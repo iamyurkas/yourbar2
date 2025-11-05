@@ -18,6 +18,9 @@ const MAPPING = {
   'paperplane.fill': 'send',
   'chevron.left.forwardslash.chevron.right': 'code',
   'chevron.right': 'chevron-right',
+  'wineglass.fill': 'local-bar',
+  'shaker.fill': 'science',
+  'shopping.basket.fill': 'shopping-basket',
 } as IconMapping;
 
 /**
