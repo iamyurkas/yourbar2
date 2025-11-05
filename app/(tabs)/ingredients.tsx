@@ -1,10 +1,11 @@
 import React, { useMemo, useState } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { MD3TopTabs } from '@/components/ui/md3-top-tabs';
 import type { TabItem } from '@/components/ui/md3-top-tabs';
+import { SearchBar } from '@/components/ui/search-bar';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
 
 type IngredientSection = {
@@ -18,8 +19,13 @@ type IngredientSection = {
 export default function IngredientsScreen() {
   const { ingredients } = useInventory();
   const [activeTab, setActiveTab] = useState<string>('all');
+  const [query, setQuery] = useState('');
+  const [selected, setSelected] = useState<Set<number>>(new Set());
 
   const sections = useMemo<Record<string, IngredientSection>>(() => {
+    const frequent = ingredients.filter((ingredient) => (ingredient.usageCount ?? 0) > 3);
+    const needsRestock = ingredients.filter((ingredient) => (ingredient.usageCount ?? 0) === 0);
+
     return {
       all: {
         key: 'all',
@@ -28,12 +34,48 @@ export default function IngredientsScreen() {
         description: 'Keep an eye on bottles, modifiers and prep essentials across the bar.',
         data: ingredients,
       },
+      my: {
+        key: 'my',
+        label: 'My',
+        heading: "What's on your rail",
+        description: 'Frequently used bottles and everyday essentials curated for fast service.',
+        data: frequent.length > 0 ? frequent : ingredients.slice(0, 12),
+      },
+      shopping: {
+        key: 'shopping',
+        label: 'Shopping',
+        heading: 'Restock list',
+        description: 'Ingredients that need attention before the next service or prep run.',
+        data: needsRestock.length > 0 ? needsRestock : ingredients.slice(-12),
+      },
     } satisfies Record<string, IngredientSection>;
   }, [ingredients]);
 
   const tabItems: TabItem[] = useMemo(() => Object.values(sections).map(({ key, label }) => ({ key, label })), [sections]);
 
   const activeSection = useMemo(() => sections[activeTab] ?? sections.all, [sections, activeTab]);
+
+  const filteredIngredients = useMemo(() => {
+    const base = activeSection.data;
+    if (!query.trim()) {
+      return base;
+    }
+    const safeQuery = query.trim().toLowerCase();
+    return base.filter((ingredient) => ingredient.name.toLowerCase().includes(safeQuery));
+  }, [activeSection.data, query]);
+
+  const toggleSelection = (ingredient: Ingredient) => {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      const id = Number(ingredient.id ?? -1);
+      if (next.has(id)) {
+        next.delete(id);
+      } else if (id >= 0) {
+        next.add(id);
+      }
+      return next;
+    });
+  };
 
   return (
     <ThemedView style={styles.container}>
@@ -45,6 +87,8 @@ export default function IngredientsScreen() {
           </ThemedText>
         </View>
 
+        <SearchBar placeholder="Search ingredients" value={query} onChange={setQuery} trailingActionLabel="filter" />
+
         <MD3TopTabs tabs={tabItems} activeKey={activeTab} onTabChange={setActiveTab} />
 
         <View style={styles.sectionIntro}>
@@ -52,9 +96,14 @@ export default function IngredientsScreen() {
           <ThemedText style={styles.sectionDescription}>{activeSection.description}</ThemedText>
         </View>
 
-        {activeSection.data.length > 0 ? (
-          activeSection.data.map((ingredient) => (
-            <IngredientRow key={String(ingredient.id ?? ingredient.name)} ingredient={ingredient} />
+        {filteredIngredients.length > 0 ? (
+          filteredIngredients.map((ingredient) => (
+            <IngredientRow
+              key={String(ingredient.id ?? ingredient.name)}
+              ingredient={ingredient}
+              isSelected={selected.has(Number(ingredient.id ?? -1))}
+              onToggle={() => toggleSelection(ingredient)}
+            />
           ))
         ) : (
           <EmptyState message="Everything is stocked. Time to shake!" />
@@ -64,39 +113,49 @@ export default function IngredientsScreen() {
   );
 }
 
-function IngredientRow({ ingredient }: { ingredient: Ingredient }) {
+function IngredientRow({ ingredient, isSelected, onToggle }: { ingredient: Ingredient; isSelected: boolean; onToggle: () => void }) {
   const description = ingredient.description?.trim();
   const tag = ingredient.tags?.[0];
+  const usageCount = ingredient.usageCount ?? 0;
+  const usageLabel = usageCount > 0 ? `${usageCount} cocktail${usageCount === 1 ? '' : 's'}` : 'No cocktails yet';
+  const badgeColor = tag?.color ?? '#C5CAE9';
+  const initials = ingredient.name
+    .split(' ')
+    .slice(0, 2)
+    .map((part) => part[0])
+    .join('')
+    .toUpperCase();
 
   return (
-    <ThemedView
-      lightColor="rgba(10,126,164,0.06)"
-      darkColor="rgba(255,255,255,0.06)"
-      style={styles.row}>
-      <View style={styles.rowText}>
-        <ThemedText type="subtitle" style={styles.rowTitle}>
-          {ingredient.name}
-        </ThemedText>
-        {description ? (
-          <ThemedText style={styles.rowDetail} numberOfLines={3}>
-            {description}
+    <Pressable accessibilityRole="checkbox" accessibilityState={{ checked: isSelected }} onPress={onToggle}>
+      <ThemedView
+        lightColor="rgba(10,126,164,0.05)"
+        darkColor="rgba(255,255,255,0.05)"
+        style={styles.row}>
+        <View style={[styles.thumbnail, { backgroundColor: `${badgeColor}22` }]}> 
+          <ThemedText style={[styles.thumbnailLabel, { color: badgeColor }]}>{initials}</ThemedText>
+        </View>
+        <View style={styles.rowText}>
+          <ThemedText type="subtitle" style={styles.rowTitle} numberOfLines={1}>
+            {ingredient.name}
           </ThemedText>
-        ) : null}
-      </View>
-      {tag ? <TagPill label={tag.name} color={tag.color} /> : null}
-    </ThemedView>
-  );
-}
-
-function TagPill({ label, color }: { label: string; color?: string }) {
-  const lightColor = color ? `${color}33` : 'rgba(10,126,164,0.12)';
-  const darkColor = color ? `${color}44` : 'rgba(255,255,255,0.16)';
-  return (
-    <ThemedView lightColor={lightColor} darkColor={darkColor} style={styles.pill}>
-      <ThemedText style={styles.pillLabel} numberOfLines={1}>
-        {label}
-      </ThemedText>
-    </ThemedView>
+          <ThemedText style={styles.rowDetail} numberOfLines={1}>
+            {usageLabel}
+          </ThemedText>
+          {description ? (
+            <ThemedText style={styles.rowDescription} numberOfLines={1}>
+              {description}
+            </ThemedText>
+          ) : null}
+        </View>
+        <View style={styles.rowMeta}>
+          <View style={[styles.tagDot, { backgroundColor: badgeColor }]} />
+          <View style={[styles.checkbox, { borderColor: badgeColor }]}> 
+            {isSelected ? <View style={[styles.checkboxFill, { backgroundColor: badgeColor }]} /> : null}
+          </View>
+        </View>
+      </ThemedView>
+    </Pressable>
   );
 }
 
@@ -115,7 +174,7 @@ function EmptyState({ message }: { message: string }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 48,
+    paddingTop: 32,
     paddingHorizontal: 20,
   },
   scrollContent: {
@@ -140,34 +199,29 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: 'row',
-    borderRadius: 18,
-    padding: 20,
-    gap: 16,
+    borderRadius: 16,
+    padding: 16,
+    gap: 14,
     alignItems: 'center',
     justifyContent: 'space-between',
   },
   rowText: {
     flex: 1,
-    gap: 6,
+    gap: 4,
   },
   rowTitle: {
     letterSpacing: 0.2,
+    fontSize: 17,
   },
   rowDetail: {
-    fontSize: 15,
-    lineHeight: 22,
-    opacity: 0.85,
+    fontSize: 14,
+    lineHeight: 20,
+    opacity: 0.7,
   },
-  pill: {
-    borderRadius: 999,
-    paddingVertical: 6,
-    paddingHorizontal: 14,
-  },
-  pillLabel: {
+  rowDescription: {
     fontSize: 13,
-    fontWeight: '600',
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
+    lineHeight: 18,
+    opacity: 0.7,
   },
   emptyState: {
     flexDirection: 'column',
@@ -176,5 +230,38 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 18,
     fontWeight: '600',
+  },
+  thumbnail: {
+    width: 48,
+    height: 48,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  thumbnailLabel: {
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  rowMeta: {
+    alignItems: 'flex-end',
+    gap: 12,
+  },
+  tagDot: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+  },
+  checkbox: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    borderWidth: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  checkboxFill: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
   },
 });

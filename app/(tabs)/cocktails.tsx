@@ -1,10 +1,11 @@
 import React, { useMemo, useState } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { MD3TopTabs } from '@/components/ui/md3-top-tabs';
 import type { TabItem } from '@/components/ui/md3-top-tabs';
+import { SearchBar } from '@/components/ui/search-bar';
 import { useInventory, type Cocktail } from '@/providers/inventory-provider';
 
 type CocktailSection = {
@@ -18,8 +19,14 @@ type CocktailSection = {
 export default function CocktailsScreen() {
   const { cocktails } = useInventory();
   const [activeTab, setActiveTab] = useState<string>('all');
+  const [query, setQuery] = useState('');
 
   const sections = useMemo<Record<string, CocktailSection>>(() => {
+    const signature = cocktails.filter((cocktail) =>
+      (cocktail.tags ?? []).some((tag) => /signature|house|favorite|favourite|classic/i.test(tag.name)),
+    );
+    const quickBuilds = cocktails.filter((cocktail) => (cocktail.ingredients?.length ?? 0) <= 4);
+
     return {
       all: {
         key: 'all',
@@ -28,12 +35,35 @@ export default function CocktailsScreen() {
         description: 'Browse the full catalogue of signature and classic recipes ready for service.',
         data: cocktails,
       },
+      my: {
+        key: 'my',
+        label: 'My',
+        heading: 'Shift-ready builds',
+        description: 'Keep the recipes you pour night after night within easy reach.',
+        data: quickBuilds.length > 0 ? quickBuilds : cocktails.slice(0, 15),
+      },
+      favorites: {
+        key: 'favorites',
+        label: 'Favorites',
+        heading: 'Signature highlights',
+        description: 'House signatures and classic crowd-pleasers to feature on the menu.',
+        data: signature.length > 0 ? signature : cocktails.slice(0, 12),
+      },
     } satisfies Record<string, CocktailSection>;
   }, [cocktails]);
 
   const tabItems: TabItem[] = useMemo(() => Object.values(sections).map(({ key, label }) => ({ key, label })), [sections]);
 
   const activeSection = useMemo(() => sections[activeTab] ?? sections.all, [sections, activeTab]);
+
+  const filteredCocktails = useMemo(() => {
+    const base = activeSection.data;
+    if (!query.trim()) {
+      return base;
+    }
+    const safeQuery = query.trim().toLowerCase();
+    return base.filter((cocktail) => cocktail.name.toLowerCase().includes(safeQuery));
+  }, [activeSection.data, query]);
 
   return (
     <ThemedView style={styles.container}>
@@ -45,6 +75,8 @@ export default function CocktailsScreen() {
           </ThemedText>
         </View>
 
+        <SearchBar placeholder="Search cocktails" value={query} onChange={setQuery} trailingActionLabel="sort" />
+
         <MD3TopTabs tabs={tabItems} activeKey={activeTab} onTabChange={setActiveTab} />
 
         <View style={styles.sectionIntro}>
@@ -52,9 +84,9 @@ export default function CocktailsScreen() {
           <ThemedText style={styles.sectionDescription}>{activeSection.description}</ThemedText>
         </View>
 
-        {activeSection.data.length > 0 ? (
-          activeSection.data.map((cocktail) => (
-            <CocktailCard key={String(cocktail.id ?? cocktail.name)} cocktail={cocktail} />
+        {filteredCocktails.length > 0 ? (
+          filteredCocktails.map((cocktail) => (
+            <CocktailRow key={String(cocktail.id ?? cocktail.name)} cocktail={cocktail} />
           ))
         ) : (
           <EmptyState message="Add a recipe to get started shaking." />
@@ -64,33 +96,53 @@ export default function CocktailsScreen() {
   );
 }
 
-function CocktailCard({ cocktail }: { cocktail: Cocktail }) {
+function CocktailRow({ cocktail }: { cocktail: Cocktail }) {
   const profile = cocktail.description?.trim() || cocktail.instructions?.trim();
   const ingredients = cocktail.ingredients
     .map((item) => item.name)
     .filter(Boolean)
     .join(' • ');
+  const tag = cocktail.tags?.[0];
+  const badgeColor = tag?.color ?? '#FFD54F';
+  const missingCount = Math.max(0, 5 - (cocktail.ingredients?.length ?? 0));
+  const missingLabel = `Missing: ${missingCount} ingredient${missingCount === 1 ? '' : 's'}`;
+  const initials = cocktail.name
+    .split(' ')
+    .slice(0, 2)
+    .map((part) => part[0])
+    .join('')
+    .toUpperCase();
 
   return (
-    <ThemedView
-      lightColor="rgba(10,126,164,0.08)"
-      darkColor="rgba(255,255,255,0.07)"
-      style={styles.card}>
-      <ThemedText type="subtitle" style={styles.cardTitle}>
-        {cocktail.name}
-      </ThemedText>
-      {profile ? (
-        <ThemedText style={styles.cardProfile}>{profile}</ThemedText>
-      ) : (
-        <ThemedText style={styles.cardProfile}>
-          No description yet. Add tasting notes to keep your team aligned.
-        </ThemedText>
-      )}
-      <ThemedText style={styles.cardLabel}>Key ingredients</ThemedText>
-      <ThemedText style={styles.cardIngredients}>
-        {ingredients || 'Ingredients list is empty for this cocktail.'}
-      </ThemedText>
-    </ThemedView>
+    <Pressable accessibilityRole="button" onPress={() => {}}>
+      <ThemedView
+        lightColor="rgba(10,126,164,0.06)"
+        darkColor="rgba(255,255,255,0.05)"
+        style={styles.row}>
+        <View style={[styles.thumbnail, { backgroundColor: `${badgeColor}22` }]}> 
+          <ThemedText style={[styles.thumbnailLabel, { color: badgeColor }]}>{initials}</ThemedText>
+        </View>
+        <View style={styles.rowContent}>
+          <ThemedText type="subtitle" style={styles.rowTitle} numberOfLines={1}>
+            {cocktail.name}
+          </ThemedText>
+          <ThemedText style={styles.rowMissing} numberOfLines={1}>
+            {missingLabel}
+          </ThemedText>
+          <ThemedText style={styles.rowIngredients} numberOfLines={1}>
+            {ingredients || 'No ingredients listed yet.'}
+          </ThemedText>
+          {profile ? (
+            <ThemedText style={styles.rowProfile} numberOfLines={2}>
+              {profile}
+            </ThemedText>
+          ) : null}
+        </View>
+        <View style={styles.rowMeta}>
+          <View style={[styles.tagDot, { backgroundColor: badgeColor }]} />
+        </View>
+      </ThemedView>
+    </Pressable>
   );
 }
 
@@ -99,9 +151,9 @@ function EmptyState({ message }: { message: string }) {
     <ThemedView
       lightColor="rgba(10,126,164,0.05)"
       darkColor="rgba(255,255,255,0.04)"
-      style={[styles.card, styles.emptyCard]}>
+      style={[styles.row, styles.emptyCard]}>
       <ThemedText style={styles.emptyTitle}>Nothing here yet</ThemedText>
-      <ThemedText style={styles.cardProfile}>{message}</ThemedText>
+      <ThemedText style={styles.rowProfile}>{message}</ThemedText>
     </ThemedView>
   );
 }
@@ -109,7 +161,7 @@ function EmptyState({ message }: { message: string }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 48,
+    paddingTop: 32,
     paddingHorizontal: 20,
   },
   scrollContent: {
@@ -132,30 +184,61 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     opacity: 0.8,
   },
-  card: {
-    borderRadius: 20,
-    padding: 20,
-    gap: 8,
+  row: {
+    flexDirection: 'row',
+    borderRadius: 16,
+    padding: 16,
+    gap: 14,
+    alignItems: 'center',
   },
-  cardTitle: {
+  rowContent: {
+    flex: 1,
+    gap: 4,
+  },
+  rowTitle: {
     letterSpacing: 0.2,
+    fontSize: 17,
   },
-  cardProfile: {
-    fontSize: 16,
-    lineHeight: 22,
-  },
-  cardLabel: {
+  rowMissing: {
     fontSize: 13,
-    letterSpacing: 0.4,
+    letterSpacing: 0.3,
     textTransform: 'uppercase',
     opacity: 0.7,
   },
-  cardIngredients: {
-    fontSize: 15,
-    lineHeight: 22,
+  rowIngredients: {
+    fontSize: 14,
+    lineHeight: 20,
+    opacity: 0.75,
+  },
+  rowProfile: {
+    fontSize: 13,
+    lineHeight: 18,
+    opacity: 0.7,
+  },
+  rowMeta: {
+    alignItems: 'flex-end',
+    gap: 12,
+  },
+  tagDot: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+  },
+  thumbnail: {
+    width: 48,
+    height: 48,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  thumbnailLabel: {
+    fontSize: 16,
+    fontWeight: '600',
   },
   emptyCard: {
+    flexDirection: 'column',
     alignItems: 'flex-start',
+    gap: 8,
   },
   emptyTitle: {
     fontSize: 18,
