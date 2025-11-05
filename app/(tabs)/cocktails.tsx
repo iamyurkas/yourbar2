@@ -5,80 +5,35 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { MD3TopTabs } from '@/components/ui/md3-top-tabs';
 import type { TabItem } from '@/components/ui/md3-top-tabs';
+import { useInventory, type Cocktail } from '@/providers/inventory-provider';
 
-type Cocktail = {
-  name: string;
-  profile: string;
-  ingredients: string[];
-};
-
-const ALL_COCKTAILS: Cocktail[] = [
-  {
-    name: 'Negroni',
-    profile: 'Bitter, citrus-forward and perfectly balanced.',
-    ingredients: ['Gin', 'Campari', 'Sweet vermouth'],
-  },
-  {
-    name: 'Whiskey Sour',
-    profile: 'Silky texture with bright lemon acidity.',
-    ingredients: ['Bourbon', 'Lemon', 'Simple syrup', 'Egg white'],
-  },
-  {
-    name: 'Margarita',
-    profile: 'Zesty, refreshing and crowd-pleasing.',
-    ingredients: ['Tequila', 'Lime', 'Orange liqueur'],
-  },
-  {
-    name: 'Old Fashioned',
-    profile: 'Spirit-forward with a soft citrus aroma.',
-    ingredients: ['Bourbon', 'Angostura bitters', 'Sugar', 'Orange zest'],
-  },
-  {
-    name: 'Espresso Martini',
-    profile: 'Velvety pick-me-up with espresso intensity.',
-    ingredients: ['Vodka', 'Fresh espresso', 'Coffee liqueur'],
-  },
-];
-
-const MY_RECIPES = new Set(['Margarita', 'Espresso Martini', 'Negroni']);
-const FAVORITES = new Set(['Negroni', 'Old Fashioned']);
-
-const COCKTAIL_SECTIONS = {
-  all: {
-    key: 'all',
-    label: 'All',
-    heading: 'Explore every pour',
-    description: 'Browse the full catalogue of signature and classic recipes ready for service.',
-    data: ALL_COCKTAILS,
-  },
-  my: {
-    key: 'my',
-    label: 'My',
-    heading: 'Saved to your station',
-    description: 'Personal creations and bar-approved specs you have pinned for quick access.',
-    data: ALL_COCKTAILS.filter((cocktail) => MY_RECIPES.has(cocktail.name)),
-  },
-  favorites: {
-    key: 'favorites',
-    label: 'Favorites',
-    heading: 'Nightly crowd-pleasers',
-    description: 'Highlight the recipes guests ask for again and again to keep your shift flowing.',
-    data: ALL_COCKTAILS.filter((cocktail) => FAVORITES.has(cocktail.name)),
-  },
-} satisfies Record<string, {
+type CocktailSection = {
   key: string;
   label: string;
   heading: string;
   description: string;
   data: Cocktail[];
-}>;
-
-const TAB_ITEMS: TabItem[] = Object.values(COCKTAIL_SECTIONS).map(({ key, label }) => ({ key, label }));
+};
 
 export default function CocktailsScreen() {
+  const { cocktails } = useInventory();
   const [activeTab, setActiveTab] = useState<string>('all');
 
-  const activeSection = useMemo(() => COCKTAIL_SECTIONS[activeTab], [activeTab]);
+  const sections = useMemo<Record<string, CocktailSection>>(() => {
+    return {
+      all: {
+        key: 'all',
+        label: 'All',
+        heading: 'Explore every pour',
+        description: 'Browse the full catalogue of signature and classic recipes ready for service.',
+        data: cocktails,
+      },
+    } satisfies Record<string, CocktailSection>;
+  }, [cocktails]);
+
+  const tabItems: TabItem[] = useMemo(() => Object.values(sections).map(({ key, label }) => ({ key, label })), [sections]);
+
+  const activeSection = useMemo(() => sections[activeTab] ?? sections.all, [sections, activeTab]);
 
   return (
     <ThemedView style={styles.container}>
@@ -90,7 +45,7 @@ export default function CocktailsScreen() {
           </ThemedText>
         </View>
 
-        <MD3TopTabs tabs={TAB_ITEMS} activeKey={activeTab} onTabChange={setActiveTab} />
+        <MD3TopTabs tabs={tabItems} activeKey={activeTab} onTabChange={setActiveTab} />
 
         <View style={styles.sectionIntro}>
           <ThemedText type="subtitle">{activeSection.heading}</ThemedText>
@@ -98,7 +53,9 @@ export default function CocktailsScreen() {
         </View>
 
         {activeSection.data.length > 0 ? (
-          activeSection.data.map((cocktail) => <CocktailCard key={cocktail.name} cocktail={cocktail} />)
+          activeSection.data.map((cocktail) => (
+            <CocktailCard key={String(cocktail.id ?? cocktail.name)} cocktail={cocktail} />
+          ))
         ) : (
           <EmptyState message="Add a recipe to get started shaking." />
         )}
@@ -108,6 +65,12 @@ export default function CocktailsScreen() {
 }
 
 function CocktailCard({ cocktail }: { cocktail: Cocktail }) {
+  const profile = cocktail.description?.trim() || cocktail.instructions?.trim();
+  const ingredients = cocktail.ingredients
+    .map((item) => item.name)
+    .filter(Boolean)
+    .join(' • ');
+
   return (
     <ThemedView
       lightColor="rgba(10,126,164,0.08)"
@@ -116,9 +79,17 @@ function CocktailCard({ cocktail }: { cocktail: Cocktail }) {
       <ThemedText type="subtitle" style={styles.cardTitle}>
         {cocktail.name}
       </ThemedText>
-      <ThemedText style={styles.cardProfile}>{cocktail.profile}</ThemedText>
+      {profile ? (
+        <ThemedText style={styles.cardProfile}>{profile}</ThemedText>
+      ) : (
+        <ThemedText style={styles.cardProfile}>
+          No description yet. Add tasting notes to keep your team aligned.
+        </ThemedText>
+      )}
       <ThemedText style={styles.cardLabel}>Key ingredients</ThemedText>
-      <ThemedText style={styles.cardIngredients}>{cocktail.ingredients.join(' • ')}</ThemedText>
+      <ThemedText style={styles.cardIngredients}>
+        {ingredients || 'Ingredients list is empty for this cocktail.'}
+      </ThemedText>
     </ThemedView>
   );
 }
