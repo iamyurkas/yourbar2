@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
@@ -17,9 +17,53 @@ type CocktailSection = {
 };
 
 export default function CocktailsScreen() {
-  const { cocktails, availableIngredientIds } = useInventory();
+  const { cocktails, ingredients, availableIngredientIds } = useInventory();
   const [activeTab, setActiveTab] = useState<string>('all');
   const [query, setQuery] = useState('');
+
+  const brandedIngredientsByBaseId = useMemo(() => {
+    return ingredients.reduce((map, ingredient) => {
+      const baseId = ingredient.baseIngredientId;
+      const id = ingredient.id;
+
+      if (typeof baseId === 'number' && typeof id === 'number') {
+        const existing = map.get(baseId);
+        if (existing) {
+          existing.add(id);
+        } else {
+          map.set(baseId, new Set<number>([id]));
+        }
+      }
+
+      return map;
+    }, new Map<number, Set<number>>());
+  }, [ingredients]);
+
+  const isIngredientAvailable = useCallback(
+    (ingredientId: number | undefined | null) => {
+      if (typeof ingredientId !== 'number') {
+        return false;
+      }
+
+      if (availableIngredientIds.has(ingredientId)) {
+        return true;
+      }
+
+      const branded = brandedIngredientsByBaseId.get(ingredientId);
+      if (!branded) {
+        return false;
+      }
+
+      for (const brandedId of branded) {
+        if (availableIngredientIds.has(brandedId)) {
+          return true;
+        }
+      }
+
+      return false;
+    },
+    [availableIngredientIds, brandedIngredientsByBaseId],
+  );
 
   const readyToMix = useMemo(() => {
     return cocktails.filter((cocktail) => {
@@ -29,13 +73,10 @@ export default function CocktailsScreen() {
       }
 
       return recipe.every((item) => {
-        if (typeof item.ingredientId !== 'number') {
-          return false;
-        }
-        return availableIngredientIds.has(item.ingredientId);
+        return isIngredientAvailable(item.ingredientId);
       });
     });
-  }, [cocktails, availableIngredientIds]);
+  }, [cocktails, isIngredientAvailable]);
 
   const sections = useMemo<Record<string, CocktailSection>>(() => {
     const signature = cocktails.filter((cocktail) =>
@@ -104,7 +145,7 @@ export default function CocktailsScreen() {
             <CocktailRow
               key={String(cocktail.id ?? cocktail.name)}
               cocktail={cocktail}
-              availableIngredientIds={availableIngredientIds}
+              isIngredientAvailable={isIngredientAvailable}
             />
           ))
         ) : activeSection.key === 'my' ? (
@@ -119,10 +160,10 @@ export default function CocktailsScreen() {
 
 function CocktailRow({
   cocktail,
-  availableIngredientIds,
+  isIngredientAvailable,
 }: {
   cocktail: Cocktail;
-  availableIngredientIds: Set<number>;
+  isIngredientAvailable: (ingredientId: number | undefined | null) => boolean;
 }) {
   const profile = cocktail.description?.trim() || cocktail.instructions?.trim();
   const ingredients = cocktail.ingredients
@@ -133,10 +174,7 @@ function CocktailRow({
   const badgeColor = tag?.color ?? '#FFD54F';
   const totalIngredients = cocktail.ingredients?.length ?? 0;
   const availableCount = (cocktail.ingredients ?? []).reduce((count, item) => {
-    if (typeof item.ingredientId !== 'number') {
-      return count;
-    }
-    return availableIngredientIds.has(item.ingredientId) ? count + 1 : count;
+    return isIngredientAvailable(item.ingredientId) ? count + 1 : count;
   }, 0);
   const missingCount = Math.max(0, totalIngredients - availableCount);
   const missingLabel =
