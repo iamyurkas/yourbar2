@@ -17,15 +17,30 @@ type CocktailSection = {
 };
 
 export default function CocktailsScreen() {
-  const { cocktails } = useInventory();
+  const { cocktails, availableIngredientIds } = useInventory();
   const [activeTab, setActiveTab] = useState<string>('all');
   const [query, setQuery] = useState('');
+
+  const readyToMix = useMemo(() => {
+    return cocktails.filter((cocktail) => {
+      const recipe = cocktail.ingredients ?? [];
+      if (recipe.length === 0) {
+        return false;
+      }
+
+      return recipe.every((item) => {
+        if (typeof item.ingredientId !== 'number') {
+          return false;
+        }
+        return availableIngredientIds.has(item.ingredientId);
+      });
+    });
+  }, [cocktails, availableIngredientIds]);
 
   const sections = useMemo<Record<string, CocktailSection>>(() => {
     const signature = cocktails.filter((cocktail) =>
       (cocktail.tags ?? []).some((tag) => /signature|house|favorite|favourite|classic/i.test(tag.name)),
     );
-    const quickBuilds = cocktails.filter((cocktail) => (cocktail.ingredients?.length ?? 0) <= 4);
 
     return {
       all: {
@@ -39,8 +54,8 @@ export default function CocktailsScreen() {
         key: 'my',
         label: 'My',
         heading: 'Shift-ready builds',
-        description: 'Keep the recipes you pour night after night within easy reach.',
-        data: quickBuilds.length > 0 ? quickBuilds : cocktails.slice(0, 15),
+        description: 'Keep the recipes you can shake with what you have on hand.',
+        data: readyToMix,
       },
       favorites: {
         key: 'favorites',
@@ -50,7 +65,7 @@ export default function CocktailsScreen() {
         data: signature.length > 0 ? signature : cocktails.slice(0, 12),
       },
     } satisfies Record<string, CocktailSection>;
-  }, [cocktails]);
+  }, [cocktails, readyToMix]);
 
   const tabItems: TabItem[] = useMemo(() => Object.values(sections).map(({ key, label }) => ({ key, label })), [sections]);
 
@@ -86,8 +101,14 @@ export default function CocktailsScreen() {
 
         {filteredCocktails.length > 0 ? (
           filteredCocktails.map((cocktail) => (
-            <CocktailRow key={String(cocktail.id ?? cocktail.name)} cocktail={cocktail} />
+            <CocktailRow
+              key={String(cocktail.id ?? cocktail.name)}
+              cocktail={cocktail}
+              availableIngredientIds={availableIngredientIds}
+            />
           ))
+        ) : activeSection.key === 'my' ? (
+          <EmptyState message="Add more ingredients to unlock ready-to-mix recipes." />
         ) : (
           <EmptyState message="Add a recipe to get started shaking." />
         )}
@@ -96,7 +117,13 @@ export default function CocktailsScreen() {
   );
 }
 
-function CocktailRow({ cocktail }: { cocktail: Cocktail }) {
+function CocktailRow({
+  cocktail,
+  availableIngredientIds,
+}: {
+  cocktail: Cocktail;
+  availableIngredientIds: Set<number>;
+}) {
   const profile = cocktail.description?.trim() || cocktail.instructions?.trim();
   const ingredients = cocktail.ingredients
     .map((item) => item.name)
@@ -104,8 +131,20 @@ function CocktailRow({ cocktail }: { cocktail: Cocktail }) {
     .join(' • ');
   const tag = cocktail.tags?.[0];
   const badgeColor = tag?.color ?? '#FFD54F';
-  const missingCount = Math.max(0, 5 - (cocktail.ingredients?.length ?? 0));
-  const missingLabel = `Missing: ${missingCount} ingredient${missingCount === 1 ? '' : 's'}`;
+  const totalIngredients = cocktail.ingredients?.length ?? 0;
+  const availableCount = (cocktail.ingredients ?? []).reduce((count, item) => {
+    if (typeof item.ingredientId !== 'number') {
+      return count;
+    }
+    return availableIngredientIds.has(item.ingredientId) ? count + 1 : count;
+  }, 0);
+  const missingCount = Math.max(0, totalIngredients - availableCount);
+  const missingLabel =
+    totalIngredients === 0
+      ? 'No ingredients tracked yet'
+      : missingCount === 0
+        ? 'All ingredients ready'
+        : `Missing: ${missingCount} ingredient${missingCount === 1 ? '' : 's'}`;
   const initials = cocktail.name
     .split(' ')
     .slice(0, 2)

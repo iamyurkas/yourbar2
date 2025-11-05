@@ -17,14 +17,16 @@ type IngredientSection = {
 };
 
 export default function IngredientsScreen() {
-  const { ingredients } = useInventory();
+  const { ingredients, availableIngredientIds, toggleIngredientAvailability } = useInventory();
   const [activeTab, setActiveTab] = useState<string>('all');
   const [query, setQuery] = useState('');
-  const [selected, setSelected] = useState<Set<number>>(new Set());
 
   const sections = useMemo<Record<string, IngredientSection>>(() => {
-    const frequent = ingredients.filter((ingredient) => (ingredient.usageCount ?? 0) > 3);
     const needsRestock = ingredients.filter((ingredient) => (ingredient.usageCount ?? 0) === 0);
+    const inStock = ingredients.filter((ingredient) => {
+      const id = Number(ingredient.id ?? -1);
+      return id >= 0 && availableIngredientIds.has(id);
+    });
 
     return {
       all: {
@@ -39,7 +41,7 @@ export default function IngredientsScreen() {
         label: 'My',
         heading: "What's on your rail",
         description: 'Frequently used bottles and everyday essentials curated for fast service.',
-        data: frequent.length > 0 ? frequent : ingredients.slice(0, 12),
+        data: inStock,
       },
       shopping: {
         key: 'shopping',
@@ -49,7 +51,7 @@ export default function IngredientsScreen() {
         data: needsRestock.length > 0 ? needsRestock : ingredients.slice(-12),
       },
     } satisfies Record<string, IngredientSection>;
-  }, [ingredients]);
+  }, [ingredients, availableIngredientIds]);
 
   const tabItems: TabItem[] = useMemo(() => Object.values(sections).map(({ key, label }) => ({ key, label })), [sections]);
 
@@ -63,19 +65,6 @@ export default function IngredientsScreen() {
     const safeQuery = query.trim().toLowerCase();
     return base.filter((ingredient) => ingredient.name.toLowerCase().includes(safeQuery));
   }, [activeSection.data, query]);
-
-  const toggleSelection = (ingredient: Ingredient) => {
-    setSelected((prev) => {
-      const next = new Set(prev);
-      const id = Number(ingredient.id ?? -1);
-      if (next.has(id)) {
-        next.delete(id);
-      } else if (id >= 0) {
-        next.add(id);
-      }
-      return next;
-    });
-  };
 
   return (
     <ThemedView style={styles.container}>
@@ -97,14 +86,27 @@ export default function IngredientsScreen() {
         </View>
 
         {filteredIngredients.length > 0 ? (
-          filteredIngredients.map((ingredient) => (
-            <IngredientRow
-              key={String(ingredient.id ?? ingredient.name)}
-              ingredient={ingredient}
-              isSelected={selected.has(Number(ingredient.id ?? -1))}
-              onToggle={() => toggleSelection(ingredient)}
-            />
-          ))
+          filteredIngredients.map((ingredient) => {
+            const id = Number(ingredient.id ?? -1);
+            const isAvailable = id >= 0 && availableIngredientIds.has(id);
+
+            const handleToggle = () => {
+              if (id >= 0) {
+                toggleIngredientAvailability(id);
+              }
+            };
+
+            return (
+              <IngredientRow
+                key={String(ingredient.id ?? ingredient.name)}
+                ingredient={ingredient}
+                isAvailable={isAvailable}
+                onToggle={handleToggle}
+              />
+            );
+          })
+        ) : activeSection.key === 'my' ? (
+          <EmptyState message="Mark an ingredient as in stock to see it here." />
         ) : (
           <EmptyState message="Everything is stocked. Time to shake!" />
         )}
@@ -113,7 +115,15 @@ export default function IngredientsScreen() {
   );
 }
 
-function IngredientRow({ ingredient, isSelected, onToggle }: { ingredient: Ingredient; isSelected: boolean; onToggle: () => void }) {
+function IngredientRow({
+  ingredient,
+  isAvailable,
+  onToggle,
+}: {
+  ingredient: Ingredient;
+  isAvailable: boolean;
+  onToggle: () => void;
+}) {
   const description = ingredient.description?.trim();
   const tag = ingredient.tags?.[0];
   const usageCount = ingredient.usageCount ?? 0;
@@ -126,13 +136,13 @@ function IngredientRow({ ingredient, isSelected, onToggle }: { ingredient: Ingre
     .join('')
     .toUpperCase();
 
+  const lightColor = isAvailable ? 'rgba(10,126,164,0.16)' : 'rgba(10,126,164,0.05)';
+  const darkColor = isAvailable ? 'rgba(10,126,164,0.22)' : 'rgba(255,255,255,0.05)';
+
   return (
-    <Pressable accessibilityRole="checkbox" accessibilityState={{ checked: isSelected }} onPress={onToggle}>
-      <ThemedView
-        lightColor="rgba(10,126,164,0.05)"
-        darkColor="rgba(255,255,255,0.05)"
-        style={styles.row}>
-        <View style={[styles.thumbnail, { backgroundColor: `${badgeColor}22` }]}> 
+    <Pressable accessibilityRole="checkbox" accessibilityState={{ checked: isAvailable }} onPress={onToggle}>
+      <ThemedView lightColor={lightColor} darkColor={darkColor} style={styles.row}>
+        <View style={[styles.thumbnail, { backgroundColor: `${badgeColor}22` }]}>
           <ThemedText style={[styles.thumbnailLabel, { color: badgeColor }]}>{initials}</ThemedText>
         </View>
         <View style={styles.rowText}>
@@ -150,8 +160,8 @@ function IngredientRow({ ingredient, isSelected, onToggle }: { ingredient: Ingre
         </View>
         <View style={styles.rowMeta}>
           <View style={[styles.tagDot, { backgroundColor: badgeColor }]} />
-          <View style={[styles.checkbox, { borderColor: badgeColor }]}> 
-            {isSelected ? <View style={[styles.checkboxFill, { backgroundColor: badgeColor }]} /> : null}
+          <View style={[styles.checkbox, { borderColor: badgeColor }]}>
+            {isAvailable ? <View style={[styles.checkboxFill, { backgroundColor: badgeColor }]} /> : null}
           </View>
         </View>
       </ThemedView>

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useMemo } from 'react';
+import React, { createContext, useCallback, useContext, useMemo, useState } from 'react';
 
 import data from '@/assets/data/data.json';
 
@@ -9,6 +9,9 @@ type InventoryContextValue = {
   cocktails: Cocktail[];
   ingredients: Ingredient[];
   loading: boolean;
+  availableIngredientIds: Set<number>;
+  setIngredientAvailability: (id: number, available: boolean) => void;
+  toggleIngredientAvailability: (id: number) => void;
 };
 
 type InventoryState = {
@@ -42,14 +45,42 @@ type InventoryProviderProps = {
 
 export function InventoryProvider({ children }: InventoryProviderProps) {
   const inventory = ensureInventoryState();
+  const [availableIngredientIds, setAvailableIngredientIds] = useState<Set<number>>(() => new Set());
+
+  const setIngredientAvailability = useCallback((id: number, available: boolean) => {
+    setAvailableIngredientIds((prev) => {
+      const next = new Set(prev);
+      if (available) {
+        next.add(id);
+      } else {
+        next.delete(id);
+      }
+      return next;
+    });
+  }, []);
+
+  const toggleIngredientAvailability = useCallback((id: number) => {
+    setAvailableIngredientIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+      return next;
+    });
+  }, []);
 
   const value = useMemo<InventoryContextValue>(() => {
     return {
       cocktails: inventory.cocktails,
       ingredients: inventory.ingredients,
       loading: false,
+      availableIngredientIds,
+      setIngredientAvailability,
+      toggleIngredientAvailability,
     };
-  }, [inventory]);
+  }, [inventory, availableIngredientIds, setIngredientAvailability, toggleIngredientAvailability]);
 
   return <InventoryContext.Provider value={value}>{children}</InventoryContext.Provider>;
 }
