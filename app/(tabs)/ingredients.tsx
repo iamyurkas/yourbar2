@@ -5,60 +5,35 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { MD3TopTabs } from '@/components/ui/md3-top-tabs';
 import type { TabItem } from '@/components/ui/md3-top-tabs';
+import { useInventory, type Ingredient } from '@/providers/inventory-provider';
 
-type Ingredient = {
-  name: string;
-  detail: string;
-  status: 'stocked' | 'low' | 'order';
-};
-
-const ALL_INGREDIENTS: Ingredient[] = [
-  { name: 'Tequila Reposado', detail: 'Agave spirit · 750ml · NOM 1414', status: 'stocked' },
-  { name: 'Sweet Vermouth', detail: 'Fortified wine · keep refrigerated', status: 'low' },
-  { name: 'Lime Juice', detail: 'Fresh pressed · nightly prep', status: 'order' },
-  { name: 'Angostura Bitters', detail: '4oz dasher bottle · aromatic', status: 'stocked' },
-  { name: 'Orgeat Syrup', detail: 'Almond · housemade weekly', status: 'low' },
-];
-
-const PERSONAL_STAPLES = new Set(['Tequila Reposado', 'Orgeat Syrup', 'Angostura Bitters']);
-const SHOPPING_NEEDS = new Set(['Sweet Vermouth', 'Lime Juice']);
-
-const INGREDIENT_SECTIONS = {
-  all: {
-    key: 'all',
-    label: 'All',
-    heading: 'Inventory at a glance',
-    description: 'Keep an eye on bottles, modifiers and prep essentials across the bar.',
-    data: ALL_INGREDIENTS,
-  },
-  my: {
-    key: 'my',
-    label: 'My',
-    heading: 'Your station staples',
-    description: 'The bottles you reach for every shift, highlighted for faster setup.',
-    data: ALL_INGREDIENTS.filter((item) => PERSONAL_STAPLES.has(item.name)),
-  },
-  shopping: {
-    key: 'shopping',
-    label: 'Shopping',
-    heading: 'Restock before service',
-    description: 'Flag low inventory items so the next order sheet writes itself.',
-    data: ALL_INGREDIENTS.filter((item) => SHOPPING_NEEDS.has(item.name)),
-  },
-} satisfies Record<string, {
+type IngredientSection = {
   key: string;
   label: string;
   heading: string;
   description: string;
   data: Ingredient[];
-}>;
-
-const TAB_ITEMS: TabItem[] = Object.values(INGREDIENT_SECTIONS).map(({ key, label }) => ({ key, label }));
+};
 
 export default function IngredientsScreen() {
+  const { ingredients } = useInventory();
   const [activeTab, setActiveTab] = useState<string>('all');
 
-  const activeSection = useMemo(() => INGREDIENT_SECTIONS[activeTab], [activeTab]);
+  const sections = useMemo<Record<string, IngredientSection>>(() => {
+    return {
+      all: {
+        key: 'all',
+        label: 'All',
+        heading: 'Inventory at a glance',
+        description: 'Keep an eye on bottles, modifiers and prep essentials across the bar.',
+        data: ingredients,
+      },
+    } satisfies Record<string, IngredientSection>;
+  }, [ingredients]);
+
+  const tabItems: TabItem[] = useMemo(() => Object.values(sections).map(({ key, label }) => ({ key, label })), [sections]);
+
+  const activeSection = useMemo(() => sections[activeTab] ?? sections.all, [sections, activeTab]);
 
   return (
     <ThemedView style={styles.container}>
@@ -70,7 +45,7 @@ export default function IngredientsScreen() {
           </ThemedText>
         </View>
 
-        <MD3TopTabs tabs={TAB_ITEMS} activeKey={activeTab} onTabChange={setActiveTab} />
+        <MD3TopTabs tabs={tabItems} activeKey={activeTab} onTabChange={setActiveTab} />
 
         <View style={styles.sectionIntro}>
           <ThemedText type="subtitle">{activeSection.heading}</ThemedText>
@@ -88,6 +63,9 @@ export default function IngredientsScreen() {
 }
 
 function IngredientRow({ ingredient }: { ingredient: Ingredient }) {
+  const description = ingredient.description?.trim();
+  const tag = ingredient.tags?.[0];
+
   return (
     <ThemedView
       lightColor="rgba(10,126,164,0.06)"
@@ -97,25 +75,25 @@ function IngredientRow({ ingredient }: { ingredient: Ingredient }) {
         <ThemedText type="subtitle" style={styles.rowTitle}>
           {ingredient.name}
         </ThemedText>
-        <ThemedText style={styles.rowDetail}>{ingredient.detail}</ThemedText>
+        {description ? (
+          <ThemedText style={styles.rowDetail} numberOfLines={3}>
+            {description}
+          </ThemedText>
+        ) : null}
       </View>
-      <StatusPill status={ingredient.status} />
+      {tag ? <TagPill label={tag.name} color={tag.color} /> : null}
     </ThemedView>
   );
 }
 
-function StatusPill({ status }: { status: Ingredient['status'] }) {
-  const labelMap: Record<Ingredient['status'], { label: string; light: string; dark: string }> = {
-    stocked: { label: 'Stocked', light: 'rgba(46,125,50,0.16)', dark: 'rgba(129,199,132,0.24)' },
-    low: { label: 'Running low', light: 'rgba(255,143,0,0.16)', dark: 'rgba(255,183,77,0.28)' },
-    order: { label: 'Order now', light: 'rgba(211,47,47,0.16)', dark: 'rgba(229,115,115,0.28)' },
-  };
-
-  const palette = labelMap[status];
-
+function TagPill({ label, color }: { label: string; color?: string }) {
+  const lightColor = color ? `${color}33` : 'rgba(10,126,164,0.12)';
+  const darkColor = color ? `${color}44` : 'rgba(255,255,255,0.16)';
   return (
-    <ThemedView lightColor={palette.light} darkColor={palette.dark} style={styles.pill}>
-      <ThemedText style={styles.pillLabel}>{palette.label}</ThemedText>
+    <ThemedView lightColor={lightColor} darkColor={darkColor} style={styles.pill}>
+      <ThemedText style={styles.pillLabel} numberOfLines={1}>
+        {label}
+      </ThemedText>
     </ThemedView>
   );
 }
