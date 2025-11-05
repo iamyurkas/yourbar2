@@ -1,0 +1,19 @@
+import 'package:flutter/material.dart';
+
+import 'features/home/home_shell.dart';
+
+class CocktailApp extends StatelessWidget {
+  const CocktailApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'YourBar',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF1E88E5)),
+        useMaterial3: true,
+      ),
+      home: const HomeShell(),
+    );
+  }
+}
