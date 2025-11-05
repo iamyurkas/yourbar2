@@ -14,6 +14,9 @@ type IconSymbolName = keyof typeof MAPPING;
  * - see SF Symbols in the [SF Symbols](https://developer.apple.com/sf-symbols/) app.
  */
 const MAPPING = {
+  'martini.glass.fill': 'local-bar',
+  'cocktail.shaker.fill': 'science',
+  'leaf.fill': 'spa',
   'house.fill': 'home',
   'paperplane.fill': 'send',
   'chevron.left.forwardslash.chevron.right': 'code',

@@ -1,98 +1,95 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
+import { Colors } from '@/constants/theme';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
 
-export default function HomeScreen() {
+const cocktails = [
+  {
+    name: 'Negroni',
+    description: 'Equal parts gin, Campari, and sweet vermouth stirred over ice with an orange twist.',
+  },
+  {
+    name: 'Whisky Sour',
+    description: 'A silky blend of bourbon, lemon, and a hint of syrup shaken hard and crowned with foam.',
+  },
+  {
+    name: 'Margarita',
+    description: 'Tequila, lime, and orange liqueur served on the rocks with a salted rim.',
+  },
+];
+
+export default function CocktailsScreen() {
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+    <ThemedView style={styles.root}>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <ThemedView
+          style={styles.hero}
+          lightColor={Colors.light.surfaceVariant}
+          darkColor={Colors.dark.surfaceVariant}>
+          <ThemedText type="subtitle">Tonight&apos;s Selection</ThemedText>
+          <ThemedText type="title" style={styles.heroTitle}>
+            Signature Cocktails
+          </ThemedText>
+          <ThemedText style={styles.heroDescription}>
+            Curated classics and modern favorites, balanced for every palette.
+          </ThemedText>
+        </ThemedView>
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+        <View style={styles.list}>
+          {cocktails.map((cocktail) => (
+            <ThemedView
+              key={cocktail.name}
+              style={styles.card}
+              lightColor={Colors.light.background}
+              darkColor={Colors.dark.surface}>
+              <ThemedText type="subtitle" style={styles.cardTitle}>
+                {cocktail.name}
+              </ThemedText>
+              <ThemedText>{cocktail.description}</ThemedText>
+            </ThemedView>
+          ))}
+        </View>
+      </ScrollView>
+    </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+  root: {
+    flex: 1,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  scrollContent: {
+    padding: 24,
+    gap: 24,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  hero: {
+    borderRadius: 24,
+    padding: 24,
+    gap: 12,
+  },
+  heroTitle: {
+    marginBottom: 4,
+  },
+  heroDescription: {
+    opacity: 0.8,
+  },
+  list: {
+    gap: 16,
+  },
+  card: {
+    borderRadius: 20,
+    padding: 20,
+    gap: 8,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: 'transparent',
+    shadowColor: '#000',
+    shadowOpacity: 0.08,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 12,
+    elevation: 1,
+  },
+  cardTitle: {
+    fontSize: 18,
   },
 });

@@ -12,18 +12,28 @@ export const Colors = {
   light: {
     text: '#11181C',
     background: '#fff',
+    surface: '#f4f6fb',
+    surfaceVariant: '#e4eef6',
+    outline: '#d5d9de',
     tint: tintColorLight,
     icon: '#687076',
     tabIconDefault: '#687076',
     tabIconSelected: tintColorLight,
+    tabBarActiveBackground: 'rgba(10, 126, 164, 0.14)',
+    tabBarInactiveBackground: 'rgba(10, 126, 164, 0.06)',
   },
   dark: {
     text: '#ECEDEE',
     background: '#151718',
+    surface: '#1f2024',
+    surfaceVariant: '#1b1c1f',
+    outline: '#2f3336',
     tint: tintColorDark,
     icon: '#9BA1A6',
     tabIconDefault: '#9BA1A6',
     tabIconSelected: tintColorDark,
+    tabBarActiveBackground: 'rgba(255, 255, 255, 0.14)',
+    tabBarInactiveBackground: 'rgba(255, 255, 255, 0.08)',
   },
 };
 
