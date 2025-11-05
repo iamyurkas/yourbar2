@@ -1,8 +1,8 @@
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { Tabs } from 'expo-router';
 import React from 'react';
 
 import { HapticTab } from '@/components/haptic-tab';
-import { IconSymbol } from '@/components/ui/icon-symbol';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
@@ -17,17 +17,30 @@ export default function TabLayout() {
         tabBarButton: HapticTab,
       }}>
       <Tabs.Screen
-        name="index"
+        name="cocktails"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          title: 'Cocktails',
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons name="glass-cocktail" size={26} color={color} />
+          ),
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="shaker"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: 'Shaker',
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons name="cup-outline" size={26} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="ingredients"
+        options={{
+          title: 'Ingredients',
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons name="food-apple-outline" size={26} color={color} />
+          ),
         }}
       />
     </Tabs>
