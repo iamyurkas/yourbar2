@@ -19,14 +19,15 @@ type MD3TopTabsProps = {
 export function MD3TopTabs({ tabs, activeKey, onTabChange }: MD3TopTabsProps) {
   const colorScheme = useColorScheme();
   const theme = Colors[colorScheme ?? 'light'];
-  const containerBorder = colorScheme === 'dark' ? 'rgba(255,255,255,0.08)' : 'rgba(17,24,28,0.1)';
+  const isDark = colorScheme === 'dark';
+  const containerBorder = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(17,24,28,0.08)';
 
   return (
     <View
       style={[
         styles.container,
         {
-          backgroundColor: colorScheme === 'dark' ? '#201F24' : '#FFFBFE',
+          backgroundColor: isDark ? '#201F24' : '#F5F6FA',
           borderColor: containerBorder,
         },
       ]}>
@@ -42,7 +43,14 @@ export function MD3TopTabs({ tabs, activeKey, onTabChange }: MD3TopTabsProps) {
               {
                 backgroundColor: isActive
                   ? theme.tint
-                  : 'transparent',
+                  : isDark
+                    ? 'transparent'
+                    : '#FFFFFF',
+                borderColor: isActive
+                  ? 'transparent'
+                  : isDark
+                    ? 'rgba(255,255,255,0.08)'
+                    : 'rgba(17,24,28,0.05)',
                 opacity: pressed ? 0.9 : 1,
               },
             ]}
@@ -80,8 +88,10 @@ const styles = StyleSheet.create({
     flex: 1,
     borderRadius: 14,
     paddingVertical: 10,
+    paddingHorizontal: 12,
     alignItems: 'center',
     justifyContent: 'center',
+    borderWidth: 1,
   },
   label: {
     letterSpacing: 0.3,
