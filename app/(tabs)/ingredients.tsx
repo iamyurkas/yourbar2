@@ -53,7 +53,9 @@ export default function IngredientsScreen() {
         </View>
 
         {activeSection.data.length > 0 ? (
-          activeSection.data.map((ingredient) => <IngredientRow key={ingredient.name} ingredient={ingredient} />)
+          activeSection.data.map((ingredient) => (
+            <IngredientRow key={String(ingredient.id ?? ingredient.name)} ingredient={ingredient} />
+          ))
         ) : (
           <EmptyState message="Everything is stocked. Time to shake!" />
         )}

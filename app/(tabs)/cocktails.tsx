@@ -53,7 +53,9 @@ export default function CocktailsScreen() {
         </View>
 
         {activeSection.data.length > 0 ? (
-          activeSection.data.map((cocktail) => <CocktailCard key={cocktail.name} cocktail={cocktail} />)
+          activeSection.data.map((cocktail) => (
+            <CocktailCard key={String(cocktail.id ?? cocktail.name)} cocktail={cocktail} />
+          ))
         ) : (
           <EmptyState message="Add a recipe to get started shaking." />
         )}
