@@ -17,7 +17,7 @@ export function FabAdd({ label = 'Add', onPress }: FabAddProps) {
   const palette = Colors[colorScheme ?? 'light'];
 
   return (
-    <View style={[styles.container, { bottom: insets.bottom + 88 }]}> 
+    <View style={[styles.container, { bottom: insets.bottom + 32 }]}>
       <Pressable
         accessibilityRole="button"
         accessibilityLabel={label}

@@ -2,7 +2,8 @@ import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Image, type ImageSource } from 'expo-image';
+import type { ComponentType } from 'react';
+import type { SvgProps } from 'react-native-svg';
 
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
@@ -12,7 +13,9 @@ import IngredientsIcon from '@/assets/images/ingredients.svg';
 
 type RouteKey = 'cocktails' | 'shaker' | 'ingredients';
 
-const ICONS: Record<RouteKey, ImageSource> = {
+const ICON_SIZE = 28;
+
+const ICONS: Record<RouteKey, ComponentType<SvgProps>> = {
   cocktails: CocktailsIcon,
   shaker: ShakerIcon,
   ingredients: IngredientsIcon,
@@ -66,6 +69,8 @@ export function BottomBar({ state, descriptors, navigation }: BottomTabBarProps)
             });
           };
 
+          const Icon = ICONS[route.name as RouteKey];
+
           return (
             <Pressable
               key={route.key}
@@ -76,11 +81,12 @@ export function BottomBar({ state, descriptors, navigation }: BottomTabBarProps)
               onPress={onPress}
               onLongPress={onLongPress}
               style={styles.item}>
-              <Image
-                source={ICONS[route.name as RouteKey]}
-                style={[styles.icon, { tintColor: color }]}
-                contentFit="contain"
-                accessibilityIgnoresInvertColors
+              <Icon
+                width={ICON_SIZE}
+                height={ICON_SIZE}
+                fill={color}
+                accessibilityRole="image"
+                accessibilityLabel={typeof label === 'string' ? label : undefined}
               />
               <Text style={[styles.label, { color: labelColor, fontWeight: focused ? '600' : '500' }]}>
                 {label}
@@ -118,10 +124,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 6,
     paddingVertical: 8,
-  },
-  icon: {
-    width: 28,
-    height: 28,
   },
   label: {
     fontSize: 12,
