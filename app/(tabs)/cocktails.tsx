@@ -138,7 +138,7 @@ export default function CocktailsScreen() {
   const { cocktails, availableIngredientIds } = useInventory();
   const [activeTab, setActiveTab] = useState<CocktailTabKey>('all');
   const [query, setQuery] = useState('');
-  const paletteColors = Colors.light;
+  const paletteColors = Colors;
 
   const readyToMix = useMemo(() => {
     return cocktails.filter((cocktail) => {

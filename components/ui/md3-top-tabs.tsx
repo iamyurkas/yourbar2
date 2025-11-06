@@ -17,7 +17,7 @@ type MD3TopTabsProps = {
 };
 
 export function MD3TopTabs({ tabs, activeKey, onTabChange }: MD3TopTabsProps) {
-  const paletteColors = Colors.light;
+  const paletteColors = Colors;
 
   return (
     <View

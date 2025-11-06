@@ -11,7 +11,6 @@ import {
 } from 'react-native';
 
 import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
 
 type SearchTopBarProps = {
   value: string;
@@ -41,8 +40,7 @@ export function SearchTopBar({
   onMenuPress,
   onFilterPress,
 }: SearchTopBarProps) {
-  const colorScheme = useColorScheme();
-  const palette = Colors[colorScheme ?? 'light'];
+  const palette = Colors;
 
   const handleSubmit = (event: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
     onSubmit?.(event.nativeEvent.text);
@@ -98,8 +96,7 @@ export function SearchTopBar({
 }
 
 export function SegmentTabs({ options, value, onChange }: SegmentTabsProps) {
-  const colorScheme = useColorScheme();
-  const palette = Colors[colorScheme ?? 'light'];
+  const palette = Colors;
 
   return (
     <View style={[styles.tabs, { backgroundColor: palette.surface }]}> 

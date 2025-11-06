@@ -96,7 +96,7 @@ export default function IngredientsScreen() {
   const { ingredients, availableIngredientIds, toggleIngredientAvailability } = useInventory();
   const [activeTab, setActiveTab] = useState<IngredientTabKey>('all');
   const [query, setQuery] = useState('');
-  const paletteColors = Colors.light;
+  const paletteColors = Colors;
 
   const sections = useMemo<Record<IngredientTabKey, IngredientSection>>(() => {
     const inStock = ingredients.filter((ingredient) => {
