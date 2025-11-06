@@ -128,7 +128,7 @@ export default function IngredientsScreen() {
     return base.filter((ingredient) => ingredient.name.toLowerCase().includes(safeQuery));
   }, [activeSection.data, query]);
 
-  const highlightColor = '#4A90E21F';
+  const highlightColor = palette.highlightSubtle;
   const separatorColor = paletteColors.outline;
 
   const handleToggle = useCallback(

@@ -5,6 +5,7 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { Colors } from '@/constants/theme';
+import { palette } from '@/theme/theme';
 
 type ActionCardProps = {
   title: string;
@@ -13,10 +14,10 @@ type ActionCardProps = {
 };
 
 export default function ShakerScreen() {
-  const palette = Colors.light;
+  const paletteColors = Colors.light;
 
   return (
-    <ThemedView style={[styles.container, { backgroundColor: palette.background }]}> 
+    <ThemedView style={[styles.container, { backgroundColor: paletteColors.background }]}>
       <View style={styles.header}>
         <ThemedText type="title">Shaker</ThemedText>
         <ThemedText style={styles.subtitle}>
@@ -44,9 +45,9 @@ export default function ShakerScreen() {
 }
 
 function ActionCard({ title, description, icon }: ActionCardProps) {
-  const palette = Colors.light;
-  const tint = palette.tint;
-  const backgroundColor = '#FFFFFF';
+  const paletteColors = Colors.light;
+  const tint = paletteColors.tint;
+  const backgroundColor = palette.surfaceBright;
   const borderColor = `${tint}3d`;
 
   return (
@@ -56,14 +57,14 @@ function ActionCard({ title, description, icon }: ActionCardProps) {
         {
           backgroundColor,
           borderColor,
-          shadowColor: '#4DABF7',
+          shadowColor: palette.primary,
           shadowOpacity: 0.08,
           shadowRadius: 20,
           shadowOffset: { width: 0, height: 12 },
           elevation: 4,
         },
       ]}>
-      <View style={[styles.iconBadge, { backgroundColor: `${tint}1A`, borderColor: `${tint}33` }]}> 
+      <View style={[styles.iconBadge, { backgroundColor: `${tint}1A`, borderColor: `${tint}33` }]}>
         <IconSymbol name={icon} size={28} color={tint} />
       </View>
       <View style={styles.cardText}>

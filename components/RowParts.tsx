@@ -13,6 +13,7 @@ import {
 
 import { resolveAssetFromCatalog } from '@/assets/image-manifest';
 import { Colors } from '@/constants/theme';
+import { palette, tagColors } from '@/theme/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
 const THUMB_SIZE = 56;
@@ -26,7 +27,7 @@ export type ThumbProps = {
 
 export function Thumb({ uri, label, fallbackUri, fallbackLabel }: ThumbProps) {
   const colorScheme = useColorScheme();
-  const palette = Colors[colorScheme ?? 'light'];
+  const paletteColors = Colors[colorScheme ?? 'light'];
   const effectiveLabel = label ?? fallbackLabel;
   const trimmed = effectiveLabel?.trim();
   const fallbackText = trimmed ? trimmed.slice(0, 2).toUpperCase() : undefined;
@@ -45,13 +46,13 @@ export function Thumb({ uri, label, fallbackUri, fallbackLabel }: ThumbProps) {
   }
 
   return (
-    <View style={[styles.thumb, { backgroundColor: '#FFFFFF' }]}>
+    <View style={[styles.thumb, { backgroundColor: palette.surfaceBright }]}>
       {source ? (
         <Image source={source} style={styles.thumbImage} contentFit="contain" />
       ) : fallbackText ? (
-        <Text style={[styles.thumbFallback, { color: palette.onSurfaceVariant }]}>{fallbackText}</Text>
+        <Text style={[styles.thumbFallback, { color: paletteColors.onSurfaceVariant }]}>{fallbackText}</Text>
       ) : (
-        <MaterialCommunityIcons name="image-off" size={24} color={palette.onSurfaceVariant} />
+        <MaterialCommunityIcons name="image-off" size={24} color={paletteColors.onSurfaceVariant} />
       )}
     </View>
   );
@@ -61,7 +62,7 @@ type TagDotProps = {
   color?: string;
 };
 
-export function TagDot({ color = '#E5E7EB' }: TagDotProps) {
+export function TagDot({ color = tagColors.default }: TagDotProps) {
   return <View style={[styles.tagDot, { backgroundColor: color }]} />;
 }
 
@@ -72,10 +73,10 @@ type PresenceCheckProps = {
 
 export function PresenceCheck({ checked, onToggle }: PresenceCheckProps) {
   const colorScheme = useColorScheme();
-  const palette = Colors[colorScheme ?? 'light'];
-  const borderColor = checked ? palette.tint : palette.outline;
-  const fillColor = checked ? palette.tint : 'transparent';
-  const iconColor = checked ? palette.surface : 'transparent';
+  const paletteColors = Colors[colorScheme ?? 'light'];
+  const borderColor = checked ? paletteColors.tint : paletteColors.outline;
+  const fillColor = checked ? paletteColors.tint : 'transparent';
+  const iconColor = checked ? paletteColors.surface : 'transparent';
 
   return (
     <Pressable
@@ -98,9 +99,9 @@ type FavoriteStarProps = {
 
 export function FavoriteStar({ active, onToggle }: FavoriteStarProps) {
   const colorScheme = useColorScheme();
-  const palette = Colors[colorScheme ?? 'light'];
+  const paletteColors = Colors[colorScheme ?? 'light'];
   const icon = active ? 'star' : 'star-outline';
-  const color = active ? palette.secondary : palette.onSurfaceVariant;
+  const color = active ? paletteColors.secondary : paletteColors.onSurfaceVariant;
 
   return (
     <Pressable
@@ -142,8 +143,8 @@ export function ListRow({
   subtitleStyle,
 }: ListRowProps) {
   const colorScheme = useColorScheme();
-  const palette = Colors[colorScheme ?? 'light'];
-  const backgroundColor = selected ? highlightColor ?? `${palette.tint}1F` : palette.surface;
+  const paletteColors = Colors[colorScheme ?? 'light'];
+  const backgroundColor = selected ? highlightColor ?? `${paletteColors.tint}1F` : paletteColors.surface;
   return (
     <Pressable
       onPress={onPress}
@@ -152,11 +153,11 @@ export function ListRow({
       style={[styles.row, { backgroundColor }]}>
       <View style={styles.thumbSlot}>{thumbnail}</View>
       <View style={styles.textColumn}>
-        <Text style={[styles.title, { color: palette.text }]} numberOfLines={1}>
+        <Text style={[styles.title, { color: paletteColors.text }]} numberOfLines={1}>
           {title}
         </Text>
         {subtitle ? (
-          <Text style={[styles.subtitle, { color: palette.icon }, subtitleStyle]} numberOfLines={1}>
+          <Text style={[styles.subtitle, { color: paletteColors.icon }, subtitleStyle]} numberOfLines={1}>
             {subtitle}
           </Text>
         ) : null}
