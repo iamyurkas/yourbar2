@@ -1,9 +1,18 @@
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
-import React, { useCallback, useMemo } from 'react';
-import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import type { GestureResponderEvent } from 'react-native';
+import React, { useCallback, useMemo, useState } from 'react';
+import {
+  Alert,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  type GestureResponderEvent,
+  type NativeSyntheticEvent,
+  type TextLayoutEventData,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { resolveAssetFromCatalog, resolveGlasswareUriFromId } from '@/assets/image-manifest';
@@ -126,6 +135,28 @@ export default function IngredientDetailsScreen() {
 
   const handleAddCocktail = useCallback(() => {
     // Navigation to add cocktail will be added later
+  }, []);
+
+  const DESCRIPTION_PREVIEW_LINES = 5;
+  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
+  const [shouldShowDescriptionToggle, setShouldShowDescriptionToggle] = useState(false);
+
+  const handleDescriptionLayout = useCallback(
+    (event: NativeSyntheticEvent<TextLayoutEventData>) => {
+      if (shouldShowDescriptionToggle) {
+        return;
+      }
+
+      const totalLines = event.nativeEvent?.lines?.length ?? 0;
+      if (totalLines > DESCRIPTION_PREVIEW_LINES) {
+        setShouldShowDescriptionToggle(true);
+      }
+    },
+    [DESCRIPTION_PREVIEW_LINES, shouldShowDescriptionToggle],
+  );
+
+  const handleToggleDescription = useCallback(() => {
+    setIsDescriptionExpanded((previous) => !previous);
   }, []);
 
   const photoSource = useMemo(() => {
@@ -266,7 +297,27 @@ export default function IngredientDetailsScreen() {
             {ingredient.description ? (
               <View style={styles.infoBlock}>
                 <Text style={[styles.sectionLabel, { color: palette.onSurfaceVariant }]}>Description</Text>
-                <Text style={[styles.bodyText, { color: palette.onSurface }]}>{ingredient.description}</Text>
+                <Text
+                  style={[styles.bodyText, { color: palette.onSurface }]}
+                  numberOfLines={isDescriptionExpanded ? undefined : DESCRIPTION_PREVIEW_LINES}
+                  onTextLayout={handleDescriptionLayout}
+                >
+                  {ingredient.description}
+                </Text>
+                {shouldShowDescriptionToggle ? (
+                  <Pressable
+                    onPress={handleToggleDescription}
+                    accessibilityRole="button"
+                    accessibilityLabel={
+                      isDescriptionExpanded ? 'Show less description' : 'Show full description'
+                    }
+                    hitSlop={8}
+                  >
+                    <Text style={[styles.showMoreLess, { color: palette.tint }]}>
+                      {isDescriptionExpanded ? 'Show less' : 'Show more'}
+                    </Text>
+                  </Pressable>
+                ) : null}
               </View>
             ) : null}
 
@@ -328,7 +379,7 @@ export default function IngredientDetailsScreen() {
               )}
             </View>
 
-            <View style={styles.infoBlock}>
+            <View style={[styles.infoBlock, styles.cocktailBlock]}>
               <Text style={[styles.sectionLabel, { color: palette.onSurfaceVariant }]}>Cocktails</Text>
               {cocktailsWithIngredient.length ? (
                 <View style={styles.cocktailList}>
@@ -450,6 +501,7 @@ const styles = StyleSheet.create({
   },
   cocktailList: {
     gap: 12,
+    marginHorizontal: -24,
   },
   placeholderText: {
     fontSize: 15,
@@ -471,6 +523,11 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     textTransform: 'uppercase',
     letterSpacing: 0.5,
+  },
+  showMoreLess: {
+    marginTop: 4,
+    fontSize: 14,
+    fontWeight: '500',
   },
   baseIngredientRow: {
     flexDirection: 'row',
@@ -516,6 +573,10 @@ const styles = StyleSheet.create({
   unlinkButton: {
     padding: 6,
     borderRadius: 999,
+  },
+  cocktailBlock: {
+    marginHorizontal: -24,
+    paddingHorizontal: 24,
   },
   addButton: {
     marginTop: 12,
