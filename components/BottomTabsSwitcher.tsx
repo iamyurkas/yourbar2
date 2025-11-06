@@ -1,9 +1,7 @@
 import React, { useMemo } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Image, Pressable, StyleSheet, Text, View, type ImageSourcePropType } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router, usePathname } from 'expo-router';
-import type { ComponentType } from 'react';
-import type { SvgProps } from 'react-native-svg';
 
 import { Colors } from '@/constants/theme';
 import CocktailsIcon from '@/assets/images/cocktails.svg';
@@ -16,15 +14,15 @@ type TabItem = {
   key: TabKey;
   label: string;
   href: string;
-  Icon: ComponentType<SvgProps>;
+  icon: ImageSourcePropType;
 };
 
 const ICON_SIZE = 28;
 
 const TABS: TabItem[] = [
-  { key: 'cocktails', label: 'Cocktails', href: '/(tabs)/cocktails', Icon: CocktailsIcon },
-  { key: 'shaker', label: 'Shaker', href: '/(tabs)/shaker', Icon: ShakerIcon },
-  { key: 'ingredients', label: 'Ingredients', href: '/(tabs)/ingredients', Icon: IngredientsIcon },
+  { key: 'cocktails', label: 'Cocktails', href: '/(tabs)/cocktails', icon: CocktailsIcon },
+  { key: 'shaker', label: 'Shaker', href: '/(tabs)/shaker', icon: ShakerIcon },
+  { key: 'ingredients', label: 'Ingredients', href: '/(tabs)/ingredients', icon: IngredientsIcon },
 ];
 
 function resolveActiveTab(pathname: string | null): TabKey {
@@ -66,7 +64,7 @@ export function BottomTabsSwitcher() {
             shadowColor: palette.tint,
           },
         ]}>
-        {TABS.map(({ key, label, href, Icon }) => {
+        {TABS.map(({ key, label, href, icon }) => {
           const focused = key === activeTab;
           const color = focused ? palette.tint : palette.tabIconDefault;
           const labelColor = focused ? palette.tint : palette.icon;
@@ -87,12 +85,11 @@ export function BottomTabsSwitcher() {
               accessibilityLabel={label}
               onPress={handlePress}
               style={styles.item}>
-              <Icon
-                width={ICON_SIZE}
-                height={ICON_SIZE}
-                fill={color}
+              <Image
+                source={icon}
                 accessibilityRole="image"
                 accessibilityLabel={label}
+                style={[styles.icon, { tintColor: color }]}
               />
               <Text style={[styles.label, { color: labelColor, fontWeight: focused ? '600' : '500' }]}>
                 {label}
@@ -130,6 +127,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 6,
     paddingVertical: 8,
+  },
+  icon: {
+    width: ICON_SIZE,
+    height: ICON_SIZE,
+    resizeMode: 'contain',
   },
   label: {
     fontSize: 12,
