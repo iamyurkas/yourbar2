@@ -17,6 +17,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { resolveAssetFromCatalog } from '@/assets/image-manifest';
 import { CocktailListRow } from '@/components/CocktailListRow';
+import { BottomTabsSwitcher } from '@/components/BottomTabsSwitcher';
 import { PresenceCheck } from '@/components/RowParts';
 import { Colors } from '@/constants/theme';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
@@ -274,7 +275,9 @@ export default function IngredientDetailsScreen() {
   );
 
   return (
-    <SafeAreaView style={[styles.safeArea, { backgroundColor: palette.background }]} edges={['left', 'right']}>
+    <SafeAreaView
+      style={[styles.safeArea, { backgroundColor: palette.background }]}
+      edges={['left', 'right', 'bottom']}>
       <Stack.Screen
         options={{
           title: 'Ingredient details',
@@ -305,9 +308,10 @@ export default function IngredientDetailsScreen() {
         }}
       />
 
-      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-        {ingredient ? (
-          <View style={styles.section}>
+      <View style={styles.container}>
+        <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+          {ingredient ? (
+            <View style={styles.section}>
             <Text style={[styles.name, { color: palette.onSurface }]}>{ingredient.name}</Text>
 
             <View style={styles.photoWrapper}>
@@ -550,19 +554,24 @@ export default function IngredientDetailsScreen() {
               accessibilityLabel="Add cocktail">
               <Text style={[styles.addButtonLabel, { color: palette.onPrimary }]}>+ Add cocktail</Text>
             </Pressable>
-          </View>
-        ) : (
-          <View style={styles.emptyState}>
-            <Text style={[styles.placeholderText, { color: palette.onSurfaceVariant }]}>Ingredient not found</Text>
-          </View>
-        )}
-      </ScrollView>
+            </View>
+          ) : (
+            <View style={styles.emptyState}>
+              <Text style={[styles.placeholderText, { color: palette.onSurfaceVariant }]}>Ingredient not found</Text>
+            </View>
+          )}
+        </ScrollView>
+        <BottomTabsSwitcher />
+      </View>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   safeArea: {
+    flex: 1,
+  },
+  container: {
     flex: 1,
   },
   headerButton: {
@@ -575,7 +584,7 @@ const styles = StyleSheet.create({
   content: {
     paddingHorizontal: 24,
     paddingTop: 24,
-    paddingBottom: 48,
+    paddingBottom: 160,
     gap: 24,
   },
   section: {
