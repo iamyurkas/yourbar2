@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { IconSymbol } from '@/components/ui/icon-symbol';
+import { SearchTopBar } from '@/components/TopBars';
 import { Colors } from '@/constants/theme';
 import { palette } from '@/theme/theme';
 
@@ -14,32 +15,36 @@ type ActionCardProps = {
 };
 
 export default function ShakerScreen() {
+  const [query, setQuery] = useState('');
   const paletteColors = Colors.light;
 
   return (
-    <ThemedView style={[styles.container, { backgroundColor: paletteColors.background }]}>
-      <View style={styles.header}>
-        <ThemedText type="title">Shaker</ThemedText>
-        <ThemedText style={styles.subtitle}>
-          Jump into service mode with timers, prep reminders and a live checklist for the bar team.
-        </ThemedText>
-      </View>
+    <ThemedView style={[styles.screen, { backgroundColor: paletteColors.background }]}>
+      <SearchTopBar value={query} onChangeText={setQuery} placeholder="Search" />
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <ThemedText type="title">Shaker</ThemedText>
+          <ThemedText style={styles.subtitle}>
+            Jump into service mode with timers, prep reminders and a live checklist for the bar team.
+          </ThemedText>
+        </View>
 
-      <ActionCard
-        title="Service rounds"
-        description="Start a round, track tickets and sync progress with the floor in real time."
-        icon="shaker.fill"
-      />
-      <ActionCard
-        title="Build a new recipe"
-        description="Capture specs, tasting notes and garnish instructions before saving to Cocktails."
-        icon="wineglass.fill"
-      />
-      <ActionCard
-        title="Restock checklist"
-        description="Create a closing checklist and share it with the team before the next shift."
-        icon="shopping.basket.fill"
-      />
+        <ActionCard
+          title="Service rounds"
+          description="Start a round, track tickets and sync progress with the floor in real time."
+          icon="shaker.fill"
+        />
+        <ActionCard
+          title="Build a new recipe"
+          description="Capture specs, tasting notes and garnish instructions before saving to Cocktails."
+          icon="wineglass.fill"
+        />
+        <ActionCard
+          title="Restock checklist"
+          description="Create a closing checklist and share it with the team before the next shift."
+          icon="shopping.basket.fill"
+        />
+      </View>
     </ThemedView>
   );
 }
@@ -78,9 +83,12 @@ function ActionCard({ title, description, icon }: ActionCardProps) {
 }
 
 const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+  },
   container: {
     flex: 1,
-    paddingTop: 48,
+    paddingTop: 32,
     paddingHorizontal: 20,
     paddingBottom: 120,
     gap: 24,
