@@ -20,7 +20,7 @@ export function SearchBar({
   trailingActionLabel,
   onPressTrailingAction,
 }: SearchBarProps) {
-  const paletteColors = Colors.light;
+  const paletteColors = Colors;
   const backgroundColor = palette.surfaceBright;
   const borderColor = paletteColors.outline;
   const placeholderColor = palette.placeholder;

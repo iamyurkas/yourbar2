@@ -16,7 +16,7 @@ type ActionCardProps = {
 
 export default function ShakerScreen() {
   const [query, setQuery] = useState('');
-  const paletteColors = Colors.light;
+  const paletteColors = Colors;
 
   return (
     <ThemedView style={[styles.screen, { backgroundColor: paletteColors.background }]}>
@@ -50,7 +50,7 @@ export default function ShakerScreen() {
 }
 
 function ActionCard({ title, description, icon }: ActionCardProps) {
-  const paletteColors = Colors.light;
+  const paletteColors = Colors;
   const tint = paletteColors.tint;
   const backgroundColor = palette.surfaceBright;
   const borderColor = `${tint}3d`;

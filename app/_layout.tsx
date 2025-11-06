@@ -17,10 +17,10 @@ export default function RootLayout() {
     ...DefaultTheme,
     colors: {
       ...DefaultTheme.colors,
-      background: Colors.light.background,
-      card: Colors.light.surface,
-      text: Colors.light.text,
-      border: Colors.light.outline,
+      background: Colors.background,
+      card: Colors.surface,
+      text: Colors.text,
+      border: Colors.outline,
     },
   } satisfies typeof DefaultTheme);
 

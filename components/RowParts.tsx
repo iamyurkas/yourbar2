@@ -13,7 +13,6 @@ import {
 
 import { resolveAssetFromCatalog } from '@/assets/image-manifest';
 import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
 import { palette, tagColors } from '@/theme/theme';
 
 const THUMB_SIZE = 56;
@@ -26,8 +25,7 @@ export type ThumbProps = {
 };
 
 export function Thumb({ uri, label, fallbackUri, fallbackLabel }: ThumbProps) {
-  const colorScheme = useColorScheme();
-  const paletteColors = Colors[colorScheme ?? 'light'];
+  const paletteColors = Colors;
   const effectiveLabel = label ?? fallbackLabel;
   const trimmed = effectiveLabel?.trim();
   const fallbackText = trimmed ? trimmed.slice(0, 2).toUpperCase() : undefined;
@@ -72,8 +70,7 @@ type PresenceCheckProps = {
 };
 
 export function PresenceCheck({ checked, onToggle }: PresenceCheckProps) {
-  const colorScheme = useColorScheme();
-  const paletteColors = Colors[colorScheme ?? 'light'];
+  const paletteColors = Colors;
   const borderColor = checked ? paletteColors.tint : paletteColors.outline;
   const backgroundColor = checked ? paletteColors.tint : 'transparent';
   const iconColor = checked ? '#FFFFFF' : 'transparent';
@@ -96,8 +93,7 @@ type FavoriteStarProps = {
 };
 
 export function FavoriteStar({ active, onToggle }: FavoriteStarProps) {
-  const colorScheme = useColorScheme();
-  const paletteColors = Colors[colorScheme ?? 'light'];
+  const paletteColors = Colors;
   const icon = active ? 'star' : 'star-outline';
   const color = active ? paletteColors.secondary : paletteColors.onSurfaceVariant;
 
@@ -140,8 +136,7 @@ export function ListRow({
   accessibilityState,
   subtitleStyle,
 }: ListRowProps) {
-  const colorScheme = useColorScheme();
-  const paletteColors = Colors[colorScheme ?? 'light'];
+  const paletteColors = Colors;
   const backgroundColor = selected ? highlightColor ?? `${paletteColors.tint}1F` : paletteColors.background;
   return (
     <Pressable

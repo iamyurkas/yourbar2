@@ -4,7 +4,6 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
 import { palette } from '@/theme/theme';
 
 type FabAddProps = {
@@ -14,8 +13,7 @@ type FabAddProps = {
 
 export function FabAdd({ label = 'Add', onPress }: FabAddProps) {
   const insets = useSafeAreaInsets();
-  const colorScheme = useColorScheme();
-  const paletteColors = Colors[colorScheme ?? 'light'];
+  const paletteColors = Colors;
 
   return (
     <View style={[styles.container, { bottom: insets.bottom + 16 }]}>

@@ -2,22 +2,17 @@ import { Platform } from 'react-native';
 
 import { lightTheme } from '@/theme/theme';
 
-const tintColorLight = lightTheme.colors.primary;
+const lightColors = lightTheme.colors;
+const tintColor = lightColors.primary;
 
 export const Colors = {
-  light: {
-    text: lightTheme.colors.onSurface,
-    background: lightTheme.colors.background,
-    surface: lightTheme.colors.surface,
-    surfaceVariant: lightTheme.colors.surfaceVariant,
-    outline: lightTheme.colors.outline,
-    outlineVariant: lightTheme.colors.outlineVariant,
-    tint: tintColorLight,
-    icon: lightTheme.colors.onSurfaceVariant,
-    tabIconDefault: lightTheme.colors.onSurfaceVariant,
-    tabIconSelected: tintColorLight,
-  },
-};
+  ...lightColors,
+  text: lightColors.onSurface,
+  tint: tintColor,
+  icon: lightColors.onSurfaceVariant,
+  tabIconDefault: lightColors.onSurfaceVariant,
+  tabIconSelected: tintColor,
+} as const;
 
 export const Fonts = Platform.select({
   ios: {

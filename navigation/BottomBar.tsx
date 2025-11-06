@@ -22,7 +22,7 @@ const ICONS: Record<RouteKey, ComponentType<SvgProps>> = {
 
 export function BottomBar({ state, descriptors, navigation }: BottomTabBarProps) {
   const insets = useSafeAreaInsets();
-  const palette = Colors.light;
+  const palette = Colors;
 
   return (
     <View style={[styles.wrapper, { paddingBottom: Math.max(insets.bottom, 16) }]}>
