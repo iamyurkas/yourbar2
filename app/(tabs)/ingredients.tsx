@@ -1,3 +1,4 @@
+import { useRouter } from 'expo-router';
 import React, { memo, useCallback, useMemo, useState } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -30,6 +31,7 @@ type IngredientListItemProps = {
   availableIngredientIds: Set<number>;
   onToggle: (id: number) => void;
   surfaceVariantColor?: string;
+  onOpenDetails?: (id: number) => void;
 };
 
 const areIngredientPropsEqual = (
@@ -40,7 +42,8 @@ const areIngredientPropsEqual = (
   prev.highlightColor === next.highlightColor &&
   prev.availableIngredientIds === next.availableIngredientIds &&
   prev.onToggle === next.onToggle &&
-  prev.surfaceVariantColor === next.surfaceVariantColor;
+  prev.surfaceVariantColor === next.surfaceVariantColor &&
+  prev.onOpenDetails === next.onOpenDetails;
 
 const IngredientListItem = memo(function IngredientListItemComponent({
   ingredient,
@@ -48,6 +51,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
   availableIngredientIds,
   onToggle,
   surfaceVariantColor,
+  onOpenDetails,
 }: IngredientListItemProps) {
     const id = Number(ingredient.id ?? -1);
     const isAvailable = id >= 0 && availableIngredientIds.has(id);
@@ -76,12 +80,18 @@ const IngredientListItem = memo(function IngredientListItemComponent({
       [handleToggle, isAvailable],
     );
 
+    const handleOpenDetails = useCallback(() => {
+      if (id >= 0) {
+        onOpenDetails?.(id);
+      }
+    }, [id, onOpenDetails]);
+
     return (
       <ListRow
         title={ingredient.name}
         subtitle={subtitle}
         subtitleStyle={subtitleStyle}
-        onPress={handleToggle}
+        onPress={handleOpenDetails}
         selected={isAvailable}
         highlightColor={highlightColor}
         tagColor={tagColor}
@@ -95,6 +105,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
 
 export default function IngredientsScreen() {
   const { ingredients, availableIngredientIds, toggleIngredientAvailability } = useInventory();
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState<IngredientTabKey>('all');
   const [query, setQuery] = useState('');
   const paletteColors = Colors;
@@ -169,12 +180,14 @@ export default function IngredientsScreen() {
         availableIngredientIds={availableIngredientIds}
         onToggle={handleToggle}
         surfaceVariantColor={paletteColors.onSurfaceVariant ?? paletteColors.icon}
+        onOpenDetails={(id) => router.push({ pathname: '/ingredients/[id]', params: { id: String(id) } })}
       />
     ),
     [
       availableIngredientIds,
       handleToggle,
       highlightColor,
+      router,
       paletteColors.icon,
       paletteColors.onSurfaceVariant,
     ],
@@ -210,7 +223,7 @@ export default function IngredientsScreen() {
           }
         />
       </View>
-      <FabAdd label="Add ingredient" />
+      <FabAdd label="Add ingredient" onPress={() => router.push('/ingredients/create')} />
     </SafeAreaView>
   );
 }
