@@ -1,6 +1,6 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
   Image,
@@ -90,6 +90,28 @@ export default function IngredientDetailsScreen() {
     router.back();
   }, [router]);
 
+  const ingredientDescription = ingredient?.description ?? '';
+
+  const [descriptionExpanded, setDescriptionExpanded] = useState(false);
+
+  const descriptionNeedsToggle = ingredientDescription.length > 160;
+
+  const displayedDescription = useMemo(() => {
+    if (!ingredientDescription) {
+      return '';
+    }
+
+    if (descriptionExpanded || !descriptionNeedsToggle) {
+      return ingredientDescription;
+    }
+
+    return `${ingredientDescription.slice(0, 160)}…`;
+  }, [descriptionExpanded, descriptionNeedsToggle, ingredientDescription]);
+
+  const handleToggleDescription = useCallback(() => {
+    setDescriptionExpanded((prev) => !prev);
+  }, []);
+
   if (!ingredient) {
     return (
       <View style={styles.loaderContainer}>
@@ -103,7 +125,7 @@ export default function IngredientDetailsScreen() {
     <>
       <Stack.Screen
         options={{
-          title: ingredient.name,
+          title: 'Ingredient Details',
           headerLeft: () => (
             <Pressable onPress={handleBack} accessibilityRole="button" style={styles.headerIconButton}>
               <MaterialIcons
@@ -121,42 +143,43 @@ export default function IngredientDetailsScreen() {
         }}
       />
       <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
-        <View style={styles.headerRow}>
-          <Text style={[styles.title, { color: Colors.onSurface }]}>{ingredient.name}</Text>
-          <View style={styles.iconRow}>
-            <Pressable
-              onPress={handleToggleShopping}
-              style={styles.iconButton}
-              accessibilityRole="button"
-              android_ripple={{ color: `${Colors.onSurface}22` }}>
-              <MaterialIcons
-                name={inShoppingList ? 'add-shopping-cart' : 'shopping-cart'}
-                size={22}
-                color={inShoppingList ? Colors.tint : Colors.onSurface}
-              />
-            </Pressable>
-            <Pressable
-              onPress={handleToggleAvailability}
-              style={styles.iconButton}
-              accessibilityRole="button"
-              android_ripple={{ color: `${Colors.onSurface}22` }}>
-              <MaterialIcons
-                name={isAvailable ? 'check-circle' : 'radio-button-unchecked'}
-                size={22}
-                color={isAvailable ? Colors.tint : Colors.onSurface}
-              />
-            </Pressable>
-          </View>
+        <Text style={[styles.title, { color: Colors.onSurface }]}>{ingredient.name}</Text>
+
+        <View style={styles.iconRow}>
+          <Pressable
+            onPress={handleToggleShopping}
+            style={styles.iconButton}
+            accessibilityRole="button"
+            android_ripple={{ color: `${Colors.onSurface}22` }}>
+            <MaterialIcons
+              name={inShoppingList ? 'add-shopping-cart' : 'shopping-cart'}
+              size={24}
+              color={inShoppingList ? Colors.tint : Colors.onSurface}
+            />
+          </Pressable>
+          <Pressable
+            onPress={handleToggleAvailability}
+            style={styles.iconButton}
+            accessibilityRole="button"
+            android_ripple={{ color: `${Colors.onSurface}22` }}>
+            <MaterialIcons
+              name={isAvailable ? 'check-circle' : 'radio-button-unchecked'}
+              size={24}
+              color={isAvailable ? Colors.tint : Colors.onSurface}
+            />
+          </Pressable>
         </View>
 
-        <View style={styles.photoWrapper}>
-          {ingredient.photoUri ? (
-            <Image source={{ uri: ingredient.photoUri }} style={styles.photo} resizeMode="cover" />
-          ) : (
-            <View style={[styles.photoPlaceholder, { borderColor: Colors.outline }]}>
-              <Text style={{ color: Colors.onSurfaceVariant }}>No image</Text>
-            </View>
-          )}
+        <View style={styles.photoSection}>
+          <View style={styles.photoWrapper}>
+            {ingredient.photoUri ? (
+              <Image source={{ uri: ingredient.photoUri }} style={styles.photo} resizeMode="cover" />
+            ) : (
+              <View style={[styles.photoPlaceholder, { borderColor: Colors.outline }]}>
+                <Text style={{ color: Colors.onSurfaceVariant }}>No image</Text>
+              </View>
+            )}
+          </View>
         </View>
 
         {ingredient.tags?.length ? (
@@ -168,7 +191,17 @@ export default function IngredientDetailsScreen() {
         ) : null}
 
         {ingredient.description ? (
-          <Text style={[styles.description, { color: Colors.onSurface }]}>{ingredient.description}</Text>
+          <View style={styles.descriptionBlock}>
+            <Text style={[styles.sectionTitle, { color: Colors.onSurface }]}>Description</Text>
+            <Text style={[styles.description, { color: Colors.onSurface }]}>{displayedDescription}</Text>
+            {descriptionNeedsToggle ? (
+              <Pressable onPress={handleToggleDescription} accessibilityRole="button">
+                <Text style={[styles.link, { color: Colors.tint }]}>
+                  {descriptionExpanded ? 'Show less' : 'Show more'}
+                </Text>
+              </Pressable>
+            ) : null}
+          </View>
         ) : null}
 
         {brandedChildren.length ? (
@@ -182,12 +215,29 @@ export default function IngredientDetailsScreen() {
           </View>
         ) : null}
 
-        {baseIngredient ? (
-          <View style={styles.section}>
-            <Text style={[styles.sectionTitle, { color: Colors.onSurface }]}>Base ingredient</Text>
-            <Text style={[styles.sectionItem, { color: Colors.onSurfaceVariant }]}>{baseIngredient.name}</Text>
+        <View style={styles.section}>
+          <Text style={[styles.sectionTitle, { color: Colors.onSurface }]}>Base ingredient</Text>
+          <View style={[styles.baseCard, { backgroundColor: Colors.surfaceVariant, borderColor: Colors.outline }]}>
+            {baseIngredient ? (
+              <>
+                {baseIngredient.photoUri ? (
+                  <Image source={{ uri: baseIngredient.photoUri }} style={styles.baseThumbnail} />
+                ) : (
+                  <View style={[styles.baseThumbnail, styles.basePlaceholder]}>
+                    <MaterialIcons
+                      name="inventory-2"
+                      size={20}
+                      color={Colors.onSurfaceVariant}
+                    />
+                  </View>
+                )}
+                <Text style={[styles.baseName, { color: Colors.onSurface }]}>{baseIngredient.name}</Text>
+              </>
+            ) : (
+              <Text style={[styles.baseName, { color: Colors.onSurfaceVariant }]}>None</Text>
+            )}
           </View>
-        ) : null}
+        </View>
 
         <View style={styles.section}>
           <Text style={[styles.sectionTitle, { color: Colors.onSurface }]}>Used in cocktails</Text>
@@ -219,42 +269,42 @@ const styles = StyleSheet.create({
   loaderText: {
     marginTop: 12,
   },
-  headerRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 16,
-  },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: '700',
-    flex: 1,
+    marginBottom: 12,
   },
   iconRow: {
     flexDirection: 'row',
+    alignSelf: 'flex-end',
+    marginBottom: 24,
   },
   iconButton: {
     marginLeft: 12,
-    padding: 6,
-    borderRadius: 18,
+    padding: 8,
+    borderRadius: 20,
   },
   headerIconButton: {
     padding: 6,
     marginLeft: 12,
   },
-  photoWrapper: {
-    alignItems: 'flex-start',
+  photoSection: {
+    width: '100%',
+    alignItems: 'center',
     marginBottom: 24,
+  },
+  photoWrapper: {
+    borderRadius: 16,
+    overflow: 'hidden',
   },
   photo: {
     width: 150,
     height: 150,
-    borderRadius: 12,
   },
   photoPlaceholder: {
     width: 150,
     height: 150,
-    borderRadius: 12,
+    borderRadius: 16,
     borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
@@ -264,10 +314,13 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     marginBottom: 16,
   },
-  description: {
-    fontSize: 15,
-    lineHeight: 20,
+  descriptionBlock: {
     marginBottom: 24,
+  },
+  description: {
+    fontSize: 16,
+    lineHeight: 22,
+    marginBottom: 8,
   },
   section: {
     marginBottom: 24,
@@ -280,5 +333,31 @@ const styles = StyleSheet.create({
   sectionItem: {
     fontSize: 15,
     marginBottom: 8,
+  },
+  link: {
+    fontSize: 15,
+    fontWeight: '600',
+  },
+  baseCard: {
+    borderRadius: 12,
+    borderWidth: 1,
+    padding: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  baseThumbnail: {
+    width: 40,
+    height: 40,
+    borderRadius: 8,
+  },
+  basePlaceholder: {
+    backgroundColor: Colors.surface,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  baseName: {
+    fontSize: 16,
+    flexShrink: 1,
+    marginLeft: 12,
   },
 });
