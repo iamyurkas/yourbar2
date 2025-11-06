@@ -1,4 +1,4 @@
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useCallback, useMemo, useState } from 'react';
 import {
@@ -125,7 +125,7 @@ export default function IngredientDetailsScreen() {
     <>
       <Stack.Screen
         options={{
-          title: 'Ingredient Details',
+          title: 'Ingredient details',
           headerLeft: () => (
             <Pressable onPress={handleBack} accessibilityRole="button" style={styles.headerIconButton}>
               <MaterialIcons
@@ -140,35 +140,11 @@ export default function IngredientDetailsScreen() {
               <MaterialIcons name="edit" size={22} color={Colors.onSurface} />
             </Pressable>
           ),
+          headerTitleAlign: 'center',
         }}
       />
       <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
         <Text style={[styles.title, { color: Colors.onSurface }]}>{ingredient.name}</Text>
-
-        <View style={styles.iconRow}>
-          <Pressable
-            onPress={handleToggleShopping}
-            style={styles.iconButton}
-            accessibilityRole="button"
-            android_ripple={{ color: `${Colors.onSurface}22` }}>
-            <MaterialIcons
-              name={inShoppingList ? 'add-shopping-cart' : 'shopping-cart'}
-              size={24}
-              color={inShoppingList ? Colors.tint : Colors.onSurface}
-            />
-          </Pressable>
-          <Pressable
-            onPress={handleToggleAvailability}
-            style={styles.iconButton}
-            accessibilityRole="button"
-            android_ripple={{ color: `${Colors.onSurface}22` }}>
-            <MaterialIcons
-              name={isAvailable ? 'check-circle' : 'radio-button-unchecked'}
-              size={24}
-              color={isAvailable ? Colors.tint : Colors.onSurface}
-            />
-          </Pressable>
-        </View>
 
         <View style={styles.photoSection}>
           <View style={styles.photoWrapper}>
@@ -180,6 +156,31 @@ export default function IngredientDetailsScreen() {
               </View>
             )}
           </View>
+        </View>
+
+        <View style={styles.iconRow}>
+          <Pressable
+            onPress={handleToggleShopping}
+            style={[styles.iconButton, inShoppingList && styles.iconButtonActive]}
+            accessibilityRole="button"
+            android_ripple={{ color: `${Colors.onSurface}22` }}>
+            <MaterialCommunityIcons
+              name={inShoppingList ? 'cart' : 'cart-outline'}
+              size={26}
+              color={inShoppingList ? Colors.tint : Colors.onSurfaceVariant}
+            />
+          </Pressable>
+          <Pressable
+            onPress={handleToggleAvailability}
+            style={[styles.iconButton, isAvailable && styles.iconButtonActive]}
+            accessibilityRole="button"
+            android_ripple={{ color: `${Colors.onSurface}22` }}>
+            <MaterialIcons
+              name={isAvailable ? 'check-circle' : 'radio-button-unchecked'}
+              size={26}
+              color={isAvailable ? Colors.tint : Colors.onSurfaceVariant}
+            />
+          </Pressable>
         </View>
 
         {ingredient.tags?.length ? (
@@ -272,17 +273,21 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: '700',
-    marginBottom: 12,
+    marginBottom: 16,
+    textAlign: 'center',
   },
   iconRow: {
     flexDirection: 'row',
-    alignSelf: 'flex-end',
+    justifyContent: 'center',
     marginBottom: 24,
   },
   iconButton: {
-    marginLeft: 12,
+    marginHorizontal: 12,
     padding: 8,
     borderRadius: 20,
+  },
+  iconButtonActive: {
+    backgroundColor: `${Colors.tint}22`,
   },
   headerIconButton: {
     padding: 6,
