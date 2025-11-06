@@ -15,7 +15,7 @@ import { resolveAssetFromCatalog } from '@/assets/image-manifest';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
-const THUMB_SIZE = 60;
+const THUMB_SIZE = 56;
 
 export type ThumbProps = {
   uri?: string | null;
@@ -34,7 +34,7 @@ export function Thumb({ uri, label }: ThumbProps) {
   return (
     <View style={[styles.thumb, { backgroundColor: palette.surfaceVariant, borderColor: palette.outlineVariant }]}> 
       {source ? (
-        <Image source={source} style={styles.thumbImage} contentFit="cover" />
+        <Image source={source} style={styles.thumbImage} contentFit="contain" />
       ) : fallbackLabel ? (
         <Text style={[styles.thumbFallback, { color: palette.onSurfaceVariant }]}>{fallbackLabel}</Text>
       ) : (
@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
   thumbSlot: {
     width: THUMB_SIZE,
     height: THUMB_SIZE,
-    borderRadius: 12,
+    borderRadius: 8,
     overflow: 'hidden',
   },
   textColumn: {
@@ -217,7 +217,7 @@ const styles = StyleSheet.create({
   thumb: {
     width: THUMB_SIZE,
     height: THUMB_SIZE,
-    borderRadius: 12,
+    borderRadius: 8,
     borderWidth: 1,
     overflow: 'hidden',
     alignItems: 'center',
