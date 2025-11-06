@@ -171,8 +171,11 @@ export default function IngredientDetailsScreen() {
         return;
       }
 
-      const totalLines = event.nativeEvent?.lines?.length ?? 0;
-      if (totalLines > DESCRIPTION_PREVIEW_LINES) {
+      const lines = event.nativeEvent?.lines ?? [];
+      const lastLine = lines.at(-1);
+      const hasEllipsis = lastLine ? /(…|\.\.\.)$/.test(lastLine.text) : false;
+
+      if (hasEllipsis || lines.length > DESCRIPTION_PREVIEW_LINES) {
         setShouldShowDescriptionToggle(true);
       }
     },
