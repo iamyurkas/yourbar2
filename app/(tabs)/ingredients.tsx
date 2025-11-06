@@ -8,6 +8,7 @@ import { SearchTopBar, SegmentTabs } from '@/components/TopBars';
 import { Colors } from '@/constants/theme';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
 import { palette } from '@/theme/theme';
+import { useSegmentedTabSwipe } from '@/hooks/use-segmented-tab-swipe';
 
 type IngredientSection = {
   key: string;
@@ -97,6 +98,7 @@ export default function IngredientsScreen() {
   const [activeTab, setActiveTab] = useState<IngredientTabKey>('all');
   const [query, setQuery] = useState('');
   const paletteColors = Colors.light;
+  const swipeResponder = useSegmentedTabSwipe(TAB_OPTIONS, activeTab, setActiveTab);
 
   const sections = useMemo<Record<IngredientTabKey, IngredientSection>>(() => {
     const inStock = ingredients.filter((ingredient) => {
@@ -173,17 +175,19 @@ export default function IngredientsScreen() {
       <View style={styles.container}>
         <SearchTopBar value={query} onChangeText={setQuery} placeholder="Search" />
         <SegmentTabs options={TAB_OPTIONS} value={activeTab} onChange={setActiveTab} />
-        <FlatList
-          data={filteredIngredients}
-          keyExtractor={keyExtractor}
-          renderItem={renderItem}
-          ItemSeparatorComponent={renderSeparator}
-          contentContainerStyle={styles.listContent}
-          showsVerticalScrollIndicator={false}
-          ListEmptyComponent={
-            <Text style={[styles.emptyLabel, { color: paletteColors.onSurfaceVariant }]}>No ingredients yet</Text>
-          }
-        />
+        <View style={styles.listWrapper} {...swipeResponder.panHandlers}>
+          <FlatList
+            data={filteredIngredients}
+            keyExtractor={keyExtractor}
+            renderItem={renderItem}
+            ItemSeparatorComponent={renderSeparator}
+            contentContainerStyle={styles.listContent}
+            showsVerticalScrollIndicator={false}
+            ListEmptyComponent={
+              <Text style={[styles.emptyLabel, { color: paletteColors.onSurfaceVariant }]}>No ingredients yet</Text>
+            }
+          />
+        </View>
       </View>
       <FabAdd label="Add ingredient" />
     </SafeAreaView>
@@ -195,6 +199,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   container: {
+    flex: 1,
+  },
+  listWrapper: {
     flex: 1,
   },
   listContent: {
