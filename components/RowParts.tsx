@@ -75,19 +75,17 @@ export function PresenceCheck({ checked, onToggle }: PresenceCheckProps) {
   const colorScheme = useColorScheme();
   const paletteColors = Colors[colorScheme ?? 'light'];
   const borderColor = checked ? paletteColors.tint : paletteColors.outline;
-  const fillColor = checked ? paletteColors.tint : 'transparent';
-  const iconColor = checked ? paletteColors.surface : 'transparent';
+  const backgroundColor = checked ? paletteColors.tint : 'transparent';
+  const iconColor = checked ? '#FFFFFF' : 'transparent';
 
   return (
     <Pressable
       accessibilityRole="checkbox"
       accessibilityState={{ checked }}
       onPress={onToggle}
-      style={[styles.checkbox, { borderColor }]}
+      style={[styles.checkbox, { borderColor, backgroundColor }]}
       hitSlop={8}>
-      <View style={[styles.checkboxFill, { backgroundColor: fillColor }]}>
-        <MaterialCommunityIcons name="check" color={iconColor} size={16} />
-      </View>
+      <MaterialCommunityIcons name="check" color={iconColor} size={16} />
     </Pressable>
   );
 }
@@ -213,13 +211,6 @@ const styles = StyleSheet.create({
     height: 28,
     borderRadius: 14,
     borderWidth: 2,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  checkboxFill: {
-    width: 22,
-    height: 22,
-    borderRadius: 11,
     alignItems: 'center',
     justifyContent: 'center',
   },
