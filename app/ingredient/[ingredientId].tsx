@@ -82,6 +82,14 @@ export default function IngredientDetailsScreen() {
     return ingredients.find((item) => Number(item.id ?? -1) === baseId);
   }, [ingredient?.baseIngredientId, ingredients]);
 
+  const brandedIngredients = useMemo(() => {
+    if (numericIngredientId == null) {
+      return [];
+    }
+
+    return ingredients.filter((item) => Number(item.baseIngredientId ?? -1) === numericIngredientId);
+  }, [ingredients, numericIngredientId]);
+
   const baseIngredientPhotoSource = useMemo(() => {
     if (!baseIngredient?.photoUri) {
       return undefined;
@@ -214,6 +222,42 @@ export default function IngredientDetailsScreen() {
     });
   }, [baseIngredient?.id]);
 
+  const handleNavigateToIngredient = useCallback((id: number | string | undefined) => {
+    if (id == null) {
+      return;
+    }
+
+    router.push({ pathname: '/ingredient/[ingredientId]', params: { ingredientId: String(id) } });
+  }, []);
+
+  const handleRemoveBranded = useCallback(
+    (brandedIngredient: Ingredient) =>
+      (event?: GestureResponderEvent) => {
+        event?.stopPropagation();
+
+        const brandedId = Number(brandedIngredient.id ?? -1);
+        if (Number.isNaN(brandedId)) {
+          return;
+        }
+
+        Alert.alert(
+          'Remove branded ingredient',
+          `Unlink ${brandedIngredient.name} from ${ingredient?.name}?`,
+          [
+            { text: 'Cancel', style: 'cancel' },
+            {
+              text: 'Remove',
+              style: 'destructive',
+              onPress: () => {
+                clearBaseIngredient(brandedId);
+              },
+            },
+          ],
+        );
+      },
+    [clearBaseIngredient, ingredient?.name],
+  );
+
   return (
     <SafeAreaView style={[styles.safeArea, { backgroundColor: palette.background }]} edges={['left', 'right']}>
       <Stack.Screen
@@ -322,9 +366,9 @@ export default function IngredientDetailsScreen() {
               </View>
             ) : null}
 
-            <View style={styles.infoBlock}>
-              <Text style={[styles.sectionLabel, { color: palette.onSurfaceVariant }]}>Base ingredient</Text>
-              {baseIngredient ? (
+            {baseIngredient ? (
+              <View style={styles.infoBlock}>
+                <Text style={[styles.sectionLabel, { color: palette.onSurfaceVariant }]}>Base ingredient</Text>
                 <Pressable
                   onPress={handleNavigateToBase}
                   accessibilityRole="button"
@@ -375,10 +419,90 @@ export default function IngredientDetailsScreen() {
                     <MaterialIcons name="chevron-right" size={20} color={palette.onSurfaceVariant} />
                   </View>
                 </Pressable>
-              ) : (
-                <Text style={[styles.bodyText, { color: palette.onSurfaceVariant }]}>—</Text>
-              )}
-            </View>
+              </View>
+            ) : null}
+
+            {brandedIngredients.length ? (
+              <View style={styles.infoBlock}>
+                <Text style={[styles.sectionLabel, { color: palette.onSurfaceVariant }]}>Branded ingredients</Text>
+                <View style={styles.brandedList}>
+                  {brandedIngredients.map((branded) => {
+                    const brandedPhotoSource = (() => {
+                      if (!branded.photoUri) {
+                        return undefined;
+                      }
+
+                      const asset = resolveAssetFromCatalog(branded.photoUri);
+                      if (asset) {
+                        return asset;
+                      }
+
+                      if (/^https?:/i.test(branded.photoUri)) {
+                        return { uri: branded.photoUri } as const;
+                      }
+
+                      return undefined;
+                    })();
+
+                    return (
+                      <Pressable
+                        key={branded.id ?? branded.name}
+                        onPress={() => handleNavigateToIngredient(branded.id)}
+                        accessibilityRole="button"
+                        accessibilityLabel={`View ${branded.name}`}
+                        style={[
+                          styles.baseIngredientRow,
+                          { borderColor: palette.outline, backgroundColor: palette.surface },
+                        ]}>
+                        <View style={styles.baseIngredientInfo}>
+                          <View style={styles.baseIngredientThumb}>
+                            {brandedPhotoSource ? (
+                              <Image
+                                source={brandedPhotoSource}
+                                style={styles.baseIngredientImage}
+                                contentFit="contain"
+                              />
+                            ) : (
+                              <View
+                                style={[
+                                  styles.baseIngredientPlaceholder,
+                                  { backgroundColor: palette.surfaceVariant },
+                                ]}>
+                                <MaterialCommunityIcons
+                                  name="image-off"
+                                  size={20}
+                                  color={palette.onSurfaceVariant}
+                                />
+                              </View>
+                            )}
+                          </View>
+                          <Text
+                            style={[styles.baseIngredientName, { color: palette.onSurface }]}
+                            numberOfLines={2}>
+                            {branded.name}
+                          </Text>
+                        </View>
+                        <View style={styles.baseIngredientActions}>
+                          <Pressable
+                            onPress={handleRemoveBranded(branded)}
+                            style={styles.unlinkButton}
+                            accessibilityRole="button"
+                            accessibilityLabel={`Remove ${branded.name} link`}
+                            hitSlop={8}>
+                            <MaterialCommunityIcons
+                              name="link-variant-off"
+                              size={20}
+                              color={palette.error}
+                            />
+                          </Pressable>
+                          <MaterialIcons name="chevron-right" size={20} color={palette.onSurfaceVariant} />
+                        </View>
+                      </Pressable>
+                    );
+                  })}
+                </View>
+              </View>
+            ) : null}
 
             <View style={[styles.infoBlock, styles.cocktailBlock]}>
               <Text style={[styles.sectionLabel, { color: palette.onSurfaceVariant }]}>Cocktails</Text>
@@ -567,6 +691,9 @@ const styles = StyleSheet.create({
   unlinkButton: {
     padding: 6,
     borderRadius: 999,
+  },
+  brandedList: {
+    gap: 12,
   },
   cocktailBlock: {
     marginHorizontal: -24,
