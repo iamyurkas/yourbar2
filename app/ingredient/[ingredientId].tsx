@@ -245,6 +245,14 @@ export default function IngredientDetailsScreen() {
     router.push({ pathname: '/ingredient/[ingredientId]', params: { ingredientId: String(id) } });
   }, []);
 
+  const handleNavigateToCocktail = useCallback((cocktailId: number | string | undefined) => {
+    if (cocktailId == null) {
+      return;
+    }
+
+    router.push({ pathname: '/cocktail/[cocktailId]', params: { cocktailId: String(cocktailId) } });
+  }, []);
+
   const handleRemoveBranded = useCallback(
     (brandedIngredient: Ingredient) =>
       (event?: GestureResponderEvent) => {
@@ -541,6 +549,7 @@ export default function IngredientDetailsScreen() {
                       key={cocktail.id ?? cocktail.name}
                       cocktail={cocktail}
                       availableIngredientIds={availableIngredientIds}
+                      onPress={() => handleNavigateToCocktail(cocktail.id ?? cocktail.name)}
                     />
                   ))}
                 </View>
