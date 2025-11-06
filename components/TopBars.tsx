@@ -102,37 +102,56 @@ export function SegmentTabs({ options, value, onChange }: SegmentTabsProps) {
   const palette = Colors[colorScheme ?? 'light'];
 
   return (
-    <View style={[styles.tabs, { backgroundColor: palette.surface }]}> 
-      {options.map((option) => {
-        const focused = option.key === value;
-        return (
-          <Pressable
-            key={option.key}
-            accessibilityRole="tab"
-            accessibilityState={focused ? { selected: true } : {}}
-            onPress={() => onChange(option.key)}
-            style={styles.tabButton}>
-            <Text
-              style={[
-                styles.tabLabel,
-                {
-                  color: focused ? palette.tint : palette.onSurfaceVariant,
-                  fontWeight: focused ? '600' : '500',
-                },
-              ]}>
-              {option.label}
-            </Text>
-            <View
-              style={[
-                styles.tabIndicator,
-                {
-                  backgroundColor: focused ? palette.tint : 'transparent',
-                },
-              ]}
-            />
-          </Pressable>
-        );
-      })}
+    <View
+      style={[
+        styles.tabsContainer,
+        {
+          backgroundColor: palette.surface,
+          borderTopColor: palette.outlineVariant,
+        },
+      ]}>
+      <View style={[styles.tabs, { backgroundColor: palette.surface }]}>
+        {options.map((option) => {
+          const focused = option.key === value;
+          return (
+            <Pressable
+              key={option.key}
+              accessibilityRole="tab"
+              accessibilityState={focused ? { selected: true } : {}}
+              onPress={() => onChange(option.key)}
+              style={styles.tabButton}>
+              <Text
+                style={[
+                  styles.tabLabel,
+                  {
+                    color: focused ? palette.tint : palette.onSurfaceVariant,
+                    fontWeight: focused ? '600' : '500',
+                  },
+                ]}>
+                {option.label}
+              </Text>
+              <View
+                style={[
+                  styles.tabIndicator,
+                  {
+                    backgroundColor: focused ? palette.tint : 'transparent',
+                  },
+                ]}
+              />
+            </Pressable>
+          );
+        })}
+      </View>
+      <View
+        style={[
+          styles.bottomDivider,
+          {
+            backgroundColor: palette.surfaceVariant,
+            shadowColor: '#000',
+            borderTopColor: palette.outlineVariant,
+          },
+        ]}
+      />
     </View>
   );
 }
@@ -176,6 +195,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  tabsContainer: {
+    borderTopWidth: StyleSheet.hairlineWidth,
+  },
   tabs: {
     flexDirection: 'row',
     paddingHorizontal: 16,
@@ -196,5 +218,14 @@ const styles = StyleSheet.create({
     width: '60%',
     height: 3,
     borderRadius: 2,
+  },
+  bottomDivider: {
+    height: 8,
+    width: '100%',
+    borderTopWidth: StyleSheet.hairlineWidth,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 3,
   },
 });
