@@ -13,8 +13,8 @@ import {
 
 import { resolveAssetFromCatalog } from '@/assets/image-manifest';
 import { Colors } from '@/constants/theme';
-import { palette, tagColors } from '@/theme/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import { palette, tagColors } from '@/theme/theme';
 
 const THUMB_SIZE = 56;
 
@@ -144,7 +144,7 @@ export function ListRow({
 }: ListRowProps) {
   const colorScheme = useColorScheme();
   const paletteColors = Colors[colorScheme ?? 'light'];
-  const backgroundColor = selected ? highlightColor ?? `${paletteColors.tint}1F` : paletteColors.surface;
+  const backgroundColor = selected ? highlightColor ?? `${paletteColors.tint}1F` : paletteColors.background;
   return (
     <Pressable
       onPress={onPress}
@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 17,
-    fontWeight: '600',
+    fontWeight: '400',
   },
   subtitle: {
     fontSize: 13,
