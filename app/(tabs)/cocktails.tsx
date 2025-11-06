@@ -10,6 +10,7 @@ import { SearchTopBar, SegmentTabs } from '@/components/TopBars';
 import { Colors } from '@/constants/theme';
 import { useInventory, type Cocktail } from '@/providers/inventory-provider';
 import { palette, tagColors } from '@/theme/theme';
+import { useSegmentedTabSwipe } from '@/hooks/use-segmented-tab-swipe';
 
 type CocktailSection = {
   key: string;
@@ -139,6 +140,7 @@ export default function CocktailsScreen() {
   const [activeTab, setActiveTab] = useState<CocktailTabKey>('all');
   const [query, setQuery] = useState('');
   const paletteColors = Colors.light;
+  const swipeResponder = useSegmentedTabSwipe(TAB_OPTIONS, activeTab, setActiveTab);
 
   const readyToMix = useMemo(() => {
     return cocktails.filter((cocktail) => {
@@ -226,17 +228,19 @@ export default function CocktailsScreen() {
       <View style={styles.container}>
         <SearchTopBar value={query} onChangeText={setQuery} placeholder="Search" />
         <SegmentTabs options={TAB_OPTIONS} value={activeTab} onChange={setActiveTab} />
-        <FlatList
-          data={filteredCocktails}
-          keyExtractor={keyExtractor}
-          renderItem={renderItem}
-          ItemSeparatorComponent={renderSeparator}
-          contentContainerStyle={styles.listContent}
-          showsVerticalScrollIndicator={false}
-          ListEmptyComponent={
-            <Text style={[styles.emptyLabel, { color: paletteColors.onSurfaceVariant }]}>No cocktails yet</Text>
-          }
-        />
+        <View style={styles.listWrapper} {...swipeResponder.panHandlers}>
+          <FlatList
+            data={filteredCocktails}
+            keyExtractor={keyExtractor}
+            renderItem={renderItem}
+            ItemSeparatorComponent={renderSeparator}
+            contentContainerStyle={styles.listContent}
+            showsVerticalScrollIndicator={false}
+            ListEmptyComponent={
+              <Text style={[styles.emptyLabel, { color: paletteColors.onSurfaceVariant }]}>No cocktails yet</Text>
+            }
+          />
+        </View>
       </View>
       <FabAdd label="Add cocktail" />
     </SafeAreaView>
@@ -248,6 +252,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   container: {
+    flex: 1,
+  },
+  listWrapper: {
     flex: 1,
   },
   listContent: {
