@@ -180,14 +180,32 @@ export default function CocktailsScreen() {
 
   const activeSection = sections[activeTab] ?? sections.all;
 
+  const normalizedQuery = useMemo(() => {
+    const trimmed = query.trim().toLowerCase();
+    const tokens = trimmed ? trimmed.split(/\s+/).filter(Boolean) : [];
+    return { text: trimmed, tokens };
+  }, [query]);
+
   const filteredCocktails = useMemo(() => {
     const base = activeSection.data;
-    if (!query.trim()) {
+    if (!normalizedQuery.text) {
       return base;
     }
-    const safeQuery = query.trim().toLowerCase();
-    return base.filter((cocktail) => cocktail.name.toLowerCase().includes(safeQuery));
-  }, [activeSection.data, query]);
+
+    const { text, tokens } = normalizedQuery;
+    if (tokens.length <= 1) {
+      const token = tokens[0] ?? text;
+      return base.filter((cocktail) => cocktail.searchNameNormalized.includes(token));
+    }
+
+    return base.filter((cocktail) =>
+      tokens.every(
+        (token) =>
+          cocktail.searchTokensNormalized.includes(token) ||
+          cocktail.searchNameNormalized.includes(token),
+      ),
+    );
+  }, [activeSection.data, normalizedQuery]);
 
   const highlightColor = palette.highlightFaint;
   const separatorColor = paletteColors.outline;

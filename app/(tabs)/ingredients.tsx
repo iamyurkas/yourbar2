@@ -120,14 +120,32 @@ export default function IngredientsScreen() {
 
   const activeSection = sections[activeTab] ?? sections.all;
 
+  const normalizedQuery = useMemo(() => {
+    const trimmed = query.trim().toLowerCase();
+    const tokens = trimmed ? trimmed.split(/\s+/).filter(Boolean) : [];
+    return { text: trimmed, tokens };
+  }, [query]);
+
   const filteredIngredients = useMemo(() => {
     const base = activeSection.data;
-    if (!query.trim()) {
+    if (!normalizedQuery.text) {
       return base;
     }
-    const safeQuery = query.trim().toLowerCase();
-    return base.filter((ingredient) => ingredient.name.toLowerCase().includes(safeQuery));
-  }, [activeSection.data, query]);
+
+    const { text, tokens } = normalizedQuery;
+    if (tokens.length <= 1) {
+      const token = tokens[0] ?? text;
+      return base.filter((ingredient) => ingredient.searchNameNormalized.includes(token));
+    }
+
+    return base.filter((ingredient) =>
+      tokens.every(
+        (token) =>
+          ingredient.searchTokensNormalized.includes(token) ||
+          ingredient.searchNameNormalized.includes(token),
+      ),
+    );
+  }, [activeSection.data, normalizedQuery]);
 
   const highlightColor = palette.highlightSubtle;
   const separatorColor = paletteColors.outline;
