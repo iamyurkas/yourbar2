@@ -19,16 +19,14 @@ type MD3TopTabsProps = {
 export function MD3TopTabs({ tabs, activeKey, onTabChange }: MD3TopTabsProps) {
   const colorScheme = useColorScheme();
   const theme = Colors[colorScheme ?? 'light'];
-  const isDark = colorScheme === 'dark';
-  const containerBorder = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(17,24,28,0.08)';
 
   return (
     <View
       style={[
         styles.container,
         {
-          backgroundColor: isDark ? '#201F24' : '#F5F6FA',
-          borderColor: containerBorder,
+          backgroundColor: theme.surface,
+          borderColor: theme.outline,
         },
       ]}>
       {tabs.map((tab) => {
@@ -38,35 +36,19 @@ export function MD3TopTabs({ tabs, activeKey, onTabChange }: MD3TopTabsProps) {
             key={tab.key}
             accessibilityRole="tab"
             accessibilityState={{ selected: isActive }}
+            onPress={() => onTabChange(tab.key)}
             style={({ pressed }) => [
               styles.tab,
               {
-                backgroundColor: isActive
-                  ? theme.tint
-                  : isDark
-                    ? 'transparent'
-                    : '#FFFFFF',
-                borderColor: isActive
-                  ? 'transparent'
-                  : isDark
-                    ? 'rgba(255,255,255,0.08)'
-                    : 'rgba(17,24,28,0.05)',
-                opacity: pressed ? 0.9 : 1,
+                backgroundColor: isActive ? theme.primaryContainer : theme.surface,
+                borderColor: isActive ? theme.primary : theme.outline,
               },
+              pressed && styles.pressed,
             ]}
-            onPress={() => onTabChange(tab.key)}>
+            android_ripple={{ color: theme.ripple, radius: 120 }}>
             <ThemedText
               type="defaultSemiBold"
-              style={[
-                styles.label,
-                {
-                  color: isActive
-                    ? '#FFFFFF'
-                    : colorScheme === 'dark'
-                      ? 'rgba(236,237,238,0.75)'
-                      : 'rgba(17,24,28,0.75)',
-                },
-              ]}>
+              style={{ color: isActive ? theme.primary : theme.textMuted }}>
               {tab.label}
             </ThemedText>
           </Pressable>
@@ -80,21 +62,22 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     padding: 4,
-    borderRadius: 18,
+    borderRadius: 28,
     borderWidth: 1,
-    gap: 4,
+    gap: 8,
   },
   tab: {
     flex: 1,
-    borderRadius: 14,
+    borderRadius: 20,
     paddingVertical: 10,
-    paddingHorizontal: 12,
+    paddingHorizontal: 16,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
+    minHeight: 40,
   },
-  label: {
-    letterSpacing: 0.3,
+  pressed: {
+    transform: [{ scale: 0.98 }],
   },
 });
 

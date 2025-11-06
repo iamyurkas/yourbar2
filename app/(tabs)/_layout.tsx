@@ -1,6 +1,6 @@
 import { Tabs } from 'expo-router';
-import React, { useMemo } from 'react';
-import { StyleSheet } from 'react-native';
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 import { Image } from 'expo-image';
 import type { ImageSource } from 'expo-image';
 
@@ -18,6 +18,15 @@ type TabIconProps = {
   source: ImageSource;
 };
 
+type Palette = (typeof Colors)['light'];
+
+type TabBarItemProps = {
+  label: string;
+  icon: ImageSource;
+  focused: boolean;
+  theme: Palette;
+};
+
 const TabImageIcon = ({ color, size = 24, source }: TabIconProps) => (
   <Image
     source={source}
@@ -26,27 +35,33 @@ const TabImageIcon = ({ color, size = 24, source }: TabIconProps) => (
   />
 );
 
+function TabBarItem({ label, icon, focused, theme }: TabBarItemProps) {
+  return (
+    <View style={styles.tabContent}>
+      <TabImageIcon color={focused ? theme.primary : theme.tabIconDefault} source={icon} />
+      <Text
+        style={[
+          styles.tabLabel,
+          { color: focused ? theme.primary : theme.tabIconDefault },
+        ]}>
+        {label}
+      </Text>
+      <View
+        style={[
+          styles.indicator,
+          {
+            backgroundColor: focused ? theme.primary : theme.outlineVariant,
+            opacity: focused ? 1 : 0,
+          },
+        ]}
+      />
+    </View>
+  );
+}
+
 export default function TabLayout() {
   const colorScheme = useColorScheme();
-
-  const { surface, border, activeBackground } = useMemo(() => {
-    if (colorScheme === 'dark') {
-      return {
-        surface: '#1F1B24',
-        border: 'rgba(255,255,255,0.08)',
-        activeBackground: 'rgba(10,126,164,0.24)',
-      };
-    }
-
-    return {
-      surface: '#F7F2FA',
-      border: 'rgba(17,24,28,0.08)',
-      activeBackground: 'rgba(10,126,164,0.12)',
-    };
-  }, [colorScheme]);
-
-  const tint = Colors[colorScheme ?? 'light'].tint;
-  const inactiveTint = Colors[colorScheme ?? 'light'].tabIconDefault;
+  const theme = Colors[colorScheme ?? 'light'];
 
   return (
     <Tabs
@@ -54,22 +69,25 @@ export default function TabLayout() {
       screenOptions={{
         headerShown: false,
         tabBarButton: HapticTab,
-        tabBarActiveTintColor: tint,
-        tabBarInactiveTintColor: inactiveTint,
-        tabBarActiveBackgroundColor: activeBackground,
-        tabBarLabelStyle: styles.tabLabel,
-        tabBarItemStyle: styles.tabItem,
-        tabBarIconStyle: styles.tabIcon,
+        tabBarShowLabel: false,
         tabBarHideOnKeyboard: true,
-        tabBarStyle: [styles.tabBar, { backgroundColor: surface, borderColor: border }],
-        sceneContainerStyle: styles.scene,
+        tabBarStyle: [
+          styles.tabBar,
+          {
+            backgroundColor: theme.surface,
+            borderTopWidth: 0,
+            shadowColor: theme.primary,
+          },
+        ],
+        tabBarItemStyle: styles.tabItem,
+        sceneContainerStyle: { backgroundColor: theme.background },
       }}>
       <Tabs.Screen
         name="cocktails"
         options={{
           title: 'Cocktails',
-          tabBarIcon: ({ color }) => (
-            <TabImageIcon color={color} source={cocktailsIcon} />
+          tabBarIcon: ({ focused }) => (
+            <TabBarItem label="Cocktails" icon={cocktailsIcon} focused={focused} theme={theme} />
           ),
         }}
       />
@@ -77,8 +95,8 @@ export default function TabLayout() {
         name="shaker"
         options={{
           title: 'Shaker',
-          tabBarIcon: ({ color }) => (
-            <TabImageIcon color={color} source={shakerIcon} />
+          tabBarIcon: ({ focused }) => (
+            <TabBarItem label="Shaker" icon={shakerIcon} focused={focused} theme={theme} />
           ),
         }}
       />
@@ -86,8 +104,13 @@ export default function TabLayout() {
         name="ingredients"
         options={{
           title: 'Ingredients',
-          tabBarIcon: ({ color }) => (
-            <TabImageIcon color={color} source={ingredientsIcon} />
+          tabBarIcon: ({ focused }) => (
+            <TabBarItem
+              label="Ingredients"
+              icon={ingredientsIcon}
+              focused={focused}
+              theme={theme}
+            />
           ),
         }}
       />
@@ -97,29 +120,31 @@ export default function TabLayout() {
 
 const styles = StyleSheet.create({
   tabBar: {
-    position: 'absolute',
-    left: 16,
-    right: 16,
-    bottom: 16,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 28,
-    borderWidth: 1,
-    height: 80,
-    elevation: 0,
-    shadowOpacity: 0,
+    height: 88,
+    paddingHorizontal: 24,
+    paddingTop: 12,
+    paddingBottom: 20,
+    elevation: 12,
+    shadowOpacity: 0.12,
+    shadowRadius: 16,
+    shadowOffset: { width: 0, height: -2 },
+  },
+  tabItem: {
+    borderRadius: 18,
+  },
+  tabContent: {
+    alignItems: 'center',
+    gap: 4,
   },
   tabLabel: {
     fontSize: 12,
     fontWeight: '600',
+    letterSpacing: 0.3,
   },
-  tabItem: {
-    borderRadius: 20,
-  },
-  tabIcon: {
-    marginBottom: -2,
-  },
-  scene: {
-    backgroundColor: 'transparent',
+  indicator: {
+    marginTop: 4,
+    height: 4,
+    width: 28,
+    borderRadius: 999,
   },
 });
