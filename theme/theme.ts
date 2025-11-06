@@ -1,4 +1,4 @@
-import { MD3DarkTheme, MD3LightTheme, type PaperTheme } from '@/libs/react-native-paper';
+import { MD3LightTheme, type PaperTheme } from '@/libs/react-native-paper';
 
 export const palette = {
    primary: "#4DABF7",
@@ -80,61 +80,11 @@ const lightColors: PaperTheme['colors'] = {
   },
 };
 
-const darkColors: PaperTheme['colors'] = {
-  ...MD3DarkTheme.colors,
-  primary: '#9CCAFF',
-  onPrimary: '#001021',
-  primaryContainer: '#1E3A5C',
-  onPrimaryContainer: '#D8EAFF',
-  secondary: '#FFD166',
-  secondaryContainer: '#473000',
-  onSecondary: '#221600',
-  onSecondaryContainer: '#FFEBC0',
-  tertiary: '#5ED4C6',
-  tertiaryContainer: '#0C4039',
-  onTertiary: '#00211D',
-  onTertiaryContainer: '#BDF4EA',
-  background: '#0D141C',
-  surface: '#101820',
-  surfaceVariant: '#1F2A36',
-  outline: '#3C4C5F',
-  outlineVariant: '#2A3947',
-  onSurface: '#E3E8EF',
-  onSurfaceVariant: '#A9B4C0',
-  onBackground: '#E3E8EF',
-  error: '#F28B82',
-  errorContainer: '#4C1B1B',
-  onError: '#2C0B0B',
-  onErrorContainer: '#FADADB',
-  inversePrimary: palette.primary,
-  inverseOnSurface: '#101820',
-  inverseSurface: '#E3E8EF',
-  surfaceDisabled: 'rgba(227,232,239,0.16)',
-  onSurfaceDisabled: 'rgba(227,232,239,0.38)',
-  backdrop: 'rgba(5,12,20,0.5)',
-  elevation: {
-    ...MD3DarkTheme.colors.elevation,
-    level0: 'transparent',
-    level1: 'rgba(22,31,40,0.85)',
-    level2: 'rgba(24,34,45,0.88)',
-    level3: 'rgba(26,36,48,0.9)',
-    level4: 'rgba(27,38,50,0.92)',
-    level5: 'rgba(29,41,54,0.94)',
-  },
-};
-
 export const lightTheme: PaperTheme = {
   ...MD3LightTheme,
   colors: lightColors,
 };
 
-export const darkTheme: PaperTheme = {
-  ...MD3DarkTheme,
-  colors: darkColors,
-};
-
-export type AppThemeMode = 'light' | 'dark';
-
-export function getAppTheme(mode: AppThemeMode): PaperTheme {
-  return mode === 'dark' ? darkTheme : lightTheme;
+export function getAppTheme(): PaperTheme {
+  return lightTheme;
 }

@@ -8,7 +8,6 @@ import { FabAdd } from '@/components/FabAdd';
 import { FavoriteStar, ListRow, Thumb } from '@/components/RowParts';
 import { SearchTopBar, SegmentTabs } from '@/components/TopBars';
 import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useInventory, type Cocktail } from '@/providers/inventory-provider';
 import { palette } from '@/theme/theme';
 
@@ -30,8 +29,7 @@ export default function CocktailsScreen() {
   const { cocktails, availableIngredientIds } = useInventory();
   const [activeTab, setActiveTab] = useState<CocktailTabKey>('all');
   const [query, setQuery] = useState('');
-  const colorScheme = useColorScheme();
-  const paletteColors = Colors[colorScheme ?? 'light'];
+  const paletteColors = Colors.light;
 
   const readyToMix = useMemo(() => {
     return cocktails.filter((cocktail) => {
@@ -81,7 +79,7 @@ export default function CocktailsScreen() {
     return base.filter((cocktail) => cocktail.name.toLowerCase().includes(safeQuery));
   }, [activeSection.data, query]);
 
-  const highlightColor = colorScheme === 'dark' ? 'rgba(74,144,226,0.24)' : '#4A90E21A';
+  const highlightColor = '#4A90E21A';
   const separatorColor = paletteColors.outline;
 
   const keyExtractor = useCallback((item: Cocktail) => String(item.id ?? item.name), []);

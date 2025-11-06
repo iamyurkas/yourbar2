@@ -1,11 +1,10 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { PaperProvider } from '@/libs/react-native-paper';
 import 'react-native-reanimated';
 
 import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
 import { InventoryProvider } from '@/providers/inventory-provider';
 import { getAppTheme } from '@/theme/theme';
 
@@ -14,23 +13,18 @@ export const unstable_settings = {
 };
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const isDark = colorScheme === 'dark';
+  const navigationTheme = ({
+    ...DefaultTheme,
+    colors: {
+      ...DefaultTheme.colors,
+      background: Colors.light.background,
+      card: Colors.light.surface,
+      text: Colors.light.text,
+      border: Colors.light.outline,
+    },
+  } satisfies typeof DefaultTheme);
 
-  const navigationTheme = isDark
-    ? DarkTheme
-    : ({
-        ...DefaultTheme,
-        colors: {
-          ...DefaultTheme.colors,
-          background: Colors.light.background,
-          card: Colors.light.surface,
-          text: Colors.light.text,
-          border: Colors.light.outline,
-        },
-      } satisfies typeof DefaultTheme);
-
-  const paperTheme = getAppTheme(isDark ? 'dark' : 'light');
+  const paperTheme = getAppTheme();
 
   return (
     <InventoryProvider>
@@ -40,7 +34,7 @@ export default function RootLayout() {
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
           </Stack>
-          <StatusBar style={isDark ? 'light' : 'dark'} />
+          <StatusBar style="dark" />
         </ThemeProvider>
       </PaperProvider>
     </InventoryProvider>

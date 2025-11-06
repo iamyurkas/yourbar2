@@ -1,9 +1,8 @@
 import { Platform } from 'react-native';
 
-import { darkTheme, lightTheme } from '@/theme/theme';
+import { lightTheme } from '@/theme/theme';
 
 const tintColorLight = lightTheme.colors.primary;
-const tintColorDark = darkTheme.colors.primary;
 
 export const Colors = {
   light: {
@@ -17,18 +16,6 @@ export const Colors = {
     icon: lightTheme.colors.onSurfaceVariant,
     tabIconDefault: lightTheme.colors.onSurfaceVariant,
     tabIconSelected: tintColorLight,
-  },
-  dark: {
-    text: darkTheme.colors.onSurface,
-    background: darkTheme.colors.background,
-    surface: darkTheme.colors.surface,
-    surfaceVariant: darkTheme.colors.surfaceVariant,
-    outline: darkTheme.colors.outline,
-    outlineVariant: darkTheme.colors.outlineVariant,
-    tint: tintColorDark,
-    icon: darkTheme.colors.onSurfaceVariant,
-    tabIconDefault: darkTheme.colors.onSurfaceVariant,
-    tabIconSelected: tintColorDark,
   },
 };
 
