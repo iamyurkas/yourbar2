@@ -178,7 +178,7 @@ export default function CocktailDetailsScreen() {
   }, [initialRating]);
 
   const handleRatingSelect = useCallback((value: number) => {
-    setUserRating(value);
+    setUserRating((current) => (current === value ? 0 : value));
   }, []);
 
   const instructionsParagraphs = useMemo(() => {
@@ -300,14 +300,14 @@ export default function CocktailDetailsScreen() {
                 {displayedImageSource ? (
                   <Image
                     source={displayedImageSource}
-                    style={[styles.photo, { backgroundColor: palette.surface }]}
+                    style={styles.photo}
                     contentFit="contain"
                   />
                 ) : (
                   <View
                     style={[
                       styles.photoPlaceholder,
-                      { borderColor: palette.outline, backgroundColor: palette.surface },
+                      { borderColor: palette.outline },
                     ]}>
                     <MaterialCommunityIcons name="image-off" size={36} color={palette.onSurfaceVariant} />
                     <Text style={[styles.photoPlaceholderText, { color: palette.onSurfaceVariant }]}>No photo</Text>
@@ -326,17 +326,19 @@ export default function CocktailDetailsScreen() {
                       key={`rating-star-${starValue}`}
                       onPress={() => handleRatingSelect(starValue)}
                       accessibilityRole="button"
-                      accessibilityLabel={`Set rating to ${starValue}`}
+                      accessibilityLabel={
+                        userRating === starValue ? 'Clear rating' : `Set rating to ${starValue}`
+                      }
                       style={styles.ratingStar}
                       hitSlop={8}>
-                      <MaterialCommunityIcons name={icon} size={26} color={palette.tint} />
+                      <MaterialCommunityIcons name={icon} size={32} color={palette.tint} />
                     </Pressable>
                   );
                 })}
               </View>
 
               {photoSource && glassSource && glassLabel ? (
-                <View style={[styles.glassInfo, { backgroundColor: palette.surfaceVariant }]}>
+                <View style={styles.glassInfo}>
                   <View style={styles.glassImageWrapper}>
                     <Image source={glassSource} style={styles.glassImage} contentFit="contain" />
                   </View>
@@ -360,7 +362,6 @@ export default function CocktailDetailsScreen() {
 
             {cocktail.description ? (
               <View style={styles.textBlock}>
-                <Text style={[styles.sectionTitle, { color: palette.onSurface }]}>Description</Text>
                 <Text
                   style={[styles.bodyText, styles.descriptionText, { color: palette.onSurfaceVariant }]}
                   numberOfLines={!isDescriptionExpanded && shouldTruncateDescription ? 5 : undefined}
@@ -379,12 +380,12 @@ export default function CocktailDetailsScreen() {
             ) : null}
 
             {instructionsParagraphs.length ? (
-              <View style={[styles.textBlock, styles.instructionsBlock, { backgroundColor: palette.onSurface }]}> 
-                <Text style={[styles.instructionsTitle, { color: palette.background }]}>Instructions</Text>
+              <View style={[styles.textBlock, styles.instructionsBlock, { backgroundColor: palette.surface }]}>
+                <Text style={[styles.instructionsTitle, { color: palette.onSurface }]}>Instructions</Text>
                 {instructionsParagraphs.map((paragraph, index) => (
                   <Text
                     key={`instruction-${index}`}
-                    style={[styles.instructionsText, { color: palette.background }]}
+                    style={[styles.instructionsText, { color: palette.onSurface }]}
                   >
                     {paragraph}
                   </Text>
@@ -469,6 +470,7 @@ const styles = StyleSheet.create({
     height: 150,
     borderRadius: 16,
     overflow: 'hidden',
+    backgroundColor: '#FFFFFF',
   },
   photoPlaceholder: {
     width: 150,
@@ -478,6 +480,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
+    backgroundColor: '#FFFFFF',
   },
   photoPlaceholderText: {
     fontSize: 14,
@@ -485,17 +488,18 @@ const styles = StyleSheet.create({
   ratingRow: {
     flexDirection: 'row',
     justifyContent: 'center',
-    gap: 12,
+    gap: 8,
   },
   ratingStar: {
-    paddingVertical: 4,
+    width: 32,
+    height: 32,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   glassInfo: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
-    padding: 12,
-    borderRadius: 12,
     alignSelf: 'flex-start',
   },
   glassImageWrapper: {
@@ -508,7 +512,6 @@ const styles = StyleSheet.create({
   },
   glassLabel: {
     fontSize: 16,
-    fontWeight: '500',
   },
   tagList: {
     flexDirection: 'row',

@@ -163,20 +163,20 @@ export default function IngredientDetailsScreen() {
 
   const DESCRIPTION_PREVIEW_LINES = 5;
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
-  const [shouldShowDescriptionToggle, setShouldShowDescriptionToggle] = useState(false);
+  const [shouldTruncateDescription, setShouldTruncateDescription] = useState(false);
 
   const handleDescriptionLayout = useCallback(
     (event: NativeSyntheticEvent<TextLayoutEventData>) => {
-      if (shouldShowDescriptionToggle) {
+      if (shouldTruncateDescription) {
         return;
       }
 
       const totalLines = event.nativeEvent?.lines?.length ?? 0;
       if (totalLines > DESCRIPTION_PREVIEW_LINES) {
-        setShouldShowDescriptionToggle(true);
+        setShouldTruncateDescription(true);
       }
     },
-    [DESCRIPTION_PREVIEW_LINES, shouldShowDescriptionToggle],
+    [DESCRIPTION_PREVIEW_LINES, shouldTruncateDescription],
   );
 
   const handleToggleDescription = useCallback(() => {
@@ -313,16 +313,12 @@ export default function IngredientDetailsScreen() {
             <View style={styles.mediaSection}>
               <View style={styles.photoWrapper}>
                 {photoSource ? (
-                  <Image
-                    source={photoSource}
-                    style={[styles.photo, { backgroundColor: palette.surface }]}
-                    contentFit="contain"
-                  />
+                  <Image source={photoSource} style={styles.photo} contentFit="contain" />
                 ) : (
                   <View
                     style={[
                       styles.photoPlaceholder,
-                      { borderColor: palette.outline, backgroundColor: palette.surface },
+                      { borderColor: palette.outline },
                     ]}>
                     <MaterialCommunityIcons
                       name="image-off"
@@ -370,15 +366,18 @@ export default function IngredientDetailsScreen() {
 
             {ingredient.description ? (
               <View style={styles.textBlock}>
-                <Text style={[styles.sectionTitle, { color: palette.onSurface }]}>Description</Text>
                 <Text
                   style={[styles.bodyText, styles.descriptionText, { color: palette.onSurfaceVariant }]}
-                  numberOfLines={isDescriptionExpanded ? undefined : DESCRIPTION_PREVIEW_LINES}
+                  numberOfLines={
+                    !isDescriptionExpanded && shouldTruncateDescription
+                      ? DESCRIPTION_PREVIEW_LINES
+                      : undefined
+                  }
                   onTextLayout={handleDescriptionLayout}
                 >
                   {ingredient.description}
                 </Text>
-                {shouldShowDescriptionToggle ? (
+                {shouldTruncateDescription ? (
                   <Pressable
                     onPress={handleToggleDescription}
                     accessibilityRole="button"
@@ -387,7 +386,7 @@ export default function IngredientDetailsScreen() {
                     }
                     hitSlop={8}
                   >
-                    <Text style={[styles.toggleDescription, { color: palette.tint }]}>
+                    <Text style={[styles.toggleDescription, { color: palette.tint }]}> 
                       {isDescriptionExpanded ? 'Show less' : 'Show more'}
                     </Text>
                   </Pressable>
@@ -606,6 +605,7 @@ const styles = StyleSheet.create({
     height: '100%',
     borderRadius: 16,
     overflow: 'hidden',
+    backgroundColor: '#FFFFFF',
   },
   photoPlaceholder: {
     width: 150,
@@ -615,6 +615,7 @@ const styles = StyleSheet.create({
     borderWidth: StyleSheet.hairlineWidth,
     borderRadius: 16,
     gap: 8,
+    backgroundColor: '#FFFFFF',
   },
   photoPlaceholderText: {
     fontSize: 14,
