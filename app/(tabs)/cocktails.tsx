@@ -3,6 +3,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { resolveGlasswareUriFromId } from '@/assets/image-manifest';
 import { FabAdd } from '@/components/FabAdd';
 import { FavoriteStar, ListRow, Thumb } from '@/components/RowParts';
 import { SearchTopBar, SegmentTabs } from '@/components/TopBars';
@@ -120,11 +121,13 @@ export default function CocktailsScreen() {
       const isFavorite = favoriteIds.has(item.id);
       const isReady = missingCount === 0 && totalIngredients > 0;
 
+      const glasswareUri = resolveGlasswareUriFromId(item.glassId);
+
       const thumbnail = (
         <View style={styles.thumbnailWrapper}>
-          <Thumb label={item.name} uri={item.photoUri} />
+          <Thumb label={item.name} uri={item.photoUri} fallbackUri={glasswareUri} />
           {isFavorite ? (
-            <View style={[styles.favoriteBadge, { backgroundColor: palette.secondary }]}> 
+            <View style={[styles.favoriteBadge, { backgroundColor: palette.secondary }]}>
               <MaterialCommunityIcons name="star" size={14} color={paletteColors.background} />
             </View>
           ) : null}

@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Image } from 'expo-image';
+import { Image, type ImageSource } from 'expo-image';
 import React, { type ReactNode } from 'react';
 import {
   Pressable,
@@ -20,23 +20,36 @@ const THUMB_SIZE = 56;
 export type ThumbProps = {
   uri?: string | null;
   label?: string;
+  fallbackUri?: string | null;
+  fallbackLabel?: string;
 };
 
-export function Thumb({ uri, label }: ThumbProps) {
+export function Thumb({ uri, label, fallbackUri, fallbackLabel }: ThumbProps) {
   const colorScheme = useColorScheme();
   const palette = Colors[colorScheme ?? 'light'];
-  const trimmed = label?.trim();
-  const fallbackLabel = trimmed ? trimmed.slice(0, 2).toUpperCase() : undefined;
+  const effectiveLabel = label ?? fallbackLabel;
+  const trimmed = effectiveLabel?.trim();
+  const fallbackText = trimmed ? trimmed.slice(0, 2).toUpperCase() : undefined;
+
   const assetSource = resolveAssetFromCatalog(uri);
   const resolvedUri = uri && /^https?:/i.test(uri) ? uri : undefined;
-  const source = assetSource ?? (resolvedUri ? { uri: resolvedUri } : undefined);
+  let source: ImageSource | undefined = assetSource ?? (resolvedUri ? { uri: resolvedUri } : undefined);
+
+  if (!source && fallbackUri) {
+    const fallbackAsset = resolveAssetFromCatalog(fallbackUri);
+    if (fallbackAsset) {
+      source = fallbackAsset;
+    } else if (/^https?:/i.test(fallbackUri)) {
+      source = { uri: fallbackUri };
+    }
+  }
 
   return (
-    <View style={[styles.thumb, { backgroundColor: palette.surfaceVariant, borderColor: palette.outlineVariant }]}> 
+    <View style={[styles.thumb, { backgroundColor: '#FFFFFF', borderColor: palette.outlineVariant }]}>
       {source ? (
         <Image source={source} style={styles.thumbImage} contentFit="contain" />
-      ) : fallbackLabel ? (
-        <Text style={[styles.thumbFallback, { color: palette.onSurfaceVariant }]}>{fallbackLabel}</Text>
+      ) : fallbackText ? (
+        <Text style={[styles.thumbFallback, { color: palette.onSurfaceVariant }]}>{fallbackText}</Text>
       ) : (
         <MaterialCommunityIcons name="image-off" size={24} color={palette.onSurfaceVariant} />
       )}

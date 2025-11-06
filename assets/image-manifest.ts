@@ -319,6 +319,59 @@ export const ingredientImages: Record<string, number> = {
   'assets/ingredients/999967-cherry-liqueur.jpg': require('./ingredients/999967-cherry-liqueur.jpg'),
 };
 
+export const glasswareImages: Record<string, number> = {
+  'assets/glassware/bowl.jpg': require('./glassware/bowl.jpg'),
+  'assets/glassware/champagne.jpg': require('./glassware/champagne.jpg'),
+  'assets/glassware/cocktail.jpg': require('./glassware/cocktail.jpg'),
+  'assets/glassware/collins.jpg': require('./glassware/collins.jpg'),
+  'assets/glassware/copper.jpg': require('./glassware/copper.jpg'),
+  'assets/glassware/coupe.jpg': require('./glassware/coupe.jpg'),
+  'assets/glassware/cup.jpg': require('./glassware/cup.jpg'),
+  'assets/glassware/goblet.jpg': require('./glassware/goblet.jpg'),
+  'assets/glassware/highball.jpg': require('./glassware/highball.jpg'),
+  'assets/glassware/hurricane.jpg': require('./glassware/hurricane.jpg'),
+  'assets/glassware/irish.jpg': require('./glassware/irish.jpg'),
+  'assets/glassware/margarita.jpg': require('./glassware/margarita.jpg'),
+  'assets/glassware/nick.jpg': require('./glassware/nick.jpg'),
+  'assets/glassware/pitcher.jpg': require('./glassware/pitcher.jpg'),
+  'assets/glassware/pub.jpg': require('./glassware/pub.jpg'),
+  'assets/glassware/rocks.jpg': require('./glassware/rocks.jpg'),
+  'assets/glassware/shooter.jpg': require('./glassware/shooter.jpg'),
+  'assets/glassware/snifter.jpg': require('./glassware/snifter.jpg'),
+  'assets/glassware/tiki.jpg': require('./glassware/tiki.jpg'),
+  'assets/glassware/wine.jpg': require('./glassware/wine.jpg'),
+};
+
+export const glasswareUriById: Record<string, string> = {
+  bowl: 'assets/glassware/bowl.jpg',
+  champagne_flute: 'assets/glassware/champagne.jpg',
+  cocktail_glass: 'assets/glassware/cocktail.jpg',
+  collins_glass: 'assets/glassware/collins.jpg',
+  copper_mug: 'assets/glassware/copper.jpg',
+  coupe: 'assets/glassware/coupe.jpg',
+  cup: 'assets/glassware/cup.jpg',
+  goblet: 'assets/glassware/goblet.jpg',
+  highball_glass: 'assets/glassware/highball.jpg',
+  hurricane_glass: 'assets/glassware/hurricane.jpg',
+  irish_coffee_glass: 'assets/glassware/irish.jpg',
+  margarita_glass: 'assets/glassware/margarita.jpg',
+  nick_and_nora: 'assets/glassware/nick.jpg',
+  pitcher: 'assets/glassware/pitcher.jpg',
+  pub_glass: 'assets/glassware/pub.jpg',
+  rocks_glass: 'assets/glassware/rocks.jpg',
+  shooter: 'assets/glassware/shooter.jpg',
+  snifter: 'assets/glassware/snifter.jpg',
+  tiki: 'assets/glassware/tiki.jpg',
+  wine_glass: 'assets/glassware/wine.jpg',
+};
+
+export function resolveGlasswareUriFromId(glassId?: string | null) {
+  if (!glassId) {
+    return undefined;
+  }
+  return glasswareUriById[glassId] ?? undefined;
+}
+
 export const cocktailImages: Record<string, number> = {
   'assets/cocktails/1755800000019-brandy-crusta.jpg': require('./cocktails/1755800000019-brandy-crusta.jpg'),
   'assets/cocktails/1755800000020-bronx.jpg': require('./cocktails/1755800000020-bronx.jpg'),
@@ -505,6 +558,9 @@ export function resolveAssetFromCatalog(uri?: string | null) {
   }
   if (uri in cocktailImages) {
     return cocktailImages[uri as keyof typeof cocktailImages];
+  }
+  if (uri in glasswareImages) {
+    return glasswareImages[uri as keyof typeof glasswareImages];
   }
   return undefined;
 }
