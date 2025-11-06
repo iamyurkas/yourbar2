@@ -10,6 +10,7 @@ type InventoryContextValue = {
   ingredients: Ingredient[];
   loading: boolean;
   availableIngredientIds: Set<number>;
+  availableIngredientVersion: number;
   setIngredientAvailability: (id: number, available: boolean) => void;
   toggleIngredientAvailability: (id: number) => void;
 };
@@ -46,7 +47,7 @@ type InventoryProviderProps = {
 export function InventoryProvider({ children }: InventoryProviderProps) {
   const inventory = ensureInventoryState();
   const availableIngredientIdsRef = useRef<Set<number>>(new Set());
-  const [version, setVersion] = useState(0);
+  const [availableIngredientVersion, setAvailableIngredientVersion] = useState(0);
 
   const setIngredientAvailability = useCallback(
     (id: number, available: boolean) => {
@@ -63,10 +64,10 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       }
 
       if (hasChanged) {
-        setVersion((current) => current + 1);
+        setAvailableIngredientVersion((current) => current + 1);
       }
     },
-    [setVersion],
+    [setAvailableIngredientVersion],
   );
 
   const toggleIngredientAvailability = useCallback(
@@ -84,10 +85,16 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       ingredients: inventory.ingredients,
       loading: false,
       availableIngredientIds: availableIngredientIdsRef.current,
+      availableIngredientVersion,
       setIngredientAvailability,
       toggleIngredientAvailability,
     };
-  }, [inventory, setIngredientAvailability, toggleIngredientAvailability, version]);
+  }, [
+    inventory,
+    availableIngredientVersion,
+    setIngredientAvailability,
+    toggleIngredientAvailability,
+  ]);
 
   return <InventoryContext.Provider value={value}>{children}</InventoryContext.Provider>;
 }
