@@ -1,4 +1,4 @@
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
 import React, { useCallback, useMemo } from 'react';
@@ -157,11 +157,32 @@ export default function IngredientDetailsScreen() {
         {ingredient ? (
           <View style={styles.section}>
             <Text style={[styles.name, { color: palette.onSurface }]}>{ingredient.name}</Text>
-            <View style={[styles.photoContainer, { borderColor: palette.outline, backgroundColor: palette.surface }]}>
+            {ingredient.tags && ingredient.tags.length ? (
+              <View style={styles.tagList}>
+                {ingredient.tags.map((tag) => (
+                  <View
+                    key={tag.id ?? tag.name}
+                    style={[styles.tagChip, { backgroundColor: tag.color ?? palette.surfaceVariant }]}
+                  >
+                    <Text style={[styles.tagText, { color: palette.onPrimary }]}>{tag.name}</Text>
+                  </View>
+                ))}
+              </View>
+            ) : null}
+
+            <View style={styles.photoWrapper}>
               {photoSource ? (
-                <Image source={photoSource} style={styles.photo} contentFit="cover" />
+                <Image
+                  source={photoSource}
+                  style={[styles.photo, { backgroundColor: palette.surface }]}
+                  contentFit="cover"
+                />
               ) : (
-                <View style={styles.photoPlaceholder}>
+                <View
+                  style={[
+                    styles.photoPlaceholder,
+                    { borderColor: palette.outline, backgroundColor: palette.surface },
+                  ]}>
                   <Text style={[styles.photoPlaceholderText, { color: palette.onSurfaceVariant }]}>No photo</Text>
                 </View>
               )}
@@ -171,9 +192,13 @@ export default function IngredientDetailsScreen() {
               onPress={handleToggleAvailability}
               accessibilityRole="checkbox"
               accessibilityState={{ checked: isAvailable }}
-              style={styles.availabilityRow}>
+              style={[styles.availabilityRow, { backgroundColor: palette.surfaceVariant }]}
+            >
+              <View style={styles.availabilityInfo}>
+                <MaterialIcons name="add-shopping-cart" size={20} color={palette.onSurfaceVariant} />
+                <Text style={[styles.availabilityLabel, { color: palette.onSurface }]}>Available</Text>
+              </View>
               <PresenceCheck checked={isAvailable} onToggle={handleToggleAvailability} />
-              <Text style={[styles.availabilityLabel, { color: palette.onSurface }]}>Available</Text>
             </Pressable>
 
             {ingredient.description ? (
@@ -248,28 +273,39 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: '600',
   },
-  photoContainer: {
+  photoWrapper: {
     width: 150,
     height: 150,
-    borderRadius: 16,
-    overflow: 'hidden',
-    alignSelf: 'flex-start',
-    borderWidth: 1,
+    alignSelf: 'center',
   },
   photo: {
     width: '100%',
     height: '100%',
+    borderRadius: 16,
+    overflow: 'hidden',
   },
   photoPlaceholder: {
     flex: 1,
+    width: '100%',
+    height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
+    borderWidth: 1,
+    borderRadius: 16,
   },
   photoPlaceholderText: {
     fontSize: 14,
     fontWeight: '500',
   },
   availabilityRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderRadius: 16,
+  },
+  availabilityInfo: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
@@ -297,6 +333,23 @@ const styles = StyleSheet.create({
   placeholderText: {
     fontSize: 15,
     textAlign: 'center',
+  },
+  tagList: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+    justifyContent: 'center',
+  },
+  tagChip: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 999,
+  },
+  tagText: {
+    fontSize: 12,
+    fontWeight: '600',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
   addButton: {
     marginTop: 12,
