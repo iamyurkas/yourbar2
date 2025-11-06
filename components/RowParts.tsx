@@ -207,12 +207,13 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   checkbox: {
-    width: 28,
-    height: 28,
+    width: 20,
+    height: 20,
     borderRadius: 14,
     borderWidth: 2,
     alignItems: 'center',
     justifyContent: 'center',
+    marginRight: 8,
   },
   starButton: {
     padding: 2,
