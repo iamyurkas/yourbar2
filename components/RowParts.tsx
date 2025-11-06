@@ -45,7 +45,7 @@ export function Thumb({ uri, label, fallbackUri, fallbackLabel }: ThumbProps) {
   }
 
   return (
-    <View style={[styles.thumb, { backgroundColor: '#FFFFFF', borderColor: palette.outlineVariant }]}>
+    <View style={[styles.thumb, { backgroundColor: '#FFFFFF' }]}>
       {source ? (
         <Image source={source} style={styles.thumbImage} contentFit="contain" />
       ) : fallbackText ? (
@@ -144,14 +144,12 @@ export function ListRow({
   const colorScheme = useColorScheme();
   const palette = Colors[colorScheme ?? 'light'];
   const backgroundColor = selected ? highlightColor ?? `${palette.tint}1F` : palette.surface;
-  const borderColor = selected ? `${palette.tint}66` : 'transparent';
-
   return (
     <Pressable
       onPress={onPress}
       accessibilityRole={accessibilityRole}
       accessibilityState={accessibilityState}
-      style={[styles.row, { backgroundColor, borderColor, borderWidth: selected ? 1 : 0 }]}>
+      style={[styles.row, { backgroundColor }]}>
       <View style={styles.thumbSlot}>{thumbnail}</View>
       <View style={styles.textColumn}>
         <Text style={[styles.title, { color: palette.text }]} numberOfLines={1}>
@@ -175,11 +173,11 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 12,
+    paddingHorizontal: 16,
     paddingVertical: 12,
-    borderRadius: 14,
     gap: 16,
     minHeight: 76,
+    width: '100%',
   },
   thumbSlot: {
     width: THUMB_SIZE,
@@ -231,7 +229,6 @@ const styles = StyleSheet.create({
     width: THUMB_SIZE,
     height: THUMB_SIZE,
     borderRadius: 8,
-    borderWidth: 1,
     overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center',

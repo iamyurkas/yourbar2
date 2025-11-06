@@ -195,11 +195,9 @@ const styles = StyleSheet.create({
   listContent: {
     paddingTop: 8,
     paddingBottom: 200,
-    paddingHorizontal: 16,
   },
   divider: {
     height: StyleSheet.hairlineWidth,
-    marginLeft: 104,
   },
   emptyLabel: {
     textAlign: 'center',
