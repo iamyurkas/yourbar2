@@ -9,6 +9,7 @@ import type { SegmentTabOption } from '@/components/TopBars';
 import { Colors } from '@/constants/theme';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
 import { palette } from '@/theme/theme';
+import { useRouter } from 'expo-router';
 
 type IngredientSection = {
   key: string;
@@ -49,9 +50,10 @@ const IngredientListItem = memo(function IngredientListItemComponent({
   onToggle,
   surfaceVariantColor,
 }: IngredientListItemProps) {
-    const id = Number(ingredient.id ?? -1);
-    const isAvailable = id >= 0 && availableIngredientIds.has(id);
-    const usageCount = ingredient.usageCount ?? 0;
+  const router = useRouter();
+  const id = Number(ingredient.id ?? -1);
+  const isAvailable = id >= 0 && availableIngredientIds.has(id);
+  const usageCount = ingredient.usageCount ?? 0;
     const subtitle = useMemo(
       () => `${usageCount} cocktail${usageCount === 1 ? '' : 's'}`,
       [usageCount],
@@ -71,27 +73,39 @@ const IngredientListItem = memo(function IngredientListItemComponent({
       [ingredient.name, ingredient.photoUri],
     );
 
-    const control = useMemo(
-      () => <PresenceCheck checked={isAvailable} onToggle={handleToggle} />,
-      [handleToggle, isAvailable],
-    );
+  const control = useMemo(
+    () => <PresenceCheck checked={isAvailable} onToggle={handleToggle} />,
+    [handleToggle, isAvailable],
+  );
 
-    return (
-      <ListRow
-        title={ingredient.name}
-        subtitle={subtitle}
-        subtitleStyle={subtitleStyle}
-        onPress={handleToggle}
-        selected={isAvailable}
-        highlightColor={highlightColor}
-        tagColor={tagColor}
-        accessibilityRole="checkbox"
-        accessibilityState={{ checked: isAvailable }}
-        thumbnail={thumbnail}
-        control={control}
-      />
-    );
-  }, areIngredientPropsEqual);
+  const handlePress = useCallback(() => {
+    const routeParam = ingredient.id ?? ingredient.name;
+    if (routeParam == null) {
+      return;
+    }
+
+    router.push({
+      pathname: '/ingredient/[ingredientId]',
+      params: { ingredientId: String(routeParam) },
+    });
+  }, [ingredient.id, ingredient.name, router]);
+
+  return (
+    <ListRow
+      title={ingredient.name}
+      subtitle={subtitle}
+      subtitleStyle={subtitleStyle}
+      onPress={handlePress}
+      selected={isAvailable}
+      highlightColor={highlightColor}
+      tagColor={tagColor}
+      accessibilityRole="button"
+      accessibilityState={isAvailable ? { selected: true } : undefined}
+      thumbnail={thumbnail}
+      control={control}
+    />
+  );
+}, areIngredientPropsEqual);
 
 export default function IngredientsScreen() {
   const { ingredients, availableIngredientIds, toggleIngredientAvailability } = useInventory();
