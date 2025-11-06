@@ -53,7 +53,7 @@ export function SearchTopBar({
       style={[
         styles.topBar,
         {
-          backgroundColor: palette.surface,
+          backgroundColor: palette.background,
           borderBottomColor: palette.outline,
           borderBottomWidth: StyleSheet.hairlineWidth,
         },
@@ -63,10 +63,10 @@ export function SearchTopBar({
         accessibilityLabel="Open navigation"
         onPress={onMenuPress}
         style={styles.iconButton}>
-        <MaterialCommunityIcons name="menu" size={24} color={palette.icon} />
+        <MaterialCommunityIcons name="menu" size={24} color={palette.onSurface} />
       </Pressable>
-      <View style={[styles.searchContainer, { backgroundColor: palette.surfaceVariant, borderColor: palette.outline }]}>
-        <MaterialCommunityIcons name="magnify" size={20} color={palette.onSurfaceVariant} style={styles.searchIcon} />
+      <View style={[styles.searchContainer, { backgroundColor: palette.surface, borderColor: palette.background }]}>
+        <MaterialCommunityIcons name="magnify" size={20} color={palette.onSurface} style={styles.searchIcon} />
         <TextInput
           value={value}
           onChangeText={onChangeText}
@@ -74,7 +74,7 @@ export function SearchTopBar({
           placeholderTextColor={`${palette.onSurfaceVariant}99`}
           returnKeyType="search"
           onSubmitEditing={handleSubmit}
-          style={[styles.searchInput, { color: palette.text, fontWeight: '500' }]}
+          style={[styles.searchInput, { color: palette.text, fontWeight: '400' }]}
         />
         {value ? (
           <Pressable
@@ -82,7 +82,7 @@ export function SearchTopBar({
             accessibilityLabel="Clear search query"
             onPress={() => onChangeText('')}
             style={styles.clearButton}>
-            <MaterialCommunityIcons name="close" size={18} color={palette.onSurfaceVariant} />
+            <MaterialCommunityIcons name="close" size={18} color={palette.onSurface} />
           </Pressable>
         ) : null}
       </View>
@@ -117,7 +117,7 @@ export function SegmentTabs({ options, value, onChange }: SegmentTabsProps) {
                 styles.tabLabel,
                 {
                   color: focused ? palette.tint : palette.onSurfaceVariant,
-                  fontWeight: focused ? '600' : '500',
+                  fontWeight: focused ? '600' : '400',
                 },
               ]}>
               {option.label}
@@ -180,13 +180,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: 16,
     paddingTop: 4,
-    paddingBottom: 8,
+    paddingBottom: 0,
+    elevation: 4,
+    zIndex: 1,
   },
   tabButton: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 8,
+    paddingTop: 12,
     gap: 6,
   },
   tabLabel: {
