@@ -1,33 +1,56 @@
-import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
-import React from 'react';
-import {
-  Image,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-  type ImageSourcePropType,
-} from 'react-native';
+import React, { useMemo } from 'react';
+import { Image, Pressable, StyleSheet, Text, View, type ImageSourcePropType } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { router, usePathname } from 'expo-router';
 
 import { Colors } from '@/constants/theme';
 import CocktailsIcon from '@/assets/images/cocktails.svg';
 import ShakerIcon from '@/assets/images/shaker.svg';
 import IngredientsIcon from '@/assets/images/ingredients.svg';
 
-type RouteKey = 'cocktails' | 'shaker' | 'ingredients';
+type TabKey = 'cocktails' | 'shaker' | 'ingredients';
+
+type TabItem = {
+  key: TabKey;
+  label: string;
+  href: string;
+  icon: ImageSourcePropType;
+};
 
 const ICON_SIZE = 28;
 
-const ICONS: Record<RouteKey, ImageSourcePropType> = {
-  cocktails: CocktailsIcon,
-  shaker: ShakerIcon,
-  ingredients: IngredientsIcon,
-};
+const TABS: TabItem[] = [
+  { key: 'cocktails', label: 'Cocktails', href: '/(tabs)/cocktails', icon: CocktailsIcon },
+  { key: 'shaker', label: 'Shaker', href: '/(tabs)/shaker', icon: ShakerIcon },
+  { key: 'ingredients', label: 'Ingredients', href: '/(tabs)/ingredients', icon: IngredientsIcon },
+];
 
-export function BottomBar({ state, descriptors, navigation }: BottomTabBarProps) {
-  const insets = useSafeAreaInsets();
+function resolveActiveTab(pathname: string | null): TabKey {
+  if (!pathname) {
+    return 'cocktails';
+  }
+
+  if (pathname.startsWith('/(tabs)/cocktails')) {
+    return 'cocktails';
+  }
+
+  if (pathname.startsWith('/(tabs)/shaker')) {
+    return 'shaker';
+  }
+
+  if (pathname.startsWith('/(tabs)/ingredients') || pathname.startsWith('/ingredient')) {
+    return 'ingredients';
+  }
+
+  return 'cocktails';
+}
+
+export function BottomTabsSwitcher() {
   const palette = Colors;
+  const insets = useSafeAreaInsets();
+  const pathname = usePathname();
+
+  const activeTab = useMemo(() => resolveActiveTab(pathname), [pathname]);
 
   return (
     <View style={[styles.wrapper, { paddingBottom: Math.max(insets.bottom, 16) }]}>
@@ -41,53 +64,31 @@ export function BottomBar({ state, descriptors, navigation }: BottomTabBarProps)
             shadowColor: palette.tint,
           },
         ]}>
-        {state.routes.map((route, index) => {
-          const focused = state.index === index;
-          const { options } = descriptors[route.key];
-          const label =
-            options.tabBarLabel !== undefined
-              ? options.tabBarLabel
-              : options.title !== undefined
-                ? options.title
-                : route.name;
+        {TABS.map(({ key, label, href, icon }) => {
+          const focused = key === activeTab;
           const color = focused ? palette.tint : palette.tabIconDefault;
           const labelColor = focused ? palette.tint : palette.icon;
 
-          const onPress = () => {
-            const event = navigation.emit({
-              type: 'tabPress',
-              target: route.key,
-              canPreventDefault: true,
-            });
-
-            if (!focused && !event.defaultPrevented) {
-              navigation.navigate(route.name, route.params);
+          const handlePress = () => {
+            if (focused) {
+              return;
             }
-          };
 
-          const onLongPress = () => {
-            navigation.emit({
-              type: 'tabLongPress',
-              target: route.key,
-            });
+            router.replace(href);
           };
-
-          const iconSource = ICONS[route.name as RouteKey];
 
           return (
             <Pressable
-              key={route.key}
+              key={key}
               accessibilityRole="button"
               accessibilityState={focused ? { selected: true } : {}}
-              accessibilityLabel={options.tabBarAccessibilityLabel}
-              testID={options.tabBarTestID}
-              onPress={onPress}
-              onLongPress={onLongPress}
+              accessibilityLabel={label}
+              onPress={handlePress}
               style={styles.item}>
               <Image
-                source={iconSource}
+                source={icon}
                 accessibilityRole="image"
-                accessibilityLabel={typeof label === 'string' ? label : undefined}
+                accessibilityLabel={label}
                 style={[styles.icon, { tintColor: color }]}
               />
               <Text style={[styles.label, { color: labelColor, fontWeight: focused ? '600' : '500' }]}>
