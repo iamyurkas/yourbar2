@@ -1,6 +1,6 @@
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
-import { Stack, router, useLocalSearchParams } from 'expo-router';
+import { Stack, router, useLocalSearchParams, useSegments } from 'expo-router';
 import React, { useCallback, useMemo, useState } from 'react';
 import {
   Alert,
@@ -18,6 +18,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { resolveAssetFromCatalog } from '@/assets/image-manifest';
 import { CocktailListRow } from '@/components/CocktailListRow';
 import { PresenceCheck } from '@/components/RowParts';
+import CocktailsIcon from '@/assets/images/cocktails.svg';
+import IngredientsIcon from '@/assets/images/ingredients.svg';
+import ShakerIcon from '@/assets/images/shaker.svg';
 import { Colors } from '@/constants/theme';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
 
@@ -40,9 +43,31 @@ function useResolvedIngredient(param: string | undefined, ingredients: Ingredien
   }, [ingredients, param]);
 }
 
+const BOTTOM_TABS = [
+  {
+    key: 'cocktails',
+    label: 'Коктейлі',
+    href: '/cocktails' as const,
+    Icon: CocktailsIcon,
+  },
+  {
+    key: 'shaker',
+    label: 'Шейкер',
+    href: '/shaker' as const,
+    Icon: ShakerIcon,
+  },
+  {
+    key: 'ingredients',
+    label: 'Інгредієнти',
+    href: '/ingredients' as const,
+    Icon: IngredientsIcon,
+  },
+] as const;
+
 export default function IngredientDetailsScreen() {
   const palette = Colors;
   const { ingredientId } = useLocalSearchParams<{ ingredientId?: string }>();
+  const segments = useSegments();
   const {
     ingredients,
     cocktails,
@@ -273,8 +298,15 @@ export default function IngredientDetailsScreen() {
     [clearBaseIngredient, ingredient?.name],
   );
 
+  const handleNavigateToTab = useCallback((href: (typeof BOTTOM_TABS)[number]['href']) => {
+    router.replace(href);
+  }, []);
+
   return (
-    <SafeAreaView style={[styles.safeArea, { backgroundColor: palette.background }]} edges={['left', 'right']}>
+    <SafeAreaView
+      style={[styles.safeArea, { backgroundColor: palette.background }]}
+      edges={['left', 'right', 'bottom']}>
+      <View style={styles.container}>
       <Stack.Screen
         options={{
           title: 'Ingredient details',
@@ -305,7 +337,10 @@ export default function IngredientDetailsScreen() {
         }}
       />
 
-      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+        <ScrollView
+          style={styles.scroll}
+          contentContainerStyle={styles.content}
+          showsVerticalScrollIndicator={false}>
         {ingredient ? (
           <View style={styles.section}>
             <Text style={[styles.name, { color: palette.onSurface }]}>{ingredient.name}</Text>
@@ -556,13 +591,52 @@ export default function IngredientDetailsScreen() {
             <Text style={[styles.placeholderText, { color: palette.onSurfaceVariant }]}>Ingredient not found</Text>
           </View>
         )}
-      </ScrollView>
+        </ScrollView>
+
+        <View style={[styles.bottomTabsWrapper, { borderColor: palette.outline, backgroundColor: palette.surface }]}>
+          {BOTTOM_TABS.map(({ key, label, Icon, href }) => {
+            const isActive = segments[0] === key;
+            return (
+              <Pressable
+                key={key}
+                onPress={() => handleNavigateToTab(href)}
+                style={[
+                  styles.bottomTabButton,
+                  isActive && { backgroundColor: palette.surfaceVariant },
+                ]}
+                accessibilityRole="button"
+                accessibilityLabel={label}>
+                <Icon
+                  width={22}
+                  height={22}
+                  fill={isActive ? palette.tint : palette.icon}
+                  accessibilityRole="image"
+                  accessibilityLabel={label}
+                />
+                <Text
+                  style={[
+                    styles.bottomTabLabel,
+                    { color: isActive ? palette.tint : palette.onSurfaceVariant },
+                  ]}>
+                  {label}
+                </Text>
+              </Pressable>
+            );
+          })}
+        </View>
+      </View>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   safeArea: {
+    flex: 1,
+  },
+  container: {
+    flex: 1,
+  },
+  scroll: {
     flex: 1,
   },
   headerButton: {
@@ -575,7 +649,7 @@ const styles = StyleSheet.create({
   content: {
     paddingHorizontal: 24,
     paddingTop: 24,
-    paddingBottom: 48,
+    paddingBottom: 160,
     gap: 24,
   },
   section: {
@@ -727,5 +801,30 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 80,
+  },
+  bottomTabsWrapper: {
+    marginTop: 16,
+    marginHorizontal: 24,
+    marginBottom: 16,
+    borderRadius: 24,
+    borderWidth: 1,
+    paddingHorizontal: 12,
+    paddingVertical: 12,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    gap: 8,
+  },
+  bottomTabButton: {
+    flex: 1,
+    paddingVertical: 12,
+    borderRadius: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+  },
+  bottomTabLabel: {
+    fontSize: 12,
+    fontWeight: '600',
   },
 });
