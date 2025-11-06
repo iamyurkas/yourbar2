@@ -163,20 +163,20 @@ export default function IngredientDetailsScreen() {
 
   const DESCRIPTION_PREVIEW_LINES = 5;
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
-  const [shouldShowDescriptionToggle, setShouldShowDescriptionToggle] = useState(false);
+  const [shouldTruncateDescription, setShouldTruncateDescription] = useState(false);
 
   const handleDescriptionLayout = useCallback(
     (event: NativeSyntheticEvent<TextLayoutEventData>) => {
-      if (shouldShowDescriptionToggle) {
+      if (shouldTruncateDescription) {
         return;
       }
 
       const totalLines = event.nativeEvent?.lines?.length ?? 0;
       if (totalLines > DESCRIPTION_PREVIEW_LINES) {
-        setShouldShowDescriptionToggle(true);
+        setShouldTruncateDescription(true);
       }
     },
-    [DESCRIPTION_PREVIEW_LINES, shouldShowDescriptionToggle],
+    [DESCRIPTION_PREVIEW_LINES, shouldTruncateDescription],
   );
 
   const handleToggleDescription = useCallback(() => {
@@ -245,6 +245,14 @@ export default function IngredientDetailsScreen() {
     router.push({ pathname: '/ingredient/[ingredientId]', params: { ingredientId: String(id) } });
   }, []);
 
+  const handleNavigateToCocktail = useCallback((cocktailId: number | string | undefined) => {
+    if (cocktailId == null) {
+      return;
+    }
+
+    router.push({ pathname: '/cocktail/[cocktailId]', params: { cocktailId: String(cocktailId) } });
+  }, []);
+
   const handleRemoveBranded = useCallback(
     (brandedIngredient: Ingredient) =>
       (event?: GestureResponderEvent) => {
@@ -310,42 +318,45 @@ export default function IngredientDetailsScreen() {
           <View style={styles.section}>
             <Text style={[styles.name, { color: palette.onSurface }]}>{ingredient.name}</Text>
 
-            <View style={styles.photoWrapper}>
-              {photoSource ? (
-                <Image
-                  source={photoSource}
-                  style={[styles.photo, { backgroundColor: palette.surface }]}
-                  contentFit="cover"
-                />
-              ) : (
-                <View
-                  style={[
-                    styles.photoPlaceholder,
-                    { borderColor: palette.outline, backgroundColor: palette.surface },
-                  ]}>
-                  <Text style={[styles.photoPlaceholderText, { color: palette.onSurfaceVariant }]}>No photo</Text>
-                </View>
-              )}
-            </View>
+            <View style={styles.mediaSection}>
+              <View style={styles.photoWrapper}>
+                {photoSource ? (
+                  <Image source={photoSource} style={styles.photo} contentFit="contain" />
+                ) : (
+                  <View
+                    style={[
+                      styles.photoPlaceholder,
+                      { borderColor: palette.outline },
+                    ]}>
+                    <MaterialCommunityIcons
+                      name="image-off"
+                      size={36}
+                      color={palette.onSurfaceVariant}
+                    />
+                    <Text style={[styles.photoPlaceholderText, { color: palette.onSurfaceVariant }]}>No photo</Text>
+                  </View>
+                )}
+              </View>
 
-            <View style={styles.statusRow}>
-              <Pressable
-                onPress={handleToggleShopping}
-                accessibilityRole="button"
-                accessibilityLabel={
-                  isOnShoppingList
-                    ? 'Remove ingredient from shopping list'
-                    : 'Add ingredient to shopping list'
-                }
-                hitSlop={8}
-              >
-                <MaterialIcons
-                  name={isOnShoppingList ? 'shopping-cart' : 'add-shopping-cart'}
-                  size={22}
-                  color={isOnShoppingList ? palette.tint : palette.onSurfaceVariant}
-                />
-              </Pressable>
-              <PresenceCheck checked={isAvailable} onToggle={handleToggleAvailability} />
+              <View style={styles.statusRow}>
+                <Pressable
+                  onPress={handleToggleShopping}
+                  accessibilityRole="button"
+                  accessibilityLabel={
+                    isOnShoppingList
+                      ? 'Remove ingredient from shopping list'
+                      : 'Add ingredient to shopping list'
+                  }
+                  hitSlop={8}
+                >
+                  <MaterialIcons
+                    name={isOnShoppingList ? 'shopping-cart' : 'add-shopping-cart'}
+                    size={22}
+                    color={isOnShoppingList ? palette.tint : palette.onSurfaceVariant}
+                  />
+                </Pressable>
+                <PresenceCheck checked={isAvailable} onToggle={handleToggleAvailability} />
+              </View>
             </View>
 
             {ingredient.tags && ingredient.tags.length ? (
@@ -362,16 +373,19 @@ export default function IngredientDetailsScreen() {
             ) : null}
 
             {ingredient.description ? (
-              <View style={styles.infoBlock}>
-                <Text style={[styles.sectionLabel, { color: palette.onSurfaceVariant }]}>Description</Text>
+              <View style={styles.textBlock}>
                 <Text
-                  style={[styles.bodyText, { color: palette.onSurface }]}
-                  numberOfLines={isDescriptionExpanded ? undefined : DESCRIPTION_PREVIEW_LINES}
+                  style={[styles.bodyText, styles.descriptionText, { color: palette.onSurfaceVariant }]}
+                  numberOfLines={
+                    !isDescriptionExpanded && shouldTruncateDescription
+                      ? DESCRIPTION_PREVIEW_LINES
+                      : undefined
+                  }
                   onTextLayout={handleDescriptionLayout}
                 >
                   {ingredient.description}
                 </Text>
-                {shouldShowDescriptionToggle ? (
+                {shouldTruncateDescription ? (
                   <Pressable
                     onPress={handleToggleDescription}
                     accessibilityRole="button"
@@ -380,7 +394,7 @@ export default function IngredientDetailsScreen() {
                     }
                     hitSlop={8}
                   >
-                    <Text style={[styles.showMoreLess, { color: palette.tint }]}>
+                    <Text style={[styles.toggleDescription, { color: palette.tint }]}> 
                       {isDescriptionExpanded ? 'Show less' : 'Show more'}
                     </Text>
                   </Pressable>
@@ -389,8 +403,8 @@ export default function IngredientDetailsScreen() {
             ) : null}
 
             {baseIngredient ? (
-              <View style={styles.infoBlock}>
-                <Text style={[styles.sectionLabel, { color: palette.onSurfaceVariant }]}>Base ingredient</Text>
+              <View style={styles.textBlock}>
+                <Text style={[styles.sectionTitle, { color: palette.onSurface }]}>Base ingredient</Text>
                 <Pressable
                   onPress={handleNavigateToBase}
                   accessibilityRole="button"
@@ -445,8 +459,8 @@ export default function IngredientDetailsScreen() {
             ) : null}
 
             {brandedIngredients.length ? (
-              <View style={styles.infoBlock}>
-                <Text style={[styles.sectionLabel, { color: palette.onSurfaceVariant }]}>Branded ingredients</Text>
+              <View style={styles.textBlock}>
+                <Text style={[styles.sectionTitle, { color: palette.onSurface }]}>Branded ingredients</Text>
                 <View style={styles.brandedList}>
                   {brandedIngredients.map((branded) => {
                     const brandedPhotoSource = (() => {
@@ -526,8 +540,8 @@ export default function IngredientDetailsScreen() {
               </View>
             ) : null}
 
-            <View style={[styles.infoBlock, styles.cocktailBlock]}>
-              <Text style={[styles.sectionLabel, { color: palette.onSurfaceVariant }]}>Cocktails</Text>
+            <View style={[styles.textBlock, styles.cocktailBlock]}>
+              <Text style={[styles.sectionTitle, { color: palette.onSurface }]}>Cocktails</Text>
               {cocktailsWithIngredient.length ? (
                 <View style={styles.cocktailList}>
                   {cocktailsWithIngredient.map((cocktail) => (
@@ -535,6 +549,7 @@ export default function IngredientDetailsScreen() {
                       key={cocktail.id ?? cocktail.name}
                       cocktail={cocktail}
                       availableIngredientIds={availableIngredientIds}
+                      onPress={() => handleNavigateToCocktail(cocktail.id ?? cocktail.name)}
                     />
                   ))}
                 </View>
@@ -566,44 +581,50 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   headerButton: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
+    width: 40,
+    height: 40,
+    borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
   },
   content: {
     paddingHorizontal: 24,
-    paddingTop: 24,
-    paddingBottom: 48,
-    gap: 24,
+    paddingVertical: 32,
   },
   section: {
     gap: 24,
   },
   name: {
-    fontSize: 28,
-    fontWeight: '600',
+    fontSize: 32,
+    fontWeight: '700',
+    textAlign: 'center',
+  },
+  mediaSection: {
+    gap: 16,
+    alignItems: 'center',
   },
   photoWrapper: {
     width: 150,
     height: 150,
-    alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   photo: {
     width: '100%',
     height: '100%',
     borderRadius: 16,
     overflow: 'hidden',
+    backgroundColor: '#FFFFFF',
   },
   photoPlaceholder: {
-    flex: 1,
-    width: '100%',
-    height: '100%',
+    width: 150,
+    height: 150,
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 1,
+    borderWidth: StyleSheet.hairlineWidth,
     borderRadius: 16,
+    gap: 8,
+    backgroundColor: '#FFFFFF',
   },
   photoPlaceholderText: {
     fontSize: 14,
@@ -612,22 +633,8 @@ const styles = StyleSheet.create({
   statusRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-end',
-    gap: 20,
-    marginTop: 16,
-  },
-  infoBlock: {
-    gap: 8,
-  },
-  sectionLabel: {
-    fontSize: 14,
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-    fontWeight: '500',
-  },
-  bodyText: {
-    fontSize: 16,
-    lineHeight: 22,
+    justifyContent: 'center',
+    gap: 24,
   },
   cocktailList: {
     gap: 12,
@@ -642,6 +649,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     gap: 8,
     justifyContent: 'flex-start',
+    alignSelf: 'stretch',
   },
   tagChip: {
     paddingHorizontal: 12,
@@ -649,14 +657,25 @@ const styles = StyleSheet.create({
     borderRadius: 999,
   },
   tagText: {
-    fontSize: 12,
-    fontWeight: '600',
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
+    fontSize: 13,
+    fontWeight: '500',
   },
-  showMoreLess: {
-    marginTop: 4,
-    fontSize: 14,
+  textBlock: {
+    gap: 12,
+  },
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: '600',
+  },
+  bodyText: {
+    fontSize: 15,
+    lineHeight: 22,
+  },
+  descriptionText: {
+    color: '#6F6F6F',
+  },
+  toggleDescription: {
+    fontSize: 15,
     fontWeight: '500',
   },
   baseIngredientRow: {
@@ -665,7 +684,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     gap: 16,
     padding: 12,
-    borderWidth: 1,
+    borderWidth: StyleSheet.hairlineWidth,
     borderRadius: 16,
   },
   baseIngredientInfo: {
