@@ -18,9 +18,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { resolveAssetFromCatalog } from '@/assets/image-manifest';
 import { CocktailListRow } from '@/components/CocktailListRow';
 import { PresenceCheck } from '@/components/RowParts';
-import CocktailsIcon from '@/assets/images/cocktails.svg';
-import IngredientsIcon from '@/assets/images/ingredients.svg';
-import ShakerIcon from '@/assets/images/shaker.svg';
 import { Colors } from '@/constants/theme';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
 
@@ -48,19 +45,19 @@ const BOTTOM_TABS = [
     key: 'cocktails',
     label: 'Коктейлі',
     href: '/cocktails' as const,
-    Icon: CocktailsIcon,
+    iconName: 'glass-cocktail' as const,
   },
   {
     key: 'shaker',
     label: 'Шейкер',
     href: '/shaker' as const,
-    Icon: ShakerIcon,
+    iconName: 'blender' as const,
   },
   {
     key: 'ingredients',
     label: 'Інгредієнти',
     href: '/ingredients' as const,
-    Icon: IngredientsIcon,
+    iconName: 'food-apple-outline' as const,
   },
 ] as const;
 
@@ -594,7 +591,7 @@ export default function IngredientDetailsScreen() {
         </ScrollView>
 
         <View style={[styles.bottomTabsWrapper, { borderColor: palette.outline, backgroundColor: palette.surface }]}>
-          {BOTTOM_TABS.map(({ key, label, Icon, href }) => {
+          {BOTTOM_TABS.map(({ key, label, iconName, href }) => {
             const isActive = segments[0] === key;
             return (
               <Pressable
@@ -606,10 +603,10 @@ export default function IngredientDetailsScreen() {
                 ]}
                 accessibilityRole="button"
                 accessibilityLabel={label}>
-                <Icon
-                  width={22}
-                  height={22}
-                  fill={isActive ? palette.tint : palette.icon}
+                <MaterialCommunityIcons
+                  name={iconName}
+                  size={22}
+                  color={isActive ? palette.tint : palette.icon}
                   accessibilityRole="image"
                   accessibilityLabel={label}
                 />
