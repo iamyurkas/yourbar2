@@ -1,4 +1,4 @@
-import { MD3LightTheme as BaseTheme } from 'react-native-paper';
+import { MD3LightTheme as BaseTheme } from '@/libs/react-native-paper';
 
 export const AppTheme = {
   ...BaseTheme,

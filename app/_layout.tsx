@@ -1,7 +1,7 @@
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { PaperProvider } from 'react-native-paper';
+import { PaperProvider } from '@/libs/react-native-paper';
 import 'react-native-reanimated';
 
 import { AppTheme } from '@/constants/app-theme';
