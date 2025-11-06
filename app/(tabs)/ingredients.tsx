@@ -4,7 +4,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { FabAdd } from '@/components/FabAdd';
 import { ListRow, PresenceCheck, Thumb } from '@/components/RowParts';
-import { SearchTopBar, SegmentTabs } from '@/components/TopBars';
+import { CollectionHeader } from '@/components/CollectionHeader';
+import type { SegmentTabOption } from '@/components/TopBars';
 import { Colors } from '@/constants/theme';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
 import { palette } from '@/theme/theme';
@@ -17,7 +18,7 @@ type IngredientSection = {
 
 type IngredientTabKey = 'all' | 'my' | 'shopping';
 
-const TAB_OPTIONS: { key: IngredientTabKey; label: string }[] = [
+const TAB_OPTIONS: SegmentTabOption[] = [
   { key: 'all', label: 'All' },
   { key: 'my', label: 'My' },
   { key: 'shopping', label: 'Shopping' },
@@ -171,8 +172,14 @@ export default function IngredientsScreen() {
       style={[styles.safeArea, { backgroundColor: paletteColors.background }]}
       edges={['top', 'left', 'right']}>
       <View style={styles.container}>
-        <SearchTopBar value={query} onChangeText={setQuery} placeholder="Search" />
-        <SegmentTabs options={TAB_OPTIONS} value={activeTab} onChange={setActiveTab} />
+        <CollectionHeader
+          searchValue={query}
+          onSearchChange={setQuery}
+          placeholder="Search"
+          tabs={TAB_OPTIONS}
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+        />
         <FlatList
           data={filteredIngredients}
           keyExtractor={keyExtractor}

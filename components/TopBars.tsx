@@ -21,13 +21,13 @@ type SearchTopBarProps = {
   onFilterPress?: () => void;
 };
 
-type TabOption = {
+export type SegmentTabOption = {
   key: string;
   label: string;
 };
 
 type SegmentTabsProps = {
-  options: TabOption[];
+  options: SegmentTabOption[];
   value: string;
   onChange: (key: string) => void;
 };

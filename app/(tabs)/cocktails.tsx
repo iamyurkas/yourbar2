@@ -6,7 +6,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { resolveGlasswareUriFromId } from '@/assets/image-manifest';
 import { FabAdd } from '@/components/FabAdd';
 import { FavoriteStar, ListRow, Thumb } from '@/components/RowParts';
-import { SearchTopBar, SegmentTabs } from '@/components/TopBars';
+import { CollectionHeader } from '@/components/CollectionHeader';
+import type { SegmentTabOption } from '@/components/TopBars';
 import { Colors } from '@/constants/theme';
 import { useInventory, type Cocktail } from '@/providers/inventory-provider';
 import { palette, tagColors } from '@/theme/theme';
@@ -19,7 +20,7 @@ type CocktailSection = {
 
 type CocktailTabKey = 'all' | 'my' | 'favorites';
 
-const TAB_OPTIONS: { key: CocktailTabKey; label: string }[] = [
+const TAB_OPTIONS: SegmentTabOption[] = [
   { key: 'all', label: 'All' },
   { key: 'my', label: 'My' },
   { key: 'favorites', label: 'Favorites' },
@@ -224,8 +225,14 @@ export default function CocktailsScreen() {
       style={[styles.safeArea, { backgroundColor: paletteColors.background }]}
       edges={['top', 'left', 'right']}>
       <View style={styles.container}>
-        <SearchTopBar value={query} onChangeText={setQuery} placeholder="Search" />
-        <SegmentTabs options={TAB_OPTIONS} value={activeTab} onChange={setActiveTab} />
+        <CollectionHeader
+          searchValue={query}
+          onSearchChange={setQuery}
+          placeholder="Search"
+          tabs={TAB_OPTIONS}
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+        />
         <FlatList
           data={filteredCocktails}
           keyExtractor={keyExtractor}
