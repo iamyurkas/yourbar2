@@ -11,6 +11,7 @@ import {
   type TextStyle,
 } from 'react-native';
 
+import { resolveAssetFromCatalog } from '@/assets/image-manifest';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
@@ -26,12 +27,14 @@ export function Thumb({ uri, label }: ThumbProps) {
   const palette = Colors[colorScheme ?? 'light'];
   const trimmed = label?.trim();
   const fallbackLabel = trimmed ? trimmed.slice(0, 2).toUpperCase() : undefined;
+  const assetSource = resolveAssetFromCatalog(uri);
   const resolvedUri = uri && /^https?:/i.test(uri) ? uri : undefined;
+  const source = assetSource ?? (resolvedUri ? { uri: resolvedUri } : undefined);
 
   return (
     <View style={[styles.thumb, { backgroundColor: palette.surfaceVariant, borderColor: palette.outlineVariant }]}> 
-      {resolvedUri ? (
-        <Image source={{ uri: resolvedUri }} style={styles.thumbImage} contentFit="cover" />
+      {source ? (
+        <Image source={source} style={styles.thumbImage} contentFit="cover" />
       ) : fallbackLabel ? (
         <Text style={[styles.thumbFallback, { color: palette.onSurfaceVariant }]}>{fallbackLabel}</Text>
       ) : (

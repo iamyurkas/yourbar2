@@ -1,20 +1,21 @@
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Image, type ImageSource } from 'expo-image';
 
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import CocktailsIcon from '@/assets/images/cocktails.svg';
+import ShakerIcon from '@/assets/images/shaker.svg';
+import IngredientsIcon from '@/assets/images/ingredients.svg';
 
 type RouteKey = 'cocktails' | 'shaker' | 'ingredients';
 
-type IconMap = Record<RouteKey, keyof typeof MaterialCommunityIcons.glyphMap>;
-
-const ICONS: IconMap = {
-  cocktails: 'glass-cocktail',
-  shaker: 'shaker',
-  ingredients: 'bottle',
+const ICONS: Record<RouteKey, ImageSource> = {
+  cocktails: CocktailsIcon,
+  shaker: ShakerIcon,
+  ingredients: IngredientsIcon,
 };
 
 export function BottomBar({ state, descriptors, navigation }: BottomTabBarProps) {
@@ -43,7 +44,6 @@ export function BottomBar({ state, descriptors, navigation }: BottomTabBarProps)
               : options.title !== undefined
                 ? options.title
                 : route.name;
-          const iconName = ICONS[route.name as RouteKey] ?? 'circle-outline';
           const color = focused ? palette.tint : palette.tabIconDefault;
           const labelColor = focused ? palette.tint : palette.icon;
 
@@ -76,7 +76,12 @@ export function BottomBar({ state, descriptors, navigation }: BottomTabBarProps)
               onPress={onPress}
               onLongPress={onLongPress}
               style={styles.item}>
-              <MaterialCommunityIcons name={iconName} color={color} size={26} />
+              <Image
+                source={ICONS[route.name as RouteKey]}
+                style={[styles.icon, { tintColor: color }]}
+                contentFit="contain"
+                accessibilityIgnoresInvertColors
+              />
               <Text style={[styles.label, { color: labelColor, fontWeight: focused ? '600' : '500' }]}>
                 {label}
               </Text>
@@ -113,6 +118,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 6,
     paddingVertical: 8,
+  },
+  icon: {
+    width: 28,
+    height: 28,
   },
   label: {
     fontSize: 12,
