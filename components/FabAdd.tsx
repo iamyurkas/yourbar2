@@ -4,6 +4,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Colors } from '@/constants/theme';
+import { palette } from '@/theme/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
 type FabAddProps = {
@@ -14,7 +15,7 @@ type FabAddProps = {
 export function FabAdd({ label = 'Add', onPress }: FabAddProps) {
   const insets = useSafeAreaInsets();
   const colorScheme = useColorScheme();
-  const palette = Colors[colorScheme ?? 'light'];
+  const paletteColors = Colors[colorScheme ?? 'light'];
 
   return (
     <View style={[styles.container, { bottom: insets.bottom + 32 }]}>
@@ -22,9 +23,9 @@ export function FabAdd({ label = 'Add', onPress }: FabAddProps) {
         accessibilityRole="button"
         accessibilityLabel={label}
         onPress={onPress}
-        style={[styles.fab, { backgroundColor: palette.tint }]}
-        android_ripple={{ color: `${palette.surface}33`, borderless: true }}>
-        <MaterialCommunityIcons name="plus" size={26} color={palette.surface} />
+        style={[styles.fab, { backgroundColor: paletteColors.tint }]}
+        android_ripple={{ color: `${paletteColors.surface}33`, borderless: true }}>
+        <MaterialCommunityIcons name="plus" size={26} color={paletteColors.surface} />
       </Pressable>
     </View>
   );
@@ -43,7 +44,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     elevation: 6,
-    shadowColor: '#000',
+    shadowColor: palette.shadow,
     shadowOpacity: 0.18,
     shadowOffset: { width: 0, height: 6 },
     shadowRadius: 12,

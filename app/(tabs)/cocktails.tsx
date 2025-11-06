@@ -9,7 +9,7 @@ import { FavoriteStar, ListRow, Thumb } from '@/components/RowParts';
 import { SearchTopBar, SegmentTabs } from '@/components/TopBars';
 import { Colors } from '@/constants/theme';
 import { useInventory, type Cocktail } from '@/providers/inventory-provider';
-import { palette } from '@/theme/theme';
+import { palette, tagColors } from '@/theme/theme';
 
 type CocktailSection = {
   key: string;
@@ -104,7 +104,7 @@ const CocktailListItem = memo(function CocktailListItemComponent({
       ? { color: surfaceVariantColor }
       : undefined;
 
-  const tagColor = cocktail.tags?.[0]?.color ?? palette.tagPink;
+  const tagColor = cocktail.tags?.[0]?.color ?? tagColors.pink;
   const isFavorite = favoriteIds.has(cocktail.id);
   const isReady = missingCount === 0 && totalIngredients > 0;
   const glasswareUri = resolveGlasswareUriFromId(cocktail.glassId);
@@ -188,7 +188,7 @@ export default function CocktailsScreen() {
     return base.filter((cocktail) => cocktail.name.toLowerCase().includes(safeQuery));
   }, [activeSection.data, query]);
 
-  const highlightColor = '#4A90E21A';
+  const highlightColor = palette.highlightFaint;
   const separatorColor = paletteColors.outline;
 
   const keyExtractor = useCallback((item: Cocktail) => String(item.id ?? item.name), []);
