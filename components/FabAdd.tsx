@@ -4,8 +4,8 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Colors } from '@/constants/theme';
-import { palette } from '@/theme/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import { palette } from '@/theme/theme';
 
 type FabAddProps = {
   label?: string;
@@ -18,7 +18,7 @@ export function FabAdd({ label = 'Add', onPress }: FabAddProps) {
   const paletteColors = Colors[colorScheme ?? 'light'];
 
   return (
-    <View style={[styles.container, { bottom: insets.bottom + 32 }]}>
+    <View style={[styles.container, { bottom: insets.bottom + 16 }]}>
       <Pressable
         accessibilityRole="button"
         accessibilityLabel={label}

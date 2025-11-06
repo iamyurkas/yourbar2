@@ -251,8 +251,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   listContent: {
-    paddingTop: 8,
-    paddingBottom: 200,
+    paddingTop: 0,
+    paddingBottom: 80,
   },
   divider: {
     height: StyleSheet.hairlineWidth,
