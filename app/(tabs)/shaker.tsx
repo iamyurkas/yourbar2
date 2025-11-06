@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
+import { CollectionHeader } from '@/components/CollectionHeader';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { IconSymbol } from '@/components/ui/icon-symbol';
-import { SearchTopBar } from '@/components/TopBars';
 import { Colors } from '@/constants/theme';
 import { palette } from '@/theme/theme';
 
@@ -20,7 +20,7 @@ export default function ShakerScreen() {
 
   return (
     <ThemedView style={[styles.screen, { backgroundColor: paletteColors.background }]}>
-      <SearchTopBar value={query} onChangeText={setQuery} placeholder="Search" />
+      <CollectionHeader searchValue={query} onSearchChange={setQuery} placeholder="Search" />
       <View style={styles.container}>
         <View style={styles.header}>
           <ThemedText type="title">Shaker</ThemedText>
