@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { memo, useCallback, useMemo, useState } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -23,6 +23,75 @@ const TAB_OPTIONS: { key: IngredientTabKey; label: string }[] = [
   { key: 'my', label: 'My' },
   { key: 'shopping', label: 'Shopping' },
 ];
+
+type IngredientListItemProps = {
+  ingredient: Ingredient;
+  highlightColor: string;
+  availableIngredientIds: Set<number>;
+  onToggle: (id: number) => void;
+  surfaceVariantColor?: string;
+};
+
+const areIngredientPropsEqual = (
+  prev: Readonly<IngredientListItemProps>,
+  next: Readonly<IngredientListItemProps>,
+) =>
+  prev.ingredient === next.ingredient &&
+  prev.highlightColor === next.highlightColor &&
+  prev.availableIngredientIds === next.availableIngredientIds &&
+  prev.onToggle === next.onToggle &&
+  prev.surfaceVariantColor === next.surfaceVariantColor;
+
+const IngredientListItem = memo(function IngredientListItemComponent({
+  ingredient,
+  highlightColor,
+  availableIngredientIds,
+  onToggle,
+  surfaceVariantColor,
+}: IngredientListItemProps) {
+    const id = Number(ingredient.id ?? -1);
+    const isAvailable = id >= 0 && availableIngredientIds.has(id);
+    const usageCount = ingredient.usageCount ?? 0;
+    const subtitle = useMemo(
+      () => `${usageCount} cocktail${usageCount === 1 ? '' : 's'}`,
+      [usageCount],
+    );
+    const tagColor = ingredient.tags?.[0]?.color ?? palette.tagYellow;
+
+    const handleToggle = useCallback(() => {
+      if (id >= 0) {
+        onToggle(id);
+      }
+    }, [id, onToggle]);
+
+    const subtitleStyle = surfaceVariantColor ? { color: surfaceVariantColor } : undefined;
+
+    const thumbnail = useMemo(
+      () => <Thumb label={ingredient.name} uri={ingredient.photoUri} />,
+      [ingredient.name, ingredient.photoUri],
+    );
+
+    const control = useMemo(
+      () => <PresenceCheck checked={isAvailable} onToggle={handleToggle} />,
+      [handleToggle, isAvailable],
+    );
+
+    return (
+      <ListRow
+        title={ingredient.name}
+        subtitle={subtitle}
+        subtitleStyle={subtitleStyle}
+        onPress={handleToggle}
+        selected={isAvailable}
+        highlightColor={highlightColor}
+        tagColor={tagColor}
+        accessibilityRole="checkbox"
+        accessibilityState={{ checked: isAvailable }}
+        thumbnail={thumbnail}
+        control={control}
+      />
+    );
+  }, areIngredientPropsEqual);
 
 export default function IngredientsScreen() {
   const { ingredients, availableIngredientIds, toggleIngredientAvailability } = useInventory();
@@ -65,8 +134,7 @@ export default function IngredientsScreen() {
   const separatorColor = paletteColors.outline;
 
   const handleToggle = useCallback(
-    (ingredient: Ingredient) => {
-      const id = Number(ingredient.id ?? -1);
+    (id: number) => {
       if (id >= 0) {
         toggleIngredientAvailability(id);
       }
@@ -77,28 +145,22 @@ export default function IngredientsScreen() {
   const keyExtractor = useCallback((item: Ingredient) => String(item.id ?? item.name), []);
 
   const renderItem = useCallback(
-    ({ item }: { item: Ingredient }) => {
-      const id = Number(item.id ?? -1);
-      const isAvailable = id >= 0 && availableIngredientIds.has(id);
-      const usageCount = item.usageCount ?? 0;
-      const subtitle = `${usageCount} cocktail${usageCount === 1 ? '' : 's'}`;
-      const tagColor = item.tags?.[0]?.color ?? palette.tagYellow;
-
-      return (
-        <ListRow
-          title={item.name}
-          subtitle={subtitle}
-          onPress={() => handleToggle(item)}
-          selected={isAvailable}
-          highlightColor={highlightColor}
-          tagColor={tagColor}
-          accessibilityRole="checkbox"
-          accessibilityState={{ checked: isAvailable }}
-          thumbnail={<Thumb label={item.name} uri={item.photoUri} />}
-          control={<PresenceCheck checked={isAvailable} onToggle={() => handleToggle(item)} />} />
-      );
-    },
-    [availableIngredientIds, handleToggle, highlightColor],
+    ({ item }: { item: Ingredient }) => (
+      <IngredientListItem
+        ingredient={item}
+        highlightColor={highlightColor}
+        availableIngredientIds={availableIngredientIds}
+        onToggle={handleToggle}
+        surfaceVariantColor={paletteColors.onSurfaceVariant ?? paletteColors.icon}
+      />
+    ),
+    [
+      availableIngredientIds,
+      handleToggle,
+      highlightColor,
+      paletteColors.icon,
+      paletteColors.onSurfaceVariant,
+    ],
   );
 
   const renderSeparator = useCallback(
