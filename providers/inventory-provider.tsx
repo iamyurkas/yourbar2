@@ -18,8 +18,10 @@ type InventoryContextValue = {
   ingredients: Ingredient[];
   loading: boolean;
   availableIngredientIds: Set<number>;
+  shoppingIngredientIds: Set<number>;
   setIngredientAvailability: (id: number, available: boolean) => void;
   toggleIngredientAvailability: (id: number) => void;
+  toggleIngredientShopping: (id: number) => void;
   clearBaseIngredient: (id: number) => void;
 };
 
@@ -77,6 +79,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   const inventory = ensureInventoryState();
   const [ingredientsState, setIngredientsState] = useState<Ingredient[]>(() => inventory.ingredients);
   const [availableIngredientIds, setAvailableIngredientIds] = useState<Set<number>>(() => new Set());
+  const [shoppingIngredientIds, setShoppingIngredientIds] = useState<Set<number>>(() => new Set());
 
   const setIngredientAvailability = useCallback((id: number, available: boolean) => {
     setAvailableIngredientIds((prev) => {
@@ -92,6 +95,18 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
 
   const toggleIngredientAvailability = useCallback((id: number) => {
     setAvailableIngredientIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+      return next;
+    });
+  }, []);
+
+  const toggleIngredientShopping = useCallback((id: number) => {
+    setShoppingIngredientIds((prev) => {
       const next = new Set(prev);
       if (next.has(id)) {
         next.delete(id);
@@ -130,16 +145,20 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       ingredients: ingredientsState,
       loading: false,
       availableIngredientIds,
+      shoppingIngredientIds,
       setIngredientAvailability,
       toggleIngredientAvailability,
+      toggleIngredientShopping,
       clearBaseIngredient,
     };
   }, [
     inventory.cocktails,
     ingredientsState,
     availableIngredientIds,
+    shoppingIngredientIds,
     setIngredientAvailability,
     toggleIngredientAvailability,
+    toggleIngredientShopping,
     clearBaseIngredient,
   ]);
 

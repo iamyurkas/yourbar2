@@ -48,6 +48,8 @@ export default function IngredientDetailsScreen() {
     cocktails,
     availableIngredientIds,
     toggleIngredientAvailability,
+    shoppingIngredientIds,
+    toggleIngredientShopping,
     clearBaseIngredient,
   } = useInventory();
 
@@ -68,6 +70,13 @@ export default function IngredientDetailsScreen() {
     }
     return availableIngredientIds.has(numericIngredientId);
   }, [availableIngredientIds, numericIngredientId]);
+
+  const isOnShoppingList = useMemo(() => {
+    if (numericIngredientId == null) {
+      return false;
+    }
+    return shoppingIngredientIds.has(numericIngredientId);
+  }, [numericIngredientId, shoppingIngredientIds]);
 
   const baseIngredient = useMemo(() => {
     if (!ingredient?.baseIngredientId) {
@@ -137,6 +146,12 @@ export default function IngredientDetailsScreen() {
       toggleIngredientAvailability(numericIngredientId);
     }
   }, [numericIngredientId, toggleIngredientAvailability]);
+
+  const handleToggleShopping = useCallback(() => {
+    if (numericIngredientId != null) {
+      toggleIngredientShopping(numericIngredientId);
+    }
+  }, [numericIngredientId, toggleIngredientShopping]);
 
   const handleEditPress = useCallback(() => {
     // Editing functionality to be implemented later
@@ -313,18 +328,25 @@ export default function IngredientDetailsScreen() {
               )}
             </View>
 
-            <Pressable
-              onPress={handleToggleAvailability}
-              accessibilityRole="checkbox"
-              accessibilityState={{ checked: isAvailable }}
-              style={[styles.availabilityRow, { backgroundColor: palette.surfaceVariant }]}
-            >
-              <View style={styles.availabilityInfo}>
-                <MaterialIcons name="add-shopping-cart" size={20} color={palette.onSurfaceVariant} />
-                <Text style={[styles.availabilityLabel, { color: palette.onSurface }]}>Available</Text>
-              </View>
+            <View style={styles.statusRow}>
+              <Pressable
+                onPress={handleToggleShopping}
+                accessibilityRole="button"
+                accessibilityLabel={
+                  isOnShoppingList
+                    ? 'Remove ingredient from shopping list'
+                    : 'Add ingredient to shopping list'
+                }
+                hitSlop={8}
+              >
+                <MaterialIcons
+                  name={isOnShoppingList ? 'shopping-cart' : 'add-shopping-cart'}
+                  size={22}
+                  color={isOnShoppingList ? palette.tint : palette.onSurfaceVariant}
+                />
+              </Pressable>
               <PresenceCheck checked={isAvailable} onToggle={handleToggleAvailability} />
-            </Pressable>
+            </View>
 
             {ingredient.tags && ingredient.tags.length ? (
               <View style={styles.tagList}>
@@ -587,22 +609,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '500',
   },
-  availabilityRow: {
+  statusRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderRadius: 16,
-  },
-  availabilityInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-  },
-  availabilityLabel: {
-    fontSize: 16,
-    fontWeight: '500',
+    justifyContent: 'flex-end',
+    gap: 20,
+    marginTop: 16,
   },
   infoBlock: {
     gap: 8,

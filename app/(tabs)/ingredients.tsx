@@ -108,7 +108,12 @@ const IngredientListItem = memo(function IngredientListItemComponent({
 }, areIngredientPropsEqual);
 
 export default function IngredientsScreen() {
-  const { ingredients, availableIngredientIds, toggleIngredientAvailability } = useInventory();
+  const {
+    ingredients,
+    availableIngredientIds,
+    shoppingIngredientIds,
+    toggleIngredientAvailability,
+  } = useInventory();
   const [activeTab, setActiveTab] = useState<IngredientTabKey>('all');
   const [query, setQuery] = useState('');
   const paletteColors = Colors;
@@ -119,7 +124,10 @@ export default function IngredientsScreen() {
       return id >= 0 && availableIngredientIds.has(id);
     });
 
-    const needsRestock = ingredients.filter((ingredient) => (ingredient.usageCount ?? 0) === 0);
+    const shoppingList = ingredients.filter((ingredient) => {
+      const id = Number(ingredient.id ?? -1);
+      return id >= 0 && shoppingIngredientIds.has(id);
+    });
 
     return {
       all: { key: 'all', label: 'All', data: ingredients },
@@ -127,10 +135,10 @@ export default function IngredientsScreen() {
       shopping: {
         key: 'shopping',
         label: 'Shopping',
-        data: needsRestock.length ? needsRestock : ingredients.slice(-12),
+        data: shoppingList,
       },
     };
-  }, [ingredients, availableIngredientIds]);
+  }, [ingredients, availableIngredientIds, shoppingIngredientIds]);
 
   const activeSection = sections[activeTab] ?? sections.all;
 
