@@ -2,8 +2,16 @@ import React, { createContext, useCallback, useContext, useMemo, useState } from
 
 import data from '@/assets/data/data.json';
 
-type Cocktail = (typeof data)['cocktails'][number];
-type Ingredient = (typeof data)['ingredients'][number];
+type CocktailRecord = (typeof data)['cocktails'][number];
+type IngredientRecord = (typeof data)['ingredients'][number];
+
+type NormalizedSearchFields = {
+  searchNameNormalized: string;
+  searchTokensNormalized: string[];
+};
+
+type Cocktail = CocktailRecord & NormalizedSearchFields;
+type Ingredient = IngredientRecord & NormalizedSearchFields;
 
 type InventoryContextValue = {
   cocktails: Cocktail[];
@@ -25,11 +33,32 @@ declare global {
   var __yourbarInventory: InventoryState | undefined;
 }
 
+function normalizeSearchFields<T extends { name?: string | null; searchName?: string | null; searchTokens?: string[] | null }>(
+  items: readonly T[] = [],
+): (T & NormalizedSearchFields)[] {
+  return items.map((item) => {
+    const baseName = item.searchName ?? item.name ?? '';
+    const searchNameNormalized = baseName.toLowerCase();
+    const searchTokensNormalized = (item.searchTokens && item.searchTokens.length > 0
+      ? item.searchTokens
+      : searchNameNormalized.split(/\s+/)
+    )
+      .map((token) => token.toLowerCase())
+      .filter(Boolean);
+
+    return {
+      ...item,
+      searchNameNormalized,
+      searchTokensNormalized,
+    };
+  });
+}
+
 function ensureInventoryState(): InventoryState {
   if (!globalThis.__yourbarInventory) {
     globalThis.__yourbarInventory = {
-      cocktails: data.cocktails ?? [],
-      ingredients: data.ingredients ?? [],
+      cocktails: normalizeSearchFields(data.cocktails),
+      ingredients: normalizeSearchFields(data.ingredients),
       imported: true,
     } satisfies InventoryState;
   }
