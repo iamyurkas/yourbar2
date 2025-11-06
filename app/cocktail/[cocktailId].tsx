@@ -9,7 +9,7 @@ import {
   resolveAssetFromCatalog,
   resolveGlasswareUriFromId,
 } from '@/assets/image-manifest';
-import { Thumb } from '@/components/RowParts';
+import { IngredientQuantityRow } from '@/components/IngredientQuantityRow';
 import { Colors } from '@/constants/theme';
 import { useInventory, type Cocktail } from '@/providers/inventory-provider';
 
@@ -380,16 +380,18 @@ export default function CocktailDetailsScreen() {
             ) : null}
 
             {instructionsParagraphs.length ? (
-              <View style={[styles.textBlock, styles.instructionsBlock, { backgroundColor: palette.surface }]}>
+              <View style={styles.textBlock}>
                 <Text style={[styles.instructionsTitle, { color: palette.onSurface }]}>Instructions</Text>
-                {instructionsParagraphs.map((paragraph, index) => (
-                  <Text
-                    key={`instruction-${index}`}
-                    style={[styles.instructionsText, { color: palette.onSurface }]}
-                  >
-                    {paragraph}
-                  </Text>
-                ))}
+                <View style={styles.instructionsList}>
+                  {instructionsParagraphs.map((paragraph, index) => (
+                    <Text
+                      key={`instruction-${index}`}
+                      style={[styles.instructionsText, { color: palette.onSurface }]}
+                    >
+                      {paragraph}
+                    </Text>
+                  ))}
+                </View>
               </View>
             ) : null}
 
@@ -397,31 +399,22 @@ export default function CocktailDetailsScreen() {
               <View style={styles.textBlock}>
                 <Text style={[styles.sectionTitle, { color: palette.onSurface }]}>Ingredients</Text>
                 <View style={styles.ingredientsList}>
-                  {sortedIngredients.map((ingredient) => {
+                  {sortedIngredients.map((ingredient, index) => {
                     const quantity = formatIngredientQuantity(ingredient);
                     const qualifier = getIngredientQualifier(ingredient);
+                    const key = `${ingredient.ingredientId ?? ingredient.name}-${ingredient.order}`;
 
                     return (
-                      <View
-                        key={`${ingredient.ingredientId ?? ingredient.name}-${ingredient.order}`}
-                        style={[styles.ingredientRow, { borderColor: palette.outline }]}
-                      >
-                        <View style={styles.ingredientThumbSlot}>
-                          <Thumb label={ingredient.name} uri={ingredient.photoUri} />
-                        </View>
-                        <View style={styles.ingredientDetails}>
-                          <Text style={[styles.ingredientName, { color: palette.onSurface }]}>{ingredient.name}</Text>
-                          {qualifier ? (
-                            <Text style={[styles.ingredientQualifier, { color: palette.onSurfaceVariant }]}>
-                              {qualifier}
-                            </Text>
-                          ) : null}
-                        </View>
-                        <View style={styles.ingredientAmountBlock}>
-                          <Text style={[styles.ingredientAmount, { color: palette.onSurfaceVariant }]}>
-                            {quantity}
-                          </Text>
-                        </View>
+                      <View key={key}>
+                        {index > 0 ? (
+                          <View style={[styles.ingredientDivider, { backgroundColor: palette.outline }]} />
+                        ) : null}
+                        <IngredientQuantityRow
+                          name={ingredient.name ?? ''}
+                          photoUri={ingredient.photoUri}
+                          quantity={quantity}
+                          qualifier={qualifier}
+                        />
                       </View>
                     );
                   })}
@@ -547,12 +540,6 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '500',
   },
-  instructionsBlock: {
-    borderRadius: 16,
-    padding: 16,
-    gap: 8,
-    alignSelf: 'stretch',
-  },
   instructionsTitle: {
     fontSize: 18,
     fontWeight: '600',
@@ -561,44 +548,15 @@ const styles = StyleSheet.create({
     fontSize: 15,
     lineHeight: 22,
   },
+  instructionsList: {
+    gap: 8,
+  },
   ingredientsList: {
-    gap: 12,
-  },
-  ingredientRow: {
-    flexDirection: 'row',
-    gap: 16,
-    borderRadius: 12,
-    borderWidth: StyleSheet.hairlineWidth,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    alignItems: 'center',
-  },
-  ingredientThumbSlot: {
-    width: 56,
-    height: 56,
-    borderRadius: 8,
+    borderRadius: 16,
     overflow: 'hidden',
   },
-  ingredientDetails: {
-    flex: 1,
-    gap: 4,
-  },
-  ingredientName: {
-    fontSize: 15,
-    fontWeight: '500',
-  },
-  ingredientQualifier: {
-    fontSize: 13,
-    textTransform: 'capitalize',
-  },
-  ingredientAmountBlock: {
-    minWidth: 90,
-    alignItems: 'flex-end',
-  },
-  ingredientAmount: {
-    fontSize: 15,
-    fontWeight: '500',
-    textAlign: 'right',
+  ingredientDivider: {
+    height: StyleSheet.hairlineWidth,
   },
   headerButton: {
     width: 40,
