@@ -11,7 +11,24 @@ type NormalizedSearchFields = {
 };
 
 type Cocktail = CocktailRecord & NormalizedSearchFields;
-type Ingredient = IngredientRecord & NormalizedSearchFields;
+type IngredientTag = NonNullable<IngredientRecord['tags']>[number];
+
+type Ingredient = (IngredientRecord &
+  NormalizedSearchFields & {
+    shoppingList?: boolean;
+  });
+
+type IngredientDraft = {
+  id: number;
+  name: string;
+  description?: string | null;
+  baseIngredientId?: number | null;
+  photoUri?: string | null;
+  tags?: IngredientTag[] | null;
+  searchName?: string | null;
+  searchTokens?: string[] | null;
+  usageCount?: number;
+};
 
 type InventoryContextValue = {
   cocktails: Cocktail[];
@@ -20,6 +37,13 @@ type InventoryContextValue = {
   availableIngredientIds: Set<number>;
   setIngredientAvailability: (id: number, available: boolean) => void;
   toggleIngredientAvailability: (id: number) => void;
+  shoppingListIds: Set<number>;
+  toggleShoppingList: (id: number) => void;
+  upsertIngredient: (ingredient: IngredientDraft) => Ingredient | undefined;
+  removeIngredient: (id: number) => void;
+  findIngredientById: (id: number) => Ingredient | undefined;
+  tags: IngredientTag[];
+  upsertTag: (tag: IngredientTag) => IngredientTag;
 };
 
 type InventoryState = {
@@ -74,7 +98,20 @@ type InventoryProviderProps = {
 
 export function InventoryProvider({ children }: InventoryProviderProps) {
   const inventory = ensureInventoryState();
+  const [ingredientsState, setIngredientsState] = useState<Ingredient[]>(() =>
+    normalizeSearchFields(inventory.ingredients) as Ingredient[],
+  );
   const [availableIngredientIds, setAvailableIngredientIds] = useState<Set<number>>(() => new Set());
+  const [shoppingListIds, setShoppingListIds] = useState<Set<number>>(() => new Set());
+  const [tags, setTags] = useState<IngredientTag[]>(() => {
+    const tagMap = new Map<number, IngredientTag>();
+    for (const ingredient of inventory.ingredients) {
+      for (const tag of ingredient.tags ?? []) {
+        tagMap.set(tag.id, tag);
+      }
+    }
+    return Array.from(tagMap.values());
+  });
 
   const setIngredientAvailability = useCallback((id: number, available: boolean) => {
     setAvailableIngredientIds((prev) => {
@@ -100,16 +137,102 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     });
   }, []);
 
+  const toggleShoppingList = useCallback((id: number) => {
+    setShoppingListIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+      return next;
+    });
+    setIngredientsState((prev) =>
+      prev.map((ingredient) =>
+        ingredient.id === id ? { ...ingredient, shoppingList: !ingredient.shoppingList } : ingredient,
+      ),
+    );
+  }, []);
+
+  const findIngredientById = useCallback(
+    (id: number) => ingredientsState.find((ingredient) => ingredient.id === id),
+    [ingredientsState],
+  );
+
+  const upsertIngredient = useCallback(
+    (draft: IngredientDraft) => {
+      const normalized = normalizeSearchFields([draft])[0] as Ingredient;
+      normalized.shoppingList = draft.id ? shoppingListIds.has(draft.id) : false;
+
+      setIngredientsState((prev) => {
+        const next = prev.filter((ingredient) => ingredient.id !== draft.id);
+        next.push(normalized);
+        next.sort((a, b) => a.name.localeCompare(b.name));
+        return next;
+      });
+
+      return normalized;
+    },
+    [shoppingListIds],
+  );
+
+  const removeIngredient = useCallback((id: number) => {
+    setIngredientsState((prev) => prev.filter((ingredient) => ingredient.id !== id));
+    setAvailableIngredientIds((prev) => {
+      const next = new Set(prev);
+      next.delete(id);
+      return next;
+    });
+    setShoppingListIds((prev) => {
+      const next = new Set(prev);
+      next.delete(id);
+      return next;
+    });
+  }, []);
+
+  const upsertTag = useCallback((tag: IngredientTag) => {
+    setTags((prev) => {
+      const existingIndex = prev.findIndex((item) => item.id === tag.id);
+      if (existingIndex >= 0) {
+        const next = [...prev];
+        next[existingIndex] = tag;
+        return next;
+      }
+      return [...prev, tag];
+    });
+    return tag;
+  }, []);
+
   const value = useMemo<InventoryContextValue>(() => {
     return {
       cocktails: inventory.cocktails,
-      ingredients: inventory.ingredients,
+      ingredients: ingredientsState,
       loading: false,
       availableIngredientIds,
       setIngredientAvailability,
       toggleIngredientAvailability,
+      shoppingListIds,
+      toggleShoppingList,
+      upsertIngredient,
+      removeIngredient,
+      findIngredientById,
+      tags,
+      upsertTag,
     };
-  }, [inventory, availableIngredientIds, setIngredientAvailability, toggleIngredientAvailability]);
+  }, [
+    inventory.cocktails,
+    ingredientsState,
+    availableIngredientIds,
+    setIngredientAvailability,
+    toggleIngredientAvailability,
+    shoppingListIds,
+    toggleShoppingList,
+    upsertIngredient,
+    removeIngredient,
+    findIngredientById,
+    tags,
+    upsertTag,
+  ]);
 
   return <InventoryContext.Provider value={value}>{children}</InventoryContext.Provider>;
 }
@@ -124,4 +247,4 @@ export function useInventory() {
   return context;
 }
 
-export type { Cocktail, Ingredient };
+export type { Cocktail, Ingredient, IngredientDraft, IngredientTag };
