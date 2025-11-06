@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
-import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useCallback, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
@@ -11,6 +11,7 @@ import {
   Text,
   View,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { TagPill } from '@/components/ui/TagPill';
 import { Colors } from '@/constants/theme';
@@ -112,38 +113,50 @@ export default function IngredientDetailsScreen() {
     setDescriptionExpanded((prev) => !prev);
   }, []);
 
+  const renderHeader = (actionsEnabled: boolean) => (
+    <View style={[styles.header, { backgroundColor: Colors.surface, borderBottomColor: Colors.outline }]}>
+      <Pressable
+        onPress={handleBack}
+        accessibilityRole="button"
+        style={styles.headerIconButton}
+        android_ripple={{ color: `${Colors.onSurface}14` }}>
+        <MaterialIcons
+          name={Platform.select({ ios: 'arrow-back-ios', default: 'arrow-back' }) as any}
+          size={24}
+          color={Colors.onSurface}
+        />
+      </Pressable>
+      <Text style={[styles.headerTitle, { color: Colors.onSurface }]}>Ingredient details</Text>
+      <Pressable
+        onPress={handleEdit}
+        accessibilityRole="button"
+        style={[styles.headerIconButton, !actionsEnabled && styles.headerIconButtonDisabled]}
+        android_ripple={{ color: `${Colors.onSurface}14` }}
+        disabled={!actionsEnabled}>
+        <MaterialIcons name="edit" size={22} color={Colors.onSurface} />
+      </Pressable>
+    </View>
+  );
+
   if (!ingredient) {
     return (
-      <View style={styles.loaderContainer}>
-        <ActivityIndicator color={Colors.tint} />
-        <Text style={[styles.loaderText, { color: Colors.onSurfaceVariant }]}>Ingredient not found</Text>
-      </View>
+      <SafeAreaView style={[styles.safeArea, { backgroundColor: Colors.background }]}>
+        {renderHeader(false)}
+        <View style={styles.loaderContainer}>
+          <ActivityIndicator color={Colors.tint} />
+          <Text style={[styles.loaderText, { color: Colors.onSurfaceVariant }]}>Ingredient not found</Text>
+        </View>
+      </SafeAreaView>
     );
   }
 
   return (
-    <>
-      <Stack.Screen
-        options={{
-          title: 'Ingredient details',
-          headerLeft: () => (
-            <Pressable onPress={handleBack} accessibilityRole="button" style={styles.headerIconButton}>
-              <MaterialIcons
-                name={Platform.select({ ios: 'arrow-back-ios', default: 'arrow-back' }) as any}
-                size={24}
-                color={Colors.onSurface}
-              />
-            </Pressable>
-          ),
-          headerRight: () => (
-            <Pressable onPress={handleEdit} accessibilityRole="button" style={styles.headerIconButton}>
-              <MaterialIcons name="edit" size={22} color={Colors.onSurface} />
-            </Pressable>
-          ),
-          headerTitleAlign: 'center',
-        }}
-      />
-      <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
+    <SafeAreaView style={[styles.safeArea, { backgroundColor: Colors.background }]}>
+      {renderHeader(true)}
+      <ScrollView
+        style={styles.scroll}
+        contentContainerStyle={styles.container}
+        showsVerticalScrollIndicator={false}>
         <Text style={[styles.title, { color: Colors.onSurface }]}>{ingredient.name}</Text>
 
         <View style={styles.photoSection}>
@@ -253,11 +266,37 @@ export default function IngredientDetailsScreen() {
           )}
         </View>
       </ScrollView>
-    </>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+  },
+  headerTitle: {
+    flex: 1,
+    fontSize: 18,
+    fontWeight: '600',
+    textAlign: 'center',
+  },
+  headerIconButton: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  headerIconButtonDisabled: {
+    opacity: 0.4,
+  },
   container: {
     padding: 24,
     paddingBottom: 120,
@@ -269,6 +308,9 @@ const styles = StyleSheet.create({
   },
   loaderText: {
     marginTop: 12,
+  },
+  scroll: {
+    flex: 1,
   },
   title: {
     fontSize: 28,
@@ -288,10 +330,6 @@ const styles = StyleSheet.create({
   },
   iconButtonActive: {
     backgroundColor: `${Colors.tint}22`,
-  },
-  headerIconButton: {
-    padding: 6,
-    marginLeft: 12,
   },
   photoSection: {
     width: '100%',
