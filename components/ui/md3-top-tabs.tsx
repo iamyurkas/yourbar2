@@ -18,17 +18,20 @@ type MD3TopTabsProps = {
 
 export function MD3TopTabs({ tabs, activeKey, onTabChange }: MD3TopTabsProps) {
   const colorScheme = useColorScheme();
-  const theme = Colors[colorScheme ?? 'light'];
+  const palette = Colors[colorScheme ?? 'light'];
   const isDark = colorScheme === 'dark';
-  const containerBorder = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(17,24,28,0.08)';
 
   return (
     <View
       style={[
         styles.container,
         {
-          backgroundColor: isDark ? '#201F24' : '#F5F6FA',
-          borderColor: containerBorder,
+          backgroundColor: isDark ? palette.surfaceVariant : palette.surfaceVariant,
+          borderColor: isDark ? palette.outlineVariant : palette.outline,
+          shadowColor: isDark ? 'transparent' : '#000000',
+          shadowOffset: { width: 0, height: 6 },
+          shadowRadius: 16,
+          shadowOpacity: isDark ? 0 : 0.05,
         },
       ]}>
       {tabs.map((tab) => {
@@ -41,17 +44,13 @@ export function MD3TopTabs({ tabs, activeKey, onTabChange }: MD3TopTabsProps) {
             style={({ pressed }) => [
               styles.tab,
               {
-                backgroundColor: isActive
-                  ? theme.tint
-                  : isDark
-                    ? 'transparent'
-                    : '#FFFFFF',
-                borderColor: isActive
-                  ? 'transparent'
-                  : isDark
-                    ? 'rgba(255,255,255,0.08)'
-                    : 'rgba(17,24,28,0.05)',
+                backgroundColor: isActive ? palette.tint : isDark ? 'transparent' : '#FFFFFF',
+                borderColor: isActive ? 'transparent' : isDark ? palette.outlineVariant : palette.outlineVariant,
                 opacity: pressed ? 0.9 : 1,
+                shadowColor: isActive && !isDark ? '#4DABF7' : 'transparent',
+                shadowOffset: { width: 0, height: isActive ? 8 : 0 },
+                shadowRadius: isActive ? 16 : 0,
+                shadowOpacity: isActive && !isDark ? 0.24 : 0,
               },
             ]}
             onPress={() => onTabChange(tab.key)}>
@@ -62,13 +61,14 @@ export function MD3TopTabs({ tabs, activeKey, onTabChange }: MD3TopTabsProps) {
                 {
                   color: isActive
                     ? '#FFFFFF'
-                    : colorScheme === 'dark'
-                      ? 'rgba(236,237,238,0.75)'
-                      : 'rgba(17,24,28,0.75)',
+                    : isDark
+                      ? 'rgba(226,232,240,0.75)'
+                      : '#5C6C7C',
                 },
               ]}>
               {tab.label}
             </ThemedText>
+            {isActive ? <View style={[styles.activeDot, { backgroundColor: '#FFFFFF55' }]} /> : null}
           </Pressable>
         );
       })}
@@ -80,13 +80,13 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     padding: 4,
-    borderRadius: 18,
+    borderRadius: 20,
     borderWidth: 1,
-    gap: 4,
+    gap: 6,
   },
   tab: {
     flex: 1,
-    borderRadius: 14,
+    borderRadius: 16,
     paddingVertical: 10,
     paddingHorizontal: 12,
     alignItems: 'center',
@@ -95,6 +95,14 @@ const styles = StyleSheet.create({
   },
   label: {
     letterSpacing: 0.3,
+    fontSize: 14,
+  },
+  activeDot: {
+    position: 'absolute',
+    bottom: 6,
+    width: 6,
+    height: 6,
+    borderRadius: 3,
   },
 });
 

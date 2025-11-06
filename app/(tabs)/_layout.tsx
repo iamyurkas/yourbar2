@@ -1,5 +1,5 @@
 import { Tabs } from 'expo-router';
-import React, { useMemo } from 'react';
+import React from 'react';
 import { StyleSheet } from 'react-native';
 import { Image } from 'expo-image';
 import type { ImageSource } from 'expo-image';
@@ -29,24 +29,11 @@ const TabImageIcon = ({ color, size = 24, source }: TabIconProps) => (
 export default function TabLayout() {
   const colorScheme = useColorScheme();
 
-  const { surface, border, activeBackground } = useMemo(() => {
-    if (colorScheme === 'dark') {
-      return {
-        surface: '#1F1B24',
-        border: 'rgba(255,255,255,0.08)',
-        activeBackground: 'rgba(10,126,164,0.24)',
-      };
-    }
-
-    return {
-      surface: '#F7F2FA',
-      border: 'rgba(17,24,28,0.08)',
-      activeBackground: 'rgba(10,126,164,0.12)',
-    };
-  }, [colorScheme]);
-
-  const tint = Colors[colorScheme ?? 'light'].tint;
-  const inactiveTint = Colors[colorScheme ?? 'light'].tabIconDefault;
+  const palette = Colors[colorScheme ?? 'light'];
+  const { surface, outline: border } = palette;
+  const tint = palette.tint;
+  const inactiveTint = palette.tabIconDefault;
+  const activeBackground = colorScheme === 'dark' ? '#1F2A36' : `${tint}22`;
 
   return (
     <Tabs
@@ -61,7 +48,18 @@ export default function TabLayout() {
         tabBarItemStyle: styles.tabItem,
         tabBarIconStyle: styles.tabIcon,
         tabBarHideOnKeyboard: true,
-        tabBarStyle: [styles.tabBar, { backgroundColor: surface, borderColor: border }],
+        tabBarStyle: [
+          styles.tabBar,
+          {
+            backgroundColor: surface,
+            borderColor: border,
+            shadowColor: colorScheme === 'dark' ? 'transparent' : '#4DABF7',
+            shadowOpacity: colorScheme === 'dark' ? 0 : 0.08,
+            shadowRadius: 24,
+            shadowOffset: { width: 0, height: 12 },
+            elevation: colorScheme === 'dark' ? 0 : 6,
+          },
+        ],
         sceneContainerStyle: styles.scene,
       }}>
       <Tabs.Screen
