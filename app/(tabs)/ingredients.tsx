@@ -6,7 +6,6 @@ import { FabAdd } from '@/components/FabAdd';
 import { ListRow, PresenceCheck, Thumb } from '@/components/RowParts';
 import { SearchTopBar, SegmentTabs } from '@/components/TopBars';
 import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
 import { palette } from '@/theme/theme';
 
@@ -97,8 +96,7 @@ export default function IngredientsScreen() {
   const { ingredients, availableIngredientIds, toggleIngredientAvailability } = useInventory();
   const [activeTab, setActiveTab] = useState<IngredientTabKey>('all');
   const [query, setQuery] = useState('');
-  const colorScheme = useColorScheme();
-  const paletteColors = Colors[colorScheme ?? 'light'];
+  const paletteColors = Colors.light;
 
   const sections = useMemo<Record<IngredientTabKey, IngredientSection>>(() => {
     const inStock = ingredients.filter((ingredient) => {
@@ -130,7 +128,7 @@ export default function IngredientsScreen() {
     return base.filter((ingredient) => ingredient.name.toLowerCase().includes(safeQuery));
   }, [activeSection.data, query]);
 
-  const highlightColor = colorScheme === 'dark' ? 'rgba(74,144,226,0.28)' : '#4A90E21F';
+  const highlightColor = '#4A90E21F';
   const separatorColor = paletteColors.outline;
 
   const handleToggle = useCallback(

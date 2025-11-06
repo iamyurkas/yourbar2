@@ -6,7 +6,6 @@ import type { ComponentType } from 'react';
 import type { SvgProps } from 'react-native-svg';
 
 import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
 import CocktailsIcon from '@/assets/images/cocktails.svg';
 import ShakerIcon from '@/assets/images/shaker.svg';
 import IngredientsIcon from '@/assets/images/ingredients.svg';
@@ -23,8 +22,7 @@ const ICONS: Record<RouteKey, ComponentType<SvgProps>> = {
 
 export function BottomBar({ state, descriptors, navigation }: BottomTabBarProps) {
   const insets = useSafeAreaInsets();
-  const colorScheme = useColorScheme();
-  const palette = Colors[colorScheme ?? 'light'];
+  const palette = Colors.light;
 
   return (
     <View style={[styles.wrapper, { paddingBottom: Math.max(insets.bottom, 16) }]}>
@@ -34,8 +32,8 @@ export function BottomBar({ state, descriptors, navigation }: BottomTabBarProps)
           {
             backgroundColor: palette.surface,
             borderColor: palette.outline,
-            shadowOpacity: colorScheme === 'dark' ? 0.25 : 0.12,
-            shadowColor: colorScheme === 'dark' ? '#000000' : palette.tint,
+            shadowOpacity: 0.12,
+            shadowColor: palette.tint,
           },
         ]}>
         {state.routes.map((route, index) => {

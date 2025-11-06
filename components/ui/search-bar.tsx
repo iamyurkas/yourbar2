@@ -2,7 +2,6 @@ import React from 'react';
 import { Pressable, StyleSheet, TextInput, View } from 'react-native';
 
 import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
 import { ThemedText } from '@/components/themed-text';
 
 type SearchBarProps = {
@@ -20,13 +19,11 @@ export function SearchBar({
   trailingActionLabel,
   onPressTrailingAction,
 }: SearchBarProps) {
-  const scheme = useColorScheme();
-  const isDark = scheme === 'dark';
-  const palette = Colors[scheme ?? 'light'];
-  const backgroundColor = isDark ? palette.surfaceVariant : '#FFFFFF';
-  const borderColor = isDark ? palette.outlineVariant : palette.outline;
-  const placeholderColor = isDark ? 'rgba(236,246,255,0.6)' : '#A1A1A1';
-  const textColor = isDark ? '#F6FAFF' : palette.text;
+  const palette = Colors.light;
+  const backgroundColor = '#FFFFFF';
+  const borderColor = palette.outline;
+  const placeholderColor = '#A1A1A1';
+  const textColor = palette.text;
   const accent = palette.tint;
 
   return (
@@ -36,7 +33,7 @@ export function SearchBar({
         {
           backgroundColor,
           borderColor,
-          shadowOpacity: isDark ? 0 : 0.04,
+          shadowOpacity: 0.04,
         },
       ]}>
       <View style={styles.leadingIcon}>
@@ -59,11 +56,7 @@ export function SearchBar({
           style={({ pressed }) => [
             styles.trailing,
             {
-              backgroundColor: pressed
-                ? isDark
-                  ? 'rgba(255,255,255,0.08)'
-                  : `${accent}1A`
-                : 'transparent',
+              backgroundColor: pressed ? `${accent}1A` : 'transparent',
             },
           ]}>
           <ThemedText style={[styles.trailingLabel, { color: accent }]}>{trailingActionLabel}</ThemedText>

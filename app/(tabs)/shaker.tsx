@@ -5,7 +5,6 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
 
 type ActionCardProps = {
   title: string;
@@ -14,8 +13,7 @@ type ActionCardProps = {
 };
 
 export default function ShakerScreen() {
-  const colorScheme = useColorScheme();
-  const palette = Colors[colorScheme ?? 'light'];
+  const palette = Colors.light;
 
   return (
     <ThemedView style={[styles.container, { backgroundColor: palette.background }]}> 
@@ -46,10 +44,9 @@ export default function ShakerScreen() {
 }
 
 function ActionCard({ title, description, icon }: ActionCardProps) {
-  const colorScheme = useColorScheme();
-  const palette = Colors[colorScheme ?? 'light'];
+  const palette = Colors.light;
   const tint = palette.tint;
-  const backgroundColor = colorScheme === 'dark' ? '#17222D' : '#FFFFFF';
+  const backgroundColor = '#FFFFFF';
   const borderColor = `${tint}3d`;
 
   return (
@@ -59,11 +56,11 @@ function ActionCard({ title, description, icon }: ActionCardProps) {
         {
           backgroundColor,
           borderColor,
-          shadowColor: colorScheme === 'dark' ? 'transparent' : '#4DABF7',
-          shadowOpacity: colorScheme === 'dark' ? 0 : 0.08,
+          shadowColor: '#4DABF7',
+          shadowOpacity: 0.08,
           shadowRadius: 20,
           shadowOffset: { width: 0, height: 12 },
-          elevation: colorScheme === 'dark' ? 0 : 4,
+          elevation: 4,
         },
       ]}>
       <View style={[styles.iconBadge, { backgroundColor: `${tint}1A`, borderColor: `${tint}33` }]}> 
