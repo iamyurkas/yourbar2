@@ -121,6 +121,7 @@ type ListRowProps = {
   accessibilityRole?: 'button' | 'checkbox';
   accessibilityState?: AccessibilityState;
   subtitleStyle?: StyleProp<TextStyle>;
+  metaAlignment?: 'flex-start' | 'center' | 'space-between';
 };
 
 export function ListRow({
@@ -135,9 +136,16 @@ export function ListRow({
   accessibilityRole,
   accessibilityState,
   subtitleStyle,
+  metaAlignment = 'space-between',
 }: ListRowProps) {
   const paletteColors = Colors;
   const backgroundColor = selected ? highlightColor ?? `${paletteColors.tint}1F` : paletteColors.background;
+  const metaAlignmentStyle =
+    metaAlignment === 'center'
+      ? styles.metaColumnCenter
+      : metaAlignment === 'flex-start'
+      ? styles.metaColumnStart
+      : styles.metaColumnSpaceBetween;
   return (
     <Pressable
       onPress={onPress}
@@ -155,7 +163,7 @@ export function ListRow({
           </Text>
         ) : null}
       </View>
-      <View style={styles.metaColumn}>
+      <View style={[styles.metaColumn, metaAlignmentStyle]}>
         {tagColor ? <TagDot color={tagColor} /> : null}
         {control}
       </View>
@@ -185,9 +193,17 @@ const styles = StyleSheet.create({
   },
   metaColumn: {
     alignItems: 'center',
-    justifyContent: 'space-between',
     gap: 12,
     minHeight: THUMB_SIZE,
+  },
+  metaColumnSpaceBetween: {
+    justifyContent: 'space-between',
+  },
+  metaColumnCenter: {
+    justifyContent: 'center',
+  },
+  metaColumnStart: {
+    justifyContent: 'flex-start',
   },
   title: {
     fontSize: 17,

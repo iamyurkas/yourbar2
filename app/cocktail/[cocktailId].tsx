@@ -11,9 +11,10 @@ import {
 } from '@/assets/image-manifest';
 import { IngredientQuantityRow } from '@/components/IngredientQuantityRow';
 import { Colors } from '@/constants/theme';
-import { useInventory, type Cocktail } from '@/providers/inventory-provider';
+import { useInventory, type Cocktail, type Ingredient as InventoryIngredient } from '@/providers/inventory-provider';
+import { palette as appPalette } from '@/theme/theme';
 
-type Ingredient = NonNullable<Cocktail['ingredients']>[number];
+type RecipeIngredient = NonNullable<Cocktail['ingredients']>[number];
 
 type UnitDictionary = Record<number, { singular: string; plural?: string }>;
 
@@ -87,7 +88,7 @@ function resolveCocktail(
   return cocktails.find((item) => item.name?.toLowerCase() === normalized);
 }
 
-function formatIngredientQuantity(ingredient: Ingredient): string {
+function formatIngredientQuantity(ingredient: RecipeIngredient): string {
   const amountRaw = ingredient.amount ?? '';
   const amount = amountRaw.trim();
   const unitId = typeof ingredient.unitId === 'number' ? ingredient.unitId : undefined;
@@ -116,7 +117,7 @@ function formatIngredientQuantity(ingredient: Ingredient): string {
   return amount;
 }
 
-function getIngredientQualifier(ingredient: Ingredient): string | undefined {
+function getIngredientQualifier(ingredient: RecipeIngredient): string | undefined {
   if (ingredient.optional) {
     return 'optional';
   }
@@ -146,13 +147,24 @@ function formatGlassLabel(glassId?: string | null) {
 export default function CocktailDetailsScreen() {
   const palette = Colors;
   const { cocktailId } = useLocalSearchParams<{ cocktailId?: string }>();
-  const { cocktails } = useInventory();
+  const { cocktails, ingredients, availableIngredientIds } = useInventory();
 
   const resolvedParam = Array.isArray(cocktailId) ? cocktailId[0] : cocktailId;
   const cocktail = useMemo(
     () => resolveCocktail(resolvedParam, cocktails),
     [cocktails, resolvedParam],
   );
+
+  const ingredientCatalog = useMemo(() => {
+    const catalog = new Map<number, InventoryIngredient>();
+    ingredients.forEach((item) => {
+      const idValue = Number(item.id ?? -1);
+      if (!Number.isNaN(idValue) && idValue >= 0) {
+        catalog.set(idValue, item);
+      }
+    });
+    return catalog;
+  }, [ingredients]);
 
   const sortedIngredients = useMemo(() => {
     const recipe = cocktail?.ingredients ?? [];
@@ -192,6 +204,8 @@ export default function CocktailDetailsScreen() {
       .map((segment) => segment.trim())
       .filter(Boolean);
   }, [cocktail?.instructions]);
+
+  const ingredientHighlightColor = appPalette.highlightSubtle;
 
   const photoSource = useMemo(() => {
     if (!cocktail?.photoUri) {
@@ -403,6 +417,33 @@ export default function CocktailDetailsScreen() {
                     const quantity = formatIngredientQuantity(ingredient);
                     const qualifier = getIngredientQualifier(ingredient);
                     const key = `${ingredient.ingredientId ?? ingredient.name}-${ingredient.order}`;
+                    const ingredientIdRaw = ingredient.ingredientId;
+                    let ingredientId = -1;
+                    if (typeof ingredientIdRaw === 'number') {
+                      ingredientId = ingredientIdRaw;
+                    } else if (typeof ingredientIdRaw === 'string') {
+                      const parsed = Number(ingredientIdRaw);
+                      if (!Number.isNaN(parsed)) {
+                        ingredientId = parsed;
+                      }
+                    }
+                    const catalogEntry = ingredientId >= 0 ? ingredientCatalog.get(ingredientId) : undefined;
+                    const photoUri = ingredient.photoUri ?? catalogEntry?.photoUri;
+                    const isAvailable = ingredientId >= 0 && availableIngredientIds.has(ingredientId);
+                    const handlePress = () => {
+                      const routeParam =
+                        ingredientId >= 0
+                          ? ingredientId
+                          : catalogEntry?.id ?? ingredient.name;
+                      if (routeParam == null) {
+                        return;
+                      }
+
+                      router.push({
+                        pathname: '/ingredient/[ingredientId]',
+                        params: { ingredientId: String(routeParam) },
+                      });
+                    };
 
                     return (
                       <View key={key}>
@@ -411,9 +452,13 @@ export default function CocktailDetailsScreen() {
                         ) : null}
                         <IngredientQuantityRow
                           name={ingredient.name ?? ''}
-                          photoUri={ingredient.photoUri}
+                          photoUri={photoUri}
+                          fallbackPhotoUri={catalogEntry?.photoUri}
                           quantity={quantity}
                           qualifier={qualifier}
+                          onPress={handlePress}
+                          selected={isAvailable}
+                          highlightColor={ingredientHighlightColor}
                         />
                       </View>
                     );
@@ -552,8 +597,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   ingredientsList: {
-    borderRadius: 16,
-    overflow: 'hidden',
+    marginHorizontal: -24,
   },
   ingredientDivider: {
     height: StyleSheet.hairlineWidth,
