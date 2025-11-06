@@ -1,16 +1,14 @@
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import React, { memo, useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { resolveGlasswareUriFromId } from '@/assets/image-manifest';
 import { FabAdd } from '@/components/FabAdd';
-import { FavoriteStar, ListRow, Thumb } from '@/components/RowParts';
+import { CocktailListRow } from '@/components/CocktailListRow';
+import { FavoriteStar } from '@/components/RowParts';
 import { CollectionHeader } from '@/components/CollectionHeader';
 import type { SegmentTabOption } from '@/components/TopBars';
 import { Colors } from '@/constants/theme';
 import { useInventory, type Cocktail } from '@/providers/inventory-provider';
-import { palette, tagColors } from '@/theme/theme';
 
 type CocktailSection = {
   key: string;
@@ -26,115 +24,6 @@ const TAB_OPTIONS: SegmentTabOption[] = [
   { key: 'favorites', label: 'Favorites' },
 ];
 
-type CocktailListItemProps = {
-  cocktail: Cocktail;
-  availableIngredientIds: Set<number>;
-  favoriteIds: Set<number | undefined>;
-  highlightColor: string;
-  backgroundColor: string;
-  surfaceVariantColor?: string;
-};
-
-const areCocktailPropsEqual = (
-  prev: Readonly<CocktailListItemProps>,
-  next: Readonly<CocktailListItemProps>,
-) =>
-  prev.cocktail === next.cocktail &&
-  prev.availableIngredientIds === next.availableIngredientIds &&
-  prev.favoriteIds === next.favoriteIds &&
-  prev.highlightColor === next.highlightColor &&
-  prev.backgroundColor === next.backgroundColor &&
-  prev.surfaceVariantColor === next.surfaceVariantColor;
-
-const CocktailListItem = memo(function CocktailListItemComponent({
-  cocktail,
-  availableIngredientIds,
-  favoriteIds,
-  highlightColor,
-  backgroundColor,
-  surfaceVariantColor,
-}: CocktailListItemProps) {
-  const recipe = useMemo(() => cocktail.ingredients ?? [], [cocktail.ingredients]);
-
-  const { availableCount, missingIngredients } = useMemo(() => {
-    return recipe.reduce(
-      (acc, ingredient) => {
-        if (typeof ingredient.ingredientId === 'number') {
-          if (availableIngredientIds.has(ingredient.ingredientId)) {
-            acc.availableCount += 1;
-          } else {
-            acc.missingIngredients.push(ingredient.name);
-          }
-        }
-        return acc;
-      },
-      { availableCount: 0, missingIngredients: [] as (string | undefined)[] },
-    );
-  }, [availableIngredientIds, recipe]);
-
-  const totalIngredients = recipe.length;
-  const missingCount = Math.max(0, totalIngredients - availableCount);
-
-  const baseIngredients = useMemo(
-    () =>
-      recipe
-        .map((ingredient) => ingredient.name)
-        .filter(Boolean)
-        .slice(0, 3)
-        .join(', '),
-    [recipe],
-  );
-
-  const subtitle = useMemo(() => {
-    if (missingCount === 0) {
-      return baseIngredients || 'All ingredients ready';
-    }
-
-    if (missingCount === 1 && missingIngredients[0]) {
-      return `Missing: ${missingIngredients[0]}`;
-    }
-
-    return `Missing: ${missingCount} ingredient${missingCount === 1 ? '' : 's'}`;
-  }, [baseIngredients, missingCount, missingIngredients]);
-
-  const subtitleStyle = missingCount
-    ? surfaceVariantColor
-      ? { color: surfaceVariantColor, fontStyle: 'italic' as const }
-      : { fontStyle: 'italic' as const }
-    : surfaceVariantColor
-      ? { color: surfaceVariantColor }
-      : undefined;
-
-  const tagColor = cocktail.tags?.[0]?.color ?? tagColors.pink;
-  const isFavorite = favoriteIds.has(cocktail.id);
-  const isReady = missingCount === 0 && totalIngredients > 0;
-  const glasswareUri = resolveGlasswareUriFromId(cocktail.glassId);
-
-  const thumbnail = (
-    <View style={styles.thumbnailWrapper}>
-      <Thumb label={cocktail.name} uri={cocktail.photoUri} fallbackUri={glasswareUri} />
-      {isFavorite ? (
-        <View style={[styles.favoriteBadge, { backgroundColor: palette.secondary }]}>
-          <MaterialCommunityIcons name="star" size={14} color={backgroundColor} />
-        </View>
-      ) : null}
-    </View>
-  );
-
-  return (
-    <ListRow
-      title={cocktail.name}
-      subtitle={subtitle}
-      subtitleStyle={subtitleStyle}
-      selected={isReady}
-      highlightColor={highlightColor}
-      tagColor={tagColor}
-      thumbnail={thumbnail}
-      control={<FavoriteStar active={isFavorite} />}
-    />
-  );
-}, areCocktailPropsEqual);
-
 export default function CocktailsScreen() {
   const { cocktails, availableIngredientIds } = useInventory();
   const [activeTab, setActiveTab] = useState<CocktailTabKey>('all');
@@ -148,10 +37,16 @@ export default function CocktailsScreen() {
         return false;
       }
       return recipe.every((item) => {
-        if (typeof item.ingredientId !== 'number') {
+        if (item?.optional || item?.garnish) {
+          return true;
+        }
+
+        const id = typeof item.ingredientId === 'number' ? item.ingredientId : undefined;
+        if (id == null) {
           return false;
         }
-        return availableIngredientIds.has(item.ingredientId);
+
+        return availableIngredientIds.has(id);
       });
     });
   }, [cocktails, availableIngredientIds]);
@@ -207,29 +102,21 @@ export default function CocktailsScreen() {
     );
   }, [activeSection.data, normalizedQuery]);
 
-  const highlightColor = palette.highlightFaint;
   const separatorColor = paletteColors.outline;
 
   const keyExtractor = useCallback((item: Cocktail) => String(item.id ?? item.name), []);
 
   const renderItem = useCallback(
     ({ item }: { item: Cocktail }) => (
-      <CocktailListItem
+      <CocktailListRow
         cocktail={item}
         availableIngredientIds={availableIngredientIds}
-        favoriteIds={favoriteIds}
-        highlightColor={highlightColor}
-        backgroundColor={paletteColors.background}
-        surfaceVariantColor={paletteColors.onSurfaceVariant ?? paletteColors.icon}
+        control={<FavoriteStar active={favoriteIds.has(item.id)} />}
       />
     ),
     [
       availableIngredientIds,
       favoriteIds,
-      highlightColor,
-      paletteColors.background,
-      paletteColors.icon,
-      paletteColors.onSurfaceVariant,
     ],
   );
 
@@ -286,18 +173,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 80,
     fontSize: 14,
-  },
-  thumbnailWrapper: {
-    position: 'relative',
-  },
-  favoriteBadge: {
-    position: 'absolute',
-    top: 4,
-    right: 4,
-    borderRadius: 12,
-    paddingHorizontal: 4,
-    paddingVertical: 2,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });

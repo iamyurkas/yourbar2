@@ -15,8 +15,9 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { resolveAssetFromCatalog, resolveGlasswareUriFromId } from '@/assets/image-manifest';
-import { ListRow, PresenceCheck, Thumb } from '@/components/RowParts';
+import { resolveAssetFromCatalog } from '@/assets/image-manifest';
+import { CocktailListRow } from '@/components/CocktailListRow';
+import { PresenceCheck } from '@/components/RowParts';
 import { Colors } from '@/constants/theme';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
 
@@ -384,17 +385,10 @@ export default function IngredientDetailsScreen() {
               {cocktailsWithIngredient.length ? (
                 <View style={styles.cocktailList}>
                   {cocktailsWithIngredient.map((cocktail) => (
-                    <ListRow
+                    <CocktailListRow
                       key={cocktail.id ?? cocktail.name}
-                      title={cocktail.name}
-                      subtitle={`${cocktail.ingredients?.length ?? 0} ingredients`}
-                      thumbnail={
-                        <Thumb
-                          label={cocktail.name}
-                          uri={cocktail.photoUri}
-                          fallbackUri={resolveGlasswareUriFromId(cocktail.glassId)}
-                        />
-                      }
+                      cocktail={cocktail}
+                      availableIngredientIds={availableIngredientIds}
                     />
                   ))}
                 </View>
