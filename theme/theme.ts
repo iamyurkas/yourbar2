@@ -1,13 +1,33 @@
 import { MD3DarkTheme, MD3LightTheme, type PaperTheme } from '@/libs/react-native-paper';
 
 export const palette = {
-  primary: '#4A90E2',
-  secondary: '#FFC107',
-  tertiary: '#26A69A',
-  surface: '#FFFFFF',
-  background: '#F7F7F9',
-  outline: '#DADCE0',
-  onSurfaceVariant: '#6B7280',
+   primary: "#4DABF7",
+    secondary: "#74C0FC",
+    tertiary: "#A5D8FF",
+
+    primaryContainer: "#D0EBFF",
+    inversePrimary: "#E9F7DF",
+
+    background: "#FFFFFF",
+    surface: "#F8F9FA",
+    outline: "#E5EAF0",
+    outlineVariant: "#E9EEF4",
+    surfaceVariant: "#EAF3F9",
+
+    error: "#FF6B6B",
+    errorContainer: "#FFE3E6",
+    onError: "#FFFFFF",
+    onErrorContainer: "#7A1C1C",
+
+    onPrimary: "#FFFFFF",
+    onBackground: "#000000",
+    onSurface: "#303030ff",
+    onSurfaceVariant: "#A1A1A1",
+
+    disabled: "#CED4DA",
+    placeholder: "#A1A1A1",
+    backdrop: "rgba(0,0,0,0.4)",
+
   success: '#2E7D32',
   danger: '#D32F2F',
   tagPink: '#F06292',
