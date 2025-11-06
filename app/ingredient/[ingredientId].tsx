@@ -364,25 +364,35 @@ export default function IngredientDetailsScreen() {
             {ingredient.description ? (
               <View style={styles.infoBlock}>
                 <Text style={[styles.sectionLabel, { color: palette.onSurfaceVariant }]}>Description</Text>
-                <Text
-                  style={[styles.bodyText, { color: palette.onSurface }]}
-                  numberOfLines={isDescriptionExpanded ? undefined : DESCRIPTION_PREVIEW_LINES}
-                  onTextLayout={handleDescriptionLayout}
-                >
-                  {ingredient.description}
-                </Text>
-                {shouldShowDescriptionToggle ? (
+                <View style={styles.descriptionWrapper}>
+                  <Text
+                    style={[styles.bodyText, { color: palette.onSurface }]}
+                    numberOfLines={isDescriptionExpanded ? undefined : DESCRIPTION_PREVIEW_LINES}
+                    onTextLayout={handleDescriptionLayout}
+                  >
+                    {ingredient.description}
+                  </Text>
+                  {shouldShowDescriptionToggle && !isDescriptionExpanded ? (
+                    <Pressable
+                      onPress={handleToggleDescription}
+                      accessibilityRole="button"
+                      accessibilityLabel="Show full description"
+                      hitSlop={8}
+                      style={[styles.showMoreOverlay, { backgroundColor: palette.background }]}
+                    >
+                      <Text style={[styles.showMoreOverlayText, { color: palette.tint }]}>Show more</Text>
+                    </Pressable>
+                  ) : null}
+                </View>
+                {shouldShowDescriptionToggle && isDescriptionExpanded ? (
                   <Pressable
                     onPress={handleToggleDescription}
                     accessibilityRole="button"
-                    accessibilityLabel={
-                      isDescriptionExpanded ? 'Show less description' : 'Show full description'
-                    }
+                    accessibilityLabel="Show less description"
                     hitSlop={8}
+                    style={styles.showLessButton}
                   >
-                    <Text style={[styles.showMoreLess, { color: palette.tint }]}>
-                      {isDescriptionExpanded ? 'Show less' : 'Show more'}
-                    </Text>
+                    <Text style={[styles.showMoreLess, { color: palette.tint }]}>Show less</Text>
                   </Pressable>
                 ) : null}
               </View>
@@ -619,6 +629,10 @@ const styles = StyleSheet.create({
   infoBlock: {
     gap: 8,
   },
+  descriptionWrapper: {
+    position: 'relative',
+    overflow: 'hidden',
+  },
   sectionLabel: {
     fontSize: 14,
     textTransform: 'uppercase',
@@ -628,6 +642,19 @@ const styles = StyleSheet.create({
   bodyText: {
     fontSize: 16,
     lineHeight: 22,
+  },
+  showMoreOverlay: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: 22,
+    justifyContent: 'flex-end',
+    paddingTop: 4,
+  },
+  showMoreOverlayText: {
+    fontSize: 14,
+    fontWeight: '500',
   },
   cocktailList: {
     gap: 12,
@@ -658,6 +685,9 @@ const styles = StyleSheet.create({
     marginTop: 4,
     fontSize: 14,
     fontWeight: '500',
+  },
+  showLessButton: {
+    alignSelf: 'flex-start',
   },
   baseIngredientRow: {
     flexDirection: 'row',
