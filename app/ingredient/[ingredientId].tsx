@@ -287,7 +287,7 @@ export default function IngredientDetailsScreen() {
                         <Image
                           source={baseIngredientPhotoSource}
                           style={styles.baseIngredientImage}
-                          contentFit="cover"
+                          contentFit="contain"
                         />
                       ) : (
                         <View
@@ -317,7 +317,7 @@ export default function IngredientDetailsScreen() {
                       <MaterialCommunityIcons
                         name="link-variant-off"
                         size={20}
-                        color={palette.onSurfaceVariant}
+                        color={palette.error}
                       />
                     </Pressable>
                     <MaterialIcons name="chevron-right" size={20} color={palette.onSurfaceVariant} />
@@ -459,7 +459,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 8,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
   },
   tagChip: {
     paddingHorizontal: 12,
@@ -519,7 +519,7 @@ const styles = StyleSheet.create({
   },
   addButton: {
     marginTop: 12,
-    alignSelf: 'flex-start',
+    alignSelf: 'center',
     paddingHorizontal: 20,
     paddingVertical: 12,
     borderRadius: 24,
