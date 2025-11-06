@@ -65,7 +65,7 @@ export function SearchTopBar({
         style={styles.iconButton}>
         <MaterialCommunityIcons name="menu" size={24} color={palette.icon} />
       </Pressable>
-      <View style={[styles.searchContainer, { backgroundColor: palette.surfaceVariant, borderColor: palette.outline }]}> 
+      <View style={[styles.searchContainer, { backgroundColor: palette.surfaceVariant, borderColor: palette.outline }]}>
         <MaterialCommunityIcons name="magnify" size={20} color={palette.onSurfaceVariant} style={styles.searchIcon} />
         <TextInput
           value={value}
@@ -76,6 +76,15 @@ export function SearchTopBar({
           onSubmitEditing={handleSubmit}
           style={[styles.searchInput, { color: palette.text, fontWeight: '500' }]}
         />
+        {value ? (
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="Clear search query"
+            onPress={() => onChangeText('')}
+            style={styles.clearButton}>
+            <MaterialCommunityIcons name="close" size={18} color={palette.onSurfaceVariant} />
+          </Pressable>
+        ) : null}
       </View>
       <Pressable
         accessibilityRole="button"
@@ -159,6 +168,13 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     fontSize: 16,
+  },
+  clearButton: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   tabs: {
     flexDirection: 'row',
