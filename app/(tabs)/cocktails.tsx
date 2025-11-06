@@ -29,6 +29,7 @@ const TAB_OPTIONS: SegmentTabOption[] = [
 type CocktailListItemProps = {
   cocktail: Cocktail;
   availableIngredientIds: Set<number>;
+  availableIngredientVersion: number;
   favoriteIds: Set<number | undefined>;
   highlightColor: string;
   backgroundColor: string;
@@ -41,6 +42,7 @@ const areCocktailPropsEqual = (
 ) =>
   prev.cocktail === next.cocktail &&
   prev.availableIngredientIds === next.availableIngredientIds &&
+  prev.availableIngredientVersion === next.availableIngredientVersion &&
   prev.favoriteIds === next.favoriteIds &&
   prev.highlightColor === next.highlightColor &&
   prev.backgroundColor === next.backgroundColor &&
@@ -49,6 +51,7 @@ const areCocktailPropsEqual = (
 const CocktailListItem = memo(function CocktailListItemComponent({
   cocktail,
   availableIngredientIds,
+  availableIngredientVersion,
   favoriteIds,
   highlightColor,
   backgroundColor,
@@ -70,7 +73,7 @@ const CocktailListItem = memo(function CocktailListItemComponent({
       },
       { availableCount: 0, missingIngredients: [] as (string | undefined)[] },
     );
-  }, [availableIngredientIds, recipe]);
+  }, [availableIngredientIds, availableIngredientVersion, recipe]);
 
   const totalIngredients = recipe.length;
   const missingCount = Math.max(0, totalIngredients - availableCount);
@@ -136,7 +139,7 @@ const CocktailListItem = memo(function CocktailListItemComponent({
 }, areCocktailPropsEqual);
 
 export default function CocktailsScreen() {
-  const { cocktails, availableIngredientIds } = useInventory();
+  const { cocktails, availableIngredientIds, availableIngredientVersion } = useInventory();
   const [activeTab, setActiveTab] = useState<CocktailTabKey>('all');
   const [query, setQuery] = useState('');
   const paletteColors = Colors;
@@ -154,7 +157,7 @@ export default function CocktailsScreen() {
         return availableIngredientIds.has(item.ingredientId);
       });
     });
-  }, [cocktails, availableIngredientIds]);
+  }, [cocktails, availableIngredientIds, availableIngredientVersion]);
 
   const favoriteCandidates = useMemo(() => {
     return cocktails.filter((cocktail) =>
@@ -217,6 +220,7 @@ export default function CocktailsScreen() {
       <CocktailListItem
         cocktail={item}
         availableIngredientIds={availableIngredientIds}
+        availableIngredientVersion={availableIngredientVersion}
         favoriteIds={favoriteIds}
         highlightColor={highlightColor}
         backgroundColor={paletteColors.background}
@@ -225,6 +229,7 @@ export default function CocktailsScreen() {
     ),
     [
       availableIngredientIds,
+      availableIngredientVersion,
       favoriteIds,
       highlightColor,
       paletteColors.background,

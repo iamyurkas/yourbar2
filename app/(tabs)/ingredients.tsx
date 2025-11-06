@@ -28,6 +28,7 @@ type IngredientListItemProps = {
   ingredient: Ingredient;
   highlightColor: string;
   availableIngredientIds: Set<number>;
+  availableIngredientVersion: number;
   onToggle: (id: number) => void;
   surfaceVariantColor?: string;
 };
@@ -39,6 +40,7 @@ const areIngredientPropsEqual = (
   prev.ingredient === next.ingredient &&
   prev.highlightColor === next.highlightColor &&
   prev.availableIngredientIds === next.availableIngredientIds &&
+  prev.availableIngredientVersion === next.availableIngredientVersion &&
   prev.onToggle === next.onToggle &&
   prev.surfaceVariantColor === next.surfaceVariantColor;
 
@@ -46,6 +48,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
   ingredient,
   highlightColor,
   availableIngredientIds,
+  availableIngredientVersion,
   onToggle,
   surfaceVariantColor,
 }: IngredientListItemProps) {
@@ -94,7 +97,12 @@ const IngredientListItem = memo(function IngredientListItemComponent({
   }, areIngredientPropsEqual);
 
 export default function IngredientsScreen() {
-  const { ingredients, availableIngredientIds, toggleIngredientAvailability } = useInventory();
+  const {
+    ingredients,
+    availableIngredientIds,
+    availableIngredientVersion,
+    toggleIngredientAvailability,
+  } = useInventory();
   const [activeTab, setActiveTab] = useState<IngredientTabKey>('all');
   const [query, setQuery] = useState('');
   const paletteColors = Colors;
@@ -116,7 +124,7 @@ export default function IngredientsScreen() {
         data: needsRestock.length ? needsRestock : ingredients.slice(-12),
       },
     };
-  }, [ingredients, availableIngredientIds]);
+  }, [ingredients, availableIngredientIds, availableIngredientVersion]);
 
   const activeSection = sections[activeTab] ?? sections.all;
 
@@ -167,12 +175,14 @@ export default function IngredientsScreen() {
         ingredient={item}
         highlightColor={highlightColor}
         availableIngredientIds={availableIngredientIds}
+        availableIngredientVersion={availableIngredientVersion}
         onToggle={handleToggle}
         surfaceVariantColor={paletteColors.onSurfaceVariant ?? paletteColors.icon}
       />
     ),
     [
       availableIngredientIds,
+      availableIngredientVersion,
       handleToggle,
       highlightColor,
       paletteColors.icon,
