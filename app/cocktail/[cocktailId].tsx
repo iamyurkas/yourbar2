@@ -1,11 +1,15 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { resolveAssetFromCatalog } from '@/assets/image-manifest';
+import {
+  resolveAssetFromCatalog,
+  resolveGlasswareUriFromId,
+} from '@/assets/image-manifest';
+import { Thumb } from '@/components/RowParts';
 import { Colors } from '@/constants/theme';
 import { useInventory, type Cocktail } from '@/providers/inventory-provider';
 
@@ -37,6 +41,31 @@ const UNIT_LABELS: UnitDictionary = {
   27: { singular: 'piece', plural: 'pieces' },
   31: { singular: 'spray', plural: 'sprays' },
 };
+
+const GLASS_LABELS: Record<string, string> = {
+  bowl: 'Punch bowl',
+  champagne_flute: 'Champagne flute',
+  cocktail_glass: 'Cocktail glass',
+  collins_glass: 'Collins glass',
+  copper_mug: 'Copper mug',
+  coupe: 'Coupe glass',
+  cup: 'Cup',
+  goblet: 'Goblet',
+  highball_glass: 'Highball glass',
+  hurricane_glass: 'Hurricane glass',
+  irish_coffee_glass: 'Irish coffee glass',
+  margarita_glass: 'Margarita glass',
+  nick_and_nora: 'Nick & Nora glass',
+  pitcher: 'Pitcher',
+  pub_glass: 'Pub glass',
+  rocks_glass: 'Rocks glass',
+  shooter: 'Shooter glass',
+  snifter: 'Snifter',
+  tiki: 'Tiki mug',
+  wine_glass: 'Wine glass',
+};
+
+const MAX_RATING = 5;
 
 function resolveCocktail(
   param: string | undefined,
@@ -99,6 +128,21 @@ function getIngredientQualifier(ingredient: Ingredient): string | undefined {
   return undefined;
 }
 
+function formatGlassLabel(glassId?: string | null) {
+  if (!glassId) {
+    return undefined;
+  }
+
+  return (
+    GLASS_LABELS[glassId] ??
+    glassId
+      .split(/[_\s]+/)
+      .filter(Boolean)
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ')
+  );
+}
+
 export default function CocktailDetailsScreen() {
   const palette = Colors;
   const { cocktailId } = useLocalSearchParams<{ cocktailId?: string }>();
@@ -114,6 +158,28 @@ export default function CocktailDetailsScreen() {
     const recipe = cocktail?.ingredients ?? [];
     return [...recipe].sort((a, b) => (a?.order ?? 0) - (b?.order ?? 0));
   }, [cocktail?.ingredients]);
+
+  const initialRating = useMemo(() => {
+    if (!cocktail) {
+      return 0;
+    }
+
+    const ratingValueRaw = (cocktail as { rating?: number; userRating?: number }).rating ??
+      (cocktail as { rating?: number; userRating?: number }).userRating ??
+      0;
+    const ratingValue = Math.max(0, Math.min(MAX_RATING, Number(ratingValueRaw) || 0));
+    return ratingValue;
+  }, [cocktail]);
+
+  const [userRating, setUserRating] = useState(initialRating);
+
+  useEffect(() => {
+    setUserRating(initialRating);
+  }, [initialRating]);
+
+  const handleRatingSelect = useCallback((value: number) => {
+    setUserRating(value);
+  }, []);
 
   const instructionsParagraphs = useMemo(() => {
     const instructions = cocktail?.instructions?.trim();
@@ -143,6 +209,48 @@ export default function CocktailDetailsScreen() {
 
     return undefined;
   }, [cocktail?.photoUri]);
+
+  const glassUri = useMemo(() => resolveGlasswareUriFromId(cocktail?.glassId), [cocktail?.glassId]);
+
+  const glassSource = useMemo(() => {
+    if (!glassUri) {
+      return undefined;
+    }
+
+    const asset = resolveAssetFromCatalog(glassUri);
+    if (asset) {
+      return asset;
+    }
+
+    if (/^https?:/i.test(glassUri)) {
+      return { uri: glassUri } as const;
+    }
+
+    return undefined;
+  }, [glassUri]);
+
+  const displayedImageSource = photoSource ?? glassSource;
+  const glassLabel = useMemo(() => formatGlassLabel(cocktail?.glassId), [cocktail?.glassId]);
+
+  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
+  const [shouldTruncateDescription, setShouldTruncateDescription] = useState(false);
+
+  const handleDescriptionLayout = useCallback(
+    (event: { nativeEvent: { lines: { length: number }[] } }) => {
+      if (shouldTruncateDescription) {
+        return;
+      }
+
+      if (event.nativeEvent.lines.length > 5) {
+        setShouldTruncateDescription(true);
+      }
+    },
+    [shouldTruncateDescription],
+  );
+
+  const toggleDescription = useCallback(() => {
+    setIsDescriptionExpanded((current) => !current);
+  }, []);
 
   const handleEditPress = useCallback(() => {
     // Editing functionality will be implemented later
@@ -187,23 +295,54 @@ export default function CocktailDetailsScreen() {
           <View style={styles.section}>
             <Text style={[styles.name, { color: palette.onSurface }]}>{cocktail.name}</Text>
 
-            <View style={styles.photoWrapper}>
-              {photoSource ? (
-                <Image
-                  source={photoSource}
-                  style={[styles.photo, { backgroundColor: palette.surface }]}
-                  contentFit="cover"
-                />
-              ) : (
-                <View
-                  style={[
-                    styles.photoPlaceholder,
-                    { borderColor: palette.outline, backgroundColor: palette.surface },
-                  ]}>
-                  <MaterialCommunityIcons name="image-off" size={36} color={palette.onSurfaceVariant} />
-                  <Text style={[styles.photoPlaceholderText, { color: palette.onSurfaceVariant }]}>No photo</Text>
+            <View style={styles.mediaSection}>
+              <View style={styles.photoWrapper}>
+                {displayedImageSource ? (
+                  <Image
+                    source={displayedImageSource}
+                    style={[styles.photo, { backgroundColor: palette.surface }]}
+                    contentFit="contain"
+                  />
+                ) : (
+                  <View
+                    style={[
+                      styles.photoPlaceholder,
+                      { borderColor: palette.outline, backgroundColor: palette.surface },
+                    ]}>
+                    <MaterialCommunityIcons name="image-off" size={36} color={palette.onSurfaceVariant} />
+                    <Text style={[styles.photoPlaceholderText, { color: palette.onSurfaceVariant }]}>No photo</Text>
+                  </View>
+                )}
+              </View>
+
+              <View style={styles.ratingRow}>
+                {Array.from({ length: MAX_RATING }).map((_, index) => {
+                  const starValue = index + 1;
+                  const isActive = userRating >= starValue;
+                  const icon = isActive ? 'star' : 'star-outline';
+
+                  return (
+                    <Pressable
+                      key={`rating-star-${starValue}`}
+                      onPress={() => handleRatingSelect(starValue)}
+                      accessibilityRole="button"
+                      accessibilityLabel={`Set rating to ${starValue}`}
+                      style={styles.ratingStar}
+                      hitSlop={8}>
+                      <MaterialCommunityIcons name={icon} size={26} color={palette.tint} />
+                    </Pressable>
+                  );
+                })}
+              </View>
+
+              {photoSource && glassSource && glassLabel ? (
+                <View style={[styles.glassInfo, { backgroundColor: palette.surfaceVariant }]}>
+                  <View style={styles.glassImageWrapper}>
+                    <Image source={glassSource} style={styles.glassImage} contentFit="contain" />
+                  </View>
+                  <Text style={[styles.glassLabel, { color: palette.onSurface }]}>{glassLabel}</Text>
                 </View>
-              )}
+              ) : null}
             </View>
 
             {cocktail.tags && cocktail.tags.length ? (
@@ -222,17 +361,30 @@ export default function CocktailDetailsScreen() {
             {cocktail.description ? (
               <View style={styles.textBlock}>
                 <Text style={[styles.sectionTitle, { color: palette.onSurface }]}>Description</Text>
-                <Text style={[styles.bodyText, { color: palette.onSurfaceVariant }]}>{cocktail.description}</Text>
+                <Text
+                  style={[styles.bodyText, styles.descriptionText, { color: palette.onSurfaceVariant }]}
+                  numberOfLines={!isDescriptionExpanded && shouldTruncateDescription ? 5 : undefined}
+                  onTextLayout={handleDescriptionLayout}
+                >
+                  {cocktail.description}
+                </Text>
+                {shouldTruncateDescription ? (
+                  <Pressable onPress={toggleDescription} accessibilityRole="button">
+                    <Text style={[styles.toggleDescription, { color: palette.tint }]}>
+                      {isDescriptionExpanded ? 'Show less' : 'Show more'}
+                    </Text>
+                  </Pressable>
+                ) : null}
               </View>
             ) : null}
 
             {instructionsParagraphs.length ? (
-              <View style={styles.textBlock}>
-                <Text style={[styles.sectionTitle, { color: palette.onSurface }]}>Instructions</Text>
+              <View style={[styles.textBlock, styles.instructionsBlock, { backgroundColor: palette.onSurface }]}> 
+                <Text style={[styles.instructionsTitle, { color: palette.background }]}>Instructions</Text>
                 {instructionsParagraphs.map((paragraph, index) => (
                   <Text
                     key={`instruction-${index}`}
-                    style={[styles.bodyText, { color: palette.onSurfaceVariant }]}
+                    style={[styles.instructionsText, { color: palette.background }]}
                   >
                     {paragraph}
                   </Text>
@@ -253,7 +405,9 @@ export default function CocktailDetailsScreen() {
                         key={`${ingredient.ingredientId ?? ingredient.name}-${ingredient.order}`}
                         style={[styles.ingredientRow, { borderColor: palette.outline }]}
                       >
-                        <Text style={[styles.ingredientAmount, { color: palette.onSurface }]}>{quantity}</Text>
+                        <View style={styles.ingredientThumbSlot}>
+                          <Thumb label={ingredient.name} uri={ingredient.photoUri} />
+                        </View>
                         <View style={styles.ingredientDetails}>
                           <Text style={[styles.ingredientName, { color: palette.onSurface }]}>{ingredient.name}</Text>
                           {qualifier ? (
@@ -261,6 +415,11 @@ export default function CocktailDetailsScreen() {
                               {qualifier}
                             </Text>
                           ) : null}
+                        </View>
+                        <View style={styles.ingredientAmountBlock}>
+                          <Text style={[styles.ingredientAmount, { color: palette.onSurfaceVariant }]}>
+                            {quantity}
+                          </Text>
                         </View>
                       </View>
                     );
@@ -296,9 +455,14 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     textAlign: 'center',
   },
+  mediaSection: {
+    gap: 16,
+    alignItems: 'center',
+  },
   photoWrapper: {
     alignItems: 'center',
     justifyContent: 'center',
+    alignSelf: 'center',
   },
   photo: {
     width: 150,
@@ -318,11 +482,40 @@ const styles = StyleSheet.create({
   photoPlaceholderText: {
     fontSize: 14,
   },
+  ratingRow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: 12,
+  },
+  ratingStar: {
+    paddingVertical: 4,
+  },
+  glassInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    padding: 12,
+    borderRadius: 12,
+    alignSelf: 'flex-start',
+  },
+  glassImageWrapper: {
+    width: 48,
+    height: 48,
+  },
+  glassImage: {
+    width: '100%',
+    height: '100%',
+  },
+  glassLabel: {
+    fontSize: 16,
+    fontWeight: '500',
+  },
   tagList: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     gap: 8,
+    alignSelf: 'stretch',
   },
   tagChip: {
     borderRadius: 999,
@@ -344,22 +537,44 @@ const styles = StyleSheet.create({
     fontSize: 15,
     lineHeight: 22,
   },
+  descriptionText: {
+    color: '#6F6F6F',
+  },
+  toggleDescription: {
+    fontSize: 15,
+    fontWeight: '500',
+  },
+  instructionsBlock: {
+    borderRadius: 16,
+    padding: 16,
+    gap: 8,
+    alignSelf: 'stretch',
+  },
+  instructionsTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  instructionsText: {
+    fontSize: 15,
+    lineHeight: 22,
+  },
   ingredientsList: {
     gap: 12,
   },
   ingredientRow: {
     flexDirection: 'row',
-    gap: 12,
+    gap: 16,
     borderRadius: 12,
     borderWidth: StyleSheet.hairlineWidth,
     paddingHorizontal: 16,
     paddingVertical: 12,
-    alignItems: 'flex-start',
+    alignItems: 'center',
   },
-  ingredientAmount: {
-    fontSize: 15,
-    fontWeight: '600',
-    minWidth: 80,
+  ingredientThumbSlot: {
+    width: 56,
+    height: 56,
+    borderRadius: 8,
+    overflow: 'hidden',
   },
   ingredientDetails: {
     flex: 1,
@@ -372,6 +587,15 @@ const styles = StyleSheet.create({
   ingredientQualifier: {
     fontSize: 13,
     textTransform: 'capitalize',
+  },
+  ingredientAmountBlock: {
+    minWidth: 90,
+    alignItems: 'flex-end',
+  },
+  ingredientAmount: {
+    fontSize: 15,
+    fontWeight: '500',
+    textAlign: 'right',
   },
   headerButton: {
     width: 40,
