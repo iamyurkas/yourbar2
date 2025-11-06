@@ -14,8 +14,11 @@ type ActionCardProps = {
 };
 
 export default function ShakerScreen() {
+  const colorScheme = useColorScheme();
+  const palette = Colors[colorScheme ?? 'light'];
+
   return (
-    <ThemedView style={styles.container}>
+    <ThemedView style={[styles.container, { backgroundColor: palette.background }]}> 
       <View style={styles.header}>
         <ThemedText type="title">Shaker</ThemedText>
         <ThemedText style={styles.subtitle}>
@@ -44,11 +47,26 @@ export default function ShakerScreen() {
 
 function ActionCard({ title, description, icon }: ActionCardProps) {
   const colorScheme = useColorScheme();
-  const tint = Colors[colorScheme ?? 'light'].tint;
+  const palette = Colors[colorScheme ?? 'light'];
+  const tint = palette.tint;
+  const backgroundColor = colorScheme === 'dark' ? '#17222D' : '#FFFFFF';
+  const borderColor = `${tint}3d`;
 
   return (
-    <ThemedView lightColor="rgba(10,126,164,0.07)" darkColor="rgba(255,255,255,0.06)" style={styles.card}>
-      <View style={styles.iconBadge}>
+    <ThemedView
+      style={[
+        styles.card,
+        {
+          backgroundColor,
+          borderColor,
+          shadowColor: colorScheme === 'dark' ? 'transparent' : '#4DABF7',
+          shadowOpacity: colorScheme === 'dark' ? 0 : 0.08,
+          shadowRadius: 20,
+          shadowOffset: { width: 0, height: 12 },
+          elevation: colorScheme === 'dark' ? 0 : 4,
+        },
+      ]}>
+      <View style={[styles.iconBadge, { backgroundColor: `${tint}1A`, borderColor: `${tint}33` }]}> 
         <IconSymbol name={icon} size={28} color={tint} />
       </View>
       <View style={styles.cardText}>
@@ -67,30 +85,31 @@ const styles = StyleSheet.create({
     paddingTop: 48,
     paddingHorizontal: 20,
     paddingBottom: 120,
-    gap: 20,
+    gap: 24,
   },
   header: {
     gap: 8,
   },
   subtitle: {
-    fontSize: 16,
-    lineHeight: 24,
-    opacity: 0.8,
+    fontSize: 15,
+    lineHeight: 22,
+    opacity: 0.72,
   },
   card: {
-    borderRadius: 22,
+    borderRadius: 20,
     padding: 20,
     flexDirection: 'row',
     gap: 16,
     alignItems: 'center',
+    borderWidth: 1,
   },
   iconBadge: {
-    width: 48,
-    height: 48,
-    borderRadius: 16,
+    width: 52,
+    height: 52,
+    borderRadius: 18,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(10,126,164,0.12)',
+    borderWidth: 1,
   },
   cardText: {
     flex: 1,
@@ -98,10 +117,11 @@ const styles = StyleSheet.create({
   },
   cardTitle: {
     letterSpacing: 0.2,
+    fontSize: 18,
   },
   cardDescription: {
-    fontSize: 15,
+    fontSize: 14,
     lineHeight: 22,
-    opacity: 0.85,
+    opacity: 0.75,
   },
 });

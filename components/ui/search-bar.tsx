@@ -1,6 +1,7 @@
 import React from 'react';
 import { Pressable, StyleSheet, TextInput, View } from 'react-native';
 
+import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { ThemedText } from '@/components/themed-text';
 
@@ -21,14 +22,21 @@ export function SearchBar({
 }: SearchBarProps) {
   const scheme = useColorScheme();
   const isDark = scheme === 'dark';
+  const palette = Colors[scheme ?? 'light'];
+  const backgroundColor = isDark ? palette.surfaceVariant : '#FFFFFF';
+  const borderColor = isDark ? palette.outlineVariant : palette.outline;
+  const placeholderColor = isDark ? 'rgba(236,246,255,0.6)' : '#A1A1A1';
+  const textColor = isDark ? '#F6FAFF' : palette.text;
+  const accent = palette.tint;
 
   return (
     <View
       style={[
         styles.container,
         {
-          backgroundColor: isDark ? '#1E1D22' : '#FFFFFF',
-          borderColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(17,24,28,0.08)',
+          backgroundColor,
+          borderColor,
+          shadowOpacity: isDark ? 0 : 0.04,
         },
       ]}>
       <View style={styles.leadingIcon}>
@@ -36,10 +44,10 @@ export function SearchBar({
       </View>
       <TextInput
         placeholder={placeholder}
-        placeholderTextColor={isDark ? 'rgba(236,237,238,0.6)' : 'rgba(17,24,28,0.45)'}
+        placeholderTextColor={placeholderColor}
         value={value}
         onChangeText={onChange}
-        style={[styles.input, { color: isDark ? '#ECEDEE' : '#11181C' }]}
+        style={[styles.input, { color: textColor }]}
         autoCapitalize="none"
         autoCorrect={false}
         accessibilityRole="search"
@@ -54,11 +62,11 @@ export function SearchBar({
               backgroundColor: pressed
                 ? isDark
                   ? 'rgba(255,255,255,0.08)'
-                  : 'rgba(17,24,28,0.08)'
+                  : `${accent}1A`
                 : 'transparent',
             },
           ]}>
-          <ThemedText style={styles.trailingLabel}>{trailingActionLabel}</ThemedText>
+          <ThemedText style={[styles.trailingLabel, { color: accent }]}>{trailingActionLabel}</ThemedText>
         </Pressable>
       ) : null}
     </View>
@@ -74,6 +82,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     gap: 12,
     height: 44,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 6 },
+    shadowRadius: 12,
+    shadowOpacity: 0.08,
+    elevation: 2,
   },
   leadingIcon: {
     width: 20,
@@ -82,7 +95,7 @@ const styles = StyleSheet.create({
   },
   iconGlyph: {
     fontSize: 18,
-    opacity: 0.6,
+    color: '#A1A1A1',
   },
   input: {
     flex: 1,

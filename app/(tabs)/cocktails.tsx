@@ -6,6 +6,8 @@ import { ThemedView } from '@/components/themed-view';
 import { MD3TopTabs } from '@/components/ui/md3-top-tabs';
 import type { TabItem } from '@/components/ui/md3-top-tabs';
 import { SearchBar } from '@/components/ui/search-bar';
+import { Colors } from '@/constants/theme';
+import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useInventory, type Cocktail } from '@/providers/inventory-provider';
 
 type CocktailSection = {
@@ -20,6 +22,8 @@ export default function CocktailsScreen() {
   const { cocktails, availableIngredientIds } = useInventory();
   const [activeTab, setActiveTab] = useState<string>('all');
   const [query, setQuery] = useState('');
+  const colorScheme = useColorScheme();
+  const palette = Colors[colorScheme ?? 'light'];
 
   const readyToMix = useMemo(() => {
     return cocktails.filter((cocktail) => {
@@ -81,7 +85,7 @@ export default function CocktailsScreen() {
   }, [activeSection.data, query]);
 
   return (
-    <ThemedView style={styles.container}>
+    <ThemedView style={[styles.container, { backgroundColor: palette.background }]}> 
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         <View style={styles.header}>
           <ThemedText type="title">Cocktails</ThemedText>
@@ -105,6 +109,8 @@ export default function CocktailsScreen() {
               key={String(cocktail.id ?? cocktail.name)}
               cocktail={cocktail}
               availableIngredientIds={availableIngredientIds}
+              palette={palette}
+              colorScheme={colorScheme}
             />
           ))
         ) : activeSection.key === 'my' ? (
@@ -120,9 +126,13 @@ export default function CocktailsScreen() {
 function CocktailRow({
   cocktail,
   availableIngredientIds,
+  palette,
+  colorScheme,
 }: {
   cocktail: Cocktail;
   availableIngredientIds: Set<number>;
+  palette: (typeof Colors)['light'] | (typeof Colors)['dark'];
+  colorScheme: ReturnType<typeof useColorScheme>;
 }) {
   const profile = cocktail.description?.trim() || cocktail.instructions?.trim();
   const ingredients = cocktail.ingredients
@@ -151,14 +161,24 @@ function CocktailRow({
     .map((part) => part[0])
     .join('')
     .toUpperCase();
+  const isReady = missingCount === 0 && totalIngredients > 0;
+  const rowBackground = colorScheme === 'dark' ? '#182330' : '#FFFFFF';
+  const activeBackground = colorScheme === 'dark' ? 'rgba(77,171,247,0.25)' : `${palette.tint}14`;
+  const borderColor = isReady ? `${palette.tint}66` : palette.outlineVariant;
 
   return (
     <Pressable accessibilityRole="button" onPress={() => {}}>
       <ThemedView
-        lightColor="rgba(10,126,164,0.06)"
-        darkColor="rgba(255,255,255,0.05)"
-        style={styles.row}>
-        <View style={[styles.thumbnail, { backgroundColor: `${badgeColor}22` }]}> 
+        style={[
+          styles.row,
+          {
+            backgroundColor: isReady ? activeBackground : rowBackground,
+            borderColor,
+            shadowOpacity: colorScheme === 'dark' ? 0 : 0.06,
+            elevation: colorScheme === 'dark' ? 0 : 2,
+          },
+        ]}>
+        <View style={[styles.thumbnail, { backgroundColor: `${badgeColor}1A`, borderColor: `${badgeColor}55` }]}> 
           <ThemedText style={[styles.thumbnailLabel, { color: badgeColor }]}>{initials}</ThemedText>
         </View>
         <View style={styles.rowContent}>
@@ -186,11 +206,20 @@ function CocktailRow({
 }
 
 function EmptyState({ message }: { message: string }) {
+  const colorScheme = useColorScheme();
+  const palette = Colors[colorScheme ?? 'light'];
+  const backgroundColor = colorScheme === 'dark' ? '#17222D' : palette.surfaceVariant;
+
   return (
     <ThemedView
-      lightColor="rgba(10,126,164,0.05)"
-      darkColor="rgba(255,255,255,0.04)"
-      style={[styles.row, styles.emptyCard]}>
+      style={[
+        styles.row,
+        styles.emptyCard,
+        {
+          backgroundColor,
+          borderColor: palette.outlineVariant,
+        },
+      ]}>
       <ThemedText style={styles.emptyTitle}>Nothing here yet</ThemedText>
       <ThemedText style={styles.rowProfile}>{message}</ThemedText>
     </ThemedView>
@@ -204,24 +233,24 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   scrollContent: {
-    paddingBottom: 120,
-    gap: 20,
+    paddingBottom: 140,
+    gap: 24,
   },
   header: {
     gap: 8,
   },
   subtitle: {
-    fontSize: 16,
-    lineHeight: 24,
-    opacity: 0.8,
+    fontSize: 15,
+    lineHeight: 22,
+    opacity: 0.72,
   },
   sectionIntro: {
     gap: 8,
   },
   sectionDescription: {
-    fontSize: 16,
-    lineHeight: 24,
-    opacity: 0.8,
+    fontSize: 15,
+    lineHeight: 22,
+    opacity: 0.75,
   },
   row: {
     flexDirection: 'row',
@@ -229,6 +258,12 @@ const styles = StyleSheet.create({
     padding: 16,
     gap: 14,
     alignItems: 'center',
+    borderWidth: 1,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowRadius: 20,
+    shadowOpacity: 0.06,
+    elevation: 2,
   },
   rowContent: {
     flex: 1,
@@ -236,26 +271,26 @@ const styles = StyleSheet.create({
   },
   rowTitle: {
     letterSpacing: 0.2,
-    fontSize: 17,
+    fontSize: 16,
   },
   rowMissing: {
-    fontSize: 13,
-    letterSpacing: 0.3,
+    fontSize: 12,
+    letterSpacing: 0.4,
     textTransform: 'uppercase',
-    opacity: 0.7,
+    opacity: 0.6,
   },
   rowIngredients: {
-    fontSize: 14,
-    lineHeight: 20,
-    opacity: 0.75,
+    fontSize: 13,
+    lineHeight: 18,
+    opacity: 0.72,
   },
   rowProfile: {
     fontSize: 13,
     lineHeight: 18,
-    opacity: 0.7,
+    opacity: 0.68,
   },
   rowMeta: {
-    alignItems: 'flex-end',
+    alignItems: 'center',
     gap: 12,
   },
   tagDot: {
@@ -264,11 +299,12 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   thumbnail: {
-    width: 48,
-    height: 48,
-    borderRadius: 12,
+    width: 52,
+    height: 52,
+    borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
+    borderWidth: 1,
   },
   thumbnailLabel: {
     fontSize: 16,
@@ -278,6 +314,8 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'flex-start',
     gap: 8,
+    shadowOpacity: 0,
+    elevation: 0,
   },
   emptyTitle: {
     fontSize: 18,

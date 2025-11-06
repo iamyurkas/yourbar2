@@ -6,6 +6,8 @@ import { ThemedView } from '@/components/themed-view';
 import { MD3TopTabs } from '@/components/ui/md3-top-tabs';
 import type { TabItem } from '@/components/ui/md3-top-tabs';
 import { SearchBar } from '@/components/ui/search-bar';
+import { Colors } from '@/constants/theme';
+import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
 
 type IngredientSection = {
@@ -20,6 +22,8 @@ export default function IngredientsScreen() {
   const { ingredients, availableIngredientIds, toggleIngredientAvailability } = useInventory();
   const [activeTab, setActiveTab] = useState<string>('all');
   const [query, setQuery] = useState('');
+  const colorScheme = useColorScheme();
+  const palette = Colors[colorScheme ?? 'light'];
 
   const sections = useMemo<Record<string, IngredientSection>>(() => {
     const needsRestock = ingredients.filter((ingredient) => (ingredient.usageCount ?? 0) === 0);
@@ -67,7 +71,7 @@ export default function IngredientsScreen() {
   }, [activeSection.data, query]);
 
   return (
-    <ThemedView style={styles.container}>
+    <ThemedView style={[styles.container, { backgroundColor: palette.background }]}> 
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         <View style={styles.header}>
           <ThemedText type="title">Ingredients</ThemedText>
@@ -102,6 +106,8 @@ export default function IngredientsScreen() {
                 ingredient={ingredient}
                 isAvailable={isAvailable}
                 onToggle={handleToggle}
+                palette={palette}
+                colorScheme={colorScheme}
               />
             );
           })
@@ -119,10 +125,14 @@ function IngredientRow({
   ingredient,
   isAvailable,
   onToggle,
+  palette,
+  colorScheme,
 }: {
   ingredient: Ingredient;
   isAvailable: boolean;
   onToggle: () => void;
+  palette: (typeof Colors)['light'] | (typeof Colors)['dark'];
+  colorScheme: ReturnType<typeof useColorScheme>;
 }) {
   const description = ingredient.description?.trim();
   const tag = ingredient.tags?.[0];
@@ -136,20 +146,32 @@ function IngredientRow({
     .join('')
     .toUpperCase();
 
-  const lightColor = isAvailable ? 'rgba(10,126,164,0.16)' : 'rgba(10,126,164,0.05)';
-  const darkColor = isAvailable ? 'rgba(10,126,164,0.22)' : 'rgba(255,255,255,0.05)';
+  const rowBackground = colorScheme === 'dark' ? '#17222D' : '#FFFFFF';
+  const activeBackground = colorScheme === 'dark' ? 'rgba(77,171,247,0.2)' : `${palette.tint}12`;
+  const checkboxBorder = isAvailable ? palette.tint : palette.outlineVariant;
+  const textAccent = isAvailable ? palette.tint : '#6F7A86';
+  const borderColor = isAvailable ? `${palette.tint}55` : palette.outlineVariant;
 
   return (
     <Pressable accessibilityRole="checkbox" accessibilityState={{ checked: isAvailable }} onPress={onToggle}>
-      <ThemedView lightColor={lightColor} darkColor={darkColor} style={styles.row}>
-        <View style={[styles.thumbnail, { backgroundColor: `${badgeColor}22` }]}>
+      <ThemedView
+        style={[
+          styles.row,
+          {
+            backgroundColor: isAvailable ? activeBackground : rowBackground,
+            borderColor,
+            shadowOpacity: colorScheme === 'dark' ? 0 : 0.06,
+            elevation: colorScheme === 'dark' ? 0 : 2,
+          },
+        ]}>
+        <View style={[styles.thumbnail, { backgroundColor: `${badgeColor}12`, borderColor: `${badgeColor}44` }]}> 
           <ThemedText style={[styles.thumbnailLabel, { color: badgeColor }]}>{initials}</ThemedText>
         </View>
         <View style={styles.rowText}>
           <ThemedText type="subtitle" style={styles.rowTitle} numberOfLines={1}>
             {ingredient.name}
           </ThemedText>
-          <ThemedText style={styles.rowDetail} numberOfLines={1}>
+          <ThemedText style={[styles.rowDetail, { color: textAccent }]} numberOfLines={1}>
             {usageLabel}
           </ThemedText>
           {description ? (
@@ -160,8 +182,8 @@ function IngredientRow({
         </View>
         <View style={styles.rowMeta}>
           <View style={[styles.tagDot, { backgroundColor: badgeColor }]} />
-          <View style={[styles.checkbox, { borderColor: badgeColor }]}>
-            {isAvailable ? <View style={[styles.checkboxFill, { backgroundColor: badgeColor }]} /> : null}
+          <View style={[styles.checkbox, { borderColor: checkboxBorder }]}> 
+            {isAvailable ? <View style={[styles.checkboxFill, { backgroundColor: palette.tint }]} /> : null}
           </View>
         </View>
       </ThemedView>
@@ -170,11 +192,20 @@ function IngredientRow({
 }
 
 function EmptyState({ message }: { message: string }) {
+  const colorScheme = useColorScheme();
+  const palette = Colors[colorScheme ?? 'light'];
+  const backgroundColor = colorScheme === 'dark' ? '#17222D' : palette.surfaceVariant;
+
   return (
     <ThemedView
-      lightColor="rgba(10,126,164,0.05)"
-      darkColor="rgba(255,255,255,0.04)"
-      style={[styles.row, styles.emptyState]}>
+      style={[
+        styles.row,
+        styles.emptyState,
+        {
+          backgroundColor,
+          borderColor: palette.outlineVariant,
+        },
+      ]}>
       <ThemedText style={styles.emptyTitle}>All clear</ThemedText>
       <ThemedText style={styles.rowDetail}>{message}</ThemedText>
     </ThemedView>
@@ -188,24 +219,24 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   scrollContent: {
-    paddingBottom: 120,
-    gap: 20,
+    paddingBottom: 140,
+    gap: 24,
   },
   header: {
     gap: 8,
   },
   subtitle: {
-    fontSize: 16,
-    lineHeight: 24,
-    opacity: 0.8,
+    fontSize: 15,
+    lineHeight: 22,
+    opacity: 0.72,
   },
   sectionIntro: {
     gap: 8,
   },
   sectionDescription: {
-    fontSize: 16,
-    lineHeight: 24,
-    opacity: 0.8,
+    fontSize: 15,
+    lineHeight: 22,
+    opacity: 0.75,
   },
   row: {
     flexDirection: 'row',
@@ -214,6 +245,12 @@ const styles = StyleSheet.create({
     gap: 14,
     alignItems: 'center',
     justifyContent: 'space-between',
+    borderWidth: 1,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowRadius: 20,
+    shadowOpacity: 0.06,
+    elevation: 2,
   },
   rowText: {
     flex: 1,
@@ -221,39 +258,42 @@ const styles = StyleSheet.create({
   },
   rowTitle: {
     letterSpacing: 0.2,
-    fontSize: 17,
+    fontSize: 16,
   },
   rowDetail: {
-    fontSize: 14,
-    lineHeight: 20,
+    fontSize: 13,
+    lineHeight: 18,
     opacity: 0.7,
   },
   rowDescription: {
     fontSize: 13,
     lineHeight: 18,
-    opacity: 0.7,
+    opacity: 0.68,
   },
   emptyState: {
     flexDirection: 'column',
     alignItems: 'flex-start',
+    shadowOpacity: 0,
+    elevation: 0,
   },
   emptyTitle: {
     fontSize: 18,
     fontWeight: '600',
   },
   thumbnail: {
-    width: 48,
-    height: 48,
-    borderRadius: 12,
+    width: 52,
+    height: 52,
+    borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
+    borderWidth: 1,
   },
   thumbnailLabel: {
     fontSize: 16,
     fontWeight: '600',
   },
   rowMeta: {
-    alignItems: 'flex-end',
+    alignItems: 'center',
     gap: 12,
   },
   tagDot: {
