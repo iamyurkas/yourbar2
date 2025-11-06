@@ -120,6 +120,53 @@ export const MD3LightTheme: PaperTheme = {
   },
 };
 
+export const MD3DarkTheme: PaperTheme = {
+  ...MD3LightTheme,
+  colors: {
+    ...MD3LightTheme.colors,
+    primary: '#9CCAFF',
+    primaryContainer: '#1E2936',
+    secondary: '#B0BEC5',
+    secondaryContainer: '#1F2A36',
+    tertiary: '#A5D8FF',
+    tertiaryContainer: '#14202B',
+    surface: '#0F1720',
+    surfaceVariant: '#1B2733',
+    surfaceDisabled: 'rgba(255,255,255,0.12)',
+    background: '#0B1017',
+    error: '#F28B82',
+    errorContainer: '#3B121A',
+    onPrimary: '#001529',
+    onPrimaryContainer: '#D6E4FF',
+    onSecondary: '#0A141F',
+    onSecondaryContainer: '#DCE4EA',
+    onTertiary: '#0B1721',
+    onTertiaryContainer: '#DFF3FF',
+    onSurface: '#E5EAF0',
+    onSurfaceVariant: '#B7C1CC',
+    onSurfaceDisabled: 'rgba(255,255,255,0.38)',
+    onError: '#3B121A',
+    onErrorContainer: '#FADADB',
+    onBackground: '#E5EAF0',
+    outline: '#3C4C5F',
+    outlineVariant: '#2A3947',
+    inverseSurface: '#E5EAF0',
+    inverseOnSurface: '#122030',
+    inversePrimary: '#4A90E2',
+    shadow: '#000000',
+    scrim: '#000000',
+    backdrop: 'rgba(15,23,32,0.6)',
+    elevation: {
+      level0: 'transparent',
+      level1: 'rgba(12,18,26,0.7)',
+      level2: 'rgba(14,20,29,0.72)',
+      level3: 'rgba(15,22,31,0.74)',
+      level4: 'rgba(16,24,33,0.76)',
+      level5: 'rgba(18,26,36,0.78)',
+    },
+  },
+};
+
 type PaperProviderProps = PropsWithChildren<{
   theme?: PaperTheme;
 }>;

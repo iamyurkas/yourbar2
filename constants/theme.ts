@@ -1,33 +1,33 @@
 import { Platform } from 'react-native';
 
-import { AppTheme } from '@/constants/app-theme';
+import { darkTheme, lightTheme } from '@/theme/theme';
 
-const tintColorLight = AppTheme.colors.primary;
-const tintColorDark = '#9CCAFF';
+const tintColorLight = lightTheme.colors.primary;
+const tintColorDark = darkTheme.colors.primary;
 
 export const Colors = {
   light: {
-    text: AppTheme.colors.onSurface,
-    background: AppTheme.colors.background,
-    surface: AppTheme.colors.surface,
-    surfaceVariant: AppTheme.colors.surfaceVariant,
-    outline: AppTheme.colors.outline,
-    outlineVariant: AppTheme.colors.outlineVariant,
+    text: lightTheme.colors.onSurface,
+    background: lightTheme.colors.background,
+    surface: lightTheme.colors.surface,
+    surfaceVariant: lightTheme.colors.surfaceVariant,
+    outline: lightTheme.colors.outline,
+    outlineVariant: lightTheme.colors.outlineVariant,
     tint: tintColorLight,
-    icon: AppTheme.colors.onSurfaceVariant,
-    tabIconDefault: AppTheme.colors.onSurfaceVariant,
+    icon: lightTheme.colors.onSurfaceVariant,
+    tabIconDefault: lightTheme.colors.onSurfaceVariant,
     tabIconSelected: tintColorLight,
   },
   dark: {
-    text: '#F4F7FA',
-    background: '#0E141B',
-    surface: '#151F28',
-    surfaceVariant: '#1E2A35',
-    outline: 'rgba(255,255,255,0.1)',
-    outlineVariant: 'rgba(255,255,255,0.05)',
+    text: darkTheme.colors.onSurface,
+    background: darkTheme.colors.background,
+    surface: darkTheme.colors.surface,
+    surfaceVariant: darkTheme.colors.surfaceVariant,
+    outline: darkTheme.colors.outline,
+    outlineVariant: darkTheme.colors.outlineVariant,
     tint: tintColorDark,
-    icon: '#8A97A8',
-    tabIconDefault: '#748297',
+    icon: darkTheme.colors.onSurfaceVariant,
+    tabIconDefault: darkTheme.colors.onSurfaceVariant,
     tabIconSelected: tintColorDark,
   },
 };
