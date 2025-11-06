@@ -18,8 +18,11 @@ type InventoryContextValue = {
   ingredients: Ingredient[];
   loading: boolean;
   availableIngredientIds: Set<number>;
+  shoppingIngredientIds: Set<number>;
   setIngredientAvailability: (id: number, available: boolean) => void;
   toggleIngredientAvailability: (id: number) => void;
+  toggleIngredientShopping: (id: number) => void;
+  clearBaseIngredient: (id: number) => void;
 };
 
 type InventoryState = {
@@ -74,7 +77,9 @@ type InventoryProviderProps = {
 
 export function InventoryProvider({ children }: InventoryProviderProps) {
   const inventory = ensureInventoryState();
+  const [ingredientsState, setIngredientsState] = useState<Ingredient[]>(() => inventory.ingredients);
   const [availableIngredientIds, setAvailableIngredientIds] = useState<Set<number>>(() => new Set());
+  const [shoppingIngredientIds, setShoppingIngredientIds] = useState<Set<number>>(() => new Set());
 
   const setIngredientAvailability = useCallback((id: number, available: boolean) => {
     setAvailableIngredientIds((prev) => {
@@ -100,16 +105,62 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     });
   }, []);
 
+  const toggleIngredientShopping = useCallback((id: number) => {
+    setShoppingIngredientIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+      return next;
+    });
+  }, []);
+
+  const clearBaseIngredient = useCallback(
+    (id: number) => {
+      setIngredientsState((prev) => {
+        let didChange = false;
+        const next = prev.map((ingredient) => {
+          if (Number(ingredient.id ?? -1) === id && ingredient.baseIngredientId != null) {
+            didChange = true;
+            return { ...ingredient, baseIngredientId: undefined };
+          }
+          return ingredient;
+        });
+
+        if (didChange) {
+          inventory.ingredients = next;
+        }
+
+        return didChange ? next : prev;
+      });
+    },
+    [inventory],
+  );
+
   const value = useMemo<InventoryContextValue>(() => {
     return {
       cocktails: inventory.cocktails,
-      ingredients: inventory.ingredients,
+      ingredients: ingredientsState,
       loading: false,
       availableIngredientIds,
+      shoppingIngredientIds,
       setIngredientAvailability,
       toggleIngredientAvailability,
+      toggleIngredientShopping,
+      clearBaseIngredient,
     };
-  }, [inventory, availableIngredientIds, setIngredientAvailability, toggleIngredientAvailability]);
+  }, [
+    inventory.cocktails,
+    ingredientsState,
+    availableIngredientIds,
+    shoppingIngredientIds,
+    setIngredientAvailability,
+    toggleIngredientAvailability,
+    toggleIngredientShopping,
+    clearBaseIngredient,
+  ]);
 
   return <InventoryContext.Provider value={value}>{children}</InventoryContext.Provider>;
 }
