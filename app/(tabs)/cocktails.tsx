@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useRouter } from 'expo-router';
 
 import { FabAdd } from '@/components/FabAdd';
 import { CocktailListRow } from '@/components/CocktailListRow';
@@ -29,6 +30,7 @@ export default function CocktailsScreen() {
   const [activeTab, setActiveTab] = useState<CocktailTabKey>('all');
   const [query, setQuery] = useState('');
   const paletteColors = Colors;
+  const router = useRouter();
 
   const readyToMix = useMemo(() => {
     return cocktails.filter((cocktail) => {
@@ -106,18 +108,28 @@ export default function CocktailsScreen() {
 
   const keyExtractor = useCallback((item: Cocktail) => String(item.id ?? item.name), []);
 
+  const handleSelectCocktail = useCallback(
+    (cocktail: Cocktail) => {
+      const candidateId = cocktail.id ?? cocktail.name;
+      if (!candidateId) {
+        return;
+      }
+
+      router.push({ pathname: '/cocktail/[cocktailId]', params: { cocktailId: String(candidateId) } });
+    },
+    [router],
+  );
+
   const renderItem = useCallback(
     ({ item }: { item: Cocktail }) => (
       <CocktailListRow
         cocktail={item}
         availableIngredientIds={availableIngredientIds}
+        onPress={() => handleSelectCocktail(item)}
         control={<FavoriteStar active={favoriteIds.has(item.id)} />}
       />
     ),
-    [
-      availableIngredientIds,
-      favoriteIds,
-    ],
+    [availableIngredientIds, favoriteIds, handleSelectCocktail],
   );
 
   const renderSeparator = useCallback(
