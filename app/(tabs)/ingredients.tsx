@@ -1,250 +1,266 @@
 import React, { useMemo, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { PlatformPressable } from '@react-navigation/elements';
+import { ScrollView, StyleSheet, View } from 'react-native';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { MD3TopTabs } from '@/components/ui/md3-top-tabs';
-import type { TabItem } from '@/components/ui/md3-top-tabs';
-import { SearchBar } from '@/components/ui/search-bar';
+import { Screen } from '@/components/ui/screen';
+import { SearchHeader } from '@/components/ui/search-header';
+import { Badge } from '@/components/ui/badge';
+import { UnderlineTabs, type UnderlineTab } from '@/components/ui/underline-tabs';
+import { Colors } from '@/constants/theme';
+import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
-
-type IngredientSection = {
-  key: string;
-  label: string;
-  heading: string;
-  description: string;
-  data: Ingredient[];
-};
 
 export default function IngredientsScreen() {
   const { ingredients, availableIngredientIds, toggleIngredientAvailability } = useInventory();
-  const [activeTab, setActiveTab] = useState<string>('all');
+  const scheme = useColorScheme() ?? 'light';
+  const colors = Colors[scheme];
   const [query, setQuery] = useState('');
+  const [activeTab, setActiveTab] = useState('all');
+  const [restockOnly, setRestockOnly] = useState(false);
 
-  const sections = useMemo<Record<string, IngredientSection>>(() => {
-    const needsRestock = ingredients.filter((ingredient) => (ingredient.usageCount ?? 0) === 0);
-    const inStock = ingredients.filter((ingredient) => {
-      const id = Number(ingredient.id ?? -1);
-      return id >= 0 && availableIngredientIds.has(id);
-    });
+  const sections = useMemo(() => createSections(ingredients, availableIngredientIds), [ingredients, availableIngredientIds]);
+  const tabs: UnderlineTab[] = useMemo(() => Object.values(sections).map(({ key, label }) => ({ key, label })), [sections]);
+  const activeSection = sections[activeTab] ?? sections.all;
 
-    return {
-      all: {
-        key: 'all',
-        label: 'All',
-        heading: 'Inventory at a glance',
-        description: 'Keep an eye on bottles, modifiers and prep essentials across the bar.',
-        data: ingredients,
-      },
-      my: {
-        key: 'my',
-        label: 'My',
-        heading: "What's on your rail",
-        description: 'Frequently used bottles and everyday essentials curated for fast service.',
-        data: inStock,
-      },
-      shopping: {
-        key: 'shopping',
-        label: 'Shopping',
-        heading: 'Restock list',
-        description: 'Ingredients that need attention before the next service or prep run.',
-        data: needsRestock.length > 0 ? needsRestock : ingredients.slice(-12),
-      },
-    } satisfies Record<string, IngredientSection>;
-  }, [ingredients, availableIngredientIds]);
-
-  const tabItems: TabItem[] = useMemo(() => Object.values(sections).map(({ key, label }) => ({ key, label })), [sections]);
-
-  const activeSection = useMemo(() => sections[activeTab] ?? sections.all, [sections, activeTab]);
-
-  const filteredIngredients = useMemo(() => {
-    const base = activeSection.data;
-    if (!query.trim()) {
-      return base;
+  const filtered = useMemo(() => {
+    let base = activeSection.data;
+    if (restockOnly) {
+      base = base.filter((ingredient) => (ingredient.usageCount ?? 0) === 0);
     }
-    const safeQuery = query.trim().toLowerCase();
-    return base.filter((ingredient) => ingredient.name.toLowerCase().includes(safeQuery));
-  }, [activeSection.data, query]);
+    if (query.trim()) {
+      const safe = query.trim().toLowerCase();
+      base = base.filter((ingredient) => ingredient.name.toLowerCase().includes(safe));
+    }
+    return base;
+  }, [activeSection.data, query, restockOnly]);
+
+  const handleToggle = (id: number) => {
+    if (Number.isFinite(id)) {
+      toggleIngredientAvailability(id);
+    }
+  };
 
   return (
-    <ThemedView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-        <View style={styles.header}>
-          <ThemedText type="title">Ingredients</ThemedText>
-          <ThemedText style={styles.subtitle}>
-            Track your inventory, prep list and shopping runs without leaving the rail.
-          </ThemedText>
-        </View>
+    <Screen>
+      <View style={styles.flex1}>
+        <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
+          <SearchHeader
+            query={query}
+            onQueryChange={setQuery}
+            placeholder="Search ingredients"
+            onPressMenu={() => {}}
+            onPressFilter={() => setRestockOnly((prev) => !prev)}
+            filterActive={restockOnly}
+          />
 
-        <SearchBar placeholder="Search ingredients" value={query} onChange={setQuery} trailingActionLabel="filter" />
+          <View style={styles.headerBlock}>
+            <ThemedText type="title">Ingredients</ThemedText>
+            <ThemedText style={[styles.subtitle, { color: colors.mutedText }]}>
+              Manage your back bar, prep list and shopping runs without leaving the rail.
+            </ThemedText>
+          </View>
 
-        <MD3TopTabs tabs={tabItems} activeKey={activeTab} onTabChange={setActiveTab} />
+          <UnderlineTabs tabs={tabs} activeKey={activeTab} onChange={setActiveTab} />
 
-        <View style={styles.sectionIntro}>
-          <ThemedText type="subtitle">{activeSection.heading}</ThemedText>
-          <ThemedText style={styles.sectionDescription}>{activeSection.description}</ThemedText>
-        </View>
+          <View style={styles.sectionIntro}>
+            <ThemedText type="subtitle">{activeSection.heading}</ThemedText>
+            <ThemedText style={[styles.sectionDescription, { color: colors.mutedText }]}>
+              {activeSection.description}
+            </ThemedText>
+          </View>
 
-        {filteredIngredients.length > 0 ? (
-          filteredIngredients.map((ingredient) => {
-            const id = Number(ingredient.id ?? -1);
-            const isAvailable = id >= 0 && availableIngredientIds.has(id);
-
-            const handleToggle = () => {
-              if (id >= 0) {
-                toggleIngredientAvailability(id);
+          {filtered.length > 0 ? (
+            filtered.map((ingredient) => {
+              const id = Number(ingredient.id ?? -1);
+              const isAvailable = id >= 0 && availableIngredientIds.has(id);
+              return (
+                <IngredientCard
+                  key={String(ingredient.id ?? ingredient.name)}
+                  ingredient={ingredient}
+                  isAvailable={isAvailable}
+                  onToggle={() => handleToggle(id)}
+                  colors={colors}
+                />
+              );
+            })
+          ) : (
+            <EmptyInventoryMessage
+              message={
+                activeSection.key === 'shopping'
+                  ? 'Everything is stocked. Time to shake!'
+                  : 'Add bottles or mark stock levels to populate your list.'
               }
-            };
-
-            return (
-              <IngredientRow
-                key={String(ingredient.id ?? ingredient.name)}
-                ingredient={ingredient}
-                isAvailable={isAvailable}
-                onToggle={handleToggle}
-              />
-            );
-          })
-        ) : activeSection.key === 'my' ? (
-          <EmptyState message="Mark an ingredient as in stock to see it here." />
-        ) : (
-          <EmptyState message="Everything is stocked. Time to shake!" />
-        )}
-      </ScrollView>
-    </ThemedView>
+            />
+          )}
+        </ScrollView>
+        <PlatformPressable
+          accessibilityRole="button"
+          android_ripple={{ color: '#4DABF744' }}
+          style={({ pressed }) => [
+            styles.fab,
+            {
+              backgroundColor: colors.primaryContainer,
+              opacity: pressed ? 0.9 : 1,
+            },
+          ]}
+          onPress={() => {}}>
+          <MaterialIcons name="add" size={28} color={colors.primary} />
+        </PlatformPressable>
+      </View>
+    </Screen>
   );
 }
 
-function IngredientRow({
+function createSections(ingredients: Ingredient[], available: Set<number>) {
+  const needsRestock = ingredients.filter((ingredient) => (ingredient.usageCount ?? 0) === 0);
+  const inStock = ingredients.filter((ingredient) => available.has(Number(ingredient.id ?? -1)));
+
+  return {
+    all: {
+      key: 'all',
+      label: 'All',
+      heading: 'Inventory at a glance',
+      description: 'Keep tabs on spirits, modifiers and prep essentials across the bar.',
+      data: ingredients,
+    },
+    my: {
+      key: 'my',
+      label: 'My',
+      heading: "What's on your rail",
+      description: 'Frequently pulled bottles and everyday workhorses ready for service.',
+      data: inStock,
+    },
+    shopping: {
+      key: 'shopping',
+      label: 'Shopping',
+      heading: 'Restock list',
+      description: 'Flag bottles and batches to pick up before the next shift.',
+      data: needsRestock.length > 0 ? needsRestock : ingredients.slice(-12),
+    },
+  } satisfies Record<string, { key: string; label: string; heading: string; description: string; data: Ingredient[] }>;
+}
+
+
+function IngredientCard({
   ingredient,
   isAvailable,
   onToggle,
+  colors,
 }: {
   ingredient: Ingredient;
   isAvailable: boolean;
   onToggle: () => void;
+  colors: typeof Colors['light'];
 }) {
-  const description = ingredient.description?.trim();
   const tag = ingredient.tags?.[0];
-  const usageCount = ingredient.usageCount ?? 0;
-  const usageLabel = usageCount > 0 ? `${usageCount} cocktail${usageCount === 1 ? '' : 's'}` : 'No cocktails yet';
-  const badgeColor = tag?.color ?? '#C5CAE9';
-  const initials = ingredient.name
-    .split(' ')
-    .slice(0, 2)
-    .map((part) => part[0])
-    .join('')
-    .toUpperCase();
-
-  const lightColor = isAvailable ? 'rgba(10,126,164,0.16)' : 'rgba(10,126,164,0.05)';
-  const darkColor = isAvailable ? 'rgba(10,126,164,0.22)' : 'rgba(255,255,255,0.05)';
+  const badgeColor = tag?.color ?? colors.primary;
+  const usage = ingredient.usageCount ?? 0;
+  const usageLabel = usage > 0 ? `${usage} cocktail${usage === 1 ? '' : 's'}` : 'No cocktails yet';
+  const background = (badgeColor ?? colors.primary) + '22';
 
   return (
-    <Pressable accessibilityRole="checkbox" accessibilityState={{ checked: isAvailable }} onPress={onToggle}>
-      <ThemedView lightColor={lightColor} darkColor={darkColor} style={styles.row}>
-        <View style={[styles.thumbnail, { backgroundColor: `${badgeColor}22` }]}>
-          <ThemedText style={[styles.thumbnailLabel, { color: badgeColor }]}>{initials}</ThemedText>
+    <PlatformPressable
+      accessibilityRole="button"
+      onPress={onToggle}
+      android_ripple={{ color: '#74C0FC55' }}
+      style={({ pressed }) => [
+        styles.card,
+        {
+          backgroundColor: isAvailable ? 'rgba(116,192,252,0.18)' : colors.surface,
+          borderColor: colors.outline,
+          opacity: pressed ? 0.92 : 1,
+        },
+      ]}>
+      <View style={[styles.thumbnail, { backgroundColor: background }]}>
+        <ThemedText style={styles.thumbnailLabel}>{getInitials(ingredient.name)}</ThemedText>
+      </View>
+      <View style={styles.cardContent}>
+        <ThemedText type="subtitle" numberOfLines={1}>
+          {ingredient.name}
+        </ThemedText>
+        <ThemedText style={[styles.cardSecondary, { color: colors.mutedText }]} numberOfLines={1}>
+          {usageLabel}
+        </ThemedText>
+        <ThemedText style={[styles.cardMeta, { color: colors.mutedText }]} numberOfLines={1}>
+          {(ingredient.description ?? '').slice(0, 72) || 'No tasting notes yet.'}
+        </ThemedText>
+      </View>
+      <View style={styles.cardMetaColumn}>
+        <Badge label={isAvailable ? 'In stock' : 'Track'} tone={isAvailable ? 'success' : 'neutral'} />
+        <View style={[styles.switch, { borderColor: badgeColor }]}>
+          <View
+            style={[
+              styles.switchThumb,
+              {
+                backgroundColor: isAvailable ? badgeColor : 'transparent',
+              },
+            ]}
+          />
         </View>
-        <View style={styles.rowText}>
-          <ThemedText type="subtitle" style={styles.rowTitle} numberOfLines={1}>
-            {ingredient.name}
-          </ThemedText>
-          <ThemedText style={styles.rowDetail} numberOfLines={1}>
-            {usageLabel}
-          </ThemedText>
-          {description ? (
-            <ThemedText style={styles.rowDescription} numberOfLines={1}>
-              {description}
-            </ThemedText>
-          ) : null}
-        </View>
-        <View style={styles.rowMeta}>
-          <View style={[styles.tagDot, { backgroundColor: badgeColor }]} />
-          <View style={[styles.checkbox, { borderColor: badgeColor }]}>
-            {isAvailable ? <View style={[styles.checkboxFill, { backgroundColor: badgeColor }]} /> : null}
-          </View>
-        </View>
-      </ThemedView>
-    </Pressable>
+      </View>
+    </PlatformPressable>
   );
 }
 
-function EmptyState({ message }: { message: string }) {
+function EmptyInventoryMessage({ message }: { message: string }) {
+  const scheme = useColorScheme() ?? 'light';
+  const colors = Colors[scheme];
   return (
-    <ThemedView
-      lightColor="rgba(10,126,164,0.05)"
-      darkColor="rgba(255,255,255,0.04)"
-      style={[styles.row, styles.emptyState]}>
-      <ThemedText style={styles.emptyTitle}>All clear</ThemedText>
-      <ThemedText style={styles.rowDetail}>{message}</ThemedText>
-    </ThemedView>
+    <View style={[styles.emptyState, { borderColor: colors.outline }]}>
+      <ThemedText type="subtitle">Nothing tracked yet</ThemedText>
+      <ThemedText style={[styles.emptyHint, { color: colors.mutedText }]}>{message}</ThemedText>
+    </View>
   );
+}
+
+function getInitials(name: string) {
+  return name
+    .split(' ')
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0] ?? '')
+    .join('')
+    .toUpperCase();
 }
 
 const styles = StyleSheet.create({
-  container: {
+  flex1: {
     flex: 1,
-    paddingTop: 32,
-    paddingHorizontal: 20,
   },
-  scrollContent: {
-    paddingBottom: 120,
-    gap: 20,
+  scroll: {
+    paddingBottom: 140,
+    gap: 16,
   },
-  header: {
-    gap: 8,
+  headerBlock: {
+    gap: 6,
+    paddingTop: 4,
   },
   subtitle: {
-    fontSize: 16,
-    lineHeight: 24,
-    opacity: 0.8,
+    fontSize: 15,
+    lineHeight: 22,
   },
   sectionIntro: {
-    gap: 8,
+    gap: 6,
+    paddingTop: 4,
   },
   sectionDescription: {
-    fontSize: 16,
-    lineHeight: 24,
-    opacity: 0.8,
-  },
-  row: {
-    flexDirection: 'row',
-    borderRadius: 16,
-    padding: 16,
-    gap: 14,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  rowText: {
-    flex: 1,
-    gap: 4,
-  },
-  rowTitle: {
-    letterSpacing: 0.2,
-    fontSize: 17,
-  },
-  rowDetail: {
     fontSize: 14,
     lineHeight: 20,
-    opacity: 0.7,
   },
-  rowDescription: {
-    fontSize: 13,
-    lineHeight: 18,
-    opacity: 0.7,
-  },
-  emptyState: {
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-  },
-  emptyTitle: {
-    fontSize: 18,
-    fontWeight: '600',
+  card: {
+    borderRadius: 24,
+    borderWidth: 1,
+    padding: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 16,
   },
   thumbnail: {
     width: 48,
     height: 48,
-    borderRadius: 12,
+    borderRadius: 18,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -252,26 +268,56 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
-  rowMeta: {
+  cardContent: {
+    flex: 1,
+    gap: 6,
+  },
+  cardSecondary: {
+    fontSize: 13,
+    lineHeight: 18,
+  },
+  cardMeta: {
+    fontSize: 12,
+    lineHeight: 18,
+  },
+  cardMetaColumn: {
     alignItems: 'flex-end',
-    gap: 12,
+    gap: 8,
   },
-  tagDot: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
-  },
-  checkbox: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
+  switch: {
+    width: 40,
+    height: 22,
+    borderRadius: 16,
     borderWidth: 2,
-    alignItems: 'center',
+    padding: 2,
     justifyContent: 'center',
   },
-  checkboxFill: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
+  switchThumb: {
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+  },
+  emptyState: {
+    borderWidth: 1,
+    borderRadius: 20,
+    padding: 24,
+    alignItems: 'center',
+    gap: 8,
+  },
+  emptyHint: {
+    fontSize: 14,
+    lineHeight: 20,
+    textAlign: 'center',
+  },
+  fab: {
+    position: 'absolute',
+    right: 20,
+    bottom: 24,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 4,
   },
 });

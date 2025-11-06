@@ -1,12 +1,12 @@
 import { Tabs } from 'expo-router';
-import React, { useMemo } from 'react';
+import React from 'react';
 import { StyleSheet } from 'react-native';
 import { Image } from 'expo-image';
 import type { ImageSource } from 'expo-image';
 
-import { HapticTab } from '@/components/haptic-tab';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import { PastelTabBar } from '@/components/ui/pastel-tab-bar';
 
 import cocktailsIcon from '@/assets/images/cocktails.svg';
 import shakerIcon from '@/assets/images/shaker.svg';
@@ -29,22 +29,6 @@ const TabImageIcon = ({ color, size = 24, source }: TabIconProps) => (
 export default function TabLayout() {
   const colorScheme = useColorScheme();
 
-  const { surface, border, activeBackground } = useMemo(() => {
-    if (colorScheme === 'dark') {
-      return {
-        surface: '#1F1B24',
-        border: 'rgba(255,255,255,0.08)',
-        activeBackground: 'rgba(10,126,164,0.24)',
-      };
-    }
-
-    return {
-      surface: '#F7F2FA',
-      border: 'rgba(17,24,28,0.08)',
-      activeBackground: 'rgba(10,126,164,0.12)',
-    };
-  }, [colorScheme]);
-
   const tint = Colors[colorScheme ?? 'light'].tint;
   const inactiveTint = Colors[colorScheme ?? 'light'].tabIconDefault;
 
@@ -53,16 +37,11 @@ export default function TabLayout() {
       initialRouteName="cocktails"
       screenOptions={{
         headerShown: false,
-        tabBarButton: HapticTab,
         tabBarActiveTintColor: tint,
         tabBarInactiveTintColor: inactiveTint,
-        tabBarActiveBackgroundColor: activeBackground,
-        tabBarLabelStyle: styles.tabLabel,
-        tabBarItemStyle: styles.tabItem,
-        tabBarIconStyle: styles.tabIcon,
         tabBarHideOnKeyboard: true,
-        tabBarStyle: [styles.tabBar, { backgroundColor: surface, borderColor: border }],
         sceneContainerStyle: styles.scene,
+        tabBar: (props) => <PastelTabBar {...props} />,
       }}>
       <Tabs.Screen
         name="cocktails"
@@ -96,29 +75,6 @@ export default function TabLayout() {
 }
 
 const styles = StyleSheet.create({
-  tabBar: {
-    position: 'absolute',
-    left: 16,
-    right: 16,
-    bottom: 16,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 28,
-    borderWidth: 1,
-    height: 80,
-    elevation: 0,
-    shadowOpacity: 0,
-  },
-  tabLabel: {
-    fontSize: 12,
-    fontWeight: '600',
-  },
-  tabItem: {
-    borderRadius: 20,
-  },
-  tabIcon: {
-    marginBottom: -2,
-  },
   scene: {
     backgroundColor: 'transparent',
   },
