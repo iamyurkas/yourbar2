@@ -8,6 +8,7 @@ import { CocktailListRow } from '@/components/CocktailListRow';
 import { CollectionHeader } from '@/components/CollectionHeader';
 import type { SegmentTabOption } from '@/components/TopBars';
 import { Colors } from '@/constants/theme';
+import { TagFilterModal, type TagFilterOption } from '@/components/TagFilterModal';
 import { useInventory, type Cocktail } from '@/providers/inventory-provider';
 
 type CocktailSection = {
@@ -28,6 +29,8 @@ export default function CocktailsScreen() {
   const { cocktails, availableIngredientIds } = useInventory();
   const [activeTab, setActiveTab] = useState<CocktailTabKey>('all');
   const [query, setQuery] = useState('');
+  const [isFilterVisible, setFilterVisible] = useState(false);
+  const [selectedTagId, setSelectedTagId] = useState<number | undefined>();
   const paletteColors = Colors;
   const router = useRouter();
 
@@ -59,6 +62,39 @@ export default function CocktailsScreen() {
     });
   }, [cocktails]);
 
+  const tagOptions = useMemo<TagFilterOption[]>(() => {
+    const map = new Map<number, TagFilterOption>();
+    cocktails.forEach((cocktail) => {
+      (cocktail.tags ?? []).forEach((tag) => {
+        if (!tag) {
+          return;
+        }
+        const idRaw = tag.id;
+        if (idRaw == null) {
+          return;
+        }
+        const id = Number(idRaw);
+        if (!Number.isFinite(id)) {
+          return;
+        }
+        if (map.has(id)) {
+          return;
+        }
+        map.set(id, {
+          id,
+          name: tag.name ?? `Tag ${id}`,
+          color: tag.color ?? paletteColors.tint,
+        });
+      });
+    });
+    return Array.from(map.values());
+  }, [cocktails, paletteColors.tint]);
+
+  const selectedTag = useMemo(() => tagOptions.find((tag) => tag.id === selectedTagId), [
+    tagOptions,
+    selectedTagId,
+  ]);
+
   const sections = useMemo<Record<CocktailTabKey, CocktailSection>>(() => {
     return {
       all: { key: 'all', label: 'All', data: cocktails },
@@ -80,7 +116,18 @@ export default function CocktailsScreen() {
   }, [query]);
 
   const filteredCocktails = useMemo(() => {
-    const base = activeSection.data;
+    const base = selectedTagId
+      ? activeSection.data.filter((cocktail) =>
+          (cocktail.tags ?? []).some((tag) => {
+            const idRaw = tag?.id;
+            if (idRaw == null) {
+              return false;
+            }
+            const id = Number(idRaw);
+            return Number.isFinite(id) && id === selectedTagId;
+          }),
+        )
+      : activeSection.data;
     if (!normalizedQuery.text) {
       return base;
     }
@@ -98,7 +145,7 @@ export default function CocktailsScreen() {
           cocktail.searchNameNormalized.includes(token),
       ),
     );
-  }, [activeSection.data, normalizedQuery]);
+  }, [activeSection.data, normalizedQuery, selectedTagId]);
 
   const separatorColor = paletteColors.outline;
 
@@ -132,6 +179,23 @@ export default function CocktailsScreen() {
     [separatorColor],
   );
 
+  const handleCloseFilter = useCallback(() => {
+    setFilterVisible(false);
+  }, []);
+
+  const handleSelectTag = useCallback(
+    (tagId?: number) => {
+      setSelectedTagId((previous) => {
+        if (previous === tagId || tagId == null) {
+          return undefined;
+        }
+        return tagId;
+      });
+      setFilterVisible(false);
+    },
+    [],
+  );
+
   return (
     <SafeAreaView
       style={[styles.safeArea, { backgroundColor: paletteColors.background }]}
@@ -144,6 +208,8 @@ export default function CocktailsScreen() {
           tabs={TAB_OPTIONS}
           activeTab={activeTab}
           onTabChange={setActiveTab}
+          onFilterPress={() => setFilterVisible(true)}
+          filterColor={selectedTag?.color}
         />
         <FlatList
           data={filteredCocktails}
@@ -157,6 +223,13 @@ export default function CocktailsScreen() {
           }
         />
       </View>
+      <TagFilterModal
+        visible={isFilterVisible}
+        onClose={handleCloseFilter}
+        onSelect={handleSelectTag}
+        tags={tagOptions}
+        selectedTagId={selectedTagId}
+      />
       <FabAdd label="Add cocktail" />
     </SafeAreaView>
   );

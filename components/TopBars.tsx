@@ -19,6 +19,7 @@ type SearchTopBarProps = {
   onSubmit?: (value: string) => void;
   onMenuPress?: () => void;
   onFilterPress?: () => void;
+  filterColor?: string;
 };
 
 export type SegmentTabOption = {
@@ -39,6 +40,7 @@ export function SearchTopBar({
   onSubmit,
   onMenuPress,
   onFilterPress,
+  filterColor,
 }: SearchTopBarProps) {
   const palette = Colors;
 
@@ -89,7 +91,11 @@ export function SearchTopBar({
         accessibilityLabel="Filter items"
         onPress={onFilterPress}
         style={styles.iconButton}>
-        <MaterialCommunityIcons name="filter-variant" size={24} color={palette.icon} />
+        <MaterialCommunityIcons
+          name="filter-variant"
+          size={24}
+          color={filterColor ?? palette.icon}
+        />
       </Pressable>
     </View>
   );

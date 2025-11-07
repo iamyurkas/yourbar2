@@ -6,6 +6,7 @@ import { FabAdd } from '@/components/FabAdd';
 import { ListRow, PresenceCheck, Thumb } from '@/components/RowParts';
 import { CollectionHeader } from '@/components/CollectionHeader';
 import type { SegmentTabOption } from '@/components/TopBars';
+import { TagFilterModal, type TagFilterOption } from '@/components/TagFilterModal';
 import { Colors } from '@/constants/theme';
 import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
 import { palette } from '@/theme/theme';
@@ -115,11 +116,43 @@ export default function IngredientsScreen() {
   } = useInventory();
   const [activeTab, setActiveTab] = useState<IngredientTabKey>('all');
   const [query, setQuery] = useState('');
+  const [isFilterVisible, setFilterVisible] = useState(false);
+  const [selectedTagId, setSelectedTagId] = useState<number | undefined>();
   const [optimisticAvailability, setOptimisticAvailability] = useState<Map<number, boolean>>(
     () => new Map(),
   );
   const [, startAvailabilityTransition] = useTransition();
   const paletteColors = Colors;
+
+  const tagOptions = useMemo<TagFilterOption[]>(() => {
+    const map = new Map<number, TagFilterOption>();
+    ingredients.forEach((ingredient) => {
+      (ingredient.tags ?? []).forEach((tag) => {
+        if (!tag) {
+          return;
+        }
+        const idRaw = tag.id;
+        if (idRaw == null) {
+          return;
+        }
+        const id = Number(idRaw);
+        if (!Number.isFinite(id) || map.has(id)) {
+          return;
+        }
+        map.set(id, {
+          id,
+          name: tag.name ?? `Tag ${id}`,
+          color: tag.color ?? paletteColors.tint,
+        });
+      });
+    });
+    return Array.from(map.values());
+  }, [ingredients, paletteColors.tint]);
+
+  const selectedTag = useMemo(() => tagOptions.find((tag) => tag.id === selectedTagId), [
+    tagOptions,
+    selectedTagId,
+  ]);
 
   const ingredientById = useMemo(() => {
     const map = new Map<number, Ingredient>();
@@ -365,7 +398,18 @@ export default function IngredientsScreen() {
   }, [query]);
 
   const filteredIngredients = useMemo(() => {
-    const base = activeSection.data;
+    const base = selectedTagId
+      ? activeSection.data.filter((ingredient) =>
+          (ingredient.tags ?? []).some((tag) => {
+            const idRaw = tag?.id;
+            if (idRaw == null) {
+              return false;
+            }
+            const id = Number(idRaw);
+            return Number.isFinite(id) && id === selectedTagId;
+          }),
+        )
+      : activeSection.data;
     if (!normalizedQuery.text) {
       return base;
     }
@@ -383,7 +427,7 @@ export default function IngredientsScreen() {
           ingredient.searchNameNormalized.includes(token),
       ),
     );
-  }, [activeSection.data, normalizedQuery]);
+  }, [activeSection.data, normalizedQuery, selectedTagId]);
 
   const highlightColor = palette.highlightSubtle;
   const separatorColor = paletteColors.outline;
@@ -499,6 +543,23 @@ export default function IngredientsScreen() {
     [separatorColor],
   );
 
+  const handleCloseFilter = useCallback(() => {
+    setFilterVisible(false);
+  }, []);
+
+  const handleSelectTag = useCallback(
+    (tagId?: number) => {
+      setSelectedTagId((previous) => {
+        if (previous === tagId || tagId == null) {
+          return undefined;
+        }
+        return tagId;
+      });
+      setFilterVisible(false);
+    },
+    [],
+  );
+
   return (
     <SafeAreaView
       style={[styles.safeArea, { backgroundColor: paletteColors.background }]}
@@ -511,6 +572,8 @@ export default function IngredientsScreen() {
           tabs={TAB_OPTIONS}
           activeTab={activeTab}
           onTabChange={setActiveTab}
+          onFilterPress={() => setFilterVisible(true)}
+          filterColor={selectedTag?.color}
         />
         <FlatList
           data={filteredIngredients}
@@ -524,6 +587,13 @@ export default function IngredientsScreen() {
           }
         />
       </View>
+      <TagFilterModal
+        visible={isFilterVisible}
+        onClose={handleCloseFilter}
+        onSelect={handleSelectTag}
+        tags={tagOptions}
+        selectedTagId={selectedTagId}
+      />
       <FabAdd label="Add ingredient" />
     </SafeAreaView>
   );
