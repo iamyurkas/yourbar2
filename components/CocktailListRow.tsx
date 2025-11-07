@@ -123,25 +123,25 @@ const CocktailListRowComponent = ({
       return null;
     }
 
-    const stars = Array.from({ length: MAX_RATING }, (_, index) => index < ratingValue);
+    const totalStars = Math.max(0, Math.min(MAX_RATING, Math.round(ratingValue)));
+
     return (
-      <View style={styles.starsRow}>
-        {stars.map((active, index) => (
-          <View
-            key={`star-${index}`}
-            style={[styles.star, active ? styles.starActive : styles.starInactive]}
-          >
-            <MaterialCommunityIcons
-              name="star"
-              size={8}
-              color={active ? paletteColors.tint : 'transparent'}
-              style={styles.starIcon}
-            />
-          </View>
+      <View
+        style={[
+          styles.ratingOverlay,
+          { backgroundColor: `${paletteColors.surfaceVariant}F2`, borderColor: paletteColors.outline },
+        ]}>
+        {Array.from({ length: totalStars }).map((_, index) => (
+          <MaterialCommunityIcons
+            key={`rating-icon-${index}`}
+            name="star"
+            size={12}
+            color={paletteColors.tint}
+          />
         ))}
       </View>
     );
-  }, [paletteColors.tint, ratingValue]);
+  }, [paletteColors.outline, paletteColors.surfaceVariant, paletteColors.tint, ratingValue]);
 
   const tagDots = useMemo(() => {
     const tags = cocktail.tags ?? [];
@@ -177,9 +177,9 @@ const CocktailListRowComponent = ({
       </View>
       <View style={styles.metaColumn}>
         {tagDots}
-        {ratingStars}
         {control}
       </View>
+      {ratingStars}
     </Pressable>
   );
 };
@@ -194,6 +194,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     gap: 16,
     minHeight: 76,
+    position: 'relative',
   },
   thumbSlot: {
     width: 56,
@@ -222,21 +223,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 4,
   },
-  starsRow: {
+  ratingOverlay: {
+    position: 'absolute',
+    right: 16,
+    bottom: 8,
     flexDirection: 'row',
+    alignItems: 'center',
     gap: 2,
-    alignItems: 'center',
+    borderRadius: 999,
+    paddingVertical: 2,
+    paddingHorizontal: 6,
+    borderWidth: StyleSheet.hairlineWidth,
   },
-  star: {
-    width: 8,
-    height: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  starIcon: {
-    transform: [{ scale: 0.5 }],
-  },
-  starActive: {},
-  starInactive: {},
 });
 
