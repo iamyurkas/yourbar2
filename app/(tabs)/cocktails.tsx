@@ -53,7 +53,7 @@ export default function CocktailsScreen() {
     });
   }, [cocktails, availableIngredientIds]);
 
-  const favoriteCandidates = useMemo(() => {
+  const taggedFavorites = useMemo(() => {
     return cocktails.filter((cocktail) =>
       (cocktail.tags ?? []).some((tag) =>
         /signature|house|favorite|favourite|classic/i.test(tag.name ?? ''),
@@ -61,7 +61,44 @@ export default function CocktailsScreen() {
     );
   }, [cocktails]);
 
-  const favoriteIds = useMemo(() => new Set(favoriteCandidates.map((item) => item.id)), [favoriteCandidates]);
+  const ratedCocktails = useMemo(() => {
+    return cocktails.filter((cocktail) => {
+      const ratingValueRaw = (cocktail as { userRating?: number }).userRating ?? 0;
+      const ratingValue = Number(ratingValueRaw);
+      return Number.isFinite(ratingValue) && ratingValue > 0;
+    });
+  }, [cocktails]);
+
+  const favoriteCandidates = useMemo(() => {
+    const map = new Map<string, Cocktail>();
+
+    const addCandidate = (item: Cocktail) => {
+      const identifier = item.id != null ? String(item.id) : item.name;
+      if (!identifier) {
+        return;
+      }
+
+      if (!map.has(identifier)) {
+        map.set(identifier, item);
+      }
+    };
+
+    taggedFavorites.forEach(addCandidate);
+    ratedCocktails.forEach(addCandidate);
+
+    return Array.from(map.values());
+  }, [ratedCocktails, taggedFavorites]);
+
+  const favoriteIds = useMemo(() => {
+    const ids = new Set<string>();
+    favoriteCandidates.forEach((item) => {
+      const identifier = item.id != null ? String(item.id) : item.name;
+      if (identifier) {
+        ids.add(identifier);
+      }
+    });
+    return ids;
+  }, [favoriteCandidates]);
 
   const sections = useMemo<Record<CocktailTabKey, CocktailSection>>(() => {
     return {
@@ -126,7 +163,9 @@ export default function CocktailsScreen() {
         cocktail={item}
         availableIngredientIds={availableIngredientIds}
         onPress={() => handleSelectCocktail(item)}
-        control={<FavoriteStar active={favoriteIds.has(item.id)} />}
+        control={
+          <FavoriteStar active={favoriteIds.has(String(item.id ?? item.name ?? ''))} />
+        }
       />
     ),
     [availableIngredientIds, favoriteIds, handleSelectCocktail],

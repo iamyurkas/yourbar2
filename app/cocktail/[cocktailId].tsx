@@ -147,7 +147,7 @@ function formatGlassLabel(glassId?: string | null) {
 export default function CocktailDetailsScreen() {
   const palette = Colors;
   const { cocktailId } = useLocalSearchParams<{ cocktailId?: string }>();
-  const { cocktails, ingredients, availableIngredientIds } = useInventory();
+  const { cocktails, ingredients, availableIngredientIds, setCocktailRating } = useInventory();
 
   const resolvedParam = Array.isArray(cocktailId) ? cocktailId[0] : cocktailId;
   const cocktail = useMemo(
@@ -189,9 +189,21 @@ export default function CocktailDetailsScreen() {
     setUserRating(initialRating);
   }, [initialRating]);
 
-  const handleRatingSelect = useCallback((value: number) => {
-    setUserRating((current) => (current === value ? 0 : value));
-  }, []);
+  const handleRatingSelect = useCallback(
+    (value: number) => {
+      setUserRating((current) => {
+        const nextValue = current === value ? 0 : value;
+        if (cocktail) {
+          const identifier = cocktail.id ?? cocktail.name;
+          if (identifier != null) {
+            setCocktailRating(identifier, nextValue);
+          }
+        }
+        return nextValue;
+      });
+    },
+    [cocktail, setCocktailRating],
+  );
 
   const instructionsParagraphs = useMemo(() => {
     const instructions = cocktail?.instructions?.trim();
