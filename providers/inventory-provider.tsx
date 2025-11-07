@@ -1,4 +1,14 @@
-import React, { createContext, useCallback, useContext, useMemo, useState } from 'react';
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+
+import { loadInventorySnapshot, persistInventorySnapshot } from '@/libs/inventory-storage';
 
 type InventoryData = typeof import('@/assets/data/data.json');
 
@@ -9,7 +19,7 @@ function loadInventoryData(): InventoryData {
     cachedInventoryData = require('@/assets/data/data.json');
   }
 
-  return cachedInventoryData;
+  return cachedInventoryData!;
 }
 
 type CocktailRecord = InventoryData['cocktails'][number];
@@ -44,6 +54,15 @@ type InventoryState = {
   imported: boolean;
 };
 
+type InventorySnapshot = {
+  version: number;
+  cocktails: Cocktail[];
+  ingredients: Ingredient[];
+  imported?: boolean;
+};
+
+const INVENTORY_SNAPSHOT_VERSION = 1;
+
 declare global {
   // eslint-disable-next-line no-var
   var __yourbarInventory: InventoryState | undefined;
@@ -70,17 +89,29 @@ function normalizeSearchFields<T extends { name?: string | null; searchName?: st
   });
 }
 
-function ensureInventoryState(): InventoryState {
-  if (!globalThis.__yourbarInventory) {
-    const data = loadInventoryData();
-    globalThis.__yourbarInventory = {
-      cocktails: normalizeSearchFields(data.cocktails),
-      ingredients: normalizeSearchFields(data.ingredients),
-      imported: true,
-    } satisfies InventoryState;
-  }
+function createInventoryStateFromData(data: InventoryData, imported: boolean): InventoryState {
+  return {
+    cocktails: normalizeSearchFields(data.cocktails) as Cocktail[],
+    ingredients: normalizeSearchFields(data.ingredients) as Ingredient[],
+    imported,
+  } satisfies InventoryState;
+}
 
-  return globalThis.__yourbarInventory;
+function createInventoryStateFromSnapshot(snapshot: InventorySnapshot): InventoryState {
+  return {
+    cocktails: normalizeSearchFields(snapshot.cocktails) as Cocktail[],
+    ingredients: normalizeSearchFields(snapshot.ingredients) as Ingredient[],
+    imported: Boolean(snapshot.imported),
+  } satisfies InventoryState;
+}
+
+function createSnapshotFromInventory(state: InventoryState): InventorySnapshot {
+  return {
+    version: INVENTORY_SNAPSHOT_VERSION,
+    cocktails: state.cocktails,
+    ingredients: state.ingredients,
+    imported: state.imported,
+  } satisfies InventorySnapshot;
 }
 
 const InventoryContext = createContext<InventoryContextValue | undefined>(undefined);
@@ -90,11 +121,76 @@ type InventoryProviderProps = {
 };
 
 export function InventoryProvider({ children }: InventoryProviderProps) {
-  const inventory = ensureInventoryState();
-  const [ingredientsState, setIngredientsState] = useState<Ingredient[]>(() => inventory.ingredients);
+  const [inventoryState, setInventoryState] = useState<InventoryState | undefined>(
+    () => globalThis.__yourbarInventory,
+  );
+  const [loading, setLoading] = useState<boolean>(() => !globalThis.__yourbarInventory);
   const [availableIngredientIds, setAvailableIngredientIds] = useState<Set<number>>(() => new Set());
   const [shoppingIngredientIds, setShoppingIngredientIds] = useState<Set<number>>(() => new Set());
   const [cocktailRatings, setCocktailRatings] = useState<Record<string, number>>({});
+  const lastPersistedSnapshot = useRef<string | undefined>(undefined);
+
+  useEffect(() => {
+    if (inventoryState) {
+      return;
+    }
+
+    let cancelled = false;
+    setLoading(true);
+
+    void (async () => {
+      try {
+        const stored = await loadInventorySnapshot<Cocktail, Ingredient>();
+        if (stored && stored.version === INVENTORY_SNAPSHOT_VERSION && !cancelled) {
+          setInventoryState(createInventoryStateFromSnapshot(stored));
+          return;
+        }
+      } catch (error) {
+        console.error('Failed to load inventory snapshot', error);
+      }
+
+      try {
+        const data = loadInventoryData();
+        if (!cancelled) {
+          setInventoryState(createInventoryStateFromData(data, true));
+        }
+      } catch (error) {
+        console.error('Failed to import bundled inventory', error);
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [inventoryState]);
+
+  useEffect(() => {
+    if (!inventoryState) {
+      return;
+    }
+
+    setLoading(false);
+    globalThis.__yourbarInventory = inventoryState;
+
+    const snapshot = createSnapshotFromInventory(inventoryState);
+    const serialized = JSON.stringify(snapshot);
+
+    if (lastPersistedSnapshot.current === serialized) {
+      return;
+    }
+
+    lastPersistedSnapshot.current = serialized;
+
+    void persistInventorySnapshot(snapshot).catch((error) => {
+      console.error('Failed to persist inventory snapshot', error);
+    });
+  }, [inventoryState]);
+
+  const cocktails = inventoryState?.cocktails ?? [];
+  const ingredients = inventoryState?.ingredients ?? [];
 
   const resolveCocktailKey = useCallback((cocktail: Cocktail) => {
     const id = cocktail.id;
@@ -157,7 +253,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   );
 
   const cocktailsWithRatings = useMemo(() => {
-    return inventory.cocktails.map((cocktail) => {
+    return cocktails.map((cocktail) => {
       const key = resolveCocktailKey(cocktail);
       if (!key) {
         return cocktail;
@@ -173,7 +269,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         userRating: rating,
       } satisfies Cocktail;
     });
-  }, [cocktailRatings, inventory.cocktails, resolveCocktailKey]);
+  }, [cocktailRatings, cocktails, resolveCocktailKey]);
 
   const setIngredientAvailability = useCallback((id: number, available: boolean) => {
     setAvailableIngredientIds((prev) => {
@@ -211,33 +307,37 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     });
   }, []);
 
-  const clearBaseIngredient = useCallback(
-    (id: number) => {
-      setIngredientsState((prev) => {
-        let didChange = false;
-        const next = prev.map((ingredient) => {
-          if (Number(ingredient.id ?? -1) === id && ingredient.baseIngredientId != null) {
-            didChange = true;
-            return { ...ingredient, baseIngredientId: undefined };
-          }
-          return ingredient;
-        });
+  const clearBaseIngredient = useCallback((id: number) => {
+    setInventoryState((prev) => {
+      if (!prev) {
+        return prev;
+      }
 
-        if (didChange) {
-          inventory.ingredients = next;
+      let didChange = false;
+      const nextIngredients = prev.ingredients.map((ingredient) => {
+        if (Number(ingredient.id ?? -1) === id && ingredient.baseIngredientId != null) {
+          didChange = true;
+          return { ...ingredient, baseIngredientId: undefined } satisfies Ingredient;
         }
-
-        return didChange ? next : prev;
+        return ingredient;
       });
-    },
-    [inventory],
-  );
+
+      if (!didChange) {
+        return prev;
+      }
+
+      return {
+        ...prev,
+        ingredients: nextIngredients,
+      } satisfies InventoryState;
+    });
+  }, []);
 
   const value = useMemo<InventoryContextValue>(() => {
     return {
       cocktails: cocktailsWithRatings,
-      ingredients: ingredientsState,
-      loading: false,
+      ingredients,
+      loading,
       availableIngredientIds,
       shoppingIngredientIds,
       setIngredientAvailability,
@@ -250,7 +350,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     };
   }, [
     cocktailsWithRatings,
-    ingredientsState,
+    ingredients,
+    loading,
     availableIngredientIds,
     shoppingIngredientIds,
     setIngredientAvailability,
