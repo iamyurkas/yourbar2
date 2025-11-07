@@ -19,6 +19,8 @@ type SearchTopBarProps = {
   onSubmit?: (value: string) => void;
   onMenuPress?: () => void;
   onFilterPress?: () => void;
+  filterButtonColor?: string;
+  filterHighlightColor?: string;
 };
 
 export type SegmentTabOption = {
@@ -39,12 +41,17 @@ export function SearchTopBar({
   onSubmit,
   onMenuPress,
   onFilterPress,
+  filterButtonColor,
+  filterHighlightColor,
 }: SearchTopBarProps) {
   const palette = Colors;
 
   const handleSubmit = (event: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
     onSubmit?.(event.nativeEvent.text);
   };
+
+  const isFilterActive = Boolean(filterButtonColor);
+  const filterIconColor = isFilterActive ? palette.onPrimary : palette.icon;
 
   return (
     <View
@@ -84,13 +91,32 @@ export function SearchTopBar({
           </Pressable>
         ) : null}
       </View>
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel="Filter items"
-        onPress={onFilterPress}
-        style={styles.iconButton}>
-        <MaterialCommunityIcons name="filter-variant" size={24} color={palette.icon} />
-      </Pressable>
+      <View
+        style={[
+          styles.filterWrapper,
+          filterHighlightColor
+            ? {
+                borderColor: filterHighlightColor,
+                borderWidth: 2,
+                padding: 2,
+              }
+            : { padding: 0 },
+        ]}>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Filter items"
+          onPress={onFilterPress}
+          style={[
+            styles.iconButton,
+            isFilterActive
+              ? {
+                  backgroundColor: filterButtonColor,
+                }
+              : null,
+          ]}>
+          <MaterialCommunityIcons name="filter-variant" size={24} color={filterIconColor} />
+        </Pressable>
+      </View>
     </View>
   );
 }
@@ -147,6 +173,11 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  filterWrapper: {
+    borderRadius: 4,
     alignItems: 'center',
     justifyContent: 'center',
   },

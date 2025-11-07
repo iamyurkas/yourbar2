@@ -10,6 +10,8 @@ type CollectionHeaderProps = {
   onSearchSubmit?: (value: string) => void;
   onMenuPress?: () => void;
   onFilterPress?: () => void;
+  filterButtonColor?: string;
+  filterHighlightColor?: string;
   tabs?: SegmentTabOption[];
   activeTab?: string;
   onTabChange?: (key: string) => void;
@@ -23,6 +25,8 @@ export function CollectionHeader({
   onSearchSubmit,
   onMenuPress,
   onFilterPress,
+  filterButtonColor,
+  filterHighlightColor,
   tabs,
   activeTab,
   onTabChange,
@@ -39,6 +43,8 @@ export function CollectionHeader({
         onSubmit={onSearchSubmit}
         onMenuPress={onMenuPress}
         onFilterPress={onFilterPress}
+        filterButtonColor={filterButtonColor}
+        filterHighlightColor={filterHighlightColor}
       />
       {shouldShowTabs && tabs ? (
         <SegmentTabs options={tabs} value={activeTab!} onChange={onTabChange!} />
