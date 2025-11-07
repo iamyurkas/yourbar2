@@ -30,7 +30,7 @@ type IngredientListItemProps = {
   highlightColor: string;
   availableIngredientIds: Set<number>;
   onToggle: (id: number) => void;
-  subtitle: string;
+  subtitle?: string;
   surfaceVariantColor?: string;
 };
 
@@ -400,15 +400,19 @@ export default function IngredientsScreen() {
       const ingredientId = Number(item.id ?? -1);
       const baseGroupId = ingredientId >= 0 ? getBaseGroupId(ingredientId) : undefined;
 
-      let subtitleText: string;
-      if (activeTab === 'my') {
-        const count = baseGroupId != null ? makeableCocktailCounts.get(baseGroupId) ?? 0 : 0;
-        const label = count === 1 ? 'cocktail' : 'cocktails';
-        subtitleText = `Make ${count} ${label}`;
-      } else {
-        const count = baseGroupId != null ? totalCocktailCounts.get(baseGroupId) ?? 0 : 0;
-        const label = count === 1 ? 'recipe' : 'recipes';
-        subtitleText = `${count} ${label}`;
+      const isMyTab = activeTab === 'my';
+      const countsMap = isMyTab ? makeableCocktailCounts : totalCocktailCounts;
+      const count = baseGroupId != null ? countsMap.get(baseGroupId) ?? 0 : 0;
+
+      let subtitleText: string | undefined;
+      if (count > 0) {
+        if (isMyTab) {
+          const label = count === 1 ? 'cocktail' : 'cocktails';
+          subtitleText = `Make ${count} ${label}`;
+        } else {
+          const label = count === 1 ? 'recipe' : 'recipes';
+          subtitleText = `${count} ${label}`;
+        }
       }
 
       return (
