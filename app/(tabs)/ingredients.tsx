@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useMemo, useState } from 'react';
+import React, { memo, useCallback, useEffect, useMemo, useState, useTransition } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -115,6 +115,10 @@ export default function IngredientsScreen() {
   } = useInventory();
   const [activeTab, setActiveTab] = useState<IngredientTabKey>('all');
   const [query, setQuery] = useState('');
+  const [optimisticAvailability, setOptimisticAvailability] = useState<Map<number, boolean>>(
+    () => new Map(),
+  );
+  const [, startAvailabilityTransition] = useTransition();
   const paletteColors = Colors;
 
   const ingredientById = useMemo(() => {
@@ -384,13 +388,64 @@ export default function IngredientsScreen() {
   const highlightColor = palette.highlightSubtle;
   const separatorColor = paletteColors.outline;
 
+  const effectiveAvailableIngredientIds = useMemo(() => {
+    if (optimisticAvailability.size === 0) {
+      return availableIngredientIds;
+    }
+
+    const next = new Set(availableIngredientIds);
+    optimisticAvailability.forEach((value, id) => {
+      if (value) {
+        next.add(id);
+      } else {
+        next.delete(id);
+      }
+    });
+
+    return next;
+  }, [availableIngredientIds, optimisticAvailability]);
+
+  useEffect(() => {
+    if (optimisticAvailability.size === 0) {
+      return;
+    }
+
+    setOptimisticAvailability((previous) => {
+      if (previous.size === 0) {
+        return previous;
+      }
+
+      let didChange = false;
+      const next = new Map(previous);
+      previous.forEach((value, id) => {
+        if (availableIngredientIds.has(id) === value) {
+          next.delete(id);
+          didChange = true;
+        }
+      });
+
+      return didChange ? next : previous;
+    });
+  }, [availableIngredientIds, optimisticAvailability]);
+
   const handleToggle = useCallback(
     (id: number) => {
       if (id >= 0) {
-        toggleIngredientAvailability(id);
+        setOptimisticAvailability((previous) => {
+          const next = new Map(previous);
+          const current = next.has(id)
+            ? next.get(id) ?? availableIngredientIds.has(id)
+            : availableIngredientIds.has(id);
+          next.set(id, !current);
+          return next;
+        });
+
+        startAvailabilityTransition(() => {
+          toggleIngredientAvailability(id);
+        });
       }
     },
-    [toggleIngredientAvailability],
+    [availableIngredientIds, startAvailabilityTransition, toggleIngredientAvailability],
   );
 
   const keyExtractor = useCallback((item: Ingredient) => String(item.id ?? item.name), []);
@@ -419,7 +474,7 @@ export default function IngredientsScreen() {
         <IngredientListItem
           ingredient={item}
           highlightColor={highlightColor}
-          availableIngredientIds={availableIngredientIds}
+          availableIngredientIds={effectiveAvailableIngredientIds}
           onToggle={handleToggle}
           subtitle={subtitleText}
           surfaceVariantColor={paletteColors.onSurfaceVariant ?? paletteColors.icon}
@@ -428,7 +483,7 @@ export default function IngredientsScreen() {
     },
     [
       activeTab,
-      availableIngredientIds,
+      effectiveAvailableIngredientIds,
       getBaseGroupId,
       handleToggle,
       highlightColor,
