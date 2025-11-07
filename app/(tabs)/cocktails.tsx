@@ -5,7 +5,6 @@ import { useRouter } from 'expo-router';
 
 import { FabAdd } from '@/components/FabAdd';
 import { CocktailListRow } from '@/components/CocktailListRow';
-import { FavoriteStar } from '@/components/RowParts';
 import { CollectionHeader } from '@/components/CollectionHeader';
 import type { SegmentTabOption } from '@/components/TopBars';
 import { Colors } from '@/constants/theme';
@@ -60,8 +59,6 @@ export default function CocktailsScreen() {
       ),
     );
   }, [cocktails]);
-
-  const favoriteIds = useMemo(() => new Set(favoriteCandidates.map((item) => item.id)), [favoriteCandidates]);
 
   const sections = useMemo<Record<CocktailTabKey, CocktailSection>>(() => {
     return {
@@ -126,10 +123,9 @@ export default function CocktailsScreen() {
         cocktail={item}
         availableIngredientIds={availableIngredientIds}
         onPress={() => handleSelectCocktail(item)}
-        control={<FavoriteStar active={favoriteIds.has(item.id)} />}
       />
     ),
-    [availableIngredientIds, favoriteIds, handleSelectCocktail],
+    [availableIngredientIds, handleSelectCocktail],
   );
 
   const renderSeparator = useCallback(
