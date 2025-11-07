@@ -1,4 +1,5 @@
-import React, { createContext, useCallback, useContext, useMemo, useState } from 'react';
+import * as FileSystem from 'expo-file-system';
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
 type InventoryData = typeof import('@/assets/data/data.json');
 
@@ -43,6 +44,52 @@ type InventoryState = {
   ingredients: Ingredient[];
   imported: boolean;
 };
+
+type PersistedState = {
+  cocktails?: Cocktail[];
+  ingredients?: Ingredient[];
+  availableIngredientIds?: number[];
+  shoppingIngredientIds?: number[];
+  cocktailRatings?: Record<string, number>;
+};
+
+const STORAGE_DIRECTORY = FileSystem.documentDirectory ?? FileSystem.cacheDirectory ?? '';
+const STORAGE_FILE_URI = STORAGE_DIRECTORY ? `${STORAGE_DIRECTORY}inventory-state.json` : '';
+
+async function readPersistedState(): Promise<PersistedState | undefined> {
+  if (!STORAGE_FILE_URI) {
+    return undefined;
+  }
+
+  try {
+    const fileInfo = await FileSystem.getInfoAsync(STORAGE_FILE_URI);
+    if (!fileInfo.exists) {
+      return undefined;
+    }
+
+    const content = await FileSystem.readAsStringAsync(STORAGE_FILE_URI);
+    if (!content) {
+      return undefined;
+    }
+
+    return JSON.parse(content) as PersistedState;
+  } catch (error) {
+    console.error('Failed to read inventory state from storage', error);
+    return undefined;
+  }
+}
+
+async function writePersistedState(state: PersistedState) {
+  if (!STORAGE_FILE_URI) {
+    return;
+  }
+
+  try {
+    await FileSystem.writeAsStringAsync(STORAGE_FILE_URI, JSON.stringify(state));
+  } catch (error) {
+    console.error('Failed to write inventory state to storage', error);
+  }
+}
 
 declare global {
   // eslint-disable-next-line no-var
@@ -91,10 +138,92 @@ type InventoryProviderProps = {
 
 export function InventoryProvider({ children }: InventoryProviderProps) {
   const inventory = ensureInventoryState();
+  const [hydrated, setHydrated] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [cocktailsState, setCocktailsState] = useState<Cocktail[]>(() => inventory.cocktails);
   const [ingredientsState, setIngredientsState] = useState<Ingredient[]>(() => inventory.ingredients);
   const [availableIngredientIds, setAvailableIngredientIds] = useState<Set<number>>(() => new Set());
   const [shoppingIngredientIds, setShoppingIngredientIds] = useState<Set<number>>(() => new Set());
   const [cocktailRatings, setCocktailRatings] = useState<Record<string, number>>({});
+
+  useEffect(() => {
+    inventory.cocktails = cocktailsState;
+  }, [cocktailsState, inventory]);
+
+  useEffect(() => {
+    inventory.ingredients = ingredientsState;
+  }, [ingredientsState, inventory]);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const hydrate = async () => {
+      try {
+        const persisted = await readPersistedState();
+        if (!isMounted || !persisted) {
+          return;
+        }
+
+        if (Array.isArray(persisted.cocktails)) {
+          const normalizedCocktails = normalizeSearchFields(persisted.cocktails) as Cocktail[];
+          inventory.cocktails = normalizedCocktails;
+          setCocktailsState(normalizedCocktails);
+        }
+
+        if (Array.isArray(persisted.ingredients)) {
+          const normalizedIngredients = normalizeSearchFields(persisted.ingredients) as Ingredient[];
+          inventory.ingredients = normalizedIngredients;
+          setIngredientsState(normalizedIngredients);
+        }
+
+        if (Array.isArray(persisted.availableIngredientIds)) {
+          setAvailableIngredientIds(new Set(persisted.availableIngredientIds));
+        }
+
+        if (Array.isArray(persisted.shoppingIngredientIds)) {
+          setShoppingIngredientIds(new Set(persisted.shoppingIngredientIds));
+        }
+
+        if (persisted.cocktailRatings && typeof persisted.cocktailRatings === 'object') {
+          setCocktailRatings(persisted.cocktailRatings);
+        }
+      } finally {
+        if (isMounted) {
+          setHydrated(true);
+          setLoading(false);
+        }
+      }
+    };
+
+    void hydrate();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [inventory]);
+
+  useEffect(() => {
+    if (!hydrated) {
+      return;
+    }
+
+    const payload: PersistedState = {
+      cocktails: cocktailsState,
+      ingredients: ingredientsState,
+      availableIngredientIds: Array.from(availableIngredientIds),
+      shoppingIngredientIds: Array.from(shoppingIngredientIds),
+      cocktailRatings,
+    };
+
+    void writePersistedState(payload);
+  }, [
+    hydrated,
+    cocktailsState,
+    ingredientsState,
+    availableIngredientIds,
+    shoppingIngredientIds,
+    cocktailRatings,
+  ]);
 
   const resolveCocktailKey = useCallback((cocktail: Cocktail) => {
     const id = cocktail.id;
@@ -157,7 +286,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   );
 
   const cocktailsWithRatings = useMemo(() => {
-    return inventory.cocktails.map((cocktail) => {
+    return cocktailsState.map((cocktail) => {
       const key = resolveCocktailKey(cocktail);
       if (!key) {
         return cocktail;
@@ -173,7 +302,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         userRating: rating,
       } satisfies Cocktail;
     });
-  }, [cocktailRatings, inventory.cocktails, resolveCocktailKey]);
+  }, [cocktailRatings, cocktailsState, resolveCocktailKey]);
 
   const setIngredientAvailability = useCallback((id: number, available: boolean) => {
     setAvailableIngredientIds((prev) => {
@@ -237,7 +366,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     return {
       cocktails: cocktailsWithRatings,
       ingredients: ingredientsState,
-      loading: false,
+      loading,
       availableIngredientIds,
       shoppingIngredientIds,
       setIngredientAvailability,
@@ -251,6 +380,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   }, [
     cocktailsWithRatings,
     ingredientsState,
+    loading,
     availableIngredientIds,
     shoppingIngredientIds,
     setIngredientAvailability,
