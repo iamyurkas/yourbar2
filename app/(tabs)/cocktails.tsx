@@ -88,8 +88,9 @@ function TagFilterModal({
           style={[StyleSheet.absoluteFillObject, { zIndex: 0 }]}
         />
         <View
-          accessibilityRole="dialog"
+          accessible
           accessibilityLabel="Filter cocktails by tags"
+          accessibilityViewIsModal
           style={[
             styles.modalContent,
             {
