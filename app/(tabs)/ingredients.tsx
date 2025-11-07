@@ -7,7 +7,7 @@ import { ListRow, PresenceCheck, Thumb } from '@/components/RowParts';
 import { CollectionHeader } from '@/components/CollectionHeader';
 import type { SegmentTabOption } from '@/components/TopBars';
 import { Colors } from '@/constants/theme';
-import { useInventory, type Ingredient } from '@/providers/inventory-provider';
+import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
 import { palette } from '@/theme/theme';
 import { useRouter } from 'expo-router';
 
@@ -30,6 +30,7 @@ type IngredientListItemProps = {
   highlightColor: string;
   availableIngredientIds: Set<number>;
   onToggle: (id: number) => void;
+  subtitle: string;
   surfaceVariantColor?: string;
 };
 
@@ -41,6 +42,7 @@ const areIngredientPropsEqual = (
   prev.highlightColor === next.highlightColor &&
   prev.availableIngredientIds === next.availableIngredientIds &&
   prev.onToggle === next.onToggle &&
+  prev.subtitle === next.subtitle &&
   prev.surfaceVariantColor === next.surfaceVariantColor;
 
 const IngredientListItem = memo(function IngredientListItemComponent({
@@ -48,30 +50,26 @@ const IngredientListItem = memo(function IngredientListItemComponent({
   highlightColor,
   availableIngredientIds,
   onToggle,
+  subtitle,
   surfaceVariantColor,
 }: IngredientListItemProps) {
   const router = useRouter();
   const id = Number(ingredient.id ?? -1);
   const isAvailable = id >= 0 && availableIngredientIds.has(id);
-  const usageCount = ingredient.usageCount ?? 0;
-    const subtitle = useMemo(
-      () => `${usageCount} cocktail${usageCount === 1 ? '' : 's'}`,
-      [usageCount],
-    );
-    const tagColor = ingredient.tags?.[0]?.color ?? palette.tagYellow;
+  const tagColor = ingredient.tags?.[0]?.color ?? palette.tagYellow;
 
-    const handleToggle = useCallback(() => {
-      if (id >= 0) {
-        onToggle(id);
-      }
-    }, [id, onToggle]);
+  const handleToggle = useCallback(() => {
+    if (id >= 0) {
+      onToggle(id);
+    }
+  }, [id, onToggle]);
 
-    const subtitleStyle = surfaceVariantColor ? { color: surfaceVariantColor } : undefined;
+  const subtitleStyle = surfaceVariantColor ? { color: surfaceVariantColor } : undefined;
 
-    const thumbnail = useMemo(
-      () => <Thumb label={ingredient.name} uri={ingredient.photoUri} />,
-      [ingredient.name, ingredient.photoUri],
-    );
+  const thumbnail = useMemo(
+    () => <Thumb label={ingredient.name} uri={ingredient.photoUri} />,
+    [ingredient.name, ingredient.photoUri],
+  );
 
   const control = useMemo(
     () => <PresenceCheck checked={isAvailable} onToggle={handleToggle} />,
@@ -109,6 +107,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
 
 export default function IngredientsScreen() {
   const {
+    cocktails,
     ingredients,
     availableIngredientIds,
     shoppingIngredientIds,
@@ -117,6 +116,219 @@ export default function IngredientsScreen() {
   const [activeTab, setActiveTab] = useState<IngredientTabKey>('all');
   const [query, setQuery] = useState('');
   const paletteColors = Colors;
+
+  const ingredientById = useMemo(() => {
+    const map = new Map<number, Ingredient>();
+    ingredients.forEach((ingredient) => {
+      const id = Number(ingredient.id ?? -1);
+      if (!Number.isFinite(id) || id < 0) {
+        return;
+      }
+      map.set(id, ingredient);
+    });
+    return map;
+  }, [ingredients]);
+
+  const ingredientsByBaseId = useMemo(() => {
+    const map = new Map<number, Set<number>>();
+
+    ingredients.forEach((ingredient) => {
+      const id = Number(ingredient.id ?? -1);
+      if (!Number.isFinite(id) || id < 0) {
+        return;
+      }
+
+      const baseIdRaw =
+        ingredient.baseIngredientId != null ? Number(ingredient.baseIngredientId) : id;
+      if (!Number.isFinite(baseIdRaw) || baseIdRaw < 0) {
+        return;
+      }
+
+      const baseId = baseIdRaw;
+      let group = map.get(baseId);
+      if (!group) {
+        group = new Set<number>();
+        map.set(baseId, group);
+      }
+
+      group.add(baseId);
+      group.add(id);
+    });
+
+    return map;
+  }, [ingredients]);
+
+  const getBaseGroupId = useCallback(
+    (rawId: number | string | null | undefined) => {
+      if (rawId == null) {
+        return undefined;
+      }
+
+      const id = Number(rawId);
+      if (!Number.isFinite(id) || id < 0) {
+        return undefined;
+      }
+
+      const ingredientRecord = ingredientById.get(id);
+      if (ingredientRecord?.baseIngredientId != null) {
+        const baseId = Number(ingredientRecord.baseIngredientId);
+        if (Number.isFinite(baseId) && baseId >= 0) {
+          return baseId;
+        }
+      }
+
+      if (ingredientRecord?.id != null) {
+        const normalizedId = Number(ingredientRecord.id);
+        if (Number.isFinite(normalizedId) && normalizedId >= 0) {
+          return normalizedId;
+        }
+      }
+
+      return id;
+    },
+    [ingredientById],
+  );
+
+  const resolveCocktailKey = useCallback((cocktail: Cocktail) => {
+    const id = cocktail.id;
+    if (id != null) {
+      return String(id);
+    }
+
+    if (cocktail.name) {
+      return cocktail.name.trim().toLowerCase();
+    }
+
+    return undefined;
+  }, []);
+
+  const cocktailsByBaseGroup = useMemo(() => {
+    const map = new Map<number, Set<string>>();
+
+    cocktails.forEach((cocktail) => {
+      const cocktailKey = resolveCocktailKey(cocktail);
+      if (!cocktailKey) {
+        return;
+      }
+
+      const seenBaseIds = new Set<number>();
+      (cocktail.ingredients ?? []).forEach((item) => {
+        const baseGroupId = getBaseGroupId(item.ingredientId);
+        if (baseGroupId == null || seenBaseIds.has(baseGroupId)) {
+          return;
+        }
+
+        seenBaseIds.add(baseGroupId);
+        let set = map.get(baseGroupId);
+        if (!set) {
+          set = new Set<string>();
+          map.set(baseGroupId, set);
+        }
+
+        set.add(cocktailKey);
+      });
+    });
+
+    return map;
+  }, [cocktails, getBaseGroupId, resolveCocktailKey]);
+
+  const expandIngredientIds = useCallback(
+    (rawId: number | string | null | undefined, target: Set<number>) => {
+      if (rawId == null) {
+        return;
+      }
+
+      const id = Number(rawId);
+      if (!Number.isFinite(id) || id < 0) {
+        return;
+      }
+
+      const baseGroupId = getBaseGroupId(id);
+      if (baseGroupId == null) {
+        return;
+      }
+
+      const candidates = ingredientsByBaseId.get(baseGroupId);
+      if (candidates && candidates.size > 0) {
+        candidates.forEach((candidateId) => target.add(candidateId));
+        return;
+      }
+
+      target.add(baseGroupId);
+    },
+    [getBaseGroupId, ingredientsByBaseId],
+  );
+
+  const canMakeCocktail = useCallback(
+    (cocktail: Cocktail) => {
+      const recipe = cocktail.ingredients ?? [];
+      const requiredIngredients = recipe.filter((ingredient) => !ingredient?.optional && !ingredient?.garnish);
+
+      if (requiredIngredients.length === 0) {
+        return false;
+      }
+
+      return requiredIngredients.every((ingredient) => {
+        const candidateIds = new Set<number>();
+        expandIngredientIds(ingredient.ingredientId, candidateIds);
+        (ingredient.substitutes ?? []).forEach((substitute) => {
+          expandIngredientIds(substitute.id, candidateIds);
+        });
+
+        if (candidateIds.size === 0) {
+          return false;
+        }
+
+        for (const candidateId of candidateIds) {
+          if (availableIngredientIds.has(candidateId)) {
+            return true;
+          }
+        }
+
+        return false;
+      });
+    },
+    [availableIngredientIds, expandIngredientIds],
+  );
+
+  const makeableCocktailKeys = useMemo(() => {
+    const keys = new Set<string>();
+
+    cocktails.forEach((cocktail) => {
+      const key = resolveCocktailKey(cocktail);
+      if (!key) {
+        return;
+      }
+
+      if (canMakeCocktail(cocktail)) {
+        keys.add(key);
+      }
+    });
+
+    return keys;
+  }, [canMakeCocktail, cocktails, resolveCocktailKey]);
+
+  const totalCocktailCounts = useMemo(() => {
+    const counts = new Map<number, number>();
+    cocktailsByBaseGroup.forEach((cocktailKeys, baseId) => {
+      counts.set(baseId, cocktailKeys.size);
+    });
+    return counts;
+  }, [cocktailsByBaseGroup]);
+
+  const makeableCocktailCounts = useMemo(() => {
+    const counts = new Map<number, number>();
+    cocktailsByBaseGroup.forEach((cocktailKeys, baseId) => {
+      let count = 0;
+      cocktailKeys.forEach((key) => {
+        if (makeableCocktailKeys.has(key)) {
+          count += 1;
+        }
+      });
+      counts.set(baseId, count);
+    });
+    return counts;
+  }, [cocktailsByBaseGroup, makeableCocktailKeys]);
 
   const sections = useMemo<Record<IngredientTabKey, IngredientSection>>(() => {
     const inStock = ingredients.filter((ingredient) => {
@@ -184,21 +396,42 @@ export default function IngredientsScreen() {
   const keyExtractor = useCallback((item: Ingredient) => String(item.id ?? item.name), []);
 
   const renderItem = useCallback(
-    ({ item }: { item: Ingredient }) => (
-      <IngredientListItem
-        ingredient={item}
-        highlightColor={highlightColor}
-        availableIngredientIds={availableIngredientIds}
-        onToggle={handleToggle}
-        surfaceVariantColor={paletteColors.onSurfaceVariant ?? paletteColors.icon}
-      />
-    ),
+    ({ item }: { item: Ingredient }) => {
+      const ingredientId = Number(item.id ?? -1);
+      const baseGroupId = ingredientId >= 0 ? getBaseGroupId(ingredientId) : undefined;
+
+      let subtitleText: string;
+      if (activeTab === 'my') {
+        const count = baseGroupId != null ? makeableCocktailCounts.get(baseGroupId) ?? 0 : 0;
+        const label = count === 1 ? 'cocktail' : 'cocktails';
+        subtitleText = `Make ${count} ${label}`;
+      } else {
+        const count = baseGroupId != null ? totalCocktailCounts.get(baseGroupId) ?? 0 : 0;
+        const label = count === 1 ? 'recipe' : 'recipes';
+        subtitleText = `${count} ${label}`;
+      }
+
+      return (
+        <IngredientListItem
+          ingredient={item}
+          highlightColor={highlightColor}
+          availableIngredientIds={availableIngredientIds}
+          onToggle={handleToggle}
+          subtitle={subtitleText}
+          surfaceVariantColor={paletteColors.onSurfaceVariant ?? paletteColors.icon}
+        />
+      );
+    },
     [
+      activeTab,
       availableIngredientIds,
+      getBaseGroupId,
       handleToggle,
       highlightColor,
+      makeableCocktailCounts,
       paletteColors.icon,
       paletteColors.onSurfaceVariant,
+      totalCocktailCounts,
     ],
   );
 
