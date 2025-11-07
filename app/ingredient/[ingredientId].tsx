@@ -1,7 +1,7 @@
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState, useTransition } from 'react';
 import {
   Alert,
   Pressable,
@@ -64,6 +64,11 @@ export default function IngredientDetailsScreen() {
     return Number.isNaN(parsed) ? undefined : parsed;
   }, [ingredient?.id, ingredientId]);
 
+  const [optimisticAvailability, setOptimisticAvailability] = useState<boolean | null>(null);
+  const [optimisticShopping, setOptimisticShopping] = useState<boolean | null>(null);
+  const [, startAvailabilityTransition] = useTransition();
+  const [, startShoppingTransition] = useTransition();
+
   const isAvailable = useMemo(() => {
     if (numericIngredientId == null) {
       return false;
@@ -77,6 +82,29 @@ export default function IngredientDetailsScreen() {
     }
     return shoppingIngredientIds.has(numericIngredientId);
   }, [numericIngredientId, shoppingIngredientIds]);
+
+  const effectiveIsAvailable = optimisticAvailability ?? isAvailable;
+  const effectiveIsOnShoppingList = optimisticShopping ?? isOnShoppingList;
+
+  useEffect(() => {
+    setOptimisticAvailability((previous) => {
+      if (previous == null) {
+        return previous;
+      }
+
+      return previous === isAvailable ? null : previous;
+    });
+  }, [isAvailable]);
+
+  useEffect(() => {
+    setOptimisticShopping((previous) => {
+      if (previous == null) {
+        return previous;
+      }
+
+      return previous === isOnShoppingList ? null : previous;
+    });
+  }, [isOnShoppingList]);
 
   const baseIngredient = useMemo(() => {
     if (!ingredient?.baseIngredientId) {
@@ -143,15 +171,29 @@ export default function IngredientDetailsScreen() {
 
   const handleToggleAvailability = useCallback(() => {
     if (numericIngredientId != null) {
-      toggleIngredientAvailability(numericIngredientId);
+      setOptimisticAvailability((previous) => {
+        const current = previous ?? isAvailable;
+        return !current;
+      });
+
+      startAvailabilityTransition(() => {
+        toggleIngredientAvailability(numericIngredientId);
+      });
     }
-  }, [numericIngredientId, toggleIngredientAvailability]);
+  }, [isAvailable, numericIngredientId, startAvailabilityTransition, toggleIngredientAvailability]);
 
   const handleToggleShopping = useCallback(() => {
     if (numericIngredientId != null) {
-      toggleIngredientShopping(numericIngredientId);
+      setOptimisticShopping((previous) => {
+        const current = previous ?? isOnShoppingList;
+        return !current;
+      });
+
+      startShoppingTransition(() => {
+        toggleIngredientShopping(numericIngredientId);
+      });
     }
-  }, [numericIngredientId, toggleIngredientShopping]);
+  }, [isOnShoppingList, numericIngredientId, startShoppingTransition, toggleIngredientShopping]);
 
   const handleEditPress = useCallback(() => {
     // Editing functionality to be implemented later
@@ -343,19 +385,23 @@ export default function IngredientDetailsScreen() {
                   onPress={handleToggleShopping}
                   accessibilityRole="button"
                   accessibilityLabel={
-                    isOnShoppingList
+                    effectiveIsOnShoppingList
                       ? 'Remove ingredient from shopping list'
                       : 'Add ingredient to shopping list'
                   }
                   hitSlop={8}
                 >
                   <MaterialIcons
-                    name={isOnShoppingList ? 'shopping-cart' : 'add-shopping-cart'}
+                    name={
+                      effectiveIsOnShoppingList ? 'shopping-cart' : 'add-shopping-cart'
+                    }
                     size={22}
-                    color={isOnShoppingList ? palette.tint : palette.onSurfaceVariant}
+                    color={
+                      effectiveIsOnShoppingList ? palette.tint : palette.onSurfaceVariant
+                    }
                   />
                 </Pressable>
-                <PresenceCheck checked={isAvailable} onToggle={handleToggleAvailability} />
+                <PresenceCheck checked={effectiveIsAvailable} onToggle={handleToggleAvailability} />
               </View>
             </View>
 

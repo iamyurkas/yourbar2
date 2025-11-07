@@ -1,7 +1,7 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState, useTransition } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -184,16 +184,34 @@ export default function CocktailDetailsScreen() {
     return getCocktailRating(cocktail);
   }, [cocktail, getCocktailRating]);
 
+  const [optimisticRating, setOptimisticRating] = useState<number | null>(null);
+  const [, startRatingTransition] = useTransition();
+  const displayedRating = optimisticRating ?? userRating;
+
+  useEffect(() => {
+    setOptimisticRating((previous) => {
+      if (previous == null) {
+        return previous;
+      }
+
+      return previous === userRating ? null : previous;
+    });
+  }, [userRating]);
+
   const handleRatingSelect = useCallback(
     (value: number) => {
       if (!cocktail) {
         return;
       }
 
-      const nextRating = userRating === value ? 0 : value;
-      setCocktailRating(cocktail, nextRating);
+      const nextRating = displayedRating === value ? 0 : value;
+      setOptimisticRating(nextRating);
+
+      startRatingTransition(() => {
+        setCocktailRating(cocktail, nextRating);
+      });
     },
-    [cocktail, setCocktailRating, userRating],
+    [cocktail, displayedRating, setCocktailRating, startRatingTransition],
   );
 
   const instructionsParagraphs = useMemo(() => {
@@ -335,7 +353,7 @@ export default function CocktailDetailsScreen() {
               <View style={styles.ratingRow}>
                 {Array.from({ length: MAX_RATING }).map((_, index) => {
                   const starValue = index + 1;
-                  const isActive = userRating >= starValue;
+                  const isActive = displayedRating >= starValue;
                   const icon = isActive ? 'star' : 'star-outline';
 
                   return (
@@ -344,7 +362,9 @@ export default function CocktailDetailsScreen() {
                       onPress={() => handleRatingSelect(starValue)}
                       accessibilityRole="button"
                       accessibilityLabel={
-                        userRating === starValue ? 'Clear rating' : `Set rating to ${starValue}`
+                        displayedRating === starValue
+                          ? 'Clear rating'
+                          : `Set rating to ${starValue}`
                       }
                       style={styles.ratingStar}
                       hitSlop={8}>
