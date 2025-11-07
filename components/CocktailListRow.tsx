@@ -113,9 +113,7 @@ const CocktailListRowComponent = ({
 
   const backgroundColor = isReady ? highlightColor : paletteColors.background;
 
-  const ratingValueRaw = (cocktail as { rating?: number; userRating?: number }).rating ??
-    (cocktail as { rating?: number; userRating?: number }).userRating ??
-    0;
+  const ratingValueRaw = (cocktail as { userRating?: number }).userRating ?? 0;
   const ratingValue = Math.max(0, Math.min(MAX_RATING, Number(ratingValueRaw) || 0));
 
   const ratingStars = useMemo(() => {

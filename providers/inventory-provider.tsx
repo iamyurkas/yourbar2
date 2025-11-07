@@ -25,6 +25,7 @@ type InventoryContextValue = {
   clearBaseIngredient: (id: number) => void;
   cocktailRatings: Record<string, number>;
   setCocktailRating: (cocktail: Cocktail, rating: number) => void;
+  getCocktailRating: (cocktail: Cocktail) => number;
 };
 
 type InventoryState = {
@@ -127,6 +128,23 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     [resolveCocktailKey],
   );
 
+  const getCocktailRating = useCallback(
+    (cocktail: Cocktail) => {
+      const key = resolveCocktailKey(cocktail);
+      if (!key) {
+        return 0;
+      }
+
+      const rating = cocktailRatings[key];
+      if (rating == null) {
+        return 0;
+      }
+
+      return Math.max(0, Math.min(5, Number(rating) || 0));
+    },
+    [cocktailRatings, resolveCocktailKey],
+  );
+
   const cocktailsWithRatings = useMemo(() => {
     return inventory.cocktails.map((cocktail) => {
       const key = resolveCocktailKey(cocktail);
@@ -217,6 +235,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       clearBaseIngredient,
       cocktailRatings,
       setCocktailRating,
+      getCocktailRating,
     };
   }, [
     cocktailsWithRatings,
@@ -229,6 +248,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     clearBaseIngredient,
     cocktailRatings,
     setCocktailRating,
+    getCocktailRating,
   ]);
 
   return <InventoryContext.Provider value={value}>{children}</InventoryContext.Provider>;

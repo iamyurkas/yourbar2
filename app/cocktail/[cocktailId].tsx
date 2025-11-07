@@ -11,7 +11,11 @@ import {
 } from '@/assets/image-manifest';
 import { IngredientQuantityRow } from '@/components/IngredientQuantityRow';
 import { Colors } from '@/constants/theme';
-import { useInventory, type Cocktail, type Ingredient as InventoryIngredient } from '@/providers/inventory-provider';
+import {
+  useInventory,
+  type Cocktail,
+  type Ingredient as InventoryIngredient,
+} from '@/providers/inventory-provider';
 import { palette as appPalette } from '@/theme/theme';
 
 type RecipeIngredient = NonNullable<Cocktail['ingredients']>[number];
@@ -147,7 +151,8 @@ function formatGlassLabel(glassId?: string | null) {
 export default function CocktailDetailsScreen() {
   const palette = Colors;
   const { cocktailId } = useLocalSearchParams<{ cocktailId?: string }>();
-  const { cocktails, ingredients, availableIngredientIds, setCocktailRating } = useInventory();
+  const { cocktails, ingredients, availableIngredientIds, setCocktailRating, getCocktailRating } =
+    useInventory();
 
   const resolvedParam = Array.isArray(cocktailId) ? cocktailId[0] : cocktailId;
   const cocktail = useMemo(
@@ -176,12 +181,8 @@ export default function CocktailDetailsScreen() {
       return 0;
     }
 
-    const ratingValueRaw = (cocktail as { rating?: number; userRating?: number }).rating ??
-      (cocktail as { rating?: number; userRating?: number }).userRating ??
-      0;
-    const ratingValue = Math.max(0, Math.min(MAX_RATING, Number(ratingValueRaw) || 0));
-    return ratingValue;
-  }, [cocktail]);
+    return getCocktailRating(cocktail);
+  }, [cocktail, getCocktailRating]);
 
   const handleRatingSelect = useCallback(
     (value: number) => {
