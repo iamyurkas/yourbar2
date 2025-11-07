@@ -10,7 +10,7 @@ type NormalizedSearchFields = {
   searchTokensNormalized: string[];
 };
 
-type Cocktail = CocktailRecord & NormalizedSearchFields;
+type Cocktail = CocktailRecord & NormalizedSearchFields & { userRating?: number };
 type Ingredient = IngredientRecord & NormalizedSearchFields;
 
 type InventoryContextValue = {
@@ -23,6 +23,9 @@ type InventoryContextValue = {
   toggleIngredientAvailability: (id: number) => void;
   toggleIngredientShopping: (id: number) => void;
   clearBaseIngredient: (id: number) => void;
+  cocktailRatings: Record<string, number>;
+  setCocktailRating: (cocktail: Cocktail, rating: number) => void;
+  getCocktailRating: (cocktail: Cocktail) => number;
 };
 
 type InventoryState = {
@@ -80,6 +83,86 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   const [ingredientsState, setIngredientsState] = useState<Ingredient[]>(() => inventory.ingredients);
   const [availableIngredientIds, setAvailableIngredientIds] = useState<Set<number>>(() => new Set());
   const [shoppingIngredientIds, setShoppingIngredientIds] = useState<Set<number>>(() => new Set());
+  const [cocktailRatings, setCocktailRatings] = useState<Record<string, number>>({});
+
+  const resolveCocktailKey = useCallback((cocktail: Cocktail) => {
+    const id = cocktail.id;
+    if (id != null) {
+      return String(id);
+    }
+
+    if (cocktail.name) {
+      return cocktail.name.trim().toLowerCase();
+    }
+
+    return undefined;
+  }, []);
+
+  const setCocktailRating = useCallback(
+    (cocktail: Cocktail, rating: number) => {
+      const key = resolveCocktailKey(cocktail);
+      if (!key) {
+        return;
+      }
+
+      setCocktailRatings((prev) => {
+        const normalizedRating = Math.max(0, Math.min(5, Math.round(rating)));
+
+        if (normalizedRating <= 0) {
+          if (!(key in prev)) {
+            return prev;
+          }
+
+          const next = { ...prev };
+          delete next[key];
+          return next;
+        }
+
+        if (prev[key] === normalizedRating) {
+          return prev;
+        }
+
+        return { ...prev, [key]: normalizedRating };
+      });
+    },
+    [resolveCocktailKey],
+  );
+
+  const getCocktailRating = useCallback(
+    (cocktail: Cocktail) => {
+      const key = resolveCocktailKey(cocktail);
+      if (!key) {
+        return 0;
+      }
+
+      const rating = cocktailRatings[key];
+      if (rating == null) {
+        return 0;
+      }
+
+      return Math.max(0, Math.min(5, Number(rating) || 0));
+    },
+    [cocktailRatings, resolveCocktailKey],
+  );
+
+  const cocktailsWithRatings = useMemo(() => {
+    return inventory.cocktails.map((cocktail) => {
+      const key = resolveCocktailKey(cocktail);
+      if (!key) {
+        return cocktail;
+      }
+
+      const rating = cocktailRatings[key];
+      if (rating == null) {
+        return cocktail;
+      }
+
+      return {
+        ...cocktail,
+        userRating: rating,
+      } satisfies Cocktail;
+    });
+  }, [cocktailRatings, inventory.cocktails, resolveCocktailKey]);
 
   const setIngredientAvailability = useCallback((id: number, available: boolean) => {
     setAvailableIngredientIds((prev) => {
@@ -141,7 +224,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
 
   const value = useMemo<InventoryContextValue>(() => {
     return {
-      cocktails: inventory.cocktails,
+      cocktails: cocktailsWithRatings,
       ingredients: ingredientsState,
       loading: false,
       availableIngredientIds,
@@ -150,9 +233,12 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       toggleIngredientAvailability,
       toggleIngredientShopping,
       clearBaseIngredient,
+      cocktailRatings,
+      setCocktailRating,
+      getCocktailRating,
     };
   }, [
-    inventory.cocktails,
+    cocktailsWithRatings,
     ingredientsState,
     availableIngredientIds,
     shoppingIngredientIds,
@@ -160,6 +246,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     toggleIngredientAvailability,
     toggleIngredientShopping,
     clearBaseIngredient,
+    cocktailRatings,
+    setCocktailRating,
+    getCocktailRating,
   ]);
 
   return <InventoryContext.Provider value={value}>{children}</InventoryContext.Provider>;

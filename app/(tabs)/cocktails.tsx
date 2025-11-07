@@ -52,12 +52,11 @@ export default function CocktailsScreen() {
     });
   }, [cocktails, availableIngredientIds]);
 
-  const favoriteCandidates = useMemo(() => {
-    return cocktails.filter((cocktail) =>
-      (cocktail.tags ?? []).some((tag) =>
-        /signature|house|favorite|favourite|classic/i.test(tag.name ?? ''),
-      ),
-    );
+  const ratedCocktails = useMemo(() => {
+    return cocktails.filter((cocktail) => {
+      const ratingValue = Number((cocktail as { userRating?: number }).userRating ?? 0);
+      return ratingValue > 0;
+    });
   }, [cocktails]);
 
   const sections = useMemo<Record<CocktailTabKey, CocktailSection>>(() => {
@@ -67,10 +66,10 @@ export default function CocktailsScreen() {
       favorites: {
         key: 'favorites',
         label: 'Favorites',
-        data: favoriteCandidates.length ? favoriteCandidates : cocktails.slice(0, 12),
+        data: ratedCocktails,
       },
     };
-  }, [cocktails, readyToMix, favoriteCandidates]);
+  }, [cocktails, readyToMix, ratedCocktails]);
 
   const activeSection = sections[activeTab] ?? sections.all;
 
