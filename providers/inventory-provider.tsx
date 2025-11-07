@@ -1,9 +1,19 @@
 import React, { createContext, useCallback, useContext, useMemo, useState } from 'react';
 
-import data from '@/assets/data/data.json';
+type InventoryData = typeof import('@/assets/data/data.json');
 
-type CocktailRecord = (typeof data)['cocktails'][number];
-type IngredientRecord = (typeof data)['ingredients'][number];
+let cachedInventoryData: InventoryData | undefined;
+
+function loadInventoryData(): InventoryData {
+  if (!cachedInventoryData) {
+    cachedInventoryData = require('@/assets/data/data.json');
+  }
+
+  return cachedInventoryData;
+}
+
+type CocktailRecord = InventoryData['cocktails'][number];
+type IngredientRecord = InventoryData['ingredients'][number];
 
 type NormalizedSearchFields = {
   searchNameNormalized: string;
@@ -59,6 +69,7 @@ function normalizeSearchFields<T extends { name?: string | null; searchName?: st
 
 function ensureInventoryState(): InventoryState {
   if (!globalThis.__yourbarInventory) {
+    const data = loadInventoryData();
     globalThis.__yourbarInventory = {
       cocktails: normalizeSearchFields(data.cocktails),
       ingredients: normalizeSearchFields(data.ingredients),
