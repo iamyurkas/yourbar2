@@ -1,4 +1,4 @@
 declare module '*.svg' {
-  const content: import('expo-image').ImageSource;
+  const content: import('react-native').ImageSourcePropType;
   export default content;
 }

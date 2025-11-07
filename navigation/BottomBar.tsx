@@ -1,7 +1,6 @@
 import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import React from 'react';
-import { Image, type ImageSource } from 'expo-image';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Image, type ImageSourcePropType, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Colors } from '@/constants/theme';
@@ -13,7 +12,7 @@ type RouteKey = 'cocktails' | 'shaker' | 'ingredients';
 
 const ICON_SIZE = 28;
 
-const ICONS: Record<RouteKey, ImageSource> = {
+const ICONS: Record<RouteKey, ImageSourcePropType> = {
   cocktails: CocktailsIcon,
   shaker: ShakerIcon,
   ingredients: IngredientsIcon,
@@ -81,7 +80,7 @@ export function BottomBar({ state, descriptors, navigation }: BottomTabBarProps)
               <Image
                 source={iconSource}
                 style={[styles.icon, { tintColor: color }]}
-                contentFit="contain"
+                resizeMode="contain"
                 accessibilityRole="image"
                 accessibilityLabel={typeof label === 'string' ? label : undefined}
               />
