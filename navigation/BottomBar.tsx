@@ -1,9 +1,8 @@
 import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import React from 'react';
+import { Image, type ImageSource } from 'expo-image';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import type { ComponentType } from 'react';
-import type { SvgProps } from 'react-native-svg';
 
 import { Colors } from '@/constants/theme';
 import CocktailsIcon from '@/assets/images/cocktails.svg';
@@ -14,7 +13,7 @@ type RouteKey = 'cocktails' | 'shaker' | 'ingredients';
 
 const ICON_SIZE = 28;
 
-const ICONS: Record<RouteKey, ComponentType<SvgProps>> = {
+const ICONS: Record<RouteKey, ImageSource> = {
   cocktails: CocktailsIcon,
   shaker: ShakerIcon,
   ingredients: IngredientsIcon,
@@ -67,7 +66,7 @@ export function BottomBar({ state, descriptors, navigation }: BottomTabBarProps)
             });
           };
 
-          const Icon = ICONS[route.name as RouteKey];
+          const iconSource = ICONS[route.name as RouteKey];
 
           return (
             <Pressable
@@ -79,10 +78,10 @@ export function BottomBar({ state, descriptors, navigation }: BottomTabBarProps)
               onPress={onPress}
               onLongPress={onLongPress}
               style={styles.item}>
-              <Icon
-                width={ICON_SIZE}
-                height={ICON_SIZE}
-                fill={color}
+              <Image
+                source={iconSource}
+                style={[styles.icon, { tintColor: color }]}
+                contentFit="contain"
                 accessibilityRole="image"
                 accessibilityLabel={typeof label === 'string' ? label : undefined}
               />
@@ -122,6 +121,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 6,
     paddingVertical: 8,
+  },
+  icon: {
+    width: ICON_SIZE,
+    height: ICON_SIZE,
   },
   label: {
     fontSize: 12,
