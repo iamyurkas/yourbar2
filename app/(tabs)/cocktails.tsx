@@ -25,6 +25,15 @@ const TAB_OPTIONS: SegmentTabOption[] = [
   { key: 'favorites', label: 'Favorites' },
 ];
 
+function resolveCocktailKey(cocktail: Cocktail): string | undefined {
+  const candidate = cocktail.id ?? cocktail.name;
+  if (candidate == null) {
+    return undefined;
+  }
+
+  return String(candidate);
+}
+
 export default function CocktailsScreen() {
   const { cocktails, availableIngredientIds } = useInventory();
   const [activeTab, setActiveTab] = useState<CocktailTabKey>('all');
@@ -61,7 +70,41 @@ export default function CocktailsScreen() {
     );
   }, [cocktails]);
 
-  const favoriteIds = useMemo(() => new Set(favoriteCandidates.map((item) => item.id)), [favoriteCandidates]);
+  const ratedCocktails = useMemo(() => {
+    return cocktails.filter((cocktail) => {
+      const ratingValue = (cocktail as { userRating?: number }).userRating ?? 0;
+      return Number(ratingValue) > 0;
+    });
+  }, [cocktails]);
+
+  const favoritesData = useMemo(() => {
+    const unique = new Map<string, Cocktail>();
+
+    const addCocktail = (cocktail: Cocktail) => {
+      const key = resolveCocktailKey(cocktail);
+      if (!key || unique.has(key)) {
+        return;
+      }
+
+      unique.set(key, cocktail);
+    };
+
+    ratedCocktails.forEach(addCocktail);
+    favoriteCandidates.forEach(addCocktail);
+
+    if (unique.size > 0) {
+      return Array.from(unique.values());
+    }
+
+    return cocktails.slice(0, 12);
+  }, [cocktails, favoriteCandidates, ratedCocktails]);
+
+  const favoriteIds = useMemo(() => {
+    const ids = favoritesData
+      .map((item) => resolveCocktailKey(item))
+      .filter((key): key is string => Boolean(key));
+    return new Set(ids);
+  }, [favoritesData]);
 
   const sections = useMemo<Record<CocktailTabKey, CocktailSection>>(() => {
     return {
@@ -70,10 +113,10 @@ export default function CocktailsScreen() {
       favorites: {
         key: 'favorites',
         label: 'Favorites',
-        data: favoriteCandidates.length ? favoriteCandidates : cocktails.slice(0, 12),
+        data: favoritesData,
       },
     };
-  }, [cocktails, readyToMix, favoriteCandidates]);
+  }, [cocktails, favoritesData, readyToMix]);
 
   const activeSection = sections[activeTab] ?? sections.all;
 
@@ -121,14 +164,19 @@ export default function CocktailsScreen() {
   );
 
   const renderItem = useCallback(
-    ({ item }: { item: Cocktail }) => (
-      <CocktailListRow
-        cocktail={item}
-        availableIngredientIds={availableIngredientIds}
-        onPress={() => handleSelectCocktail(item)}
-        control={<FavoriteStar active={favoriteIds.has(item.id)} />}
-      />
-    ),
+    ({ item }: { item: Cocktail }) => {
+      const itemKey = resolveCocktailKey(item);
+      const isFavorite = itemKey ? favoriteIds.has(itemKey) : false;
+
+      return (
+        <CocktailListRow
+          cocktail={item}
+          availableIngredientIds={availableIngredientIds}
+          onPress={() => handleSelectCocktail(item)}
+          control={<FavoriteStar active={isFavorite} />}
+        />
+      );
+    },
     [availableIngredientIds, favoriteIds, handleSelectCocktail],
   );
 
