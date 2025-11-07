@@ -1,7 +1,7 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -11,7 +11,11 @@ import {
 } from '@/assets/image-manifest';
 import { IngredientQuantityRow } from '@/components/IngredientQuantityRow';
 import { Colors } from '@/constants/theme';
-import { useInventory, type Cocktail, type Ingredient as InventoryIngredient } from '@/providers/inventory-provider';
+import {
+  useInventory,
+  type Cocktail,
+  type Ingredient as InventoryIngredient,
+} from '@/providers/inventory-provider';
 import { palette as appPalette } from '@/theme/theme';
 
 type RecipeIngredient = NonNullable<Cocktail['ingredients']>[number];
@@ -147,7 +151,7 @@ function formatGlassLabel(glassId?: string | null) {
 export default function CocktailDetailsScreen() {
   const palette = Colors;
   const { cocktailId } = useLocalSearchParams<{ cocktailId?: string }>();
-  const { cocktails, ingredients, availableIngredientIds } = useInventory();
+  const { cocktails, ingredients, availableIngredientIds, setCocktailRating } = useInventory();
 
   const resolvedParam = Array.isArray(cocktailId) ? cocktailId[0] : cocktailId;
   const cocktail = useMemo(
@@ -171,27 +175,42 @@ export default function CocktailDetailsScreen() {
     return [...recipe].sort((a, b) => (a?.order ?? 0) - (b?.order ?? 0));
   }, [cocktail?.ingredients]);
 
-  const initialRating = useMemo(() => {
+  const { userRating, displayedRating } = useMemo(() => {
     if (!cocktail) {
-      return 0;
+      return { userRating: 0, displayedRating: 0 };
     }
 
-    const ratingValueRaw = (cocktail as { rating?: number; userRating?: number }).rating ??
-      (cocktail as { rating?: number; userRating?: number }).userRating ??
-      0;
-    const ratingValue = Math.max(0, Math.min(MAX_RATING, Number(ratingValueRaw) || 0));
-    return ratingValue;
+    const rawUserRating = (cocktail as { userRating?: number }).userRating ?? 0;
+    const userRatingValue = Math.max(0, Math.min(MAX_RATING, Number(rawUserRating) || 0));
+    const rawBaseRating = (cocktail as { rating?: number }).rating ?? 0;
+    const baseRatingValue = Math.max(0, Math.min(MAX_RATING, Number(rawBaseRating) || 0));
+
+    if (userRatingValue > 0) {
+      return { userRating: userRatingValue, displayedRating: userRatingValue };
+    }
+
+    return {
+      userRating: 0,
+      displayedRating: baseRatingValue,
+    };
   }, [cocktail]);
 
-  const [userRating, setUserRating] = useState(initialRating);
+  const handleRatingSelect = useCallback(
+    (value: number) => {
+      if (!cocktail) {
+        return;
+      }
 
-  useEffect(() => {
-    setUserRating(initialRating);
-  }, [initialRating]);
+      const id = cocktail.id ?? cocktail.name;
+      if (id == null) {
+        return;
+      }
 
-  const handleRatingSelect = useCallback((value: number) => {
-    setUserRating((current) => (current === value ? 0 : value));
-  }, []);
+      const nextRating = userRating === value ? 0 : value;
+      setCocktailRating(id, nextRating);
+    },
+    [cocktail, setCocktailRating, userRating],
+  );
 
   const instructionsParagraphs = useMemo(() => {
     const instructions = cocktail?.instructions?.trim();
@@ -332,7 +351,7 @@ export default function CocktailDetailsScreen() {
               <View style={styles.ratingRow}>
                 {Array.from({ length: MAX_RATING }).map((_, index) => {
                   const starValue = index + 1;
-                  const isActive = userRating >= starValue;
+                  const isActive = displayedRating >= starValue;
                   const icon = isActive ? 'star' : 'star-outline';
 
                   return (

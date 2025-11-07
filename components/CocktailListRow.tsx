@@ -113,8 +113,8 @@ const CocktailListRowComponent = ({
 
   const backgroundColor = isReady ? highlightColor : paletteColors.background;
 
-  const ratingValueRaw = (cocktail as { rating?: number; userRating?: number }).rating ??
-    (cocktail as { rating?: number; userRating?: number }).userRating ??
+  const ratingValueRaw = (cocktail as { userRating?: number }).userRating ??
+    (cocktail as { rating?: number }).rating ??
     0;
   const ratingValue = Math.max(0, Math.min(MAX_RATING, Number(ratingValueRaw) || 0));
 
