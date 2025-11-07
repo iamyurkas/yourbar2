@@ -10,7 +10,12 @@ type NormalizedSearchFields = {
   searchTokensNormalized: string[];
 };
 
-type Cocktail = CocktailRecord & NormalizedSearchFields;
+const MAX_RATING = 5;
+
+type Cocktail = CocktailRecord &
+  NormalizedSearchFields & {
+    userRating?: number | null;
+  };
 type Ingredient = IngredientRecord & NormalizedSearchFields;
 
 type InventoryContextValue = {
@@ -23,6 +28,7 @@ type InventoryContextValue = {
   toggleIngredientAvailability: (id: number) => void;
   toggleIngredientShopping: (id: number) => void;
   clearBaseIngredient: (id: number) => void;
+  setCocktailRating: (id: number | string, rating: number) => void;
 };
 
 type InventoryState = {
@@ -60,7 +66,7 @@ function normalizeSearchFields<T extends { name?: string | null; searchName?: st
 function ensureInventoryState(): InventoryState {
   if (!globalThis.__yourbarInventory) {
     globalThis.__yourbarInventory = {
-      cocktails: normalizeSearchFields(data.cocktails),
+      cocktails: normalizeSearchFields(data.cocktails) as Cocktail[],
       ingredients: normalizeSearchFields(data.ingredients),
       imported: true,
     } satisfies InventoryState;
@@ -77,6 +83,7 @@ type InventoryProviderProps = {
 
 export function InventoryProvider({ children }: InventoryProviderProps) {
   const inventory = ensureInventoryState();
+  const [cocktailsState, setCocktailsState] = useState<Cocktail[]>(() => inventory.cocktails);
   const [ingredientsState, setIngredientsState] = useState<Ingredient[]>(() => inventory.ingredients);
   const [availableIngredientIds, setAvailableIngredientIds] = useState<Set<number>>(() => new Set());
   const [shoppingIngredientIds, setShoppingIngredientIds] = useState<Set<number>>(() => new Set());
@@ -139,9 +146,43 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     [inventory],
   );
 
+  const setCocktailRating = useCallback(
+    (id: number | string, rating: number) => {
+      const normalizedId = String(id);
+      setCocktailsState((prev) => {
+        let didChange = false;
+        const next = prev.map((cocktail) => {
+          const candidateId = cocktail.id != null ? String(cocktail.id) : cocktail.name;
+          if (!candidateId || String(candidateId) !== normalizedId) {
+            return cocktail;
+          }
+
+          const nextRating = Math.max(0, Math.min(MAX_RATING, Math.floor(rating)));
+          const storedRating = typeof cocktail.userRating === 'number' ? cocktail.userRating : 0;
+
+          if (nextRating === storedRating || (nextRating === 0 && cocktail.userRating == null)) {
+            return cocktail;
+          }
+
+          didChange = true;
+          const updatedRating = nextRating > 0 ? nextRating : undefined;
+          return { ...cocktail, userRating: updatedRating };
+        });
+
+        if (didChange) {
+          inventory.cocktails = next;
+          return next;
+        }
+
+        return prev;
+      });
+    },
+    [inventory],
+  );
+
   const value = useMemo<InventoryContextValue>(() => {
     return {
-      cocktails: inventory.cocktails,
+      cocktails: cocktailsState,
       ingredients: ingredientsState,
       loading: false,
       availableIngredientIds,
@@ -150,9 +191,10 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       toggleIngredientAvailability,
       toggleIngredientShopping,
       clearBaseIngredient,
+      setCocktailRating,
     };
   }, [
-    inventory.cocktails,
+    cocktailsState,
     ingredientsState,
     availableIngredientIds,
     shoppingIngredientIds,
@@ -160,6 +202,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     toggleIngredientAvailability,
     toggleIngredientShopping,
     clearBaseIngredient,
+    setCocktailRating,
   ]);
 
   return <InventoryContext.Provider value={value}>{children}</InventoryContext.Provider>;

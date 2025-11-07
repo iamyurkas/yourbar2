@@ -117,31 +117,26 @@ const CocktailListRowComponent = ({
     (cocktail as { rating?: number; userRating?: number }).userRating ??
     0;
   const ratingValue = Math.max(0, Math.min(MAX_RATING, Number(ratingValueRaw) || 0));
+  const ratingCount = Math.max(0, Math.min(MAX_RATING, Math.floor(ratingValue)));
 
-  const ratingStars = useMemo(() => {
-    if (ratingValue <= 0) {
+  const ratingBadge = useMemo(() => {
+    if (ratingCount <= 0) {
       return null;
     }
 
-    const stars = Array.from({ length: MAX_RATING }, (_, index) => index < ratingValue);
     return (
-      <View style={styles.starsRow}>
-        {stars.map((active, index) => (
-          <View
-            key={`star-${index}`}
-            style={[styles.star, active ? styles.starActive : styles.starInactive]}
-          >
-            <MaterialCommunityIcons
-              name="star"
-              size={8}
-              color={active ? paletteColors.tint : 'transparent'}
-              style={styles.starIcon}
-            />
-          </View>
+      <View style={[styles.ratingBadge, { backgroundColor: paletteColors.surface }]} pointerEvents="none">
+        {Array.from({ length: ratingCount }).map((_, index) => (
+          <MaterialCommunityIcons
+            key={`rating-star-${index}`}
+            name="star"
+            size={12}
+            color={paletteColors.tint}
+          />
         ))}
       </View>
     );
-  }, [paletteColors.tint, ratingValue]);
+  }, [paletteColors.surface, paletteColors.tint, ratingCount]);
 
   const tagDots = useMemo(() => {
     const tags = cocktail.tags ?? [];
@@ -177,9 +172,9 @@ const CocktailListRowComponent = ({
       </View>
       <View style={styles.metaColumn}>
         {tagDots}
-        {ratingStars}
         {control}
       </View>
+      {ratingBadge}
     </Pressable>
   );
 };
@@ -194,6 +189,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     gap: 16,
     minHeight: 76,
+    position: 'relative',
   },
   thumbSlot: {
     width: 56,
@@ -222,21 +218,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 4,
   },
-  starsRow: {
+  ratingBadge: {
+    position: 'absolute',
+    right: 16,
+    bottom: 10,
     flexDirection: 'row',
     gap: 2,
-    alignItems: 'center',
+    paddingHorizontal: 6,
+    paddingVertical: 4,
+    borderRadius: 999,
+    elevation: 1,
+    shadowColor: '#000000',
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    shadowOffset: { width: 0, height: 1 },
   },
-  star: {
-    width: 8,
-    height: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  starIcon: {
-    transform: [{ scale: 0.5 }],
-  },
-  starActive: {},
-  starInactive: {},
 });
 
