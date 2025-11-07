@@ -118,30 +118,27 @@ const CocktailListRowComponent = ({
     0;
   const ratingValue = Math.max(0, Math.min(MAX_RATING, Number(ratingValueRaw) || 0));
 
-  const ratingStars = useMemo(() => {
+  const ratingBadge = useMemo(() => {
     if (ratingValue <= 0) {
       return null;
     }
 
-    const stars = Array.from({ length: MAX_RATING }, (_, index) => index < ratingValue);
+    const stars = Array.from({ length: ratingValue });
     return (
-      <View style={styles.starsRow}>
-        {stars.map((active, index) => (
-          <View
-            key={`star-${index}`}
-            style={[styles.star, active ? styles.starActive : styles.starInactive]}
-          >
+      <View style={styles.ratingBadgeContainer}>
+        <View style={[styles.ratingBadge, { backgroundColor: paletteColors.surfaceVariant }]}>
+          {stars.map((_, index) => (
             <MaterialCommunityIcons
+              key={`rating-star-${index}`}
               name="star"
-              size={8}
-              color={active ? paletteColors.tint : 'transparent'}
-              style={styles.starIcon}
+              size={10}
+              color={paletteColors.tint}
             />
-          </View>
-        ))}
+          ))}
+        </View>
       </View>
     );
-  }, [paletteColors.tint, ratingValue]);
+  }, [paletteColors.surfaceVariant, paletteColors.tint, ratingValue]);
 
   const tagDots = useMemo(() => {
     const tags = cocktail.tags ?? [];
@@ -166,6 +163,7 @@ const CocktailListRowComponent = ({
     >
       <View style={styles.thumbSlot}>
         <Thumb label={cocktail.name} uri={cocktail.photoUri} fallbackUri={glasswareUri} />
+        {ratingBadge}
       </View>
       <View style={styles.textColumn}>
         <Text style={[styles.title, { color: paletteColors.text }]} numberOfLines={1}>
@@ -177,7 +175,6 @@ const CocktailListRowComponent = ({
       </View>
       <View style={styles.metaColumn}>
         {tagDots}
-        {ratingStars}
         {control}
       </View>
     </Pressable>
@@ -200,6 +197,7 @@ const styles = StyleSheet.create({
     height: 56,
     borderRadius: 8,
     overflow: 'hidden',
+    position: 'relative',
   },
   textColumn: {
     flex: 1,
@@ -222,21 +220,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 4,
   },
-  starsRow: {
+  ratingBadgeContainer: {
+    position: 'absolute',
+    left: 6,
+    bottom: 6,
+  },
+  ratingBadge: {
+    borderRadius: 8,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
     flexDirection: 'row',
+    alignItems: 'center',
     gap: 2,
-    alignItems: 'center',
   },
-  star: {
-    width: 8,
-    height: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  starIcon: {
-    transform: [{ scale: 0.5 }],
-  },
-  starActive: {},
-  starInactive: {},
 });
 

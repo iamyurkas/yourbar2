@@ -10,8 +10,10 @@ type NormalizedSearchFields = {
   searchTokensNormalized: string[];
 };
 
-type Cocktail = CocktailRecord & NormalizedSearchFields;
+type Cocktail = (CocktailRecord & NormalizedSearchFields) & { userRating?: number };
 type Ingredient = IngredientRecord & NormalizedSearchFields;
+
+const MAX_RATING = 5;
 
 type InventoryContextValue = {
   cocktails: Cocktail[];
@@ -23,6 +25,7 @@ type InventoryContextValue = {
   toggleIngredientAvailability: (id: number) => void;
   toggleIngredientShopping: (id: number) => void;
   clearBaseIngredient: (id: number) => void;
+  setCocktailRating: (cocktailId: number | string | undefined, rating: number) => void;
 };
 
 type InventoryState = {
@@ -77,6 +80,7 @@ type InventoryProviderProps = {
 
 export function InventoryProvider({ children }: InventoryProviderProps) {
   const inventory = ensureInventoryState();
+  const [cocktailsState, setCocktailsState] = useState<Cocktail[]>(() => inventory.cocktails);
   const [ingredientsState, setIngredientsState] = useState<Ingredient[]>(() => inventory.ingredients);
   const [availableIngredientIds, setAvailableIngredientIds] = useState<Set<number>>(() => new Set());
   const [shoppingIngredientIds, setShoppingIngredientIds] = useState<Set<number>>(() => new Set());
@@ -139,9 +143,53 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     [inventory],
   );
 
+  const setCocktailRating = useCallback(
+    (cocktailId: number | string | undefined, rating: number) => {
+      if (cocktailId == null) {
+        return;
+      }
+
+      const normalizedId = String(cocktailId);
+      const clampedRating = Math.min(MAX_RATING, Math.max(0, Math.floor(Number(rating) || 0)));
+
+      setCocktailsState((prev) => {
+        let didChange = false;
+
+        const next = prev.map((cocktail) => {
+          const candidateIdRaw = cocktail.id ?? cocktail.name;
+          if (candidateIdRaw == null) {
+            return cocktail;
+          }
+
+          const candidateId = String(candidateIdRaw);
+          if (candidateId !== normalizedId) {
+            return cocktail;
+          }
+
+          const nextRating = clampedRating > 0 ? clampedRating : undefined;
+          const currentRating = (cocktail as { userRating?: number }).userRating;
+
+          if (currentRating === nextRating) {
+            return cocktail;
+          }
+
+          didChange = true;
+          return nextRating != null ? { ...cocktail, userRating: nextRating } : { ...cocktail, userRating: undefined };
+        });
+
+        if (didChange) {
+          inventory.cocktails = next;
+        }
+
+        return didChange ? next : prev;
+      });
+    },
+    [inventory],
+  );
+
   const value = useMemo<InventoryContextValue>(() => {
     return {
-      cocktails: inventory.cocktails,
+      cocktails: cocktailsState,
       ingredients: ingredientsState,
       loading: false,
       availableIngredientIds,
@@ -150,9 +198,10 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       toggleIngredientAvailability,
       toggleIngredientShopping,
       clearBaseIngredient,
+      setCocktailRating,
     };
   }, [
-    inventory.cocktails,
+    cocktailsState,
     ingredientsState,
     availableIngredientIds,
     shoppingIngredientIds,
@@ -160,6 +209,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     toggleIngredientAvailability,
     toggleIngredientShopping,
     clearBaseIngredient,
+    setCocktailRating,
   ]);
 
   return <InventoryContext.Provider value={value}>{children}</InventoryContext.Provider>;
