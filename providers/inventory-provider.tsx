@@ -1,4 +1,18 @@
-import React, { createContext, useCallback, useContext, useMemo, useState } from 'react';
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+
+import {
+  loadPersistedInventoryState,
+  savePersistedInventoryState,
+  type PersistedInventoryState,
+} from '@/libs/inventory-persistence';
 
 type InventoryData = typeof import('@/assets/data/data.json');
 
@@ -43,6 +57,41 @@ type InventoryState = {
   ingredients: Ingredient[];
   imported: boolean;
 };
+
+function toPersistableIdArray(ids: Iterable<number>): number[] {
+  const unique = new Set<number>();
+
+  for (const value of ids) {
+    const numeric = Number(value);
+    if (Number.isFinite(numeric) && numeric >= 0) {
+      unique.add(Math.trunc(numeric));
+    }
+  }
+
+  return Array.from(unique).sort((a, b) => a - b);
+}
+
+function toPersistableRatings(ratings: Record<string, number>): Record<string, number> {
+  const sanitized: Record<string, number> = {};
+
+  Object.entries(ratings).forEach(([key, value]) => {
+    if (!key) {
+      return;
+    }
+
+    const numeric = Number(value);
+    if (!Number.isFinite(numeric)) {
+      return;
+    }
+
+    const normalized = Math.max(0, Math.min(5, Math.round(numeric)));
+    if (normalized > 0) {
+      sanitized[key] = normalized;
+    }
+  });
+
+  return sanitized;
+}
 
 declare global {
   // eslint-disable-next-line no-var
@@ -95,6 +144,78 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   const [availableIngredientIds, setAvailableIngredientIds] = useState<Set<number>>(() => new Set());
   const [shoppingIngredientIds, setShoppingIngredientIds] = useState<Set<number>>(() => new Set());
   const [cocktailRatings, setCocktailRatings] = useState<Record<string, number>>({});
+  const persistedStateRef = useRef<PersistedInventoryState>({
+    availableIngredientIds: [],
+    shoppingIngredientIds: [],
+    cocktailRatings: {},
+  });
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const restorePersistedState = async () => {
+      const persisted = await loadPersistedInventoryState();
+
+      if (!isMounted) {
+        return;
+      }
+
+      persistedStateRef.current = {
+        availableIngredientIds: [...persisted.availableIngredientIds],
+        shoppingIngredientIds: [...persisted.shoppingIngredientIds],
+        cocktailRatings: { ...persisted.cocktailRatings },
+      } satisfies PersistedInventoryState;
+
+      setAvailableIngredientIds(new Set(persisted.availableIngredientIds));
+      setShoppingIngredientIds(new Set(persisted.shoppingIngredientIds));
+      setCocktailRatings({ ...persisted.cocktailRatings });
+    };
+
+    void restorePersistedState();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const updatePersistedState = useCallback((partial: Partial<PersistedInventoryState>) => {
+    const nextState: PersistedInventoryState = {
+      availableIngredientIds:
+        partial.availableIngredientIds ?? persistedStateRef.current.availableIngredientIds,
+      shoppingIngredientIds:
+        partial.shoppingIngredientIds ?? persistedStateRef.current.shoppingIngredientIds,
+      cocktailRatings: partial.cocktailRatings ?? persistedStateRef.current.cocktailRatings,
+    };
+
+    persistedStateRef.current = {
+      availableIngredientIds: [...nextState.availableIngredientIds],
+      shoppingIngredientIds: [...nextState.shoppingIngredientIds],
+      cocktailRatings: { ...nextState.cocktailRatings },
+    } satisfies PersistedInventoryState;
+
+    void savePersistedInventoryState(persistedStateRef.current);
+  }, []);
+
+  const persistAvailableIds = useCallback(
+    (ids: Set<number>) => {
+      updatePersistedState({ availableIngredientIds: toPersistableIdArray(ids) });
+    },
+    [updatePersistedState],
+  );
+
+  const persistShoppingIds = useCallback(
+    (ids: Set<number>) => {
+      updatePersistedState({ shoppingIngredientIds: toPersistableIdArray(ids) });
+    },
+    [updatePersistedState],
+  );
+
+  const persistRatings = useCallback(
+    (ratings: Record<string, number>) => {
+      updatePersistedState({ cocktailRatings: toPersistableRatings(ratings) });
+    },
+    [updatePersistedState],
+  );
 
   const resolveCocktailKey = useCallback((cocktail: Cocktail) => {
     const id = cocktail.id;
@@ -126,6 +247,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
 
           const next = { ...prev };
           delete next[key];
+          persistRatings(next);
           return next;
         }
 
@@ -133,10 +255,12 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           return prev;
         }
 
-        return { ...prev, [key]: normalizedRating };
+        const next = { ...prev, [key]: normalizedRating };
+        persistRatings(next);
+        return next;
       });
     },
-    [resolveCocktailKey],
+    [persistRatings, resolveCocktailKey],
   );
 
   const getCocktailRating = useCallback(
@@ -175,41 +299,73 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     });
   }, [cocktailRatings, inventory.cocktails, resolveCocktailKey]);
 
-  const setIngredientAvailability = useCallback((id: number, available: boolean) => {
-    setAvailableIngredientIds((prev) => {
-      const next = new Set(prev);
-      if (available) {
-        next.add(id);
-      } else {
-        next.delete(id);
+  const setIngredientAvailability = useCallback(
+    (id: number, available: boolean) => {
+      if (!Number.isFinite(id) || id < 0) {
+        return;
       }
-      return next;
-    });
-  }, []);
 
-  const toggleIngredientAvailability = useCallback((id: number) => {
-    setAvailableIngredientIds((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) {
-        next.delete(id);
-      } else {
-        next.add(id);
-      }
-      return next;
-    });
-  }, []);
+      setAvailableIngredientIds((prev) => {
+        const hasId = prev.has(id);
+        if ((available && hasId) || (!available && !hasId)) {
+          return prev;
+        }
 
-  const toggleIngredientShopping = useCallback((id: number) => {
-    setShoppingIngredientIds((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) {
-        next.delete(id);
-      } else {
-        next.add(id);
+        const next = new Set(prev);
+        if (available) {
+          next.add(id);
+        } else {
+          next.delete(id);
+        }
+
+        persistAvailableIds(next);
+        return next;
+      });
+    },
+    [persistAvailableIds],
+  );
+
+  const toggleIngredientAvailability = useCallback(
+    (id: number) => {
+      if (!Number.isFinite(id) || id < 0) {
+        return;
       }
-      return next;
-    });
-  }, []);
+
+      setAvailableIngredientIds((prev) => {
+        const next = new Set(prev);
+        if (next.has(id)) {
+          next.delete(id);
+        } else {
+          next.add(id);
+        }
+
+        persistAvailableIds(next);
+        return next;
+      });
+    },
+    [persistAvailableIds],
+  );
+
+  const toggleIngredientShopping = useCallback(
+    (id: number) => {
+      if (!Number.isFinite(id) || id < 0) {
+        return;
+      }
+
+      setShoppingIngredientIds((prev) => {
+        const next = new Set(prev);
+        if (next.has(id)) {
+          next.delete(id);
+        } else {
+          next.add(id);
+        }
+
+        persistShoppingIds(next);
+        return next;
+      });
+    },
+    [persistShoppingIds],
+  );
 
   const clearBaseIngredient = useCallback(
     (id: number) => {
