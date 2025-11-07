@@ -1,4 +1,13 @@
-import React, { createContext, useCallback, useContext, useMemo, useState } from 'react';
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+import * as FileSystem from 'expo-file-system';
+import { Platform } from 'react-native';
 
 type InventoryData = typeof import('@/assets/data/data.json');
 
@@ -43,6 +52,110 @@ type InventoryState = {
   ingredients: Ingredient[];
   imported: boolean;
 };
+
+type PersistedInventoryState = {
+  availableIngredientIds?: number[];
+  shoppingIngredientIds?: number[];
+  cocktailRatings?: Record<string, number>;
+};
+
+const STORAGE_FILE_NAME = 'yourbar-inventory.json';
+
+type WebStorage = {
+  getItem: (key: string) => string | null;
+  setItem: (key: string, value: string) => void;
+};
+
+function getWebStorage(): WebStorage | undefined {
+  if (Platform.OS !== 'web') {
+    return undefined;
+  }
+
+  const candidate = (globalThis as { localStorage?: unknown }).localStorage;
+  if (
+    candidate &&
+    typeof candidate === 'object' &&
+    'getItem' in candidate &&
+    typeof (candidate as { getItem?: unknown }).getItem === 'function' &&
+    'setItem' in candidate &&
+    typeof (candidate as { setItem?: unknown }).setItem === 'function'
+  ) {
+    return candidate as WebStorage;
+  }
+
+  return undefined;
+}
+
+const STORAGE_FILE_URI = (() => {
+  const directory = FileSystem.documentDirectory ?? FileSystem.cacheDirectory;
+  if (!directory) {
+    return undefined;
+  }
+
+  return `${directory}${STORAGE_FILE_NAME}`;
+})();
+
+async function readPersistedInventoryState() {
+  const webStorage = getWebStorage();
+  if (webStorage) {
+    try {
+      const value = webStorage.getItem(STORAGE_FILE_NAME);
+      if (!value) {
+        return undefined;
+      }
+
+      return JSON.parse(value) as PersistedInventoryState;
+    } catch (error) {
+      console.warn('Failed to read inventory state from web storage', error);
+      return undefined;
+    }
+  }
+
+  if (!STORAGE_FILE_URI) {
+    return undefined;
+  }
+
+  try {
+    const info = await FileSystem.getInfoAsync(STORAGE_FILE_URI);
+    if (!info.exists) {
+      return undefined;
+    }
+
+    const contents = await FileSystem.readAsStringAsync(STORAGE_FILE_URI);
+    if (!contents) {
+      return undefined;
+    }
+
+    return JSON.parse(contents) as PersistedInventoryState;
+  } catch (error) {
+    console.warn('Failed to read inventory state from file', error);
+    return undefined;
+  }
+}
+
+async function writePersistedInventoryState(state: PersistedInventoryState) {
+  const payload = JSON.stringify(state);
+
+  const webStorage = getWebStorage();
+  if (webStorage) {
+    try {
+      webStorage.setItem(STORAGE_FILE_NAME, payload);
+    } catch (error) {
+      console.warn('Failed to persist inventory state to web storage', error);
+    }
+    return;
+  }
+
+  if (!STORAGE_FILE_URI) {
+    return;
+  }
+
+  try {
+    await FileSystem.writeAsStringAsync(STORAGE_FILE_URI, payload);
+  } catch (error) {
+    console.warn('Failed to persist inventory state to file', error);
+  }
+}
 
 declare global {
   // eslint-disable-next-line no-var
@@ -95,6 +208,81 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   const [availableIngredientIds, setAvailableIngredientIds] = useState<Set<number>>(() => new Set());
   const [shoppingIngredientIds, setShoppingIngredientIds] = useState<Set<number>>(() => new Set());
   const [cocktailRatings, setCocktailRatings] = useState<Record<string, number>>({});
+  const [hydrated, setHydrated] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function hydrate() {
+      try {
+        const persisted = await readPersistedInventoryState();
+
+        if (!isMounted) {
+          return;
+        }
+
+        if (persisted) {
+          const normalizeIdList = (value: unknown): number[] => {
+            if (!Array.isArray(value)) {
+              return [];
+            }
+
+            return value
+              .map((item) => Number(item))
+              .filter((item) => Number.isFinite(item));
+          };
+
+          if (persisted.availableIngredientIds) {
+            setAvailableIngredientIds(new Set(normalizeIdList(persisted.availableIngredientIds)));
+          }
+
+          if (persisted.shoppingIngredientIds) {
+            setShoppingIngredientIds(new Set(normalizeIdList(persisted.shoppingIngredientIds)));
+          }
+
+          if (persisted.cocktailRatings) {
+            const source = persisted.cocktailRatings;
+            if (source && typeof source === 'object') {
+              const nextRatings: Record<string, number> = {};
+              for (const [key, value] of Object.entries(source)) {
+                const normalized = Math.max(0, Math.min(5, Math.round(Number(value) || 0)));
+                if (normalized > 0) {
+                  nextRatings[key] = normalized;
+                }
+              }
+              setCocktailRatings(nextRatings);
+            }
+          }
+        }
+      } catch (error) {
+        console.warn('Failed to hydrate inventory state', error);
+      } finally {
+        if (isMounted) {
+          setHydrated(true);
+          setLoading(false);
+        }
+      }
+    }
+
+    void hydrate();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!hydrated) {
+      return;
+    }
+
+    void writePersistedInventoryState({
+      availableIngredientIds: Array.from(availableIngredientIds),
+      shoppingIngredientIds: Array.from(shoppingIngredientIds),
+      cocktailRatings,
+    });
+  }, [availableIngredientIds, shoppingIngredientIds, cocktailRatings, hydrated]);
 
   const resolveCocktailKey = useCallback((cocktail: Cocktail) => {
     const id = cocktail.id;
@@ -237,7 +425,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     return {
       cocktails: cocktailsWithRatings,
       ingredients: ingredientsState,
-      loading: false,
+      loading,
       availableIngredientIds,
       shoppingIngredientIds,
       setIngredientAvailability,
@@ -251,6 +439,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   }, [
     cocktailsWithRatings,
     ingredientsState,
+    loading,
     availableIngredientIds,
     shoppingIngredientIds,
     setIngredientAvailability,
