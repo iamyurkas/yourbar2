@@ -175,24 +175,13 @@ export default function CocktailDetailsScreen() {
     return [...recipe].sort((a, b) => (a?.order ?? 0) - (b?.order ?? 0));
   }, [cocktail?.ingredients]);
 
-  const { userRating, displayedRating } = useMemo(() => {
+  const userRating = useMemo(() => {
     if (!cocktail) {
-      return { userRating: 0, displayedRating: 0 };
+      return 0;
     }
 
     const rawUserRating = (cocktail as { userRating?: number }).userRating ?? 0;
-    const userRatingValue = Math.max(0, Math.min(MAX_RATING, Number(rawUserRating) || 0));
-    const rawBaseRating = (cocktail as { rating?: number }).rating ?? 0;
-    const baseRatingValue = Math.max(0, Math.min(MAX_RATING, Number(rawBaseRating) || 0));
-
-    if (userRatingValue > 0) {
-      return { userRating: userRatingValue, displayedRating: userRatingValue };
-    }
-
-    return {
-      userRating: 0,
-      displayedRating: baseRatingValue,
-    };
+    return Math.max(0, Math.min(MAX_RATING, Number(rawUserRating) || 0));
   }, [cocktail]);
 
   const handleRatingSelect = useCallback(
@@ -346,12 +335,25 @@ export default function CocktailDetailsScreen() {
                     <Text style={[styles.photoPlaceholderText, { color: palette.onSurfaceVariant }]}>No photo</Text>
                   </View>
                 )}
+                {userRating > 0 ? (
+                  <View pointerEvents="none" style={styles.photoRatingBadge}>
+                    {Array.from({ length: userRating }).map((_, index) => (
+                      <MaterialCommunityIcons
+                        key={`photo-rating-star-${index}`}
+                        name="star"
+                        size={8}
+                        color={palette.tint}
+                        style={styles.photoRatingStar}
+                      />
+                    ))}
+                  </View>
+                ) : null}
               </View>
 
               <View style={styles.ratingRow}>
                 {Array.from({ length: MAX_RATING }).map((_, index) => {
                   const starValue = index + 1;
-                  const isActive = displayedRating >= starValue;
+                  const isActive = userRating >= starValue;
                   const icon = isActive ? 'star' : 'star-outline';
 
                   return (
@@ -521,6 +523,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center',
+    position: 'relative',
   },
   photo: {
     width: 150,
@@ -552,6 +555,17 @@ const styles = StyleSheet.create({
     height: 32,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  photoRatingBadge: {
+    position: 'absolute',
+    left: 8,
+    bottom: 8,
+    flexDirection: 'row',
+    gap: 2,
+    alignItems: 'center',
+  },
+  photoRatingStar: {
+    transform: [{ scale: 0.5 }],
   },
   glassInfo: {
     flexDirection: 'row',
