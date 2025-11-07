@@ -20,12 +20,13 @@ type StorageDriver = {
   write(data: string): Promise<void>;
 };
 
-const baseDirectory = FileSystem.documentDirectory ?? FileSystem.cacheDirectory ?? null;
-
-const globalWithStorage = globalThis as typeof globalThis & { localStorage?: OptionalStorage };
-const localStorageInstance = globalWithStorage.localStorage;
+const globalWithStorage = globalThis as typeof globalThis & {
+  localStorage?: OptionalStorage;
+  window?: { localStorage?: OptionalStorage };
+};
 
 let didWarnMissingStorage = false;
+let cachedStorageDriver: StorageDriver | null = null;
 
 function warnMissingStorage() {
   if (!didWarnMissingStorage) {
@@ -34,61 +35,114 @@ function warnMissingStorage() {
   }
 }
 
-const storageDriver: StorageDriver = baseDirectory
-  ? {
-      async read() {
-        try {
-          const path = `${baseDirectory}${STORAGE_FILE_NAME}`;
-          const info = await FileSystem.getInfoAsync(path);
-          if (!info.exists || info.isDirectory) {
-            return null;
-          }
-          return await FileSystem.readAsStringAsync(path, {
-            encoding: FileSystem.EncodingType.UTF8,
-          });
-        } catch (error) {
-          console.warn('Failed to read inventory storage file', error);
+function getFileSystemBaseDirectory(): string | null {
+  const { documentDirectory, cacheDirectory } = FileSystem;
+
+  if (typeof documentDirectory === 'string' && documentDirectory.length > 0) {
+    return documentDirectory.endsWith('/') ? documentDirectory : `${documentDirectory}/`;
+  }
+
+  if (typeof cacheDirectory === 'string' && cacheDirectory.length > 0) {
+    return cacheDirectory.endsWith('/') ? cacheDirectory : `${cacheDirectory}/`;
+  }
+
+  return null;
+}
+
+function getLocalStorage(): OptionalStorage | null {
+  try {
+    if (globalWithStorage.localStorage) {
+      return globalWithStorage.localStorage;
+    }
+
+    if (globalWithStorage.window?.localStorage) {
+      return globalWithStorage.window.localStorage;
+    }
+  } catch (error) {
+    console.warn('Failed to access localStorage for inventory persistence', error);
+  }
+
+  return null;
+}
+
+function createFileSystemDriver(baseDirectory: string): StorageDriver {
+  const path = `${baseDirectory}${STORAGE_FILE_NAME}`;
+
+  return {
+    async read() {
+      try {
+        const info = await FileSystem.getInfoAsync(path);
+        if (!info.exists || info.isDirectory) {
           return null;
         }
-      },
-      async write(data: string) {
-        try {
-          const path = `${baseDirectory}${STORAGE_FILE_NAME}`;
-          await FileSystem.writeAsStringAsync(path, data, {
-            encoding: FileSystem.EncodingType.UTF8,
-          });
-        } catch (error) {
-          console.warn('Failed to write inventory storage file', error);
-        }
-      },
-    }
-  : localStorageInstance
-  ? {
-      async read() {
-        try {
-          return localStorageInstance.getItem(LOCAL_STORAGE_KEY);
-        } catch (error) {
-          console.warn('Failed to read inventory storage from localStorage', error);
-          return null;
-        }
-      },
-      async write(data: string) {
-        try {
-          localStorageInstance.setItem(LOCAL_STORAGE_KEY, data);
-        } catch (error) {
-          console.warn('Failed to write inventory storage to localStorage', error);
-        }
-      },
-    }
-  : {
-      async read() {
-        warnMissingStorage();
+        return await FileSystem.readAsStringAsync(path, {
+          encoding: FileSystem.EncodingType.UTF8,
+        });
+      } catch (error) {
+        console.warn('Failed to read inventory storage file', error);
         return null;
-      },
-      async write() {
-        warnMissingStorage();
-      },
-    };
+      }
+    },
+    async write(data: string) {
+      try {
+        await FileSystem.writeAsStringAsync(path, data, {
+          encoding: FileSystem.EncodingType.UTF8,
+        });
+      } catch (error) {
+        console.warn('Failed to write inventory storage file', error);
+      }
+    },
+  } satisfies StorageDriver;
+}
+
+function createLocalStorageDriver(storage: OptionalStorage): StorageDriver {
+  return {
+    async read() {
+      try {
+        return storage.getItem(LOCAL_STORAGE_KEY);
+      } catch (error) {
+        console.warn('Failed to read inventory storage from localStorage', error);
+        return null;
+      }
+    },
+    async write(data: string) {
+      try {
+        storage.setItem(LOCAL_STORAGE_KEY, data);
+      } catch (error) {
+        console.warn('Failed to write inventory storage to localStorage', error);
+      }
+    },
+  } satisfies StorageDriver;
+}
+
+function resolveStorageDriver(): StorageDriver {
+  if (cachedStorageDriver) {
+    return cachedStorageDriver;
+  }
+
+  const baseDirectory = getFileSystemBaseDirectory();
+  if (baseDirectory) {
+    cachedStorageDriver = createFileSystemDriver(baseDirectory);
+    return cachedStorageDriver;
+  }
+
+  const localStorageInstance = getLocalStorage();
+  if (localStorageInstance) {
+    cachedStorageDriver = createLocalStorageDriver(localStorageInstance);
+    return cachedStorageDriver;
+  }
+
+  warnMissingStorage();
+
+  return {
+    async read() {
+      return null;
+    },
+    async write() {
+      // no-op
+    },
+  } satisfies StorageDriver;
+}
 
 const EMPTY_STATE: PersistedInventoryState = {
   availableIngredientIds: [],
@@ -153,7 +207,8 @@ function sanitizeState(value: unknown): PersistedInventoryState {
 
 export async function loadPersistedInventoryState(): Promise<PersistedInventoryState> {
   try {
-    const raw = await storageDriver.read();
+    const driver = resolveStorageDriver();
+    const raw = await driver.read();
     if (!raw) {
       return { ...EMPTY_STATE };
     }
@@ -170,7 +225,8 @@ export async function savePersistedInventoryState(state: PersistedInventoryState
   try {
     const sanitized = sanitizeState(state);
     const serialized = JSON.stringify(sanitized);
-    await storageDriver.write(serialized);
+    const driver = resolveStorageDriver();
+    await driver.write(serialized);
   } catch (error) {
     console.warn('Failed to persist inventory state', error);
   }
