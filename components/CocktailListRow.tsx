@@ -123,18 +123,15 @@ const CocktailListRowComponent = ({
       return null;
     }
 
-    const stars = Array.from({ length: MAX_RATING }, (_, index) => index < ratingValue);
+    const stars = Array.from({ length: ratingValue }, (_, index) => index);
     return (
       <View style={styles.starsRow}>
-        {stars.map((active, index) => (
-          <View
-            key={`star-${index}`}
-            style={[styles.star, active ? styles.starActive : styles.starInactive]}
-          >
+        {stars.map((_, index) => (
+          <View key={`star-${index}`} style={styles.star}>
             <MaterialCommunityIcons
               name="star"
               size={8}
-              color={active ? paletteColors.tint : 'transparent'}
+              color={paletteColors.tint}
               style={styles.starIcon}
             />
           </View>
@@ -228,15 +225,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   star: {
-    width: 8,
-    height: 8,
+    width: 4,
+    height: 4,
     alignItems: 'center',
     justifyContent: 'center',
   },
   starIcon: {
     transform: [{ scale: 0.5 }],
   },
-  starActive: {},
-  starInactive: {},
 });
 

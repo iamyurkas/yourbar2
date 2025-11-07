@@ -5,7 +5,6 @@ import { useRouter } from 'expo-router';
 
 import { FabAdd } from '@/components/FabAdd';
 import { CocktailListRow } from '@/components/CocktailListRow';
-import { FavoriteStar } from '@/components/RowParts';
 import { CollectionHeader } from '@/components/CollectionHeader';
 import type { SegmentTabOption } from '@/components/TopBars';
 import { Colors } from '@/constants/theme';
@@ -100,21 +99,6 @@ export default function CocktailsScreen() {
     return Array.from(merged.values());
   }, [favoriteFromTags, ratedCocktails]);
 
-  const favoriteKeys = useMemo(() => {
-    const keys = new Set<string>();
-    const register = (cocktail: Cocktail) => {
-      const key = getCocktailKey(cocktail);
-      if (key) {
-        keys.add(key);
-      }
-    };
-
-    favoriteCandidates.forEach(register);
-    ratedCocktails.forEach(register);
-
-    return keys;
-  }, [favoriteCandidates, ratedCocktails]);
-
   const sections = useMemo<Record<CocktailTabKey, CocktailSection>>(() => {
     return {
       all: { key: 'all', label: 'All', data: cocktails },
@@ -174,19 +158,15 @@ export default function CocktailsScreen() {
 
   const renderItem = useCallback(
     ({ item }: { item: Cocktail }) => {
-      const key = getCocktailKey(item);
-      const isFavorite = key ? favoriteKeys.has(key) : false;
-
       return (
         <CocktailListRow
           cocktail={item}
           availableIngredientIds={availableIngredientIds}
           onPress={() => handleSelectCocktail(item)}
-          control={<FavoriteStar active={isFavorite} />}
         />
       );
     },
-    [availableIngredientIds, favoriteKeys, handleSelectCocktail],
+    [availableIngredientIds, handleSelectCocktail],
   );
 
   const renderSeparator = useCallback(
