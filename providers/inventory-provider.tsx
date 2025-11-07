@@ -59,6 +59,9 @@ type InventorySnapshot = {
   cocktails: Cocktail[];
   ingredients: Ingredient[];
   imported?: boolean;
+  availableIngredientIds?: number[];
+  shoppingIngredientIds?: number[];
+  cocktailRatings?: Record<string, number>;
 };
 
 const INVENTORY_SNAPSHOT_VERSION = 1;
@@ -66,6 +69,12 @@ const INVENTORY_SNAPSHOT_VERSION = 1;
 declare global {
   // eslint-disable-next-line no-var
   var __yourbarInventory: InventoryState | undefined;
+  // eslint-disable-next-line no-var
+  var __yourbarInventoryAvailableIngredientIds: Set<number> | undefined;
+  // eslint-disable-next-line no-var
+  var __yourbarInventoryShoppingIngredientIds: Set<number> | undefined;
+  // eslint-disable-next-line no-var
+  var __yourbarInventoryCocktailRatings: Record<string, number> | undefined;
 }
 
 function normalizeSearchFields<T extends { name?: string | null; searchName?: string | null; searchTokens?: string[] | null }>(
@@ -105,12 +114,69 @@ function createInventoryStateFromSnapshot(snapshot: InventorySnapshot): Inventor
   } satisfies InventoryState;
 }
 
-function createSnapshotFromInventory(state: InventoryState): InventorySnapshot {
+function toSortedArray(values: Iterable<number>): number[] {
+  const sanitized = Array.from(values)
+    .map((value) => Number(value))
+    .filter((value) => Number.isFinite(value))
+    .map((value) => Math.trunc(value));
+
+  return Array.from(new Set(sanitized)).sort((a, b) => a - b);
+}
+
+function sanitizeCocktailRatings(
+  ratings?: Record<string, number> | null | undefined,
+): Record<string, number> {
+  if (!ratings) {
+    return {};
+  }
+
+  const sanitized: Record<string, number> = {};
+  Object.entries(ratings).forEach(([key, value]) => {
+    const normalized = Math.max(0, Math.min(5, Math.round(Number(value) || 0)));
+    if (normalized > 0) {
+      sanitized[key] = normalized;
+    }
+  });
+  return sanitized;
+}
+
+function createIngredientIdSet(values?: readonly number[] | null): Set<number> {
+  if (!values || values.length === 0) {
+    return new Set<number>();
+  }
+
+  const sanitized = values
+    .map((value) => Number(value))
+    .filter((value) => Number.isFinite(value))
+    .map((value) => Math.trunc(value));
+
+  return new Set(sanitized);
+}
+
+function createSnapshotFromInventory(
+  state: InventoryState,
+  options: {
+    availableIngredientIds: Set<number>;
+    shoppingIngredientIds: Set<number>;
+    cocktailRatings: Record<string, number>;
+  },
+): InventorySnapshot {
+  const sanitizedRatings = sanitizeCocktailRatings(options.cocktailRatings);
+
   return {
     version: INVENTORY_SNAPSHOT_VERSION,
     cocktails: state.cocktails,
     ingredients: state.ingredients,
     imported: state.imported,
+    availableIngredientIds:
+      options.availableIngredientIds.size > 0
+        ? toSortedArray(options.availableIngredientIds)
+        : undefined,
+    shoppingIngredientIds:
+      options.shoppingIngredientIds.size > 0
+        ? toSortedArray(options.shoppingIngredientIds)
+        : undefined,
+    cocktailRatings: Object.keys(sanitizedRatings).length > 0 ? sanitizedRatings : undefined,
   } satisfies InventorySnapshot;
 }
 
@@ -125,9 +191,19 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     () => globalThis.__yourbarInventory,
   );
   const [loading, setLoading] = useState<boolean>(() => !globalThis.__yourbarInventory);
-  const [availableIngredientIds, setAvailableIngredientIds] = useState<Set<number>>(() => new Set());
-  const [shoppingIngredientIds, setShoppingIngredientIds] = useState<Set<number>>(() => new Set());
-  const [cocktailRatings, setCocktailRatings] = useState<Record<string, number>>({});
+  const [availableIngredientIds, setAvailableIngredientIds] = useState<Set<number>>(() =>
+    globalThis.__yourbarInventoryAvailableIngredientIds
+      ? new Set(globalThis.__yourbarInventoryAvailableIngredientIds)
+      : new Set(),
+  );
+  const [shoppingIngredientIds, setShoppingIngredientIds] = useState<Set<number>>(() =>
+    globalThis.__yourbarInventoryShoppingIngredientIds
+      ? new Set(globalThis.__yourbarInventoryShoppingIngredientIds)
+      : new Set(),
+  );
+  const [cocktailRatings, setCocktailRatings] = useState<Record<string, number>>(() =>
+    sanitizeCocktailRatings(globalThis.__yourbarInventoryCocktailRatings),
+  );
   const lastPersistedSnapshot = useRef<string | undefined>(undefined);
 
   useEffect(() => {
@@ -142,7 +218,15 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       try {
         const stored = await loadInventorySnapshot<Cocktail, Ingredient>();
         if (stored && stored.version === INVENTORY_SNAPSHOT_VERSION && !cancelled) {
-          setInventoryState(createInventoryStateFromSnapshot(stored));
+          const nextInventoryState = createInventoryStateFromSnapshot(stored);
+          const nextAvailableIds = createIngredientIdSet(stored.availableIngredientIds);
+          const nextShoppingIds = createIngredientIdSet(stored.shoppingIngredientIds);
+          const nextRatings = sanitizeCocktailRatings(stored.cocktailRatings);
+
+          setInventoryState(nextInventoryState);
+          setAvailableIngredientIds(nextAvailableIds);
+          setShoppingIngredientIds(nextShoppingIds);
+          setCocktailRatings(nextRatings);
           return;
         }
       } catch (error) {
@@ -153,6 +237,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         const data = loadInventoryData();
         if (!cancelled) {
           setInventoryState(createInventoryStateFromData(data, true));
+          setAvailableIngredientIds(new Set());
+          setShoppingIngredientIds(new Set());
+          setCocktailRatings({});
         }
       } catch (error) {
         console.error('Failed to import bundled inventory', error);
@@ -174,8 +261,15 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
 
     setLoading(false);
     globalThis.__yourbarInventory = inventoryState;
+    globalThis.__yourbarInventoryAvailableIngredientIds = availableIngredientIds;
+    globalThis.__yourbarInventoryShoppingIngredientIds = shoppingIngredientIds;
+    globalThis.__yourbarInventoryCocktailRatings = cocktailRatings;
 
-    const snapshot = createSnapshotFromInventory(inventoryState);
+    const snapshot = createSnapshotFromInventory(inventoryState, {
+      availableIngredientIds,
+      shoppingIngredientIds,
+      cocktailRatings,
+    });
     const serialized = JSON.stringify(snapshot);
 
     if (lastPersistedSnapshot.current === serialized) {
@@ -187,7 +281,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     void persistInventorySnapshot(snapshot).catch((error) => {
       console.error('Failed to persist inventory snapshot', error);
     });
-  }, [inventoryState]);
+  }, [inventoryState, availableIngredientIds, shoppingIngredientIds, cocktailRatings]);
 
   const cocktails = inventoryState?.cocktails ?? [];
   const ingredients = inventoryState?.ingredients ?? [];

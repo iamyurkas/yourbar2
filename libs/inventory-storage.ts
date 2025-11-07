@@ -1,31 +1,56 @@
 import * as FileSystem from 'expo-file-system/legacy';
 
 const STORAGE_FILENAME = 'inventory-state.json';
+let hasLoggedDocumentDirectoryWarning = false;
+let hasLoggedCacheDirectoryWarning = false;
 
 export type InventorySnapshot<TCocktail, TIngredient> = {
   version: number;
   cocktails: TCocktail[];
   ingredients: TIngredient[];
   imported?: boolean;
+  availableIngredientIds?: number[];
+  shoppingIngredientIds?: number[];
+  cocktailRatings?: Record<string, number>;
 };
+
+function joinDirectoryPath(directory: string | null | undefined, filename: string): string | undefined {
+  if (!directory) {
+    return undefined;
+  }
+
+  return `${directory.replace(/\/?$/, '/')}${filename}`;
+}
 
 function resolveStoragePath(): string | undefined {
   try {
-    const directory = FileSystem.Paths.document;
-    if (directory) {
-      return FileSystem.Paths.join(directory, STORAGE_FILENAME);
+    const documentPath = joinDirectoryPath(FileSystem.documentDirectory, STORAGE_FILENAME);
+    if (documentPath) {
+      return documentPath;
     }
   } catch (error) {
     console.warn('Unable to access document directory for inventory snapshot', error);
+    hasLoggedDocumentDirectoryWarning = true;
+  }
+
+  if (!FileSystem.documentDirectory && !hasLoggedDocumentDirectoryWarning) {
+    console.warn('Unable to access document directory for inventory snapshot');
+    hasLoggedDocumentDirectoryWarning = true;
   }
 
   try {
-    const directory = FileSystem.Paths.cache;
-    if (directory) {
-      return FileSystem.Paths.join(directory, STORAGE_FILENAME);
+    const cachePath = joinDirectoryPath(FileSystem.cacheDirectory, STORAGE_FILENAME);
+    if (cachePath) {
+      return cachePath;
     }
   } catch (error) {
     console.warn('Unable to access cache directory for inventory snapshot', error);
+    hasLoggedCacheDirectoryWarning = true;
+  }
+
+  if (!FileSystem.cacheDirectory && !hasLoggedCacheDirectoryWarning) {
+    console.warn('Unable to access cache directory for inventory snapshot');
+    hasLoggedCacheDirectoryWarning = true;
   }
 
   return undefined;
