@@ -5,7 +5,6 @@ import { useRouter } from 'expo-router';
 
 import { FabAdd } from '@/components/FabAdd';
 import { CocktailListRow } from '@/components/CocktailListRow';
-import { FavoriteStar } from '@/components/RowParts';
 import { CollectionHeader } from '@/components/CollectionHeader';
 import type { SegmentTabOption } from '@/components/TopBars';
 import { Colors } from '@/constants/theme';
@@ -19,11 +18,28 @@ type CocktailSection = {
 
 type CocktailTabKey = 'all' | 'my' | 'favorites';
 
+const MAX_RATING = 5;
+
 const TAB_OPTIONS: SegmentTabOption[] = [
   { key: 'all', label: 'All' },
   { key: 'my', label: 'My' },
   { key: 'favorites', label: 'Favorites' },
 ];
+
+function getCocktailKey(cocktail: Cocktail): string | undefined {
+  const candidate = cocktail.id ?? cocktail.name;
+  if (candidate == null) {
+    return undefined;
+  }
+
+  return String(candidate);
+}
+
+function getCocktailUserRating(cocktail: Cocktail): number {
+  const ratingValueRaw = (cocktail as { userRating?: number }).userRating ?? 0;
+  const ratingValue = Math.max(0, Math.min(MAX_RATING, Number(ratingValueRaw) || 0));
+  return ratingValue;
+}
 
 export default function CocktailsScreen() {
   const { cocktails, availableIngredientIds } = useInventory();
@@ -53,7 +69,7 @@ export default function CocktailsScreen() {
     });
   }, [cocktails, availableIngredientIds]);
 
-  const favoriteCandidates = useMemo(() => {
+  const favoriteFromTags = useMemo(() => {
     return cocktails.filter((cocktail) =>
       (cocktail.tags ?? []).some((tag) =>
         /signature|house|favorite|favourite|classic/i.test(tag.name ?? ''),
@@ -61,7 +77,27 @@ export default function CocktailsScreen() {
     );
   }, [cocktails]);
 
-  const favoriteIds = useMemo(() => new Set(favoriteCandidates.map((item) => item.id)), [favoriteCandidates]);
+  const ratedCocktails = useMemo(
+    () => cocktails.filter((cocktail) => getCocktailUserRating(cocktail) > 0),
+    [cocktails],
+  );
+
+  const favoriteCandidates = useMemo(() => {
+    const merged = new Map<string, Cocktail>();
+    const register = (cocktail: Cocktail) => {
+      const key = getCocktailKey(cocktail);
+      if (!key || merged.has(key)) {
+        return;
+      }
+
+      merged.set(key, cocktail);
+    };
+
+    favoriteFromTags.forEach(register);
+    ratedCocktails.forEach(register);
+
+    return Array.from(merged.values());
+  }, [favoriteFromTags, ratedCocktails]);
 
   const sections = useMemo<Record<CocktailTabKey, CocktailSection>>(() => {
     return {
@@ -121,15 +157,16 @@ export default function CocktailsScreen() {
   );
 
   const renderItem = useCallback(
-    ({ item }: { item: Cocktail }) => (
-      <CocktailListRow
-        cocktail={item}
-        availableIngredientIds={availableIngredientIds}
-        onPress={() => handleSelectCocktail(item)}
-        control={<FavoriteStar active={favoriteIds.has(item.id)} />}
-      />
-    ),
-    [availableIngredientIds, favoriteIds, handleSelectCocktail],
+    ({ item }: { item: Cocktail }) => {
+      return (
+        <CocktailListRow
+          cocktail={item}
+          availableIngredientIds={availableIngredientIds}
+          onPress={() => handleSelectCocktail(item)}
+        />
+      );
+    },
+    [availableIngredientIds, handleSelectCocktail],
   );
 
   const renderSeparator = useCallback(

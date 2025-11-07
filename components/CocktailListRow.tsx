@@ -113,9 +113,7 @@ const CocktailListRowComponent = ({
 
   const backgroundColor = isReady ? highlightColor : paletteColors.background;
 
-  const ratingValueRaw = (cocktail as { rating?: number; userRating?: number }).rating ??
-    (cocktail as { rating?: number; userRating?: number }).userRating ??
-    0;
+  const ratingValueRaw = (cocktail as { userRating?: number }).userRating ?? 0;
   const ratingValue = Math.max(0, Math.min(MAX_RATING, Number(ratingValueRaw) || 0));
 
   const ratingStars = useMemo(() => {
@@ -123,21 +121,17 @@ const CocktailListRowComponent = ({
       return null;
     }
 
-    const stars = Array.from({ length: MAX_RATING }, (_, index) => index < ratingValue);
+    const stars = Array.from({ length: ratingValue }, (_, index) => index);
     return (
       <View style={styles.starsRow}>
-        {stars.map((active, index) => (
-          <View
+        {stars.map((_, index) => (
+          <MaterialCommunityIcons
             key={`star-${index}`}
-            style={[styles.star, active ? styles.starActive : styles.starInactive]}
-          >
-            <MaterialCommunityIcons
-              name="star"
-              size={8}
-              color={active ? paletteColors.tint : 'transparent'}
-              style={styles.starIcon}
-            />
-          </View>
+            name="star"
+            size={8}
+            color={paletteColors.tint}
+            style={styles.starIcon}
+          />
         ))}
       </View>
     );
@@ -166,6 +160,7 @@ const CocktailListRowComponent = ({
     >
       <View style={styles.thumbSlot}>
         <Thumb label={cocktail.name} uri={cocktail.photoUri} fallbackUri={glasswareUri} />
+        {ratingStars ? <View style={styles.ratingOverlay}>{ratingStars}</View> : null}
       </View>
       <View style={styles.textColumn}>
         <Text style={[styles.title, { color: paletteColors.text }]} numberOfLines={1}>
@@ -177,7 +172,6 @@ const CocktailListRowComponent = ({
       </View>
       <View style={styles.metaColumn}>
         {tagDots}
-        {ratingStars}
         {control}
       </View>
     </Pressable>
@@ -200,6 +194,7 @@ const styles = StyleSheet.create({
     height: 56,
     borderRadius: 8,
     overflow: 'hidden',
+    position: 'relative',
   },
   textColumn: {
     flex: 1,
@@ -222,21 +217,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 4,
   },
+  ratingOverlay: {
+    position: 'absolute',
+    left: 4,
+    bottom: 4,
+  },
   starsRow: {
     flexDirection: 'row',
     gap: 2,
     alignItems: 'center',
   },
-  star: {
-    width: 8,
-    height: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   starIcon: {
     transform: [{ scale: 0.5 }],
   },
-  starActive: {},
-  starInactive: {},
 });
 
