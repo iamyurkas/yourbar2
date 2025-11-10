@@ -6,6 +6,7 @@ import * as ImagePicker from 'expo-image-picker';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Alert,
+  InteractionManager,
   KeyboardAvoidingView,
   Keyboard,
   Platform,
@@ -60,6 +61,17 @@ export default function CreateIngredientScreen() {
       hideListener.remove();
     };
   }, [updateBaseFieldWindowLayout]);
+
+  useEffect(() => {
+    if (!baseFieldLayout) {
+      return;
+    }
+    updateBaseFieldWindowLayout();
+    const timer = setTimeout(() => {
+      updateBaseFieldWindowLayout();
+    }, 120);
+    return () => clearTimeout(timer);
+  }, [baseFieldLayout, updateBaseFieldWindowLayout]);
 
   const baseIngredients = useMemo(() => {
     return ingredients
@@ -140,14 +152,16 @@ export default function CreateIngredientScreen() {
   const handleBaseInputFocus = useCallback(() => {
     if (baseFieldLayout) {
       scrollRef.current?.scrollTo({
-        y: Math.max(baseFieldLayout.y - 24, 0),
+        y: Math.max(baseFieldLayout.y - 100, 0),
         animated: true,
       });
     }
-    updateBaseFieldWindowLayout();
-    setTimeout(() => {
+    InteractionManager.runAfterInteractions(() => {
       updateBaseFieldWindowLayout();
-    }, 160);
+      setTimeout(() => {
+        updateBaseFieldWindowLayout();
+      }, 80);
+    });
     if (baseInputValue.trim().length >= 3) {
       setBaseDropdownVisible(true);
     }
@@ -360,7 +374,7 @@ function IngredientSuggestionsDropdown({
   }
 
   const dropdownPosition = {
-    top: fieldLayout.y + fieldLayout.height + 4,
+    top: fieldLayout.y + fieldLayout.height,
     left: fieldLayout.x,
     width: fieldLayout.width,
   } as const;
