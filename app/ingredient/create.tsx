@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 
 import { Colors } from '@/constants/theme';
+import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 
 export default function CreateIngredientScreen() {
   const palette = Colors;
@@ -22,6 +23,7 @@ export default function CreateIngredientScreen() {
   const [description, setDescription] = useState('');
   const [imageUri, setImageUri] = useState<string | null>(null);
   const [isPickingImage, setIsPickingImage] = useState(false);
+  const [selectedTagIds, setSelectedTagIds] = useState<number[]>([]);
   const [permissionStatus, requestPermission] = ImagePicker.useMediaLibraryPermissions();
 
   const placeholderLabel = useMemo(() => {
@@ -31,6 +33,24 @@ export default function CreateIngredientScreen() {
 
     return 'Add image';
   }, [imageUri]);
+
+  const toggleTag = useCallback((tagId: number) => {
+    setSelectedTagIds((prev) => {
+      if (prev.includes(tagId)) {
+        return prev.filter((id) => id !== tagId);
+      }
+
+      return [...prev, tagId];
+    });
+  }, []);
+
+  const tagSelection = useMemo(() => {
+    const set = new Set(selectedTagIds);
+    return BUILTIN_INGREDIENT_TAGS.map((tag) => ({
+      ...tag,
+      selected: set.has(tag.id),
+    }));
+  }, [selectedTagIds]);
 
   const ensureMediaPermission = useCallback(async () => {
     if (permissionStatus?.granted) {
@@ -156,6 +176,32 @@ export default function CreateIngredientScreen() {
           />
         </View>
 
+        <View style={styles.section}>
+          <Text style={[styles.label, { color: palette.onSurfaceVariant }]}>Tags</Text>
+          <Text style={[styles.hint, { color: palette.onSurfaceVariant }]}>Select one or more tags</Text>
+          <View style={styles.tagList}>
+            {tagSelection.map((tag) => {
+              const isSelected = tag.selected;
+              const backgroundColor = isSelected ? tag.color : palette.surface;
+              const borderColor = isSelected ? tag.color : palette.outline;
+              const textColor = isSelected ? Colors.surface : palette.onSurface;
+
+              return (
+                <Pressable
+                  key={tag.id}
+                  accessibilityRole="checkbox"
+                  accessibilityState={{ checked: isSelected }}
+                  onPress={() => toggleTag(tag.id)}
+                  style={[styles.tagChip, { backgroundColor, borderColor }]}
+                  android_ripple={{ color: `${palette.surface}33` }}>
+                  <View style={[styles.tagIndicator, { backgroundColor: tag.color }]} />
+                  <Text style={[styles.tagLabel, { color: textColor }]}>{tag.name}</Text>
+                </Pressable>
+              );
+            })}
+          </View>
+        </View>
+
         <Pressable
           accessibilityRole="button"
           style={[styles.submitButton, { backgroundColor: palette.tint }]}
@@ -183,6 +229,9 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     fontWeight: '600',
+  },
+  hint: {
+    fontSize: 13,
   },
   input: {
     borderWidth: StyleSheet.hairlineWidth,
@@ -221,6 +270,29 @@ const styles = StyleSheet.create({
   placeholderHint: {
     fontSize: 12,
     textAlign: 'center',
+  },
+  tagList: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 12,
+  },
+  tagChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: 999,
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderWidth: StyleSheet.hairlineWidth,
+    gap: 8,
+  },
+  tagLabel: {
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  tagIndicator: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
   },
   submitButton: {
     borderRadius: 999,
