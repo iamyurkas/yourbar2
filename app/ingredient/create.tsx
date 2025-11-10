@@ -18,6 +18,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { ListRow, Thumb } from '@/components/RowParts';
 import { Colors } from '@/constants/theme';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
 import { palette as appPalette } from '@/theme/theme';
@@ -263,24 +264,20 @@ export default function CreateIngredientScreen() {
             {filteredBaseIngredients.map((ingredient) => {
               const id = ingredient.id != null ? Number(ingredient.id) : null;
               const isSelected = id != null && id === baseIngredientId;
+              const tagColor = ingredient.tags?.[0]?.color;
               return (
-                <Pressable
+                <ListRow
                   key={ingredient.id ?? ingredient.name}
+                  title={ingredient.name ?? 'Unknown ingredient'}
                   onPress={() => handleSelectBaseIngredient(ingredient)}
-                  style={[
-                    styles.modalItem,
-                    {
-                      borderColor: isSelected ? paletteColors.tint : paletteColors.outline,
-                      backgroundColor: isSelected ? appPalette.highlightSubtle : paletteColors.surface,
-                    },
-                  ]}
+                  selected={isSelected}
+                  highlightColor={appPalette.highlightSubtle}
                   accessibilityRole="button"
-                  accessibilityLabel={`Use ${ingredient.name} as base ingredient`}>
-                  <Text style={[styles.modalItemLabel, { color: paletteColors.onSurface }]}>{ingredient.name}</Text>
-                  {isSelected ? (
-                    <MaterialIcons name="check" size={18} color={paletteColors.tint} />
-                  ) : null}
-                </Pressable>
+                  accessibilityLabel={`Use ${ingredient.name} as base ingredient`}
+                  accessibilityState={isSelected ? { selected: true } : undefined}
+                  thumbnail={<Thumb label={ingredient.name ?? undefined} uri={ingredient.photoUri ?? undefined} />}
+                  tagColor={tagColor}
+                />
               );
             })}
             {filteredBaseIngredients.length === 0 ? (
@@ -455,22 +452,8 @@ const styles = StyleSheet.create({
   modalList: {
     paddingHorizontal: 20,
     paddingVertical: 16,
-    gap: 12,
     paddingBottom: 40,
-  },
-  modalItem: {
-    borderWidth: 1,
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: 12,
-  },
-  modalItemLabel: {
-    fontSize: 16,
-    flex: 1,
+    gap: 8,
   },
   modalEmptyState: {
     alignItems: 'center',
