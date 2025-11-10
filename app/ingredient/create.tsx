@@ -226,18 +226,20 @@ export default function CreateIngredientScreen() {
 
     setBaseQuery(ingredient.name ?? '');
     setBaseModalVisible(false);
+    baseInputRef.current?.focus();
   }, []);
 
   const handleDismissBaseModal = useCallback(() => {
     setBaseModalVisible(false);
     ensureBaseSelection(baseQuery);
+    baseInputRef.current?.focus();
   }, [baseQuery, ensureBaseSelection]);
 
   const handleClearBase = useCallback(() => {
     setSelectedBaseId(null);
     setBaseQuery('');
     setBaseModalVisible(false);
-    baseInputRef.current?.blur();
+    baseInputRef.current?.focus();
   }, []);
 
   const handleSelectPhoto = useCallback(async () => {
@@ -471,8 +473,9 @@ const styles = StyleSheet.create({
     gap: 24,
   },
   photoPlaceholder: {
-    width: '100%',
-    aspectRatio: 1,
+    width: 150,
+    height: 150,
+    alignSelf: 'center',
     borderRadius: 16,
     borderWidth: 1,
     overflow: 'hidden',
