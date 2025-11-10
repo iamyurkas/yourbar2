@@ -39,6 +39,7 @@ type InventoryContextValue = {
   loading: boolean;
   availableIngredientIds: Set<number>;
   shoppingIngredientIds: Set<number>;
+  addIngredient: (input: CreateIngredientInput) => Ingredient;
   setIngredientAvailability: (id: number, available: boolean) => void;
   toggleIngredientAvailability: (id: number) => void;
   toggleIngredientShopping: (id: number) => void;
@@ -52,6 +53,14 @@ type InventoryState = {
   cocktails: Cocktail[];
   ingredients: Ingredient[];
   imported: boolean;
+};
+
+type CreateIngredientInput = {
+  name: string;
+  description?: string | null;
+  baseIngredientId?: number | null;
+  photoUri?: string | null;
+  tags?: Ingredient['tags'];
 };
 
 type InventorySnapshot = {
@@ -365,6 +374,90 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     });
   }, [cocktailRatings, cocktails, resolveCocktailKey]);
 
+  const addIngredient = useCallback(
+    (input: CreateIngredientInput) => {
+      if (!inventoryState) {
+        throw new Error('Cannot create ingredient until inventory is loaded');
+      }
+
+      const sanitizedName = input.name.trim();
+      if (!sanitizedName) {
+        throw new Error('Ingredient name is required');
+      }
+
+      const normalizedDescription = input.description?.trim() || undefined;
+      const normalizedPhotoUri = input.photoUri?.trim() || undefined;
+      let normalizedBaseIngredientId: number | undefined;
+
+      if (input.baseIngredientId != null) {
+        const parsedBaseId = Number(input.baseIngredientId);
+        if (Number.isFinite(parsedBaseId) && parsedBaseId >= 0) {
+          normalizedBaseIngredientId = Math.trunc(parsedBaseId);
+        }
+      }
+
+      let createdIngredient: Ingredient | undefined;
+
+      setInventoryState((prev) => {
+        if (!prev) {
+          return prev;
+        }
+
+        const maxExistingId = prev.ingredients.reduce((max, ingredient) => {
+          const candidateId = Number(ingredient.id ?? -1);
+          if (!Number.isFinite(candidateId) || candidateId < 0) {
+            return max;
+          }
+
+          return Math.max(max, candidateId);
+        }, 0);
+
+        const nextId = maxExistingId + 1;
+
+        const rawIngredient: Ingredient = {
+          id: nextId,
+          name: sanitizedName,
+          description: normalizedDescription,
+          baseIngredientId: normalizedBaseIngredientId,
+          photoUri: normalizedPhotoUri,
+          tags: input.tags ?? [],
+          usageCount: 0,
+          searchName: sanitizedName,
+          searchTokens: sanitizedName.split(/\s+/).filter(Boolean),
+          searchNameNormalized: '',
+          searchTokensNormalized: [],
+        } satisfies Ingredient;
+
+        const [normalizedIngredient] = normalizeSearchFields([rawIngredient]);
+        createdIngredient = {
+          ...rawIngredient,
+          ...normalizedIngredient,
+        } satisfies Ingredient;
+
+        return {
+          ...prev,
+          ingredients: [...prev.ingredients, createdIngredient],
+        } satisfies InventoryState;
+      });
+
+      if (!createdIngredient) {
+        throw new Error('Failed to create ingredient');
+      }
+
+      const createdId = Number(createdIngredient.id ?? -1);
+      if (Number.isFinite(createdId) && createdId >= 0) {
+        setAvailableIngredientIds((prev) => {
+          const next = new Set(prev);
+          next.add(createdId);
+          return next;
+        });
+      }
+
+      return createdIngredient;
+    },
+    [inventoryState, setAvailableIngredientIds, setInventoryState],
+  );
+
   const setIngredientAvailability = useCallback((id: number, available: boolean) => {
     setAvailableIngredientIds((prev) => {
       const next = new Set(prev);
@@ -434,6 +527,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       loading,
       availableIngredientIds,
       shoppingIngredientIds,
+      addIngredient,
       setIngredientAvailability,
       toggleIngredientAvailability,
       toggleIngredientShopping,
@@ -448,6 +542,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     loading,
     availableIngredientIds,
     shoppingIngredientIds,
+    addIngredient,
     setIngredientAvailability,
     toggleIngredientAvailability,
     toggleIngredientShopping,
@@ -470,4 +565,4 @@ export function useInventory() {
   return context;
 }
 
-export type { Cocktail, Ingredient };
+export type { Cocktail, Ingredient, CreateIngredientInput };
