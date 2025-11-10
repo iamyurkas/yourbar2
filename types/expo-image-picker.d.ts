@@ -1,5 +1,5 @@
 declare module 'expo-image-picker' {
-  export type MediaTypeOptionsValue = 'All' | 'Images' | 'Videos';
+  export type MediaTypeOptionsValue = 'All' | 'Images' | 'Videos' | (string & {});
 
   export const MediaTypeOptions: {
     readonly All: MediaTypeOptionsValue;
@@ -29,7 +29,7 @@ declare module 'expo-image-picker' {
   export type ImagePickerResult = ImagePickerSuccessResult | ImagePickerCancelledResult;
 
   export type ImagePickerOptions = {
-    mediaTypes?: MediaTypeOptionsValue;
+    mediaTypes?: MediaTypeOptionsValue | readonly MediaTypeOptionsValue[];
     allowsEditing?: boolean;
     aspect?: readonly [number, number];
     quality?: number;
