@@ -106,6 +106,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
 }, areIngredientPropsEqual);
 
 export default function IngredientsScreen() {
+  const router = useRouter();
   const {
     cocktails,
     ingredients,
@@ -524,7 +525,7 @@ export default function IngredientsScreen() {
           }
         />
       </View>
-      <FabAdd label="Add ingredient" />
+      <FabAdd label="Add ingredient" onPress={() => router.push('/ingredient/create')} />
     </SafeAreaView>
   );
 }
