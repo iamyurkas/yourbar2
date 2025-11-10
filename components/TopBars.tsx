@@ -1,4 +1,4 @@
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import React from 'react';
 import {
   Pressable,
@@ -60,16 +60,21 @@ export function SearchTopBar({
         accessibilityRole="button"
         accessibilityLabel="Open navigation"
         onPress={onMenuPress}
-        style={styles.iconButton}>
-        <MaterialCommunityIcons name="menu" size={24} color={palette.onSurface} />
+        style={styles.iconButton}
+        android_ripple={{ color: `${palette.tertiary}33`, borderless: false }}>
+        <MaterialIcons name="menu" size={26} color={palette.onSurface} />
       </Pressable>
-      <View style={[styles.searchContainer, { backgroundColor: palette.surface, borderColor: palette.background }]}>
-        <MaterialCommunityIcons name="magnify" size={20} color={palette.onSurface} style={styles.searchIcon} />
+      <View
+        style={[
+          styles.searchContainer,
+          { backgroundColor: palette.surfaceBright, borderColor: palette.outline },
+        ]}>
+        <MaterialIcons name="search" size={20} color={palette.onSurfaceVariant} style={styles.searchIcon} />
         <TextInput
           value={value}
           onChangeText={onChangeText}
           placeholder={placeholder}
-          placeholderTextColor={`${palette.onSurfaceVariant}99`}
+          placeholderTextColor={palette.placeholder}
           returnKeyType="search"
           onSubmitEditing={handleSubmit}
           style={[styles.searchInput, { color: palette.text, fontWeight: '400' }]}
@@ -79,8 +84,9 @@ export function SearchTopBar({
             accessibilityRole="button"
             accessibilityLabel="Clear search query"
             onPress={() => onChangeText('')}
-            style={styles.clearButton}>
-            <MaterialCommunityIcons name="close" size={18} color={palette.onSurface} />
+            style={styles.clearButton}
+            android_ripple={{ color: `${palette.tertiary}33`, borderless: true }}>
+            <MaterialIcons name="close" size={20} color={palette.onSurfaceVariant} />
           </Pressable>
         ) : null}
       </View>
@@ -88,8 +94,9 @@ export function SearchTopBar({
         accessibilityRole="button"
         accessibilityLabel="Filter items"
         onPress={onFilterPress}
-        style={styles.iconButton}>
-        <MaterialCommunityIcons name="filter-variant" size={24} color={palette.icon} />
+        style={styles.iconButton}
+        android_ripple={{ color: `${palette.tertiary}33`, borderless: false }}>
+        <MaterialIcons name="tune" size={26} color={palette.icon} />
       </Pressable>
     </View>
   );
@@ -99,7 +106,15 @@ export function SegmentTabs({ options, value, onChange }: SegmentTabsProps) {
   const palette = Colors;
 
   return (
-    <View style={[styles.tabs, { backgroundColor: palette.surface }]}> 
+    <View
+      style={[
+        styles.tabs,
+        {
+          backgroundColor: palette.surfaceBright,
+          borderTopColor: palette.outline,
+          borderTopWidth: StyleSheet.hairlineWidth,
+        },
+      ]}>
       {options.map((option) => {
         const focused = option.key === value;
         return (
@@ -108,7 +123,8 @@ export function SegmentTabs({ options, value, onChange }: SegmentTabsProps) {
             accessibilityRole="tab"
             accessibilityState={focused ? { selected: true } : {}}
             onPress={() => onChange(option.key)}
-            style={styles.tabButton}>
+            style={styles.tabButton}
+            android_ripple={{ color: `${palette.tertiary}22`, borderless: false }}>
             <Text
               style={[
                 styles.tabLabel,
@@ -141,12 +157,12 @@ const styles = StyleSheet.create({
     gap: 12,
     paddingHorizontal: 16,
     paddingTop: 12,
-    paddingBottom: 8,
+    paddingBottom: 12,
   },
   iconButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -154,10 +170,10 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    borderRadius: 24,
-    borderWidth: 1,
+    borderRadius: 20,
+    borderWidth: StyleSheet.hairlineWidth,
     paddingHorizontal: 12,
-    paddingVertical: 4,
+    paddingVertical: 8,
   },
   searchIcon: {
     marginRight: 8,
@@ -167,25 +183,23 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   clearButton: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
   },
   tabs: {
     flexDirection: 'row',
-    paddingHorizontal: 16,
-    paddingTop: 4,
-    paddingBottom: 0,
-    elevation: 4,
-    zIndex: 1,
+    paddingHorizontal: 12,
+    paddingVertical: 0,
   },
   tabButton: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     paddingTop: 12,
+    paddingBottom: 8,
     gap: 6,
   },
   tabLabel: {

@@ -49,7 +49,8 @@ export function CollectionHeader({
 
 const styles = StyleSheet.create({
   container: {
-    gap: 0,
+    gap: 12,
+    paddingBottom: 8,
   },
 });
 

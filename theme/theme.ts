@@ -2,65 +2,65 @@ import { MD3LightTheme, type PaperTheme } from '@/libs/react-native-paper';
 
 export const palette = {
   primary: '#4DABF7',
-  primaryContainer: '#D5E6FA',
+  primaryContainer: '#D9EDFF',
   onPrimary: '#FFFFFF',
-  onPrimaryContainer: '#0B2A4A',
+  onPrimaryContainer: '#0B375F',
 
   secondary: '#74C0FC',
-  secondaryContainer: '#FFE9A6',
-  onSecondary: '#2B1D00',
-  onSecondaryContainer: '#3B2800',
+  secondaryContainer: '#E6F3FF',
+  onSecondary: '#0B375F',
+  onSecondaryContainer: '#0B2A4A',
 
   tertiary: '#A5D8FF',
-  tertiaryContainer: '#CBF1EC',
-  onTertiary: '#003833',
-  onTertiaryContainer: '#00302B',
+  tertiaryContainer: '#E8F4FF',
+  onTertiary: '#0B375F',
+  onTertiaryContainer: '#0B2A4A',
 
   background: '#FFFFFF',
   surface: '#F8F9FA',
   surfaceBright: '#FFFFFF',
-  surfaceVariant: '#EEF2F8',
+  surfaceVariant: '#EAF3F9',
 
   outline: '#E5EAF0',
-  outlineVariant: '#E3E6EC',
+  outlineVariant: '#E9EEF4',
 
-  onSurface: '#1F2933',
+  onSurface: '#303030',
   onSurfaceMuted: '#5C6C7C',
   onSurfaceVariant: '#A1A1A1',
-  onSurfaceDisabled: 'rgba(31,41,51,0.38)',
-  onBackground: '#1F2933',
+  onSurfaceDisabled: 'rgba(48,48,48,0.38)',
+  onBackground: '#303030',
 
   inversePrimary: '#9CCAFF',
   inverseSurface: '#1F3142',
   inverseOnSurface: '#F7FAFF',
 
-  error: '#D32F2F',
-  errorContainer: '#FAD4D4',
+  error: '#FF6B6B',
+  errorContainer: '#FFE3E6',
   onError: '#FFFFFF',
-  onErrorContainer: '#410E0B',
+  onErrorContainer: '#5B1317',
 
   success: '#2E7D32',
-  danger: '#D32F2F',
+  danger: '#FF6B6B',
 
   disabled: '#CED4DA',
   placeholder: '#A1A1A1',
 
-  surfaceDisabled: 'rgba(31,41,51,0.12)',
-  backdrop: 'rgba(15,23,42,0.2)',
+  surfaceDisabled: 'rgba(48,48,48,0.12)',
+  backdrop: 'rgba(0,0,0,0.4)',
   shadow: '#000000',
 
-  highlightFaint: '#4A90E21A',
-  highlightSubtle: '#4A90E21F',
+  highlightFaint: 'rgba(77,171,247,0.08)',
+  highlightSubtle: 'rgba(77,171,247,0.12)',
   overlayOnPrimary: '#FFFFFF55',
 } as const;
 
 export const tagColors = {
   default: '#E5E7EB',
-  pink: '#F06292',
-  yellow: '#F4C430',
-  teal: '#26C6DA',
-  purple: '#9C27B0',
-  orange: '#FB8C00',
+  pink: '#FF8DAA',
+  yellow: '#FFD76F',
+  teal: '#5ED7D1',
+  purple: '#B28DFF',
+  orange: '#FFB46E',
 } as const;
 
 const lightColors: PaperTheme['colors'] = {

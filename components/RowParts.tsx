@@ -1,4 +1,4 @@
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { Image, type ImageSource } from 'expo-image';
 import React, { type ReactNode } from 'react';
 import {
@@ -44,13 +44,13 @@ export function Thumb({ uri, label, fallbackUri, fallbackLabel }: ThumbProps) {
   }
 
   return (
-    <View style={[styles.thumb, { backgroundColor: palette.surfaceBright }]}>
+    <View style={[styles.thumb, { backgroundColor: palette.surface }]}>
       {source ? (
-        <Image source={source} style={styles.thumbImage} contentFit="contain" />
+        <Image source={source} style={styles.thumbImage} contentFit="cover" />
       ) : fallbackText ? (
-        <Text style={[styles.thumbFallback, { color: paletteColors.onSurfaceVariant }]}>{fallbackText}</Text>
+        <Text style={[styles.thumbFallback, { color: paletteColors.onSurface }]}>{fallbackText}</Text>
       ) : (
-        <MaterialCommunityIcons name="image-off" size={24} color={paletteColors.onSurfaceVariant} />
+        <Text style={[styles.thumbPlaceholder, { color: paletteColors.onSurfaceVariant }]}>No image</Text>
       )}
     </View>
   );
@@ -72,8 +72,8 @@ type PresenceCheckProps = {
 export function PresenceCheck({ checked, onToggle }: PresenceCheckProps) {
   const paletteColors = Colors;
   const borderColor = checked ? paletteColors.tint : paletteColors.outline;
-  const backgroundColor = checked ? paletteColors.tint : 'transparent';
-  const iconColor = checked ? paletteColors.background : paletteColors.outline;
+  const backgroundColor = checked ? paletteColors.tint : paletteColors.surfaceBright;
+  const iconColor = checked ? paletteColors.onPrimary : paletteColors.onSurfaceVariant;
 
   return (
     <Pressable
@@ -81,8 +81,9 @@ export function PresenceCheck({ checked, onToggle }: PresenceCheckProps) {
       accessibilityState={{ checked }}
       onPress={onToggle}
       style={[styles.checkbox, { borderColor, backgroundColor }]}
-      hitSlop={8}>
-      <MaterialCommunityIcons name="check" color={iconColor} size={16} />
+      hitSlop={8}
+      android_ripple={{ color: `${paletteColors.tertiary}44`, borderless: true }}>
+      <MaterialIcons name="check" color={iconColor} size={18} />
     </Pressable>
   );
 }
@@ -94,7 +95,7 @@ type FavoriteStarProps = {
 
 export function FavoriteStar({ active, onToggle }: FavoriteStarProps) {
   const paletteColors = Colors;
-  const icon = active ? 'star' : 'star-outline';
+  const icon = active ? 'star' : 'star-border';
   const color = active ? paletteColors.secondary : paletteColors.onSurfaceVariant;
 
   return (
@@ -103,8 +104,9 @@ export function FavoriteStar({ active, onToggle }: FavoriteStarProps) {
       accessibilityLabel={active ? 'Remove from favorites' : 'Add to favorites'}
       onPress={onToggle}
       style={styles.starButton}
-      hitSlop={8}>
-      <MaterialCommunityIcons name={icon} size={24} color={color} />
+      hitSlop={8}
+      android_ripple={{ color: `${paletteColors.tertiary}44`, borderless: true }}>
+      <MaterialIcons name={icon} size={24} color={color} />
     </Pressable>
   );
 }
@@ -139,7 +141,9 @@ export function ListRow({
   metaAlignment = 'space-between',
 }: ListRowProps) {
   const paletteColors = Colors;
-  const backgroundColor = selected ? highlightColor ?? `${paletteColors.tint}1F` : paletteColors.background;
+  const baseBackground = paletteColors.surfaceBright;
+  const highlightBackground = highlightColor ?? 'rgba(116,192,252,0.25)';
+  const backgroundColor = selected ? highlightBackground : baseBackground;
   const metaAlignmentStyle =
     metaAlignment === 'center'
       ? styles.metaColumnCenter
@@ -151,14 +155,17 @@ export function ListRow({
       onPress={onPress}
       accessibilityRole={accessibilityRole}
       accessibilityState={accessibilityState}
-      style={[styles.row, { backgroundColor }]}>
+      android_ripple={{ color: `${paletteColors.tertiary}1F`, borderless: false }}
+      style={[styles.row, { backgroundColor, borderColor: paletteColors.outlineVariant }]}>
       <View style={styles.thumbSlot}>{thumbnail}</View>
       <View style={styles.textColumn}>
         <Text style={[styles.title, { color: paletteColors.text }]} numberOfLines={1}>
           {title}
         </Text>
         {subtitle ? (
-          <Text style={[styles.subtitle, { color: paletteColors.icon }, subtitleStyle]} numberOfLines={1}>
+          <Text
+            style={[styles.subtitle, { color: paletteColors.onSurfaceVariant }, subtitleStyle]}
+            numberOfLines={1}>
             {subtitle}
           </Text>
         ) : null}
@@ -176,16 +183,29 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: 14,
     gap: 16,
     minHeight: 76,
     width: '100%',
+    borderRadius: 12,
+    borderWidth: StyleSheet.hairlineWidth,
+    marginHorizontal: 16,
+    marginVertical: 4,
+    shadowColor: palette.shadow,
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 1,
+    overflow: 'hidden',
   },
   thumbSlot: {
     width: THUMB_SIZE,
     height: THUMB_SIZE,
     borderRadius: 8,
     overflow: 'hidden',
+    backgroundColor: palette.surface,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   textColumn: {
     flex: 1,
@@ -207,21 +227,21 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 17,
-    fontWeight: '400',
+    fontWeight: '600',
   },
   subtitle: {
-    fontSize: 13,
+    fontSize: 14,
   },
   tagDot: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
+    width: 8,
+    height: 8,
+    borderRadius: 4,
   },
   checkbox: {
-    width: 20,
-    height: 20,
-    borderRadius: 14,
-    borderWidth: 2,
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    borderWidth: StyleSheet.hairlineWidth,
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 8,
@@ -245,5 +265,9 @@ const styles = StyleSheet.create({
   thumbFallback: {
     fontSize: 16,
     fontWeight: '600',
+  },
+  thumbPlaceholder: {
+    fontSize: 12,
+    fontWeight: '500',
   },
 });

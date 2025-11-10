@@ -28,7 +28,7 @@ export default function ShakerScreen() {
         <View style={styles.container}>
           <View style={styles.header}>
             <ThemedText type="title">Shaker</ThemedText>
-            <ThemedText style={styles.subtitle}>
+            <ThemedText style={[styles.subtitle, { color: paletteColors.onSurfaceVariant }]}>
               Jump into service mode with timers, prep reminders and a live checklist for the bar team.
             </ThemedText>
           </View>
@@ -58,7 +58,7 @@ function ActionCard({ title, description, icon }: ActionCardProps) {
   const paletteColors = Colors;
   const tint = paletteColors.tint;
   const backgroundColor = palette.surfaceBright;
-  const borderColor = `${tint}3d`;
+  const borderColor = paletteColors.outlineVariant;
 
   return (
     <ThemedView
@@ -67,21 +67,23 @@ function ActionCard({ title, description, icon }: ActionCardProps) {
         {
           backgroundColor,
           borderColor,
-          shadowColor: palette.primary,
+          shadowColor: palette.shadow,
           shadowOpacity: 0.08,
-          shadowRadius: 20,
-          shadowOffset: { width: 0, height: 12 },
-          elevation: 4,
+          shadowRadius: 12,
+          shadowOffset: { width: 0, height: 4 },
+          elevation: 2,
         },
       ]}>
-      <View style={[styles.iconBadge, { backgroundColor: `${tint}1A`, borderColor: `${tint}33` }]}>
+      <View style={[styles.iconBadge, { backgroundColor: `${tint}1F`, borderColor: `${tint}33` }]}>
         <IconSymbol name={icon} size={28} color={tint} />
       </View>
       <View style={styles.cardText}>
         <ThemedText type="subtitle" style={styles.cardTitle}>
           {title}
         </ThemedText>
-        <ThemedText style={styles.cardDescription}>{description}</ThemedText>
+        <ThemedText style={[styles.cardDescription, { color: paletteColors.onSurfaceVariant }]}>
+          {description}
+        </ThemedText>
       </View>
     </ThemedView>
   );
@@ -96,10 +98,10 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    paddingTop: 32,
-    paddingHorizontal: 20,
+    paddingTop: 24,
+    paddingHorizontal: 16,
     paddingBottom: 120,
-    gap: 24,
+    gap: 20,
   },
   header: {
     gap: 8,
@@ -107,23 +109,22 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 15,
     lineHeight: 22,
-    opacity: 0.72,
   },
   card: {
-    borderRadius: 20,
+    borderRadius: 12,
     padding: 20,
     flexDirection: 'row',
     gap: 16,
     alignItems: 'center',
-    borderWidth: 1,
+    borderWidth: StyleSheet.hairlineWidth,
   },
   iconBadge: {
     width: 52,
     height: 52,
-    borderRadius: 18,
+    borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 1,
+    borderWidth: StyleSheet.hairlineWidth,
   },
   cardText: {
     flex: 1,
@@ -132,10 +133,10 @@ const styles = StyleSheet.create({
   cardTitle: {
     letterSpacing: 0.2,
     fontSize: 18,
+    fontWeight: '600',
   },
   cardDescription: {
     fontSize: 14,
     lineHeight: 22,
-    opacity: 0.75,
   },
 });

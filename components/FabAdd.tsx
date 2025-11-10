@@ -1,4 +1,4 @@
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import React from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -23,7 +23,7 @@ export function FabAdd({ label = 'Add', onPress }: FabAddProps) {
         onPress={onPress}
         style={[styles.fab, { backgroundColor: paletteColors.tint }]}
         android_ripple={{ color: `${paletteColors.surface}33`, borderless: true }}>
-        <MaterialCommunityIcons name="plus" size={26} color={paletteColors.surface} />
+        <MaterialIcons name="add" size={26} color={paletteColors.surface} />
       </Pressable>
     </View>
   );
