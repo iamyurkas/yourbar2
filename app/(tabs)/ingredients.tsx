@@ -524,7 +524,7 @@ export default function IngredientsScreen() {
           }
         />
       </View>
-      <FabAdd label="Add ingredient" />
+      <FabAdd label="Add ingredient" onPress={() => router.push('/ingredient/create')} />
     </SafeAreaView>
   );
 }
