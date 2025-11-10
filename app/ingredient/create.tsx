@@ -262,7 +262,6 @@ export default function CreateIngredientScreen() {
       }
 
       const result = await pickerModule.launchImageLibraryAsync({
-        mediaTypes: [pickerModule.MediaTypeOptions.Images],
         allowsEditing: true,
         aspect: [1, 1],
         quality: 0.9,
