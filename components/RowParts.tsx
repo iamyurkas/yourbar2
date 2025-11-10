@@ -139,7 +139,10 @@ export function ListRow({
   metaAlignment = 'space-between',
 }: ListRowProps) {
   const paletteColors = Colors;
-  const backgroundColor = selected ? highlightColor ?? `${paletteColors.tint}1F` : paletteColors.background;
+  const baseBackground = paletteColors.surface;
+  const backgroundColor = selected ? highlightColor ?? `${paletteColors.tint}1F` : baseBackground;
+  const borderColor = selected ? `${paletteColors.tint}66` : `${paletteColors.outline}99`;
+  const cardShadowOpacity = selected ? 0.12 : 0.06;
   const metaAlignmentStyle =
     metaAlignment === 'center'
       ? styles.metaColumnCenter
@@ -151,7 +154,7 @@ export function ListRow({
       onPress={onPress}
       accessibilityRole={accessibilityRole}
       accessibilityState={accessibilityState}
-      style={[styles.row, { backgroundColor }]}>
+      style={[styles.row, { backgroundColor, borderColor, shadowOpacity: cardShadowOpacity }]}> 
       <View style={styles.thumbSlot}>{thumbnail}</View>
       <View style={styles.textColumn}>
         <Text style={[styles.title, { color: paletteColors.text }]} numberOfLines={1}>
@@ -180,6 +183,14 @@ const styles = StyleSheet.create({
     gap: 16,
     minHeight: 76,
     width: '100%',
+    borderRadius: 18,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: 'transparent',
+    shadowColor: palette.shadow,
+    shadowOpacity: 0.06,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 6 },
+    elevation: 1,
   },
   thumbSlot: {
     width: THUMB_SIZE,

@@ -100,8 +100,6 @@ export default function CocktailsScreen() {
     );
   }, [activeSection.data, normalizedQuery]);
 
-  const separatorColor = paletteColors.outline;
-
   const keyExtractor = useCallback((item: Cocktail) => String(item.id ?? item.name), []);
 
   const handleSelectCocktail = useCallback(
@@ -128,8 +126,8 @@ export default function CocktailsScreen() {
   );
 
   const renderSeparator = useCallback(
-    () => <View style={[styles.divider, { backgroundColor: separatorColor }]} />,
-    [separatorColor],
+    () => <View style={styles.separator} />,
+    [],
   );
 
   return (
@@ -170,11 +168,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   listContent: {
-    paddingTop: 0,
-    paddingBottom: 80,
+    paddingTop: 8,
+    paddingBottom: 96,
+    paddingHorizontal: 20,
   },
-  divider: {
-    height: StyleSheet.hairlineWidth,
+  separator: {
+    height: 12,
   },
   emptyLabel: {
     textAlign: 'center',

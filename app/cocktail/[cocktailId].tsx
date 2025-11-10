@@ -470,9 +470,7 @@ export default function CocktailDetailsScreen() {
 
                     return (
                       <View key={key}>
-                        {index > 0 ? (
-                          <View style={[styles.ingredientDivider, { backgroundColor: palette.outline }]} />
-                        ) : null}
+                        {index > 0 ? <View style={styles.ingredientSpacer} /> : null}
                         <IngredientQuantityRow
                           name={ingredient.name ?? ''}
                           photoUri={photoUri}
@@ -620,10 +618,10 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   ingredientsList: {
-    marginHorizontal: -24,
+    gap: 12,
   },
-  ingredientDivider: {
-    height: StyleSheet.hairlineWidth,
+  ingredientSpacer: {
+    height: 12,
   },
   headerButton: {
     width: 40,

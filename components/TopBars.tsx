@@ -47,40 +47,57 @@ export function SearchTopBar({
   };
 
   return (
-    <View
-      style={[
-        styles.topBar,
-        {
-          backgroundColor: palette.background,
-          borderBottomColor: palette.outline,
-          borderBottomWidth: StyleSheet.hairlineWidth,
-        },
-      ]}>
+    <View style={[styles.topBar, { backgroundColor: palette.background }]}>
       <Pressable
         accessibilityRole="button"
         accessibilityLabel="Open navigation"
         onPress={onMenuPress}
-        style={styles.iconButton}>
-        <MaterialCommunityIcons name="menu" size={24} color={palette.onSurface} />
+        style={[
+          styles.iconButton,
+          {
+            backgroundColor: palette.surface,
+            borderColor: `${palette.outline}80`,
+            borderWidth: StyleSheet.hairlineWidth,
+          },
+        ]}>
+        <MaterialCommunityIcons name="menu" size={22} color={palette.onSurface} />
       </Pressable>
-      <View style={[styles.searchContainer, { backgroundColor: palette.surface, borderColor: palette.background }]}>
-        <MaterialCommunityIcons name="magnify" size={20} color={palette.onSurface} style={styles.searchIcon} />
+      <View
+        style={[
+          styles.searchContainer,
+          {
+            backgroundColor: palette.surface,
+            borderColor: `${palette.outline}80`,
+            borderWidth: StyleSheet.hairlineWidth,
+            shadowColor: palette.shadow,
+            shadowOpacity: 0.05,
+            shadowRadius: 10,
+            shadowOffset: { width: 0, height: 4 },
+            elevation: 1,
+          },
+        ]}>
+        <MaterialCommunityIcons name="magnify" size={20} color={palette.onSurfaceVariant} />
         <TextInput
           value={value}
           onChangeText={onChangeText}
           placeholder={placeholder}
-          placeholderTextColor={`${palette.onSurfaceVariant}99`}
+          placeholderTextColor={`${palette.onSurfaceVariant}B3`}
           returnKeyType="search"
           onSubmitEditing={handleSubmit}
-          style={[styles.searchInput, { color: palette.text, fontWeight: '400' }]}
+          style={[styles.searchInput, { color: palette.text }]}
         />
         {value ? (
           <Pressable
             accessibilityRole="button"
             accessibilityLabel="Clear search query"
             onPress={() => onChangeText('')}
-            style={styles.clearButton}>
-            <MaterialCommunityIcons name="close" size={18} color={palette.onSurface} />
+            style={[
+              styles.clearButton,
+              {
+                backgroundColor: palette.surfaceVariant,
+              },
+            ]}>
+            <MaterialCommunityIcons name="close" size={18} color={palette.onSurfaceVariant} />
           </Pressable>
         ) : null}
       </View>
@@ -88,8 +105,15 @@ export function SearchTopBar({
         accessibilityRole="button"
         accessibilityLabel="Filter items"
         onPress={onFilterPress}
-        style={styles.iconButton}>
-        <MaterialCommunityIcons name="filter-variant" size={24} color={palette.icon} />
+        style={[
+          styles.iconButton,
+          {
+            backgroundColor: palette.surface,
+            borderColor: `${palette.outline}80`,
+            borderWidth: StyleSheet.hairlineWidth,
+          },
+        ]}>
+        <MaterialCommunityIcons name="filter-variant" size={22} color={palette.onSurface} />
       </Pressable>
     </View>
   );
@@ -99,37 +123,50 @@ export function SegmentTabs({ options, value, onChange }: SegmentTabsProps) {
   const palette = Colors;
 
   return (
-    <View style={[styles.tabs, { backgroundColor: palette.surface }]}> 
-      {options.map((option) => {
-        const focused = option.key === value;
-        return (
-          <Pressable
-            key={option.key}
-            accessibilityRole="tab"
-            accessibilityState={focused ? { selected: true } : {}}
-            onPress={() => onChange(option.key)}
-            style={styles.tabButton}>
-            <Text
+    <View style={styles.tabsContainer}>
+      <View
+        style={[
+          styles.tabs,
+          {
+            backgroundColor: palette.surface,
+            borderColor: `${palette.outline}80`,
+            shadowColor: palette.shadow,
+            shadowOpacity: 0.04,
+            shadowRadius: 8,
+            shadowOffset: { width: 0, height: 2 },
+            elevation: 1,
+          },
+        ]}>
+        {options.map((option) => {
+          const focused = option.key === value;
+          return (
+            <Pressable
+              key={option.key}
+              accessibilityRole="tab"
+              accessibilityState={focused ? { selected: true } : {}}
+              onPress={() => onChange(option.key)}
               style={[
-                styles.tabLabel,
+                styles.tabButton,
                 {
-                  color: focused ? palette.tint : palette.onSurfaceVariant,
-                  fontWeight: focused ? '600' : '400',
+                  backgroundColor: focused ? palette.surfaceBright : 'transparent',
+                  borderColor: focused ? `${palette.outline}99` : 'transparent',
+                  shadowOpacity: focused ? 0.08 : 0,
+                  elevation: focused ? 2 : 0,
                 },
               ]}>
-              {option.label}
-            </Text>
-            <View
-              style={[
-                styles.tabIndicator,
-                {
-                  backgroundColor: focused ? palette.tint : 'transparent',
-                },
-              ]}
-            />
-          </Pressable>
-        );
-      })}
+              <Text
+                style={[
+                  styles.tabLabel,
+                  {
+                    color: focused ? palette.text : palette.onSurfaceVariant,
+                  },
+                ]}>
+                {option.label}
+              </Text>
+            </Pressable>
+          );
+        })}
+      </View>
     </View>
   );
 }
@@ -139,9 +176,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
-    paddingHorizontal: 16,
-    paddingTop: 12,
-    paddingBottom: 8,
   },
   iconButton: {
     width: 40,
@@ -154,17 +188,15 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    borderRadius: 24,
-    borderWidth: 1,
-    paddingHorizontal: 12,
-    paddingVertical: 4,
-  },
-  searchIcon: {
-    marginRight: 8,
+    borderRadius: 18,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    gap: 8,
   },
   searchInput: {
     flex: 1,
     fontSize: 16,
+    paddingVertical: 0,
   },
   clearButton: {
     width: 28,
@@ -173,27 +205,27 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  tabsContainer: {
+    paddingTop: 4,
+  },
   tabs: {
     flexDirection: 'row',
-    paddingHorizontal: 16,
-    paddingTop: 4,
-    paddingBottom: 0,
-    elevation: 4,
-    zIndex: 1,
+    borderRadius: 999,
+    padding: 4,
+    gap: 8,
+    borderWidth: 1,
   },
   tabButton: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: 12,
-    gap: 6,
+    borderRadius: 999,
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    borderWidth: StyleSheet.hairlineWidth,
   },
   tabLabel: {
     fontSize: 15,
-  },
-  tabIndicator: {
-    width: '60%',
-    height: 3,
-    borderRadius: 2,
+    fontWeight: '500',
   },
 });

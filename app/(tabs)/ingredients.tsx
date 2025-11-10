@@ -387,7 +387,6 @@ export default function IngredientsScreen() {
   }, [activeSection.data, normalizedQuery]);
 
   const highlightColor = palette.highlightSubtle;
-  const separatorColor = paletteColors.outline;
 
   const effectiveAvailableIngredientIds = useMemo(() => {
     if (optimisticAvailability.size === 0) {
@@ -495,10 +494,7 @@ export default function IngredientsScreen() {
     ],
   );
 
-  const renderSeparator = useCallback(
-    () => <View style={[styles.divider, { backgroundColor: separatorColor }]} />,
-    [separatorColor],
-  );
+  const renderSeparator = useCallback(() => <View style={styles.separator} />, []);
 
   return (
     <SafeAreaView
@@ -538,11 +534,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   listContent: {
-    paddingTop: 0,
-    paddingBottom: 80,
+    paddingTop: 8,
+    paddingBottom: 96,
+    paddingHorizontal: 20,
   },
-  divider: {
-    height: StyleSheet.hairlineWidth,
+  separator: {
+    height: 12,
   },
   emptyLabel: {
     textAlign: 'center',

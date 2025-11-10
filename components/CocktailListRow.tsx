@@ -111,7 +111,9 @@ const CocktailListRowComponent = ({
     return 'Missing ingredients';
   }, [missingCount, missingNames, recipeNames]);
 
-  const backgroundColor = isReady ? highlightColor : paletteColors.background;
+  const backgroundColor = isReady ? highlightColor : paletteColors.surface;
+  const borderColor = isReady ? `${paletteColors.tint}66` : `${paletteColors.outline}99`;
+  const cardShadowOpacity = isReady ? 0.12 : 0.06;
 
   const ratingValueRaw = (cocktail as { userRating?: number }).userRating ?? 0;
   const ratingValue = Math.max(0, Math.min(MAX_RATING, Number(ratingValueRaw) || 0));
@@ -159,7 +161,11 @@ const CocktailListRowComponent = ({
   return (
     <Pressable
       onPress={onPress}
-      style={[styles.row, { backgroundColor }, containerStyle]}
+      style={[
+        styles.row,
+        { backgroundColor, borderColor, shadowOpacity: cardShadowOpacity },
+        containerStyle,
+      ]}
       accessibilityRole={onPress ? 'button' : undefined}
     >
       <View style={styles.thumbSlot}>
@@ -193,6 +199,14 @@ const styles = StyleSheet.create({
     gap: 16,
     minHeight: 76,
     position: 'relative',
+    borderRadius: 18,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: 'transparent',
+    shadowColor: palette.shadow,
+    shadowOpacity: 0.06,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 6 },
+    elevation: 1,
   },
   thumbSlot: {
     width: 56,
