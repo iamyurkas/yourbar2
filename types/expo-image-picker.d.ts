@@ -19,7 +19,7 @@ declare module 'expo-image-picker' {
   };
 
   export type ImageLibraryOptions = {
-    mediaTypes?: MediaTypeOptions;
+    mediaTypes?: MediaTypeOptions | MediaTypeOptions[];
     allowsEditing?: boolean;
     aspect?: [number, number];
     quality?: number;
