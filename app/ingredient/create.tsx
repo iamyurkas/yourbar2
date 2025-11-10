@@ -73,7 +73,6 @@ export default function CreateIngredientScreen() {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ['images'],
       allowsEditing: true,
-      aspect: [1, 1],
       quality: 0.9,
     });
 
@@ -166,7 +165,7 @@ export default function CreateIngredientScreen() {
                 <View style={styles.photoPlaceholderContent}>
                   <MaterialCommunityIcons name="image-plus" size={36} color={paletteColors.onSurfaceVariant} />
                   <Text style={[styles.photoPlaceholderText, { color: paletteColors.onSurfaceVariant }]}>Tap to add photo</Text>
-                  <Text style={[styles.photoHint, { color: paletteColors.onSurfaceVariant }]}>Crop a square image</Text>
+                  <Text style={[styles.photoHint, { color: paletteColors.onSurfaceVariant }]}>Crop or adjust the photo</Text>
                 </View>
               )}
             </Pressable>
