@@ -65,7 +65,7 @@ export default function CreateIngredientScreen() {
     try {
       setIsPickingImage(true);
       const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        mediaTypes: ['images'],
         allowsEditing: true,
         quality: 1,
         exif: false,
