@@ -3,11 +3,10 @@ import { Stack, useRouter } from 'expo-router';
 import { Image } from 'expo-image';
 // eslint-disable-next-line import/no-unresolved
 import * as ImagePicker from 'expo-image-picker';
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Alert,
   KeyboardAvoidingView,
-  Modal,
   Keyboard,
   Platform,
   Pressable,
@@ -15,7 +14,6 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -45,6 +43,23 @@ export default function CreateIngredientScreen() {
   const [baseFieldWindowLayout, setBaseFieldWindowLayout] =
     useState<{ x: number; y: number; width: number; height: number } | null>(null);
   const [isBaseDropdownVisible, setBaseDropdownVisible] = useState(false);
+
+  const updateBaseFieldWindowLayout = useCallback(() => {
+    requestAnimationFrame(() => {
+      baseFieldContainerRef.current?.measureInWindow((x, y, width, height) => {
+        setBaseFieldWindowLayout({ x, y, width, height });
+      });
+    });
+  }, []);
+
+  useEffect(() => {
+    const showListener = Keyboard.addListener('keyboardDidShow', updateBaseFieldWindowLayout);
+    const hideListener = Keyboard.addListener('keyboardDidHide', updateBaseFieldWindowLayout);
+    return () => {
+      showListener.remove();
+      hideListener.remove();
+    };
+  }, [updateBaseFieldWindowLayout]);
 
   const baseIngredients = useMemo(() => {
     return ingredients
@@ -129,13 +144,14 @@ export default function CreateIngredientScreen() {
         animated: true,
       });
     }
-    baseFieldContainerRef.current?.measureInWindow((x, y, width, height) => {
-      setBaseFieldWindowLayout({ x, y, width, height });
-    });
+    updateBaseFieldWindowLayout();
+    setTimeout(() => {
+      updateBaseFieldWindowLayout();
+    }, 160);
     if (baseInputValue.trim().length >= 3) {
       setBaseDropdownVisible(true);
     }
-  }, [baseFieldLayout, baseInputValue]);
+  }, [baseFieldLayout, baseInputValue, updateBaseFieldWindowLayout]);
 
   const handleBaseInputBlur = useCallback(() => {
     setTimeout(() => {
@@ -151,18 +167,28 @@ export default function CreateIngredientScreen() {
       }
       if (text.trim().length >= 3) {
         setBaseDropdownVisible(true);
+        updateBaseFieldWindowLayout();
       } else {
         setBaseDropdownVisible(false);
       }
     },
-    [selectedBaseIngredient],
+    [selectedBaseIngredient, updateBaseFieldWindowLayout],
   );
 
   const closeBaseDropdown = useCallback(() => {
     setBaseDropdownVisible(false);
-    baseInputRef.current?.blur();
-    Keyboard.dismiss();
   }, []);
+
+  useEffect(() => {
+    if (isBaseDropdownVisible) {
+      updateBaseFieldWindowLayout();
+      const timer = setTimeout(() => {
+        updateBaseFieldWindowLayout();
+      }, 120);
+      return () => clearTimeout(timer);
+    }
+    return undefined;
+  }, [isBaseDropdownVisible, updateBaseFieldWindowLayout]);
 
   const handleSubmit = useCallback(() => {
     const summary = [
@@ -340,52 +366,53 @@ function IngredientSuggestionsDropdown({
   } as const;
 
   return (
-    <Modal transparent visible={visible} animationType="fade" onRequestClose={onRequestClose}>
-      <TouchableWithoutFeedback onPress={onRequestClose}>
-        <View style={styles.dropdownOverlay}>
-          <TouchableWithoutFeedback>
-            <View
-              style={[
-                styles.dropdownContainer,
-                dropdownPosition,
-                {
-                  backgroundColor: paletteColors.surface,
-                  borderColor: paletteColors.outline,
-                },
-              ]}>
-              <ScrollView style={styles.dropdownList}>
-                {baseIngredients.length > 0 ? (
-                  baseIngredients.map((ingredient) => {
-                    const id = ingredient.id != null ? Number(ingredient.id) : null;
-                    const isSelected = id != null && id === selectedBaseIngredientId;
-                    const tagColor = ingredient.tags?.[0]?.color;
-                    return (
-                      <ListRow
-                        key={ingredient.id ?? ingredient.name}
-                        title={ingredient.name ?? 'Unknown ingredient'}
-                        onPress={() => onSelect(ingredient)}
-                        selected={isSelected}
-                        highlightColor={appPalette.highlightSubtle}
-                        accessibilityRole="button"
-                        accessibilityLabel={`Use ${ingredient.name} as base ingredient`}
-                        accessibilityState={isSelected ? { selected: true } : undefined}
-                        thumbnail={<Thumb label={ingredient.name ?? undefined} uri={ingredient.photoUri ?? undefined} />}
-                        tagColor={tagColor}
-                      />
-                    );
-                  })
-                ) : (
-                  <View style={styles.dropdownEmptyState}>
-                    <MaterialCommunityIcons name="magnify-close" size={28} color={paletteColors.onSurfaceVariant} />
-                    <Text style={[styles.dropdownEmptyText, { color: paletteColors.onSurfaceVariant }]}>No matches</Text>
-                  </View>
-                )}
-              </ScrollView>
+    <View pointerEvents="box-none" style={StyleSheet.absoluteFill}>
+      <Pressable
+        style={[StyleSheet.absoluteFill, styles.dropdownOverlay]}
+        accessibilityRole="button"
+        accessibilityLabel="Dismiss ingredient suggestions"
+        onPress={onRequestClose}
+      />
+      <View
+        style={[
+          styles.dropdownContainer,
+          dropdownPosition,
+          {
+            backgroundColor: paletteColors.surface,
+            borderColor: paletteColors.outline,
+          },
+        ]}
+        pointerEvents="auto">
+        <ScrollView style={styles.dropdownList}>
+          {baseIngredients.length > 0 ? (
+            baseIngredients.map((ingredient) => {
+              const id = ingredient.id != null ? Number(ingredient.id) : null;
+              const isSelected = id != null && id === selectedBaseIngredientId;
+              const tagColor = ingredient.tags?.[0]?.color;
+              return (
+                <ListRow
+                  key={ingredient.id ?? ingredient.name}
+                  title={ingredient.name ?? 'Unknown ingredient'}
+                  onPress={() => onSelect(ingredient)}
+                  selected={isSelected}
+                  highlightColor={appPalette.highlightSubtle}
+                  accessibilityRole="button"
+                  accessibilityLabel={`Use ${ingredient.name} as base ingredient`}
+                  accessibilityState={isSelected ? { selected: true } : undefined}
+                  thumbnail={<Thumb label={ingredient.name ?? undefined} uri={ingredient.photoUri ?? undefined} />}
+                  tagColor={tagColor}
+                />
+              );
+            })
+          ) : (
+            <View style={styles.dropdownEmptyState}>
+              <MaterialCommunityIcons name="magnify-close" size={28} color={paletteColors.onSurfaceVariant} />
+              <Text style={[styles.dropdownEmptyText, { color: paletteColors.onSurfaceVariant }]}>No matches</Text>
             </View>
-          </TouchableWithoutFeedback>
-        </View>
-      </TouchableWithoutFeedback>
-    </Modal>
+          )}
+        </ScrollView>
+      </View>
+    </View>
   );
 }
 
