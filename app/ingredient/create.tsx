@@ -164,7 +164,9 @@ export default function CreateIngredientScreen() {
     setBaseIngredientId(null);
     setBaseInputValue('');
     setBaseDropdownVisible(false);
-    baseInputRef.current?.focus();
+    requestAnimationFrame(() => {
+      baseInputRef.current?.focus();
+    });
   }, []);
 
   const handleBaseInputFocus = useCallback(() => {
@@ -307,38 +309,45 @@ export default function CreateIngredientScreen() {
               style={[styles.baseInputWrapper, { borderColor: paletteColors.outline, backgroundColor: paletteColors.surface }]}
               pointerEvents="box-none">
               {selectedBaseIngredient ? (
-                <View
-                  style={[
-                    styles.baseInputPreview,
-                    { backgroundColor: paletteColors.surfaceVariant, borderColor: paletteColors.outlineVariant },
-                  ]}>
-                  {selectedBaseIngredientPhotoSource ? (
-                    <Image
-                      source={selectedBaseIngredientPhotoSource}
-                      style={styles.baseInputPreviewImage}
-                      contentFit="contain"
-                    />
-                  ) : (
-                    <MaterialCommunityIcons
-                      name="image-off"
-                      size={18}
-                      color={paletteColors.onSurfaceVariant}
-                    />
-                  )}
-                </View>
+                <>
+                  <View
+                    style={[
+                      styles.baseInputPreview,
+                      { backgroundColor: paletteColors.surfaceVariant, borderColor: paletteColors.outlineVariant },
+                    ]}>
+                    {selectedBaseIngredientPhotoSource ? (
+                      <Image
+                        source={selectedBaseIngredientPhotoSource}
+                        style={styles.baseInputPreviewImage}
+                        contentFit="contain"
+                      />
+                    ) : (
+                      <MaterialCommunityIcons
+                        name="image-off"
+                        size={18}
+                        color={paletteColors.onSurfaceVariant}
+                      />
+                    )}
+                  </View>
+                  <Text style={[styles.baseInputSelectedName, { color: paletteColors.onSurface }]} numberOfLines={2}>
+                    {selectedBaseIngredient.name ?? 'Unknown ingredient'}
+                  </Text>
+                </>
               ) : null}
-              <TextInput
-                ref={baseInputRef}
-                style={[styles.baseInput, { color: paletteColors.onSurface }]}
-                placeholder="Start typing to search"
-                placeholderTextColor={paletteColors.onSurfaceVariant}
-                value={baseInputValue}
-                onChangeText={handleBaseInputChange}
-                onFocus={handleBaseInputFocus}
-                onBlur={handleBaseInputBlur}
-                autoCapitalize="words"
-                autoCorrect={false}
-              />
+              {!selectedBaseIngredient ? (
+                <TextInput
+                  ref={baseInputRef}
+                  style={[styles.baseInput, { color: paletteColors.onSurface }]}
+                  placeholder="Start typing to search"
+                  placeholderTextColor={paletteColors.onSurfaceVariant}
+                  value={baseInputValue}
+                  onChangeText={handleBaseInputChange}
+                  onFocus={handleBaseInputFocus}
+                  onBlur={handleBaseInputBlur}
+                  autoCapitalize="words"
+                  autoCorrect={false}
+                />
+              ) : null}
               {selectedBaseIngredient ? (
                 <Pressable
                   onPress={handleClearBaseIngredient}
@@ -565,6 +574,10 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     paddingVertical: 4,
+  },
+  baseInputSelectedName: {
+    flex: 1,
+    fontSize: 16,
   },
   baseInputPreview: {
     width: 40,
