@@ -113,6 +113,7 @@ export default function IngredientsScreen() {
     shoppingIngredientIds,
     toggleIngredientAvailability,
   } = useInventory();
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState<IngredientTabKey>('all');
   const [query, setQuery] = useState('');
   const [optimisticAvailability, setOptimisticAvailability] = useState<Map<number, boolean>>(
@@ -120,6 +121,10 @@ export default function IngredientsScreen() {
   );
   const [, startAvailabilityTransition] = useTransition();
   const paletteColors = Colors;
+
+  const handleAddIngredient = useCallback(() => {
+    router.push('/ingredient/create');
+  }, [router]);
 
   const ingredientById = useMemo(() => {
     const map = new Map<number, Ingredient>();
@@ -524,7 +529,7 @@ export default function IngredientsScreen() {
           }
         />
       </View>
-      <FabAdd label="Add ingredient" />
+      <FabAdd label="Add ingredient" onPress={handleAddIngredient} />
     </SafeAreaView>
   );
 }
