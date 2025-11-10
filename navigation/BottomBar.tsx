@@ -25,17 +25,16 @@ export function BottomBar({ state, descriptors, navigation }: BottomTabBarProps)
   const palette = Colors;
 
   return (
-    <View style={[styles.wrapper, { paddingBottom: Math.max(insets.bottom, 16) }]}>
-      <View
-        style={[
-          styles.bar,
-          {
-            backgroundColor: palette.surface,
-            borderColor: palette.outline,
-            shadowOpacity: 0.12,
-            shadowColor: palette.tint,
-          },
-        ]}>
+    <View
+      style={[
+        styles.wrapper,
+        {
+          paddingBottom: Math.max(insets.bottom, 12),
+          backgroundColor: palette.background,
+          borderTopColor: `${palette.outline}AA`,
+        },
+      ]}>
+      <View style={styles.bar}>
         {state.routes.map((route, index) => {
           const focused = state.index === index;
           const { options } = descriptors[route.key];
@@ -78,17 +77,28 @@ export function BottomBar({ state, descriptors, navigation }: BottomTabBarProps)
               testID={options.tabBarTestID}
               onPress={onPress}
               onLongPress={onLongPress}
-              style={styles.item}>
-              <Icon
-                width={ICON_SIZE}
-                height={ICON_SIZE}
-                fill={color}
-                accessibilityRole="image"
-                accessibilityLabel={typeof label === 'string' ? label : undefined}
-              />
+              android_ripple={{ color: `${palette.tertiary}59`, foreground: true }}
+              style={({ pressed }) => [styles.item, pressed && styles.itemPressed]}>
+              <View style={styles.iconWrapper}>
+                <Icon
+                  width={ICON_SIZE}
+                  height={ICON_SIZE}
+                  fill={color}
+                  accessibilityRole="image"
+                  accessibilityLabel={typeof label === 'string' ? label : undefined}
+                />
+              </View>
               <Text style={[styles.label, { color: labelColor, fontWeight: focused ? '600' : '500' }]}>
                 {label}
               </Text>
+              <View
+                style={[
+                  styles.indicator,
+                  {
+                    backgroundColor: focused ? palette.primary : 'transparent',
+                  },
+                ]}
+              />
             </Pressable>
           );
         })}
@@ -100,30 +110,43 @@ export function BottomBar({ state, descriptors, navigation }: BottomTabBarProps)
 const styles = StyleSheet.create({
   wrapper: {
     position: 'absolute',
-    left: 16,
-    right: 16,
+    left: 0,
+    right: 0,
     bottom: 0,
+    borderTopWidth: StyleSheet.hairlineWidth,
   },
   bar: {
     flexDirection: 'row',
-    borderRadius: 28,
-    borderWidth: 1,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
     alignItems: 'center',
-    justifyContent: 'space-between',
-    elevation: 6,
-    shadowOffset: { width: 0, height: 12 },
-    shadowRadius: 20,
+    justifyContent: 'space-around',
+    paddingHorizontal: 24,
+    paddingTop: 10,
   },
   item: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
-    paddingVertical: 8,
+    paddingVertical: 10,
+    position: 'relative',
+  },
+  itemPressed: {
+    opacity: 0.75,
+    transform: [{ scale: 0.96 }],
+  },
+  iconWrapper: {
+    height: ICON_SIZE + 6,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   label: {
     fontSize: 12,
+  },
+  indicator: {
+    position: 'absolute',
+    bottom: 0,
+    height: 3,
+    width: 36,
+    borderRadius: 999,
   },
 });

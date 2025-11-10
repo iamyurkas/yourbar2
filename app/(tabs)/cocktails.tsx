@@ -1,11 +1,13 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 
 import { FabAdd } from '@/components/FabAdd';
 import { CocktailListRow } from '@/components/CocktailListRow';
 import { CollectionHeader } from '@/components/CollectionHeader';
+import { SideMenu, type SideMenuItem } from '@/components/SideMenu';
+import { FlashList } from '@/components/ui/flash-list';
 import type { SegmentTabOption } from '@/components/TopBars';
 import { Colors } from '@/constants/theme';
 import { useInventory, type Cocktail } from '@/providers/inventory-provider';
@@ -28,6 +30,7 @@ export default function CocktailsScreen() {
   const { cocktails, availableIngredientIds } = useInventory();
   const [activeTab, setActiveTab] = useState<CocktailTabKey>('all');
   const [query, setQuery] = useState('');
+  const [menuVisible, setMenuVisible] = useState(false);
   const paletteColors = Colors;
   const router = useRouter();
 
@@ -100,8 +103,6 @@ export default function CocktailsScreen() {
     );
   }, [activeSection.data, normalizedQuery]);
 
-  const separatorColor = paletteColors.outline;
-
   const keyExtractor = useCallback((item: Cocktail) => String(item.id ?? item.name), []);
 
   const handleSelectCocktail = useCallback(
@@ -127,10 +128,46 @@ export default function CocktailsScreen() {
     [availableIngredientIds, handleSelectCocktail],
   );
 
-  const renderSeparator = useCallback(
-    () => <View style={[styles.divider, { backgroundColor: separatorColor }]} />,
-    [separatorColor],
+  const menuItems = useMemo<SideMenuItem[]>(
+    () => [
+      {
+        key: 'cocktails',
+        label: 'Cocktails',
+        icon: 'glass-cocktail',
+        badgeColorKey: 'pink',
+        onPress: () => router.push('/(tabs)/cocktails'),
+      },
+      {
+        key: 'shaker',
+        label: 'Shaker',
+        icon: 'shaker-outline',
+        badgeColorKey: 'teal',
+        onPress: () => router.push('/(tabs)/shaker'),
+      },
+      {
+        key: 'ingredients',
+        label: 'Ingredients',
+        icon: 'basket-outline',
+        badgeColorKey: 'orange',
+        onPress: () => router.push('/(tabs)/ingredients'),
+      },
+      {
+        key: 'settings',
+        label: 'Settings',
+        icon: 'cog-outline',
+        badgeColorKey: 'purple',
+      },
+    ],
+    [router],
   );
+
+  const handleMenuPress = useCallback(() => {
+    setMenuVisible(true);
+  }, []);
+
+  const handleMenuClose = useCallback(() => {
+    setMenuVisible(false);
+  }, []);
 
   return (
     <SafeAreaView
@@ -144,20 +181,25 @@ export default function CocktailsScreen() {
           tabs={TAB_OPTIONS}
           activeTab={activeTab}
           onTabChange={setActiveTab}
+          onMenuPress={handleMenuPress}
         />
-        <FlatList
+        <FlashList
           data={filteredCocktails}
           keyExtractor={keyExtractor}
           renderItem={renderItem}
-          ItemSeparatorComponent={renderSeparator}
+          estimatedItemSize={96}
+          ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
           contentContainerStyle={styles.listContent}
           showsVerticalScrollIndicator={false}
           ListEmptyComponent={
-            <Text style={[styles.emptyLabel, { color: paletteColors.onSurfaceVariant }]}>No cocktails yet</Text>
+            <View style={styles.emptyState}>
+              <Text style={[styles.emptyLabel, { color: paletteColors.onSurfaceVariant }]}>No cocktails yet</Text>
+            </View>
           }
         />
       </View>
       <FabAdd label="Add cocktail" />
+      <SideMenu visible={menuVisible} onClose={handleMenuClose} items={menuItems} />
     </SafeAreaView>
   );
 }
@@ -170,15 +212,18 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   listContent: {
-    paddingTop: 0,
-    paddingBottom: 80,
-  },
-  divider: {
-    height: StyleSheet.hairlineWidth,
+    paddingTop: 12,
+    paddingHorizontal: 12,
+    paddingBottom: 120,
   },
   emptyLabel: {
     textAlign: 'center',
-    marginTop: 80,
     fontSize: 14,
+  },
+  emptyState: {
+    paddingVertical: 48,
+    paddingHorizontal: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

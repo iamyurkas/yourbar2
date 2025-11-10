@@ -7,50 +7,50 @@ export const palette = {
   onPrimaryContainer: '#0B2A4A',
 
   secondary: '#74C0FC',
-  secondaryContainer: '#FFE9A6',
-  onSecondary: '#2B1D00',
-  onSecondaryContainer: '#3B2800',
+  secondaryContainer: '#E3F2FE',
+  onSecondary: '#1F2B38',
+  onSecondaryContainer: '#123B54',
 
   tertiary: '#A5D8FF',
-  tertiaryContainer: '#CBF1EC',
-  onTertiary: '#003833',
-  onTertiaryContainer: '#00302B',
+  tertiaryContainer: '#D7EEFF',
+  onTertiary: '#16354F',
+  onTertiaryContainer: '#0C263A',
 
   background: '#FFFFFF',
   surface: '#F8F9FA',
   surfaceBright: '#FFFFFF',
-  surfaceVariant: '#EEF2F8',
+  surfaceVariant: '#EAF3F9',
 
-  outline: '#E5EAF0',
-  outlineVariant: '#E3E6EC',
+  outline: '#D7E1EB',
+  outlineVariant: '#E3EAF2',
 
-  onSurface: '#1F2933',
+  onSurface: '#303030',
   onSurfaceMuted: '#5C6C7C',
   onSurfaceVariant: '#A1A1A1',
-  onSurfaceDisabled: 'rgba(31,41,51,0.38)',
-  onBackground: '#1F2933',
+  onSurfaceDisabled: 'rgba(48,48,48,0.32)',
+  onBackground: '#303030',
 
   inversePrimary: '#9CCAFF',
   inverseSurface: '#1F3142',
   inverseOnSurface: '#F7FAFF',
 
-  error: '#D32F2F',
-  errorContainer: '#FAD4D4',
-  onError: '#FFFFFF',
-  onErrorContainer: '#410E0B',
+  error: '#FF6B6B',
+  errorContainer: '#FFE3E6',
+  onError: '#601B28',
+  onErrorContainer: '#5A1D2A',
 
   success: '#2E7D32',
-  danger: '#D32F2F',
+  danger: '#FF6B6B',
 
   disabled: '#CED4DA',
   placeholder: '#A1A1A1',
 
   surfaceDisabled: 'rgba(31,41,51,0.12)',
-  backdrop: 'rgba(15,23,42,0.2)',
+  backdrop: 'rgba(15,23,42,0.25)',
   shadow: '#000000',
 
-  highlightFaint: '#4A90E21A',
-  highlightSubtle: '#4A90E21F',
+  highlightFaint: '#4DABF712',
+  highlightSubtle: '#4DABF71F',
   overlayOnPrimary: '#FFFFFF55',
 } as const;
 

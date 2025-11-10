@@ -111,7 +111,9 @@ const CocktailListRowComponent = ({
     return 'Missing ingredients';
   }, [missingCount, missingNames, recipeNames]);
 
-  const backgroundColor = isReady ? highlightColor : paletteColors.background;
+  const highlightBackground = isReady ? highlightColor ?? `${palette.primary}12` : palette.surface;
+  const brandColor = cocktail.tags?.[0]?.color ?? (isReady ? palette.primary : `${palette.outline}55`);
+  const rippleColor = `${palette.tertiary}59`;
 
   const ratingValueRaw = (cocktail as { userRating?: number }).userRating ?? 0;
   const ratingValue = Math.max(0, Math.min(MAX_RATING, Number(ratingValueRaw) || 0));
@@ -127,19 +129,22 @@ const CocktailListRowComponent = ({
       <View
         style={[
           styles.ratingOverlay,
-          { backgroundColor: `${paletteColors.surfaceVariant}F2`, borderColor: paletteColors.outline },
+          {
+            backgroundColor: `${palette.surfaceVariant}F2`,
+            borderColor: `${palette.outline}AA`,
+          },
         ]}>
         {Array.from({ length: totalStars }).map((_, index) => (
           <MaterialCommunityIcons
             key={`rating-icon-${index}`}
             name="star"
-            size={12}
-            color={paletteColors.tint}
+            size={10}
+            color={palette.secondary}
           />
         ))}
       </View>
     );
-  }, [paletteColors.outline, paletteColors.surfaceVariant, paletteColors.tint, ratingValue]);
+  }, [ratingValue]);
 
   const tagDots = useMemo(() => {
     const tags = cocktail.tags ?? [];
@@ -159,9 +164,10 @@ const CocktailListRowComponent = ({
   return (
     <Pressable
       onPress={onPress}
-      style={[styles.row, { backgroundColor }, containerStyle]}
-      accessibilityRole={onPress ? 'button' : undefined}
-    >
+      android_ripple={{ color: rippleColor }}
+      style={({ pressed }) => [styles.row, { backgroundColor: highlightBackground }, pressed && styles.rowPressed, containerStyle]}
+      accessibilityRole={onPress ? 'button' : undefined}>
+      <View style={[styles.brandStripe, { backgroundColor: brandColor }]} />
       <View style={styles.thumbSlot}>
         <Thumb label={cocktail.name} uri={cocktail.photoUri} fallbackUri={glasswareUri} />
       </View>
@@ -169,7 +175,7 @@ const CocktailListRowComponent = ({
         <Text style={[styles.title, { color: paletteColors.text }]} numberOfLines={1}>
           {cocktail.name}
         </Text>
-        <Text style={[styles.subtitle, { color: paletteColors.icon }]} numberOfLines={1}>
+        <Text style={[styles.subtitle, { color: paletteColors.onSurfaceVariant }]} numberOfLines={1}>
           {subtitle}
         </Text>
       </View>
@@ -188,15 +194,33 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    gap: 16,
-    minHeight: 76,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    gap: 12,
+    minHeight: 80,
     position: 'relative',
+    borderRadius: 18,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: `${palette.outline}55`,
+    shadowColor: palette.shadow,
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 6 },
+    elevation: 2,
+    overflow: 'hidden',
+  },
+  rowPressed: {
+    opacity: 0.72,
+    transform: [{ scale: 0.97 }],
+  },
+  brandStripe: {
+    width: 4,
+    borderRadius: 4,
+    alignSelf: 'stretch',
   },
   thumbSlot: {
-    width: 56,
-    height: 56,
+    width: 50,
+    height: 50,
     borderRadius: 8,
     overflow: 'hidden',
   },
@@ -208,22 +232,23 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     justifyContent: 'center',
     gap: 8,
-    minHeight: 56,
+    minHeight: 50,
   },
   title: {
-    fontSize: 17,
-    fontWeight: '500',
+    fontSize: 18,
+    fontWeight: '600',
+    letterSpacing: 0.2,
   },
   subtitle: {
     fontSize: 13,
   },
   tagDotsRow: {
     flexDirection: 'row',
-    gap: 4,
+    gap: 6,
   },
   ratingOverlay: {
     position: 'absolute',
-    right: 16,
+    right: 18,
     bottom: 8,
     flexDirection: 'row',
     alignItems: 'center',

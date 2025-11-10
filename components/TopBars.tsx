@@ -7,10 +7,12 @@ import {
   TextInput,
   View,
   type NativeSyntheticEvent,
+  type PressableStateCallbackType,
   type TextInputSubmitEditingEventData,
 } from 'react-native';
 
 import { Colors } from '@/constants/theme';
+import { palette as appPalette } from '@/theme/theme';
 
 type SearchTopBarProps = {
   value: string;
@@ -40,7 +42,8 @@ export function SearchTopBar({
   onMenuPress,
   onFilterPress,
 }: SearchTopBarProps) {
-  const palette = Colors;
+  const colors = Colors;
+  const rippleColor = `${appPalette.tertiary}59`;
 
   const handleSubmit = (event: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
     onSubmit?.(event.nativeEvent.text);
@@ -50,37 +53,53 @@ export function SearchTopBar({
     <View
       style={[
         styles.topBar,
-        {
-          backgroundColor: palette.background,
-          borderBottomColor: palette.outline,
-          borderBottomWidth: StyleSheet.hairlineWidth,
-        },
+        { backgroundColor: colors.background, borderBottomColor: `${colors.outline}33` },
       ]}>
       <Pressable
         accessibilityRole="button"
         accessibilityLabel="Open navigation"
         onPress={onMenuPress}
-        style={styles.iconButton}>
-        <MaterialCommunityIcons name="menu" size={24} color={palette.onSurface} />
+        android_ripple={{ color: rippleColor, foreground: true }}
+        style={({ pressed }: PressableStateCallbackType) => [
+          styles.iconButton,
+          pressed && styles.iconButtonPressed,
+        ]}>
+        <MaterialCommunityIcons name="menu" size={24} color={colors.onSurface} />
       </Pressable>
-      <View style={[styles.searchContainer, { backgroundColor: palette.surface, borderColor: palette.background }]}>
-        <MaterialCommunityIcons name="magnify" size={20} color={palette.onSurface} style={styles.searchIcon} />
+      <View
+        style={[
+          styles.searchContainer,
+          {
+            backgroundColor: colors.surface,
+            borderColor: `${colors.outline}88`,
+          },
+        ]}>
+        <MaterialCommunityIcons
+          name="magnify"
+          size={20}
+          color={colors.onSurfaceVariant}
+          style={styles.searchIcon}
+        />
         <TextInput
           value={value}
           onChangeText={onChangeText}
           placeholder={placeholder}
-          placeholderTextColor={`${palette.onSurfaceVariant}99`}
+          placeholderTextColor={`${appPalette.placeholder}AA`}
           returnKeyType="search"
           onSubmitEditing={handleSubmit}
-          style={[styles.searchInput, { color: palette.text, fontWeight: '400' }]}
+          style={[styles.searchInput, { color: colors.text, fontWeight: '500' }]}
         />
         {value ? (
           <Pressable
             accessibilityRole="button"
             accessibilityLabel="Clear search query"
             onPress={() => onChangeText('')}
-            style={styles.clearButton}>
-            <MaterialCommunityIcons name="close" size={18} color={palette.onSurface} />
+            android_ripple={{ color: rippleColor, foreground: true }}
+            style={({ pressed }: PressableStateCallbackType) => [
+              styles.clearButton,
+              pressed && styles.iconButtonPressed,
+            ]}>
+            <MaterialCommunityIcons name="close" size={18} color={colors.onSurfaceVariant} />
           </Pressable>
         ) : null}
       </View>
@@ -88,18 +107,30 @@ export function SearchTopBar({
         accessibilityRole="button"
         accessibilityLabel="Filter items"
         onPress={onFilterPress}
-        style={styles.iconButton}>
-        <MaterialCommunityIcons name="filter-variant" size={24} color={palette.icon} />
+        android_ripple={{ color: rippleColor, foreground: true }}
+        style={({ pressed }: PressableStateCallbackType) => [
+          styles.iconButton,
+          pressed && styles.iconButtonPressed,
+        ]}>
+        <MaterialCommunityIcons name="tune" size={22} color={colors.tint} />
       </Pressable>
     </View>
   );
 }
 
 export function SegmentTabs({ options, value, onChange }: SegmentTabsProps) {
-  const palette = Colors;
+  const colors = Colors;
+  const rippleColor = `${appPalette.tertiary}59`;
 
   return (
-    <View style={[styles.tabs, { backgroundColor: palette.surface }]}> 
+    <View
+      style={[
+        styles.tabs,
+        {
+          backgroundColor: colors.surface,
+          borderBottomColor: `${colors.outline}55`,
+        },
+      ]}>
       {options.map((option) => {
         const focused = option.key === value;
         return (
@@ -108,13 +139,17 @@ export function SegmentTabs({ options, value, onChange }: SegmentTabsProps) {
             accessibilityRole="tab"
             accessibilityState={focused ? { selected: true } : {}}
             onPress={() => onChange(option.key)}
-            style={styles.tabButton}>
+            android_ripple={{ color: rippleColor, foreground: true }}
+            style={({ pressed }: PressableStateCallbackType) => [
+              styles.tabButton,
+              pressed && styles.tabPressed,
+            ]}>
             <Text
               style={[
                 styles.tabLabel,
                 {
-                  color: focused ? palette.tint : palette.onSurfaceVariant,
-                  fontWeight: focused ? '600' : '400',
+                  color: focused ? colors.tint : colors.onSurfaceVariant,
+                  fontWeight: focused ? '600' : '500',
                 },
               ]}>
               {option.label}
@@ -123,7 +158,7 @@ export function SegmentTabs({ options, value, onChange }: SegmentTabsProps) {
               style={[
                 styles.tabIndicator,
                 {
-                  backgroundColor: focused ? palette.tint : 'transparent',
+                  backgroundColor: focused ? colors.tint : 'transparent',
                 },
               ]}
             />
@@ -141,7 +176,9 @@ const styles = StyleSheet.create({
     gap: 12,
     paddingHorizontal: 16,
     paddingTop: 12,
-    paddingBottom: 8,
+    paddingBottom: 12,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: 'transparent',
   },
   iconButton: {
     width: 40,
@@ -150,14 +187,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  iconButtonPressed: {
+    opacity: 0.7,
+    transform: [{ scale: 0.94 }],
+  },
   searchContainer: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    borderRadius: 24,
+    borderRadius: 20,
     borderWidth: 1,
     paddingHorizontal: 12,
-    paddingVertical: 4,
+    paddingVertical: 6,
   },
   searchIcon: {
     marginRight: 8,
@@ -176,17 +217,18 @@ const styles = StyleSheet.create({
   tabs: {
     flexDirection: 'row',
     paddingHorizontal: 16,
-    paddingTop: 4,
-    paddingBottom: 0,
-    elevation: 4,
-    zIndex: 1,
+    paddingBottom: 4,
+    borderBottomWidth: StyleSheet.hairlineWidth,
   },
   tabButton: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: 12,
-    gap: 6,
+    height: 48,
+    gap: 8,
+  },
+  tabPressed: {
+    opacity: 0.78,
   },
   tabLabel: {
     fontSize: 15,

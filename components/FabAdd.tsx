@@ -14,16 +14,17 @@ type FabAddProps = {
 export function FabAdd({ label = 'Add', onPress }: FabAddProps) {
   const insets = useSafeAreaInsets();
   const paletteColors = Colors;
+  const rippleColor = `${palette.tertiary}59`;
 
   return (
-    <View style={[styles.container, { bottom: insets.bottom + 16 }]}>
+    <View style={[styles.container, { bottom: insets.bottom + 24 }]}>
       <Pressable
         accessibilityRole="button"
         accessibilityLabel={label}
         onPress={onPress}
-        style={[styles.fab, { backgroundColor: paletteColors.tint }]}
-        android_ripple={{ color: `${paletteColors.surface}33`, borderless: true }}>
-        <MaterialCommunityIcons name="plus" size={26} color={paletteColors.surface} />
+        style={[styles.fab, { backgroundColor: palette.primaryContainer }]}
+        android_ripple={{ color: rippleColor, borderless: true }}>
+        <MaterialCommunityIcons name="plus" size={26} color={palette.primary} />
       </Pressable>
     </View>
   );
@@ -36,15 +37,17 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
   fab: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
+    width: 64,
+    height: 64,
+    borderRadius: 32,
     alignItems: 'center',
     justifyContent: 'center',
-    elevation: 6,
+    elevation: 8,
     shadowColor: palette.shadow,
-    shadowOpacity: 0.18,
-    shadowOffset: { width: 0, height: 6 },
-    shadowRadius: 12,
+    shadowOpacity: 0.2,
+    shadowOffset: { width: 0, height: 10 },
+    shadowRadius: 16,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: `${palette.outline}66`,
   },
 });

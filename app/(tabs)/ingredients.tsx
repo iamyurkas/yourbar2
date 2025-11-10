@@ -1,11 +1,13 @@
 import React, { memo, useCallback, useEffect, useMemo, useState, useTransition } from 'react';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { FabAdd } from '@/components/FabAdd';
 import { ListRow, PresenceCheck, Thumb } from '@/components/RowParts';
 import { CollectionHeader } from '@/components/CollectionHeader';
+import { SideMenu, type SideMenuItem } from '@/components/SideMenu';
 import type { SegmentTabOption } from '@/components/TopBars';
+import { FlashList } from '@/components/ui/flash-list';
 import { Colors } from '@/constants/theme';
 import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
 import { palette } from '@/theme/theme';
@@ -120,6 +122,7 @@ export default function IngredientsScreen() {
     () => new Map(),
   );
   const [, startAvailabilityTransition] = useTransition();
+  const [menuVisible, setMenuVisible] = useState(false);
   const paletteColors = Colors;
 
   const ingredientById = useMemo(() => {
@@ -387,8 +390,6 @@ export default function IngredientsScreen() {
   }, [activeSection.data, normalizedQuery]);
 
   const highlightColor = palette.highlightSubtle;
-  const separatorColor = paletteColors.outline;
-
   const effectiveAvailableIngredientIds = useMemo(() => {
     if (optimisticAvailability.size === 0) {
       return availableIngredientIds;
@@ -495,10 +496,41 @@ export default function IngredientsScreen() {
     ],
   );
 
-  const renderSeparator = useCallback(
-    () => <View style={[styles.divider, { backgroundColor: separatorColor }]} />,
-    [separatorColor],
+  const menuItems = useMemo<SideMenuItem[]>(
+    () => [
+      {
+        key: 'cocktails',
+        label: 'Cocktails',
+        icon: 'glass-cocktail',
+        badgeColorKey: 'pink',
+        onPress: () => router.push('/(tabs)/cocktails'),
+      },
+      {
+        key: 'shaker',
+        label: 'Shaker',
+        icon: 'shaker-outline',
+        badgeColorKey: 'teal',
+        onPress: () => router.push('/(tabs)/shaker'),
+      },
+      {
+        key: 'ingredients',
+        label: 'Ingredients',
+        icon: 'basket-outline',
+        badgeColorKey: 'orange',
+        onPress: () => router.push('/(tabs)/ingredients'),
+      },
+      {
+        key: 'settings',
+        label: 'Settings',
+        icon: 'cog-outline',
+        badgeColorKey: 'purple',
+      },
+    ],
+    [router],
   );
+
+  const handleMenuPress = useCallback(() => setMenuVisible(true), []);
+  const handleMenuClose = useCallback(() => setMenuVisible(false), []);
 
   return (
     <SafeAreaView
@@ -512,20 +544,25 @@ export default function IngredientsScreen() {
           tabs={TAB_OPTIONS}
           activeTab={activeTab}
           onTabChange={setActiveTab}
+          onMenuPress={handleMenuPress}
         />
-        <FlatList
+        <FlashList
           data={filteredIngredients}
           keyExtractor={keyExtractor}
           renderItem={renderItem}
-          ItemSeparatorComponent={renderSeparator}
+          estimatedItemSize={92}
+          ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
           contentContainerStyle={styles.listContent}
           showsVerticalScrollIndicator={false}
           ListEmptyComponent={
-            <Text style={[styles.emptyLabel, { color: paletteColors.onSurfaceVariant }]}>No ingredients yet</Text>
+            <View style={styles.emptyState}>
+              <Text style={[styles.emptyLabel, { color: paletteColors.onSurfaceVariant }]}>No ingredients yet</Text>
+            </View>
           }
         />
       </View>
       <FabAdd label="Add ingredient" onPress={() => router.push('/ingredient/create')} />
+      <SideMenu visible={menuVisible} onClose={handleMenuClose} items={menuItems} />
     </SafeAreaView>
   );
 }
@@ -538,15 +575,18 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   listContent: {
-    paddingTop: 0,
-    paddingBottom: 80,
-  },
-  divider: {
-    height: StyleSheet.hairlineWidth,
+    paddingTop: 12,
+    paddingHorizontal: 12,
+    paddingBottom: 120,
   },
   emptyLabel: {
     textAlign: 'center',
-    marginTop: 80,
     fontSize: 14,
+  },
+  emptyState: {
+    paddingVertical: 48,
+    paddingHorizontal: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
