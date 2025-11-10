@@ -1,6 +1,9 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import React from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
+  Animated,
+  Easing,
+  LayoutChangeEvent,
   Pressable,
   StyleSheet,
   Text,
@@ -47,50 +50,67 @@ export function SearchTopBar({
   };
 
   return (
-    <View
-      style={[
-        styles.topBar,
-        {
-          backgroundColor: palette.background,
-          borderBottomColor: palette.outline,
-          borderBottomWidth: StyleSheet.hairlineWidth,
-        },
-      ]}>
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel="Open navigation"
-        onPress={onMenuPress}
-        style={styles.iconButton}>
-        <MaterialCommunityIcons name="menu" size={24} color={palette.onSurface} />
-      </Pressable>
-      <View style={[styles.searchContainer, { backgroundColor: palette.surface, borderColor: palette.background }]}>
-        <MaterialCommunityIcons name="magnify" size={20} color={palette.onSurface} style={styles.searchIcon} />
-        <TextInput
-          value={value}
-          onChangeText={onChangeText}
-          placeholder={placeholder}
-          placeholderTextColor={`${palette.onSurfaceVariant}99`}
-          returnKeyType="search"
-          onSubmitEditing={handleSubmit}
-          style={[styles.searchInput, { color: palette.text, fontWeight: '400' }]}
-        />
-        {value ? (
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel="Clear search query"
-            onPress={() => onChangeText('')}
-            style={styles.clearButton}>
-            <MaterialCommunityIcons name="close" size={18} color={palette.onSurface} />
-          </Pressable>
-        ) : null}
+    <View style={[styles.topBarWrapper, { backgroundColor: palette.surface }]}>
+      <View
+        style={[
+          styles.topBar,
+          {
+            backgroundColor: palette.surfaceBright,
+            shadowColor: palette.shadow,
+          },
+        ]}>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Open navigation"
+          onPress={onMenuPress}
+          style={[styles.iconButton, { backgroundColor: palette.surfaceVariant }]}
+          android_ripple={{ color: `${palette.onSurfaceDisabled}` }}>
+          <MaterialCommunityIcons name="menu" size={22} color={palette.onSurface} />
+        </Pressable>
+        <View
+          style={[
+            styles.searchContainer,
+            {
+              backgroundColor: palette.surface,
+              borderColor: palette.outlineVariant,
+              shadowColor: palette.shadow,
+            },
+          ]}>
+          <MaterialCommunityIcons
+            name="magnify"
+            size={20}
+            color={palette.onSurface}
+            style={styles.searchIcon}
+          />
+          <TextInput
+            value={value}
+            onChangeText={onChangeText}
+            placeholder={placeholder}
+            placeholderTextColor={`${palette.onSurfaceVariant}99`}
+            returnKeyType="search"
+            onSubmitEditing={handleSubmit}
+            style={[styles.searchInput, { color: palette.text }]}
+          />
+          {value ? (
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Clear search query"
+              onPress={() => onChangeText('')}
+              style={[styles.clearButton, { backgroundColor: palette.surfaceVariant }]}
+            >
+              <MaterialCommunityIcons name="close" size={18} color={palette.onSurface} />
+            </Pressable>
+          ) : null}
+        </View>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Filter items"
+          onPress={onFilterPress}
+          style={[styles.iconButton, { backgroundColor: palette.surfaceVariant }]}
+          android_ripple={{ color: `${palette.onSurfaceDisabled}` }}>
+          <MaterialCommunityIcons name="filter-variant" size={22} color={palette.icon} />
+        </Pressable>
       </View>
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel="Filter items"
-        onPress={onFilterPress}
-        style={styles.iconButton}>
-        <MaterialCommunityIcons name="filter-variant" size={24} color={palette.icon} />
-      </Pressable>
     </View>
   );
 }
@@ -98,55 +118,130 @@ export function SearchTopBar({
 export function SegmentTabs({ options, value, onChange }: SegmentTabsProps) {
   const palette = Colors;
 
+  const [layouts, setLayouts] = useState<Record<string, { x: number; width: number }>>({});
+  const indicatorX = useRef(new Animated.Value(0)).current;
+  const indicatorWidth = useRef(new Animated.Value(0)).current;
+  const hasMeasured = useRef(false);
+
+  const handleLayout = useCallback(
+    (key: string) =>
+      (event: LayoutChangeEvent) => {
+        const { x, width } = event.nativeEvent.layout;
+        setLayouts((prev) => {
+          const existing = prev[key];
+          if (existing && existing.x === x && existing.width === width) {
+            return prev;
+          }
+          return { ...prev, [key]: { x, width } };
+        });
+      },
+    [],
+  );
+
+  useEffect(() => {
+    const layout = layouts[value];
+    if (!layout) {
+      return;
+    }
+
+    if (!hasMeasured.current) {
+      indicatorX.setValue(layout.x);
+      indicatorWidth.setValue(layout.width);
+      hasMeasured.current = true;
+      return;
+    }
+
+    Animated.spring(indicatorX, {
+      toValue: layout.x,
+      useNativeDriver: true,
+      friction: 18,
+      tension: 180,
+    }).start();
+
+    Animated.timing(indicatorWidth, {
+      toValue: layout.width,
+      duration: 220,
+      easing: Easing.out(Easing.ease),
+      useNativeDriver: false,
+    }).start();
+  }, [indicatorWidth, indicatorX, layouts, value]);
+
+  const activeLayout = layouts[value];
+
   return (
-    <View style={[styles.tabs, { backgroundColor: palette.surface }]}> 
-      {options.map((option) => {
-        const focused = option.key === value;
-        return (
-          <Pressable
-            key={option.key}
-            accessibilityRole="tab"
-            accessibilityState={focused ? { selected: true } : {}}
-            onPress={() => onChange(option.key)}
-            style={styles.tabButton}>
-            <Text
-              style={[
-                styles.tabLabel,
-                {
-                  color: focused ? palette.tint : palette.onSurfaceVariant,
-                  fontWeight: focused ? '600' : '400',
-                },
-              ]}>
-              {option.label}
-            </Text>
-            <View
-              style={[
-                styles.tabIndicator,
-                {
-                  backgroundColor: focused ? palette.tint : 'transparent',
-                },
-              ]}
-            />
-          </Pressable>
-        );
-      })}
+    <View style={[styles.tabsWrapper, { backgroundColor: palette.surface }]}>
+      <View
+        style={[
+          styles.tabs,
+          {
+            backgroundColor: palette.surfaceVariant,
+            borderColor: palette.outlineVariant,
+          },
+        ]}>
+        {activeLayout ? (
+          <Animated.View
+            pointerEvents="none"
+            style={[
+              styles.tabIndicator,
+              {
+                backgroundColor: palette.surfaceBright,
+                shadowColor: palette.shadow,
+                transform: [{ translateX: indicatorX }],
+                width: indicatorWidth,
+              },
+            ]}
+          />
+        ) : null}
+        {options.map((option) => {
+          const focused = option.key === value;
+          return (
+            <Pressable
+              key={option.key}
+              accessibilityRole="tab"
+              accessibilityState={focused ? { selected: true } : {}}
+              onPress={() => onChange(option.key)}
+              onLayout={handleLayout(option.key)}
+              style={styles.tabButton}>
+              <Text
+                style={[
+                  styles.tabLabel,
+                  {
+                    color: focused ? palette.tint : palette.onSurfaceVariant,
+                    fontWeight: focused ? '600' : '500',
+                  },
+                ]}>
+                {option.label}
+              </Text>
+            </Pressable>
+          );
+        })}
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  topBarWrapper: {
+    paddingHorizontal: 16,
+    paddingTop: 4,
+    paddingBottom: 16,
+  },
   topBar: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
-    paddingHorizontal: 16,
-    paddingTop: 12,
-    paddingBottom: 8,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    borderRadius: 24,
+    elevation: 6,
+    shadowOpacity: 0.12,
+    shadowOffset: { width: 0, height: 6 },
+    shadowRadius: 16,
   },
   iconButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -154,46 +249,61 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    borderRadius: 24,
+    borderRadius: 26,
     borderWidth: 1,
-    paddingHorizontal: 12,
-    paddingVertical: 4,
+    paddingHorizontal: 16,
+    minHeight: 48,
+    elevation: 3,
+    shadowOpacity: 0.08,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 12,
   },
   searchIcon: {
     marginRight: 8,
   },
   searchInput: {
     flex: 1,
-    fontSize: 16,
+    fontSize: 17,
+    fontWeight: '500',
   },
   clearButton: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
   },
+  tabsWrapper: {
+    paddingHorizontal: 16,
+    paddingBottom: 12,
+  },
   tabs: {
     flexDirection: 'row',
-    paddingHorizontal: 16,
-    paddingTop: 4,
-    paddingBottom: 0,
-    elevation: 4,
-    zIndex: 1,
+    position: 'relative',
+    borderRadius: 999,
+    padding: 4,
+    overflow: 'hidden',
+    borderWidth: StyleSheet.hairlineWidth,
   },
   tabButton: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: 12,
-    gap: 6,
+    paddingVertical: 10,
+    borderRadius: 999,
+    zIndex: 1,
   },
   tabLabel: {
     fontSize: 15,
   },
   tabIndicator: {
-    width: '60%',
-    height: 3,
-    borderRadius: 2,
+    position: 'absolute',
+    top: 4,
+    bottom: 4,
+    borderRadius: 999,
+    elevation: 2,
+    shadowOpacity: 0.08,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 8,
   },
 });

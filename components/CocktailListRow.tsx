@@ -32,6 +32,13 @@ type AvailabilitySummary = {
   isReady: boolean;
 };
 
+type StatusConfig = {
+  label: string;
+  backgroundColor: string;
+  textColor: string;
+  icon: keyof typeof MaterialCommunityIcons.glyphMap;
+};
+
 const REQUIRED_INGREDIENT_FILTER = (item: Cocktail['ingredients'][number]) =>
   !item?.optional && !item?.garnish;
 
@@ -113,6 +120,33 @@ const CocktailListRowComponent = ({
 
   const backgroundColor = isReady ? highlightColor : paletteColors.background;
 
+  const statusConfig = useMemo<StatusConfig>(() => {
+    if (isReady) {
+      return {
+        label: 'Ready',
+        backgroundColor: `${paletteColors.secondaryContainer}CC`,
+        textColor: paletteColors.onSecondaryContainer,
+        icon: 'check-circle',
+      };
+    }
+
+    if (missingCount > 0) {
+      return {
+        label: 'Missing ingredients',
+        backgroundColor: `${paletteColors.errorContainer}E6`,
+        textColor: paletteColors.onErrorContainer,
+        icon: 'alert-circle',
+      };
+    }
+
+    return {
+      label: 'Draft',
+      backgroundColor: `${paletteColors.surfaceVariant}CC`,
+      textColor: paletteColors.onSurfaceVariant,
+      icon: 'progress-clock',
+    };
+  }, [isReady, missingCount, paletteColors.errorContainer, paletteColors.onErrorContainer, paletteColors.onSecondaryContainer, paletteColors.onSurfaceVariant, paletteColors.secondaryContainer, paletteColors.surfaceVariant]);
+
   const ratingValueRaw = (cocktail as { userRating?: number }).userRating ?? 0;
   const ratingValue = Math.max(0, Math.min(MAX_RATING, Number(ratingValueRaw) || 0));
 
@@ -121,25 +155,20 @@ const CocktailListRowComponent = ({
       return null;
     }
 
-    const totalStars = Math.max(0, Math.min(MAX_RATING, Math.round(ratingValue)));
-
     return (
       <View
         style={[
           styles.ratingOverlay,
-          { backgroundColor: `${paletteColors.surfaceVariant}F2`, borderColor: paletteColors.outline },
+          {
+            backgroundColor: paletteColors.surfaceBright,
+            borderColor: `${paletteColors.outline}CC`,
+          },
         ]}>
-        {Array.from({ length: totalStars }).map((_, index) => (
-          <MaterialCommunityIcons
-            key={`rating-icon-${index}`}
-            name="star"
-            size={12}
-            color={paletteColors.tint}
-          />
-        ))}
+        <MaterialCommunityIcons name="star" size={14} color={paletteColors.secondary} />
+        <Text style={[styles.ratingLabel, { color: paletteColors.onSurface }]}>{ratingValue.toFixed(1)}</Text>
       </View>
     );
-  }, [paletteColors.outline, paletteColors.surfaceVariant, paletteColors.tint, ratingValue]);
+  }, [paletteColors.onSurface, paletteColors.outline, paletteColors.secondary, paletteColors.surfaceBright, ratingValue]);
 
   const tagDots = useMemo(() => {
     const tags = cocktail.tags ?? [];
@@ -163,17 +192,28 @@ const CocktailListRowComponent = ({
       accessibilityRole={onPress ? 'button' : undefined}
     >
       <View style={styles.thumbSlot}>
-        <Thumb label={cocktail.name} uri={cocktail.photoUri} fallbackUri={glasswareUri} />
+        <Thumb
+          label={cocktail.name}
+          uri={cocktail.photoUri}
+          fallbackUri={glasswareUri}
+          backgroundColor={isReady ? `${paletteColors.secondaryContainer}66` : undefined}
+        />
       </View>
       <View style={styles.textColumn}>
-        <Text style={[styles.title, { color: paletteColors.text }]} numberOfLines={1}>
+        <Text style={[styles.title, { color: paletteColors.text }]} numberOfLines={2}>
           {cocktail.name}
         </Text>
-        <Text style={[styles.subtitle, { color: paletteColors.icon }]} numberOfLines={1}>
+        <Text style={[styles.subtitle, { color: paletteColors.onSurfaceVariant }]} numberOfLines={2}>
           {subtitle}
         </Text>
       </View>
       <View style={styles.metaColumn}>
+        <View style={[styles.statusBadge, { backgroundColor: statusConfig.backgroundColor }]}>
+          <MaterialCommunityIcons name={statusConfig.icon} size={14} color={statusConfig.textColor} />
+          <Text style={[styles.statusLabel, { color: statusConfig.textColor }]} numberOfLines={1}>
+            {statusConfig.label}
+          </Text>
+        </View>
         {tagDots}
         {control}
       </View>
@@ -206,8 +246,8 @@ const styles = StyleSheet.create({
   },
   metaColumn: {
     alignItems: 'flex-end',
-    justifyContent: 'center',
-    gap: 8,
+    justifyContent: 'space-between',
+    gap: 12,
     minHeight: 56,
   },
   title: {
@@ -216,6 +256,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 13,
+    lineHeight: 18,
   },
   tagDotsRow: {
     flexDirection: 'row',
@@ -224,14 +265,37 @@ const styles = StyleSheet.create({
   ratingOverlay: {
     position: 'absolute',
     right: 16,
-    bottom: 8,
+    top: 12,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 2,
-    borderRadius: 999,
-    paddingVertical: 2,
-    paddingHorizontal: 6,
+    gap: 6,
+    borderRadius: 16,
+    paddingVertical: 4,
+    paddingHorizontal: 10,
     borderWidth: StyleSheet.hairlineWidth,
+    elevation: 2,
+    shadowColor: palette.shadow,
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 8,
+  },
+  ratingLabel: {
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  statusBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 999,
+  },
+  statusLabel: {
+    fontSize: 12,
+    fontWeight: '600',
+    textTransform: 'uppercase',
+    letterSpacing: 0.6,
   },
 });
 

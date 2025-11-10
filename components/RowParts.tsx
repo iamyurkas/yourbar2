@@ -22,9 +22,10 @@ export type ThumbProps = {
   label?: string;
   fallbackUri?: string | null;
   fallbackLabel?: string;
+  backgroundColor?: string;
 };
 
-export function Thumb({ uri, label, fallbackUri, fallbackLabel }: ThumbProps) {
+export function Thumb({ uri, label, fallbackUri, fallbackLabel, backgroundColor }: ThumbProps) {
   const paletteColors = Colors;
   const effectiveLabel = label ?? fallbackLabel;
   const trimmed = effectiveLabel?.trim();
@@ -44,7 +45,7 @@ export function Thumb({ uri, label, fallbackUri, fallbackLabel }: ThumbProps) {
   }
 
   return (
-    <View style={[styles.thumb, { backgroundColor: palette.surfaceBright }]}>
+    <View style={[styles.thumb, { backgroundColor: backgroundColor ?? palette.surfaceBright }]}>
       {source ? (
         <Image source={source} style={styles.thumbImage} contentFit="contain" />
       ) : fallbackText ? (

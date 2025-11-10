@@ -1,13 +1,15 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { FabAdd } from '@/components/FabAdd';
 import { CocktailListRow } from '@/components/CocktailListRow';
 import { CollectionHeader } from '@/components/CollectionHeader';
 import type { SegmentTabOption } from '@/components/TopBars';
 import { Colors } from '@/constants/theme';
+import { palette } from '@/theme/theme';
 import { useInventory, type Cocktail } from '@/providers/inventory-provider';
 
 type CocktailSection = {
@@ -132,6 +134,10 @@ export default function CocktailsScreen() {
     [separatorColor],
   );
 
+  const handleAddCocktail = useCallback(() => {
+    router.push('/modal');
+  }, [router]);
+
   return (
     <SafeAreaView
       style={[styles.safeArea, { backgroundColor: paletteColors.background }]}
@@ -153,11 +159,40 @@ export default function CocktailsScreen() {
           contentContainerStyle={styles.listContent}
           showsVerticalScrollIndicator={false}
           ListEmptyComponent={
-            <Text style={[styles.emptyLabel, { color: paletteColors.onSurfaceVariant }]}>No cocktails yet</Text>
+            <View
+              style={[
+                styles.emptyState,
+                {
+                  backgroundColor: paletteColors.surface,
+                  borderColor: `${paletteColors.outline}66`,
+                },
+              ]}>
+              <View
+                style={[
+                  styles.emptyIllustration,
+                  {
+                    backgroundColor: `${paletteColors.secondaryContainer}AA`,
+                  },
+                ]}>
+                <MaterialCommunityIcons name="glass-cocktail" size={36} color={paletteColors.secondary} />
+              </View>
+              <Text style={[styles.emptyTitle, { color: paletteColors.onSurface }]}>No cocktails yet</Text>
+              <Text style={[styles.emptySubtitle, { color: paletteColors.onSurfaceVariant }]}>
+                Start building your personal bar by adding a cocktail recipe.
+              </Text>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel="Add cocktail"
+                onPress={handleAddCocktail}
+                style={[styles.emptyCta, { backgroundColor: paletteColors.tint }]}
+              >
+                <Text style={[styles.emptyCtaLabel, { color: paletteColors.onPrimary }]}>Add cocktail</Text>
+              </Pressable>
+            </View>
           }
         />
       </View>
-      <FabAdd label="Add cocktail" />
+      <FabAdd label="Add cocktail" onPress={handleAddCocktail} />
     </SafeAreaView>
   );
 }
@@ -176,9 +211,51 @@ const styles = StyleSheet.create({
   divider: {
     height: StyleSheet.hairlineWidth,
   },
-  emptyLabel: {
-    textAlign: 'center',
+  emptyState: {
+    marginHorizontal: 24,
     marginTop: 80,
+    borderRadius: 24,
+    paddingHorizontal: 24,
+    paddingVertical: 32,
+    borderWidth: StyleSheet.hairlineWidth,
+    alignItems: 'center',
+    gap: 16,
+    elevation: 2,
+    shadowColor: palette.shadow,
+    shadowOpacity: 0.08,
+    shadowOffset: { width: 0, height: 8 },
+    shadowRadius: 16,
+  },
+  emptyIllustration: {
+    width: 72,
+    height: 72,
+    borderRadius: 36,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  emptyTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    textAlign: 'center',
+  },
+  emptySubtitle: {
     fontSize: 14,
+    textAlign: 'center',
+    lineHeight: 20,
+  },
+  emptyCta: {
+    marginTop: 8,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 999,
+    elevation: 1,
+    shadowColor: palette.shadow,
+    shadowOpacity: 0.12,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 8,
+  },
+  emptyCtaLabel: {
+    fontSize: 15,
+    fontWeight: '600',
   },
 });
