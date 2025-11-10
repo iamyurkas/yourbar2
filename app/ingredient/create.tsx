@@ -3,17 +3,19 @@ import { Stack, useRouter } from 'expo-router';
 import { Image } from 'expo-image';
 // eslint-disable-next-line import/no-unresolved
 import * as ImagePicker from 'expo-image-picker';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import {
   Alert,
   KeyboardAvoidingView,
   Modal,
+  Keyboard,
   Platform,
   Pressable,
   ScrollView,
   StyleSheet,
   Text,
   TextInput,
+  TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -30,12 +32,19 @@ export default function CreateIngredientScreen() {
   const router = useRouter();
   const { ingredients } = useInventory();
 
+  const scrollRef = useRef<ScrollView>(null);
+  const baseFieldContainerRef = useRef<View>(null);
+  const baseInputRef = useRef<TextInput>(null);
+
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [photoUri, setPhotoUri] = useState<string | null>(null);
   const [baseIngredientId, setBaseIngredientId] = useState<number | null>(null);
-  const [isBasePickerVisible, setBasePickerVisible] = useState(false);
-  const [baseSearchQuery, setBaseSearchQuery] = useState('');
+  const [baseInputValue, setBaseInputValue] = useState('');
+  const [baseFieldLayout, setBaseFieldLayout] = useState<{ y: number; height: number } | null>(null);
+  const [baseFieldWindowLayout, setBaseFieldWindowLayout] =
+    useState<{ x: number; y: number; width: number; height: number } | null>(null);
+  const [isBaseDropdownVisible, setBaseDropdownVisible] = useState(false);
 
   const baseIngredients = useMemo(() => {
     return ingredients
@@ -45,14 +54,20 @@ export default function CreateIngredientScreen() {
   }, [ingredients]);
 
   const filteredBaseIngredients = useMemo(() => {
-    if (!baseSearchQuery.trim()) {
-      return baseIngredients;
+    const normalized = baseInputValue.trim().toLowerCase();
+    if (normalized.length < 3) {
+      return [];
     }
-    const normalized = baseSearchQuery.trim().toLowerCase();
-    return baseIngredients.filter((ingredient) =>
-      (ingredient.name ?? '').toLowerCase().includes(normalized),
-    );
-  }, [baseIngredients, baseSearchQuery]);
+    return baseIngredients.filter((ingredient) => {
+      const name = (ingredient.name ?? '').toLowerCase();
+      if (name.startsWith(normalized)) {
+        return true;
+      }
+      return name
+        .split(/\s+/)
+        .some((word) => word.startsWith(normalized));
+    });
+  }, [baseIngredients, baseInputValue]);
 
   const selectedBaseIngredient = useMemo(() => {
     if (baseIngredientId == null) {
@@ -89,26 +104,65 @@ export default function CreateIngredientScreen() {
     setPhotoUri(null);
   }, []);
 
-  const openBasePicker = useCallback(() => {
-    setBasePickerVisible(true);
-  }, []);
-
-  const closeBasePicker = useCallback(() => {
-    setBasePickerVisible(false);
-  }, []);
-
   const handleSelectBaseIngredient = useCallback((ingredient: Ingredient) => {
     const id = ingredient.id != null ? Number(ingredient.id) : null;
     if (id != null && !Number.isNaN(id)) {
       setBaseIngredientId(id);
+      setBaseInputValue(ingredient.name ?? '');
     }
-    closeBasePicker();
-  }, [closeBasePicker]);
+    setBaseDropdownVisible(false);
+    baseInputRef.current?.blur();
+    Keyboard.dismiss();
+  }, []);
 
   const handleClearBaseIngredient = useCallback(() => {
     setBaseIngredientId(null);
-    closeBasePicker();
-  }, [closeBasePicker]);
+    setBaseInputValue('');
+    setBaseDropdownVisible(false);
+    baseInputRef.current?.focus();
+  }, []);
+
+  const handleBaseInputFocus = useCallback(() => {
+    if (baseFieldLayout) {
+      scrollRef.current?.scrollTo({
+        y: Math.max(baseFieldLayout.y - 24, 0),
+        animated: true,
+      });
+    }
+    baseFieldContainerRef.current?.measureInWindow((x, y, width, height) => {
+      setBaseFieldWindowLayout({ x, y, width, height });
+    });
+    if (baseInputValue.trim().length >= 3) {
+      setBaseDropdownVisible(true);
+    }
+  }, [baseFieldLayout, baseInputValue]);
+
+  const handleBaseInputBlur = useCallback(() => {
+    setTimeout(() => {
+      setBaseDropdownVisible(false);
+    }, 100);
+  }, []);
+
+  const handleBaseInputChange = useCallback(
+    (text: string) => {
+      setBaseInputValue(text);
+      if (selectedBaseIngredient && (selectedBaseIngredient.name ?? '') !== text) {
+        setBaseIngredientId(null);
+      }
+      if (text.trim().length >= 3) {
+        setBaseDropdownVisible(true);
+      } else {
+        setBaseDropdownVisible(false);
+      }
+    },
+    [selectedBaseIngredient],
+  );
+
+  const closeBaseDropdown = useCallback(() => {
+    setBaseDropdownVisible(false);
+    baseInputRef.current?.blur();
+    Keyboard.dismiss();
+  }, []);
 
   const handleSubmit = useCallback(() => {
     const summary = [
@@ -137,6 +191,7 @@ export default function CreateIngredientScreen() {
         style={styles.flex}
         keyboardVerticalOffset={16}>
         <ScrollView
+          ref={scrollRef}
           style={styles.flex}
           contentContainerStyle={styles.scrollContent}
           keyboardShouldPersistTaps="handled">
@@ -182,32 +237,39 @@ export default function CreateIngredientScreen() {
             ) : null}
           </View>
 
-          <View style={styles.formGroup}>
+          <View
+            style={styles.formGroup}
+            ref={baseFieldContainerRef}
+            onLayout={(event) => {
+              const { y, height } = event.nativeEvent.layout;
+              setBaseFieldLayout({ y, height });
+            }}>
             <Text style={[styles.label, { color: paletteColors.onSurface }]}>Base ingredient</Text>
-            <Pressable
-              onPress={openBasePicker}
-              style={[styles.selectorButton, { borderColor: paletteColors.outline, backgroundColor: paletteColors.surface }]}
-              accessibilityRole="button"
-              accessibilityLabel="Choose base ingredient">
-              <Text
-                style={[
-                  styles.selectorValue,
-                  { color: selectedBaseIngredient ? paletteColors.onSurface : paletteColors.onSurfaceVariant },
-                ]}>
-                {selectedBaseIngredient ? selectedBaseIngredient.name : 'Select a base ingredient'}
-              </Text>
-              <MaterialIcons name="keyboard-arrow-right" size={20} color={paletteColors.onSurfaceVariant} />
-            </Pressable>
-            {selectedBaseIngredient ? (
-              <Pressable
-                onPress={handleClearBaseIngredient}
-                accessibilityRole="button"
-                accessibilityLabel="Clear base ingredient"
-                style={[styles.clearSelectionButton, { backgroundColor: paletteColors.surfaceVariant }]}>
-                <MaterialIcons name="close" size={16} color={paletteColors.onSurfaceVariant} />
-                <Text style={[styles.clearSelectionLabel, { color: paletteColors.onSurfaceVariant }]}>Clear selection</Text>
-              </Pressable>
-            ) : null}
+            <View
+              style={[styles.baseInputWrapper, { borderColor: paletteColors.outline, backgroundColor: paletteColors.surface }]}
+              pointerEvents="box-none">
+              <TextInput
+                ref={baseInputRef}
+                style={[styles.baseInput, { color: paletteColors.onSurface }]}
+                placeholder="Start typing to search"
+                placeholderTextColor={paletteColors.onSurfaceVariant}
+                value={baseInputValue}
+                onChangeText={handleBaseInputChange}
+                onFocus={handleBaseInputFocus}
+                onBlur={handleBaseInputBlur}
+                autoCapitalize="words"
+                autoCorrect={false}
+              />
+              {baseInputValue.length > 0 ? (
+                <Pressable
+                  onPress={handleClearBaseIngredient}
+                  style={[styles.clearTextButton, { backgroundColor: paletteColors.surfaceVariant }]}
+                  accessibilityRole="button"
+                  accessibilityLabel="Clear base ingredient text">
+                  <MaterialIcons name="close" size={16} color={paletteColors.onSurfaceVariant} />
+                </Pressable>
+              ) : null}
+            </View>
           </View>
 
           <View style={styles.formGroup}>
@@ -235,70 +297,95 @@ export default function CreateIngredientScreen() {
         </View>
       </KeyboardAvoidingView>
 
-      <Modal
-        visible={isBasePickerVisible}
-        animationType="slide"
-        presentationStyle="pageSheet"
-        onRequestClose={closeBasePicker}>
-        <SafeAreaView style={[styles.modalSafeArea, { backgroundColor: paletteColors.surface }]}
-          edges={['bottom']}>
-          <View style={styles.modalHeader}>
-            <Text style={[styles.modalTitle, { color: paletteColors.onSurface }]}>Choose base ingredient</Text>
-            <Pressable onPress={closeBasePicker} accessibilityRole="button" accessibilityLabel="Close">
-              <MaterialIcons name="close" size={24} color={paletteColors.onSurfaceVariant} />
-            </Pressable>
-          </View>
-          <View style={styles.modalSearchRow}>
-            <MaterialIcons name="search" size={20} color={paletteColors.onSurfaceVariant} style={styles.searchIcon} />
-            <TextInput
-              style={[styles.modalSearchInput, { color: paletteColors.onSurface }]}
-              placeholder="Search ingredients"
-              placeholderTextColor={paletteColors.onSurfaceVariant}
-              value={baseSearchQuery}
-              onChangeText={setBaseSearchQuery}
-              autoCorrect={false}
-              autoCapitalize="none"
-            />
-          </View>
-          <ScrollView contentContainerStyle={styles.modalList}>
-            {filteredBaseIngredients.map((ingredient) => {
-              const id = ingredient.id != null ? Number(ingredient.id) : null;
-              const isSelected = id != null && id === baseIngredientId;
-              const tagColor = ingredient.tags?.[0]?.color;
-              return (
-                <ListRow
-                  key={ingredient.id ?? ingredient.name}
-                  title={ingredient.name ?? 'Unknown ingredient'}
-                  onPress={() => handleSelectBaseIngredient(ingredient)}
-                  selected={isSelected}
-                  highlightColor={appPalette.highlightSubtle}
-                  accessibilityRole="button"
-                  accessibilityLabel={`Use ${ingredient.name} as base ingredient`}
-                  accessibilityState={isSelected ? { selected: true } : undefined}
-                  thumbnail={<Thumb label={ingredient.name ?? undefined} uri={ingredient.photoUri ?? undefined} />}
-                  tagColor={tagColor}
-                />
-              );
-            })}
-            {filteredBaseIngredients.length === 0 ? (
-              <View style={styles.modalEmptyState}>
-                <MaterialCommunityIcons name="magnify-close" size={28} color={paletteColors.onSurfaceVariant} />
-                <Text style={[styles.modalEmptyText, { color: paletteColors.onSurfaceVariant }]}>No matches</Text>
-              </View>
-            ) : null}
-          </ScrollView>
-          {selectedBaseIngredient ? (
-            <Pressable
-              onPress={handleClearBaseIngredient}
-              style={[styles.modalClearButton, { borderTopColor: paletteColors.outline }]}
-              accessibilityRole="button"
-              accessibilityLabel="Remove selected base ingredient">
-              <Text style={[styles.modalClearLabel, { color: paletteColors.error }]}>Remove base ingredient</Text>
-            </Pressable>
-          ) : null}
-        </SafeAreaView>
-      </Modal>
+      <IngredientSuggestionsDropdown
+        visible={isBaseDropdownVisible}
+        onRequestClose={closeBaseDropdown}
+        fieldLayout={baseFieldWindowLayout}
+        paletteColors={paletteColors}
+        baseIngredients={filteredBaseIngredients}
+        onSelect={handleSelectBaseIngredient}
+        selectedBaseIngredientId={baseIngredientId}
+      />
     </SafeAreaView>
+  );
+}
+
+type IngredientSuggestionsDropdownProps = {
+  visible: boolean;
+  onRequestClose: () => void;
+  fieldLayout: { x: number; y: number; width: number; height: number } | null;
+  paletteColors: typeof Colors;
+  baseIngredients: Ingredient[];
+  onSelect: (ingredient: Ingredient) => void;
+  selectedBaseIngredientId: number | null;
+};
+
+function IngredientSuggestionsDropdown({
+  visible,
+  onRequestClose,
+  fieldLayout,
+  paletteColors,
+  baseIngredients,
+  onSelect,
+  selectedBaseIngredientId,
+}: IngredientSuggestionsDropdownProps) {
+  if (!visible || !fieldLayout) {
+    return null;
+  }
+
+  const dropdownPosition = {
+    top: fieldLayout.y + fieldLayout.height + 4,
+    left: fieldLayout.x,
+    width: fieldLayout.width,
+  } as const;
+
+  return (
+    <Modal transparent visible={visible} animationType="fade" onRequestClose={onRequestClose}>
+      <TouchableWithoutFeedback onPress={onRequestClose}>
+        <View style={styles.dropdownOverlay}>
+          <TouchableWithoutFeedback>
+            <View
+              style={[
+                styles.dropdownContainer,
+                dropdownPosition,
+                {
+                  backgroundColor: paletteColors.surface,
+                  borderColor: paletteColors.outline,
+                },
+              ]}>
+              <ScrollView style={styles.dropdownList}>
+                {baseIngredients.length > 0 ? (
+                  baseIngredients.map((ingredient) => {
+                    const id = ingredient.id != null ? Number(ingredient.id) : null;
+                    const isSelected = id != null && id === selectedBaseIngredientId;
+                    const tagColor = ingredient.tags?.[0]?.color;
+                    return (
+                      <ListRow
+                        key={ingredient.id ?? ingredient.name}
+                        title={ingredient.name ?? 'Unknown ingredient'}
+                        onPress={() => onSelect(ingredient)}
+                        selected={isSelected}
+                        highlightColor={appPalette.highlightSubtle}
+                        accessibilityRole="button"
+                        accessibilityLabel={`Use ${ingredient.name} as base ingredient`}
+                        accessibilityState={isSelected ? { selected: true } : undefined}
+                        thumbnail={<Thumb label={ingredient.name ?? undefined} uri={ingredient.photoUri ?? undefined} />}
+                        tagColor={tagColor}
+                      />
+                    );
+                  })
+                ) : (
+                  <View style={styles.dropdownEmptyState}>
+                    <MaterialCommunityIcons name="magnify-close" size={28} color={paletteColors.onSurfaceVariant} />
+                    <Text style={[styles.dropdownEmptyText, { color: paletteColors.onSurfaceVariant }]}>No matches</Text>
+                  </View>
+                )}
+              </ScrollView>
+            </View>
+          </TouchableWithoutFeedback>
+        </View>
+      </TouchableWithoutFeedback>
+    </Modal>
   );
 }
 
@@ -375,32 +462,24 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '500',
   },
-  selectorButton: {
+  baseInputWrapper: {
     borderWidth: 1,
     borderRadius: 12,
     paddingHorizontal: 16,
-    paddingVertical: 14,
+    paddingVertical: 10,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: 12,
+    position: 'relative',
   },
-  selectorValue: {
-    fontSize: 16,
+  baseInput: {
     flex: 1,
+    fontSize: 16,
+    paddingVertical: 4,
   },
-  clearSelectionButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
+  clearTextButton: {
+    marginLeft: 12,
     borderRadius: 999,
-    alignSelf: 'flex-start',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    marginTop: 12,
-  },
-  clearSelectionLabel: {
-    fontSize: 14,
+    padding: 4,
   },
   footer: {
     paddingHorizontal: 24,
@@ -417,61 +496,31 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: '600',
   },
-  modalSafeArea: {
+  dropdownOverlay: {
     flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.05)',
   },
-  modalHeader: {
-    paddingHorizontal: 20,
-    paddingTop: 12,
-    paddingBottom: 8,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  modalTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-  },
-  modalSearchRow: {
-    marginHorizontal: 20,
-    marginTop: 8,
+  dropdownContainer: {
+    position: 'absolute',
     borderRadius: 12,
     borderWidth: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 12,
-    paddingVertical: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
+    maxHeight: 320,
   },
-  searchIcon: {
-    marginRight: 8,
+  dropdownList: {
+    maxHeight: 320,
   },
-  modalSearchInput: {
-    flex: 1,
-    fontSize: 16,
-  },
-  modalList: {
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    paddingBottom: 40,
-    gap: 8,
-  },
-  modalEmptyState: {
+  dropdownEmptyState: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 40,
+    paddingVertical: 32,
     gap: 12,
   },
-  modalEmptyText: {
+  dropdownEmptyText: {
     fontSize: 15,
-  },
-  modalClearButton: {
-    paddingHorizontal: 24,
-    paddingVertical: 18,
-    borderTopWidth: 1,
-  },
-  modalClearLabel: {
-    fontSize: 16,
-    fontWeight: '500',
-    textAlign: 'center',
   },
 });
