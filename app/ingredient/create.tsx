@@ -19,6 +19,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { resolveAssetFromCatalog } from '@/assets/image-manifest';
 import { ListRow, Thumb } from '@/components/RowParts';
 import { Colors } from '@/constants/theme';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
@@ -102,6 +103,23 @@ export default function CreateIngredientScreen() {
     }
     return baseIngredients.find((ingredient) => Number(ingredient.id ?? -1) === baseIngredientId);
   }, [baseIngredientId, baseIngredients]);
+
+  const selectedBaseIngredientPhotoSource = useMemo(() => {
+    if (!selectedBaseIngredient?.photoUri) {
+      return undefined;
+    }
+
+    const asset = resolveAssetFromCatalog(selectedBaseIngredient.photoUri);
+    if (asset) {
+      return asset;
+    }
+
+    if (/^https?:/i.test(selectedBaseIngredient.photoUri)) {
+      return { uri: selectedBaseIngredient.photoUri } as const;
+    }
+
+    return undefined;
+  }, [selectedBaseIngredient?.photoUri]);
 
   const handlePickPhoto = useCallback(async () => {
     const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -288,6 +306,27 @@ export default function CreateIngredientScreen() {
             <View
               style={[styles.baseInputWrapper, { borderColor: paletteColors.outline, backgroundColor: paletteColors.surface }]}
               pointerEvents="box-none">
+              {selectedBaseIngredient ? (
+                <View
+                  style={[
+                    styles.baseInputPreview,
+                    { backgroundColor: paletteColors.surfaceVariant, borderColor: paletteColors.outlineVariant },
+                  ]}>
+                  {selectedBaseIngredientPhotoSource ? (
+                    <Image
+                      source={selectedBaseIngredientPhotoSource}
+                      style={styles.baseInputPreviewImage}
+                      contentFit="contain"
+                    />
+                  ) : (
+                    <MaterialCommunityIcons
+                      name="image-off"
+                      size={18}
+                      color={paletteColors.onSurfaceVariant}
+                    />
+                  )}
+                </View>
+              ) : null}
               <TextInput
                 ref={baseInputRef}
                 style={[styles.baseInput, { color: paletteColors.onSurface }]}
@@ -300,7 +339,16 @@ export default function CreateIngredientScreen() {
                 autoCapitalize="words"
                 autoCorrect={false}
               />
-              {baseInputValue.length > 0 ? (
+              {selectedBaseIngredient ? (
+                <Pressable
+                  onPress={handleClearBaseIngredient}
+                  style={styles.unlinkButton}
+                  accessibilityRole="button"
+                  accessibilityLabel="Remove selected base ingredient"
+                  hitSlop={8}>
+                  <MaterialCommunityIcons name="link-variant-off" size={20} color={paletteColors.error} />
+                </Pressable>
+              ) : baseInputValue.length > 0 ? (
                 <Pressable
                   onPress={handleClearBaseIngredient}
                   style={[styles.clearTextButton, { backgroundColor: paletteColors.surfaceVariant }]}
@@ -511,16 +559,35 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     position: 'relative',
+    gap: 12,
   },
   baseInput: {
     flex: 1,
     fontSize: 16,
     paddingVertical: 4,
   },
+  baseInputPreview: {
+    width: 40,
+    height: 40,
+    borderRadius: 10,
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'hidden',
+  },
+  baseInputPreviewImage: {
+    width: '100%',
+    height: '100%',
+  },
   clearTextButton: {
     marginLeft: 12,
     borderRadius: 999,
     padding: 4,
+  },
+  unlinkButton: {
+    marginLeft: 4,
+    padding: 6,
+    borderRadius: 999,
   },
   footer: {
     paddingHorizontal: 24,
