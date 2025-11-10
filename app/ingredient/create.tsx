@@ -163,6 +163,31 @@ export default function CreateIngredientScreen() {
         </Pressable>
 
         <View style={styles.section}>
+          <Text style={[styles.label, { color: palette.onSurfaceVariant }]}>Tags</Text>
+          <Text style={[styles.hint, { color: palette.onSurfaceVariant }]}>Select one or more tags</Text>
+          <View style={styles.tagList}>
+            {tagSelection.map((tag) => {
+              const isSelected = tag.selected;
+              const backgroundColor = isSelected ? tag.color : palette.surface;
+              const borderColor = tag.color;
+              const textColor = isSelected ? Colors.surface : tag.color;
+
+              return (
+                <Pressable
+                  key={tag.id}
+                  accessibilityRole="checkbox"
+                  accessibilityState={{ checked: isSelected }}
+                  onPress={() => toggleTag(tag.id)}
+                  style={[styles.tagChip, { backgroundColor, borderColor }]}
+                  android_ripple={{ color: `${palette.surface}33` }}>
+                  <Text style={[styles.tagLabel, { color: textColor }]}>{tag.name}</Text>
+                </Pressable>
+              );
+            })}
+          </View>
+        </View>
+
+        <View style={styles.section}>
           <Text style={[styles.label, { color: palette.onSurfaceVariant }]}>Description</Text>
           <TextInput
             value={description}
@@ -174,32 +199,6 @@ export default function CreateIngredientScreen() {
             numberOfLines={4}
             textAlignVertical="top"
           />
-        </View>
-
-        <View style={styles.section}>
-          <Text style={[styles.label, { color: palette.onSurfaceVariant }]}>Tags</Text>
-          <Text style={[styles.hint, { color: palette.onSurfaceVariant }]}>Select one or more tags</Text>
-          <View style={styles.tagList}>
-            {tagSelection.map((tag) => {
-              const isSelected = tag.selected;
-              const backgroundColor = isSelected ? tag.color : palette.surface;
-              const borderColor = isSelected ? tag.color : palette.outline;
-              const textColor = isSelected ? Colors.surface : palette.onSurface;
-
-              return (
-                <Pressable
-                  key={tag.id}
-                  accessibilityRole="checkbox"
-                  accessibilityState={{ checked: isSelected }}
-                  onPress={() => toggleTag(tag.id)}
-                  style={[styles.tagChip, { backgroundColor, borderColor }]}
-                  android_ripple={{ color: `${palette.surface}33` }}>
-                  <View style={[styles.tagIndicator, { backgroundColor: tag.color }]} />
-                  <Text style={[styles.tagLabel, { color: textColor }]}>{tag.name}</Text>
-                </Pressable>
-              );
-            })}
-          </View>
         </View>
 
         <Pressable
@@ -277,22 +276,17 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   tagChip: {
-    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     borderRadius: 999,
     paddingHorizontal: 14,
     paddingVertical: 8,
     borderWidth: StyleSheet.hairlineWidth,
-    gap: 8,
   },
   tagLabel: {
     fontSize: 14,
     fontWeight: '500',
-  },
-  tagIndicator: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
+    textAlign: 'center',
   },
   submitButton: {
     borderRadius: 999,
