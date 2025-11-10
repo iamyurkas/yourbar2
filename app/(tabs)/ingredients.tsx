@@ -106,6 +106,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
 }, areIngredientPropsEqual);
 
 export default function IngredientsScreen() {
+  const router = useRouter();
   const {
     cocktails,
     ingredients,
