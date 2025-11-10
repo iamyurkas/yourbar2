@@ -1,3 +1,6 @@
+import * as ImageManipulator from 'expo-image-manipulator';
+import * as ImagePicker from 'expo-image-picker';
+import { Image } from 'expo-image';
 import { Stack, useRouter } from 'expo-router';
 import React, { useCallback, useMemo, useState } from 'react';
 import {
@@ -24,6 +27,8 @@ export default function CreateIngredientScreen() {
   const [description, setDescription] = useState('');
   const [baseInput, setBaseInput] = useState('');
   const [photoUri, setPhotoUri] = useState('');
+  const [isPickingPhoto, setIsPickingPhoto] = useState(false);
+  const [imagePermission, requestImagePermission] = ImagePicker.useMediaLibraryPermissions();
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -135,6 +140,52 @@ export default function CreateIngredientScreen() {
     router,
   ]);
 
+  const handlePickPhoto = useCallback(async () => {
+    if (isPickingPhoto) {
+      return;
+    }
+
+    try {
+      setIsPickingPhoto(true);
+
+      if (!imagePermission || imagePermission.status !== ImagePicker.PermissionStatus.GRANTED) {
+        const permissionResult = await requestImagePermission();
+        if (!permissionResult || permissionResult.status !== ImagePicker.PermissionStatus.GRANTED) {
+          return;
+        }
+      }
+
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 1,
+      });
+
+      if (result.canceled || !result.assets || result.assets.length === 0) {
+        return;
+      }
+
+      const [asset] = result.assets;
+      if (!asset?.uri) {
+        return;
+      }
+
+      const manipulated = await ImageManipulator.manipulateAsync(asset.uri, [], {
+        compress: 0.9,
+        format: ImageManipulator.SaveFormat.JPEG,
+      });
+
+      if (manipulated?.uri) {
+        setPhotoUri(manipulated.uri);
+      }
+    } catch (pickError) {
+      console.error(pickError);
+    } finally {
+      setIsPickingPhoto(false);
+    }
+  }, [imagePermission, isPickingPhoto, requestImagePermission]);
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <Stack.Screen options={{ title: 'Create ingredient' }} />
@@ -190,17 +241,26 @@ export default function CreateIngredientScreen() {
           </View>
 
           <View style={styles.fieldGroup}>
-            <Text style={[styles.label, { color: palette.onSurfaceVariant }]}>Photo URL</Text>
-            <TextInput
-              value={photoUri}
-              onChangeText={setPhotoUri}
-              placeholder="https://example.com/photo.jpg"
-              placeholderTextColor={`${palette.onSurfaceVariant}99`}
-              autoCapitalize="none"
-              autoCorrect={false}
-              style={[styles.input, { borderColor: palette.outline, color: palette.onSurface }]}
-              accessibilityLabel="Ingredient photo URL"
-            />
+            <Text style={[styles.label, { color: palette.onSurfaceVariant }]}>Photo</Text>
+            <Pressable
+              onPress={handlePickPhoto}
+              disabled={isPickingPhoto}
+              style={({ pressed }) => [
+                styles.photoPlaceholder,
+                { borderColor: palette.outline, backgroundColor: palette.surfaceVariant },
+                pressed && !isPickingPhoto ? { opacity: 0.85 } : null,
+              ]}
+              accessibilityRole="button"
+              accessibilityState={
+                isPickingPhoto ? { disabled: true, busy: true } : undefined
+              }
+              accessibilityLabel={photoUri ? 'Change ingredient photo' : 'Add ingredient photo'}>
+              {photoUri ? (
+                <Image source={{ uri: photoUri }} style={styles.photoPreview} contentFit="cover" />
+              ) : (
+                <Text style={[styles.photoPlaceholderLabel, { color: palette.onSurfaceVariant }]}>Tap to add photo</Text>
+              )}
+            </Pressable>
           </View>
 
           {error ? <Text style={[styles.errorText, { color: palette.error }]}>{error}</Text> : null}
@@ -256,6 +316,21 @@ const styles = StyleSheet.create({
   },
   multiline: {
     minHeight: 120,
+  },
+  photoPlaceholder: {
+    borderWidth: 1,
+    borderRadius: 12,
+    minHeight: 180,
+    alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'hidden',
+  },
+  photoPlaceholderLabel: {
+    fontSize: 14,
+  },
+  photoPreview: {
+    width: '100%',
+    height: '100%',
   },
   helper: {
     fontSize: 12,
