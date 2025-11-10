@@ -2,7 +2,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import * as ImagePicker from 'expo-image-picker';
 import { Stack, router } from 'expo-router';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Alert,
   FlatList,
@@ -183,7 +183,7 @@ export default function CreateIngredientScreen() {
   const handleCloseBaseModal = useCallback(() => {
     const normalized = baseSearch.trim().toLowerCase();
     if (normalized) {
-      const match = ingredients.find((item) =>
+      const match = baseIngredientOptions.find((item) =>
         item.name ? item.name.trim().toLowerCase() === normalized : false,
       );
 
@@ -197,16 +197,21 @@ export default function CreateIngredientScreen() {
 
     setIsBaseModalVisible(false);
     setBaseSearch('');
-  }, [baseSearch, ingredients]);
+  }, [baseIngredientOptions, baseSearch]);
 
   const normalizedBaseQuery = useMemo(() => baseSearch.trim().toLowerCase(), [baseSearch]);
 
+  const baseIngredientOptions = useMemo(
+    () => ingredients.filter((ingredient) => ingredient.baseIngredientId == null),
+    [ingredients],
+  );
+
   const filteredBaseIngredients = useMemo(() => {
     if (!normalizedBaseQuery) {
-      return ingredients;
+      return baseIngredientOptions;
     }
 
-    return ingredients.filter((ingredient) => {
+    return baseIngredientOptions.filter((ingredient) => {
       const nameNormalized = ingredient.searchNameNormalized ?? '';
       if (nameNormalized.startsWith(normalizedBaseQuery)) {
         return true;
@@ -216,7 +221,7 @@ export default function CreateIngredientScreen() {
         token.startsWith(normalizedBaseQuery),
       );
     });
-  }, [ingredients, normalizedBaseQuery]);
+  }, [baseIngredientOptions, normalizedBaseQuery]);
 
   const handleSelectBaseIngredient = useCallback(
     (ingredient: Ingredient) => {
@@ -261,6 +266,22 @@ export default function CreateIngredientScreen() {
 
     return item.name ?? '';
   }, []);
+
+  const baseSearchInputRef = useRef<TextInput | null>(null);
+
+  useEffect(() => {
+    if (!isBaseModalVisible) {
+      return;
+    }
+
+    const timeout = setTimeout(() => {
+      baseSearchInputRef.current?.focus();
+    }, Platform.OS === 'android' ? 50 : 0);
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [isBaseModalVisible]);
 
   return (
     <>
@@ -419,6 +440,7 @@ export default function CreateIngredientScreen() {
             style={[styles.modalCard, { backgroundColor: paletteColors.surface }]}
           >
             <TextInput
+              ref={baseSearchInputRef}
               value={baseSearch}
               onChangeText={setBaseSearch}
               placeholder="Search ingredients"
@@ -582,7 +604,7 @@ const styles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
     paddingTop: 48,
-    paddingBottom: 120,
+    paddingBottom: 48,
     paddingHorizontal: 24,
     justifyContent: 'flex-start',
   },
