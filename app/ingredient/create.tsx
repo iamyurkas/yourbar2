@@ -26,10 +26,10 @@ export default function CreateIngredientScreen() {
 
   const placeholderLabel = useMemo(() => {
     if (imageUri) {
-      return 'Змінити зображення';
+      return 'Change image';
     }
 
-    return 'Додати зображення';
+    return 'Add image';
   }, [imageUri]);
 
   const ensureMediaPermission = useCallback(async () => {
@@ -44,8 +44,8 @@ export default function CreateIngredientScreen() {
 
     if (!canAskAgain) {
       Alert.alert(
-        'Доступ до медіатеки',
-        'Надайте доступ до фото у налаштуваннях пристрою, щоб додати зображення інгредієнта.',
+        'Media library access',
+        'Enable photo library permissions in system settings to add an ingredient image.',
       );
     }
 
@@ -65,7 +65,7 @@ export default function CreateIngredientScreen() {
     try {
       setIsPickingImage(true);
       const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        mediaTypes: ['images'],
         allowsEditing: true,
         aspect: [1, 1],
         quality: 1,
@@ -80,7 +80,7 @@ export default function CreateIngredientScreen() {
       }
     } catch (error) {
       console.warn('Failed to pick image', error);
-      Alert.alert('Не вдалося вибрати зображення', 'Повторіть спробу пізніше.');
+      Alert.alert('Could not pick image', 'Please try again later.');
     } finally {
       setIsPickingImage(false);
     }
@@ -88,16 +88,16 @@ export default function CreateIngredientScreen() {
 
   const handleSubmit = useCallback(() => {
     if (!name.trim()) {
-      Alert.alert('Назва обовʼязкова', 'Будь ласка, введіть назву інгредієнта.');
+      Alert.alert('Name is required', 'Please enter the ingredient name.');
       return;
     }
 
     Alert.alert(
-      'Інгредієнт збережено',
-      'Цей прототип поки що не синхронізується з базою даних, але форма готова до інтеграції.',
+      'Ingredient saved',
+      'This prototype does not persist data yet, but the form is ready for integration.',
       [
         {
-          text: 'Повернутися',
+          text: 'Go back',
           onPress: () => {
             router.back();
           },
@@ -108,17 +108,17 @@ export default function CreateIngredientScreen() {
 
   return (
     <>
-      <Stack.Screen options={{ title: 'Новий інгредієнт' }} />
+      <Stack.Screen options={{ title: 'New ingredient' }} />
       <ScrollView
         contentContainerStyle={styles.content}
         style={styles.container}
         keyboardShouldPersistTaps="handled">
         <View style={styles.section}>
-          <Text style={[styles.label, { color: palette.onSurfaceVariant }]}>Назва</Text>
+          <Text style={[styles.label, { color: palette.onSurfaceVariant }]}>Name</Text>
           <TextInput
             value={name}
             onChangeText={setName}
-            placeholder="Наприклад, Імбирний сироп"
+            placeholder="For example, Ginger syrup"
             style={[styles.input, { borderColor: palette.outline, color: palette.text }]}
             placeholderTextColor={`${palette.onSurfaceVariant}99`}
           />
@@ -137,18 +137,18 @@ export default function CreateIngredientScreen() {
               <MaterialCommunityIcons name="image-plus" size={32} color={palette.onSurfaceVariant} />
               <Text style={[styles.placeholderText, { color: palette.onSurfaceVariant }]}>150 × 150</Text>
               <Text style={[styles.placeholderHint, { color: palette.onSurfaceVariant }]}>
-                Натисніть, щоб додати фото
+                Tap to add a photo
               </Text>
             </View>
           )}
         </Pressable>
 
         <View style={styles.section}>
-          <Text style={[styles.label, { color: palette.onSurfaceVariant }]}>Опис</Text>
+          <Text style={[styles.label, { color: palette.onSurfaceVariant }]}>Description</Text>
           <TextInput
             value={description}
             onChangeText={setDescription}
-            placeholder="Додайте нотатки про смак або поради щодо використання"
+            placeholder="Add tasting notes or usage suggestions"
             style={[styles.input, styles.multilineInput, { borderColor: palette.outline, color: palette.text }]}
             placeholderTextColor={`${palette.onSurfaceVariant}99`}
             multiline
@@ -162,7 +162,7 @@ export default function CreateIngredientScreen() {
           style={[styles.submitButton, { backgroundColor: palette.tint }]}
           onPress={handleSubmit}
           disabled={isPickingImage}>
-          <Text style={[styles.submitLabel, { color: palette.surface }]}>Зберегти</Text>
+          <Text style={[styles.submitLabel, { color: palette.surface }]}>Save</Text>
         </Pressable>
       </ScrollView>
     </>
