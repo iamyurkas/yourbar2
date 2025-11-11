@@ -87,6 +87,8 @@ const IngredientListItem = memo(function IngredientListItemComponent({
     [ingredient.name, ingredient.photoUri],
   );
 
+  const brandIndicatorColor = ingredient.baseIngredientId != null ? Colors.primary : undefined;
+
   const control = useMemo(() => {
     const shoppingLabel = onShoppingToggle ? 'Remove from shopping list' : 'On shopping list';
     const isShoppingTab = Boolean(onShoppingToggle);
@@ -181,6 +183,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
       }
       thumbnail={thumbnail}
       control={control}
+      brandIndicatorColor={brandIndicatorColor}
     />
   );
 }, areIngredientPropsEqual);
