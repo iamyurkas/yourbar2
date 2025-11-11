@@ -6,16 +6,16 @@ import type { ComponentType } from 'react';
 import type { SvgProps } from 'react-native-svg';
 
 import { Colors } from '@/constants/theme';
-import CocktailsIcon from '@/assets/images/cocktails.svg';
+import CocktailIcon from '@/assets/images/cocktail.svg';
 import ShakerIcon from '@/assets/images/shaker.svg';
-import IngredientsIcon from '@/assets/images/ingredients.svg';
+import IngredientsIcon from '@/assets/images/lemon.svg';
 
 type RouteKey = 'cocktails' | 'shaker' | 'ingredients';
 
 const ICON_SIZE = 28;
 
 const ICONS: Record<RouteKey, ComponentType<SvgProps>> = {
-  cocktails: CocktailsIcon,
+  cocktails: CocktailIcon,
   shaker: ShakerIcon,
   ingredients: IngredientsIcon,
 };
