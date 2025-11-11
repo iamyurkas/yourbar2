@@ -134,7 +134,9 @@ const CocktailListRowComponent = ({
 
   const baseBackgroundColor = paletteColors.surface;
   const backgroundColor = isReady ? highlightColor : baseBackgroundColor;
-  const borderColor = isReady ? `${paletteColors.tint}66` : `${paletteColors.outline}80`;
+  const inactiveBorderColor = `${paletteColors.outlineVariant}40`;
+  const activeBorderColor = `${paletteColors.tint}40`;
+  const borderColor = isReady ? activeBorderColor : inactiveBorderColor;
 
   const ratingValueRaw = (cocktail as { userRating?: number }).userRating ?? 0;
   const ratingValue = Math.max(0, Math.min(MAX_RATING, Number(ratingValueRaw) || 0));

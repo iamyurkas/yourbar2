@@ -144,7 +144,9 @@ export function ListRow({
   const paletteColors = Colors;
   const baseBackgroundColor = paletteColors.surface;
   const backgroundColor = selected ? highlightColor ?? `${paletteColors.tint}1F` : baseBackgroundColor;
-  const borderColor = selected ? `${paletteColors.tint}80` : `${paletteColors.outline}80`;
+  const inactiveBorderColor = `${paletteColors.outlineVariant}40`;
+  const activeBorderColor = `${paletteColors.tint}4D`;
+  const borderColor = selected ? activeBorderColor : inactiveBorderColor;
   const metaAlignmentStyle =
     metaAlignment === 'center'
       ? styles.metaContentCenter
@@ -268,8 +270,8 @@ const styles = StyleSheet.create({
   checkbox: {
     width: 20,
     height: 20,
-    borderRadius: Radii.sm,
-    borderWidth: StyleSheet.hairlineWidth,
+    borderRadius: 10,
+    borderWidth: 2,
     alignItems: 'center',
     justifyContent: 'center',
   },
