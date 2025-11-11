@@ -157,7 +157,6 @@ export default function CreateIngredientScreen() {
     description,
     imageUri,
     name,
-    router,
     selectedTagIds,
   ]);
 
