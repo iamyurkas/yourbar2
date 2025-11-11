@@ -6,6 +6,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   Alert,
   FlatList,
+  Keyboard,
   Modal,
   Platform,
   Pressable,
@@ -405,6 +406,14 @@ export default function EditIngredientScreen() {
   }, []);
 
   const baseSearchInputRef = useRef<TextInput | null>(null);
+  const scrollViewRef = useRef<ScrollView | null>(null);
+  const descriptionSectionOffsetRef = useRef(0);
+  const [isDescriptionFocused, setIsDescriptionFocused] = useState(false);
+
+  const scrollDescriptionIntoView = useCallback(() => {
+    const offset = Math.max(0, descriptionSectionOffsetRef.current - 24);
+    scrollViewRef.current?.scrollTo({ y: offset, animated: true });
+  }, []);
 
   useEffect(() => {
     if (!isBaseModalVisible) {
@@ -419,6 +428,28 @@ export default function EditIngredientScreen() {
       clearTimeout(timeout);
     };
   }, [isBaseModalVisible]);
+
+  useEffect(() => {
+    if (!isDescriptionFocused) {
+      return;
+    }
+
+    const eventName = Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow';
+    const subscription = Keyboard.addListener(eventName, scrollDescriptionIntoView);
+
+    return () => {
+      subscription.remove();
+    };
+  }, [isDescriptionFocused, scrollDescriptionIntoView]);
+
+  const handleDescriptionFocus = useCallback(() => {
+    setIsDescriptionFocused(true);
+    setTimeout(scrollDescriptionIntoView, 100);
+  }, [scrollDescriptionIntoView]);
+
+  const handleDescriptionBlur = useCallback(() => {
+    setIsDescriptionFocused(false);
+  }, []);
 
   const imageSource = useMemo(() => {
     if (!imageUri) {
@@ -466,9 +497,11 @@ export default function EditIngredientScreen() {
         }}
       />
       <ScrollView
+        ref={scrollViewRef}
         contentContainerStyle={styles.content}
         style={styles.container}
-        keyboardShouldPersistTaps="handled">
+        keyboardShouldPersistTaps="handled"
+        scrollIndicatorInsets={{ bottom: 32 }}>
         <View style={styles.section}>
           <Text style={[styles.label, { color: paletteColors.onSurfaceVariant }]}>Name</Text>
           <TextInput
@@ -581,7 +614,12 @@ export default function EditIngredientScreen() {
           </Pressable>
         </View>
 
-        <View style={styles.section}>
+        <View
+          style={styles.section}
+          onLayout={(event) => {
+            descriptionSectionOffsetRef.current = event.nativeEvent.layout.y;
+          }}
+        >
           <Text style={[styles.label, { color: paletteColors.onSurfaceVariant }]}>Description</Text>
           <TextInput
             value={description}
@@ -592,6 +630,8 @@ export default function EditIngredientScreen() {
             multiline
             numberOfLines={4}
             textAlignVertical="top"
+            onFocus={handleDescriptionFocus}
+            onBlur={handleDescriptionBlur}
           />
         </View>
 
@@ -659,6 +699,7 @@ const styles = StyleSheet.create({
   content: {
     padding: 24,
     gap: 24,
+    paddingBottom: 72,
   },
   section: {
     gap: 8,
