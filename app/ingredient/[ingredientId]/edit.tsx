@@ -487,7 +487,7 @@ export default function EditIngredientScreen() {
           onPress={handlePickImage}
           android_ripple={{ color: `${paletteColors.surface}33` }}>
           {imageSource ? (
-            <Image source={imageSource} style={styles.image} contentFit="cover" />
+            <Image source={imageSource} style={styles.image} contentFit="contain" />
           ) : (
             <View style={styles.placeholderContent}>
               
