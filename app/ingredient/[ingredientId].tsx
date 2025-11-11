@@ -390,12 +390,13 @@ export default function IngredientDetailsScreen() {
                       : 'Add ingredient to shopping list'
                   }
                   hitSlop={8}
+                  style={styles.statusIconButton}
                 >
                   <MaterialIcons
                     name={
                       effectiveIsOnShoppingList ? 'shopping-cart' : 'add-shopping-cart'
                     }
-                    size={22}
+                    size={20}
                     color={
                       effectiveIsOnShoppingList ? palette.tint : palette.onSurfaceVariant
                     }
@@ -679,8 +680,16 @@ const styles = StyleSheet.create({
   statusRow: {
     flexDirection: 'row',
     alignItems: 'center',
+    alignSelf: 'stretch',
+    width: '100%',
+    justifyContent: 'flex-end',
+    gap: 16,
+  },
+  statusIconButton: {
+    width: 20,
+    height: 20,
+    alignItems: 'center',
     justifyContent: 'center',
-    gap: 24,
   },
   cocktailList: {
     gap: 12,
