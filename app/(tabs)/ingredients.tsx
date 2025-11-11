@@ -660,17 +660,19 @@ const styles = StyleSheet.create({
   },
   shoppingSlot: {
     height: 16,
-    alignItems: 'center',
+    alignItems: 'flex-end',
     justifyContent: 'flex-end',
     width: 24,
   },
   shoppingIcon: {
     width: 16,
     height: 16,
+    alignSelf: 'flex-end',
   },
   shoppingIconPlaceholder: {
     width: 16,
     height: 16,
+    alignSelf: 'flex-end',
   },
   shoppingButton: {
     borderRadius: 16,
