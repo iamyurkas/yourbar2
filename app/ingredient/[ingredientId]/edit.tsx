@@ -486,7 +486,7 @@ export default function EditIngredientScreen() {
           style={[
             styles.imagePlaceholder,
             { borderColor: paletteColors.outline },
-            !imageSource && { backgroundColor: paletteColors.surfaceVariant },
+            !imageSource && { backgroundColor: paletteColors.onSurfaceVariant },
           ]}
           onPress={handlePickImage}
           android_ripple={{ color: `${paletteColors.surface}33` }}>
@@ -540,7 +540,7 @@ export default function EditIngredientScreen() {
                       <Image source={baseIngredientPhotoSource} style={styles.baseImage} contentFit="contain" />
                     ) : (
                       <View
-                        style={[styles.basePlaceholder, { backgroundColor: paletteColors.surfaceVariant }]}
+                        style={[styles.basePlaceholder, { backgroundColor: paletteColors.onSurfaceVariant }]}
                       >
                         <MaterialCommunityIcons
                           name="image-off"
