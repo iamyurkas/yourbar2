@@ -18,6 +18,34 @@ type CocktailSection = {
 
 type CocktailTabKey = 'all' | 'my' | 'favorites';
 
+type NormalizedQuery = {
+  text: string;
+  tokens: string[];
+};
+
+function filterCocktailsByQuery(
+  base: Cocktail[],
+  normalizedQuery: NormalizedQuery,
+): Cocktail[] {
+  if (!normalizedQuery.text) {
+    return base;
+  }
+
+  const { text, tokens } = normalizedQuery;
+  if (tokens.length <= 1) {
+    const token = tokens[0] ?? text;
+    return base.filter((cocktail) => cocktail.searchNameNormalized.includes(token));
+  }
+
+  return base.filter((cocktail) =>
+    tokens.every(
+      (token) =>
+        cocktail.searchTokensNormalized.includes(token) ||
+        cocktail.searchNameNormalized.includes(token),
+    ),
+  );
+}
+
 const TAB_OPTIONS: SegmentTabOption[] = [
   { key: 'all', label: 'All' },
   { key: 'my', label: 'My' },
@@ -71,34 +99,21 @@ export default function CocktailsScreen() {
     };
   }, [cocktails, readyToMix, ratedCocktails]);
 
-  const activeSection = sections[activeTab] ?? sections.all;
-
   const normalizedQuery = useMemo(() => {
     const trimmed = query.trim().toLowerCase();
     const tokens = trimmed ? trimmed.split(/\s+/).filter(Boolean) : [];
     return { text: trimmed, tokens };
   }, [query]);
 
-  const filteredCocktails = useMemo(() => {
-    const base = activeSection.data;
-    if (!normalizedQuery.text) {
-      return base;
-    }
+  const filteredCocktailsByTab = useMemo<Record<CocktailTabKey, Cocktail[]>>(() => {
+    return {
+      all: filterCocktailsByQuery(sections.all.data, normalizedQuery),
+      my: filterCocktailsByQuery(sections.my.data, normalizedQuery),
+      favorites: filterCocktailsByQuery(sections.favorites.data, normalizedQuery),
+    };
+  }, [normalizedQuery, sections]);
 
-    const { text, tokens } = normalizedQuery;
-    if (tokens.length <= 1) {
-      const token = tokens[0] ?? text;
-      return base.filter((cocktail) => cocktail.searchNameNormalized.includes(token));
-    }
-
-    return base.filter((cocktail) =>
-      tokens.every(
-        (token) =>
-          cocktail.searchTokensNormalized.includes(token) ||
-          cocktail.searchNameNormalized.includes(token),
-      ),
-    );
-  }, [activeSection.data, normalizedQuery]);
+  const filteredCocktails = filteredCocktailsByTab[activeTab] ?? filteredCocktailsByTab.all;
 
   const separatorColor = paletteColors.outline;
 
