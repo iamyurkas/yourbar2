@@ -67,6 +67,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
   const id = Number(ingredient.id ?? -1);
   const isAvailable = id >= 0 && availableIngredientIds.has(id);
   const tagColor = ingredient.tags?.[0]?.color ?? palette.tagYellow;
+  const leadingIndicatorColor = ingredient.baseIngredientId != null ? Colors.tint : undefined;
 
   const handleToggleAvailability = useCallback(() => {
     if (id >= 0) {
@@ -175,6 +176,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
       selected={isAvailable}
       highlightColor={highlightColor}
       tagColor={tagColor}
+      leadingIndicatorColor={leadingIndicatorColor}
       accessibilityRole="button"
       accessibilityState={
         showAvailabilityToggle && isAvailable ? { selected: true } : undefined

@@ -457,6 +457,8 @@ export default function CocktailDetailsScreen() {
                       ingredient.tags?.[0]?.color ??
                       catalogEntry?.tags?.[0]?.color ??
                       appPalette.tagYellow;
+                    const leadingIndicatorColor =
+                      catalogEntry?.baseIngredientId != null ? palette.tint : undefined;
                     const handlePress = () => {
                       const routeParam =
                         ingredientId >= 0
@@ -487,6 +489,7 @@ export default function CocktailDetailsScreen() {
                           selected={isAvailable}
                           highlightColor={ingredientHighlightColor}
                           tagColor={tagColor}
+                          leadingIndicatorColor={leadingIndicatorColor}
                         />
                       </View>
                     );

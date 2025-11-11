@@ -16,6 +16,7 @@ type IngredientQuantityRowProps = {
   selected?: boolean;
   highlightColor?: string;
   tagColor?: string;
+  leadingIndicatorColor?: string;
 };
 
 export function IngredientQuantityRow({
@@ -28,6 +29,7 @@ export function IngredientQuantityRow({
   selected = false,
   highlightColor,
   tagColor,
+  leadingIndicatorColor,
 }: IngredientQuantityRowProps) {
   const palette = Colors;
   const resolvedHighlight = highlightColor ?? appPalette.highlightSubtle;
@@ -67,6 +69,7 @@ export function IngredientQuantityRow({
       selected={selected}
       highlightColor={resolvedHighlight}
       tagColor={tagColor}
+      leadingIndicatorColor={leadingIndicatorColor}
       accessibilityRole={onPress ? 'button' : undefined}
       accessibilityState={selected ? { selected: true } : undefined}
       metaAlignment="center"

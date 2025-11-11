@@ -119,6 +119,7 @@ type ListRowProps = {
   tagColor?: string;
   control?: ReactNode;
   thumbnail?: ReactNode;
+  leadingIndicatorColor?: string;
   accessibilityRole?: 'button' | 'checkbox';
   accessibilityState?: AccessibilityState;
   subtitleStyle?: StyleProp<TextStyle>;
@@ -134,6 +135,7 @@ export function ListRow({
   tagColor,
   control,
   thumbnail,
+  leadingIndicatorColor,
   accessibilityRole,
   accessibilityState,
   subtitleStyle,
@@ -154,6 +156,12 @@ export function ListRow({
       accessibilityState={accessibilityState}
       style={[styles.row, { backgroundColor }]}
     >
+      {leadingIndicatorColor ? (
+        <View
+          pointerEvents="none"
+          style={[styles.leadingIndicator, { backgroundColor: leadingIndicatorColor }]}
+        />
+      ) : null}
       <View style={styles.thumbSlot}>{thumbnail}</View>
       <View style={styles.textColumn}>
         <Text style={[styles.title, { color: paletteColors.text }]} numberOfLines={1}>
@@ -188,6 +196,11 @@ const styles = StyleSheet.create({
     gap: 16,
     minHeight: 76,
     width: '100%',
+  },
+  leadingIndicator: {
+    width: 4,
+    borderRadius: 2,
+    alignSelf: 'stretch',
   },
   thumbSlot: {
     width: THUMB_SIZE,
