@@ -46,7 +46,8 @@ function useResolvedIngredient(param: string | undefined, ingredients: Ingredien
 export default function EditIngredientScreen() {
   const paletteColors = Colors;
   const { ingredientId } = useLocalSearchParams<{ ingredientId?: string }>();
-  const { ingredients, shoppingIngredientIds, updateIngredient } = useInventory();
+  const { ingredients, shoppingIngredientIds, updateIngredient, deleteIngredient } =
+    useInventory();
 
   const ingredient = useResolvedIngredient(
     Array.isArray(ingredientId) ? ingredientId[0] : ingredientId,
@@ -209,6 +210,35 @@ export default function EditIngredientScreen() {
     selectedTagIds,
     updateIngredient,
   ]);
+
+  const handleDeletePress = useCallback(() => {
+    if (numericIngredientId == null) {
+      Alert.alert('Ingredient not found', 'Please try again later.');
+      return;
+    }
+
+    const trimmedName = ingredient?.name?.trim();
+    const message = trimmedName
+      ? `Are you sure you want to delete ${trimmedName}? This action cannot be undone.`
+      : 'Are you sure you want to delete this ingredient? This action cannot be undone.';
+
+    Alert.alert('Delete ingredient', message, [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Delete',
+        style: 'destructive',
+        onPress: () => {
+          const wasDeleted = deleteIngredient(numericIngredientId);
+          if (!wasDeleted) {
+            Alert.alert('Could not delete ingredient', 'Please try again later.');
+            return;
+          }
+
+          router.back();
+        },
+      },
+    ]);
+  }, [deleteIngredient, ingredient?.name, numericIngredientId]);
 
   const baseIngredient = useMemo(() => {
     if (baseIngredientId == null) {
@@ -420,7 +450,21 @@ export default function EditIngredientScreen() {
 
   return (
     <>
-      <Stack.Screen options={{ title: 'Edit ingredient' }} />
+      <Stack.Screen
+        options={{
+          title: 'Edit ingredient',
+          headerRight: () => (
+            <Pressable
+              onPress={handleDeletePress}
+              accessibilityRole="button"
+              accessibilityLabel="Delete ingredient"
+              style={[styles.headerButton, { backgroundColor: paletteColors.surfaceVariant }]}
+              hitSlop={8}>
+              <MaterialIcons name="delete-outline" size={22} color={paletteColors.onSurface} />
+            </Pressable>
+          ),
+        }}
+      />
       <ScrollView
         contentContainerStyle={styles.content}
         style={styles.container}
@@ -604,6 +648,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.surface,
+  },
+  headerButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   content: {
     padding: 24,

@@ -45,6 +45,7 @@ type InventoryContextValue = {
   clearBaseIngredient: (id: number) => void;
   createIngredient: (input: CreateIngredientInput) => Ingredient | undefined;
   updateIngredient: (id: number, input: CreateIngredientInput) => Ingredient | undefined;
+  deleteIngredient: (id: number) => boolean;
   cocktailRatings: Record<string, number>;
   setCocktailRating: (cocktail: Cocktail, rating: number) => void;
   getCocktailRating: (cocktail: Cocktail) => number;
@@ -597,6 +598,84 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     [],
   );
 
+  const deleteIngredient = useCallback((id: number) => {
+    const normalizedId = Number(id);
+    if (!Number.isFinite(normalizedId) || normalizedId < 0) {
+      return false;
+    }
+
+    let wasRemoved = false;
+
+    setInventoryState((prev) => {
+      if (!prev) {
+        return prev;
+      }
+
+      let didUpdateDependents = false;
+
+      const nextIngredients = prev.ingredients.reduce<Ingredient[]>((acc, ingredient) => {
+        const ingredientId = Number(ingredient.id ?? -1);
+        if (ingredientId === normalizedId) {
+          wasRemoved = true;
+          return acc;
+        }
+
+        if (
+          ingredient.baseIngredientId != null &&
+          Number(ingredient.baseIngredientId) === normalizedId
+        ) {
+          didUpdateDependents = true;
+          acc.push({ ...ingredient, baseIngredientId: undefined } satisfies Ingredient);
+          return acc;
+        }
+
+        acc.push(ingredient);
+        return acc;
+      }, []);
+
+      if (!wasRemoved) {
+        return prev;
+      }
+
+      if (didUpdateDependents) {
+        nextIngredients.sort((a, b) =>
+          a.searchNameNormalized.localeCompare(b.searchNameNormalized),
+        );
+      }
+
+      return {
+        ...prev,
+        ingredients: nextIngredients,
+      } satisfies InventoryState;
+    });
+
+    if (!wasRemoved) {
+      return false;
+    }
+
+    setAvailableIngredientIds((prev) => {
+      if (!prev.has(normalizedId)) {
+        return prev;
+      }
+
+      const next = new Set(prev);
+      next.delete(normalizedId);
+      return next;
+    });
+
+    setShoppingIngredientIds((prev) => {
+      if (!prev.has(normalizedId)) {
+        return prev;
+      }
+
+      const next = new Set(prev);
+      next.delete(normalizedId);
+      return next;
+    });
+
+    return true;
+  }, []);
+
   const toggleIngredientAvailability = useCallback((id: number) => {
     setAvailableIngredientIds((prev) => {
       const next = new Set(prev);
@@ -660,6 +739,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       clearBaseIngredient,
       createIngredient,
       updateIngredient,
+      deleteIngredient,
       cocktailRatings,
       setCocktailRating,
       getCocktailRating,
@@ -676,6 +756,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     clearBaseIngredient,
     createIngredient,
     updateIngredient,
+    deleteIngredient,
     cocktailRatings,
     setCocktailRating,
     getCocktailRating,
