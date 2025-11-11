@@ -83,7 +83,7 @@ export function PresenceCheck({ checked, onToggle }: PresenceCheckProps) {
       onPress={onToggle}
       style={[styles.checkbox, { borderColor, backgroundColor }]}
       hitSlop={8}>
-      <MaterialCommunityIcons name="check" color={iconColor} size={12} />
+      <MaterialCommunityIcons name="check" color={iconColor} size={16} />
     </Pressable>
   );
 }
@@ -243,9 +243,9 @@ const styles = StyleSheet.create({
     right: 0,
   },
   checkbox: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
+    width: 24,
+    height: 24,
+    borderRadius: 12,
     borderWidth: 2,
     alignItems: 'center',
     justifyContent: 'center',
