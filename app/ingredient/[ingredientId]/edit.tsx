@@ -562,7 +562,7 @@ export default function EditIngredientScreen() {
                   style={styles.unlinkButton}
                 >
                   <MaterialCommunityIcons
-                    name="link-variant-off"
+                    name="link-off"
                     size={20}
                     color={paletteColors.error}
                   />

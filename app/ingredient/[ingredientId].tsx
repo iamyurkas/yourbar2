@@ -496,7 +496,7 @@ export default function IngredientDetailsScreen() {
                       accessibilityLabel="Remove base ingredient"
                       hitSlop={8}>
                       <MaterialCommunityIcons
-                        name="link-variant-off"
+                        name="link-off"
                         size={20}
                         color={palette.error}
                       />
@@ -575,7 +575,7 @@ export default function IngredientDetailsScreen() {
                             accessibilityLabel={`Remove ${branded.name} link`}
                             hitSlop={8}>
                             <MaterialCommunityIcons
-                              name="link-variant-off"
+                              name="link-off"
                               size={20}
                               color={palette.error}
                             />

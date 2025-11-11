@@ -424,7 +424,7 @@ export default function CreateIngredientScreen() {
                   style={styles.unlinkButton}
                 >
                   <MaterialCommunityIcons
-                    name="link-variant-off"
+                    name="link-off"
                     size={20}
                     color={paletteColors.error}
                   />
