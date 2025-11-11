@@ -25,6 +25,27 @@ type CocktailListRowProps = {
   containerStyle?: StyleProp<ViewStyle>;
 };
 
+const areCocktailRowPropsEqual = (
+  prev: Readonly<CocktailListRowProps>,
+  next: Readonly<CocktailListRowProps>,
+) => {
+  const hasOnPress = Boolean(prev.onPress);
+  const hasNextOnPress = Boolean(next.onPress);
+  const onPressEqual =
+    prev.onPress === next.onPress ||
+    (!hasOnPress && !hasNextOnPress) ||
+    (hasOnPress && hasNextOnPress && prev.cocktail === next.cocktail);
+
+  return (
+    prev.cocktail === next.cocktail &&
+    prev.availableIngredientIds === next.availableIngredientIds &&
+    prev.highlightColor === next.highlightColor &&
+    onPressEqual &&
+    prev.control === next.control &&
+    prev.containerStyle === next.containerStyle
+  );
+};
+
 type AvailabilitySummary = {
   missingCount: number;
   missingNames: string[];
@@ -186,7 +207,7 @@ const CocktailListRowComponent = ({
   );
 };
 
-export const CocktailListRow = memo(CocktailListRowComponent);
+export const CocktailListRow = memo(CocktailListRowComponent, areCocktailRowPropsEqual);
 
 const styles = StyleSheet.create({
   row: {
