@@ -116,7 +116,7 @@ const CocktailListRowComponent = ({
   const ratingValueRaw = (cocktail as { userRating?: number }).userRating ?? 0;
   const ratingValue = Math.max(0, Math.min(MAX_RATING, Number(ratingValueRaw) || 0));
 
-  const ratingStars = useMemo(() => {
+  const ratingContent = useMemo(() => {
     if (ratingValue <= 0) {
       return null;
     }
@@ -126,7 +126,7 @@ const CocktailListRowComponent = ({
     return (
       <View
         style={[
-          styles.ratingOverlay,
+          styles.ratingPill,
           { backgroundColor: `${paletteColors.surfaceVariant}F2`, borderColor: paletteColors.outline },
         ]}>
         {Array.from({ length: totalStars }).map((_, index) => (
@@ -175,9 +175,11 @@ const CocktailListRowComponent = ({
       </View>
       <View style={styles.metaColumn}>
         <View style={styles.tagSlot}>{tagDots ?? <View style={styles.tagPlaceholder} />}</View>
+        <View style={styles.metaMiddleSlot}>
+          {ratingContent ?? <View style={styles.ratingPlaceholder} />}
+        </View>
         <View style={styles.metaBottomSlot}>{control ?? <View style={styles.metaControlPlaceholder} />}</View>
       </View>
-      {ratingStars}
     </Pressable>
   );
 };
@@ -220,6 +222,12 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
   },
+  metaMiddleSlot: {
+    flexGrow: 1,
+    minHeight: 12,
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+  },
   metaBottomSlot: {
     minHeight: 40,
     alignItems: 'flex-end',
@@ -239,10 +247,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 4,
   },
-  ratingOverlay: {
-    position: 'absolute',
-    right: 16,
-    bottom: 8,
+  ratingPill: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 2,
@@ -250,6 +255,10 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
     paddingHorizontal: 6,
     borderWidth: StyleSheet.hairlineWidth,
+  },
+  ratingPlaceholder: {
+    minHeight: 12,
+    minWidth: 8,
   },
 });
 
