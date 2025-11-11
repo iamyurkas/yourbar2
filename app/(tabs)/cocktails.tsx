@@ -9,6 +9,7 @@ import { CollectionHeader } from '@/components/CollectionHeader';
 import type { SegmentTabOption } from '@/components/TopBars';
 import { Colors } from '@/constants/theme';
 import { useInventory, type Cocktail } from '@/providers/inventory-provider';
+import { spacing, typography } from '@/theme/design-tokens';
 
 type CocktailSection = {
   key: string;
@@ -100,8 +101,6 @@ export default function CocktailsScreen() {
     );
   }, [activeSection.data, normalizedQuery]);
 
-  const separatorColor = paletteColors.outline;
-
   const keyExtractor = useCallback((item: Cocktail) => String(item.id ?? item.name), []);
 
   const handleSelectCocktail = useCallback(
@@ -128,8 +127,8 @@ export default function CocktailsScreen() {
   );
 
   const renderSeparator = useCallback(
-    () => <View style={[styles.divider, { backgroundColor: separatorColor }]} />,
-    [separatorColor],
+    () => <View style={styles.listSeparator} />, 
+    [],
   );
 
   return (
@@ -170,15 +169,16 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   listContent: {
-    paddingTop: 0,
-    paddingBottom: 80,
+    paddingTop: spacing.md,
+    paddingHorizontal: spacing.lg,
+    paddingBottom: spacing.xxxl,
   },
-  divider: {
-    height: StyleSheet.hairlineWidth,
+  listSeparator: {
+    height: spacing.md,
   },
   emptyLabel: {
     textAlign: 'center',
-    marginTop: 80,
-    fontSize: 14,
+    marginTop: spacing.xxxl,
+    ...typography.subtitle,
   },
 });

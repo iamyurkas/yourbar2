@@ -2,6 +2,8 @@ import React from 'react';
 import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 
 import { SearchTopBar, SegmentTabs, type SegmentTabOption } from '@/components/TopBars';
+import { Colors } from '@/constants/theme';
+import { spacing } from '@/theme/design-tokens';
 
 type CollectionHeaderProps = {
   searchValue: string;
@@ -29,9 +31,19 @@ export function CollectionHeader({
   style,
 }: CollectionHeaderProps) {
   const shouldShowTabs = Boolean(tabs?.length && activeTab !== undefined && onTabChange);
+  const palette = Colors;
 
   return (
-    <View style={[styles.container, style]}>
+    <View
+      style={[
+        styles.container,
+        {
+          backgroundColor: palette.surfaceBright,
+          borderBottomColor: palette.outline,
+          shadowColor: palette.shadow,
+        },
+        style,
+      ]}>
       <SearchTopBar
         value={searchValue}
         onChangeText={onSearchChange}
@@ -49,7 +61,15 @@ export function CollectionHeader({
 
 const styles = StyleSheet.create({
   container: {
-    gap: 0,
+    gap: spacing.md,
+    paddingHorizontal: spacing.lg,
+    paddingTop: spacing.xl,
+    paddingBottom: spacing.md,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    shadowOpacity: 0.05,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 12,
+    elevation: 1,
   },
 });
 

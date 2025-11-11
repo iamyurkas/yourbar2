@@ -12,6 +12,7 @@ import {
 import { resolveGlasswareUriFromId } from '@/assets/image-manifest';
 import { Colors } from '@/constants/theme';
 import type { Cocktail } from '@/providers/inventory-provider';
+import { radii, spacing, typography } from '@/theme/design-tokens';
 import { palette, tagColors } from '@/theme/theme';
 
 import { TagDot, Thumb } from './RowParts';
@@ -132,7 +133,8 @@ const CocktailListRowComponent = ({
     return 'Missing ingredients';
   }, [missingCount, missingNames, recipeNames]);
 
-  const backgroundColor = isReady ? highlightColor : paletteColors.background;
+  const cardBackground = isReady ? highlightColor : paletteColors.surface;
+  const cardBorderColor = isReady ? paletteColors.tint : paletteColors.outline;
 
   const ratingValueRaw = (cocktail as { userRating?: number }).userRating ?? 0;
   const ratingValue = Math.max(0, Math.min(MAX_RATING, Number(ratingValueRaw) || 0));
@@ -148,7 +150,7 @@ const CocktailListRowComponent = ({
       <View
         style={[
           styles.ratingPill,
-          { backgroundColor: `${paletteColors.surfaceVariant}F2`, borderColor: paletteColors.outline },
+          { backgroundColor: paletteColors.surfaceVariant, borderColor: paletteColors.outline },
         ]}>
         {Array.from({ length: totalStars }).map((_, index) => (
           <MaterialCommunityIcons
@@ -182,7 +184,7 @@ const CocktailListRowComponent = ({
   return (
     <Pressable
       onPress={onPress}
-      style={[styles.row, { backgroundColor }, containerStyle]}
+      style={[styles.row, { backgroundColor: cardBackground, borderColor: cardBorderColor }, containerStyle]}
       accessibilityRole={onPress ? 'button' : undefined}
     >
       <View style={styles.thumbSlot}>
@@ -213,26 +215,33 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    gap: 16,
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.md,
+    gap: spacing.md,
     minHeight: 76,
     position: 'relative',
+    borderRadius: radii.lg,
+    borderWidth: StyleSheet.hairlineWidth,
+    shadowColor: palette.shadow,
+    shadowOpacity: 0.08,
+    shadowOffset: { width: 0, height: 8 },
+    shadowRadius: 16,
+    elevation: 2,
   },
   thumbSlot: {
     width: 56,
     height: 56,
-    borderRadius: 8,
+    borderRadius: radii.md,
     overflow: 'hidden',
   },
   textColumn: {
     flex: 1,
-    gap: 4,
+    gap: spacing.xs,
   },
   metaColumn: {
     alignItems: 'flex-end',
     justifyContent: 'center',
-    gap: 8,
+    gap: spacing.sm,
     minHeight: 56,
     alignSelf: 'stretch',
   },
@@ -240,13 +249,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   tagSlot: {
-    height: 8,
+    height: spacing.sm,
     alignItems: 'flex-end',
     justifyContent: 'flex-start',
   },
   metaMiddleSlot: {
     flexGrow: 1,
-    minHeight: 12,
+    minHeight: spacing.sm,
     alignItems: 'flex-end',
     justifyContent: 'center',
   },
@@ -258,28 +267,27 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   title: {
-    fontSize: 17,
-    fontWeight: '500',
+    ...typography.title,
   },
   subtitle: {
-    fontSize: 13,
+    ...typography.subtitle,
   },
   tagDotsRow: {
     flexDirection: 'row',
-    gap: 4,
+    gap: spacing.xs,
   },
   ratingPill: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 2,
-    borderRadius: 999,
-    paddingVertical: 2,
-    paddingHorizontal: 6,
+    gap: spacing.xs,
+    borderRadius: radii.full,
+    paddingVertical: spacing.xxs,
+    paddingHorizontal: spacing.sm,
     borderWidth: StyleSheet.hairlineWidth,
   },
   ratingPlaceholder: {
-    minHeight: 12,
-    minWidth: 8,
+    minHeight: spacing.sm,
+    minWidth: spacing.xs,
   },
 });
 

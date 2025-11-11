@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 
 import { Colors } from '@/constants/theme';
+import { radii, spacing, typography } from '@/theme/design-tokens';
 
 type SearchTopBarProps = {
   value: string;
@@ -51,20 +52,39 @@ export function SearchTopBar({
       style={[
         styles.topBar,
         {
-          backgroundColor: palette.background,
+          backgroundColor: palette.surfaceBright,
           borderBottomColor: palette.outline,
           borderBottomWidth: StyleSheet.hairlineWidth,
+          shadowColor: palette.shadow,
         },
       ]}>
       <Pressable
         accessibilityRole="button"
         accessibilityLabel="Open navigation"
         onPress={onMenuPress}
-        style={styles.iconButton}>
-        <MaterialCommunityIcons name="menu" size={24} color={palette.onSurface} />
+        style={[
+          styles.iconButton,
+          {
+            backgroundColor: palette.surface,
+            borderColor: palette.outline,
+          },
+        ]}>
+        <MaterialCommunityIcons name="menu" size={22} color={palette.onSurface} />
       </Pressable>
-      <View style={[styles.searchContainer, { backgroundColor: palette.surface, borderColor: palette.background }]}>
-        <MaterialCommunityIcons name="magnify" size={20} color={palette.onSurface} style={styles.searchIcon} />
+      <View
+        style={[
+          styles.searchContainer,
+          {
+            backgroundColor: palette.surface,
+            borderColor: palette.outline,
+          },
+        ]}>
+        <MaterialCommunityIcons
+          name="magnify"
+          size={20}
+          color={palette.icon}
+          style={styles.searchIcon}
+        />
         <TextInput
           value={value}
           onChangeText={onChangeText}
@@ -72,7 +92,7 @@ export function SearchTopBar({
           placeholderTextColor={`${palette.onSurfaceVariant}99`}
           returnKeyType="search"
           onSubmitEditing={handleSubmit}
-          style={[styles.searchInput, { color: palette.text, fontWeight: '400' }]}
+          style={[styles.searchInput, { color: palette.text }]}
         />
         {value ? (
           <Pressable
@@ -88,8 +108,14 @@ export function SearchTopBar({
         accessibilityRole="button"
         accessibilityLabel="Filter items"
         onPress={onFilterPress}
-        style={styles.iconButton}>
-        <MaterialCommunityIcons name="filter-variant" size={24} color={palette.icon} />
+        style={[
+          styles.iconButton,
+          {
+            backgroundColor: palette.surface,
+            borderColor: palette.outline,
+          },
+        ]}>
+        <MaterialCommunityIcons name="filter-variant" size={22} color={palette.icon} />
       </Pressable>
     </View>
   );
@@ -99,7 +125,13 @@ export function SegmentTabs({ options, value, onChange }: SegmentTabsProps) {
   const palette = Colors;
 
   return (
-    <View style={[styles.tabs, { backgroundColor: palette.surface }]}> 
+    <View
+      style={[
+        styles.tabs,
+        {
+          backgroundColor: palette.surfaceBright,
+        },
+      ]}>
       {options.map((option) => {
         const focused = option.key === value;
         return (
@@ -108,25 +140,22 @@ export function SegmentTabs({ options, value, onChange }: SegmentTabsProps) {
             accessibilityRole="tab"
             accessibilityState={focused ? { selected: true } : {}}
             onPress={() => onChange(option.key)}
-            style={styles.tabButton}>
+            style={[
+              styles.tabButton,
+              {
+                backgroundColor: focused ? palette.tint : 'transparent',
+                borderColor: focused ? palette.tint : palette.outline,
+              },
+            ]}>
             <Text
               style={[
                 styles.tabLabel,
                 {
-                  color: focused ? palette.tint : palette.onSurfaceVariant,
-                  fontWeight: focused ? '600' : '400',
+                  color: focused ? palette.onPrimary : palette.onSurfaceVariant,
                 },
               ]}>
               {option.label}
             </Text>
-            <View
-              style={[
-                styles.tabIndicator,
-                {
-                  backgroundColor: focused ? palette.tint : 'transparent',
-                },
-              ]}
-            />
           </Pressable>
         );
       })}
@@ -138,15 +167,18 @@ const styles = StyleSheet.create({
   topBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
-    paddingHorizontal: 16,
-    paddingTop: 12,
-    paddingBottom: 8,
+    gap: spacing.sm,
+    paddingVertical: spacing.sm,
+    shadowOpacity: 0.08,
+    shadowOffset: { width: 0, height: 6 },
+    shadowRadius: 12,
+    elevation: 1,
   },
   iconButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 44,
+    height: 44,
+    borderRadius: radii.full,
+    borderWidth: StyleSheet.hairlineWidth,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -154,46 +186,42 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    borderRadius: 24,
-    borderWidth: 1,
-    paddingHorizontal: 12,
-    paddingVertical: 4,
+    borderRadius: radii.xl,
+    borderWidth: StyleSheet.hairlineWidth,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs,
   },
   searchIcon: {
-    marginRight: 8,
+    marginRight: spacing.sm,
   },
   searchInput: {
     flex: 1,
-    fontSize: 16,
+    ...typography.body,
   },
   clearButton: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
+    width: 32,
+    height: 32,
+    borderRadius: radii.full,
     alignItems: 'center',
     justifyContent: 'center',
   },
   tabs: {
     flexDirection: 'row',
-    paddingHorizontal: 16,
-    paddingTop: 4,
-    paddingBottom: 0,
-    elevation: 4,
+    gap: spacing.xs,
+    paddingTop: spacing.xs,
+    paddingBottom: spacing.sm,
     zIndex: 1,
   },
   tabButton: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: 12,
-    gap: 6,
+    paddingVertical: spacing.xs,
+    borderRadius: radii.lg,
+    borderWidth: StyleSheet.hairlineWidth,
   },
   tabLabel: {
-    fontSize: 15,
-  },
-  tabIndicator: {
-    width: '60%',
-    height: 3,
-    borderRadius: 2,
+    ...typography.label,
+    textTransform: 'uppercase',
   },
 });
