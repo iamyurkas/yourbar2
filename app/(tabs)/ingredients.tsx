@@ -132,11 +132,14 @@ const IngredientListItem = memo(function IngredientListItemComponent({
             ? styles.controlContainerWithToggle
             : styles.controlContainerShoppingOnly,
         ]}>
-        {showAvailabilityToggle ? (
-          <View style={styles.presenceSlot}>
+        <View style={styles.controlTopSpacer} />
+        <View style={styles.presenceSlot}>
+          {showAvailabilityToggle ? (
             <PresenceCheck checked={isAvailable} onToggle={handleToggleAvailability} />
-          </View>
-        ) : null}
+          ) : (
+            <View style={styles.presencePlaceholder} />
+          )}
+        </View>
         <View style={styles.shoppingSlot}>
           {shoppingIconContent ?? <View style={styles.shoppingIconPlaceholder} />}
         </View>
@@ -631,7 +634,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   controlContainer: {
-    alignItems: 'center',
+    alignItems: 'flex-end',
     alignSelf: 'stretch',
     flexDirection: 'column',
     justifyContent: 'space-between',
@@ -640,14 +643,20 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
   },
   controlContainerWithToggle: {},
-  controlContainerShoppingOnly: {
-    justifyContent: 'center',
+  controlContainerShoppingOnly: {},
+  controlTopSpacer: {
+    height: 16,
+    width: 24,
   },
   presenceSlot: {
     height: 16,
     alignItems: 'center',
     justifyContent: 'center',
     width: 24,
+  },
+  presencePlaceholder: {
+    height: 16,
+    width: 16,
   },
   shoppingSlot: {
     height: 16,
