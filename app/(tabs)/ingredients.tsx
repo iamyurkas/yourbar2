@@ -89,6 +89,10 @@ const IngredientListItem = memo(function IngredientListItemComponent({
 
   const control = useMemo(() => {
     const shoppingLabel = onShoppingToggle ? 'Remove from shopping list' : 'On shopping list';
+    const shoppingIconStyle = [
+      styles.shoppingIcon,
+      showAvailabilityToggle ? styles.shoppingIconWithToggle : null,
+    ];
     const shoppingIcon = !isOnShoppingList
       ? null
       : onShoppingToggle
@@ -104,29 +108,33 @@ const IngredientListItem = memo(function IngredientListItemComponent({
             ]}>
             <MaterialIcons
               name="shopping-cart"
-              size={20}
+              size={16}
               color={Colors.tint}
-              style={styles.shoppingIcon}
+              style={shoppingIconStyle}
             />
           </Pressable>
         )
       : (
           <MaterialIcons
             name="shopping-cart"
-            size={20}
+            size={16}
             color={Colors.tint}
-            style={styles.shoppingIcon}
+            style={shoppingIconStyle}
             accessibilityRole="image"
             accessibilityLabel={shoppingLabel}
           />
         );
 
     return (
-      <View style={styles.controlContainer}>
-        {shoppingIcon}
+      <View
+        style={[
+          styles.controlContainer,
+          showAvailabilityToggle ? styles.controlContainerWithToggle : null,
+        ]}>
         {showAvailabilityToggle ? (
           <PresenceCheck checked={isAvailable} onToggle={handleToggleAvailability} />
         ) : null}
+        {shoppingIcon}
       </View>
     );
   }, [
@@ -618,15 +626,19 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   controlContainer: {
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    gap: 8,
+    alignItems: 'center',
+    gap: 4,
+  },
+  controlContainerWithToggle: {
+    flexDirection: 'column',
   },
   shoppingIcon: {
-    marginBottom: 2,
+    marginTop: 0,
+  },
+  shoppingIconWithToggle: {
+    marginTop: 4,
   },
   shoppingButton: {
-    marginBottom: 2,
     borderRadius: 16,
     padding: 4,
   },
