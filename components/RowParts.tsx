@@ -82,7 +82,7 @@ export function PresenceCheck({ checked, onToggle }: PresenceCheckProps) {
       onPress={onToggle}
       style={[styles.checkbox, { borderColor, backgroundColor }]}
       hitSlop={8}>
-      <MaterialCommunityIcons name="check" color={iconColor} size={16} />
+      <MaterialCommunityIcons name="check" color={iconColor} size={6} />
     </Pressable>
   );
 }
@@ -146,6 +146,12 @@ export function ListRow({
       : metaAlignment === 'flex-start'
       ? styles.metaColumnStart
       : styles.metaColumnSpaceBetween;
+  const tagElement = (
+    <View style={styles.tagSlot}>
+      {tagColor ? <TagDot color={tagColor} /> : <View style={styles.tagPlaceholder} />}
+    </View>
+  );
+
   return (
     <Pressable
       onPress={onPress}
@@ -164,8 +170,8 @@ export function ListRow({
         ) : null}
       </View>
       <View style={[styles.metaColumn, metaAlignmentStyle]}>
-        {tagColor ? <TagDot color={tagColor} /> : null}
-        {control}
+        {tagElement}
+        {control ?? <View style={styles.controlPlaceholder} />}
       </View>
     </Pressable>
   );
@@ -192,9 +198,9 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   metaColumn: {
-    alignItems: 'center',
-    gap: 12,
+    alignItems: 'flex-end',
     minHeight: THUMB_SIZE,
+    paddingVertical: 4,
   },
   metaColumnSpaceBetween: {
     justifyContent: 'space-between',
@@ -213,18 +219,31 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   tagDot: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
+    width: 4,
+    height: 4,
+    borderRadius: 2,
+  },
+  tagSlot: {
+    minHeight: 8,
+    minWidth: 8,
+    alignItems: 'flex-end',
+    justifyContent: 'flex-start',
+  },
+  tagPlaceholder: {
+    width: 4,
+    height: 4,
+  },
+  controlPlaceholder: {
+    height: THUMB_SIZE - 8,
+    minWidth: 12,
   },
   checkbox: {
-    width: 20,
-    height: 20,
-    borderRadius: 14,
-    borderWidth: 2,
+    width: 8,
+    height: 8,
+    borderRadius: 2,
+    borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 8,
   },
   starButton: {
     padding: 2,

@@ -89,11 +89,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
 
   const control = useMemo(() => {
     const shoppingLabel = onShoppingToggle ? 'Remove from shopping list' : 'On shopping list';
-    const shoppingIconStyle = [
-      styles.shoppingIcon,
-      showAvailabilityToggle ? styles.shoppingIconWithToggle : null,
-    ];
-    const shoppingIcon = !isOnShoppingList
+    const shoppingIconContent = !isOnShoppingList
       ? null
       : onShoppingToggle
       ? (
@@ -106,35 +102,40 @@ const IngredientListItem = memo(function IngredientListItemComponent({
               styles.shoppingButton,
               pressed ? styles.shoppingButtonPressed : null,
             ]}>
-            <MaterialIcons
-              name="shopping-cart"
-              size={16}
-              color={Colors.tint}
-              style={shoppingIconStyle}
-            />
+            <MaterialIcons name="shopping-cart" size={8} color={Colors.tint} />
           </Pressable>
         )
       : (
           <MaterialIcons
             name="shopping-cart"
-            size={16}
+            size={8}
             color={Colors.tint}
-            style={shoppingIconStyle}
             accessibilityRole="image"
             accessibilityLabel={shoppingLabel}
           />
         );
 
-    return (
-      <View
-        style={[
-          styles.controlContainer,
-          showAvailabilityToggle ? styles.controlContainerWithToggle : null,
-        ]}>
+    const renderShoppingSlot = () => (
+      <View style={styles.shoppingSlot}>{shoppingIconContent}</View>
+    );
+
+    const centerContent = (
+      <View style={styles.checkboxSlot}>
         {showAvailabilityToggle ? (
           <PresenceCheck checked={isAvailable} onToggle={handleToggleAvailability} />
-        ) : null}
-        {shoppingIcon}
+        ) : (
+          renderShoppingSlot()
+        )}
+      </View>
+    );
+
+    const bottomContent = showAvailabilityToggle ? renderShoppingSlot() : <View style={styles.shoppingSlot} />;
+
+    return (
+      <View style={styles.controlColumn}>
+        <View style={styles.controlTopSpacer} />
+        {centerContent}
+        {bottomContent}
       </View>
     );
   }, [
@@ -625,22 +626,33 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  controlContainer: {
-    alignItems: 'center',
-    gap: 4,
+  controlColumn: {
+    minHeight: 56,
+    alignItems: 'flex-end',
+    justifyContent: 'space-between',
+    paddingVertical: 4,
+    minWidth: 16,
   },
-  controlContainerWithToggle: {
-    flexDirection: 'column',
+  controlTopSpacer: {
+    height: 4,
   },
-  shoppingIcon: {
-    marginTop: 0,
+  checkboxSlot: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+    width: 12,
   },
-  shoppingIconWithToggle: {
-    marginTop: 4,
+  shoppingSlot: {
+    minHeight: 8,
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+    width: 12,
   },
   shoppingButton: {
-    borderRadius: 16,
-    padding: 4,
+    borderRadius: 6,
+    padding: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   shoppingButtonPressed: {
     opacity: 0.6,

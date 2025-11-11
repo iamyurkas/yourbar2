@@ -116,30 +116,26 @@ const CocktailListRowComponent = ({
   const ratingValueRaw = (cocktail as { userRating?: number }).userRating ?? 0;
   const ratingValue = Math.max(0, Math.min(MAX_RATING, Number(ratingValueRaw) || 0));
 
-  const ratingStars = useMemo(() => {
+  const ratingIndicator = useMemo(() => {
     if (ratingValue <= 0) {
-      return null;
+      return <View style={styles.ratingRow} />;
     }
 
     const totalStars = Math.max(0, Math.min(MAX_RATING, Math.round(ratingValue)));
 
     return (
-      <View
-        style={[
-          styles.ratingOverlay,
-          { backgroundColor: `${paletteColors.surfaceVariant}F2`, borderColor: paletteColors.outline },
-        ]}>
+      <View style={styles.ratingRow}>
         {Array.from({ length: totalStars }).map((_, index) => (
           <MaterialCommunityIcons
             key={`rating-icon-${index}`}
             name="star"
-            size={12}
+            size={4}
             color={paletteColors.tint}
           />
         ))}
       </View>
     );
-  }, [paletteColors.outline, paletteColors.surfaceVariant, paletteColors.tint, ratingValue]);
+  }, [paletteColors.tint, ratingValue]);
 
   const tagDots = useMemo(() => {
     const tags = cocktail.tags ?? [];
@@ -155,6 +151,16 @@ const CocktailListRowComponent = ({
       </View>
     );
   }, [cocktail.tags]);
+
+  const tagArea = (
+    <View style={styles.tagArea}>{tagDots ?? <View style={styles.tagPlaceholder} />}</View>
+  );
+
+  const shoppingStatus = (
+    <View style={styles.shoppingStatusSlot}>
+      {control ?? <View style={styles.shoppingStatusPlaceholder} />}
+    </View>
+  );
 
   return (
     <Pressable
@@ -174,10 +180,13 @@ const CocktailListRowComponent = ({
         </Text>
       </View>
       <View style={styles.metaColumn}>
-        {tagDots}
-        {control}
+        {tagArea}
+        <View style={styles.metaSpacer} />
+        <View style={styles.metaBottomRow}>
+          {shoppingStatus}
+          {ratingIndicator}
+        </View>
       </View>
-      {ratingStars}
     </Pressable>
   );
 };
@@ -192,7 +201,6 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     gap: 16,
     minHeight: 76,
-    position: 'relative',
   },
   thumbSlot: {
     width: 56,
@@ -206,9 +214,17 @@ const styles = StyleSheet.create({
   },
   metaColumn: {
     alignItems: 'flex-end',
-    justifyContent: 'center',
-    gap: 8,
     minHeight: 56,
+    paddingVertical: 4,
+    minWidth: 32,
+  },
+  metaSpacer: {
+    flex: 1,
+  },
+  metaBottomRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    gap: 4,
   },
   title: {
     fontSize: 17,
@@ -217,21 +233,36 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 13,
   },
+  tagArea: {
+    minHeight: 8,
+    alignItems: 'flex-end',
+    justifyContent: 'flex-start',
+    width: 12,
+  },
   tagDotsRow: {
     flexDirection: 'row',
-    gap: 4,
-  },
-  ratingOverlay: {
-    position: 'absolute',
-    right: 16,
-    bottom: 8,
-    flexDirection: 'row',
-    alignItems: 'center',
     gap: 2,
-    borderRadius: 999,
-    paddingVertical: 2,
-    paddingHorizontal: 6,
-    borderWidth: StyleSheet.hairlineWidth,
+  },
+  tagPlaceholder: {
+    width: 4,
+    height: 4,
+  },
+  shoppingStatusSlot: {
+    minHeight: 8,
+    minWidth: 12,
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+  },
+  shoppingStatusPlaceholder: {
+    width: 8,
+    height: 8,
+  },
+  ratingRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    gap: 2,
+    minHeight: 4,
+    minWidth: 4,
   },
 });
 
