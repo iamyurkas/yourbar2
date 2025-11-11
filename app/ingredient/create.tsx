@@ -26,7 +26,7 @@ import { palette as appPalette } from '@/theme/theme';
 
 export default function CreateIngredientScreen() {
   const paletteColors = Colors;
-  const { ingredients, shoppingIngredientIds } = useInventory();
+  const { ingredients, shoppingIngredientIds, createIngredient } = useInventory();
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [imageUri, setImageUri] = useState<string | null>(null);
@@ -117,24 +117,49 @@ export default function CreateIngredientScreen() {
   }, [ensureMediaPermission, isPickingImage]);
 
   const handleSubmit = useCallback(() => {
-    if (!name.trim()) {
+    const trimmedName = name.trim();
+    if (!trimmedName) {
       Alert.alert('Name is required', 'Please enter the ingredient name.');
       return;
     }
 
-    Alert.alert(
-      'Ingredient saved',
-      'This prototype does not persist data yet, but the form is ready for integration.',
-      [
-        {
-          text: 'Go back',
-          onPress: () => {
-            router.back();
-          },
-        },
-      ],
-    );
-  }, [name]);
+    const descriptionValue = description.trim();
+    const selectedTags = selectedTagIds
+      .map((tagId) => BUILTIN_INGREDIENT_TAGS.find((tag) => tag.id === tagId))
+      .filter((tag): tag is (typeof BUILTIN_INGREDIENT_TAGS)[number] => Boolean(tag));
+
+    const created = createIngredient({
+      name: trimmedName,
+      description: descriptionValue || undefined,
+      photoUri: imageUri ?? undefined,
+      baseIngredientId,
+      tags: selectedTags,
+    });
+
+    if (!created) {
+      Alert.alert('Could not save ingredient', 'Please try again later.');
+      return;
+    }
+
+    const targetId = created.id ?? created.name;
+    if (!targetId) {
+      router.back();
+      return;
+    }
+
+    router.replace({
+      pathname: '/ingredient/[ingredientId]',
+      params: { ingredientId: String(targetId) },
+    });
+  }, [
+    baseIngredientId,
+    createIngredient,
+    description,
+    imageUri,
+    name,
+    router,
+    selectedTagIds,
+  ]);
 
   const baseIngredient = useMemo(() => {
     if (baseIngredientId == null) {
