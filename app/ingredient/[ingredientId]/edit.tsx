@@ -19,8 +19,8 @@ import {
 
 import { resolveAssetFromCatalog } from '@/assets/image-manifest';
 import { ListRow, Thumb } from '@/components/RowParts';
-import { Colors } from '@/constants/theme';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
+import { Colors } from '@/constants/theme';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
 import { palette as appPalette } from '@/theme/theme';
 
@@ -490,8 +490,8 @@ export default function EditIngredientScreen() {
             <Image source={imageSource} style={styles.image} contentFit="cover" />
           ) : (
             <View style={styles.placeholderContent}>
-              <MaterialCommunityIcons name="image-plus" size={32} color={paletteColors.onSurfaceVariant} />
-              <Text style={[styles.placeholderText, { color: paletteColors.onSurfaceVariant }]}>150 × 150</Text>
+              
+              
               <Text style={[styles.placeholderHint, { color: paletteColors.onSurfaceVariant }]}>Tap to add a photo</Text>
             </View>
           )}
@@ -664,7 +664,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   descriptionSection: {
-    paddingBottom: 150,
+    paddingBottom: 250,
   },
   label: {
     fontSize: 16,
