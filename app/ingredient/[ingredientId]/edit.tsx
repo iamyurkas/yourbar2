@@ -475,7 +475,7 @@ export default function EditIngredientScreen() {
             value={name}
             onChangeText={setName}
             placeholder="For example, Ginger syrup"
-            style={[styles.input, { borderColor: paletteColors.outline, color: paletteColors.text }]}
+            style={[styles.input, { borderColor: paletteColors.outlineVariant, color: paletteColors.text }]}
             placeholderTextColor={`${paletteColors.onSurfaceVariant}99`}
           />
         </View>
@@ -591,7 +591,11 @@ export default function EditIngredientScreen() {
             value={description}
             onChangeText={setDescription}
             placeholder="Add tasting notes or usage suggestions"
-            style={[styles.input, styles.multilineInput, { borderColor: paletteColors.outline, color: paletteColors.text }]}
+            style={[
+              styles.input,
+              styles.multilineInput,
+              { borderColor: paletteColors.outlineVariant, color: paletteColors.text },
+            ]}
             placeholderTextColor={`${paletteColors.onSurfaceVariant}99`}
             multiline
             numberOfLines={4}
@@ -626,7 +630,10 @@ export default function EditIngredientScreen() {
               onChangeText={setBaseSearch}
               placeholder="Search ingredients"
               placeholderTextColor={`${paletteColors.onSurfaceVariant}99`}
-              style={[styles.modalSearchInput, { borderColor: paletteColors.outline, color: paletteColors.text }]}
+              style={[
+                styles.modalSearchInput,
+                { borderColor: paletteColors.outlineVariant, color: paletteColors.text },
+              ]}
               autoFocus
               keyboardAppearance="light"
             />
