@@ -6,9 +6,11 @@ import type { ComponentType } from 'react';
 import type { SvgProps } from 'react-native-svg';
 
 import { Colors } from '@/constants/theme';
-import CocktailsIcon from '@/assets/images/cocktails.svg';
-import ShakerIcon from '@/assets/images/shaker.svg';
-import IngredientsIcon from '@/assets/images/ingredients.svg';
+import {
+  CocktailsIcon,
+  IngredientsIcon,
+  ShakerIcon,
+} from '@/components/icons/BottomTabIcons';
 
 type RouteKey = 'cocktails' | 'shaker' | 'ingredients';
 
