@@ -1,3 +1,4 @@
+import { MaterialIcons } from '@expo/vector-icons';
 import React, { memo, useCallback, useEffect, useMemo, useState, useTransition } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -32,6 +33,7 @@ type IngredientListItemProps = {
   onToggle: (id: number) => void;
   subtitle?: string;
   surfaceVariantColor?: string;
+  isOnShoppingList: boolean;
 };
 
 const areIngredientPropsEqual = (
@@ -43,7 +45,8 @@ const areIngredientPropsEqual = (
   prev.availableIngredientIds === next.availableIngredientIds &&
   prev.onToggle === next.onToggle &&
   prev.subtitle === next.subtitle &&
-  prev.surfaceVariantColor === next.surfaceVariantColor;
+  prev.surfaceVariantColor === next.surfaceVariantColor &&
+  prev.isOnShoppingList === next.isOnShoppingList;
 
 const IngredientListItem = memo(function IngredientListItemComponent({
   ingredient,
@@ -52,6 +55,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
   onToggle,
   subtitle,
   surfaceVariantColor,
+  isOnShoppingList,
 }: IngredientListItemProps) {
   const router = useRouter();
   const id = Number(ingredient.id ?? -1);
@@ -72,8 +76,20 @@ const IngredientListItem = memo(function IngredientListItemComponent({
   );
 
   const control = useMemo(
-    () => <PresenceCheck checked={isAvailable} onToggle={handleToggle} />,
-    [handleToggle, isAvailable],
+    () => (
+      <View style={styles.controlContainer}>
+        {isOnShoppingList ? (
+          <MaterialIcons
+            name="shopping-cart"
+            size={20}
+            color={Colors.tint}
+            style={styles.shoppingIcon}
+          />
+        ) : null}
+        <PresenceCheck checked={isAvailable} onToggle={handleToggle} />
+      </View>
+    ),
+    [handleToggle, isAvailable, isOnShoppingList],
   );
 
   const handlePress = useCallback(() => {
@@ -455,6 +471,7 @@ export default function IngredientsScreen() {
     ({ item }: { item: Ingredient }) => {
       const ingredientId = Number(item.id ?? -1);
       const baseGroupId = ingredientId >= 0 ? getBaseGroupId(ingredientId) : undefined;
+      const isOnShoppingList = ingredientId >= 0 && shoppingIngredientIds.has(ingredientId);
 
       const isMyTab = activeTab === 'my';
       const countsMap = isMyTab ? makeableCocktailCounts : totalCocktailCounts;
@@ -479,6 +496,7 @@ export default function IngredientsScreen() {
           onToggle={handleToggle}
           subtitle={subtitleText}
           surfaceVariantColor={paletteColors.onSurfaceVariant ?? paletteColors.icon}
+          isOnShoppingList={isOnShoppingList}
         />
       );
     },
@@ -491,6 +509,7 @@ export default function IngredientsScreen() {
       makeableCocktailCounts,
       paletteColors.icon,
       paletteColors.onSurfaceVariant,
+      shoppingIngredientIds,
       totalCocktailCounts,
     ],
   );
@@ -536,6 +555,14 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+  },
+  controlContainer: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    gap: 8,
+  },
+  shoppingIcon: {
+    marginBottom: 2,
   },
   listContent: {
     paddingTop: 0,
