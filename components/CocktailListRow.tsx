@@ -169,15 +169,15 @@ const CocktailListRowComponent = ({
         <Text style={[styles.title, { color: paletteColors.text }]} numberOfLines={1}>
           {cocktail.name}
         </Text>
-        <Text style={[styles.subtitle, { color: paletteColors.icon }]} numberOfLines={1}>
-          {subtitle}
-        </Text>
+        <View style={styles.subtitleRow}>
+          <Text style={[styles.subtitle, { color: paletteColors.icon }]} numberOfLines={1}>
+            {subtitle}
+          </Text>
+          {ratingContent ? <View style={styles.subtitleRatingSlot}>{ratingContent}</View> : null}
+        </View>
       </View>
       <View style={styles.metaColumn}>
         <View style={styles.tagSlot}>{tagDots ?? <View style={styles.tagPlaceholder} />}</View>
-        <View style={styles.metaMiddleSlot}>
-          {ratingContent ?? <View style={styles.ratingPlaceholder} />}
-        </View>
         <View style={styles.metaBottomSlot}>{control ?? <View style={styles.metaControlPlaceholder} />}</View>
       </View>
     </Pressable>
@@ -206,6 +206,11 @@ const styles = StyleSheet.create({
     flex: 1,
     gap: 4,
   },
+  subtitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
   metaColumn: {
     alignItems: 'flex-end',
     justifyContent: 'space-between',
@@ -222,12 +227,6 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
   },
-  metaMiddleSlot: {
-    flexGrow: 1,
-    minHeight: 12,
-    alignItems: 'flex-end',
-    justifyContent: 'center',
-  },
   metaBottomSlot: {
     minHeight: 40,
     alignItems: 'flex-end',
@@ -242,6 +241,12 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 13,
+    flex: 1,
+  },
+  subtitleRatingSlot: {
+    flexShrink: 0,
+    justifyContent: 'center',
+    alignItems: 'flex-end',
   },
   tagDotsRow: {
     flexDirection: 'row',
@@ -255,10 +260,6 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
     paddingHorizontal: 6,
     borderWidth: StyleSheet.hairlineWidth,
-  },
-  ratingPlaceholder: {
-    minHeight: 12,
-    minWidth: 8,
   },
 });
 
