@@ -8,7 +8,7 @@ import type { SvgProps } from 'react-native-svg';
 import { Colors } from '@/constants/theme';
 import CocktailsIcon from '@/assets/images/cocktails.svg';
 import ShakerIcon from '@/assets/images/shaker.svg';
-import IngredientsIcon from '@/assets/images/ingredients.svg';
+import LemonIcon from '@/assets/images/lemon.svg';
 
 type RouteKey = 'cocktails' | 'shaker' | 'ingredients';
 
@@ -17,7 +17,7 @@ const ICON_SIZE = 28;
 const ICONS: Record<RouteKey, ComponentType<SvgProps>> = {
   cocktails: CocktailsIcon,
   shaker: ShakerIcon,
-  ingredients: IngredientsIcon,
+  ingredients: LemonIcon,
 };
 
 export function BottomBar({ state, descriptors, navigation }: BottomTabBarProps) {
@@ -45,8 +45,8 @@ export function BottomBar({ state, descriptors, navigation }: BottomTabBarProps)
               : options.title !== undefined
                 ? options.title
                 : route.name;
-          const color = focused ? palette.tint : palette.tabIconDefault;
-          const labelColor = focused ? palette.tint : palette.icon;
+          const color = focused ? palette.onPrimary : palette.tabIconDefault;
+          const labelColor = focused ? palette.onSecondaryContainer : palette.icon;
 
           const onPress = () => {
             const event = navigation.emit({
@@ -78,14 +78,33 @@ export function BottomBar({ state, descriptors, navigation }: BottomTabBarProps)
               testID={options.tabBarTestID}
               onPress={onPress}
               onLongPress={onLongPress}
-              style={styles.item}>
-              <Icon
-                width={ICON_SIZE}
-                height={ICON_SIZE}
-                fill={color}
-                accessibilityRole="image"
-                accessibilityLabel={typeof label === 'string' ? label : undefined}
-              />
+              style={({ pressed }) => [
+                styles.item,
+                {
+                  backgroundColor: focused ? palette.secondaryContainer : palette.surface,
+                  borderColor: focused ? palette.tint : palette.outline,
+                },
+                pressed && styles.itemPressed,
+              ]}>
+              <View
+                style={[
+                  styles.iconBadge,
+                  {
+                    backgroundColor: focused ? palette.tint : palette.surface,
+                    borderColor: focused ? palette.tint : palette.outlineVariant,
+                    shadowColor: palette.tint,
+                    shadowOpacity: focused ? 0.24 : 0,
+                    elevation: focused ? 6 : 0,
+                  },
+                ]}>
+                <Icon
+                  width={ICON_SIZE}
+                  height={ICON_SIZE}
+                  fill={color}
+                  accessibilityRole="image"
+                  accessibilityLabel={typeof label === 'string' ? label : undefined}
+                />
+              </View>
               <Text style={[styles.label, { color: labelColor, fontWeight: focused ? '600' : '500' }]}>
                 {label}
               </Text>
@@ -109,7 +128,7 @@ const styles = StyleSheet.create({
     borderRadius: 28,
     borderWidth: 1,
     paddingHorizontal: 12,
-    paddingVertical: 8,
+    paddingVertical: 10,
     alignItems: 'center',
     justifyContent: 'space-between',
     elevation: 6,
@@ -121,7 +140,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
-    paddingVertical: 8,
+    paddingVertical: 12,
+    borderRadius: 20,
+    borderWidth: 1,
+  },
+  itemPressed: {
+    opacity: 0.9,
+  },
+  iconBadge: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    shadowOffset: { width: 0, height: 6 },
+    shadowRadius: 12,
   },
   label: {
     fontSize: 12,
