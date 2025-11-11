@@ -71,7 +71,7 @@ type PresenceCheckProps = {
 
 export function PresenceCheck({ checked, onToggle }: PresenceCheckProps) {
   const paletteColors = Colors;
-  const idleColor = paletteColors.icon;
+  const idleColor = paletteColors.onSurfaceVariant;
   const borderColor = checked ? paletteColors.tint : idleColor;
   const backgroundColor = checked ? paletteColors.tint : 'transparent';
   const iconColor = checked ? paletteColors.background : idleColor;
@@ -243,9 +243,9 @@ const styles = StyleSheet.create({
     right: 0,
   },
   checkbox: {
-    width: 16,
-    height: 16,
-    borderRadius: 8,
+    width: 20,
+    height: 20,
+    borderRadius: 10,
     borderWidth: 2,
     alignItems: 'center',
     justifyContent: 'center',
