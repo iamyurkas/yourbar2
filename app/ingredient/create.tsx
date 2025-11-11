@@ -1,4 +1,4 @@
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import * as ImagePicker from 'expo-image-picker';
 import { Stack, router } from 'expo-router';
@@ -26,7 +26,7 @@ import { palette as appPalette } from '@/theme/theme';
 
 export default function CreateIngredientScreen() {
   const paletteColors = Colors;
-  const { ingredients } = useInventory();
+  const { ingredients, shoppingIngredientIds } = useInventory();
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [imageUri, setImageUri] = useState<string | null>(null);
@@ -242,6 +242,13 @@ export default function CreateIngredientScreen() {
       const id = Number(item.id ?? -1);
       const isSelected = Number.isFinite(id) && id >= 0 && id === baseIngredientId;
       const tagColor = item.tags?.[0]?.color;
+      const isOnShoppingList = Number.isFinite(id) && id >= 0 && shoppingIngredientIds.has(id);
+
+      const control = isOnShoppingList ? (
+        <View style={styles.baseShoppingIndicator}>
+          <MaterialIcons name="shopping-cart" size={20} color={paletteColors.tint} />
+        </View>
+      ) : undefined;
 
       return (
         <ListRow
@@ -253,10 +260,17 @@ export default function CreateIngredientScreen() {
           tagColor={tagColor}
           accessibilityRole="button"
           accessibilityState={isSelected ? { selected: true } : undefined}
+          control={control}
+          metaAlignment="flex-start"
         />
       );
     },
-    [baseIngredientId, handleSelectBaseIngredient],
+    [
+      baseIngredientId,
+      handleSelectBaseIngredient,
+      paletteColors.tint,
+      shoppingIngredientIds,
+    ],
   );
 
   const baseModalKeyExtractor = useCallback((item: Ingredient) => {
@@ -596,6 +610,11 @@ const styles = StyleSheet.create({
   basePlaceholderText: {
     fontSize: 15,
     fontWeight: '500',
+  },
+  baseShoppingIndicator: {
+    minHeight: 56,
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
   },
   unlinkButton: {
     padding: 6,
