@@ -24,34 +24,17 @@ export type ThumbProps = {
   fallbackLabel?: string;
 };
 
-export function Thumb({ uri, label, fallbackUri, fallbackLabel }: ThumbProps) {
-  const paletteColors = Colors;
-  const effectiveLabel = label ?? fallbackLabel;
-  const trimmed = effectiveLabel?.trim();
-  const fallbackText = trimmed ? trimmed.slice(0, 2).toUpperCase() : undefined;
-
+export function Thumb({ uri, fallbackUri }: ThumbProps) {
   const assetSource = resolveAssetFromCatalog(uri);
-  const resolvedUri = uri && /^https?:/i.test(uri) ? uri : undefined;
-  let source: ImageSource | undefined = assetSource ?? (resolvedUri ? { uri: resolvedUri } : undefined);
+  let source: ImageSource | undefined = assetSource;
 
   if (!source && fallbackUri) {
-    const fallbackAsset = resolveAssetFromCatalog(fallbackUri);
-    if (fallbackAsset) {
-      source = fallbackAsset;
-    } else if (/^https?:/i.test(fallbackUri)) {
-      source = { uri: fallbackUri };
-    }
+    source = resolveAssetFromCatalog(fallbackUri) ?? undefined;
   }
 
   return (
     <View style={[styles.thumb, { backgroundColor: palette.surfaceBright }]}>
-      {source ? (
-        <Image source={source} style={styles.thumbImage} contentFit="contain" />
-      ) : fallbackText ? (
-        <Text style={[styles.thumbFallback, { color: paletteColors.onSurfaceVariant }]}>{fallbackText}</Text>
-      ) : (
-        <MaterialCommunityIcons name="image-off" size={24} color={paletteColors.onSurfaceVariant} />
-      )}
+      {source ? <Image source={source} style={styles.thumbImage} contentFit="contain" /> : null}
     </View>
   );
 }
@@ -280,9 +263,5 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     borderRadius: 8,
-  },
-  thumbFallback: {
-    fontSize: 16,
-    fontWeight: '600',
   },
 });
