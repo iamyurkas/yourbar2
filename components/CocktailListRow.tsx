@@ -1,4 +1,4 @@
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import React, { memo, useMemo } from 'react';
 import {
   Pressable,
@@ -124,22 +124,42 @@ const CocktailListRowComponent = ({
     const totalStars = Math.max(0, Math.min(MAX_RATING, Math.round(ratingValue)));
 
     return (
-      <View
-        style={[
-          styles.ratingOverlay,
-          { backgroundColor: `${paletteColors.surfaceVariant}F2`, borderColor: paletteColors.outline },
-        ]}>
+      <View style={styles.ratingRow}>
         {Array.from({ length: totalStars }).map((_, index) => (
           <MaterialCommunityIcons
             key={`rating-icon-${index}`}
             name="star"
-            size={12}
+            size={8}
             color={paletteColors.tint}
           />
         ))}
       </View>
     );
-  }, [paletteColors.outline, paletteColors.surfaceVariant, paletteColors.tint, ratingValue]);
+  }, [paletteColors.tint, ratingValue]);
+
+  const shoppingStatus = useMemo(() => {
+    const color = isReady ? paletteColors.tint : paletteColors.onSurfaceVariant;
+    const label = isReady ? 'All ingredients ready' : 'Missing ingredients';
+
+    return (
+      <MaterialIcons
+        name="shopping-cart"
+        size={16}
+        color={color}
+        accessibilityRole="image"
+        accessibilityLabel={label}
+      />
+    );
+  }, [isReady, paletteColors.onSurfaceVariant, paletteColors.tint]);
+
+  const statusContent = useMemo(() => {
+    return (
+      <>
+        <View style={styles.shoppingStatusSlot}>{shoppingStatus}</View>
+        <View style={styles.ratingSlot}>{ratingStars ?? <View style={styles.ratingPlaceholder} />}</View>
+      </>
+    );
+  }, [ratingStars, shoppingStatus]);
 
   const tagDots = useMemo(() => {
     const tags = cocktail.tags ?? [];
@@ -174,10 +194,10 @@ const CocktailListRowComponent = ({
         </Text>
       </View>
       <View style={styles.metaColumn}>
-        {tagDots}
-        {control}
+        <View style={styles.tagDotsSlot}>{tagDots ?? <View style={styles.tagDotsPlaceholder} />}</View>
+        <View style={styles.metaBody}>{control ?? <View style={styles.controlPlaceholder} />}</View>
+        <View style={styles.statusSlot}>{statusContent}</View>
       </View>
-      {ratingStars}
     </Pressable>
   );
 };
@@ -205,10 +225,60 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   metaColumn: {
+    minHeight: 56,
+    alignItems: 'flex-end',
+    width: 56,
+    paddingVertical: 4,
+    alignSelf: 'stretch',
+    gap: 4,
+  },
+  tagDotsSlot: {
+    height: 16,
+    width: '100%',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-end',
+  },
+  tagDotsPlaceholder: {
+    width: 8,
+    height: 8,
+  },
+  metaBody: {
+    flex: 1,
+    width: '100%',
     alignItems: 'flex-end',
     justifyContent: 'center',
-    gap: 8,
-    minHeight: 56,
+  },
+  controlPlaceholder: {
+    width: 24,
+    height: 24,
+  },
+  statusSlot: {
+    minHeight: 28,
+    width: '100%',
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
+    gap: 4,
+  },
+  shoppingStatusSlot: {
+    width: 16,
+    height: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  ratingSlot: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 2,
+    minHeight: 8,
+  },
+  ratingRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 2,
+  },
+  ratingPlaceholder: {
+    width: 8,
+    height: 8,
   },
   title: {
     fontSize: 17,
@@ -220,18 +290,6 @@ const styles = StyleSheet.create({
   tagDotsRow: {
     flexDirection: 'row',
     gap: 4,
-  },
-  ratingOverlay: {
-    position: 'absolute',
-    right: 16,
-    bottom: 8,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 2,
-    borderRadius: 999,
-    paddingVertical: 2,
-    paddingHorizontal: 6,
-    borderWidth: StyleSheet.hairlineWidth,
   },
 });
 

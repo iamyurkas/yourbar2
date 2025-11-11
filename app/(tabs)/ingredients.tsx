@@ -89,10 +89,6 @@ const IngredientListItem = memo(function IngredientListItemComponent({
 
   const control = useMemo(() => {
     const shoppingLabel = onShoppingToggle ? 'Remove from shopping list' : 'On shopping list';
-    const shoppingIconStyle = [
-      styles.shoppingIcon,
-      showAvailabilityToggle ? styles.shoppingIconWithToggle : null,
-    ];
     const shoppingIcon = !isOnShoppingList
       ? null
       : onShoppingToggle
@@ -106,12 +102,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
               styles.shoppingButton,
               pressed ? styles.shoppingButtonPressed : null,
             ]}>
-            <MaterialIcons
-              name="shopping-cart"
-              size={16}
-              color={Colors.tint}
-              style={shoppingIconStyle}
-            />
+            <MaterialIcons name="shopping-cart" size={16} color={Colors.tint} />
           </Pressable>
         )
       : (
@@ -119,24 +110,29 @@ const IngredientListItem = memo(function IngredientListItemComponent({
             name="shopping-cart"
             size={16}
             color={Colors.tint}
-            style={shoppingIconStyle}
             accessibilityRole="image"
             accessibilityLabel={shoppingLabel}
           />
         );
 
-    return (
-      <View
-        style={[
-          styles.controlContainer,
-          showAvailabilityToggle ? styles.controlContainerWithToggle : null,
-        ]}>
-        {showAvailabilityToggle ? (
-          <PresenceCheck checked={isAvailable} onToggle={handleToggleAvailability} />
-        ) : null}
-        {shoppingIcon}
+    const shoppingSlot = (
+      <View style={styles.controlBottomSlot}>
+        {shoppingIcon ?? <View style={styles.shoppingPlaceholder} />}
       </View>
     );
+
+    if (showAvailabilityToggle) {
+      return (
+        <View style={styles.controlColumn}>
+          <View style={styles.controlCenterSlot}>
+            <PresenceCheck checked={isAvailable} onToggle={handleToggleAvailability} />
+          </View>
+          {shoppingSlot}
+        </View>
+      );
+    }
+
+    return <View style={styles.controlShoppingOnly}>{shoppingSlot}</View>;
   }, [
     handleShoppingToggle,
     handleToggleAvailability,
@@ -625,22 +621,35 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  controlContainer: {
+  controlColumn: {
+    height: 56,
+    justifyContent: 'space-between',
     alignItems: 'center',
-    gap: 4,
+    alignSelf: 'stretch',
   },
-  controlContainerWithToggle: {
-    flexDirection: 'column',
+  controlShoppingOnly: {
+    height: 56,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'stretch',
   },
-  shoppingIcon: {
-    marginTop: 0,
+  controlCenterSlot: {
+    minHeight: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  shoppingIconWithToggle: {
-    marginTop: 4,
+  controlBottomSlot: {
+    minHeight: 16,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  shoppingPlaceholder: {
+    width: 16,
+    height: 16,
   },
   shoppingButton: {
     borderRadius: 16,
-    padding: 4,
+    padding: 0,
   },
   shoppingButtonPressed: {
     opacity: 0.6,
