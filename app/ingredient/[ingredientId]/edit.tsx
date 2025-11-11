@@ -494,8 +494,6 @@ export default function EditIngredientScreen() {
             <Image source={imageSource} style={styles.image} contentFit="contain" />
           ) : (
             <View style={styles.placeholderContent}>
-              
-              
               <Text style={[styles.placeholderHint, { color: paletteColors.onSurfaceVariant }]}>Tap to add a photo</Text>
             </View>
           )}
