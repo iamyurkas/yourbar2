@@ -396,7 +396,7 @@ export default function IngredientDetailsScreen() {
                     name={
                       effectiveIsOnShoppingList ? 'shopping-cart' : 'add-shopping-cart'
                     }
-                    size={20}
+                    size={24}
                     color={
                       effectiveIsOnShoppingList ? palette.tint : palette.onSurfaceVariant
                     }
@@ -686,8 +686,8 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   statusIconButton: {
-    width: 20,
-    height: 20,
+    width: 24,
+    height: 24,
     alignItems: 'center',
     justifyContent: 'center',
   },

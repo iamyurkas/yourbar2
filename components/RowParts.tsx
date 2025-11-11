@@ -71,7 +71,7 @@ type PresenceCheckProps = {
 
 export function PresenceCheck({ checked, onToggle }: PresenceCheckProps) {
   const paletteColors = Colors;
-  const idleColor = paletteColors.onSurfaceVariant;
+  const idleColor = paletteColors.outlineVariant;
   const borderColor = checked ? paletteColors.tint : idleColor;
   const backgroundColor = checked ? paletteColors.tint : 'transparent';
   const iconColor = checked ? paletteColors.background : idleColor;

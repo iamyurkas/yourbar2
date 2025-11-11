@@ -22,7 +22,7 @@ export const palette = {
   surfaceVariant: '#EEF2F8',
 
   outline: '#E5EAF0',
-  outlineVariant: '#E3E6EC',
+  outlineVariant: '#C4C4C4',
 
   onSurface: '#1F2933',
   onSurfaceMuted: '#5C6C7C',
