@@ -3,9 +3,9 @@ import React, { memo, useCallback, useEffect, useMemo, useState, useTransition }
 import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { CollectionHeader } from '@/components/CollectionHeader';
 import { FabAdd } from '@/components/FabAdd';
 import { ListRow, PresenceCheck, Thumb } from '@/components/RowParts';
-import { CollectionHeader } from '@/components/CollectionHeader';
 import type { SegmentTabOption } from '@/components/TopBars';
 import { Colors } from '@/constants/theme';
 import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
@@ -640,7 +640,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     minHeight: 56,
     minWidth: 32,
-    paddingVertical: 4,
+    
   },
   controlContainerWithToggle: {},
   controlContainerShoppingOnly: {},
