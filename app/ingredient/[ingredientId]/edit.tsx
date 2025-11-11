@@ -593,15 +593,15 @@ export default function EditIngredientScreen() {
             numberOfLines={4}
             textAlignVertical="top"
           />
-        </View>
 
-        <Pressable
-          accessibilityRole="button"
-          style={[styles.submitButton, { backgroundColor: paletteColors.tint }]}
-          onPress={handleSubmit}
-          disabled={isPickingImage}>
-          <Text style={[styles.submitLabel, { color: paletteColors.surface }]}>Save changes</Text>
-        </Pressable>
+          <Pressable
+            accessibilityRole="button"
+            style={[styles.submitButton, { backgroundColor: paletteColors.tint }]}
+            onPress={handleSubmit}
+            disabled={isPickingImage}>
+            <Text style={[styles.submitLabel, { color: paletteColors.surface }]}>Save changes</Text>
+          </Pressable>
+        </View>
       </ScrollView>
 
       <Modal
