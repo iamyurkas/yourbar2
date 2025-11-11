@@ -2,8 +2,8 @@ import { Image } from 'expo-image';
 import { Tabs } from 'expo-router';
 import React from 'react';
 
-import CocktailIcon from '@/assets/images/cocktail.svg';
-import LemonIcon from '@/assets/images/lemon.svg';
+import CocktailIcon from '@/assets/images/cocktails.svg';
+import LemonIcon from '@/assets/images/ingredients.svg';
 import ShakerIcon from '@/assets/images/shaker.svg';
 import { palette } from '@/theme/theme';
 
