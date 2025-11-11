@@ -441,34 +441,86 @@ export default function IngredientsScreen() {
     };
   }, [ingredients, availableIngredientIds, shoppingIngredientIds]);
 
-  const activeSection = sections[activeTab] ?? sections.all;
-
   const normalizedQuery = useMemo(() => {
     const trimmed = query.trim().toLowerCase();
     const tokens = trimmed ? trimmed.split(/\s+/).filter(Boolean) : [];
     return { text: trimmed, tokens };
   }, [query]);
 
-  const filteredIngredients = useMemo(() => {
-    const base = activeSection.data;
-    if (!normalizedQuery.text) {
-      return base;
-    }
+  const filteredIngredientsByTab = useMemo(() => {
+    const applyFilter = (items: Ingredient[]) => {
+      if (!normalizedQuery.text) {
+        return items;
+      }
 
-    const { text, tokens } = normalizedQuery;
-    if (tokens.length <= 1) {
-      const token = tokens[0] ?? text;
-      return base.filter((ingredient) => ingredient.searchNameNormalized.includes(token));
-    }
+      const { text, tokens } = normalizedQuery;
+      if (tokens.length <= 1) {
+        const token = tokens[0] ?? text;
+        return items.filter((ingredient) => ingredient.searchNameNormalized.includes(token));
+      }
 
-    return base.filter((ingredient) =>
-      tokens.every(
-        (token) =>
-          ingredient.searchTokensNormalized.includes(token) ||
-          ingredient.searchNameNormalized.includes(token),
-      ),
-    );
-  }, [activeSection.data, normalizedQuery]);
+      return items.filter((ingredient) =>
+        tokens.every(
+          (token) =>
+            ingredient.searchTokensNormalized.includes(token) ||
+            ingredient.searchNameNormalized.includes(token),
+        ),
+      );
+    };
+
+    return {
+      all: applyFilter(sections.all.data),
+      my: applyFilter(sections.my.data),
+      shopping: applyFilter(sections.shopping.data),
+    } satisfies Record<IngredientTabKey, Ingredient[]>;
+  }, [normalizedQuery, sections]);
+
+  const activeSection = sections[activeTab] ?? sections.all;
+  const filteredIngredients =
+    filteredIngredientsByTab[activeSection.key] ?? filteredIngredientsByTab.all;
+
+  const subtitleByIngredientIdByTab = useMemo(() => {
+    const buildMap = (
+      items: Ingredient[],
+      counts: Map<number, number>,
+      mode: 'makeable' | 'total',
+    ) => {
+      const map = new Map<number, string>();
+
+      items.forEach((ingredient) => {
+        const ingredientId = Number(ingredient.id ?? -1);
+        if (!Number.isFinite(ingredientId) || ingredientId < 0) {
+          return;
+        }
+
+        const baseGroupId = getBaseGroupId(ingredientId);
+        if (baseGroupId == null) {
+          return;
+        }
+
+        const count = counts.get(baseGroupId) ?? 0;
+        if (count <= 0) {
+          return;
+        }
+
+        if (mode === 'makeable') {
+          const label = count === 1 ? 'cocktail' : 'cocktails';
+          map.set(ingredientId, `Make ${count} ${label}`);
+        } else {
+          const label = count === 1 ? 'recipe' : 'recipes';
+          map.set(ingredientId, `${count} ${label}`);
+        }
+      });
+
+      return map;
+    };
+
+    return {
+      all: buildMap(sections.all.data, totalCocktailCounts, 'total'),
+      my: buildMap(sections.my.data, makeableCocktailCounts, 'makeable'),
+      shopping: buildMap(sections.shopping.data, totalCocktailCounts, 'total'),
+    } satisfies Record<IngredientTabKey, Map<number, string>>;
+  }, [getBaseGroupId, makeableCocktailCounts, sections, totalCocktailCounts]);
 
   const highlightColor = palette.highlightSubtle;
   const separatorColor = paletteColors.outline;
@@ -547,23 +599,10 @@ export default function IngredientsScreen() {
   const renderItem = useCallback(
     ({ item }: { item: Ingredient }) => {
       const ingredientId = Number(item.id ?? -1);
-      const baseGroupId = ingredientId >= 0 ? getBaseGroupId(ingredientId) : undefined;
       const isOnShoppingList = ingredientId >= 0 && shoppingIngredientIds.has(ingredientId);
 
-      const isMyTab = activeTab === 'my';
-      const countsMap = isMyTab ? makeableCocktailCounts : totalCocktailCounts;
-      const count = baseGroupId != null ? countsMap.get(baseGroupId) ?? 0 : 0;
-
-      let subtitleText: string | undefined;
-      if (count > 0) {
-        if (isMyTab) {
-          const label = count === 1 ? 'cocktail' : 'cocktails';
-          subtitleText = `Make ${count} ${label}`;
-        } else {
-          const label = count === 1 ? 'recipe' : 'recipes';
-          subtitleText = `${count} ${label}`;
-        }
-      }
+      const subtitleMap = subtitleByIngredientIdByTab[activeTab] ?? subtitleByIngredientIdByTab.all;
+      const subtitleText = ingredientId >= 0 ? subtitleMap.get(ingredientId) : undefined;
 
       return (
         <IngredientListItem
@@ -582,15 +621,13 @@ export default function IngredientsScreen() {
     [
       activeTab,
       effectiveAvailableIngredientIds,
-      getBaseGroupId,
       handleToggle,
       handleShoppingToggle,
       highlightColor,
-      makeableCocktailCounts,
       paletteColors.icon,
       paletteColors.onSurfaceVariant,
       shoppingIngredientIds,
-      totalCocktailCounts,
+      subtitleByIngredientIdByTab,
     ],
   );
 
