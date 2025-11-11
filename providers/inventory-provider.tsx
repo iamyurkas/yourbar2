@@ -43,6 +43,7 @@ type InventoryContextValue = {
   toggleIngredientAvailability: (id: number) => void;
   toggleIngredientShopping: (id: number) => void;
   clearBaseIngredient: (id: number) => void;
+  createIngredient: (input: CreateIngredientInput) => Ingredient | undefined;
   cocktailRatings: Record<string, number>;
   setCocktailRating: (cocktail: Cocktail, rating: number) => void;
   getCocktailRating: (cocktail: Cocktail) => number;
@@ -52,6 +53,16 @@ type InventoryState = {
   cocktails: Cocktail[];
   ingredients: Ingredient[];
   imported: boolean;
+};
+
+type IngredientTag = NonNullable<IngredientRecord['tags']>[number];
+
+type CreateIngredientInput = {
+  name: string;
+  description?: string | null;
+  photoUri?: string | null;
+  baseIngredientId?: number | null;
+  tags?: IngredientTag[] | null;
 };
 
 type InventorySnapshot = {
@@ -377,6 +388,119 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     });
   }, []);
 
+  const createIngredient = useCallback(
+    (input: CreateIngredientInput) => {
+      let created: Ingredient | undefined;
+
+      setInventoryState((prev) => {
+        if (!prev) {
+          return prev;
+        }
+
+        const trimmedName = input.name?.trim();
+        if (!trimmedName) {
+          return prev;
+        }
+
+        const nextId =
+          prev.ingredients.reduce((maxId, ingredient) => {
+            const id = Number(ingredient.id ?? -1);
+            if (!Number.isFinite(id) || id < 0) {
+              return maxId;
+            }
+
+            return Math.max(maxId, id);
+          }, 0) + 1;
+
+        const normalizedBaseId =
+          input.baseIngredientId != null ? Number(input.baseIngredientId) : undefined;
+        const baseIngredientId =
+          normalizedBaseId != null && Number.isFinite(normalizedBaseId) && normalizedBaseId >= 0
+            ? Math.trunc(normalizedBaseId)
+            : undefined;
+
+        const description = input.description?.trim() || undefined;
+        const photoUri = input.photoUri?.trim() || undefined;
+
+        const tagMap = new Map<number, IngredientTag>();
+        (input.tags ?? []).forEach((tag) => {
+          const id = Number(tag.id ?? -1);
+          if (!Number.isFinite(id) || id < 0) {
+            return;
+          }
+
+          if (!tagMap.has(id)) {
+            tagMap.set(id, {
+              id,
+              name: tag.name,
+              color: tag.color,
+            });
+          }
+        });
+        const tags = tagMap.size > 0 ? Array.from(tagMap.values()) : undefined;
+
+        const normalizedName = trimmedName.toLowerCase();
+        const searchTokens = normalizedName.split(/\s+/).filter(Boolean);
+
+        const candidateRecord: IngredientRecord = {
+          id: nextId,
+          name: trimmedName,
+          description,
+          tags,
+          baseIngredientId,
+          usageCount: 0,
+          searchName: normalizedName,
+          searchTokens,
+          photoUri,
+        };
+
+        const [normalized] = normalizeSearchFields([candidateRecord]);
+        if (!normalized) {
+          return prev;
+        }
+
+        const nextIngredients = [...prev.ingredients, normalized].sort((a, b) =>
+          a.searchNameNormalized.localeCompare(b.searchNameNormalized),
+        );
+
+        created = normalized;
+
+        return {
+          ...prev,
+          ingredients: nextIngredients,
+        } satisfies InventoryState;
+      });
+
+      if (created?.id != null) {
+        const id = Number(created.id);
+        if (Number.isFinite(id) && id >= 0) {
+          setAvailableIngredientIds((prev) => {
+            if (prev.has(id)) {
+              return prev;
+            }
+
+            const next = new Set(prev);
+            next.add(id);
+            return next;
+          });
+
+          setShoppingIngredientIds((prev) => {
+            if (!prev.has(id)) {
+              return prev;
+            }
+
+            const next = new Set(prev);
+            next.delete(id);
+            return next;
+          });
+        }
+      }
+
+      return created;
+    },
+    [],
+  );
+
   const toggleIngredientAvailability = useCallback((id: number) => {
     setAvailableIngredientIds((prev) => {
       const next = new Set(prev);
@@ -438,6 +562,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       toggleIngredientAvailability,
       toggleIngredientShopping,
       clearBaseIngredient,
+      createIngredient,
       cocktailRatings,
       setCocktailRating,
       getCocktailRating,
@@ -452,6 +577,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     toggleIngredientAvailability,
     toggleIngredientShopping,
     clearBaseIngredient,
+    createIngredient,
     cocktailRatings,
     setCocktailRating,
     getCocktailRating,
@@ -470,4 +596,4 @@ export function useInventory() {
   return context;
 }
 
-export type { Cocktail, Ingredient };
+export type { Cocktail, Ingredient, CreateIngredientInput };
