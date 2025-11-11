@@ -83,7 +83,7 @@ export function PresenceCheck({ checked, onToggle }: PresenceCheckProps) {
       onPress={onToggle}
       style={[styles.checkbox, { borderColor, backgroundColor }]}
       hitSlop={8}>
-      <MaterialCommunityIcons name="check" color={iconColor} size={12} />
+      <MaterialCommunityIcons name="check" color={iconColor} size={16} />
     </Pressable>
   );
 }
@@ -179,6 +179,8 @@ export function ListRow({
   );
 }
 
+const CHECKBOX_SIZE = 24;
+
 const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
@@ -243,9 +245,9 @@ const styles = StyleSheet.create({
     right: 0,
   },
   checkbox: {
-    width: 16,
-    height: 16,
-    borderRadius: 8,
+    width: CHECKBOX_SIZE,
+    height: CHECKBOX_SIZE,
+    borderRadius: CHECKBOX_SIZE / 2,
     borderWidth: 2,
     alignItems: 'center',
     justifyContent: 'center',
