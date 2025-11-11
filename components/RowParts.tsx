@@ -269,7 +269,7 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     borderRadius: Radii.sm,
-    borderWidth: 2,
+    borderWidth: StyleSheet.hairlineWidth,
     alignItems: 'center',
     justifyContent: 'center',
   },
