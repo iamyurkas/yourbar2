@@ -196,8 +196,20 @@ export default function IngredientDetailsScreen() {
   }, [isOnShoppingList, numericIngredientId, startShoppingTransition, toggleIngredientShopping]);
 
   const handleEditPress = useCallback(() => {
-    // Editing functionality to be implemented later
-  }, []);
+    if (!ingredient) {
+      return;
+    }
+
+    const targetId = ingredient.id ?? ingredient.name;
+    if (!targetId) {
+      return;
+    }
+
+    router.push({
+      pathname: '/ingredient/[ingredientId]/edit',
+      params: { ingredientId: String(targetId) },
+    });
+  }, [ingredient]);
 
   const handleAddCocktail = useCallback(() => {
     // Navigation to add cocktail will be added later

@@ -44,6 +44,7 @@ type InventoryContextValue = {
   toggleIngredientShopping: (id: number) => void;
   clearBaseIngredient: (id: number) => void;
   createIngredient: (input: CreateIngredientInput) => Ingredient | undefined;
+  updateIngredient: (id: number, input: CreateIngredientInput) => Ingredient | undefined;
   cocktailRatings: Record<string, number>;
   setCocktailRating: (cocktail: Cocktail, rating: number) => void;
   getCocktailRating: (cocktail: Cocktail) => number;
@@ -501,6 +502,101 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     [],
   );
 
+  const updateIngredient = useCallback(
+    (id: number, input: CreateIngredientInput) => {
+      let updated: Ingredient | undefined;
+
+      setInventoryState((prev) => {
+        if (!prev) {
+          return prev;
+        }
+
+        const normalizedId = Number(id);
+        if (!Number.isFinite(normalizedId) || normalizedId < 0) {
+          return prev;
+        }
+
+        const ingredientIndex = prev.ingredients.findIndex(
+          (item) => Number(item.id ?? -1) === normalizedId,
+        );
+
+        if (ingredientIndex === -1) {
+          return prev;
+        }
+
+        const trimmedName = input.name?.trim();
+        if (!trimmedName) {
+          return prev;
+        }
+
+        const normalizedBaseId =
+          input.baseIngredientId != null ? Number(input.baseIngredientId) : undefined;
+        const baseIngredientId =
+          normalizedBaseId != null && Number.isFinite(normalizedBaseId) && normalizedBaseId >= 0
+            ? Math.trunc(normalizedBaseId)
+            : undefined;
+
+        const description = input.description?.trim() || undefined;
+        const photoUri = input.photoUri?.trim() || undefined;
+
+        const tagMap = new Map<number, IngredientTag>();
+        (input.tags ?? []).forEach((tag) => {
+          const tagId = Number(tag.id ?? -1);
+          if (!Number.isFinite(tagId) || tagId < 0) {
+            return;
+          }
+
+          if (!tagMap.has(tagId)) {
+            tagMap.set(tagId, {
+              id: tagId,
+              name: tag.name,
+              color: tag.color,
+            });
+          }
+        });
+        const tags = tagMap.size > 0 ? Array.from(tagMap.values()) : undefined;
+
+        const normalizedName = trimmedName.toLowerCase();
+        const searchTokens = normalizedName.split(/\s+/).filter(Boolean);
+
+        const previous = prev.ingredients[ingredientIndex];
+        const candidateRecord: IngredientRecord = {
+          ...previous,
+          id: previous.id,
+          name: trimmedName,
+          description,
+          tags,
+          baseIngredientId,
+          usageCount: previous.usageCount,
+          searchName: normalizedName,
+          searchTokens,
+          photoUri,
+        };
+
+        const [normalized] = normalizeSearchFields([candidateRecord]);
+        if (!normalized) {
+          return prev;
+        }
+
+        const nextIngredients = [...prev.ingredients];
+        nextIngredients[ingredientIndex] = normalized;
+        nextIngredients.sort((a, b) =>
+          a.searchNameNormalized.localeCompare(b.searchNameNormalized),
+        );
+
+        updated = normalized;
+
+        return {
+          ...prev,
+          ingredients: nextIngredients,
+        } satisfies InventoryState;
+      });
+
+      return updated;
+    },
+    [],
+  );
+
   const toggleIngredientAvailability = useCallback((id: number) => {
     setAvailableIngredientIds((prev) => {
       const next = new Set(prev);
@@ -563,6 +659,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       toggleIngredientShopping,
       clearBaseIngredient,
       createIngredient,
+      updateIngredient,
       cocktailRatings,
       setCocktailRating,
       getCocktailRating,
@@ -578,6 +675,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     toggleIngredientShopping,
     clearBaseIngredient,
     createIngredient,
+    updateIngredient,
     cocktailRatings,
     setCocktailRating,
     getCocktailRating,
