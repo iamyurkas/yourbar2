@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 
 import { SearchTopBar, SegmentTabs, type SegmentTabOption } from '@/components/TopBars';
+import { Spacing } from '@/constants/theme';
 
 type CollectionHeaderProps = {
   searchValue: string;
@@ -49,7 +50,7 @@ export function CollectionHeader({
 
 const styles = StyleSheet.create({
   container: {
-    gap: 0,
+    gap: Spacing.sm,
   },
 });
 

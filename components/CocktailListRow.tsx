@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 
 import { resolveGlasswareUriFromId } from '@/assets/image-manifest';
-import { Colors } from '@/constants/theme';
+import { Colors, Fonts, Radii, Shadows, Spacing } from '@/constants/theme';
 import type { Cocktail } from '@/providers/inventory-provider';
 import { palette, tagColors } from '@/theme/theme';
 
@@ -132,7 +132,9 @@ const CocktailListRowComponent = ({
     return 'Missing ingredients';
   }, [missingCount, missingNames, recipeNames]);
 
-  const backgroundColor = isReady ? highlightColor : paletteColors.background;
+  const baseBackgroundColor = paletteColors.surface;
+  const backgroundColor = isReady ? highlightColor : baseBackgroundColor;
+  const borderColor = isReady ? `${paletteColors.tint}66` : `${paletteColors.outline}80`;
 
   const ratingValueRaw = (cocktail as { userRating?: number }).userRating ?? 0;
   const ratingValue = Math.max(0, Math.min(MAX_RATING, Number(ratingValueRaw) || 0));
@@ -182,7 +184,15 @@ const CocktailListRowComponent = ({
   return (
     <Pressable
       onPress={onPress}
-      style={[styles.row, { backgroundColor }, containerStyle]}
+      style={[
+        styles.row,
+        {
+          backgroundColor,
+          borderColor,
+          shadowColor: palette.shadow,
+        },
+        containerStyle,
+      ]}
       accessibilityRole={onPress ? 'button' : undefined}
     >
       <View style={styles.thumbSlot}>
@@ -192,7 +202,7 @@ const CocktailListRowComponent = ({
         <Text style={[styles.title, { color: paletteColors.text }]} numberOfLines={1}>
           {cocktail.name}
         </Text>
-        <Text style={[styles.subtitle, { color: paletteColors.icon }]} numberOfLines={1}>
+        <Text style={[styles.subtitle, { color: paletteColors.onSurfaceMuted }]} numberOfLines={1}>
           {subtitle}
         </Text>
       </View>
@@ -213,21 +223,24 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 16,
+    paddingHorizontal: Spacing.lg,
     paddingVertical: 12,
-    gap: 16,
+    gap: Spacing.lg,
     minHeight: 76,
     position: 'relative',
+    borderRadius: Radii.lg,
+    borderWidth: StyleSheet.hairlineWidth,
+    ...Shadows.level1,
   },
   thumbSlot: {
     width: 56,
     height: 56,
-    borderRadius: 8,
+    borderRadius: Radii.md,
     overflow: 'hidden',
   },
   textColumn: {
     flex: 1,
-    gap: 4,
+    gap: Spacing.xs,
   },
   metaColumn: {
     alignItems: 'flex-end',
@@ -259,20 +272,24 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 17,
-    fontWeight: '500',
+    fontWeight: '600',
+    fontFamily: Fonts?.sans,
+    letterSpacing: 0.2,
   },
   subtitle: {
     fontSize: 13,
+    fontFamily: Fonts?.sans,
+    color: Colors.onSurfaceMuted,
   },
   tagDotsRow: {
     flexDirection: 'row',
-    gap: 4,
+    gap: Spacing.xs,
   },
   ratingPill: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 2,
-    borderRadius: 999,
+    borderRadius: Radii.pill,
     paddingVertical: 2,
     paddingHorizontal: 6,
     borderWidth: StyleSheet.hairlineWidth,

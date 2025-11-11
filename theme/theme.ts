@@ -1,66 +1,66 @@
 import { MD3LightTheme, type PaperTheme } from '@/libs/react-native-paper';
 
 export const palette = {
-  primary: '#4DABF7',
-  primaryContainer: '#D5E6FA',
+  primary: '#7F5AF0',
+  primaryContainer: '#E8E2FF',
   onPrimary: '#FFFFFF',
-  onPrimaryContainer: '#0B2A4A',
+  onPrimaryContainer: '#20104B',
 
-  secondary: '#74C0FC',
-  secondaryContainer: '#FFE9A6',
-  onSecondary: '#2B1D00',
-  onSecondaryContainer: '#3B2800',
+  secondary: '#2CB67D',
+  secondaryContainer: '#D2F2E3',
+  onSecondary: '#053323',
+  onSecondaryContainer: '#0D4C38',
 
-  tertiary: '#A5D8FF',
-  tertiaryContainer: '#CBF1EC',
-  onTertiary: '#003833',
-  onTertiaryContainer: '#00302B',
+  tertiary: '#F7B733',
+  tertiaryContainer: '#FFF1CF',
+  onTertiary: '#3B2600',
+  onTertiaryContainer: '#4F3200',
 
-  background: '#FFFFFF',
-  surface: '#F8F8F8',
+  background: '#F5F7FA',
+  surface: '#FFFFFF',
   surfaceBright: '#FFFFFF',
-  surfaceVariant: '#EEEEEE',
+  surfaceVariant: '#E4E7EF',
 
-  outline: '#E5EAF0',
-  outlineVariant: '#C4C4C4',
+  outline: '#D0D5DD',
+  outlineVariant: '#B9C1D0',
 
-  onSurface: '#1F2933',
-  onSurfaceMuted: '#5C6C7C',
-  onSurfaceVariant: '#A1A1A1',
-  onSurfaceDisabled: 'rgba(31,41,51,0.38)',
-  onBackground: '#1F2933',
+  onSurface: '#1C2834',
+  onSurfaceMuted: '#4B5565',
+  onSurfaceVariant: '#7A8699',
+  onSurfaceDisabled: 'rgba(28,40,52,0.38)',
+  onBackground: '#1C2834',
 
-  inversePrimary: '#9CCAFF',
-  inverseSurface: '#1F3142',
-  inverseOnSurface: '#F7FAFF',
+  inversePrimary: '#B7A6FF',
+  inverseSurface: '#1E2532',
+  inverseOnSurface: '#F8F9FF',
 
-  error: '#D32F2F',
-  errorContainer: '#FAD4D4',
+  error: '#D84646',
+  errorContainer: '#F9D1D1',
   onError: '#FFFFFF',
   onErrorContainer: '#410E0B',
 
-  success: '#2E7D32',
-  danger: '#D32F2F',
+  success: '#2FB36D',
+  danger: '#D84646',
 
-  disabled: '#CED4DA',
-  placeholder: '#A1A1A1',
+  disabled: '#D9DEE5',
+  placeholder: '#9AA5B6',
 
-  surfaceDisabled: 'rgba(31,41,51,0.12)',
-  backdrop: 'rgba(15,23,42,0.2)',
-  shadow: '#000000',
+  surfaceDisabled: 'rgba(28,40,52,0.12)',
+  backdrop: 'rgba(15,23,42,0.25)',
+  shadow: '#0F172A',
 
-  highlightFaint: '#4A90E21A',
-  highlightSubtle: '#4A90E21F',
+  highlightFaint: '#7F5AF01A',
+  highlightSubtle: '#7F5AF029',
   overlayOnPrimary: '#FFFFFF55',
 } as const;
 
 export const tagColors = {
-  default: '#E5E7EB',
-  pink: '#F06292',
-  yellow: '#F4C430',
-  teal: '#26C6DA',
-  purple: '#9C27B0',
-  orange: '#FB8C00',
+  default: '#DFE6FF',
+  pink: '#FF8FA3',
+  yellow: '#F7D98B',
+  teal: '#4FD1C5',
+  purple: '#CDB9FF',
+  orange: '#FFB385',
 } as const;
 
 const lightColors: PaperTheme['colors'] = {

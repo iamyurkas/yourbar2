@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 
 import { resolveAssetFromCatalog } from '@/assets/image-manifest';
-import { Colors } from '@/constants/theme';
+import { Colors, Fonts, Radii, Shadows, Spacing } from '@/constants/theme';
 import { palette, tagColors } from '@/theme/theme';
 
 const THUMB_SIZE = 56;
@@ -48,7 +48,7 @@ export function Thumb({ uri, label, fallbackUri, fallbackLabel }: ThumbProps) {
       {source ? (
         <Image source={source} style={styles.thumbImage} contentFit="contain" />
       ) : fallbackText ? (
-        <Text style={[styles.thumbFallback, { color: paletteColors.onSurfaceVariant }]}>{fallbackText}</Text>
+        <Text style={[styles.thumbFallback, { color: paletteColors.onSurfaceMuted }]}>{fallbackText}</Text>
       ) : (
         <MaterialCommunityIcons name="image-off" size={24} color={paletteColors.onSurfaceVariant} />
       )}
@@ -142,7 +142,9 @@ export function ListRow({
   brandIndicatorColor,
 }: ListRowProps) {
   const paletteColors = Colors;
-  const backgroundColor = selected ? highlightColor ?? `${paletteColors.tint}1F` : paletteColors.background;
+  const baseBackgroundColor = paletteColors.surface;
+  const backgroundColor = selected ? highlightColor ?? `${paletteColors.tint}1F` : baseBackgroundColor;
+  const borderColor = selected ? `${paletteColors.tint}80` : `${paletteColors.outline}80`;
   const metaAlignmentStyle =
     metaAlignment === 'center'
       ? styles.metaContentCenter
@@ -156,7 +158,7 @@ export function ListRow({
       onPress={onPress}
       accessibilityRole={accessibilityRole}
       accessibilityState={accessibilityState}
-      style={[styles.row, { backgroundColor }]}
+      style={[styles.row, { backgroundColor, borderColor }]}
     >
       {showBrandIndicator ? (
         <View pointerEvents="none" style={[styles.brandIndicator, { backgroundColor: indicatorColor }]} />
@@ -167,7 +169,7 @@ export function ListRow({
           {title}
         </Text>
         {subtitle ? (
-          <Text style={[styles.subtitle, { color: paletteColors.icon }, subtitleStyle]} numberOfLines={1}>
+          <Text style={[styles.subtitle, { color: paletteColors.onSurfaceMuted }, subtitleStyle]} numberOfLines={1}>
             {subtitle}
           </Text>
         ) : null}
@@ -190,12 +192,15 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 16,
+    paddingHorizontal: Spacing.lg,
     paddingVertical: 12,
-    gap: 16,
+    gap: Spacing.lg,
     minHeight: 76,
     width: '100%',
     position: 'relative',
+    borderRadius: Radii.lg,
+    borderWidth: StyleSheet.hairlineWidth,
+    ...Shadows.level1,
   },
   brandIndicator: {
     position: 'absolute',
@@ -207,12 +212,12 @@ const styles = StyleSheet.create({
   thumbSlot: {
     width: THUMB_SIZE,
     height: THUMB_SIZE,
-    borderRadius: 8,
+    borderRadius: Radii.md,
     overflow: 'hidden',
   },
   textColumn: {
     flex: 1,
-    gap: 4,
+    gap: Spacing.xs,
   },
   metaColumn: {
     alignItems: 'flex-end',
@@ -242,15 +247,18 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 17,
-    fontWeight: '400',
+    fontWeight: '600',
+    fontFamily: Fonts?.sans,
+    letterSpacing: 0.2,
   },
   subtitle: {
     fontSize: 13,
+    fontFamily: Fonts?.sans,
   },
   tagDot: {
     width: 8,
     height: 8,
-    borderRadius: 4,
+    borderRadius: Radii.xs,
   },
   tagDotOverlay: {
     position: 'absolute',
@@ -260,7 +268,7 @@ const styles = StyleSheet.create({
   checkbox: {
     width: 20,
     height: 20,
-    borderRadius: 10,
+    borderRadius: Radii.sm,
     borderWidth: 2,
     alignItems: 'center',
     justifyContent: 'center',
@@ -271,7 +279,7 @@ const styles = StyleSheet.create({
   thumb: {
     width: THUMB_SIZE,
     height: THUMB_SIZE,
-    borderRadius: 8,
+    borderRadius: Radii.md,
     overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center',
@@ -279,10 +287,12 @@ const styles = StyleSheet.create({
   thumbImage: {
     width: '100%',
     height: '100%',
-    borderRadius: 8,
+    borderRadius: Radii.md,
   },
   thumbFallback: {
     fontSize: 16,
-    fontWeight: '600',
+    fontFamily: Fonts?.sans,
+    fontWeight: '700',
+    letterSpacing: 0.5,
   },
 });
