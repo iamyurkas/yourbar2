@@ -581,7 +581,7 @@ export default function EditIngredientScreen() {
           </Pressable>
         </View>
 
-        <View style={styles.section}>
+        <View style={[styles.section, styles.descriptionSection]}>
           <Text style={[styles.label, { color: paletteColors.onSurfaceVariant }]}>Description</Text>
           <TextInput
             value={description}
@@ -593,15 +593,15 @@ export default function EditIngredientScreen() {
             numberOfLines={4}
             textAlignVertical="top"
           />
-        </View>
 
-        <Pressable
-          accessibilityRole="button"
-          style={[styles.submitButton, { backgroundColor: paletteColors.tint }]}
-          onPress={handleSubmit}
-          disabled={isPickingImage}>
-          <Text style={[styles.submitLabel, { color: paletteColors.surface }]}>Save changes</Text>
-        </Pressable>
+          <Pressable
+            accessibilityRole="button"
+            style={[styles.submitButton, { backgroundColor: paletteColors.tint }]}
+            onPress={handleSubmit}
+            disabled={isPickingImage}>
+            <Text style={[styles.submitLabel, { color: paletteColors.surface }]}>Save changes</Text>
+          </Pressable>
+        </View>
       </ScrollView>
 
       <Modal
@@ -662,6 +662,9 @@ const styles = StyleSheet.create({
   },
   section: {
     gap: 8,
+  },
+  descriptionSection: {
+    paddingBottom: 150,
   },
   label: {
     fontSize: 16,
