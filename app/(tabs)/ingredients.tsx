@@ -89,6 +89,9 @@ const IngredientListItem = memo(function IngredientListItemComponent({
 
   const control = useMemo(() => {
     const shoppingLabel = onShoppingToggle ? 'Remove from shopping list' : 'On shopping list';
+    const isShoppingTab = Boolean(onShoppingToggle);
+    const shoppingIconName = isShoppingTab ? 'remove-shopping-cart' : 'shopping-cart';
+    const shoppingIconColor = isShoppingTab ? Colors.error : Colors.tint;
     const shoppingIconContent = isOnShoppingList
       ? onShoppingToggle
         ? (
@@ -101,14 +104,19 @@ const IngredientListItem = memo(function IngredientListItemComponent({
                 styles.shoppingButton,
                 pressed ? styles.shoppingButtonPressed : null,
               ]}>
-              <MaterialIcons name="shopping-cart" size={16} color={Colors.tint} style={styles.shoppingIcon} />
+              <MaterialIcons
+                name={shoppingIconName}
+                size={16}
+                color={shoppingIconColor}
+                style={styles.shoppingIcon}
+              />
             </Pressable>
           )
         : (
             <MaterialIcons
-              name="shopping-cart"
+              name={shoppingIconName}
               size={16}
-              color={Colors.tint}
+              color={shoppingIconColor}
               style={styles.shoppingIcon}
               accessibilityRole="image"
               accessibilityLabel={shoppingLabel}
