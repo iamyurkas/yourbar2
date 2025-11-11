@@ -380,13 +380,8 @@ export default function IngredientDetailsScreen() {
                   <View
                     style={[
                       styles.photoPlaceholder,
-                      { borderColor: palette.outline },
+                      { borderColor: palette.outline, backgroundColor: palette.surface },
                     ]}>
-                    <MaterialCommunityIcons
-                      name="image-off"
-                      size={36}
-                      color={palette.onSurfaceVariant}
-                    />
                     <Text style={[styles.photoPlaceholderText, { color: palette.onSurfaceVariant }]}>No photo</Text>
                   </View>
                 )}
@@ -683,7 +678,6 @@ const styles = StyleSheet.create({
     borderWidth: StyleSheet.hairlineWidth,
     borderRadius: 16,
     gap: 8,
-    backgroundColor: '#FFFFFF',
   },
   photoPlaceholderText: {
     fontSize: 14,
