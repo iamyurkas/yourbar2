@@ -718,6 +718,7 @@ const styles = StyleSheet.create({
   },
   placeholderHint: {
     fontSize: 12,
+    fontWeight: '500',
     textAlign: 'center',
   },
   tagList: {
