@@ -15,6 +15,14 @@ export default function TabLayout() {
         headerShown: false,
         tabBarActiveTintColor: palette.primary,
         tabBarInactiveTintColor: palette.onSurfaceVariant,
+        tabBarStyle: {
+          height: 72,
+          paddingVertical: 8,
+        },
+        tabBarItemStyle: {
+          justifyContent: 'center',
+          alignItems: 'center',
+        },
       }}>
       <Tabs.Screen
         name="cocktails"
