@@ -133,7 +133,7 @@ const CocktailListRowComponent = ({
           <MaterialCommunityIcons
             key={`rating-icon-${index}`}
             name="star"
-            size={12}
+            size={8}
             color={paletteColors.tint}
           />
         ))}
@@ -174,8 +174,8 @@ const CocktailListRowComponent = ({
         </Text>
       </View>
       <View style={styles.metaColumn}>
-        {tagDots}
-        {control}
+        <View style={styles.tagSlot}>{tagDots ?? <View style={styles.tagPlaceholder} />}</View>
+        <View style={styles.metaBottomSlot}>{control ?? <View style={styles.metaControlPlaceholder} />}</View>
       </View>
       {ratingStars}
     </Pressable>
@@ -206,9 +206,27 @@ const styles = StyleSheet.create({
   },
   metaColumn: {
     alignItems: 'flex-end',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     gap: 8,
     minHeight: 56,
+    alignSelf: 'stretch',
+  },
+  tagSlot: {
+    height: 8,
+    alignItems: 'flex-end',
+    justifyContent: 'flex-start',
+  },
+  tagPlaceholder: {
+    width: 8,
+    height: 8,
+  },
+  metaBottomSlot: {
+    minHeight: 40,
+    alignItems: 'flex-end',
+    justifyContent: 'flex-end',
+  },
+  metaControlPlaceholder: {
+    minHeight: 40,
   },
   title: {
     fontSize: 17,

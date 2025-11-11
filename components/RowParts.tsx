@@ -82,7 +82,7 @@ export function PresenceCheck({ checked, onToggle }: PresenceCheckProps) {
       onPress={onToggle}
       style={[styles.checkbox, { borderColor, backgroundColor }]}
       hitSlop={8}>
-      <MaterialCommunityIcons name="check" color={iconColor} size={16} />
+      <MaterialCommunityIcons name="check" color={iconColor} size={12} />
     </Pressable>
   );
 }
@@ -142,10 +142,10 @@ export function ListRow({
   const backgroundColor = selected ? highlightColor ?? `${paletteColors.tint}1F` : paletteColors.background;
   const metaAlignmentStyle =
     metaAlignment === 'center'
-      ? styles.metaColumnCenter
+      ? styles.metaContentCenter
       : metaAlignment === 'flex-start'
-      ? styles.metaColumnStart
-      : styles.metaColumnSpaceBetween;
+      ? styles.metaContentStart
+      : styles.metaContentSpaceBetween;
   return (
     <Pressable
       onPress={onPress}
@@ -163,9 +163,13 @@ export function ListRow({
           </Text>
         ) : null}
       </View>
-      <View style={[styles.metaColumn, metaAlignmentStyle]}>
-        {tagColor ? <TagDot color={tagColor} /> : null}
-        {control}
+      <View style={styles.metaColumn}>
+        <View style={styles.tagSlot}>
+          {tagColor ? <TagDot color={tagColor} /> : <View style={styles.tagPlaceholder} />}
+        </View>
+        <View style={[styles.metaContent, metaAlignmentStyle]}>
+          {control ?? <View style={styles.metaControlPlaceholder} />}
+        </View>
       </View>
     </Pressable>
   );
@@ -192,18 +196,38 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   metaColumn: {
-    alignItems: 'center',
-    gap: 12,
+    alignItems: 'flex-end',
     minHeight: THUMB_SIZE,
+    gap: 4,
+    alignSelf: 'stretch',
   },
-  metaColumnSpaceBetween: {
+  tagSlot: {
+    height: 8,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-end',
+  },
+  tagPlaceholder: {
+    width: 8,
+    height: 8,
+  },
+  metaContent: {
+    flex: 1,
+    minHeight: THUMB_SIZE,
+    alignSelf: 'stretch',
+    alignItems: 'flex-end',
+  },
+  metaContentSpaceBetween: {
     justifyContent: 'space-between',
   },
-  metaColumnCenter: {
+  metaContentCenter: {
     justifyContent: 'center',
   },
-  metaColumnStart: {
+  metaContentStart: {
     justifyContent: 'flex-start',
+  },
+  metaControlPlaceholder: {
+    minHeight: THUMB_SIZE,
+    alignSelf: 'stretch',
   },
   title: {
     fontSize: 17,
@@ -213,18 +237,17 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   tagDot: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
+    width: 8,
+    height: 8,
+    borderRadius: 4,
   },
   checkbox: {
-    width: 20,
-    height: 20,
-    borderRadius: 14,
+    width: 16,
+    height: 16,
+    borderRadius: 8,
     borderWidth: 2,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 8,
   },
   starButton: {
     padding: 2,
