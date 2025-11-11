@@ -343,7 +343,11 @@ export default function CreateIngredientScreen() {
         <Pressable
           accessibilityRole="button"
           accessibilityLabel={placeholderLabel}
-          style={[styles.imagePlaceholder, { borderColor: paletteColors.outline }]} 
+          style={[
+            styles.imagePlaceholder,
+            { borderColor: paletteColors.outline },
+            !imageUri && { backgroundColor: paletteColors.surfaceVariant },
+          ]}
           onPress={handlePickImage}
           android_ripple={{ color: `${paletteColors.surface}33` }}>
           {imageUri ? (
