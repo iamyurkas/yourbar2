@@ -89,7 +89,7 @@ export function SearchTopBar({
         accessibilityLabel="Filter items"
         onPress={onFilterPress}
         style={styles.iconButton}>
-        <MaterialCommunityIcons name="filter-variant" size={24} color={palette.icon} />
+        <MaterialCommunityIcons name="filter" size={24} color={palette.icon} />
       </Pressable>
     </View>
   );
