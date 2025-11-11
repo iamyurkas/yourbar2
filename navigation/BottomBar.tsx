@@ -2,22 +2,21 @@ import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import type { ComponentType } from 'react';
-import type { SvgProps } from 'react-native-svg';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import type { ComponentProps } from 'react';
 
 import { Colors } from '@/constants/theme';
-import CocktailsIcon from '@/assets/images/cocktails.svg';
-import ShakerIcon from '@/assets/images/shaker.svg';
-import IngredientsIcon from '@/assets/images/ingredients.svg';
 
 type RouteKey = 'cocktails' | 'shaker' | 'ingredients';
 
+type MaterialCommunityIconName = ComponentProps<typeof MaterialCommunityIcons>['name'];
+
 const ICON_SIZE = 28;
 
-const ICONS: Record<RouteKey, ComponentType<SvgProps>> = {
-  cocktails: CocktailsIcon,
-  shaker: ShakerIcon,
-  ingredients: IngredientsIcon,
+const ICONS: Record<RouteKey, MaterialCommunityIconName> = {
+  cocktails: 'glass-cocktail',
+  shaker: 'bottle-tonic-outline',
+  ingredients: 'silverware-fork-knife',
 };
 
 export function BottomBar({ state, descriptors, navigation }: BottomTabBarProps) {
@@ -67,7 +66,7 @@ export function BottomBar({ state, descriptors, navigation }: BottomTabBarProps)
             });
           };
 
-          const Icon = ICONS[route.name as RouteKey];
+          const iconName = ICONS[route.name as RouteKey];
 
           return (
             <Pressable
@@ -79,10 +78,10 @@ export function BottomBar({ state, descriptors, navigation }: BottomTabBarProps)
               onPress={onPress}
               onLongPress={onLongPress}
               style={styles.item}>
-              <Icon
-                width={ICON_SIZE}
-                height={ICON_SIZE}
-                fill={color}
+              <MaterialCommunityIcons
+                name={iconName}
+                size={ICON_SIZE}
+                color={color}
                 accessibilityRole="image"
                 accessibilityLabel={typeof label === 'string' ? label : undefined}
               />
