@@ -346,7 +346,7 @@ export default function CreateIngredientScreen() {
           style={[
             styles.imagePlaceholder,
             { borderColor: paletteColors.outline },
-            !imageUri && { backgroundColor: paletteColors.surfaceVariant },
+            !imageUri && { backgroundColor: paletteColors.onSurfaceVariant },
           ]}
           onPress={handlePickImage}
           android_ripple={{ color: `${paletteColors.surface}33` }}>
@@ -402,7 +402,7 @@ export default function CreateIngredientScreen() {
                       <Image source={baseIngredientPhotoSource} style={styles.baseImage} contentFit="contain" />
                     ) : (
                       <View
-                        style={[styles.basePlaceholder, { backgroundColor: paletteColors.surfaceVariant }]}
+                        style={[styles.basePlaceholder, { backgroundColor: paletteColors.onSurfaceVariant }]}
                       >
                         <MaterialCommunityIcons
                           name="image-off"
