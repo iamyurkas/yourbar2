@@ -116,7 +116,7 @@ const CocktailListRowComponent = ({
   const ratingValueRaw = (cocktail as { userRating?: number }).userRating ?? 0;
   const ratingValue = Math.max(0, Math.min(MAX_RATING, Number(ratingValueRaw) || 0));
 
-  const ratingStars = useMemo(() => {
+  const ratingContent = useMemo(() => {
     if (ratingValue <= 0) {
       return null;
     }
@@ -126,14 +126,14 @@ const CocktailListRowComponent = ({
     return (
       <View
         style={[
-          styles.ratingOverlay,
+          styles.ratingPill,
           { backgroundColor: `${paletteColors.surfaceVariant}F2`, borderColor: paletteColors.outline },
         ]}>
         {Array.from({ length: totalStars }).map((_, index) => (
           <MaterialCommunityIcons
             key={`rating-icon-${index}`}
             name="star"
-            size={12}
+            size={8}
             color={paletteColors.tint}
           />
         ))}
@@ -174,10 +174,12 @@ const CocktailListRowComponent = ({
         </Text>
       </View>
       <View style={styles.metaColumn}>
-        {tagDots}
-        {control}
+        <View style={styles.tagSlot}>{tagDots ?? <View style={styles.tagPlaceholder} />}</View>
+        <View style={styles.metaMiddleSlot}>
+          {ratingContent ?? <View style={styles.ratingPlaceholder} />}
+        </View>
+        <View style={styles.metaBottomSlot}>{control ?? <View style={styles.metaControlPlaceholder} />}</View>
       </View>
-      {ratingStars}
     </Pressable>
   );
 };
@@ -206,9 +208,33 @@ const styles = StyleSheet.create({
   },
   metaColumn: {
     alignItems: 'flex-end',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     gap: 8,
     minHeight: 56,
+    alignSelf: 'stretch',
+  },
+  tagSlot: {
+    height: 8,
+    alignItems: 'flex-end',
+    justifyContent: 'flex-start',
+  },
+  tagPlaceholder: {
+    width: 8,
+    height: 8,
+  },
+  metaMiddleSlot: {
+    flexGrow: 1,
+    minHeight: 12,
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+  },
+  metaBottomSlot: {
+    minHeight: 40,
+    alignItems: 'flex-end',
+    justifyContent: 'flex-end',
+  },
+  metaControlPlaceholder: {
+    minHeight: 40,
   },
   title: {
     fontSize: 17,
@@ -221,10 +247,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 4,
   },
-  ratingOverlay: {
-    position: 'absolute',
-    right: 16,
-    bottom: 8,
+  ratingPill: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 2,
@@ -232,6 +255,10 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
     paddingHorizontal: 6,
     borderWidth: StyleSheet.hairlineWidth,
+  },
+  ratingPlaceholder: {
+    minHeight: 12,
+    minWidth: 8,
   },
 });
 

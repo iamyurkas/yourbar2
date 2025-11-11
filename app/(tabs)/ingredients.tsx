@@ -89,52 +89,57 @@ const IngredientListItem = memo(function IngredientListItemComponent({
 
   const control = useMemo(() => {
     const shoppingLabel = onShoppingToggle ? 'Remove from shopping list' : 'On shopping list';
-    const shoppingIconStyle = [
-      styles.shoppingIcon,
-      showAvailabilityToggle ? styles.shoppingIconWithToggle : null,
-    ];
-    const shoppingIcon = !isOnShoppingList
-      ? null
-      : onShoppingToggle
-      ? (
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel={shoppingLabel}
-            onPress={handleShoppingToggle}
-            hitSlop={8}
-            style={({ pressed }) => [
-              styles.shoppingButton,
-              pressed ? styles.shoppingButtonPressed : null,
-            ]}>
+    const isShoppingTab = Boolean(onShoppingToggle);
+    const shoppingIconName = isShoppingTab ? 'remove-shopping-cart' : 'shopping-cart';
+    const shoppingIconColor = isShoppingTab ? Colors.error : Colors.tint;
+    const shoppingIconContent = isOnShoppingList
+      ? onShoppingToggle
+        ? (
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={shoppingLabel}
+              onPress={handleShoppingToggle}
+              hitSlop={8}
+              style={({ pressed }) => [
+                styles.shoppingButton,
+                pressed ? styles.shoppingButtonPressed : null,
+              ]}>
+              <MaterialIcons
+                name={shoppingIconName}
+                size={16}
+                color={shoppingIconColor}
+                style={styles.shoppingIcon}
+              />
+            </Pressable>
+          )
+        : (
             <MaterialIcons
-              name="shopping-cart"
+              name={shoppingIconName}
               size={16}
-              color={Colors.tint}
-              style={shoppingIconStyle}
+              color={shoppingIconColor}
+              style={styles.shoppingIcon}
+              accessibilityRole="image"
+              accessibilityLabel={shoppingLabel}
             />
-          </Pressable>
-        )
-      : (
-          <MaterialIcons
-            name="shopping-cart"
-            size={16}
-            color={Colors.tint}
-            style={shoppingIconStyle}
-            accessibilityRole="image"
-            accessibilityLabel={shoppingLabel}
-          />
-        );
+          )
+      : null;
 
     return (
       <View
         style={[
           styles.controlContainer,
-          showAvailabilityToggle ? styles.controlContainerWithToggle : null,
+          showAvailabilityToggle
+            ? styles.controlContainerWithToggle
+            : styles.controlContainerShoppingOnly,
         ]}>
         {showAvailabilityToggle ? (
-          <PresenceCheck checked={isAvailable} onToggle={handleToggleAvailability} />
+          <View style={styles.presenceSlot}>
+            <PresenceCheck checked={isAvailable} onToggle={handleToggleAvailability} />
+          </View>
         ) : null}
-        {shoppingIcon}
+        <View style={styles.shoppingSlot}>
+          {shoppingIconContent ?? <View style={styles.shoppingIconPlaceholder} />}
+        </View>
       </View>
     );
   }, [
@@ -164,7 +169,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
       subtitle={subtitle}
       subtitleStyle={subtitleStyle}
       onPress={handlePress}
-      selected={showAvailabilityToggle ? isAvailable : false}
+      selected={isAvailable}
       highlightColor={highlightColor}
       tagColor={tagColor}
       accessibilityRole="button"
@@ -627,16 +632,36 @@ const styles = StyleSheet.create({
   },
   controlContainer: {
     alignItems: 'center',
-    gap: 4,
-  },
-  controlContainerWithToggle: {
+    alignSelf: 'stretch',
     flexDirection: 'column',
+    justifyContent: 'space-between',
+    minHeight: 56,
+    minWidth: 32,
+    paddingVertical: 4,
+  },
+  controlContainerWithToggle: {},
+  controlContainerShoppingOnly: {
+    justifyContent: 'center',
+  },
+  presenceSlot: {
+    height: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 24,
+  },
+  shoppingSlot: {
+    height: 16,
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    width: 24,
   },
   shoppingIcon: {
-    marginTop: 0,
+    width: 16,
+    height: 16,
   },
-  shoppingIconWithToggle: {
-    marginTop: 4,
+  shoppingIconPlaceholder: {
+    width: 16,
+    height: 16,
   },
   shoppingButton: {
     borderRadius: 16,
