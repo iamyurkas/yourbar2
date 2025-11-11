@@ -156,6 +156,8 @@ const CocktailListRowComponent = ({
     );
   }, [cocktail.tags]);
 
+  const hasControl = Boolean(control);
+
   return (
     <Pressable
       onPress={onPress}
@@ -173,12 +175,12 @@ const CocktailListRowComponent = ({
           {subtitle}
         </Text>
       </View>
-      <View style={styles.metaColumn}>
-        <View style={styles.tagSlot}>{tagDots ?? <View style={styles.tagPlaceholder} />}</View>
-        <View style={styles.metaMiddleSlot}>
+      <View style={[styles.metaColumn, hasControl ? styles.metaColumnWithControl : null]}>
+        {tagDots ? <View style={styles.tagSlot}>{tagDots}</View> : null}
+        <View style={[styles.metaMiddleSlot, ratingContent ? null : styles.metaMiddleSlotEmpty]}>
           {ratingContent ?? <View style={styles.ratingPlaceholder} />}
         </View>
-        <View style={styles.metaBottomSlot}>{control ?? <View style={styles.metaControlPlaceholder} />}</View>
+        {hasControl ? <View style={styles.metaBottomSlot}>{control}</View> : null}
       </View>
     </Pressable>
   );
@@ -208,19 +210,18 @@ const styles = StyleSheet.create({
   },
   metaColumn: {
     alignItems: 'flex-end',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     gap: 8,
     minHeight: 56,
     alignSelf: 'stretch',
+  },
+  metaColumnWithControl: {
+    justifyContent: 'space-between',
   },
   tagSlot: {
     height: 8,
     alignItems: 'flex-end',
     justifyContent: 'flex-start',
-  },
-  tagPlaceholder: {
-    width: 8,
-    height: 8,
   },
   metaMiddleSlot: {
     flexGrow: 1,
@@ -228,13 +229,12 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     justifyContent: 'center',
   },
+  metaMiddleSlotEmpty: {
+    flexGrow: 0,
+  },
   metaBottomSlot: {
-    minHeight: 40,
     alignItems: 'flex-end',
     justifyContent: 'flex-end',
-  },
-  metaControlPlaceholder: {
-    minHeight: 40,
   },
   title: {
     fontSize: 17,
