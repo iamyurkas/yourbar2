@@ -1,6 +1,6 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import React, { memo, useCallback, useEffect, useMemo, useState, useTransition } from 'react';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { FabAdd } from '@/components/FabAdd';
@@ -30,10 +30,12 @@ type IngredientListItemProps = {
   ingredient: Ingredient;
   highlightColor: string;
   availableIngredientIds: Set<number>;
-  onToggle: (id: number) => void;
+  onToggleAvailability: (id: number) => void;
   subtitle?: string;
   surfaceVariantColor?: string;
   isOnShoppingList: boolean;
+  showAvailabilityToggle?: boolean;
+  onShoppingToggle?: (id: number) => void;
 };
 
 const areIngredientPropsEqual = (
@@ -43,30 +45,40 @@ const areIngredientPropsEqual = (
   prev.ingredient === next.ingredient &&
   prev.highlightColor === next.highlightColor &&
   prev.availableIngredientIds === next.availableIngredientIds &&
-  prev.onToggle === next.onToggle &&
+  prev.onToggleAvailability === next.onToggleAvailability &&
   prev.subtitle === next.subtitle &&
   prev.surfaceVariantColor === next.surfaceVariantColor &&
-  prev.isOnShoppingList === next.isOnShoppingList;
+  prev.isOnShoppingList === next.isOnShoppingList &&
+  prev.showAvailabilityToggle === next.showAvailabilityToggle &&
+  prev.onShoppingToggle === next.onShoppingToggle;
 
 const IngredientListItem = memo(function IngredientListItemComponent({
   ingredient,
   highlightColor,
   availableIngredientIds,
-  onToggle,
+  onToggleAvailability,
   subtitle,
   surfaceVariantColor,
   isOnShoppingList,
+  showAvailabilityToggle = true,
+  onShoppingToggle,
 }: IngredientListItemProps) {
   const router = useRouter();
   const id = Number(ingredient.id ?? -1);
   const isAvailable = id >= 0 && availableIngredientIds.has(id);
   const tagColor = ingredient.tags?.[0]?.color ?? palette.tagYellow;
 
-  const handleToggle = useCallback(() => {
+  const handleToggleAvailability = useCallback(() => {
     if (id >= 0) {
-      onToggle(id);
+      onToggleAvailability(id);
     }
-  }, [id, onToggle]);
+  }, [id, onToggleAvailability]);
+
+  const handleShoppingToggle = useCallback(() => {
+    if (id >= 0 && onShoppingToggle) {
+      onShoppingToggle(id);
+    }
+  }, [id, onShoppingToggle]);
 
   const subtitleStyle = surfaceVariantColor ? { color: surfaceVariantColor } : undefined;
 
@@ -75,22 +87,56 @@ const IngredientListItem = memo(function IngredientListItemComponent({
     [ingredient.name, ingredient.photoUri],
   );
 
-  const control = useMemo(
-    () => (
-      <View style={styles.controlContainer}>
-        {isOnShoppingList ? (
+  const control = useMemo(() => {
+    const shoppingLabel = onShoppingToggle ? 'Remove from shopping list' : 'On shopping list';
+    const shoppingIcon = !isOnShoppingList
+      ? null
+      : onShoppingToggle
+      ? (
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={shoppingLabel}
+            onPress={handleShoppingToggle}
+            hitSlop={8}
+            style={({ pressed }) => [
+              styles.shoppingButton,
+              pressed ? styles.shoppingButtonPressed : null,
+            ]}>
+            <MaterialIcons
+              name="shopping-cart"
+              size={20}
+              color={Colors.tint}
+              style={styles.shoppingIcon}
+            />
+          </Pressable>
+        )
+      : (
           <MaterialIcons
             name="shopping-cart"
             size={20}
             color={Colors.tint}
             style={styles.shoppingIcon}
+            accessibilityRole="image"
+            accessibilityLabel={shoppingLabel}
           />
+        );
+
+    return (
+      <View style={styles.controlContainer}>
+        {shoppingIcon}
+        {showAvailabilityToggle ? (
+          <PresenceCheck checked={isAvailable} onToggle={handleToggleAvailability} />
         ) : null}
-        <PresenceCheck checked={isAvailable} onToggle={handleToggle} />
       </View>
-    ),
-    [handleToggle, isAvailable, isOnShoppingList],
-  );
+    );
+  }, [
+    handleShoppingToggle,
+    handleToggleAvailability,
+    isAvailable,
+    isOnShoppingList,
+    onShoppingToggle,
+    showAvailabilityToggle,
+  ]);
 
   const handlePress = useCallback(() => {
     const routeParam = ingredient.id ?? ingredient.name;
@@ -110,11 +156,13 @@ const IngredientListItem = memo(function IngredientListItemComponent({
       subtitle={subtitle}
       subtitleStyle={subtitleStyle}
       onPress={handlePress}
-      selected={isAvailable}
+      selected={showAvailabilityToggle ? isAvailable : false}
       highlightColor={highlightColor}
       tagColor={tagColor}
       accessibilityRole="button"
-      accessibilityState={isAvailable ? { selected: true } : undefined}
+      accessibilityState={
+        showAvailabilityToggle && isAvailable ? { selected: true } : undefined
+      }
       thumbnail={thumbnail}
       control={control}
     />
@@ -128,6 +176,7 @@ export default function IngredientsScreen() {
     ingredients,
     availableIngredientIds,
     shoppingIngredientIds,
+    toggleIngredientShopping,
     toggleIngredientAvailability,
   } = useInventory();
   const [activeTab, setActiveTab] = useState<IngredientTabKey>('all');
@@ -465,6 +514,15 @@ export default function IngredientsScreen() {
     [availableIngredientIds, startAvailabilityTransition, toggleIngredientAvailability],
   );
 
+  const handleShoppingToggle = useCallback(
+    (id: number) => {
+      if (id >= 0) {
+        toggleIngredientShopping(id);
+      }
+    },
+    [toggleIngredientShopping],
+  );
+
   const keyExtractor = useCallback((item: Ingredient) => String(item.id ?? item.name), []);
 
   const renderItem = useCallback(
@@ -493,10 +551,12 @@ export default function IngredientsScreen() {
           ingredient={item}
           highlightColor={highlightColor}
           availableIngredientIds={effectiveAvailableIngredientIds}
-          onToggle={handleToggle}
+          onToggleAvailability={handleToggle}
           subtitle={subtitleText}
           surfaceVariantColor={paletteColors.onSurfaceVariant ?? paletteColors.icon}
           isOnShoppingList={isOnShoppingList}
+          showAvailabilityToggle={activeTab !== 'shopping'}
+          onShoppingToggle={activeTab === 'shopping' ? handleShoppingToggle : undefined}
         />
       );
     },
@@ -505,6 +565,7 @@ export default function IngredientsScreen() {
       effectiveAvailableIngredientIds,
       getBaseGroupId,
       handleToggle,
+      handleShoppingToggle,
       highlightColor,
       makeableCocktailCounts,
       paletteColors.icon,
@@ -563,6 +624,14 @@ const styles = StyleSheet.create({
   },
   shoppingIcon: {
     marginBottom: 2,
+  },
+  shoppingButton: {
+    marginBottom: 2,
+    borderRadius: 16,
+    padding: 4,
+  },
+  shoppingButtonPressed: {
+    opacity: 0.6,
   },
   listContent: {
     paddingTop: 0,
