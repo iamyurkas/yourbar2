@@ -151,7 +151,8 @@ export function ListRow({
       onPress={onPress}
       accessibilityRole={accessibilityRole}
       accessibilityState={accessibilityState}
-      style={[styles.row, { backgroundColor }]}>
+      style={[styles.row, { backgroundColor }]}
+    >
       <View style={styles.thumbSlot}>{thumbnail}</View>
       <View style={styles.textColumn}>
         <Text style={[styles.title, { color: paletteColors.text }]} numberOfLines={1}>
@@ -164,9 +165,11 @@ export function ListRow({
         ) : null}
       </View>
       <View style={styles.metaColumn}>
-        <View style={styles.tagSlot}>
-          {tagColor ? <TagDot color={tagColor} /> : <View style={styles.tagPlaceholder} />}
-        </View>
+        {tagColor ? (
+          <View pointerEvents="none" style={styles.tagDotOverlay}>
+            <TagDot color={tagColor} />
+          </View>
+        ) : null}
         <View style={[styles.metaContent, metaAlignmentStyle]}>
           {control ?? <View style={styles.metaControlPlaceholder} />}
         </View>
@@ -197,18 +200,10 @@ const styles = StyleSheet.create({
   },
   metaColumn: {
     alignItems: 'flex-end',
+    justifyContent: 'center',
     minHeight: THUMB_SIZE,
-    gap: 4,
-    alignSelf: 'stretch',
-  },
-  tagSlot: {
-    height: 8,
-    justifyContent: 'flex-start',
-    alignItems: 'flex-end',
-  },
-  tagPlaceholder: {
-    width: 8,
-    height: 8,
+    alignSelf: 'center',
+    position: 'relative',
   },
   metaContent: {
     flex: 1,
@@ -240,6 +235,11 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
+  },
+  tagDotOverlay: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
   },
   checkbox: {
     width: 16,

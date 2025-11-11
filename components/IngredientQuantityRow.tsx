@@ -15,6 +15,7 @@ type IngredientQuantityRowProps = {
   onPress?: () => void;
   selected?: boolean;
   highlightColor?: string;
+  tagColor?: string;
 };
 
 export function IngredientQuantityRow({
@@ -26,6 +27,7 @@ export function IngredientQuantityRow({
   onPress,
   selected = false,
   highlightColor,
+  tagColor,
 }: IngredientQuantityRowProps) {
   const palette = Colors;
   const resolvedHighlight = highlightColor ?? appPalette.highlightSubtle;
@@ -64,6 +66,7 @@ export function IngredientQuantityRow({
       onPress={onPress}
       selected={selected}
       highlightColor={resolvedHighlight}
+      tagColor={tagColor}
       accessibilityRole={onPress ? 'button' : undefined}
       accessibilityState={selected ? { selected: true } : undefined}
       metaAlignment="center"
