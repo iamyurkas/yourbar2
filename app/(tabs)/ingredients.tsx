@@ -102,13 +102,17 @@ const IngredientListItem = memo(function IngredientListItemComponent({
               hitSlop={8}
               style={({ pressed }) => [
                 styles.shoppingButton,
+                isShoppingTab ? styles.shoppingButtonShoppingTab : null,
                 pressed ? styles.shoppingButtonPressed : null,
               ]}>
               <MaterialIcons
                 name={shoppingIconName}
                 size={16}
                 color={shoppingIconColor}
-                style={styles.shoppingIcon}
+                style={[
+                  styles.shoppingIcon,
+                  isShoppingTab ? styles.shoppingIconShoppingTab : null,
+                ]}
               />
             </Pressable>
           )
@@ -132,7 +136,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
             ? styles.controlContainerWithToggle
             : styles.controlContainerShoppingOnly,
         ]}>
-        <View style={styles.controlTopSpacer} />
+        {showAvailabilityToggle ? <View style={styles.controlTopSpacer} /> : null}
         <View style={styles.presenceSlot}>
           {showAvailabilityToggle ? (
             <PresenceCheck checked={isAvailable} onToggle={handleToggleAvailability} />
@@ -140,8 +144,19 @@ const IngredientListItem = memo(function IngredientListItemComponent({
             <View style={styles.presencePlaceholder} />
           )}
         </View>
-        <View style={styles.shoppingSlot}>
-          {shoppingIconContent ?? <View style={styles.shoppingIconPlaceholder} />}
+        <View
+          style={[
+            styles.shoppingSlot,
+            isShoppingTab ? styles.shoppingSlotShoppingTab : null,
+          ]}>
+          {shoppingIconContent ?? (
+            <View
+              style={[
+                styles.shoppingIconPlaceholder,
+                isShoppingTab ? styles.shoppingIconShoppingTab : null,
+              ]}
+            />
+          )}
         </View>
       </View>
     );
@@ -640,10 +655,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     minHeight: 56,
     minWidth: 32,
-    
   },
   controlContainerWithToggle: {},
-  controlContainerShoppingOnly: {},
+  controlContainerShoppingOnly: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   controlTopSpacer: {
     height: 16,
     width: 24,
@@ -664,15 +681,33 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     width: 24,
   },
+  shoppingSlotShoppingTab: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 20,
+  },
   shoppingIcon: {
     width: 16,
     height: 16,
     alignSelf: 'flex-end',
   },
+  shoppingIconShoppingTab: {
+    width: 20,
+    height: 20,
+    alignSelf: 'center',
+  },
   shoppingIconPlaceholder: {
     width: 16,
     height: 16,
     alignSelf: 'flex-end',
+  },
+  shoppingButtonShoppingTab: {
+    borderRadius: 10,
+    width: 20,
+    height: 20,
+    padding: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   shoppingButton: {
     borderRadius: 16,
