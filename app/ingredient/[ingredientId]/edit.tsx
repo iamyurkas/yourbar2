@@ -581,7 +581,7 @@ export default function EditIngredientScreen() {
           </Pressable>
         </View>
 
-        <View style={styles.section}>
+        <View style={[styles.section, styles.descriptionSection]}>
           <Text style={[styles.label, { color: paletteColors.onSurfaceVariant }]}>Description</Text>
           <TextInput
             value={description}
@@ -662,6 +662,9 @@ const styles = StyleSheet.create({
   },
   section: {
     gap: 8,
+  },
+  descriptionSection: {
+    paddingBottom: 150,
   },
   label: {
     fontSize: 16,
