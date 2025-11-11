@@ -479,13 +479,8 @@ export default function IngredientDetailsScreen() {
                         <View
                           style={[
                             styles.baseIngredientPlaceholder,
-                            { backgroundColor: palette.surfaceVariant },
+                            { backgroundColor: palette.background },
                           ]}>
-                          <MaterialCommunityIcons
-                            name="image-off"
-                            size={20}
-                            color={palette.onSurfaceVariant}
-                          />
                         </View>
                       )}
                     </View>
