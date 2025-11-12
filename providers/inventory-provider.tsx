@@ -24,6 +24,10 @@ function loadInventoryData(): InventoryData {
 
 type CocktailRecord = InventoryData['cocktails'][number];
 type IngredientRecord = InventoryData['ingredients'][number];
+type CocktailIngredientRecord = NonNullable<
+  NonNullable<CocktailRecord['ingredients']>[number]
+> & { allowSubstitutes?: boolean };
+type CocktailSubstituteRecord = NonNullable<CocktailIngredientRecord['substitutes']>[number];
 
 type NormalizedSearchFields = {
   searchNameNormalized: string;
@@ -43,6 +47,7 @@ type InventoryContextValue = {
   toggleIngredientAvailability: (id: number) => void;
   toggleIngredientShopping: (id: number) => void;
   clearBaseIngredient: (id: number) => void;
+  createCocktail: (input: CreateCocktailInput) => Cocktail | undefined;
   createIngredient: (input: CreateIngredientInput) => Ingredient | undefined;
   updateIngredient: (id: number, input: CreateIngredientInput) => Ingredient | undefined;
   deleteIngredient: (id: number) => boolean;
@@ -58,6 +63,28 @@ type InventoryState = {
 };
 
 type IngredientTag = NonNullable<IngredientRecord['tags']>[number];
+type CocktailTag = NonNullable<CocktailRecord['tags']>[number];
+
+type CreateCocktailIngredientInput = {
+  name: string;
+  ingredientId?: number | null;
+  amount?: string | null;
+  unitId?: number | null;
+  garnish?: boolean | null;
+  optional?: boolean | null;
+  allowSubstitutes?: boolean | null;
+  substitutes?: { id?: number | null; name: string }[] | null;
+};
+
+type CreateCocktailInput = {
+  name: string;
+  glassId?: string | null;
+  description?: string | null;
+  instructions?: string | null;
+  photoUri?: string | null;
+  tags?: CocktailTag[] | null;
+  ingredients: CreateCocktailIngredientInput[];
+};
 
 type CreateIngredientInput = {
   name: string;
@@ -389,6 +416,231 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       return next;
     });
   }, []);
+
+  const createCocktail = useCallback(
+    (input: CreateCocktailInput) => {
+      let created: Cocktail | undefined;
+
+      setInventoryState((prev) => {
+        if (!prev) {
+          return prev;
+        }
+
+        const trimmedName = input.name?.trim();
+        if (!trimmedName) {
+          return prev;
+        }
+
+        const ingredientById = new Map<number, Ingredient>();
+        const ingredientByName = new Map<string, Ingredient>();
+        prev.ingredients.forEach((item) => {
+          const idValue = Number(item.id ?? -1);
+          if (Number.isFinite(idValue) && idValue >= 0) {
+            ingredientById.set(idValue, item);
+          }
+
+          if (item.name) {
+            ingredientByName.set(item.name.toLowerCase(), item);
+          }
+        });
+
+        const sanitizedIngredients: CocktailIngredientRecord[] = [];
+
+        (input.ingredients ?? []).forEach((ingredientInput) => {
+          const rawName = ingredientInput.name ?? '';
+          const trimmedIngredientName = rawName.trim();
+          if (!trimmedIngredientName) {
+            return;
+          }
+
+          const normalizedIngredientName = trimmedIngredientName.toLowerCase();
+
+          let resolvedIngredient: Ingredient | undefined;
+          if (ingredientInput.ingredientId != null) {
+            const candidateId = Number(ingredientInput.ingredientId);
+            if (Number.isFinite(candidateId) && candidateId >= 0) {
+              resolvedIngredient = ingredientById.get(candidateId);
+            }
+          }
+
+          if (!resolvedIngredient) {
+            resolvedIngredient = ingredientByName.get(normalizedIngredientName);
+          }
+
+          const resolvedIngredientId = resolvedIngredient?.id;
+          const ingredientId =
+            resolvedIngredientId != null && Number.isFinite(Number(resolvedIngredientId))
+              ? Math.trunc(Number(resolvedIngredientId))
+              : undefined;
+
+          const ingredientName = resolvedIngredient?.name ?? trimmedIngredientName;
+
+          const amountValue = ingredientInput.amount != null ? String(ingredientInput.amount) : '';
+          const trimmedAmount = amountValue.trim();
+
+          const normalizedUnit = ingredientInput.unitId != null ? Number(ingredientInput.unitId) : undefined;
+          const unitId =
+            normalizedUnit != null && Number.isFinite(normalizedUnit) && normalizedUnit >= 0
+              ? Math.trunc(normalizedUnit)
+              : undefined;
+
+          const substituteIdSet = new Set<number>();
+          const substituteNameSet = new Set<string>();
+          const substitutes: CocktailSubstituteRecord[] = [];
+
+          (ingredientInput.substitutes ?? []).forEach((substitute) => {
+            const substituteName = substitute?.name?.trim();
+            if (!substituteName) {
+              return;
+            }
+
+            const normalizedSubstituteName = substituteName.toLowerCase();
+
+            let resolvedSubstitute: Ingredient | undefined;
+            if (substitute?.id != null) {
+              const candidateId = Number(substitute.id);
+              if (Number.isFinite(candidateId) && candidateId >= 0) {
+                resolvedSubstitute = ingredientById.get(candidateId);
+              }
+            }
+
+            if (!resolvedSubstitute) {
+              resolvedSubstitute = ingredientByName.get(normalizedSubstituteName);
+            }
+
+            const substituteId = resolvedSubstitute?.id;
+            if (substituteId != null && Number.isFinite(Number(substituteId))) {
+              const normalizedId = Math.trunc(Number(substituteId));
+              if (substituteIdSet.has(normalizedId)) {
+                return;
+              }
+
+              substituteIdSet.add(normalizedId);
+              substitutes.push({
+                id: normalizedId,
+                name: resolvedSubstitute?.name ?? substituteName,
+              });
+              return;
+            }
+
+            if (substituteNameSet.has(normalizedSubstituteName)) {
+              return;
+            }
+
+            substituteNameSet.add(normalizedSubstituteName);
+            substitutes.push({ name: substituteName } as CocktailSubstituteRecord);
+          });
+
+          const normalizedIngredient: CocktailIngredientRecord = {
+            order: sanitizedIngredients.length + 1,
+            ingredientId,
+            name: ingredientName,
+            amount: trimmedAmount || undefined,
+            unitId,
+            garnish: ingredientInput.garnish ? true : undefined,
+            optional: ingredientInput.optional ? true : undefined,
+            allowSubstitutes: ingredientInput.allowSubstitutes ? true : undefined,
+            substitutes: substitutes.length > 0 ? substitutes : undefined,
+          } satisfies CocktailIngredientRecord;
+
+          sanitizedIngredients.push(normalizedIngredient);
+        });
+
+        if (sanitizedIngredients.length === 0) {
+          return prev;
+        }
+
+        const timestamp = Date.now();
+        const normalizedName = trimmedName.toLowerCase();
+        const searchTokens = normalizedName.split(/\s+/).filter(Boolean);
+        const description = input.description?.trim() || undefined;
+        const instructions = input.instructions?.trim() || undefined;
+        const glassId = input.glassId?.trim() || undefined;
+        const photoUri = input.photoUri?.trim() || undefined;
+
+        const tagMap = new Map<number, CocktailTag>();
+        (input.tags ?? []).forEach((tag) => {
+          const tagId = Number(tag?.id ?? -1);
+          if (!Number.isFinite(tagId) || tagId < 0) {
+            return;
+          }
+
+          if (!tagMap.has(tagId)) {
+            tagMap.set(tagId, {
+              id: tagId,
+              name: tag.name,
+              color: tag.color,
+            });
+          }
+        });
+        const tags = tagMap.size > 0 ? Array.from(tagMap.values()) : undefined;
+
+        const candidateRecord: CocktailRecord = {
+          id: timestamp,
+          name: trimmedName,
+          glassId,
+          tags,
+          description,
+          instructions,
+          ingredients: sanitizedIngredients,
+          createdAt: timestamp,
+          updatedAt: timestamp,
+          searchName: normalizedName,
+          searchTokens,
+          photoUri,
+        } satisfies CocktailRecord;
+
+        const [normalizedCocktail] = normalizeSearchFields([candidateRecord]);
+        if (!normalizedCocktail) {
+          return prev;
+        }
+
+        const usageAdjustments = new Map<number, number>();
+        sanitizedIngredients.forEach((item) => {
+          const ingredientIdValue = Number(item.ingredientId ?? -1);
+          if (Number.isFinite(ingredientIdValue) && ingredientIdValue >= 0) {
+            usageAdjustments.set(
+              ingredientIdValue,
+              (usageAdjustments.get(ingredientIdValue) ?? 0) + 1,
+            );
+          }
+        });
+
+        const nextIngredients =
+          usageAdjustments.size > 0
+            ? prev.ingredients.map((item) => {
+                const idValue = Number(item.id ?? -1);
+                const increment = usageAdjustments.get(idValue);
+                if (!increment) {
+                  return item;
+                }
+
+                const currentUsage = Number(item.usageCount ?? 0);
+                const normalizedUsage = Number.isFinite(currentUsage) ? currentUsage : 0;
+                return {
+                  ...item,
+                  usageCount: normalizedUsage + increment,
+                } satisfies Ingredient;
+              })
+            : prev.ingredients;
+
+        const nextCocktails = [...prev.cocktails, normalizedCocktail].sort((a, b) =>
+          a.searchNameNormalized.localeCompare(b.searchNameNormalized),
+        );
+
+        created = normalizedCocktail;
+
+        return {
+          ...prev,
+          cocktails: nextCocktails,
+          ingredients: nextIngredients,
+        } satisfies InventoryState;
+      });
+
+      return created;
+    },
+    [],
+  );
 
   const createIngredient = useCallback(
     (input: CreateIngredientInput) => {
@@ -737,6 +989,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       toggleIngredientAvailability,
       toggleIngredientShopping,
       clearBaseIngredient,
+      createCocktail,
       createIngredient,
       updateIngredient,
       deleteIngredient,
@@ -754,6 +1007,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     toggleIngredientAvailability,
     toggleIngredientShopping,
     clearBaseIngredient,
+    createCocktail,
     createIngredient,
     updateIngredient,
     deleteIngredient,
@@ -775,4 +1029,13 @@ export function useInventory() {
   return context;
 }
 
-export type { Cocktail, Ingredient, CreateIngredientInput };
+export type {
+  Cocktail,
+  Ingredient,
+  CreateIngredientInput,
+  CreateCocktailInput,
+  CreateCocktailIngredientInput,
+  CocktailIngredientRecord,
+  CocktailSubstituteRecord,
+  CocktailTag,
+};

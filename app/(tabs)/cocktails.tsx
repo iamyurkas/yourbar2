@@ -132,6 +132,10 @@ export default function CocktailsScreen() {
     [separatorColor],
   );
 
+  const handleAddCocktail = useCallback(() => {
+    router.push({ pathname: '/cocktail/create', params: { source: 'cocktails' } });
+  }, [router]);
+
   return (
     <SafeAreaView
       style={[styles.safeArea, { backgroundColor: paletteColors.background }]}
@@ -157,7 +161,7 @@ export default function CocktailsScreen() {
           }
         />
       </View>
-      <FabAdd label="Add cocktail" />
+      <FabAdd label="Add cocktail" onPress={handleAddCocktail} />
     </SafeAreaView>
   );
 }
