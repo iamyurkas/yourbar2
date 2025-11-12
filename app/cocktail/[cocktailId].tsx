@@ -10,6 +10,7 @@ import {
   resolveGlasswareUriFromId,
 } from '@/assets/image-manifest';
 import { IngredientQuantityRow } from '@/components/IngredientQuantityRow';
+import { TagPill } from '@/components/TagPill';
 import { Colors } from '@/constants/theme';
 import {
   useInventory,
@@ -387,12 +388,13 @@ export default function CocktailDetailsScreen() {
             {cocktail.tags && cocktail.tags.length ? (
               <View style={styles.tagList}>
                 {cocktail.tags.map((tag) => (
-                  <View
+                  <TagPill
                     key={tag.id ?? tag.name}
-                    style={[styles.tagChip, { backgroundColor: tag.color ?? palette.surfaceVariant }]}
-                  >
-                    <Text style={[styles.tagText, { color: palette.onPrimary }]}>{tag.name}</Text>
-                  </View>
+                    label={tag.name ?? 'Tag'}
+                    color={tag.color ?? palette.tint}
+                    selected
+                    accessibilityLabel={tag.name ?? 'Tag'}
+                  />
                 ))}
               </View>
             ) : null}
@@ -585,15 +587,6 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     gap: 8,
     alignSelf: 'stretch',
-  },
-  tagChip: {
-    borderRadius: 999,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-  },
-  tagText: {
-    fontSize: 13,
-    fontWeight: '500',
   },
   textBlock: {
     gap: 12,
