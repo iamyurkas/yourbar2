@@ -948,7 +948,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderRadius: 12,
     borderWidth: StyleSheet.hairlineWidth,
-    minWidth: 200,
+    alignItems: 'flex-end',
     zIndex: 4,
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.12,
@@ -959,7 +959,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     gap: 8,
     alignItems: 'flex-end',
-    alignSelf: 'stretch',
   },
   filterMenuEmpty: {
     fontSize: 14,
