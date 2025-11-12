@@ -19,6 +19,7 @@ import { resolveAssetFromCatalog } from '@/assets/image-manifest';
 import { CocktailListRow } from '@/components/CocktailListRow';
 import { PresenceCheck } from '@/components/RowParts';
 import { Colors } from '@/constants/theme';
+import { radius, spacing, typography } from '@/theme/design-system';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
 
 function useResolvedIngredient(param: string | undefined, ingredients: Ingredient[]) {
@@ -632,24 +633,23 @@ const styles = StyleSheet.create({
   headerButton: {
     width: 40,
     height: 40,
-    borderRadius: 12,
+    borderRadius: radius.lg,
     alignItems: 'center',
     justifyContent: 'center',
   },
   content: {
-    paddingHorizontal: 24,
-    paddingVertical: 32,
+    paddingHorizontal: spacing.xl,
+    paddingVertical: spacing.xxl,
   },
   section: {
-    gap: 24,
+    gap: spacing.xl,
   },
   name: {
-    fontSize: 32,
-    fontWeight: '700',
+    ...typography.headline,
     textAlign: 'center',
   },
   mediaSection: {
-    gap: 16,
+    gap: spacing.lg,
     alignItems: 'center',
   },
   photoWrapper: {
@@ -661,7 +661,7 @@ const styles = StyleSheet.create({
   photo: {
     width: '100%',
     height: '100%',
-    borderRadius: 16,
+    borderRadius: radius.xl,
     overflow: 'hidden',
     backgroundColor: '#FFFFFF',
   },
@@ -671,12 +671,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: StyleSheet.hairlineWidth,
-    borderRadius: 16,
-    gap: 8,
+    borderRadius: radius.xl,
+    gap: spacing.sm,
   },
   photoPlaceholderText: {
-    fontSize: 14,
-    fontWeight: '500',
+    ...typography.body,
   },
   statusRow: {
     flexDirection: 'row',
@@ -684,75 +683,72 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     width: '100%',
     justifyContent: 'flex-end',
-    gap: 16,
+    gap: spacing.lg,
   },
   statusIconButton: {
     width: 24,
     height: 24,
+    borderRadius: radius.lg,
     alignItems: 'center',
     justifyContent: 'center',
   },
   cocktailList: {
-    gap: 12,
-    marginHorizontal: -24,
+    gap: spacing.md,
+    marginHorizontal: -spacing.xl,
   },
   placeholderText: {
-    fontSize: 15,
+    ...typography.body,
     textAlign: 'center',
   },
   tagList: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 8,
+    gap: spacing.sm,
     justifyContent: 'flex-start',
     alignSelf: 'stretch',
   },
   tagChip: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 999,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs,
+    borderRadius: radius.pill,
   },
   tagText: {
-    fontSize: 13,
-    fontWeight: '500',
+    ...typography.chip,
   },
   textBlock: {
-    gap: 12,
+    gap: spacing.sm,
   },
   sectionTitle: {
-    fontSize: 20,
-    fontWeight: '600',
+    ...typography.title,
   },
   bodyText: {
-    fontSize: 15,
-    lineHeight: 22,
+    ...typography.body,
   },
   descriptionText: {
     color: '#6F6F6F',
   },
   toggleDescription: {
-    fontSize: 15,
-    fontWeight: '500',
+    ...typography.label,
   },
   baseIngredientRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    gap: 16,
-    padding: 12,
+    gap: spacing.md,
+    padding: spacing.md,
     borderWidth: StyleSheet.hairlineWidth,
-    borderRadius: 16,
+    borderRadius: radius.lg,
   },
   baseIngredientInfo: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+    gap: spacing.md,
     flex: 1,
   },
   baseIngredientThumb: {
     width: 56,
     height: 56,
-    borderRadius: 12,
+    borderRadius: radius.md,
     overflow: 'hidden',
     backgroundColor: 'transparent',
   },
@@ -764,38 +760,36 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 12,
+    borderRadius: radius.md,
   },
   baseIngredientName: {
-    fontSize: 16,
-    fontWeight: '500',
+    ...typography.bodyLarge,
   },
   baseIngredientActions: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+    gap: spacing.md,
   },
   unlinkButton: {
-    padding: 6,
-    borderRadius: 999,
+    padding: spacing.xs,
+    borderRadius: radius.pill,
   },
   brandedList: {
-    gap: 12,
+    gap: spacing.md,
   },
   cocktailBlock: {
-    marginHorizontal: -24,
-    paddingHorizontal: 24,
+    marginHorizontal: -spacing.xl,
+    paddingHorizontal: spacing.xl,
   },
   addButton: {
-    marginTop: 12,
+    marginTop: spacing.md,
     alignSelf: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-    borderRadius: 24,
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.sm,
+    borderRadius: radius.xl,
   },
   addButtonLabel: {
-    fontSize: 16,
-    fontWeight: '600',
+    ...typography.button,
   },
   emptyState: {
     flex: 1,

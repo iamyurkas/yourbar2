@@ -21,6 +21,7 @@ import { resolveAssetFromCatalog } from '@/assets/image-manifest';
 import { ListRow, Thumb } from '@/components/RowParts';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { Colors } from '@/constants/theme';
+import { fontFamilies, radius, spacing, typography } from '@/theme/design-system';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
 import { palette as appPalette } from '@/theme/theme';
 
@@ -661,33 +662,33 @@ const styles = StyleSheet.create({
   headerButton: {
     width: 40,
     height: 40,
-    borderRadius: 12,
+    borderRadius: radius.lg,
     alignItems: 'center',
     justifyContent: 'center',
   },
   content: {
-    padding: 24,
-    gap: 24,
+    padding: spacing.xl,
+    gap: spacing.xl,
   },
   section: {
-    gap: 8,
+    gap: spacing.sm,
   },
   descriptionSection: {
     paddingBottom: 250,
   },
   label: {
-    fontSize: 16,
-    fontWeight: '600',
+    ...typography.label,
   },
   hint: {
-    fontSize: 13,
+    ...typography.helper,
   },
   input: {
     borderWidth: StyleSheet.hairlineWidth,
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    paddingVertical: Platform.select({ ios: 14, default: 12 }),
-    fontSize: 16,
+    borderRadius: radius.lg,
+    paddingHorizontal: spacing.lg,
+    paddingVertical: Platform.select({ ios: spacing.lg, default: spacing.md }),
+    ...typography.bodyLarge,
+    fontFamily: fontFamilies.sans,
     backgroundColor: Colors.surface,
   },
   multilineInput: {
@@ -696,7 +697,7 @@ const styles = StyleSheet.create({
   imagePlaceholder: {
     width: 150,
     height: 150,
-    borderRadius: 16,
+    borderRadius: radius.xl,
     borderWidth: StyleSheet.hairlineWidth,
     overflow: 'hidden',
     alignItems: 'center',
@@ -710,64 +711,60 @@ const styles = StyleSheet.create({
   placeholderContent: {
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 6,
+    gap: spacing.sm,
   },
   placeholderText: {
-    fontSize: 14,
-    fontWeight: '600',
+    ...typography.button,
   },
   placeholderHint: {
-    fontSize: 12,
-    fontWeight: '500',
+    ...typography.caption,
     textAlign: 'center',
   },
   tagList: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 12,
+    gap: spacing.md,
   },
   tagChip: {
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 999,
-    paddingHorizontal: 14,
-    paddingVertical: 8,
+    borderRadius: radius.pill,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
     borderWidth: StyleSheet.hairlineWidth,
   },
   tagLabel: {
-    fontSize: 14,
-    fontWeight: '500',
+    ...typography.chip,
     textAlign: 'center',
   },
   submitButton: {
-    borderRadius: 999,
-    paddingVertical: 14,
+    borderRadius: radius.pill,
+    paddingVertical: spacing.md,
     alignItems: 'center',
     justifyContent: 'center',
   },
   submitLabel: {
-    fontSize: 16,
-    fontWeight: '600',
+    ...typography.button,
   },
   baseSelector: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    gap: 16,
-    padding: 12,
+    gap: spacing.md,
+    padding: spacing.md,
     borderWidth: StyleSheet.hairlineWidth,
-    borderRadius: 16,
+    borderRadius: radius.lg,
   },
   baseInfo: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+    gap: spacing.md,
     flex: 1,
   },
   baseThumb: {
     width: 56,
     height: 56,
-    borderRadius: 12,
+    borderRadius: radius.md,
     overflow: 'hidden',
   },
   baseImage: {
@@ -778,21 +775,19 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 12,
+    borderRadius: radius.md,
   },
   baseName: {
-    fontSize: 16,
-    fontWeight: '500',
+    ...typography.bodyLarge,
   },
   basePlaceholderRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+    gap: spacing.md,
     flex: 1,
   },
   basePlaceholderText: {
-    fontSize: 15,
-    fontWeight: '500',
+    ...typography.body,
   },
   baseShoppingIndicator: {
     minHeight: 56,
@@ -800,40 +795,41 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   unlinkButton: {
-    padding: 6,
-    borderRadius: 999,
+    padding: spacing.xs,
+    borderRadius: radius.pill,
   },
   modalOverlay: {
     flex: 1,
-    paddingTop: 48,
-    paddingBottom: 48,
-    paddingHorizontal: 24,
+    paddingTop: spacing.xl * 2,
+    paddingBottom: spacing.xl * 2,
+    paddingHorizontal: spacing.xl,
     justifyContent: 'flex-start',
   },
   modalCard: {
-    borderRadius: 24,
-    padding: 16,
-    gap: 16,
+    borderRadius: radius.xl,
+    padding: spacing.lg,
+    gap: spacing.lg,
     flex: 1,
   },
   modalSearchInput: {
     borderWidth: StyleSheet.hairlineWidth,
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    paddingVertical: Platform.select({ ios: 14, default: 12 }),
-    fontSize: 16,
+    borderRadius: radius.lg,
+    paddingHorizontal: spacing.lg,
+    paddingVertical: Platform.select({ ios: spacing.lg, default: spacing.md }),
+    ...typography.bodyLarge,
+    fontFamily: fontFamilies.sans,
   },
   modalListContent: {
-    gap: 12,
+    gap: spacing.md,
     flexGrow: 1,
-    paddingBottom: 12,
+    paddingBottom: spacing.md,
   },
   modalSeparator: {
     height: StyleSheet.hairlineWidth,
   },
   modalEmptyText: {
     textAlign: 'center',
-    fontSize: 15,
+    ...typography.body,
   },
   emptyState: {
     flex: 1,
@@ -843,7 +839,7 @@ const styles = StyleSheet.create({
     padding: 24,
   },
   emptyMessage: {
-    fontSize: 16,
+    ...typography.bodyLarge,
     textAlign: 'center',
   },
 });

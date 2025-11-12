@@ -13,6 +13,7 @@ import {
 
 import { resolveAssetFromCatalog } from '@/assets/image-manifest';
 import { Colors } from '@/constants/theme';
+import { fontFamilies, radius, spacing, typography } from '@/theme/design-system';
 import { palette, tagColors } from '@/theme/theme';
 
 const THUMB_SIZE = 56;
@@ -190,9 +191,9 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    gap: 16,
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.md,
+    gap: spacing.lg,
     minHeight: 76,
     width: '100%',
     position: 'relative',
@@ -207,7 +208,7 @@ const styles = StyleSheet.create({
   thumbSlot: {
     width: THUMB_SIZE,
     height: THUMB_SIZE,
-    borderRadius: 8,
+    borderRadius: radius.md,
     overflow: 'hidden',
   },
   textColumn: {
@@ -241,16 +242,18 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
   },
   title: {
-    fontSize: 17,
-    fontWeight: '400',
+    ...typography.bodyLarge,
+    fontFamily: fontFamilies.sans,
+    fontWeight: '600',
   },
   subtitle: {
-    fontSize: 13,
+    ...typography.helper,
+    fontFamily: fontFamilies.sans,
   },
   tagDot: {
     width: 8,
     height: 8,
-    borderRadius: 4,
+    borderRadius: radius.sm,
   },
   tagDotOverlay: {
     position: 'absolute',
@@ -260,18 +263,18 @@ const styles = StyleSheet.create({
   checkbox: {
     width: 20,
     height: 20,
-    borderRadius: 10,
+    borderRadius: radius.pill,
     borderWidth: 2,
     alignItems: 'center',
     justifyContent: 'center',
   },
   starButton: {
-    padding: 2,
+    padding: spacing.xs,
   },
   thumb: {
     width: THUMB_SIZE,
     height: THUMB_SIZE,
-    borderRadius: 8,
+    borderRadius: radius.md,
     overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center',
@@ -279,10 +282,10 @@ const styles = StyleSheet.create({
   thumbImage: {
     width: '100%',
     height: '100%',
-    borderRadius: 8,
+    borderRadius: radius.md,
   },
   thumbFallback: {
-    fontSize: 16,
-    fontWeight: '600',
+    ...typography.button,
+    fontFamily: fontFamilies.sans,
   },
 });

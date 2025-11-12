@@ -8,6 +8,7 @@ import { FabAdd } from '@/components/FabAdd';
 import { ListRow, PresenceCheck, Thumb } from '@/components/RowParts';
 import type { SegmentTabOption } from '@/components/TopBars';
 import { Colors } from '@/constants/theme';
+import { radius, spacing, typography } from '@/theme/design-system';
 import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
 import { palette } from '@/theme/theme';
 import { useRouter } from 'expo-router';
@@ -648,21 +649,21 @@ const styles = StyleSheet.create({
   controlContainerWithToggle: {},
   controlContainerShoppingOnly: {},
   controlTopSpacer: {
-    height: 16,
+    height: spacing.md,
     width: 24,
   },
   presenceSlot: {
-    height: 16,
+    height: spacing.md,
     alignItems: 'center',
     justifyContent: 'center',
     width: 24,
   },
   presencePlaceholder: {
-    height: 16,
-    width: 16,
+    height: spacing.md,
+    width: spacing.md,
   },
   shoppingSlot: {
-    height: 16,
+    height: spacing.md,
     alignItems: 'flex-end',
     justifyContent: 'flex-end',
     width: 24,
@@ -678,8 +679,8 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
   },
   shoppingButton: {
-    borderRadius: 16,
-    padding: 4,
+    borderRadius: radius.lg,
+    padding: spacing.xs,
   },
   shoppingButtonPressed: {
     opacity: 0.6,
@@ -694,6 +695,6 @@ const styles = StyleSheet.create({
   emptyLabel: {
     textAlign: 'center',
     marginTop: 80,
-    fontSize: 14,
+    ...typography.body,
   },
 });
