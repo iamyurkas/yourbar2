@@ -958,7 +958,8 @@ const styles = StyleSheet.create({
   filterTagList: {
     flexDirection: 'column',
     gap: 8,
-    alignItems: 'flex-start',
+    alignItems: 'flex-end',
+    alignSelf: 'stretch',
   },
   filterMenuEmpty: {
     fontSize: 14,
