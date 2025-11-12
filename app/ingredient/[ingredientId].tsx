@@ -213,8 +213,22 @@ export default function IngredientDetailsScreen() {
   }, [ingredient]);
 
   const handleAddCocktail = useCallback(() => {
-    // Navigation to add cocktail will be added later
-  }, []);
+    if (!ingredient) {
+      router.push('/cocktail/create');
+      return;
+    }
+
+    const targetId = ingredient.id ?? ingredient.name;
+    const params: Record<string, string> = { source: 'ingredient' };
+    if (targetId != null) {
+      params.ingredientId = String(targetId);
+    }
+    if (ingredient.name) {
+      params.ingredientName = ingredient.name;
+    }
+
+    router.push({ pathname: '/cocktail/create', params });
+  }, [ingredient]);
 
   const DESCRIPTION_PREVIEW_LINES = 5;
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
