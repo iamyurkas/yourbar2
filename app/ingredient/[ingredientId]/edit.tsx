@@ -470,7 +470,7 @@ export default function EditIngredientScreen() {
         contentContainerStyle={styles.content}
         style={styles.container}
         keyboardShouldPersistTaps="handled">
-        <View style={styles.section}>
+        <View style={[styles.card, styles.section]}>
           <Text style={[styles.label, { color: paletteColors.onSurfaceVariant }]}>Name</Text>
           <TextInput
             value={name}
@@ -481,26 +481,28 @@ export default function EditIngredientScreen() {
           />
         </View>
 
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={placeholderLabel}
-          style={[
-            styles.imagePlaceholder,
-            { borderColor: paletteColors.outline },
-            !imageSource && { backgroundColor: paletteColors.surfaceVariant },
-          ]}
-          onPress={handlePickImage}
-          android_ripple={{ color: `${paletteColors.surface}33` }}>
-          {imageSource ? (
-            <Image source={imageSource} style={styles.image} contentFit="contain" />
-          ) : (
-            <View style={styles.placeholderContent}>
-              <Text style={[styles.placeholderHint, { color: paletteColors.onSurfaceVariant }]}>Tap to add a photo</Text>
-            </View>
-          )}
-        </Pressable>
+        <View style={[styles.card, styles.mediaCard]}>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={placeholderLabel}
+            style={[
+              styles.imagePlaceholder,
+              { borderColor: paletteColors.outline },
+              !imageSource && { backgroundColor: paletteColors.surfaceVariant },
+            ]}
+            onPress={handlePickImage}
+            android_ripple={{ color: `${paletteColors.surface}33` }}>
+            {imageSource ? (
+              <Image source={imageSource} style={styles.image} contentFit="contain" />
+            ) : (
+              <View style={styles.placeholderContent}>
+                <Text style={[styles.placeholderHint, { color: paletteColors.onSurfaceVariant }]}>Tap to add a photo</Text>
+              </View>
+            )}
+          </Pressable>
+        </View>
 
-        <View style={styles.section}>
+        <View style={[styles.card, styles.section]}>
           <Text style={[styles.label, { color: paletteColors.onSurfaceVariant }]}>Tags</Text>
           <Text style={[styles.hint, { color: paletteColors.onSurfaceVariant }]}>Select one or more tags</Text>
           <View style={styles.tagList}>
@@ -519,7 +521,7 @@ export default function EditIngredientScreen() {
           </View>
         </View>
 
-        <View style={styles.section}>
+        <View style={[styles.card, styles.section]}>
           <Text style={[styles.label, { color: paletteColors.onSurfaceVariant }]}>Base ingredient</Text>
           <Pressable
             accessibilityRole="button"
@@ -578,7 +580,7 @@ export default function EditIngredientScreen() {
           </Pressable>
         </View>
 
-        <View style={[styles.section, styles.descriptionSection]}>
+        <View style={[styles.card, styles.section, styles.descriptionSection]}>
           <Text style={[styles.label, { color: paletteColors.onSurfaceVariant }]}>Description</Text>
           <TextInput
             value={description}
@@ -651,24 +653,43 @@ export default function EditIngredientScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.surface,
+    backgroundColor: Colors.background,
   },
   headerButton: {
     width: 40,
     height: 40,
-    borderRadius: 12,
+    borderRadius: 14,
     alignItems: 'center',
     justifyContent: 'center',
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: Colors.outline,
   },
   content: {
-    padding: 24,
-    gap: 24,
+    paddingHorizontal: 20,
+    paddingVertical: 24,
+    paddingBottom: 96,
+    gap: 20,
+  },
+  card: {
+    borderRadius: 24,
+    padding: 20,
+    backgroundColor: Colors.surface,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: Colors.outline,
+    shadowColor: appPalette.shadow,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.08,
+    shadowRadius: 24,
+    elevation: 4,
   },
   section: {
-    gap: 8,
+    gap: 16,
+  },
+  mediaCard: {
+    padding: 16,
   },
   descriptionSection: {
-    paddingBottom: 250,
+    gap: 20,
   },
   label: {
     fontSize: 16,
@@ -679,24 +700,23 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: StyleSheet.hairlineWidth,
-    borderRadius: 12,
+    borderRadius: 16,
     paddingHorizontal: 16,
     paddingVertical: Platform.select({ ios: 14, default: 12 }),
     fontSize: 16,
-    backgroundColor: Colors.surface,
+    backgroundColor: Colors.surfaceBright,
   },
   multilineInput: {
     minHeight: 140,
   },
   imagePlaceholder: {
-    width: 150,
-    height: 150,
-    borderRadius: 16,
+    width: '100%',
+    minHeight: 220,
+    borderRadius: 20,
     borderWidth: StyleSheet.hairlineWidth,
     overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center',
-    alignSelf: 'flex-start',
   },
   image: {
     width: '100%',
@@ -705,14 +725,15 @@ const styles = StyleSheet.create({
   placeholderContent: {
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 6,
+    gap: 8,
+    paddingHorizontal: 16,
   },
   placeholderText: {
     fontSize: 14,
     fontWeight: '600',
   },
   placeholderHint: {
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: '500',
     textAlign: 'center',
   },
@@ -722,8 +743,8 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   submitButton: {
-    borderRadius: 999,
-    paddingVertical: 14,
+    borderRadius: 16,
+    paddingVertical: 16,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -736,9 +757,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     gap: 16,
-    padding: 12,
+    padding: 16,
     borderWidth: StyleSheet.hairlineWidth,
-    borderRadius: 16,
+    borderRadius: 18,
   },
   baseInfo: {
     flexDirection: 'row',
@@ -747,9 +768,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   baseThumb: {
-    width: 56,
-    height: 56,
-    borderRadius: 12,
+    width: 52,
+    height: 52,
+    borderRadius: 16,
     overflow: 'hidden',
   },
   baseImage: {
@@ -782,25 +803,32 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   unlinkButton: {
-    padding: 6,
-    borderRadius: 999,
+    padding: 8,
+    borderRadius: 16,
   },
   modalOverlay: {
     flex: 1,
-    paddingTop: 48,
-    paddingBottom: 48,
     paddingHorizontal: 24,
-    justifyContent: 'flex-start',
+    paddingVertical: 48,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   modalCard: {
-    borderRadius: 24,
-    padding: 16,
-    gap: 16,
-    flex: 1,
+    borderRadius: 28,
+    padding: 20,
+    gap: 20,
+    width: '100%',
+    maxWidth: 480,
+    maxHeight: 520,
+    shadowColor: appPalette.shadow,
+    shadowOpacity: 0.08,
+    shadowRadius: 24,
+    shadowOffset: { width: 0, height: 12 },
+    elevation: 6,
   },
   modalSearchInput: {
     borderWidth: StyleSheet.hairlineWidth,
-    borderRadius: 12,
+    borderRadius: 16,
     paddingHorizontal: 16,
     paddingVertical: Platform.select({ ios: 14, default: 12 }),
     fontSize: 16,
@@ -808,7 +836,7 @@ const styles = StyleSheet.create({
   modalListContent: {
     gap: 12,
     flexGrow: 1,
-    paddingBottom: 12,
+    paddingBottom: 8,
   },
   modalSeparator: {
     height: StyleSheet.hairlineWidth,
