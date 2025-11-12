@@ -346,7 +346,7 @@ export default function CreateIngredientScreen() {
           style={[
             styles.imagePlaceholder,
             { borderColor: paletteColors.outline },
-            !imageUri && { backgroundColor: paletteColors.onSurfaceVariant },
+            !imageUri && { backgroundColor: paletteColors.surfaceVariant },
           ]}
           onPress={handlePickImage}
           android_ripple={{ color: `${paletteColors.surface}33` }}>
