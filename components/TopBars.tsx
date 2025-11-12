@@ -6,6 +6,7 @@ import {
   Text,
   TextInput,
   View,
+  type LayoutRectangle,
   type NativeSyntheticEvent,
   type TextInputSubmitEditingEventData,
 } from 'react-native';
@@ -19,6 +20,9 @@ type SearchTopBarProps = {
   onSubmit?: (value: string) => void;
   onMenuPress?: () => void;
   onFilterPress?: () => void;
+  filterActive?: boolean;
+  filterExpanded?: boolean;
+  onFilterLayout?: (layout: LayoutRectangle) => void;
 };
 
 export type SegmentTabOption = {
@@ -39,6 +43,9 @@ export function SearchTopBar({
   onSubmit,
   onMenuPress,
   onFilterPress,
+  filterActive = false,
+  filterExpanded = false,
+  onFilterLayout,
 }: SearchTopBarProps) {
   const palette = Colors;
 
@@ -87,9 +94,20 @@ export function SearchTopBar({
       <Pressable
         accessibilityRole="button"
         accessibilityLabel="Filter items"
+        accessibilityState={filterExpanded ? { expanded: true } : undefined}
         onPress={onFilterPress}
-        style={styles.iconButton}>
-        <MaterialCommunityIcons name="filter-variant" size={24} color={palette.icon} />
+        onLayout={(event) => onFilterLayout?.(event.nativeEvent.layout)}
+        style={[
+          styles.iconButton,
+          filterActive
+            ? { backgroundColor: `${palette.tint}1A` }
+            : null,
+        ]}>
+        <MaterialCommunityIcons
+          name="filter-variant"
+          size={24}
+          color={filterActive ? palette.tint : palette.icon}
+        />
       </Pressable>
     </View>
   );

@@ -17,6 +17,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { resolveAssetFromCatalog } from '@/assets/image-manifest';
 import { CocktailListRow } from '@/components/CocktailListRow';
+import { TagPill } from '@/components/TagPill';
 import { PresenceCheck } from '@/components/RowParts';
 import { Colors } from '@/constants/theme';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
@@ -416,12 +417,13 @@ export default function IngredientDetailsScreen() {
             {ingredient.tags && ingredient.tags.length ? (
               <View style={styles.tagList}>
                 {ingredient.tags.map((tag) => (
-                  <View
+                  <TagPill
                     key={tag.id ?? tag.name}
-                    style={[styles.tagChip, { backgroundColor: tag.color ?? palette.surfaceVariant }]}
-                  >
-                    <Text style={[styles.tagText, { color: palette.onPrimary }]}>{tag.name}</Text>
-                  </View>
+                    label={tag.name ?? ''}
+                    color={tag.color ?? palette.tint}
+                    selected
+                    accessibilityLabel={tag.name ?? 'Tag'}
+                  />
                 ))}
               </View>
             ) : null}
@@ -706,15 +708,6 @@ const styles = StyleSheet.create({
     gap: 8,
     justifyContent: 'flex-start',
     alignSelf: 'stretch',
-  },
-  tagChip: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 999,
-  },
-  tagText: {
-    fontSize: 13,
-    fontWeight: '500',
   },
   textBlock: {
     gap: 12,

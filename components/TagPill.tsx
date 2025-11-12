@@ -1,0 +1,114 @@
+import React from 'react';
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  type AccessibilityRole,
+  type AccessibilityState,
+  type GestureResponderEvent,
+  type PressableProps,
+  type StyleProp,
+  type TextStyle,
+  type ViewStyle,
+} from 'react-native';
+
+import { Colors } from '@/constants/theme';
+
+export type TagPillProps = {
+  label: string;
+  color: string;
+  selected?: boolean;
+  onPress?: (event: GestureResponderEvent) => void;
+  disabled?: boolean;
+  style?: StyleProp<ViewStyle>;
+  textStyle?: StyleProp<TextStyle>;
+  androidRippleColor?: string;
+  accessibilityRole?: AccessibilityRole;
+  accessibilityState?: AccessibilityState;
+  accessibilityLabel?: string;
+  testID?: string;
+} & Pick<PressableProps, 'hitSlop'>;
+
+export function TagPill({
+  label,
+  color,
+  selected = false,
+  onPress,
+  disabled = false,
+  style,
+  textStyle,
+  androidRippleColor,
+  accessibilityRole,
+  accessibilityState,
+  accessibilityLabel,
+  hitSlop,
+  testID,
+}: TagPillProps) {
+  const palette = Colors;
+
+  const content = (
+    <Text
+      style={[
+        styles.label,
+        { color: selected ? palette.surface : color },
+        textStyle,
+      ]}
+    >
+      {label}
+    </Text>
+  );
+
+  const baseStyle = [
+    styles.pill,
+    {
+      borderColor: color,
+      backgroundColor: selected ? color : palette.surface,
+      opacity: disabled ? 0.5 : 1,
+    },
+    style,
+  ];
+
+  if (onPress) {
+    return (
+      <Pressable
+        accessibilityRole={accessibilityRole}
+        accessibilityState={accessibilityState}
+        accessibilityLabel={accessibilityLabel}
+        onPress={onPress}
+        disabled={disabled}
+        style={({ pressed }) => [baseStyle, pressed ? styles.pressed : null]}
+        android_ripple={androidRippleColor ? { color: androidRippleColor } : undefined}
+        hitSlop={hitSlop}
+        testID={testID}
+      >
+        {content}
+      </Pressable>
+    );
+  }
+
+  return (
+    <View style={baseStyle} testID={testID} accessibilityLabel={accessibilityLabel}>
+      {content}
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  pill: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 999,
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderWidth: StyleSheet.hairlineWidth,
+  },
+  label: {
+    fontSize: 14,
+    fontWeight: '500',
+    textAlign: 'center',
+  },
+  pressed: {
+    opacity: 0.85,
+  },
+});
