@@ -825,7 +825,6 @@ export default function IngredientsScreen() {
                         accessibilityRole="checkbox"
                         accessibilityState={{ checked: selected }}
                         androidRippleColor={`${paletteColors.surfaceVariant}33`}
-                        style={styles.filterTagPill}
                       />
                     );
                   })}
@@ -959,9 +958,7 @@ const styles = StyleSheet.create({
   filterTagList: {
     flexDirection: 'column',
     gap: 8,
-  },
-  filterTagPill: {
-    alignSelf: 'stretch',
+    alignItems: 'flex-start',
   },
   filterMenuEmpty: {
     fontSize: 14,
