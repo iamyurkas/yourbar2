@@ -16,6 +16,7 @@ import { FabAdd } from '@/components/FabAdd';
 import { ListRow, PresenceCheck, Thumb } from '@/components/RowParts';
 import type { SegmentTabOption } from '@/components/TopBars';
 import { TagPill } from '@/components/TagPill';
+import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { Colors } from '@/constants/theme';
 import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
 import { palette } from '@/theme/theme';
@@ -228,6 +229,14 @@ export default function IngredientsScreen() {
 
   const availableTagOptions = useMemo<IngredientTagOption[]>(() => {
     const map = new Map<string, IngredientTagOption>();
+    const builtinTagOrder = new Map<string, number>();
+
+    BUILTIN_INGREDIENT_TAGS.forEach((tag, index) => {
+      builtinTagOrder.set(String(tag.id), index);
+      if (tag.name) {
+        builtinTagOrder.set(tag.name.trim().toLowerCase(), index);
+      }
+    });
 
     ingredients.forEach((ingredient) => {
       (ingredient.tags ?? []).forEach((tag) => {
@@ -250,7 +259,28 @@ export default function IngredientsScreen() {
       });
     });
 
-    return Array.from(map.values()).sort((a, b) => a.name.localeCompare(b.name));
+    return Array.from(map.values()).sort((a, b) => {
+      const normalizedNameA = a.name.trim().toLowerCase();
+      const normalizedNameB = b.name.trim().toLowerCase();
+      const orderA = builtinTagOrder.get(a.key) ?? builtinTagOrder.get(normalizedNameA);
+      const orderB = builtinTagOrder.get(b.key) ?? builtinTagOrder.get(normalizedNameB);
+
+      if (orderA != null || orderB != null) {
+        if (orderA == null) {
+          return 1;
+        }
+
+        if (orderB == null) {
+          return -1;
+        }
+
+        if (orderA !== orderB) {
+          return orderA - orderB;
+        }
+      }
+
+      return normalizedNameA.localeCompare(normalizedNameB);
+    });
   }, [defaultTagColor, ingredients]);
 
   useEffect(() => {
