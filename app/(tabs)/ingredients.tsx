@@ -95,6 +95,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
     const isShoppingTab = Boolean(onShoppingToggle);
     const shoppingIconName = isShoppingTab ? 'remove-shopping-cart' : 'shopping-cart';
     const shoppingIconColor = isShoppingTab ? Colors.error : Colors.tint;
+    const paletteColors = Colors;
     const shoppingIconContent = isOnShoppingList
       ? onShoppingToggle
         ? (
@@ -105,6 +106,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
               hitSlop={8}
               style={({ pressed }) => [
                 styles.shoppingButton,
+                { backgroundColor: paletteColors.surfaceVariant },
                 pressed ? styles.shoppingButtonPressed : null,
               ]}>
               <MaterialIcons
@@ -144,7 +146,14 @@ const IngredientListItem = memo(function IngredientListItemComponent({
           )}
         </View>
         <View style={styles.shoppingSlot}>
-          {shoppingIconContent ?? <View style={styles.shoppingIconPlaceholder} />}
+          {shoppingIconContent ?? (
+            <View
+              style={[
+                styles.shoppingIconPlaceholder,
+                { backgroundColor: paletteColors.surfaceVariant },
+              ]}
+            />
+          )}
         </View>
       </View>
     );
@@ -642,21 +651,21 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     flexDirection: 'column',
     justifyContent: 'space-between',
-    minHeight: 56,
-    minWidth: 32,
-    
+    minHeight: spacing.xxl + spacing.xl,
+    minWidth: spacing.xxl,
+
   },
   controlContainerWithToggle: {},
   controlContainerShoppingOnly: {},
   controlTopSpacer: {
     height: spacing.md,
-    width: 24,
+    width: spacing.xl,
   },
   presenceSlot: {
     height: spacing.md,
     alignItems: 'center',
     justifyContent: 'center',
-    width: 24,
+    width: spacing.xl,
   },
   presencePlaceholder: {
     height: spacing.md,
@@ -666,7 +675,7 @@ const styles = StyleSheet.create({
     height: spacing.md,
     alignItems: 'flex-end',
     justifyContent: 'flex-end',
-    width: 24,
+    width: spacing.xl,
   },
   shoppingIcon: {
     width: 16,
@@ -677,24 +686,27 @@ const styles = StyleSheet.create({
     width: 16,
     height: 16,
     alignSelf: 'flex-end',
+    borderRadius: radius.lg,
   },
   shoppingButton: {
     borderRadius: radius.lg,
     padding: spacing.xs,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   shoppingButtonPressed: {
     opacity: 0.6,
   },
   listContent: {
     paddingTop: 0,
-    paddingBottom: 80,
+    paddingBottom: spacing.xxl * 2,
   },
   divider: {
     height: StyleSheet.hairlineWidth,
   },
   emptyLabel: {
     textAlign: 'center',
-    marginTop: 80,
+    marginTop: spacing.xxl * 2,
     ...typography.body,
   },
 });

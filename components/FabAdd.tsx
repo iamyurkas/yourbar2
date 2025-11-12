@@ -4,7 +4,10 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Colors } from '@/constants/theme';
+import { radius, spacing } from '@/theme/design-system';
 import { palette } from '@/theme/theme';
+
+const FAB_SIZE = spacing.xxl + spacing.xl;
 
 type FabAddProps = {
   label?: string;
@@ -16,7 +19,7 @@ export function FabAdd({ label = 'Add', onPress }: FabAddProps) {
   const paletteColors = Colors;
 
   return (
-    <View style={[styles.container, { bottom: insets.bottom + 16 }]}>
+    <View style={[styles.container, { bottom: insets.bottom + spacing.lg }]}>
       <Pressable
         accessibilityRole="button"
         accessibilityLabel={label}
@@ -32,13 +35,13 @@ export function FabAdd({ label = 'Add', onPress }: FabAddProps) {
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    right: 24,
+    right: spacing.xl,
     zIndex: 10,
   },
   fab: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
+    width: FAB_SIZE,
+    height: FAB_SIZE,
+    borderRadius: radius.pill,
     alignItems: 'center',
     justifyContent: 'center',
     elevation: 6,

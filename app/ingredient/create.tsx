@@ -346,7 +346,7 @@ export default function CreateIngredientScreen() {
           style={[
             styles.imagePlaceholder,
             { borderColor: paletteColors.outline },
-            !imageUri && { backgroundColor: paletteColors.onSurfaceVariant },
+            !imageUri && { backgroundColor: paletteColors.surfaceVariant },
           ]}
           onPress={handlePickImage}
           android_ripple={{ color: `${paletteColors.surface}33` }}>
@@ -402,7 +402,7 @@ export default function CreateIngredientScreen() {
                       <Image source={baseIngredientPhotoSource} style={styles.baseImage} contentFit="contain" />
                     ) : (
                       <View
-                        style={[styles.basePlaceholder, { backgroundColor: paletteColors.onSurfaceVariant }]}
+                        style={[styles.basePlaceholder, { backgroundColor: paletteColors.surfaceVariant }]}
                       >
                         <MaterialCommunityIcons
                           name="image-off"
@@ -421,7 +421,7 @@ export default function CreateIngredientScreen() {
                   accessibilityRole="button"
                   accessibilityLabel="Remove base ingredient"
                   hitSlop={8}
-                  style={styles.unlinkButton}
+                  style={[styles.unlinkButton, { backgroundColor: paletteColors.surfaceVariant }]}
                 >
                   <MaterialCommunityIcons
                     name="link-off"
@@ -651,6 +651,8 @@ const styles = StyleSheet.create({
   unlinkButton: {
     padding: spacing.xs,
     borderRadius: radius.pill,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   modalOverlay: {
     flex: 1,

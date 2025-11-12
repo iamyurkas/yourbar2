@@ -25,6 +25,8 @@ import { fontFamilies, radius, spacing, typography } from '@/theme/design-system
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
 import { palette as appPalette } from '@/theme/theme';
 
+const HEADER_ICON_SIZE = spacing.xxl + spacing.sm;
+
 function useResolvedIngredient(param: string | undefined, ingredients: Ingredient[]) {
   return useMemo(() => {
     if (!param) {
@@ -454,6 +456,7 @@ export default function EditIngredientScreen() {
       <Stack.Screen
         options={{
           title: 'Edit ingredient',
+          headerTitleStyle: { ...typography.title, color: paletteColors.onSurface },
           headerRight: () => (
             <Pressable
               onPress={handleDeletePress}
@@ -487,12 +490,16 @@ export default function EditIngredientScreen() {
           style={[
             styles.imagePlaceholder,
             { borderColor: paletteColors.outline },
-            !imageSource && { backgroundColor: paletteColors.onSurfaceVariant },
+            !imageSource && { backgroundColor: paletteColors.surfaceVariant },
           ]}
           onPress={handlePickImage}
           android_ripple={{ color: `${paletteColors.surface}33` }}>
           {imageSource ? (
-            <Image source={imageSource} style={styles.image} contentFit="contain" />
+            <Image
+              source={imageSource}
+              style={[styles.image, { backgroundColor: paletteColors.surface }]}
+              contentFit="contain"
+            />
           ) : (
             <View style={styles.placeholderContent}>
               <Text style={[styles.placeholderHint, { color: paletteColors.onSurfaceVariant }]}>Tap to add a photo</Text>
@@ -541,7 +548,7 @@ export default function EditIngredientScreen() {
                       <Image source={baseIngredientPhotoSource} style={styles.baseImage} contentFit="contain" />
                     ) : (
                       <View
-                        style={[styles.basePlaceholder, { backgroundColor: paletteColors.onSurfaceVariant }]}
+                        style={[styles.basePlaceholder, { backgroundColor: paletteColors.surfaceVariant }]}
                       >
                         <MaterialCommunityIcons
                           name="image-off"
@@ -560,7 +567,7 @@ export default function EditIngredientScreen() {
                   accessibilityRole="button"
                   accessibilityLabel="Remove base ingredient"
                   hitSlop={8}
-                  style={styles.unlinkButton}
+                  style={[styles.unlinkButton, { backgroundColor: paletteColors.surfaceVariant }]}
                 >
                   <MaterialCommunityIcons
                     name="link-off"
@@ -660,8 +667,8 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.surface,
   },
   headerButton: {
-    width: 40,
-    height: 40,
+    width: HEADER_ICON_SIZE,
+    height: HEADER_ICON_SIZE,
     borderRadius: radius.lg,
     alignItems: 'center',
     justifyContent: 'center',
@@ -797,6 +804,8 @@ const styles = StyleSheet.create({
   unlinkButton: {
     padding: spacing.xs,
     borderRadius: radius.pill,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   modalOverlay: {
     flex: 1,

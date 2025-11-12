@@ -22,6 +22,8 @@ import { Colors } from '@/constants/theme';
 import { radius, spacing, typography } from '@/theme/design-system';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
 
+const HEADER_ICON_SIZE = spacing.xxl + spacing.sm;
+
 function useResolvedIngredient(param: string | undefined, ingredients: Ingredient[]) {
   return useMemo(() => {
     if (!param) {
@@ -343,7 +345,7 @@ export default function IngredientDetailsScreen() {
           title: 'Ingredient details',
           headerTitleAlign: 'center',
           headerStyle: { backgroundColor: palette.surface },
-          headerTitleStyle: { color: palette.onSurface, fontSize: 18, fontWeight: '600' },
+          headerTitleStyle: { ...typography.title, color: palette.onSurface },
           headerShadowVisible: false,
           headerLeft: () => (
             <Pressable
@@ -376,7 +378,11 @@ export default function IngredientDetailsScreen() {
             <View style={styles.mediaSection}>
               <View style={styles.photoWrapper}>
                 {photoSource ? (
-                  <Image source={photoSource} style={styles.photo} contentFit="contain" />
+                  <Image
+                    source={photoSource}
+                    style={[styles.photo, { backgroundColor: palette.surface }]}
+                    contentFit="contain"
+                  />
                 ) : (
                   <View
                     style={[
@@ -398,7 +404,7 @@ export default function IngredientDetailsScreen() {
                       : 'Add ingredient to shopping list'
                   }
                   hitSlop={8}
-                  style={styles.statusIconButton}
+                  style={[styles.statusIconButton, { backgroundColor: palette.surfaceVariant }]}
                 >
                   <MaterialIcons
                     name={
@@ -419,9 +425,21 @@ export default function IngredientDetailsScreen() {
                 {ingredient.tags.map((tag) => (
                   <View
                     key={tag.id ?? tag.name}
-                    style={[styles.tagChip, { backgroundColor: tag.color ?? palette.surfaceVariant }]}
+                    style={[
+                      styles.tagChip,
+                      {
+                        backgroundColor: tag.color ?? palette.surfaceVariant,
+                        borderColor: tag.color ?? palette.outlineVariant,
+                      },
+                    ]}
                   >
-                    <Text style={[styles.tagText, { color: palette.onPrimary }]}>{tag.name}</Text>
+                    <Text
+                      style={[
+                        styles.tagText,
+                        { color: tag.color ? Colors.surface : palette.onSurfaceVariant },
+                      ]}>
+                      {tag.name}
+                    </Text>
                   </View>
                 ))}
               </View>
@@ -430,7 +448,7 @@ export default function IngredientDetailsScreen() {
             {ingredient.description ? (
               <View style={styles.textBlock}>
                 <Text
-                  style={[styles.bodyText, styles.descriptionText, { color: palette.onSurfaceVariant }]}
+                  style={[styles.bodyText, { color: palette.onSurfaceVariant }]}
                   numberOfLines={
                     !isDescriptionExpanded && shouldTruncateDescription
                       ? DESCRIPTION_PREVIEW_LINES
@@ -480,7 +498,7 @@ export default function IngredientDetailsScreen() {
                         <View
                           style={[
                             styles.baseIngredientPlaceholder,
-                            { backgroundColor: palette.background },
+                            { backgroundColor: palette.surfaceVariant },
                           ]}>
                         </View>
                       )}
@@ -492,7 +510,7 @@ export default function IngredientDetailsScreen() {
                   <View style={styles.baseIngredientActions}>
                     <Pressable
                       onPress={handleRemoveBase}
-                      style={styles.unlinkButton}
+                      style={[styles.unlinkButton, { backgroundColor: palette.surfaceVariant }]}
                       accessibilityRole="button"
                       accessibilityLabel="Remove base ingredient"
                       hitSlop={8}>
@@ -571,7 +589,7 @@ export default function IngredientDetailsScreen() {
                         <View style={styles.baseIngredientActions}>
                           <Pressable
                             onPress={handleRemoveBranded(branded)}
-                            style={styles.unlinkButton}
+                            style={[styles.unlinkButton, { backgroundColor: palette.surfaceVariant }]}
                             accessibilityRole="button"
                             accessibilityLabel={`Remove ${branded.name} link`}
                             hitSlop={8}>
@@ -631,8 +649,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   headerButton: {
-    width: 40,
-    height: 40,
+    width: HEADER_ICON_SIZE,
+    height: HEADER_ICON_SIZE,
     borderRadius: radius.lg,
     alignItems: 'center',
     justifyContent: 'center',
@@ -663,7 +681,6 @@ const styles = StyleSheet.create({
     height: '100%',
     borderRadius: radius.xl,
     overflow: 'hidden',
-    backgroundColor: '#FFFFFF',
   },
   photoPlaceholder: {
     width: 150,
@@ -686,8 +703,8 @@ const styles = StyleSheet.create({
     gap: spacing.lg,
   },
   statusIconButton: {
-    width: 24,
-    height: 24,
+    width: spacing.xl,
+    height: spacing.xl,
     borderRadius: radius.lg,
     alignItems: 'center',
     justifyContent: 'center',
@@ -711,6 +728,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.xs,
     borderRadius: radius.pill,
+    borderWidth: StyleSheet.hairlineWidth,
   },
   tagText: {
     ...typography.chip,
@@ -723,9 +741,6 @@ const styles = StyleSheet.create({
   },
   bodyText: {
     ...typography.body,
-  },
-  descriptionText: {
-    color: '#6F6F6F',
   },
   toggleDescription: {
     ...typography.label,
@@ -773,6 +788,8 @@ const styles = StyleSheet.create({
   unlinkButton: {
     padding: spacing.xs,
     borderRadius: radius.pill,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   brandedList: {
     gap: spacing.md,
@@ -784,9 +801,9 @@ const styles = StyleSheet.create({
   addButton: {
     marginTop: spacing.md,
     alignSelf: 'center',
-    paddingHorizontal: spacing.lg,
+    paddingHorizontal: spacing.xl,
     paddingVertical: spacing.sm,
-    borderRadius: radius.xl,
+    borderRadius: radius.pill,
   },
   addButtonLabel: {
     ...typography.button,
@@ -795,6 +812,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 80,
+    paddingVertical: spacing.xxl * 2,
   },
 });

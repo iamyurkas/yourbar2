@@ -11,6 +11,10 @@ import {
 } from 'react-native';
 
 import { Colors } from '@/constants/theme';
+import { radius, spacing, typography } from '@/theme/design-system';
+
+const ICON_BUTTON_SIZE = spacing.xxl + spacing.sm;
+const CLEAR_BUTTON_SIZE = spacing.xl + spacing.xs;
 
 type SearchTopBarProps = {
   value: string;
@@ -60,7 +64,7 @@ export function SearchTopBar({
         accessibilityRole="button"
         accessibilityLabel="Open navigation"
         onPress={onMenuPress}
-        style={styles.iconButton}>
+        style={[styles.iconButton, { backgroundColor: palette.surfaceVariant }]}>
         <MaterialCommunityIcons name="menu" size={24} color={palette.onSurface} />
       </Pressable>
       <View style={[styles.searchContainer, { backgroundColor: palette.surface, borderColor: palette.background }]}>
@@ -72,14 +76,14 @@ export function SearchTopBar({
           placeholderTextColor={`${palette.onSurfaceVariant}99`}
           returnKeyType="search"
           onSubmitEditing={handleSubmit}
-          style={[styles.searchInput, { color: palette.text, fontWeight: '400' }]}
+          style={[styles.searchInput, { color: palette.text }]}
         />
         {value ? (
           <Pressable
             accessibilityRole="button"
             accessibilityLabel="Clear search query"
             onPress={() => onChangeText('')}
-            style={styles.clearButton}>
+            style={[styles.clearButton, { backgroundColor: palette.surfaceVariant }]}>
             <MaterialCommunityIcons name="close" size={18} color={palette.onSurface} />
           </Pressable>
         ) : null}
@@ -88,7 +92,7 @@ export function SearchTopBar({
         accessibilityRole="button"
         accessibilityLabel="Filter items"
         onPress={onFilterPress}
-        style={styles.iconButton}>
+        style={[styles.iconButton, { backgroundColor: palette.surfaceVariant }]}>
         <MaterialCommunityIcons name="filter-variant" size={24} color={palette.icon} />
       </Pressable>
     </View>
@@ -108,13 +112,13 @@ export function SegmentTabs({ options, value, onChange }: SegmentTabsProps) {
             accessibilityRole="tab"
             accessibilityState={focused ? { selected: true } : {}}
             onPress={() => onChange(option.key)}
-            style={styles.tabButton}>
+            style={[styles.tabButton, focused ? { backgroundColor: `${palette.tint}14` } : undefined]}>
             <Text
               style={[
                 styles.tabLabel,
                 {
                   color: focused ? palette.tint : palette.onSurfaceVariant,
-                  fontWeight: focused ? '600' : '400',
+                  fontWeight: focused ? '600' : '500',
                 },
               ]}>
               {option.label}
@@ -138,15 +142,15 @@ const styles = StyleSheet.create({
   topBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
-    paddingHorizontal: 16,
-    paddingTop: 12,
-    paddingBottom: 8,
+    gap: spacing.md,
+    paddingHorizontal: spacing.lg,
+    paddingTop: spacing.lg,
+    paddingBottom: spacing.md,
   },
   iconButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: ICON_BUTTON_SIZE,
+    height: ICON_BUTTON_SIZE,
+    borderRadius: radius.lg,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -154,46 +158,45 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    borderRadius: 24,
+    borderRadius: radius.pill,
     borderWidth: 1,
-    paddingHorizontal: 12,
-    paddingVertical: 4,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs,
   },
   searchIcon: {
-    marginRight: 8,
+    marginRight: spacing.sm,
   },
   searchInput: {
     flex: 1,
-    fontSize: 16,
+    ...typography.body,
   },
   clearButton: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
+    width: CLEAR_BUTTON_SIZE,
+    height: CLEAR_BUTTON_SIZE,
+    borderRadius: radius.lg,
     alignItems: 'center',
     justifyContent: 'center',
   },
   tabs: {
     flexDirection: 'row',
-    paddingHorizontal: 16,
-    paddingTop: 4,
+    paddingHorizontal: spacing.lg,
+    paddingTop: spacing.xs,
     paddingBottom: 0,
-    elevation: 4,
-    zIndex: 1,
   },
   tabButton: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: 12,
-    gap: 6,
+    paddingVertical: spacing.md,
+    borderRadius: radius.lg,
+    gap: spacing.xs,
   },
   tabLabel: {
-    fontSize: 15,
+    ...typography.label,
   },
   tabIndicator: {
     width: '60%',
     height: 3,
-    borderRadius: 2,
+    borderRadius: radius.sm,
   },
 });
