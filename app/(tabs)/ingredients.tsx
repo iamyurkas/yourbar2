@@ -1,12 +1,21 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import React, { memo, useCallback, useEffect, useMemo, useState, useTransition } from 'react';
-import { FlatList, Pressable, StyleSheet, Text, View, type LayoutChangeEvent } from 'react-native';
+import {
+  FlatList,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  type LayoutChangeEvent,
+  type LayoutRectangle,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { CollectionHeader } from '@/components/CollectionHeader';
 import { FabAdd } from '@/components/FabAdd';
 import { ListRow, PresenceCheck, Thumb } from '@/components/RowParts';
 import type { SegmentTabOption } from '@/components/TopBars';
+import { TagPill } from '@/components/TagPill';
 import { Colors } from '@/constants/theme';
 import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
 import { palette } from '@/theme/theme';
@@ -208,7 +217,8 @@ export default function IngredientsScreen() {
   const [query, setQuery] = useState('');
   const [isFilterMenuVisible, setFilterMenuVisible] = useState(false);
   const [selectedTagKeys, setSelectedTagKeys] = useState<Set<string>>(() => new Set());
-  const [headerHeight, setHeaderHeight] = useState(0);
+  const [headerLayout, setHeaderLayout] = useState<LayoutRectangle | null>(null);
+  const [filterAnchorLayout, setFilterAnchorLayout] = useState<LayoutRectangle | null>(null);
   const [optimisticAvailability, setOptimisticAvailability] = useState<Map<number, boolean>>(
     () => new Map(),
   );
@@ -270,8 +280,36 @@ export default function IngredientsScreen() {
   }, [availableTagOptions]);
 
   const handleHeaderLayout = useCallback((event: LayoutChangeEvent) => {
-    const nextHeight = event.nativeEvent.layout.height;
-    setHeaderHeight((previous) => (Math.abs(previous - nextHeight) < 0.5 ? previous : nextHeight));
+    const nextLayout = event.nativeEvent.layout;
+    setHeaderLayout((previous) => {
+      if (
+        previous &&
+        Math.abs(previous.x - nextLayout.x) < 0.5 &&
+        Math.abs(previous.y - nextLayout.y) < 0.5 &&
+        Math.abs(previous.width - nextLayout.width) < 0.5 &&
+        Math.abs(previous.height - nextLayout.height) < 0.5
+      ) {
+        return previous;
+      }
+
+      return nextLayout;
+    });
+  }, []);
+
+  const handleFilterLayout = useCallback((layout: LayoutRectangle) => {
+    setFilterAnchorLayout((previous) => {
+      if (
+        previous &&
+        Math.abs(previous.x - layout.x) < 0.5 &&
+        Math.abs(previous.y - layout.y) < 0.5 &&
+        Math.abs(previous.width - layout.width) < 0.5 &&
+        Math.abs(previous.height - layout.height) < 0.5
+      ) {
+        return previous;
+      }
+
+      return layout;
+    });
   }, []);
 
   const handleFilterPress = useCallback(() => {
@@ -598,6 +636,17 @@ export default function IngredientsScreen() {
   const highlightColor = palette.highlightSubtle;
   const separatorColor = paletteColors.outline;
   const isFilterActive = selectedTagKeys.size > 0;
+  const filterMenuTop = useMemo(() => {
+    if (headerLayout && filterAnchorLayout) {
+      return headerLayout.y + filterAnchorLayout.y + filterAnchorLayout.height + 6;
+    }
+
+    if (headerLayout) {
+      return headerLayout.y + headerLayout.height;
+    }
+
+    return 0;
+  }, [filterAnchorLayout, headerLayout]);
 
   const effectiveAvailableIngredientIds = useMemo(() => {
     if (optimisticAvailability.size === 0) {
@@ -741,6 +790,7 @@ export default function IngredientsScreen() {
             onFilterPress={handleFilterPress}
             filterActive={isFilterActive}
             filterExpanded={isFilterMenuVisible}
+            onFilterLayout={handleFilterLayout}
           />
         </View>
         {isFilterMenuVisible ? (
@@ -749,46 +799,33 @@ export default function IngredientsScreen() {
               accessibilityRole="button"
               accessibilityLabel="Close tag filters"
               onPress={handleCloseFilterMenu}
-              style={[styles.filterMenuBackdrop, { top: headerHeight }]}
+              style={styles.filterMenuBackdrop}
             />
             <View
               style={[
                 styles.filterMenu,
                 {
-                  top: headerHeight + 4,
+                  top: filterMenuTop,
                   backgroundColor: paletteColors.surface,
                   borderColor: paletteColors.outline,
                   shadowColor: palette.shadow,
                 },
               ]}>
               {availableTagOptions.length > 0 ? (
-                <View style={styles.filterMenuList}>
+                <View style={styles.filterTagList}>
                   {availableTagOptions.map((tag) => {
                     const selected = selectedTagKeys.has(tag.key);
                     return (
-                      <Pressable
+                      <TagPill
                         key={tag.key}
+                        label={tag.name}
+                        color={tag.color}
+                        selected={selected}
+                        onPress={() => handleTagFilterToggle(tag.key)}
                         accessibilityRole="checkbox"
                         accessibilityState={{ checked: selected }}
-                        onPress={() => handleTagFilterToggle(tag.key)}
-                        style={styles.filterMenuItem}
-                        android_ripple={{ color: `${paletteColors.surfaceVariant}33` }}
-                      >
-                        <View style={[styles.filterMenuColor, { backgroundColor: tag.color }]} />
-                        <Text
-                          style={[styles.filterMenuItemLabel, { color: paletteColors.onSurface }]}
-                          numberOfLines={1}>
-                          {tag.name}
-                        </Text>
-                        {selected ? (
-                          <MaterialIcons
-                            name="check"
-                            size={18}
-                            color={paletteColors.tint}
-                            style={styles.filterMenuCheckIcon}
-                          />
-                        ) : null}
-                      </Pressable>
+                        androidRippleColor={`${paletteColors.surfaceVariant}33`}
+                      />
                     );
                   })}
                 </View>
@@ -899,6 +936,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     right: 0,
+    top: 0,
     bottom: 0,
     backgroundColor: 'transparent',
     zIndex: 3,
@@ -911,35 +949,16 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: StyleSheet.hairlineWidth,
     minWidth: 200,
-    gap: 4,
     zIndex: 4,
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.12,
     shadowRadius: 12,
     elevation: 8,
   },
-  filterMenuList: {
-    gap: 4,
-  },
-  filterMenuItem: {
+  filterTagList: {
     flexDirection: 'row',
-    alignItems: 'center',
-    borderRadius: 10,
-    paddingHorizontal: 8,
-    paddingVertical: 8,
-    gap: 12,
-  },
-  filterMenuColor: {
-    width: 16,
-    height: 16,
-    borderRadius: 8,
-  },
-  filterMenuItemLabel: {
-    flex: 1,
-    fontSize: 14,
-  },
-  filterMenuCheckIcon: {
-    marginLeft: 8,
+    flexWrap: 'wrap',
+    gap: 8,
   },
   filterMenuEmpty: {
     fontSize: 14,

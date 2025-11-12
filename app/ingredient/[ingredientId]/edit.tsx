@@ -19,6 +19,7 @@ import {
 
 import { resolveAssetFromCatalog } from '@/assets/image-manifest';
 import { ListRow, Thumb } from '@/components/RowParts';
+import { TagPill } from '@/components/TagPill';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { Colors } from '@/constants/theme';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
@@ -503,24 +504,18 @@ export default function EditIngredientScreen() {
           <Text style={[styles.label, { color: paletteColors.onSurfaceVariant }]}>Tags</Text>
           <Text style={[styles.hint, { color: paletteColors.onSurfaceVariant }]}>Select one or more tags</Text>
           <View style={styles.tagList}>
-            {tagSelection.map((tag) => {
-              const isSelected = tag.selected;
-              const backgroundColor = isSelected ? tag.color : paletteColors.surface;
-              const borderColor = tag.color;
-              const textColor = isSelected ? Colors.surface : tag.color;
-
-              return (
-                <Pressable
-                  key={tag.id}
-                  accessibilityRole="checkbox"
-                  accessibilityState={{ checked: isSelected }}
-                  onPress={() => toggleTag(tag.id)}
-                  style={[styles.tagChip, { backgroundColor, borderColor }]}
-                  android_ripple={{ color: `${paletteColors.surface}33` }}>
-                  <Text style={[styles.tagLabel, { color: textColor }]}>{tag.name}</Text>
-                </Pressable>
-              );
-            })}
+            {tagSelection.map((tag) => (
+              <TagPill
+                key={tag.id}
+                label={tag.name}
+                color={tag.color}
+                selected={tag.selected}
+                onPress={() => toggleTag(tag.id)}
+                accessibilityRole="checkbox"
+                accessibilityState={{ checked: tag.selected }}
+                androidRippleColor={`${paletteColors.surface}33`}
+              />
+            ))}
           </View>
         </View>
 
@@ -725,19 +720,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 12,
-  },
-  tagChip: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 999,
-    paddingHorizontal: 14,
-    paddingVertical: 8,
-    borderWidth: StyleSheet.hairlineWidth,
-  },
-  tagLabel: {
-    fontSize: 14,
-    fontWeight: '500',
-    textAlign: 'center',
   },
   submitButton: {
     borderRadius: 999,

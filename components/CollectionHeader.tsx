@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
+import { StyleSheet, View, type LayoutRectangle, type StyleProp, type ViewStyle } from 'react-native';
 
 import { SearchTopBar, SegmentTabs, type SegmentTabOption } from '@/components/TopBars';
 
@@ -12,6 +12,7 @@ type CollectionHeaderProps = {
   onFilterPress?: () => void;
   filterActive?: boolean;
   filterExpanded?: boolean;
+  onFilterLayout?: (layout: LayoutRectangle) => void;
   tabs?: SegmentTabOption[];
   activeTab?: string;
   onTabChange?: (key: string) => void;
@@ -27,6 +28,7 @@ export function CollectionHeader({
   onFilterPress,
   filterActive,
   filterExpanded,
+  onFilterLayout,
   tabs,
   activeTab,
   onTabChange,
@@ -45,6 +47,7 @@ export function CollectionHeader({
         onFilterPress={onFilterPress}
         filterActive={filterActive}
         filterExpanded={filterExpanded}
+        onFilterLayout={onFilterLayout}
       />
       {shouldShowTabs && tabs ? (
         <SegmentTabs options={tabs} value={activeTab!} onChange={onTabChange!} />

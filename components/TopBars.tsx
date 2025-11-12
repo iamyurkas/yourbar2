@@ -6,6 +6,7 @@ import {
   Text,
   TextInput,
   View,
+  type LayoutRectangle,
   type NativeSyntheticEvent,
   type TextInputSubmitEditingEventData,
 } from 'react-native';
@@ -21,6 +22,7 @@ type SearchTopBarProps = {
   onFilterPress?: () => void;
   filterActive?: boolean;
   filterExpanded?: boolean;
+  onFilterLayout?: (layout: LayoutRectangle) => void;
 };
 
 export type SegmentTabOption = {
@@ -43,6 +45,7 @@ export function SearchTopBar({
   onFilterPress,
   filterActive = false,
   filterExpanded = false,
+  onFilterLayout,
 }: SearchTopBarProps) {
   const palette = Colors;
 
@@ -93,6 +96,7 @@ export function SearchTopBar({
         accessibilityLabel="Filter items"
         accessibilityState={filterExpanded ? { expanded: true } : undefined}
         onPress={onFilterPress}
+        onLayout={(event) => onFilterLayout?.(event.nativeEvent.layout)}
         style={[
           styles.iconButton,
           filterActive
