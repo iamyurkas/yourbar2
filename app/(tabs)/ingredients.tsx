@@ -1,6 +1,6 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import React, { memo, useCallback, useEffect, useMemo, useState, useTransition } from 'react';
-import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
+import { FlatList, Pressable, StyleSheet, Text, View, type LayoutChangeEvent } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { CollectionHeader } from '@/components/CollectionHeader';
@@ -25,6 +25,12 @@ const TAB_OPTIONS: SegmentTabOption[] = [
   { key: 'my', label: 'My' },
   { key: 'shopping', label: 'Shopping' },
 ];
+
+type IngredientTagOption = {
+  key: string;
+  name: string;
+  color: string;
+};
 
 type IngredientListItemProps = {
   ingredient: Ingredient;
@@ -200,11 +206,103 @@ export default function IngredientsScreen() {
   } = useInventory();
   const [activeTab, setActiveTab] = useState<IngredientTabKey>('all');
   const [query, setQuery] = useState('');
+  const [isFilterMenuVisible, setFilterMenuVisible] = useState(false);
+  const [selectedTagKeys, setSelectedTagKeys] = useState<Set<string>>(() => new Set());
+  const [headerHeight, setHeaderHeight] = useState(0);
   const [optimisticAvailability, setOptimisticAvailability] = useState<Map<number, boolean>>(
     () => new Map(),
   );
   const [, startAvailabilityTransition] = useTransition();
   const paletteColors = Colors;
+  const defaultTagColor = palette.tagYellow ?? palette.highlightSubtle;
+
+  const availableTagOptions = useMemo<IngredientTagOption[]>(() => {
+    const map = new Map<string, IngredientTagOption>();
+
+    ingredients.forEach((ingredient) => {
+      (ingredient.tags ?? []).forEach((tag) => {
+        if (!tag) {
+          return;
+        }
+
+        const key = tag.id != null ? String(tag.id) : tag.name?.toLowerCase();
+        if (!key) {
+          return;
+        }
+
+        if (!map.has(key)) {
+          map.set(key, {
+            key,
+            name: tag.name ?? 'Unnamed tag',
+            color: tag.color ?? defaultTagColor,
+          });
+        }
+      });
+    });
+
+    return Array.from(map.values()).sort((a, b) => a.name.localeCompare(b.name));
+  }, [defaultTagColor, ingredients]);
+
+  useEffect(() => {
+    setSelectedTagKeys((previous) => {
+      if (previous.size === 0) {
+        return previous;
+      }
+
+      const validKeys = new Set(availableTagOptions.map((tag) => tag.key));
+      let didChange = false;
+      const next = new Set<string>();
+
+      previous.forEach((key) => {
+        if (validKeys.has(key)) {
+          next.add(key);
+        } else {
+          didChange = true;
+        }
+      });
+
+      if (!didChange && next.size === previous.size) {
+        return previous;
+      }
+
+      return next;
+    });
+  }, [availableTagOptions]);
+
+  const handleHeaderLayout = useCallback((event: LayoutChangeEvent) => {
+    const nextHeight = event.nativeEvent.layout.height;
+    setHeaderHeight((previous) => (Math.abs(previous - nextHeight) < 0.5 ? previous : nextHeight));
+  }, []);
+
+  const handleFilterPress = useCallback(() => {
+    setFilterMenuVisible((previous) => !previous);
+  }, []);
+
+  const handleCloseFilterMenu = useCallback(() => {
+    setFilterMenuVisible(false);
+  }, []);
+
+  const handleTagFilterToggle = useCallback((key: string) => {
+    setSelectedTagKeys((previous) => {
+      const next = new Set(previous);
+      if (next.has(key)) {
+        next.delete(key);
+      } else {
+        next.add(key);
+      }
+      return next;
+    });
+  }, []);
+
+  const handleClearTagFilters = useCallback(() => {
+    setSelectedTagKeys((previous) => {
+      if (previous.size === 0) {
+        return previous;
+      }
+
+      return new Set<string>();
+    });
+  }, []);
 
   const ingredientById = useMemo(() => {
     const map = new Map<number, Ingredient>();
@@ -449,8 +547,35 @@ export default function IngredientsScreen() {
     return { text: trimmed, tokens };
   }, [query]);
 
-  const filteredIngredients = useMemo(() => {
+  const filteredByTags = useMemo(() => {
     const base = activeSection.data;
+    if (selectedTagKeys.size === 0) {
+      return base;
+    }
+
+    return base.filter((ingredient) => {
+      const tags = ingredient.tags ?? [];
+      if (tags.length === 0) {
+        return false;
+      }
+
+      return tags.some((tag) => {
+        if (!tag) {
+          return false;
+        }
+
+        const key = tag.id != null ? String(tag.id) : tag.name?.toLowerCase();
+        if (!key) {
+          return false;
+        }
+
+        return selectedTagKeys.has(key);
+      });
+    });
+  }, [activeSection.data, selectedTagKeys]);
+
+  const filteredIngredients = useMemo(() => {
+    const base = filteredByTags;
     if (!normalizedQuery.text) {
       return base;
     }
@@ -468,10 +593,11 @@ export default function IngredientsScreen() {
           ingredient.searchNameNormalized.includes(token),
       ),
     );
-  }, [activeSection.data, normalizedQuery]);
+  }, [filteredByTags, normalizedQuery]);
 
   const highlightColor = palette.highlightSubtle;
   const separatorColor = paletteColors.outline;
+  const isFilterActive = selectedTagKeys.size > 0;
 
   const effectiveAvailableIngredientIds = useMemo(() => {
     if (optimisticAvailability.size === 0) {
@@ -604,14 +730,83 @@ export default function IngredientsScreen() {
       style={[styles.safeArea, { backgroundColor: paletteColors.background }]}
       edges={['top', 'left', 'right']}>
       <View style={styles.container}>
-        <CollectionHeader
-          searchValue={query}
-          onSearchChange={setQuery}
-          placeholder="Search"
-          tabs={TAB_OPTIONS}
-          activeTab={activeTab}
-          onTabChange={setActiveTab}
-        />
+        <View style={styles.headerWrapper} onLayout={handleHeaderLayout}>
+          <CollectionHeader
+            searchValue={query}
+            onSearchChange={setQuery}
+            placeholder="Search"
+            tabs={TAB_OPTIONS}
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
+            onFilterPress={handleFilterPress}
+            filterActive={isFilterActive}
+            filterExpanded={isFilterMenuVisible}
+          />
+        </View>
+        {isFilterMenuVisible ? (
+          <>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Close tag filters"
+              onPress={handleCloseFilterMenu}
+              style={[styles.filterMenuBackdrop, { top: headerHeight }]}
+            />
+            <View
+              style={[
+                styles.filterMenu,
+                {
+                  top: headerHeight + 4,
+                  backgroundColor: paletteColors.surface,
+                  borderColor: paletteColors.outline,
+                  shadowColor: palette.shadow,
+                },
+              ]}>
+              {availableTagOptions.length > 0 ? (
+                <View style={styles.filterMenuList}>
+                  {availableTagOptions.map((tag) => {
+                    const selected = selectedTagKeys.has(tag.key);
+                    return (
+                      <Pressable
+                        key={tag.key}
+                        accessibilityRole="checkbox"
+                        accessibilityState={{ checked: selected }}
+                        onPress={() => handleTagFilterToggle(tag.key)}
+                        style={styles.filterMenuItem}
+                        android_ripple={{ color: `${paletteColors.surfaceVariant}33` }}
+                      >
+                        <View style={[styles.filterMenuColor, { backgroundColor: tag.color }]} />
+                        <Text
+                          style={[styles.filterMenuItemLabel, { color: paletteColors.onSurface }]}
+                          numberOfLines={1}>
+                          {tag.name}
+                        </Text>
+                        {selected ? (
+                          <MaterialIcons
+                            name="check"
+                            size={18}
+                            color={paletteColors.tint}
+                            style={styles.filterMenuCheckIcon}
+                          />
+                        ) : null}
+                      </Pressable>
+                    );
+                  })}
+                </View>
+              ) : (
+                <Text style={[styles.filterMenuEmpty, { color: paletteColors.onSurfaceVariant }]}>No tags available</Text>
+              )}
+              {selectedTagKeys.size > 0 ? (
+                <Pressable
+                  accessibilityRole="button"
+                  accessibilityLabel="Clear selected tag filters"
+                  onPress={handleClearTagFilters}
+                  style={styles.filterMenuClearButton}>
+                  <Text style={[styles.filterMenuClearLabel, { color: paletteColors.tint }]}>Clear filters</Text>
+                </Pressable>
+              ) : null}
+            </View>
+          </>
+        ) : null}
         <FlatList
           data={filteredIngredients}
           keyExtractor={keyExtractor}
@@ -635,6 +830,10 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+    position: 'relative',
+  },
+  headerWrapper: {
+    zIndex: 2,
   },
   controlContainer: {
     alignItems: 'flex-end',
@@ -695,5 +894,68 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 80,
     fontSize: 14,
+  },
+  filterMenuBackdrop: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'transparent',
+    zIndex: 3,
+  },
+  filterMenu: {
+    position: 'absolute',
+    right: 16,
+    paddingHorizontal: 12,
+    paddingVertical: 12,
+    borderRadius: 12,
+    borderWidth: StyleSheet.hairlineWidth,
+    minWidth: 200,
+    gap: 4,
+    zIndex: 4,
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.12,
+    shadowRadius: 12,
+    elevation: 8,
+  },
+  filterMenuList: {
+    gap: 4,
+  },
+  filterMenuItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: 10,
+    paddingHorizontal: 8,
+    paddingVertical: 8,
+    gap: 12,
+  },
+  filterMenuColor: {
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+  },
+  filterMenuItemLabel: {
+    flex: 1,
+    fontSize: 14,
+  },
+  filterMenuCheckIcon: {
+    marginLeft: 8,
+  },
+  filterMenuEmpty: {
+    fontSize: 14,
+    textAlign: 'left',
+    paddingHorizontal: 4,
+    paddingVertical: 2,
+  },
+  filterMenuClearButton: {
+    marginTop: 8,
+    alignSelf: 'flex-start',
+    paddingHorizontal: 8,
+    paddingVertical: 6,
+    borderRadius: 8,
+  },
+  filterMenuClearLabel: {
+    fontSize: 13,
+    fontWeight: '600',
   },
 });
