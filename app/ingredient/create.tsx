@@ -25,6 +25,8 @@ import { Colors } from '@/constants/theme';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
 import { palette as appPalette } from '@/theme/theme';
 
+const DESCRIPTION_MAX_LENGTH = 280;
+
 export default function CreateIngredientScreen() {
   const paletteColors = Colors;
   const { ingredients, shoppingIngredientIds, createIngredient } = useInventory();
@@ -38,6 +40,9 @@ export default function CreateIngredientScreen() {
   const [baseSearch, setBaseSearch] = useState('');
   const [permissionStatus, requestPermission] = ImagePicker.useMediaLibraryPermissions();
 
+  const trimmedName = useMemo(() => name.trim(), [name]);
+  const descriptionValue = useMemo(() => description.trim(), [description]);
+
   const placeholderLabel = useMemo(() => {
     if (imageUri) {
       return 'Change image';
@@ -45,6 +50,11 @@ export default function CreateIngredientScreen() {
 
     return 'Add image';
   }, [imageUri]);
+
+  const descriptionCharactersRemaining = useMemo(
+    () => Math.max(0, DESCRIPTION_MAX_LENGTH - description.length),
+    [description.length],
+  );
 
   const toggleTag = useCallback((tagId: number) => {
     setSelectedTagIds((prev) => {
@@ -118,19 +128,18 @@ export default function CreateIngredientScreen() {
   }, [ensureMediaPermission, isPickingImage]);
 
   const handleSubmit = useCallback(() => {
-    const trimmedName = name.trim();
-    if (!trimmedName) {
+    const trimmed = trimmedName;
+    if (!trimmed) {
       Alert.alert('Name is required', 'Please enter the ingredient name.');
       return;
     }
 
-    const descriptionValue = description.trim();
     const selectedTags = selectedTagIds
       .map((tagId) => BUILTIN_INGREDIENT_TAGS.find((tag) => tag.id === tagId))
       .filter((tag): tag is (typeof BUILTIN_INGREDIENT_TAGS)[number] => Boolean(tag));
 
     const created = createIngredient({
-      name: trimmedName,
+      name: trimmed,
       description: descriptionValue || undefined,
       photoUri: imageUri ?? undefined,
       baseIngredientId,
@@ -155,10 +164,10 @@ export default function CreateIngredientScreen() {
   }, [
     baseIngredientId,
     createIngredient,
-    description,
+    descriptionValue,
     imageUri,
-    name,
     selectedTagIds,
+    trimmedName,
   ]);
 
   const baseIngredient = useMemo(() => {
@@ -322,6 +331,16 @@ export default function CreateIngredientScreen() {
     };
   }, [isBaseModalVisible]);
 
+  const selectedTagsPreview = useMemo(
+    () => tagSelection.filter((tag) => tag.selected),
+    [tagSelection],
+  );
+
+  const isSaveDisabled = useMemo(
+    () => !trimmedName || isPickingImage,
+    [isPickingImage, trimmedName],
+  );
+
   return (
     <>
       <Stack.Screen options={{ title: 'New ingredient' }} />
@@ -329,140 +348,285 @@ export default function CreateIngredientScreen() {
         contentContainerStyle={styles.content}
         style={styles.container}
         keyboardShouldPersistTaps="handled">
-        <View style={styles.section}>
-          <Text style={[styles.label, { color: paletteColors.onSurfaceVariant }]}>Name</Text>
-          <TextInput
-            value={name}
-            onChangeText={setName}
-            placeholder="For example, Ginger syrup"
-            style={[styles.input, { borderColor: paletteColors.outlineVariant, color: paletteColors.text }]}
-            placeholderTextColor={`${paletteColors.onSurfaceVariant}99`}
-          />
+        <View style={[styles.section, styles.card, styles.hero]}>
+          <View style={styles.heroHeader}>
+            <MaterialCommunityIcons
+              name="bottle-tonic-plus-outline"
+              size={28}
+              color={paletteColors.tint}
+            />
+            <Text style={[styles.heroTitle, { color: paletteColors.onSurface }]}>Craft a new ingredient</Text>
+          </View>
+          <Text style={[styles.heroSubtitle, { color: paletteColors.onSurfaceVariant }]}>
+            Give it a memorable name, add helpful tags and link it to a base ingredient to keep
+            your bar beautifully organised.
+          </Text>
         </View>
 
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={placeholderLabel}
-          style={[
-            styles.imagePlaceholder,
-            { borderColor: paletteColors.outline },
-            !imageUri && { backgroundColor: paletteColors.surfaceVariant },
-          ]}
-          onPress={handlePickImage}
-          android_ripple={{ color: `${paletteColors.surface}33` }}>
-          {imageUri ? (
-            <Image source={{ uri: imageUri }} style={styles.image} contentFit="cover" />
-          ) : (
-            <View style={styles.placeholderContent}>
-              <Text style={[styles.placeholderHint, { color: paletteColors.onSurfaceVariant }]}>
-                Tap to add a photo
-              </Text>
-            </View>
-          )}
-        </Pressable>
-
         <View style={styles.section}>
-          <Text style={[styles.label, { color: paletteColors.onSurfaceVariant }]}>Tags</Text>
-          <Text style={[styles.hint, { color: paletteColors.onSurfaceVariant }]}>Select one or more tags</Text>
-          <View style={styles.tagList}>
-            {tagSelection.map((tag) => (
-              <TagPill
-                key={tag.id}
-                label={tag.name}
-                color={tag.color}
-                selected={tag.selected}
-                onPress={() => toggleTag(tag.id)}
-                accessibilityRole="checkbox"
-                accessibilityState={{ checked: tag.selected }}
-                androidRippleColor={`${paletteColors.surface}33`}
-              />
-            ))}
+          <View style={[styles.card, styles.sectionCard]}>
+            <Text style={[styles.label, { color: paletteColors.onSurfaceVariant }]}>Name</Text>
+            <TextInput
+              value={name}
+              onChangeText={setName}
+              placeholder="For example, Ginger syrup"
+              style={[
+                styles.input,
+                { borderColor: paletteColors.outlineVariant, color: paletteColors.text },
+              ]}
+              placeholderTextColor={`${paletteColors.onSurfaceVariant}99`}
+              returnKeyType="next"
+            />
+            <Text style={[styles.helper, { color: paletteColors.onSurfaceVariant }]}>
+              This is how the ingredient will appear in lists and search results.
+            </Text>
           </View>
         </View>
 
         <View style={styles.section}>
-          <Text style={[styles.label, { color: paletteColors.onSurfaceVariant }]}>Base ingredient</Text>
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel={baseIngredient ? 'Change base ingredient' : 'Select base ingredient'}
-            onPress={handleOpenBaseModal}
-            style={[styles.baseSelector, { borderColor: paletteColors.outline, backgroundColor: paletteColors.surface }]}
-          >
-            {baseIngredient ? (
-              <>
-                <View style={styles.baseInfo}>
-                  <View style={styles.baseThumb}>
-                    {baseIngredientPhotoSource ? (
-                      <Image source={baseIngredientPhotoSource} style={styles.baseImage} contentFit="contain" />
-                    ) : (
-                      <View
-                        style={[styles.basePlaceholder, { backgroundColor: paletteColors.onSurfaceVariant }]}
-                      >
-                        <MaterialCommunityIcons
-                          name="image-off"
-                          size={20}
-                          color={paletteColors.onSurfaceVariant}
-                        />
-                      </View>
-                    )}
+          <View style={[styles.card, styles.sectionCard]}>
+            <Text style={[styles.label, { color: paletteColors.onSurfaceVariant }]}>Image</Text>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={placeholderLabel}
+              style={[
+                styles.imagePlaceholder,
+                { borderColor: paletteColors.outline },
+                !imageUri && { backgroundColor: paletteColors.surfaceVariant },
+              ]}
+              onPress={handlePickImage}
+              android_ripple={{ color: `${paletteColors.surface}33` }}>
+              {imageUri ? (
+                <Image source={{ uri: imageUri }} style={styles.image} contentFit="cover" />
+              ) : (
+                <View style={styles.placeholderContent}>
+                  <View style={[styles.placeholderIconContainer, { backgroundColor: paletteColors.surface }]}>
+                    <MaterialCommunityIcons
+                      name="image-plus"
+                      size={28}
+                      color={paletteColors.onSurfaceVariant}
+                    />
                   </View>
-                  <Text style={[styles.baseName, { color: paletteColors.onSurface }]} numberOfLines={2}>
-                    {baseIngredient.name}
-                  </Text>
+                  <Text style={[styles.placeholderHint, { color: paletteColors.onSurfaceVariant }]}>Tap to add a photo</Text>
+                  <Text style={[styles.placeholderHint, { color: paletteColors.onSurfaceVariant }]}>Square images look best</Text>
                 </View>
-                <Pressable
-                  onPress={handleClearBaseIngredient}
-                  accessibilityRole="button"
-                  accessibilityLabel="Remove base ingredient"
-                  hitSlop={8}
-                  style={styles.unlinkButton}
-                >
-                  <MaterialCommunityIcons
-                    name="link-off"
-                    size={20}
-                    color={paletteColors.error}
-                  />
-                </Pressable>
-              </>
-            ) : (
-              <View style={styles.basePlaceholderRow}>
-                <MaterialCommunityIcons
-                  name="link-variant"
-                  size={20}
-                  color={paletteColors.onSurfaceVariant}
-                />
-                <Text style={[styles.basePlaceholderText, { color: paletteColors.onSurfaceVariant }]}>
-                  Select a base ingredient
-                </Text>
-              </View>
-            )}
-          </Pressable>
+              )}
+            </Pressable>
+            <Text style={[styles.helper, { color: paletteColors.onSurfaceVariant }]}>
+              Add a high-quality square image so it stands out in your inventory.
+            </Text>
+          </View>
         </View>
 
-        <View style={[styles.section, styles.descriptionSection]}>
-          <Text style={[styles.label, { color: paletteColors.onSurfaceVariant }]}>Description</Text>
-          <TextInput
-            value={description}
-            onChangeText={setDescription}
-            placeholder="Add tasting notes or usage suggestions"
-            style={[
-              styles.input,
-              styles.multilineInput,
-              { borderColor: paletteColors.outlineVariant, color: paletteColors.text },
-            ]}
-            placeholderTextColor={`${paletteColors.onSurfaceVariant}99`}
-            multiline
-            numberOfLines={4}
-            textAlignVertical="top"
-          />
+        <View style={styles.section}>
+          <View style={[styles.card, styles.sectionCard]}>
+            <View style={styles.sectionHeaderRow}>
+              <Text style={[styles.label, { color: paletteColors.onSurfaceVariant }]}>Tags</Text>
+              <Text style={[styles.helper, { color: paletteColors.onSurfaceVariant }]}>
+                {selectedTagsPreview.length
+                  ? `${selectedTagsPreview.length} selected`
+                  : 'Optional'}
+              </Text>
+            </View>
+            <Text style={[styles.hint, { color: paletteColors.onSurfaceVariant }]}>Select one or more tags</Text>
+            <View style={styles.tagList}>
+              {tagSelection.map((tag) => (
+                <TagPill
+                  key={tag.id}
+                  label={tag.name}
+                  color={tag.color}
+                  selected={tag.selected}
+                  onPress={() => toggleTag(tag.id)}
+                  accessibilityRole="checkbox"
+                  accessibilityState={{ checked: tag.selected }}
+                  androidRippleColor={`${paletteColors.surface}33`}
+                />
+              ))}
+            </View>
+            <Text style={[styles.helper, { color: paletteColors.onSurfaceVariant }]}>
+              Tags make it easier to filter recipes, plan shopping lists and spot trends.
+            </Text>
+          </View>
+        </View>
 
-          <Pressable
-            accessibilityRole="button"
-            style={[styles.submitButton, { backgroundColor: paletteColors.tint }]}
-            onPress={handleSubmit}
-            disabled={isPickingImage}>
-            <Text style={[styles.submitLabel, { color: paletteColors.surface }]}>Save</Text>
-          </Pressable>
+        <View style={styles.section}>
+          <View style={[styles.card, styles.sectionCard]}>
+            <Text style={[styles.label, { color: paletteColors.onSurfaceVariant }]}>Base ingredient</Text>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={baseIngredient ? 'Change base ingredient' : 'Select base ingredient'}
+              onPress={handleOpenBaseModal}
+              style={[styles.baseSelector, { borderColor: paletteColors.outline, backgroundColor: paletteColors.surface }]}
+            >
+              {baseIngredient ? (
+                <>
+                  <View style={styles.baseInfo}>
+                    <View style={styles.baseThumb}>
+                      {baseIngredientPhotoSource ? (
+                        <Image source={baseIngredientPhotoSource} style={styles.baseImage} contentFit="contain" />
+                      ) : (
+                        <View
+                          style={[styles.basePlaceholder, { backgroundColor: paletteColors.onSurfaceVariant }]}
+                        >
+                          <MaterialCommunityIcons
+                            name="image-off"
+                            size={20}
+                            color={paletteColors.onSurfaceVariant}
+                          />
+                        </View>
+                      )}
+                    </View>
+                    <Text style={[styles.baseName, { color: paletteColors.onSurface }]} numberOfLines={2}>
+                      {baseIngredient.name}
+                    </Text>
+                  </View>
+                  <Pressable
+                    onPress={handleClearBaseIngredient}
+                    accessibilityRole="button"
+                    accessibilityLabel="Remove base ingredient"
+                    hitSlop={8}
+                    style={styles.unlinkButton}
+                  >
+                    <MaterialCommunityIcons
+                      name="link-off"
+                      size={20}
+                      color={paletteColors.error}
+                    />
+                  </Pressable>
+                </>
+              ) : (
+                <View style={styles.basePlaceholderRow}>
+                  <MaterialCommunityIcons
+                    name="link-variant"
+                    size={20}
+                    color={paletteColors.onSurfaceVariant}
+                  />
+                  <Text style={[styles.basePlaceholderText, { color: paletteColors.onSurfaceVariant }]}>
+                    Select a base ingredient
+                  </Text>
+                </View>
+              )}
+            </Pressable>
+            <Text style={[styles.helper, { color: paletteColors.onSurfaceVariant }]}>
+              Link to a base ingredient to inherit shopping status and keep substitutions handy.
+            </Text>
+          </View>
+        </View>
+
+        <View style={styles.section}>
+          <View style={[styles.card, styles.sectionCard]}>
+            <Text style={[styles.label, { color: paletteColors.onSurfaceVariant }]}>Description</Text>
+            <TextInput
+              value={description}
+              onChangeText={setDescription}
+              placeholder="Add tasting notes or usage suggestions"
+              style={[
+                styles.input,
+                styles.multilineInput,
+                { borderColor: paletteColors.outlineVariant, color: paletteColors.text },
+              ]}
+              placeholderTextColor={`${paletteColors.onSurfaceVariant}99`}
+              multiline
+              numberOfLines={4}
+              textAlignVertical="top"
+              maxLength={DESCRIPTION_MAX_LENGTH}
+            />
+            <View style={styles.descriptionFooter}>
+              <Text style={[styles.helper, { color: paletteColors.onSurfaceVariant }]}>
+                Share flavour notes, serving tips or preparation details.
+              </Text>
+              <Text style={[styles.helper, { color: paletteColors.onSurfaceVariant }]}>
+                {descriptionCharactersRemaining} characters left
+              </Text>
+            </View>
+          </View>
+        </View>
+
+        <View style={styles.section}>
+          <View style={[styles.card, styles.summaryCard]}>
+            <Text style={[styles.summaryTitle, { color: paletteColors.onSurface }]}>Quick preview</Text>
+            {trimmedName || selectedTagsPreview.length || baseIngredient || descriptionValue ? (
+              <>
+                {trimmedName ? (
+                  <View style={styles.summaryRow}>
+                    <Text style={[styles.summaryLabel, { color: paletteColors.onSurfaceVariant }]}>Name</Text>
+                    <Text style={[styles.summaryValue, { color: paletteColors.onSurface }]}>{trimmedName}</Text>
+                  </View>
+                ) : null}
+                {selectedTagsPreview.length ? (
+                  <View style={styles.summaryRow}>
+                    <Text style={[styles.summaryLabel, { color: paletteColors.onSurfaceVariant }]}>Tags</Text>
+                    <View style={styles.summaryTagList}>
+                      {selectedTagsPreview.map((tag) => (
+                        <View
+                          key={tag.id}
+                          style={[styles.summaryTag, { backgroundColor: `${tag.color}26`, borderColor: `${tag.color}66` }]}
+                        >
+                          <Text style={[styles.summaryTagText, { color: tag.color }]}>{tag.name}</Text>
+                        </View>
+                      ))}
+                    </View>
+                  </View>
+                ) : null}
+                {baseIngredient ? (
+                  <View style={styles.summaryRow}>
+                    <Text style={[styles.summaryLabel, { color: paletteColors.onSurfaceVariant }]}>Base</Text>
+                    <Text style={[styles.summaryValue, { color: paletteColors.onSurface }]}>{baseIngredient.name}</Text>
+                  </View>
+                ) : null}
+                {descriptionValue ? (
+                  <View style={styles.summaryRow}>
+                    <Text style={[styles.summaryLabel, { color: paletteColors.onSurfaceVariant }]}>Description</Text>
+                    <Text style={[styles.summaryValue, { color: paletteColors.onSurface }]} numberOfLines={3}>
+                      {descriptionValue}
+                    </Text>
+                  </View>
+                ) : null}
+              </>
+            ) : (
+              <Text style={[styles.summaryPlaceholder, { color: paletteColors.onSurfaceVariant }]}>
+                As you fill in the details we’ll show a concise preview here.
+              </Text>
+            )}
+          </View>
+        </View>
+
+        <View style={styles.section}>
+          <View style={[styles.card, styles.actionsCard]}>
+            <Pressable
+              accessibilityRole="button"
+              style={({ pressed }) => [
+                styles.submitButton,
+                {
+                  backgroundColor: isSaveDisabled
+                    ? `${paletteColors.onSurfaceVariant}33`
+                    : paletteColors.tint,
+                  transform: pressed && !isSaveDisabled ? [{ scale: 0.99 }] : undefined,
+                },
+              ]}
+              onPress={handleSubmit}
+              disabled={isSaveDisabled}>
+              <View style={styles.submitContent}>
+                <MaterialCommunityIcons
+                  name={isSaveDisabled ? 'content-save-outline' : 'content-save-check-outline'}
+                  size={20}
+                  color={isSaveDisabled ? paletteColors.onSurfaceVariant : paletteColors.surface}
+                />
+                <Text
+                  style={[
+                    styles.submitLabel,
+                    {
+                      color: isSaveDisabled ? paletteColors.onSurfaceVariant : paletteColors.surface,
+                    },
+                  ]}>
+                  Save ingredient
+                </Text>
+              </View>
+            </Pressable>
+            <Text style={[styles.helper, { color: paletteColors.onSurfaceVariant }]}>
+              You can update details later from the ingredient page.
+            </Text>
+          </View>
         </View>
       </ScrollView>
 
@@ -496,7 +660,9 @@ export default function CreateIngredientScreen() {
               keyExtractor={baseModalKeyExtractor}
               renderItem={renderBaseIngredient}
               keyboardShouldPersistTaps="handled"
-              ItemSeparatorComponent={() => <View style={[styles.modalSeparator, { backgroundColor: paletteColors.outline }]} />}
+              ItemSeparatorComponent={() => (
+                <View style={[styles.modalSeparator, { backgroundColor: paletteColors.outline }]} />
+              )}
               contentContainerStyle={styles.modalListContent}
               ListEmptyComponent={() => (
                 <Text style={[styles.modalEmptyText, { color: paletteColors.onSurfaceVariant }]}>No ingredients found</Text>
@@ -519,38 +685,72 @@ const styles = StyleSheet.create({
     gap: 24,
   },
   section: {
-    gap: 8,
+    gap: 12,
   },
-  descriptionSection: {
-    paddingBottom: 250,
+  card: {
+    borderRadius: 24,
+    padding: 20,
+    backgroundColor: Colors.surfaceVariant,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: `${Colors.outline}33`,
+  },
+  hero: {
+    gap: 12,
+  },
+  heroHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  heroTitle: {
+    fontSize: 22,
+    fontWeight: '700',
+  },
+  heroSubtitle: {
+    fontSize: 15,
+    lineHeight: 22,
+  },
+  sectionCard: {
+    gap: 12,
+  },
+  sectionHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   label: {
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: '600',
   },
   hint: {
     fontSize: 13,
+    marginBottom: 4,
+  },
+  helper: {
+    fontSize: 13,
+    lineHeight: 18,
   },
   input: {
     borderWidth: StyleSheet.hairlineWidth,
-    borderRadius: 12,
+    borderRadius: 16,
     paddingHorizontal: 16,
     paddingVertical: Platform.select({ ios: 14, default: 12 }),
     fontSize: 16,
+    fontWeight: '500',
     backgroundColor: Colors.surface,
   },
   multilineInput: {
-    minHeight: 140,
+    minHeight: 160,
   },
   imagePlaceholder: {
-    width: 150,
-    height: 150,
-    borderRadius: 16,
+    width: '100%',
+    height: 220,
+    borderRadius: 24,
     borderWidth: StyleSheet.hairlineWidth,
     overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center',
-    alignSelf: 'flex-start',
+    alignSelf: 'stretch',
   },
   image: {
     width: '100%',
@@ -559,31 +759,23 @@ const styles = StyleSheet.create({
   placeholderContent: {
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 6,
+    gap: 10,
   },
-  placeholderText: {
-    fontSize: 14,
-    fontWeight: '600',
+  placeholderIconContainer: {
+    padding: 12,
+    borderRadius: 999,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: `${Colors.outline}4d`,
   },
   placeholderHint: {
     fontSize: 12,
-    fontWeight: '500',
+    fontWeight: '600',
     textAlign: 'center',
   },
   tagList: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 12,
-  },
-  submitButton: {
-    borderRadius: 999,
-    paddingVertical: 14,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  submitLabel: {
-    fontSize: 16,
-    fontWeight: '600',
   },
   baseSelector: {
     flexDirection: 'row',
@@ -638,6 +830,68 @@ const styles = StyleSheet.create({
   unlinkButton: {
     padding: 6,
     borderRadius: 999,
+  },
+  descriptionFooter: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    flexWrap: 'wrap',
+    gap: 8,
+  },
+  summaryCard: {
+    gap: 16,
+  },
+  summaryTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+  },
+  summaryRow: {
+    gap: 4,
+  },
+  summaryLabel: {
+    fontSize: 13,
+    fontWeight: '600',
+  },
+  summaryValue: {
+    fontSize: 15,
+    lineHeight: 20,
+  },
+  summaryTagList: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+  },
+  summaryTag: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 999,
+    borderWidth: StyleSheet.hairlineWidth,
+  },
+  summaryTagText: {
+    fontSize: 13,
+    fontWeight: '600',
+  },
+  summaryPlaceholder: {
+    fontSize: 14,
+    lineHeight: 20,
+  },
+  actionsCard: {
+    gap: 16,
+  },
+  submitButton: {
+    borderRadius: 999,
+    paddingVertical: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  submitContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  submitLabel: {
+    fontSize: 16,
+    fontWeight: '600',
   },
   modalOverlay: {
     flex: 1,
