@@ -11,6 +11,7 @@ import {
 } from '@/assets/image-manifest';
 import { IngredientQuantityRow } from '@/components/IngredientQuantityRow';
 import { TagPill } from '@/components/TagPill';
+import { COCKTAIL_UNIT_DICTIONARY } from '@/constants/cocktail-units';
 import { Colors } from '@/constants/theme';
 import {
   useInventory,
@@ -20,33 +21,6 @@ import {
 import { palette as appPalette } from '@/theme/theme';
 
 type RecipeIngredient = NonNullable<Cocktail['ingredients']>[number];
-
-type UnitDictionary = Record<number, { singular: string; plural?: string }>;
-
-const UNIT_LABELS: UnitDictionary = {
-  1: { singular: 'piece', plural: 'pieces' },
-  2: { singular: 'bar spoon', plural: 'bar spoons' },
-  4: { singular: 'teaspoon', plural: 'teaspoons' },
-  6: { singular: 'dash', plural: 'dashes' },
-  7: { singular: 'drop', plural: 'drops' },
-  8: { singular: 'g' },
-  9: { singular: 'pinch', plural: 'pinches' },
-  10: { singular: 'leaf', plural: 'leaves' },
-  11: { singular: 'ml' },
-  12: { singular: 'oz' },
-  14: { singular: 'cup', plural: 'cups' },
-  15: { singular: 'pinch', plural: 'pinches' },
-  17: { singular: 'splash', plural: 'splashes' },
-  18: { singular: 'scoop', plural: 'scoops' },
-  19: { singular: 'piece', plural: 'pieces' },
-  20: { singular: 'bottle', plural: 'bottles' },
-  21: { singular: 'sprig', plural: 'sprigs' },
-  22: { singular: 'tablespoon', plural: 'tablespoons' },
-  24: { singular: 'ml' },
-  26: { singular: 'piece', plural: 'pieces' },
-  27: { singular: 'piece', plural: 'pieces' },
-  31: { singular: 'spray', plural: 'sprays' },
-};
 
 const GLASS_LABELS: Record<string, string> = {
   bowl: 'Punch bowl',
@@ -97,7 +71,7 @@ function formatIngredientQuantity(ingredient: RecipeIngredient): string {
   const amountRaw = ingredient.amount ?? '';
   const amount = amountRaw.trim();
   const unitId = typeof ingredient.unitId === 'number' ? ingredient.unitId : undefined;
-  const unitDetails = unitId != null ? UNIT_LABELS[unitId] : undefined;
+  const unitDetails = unitId != null ? COCKTAIL_UNIT_DICTIONARY[unitId] : undefined;
   const parsedAmount = Number(amount);
   const isNumeric = !Number.isNaN(parsedAmount);
 

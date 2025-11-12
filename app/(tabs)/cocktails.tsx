@@ -157,7 +157,12 @@ export default function CocktailsScreen() {
           }
         />
       </View>
-      <FabAdd label="Add cocktail" />
+      <FabAdd
+        label="Add cocktail"
+        onPress={() =>
+          router.push({ pathname: '/cocktail/create', params: { source: 'cocktails' } })
+        }
+      />
     </SafeAreaView>
   );
 }
