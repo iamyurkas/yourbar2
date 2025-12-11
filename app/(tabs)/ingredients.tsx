@@ -1004,7 +1004,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   filterMenuClearLabel: {
-    fontSize: 13,
+    fontSize: 14,
     fontWeight: '600',
   },
 });

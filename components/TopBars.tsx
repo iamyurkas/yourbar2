@@ -207,7 +207,7 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   tabLabel: {
-    fontSize: 15,
+    fontSize: 14,
   },
   tabIndicator: {
     width: '60%',

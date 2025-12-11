@@ -675,14 +675,14 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   hint: {
-    fontSize: 13,
+    fontSize: 12,
   },
   input: {
     borderWidth: StyleSheet.hairlineWidth,
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: Platform.select({ ios: 14, default: 12 }),
-    fontSize: 16,
+    fontSize: 14,
     backgroundColor: Colors.surface,
   },
   multilineInput: {
@@ -712,7 +712,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   placeholderHint: {
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: '500',
     textAlign: 'center',
   },
@@ -773,7 +773,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   basePlaceholderText: {
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: '500',
   },
   baseShoppingIndicator: {
@@ -803,7 +803,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: Platform.select({ ios: 14, default: 12 }),
-    fontSize: 16,
+    fontSize: 14,
   },
   modalListContent: {
     gap: 12,
@@ -815,7 +815,7 @@ const styles = StyleSheet.create({
   },
   modalEmptyText: {
     textAlign: 'center',
-    fontSize: 15,
+    fontSize: 14,
   },
   emptyState: {
     flex: 1,
@@ -825,7 +825,7 @@ const styles = StyleSheet.create({
     padding: 24,
   },
   emptyMessage: {
-    fontSize: 16,
+    fontSize: 14,
     textAlign: 'center',
   },
 });

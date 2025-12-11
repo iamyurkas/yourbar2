@@ -81,11 +81,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   quantityLabel: {
-    fontSize: 15,
-    fontWeight: '500',
+    fontSize: 16,
     textAlign: 'right',
   },
   subtitle: {
-    fontSize: 13,
+    fontSize: 12,
   },
 });

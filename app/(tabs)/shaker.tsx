@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   subtitle: {
-    fontSize: 15,
+    fontSize: 14,
     lineHeight: 22,
     opacity: 0.72,
   },
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
   },
   cardTitle: {
     letterSpacing: 0.2,
-    fontSize: 18,
+    fontSize: 14,
   },
   cardDescription: {
     fontSize: 14,

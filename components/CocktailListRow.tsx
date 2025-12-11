@@ -258,11 +258,11 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   title: {
-    fontSize: 17,
-    fontWeight: '500',
+    fontSize: 16,
+    fontWeight: '400',
   },
   subtitle: {
-    fontSize: 13,
+    fontSize: 12,
   },
   tagDotsRow: {
     flexDirection: 'row',

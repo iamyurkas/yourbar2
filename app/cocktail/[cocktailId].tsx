@@ -275,7 +275,7 @@ export default function CocktailDetailsScreen() {
           title: 'Cocktail details',
           headerTitleAlign: 'center',
           headerStyle: { backgroundColor: palette.surface },
-          headerTitleStyle: { color: palette.onSurface, fontSize: 18, fontWeight: '600' },
+          headerTitleStyle: { color: palette.onSurface, fontSize: 16, fontWeight: '600' },
           headerShadowVisible: false,
           headerLeft: () => (
             <Pressable
@@ -494,7 +494,7 @@ const styles = StyleSheet.create({
     gap: 24,
   },
   name: {
-    fontSize: 32,
+    fontSize: 20,
     fontWeight: '700',
     textAlign: 'center',
   },
@@ -566,26 +566,26 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   sectionTitle: {
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: '600',
   },
   bodyText: {
-    fontSize: 15,
+    fontSize: 14,
     lineHeight: 22,
   },
   descriptionText: {
     color: '#6F6F6F',
   },
   toggleDescription: {
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: '500',
   },
   instructionsTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '600',
   },
   instructionsText: {
-    fontSize: 15,
+    fontSize: 14,
     lineHeight: 22,
   },
   instructionsList: {
@@ -612,6 +612,6 @@ const styles = StyleSheet.create({
     marginTop: 80,
   },
   emptyText: {
-    fontSize: 16,
+    fontSize: 14,
   },
 });

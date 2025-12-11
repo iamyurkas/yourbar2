@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   iconGlyph: {
-    fontSize: 18,
+    fontSize: 16,
     color: palette.placeholder,
   },
   input: {
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
   },
   trailingLabel: {
-    fontSize: 13,
+    fontSize: 14,
     fontWeight: '600',
     letterSpacing: 0.4,
     textTransform: 'uppercase',

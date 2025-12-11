@@ -241,11 +241,11 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
   },
   title: {
-    fontSize: 17,
+    fontSize: 16,
     fontWeight: '400',
   },
   subtitle: {
-    fontSize: 13,
+    fontSize: 14,
   },
   tagDot: {
     width: 8,
@@ -282,7 +282,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   thumbFallback: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '600',
   },
 });

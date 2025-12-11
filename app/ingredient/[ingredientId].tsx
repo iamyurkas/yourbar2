@@ -357,7 +357,7 @@ export default function IngredientDetailsScreen() {
           title: 'Ingredient details',
           headerTitleAlign: 'center',
           headerStyle: { backgroundColor: palette.surface },
-          headerTitleStyle: { color: palette.onSurface, fontSize: 18, fontWeight: '600' },
+          headerTitleStyle: { color: palette.onSurface, fontSize: 16, fontWeight: '600' },
           headerShadowVisible: false,
           headerLeft: () => (
             <Pressable
@@ -660,7 +660,7 @@ const styles = StyleSheet.create({
     gap: 24,
   },
   name: {
-    fontSize: 32,
+    fontSize: 20,
     fontWeight: '700',
     textAlign: 'center',
   },
@@ -713,7 +713,7 @@ const styles = StyleSheet.create({
     marginHorizontal: -24,
   },
   placeholderText: {
-    fontSize: 15,
+    fontSize: 14,
     textAlign: 'center',
   },
   tagList: {
@@ -727,18 +727,18 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   sectionTitle: {
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: '600',
   },
   bodyText: {
-    fontSize: 15,
+    fontSize: 14,
     lineHeight: 22,
   },
   descriptionText: {
     color: '#6F6F6F',
   },
   toggleDescription: {
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: '500',
   },
   baseIngredientRow: {
@@ -774,7 +774,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   baseIngredientName: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '500',
   },
   baseIngredientActions: {

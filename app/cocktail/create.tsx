@@ -725,7 +725,7 @@ export default function CreateCocktailScreen() {
           headerTitleAlign: 'center',
           headerStyle: { backgroundColor: palette.surface },
           headerShadowVisible: false,
-          headerTitleStyle: { color: palette.onSurface, fontSize: 18, fontWeight: '600' },
+          headerTitleStyle: { color: palette.onSurface, fontSize: 16, fontWeight: '600' },
           headerLeft: () => (
             <Pressable
               onPress={handleGoBack}
@@ -1439,7 +1439,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   hint: {
-    fontSize: 13,
+    fontSize: 14,
   },
   input: {
     borderWidth: StyleSheet.hairlineWidth,
@@ -1469,7 +1469,7 @@ const styles = StyleSheet.create({
     minWidth: '48%',
   },
   cardLabel: {
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: '600',
   },
   glassTile: {
@@ -1484,7 +1484,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   cardHint: {
-    fontSize: 13,
+    fontSize: 12,
   },
   cardValue: {
     fontSize: 14,
@@ -1576,7 +1576,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   ingredientHeading: {
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: '600',
   },
   reorderControls: {
@@ -1625,7 +1625,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
   },
   suggestionLabel: {
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: '500',
     flex: 1,
   },
@@ -1667,7 +1667,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
   },
   unitLabel: {
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: '400',
   },
   toggleRow: {
@@ -1709,7 +1709,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
   },
   addSubstituteLabel: {
-    fontSize: 13,
+    fontSize: 14,
     fontWeight: '600',
   },
   substitutesList: {
@@ -1731,7 +1731,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   substituteHint: {
-    fontSize: 13,
+    fontSize: 14,
   },
   submitButton: {
     borderRadius: 12,
@@ -1762,11 +1762,11 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   modalTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '700',
   },
   modalSubtitle: {
-    fontSize: 13,
+    fontSize: 14,
     marginTop: 2,
   },
   modalHeader: {
@@ -1780,7 +1780,7 @@ const styles = StyleSheet.create({
   },
   modalEmptyText: {
     textAlign: 'center',
-    fontSize: 15,
+    fontSize: 14,
     marginTop: 24,
   },
   unitList: {
@@ -1804,7 +1804,7 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
   },
   removePhotoLabel: {
-    fontSize: 13,
+    fontSize: 12,
     fontWeight: '600',
   },
   headerButton: {
