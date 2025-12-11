@@ -32,6 +32,8 @@ type NormalizedSearchFields = {
 
 type Cocktail = CocktailRecord & NormalizedSearchFields & { userRating?: number };
 type Ingredient = IngredientRecord & NormalizedSearchFields;
+type CocktailTag = NonNullable<CocktailRecord['tags']>[number];
+type CocktailIngredient = NonNullable<CocktailRecord['ingredients']>[number];
 
 type InventoryContextValue = {
   cocktails: Cocktail[];
@@ -43,6 +45,7 @@ type InventoryContextValue = {
   toggleIngredientAvailability: (id: number) => void;
   toggleIngredientShopping: (id: number) => void;
   clearBaseIngredient: (id: number) => void;
+  createCocktail: (input: CreateCocktailInput) => Cocktail | undefined;
   createIngredient: (input: CreateIngredientInput) => Ingredient | undefined;
   updateIngredient: (id: number, input: CreateIngredientInput) => Ingredient | undefined;
   deleteIngredient: (id: number) => boolean;
@@ -58,6 +61,15 @@ type InventoryState = {
 };
 
 type IngredientTag = NonNullable<IngredientRecord['tags']>[number];
+type CreateCocktailInput = {
+  name: string;
+  description?: string | null;
+  instructions?: string | null;
+  glassId?: string | null;
+  photoUri?: string | null;
+  tags?: CocktailTag[] | null;
+  ingredients?: CocktailIngredient[] | null;
+};
 
 type CreateIngredientInput = {
   name: string;
@@ -388,6 +400,132 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       }
       return next;
     });
+  }, []);
+
+  const createCocktail = useCallback((input: CreateCocktailInput) => {
+    let created: Cocktail | undefined;
+
+    setInventoryState((prev) => {
+      if (!prev) {
+        return prev;
+      }
+
+      const trimmedName = input.name?.trim();
+      if (!trimmedName) {
+        return prev;
+      }
+
+      const nextId =
+        prev.cocktails.reduce((maxId, cocktail) => {
+          const id = Number(cocktail.id ?? -1);
+          if (!Number.isFinite(id) || id < 0) {
+            return maxId;
+          }
+
+          return Math.max(maxId, id);
+        }, 0) + 1;
+
+      const description = input.description?.trim() || undefined;
+      const instructions = input.instructions?.trim() || undefined;
+      const photoUri = input.photoUri?.trim() || undefined;
+      const glassId = input.glassId?.trim() || undefined;
+
+      const tagMap = new Map<number, CocktailTag>();
+      (input.tags ?? []).forEach((tag) => {
+        const id = Number(tag.id ?? -1);
+        if (!Number.isFinite(id) || id < 0) {
+          return;
+        }
+
+        if (!tagMap.has(id)) {
+          tagMap.set(id, { id, name: tag.name, color: tag.color });
+        }
+      });
+      const tags = tagMap.size > 0 ? Array.from(tagMap.values()) : undefined;
+
+      const normalizedName = trimmedName.toLowerCase();
+      const searchTokens = normalizedName.split(/\s+/).filter(Boolean);
+      const timestamp = Date.now();
+
+      const normalizedIngredients: CocktailIngredient[] | undefined = input.ingredients
+        ?.map((ingredient, index) => {
+          const rawName = ingredient.name?.trim() ?? '';
+          if (!rawName) {
+            return undefined;
+          }
+
+          const normalizedIngredientId =
+            ingredient.ingredientId != null ? Number(ingredient.ingredientId) : undefined;
+          const ingredientId =
+            normalizedIngredientId != null && Number.isFinite(normalizedIngredientId)
+              ? Math.trunc(normalizedIngredientId)
+              : undefined;
+
+          const amount = ingredient.amount?.trim();
+          const unitId = ingredient.unitId != null ? Number(ingredient.unitId) : undefined;
+          const substitutes = ingredient.substitutes
+            ?.map((substitute) => {
+              const substituteId = substitute.id != null ? Number(substitute.id) : undefined;
+              if (substituteId == null || Number.isNaN(substituteId)) {
+                return undefined;
+              }
+
+              return {
+                id: substituteId,
+                name: substitute.name,
+                isBrand: (substitute as { isBrand?: boolean }).isBrand,
+              } satisfies CocktailIngredient['substitutes'][number];
+            })
+            .filter(Boolean) as CocktailIngredient['substitutes'] | undefined;
+
+          return {
+            order: ingredient.order ?? index + 1,
+            ingredientId,
+            name: rawName,
+            amount,
+            unitId,
+            garnish: ingredient.garnish ?? false ? true : undefined,
+            optional: ingredient.optional ?? false ? true : undefined,
+            allowBaseSubstitute: ingredient.allowBaseSubstitute ?? false ? true : undefined,
+            allowBrandSubstitute: ingredient.allowBrandSubstitute ?? false ? true : undefined,
+            substitutes,
+          } satisfies CocktailIngredient;
+        })
+        .filter(Boolean);
+
+      const candidateRecord: CocktailRecord = {
+        id: nextId,
+        name: trimmedName,
+        description,
+        instructions,
+        glassId,
+        photoUri,
+        tags,
+        createdAt: timestamp,
+        updatedAt: timestamp,
+        searchName: normalizedName,
+        searchTokens,
+        ingredients: normalizedIngredients,
+      };
+
+      const [normalized] = normalizeSearchFields([candidateRecord]);
+      if (!normalized) {
+        return prev;
+      }
+
+      const nextCocktails = [...prev.cocktails, normalized].sort((a, b) =>
+        a.searchNameNormalized.localeCompare(b.searchNameNormalized),
+      );
+
+      created = normalized;
+
+      return {
+        ...prev,
+        cocktails: nextCocktails,
+      } satisfies InventoryState;
+    });
+
+    return created;
   }, []);
 
   const createIngredient = useCallback(
@@ -737,6 +875,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       toggleIngredientAvailability,
       toggleIngredientShopping,
       clearBaseIngredient,
+      createCocktail,
       createIngredient,
       updateIngredient,
       deleteIngredient,
@@ -754,6 +893,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     toggleIngredientAvailability,
     toggleIngredientShopping,
     clearBaseIngredient,
+    createCocktail,
     createIngredient,
     updateIngredient,
     deleteIngredient,
@@ -775,4 +915,4 @@ export function useInventory() {
   return context;
 }
 
-export type { Cocktail, Ingredient, CreateIngredientInput };
+export type { Cocktail, Ingredient, CreateCocktailInput, CreateIngredientInput };
