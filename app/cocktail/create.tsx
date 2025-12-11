@@ -41,11 +41,6 @@ const DEFAULT_UNIT_ID = 11;
 const MIN_AUTOCOMPLETE_LENGTH = 2;
 const MAX_SUGGESTIONS = 8;
 
-const SUBSTITUTION_HINTS = {
-  base: 'Allow using the base ingredient linked to this ingredient when available.',
-  brand: 'Allow swapping for branded variants that are linked to this ingredient.',
-} as const;
-
 type EditableSubstitute = {
   key: string;
   id?: number;
@@ -389,23 +384,6 @@ export default function CreateCocktailScreen() {
     setIngredientsState((prev) => {
       const next = prev.filter((item) => item.key !== key);
       return next.length > 0 ? next : [createEditableIngredient()];
-    });
-  }, []);
-
-  const handleMoveIngredient = useCallback((key: string, direction: -1 | 1) => {
-    setIngredientsState((prev) => {
-      const index = prev.findIndex((item) => item.key === key);
-      if (index === -1) {
-        return prev;
-      }
-      const targetIndex = index + direction;
-      if (targetIndex < 0 || targetIndex >= prev.length) {
-        return prev;
-      }
-      const next = [...prev];
-      const [moved] = next.splice(index, 1);
-      next.splice(targetIndex, 0, moved);
-      return next;
     });
   }, []);
 
@@ -766,137 +744,99 @@ export default function CreateCocktailScreen() {
             <TextInput
               value={name}
               onChangeText={setName}
-              placeholder="For example, Negroni"
+              placeholder="e.g. Margarita"
               style={[styles.input, { borderColor: palette.outlineVariant, color: palette.text }]}
               placeholderTextColor={`${palette.onSurfaceVariant}99`}
             />
           </View>
 
-          <View style={styles.section}>
-            <Text style={[styles.label, { color: palette.onSurface }]}>Glass</Text>
-            <Pressable
-              style={[styles.glassSelector, { borderColor: palette.outlineVariant }]}
-              accessibilityRole="button"
-              accessibilityLabel="Select glassware"
-              onPress={() => setIsGlassModalVisible(true)}>
-              {selectedGlass ? (
-                <View style={styles.glassContent}>
-                  <View style={styles.glassThumb}>
-                    {glassImageSource ? (
-                      <Image source={glassImageSource} style={styles.glassImage} contentFit="cover" />
-                    ) : (
-                      <MaterialCommunityIcons
-                        name="glass-cocktail"
-                        size={28}
-                        color={palette.onSurfaceVariant}
-                      />
-                    )}
-                  </View>
-                  <Text style={[styles.glassLabel, { color: palette.onSurface }]}>{selectedGlass.name}</Text>
-                  <Pressable
-                    onPress={(event) => {
-                      event.stopPropagation();
-                      setGlassId(null);
-                    }}
-                    hitSlop={8}
-                    style={[styles.clearButton, { backgroundColor: palette.surface }]}>
-                    <MaterialCommunityIcons name="close" size={16} color={palette.onSurfaceVariant} />
-                  </Pressable>
-                </View>
-              ) : (
-                <Text style={[styles.placeholderText, { color: palette.onSurfaceVariant }]}>Select glassware</Text>
-              )}
-            </Pressable>
-          </View>
-
-          <View style={styles.section}>
-            <Text style={[styles.label, { color: palette.onSurface }]}>Photo</Text>
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel={placeholderLabel}
-              style={[
-                styles.imagePlaceholder,
-                { borderColor: palette.outline },
-                !imageSource && { backgroundColor: palette.surfaceVariant },
-              ]}
-              onPress={handlePickImage}
-              android_ripple={{ color: `${palette.surface}33` }}>
-              {imageSource ? (
-                <Image source={imageSource} style={styles.image} contentFit="cover" />
-              ) : (
-                <View style={styles.placeholderContent}>
-                  <MaterialCommunityIcons
-                    name="image-plus"
-                    size={28}
-                    color={palette.onSurfaceVariant}
-                  />
-                  <Text style={[styles.placeholderHint, { color: palette.onSurfaceVariant }]}>Tap to add photo</Text>
-                </View>
-              )}
-            </Pressable>
-            {imageUri ? (
+          <View style={[styles.section, styles.rowWrap]}>
+            <View style={[styles.card, styles.halfCard, { borderColor: palette.outlineVariant }]}> 
+              <Text style={[styles.cardLabel, { color: palette.onSurface }]}>Glass</Text>
               <Pressable
-                onPress={handleRemovePhoto}
-                style={[styles.removePhotoButton, { borderColor: palette.outlineVariant }]}
+                style={styles.glassTile}
                 accessibilityRole="button"
-                accessibilityLabel="Remove photo">
-                <MaterialCommunityIcons name="trash-can-outline" size={18} color={palette.error} />
-                <Text style={[styles.removePhotoLabel, { color: palette.error }]}>Remove photo</Text>
+                accessibilityLabel="Select glassware"
+                onPress={() => setIsGlassModalVisible(true)}>
+                {glassImageSource ? (
+                  <Image source={glassImageSource} style={styles.glassPreview} contentFit="contain" />
+                ) : (
+                  <MaterialCommunityIcons name="glass-cocktail" size={48} color={palette.onSurfaceVariant} />
+                )}
+                <Text style={[styles.cardHint, { color: palette.onSurfaceVariant }]}>Tap to select</Text>
+                {selectedGlass ? (
+                  <Text style={[styles.cardValue, { color: palette.onSurface }]} numberOfLines={1}>
+                    {selectedGlass.name}
+                  </Text>
+                ) : null}
               </Pressable>
-            ) : null}
+            </View>
+
+            <View style={[styles.card, styles.halfCard, { borderColor: palette.outlineVariant }]}> 
+              <Text style={[styles.cardLabel, { color: palette.onSurface }]}>Photo</Text>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={placeholderLabel}
+                style={[styles.photoTile, !imageSource && { backgroundColor: palette.surfaceVariant }]}
+                onPress={handlePickImage}
+                android_ripple={{ color: `${palette.surface}33` }}>
+                {imageSource ? (
+                  <Image source={imageSource} style={styles.photoPreview} contentFit="cover" />
+                ) : (
+                  <Text style={[styles.cardHint, { color: palette.onSurfaceVariant }]}>Tap to select image</Text>
+                )}
+              </Pressable>
+              {imageUri ? (
+                <Pressable
+                  onPress={handleRemovePhoto}
+                  style={[styles.removePhotoButton, { borderColor: palette.outlineVariant }]}
+                  accessibilityRole="button"
+                  accessibilityLabel="Remove photo">
+                  <MaterialCommunityIcons name="trash-can-outline" size={18} color={palette.error} />
+                  <Text style={[styles.removePhotoLabel, { color: palette.error }]}>Remove photo</Text>
+                </Pressable>
+              ) : null}
+            </View>
           </View>
 
           <View style={styles.section}>
             <Text style={[styles.label, { color: palette.onSurface }]}>Tags</Text>
-            <Text style={[styles.hint, { color: palette.onSurfaceVariant }]}>Select one or more tags</Text>
             <View style={styles.tagList}>
-              {tagSelection.map((tag) => (
+              {tagSelection.selected.length ? (
+                tagSelection.selected.map((tag) => (
+                  <TagPill
+                    key={tag.id}
+                    label={tag.name}
+                    color={tag.color}
+                    selected
+                    onPress={() => handleToggleTag(tag.id)}
+                    accessibilityRole="checkbox"
+                    accessibilityState={{ checked: true }}
+                    androidRippleColor={`${palette.surface}33`}
+                  />
+                ))
+              ) : (
+                <Text style={[styles.hint, { color: palette.onSurfaceVariant }]}>No tags selected</Text>
+              )}
+            </View>
+
+            <Text style={[styles.label, { color: palette.onSurface }]}>Add Tag</Text>
+            <View style={styles.tagList}>
+              {tagSelection.available.map((tag) => (
                 <TagPill
                   key={tag.id}
                   label={tag.name}
                   color={tag.color}
-                  selected={tag.selected}
+                  selected={false}
                   onPress={() => handleToggleTag(tag.id)}
-                  accessibilityRole="checkbox"
-                  accessibilityState={{ checked: tag.selected }}
+                  accessibilityRole="button"
                   androidRippleColor={`${palette.surface}33`}
                 />
               ))}
             </View>
-          </View>
-
-          <View style={styles.section}>
-            <View style={styles.sectionHeader}>
-              <Text style={[styles.label, { color: palette.onSurface }]}>Ingredients</Text>
-              <Pressable
-                onPress={handleAddIngredient}
-                style={[styles.addIngredientButton, { borderColor: palette.outlineVariant }]}
-                accessibilityRole="button"
-                accessibilityLabel="Add ingredient">
-                <MaterialCommunityIcons name="plus" size={18} color={palette.tint} />
-                <Text style={[styles.addIngredientLabel, { color: palette.tint }]}>Add ingredient</Text>
-              </Pressable>
-            </View>
-
-            <View style={styles.ingredientsList}>
-              {ingredientsState.map((ingredient, index) => (
-                <EditableIngredientRow
-                  key={ingredient.key}
-                  ingredient={ingredient}
-                  inventoryIngredients={inventoryIngredients}
-                  onChange={handleChangeIngredient}
-                  onRemove={handleRemoveIngredient}
-                  onMove={handleMoveIngredient}
-                  onRequestUnitPicker={handleOpenUnitPicker}
-                  onRequestAddSubstitute={handleOpenSubstituteModal}
-                  onRemoveSubstitute={handleRemoveSubstitute}
-                  onRequestCreateIngredient={handleRequestCreateIngredient}
-                  isFirst={index === 0}
-                  isLast={index === ingredientsState.length - 1}
-                  palette={palette}
-                />
-              ))}
-            </View>
+            <Pressable onPress={() => Alert.alert('Manage tags', 'Tag management coming soon')}>
+              <Text style={[styles.manageTagsLink, { color: palette.tint }]}>Manage tags</Text>
+            </Pressable>
           </View>
 
           <View style={styles.section}>
@@ -904,7 +844,7 @@ export default function CreateCocktailScreen() {
             <TextInput
               value={description}
               onChangeText={setDescription}
-              placeholder="What makes this cocktail special?"
+              placeholder="Optional description"
               placeholderTextColor={`${palette.onSurfaceVariant}99`}
               style={[styles.input, styles.multilineInput, { borderColor: palette.outlineVariant, color: palette.text }]}
               multiline
@@ -917,12 +857,41 @@ export default function CreateCocktailScreen() {
             <TextInput
               value={instructions}
               onChangeText={setInstructions}
-              placeholder="Stir over ice and strain into a chilled glass..."
+              placeholder="1. Grab some ice..."
               placeholderTextColor={`${palette.onSurfaceVariant}99`}
               style={[styles.input, styles.multilineInput, { borderColor: palette.outlineVariant, color: palette.text }]}
               multiline
               textAlignVertical="top"
             />
+          </View>
+
+          <View style={styles.section}>
+            <Text style={[styles.label, { color: palette.onSurface }]}>Ingredients</Text>
+            <View style={styles.ingredientsList}>
+              {ingredientsState.map((ingredient, index) => (
+                <EditableIngredientRow
+                  key={ingredient.key}
+                  ingredient={ingredient}
+                  inventoryIngredients={inventoryIngredients}
+                  onChange={handleChangeIngredient}
+                  onRemove={handleRemoveIngredient}
+                  onRequestUnitPicker={handleOpenUnitPicker}
+                  onRequestAddSubstitute={handleOpenSubstituteModal}
+                  onRemoveSubstitute={handleRemoveSubstitute}
+                  onRequestCreateIngredient={handleRequestCreateIngredient}
+                  palette={palette}
+                  index={index}
+                />
+              ))}
+            </View>
+            <Pressable
+              onPress={handleAddIngredient}
+              style={[styles.addIngredientButton, { borderColor: palette.outlineVariant }]}
+              accessibilityRole="button"
+              accessibilityLabel="Add ingredient">
+              <MaterialCommunityIcons name="plus" size={18} color={palette.tint} />
+              <Text style={[styles.addIngredientLabel, { color: palette.tint }]}>Add ingredient</Text>
+            </Pressable>
           </View>
 
           <Pressable
@@ -1082,13 +1051,11 @@ type EditableIngredientRowProps = {
   inventoryIngredients: Ingredient[];
   onChange: (key: string, changes: Partial<EditableIngredient>) => void;
   onRemove: (key: string) => void;
-  onMove: (key: string, direction: -1 | 1) => void;
   onRequestUnitPicker: (key: string) => void;
   onRequestAddSubstitute: (key: string) => void;
   onRemoveSubstitute: (ingredientKey: string, substituteKey: string) => void;
   onRequestCreateIngredient: (name: string) => void;
-  isFirst: boolean;
-  isLast: boolean;
+  index: number;
   palette: typeof Colors;
 };
 
@@ -1097,13 +1064,11 @@ function EditableIngredientRow({
   inventoryIngredients,
   onChange,
   onRemove,
-  onMove,
   onRequestUnitPicker,
   onRequestAddSubstitute,
   onRemoveSubstitute,
   onRequestCreateIngredient,
-  isFirst,
-  isLast,
+  index,
   palette,
 }: EditableIngredientRowProps) {
   const [isFocused, setIsFocused] = useState(false);
@@ -1189,14 +1154,6 @@ function EditableIngredientRow({
     onChange(ingredient.key, { garnish: !ingredient.garnish });
   }, [ingredient.key, ingredient.garnish, onChange]);
 
-  const handleToggleAllowBase = useCallback(() => {
-    onChange(ingredient.key, { allowBaseSubstitution: !ingredient.allowBaseSubstitution });
-  }, [ingredient.allowBaseSubstitution, ingredient.key, onChange]);
-
-  const handleToggleAllowBrand = useCallback(() => {
-    onChange(ingredient.key, { allowBrandSubstitution: !ingredient.allowBrandSubstitution });
-  }, [ingredient.allowBrandSubstitution, ingredient.key, onChange]);
-
   const unitLabel = useMemo(() => {
     if (ingredient.unitId == null) {
       return 'No unit';
@@ -1216,54 +1173,33 @@ function EditableIngredientRow({
 
   return (
     <View style={[styles.ingredientCard, { borderColor: palette.outlineVariant, backgroundColor: palette.surface }]}>
-      <View style={styles.ingredientHeader}>
-        <TextInput
-          value={ingredient.name}
-          onChangeText={(text) => {
-            const nextNormalized = text.trim().toLowerCase();
-            const shouldClearId =
-              ingredient.ingredientId != null && nextNormalized !== normalizedName;
-            onChange(ingredient.key, {
-              name: text,
-              ingredientId: shouldClearId ? undefined : ingredient.ingredientId,
-            });
-          }}
-          placeholder="Ingredient name"
-          placeholderTextColor={`${palette.onSurfaceVariant}99`}
-          style={[styles.input, styles.ingredientNameInput, { borderColor: palette.outlineVariant, color: palette.text }]}
-          onFocus={handleNameFocus}
-          onBlur={handleNameBlur}
-          autoCapitalize="words"
-        />
-        <View style={styles.ingredientActions}>
-          <Pressable
-            onPress={() => onMove(ingredient.key, -1)}
-            disabled={isFirst}
-            style={[styles.actionButton, { opacity: isFirst ? 0.4 : 1 }]}
-            accessibilityRole="button"
-            accessibilityLabel="Move ingredient up"
-            hitSlop={8}>
-            <MaterialCommunityIcons name="arrow-up" size={18} color={palette.onSurfaceVariant} />
-          </Pressable>
-          <Pressable
-            onPress={() => onMove(ingredient.key, 1)}
-            disabled={isLast}
-            style={[styles.actionButton, { opacity: isLast ? 0.4 : 1 }]}
-            accessibilityRole="button"
-            accessibilityLabel="Move ingredient down"
-            hitSlop={8}>
-            <MaterialCommunityIcons name="arrow-down" size={18} color={palette.onSurfaceVariant} />
-          </Pressable>
-          <Pressable
-            onPress={() => onRemove(ingredient.key)}
-            style={styles.actionButton}
-            accessibilityRole="button"
-            accessibilityLabel="Remove ingredient"
-            hitSlop={8}>
-            <MaterialIcons name="delete-outline" size={20} color={palette.error} />
-          </Pressable>
-        </View>
+      <View style={styles.ingredientHeaderSimple}>
+        <Text style={[styles.ingredientHeading, { color: palette.onSurface }]}>{`${index + 1}. Ingredient`}</Text>
+        <Pressable
+          onPress={() => onRemove(ingredient.key)}
+          hitSlop={8}
+          accessibilityRole="button"
+          accessibilityLabel="Remove ingredient">
+          <MaterialIcons name="delete-outline" size={20} color={palette.onSurfaceVariant} />
+        </Pressable>
       </View>
+      <TextInput
+        value={ingredient.name}
+        onChangeText={(text) => {
+          const nextNormalized = text.trim().toLowerCase();
+          const shouldClearId = ingredient.ingredientId != null && nextNormalized !== normalizedName;
+          onChange(ingredient.key, {
+            name: text,
+            ingredientId: shouldClearId ? undefined : ingredient.ingredientId,
+          });
+        }}
+        placeholder="Type ingredient name"
+        placeholderTextColor={`${palette.onSurfaceVariant}99`}
+        style={[styles.input, styles.ingredientNameInput, { borderColor: palette.outlineVariant, color: palette.text }]}
+        onFocus={handleNameFocus}
+        onBlur={handleNameBlur}
+        autoCapitalize="words"
+      />
 
       {showSuggestions && suggestions.length ? (
         <View style={[styles.suggestionList, { borderColor: palette.outlineVariant, backgroundColor: palette.surface }]}
@@ -1303,7 +1239,7 @@ function EditableIngredientRow({
           <TextInput
             value={ingredient.amount}
             onChangeText={(text) => onChange(ingredient.key, { amount: text })}
-            placeholder="45"
+            placeholder="e.g. 45"
             placeholderTextColor={`${palette.onSurfaceVariant}99`}
             keyboardType="decimal-pad"
             style={[styles.input, { borderColor: palette.outlineVariant, color: palette.text }]}
@@ -1323,30 +1259,8 @@ function EditableIngredientRow({
       </View>
 
       <View style={styles.toggleRow}>
-        <ToggleChip
-          label="Optional"
-          active={ingredient.optional}
-          onToggle={handleToggleOptional}
-          palette={palette}
-        />
         <ToggleChip label="Garnish" active={ingredient.garnish} onToggle={handleToggleGarnish} palette={palette} />
-      </View>
-
-      <View style={styles.toggleRow}>
-        <ToggleChip
-          label="Allow base substitute"
-          active={ingredient.allowBaseSubstitution}
-          onToggle={handleToggleAllowBase}
-          onInfo={() => Alert.alert('Base substitute', SUBSTITUTION_HINTS.base)}
-          palette={palette}
-        />
-        <ToggleChip
-          label="Allow brand swap"
-          active={ingredient.allowBrandSubstitution}
-          onToggle={handleToggleAllowBrand}
-          onInfo={() => Alert.alert('Brand substitute', SUBSTITUTION_HINTS.brand)}
-          palette={palette}
-        />
+        <ToggleChip label="Optional" active={ingredient.optional} onToggle={handleToggleOptional} palette={palette} />
       </View>
 
       <View style={styles.substitutesSection}>
@@ -1438,12 +1352,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
-    padding: 24,
-    gap: 24,
+    padding: 16,
+    gap: 20,
     paddingBottom: 120,
   },
   section: {
-    gap: 12,
+    gap: 10,
   },
   sectionHeader: {
     flexDirection: 'row',
@@ -1466,37 +1380,58 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.surface,
   },
   multilineInput: {
-    minHeight: 140,
+    minHeight: 120,
   },
-  glassSelector: {
+  rowWrap: {
     flexDirection: 'row',
-    alignItems: 'center',
-    padding: 12,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderRadius: 16,
-  },
-  glassContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
     gap: 12,
-    flex: 1,
+    flexWrap: 'wrap',
   },
-  glassThumb: {
-    width: 48,
-    height: 48,
-    borderRadius: 12,
-    overflow: 'hidden',
+  card: {
+    borderWidth: StyleSheet.hairlineWidth,
+    borderRadius: 14,
+    padding: 12,
+    gap: 8,
+    backgroundColor: Colors.surface,
+  },
+  halfCard: {
+    flex: 1,
+    minWidth: '48%',
+  },
+  cardLabel: {
+    fontSize: 15,
+    fontWeight: '600',
+  },
+  glassTile: {
     alignItems: 'center',
     justifyContent: 'center',
+    gap: 8,
+    minHeight: 180,
   },
-  glassImage: {
+  glassPreview: {
+    width: '100%',
+    height: 140,
+    resizeMode: 'contain',
+  },
+  cardHint: {
+    fontSize: 13,
+  },
+  cardValue: {
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  photoTile: {
+    height: 180,
+    borderRadius: 12,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: Colors.outline,
+    alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'hidden',
+  },
+  photoPreview: {
     width: '100%',
     height: '100%',
-  },
-  glassLabel: {
-    fontSize: 16,
-    fontWeight: '500',
-    flex: 1,
   },
   glassRow: {
     justifyContent: 'space-between',
@@ -1524,36 +1459,15 @@ const styles = StyleSheet.create({
     gap: 16,
     paddingBottom: 16,
   },
-  imagePlaceholder: {
-    width: '100%',
-    height: 180,
-    borderRadius: 16,
-    borderWidth: StyleSheet.hairlineWidth,
-    overflow: 'hidden',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  image: {
-    width: '100%',
-    height: '100%',
-  },
-  placeholderContent: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 8,
-  },
-  placeholderHint: {
-    fontSize: 13,
-    fontWeight: '500',
-  },
-  placeholderText: {
-    fontSize: 14,
-    fontWeight: '500',
-  },
   tagList: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 12,
+    gap: 10,
+  },
+  manageTagsLink: {
+    fontSize: 14,
+    fontWeight: '600',
+    marginTop: 6,
   },
   addIngredientButton: {
     flexDirection: 'row',
@@ -1573,30 +1487,25 @@ const styles = StyleSheet.create({
   },
   ingredientCard: {
     borderWidth: StyleSheet.hairlineWidth,
-    borderRadius: 20,
-    padding: 16,
-    gap: 16,
+    borderRadius: 16,
+    padding: 14,
+    gap: 12,
   },
-  ingredientHeader: {
+  ingredientHeaderSimple: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+    justifyContent: 'space-between',
+  },
+  ingredientHeading: {
+    fontSize: 15,
+    fontWeight: '600',
   },
   ingredientNameInput: {
     flex: 1,
   },
-  ingredientActions: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  actionButton: {
-    padding: 6,
-    borderRadius: 999,
-  },
   suggestionList: {
     position: 'absolute',
-    top: 70,
+    top: 86,
     left: 0,
     right: 0,
     zIndex: 10,
@@ -1604,6 +1513,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     paddingVertical: 4,
     gap: 4,
+    backgroundColor: Colors.surface,
   },
   suggestionItem: {
     flexDirection: 'row',
@@ -1631,7 +1541,7 @@ const styles = StyleSheet.create({
   },
   rowInputs: {
     flexDirection: 'row',
-    gap: 16,
+    gap: 12,
   },
   amountColumn: {
     flex: 1,
@@ -1660,7 +1570,7 @@ const styles = StyleSheet.create({
   },
   toggleRow: {
     flexDirection: 'row',
-    gap: 16,
+    gap: 12,
     flexWrap: 'wrap',
   },
   toggleChipContainer: {
@@ -1682,7 +1592,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   substitutesSection: {
-    gap: 12,
+    gap: 10,
   },
   substitutesHeader: {
     flexDirection: 'row',
