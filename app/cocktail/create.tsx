@@ -911,7 +911,10 @@ export default function CreateCocktailScreen() {
             </View>
           <Pressable
             onPress={handleAddIngredient}
-            style={[styles.addIngredientButton, { borderColor: palette.outlineVariant }]}
+            style={[
+              styles.addIngredientButton,
+              { borderColor: palette.outlineVariant, backgroundColor: palette.surface },
+            ]}
             accessibilityRole="button"
             accessibilityLabel="Add ingredient">
               <MaterialCommunityIcons name="plus" size={18} color={palette.tint} />
@@ -1209,46 +1212,49 @@ function EditableIngredientRow({
       <View style={styles.ingredientHeaderSimple}>
         <View style={styles.ingredientTitleRow}>
           <Text style={[styles.ingredientHeading, { color: palette.onSurface }]}>{`${index + 1}. Ingredient`}</Text>
-          {canReorder ? (
-            <View style={styles.reorderControls}>
-              <Pressable
-                onPress={() => onMove(ingredient.key, 'up')}
-                disabled={!canMoveUp}
-                hitSlop={8}
-                accessibilityRole="button"
-                accessibilityLabel="Move ingredient up"
-                style={[styles.reorderButton, !canMoveUp && styles.reorderButtonDisabled]}>
-                <MaterialIcons
-                  name="keyboard-arrow-up"
-                  size={18}
-                  color={canMoveUp ? palette.onSurfaceVariant : `${palette.onSurfaceVariant}66`}
-                />
-              </Pressable>
-              <Pressable
-                onPress={() => onMove(ingredient.key, 'down')}
-                disabled={!canMoveDown}
-                hitSlop={8}
-                accessibilityRole="button"
-                accessibilityLabel="Move ingredient down"
-                style={[styles.reorderButton, !canMoveDown && styles.reorderButtonDisabled]}>
-                <MaterialIcons
-                  name="keyboard-arrow-down"
-                  size={18}
-                  color={canMoveDown ? palette.onSurfaceVariant : `${palette.onSurfaceVariant}66`}
-                />
-              </Pressable>
-            </View>
-          ) : null}
+          <View
+            style={[
+              styles.reorderControls,
+              !canReorder && styles.reorderControlsPlaceholder,
+            ]}
+            pointerEvents={canReorder ? 'auto' : 'none'}>
+            <Pressable
+              onPress={() => onMove(ingredient.key, 'up')}
+              disabled={!canMoveUp}
+              hitSlop={8}
+              accessibilityRole="button"
+              accessibilityLabel="Move ingredient up"
+              style={[styles.reorderButton, !canMoveUp && styles.reorderButtonDisabled]}>
+              <MaterialIcons
+                name="keyboard-arrow-up"
+                size={18}
+                color={canMoveUp ? palette.onSurfaceVariant : `${palette.onSurfaceVariant}66`}
+              />
+            </Pressable>
+            <Pressable
+              onPress={() => onMove(ingredient.key, 'down')}
+              disabled={!canMoveDown}
+              hitSlop={8}
+              accessibilityRole="button"
+              accessibilityLabel="Move ingredient down"
+              style={[styles.reorderButton, !canMoveDown && styles.reorderButtonDisabled]}>
+              <MaterialIcons
+                name="keyboard-arrow-down"
+                size={18}
+                color={canMoveDown ? palette.onSurfaceVariant : `${palette.onSurfaceVariant}66`}
+              />
+            </Pressable>
+          </View>
         </View>
-        {canReorder ? (
-          <Pressable
-            onPress={() => onRemove(ingredient.key)}
-            hitSlop={8}
-            accessibilityRole="button"
-            accessibilityLabel="Remove ingredient">
-            <MaterialIcons name="delete-outline" size={20} color={palette.error} />
-          </Pressable>
-        ) : null}
+        <Pressable
+          onPress={() => onRemove(ingredient.key)}
+          hitSlop={8}
+          accessibilityRole="button"
+          accessibilityLabel="Remove ingredient"
+          style={!canReorder && styles.hiddenControl}
+          pointerEvents={canReorder ? 'auto' : 'none'}>
+          <MaterialIcons name="delete-outline" size={20} color={palette.error} />
+        </Pressable>
       </View>
       <TextInput
         value={ingredient.name}
@@ -1333,7 +1339,10 @@ function EditableIngredientRow({
       <View style={styles.substitutesSection}>
         <Pressable
           onPress={() => onRequestAddSubstitute(ingredient.key)}
-          style={[styles.addSubstituteButton, { borderColor: palette.outlineVariant }]}
+          style={[
+            styles.addSubstituteButton,
+            { borderColor: palette.outlineVariant, backgroundColor: palette.background },
+          ]}
           accessibilityRole="button"
           accessibilityLabel="Add substitute">
           <MaterialCommunityIcons name="plus" size={16} color={palette.tint} />
@@ -1536,7 +1545,7 @@ const styles = StyleSheet.create({
     gap: 6,
     paddingHorizontal: 12,
     paddingVertical: 8,
-    borderRadius: 4,
+    borderRadius: 8,
     borderWidth: StyleSheet.hairlineWidth,
     minHeight: 52,
     width: '50%',
@@ -1576,6 +1585,9 @@ const styles = StyleSheet.create({
     gap: 6,
     marginLeft: 6,
   },
+  reorderControlsPlaceholder: {
+    opacity: 0,
+  },
   reorderButton: {
     width: 28,
     height: 28,
@@ -1586,6 +1598,9 @@ const styles = StyleSheet.create({
   },
   reorderButtonDisabled: {
     opacity: 0.6,
+  },
+  hiddenControl: {
+    opacity: 0,
   },
   ingredientNameInput: {
     flex: 1,
@@ -1686,7 +1701,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 6,
     borderWidth: StyleSheet.hairlineWidth,
-    borderRadius: 4,
+    borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 8,
     minHeight: 52,
@@ -1719,7 +1734,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   submitButton: {
-    borderRadius: 4,
+    borderRadius: 8,
     paddingVertical: 16,
     alignItems: 'center',
     justifyContent: 'center',
