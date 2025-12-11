@@ -199,10 +199,10 @@ export default function CreateCocktailScreen() {
 
   const tagSelection = useMemo(() => {
     const set = new Set(selectedTagIds);
-    return BUILTIN_COCKTAIL_TAGS.map((tag) => ({
-      ...tag,
-      selected: set.has(tag.id),
-    }));
+    const selected = BUILTIN_COCKTAIL_TAGS.filter((tag) => set.has(tag.id));
+    const available = BUILTIN_COCKTAIL_TAGS.filter((tag) => !set.has(tag.id));
+
+    return { selected, available };
   }, [selectedTagIds]);
 
   useEffect(() => {
