@@ -483,14 +483,8 @@ export default function CreateIngredientScreen() {
               </>
             ) : (
               <View style={styles.basePlaceholderRow}>
-                <MaterialCommunityIcons
-                  name="link-variant"
-                  size={20}
-                  color={palette.onSurfaceVariant}
-                />
-                <Text style={[styles.basePlaceholderText, { color: palette.onSurfaceVariant }]}>
-                  Select a base ingredient
-                </Text>
+                <View style={[styles.baseThumb, styles.basePlaceholderThumb]} />
+                <Text style={[styles.basePlaceholderText, { color: palette.onSurfaceVariant }]}>None</Text>
               </View>
             )}
           </Pressable>
@@ -691,10 +685,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 12,
     flex: 1,
+    minHeight: 56,
   },
   basePlaceholderText: {
     fontSize: 14,
     fontWeight: '500',
+  },
+  basePlaceholderThumb: {
+    backgroundColor: 'transparent',
+    borderColor: 'transparent',
+    borderWidth: StyleSheet.hairlineWidth,
   },
   baseShoppingIndicator: {
     minHeight: 56,
