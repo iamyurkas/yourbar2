@@ -749,18 +749,23 @@ export default function CreateCocktailScreen() {
           contentContainerStyle={styles.content}
           keyboardShouldPersistTaps="handled">
           <View style={styles.section}>
-            <Text style={[styles.label, { color: palette.onSurface }]}>Name</Text>
-            <TextInput
-              value={name}
-              onChangeText={setName}
-              placeholder="e.g. Margarita"
-              style={[styles.input, { borderColor: palette.outlineVariant, color: palette.text }]}
-              placeholderTextColor={`${palette.onSurfaceVariant}99`}
-            />
-          </View>
+          <Text style={[styles.label, { color: palette.onSurface }]}>Name</Text>
+          <TextInput
+            value={name}
+            onChangeText={setName}
+            placeholder="e.g. Margarita"
+            style={[
+              styles.input,
+              { borderColor: palette.outlineVariant, color: palette.text, backgroundColor: palette.surface },
+            ]}
+            placeholderTextColor={`${palette.onSurfaceVariant}99`}
+          />
+        </View>
 
           <View style={[styles.section, styles.rowWrap]}>
-            <View style={[styles.card, styles.halfCard, { borderColor: palette.outlineVariant }]}> 
+            <View
+              style={[styles.card, styles.halfCard, { borderColor: palette.outlineVariant, backgroundColor: palette.background }]}
+            >
               <Text style={[styles.cardLabel, { color: palette.onSurface }]}>Glass</Text>
               <Pressable
                 style={styles.glassTile}
@@ -781,7 +786,9 @@ export default function CreateCocktailScreen() {
               </Pressable>
             </View>
 
-            <View style={[styles.card, styles.halfCard, { borderColor: palette.outlineVariant }]}> 
+            <View
+              style={[styles.card, styles.halfCard, { borderColor: palette.outlineVariant, backgroundColor: palette.background }]}
+            >
               <Text style={[styles.cardLabel, { color: palette.onSurface }]}>Photo</Text>
               <Pressable
                 accessibilityRole="button"
@@ -855,7 +862,11 @@ export default function CreateCocktailScreen() {
               onChangeText={setDescription}
               placeholder="Optional description"
               placeholderTextColor={`${palette.onSurfaceVariant}99`}
-              style={[styles.input, styles.multilineInput, { borderColor: palette.outlineVariant, color: palette.text }]}
+              style={[
+                styles.input,
+                styles.multilineInput,
+                { borderColor: palette.outlineVariant, color: palette.text, backgroundColor: palette.surface },
+              ]}
               multiline
               textAlignVertical="top"
             />
@@ -868,7 +879,11 @@ export default function CreateCocktailScreen() {
               onChangeText={setInstructions}
               placeholder="1. Grab some ice..."
               placeholderTextColor={`${palette.onSurfaceVariant}99`}
-              style={[styles.input, styles.multilineInput, { borderColor: palette.outlineVariant, color: palette.text }]}
+              style={[
+                styles.input,
+                styles.multilineInput,
+                { borderColor: palette.outlineVariant, color: palette.text, backgroundColor: palette.surface },
+              ]}
               multiline
               textAlignVertical="top"
             />
@@ -895,11 +910,11 @@ export default function CreateCocktailScreen() {
                 />
               ))}
             </View>
-            <Pressable
-              onPress={handleAddIngredient}
-              style={[styles.addIngredientButton, { borderColor: palette.outlineVariant }]}
-              accessibilityRole="button"
-              accessibilityLabel="Add ingredient">
+          <Pressable
+            onPress={handleAddIngredient}
+            style={[styles.addIngredientButton, { borderColor: palette.outlineVariant }]}
+            accessibilityRole="button"
+            accessibilityLabel="Add ingredient">
               <MaterialCommunityIcons name="plus" size={18} color={palette.tint} />
               <Text style={[styles.addIngredientLabel, { color: palette.tint }]}>Add ingredient</Text>
             </Pressable>
@@ -1300,7 +1315,7 @@ function EditableIngredientRow({
           <Text style={[styles.inputLabel, { color: palette.onSurfaceVariant }]}>Unit</Text>
           <Pressable
             onPress={() => onRequestUnitPicker(ingredient.key)}
-            style={[styles.unitSelector, { borderColor: palette.outlineVariant }]}
+            style={[styles.unitSelector, { borderColor: palette.outlineVariant, backgroundColor: palette.background }]}
             accessibilityRole="button"
             accessibilityLabel="Select unit">
             <Text style={[styles.unitLabel, { color: palette.onSurface }]}>{unitLabel}</Text>
@@ -1523,6 +1538,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderRadius: 999,
     borderWidth: StyleSheet.hairlineWidth,
+    minHeight: 52,
   },
   addIngredientLabel: {
     fontSize: 14,
@@ -1702,6 +1718,7 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     alignItems: 'center',
     justifyContent: 'center',
+    minHeight: 56,
   },
   submitLabel: {
     fontSize: 16,
