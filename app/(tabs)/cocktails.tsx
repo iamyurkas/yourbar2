@@ -24,6 +24,36 @@ const TAB_OPTIONS: SegmentTabOption[] = [
   { key: 'favorites', label: 'Favorites' },
 ];
 
+function isIngredientAvailable(
+  ingredient: Cocktail['ingredients'][number],
+  availableIngredientIds: Set<number>,
+) {
+  if (!ingredient || ingredient.optional || ingredient.garnish) {
+    return true;
+  }
+
+  const candidateIds: number[] = [];
+
+  const id = typeof ingredient.ingredientId === 'number' ? ingredient.ingredientId : undefined;
+  if (id != null) {
+    candidateIds.push(id);
+  }
+
+  (ingredient.substitutes ?? []).forEach((substitute) => {
+    const substituteId =
+      typeof substitute.ingredientId === 'number'
+        ? substitute.ingredientId
+        : typeof substitute.id === 'number'
+          ? substitute.id
+          : undefined;
+    if (substituteId != null && !candidateIds.includes(substituteId)) {
+      candidateIds.push(substituteId);
+    }
+  });
+
+  return candidateIds.some((candidateId) => availableIngredientIds.has(candidateId));
+}
+
 export default function CocktailsScreen() {
   const { cocktails, availableIngredientIds } = useInventory();
   const [activeTab, setActiveTab] = useState<CocktailTabKey>('all');
@@ -37,18 +67,7 @@ export default function CocktailsScreen() {
       if (recipe.length === 0) {
         return false;
       }
-      return recipe.every((item) => {
-        if (item?.optional || item?.garnish) {
-          return true;
-        }
-
-        const id = typeof item.ingredientId === 'number' ? item.ingredientId : undefined;
-        if (id == null) {
-          return false;
-        }
-
-        return availableIngredientIds.has(id);
-      });
+      return recipe.every((item) => isIngredientAvailable(item, availableIngredientIds));
     });
   }, [cocktails, availableIngredientIds]);
 

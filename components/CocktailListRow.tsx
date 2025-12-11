@@ -56,6 +56,36 @@ type AvailabilitySummary = {
 const REQUIRED_INGREDIENT_FILTER = (item: Cocktail['ingredients'][number]) =>
   !item?.optional && !item?.garnish;
 
+function isIngredientAvailable(
+  ingredient: Cocktail['ingredients'][number],
+  availableIngredientIds: Set<number>,
+) {
+  if (!ingredient) {
+    return false;
+  }
+
+  const candidateIds: number[] = [];
+
+  const id = typeof ingredient.ingredientId === 'number' ? ingredient.ingredientId : undefined;
+  if (id != null) {
+    candidateIds.push(id);
+  }
+
+  (ingredient.substitutes ?? []).forEach((substitute) => {
+    const substituteId =
+      typeof substitute.ingredientId === 'number'
+        ? substitute.ingredientId
+        : typeof substitute.id === 'number'
+          ? substitute.id
+          : undefined;
+    if (substituteId != null && !candidateIds.includes(substituteId)) {
+      candidateIds.push(substituteId);
+    }
+  });
+
+  return candidateIds.some((candidateId) => availableIngredientIds.has(candidateId));
+}
+
 function summariseAvailability(
   cocktail: Cocktail,
   availableIngredientIds: Set<number>,
@@ -76,12 +106,7 @@ function summariseAvailability(
   const missingNames: string[] = [];
 
   requiredIngredients.forEach((ingredient) => {
-    const id = typeof ingredient.ingredientId === 'number' ? ingredient.ingredientId : undefined;
-    if (id == null) {
-      return;
-    }
-
-    if (!availableIngredientIds.has(id)) {
+    if (!isIngredientAvailable(ingredient, availableIngredientIds)) {
       if (ingredient.name) {
         missingNames.push(ingredient.name);
       }

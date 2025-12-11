@@ -492,46 +492,28 @@ export default function CreateCocktailScreen() {
       const candidateId = Number(candidate.id ?? -1);
       const numericId = Number.isFinite(candidateId) && candidateId >= 0 ? Math.trunc(candidateId) : undefined;
 
-      const addSubstitute = (isBrand: boolean) => {
-        const newSubstitute: EditableSubstitute = {
-          key: createUniqueKey(`sub-${substituteTarget}`),
-          name: trimmedName,
-          id: numericId,
-          ingredientId: numericId,
-          isBrand,
-        };
-
-        handleUpdateSubstitutes(substituteTarget, (items) => {
-          const normalizedName = trimmedName.toLowerCase();
-          const exists = items.some((item) => {
-            if (numericId != null && item.ingredientId === numericId) {
-              return true;
-            }
-            return item.name.trim().toLowerCase() === normalizedName;
-          });
-          if (exists) {
-            return items;
-          }
-          return [...items, newSubstitute];
-        });
-        handleCloseSubstituteModal();
+      const newSubstitute: EditableSubstitute = {
+        key: createUniqueKey(`sub-${substituteTarget}`),
+        name: trimmedName,
+        id: numericId,
+        ingredientId: numericId,
+        isBrand: false,
       };
 
-      Alert.alert(
-        'Add substitute',
-        `Add ${trimmedName} as a general or brand-specific substitute?`,
-        [
-          { text: 'Cancel', style: 'cancel' },
-          {
-            text: 'General substitute',
-            onPress: () => addSubstitute(false),
-          },
-          {
-            text: 'Brand-specific',
-            onPress: () => addSubstitute(true),
-          },
-        ],
-      );
+      handleUpdateSubstitutes(substituteTarget, (items) => {
+        const normalizedName = trimmedName.toLowerCase();
+        const exists = items.some((item) => {
+          if (numericId != null && item.ingredientId === numericId) {
+            return true;
+          }
+          return item.name.trim().toLowerCase() === normalizedName;
+        });
+        if (exists) {
+          return items;
+        }
+        return [...items, newSubstitute];
+      });
+      handleCloseSubstituteModal();
     },
     [handleCloseSubstituteModal, handleUpdateSubstitutes, substituteTarget],
   );
