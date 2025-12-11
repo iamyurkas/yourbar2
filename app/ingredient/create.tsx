@@ -606,12 +606,17 @@ const styles = StyleSheet.create({
   imagePlaceholder: {
     width: 150,
     height: 150,
+    maxWidth: 150,
+    maxHeight: 150,
+    minWidth: 150,
+    minHeight: 150,
     borderRadius: 12,
     borderWidth: StyleSheet.hairlineWidth,
     overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'flex-start',
+    flexShrink: 0,
   },
   image: {
     width: '100%',
