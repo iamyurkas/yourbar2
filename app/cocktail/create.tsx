@@ -175,7 +175,7 @@ export default function CreateCocktailScreen() {
   const cocktailNameParam = getParamValue(params.cocktailName);
 
   const [name, setName] = useState('');
-  const [glassId, setGlassId] = useState<string | null>(null);
+  const [glassId, setGlassId] = useState<string | null>('cocktail_glass');
   const [isGlassModalVisible, setIsGlassModalVisible] = useState(false);
   const [imageUri, setImageUri] = useState<string | null>(null);
   const [isPickingImage, setIsPickingImage] = useState(false);
@@ -230,7 +230,7 @@ export default function CreateCocktailScreen() {
     const baseCocktail = resolveCocktail(cocktailParam) ?? resolveCocktail(cocktailNameParam);
     if (baseCocktail) {
       setName(baseCocktail.name ?? '');
-      setGlassId(baseCocktail.glassId ?? null);
+      setGlassId(baseCocktail.glassId ?? 'cocktail_glass');
       setDescription(baseCocktail.description ?? '');
       setInstructions(baseCocktail.instructions ?? '');
       setImageUri(baseCocktail.photoUri ?? null);
@@ -384,6 +384,25 @@ export default function CreateCocktailScreen() {
     setIngredientsState((prev) => {
       const next = prev.filter((item) => item.key !== key);
       return next.length > 0 ? next : [createEditableIngredient()];
+    });
+  }, []);
+
+  const handleMoveIngredient = useCallback((key: string, direction: 'up' | 'down') => {
+    setIngredientsState((prev) => {
+      const currentIndex = prev.findIndex((item) => item.key === key);
+      if (currentIndex < 0) {
+        return prev;
+      }
+
+      const targetIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1;
+      if (targetIndex < 0 || targetIndex >= prev.length) {
+        return prev;
+      }
+
+      const next = [...prev];
+      const [moved] = next.splice(currentIndex, 1);
+      next.splice(targetIndex, 0, moved);
+      return next;
     });
   }, []);
 
@@ -718,16 +737,6 @@ export default function CreateCocktailScreen() {
               <MaterialCommunityIcons name="arrow-left" size={22} color={palette.onSurface} />
             </Pressable>
           ),
-          headerRight: () => (
-            <Pressable
-              onPress={handleSubmit}
-              disabled={isSaving}
-              accessibilityRole="button"
-              accessibilityLabel="Save cocktail"
-              style={[styles.headerButton, { backgroundColor: palette.surfaceVariant, opacity: isSaving ? 0.6 : 1 }]}>
-              <MaterialCommunityIcons name="content-save" size={20} color={palette.onSurface} />
-            </Pressable>
-          ),
         }}
       />
 
@@ -875,12 +884,14 @@ export default function CreateCocktailScreen() {
                   inventoryIngredients={inventoryIngredients}
                   onChange={handleChangeIngredient}
                   onRemove={handleRemoveIngredient}
+                  onMove={handleMoveIngredient}
                   onRequestUnitPicker={handleOpenUnitPicker}
                   onRequestAddSubstitute={handleOpenSubstituteModal}
                   onRemoveSubstitute={handleRemoveSubstitute}
                   onRequestCreateIngredient={handleRequestCreateIngredient}
                   palette={palette}
                   index={index}
+                  totalCount={ingredientsState.length}
                 />
               ))}
             </View>
@@ -1051,11 +1062,13 @@ type EditableIngredientRowProps = {
   inventoryIngredients: Ingredient[];
   onChange: (key: string, changes: Partial<EditableIngredient>) => void;
   onRemove: (key: string) => void;
+  onMove: (key: string, direction: 'up' | 'down') => void;
   onRequestUnitPicker: (key: string) => void;
   onRequestAddSubstitute: (key: string) => void;
   onRemoveSubstitute: (ingredientKey: string, substituteKey: string) => void;
   onRequestCreateIngredient: (name: string) => void;
   index: number;
+  totalCount: number;
   palette: typeof Colors;
 };
 
@@ -1064,11 +1077,13 @@ function EditableIngredientRow({
   inventoryIngredients,
   onChange,
   onRemove,
+  onMove,
   onRequestUnitPicker,
   onRequestAddSubstitute,
   onRemoveSubstitute,
   onRequestCreateIngredient,
   index,
+  totalCount,
   palette,
 }: EditableIngredientRowProps) {
   const [isFocused, setIsFocused] = useState(false);
@@ -1076,6 +1091,10 @@ function EditableIngredientRow({
   const hideSuggestionsTimeout = useRef<NodeJS.Timeout | null>(null);
 
   const normalizedName = ingredient.name.trim().toLowerCase();
+
+  const canReorder = totalCount > 1;
+  const canMoveUp = canReorder && index > 0;
+  const canMoveDown = canReorder && index < totalCount - 1;
 
   const suggestions = useMemo(() => {
     if (normalizedName.length < MIN_AUTOCOMPLETE_LENGTH) {
@@ -1174,7 +1193,39 @@ function EditableIngredientRow({
   return (
     <View style={[styles.ingredientCard, { borderColor: palette.outlineVariant, backgroundColor: palette.surface }]}>
       <View style={styles.ingredientHeaderSimple}>
-        <Text style={[styles.ingredientHeading, { color: palette.onSurface }]}>{`${index + 1}. Ingredient`}</Text>
+        <View style={styles.ingredientTitleRow}>
+          <Text style={[styles.ingredientHeading, { color: palette.onSurface }]}>{`${index + 1}. Ingredient`}</Text>
+          {canReorder ? (
+            <View style={styles.reorderControls}>
+              <Pressable
+                onPress={() => onMove(ingredient.key, 'up')}
+                disabled={!canMoveUp}
+                hitSlop={8}
+                accessibilityRole="button"
+                accessibilityLabel="Move ingredient up"
+                style={[styles.reorderButton, !canMoveUp && styles.reorderButtonDisabled]}>
+                <MaterialIcons
+                  name="keyboard-arrow-up"
+                  size={18}
+                  color={canMoveUp ? palette.onSurfaceVariant : `${palette.onSurfaceVariant}66`}
+                />
+              </Pressable>
+              <Pressable
+                onPress={() => onMove(ingredient.key, 'down')}
+                disabled={!canMoveDown}
+                hitSlop={8}
+                accessibilityRole="button"
+                accessibilityLabel="Move ingredient down"
+                style={[styles.reorderButton, !canMoveDown && styles.reorderButtonDisabled]}>
+                <MaterialIcons
+                  name="keyboard-arrow-down"
+                  size={18}
+                  color={canMoveDown ? palette.onSurfaceVariant : `${palette.onSurfaceVariant}66`}
+                />
+              </Pressable>
+            </View>
+          ) : null}
+        </View>
         <Pressable
           onPress={() => onRemove(ingredient.key)}
           hitSlop={8}
@@ -1264,17 +1315,14 @@ function EditableIngredientRow({
       </View>
 
       <View style={styles.substitutesSection}>
-        <View style={styles.substitutesHeader}>
-          <Text style={[styles.inputLabel, { color: palette.onSurfaceVariant }]}>Substitutes</Text>
-          <Pressable
-            onPress={() => onRequestAddSubstitute(ingredient.key)}
-            style={[styles.addSubstituteButton, { borderColor: palette.outlineVariant }]}
-            accessibilityRole="button"
-            accessibilityLabel="Add substitute">
-            <MaterialCommunityIcons name="plus" size={16} color={palette.tint} />
-            <Text style={[styles.addSubstituteLabel, { color: palette.tint }]}>Add substitute</Text>
-          </Pressable>
-        </View>
+        <Pressable
+          onPress={() => onRequestAddSubstitute(ingredient.key)}
+          style={[styles.addSubstituteButton, { borderColor: palette.outlineVariant }]}
+          accessibilityRole="button"
+          accessibilityLabel="Add substitute">
+          <MaterialCommunityIcons name="plus" size={16} color={palette.tint} />
+          <Text style={[styles.addSubstituteLabel, { color: palette.tint }]}>Add substitute</Text>
+        </Pressable>
         {ingredient.substitutes.length ? (
           <View style={styles.substitutesList}>
             {ingredient.substitutes.map((substitute) => (
@@ -1299,9 +1347,7 @@ function EditableIngredientRow({
               </View>
             ))}
           </View>
-        ) : (
-          <Text style={[styles.substituteHint, { color: palette.onSurfaceVariant }]}>No substitutes yet</Text>
-        )}
+        ) : null}
       </View>
     </View>
   );
@@ -1377,7 +1423,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: Platform.select({ ios: 14, default: 12 }),
     fontSize: 16,
-    backgroundColor: Colors.surface,
+    backgroundColor: Colors.background,
   },
   multilineInput: {
     minHeight: 120,
@@ -1496,9 +1542,32 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
+  ingredientTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    flex: 1,
+  },
   ingredientHeading: {
     fontSize: 15,
     fontWeight: '600',
+  },
+  reorderControls: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    marginLeft: 6,
+  },
+  reorderButton: {
+    width: 28,
+    height: 28,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: StyleSheet.hairlineWidth,
+  },
+  reorderButtonDisabled: {
+    opacity: 0.6,
   },
   ingredientNameInput: {
     flex: 1,
@@ -1593,11 +1662,6 @@ const styles = StyleSheet.create({
   },
   substitutesSection: {
     gap: 10,
-  },
-  substitutesHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
   },
   addSubstituteButton: {
     flexDirection: 'row',
