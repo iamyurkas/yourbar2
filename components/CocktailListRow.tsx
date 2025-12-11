@@ -258,7 +258,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   title: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '400',
   },
   subtitle: {

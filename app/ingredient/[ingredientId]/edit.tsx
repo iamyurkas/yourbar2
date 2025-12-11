@@ -475,7 +475,7 @@ export default function EditIngredientScreen() {
           <TextInput
             value={name}
             onChangeText={setName}
-            placeholder="For example, Ginger syrup"
+            placeholder="e.g. Ginger syrup"
             style={[styles.input, { borderColor: paletteColors.outlineVariant, color: paletteColors.text }]}
             placeholderTextColor={`${paletteColors.onSurfaceVariant}99`}
           />
@@ -712,8 +712,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   placeholderHint: {
-    fontSize: 14,
-    fontWeight: '500',
+    fontSize: 12,
     textAlign: 'center',
   },
   tagList: {

@@ -241,7 +241,7 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
   },
   title: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '400',
   },
   subtitle: {

@@ -48,7 +48,7 @@ export function IngredientQuantityRow({
   const quantityDisplay = useMemo(
     () => (
       <View style={styles.quantityContainer}>
-        <Text style={[styles.quantityLabel, { color: palette.onSurface }]} numberOfLines={1}>
+        <Text style={[styles.quantityLabel, { color: palette.onSurfaceVariant }]} numberOfLines={1}>
           {quantity}
         </Text>
       </View>
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   quantityLabel: {
-    fontSize: 16,
+    fontSize: 14,
     textAlign: 'right',
   },
   subtitle: {
