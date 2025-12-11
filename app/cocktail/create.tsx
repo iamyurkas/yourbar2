@@ -24,8 +24,9 @@ import {
 } from 'react-native';
 
 import { resolveAssetFromCatalog } from '@/assets/image-manifest';
-import { ListRow, Thumb } from '@/components/RowParts';
+import { Thumb } from '@/components/RowParts';
 import { TagPill } from '@/components/TagPill';
+import { SubstituteModal } from '@/components/SubstituteModal';
 import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
 import { COCKTAIL_UNIT_DICTIONARY, COCKTAIL_UNIT_OPTIONS } from '@/constants/cocktail-units';
 import { GLASSWARE } from '@/constants/glassware';
@@ -148,21 +149,6 @@ function mapRecipeIngredientToEditable(recipe: NonNullable<Cocktail['ingredients
   } satisfies EditableIngredient;
 }
 
-function filterIngredientsByQuery(options: Ingredient[], query: string) {
-  if (!query) {
-    return options;
-  }
-
-  return options.filter((candidate) => {
-    const nameNormalized = candidate.searchNameNormalized ?? candidate.name?.toLowerCase() ?? '';
-    if (nameNormalized.includes(query)) {
-      return true;
-    }
-
-    return (candidate.searchTokensNormalized ?? []).some((token) => token.includes(query));
-  });
-}
-
 export default function CreateCocktailScreen() {
   const palette = Colors;
   const { ingredients: inventoryIngredients, cocktails, createCocktail } = useInventory();
@@ -187,7 +173,6 @@ export default function CreateCocktailScreen() {
   ]);
   const [unitPickerTarget, setUnitPickerTarget] = useState<string | null>(null);
   const [substituteTarget, setSubstituteTarget] = useState<string | null>(null);
-  const [substituteSearch, setSubstituteSearch] = useState('');
   const [isSaving, setIsSaving] = useState(false);
   const [permissionStatus, requestPermission] = ImagePicker.useMediaLibraryPermissions();
 
@@ -452,14 +437,12 @@ export default function CreateCocktailScreen() {
     setUnitPickerTarget(null);
   }, []);
 
-  const handleOpenSubstituteModal = useCallback((key: string) => {
-    setSubstituteTarget(key);
-    setSubstituteSearch('');
-  }, []);
+    const handleOpenSubstituteModal = useCallback((key: string) => {
+      setSubstituteTarget(key);
+    }, []);
 
   const handleCloseSubstituteModal = useCallback(() => {
     setSubstituteTarget(null);
-    setSubstituteSearch('');
   }, []);
 
   const handleRequestCreateIngredient = useCallback((suggested: string) => {
@@ -470,12 +453,6 @@ export default function CreateCocktailScreen() {
     }
     router.push({ pathname: '/ingredient/create', params: { suggestedName: trimmed } });
   }, []);
-
-  const substituteCandidates = useMemo(() => {
-    const normalized = substituteSearch.trim().toLowerCase();
-    const filtered = filterIngredientsByQuery(inventoryIngredients, normalized);
-    return filtered.slice(0, MAX_SUGGESTIONS);
-  }, [inventoryIngredients, substituteSearch]);
 
   const handleSelectSubstituteCandidate = useCallback(
     (candidate: Ingredient) => {
@@ -1007,51 +984,13 @@ export default function CreateCocktailScreen() {
         </Pressable>
       </Modal>
 
-      <Modal
+      <SubstituteModal
         visible={substituteTarget != null}
-        transparent
-        animationType="slide"
-        onRequestClose={handleCloseSubstituteModal}>
-        <View style={styles.modalOverlay}>
-          <View style={[styles.modalCard, { backgroundColor: palette.surface }]}>
-            <View style={styles.modalHeader}>
-              <View>
-                <Text style={[styles.modalTitle, { color: palette.onSurface }]}>Add substitute</Text>
-                {substituteModalIngredient ? (
-                  <Text style={[styles.modalSubtitle, { color: palette.onSurfaceVariant }]}>For {substituteModalIngredient.name || 'ingredient'}</Text>
-                ) : null}
-              </View>
-              <Pressable onPress={handleCloseSubstituteModal} accessibilityRole="button" accessibilityLabel="Close">
-                <MaterialCommunityIcons name="close" size={22} color={palette.onSurfaceVariant} />
-              </Pressable>
-            </View>
-            <TextInput
-              value={substituteSearch}
-              onChangeText={setSubstituteSearch}
-              placeholder="Search ingredients"
-              placeholderTextColor={`${palette.onSurfaceVariant}99`}
-              style={[styles.input, { borderColor: palette.outlineVariant, color: palette.text }]}
-              autoFocus
-            />
-            <ScrollView contentContainerStyle={styles.modalListContent} keyboardShouldPersistTaps="handled">
-              {substituteCandidates.length ? (
-                substituteCandidates.map((candidate) => (
-                  <ListRow
-                    key={candidate.id ?? candidate.name}
-                    title={candidate.name ?? ''}
-                    subtitle={candidate.description ? candidate.description.slice(0, 48) : undefined}
-                    onPress={() => handleSelectSubstituteCandidate(candidate)}
-                    highlightColor={palette.surfaceVariant}
-                    thumbnail={<Thumb label={candidate.name ?? undefined} uri={candidate.photoUri} />}
-                  />
-                ))
-              ) : (
-                <Text style={[styles.modalEmptyText, { color: palette.onSurfaceVariant }]}>No ingredients found</Text>
-              )}
-            </ScrollView>
-          </View>
-        </View>
-      </Modal>
+        onClose={handleCloseSubstituteModal}
+        onSelect={handleSelectSubstituteCandidate}
+        ingredientName={substituteModalIngredient?.name}
+        excludedIngredientId={substituteModalIngredient?.ingredientId}
+      />
     </>
   );
 }
