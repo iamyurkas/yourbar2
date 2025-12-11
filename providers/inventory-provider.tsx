@@ -22,7 +22,21 @@ function loadInventoryData(): InventoryData {
   return cachedInventoryData!;
 }
 
-type CocktailRecord = InventoryData['cocktails'][number];
+type BaseCocktailRecord = InventoryData['cocktails'][number];
+type CocktailIngredientRecord = NonNullable<BaseCocktailRecord['ingredients']>[number];
+type CocktailSubstituteRecord = NonNullable<CocktailIngredientRecord['substitutes']>[number];
+type CocktailTag = NonNullable<BaseCocktailRecord['tags']>[number];
+type CocktailSubstitute = CocktailSubstituteRecord & { brand?: boolean };
+type CocktailIngredient = Omit<CocktailIngredientRecord, 'substitutes'> & {
+  allowBaseSubstitution?: boolean;
+  allowBrandSubstitution?: boolean;
+  substitutes?: CocktailSubstitute[];
+};
+type CocktailRecord = Omit<BaseCocktailRecord, 'ingredients' | 'searchName' | 'searchTokens'> & {
+  ingredients?: CocktailIngredient[];
+  searchName?: string | null;
+  searchTokens?: string[] | null;
+};
 type IngredientRecord = InventoryData['ingredients'][number];
 
 type NormalizedSearchFields = {
@@ -43,6 +57,7 @@ type InventoryContextValue = {
   toggleIngredientAvailability: (id: number) => void;
   toggleIngredientShopping: (id: number) => void;
   clearBaseIngredient: (id: number) => void;
+  createCocktail: (input: CreateCocktailInput) => Cocktail | undefined;
   createIngredient: (input: CreateIngredientInput) => Ingredient | undefined;
   updateIngredient: (id: number, input: CreateIngredientInput) => Ingredient | undefined;
   deleteIngredient: (id: number) => boolean;
@@ -58,6 +73,36 @@ type InventoryState = {
 };
 
 type IngredientTag = NonNullable<IngredientRecord['tags']>[number];
+
+type CreateCocktailSubstituteInput = {
+  id?: number | string | null;
+  ingredientId?: number | string | null;
+  name?: string | null;
+  brand?: boolean | null;
+};
+
+type CreateCocktailIngredientInput = {
+  ingredientId?: number | string | null;
+  name?: string | null;
+  amount?: string | null;
+  unitId?: number | string | null;
+  optional?: boolean | null;
+  garnish?: boolean | null;
+  allowBaseSubstitution?: boolean | null;
+  allowBrandSubstitution?: boolean | null;
+  substitutes?: CreateCocktailSubstituteInput[] | null;
+  order?: number | null;
+};
+
+type CreateCocktailInput = {
+  name: string;
+  description?: string | null;
+  instructions?: string | null;
+  photoUri?: string | null;
+  glassId?: string | null;
+  tags?: CocktailTag[] | null;
+  ingredients: CreateCocktailIngredientInput[];
+};
 
 type CreateIngredientInput = {
   name: string;
@@ -389,6 +434,173 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       return next;
     });
   }, []);
+
+  const createCocktail = useCallback(
+    (input: CreateCocktailInput) => {
+      let created: Cocktail | undefined;
+
+      setInventoryState((prev) => {
+        if (!prev) {
+          return prev;
+        }
+
+        const trimmedName = input.name?.trim();
+        if (!trimmedName) {
+          return prev;
+        }
+
+        const sanitizedIngredients = (input.ingredients ?? [])
+          .map((ingredient, index) => {
+            const trimmedIngredientName = ingredient.name?.trim();
+            if (!trimmedIngredientName) {
+              return undefined;
+            }
+
+            const normalizedIngredientId =
+              ingredient.ingredientId != null ? Number(ingredient.ingredientId) : undefined;
+            const ingredientId =
+              normalizedIngredientId != null &&
+              Number.isFinite(normalizedIngredientId) &&
+              normalizedIngredientId >= 0
+                ? Math.trunc(normalizedIngredientId)
+                : undefined;
+
+            const normalizedUnitId = ingredient.unitId != null ? Number(ingredient.unitId) : undefined;
+            const unitId =
+              normalizedUnitId != null && Number.isFinite(normalizedUnitId) && normalizedUnitId >= 0
+                ? Math.trunc(normalizedUnitId)
+                : undefined;
+
+            const amount = ingredient.amount?.trim() || undefined;
+            const optional = ingredient.optional ? true : undefined;
+            const garnish = ingredient.garnish ? true : undefined;
+            const allowBase = ingredient.allowBaseSubstitution ? true : undefined;
+            const allowBrand = ingredient.allowBrandSubstitution ? true : undefined;
+
+            const substituteInputs = ingredient.substitutes ?? [];
+            const substitutes: CocktailSubstitute[] = [];
+            const seenKeys = new Set<string>();
+
+            substituteInputs.forEach((candidate) => {
+              const substituteName = candidate?.name?.trim();
+              if (!substituteName) {
+                return;
+              }
+
+              const rawId = candidate.id != null ? Number(candidate.id) : undefined;
+              const substituteId =
+                rawId != null && Number.isFinite(rawId) && rawId >= 0 ? Math.trunc(rawId) : undefined;
+
+              const rawIngredientLink =
+                candidate.ingredientId != null ? Number(candidate.ingredientId) : undefined;
+              const substituteIngredientId =
+                rawIngredientLink != null && Number.isFinite(rawIngredientLink) && rawIngredientLink >= 0
+                  ? Math.trunc(rawIngredientLink)
+                  : substituteId;
+
+              const key = substituteId != null ? `id:${substituteId}` : `name:${substituteName.toLowerCase()}`;
+              if (seenKeys.has(key)) {
+                return;
+              }
+              seenKeys.add(key);
+
+              const brand = candidate.brand ? true : undefined;
+
+              substitutes.push({
+                id: substituteId ?? substituteIngredientId,
+                ingredientId: substituteIngredientId,
+                name: substituteName,
+                brand,
+              });
+            });
+
+            return {
+              order: index + 1,
+              ingredientId,
+              name: trimmedIngredientName,
+              amount,
+              unitId,
+              optional,
+              garnish,
+              allowBaseSubstitution: allowBase,
+              allowBrandSubstitution: allowBrand,
+              substitutes: substitutes.length > 0 ? substitutes : undefined,
+            } satisfies CocktailIngredient;
+          })
+          .filter((value): value is CocktailIngredient => Boolean(value));
+
+        if (sanitizedIngredients.length === 0) {
+          return prev;
+        }
+
+        const nextId =
+          prev.cocktails.reduce((maxId, cocktail) => {
+            const id = Number(cocktail.id ?? -1);
+            if (!Number.isFinite(id) || id < 0) {
+              return maxId;
+            }
+
+            return Math.max(maxId, id);
+          }, 0) + 1;
+
+        const description = input.description?.trim() || undefined;
+        const instructions = input.instructions?.trim() || undefined;
+        const photoUri = input.photoUri?.trim() || undefined;
+        const glassId = input.glassId?.trim() || undefined;
+
+        const tagMap = new Map<number, CocktailTag>();
+        (input.tags ?? []).forEach((tag) => {
+          const id = Number(tag.id ?? -1);
+          if (!Number.isFinite(id) || id < 0) {
+            return;
+          }
+
+          if (!tagMap.has(id)) {
+            tagMap.set(id, { id, name: tag.name, color: tag.color });
+          }
+        });
+        const tags = tagMap.size > 0 ? Array.from(tagMap.values()) : undefined;
+
+        const normalizedName = trimmedName.toLowerCase();
+        const searchTokens = normalizedName.split(/\s+/).filter(Boolean);
+
+        const candidateRecord: CocktailRecord = {
+          id: nextId,
+          name: trimmedName,
+          description,
+          instructions,
+          photoUri,
+          glassId,
+          tags,
+          ingredients: sanitizedIngredients.map((ingredient, index) => ({
+            ...ingredient,
+            order: index + 1,
+          })),
+          searchName: normalizedName,
+          searchTokens,
+        } satisfies CocktailRecord;
+
+        const [normalized] = normalizeSearchFields([candidateRecord]);
+        if (!normalized) {
+          return prev;
+        }
+
+        created = normalized;
+
+        const nextCocktails = [...prev.cocktails, normalized].sort((a, b) =>
+          a.searchNameNormalized.localeCompare(b.searchNameNormalized),
+        );
+
+        return {
+          ...prev,
+          cocktails: nextCocktails,
+        } satisfies InventoryState;
+      });
+
+      return created;
+    },
+    [],
+  );
 
   const createIngredient = useCallback(
     (input: CreateIngredientInput) => {
@@ -737,6 +949,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       toggleIngredientAvailability,
       toggleIngredientShopping,
       clearBaseIngredient,
+      createCocktail,
       createIngredient,
       updateIngredient,
       deleteIngredient,
@@ -754,6 +967,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     toggleIngredientAvailability,
     toggleIngredientShopping,
     clearBaseIngredient,
+    createCocktail,
     createIngredient,
     updateIngredient,
     deleteIngredient,
@@ -775,4 +989,4 @@ export function useInventory() {
   return context;
 }
 
-export type { Cocktail, Ingredient, CreateIngredientInput };
+export type { Cocktail, Ingredient, CreateIngredientInput, CreateCocktailInput };

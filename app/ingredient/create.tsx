@@ -1,7 +1,7 @@
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import * as ImagePicker from 'expo-image-picker';
-import { Stack, router } from 'expo-router';
+import { Stack, router, useLocalSearchParams } from 'expo-router';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Alert,
@@ -26,9 +26,15 @@ import { useInventory, type Ingredient } from '@/providers/inventory-provider';
 import { palette as appPalette } from '@/theme/theme';
 
 export default function CreateIngredientScreen() {
+  const params = useLocalSearchParams<{ suggestedName?: string }>();
+  const suggestedNameParam = useMemo(() => {
+    const value = Array.isArray(params.suggestedName) ? params.suggestedName[0] : params.suggestedName;
+    return typeof value === 'string' ? value : undefined;
+  }, [params.suggestedName]);
+
   const paletteColors = Colors;
   const { ingredients, shoppingIngredientIds, createIngredient } = useInventory();
-  const [name, setName] = useState('');
+  const [name, setName] = useState(() => suggestedNameParam ?? '');
   const [description, setDescription] = useState('');
   const [imageUri, setImageUri] = useState<string | null>(null);
   const [isPickingImage, setIsPickingImage] = useState(false);
@@ -37,6 +43,12 @@ export default function CreateIngredientScreen() {
   const [isBaseModalVisible, setIsBaseModalVisible] = useState(false);
   const [baseSearch, setBaseSearch] = useState('');
   const [permissionStatus, requestPermission] = ImagePicker.useMediaLibraryPermissions();
+
+  useEffect(() => {
+    if (suggestedNameParam && !name) {
+      setName(suggestedNameParam);
+    }
+  }, [name, suggestedNameParam]);
 
   const placeholderLabel = useMemo(() => {
     if (imageUri) {
