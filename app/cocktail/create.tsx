@@ -1395,7 +1395,7 @@ function ToggleChip({ label, active, onToggle, onInfo, palette }: ToggleChipProp
           size={18}
           color={active ? palette.tint : palette.onSurfaceVariant}
         />
-        <Text style={[styles.toggleChipLabel, { color: palette.onSurface }]} numberOfLines={1}>
+        <Text style={[styles.toggleChipLabel, { color: palette.onSurfaceVariant }]} numberOfLines={1}>
           {label}
         </Text>
       </Pressable>
@@ -1536,9 +1536,11 @@ const styles = StyleSheet.create({
     gap: 6,
     paddingHorizontal: 12,
     paddingVertical: 8,
-    borderRadius: 999,
+    borderRadius: 4,
     borderWidth: StyleSheet.hairlineWidth,
     minHeight: 52,
+    width: '50%',
+    alignSelf: 'flex-start',
   },
   addIngredientLabel: {
     fontSize: 14,
@@ -1651,7 +1653,7 @@ const styles = StyleSheet.create({
   },
   unitLabel: {
     fontSize: 15,
-    fontWeight: '500',
+    fontWeight: '400',
   },
   toggleRow: {
     flexDirection: 'row',
@@ -1674,6 +1676,7 @@ const styles = StyleSheet.create({
   toggleChipLabel: {
     fontSize: 14,
     fontWeight: '400',
+    color: Colors.onSurfaceVariant,
   },
   substitutesSection: {
     gap: 10,
@@ -1683,7 +1686,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 6,
     borderWidth: StyleSheet.hairlineWidth,
-    borderRadius: 999,
+    borderRadius: 4,
     paddingHorizontal: 12,
     paddingVertical: 8,
     minHeight: 52,
@@ -1716,7 +1719,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   submitButton: {
-    borderRadius: 999,
+    borderRadius: 4,
     paddingVertical: 16,
     alignItems: 'center',
     justifyContent: 'center',
@@ -1776,7 +1779,7 @@ const styles = StyleSheet.create({
   },
   removePhotoButton: {
     marginTop: 8,
-    borderRadius: 999,
+    borderRadius: 4,
     borderWidth: StyleSheet.hairlineWidth,
     flexDirection: 'row',
     alignItems: 'center',
@@ -1792,12 +1795,12 @@ const styles = StyleSheet.create({
   headerButton: {
     width: 40,
     height: 40,
-    borderRadius: 12,
+    borderRadius: 4,
     alignItems: 'center',
     justifyContent: 'center',
   },
   clearButton: {
     padding: 6,
-    borderRadius: 999,
+    borderRadius: 4,
   },
 });
