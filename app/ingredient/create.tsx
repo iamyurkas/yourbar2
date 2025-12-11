@@ -604,8 +604,8 @@ const styles = StyleSheet.create({
     minHeight: 120,
   },
   imagePlaceholder: {
-    width: '100%',
-    height: 200,
+    width: 150,
+    height: 150,
     borderRadius: 12,
     borderWidth: StyleSheet.hairlineWidth,
     overflow: 'hidden',
