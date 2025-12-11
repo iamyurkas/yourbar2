@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
   },
   listContent: {
     paddingTop: 0,
-    paddingBottom: 80,
+    paddingBottom: 104,
   },
   divider: {
     height: StyleSheet.hairlineWidth,

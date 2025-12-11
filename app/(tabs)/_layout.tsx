@@ -1,11 +1,12 @@
 import { Image } from 'expo-image';
 import { Tabs } from 'expo-router';
 import React from 'react';
+import { StyleSheet } from 'react-native';
 
 import CocktailIcon from '@/assets/images/cocktails.svg';
 import LemonIcon from '@/assets/images/ingredients.svg';
 import ShakerIcon from '@/assets/images/shaker.svg';
-import { palette } from '@/theme/theme';
+import { Colors } from '@/constants/theme';
 
 export default function TabLayout() {
   return (
@@ -13,15 +14,23 @@ export default function TabLayout() {
       initialRouteName="cocktails"
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: palette.primary,
-        tabBarInactiveTintColor: palette.onSurfaceVariant,
+        tabBarActiveTintColor: Colors.tint,
+        tabBarInactiveTintColor: Colors.onSurfaceVariant,
         tabBarStyle: {
-          height: 72,
-          paddingVertical: 8,
+          height: 64,
+          paddingVertical: 12,
+          borderTopWidth: StyleSheet.hairlineWidth,
+          borderTopColor: Colors.outline,
+          backgroundColor: Colors.surface,
         },
         tabBarItemStyle: {
           justifyContent: 'center',
           alignItems: 'center',
+          paddingVertical: 4,
+        },
+        tabBarLabelStyle: {
+          fontSize: 14,
+          fontWeight: '600',
         },
       }}>
       <Tabs.Screen
@@ -31,7 +40,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color, focused }) => (
             <Image
               source={CocktailIcon}
-              style={{ width: 24, height: 24, tintColor: color, opacity: focused ? 1 : 0.72 }}
+              style={{ width: 24, height: 24, tintColor: color }}
               contentFit="contain"
             />
           ),
@@ -44,7 +53,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color, focused }) => (
             <Image
               source={ShakerIcon}
-              style={{ width: 24, height: 24, tintColor: color, opacity: focused ? 1 : 0.72 }}
+              style={{ width: 24, height: 24, tintColor: color }}
               contentFit="contain"
             />
           ),
@@ -57,7 +66,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color, focused }) => (
             <Image
               source={LemonIcon}
-              style={{ width: 24, height: 24, tintColor: color, opacity: focused ? 1 : 0.72 }}
+              style={{ width: 24, height: 24, tintColor: color }}
               contentFit="contain"
             />
           ),
