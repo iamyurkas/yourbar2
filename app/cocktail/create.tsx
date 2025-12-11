@@ -181,7 +181,7 @@ export default function CreateCocktailScreen() {
   const [isPickingImage, setIsPickingImage] = useState(false);
   const [description, setDescription] = useState('');
   const [instructions, setInstructions] = useState('');
-  const [selectedTagIds, setSelectedTagIds] = useState<number[]>([]);
+  const [selectedTagIds, setSelectedTagIds] = useState<number[]>([11]);
   const [ingredientsState, setIngredientsState] = useState<EditableIngredient[]>(() => [
     createEditableIngredient(),
   ]);
@@ -234,12 +234,11 @@ export default function CreateCocktailScreen() {
       setDescription(baseCocktail.description ?? '');
       setInstructions(baseCocktail.instructions ?? '');
       setImageUri(baseCocktail.photoUri ?? null);
-      setSelectedTagIds(
-        (baseCocktail.tags ?? [])
-          .map((tag) => Number(tag.id ?? -1))
-          .filter((id): id is number => Number.isFinite(id) && id >= 0)
-          .map((id) => Math.trunc(id)),
-      );
+      const mappedTags = (baseCocktail.tags ?? [])
+        .map((tag) => Number(tag.id ?? -1))
+        .filter((id): id is number => Number.isFinite(id) && id >= 0)
+        .map((id) => Math.trunc(id));
+      setSelectedTagIds(mappedTags.length ? mappedTags : [11]);
 
       const recipe = [...(baseCocktail.ingredients ?? [])].sort(
         (a, b) => (a?.order ?? 0) - (b?.order ?? 0),
@@ -1241,13 +1240,15 @@ function EditableIngredientRow({
             </View>
           ) : null}
         </View>
-        <Pressable
-          onPress={() => onRemove(ingredient.key)}
-          hitSlop={8}
-          accessibilityRole="button"
-          accessibilityLabel="Remove ingredient">
-          <MaterialIcons name="delete-outline" size={20} color={palette.onSurfaceVariant} />
-        </Pressable>
+        {canReorder ? (
+          <Pressable
+            onPress={() => onRemove(ingredient.key)}
+            hitSlop={8}
+            accessibilityRole="button"
+            accessibilityLabel="Remove ingredient">
+            <MaterialIcons name="delete-outline" size={20} color={palette.error} />
+          </Pressable>
+        ) : null}
       </View>
       <TextInput
         value={ingredient.name}
@@ -1384,8 +1385,7 @@ function ToggleChip({ label, active, onToggle, onInfo, palette }: ToggleChipProp
         style={[
           styles.toggleChip,
           {
-            borderColor: active ? palette.tint : palette.outlineVariant,
-            backgroundColor: active ? `${palette.tint}1A` : palette.surface,
+            backgroundColor: active ? `${palette.tint}1A` : 'transparent',
           },
         ]}
         accessibilityRole="checkbox"
@@ -1637,8 +1637,8 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   inputLabel: {
-    fontSize: 13,
-    fontWeight: '500',
+    fontSize: 14,
+    fontWeight: '700',
   },
   unitSelector: {
     flexDirection: 'row',
@@ -1667,14 +1667,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    borderWidth: StyleSheet.hairlineWidth,
     borderRadius: 999,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
+    paddingHorizontal: 4,
+    paddingVertical: 2,
   },
   toggleChipLabel: {
     fontSize: 14,
-    fontWeight: '500',
+    fontWeight: '400',
   },
   substitutesSection: {
     gap: 10,
@@ -1686,7 +1685,10 @@ const styles = StyleSheet.create({
     borderWidth: StyleSheet.hairlineWidth,
     borderRadius: 999,
     paddingHorizontal: 12,
-    paddingVertical: 6,
+    paddingVertical: 8,
+    minHeight: 52,
+    width: '50%',
+    alignSelf: 'flex-start',
   },
   addSubstituteLabel: {
     fontSize: 13,
