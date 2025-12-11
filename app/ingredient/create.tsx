@@ -448,7 +448,7 @@ export default function CreateIngredientScreen() {
             {baseIngredient ? (
               <>
                 <View style={styles.baseInfo}>
-                  <View style={styles.baseThumb}>
+                  <View style={[styles.baseThumb, { backgroundColor: palette.surfaceBright }]}>
                     {baseIngredientPhotoSource ? (
                       <Image source={baseIngredientPhotoSource} style={styles.baseImage} contentFit="contain" />
                     ) : (
@@ -663,18 +663,21 @@ const styles = StyleSheet.create({
   baseThumb: {
     width: 56,
     height: 56,
-    borderRadius: 12,
+    borderRadius: 8,
     overflow: 'hidden',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   baseImage: {
     width: '100%',
     height: '100%',
+    borderRadius: 8,
   },
   basePlaceholder: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 12,
+    borderRadius: 8,
   },
   baseName: {
     fontSize: 16,
