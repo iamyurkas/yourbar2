@@ -53,7 +53,7 @@ export function IngredientQuantityRow({
         </Text>
       </View>
     ),
-    [palette.onSurface, quantity],
+    [palette.onSurfaceVariant, quantity],
   );
 
   return (
