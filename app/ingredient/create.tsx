@@ -667,6 +667,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: appPalette.surfaceBright,
   },
   baseImage: {
     width: '100%',
@@ -678,6 +679,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 8,
+    backgroundColor: appPalette.surfaceBright,
   },
   baseName: {
     fontSize: 16,
@@ -695,8 +697,8 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   basePlaceholderThumb: {
-    backgroundColor: 'transparent',
-    borderColor: 'transparent',
+    backgroundColor: appPalette.surfaceBright,
+    borderColor: Colors.outlineVariant,
     borderWidth: StyleSheet.hairlineWidth,
   },
   baseShoppingIndicator: {
