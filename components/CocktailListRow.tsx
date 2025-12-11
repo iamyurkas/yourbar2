@@ -272,7 +272,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 2,
-    borderRadius: 999,
+    borderRadius: 12,
     paddingVertical: 2,
     paddingHorizontal: 6,
     borderWidth: StyleSheet.hairlineWidth,

@@ -510,14 +510,14 @@ const styles = StyleSheet.create({
   photo: {
     width: 150,
     height: 150,
-    borderRadius: 16,
+    borderRadius: 12,
     overflow: 'hidden',
     backgroundColor: '#FFFFFF',
   },
   photoPlaceholder: {
     width: 150,
     height: 150,
-    borderRadius: 16,
+    borderRadius: 12,
     borderWidth: StyleSheet.hairlineWidth,
     alignItems: 'center',
     justifyContent: 'center',

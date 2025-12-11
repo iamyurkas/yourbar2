@@ -250,7 +250,7 @@ const styles = StyleSheet.create({
   tagDot: {
     width: 8,
     height: 8,
-    borderRadius: 4,
+    borderRadius: 8,
   },
   tagDotOverlay: {
     position: 'absolute',

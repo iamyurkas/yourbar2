@@ -1,9 +1,9 @@
 import React from 'react';
 import { Pressable, StyleSheet, TextInput, View } from 'react-native';
 
+import { ThemedText } from '@/components/themed-text';
 import { Colors } from '@/constants/theme';
 import { palette } from '@/theme/theme';
-import { ThemedText } from '@/components/themed-text';
 
 type SearchBarProps = {
   placeholder: string;
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderRadius: 18,
+    borderRadius: 12,
     borderWidth: 1,
     paddingHorizontal: 12,
     gap: 12,

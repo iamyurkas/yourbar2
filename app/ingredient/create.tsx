@@ -557,7 +557,7 @@ const styles = StyleSheet.create({
   imagePlaceholder: {
     width: 150,
     height: 150,
-    borderRadius: 16,
+    borderRadius: 12,
     borderWidth: StyleSheet.hairlineWidth,
     overflow: 'hidden',
     alignItems: 'center',
@@ -588,7 +588,7 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   submitButton: {
-    borderRadius: 999,
+    borderRadius: 12,
     paddingVertical: 14,
     alignItems: 'center',
     justifyContent: 'center',
@@ -604,7 +604,7 @@ const styles = StyleSheet.create({
     gap: 16,
     padding: 12,
     borderWidth: StyleSheet.hairlineWidth,
-    borderRadius: 16,
+    borderRadius: 12,
   },
   baseInfo: {
     flexDirection: 'row',
@@ -649,7 +649,7 @@ const styles = StyleSheet.create({
   },
   unlinkButton: {
     padding: 6,
-    borderRadius: 999,
+    borderRadius: 12,
   },
   modalOverlay: {
     flex: 1,
@@ -659,8 +659,8 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   modalCard: {
-    borderRadius: 24,
-    padding: 16,
+    borderRadius: 12,
+    padding: 12,
     gap: 16,
     flex: 1,
   },

@@ -17,8 +17,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { resolveAssetFromCatalog } from '@/assets/image-manifest';
 import { CocktailListRow } from '@/components/CocktailListRow';
-import { TagPill } from '@/components/TagPill';
 import { PresenceCheck } from '@/components/RowParts';
+import { TagPill } from '@/components/TagPill';
 import { Colors } from '@/constants/theme';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
 
@@ -677,7 +677,7 @@ const styles = StyleSheet.create({
   photo: {
     width: '100%',
     height: '100%',
-    borderRadius: 16,
+    borderRadius: 12,
     overflow: 'hidden',
     backgroundColor: '#FFFFFF',
   },
@@ -687,7 +687,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: StyleSheet.hairlineWidth,
-    borderRadius: 16,
+    borderRadius: 12,
     gap: 8,
   },
   photoPlaceholderText: {
@@ -748,7 +748,7 @@ const styles = StyleSheet.create({
     gap: 16,
     padding: 12,
     borderWidth: StyleSheet.hairlineWidth,
-    borderRadius: 16,
+    borderRadius: 12,
   },
   baseIngredientInfo: {
     flexDirection: 'row',
@@ -784,7 +784,7 @@ const styles = StyleSheet.create({
   },
   unlinkButton: {
     padding: 6,
-    borderRadius: 999,
+    borderRadius: 12,
   },
   brandedList: {
     gap: 12,
@@ -798,7 +798,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     paddingHorizontal: 20,
     paddingVertical: 12,
-    borderRadius: 24,
+    borderRadius: 12,
   },
   addButtonLabel: {
     fontSize: 16,

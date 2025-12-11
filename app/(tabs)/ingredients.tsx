@@ -14,8 +14,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { CollectionHeader } from '@/components/CollectionHeader';
 import { FabAdd } from '@/components/FabAdd';
 import { ListRow, PresenceCheck, Thumb } from '@/components/RowParts';
-import type { SegmentTabOption } from '@/components/TopBars';
 import { TagPill } from '@/components/TagPill';
+import type { SegmentTabOption } from '@/components/TopBars';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { Colors } from '@/constants/theme';
 import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
@@ -944,7 +944,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
   },
   shoppingButton: {
-    borderRadius: 16,
+    borderRadius: 12,
     padding: 4,
   },
   shoppingButtonPressed: {

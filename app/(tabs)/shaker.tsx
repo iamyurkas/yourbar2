@@ -69,7 +69,7 @@ function ActionCard({ title, description, icon }: ActionCardProps) {
           borderColor,
           shadowColor: palette.primary,
           shadowOpacity: 0.08,
-          shadowRadius: 20,
+          shadowRadius: 12,
           shadowOffset: { width: 0, height: 12 },
           elevation: 4,
         },
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     opacity: 0.72,
   },
   card: {
-    borderRadius: 20,
+    borderRadius: 12,
     padding: 20,
     flexDirection: 'row',
     gap: 16,
@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
   iconBadge: {
     width: 52,
     height: 52,
-    borderRadius: 18,
+    borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,

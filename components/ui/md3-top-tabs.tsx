@@ -1,9 +1,9 @@
 import React from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
+import { ThemedText } from '@/components/themed-text';
 import { Colors } from '@/constants/theme';
 import { palette } from '@/theme/theme';
-import { ThemedText } from '@/components/themed-text';
 
 type TabItem = {
   key: string;
@@ -28,7 +28,7 @@ export function MD3TopTabs({ tabs, activeKey, onTabChange }: MD3TopTabsProps) {
           borderColor: paletteColors.outline,
           shadowColor: palette.shadow,
           shadowOffset: { width: 0, height: 6 },
-          shadowRadius: 16,
+          shadowRadius: 12,
           shadowOpacity: 0.05,
         },
       ]}>
@@ -47,7 +47,7 @@ export function MD3TopTabs({ tabs, activeKey, onTabChange }: MD3TopTabsProps) {
                 opacity: pressed ? 0.9 : 1,
                 shadowColor: isActive ? palette.primary : 'transparent',
                 shadowOffset: { width: 0, height: isActive ? 8 : 0 },
-                shadowRadius: isActive ? 16 : 0,
+                shadowRadius: isActive ? 12 : 0,
                 shadowOpacity: isActive ? 0.24 : 0,
               },
             ]}
@@ -76,13 +76,13 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     padding: 4,
-    borderRadius: 20,
+    borderRadius: 12,
     borderWidth: 1,
     gap: 6,
   },
   tab: {
     flex: 1,
-    borderRadius: 16,
+    borderRadius: 12,
     paddingVertical: 10,
     paddingHorizontal: 12,
     alignItems: 'center',
@@ -103,3 +103,4 @@ const styles = StyleSheet.create({
 });
 
 export type { TabItem };
+
