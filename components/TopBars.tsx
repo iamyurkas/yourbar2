@@ -48,6 +48,7 @@ export function SearchTopBar({
   onFilterLayout,
 }: SearchTopBarProps) {
   const palette = Colors;
+  const accentColor = palette.tint;
 
   const handleSubmit = (event: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
     onSubmit?.(event.nativeEvent.text);
@@ -67,10 +68,14 @@ export function SearchTopBar({
         accessibilityRole="button"
         accessibilityLabel="Open navigation"
         onPress={onMenuPress}
-        style={styles.iconButton}>
+        style={({ pressed }) => [styles.iconButton, pressed && styles.surfacePressed]}>
         <MaterialCommunityIcons name="menu" size={24} color={palette.onSurface} />
       </Pressable>
-      <View style={[styles.searchContainer, { backgroundColor: palette.surface, borderColor: palette.background }]}>
+      <View
+        style={[
+          styles.searchContainer,
+          { backgroundColor: palette.surface, borderColor: palette.outline },
+        ]}>
         <MaterialCommunityIcons name="magnify" size={20} color={palette.onSurface} style={styles.searchIcon} />
         <TextInput
           value={value}
@@ -86,7 +91,7 @@ export function SearchTopBar({
             accessibilityRole="button"
             accessibilityLabel="Clear search query"
             onPress={() => onChangeText('')}
-            style={styles.clearButton}>
+            style={({ pressed }) => [styles.clearButton, pressed && styles.surfacePressed]}>
             <MaterialCommunityIcons name="close" size={18} color={palette.onSurface} />
           </Pressable>
         ) : null}
@@ -97,16 +102,15 @@ export function SearchTopBar({
         accessibilityState={filterExpanded ? { expanded: true } : undefined}
         onPress={onFilterPress}
         onLayout={(event) => onFilterLayout?.(event.nativeEvent.layout)}
-        style={[
+        style={({ pressed }) => [
           styles.iconButton,
-          filterActive
-            ? { backgroundColor: `${palette.tint}1A` }
-            : null,
+          filterActive ? { backgroundColor: palette.primaryContainer } : null,
+          pressed && styles.surfacePressed,
         ]}>
         <MaterialCommunityIcons
           name="filter-variant"
           size={24}
-          color={filterActive ? palette.tint : palette.icon}
+          color={filterActive ? accentColor : palette.icon}
         />
       </Pressable>
     </View>
@@ -115,9 +119,10 @@ export function SearchTopBar({
 
 export function SegmentTabs({ options, value, onChange }: SegmentTabsProps) {
   const palette = Colors;
+  const accentColor = palette.tint;
 
   return (
-    <View style={[styles.tabs, { backgroundColor: palette.surface }]}> 
+    <View style={[styles.tabs, { backgroundColor: palette.surface }]}>
       {options.map((option) => {
         const focused = option.key === value;
         return (
@@ -126,13 +131,16 @@ export function SegmentTabs({ options, value, onChange }: SegmentTabsProps) {
             accessibilityRole="tab"
             accessibilityState={focused ? { selected: true } : {}}
             onPress={() => onChange(option.key)}
-            style={styles.tabButton}>
+            style={({ pressed }) => [
+              styles.tabButton,
+              focused || pressed ? styles.tabButtonActive : null,
+            ]}>
             <Text
               style={[
                 styles.tabLabel,
                 {
-                  color: focused ? palette.tint : palette.onSurfaceVariant,
-                  fontWeight: focused ? '600' : '400',
+                  color: focused ? accentColor : palette.onSurface,
+                  fontWeight: focused ? '600' : '500',
                 },
               ]}>
               {option.label}
@@ -141,7 +149,7 @@ export function SegmentTabs({ options, value, onChange }: SegmentTabsProps) {
               style={[
                 styles.tabIndicator,
                 {
-                  backgroundColor: focused ? palette.tint : 'transparent',
+                  backgroundColor: focused ? accentColor : 'transparent',
                 },
               ]}
             />
@@ -158,8 +166,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 12,
     paddingHorizontal: 16,
-    paddingTop: 12,
-    paddingBottom: 8,
+    paddingVertical: 12,
   },
   iconButton: {
     width: 40,
@@ -167,6 +174,12 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: Colors.surface,
+    shadowColor: Colors.shadow,
+    shadowOpacity: 0.08,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 8,
+    elevation: 2,
   },
   searchContainer: {
     flex: 1,
@@ -175,7 +188,13 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: 1,
     paddingHorizontal: 12,
-    paddingVertical: 4,
+    paddingVertical: 10,
+    gap: 4,
+    shadowColor: Colors.shadow,
+    shadowOpacity: 0.08,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 8,
+    elevation: 2,
   },
   searchIcon: {
     marginRight: 8,
@@ -190,28 +209,34 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: Colors.surface,
   },
   tabs: {
     flexDirection: 'row',
     paddingHorizontal: 16,
-    paddingTop: 4,
-    paddingBottom: 0,
-    elevation: 4,
-    zIndex: 1,
+    paddingVertical: 8,
+    gap: 8,
   },
   tabButton: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: 12,
+    paddingVertical: 10,
     gap: 6,
+    borderRadius: 12,
+  },
+  tabButtonActive: {
+    backgroundColor: Colors.primaryContainer,
   },
   tabLabel: {
-    fontSize: 15,
+    fontSize: 16,
   },
   tabIndicator: {
-    width: '60%',
+    width: '80%',
     height: 3,
-    borderRadius: 2,
+    borderRadius: 3,
+  },
+  surfacePressed: {
+    backgroundColor: Colors.surfaceVariant,
   },
 });

@@ -32,7 +32,7 @@ export function FabAdd({ label = 'Add', onPress }: FabAddProps) {
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    right: 24,
+    right: 16,
     zIndex: 10,
   },
   fab: {
