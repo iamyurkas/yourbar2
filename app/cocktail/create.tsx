@@ -721,9 +721,7 @@ export default function CreateCocktailScreen() {
         </View>
 
           <View style={[styles.section, styles.rowWrap]}>
-            <View
-              style={[styles.card, styles.halfCard, { borderColor: palette.outlineVariant, backgroundColor: palette.background }]}
-            >
+            <View style={[styles.card, styles.halfCard, { backgroundColor: palette.background }]}>
               <Text style={[styles.cardLabel, { color: palette.onSurface }]}>Glass</Text>
               <Pressable
                 style={styles.glassTile}
@@ -735,18 +733,10 @@ export default function CreateCocktailScreen() {
                 ) : (
                   <MaterialCommunityIcons name="glass-cocktail" size={48} color={palette.onSurfaceVariant} />
                 )}
-                <Text style={[styles.cardHint, { color: palette.onSurfaceVariant }]}>Tap to select</Text>
-                {selectedGlass ? (
-                  <Text style={[styles.cardValue, { color: palette.onSurface }]} numberOfLines={1}>
-                    {selectedGlass.name}
-                  </Text>
-                ) : null}
               </Pressable>
             </View>
 
-            <View
-              style={[styles.card, styles.halfCard, { borderColor: palette.outlineVariant, backgroundColor: palette.background }]}
-            >
+            <View style={[styles.card, styles.halfCard, { backgroundColor: palette.background }]}>
               <Text style={[styles.cardLabel, { color: palette.onSurface }]}>Photo</Text>
               <Pressable
                 accessibilityRole="button"
@@ -755,7 +745,7 @@ export default function CreateCocktailScreen() {
                 onPress={handlePickImage}
                 android_ripple={{ color: `${palette.surface}33` }}>
                 {imageSource ? (
-                  <Image source={imageSource} style={styles.photoPreview} contentFit="cover" />
+                  <Image source={imageSource} style={styles.photoPreview} contentFit="contain" />
                 ) : (
                   <Text style={[styles.cardHint, { color: palette.onSurfaceVariant }]}>Tap to select image</Text>
                 )}
@@ -1358,7 +1348,6 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   card: {
-    borderWidth: StyleSheet.hairlineWidth,
     borderRadius: 12,
     padding: 12,
     gap: 8,
@@ -1373,31 +1362,29 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   glassTile: {
+    width: 150,
+    height: 150,
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    minHeight: 180,
+    alignSelf: 'center',
   },
   glassPreview: {
-    width: '100%',
-    height: 140,
+    width: 150,
+    height: 150,
     resizeMode: 'contain',
   },
   cardHint: {
     fontSize: 12,
   },
-  cardValue: {
-    fontSize: 14,
-    fontWeight: '600',
-  },
   photoTile: {
-    height: 180,
+    width: 150,
+    height: 150,
     borderRadius: 12,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: Colors.outline,
     alignItems: 'center',
     justifyContent: 'center',
     overflow: 'hidden',
+    alignSelf: 'center',
   },
   photoPreview: {
     width: '100%',
