@@ -10,7 +10,7 @@ import {
   View,
 } from 'react-native';
 
-import { ListRow, PresenceCheck, Thumb } from '@/components/RowParts';
+import { ListRow, Thumb } from '@/components/RowParts';
 import { Colors } from '@/constants/theme';
 import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
 import { palette } from '@/theme/theme';
@@ -231,24 +231,18 @@ export function SubstituteModal({
                     brandIndicatorColor={brandIndicatorColor}
                     control={
                       <View style={styles.controlContainer}>
-                        <View style={styles.controlTopSpacer} />
-                        <View style={styles.presenceSlot}>
-                          <PresenceCheck checked={isAvailable} />
-                        </View>
-                        <View style={styles.shoppingSlot}>
-                          {isOnShoppingList ? (
-                            <MaterialIcons
-                              name="shopping-cart"
-                              size={16}
-                              color={Colors.tint}
-                              style={styles.shoppingIcon}
-                              accessibilityRole="image"
-                              accessibilityLabel="On shopping list"
-                            />
-                          ) : (
-                            <View style={styles.shoppingIconPlaceholder} />
-                          )}
-                        </View>
+                        {isOnShoppingList ? (
+                          <MaterialIcons
+                            name="shopping-cart"
+                            size={16}
+                            color={Colors.tint}
+                            style={styles.shoppingIcon}
+                            accessibilityRole="image"
+                            accessibilityLabel="On shopping list"
+                          />
+                        ) : (
+                          <View style={styles.shoppingIconPlaceholder} />
+                        )}
                       </View>
                     }
                   />
@@ -310,24 +304,12 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   controlContainer: {
-    alignItems: 'flex-end',
+    alignItems: 'center',
     alignSelf: 'stretch',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
     minHeight: 56,
     minWidth: 32,
-  },
-  controlTopSpacer: {
-    height: 16,
-    width: 24,
-  },
-  presenceSlot: {
-    minHeight: 16,
-    minWidth: 16,
-  },
-  shoppingSlot: {
-    minHeight: 16,
-    minWidth: 16,
   },
   shoppingIcon: {
     marginTop: 4,
