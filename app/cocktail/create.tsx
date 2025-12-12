@@ -41,6 +41,7 @@ import {
 const DEFAULT_UNIT_ID = 11;
 const MIN_AUTOCOMPLETE_LENGTH = 2;
 const MAX_SUGGESTIONS = 8;
+const HEADER_FOCUS_OFFSET = Platform.select({ ios: 96, android: 72, default: 72 });
 
 type EditableSubstitute = {
   key: string;
@@ -199,7 +200,10 @@ export default function CreateCocktailScreen() {
   const handleFocusField = useCallback((key: string) => {
     const y = fieldOffsetsRef.current[key];
     if (typeof y === 'number') {
-      scrollViewRef.current?.scrollTo({ y: Math.max(y - 12, 0), animated: true });
+      const safeOffset = Math.max(y - (HEADER_FOCUS_OFFSET ?? 72), 0);
+      requestAnimationFrame(() => {
+        scrollViewRef.current?.scrollTo({ y: safeOffset, animated: true });
+      });
     }
   }, []);
 
@@ -1449,7 +1453,7 @@ const styles = StyleSheet.create({
   content: {
     padding: 16,
     gap: 20,
-    paddingBottom: 240,
+    paddingBottom: 320,
   },
   section: {
     gap: 10,
