@@ -738,28 +738,30 @@ export default function CreateCocktailScreen() {
 
             <View style={[styles.card, styles.halfCard, { backgroundColor: palette.background }]}>
               <Text style={[styles.cardLabel, { color: palette.onSurface }]}>Photo</Text>
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel={placeholderLabel}
-                style={[styles.photoTile, !imageSource && { backgroundColor: palette.surfaceVariant }]}
-                onPress={handlePickImage}
-                android_ripple={{ color: `${palette.surface}33` }}>
-                {imageSource ? (
-                  <Image source={imageSource} style={styles.photoPreview} contentFit="contain" />
-                ) : (
-                  <Text style={[styles.cardHint, { color: palette.onSurfaceVariant }]}>Tap to select image</Text>
-                )}
-              </Pressable>
-              {imageUri ? (
+              <View style={styles.photoTileWrapper}>
                 <Pressable
-                  onPress={handleRemovePhoto}
-                  style={[styles.removePhotoButton, { borderColor: palette.outlineVariant }]}
                   accessibilityRole="button"
-                  accessibilityLabel="Remove photo">
-                  <MaterialCommunityIcons name="trash-can-outline" size={18} color={palette.error} />
-                  <Text style={[styles.removePhotoLabel, { color: palette.error }]}>Remove photo</Text>
+                  accessibilityLabel={placeholderLabel}
+                  style={[styles.photoTile, !imageSource && { backgroundColor: palette.surfaceVariant }]}
+                  onPress={handlePickImage}
+                  android_ripple={{ color: `${palette.surface}33` }}>
+                  {imageSource ? (
+                    <Image source={imageSource} style={styles.photoPreview} contentFit="contain" />
+                  ) : (
+                    <Text style={[styles.cardHint, { color: palette.onSurfaceVariant }]}>Tap to select image</Text>
+                  )}
                 </Pressable>
-              ) : null}
+                {imageUri ? (
+                  <Pressable
+                    onPress={handleRemovePhoto}
+                    hitSlop={8}
+                    style={styles.removePhotoButton}
+                    accessibilityRole="button"
+                    accessibilityLabel="Remove photo">
+                    <MaterialCommunityIcons name="trash-can-outline" size={18} color={palette.error} />
+                  </Pressable>
+                ) : null}
+              </View>
             </View>
           </View>
 
@@ -1377,14 +1379,19 @@ const styles = StyleSheet.create({
   cardHint: {
     fontSize: 12,
   },
-  photoTile: {
+  photoTileWrapper: {
     width: 150,
     height: 150,
+    alignSelf: 'center',
+    position: 'relative',
+  },
+  photoTile: {
+    width: '100%',
+    height: '100%',
     borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
     overflow: 'hidden',
-    alignSelf: 'center',
   },
   photoPreview: {
     width: '100%',
@@ -1680,19 +1687,12 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
   },
   removePhotoButton: {
-    marginTop: 8,
-    borderRadius: 8,
-    borderWidth: StyleSheet.hairlineWidth,
-    flexDirection: 'row',
+    position: 'absolute',
+    top: 8,
+    right: 8,
+    padding: 4,
     alignItems: 'center',
-    gap: 8,
-    alignSelf: 'flex-start',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-  },
-  removePhotoLabel: {
-    fontSize: 12,
-    fontWeight: '600',
+    justifyContent: 'center',
   },
   headerButton: {
     width: 40,
