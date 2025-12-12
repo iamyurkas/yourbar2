@@ -754,7 +754,8 @@ export default function CreateCocktailScreen() {
                 {imageUri ? (
                   <Pressable
                     onPress={handleRemovePhoto}
-                    style={[styles.removePhotoButton, { backgroundColor: palette.surface, borderColor: palette.outlineVariant }]}
+                    hitSlop={8}
+                    style={styles.removePhotoButton}
                     accessibilityRole="button"
                     accessibilityLabel="Remove photo">
                     <MaterialCommunityIcons name="trash-can-outline" size={18} color={palette.error} />
@@ -1689,10 +1690,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 8,
     right: 8,
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    borderWidth: StyleSheet.hairlineWidth,
+    padding: 4,
     alignItems: 'center',
     justifyContent: 'center',
   },
