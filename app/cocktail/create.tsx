@@ -20,7 +20,9 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  UIManager,
   View,
+  findNodeHandle,
 } from 'react-native';
 
 import { resolveAssetFromCatalog } from '@/assets/image-manifest';
@@ -177,6 +179,7 @@ export default function CreateCocktailScreen() {
   const [permissionStatus, requestPermission] = ImagePicker.useMediaLibraryPermissions();
 
   const initializedRef = useRef(false);
+  const scrollRef = useRef<ScrollView | null>(null);
 
   const placeholderLabel = useMemo(() => (imageUri ? 'Change photo' : 'Add photo'), [imageUri]);
 
@@ -189,6 +192,30 @@ export default function CreateCocktailScreen() {
       selected: set.has(tag.id),
     }));
   }, [selectedTagIds]);
+
+  const scrollFieldIntoView = useCallback((target?: number | null) => {
+    if (target == null) {
+      return;
+    }
+
+    const scrollNodeHandle = scrollRef.current?.getInnerViewNode
+      ? findNodeHandle(scrollRef.current.getInnerViewNode())
+      : findNodeHandle(scrollRef.current);
+    if (!scrollNodeHandle) {
+      return;
+    }
+
+    UIManager.measureLayout(
+      target,
+      scrollNodeHandle,
+      () => {},
+      (_x, y) => {
+        const HEADER_OFFSET = 56;
+        const targetOffset = Math.max(0, y - HEADER_OFFSET);
+        scrollRef.current?.scrollTo({ y: targetOffset, animated: true });
+      },
+    );
+  }, []);
 
   useEffect(() => {
     if (initializedRef.current) {
@@ -703,6 +730,7 @@ export default function CreateCocktailScreen() {
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         keyboardVerticalOffset={Platform.select({ ios: 96, default: 0 })}>
         <ScrollView
+          ref={scrollRef}
           style={[styles.flex, { backgroundColor: palette.background }]}
           contentContainerStyle={styles.content}
           keyboardShouldPersistTaps="handled">
@@ -798,6 +826,7 @@ export default function CreateCocktailScreen() {
               ]}
               multiline
               textAlignVertical="top"
+              onFocus={(event) => scrollFieldIntoView(event.nativeEvent.target)}
             />
           </View>
 
@@ -815,6 +844,7 @@ export default function CreateCocktailScreen() {
               ]}
               multiline
               textAlignVertical="top"
+              onFocus={(event) => scrollFieldIntoView(event.nativeEvent.target)}
             />
           </View>
 
@@ -833,6 +863,7 @@ export default function CreateCocktailScreen() {
                   onRequestAddSubstitute={handleOpenSubstituteModal}
                   onRemoveSubstitute={handleRemoveSubstitute}
                   onRequestCreateIngredient={handleRequestCreateIngredient}
+                  onInputFocus={scrollFieldIntoView}
                   palette={palette}
                   index={index}
                   totalCount={ingredientsState.length}
@@ -860,6 +891,7 @@ export default function CreateCocktailScreen() {
             accessibilityLabel="Save cocktail">
             <Text style={[styles.submitLabel, { color: palette.onPrimary }]}>Save cocktail</Text>
           </Pressable>
+          <View style={styles.bottomSpacer} />
         </ScrollView>
       </KeyboardAvoidingView>
 
@@ -976,6 +1008,7 @@ type EditableIngredientRowProps = {
   onRequestAddSubstitute: (key: string) => void;
   onRemoveSubstitute: (ingredientKey: string, substituteKey: string) => void;
   onRequestCreateIngredient: (name: string) => void;
+  onInputFocus: (target?: number | null) => void;
   index: number;
   totalCount: number;
   palette: typeof Colors;
@@ -991,6 +1024,7 @@ function EditableIngredientRow({
   onRequestAddSubstitute,
   onRemoveSubstitute,
   onRequestCreateIngredient,
+  onInputFocus,
   index,
   totalCount,
   palette,
@@ -1196,7 +1230,10 @@ function EditableIngredientRow({
         placeholder="Type ingredient name"
         placeholderTextColor={`${palette.onSurfaceVariant}99`}
         style={[styles.input, styles.ingredientNameInput, { borderColor: palette.outlineVariant, color: palette.text }]}
-        onFocus={handleNameFocus}
+        onFocus={(event) => {
+          handleNameFocus();
+          onInputFocus(event.nativeEvent.target);
+        }}
         onBlur={handleNameBlur}
         autoCapitalize="words"
       />
@@ -1243,6 +1280,7 @@ function EditableIngredientRow({
             placeholderTextColor={`${palette.onSurfaceVariant}99`}
             keyboardType="decimal-pad"
             style={[styles.input, { borderColor: palette.outlineVariant, color: palette.text }]}
+            onFocus={(event) => onInputFocus(event.nativeEvent.target)}
           />
         </View>
         <View style={styles.unitColumn}>
@@ -1717,6 +1755,9 @@ const styles = StyleSheet.create({
   submitLabel: {
     fontSize: 16,
     fontWeight: '600',
+  },
+  bottomSpacer: {
+    height: 200,
   },
   modalOverlay: {
     flex: 1,
