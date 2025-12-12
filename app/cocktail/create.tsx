@@ -210,7 +210,7 @@ export default function CreateCocktailScreen() {
       scrollNodeHandle,
       () => {},
       (_x, y) => {
-        const HEADER_OFFSET = 96;
+        const HEADER_OFFSET = 56;
         const targetOffset = Math.max(0, y - HEADER_OFFSET);
         scrollRef.current?.scrollTo({ y: targetOffset, animated: true });
       },
