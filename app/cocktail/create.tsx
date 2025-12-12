@@ -1635,8 +1635,8 @@ const styles = StyleSheet.create({
   ingredientNameCreate: {
     position: 'absolute',
     right: 12,
-    top: 0,
-    bottom: 0,
+    top: 2,
+    bottom: 2,
     flexDirection: 'row',
     alignItems: 'center',
     borderRadius: 10,
@@ -1649,7 +1649,7 @@ const styles = StyleSheet.create({
   },
   suggestionList: {
     position: 'absolute',
-    top: 90,
+    top: 94,
     left: 0,
     right: 0,
     zIndex: 10,
