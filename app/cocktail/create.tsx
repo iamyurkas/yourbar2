@@ -1217,26 +1217,51 @@ function EditableIngredientRow({
           <MaterialIcons name="delete-outline" size={20} color={palette.error} />
         </Pressable>
       </View>
-      <TextInput
-        value={ingredient.name}
-        onChangeText={(text) => {
-          const nextNormalized = text.trim().toLowerCase();
-          const shouldClearId = ingredient.ingredientId != null && nextNormalized !== normalizedName;
-          onChange(ingredient.key, {
-            name: text,
-            ingredientId: shouldClearId ? undefined : ingredient.ingredientId,
-          });
-        }}
-        placeholder="Type ingredient name"
-        placeholderTextColor={`${palette.onSurfaceVariant}99`}
-        style={[styles.input, styles.ingredientNameInput, { borderColor: palette.outlineVariant, color: palette.text }]}
-        onFocus={(event) => {
-          handleNameFocus();
-          onInputFocus(event.nativeEvent.target);
-        }}
-        onBlur={handleNameBlur}
-        autoCapitalize="words"
-      />
+      <View style={styles.ingredientNameWrapper}>
+        <TextInput
+          value={ingredient.name}
+          onChangeText={(text) => {
+            const nextNormalized = text.trim().toLowerCase();
+            const shouldClearId = ingredient.ingredientId != null && nextNormalized !== normalizedName;
+            onChange(ingredient.key, {
+              name: text,
+              ingredientId: shouldClearId ? undefined : ingredient.ingredientId,
+            });
+          }}
+          placeholder="Type ingredient name"
+          placeholderTextColor={`${palette.onSurfaceVariant}99`}
+          style={[
+            styles.input,
+            styles.ingredientNameInput,
+            {
+              borderColor: palette.outlineVariant,
+              color: palette.text,
+              paddingRight:
+                showSuggestions && suggestions.length > 0 && normalizedName.length >= MIN_AUTOCOMPLETE_LENGTH ? 72 : 16,
+            },
+          ]}
+          onFocus={(event) => {
+            handleNameFocus();
+            onInputFocus(event.nativeEvent.target);
+          }}
+          onBlur={handleNameBlur}
+          autoCapitalize="words"
+        />
+
+        {showSuggestions && suggestions.length > 0 && normalizedName.length >= MIN_AUTOCOMPLETE_LENGTH ? (
+          <Pressable
+            onPress={() => {
+              setShowSuggestions(false);
+              onRequestCreateIngredient(ingredient.name);
+            }}
+            style={[styles.ingredientNameCreate, { backgroundColor: palette.background, borderColor: palette.outlineVariant }]}
+            accessibilityRole="button"
+            accessibilityLabel="Create new ingredient"
+            hitSlop={8}>
+            <Text style={[styles.ingredientNameCreateLabel, { color: palette.tint }]}>+ Add</Text>
+          </Pressable>
+        ) : null}
+      </View>
 
       {showSuggestions && suggestions.length ? (
         <View style={[styles.suggestionList, { borderColor: palette.outlineVariant, backgroundColor: palette.surface }]}
@@ -1254,19 +1279,6 @@ function EditableIngredientRow({
               </Text>
             </Pressable>
           ))}
-          {normalizedName.length >= MIN_AUTOCOMPLETE_LENGTH ? (
-            <Pressable
-              onPress={() => {
-                setShowSuggestions(false);
-                onRequestCreateIngredient(ingredient.name);
-              }}
-              style={styles.suggestionCreate}
-              accessibilityRole="button"
-              accessibilityLabel="Create new ingredient">
-              <MaterialCommunityIcons name="plus" size={18} color={palette.tint} />
-              <Text style={[styles.suggestionCreateLabel, { color: palette.tint }]}>Create “{ingredient.name.trim() || 'new ingredient'}”</Text>
-            </Pressable>
-          ) : null}
         </View>
       ) : null}
 
@@ -1617,6 +1629,25 @@ const styles = StyleSheet.create({
   ingredientNameInput: {
     flex: 1,
   },
+  ingredientNameWrapper: {
+    position: 'relative',
+  },
+  ingredientNameCreate: {
+    position: 'absolute',
+    right: 12,
+    top: 0,
+    bottom: 0,
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: 10,
+    borderWidth: StyleSheet.hairlineWidth,
+    paddingHorizontal: 12,
+    gap: 4,
+  },
+  ingredientNameCreateLabel: {
+    fontSize: 14,
+    fontWeight: '700',
+  },
   suggestionList: {
     position: 'absolute',
     top: 86,
@@ -1640,18 +1671,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '500',
     flex: 1,
-  },
-  suggestionCreate: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    borderTopWidth: StyleSheet.hairlineWidth,
-  },
-  suggestionCreateLabel: {
-    fontSize: 14,
-    fontWeight: '600',
   },
   rowInputs: {
     flexDirection: 'row',
