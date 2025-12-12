@@ -1254,7 +1254,7 @@ function EditableIngredientRow({
               setShowSuggestions(false);
               onRequestCreateIngredient(ingredient.name);
             }}
-            style={[styles.ingredientNameCreate, { backgroundColor: palette.background, borderColor: palette.outlineVariant }]}
+            style={[styles.ingredientNameCreate, { backgroundColor: palette.background }]}
             accessibilityRole="button"
             accessibilityLabel="Create new ingredient"
             hitSlop={8}>
@@ -1640,7 +1640,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderRadius: 10,
-    borderWidth: StyleSheet.hairlineWidth,
     paddingHorizontal: 12,
     gap: 4,
   },
@@ -1650,7 +1649,7 @@ const styles = StyleSheet.create({
   },
   suggestionList: {
     position: 'absolute',
-    top: 86,
+    top: 90,
     left: 0,
     right: 0,
     zIndex: 10,
