@@ -167,7 +167,7 @@ export default function CreateCocktailScreen() {
   const [isPickingImage, setIsPickingImage] = useState(false);
   const [description, setDescription] = useState('');
   const [instructions, setInstructions] = useState('');
-  const [selectedTagIds, setSelectedTagIds] = useState<number[]>([11]);
+  const [selectedTagIds, setSelectedTagIds] = useState<number[]>([]);
   const [ingredientsState, setIngredientsState] = useState<EditableIngredient[]>(() => [
     createEditableIngredient(),
   ]);
@@ -184,10 +184,10 @@ export default function CreateCocktailScreen() {
 
   const tagSelection = useMemo(() => {
     const set = new Set(selectedTagIds);
-    const selected = BUILTIN_COCKTAIL_TAGS.filter((tag) => set.has(tag.id));
-    const available = BUILTIN_COCKTAIL_TAGS.filter((tag) => !set.has(tag.id));
-
-    return { selected, available };
+    return BUILTIN_COCKTAIL_TAGS.map((tag) => ({
+      ...tag,
+      selected: set.has(tag.id),
+    }));
   }, [selectedTagIds]);
 
   useEffect(() => {
@@ -223,7 +223,7 @@ export default function CreateCocktailScreen() {
         .map((tag) => Number(tag.id ?? -1))
         .filter((id): id is number => Number.isFinite(id) && id >= 0)
         .map((id) => Math.trunc(id));
-      setSelectedTagIds(mappedTags.length ? mappedTags : [11]);
+      setSelectedTagIds(mappedTags);
 
       const recipe = [...(baseCocktail.ingredients ?? [])].sort(
         (a, b) => (a?.order ?? 0) - (b?.order ?? 0),
@@ -775,42 +775,21 @@ export default function CreateCocktailScreen() {
 
           <View style={styles.section}>
             <Text style={[styles.label, { color: palette.onSurface }]}>Tags</Text>
+            <Text style={[styles.hint, { color: palette.onSurfaceVariant }]}>Select one or more tags</Text>
             <View style={styles.tagList}>
-              {tagSelection.selected.length ? (
-                tagSelection.selected.map((tag) => (
-                  <TagPill
-                    key={tag.id}
-                    label={tag.name}
-                    color={tag.color}
-                    selected
-                    onPress={() => handleToggleTag(tag.id)}
-                    accessibilityRole="checkbox"
-                    accessibilityState={{ checked: true }}
-                    androidRippleColor={`${palette.surface}33`}
-                  />
-                ))
-              ) : (
-                <Text style={[styles.hint, { color: palette.onSurfaceVariant }]}>No tags selected</Text>
-              )}
-            </View>
-
-            <Text style={[styles.label, { color: palette.onSurface }]}>Add Tag</Text>
-            <View style={styles.tagList}>
-              {tagSelection.available.map((tag) => (
+              {tagSelection.map((tag) => (
                 <TagPill
                   key={tag.id}
                   label={tag.name}
                   color={tag.color}
-                  selected={false}
+                  selected={tag.selected}
                   onPress={() => handleToggleTag(tag.id)}
-                  accessibilityRole="button"
+                  accessibilityRole="checkbox"
+                  accessibilityState={{ checked: tag.selected }}
                   androidRippleColor={`${palette.surface}33`}
                 />
               ))}
             </View>
-            <Pressable onPress={() => Alert.alert('Manage tags', 'Tag management coming soon')}>
-              <Text style={[styles.manageTagsLink, { color: palette.tint }]}>Manage tags</Text>
-            </Pressable>
           </View>
 
           <View style={styles.section}>
