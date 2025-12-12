@@ -735,12 +735,6 @@ export default function CreateCocktailScreen() {
                 ) : (
                   <MaterialCommunityIcons name="glass-cocktail" size={48} color={palette.onSurfaceVariant} />
                 )}
-                {selectedGlass ? (
-                  <Text style={[styles.cardValue, { color: palette.onSurface }]} numberOfLines={1}>
-                    {selectedGlass.name}
-                  </Text>
-                ) : null}
-                <Text style={[styles.cardHint, { color: palette.onSurfaceVariant }]}>Tap to select</Text>
               </Pressable>
             </View>
 
@@ -755,7 +749,7 @@ export default function CreateCocktailScreen() {
                 onPress={handlePickImage}
                 android_ripple={{ color: `${palette.surface}33` }}>
                 {imageSource ? (
-                  <Image source={imageSource} style={styles.photoPreview} contentFit="cover" />
+                  <Image source={imageSource} style={styles.photoPreview} contentFit="contain" />
                 ) : (
                   <Text style={[styles.cardHint, { color: palette.onSurfaceVariant }]}>Tap to select image</Text>
                 )}
@@ -1385,10 +1379,6 @@ const styles = StyleSheet.create({
   },
   cardHint: {
     fontSize: 12,
-  },
-  cardValue: {
-    fontSize: 14,
-    fontWeight: '600',
   },
   photoTile: {
     width: 150,
