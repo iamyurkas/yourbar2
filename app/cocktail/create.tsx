@@ -177,6 +177,8 @@ export default function CreateCocktailScreen() {
   const [permissionStatus, requestPermission] = ImagePicker.useMediaLibraryPermissions();
 
   const initializedRef = useRef(false);
+  const scrollViewRef = useRef<ScrollView | null>(null);
+  const fieldOffsetsRef = useRef<Record<string, number>>({});
 
   const placeholderLabel = useMemo(() => (imageUri ? 'Change photo' : 'Add photo'), [imageUri]);
 
@@ -189,6 +191,17 @@ export default function CreateCocktailScreen() {
       selected: set.has(tag.id),
     }));
   }, [selectedTagIds]);
+
+  const handleRegisterFieldOffset = useCallback((key: string, y: number) => {
+    fieldOffsetsRef.current[key] = y;
+  }, []);
+
+  const handleFocusField = useCallback((key: string) => {
+    const y = fieldOffsetsRef.current[key];
+    if (typeof y === 'number') {
+      scrollViewRef.current?.scrollTo({ y: Math.max(y - 12, 0), animated: true });
+    }
+  }, []);
 
   useEffect(() => {
     if (initializedRef.current) {
@@ -703,6 +716,7 @@ export default function CreateCocktailScreen() {
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         keyboardVerticalOffset={Platform.select({ ios: 96, default: 0 })}>
         <ScrollView
+          ref={scrollViewRef}
           style={[styles.flex, { backgroundColor: palette.background }]}
           contentContainerStyle={styles.content}
           keyboardShouldPersistTaps="handled">
@@ -797,6 +811,8 @@ export default function CreateCocktailScreen() {
                 { borderColor: palette.outlineVariant, color: palette.text, backgroundColor: palette.surface },
               ]}
               multiline
+              onLayout={(event) => handleRegisterFieldOffset('description', event.nativeEvent.layout.y)}
+              onFocus={() => handleFocusField('description')}
               textAlignVertical="top"
             />
           </View>
@@ -814,6 +830,8 @@ export default function CreateCocktailScreen() {
                 { borderColor: palette.outlineVariant, color: palette.text, backgroundColor: palette.surface },
               ]}
               multiline
+              onLayout={(event) => handleRegisterFieldOffset('instructions', event.nativeEvent.layout.y)}
+              onFocus={() => handleFocusField('instructions')}
               textAlignVertical="top"
             />
           </View>
@@ -829,15 +847,17 @@ export default function CreateCocktailScreen() {
                   onChange={handleChangeIngredient}
                   onRemove={handleRemoveIngredient}
                   onMove={handleMoveIngredient}
-                  onRequestUnitPicker={handleOpenUnitPicker}
-                  onRequestAddSubstitute={handleOpenSubstituteModal}
-                  onRemoveSubstitute={handleRemoveSubstitute}
-                  onRequestCreateIngredient={handleRequestCreateIngredient}
-                  palette={palette}
-                  index={index}
-                  totalCount={ingredientsState.length}
-                />
-              ))}
+                onRequestUnitPicker={handleOpenUnitPicker}
+                onRequestAddSubstitute={handleOpenSubstituteModal}
+                onRemoveSubstitute={handleRemoveSubstitute}
+                onRequestCreateIngredient={handleRequestCreateIngredient}
+                palette={palette}
+                index={index}
+                totalCount={ingredientsState.length}
+                onRegisterFieldOffset={handleRegisterFieldOffset}
+                onFocusField={handleFocusField}
+              />
+            ))}
             </View>
           <Pressable
             onPress={handleAddIngredient}
@@ -979,6 +999,8 @@ type EditableIngredientRowProps = {
   index: number;
   totalCount: number;
   palette: typeof Colors;
+  onRegisterFieldOffset?: (key: string, y: number) => void;
+  onFocusField?: (key: string) => void;
 };
 
 function EditableIngredientRow({
@@ -994,11 +1016,17 @@ function EditableIngredientRow({
   index,
   totalCount,
   palette,
+  onRegisterFieldOffset,
+  onFocusField,
 }: EditableIngredientRowProps) {
   const [isFocused, setIsFocused] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const hideSuggestionsTimeout = useRef<NodeJS.Timeout | null>(null);
   const [infoModal, setInfoModal] = useState<'base' | 'brand' | null>(null);
+  const containerOffsetRef = useRef(0);
+
+  const nameFieldKey = useMemo(() => `ingredient-${ingredient.key}-name`, [ingredient.key]);
+  const amountFieldKey = useMemo(() => `ingredient-${ingredient.key}-amount`, [ingredient.key]);
 
   const normalizedName = ingredient.name.trim().toLowerCase();
 
@@ -1063,6 +1091,23 @@ function EditableIngredientRow({
     }
   }, [ingredient.key, ingredient.ingredientId, ingredient.name, inventoryIngredients, normalizedName, onChange]);
 
+  const registerFieldOffset = useCallback(
+    (fieldKey: string, localY: number) => {
+      if (!onRegisterFieldOffset) {
+        return;
+      }
+      onRegisterFieldOffset(fieldKey, containerOffsetRef.current + localY);
+    },
+    [onRegisterFieldOffset],
+  );
+
+  const focusField = useCallback(
+    (fieldKey: string) => {
+      onFocusField?.(fieldKey);
+    },
+    [onFocusField],
+  );
+
   const handleNameFocus = useCallback(() => {
     setIsFocused(true);
     setShowSuggestions(true);
@@ -1070,7 +1115,8 @@ function EditableIngredientRow({
       clearTimeout(hideSuggestionsTimeout.current);
       hideSuggestionsTimeout.current = null;
     }
-  }, []);
+    focusField(nameFieldKey);
+  }, [focusField, nameFieldKey]);
 
   const handleNameBlur = useCallback(() => {
     setIsFocused(false);
@@ -1135,7 +1181,11 @@ function EditableIngredientRow({
   }, []);
 
   return (
-    <View style={[styles.ingredientCard, { borderColor: palette.outlineVariant, backgroundColor: palette.surface }]}>
+    <View
+      style={[styles.ingredientCard, { borderColor: palette.outlineVariant, backgroundColor: palette.surface }]}
+      onLayout={(event) => {
+        containerOffsetRef.current = event.nativeEvent.layout.y;
+      }}>
       <View style={styles.ingredientHeaderSimple}>
         <View style={styles.ingredientTitleRow}>
           <Text style={[styles.ingredientHeading, { color: palette.onSurface }]}>{`${index + 1}. Ingredient`}</Text>
@@ -1198,6 +1248,7 @@ function EditableIngredientRow({
         style={[styles.input, styles.ingredientNameInput, { borderColor: palette.outlineVariant, color: palette.text }]}
         onFocus={handleNameFocus}
         onBlur={handleNameBlur}
+        onLayout={(event) => registerFieldOffset(nameFieldKey, event.nativeEvent.layout.y)}
         autoCapitalize="words"
       />
 
@@ -1243,6 +1294,8 @@ function EditableIngredientRow({
             placeholderTextColor={`${palette.onSurfaceVariant}99`}
             keyboardType="decimal-pad"
             style={[styles.input, { borderColor: palette.outlineVariant, color: palette.text }]}
+            onLayout={(event) => registerFieldOffset(amountFieldKey, event.nativeEvent.layout.y)}
+            onFocus={() => focusField(amountFieldKey)}
           />
         </View>
         <View style={styles.unitColumn}>
@@ -1396,7 +1449,7 @@ const styles = StyleSheet.create({
   content: {
     padding: 16,
     gap: 20,
-    paddingBottom: 120,
+    paddingBottom: 240,
   },
   section: {
     gap: 10,
