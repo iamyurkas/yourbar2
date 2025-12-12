@@ -20,6 +20,7 @@ import { CocktailListRow } from '@/components/CocktailListRow';
 import { PresenceCheck } from '@/components/RowParts';
 import { TagPill } from '@/components/TagPill';
 import { Colors } from '@/constants/theme';
+import { createIngredientLookup } from '@/libs/ingredient-availability';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
 
 function useResolvedIngredient(param: string | undefined, ingredients: Ingredient[]) {
@@ -58,6 +59,8 @@ export default function IngredientDetailsScreen() {
     Array.isArray(ingredientId) ? ingredientId[0] : ingredientId,
     ingredients,
   );
+
+  const ingredientLookup = useMemo(() => createIngredientLookup(ingredients), [ingredients]);
 
   const numericIngredientId = useMemo(() => {
     const candidate = ingredient?.id ?? (Array.isArray(ingredientId) ? ingredientId[0] : ingredientId);
@@ -614,6 +617,7 @@ export default function IngredientDetailsScreen() {
                       key={cocktail.id ?? cocktail.name}
                       cocktail={cocktail}
                       availableIngredientIds={availableIngredientIds}
+                      ingredientLookup={ingredientLookup}
                       onPress={() => handleNavigateToCocktail(cocktail.id ?? cocktail.name)}
                     />
                   ))}
