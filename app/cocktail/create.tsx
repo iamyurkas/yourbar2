@@ -998,12 +998,35 @@ function EditableIngredientRow({
   const [isFocused, setIsFocused] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const hideSuggestionsTimeout = useRef<NodeJS.Timeout | null>(null);
+  const [infoModal, setInfoModal] = useState<'base' | 'brand' | null>(null);
 
   const normalizedName = ingredient.name.trim().toLowerCase();
 
   const canReorder = totalCount > 1;
   const canMoveUp = canReorder && index > 0;
   const canMoveDown = canReorder && index < totalCount - 1;
+
+  const ingredientRecord = useMemo(() => {
+    if (ingredient.ingredientId == null) {
+      return undefined;
+    }
+
+    return inventoryIngredients.find(
+      (candidate) => Number(candidate.id ?? -1) === Number(ingredient.ingredientId),
+    );
+  }, [ingredient.ingredientId, inventoryIngredients]);
+
+  const baseIngredientId = useMemo(() => {
+    const candidate = ingredientRecord?.baseIngredientId;
+    if (candidate == null) {
+      return undefined;
+    }
+
+    const parsed = Number(candidate);
+    return Number.isFinite(parsed) && parsed >= 0 ? Math.trunc(parsed) : undefined;
+  }, [ingredientRecord?.baseIngredientId]);
+
+  const isBrandedIngredient = baseIngredientId != null;
 
   const suggestions = useMemo(() => {
     if (normalizedName.length < MIN_AUTOCOMPLETE_LENGTH) {
@@ -1081,6 +1104,18 @@ function EditableIngredientRow({
   const handleToggleGarnish = useCallback(() => {
     onChange(ingredient.key, { garnish: !ingredient.garnish });
   }, [ingredient.key, ingredient.garnish, onChange]);
+
+  const handleToggleAllowBase = useCallback(() => {
+    onChange(ingredient.key, { allowBaseSubstitution: !ingredient.allowBaseSubstitution });
+  }, [ingredient.allowBaseSubstitution, ingredient.key, onChange]);
+
+  const handleToggleAllowBrand = useCallback(() => {
+    onChange(ingredient.key, { allowBrandSubstitution: !ingredient.allowBrandSubstitution });
+  }, [ingredient.allowBrandSubstitution, ingredient.key, onChange]);
+
+  const handleCloseInfoModal = useCallback(() => {
+    setInfoModal(null);
+  }, []);
 
   const unitLabel = useMemo(() => {
     if (ingredient.unitId == null) {
@@ -1228,6 +1263,25 @@ function EditableIngredientRow({
         <ToggleChip label="Optional" active={ingredient.optional} onToggle={handleToggleOptional} palette={palette} />
       </View>
 
+      {isBrandedIngredient ? (
+        <View style={styles.toggleRow}>
+          <ToggleChip
+            label="Allow base substitute"
+            active={ingredient.allowBaseSubstitution}
+            onToggle={handleToggleAllowBase}
+            onInfo={() => setInfoModal('base')}
+            palette={palette}
+          />
+          <ToggleChip
+            label="Allow branded substitute"
+            active={ingredient.allowBrandSubstitution}
+            onToggle={handleToggleAllowBrand}
+            onInfo={() => setInfoModal('brand')}
+            palette={palette}
+          />
+        </View>
+      ) : null}
+
       <View style={styles.substitutesSection}>
         <Pressable
           onPress={() => onRequestAddSubstitute(ingredient.key)}
@@ -1266,6 +1320,32 @@ function EditableIngredientRow({
           </View>
         ) : null}
       </View>
+
+      <Modal
+        visible={infoModal != null}
+        transparent
+        animationType="fade"
+        onRequestClose={handleCloseInfoModal}>
+        <Pressable style={styles.modalOverlay} onPress={handleCloseInfoModal}>
+          <View style={[styles.modalCardSmall, { backgroundColor: palette.surface }]}>
+            <Text style={[styles.modalTitle, { color: palette.onSurface }]}>
+              {infoModal === 'brand' ? 'Allow branded substitute' : 'Allow base substitute'}
+            </Text>
+            <Text style={[styles.modalSubtitle, { color: palette.onSurfaceVariant }]}>
+              {infoModal === 'brand'
+                ? "If the specified ingredient isn't available, the cocktail will be shown as available with branded ingredients of the base."
+                : "If the specified ingredient isn't available, the cocktail will be shown as available with its base ingredient."}
+            </Text>
+            <Pressable
+              onPress={handleCloseInfoModal}
+              style={[styles.modalActionButton, { backgroundColor: palette.tint }]}
+              accessibilityRole="button"
+              accessibilityLabel="Close info">
+              <Text style={[styles.modalActionLabel, { color: palette.onPrimary }]}>OK</Text>
+            </Pressable>
+          </View>
+        </Pressable>
+      </Modal>
     </View>
   );
 }
@@ -1662,6 +1742,16 @@ const styles = StyleSheet.create({
   modalSubtitle: {
     fontSize: 14,
     marginTop: 4,
+  },
+  modalActionButton: {
+    marginTop: 8,
+    borderRadius: 12,
+    paddingVertical: 10,
+    alignItems: 'center',
+  },
+  modalActionLabel: {
+    fontSize: 14,
+    fontWeight: '600',
   },
   modalHeader: {
     flexDirection: 'row',

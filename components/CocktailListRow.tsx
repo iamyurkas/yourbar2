@@ -11,7 +11,12 @@ import {
 
 import { resolveGlasswareUriFromId } from '@/assets/image-manifest';
 import { Colors } from '@/constants/theme';
-import type { Cocktail } from '@/providers/inventory-provider';
+import type { Cocktail, Ingredient } from '@/providers/inventory-provider';
+import {
+  createIngredientLookup,
+  isRecipeIngredientAvailable,
+  type IngredientLookup,
+} from '@/libs/ingredient-availability';
 import { palette, tagColors } from '@/theme/theme';
 
 import { TagDot, Thumb } from './RowParts';
@@ -19,6 +24,8 @@ import { TagDot, Thumb } from './RowParts';
 type CocktailListRowProps = {
   cocktail: Cocktail;
   availableIngredientIds: Set<number>;
+  ingredients?: Ingredient[];
+  ingredientLookup?: IngredientLookup;
   highlightColor?: string;
   onPress?: () => void;
   control?: React.ReactNode;
@@ -39,6 +46,8 @@ const areCocktailRowPropsEqual = (
   return (
     prev.cocktail === next.cocktail &&
     prev.availableIngredientIds === next.availableIngredientIds &&
+    prev.ingredientLookup === next.ingredientLookup &&
+    prev.ingredients === next.ingredients &&
     prev.highlightColor === next.highlightColor &&
     onPressEqual &&
     prev.control === next.control &&
@@ -56,39 +65,10 @@ type AvailabilitySummary = {
 const REQUIRED_INGREDIENT_FILTER = (item: Cocktail['ingredients'][number]) =>
   !item?.optional && !item?.garnish;
 
-function isIngredientAvailable(
-  ingredient: Cocktail['ingredients'][number],
-  availableIngredientIds: Set<number>,
-) {
-  if (!ingredient) {
-    return false;
-  }
-
-  const candidateIds: number[] = [];
-
-  const id = typeof ingredient.ingredientId === 'number' ? ingredient.ingredientId : undefined;
-  if (id != null) {
-    candidateIds.push(id);
-  }
-
-  (ingredient.substitutes ?? []).forEach((substitute) => {
-    const substituteId =
-      typeof substitute.ingredientId === 'number'
-        ? substitute.ingredientId
-        : typeof substitute.id === 'number'
-          ? substitute.id
-          : undefined;
-    if (substituteId != null && !candidateIds.includes(substituteId)) {
-      candidateIds.push(substituteId);
-    }
-  });
-
-  return candidateIds.some((candidateId) => availableIngredientIds.has(candidateId));
-}
-
 function summariseAvailability(
   cocktail: Cocktail,
   availableIngredientIds: Set<number>,
+  ingredientLookup: IngredientLookup,
 ): AvailabilitySummary {
   const recipe = cocktail.ingredients ?? [];
   const requiredIngredients = recipe.filter(REQUIRED_INGREDIENT_FILTER);
@@ -106,7 +86,7 @@ function summariseAvailability(
   const missingNames: string[] = [];
 
   requiredIngredients.forEach((ingredient) => {
-    if (!isIngredientAvailable(ingredient, availableIngredientIds)) {
+    if (!isRecipeIngredientAvailable(ingredient, availableIngredientIds, ingredientLookup)) {
       if (ingredient.name) {
         missingNames.push(ingredient.name);
       }
@@ -124,17 +104,26 @@ const MAX_RATING = 5;
 const CocktailListRowComponent = ({
   cocktail,
   availableIngredientIds,
+  ingredients,
+  ingredientLookup,
   highlightColor = palette.highlightFaint,
   onPress,
   control,
   containerStyle,
 }: CocktailListRowProps) => {
   const paletteColors = Colors;
+  const lookup = useMemo(() => {
+    if (ingredientLookup) {
+      return ingredientLookup;
+    }
+
+    return createIngredientLookup(ingredients ?? []);
+  }, [ingredientLookup, ingredients]);
   const glasswareUri = resolveGlasswareUriFromId(cocktail.glassId);
 
   const { missingCount, missingNames, recipeNames, isReady } = useMemo(
-    () => summariseAvailability(cocktail, availableIngredientIds),
-    [availableIngredientIds, cocktail],
+    () => summariseAvailability(cocktail, availableIngredientIds, lookup),
+    [availableIngredientIds, cocktail, lookup],
   );
 
   const subtitle = useMemo(() => {
