@@ -245,7 +245,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
   },
   subtitle: {
-    fontSize: 14,
+    fontSize: 12,
   },
   tagDot: {
     width: 8,
