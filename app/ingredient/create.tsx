@@ -448,7 +448,7 @@ export default function CreateIngredientScreen() {
             {baseIngredient ? (
               <>
                 <View style={styles.baseInfo}>
-                  <View style={styles.baseThumb}>
+                  <View style={[styles.baseThumb, { backgroundColor: palette.surfaceBright }]}>
                     {baseIngredientPhotoSource ? (
                       <Image source={baseIngredientPhotoSource} style={styles.baseImage} contentFit="contain" />
                     ) : (
@@ -483,14 +483,8 @@ export default function CreateIngredientScreen() {
               </>
             ) : (
               <View style={styles.basePlaceholderRow}>
-                <MaterialCommunityIcons
-                  name="link-variant"
-                  size={20}
-                  color={palette.onSurfaceVariant}
-                />
-                <Text style={[styles.basePlaceholderText, { color: palette.onSurfaceVariant }]}>
-                  Select a base ingredient
-                </Text>
+                <View style={[styles.baseThumb, styles.basePlaceholderThumb]} />
+                <Text style={[styles.basePlaceholderText, { color: palette.onSurfaceVariant }]}>None</Text>
               </View>
             )}
           </Pressable>
@@ -669,18 +663,23 @@ const styles = StyleSheet.create({
   baseThumb: {
     width: 56,
     height: 56,
-    borderRadius: 12,
+    borderRadius: 8,
     overflow: 'hidden',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: appPalette.surfaceBright,
   },
   baseImage: {
     width: '100%',
     height: '100%',
+    borderRadius: 8,
   },
   basePlaceholder: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 12,
+    borderRadius: 8,
+    backgroundColor: appPalette.surfaceBright,
   },
   baseName: {
     fontSize: 16,
@@ -691,10 +690,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 12,
     flex: 1,
+    minHeight: 56,
   },
   basePlaceholderText: {
     fontSize: 14,
     fontWeight: '500',
+  },
+  basePlaceholderThumb: {
+    backgroundColor: appPalette.surfaceBright,
+    borderColor: Colors.outlineVariant,
+    borderWidth: StyleSheet.hairlineWidth,
   },
   baseShoppingIndicator: {
     minHeight: 56,
