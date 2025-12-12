@@ -26,6 +26,9 @@ import { Colors } from '@/constants/theme';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
 import { palette as appPalette } from '@/theme/theme';
 
+const BASE_THUMB_SIZE = 56;
+const BASE_SELECTOR_MIN_HEIGHT = BASE_THUMB_SIZE + 24;
+
 export default function CreateIngredientScreen() {
   const params = useLocalSearchParams<{ suggestedName?: string }>();
   const suggestedNameParam = useMemo(() => {
@@ -443,19 +446,19 @@ export default function CreateIngredientScreen() {
             accessibilityRole="button"
             accessibilityLabel={baseIngredient ? 'Change base ingredient' : 'Select base ingredient'}
             onPress={handleOpenBaseModal}
-            style={[styles.baseSelector, { borderColor: palette.outline, backgroundColor: palette.surface }]}
-          >
-            {baseIngredient ? (
-              <>
-                <View style={styles.baseInfo}>
-                  <View style={styles.baseThumb}>
-                    {baseIngredientPhotoSource ? (
-                      <Image source={baseIngredientPhotoSource} style={styles.baseImage} contentFit="contain" />
-                    ) : (
-                      <View
-                        style={[styles.basePlaceholder, { backgroundColor: palette.onSurfaceVariant }]}
-                      >
-                        <MaterialCommunityIcons
+          style={[styles.baseSelector, { borderColor: palette.outline, backgroundColor: palette.surface }]}
+        >
+          {baseIngredient ? (
+            <>
+              <View style={styles.baseInfo}>
+                <View style={[styles.baseThumb, { backgroundColor: palette.surfaceBright }]}>
+                  {baseIngredientPhotoSource ? (
+                    <Image source={baseIngredientPhotoSource} style={styles.baseImage} contentFit="contain" />
+                  ) : (
+                    <View
+                      style={[styles.basePlaceholder, { backgroundColor: palette.surfaceBright }]}
+                    >
+                      <MaterialCommunityIcons
                           name="image-off"
                           size={20}
                           color={palette.onSurfaceVariant}
@@ -481,16 +484,9 @@ export default function CreateIngredientScreen() {
                   />
                 </Pressable>
               </>
-            ) : (
+          ) : (
               <View style={styles.basePlaceholderRow}>
-                <MaterialCommunityIcons
-                  name="link-variant"
-                  size={20}
-                  color={palette.onSurfaceVariant}
-                />
-                <Text style={[styles.basePlaceholderText, { color: palette.onSurfaceVariant }]}>
-                  Select a base ingredient
-                </Text>
+                <Text style={[styles.basePlaceholderText, { color: palette.onSurfaceVariant }]}>None</Text>
               </View>
             )}
           </Pressable>
@@ -659,6 +655,7 @@ const styles = StyleSheet.create({
     padding: 12,
     borderWidth: StyleSheet.hairlineWidth,
     borderRadius: 12,
+    minHeight: BASE_SELECTOR_MIN_HEIGHT,
   },
   baseInfo: {
     flexDirection: 'row',
@@ -667,8 +664,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   baseThumb: {
-    width: 56,
-    height: 56,
+    width: BASE_THUMB_SIZE,
+    height: BASE_THUMB_SIZE,
     borderRadius: 12,
     overflow: 'hidden',
   },
