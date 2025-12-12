@@ -1,9 +1,9 @@
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
+  FlatList,
   Modal,
   Pressable,
-  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -180,6 +180,61 @@ export function SubstituteModal({
     [cocktailsByBaseGroup],
   );
 
+  const keyExtractor = useCallback((item: Ingredient) => String(item.id ?? item.name), []);
+
+  const renderCandidate = useCallback(
+    ({ item }: { item: Ingredient }) => {
+      const candidateId = Number(item.id ?? -1);
+      const baseGroupId = getBaseGroupId(item.id);
+      const isAvailable = candidateId >= 0 && availableIngredientIds.has(candidateId);
+      const isOnShoppingList = candidateId >= 0 && shoppingIngredientIds.has(candidateId);
+      const tagColor = item.tags?.[0]?.color ?? palette.tagYellow;
+      const subtitle = renderSubtitle(baseGroupId);
+      const brandIndicatorColor = item.baseIngredientId != null ? Colors.primary : undefined;
+
+      return (
+        <ListRow
+          title={item.name ?? ''}
+          subtitle={subtitle}
+          onPress={() => onSelect(item)}
+          selected={isAvailable}
+          highlightColor={palette.highlightSubtle}
+          tagColor={tagColor}
+          thumbnail={<Thumb label={item.name ?? undefined} uri={item.photoUri} />}
+          brandIndicatorColor={brandIndicatorColor}
+          control={
+            <View style={styles.controlContainer}>
+              {isOnShoppingList ? (
+                <MaterialIcons
+                  name="shopping-cart"
+                  size={16}
+                  color={Colors.tint}
+                  style={styles.shoppingIcon}
+                  accessibilityRole="image"
+                  accessibilityLabel="On shopping list"
+                />
+              ) : (
+                <View style={styles.shoppingIconPlaceholder} />
+              )}
+            </View>
+          }
+        />
+      );
+    },
+    [
+      availableIngredientIds,
+      getBaseGroupId,
+      onSelect,
+      renderSubtitle,
+      shoppingIngredientIds,
+    ],
+  );
+
+  const renderSeparator = useCallback(
+    () => <View style={[styles.modalSeparator, { backgroundColor: paletteColors.outline }]} />,
+    [paletteColors.outline],
+  );
+
   return (
     <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
       <View style={styles.modalOverlay}>
@@ -207,51 +262,17 @@ export function SubstituteModal({
             style={[styles.input, { borderColor: paletteColors.outlineVariant, color: paletteColors.text }]}
             autoFocus
           />
-          <ScrollView contentContainerStyle={styles.modalListContent} keyboardShouldPersistTaps="handled">
-            {candidateIngredients.length ? (
-              candidateIngredients.map((candidate) => {
-                const candidateId = Number(candidate.id ?? -1);
-                const baseGroupId = getBaseGroupId(candidate.id);
-                const isAvailable = candidateId >= 0 && availableIngredientIds.has(candidateId);
-                const isOnShoppingList = candidateId >= 0 && shoppingIngredientIds.has(candidateId);
-                const tagColor = candidate.tags?.[0]?.color ?? palette.tagYellow;
-                const subtitle = renderSubtitle(baseGroupId);
-                const brandIndicatorColor = candidate.baseIngredientId != null ? Colors.primary : undefined;
-
-                return (
-                  <ListRow
-                    key={candidate.id ?? candidate.name}
-                    title={candidate.name ?? ''}
-                    subtitle={subtitle}
-                    onPress={() => onSelect(candidate)}
-                    selected={isAvailable}
-                    highlightColor={palette.highlightSubtle}
-                    tagColor={tagColor}
-                    thumbnail={<Thumb label={candidate.name ?? undefined} uri={candidate.photoUri} />}
-                    brandIndicatorColor={brandIndicatorColor}
-                    control={
-                      <View style={styles.controlContainer}>
-                        {isOnShoppingList ? (
-                          <MaterialIcons
-                            name="shopping-cart"
-                            size={16}
-                            color={Colors.tint}
-                            style={styles.shoppingIcon}
-                            accessibilityRole="image"
-                            accessibilityLabel="On shopping list"
-                          />
-                        ) : (
-                          <View style={styles.shoppingIconPlaceholder} />
-                        )}
-                      </View>
-                    }
-                  />
-                );
-              })
-            ) : (
+          <FlatList
+            data={candidateIngredients}
+            keyExtractor={keyExtractor}
+            renderItem={renderCandidate}
+            ItemSeparatorComponent={renderSeparator}
+            keyboardShouldPersistTaps="handled"
+            contentContainerStyle={styles.modalListContent}
+            ListEmptyComponent={
               <Text style={[styles.modalEmptyText, { color: paletteColors.onSurfaceVariant }]}>No ingredients found</Text>
-            )}
-          </ScrollView>
+            }
+          />
         </View>
       </View>
     </Modal>
@@ -290,7 +311,6 @@ const styles = StyleSheet.create({
   },
   modalListContent: {
     paddingVertical: 8,
-    gap: 4,
   },
   modalEmptyText: {
     textAlign: 'center',
@@ -318,5 +338,8 @@ const styles = StyleSheet.create({
     minHeight: 16,
     minWidth: 16,
     marginTop: 4,
+  },
+  modalSeparator: {
+    height: StyleSheet.hairlineWidth,
   },
 });
