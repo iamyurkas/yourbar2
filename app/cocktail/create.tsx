@@ -25,8 +25,8 @@ import {
 
 import { resolveAssetFromCatalog } from '@/assets/image-manifest';
 import { Thumb } from '@/components/RowParts';
-import { TagPill } from '@/components/TagPill';
 import { SubstituteModal } from '@/components/SubstituteModal';
+import { TagPill } from '@/components/TagPill';
 import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
 import { COCKTAIL_UNIT_DICTIONARY, COCKTAIL_UNIT_OPTIONS } from '@/constants/cocktail-units';
 import { GLASSWARE } from '@/constants/glassware';
@@ -1684,11 +1684,11 @@ const styles = StyleSheet.create({
   },
   modalTitle: {
     fontSize: 16,
-    fontWeight: '700',
+    fontWeight: '600',
   },
   modalSubtitle: {
     fontSize: 14,
-    marginTop: 2,
+    marginTop: 4,
   },
   modalHeader: {
     flexDirection: 'row',
