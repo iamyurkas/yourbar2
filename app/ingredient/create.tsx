@@ -357,7 +357,7 @@ export default function CreateIngredientScreen() {
               onPress={handleGoBack}
               accessibilityRole="button"
               accessibilityLabel="Go back"
-              style={[styles.headerButton, { backgroundColor: palette.surfaceVariant }]}
+              style={styles.headerButton}
               hitSlop={8}>
               <MaterialCommunityIcons name="arrow-left" size={22} color={palette.onSurface} />
             </Pressable>

@@ -364,7 +364,7 @@ export default function IngredientDetailsScreen() {
               onPress={() => router.back()}
               accessibilityRole="button"
               accessibilityLabel="Go back"
-              style={[styles.headerButton, { backgroundColor: palette.surfaceVariant }]}
+              style={styles.headerButton}
               hitSlop={8}>
               <MaterialCommunityIcons name="arrow-left" size={22} color={palette.onSurface} />
             </Pressable>
@@ -374,7 +374,7 @@ export default function IngredientDetailsScreen() {
               onPress={handleEditPress}
               accessibilityRole="button"
               accessibilityLabel="Edit ingredient"
-              style={[styles.headerButton, { backgroundColor: palette.surfaceVariant }]}
+              style={styles.headerButton}
               hitSlop={8}>
               <MaterialCommunityIcons name="pencil-outline" size={20} color={palette.onSurface} />
             </Pressable>

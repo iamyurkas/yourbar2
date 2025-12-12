@@ -459,7 +459,7 @@ export default function EditIngredientScreen() {
               onPress={handleDeletePress}
               accessibilityRole="button"
               accessibilityLabel="Delete ingredient"
-              style={[styles.headerButton, { backgroundColor: paletteColors.surfaceVariant }]}
+              style={styles.headerButton}
               hitSlop={8}>
               <MaterialIcons name="delete-outline" size={22} color={paletteColors.onSurface} />
             </Pressable>
