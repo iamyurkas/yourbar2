@@ -735,12 +735,12 @@ export default function CreateCocktailScreen() {
                 ) : (
                   <MaterialCommunityIcons name="glass-cocktail" size={48} color={palette.onSurfaceVariant} />
                 )}
-                <Text style={[styles.cardHint, { color: palette.onSurfaceVariant }]}>Tap to select</Text>
                 {selectedGlass ? (
                   <Text style={[styles.cardValue, { color: palette.onSurface }]} numberOfLines={1}>
                     {selectedGlass.name}
                   </Text>
                 ) : null}
+                <Text style={[styles.cardHint, { color: palette.onSurfaceVariant }]}>Tap to select</Text>
               </Pressable>
             </View>
 
@@ -1379,8 +1379,8 @@ const styles = StyleSheet.create({
     minHeight: 180,
   },
   glassPreview: {
-    width: '100%',
-    height: 140,
+    width: 150,
+    height: 150,
     resizeMode: 'contain',
   },
   cardHint: {
@@ -1391,13 +1391,15 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   photoTile: {
-    height: 180,
+    width: 150,
+    height: 150,
     borderRadius: 12,
     borderWidth: StyleSheet.hairlineWidth,
     borderColor: Colors.outline,
     alignItems: 'center',
     justifyContent: 'center',
     overflow: 'hidden',
+    alignSelf: 'center',
   },
   photoPreview: {
     width: '100%',
