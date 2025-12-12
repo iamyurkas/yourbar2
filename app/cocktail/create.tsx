@@ -1183,23 +1183,43 @@ function EditableIngredientRow({
           <MaterialIcons name="delete-outline" size={20} color={palette.error} />
         </Pressable>
       </View>
-      <TextInput
-        value={ingredient.name}
-        onChangeText={(text) => {
-          const nextNormalized = text.trim().toLowerCase();
-          const shouldClearId = ingredient.ingredientId != null && nextNormalized !== normalizedName;
-          onChange(ingredient.key, {
-            name: text,
-            ingredientId: shouldClearId ? undefined : ingredient.ingredientId,
-          });
-        }}
-        placeholder="Type ingredient name"
-        placeholderTextColor={`${palette.onSurfaceVariant}99`}
-        style={[styles.input, styles.ingredientNameInput, { borderColor: palette.outlineVariant, color: palette.text }]}
-        onFocus={handleNameFocus}
-        onBlur={handleNameBlur}
-        autoCapitalize="words"
-      />
+      <View style={styles.ingredientNameField}>
+        <TextInput
+          value={ingredient.name}
+          onChangeText={(text) => {
+            const nextNormalized = text.trim().toLowerCase();
+            const shouldClearId = ingredient.ingredientId != null && nextNormalized !== normalizedName;
+            onChange(ingredient.key, {
+              name: text,
+              ingredientId: shouldClearId ? undefined : ingredient.ingredientId,
+            });
+          }}
+          placeholder="Type ingredient name"
+          placeholderTextColor={`${palette.onSurfaceVariant}99`}
+          style={[
+            styles.input,
+            styles.ingredientNameInput,
+            normalizedName.length >= MIN_AUTOCOMPLETE_LENGTH && styles.ingredientNameInputWithAction,
+            { borderColor: palette.outlineVariant, color: palette.text },
+          ]}
+          onFocus={handleNameFocus}
+          onBlur={handleNameBlur}
+          autoCapitalize="words"
+        />
+        {normalizedName.length >= MIN_AUTOCOMPLETE_LENGTH && showSuggestions && (
+          <Pressable
+            onPress={() => {
+              setShowSuggestions(false);
+              onRequestCreateIngredient(ingredient.name);
+            }}
+            style={[styles.inlineAddButton, { backgroundColor: palette.surface, borderColor: palette.outlineVariant }]}
+            accessibilityRole="button"
+            accessibilityLabel="Create new ingredient">
+            <MaterialCommunityIcons name="plus" size={16} color={palette.tint} />
+            <Text style={[styles.inlineAddLabel, { color: palette.tint }]}>+ Add</Text>
+          </Pressable>
+        )}
+      </View>
 
       {showSuggestions && suggestions.length ? (
         <View style={[styles.suggestionList, { borderColor: palette.outlineVariant, backgroundColor: palette.surface }]}
@@ -1217,19 +1237,6 @@ function EditableIngredientRow({
               </Text>
             </Pressable>
           ))}
-          {normalizedName.length >= MIN_AUTOCOMPLETE_LENGTH ? (
-            <Pressable
-              onPress={() => {
-                setShowSuggestions(false);
-                onRequestCreateIngredient(ingredient.name);
-              }}
-              style={styles.suggestionCreate}
-              accessibilityRole="button"
-              accessibilityLabel="Create new ingredient">
-              <MaterialCommunityIcons name="plus" size={18} color={palette.tint} />
-              <Text style={[styles.suggestionCreateLabel, { color: palette.tint }]}>Create “{ingredient.name.trim() || 'new ingredient'}”</Text>
-            </Pressable>
-          ) : null}
         </View>
       ) : null}
 
@@ -1576,8 +1583,31 @@ const styles = StyleSheet.create({
   hiddenControl: {
     opacity: 0,
   },
+  ingredientNameField: {
+    position: 'relative',
+  },
   ingredientNameInput: {
     flex: 1,
+  },
+  ingredientNameInputWithAction: {
+    paddingRight: 88,
+  },
+  inlineAddButton: {
+    position: 'absolute',
+    right: 10,
+    top: '50%',
+    transform: [{ translateY: -14 }],
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderRadius: 10,
+  },
+  inlineAddLabel: {
+    fontSize: 14,
+    fontWeight: '700',
   },
   suggestionList: {
     position: 'absolute',
@@ -1602,18 +1632,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '500',
     flex: 1,
-  },
-  suggestionCreate: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    borderTopWidth: StyleSheet.hairlineWidth,
-  },
-  suggestionCreateLabel: {
-    fontSize: 14,
-    fontWeight: '600',
   },
   rowInputs: {
     flexDirection: 'row',
