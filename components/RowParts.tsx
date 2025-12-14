@@ -175,16 +175,20 @@ export function ListRow({
         ) : null}
       </View>
       <View style={styles.metaColumn}>
-        {tagColor ? (
-          <View pointerEvents="none" style={styles.tagDotOverlay}>
-            <TagDot color={tagColor} />
-          </View>
-        ) : null}
         <View style={styles.metaContent}>
+          <View style={styles.metaTop}>
+            {tagColor ? (
+              <TagDot color={tagColor} />
+            ) : (
+              <View style={styles.tagDotPlaceholder} />
+            )}
+          </View>
           <View style={[styles.metaMiddle, metaAlignmentStyle]}>
             {control ?? <View style={styles.metaControlPlaceholder} />}
           </View>
-          <View style={styles.metaFooter}>{metaFooter ?? <View style={styles.metaFooterPlaceholder} />}</View>
+          <View style={styles.metaFooter}>
+            {metaFooter ?? <View style={styles.metaFooterPlaceholder} />}
+          </View>
         </View>
       </View>
     </Pressable>
@@ -220,15 +224,19 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   metaColumn: {
-    alignItems: 'flex-end',
     justifyContent: 'center',
     minHeight: THUMB_SIZE,
     alignSelf: 'center',
-    position: 'relative',
   },
   metaContent: {
     height: THUMB_SIZE,
     alignSelf: 'stretch',
+    alignItems: 'stretch',
+  },
+  metaTop: {
+    height: 16,
+    alignItems: 'flex-end',
+    justifyContent: 'flex-start',
   },
   metaMiddle: {
     flex: 1,
@@ -269,10 +277,9 @@ const styles = StyleSheet.create({
     height: 8,
     borderRadius: 8,
   },
-  tagDotOverlay: {
-    position: 'absolute',
-    top: 0,
-    right: 0,
+  tagDotPlaceholder: {
+    width: 16,
+    height: 16,
   },
   checkbox: {
     width: 20,
