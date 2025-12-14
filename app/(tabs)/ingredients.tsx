@@ -14,6 +14,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { CollectionHeader } from '@/components/CollectionHeader';
 import { FabAdd } from '@/components/FabAdd';
 import { ListRow, PresenceCheck, Thumb } from '@/components/RowParts';
+import { SideMenu } from '@/components/SideMenu';
 import { TagPill } from '@/components/TagPill';
 import type { SegmentTabOption } from '@/components/TopBars';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
@@ -205,6 +206,7 @@ export default function IngredientsScreen() {
   } = useInventory();
   const [activeTab, setActiveTab] = useState<IngredientTabKey>('all');
   const [query, setQuery] = useState('');
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isFilterMenuVisible, setFilterMenuVisible] = useState(false);
   const [selectedTagKeys, setSelectedTagKeys] = useState<Set<string>>(() => new Set());
   const [headerLayout, setHeaderLayout] = useState<LayoutRectangle | null>(null);
@@ -337,6 +339,14 @@ export default function IngredientsScreen() {
 
   const handleCloseFilterMenu = useCallback(() => {
     setFilterMenuVisible(false);
+  }, []);
+
+  const handleOpenMenu = useCallback(() => {
+    setIsMenuOpen(true);
+  }, []);
+
+  const handleCloseMenu = useCallback(() => {
+    setIsMenuOpen(false);
   }, []);
 
   const handleTagFilterToggle = useCallback((key: string) => {
@@ -808,6 +818,7 @@ export default function IngredientsScreen() {
             searchValue={query}
             onSearchChange={setQuery}
             placeholder="Search"
+            onMenuPress={handleOpenMenu}
             tabs={TAB_OPTIONS}
             activeTab={activeTab}
             onTabChange={setActiveTab}
@@ -880,6 +891,7 @@ export default function IngredientsScreen() {
           }
         />
       </View>
+      <SideMenu visible={isMenuOpen} onClose={handleCloseMenu} />
       <FabAdd label="Add ingredient" onPress={() => router.push('/ingredient/create')} />
     </SafeAreaView>
   );

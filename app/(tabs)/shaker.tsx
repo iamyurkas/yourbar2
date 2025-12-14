@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { CollectionHeader } from '@/components/CollectionHeader';
+import { SideMenu } from '@/components/SideMenu';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { IconSymbol } from '@/components/ui/icon-symbol';
@@ -17,14 +18,28 @@ type ActionCardProps = {
 
 export default function ShakerScreen() {
   const [query, setQuery] = useState('');
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const paletteColors = Colors;
+
+  const handleOpenMenu = useCallback(() => {
+    setIsMenuOpen(true);
+  }, []);
+
+  const handleCloseMenu = useCallback(() => {
+    setIsMenuOpen(false);
+  }, []);
 
   return (
     <SafeAreaView
       style={[styles.safeArea, { backgroundColor: paletteColors.background }]}
       edges={['top', 'left', 'right']}>
       <ThemedView style={[styles.screen, { backgroundColor: paletteColors.background }]}>
-        <CollectionHeader searchValue={query} onSearchChange={setQuery} placeholder="Search" />
+        <CollectionHeader
+          searchValue={query}
+          onSearchChange={setQuery}
+          placeholder="Search"
+          onMenuPress={handleOpenMenu}
+        />
         <View style={styles.container}>
           <View style={styles.header}>
             <ThemedText type="title">Shaker</ThemedText>
@@ -50,6 +65,7 @@ export default function ShakerScreen() {
           />
         </View>
       </ThemedView>
+      <SideMenu visible={isMenuOpen} onClose={handleCloseMenu} />
     </SafeAreaView>
   );
 }
