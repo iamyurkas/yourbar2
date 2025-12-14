@@ -147,7 +147,7 @@ const CocktailListRowComponent = ({
       <View
         style={[
           styles.ratingPill,
-          { backgroundColor: `${paletteColors.surfaceVariant}F2`, borderColor: paletteColors.outline },
+          { backgroundColor: paletteColors.background, borderColor: paletteColors.outline },
         ]}>
         {Array.from({ length: totalStars }).map((_, index) => (
           <MaterialCommunityIcons
@@ -190,6 +190,7 @@ const styles = StyleSheet.create({
   ratingPill: {
     flexDirection: 'row',
     alignItems: 'center',
+    alignSelf: 'flex-end',
     gap: 2,
     borderRadius: 12,
     paddingVertical: 2,
