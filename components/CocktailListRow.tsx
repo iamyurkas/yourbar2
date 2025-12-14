@@ -20,6 +20,7 @@ type CocktailListRowProps = {
   ingredients?: Ingredient[];
   ingredientLookup?: IngredientLookup;
   highlightColor?: string;
+  availabilitySummary?: AvailabilitySummary;
   onPress?: () => void;
 };
 
@@ -40,11 +41,12 @@ const areCocktailRowPropsEqual = (
     prev.ingredientLookup === next.ingredientLookup &&
     prev.ingredients === next.ingredients &&
     prev.highlightColor === next.highlightColor &&
+    prev.availabilitySummary === next.availabilitySummary &&
     onPressEqual
   );
 };
 
-type AvailabilitySummary = {
+export type AvailabilitySummary = {
   missingCount: number;
   missingNames: string[];
   recipeNames: string[];
@@ -54,7 +56,7 @@ type AvailabilitySummary = {
 const REQUIRED_INGREDIENT_FILTER = (item: Cocktail['ingredients'][number]) =>
   !item?.optional && !item?.garnish;
 
-function summariseAvailability(
+export function getCocktailAvailabilitySummary(
   cocktail: Cocktail,
   availableIngredientIds: Set<number>,
   ingredientLookup: IngredientLookup,
@@ -96,6 +98,7 @@ const CocktailListRowComponent = ({
   ingredients,
   ingredientLookup,
   highlightColor = palette.highlightFaint,
+  availabilitySummary,
   onPress,
 }: CocktailListRowProps) => {
   const paletteColors = Colors;
@@ -109,8 +112,8 @@ const CocktailListRowComponent = ({
   const glasswareUri = resolveGlasswareUriFromId(cocktail.glassId);
 
   const { missingCount, missingNames, recipeNames, isReady } = useMemo(
-    () => summariseAvailability(cocktail, availableIngredientIds, lookup),
-    [availableIngredientIds, cocktail, lookup],
+    () => availabilitySummary ?? getCocktailAvailabilitySummary(cocktail, availableIngredientIds, lookup),
+    [availabilitySummary, availableIngredientIds, cocktail, lookup],
   );
 
   const subtitle = useMemo(() => {

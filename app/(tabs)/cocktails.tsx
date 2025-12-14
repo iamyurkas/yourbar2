@@ -4,8 +4,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 
 import { FabAdd } from '@/components/FabAdd';
-import { CocktailListRow } from '@/components/CocktailListRow';
+import { CocktailListRow, getCocktailAvailabilitySummary } from '@/components/CocktailListRow';
 import { CollectionHeader } from '@/components/CollectionHeader';
+import { HairlineSeparator } from '@/components/RowSeparator';
 import type { SegmentTabOption } from '@/components/TopBars';
 import { Colors } from '@/constants/theme';
 import { useInventory, type Cocktail } from '@/providers/inventory-provider';
@@ -13,6 +14,7 @@ import {
   createIngredientLookup,
   isRecipeIngredientAvailable,
 } from '@/libs/ingredient-availability';
+import { palette } from '@/theme/theme';
 
 type CocktailSection = {
   key: string;
@@ -96,8 +98,6 @@ export default function CocktailsScreen() {
     );
   }, [activeSection.data, normalizedQuery]);
 
-  const separatorColor = paletteColors.outline;
-
   const keyExtractor = useCallback((item: Cocktail) => String(item.id ?? item.name), []);
 
   const handleSelectCocktail = useCallback(
@@ -113,20 +113,36 @@ export default function CocktailsScreen() {
   );
 
   const renderItem = useCallback(
-    ({ item }: { item: Cocktail }) => (
-      <CocktailListRow
-        cocktail={item}
-        availableIngredientIds={availableIngredientIds}
-        ingredientLookup={ingredientLookup}
-        onPress={() => handleSelectCocktail(item)}
-      />
-    ),
+    ({ item }: { item: Cocktail }) => {
+      const availabilitySummary = getCocktailAvailabilitySummary(
+        item,
+        availableIngredientIds,
+        ingredientLookup,
+      );
+
+      return (
+        <CocktailListRow
+          cocktail={item}
+          availableIngredientIds={availableIngredientIds}
+          ingredientLookup={ingredientLookup}
+          availabilitySummary={availabilitySummary}
+          onPress={() => handleSelectCocktail(item)}
+        />
+      );
+    },
     [availableIngredientIds, handleSelectCocktail, ingredientLookup],
   );
 
   const renderSeparator = useCallback(
-    () => <View style={[styles.divider, { backgroundColor: separatorColor }]} />,
-    [separatorColor],
+    ({ leadingItem }: { leadingItem?: Cocktail }) => {
+      const isAvailable = leadingItem
+        ? getCocktailAvailabilitySummary(leadingItem, availableIngredientIds, ingredientLookup).isReady
+        : false;
+      const separatorColor = isAvailable ? palette.surfaceBright : palette.outlineVariant;
+
+      return <HairlineSeparator color={separatorColor} />;
+    },
+    [availableIngredientIds, ingredientLookup],
   );
 
   return (
@@ -174,9 +190,6 @@ const styles = StyleSheet.create({
   listContent: {
     paddingTop: 0,
     paddingBottom: 80,
-  },
-  divider: {
-    height: StyleSheet.hairlineWidth,
   },
   emptyLabel: {
     textAlign: 'center',

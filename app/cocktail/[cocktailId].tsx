@@ -9,6 +9,7 @@ import {
   resolveAssetFromCatalog,
   resolveGlasswareUriFromId,
 } from '@/assets/image-manifest';
+import { HairlineSeparator } from '@/components/RowSeparator';
 import { ListRow, Thumb } from '@/components/RowParts';
 import { TagPill } from '@/components/TagPill';
 import { COCKTAIL_UNIT_DICTIONARY } from '@/constants/cocktail-units';
@@ -156,6 +157,17 @@ export default function CocktailDetailsScreen() {
     const recipe = cocktail?.ingredients ?? [];
     return [...recipe].sort((a, b) => (a?.order ?? 0) - (b?.order ?? 0));
   }, [cocktail?.ingredients]);
+
+  const ingredientAvailability = useMemo(() => {
+    return sortedIngredients.map((ingredient) => {
+      const ingredientIdRaw = ingredient.ingredientId;
+      const ingredientId = Number.isFinite(ingredientIdRaw)
+        ? Number(ingredientIdRaw)
+        : Number(ingredientIdRaw ?? -1);
+      const normalizedId = Number.isFinite(ingredientId) && ingredientId >= 0 ? Math.trunc(ingredientId) : -1;
+      return normalizedId >= 0 && availableIngredientIds.has(normalizedId);
+    });
+  }, [availableIngredientIds, sortedIngredients]);
 
   const userRating = useMemo(() => {
     if (!cocktail) {
@@ -456,11 +468,14 @@ export default function CocktailDetailsScreen() {
                       });
                     };
 
+                    const previousIsAvailable = index > 0 ? ingredientAvailability[index - 1] : false;
+                    const separatorColor = previousIsAvailable
+                      ? palette.background
+                      : palette.outlineVariant;
+
                     return (
-                      <View key={key}>
-                        {index > 0 ? (
-                          <View style={[styles.ingredientDivider, { backgroundColor: palette.outline }]} />
-                        ) : null}
+                      <React.Fragment key={key}>
+                        {index > 0 ? <HairlineSeparator color={separatorColor} /> : null}
                         <ListRow
                           title={ingredient.name ?? ''}
                           subtitle={
@@ -511,7 +526,7 @@ export default function CocktailDetailsScreen() {
                           accessibilityState={isAvailable ? { selected: true } : undefined}
                           metaAlignment="center"
                         />
-                      </View>
+                      </React.Fragment>
                     );
                   })}
                 </View>
@@ -640,9 +655,6 @@ const styles = StyleSheet.create({
   },
   ingredientsList: {
     marginHorizontal: -24,
-  },
-  ingredientDivider: {
-    height: StyleSheet.hairlineWidth,
   },
   quantityContainer: {
     minWidth: 88,
