@@ -1,3 +1,4 @@
+import { MaterialIcons } from '@expo/vector-icons';
 import React, { useMemo } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
@@ -16,6 +17,7 @@ type IngredientQuantityRowProps = {
   selected?: boolean;
   highlightColor?: string;
   tagColor?: string;
+  isOnShoppingList?: boolean;
 };
 
 export function IngredientQuantityRow({
@@ -28,6 +30,7 @@ export function IngredientQuantityRow({
   selected = false,
   highlightColor,
   tagColor,
+  isOnShoppingList = false,
 }: IngredientQuantityRowProps) {
   const palette = Colors;
   const resolvedHighlight = highlightColor ?? appPalette.highlightSubtle;
@@ -47,13 +50,29 @@ export function IngredientQuantityRow({
 
   const quantityDisplay = useMemo(
     () => (
-      <View style={styles.quantityContainer}>
-        <Text style={[styles.quantityLabel, { color: palette.onSurfaceVariant }]} numberOfLines={1}>
-          {quantity}
-        </Text>
+      <View style={styles.metaContainer}>
+        <View style={styles.shoppingSlot}>
+          {isOnShoppingList ? (
+            <MaterialIcons
+              name="shopping-cart"
+              size={16}
+              color={palette.tint}
+              style={styles.shoppingIcon}
+              accessibilityRole="image"
+              accessibilityLabel="On shopping list"
+            />
+          ) : (
+            <View style={styles.shoppingIconPlaceholder} />
+          )}
+        </View>
+        <View style={styles.quantityContainer}>
+          <Text style={[styles.quantityLabel, { color: palette.onSurfaceVariant }]} numberOfLines={1}>
+            {quantity}
+          </Text>
+        </View>
       </View>
     ),
-    [palette.onSurface, quantity],
+    [isOnShoppingList, palette.onSurfaceVariant, palette.tint, quantity],
   );
 
   return (
@@ -75,6 +94,10 @@ export function IngredientQuantityRow({
 }
 
 const styles = StyleSheet.create({
+  metaContainer: {
+    alignItems: 'flex-end',
+    gap: 6,
+  },
   quantityContainer: {
     minWidth: 88,
     alignItems: 'flex-end',
@@ -86,5 +109,21 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 12,
+  },
+  shoppingSlot: {
+    height: 16,
+    alignItems: 'flex-end',
+    justifyContent: 'flex-end',
+    width: 24,
+  },
+  shoppingIcon: {
+    width: 16,
+    height: 16,
+    alignSelf: 'flex-end',
+  },
+  shoppingIconPlaceholder: {
+    width: 16,
+    height: 16,
+    alignSelf: 'flex-end',
   },
 });

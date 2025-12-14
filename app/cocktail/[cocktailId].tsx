@@ -126,8 +126,14 @@ function formatGlassLabel(glassId?: string | null) {
 export default function CocktailDetailsScreen() {
   const palette = Colors;
   const { cocktailId } = useLocalSearchParams<{ cocktailId?: string }>();
-  const { cocktails, ingredients, availableIngredientIds, setCocktailRating, getCocktailRating } =
-    useInventory();
+  const {
+    cocktails,
+    ingredients,
+    availableIngredientIds,
+    shoppingIngredientIds,
+    setCocktailRating,
+    getCocktailRating,
+  } = useInventory();
 
   const resolvedParam = Array.isArray(cocktailId) ? cocktailId[0] : cocktailId;
   const cocktail = useMemo(
@@ -429,6 +435,8 @@ export default function CocktailDetailsScreen() {
                     const catalogEntry = ingredientId >= 0 ? ingredientCatalog.get(ingredientId) : undefined;
                     const photoUri = ingredient.photoUri ?? catalogEntry?.photoUri;
                     const isAvailable = ingredientId >= 0 && availableIngredientIds.has(ingredientId);
+                    const isOnShoppingList =
+                      ingredientId >= 0 && shoppingIngredientIds.has(ingredientId);
                     const tagColor =
                       ingredient.tags?.[0]?.color ??
                       catalogEntry?.tags?.[0]?.color ??
@@ -463,6 +471,7 @@ export default function CocktailDetailsScreen() {
                           selected={isAvailable}
                           highlightColor={ingredientHighlightColor}
                           tagColor={tagColor}
+                          isOnShoppingList={isOnShoppingList}
                         />
                       </View>
                     );
