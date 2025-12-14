@@ -49,7 +49,7 @@ export const palette = {
   backdrop: 'rgba(15,23,42,0.2)',
   shadow: '#000000',
 
-  highlightFaint: '#DCEFFE',
+  highlightFaint: '#DDEEFF',
   highlightSubtle: '#4A90E21F',
   overlayOnPrimary: '#FFFFFF55',
 } as const;
