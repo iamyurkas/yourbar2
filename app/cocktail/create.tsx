@@ -26,7 +26,7 @@ import {
 } from 'react-native';
 
 import { resolveAssetFromCatalog } from '@/assets/image-manifest';
-import { Thumb } from '@/components/RowParts';
+import { ListRow, PresenceCheck, Thumb } from '@/components/RowParts';
 import { SubstituteModal } from '@/components/SubstituteModal';
 import { TagPill } from '@/components/TagPill';
 import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
@@ -39,6 +39,7 @@ import {
   type CreateCocktailInput,
   type Ingredient,
 } from '@/providers/inventory-provider';
+import { palette as themePalette } from '@/theme/theme';
 
 const DEFAULT_UNIT_ID = 11;
 const MIN_AUTOCOMPLETE_LENGTH = 2;
@@ -153,7 +154,13 @@ function mapRecipeIngredientToEditable(recipe: NonNullable<Cocktail['ingredients
 
 export default function CreateCocktailScreen() {
   const palette = Colors;
-  const { ingredients: inventoryIngredients, cocktails, createCocktail } = useInventory();
+  const {
+    ingredients: inventoryIngredients,
+    cocktails,
+    createCocktail,
+    availableIngredientIds,
+    shoppingIngredientIds,
+  } = useInventory();
   const params = useLocalSearchParams();
 
   const sourceParam = getParamValue(params.source);
@@ -1266,19 +1273,48 @@ function EditableIngredientRow({
       {showSuggestions && suggestions.length ? (
         <View style={[styles.suggestionList, { borderColor: palette.outlineVariant, backgroundColor: palette.surface }]}
           pointerEvents={isFocused ? 'auto' : 'none'}>
-          {suggestions.map((candidate) => (
-            <Pressable
-              key={candidate.id ?? candidate.name}
-              onPress={() => handleSelectSuggestion(candidate)}
-              style={styles.suggestionItem}
-              accessibilityRole="button"
-              accessibilityLabel={`Use ${candidate.name ?? 'ingredient'}`}>
-              <Thumb label={candidate.name ?? undefined} uri={candidate.photoUri} />
-              <Text style={[styles.suggestionLabel, { color: palette.onSurface }]} numberOfLines={1}>
-                {candidate.name}
-              </Text>
-            </Pressable>
-          ))}
+          {suggestions.map((candidate) => {
+            const numericId = Number(candidate.id ?? -1);
+            const ingredientId = Number.isFinite(numericId) && numericId >= 0 ? Math.trunc(numericId) : undefined;
+            const isAvailable = ingredientId != null && availableIngredientIds.has(ingredientId);
+            const isOnShoppingList = ingredientId != null && shoppingIngredientIds.has(ingredientId);
+            const tagColor = candidate.tags?.[0]?.color ?? themePalette.tagYellow;
+            const brandIndicatorColor = candidate.baseIngredientId != null ? Colors.primary : undefined;
+
+            return (
+              <ListRow
+                key={candidate.id ?? candidate.name}
+                title={candidate.name ?? 'Ingredient'}
+                onPress={() => handleSelectSuggestion(candidate)}
+                selected={isAvailable}
+                highlightColor={`${Colors.tint}1F`}
+                tagColor={tagColor}
+                brandIndicatorColor={brandIndicatorColor}
+                thumbnail={<Thumb label={candidate.name ?? undefined} uri={candidate.photoUri} />}
+                control={
+                  <View style={styles.suggestionControlContainer}>
+                    <View style={styles.suggestionPresenceSlot}>
+                      <PresenceCheck checked={isAvailable} />
+                    </View>
+                    <View style={styles.suggestionShoppingSlot}>
+                      {isOnShoppingList ? (
+                        <MaterialIcons
+                          name="shopping-cart"
+                          size={16}
+                          color={Colors.tint}
+                          style={styles.suggestionShoppingIcon}
+                          accessibilityRole="image"
+                          accessibilityLabel="On shopping list"
+                        />
+                      ) : null}
+                    </View>
+                  </View>
+                }
+                accessibilityRole="button"
+                accessibilityLabel={`Use ${candidate.name ?? 'ingredient'}`}
+              />
+            );
+          })}
         </View>
       ) : null}
 
@@ -1649,7 +1685,7 @@ const styles = StyleSheet.create({
   },
   suggestionList: {
     position: 'absolute',
-    top: 94,
+    top: 98,
     left: 0,
     right: 0,
     zIndex: 10,
@@ -1659,17 +1695,30 @@ const styles = StyleSheet.create({
     gap: 4,
     backgroundColor: Colors.surface,
   },
-  suggestionItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
+  suggestionControlContainer: {
+    alignItems: 'flex-end',
+    alignSelf: 'stretch',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    minHeight: 56,
+    minWidth: 32,
   },
-  suggestionLabel: {
-    fontSize: 14,
-    fontWeight: '500',
-    flex: 1,
+  suggestionPresenceSlot: {
+    height: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 24,
+  },
+  suggestionShoppingSlot: {
+    height: 16,
+    alignItems: 'flex-end',
+    justifyContent: 'flex-end',
+    width: 24,
+  },
+  suggestionShoppingIcon: {
+    width: 16,
+    height: 16,
+    alignSelf: 'flex-end',
   },
   rowInputs: {
     flexDirection: 'row',
