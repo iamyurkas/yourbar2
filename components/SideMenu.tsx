@@ -42,7 +42,13 @@ export function SideMenu({ visible, onClose, children }: SideMenuProps) {
 
   return (
     <View style={StyleSheet.absoluteFill} pointerEvents="box-none">
-      <View style={[styles.overlay]}>
+      <View style={styles.overlay}>
+        <Pressable
+          style={styles.scrim}
+          onPress={onClose}
+          accessibilityRole="button"
+          accessibilityLabel="Close menu"
+        />
         <Animated.View
           style={[
             styles.menu,
@@ -53,12 +59,6 @@ export function SideMenu({ visible, onClose, children }: SideMenuProps) {
           ]}>
           {children}
         </Animated.View>
-        <Pressable
-          style={styles.scrim}
-          onPress={onClose}
-          accessibilityRole="button"
-          accessibilityLabel="Close menu"
-        />
       </View>
     </View>
   );
@@ -67,11 +67,13 @@ export function SideMenu({ visible, onClose, children }: SideMenuProps) {
 const styles = StyleSheet.create({
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    flexDirection: 'row',
     zIndex: 100,
   },
   menu: {
     height: '100%',
+    position: 'absolute',
+    left: 0,
+    top: 0,
     backgroundColor: Colors.surface,
     paddingTop: 16,
     paddingHorizontal: 16,
@@ -82,7 +84,7 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
   scrim: {
-    flex: 1,
+    ...StyleSheet.absoluteFillObject,
     backgroundColor: Colors.backdrop,
   },
 });
