@@ -466,6 +466,7 @@ export default function CocktailDetailsScreen() {
                           subtitleStyle={
                             qualifier ? [styles.ingredientSubtitle, { color: palette.onSurfaceVariant }] : undefined
                           }
+                          metaAlignment="center"
                           thumbnail={
                             <Thumb label={ingredient.name ?? ''} uri={photoUri} fallbackUri={catalogEntry?.photoUri} />
                           }
@@ -638,13 +639,16 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     alignSelf: 'stretch',
     flexDirection: 'column',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     minHeight: 56,
     minWidth: 88,
     paddingVertical: 4,
+    position: 'relative',
   },
   quantityContainer: {
     alignItems: 'flex-end',
+    alignSelf: 'stretch',
+    flex: 1,
     justifyContent: 'center',
   },
   quantityLabel: {
@@ -657,7 +661,10 @@ const styles = StyleSheet.create({
   shoppingSlot: {
     height: 16,
     alignItems: 'flex-end',
+    bottom: 4,
     justifyContent: 'flex-end',
+    position: 'absolute',
+    right: 0,
     width: 24,
   },
   shoppingIcon: {
