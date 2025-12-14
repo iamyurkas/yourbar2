@@ -1375,7 +1375,7 @@ function EditableIngredientRow({
         <View
           style={[styles.suggestionList, { borderColor: palette.outlineVariant, backgroundColor: palette.surface }]}
           pointerEvents={isFocused ? 'auto' : 'none'}>
-          {suggestions.map((candidate) => {
+          {suggestions.map((candidate, index) => {
             const candidateId = Number(candidate.id ?? -1);
             const baseGroupId = getBaseGroupId(candidate.id);
             const isAvailable = candidateId >= 0 && availableIngredientIds.has(candidateId);
@@ -1383,36 +1383,44 @@ function EditableIngredientRow({
             const tagColor = candidate.tags?.[0]?.color ?? palette.tagYellow;
             const subtitle = renderSubtitle(baseGroupId);
             const brandIndicatorColor = candidate.baseIngredientId != null ? Colors.primary : undefined;
+            const isLast = index === suggestions.length - 1;
 
             return (
-              <ListRow
-                key={candidate.id ?? candidate.name}
-                title={candidate.name ?? ''}
-                subtitle={subtitle}
-                onPress={() => handleSelectSuggestion(candidate)}
-                selected={isAvailable}
-                highlightColor={palette.highlightSubtle}
-                tagColor={tagColor}
-                thumbnail={<Thumb label={candidate.name ?? undefined} uri={candidate.photoUri} />}
-                brandIndicatorColor={brandIndicatorColor}
-                control={null}
-                metaFooter={
-                  isOnShoppingList ? (
-                    <MaterialIcons
-                      name="shopping-cart"
-                      size={16}
-                      color={Colors.tint}
-                      style={styles.shoppingIcon}
-                      accessibilityRole="image"
-                      accessibilityLabel="On shopping list"
-                    />
-                  ) : (
-                    <View style={styles.shoppingIconPlaceholder} />
-                  )
-                }
-                metaAlignment="center"
-                accessibilityRole="button"
-              />
+              <React.Fragment key={candidate.id ?? candidate.name}>
+                <ListRow
+                  title={candidate.name ?? ''}
+                  subtitle={subtitle}
+                  onPress={() => handleSelectSuggestion(candidate)}
+                  selected={isAvailable}
+                  highlightColor={palette.highlightSubtle}
+                  tagColor={tagColor}
+                  thumbnail={<Thumb label={candidate.name ?? undefined} uri={candidate.photoUri} />}
+                  brandIndicatorColor={brandIndicatorColor}
+                  control={null}
+                  metaFooter={
+                    isOnShoppingList ? (
+                      <MaterialIcons
+                        name="shopping-cart"
+                        size={16}
+                        color={Colors.tint}
+                        style={styles.shoppingIcon}
+                        accessibilityRole="image"
+                        accessibilityLabel="On shopping list"
+                      />
+                    ) : (
+                      <View style={styles.shoppingIconPlaceholder} />
+                    )
+                  }
+                  metaAlignment="center"
+                  accessibilityRole="button"
+                />
+                {!isLast ? (
+                  <View
+                    style={[styles.suggestionSeparator, { backgroundColor: palette.outline }]}
+                    pointerEvents="none"
+                  />
+                ) : null}
+              </React.Fragment>
             );
           })}
         </View>
@@ -1792,8 +1800,10 @@ const styles = StyleSheet.create({
     borderWidth: StyleSheet.hairlineWidth,
     borderRadius: 12,
     paddingVertical: 4,
-    gap: 4,
     backgroundColor: Colors.surface,
+  },
+  suggestionSeparator: {
+    height: StyleSheet.hairlineWidth,
   },
   shoppingIcon: {
     marginTop: 4,
