@@ -653,7 +653,6 @@ export default function IngredientsScreen() {
   }, [filteredByTags, normalizedQuery]);
 
   const highlightColor = palette.highlightFaint;
-  const separatorColor = paletteColors.outline;
   const isFilterActive = selectedTagKeys.size > 0;
   const filterMenuTop = useMemo(() => {
     if (headerLayout && filterAnchorLayout) {
@@ -789,8 +788,14 @@ export default function IngredientsScreen() {
   );
 
   const renderSeparator = useCallback(
-    () => <View style={[styles.divider, { backgroundColor: separatorColor }]} />,
-    [separatorColor],
+    ({ leadingItem }: { leadingItem?: Ingredient | null }) => {
+      const ingredientId = Number(leadingItem?.id ?? -1);
+      const isAvailable = ingredientId >= 0 && effectiveAvailableIngredientIds.has(ingredientId);
+      const backgroundColor = isAvailable ? paletteColors.outline : paletteColors.outlineVariant;
+
+      return <View style={[styles.divider, { backgroundColor }]} />;
+    },
+    [effectiveAvailableIngredientIds, paletteColors.outline, paletteColors.outlineVariant],
   );
 
   return (

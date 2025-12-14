@@ -157,6 +157,22 @@ export default function CocktailDetailsScreen() {
     return [...recipe].sort((a, b) => (a?.order ?? 0) - (b?.order ?? 0));
   }, [cocktail?.ingredients]);
 
+  const parseIngredientId = useCallback((ingredient: RecipeIngredient) => {
+    const ingredientIdRaw = ingredient.ingredientId;
+    if (typeof ingredientIdRaw === 'number') {
+      return ingredientIdRaw;
+    }
+
+    if (typeof ingredientIdRaw === 'string') {
+      const parsed = Number(ingredientIdRaw);
+      if (!Number.isNaN(parsed)) {
+        return parsed;
+      }
+    }
+
+    return -1;
+  }, []);
+
   const userRating = useMemo(() => {
     if (!cocktail) {
       return 0;
@@ -422,19 +438,17 @@ export default function CocktailDetailsScreen() {
                     const quantity = formatIngredientQuantity(ingredient);
                     const qualifier = getIngredientQualifier(ingredient);
                     const key = `${ingredient.ingredientId ?? ingredient.name}-${ingredient.order}`;
-                    const ingredientIdRaw = ingredient.ingredientId;
-                    let ingredientId = -1;
-                    if (typeof ingredientIdRaw === 'number') {
-                      ingredientId = ingredientIdRaw;
-                    } else if (typeof ingredientIdRaw === 'string') {
-                      const parsed = Number(ingredientIdRaw);
-                      if (!Number.isNaN(parsed)) {
-                        ingredientId = parsed;
-                      }
-                    }
+                    const ingredientId = parseIngredientId(ingredient);
                     const catalogEntry = ingredientId >= 0 ? ingredientCatalog.get(ingredientId) : undefined;
                     const photoUri = ingredient.photoUri ?? catalogEntry?.photoUri;
                     const isAvailable = ingredientId >= 0 && availableIngredientIds.has(ingredientId);
+                    const previousIngredient = sortedIngredients[index - 1];
+                    const previousIngredientId = previousIngredient
+                      ? parseIngredientId(previousIngredient)
+                      : -1;
+                    const previousAvailable =
+                      previousIngredientId >= 0 && availableIngredientIds.has(previousIngredientId);
+                    const dividerColor = previousAvailable ? palette.outline : palette.outlineVariant;
                     const tagColor =
                       ingredient.tags?.[0]?.color ??
                       catalogEntry?.tags?.[0]?.color ??
@@ -459,7 +473,7 @@ export default function CocktailDetailsScreen() {
                     return (
                       <View key={key}>
                         {index > 0 ? (
-                          <View style={[styles.ingredientDivider, { backgroundColor: palette.outline }]} />
+                          <View style={[styles.ingredientDivider, { backgroundColor: dividerColor }]} />
                         ) : null}
                         <ListRow
                           title={ingredient.name ?? ''}

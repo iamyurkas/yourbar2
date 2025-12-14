@@ -231,8 +231,14 @@ export function SubstituteModal({
   );
 
   const renderSeparator = useCallback(
-    () => <View style={[styles.modalSeparator, { backgroundColor: paletteColors.outline }]} />,
-    [paletteColors.outline],
+    ({ leadingItem }: { leadingItem?: Ingredient | null }) => {
+      const ingredientId = Number(leadingItem?.id ?? -1);
+      const isAvailable = ingredientId >= 0 && availableIngredientIds.has(ingredientId);
+      const backgroundColor = isAvailable ? paletteColors.outline : paletteColors.outlineVariant;
+
+      return <View style={[styles.modalSeparator, { backgroundColor }]} />;
+    },
+    [availableIngredientIds, paletteColors.outline, paletteColors.outlineVariant],
   );
 
   return (

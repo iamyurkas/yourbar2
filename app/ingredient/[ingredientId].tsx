@@ -20,6 +20,7 @@ import { CocktailListRow } from '@/components/CocktailListRow';
 import { PresenceCheck } from '@/components/RowParts';
 import { TagPill } from '@/components/TagPill';
 import { Colors } from '@/constants/theme';
+import { isCocktailReady } from '@/libs/cocktail-availability';
 import { createIngredientLookup } from '@/libs/ingredient-availability';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
 
@@ -172,6 +173,15 @@ export default function IngredientDetailsScreen() {
       }),
     );
   }, [cocktails, ingredient, numericIngredientId]);
+
+  const cocktailEntries = useMemo(
+    () =>
+      cocktailsWithIngredient.map((cocktail) => ({
+        cocktail,
+        isReady: isCocktailReady(cocktail, availableIngredientIds, ingredientLookup),
+      })),
+    [availableIngredientIds, cocktailsWithIngredient, ingredientLookup],
+  );
 
   const handleToggleAvailability = useCallback(() => {
     if (numericIngredientId != null) {
@@ -610,17 +620,27 @@ export default function IngredientDetailsScreen() {
 
             <View style={[styles.textBlock, styles.cocktailBlock]}>
               <Text style={[styles.sectionTitle, { color: palette.onSurface }]}>Cocktails</Text>
-              {cocktailsWithIngredient.length ? (
+              {cocktailEntries.length ? (
                 <View style={styles.cocktailList}>
-                  {cocktailsWithIngredient.map((cocktail) => (
-                    <CocktailListRow
-                      key={cocktail.id ?? cocktail.name}
-                      cocktail={cocktail}
-                      availableIngredientIds={availableIngredientIds}
-                      ingredientLookup={ingredientLookup}
-                      onPress={() => handleNavigateToCocktail(cocktail.id ?? cocktail.name)}
-                    />
-                  ))}
+                  {cocktailEntries.map(({ cocktail, isReady }, index) => {
+                    const previousReady = index > 0 ? cocktailEntries[index - 1]?.isReady : undefined;
+                    const dividerColor = previousReady ? palette.outline : palette.outlineVariant;
+
+                    return (
+                      <React.Fragment key={cocktail.id ?? cocktail.name}>
+                        {index > 0 ? (
+                          <View style={[styles.cocktailDivider, { backgroundColor: dividerColor }]} />
+                        ) : null}
+                        <CocktailListRow
+                          cocktail={cocktail}
+                          availableIngredientIds={availableIngredientIds}
+                          ingredientLookup={ingredientLookup}
+                          onPress={() => handleNavigateToCocktail(cocktail.id ?? cocktail.name)}
+                          highlightColor={isReady ? undefined : palette.highlightFaint}
+                        />
+                      </React.Fragment>
+                    );
+                  })}
                 </View>
               ) : (
                 <Text style={[styles.placeholderText, { color: palette.onSurfaceVariant }]}>No cocktails yet</Text>
@@ -713,8 +733,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   cocktailList: {
-    gap: 12,
     marginHorizontal: -24,
+  },
+  cocktailDivider: {
+    height: StyleSheet.hairlineWidth,
   },
   placeholderText: {
     fontSize: 14,
