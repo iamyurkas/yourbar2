@@ -1,11 +1,11 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import React, { useMemo } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
 
 import { Colors } from '@/constants/theme';
 import { palette as appPalette } from '@/theme/theme';
 
-import { ListRow, Thumb } from './RowParts';
+import { ListRow, MetaStack, Thumb } from './RowParts';
 
 type IngredientQuantityRowProps = {
   name: string;
@@ -50,27 +50,33 @@ export function IngredientQuantityRow({
 
   const quantityDisplay = useMemo(
     () => (
-      <View style={styles.metaContainer}>
-        <View style={styles.quantityContainer}>
-          <Text style={[styles.quantityLabel, { color: palette.onSurfaceVariant }]} numberOfLines={1}>
-            {quantity}
-          </Text>
-        </View>
-        <View style={styles.shoppingSlot}>
-          {isOnShoppingList ? (
-            <MaterialIcons
-              name="shopping-cart"
-              size={16}
-              color={palette.tint}
-              style={styles.shoppingIcon}
-              accessibilityRole="image"
-              accessibilityLabel="On shopping list"
-            />
-          ) : (
-            <View style={styles.shoppingIconPlaceholder} />
-          )}
-        </View>
-      </View>
+      <MetaStack
+        gap={6}
+        items={[
+          {
+            minWidth: 88,
+            content: (
+              <Text style={[styles.quantityLabel, { color: palette.onSurfaceVariant }]} numberOfLines={1}>
+                {quantity}
+              </Text>
+            ),
+          },
+          {
+            minWidth: 24,
+            minHeight: 16,
+            content: isOnShoppingList ? (
+              <MaterialIcons
+                name="shopping-cart"
+                size={16}
+                color={palette.tint}
+                style={styles.shoppingIcon}
+                accessibilityRole="image"
+                accessibilityLabel="On shopping list"
+              />
+            ) : undefined,
+          },
+        ]}
+      />
     ),
     [isOnShoppingList, palette.onSurfaceVariant, palette.tint, quantity],
   );
@@ -94,15 +100,6 @@ export function IngredientQuantityRow({
 }
 
 const styles = StyleSheet.create({
-  metaContainer: {
-    alignItems: 'flex-end',
-    gap: 6,
-  },
-  quantityContainer: {
-    minWidth: 88,
-    alignItems: 'flex-end',
-    justifyContent: 'center',
-  },
   quantityLabel: {
     fontSize: 14,
     textAlign: 'right',
@@ -110,18 +107,7 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 12,
   },
-  shoppingSlot: {
-    height: 16,
-    alignItems: 'flex-end',
-    justifyContent: 'flex-end',
-    width: 24,
-  },
   shoppingIcon: {
-    width: 16,
-    height: 16,
-    alignSelf: 'flex-end',
-  },
-  shoppingIconPlaceholder: {
     width: 16,
     height: 16,
     alignSelf: 'flex-end',

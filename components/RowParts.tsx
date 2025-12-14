@@ -110,6 +110,40 @@ export function FavoriteStar({ active, onToggle }: FavoriteStarProps) {
   );
 }
 
+type MetaStackItem = {
+  content?: ReactNode;
+  minHeight?: number;
+  minWidth?: number;
+};
+
+type MetaStackProps = {
+  items: MetaStackItem[];
+  gap?: number;
+  align?: 'flex-start' | 'center' | 'flex-end';
+};
+
+export function MetaStack({ items, gap = 8, align = 'flex-end' }: MetaStackProps) {
+  return (
+    <View style={[styles.metaStack, { gap, alignItems: align }]}>
+      {items.map(({ content, minHeight, minWidth }, index) => {
+        const hasPlaceholder = content == null && (minHeight != null || minWidth != null);
+        const placeholderStyle = {
+          minHeight: minHeight ?? 0,
+          minWidth: minWidth ?? 0,
+        };
+
+        return (
+          <View
+            key={index}
+            style={[styles.metaStackItem, minHeight ? { minHeight } : null, minWidth ? { minWidth } : null]}>
+            {hasPlaceholder ? <View style={placeholderStyle} /> : content}
+          </View>
+        );
+      })}
+    </View>
+  );
+}
+
 type ListRowProps = {
   title: string;
   subtitle?: string;
@@ -239,6 +273,13 @@ const styles = StyleSheet.create({
   metaControlPlaceholder: {
     minHeight: THUMB_SIZE,
     alignSelf: 'stretch',
+  },
+  metaStack: {
+    alignItems: 'flex-end',
+  },
+  metaStackItem: {
+    alignSelf: 'stretch',
+    alignItems: 'flex-end',
   },
   title: {
     fontSize: 14,
