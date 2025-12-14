@@ -118,6 +118,7 @@ type ListRowProps = {
   highlightColor?: string;
   tagColor?: string;
   control?: ReactNode;
+  metaFooter?: ReactNode;
   thumbnail?: ReactNode;
   accessibilityRole?: 'button' | 'checkbox';
   accessibilityState?: AccessibilityState;
@@ -134,6 +135,7 @@ export function ListRow({
   highlightColor,
   tagColor,
   control,
+  metaFooter,
   thumbnail,
   accessibilityRole,
   accessibilityState,
@@ -173,13 +175,20 @@ export function ListRow({
         ) : null}
       </View>
       <View style={styles.metaColumn}>
-        {tagColor ? (
-          <View pointerEvents="none" style={styles.tagDotOverlay}>
-            <TagDot color={tagColor} />
+        <View style={styles.metaContent}>
+          <View style={styles.metaTop}>
+            {tagColor ? (
+              <TagDot color={tagColor} />
+            ) : (
+              <View style={styles.tagDotPlaceholder} />
+            )}
           </View>
-        ) : null}
-        <View style={[styles.metaContent, metaAlignmentStyle]}>
-          {control ?? <View style={styles.metaControlPlaceholder} />}
+          <View style={[styles.metaMiddle, metaAlignmentStyle]}>
+            {control ?? <View style={styles.metaControlPlaceholder} />}
+          </View>
+          <View style={styles.metaFooter}>
+            {metaFooter ?? <View style={styles.metaFooterPlaceholder} />}
+          </View>
         </View>
       </View>
     </Pressable>
@@ -215,15 +224,22 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   metaColumn: {
-    alignItems: 'flex-end',
     justifyContent: 'center',
     minHeight: THUMB_SIZE,
     alignSelf: 'center',
-    position: 'relative',
   },
   metaContent: {
+    height: THUMB_SIZE,
+    alignSelf: 'stretch',
+    alignItems: 'stretch',
+  },
+  metaTop: {
+    height: 16,
+    alignItems: 'flex-end',
+    justifyContent: 'flex-start',
+  },
+  metaMiddle: {
     flex: 1,
-    minHeight: THUMB_SIZE,
     alignSelf: 'stretch',
     alignItems: 'flex-end',
   },
@@ -237,8 +253,17 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   metaControlPlaceholder: {
-    minHeight: THUMB_SIZE,
-    alignSelf: 'stretch',
+    minHeight: 24,
+    minWidth: 32,
+  },
+  metaFooter: {
+    minHeight: 16,
+    alignItems: 'flex-end',
+    justifyContent: 'flex-end',
+  },
+  metaFooterPlaceholder: {
+    minHeight: 16,
+    minWidth: 16,
   },
   title: {
     fontSize: 14,
@@ -252,10 +277,9 @@ const styles = StyleSheet.create({
     height: 8,
     borderRadius: 8,
   },
-  tagDotOverlay: {
-    position: 'absolute',
-    top: 0,
-    right: 0,
+  tagDotPlaceholder: {
+    width: 16,
+    height: 16,
   },
   checkbox: {
     width: 20,
