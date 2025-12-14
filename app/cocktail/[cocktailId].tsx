@@ -1,4 +1,4 @@
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
 import React, { useCallback, useEffect, useMemo, useState, useTransition } from 'react';
@@ -9,7 +9,7 @@ import {
   resolveAssetFromCatalog,
   resolveGlasswareUriFromId,
 } from '@/assets/image-manifest';
-import { IngredientQuantityRow } from '@/components/IngredientQuantityRow';
+import { ListRow, Thumb } from '@/components/RowParts';
 import { TagPill } from '@/components/TagPill';
 import { COCKTAIL_UNIT_DICTIONARY } from '@/constants/cocktail-units';
 import { Colors } from '@/constants/theme';
@@ -126,8 +126,14 @@ function formatGlassLabel(glassId?: string | null) {
 export default function CocktailDetailsScreen() {
   const palette = Colors;
   const { cocktailId } = useLocalSearchParams<{ cocktailId?: string }>();
-  const { cocktails, ingredients, availableIngredientIds, setCocktailRating, getCocktailRating } =
-    useInventory();
+  const {
+    cocktails,
+    ingredients,
+    availableIngredientIds,
+    shoppingIngredientIds,
+    setCocktailRating,
+    getCocktailRating,
+  } = useInventory();
 
   const resolvedParam = Array.isArray(cocktailId) ? cocktailId[0] : cocktailId;
   const cocktail = useMemo(
@@ -433,6 +439,8 @@ export default function CocktailDetailsScreen() {
                       ingredient.tags?.[0]?.color ??
                       catalogEntry?.tags?.[0]?.color ??
                       appPalette.tagYellow;
+                    const isOnShoppingList =
+                      ingredientId >= 0 && shoppingIngredientIds.has(ingredientId);
                     const handlePress = () => {
                       const routeParam =
                         ingredientId >= 0
@@ -453,16 +461,55 @@ export default function CocktailDetailsScreen() {
                         {index > 0 ? (
                           <View style={[styles.ingredientDivider, { backgroundColor: palette.outline }]} />
                         ) : null}
-                        <IngredientQuantityRow
-                          name={ingredient.name ?? ''}
-                          photoUri={photoUri}
-                          fallbackPhotoUri={catalogEntry?.photoUri}
-                          quantity={quantity}
-                          qualifier={qualifier}
+                        <ListRow
+                          title={ingredient.name ?? ''}
+                          subtitle={
+                            qualifier
+                              ? qualifier.charAt(0).toUpperCase() + qualifier.slice(1)
+                              : undefined
+                          }
+                          subtitleStyle={
+                            qualifier
+                              ? [styles.ingredientSubtitle, { color: palette.onSurfaceVariant }]
+                              : undefined
+                          }
+                          thumbnail={
+                            <Thumb
+                              label={ingredient.name ?? undefined}
+                              uri={photoUri}
+                              fallbackUri={catalogEntry?.photoUri}
+                            />
+                          }
+                          control={
+                            <View style={styles.quantityContainer}>
+                              <Text
+                                style={[styles.quantityLabel, { color: palette.onSurfaceVariant }]}
+                                numberOfLines={1}>
+                                {quantity}
+                              </Text>
+                            </View>
+                          }
+                          metaFooter={
+                            isOnShoppingList ? (
+                              <MaterialIcons
+                                name="shopping-cart"
+                                size={16}
+                                color={palette.tint}
+                                style={styles.shoppingIcon}
+                                accessibilityRole="image"
+                                accessibilityLabel="On shopping list"
+                              />
+                            ) : (
+                              <View style={styles.shoppingIconPlaceholder} />
+                            )
+                          }
                           onPress={handlePress}
                           selected={isAvailable}
                           highlightColor={ingredientHighlightColor}
                           tagColor={tagColor}
+                          accessibilityRole="button"
+                          accessibilityState={isAvailable ? { selected: true } : undefined}
+                          metaAlignment="center"
                         />
                       </View>
                     );
@@ -596,6 +643,28 @@ const styles = StyleSheet.create({
   },
   ingredientDivider: {
     height: StyleSheet.hairlineWidth,
+  },
+  quantityContainer: {
+    minWidth: 88,
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+  },
+  quantityLabel: {
+    fontSize: 14,
+    textAlign: 'right',
+  },
+  ingredientSubtitle: {
+    fontSize: 12,
+  },
+  shoppingIcon: {
+    width: 16,
+    height: 16,
+    alignSelf: 'flex-end',
+  },
+  shoppingIconPlaceholder: {
+    width: 16,
+    height: 16,
+    alignSelf: 'flex-end',
   },
   headerButton: {
     width: 40,

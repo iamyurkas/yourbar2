@@ -202,22 +202,22 @@ export function SubstituteModal({
           tagColor={tagColor}
           thumbnail={<Thumb label={item.name ?? undefined} uri={item.photoUri} />}
           brandIndicatorColor={brandIndicatorColor}
-          control={
-            <View style={styles.controlContainer}>
-              {isOnShoppingList ? (
-                <MaterialIcons
-                  name="shopping-cart"
-                  size={16}
-                  color={Colors.tint}
-                  style={styles.shoppingIcon}
-                  accessibilityRole="image"
-                  accessibilityLabel="On shopping list"
-                />
-              ) : (
-                <View style={styles.shoppingIconPlaceholder} />
-              )}
-            </View>
+          control={null}
+          metaFooter={
+            isOnShoppingList ? (
+              <MaterialIcons
+                name="shopping-cart"
+                size={16}
+                color={Colors.tint}
+                style={styles.shoppingIcon}
+                accessibilityRole="image"
+                accessibilityLabel="On shopping list"
+              />
+            ) : (
+              <View style={styles.shoppingIconPlaceholder} />
+            )
           }
+          metaAlignment="center"
         />
       );
     },
@@ -322,14 +322,6 @@ const styles = StyleSheet.create({
     padding: 12,
     fontSize: 16,
     marginBottom: 8,
-  },
-  controlContainer: {
-    alignItems: 'center',
-    alignSelf: 'stretch',
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    minHeight: 56,
-    minWidth: 32,
   },
   shoppingIcon: {
     marginTop: 4,
