@@ -65,6 +65,9 @@ export function isRecipeIngredientAvailable(
         brandedOptions?.forEach((brandId) => candidateIds.add(brandId));
       }
     }
+
+    const baseBrandedOptions = lookup.brandsByBaseId.get(id);
+    baseBrandedOptions?.forEach((brandId) => candidateIds.add(brandId));
   }
 
   (ingredient.substitutes ?? []).forEach((substitute) => {
