@@ -14,6 +14,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { CollectionHeader } from '@/components/CollectionHeader';
 import { FabAdd } from '@/components/FabAdd';
 import { ListRow, PresenceCheck, Thumb } from '@/components/RowParts';
+import { HairlineSeparator } from '@/components/RowSeparator';
 import { TagPill } from '@/components/TagPill';
 import type { SegmentTabOption } from '@/components/TopBars';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
@@ -653,7 +654,6 @@ export default function IngredientsScreen() {
   }, [filteredByTags, normalizedQuery]);
 
   const highlightColor = palette.highlightFaint;
-  const separatorColor = paletteColors.outline;
   const isFilterActive = selectedTagKeys.size > 0;
   const filterMenuTop = useMemo(() => {
     if (headerLayout && filterAnchorLayout) {
@@ -789,8 +789,15 @@ export default function IngredientsScreen() {
   );
 
   const renderSeparator = useCallback(
-    () => <View style={[styles.divider, { backgroundColor: separatorColor }]} />,
-    [separatorColor],
+    ({ leadingItem }: { leadingItem?: Ingredient }) => {
+      const isAvailable = leadingItem
+        ? effectiveAvailableIngredientIds.has(Number(leadingItem.id ?? -1))
+        : false;
+      const separatorColor = isAvailable ? palette.background : palette.outlineVariant;
+
+      return <HairlineSeparator color={separatorColor} />;
+    },
+    [effectiveAvailableIngredientIds],
   );
 
   return (
@@ -921,9 +928,6 @@ const styles = StyleSheet.create({
   listContent: {
     paddingTop: 0,
     paddingBottom: 80,
-  },
-  divider: {
-    height: StyleSheet.hairlineWidth,
   },
   emptyLabel: {
     textAlign: 'center',

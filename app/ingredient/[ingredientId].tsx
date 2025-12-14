@@ -16,7 +16,8 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { resolveAssetFromCatalog } from '@/assets/image-manifest';
-import { CocktailListRow } from '@/components/CocktailListRow';
+import { CocktailListRow, getCocktailAvailabilitySummary } from '@/components/CocktailListRow';
+import { HairlineSeparator } from '@/components/RowSeparator';
 import { PresenceCheck } from '@/components/RowParts';
 import { TagPill } from '@/components/TagPill';
 import { Colors } from '@/constants/theme';
@@ -612,15 +613,37 @@ export default function IngredientDetailsScreen() {
               <Text style={[styles.sectionTitle, { color: palette.onSurface }]}>Cocktails</Text>
               {cocktailsWithIngredient.length ? (
                 <View style={styles.cocktailList}>
-                  {cocktailsWithIngredient.map((cocktail) => (
-                    <CocktailListRow
-                      key={cocktail.id ?? cocktail.name}
-                      cocktail={cocktail}
-                      availableIngredientIds={availableIngredientIds}
-                      ingredientLookup={ingredientLookup}
-                      onPress={() => handleNavigateToCocktail(cocktail.id ?? cocktail.name)}
-                    />
-                  ))}
+                  {cocktailsWithIngredient.map((cocktail, index) => {
+                    const availabilitySummary = getCocktailAvailabilitySummary(
+                      cocktail,
+                      availableIngredientIds,
+                      ingredientLookup,
+                    );
+                    const previousCocktail = index > 0 ? cocktailsWithIngredient[index - 1] : undefined;
+                    const previousIsAvailable = previousCocktail
+                      ? getCocktailAvailabilitySummary(
+                          previousCocktail,
+                          availableIngredientIds,
+                          ingredientLookup,
+                        ).isReady
+                      : false;
+                    const separatorColor = previousIsAvailable
+                      ? palette.background
+                      : palette.outlineVariant;
+
+                    return (
+                      <React.Fragment key={cocktail.id ?? cocktail.name}>
+                        {index > 0 ? <HairlineSeparator color={separatorColor} /> : null}
+                        <CocktailListRow
+                          cocktail={cocktail}
+                          availableIngredientIds={availableIngredientIds}
+                          ingredientLookup={ingredientLookup}
+                          availabilitySummary={availabilitySummary}
+                          onPress={() => handleNavigateToCocktail(cocktail.id ?? cocktail.name)}
+                        />
+                      </React.Fragment>
+                    );
+                  })}
                 </View>
               ) : (
                 <Text style={[styles.placeholderText, { color: palette.onSurfaceVariant }]}>No cocktails yet</Text>
@@ -713,7 +736,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   cocktailList: {
-    gap: 12,
     marginHorizontal: -24,
   },
   placeholderText: {

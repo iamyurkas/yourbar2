@@ -26,6 +26,7 @@ import {
 } from 'react-native';
 
 import { resolveAssetFromCatalog } from '@/assets/image-manifest';
+import { HairlineSeparator } from '@/components/RowSeparator';
 import { ListRow, Thumb } from '@/components/RowParts';
 import { SubstituteModal } from '@/components/SubstituteModal';
 import { TagPill } from '@/components/TagPill';
@@ -782,6 +783,14 @@ export default function CreateCocktailScreen() {
     return ingredientsState.find((item) => item.key === substituteTarget);
   }, [ingredientsState, substituteTarget]);
 
+  const ingredientAvailability = useMemo(() => {
+    return ingredientsState.map((ingredient) => {
+      const ingredientId = Number(ingredient.ingredientId ?? -1);
+      const normalizedId = Number.isFinite(ingredientId) && ingredientId >= 0 ? Math.trunc(ingredientId) : -1;
+      return normalizedId >= 0 && availableIngredientIds.has(normalizedId);
+    });
+  }, [availableIngredientIds, ingredientsState]);
+
   return (
     <>
       <Stack.Screen
@@ -930,28 +939,37 @@ export default function CreateCocktailScreen() {
           <View style={styles.section}>
             <Text style={[styles.label, { color: palette.onSurface }]}>Ingredients</Text>
             <View style={styles.ingredientsList}>
-              {ingredientsState.map((ingredient, index) => (
-                <EditableIngredientRow
-                  key={ingredient.key}
-                  ingredient={ingredient}
-                  inventoryIngredients={inventoryIngredients}
-                  availableIngredientIds={availableIngredientIds}
-                  shoppingIngredientIds={shoppingIngredientIds}
-                  getBaseGroupId={getBaseGroupId}
-                  cocktailsByBaseGroup={cocktailsByBaseGroup}
-                  onChange={handleChangeIngredient}
-                  onRemove={handleRemoveIngredient}
-                  onMove={handleMoveIngredient}
-                  onRequestUnitPicker={handleOpenUnitPicker}
-                  onRequestAddSubstitute={handleOpenSubstituteModal}
-                  onRemoveSubstitute={handleRemoveSubstitute}
-                  onRequestCreateIngredient={handleRequestCreateIngredient}
-                  onInputFocus={scrollFieldIntoView}
-                  palette={palette}
-                  index={index}
-                  totalCount={ingredientsState.length}
-                />
-              ))}
+              {ingredientsState.map((ingredient, index) => {
+                const previousIsAvailable = index > 0 ? ingredientAvailability[index - 1] : false;
+                const separatorColor = previousIsAvailable
+                  ? palette.background
+                  : palette.outlineVariant;
+
+                return (
+                  <React.Fragment key={ingredient.key}>
+                    {index > 0 ? <HairlineSeparator color={separatorColor} /> : null}
+                    <EditableIngredientRow
+                      ingredient={ingredient}
+                      inventoryIngredients={inventoryIngredients}
+                      availableIngredientIds={availableIngredientIds}
+                      shoppingIngredientIds={shoppingIngredientIds}
+                      getBaseGroupId={getBaseGroupId}
+                      cocktailsByBaseGroup={cocktailsByBaseGroup}
+                      onChange={handleChangeIngredient}
+                      onRemove={handleRemoveIngredient}
+                      onMove={handleMoveIngredient}
+                      onRequestUnitPicker={handleOpenUnitPicker}
+                      onRequestAddSubstitute={handleOpenSubstituteModal}
+                      onRemoveSubstitute={handleRemoveSubstitute}
+                      onRequestCreateIngredient={handleRequestCreateIngredient}
+                      onInputFocus={scrollFieldIntoView}
+                      palette={palette}
+                      index={index}
+                      totalCount={ingredientsState.length}
+                    />
+                  </React.Fragment>
+                );
+              })}
             </View>
           <Pressable
             onPress={handleAddIngredient}
@@ -1724,7 +1742,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   ingredientsList: {
-    gap: 16,
+    gap: 0,
   },
   ingredientCard: {
     borderWidth: StyleSheet.hairlineWidth,
