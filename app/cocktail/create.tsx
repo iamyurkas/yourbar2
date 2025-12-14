@@ -863,6 +863,8 @@ export default function CreateCocktailScreen() {
                   key={ingredient.key}
                   ingredient={ingredient}
                   inventoryIngredients={inventoryIngredients}
+                  availableIngredientIds={availableIngredientIds}
+                  shoppingIngredientIds={shoppingIngredientIds}
                   onChange={handleChangeIngredient}
                   onRemove={handleRemoveIngredient}
                   onMove={handleMoveIngredient}
@@ -1008,6 +1010,8 @@ export default function CreateCocktailScreen() {
 type EditableIngredientRowProps = {
   ingredient: EditableIngredient;
   inventoryIngredients: Ingredient[];
+  availableIngredientIds: Set<number>;
+  shoppingIngredientIds: Set<number>;
   onChange: (key: string, changes: Partial<EditableIngredient>) => void;
   onRemove: (key: string) => void;
   onMove: (key: string, direction: 'up' | 'down') => void;
@@ -1024,6 +1028,8 @@ type EditableIngredientRowProps = {
 function EditableIngredientRow({
   ingredient,
   inventoryIngredients,
+  availableIngredientIds,
+  shoppingIngredientIds,
   onChange,
   onRemove,
   onMove,
