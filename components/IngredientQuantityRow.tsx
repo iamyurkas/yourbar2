@@ -51,6 +51,11 @@ export function IngredientQuantityRow({
   const quantityDisplay = useMemo(
     () => (
       <View style={styles.metaContainer}>
+        <View style={styles.quantityContainer}>
+          <Text style={[styles.quantityLabel, { color: palette.onSurfaceVariant }]} numberOfLines={1}>
+            {quantity}
+          </Text>
+        </View>
         <View style={styles.shoppingSlot}>
           {isOnShoppingList ? (
             <MaterialIcons
@@ -64,11 +69,6 @@ export function IngredientQuantityRow({
           ) : (
             <View style={styles.shoppingIconPlaceholder} />
           )}
-        </View>
-        <View style={styles.quantityContainer}>
-          <Text style={[styles.quantityLabel, { color: palette.onSurfaceVariant }]} numberOfLines={1}>
-            {quantity}
-          </Text>
         </View>
       </View>
     ),
