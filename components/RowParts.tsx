@@ -236,7 +236,7 @@ const styles = StyleSheet.create({
   metaTop: {
     height: 16,
     alignItems: 'flex-end',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
   },
   metaMiddle: {
     flex: 1,
