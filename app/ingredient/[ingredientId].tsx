@@ -154,25 +154,46 @@ export default function IngredientDetailsScreen() {
       return [];
     }
 
-    const normalizedName = ingredient.name?.toLowerCase();
-    const idToMatch = numericIngredientId;
+    const normalizedNames = new Set<string>();
+    const idsToMatch = new Set<number>();
+
+    if (ingredient.name) {
+      normalizedNames.add(ingredient.name.toLowerCase());
+    }
+
+    if (numericIngredientId != null && !Number.isNaN(numericIngredientId)) {
+      idsToMatch.add(numericIngredientId);
+    }
+
+    if (ingredient.baseIngredientId != null) {
+      const baseId = Number(ingredient.baseIngredientId);
+      if (!Number.isNaN(baseId)) {
+        idsToMatch.add(baseId);
+      }
+
+      if (baseIngredient?.name) {
+        normalizedNames.add(baseIngredient.name.toLowerCase());
+      }
+    }
 
     return cocktails.filter((cocktail) =>
       cocktail.ingredients?.some((cocktailIngredient) => {
-        if (idToMatch != null && !Number.isNaN(Number(cocktailIngredient.ingredientId))) {
-          if (Number(cocktailIngredient.ingredientId) === idToMatch) {
-            return true;
-          }
+        const ingredientId = Number(cocktailIngredient.ingredientId);
+        if (!Number.isNaN(ingredientId) && idsToMatch.has(ingredientId)) {
+          return true;
         }
 
-        if (normalizedName && cocktailIngredient.name) {
-          return cocktailIngredient.name.toLowerCase() === normalizedName;
+        if (cocktailIngredient.name) {
+          const normalizedName = cocktailIngredient.name.toLowerCase();
+          if (normalizedNames.has(normalizedName)) {
+            return true;
+          }
         }
 
         return false;
       }),
     );
-  }, [cocktails, ingredient, numericIngredientId]);
+  }, [baseIngredient?.name, cocktails, ingredient, numericIngredientId]);
 
   const cocktailEntries = useMemo(
     () =>
