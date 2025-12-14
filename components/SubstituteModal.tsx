@@ -285,7 +285,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 16,
-    backgroundColor: '#0008',
+    backgroundColor: Colors.backdrop,
   },
   modalCard: {
     width: '100%',
