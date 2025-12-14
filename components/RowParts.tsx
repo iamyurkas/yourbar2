@@ -144,7 +144,7 @@ export function ListRow({
   brandIndicatorColor,
 }: ListRowProps) {
   const paletteColors = Colors;
-  const backgroundColor = selected ? highlightColor ?? `${paletteColors.tint}1F` : paletteColors.background;
+  const backgroundColor = selected ? highlightColor ?? paletteColors.primaryContainer : paletteColors.background;
   const metaAlignmentStyle =
     metaAlignment === 'center'
       ? styles.metaContentCenter
