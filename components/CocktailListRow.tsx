@@ -190,6 +190,7 @@ const styles = StyleSheet.create({
   ratingPill: {
     flexDirection: 'row',
     alignItems: 'center',
+    alignSelf: 'flex-end',
     gap: 2,
     borderRadius: 12,
     paddingVertical: 2,
