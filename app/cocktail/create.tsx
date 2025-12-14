@@ -26,7 +26,7 @@ import {
 } from 'react-native';
 
 import { resolveAssetFromCatalog } from '@/assets/image-manifest';
-import { Thumb } from '@/components/RowParts';
+import { ListRow, Thumb } from '@/components/RowParts';
 import { SubstituteModal } from '@/components/SubstituteModal';
 import { TagPill } from '@/components/TagPill';
 import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
@@ -153,7 +153,13 @@ function mapRecipeIngredientToEditable(recipe: NonNullable<Cocktail['ingredients
 
 export default function CreateCocktailScreen() {
   const palette = Colors;
-  const { ingredients: inventoryIngredients, cocktails, createCocktail } = useInventory();
+  const {
+    ingredients: inventoryIngredients,
+    cocktails,
+    availableIngredientIds,
+    shoppingIngredientIds,
+    createCocktail,
+  } = useInventory();
   const params = useLocalSearchParams();
 
   const sourceParam = getParamValue(params.source);
@@ -180,6 +186,79 @@ export default function CreateCocktailScreen() {
 
   const initializedRef = useRef(false);
   const scrollRef = useRef<ScrollView | null>(null);
+
+  const ingredientById = useMemo(() => {
+    const map = new Map<number, Ingredient>();
+    inventoryIngredients.forEach((item) => {
+      const id = Number(item.id ?? -1);
+      if (Number.isFinite(id) && id >= 0) {
+        map.set(id, item);
+      }
+    });
+    return map;
+  }, [inventoryIngredients]);
+
+  const getBaseGroupId = useCallback(
+    (rawId: number | string | null | undefined) => {
+      if (rawId == null) {
+        return undefined;
+      }
+
+      const id = Number(rawId);
+      if (!Number.isFinite(id) || id < 0) {
+        return undefined;
+      }
+
+      const ingredientRecord = ingredientById.get(id);
+      if (ingredientRecord?.baseIngredientId != null) {
+        const baseId = Number(ingredientRecord.baseIngredientId);
+        if (Number.isFinite(baseId) && baseId >= 0) {
+          return baseId;
+        }
+      }
+
+      if (ingredientRecord?.id != null) {
+        const normalizedId = Number(ingredientRecord.id);
+        if (Number.isFinite(normalizedId) && normalizedId >= 0) {
+          return normalizedId;
+        }
+      }
+
+      return id;
+    },
+    [ingredientById],
+  );
+
+  const cocktailsByBaseGroup = useMemo(() => {
+    const map = new Map<number, Set<string>>();
+
+    cocktails.forEach((cocktail: Cocktail) => {
+      const id = cocktail.id;
+      const cocktailKey = id != null ? String(id) : cocktail.name?.trim().toLowerCase();
+      if (!cocktailKey) {
+        return;
+      }
+
+      const seenBaseIds = new Set<number>();
+      (cocktail.ingredients ?? []).forEach((item) => {
+        const baseGroupId = getBaseGroupId(item.ingredientId);
+        if (baseGroupId == null || seenBaseIds.has(baseGroupId)) {
+          return;
+        }
+
+        seenBaseIds.add(baseGroupId);
+        let set = map.get(baseGroupId);
+        if (!set) {
+          set = new Set<string>();
+          map.set(baseGroupId, set);
+        }
+
+        set.add(cocktailKey);
+      });
+    });
+
+    return map;
+  }, [cocktails, getBaseGroupId]);
 
   const placeholderLabel = useMemo(() => (imageUri ? 'Change photo' : 'Add photo'), [imageUri]);
 
@@ -856,6 +935,10 @@ export default function CreateCocktailScreen() {
                   key={ingredient.key}
                   ingredient={ingredient}
                   inventoryIngredients={inventoryIngredients}
+                  availableIngredientIds={availableIngredientIds}
+                  shoppingIngredientIds={shoppingIngredientIds}
+                  getBaseGroupId={getBaseGroupId}
+                  cocktailsByBaseGroup={cocktailsByBaseGroup}
                   onChange={handleChangeIngredient}
                   onRemove={handleRemoveIngredient}
                   onMove={handleMoveIngredient}
@@ -1001,6 +1084,10 @@ export default function CreateCocktailScreen() {
 type EditableIngredientRowProps = {
   ingredient: EditableIngredient;
   inventoryIngredients: Ingredient[];
+  availableIngredientIds: Set<number>;
+  shoppingIngredientIds: Set<number>;
+  getBaseGroupId: (rawId: number | string | null | undefined) => number | undefined;
+  cocktailsByBaseGroup: Map<number, Set<string>>;
   onChange: (key: string, changes: Partial<EditableIngredient>) => void;
   onRemove: (key: string) => void;
   onMove: (key: string, direction: 'up' | 'down') => void;
@@ -1017,6 +1104,10 @@ type EditableIngredientRowProps = {
 function EditableIngredientRow({
   ingredient,
   inventoryIngredients,
+  availableIngredientIds,
+  shoppingIngredientIds,
+  getBaseGroupId,
+  cocktailsByBaseGroup,
   onChange,
   onRemove,
   onMove,
@@ -1078,6 +1169,23 @@ function EditableIngredientRow({
 
     return filtered.slice(0, MAX_SUGGESTIONS);
   }, [inventoryIngredients, normalizedName]);
+
+  const renderSubtitle = useCallback(
+    (baseGroupId: number | undefined) => {
+      if (baseGroupId == null) {
+        return undefined;
+      }
+
+      const count = cocktailsByBaseGroup.get(baseGroupId)?.size ?? 0;
+      if (count <= 0) {
+        return undefined;
+      }
+
+      const label = count === 1 ? 'recipe' : 'recipes';
+      return `${count} ${label}`;
+    },
+    [cocktailsByBaseGroup],
+  );
 
   useEffect(() => {
     if (normalizedName.length < MIN_AUTOCOMPLETE_LENGTH) {
@@ -1264,21 +1372,57 @@ function EditableIngredientRow({
       </View>
 
       {showSuggestions && suggestions.length ? (
-        <View style={[styles.suggestionList, { borderColor: palette.outlineVariant, backgroundColor: palette.surface }]}
+        <View
+          style={[styles.suggestionList, { borderColor: palette.outlineVariant, backgroundColor: palette.surface }]}
           pointerEvents={isFocused ? 'auto' : 'none'}>
-          {suggestions.map((candidate) => (
-            <Pressable
-              key={candidate.id ?? candidate.name}
-              onPress={() => handleSelectSuggestion(candidate)}
-              style={styles.suggestionItem}
-              accessibilityRole="button"
-              accessibilityLabel={`Use ${candidate.name ?? 'ingredient'}`}>
-              <Thumb label={candidate.name ?? undefined} uri={candidate.photoUri} />
-              <Text style={[styles.suggestionLabel, { color: palette.onSurface }]} numberOfLines={1}>
-                {candidate.name}
-              </Text>
-            </Pressable>
-          ))}
+          {suggestions.map((candidate, index) => {
+            const candidateId = Number(candidate.id ?? -1);
+            const baseGroupId = getBaseGroupId(candidate.id);
+            const isAvailable = candidateId >= 0 && availableIngredientIds.has(candidateId);
+            const isOnShoppingList = candidateId >= 0 && shoppingIngredientIds.has(candidateId);
+            const tagColor = candidate.tags?.[0]?.color ?? palette.tagYellow;
+            const subtitle = renderSubtitle(baseGroupId);
+            const brandIndicatorColor = candidate.baseIngredientId != null ? Colors.primary : undefined;
+            const isLast = index === suggestions.length - 1;
+
+            return (
+              <React.Fragment key={candidate.id ?? candidate.name}>
+                <ListRow
+                  title={candidate.name ?? ''}
+                  subtitle={subtitle}
+                  onPress={() => handleSelectSuggestion(candidate)}
+                  selected={isAvailable}
+                  highlightColor={palette.highlightSubtle}
+                  tagColor={tagColor}
+                  thumbnail={<Thumb label={candidate.name ?? undefined} uri={candidate.photoUri} />}
+                  brandIndicatorColor={brandIndicatorColor}
+                  control={null}
+                  metaFooter={
+                    isOnShoppingList ? (
+                      <MaterialIcons
+                        name="shopping-cart"
+                        size={16}
+                        color={Colors.tint}
+                        style={styles.shoppingIcon}
+                        accessibilityRole="image"
+                        accessibilityLabel="On shopping list"
+                      />
+                    ) : (
+                      <View style={styles.shoppingIconPlaceholder} />
+                    )
+                  }
+                  metaAlignment="center"
+                  accessibilityRole="button"
+                />
+                {!isLast ? (
+                  <View
+                    style={[styles.suggestionSeparator, { backgroundColor: palette.outline }]}
+                    pointerEvents="none"
+                  />
+                ) : null}
+              </React.Fragment>
+            );
+          })}
         </View>
       ) : null}
 
@@ -1649,27 +1793,27 @@ const styles = StyleSheet.create({
   },
   suggestionList: {
     position: 'absolute',
-    top: 94,
+    top: 100,
     left: 0,
     right: 0,
     zIndex: 10,
     borderWidth: StyleSheet.hairlineWidth,
     borderRadius: 12,
-    paddingVertical: 4,
-    gap: 4,
+    overflow: 'hidden',
+    paddingTop: 0,
+    paddingBottom: 4,
     backgroundColor: Colors.surface,
   },
-  suggestionItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
+  suggestionSeparator: {
+    height: StyleSheet.hairlineWidth,
   },
-  suggestionLabel: {
-    fontSize: 14,
-    fontWeight: '500',
-    flex: 1,
+  shoppingIcon: {
+    marginTop: 4,
+  },
+  shoppingIconPlaceholder: {
+    minHeight: 16,
+    minWidth: 16,
+    marginTop: 4,
   },
   rowInputs: {
     flexDirection: 'row',
