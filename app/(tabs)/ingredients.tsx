@@ -106,71 +106,60 @@ const IngredientListItem = memo(function IngredientListItemComponent({
   const brandIndicatorColor = ingredient.baseIngredientId != null ? Colors.primary : undefined;
 
   const control = useMemo(() => {
+    return (
+      <View style={styles.presenceSlot}>
+        {showAvailabilityToggle ? (
+          <PresenceCheck checked={isAvailable} onToggle={handleToggleAvailability} />
+        ) : (
+          <View style={styles.presencePlaceholder} />
+        )}
+      </View>
+    );
+  }, [
+    handleToggleAvailability,
+    isAvailable,
+    showAvailabilityToggle,
+  ]);
+
+  const shoppingControl = useMemo(() => {
     const shoppingLabel = onShoppingToggle ? 'Remove from shopping list' : 'On shopping list';
     const isShoppingTab = Boolean(onShoppingToggle);
     const shoppingIconName = isShoppingTab ? 'remove-shopping-cart' : 'shopping-cart';
     const shoppingIconColor = isShoppingTab ? Colors.error : Colors.tint;
-    const shoppingIconContent = isOnShoppingList
-      ? onShoppingToggle
-        ? (
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel={shoppingLabel}
-              onPress={handleShoppingToggle}
-              hitSlop={8}
-              style={({ pressed }) => [
-                styles.shoppingButton,
-                pressed ? styles.shoppingButtonPressed : null,
-              ]}>
-              <MaterialIcons
-                name={shoppingIconName}
-                size={16}
-                color={shoppingIconColor}
-                style={styles.shoppingIcon}
-              />
-            </Pressable>
-          )
-        : (
-            <MaterialIcons
-              name={shoppingIconName}
-              size={16}
-              color={shoppingIconColor}
-              style={styles.shoppingIcon}
-              accessibilityRole="image"
-              accessibilityLabel={shoppingLabel}
-            />
-          )
-      : null;
+
+    if (!isOnShoppingList) {
+      return <View style={styles.shoppingIconPlaceholder} />;
+    }
+
+    if (onShoppingToggle) {
+      return (
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={shoppingLabel}
+          onPress={handleShoppingToggle}
+          hitSlop={8}
+          style={({ pressed }) => [styles.shoppingButton, pressed ? styles.shoppingButtonPressed : null]}>
+          <MaterialIcons
+            name={shoppingIconName}
+            size={16}
+            color={shoppingIconColor}
+            style={styles.shoppingIcon}
+          />
+        </Pressable>
+      );
+    }
 
     return (
-      <View
-        style={[
-          styles.controlContainer,
-          showAvailabilityToggle
-            ? styles.controlContainerWithToggle
-            : styles.controlContainerShoppingOnly,
-        ]}>
-        <View style={styles.controlTopSpacer} />
-        <View style={styles.presenceSlot}>
-          {showAvailabilityToggle ? (
-            <PresenceCheck checked={isAvailable} onToggle={handleToggleAvailability} />
-          ) : (
-            <View style={styles.presencePlaceholder} />
-          )}
-        </View>
-        <View style={styles.shoppingSlot}>
-          {shoppingIconContent ?? <View style={styles.shoppingIconPlaceholder} />}
-        </View>
-      </View>
+      <MaterialIcons
+        name={shoppingIconName}
+        size={16}
+        color={shoppingIconColor}
+        style={styles.shoppingIcon}
+        accessibilityRole="image"
+        accessibilityLabel={shoppingLabel}
+      />
     );
-  }, [
-    handleShoppingToggle,
-    handleToggleAvailability,
-    isAvailable,
-    isOnShoppingList,
-    onShoppingToggle,
-    showAvailabilityToggle,
-  ]);
+  }, [handleShoppingToggle, isOnShoppingList, onShoppingToggle]);
 
   const handlePress = useCallback(() => {
     const routeParam = ingredient.id ?? ingredient.name;
@@ -194,12 +183,12 @@ const IngredientListItem = memo(function IngredientListItemComponent({
       highlightColor={highlightColor}
       tagColor={tagColor}
       accessibilityRole="button"
-      accessibilityState={
-        showAvailabilityToggle && isAvailable ? { selected: true } : undefined
-      }
+      accessibilityState={showAvailabilityToggle && isAvailable ? { selected: true } : undefined}
       thumbnail={thumbnail}
       control={control}
+      metaFooter={shoppingControl}
       brandIndicatorColor={brandIndicatorColor}
+      metaAlignment="center"
     />
   );
 }, areIngredientPropsEqual);
@@ -902,36 +891,15 @@ const styles = StyleSheet.create({
   headerWrapper: {
     zIndex: 2,
   },
-  controlContainer: {
-    alignItems: 'flex-end',
-    alignSelf: 'stretch',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    minHeight: 56,
-    minWidth: 32,
-    
-  },
-  controlContainerWithToggle: {},
-  controlContainerShoppingOnly: {},
-  controlTopSpacer: {
-    height: 16,
-    width: 24,
-  },
   presenceSlot: {
-    height: 16,
+    minHeight: 24,
     alignItems: 'center',
     justifyContent: 'center',
-    width: 24,
+    minWidth: 24,
   },
   presencePlaceholder: {
     height: 16,
     width: 16,
-  },
-  shoppingSlot: {
-    height: 16,
-    alignItems: 'flex-end',
-    justifyContent: 'flex-end',
-    width: 24,
   },
   shoppingIcon: {
     width: 16,
