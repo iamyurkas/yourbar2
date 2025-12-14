@@ -1799,6 +1799,7 @@ const styles = StyleSheet.create({
     zIndex: 10,
     borderWidth: StyleSheet.hairlineWidth,
     borderRadius: 12,
+    overflow: 'hidden',
     paddingTop: 0,
     paddingBottom: 4,
     backgroundColor: Colors.surface,
