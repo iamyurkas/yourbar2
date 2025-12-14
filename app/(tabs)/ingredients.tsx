@@ -652,7 +652,7 @@ export default function IngredientsScreen() {
     );
   }, [filteredByTags, normalizedQuery]);
 
-  const highlightColor = palette.highlightSubtle;
+  const highlightColor = palette.primaryContainer;
   const separatorColor = paletteColors.outline;
   const isFilterActive = selectedTagKeys.size > 0;
   const filterMenuTop = useMemo(() => {
