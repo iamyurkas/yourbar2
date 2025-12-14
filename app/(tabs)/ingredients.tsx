@@ -15,6 +15,7 @@ import { CollectionHeader } from '@/components/CollectionHeader';
 import { FabAdd } from '@/components/FabAdd';
 import { ListRow, PresenceCheck, Thumb } from '@/components/RowParts';
 import { TagPill } from '@/components/TagPill';
+import { SideMenuDrawer } from '@/components/SideMenuDrawer';
 import type { SegmentTabOption } from '@/components/TopBars';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { Colors } from '@/constants/theme';
@@ -205,6 +206,7 @@ export default function IngredientsScreen() {
   } = useInventory();
   const [activeTab, setActiveTab] = useState<IngredientTabKey>('all');
   const [query, setQuery] = useState('');
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isFilterMenuVisible, setFilterMenuVisible] = useState(false);
   const [selectedTagKeys, setSelectedTagKeys] = useState<Set<string>>(() => new Set());
   const [headerLayout, setHeaderLayout] = useState<LayoutRectangle | null>(null);
@@ -808,6 +810,7 @@ export default function IngredientsScreen() {
             searchValue={query}
             onSearchChange={setQuery}
             placeholder="Search"
+            onMenuPress={() => setIsMenuOpen(true)}
             tabs={TAB_OPTIONS}
             activeTab={activeTab}
             onTabChange={setActiveTab}
@@ -881,6 +884,7 @@ export default function IngredientsScreen() {
         />
       </View>
       <FabAdd label="Add ingredient" onPress={() => router.push('/ingredient/create')} />
+      <SideMenuDrawer visible={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
     </SafeAreaView>
   );
 }
