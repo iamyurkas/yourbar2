@@ -1,5 +1,4 @@
-import { MaterialIcons } from '@expo/vector-icons';
-import React, { memo, useCallback, useEffect, useMemo, useState, useTransition } from 'react';
+import React, { useCallback, useEffect, useMemo, useState, useTransition } from 'react';
 import {
   FlatList,
   Pressable,
@@ -13,7 +12,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { CollectionHeader } from '@/components/CollectionHeader';
 import { FabAdd } from '@/components/FabAdd';
-import { ListRow, PresenceCheck, Thumb } from '@/components/RowParts';
+import { IngredientListRow } from '@/components/IngredientListRow';
 import { TagPill } from '@/components/TagPill';
 import type { SegmentTabOption } from '@/components/TopBars';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
@@ -41,157 +40,6 @@ type IngredientTagOption = {
   name: string;
   color: string;
 };
-
-type IngredientListItemProps = {
-  ingredient: Ingredient;
-  highlightColor: string;
-  availableIngredientIds: Set<number>;
-  onToggleAvailability: (id: number) => void;
-  subtitle?: string;
-  surfaceVariantColor?: string;
-  isOnShoppingList: boolean;
-  showAvailabilityToggle?: boolean;
-  onShoppingToggle?: (id: number) => void;
-};
-
-const areIngredientPropsEqual = (
-  prev: Readonly<IngredientListItemProps>,
-  next: Readonly<IngredientListItemProps>,
-) =>
-  prev.ingredient === next.ingredient &&
-  prev.highlightColor === next.highlightColor &&
-  prev.availableIngredientIds === next.availableIngredientIds &&
-  prev.onToggleAvailability === next.onToggleAvailability &&
-  prev.subtitle === next.subtitle &&
-  prev.surfaceVariantColor === next.surfaceVariantColor &&
-  prev.isOnShoppingList === next.isOnShoppingList &&
-  prev.showAvailabilityToggle === next.showAvailabilityToggle &&
-  prev.onShoppingToggle === next.onShoppingToggle;
-
-const IngredientListItem = memo(function IngredientListItemComponent({
-  ingredient,
-  highlightColor,
-  availableIngredientIds,
-  onToggleAvailability,
-  subtitle,
-  surfaceVariantColor,
-  isOnShoppingList,
-  showAvailabilityToggle = true,
-  onShoppingToggle,
-}: IngredientListItemProps) {
-  const router = useRouter();
-  const id = Number(ingredient.id ?? -1);
-  const isAvailable = id >= 0 && availableIngredientIds.has(id);
-  const tagColor = ingredient.tags?.[0]?.color ?? palette.tagYellow;
-
-  const handleToggleAvailability = useCallback(() => {
-    if (id >= 0) {
-      onToggleAvailability(id);
-    }
-  }, [id, onToggleAvailability]);
-
-  const handleShoppingToggle = useCallback(() => {
-    if (id >= 0 && onShoppingToggle) {
-      onShoppingToggle(id);
-    }
-  }, [id, onShoppingToggle]);
-
-  const subtitleStyle = surfaceVariantColor ? { color: surfaceVariantColor } : undefined;
-
-  const thumbnail = useMemo(
-    () => <Thumb label={ingredient.name} uri={ingredient.photoUri} />,
-    [ingredient.name, ingredient.photoUri],
-  );
-
-  const brandIndicatorColor = ingredient.baseIngredientId != null ? Colors.primary : undefined;
-
-  const control = useMemo(() => {
-    return (
-      <View style={styles.presenceSlot}>
-        {showAvailabilityToggle ? (
-          <PresenceCheck checked={isAvailable} onToggle={handleToggleAvailability} />
-        ) : (
-          <View style={styles.presencePlaceholder} />
-        )}
-      </View>
-    );
-  }, [
-    handleToggleAvailability,
-    isAvailable,
-    showAvailabilityToggle,
-  ]);
-
-  const shoppingControl = useMemo(() => {
-    const shoppingLabel = onShoppingToggle ? 'Remove from shopping list' : 'On shopping list';
-    const isShoppingTab = Boolean(onShoppingToggle);
-    const shoppingIconName = isShoppingTab ? 'remove-shopping-cart' : 'shopping-cart';
-    const shoppingIconColor = isShoppingTab ? Colors.error : Colors.tint;
-
-    if (!isOnShoppingList) {
-      return <View style={styles.shoppingIconPlaceholder} />;
-    }
-
-    if (onShoppingToggle) {
-      return (
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={shoppingLabel}
-          onPress={handleShoppingToggle}
-          hitSlop={8}
-          style={({ pressed }) => [styles.shoppingButton, pressed ? styles.shoppingButtonPressed : null]}>
-          <MaterialIcons
-            name={shoppingIconName}
-            size={16}
-            color={shoppingIconColor}
-            style={styles.shoppingIcon}
-          />
-        </Pressable>
-      );
-    }
-
-    return (
-      <MaterialIcons
-        name={shoppingIconName}
-        size={16}
-        color={shoppingIconColor}
-        style={styles.shoppingIcon}
-        accessibilityRole="image"
-        accessibilityLabel={shoppingLabel}
-      />
-    );
-  }, [handleShoppingToggle, isOnShoppingList, onShoppingToggle]);
-
-  const handlePress = useCallback(() => {
-    const routeParam = ingredient.id ?? ingredient.name;
-    if (routeParam == null) {
-      return;
-    }
-
-    router.push({
-      pathname: '/ingredient/[ingredientId]',
-      params: { ingredientId: String(routeParam) },
-    });
-  }, [ingredient.id, ingredient.name, router]);
-
-  return (
-    <ListRow
-      title={ingredient.name}
-      subtitle={subtitle}
-      subtitleStyle={subtitleStyle}
-      onPress={handlePress}
-      selected={isAvailable}
-      highlightColor={highlightColor}
-      tagColor={tagColor}
-      accessibilityRole="button"
-      accessibilityState={showAvailabilityToggle && isAvailable ? { selected: true } : undefined}
-      thumbnail={thumbnail}
-      control={control}
-      metaFooter={shoppingControl}
-      brandIndicatorColor={brandIndicatorColor}
-      metaAlignment="center"
-    />
-  );
-}, areIngredientPropsEqual);
 
 export default function IngredientsScreen() {
   const router = useRouter();
@@ -760,7 +608,7 @@ export default function IngredientsScreen() {
       }
 
       return (
-        <IngredientListItem
+        <IngredientListRow
           ingredient={item}
           highlightColor={highlightColor}
           availableIngredientIds={effectiveAvailableIngredientIds}
@@ -890,33 +738,6 @@ const styles = StyleSheet.create({
   },
   headerWrapper: {
     zIndex: 2,
-  },
-  presenceSlot: {
-    minHeight: 24,
-    alignItems: 'center',
-    justifyContent: 'center',
-    minWidth: 24,
-  },
-  presencePlaceholder: {
-    height: 16,
-    width: 16,
-  },
-  shoppingIcon: {
-    width: 16,
-    height: 16,
-    alignSelf: 'flex-end',
-  },
-  shoppingIconPlaceholder: {
-    width: 16,
-    height: 16,
-    alignSelf: 'flex-end',
-  },
-  shoppingButton: {
-    borderRadius: 12,
-    padding: 4,
-  },
-  shoppingButtonPressed: {
-    opacity: 0.6,
   },
   listContent: {
     paddingTop: 0,
