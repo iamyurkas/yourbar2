@@ -6,6 +6,7 @@ import { useRouter } from 'expo-router';
 import { FabAdd } from '@/components/FabAdd';
 import { CocktailListRow } from '@/components/CocktailListRow';
 import { CollectionHeader } from '@/components/CollectionHeader';
+import { SideMenuDrawer } from '@/components/SideMenuDrawer';
 import type { SegmentTabOption } from '@/components/TopBars';
 import { Colors } from '@/constants/theme';
 import { isCocktailReady } from '@/libs/cocktail-availability';
@@ -30,6 +31,7 @@ export default function CocktailsScreen() {
   const { cocktails, availableIngredientIds, ingredients } = useInventory();
   const [activeTab, setActiveTab] = useState<CocktailTabKey>('all');
   const [query, setQuery] = useState('');
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const paletteColors = Colors;
   const router = useRouter();
   const ingredientLookup = useMemo(() => createIngredientLookup(ingredients), [ingredients]);
@@ -141,6 +143,7 @@ export default function CocktailsScreen() {
           searchValue={query}
           onSearchChange={setQuery}
           placeholder="Search"
+          onMenuPress={() => setIsMenuOpen(true)}
           tabs={TAB_OPTIONS}
           activeTab={activeTab}
           onTabChange={setActiveTab}
@@ -163,6 +166,7 @@ export default function CocktailsScreen() {
           router.push({ pathname: '/cocktail/create', params: { source: 'cocktails' } })
         }
       />
+      <SideMenuDrawer visible={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
     </SafeAreaView>
   );
 }

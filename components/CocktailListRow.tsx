@@ -112,7 +112,12 @@ const CocktailListRowComponent = ({
         ))}
       </View>
     );
-  }, [paletteColors.outline, paletteColors.surfaceVariant, paletteColors.tint, ratingValue]);
+  }, [
+    paletteColors.background,
+    paletteColors.outline,
+    paletteColors.tint,
+    ratingValue,
+  ]);
 
   const tagColor = cocktail.tags?.[0]?.color ?? undefined;
 
