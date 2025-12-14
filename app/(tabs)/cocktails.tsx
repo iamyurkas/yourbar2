@@ -8,11 +8,9 @@ import { CocktailListRow } from '@/components/CocktailListRow';
 import { CollectionHeader } from '@/components/CollectionHeader';
 import type { SegmentTabOption } from '@/components/TopBars';
 import { Colors } from '@/constants/theme';
+import { isCocktailReady } from '@/libs/cocktail-availability';
 import { useInventory, type Cocktail } from '@/providers/inventory-provider';
-import {
-  createIngredientLookup,
-  isRecipeIngredientAvailable,
-} from '@/libs/ingredient-availability';
+import { createIngredientLookup, isRecipeIngredientAvailable } from '@/libs/ingredient-availability';
 
 type CocktailSection = {
   key: string;
@@ -96,8 +94,6 @@ export default function CocktailsScreen() {
     );
   }, [activeSection.data, normalizedQuery]);
 
-  const separatorColor = paletteColors.outline;
-
   const keyExtractor = useCallback((item: Cocktail) => String(item.id ?? item.name), []);
 
   const handleSelectCocktail = useCallback(
@@ -125,8 +121,15 @@ export default function CocktailsScreen() {
   );
 
   const renderSeparator = useCallback(
-    () => <View style={[styles.divider, { backgroundColor: separatorColor }]} />,
-    [separatorColor],
+    ({ leadingItem }: { leadingItem?: Cocktail | null }) => {
+      const isReady = leadingItem
+        ? isCocktailReady(leadingItem, availableIngredientIds, ingredientLookup)
+        : false;
+      const backgroundColor = isReady ? paletteColors.outline : paletteColors.outlineVariant;
+
+      return <View style={[styles.divider, { backgroundColor }]} />;
+    },
+    [availableIngredientIds, ingredientLookup, paletteColors.outline, paletteColors.outlineVariant],
   );
 
   return (

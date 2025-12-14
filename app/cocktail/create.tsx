@@ -1384,6 +1384,7 @@ function EditableIngredientRow({
             const subtitle = renderSubtitle(baseGroupId);
             const brandIndicatorColor = candidate.baseIngredientId != null ? Colors.primary : undefined;
             const isLast = index === suggestions.length - 1;
+            const separatorColor = isAvailable ? palette.outline : palette.outlineVariant;
 
             return (
               <React.Fragment key={candidate.id ?? candidate.name}>
@@ -1416,7 +1417,7 @@ function EditableIngredientRow({
                 />
                 {!isLast ? (
                   <View
-                    style={[styles.suggestionSeparator, { backgroundColor: palette.outline }]}
+                    style={[styles.suggestionSeparator, { backgroundColor: separatorColor }]}
                     pointerEvents="none"
                   />
                 ) : null}
