@@ -1793,13 +1793,14 @@ const styles = StyleSheet.create({
   },
   suggestionList: {
     position: 'absolute',
-    top: 98,
+    top: 100,
     left: 0,
     right: 0,
     zIndex: 10,
     borderWidth: StyleSheet.hairlineWidth,
     borderRadius: 12,
-    paddingVertical: 4,
+    paddingTop: 0,
+    paddingBottom: 4,
     backgroundColor: Colors.surface,
   },
   suggestionSeparator: {
