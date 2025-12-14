@@ -711,7 +711,7 @@ const styles = StyleSheet.create({
     paddingBottom: 48,
     paddingHorizontal: 24,
     justifyContent: 'flex-start',
-    backgroundColor: 'rgba(0,0,0,0.45)',
+    backgroundColor: Colors.backdrop,
   },
   modalCard: {
     borderRadius: 12,

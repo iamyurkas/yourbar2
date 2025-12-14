@@ -683,7 +683,7 @@ const styles = StyleSheet.create({
     height: '100%',
     borderRadius: 12,
     overflow: 'hidden',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: Colors.surfaceBright,
   },
   photoPlaceholder: {
     width: 150,
@@ -739,7 +739,7 @@ const styles = StyleSheet.create({
     lineHeight: 22,
   },
   descriptionText: {
-    color: '#6F6F6F',
+    color: Colors.onSurfaceMuted,
   },
   toggleDescription: {
     fontSize: 14,
