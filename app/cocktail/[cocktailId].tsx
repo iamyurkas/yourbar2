@@ -207,7 +207,7 @@ export default function CocktailDetailsScreen() {
       .filter(Boolean);
   }, [cocktail?.instructions]);
 
-  const ingredientHighlightColor = appPalette.highlightSubtle;
+  const ingredientHighlightColor = appPalette.highlightFaint;
 
   const photoSource = useMemo(() => {
     if (!cocktail?.photoUri) {
