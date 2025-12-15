@@ -2,6 +2,7 @@ import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   FlatList,
+  InteractionManager,
   Modal,
   Pressable,
   StyleSheet,
@@ -39,6 +40,8 @@ type SubstituteModalProps = {
   excludedIngredientId?: number;
   onClose: () => void;
   onSelect: (ingredient: Ingredient) => void;
+  selectedSubstituteIds?: Set<number>;
+  selectedSubstituteNames?: Set<string>;
 };
 
 export function SubstituteModal({
@@ -47,6 +50,8 @@ export function SubstituteModal({
   excludedIngredientId,
   onClose,
   onSelect,
+  selectedSubstituteIds,
+  selectedSubstituteNames,
 }: SubstituteModalProps) {
   const paletteColors = Colors;
   const { ingredients, availableIngredientIds, shoppingIngredientIds, cocktails } = useInventory();
@@ -144,24 +149,65 @@ export function SubstituteModal({
           return false;
         }
 
+        const candidateId = Number(item.id ?? -1);
+        if (candidateId >= 0 && selectedSubstituteIds?.has(candidateId)) {
+          return false;
+        }
+
+        const normalizedName = item.name?.trim().toLowerCase();
+        if (normalizedName && selectedSubstituteNames?.has(normalizedName)) {
+          return false;
+        }
+
         return Boolean(item.name?.trim());
       })
       .slice(0, MAX_SUGGESTIONS);
-  }, [excludedBaseGroupId, getBaseGroupId, ingredients, searchValue]);
+  }, [
+    excludedBaseGroupId,
+    getBaseGroupId,
+    ingredients,
+    searchValue,
+    selectedSubstituteIds,
+    selectedSubstituteNames,
+  ]);
+
+  const focusTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const secondaryFocusTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const clearFocusTimers = useCallback(() => {
+    if (focusTimeoutRef.current) {
+      clearTimeout(focusTimeoutRef.current);
+      focusTimeoutRef.current = null;
+    }
+    if (secondaryFocusTimeoutRef.current) {
+      clearTimeout(secondaryFocusTimeoutRef.current);
+      secondaryFocusTimeoutRef.current = null;
+    }
+  }, []);
 
   const handleFocusInput = useCallback(() => {
-    requestAnimationFrame(() => {
-      inputRef.current?.focus();
+    clearFocusTimers();
+    InteractionManager.runAfterInteractions(() => {
+      requestAnimationFrame(() => {
+        focusTimeoutRef.current = setTimeout(() => {
+          inputRef.current?.focus();
+          secondaryFocusTimeoutRef.current = setTimeout(() => inputRef.current?.focus(), 80);
+        }, 120);
+      });
     });
-  }, []);
+  }, [clearFocusTimers]);
 
   useEffect(() => {
     if (visible) {
       handleFocusInput();
     } else {
+      clearFocusTimers();
+      inputRef.current?.blur();
       setSearchValue('');
     }
-  }, [handleFocusInput, visible]);
+  }, [clearFocusTimers, handleFocusInput, visible]);
+
+  useEffect(() => clearFocusTimers, [clearFocusTimers]);
 
   const renderSubtitle = useCallback(
     (baseGroupId: number | undefined) => {
@@ -242,9 +288,17 @@ export function SubstituteModal({
   );
 
   return (
-    <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
-      <View style={styles.modalOverlay}>
-        <View style={[styles.modalCard, { backgroundColor: paletteColors.surface }]}>
+    <Modal
+      visible={visible}
+      transparent
+      animationType="slide"
+      onRequestClose={onClose}
+      onShow={handleFocusInput}>
+      <Pressable style={styles.modalOverlay} onPress={onClose} accessibilityRole="button">
+        <Pressable
+          style={[styles.modalCard, { backgroundColor: paletteColors.surface }]}
+          onPress={() => {}}
+          accessibilityRole="menu">
           <View style={styles.modalHeader}>
             <View>
               <Text style={[styles.modalTitle, { color: paletteColors.onSurface }]}>Add substitute</Text>
@@ -265,7 +319,14 @@ export function SubstituteModal({
             onChangeText={setSearchValue}
             placeholder="Search ingredients"
             placeholderTextColor={`${paletteColors.onSurfaceVariant}99`}
-            style={[styles.input, { borderColor: paletteColors.outlineVariant, color: paletteColors.text }]}
+            style={[
+              styles.input,
+              {
+                borderColor: paletteColors.outlineVariant,
+                color: paletteColors.text,
+                backgroundColor: palette.surfaceBright,
+              },
+            ]}
             autoFocus
           />
           <FlatList
@@ -279,8 +340,8 @@ export function SubstituteModal({
               <Text style={[styles.modalEmptyText, { color: paletteColors.onSurfaceVariant }]}>No ingredients found</Text>
             }
           />
-        </View>
-      </View>
+        </Pressable>
+      </Pressable>
     </Modal>
   );
 }

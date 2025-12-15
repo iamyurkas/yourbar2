@@ -614,9 +614,8 @@ export default function CreateCocktailScreen() {
         }
         return [...items, newSubstitute];
       });
-      handleCloseSubstituteModal();
     },
-    [handleCloseSubstituteModal, handleUpdateSubstitutes, substituteTarget],
+    [handleUpdateSubstitutes, substituteTarget],
   );
 
   const handleSubmit = useCallback(() => {
@@ -799,6 +798,39 @@ export default function CreateCocktailScreen() {
     }
     return ingredientsState.find((item) => item.key === substituteTarget);
   }, [ingredientsState, substituteTarget]);
+
+  const substituteModalSelectionIds = useMemo(() => {
+    if (!substituteModalIngredient) {
+      return undefined;
+    }
+
+    const ids = new Set<number>();
+    substituteModalIngredient.substitutes.forEach((item) => {
+      const source = item.ingredientId ?? item.id;
+      const normalized = source != null ? Number(source) : NaN;
+      if (Number.isFinite(normalized) && normalized >= 0) {
+        ids.add(Math.trunc(normalized));
+      }
+    });
+
+    return ids.size ? ids : undefined;
+  }, [substituteModalIngredient]);
+
+  const substituteModalSelectionNames = useMemo(() => {
+    if (!substituteModalIngredient) {
+      return undefined;
+    }
+
+    const names = new Set<string>();
+    substituteModalIngredient.substitutes.forEach((item) => {
+      const normalized = item.name.trim().toLowerCase();
+      if (normalized) {
+        names.add(normalized);
+      }
+    });
+
+    return names.size ? names : undefined;
+  }, [substituteModalIngredient]);
 
   return (
     <>
@@ -1103,6 +1135,8 @@ export default function CreateCocktailScreen() {
         onSelect={handleSelectSubstituteCandidate}
         ingredientName={substituteModalIngredient?.name}
         excludedIngredientId={substituteModalIngredient?.ingredientId}
+        selectedSubstituteIds={substituteModalSelectionIds}
+        selectedSubstituteNames={substituteModalSelectionNames}
       />
     </>
   );
@@ -1529,7 +1563,7 @@ function EditableIngredientRow({
                 key={substitute.key}
                 style={[
                   styles.substitutePill,
-                  { borderColor: palette.outlineVariant, backgroundColor: palette.surfaceVariant },
+                  { borderColor: palette.outlineVariant, backgroundColor: `${palette.tint}1A` },
                   substitute.isBrand && { borderLeftColor: palette.tint, borderLeftWidth: 4 },
                 ]}>
                 <Text style={[styles.substituteLabel, { color: palette.onSurface }]} numberOfLines={1}>
@@ -1935,7 +1969,7 @@ const styles = StyleSheet.create({
   },
   substituteLabel: {
     fontSize: 14,
-    fontWeight: '500',
+    fontWeight: '400',
     flex: 1,
   },
   substituteHint: {
