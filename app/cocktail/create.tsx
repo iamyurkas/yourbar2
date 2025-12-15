@@ -116,6 +116,14 @@ function createEditableIngredient(initial?: Partial<EditableIngredient>): Editab
   } satisfies EditableIngredient;
 }
 
+function shouldUsePluralUnits(amountRaw?: string) {
+  if (!amountRaw) {
+    return false;
+  }
+  const numericAmount = Number(amountRaw.trim());
+  return Number.isFinite(numericAmount) && numericAmount !== 1;
+}
+
 function mapRecipeIngredientToEditable(recipe: NonNullable<Cocktail['ingredients']>[number]): EditableIngredient {
   const key = createUniqueKey('ingredient');
   const unitId =
@@ -543,9 +551,19 @@ export default function CreateCocktailScreen() {
     setUnitPickerTarget(null);
   }, []);
 
-    const handleOpenSubstituteModal = useCallback((key: string) => {
-      setSubstituteTarget(key);
-    }, []);
+  const targetUnitPickerIngredient = useMemo(
+    () => ingredientsState.find((item) => item.key === unitPickerTarget),
+    [ingredientsState, unitPickerTarget],
+  );
+
+  const usePluralUnitsInPicker = useMemo(
+    () => shouldUsePluralUnits(targetUnitPickerIngredient?.amount),
+    [targetUnitPickerIngredient?.amount],
+  );
+
+  const handleOpenSubstituteModal = useCallback((key: string) => {
+    setSubstituteTarget(key);
+  }, []);
 
   const handleCloseSubstituteModal = useCallback(() => {
     setSubstituteTarget(null);
@@ -1056,16 +1074,24 @@ export default function CreateCocktailScreen() {
               </Pressable>
             </View>
             <ScrollView contentContainerStyle={styles.unitList}>
-              {COCKTAIL_UNIT_OPTIONS.map((option) => (
-                <Pressable
-                  key={option.id}
-                  onPress={() => handleSelectUnit(option.id)}
-                  style={[styles.unitOption, { borderColor: palette.outlineVariant }]}
-                  accessibilityRole="button"
-                  accessibilityLabel={option.label ? `Select ${option.label}` : 'Select empty unit'}>
-                  <Text style={[styles.unitLabel, { color: palette.onSurface }]}>{option.label || ' '}</Text>
-                </Pressable>
-              ))}
+              {COCKTAIL_UNIT_OPTIONS.map((option) => {
+                const optionLabel = usePluralUnitsInPicker
+                  ? COCKTAIL_UNIT_DICTIONARY[option.id]?.plural ?? option.label
+                  : option.label;
+                const displayLabel = optionLabel || ' ';
+                return (
+                  <Pressable
+                    key={option.id}
+                    onPress={() => handleSelectUnit(option.id)}
+                    style={[styles.unitOption, { borderColor: palette.outlineVariant }]}
+                    accessibilityRole="button"
+                    accessibilityLabel={displayLabel.trim()
+                      ? `Select ${displayLabel.trim()}`
+                      : 'Select empty unit'}>
+                    <Text style={[styles.unitLabel, { color: palette.onSurface }]}>{displayLabel}</Text>
+                  </Pressable>
+                );
+              })}
             </ScrollView>
           </View>
         </Pressable>
@@ -1260,13 +1286,19 @@ function EditableIngredientRow({
     setInfoModal(null);
   }, []);
 
+  const usePluralUnits = useMemo(() => shouldUsePluralUnits(ingredient.amount), [ingredient.amount]);
+
   const unitLabel = useMemo(() => {
     if (ingredient.unitId == null) {
       return 'No unit';
     }
     const entry = COCKTAIL_UNIT_DICTIONARY[ingredient.unitId];
-    return entry?.singular ?? 'Custom';
-  }, [ingredient.unitId]);
+    if (!entry) {
+      return 'Custom';
+    }
+    const label = usePluralUnits ? entry.plural ?? entry.singular : entry.singular;
+    return label || 'Custom';
+  }, [ingredient.unitId, usePluralUnits]);
 
   useEffect(() => {
     return () => {
