@@ -836,7 +836,7 @@ const styles = StyleSheet.create({
   baseIngredientThumb: {
     width: 56,
     height: 56,
-    borderRadius: 0,
+    borderRadius: 8,
     overflow: 'hidden',
     backgroundColor: Colors.surfaceBright,
   },
@@ -848,7 +848,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 0,
+    borderRadius: 8,
   },
   baseIngredientName: {
     fontSize: 16,
