@@ -151,7 +151,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               <View style={styles.settingTextContainer}>
                 <Text style={[styles.settingLabel, { color: palette.onSurface }]}>Allow all substitutes</Text>
                 <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>
-                  Use base or branded alternative regardless of recipe
+                  Use base or branded alternative regardless of a recipe
                 </Text>
               </View>
             </Pressable>
@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 12,
     paddingVertical: 12,
-    paddingRight: 12,
+    paddingRight: 10,
     borderRadius: 12,
     borderWidth: StyleSheet.hairlineWidth,
   },
@@ -220,7 +220,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   settingCaption: {
-    fontSize: 13,
+    fontSize: 12,
   },
 });
 
