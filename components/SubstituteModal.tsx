@@ -40,6 +40,8 @@ type SubstituteModalProps = {
   excludedIngredientId?: number;
   onClose: () => void;
   onSelect: (ingredient: Ingredient) => void;
+  selectedSubstituteIds?: Set<number>;
+  selectedSubstituteNames?: Set<string>;
 };
 
 export function SubstituteModal({
@@ -48,6 +50,8 @@ export function SubstituteModal({
   excludedIngredientId,
   onClose,
   onSelect,
+  selectedSubstituteIds,
+  selectedSubstituteNames,
 }: SubstituteModalProps) {
   const paletteColors = Colors;
   const { ingredients, availableIngredientIds, shoppingIngredientIds, cocktails } = useInventory();
@@ -145,10 +149,27 @@ export function SubstituteModal({
           return false;
         }
 
+        const candidateId = Number(item.id ?? -1);
+        if (candidateId >= 0 && selectedSubstituteIds?.has(candidateId)) {
+          return false;
+        }
+
+        const normalizedName = item.name?.trim().toLowerCase();
+        if (normalizedName && selectedSubstituteNames?.has(normalizedName)) {
+          return false;
+        }
+
         return Boolean(item.name?.trim());
       })
       .slice(0, MAX_SUGGESTIONS);
-  }, [excludedBaseGroupId, getBaseGroupId, ingredients, searchValue]);
+  }, [
+    excludedBaseGroupId,
+    getBaseGroupId,
+    ingredients,
+    searchValue,
+    selectedSubstituteIds,
+    selectedSubstituteNames,
+  ]);
 
   const handleFocusInput = useCallback(() => {
     InteractionManager.runAfterInteractions(() => {
@@ -252,8 +273,11 @@ export function SubstituteModal({
       animationType="slide"
       onRequestClose={onClose}
       onShow={handleFocusInput}>
-      <View style={styles.modalOverlay}>
-        <View style={[styles.modalCard, { backgroundColor: paletteColors.surface }]}>
+      <Pressable style={styles.modalOverlay} onPress={onClose} accessibilityRole="button">
+        <Pressable
+          style={[styles.modalCard, { backgroundColor: paletteColors.surface }]}
+          onPress={() => {}}
+          accessibilityRole="menu">
           <View style={styles.modalHeader}>
             <View>
               <Text style={[styles.modalTitle, { color: paletteColors.onSurface }]}>Add substitute</Text>
@@ -295,8 +319,8 @@ export function SubstituteModal({
               <Text style={[styles.modalEmptyText, { color: paletteColors.onSurfaceVariant }]}>No ingredients found</Text>
             }
           />
-        </View>
-      </View>
+        </Pressable>
+      </Pressable>
     </Modal>
   );
 }
