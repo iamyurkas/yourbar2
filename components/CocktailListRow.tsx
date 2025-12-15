@@ -17,6 +17,7 @@ type CocktailListRowProps = {
   ingredients?: Ingredient[];
   ingredientLookup?: IngredientLookup;
   highlightColor?: string;
+  ignoreGarnish?: boolean;
   onPress?: () => void;
 };
 
@@ -36,6 +37,7 @@ const areCocktailRowPropsEqual = (
     prev.availableIngredientIds === next.availableIngredientIds &&
     prev.ingredientLookup === next.ingredientLookup &&
     prev.ingredients === next.ingredients &&
+    prev.ignoreGarnish === next.ignoreGarnish &&
     prev.highlightColor === next.highlightColor &&
     onPressEqual
   );
@@ -49,6 +51,7 @@ const CocktailListRowComponent = ({
   ingredients,
   ingredientLookup,
   highlightColor = palette.highlightFaint,
+  ignoreGarnish = true,
   onPress,
 }: CocktailListRowProps) => {
   const paletteColors = Colors;
@@ -62,8 +65,11 @@ const CocktailListRowComponent = ({
   const glasswareUri = resolveGlasswareUriFromId(cocktail.glassId);
 
   const { missingCount, missingNames, recipeNames, isReady } = useMemo(
-    () => summariseCocktailAvailability(cocktail, availableIngredientIds, lookup),
-    [availableIngredientIds, cocktail, lookup],
+    () =>
+      summariseCocktailAvailability(cocktail, availableIngredientIds, lookup, undefined, {
+        ignoreGarnish,
+      }),
+    [availableIngredientIds, cocktail, ignoreGarnish, lookup],
   );
 
   const subtitle = useMemo(() => {

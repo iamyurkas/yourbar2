@@ -2,11 +2,11 @@ import type { Cocktail, Ingredient } from '@/providers/inventory-provider';
 import {
   createIngredientLookup,
   isRecipeIngredientAvailable,
+  type IngredientAvailabilityOptions,
   type IngredientLookup,
 } from '@/libs/ingredient-availability';
 
-const REQUIRED_INGREDIENT_FILTER = (item: Cocktail['ingredients'][number]) =>
-  !item?.optional && !item?.garnish;
+const DEFAULT_AVAILABILITY_OPTIONS: IngredientAvailabilityOptions = { ignoreGarnish: true };
 
 export type CocktailAvailabilitySummary = {
   missingCount: number;
@@ -20,10 +20,14 @@ export function summariseCocktailAvailability(
   availableIngredientIds: Set<number>,
   ingredientLookup?: IngredientLookup,
   ingredients?: Ingredient[],
+  options?: IngredientAvailabilityOptions,
 ): CocktailAvailabilitySummary {
+  const resolvedOptions = { ...DEFAULT_AVAILABILITY_OPTIONS, ...options };
   const lookup = ingredientLookup ?? createIngredientLookup(ingredients ?? []);
   const recipe = cocktail.ingredients ?? [];
-  const requiredIngredients = recipe.filter(REQUIRED_INGREDIENT_FILTER);
+  const requiredIngredients = recipe.filter(
+    (item) => !item?.optional && !(resolvedOptions.ignoreGarnish && item?.garnish),
+  );
 
   const recipeNames = recipe
     .map((ingredient) => ingredient.name)
@@ -38,7 +42,7 @@ export function summariseCocktailAvailability(
   const missingNames: string[] = [];
 
   requiredIngredients.forEach((ingredient) => {
-    if (!isRecipeIngredientAvailable(ingredient, availableIngredientIds, lookup)) {
+    if (!isRecipeIngredientAvailable(ingredient, availableIngredientIds, lookup, resolvedOptions)) {
       if (ingredient.name) {
         missingNames.push(ingredient.name);
       }
@@ -56,6 +60,13 @@ export function isCocktailReady(
   availableIngredientIds: Set<number>,
   ingredientLookup?: IngredientLookup,
   ingredients?: Ingredient[],
+  options?: IngredientAvailabilityOptions,
 ): boolean {
-  return summariseCocktailAvailability(cocktail, availableIngredientIds, ingredientLookup, ingredients).isReady;
+  return summariseCocktailAvailability(
+    cocktail,
+    availableIngredientIds,
+    ingredientLookup,
+    ingredients,
+    options,
+  ).isReady;
 }

@@ -12,6 +12,7 @@ export type InventorySnapshot<TCocktail, TIngredient> = {
   availableIngredientIds?: number[];
   shoppingIngredientIds?: number[];
   cocktailRatings?: Record<string, number>;
+  ignoreGarnish?: boolean;
 };
 
 function joinDirectoryPath(directory: string | null | undefined, filename: string): string | undefined {
