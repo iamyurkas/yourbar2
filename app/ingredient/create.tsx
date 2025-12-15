@@ -373,7 +373,7 @@ export default function CreateIngredientScreen() {
           style={[styles.container, { backgroundColor: palette.background }]}
           keyboardShouldPersistTaps="handled">
           <View style={styles.section}>
-            <Text style={[styles.label, { color: '#000' }]}>Name</Text>
+            <Text style={[styles.label, { color: palette.onSurface }]}>Name</Text>
             <TextInput
             value={name}
             onChangeText={setName}
@@ -419,7 +419,7 @@ export default function CreateIngredientScreen() {
         ) : null}
 
         <View style={styles.section}>
-            <Text style={[styles.label, { color: '#000' }]}>Tags</Text>
+            <Text style={[styles.label, { color: palette.onSurface }]}>Tags</Text>
             <Text style={[styles.hint, { color: palette.onSurfaceVariant }]}>Select one or more tags</Text>
           <View style={styles.tagList}>
             {tagSelection.map((tag) => (
@@ -438,7 +438,7 @@ export default function CreateIngredientScreen() {
         </View>
 
         <View style={styles.section}>
-            <Text style={[styles.label, { color: '#000' }]}>Base ingredient</Text>
+            <Text style={[styles.label, { color: palette.onSurface }]}>Base ingredient</Text>
           <Pressable
             accessibilityRole="button"
             accessibilityLabel={baseIngredient ? 'Change base ingredient' : 'Select base ingredient'}
@@ -497,7 +497,7 @@ export default function CreateIngredientScreen() {
         </View>
 
         <View style={[styles.section, styles.descriptionSection]}>
-            <Text style={[styles.label, { color: '#000' }]}>Description</Text>
+            <Text style={[styles.label, { color: palette.onSurface }]}>Description</Text>
             <TextInput
             value={description}
             onChangeText={setDescription}
