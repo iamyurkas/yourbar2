@@ -1046,23 +1046,24 @@ export default function CreateCocktailScreen() {
         onRequestClose={handleCloseUnitPicker}>
         <Pressable style={styles.modalOverlay} onPress={handleCloseUnitPicker}>
           <View style={[styles.modalCardSmall, { backgroundColor: palette.surface }]}>
-            <Text style={[styles.modalTitle, { color: palette.onSurface }]}>Select unit</Text>
-            <ScrollView contentContainerStyle={styles.unitList}>
+            <View style={styles.modalHeader}>
+              <Text style={[styles.modalTitle, { color: palette.onSurface }]}>Select unit</Text>
               <Pressable
-                onPress={() => handleSelectUnit(undefined)}
-                style={[styles.unitOption, { borderColor: palette.outlineVariant }]}
+                onPress={handleCloseUnitPicker}
                 accessibilityRole="button"
-                accessibilityLabel="No unit">
-                <Text style={[styles.unitLabel, { color: palette.onSurface }]}>No unit</Text>
+                accessibilityLabel="Close">
+                <MaterialCommunityIcons name="close" size={22} color={palette.onSurfaceVariant} />
               </Pressable>
+            </View>
+            <ScrollView contentContainerStyle={styles.unitList}>
               {COCKTAIL_UNIT_OPTIONS.map((option) => (
                 <Pressable
                   key={option.id}
                   onPress={() => handleSelectUnit(option.id)}
                   style={[styles.unitOption, { borderColor: palette.outlineVariant }]}
                   accessibilityRole="button"
-                  accessibilityLabel={`Select ${option.label}`}>
-                  <Text style={[styles.unitLabel, { color: palette.onSurface }]}>{option.label}</Text>
+                  accessibilityLabel={option.label ? `Select ${option.label}` : 'Select empty unit'}>
+                  <Text style={[styles.unitLabel, { color: palette.onSurface }]}>{option.label || ' '}</Text>
                 </Pressable>
               ))}
             </ScrollView>
@@ -1972,7 +1973,6 @@ const styles = StyleSheet.create({
     marginTop: 24,
   },
   unitList: {
-    gap: 12,
   },
   unitOption: {
     borderWidth: StyleSheet.hairlineWidth,
