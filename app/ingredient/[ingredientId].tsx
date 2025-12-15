@@ -125,6 +125,27 @@ export default function IngredientDetailsScreen() {
     return ingredients.find((item) => Number(item.id ?? -1) === baseId);
   }, [ingredient?.baseIngredientId, ingredients]);
 
+  const getIngredientAvailability = useCallback(
+    (item?: Ingredient | null) => {
+      if (!item?.id) {
+        return false;
+      }
+
+      const id = Number(item.id);
+      if (Number.isNaN(id)) {
+        return false;
+      }
+
+      return availableIngredientIds.has(id);
+    },
+    [availableIngredientIds],
+  );
+
+  const isBaseIngredientAvailable = useMemo(
+    () => getIngredientAvailability(baseIngredient),
+    [baseIngredient, getIngredientAvailability],
+  );
+
   const brandedIngredients = useMemo(() => {
     if (numericIngredientId == null) {
       return [];
@@ -522,7 +543,12 @@ export default function IngredientDetailsScreen() {
                   accessibilityLabel="View base ingredient"
                   style={[
                     styles.baseIngredientRow,
-                    { borderColor: palette.outline, backgroundColor: palette.surface },
+                    {
+                      borderColor: palette.outlineVariant,
+                      backgroundColor: isBaseIngredientAvailable
+                        ? palette.highlightFaint
+                        : palette.surfaceBright,
+                    },
                   ]}>
                   <View style={styles.baseIngredientInfo}>
                     <View style={styles.baseIngredientThumb}>
@@ -586,6 +612,8 @@ export default function IngredientDetailsScreen() {
                       return undefined;
                     })();
 
+                    const isBrandedAvailable = getIngredientAvailability(branded);
+
                     return (
                       <Pressable
                         key={branded.id ?? branded.name}
@@ -594,7 +622,12 @@ export default function IngredientDetailsScreen() {
                         accessibilityLabel={`View ${branded.name}`}
                         style={[
                           styles.baseIngredientRow,
-                          { borderColor: palette.outline, backgroundColor: palette.surface },
+                          {
+                            borderColor: palette.outlineVariant,
+                            backgroundColor: isBrandedAvailable
+                              ? palette.highlightFaint
+                              : palette.surfaceBright,
+                          },
                         ]}>
                         <View style={styles.baseIngredientInfo}>
                           <View style={styles.baseIngredientThumb}>
@@ -813,9 +846,9 @@ const styles = StyleSheet.create({
   baseIngredientThumb: {
     width: 56,
     height: 56,
-    borderRadius: 12,
+    borderRadius: 8,
     overflow: 'hidden',
-    backgroundColor: 'transparent',
+    backgroundColor: Colors.surfaceBright,
   },
   baseIngredientImage: {
     width: '100%',
@@ -825,11 +858,12 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 12,
+    borderRadius: 8,
+    backgroundColor: Colors.surfaceBright,
   },
   baseIngredientName: {
-    fontSize: 14,
-    fontWeight: '500',
+    fontSize: 16,
+    fontWeight: '400',
   },
   baseIngredientActions: {
     flexDirection: 'row',
