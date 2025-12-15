@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
     width: 22,
     height: 22,
     borderRadius: 6,
-    borderWidth: StyleSheet.hairlineWidth,
+    borderWidth: 2,
     alignItems: 'center',
     justifyContent: 'center',
   },
