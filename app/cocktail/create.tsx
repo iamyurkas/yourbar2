@@ -26,6 +26,7 @@ import {
 } from 'react-native';
 
 import { resolveAssetFromCatalog } from '@/assets/image-manifest';
+import { HeaderIconButton } from '@/components/HeaderIconButton';
 import { ListRow, Thumb } from '@/components/RowParts';
 import { SubstituteModal } from '@/components/SubstituteModal';
 import { TagPill } from '@/components/TagPill';
@@ -167,9 +168,12 @@ export default function CreateCocktailScreen() {
     availableIngredientIds,
     shoppingIngredientIds,
     createCocktail,
+    updateCocktail,
   } = useInventory();
   const params = useLocalSearchParams();
 
+  const modeParam = getParamValue(params.mode);
+  const isEditMode = modeParam === 'edit';
   const sourceParam = getParamValue(params.source);
   const ingredientParam = getParamValue(params.ingredientId);
   const ingredientNameParam = getParamValue(params.ingredientName);
@@ -187,6 +191,7 @@ export default function CreateCocktailScreen() {
   const [ingredientsState, setIngredientsState] = useState<EditableIngredient[]>(() => [
     createEditableIngredient(),
   ]);
+  const [prefilledCocktail, setPrefilledCocktail] = useState<Cocktail | undefined>(undefined);
   const [unitPickerTarget, setUnitPickerTarget] = useState<string | null>(null);
   const [substituteTarget, setSubstituteTarget] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
@@ -328,6 +333,7 @@ export default function CreateCocktailScreen() {
 
     const baseCocktail = resolveCocktail(cocktailParam) ?? resolveCocktail(cocktailNameParam);
     if (baseCocktail) {
+      setPrefilledCocktail(baseCocktail);
       setName(baseCocktail.name ?? '');
       setGlassId(baseCocktail.glassId ?? 'cocktail_glass');
       setDescription(baseCocktail.description ?? '');
@@ -717,22 +723,33 @@ export default function CreateCocktailScreen() {
 
     setIsSaving(true);
     try {
-      const created = createCocktail({
-        name: trimmedName,
-        glassId: glassId ?? undefined,
-        photoUri: imageUri ?? undefined,
-        description: descriptionValue || undefined,
-        instructions: instructionsValue || undefined,
-        tags,
-        ingredients: sanitizedIngredients,
-      });
+      const persisted =
+        isEditMode && prefilledCocktail?.id != null
+          ? updateCocktail(Number(prefilledCocktail.id), {
+              name: trimmedName,
+              glassId: glassId ?? undefined,
+              photoUri: imageUri ?? undefined,
+              description: descriptionValue || undefined,
+              instructions: instructionsValue || undefined,
+              tags,
+              ingredients: sanitizedIngredients,
+            })
+          : createCocktail({
+              name: trimmedName,
+              glassId: glassId ?? undefined,
+              photoUri: imageUri ?? undefined,
+              description: descriptionValue || undefined,
+              instructions: instructionsValue || undefined,
+              tags,
+              ingredients: sanitizedIngredients,
+            });
 
-      if (!created) {
+      if (!persisted) {
         Alert.alert('Could not save cocktail', 'Please try again later.');
         return;
       }
 
-      const targetId = created.id ?? created.name;
+      const targetId = persisted.id ?? persisted.name;
       if (targetId) {
         router.replace({ pathname: '/cocktail/[cocktailId]', params: { cocktailId: String(targetId) } });
         return;
@@ -744,13 +761,16 @@ export default function CreateCocktailScreen() {
     }
   }, [
     createCocktail,
+    updateCocktail,
     description,
     glassId,
     imageUri,
     ingredientsState,
     instructions,
     isSaving,
+    isEditMode,
     name,
+    prefilledCocktail?.id,
     selectedTagIds,
   ]);
 
@@ -836,21 +856,44 @@ export default function CreateCocktailScreen() {
     <>
       <Stack.Screen
         options={{
-          title: 'Add cocktail',
+          title: isEditMode ? 'Edit cocktail' : 'Add cocktail',
           headerTitleAlign: 'center',
           headerStyle: { backgroundColor: palette.surface },
           headerShadowVisible: false,
           headerTitleStyle: { color: palette.onSurface, fontSize: 16, fontWeight: '600' },
           headerLeft: () => (
-            <Pressable
-              onPress={handleGoBack}
-              accessibilityRole="button"
-              accessibilityLabel="Go back"
-              style={styles.headerButton}
-              hitSlop={8}>
+            <HeaderIconButton onPress={handleGoBack} accessibilityLabel="Go back">
               <MaterialCommunityIcons name="arrow-left" size={22} color={palette.onSurface} />
-            </Pressable>
+            </HeaderIconButton>
           ),
+          headerRight: () => {
+            if (isEditMode || !prefilledCocktail) {
+              return null;
+            }
+
+            const targetId = prefilledCocktail.id ?? prefilledCocktail.name;
+            if (!targetId) {
+              return null;
+            }
+
+            return (
+              <HeaderIconButton
+                onPress={() =>
+                  router.replace({
+                    pathname: '/cocktail/create',
+                    params: {
+                      cocktailId: String(targetId),
+                      cocktailName: prefilledCocktail.name ?? undefined,
+                      mode: 'edit',
+                      source: sourceParam ?? undefined,
+                    },
+                  })
+                }
+                accessibilityLabel="Edit cocktail">
+                <MaterialCommunityIcons name="pencil-outline" size={20} color={palette.onSurface} />
+              </HeaderIconButton>
+            );
+          },
         }}
       />
 
@@ -2051,13 +2094,6 @@ const styles = StyleSheet.create({
     top: 8,
     right: 8,
     padding: 4,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  headerButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
   },
