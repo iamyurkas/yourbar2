@@ -133,6 +133,20 @@ export default function IngredientDetailsScreen() {
     return ingredients.filter((item) => Number(item.baseIngredientId ?? -1) === numericIngredientId);
   }, [ingredients, numericIngredientId]);
 
+  const isBaseIngredientAvailable = useMemo(() => {
+    const baseId = baseIngredient?.id;
+    if (baseId == null) {
+      return false;
+    }
+
+    const parsedId = Number(baseId);
+    if (Number.isNaN(parsedId)) {
+      return false;
+    }
+
+    return availableIngredientIds.has(parsedId);
+  }, [availableIngredientIds, baseIngredient?.id]);
+
   const baseIngredientPhotoSource = useMemo(() => {
     if (!baseIngredient?.photoUri) {
       return undefined;
@@ -522,7 +536,12 @@ export default function IngredientDetailsScreen() {
                   accessibilityLabel="View base ingredient"
                   style={[
                     styles.baseIngredientRow,
-                    { borderColor: palette.outline, backgroundColor: palette.surface },
+                    {
+                      borderColor: palette.outlineVariant,
+                      backgroundColor: isBaseIngredientAvailable
+                        ? palette.highlightFaint
+                        : palette.surfaceBright,
+                    },
                   ]}>
                   <View style={styles.baseIngredientInfo}>
                     <View style={styles.baseIngredientThumb}>
@@ -536,7 +555,7 @@ export default function IngredientDetailsScreen() {
                         <View
                           style={[
                             styles.baseIngredientPlaceholder,
-                            { backgroundColor: palette.background },
+                            { backgroundColor: palette.surfaceBright },
                           ]}>
                         </View>
                       )}
@@ -586,6 +605,20 @@ export default function IngredientDetailsScreen() {
                       return undefined;
                     })();
 
+                    const isBrandedAvailable = (() => {
+                      const brandedId = branded.id;
+                      if (brandedId == null) {
+                        return false;
+                      }
+
+                      const parsedId = Number(brandedId);
+                      if (Number.isNaN(parsedId)) {
+                        return false;
+                      }
+
+                      return availableIngredientIds.has(parsedId);
+                    })();
+
                     return (
                       <Pressable
                         key={branded.id ?? branded.name}
@@ -594,7 +627,12 @@ export default function IngredientDetailsScreen() {
                         accessibilityLabel={`View ${branded.name}`}
                         style={[
                           styles.baseIngredientRow,
-                          { borderColor: palette.outline, backgroundColor: palette.surface },
+                          {
+                            borderColor: palette.outlineVariant,
+                            backgroundColor: isBrandedAvailable
+                              ? palette.highlightFaint
+                              : palette.surfaceBright,
+                          },
                         ]}>
                         <View style={styles.baseIngredientInfo}>
                           <View style={styles.baseIngredientThumb}>
@@ -608,7 +646,7 @@ export default function IngredientDetailsScreen() {
                               <View
                                 style={[
                                   styles.baseIngredientPlaceholder,
-                                  { backgroundColor: palette.surfaceVariant },
+                                  { backgroundColor: palette.surfaceBright },
                                 ]}>
                                 <MaterialCommunityIcons
                                   name="image-off"
@@ -813,9 +851,9 @@ const styles = StyleSheet.create({
   baseIngredientThumb: {
     width: 56,
     height: 56,
-    borderRadius: 12,
+    borderRadius: 8,
     overflow: 'hidden',
-    backgroundColor: 'transparent',
+    backgroundColor: Colors.surfaceBright,
   },
   baseIngredientImage: {
     width: '100%',
@@ -825,11 +863,10 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 12,
+    borderRadius: 8,
   },
   baseIngredientName: {
-    fontSize: 14,
-    fontWeight: '500',
+    fontSize: 16,
   },
   baseIngredientActions: {
     flexDirection: 'row',
