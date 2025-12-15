@@ -24,7 +24,6 @@ import { TagPill } from '@/components/TagPill';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { Colors } from '@/constants/theme';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
-import { palette as appPalette } from '@/theme/theme';
 
 export default function CreateIngredientScreen() {
   const params = useLocalSearchParams<{ suggestedName?: string }>();
@@ -44,6 +43,8 @@ export default function CreateIngredientScreen() {
   const [isBaseModalVisible, setIsBaseModalVisible] = useState(false);
   const [baseSearch, setBaseSearch] = useState('');
   const [permissionStatus, requestPermission] = ImagePicker.useMediaLibraryPermissions();
+
+  const placeholderColor = `${palette.onSurfaceVariant}99`;
 
   useEffect(() => {
     if (suggestedNameParam && !name) {
@@ -293,7 +294,7 @@ export default function CreateIngredientScreen() {
           title={item.name ?? ''}
           onPress={() => handleSelectBaseIngredient(item)}
           selected={isSelected}
-          highlightColor={appPalette.highlightSubtle}
+          highlightColor={palette.highlightSubtle}
           thumbnail={<Thumb label={item.name ?? undefined} uri={item.photoUri} />}
           tagColor={tagColor}
           accessibilityRole="button"
@@ -375,15 +376,15 @@ export default function CreateIngredientScreen() {
           <View style={styles.section}>
             <Text style={[styles.label, { color: palette.onSurface }]}>Name</Text>
             <TextInput
-            value={name}
-            onChangeText={setName}
-            placeholder="e.g. Ginger syrup"
-            style={[
-              styles.input,
-              { borderColor: palette.outlineVariant, color: palette.text, backgroundColor: palette.surface },
-            ]}
-            placeholderTextColor={`${palette.onSurfaceVariant}99`}
-          />
+              value={name}
+              onChangeText={setName}
+              placeholder="e.g. Ginger syrup"
+              style={[
+                styles.input,
+                { borderColor: palette.outlineVariant, color: palette.text, backgroundColor: palette.surface },
+              ]}
+              placeholderTextColor={`${palette.onSurfaceVariant}99`}
+            />
         </View>
 
         <Pressable
@@ -392,19 +393,19 @@ export default function CreateIngredientScreen() {
           style={[
             styles.imagePlaceholder,
             { borderColor: palette.outlineVariant },
-            !imageUri && { backgroundColor: palette.surfaceVariant },
+            !imageUri && { backgroundColor: palette.surface },
           ]}
           onPress={handlePickImage}
-          android_ripple={{ color: `${palette.surface}33` }}>
-          {imageUri ? (
-            <Image source={{ uri: imageUri }} style={styles.image} contentFit="cover" />
-          ) : (
-            <View style={styles.placeholderContent}>
-              <MaterialCommunityIcons name="image-plus" size={28} color={palette.onSurfaceVariant} />
-              <Text style={[styles.placeholderHint, { color: palette.onSurfaceVariant }]}>Tap to add a photo</Text>
-            </View>
-          )}
-        </Pressable>
+        android_ripple={{ color: `${palette.surface}33` }}>
+        {imageUri ? (
+          <Image source={{ uri: imageUri }} style={styles.image} contentFit="cover" />
+        ) : (
+          <View style={styles.placeholderContent}>
+            <MaterialCommunityIcons name="image-plus" size={28} color={placeholderColor} />
+            <Text style={[styles.placeholderHint, { color: placeholderColor }]}>Tap to add a photo</Text>
+          </View>
+        )}
+      </Pressable>
 
         {imageUri ? (
           <Pressable
@@ -443,7 +444,11 @@ export default function CreateIngredientScreen() {
             accessibilityRole="button"
             accessibilityLabel={baseIngredient ? 'Change base ingredient' : 'Select base ingredient'}
             onPress={handleOpenBaseModal}
-            style={[styles.baseSelector, { borderColor: palette.outline, backgroundColor: palette.surface }]}
+            style={[
+              styles.input,
+              styles.baseSelector,
+              { borderColor: palette.outlineVariant, backgroundColor: palette.surface },
+            ]}
           >
             {baseIngredient ? (
               <>
@@ -488,7 +493,12 @@ export default function CreateIngredientScreen() {
                   size={20}
                   color={palette.onSurfaceVariant}
                 />
-                <Text style={[styles.basePlaceholderText, { color: palette.onSurfaceVariant }]}>
+                <Text
+                  style={[
+                    styles.basePlaceholderText,
+                    { color: `${palette.onSurfaceVariant}99`, fontSize: styles.input.fontSize },
+                  ]}
+                >
                   Select a base ingredient
                 </Text>
               </View>
@@ -656,7 +666,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     gap: 16,
-    padding: 12,
+    paddingHorizontal: 16,
+    paddingVertical: Platform.select({ ios: 14, default: 12 }),
     borderWidth: StyleSheet.hairlineWidth,
     borderRadius: 12,
   },
@@ -684,7 +695,7 @@ const styles = StyleSheet.create({
   },
   baseName: {
     fontSize: 16,
-    fontWeight: '500',
+    fontWeight: '400',
   },
   basePlaceholderRow: {
     flexDirection: 'row',
@@ -693,8 +704,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   basePlaceholderText: {
-    fontSize: 14,
-    fontWeight: '500',
+    fontSize: 16,
+    fontWeight: '400',
   },
   baseShoppingIndicator: {
     minHeight: 56,
