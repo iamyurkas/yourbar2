@@ -9,6 +9,7 @@ import {
   resolveAssetFromCatalog,
   resolveGlasswareUriFromId,
 } from '@/assets/image-manifest';
+import { HeaderIconButton } from '@/components/HeaderIconButton';
 import { ListRow, Thumb } from '@/components/RowParts';
 import { TagPill } from '@/components/TagPill';
 import { COCKTAIL_UNIT_DICTIONARY } from '@/constants/cocktail-units';
@@ -286,8 +287,25 @@ export default function CocktailDetailsScreen() {
   }, []);
 
   const handleEditPress = useCallback(() => {
-    // Editing functionality will be implemented later
-  }, []);
+    if (!cocktail) {
+      return;
+    }
+
+    const targetId = cocktail.id ?? cocktail.name;
+    if (!targetId) {
+      return;
+    }
+
+    router.push({
+      pathname: '/cocktail/create',
+      params: {
+        cocktailId: String(targetId),
+        cocktailName: cocktail.name ?? undefined,
+        mode: 'edit',
+        source: 'cocktails',
+      },
+    });
+  }, [cocktail]);
 
   return (
     <SafeAreaView
@@ -301,24 +319,14 @@ export default function CocktailDetailsScreen() {
           headerTitleStyle: { color: palette.onSurface, fontSize: 16, fontWeight: '600' },
           headerShadowVisible: false,
           headerLeft: () => (
-            <Pressable
-              onPress={() => router.back()}
-              accessibilityRole="button"
-              accessibilityLabel="Go back"
-              style={styles.headerButton}
-              hitSlop={8}>
+            <HeaderIconButton onPress={() => router.back()} accessibilityLabel="Go back">
               <MaterialCommunityIcons name="arrow-left" size={22} color={palette.onSurface} />
-            </Pressable>
+            </HeaderIconButton>
           ),
           headerRight: () => (
-            <Pressable
-              onPress={handleEditPress}
-              accessibilityRole="button"
-              accessibilityLabel="Edit cocktail"
-              style={styles.headerButton}
-              hitSlop={8}>
+            <HeaderIconButton onPress={handleEditPress} accessibilityLabel="Edit cocktail">
               <MaterialCommunityIcons name="pencil-outline" size={20} color={palette.onSurface} />
-            </Pressable>
+            </HeaderIconButton>
           ),
         }}
       />
@@ -690,13 +698,6 @@ const styles = StyleSheet.create({
     width: 16,
     height: 16,
     alignSelf: 'flex-end',
-  },
-  headerButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   emptyState: {
     flex: 1,
