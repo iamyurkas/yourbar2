@@ -169,6 +169,7 @@ export default function CreateCocktailScreen() {
     shoppingIngredientIds,
     createCocktail,
     updateCocktail,
+    deleteCocktail,
   } = useInventory();
   const params = useLocalSearchParams();
 
@@ -774,6 +775,42 @@ export default function CreateCocktailScreen() {
     selectedTagIds,
   ]);
 
+  const handleDeletePress = useCallback(() => {
+    if (!isEditMode) {
+      return;
+    }
+
+    const normalizedId = prefilledCocktail?.id != null ? Number(prefilledCocktail.id) : NaN;
+    const numericId = Number.isFinite(normalizedId) && normalizedId >= 0 ? Math.trunc(normalizedId) : undefined;
+
+    if (numericId == null) {
+      Alert.alert('Cocktail not found', 'Please try again later.');
+      return;
+    }
+
+    const trimmedName = prefilledCocktail?.name?.trim();
+    const message = trimmedName
+      ? `Are you sure you want to delete ${trimmedName}? This action cannot be undone.`
+      : 'Are you sure you want to delete this cocktail? This action cannot be undone.';
+
+    Alert.alert('Delete cocktail', message, [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Delete',
+        style: 'destructive',
+        onPress: () => {
+          const wasDeleted = deleteCocktail(numericId);
+          if (!wasDeleted) {
+            Alert.alert('Could not delete cocktail', 'Please try again later.');
+            return;
+          }
+
+          router.replace('/(tabs)/cocktails');
+        },
+      },
+    ]);
+  }, [deleteCocktail, isEditMode, prefilledCocktail?.id, prefilledCocktail?.name]);
+
   const handleGoBack = useCallback(() => {
     if (sourceParam === 'ingredient' && ingredientParam) {
       router.replace({
@@ -867,7 +904,15 @@ export default function CreateCocktailScreen() {
             </HeaderIconButton>
           ),
           headerRight: () => {
-            if (isEditMode || !prefilledCocktail) {
+            if (isEditMode) {
+              return (
+                <HeaderIconButton onPress={handleDeletePress} accessibilityLabel="Delete cocktail">
+                  <MaterialIcons name="delete-outline" size={20} color={palette.onSurface} />
+                </HeaderIconButton>
+              );
+            }
+
+            if (!prefilledCocktail) {
               return null;
             }
 
