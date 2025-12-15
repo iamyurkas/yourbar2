@@ -1793,7 +1793,7 @@ const styles = StyleSheet.create({
   reorderButton: {
     width: 28,
     height: 28,
-    borderRadius: 8,
+    borderRadius: 6,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: StyleSheet.hairlineWidth,
@@ -1817,7 +1817,7 @@ const styles = StyleSheet.create({
     bottom: 2,
     flexDirection: 'row',
     alignItems: 'center',
-    borderRadius: 10,
+    borderRadius: 12,
     paddingHorizontal: 12,
     gap: 4,
   },
