@@ -53,6 +53,7 @@ type InventoryContextValue = {
   loading: boolean;
   availableIngredientIds: Set<number>;
   shoppingIngredientIds: Set<number>;
+  ignoreGarnish: boolean;
   setIngredientAvailability: (id: number, available: boolean) => void;
   toggleIngredientAvailability: (id: number) => void;
   toggleIngredientShopping: (id: number) => void;
@@ -64,6 +65,7 @@ type InventoryContextValue = {
   cocktailRatings: Record<string, number>;
   setCocktailRating: (cocktail: Cocktail, rating: number) => void;
   getCocktailRating: (cocktail: Cocktail) => number;
+  setIgnoreGarnish: (value: boolean) => void;
 };
 
 type InventoryState = {
@@ -120,6 +122,7 @@ type InventorySnapshot = {
   availableIngredientIds?: number[];
   shoppingIngredientIds?: number[];
   cocktailRatings?: Record<string, number>;
+  ignoreGarnish?: boolean;
 };
 
 const INVENTORY_SNAPSHOT_VERSION = 1;
@@ -133,6 +136,8 @@ declare global {
   var __yourbarInventoryShoppingIngredientIds: Set<number> | undefined;
   // eslint-disable-next-line no-var
   var __yourbarInventoryCocktailRatings: Record<string, number> | undefined;
+  // eslint-disable-next-line no-var
+  var __yourbarInventoryIgnoreGarnish: boolean | undefined;
 }
 
 function normalizeSearchFields<T extends { name?: string | null; searchName?: string | null; searchTokens?: string[] | null }>(
@@ -217,6 +222,7 @@ function createSnapshotFromInventory(
     availableIngredientIds: Set<number>;
     shoppingIngredientIds: Set<number>;
     cocktailRatings: Record<string, number>;
+    ignoreGarnish: boolean;
   },
 ): InventorySnapshot {
   const sanitizedRatings = sanitizeCocktailRatings(options.cocktailRatings);
@@ -235,6 +241,7 @@ function createSnapshotFromInventory(
         ? toSortedArray(options.shoppingIngredientIds)
         : undefined,
     cocktailRatings: Object.keys(sanitizedRatings).length > 0 ? sanitizedRatings : undefined,
+    ignoreGarnish: options.ignoreGarnish,
   } satisfies InventorySnapshot;
 }
 
@@ -262,6 +269,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   const [cocktailRatings, setCocktailRatings] = useState<Record<string, number>>(() =>
     sanitizeCocktailRatings(globalThis.__yourbarInventoryCocktailRatings),
   );
+  const [ignoreGarnish, setIgnoreGarnish] = useState<boolean>(
+    () => globalThis.__yourbarInventoryIgnoreGarnish ?? true,
+  );
   const lastPersistedSnapshot = useRef<string | undefined>(undefined);
 
   useEffect(() => {
@@ -280,11 +290,13 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           const nextAvailableIds = createIngredientIdSet(stored.availableIngredientIds);
           const nextShoppingIds = createIngredientIdSet(stored.shoppingIngredientIds);
           const nextRatings = sanitizeCocktailRatings(stored.cocktailRatings);
+          const nextIgnoreGarnish = stored.ignoreGarnish ?? true;
 
           setInventoryState(nextInventoryState);
           setAvailableIngredientIds(nextAvailableIds);
           setShoppingIngredientIds(nextShoppingIds);
           setCocktailRatings(nextRatings);
+          setIgnoreGarnish(nextIgnoreGarnish);
           return;
         }
       } catch (error) {
@@ -298,6 +310,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           setAvailableIngredientIds(new Set());
           setShoppingIngredientIds(new Set());
           setCocktailRatings({});
+          setIgnoreGarnish(true);
         }
       } catch (error) {
         console.error('Failed to import bundled inventory', error);
@@ -322,11 +335,13 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     globalThis.__yourbarInventoryAvailableIngredientIds = availableIngredientIds;
     globalThis.__yourbarInventoryShoppingIngredientIds = shoppingIngredientIds;
     globalThis.__yourbarInventoryCocktailRatings = cocktailRatings;
+    globalThis.__yourbarInventoryIgnoreGarnish = ignoreGarnish;
 
     const snapshot = createSnapshotFromInventory(inventoryState, {
       availableIngredientIds,
       shoppingIngredientIds,
       cocktailRatings,
+      ignoreGarnish,
     });
     const serialized = JSON.stringify(snapshot);
 
@@ -339,7 +354,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     void persistInventorySnapshot(snapshot).catch((error) => {
       console.error('Failed to persist inventory snapshot', error);
     });
-  }, [inventoryState, availableIngredientIds, shoppingIngredientIds, cocktailRatings]);
+  }, [inventoryState, availableIngredientIds, shoppingIngredientIds, cocktailRatings, ignoreGarnish]);
 
   const cocktails = inventoryState?.cocktails ?? [];
   const ingredients = inventoryState?.ingredients ?? [];
@@ -912,6 +927,10 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     });
   }, []);
 
+  const handleSetIgnoreGarnish = useCallback((value: boolean) => {
+    setIgnoreGarnish(Boolean(value));
+  }, []);
+
   const clearBaseIngredient = useCallback((id: number) => {
     setInventoryState((prev) => {
       if (!prev) {
@@ -945,6 +964,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       loading,
       availableIngredientIds,
       shoppingIngredientIds,
+      ignoreGarnish,
       setIngredientAvailability,
       toggleIngredientAvailability,
       toggleIngredientShopping,
@@ -956,6 +976,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       cocktailRatings,
       setCocktailRating,
       getCocktailRating,
+      setIgnoreGarnish: handleSetIgnoreGarnish,
     };
   }, [
     cocktailsWithRatings,
@@ -963,6 +984,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     loading,
     availableIngredientIds,
     shoppingIngredientIds,
+    ignoreGarnish,
     setIngredientAvailability,
     toggleIngredientAvailability,
     toggleIngredientShopping,
@@ -974,6 +996,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     cocktailRatings,
     setCocktailRating,
     getCocktailRating,
+    handleSetIgnoreGarnish,
   ]);
 
   return <InventoryContext.Provider value={value}>{children}</InventoryContext.Provider>;

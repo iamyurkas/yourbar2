@@ -1,7 +1,9 @@
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { Animated, Dimensions, Modal, Pressable, StyleSheet, View } from 'react-native';
+import { Animated, Dimensions, Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Colors } from '@/constants/theme';
+import { useInventory } from '@/providers/inventory-provider';
 
 const MENU_WIDTH = Math.round(Dimensions.get('window').width * 0.75);
 const ANIMATION_DURATION = 200;
@@ -13,6 +15,7 @@ type SideMenuDrawerProps = {
 
 export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   const palette = Colors;
+  const { ignoreGarnish, setIgnoreGarnish } = useInventory();
   const [isMounted, setIsMounted] = useState(visible);
   const translateX = useRef(new Animated.Value(-MENU_WIDTH)).current;
   const backdropOpacity = useRef(new Animated.Value(0)).current;
@@ -69,6 +72,10 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     return null;
   }
 
+  const toggleIgnoreGarnish = () => {
+    setIgnoreGarnish(!ignoreGarnish);
+  };
+
   return (
     <Modal transparent visible={isMounted} statusBarTranslucent animationType="none" onRequestClose={onClose}>
       <View style={styles.container}>
@@ -79,7 +86,39 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
           />
         </Pressable>
         <Animated.View style={[drawerStyle, { transform: [{ translateX }] }]}>
-          <View style={styles.menuContent} />
+          <View style={styles.menuContent}>
+            <Text style={[styles.title, { color: palette.onSurface }]}>Settings</Text>
+            <Pressable
+              accessibilityRole="checkbox"
+              accessibilityState={{ checked: ignoreGarnish }}
+              onPress={toggleIgnoreGarnish}
+              style={[
+                styles.settingRow,
+                {
+                  borderColor: palette.outline,
+                  backgroundColor: palette.surface,
+                },
+              ]}>
+              <View
+                style={[
+                  styles.checkbox,
+                  {
+                    borderColor: ignoreGarnish ? palette.tint : palette.outlineVariant,
+                    backgroundColor: ignoreGarnish ? palette.tint : 'transparent',
+                  },
+                ]}>
+                <MaterialCommunityIcons
+                  name="check"
+                  size={16}
+                  color={ignoreGarnish ? palette.background : palette.outlineVariant}
+                />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text style={[styles.settingLabel, { color: palette.onSurface }]}>Ignore garnish</Text>
+                <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>All garnishes are optional</Text>
+              </View>
+            </Pressable>
+          </View>
         </Animated.View>
       </View>
     </Modal>
@@ -110,6 +149,41 @@ const styles = StyleSheet.create({
   },
   menuContent: {
     flex: 1,
+    padding: 24,
+    gap: 16,
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: '700',
+    marginTop: 8,
+  },
+  settingRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 12,
+    borderRadius: 12,
+    borderWidth: StyleSheet.hairlineWidth,
+  },
+  checkbox: {
+    width: 22,
+    height: 22,
+    borderRadius: 6,
+    borderWidth: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  settingTextContainer: {
+    flex: 1,
+    gap: 4,
+  },
+  settingLabel: {
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  settingCaption: {
+    fontSize: 13,
   },
 });
 

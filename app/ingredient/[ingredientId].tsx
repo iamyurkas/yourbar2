@@ -54,6 +54,7 @@ export default function IngredientDetailsScreen() {
     shoppingIngredientIds,
     toggleIngredientShopping,
     clearBaseIngredient,
+    ignoreGarnish,
   } = useInventory();
 
   const ingredient = useResolvedIngredient(
@@ -199,9 +200,15 @@ export default function IngredientDetailsScreen() {
     () =>
       cocktailsWithIngredient.map((cocktail) => ({
         cocktail,
-        isReady: isCocktailReady(cocktail, availableIngredientIds, ingredientLookup),
+        isReady: isCocktailReady(
+          cocktail,
+          availableIngredientIds,
+          ingredientLookup,
+          undefined,
+          { ignoreGarnish },
+        ),
       })),
-    [availableIngredientIds, cocktailsWithIngredient, ingredientLookup],
+    [availableIngredientIds, cocktailsWithIngredient, ignoreGarnish, ingredientLookup],
   );
 
   const handleToggleAvailability = useCallback(() => {

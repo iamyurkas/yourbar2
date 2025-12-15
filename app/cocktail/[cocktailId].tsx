@@ -133,6 +133,7 @@ export default function CocktailDetailsScreen() {
     shoppingIngredientIds,
     setCocktailRating,
     getCocktailRating,
+    ignoreGarnish,
   } = useInventory();
 
   const resolvedParam = Array.isArray(cocktailId) ? cocktailId[0] : cocktailId;
@@ -442,13 +443,19 @@ export default function CocktailDetailsScreen() {
                     const catalogEntry = ingredientId >= 0 ? ingredientCatalog.get(ingredientId) : undefined;
                     const photoUri = ingredient.photoUri ?? catalogEntry?.photoUri;
                     const isAvailable = ingredientId >= 0 && availableIngredientIds.has(ingredientId);
+                    const isIgnoredGarnish = ingredient.garnish && ignoreGarnish && !isAvailable;
+                    const isConsideredAvailable = isAvailable || (ingredient.garnish && ignoreGarnish);
                     const previousIngredient = sortedIngredients[index - 1];
                     const previousIngredientId = previousIngredient
                       ? parseIngredientId(previousIngredient)
                       : -1;
                     const previousAvailable =
                       previousIngredientId >= 0 && availableIngredientIds.has(previousIngredientId);
-                    const dividerColor = previousAvailable ? palette.outline : palette.outlineVariant;
+                    const previousConsideredAvailable =
+                      previousAvailable || (previousIngredient?.garnish && ignoreGarnish);
+                    const dividerColor = previousConsideredAvailable
+                      ? palette.outline
+                      : palette.outlineVariant;
                     const tagColor =
                       ingredient.tags?.[0]?.color ??
                       catalogEntry?.tags?.[0]?.color ??
@@ -478,12 +485,14 @@ export default function CocktailDetailsScreen() {
                         <ListRow
                           title={ingredient.name ?? ''}
                           subtitle={
-                            qualifier
-                              ? qualifier.charAt(0).toUpperCase() + qualifier.slice(1)
-                              : undefined
+                            isIgnoredGarnish
+                              ? 'Ignored garnish'
+                              : qualifier
+                                ? qualifier.charAt(0).toUpperCase() + qualifier.slice(1)
+                                : undefined
                           }
                           subtitleStyle={
-                            qualifier
+                            qualifier || isIgnoredGarnish
                               ? [styles.ingredientSubtitle, { color: palette.onSurfaceVariant }]
                               : undefined
                           }
@@ -518,11 +527,13 @@ export default function CocktailDetailsScreen() {
                             )
                           }
                           onPress={handlePress}
-                          selected={isAvailable}
+                          selected={isConsideredAvailable}
                           highlightColor={ingredientHighlightColor}
                           tagColor={tagColor}
                           accessibilityRole="button"
-                          accessibilityState={isAvailable ? { selected: true } : undefined}
+                          accessibilityState={
+                            isConsideredAvailable ? { selected: true } : isIgnoredGarnish ? { disabled: true } : undefined
+                          }
                           metaAlignment="center"
                         />
                       </View>

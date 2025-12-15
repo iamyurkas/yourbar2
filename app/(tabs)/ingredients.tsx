@@ -203,6 +203,7 @@ export default function IngredientsScreen() {
     shoppingIngredientIds,
     toggleIngredientShopping,
     toggleIngredientAvailability,
+    ignoreGarnish,
   } = useInventory();
   const [activeTab, setActiveTab] = useState<IngredientTabKey>('all');
   const [query, setQuery] = useState('');
@@ -508,7 +509,9 @@ export default function IngredientsScreen() {
   const canMakeCocktail = useCallback(
     (cocktail: Cocktail) => {
       const recipe = cocktail.ingredients ?? [];
-      const requiredIngredients = recipe.filter((ingredient) => !ingredient?.optional && !ingredient?.garnish);
+      const requiredIngredients = recipe.filter(
+        (ingredient) => !ingredient?.optional && !(ignoreGarnish && ingredient?.garnish),
+      );
 
       if (requiredIngredients.length === 0) {
         return false;
@@ -534,7 +537,7 @@ export default function IngredientsScreen() {
         return false;
       });
     },
-    [availableIngredientIds, expandIngredientIds],
+    [availableIngredientIds, expandIngredientIds, ignoreGarnish],
   );
 
   const makeableCocktailKeys = useMemo(() => {

@@ -28,7 +28,7 @@ const TAB_OPTIONS: SegmentTabOption[] = [
 ];
 
 export default function CocktailsScreen() {
-  const { cocktails, availableIngredientIds, ingredients } = useInventory();
+  const { cocktails, availableIngredientIds, ingredients, ignoreGarnish } = useInventory();
   const [activeTab, setActiveTab] = useState<CocktailTabKey>('all');
   const [query, setQuery] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -43,10 +43,10 @@ export default function CocktailsScreen() {
         return false;
       }
       return recipe.every((item) =>
-        isRecipeIngredientAvailable(item, availableIngredientIds, ingredientLookup),
+        isRecipeIngredientAvailable(item, availableIngredientIds, ingredientLookup, { ignoreGarnish }),
       );
     });
-  }, [cocktails, availableIngredientIds, ingredientLookup]);
+  }, [cocktails, availableIngredientIds, ignoreGarnish, ingredientLookup]);
 
   const ratedCocktails = useMemo(() => {
     return cocktails.filter((cocktail) => {
@@ -116,22 +116,31 @@ export default function CocktailsScreen() {
         cocktail={item}
         availableIngredientIds={availableIngredientIds}
         ingredientLookup={ingredientLookup}
+        ignoreGarnish={ignoreGarnish}
         onPress={() => handleSelectCocktail(item)}
       />
     ),
-    [availableIngredientIds, handleSelectCocktail, ingredientLookup],
+    [availableIngredientIds, handleSelectCocktail, ignoreGarnish, ingredientLookup],
   );
 
   const renderSeparator = useCallback(
     ({ leadingItem }: { leadingItem?: Cocktail | null }) => {
       const isReady = leadingItem
-        ? isCocktailReady(leadingItem, availableIngredientIds, ingredientLookup)
+        ? isCocktailReady(leadingItem, availableIngredientIds, ingredientLookup, undefined, {
+            ignoreGarnish,
+          })
         : false;
       const backgroundColor = isReady ? paletteColors.outline : paletteColors.outlineVariant;
 
       return <View style={[styles.divider, { backgroundColor }]} />;
     },
-    [availableIngredientIds, ingredientLookup, paletteColors.outline, paletteColors.outlineVariant],
+    [
+      availableIngredientIds,
+      ignoreGarnish,
+      ingredientLookup,
+      paletteColors.outline,
+      paletteColors.outlineVariant,
+    ],
   );
 
   return (

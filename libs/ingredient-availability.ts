@@ -5,6 +5,10 @@ export type IngredientLookup = {
   brandsByBaseId: Map<number, number[]>;
 };
 
+export type IngredientAvailabilityOptions = {
+  ignoreGarnish?: boolean;
+};
+
 export function createIngredientLookup(ingredients: Ingredient[]): IngredientLookup {
   const ingredientById = new Map<number, Ingredient>();
   const brandsByBaseId = new Map<number, number[]>();
@@ -38,8 +42,11 @@ export function isRecipeIngredientAvailable(
   ingredient: NonNullable<Cocktail['ingredients']>[number],
   availableIngredientIds: Set<number>,
   lookup: IngredientLookup,
+  options?: IngredientAvailabilityOptions,
 ) {
-  if (!ingredient || ingredient.optional || ingredient.garnish) {
+  const ignoreGarnish = options?.ignoreGarnish ?? true;
+
+  if (!ingredient || ingredient.optional || (ignoreGarnish && ingredient.garnish)) {
     return true;
   }
 
