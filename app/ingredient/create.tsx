@@ -24,7 +24,6 @@ import { TagPill } from '@/components/TagPill';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { Colors } from '@/constants/theme';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
-import { palette as appPalette } from '@/theme/theme';
 
 export default function CreateIngredientScreen() {
   const params = useLocalSearchParams<{ suggestedName?: string }>();
@@ -293,7 +292,7 @@ export default function CreateIngredientScreen() {
           title={item.name ?? ''}
           onPress={() => handleSelectBaseIngredient(item)}
           selected={isSelected}
-          highlightColor={appPalette.highlightSubtle}
+          highlightColor={palette.highlightSubtle}
           thumbnail={<Thumb label={item.name ?? undefined} uri={item.photoUri} />}
           tagColor={tagColor}
           accessibilityRole="button"
