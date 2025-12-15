@@ -2,6 +2,7 @@ import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   FlatList,
+  InteractionManager,
   Modal,
   Pressable,
   StyleSheet,
@@ -150,8 +151,11 @@ export function SubstituteModal({
   }, [excludedBaseGroupId, getBaseGroupId, ingredients, searchValue]);
 
   const handleFocusInput = useCallback(() => {
-    requestAnimationFrame(() => {
-      inputRef.current?.focus();
+    InteractionManager.runAfterInteractions(() => {
+      requestAnimationFrame(() => {
+        inputRef.current?.focus();
+        setTimeout(() => inputRef.current?.focus(), 50);
+      });
     });
   }, []);
 
