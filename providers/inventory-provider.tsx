@@ -63,6 +63,7 @@ type InventoryContextValue = {
   createIngredient: (input: CreateIngredientInput) => Ingredient | undefined;
   updateIngredient: (id: number, input: CreateIngredientInput) => Ingredient | undefined;
   updateCocktail: (id: number, input: CreateCocktailInput) => Cocktail | undefined;
+  deleteCocktail: (id: number) => boolean;
   deleteIngredient: (id: number) => boolean;
   cocktailRatings: Record<string, number>;
   setCocktailRating: (cocktail: Cocktail, rating: number) => void;
@@ -1091,6 +1092,71 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     return true;
   }, []);
 
+  const deleteCocktail = useCallback(
+    (id: number) => {
+      const normalizedId = Number(id);
+      if (!Number.isFinite(normalizedId) || normalizedId < 0) {
+        return false;
+      }
+
+      let targetCocktail: Cocktail | undefined;
+
+      setInventoryState((prev) => {
+        if (!prev) {
+          return prev;
+        }
+
+        let wasRemoved = false;
+
+        const nextCocktails = prev.cocktails.filter((cocktail) => {
+          const cocktailId = Number(cocktail.id ?? -1);
+          if (cocktailId === normalizedId) {
+            wasRemoved = true;
+            targetCocktail = cocktail;
+            return false;
+          }
+
+          return true;
+        });
+
+        if (!wasRemoved) {
+          return prev;
+        }
+
+        return {
+          ...prev,
+          cocktails: nextCocktails,
+        } satisfies InventoryState;
+      });
+
+      if (!targetCocktail) {
+        return false;
+      }
+
+      setCocktailRatings((prev) => {
+        const next = { ...prev };
+        let didChange = false;
+
+        const keyFromId = resolveCocktailKey(targetCocktail);
+        if (keyFromId && keyFromId in next) {
+          delete next[keyFromId];
+          didChange = true;
+        }
+
+        const nameKey = targetCocktail.name?.trim().toLowerCase();
+        if (nameKey && nameKey in next) {
+          delete next[nameKey];
+          didChange = true;
+        }
+
+        return didChange ? next : prev;
+      });
+
+      return true;
+    },
+    [resolveCocktailKey],
+  );
+
   const toggleIngredientAvailability = useCallback((id: number) => {
     setAvailableIngredientIds((prev) => {
       const next = new Set(prev);
@@ -1166,6 +1232,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       createIngredient,
       updateCocktail,
       updateIngredient,
+      deleteCocktail,
       deleteIngredient,
       cocktailRatings,
       setCocktailRating,
@@ -1189,6 +1256,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     createIngredient,
     updateCocktail,
     updateIngredient,
+    deleteCocktail,
     deleteIngredient,
     cocktailRatings,
     setCocktailRating,
