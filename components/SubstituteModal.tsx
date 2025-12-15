@@ -171,22 +171,43 @@ export function SubstituteModal({
     selectedSubstituteNames,
   ]);
 
+  const focusTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const secondaryFocusTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const clearFocusTimers = useCallback(() => {
+    if (focusTimeoutRef.current) {
+      clearTimeout(focusTimeoutRef.current);
+      focusTimeoutRef.current = null;
+    }
+    if (secondaryFocusTimeoutRef.current) {
+      clearTimeout(secondaryFocusTimeoutRef.current);
+      secondaryFocusTimeoutRef.current = null;
+    }
+  }, []);
+
   const handleFocusInput = useCallback(() => {
+    clearFocusTimers();
     InteractionManager.runAfterInteractions(() => {
       requestAnimationFrame(() => {
-        inputRef.current?.focus();
-        setTimeout(() => inputRef.current?.focus(), 50);
+        focusTimeoutRef.current = setTimeout(() => {
+          inputRef.current?.focus();
+          secondaryFocusTimeoutRef.current = setTimeout(() => inputRef.current?.focus(), 80);
+        }, 120);
       });
     });
-  }, []);
+  }, [clearFocusTimers]);
 
   useEffect(() => {
     if (visible) {
       handleFocusInput();
     } else {
+      clearFocusTimers();
+      inputRef.current?.blur();
       setSearchValue('');
     }
-  }, [handleFocusInput, visible]);
+  }, [clearFocusTimers, handleFocusInput, visible]);
+
+  useEffect(() => clearFocusTimers, [clearFocusTimers]);
 
   const renderSubtitle = useCallback(
     (baseGroupId: number | undefined) => {
