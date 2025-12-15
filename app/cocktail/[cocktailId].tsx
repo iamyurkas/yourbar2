@@ -527,7 +527,7 @@ export default function CocktailDetailsScreen() {
                           }
                           thumbnail={
                             <Thumb
-                              label={resolution.resolvedName || ingredient.name ?? undefined}
+                              label={resolution.resolvedName ?? ingredient.name ?? undefined}
                               uri={photoUri}
                               fallbackUri={catalogEntry?.photoUri}
                             />
