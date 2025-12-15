@@ -7,6 +7,7 @@ export type IngredientLookup = {
 
 export type IngredientAvailabilityOptions = {
   ignoreGarnish?: boolean;
+  allowAllSubstitutes?: boolean;
 };
 
 export function createIngredientLookup(ingredients: Ingredient[]): IngredientLookup {
@@ -45,6 +46,7 @@ export function isRecipeIngredientAvailable(
   options?: IngredientAvailabilityOptions,
 ) {
   const ignoreGarnish = options?.ignoreGarnish ?? true;
+  const allowAllSubstitutes = options?.allowAllSubstitutes ?? false;
 
   if (!ingredient || ingredient.optional || (ignoreGarnish && ingredient.garnish)) {
     return true;
@@ -63,11 +65,11 @@ export function isRecipeIngredientAvailable(
       rawBaseId != null && Number.isFinite(rawBaseId) && rawBaseId >= 0 ? Math.trunc(rawBaseId) : undefined;
 
     if (baseId != null) {
-      if (ingredient.allowBaseSubstitution) {
+      if (ingredient.allowBaseSubstitution || allowAllSubstitutes) {
         candidateIds.add(baseId);
       }
 
-      if (ingredient.allowBrandSubstitution) {
+      if (ingredient.allowBrandSubstitution || allowAllSubstitutes) {
         const brandedOptions = lookup.brandsByBaseId.get(baseId);
         brandedOptions?.forEach((brandId) => candidateIds.add(brandId));
       }

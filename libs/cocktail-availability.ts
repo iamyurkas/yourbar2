@@ -6,7 +6,10 @@ import {
   type IngredientLookup,
 } from '@/libs/ingredient-availability';
 
-const DEFAULT_AVAILABILITY_OPTIONS: IngredientAvailabilityOptions = { ignoreGarnish: true };
+const DEFAULT_AVAILABILITY_OPTIONS: IngredientAvailabilityOptions = {
+  ignoreGarnish: true,
+  allowAllSubstitutes: false,
+};
 
 export type CocktailAvailabilitySummary = {
   missingCount: number;

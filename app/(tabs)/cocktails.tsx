@@ -28,7 +28,8 @@ const TAB_OPTIONS: SegmentTabOption[] = [
 ];
 
 export default function CocktailsScreen() {
-  const { cocktails, availableIngredientIds, ingredients, ignoreGarnish } = useInventory();
+  const { cocktails, availableIngredientIds, ingredients, ignoreGarnish, allowAllSubstitutes } =
+    useInventory();
   const [activeTab, setActiveTab] = useState<CocktailTabKey>('all');
   const [query, setQuery] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -43,10 +44,13 @@ export default function CocktailsScreen() {
         return false;
       }
       return recipe.every((item) =>
-        isRecipeIngredientAvailable(item, availableIngredientIds, ingredientLookup, { ignoreGarnish }),
+        isRecipeIngredientAvailable(item, availableIngredientIds, ingredientLookup, {
+          ignoreGarnish,
+          allowAllSubstitutes,
+        }),
       );
     });
-  }, [cocktails, availableIngredientIds, ignoreGarnish, ingredientLookup]);
+  }, [cocktails, availableIngredientIds, allowAllSubstitutes, ignoreGarnish, ingredientLookup]);
 
   const ratedCocktails = useMemo(() => {
     return cocktails.filter((cocktail) => {
@@ -117,10 +121,17 @@ export default function CocktailsScreen() {
         availableIngredientIds={availableIngredientIds}
         ingredientLookup={ingredientLookup}
         ignoreGarnish={ignoreGarnish}
+        allowAllSubstitutes={allowAllSubstitutes}
         onPress={() => handleSelectCocktail(item)}
       />
     ),
-    [availableIngredientIds, handleSelectCocktail, ignoreGarnish, ingredientLookup],
+    [
+      availableIngredientIds,
+      allowAllSubstitutes,
+      handleSelectCocktail,
+      ignoreGarnish,
+      ingredientLookup,
+    ],
   );
 
   const renderSeparator = useCallback(
@@ -128,6 +139,7 @@ export default function CocktailsScreen() {
       const isReady = leadingItem
         ? isCocktailReady(leadingItem, availableIngredientIds, ingredientLookup, undefined, {
             ignoreGarnish,
+            allowAllSubstitutes,
           })
         : false;
       const backgroundColor = isReady ? paletteColors.outline : paletteColors.outlineVariant;
@@ -136,6 +148,7 @@ export default function CocktailsScreen() {
     },
     [
       availableIngredientIds,
+      allowAllSubstitutes,
       ignoreGarnish,
       ingredientLookup,
       paletteColors.outline,

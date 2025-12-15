@@ -54,6 +54,7 @@ type InventoryContextValue = {
   availableIngredientIds: Set<number>;
   shoppingIngredientIds: Set<number>;
   ignoreGarnish: boolean;
+  allowAllSubstitutes: boolean;
   setIngredientAvailability: (id: number, available: boolean) => void;
   toggleIngredientAvailability: (id: number) => void;
   toggleIngredientShopping: (id: number) => void;
@@ -66,6 +67,7 @@ type InventoryContextValue = {
   setCocktailRating: (cocktail: Cocktail, rating: number) => void;
   getCocktailRating: (cocktail: Cocktail) => number;
   setIgnoreGarnish: (value: boolean) => void;
+  setAllowAllSubstitutes: (value: boolean) => void;
 };
 
 type InventoryState = {
@@ -123,6 +125,7 @@ type InventorySnapshot = {
   shoppingIngredientIds?: number[];
   cocktailRatings?: Record<string, number>;
   ignoreGarnish?: boolean;
+  allowAllSubstitutes?: boolean;
 };
 
 const INVENTORY_SNAPSHOT_VERSION = 1;
@@ -138,6 +141,8 @@ declare global {
   var __yourbarInventoryCocktailRatings: Record<string, number> | undefined;
   // eslint-disable-next-line no-var
   var __yourbarInventoryIgnoreGarnish: boolean | undefined;
+  // eslint-disable-next-line no-var
+  var __yourbarInventoryAllowAllSubstitutes: boolean | undefined;
 }
 
 function normalizeSearchFields<T extends { name?: string | null; searchName?: string | null; searchTokens?: string[] | null }>(
@@ -223,6 +228,7 @@ function createSnapshotFromInventory(
     shoppingIngredientIds: Set<number>;
     cocktailRatings: Record<string, number>;
     ignoreGarnish: boolean;
+    allowAllSubstitutes: boolean;
   },
 ): InventorySnapshot {
   const sanitizedRatings = sanitizeCocktailRatings(options.cocktailRatings);
@@ -242,6 +248,7 @@ function createSnapshotFromInventory(
         : undefined,
     cocktailRatings: Object.keys(sanitizedRatings).length > 0 ? sanitizedRatings : undefined,
     ignoreGarnish: options.ignoreGarnish,
+    allowAllSubstitutes: options.allowAllSubstitutes,
   } satisfies InventorySnapshot;
 }
 
@@ -272,6 +279,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   const [ignoreGarnish, setIgnoreGarnish] = useState<boolean>(
     () => globalThis.__yourbarInventoryIgnoreGarnish ?? true,
   );
+  const [allowAllSubstitutes, setAllowAllSubstitutes] = useState<boolean>(
+    () => globalThis.__yourbarInventoryAllowAllSubstitutes ?? false,
+  );
   const lastPersistedSnapshot = useRef<string | undefined>(undefined);
 
   useEffect(() => {
@@ -291,12 +301,14 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           const nextShoppingIds = createIngredientIdSet(stored.shoppingIngredientIds);
           const nextRatings = sanitizeCocktailRatings(stored.cocktailRatings);
           const nextIgnoreGarnish = stored.ignoreGarnish ?? true;
+          const nextAllowAllSubstitutes = stored.allowAllSubstitutes ?? false;
 
           setInventoryState(nextInventoryState);
           setAvailableIngredientIds(nextAvailableIds);
           setShoppingIngredientIds(nextShoppingIds);
           setCocktailRatings(nextRatings);
           setIgnoreGarnish(nextIgnoreGarnish);
+          setAllowAllSubstitutes(nextAllowAllSubstitutes);
           return;
         }
       } catch (error) {
@@ -311,6 +323,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           setShoppingIngredientIds(new Set());
           setCocktailRatings({});
           setIgnoreGarnish(true);
+          setAllowAllSubstitutes(false);
         }
       } catch (error) {
         console.error('Failed to import bundled inventory', error);
@@ -336,12 +349,14 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     globalThis.__yourbarInventoryShoppingIngredientIds = shoppingIngredientIds;
     globalThis.__yourbarInventoryCocktailRatings = cocktailRatings;
     globalThis.__yourbarInventoryIgnoreGarnish = ignoreGarnish;
+    globalThis.__yourbarInventoryAllowAllSubstitutes = allowAllSubstitutes;
 
     const snapshot = createSnapshotFromInventory(inventoryState, {
       availableIngredientIds,
       shoppingIngredientIds,
       cocktailRatings,
       ignoreGarnish,
+      allowAllSubstitutes,
     });
     const serialized = JSON.stringify(snapshot);
 
@@ -354,7 +369,14 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     void persistInventorySnapshot(snapshot).catch((error) => {
       console.error('Failed to persist inventory snapshot', error);
     });
-  }, [inventoryState, availableIngredientIds, shoppingIngredientIds, cocktailRatings, ignoreGarnish]);
+  }, [
+    inventoryState,
+    availableIngredientIds,
+    shoppingIngredientIds,
+    cocktailRatings,
+    ignoreGarnish,
+    allowAllSubstitutes,
+  ]);
 
   const cocktails = inventoryState?.cocktails ?? [];
   const ingredients = inventoryState?.ingredients ?? [];
@@ -931,6 +953,10 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     setIgnoreGarnish(Boolean(value));
   }, []);
 
+  const handleSetAllowAllSubstitutes = useCallback((value: boolean) => {
+    setAllowAllSubstitutes(Boolean(value));
+  }, []);
+
   const clearBaseIngredient = useCallback((id: number) => {
     setInventoryState((prev) => {
       if (!prev) {
@@ -965,6 +991,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       availableIngredientIds,
       shoppingIngredientIds,
       ignoreGarnish,
+      allowAllSubstitutes,
       setIngredientAvailability,
       toggleIngredientAvailability,
       toggleIngredientShopping,
@@ -977,6 +1004,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       setCocktailRating,
       getCocktailRating,
       setIgnoreGarnish: handleSetIgnoreGarnish,
+      setAllowAllSubstitutes: handleSetAllowAllSubstitutes,
     };
   }, [
     cocktailsWithRatings,
@@ -985,6 +1013,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     availableIngredientIds,
     shoppingIngredientIds,
     ignoreGarnish,
+    allowAllSubstitutes,
     setIngredientAvailability,
     toggleIngredientAvailability,
     toggleIngredientShopping,
@@ -997,6 +1026,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     setCocktailRating,
     getCocktailRating,
     handleSetIgnoreGarnish,
+    handleSetAllowAllSubstitutes,
   ]);
 
   return <InventoryContext.Provider value={value}>{children}</InventoryContext.Provider>;
