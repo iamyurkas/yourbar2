@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 12,
     paddingVertical: 12,
-    paddingHorizontal: 12,
+    paddingRight: 12,
     borderRadius: 12,
     borderWidth: StyleSheet.hairlineWidth,
   },
