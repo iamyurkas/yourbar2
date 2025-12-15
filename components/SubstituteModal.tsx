@@ -242,7 +242,12 @@ export function SubstituteModal({
   );
 
   return (
-    <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
+    <Modal
+      visible={visible}
+      transparent
+      animationType="slide"
+      onRequestClose={onClose}
+      onShow={handleFocusInput}>
       <View style={styles.modalOverlay}>
         <View style={[styles.modalCard, { backgroundColor: paletteColors.surface }]}>
           <View style={styles.modalHeader}>
@@ -265,7 +270,14 @@ export function SubstituteModal({
             onChangeText={setSearchValue}
             placeholder="Search ingredients"
             placeholderTextColor={`${paletteColors.onSurfaceVariant}99`}
-            style={[styles.input, { borderColor: paletteColors.outlineVariant, color: paletteColors.text }]}
+            style={[
+              styles.input,
+              {
+                borderColor: paletteColors.outlineVariant,
+                color: paletteColors.text,
+                backgroundColor: palette.surfaceBright,
+              },
+            ]}
             autoFocus
           />
           <FlatList
