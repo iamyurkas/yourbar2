@@ -143,8 +143,25 @@ export function resolveIngredientAvailability(
   const allowBrand = ingredient.allowBrandSubstitution || allowAllSubstitutes;
 
   const baseSubstituteIds = allowBase && baseId != null ? [baseId] : [];
-  const brandedSubstituteIds =
-    allowBrand && baseId != null ? (lookup.brandsByBaseId.get(baseId)?.filter((id) => id !== requestedId) ?? []) : [];
+  const brandedSubstituteSet = new Set<number>();
+
+  if (allowBrand && baseId != null) {
+    lookup.brandsByBaseId.get(baseId)?.forEach((id) => {
+      if (id !== requestedId) {
+        brandedSubstituteSet.add(id);
+      }
+    });
+  }
+
+  if (requestedId != null) {
+    lookup.brandsByBaseId.get(requestedId)?.forEach((id) => {
+      if (id !== requestedId) {
+        brandedSubstituteSet.add(id);
+      }
+    });
+  }
+
+  const brandedSubstituteIds = Array.from(brandedSubstituteSet);
   const declaredSubstituteIds = (ingredient.substitutes ?? [])
     .map((substitute) => {
       if (typeof substitute.ingredientId === 'number') {
