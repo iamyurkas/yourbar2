@@ -98,15 +98,17 @@ function formatIngredientQuantity(ingredient: RecipeIngredient): string {
 }
 
 function getIngredientQualifier(ingredient: RecipeIngredient): string | undefined {
-  if (ingredient.optional) {
-    return 'optional';
-  }
+  const qualifiers: string[] = [];
 
   if (ingredient.garnish) {
-    return 'garnish';
+    qualifiers.push('garnish');
   }
 
-  return undefined;
+  if (ingredient.optional) {
+    qualifiers.push('optional');
+  }
+
+  return qualifiers.join(', ') || undefined;
 }
 
 function formatGlassLabel(glassId?: string | null) {
@@ -451,7 +453,6 @@ export default function CocktailDetailsScreen() {
                     const catalogEntry = ingredientId >= 0 ? ingredientCatalog.get(ingredientId) : undefined;
                     const photoUri = ingredient.photoUri ?? catalogEntry?.photoUri;
                     const isAvailable = ingredientId >= 0 && availableIngredientIds.has(ingredientId);
-                    const isIgnoredGarnish = ingredient.garnish && ignoreGarnish && !isAvailable;
                     const isConsideredAvailable = isAvailable || (ingredient.garnish && ignoreGarnish);
                     const previousIngredient = sortedIngredients[index - 1];
                     const previousIngredientId = previousIngredient
@@ -493,14 +494,12 @@ export default function CocktailDetailsScreen() {
                         <ListRow
                           title={ingredient.name ?? ''}
                           subtitle={
-                            isIgnoredGarnish
-                              ? 'Ignored garnish'
-                              : qualifier
-                                ? qualifier.charAt(0).toUpperCase() + qualifier.slice(1)
-                                : undefined
+                            qualifier
+                              ? qualifier.charAt(0).toUpperCase() + qualifier.slice(1)
+                              : undefined
                           }
                           subtitleStyle={
-                            qualifier || isIgnoredGarnish
+                            qualifier
                               ? [styles.ingredientSubtitle, { color: palette.onSurfaceVariant }]
                               : undefined
                           }
@@ -539,9 +538,7 @@ export default function CocktailDetailsScreen() {
                           highlightColor={ingredientHighlightColor}
                           tagColor={tagColor}
                           accessibilityRole="button"
-                          accessibilityState={
-                            isConsideredAvailable ? { selected: true } : isIgnoredGarnish ? { disabled: true } : undefined
-                          }
+                          accessibilityState={isConsideredAvailable ? { selected: true } : undefined}
                           metaAlignment="center"
                         />
                       </View>
