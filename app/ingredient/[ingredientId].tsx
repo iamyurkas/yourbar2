@@ -536,7 +536,7 @@ export default function IngredientDetailsScreen() {
                   style={[
                     styles.baseIngredientRow,
                     {
-                      borderColor: palette.outline,
+                      borderColor: palette.outlineVariant,
                       backgroundColor: isBaseIngredientAvailable
                         ? palette.highlightFaint
                         : palette.surfaceBright,
@@ -552,10 +552,10 @@ export default function IngredientDetailsScreen() {
                         />
                       ) : (
                         <View
-                          style={[
-                            styles.baseIngredientPlaceholder,
-                            { backgroundColor: palette.surfaceBright },
-                          ]}>
+                        style={[
+                          styles.baseIngredientPlaceholder,
+                          { backgroundColor: palette.surfaceBright },
+                        ]}>
                         </View>
                       )}
                     </View>
@@ -613,7 +613,7 @@ export default function IngredientDetailsScreen() {
                         style={[
                           styles.baseIngredientRow,
                           {
-                            borderColor: palette.outline,
+                            borderColor: palette.outlineVariant,
                             backgroundColor: availableIngredientIds.has(Number(branded.id ?? -1))
                               ? palette.highlightFaint
                               : palette.surfaceBright,
@@ -848,7 +848,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 12,
+    borderRadius: 0,
   },
   baseIngredientName: {
     fontSize: 16,
