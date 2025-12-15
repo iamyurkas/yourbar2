@@ -471,7 +471,7 @@ export default function EditIngredientScreen() {
         style={styles.container}
         keyboardShouldPersistTaps="handled">
         <View style={styles.section}>
-          <Text style={[styles.label, { color: paletteColors.onSurfaceVariant }]}>Name</Text>
+          <Text style={[styles.label, { color: '#000' }]}>Name</Text>
           <TextInput
             value={name}
             onChangeText={setName}
@@ -501,7 +501,7 @@ export default function EditIngredientScreen() {
         </Pressable>
 
         <View style={styles.section}>
-          <Text style={[styles.label, { color: paletteColors.onSurfaceVariant }]}>Tags</Text>
+          <Text style={[styles.label, { color: '#000' }]}>Tags</Text>
           <Text style={[styles.hint, { color: paletteColors.onSurfaceVariant }]}>Select one or more tags</Text>
           <View style={styles.tagList}>
             {tagSelection.map((tag) => (
@@ -520,7 +520,7 @@ export default function EditIngredientScreen() {
         </View>
 
         <View style={styles.section}>
-          <Text style={[styles.label, { color: paletteColors.onSurfaceVariant }]}>Base ingredient</Text>
+          <Text style={[styles.label, { color: '#000' }]}>Base ingredient</Text>
           <Pressable
             accessibilityRole="button"
             accessibilityLabel={baseIngredient ? 'Change base ingredient' : 'Select base ingredient'}
@@ -579,7 +579,7 @@ export default function EditIngredientScreen() {
         </View>
 
         <View style={[styles.section, styles.descriptionSection]}>
-          <Text style={[styles.label, { color: paletteColors.onSurfaceVariant }]}>Description</Text>
+          <Text style={[styles.label, { color: '#000' }]}>Description</Text>
           <TextInput
             value={description}
             onChangeText={setDescription}
@@ -587,7 +587,11 @@ export default function EditIngredientScreen() {
             style={[
               styles.input,
               styles.multilineInput,
-              { borderColor: paletteColors.outlineVariant, color: paletteColors.text },
+              {
+                borderColor: paletteColors.outlineVariant,
+                color: paletteColors.text,
+                backgroundColor: paletteColors.surface,
+              },
             ]}
             placeholderTextColor={`${paletteColors.onSurfaceVariant}99`}
             multiline
