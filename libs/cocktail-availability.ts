@@ -1,7 +1,7 @@
 import type { Cocktail, Ingredient } from '@/providers/inventory-provider';
 import {
   createIngredientLookup,
-  isRecipeIngredientAvailable,
+  resolveIngredientAvailability,
   type IngredientAvailabilityOptions,
   type IngredientLookup,
 } from '@/libs/ingredient-availability';
@@ -16,6 +16,7 @@ export type CocktailAvailabilitySummary = {
   missingNames: string[];
   recipeNames: string[];
   isReady: boolean;
+  ingredientLine: string;
 };
 
 export function summariseCocktailAvailability(
@@ -39,23 +40,47 @@ export function summariseCocktailAvailability(
     .filter(Boolean);
 
   if (requiredIngredients.length === 0) {
-    return { missingCount: 0, missingNames: [], recipeNames, isReady: false };
+    return { missingCount: 0, missingNames: [], recipeNames, isReady: false, ingredientLine: '' };
   }
 
   const missingNames: string[] = [];
+  const resolvedNames: string[] = [];
+  let missingCount = 0;
 
   requiredIngredients.forEach((ingredient) => {
-    if (!isRecipeIngredientAvailable(ingredient, availableIngredientIds, lookup, resolvedOptions)) {
-      if (ingredient.name) {
-        missingNames.push(ingredient.name);
+    const resolution = resolveIngredientAvailability(
+      ingredient,
+      availableIngredientIds,
+      lookup,
+      resolvedOptions,
+    );
+
+    if (resolution.isAvailable) {
+      if (resolution.resolvedName) {
+        resolvedNames.push(resolution.resolvedName);
       }
+      return;
+    }
+
+    missingCount += 1;
+    if (resolution.missingName) {
+      missingNames.push(resolution.missingName);
     }
   });
 
-  const missingCount = missingNames.length;
+  let ingredientLine = '';
+
+  if (missingCount === 0) {
+    ingredientLine = resolvedNames.join(', ');
+  } else if (missingCount >= 3 || missingNames.length === 0) {
+    ingredientLine = `Missing: ${missingCount} ingredients`;
+  } else {
+    ingredientLine = `Missing: ${missingNames.join(', ')}`;
+  }
+
   const isReady = missingCount === 0 && requiredIngredients.length > 0;
 
-  return { missingCount, missingNames, recipeNames, isReady };
+  return { missingCount, missingNames, recipeNames, isReady, ingredientLine };
 }
 
 export function isCocktailReady(
