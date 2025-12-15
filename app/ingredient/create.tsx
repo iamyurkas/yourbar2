@@ -375,15 +375,15 @@ export default function CreateIngredientScreen() {
           <View style={styles.section}>
             <Text style={[styles.label, { color: palette.onSurface }]}>Name</Text>
             <TextInput
-            value={name}
-            onChangeText={setName}
-            placeholder="e.g. Ginger syrup"
-            style={[
-              styles.input,
-              { borderColor: palette.outlineVariant, color: palette.text, backgroundColor: palette.surface },
-            ]}
-            placeholderTextColor={`${palette.onSurfaceVariant}99`}
-          />
+              value={name}
+              onChangeText={setName}
+              placeholder="e.g. Ginger syrup"
+              style={[
+                styles.input,
+                { borderColor: palette.outlineVariant, color: palette.text, backgroundColor: palette.surface },
+              ]}
+              placeholderTextColor={`${palette.onSurfaceVariant}99`}
+            />
         </View>
 
         <Pressable
@@ -443,7 +443,11 @@ export default function CreateIngredientScreen() {
             accessibilityRole="button"
             accessibilityLabel={baseIngredient ? 'Change base ingredient' : 'Select base ingredient'}
             onPress={handleOpenBaseModal}
-            style={[styles.baseSelector, { borderColor: palette.outline, backgroundColor: palette.surface }]}
+            style={[
+              styles.input,
+              styles.baseSelector,
+              { borderColor: palette.outlineVariant, backgroundColor: palette.surface },
+            ]}
           >
             {baseIngredient ? (
               <>
@@ -488,7 +492,12 @@ export default function CreateIngredientScreen() {
                   size={20}
                   color={palette.onSurfaceVariant}
                 />
-                <Text style={[styles.basePlaceholderText, { color: palette.onSurfaceVariant }]}>
+                <Text
+                  style={[
+                    styles.basePlaceholderText,
+                    { color: `${palette.onSurfaceVariant}99`, fontSize: styles.input.fontSize },
+                  ]}
+                >
                   Select a base ingredient
                 </Text>
               </View>
@@ -656,7 +665,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     gap: 16,
-    padding: 12,
+    paddingHorizontal: 16,
+    paddingVertical: Platform.select({ ios: 14, default: 12 }),
     borderWidth: StyleSheet.hairlineWidth,
     borderRadius: 12,
   },
@@ -684,7 +694,7 @@ const styles = StyleSheet.create({
   },
   baseName: {
     fontSize: 16,
-    fontWeight: '500',
+    fontWeight: '400',
   },
   basePlaceholderRow: {
     flexDirection: 'row',
@@ -693,8 +703,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   basePlaceholderText: {
-    fontSize: 14,
-    fontWeight: '500',
+    fontSize: 16,
+    fontWeight: '400',
   },
   baseShoppingIndicator: {
     minHeight: 56,

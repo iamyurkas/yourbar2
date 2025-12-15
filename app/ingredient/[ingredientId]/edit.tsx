@@ -525,7 +525,14 @@ export default function EditIngredientScreen() {
             accessibilityRole="button"
             accessibilityLabel={baseIngredient ? 'Change base ingredient' : 'Select base ingredient'}
             onPress={handleOpenBaseModal}
-            style={[styles.baseSelector, { borderColor: paletteColors.outline, backgroundColor: paletteColors.surface }]}
+            style={[
+              styles.input,
+              styles.baseSelector,
+              {
+                borderColor: paletteColors.outlineVariant,
+                backgroundColor: paletteColors.surface,
+              },
+            ]}
           >
             {baseIngredient ? (
               <>
@@ -570,7 +577,12 @@ export default function EditIngredientScreen() {
                   size={20}
                   color={paletteColors.onSurfaceVariant}
                 />
-                <Text style={[styles.basePlaceholderText, { color: paletteColors.onSurfaceVariant }]}>
+                <Text
+                  style={[
+                    styles.basePlaceholderText,
+                    { color: `${paletteColors.onSurfaceVariant}99`, fontSize: styles.input.fontSize },
+                  ]}
+                >
                   Select a base ingredient
                 </Text>
               </View>
@@ -739,7 +751,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     gap: 16,
-    padding: 12,
+    paddingHorizontal: 16,
+    paddingVertical: Platform.select({ ios: 14, default: 12 }),
     borderWidth: StyleSheet.hairlineWidth,
     borderRadius: 12,
   },
@@ -766,8 +779,8 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   baseName: {
-    fontSize: 16,
-    fontWeight: '500',
+    fontSize: 14,
+    fontWeight: '400',
   },
   basePlaceholderRow: {
     flexDirection: 'row',
@@ -777,7 +790,7 @@ const styles = StyleSheet.create({
   },
   basePlaceholderText: {
     fontSize: 14,
-    fontWeight: '500',
+    fontWeight: '400',
   },
   baseShoppingIndicator: {
     minHeight: 56,
