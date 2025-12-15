@@ -18,6 +18,7 @@ type CocktailListRowProps = {
   ingredientLookup?: IngredientLookup;
   highlightColor?: string;
   ignoreGarnish?: boolean;
+  allowAllSubstitutes?: boolean;
   onPress?: () => void;
 };
 
@@ -38,6 +39,7 @@ const areCocktailRowPropsEqual = (
     prev.ingredientLookup === next.ingredientLookup &&
     prev.ingredients === next.ingredients &&
     prev.ignoreGarnish === next.ignoreGarnish &&
+    prev.allowAllSubstitutes === next.allowAllSubstitutes &&
     prev.highlightColor === next.highlightColor &&
     onPressEqual
   );
@@ -52,6 +54,7 @@ const CocktailListRowComponent = ({
   ingredientLookup,
   highlightColor = palette.highlightFaint,
   ignoreGarnish = true,
+  allowAllSubstitutes = false,
   onPress,
 }: CocktailListRowProps) => {
   const paletteColors = Colors;
@@ -68,8 +71,9 @@ const CocktailListRowComponent = ({
     () =>
       summariseCocktailAvailability(cocktail, availableIngredientIds, lookup, undefined, {
         ignoreGarnish,
+        allowAllSubstitutes,
       }),
-    [availableIngredientIds, cocktail, ignoreGarnish, lookup],
+    [availableIngredientIds, cocktail, allowAllSubstitutes, ignoreGarnish, lookup],
   );
 
   const subtitle = useMemo(() => {

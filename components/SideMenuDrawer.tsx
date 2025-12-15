@@ -15,7 +15,8 @@ type SideMenuDrawerProps = {
 
 export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   const palette = Colors;
-  const { ignoreGarnish, setIgnoreGarnish } = useInventory();
+  const { ignoreGarnish, setIgnoreGarnish, allowAllSubstitutes, setAllowAllSubstitutes } =
+    useInventory();
   const [isMounted, setIsMounted] = useState(visible);
   const translateX = useRef(new Animated.Value(-MENU_WIDTH)).current;
   const backdropOpacity = useRef(new Animated.Value(0)).current;
@@ -76,6 +77,10 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     setIgnoreGarnish(!ignoreGarnish);
   };
 
+  const toggleAllowAllSubstitutes = () => {
+    setAllowAllSubstitutes(!allowAllSubstitutes);
+  };
+
   return (
     <Modal transparent visible={isMounted} statusBarTranslucent animationType="none" onRequestClose={onClose}>
       <View style={styles.container}>
@@ -116,6 +121,38 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               <View style={styles.settingTextContainer}>
                 <Text style={[styles.settingLabel, { color: palette.onSurface }]}>Ignore garnish</Text>
                 <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>All garnishes are optional</Text>
+              </View>
+            </Pressable>
+            <Pressable
+              accessibilityRole="checkbox"
+              accessibilityState={{ checked: allowAllSubstitutes }}
+              onPress={toggleAllowAllSubstitutes}
+              style={[
+                styles.settingRow,
+                {
+                  borderColor: palette.outline,
+                  backgroundColor: palette.surface,
+                },
+              ]}>
+              <View
+                style={[
+                  styles.checkbox,
+                  {
+                    borderColor: allowAllSubstitutes ? palette.tint : palette.outlineVariant,
+                    backgroundColor: allowAllSubstitutes ? palette.tint : 'transparent',
+                  },
+                ]}>
+                <MaterialCommunityIcons
+                  name="check"
+                  size={16}
+                  color={allowAllSubstitutes ? palette.background : palette.outlineVariant}
+                />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text style={[styles.settingLabel, { color: palette.onSurface }]}>Allow all substitutes</Text>
+                <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>
+                  Use base or branded alternative regardless of recipe
+                </Text>
               </View>
             </Pressable>
           </View>
