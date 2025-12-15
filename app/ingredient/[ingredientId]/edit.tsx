@@ -49,6 +49,8 @@ export default function EditIngredientScreen() {
   const { ingredients, shoppingIngredientIds, updateIngredient, deleteIngredient } =
     useInventory();
 
+  const placeholderColor = `${palette.onSurfaceVariant}99`;
+
   const ingredient = useResolvedIngredient(
     Array.isArray(ingredientId) ? ingredientId[0] : ingredientId,
     ingredients,
@@ -489,16 +491,16 @@ export default function EditIngredientScreen() {
             !imageSource && { backgroundColor: palette.surface },
           ]}
           onPress={handlePickImage}
-          android_ripple={{ color: `${palette.surface}33` }}>
-          {imageSource ? (
-            <Image source={imageSource} style={styles.image} contentFit="contain" />
-          ) : (
-            <View style={styles.placeholderContent}>
-              <MaterialCommunityIcons name="image-plus" size={28} color={palette.text} />
-              <Text style={[styles.placeholderHint, { color: palette.text }]}>Tap to add a photo</Text>
-            </View>
-          )}
-        </Pressable>
+        android_ripple={{ color: `${palette.surface}33` }}>
+        {imageSource ? (
+          <Image source={imageSource} style={styles.image} contentFit="contain" />
+        ) : (
+          <View style={styles.placeholderContent}>
+            <MaterialCommunityIcons name="image-plus" size={28} color={placeholderColor} />
+            <Text style={[styles.placeholderHint, { color: placeholderColor }]}>Tap to add a photo</Text>
+          </View>
+        )}
+      </Pressable>
 
         <View style={styles.section}>
           <Text style={[styles.label, { color: palette.onSurface }]}>Tags</Text>

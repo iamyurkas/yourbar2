@@ -44,6 +44,8 @@ export default function CreateIngredientScreen() {
   const [baseSearch, setBaseSearch] = useState('');
   const [permissionStatus, requestPermission] = ImagePicker.useMediaLibraryPermissions();
 
+  const placeholderColor = `${palette.onSurfaceVariant}99`;
+
   useEffect(() => {
     if (suggestedNameParam && !name) {
       setName(suggestedNameParam);
@@ -394,16 +396,16 @@ export default function CreateIngredientScreen() {
             !imageUri && { backgroundColor: palette.surface },
           ]}
           onPress={handlePickImage}
-          android_ripple={{ color: `${palette.surface}33` }}>
-          {imageUri ? (
-            <Image source={{ uri: imageUri }} style={styles.image} contentFit="cover" />
-          ) : (
-            <View style={styles.placeholderContent}>
-              <MaterialCommunityIcons name="image-plus" size={28} color={palette.text} />
-              <Text style={[styles.placeholderHint, { color: palette.text }]}>Tap to add a photo</Text>
-            </View>
-          )}
-        </Pressable>
+        android_ripple={{ color: `${palette.surface}33` }}>
+        {imageUri ? (
+          <Image source={{ uri: imageUri }} style={styles.image} contentFit="cover" />
+        ) : (
+          <View style={styles.placeholderContent}>
+            <MaterialCommunityIcons name="image-plus" size={28} color={placeholderColor} />
+            <Text style={[styles.placeholderHint, { color: placeholderColor }]}>Tap to add a photo</Text>
+          </View>
+        )}
+      </Pressable>
 
         {imageUri ? (
           <Pressable
