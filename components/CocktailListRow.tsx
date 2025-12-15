@@ -67,7 +67,7 @@ const CocktailListRowComponent = ({
   }, [ingredientLookup, ingredients]);
   const glasswareUri = resolveGlasswareUriFromId(cocktail.glassId);
 
-  const { missingCount, missingNames, recipeNames, isReady } = useMemo(
+  const { missingCount, recipeNames, isReady, ingredientLine } = useMemo(
     () =>
       summariseCocktailAvailability(cocktail, availableIngredientIds, lookup, undefined, {
         ignoreGarnish,
@@ -77,24 +77,12 @@ const CocktailListRowComponent = ({
   );
 
   const subtitle = useMemo(() => {
-    if (missingCount === 0) {
-      if (recipeNames.length === 0) {
-        return 'All ingredients ready';
-      }
-
-      return recipeNames.join(', ');
+    if (missingCount === 0 && recipeNames.length === 0) {
+      return 'All ingredients ready';
     }
 
-    if (missingCount >= 3) {
-      return `Missing ${missingCount} ingredients`;
-    }
-
-    if (missingNames.length) {
-      return `Missing: ${missingNames.join(', ')}`;
-    }
-
-    return 'Missing ingredients';
-  }, [missingCount, missingNames, recipeNames]);
+    return ingredientLine || '\u00A0';
+  }, [ingredientLine, missingCount, recipeNames.length]);
 
   const ratingValueRaw = (cocktail as { userRating?: number }).userRating ?? 0;
   const ratingValue = Math.max(0, Math.min(MAX_RATING, Number(ratingValueRaw) || 0));

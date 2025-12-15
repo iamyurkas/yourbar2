@@ -17,8 +17,12 @@ import { Colors } from '@/constants/theme';
 import {
   useInventory,
   type Cocktail,
-  type Ingredient as InventoryIngredient,
 } from '@/providers/inventory-provider';
+import {
+  createIngredientLookup,
+  resolveIngredientAvailability,
+  type IngredientLookup,
+} from '@/libs/ingredient-availability';
 import { palette as appPalette } from '@/theme/theme';
 
 type RecipeIngredient = NonNullable<Cocktail['ingredients']>[number];
@@ -137,6 +141,7 @@ export default function CocktailDetailsScreen() {
     setCocktailRating,
     getCocktailRating,
     ignoreGarnish,
+    allowAllSubstitutes,
   } = useInventory();
 
   const resolvedParam = Array.isArray(cocktailId) ? cocktailId[0] : cocktailId;
@@ -145,21 +150,32 @@ export default function CocktailDetailsScreen() {
     [cocktails, resolvedParam],
   );
 
-  const ingredientCatalog = useMemo(() => {
-    const catalog = new Map<number, InventoryIngredient>();
-    ingredients.forEach((item) => {
-      const idValue = Number(item.id ?? -1);
-      if (!Number.isNaN(idValue) && idValue >= 0) {
-        catalog.set(idValue, item);
-      }
-    });
-    return catalog;
-  }, [ingredients]);
+  const ingredientLookup: IngredientLookup = useMemo(
+    () => createIngredientLookup(ingredients),
+    [ingredients],
+  );
 
   const sortedIngredients = useMemo(() => {
     const recipe = cocktail?.ingredients ?? [];
     return [...recipe].sort((a, b) => (a?.order ?? 0) - (b?.order ?? 0));
   }, [cocktail?.ingredients]);
+
+  const resolvedIngredients = useMemo(
+    () =>
+      sortedIngredients.map((ingredient) =>
+        resolveIngredientAvailability(ingredient, availableIngredientIds, ingredientLookup, {
+          ignoreGarnish,
+          allowAllSubstitutes,
+        }),
+      ),
+    [
+      allowAllSubstitutes,
+      availableIngredientIds,
+      ignoreGarnish,
+      ingredientLookup,
+      sortedIngredients,
+    ],
+  );
 
   const parseIngredientId = useCallback((ingredient: RecipeIngredient) => {
     const ingredientIdRaw = ingredient.ingredientId;
@@ -449,32 +465,30 @@ export default function CocktailDetailsScreen() {
                     const quantity = formatIngredientQuantity(ingredient);
                     const qualifier = getIngredientQualifier(ingredient);
                     const key = `${ingredient.ingredientId ?? ingredient.name}-${ingredient.order}`;
+                    const resolution = resolvedIngredients[index];
                     const ingredientId = parseIngredientId(ingredient);
-                    const catalogEntry = ingredientId >= 0 ? ingredientCatalog.get(ingredientId) : undefined;
-                    const photoUri = ingredient.photoUri ?? catalogEntry?.photoUri;
-                    const isAvailable = ingredientId >= 0 && availableIngredientIds.has(ingredientId);
-                    const isConsideredAvailable = isAvailable || (ingredient.garnish && ignoreGarnish);
+                    const resolvedId = resolution.resolvedId ?? ingredientId;
+                    const resolvedIngredient =
+                      resolvedId != null && resolvedId >= 0
+                        ? ingredientLookup.ingredientById.get(resolvedId)
+                        : undefined;
+                    const catalogEntry = ingredientId >= 0 ? ingredientLookup.ingredientById.get(ingredientId) : undefined;
+                    const photoUri = ingredient.photoUri ?? resolvedIngredient?.photoUri ?? catalogEntry?.photoUri;
                     const previousIngredient = sortedIngredients[index - 1];
-                    const previousIngredientId = previousIngredient
-                      ? parseIngredientId(previousIngredient)
-                      : -1;
-                    const previousAvailable =
-                      previousIngredientId >= 0 && availableIngredientIds.has(previousIngredientId);
-                    const previousConsideredAvailable =
-                      previousAvailable || (previousIngredient?.garnish && ignoreGarnish);
-                    const dividerColor = previousConsideredAvailable
+                    const previousResolution = previousIngredient ? resolvedIngredients[index - 1] : undefined;
+                    const dividerColor = previousResolution?.isConsideredAvailable
                       ? palette.outline
                       : palette.outlineVariant;
                     const tagColor =
+                      resolvedIngredient?.tags?.[0]?.color ??
                       ingredient.tags?.[0]?.color ??
                       catalogEntry?.tags?.[0]?.color ??
                       appPalette.tagYellow;
-                    const isOnShoppingList =
-                      ingredientId >= 0 && shoppingIngredientIds.has(ingredientId);
+                    const isOnShoppingList = ingredientId >= 0 && shoppingIngredientIds.has(ingredientId);
                     const handlePress = () => {
                       const routeParam =
-                        ingredientId >= 0
-                          ? ingredientId
+                        resolvedId != null && resolvedId >= 0
+                          ? resolvedId
                           : catalogEntry?.id ?? ingredient.name;
                       if (routeParam == null) {
                         return;
@@ -486,26 +500,34 @@ export default function CocktailDetailsScreen() {
                       });
                     };
 
+                    const subtitleParts: string[] = [];
+
+                    if (qualifier) {
+                      subtitleParts.push(qualifier.charAt(0).toUpperCase() + qualifier.slice(1));
+                    }
+
+                    if (resolution.substituteFor) {
+                      subtitleParts.push(`Substitute for ${resolution.substituteFor}`);
+                    }
+
+                    const subtitle = subtitleParts.length ? subtitleParts.join(' • ') : undefined;
+
                     return (
                       <View key={key}>
                         {index > 0 ? (
                           <View style={[styles.ingredientDivider, { backgroundColor: dividerColor }]} />
                         ) : null}
                         <ListRow
-                          title={ingredient.name ?? ''}
-                          subtitle={
-                            qualifier
-                              ? qualifier.charAt(0).toUpperCase() + qualifier.slice(1)
-                              : undefined
-                          }
+                          title={resolution.resolvedName || ingredient.name || ''}
+                          subtitle={subtitle}
                           subtitleStyle={
-                            qualifier
+                            subtitle
                               ? [styles.ingredientSubtitle, { color: palette.onSurfaceVariant }]
                               : undefined
                           }
                           thumbnail={
                             <Thumb
-                              label={ingredient.name ?? undefined}
+                              label={resolution.resolvedName || ingredient.name ?? undefined}
                               uri={photoUri}
                               fallbackUri={catalogEntry?.photoUri}
                             />
@@ -534,11 +556,13 @@ export default function CocktailDetailsScreen() {
                             )
                           }
                           onPress={handlePress}
-                          selected={isConsideredAvailable}
+                          selected={resolution.isConsideredAvailable}
                           highlightColor={ingredientHighlightColor}
                           tagColor={tagColor}
                           accessibilityRole="button"
-                          accessibilityState={isConsideredAvailable ? { selected: true } : undefined}
+                          accessibilityState={
+                            resolution.isConsideredAvailable ? { selected: true } : undefined
+                          }
                           metaAlignment="center"
                         />
                       </View>
