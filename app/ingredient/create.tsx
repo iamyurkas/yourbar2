@@ -392,7 +392,7 @@ export default function CreateIngredientScreen() {
           style={[
             styles.imagePlaceholder,
             { borderColor: palette.outlineVariant },
-            !imageUri && { backgroundColor: palette.surfaceVariant },
+            !imageUri && { backgroundColor: palette.surface },
           ]}
           onPress={handlePickImage}
           android_ripple={{ color: `${palette.surface}33` }}>
@@ -400,8 +400,8 @@ export default function CreateIngredientScreen() {
             <Image source={{ uri: imageUri }} style={styles.image} contentFit="cover" />
           ) : (
             <View style={styles.placeholderContent}>
-              <MaterialCommunityIcons name="image-plus" size={28} color={palette.onSurfaceVariant} />
-              <Text style={[styles.placeholderHint, { color: palette.onSurfaceVariant }]}>Tap to add a photo</Text>
+              <MaterialCommunityIcons name="image-plus" size={28} color={palette.text} />
+              <Text style={[styles.placeholderHint, { color: palette.text }]}>Tap to add a photo</Text>
             </View>
           )}
         </Pressable>

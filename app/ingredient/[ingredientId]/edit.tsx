@@ -486,8 +486,8 @@ export default function EditIngredientScreen() {
           accessibilityLabel={placeholderLabel}
           style={[
             styles.imagePlaceholder,
-            { borderColor: paletteColors.outline },
-            !imageSource && { backgroundColor: paletteColors.surfaceVariant },
+            { borderColor: paletteColors.outlineVariant },
+            !imageSource && { backgroundColor: paletteColors.surface },
           ]}
           onPress={handlePickImage}
           android_ripple={{ color: `${paletteColors.surface}33` }}>
@@ -495,7 +495,8 @@ export default function EditIngredientScreen() {
             <Image source={imageSource} style={styles.image} contentFit="contain" />
           ) : (
             <View style={styles.placeholderContent}>
-              <Text style={[styles.placeholderHint, { color: paletteColors.onSurfaceVariant }]}>Tap to add a photo</Text>
+              <MaterialCommunityIcons name="image-plus" size={28} color={paletteColors.text} />
+              <Text style={[styles.placeholderHint, { color: paletteColors.text }]}>Tap to add a photo</Text>
             </View>
           )}
         </Pressable>
