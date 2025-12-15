@@ -103,13 +103,15 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 style={[
                   styles.checkbox,
                   {
-                    borderColor: ignoreGarnish ? palette.tint : palette.outline,
-                    backgroundColor: ignoreGarnish ? `${palette.tint}1A` : palette.surface,
+                    borderColor: ignoreGarnish ? palette.tint : palette.outlineVariant,
+                    backgroundColor: ignoreGarnish ? palette.tint : 'transparent',
                   },
                 ]}>
-                {ignoreGarnish ? (
-                  <MaterialCommunityIcons name="check" size={16} color={palette.tint} />
-                ) : null}
+                <MaterialCommunityIcons
+                  name="check"
+                  size={16}
+                  color={ignoreGarnish ? palette.background : palette.outlineVariant}
+                />
               </View>
               <View style={styles.settingTextContainer}>
                 <Text style={[styles.settingLabel, { color: palette.onSurface }]}>Ignore garnish</Text>
