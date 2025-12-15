@@ -1563,7 +1563,7 @@ function EditableIngredientRow({
                 key={substitute.key}
                 style={[
                   styles.substitutePill,
-                  { borderColor: palette.outlineVariant, backgroundColor: palette.surfaceVariant },
+                  { borderColor: palette.outlineVariant, backgroundColor: `${palette.tint}1A` },
                   substitute.isBrand && { borderLeftColor: palette.tint, borderLeftWidth: 4 },
                 ]}>
                 <Text style={[styles.substituteLabel, { color: palette.onSurface }]} numberOfLines={1}>
@@ -1969,7 +1969,7 @@ const styles = StyleSheet.create({
   },
   substituteLabel: {
     fontSize: 14,
-    fontWeight: '500',
+    fontWeight: '400',
     flex: 1,
   },
   substituteHint: {
