@@ -36,7 +36,7 @@ export default function CreateIngredientScreen() {
   }, [params.suggestedName]);
 
   const palette = Colors;
-  const { ingredients, shoppingIngredientIds, createIngredient } = useInventory();
+  const { ingredients, shoppingIngredientIds, availableIngredientIds, createIngredient } = useInventory();
   const [name, setName] = useState(() => suggestedNameParam ?? '');
   const [description, setDescription] = useState('');
   const [imageUri, setImageUri] = useState<string | null>(null);
@@ -284,6 +284,7 @@ export default function CreateIngredientScreen() {
       const isSelected = Number.isFinite(id) && id >= 0 && id === baseIngredientId;
       const tagColor = item.tags?.[0]?.color;
       const isOnShoppingList = Number.isFinite(id) && id >= 0 && shoppingIngredientIds.has(id);
+      const isAvailable = Number.isFinite(id) && id >= 0 && availableIngredientIds.has(id);
 
       const control = isOnShoppingList ? (
         <View style={styles.baseShoppingIndicator}>
@@ -295,7 +296,7 @@ export default function CreateIngredientScreen() {
         <ListRow
           title={item.name ?? ''}
           onPress={() => handleSelectBaseIngredient(item)}
-          selected={isSelected}
+          selected={isAvailable}
           highlightColor={appPalette.highlightSubtle}
           thumbnail={<Thumb label={item.name ?? undefined} uri={item.photoUri} />}
           tagColor={tagColor}
@@ -307,6 +308,7 @@ export default function CreateIngredientScreen() {
       );
     },
     [
+      availableIngredientIds,
       baseIngredientId,
       handleSelectBaseIngredient,
       palette.tint,
@@ -577,9 +579,12 @@ export default function CreateIngredientScreen() {
               keyExtractor={baseModalKeyExtractor}
               renderItem={renderBaseIngredient}
               keyboardShouldPersistTaps="handled"
-              ItemSeparatorComponent={() => (
-                <View style={[styles.modalSeparator, { backgroundColor: palette.outlineVariant }]} />
-              )}
+              ItemSeparatorComponent={({ leadingItem }) => {
+                const ingredientId = Number((leadingItem as Ingredient | null)?.id ?? -1);
+                const isAvailable = ingredientId >= 0 && availableIngredientIds.has(ingredientId);
+                const backgroundColor = isAvailable ? palette.outline : palette.outlineVariant;
+                return <View style={[styles.modalSeparator, { backgroundColor }]} />;
+              }}
               contentContainerStyle={styles.modalListContent}
               ListEmptyComponent={() => (
                 <Text style={[styles.modalEmptyText, { color: palette.onSurfaceVariant }]}>No ingredients found</Text>
@@ -662,7 +667,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   bottomSpacer: {
-    height: 20,
+    height: 250,
   },
   tagList: {
     flexDirection: 'row',
@@ -769,7 +774,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   modalListContent: {
-    gap: 12,
     flexGrow: 1,
     paddingVertical: 8,
   },
