@@ -4,7 +4,6 @@ import * as ImagePicker from 'expo-image-picker';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
-  Alert,
   FlatList,
   KeyboardAvoidingView,
   Modal,
@@ -21,6 +20,7 @@ import {
 } from 'react-native';
 
 import { resolveAssetFromCatalog } from '@/assets/image-manifest';
+import { AppDialog, type DialogOptions } from '@/components/AppDialog';
 import { ListRow, Thumb } from '@/components/RowParts';
 import { TagPill } from '@/components/TagPill';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
@@ -46,6 +46,7 @@ export default function CreateIngredientScreen() {
   const [isBaseModalVisible, setIsBaseModalVisible] = useState(false);
   const [baseSearch, setBaseSearch] = useState('');
   const [permissionStatus, requestPermission] = ImagePicker.useMediaLibraryPermissions();
+  const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(null);
   const scrollRef = useRef<ScrollView | null>(null);
 
   useEffect(() => {
@@ -53,6 +54,14 @@ export default function CreateIngredientScreen() {
       setName(suggestedNameParam);
     }
   }, [name, suggestedNameParam]);
+
+  const closeDialog = useCallback(() => {
+    setDialogOptions(null);
+  }, []);
+
+  const showDialog = useCallback((options: DialogOptions) => {
+    setDialogOptions(options);
+  }, []);
 
   const placeholderLabel = useMemo(() => {
     if (imageUri) {
@@ -91,14 +100,15 @@ export default function CreateIngredientScreen() {
     }
 
     if (!canAskAgain) {
-      Alert.alert(
-        'Media library access',
-        'Enable photo library permissions in system settings to add an ingredient image.',
-      );
+      showDialog({
+        title: 'Media library access',
+        message: 'Enable photo library permissions in system settings to add an ingredient image.',
+        actions: [{ label: 'OK' }],
+      });
     }
 
     return false;
-  }, [permissionStatus?.granted, requestPermission]);
+  }, [permissionStatus?.granted, requestPermission, showDialog]);
 
   const handlePickImage = useCallback(async () => {
     if (isPickingImage) {
@@ -127,16 +137,24 @@ export default function CreateIngredientScreen() {
       }
     } catch (error) {
       console.warn('Failed to pick image', error);
-      Alert.alert('Could not pick image', 'Please try again later.');
+      showDialog({
+        title: 'Could not pick image',
+        message: 'Please try again later.',
+        actions: [{ label: 'OK' }],
+      });
     } finally {
       setIsPickingImage(false);
     }
-  }, [ensureMediaPermission, isPickingImage]);
+  }, [ensureMediaPermission, isPickingImage, showDialog]);
 
   const handleSubmit = useCallback(() => {
     const trimmedName = name.trim();
     if (!trimmedName) {
-      Alert.alert('Name is required', 'Please enter the ingredient name.');
+      showDialog({
+        title: 'Name is required',
+        message: 'Please enter the ingredient name.',
+        actions: [{ label: 'OK' }],
+      });
       return;
     }
 
@@ -154,7 +172,11 @@ export default function CreateIngredientScreen() {
     });
 
     if (!created) {
-      Alert.alert('Could not save ingredient', 'Please try again later.');
+      showDialog({
+        title: 'Could not save ingredient',
+        message: 'Please try again later.',
+        actions: [{ label: 'OK' }],
+      });
       return;
     }
 
@@ -174,6 +196,7 @@ export default function CreateIngredientScreen() {
     description,
     imageUri,
     name,
+    showDialog,
     selectedTagIds,
   ]);
 
@@ -593,6 +616,14 @@ export default function CreateIngredientScreen() {
           </Pressable>
         </Pressable>
       </Modal>
+
+      <AppDialog
+        visible={dialogOptions != null}
+        title={dialogOptions?.title ?? ''}
+        message={dialogOptions?.message}
+        actions={dialogOptions?.actions ?? []}
+        onRequestClose={closeDialog}
+      />
     </>
   );
 }

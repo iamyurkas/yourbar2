@@ -10,7 +10,6 @@ import React, {
   useState,
 } from 'react';
 import {
-  Alert,
   FlatList,
   KeyboardAvoidingView,
   Modal,
@@ -26,6 +25,7 @@ import {
 } from 'react-native';
 
 import { resolveAssetFromCatalog } from '@/assets/image-manifest';
+import { AppDialog, type DialogOptions } from '@/components/AppDialog';
 import { HeaderIconButton } from '@/components/HeaderIconButton';
 import { ListRow, Thumb } from '@/components/RowParts';
 import { SubstituteModal } from '@/components/SubstituteModal';
@@ -197,6 +197,7 @@ export default function CreateCocktailScreen() {
   const [substituteTarget, setSubstituteTarget] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [permissionStatus, requestPermission] = ImagePicker.useMediaLibraryPermissions();
+  const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(null);
 
   const initializedRef = useRef(false);
   const scrollRef = useRef<ScrollView | null>(null);
@@ -211,6 +212,14 @@ export default function CreateCocktailScreen() {
     });
     return map;
   }, [inventoryIngredients]);
+
+  const closeDialog = useCallback(() => {
+    setDialogOptions(null);
+  }, []);
+
+  const showDialog = useCallback((options: DialogOptions) => {
+    setDialogOptions(options);
+  }, []);
 
   const getBaseGroupId = useCallback(
     (rawId: number | string | null | undefined) => {
@@ -421,14 +430,15 @@ export default function CreateCocktailScreen() {
     }
 
     if (!canAskAgain) {
-      Alert.alert(
-        'Media access required',
-        'Enable photo library permissions in system settings to add a cocktail photo.',
-      );
+      showDialog({
+        title: 'Media access required',
+        message: 'Enable photo library permissions in system settings to add a cocktail photo.',
+        actions: [{ label: 'OK' }],
+      });
     }
 
     return false;
-  }, [permissionStatus?.granted, requestPermission]);
+  }, [permissionStatus?.granted, requestPermission, showDialog]);
 
   const handlePickImage = useCallback(async () => {
     if (isPickingImage) {
@@ -457,11 +467,15 @@ export default function CreateCocktailScreen() {
       }
     } catch (error) {
       console.warn('Failed to pick image', error);
-      Alert.alert('Could not pick image', 'Please try again later.');
+      showDialog({
+        title: 'Could not pick image',
+        message: 'Please try again later.',
+        actions: [{ label: 'OK' }],
+      });
     } finally {
       setIsPickingImage(false);
     }
-  }, [ensureMediaPermission, isPickingImage]);
+  }, [ensureMediaPermission, isPickingImage, showDialog]);
 
   const handleRemovePhoto = useCallback(() => {
     setImageUri(null);
@@ -632,7 +646,11 @@ export default function CreateCocktailScreen() {
 
     const trimmedName = name.trim();
     if (!trimmedName) {
-      Alert.alert('Name is required', 'Please enter the cocktail name.');
+      showDialog({
+        title: 'Name is required',
+        message: 'Please enter the cocktail name.',
+        actions: [{ label: 'OK' }],
+      });
       return;
     }
 
@@ -712,7 +730,11 @@ export default function CreateCocktailScreen() {
       .filter((value): value is CreateCocktailInput['ingredients'][number] => Boolean(value));
 
     if (!sanitizedIngredients.length) {
-      Alert.alert('Recipe required', 'Add at least one ingredient to the cocktail.');
+      showDialog({
+        title: 'Recipe required',
+        message: 'Add at least one ingredient to the cocktail.',
+        actions: [{ label: 'OK' }],
+      });
       return;
     }
 
@@ -746,7 +768,11 @@ export default function CreateCocktailScreen() {
             });
 
       if (!persisted) {
-        Alert.alert('Could not save cocktail', 'Please try again later.');
+        showDialog({
+          title: 'Could not save cocktail',
+          message: 'Please try again later.',
+          actions: [{ label: 'OK' }],
+        });
         return;
       }
 
@@ -773,6 +799,7 @@ export default function CreateCocktailScreen() {
     name,
     prefilledCocktail?.id,
     selectedTagIds,
+    showDialog,
   ]);
 
   const handleDeletePress = useCallback(() => {
@@ -784,7 +811,11 @@ export default function CreateCocktailScreen() {
     const numericId = Number.isFinite(normalizedId) && normalizedId >= 0 ? Math.trunc(normalizedId) : undefined;
 
     if (numericId == null) {
-      Alert.alert('Cocktail not found', 'Please try again later.');
+      showDialog({
+        title: 'Cocktail not found',
+        message: 'Please try again later.',
+        actions: [{ label: 'OK' }],
+      });
       return;
     }
 
@@ -793,23 +824,31 @@ export default function CreateCocktailScreen() {
       ? `Are you sure you want to delete ${trimmedName}? This action cannot be undone.`
       : 'Are you sure you want to delete this cocktail? This action cannot be undone.';
 
-    Alert.alert('Delete cocktail', message, [
-      { text: 'Cancel', style: 'cancel' },
-      {
-        text: 'Delete',
-        style: 'destructive',
-        onPress: () => {
-          const wasDeleted = deleteCocktail(numericId);
-          if (!wasDeleted) {
-            Alert.alert('Could not delete cocktail', 'Please try again later.');
-            return;
-          }
+    showDialog({
+      title: 'Delete cocktail',
+      message,
+      actions: [
+        { label: 'Cancel', variant: 'secondary' },
+        {
+          label: 'Delete',
+          variant: 'destructive',
+          onPress: () => {
+            const wasDeleted = deleteCocktail(numericId);
+            if (!wasDeleted) {
+              showDialog({
+                title: 'Could not delete cocktail',
+                message: 'Please try again later.',
+                actions: [{ label: 'OK' }],
+              });
+              return;
+            }
 
-          router.replace('/(tabs)/cocktails');
+            router.replace('/(tabs)/cocktails');
+          },
         },
-      },
-    ]);
-  }, [deleteCocktail, isEditMode, prefilledCocktail?.id, prefilledCocktail?.name]);
+      ],
+    });
+  }, [deleteCocktail, isEditMode, prefilledCocktail?.id, prefilledCocktail?.name, showDialog]);
 
   const handleGoBack = useCallback(() => {
     if (sourceParam === 'ingredient' && ingredientParam) {
@@ -1092,6 +1131,7 @@ export default function CreateCocktailScreen() {
                   onRemoveSubstitute={handleRemoveSubstitute}
                   onRequestCreateIngredient={handleRequestCreateIngredient}
                   onInputFocus={scrollFieldIntoView}
+                  onOpenDialog={showDialog}
                   palette={palette}
                   index={index}
                   totalCount={ingredientsState.length}
@@ -1233,6 +1273,14 @@ export default function CreateCocktailScreen() {
         selectedSubstituteIds={substituteModalSelectionIds}
         selectedSubstituteNames={substituteModalSelectionNames}
       />
+
+      <AppDialog
+        visible={dialogOptions != null}
+        title={dialogOptions?.title ?? ''}
+        message={dialogOptions?.message}
+        actions={dialogOptions?.actions ?? []}
+        onRequestClose={closeDialog}
+      />
     </>
   );
 }
@@ -1252,6 +1300,7 @@ type EditableIngredientRowProps = {
   onRemoveSubstitute: (ingredientKey: string, substituteKey: string) => void;
   onRequestCreateIngredient: (name: string) => void;
   onInputFocus: (target?: number | null) => void;
+  onOpenDialog: (options: DialogOptions) => void;
   index: number;
   totalCount: number;
   palette: typeof Colors;
@@ -1272,6 +1321,7 @@ function EditableIngredientRow({
   onRemoveSubstitute,
   onRequestCreateIngredient,
   onInputFocus,
+  onOpenDialog,
   index,
   totalCount,
   palette,
@@ -1279,7 +1329,6 @@ function EditableIngredientRow({
   const [isFocused, setIsFocused] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const hideSuggestionsTimeout = useRef<NodeJS.Timeout | null>(null);
-  const [infoModal, setInfoModal] = useState<'base' | 'brand' | null>(null);
 
   const normalizedName = ingredient.name.trim().toLowerCase();
 
@@ -1410,10 +1459,6 @@ function EditableIngredientRow({
   const handleToggleAllowBrand = useCallback(() => {
     onChange(ingredient.key, { allowBrandSubstitution: !ingredient.allowBrandSubstitution });
   }, [ingredient.allowBrandSubstitution, ingredient.key, onChange]);
-
-  const handleCloseInfoModal = useCallback(() => {
-    setInfoModal(null);
-  }, []);
 
   const usePluralUnits = useMemo(() => shouldUsePluralUnits(ingredient.amount), [ingredient.amount]);
 
@@ -1626,14 +1671,28 @@ function EditableIngredientRow({
             label="Allow base substitute"
             active={ingredient.allowBaseSubstitution}
             onToggle={handleToggleAllowBase}
-            onInfo={() => setInfoModal('base')}
+            onInfo={() =>
+              onOpenDialog({
+                title: 'Allow base substitute',
+                message:
+                  "If the specified ingredient isn't available, the cocktail will be shown as available with its base ingredient.",
+                actions: [{ label: 'OK' }],
+              })
+            }
             palette={palette}
           />
           <ToggleChip
             label="Allow branded substitute"
             active={ingredient.allowBrandSubstitution}
             onToggle={handleToggleAllowBrand}
-            onInfo={() => setInfoModal('brand')}
+            onInfo={() =>
+              onOpenDialog({
+                title: 'Allow branded substitute',
+                message:
+                  "If the specified ingredient isn't available, the cocktail will be shown as available with branded ingredients of the base.",
+                actions: [{ label: 'OK' }],
+              })
+            }
             palette={palette}
           />
         </View>
@@ -1677,32 +1736,6 @@ function EditableIngredientRow({
           </View>
         ) : null}
       </View>
-
-      <Modal
-        visible={infoModal != null}
-        transparent
-        animationType="fade"
-        onRequestClose={handleCloseInfoModal}>
-        <Pressable style={styles.modalOverlay} onPress={handleCloseInfoModal}>
-          <View style={[styles.modalCardSmall, { backgroundColor: palette.surface }]}>
-            <Text style={[styles.modalTitle, { color: palette.onSurface }]}>
-              {infoModal === 'brand' ? 'Allow branded substitute' : 'Allow base substitute'}
-            </Text>
-            <Text style={[styles.modalSubtitle, { color: palette.onSurfaceVariant }]}>
-              {infoModal === 'brand'
-                ? "If the specified ingredient isn't available, the cocktail will be shown as available with branded ingredients of the base."
-                : "If the specified ingredient isn't available, the cocktail will be shown as available with its base ingredient."}
-            </Text>
-            <Pressable
-              onPress={handleCloseInfoModal}
-              style={[styles.modalActionButton, { backgroundColor: palette.tint }]}
-              accessibilityRole="button"
-              accessibilityLabel="Close info">
-              <Text style={[styles.modalActionLabel, { color: palette.onPrimary }]}>OK</Text>
-            </Pressable>
-          </View>
-        </Pressable>
-      </Modal>
     </View>
   );
 }

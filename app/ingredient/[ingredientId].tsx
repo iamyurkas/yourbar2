@@ -3,7 +3,6 @@ import { Image } from 'expo-image';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
 import React, { useCallback, useEffect, useMemo, useState, useTransition } from 'react';
 import {
-  Alert,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -16,6 +15,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { resolveAssetFromCatalog } from '@/assets/image-manifest';
+import { AppDialog, type DialogOptions } from '@/components/AppDialog';
 import { CocktailListRow } from '@/components/CocktailListRow';
 import { PresenceCheck } from '@/components/RowParts';
 import { TagPill } from '@/components/TagPill';
@@ -72,6 +72,7 @@ export default function IngredientDetailsScreen() {
 
   const [optimisticAvailability, setOptimisticAvailability] = useState<boolean | null>(null);
   const [optimisticShopping, setOptimisticShopping] = useState<boolean | null>(null);
+  const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(null);
   const [, startAvailabilityTransition] = useTransition();
   const [, startShoppingTransition] = useTransition();
 
@@ -111,6 +112,14 @@ export default function IngredientDetailsScreen() {
       return previous === isOnShoppingList ? null : previous;
     });
   }, [isOnShoppingList]);
+
+  const closeDialog = useCallback(() => {
+    setDialogOptions(null);
+  }, []);
+
+  const showDialog = useCallback((options: DialogOptions) => {
+    setDialogOptions(options);
+  }, []);
 
   const baseIngredient = useMemo(() => {
     if (!ingredient?.baseIngredientId) {
@@ -331,22 +340,22 @@ export default function IngredientDetailsScreen() {
         return;
       }
 
-      Alert.alert(
-        'Remove base ingredient',
-        `Are you sure you want to unlink ${ingredient.name} from its base ingredient?`,
-        [
-          { text: 'Cancel', style: 'cancel' },
+      showDialog({
+        title: 'Remove base ingredient',
+        message: `Are you sure you want to unlink ${ingredient.name} from its base ingredient?`,
+        actions: [
+          { label: 'Cancel', variant: 'secondary' },
           {
-            text: 'Remove',
-            style: 'destructive',
+            label: 'Remove',
+            variant: 'destructive',
             onPress: () => {
               clearBaseIngredient(numericIngredientId);
             },
           },
         ],
-      );
+      });
     },
-    [clearBaseIngredient, ingredient, numericIngredientId],
+    [clearBaseIngredient, ingredient, numericIngredientId, showDialog],
   );
 
   const handleNavigateToBase = useCallback(() => {
@@ -386,22 +395,22 @@ export default function IngredientDetailsScreen() {
           return;
         }
 
-        Alert.alert(
-          'Remove branded ingredient',
-          `Unlink ${brandedIngredient.name} from ${ingredient?.name}?`,
-          [
-            { text: 'Cancel', style: 'cancel' },
+        showDialog({
+          title: 'Remove branded ingredient',
+          message: `Unlink ${brandedIngredient.name} from ${ingredient?.name}?`,
+          actions: [
+            { label: 'Cancel', variant: 'secondary' },
             {
-              text: 'Remove',
-              style: 'destructive',
+              label: 'Remove',
+              variant: 'destructive',
               onPress: () => {
                 clearBaseIngredient(brandedId);
               },
             },
           ],
-        );
+        });
       },
-    [clearBaseIngredient, ingredient?.name],
+    [clearBaseIngredient, ingredient?.name, showDialog],
   );
 
   return (
@@ -712,6 +721,14 @@ export default function IngredientDetailsScreen() {
           </View>
         )}
       </ScrollView>
+
+      <AppDialog
+        visible={dialogOptions != null}
+        title={dialogOptions?.title ?? ''}
+        message={dialogOptions?.message}
+        actions={dialogOptions?.actions ?? []}
+        onRequestClose={closeDialog}
+      />
     </SafeAreaView>
   );
 }
