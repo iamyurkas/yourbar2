@@ -212,14 +212,88 @@ export default function IngredientDetailsScreen() {
 
     return cocktails.filter((cocktail) =>
       cocktail.ingredients?.some((cocktailIngredient) => {
+        const candidateIds = new Set<number>();
+        const candidateNames = new Set<string>();
+
         const ingredientId = Number(cocktailIngredient.ingredientId);
-        if (Number.isFinite(ingredientId) && idsToMatch.has(Math.trunc(ingredientId))) {
-          return true;
+        if (Number.isFinite(ingredientId) && ingredientId >= 0) {
+          const normalizedId = Math.trunc(ingredientId);
+          candidateIds.add(normalizedId);
+
+          const record = ingredientLookup.ingredientById.get(normalizedId);
+          if (record?.name) {
+            candidateNames.add(record.name.trim().toLowerCase());
+          }
+
+          const rawBaseId = record?.baseIngredientId != null ? Number(record.baseIngredientId) : undefined;
+          const baseId =
+            rawBaseId != null && Number.isFinite(rawBaseId) && rawBaseId >= 0 ? Math.trunc(rawBaseId) : undefined;
+
+          const allowBase = cocktailIngredient.allowBaseSubstitution || allowAllSubstitutes;
+          const allowBrand = cocktailIngredient.allowBrandSubstitution || allowAllSubstitutes;
+
+          if (allowBase && baseId != null) {
+            candidateIds.add(baseId);
+            const baseRecord = ingredientLookup.ingredientById.get(baseId);
+            if (baseRecord?.name) {
+              candidateNames.add(baseRecord.name.trim().toLowerCase());
+            }
+          }
+
+          if (allowBrand && baseId != null) {
+            ingredientLookup.brandsByBaseId.get(baseId)?.forEach((brandId) => {
+              candidateIds.add(brandId);
+              const brandRecord = ingredientLookup.ingredientById.get(brandId);
+              if (brandRecord?.name) {
+                candidateNames.add(brandRecord.name.trim().toLowerCase());
+              }
+            });
+          }
+
+          ingredientLookup.brandsByBaseId.get(normalizedId)?.forEach((brandId) => {
+            candidateIds.add(brandId);
+            const brandRecord = ingredientLookup.ingredientById.get(brandId);
+            if (brandRecord?.name) {
+              candidateNames.add(brandRecord.name.trim().toLowerCase());
+            }
+          });
         }
 
-        if (cocktailIngredient.name) {
-          const normalizedName = cocktailIngredient.name.toLowerCase();
-          if (normalizedNames.has(normalizedName)) {
+        (cocktailIngredient.substitutes ?? []).forEach((substitute) => {
+          const substituteId =
+            typeof substitute.ingredientId === 'number'
+              ? substitute.ingredientId
+              : typeof substitute.id === 'number'
+                ? substitute.id
+                : undefined;
+
+          if (substituteId != null && Number.isFinite(substituteId) && substituteId >= 0) {
+            const normalizedId = Math.trunc(substituteId);
+            candidateIds.add(normalizedId);
+            const substituteRecord = ingredientLookup.ingredientById.get(normalizedId);
+            if (substituteRecord?.name) {
+              candidateNames.add(substituteRecord.name.trim().toLowerCase());
+            }
+          }
+
+          if (substitute.name) {
+            candidateNames.add(substitute.name.trim().toLowerCase());
+          }
+        });
+
+        const ingredientName = cocktailIngredient.name?.trim().toLowerCase();
+        if (ingredientName) {
+          candidateNames.add(ingredientName);
+        }
+
+        for (const candidateId of candidateIds) {
+          if (idsToMatch.has(candidateId)) {
+            return true;
+          }
+        }
+
+        for (const candidateName of candidateNames) {
+          if (normalizedNames.has(candidateName)) {
             return true;
           }
         }
