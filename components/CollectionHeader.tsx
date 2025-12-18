@@ -13,6 +13,7 @@ type CollectionHeaderProps = {
   filterActive?: boolean;
   filterExpanded?: boolean;
   onFilterLayout?: (layout: LayoutRectangle) => void;
+  rightAccessory?: React.ReactNode;
   tabs?: SegmentTabOption[];
   activeTab?: string;
   onTabChange?: (key: string) => void;
@@ -29,6 +30,7 @@ export function CollectionHeader({
   filterActive,
   filterExpanded,
   onFilterLayout,
+  rightAccessory,
   tabs,
   activeTab,
   onTabChange,
@@ -48,6 +50,7 @@ export function CollectionHeader({
         filterActive={filterActive}
         filterExpanded={filterExpanded}
         onFilterLayout={onFilterLayout}
+        rightAccessory={rightAccessory}
       />
       {shouldShowTabs && tabs ? (
         <SegmentTabs options={tabs} value={activeTab!} onChange={onTabChange!} />
@@ -61,4 +64,3 @@ const styles = StyleSheet.create({
     gap: 0,
   },
 });
-

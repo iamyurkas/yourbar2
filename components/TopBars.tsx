@@ -23,6 +23,7 @@ type SearchTopBarProps = {
   filterActive?: boolean;
   filterExpanded?: boolean;
   onFilterLayout?: (layout: LayoutRectangle) => void;
+  rightAccessory?: React.ReactNode;
 };
 
 export type SegmentTabOption = {
@@ -46,6 +47,7 @@ export function SearchTopBar({
   filterActive = false,
   filterExpanded = false,
   onFilterLayout,
+  rightAccessory,
 }: SearchTopBarProps) {
   const palette = Colors;
 
@@ -91,24 +93,28 @@ export function SearchTopBar({
           </Pressable>
         ) : null}
       </View>
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel="Filter items"
-        accessibilityState={filterExpanded ? { expanded: true } : undefined}
-        onPress={onFilterPress}
-        onLayout={(event) => onFilterLayout?.(event.nativeEvent.layout)}
-        style={[
-          styles.iconButton,
-          filterActive
-            ? { backgroundColor: `${palette.tint}1A` }
-            : null,
-        ]}>
-        <MaterialCommunityIcons
-          name="filter-variant"
-          size={24}
-          color={filterActive ? palette.tint : palette.icon}
-        />
-      </Pressable>
+      {rightAccessory ? (
+        <View style={styles.rightAccessory}>{rightAccessory}</View>
+      ) : (
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Filter items"
+          accessibilityState={filterExpanded ? { expanded: true } : undefined}
+          onPress={onFilterPress}
+          onLayout={(event) => onFilterLayout?.(event.nativeEvent.layout)}
+          style={[
+            styles.iconButton,
+            filterActive
+              ? { backgroundColor: `${palette.tint}1A` }
+              : null,
+          ]}>
+          <MaterialCommunityIcons
+            name="filter-variant"
+            size={24}
+            color={filterActive ? palette.tint : palette.icon}
+          />
+        </Pressable>
+      )}
     </View>
   );
 }
@@ -187,6 +193,13 @@ const styles = StyleSheet.create({
   clearButton: {
     width: 28,
     height: 28,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  rightAccessory: {
+    width: 40,
+    height: 40,
     borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
