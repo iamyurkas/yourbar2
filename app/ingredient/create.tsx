@@ -19,12 +19,12 @@ import {
   type GestureResponderEvent,
 } from 'react-native';
 
-import { resolveAssetFromCatalog } from '@/assets/image-manifest';
 import { AppDialog, type DialogOptions } from '@/components/AppDialog';
 import { ListRow, Thumb } from '@/components/RowParts';
 import { TagPill } from '@/components/TagPill';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { Colors } from '@/constants/theme';
+import { resolveImageSource } from '@/libs/image-source';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
 import { palette as appPalette } from '@/theme/theme';
 
@@ -213,22 +213,10 @@ export default function CreateIngredientScreen() {
     return ingredients.find((item) => Number(item.id ?? -1) === targetId);
   }, [baseIngredientId, ingredients]);
 
-  const baseIngredientPhotoSource = useMemo(() => {
-    if (!baseIngredient?.photoUri) {
-      return undefined;
-    }
-
-    const asset = resolveAssetFromCatalog(baseIngredient.photoUri);
-    if (asset) {
-      return asset;
-    }
-
-    if (/^https?:/i.test(baseIngredient.photoUri)) {
-      return { uri: baseIngredient.photoUri } as const;
-    }
-
-    return undefined;
-  }, [baseIngredient?.photoUri]);
+  const baseIngredientPhotoSource = useMemo(
+    () => resolveImageSource(baseIngredient?.photoUri),
+    [baseIngredient?.photoUri],
+  );
 
   const handleOpenBaseModal = useCallback(() => {
     setBaseSearch(baseIngredient?.name ?? '');
