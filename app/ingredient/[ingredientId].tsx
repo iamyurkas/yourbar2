@@ -20,7 +20,11 @@ import { PresenceCheck } from '@/components/RowParts';
 import { TagPill } from '@/components/TagPill';
 import { Colors } from '@/constants/theme';
 import { isCocktailReady } from '@/libs/cocktail-availability';
-import { createIngredientLookup } from '@/libs/ingredient-availability';
+import {
+  createIngredientLookup,
+  getIngredientBaseGroupId,
+  getIngredientCandidateIds,
+} from '@/libs/ingredient-availability';
 import { resolveImageSource } from '@/libs/image-source';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
 
@@ -55,6 +59,7 @@ export default function IngredientDetailsScreen() {
     toggleIngredientShopping,
     clearBaseIngredient,
     ignoreGarnish,
+    allowAllSubstitutes,
   } = useInventory();
 
   const ingredient = useResolvedIngredient(
@@ -63,6 +68,11 @@ export default function IngredientDetailsScreen() {
   );
 
   const ingredientLookup = useMemo(() => createIngredientLookup(ingredients), [ingredients]);
+
+  const targetBaseGroupId = useMemo(
+    () => getIngredientBaseGroupId(ingredient?.id ?? ingredientId, ingredientLookup),
+    [ingredient?.id, ingredientId, ingredientLookup],
+  );
 
   const numericIngredientId = useMemo(() => {
     const candidate = ingredient?.id ?? (Array.isArray(ingredientId) ? ingredientId[0] : ingredientId);
@@ -167,6 +177,7 @@ export default function IngredientDetailsScreen() {
 
     const normalizedNames = new Set<string>();
     const idsToMatch = new Set<number>();
+    const baseGroupIds = new Set<number>();
 
     if (ingredient.name) {
       normalizedNames.add(ingredient.name.toLowerCase());
@@ -174,6 +185,10 @@ export default function IngredientDetailsScreen() {
 
     if (numericIngredientId != null && !Number.isNaN(numericIngredientId)) {
       idsToMatch.add(numericIngredientId);
+    }
+
+    if (targetBaseGroupId != null) {
+      baseGroupIds.add(targetBaseGroupId);
     }
 
     if (ingredient.baseIngredientId != null) {
@@ -189,22 +204,34 @@ export default function IngredientDetailsScreen() {
 
     return cocktails.filter((cocktail) =>
       cocktail.ingredients?.some((cocktailIngredient) => {
-        const ingredientId = Number(cocktailIngredient.ingredientId);
-        if (!Number.isNaN(ingredientId) && idsToMatch.has(ingredientId)) {
-          return true;
-        }
+        const candidateIds = getIngredientCandidateIds(cocktailIngredient, ingredientLookup, {
+          allowAllSubstitutes,
+        });
 
-        if (cocktailIngredient.name) {
-          const normalizedName = cocktailIngredient.name.toLowerCase();
-          if (normalizedNames.has(normalizedName)) {
+        for (const candidateId of candidateIds) {
+          if (idsToMatch.has(candidateId)) {
+            return true;
+          }
+
+          const candidateBaseId = getIngredientBaseGroupId(candidateId, ingredientLookup);
+          if (candidateBaseId != null && baseGroupIds.has(candidateBaseId)) {
             return true;
           }
         }
 
-        return false;
+        const normalizedName = cocktailIngredient.name?.toLowerCase();
+        return normalizedName != null && normalizedNames.has(normalizedName);
       }),
     );
-  }, [baseIngredient?.name, cocktails, ingredient, numericIngredientId]);
+  }, [
+    allowAllSubstitutes,
+    baseIngredient?.name,
+    cocktails,
+    ingredient,
+    ingredientLookup,
+    numericIngredientId,
+    targetBaseGroupId,
+  ]);
 
   const cocktailEntries = useMemo(
     () =>
@@ -215,10 +242,16 @@ export default function IngredientDetailsScreen() {
           availableIngredientIds,
           ingredientLookup,
           undefined,
-          { ignoreGarnish },
+          { ignoreGarnish, allowAllSubstitutes },
         ),
       })),
-    [availableIngredientIds, cocktailsWithIngredient, ignoreGarnish, ingredientLookup],
+    [
+      allowAllSubstitutes,
+      availableIngredientIds,
+      cocktailsWithIngredient,
+      ignoreGarnish,
+      ingredientLookup,
+    ],
   );
 
   const handleToggleAvailability = useCallback(() => {
