@@ -467,11 +467,10 @@ export default function IngredientsScreen() {
           const rawBaseId = record?.baseIngredientId != null ? Number(record.baseIngredientId) : undefined;
           const baseId =
             rawBaseId != null && Number.isFinite(rawBaseId) && rawBaseId >= 0 ? Math.trunc(rawBaseId) : undefined;
+          const baseGroupId = baseId ?? normalizedId;
+          const includeBranded = allowAllSubstitutes || baseId == null;
 
-          const allowBase = item.allowBaseSubstitution || allowAllSubstitutes;
-          const allowBrand = item.allowBrandSubstitution || allowAllSubstitutes;
-
-          if (allowBase && baseId != null) {
+          if (baseId != null) {
             candidateIds.add(baseId);
             const baseRecord = ingredientLookup.ingredientById.get(baseId);
             if (baseRecord?.name) {
@@ -479,8 +478,8 @@ export default function IngredientsScreen() {
             }
           }
 
-          if (allowBrand && baseId != null) {
-            ingredientLookup.brandsByBaseId.get(baseId)?.forEach((brandId) => {
+          if (includeBranded) {
+            ingredientLookup.brandsByBaseId.get(baseGroupId)?.forEach((brandId) => {
               candidateIds.add(brandId);
               const brandRecord = ingredientLookup.ingredientById.get(brandId);
               if (brandRecord?.name) {
@@ -488,14 +487,6 @@ export default function IngredientsScreen() {
               }
             });
           }
-
-          ingredientLookup.brandsByBaseId.get(normalizedId)?.forEach((brandId) => {
-            candidateIds.add(brandId);
-            const brandRecord = ingredientLookup.ingredientById.get(brandId);
-            if (brandRecord?.name) {
-              candidateNames.add(brandRecord.name.trim().toLowerCase());
-            }
-          });
         }
 
         (item.substitutes ?? []).forEach((substitute) => {
