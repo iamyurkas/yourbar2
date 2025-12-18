@@ -1,6 +1,6 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Pressable, SectionList, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -56,7 +56,7 @@ function ShakerIngredientRow({ ingredient, selected, onToggle, availableCount, t
       subtitle={subtitle}
       onPress={handlePress}
       selected={selected}
-      highlightColor={palette.highlightSubtle}
+      highlightColor={palette.highlightFaint}
       tagColor={tagColor}
       thumbnail={<Thumb label={ingredient.name} uri={ingredient.photoUri} />}
       metaAlignment="center"
@@ -80,6 +80,7 @@ export default function ShakerScreen() {
   const [collapsedSections, setCollapsedSections] = useState<Set<string>>(() => new Set());
   const paletteColors = Colors;
   const ingredientLookup = useMemo(() => createIngredientLookup(ingredients), [ingredients]);
+  const previousSectionKeysRef = useRef<Set<string>>(new Set());
 
   const builtInTagOrder = useMemo(() => {
     const map = new Map<string, number>();
@@ -235,20 +236,38 @@ export default function ShakerScreen() {
     const validKeys = new Set(sections.map((section) => section.key));
     setCollapsedSections((previous) => {
       const next = new Set<string>();
-      previous.forEach((key) => {
-        if (validKeys.has(key)) {
+
+      validKeys.forEach((key) => {
+        const wasKnown = previousSectionKeysRef.current.has(key);
+        if (!wasKnown) {
+          next.add(key);
+          return;
+        }
+
+        if (previous.has(key)) {
           next.add(key);
         }
       });
+
       return next;
     });
+
+    previousSectionKeysRef.current = validKeys;
   }, [sections]);
+
+  const collapsedKeys = useMemo(() => {
+    if (collapsedSections.size > 0 || previousSectionKeysRef.current.size > 0) {
+      return collapsedSections;
+    }
+
+    return new Set(sections.map((section) => section.key));
+  }, [collapsedSections, sections]);
 
   const renderedSections = useMemo(() => {
     return sections.map((section) =>
-      collapsedSections.has(section.key) ? { ...section, data: [] } : section,
+      collapsedKeys.has(section.key) ? { ...section, data: [] } : section,
     );
-  }, [collapsedSections, sections]);
+  }, [collapsedKeys, sections]);
 
   const cocktailBaseMap = useMemo(() => {
     const map = new Map<string, Set<number>>();
@@ -438,7 +457,7 @@ export default function ShakerScreen() {
             {
               backgroundColor: `${section.color}26`,
               borderColor: `${section.color}44`,
-              marginBottom: collapsed ? 4 : 0,
+              marginBottom: collapsed ? 2 : 0,
             },
           ]}>
           <View style={styles.sectionHeaderContent}>
@@ -546,9 +565,9 @@ export default function ShakerScreen() {
             <Text style={[styles.clearLabel, { color: paletteColors.error }]}>Clear</Text>
           </Pressable>
           <View style={styles.counterArea}>
-            <Text style={[styles.counterLabel, { color: paletteColors.onSurface }]}>Cocktails available: {availableCount}</Text>
+            <Text style={[styles.counterLabel, { color: paletteColors.onSurface }]}>Cocktails: {availableCount}</Text>
             <Text style={[styles.counterSubLabel, { color: paletteColors.onSurfaceVariant }]}>
-              (recipes available: {matchingCount})
+              (recopies available: {matchingCount})
             </Text>
           </View>
           <Pressable
