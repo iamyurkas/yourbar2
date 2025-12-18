@@ -14,7 +14,9 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  UIManager,
   View,
+  findNodeHandle,
   type GestureResponderEvent,
 } from 'react-native';
 
@@ -44,6 +46,7 @@ export default function CreateIngredientScreen() {
   const [isBaseModalVisible, setIsBaseModalVisible] = useState(false);
   const [baseSearch, setBaseSearch] = useState('');
   const [permissionStatus, requestPermission] = ImagePicker.useMediaLibraryPermissions();
+  const scrollRef = useRef<ScrollView | null>(null);
 
   useEffect(() => {
     if (suggestedNameParam && !name) {
@@ -343,6 +346,30 @@ export default function CreateIngredientScreen() {
     setImageUri(null);
   }, []);
 
+  const scrollFieldIntoView = useCallback((target?: number | null) => {
+    if (target == null) {
+      return;
+    }
+
+    const scrollNodeHandle = scrollRef.current?.getInnerViewNode
+      ? findNodeHandle(scrollRef.current.getInnerViewNode())
+      : findNodeHandle(scrollRef.current);
+    if (!scrollNodeHandle) {
+      return;
+    }
+
+    UIManager.measureLayout(
+      target,
+      scrollNodeHandle,
+      () => {},
+      (_x, y) => {
+        const HEADER_OFFSET = 56;
+        const targetOffset = Math.max(0, y - HEADER_OFFSET);
+        scrollRef.current?.scrollTo({ y: targetOffset, animated: true });
+      },
+    );
+  }, []);
+
   return (
     <>
       <Stack.Screen
@@ -369,6 +396,7 @@ export default function CreateIngredientScreen() {
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         keyboardVerticalOffset={Platform.select({ ios: 96, default: 0 })}>
         <ScrollView
+          ref={scrollRef}
           contentContainerStyle={styles.content}
           style={[styles.container, { backgroundColor: palette.background }]}
           keyboardShouldPersistTaps="handled">
@@ -397,7 +425,7 @@ export default function CreateIngredientScreen() {
             onPress={handlePickImage}
             android_ripple={{ color: `${palette.surface}33` }}>
             {imageUri ? (
-              <Image source={{ uri: imageUri }} style={styles.image} contentFit="cover" />
+              <Image source={{ uri: imageUri }} style={styles.image} contentFit="contain" />
             ) : (
               <View style={styles.placeholderContent}>
                 <MaterialCommunityIcons name="image-plus" size={28} color={`${palette.onSurfaceVariant}99`} />
@@ -497,6 +525,7 @@ export default function CreateIngredientScreen() {
               multiline
               numberOfLines={4}
               textAlignVertical="top"
+              onFocus={(event) => scrollFieldIntoView(event.nativeEvent.target)}
             />
           </View>
 
@@ -507,6 +536,7 @@ export default function CreateIngredientScreen() {
             disabled={isPickingImage}>
             <Text style={[styles.submitLabel, { color: palette.onPrimary }]}>Save</Text>
           </Pressable>
+          <View style={styles.bottomSpacer} />
         </ScrollView>
       </KeyboardAvoidingView>
 
@@ -607,6 +637,7 @@ const styles = StyleSheet.create({
   image: {
     width: '100%',
     height: '100%',
+    resizeMode: 'contain',
   },
   placeholderContent: {
     alignItems: 'center',
@@ -620,6 +651,9 @@ const styles = StyleSheet.create({
   placeholderHint: {
     fontSize: 12,
     textAlign: 'center',
+  },
+  bottomSpacer: {
+    height: 200,
   },
   tagList: {
     flexDirection: 'row',
@@ -656,8 +690,9 @@ const styles = StyleSheet.create({
   baseThumb: {
     width: 56,
     height: 56,
-    borderRadius: 12,
+    borderRadius: 8,
     overflow: 'hidden',
+    backgroundColor: Colors.background,
   },
   baseImage: {
     width: '100%',
@@ -667,11 +702,11 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 12,
+    borderRadius: 8,
   },
   baseName: {
     fontSize: 16,
-    fontWeight: '500',
+    fontWeight: '400',
   },
   basePlaceholderRow: {
     flexDirection: 'row',
@@ -739,7 +774,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    alignSelf: 'flex-start',
+    alignSelf: 'center',
     paddingHorizontal: 12,
     paddingVertical: 6,
   },

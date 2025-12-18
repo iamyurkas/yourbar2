@@ -13,7 +13,9 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  UIManager,
   View,
+  findNodeHandle,
   type GestureResponderEvent,
 } from 'react-native';
 
@@ -72,6 +74,7 @@ export default function EditIngredientScreen() {
   const [permissionStatus, requestPermission] = ImagePicker.useMediaLibraryPermissions();
 
   const didInitializeRef = useRef(false);
+  const scrollRef = useRef<ScrollView | null>(null);
 
   useEffect(() => {
     if (!ingredient || didInitializeRef.current) {
@@ -438,6 +441,30 @@ export default function EditIngredientScreen() {
     return undefined;
   }, [imageUri]);
 
+  const scrollFieldIntoView = useCallback((target?: number | null) => {
+    if (target == null) {
+      return;
+    }
+
+    const scrollNodeHandle = scrollRef.current?.getInnerViewNode
+      ? findNodeHandle(scrollRef.current.getInnerViewNode())
+      : findNodeHandle(scrollRef.current);
+    if (!scrollNodeHandle) {
+      return;
+    }
+
+    UIManager.measureLayout(
+      target,
+      scrollNodeHandle,
+      () => {},
+      (_x, y) => {
+        const HEADER_OFFSET = 56;
+        const targetOffset = Math.max(0, y - HEADER_OFFSET);
+        scrollRef.current?.scrollTo({ y: targetOffset, animated: true });
+      },
+    );
+  }, []);
+
   if (!ingredient) {
     return (
       <>
@@ -467,6 +494,7 @@ export default function EditIngredientScreen() {
         }}
       />
       <ScrollView
+        ref={scrollRef}
         contentContainerStyle={styles.content}
         style={styles.container}
         keyboardShouldPersistTaps="handled">
@@ -594,6 +622,7 @@ export default function EditIngredientScreen() {
             multiline
             numberOfLines={4}
             textAlignVertical="top"
+            onFocus={(event) => scrollFieldIntoView(event.nativeEvent.target)}
           />
         </View>
 
@@ -604,6 +633,7 @@ export default function EditIngredientScreen() {
           disabled={isPickingImage}>
           <Text style={[styles.submitLabel, { color: paletteColors.onPrimary }]}>Save changes</Text>
         </Pressable>
+        <View style={styles.bottomSpacer} />
       </ScrollView>
 
       <Modal
@@ -707,6 +737,7 @@ const styles = StyleSheet.create({
   image: {
     width: '100%',
     height: '100%',
+    resizeMode: 'contain',
   },
   placeholderContent: {
     alignItems: 'center',
@@ -725,6 +756,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 12,
+  },
+  bottomSpacer: {
+    height: 200,
   },
   submitButton: {
     borderRadius: 12,
@@ -755,8 +789,9 @@ const styles = StyleSheet.create({
   baseThumb: {
     width: 56,
     height: 56,
-    borderRadius: 12,
+    borderRadius: 8,
     overflow: 'hidden',
+    backgroundColor: Colors.background,
   },
   baseImage: {
     width: '100%',
@@ -766,11 +801,11 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 12,
+    borderRadius: 8,
   },
   baseName: {
     fontSize: 16,
-    fontWeight: '500',
+    fontWeight: '400',
   },
   basePlaceholderRow: {
     flexDirection: 'row',
