@@ -13,7 +13,9 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  UIManager,
   View,
+  findNodeHandle,
   type GestureResponderEvent,
 } from 'react-native';
 
@@ -47,7 +49,7 @@ function useResolvedIngredient(param: string | undefined, ingredients: Ingredien
 export default function EditIngredientScreen() {
   const paletteColors = Colors;
   const { ingredientId } = useLocalSearchParams<{ ingredientId?: string }>();
-  const { ingredients, shoppingIngredientIds, updateIngredient, deleteIngredient } =
+  const { ingredients, shoppingIngredientIds, availableIngredientIds, updateIngredient, deleteIngredient } =
     useInventory();
 
   const ingredient = useResolvedIngredient(
@@ -72,6 +74,7 @@ export default function EditIngredientScreen() {
   const [permissionStatus, requestPermission] = ImagePicker.useMediaLibraryPermissions();
 
   const didInitializeRef = useRef(false);
+  const scrollRef = useRef<ScrollView | null>(null);
 
   useEffect(() => {
     if (!ingredient || didInitializeRef.current) {
@@ -285,6 +288,10 @@ export default function EditIngredientScreen() {
     [],
   );
 
+  const handleRemoveImage = useCallback(() => {
+    setImageUri(null);
+  }, []);
+
   const handleCloseBaseModal = useCallback(() => {
     const normalized = baseSearch.trim().toLowerCase();
     if (normalized) {
@@ -367,6 +374,7 @@ export default function EditIngredientScreen() {
       const isSelected = Number.isFinite(id) && id >= 0 && id === baseIngredientId;
       const tagColor = item.tags?.[0]?.color;
       const isOnShoppingList = Number.isFinite(id) && id >= 0 && shoppingIngredientIds.has(id);
+      const isAvailable = Number.isFinite(id) && id >= 0 && availableIngredientIds.has(id);
 
       const control = isOnShoppingList ? (
         <View style={styles.baseShoppingIndicator}>
@@ -378,7 +386,7 @@ export default function EditIngredientScreen() {
         <ListRow
           title={item.name ?? ''}
           onPress={() => handleSelectBaseIngredient(item)}
-          selected={isSelected}
+          selected={isAvailable}
           highlightColor={appPalette.highlightSubtle}
           thumbnail={<Thumb label={item.name ?? undefined} uri={item.photoUri} />}
           tagColor={tagColor}
@@ -390,6 +398,7 @@ export default function EditIngredientScreen() {
       );
     },
     [
+      availableIngredientIds,
       baseIngredientId,
       handleSelectBaseIngredient,
       paletteColors.tint,
@@ -438,6 +447,30 @@ export default function EditIngredientScreen() {
     return undefined;
   }, [imageUri]);
 
+  const scrollFieldIntoView = useCallback((target?: number | null) => {
+    if (target == null) {
+      return;
+    }
+
+    const scrollNodeHandle = scrollRef.current?.getInnerViewNode
+      ? findNodeHandle(scrollRef.current.getInnerViewNode())
+      : findNodeHandle(scrollRef.current);
+    if (!scrollNodeHandle) {
+      return;
+    }
+
+    UIManager.measureLayout(
+      target,
+      scrollNodeHandle,
+      () => {},
+      (_x, y) => {
+        const HEADER_OFFSET = 56;
+        const targetOffset = Math.max(0, y - HEADER_OFFSET);
+        scrollRef.current?.scrollTo({ y: targetOffset, animated: true });
+      },
+    );
+  }, []);
+
   if (!ingredient) {
     return (
       <>
@@ -467,41 +500,55 @@ export default function EditIngredientScreen() {
         }}
       />
       <ScrollView
+        ref={scrollRef}
         contentContainerStyle={styles.content}
         style={styles.container}
         keyboardShouldPersistTaps="handled">
         <View style={styles.section}>
-          <Text style={[styles.label, { color: paletteColors.onSurfaceVariant }]}>Name</Text>
+          <Text style={[styles.label, { color: paletteColors.onSurface }]}>Name</Text>
           <TextInput
             value={name}
             onChangeText={setName}
             placeholder="e.g. Ginger syrup"
-            style={[styles.input, { borderColor: paletteColors.outlineVariant, color: paletteColors.text }]}
+            style={[styles.input, { borderColor: paletteColors.outlineVariant, color: paletteColors.text, backgroundColor: paletteColors.surface }]}
             placeholderTextColor={`${paletteColors.onSurfaceVariant}99`}
           />
         </View>
 
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={placeholderLabel}
-          style={[
-            styles.imagePlaceholder,
-            { borderColor: paletteColors.outline },
-            !imageSource && { backgroundColor: paletteColors.surfaceVariant },
-          ]}
-          onPress={handlePickImage}
-          android_ripple={{ color: `${paletteColors.surface}33` }}>
+        <View style={styles.photoTileWrapper}>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={placeholderLabel}
+            style={[
+              styles.imagePlaceholder,
+              { borderColor: paletteColors.outlineVariant },
+              !imageSource && { backgroundColor: paletteColors.surface },
+            ]}
+            onPress={handlePickImage}
+            android_ripple={{ color: `${paletteColors.surface}33` }}>
+            {imageSource ? (
+              <Image source={imageSource} style={styles.image} contentFit="contain" />
+            ) : (
+              <View style={styles.placeholderContent}>
+                <MaterialCommunityIcons name="image-plus" size={28} color={`${paletteColors.onSurfaceVariant}99`} />
+                <Text style={[styles.placeholderHint, { color: `${paletteColors.onSurfaceVariant}99` }]}>Tap to add a photo</Text>
+              </View>
+            )}
+          </Pressable>
           {imageSource ? (
-            <Image source={imageSource} style={styles.image} contentFit="contain" />
-          ) : (
-            <View style={styles.placeholderContent}>
-              <Text style={[styles.placeholderHint, { color: paletteColors.onSurfaceVariant }]}>Tap to add a photo</Text>
-            </View>
-          )}
-        </Pressable>
+            <Pressable
+              onPress={handleRemoveImage}
+              hitSlop={8}
+              style={styles.removePhotoButton}
+              accessibilityRole="button"
+              accessibilityLabel="Remove photo">
+              <MaterialCommunityIcons name="trash-can-outline" size={18} color={paletteColors.error} />
+            </Pressable>
+          ) : null}
+        </View>
 
         <View style={styles.section}>
-          <Text style={[styles.label, { color: paletteColors.onSurfaceVariant }]}>Tags</Text>
+          <Text style={[styles.label, { color: paletteColors.onSurface }]}>Tags</Text>
           <Text style={[styles.hint, { color: paletteColors.onSurfaceVariant }]}>Select one or more tags</Text>
           <View style={styles.tagList}>
             {tagSelection.map((tag) => (
@@ -520,12 +567,12 @@ export default function EditIngredientScreen() {
         </View>
 
         <View style={styles.section}>
-          <Text style={[styles.label, { color: paletteColors.onSurfaceVariant }]}>Base ingredient</Text>
+          <Text style={[styles.label, { color: paletteColors.onSurface }]}>Base ingredient</Text>
           <Pressable
             accessibilityRole="button"
             accessibilityLabel={baseIngredient ? 'Change base ingredient' : 'Select base ingredient'}
             onPress={handleOpenBaseModal}
-            style={[styles.baseSelector, { borderColor: paletteColors.outline, backgroundColor: paletteColors.surface }]}
+            style={[styles.baseSelector, { borderColor: paletteColors.outlineVariant, backgroundColor: paletteColors.surface }]}
           >
             {baseIngredient ? (
               <>
@@ -579,44 +626,55 @@ export default function EditIngredientScreen() {
         </View>
 
         <View style={[styles.section, styles.descriptionSection]}>
-          <Text style={[styles.label, { color: paletteColors.onSurfaceVariant }]}>Description</Text>
+          <Text style={[styles.label, { color: paletteColors.onSurface }]}>Description</Text>
           <TextInput
             value={description}
             onChangeText={setDescription}
             placeholder="Add tasting notes or usage suggestions"
-            style={[
-              styles.input,
-              styles.multilineInput,
-              { borderColor: paletteColors.outlineVariant, color: paletteColors.text },
-            ]}
+              style={[
+                styles.input,
+                styles.multilineInput,
+                { borderColor: paletteColors.outlineVariant, color: paletteColors.text, backgroundColor: paletteColors.surface },
+              ]}
             placeholderTextColor={`${paletteColors.onSurfaceVariant}99`}
             multiline
             numberOfLines={4}
             textAlignVertical="top"
+            onFocus={(event) => scrollFieldIntoView(event.nativeEvent.target)}
           />
-
-          <Pressable
-            accessibilityRole="button"
-            style={[styles.submitButton, { backgroundColor: paletteColors.tint }]}
-            onPress={handleSubmit}
-            disabled={isPickingImage}>
-            <Text style={[styles.submitLabel, { color: paletteColors.surface }]}>Save changes</Text>
-          </Pressable>
         </View>
+
+        <Pressable
+          accessibilityRole="button"
+          style={[styles.submitButton, { backgroundColor: paletteColors.tint }]}
+          onPress={handleSubmit}
+          disabled={isPickingImage}>
+          <Text style={[styles.submitLabel, { color: paletteColors.onPrimary }]}>Save changes</Text>
+        </Pressable>
+        <View style={styles.bottomSpacer} />
       </ScrollView>
 
       <Modal
         visible={isBaseModalVisible}
         transparent
-        animationType="fade"
+        animationType="slide"
         presentationStyle="overFullScreen"
         onRequestClose={handleCloseBaseModal}
       >
-        <Pressable style={[styles.modalOverlay, { backgroundColor: paletteColors.backdrop }]} onPress={handleCloseBaseModal}>
+        <Pressable
+          style={[styles.modalOverlay, { backgroundColor: paletteColors.backdrop }]}
+          onPress={handleCloseBaseModal}
+          accessibilityRole="button">
           <Pressable
             onPress={(event) => event.stopPropagation?.()}
             style={[styles.modalCard, { backgroundColor: paletteColors.surface }]}
-          >
+            accessibilityRole="menu">
+            <View style={styles.modalHeader}>
+              <Text style={[styles.modalTitle, { color: paletteColors.onSurface }]}>Select base ingredient</Text>
+              <Pressable onPress={handleCloseBaseModal} accessibilityRole="button" accessibilityLabel="Close">
+                <MaterialCommunityIcons name="close" size={22} color={paletteColors.onSurfaceVariant} />
+              </Pressable>
+            </View>
             <TextInput
               ref={baseSearchInputRef}
               value={baseSearch}
@@ -625,7 +683,11 @@ export default function EditIngredientScreen() {
               placeholderTextColor={`${paletteColors.onSurfaceVariant}99`}
               style={[
                 styles.modalSearchInput,
-                { borderColor: paletteColors.outlineVariant, color: paletteColors.text },
+                {
+                  borderColor: paletteColors.outlineVariant,
+                  color: paletteColors.text,
+                  backgroundColor: paletteColors.surfaceBright,
+                },
               ]}
               autoFocus
               keyboardAppearance="light"
@@ -635,7 +697,12 @@ export default function EditIngredientScreen() {
               keyExtractor={baseModalKeyExtractor}
               renderItem={renderBaseIngredient}
               keyboardShouldPersistTaps="handled"
-              ItemSeparatorComponent={() => <View style={[styles.modalSeparator, { backgroundColor: paletteColors.outline }]} />}
+              ItemSeparatorComponent={({ leadingItem }) => {
+                const ingredientId = Number((leadingItem as Ingredient | null)?.id ?? -1);
+                const isAvailable = ingredientId >= 0 && availableIngredientIds.has(ingredientId);
+                const backgroundColor = isAvailable ? paletteColors.outline : paletteColors.outlineVariant;
+                return <View style={[styles.modalSeparator, { backgroundColor }]} />;
+              }}
               contentContainerStyle={styles.modalListContent}
               ListEmptyComponent={() => (
                 <Text style={[styles.modalEmptyText, { color: paletteColors.onSurfaceVariant }]}>No ingredients found</Text>
@@ -651,7 +718,7 @@ export default function EditIngredientScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.surface,
+    backgroundColor: Colors.background,
   },
   headerButton: {
     width: 40,
@@ -668,7 +735,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   descriptionSection: {
-    paddingBottom: 250,
+    paddingBottom: 0,
   },
   label: {
     fontSize: 16,
@@ -682,25 +749,47 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: Platform.select({ ios: 14, default: 12 }),
-    fontSize: 14,
+    fontSize: 16,
     backgroundColor: Colors.surface,
   },
   multilineInput: {
-    minHeight: 140,
+    minHeight: 120,
   },
   imagePlaceholder: {
     width: 150,
     height: 150,
+    maxWidth: 150,
+    maxHeight: 150,
+    minWidth: 150,
+    minHeight: 150,
     borderRadius: 12,
     borderWidth: StyleSheet.hairlineWidth,
     overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center',
-    alignSelf: 'flex-start',
+    alignSelf: 'center',
+    flexShrink: 0,
   },
   image: {
     width: '100%',
     height: '100%',
+    resizeMode: 'contain',
+  },
+  photoTileWrapper: {
+    width: 150,
+    height: 150,
+    alignSelf: 'center',
+    position: 'relative',
+  },
+  removePhotoButton: {
+    position: 'absolute',
+    top: 8,
+    right: 8,
+    padding: 4,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 8,
+    backgroundColor: Colors.surface,
   },
   placeholderContent: {
     alignItems: 'center',
@@ -720,6 +809,9 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     gap: 12,
   },
+  bottomSpacer: {
+    height: 250,
+  },
   submitButton: {
     borderRadius: 12,
     paddingVertical: 14,
@@ -735,7 +827,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     gap: 16,
-    padding: 12,
+    paddingHorizontal: 16,
+    paddingVertical: Platform.select({ ios: 14, default: 12 }),
     borderWidth: StyleSheet.hairlineWidth,
     borderRadius: 12,
   },
@@ -748,8 +841,9 @@ const styles = StyleSheet.create({
   baseThumb: {
     width: 56,
     height: 56,
-    borderRadius: 12,
+    borderRadius: 8,
     overflow: 'hidden',
+    backgroundColor: Colors.background,
   },
   baseImage: {
     width: '100%',
@@ -759,11 +853,11 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 12,
+    borderRadius: 8,
   },
   baseName: {
     fontSize: 16,
-    fontWeight: '500',
+    fontWeight: '400',
   },
   basePlaceholderRow: {
     flexDirection: 'row',
@@ -786,16 +880,27 @@ const styles = StyleSheet.create({
   },
   modalOverlay: {
     flex: 1,
-    paddingTop: 48,
-    paddingBottom: 48,
-    paddingHorizontal: 24,
-    justifyContent: 'flex-start',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 16,
   },
   modalCard: {
-    borderRadius: 12,
-    padding: 16,
-    gap: 16,
-    flex: 1,
+    width: '100%',
+    maxHeight: '92%',
+    borderRadius: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    gap: 12,
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 12,
+  },
+  modalTitle: {
+    fontSize: 16,
+    fontWeight: '600',
   },
   modalSearchInput: {
     borderWidth: StyleSheet.hairlineWidth,
@@ -805,9 +910,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   modalListContent: {
-    gap: 12,
     flexGrow: 1,
-    paddingBottom: 12,
+    paddingVertical: 8,
   },
   modalSeparator: {
     height: StyleSheet.hairlineWidth,
@@ -815,6 +919,7 @@ const styles = StyleSheet.create({
   modalEmptyText: {
     textAlign: 'center',
     fontSize: 14,
+    paddingVertical: 24,
   },
   emptyState: {
     flex: 1,
