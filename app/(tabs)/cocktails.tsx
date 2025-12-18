@@ -550,6 +550,18 @@ export default function CocktailsScreen() {
     [router],
   );
 
+  const handleSelectIngredient = useCallback(
+    (ingredientId: number) => {
+      if (ingredientId >= 0) {
+        router.push({
+          pathname: '/ingredient/[ingredientId]',
+          params: { ingredientId: String(ingredientId) },
+        });
+      }
+    },
+    [router],
+  );
+
   const handleShoppingToggle = useCallback(
     (ingredientId: number) => {
       if (ingredientId >= 0) {
@@ -593,16 +605,13 @@ export default function CocktailsScreen() {
 
       if (item.type === 'ingredient-header') {
         const isOnShoppingList = shoppingIngredientIds.has(item.ingredientId);
-        const buttonLabel = isOnShoppingList ? 'On shopping list' : 'Add to shopping list';
         const accessibilityLabel = isOnShoppingList
           ? 'Remove ingredient from shopping list'
           : 'Add ingredient to shopping list';
         const subtitleLabel = `Make ${item.cocktailCount} ${
           item.cocktailCount === 1 ? 'cocktail' : 'cocktails'
         }`;
-        const thumbnail = (
-          <Thumb label={item.name} uri={item.photoUri ?? undefined} />
-        );
+        const thumbnail = <Thumb label={item.name} uri={item.photoUri ?? undefined} />;
 
         return (
           <ListRow
@@ -612,6 +621,8 @@ export default function CocktailsScreen() {
             highlightColor={paletteColors.highlightSubtle}
             tagColor={item.tagColor}
             thumbnail={thumbnail}
+            onPress={() => handleSelectIngredient(item.ingredientId)}
+            accessibilityRole="button"
             control={
               <Pressable
                 accessibilityRole="button"
@@ -623,13 +634,6 @@ export default function CocktailsScreen() {
                   size={16}
                   color={isOnShoppingList ? paletteColors.tint : paletteColors.onSurfaceVariant}
                 />
-                <Text
-                  style={[
-                    styles.shoppingButtonLabel,
-                    { color: isOnShoppingList ? paletteColors.tint : paletteColors.onSurfaceVariant },
-                  ]}>
-                  {buttonLabel}
-                </Text>
               </Pressable>
             }
           />
@@ -651,6 +655,7 @@ export default function CocktailsScreen() {
       allowAllSubstitutes,
       availableIngredientIds,
       handleSelectCocktail,
+      handleSelectIngredient,
       handleShoppingToggle,
       ignoreGarnish,
       ingredientLookup,
@@ -841,14 +846,9 @@ const styles = StyleSheet.create({
   shoppingButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
     paddingHorizontal: 8,
     paddingVertical: 6,
     borderRadius: 16,
-  },
-  shoppingButtonLabel: {
-    fontSize: 12,
-    fontWeight: '600',
   },
   emptyLabel: {
     textAlign: 'center',
