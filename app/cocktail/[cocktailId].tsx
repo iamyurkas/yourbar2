@@ -447,7 +447,7 @@ export default function CocktailDetailsScreen() {
                     const photoUri = ingredient.photoUri ?? resolvedIngredient?.photoUri ?? catalogEntry?.photoUri;
                     const previousIngredient = sortedIngredients[index - 1];
                     const previousResolution = previousIngredient ? resolvedIngredients[index - 1] : undefined;
-                    const dividerColor = previousResolution?.isConsideredAvailable
+                    const dividerColor = previousResolution?.isAvailable
                       ? palette.outline
                       : palette.outlineVariant;
                     const tagColor =
@@ -527,13 +527,11 @@ export default function CocktailDetailsScreen() {
                             )
                           }
                           onPress={handlePress}
-                          selected={resolution.isConsideredAvailable}
+                          selected={resolution.isAvailable}
                           highlightColor={ingredientHighlightColor}
                           tagColor={tagColor}
                           accessibilityRole="button"
-                          accessibilityState={
-                            resolution.isConsideredAvailable ? { selected: true } : undefined
-                          }
+                          accessibilityState={resolution.isAvailable ? { selected: true } : undefined}
                           metaAlignment="center"
                         />
                       </View>
