@@ -111,22 +111,6 @@ const IngredientListItem = memo(function IngredientListItemComponent({
 
   const brandIndicatorColor = ingredient.baseIngredientId != null ? Colors.primary : undefined;
 
-  const control = useMemo(() => {
-    return (
-      <View style={styles.presenceSlot}>
-        {showAvailabilityToggle ? (
-          <PresenceCheck checked={isAvailable} onToggle={handleToggleAvailability} />
-        ) : (
-          <View style={styles.presencePlaceholder} />
-        )}
-      </View>
-    );
-  }, [
-    handleToggleAvailability,
-    isAvailable,
-    showAvailabilityToggle,
-  ]);
-
   const shoppingControl = useMemo(() => {
     const shoppingLabel = onShoppingToggle ? 'Remove from shopping list' : 'On shopping list';
     const isShoppingTab = Boolean(onShoppingToggle);
@@ -167,6 +151,22 @@ const IngredientListItem = memo(function IngredientListItemComponent({
     );
   }, [handleShoppingToggle, isOnShoppingList, onShoppingToggle]);
 
+  const control = useMemo(() => {
+    if (onShoppingToggle) {
+      return <View style={styles.presenceSlot}>{shoppingControl}</View>;
+    }
+
+    return (
+      <View style={styles.presenceSlot}>
+        {showAvailabilityToggle ? (
+          <PresenceCheck checked={isAvailable} onToggle={handleToggleAvailability} />
+        ) : (
+          <View style={styles.presencePlaceholder} />
+        )}
+      </View>
+    );
+  }, [handleToggleAvailability, isAvailable, onShoppingToggle, showAvailabilityToggle, shoppingControl]);
+
   const handlePress = useCallback(() => {
     const routeParam = ingredient.id ?? ingredient.name;
     if (routeParam == null) {
@@ -192,7 +192,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
       accessibilityState={showAvailabilityToggle && isAvailable ? { selected: true } : undefined}
       thumbnail={thumbnail}
       control={control}
-      metaFooter={shoppingControl}
+      metaFooter={onShoppingToggle ? undefined : shoppingControl}
       brandIndicatorColor={brandIndicatorColor}
       metaAlignment="center"
     />
@@ -805,8 +805,11 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
   },
   shoppingButton: {
-    borderRadius: 12,
-    padding: 4,
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   shoppingButtonPressed: {
     opacity: 0.6,
