@@ -471,12 +471,12 @@ export default function EditIngredientScreen() {
         style={styles.container}
         keyboardShouldPersistTaps="handled">
         <View style={styles.section}>
-          <Text style={[styles.label, { color: paletteColors.onSurfaceVariant }]}>Name</Text>
+          <Text style={[styles.label, { color: paletteColors.onSurface }]}>Name</Text>
           <TextInput
             value={name}
             onChangeText={setName}
             placeholder="e.g. Ginger syrup"
-            style={[styles.input, { borderColor: paletteColors.outlineVariant, color: paletteColors.text }]}
+            style={[styles.input, { borderColor: paletteColors.outlineVariant, color: paletteColors.text, backgroundColor: paletteColors.surface }]}
             placeholderTextColor={`${paletteColors.onSurfaceVariant}99`}
           />
         </View>
@@ -486,8 +486,8 @@ export default function EditIngredientScreen() {
           accessibilityLabel={placeholderLabel}
           style={[
             styles.imagePlaceholder,
-            { borderColor: paletteColors.outline },
-            !imageSource && { backgroundColor: paletteColors.surfaceVariant },
+            { borderColor: paletteColors.outlineVariant },
+            !imageSource && { backgroundColor: paletteColors.surface },
           ]}
           onPress={handlePickImage}
           android_ripple={{ color: `${paletteColors.surface}33` }}>
@@ -495,13 +495,14 @@ export default function EditIngredientScreen() {
             <Image source={imageSource} style={styles.image} contentFit="contain" />
           ) : (
             <View style={styles.placeholderContent}>
-              <Text style={[styles.placeholderHint, { color: paletteColors.onSurfaceVariant }]}>Tap to add a photo</Text>
+              <MaterialCommunityIcons name="image-plus" size={28} color={`${paletteColors.onSurfaceVariant}99`} />
+              <Text style={[styles.placeholderHint, { color: `${paletteColors.onSurfaceVariant}99` }]}>Tap to add a photo</Text>
             </View>
           )}
         </Pressable>
 
         <View style={styles.section}>
-          <Text style={[styles.label, { color: paletteColors.onSurfaceVariant }]}>Tags</Text>
+          <Text style={[styles.label, { color: paletteColors.onSurface }]}>Tags</Text>
           <Text style={[styles.hint, { color: paletteColors.onSurfaceVariant }]}>Select one or more tags</Text>
           <View style={styles.tagList}>
             {tagSelection.map((tag) => (
@@ -520,12 +521,12 @@ export default function EditIngredientScreen() {
         </View>
 
         <View style={styles.section}>
-          <Text style={[styles.label, { color: paletteColors.onSurfaceVariant }]}>Base ingredient</Text>
+          <Text style={[styles.label, { color: paletteColors.onSurface }]}>Base ingredient</Text>
           <Pressable
             accessibilityRole="button"
             accessibilityLabel={baseIngredient ? 'Change base ingredient' : 'Select base ingredient'}
             onPress={handleOpenBaseModal}
-            style={[styles.baseSelector, { borderColor: paletteColors.outline, backgroundColor: paletteColors.surface }]}
+            style={[styles.baseSelector, { borderColor: paletteColors.outlineVariant, backgroundColor: paletteColors.surface }]}
           >
             {baseIngredient ? (
               <>
@@ -579,30 +580,30 @@ export default function EditIngredientScreen() {
         </View>
 
         <View style={[styles.section, styles.descriptionSection]}>
-          <Text style={[styles.label, { color: paletteColors.onSurfaceVariant }]}>Description</Text>
+          <Text style={[styles.label, { color: paletteColors.onSurface }]}>Description</Text>
           <TextInput
             value={description}
             onChangeText={setDescription}
             placeholder="Add tasting notes or usage suggestions"
-            style={[
-              styles.input,
-              styles.multilineInput,
-              { borderColor: paletteColors.outlineVariant, color: paletteColors.text },
-            ]}
+              style={[
+                styles.input,
+                styles.multilineInput,
+                { borderColor: paletteColors.outlineVariant, color: paletteColors.text, backgroundColor: paletteColors.surface },
+              ]}
             placeholderTextColor={`${paletteColors.onSurfaceVariant}99`}
             multiline
             numberOfLines={4}
             textAlignVertical="top"
           />
-
-          <Pressable
-            accessibilityRole="button"
-            style={[styles.submitButton, { backgroundColor: paletteColors.tint }]}
-            onPress={handleSubmit}
-            disabled={isPickingImage}>
-            <Text style={[styles.submitLabel, { color: paletteColors.surface }]}>Save changes</Text>
-          </Pressable>
         </View>
+
+        <Pressable
+          accessibilityRole="button"
+          style={[styles.submitButton, { backgroundColor: paletteColors.tint }]}
+          onPress={handleSubmit}
+          disabled={isPickingImage}>
+          <Text style={[styles.submitLabel, { color: paletteColors.onPrimary }]}>Save changes</Text>
+        </Pressable>
       </ScrollView>
 
       <Modal
@@ -668,7 +669,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   descriptionSection: {
-    paddingBottom: 250,
+    paddingBottom: 0,
   },
   label: {
     fontSize: 16,
@@ -682,21 +683,26 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: Platform.select({ ios: 14, default: 12 }),
-    fontSize: 14,
+    fontSize: 16,
     backgroundColor: Colors.surface,
   },
   multilineInput: {
-    minHeight: 140,
+    minHeight: 120,
   },
   imagePlaceholder: {
     width: 150,
     height: 150,
+    maxWidth: 150,
+    maxHeight: 150,
+    minWidth: 150,
+    minHeight: 150,
     borderRadius: 12,
     borderWidth: StyleSheet.hairlineWidth,
     overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center',
-    alignSelf: 'flex-start',
+    alignSelf: 'center',
+    flexShrink: 0,
   },
   image: {
     width: '100%',
@@ -735,7 +741,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     gap: 16,
-    padding: 12,
+    paddingHorizontal: 16,
+    paddingVertical: Platform.select({ ios: 14, default: 12 }),
     borderWidth: StyleSheet.hairlineWidth,
     borderRadius: 12,
   },

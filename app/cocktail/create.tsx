@@ -987,13 +987,20 @@ export default function CreateCocktailScreen() {
                 <Pressable
                   accessibilityRole="button"
                   accessibilityLabel={placeholderLabel}
-                  style={[styles.photoTile, !imageSource && { backgroundColor: palette.surfaceVariant }]}
+                  style={[
+                    styles.photoTile,
+                    { borderColor: palette.outlineVariant },
+                    !imageSource && { backgroundColor: palette.surface },
+                  ]}
                   onPress={handlePickImage}
                   android_ripple={{ color: `${palette.surface}33` }}>
                   {imageSource ? (
                     <Image source={imageSource} style={styles.photoPreview} contentFit="contain" />
                   ) : (
-                    <Text style={[styles.cardHint, { color: palette.onSurfaceVariant }]}>Tap to select image</Text>
+                    <View style={styles.photoPlaceholderContent}>
+                      <MaterialCommunityIcons name="image-plus" size={28} color={`${palette.onSurfaceVariant}99`} />
+                      <Text style={[styles.cardHint, { color: `${palette.onSurfaceVariant}99` }]}>Tap to select image</Text>
+                    </View>
                   )}
                 </Pressable>
                 {imageUri ? (
@@ -1822,6 +1829,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     overflow: 'hidden',
+    borderWidth: StyleSheet.hairlineWidth,
+    backgroundColor: Colors.surface,
+  },
+  photoPlaceholderContent: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
   },
   photoPreview: {
     width: '100%',
