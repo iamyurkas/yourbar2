@@ -1863,7 +1863,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     overflow: 'hidden',
     borderWidth: StyleSheet.hairlineWidth,
-    backgroundColor: Colors.surface,
+    backgroundColor: Colors.background,
   },
   photoPlaceholderContent: {
     alignItems: 'center',
@@ -1873,6 +1873,7 @@ const styles = StyleSheet.create({
   photoPreview: {
     width: '100%',
     height: '100%',
+    backgroundColor: Colors.background,
   },
   glassRow: {
     justifyContent: 'space-between',
