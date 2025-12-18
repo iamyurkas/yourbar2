@@ -11,8 +11,8 @@ import {
   type TextStyle,
 } from 'react-native';
 
-import { resolveAssetFromCatalog } from '@/assets/image-manifest';
 import { Colors } from '@/constants/theme';
+import { resolveImageSource } from '@/libs/image-source';
 import { palette, tagColors } from '@/theme/theme';
 
 const THUMB_SIZE = 56;
@@ -30,17 +30,11 @@ export function Thumb({ uri, label, fallbackUri, fallbackLabel }: ThumbProps) {
   const trimmed = effectiveLabel?.trim();
   const fallbackText = trimmed ? trimmed.slice(0, 2).toUpperCase() : undefined;
 
-  const assetSource = resolveAssetFromCatalog(uri);
-  const resolvedUri = uri && /^https?:/i.test(uri) ? uri : undefined;
-  let source: ImageSource | undefined = assetSource ?? (resolvedUri ? { uri: resolvedUri } : undefined);
+  const primarySource = resolveImageSource(uri);
+  let source: ImageSource | undefined = primarySource;
 
   if (!source && fallbackUri) {
-    const fallbackAsset = resolveAssetFromCatalog(fallbackUri);
-    if (fallbackAsset) {
-      source = fallbackAsset;
-    } else if (/^https?:/i.test(fallbackUri)) {
-      source = { uri: fallbackUri };
-    }
+    source = resolveImageSource(fallbackUri);
   }
 
   return (

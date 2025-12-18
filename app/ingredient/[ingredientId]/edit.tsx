@@ -18,12 +18,12 @@ import {
   type GestureResponderEvent,
 } from 'react-native';
 
-import { resolveAssetFromCatalog } from '@/assets/image-manifest';
 import { AppDialog, type DialogOptions } from '@/components/AppDialog';
 import { ListRow, Thumb } from '@/components/RowParts';
 import { TagPill } from '@/components/TagPill';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { Colors } from '@/constants/theme';
+import { resolveImageSource } from '@/libs/image-source';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
 import { palette as appPalette } from '@/theme/theme';
 
@@ -296,22 +296,10 @@ export default function EditIngredientScreen() {
     return ingredients.find((item) => Number(item.id ?? -1) === targetId);
   }, [baseIngredientId, ingredients]);
 
-  const baseIngredientPhotoSource = useMemo(() => {
-    if (!baseIngredient?.photoUri) {
-      return undefined;
-    }
-
-    const asset = resolveAssetFromCatalog(baseIngredient.photoUri);
-    if (asset) {
-      return asset;
-    }
-
-    if (/^https?:/i.test(baseIngredient.photoUri) || baseIngredient.photoUri.startsWith('file:')) {
-      return { uri: baseIngredient.photoUri } as const;
-    }
-
-    return undefined;
-  }, [baseIngredient?.photoUri]);
+  const baseIngredientPhotoSource = useMemo(
+    () => resolveImageSource(baseIngredient?.photoUri),
+    [baseIngredient?.photoUri],
+  );
 
   const handleOpenBaseModal = useCallback(() => {
     setBaseSearch(baseIngredient?.name ?? '');
@@ -469,22 +457,7 @@ export default function EditIngredientScreen() {
     };
   }, [isBaseModalVisible]);
 
-  const imageSource = useMemo(() => {
-    if (!imageUri) {
-      return undefined;
-    }
-
-    const asset = resolveAssetFromCatalog(imageUri);
-    if (asset) {
-      return asset;
-    }
-
-    if (/^https?:/i.test(imageUri) || imageUri.startsWith('file:')) {
-      return { uri: imageUri } as const;
-    }
-
-    return undefined;
-  }, [imageUri]);
+  const imageSource = useMemo(() => resolveImageSource(imageUri), [imageUri]);
 
   const scrollFieldIntoView = useCallback((target?: number | null) => {
     if (target == null) {

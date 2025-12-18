@@ -14,7 +14,6 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { resolveAssetFromCatalog } from '@/assets/image-manifest';
 import { AppDialog, type DialogOptions } from '@/components/AppDialog';
 import { CocktailListRow } from '@/components/CocktailListRow';
 import { PresenceCheck } from '@/components/RowParts';
@@ -22,6 +21,7 @@ import { TagPill } from '@/components/TagPill';
 import { Colors } from '@/constants/theme';
 import { isCocktailReady } from '@/libs/cocktail-availability';
 import { createIngredientLookup } from '@/libs/ingredient-availability';
+import { resolveImageSource } from '@/libs/image-source';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
 
 function useResolvedIngredient(param: string | undefined, ingredients: Ingredient[]) {
@@ -155,22 +155,10 @@ export default function IngredientDetailsScreen() {
     return ingredients.filter((item) => Number(item.baseIngredientId ?? -1) === numericIngredientId);
   }, [ingredients, numericIngredientId]);
 
-  const baseIngredientPhotoSource = useMemo(() => {
-    if (!baseIngredient?.photoUri) {
-      return undefined;
-    }
-
-    const asset = resolveAssetFromCatalog(baseIngredient.photoUri);
-    if (asset) {
-      return asset;
-    }
-
-    if (/^https?:/i.test(baseIngredient.photoUri)) {
-      return { uri: baseIngredient.photoUri } as const;
-    }
-
-    return undefined;
-  }, [baseIngredient?.photoUri]);
+  const baseIngredientPhotoSource = useMemo(
+    () => resolveImageSource(baseIngredient?.photoUri),
+    [baseIngredient?.photoUri],
+  );
 
   const cocktailsWithIngredient = useMemo(() => {
     if (!ingredient) {
@@ -315,22 +303,10 @@ export default function IngredientDetailsScreen() {
     setIsDescriptionExpanded((previous) => !previous);
   }, []);
 
-  const photoSource = useMemo(() => {
-    if (!ingredient?.photoUri) {
-      return undefined;
-    }
-
-    const asset = resolveAssetFromCatalog(ingredient.photoUri);
-    if (asset) {
-      return asset;
-    }
-
-    if (/^https?:/i.test(ingredient.photoUri)) {
-      return { uri: ingredient.photoUri } as const;
-    }
-
-    return undefined;
-  }, [ingredient?.photoUri]);
+  const photoSource = useMemo(
+    () => resolveImageSource(ingredient?.photoUri),
+    [ingredient?.photoUri],
+  );
 
   const handleRemoveBase = useCallback(
     (event?: GestureResponderEvent) => {
@@ -596,22 +572,7 @@ export default function IngredientDetailsScreen() {
                 <Text style={[styles.sectionTitle, { color: palette.onSurface }]}>Branded ingredients</Text>
                 <View style={styles.brandedList}>
                   {brandedIngredients.map((branded) => {
-                    const brandedPhotoSource = (() => {
-                      if (!branded.photoUri) {
-                        return undefined;
-                      }
-
-                      const asset = resolveAssetFromCatalog(branded.photoUri);
-                      if (asset) {
-                        return asset;
-                      }
-
-                      if (/^https?:/i.test(branded.photoUri)) {
-                        return { uri: branded.photoUri } as const;
-                      }
-
-                      return undefined;
-                    })();
+                    const brandedPhotoSource = resolveImageSource(branded.photoUri);
 
                     return (
                       <Pressable

@@ -5,10 +5,7 @@ import React, { useCallback, useEffect, useMemo, useState, useTransition } from 
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import {
-  resolveAssetFromCatalog,
-  resolveGlasswareUriFromId,
-} from '@/assets/image-manifest';
+import { resolveGlasswareUriFromId } from '@/assets/image-manifest';
 import { HeaderIconButton } from '@/components/HeaderIconButton';
 import { ListRow, Thumb } from '@/components/RowParts';
 import { TagPill } from '@/components/TagPill';
@@ -23,6 +20,7 @@ import {
   resolveIngredientAvailability,
   type IngredientLookup,
 } from '@/libs/ingredient-availability';
+import { resolveImageSource } from '@/libs/image-source';
 import { palette as appPalette } from '@/theme/theme';
 
 type RecipeIngredient = NonNullable<Cocktail['ingredients']>[number];
@@ -245,41 +243,14 @@ export default function CocktailDetailsScreen() {
 
   const ingredientHighlightColor = appPalette.highlightFaint;
 
-  const photoSource = useMemo(() => {
-    if (!cocktail?.photoUri) {
-      return undefined;
-    }
-
-    const asset = resolveAssetFromCatalog(cocktail.photoUri);
-    if (asset) {
-      return asset;
-    }
-
-    if (/^https?:/i.test(cocktail.photoUri)) {
-      return { uri: cocktail.photoUri } as const;
-    }
-
-    return undefined;
-  }, [cocktail?.photoUri]);
+  const photoSource = useMemo(
+    () => resolveImageSource(cocktail?.photoUri),
+    [cocktail?.photoUri],
+  );
 
   const glassUri = useMemo(() => resolveGlasswareUriFromId(cocktail?.glassId), [cocktail?.glassId]);
 
-  const glassSource = useMemo(() => {
-    if (!glassUri) {
-      return undefined;
-    }
-
-    const asset = resolveAssetFromCatalog(glassUri);
-    if (asset) {
-      return asset;
-    }
-
-    if (/^https?:/i.test(glassUri)) {
-      return { uri: glassUri } as const;
-    }
-
-    return undefined;
-  }, [glassUri]);
+  const glassSource = useMemo(() => resolveImageSource(glassUri), [glassUri]);
 
   const displayedImageSource = photoSource ?? glassSource;
   const glassLabel = useMemo(() => formatGlassLabel(cocktail?.glassId), [cocktail?.glassId]);
