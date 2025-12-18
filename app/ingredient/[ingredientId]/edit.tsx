@@ -288,6 +288,10 @@ export default function EditIngredientScreen() {
     [],
   );
 
+  const handleRemoveImage = useCallback(() => {
+    setImageUri(null);
+  }, []);
+
   const handleCloseBaseModal = useCallback(() => {
     const normalized = baseSearch.trim().toLowerCase();
     if (normalized) {
@@ -511,25 +515,37 @@ export default function EditIngredientScreen() {
           />
         </View>
 
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={placeholderLabel}
-          style={[
-            styles.imagePlaceholder,
-            { borderColor: paletteColors.outlineVariant },
-            !imageSource && { backgroundColor: paletteColors.surface },
-          ]}
-          onPress={handlePickImage}
-          android_ripple={{ color: `${paletteColors.surface}33` }}>
+        <View style={styles.photoTileWrapper}>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={placeholderLabel}
+            style={[
+              styles.imagePlaceholder,
+              { borderColor: paletteColors.outlineVariant },
+              !imageSource && { backgroundColor: paletteColors.surface },
+            ]}
+            onPress={handlePickImage}
+            android_ripple={{ color: `${paletteColors.surface}33` }}>
+            {imageSource ? (
+              <Image source={imageSource} style={styles.image} contentFit="contain" />
+            ) : (
+              <View style={styles.placeholderContent}>
+                <MaterialCommunityIcons name="image-plus" size={28} color={`${paletteColors.onSurfaceVariant}99`} />
+                <Text style={[styles.placeholderHint, { color: `${paletteColors.onSurfaceVariant}99` }]}>Tap to add a photo</Text>
+              </View>
+            )}
+          </Pressable>
           {imageSource ? (
-            <Image source={imageSource} style={styles.image} contentFit="contain" />
-          ) : (
-            <View style={styles.placeholderContent}>
-              <MaterialCommunityIcons name="image-plus" size={28} color={`${paletteColors.onSurfaceVariant}99`} />
-              <Text style={[styles.placeholderHint, { color: `${paletteColors.onSurfaceVariant}99` }]}>Tap to add a photo</Text>
-            </View>
-          )}
-        </Pressable>
+            <Pressable
+              onPress={handleRemoveImage}
+              hitSlop={8}
+              style={styles.removePhotoButton}
+              accessibilityRole="button"
+              accessibilityLabel="Remove photo">
+              <MaterialCommunityIcons name="trash-can-outline" size={18} color={paletteColors.error} />
+            </Pressable>
+          ) : null}
+        </View>
 
         <View style={styles.section}>
           <Text style={[styles.label, { color: paletteColors.onSurface }]}>Tags</Text>
@@ -702,7 +718,7 @@ export default function EditIngredientScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.surface,
+    backgroundColor: Colors.background,
   },
   headerButton: {
     width: 40,
@@ -758,6 +774,22 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     resizeMode: 'contain',
+  },
+  photoTileWrapper: {
+    width: 150,
+    height: 150,
+    alignSelf: 'center',
+    position: 'relative',
+  },
+  removePhotoButton: {
+    position: 'absolute',
+    top: 8,
+    left: 8,
+    padding: 4,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 8,
+    backgroundColor: Colors.surface,
   },
   placeholderContent: {
     alignItems: 'center',
