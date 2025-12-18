@@ -15,6 +15,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { CocktailListRow } from '@/components/CocktailListRow';
 import { CollectionHeader } from '@/components/CollectionHeader';
 import { FabAdd } from '@/components/FabAdd';
+import { ListRow, Thumb } from '@/components/RowParts';
 import { SideMenuDrawer } from '@/components/SideMenuDrawer';
 import { TagPill } from '@/components/TagPill';
 import type { SegmentTabOption } from '@/components/TopBars';
@@ -41,7 +42,15 @@ type IngredientOption = {
 type MyTabListItem =
   | { type: 'cocktail'; key: string; cocktail: Cocktail }
   | { type: 'separator'; key: string }
-  | { type: 'ingredient-header'; key: string; ingredientId: number; name: string };
+  | {
+      type: 'ingredient-header';
+      key: string;
+      ingredientId: number;
+      name: string;
+      photoUri?: string | null;
+      tagColor?: string;
+      cocktailCount: number;
+    };
 
 const TAB_OPTIONS: SegmentTabOption[] = [
   { key: 'all', label: 'All' },
@@ -360,7 +369,16 @@ export default function CocktailsScreen() {
       }
     };
 
-    const groups = new Map<number, { name: string; cocktails: Cocktail[]; keys: Set<string> }>();
+    const groups = new Map<
+      number,
+      {
+        name: string;
+        photoUri?: string | null;
+        tagColor?: string;
+        cocktails: Cocktail[];
+        keys: Set<string>;
+      }
+    >();
     const available: Cocktail[] = [];
     const availabilityMap = new Map<string, boolean>();
 
@@ -441,8 +459,11 @@ export default function CocktailsScreen() {
           return;
         }
 
+        const ingredientRecord = ingredientLookup.ingredientById.get(option.id);
         const group = groups.get(option.id) ?? {
           name: option.name,
+          photoUri: ingredientRecord?.photoUri ?? null,
+          tagColor: ingredientRecord?.tags?.[0]?.color ?? palette.tagYellow,
           cocktails: [],
           keys: new Set<string>(),
         };
@@ -460,6 +481,8 @@ export default function CocktailsScreen() {
       .map(([ingredientId, group]) => ({
         ingredientId,
         name: group.name,
+        photoUri: group.photoUri,
+        tagColor: group.tagColor,
         cocktails: group.cocktails.sort((a, b) =>
           (a.name ?? '').localeCompare(b.name ?? ''),
         ),
@@ -488,6 +511,9 @@ export default function CocktailsScreen() {
           key: `ingredient-${group.ingredientId}`,
           ingredientId: group.ingredientId,
           name: group.name,
+          photoUri: group.photoUri,
+          tagColor: group.tagColor,
+          cocktailCount: group.cocktails.length,
         });
         group.cocktails.forEach((cocktail) => {
           items.push({
@@ -571,31 +597,42 @@ export default function CocktailsScreen() {
         const accessibilityLabel = isOnShoppingList
           ? 'Remove ingredient from shopping list'
           : 'Add ingredient to shopping list';
+        const subtitleLabel = `Make ${item.cocktailCount} ${
+          item.cocktailCount === 1 ? 'cocktail' : 'cocktails'
+        }`;
+        const thumbnail = (
+          <Thumb label={item.name} uri={item.photoUri ?? undefined} />
+        );
 
         return (
-          <View style={[styles.ingredientHeader, { borderColor: paletteColors.outlineVariant }]}>
-            <Text style={[styles.ingredientHeaderText, { color: paletteColors.onSurface }]}>
-              {item.name}
-            </Text>
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel={accessibilityLabel}
-              onPress={() => handleShoppingToggle(item.ingredientId)}
-              style={styles.shoppingButton}>
-              <MaterialIcons
-                name={isOnShoppingList ? 'shopping-cart' : 'add-shopping-cart'}
-                size={16}
-                color={isOnShoppingList ? paletteColors.tint : paletteColors.onSurfaceVariant}
-              />
-              <Text
-                style={[
-                  styles.shoppingButtonLabel,
-                  { color: isOnShoppingList ? paletteColors.tint : paletteColors.onSurfaceVariant },
-                ]}>
-                {buttonLabel}
-              </Text>
-            </Pressable>
-          </View>
+          <ListRow
+            title={item.name}
+            subtitle={subtitleLabel}
+            selected
+            highlightColor={paletteColors.highlightSubtle}
+            tagColor={item.tagColor}
+            thumbnail={thumbnail}
+            control={
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={accessibilityLabel}
+                onPress={() => handleShoppingToggle(item.ingredientId)}
+                style={styles.shoppingButton}>
+                <MaterialIcons
+                  name={isOnShoppingList ? 'shopping-cart' : 'add-shopping-cart'}
+                  size={16}
+                  color={isOnShoppingList ? paletteColors.tint : paletteColors.onSurfaceVariant}
+                />
+                <Text
+                  style={[
+                    styles.shoppingButtonLabel,
+                    { color: isOnShoppingList ? paletteColors.tint : paletteColors.onSurfaceVariant },
+                  ]}>
+                  {buttonLabel}
+                </Text>
+              </Pressable>
+            }
+          />
         );
       }
 
@@ -800,20 +837,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     textTransform: 'uppercase',
     letterSpacing: 0.4,
-  },
-  ingredientHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderTopWidth: StyleSheet.hairlineWidth,
-  },
-  ingredientHeaderText: {
-    fontSize: 15,
-    fontWeight: '600',
-    flex: 1,
   },
   shoppingButton: {
     flexDirection: 'row',
