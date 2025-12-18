@@ -1,3 +1,4 @@
+import { MaterialIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
@@ -14,21 +15,16 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { CocktailListRow } from '@/components/CocktailListRow';
 import { CollectionHeader } from '@/components/CollectionHeader';
 import { FabAdd } from '@/components/FabAdd';
+import { ListRow, Thumb } from '@/components/RowParts';
 import { SideMenuDrawer } from '@/components/SideMenuDrawer';
 import { TagPill } from '@/components/TagPill';
 import type { SegmentTabOption } from '@/components/TopBars';
 import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
 import { Colors } from '@/constants/theme';
 import { isCocktailReady } from '@/libs/cocktail-availability';
-import { createIngredientLookup, isRecipeIngredientAvailable } from '@/libs/ingredient-availability';
+import { createIngredientLookup } from '@/libs/ingredient-availability';
 import { useInventory, type Cocktail } from '@/providers/inventory-provider';
 import { palette } from '@/theme/theme';
-
-type CocktailSection = {
-  key: string;
-  label: string;
-  data: Cocktail[];
-};
 
 type CocktailTabKey = 'all' | 'my' | 'favorites';
 
@@ -38,15 +34,53 @@ type CocktailTagOption = {
   color: string;
 };
 
+type IngredientOption = {
+  id: number;
+  name: string;
+};
+
+type MyTabListItem =
+  | { type: 'cocktail'; key: string; cocktail: Cocktail }
+  | { type: 'separator'; key: string }
+  | {
+      type: 'ingredient-header';
+      key: string;
+      ingredientId: number;
+      name: string;
+      photoUri?: string | null;
+      tagColor?: string;
+      cocktailCount: number;
+    };
+
 const TAB_OPTIONS: SegmentTabOption[] = [
   { key: 'all', label: 'All' },
   { key: 'my', label: 'My' },
   { key: 'favorites', label: 'Favorites' },
 ];
 
+const normalizeIngredientId = (value?: number | string | null): number | undefined => {
+  if (value == null) {
+    return undefined;
+  }
+
+  const numeric = Number(value);
+  if (!Number.isFinite(numeric) || numeric < 0) {
+    return undefined;
+  }
+
+  return Math.trunc(numeric);
+};
+
 export default function CocktailsScreen() {
-  const { cocktails, availableIngredientIds, ingredients, ignoreGarnish, allowAllSubstitutes } =
-    useInventory();
+  const {
+    cocktails,
+    availableIngredientIds,
+    ingredients,
+    ignoreGarnish,
+    allowAllSubstitutes,
+    shoppingIngredientIds,
+    toggleIngredientShopping,
+  } = useInventory();
   const [activeTab, setActiveTab] = useState<CocktailTabKey>('all');
   const [query, setQuery] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -204,21 +238,6 @@ export default function CocktailsScreen() {
     });
   }, []);
 
-  const readyToMix = useMemo(() => {
-    return cocktails.filter((cocktail) => {
-      const recipe = cocktail.ingredients ?? [];
-      if (recipe.length === 0) {
-        return false;
-      }
-      return recipe.every((item) =>
-        isRecipeIngredientAvailable(item, availableIngredientIds, ingredientLookup, {
-          ignoreGarnish,
-          allowAllSubstitutes,
-        }),
-      );
-    });
-  }, [cocktails, availableIngredientIds, allowAllSubstitutes, ignoreGarnish, ingredientLookup]);
-
   const ratedCocktails = useMemo(() => {
     return cocktails.filter((cocktail) => {
       const ratingValue = Number((cocktail as { userRating?: number }).userRating ?? 0);
@@ -226,19 +245,13 @@ export default function CocktailsScreen() {
     });
   }, [cocktails]);
 
-  const sections = useMemo<Record<CocktailTabKey, CocktailSection>>(() => {
-    return {
-      all: { key: 'all', label: 'All', data: cocktails },
-      my: { key: 'my', label: 'My', data: readyToMix },
-      favorites: {
-        key: 'favorites',
-        label: 'Favorites',
-        data: ratedCocktails,
-      },
-    };
-  }, [cocktails, readyToMix, ratedCocktails]);
+  const baseTabCocktails = useMemo(() => {
+    if (activeTab === 'favorites') {
+      return ratedCocktails;
+    }
 
-  const activeSection = sections[activeTab] ?? sections.all;
+    return cocktails;
+  }, [activeTab, cocktails, ratedCocktails]);
 
   const normalizedQuery = useMemo(() => {
     const trimmed = query.trim().toLowerCase();
@@ -247,7 +260,7 @@ export default function CocktailsScreen() {
   }, [query]);
 
   const filteredByTags = useMemo(() => {
-    const base = activeSection.data;
+    const base = baseTabCocktails;
     if (selectedTagKeys.size === 0) {
       return base;
     }
@@ -271,7 +284,7 @@ export default function CocktailsScreen() {
         return selectedTagKeys.has(key);
       });
     });
-  }, [activeSection.data, selectedTagKeys]);
+  }, [baseTabCocktails, selectedTagKeys]);
 
   const filteredCocktails = useMemo(() => {
     const base = filteredByTags;
@@ -294,7 +307,236 @@ export default function CocktailsScreen() {
     );
   }, [filteredByTags, normalizedQuery]);
 
+  const myTabListData = useMemo(() => {
+    if (activeTab !== 'my') {
+      return null;
+    }
+
+    const resolveNameFromId = (id?: number, fallback?: string): string => {
+      if (id == null) {
+        return (fallback ?? '').trim();
+      }
+
+      const record = ingredientLookup.ingredientById.get(id);
+      return (record?.name ?? fallback ?? '').trim();
+    };
+
+    const collectIngredientOptions = (
+      ingredientId: number | undefined,
+      fallbackName: string | undefined,
+      allowBase: boolean,
+      allowBrand: boolean,
+      map: Map<number, string>,
+    ) => {
+      if (ingredientId == null) {
+        return;
+      }
+
+      const resolvedName = resolveNameFromId(ingredientId, fallbackName) || 'Unknown ingredient';
+      if (!map.has(ingredientId)) {
+        map.set(ingredientId, resolvedName);
+      }
+
+      const record = ingredientLookup.ingredientById.get(ingredientId);
+      const baseId = normalizeIngredientId(record?.baseIngredientId);
+
+      if (baseId == null) {
+        if (allowBrand) {
+          ingredientLookup.brandsByBaseId.get(ingredientId)?.forEach((brandId) => {
+            const brandName = resolveNameFromId(brandId);
+            if (brandName) {
+              map.set(brandId, brandName);
+            }
+          });
+        }
+        return;
+      }
+
+      if (allowBase) {
+        const baseName = resolveNameFromId(baseId);
+        if (baseName) {
+          map.set(baseId, baseName);
+        }
+      }
+
+      if (allowBrand) {
+        ingredientLookup.brandsByBaseId.get(baseId)?.forEach((brandId) => {
+          const brandName = resolveNameFromId(brandId);
+          if (brandName) {
+            map.set(brandId, brandName);
+          }
+        });
+      }
+    };
+
+    const groups = new Map<
+      number,
+      {
+        name: string;
+        photoUri?: string | null;
+        tagColor?: string;
+        cocktails: Cocktail[];
+        keys: Set<string>;
+      }
+    >();
+    const available: Cocktail[] = [];
+    const availabilityMap = new Map<string, boolean>();
+
+    filteredCocktails.forEach((cocktail) => {
+      const recipe = cocktail.ingredients ?? [];
+      const requiredIngredients = recipe.filter(
+        (item) => item && !item.optional && !(ignoreGarnish && item.garnish),
+      );
+
+      if (requiredIngredients.length === 0) {
+        return;
+      }
+
+      let missingCount = 0;
+      let missingOptions: IngredientOption[] = [];
+
+      requiredIngredients.forEach((ingredient) => {
+        const allowBase = Boolean(ingredient.allowBaseSubstitution || allowAllSubstitutes);
+        const allowBrand = Boolean(ingredient.allowBrandSubstitution || allowAllSubstitutes);
+        const candidateMap = new Map<number, string>();
+        const requestedId = normalizeIngredientId(ingredient.ingredientId);
+        const requestedName = resolveNameFromId(requestedId, ingredient.name ?? undefined);
+
+        collectIngredientOptions(
+          requestedId,
+          requestedName,
+          allowBase,
+          allowBrand,
+          candidateMap,
+        );
+
+        (ingredient.substitutes ?? []).forEach((substitute) => {
+          const substituteId = normalizeIngredientId(
+            typeof substitute.ingredientId === 'number' ? substitute.ingredientId : substitute.id,
+          );
+          const substituteName = substitute.name ?? requestedName;
+          collectIngredientOptions(
+            substituteId,
+            substituteName,
+            allowBase,
+            allowBrand,
+            candidateMap,
+          );
+        });
+
+        const candidateOptions = Array.from(candidateMap.entries()).map(([id, name]) => ({
+          id,
+          name,
+        }));
+
+        const isSatisfied = candidateOptions.some((option) =>
+          availableIngredientIds.has(option.id),
+        );
+
+        if (!isSatisfied) {
+          missingCount += 1;
+          if (missingCount === 1) {
+            missingOptions = candidateOptions;
+          }
+        }
+      });
+
+      const cocktailKey = String(cocktail.id ?? cocktail.name);
+      if (missingCount === 0) {
+        available.push(cocktail);
+        availabilityMap.set(cocktailKey, true);
+        return;
+      }
+
+      availabilityMap.set(cocktailKey, false);
+
+      if (missingCount !== 1) {
+        return;
+      }
+
+      missingOptions.forEach((option) => {
+        if (option.id == null) {
+          return;
+        }
+
+        const ingredientRecord = ingredientLookup.ingredientById.get(option.id);
+        const group = groups.get(option.id) ?? {
+          name: option.name,
+          photoUri: ingredientRecord?.photoUri ?? null,
+          tagColor: ingredientRecord?.tags?.[0]?.color ?? palette.tagYellow,
+          cocktails: [],
+          keys: new Set<string>(),
+        };
+
+        if (!group.keys.has(cocktailKey)) {
+          group.cocktails.push(cocktail);
+          group.keys.add(cocktailKey);
+        }
+
+        groups.set(option.id, group);
+      });
+    });
+
+    const sortedGroups = Array.from(groups.entries())
+      .map(([ingredientId, group]) => ({
+        ingredientId,
+        name: group.name,
+        photoUri: group.photoUri,
+        tagColor: group.tagColor,
+        cocktails: group.cocktails.sort((a, b) =>
+          (a.name ?? '').localeCompare(b.name ?? ''),
+        ),
+      }))
+      .sort((a, b) => {
+        if (a.cocktails.length !== b.cocktails.length) {
+          return b.cocktails.length - a.cocktails.length;
+        }
+        return a.name.localeCompare(b.name);
+      });
+
+    const items: MyTabListItem[] = [];
+    available.forEach((cocktail) => {
+      items.push({
+        type: 'cocktail',
+        key: `cocktail-${cocktail.id ?? cocktail.name}`,
+        cocktail,
+      });
+    });
+
+    if (sortedGroups.length > 0) {
+      items.push({ type: 'separator', key: 'more-ingredients-needed' });
+      sortedGroups.forEach((group) => {
+        items.push({
+          type: 'ingredient-header',
+          key: `ingredient-${group.ingredientId}`,
+          ingredientId: group.ingredientId,
+          name: group.name,
+          photoUri: group.photoUri,
+          tagColor: group.tagColor,
+          cocktailCount: group.cocktails.length,
+        });
+        group.cocktails.forEach((cocktail) => {
+          items.push({
+            type: 'cocktail',
+            key: `cocktail-${cocktail.id ?? cocktail.name}-missing-${group.ingredientId}`,
+            cocktail,
+          });
+        });
+      });
+    }
+
+    return { items, availabilityMap };
+  }, [
+    activeTab,
+    allowAllSubstitutes,
+    availableIngredientIds,
+    filteredCocktails,
+    ignoreGarnish,
+    ingredientLookup,
+  ]);
+
   const keyExtractor = useCallback((item: Cocktail) => String(item.id ?? item.name), []);
+  const myTabKeyExtractor = useCallback((item: MyTabListItem) => item.key, []);
 
   const handleSelectCocktail = useCallback(
     (cocktail: Cocktail) => {
@@ -306,6 +548,27 @@ export default function CocktailsScreen() {
       router.push({ pathname: '/cocktail/[cocktailId]', params: { cocktailId: String(candidateId) } });
     },
     [router],
+  );
+
+  const handleSelectIngredient = useCallback(
+    (ingredientId: number) => {
+      if (ingredientId >= 0) {
+        router.push({
+          pathname: '/ingredient/[ingredientId]',
+          params: { ingredientId: String(ingredientId) },
+        });
+      }
+    },
+    [router],
+  );
+
+  const handleShoppingToggle = useCallback(
+    (ingredientId: number) => {
+      if (ingredientId >= 0) {
+        toggleIngredientShopping(ingredientId);
+      }
+    },
+    [toggleIngredientShopping],
   );
 
   const renderItem = useCallback(
@@ -325,6 +588,82 @@ export default function CocktailsScreen() {
       handleSelectCocktail,
       ignoreGarnish,
       ingredientLookup,
+    ],
+  );
+
+  const renderMyItem = useCallback(
+    ({ item }: { item: MyTabListItem }) => {
+      if (item.type === 'separator') {
+        return (
+          <View style={styles.moreIngredientsWrapper}>
+            <Text style={[styles.moreIngredientsLabel, { color: paletteColors.onSurfaceVariant }]}>
+              More ingredients needed
+            </Text>
+          </View>
+        );
+      }
+
+      if (item.type === 'ingredient-header') {
+        const isOnShoppingList = shoppingIngredientIds.has(item.ingredientId);
+        const accessibilityLabel = isOnShoppingList
+          ? 'Remove ingredient from shopping list'
+          : 'Add ingredient to shopping list';
+        const subtitleLabel = `Make ${item.cocktailCount} ${
+          item.cocktailCount === 1 ? 'cocktail' : 'cocktails'
+        }`;
+        const thumbnail = <Thumb label={item.name} uri={item.photoUri ?? undefined} />;
+
+        return (
+          <ListRow
+            title={item.name}
+            subtitle={subtitleLabel}
+            selected
+            highlightColor={paletteColors.highlightSubtle}
+            tagColor={item.tagColor}
+            thumbnail={thumbnail}
+            onPress={() => handleSelectIngredient(item.ingredientId)}
+            accessibilityRole="button"
+            control={
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={accessibilityLabel}
+                onPress={() => handleShoppingToggle(item.ingredientId)}
+                style={styles.shoppingButton}>
+                <MaterialIcons
+                  name={isOnShoppingList ? 'shopping-cart' : 'add-shopping-cart'}
+                  size={16}
+                  color={isOnShoppingList ? paletteColors.tint : paletteColors.onSurfaceVariant}
+                />
+              </Pressable>
+            }
+          />
+        );
+      }
+
+      return (
+        <CocktailListRow
+          cocktail={item.cocktail}
+          availableIngredientIds={availableIngredientIds}
+          ingredientLookup={ingredientLookup}
+          ignoreGarnish={ignoreGarnish}
+          allowAllSubstitutes={allowAllSubstitutes}
+          onPress={() => handleSelectCocktail(item.cocktail)}
+        />
+      );
+    },
+    [
+      allowAllSubstitutes,
+      availableIngredientIds,
+      handleSelectCocktail,
+      handleSelectIngredient,
+      handleShoppingToggle,
+      ignoreGarnish,
+      ingredientLookup,
+      paletteColors.onSurface,
+      paletteColors.onSurfaceVariant,
+      paletteColors.outlineVariant,
+      paletteColors.tint,
+      shoppingIngredientIds,
     ],
   );
 
@@ -350,7 +689,24 @@ export default function CocktailsScreen() {
     ],
   );
 
+  const renderMySeparator = useCallback(
+    ({ leadingItem }: { leadingItem?: MyTabListItem | null }) => {
+      if (!leadingItem || leadingItem.type !== 'cocktail') {
+        return null;
+      }
+
+      const cocktailKey = String(leadingItem.cocktail.id ?? leadingItem.cocktail.name);
+      const isReady = myTabListData?.availabilityMap.get(cocktailKey) ?? false;
+      const backgroundColor = isReady ? paletteColors.outline : paletteColors.outlineVariant;
+
+      return <View style={[styles.divider, { backgroundColor }]} />;
+    },
+    [myTabListData, paletteColors.outline, paletteColors.outlineVariant],
+  );
+
   const isFilterActive = selectedTagKeys.size > 0;
+  const isMyTab = activeTab === 'my';
+  const listData = isMyTab ? myTabListData?.items ?? [] : filteredCocktails;
   const filterMenuTop = useMemo(() => {
     if (headerLayout && filterAnchorLayout) {
       return headerLayout.y + filterAnchorLayout.y + filterAnchorLayout.height + 6;
@@ -437,10 +793,10 @@ export default function CocktailsScreen() {
           </>
         ) : null}
         <FlatList
-          data={filteredCocktails}
-          keyExtractor={keyExtractor}
-          renderItem={renderItem}
-          ItemSeparatorComponent={renderSeparator}
+          data={listData}
+          keyExtractor={isMyTab ? myTabKeyExtractor : keyExtractor}
+          renderItem={isMyTab ? renderMyItem : renderItem}
+          ItemSeparatorComponent={isMyTab ? renderMySeparator : renderSeparator}
           contentContainerStyle={styles.listContent}
           showsVerticalScrollIndicator={false}
           ListEmptyComponent={
@@ -476,6 +832,23 @@ const styles = StyleSheet.create({
   },
   divider: {
     height: StyleSheet.hairlineWidth,
+  },
+  moreIngredientsWrapper: {
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+  },
+  moreIngredientsLabel: {
+    fontSize: 13,
+    fontWeight: '600',
+    textTransform: 'uppercase',
+    letterSpacing: 0.4,
+  },
+  shoppingButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 8,
+    paddingVertical: 6,
+    borderRadius: 16,
   },
   emptyLabel: {
     textAlign: 'center',
