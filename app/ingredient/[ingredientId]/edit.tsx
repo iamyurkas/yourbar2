@@ -758,7 +758,7 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   bottomSpacer: {
-    height: 200,
+    height: 20,
   },
   submitButton: {
     borderRadius: 12,

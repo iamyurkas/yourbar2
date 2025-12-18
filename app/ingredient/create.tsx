@@ -653,7 +653,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   bottomSpacer: {
-    height: 200,
+    height: 20,
   },
   tagList: {
     flexDirection: 'row',
