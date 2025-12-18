@@ -20,7 +20,10 @@ import { PresenceCheck } from '@/components/RowParts';
 import { TagPill } from '@/components/TagPill';
 import { Colors } from '@/constants/theme';
 import { isCocktailReady } from '@/libs/cocktail-availability';
-import { createIngredientLookup } from '@/libs/ingredient-availability';
+import {
+  createIngredientLookup,
+  getVisibleIngredientIdsForCocktail,
+} from '@/libs/ingredient-availability';
 import { resolveImageSource } from '@/libs/image-source';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
 
@@ -55,6 +58,7 @@ export default function IngredientDetailsScreen() {
     toggleIngredientShopping,
     clearBaseIngredient,
     ignoreGarnish,
+    allowAllSubstitutes,
   } = useInventory();
 
   const ingredient = useResolvedIngredient(
@@ -161,50 +165,17 @@ export default function IngredientDetailsScreen() {
   );
 
   const cocktailsWithIngredient = useMemo(() => {
-    if (!ingredient) {
+    if (numericIngredientId == null) {
       return [];
     }
 
-    const normalizedNames = new Set<string>();
-    const idsToMatch = new Set<number>();
-
-    if (ingredient.name) {
-      normalizedNames.add(ingredient.name.toLowerCase());
-    }
-
-    if (numericIngredientId != null && !Number.isNaN(numericIngredientId)) {
-      idsToMatch.add(numericIngredientId);
-    }
-
-    if (ingredient.baseIngredientId != null) {
-      const baseId = Number(ingredient.baseIngredientId);
-      if (!Number.isNaN(baseId)) {
-        idsToMatch.add(baseId);
-      }
-
-      if (baseIngredient?.name) {
-        normalizedNames.add(baseIngredient.name.toLowerCase());
-      }
-    }
-
-    return cocktails.filter((cocktail) =>
-      cocktail.ingredients?.some((cocktailIngredient) => {
-        const ingredientId = Number(cocktailIngredient.ingredientId);
-        if (!Number.isNaN(ingredientId) && idsToMatch.has(ingredientId)) {
-          return true;
-        }
-
-        if (cocktailIngredient.name) {
-          const normalizedName = cocktailIngredient.name.toLowerCase();
-          if (normalizedNames.has(normalizedName)) {
-            return true;
-          }
-        }
-
-        return false;
-      }),
-    );
-  }, [baseIngredient?.name, cocktails, ingredient, numericIngredientId]);
+    return cocktails.filter((cocktail) => {
+      const visibleIds = getVisibleIngredientIdsForCocktail(cocktail, ingredientLookup, {
+        allowAllSubstitutes,
+      });
+      return visibleIds.has(numericIngredientId);
+    });
+  }, [allowAllSubstitutes, cocktails, ingredientLookup, numericIngredientId]);
 
   const cocktailEntries = useMemo(
     () =>
@@ -215,10 +186,16 @@ export default function IngredientDetailsScreen() {
           availableIngredientIds,
           ingredientLookup,
           undefined,
-          { ignoreGarnish },
+          { ignoreGarnish, allowAllSubstitutes },
         ),
       })),
-    [availableIngredientIds, cocktailsWithIngredient, ignoreGarnish, ingredientLookup],
+    [
+      allowAllSubstitutes,
+      availableIngredientIds,
+      cocktailsWithIngredient,
+      ignoreGarnish,
+      ingredientLookup,
+    ],
   );
 
   const handleToggleAvailability = useCallback(() => {

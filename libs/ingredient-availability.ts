@@ -122,6 +122,76 @@ export function isRecipeIngredientAvailable(
   return false;
 }
 
+function normalizeIngredientId(value?: number | string | null): number | undefined {
+  if (value == null) {
+    return undefined;
+  }
+
+  const numeric = Number(value);
+  if (!Number.isFinite(numeric) || numeric < 0) {
+    return undefined;
+  }
+
+  return Math.trunc(numeric);
+}
+
+function collectVisibleIngredientIds(
+  ingredientId: number | undefined,
+  lookup: IngredientLookup,
+  allowBase: boolean,
+  allowBrand: boolean,
+  accumulator: Set<number>,
+) {
+  if (ingredientId == null) {
+    return;
+  }
+
+  accumulator.add(ingredientId);
+
+  const record = lookup.ingredientById.get(ingredientId);
+  const baseId = normalizeIngredientId(record?.baseIngredientId);
+
+  if (baseId == null) {
+    lookup.brandsByBaseId.get(ingredientId)?.forEach((id) => accumulator.add(id));
+    return;
+  }
+
+  if (allowBase) {
+    accumulator.add(baseId);
+  }
+
+  if (allowBrand) {
+    lookup.brandsByBaseId.get(baseId)?.forEach((id) => accumulator.add(id));
+  }
+}
+
+export function getVisibleIngredientIdsForCocktail(
+  cocktail: Cocktail,
+  lookup: IngredientLookup,
+  options?: IngredientAvailabilityOptions,
+): Set<number> {
+  const allowAllSubstitutes = options?.allowAllSubstitutes ?? false;
+  const visibleIngredientIds = new Set<number>();
+
+  (cocktail.ingredients ?? []).forEach((ingredient) => {
+    const requestedId = normalizeIngredientId(ingredient.ingredientId);
+    const allowBase = Boolean(ingredient.allowBaseSubstitution || allowAllSubstitutes);
+    const allowBrand = Boolean(ingredient.allowBrandSubstitution || allowAllSubstitutes);
+
+    collectVisibleIngredientIds(requestedId, lookup, allowBase, allowBrand, visibleIngredientIds);
+
+    (ingredient.substitutes ?? []).forEach((substitute) => {
+      const substituteId = normalizeIngredientId(
+        typeof substitute.ingredientId === 'number' ? substitute.ingredientId : substitute.id,
+      );
+
+      collectVisibleIngredientIds(substituteId, lookup, allowBase, allowBrand, visibleIngredientIds);
+    });
+  });
+
+  return visibleIngredientIds;
+}
+
 export function resolveIngredientAvailability(
   ingredient: NonNullable<Cocktail['ingredients']>[number],
   availableIngredientIds: Set<number>,
