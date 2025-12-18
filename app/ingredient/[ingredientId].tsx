@@ -20,7 +20,7 @@ import { PresenceCheck } from '@/components/RowParts';
 import { TagPill } from '@/components/TagPill';
 import { Colors } from '@/constants/theme';
 import { isCocktailReady } from '@/libs/cocktail-availability';
-import { createIngredientLookup } from '@/libs/ingredient-availability';
+import { createIngredientLookup, getIngredientCandidateIds } from '@/libs/ingredient-availability';
 import { resolveImageSource } from '@/libs/image-source';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
 
@@ -55,6 +55,7 @@ export default function IngredientDetailsScreen() {
     toggleIngredientShopping,
     clearBaseIngredient,
     ignoreGarnish,
+    allowAllSubstitutes,
   } = useInventory();
 
   const ingredient = useResolvedIngredient(
@@ -160,51 +161,87 @@ export default function IngredientDetailsScreen() {
     [baseIngredient?.photoUri],
   );
 
+  const resolveCocktailKey = useCallback((cocktail: (typeof cocktails)[number]) => {
+    const id = cocktail.id;
+    if (id != null) {
+      return String(id);
+    }
+
+    if (cocktail.name) {
+      return cocktail.name.trim().toLowerCase();
+    }
+
+    return undefined;
+  }, []);
+
+  const cocktailByKey = useMemo(() => {
+    const map = new Map<string, (typeof cocktails)[number]>();
+    cocktails.forEach((item) => {
+      const key = resolveCocktailKey(item);
+      if (key) {
+        map.set(key, item);
+      }
+    });
+    return map;
+  }, [cocktails, resolveCocktailKey]);
+
+  const cocktailsByIngredientId = useMemo(() => {
+    const map = new Map<number, Set<string>>();
+
+    cocktails.forEach((cocktail) => {
+      const cocktailKey = resolveCocktailKey(cocktail);
+      if (!cocktailKey) {
+        return;
+      }
+
+      const seenIds = new Set<number>();
+
+      (cocktail.ingredients ?? []).forEach((item) => {
+        const candidateIds = getIngredientCandidateIds(item, ingredientLookup, {
+          allowAllSubstitutes,
+        });
+
+        candidateIds.forEach((id) => {
+          if (seenIds.has(id)) {
+            return;
+          }
+
+          seenIds.add(id);
+          let set = map.get(id);
+          if (!set) {
+            set = new Set<string>();
+            map.set(id, set);
+          }
+
+          set.add(cocktailKey);
+        });
+      });
+    });
+
+    return map;
+  }, [allowAllSubstitutes, cocktails, ingredientLookup, resolveCocktailKey]);
+
   const cocktailsWithIngredient = useMemo(() => {
-    if (!ingredient) {
+    if (numericIngredientId == null) {
       return [];
     }
 
-    const normalizedNames = new Set<string>();
-    const idsToMatch = new Set<number>();
-
-    if (ingredient.name) {
-      normalizedNames.add(ingredient.name.toLowerCase());
+    const cocktailKeys = cocktailsByIngredientId.get(numericIngredientId);
+    if (!cocktailKeys || cocktailKeys.size === 0) {
+      return [];
     }
 
-    if (numericIngredientId != null && !Number.isNaN(numericIngredientId)) {
-      idsToMatch.add(numericIngredientId);
-    }
+    const list: typeof cocktails = [];
 
-    if (ingredient.baseIngredientId != null) {
-      const baseId = Number(ingredient.baseIngredientId);
-      if (!Number.isNaN(baseId)) {
-        idsToMatch.add(baseId);
+    cocktailKeys.forEach((key) => {
+      const match = cocktailByKey.get(key);
+      if (match) {
+        list.push(match);
       }
+    });
 
-      if (baseIngredient?.name) {
-        normalizedNames.add(baseIngredient.name.toLowerCase());
-      }
-    }
-
-    return cocktails.filter((cocktail) =>
-      cocktail.ingredients?.some((cocktailIngredient) => {
-        const ingredientId = Number(cocktailIngredient.ingredientId);
-        if (!Number.isNaN(ingredientId) && idsToMatch.has(ingredientId)) {
-          return true;
-        }
-
-        if (cocktailIngredient.name) {
-          const normalizedName = cocktailIngredient.name.toLowerCase();
-          if (normalizedNames.has(normalizedName)) {
-            return true;
-          }
-        }
-
-        return false;
-      }),
-    );
-  }, [baseIngredient?.name, cocktails, ingredient, numericIngredientId]);
+    return list;
+  }, [cocktailByKey, cocktailsByIngredientId, numericIngredientId]);
 
   const cocktailEntries = useMemo(
     () =>
@@ -215,10 +252,16 @@ export default function IngredientDetailsScreen() {
           availableIngredientIds,
           ingredientLookup,
           undefined,
-          { ignoreGarnish },
+          { ignoreGarnish, allowAllSubstitutes },
         ),
       })),
-    [availableIngredientIds, cocktailsWithIngredient, ignoreGarnish, ingredientLookup],
+    [
+      allowAllSubstitutes,
+      availableIngredientIds,
+      cocktailsWithIngredient,
+      ignoreGarnish,
+      ingredientLookup,
+    ],
   );
 
   const handleToggleAvailability = useCallback(() => {
