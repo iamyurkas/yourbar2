@@ -244,7 +244,7 @@ export function SubstituteModal({
           subtitle={subtitle}
           onPress={() => onSelect(item)}
           selected={isAvailable}
-          highlightColor={palette.highlightSubtle}
+          highlightColor={palette.highlightFaint}
           tagColor={tagColor}
           thumbnail={<Thumb label={item.name ?? undefined} uri={item.photoUri} />}
           brandIndicatorColor={brandIndicatorColor}

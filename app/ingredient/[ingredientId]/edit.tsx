@@ -387,7 +387,7 @@ export default function EditIngredientScreen() {
           title={item.name ?? ''}
           onPress={() => handleSelectBaseIngredient(item)}
           selected={isAvailable}
-          highlightColor={appPalette.highlightSubtle}
+          highlightColor={appPalette.highlightFaint}
           thumbnail={<Thumb label={item.name ?? undefined} uri={item.photoUri} />}
           tagColor={tagColor}
           accessibilityRole="button"

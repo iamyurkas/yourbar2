@@ -1555,7 +1555,7 @@ function EditableIngredientRow({
                   subtitle={subtitle}
                   onPress={() => handleSelectSuggestion(candidate)}
                   selected={isAvailable}
-                  highlightColor={palette.highlightSubtle}
+                  highlightColor={palette.highlightFaint}
                   tagColor={tagColor}
                   thumbnail={<Thumb label={candidate.name ?? undefined} uri={candidate.photoUri} />}
                   brandIndicatorColor={brandIndicatorColor}
