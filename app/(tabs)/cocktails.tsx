@@ -623,18 +623,23 @@ export default function CocktailsScreen() {
             thumbnail={thumbnail}
             onPress={() => handleSelectIngredient(item.ingredientId)}
             accessibilityRole="button"
+            metaAlignment="center"
             control={
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel={accessibilityLabel}
-                onPress={() => handleShoppingToggle(item.ingredientId)}
-                style={styles.shoppingButton}>
-                <MaterialIcons
-                  name={isOnShoppingList ? 'shopping-cart' : 'add-shopping-cart'}
-                  size={16}
-                  color={isOnShoppingList ? paletteColors.tint : paletteColors.onSurfaceVariant}
-                />
-              </Pressable>
+              <View style={styles.shoppingSlot}>
+                <Pressable
+                  accessibilityRole="button"
+                  accessibilityLabel={accessibilityLabel}
+                  onPress={() => handleShoppingToggle(item.ingredientId)}
+                  hitSlop={8}
+                  style={({ pressed }) => [styles.shoppingButton, pressed ? styles.shoppingButtonPressed : null]}>
+                  <MaterialIcons
+                    name={isOnShoppingList ? 'shopping-cart' : 'add-shopping-cart'}
+                    size={16}
+                    color={isOnShoppingList ? paletteColors.tint : paletteColors.onSurfaceVariant}
+                    style={styles.shoppingIcon}
+                  />
+                </Pressable>
+              </View>
             }
           />
         );
@@ -844,11 +849,25 @@ const styles = StyleSheet.create({
     letterSpacing: 0.4,
   },
   shoppingButton: {
-    flexDirection: 'row',
+    width: 16,
+    height: 16,
+    borderRadius: 8,
     alignItems: 'center',
-    paddingHorizontal: 8,
-    paddingVertical: 6,
-    borderRadius: 16,
+    justifyContent: 'center',
+  },
+  shoppingButtonPressed: {
+    opacity: 0.6,
+  },
+  shoppingIcon: {
+    width: 16,
+    height: 16,
+    alignSelf: 'flex-end',
+  },
+  shoppingSlot: {
+    minHeight: 24,
+    minWidth: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   emptyLabel: {
     textAlign: 'center',
