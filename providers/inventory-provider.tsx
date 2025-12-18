@@ -56,6 +56,7 @@ type InventoryContextValue = {
   ignoreGarnish: boolean;
   allowAllSubstitutes: boolean;
   setIngredientAvailability: (id: number, available: boolean) => void;
+  clearAvailableIngredients: () => void;
   toggleIngredientAvailability: (id: number) => void;
   toggleIngredientShopping: (id: number) => void;
   clearBaseIngredient: (id: number) => void;
@@ -471,6 +472,16 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         next.delete(id);
       }
       return next;
+    });
+  }, []);
+
+  const clearAvailableIngredients = useCallback(() => {
+    setAvailableIngredientIds((prev) => {
+      if (prev.size === 0) {
+        return prev;
+      }
+
+      return new Set();
     });
   }, []);
 
@@ -1225,6 +1236,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       ignoreGarnish,
       allowAllSubstitutes,
       setIngredientAvailability,
+      clearAvailableIngredients,
       toggleIngredientAvailability,
       toggleIngredientShopping,
       clearBaseIngredient,
@@ -1249,6 +1261,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     ignoreGarnish,
     allowAllSubstitutes,
     setIngredientAvailability,
+    clearAvailableIngredients,
     toggleIngredientAvailability,
     toggleIngredientShopping,
     clearBaseIngredient,
