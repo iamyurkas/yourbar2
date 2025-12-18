@@ -55,6 +55,7 @@ export default function IngredientDetailsScreen() {
     toggleIngredientShopping,
     clearBaseIngredient,
     ignoreGarnish,
+    allowAllSubstitutes,
   } = useInventory();
 
   const ingredient = useResolvedIngredient(
@@ -168,29 +169,51 @@ export default function IngredientDetailsScreen() {
     const normalizedNames = new Set<string>();
     const idsToMatch = new Set<number>();
 
-    if (ingredient.name) {
-      normalizedNames.add(ingredient.name.toLowerCase());
-    }
-
-    if (numericIngredientId != null && !Number.isNaN(numericIngredientId)) {
-      idsToMatch.add(numericIngredientId);
-    }
-
-    if (ingredient.baseIngredientId != null) {
-      const baseId = Number(ingredient.baseIngredientId);
-      if (!Number.isNaN(baseId)) {
-        idsToMatch.add(baseId);
+    const addId = (value: number | undefined | null) => {
+      if (value == null) {
+        return;
       }
 
-      if (baseIngredient?.name) {
-        normalizedNames.add(baseIngredient.name.toLowerCase());
+      const id = Number(value);
+      if (Number.isFinite(id) && id >= 0) {
+        idsToMatch.add(Math.trunc(id));
       }
+    };
+
+    const addName = (value: string | undefined | null) => {
+      const normalized = value?.trim().toLowerCase();
+      if (normalized) {
+        normalizedNames.add(normalized);
+      }
+    };
+
+    addName(ingredient.name);
+    addId(numericIngredientId);
+
+    const baseValue = ingredient.baseIngredientId;
+    const baseId =
+      baseValue != null && Number.isFinite(Number(baseValue)) ? Math.trunc(Number(baseValue)) : undefined;
+    const baseGroupId = baseId ?? numericIngredientId;
+
+    if (baseId != null) {
+      addId(baseId);
+      addName(baseIngredient?.name);
+    }
+
+    const brandIds = baseGroupId != null ? ingredientLookup.brandsByBaseId.get(baseGroupId) ?? [] : [];
+    const includeBranded = allowAllSubstitutes || baseId == null;
+
+    if (includeBranded) {
+      brandIds.forEach((brandId) => {
+        addId(brandId);
+        addName(ingredientLookup.ingredientById.get(brandId)?.name);
+      });
     }
 
     return cocktails.filter((cocktail) =>
       cocktail.ingredients?.some((cocktailIngredient) => {
         const ingredientId = Number(cocktailIngredient.ingredientId);
-        if (!Number.isNaN(ingredientId) && idsToMatch.has(ingredientId)) {
+        if (Number.isFinite(ingredientId) && idsToMatch.has(Math.trunc(ingredientId))) {
           return true;
         }
 
@@ -204,7 +227,14 @@ export default function IngredientDetailsScreen() {
         return false;
       }),
     );
-  }, [baseIngredient?.name, cocktails, ingredient, numericIngredientId]);
+  }, [
+    allowAllSubstitutes,
+    baseIngredient?.name,
+    cocktails,
+    ingredient,
+    ingredientLookup,
+    numericIngredientId,
+  ]);
 
   const cocktailEntries = useMemo(
     () =>
@@ -215,10 +245,10 @@ export default function IngredientDetailsScreen() {
           availableIngredientIds,
           ingredientLookup,
           undefined,
-          { ignoreGarnish },
+          { ignoreGarnish, allowAllSubstitutes },
         ),
       })),
-    [availableIngredientIds, cocktailsWithIngredient, ignoreGarnish, ingredientLookup],
+    [allowAllSubstitutes, availableIngredientIds, cocktailsWithIngredient, ignoreGarnish, ingredientLookup],
   );
 
   const handleToggleAvailability = useCallback(() => {
