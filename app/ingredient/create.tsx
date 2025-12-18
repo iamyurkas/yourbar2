@@ -543,15 +543,22 @@ export default function CreateIngredientScreen() {
       <Modal
         visible={isBaseModalVisible}
         transparent
-        animationType="fade"
+        animationType="slide"
         presentationStyle="overFullScreen"
         onRequestClose={handleCloseBaseModal}
       >
-        <Pressable style={styles.modalOverlay} onPress={handleCloseBaseModal}>
+        <Pressable style={styles.modalOverlay} onPress={handleCloseBaseModal} accessibilityRole="button">
           <Pressable
             onPress={(event) => event.stopPropagation?.()}
             style={[styles.modalCard, { backgroundColor: palette.surface }]}
+            accessibilityRole="menu"
           >
+            <View style={styles.modalHeader}>
+              <Text style={[styles.modalTitle, { color: palette.onSurface }]}>Select base ingredient</Text>
+              <Pressable onPress={handleCloseBaseModal} accessibilityRole="button" accessibilityLabel="Close">
+                <MaterialCommunityIcons name="close" size={22} color={palette.onSurfaceVariant} />
+              </Pressable>
+            </View>
             <TextInput
               ref={baseSearchInputRef}
               value={baseSearch}
@@ -560,7 +567,7 @@ export default function CreateIngredientScreen() {
               placeholderTextColor={`${palette.onSurfaceVariant}99`}
               style={[
                 styles.modalSearchInput,
-                { borderColor: palette.outlineVariant, color: palette.text },
+                { borderColor: palette.outlineVariant, color: palette.text, backgroundColor: palette.surfaceBright },
               ]}
               autoFocus
               keyboardAppearance="light"
@@ -570,7 +577,9 @@ export default function CreateIngredientScreen() {
               keyExtractor={baseModalKeyExtractor}
               renderItem={renderBaseIngredient}
               keyboardShouldPersistTaps="handled"
-              ItemSeparatorComponent={() => <View style={[styles.modalSeparator, { backgroundColor: palette.outline }]} />}
+              ItemSeparatorComponent={() => (
+                <View style={[styles.modalSeparator, { backgroundColor: palette.outlineVariant }]} />
+              )}
               contentContainerStyle={styles.modalListContent}
               ListEmptyComponent={() => (
                 <Text style={[styles.modalEmptyText, { color: palette.onSurfaceVariant }]}>No ingredients found</Text>
@@ -729,17 +738,28 @@ const styles = StyleSheet.create({
   },
   modalOverlay: {
     flex: 1,
-    paddingTop: 48,
-    paddingBottom: 48,
-    paddingHorizontal: 24,
-    justifyContent: 'flex-start',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 16,
     backgroundColor: Colors.backdrop,
   },
   modalCard: {
-    borderRadius: 12,
-    padding: 12,
-    gap: 16,
-    flex: 1,
+    width: '100%',
+    maxHeight: '92%',
+    borderRadius: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    gap: 12,
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 12,
+  },
+  modalTitle: {
+    fontSize: 16,
+    fontWeight: '600',
   },
   modalSearchInput: {
     borderWidth: StyleSheet.hairlineWidth,
@@ -751,7 +771,7 @@ const styles = StyleSheet.create({
   modalListContent: {
     gap: 12,
     flexGrow: 1,
-    paddingBottom: 12,
+    paddingVertical: 8,
   },
   modalSeparator: {
     height: StyleSheet.hairlineWidth,
@@ -759,6 +779,7 @@ const styles = StyleSheet.create({
   modalEmptyText: {
     textAlign: 'center',
     fontSize: 14,
+    paddingVertical: 24,
   },
   headerButton: {
     width: 40,
