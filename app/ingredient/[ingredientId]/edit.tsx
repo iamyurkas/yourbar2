@@ -4,7 +4,6 @@ import * as ImagePicker from 'expo-image-picker';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
-  Alert,
   FlatList,
   Modal,
   Platform,
@@ -20,6 +19,7 @@ import {
 } from 'react-native';
 
 import { resolveAssetFromCatalog } from '@/assets/image-manifest';
+import { AppDialog, type DialogOptions } from '@/components/AppDialog';
 import { ListRow, Thumb } from '@/components/RowParts';
 import { TagPill } from '@/components/TagPill';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
@@ -72,6 +72,7 @@ export default function EditIngredientScreen() {
   const [isBaseModalVisible, setIsBaseModalVisible] = useState(false);
   const [baseSearch, setBaseSearch] = useState('');
   const [permissionStatus, requestPermission] = ImagePicker.useMediaLibraryPermissions();
+  const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(null);
 
   const didInitializeRef = useRef(false);
   const scrollRef = useRef<ScrollView | null>(null);
@@ -94,6 +95,14 @@ export default function EditIngredientScreen() {
       .filter((id) => Number.isFinite(id) && id >= 0) as number[];
     setSelectedTagIds(initialTagIds);
   }, [ingredient]);
+
+  const closeDialog = useCallback(() => {
+    setDialogOptions(null);
+  }, []);
+
+  const showDialog = useCallback((options: DialogOptions) => {
+    setDialogOptions(options);
+  }, []);
 
   const placeholderLabel = useMemo(() => {
     if (imageUri) {
@@ -132,14 +141,15 @@ export default function EditIngredientScreen() {
     }
 
     if (!canAskAgain) {
-      Alert.alert(
-        'Media library access',
-        'Enable photo library permissions in system settings to add an ingredient image.',
-      );
+      showDialog({
+        title: 'Media library access',
+        message: 'Enable photo library permissions in system settings to add an ingredient image.',
+        actions: [{ label: 'OK' }],
+      });
     }
 
     return false;
-  }, [permissionStatus?.granted, requestPermission]);
+  }, [permissionStatus?.granted, requestPermission, showDialog]);
 
   const handlePickImage = useCallback(async () => {
     if (isPickingImage) {
@@ -168,21 +178,33 @@ export default function EditIngredientScreen() {
       }
     } catch (error) {
       console.warn('Failed to pick image', error);
-      Alert.alert('Could not pick image', 'Please try again later.');
+      showDialog({
+        title: 'Could not pick image',
+        message: 'Please try again later.',
+        actions: [{ label: 'OK' }],
+      });
     } finally {
       setIsPickingImage(false);
     }
-  }, [ensureMediaPermission, isPickingImage]);
+  }, [ensureMediaPermission, isPickingImage, showDialog]);
 
   const handleSubmit = useCallback(() => {
     const trimmedName = name.trim();
     if (!trimmedName) {
-      Alert.alert('Name is required', 'Please enter the ingredient name.');
+      showDialog({
+        title: 'Name is required',
+        message: 'Please enter the ingredient name.',
+        actions: [{ label: 'OK' }],
+      });
       return;
     }
 
     if (numericIngredientId == null) {
-      Alert.alert('Ingredient not found', 'Please try again later.');
+      showDialog({
+        title: 'Ingredient not found',
+        message: 'Please try again later.',
+        actions: [{ label: 'OK' }],
+      });
       return;
     }
 
@@ -200,7 +222,11 @@ export default function EditIngredientScreen() {
     });
 
     if (!updated) {
-      Alert.alert('Could not save ingredient', 'Please try again later.');
+      showDialog({
+        title: 'Could not save ingredient',
+        message: 'Please try again later.',
+        actions: [{ label: 'OK' }],
+      });
       return;
     }
 
@@ -211,13 +237,18 @@ export default function EditIngredientScreen() {
     imageUri,
     name,
     numericIngredientId,
+    showDialog,
     selectedTagIds,
     updateIngredient,
   ]);
 
   const handleDeletePress = useCallback(() => {
     if (numericIngredientId == null) {
-      Alert.alert('Ingredient not found', 'Please try again later.');
+      showDialog({
+        title: 'Ingredient not found',
+        message: 'Please try again later.',
+        actions: [{ label: 'OK' }],
+      });
       return;
     }
 
@@ -226,23 +257,31 @@ export default function EditIngredientScreen() {
       ? `Are you sure you want to delete ${trimmedName}? This action cannot be undone.`
       : 'Are you sure you want to delete this ingredient? This action cannot be undone.';
 
-    Alert.alert('Delete ingredient', message, [
-      { text: 'Cancel', style: 'cancel' },
-      {
-        text: 'Delete',
-        style: 'destructive',
-        onPress: () => {
-          const wasDeleted = deleteIngredient(numericIngredientId);
-          if (!wasDeleted) {
-            Alert.alert('Could not delete ingredient', 'Please try again later.');
-            return;
-          }
+    showDialog({
+      title: 'Delete ingredient',
+      message,
+      actions: [
+        { label: 'Cancel', variant: 'secondary' },
+        {
+          label: 'Delete',
+          variant: 'destructive',
+          onPress: () => {
+            const wasDeleted = deleteIngredient(numericIngredientId);
+            if (!wasDeleted) {
+              showDialog({
+                title: 'Could not delete ingredient',
+                message: 'Please try again later.',
+                actions: [{ label: 'OK' }],
+              });
+              return;
+            }
 
-          router.back();
+            router.back();
+          },
         },
-      },
-    ]);
-  }, [deleteIngredient, ingredient?.name, numericIngredientId]);
+      ],
+    });
+  }, [deleteIngredient, ingredient?.name, numericIngredientId, showDialog]);
 
   const baseIngredient = useMemo(() => {
     if (baseIngredientId == null) {
@@ -711,6 +750,14 @@ export default function EditIngredientScreen() {
           </Pressable>
         </Pressable>
       </Modal>
+
+      <AppDialog
+        visible={dialogOptions != null}
+        title={dialogOptions?.title ?? ''}
+        message={dialogOptions?.message}
+        actions={dialogOptions?.actions ?? []}
+        onRequestClose={closeDialog}
+      />
     </>
   );
 }
