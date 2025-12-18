@@ -805,8 +805,11 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
   },
   shoppingButton: {
-    borderRadius: 12,
-    padding: 4,
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   shoppingButtonPressed: {
     opacity: 0.6,
