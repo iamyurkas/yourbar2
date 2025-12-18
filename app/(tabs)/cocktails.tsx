@@ -1,3 +1,4 @@
+import { useRouter } from 'expo-router';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   FlatList,
@@ -9,19 +10,18 @@ import {
   type LayoutRectangle,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
 
-import { FabAdd } from '@/components/FabAdd';
 import { CocktailListRow } from '@/components/CocktailListRow';
 import { CollectionHeader } from '@/components/CollectionHeader';
-import { TagPill } from '@/components/TagPill';
+import { FabAdd } from '@/components/FabAdd';
 import { SideMenuDrawer } from '@/components/SideMenuDrawer';
+import { TagPill } from '@/components/TagPill';
 import type { SegmentTabOption } from '@/components/TopBars';
 import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
 import { Colors } from '@/constants/theme';
 import { isCocktailReady } from '@/libs/cocktail-availability';
-import { useInventory, type Cocktail } from '@/providers/inventory-provider';
 import { createIngredientLookup, isRecipeIngredientAvailable } from '@/libs/ingredient-availability';
+import { useInventory, type Cocktail } from '@/providers/inventory-provider';
 import { palette } from '@/theme/theme';
 
 type CocktailSection = {
@@ -57,7 +57,7 @@ export default function CocktailsScreen() {
   const paletteColors = Colors;
   const router = useRouter();
   const ingredientLookup = useMemo(() => createIngredientLookup(ingredients), [ingredients]);
-  const defaultTagColor = palette.tagYellow ?? palette.highlightSubtle;
+  const defaultTagColor = palette.tagYellow ?? palette.highlightFaint;
 
   const availableTagOptions = useMemo<CocktailTagOption[]>(() => {
     const map = new Map<string, CocktailTagOption>();

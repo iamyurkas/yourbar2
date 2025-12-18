@@ -14,8 +14,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { CollectionHeader } from '@/components/CollectionHeader';
 import { FabAdd } from '@/components/FabAdd';
 import { ListRow, PresenceCheck, Thumb } from '@/components/RowParts';
-import { TagPill } from '@/components/TagPill';
 import { SideMenuDrawer } from '@/components/SideMenuDrawer';
+import { TagPill } from '@/components/TagPill';
 import type { SegmentTabOption } from '@/components/TopBars';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { Colors } from '@/constants/theme';
@@ -217,7 +217,7 @@ export default function IngredientsScreen() {
   );
   const [, startAvailabilityTransition] = useTransition();
   const paletteColors = Colors;
-  const defaultTagColor = palette.tagYellow ?? palette.highlightSubtle;
+  const defaultTagColor = palette.tagYellow ?? palette.highlightFaint;
 
   const availableTagOptions = useMemo<IngredientTagOption[]>(() => {
     const map = new Map<string, IngredientTagOption>();

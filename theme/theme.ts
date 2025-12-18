@@ -50,7 +50,7 @@ export const palette = {
   shadow: '#000000',
 
   highlightFaint: '#DDEEFF',
-  highlightSubtle: '#4A90E21F',
+  highlightSubtle: '#50ffc5',
   overlayOnPrimary: '#FFFFFF55',
 } as const;
 
