@@ -416,39 +416,39 @@ export default function CreateIngredientScreen() {
             />
           </View>
 
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel={placeholderLabel}
-            style={[
-              styles.imagePlaceholder,
-              { borderColor: palette.outlineVariant },
-              !imageUri && { backgroundColor: palette.surface },
-            ]}
-            onPress={handlePickImage}
-            android_ripple={{ color: `${palette.surface}33` }}>
-            {imageUri ? (
-              <Image source={{ uri: imageUri }} style={styles.image} contentFit="contain" />
-            ) : (
-              <View style={styles.placeholderContent}>
-                <MaterialCommunityIcons name="image-plus" size={28} color={`${palette.onSurfaceVariant}99`} />
-                <Text style={[styles.placeholderHint, { color: `${palette.onSurfaceVariant}99` }]}>
-                  Tap to add a photo
-                </Text>
-              </View>
-            )}
-          </Pressable>
-
-          {imageUri ? (
+          <View style={styles.photoTileWrapper}>
             <Pressable
-              onPress={handleRemoveImage}
-              style={[styles.removePhotoButton, { borderColor: palette.outlineVariant }]}
               accessibilityRole="button"
-              accessibilityLabel="Remove photo"
-              hitSlop={8}>
-              <MaterialCommunityIcons name="close" size={18} color={palette.onSurface} />
-              <Text style={[styles.removePhotoLabel, { color: palette.onSurface }]}>Remove photo</Text>
+              accessibilityLabel={placeholderLabel}
+              style={[
+                styles.imagePlaceholder,
+                { borderColor: palette.outlineVariant },
+                !imageUri && { backgroundColor: palette.surface },
+              ]}
+              onPress={handlePickImage}
+              android_ripple={{ color: `${palette.surface}33` }}>
+              {imageUri ? (
+                <Image source={{ uri: imageUri }} style={styles.image} contentFit="contain" />
+              ) : (
+                <View style={styles.placeholderContent}>
+                  <MaterialCommunityIcons name="image-plus" size={28} color={`${palette.onSurfaceVariant}99`} />
+                  <Text style={[styles.placeholderHint, { color: `${palette.onSurfaceVariant}99` }]}>
+                    Tap to add a photo
+                  </Text>
+                </View>
+              )}
             </Pressable>
-          ) : null}
+            {imageUri ? (
+              <Pressable
+                onPress={handleRemoveImage}
+                hitSlop={8}
+                style={styles.removePhotoButton}
+                accessibilityRole="button"
+                accessibilityLabel="Remove photo">
+                <MaterialCommunityIcons name="trash-can-outline" size={18} color={palette.error} />
+              </Pressable>
+            ) : null}
+          </View>
 
           <View style={styles.section}>
             <Text style={[styles.label, { color: palette.onSurface }]}>Tags</Text>
@@ -653,6 +653,12 @@ const styles = StyleSheet.create({
     height: '100%',
     resizeMode: 'contain',
   },
+  photoTileWrapper: {
+    width: 150,
+    height: 150,
+    alignSelf: 'center',
+    position: 'relative',
+  },
   placeholderContent: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -793,18 +799,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   removePhotoButton: {
-    marginTop: 8,
-    borderRadius: 8,
-    borderWidth: StyleSheet.hairlineWidth,
-    flexDirection: 'row',
+    position: 'absolute',
+    top: 8,
+    right: 8,
+    padding: 4,
     alignItems: 'center',
-    gap: 8,
-    alignSelf: 'center',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-  },
-  removePhotoLabel: {
-    fontSize: 12,
-    fontWeight: '600',
+    justifyContent: 'center',
+    borderRadius: 8,
+    backgroundColor: Colors.surface,
   },
 });

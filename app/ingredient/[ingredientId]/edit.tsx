@@ -784,7 +784,7 @@ const styles = StyleSheet.create({
   removePhotoButton: {
     position: 'absolute',
     top: 8,
-    left: 8,
+    right: 8,
     padding: 4,
     alignItems: 'center',
     justifyContent: 'center',
