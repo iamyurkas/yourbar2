@@ -526,9 +526,9 @@ export default function CreateIngredientScreen() {
                 </>
               ) : (
                 <View style={styles.basePlaceholderRow}>
-                  <MaterialCommunityIcons name="link-variant" size={20} color={palette.onSurfaceVariant} />
+                  
                   <Text style={[styles.basePlaceholderText, { color: palette.onSurfaceVariant }]}>
-                    Select a base ingredient
+                    None
                   </Text>
                 </View>
               )}

@@ -1157,7 +1157,7 @@ export default function CreateCocktailScreen() {
             style={[styles.submitButton, { backgroundColor: palette.tint, opacity: isSaving ? 0.6 : 1 }]}
             accessibilityRole="button"
             accessibilityLabel="Save cocktail">
-            <Text style={[styles.submitLabel, { color: palette.onPrimary }]}>Save cocktail</Text>
+            <Text style={[styles.submitLabel, { color: palette.onPrimary }]}>Save</Text>
           </Pressable>
           <View style={styles.bottomSpacer} />
         </ScrollView>

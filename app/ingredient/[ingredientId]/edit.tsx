@@ -651,13 +651,9 @@ export default function EditIngredientScreen() {
               </>
             ) : (
               <View style={styles.basePlaceholderRow}>
-                <MaterialCommunityIcons
-                  name="link-variant"
-                  size={20}
-                  color={paletteColors.onSurfaceVariant}
-                />
+
                 <Text style={[styles.basePlaceholderText, { color: paletteColors.onSurfaceVariant }]}>
-                  Select a base ingredient
+                  None
                 </Text>
               </View>
             )}
