@@ -110,24 +110,20 @@ const expandWithBaseAndBrands = (
 
   const record = lookup.ingredientById.get(id);
   const baseId = normalizeIngredientId(record?.baseIngredientId);
-  if (baseId == null) {
-    return resolved;
-  }
-
-  if (allowBase && !resolved.includes(baseId)) {
+  if (baseId != null && allowBase && !resolved.includes(baseId)) {
     resolved.push(baseId);
   }
 
-  const allowBrandsFromBase = allowBrand || baseId === id;
-  if (!allowBrandsFromBase) {
-    return resolved;
-  }
+  const brandExpansionBaseId = baseId ?? (lookup.brandsByBaseId.has(id) ? id : undefined);
+  const allowBrandsFromBase = allowBrand || brandExpansionBaseId === id;
 
-  lookup.brandsByBaseId.get(baseId)?.forEach((brandId) => {
-    if (!resolved.includes(brandId)) {
-      resolved.push(brandId);
-    }
-  });
+  if (allowBrandsFromBase && brandExpansionBaseId != null) {
+    lookup.brandsByBaseId.get(brandExpansionBaseId)?.forEach((brandId) => {
+      if (!resolved.includes(brandId)) {
+        resolved.push(brandId);
+      }
+    });
+  }
 
   return resolved;
 };
