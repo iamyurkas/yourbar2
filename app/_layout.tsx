@@ -6,6 +6,7 @@ import 'react-native-reanimated';
 
 import { Colors } from '@/constants/theme';
 import { InventoryProvider } from '@/providers/inventory-provider';
+import { UnsavedChangesProvider } from '@/providers/unsaved-changes-provider';
 import { getAppTheme } from '@/theme/theme';
 
 export const unstable_settings = {
@@ -27,16 +28,18 @@ export default function RootLayout() {
   const paperTheme = getAppTheme();
 
   return (
-    <InventoryProvider>
-      <PaperProvider theme={paperTheme}>
-        <ThemeProvider value={navigationTheme}>
-          <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-          </Stack>
-          <StatusBar style="dark" />
-        </ThemeProvider>
-      </PaperProvider>
-    </InventoryProvider>
+    <UnsavedChangesProvider>
+      <InventoryProvider>
+        <PaperProvider theme={paperTheme}>
+          <ThemeProvider value={navigationTheme}>
+            <Stack>
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
+            </Stack>
+            <StatusBar style="dark" />
+          </ThemeProvider>
+        </PaperProvider>
+      </InventoryProvider>
+    </UnsavedChangesProvider>
   );
 }

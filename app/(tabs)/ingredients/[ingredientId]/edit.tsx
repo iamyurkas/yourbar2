@@ -1,4 +1,5 @@
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import { Image } from 'expo-image';
 import * as ImagePicker from 'expo-image-picker';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
@@ -25,7 +26,16 @@ import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { Colors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
+import { useUnsavedChanges } from '@/providers/unsaved-changes-provider';
 import { palette as appPalette } from '@/theme/theme';
+
+type IngredientFormSnapshot = {
+  name: string;
+  description: string;
+  imageUri: string | null;
+  baseIngredientId: number | null;
+  selectedTagIds: number[];
+};
 
 function useResolvedIngredient(param: string | undefined, ingredients: Ingredient[]) {
   return useMemo(() => {
@@ -48,9 +58,11 @@ function useResolvedIngredient(param: string | undefined, ingredients: Ingredien
 
 export default function EditIngredientScreen() {
   const paletteColors = Colors;
+  const navigation = useNavigation();
   const { ingredientId } = useLocalSearchParams<{ ingredientId?: string }>();
   const { ingredients, shoppingIngredientIds, availableIngredientIds, updateIngredient, deleteIngredient } =
     useInventory();
+  const { setHasUnsavedChanges } = useUnsavedChanges();
 
   const ingredient = useResolvedIngredient(
     Array.isArray(ingredientId) ? ingredientId[0] : ingredientId,
@@ -73,9 +85,12 @@ export default function EditIngredientScreen() {
   const [baseSearch, setBaseSearch] = useState('');
   const [permissionStatus, requestPermission] = ImagePicker.useMediaLibraryPermissions();
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(null);
+  const [isInitialized, setIsInitialized] = useState(false);
+  const [initialSnapshot, setInitialSnapshot] = useState<IngredientFormSnapshot | null>(null);
 
   const didInitializeRef = useRef(false);
   const scrollRef = useRef<ScrollView | null>(null);
+  const allowNavigationRef = useRef(false);
 
   useEffect(() => {
     if (!ingredient || didInitializeRef.current) {
@@ -94,6 +109,7 @@ export default function EditIngredientScreen() {
       .map((tag) => Number(tag.id ?? -1))
       .filter((id) => Number.isFinite(id) && id >= 0) as number[];
     setSelectedTagIds(initialTagIds);
+    setIsInitialized(true);
   }, [ingredient]);
 
   const closeDialog = useCallback(() => {
@@ -103,6 +119,39 @@ export default function EditIngredientScreen() {
   const showDialog = useCallback((options: DialogOptions) => {
     setDialogOptions(options);
   }, []);
+
+  const buildSnapshot = useCallback((): IngredientFormSnapshot => {
+    const normalizedTags = [...selectedTagIds].sort((a, b) => a - b);
+    return {
+      name,
+      description,
+      imageUri,
+      baseIngredientId,
+      selectedTagIds: normalizedTags,
+    };
+  }, [baseIngredientId, description, imageUri, name, selectedTagIds]);
+
+  useEffect(() => {
+    if (!isInitialized || initialSnapshot) {
+      return;
+    }
+
+    setInitialSnapshot(buildSnapshot());
+  }, [buildSnapshot, initialSnapshot, isInitialized]);
+
+  const hasUnsavedChanges = useMemo(() => {
+    if (!initialSnapshot) {
+      return false;
+    }
+
+    return JSON.stringify(buildSnapshot()) !== JSON.stringify(initialSnapshot);
+  }, [buildSnapshot, initialSnapshot]);
+
+  useEffect(() => {
+    setHasUnsavedChanges(hasUnsavedChanges);
+  }, [hasUnsavedChanges, setHasUnsavedChanges]);
+
+  useEffect(() => () => setHasUnsavedChanges(false), [setHasUnsavedChanges]);
 
   const placeholderLabel = useMemo(() => {
     if (imageUri) {
@@ -188,6 +237,45 @@ export default function EditIngredientScreen() {
     }
   }, [ensureMediaPermission, isPickingImage, showDialog]);
 
+  const confirmLeave = useCallback(
+    (onLeave: () => void) => {
+      showDialog({
+        title: 'Leave without saving?',
+        message: 'Your changes will be lost if you leave this screen.',
+        actions: [
+          { label: 'Stay', variant: 'secondary' },
+          {
+            label: 'Leave',
+            variant: 'destructive',
+            onPress: () => {
+              allowNavigationRef.current = true;
+              setHasUnsavedChanges(false);
+              onLeave();
+            },
+          },
+        ],
+      });
+    },
+    [setHasUnsavedChanges, showDialog],
+  );
+
+  useEffect(() => {
+    if (!hasUnsavedChanges) {
+      return;
+    }
+
+    const unsubscribe = navigation.addListener('beforeRemove', (event) => {
+      if (!hasUnsavedChanges || allowNavigationRef.current) {
+        return;
+      }
+
+      event.preventDefault();
+      confirmLeave(() => navigation.dispatch(event.data.action));
+    });
+
+    return unsubscribe;
+  }, [confirmLeave, hasUnsavedChanges, navigation]);
+
   const handleSubmit = useCallback(() => {
     const trimmedName = name.trim();
     if (!trimmedName) {
@@ -230,6 +318,8 @@ export default function EditIngredientScreen() {
       return;
     }
 
+    allowNavigationRef.current = true;
+    setHasUnsavedChanges(false);
     router.back();
   }, [
     baseIngredientId,
@@ -237,6 +327,7 @@ export default function EditIngredientScreen() {
     imageUri,
     name,
     numericIngredientId,
+    setHasUnsavedChanges,
     showDialog,
     selectedTagIds,
     updateIngredient,
@@ -276,12 +367,14 @@ export default function EditIngredientScreen() {
               return;
             }
 
+            allowNavigationRef.current = true;
+            setHasUnsavedChanges(false);
             router.back();
           },
         },
       ],
     });
-  }, [deleteIngredient, ingredient?.name, numericIngredientId, showDialog]);
+  }, [deleteIngredient, ingredient?.name, numericIngredientId, setHasUnsavedChanges, showDialog]);
 
   const baseIngredient = useMemo(() => {
     if (baseIngredientId == null) {

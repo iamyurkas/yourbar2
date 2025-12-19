@@ -1,4 +1,5 @@
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import { Image } from 'expo-image';
 import * as ImagePicker from 'expo-image-picker';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
@@ -40,6 +41,7 @@ import {
   type CreateCocktailInput,
   type Ingredient,
 } from '@/providers/inventory-provider';
+import { useUnsavedChanges } from '@/providers/unsaved-changes-provider';
 
 const DEFAULT_UNIT_ID = 11;
 const MIN_AUTOCOMPLETE_LENGTH = 2;
@@ -64,6 +66,31 @@ type EditableIngredient = {
   allowBaseSubstitution: boolean;
   allowBrandSubstitution: boolean;
   substitutes: EditableSubstitute[];
+};
+
+type CocktailFormSnapshot = {
+  name: string;
+  glassId: string | null;
+  description: string;
+  instructions: string;
+  imageUri: string | null;
+  selectedTagIds: number[];
+  ingredients: Array<{
+    ingredientId?: number;
+    name: string;
+    amount: string;
+    unitId?: number;
+    optional: boolean;
+    garnish: boolean;
+    allowBaseSubstitution: boolean;
+    allowBrandSubstitution: boolean;
+    substitutes: Array<{
+      id?: number;
+      ingredientId?: number;
+      name: string;
+      isBrand?: boolean;
+    }>;
+  }>;
 };
 
 function getParamValue(value?: string | string[]): string | undefined {
@@ -162,6 +189,7 @@ function mapRecipeIngredientToEditable(recipe: NonNullable<Cocktail['ingredients
 
 export default function CreateCocktailScreen() {
   const palette = Colors;
+  const navigation = useNavigation();
   const {
     ingredients: inventoryIngredients,
     cocktails,
@@ -172,6 +200,7 @@ export default function CreateCocktailScreen() {
     deleteCocktail,
   } = useInventory();
   const params = useLocalSearchParams();
+  const { setHasUnsavedChanges } = useUnsavedChanges();
 
   const modeParam = getParamValue(params.mode);
   const isEditMode = modeParam === 'edit';
@@ -198,9 +227,12 @@ export default function CreateCocktailScreen() {
   const [isSaving, setIsSaving] = useState(false);
   const [permissionStatus, requestPermission] = ImagePicker.useMediaLibraryPermissions();
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(null);
+  const [isInitialized, setIsInitialized] = useState(false);
+  const [initialSnapshot, setInitialSnapshot] = useState<CocktailFormSnapshot | null>(null);
 
   const initializedRef = useRef(false);
   const scrollRef = useRef<ScrollView | null>(null);
+  const allowNavigationRef = useRef(false);
 
   const ingredientById = useMemo(() => {
     const map = new Map<number, Ingredient>();
@@ -220,6 +252,56 @@ export default function CreateCocktailScreen() {
   const showDialog = useCallback((options: DialogOptions) => {
     setDialogOptions(options);
   }, []);
+
+  const buildSnapshot = useCallback((): CocktailFormSnapshot => {
+    const normalizedTags = [...selectedTagIds].sort((a, b) => a - b);
+    return {
+      name,
+      glassId,
+      description,
+      instructions,
+      imageUri,
+      selectedTagIds: normalizedTags,
+      ingredients: ingredientsState.map((item) => ({
+        ingredientId: item.ingredientId,
+        name: item.name,
+        amount: item.amount,
+        unitId: item.unitId,
+        optional: item.optional,
+        garnish: item.garnish,
+        allowBaseSubstitution: item.allowBaseSubstitution,
+        allowBrandSubstitution: item.allowBrandSubstitution,
+        substitutes: item.substitutes.map((substitute) => ({
+          id: substitute.id,
+          ingredientId: substitute.ingredientId,
+          name: substitute.name,
+          isBrand: substitute.isBrand,
+        })),
+      })),
+    };
+  }, [description, glassId, imageUri, ingredientsState, instructions, name, selectedTagIds]);
+
+  useEffect(() => {
+    if (!isInitialized || initialSnapshot) {
+      return;
+    }
+
+    setInitialSnapshot(buildSnapshot());
+  }, [buildSnapshot, initialSnapshot, isInitialized]);
+
+  const hasUnsavedChanges = useMemo(() => {
+    if (!initialSnapshot) {
+      return false;
+    }
+
+    return JSON.stringify(buildSnapshot()) !== JSON.stringify(initialSnapshot);
+  }, [buildSnapshot, initialSnapshot]);
+
+  useEffect(() => {
+    setHasUnsavedChanges(hasUnsavedChanges);
+  }, [hasUnsavedChanges, setHasUnsavedChanges]);
+
+  useEffect(() => () => setHasUnsavedChanges(false), [setHasUnsavedChanges]);
 
   const getBaseGroupId = useCallback(
     (rawId: number | string | null | undefined) => {
@@ -410,6 +492,7 @@ export default function CreateCocktailScreen() {
     }
 
     initializedRef.current = true;
+    setIsInitialized(true);
   }, [
     cocktails,
     cocktailNameParam,
@@ -776,6 +859,8 @@ export default function CreateCocktailScreen() {
         return;
       }
 
+      allowNavigationRef.current = true;
+      setHasUnsavedChanges(false);
       const targetId = persisted.id ?? persisted.name;
       if (targetId) {
         router.replace({ pathname: '/cocktails/[cocktailId]', params: { cocktailId: String(targetId) } });
@@ -799,6 +884,7 @@ export default function CreateCocktailScreen() {
     name,
     prefilledCocktail?.id,
     selectedTagIds,
+    setHasUnsavedChanges,
     showDialog,
   ]);
 
@@ -843,14 +929,75 @@ export default function CreateCocktailScreen() {
               return;
             }
 
+            allowNavigationRef.current = true;
+            setHasUnsavedChanges(false);
             router.replace('/cocktails');
           },
         },
       ],
     });
-  }, [deleteCocktail, isEditMode, prefilledCocktail?.id, prefilledCocktail?.name, showDialog]);
+  }, [deleteCocktail, isEditMode, prefilledCocktail?.id, prefilledCocktail?.name, setHasUnsavedChanges, showDialog]);
+
+  const confirmLeave = useCallback(
+    (onLeave: () => void) => {
+      showDialog({
+        title: 'Leave without saving?',
+        message: 'Your changes will be lost if you leave this screen.',
+        actions: [
+          { label: 'Stay', variant: 'secondary' },
+          {
+            label: 'Leave',
+            variant: 'destructive',
+            onPress: () => {
+              allowNavigationRef.current = true;
+              setHasUnsavedChanges(false);
+              onLeave();
+            },
+          },
+        ],
+      });
+    },
+    [setHasUnsavedChanges, showDialog],
+  );
+
+  useEffect(() => {
+    if (!hasUnsavedChanges) {
+      return;
+    }
+
+    const unsubscribe = navigation.addListener('beforeRemove', (event) => {
+      if (!hasUnsavedChanges || allowNavigationRef.current) {
+        return;
+      }
+
+      event.preventDefault();
+      confirmLeave(() => navigation.dispatch(event.data.action));
+    });
+
+    return unsubscribe;
+  }, [confirmLeave, hasUnsavedChanges, navigation]);
 
   const handleGoBack = useCallback(() => {
+    if (hasUnsavedChanges) {
+      confirmLeave(() => {
+        if (sourceParam === 'ingredient' && ingredientParam) {
+          router.replace({
+            pathname: '/ingredients/[ingredientId]',
+            params: { ingredientId: String(ingredientParam) },
+          });
+          return;
+        }
+
+        if (sourceParam === 'cocktails') {
+          router.replace('/cocktails');
+          return;
+        }
+
+        router.back();
+      });
+      return;
+    }
+
     if (sourceParam === 'ingredient' && ingredientParam) {
       router.replace({
         pathname: '/ingredients/[ingredientId]',
@@ -865,7 +1012,7 @@ export default function CreateCocktailScreen() {
     }
 
     router.back();
-  }, [ingredientParam, sourceParam]);
+  }, [confirmLeave, hasUnsavedChanges, ingredientParam, sourceParam]);
 
   const imageSource = useMemo(() => {
     if (!imageUri) {
