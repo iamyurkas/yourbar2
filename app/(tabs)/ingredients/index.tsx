@@ -21,6 +21,7 @@ import { TagPill } from '@/components/TagPill';
 import type { SegmentTabOption } from '@/components/TopBars';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { Colors } from '@/constants/theme';
+import { getLastIngredientTab, setLastIngredientTab, type IngredientTabKey } from '@/libs/collection-tabs';
 import { isCocktailReady } from '@/libs/cocktail-availability';
 import {
   createIngredientLookup,
@@ -34,8 +35,6 @@ type IngredientSection = {
   label: string;
   data: Ingredient[];
 };
-
-type IngredientTabKey = 'all' | 'my' | 'shopping';
 
 const TAB_OPTIONS: SegmentTabOption[] = [
   { key: 'all', label: 'All' },
@@ -212,7 +211,7 @@ export default function IngredientsScreen() {
     ignoreGarnish,
     allowAllSubstitutes,
   } = useInventory();
-  const [activeTab, setActiveTab] = useState<IngredientTabKey>('all');
+  const [activeTab, setActiveTab] = useState<IngredientTabKey>(() => getLastIngredientTab());
   const [query, setQuery] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isFilterMenuVisible, setFilterMenuVisible] = useState(false);
@@ -228,6 +227,10 @@ export default function IngredientsScreen() {
   const defaultTagColor = palette.tagYellow ?? palette.highlightFaint;
 
   useScrollToTop(listRef);
+
+  useEffect(() => {
+    setLastIngredientTab(activeTab);
+  }, [activeTab]);
 
   const availableTagOptions = useMemo<IngredientTagOption[]>(() => {
     const map = new Map<string, IngredientTagOption>();
