@@ -236,9 +236,12 @@ export default function IngredientDetailsScreen() {
 
   const handleBackPress = useCallback(() => {
     if (shouldReturnToCocktail && cocktailId != null) {
-      router.replace({
-        pathname: '/cocktails/[cocktailId]',
-        params: { cocktailId: String(cocktailId) },
+      router.replace('/cocktails');
+      requestAnimationFrame(() => {
+        router.push({
+          pathname: '/cocktails/[cocktailId]',
+          params: { cocktailId: String(cocktailId) },
+        });
       });
       return;
     }
