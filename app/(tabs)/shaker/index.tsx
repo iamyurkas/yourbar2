@@ -8,6 +8,8 @@ import {
   Text,
   TextInput,
   View,
+  type StyleProp,
+  type TextStyle,
   type ListRenderItemInfo,
 } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -39,6 +41,8 @@ type IngredientRowProps = {
   ingredient: Ingredient;
   isSelected: boolean;
   isAvailable: boolean;
+  subtitle?: string;
+  subtitleStyle?: StyleProp<TextStyle>;
   onToggle: (id: number) => void;
 };
 
@@ -46,6 +50,8 @@ const IngredientRow = memo(function IngredientRow({
   ingredient,
   isSelected,
   isAvailable,
+  subtitle,
+  subtitleStyle,
   onToggle,
 }: IngredientRowProps) {
   const ingredientId = Number(ingredient.id ?? -1);
@@ -67,6 +73,8 @@ const IngredientRow = memo(function IngredientRow({
   return (
     <ListRow
       title={ingredient.name}
+      subtitle={subtitle}
+      subtitleStyle={subtitleStyle}
       onPress={handlePress}
       selected={isSelected || isAvailable}
       highlightColor={highlightColor}
@@ -345,6 +353,74 @@ export default function ShakerScreen() {
 
   const ingredientLookup = useMemo(() => createIngredientLookup(ingredients), [ingredients]);
 
+  const visibleCocktailsByIngredientId = useMemo(() => {
+    const map = new Map<number, Set<string>>();
+
+    cocktails.forEach((cocktail) => {
+      const cocktailKey = resolveCocktailKey(cocktail);
+      if (!cocktailKey) {
+        return;
+      }
+
+      const visibleIds = getVisibleIngredientIdsForCocktail(cocktail, ingredientLookup, {
+        allowAllSubstitutes,
+      });
+
+      visibleIds.forEach((ingredientId) => {
+        let set = map.get(ingredientId);
+        if (!set) {
+          set = new Set<string>();
+          map.set(ingredientId, set);
+        }
+
+        set.add(cocktailKey);
+      });
+    });
+
+    return map;
+  }, [allowAllSubstitutes, cocktails, ingredientLookup]);
+
+  const makeableCocktailKeys = useMemo(() => {
+    const keys = new Set<string>();
+
+    cocktails.forEach((cocktail) => {
+      const key = resolveCocktailKey(cocktail);
+      if (!key) {
+        return;
+      }
+
+      if (isCocktailReady(cocktail, availableIngredientIds, ingredientLookup, ingredients, {
+        ignoreGarnish,
+        allowAllSubstitutes,
+      })) {
+        keys.add(key);
+      }
+    });
+
+    return keys;
+  }, [
+    allowAllSubstitutes,
+    availableIngredientIds,
+    cocktails,
+    ignoreGarnish,
+    ingredientLookup,
+    ingredients,
+  ]);
+
+  const makeableCocktailCounts = useMemo(() => {
+    const counts = new Map<number, number>();
+    visibleCocktailsByIngredientId.forEach((cocktailKeys, ingredientId) => {
+      let count = 0;
+      cocktailKeys.forEach((key) => {
+        if (makeableCocktailKeys.has(key)) {
+          count += 1;
+        }
+      });
+      counts.set(ingredientId, count);
+    });
+    return counts;
+  }, [makeableCocktailKeys, visibleCocktailsByIngredientId]);
+
   const selectedGroups = useMemo(() => {
     if (selectedIngredientIds.size === 0) {
       return new Map<string, Set<number>>();
@@ -481,6 +557,9 @@ export default function ShakerScreen() {
                 const separatorColor = isAvailable
                   ? paletteColors.outline
                   : paletteColors.outlineVariant;
+                const count = ingredientId >= 0 ? makeableCocktailCounts.get(ingredientId) ?? 0 : 0;
+                const label = count === 1 ? 'cocktail' : 'cocktails';
+                const subtitleText = `Make ${count} ${label}`;
 
                 return (
                   <View key={String(ingredient.id ?? ingredient.name)}>
@@ -488,6 +567,8 @@ export default function ShakerScreen() {
                       ingredient={ingredient}
                       isAvailable={isAvailable}
                       isSelected={isSelected}
+                      subtitle={subtitleText}
+                      subtitleStyle={{ color: paletteColors.onSurfaceVariant }}
                       onToggle={handleToggleIngredient}
                     />
                     {index < item.ingredients.length - 1 ? (
@@ -506,6 +587,7 @@ export default function ShakerScreen() {
       expandedTagKeys,
       handleToggleGroup,
       handleToggleIngredient,
+      makeableCocktailCounts,
       paletteColors.onSurface,
       paletteColors.onSurfaceVariant,
       selectedIngredientIds,
