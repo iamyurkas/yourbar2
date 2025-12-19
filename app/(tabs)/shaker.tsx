@@ -1,97 +1,601 @@
-import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  FlatList,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  type ListRenderItemInfo,
+} from 'react-native';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useRouter } from 'expo-router';
 
-import { CollectionHeader } from '@/components/CollectionHeader';
+import { ListRow, PresenceCheck, Thumb } from '@/components/RowParts';
 import { SideMenuDrawer } from '@/components/SideMenuDrawer';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { IconSymbol } from '@/components/ui/icon-symbol';
+import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { Colors } from '@/constants/theme';
+import { isCocktailReady } from '@/libs/cocktail-availability';
+import {
+  createIngredientLookup,
+  getVisibleIngredientIdsForCocktail,
+} from '@/libs/ingredient-availability';
+import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
 import { palette } from '@/theme/theme';
 
-type ActionCardProps = {
-  title: string;
-  description: string;
-  icon: 'wineglass.fill' | 'shaker.fill' | 'shopping.basket.fill';
+const SELECTED_HIGHLIGHT = '#DDFFEE';
+
+type IngredientTagOption = {
+  key: string;
+  name: string;
+  color: string;
 };
 
+type IngredientGroup = IngredientTagOption & {
+  ingredients: Ingredient[];
+};
+
+type IngredientRowProps = {
+  ingredient: Ingredient;
+  isSelected: boolean;
+  isAvailable: boolean;
+  onToggle: (id: number) => void;
+};
+
+const IngredientRow = memo(function IngredientRow({
+  ingredient,
+  isSelected,
+  isAvailable,
+  onToggle,
+}: IngredientRowProps) {
+  const paletteColors = Colors;
+  const ingredientId = Number(ingredient.id ?? -1);
+  const tagColor = ingredient.tags?.[0]?.color ?? palette.tagYellow;
+  const brandIndicatorColor = ingredient.baseIngredientId != null ? Colors.primary : undefined;
+
+  const handlePress = useCallback(() => {
+    if (ingredientId >= 0) {
+      onToggle(ingredientId);
+    }
+  }, [ingredientId, onToggle]);
+
+  const highlightColor = isSelected ? SELECTED_HIGHLIGHT : palette.highlightFaint;
+  const thumbnail = useMemo(
+    () => <Thumb label={ingredient.name} uri={ingredient.photoUri} />,
+    [ingredient.name, ingredient.photoUri],
+  );
+
+  return (
+    <ListRow
+      title={ingredient.name}
+      onPress={handlePress}
+      selected={isSelected || isAvailable}
+      highlightColor={highlightColor}
+      tagColor={tagColor}
+      thumbnail={thumbnail}
+      accessibilityRole="button"
+      accessibilityState={isSelected ? { selected: true } : undefined}
+      brandIndicatorColor={brandIndicatorColor}
+      metaAlignment="center"
+    />
+  );
+});
+
+function normalizeTagKey(tag?: { id?: number | null; name?: string | null }) {
+  if (!tag) {
+    return undefined;
+  }
+
+  if (tag.id != null) {
+    return String(tag.id);
+  }
+
+  return tag.name?.trim().toLowerCase();
+}
+
+function resolveCocktailKey(cocktail: Cocktail) {
+  if (cocktail.id != null) {
+    return String(cocktail.id);
+  }
+
+  if (cocktail.name) {
+    return cocktail.name.trim().toLowerCase();
+  }
+
+  return undefined;
+}
+
 export default function ShakerScreen() {
+  const router = useRouter();
+  const {
+    cocktails,
+    ingredients,
+    availableIngredientIds,
+    ignoreGarnish,
+    allowAllSubstitutes,
+  } = useInventory();
   const [query, setQuery] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [inStockOnly, setInStockOnly] = useState(false);
+  const [expandedTagKeys, setExpandedTagKeys] = useState<Set<string>>(() => new Set());
+  const [selectedIngredientIds, setSelectedIngredientIds] = useState<Set<number>>(() => new Set());
   const paletteColors = Colors;
+  const insets = useSafeAreaInsets();
+  const defaultTagColor = palette.tagYellow ?? palette.highlightFaint;
+
+  const normalizedQuery = useMemo(() => {
+    const trimmed = query.trim().toLowerCase();
+    const tokens = trimmed ? trimmed.split(/\s+/).filter(Boolean) : [];
+    return { text: trimmed, tokens };
+  }, [query]);
+
+  const filteredIngredients = useMemo(() => {
+    let base = ingredients;
+
+    if (inStockOnly) {
+      base = base.filter((ingredient) => {
+        const id = Number(ingredient.id ?? -1);
+        return id >= 0 && availableIngredientIds.has(id);
+      });
+    }
+
+    if (!normalizedQuery.text) {
+      return base;
+    }
+
+    const { text, tokens } = normalizedQuery;
+    if (tokens.length <= 1) {
+      const token = tokens[0] ?? text;
+      return base.filter((ingredient) => ingredient.searchNameNormalized.includes(token));
+    }
+
+    return base.filter((ingredient) =>
+      tokens.every(
+        (token) =>
+          ingredient.searchTokensNormalized.includes(token) ||
+          ingredient.searchNameNormalized.includes(token),
+      ),
+    );
+  }, [availableIngredientIds, ingredients, inStockOnly, normalizedQuery]);
+
+  const availableTagOptions = useMemo<IngredientTagOption[]>(() => {
+    const map = new Map<string, IngredientTagOption>();
+    const builtinTagOrder = new Map<string, number>();
+
+    BUILTIN_INGREDIENT_TAGS.forEach((tag, index) => {
+      const key = normalizeTagKey(tag);
+      if (key) {
+        builtinTagOrder.set(key, index);
+      }
+
+      if (tag.name) {
+        builtinTagOrder.set(tag.name.trim().toLowerCase(), index);
+      }
+    });
+
+    ingredients.forEach((ingredient) => {
+      const tag = ingredient.tags?.[0];
+      const key = normalizeTagKey(tag);
+      if (!key) {
+        return;
+      }
+
+      if (!map.has(key)) {
+        map.set(key, {
+          key,
+          name: tag?.name ?? 'Unnamed tag',
+          color: tag?.color ?? defaultTagColor,
+        });
+      }
+    });
+
+    const otherTag = BUILTIN_INGREDIENT_TAGS.find((tag) => tag.name === 'other');
+    const otherKey = normalizeTagKey(otherTag) ?? 'other';
+    if (!map.has(otherKey)) {
+      map.set(otherKey, {
+        key: otherKey,
+        name: otherTag?.name ?? 'Other',
+        color: otherTag?.color ?? defaultTagColor,
+      });
+    }
+
+    return Array.from(map.values()).sort((a, b) => {
+      const normalizedNameA = a.name.trim().toLowerCase();
+      const normalizedNameB = b.name.trim().toLowerCase();
+      const orderA = builtinTagOrder.get(a.key) ?? builtinTagOrder.get(normalizedNameA);
+      const orderB = builtinTagOrder.get(b.key) ?? builtinTagOrder.get(normalizedNameB);
+
+      if (orderA != null || orderB != null) {
+        if (orderA == null) {
+          return 1;
+        }
+
+        if (orderB == null) {
+          return -1;
+        }
+
+        if (orderA !== orderB) {
+          return orderA - orderB;
+        }
+      }
+
+      return normalizedNameA.localeCompare(normalizedNameB);
+    });
+  }, [defaultTagColor, ingredients]);
+
+  const ingredientGroups = useMemo<IngredientGroup[]>(() => {
+    const groups = new Map<string, IngredientGroup>();
+    const otherTag = availableTagOptions.find((tag) => tag.name.trim().toLowerCase() === 'other');
+
+    filteredIngredients.forEach((ingredient) => {
+      const tag = ingredient.tags?.[0];
+      const key = normalizeTagKey(tag) ?? otherTag?.key ?? 'other';
+      const group = groups.get(key);
+
+      if (group) {
+        group.ingredients.push(ingredient);
+        return;
+      }
+
+      const fallbackTag = otherTag ?? {
+        key,
+        name: 'Other',
+        color: defaultTagColor,
+      };
+
+      groups.set(key, {
+        key,
+        name: tag?.name ?? fallbackTag.name,
+        color: tag?.color ?? fallbackTag.color,
+        ingredients: [ingredient],
+      });
+    });
+
+    const orderMap = new Map<string, number>();
+    availableTagOptions.forEach((tag, index) => {
+      orderMap.set(tag.key, index);
+    });
+
+    return Array.from(groups.values())
+      .map((group) => ({
+        ...group,
+        ingredients: group.ingredients.sort((a, b) => a.name.localeCompare(b.name)),
+      }))
+      .sort((a, b) => {
+        const orderA = orderMap.get(a.key);
+        const orderB = orderMap.get(b.key);
+
+        if (orderA != null || orderB != null) {
+          if (orderA == null) {
+            return 1;
+          }
+
+          if (orderB == null) {
+            return -1;
+          }
+
+          if (orderA !== orderB) {
+            return orderA - orderB;
+          }
+        }
+
+        return a.name.localeCompare(b.name);
+      });
+  }, [availableTagOptions, defaultTagColor, filteredIngredients]);
+
+  useEffect(() => {
+    setExpandedTagKeys((previous) => {
+      if (previous.size === 0) {
+        return previous;
+      }
+
+      const validKeys = new Set(ingredientGroups.map((group) => group.key));
+      let didChange = false;
+      const next = new Set<string>();
+
+      previous.forEach((key) => {
+        if (validKeys.has(key)) {
+          next.add(key);
+        } else {
+          didChange = true;
+        }
+      });
+
+      if (!didChange && next.size === previous.size) {
+        return previous;
+      }
+
+      return next;
+    });
+  }, [ingredientGroups]);
+
+  const handleToggleGroup = useCallback((key: string) => {
+    setExpandedTagKeys((previous) => {
+      const next = new Set(previous);
+      if (next.has(key)) {
+        next.delete(key);
+      } else {
+        next.add(key);
+      }
+      return next;
+    });
+  }, []);
+
+  const handleToggleIngredient = useCallback((id: number) => {
+    if (id < 0) {
+      return;
+    }
+
+    setSelectedIngredientIds((previous) => {
+      const next = new Set(previous);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+      return next;
+    });
+  }, []);
+
+  const ingredientLookup = useMemo(() => createIngredientLookup(ingredients), [ingredients]);
+
+  const selectedIngredientList = useMemo(() => Array.from(selectedIngredientIds), [selectedIngredientIds]);
+
+  const matchingCocktailSummary = useMemo(() => {
+    const availableKeys: string[] = [];
+    const unavailableKeys: string[] = [];
+    const allMatchingKeys = new Set<string>();
+
+    cocktails.forEach((cocktail) => {
+      const key = resolveCocktailKey(cocktail);
+      if (!key) {
+        return;
+      }
+
+      const visibleIds = getVisibleIngredientIdsForCocktail(cocktail, ingredientLookup, {
+        allowAllSubstitutes,
+      });
+
+      const matchesSelection = selectedIngredientList.every((id) => visibleIds.has(id));
+
+      if (!matchesSelection) {
+        return;
+      }
+
+      allMatchingKeys.add(key);
+
+      const isReady = isCocktailReady(cocktail, availableIngredientIds, ingredientLookup, ingredients, {
+        ignoreGarnish,
+        allowAllSubstitutes,
+      });
+
+      if (isReady) {
+        availableKeys.push(key);
+      } else {
+        unavailableKeys.push(key);
+      }
+    });
+
+    return {
+      availableKeys,
+      unavailableKeys,
+      matchingCount: allMatchingKeys.size,
+      recipeCount: allMatchingKeys.size,
+    };
+  }, [
+    allowAllSubstitutes,
+    availableIngredientIds,
+    cocktails,
+    ignoreGarnish,
+    ingredientLookup,
+    ingredients,
+    selectedIngredientList,
+  ]);
+
+  const showHelper = selectedIngredientIds.size === 0 && matchingCocktailSummary.recipeCount === 0;
+
+  const handleClearSelection = useCallback(() => {
+    setSelectedIngredientIds((previous) => (previous.size === 0 ? previous : new Set()));
+  }, []);
+
+  const handleShowResults = useCallback(() => {
+    router.push({
+      pathname: '/shaker/results',
+      params: {
+        available: JSON.stringify(matchingCocktailSummary.availableKeys),
+        unavailable: JSON.stringify(matchingCocktailSummary.unavailableKeys),
+      },
+    });
+  }, [matchingCocktailSummary.availableKeys, matchingCocktailSummary.unavailableKeys, router]);
+
+  const renderGroup = useCallback(
+    ({ item }: ListRenderItemInfo<IngredientGroup>) => {
+      const isExpanded = expandedTagKeys.has(item.key);
+      const iconRotation = isExpanded ? '180deg' : '0deg';
+      const backgroundColor = `${item.color}22`;
+
+      return (
+        <View style={styles.groupCard}>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={`${item.name} ingredients`}
+            accessibilityState={{ expanded: isExpanded }}
+            onPress={() => handleToggleGroup(item.key)}
+            style={[styles.groupHeader, { backgroundColor }]}
+          >
+            <Text style={[styles.groupTitle, { color: paletteColors.onSurface }]}>{item.name}</Text>
+            <MaterialIcons
+              name="expand-more"
+              size={22}
+              color={paletteColors.onSurfaceVariant}
+              style={{ transform: [{ rotate: iconRotation }] }}
+            />
+          </Pressable>
+          {isExpanded ? (
+            <View style={styles.groupList}>
+              {item.ingredients.map((ingredient) => {
+                const ingredientId = Number(ingredient.id ?? -1);
+                const isAvailable = ingredientId >= 0 && availableIngredientIds.has(ingredientId);
+                const isSelected = ingredientId >= 0 && selectedIngredientIds.has(ingredientId);
+
+                return (
+                  <IngredientRow
+                    key={String(ingredient.id ?? ingredient.name)}
+                    ingredient={ingredient}
+                    isAvailable={isAvailable}
+                    isSelected={isSelected}
+                    onToggle={handleToggleIngredient}
+                  />
+                );
+              })}
+            </View>
+          ) : null}
+        </View>
+      );
+    },
+    [
+      availableIngredientIds,
+      expandedTagKeys,
+      handleToggleGroup,
+      handleToggleIngredient,
+      paletteColors.onSurface,
+      paletteColors.onSurfaceVariant,
+      selectedIngredientIds,
+    ],
+  );
 
   return (
     <SafeAreaView
       style={[styles.safeArea, { backgroundColor: paletteColors.background }]}
-      edges={['top', 'left', 'right']}>
-      <ThemedView style={[styles.screen, { backgroundColor: paletteColors.background }]}>
-        <CollectionHeader
-          searchValue={query}
-          onSearchChange={setQuery}
-          placeholder="Search"
-          onMenuPress={() => setIsMenuOpen(true)}
-        />
-        <View style={styles.container}>
-          <View style={styles.header}>
-            <ThemedText type="title">Shaker</ThemedText>
-            <ThemedText style={styles.subtitle}>
-              Jump into service mode with timers, prep reminders and a live checklist for the bar team.
-            </ThemedText>
+      edges={['top', 'left', 'right']}
+    >
+      <View style={styles.screen}>
+        <View
+          style={[
+            styles.header,
+            { backgroundColor: paletteColors.background, borderBottomColor: paletteColors.outline },
+          ]}
+        >
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="Open navigation"
+            onPress={() => setIsMenuOpen(true)}
+            style={styles.iconButton}
+          >
+            <MaterialCommunityIcons name="menu" size={24} color={paletteColors.onSurface} />
+          </Pressable>
+          <View
+            style={[
+              styles.searchContainer,
+              { backgroundColor: paletteColors.surface, borderColor: paletteColors.background },
+            ]}
+          >
+            <MaterialCommunityIcons
+              name="magnify"
+              size={20}
+              color={paletteColors.onSurface}
+              style={styles.searchIcon}
+            />
+            <TextInput
+              value={query}
+              onChangeText={setQuery}
+              placeholder="Search"
+              placeholderTextColor={`${paletteColors.onSurfaceVariant}99`}
+              returnKeyType="search"
+              style={[styles.searchInput, { color: paletteColors.text, fontWeight: '400' }]}
+            />
+            {query ? (
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel="Clear search query"
+                onPress={() => setQuery('')}
+                style={styles.clearButton}
+              >
+                <MaterialCommunityIcons name="close" size={18} color={paletteColors.onSurface} />
+              </Pressable>
+            ) : null}
           </View>
-
-          <ActionCard
-            title="Service rounds"
-            description="Start a round, track tickets and sync progress with the floor in real time."
-            icon="shaker.fill"
-          />
-          <ActionCard
-            title="Build a new recipe"
-            description="Capture specs, tasting notes and garnish instructions before saving to Cocktails."
-            icon="wineglass.fill"
-          />
-          <ActionCard
-            title="Restock checklist"
-            description="Create a closing checklist and share it with the team before the next shift."
-            icon="shopping.basket.fill"
-          />
+          <View style={styles.iconButton}>
+            <PresenceCheck checked={inStockOnly} onToggle={() => setInStockOnly((previous) => !previous)} />
+          </View>
+        </View>
+        {showHelper ? (
+          <Text style={[styles.helperText, { color: paletteColors.onSurfaceVariant }]}
+          >
+            Mark which ingredients are in stock first
+          </Text>
+        ) : null}
+        <FlatList
+          data={ingredientGroups}
+          keyExtractor={(item) => item.key}
+          renderItem={renderGroup}
+          contentContainerStyle={[styles.listContent, { paddingBottom: 140 + insets.bottom }]}
+          showsVerticalScrollIndicator={false}
+        />
+        <View
+          style={[
+            styles.bottomPanel,
+            {
+              borderTopColor: paletteColors.outlineVariant,
+              backgroundColor: paletteColors.surface,
+              paddingBottom: 12 + insets.bottom,
+            },
+          ]}
+        >
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="Clear selected ingredients"
+            onPress={handleClearSelection}
+            style={({ pressed }) => [styles.clearButtonBase, pressed ? styles.clearButtonPressed : null]}
+          >
+            <Text style={[styles.clearButtonLabel, { color: paletteColors.error }]}>Clear</Text>
+          </Pressable>
+          <View style={styles.countsColumn}>
+            <Text style={[styles.countsPrimary, { color: paletteColors.onSurface }]}
+            >
+              Cocktails: {matchingCocktailSummary.matchingCount}
+            </Text>
+            <Text style={[styles.countsSecondary, { color: paletteColors.onSurfaceVariant }]}
+            >
+              (recipes: {matchingCocktailSummary.recipeCount})
+            </Text>
+          </View>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="Show matching recipes"
+            accessibilityState={{ disabled: matchingCocktailSummary.recipeCount === 0 }}
+            disabled={matchingCocktailSummary.recipeCount === 0}
+            onPress={handleShowResults}
+            style={({ pressed }) => [
+              styles.showButton,
+              {
+                backgroundColor:
+                  matchingCocktailSummary.recipeCount === 0
+                    ? paletteColors.surfaceVariant
+                    : paletteColors.primary,
+              },
+              pressed && matchingCocktailSummary.recipeCount > 0 ? styles.showButtonPressed : null,
+            ]}
+          >
+            <Text
+              style={[
+                styles.showButtonLabel,
+                {
+                  color:
+                    matchingCocktailSummary.recipeCount === 0
+                      ? paletteColors.onSurfaceVariant
+                      : paletteColors.onPrimary,
+                },
+              ]}
+            >
+              Show
+            </Text>
+          </Pressable>
         </View>
         <SideMenuDrawer visible={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
-      </ThemedView>
+      </View>
     </SafeAreaView>
-  );
-}
-
-function ActionCard({ title, description, icon }: ActionCardProps) {
-  const paletteColors = Colors;
-  const tint = paletteColors.tint;
-  const backgroundColor = palette.surfaceBright;
-  const borderColor = `${tint}3d`;
-
-  return (
-    <ThemedView
-      style={[
-        styles.card,
-        {
-          backgroundColor,
-          borderColor,
-          shadowColor: palette.primary,
-          shadowOpacity: 0.08,
-          shadowRadius: 12,
-          shadowOffset: { width: 0, height: 12 },
-          elevation: 4,
-        },
-      ]}>
-      <View style={[styles.iconBadge, { backgroundColor: `${tint}1A`, borderColor: `${tint}33` }]}>
-        <IconSymbol name={icon} size={28} color={tint} />
-      </View>
-      <View style={styles.cardText}>
-        <ThemedText type="subtitle" style={styles.cardTitle}>
-          {title}
-        </ThemedText>
-        <ThemedText style={styles.cardDescription}>{description}</ThemedText>
-      </View>
-    </ThemedView>
   );
 }
 
@@ -102,48 +606,129 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
   },
-  container: {
-    flex: 1,
-    paddingTop: 32,
-    paddingHorizontal: 20,
-    paddingBottom: 120,
-    gap: 24,
-  },
   header: {
-    gap: 8,
-  },
-  subtitle: {
-    fontSize: 14,
-    lineHeight: 22,
-    opacity: 0.72,
-  },
-  card: {
-    borderRadius: 12,
-    padding: 20,
     flexDirection: 'row',
-    gap: 16,
     alignItems: 'center',
-    borderWidth: 1,
+    gap: 12,
+    paddingHorizontal: 16,
+    paddingTop: 12,
+    paddingBottom: 8,
+    borderBottomWidth: StyleSheet.hairlineWidth,
   },
-  iconBadge: {
-    width: 52,
-    height: 52,
+  iconButton: {
+    width: 40,
+    height: 40,
     borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 1,
   },
-  cardText: {
+  searchContainer: {
     flex: 1,
-    gap: 6,
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: 12,
+    borderWidth: 1,
+    paddingHorizontal: 12,
+    paddingVertical: 4,
   },
-  cardTitle: {
-    letterSpacing: 0.2,
+  searchIcon: {
+    marginRight: 8,
+  },
+  searchInput: {
+    flex: 1,
+    fontSize: 16,
+  },
+  clearButton: {
+    width: 28,
+    height: 28,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  helperText: {
+    textAlign: 'center',
+    marginTop: 24,
+    marginHorizontal: 24,
     fontSize: 14,
   },
-  cardDescription: {
+  listContent: {
+    paddingTop: 16,
+    paddingHorizontal: 12,
+    paddingBottom: 120,
+  },
+  groupCard: {
+    marginBottom: 2,
+  },
+  groupHeader: {
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderRadius: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  groupTitle: {
     fontSize: 14,
-    lineHeight: 22,
-    opacity: 0.75,
+    fontWeight: '600',
+    textTransform: 'capitalize',
+  },
+  groupList: {
+    overflow: 'hidden',
+    borderRadius: 12,
+    marginTop: 6,
+  },
+  bottomPanel: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  clearButtonBase: {
+    borderWidth: 1,
+    borderColor: palette.danger,
+    borderRadius: 12,
+    paddingHorizontal: 18,
+    paddingVertical: 8,
+    minWidth: 72,
+    alignItems: 'center',
+  },
+  clearButtonPressed: {
+    opacity: 0.7,
+  },
+  clearButtonLabel: {
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  countsColumn: {
+    flex: 1,
+    alignItems: 'center',
+    gap: 2,
+  },
+  countsPrimary: {
+    fontSize: 14,
+    fontWeight: '700',
+  },
+  countsSecondary: {
+    fontSize: 12,
+  },
+  showButton: {
+    borderRadius: 12,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    minWidth: 90,
+    alignItems: 'center',
+  },
+  showButtonPressed: {
+    opacity: 0.85,
+  },
+  showButtonLabel: {
+    fontSize: 14,
+    fontWeight: '600',
   },
 });
