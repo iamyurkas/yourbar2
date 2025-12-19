@@ -24,8 +24,6 @@ import {
 import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
 import { palette } from '@/theme/theme';
 
-const SELECTED_HIGHLIGHT = '#DDFFEE';
-
 type IngredientTagOption = {
   key: string;
   name: string;
@@ -49,7 +47,6 @@ const IngredientRow = memo(function IngredientRow({
   isAvailable,
   onToggle,
 }: IngredientRowProps) {
-  const paletteColors = Colors;
   const ingredientId = Number(ingredient.id ?? -1);
   const tagColor = ingredient.tags?.[0]?.color ?? palette.tagYellow;
   const brandIndicatorColor = ingredient.baseIngredientId != null ? Colors.primary : undefined;
@@ -60,7 +57,7 @@ const IngredientRow = memo(function IngredientRow({
     }
   }, [ingredientId, onToggle]);
 
-  const highlightColor = isSelected ? SELECTED_HIGHLIGHT : palette.highlightFaint;
+  const highlightColor = isSelected ? palette.highlightSubtle : palette.highlightFaint;
   const thumbnail = useMemo(
     () => <Thumb label={ingredient.name} uri={ingredient.photoUri} />,
     [ingredient.name, ingredient.photoUri],
@@ -92,6 +89,10 @@ function normalizeTagKey(tag?: { id?: number | null; name?: string | null }) {
   }
 
   return tag.name?.trim().toLowerCase();
+}
+
+function getIngredientTagKey(ingredient: Ingredient, fallbackKey?: string) {
+  return normalizeTagKey(ingredient.tags?.[0]) ?? fallbackKey ?? 'other';
 }
 
 function resolveCocktailKey(cocktail: Cocktail) {
@@ -230,7 +231,7 @@ export default function ShakerScreen() {
 
     filteredIngredients.forEach((ingredient) => {
       const tag = ingredient.tags?.[0];
-      const key = normalizeTagKey(tag) ?? otherTag?.key ?? 'other';
+      const key = getIngredientTagKey(ingredient, otherTag?.key);
       const group = groups.get(key);
 
       if (group) {
@@ -340,12 +341,43 @@ export default function ShakerScreen() {
 
   const ingredientLookup = useMemo(() => createIngredientLookup(ingredients), [ingredients]);
 
-  const selectedIngredientList = useMemo(() => Array.from(selectedIngredientIds), [selectedIngredientIds]);
+  const selectedGroups = useMemo(() => {
+    if (selectedIngredientIds.size === 0) {
+      return new Map<string, Set<number>>();
+    }
+
+    const otherTag = availableTagOptions.find((tag) => tag.name.trim().toLowerCase() === 'other');
+    const map = new Map<string, Set<number>>();
+
+    ingredients.forEach((ingredient) => {
+      const ingredientId = Number(ingredient.id ?? -1);
+      if (!selectedIngredientIds.has(ingredientId)) {
+        return;
+      }
+
+      const key = getIngredientTagKey(ingredient, otherTag?.key);
+      if (!map.has(key)) {
+        map.set(key, new Set());
+      }
+      map.get(key)?.add(ingredientId);
+    });
+
+    return map;
+  }, [availableTagOptions, ingredients, selectedIngredientIds]);
 
   const matchingCocktailSummary = useMemo(() => {
     const availableKeys: string[] = [];
     const unavailableKeys: string[] = [];
     const allMatchingKeys = new Set<string>();
+
+    if (selectedGroups.size === 0) {
+      return {
+        availableKeys,
+        unavailableKeys,
+        availableCount: 0,
+        recipeCount: 0,
+      };
+    }
 
     cocktails.forEach((cocktail) => {
       const key = resolveCocktailKey(cocktail);
@@ -357,7 +389,13 @@ export default function ShakerScreen() {
         allowAllSubstitutes,
       });
 
-      const matchesSelection = selectedIngredientList.every((id) => visibleIds.has(id));
+      let matchesSelection = true;
+      selectedGroups.forEach((groupIds) => {
+        const hasMatch = Array.from(groupIds).some((id) => visibleIds.has(id));
+        if (!hasMatch) {
+          matchesSelection = false;
+        }
+      });
 
       if (!matchesSelection) {
         return;
@@ -380,7 +418,7 @@ export default function ShakerScreen() {
     return {
       availableKeys,
       unavailableKeys,
-      matchingCount: allMatchingKeys.size,
+      availableCount: availableKeys.length,
       recipeCount: allMatchingKeys.size,
     };
   }, [
@@ -390,7 +428,7 @@ export default function ShakerScreen() {
     ignoreGarnish,
     ingredientLookup,
     ingredients,
-    selectedIngredientList,
+    selectedGroups,
   ]);
 
   const showHelper = selectedIngredientIds.size === 0 && matchingCocktailSummary.recipeCount === 0;
@@ -413,7 +451,7 @@ export default function ShakerScreen() {
     ({ item }: ListRenderItemInfo<IngredientGroup>) => {
       const isExpanded = expandedTagKeys.has(item.key);
       const iconRotation = isExpanded ? '180deg' : '0deg';
-      const backgroundColor = `${item.color}22`;
+      const backgroundColor = item.color;
 
       return (
         <View style={styles.groupCard}>
@@ -424,11 +462,11 @@ export default function ShakerScreen() {
             onPress={() => handleToggleGroup(item.key)}
             style={[styles.groupHeader, { backgroundColor }]}
           >
-            <Text style={[styles.groupTitle, { color: paletteColors.onSurface }]}>{item.name}</Text>
+            <Text style={[styles.groupTitle, { color: paletteColors.onPrimary }]}>{item.name}</Text>
             <MaterialIcons
               name="expand-more"
               size={22}
-              color={paletteColors.onSurfaceVariant}
+              color={paletteColors.onPrimary}
               style={{ transform: [{ rotate: iconRotation }] }}
             />
           </Pressable>
@@ -554,7 +592,7 @@ export default function ShakerScreen() {
           <View style={styles.countsColumn}>
             <Text style={[styles.countsPrimary, { color: paletteColors.onSurface }]}
             >
-              Cocktails: {matchingCocktailSummary.matchingCount}
+              Cocktails: {matchingCocktailSummary.availableCount}
             </Text>
             <Text style={[styles.countsSecondary, { color: paletteColors.onSurfaceVariant }]}
             >
@@ -564,18 +602,22 @@ export default function ShakerScreen() {
           <Pressable
             accessibilityRole="button"
             accessibilityLabel="Show matching recipes"
-            accessibilityState={{ disabled: matchingCocktailSummary.recipeCount === 0 }}
-            disabled={matchingCocktailSummary.recipeCount === 0}
+            accessibilityState={{
+              disabled: matchingCocktailSummary.recipeCount === 0 || selectedIngredientIds.size === 0,
+            }}
+            disabled={matchingCocktailSummary.recipeCount === 0 || selectedIngredientIds.size === 0}
             onPress={handleShowResults}
             style={({ pressed }) => [
               styles.showButton,
               {
                 backgroundColor:
-                  matchingCocktailSummary.recipeCount === 0
+                  matchingCocktailSummary.recipeCount === 0 || selectedIngredientIds.size === 0
                     ? paletteColors.surfaceVariant
                     : paletteColors.primary,
               },
-              pressed && matchingCocktailSummary.recipeCount > 0 ? styles.showButtonPressed : null,
+              pressed && matchingCocktailSummary.recipeCount > 0 && selectedIngredientIds.size > 0
+                ? styles.showButtonPressed
+                : null,
             ]}
           >
             <Text
@@ -583,7 +625,7 @@ export default function ShakerScreen() {
                 styles.showButtonLabel,
                 {
                   color:
-                    matchingCocktailSummary.recipeCount === 0
+                    matchingCocktailSummary.recipeCount === 0 || selectedIngredientIds.size === 0
                       ? paletteColors.onSurfaceVariant
                       : paletteColors.onPrimary,
                 },
@@ -653,16 +695,17 @@ const styles = StyleSheet.create({
   },
   listContent: {
     paddingTop: 16,
-    paddingHorizontal: 12,
+    paddingHorizontal: 0,
     paddingBottom: 120,
   },
   groupCard: {
     marginBottom: 2,
   },
   groupHeader: {
+    height: 64,
     paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderRadius: 12,
+    paddingVertical: 0,
+    borderRadius: 0,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -674,8 +717,8 @@ const styles = StyleSheet.create({
   },
   groupList: {
     overflow: 'hidden',
-    borderRadius: 12,
-    marginTop: 6,
+    borderRadius: 0,
+    marginTop: 0,
   },
   bottomPanel: {
     position: 'absolute',
