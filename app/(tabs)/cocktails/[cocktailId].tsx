@@ -455,6 +455,10 @@ export default function CocktailDetailsScreen() {
                       ingredient.tags?.[0]?.color ??
                       catalogEntry?.tags?.[0]?.color ??
                       appPalette.tagYellow;
+                    const brandIndicatorColor =
+                      resolvedIngredient?.baseIngredientId != null || catalogEntry?.baseIngredientId != null
+                        ? Colors.primary
+                        : undefined;
                     const isOnShoppingList = ingredientId >= 0 && shoppingIngredientIds.has(ingredientId);
                     const handlePress = () => {
                       const routeParam =
@@ -530,6 +534,7 @@ export default function CocktailDetailsScreen() {
                           selected={resolution.isAvailable}
                           highlightColor={ingredientHighlightColor}
                           tagColor={tagColor}
+                          brandIndicatorColor={brandIndicatorColor}
                           accessibilityRole="button"
                           accessibilityState={resolution.isAvailable ? { selected: true } : undefined}
                           metaAlignment="center"
