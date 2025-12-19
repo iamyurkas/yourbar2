@@ -60,6 +60,7 @@ export default function CreateIngredientScreen() {
   const [permissionStatus, requestPermission] = ImagePicker.useMediaLibraryPermissions();
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(null);
   const scrollRef = useRef<ScrollView | null>(null);
+  const isNavigatingAfterSaveRef = useRef(false);
   const [initialSnapshot, setInitialSnapshot] = useState<IngredientFormSnapshot | null>(null);
 
   useEffect(() => {
@@ -220,7 +221,7 @@ export default function CreateIngredientScreen() {
     }
 
     const unsubscribe = navigation.addListener('beforeRemove', (event) => {
-      if (!hasUnsavedChanges) {
+      if (!hasUnsavedChanges || isNavigatingAfterSaveRef.current) {
         return;
       }
 
@@ -265,6 +266,7 @@ export default function CreateIngredientScreen() {
     }
 
     setHasUnsavedChanges(false);
+    isNavigatingAfterSaveRef.current = true;
     const targetId = created.id ?? created.name;
     if (!targetId) {
       router.back();
