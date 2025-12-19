@@ -976,41 +976,8 @@ export default function CreateCocktailScreen() {
   }, [confirmLeave, hasUnsavedChanges, navigation]);
 
   const handleGoBack = useCallback(() => {
-    if (hasUnsavedChanges) {
-      confirmLeave(() => {
-        if (sourceParam === 'ingredient' && ingredientParam) {
-          router.replace({
-            pathname: '/ingredients/[ingredientId]',
-            params: { ingredientId: String(ingredientParam) },
-          });
-          return;
-        }
-
-        if (sourceParam === 'cocktails') {
-          router.replace('/cocktails');
-          return;
-        }
-
-        router.back();
-      });
-      return;
-    }
-
-    if (sourceParam === 'ingredient' && ingredientParam) {
-      router.replace({
-        pathname: '/ingredients/[ingredientId]',
-        params: { ingredientId: String(ingredientParam) },
-      });
-      return;
-    }
-
-    if (sourceParam === 'cocktails') {
-      router.replace('/cocktails');
-      return;
-    }
-
-    router.back();
-  }, [confirmLeave, hasUnsavedChanges, ingredientParam, sourceParam]);
+    navigation.goBack();
+  }, [navigation]);
 
   const imageSource = useMemo(() => {
     if (!imageUri) {
