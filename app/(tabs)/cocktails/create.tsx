@@ -231,6 +231,7 @@ export default function CreateCocktailScreen() {
   const [initialSnapshot, setInitialSnapshot] = useState<CocktailFormSnapshot | null>(null);
 
   const initializedRef = useRef(false);
+  const isNavigatingAfterSaveRef = useRef(false);
   const scrollRef = useRef<ScrollView | null>(null);
 
   const ingredientById = useMemo(() => {
@@ -859,6 +860,7 @@ export default function CreateCocktailScreen() {
       }
 
       setHasUnsavedChanges(false);
+      isNavigatingAfterSaveRef.current = true;
       const targetId = persisted.id ?? persisted.name;
       if (targetId) {
         router.replace({ pathname: '/cocktails/[cocktailId]', params: { cocktailId: String(targetId) } });
@@ -962,7 +964,7 @@ export default function CreateCocktailScreen() {
     }
 
     const unsubscribe = navigation.addListener('beforeRemove', (event) => {
-      if (!hasUnsavedChanges) {
+      if (!hasUnsavedChanges || isNavigatingAfterSaveRef.current) {
         return;
       }
 
