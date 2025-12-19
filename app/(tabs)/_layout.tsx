@@ -8,6 +8,7 @@ import CocktailIcon from '@/assets/images/cocktails.svg';
 import LemonIcon from '@/assets/images/ingredients.svg';
 import ShakerIcon from '@/assets/images/shaker.svg';
 import { HapticTab } from '@/components/haptic-tab';
+import { getLastCocktailTab, getLastIngredientTab } from '@/libs/collection-tabs';
 import { palette } from '@/theme/theme';
 
 const UNSAVED_PATH_PATTERN = /^\/(cocktails\/create|ingredients\/create|ingredients\/[^/]+\/edit)(\/|$)/;
@@ -81,11 +82,9 @@ export default function TabLayout() {
         }}
         listeners={({ navigation, route }) => ({
           tabPress: (event) => {
-            const state = route.state;
-            if (navigation.isFocused() && state && 'index' in state && state.index > 0) {
-              event.preventDefault();
-              navigation.navigate(route.name as never, { screen: 'index' } as never);
-            }
+            event.preventDefault();
+            const targetTab = getLastCocktailTab();
+            navigation.navigate(route.name as never, { screen: 'index', params: { tab: targetTab } } as never);
           },
         })}
       />
@@ -104,11 +103,8 @@ export default function TabLayout() {
         }}
         listeners={({ navigation, route }) => ({
           tabPress: (event) => {
-            const state = route.state;
-            if (navigation.isFocused() && state && 'index' in state && state.index > 0) {
-              event.preventDefault();
-              navigation.navigate(route.name as never, { screen: 'index' } as never);
-            }
+            event.preventDefault();
+            navigation.navigate(route.name as never, { screen: 'index' } as never);
           },
         })}
       />
@@ -127,11 +123,9 @@ export default function TabLayout() {
         }}
         listeners={({ navigation, route }) => ({
           tabPress: (event) => {
-            const state = route.state;
-            if (navigation.isFocused() && state && 'index' in state && state.index > 0) {
-              event.preventDefault();
-              navigation.navigate(route.name as never, { screen: 'index' } as never);
-            }
+            event.preventDefault();
+            const targetTab = getLastIngredientTab();
+            navigation.navigate(route.name as never, { screen: 'index', params: { tab: targetTab } } as never);
           },
         })}
       />

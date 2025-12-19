@@ -1,6 +1,6 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import { useScrollToTop } from '@react-navigation/native';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { memo, useCallback, useEffect, useMemo, useRef, useState, useTransition } from 'react';
 import {
   FlatList,
@@ -21,6 +21,7 @@ import { TagPill } from '@/components/TagPill';
 import type { SegmentTabOption } from '@/components/TopBars';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { Colors } from '@/constants/theme';
+import { getLastIngredientTab, setLastIngredientTab, type IngredientTabKey } from '@/libs/collection-tabs';
 import { isCocktailReady } from '@/libs/cocktail-availability';
 import {
   createIngredientLookup,
@@ -34,8 +35,6 @@ type IngredientSection = {
   label: string;
   data: Ingredient[];
 };
-
-type IngredientTabKey = 'all' | 'my' | 'shopping';
 
 const TAB_OPTIONS: SegmentTabOption[] = [
   { key: 'all', label: 'All' },
@@ -87,6 +86,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
   onShoppingToggle,
 }: IngredientListItemProps) {
   const router = useRouter();
+  const { tab } = useLocalSearchParams<{ tab?: string }>();
   const id = Number(ingredient.id ?? -1);
   const isAvailable = id >= 0 && availableIngredientIds.has(id);
   const tagColor = ingredient.tags?.[0]?.color ?? palette.tagYellow;
@@ -212,7 +212,7 @@ export default function IngredientsScreen() {
     ignoreGarnish,
     allowAllSubstitutes,
   } = useInventory();
-  const [activeTab, setActiveTab] = useState<IngredientTabKey>('all');
+  const [activeTab, setActiveTab] = useState<IngredientTabKey>(() => getLastIngredientTab());
   const [query, setQuery] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isFilterMenuVisible, setFilterMenuVisible] = useState(false);
@@ -228,6 +228,20 @@ export default function IngredientsScreen() {
   const defaultTagColor = palette.tagYellow ?? palette.highlightFaint;
 
   useScrollToTop(listRef);
+
+  useEffect(() => {
+    if (typeof tab !== 'string') {
+      return;
+    }
+
+    if (tab === 'all' || tab === 'my' || tab === 'shopping') {
+      setActiveTab(tab);
+    }
+  }, [tab]);
+
+  useEffect(() => {
+    setLastIngredientTab(activeTab);
+  }, [activeTab]);
 
   const availableTagOptions = useMemo<IngredientTagOption[]>(() => {
     const map = new Map<string, IngredientTagOption>();

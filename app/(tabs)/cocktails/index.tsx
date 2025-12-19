@@ -1,6 +1,6 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import { useScrollToTop } from '@react-navigation/native';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   FlatList,
@@ -22,12 +22,11 @@ import { TagPill } from '@/components/TagPill';
 import type { SegmentTabOption } from '@/components/TopBars';
 import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
 import { Colors } from '@/constants/theme';
+import { getLastCocktailTab, setLastCocktailTab, type CocktailTabKey } from '@/libs/collection-tabs';
 import { isCocktailReady } from '@/libs/cocktail-availability';
 import { createIngredientLookup } from '@/libs/ingredient-availability';
 import { useInventory, type Cocktail } from '@/providers/inventory-provider';
 import { palette } from '@/theme/theme';
-
-type CocktailTabKey = 'all' | 'my' | 'favorites';
 
 type CocktailTagOption = {
   key: string;
@@ -82,7 +81,7 @@ export default function CocktailsScreen() {
     shoppingIngredientIds,
     toggleIngredientShopping,
   } = useInventory();
-  const [activeTab, setActiveTab] = useState<CocktailTabKey>('all');
+  const [activeTab, setActiveTab] = useState<CocktailTabKey>(() => getLastCocktailTab());
   const [query, setQuery] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isFilterMenuVisible, setFilterMenuVisible] = useState(false);
@@ -94,6 +93,7 @@ export default function CocktailsScreen() {
   useScrollToTop(listRef);
   const paletteColors = Colors;
   const router = useRouter();
+  const { tab } = useLocalSearchParams<{ tab?: string }>();
   const ingredientLookup = useMemo(() => createIngredientLookup(ingredients), [ingredients]);
   const defaultTagColor = palette.tagYellow ?? palette.highlightFaint;
 
@@ -178,6 +178,20 @@ export default function CocktailsScreen() {
       return next;
     });
   }, [availableTagOptions]);
+
+  useEffect(() => {
+    if (typeof tab !== 'string') {
+      return;
+    }
+
+    if (tab === 'all' || tab === 'my' || tab === 'favorites') {
+      setActiveTab(tab);
+    }
+  }, [tab]);
+
+  useEffect(() => {
+    setLastCocktailTab(activeTab);
+  }, [activeTab]);
 
   const handleHeaderLayout = useCallback((event: LayoutChangeEvent) => {
     const nextLayout = event.nativeEvent.layout;
