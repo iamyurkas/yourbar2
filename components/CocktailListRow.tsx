@@ -119,6 +119,54 @@ const CocktailListRowComponent = ({
 
   const tagColor = cocktail.tags?.[0]?.color ?? undefined;
 
+  const hasBrandedIngredient = useMemo(() => {
+    const recipe = cocktail.ingredients ?? [];
+    if (!recipe.length) {
+      return false;
+    }
+
+    const normalizeIngredientId = (value?: number | string | null) => {
+      if (value == null) {
+        return undefined;
+      }
+
+      const numeric = Number(value);
+      if (!Number.isFinite(numeric) || numeric < 0) {
+        return undefined;
+      }
+
+      return Math.trunc(numeric);
+    };
+
+    for (const ingredient of recipe) {
+      const candidateIds: number[] = [];
+      const ingredientId = normalizeIngredientId(ingredient.ingredientId ?? undefined);
+      if (ingredientId != null) {
+        candidateIds.push(ingredientId);
+      }
+
+      (ingredient.substitutes ?? []).forEach((substitute) => {
+        const substituteId = normalizeIngredientId(
+          substitute.ingredientId ?? substitute.id ?? undefined,
+        );
+        if (substituteId != null) {
+          candidateIds.push(substituteId);
+        }
+      });
+
+      for (const candidateId of candidateIds) {
+        const record = lookup.ingredientById.get(candidateId);
+        if (record?.baseIngredientId != null) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }, [cocktail.ingredients, lookup.ingredientById]);
+
+  const brandIndicatorColor = hasBrandedIngredient ? paletteColors.primary : undefined;
+
   const thumbnail = useMemo(
     () => <Thumb label={cocktail.name} uri={cocktail.photoUri} fallbackUri={glasswareUri} />,
     [cocktail.name, cocktail.photoUri, glasswareUri],
@@ -134,6 +182,7 @@ const CocktailListRowComponent = ({
       tagColor={tagColor}
       control={ratingContent}
       thumbnail={thumbnail}
+      brandIndicatorColor={brandIndicatorColor}
       accessibilityRole={onPress ? 'button' : undefined}
       metaAlignment="center"
     />
@@ -154,4 +203,3 @@ const styles = StyleSheet.create({
     borderWidth: StyleSheet.hairlineWidth,
   },
 });
-
