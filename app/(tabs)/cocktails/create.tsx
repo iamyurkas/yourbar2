@@ -1687,6 +1687,9 @@ function EditableIngredientRow({
               name: text,
               ingredientId: shouldClearId ? undefined : ingredient.ingredientId,
             });
+            if (isFocused) {
+              setShowSuggestions(nextNormalized.length >= MIN_AUTOCOMPLETE_LENGTH);
+            }
           }}
           placeholder="Type ingredient name"
           placeholderTextColor={`${palette.onSurfaceVariant}99`}
