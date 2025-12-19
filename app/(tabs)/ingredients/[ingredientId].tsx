@@ -3,6 +3,7 @@ import { Image } from 'expo-image';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
 import React, { useCallback, useEffect, useMemo, useState, useTransition } from 'react';
 import {
+  BackHandler,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -48,7 +49,11 @@ function useResolvedIngredient(param: string | undefined, ingredients: Ingredien
 
 export default function IngredientDetailsScreen() {
   const palette = Colors;
-  const { ingredientId } = useLocalSearchParams<{ ingredientId?: string }>();
+  const { ingredientId, source, cocktailId: cocktailIdParam } = useLocalSearchParams<{
+    ingredientId?: string;
+    source?: string;
+    cocktailId?: string;
+  }>();
   const {
     ingredients,
     cocktails,
@@ -67,6 +72,11 @@ export default function IngredientDetailsScreen() {
   );
 
   const ingredientLookup = useMemo(() => createIngredientLookup(ingredients), [ingredients]);
+  const cocktailId = useMemo(
+    () => (Array.isArray(cocktailIdParam) ? cocktailIdParam[0] : cocktailIdParam),
+    [cocktailIdParam],
+  );
+  const shouldReturnToCocktail = source === 'cocktail' && cocktailId != null;
 
   const numericIngredientId = useMemo(() => {
     const candidate = ingredient?.id ?? (Array.isArray(ingredientId) ? ingredientId[0] : ingredientId);
@@ -224,6 +234,31 @@ export default function IngredientDetailsScreen() {
     }
   }, [isOnShoppingList, numericIngredientId, startShoppingTransition, toggleIngredientShopping]);
 
+  const handleBackPress = useCallback(() => {
+    if (shouldReturnToCocktail && cocktailId != null) {
+      router.replace({
+        pathname: '/cocktails/[cocktailId]',
+        params: { cocktailId: String(cocktailId) },
+      });
+      return;
+    }
+
+    router.back();
+  }, [cocktailId, shouldReturnToCocktail]);
+
+  useEffect(() => {
+    if (!shouldReturnToCocktail) {
+      return undefined;
+    }
+
+    const subscription = BackHandler.addEventListener('hardwareBackPress', () => {
+      handleBackPress();
+      return true;
+    });
+
+    return () => subscription.remove();
+  }, [handleBackPress, shouldReturnToCocktail]);
+
   const handleEditPress = useCallback(() => {
     if (!ingredient) {
       return;
@@ -377,7 +412,7 @@ export default function IngredientDetailsScreen() {
           headerShadowVisible: false,
           headerLeft: () => (
             <Pressable
-              onPress={() => router.back()}
+              onPress={handleBackPress}
               accessibilityRole="button"
               accessibilityLabel="Go back"
               style={styles.headerButton}

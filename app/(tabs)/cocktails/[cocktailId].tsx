@@ -157,6 +157,10 @@ export default function CocktailDetailsScreen() {
     const recipe = cocktail?.ingredients ?? [];
     return [...recipe].sort((a, b) => (a?.order ?? 0) - (b?.order ?? 0));
   }, [cocktail?.ingredients]);
+  const cocktailRouteParam = useMemo(
+    () => resolvedParam ?? cocktail?.id ?? cocktail?.name,
+    [cocktail?.id, cocktail?.name, resolvedParam],
+  );
 
   const resolvedIngredients = useMemo(
     () =>
@@ -469,10 +473,15 @@ export default function CocktailDetailsScreen() {
                         return;
                       }
 
-                      router.push({
-                        pathname: '/ingredients/[ingredientId]',
-                        params: { ingredientId: String(routeParam) },
-                      });
+                      const params: Record<string, string> = {
+                        ingredientId: String(routeParam),
+                        source: 'cocktail',
+                      };
+                      if (cocktailRouteParam != null) {
+                        params.cocktailId = String(cocktailRouteParam);
+                      }
+
+                      router.push({ pathname: '/ingredients/[ingredientId]', params });
                     };
 
                     const subtitleParts: string[] = [];
