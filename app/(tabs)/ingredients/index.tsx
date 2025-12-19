@@ -174,7 +174,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
     }
 
     router.push({
-      pathname: '/ingredient/[ingredientId]',
+      pathname: '/ingredients/[ingredientId]',
       params: { ingredientId: String(routeParam) },
     });
   }, [ingredient.id, ingredient.name, router]);
@@ -767,7 +767,7 @@ export default function IngredientsScreen() {
           }
         />
       </View>
-      <FabAdd label="Add ingredient" onPress={() => router.push('/ingredient/create')} />
+      <FabAdd label="Add ingredient" onPress={() => router.push('/ingredients/create')} />
       <SideMenuDrawer visible={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
     </SafeAreaView>
   );

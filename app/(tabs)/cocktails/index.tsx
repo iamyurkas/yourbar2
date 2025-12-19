@@ -504,7 +504,7 @@ export default function CocktailsScreen() {
     });
 
     if (sortedGroups.length > 0) {
-      items.push({ type: 'separator', key: 'more-ingredients-needed' });
+      items.push({ type: 'separator', key: 'more-ingredient-needed' });
       sortedGroups.forEach((group) => {
         items.push({
           type: 'ingredient-header',
@@ -545,7 +545,7 @@ export default function CocktailsScreen() {
         return;
       }
 
-      router.push({ pathname: '/cocktail/[cocktailId]', params: { cocktailId: String(candidateId) } });
+      router.push({ pathname: '/cocktails/[cocktailId]', params: { cocktailId: String(candidateId) } });
     },
     [router],
   );
@@ -554,7 +554,7 @@ export default function CocktailsScreen() {
     (ingredientId: number) => {
       if (ingredientId >= 0) {
         router.push({
-          pathname: '/ingredient/[ingredientId]',
+          pathname: '/ingredients/[ingredientId]',
           params: { ingredientId: String(ingredientId) },
         });
       }
@@ -812,7 +812,7 @@ export default function CocktailsScreen() {
       <FabAdd
         label="Add cocktail"
         onPress={() =>
-          router.push({ pathname: '/cocktail/create', params: { source: 'cocktails' } })
+          router.push({ pathname: '/cocktails/create', params: { source: 'cocktails' } })
         }
       />
       <SideMenuDrawer visible={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
