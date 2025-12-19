@@ -431,8 +431,6 @@ export default function ShakerScreen() {
     selectedGroups,
   ]);
 
-  const showHelper = selectedIngredientIds.size === 0 && matchingCocktailSummary.recipeCount === 0;
-
   const handleClearSelection = useCallback(() => {
     setSelectedIngredientIds((previous) => (previous.size === 0 ? previous : new Set()));
   }, []);
@@ -472,19 +470,26 @@ export default function ShakerScreen() {
           </Pressable>
           {isExpanded ? (
             <View style={styles.groupList}>
-              {item.ingredients.map((ingredient) => {
+              {item.ingredients.map((ingredient, index) => {
                 const ingredientId = Number(ingredient.id ?? -1);
                 const isAvailable = ingredientId >= 0 && availableIngredientIds.has(ingredientId);
                 const isSelected = ingredientId >= 0 && selectedIngredientIds.has(ingredientId);
+                const separatorColor = isAvailable
+                  ? paletteColors.outline
+                  : paletteColors.outlineVariant;
 
                 return (
-                  <IngredientRow
-                    key={String(ingredient.id ?? ingredient.name)}
-                    ingredient={ingredient}
-                    isAvailable={isAvailable}
-                    isSelected={isSelected}
-                    onToggle={handleToggleIngredient}
-                  />
+                  <View key={String(ingredient.id ?? ingredient.name)}>
+                    <IngredientRow
+                      ingredient={ingredient}
+                      isAvailable={isAvailable}
+                      isSelected={isSelected}
+                      onToggle={handleToggleIngredient}
+                    />
+                    {index < item.ingredients.length - 1 ? (
+                      <View style={[styles.divider, { backgroundColor: separatorColor }]} />
+                    ) : null}
+                  </View>
                 );
               })}
             </View>
@@ -558,12 +563,6 @@ export default function ShakerScreen() {
             <PresenceCheck checked={inStockOnly} onToggle={() => setInStockOnly((previous) => !previous)} />
           </View>
         </View>
-        {showHelper ? (
-          <Text style={[styles.helperText, { color: paletteColors.onSurfaceVariant }]}
-          >
-            Mark which ingredients are in stock first
-          </Text>
-        ) : null}
         <FlatList
           data={ingredientGroups}
           keyExtractor={(item) => item.key}
@@ -687,12 +686,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  helperText: {
-    textAlign: 'center',
-    marginTop: 24,
-    marginHorizontal: 24,
-    fontSize: 14,
-  },
   listContent: {
     paddingTop: 16,
     paddingHorizontal: 0,
@@ -731,6 +724,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
+  },
+  divider: {
+    height: StyleSheet.hairlineWidth,
   },
   clearButtonBase: {
     borderWidth: 1,

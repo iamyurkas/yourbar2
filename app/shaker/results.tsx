@@ -1,22 +1,15 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useCallback, useMemo } from 'react';
-import { SectionList, StyleSheet, Text, View } from 'react-native';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { resolveGlasswareUriFromId } from '@/assets/image-manifest';
 import { HeaderIconButton } from '@/components/HeaderIconButton';
-import { ListRow, Thumb } from '@/components/RowParts';
+import { CocktailListRow } from '@/components/CocktailListRow';
 import { Colors } from '@/constants/theme';
+import { isCocktailReady } from '@/libs/cocktail-availability';
+import { createIngredientLookup } from '@/libs/ingredient-availability';
 import { useInventory, type Cocktail } from '@/providers/inventory-provider';
-import { palette } from '@/theme/theme';
-
-type ResultsSection = {
-  title: string;
-  subtitle: string;
-  highlight: boolean;
-  data: Cocktail[];
-};
 
 function parseListParam(param?: string | string[]) {
   if (!param) {
@@ -55,7 +48,13 @@ function resolveCocktailByKey(key: string, cocktails: Cocktail[]) {
 export default function ShakerResultsScreen() {
   const router = useRouter();
   const paletteColors = Colors;
-  const { cocktails } = useInventory();
+  const {
+    cocktails,
+    availableIngredientIds,
+    ingredients,
+    ignoreGarnish,
+    allowAllSubstitutes,
+  } = useInventory();
   const params = useLocalSearchParams();
 
   const availableIds = useMemo(() => parseListParam(params.available), [params.available]);
@@ -105,29 +104,12 @@ export default function ShakerResultsScreen() {
     return items;
   }, [cocktails, unavailableIds]);
 
-  const sections = useMemo<ResultsSection[]>(() => {
-    const result: ResultsSection[] = [];
+  const listData = useMemo(
+    () => [...availableCocktails, ...unavailableCocktails],
+    [availableCocktails, unavailableCocktails],
+  );
 
-    if (availableCocktails.length > 0) {
-      result.push({
-        title: 'Available',
-        subtitle: 'Ready to mix',
-        highlight: true,
-        data: availableCocktails,
-      });
-    }
-
-    if (unavailableCocktails.length > 0) {
-      result.push({
-        title: 'Missing ingredients',
-        subtitle: 'Needs more stock',
-        highlight: false,
-        data: unavailableCocktails,
-      });
-    }
-
-    return result;
-  }, [availableCocktails, unavailableCocktails]);
+  const ingredientLookup = useMemo(() => createIngredientLookup(ingredients), [ingredients]);
 
   const handlePressCocktail = useCallback(
     (cocktail: Cocktail) => {
@@ -145,30 +127,45 @@ export default function ShakerResultsScreen() {
   );
 
   const renderItem = useCallback(
-    ({ item, section }: { item: Cocktail; section: ResultsSection }) => {
-      const thumbnail = (
-        <Thumb
-          label={item.name}
-          uri={item.photoUri}
-          fallbackUri={resolveGlasswareUriFromId(item.glassId)}
-        />
-      );
+    ({ item }: { item: Cocktail }) => (
+      <CocktailListRow
+        cocktail={item}
+        availableIngredientIds={availableIngredientIds}
+        ingredientLookup={ingredientLookup}
+        ignoreGarnish={ignoreGarnish}
+        allowAllSubstitutes={allowAllSubstitutes}
+        onPress={() => handlePressCocktail(item)}
+      />
+    ),
+    [
+      allowAllSubstitutes,
+      availableIngredientIds,
+      handlePressCocktail,
+      ignoreGarnish,
+      ingredientLookup,
+    ],
+  );
 
-      return (
-        <ListRow
-          title={item.name}
-          subtitle={section.subtitle}
-          onPress={() => handlePressCocktail(item)}
-          selected={section.highlight}
-          highlightColor={palette.highlightFaint}
-          tagColor={item.tags?.[0]?.color}
-          thumbnail={thumbnail}
-          accessibilityRole="button"
-          metaAlignment="center"
-        />
-      );
+  const renderSeparator = useCallback(
+    ({ leadingItem }: { leadingItem?: Cocktail | null }) => {
+      const isReady = leadingItem
+        ? isCocktailReady(leadingItem, availableIngredientIds, ingredientLookup, undefined, {
+            ignoreGarnish,
+            allowAllSubstitutes,
+          })
+        : false;
+      const backgroundColor = isReady ? paletteColors.outline : paletteColors.outlineVariant;
+
+      return <View style={[styles.divider, { backgroundColor }]} />;
     },
-    [handlePressCocktail],
+    [
+      allowAllSubstitutes,
+      availableIngredientIds,
+      ignoreGarnish,
+      ingredientLookup,
+      paletteColors.outline,
+      paletteColors.outlineVariant,
+    ],
   );
 
   return (
@@ -187,20 +184,14 @@ export default function ShakerResultsScreen() {
           ),
         }}
       />
-      <SectionList
-        sections={sections}
+      <FlatList
+        data={listData}
         keyExtractor={(item) => String(item.id ?? item.name)}
         renderItem={renderItem}
-        renderSectionHeader={({ section }) => (
-          <View style={[styles.sectionHeader, { backgroundColor: paletteColors.surface }]}
-          >
-            <Text style={[styles.sectionTitle, { color: paletteColors.onSurface }]}>{section.title}</Text>
-          </View>
-        )}
+        ItemSeparatorComponent={renderSeparator}
         contentContainerStyle={styles.listContent}
         ListEmptyComponent={
-          <Text style={[styles.emptyLabel, { color: paletteColors.onSurfaceVariant }]}
-          >
+          <Text style={[styles.emptyLabel, { color: paletteColors.onSurfaceVariant }]}>
             No matching recipes
           </Text>
         }
@@ -217,16 +208,8 @@ const styles = StyleSheet.create({
   listContent: {
     paddingBottom: 80,
   },
-  sectionHeader: {
-    paddingHorizontal: 16,
-    paddingTop: 16,
-    paddingBottom: 8,
-  },
-  sectionTitle: {
-    fontSize: 12,
-    fontWeight: '700',
-    textTransform: 'uppercase',
-    letterSpacing: 0.6,
+  divider: {
+    height: StyleSheet.hairlineWidth,
   },
   emptyLabel: {
     textAlign: 'center',
