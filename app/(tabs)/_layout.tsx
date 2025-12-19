@@ -90,13 +90,13 @@ export default function TabLayout() {
         })}
       />
       <Tabs.Screen
-        name="ingredients"
+        name="shaker"
         options={{
-          title: 'Ingredients',
+          title: 'Shaker',
           tabBarButton: (props) => <TabBarButton {...props} />,
           tabBarIcon: ({ color, focused }) => (
             <Image
-              source={LemonIcon}
+              source={ShakerIcon}
               style={{ width: 24, height: 24, tintColor: color, opacity: focused ? 1 : 0.72 }}
               contentFit="contain"
             />
@@ -113,13 +113,13 @@ export default function TabLayout() {
         })}
       />
       <Tabs.Screen
-        name="shaker"
+        name="ingredients"
         options={{
-          title: 'Shaker',
+          title: 'Ingredients',
           tabBarButton: (props) => <TabBarButton {...props} />,
           tabBarIcon: ({ color, focused }) => (
             <Image
-              source={ShakerIcon}
+              source={LemonIcon}
               style={{ width: 24, height: 24, tintColor: color, opacity: focused ? 1 : 0.72 }}
               contentFit="contain"
             />
