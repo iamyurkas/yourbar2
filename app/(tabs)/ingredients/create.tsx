@@ -1,4 +1,5 @@
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import { Image } from 'expo-image';
 import * as ImagePicker from 'expo-image-picker';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
@@ -26,7 +27,16 @@ import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { Colors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
+import { useUnsavedChanges } from '@/providers/unsaved-changes-provider';
 import { palette as appPalette } from '@/theme/theme';
+
+type IngredientFormSnapshot = {
+  name: string;
+  description: string;
+  imageUri: string | null;
+  baseIngredientId: number | null;
+  selectedTagIds: number[];
+};
 
 export default function CreateIngredientScreen() {
   const params = useLocalSearchParams<{ suggestedName?: string }>();
@@ -35,8 +45,10 @@ export default function CreateIngredientScreen() {
     return typeof value === 'string' ? value : undefined;
   }, [params.suggestedName]);
 
+  const navigation = useNavigation();
   const palette = Colors;
   const { ingredients, shoppingIngredientIds, availableIngredientIds, createIngredient } = useInventory();
+  const { setHasUnsavedChanges } = useUnsavedChanges();
   const [name, setName] = useState(() => suggestedNameParam ?? '');
   const [description, setDescription] = useState('');
   const [imageUri, setImageUri] = useState<string | null>(null);
@@ -48,6 +60,7 @@ export default function CreateIngredientScreen() {
   const [permissionStatus, requestPermission] = ImagePicker.useMediaLibraryPermissions();
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(null);
   const scrollRef = useRef<ScrollView | null>(null);
+  const [initialSnapshot, setInitialSnapshot] = useState<IngredientFormSnapshot | null>(null);
 
   useEffect(() => {
     if (suggestedNameParam && !name) {
@@ -62,6 +75,39 @@ export default function CreateIngredientScreen() {
   const showDialog = useCallback((options: DialogOptions) => {
     setDialogOptions(options);
   }, []);
+
+  const buildSnapshot = useCallback((): IngredientFormSnapshot => {
+    const normalizedTags = [...selectedTagIds].sort((a, b) => a - b);
+    return {
+      name,
+      description,
+      imageUri,
+      baseIngredientId,
+      selectedTagIds: normalizedTags,
+    };
+  }, [baseIngredientId, description, imageUri, name, selectedTagIds]);
+
+  useEffect(() => {
+    if (initialSnapshot) {
+      return;
+    }
+
+    setInitialSnapshot(buildSnapshot());
+  }, [buildSnapshot, initialSnapshot]);
+
+  const hasUnsavedChanges = useMemo(() => {
+    if (!initialSnapshot) {
+      return false;
+    }
+
+    return JSON.stringify(buildSnapshot()) !== JSON.stringify(initialSnapshot);
+  }, [buildSnapshot, initialSnapshot]);
+
+  useEffect(() => {
+    setHasUnsavedChanges(hasUnsavedChanges);
+  }, [hasUnsavedChanges, setHasUnsavedChanges]);
+
+  useEffect(() => () => setHasUnsavedChanges(false), [setHasUnsavedChanges]);
 
   const placeholderLabel = useMemo(() => {
     if (imageUri) {
@@ -147,6 +193,44 @@ export default function CreateIngredientScreen() {
     }
   }, [ensureMediaPermission, isPickingImage, showDialog]);
 
+  const confirmLeave = useCallback(
+    (onLeave: () => void) => {
+      showDialog({
+        title: 'Leave without saving?',
+        message: 'Your changes will be lost if you leave this screen.',
+        actions: [
+          { label: 'Stay', variant: 'secondary' },
+          {
+            label: 'Leave',
+            variant: 'destructive',
+            onPress: () => {
+              setHasUnsavedChanges(false);
+              onLeave();
+            },
+          },
+        ],
+      });
+    },
+    [setHasUnsavedChanges, showDialog],
+  );
+
+  useEffect(() => {
+    if (!hasUnsavedChanges) {
+      return;
+    }
+
+    const unsubscribe = navigation.addListener('beforeRemove', (event) => {
+      if (!hasUnsavedChanges) {
+        return;
+      }
+
+      event.preventDefault();
+      confirmLeave(() => navigation.dispatch(event.data.action));
+    });
+
+    return unsubscribe;
+  }, [confirmLeave, hasUnsavedChanges, navigation]);
+
   const handleSubmit = useCallback(() => {
     const trimmedName = name.trim();
     if (!trimmedName) {
@@ -180,6 +264,7 @@ export default function CreateIngredientScreen() {
       return;
     }
 
+    setHasUnsavedChanges(false);
     const targetId = created.id ?? created.name;
     if (!targetId) {
       router.back();
@@ -196,6 +281,7 @@ export default function CreateIngredientScreen() {
     description,
     imageUri,
     name,
+    setHasUnsavedChanges,
     showDialog,
     selectedTagIds,
   ]);
