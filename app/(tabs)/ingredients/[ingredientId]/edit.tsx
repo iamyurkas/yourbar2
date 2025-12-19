@@ -367,7 +367,7 @@ export default function EditIngredientScreen() {
             }
 
             setHasUnsavedChanges(false);
-            router.back();
+            router.replace('/ingredients');
           },
         },
       ],
