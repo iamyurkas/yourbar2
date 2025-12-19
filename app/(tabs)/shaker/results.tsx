@@ -347,7 +347,7 @@ export default function ShakerResultsScreen() {
       }
 
       router.push({
-        pathname: '/cocktail/[cocktailId]',
+        pathname: '/cocktails/[cocktailId]',
         params: { cocktailId: String(targetId) },
       });
     },

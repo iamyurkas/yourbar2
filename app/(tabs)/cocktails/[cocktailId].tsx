@@ -286,7 +286,7 @@ export default function CocktailDetailsScreen() {
     }
 
     router.push({
-      pathname: '/cocktail/create',
+      pathname: '/cocktails/create',
       params: {
         cocktailId: String(targetId),
         cocktailName: cocktail.name ?? undefined,
@@ -466,7 +466,7 @@ export default function CocktailDetailsScreen() {
                       }
 
                       router.push({
-                        pathname: '/ingredient/[ingredientId]',
+                        pathname: '/ingredients/[ingredientId]',
                         params: { ingredientId: String(routeParam) },
                       });
                     };

@@ -593,10 +593,10 @@ export default function CreateCocktailScreen() {
   const handleRequestCreateIngredient = useCallback((suggested: string) => {
     const trimmed = suggested.trim();
     if (!trimmed) {
-      router.push('/ingredient/create');
+      router.push('/ingredients/create');
       return;
     }
-    router.push({ pathname: '/ingredient/create', params: { suggestedName: trimmed } });
+    router.push({ pathname: '/ingredients/create', params: { suggestedName: trimmed } });
   }, []);
 
   const handleSelectSubstituteCandidate = useCallback(
@@ -778,11 +778,11 @@ export default function CreateCocktailScreen() {
 
       const targetId = persisted.id ?? persisted.name;
       if (targetId) {
-        router.replace({ pathname: '/cocktail/[cocktailId]', params: { cocktailId: String(targetId) } });
+        router.replace({ pathname: '/cocktails/[cocktailId]', params: { cocktailId: String(targetId) } });
         return;
       }
 
-      router.replace('/(tabs)/cocktails');
+      router.replace('/cocktails');
     } finally {
       setIsSaving(false);
     }
@@ -843,7 +843,7 @@ export default function CreateCocktailScreen() {
               return;
             }
 
-            router.replace('/(tabs)/cocktails');
+            router.replace('/cocktails');
           },
         },
       ],
@@ -853,14 +853,14 @@ export default function CreateCocktailScreen() {
   const handleGoBack = useCallback(() => {
     if (sourceParam === 'ingredient' && ingredientParam) {
       router.replace({
-        pathname: '/ingredient/[ingredientId]',
+        pathname: '/ingredients/[ingredientId]',
         params: { ingredientId: String(ingredientParam) },
       });
       return;
     }
 
     if (sourceParam === 'cocktails') {
-      router.replace('/(tabs)/cocktails');
+      router.replace('/cocktails');
       return;
     }
 
@@ -964,7 +964,7 @@ export default function CreateCocktailScreen() {
               <HeaderIconButton
                 onPress={() =>
                   router.replace({
-                    pathname: '/cocktail/create',
+                    pathname: '/cocktails/create',
                     params: {
                       cocktailId: String(targetId),
                       cocktailName: prefilledCocktail.name ?? undefined,
