@@ -15,8 +15,13 @@ type SideMenuDrawerProps = {
 
 export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   const palette = Colors;
-  const { ignoreGarnish, setIgnoreGarnish, allowAllSubstitutes, setAllowAllSubstitutes } =
-    useInventory();
+  const {
+    ignoreGarnish,
+    setIgnoreGarnish,
+    allowAllSubstitutes,
+    setAllowAllSubstitutes,
+    resetInventoryFromBundle,
+  } = useInventory();
   const [isMounted, setIsMounted] = useState(visible);
   const translateX = useRef(new Animated.Value(-MENU_WIDTH)).current;
   const backdropOpacity = useRef(new Animated.Value(0)).current;
@@ -79,6 +84,11 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
   const toggleAllowAllSubstitutes = () => {
     setAllowAllSubstitutes(!allowAllSubstitutes);
+  };
+
+  const handleResetInventory = async () => {
+    await resetInventoryFromBundle();
+    onClose();
   };
 
   return (
@@ -155,6 +165,27 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 </Text>
               </View>
             </Pressable>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Reload bundled inventory"
+              onPress={handleResetInventory}
+              style={[
+                styles.actionRow,
+                {
+                  borderColor: palette.outline,
+                  backgroundColor: palette.surface,
+                },
+              ]}>
+              <View style={[styles.actionIcon, { backgroundColor: palette.surfaceVariant }]}>
+                <MaterialCommunityIcons name="refresh" size={16} color={palette.onSurfaceVariant} />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text style={[styles.settingLabel, { color: palette.onSurface }]}>Reload bundled data</Text>
+                <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>
+                  Clear saved inventory and reload assets from data.json
+                </Text>
+              </View>
+            </Pressable>
           </View>
         </Animated.View>
       </View>
@@ -203,11 +234,27 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: StyleSheet.hairlineWidth,
   },
+  actionRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderRadius: 12,
+    borderWidth: StyleSheet.hairlineWidth,
+  },
   checkbox: {
     width: 22,
     height: 22,
     borderRadius: 4,
     borderWidth: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  actionIcon: {
+    width: 22,
+    height: 22,
+    borderRadius: 6,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -223,4 +270,3 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
 });
-

@@ -8,7 +8,7 @@ import React, {
   useState,
 } from 'react';
 
-import { loadInventorySnapshot, persistInventorySnapshot } from '@/libs/inventory-storage';
+import { clearInventorySnapshot, loadInventorySnapshot, persistInventorySnapshot } from '@/libs/inventory-storage';
 
 type InventoryData = typeof import('@/assets/data/data.json');
 
@@ -61,6 +61,7 @@ type InventoryContextValue = {
   clearBaseIngredient: (id: number) => void;
   createCocktail: (input: CreateCocktailInput) => Cocktail | undefined;
   createIngredient: (input: CreateIngredientInput) => Ingredient | undefined;
+  resetInventoryFromBundle: () => Promise<void>;
   updateIngredient: (id: number, input: CreateIngredientInput) => Ingredient | undefined;
   updateCocktail: (id: number, input: CreateCocktailInput) => Cocktail | undefined;
   deleteCocktail: (id: number) => boolean;
@@ -754,6 +755,22 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     [],
   );
 
+  const resetInventoryFromBundle = useCallback(async () => {
+    try {
+      await clearInventorySnapshot();
+    } catch (error) {
+      console.warn('Failed to clear inventory snapshot', error);
+    }
+
+    const data = loadInventoryData();
+    setInventoryState(createInventoryStateFromData(data, true));
+    setAvailableIngredientIds(new Set());
+    setShoppingIngredientIds(new Set());
+    setCocktailRatings({});
+    setIgnoreGarnish(true);
+    setAllowAllSubstitutes(false);
+  }, []);
+
   const updateIngredient = useCallback(
     (id: number, input: CreateIngredientInput) => {
       let updated: Ingredient | undefined;
@@ -1230,6 +1247,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       clearBaseIngredient,
       createCocktail,
       createIngredient,
+      resetInventoryFromBundle,
       updateCocktail,
       updateIngredient,
       deleteCocktail,
@@ -1254,6 +1272,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     clearBaseIngredient,
     createCocktail,
     createIngredient,
+    resetInventoryFromBundle,
     updateCocktail,
     updateIngredient,
     deleteCocktail,
@@ -1263,6 +1282,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     getCocktailRating,
     handleSetIgnoreGarnish,
     handleSetAllowAllSubstitutes,
+    resetInventoryFromBundle,
   ]);
 
   return <InventoryContext.Provider value={value}>{children}</InventoryContext.Provider>;
