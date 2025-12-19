@@ -397,7 +397,10 @@ export default function ShakerResultsScreen() {
   );
 
   return (
-    <SafeAreaView style={[styles.safeArea, { backgroundColor: paletteColors.background }]} edges={['left', 'right']}>
+    <SafeAreaView
+      style={[styles.safeArea, { backgroundColor: paletteColors.background }]}
+      edges={['top', 'left', 'right']}
+    >
       <Stack.Screen
         options={{
           headerShown: false,
