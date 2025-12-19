@@ -1520,6 +1520,19 @@ function EditableIngredientRow({
     return filtered.slice(0, MAX_SUGGESTIONS);
   }, [inventoryIngredients, normalizedName]);
 
+  const hasExactMatch = useMemo(() => {
+    if (!normalizedName) {
+      return false;
+    }
+
+    return inventoryIngredients.some((candidate) => {
+      const nameNormalized = candidate.searchNameNormalized ?? candidate.name?.toLowerCase() ?? '';
+      return nameNormalized === normalizedName;
+    });
+  }, [inventoryIngredients, normalizedName]);
+
+  const showAddButton = normalizedName.length > 0 && !hasExactMatch;
+
   const renderSubtitle = useCallback(
     (baseGroupId: number | undefined) => {
       if (baseGroupId == null) {
@@ -1700,7 +1713,7 @@ function EditableIngredientRow({
               borderColor: palette.outlineVariant,
               color: palette.text,
               paddingRight:
-                showSuggestions && suggestions.length > 0 && normalizedName.length >= MIN_AUTOCOMPLETE_LENGTH ? 72 : 16,
+                showAddButton ? 72 : 16,
             },
           ]}
           onFocus={(event) => {
@@ -1711,7 +1724,7 @@ function EditableIngredientRow({
           autoCapitalize="words"
         />
 
-        {showSuggestions && suggestions.length > 0 && normalizedName.length >= MIN_AUTOCOMPLETE_LENGTH ? (
+        {showAddButton ? (
           <Pressable
             onPress={() => {
               setShowSuggestions(false);
