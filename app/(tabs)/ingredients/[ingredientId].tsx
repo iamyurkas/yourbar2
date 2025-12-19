@@ -235,14 +235,14 @@ export default function IngredientDetailsScreen() {
     }
 
     router.push({
-      pathname: '/ingredient/[ingredientId]/edit',
+      pathname: '/ingredients/[ingredientId]/edit',
       params: { ingredientId: String(targetId) },
     });
   }, [ingredient]);
 
   const handleAddCocktail = useCallback(() => {
     if (!ingredient) {
-      router.push('/cocktail/create');
+      router.push('/cocktails/create');
       return;
     }
 
@@ -255,7 +255,7 @@ export default function IngredientDetailsScreen() {
       params.ingredientName = ingredient.name;
     }
 
-    router.push({ pathname: '/cocktail/create', params });
+    router.push({ pathname: '/cocktails/create', params });
   }, [ingredient]);
 
   const DESCRIPTION_PREVIEW_LINES = 5;
@@ -317,7 +317,7 @@ export default function IngredientDetailsScreen() {
     }
 
     router.push({
-      pathname: '/ingredient/[ingredientId]',
+      pathname: '/ingredients/[ingredientId]',
       params: { ingredientId: String(baseIngredient.id) },
     });
   }, [baseIngredient?.id]);
@@ -327,7 +327,7 @@ export default function IngredientDetailsScreen() {
       return;
     }
 
-    router.push({ pathname: '/ingredient/[ingredientId]', params: { ingredientId: String(id) } });
+    router.push({ pathname: '/ingredients/[ingredientId]', params: { ingredientId: String(id) } });
   }, []);
 
   const handleNavigateToCocktail = useCallback((cocktailId: number | string | undefined) => {
@@ -335,7 +335,7 @@ export default function IngredientDetailsScreen() {
       return;
     }
 
-    router.push({ pathname: '/cocktail/[cocktailId]', params: { cocktailId: String(cocktailId) } });
+    router.push({ pathname: '/cocktails/[cocktailId]', params: { cocktailId: String(cocktailId) } });
   }, []);
 
   const handleRemoveBranded = useCallback(

@@ -187,7 +187,7 @@ export default function CreateIngredientScreen() {
     }
 
     router.replace({
-      pathname: '/ingredient/[ingredientId]',
+      pathname: '/ingredients/[ingredientId]',
       params: { ingredientId: String(targetId) },
     });
   }, [
