@@ -63,6 +63,7 @@ export default function EditIngredientScreen() {
   const { ingredients, shoppingIngredientIds, availableIngredientIds, updateIngredient, deleteIngredient } =
     useInventory();
   const { setHasUnsavedChanges } = useUnsavedChanges();
+  const isNavigatingAfterSaveRef = useRef(false);
 
   const ingredient = useResolvedIngredient(
     Array.isArray(ingredientId) ? ingredientId[0] : ingredientId,
@@ -263,7 +264,7 @@ export default function EditIngredientScreen() {
     }
 
     const unsubscribe = navigation.addListener('beforeRemove', (event) => {
-      if (!hasUnsavedChanges) {
+      if (!hasUnsavedChanges || isNavigatingAfterSaveRef.current) {
         return;
       }
 
@@ -317,6 +318,7 @@ export default function EditIngredientScreen() {
     }
 
     setHasUnsavedChanges(false);
+    isNavigatingAfterSaveRef.current = true;
     router.back();
   }, [
     baseIngredientId,
