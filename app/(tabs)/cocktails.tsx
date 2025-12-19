@@ -634,7 +634,7 @@ export default function CocktailsScreen() {
                   style={({ pressed }) => [styles.shoppingButton, pressed ? styles.shoppingButtonPressed : null]}>
                   <MaterialIcons
                     name={isOnShoppingList ? 'shopping-cart' : 'add-shopping-cart'}
-                    size={16}
+                    size={20}
                     color={isOnShoppingList ? paletteColors.tint : paletteColors.onSurfaceVariant}
                     style={styles.shoppingIcon}
                   />
@@ -849,9 +849,9 @@ const styles = StyleSheet.create({
     letterSpacing: 0.4,
   },
   shoppingButton: {
-    width: 16,
-    height: 16,
-    borderRadius: 8,
+    width: 20,
+    height: 20,
+    borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -859,8 +859,8 @@ const styles = StyleSheet.create({
     opacity: 0.6,
   },
   shoppingIcon: {
-    width: 16,
-    height: 16,
+    width: 20,
+    height: 20,
     alignSelf: 'flex-end',
   },
   shoppingSlot: {
