@@ -1,5 +1,6 @@
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
-import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
+import { useScrollToTop } from '@react-navigation/native';
+import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   FlatList,
   Pressable,
@@ -121,9 +122,12 @@ export default function ShakerScreen() {
   const [inStockOnly, setInStockOnly] = useState(false);
   const [expandedTagKeys, setExpandedTagKeys] = useState<Set<string>>(() => new Set());
   const [selectedIngredientIds, setSelectedIngredientIds] = useState<Set<number>>(() => new Set());
+  const listRef = useRef<FlatList<unknown>>(null);
   const paletteColors = Colors;
   const insets = useSafeAreaInsets();
   const defaultTagColor = palette.tagYellow ?? palette.highlightFaint;
+
+  useScrollToTop(listRef);
 
   const normalizedQuery = useMemo(() => {
     const trimmed = query.trim().toLowerCase();
@@ -564,6 +568,7 @@ export default function ShakerScreen() {
           </View>
         </View>
         <FlatList
+          ref={listRef}
           data={ingredientGroups}
           keyExtractor={(item) => item.key}
           renderItem={renderGroup}

@@ -1,5 +1,7 @@
 import { MaterialIcons } from '@expo/vector-icons';
-import React, { memo, useCallback, useEffect, useMemo, useState, useTransition } from 'react';
+import { useScrollToTop } from '@react-navigation/native';
+import { useRouter } from 'expo-router';
+import React, { memo, useCallback, useEffect, useMemo, useRef, useState, useTransition } from 'react';
 import {
   FlatList,
   Pressable,
@@ -26,7 +28,6 @@ import {
 } from '@/libs/ingredient-availability';
 import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
 import { palette } from '@/theme/theme';
-import { useRouter } from 'expo-router';
 
 type IngredientSection = {
   key: string;
@@ -174,7 +175,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
     }
 
     router.push({
-      pathname: '/ingredient/[ingredientId]',
+      pathname: '/ingredients/[ingredientId]',
       params: { ingredientId: String(routeParam) },
     });
   }, [ingredient.id, ingredient.name, router]);
@@ -218,12 +219,15 @@ export default function IngredientsScreen() {
   const [selectedTagKeys, setSelectedTagKeys] = useState<Set<string>>(() => new Set());
   const [headerLayout, setHeaderLayout] = useState<LayoutRectangle | null>(null);
   const [filterAnchorLayout, setFilterAnchorLayout] = useState<LayoutRectangle | null>(null);
+  const listRef = useRef<FlatList<unknown>>(null);
   const [optimisticAvailability, setOptimisticAvailability] = useState<Map<number, boolean>>(
     () => new Map(),
   );
   const [, startAvailabilityTransition] = useTransition();
   const paletteColors = Colors;
   const defaultTagColor = palette.tagYellow ?? palette.highlightFaint;
+
+  useScrollToTop(listRef);
 
   const availableTagOptions = useMemo<IngredientTagOption[]>(() => {
     const map = new Map<string, IngredientTagOption>();
@@ -756,6 +760,7 @@ export default function IngredientsScreen() {
           </>
         ) : null}
         <FlatList
+          ref={listRef}
           data={filteredIngredients}
           keyExtractor={keyExtractor}
           renderItem={renderItem}
@@ -767,7 +772,7 @@ export default function IngredientsScreen() {
           }
         />
       </View>
-      <FabAdd label="Add ingredient" onPress={() => router.push('/ingredient/create')} />
+      <FabAdd label="Add ingredient" onPress={() => router.push('/ingredients/create')} />
       <SideMenuDrawer visible={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
     </SafeAreaView>
   );

@@ -1,6 +1,7 @@
 import { MaterialIcons } from '@expo/vector-icons';
+import { useScrollToTop } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   FlatList,
   Pressable,
@@ -88,6 +89,9 @@ export default function CocktailsScreen() {
   const [selectedTagKeys, setSelectedTagKeys] = useState<Set<string>>(() => new Set());
   const [headerLayout, setHeaderLayout] = useState<LayoutRectangle | null>(null);
   const [filterAnchorLayout, setFilterAnchorLayout] = useState<LayoutRectangle | null>(null);
+  const listRef = useRef<FlatList<unknown>>(null);
+
+  useScrollToTop(listRef);
   const paletteColors = Colors;
   const router = useRouter();
   const ingredientLookup = useMemo(() => createIngredientLookup(ingredients), [ingredients]);
@@ -545,7 +549,7 @@ export default function CocktailsScreen() {
         return;
       }
 
-      router.push({ pathname: '/cocktail/[cocktailId]', params: { cocktailId: String(candidateId) } });
+      router.push({ pathname: '/cocktails/[cocktailId]', params: { cocktailId: String(candidateId) } });
     },
     [router],
   );
@@ -554,7 +558,7 @@ export default function CocktailsScreen() {
     (ingredientId: number) => {
       if (ingredientId >= 0) {
         router.push({
-          pathname: '/ingredient/[ingredientId]',
+          pathname: '/ingredients/[ingredientId]',
           params: { ingredientId: String(ingredientId) },
         });
       }
@@ -798,6 +802,7 @@ export default function CocktailsScreen() {
           </>
         ) : null}
         <FlatList
+          ref={listRef}
           data={listData}
           keyExtractor={isMyTab ? myTabKeyExtractor : keyExtractor}
           renderItem={isMyTab ? renderMyItem : renderItem}
@@ -812,7 +817,7 @@ export default function CocktailsScreen() {
       <FabAdd
         label="Add cocktail"
         onPress={() =>
-          router.push({ pathname: '/cocktail/create', params: { source: 'cocktails' } })
+          router.push({ pathname: '/cocktails/create', params: { source: 'cocktails' } })
         }
       />
       <SideMenuDrawer visible={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
