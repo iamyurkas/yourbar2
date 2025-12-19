@@ -1,6 +1,6 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import { useScrollToTop } from '@react-navigation/native';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import React, { memo, useCallback, useEffect, useMemo, useRef, useState, useTransition } from 'react';
 import {
   FlatList,
@@ -86,7 +86,6 @@ const IngredientListItem = memo(function IngredientListItemComponent({
   onShoppingToggle,
 }: IngredientListItemProps) {
   const router = useRouter();
-  const { tab } = useLocalSearchParams<{ tab?: string }>();
   const id = Number(ingredient.id ?? -1);
   const isAvailable = id >= 0 && availableIngredientIds.has(id);
   const tagColor = ingredient.tags?.[0]?.color ?? palette.tagYellow;
@@ -228,16 +227,6 @@ export default function IngredientsScreen() {
   const defaultTagColor = palette.tagYellow ?? palette.highlightFaint;
 
   useScrollToTop(listRef);
-
-  useEffect(() => {
-    if (typeof tab !== 'string') {
-      return;
-    }
-
-    if (tab === 'all' || tab === 'my' || tab === 'shopping') {
-      setActiveTab(tab);
-    }
-  }, [tab]);
 
   useEffect(() => {
     setLastIngredientTab(activeTab);

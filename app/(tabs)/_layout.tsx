@@ -83,8 +83,8 @@ export default function TabLayout() {
         listeners={({ navigation, route }) => ({
           tabPress: (event) => {
             event.preventDefault();
-            const targetTab = getLastCocktailTab();
-            navigation.navigate(route.name as never, { screen: 'index', params: { tab: targetTab } } as never);
+            getLastCocktailTab();
+            navigation.navigate(route.name as never, { screen: 'index' } as never);
           },
         })}
       />
@@ -124,8 +124,8 @@ export default function TabLayout() {
         listeners={({ navigation, route }) => ({
           tabPress: (event) => {
             event.preventDefault();
-            const targetTab = getLastIngredientTab();
-            navigation.navigate(route.name as never, { screen: 'index', params: { tab: targetTab } } as never);
+            getLastIngredientTab();
+            navigation.navigate(route.name as never, { screen: 'index' } as never);
           },
         })}
       />
