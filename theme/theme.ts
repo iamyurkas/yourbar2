@@ -17,7 +17,7 @@ export const palette = {
   onTertiaryContainer: '#00302B',
 
   background: '#FFFFFF',
-  surface: '#f7f7f7',
+  surface: '#F3F3F3',
   surfaceBright: '#FFFFFF',
   surfaceVariant: '#EEEEEE',
 
