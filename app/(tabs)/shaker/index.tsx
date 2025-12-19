@@ -421,6 +421,14 @@ export default function ShakerScreen() {
     return counts;
   }, [makeableCocktailKeys, visibleCocktailsByIngredientId]);
 
+  const totalCocktailCounts = useMemo(() => {
+    const counts = new Map<number, number>();
+    visibleCocktailsByIngredientId.forEach((cocktailKeys, ingredientId) => {
+      counts.set(ingredientId, cocktailKeys.size);
+    });
+    return counts;
+  }, [visibleCocktailsByIngredientId]);
+
   const selectedGroups = useMemo(() => {
     if (selectedIngredientIds.size === 0) {
       return new Map<string, Set<number>>();
@@ -557,9 +565,16 @@ export default function ShakerScreen() {
                 const separatorColor = isAvailable
                   ? paletteColors.outline
                   : paletteColors.outlineVariant;
-                const count = ingredientId >= 0 ? makeableCocktailCounts.get(ingredientId) ?? 0 : 0;
-                const label = count === 1 ? 'cocktail' : 'cocktails';
-                const subtitleText = `Make ${count} ${label}`;
+                const makeableCount = ingredientId >= 0 ? makeableCocktailCounts.get(ingredientId) ?? 0 : 0;
+                const totalCount = ingredientId >= 0 ? totalCocktailCounts.get(ingredientId) ?? 0 : 0;
+                const label = makeableCount === 1 ? 'cocktail' : 'cocktails';
+                const recipeLabel = totalCount === 1 ? 'recipe' : 'recipes';
+                const subtitleText =
+                  makeableCount > 0
+                    ? `Make ${makeableCount} ${label}`
+                    : totalCount > 0
+                    ? `${totalCount} ${recipeLabel}`
+                    : undefined;
 
                 return (
                   <View key={String(ingredient.id ?? ingredient.name)}>
@@ -588,6 +603,7 @@ export default function ShakerScreen() {
       handleToggleGroup,
       handleToggleIngredient,
       makeableCocktailCounts,
+      totalCocktailCounts,
       paletteColors.onSurface,
       paletteColors.onSurfaceVariant,
       selectedIngredientIds,
