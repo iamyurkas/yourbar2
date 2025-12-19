@@ -91,7 +91,7 @@
         }
       ],
       "baseIngredientId": 438075,
-      "usageCount": 0,
+      "usageCount": 12,
       "searchName": "advocaat",
       "searchTokens": [
         "advocaat"
@@ -265,7 +265,7 @@
       "searchTokens": [
         "amaro"
       ],
-      "photoUri": "assets/ingredients/1758750410858-amaro.jpeg"
+      "photoUri": "assets/ingredients/1758750410858-amaro.jpg"
     },
     {
       "id": 842009,
@@ -531,7 +531,7 @@
         "apple",
         "liqueur"
       ],
-      "photoUri": "assets/ingredients/797544-apple-liqueur.jpeg"
+      "photoUri": "assets/ingredients/797544-apple-liqueur.jpg"
     },
     {
       "id": 150452,
@@ -645,7 +645,7 @@
         "anejo",
         "tequila"
       ],
-      "photoUri": "assets/ingredients/1759244905934-anejo-tequila.png"
+      "photoUri": "assets/ingredients/1759244905934-anejo-tequila.jpg"
     },
     {
       "id": 298320,
@@ -723,7 +723,7 @@
       "searchTokens": [
         "banana"
       ],
-      "photoUri": "assets/ingredients/609552-banana.jpeg"
+      "photoUri": "assets/ingredients/609552-banana.jpg"
     },
     {
       "id": 490583,
@@ -742,7 +742,7 @@
         "banana",
         "liqueur"
       ],
-      "photoUri": "assets/ingredients/490583-banana-liqueur.jpeg"
+      "photoUri": "assets/ingredients/490583-banana-liqueur.jpg"
     },
     {
       "id": 1759337227747,
@@ -762,7 +762,7 @@
         "liqueur",
         "green"
       ],
-      "photoUri": "assets/ingredients/1759337227747-banana-liqueur-green.jpeg"
+      "photoUri": "assets/ingredients/1759337227747-banana-liqueur-green.jpg"
     },
     {
       "id": 742663,
@@ -916,7 +916,7 @@
         "boston",
         "bittahs"
       ],
-      "photoUri": "assets/ingredients/1759431791149-bittermens-boston-bittahs.png"
+      "photoUri": "assets/ingredients/1759431791149-bittermens-boston-bittahs.jpg"
     },
     {
       "id": 804376,
@@ -954,7 +954,7 @@
         "grass",
         "vodka"
       ],
-      "photoUri": "assets/ingredients/1759336939666-bizon-grass-vodka.jpeg"
+      "photoUri": "assets/ingredients/1759336939666-bizon-grass-vodka.jpg"
     },
     {
       "id": 220504,
@@ -1204,7 +1204,7 @@
         "boiling",
         "water"
       ],
-      "photoUri": "assets/ingredients/1758582731258-boiling-water.jpeg"
+      "photoUri": "assets/ingredients/1758582731258-boiling-water.jpg"
     },
     {
       "id": 1756467110503,
@@ -1886,7 +1886,7 @@
         "coconut",
         "flakes"
       ],
-      "photoUri": "assets/ingredients/1758621222919-coconut-flakes.png"
+      "photoUri": "assets/ingredients/1758621222919-coconut-flakes.jpg"
     },
     {
       "id": 718499,
@@ -1982,7 +1982,7 @@
         "coconut",
         "water"
       ],
-      "photoUri": "assets/ingredients/1758626570572-coconut-water.jpeg"
+      "photoUri": "assets/ingredients/1758626570572-coconut-water.jpg"
     },
     {
       "id": 128442,
@@ -2132,7 +2132,7 @@
       "searchTokens": [
         "coriander"
       ],
-      "photoUri": "assets/ingredients/439920-coriander.jpeg"
+      "photoUri": "assets/ingredients/439920-coriander.jpg"
     },
     {
       "id": 867968,
@@ -2303,7 +2303,7 @@
           "color": "#F06292"
         }
       ],
-      "usageCount": 2,
+      "usageCount": 5,
       "searchName": "creme de cassis",
       "searchTokens": [
         "creme",
@@ -2415,7 +2415,7 @@
         "creole",
         "bitters"
       ],
-      "photoUri": "assets/ingredients/1759248231223-creole-bitters.jpeg"
+      "photoUri": "assets/ingredients/1759248231223-creole-bitters.jpg"
     },
     {
       "id": 783515,
@@ -2455,7 +2455,7 @@
         "de",
         "cafe"
       ],
-      "photoUri": "assets/ingredients/1759440990018-creme-de-cafe.jpeg"
+      "photoUri": "assets/ingredients/1759440990018-creme-de-cafe.jpg"
     },
     {
       "id": 1756039412725,
@@ -2531,7 +2531,7 @@
         "daiquiri",
         "bitters"
       ],
-      "photoUri": "assets/ingredients/1759483024680-daiquiri-bitters.jpeg"
+      "photoUri": "assets/ingredients/1759483024680-daiquiri-bitters.jpg"
     },
     {
       "id": 962705,
@@ -2687,7 +2687,7 @@
         "dried",
         "apricot"
       ],
-      "photoUri": "assets/ingredients/1759435186054-dried-apricot.jpeg"
+      "photoUri": "assets/ingredients/1759435186054-dried-apricot.jpg"
     },
     {
       "id": 218380,
@@ -2764,7 +2764,7 @@
         "grey",
         "tea"
       ],
-      "photoUri": "assets/ingredients/1758625795759-earl-grey-tea.jpeg"
+      "photoUri": "assets/ingredients/1758625795759-earl-grey-tea.jpg"
     },
     {
       "id": 368774,
@@ -2795,7 +2795,7 @@
           "color": "#F06292"
         }
       ],
-      "usageCount": 0,
+      "usageCount": 12,
       "searchName": "egg liqueur",
       "searchTokens": [
         "egg",
@@ -3258,7 +3258,7 @@
         "gomme",
         "syrup"
       ],
-      "photoUri": "assets/ingredients/1758493506879-gomme-syrup.jpeg"
+      "photoUri": "assets/ingredients/1758493506879-gomme-syrup.jpg"
     },
     {
       "id": 1756042019647,
@@ -3643,7 +3643,7 @@
         "chocolate",
         "cacao"
       ],
-      "photoUri": "assets/ingredients/1759479740138-hot-chocolate-cacao.jpeg"
+      "photoUri": "assets/ingredients/1759479740138-hot-chocolate-cacao.jpg"
     },
     {
       "id": 435279,
@@ -3741,7 +3741,7 @@
     },
     {
       "id": 489584,
-      "name": "Irish Whisky",
+      "name": "Irish Whiskey",
       "description": "",
       "tags": [
         {
@@ -3750,17 +3750,17 @@
           "color": "#ec5a5a"
         }
       ],
-      "usageCount": 2,
-      "searchName": "irish whisky",
+      "usageCount": 8,
+      "searchName": "irish whiskey",
       "searchTokens": [
         "irish",
-        "whisky"
+        "whiskey"
       ],
-      "photoUri": "assets/ingredients/489584-irish-whisky.jpg"
+      "photoUri": "assets/ingredients/489584-irish-whiskey.jpg"
     },
     {
       "id": 563527,
-      "name": "Islay Scotch Whiskey",
+      "name": "Islay Scotch Whisky",
       "description": "Scotch whisky (Scottish Gaelic: uisge-beatha na h-Alba; often simply called Scotch) is malt whisky or grain whisky made in Scotland. Scotch whisky must be made in a manner specified by law.\r\n\r\nAll Scotch whisky was originally made from malted barley. Commercial distilleries began introducing whisky made from wheat and rye in the late 18th century. Scotch whisky is divided into five distinct categories: single malt Scotch whisky, single grain Scotch whisky, blended malt Scotch whisky (formerly called \"vatted malt\" or \"pure malt\"), blended grain Scotch whisky, and blended Scotch whisky.",
       "tags": [
         {
@@ -3769,15 +3769,14 @@
           "color": "#ec5a5a"
         }
       ],
-      "usageCount": 1,
-      "singleCocktailName": "Penicillin",
-      "searchName": "islay scotch whiskey",
+      "usageCount": 9,
+      "searchName": "islay scotch whisky",
       "searchTokens": [
         "islay",
         "scotch",
-        "whiskey"
+        "whisky"
       ],
-      "photoUri": "assets/ingredients/563527-islay-scotch-whiskey.jpg"
+      "photoUri": "assets/ingredients/563527-islay-scotch-whisky.jpg"
     },
     {
       "id": 279646,
@@ -4090,7 +4089,7 @@
         "lemon",
         "bitters"
       ],
-      "photoUri": "assets/ingredients/1759446765457-lemon-bitters.jpeg"
+      "photoUri": "assets/ingredients/1759446765457-lemon-bitters.jpg"
     },
     {
       "id": 734220,
@@ -4141,7 +4140,7 @@
           "color": "#9575CD"
         }
       ],
-      "usageCount": 0,
+      "usageCount": 9,
       "searchName": "lemon-lime soda",
       "searchTokens": [
         "lemon",
@@ -4161,7 +4160,7 @@
           "color": "#9575CD"
         }
       ],
-      "usageCount": 0,
+      "usageCount": 9,
       "searchName": "lemonade",
       "searchTokens": [
         "lemonade"
@@ -4283,7 +4282,7 @@
       "searchTokens": [
         "liquorice"
       ],
-      "photoUri": "assets/ingredients/1758536917278-liquorice.png"
+      "photoUri": "assets/ingredients/1758536917278-liquorice.jpg"
     },
     {
       "id": 147675,
@@ -4320,7 +4319,7 @@
       "searchTokens": [
         "lychee"
       ],
-      "photoUri": "assets/ingredients/1758615950691-lychee.jpeg"
+      "photoUri": "assets/ingredients/1758615950691-lychee.jpg"
     },
     {
       "id": 803457,
@@ -4702,7 +4701,7 @@
         "orange",
         "marmalade"
       ],
-      "photoUri": "assets/ingredients/1757000000001-orange-marmalade.jpeg"
+      "photoUri": "assets/ingredients/1757000000001-orange-marmalade.jpg"
     },
     {
       "id": 1758623401620,
@@ -4721,7 +4720,7 @@
         "orange",
         "vodka"
       ],
-      "photoUri": "assets/ingredients/1758623401620-orange-vodka.png"
+      "photoUri": "assets/ingredients/1758623401620-orange-vodka.jpg"
     },
     {
       "id": 1756466690974,
@@ -4953,7 +4952,7 @@
       "searchTokens": [
         "pastis"
       ],
-      "photoUri": "assets/ingredients/1759433785962-pastis.png"
+      "photoUri": "assets/ingredients/1759433785962-pastis.jpg"
     },
     {
       "id": 5992,
@@ -5090,7 +5089,7 @@
         "peppermint",
         "candy"
       ],
-      "photoUri": "assets/ingredients/1759246381381-peppermint-candy.jpeg"
+      "photoUri": "assets/ingredients/1759246381381-peppermint-candy.jpg"
     },
     {
       "id": 879799,
@@ -5206,7 +5205,7 @@
         "pilsner",
         "lager"
       ],
-      "photoUri": "assets/ingredients/1759446286824-pilsner-lager.jpeg"
+      "photoUri": "assets/ingredients/1759446286824-pilsner-lager.jpg"
     },
     {
       "id": 991368,
@@ -5493,7 +5492,7 @@
         "red",
         "bull"
       ],
-      "photoUri": "assets/ingredients/1757000000003-red-bull.jpeg"
+      "photoUri": "assets/ingredients/1757000000003-red-bull.jpg"
     },
     {
       "id": 281512,
@@ -5749,7 +5748,7 @@
     },
     {
       "id": 160433,
-      "name": "Rye Whisky",
+      "name": "Rye Whiskey",
       "description": "",
       "tags": [
         {
@@ -5758,13 +5757,13 @@
           "color": "#ec5a5a"
         }
       ],
-      "usageCount": 7,
-      "searchName": "rye whisky",
+      "usageCount": 28,
+      "searchName": "rye whiskey",
       "searchTokens": [
         "rye",
-        "whisky"
+        "whiskey"
       ],
-      "photoUri": "assets/ingredients/160433-rye-whisky.jpg"
+      "photoUri": "assets/ingredients/160433-rye-whiskey.jpg"
     },
     {
       "id": 728001,
@@ -5804,7 +5803,7 @@
     },
     {
       "id": 1755776402585,
-      "name": "Scotch Highland Whiskey",
+      "name": "Scotch Highland Whisky",
       "description": "",
       "tags": [
         {
@@ -5813,18 +5812,18 @@
           "color": "#ec5a5a"
         }
       ],
-      "usageCount": 0,
-      "searchName": "scotch highland whiskey",
+      "usageCount": 3,
+      "searchName": "scotch highland whisky",
       "searchTokens": [
         "scotch",
         "highland",
-        "whiskey"
+        "whisky"
       ],
-      "photoUri": "assets/ingredients/1755776402585-scotch-highland-whiskey.jpg"
+      "photoUri": "assets/ingredients/1755776402585-scotch-highland-whisky.jpg"
     },
     {
       "id": 140867,
-      "name": "Scotch Whiskey",
+      "name": "Scotch Whisky",
       "description": "Scotch whisky, often simply called Scotch, is malt whisky or grain whisky made in Scotland. Scotch whisky must be made in a manner specified by law.\r\n\r\nAll Scotch whisky was originally made from malted barley. Commercial distilleries began introducing whisky made from wheat and rye in the late 18th century.[2] Scotch whisky is divided into five distinct categories: single malt Scotch whisky, single grain Scotch whisky, blended malt Scotch whisky (formerly called \"vatted malt\" or \"pure malt\"), blended grain Scotch whisky, and blended Scotch whisky.\r\n\r\nAll Scotch whisky must be aged in oak barrels for at least three years. Any age statement on a bottle of Scotch whisky, expressed in numerical form, must reflect the age of the youngest whisky used to produce that product. A whisky with an age statement is known as guaranteed-age whisky.\r\n\r\nThe first written mention of Scotch whisky is in the Exchequer Rolls of Scotland, 1495. A friar named John Cor was the distiller at Lindores Abbey in the Kingdom of Fife.\r\n\r\nMany Scotch whisky drinkers will refer to a unit for drinking as a dram.",
       "tags": [
         {
@@ -5833,13 +5832,13 @@
           "color": "#ec5a5a"
         }
       ],
-      "usageCount": 2,
-      "searchName": "scotch whiskey",
+      "usageCount": 17,
+      "searchName": "scotch whisky",
       "searchTokens": [
         "scotch",
-        "whiskey"
+        "whisky"
       ],
-      "photoUri": "assets/ingredients/140867-scotch-whiskey.jpg"
+      "photoUri": "assets/ingredients/140867-scotch-whisky.jpg"
     },
     {
       "id": 702409,
@@ -6147,7 +6146,7 @@
         "strucchi",
         "bitter"
       ],
-      "photoUri": "assets/ingredients/1758583893163-strucchi-bitter.jpeg"
+      "photoUri": "assets/ingredients/1758583893163-strucchi-bitter.jpg"
     },
     {
       "id": 217733,
@@ -6280,6 +6279,23 @@
         "gold"
       ],
       "photoUri": "assets/ingredients/787067-tequila-gold.jpg"
+    },
+    {
+      "id": 1762901952345,
+      "name": "Test",
+      "description": "",
+      "tags": [
+        {
+          "id": 10,
+          "name": "other",
+          "color": "#a8a8a8"
+        }
+      ],
+      "usageCount": 0,
+      "searchName": "test",
+      "searchTokens": [
+        "test"
+      ]
     },
     {
       "id": 213703,
@@ -6511,6 +6527,24 @@
       "photoUri": "assets/ingredients/477462-whipped-cream.jpg"
     },
     {
+      "id": 830162,
+      "name": "Whiskey",
+      "description": "Whisky or whiskey is a type of distilled alcoholic beverage made from fermented grain mash. Various grains (which may be malted) are used for different varieties, including barley, corn (maize), rye, and wheat. Whisky is typically aged in wooden casks, generally made of charred white oak.",
+      "tags": [
+        {
+          "id": 1,
+          "name": "strong alcohol",
+          "color": "#ec5a5a"
+        }
+      ],
+      "usageCount": 22,
+      "searchName": "whiskey",
+      "searchTokens": [
+        "whiskey"
+      ],
+      "photoUri": "assets/ingredients/830162-whiskey.jpg"
+    },
+    {
       "id": 1758583023670,
       "name": "Whiskey-Barrel Aged Bitters",
       "description": "",
@@ -6531,26 +6565,7 @@
         "aged",
         "bitters"
       ],
-      "photoUri": "assets/ingredients/1758583023670-whiskey-barrel-aged-bitters.jpeg"
-    },
-    {
-      "id": 830162,
-      "name": "Whisky",
-      "description": "Whisky or whiskey is a type of distilled alcoholic beverage made from fermented grain mash. Various grains (which may be malted) are used for different varieties, including barley, corn (maize), rye, and wheat. Whisky is typically aged in wooden casks, generally made of charred white oak.",
-      "tags": [
-        {
-          "id": 1,
-          "name": "strong alcohol",
-          "color": "#ec5a5a"
-        }
-      ],
-      "usageCount": 1,
-      "singleCocktailName": "New York Sour",
-      "searchName": "whisky",
-      "searchTokens": [
-        "whisky"
-      ],
-      "photoUri": "assets/ingredients/830162-whisky.jpg"
+      "photoUri": "assets/ingredients/1758583023670-whiskey-barrel-aged-bitters.jpg"
     },
     {
       "id": 861551,
@@ -6764,7 +6779,7 @@
       ],
       "createdAt": 1759436028203,
       "updatedAt": 1759443722331,
-      "photoUri": "assets/cocktails/1759436028203-1910.png"
+      "photoUri": "assets/cocktails/1759436028203-1910.jpg"
     },
     {
       "id": 1756467849702,
@@ -7081,7 +7096,7 @@
         }
       ],
       "createdAt": 1756473246728,
-      "updatedAt": 1758453407047,
+      "updatedAt": 1760345720642,
       "photoUri": "assets/cocktails/1756473246728-adonis.jpg"
     },
     {
@@ -7947,7 +7962,7 @@
       ],
       "createdAt": 1758844263671,
       "updatedAt": 1758844944623,
-      "photoUri": "assets/cocktails/1758844263671-amalia.png"
+      "photoUri": "assets/cocktails/1758844263671-amalia.jpg"
     },
     {
       "id": 1756483482781,
@@ -8254,7 +8269,7 @@
       ],
       "createdAt": 1758535830379,
       "updatedAt": 1758535856561,
-      "photoUri": "assets/cocktails/1758535830379-american-trilogy.png"
+      "photoUri": "assets/cocktails/1758535830379-american-trilogy.jpg"
     },
     {
       "id": 1755800000050,
@@ -8314,7 +8329,7 @@
         }
       ],
       "createdAt": 1755959676876,
-      "updatedAt": 1758453407048,
+      "updatedAt": 1760345705772,
       "photoUri": "assets/cocktails/1755800000050-americano.jpg"
     },
     {
@@ -8708,7 +8723,7 @@
       ],
       "createdAt": 1759435526187,
       "updatedAt": 1759435573729,
-      "photoUri": "assets/cocktails/1759435526187-another-sunken-boat.png"
+      "photoUri": "assets/cocktails/1759435526187-another-sunken-boat.jpg"
     },
     {
       "id": 1755800000107,
@@ -8761,7 +8776,7 @@
         }
       ],
       "createdAt": 1755959676880,
-      "updatedAt": 1758453407048,
+      "updatedAt": 1760346063773,
       "photoUri": "assets/cocktails/1755800000107-aperol-spritz.jpg"
     },
     {
@@ -8939,7 +8954,7 @@
         }
       ],
       "createdAt": 1756500510594,
-      "updatedAt": 1758453407048,
+      "updatedAt": 1760345754073,
       "photoUri": "assets/cocktails/1756500510594-appletini.jpg"
     },
     {
@@ -9195,7 +9210,7 @@
         }
       ],
       "createdAt": 1755959676876,
-      "updatedAt": 1758453407048,
+      "updatedAt": 1760345678733,
       "photoUri": "assets/cocktails/1755800000052-aviation.jpg"
     },
     {
@@ -9702,7 +9717,7 @@
       ],
       "createdAt": 1759336070098,
       "updatedAt": 1759336112951,
-      "photoUri": "assets/cocktails/1759336070098-bali-rum-trader.png"
+      "photoUri": "assets/cocktails/1759336070098-bali-rum-trader.jpg"
     },
     {
       "id": 1759337532331,
@@ -9757,7 +9772,7 @@
       ],
       "createdAt": 1759337532331,
       "updatedAt": 1759337532418,
-      "photoUri": "assets/cocktails/1759337532331-bali-trader.png"
+      "photoUri": "assets/cocktails/1759337532331-bali-trader.jpg"
     },
     {
       "id": 1756505066119,
@@ -9819,7 +9834,7 @@
         }
       ],
       "createdAt": 1756505066119,
-      "updatedAt": 1758453407049,
+      "updatedAt": 1760346304840,
       "photoUri": "assets/cocktails/1756505066119-bamboo-classic.jpg"
     },
     {
@@ -10117,8 +10132,8 @@
         }
       ],
       "createdAt": 1756513125340,
-      "updatedAt": 1759483352041,
-      "photoUri": "assets/cocktails/1756513125340-banana-daiquiri.png"
+      "updatedAt": 1760346334684,
+      "photoUri": "assets/cocktails/1756513125340-banana-daiquiri.jpg"
     },
     {
       "id": 1759482831928,
@@ -10664,7 +10679,7 @@
         }
       ],
       "createdAt": 1756587698877,
-      "updatedAt": 1758453407049,
+      "updatedAt": 1760346376232,
       "photoUri": "assets/cocktails/1756587698877-basil-julep.jpg"
     },
     {
@@ -10719,7 +10734,7 @@
       ],
       "createdAt": 1758733773661,
       "updatedAt": 1758733851088,
-      "photoUri": "assets/cocktails/1758733773661-batida.png"
+      "photoUri": "assets/cocktails/1758733773661-batida.jpg"
     },
     {
       "id": 1756816459218,
@@ -10908,7 +10923,7 @@
         }
       ],
       "createdAt": 1755959676876,
-      "updatedAt": 1758453407049,
+      "updatedAt": 1760346877039,
       "photoUri": "assets/cocktails/1755800000053-bees-knees.jpg"
     },
     {
@@ -11259,7 +11274,7 @@
         }
       ],
       "createdAt": 1756588129960,
-      "updatedAt": 1758453407049,
+      "updatedAt": 1760345475754,
       "photoUri": "assets/cocktails/1756588129960-bijou.jpg"
     },
     {
@@ -11488,7 +11503,7 @@
       ],
       "createdAt": 1759438451658,
       "updatedAt": 1759438497590,
-      "photoUri": "assets/cocktails/1759438451658-bitter-in-brazil.png"
+      "photoUri": "assets/cocktails/1759438451658-bitter-in-brazil.jpg"
     },
     {
       "id": 1755800000056,
@@ -11686,7 +11701,7 @@
         }
       ],
       "createdAt": 1756589486524,
-      "updatedAt": 1758453407049,
+      "updatedAt": 1760346908981,
       "photoUri": "assets/cocktails/1756589486524-blood-and-sand.jpg"
     },
     {
@@ -11915,23 +11930,23 @@
         }
       ],
       "createdAt": 1756823317843,
-      "updatedAt": 1758453407049,
+      "updatedAt": 1760964370559,
       "photoUri": "assets/cocktails/1756823317843-blue-hawaii.jpg"
     },
     {
       "id": 1758544591658,
-      "name": "Blue Hawaii",
+      "name": "Blue Hawaii Mocktail",
       "glassId": "hurricane_glass",
       "tags": [
-        {
-          "id": 7,
-          "name": "soft",
-          "color": "#FFD54F"
-        },
         {
           "id": 8,
           "name": "long",
           "color": "#FFB74D"
+        },
+        {
+          "id": 10,
+          "name": "non-alcoholic",
+          "color": "#DCE775"
         }
       ],
       "description": "",
@@ -11939,30 +11954,30 @@
       "ingredients": [
         {
           "order": 1,
-          "ingredientId": 38131,
-          "name": "Orange Juice",
-          "amount": "30",
-          "unitId": 11
-        },
-        {
-          "order": 2,
-          "ingredientId": 1755771415451,
-          "name": "Blue Curaçao Syrup",
-          "amount": "15",
-          "unitId": 11
-        },
-        {
-          "order": 3,
           "ingredientId": 494177,
           "name": "Pineapple Juice",
           "amount": "90",
           "unitId": 11
         },
         {
-          "order": 4,
+          "order": 2,
+          "ingredientId": 38131,
+          "name": "Orange Juice",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 3,
           "ingredientId": 734220,
           "name": "Lemon Juice",
           "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 1755771415451,
+          "name": "Blue Curaçao Syrup",
+          "amount": "15",
           "unitId": 11
         },
         {
@@ -11997,8 +12012,8 @@
         }
       ],
       "createdAt": 1758544591658,
-      "updatedAt": 1758544591737,
-      "photoUri": "assets/cocktails/1758544591658-blue-hawaii.jpg"
+      "updatedAt": 1760965542337,
+      "photoUri": "assets/cocktails/1758544591658-blue-hawaii-mocktail.jpg"
     },
     {
       "id": 1756823642522,
@@ -12098,7 +12113,7 @@
       ],
       "createdAt": 1758544228142,
       "updatedAt": 1758544228220,
-      "photoUri": "assets/cocktails/1758544228142-blue-lady.jpeg"
+      "photoUri": "assets/cocktails/1758544228142-blue-lady.jpg"
     },
     {
       "id": 1756825058541,
@@ -12157,7 +12172,7 @@
         }
       ],
       "createdAt": 1756825058541,
-      "updatedAt": 1758544386085,
+      "updatedAt": 1760965411320,
       "photoUri": "assets/cocktails/1756825058541-blue-lagoon.jpg"
     },
     {
@@ -12217,7 +12232,7 @@
         }
       ],
       "createdAt": 1758544483444,
-      "updatedAt": 1758544483525,
+      "updatedAt": 1760965472274,
       "photoUri": "assets/cocktails/1758544483444-blue-lagoon-mocktail.jpg"
     },
     {
@@ -12307,7 +12322,13 @@
           "name": "Grand Marnier",
           "amount": "25",
           "unitId": 11,
-          "allowBaseSubstitution": true
+          "allowBaseSubstitution": true,
+          "substitutes": [
+            {
+              "id": 38880,
+              "name": "Triple Sec"
+            }
+          ]
         },
         {
           "order": 3,
@@ -12334,7 +12355,7 @@
         }
       ],
       "createdAt": 1756839855535,
-      "updatedAt": 1758453407049,
+      "updatedAt": 1760345084836,
       "photoUri": "assets/cocktails/1756839855535-blueberry-tea.jpg"
     },
     {
@@ -12507,8 +12528,229 @@
         }
       ],
       "createdAt": 1756589718396,
-      "updatedAt": 1758453407049,
+      "updatedAt": 1760346925849,
       "photoUri": "assets/cocktails/1756589718396-bolo-cocktail.jpg"
+    },
+    {
+      "id": 1760963369297,
+      "name": "Bombardino",
+      "glassId": "cup",
+      "tags": [
+        {
+          "id": 6,
+          "name": "moderate",
+          "color": "#F06292"
+        }
+      ],
+      "description": "",
+      "instructions": "",
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 502166,
+          "name": "Cognac",
+          "amount": "50",
+          "unitId": 11,
+          "substitutes": [
+            {
+              "id": 435165,
+              "name": "Brandy"
+            }
+          ]
+        },
+        {
+          "order": 2,
+          "ingredientId": 487674,
+          "name": "Advocaat",
+          "amount": "100",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 477462,
+          "name": "Whipped Cream",
+          "amount": "100",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 46858,
+          "name": "Cinnamon",
+          "amount": "1",
+          "unitId": 15
+        }
+      ],
+      "createdAt": 1760963369297,
+      "updatedAt": 1760963498849,
+      "photoUri": "assets/cocktails/1760963369297-bombardino.jpg"
+    },
+    {
+      "id": 1760963459859,
+      "name": "Bombardino Calimero",
+      "glassId": "cup",
+      "tags": [
+        {
+          "id": 6,
+          "name": "moderate",
+          "color": "#F06292"
+        }
+      ],
+      "description": "",
+      "instructions": "",
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 502166,
+          "name": "Cognac",
+          "amount": "50",
+          "unitId": 11,
+          "substitutes": [
+            {
+              "id": 435165,
+              "name": "Brandy"
+            }
+          ]
+        },
+        {
+          "order": 2,
+          "ingredientId": 487674,
+          "name": "Advocaat",
+          "amount": "50",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 750837,
+          "name": "Espresso",
+          "amount": "50",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 477462,
+          "name": "Whipped Cream",
+          "amount": "100",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 46858,
+          "name": "Cinnamon",
+          "amount": "1",
+          "unitId": 15
+        }
+      ],
+      "createdAt": 1760963459859,
+      "updatedAt": 1760963459935,
+      "photoUri": "assets/cocktails/1760963459859-bombardino-calimero.jpg"
+    },
+    {
+      "id": 1760963707858,
+      "name": "Bombardino Pirata",
+      "glassId": "cup",
+      "tags": [
+        {
+          "id": 6,
+          "name": "moderate",
+          "color": "#F06292"
+        }
+      ],
+      "description": "",
+      "instructions": "",
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 811139,
+          "name": "Gold Rum",
+          "amount": "50",
+          "unitId": 11,
+          "substitutes": [
+            {
+              "id": 908571,
+              "name": "Spiced Rum"
+            },
+            {
+              "id": 962705,
+              "name": "Dark Rum"
+            },
+            {
+              "id": 861551,
+              "name": "White Rum"
+            }
+          ]
+        },
+        {
+          "order": 2,
+          "ingredientId": 487674,
+          "name": "Advocaat",
+          "amount": "100",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 477462,
+          "name": "Whipped Cream",
+          "amount": "100",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 46858,
+          "name": "Cinnamon",
+          "amount": "1",
+          "unitId": 15
+        }
+      ],
+      "createdAt": 1760963707858,
+      "updatedAt": 1760963707928,
+      "photoUri": "assets/cocktails/1760963707858-bombardino-pirata.jpg"
+    },
+    {
+      "id": 1760963780619,
+      "name": "Bombardino Scozzese",
+      "glassId": "cup",
+      "tags": [
+        {
+          "id": 6,
+          "name": "moderate",
+          "color": "#F06292"
+        }
+      ],
+      "description": "",
+      "instructions": "",
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 830162,
+          "name": "Whisky",
+          "amount": "50",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 487674,
+          "name": "Advocaat",
+          "amount": "100",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 477462,
+          "name": "Whipped Cream",
+          "amount": "100",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 46858,
+          "name": "Cinnamon",
+          "amount": "1",
+          "unitId": 15
+        }
+      ],
+      "createdAt": 1760963780619,
+      "updatedAt": 1760963780680,
+      "photoUri": "assets/cocktails/1760963780619-bombardino-scozzese.jpg"
     },
     {
       "id": 1755800000058,
@@ -13041,7 +13283,7 @@
       ],
       "createdAt": 1759339032903,
       "updatedAt": 1759339032978,
-      "photoUri": "assets/cocktails/1759339032903-brandy-sangaree.png"
+      "photoUri": "assets/cocktails/1759339032903-brandy-sangaree.jpg"
     },
     {
       "id": 1757000000104,
@@ -13294,7 +13536,7 @@
         }
       ],
       "createdAt": 1755959676877,
-      "updatedAt": 1758453407049,
+      "updatedAt": 1760346951506,
       "photoUri": "assets/cocktails/1755800000020-bronx.jpg"
     },
     {
@@ -13678,7 +13920,7 @@
         }
       ],
       "createdAt": 1756591716941,
-      "updatedAt": 1758453407049,
+      "updatedAt": 1760346965244,
       "photoUri": "assets/cocktails/1756591716941-bumbo.jpg"
     },
     {
@@ -14162,7 +14404,7 @@
         }
       ],
       "description": "A rich coffee cocktail with dark rum and Kahlua finished with cream.",
-      "instructions": "Fill a rocks glass with ice.\nPour 30 ml of dark rum and 29ml of Kahlua.\nAdd 150 ml of coffee.\nTop with 30 ml of double cream.\nGarnish with coffee beans.",
+      "instructions": "Fill a rocks glass with ice.\nPour 30ml of dark rum and 30ml of Kahlua.\nAdd 150ml of coffee.\nTop with 30ml of double cream.\nGarnish with coffee beans.",
       "ingredients": [
         {
           "order": 1,
@@ -14227,7 +14469,7 @@
         }
       ],
       "createdAt": 1757000000115,
-      "updatedAt": 1758629276791
+      "updatedAt": 1760810823363
     },
     {
       "id": 1757000000116,
@@ -14286,7 +14528,7 @@
         }
       ],
       "createdAt": 1757000000116,
-      "updatedAt": 1758453407050
+      "updatedAt": 1760346993187
     },
     {
       "id": 1757000000117,
@@ -14340,7 +14582,7 @@
         }
       ],
       "createdAt": 1757000000117,
-      "updatedAt": 1758453407050
+      "updatedAt": 1765646970443
     },
     {
       "id": 1755800000022,
@@ -14579,7 +14821,7 @@
       ],
       "createdAt": 1758746837350,
       "updatedAt": 1758747010992,
-      "photoUri": "assets/cocktails/1758746837350-cape-cod.jpeg"
+      "photoUri": "assets/cocktails/1758746837350-cape-cod.jpg"
     },
     {
       "id": 1757000000120,
@@ -14703,7 +14945,7 @@
         }
       ],
       "createdAt": 1755959676877,
-      "updatedAt": 1758453407050,
+      "updatedAt": 1760347014922,
       "photoUri": "assets/cocktails/1755800000023-cardinale.jpg"
     },
     {
@@ -14786,7 +15028,7 @@
       ],
       "createdAt": 1758616055597,
       "updatedAt": 1759487560632,
-      "photoUri": "assets/cocktails/1758616055596-caribbean-treasure.jpeg"
+      "photoUri": "assets/cocktails/1758616055596-caribbean-treasure.jpg"
     },
     {
       "id": 1757000000121,
@@ -14918,7 +15160,7 @@
       ],
       "createdAt": 1758623721532,
       "updatedAt": 1758623768230,
-      "photoUri": "assets/cocktails/1758623721532-carribbean-breeze.jpeg"
+      "photoUri": "assets/cocktails/1758623721532-carribbean-breeze.jpg"
     },
     {
       "id": 1755800000024,
@@ -14985,7 +15227,7 @@
         }
       ],
       "createdAt": 1755959676877,
-      "updatedAt": 1758453407050,
+      "updatedAt": 1760347027742,
       "photoUri": "assets/cocktails/1755800000024-casino.jpg"
     },
     {
@@ -15057,7 +15299,13 @@
           "name": "Grand Marnier",
           "amount": "3",
           "unitId": 7,
-          "optional": true
+          "optional": true,
+          "substitutes": [
+            {
+              "id": 38880,
+              "name": "Triple Sec"
+            }
+          ]
         },
         {
           "order": 6,
@@ -15077,7 +15325,7 @@
         }
       ],
       "createdAt": 1755959676877,
-      "updatedAt": 1758453407050,
+      "updatedAt": 1760345187484,
       "photoUri": "assets/cocktails/1755800000025-champagne-cocktail.jpg"
     },
     {
@@ -15615,7 +15863,7 @@
         }
       ],
       "createdAt": 1757000000126,
-      "updatedAt": 1758629313987
+      "updatedAt": 1760347042220
     },
     {
       "id": 1759436634049,
@@ -15683,7 +15931,7 @@
       ],
       "createdAt": 1759436634049,
       "updatedAt": 1759436634137,
-      "photoUri": "assets/cocktails/1759436634049-chocolate-negroni.png"
+      "photoUri": "assets/cocktails/1759436634049-chocolate-negroni.jpg"
     },
     {
       "id": 1756480552374,
@@ -15812,7 +16060,13 @@
           "name": "Grand Marnier",
           "amount": "45",
           "unitId": 11,
-          "allowBaseSubstitution": true
+          "allowBaseSubstitution": true,
+          "substitutes": [
+            {
+              "id": 38880,
+              "name": "Triple Sec"
+            }
+          ]
         },
         {
           "order": 3,
@@ -15852,8 +16106,8 @@
         }
       ],
       "createdAt": 1759447856660,
-      "updatedAt": 1759448095926,
-      "photoUri": "assets/cocktails/1759447856660-cold-blooded.png"
+      "updatedAt": 1760345224337,
+      "photoUri": "assets/cocktails/1759447856660-cold-blooded.jpg"
     },
     {
       "id": 1758536284466,
@@ -15963,7 +16217,7 @@
         }
       ],
       "createdAt": 1757000000127,
-      "updatedAt": 1758453407050
+      "updatedAt": 1760347062665
     },
     {
       "id": 1757000000128,
@@ -15997,8 +16251,8 @@
           "order": 3,
           "ingredientId": 999967,
           "name": "Cherry Liqueur",
-          "amount": "1",
-          "unitId": 6
+          "amount": "30",
+          "unitId": 11
         },
         {
           "order": 4,
@@ -16030,7 +16284,7 @@
         }
       ],
       "createdAt": 1757000000128,
-      "updatedAt": 1758453407050
+      "updatedAt": 1760347081585
     },
     {
       "id": 1759437773389,
@@ -16055,6 +16309,13 @@
         },
         {
           "order": 2,
+          "ingredientId": 949163,
+          "name": "Punt e Mes",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 3,
           "ingredientId": 1758583893163,
           "name": "Strucchi Bitter",
           "amount": "15",
@@ -16065,13 +16326,6 @@
               "name": "Campari"
             }
           ]
-        },
-        {
-          "order": 3,
-          "ingredientId": 949163,
-          "name": "Punt e Mes",
-          "amount": "15",
-          "unitId": 11
         },
         {
           "order": 4,
@@ -16103,8 +16357,8 @@
         }
       ],
       "createdAt": 1759437773389,
-      "updatedAt": 1759437773470,
-      "photoUri": "assets/cocktails/1759437773389-cornwall-negroni.png"
+      "updatedAt": 1760347484118,
+      "photoUri": "assets/cocktails/1759437773389-cornwall-negroni.jpg"
     },
     {
       "id": 1758746076430,
@@ -16159,7 +16413,7 @@
       ],
       "createdAt": 1758746076430,
       "updatedAt": 1758746224648,
-      "photoUri": "assets/cocktails/1758746076430-corona-sunrise.png"
+      "photoUri": "assets/cocktails/1758746076430-corona-sunrise.jpg"
     },
     {
       "id": 1757000000129,
@@ -16461,7 +16715,7 @@
         }
       ],
       "createdAt": 1757000000131,
-      "updatedAt": 1758453407050
+      "updatedAt": 1765647440516
     },
     {
       "id": 1759441105022,
@@ -16548,7 +16802,7 @@
       ],
       "createdAt": 1759441105022,
       "updatedAt": 1759441105116,
-      "photoUri": "assets/cocktails/1759441105022-crimson-king.png"
+      "photoUri": "assets/cocktails/1759441105022-crimson-king.jpg"
     },
     {
       "id": 1755800000030,
@@ -16788,7 +17042,7 @@
       ],
       "createdAt": 1758538860830,
       "updatedAt": 1758538860912,
-      "photoUri": "assets/cocktails/1758538860830-damn-the-bloody-weather.png"
+      "photoUri": "assets/cocktails/1758538860830-damn-the-bloody-weather.jpg"
     },
     {
       "id": 1757000000133,
@@ -17060,7 +17314,7 @@
       ],
       "createdAt": 1759437385614,
       "updatedAt": 1759437538034,
-      "photoUri": "assets/cocktails/1759437385614-death-and-taxes.png"
+      "photoUri": "assets/cocktails/1759437385614-death-and-taxes.jpg"
     },
     {
       "id": 1757000000135,
@@ -17299,7 +17553,7 @@
       ],
       "createdAt": 1758615657716,
       "updatedAt": 1758615701973,
-      "photoUri": "assets/cocktails/1758615657716-desert-island.jpeg"
+      "photoUri": "assets/cocktails/1758615657716-desert-island.jpg"
     },
     {
       "id": 1757000000139,
@@ -17885,7 +18139,7 @@
         }
       ],
       "createdAt": 1755959676878,
-      "updatedAt": 1758453407050,
+      "updatedAt": 1760347115502,
       "photoUri": "assets/cocktails/1755800000034-dry-martini.jpg"
     },
     {
@@ -18041,7 +18295,7 @@
       ],
       "createdAt": 1759445824669,
       "updatedAt": 1759445824731,
-      "photoUri": "assets/cocktails/1759445824669-eastern-promise.png"
+      "photoUri": "assets/cocktails/1759445824669-eastern-promise.jpg"
     },
     {
       "id": 1757000000147,
@@ -18101,7 +18355,7 @@
         }
       ],
       "createdAt": 1757000000147,
-      "updatedAt": 1758453407050
+      "updatedAt": 1760347138802
     },
     {
       "id": 1757000000148,
@@ -18186,7 +18440,68 @@
         }
       ],
       "createdAt": 1757000000148,
-      "updatedAt": 1758453407050
+      "updatedAt": 1760347153726
+    },
+    {
+      "id": 1760961933773,
+      "name": "El Diablo",
+      "glassId": "collins_glass",
+      "tags": [
+        {
+          "id": 6,
+          "name": "moderate",
+          "color": "#F06292"
+        }
+      ],
+      "description": "",
+      "instructions": "",
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 97568,
+          "name": "Tequila",
+          "amount": "45",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 389154,
+          "name": "Creme de Cassis",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 525624,
+          "name": "Lime Juice",
+          "amount": "22.5",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 353113,
+          "name": "Ginger Beer",
+          "amount": "60",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 346304,
+          "name": "Ice",
+          "amount": "90",
+          "unitId": 8
+        },
+        {
+          "order": 6,
+          "ingredientId": 336572,
+          "name": "Lime",
+          "amount": "1",
+          "unitId": 19
+        }
+      ],
+      "createdAt": 1760961933773,
+      "updatedAt": 1760962073871,
+      "photoUri": "assets/cocktails/1760961933773-el-diablo.jpg"
     },
     {
       "id": 1757000000149,
@@ -18397,7 +18712,7 @@
       ],
       "createdAt": 1759336313791,
       "updatedAt": 1759336379641,
-      "photoUri": "assets/cocktails/1759336313791-emerald-banana.png"
+      "photoUri": "assets/cocktails/1759336313791-emerald-banana.jpg"
     },
     {
       "id": 1757000000151,
@@ -18443,7 +18758,7 @@
         }
       ],
       "createdAt": 1757000000151,
-      "updatedAt": 1758458749464
+      "updatedAt": 1760347171402
     },
     {
       "id": 1757000000152,
@@ -18451,9 +18766,9 @@
       "glassId": "coupe",
       "tags": [
         {
-          "id": 11,
-          "name": "custom",
-          "color": "#a8a8a8"
+          "id": 5,
+          "name": "strong",
+          "color": "#ec5a5a"
         }
       ],
       "description": "",
@@ -18482,7 +18797,7 @@
         }
       ],
       "createdAt": 1757000000152,
-      "updatedAt": 1759481060799
+      "updatedAt": 1760347199622
     },
     {
       "id": 1759480768932,
@@ -18595,7 +18910,7 @@
         }
       ],
       "createdAt": 1755959676878,
-      "updatedAt": 1758629436081,
+      "updatedAt": 1760347410709,
       "photoUri": "assets/cocktails/1755800000035-espresso-martini.jpg"
     },
     {
@@ -18655,8 +18970,8 @@
         }
       ],
       "createdAt": 1759439523703,
-      "updatedAt": 1759439523781,
-      "photoUri": "assets/cocktails/1759439523703-fergroni.png"
+      "updatedAt": 1760347432638,
+      "photoUri": "assets/cocktails/1759439523703-fergroni.jpg"
     },
     {
       "id": 1755800000036,
@@ -18827,9 +19142,9 @@
       "glassId": "margarita_glass",
       "tags": [
         {
-          "id": 11,
-          "name": "custom",
-          "color": "#a8a8a8"
+          "id": 6,
+          "name": "moderate",
+          "color": "#F06292"
         }
       ],
       "description": "",
@@ -18872,7 +19187,7 @@
         }
       ],
       "createdAt": 1757000000155,
-      "updatedAt": 1758453407051
+      "updatedAt": 1760347370881
     },
     {
       "id": 1757000000156,
@@ -19165,7 +19480,7 @@
       ],
       "createdAt": 1759432761867,
       "updatedAt": 1759433027521,
-      "photoUri": "assets/cocktails/1759432761867-flip-27.png"
+      "photoUri": "assets/cocktails/1759432761867-flip-27.jpg"
     },
     {
       "id": 1757000000160,
@@ -19186,7 +19501,13 @@
           "ingredientId": 861551,
           "name": "White Rum",
           "amount": "30",
-          "unitId": 11
+          "unitId": 11,
+          "substitutes": [
+            {
+              "id": 908571,
+              "name": "Spiced Rum"
+            }
+          ]
         },
         {
           "order": 2,
@@ -19219,7 +19540,7 @@
         }
       ],
       "createdAt": 1757000000160,
-      "updatedAt": 1758453407051
+      "updatedAt": 1765647206591
     },
     {
       "id": 1757000000161,
@@ -19331,7 +19652,7 @@
       ],
       "createdAt": 1759439338266,
       "updatedAt": 1759439338346,
-      "photoUri": "assets/cocktails/1759439338266-fort-point.png"
+      "photoUri": "assets/cocktails/1759439338266-fort-point.jpg"
     },
     {
       "id": 1755800000037,
@@ -19530,7 +19851,7 @@
       ],
       "createdAt": 1759448574552,
       "updatedAt": 1759448574631,
-      "photoUri": "assets/cocktails/1759448574552-french-dew-sour.png"
+      "photoUri": "assets/cocktails/1759448574552-french-dew-sour.jpg"
     },
     {
       "id": 1755800000039,
@@ -19653,7 +19974,7 @@
       ],
       "createdAt": 1759434092387,
       "updatedAt": 1759434169092,
-      "photoUri": "assets/cocktails/1759434092387-french-pearl.png"
+      "photoUri": "assets/cocktails/1759434092387-french-pearl.jpg"
     },
     {
       "id": 1759484571256,
@@ -19729,7 +20050,7 @@
       ],
       "createdAt": 1759484571256,
       "updatedAt": 1759484887959,
-      "photoUri": "assets/cocktails/1759484571256-fresh-strawberry-daiquiri.png"
+      "photoUri": "assets/cocktails/1759484571256-fresh-strawberry-daiquiri.jpg"
     },
     {
       "id": 1759480948620,
@@ -19979,7 +20300,7 @@
         }
       ],
       "createdAt": 1755959676878,
-      "updatedAt": 1758453407051,
+      "updatedAt": 1760347512868,
       "photoUri": "assets/cocktails/1755800000040-garibaldi.jpg"
     },
     {
@@ -20063,7 +20384,7 @@
       ],
       "createdAt": 1759246987728,
       "updatedAt": 1759247025743,
-      "photoUri": "assets/cocktails/1759246987728-gem.png"
+      "photoUri": "assets/cocktails/1759246987728-gem.jpg"
     },
     {
       "id": 1756467152550,
@@ -20218,7 +20539,7 @@
         }
       ],
       "createdAt": 1757000000165,
-      "updatedAt": 1758453407051
+      "updatedAt": 1760347650164
     },
     {
       "id": 1757000000166,
@@ -20245,8 +20566,8 @@
           "order": 2,
           "ingredientId": 336572,
           "name": "Lime",
-          "amount": "1",
-          "unitId": 9
+          "amount": "15",
+          "unitId": 11
         },
         {
           "order": 3,
@@ -20273,7 +20594,7 @@
         }
       ],
       "createdAt": 1757000000166,
-      "updatedAt": 1758453407051
+      "updatedAt": 1760347710285
     },
     {
       "id": 1756466170421,
@@ -20320,7 +20641,7 @@
         }
       ],
       "createdAt": 1756466170421,
-      "updatedAt": 1758453407051,
+      "updatedAt": 1760347742981,
       "photoUri": "assets/cocktails/1756466170421-gin-and-tonic.jpg"
     },
     {
@@ -20434,7 +20755,7 @@
         }
       ],
       "createdAt": 1755959676878,
-      "updatedAt": 1758453407051,
+      "updatedAt": 1760347758390,
       "photoUri": "assets/cocktails/1755800000041-gin-basil-smash.jpg"
     },
     {
@@ -20494,7 +20815,7 @@
         }
       ],
       "createdAt": 1755959676878,
-      "updatedAt": 1758453407051,
+      "updatedAt": 1760347794439,
       "photoUri": "assets/cocktails/1755800000042-gin-fizz.jpg"
     },
     {
@@ -20984,7 +21305,14 @@
           "ingredientId": 392135,
           "name": "Grand Marnier",
           "amount": "30",
-          "unitId": 11
+          "unitId": 11,
+          "allowBaseSubstitution": true,
+          "substitutes": [
+            {
+              "id": 38880,
+              "name": "Triple Sec"
+            }
+          ]
         },
         {
           "order": 3,
@@ -21018,7 +21346,7 @@
         }
       ],
       "createdAt": 1755959676878,
-      "updatedAt": 1758453407051,
+      "updatedAt": 1760345338996,
       "photoUri": "assets/cocktails/1755800000043-grand-margarita.jpg"
     },
     {
@@ -21134,7 +21462,7 @@
       ],
       "createdAt": 1758847422361,
       "updatedAt": 1758847532550,
-      "photoUri": "assets/cocktails/1758847422361-greek-tragedy.png"
+      "photoUri": "assets/cocktails/1758847422361-greek-tragedy.jpg"
     },
     {
       "id": 1757000000176,
@@ -21303,7 +21631,7 @@
       ],
       "createdAt": 1759336666291,
       "updatedAt": 1759337034478,
-      "photoUri": "assets/cocktails/1759336666291-green-tea.png"
+      "photoUri": "assets/cocktails/1759336666291-green-tea.jpg"
     },
     {
       "id": 1757000000178,
@@ -21775,7 +22103,7 @@
       ],
       "createdAt": 1759439837561,
       "updatedAt": 1759443787543,
-      "photoUri": "assets/cocktails/1759439837561-harvest-negroni.png"
+      "photoUri": "assets/cocktails/1759439837561-harvest-negroni.jpg"
     },
     {
       "id": 1757000000182,
@@ -22274,7 +22602,7 @@
       ],
       "createdAt": 1759446817206,
       "updatedAt": 1759446987787,
-      "photoUri": "assets/cocktails/1759446817206-honey-badger.png"
+      "photoUri": "assets/cocktails/1759446817206-honey-badger.jpg"
     },
     {
       "id": 1757000000187,
@@ -23179,7 +23507,7 @@
       ],
       "createdAt": 1758627855539,
       "updatedAt": 1758627908956,
-      "photoUri": "assets/cocktails/1758627855539-irish-apple-pie.jpeg"
+      "photoUri": "assets/cocktails/1758627855539-irish-apple-pie.jpg"
     },
     {
       "id": 1757000000195,
@@ -23325,7 +23653,7 @@
         }
       ],
       "createdAt": 1757000000196,
-      "updatedAt": 1758453407052
+      "updatedAt": 1760345403149
     },
     {
       "id": 1757000000197,
@@ -23439,7 +23767,7 @@
       ],
       "createdAt": 1758628270496,
       "updatedAt": 1758628327363,
-      "photoUri": "assets/cocktails/1758628270496-irish-pie-tobby.jpeg"
+      "photoUri": "assets/cocktails/1758628270496-irish-pie-tobby.jpg"
     },
     {
       "id": 1758533905244,
@@ -23494,7 +23822,7 @@
       ],
       "createdAt": 1758533905244,
       "updatedAt": 1758534087897,
-      "photoUri": "assets/cocktails/1758533905244-islander.png"
+      "photoUri": "assets/cocktails/1758533905244-islander.jpg"
     },
     {
       "id": 1757000000198,
@@ -24146,21 +24474,21 @@
     {
       "id": 1757000000208,
       "name": "Kamikaze",
-      "glassId": "cocktail_glass",
+      "glassId": "shooter",
       "tags": [
+        {
+          "id": 9,
+          "name": "shooter",
+          "color": "#FF8A65"
+        },
         {
           "id": 5,
           "name": "strong",
           "color": "#ec5a5a"
-        },
-        {
-          "id": 1,
-          "name": "IBA Official",
-          "color": "#81C784"
         }
       ],
-      "description": "This popular IBA official cocktail is a variation of the original Kamikaze shooter.",
-      "instructions": "Fill a shaker with ice cubes.\nAdd 30ml of vodka, 30ml of triple sec and 30ml of lime juice.\nShake well and strain into a cocktail glass.\nGarnish with a lime wedge.",
+      "description": "This popular cocktail is a variation of the original Kamikaze shooter.",
+      "instructions": "Fill a shaker with ice cubes.\nAdd 45ml of vodka, 15ml of triple sec and 5ml of lime juice.\nShake well and strain into a shooter glass.\nGarnish with a lime wedge.",
       "ingredients": [
         {
           "order": 1,
@@ -24186,8 +24514,8 @@
           "order": 3,
           "ingredientId": 336572,
           "name": "Lime",
-          "amount": "0.5",
-          "unitId": 9
+          "amount": "5",
+          "unitId": 11
         },
         {
           "order": 4,
@@ -24201,12 +24529,12 @@
           "order": 5,
           "ingredientId": 346304,
           "name": "Ice",
-          "amount": "100",
+          "amount": "90",
           "unitId": 8
         }
       ],
       "createdAt": 1757000000208,
-      "updatedAt": 1758453407052
+      "updatedAt": 1760211571236
     },
     {
       "id": 1759440587494,
@@ -24260,7 +24588,7 @@
       ],
       "createdAt": 1759440587495,
       "updatedAt": 1759440629894,
-      "photoUri": "assets/cocktails/1759440587494-kings-county.png"
+      "photoUri": "assets/cocktails/1759440587494-kings-county.jpg"
     },
     {
       "id": 1755800000076,
@@ -24604,8 +24932,8 @@
           "color": "#4DD0E1"
         }
       ],
-      "description": "Vodka citrus martini with triple sec and sugar rim.",
-      "instructions": "Rim a cocktail glass with sugar.\nAdd vodka, triple sec, lemon juice, and simple syrup into a shaker with ice.\nShake well.\nStrain into the prepared glass.\nGarnish with a lemon slice.",
+      "description": "An IBA official variation of the Martini drink that is served as an all-day cocktail.",
+      "instructions": "Fill a shaker with ice cubes.\nAdd 30ml of vodka, 20ml of triple sec and 15ml of lemon juice.\nShake and strain into a chilled cocktail glass rimmed with sugar.",
       "ingredients": [
         {
           "order": 1,
@@ -24646,7 +24974,7 @@
         }
       ],
       "createdAt": 1755959676879,
-      "updatedAt": 1758453407052,
+      "updatedAt": 1760210867637,
       "photoUri": "assets/cocktails/1755800000078-lemon-drop-martini.jpg"
     },
     {
@@ -24960,7 +25288,7 @@
       ],
       "createdAt": 1758536935697,
       "updatedAt": 1758537169836,
-      "photoUri": "assets/cocktails/1758536935697-liquorice.png"
+      "photoUri": "assets/cocktails/1758536935697-liquorice.jpg"
     },
     {
       "id": 1759431826093,
@@ -25309,7 +25637,7 @@
       ],
       "createdAt": 1759436893088,
       "updatedAt": 1759436893164,
-      "photoUri": "assets/cocktails/1759436893087-longshoreman.png"
+      "photoUri": "assets/cocktails/1759436893087-longshoreman.jpg"
     },
     {
       "id": 1757000000217,
@@ -25452,7 +25780,7 @@
       ],
       "createdAt": 1758584061897,
       "updatedAt": 1758584188421,
-      "photoUri": "assets/cocktails/1758584061897-lovelight.png"
+      "photoUri": "assets/cocktails/1758584061897-lovelight.jpg"
     },
     {
       "id": 1757000000218,
@@ -25477,22 +25805,22 @@
         },
         {
           "order": 2,
-          "ingredientId": 569330,
-          "name": "Dry Vermouth",
-          "amount": "15",
-          "unitId": 11
-        },
-        {
-          "order": 3,
           "ingredientId": 354943,
           "name": "Cointreau",
           "amount": "15",
           "unitId": 11
         },
         {
-          "order": 4,
+          "order": 3,
           "ingredientId": 705866,
           "name": "Campari",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 569330,
+          "name": "Dry Vermouth",
           "amount": "15",
           "unitId": 11
         },
@@ -25508,12 +25836,12 @@
           "order": 6,
           "ingredientId": 346304,
           "name": "Ice",
-          "amount": "100",
+          "amount": "90",
           "unitId": 8
         }
       ],
       "createdAt": 1757000000218,
-      "updatedAt": 1758453407052
+      "updatedAt": 1763851889762
     },
     {
       "id": 1757000000219,
@@ -25662,7 +25990,7 @@
         }
       ],
       "createdAt": 1755959676879,
-      "updatedAt": 1758453407052,
+      "updatedAt": 1765996666385,
       "photoUri": "assets/cocktails/1755800000060-mai-tai.jpg"
     },
     {
@@ -26209,71 +26537,6 @@
       "updatedAt": 1758455905671
     },
     {
-      "id": 1757000000225,
-      "name": "Martini Lemon Drop",
-      "glassId": "cocktail_glass",
-      "tags": [
-        {
-          "id": 6,
-          "name": "moderate",
-          "color": "#F06292"
-        },
-        {
-          "id": 1,
-          "name": "IBA Official",
-          "color": "#81C784"
-        }
-      ],
-      "description": "An IBA official variation of the Martini drink that is served as an all-day cocktail.",
-      "instructions": "Fill a shaker with ice cubes.\nAdd 30ml of vodka, 20ml of triple sec and 15ml of lemon juice.\nShake and strain into a chilled cocktail glass rimmed with sugar.",
-      "ingredients": [
-        {
-          "order": 1,
-          "ingredientId": 16862,
-          "name": "Vodka",
-          "amount": "30",
-          "unitId": 11,
-          "substitutes": [
-            {
-              "id": 1755300138380,
-              "name": "Vodka Citron"
-            }
-          ]
-        },
-        {
-          "order": 2,
-          "ingredientId": 38880,
-          "name": "Triple Sec",
-          "amount": "20",
-          "unitId": 11
-        },
-        {
-          "order": 3,
-          "ingredientId": 734220,
-          "name": "Lemon Juice",
-          "amount": "15",
-          "unitId": 11
-        },
-        {
-          "order": 4,
-          "ingredientId": 217733,
-          "name": "Sugar",
-          "amount": "5",
-          "unitId": 8,
-          "garnish": true
-        },
-        {
-          "order": 5,
-          "ingredientId": 346304,
-          "name": "Ice",
-          "amount": "100",
-          "unitId": 8
-        }
-      ],
-      "createdAt": 1757000000225,
-      "updatedAt": 1758453407052
-    },
-    {
       "id": 1757000000226,
       "name": "Martini Perfect",
       "glassId": "cocktail_glass",
@@ -26557,7 +26820,7 @@
       ],
       "createdAt": 1759437114412,
       "updatedAt": 1759437114481,
-      "photoUri": "assets/cocktails/1759437114412-maximilian-affair.png"
+      "photoUri": "assets/cocktails/1759437114412-maximilian-affair.jpg"
     },
     {
       "id": 1759438753854,
@@ -26723,7 +26986,7 @@
       ],
       "createdAt": 1758624030607,
       "updatedAt": 1758624050498,
-      "photoUri": "assets/cocktails/1758624030607-metropolis.jpeg"
+      "photoUri": "assets/cocktails/1758624030607-metropolis.jpg"
     },
     {
       "id": 1757000000230,
@@ -27516,7 +27779,7 @@
       ],
       "createdAt": 1759434442163,
       "updatedAt": 1759434442223,
-      "photoUri": "assets/cocktails/1759434442163-momisette.png"
+      "photoUri": "assets/cocktails/1759434442163-momisette.jpg"
     },
     {
       "id": 1755800000069,
@@ -27704,7 +27967,7 @@
       ],
       "createdAt": 1758744805979,
       "updatedAt": 1758744806081,
-      "photoUri": "assets/cocktails/1758744805979-motox.png"
+      "photoUri": "assets/cocktails/1758744805979-motox.jpg"
     },
     {
       "id": 1759248306670,
@@ -27773,7 +28036,7 @@
       ],
       "createdAt": 1759248306670,
       "updatedAt": 1759248306748,
-      "photoUri": "assets/cocktails/1759248306670-mrs-daisy-robinson.png"
+      "photoUri": "assets/cocktails/1759248306670-mrs-daisy-robinson.jpg"
     },
     {
       "id": 1757000000238,
@@ -27905,7 +28168,7 @@
       ],
       "createdAt": 1757000000239,
       "updatedAt": 1758493722694,
-      "photoUri": "assets/cocktails/1757000000239-mulled-wine.png"
+      "photoUri": "assets/cocktails/1757000000239-mulled-wine.jpg"
     },
     {
       "id": 1755800000071,
@@ -28674,7 +28937,7 @@
       ],
       "createdAt": 1758536592633,
       "updatedAt": 1758536592688,
-      "photoUri": "assets/cocktails/1758536592633-opal-cafe.png"
+      "photoUri": "assets/cocktails/1758536592633-opal-cafe.jpg"
     },
     {
       "id": 1757000000245,
@@ -28700,7 +28963,8 @@
           "ingredientId": 354943,
           "name": "Cointreau",
           "amount": "30",
-          "unitId": 11
+          "unitId": 11,
+          "allowBaseSubstitution": true
         },
         {
           "order": 2,
@@ -28714,7 +28978,8 @@
           "ingredientId": 392135,
           "name": "Grand Marnier",
           "amount": "20",
-          "unitId": 11
+          "unitId": 11,
+          "allowBaseSubstitution": true
         },
         {
           "order": 4,
@@ -28733,7 +28998,7 @@
         }
       ],
       "createdAt": 1757000000245,
-      "updatedAt": 1758455976356
+      "updatedAt": 1760345435247
     },
     {
       "id": 1757000000246,
@@ -28836,7 +29101,7 @@
       ],
       "createdAt": 1758847662571,
       "updatedAt": 1758847703292,
-      "photoUri": "assets/cocktails/1758847662571-ouzi.png"
+      "photoUri": "assets/cocktails/1758847662571-ouzi.jpg"
     },
     {
       "id": 1758622838989,
@@ -28911,7 +29176,7 @@
       ],
       "createdAt": 1758622838989,
       "updatedAt": 1758622969274,
-      "photoUri": "assets/cocktails/1758622838989-pacha-sao-paulo.jpeg"
+      "photoUri": "assets/cocktails/1758622838989-pacha-sao-paulo.jpg"
     },
     {
       "id": 1758843335655,
@@ -29111,7 +29376,7 @@
       ],
       "createdAt": 1758492577524,
       "updatedAt": 1758493012839,
-      "photoUri": "assets/cocktails/1758492577523-pale-charlie.png"
+      "photoUri": "assets/cocktails/1758492577523-pale-charlie.jpg"
     },
     {
       "id": 1755800000084,
@@ -29625,7 +29890,7 @@
       ],
       "createdAt": 1758625901189,
       "updatedAt": 1758626053010,
-      "photoUri": "assets/cocktails/1758625901189-paradise-punch.jpeg"
+      "photoUri": "assets/cocktails/1758625901189-paradise-punch.jpg"
     },
     {
       "id": 1759432360232,
@@ -30006,7 +30271,7 @@
       ],
       "createdAt": 1759247416006,
       "updatedAt": 1759247416070,
-      "photoUri": "assets/cocktails/1759247416006-pina-clara.png"
+      "photoUri": "assets/cocktails/1759247416006-pina-clara.jpg"
     },
     {
       "id": 1755800000088,
@@ -30438,7 +30703,7 @@
       ],
       "createdAt": 1759442051735,
       "updatedAt": 1759442100637,
-      "photoUri": "assets/cocktails/1759442051734-popinjay.png"
+      "photoUri": "assets/cocktails/1759442051734-popinjay.jpg"
     },
     {
       "id": 1755800000092,
@@ -30645,7 +30910,7 @@
       ],
       "createdAt": 1759442398603,
       "updatedAt": 1759442398714,
-      "photoUri": "assets/cocktails/1759442398603-purgatory-a-la-francaise.png"
+      "photoUri": "assets/cocktails/1759442398603-purgatory-a-la-francaise.jpg"
     },
     {
       "id": 1755800000094,
@@ -30766,11 +31031,11 @@
       ],
       "createdAt": 1758621286891,
       "updatedAt": 1758621286961,
-      "photoUri": "assets/cocktails/1758621286891-rafaello.jpeg"
+      "photoUri": "assets/cocktails/1758621286891-rafaello.jpg"
     },
     {
       "id": 1755800000095,
-      "name": "Ramos Fizz",
+      "name": "Ramos Gin Fizz",
       "glassId": "highball_glass",
       "tags": [
         {
@@ -30852,8 +31117,8 @@
         }
       ],
       "createdAt": 1755959676879,
-      "updatedAt": 1758453407053,
-      "photoUri": "assets/cocktails/1755800000095-ramos-fizz.jpg"
+      "updatedAt": 1765997254688,
+      "photoUri": "assets/cocktails/1755800000095-ramos-gin-fizz.jpg"
     },
     {
       "id": 1757000000253,
@@ -30976,7 +31241,7 @@
       ],
       "createdAt": 1759435726061,
       "updatedAt": 1759435726128,
-      "photoUri": "assets/cocktails/1759435726061-red-hook.png"
+      "photoUri": "assets/cocktails/1759435726061-red-hook.jpg"
     },
     {
       "id": 1759485832039,
@@ -31015,7 +31280,7 @@
       ],
       "createdAt": 1759485832039,
       "updatedAt": 1759485832087,
-      "photoUri": "assets/cocktails/1759485832039-red-russian.png"
+      "photoUri": "assets/cocktails/1759485832039-red-russian.jpg"
     },
     {
       "id": 1757000000254,
@@ -31353,7 +31618,7 @@
       ],
       "createdAt": 1758625156207,
       "updatedAt": 1758625219562,
-      "photoUri": "assets/cocktails/1758625156207-robinson.jpeg"
+      "photoUri": "assets/cocktails/1758625156207-robinson.jpg"
     },
     {
       "id": 1757000000259,
@@ -31510,7 +31775,7 @@
       ],
       "createdAt": 1759442653429,
       "updatedAt": 1759442653518,
-      "photoUri": "assets/cocktails/1759442653429-rome-is-burning.png"
+      "photoUri": "assets/cocktails/1759442653429-rome-is-burning.jpg"
     },
     {
       "id": 1757000000260,
@@ -32373,7 +32638,7 @@
       ],
       "createdAt": 1758847185194,
       "updatedAt": 1758847243111,
-      "photoUri": "assets/cocktails/1758847185194-santorini.png"
+      "photoUri": "assets/cocktails/1758847185194-santorini.jpg"
     },
     {
       "id": 1755800000099,
@@ -33440,7 +33705,7 @@
     },
     {
       "id": 1757000000274,
-      "name": "Smoky Whisky Sour",
+      "name": "Smoky Whiskey Sour",
       "glassId": "rocks_glass",
       "tags": [
         {
@@ -33505,7 +33770,7 @@
         }
       ],
       "createdAt": 1757000000274,
-      "updatedAt": 1758453407054
+      "updatedAt": 1763851324668
     },
     {
       "id": 1758534889180,
@@ -33561,7 +33826,7 @@
       ],
       "createdAt": 1758534889180,
       "updatedAt": 1758538323902,
-      "photoUri": "assets/cocktails/1758534889180-snakebite.png"
+      "photoUri": "assets/cocktails/1758534889180-snakebite.jpg"
     },
     {
       "id": 1757000000275,
@@ -34387,7 +34652,7 @@
       ],
       "createdAt": 1759484662626,
       "updatedAt": 1759484942205,
-      "photoUri": "assets/cocktails/1759484662626-strawberry-daiquiri.png"
+      "photoUri": "assets/cocktails/1759484662626-strawberry-daiquiri.jpg"
     },
     {
       "id": 1757000000282,
@@ -34482,21 +34747,21 @@
           "order": 2,
           "ingredientId": 266182,
           "name": "Tequila Blanco",
-          "amount": "170",
+          "amount": "180",
           "unitId": 11
         },
         {
           "order": 3,
           "ingredientId": 354943,
           "name": "Cointreau",
-          "amount": "100",
+          "amount": "120",
           "unitId": 11
         },
         {
           "order": 4,
           "ingredientId": 525624,
           "name": "Lime Juice",
-          "amount": "80",
+          "amount": "90",
           "unitId": 11
         },
         {
@@ -34511,12 +34776,12 @@
           "order": 6,
           "ingredientId": 346304,
           "name": "Ice",
-          "amount": "100",
+          "amount": "120",
           "unitId": 8
         }
       ],
       "createdAt": 1757000000283,
-      "updatedAt": 1758453407054
+      "updatedAt": 1761420960670
     },
     {
       "id": 1758544887872,
@@ -34563,7 +34828,7 @@
       ],
       "createdAt": 1758544887872,
       "updatedAt": 1758544917003,
-      "photoUri": "assets/cocktails/1758544887872-streamtini.png"
+      "photoUri": "assets/cocktails/1758544887872-streamtini.jpg"
     },
     {
       "id": 1757000000284,
@@ -35035,7 +35300,7 @@
       ],
       "createdAt": 1758788493428,
       "updatedAt": 1758788493487,
-      "photoUri": "assets/cocktails/1758788493428-temperance-punch.jpeg"
+      "photoUri": "assets/cocktails/1758788493428-temperance-punch.jpg"
     },
     {
       "id": 1759450592610,
@@ -35358,7 +35623,7 @@
       ],
       "createdAt": 1759447347844,
       "updatedAt": 1759447347947,
-      "photoUri": "assets/cocktails/1759447347844-the-cheshire-cat.png"
+      "photoUri": "assets/cocktails/1759447347844-the-cheshire-cat.jpg"
     },
     {
       "id": 1759247836982,
@@ -35426,7 +35691,7 @@
       ],
       "createdAt": 1759247836982,
       "updatedAt": 1759247837067,
-      "photoUri": "assets/cocktails/1759247836982-the-haole.png"
+      "photoUri": "assets/cocktails/1759247836982-the-haole.jpg"
     },
     {
       "id": 1759440363887,
@@ -35515,7 +35780,7 @@
       ],
       "createdAt": 1759440363887,
       "updatedAt": 1759440363990,
-      "photoUri": "assets/cocktails/1759440363887-the-ridgwell.png"
+      "photoUri": "assets/cocktails/1759440363887-the-ridgwell.jpg"
     },
     {
       "id": 1759435206347,
@@ -35577,7 +35842,7 @@
       ],
       "createdAt": 1759435206347,
       "updatedAt": 1759435206421,
-      "photoUri": "assets/cocktails/1759435206347-the-slope.png"
+      "photoUri": "assets/cocktails/1759435206347-the-slope.jpg"
     },
     {
       "id": 1755800000111,
@@ -35900,7 +36165,7 @@
       ],
       "createdAt": 1758546071521,
       "updatedAt": 1758584371186,
-      "photoUri": "assets/cocktails/1758546071521-tom-and-cherry.png"
+      "photoUri": "assets/cocktails/1758546071521-tom-and-cherry.jpg"
     },
     {
       "id": 1757000000292,
@@ -36336,7 +36601,7 @@
       ],
       "createdAt": 1758627022244,
       "updatedAt": 1758627022327,
-      "photoUri": "assets/cocktails/1758627022244-tropical-queen.jpeg"
+      "photoUri": "assets/cocktails/1758627022244-tropical-queen.jpg"
     },
     {
       "id": 1758624641640,
@@ -36417,7 +36682,7 @@
       ],
       "createdAt": 1758624641640,
       "updatedAt": 1758624797010,
-      "photoUri": "assets/cocktails/1758624641640-tropical-sangria.jpeg"
+      "photoUri": "assets/cocktails/1758624641640-tropical-sangria.jpg"
     },
     {
       "id": 1755800000115,
@@ -36596,7 +36861,7 @@
       ],
       "createdAt": 1758622373175,
       "updatedAt": 1758622521643,
-      "photoUri": "assets/cocktails/1758622373175-vacation-in-jamaica.jpeg"
+      "photoUri": "assets/cocktails/1758622373175-vacation-in-jamaica.jpg"
     },
     {
       "id": 1757000000295,
@@ -37187,7 +37452,7 @@
       ],
       "createdAt": 1758788190920,
       "updatedAt": 1758788283642,
-      "photoUri": "assets/cocktails/1758788190920-virgini-sangria.jpeg"
+      "photoUri": "assets/cocktails/1758788190920-virgini-sangria.jpg"
     },
     {
       "id": 1758615175313,
@@ -37248,7 +37513,7 @@
       ],
       "createdAt": 1758615175313,
       "updatedAt": 1758615175368,
-      "photoUri": "assets/cocktails/1758615175313-virginia.jpeg"
+      "photoUri": "assets/cocktails/1758615175313-virginia.jpg"
     },
     {
       "id": 1759450356801,
@@ -37637,7 +37902,7 @@
     },
     {
       "id": 1755800000119,
-      "name": "Whisky Sour",
+      "name": "Whiskey Sour",
       "glassId": "rocks_glass",
       "tags": [
         {
@@ -37659,7 +37924,25 @@
           "ingredientId": 342124,
           "name": "Bourbon",
           "amount": "60",
-          "unitId": 11
+          "unitId": 11,
+          "substitutes": [
+            {
+              "id": 830162,
+              "name": "Whisky"
+            },
+            {
+              "id": 489584,
+              "name": "Irish Whisky"
+            },
+            {
+              "id": 140867,
+              "name": "Scotch Whiskey"
+            },
+            {
+              "id": 1755776402585,
+              "name": "Scotch Highland Whiskey"
+            }
+          ]
         },
         {
           "order": 2,
@@ -37701,8 +37984,8 @@
         }
       ],
       "createdAt": 1755959676880,
-      "updatedAt": 1758453407055,
-      "photoUri": "assets/cocktails/1755800000119-whisky-sour.jpg"
+      "updatedAt": 1763851307913,
+      "photoUri": "assets/cocktails/1755800000119-whiskey-sour.jpg"
     },
     {
       "id": 1759246411417,
@@ -37757,7 +38040,7 @@
       ],
       "createdAt": 1759246411418,
       "updatedAt": 1759246411479,
-      "photoUri": "assets/cocktails/1759246411417-white-christmas-martini.png"
+      "photoUri": "assets/cocktails/1759246411417-white-christmas-martini.jpg"
     },
     {
       "id": 1755800000120,
@@ -37801,7 +38084,7 @@
         }
       ],
       "createdAt": 1755959676880,
-      "updatedAt": 1758453407055,
+      "updatedAt": 1760210680898,
       "photoUri": "assets/cocktails/1755800000120-white-lady.jpg"
     },
     {
@@ -37972,7 +38255,7 @@
       ],
       "createdAt": 1758615390318,
       "updatedAt": 1758615457404,
-      "photoUri": "assets/cocktails/1758615390318-wizard-of-oz.jpeg"
+      "photoUri": "assets/cocktails/1758615390318-wizard-of-oz.jpg"
     },
     {
       "id": 1757000000305,
@@ -38179,7 +38462,7 @@
       ],
       "createdAt": 1758843695554,
       "updatedAt": 1758843742821,
-      "photoUri": "assets/cocktails/1758843695554-yamabuki.png"
+      "photoUri": "assets/cocktails/1758843695554-yamabuki.jpg"
     },
     {
       "id": 1757000000307,
@@ -38292,7 +38575,7 @@
       ],
       "createdAt": 1758846419510,
       "updatedAt": 1758846419573,
-      "photoUri": "assets/cocktails/1758846419510-yo-ho.png"
+      "photoUri": "assets/cocktails/1758846419510-yo-ho.jpg"
     },
     {
       "id": 1756051666171,
