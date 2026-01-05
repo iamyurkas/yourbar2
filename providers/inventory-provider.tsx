@@ -289,12 +289,66 @@ function createExportSlug(prefix: string): string {
   return `${prefix}-${safeStamp}`;
 }
 
+function buildPhotoFilename(uri: string, index: number): string {
+  const basename = uri.split('/').pop();
+  if (basename && /\.[a-zA-Z0-9]+$/.test(basename)) {
+    return basename;
+  }
+
+  return `photo-${index + 1}.jpg`;
+}
+
+function guessMimeTypeFromFilename(filename: string): string {
+  if (filename.endsWith('.json')) {
+    return 'application/json';
+  }
+
+  if (filename.endsWith('.png')) {
+    return 'image/png';
+  }
+
+  if (filename.endsWith('.jpg') || filename.endsWith('.jpeg')) {
+    return 'image/jpeg';
+  }
+
+  return 'application/octet-stream';
+}
+
+async function saveStringWithSaf(
+  filename: string,
+  mimeType: string,
+  contents: string,
+  encoding: FileSystem.EncodingType,
+): Promise<string | null> {
+  if (Platform.OS !== 'android' || !FileSystem.StorageAccessFramework) {
+    return null;
+  }
+
+  try {
+    const permission = await FileSystem.StorageAccessFramework.requestDirectoryPermissionsAsync();
+    if (!permission.granted || !permission.directoryUri) {
+      return null;
+    }
+
+    const targetUri = await FileSystem.StorageAccessFramework.createFileAsync(
+      permission.directoryUri,
+      filename,
+      mimeType,
+    );
+
+    await FileSystem.writeAsStringAsync(targetUri, contents, { encoding });
+    return targetUri;
+  } catch (error) {
+    console.warn('Failed to export using Storage Access Framework', error);
+    return null;
+  }
+}
+
 async function shareFileForExport(path: string, dialogTitle: string) {
   const targetUri = Platform.OS === 'android' ? await FileSystem.getContentUriAsync(path) : path;
 
   await Share.share({
     title: dialogTitle,
-    message: dialogTitle,
     url: targetUri,
   });
 }
@@ -828,16 +882,28 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       allowAllSubstitutes,
     });
 
+    const filename = `${createExportSlug('yourbar-backup')}.json`;
+    const payload = JSON.stringify(snapshot, null, 2);
+    const savedUri = await saveStringWithSaf(
+      filename,
+      guessMimeTypeFromFilename(filename),
+      payload,
+      FileSystem.EncodingType.UTF8,
+    );
+
+    if (savedUri) {
+      return;
+    }
+
     const directory = FileSystem.cacheDirectory ?? FileSystem.documentDirectory;
     if (!directory) {
       console.warn('No writable directory available for export');
       return;
     }
 
-    const filename = `${createExportSlug('yourbar-backup')}.json`;
     const exportPath = `${directory}${filename}`;
 
-    await FileSystem.writeAsStringAsync(exportPath, JSON.stringify(snapshot, null, 2));
+    await FileSystem.writeAsStringAsync(exportPath, payload);
     await shareFileForExport(exportPath, 'Export inventory data');
   }, [
     allowAllSubstitutes,
@@ -853,57 +919,77 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       return;
     }
 
-    const directory = FileSystem.cacheDirectory ?? FileSystem.documentDirectory;
-    if (!directory) {
-      console.warn('No writable directory available for export');
-      return;
-    }
-
     const photoUris = collectPhotoUris(inventoryState).filter((uri) => !resolveAssetFromCatalog(uri));
     if (photoUris.length === 0) {
       console.warn('No custom photos to export');
       return;
     }
 
-    const photos: { sourceUri: string; filename: string; base64: string }[] = [];
+    if (Platform.OS === 'android' && FileSystem.StorageAccessFramework) {
+      const permission = await FileSystem.StorageAccessFramework.requestDirectoryPermissionsAsync();
+      if (!permission.granted || !permission.directoryUri) {
+        console.warn('Photo export cancelled: no directory selected');
+        return;
+      }
 
-    for (const uri of photoUris) {
+      for (const [index, uri] of photoUris.entries()) {
+        try {
+          const info = await FileSystem.getInfoAsync(uri);
+          if (!info.exists) {
+            continue;
+          }
+
+          const filename = buildPhotoFilename(uri, index);
+          const mimeType = guessMimeTypeFromFilename(filename);
+          const fileUri = await FileSystem.StorageAccessFramework.createFileAsync(
+            permission.directoryUri,
+            filename,
+            mimeType,
+          );
+
+          const base64 = await FileSystem.readAsStringAsync(uri, {
+            encoding: FileSystem.EncodingType.Base64,
+          });
+
+          await FileSystem.writeAsStringAsync(fileUri, base64, {
+            encoding: FileSystem.EncodingType.Base64,
+          });
+        } catch (error) {
+          console.warn('Failed to export photo', uri, error);
+        }
+      }
+
+      return;
+    }
+
+    const directory = FileSystem.cacheDirectory ?? FileSystem.documentDirectory;
+    if (!directory) {
+      console.warn('No writable directory available for export');
+      return;
+    }
+
+    for (const [index, uri] of photoUris.entries()) {
       try {
         const info = await FileSystem.getInfoAsync(uri);
         if (!info.exists) {
           continue;
         }
 
-        const filename = uri.split('/').pop() || 'photo.jpg';
+        const filename = `${createExportSlug('yourbar-photo')}-${buildPhotoFilename(uri, index)}`;
+        const mimeType = guessMimeTypeFromFilename(filename);
+        const exportPath = `${directory}${filename}`;
         const base64 = await FileSystem.readAsStringAsync(uri, {
           encoding: FileSystem.EncodingType.Base64,
         });
 
-        photos.push({
-          sourceUri: uri,
-          filename,
-          base64,
+        await FileSystem.writeAsStringAsync(exportPath, base64, {
+          encoding: FileSystem.EncodingType.Base64,
         });
+        await shareFileForExport(exportPath, 'Export photos');
       } catch (error) {
         console.warn('Failed to export photo', uri, error);
       }
     }
-
-    if (photos.length === 0) {
-      console.warn('No readable custom photos to export');
-      return;
-    }
-
-    const payload = {
-      generatedAt: new Date().toISOString(),
-      photos,
-    };
-
-    const filename = `${createExportSlug('yourbar-photos')}.json`;
-    const exportPath = `${directory}${filename}`;
-
-    await FileSystem.writeAsStringAsync(exportPath, JSON.stringify(payload, null, 2));
-    await shareFileForExport(exportPath, 'Export photos');
   }, [inventoryState]);
 
   const updateIngredient = useCallback(
