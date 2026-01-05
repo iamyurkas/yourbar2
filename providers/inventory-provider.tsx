@@ -1,3 +1,4 @@
+import * as FileSystem from 'expo-file-system/legacy';
 import React, {
   createContext,
   useCallback,
@@ -38,6 +39,12 @@ type CocktailRecord = Omit<BaseCocktailRecord, 'ingredients' | 'searchName' | 's
   searchTokens?: string[] | null;
 };
 type IngredientRecord = InventoryData['ingredients'][number];
+type PhotoExportResult = {
+  directory: string;
+  exported: string[];
+  failed: string[];
+  skipped: string[];
+};
 
 type NormalizedSearchFields = {
   searchNameNormalized: string;
@@ -71,6 +78,8 @@ type InventoryContextValue = {
   getCocktailRating: (cocktail: Cocktail) => number;
   setIgnoreGarnish: (value: boolean) => void;
   setAllowAllSubstitutes: (value: boolean) => void;
+  exportInventoryData: () => Promise<string>;
+  exportInventoryPhotos: () => Promise<PhotoExportResult>;
 };
 
 type InventoryState = {
@@ -132,6 +141,10 @@ type InventorySnapshot = {
 };
 
 const INVENTORY_SNAPSHOT_VERSION = 1;
+const EXPORT_DIRECTORY_NAME = 'yourbar-export';
+const PHOTO_EXPORT_DIRECTORY_NAME = 'photos';
+const BUNDLED_ASSET_PATTERN = /^assets\//i;
+const REMOTE_URI_PATTERN = /^https?:\/\//i;
 
 declare global {
   // eslint-disable-next-line no-var
@@ -253,6 +266,59 @@ function createSnapshotFromInventory(
     ignoreGarnish: options.ignoreGarnish,
     allowAllSubstitutes: options.allowAllSubstitutes,
   } satisfies InventorySnapshot;
+}
+
+function sanitizeFilename(candidate: string, fallback: string): string {
+  const sanitized = candidate.replace(/[^\w.-]/g, '_').replace(/_+/g, '_').replace(/^_+|_+$/g, '');
+
+  return sanitized || fallback;
+}
+
+function extractFileName(uri: string): string | undefined {
+  const segments = uri.split('/');
+  const lastSegment = segments[segments.length - 1];
+  if (!lastSegment) {
+    return undefined;
+  }
+
+  const [basename] = lastSegment.split(/[?#]/);
+  return basename || undefined;
+}
+
+function extractFileExtension(uri: string): string | undefined {
+  const basename = extractFileName(uri);
+  if (!basename) {
+    return undefined;
+  }
+
+  const lastDotIndex = basename.lastIndexOf('.');
+  if (lastDotIndex <= 0 || lastDotIndex === basename.length - 1) {
+    return undefined;
+  }
+
+  return basename.slice(lastDotIndex + 1);
+}
+
+function collectPhotoUris(state: InventoryState): Set<string> {
+  const uris = new Set<string>();
+
+  state.cocktails.forEach((cocktail) => {
+    if (cocktail.photoUri) {
+      uris.add(cocktail.photoUri);
+    }
+  });
+
+  state.ingredients.forEach((ingredient) => {
+    if (ingredient.photoUri) {
+      uris.add(ingredient.photoUri);
+    }
+  });
+
+  return uris;
+}
+
+function createExportDirectoryPath(directory: string, name: string): string {
+  return `${directory.replace(/\/?$/, '/')}${name.replace(/^\//, '')}/`;
 }
 
 const InventoryContext = createContext<InventoryContextValue | undefined>(undefined);
@@ -1232,6 +1298,98 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     });
   }, []);
 
+  const ensureExportDirectory = useCallback(async () => {
+    const documentDirectory = FileSystem.documentDirectory;
+
+    if (!documentDirectory) {
+      throw new Error('Document directory is unavailable on this device.');
+    }
+
+    const exportDirectory = createExportDirectoryPath(documentDirectory, EXPORT_DIRECTORY_NAME);
+
+    await FileSystem.makeDirectoryAsync(exportDirectory, { intermediates: true });
+
+    return exportDirectory;
+  }, []);
+
+  const exportInventoryData = useCallback(async () => {
+    if (!inventoryState) {
+      throw new Error('Inventory is still loading. Try again in a moment.');
+    }
+
+    const exportDirectory = await ensureExportDirectory();
+    const snapshot = createSnapshotFromInventory(inventoryState, {
+      availableIngredientIds,
+      shoppingIngredientIds,
+      cocktailRatings,
+      ignoreGarnish,
+      allowAllSubstitutes,
+    });
+
+    const targetPath = `${exportDirectory}inventory-state.json`;
+    await FileSystem.writeAsStringAsync(targetPath, JSON.stringify(snapshot, null, 2));
+
+    return targetPath;
+  }, [
+    allowAllSubstitutes,
+    availableIngredientIds,
+    cocktailRatings,
+    ensureExportDirectory,
+    ignoreGarnish,
+    inventoryState,
+    shoppingIngredientIds,
+  ]);
+
+  const exportInventoryPhotos = useCallback(async () => {
+    if (!inventoryState) {
+      throw new Error('Inventory is still loading. Try again in a moment.');
+    }
+
+    const exportDirectory = await ensureExportDirectory();
+    const photosDirectory = createExportDirectoryPath(exportDirectory, PHOTO_EXPORT_DIRECTORY_NAME);
+    await FileSystem.makeDirectoryAsync(photosDirectory, { intermediates: true });
+
+    const uris = Array.from(collectPhotoUris(inventoryState));
+    const exported: string[] = [];
+    const failed: string[] = [];
+    const skipped: string[] = [];
+
+    let counter = 1;
+
+    for (const uri of uris) {
+      if (!uri) {
+        continue;
+      }
+
+      if (BUNDLED_ASSET_PATTERN.test(uri) || REMOTE_URI_PATTERN.test(uri) || uri.startsWith('data:')) {
+        skipped.push(uri);
+        continue;
+      }
+
+      try {
+        const info = await FileSystem.getInfoAsync(uri);
+        if (!info.exists) {
+          failed.push(uri);
+          continue;
+        }
+
+        const extension = sanitizeFilename(extractFileExtension(uri) ?? 'jpg', 'jpg');
+        const candidateName = extractFileName(uri) ?? `photo-${counter}`;
+        const filename = sanitizeFilename(candidateName.replace(/\.[^.]+$/, ''), `photo-${counter}`);
+        const targetPath = `${photosDirectory}${filename}.${extension}`;
+
+        await FileSystem.copyAsync({ from: uri, to: targetPath });
+        exported.push(targetPath);
+        counter += 1;
+      } catch (error) {
+        console.error('Failed to export photo', error);
+        failed.push(uri);
+      }
+    }
+
+    return { directory: photosDirectory, exported, failed, skipped } satisfies PhotoExportResult;
+  }, [ensureExportDirectory, inventoryState]);
+
   const value = useMemo<InventoryContextValue>(() => {
     return {
       cocktails: cocktailsWithRatings,
@@ -1257,6 +1415,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       getCocktailRating,
       setIgnoreGarnish: handleSetIgnoreGarnish,
       setAllowAllSubstitutes: handleSetAllowAllSubstitutes,
+      exportInventoryData,
+      exportInventoryPhotos,
     };
   }, [
     cocktailsWithRatings,
@@ -1283,6 +1443,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     handleSetIgnoreGarnish,
     handleSetAllowAllSubstitutes,
     resetInventoryFromBundle,
+    exportInventoryData,
+    exportInventoryPhotos,
   ]);
 
   return <InventoryContext.Provider value={value}>{children}</InventoryContext.Provider>;
