@@ -1,6 +1,6 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { Animated, Dimensions, Modal, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Alert, Animated, Dimensions, Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Colors } from '@/constants/theme';
 import { useInventory } from '@/providers/inventory-provider';
@@ -20,11 +20,15 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     setIgnoreGarnish,
     allowAllSubstitutes,
     setAllowAllSubstitutes,
+    exportInventoryData,
+    exportInventoryPhotos,
     resetInventoryFromBundle,
   } = useInventory();
   const [isMounted, setIsMounted] = useState(visible);
   const translateX = useRef(new Animated.Value(-MENU_WIDTH)).current;
   const backdropOpacity = useRef(new Animated.Value(0)).current;
+  const [isExportingData, setIsExportingData] = useState(false);
+  const [isExportingPhotos, setIsExportingPhotos] = useState(false);
 
   const drawerStyle = useMemo(
     () => [
@@ -89,6 +93,46 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   const handleResetInventory = async () => {
     await resetInventoryFromBundle();
     onClose();
+  };
+
+  const handleExportData = async () => {
+    if (isExportingData) {
+      return;
+    }
+
+    try {
+      setIsExportingData(true);
+      await exportInventoryData();
+      Alert.alert('Export complete', 'Saved inventory data to the selected folder.');
+      onClose();
+    } catch (error) {
+      console.warn('Failed to export inventory data', error);
+      Alert.alert('Export failed', 'Unable to export inventory data. Please try again.');
+    } finally {
+      setIsExportingData(false);
+    }
+  };
+
+  const handleExportPhotos = async () => {
+    if (isExportingPhotos) {
+      return;
+    }
+
+    try {
+      setIsExportingPhotos(true);
+      const { saved, failed } = await exportInventoryPhotos();
+      const summary = failed > 0
+        ? `${saved} photo(s) saved. ${failed} could not be exported.`
+        : `${saved} photo(s) saved to the selected folder.`;
+
+      Alert.alert('Photo export finished', summary);
+      onClose();
+    } catch (error) {
+      console.warn('Failed to export photos', error);
+      Alert.alert('Export failed', 'Unable to export photos. Please try again.');
+    } finally {
+      setIsExportingPhotos(false);
+    }
   };
 
   return (
@@ -176,14 +220,54 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   backgroundColor: palette.surface,
                 },
               ]}>
-              <View style={[styles.actionIcon, { backgroundColor: palette.surfaceVariant }]}>
+              <View style={[styles.actionIcon, { backgroundColor: palette.surfaceVariant }]}> 
                 <MaterialCommunityIcons name="refresh" size={16} color={palette.onSurfaceVariant} />
               </View>
               <View style={styles.settingTextContainer}>
                 <Text style={[styles.settingLabel, { color: palette.onSurface }]}>Reload bundled data</Text>
-                <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>
+                <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}> 
                   Clear saved inventory and reload assets from data.json
                 </Text>
+              </View>
+            </Pressable>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Export inventory data"
+              onPress={handleExportData}
+              style={[
+                styles.actionRow,
+                {
+                  borderColor: palette.outline,
+                  backgroundColor: palette.surface,
+                  opacity: isExportingData ? 0.7 : 1,
+                },
+              ]}>
+              <View style={[styles.actionIcon, { backgroundColor: palette.surfaceVariant }]}> 
+                <MaterialCommunityIcons name="file-download" size={16} color={palette.onSurfaceVariant} />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text style={[styles.settingLabel, { color: palette.onSurface }]}>Export data</Text>
+                <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>Save inventory JSON to a folder</Text>
+              </View>
+            </Pressable>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Export inventory photos"
+              onPress={handleExportPhotos}
+              style={[
+                styles.actionRow,
+                {
+                  borderColor: palette.outline,
+                  backgroundColor: palette.surface,
+                  opacity: isExportingPhotos ? 0.7 : 1,
+                },
+              ]}>
+              <View style={[styles.actionIcon, { backgroundColor: palette.surfaceVariant }]}> 
+                <MaterialCommunityIcons name="image-multiple" size={16} color={palette.onSurfaceVariant} />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text style={[styles.settingLabel, { color: palette.onSurface }]}>Export photos</Text>
+                <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>Pick a folder to copy all images</Text>
               </View>
             </Pressable>
           </View>
