@@ -1,6 +1,6 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { Animated, Dimensions, Modal, Pressable, StyleSheet, Text, View } from 'react-native';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Alert, Animated, Dimensions, Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Colors } from '@/constants/theme';
 import { useInventory } from '@/providers/inventory-provider';
@@ -21,7 +21,11 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     allowAllSubstitutes,
     setAllowAllSubstitutes,
     resetInventoryFromBundle,
+    exportInventoryData,
+    exportInventoryMedia,
   } = useInventory();
+  const [exportingData, setExportingData] = useState(false);
+  const [exportingPhotos, setExportingPhotos] = useState(false);
   const [isMounted, setIsMounted] = useState(visible);
   const translateX = useRef(new Animated.Value(-MENU_WIDTH)).current;
   const backdropOpacity = useRef(new Animated.Value(0)).current;
@@ -74,10 +78,6 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     }
   }, [backdropOpacity, translateX, visible]);
 
-  if (!isMounted) {
-    return null;
-  }
-
   const toggleIgnoreGarnish = () => {
     setIgnoreGarnish(!ignoreGarnish);
   };
@@ -90,6 +90,36 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     await resetInventoryFromBundle();
     onClose();
   };
+
+  const handleExportData = useCallback(async () => {
+    setExportingData(true);
+    try {
+      await exportInventoryData();
+    } catch (error) {
+      console.error('Failed to export data snapshot', error);
+      Alert.alert('Export failed', 'Unable to export data.json snapshot. Please try again.');
+    } finally {
+      setExportingData(false);
+    }
+  }, [exportInventoryData]);
+
+  const handleExportPhotos = useCallback(async () => {
+    setExportingPhotos(true);
+    try {
+      await exportInventoryMedia();
+    } catch (error) {
+      console.error('Failed to export photos', error);
+      Alert.alert('Export failed', 'Unable to export photos archive. Please try again.');
+    } finally {
+      setExportingPhotos(false);
+    }
+  }, [exportInventoryMedia]);
+
+  const actionsDisabled = exportingData || exportingPhotos;
+
+  if (!isMounted) {
+    return null;
+  }
 
   return (
     <Modal transparent visible={isMounted} statusBarTranslucent animationType="none" onRequestClose={onClose}>
@@ -183,6 +213,52 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 <Text style={[styles.settingLabel, { color: palette.onSurface }]}>Reload bundled data</Text>
                 <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>
                   Clear saved inventory and reload assets from data.json
+                </Text>
+              </View>
+            </Pressable>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Export data snapshot"
+              disabled={actionsDisabled}
+              onPress={handleExportData}
+              style={[
+                styles.actionRow,
+                {
+                  borderColor: palette.outline,
+                  backgroundColor: palette.surface,
+                  opacity: actionsDisabled ? 0.6 : 1,
+                },
+              ]}>
+              <View style={[styles.actionIcon, { backgroundColor: palette.surfaceVariant }]}>
+                <MaterialCommunityIcons name="file-export" size={16} color={palette.onSurfaceVariant} />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text style={[styles.settingLabel, { color: palette.onSurface }]}>Export data (JSON)</Text>
+                <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>
+                  {exportingData ? 'Preparing backup…' : 'Choose where to save data.json snapshot'}
+                </Text>
+              </View>
+            </Pressable>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Export photos archive"
+              disabled={actionsDisabled}
+              onPress={handleExportPhotos}
+              style={[
+                styles.actionRow,
+                {
+                  borderColor: palette.outline,
+                  backgroundColor: palette.surface,
+                  opacity: actionsDisabled ? 0.6 : 1,
+                },
+              ]}>
+              <View style={[styles.actionIcon, { backgroundColor: palette.surfaceVariant }]}>
+                <MaterialCommunityIcons name="folder-zip-outline" size={16} color={palette.onSurfaceVariant} />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text style={[styles.settingLabel, { color: palette.onSurface }]}>Export photos (.zip)</Text>
+                <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>
+                  {exportingPhotos ? 'Collecting images…' : 'Choose where to save images archive'}
                 </Text>
               </View>
             </Pressable>
