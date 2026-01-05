@@ -8,6 +8,10 @@ import React, {
   useState,
 } from 'react';
 
+import * as FileSystem from 'expo-file-system/legacy';
+import { Platform, Share } from 'react-native';
+
+import { resolveAssetFromCatalog } from '@/assets/image-manifest';
 import { clearInventorySnapshot, loadInventorySnapshot, persistInventorySnapshot } from '@/libs/inventory-storage';
 
 type InventoryData = typeof import('@/assets/data/data.json');
@@ -61,6 +65,8 @@ type InventoryContextValue = {
   clearBaseIngredient: (id: number) => void;
   createCocktail: (input: CreateCocktailInput) => Cocktail | undefined;
   createIngredient: (input: CreateIngredientInput) => Ingredient | undefined;
+  exportInventoryData: () => Promise<void>;
+  exportInventoryPhotos: () => Promise<void>;
   resetInventoryFromBundle: () => Promise<void>;
   updateIngredient: (id: number, input: CreateIngredientInput) => Ingredient | undefined;
   updateCocktail: (id: number, input: CreateCocktailInput) => Cocktail | undefined;
@@ -253,6 +259,44 @@ function createSnapshotFromInventory(
     ignoreGarnish: options.ignoreGarnish,
     allowAllSubstitutes: options.allowAllSubstitutes,
   } satisfies InventorySnapshot;
+}
+
+function collectPhotoUris(state: InventoryState): string[] {
+  const photoUris = new Set<string>();
+
+  state.ingredients.forEach((ingredient) => {
+    if (ingredient.photoUri) {
+      photoUris.add(ingredient.photoUri);
+    }
+  });
+
+  state.cocktails.forEach((cocktail) => {
+    if (cocktail.photoUri) {
+      photoUris.add(cocktail.photoUri);
+    }
+  });
+
+  return [...photoUris];
+}
+
+function createExportSlug(prefix: string): string {
+  const timestamp = new Date();
+  const safeStamp = timestamp
+    .toISOString()
+    .replace(/[:T]/g, '-')
+    .replace(/\..+$/, '');
+
+  return `${prefix}-${safeStamp}`;
+}
+
+async function shareFileForExport(path: string, dialogTitle: string) {
+  const targetUri = Platform.OS === 'android' ? await FileSystem.getContentUriAsync(path) : path;
+
+  await Share.share({
+    title: dialogTitle,
+    message: dialogTitle,
+    url: targetUri,
+  });
 }
 
 const InventoryContext = createContext<InventoryContextValue | undefined>(undefined);
@@ -771,6 +815,97 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     setAllowAllSubstitutes(false);
   }, []);
 
+  const exportInventoryData = useCallback(async () => {
+    if (!inventoryState) {
+      return;
+    }
+
+    const snapshot = createSnapshotFromInventory(inventoryState, {
+      availableIngredientIds,
+      shoppingIngredientIds,
+      cocktailRatings,
+      ignoreGarnish,
+      allowAllSubstitutes,
+    });
+
+    const directory = FileSystem.cacheDirectory ?? FileSystem.documentDirectory;
+    if (!directory) {
+      console.warn('No writable directory available for export');
+      return;
+    }
+
+    const filename = `${createExportSlug('yourbar-backup')}.json`;
+    const exportPath = `${directory}${filename}`;
+
+    await FileSystem.writeAsStringAsync(exportPath, JSON.stringify(snapshot, null, 2));
+    await shareFileForExport(exportPath, 'Export inventory data');
+  }, [
+    allowAllSubstitutes,
+    availableIngredientIds,
+    cocktailRatings,
+    ignoreGarnish,
+    inventoryState,
+    shoppingIngredientIds,
+  ]);
+
+  const exportInventoryPhotos = useCallback(async () => {
+    if (!inventoryState) {
+      return;
+    }
+
+    const directory = FileSystem.cacheDirectory ?? FileSystem.documentDirectory;
+    if (!directory) {
+      console.warn('No writable directory available for export');
+      return;
+    }
+
+    const photoUris = collectPhotoUris(inventoryState).filter((uri) => !resolveAssetFromCatalog(uri));
+    if (photoUris.length === 0) {
+      console.warn('No custom photos to export');
+      return;
+    }
+
+    const photos: { sourceUri: string; filename: string; base64: string }[] = [];
+
+    for (const uri of photoUris) {
+      try {
+        const info = await FileSystem.getInfoAsync(uri);
+        if (!info.exists) {
+          continue;
+        }
+
+        const filename = uri.split('/').pop() || 'photo.jpg';
+        const base64 = await FileSystem.readAsStringAsync(uri, {
+          encoding: FileSystem.EncodingType.Base64,
+        });
+
+        photos.push({
+          sourceUri: uri,
+          filename,
+          base64,
+        });
+      } catch (error) {
+        console.warn('Failed to export photo', uri, error);
+      }
+    }
+
+    if (photos.length === 0) {
+      console.warn('No readable custom photos to export');
+      return;
+    }
+
+    const payload = {
+      generatedAt: new Date().toISOString(),
+      photos,
+    };
+
+    const filename = `${createExportSlug('yourbar-photos')}.json`;
+    const exportPath = `${directory}${filename}`;
+
+    await FileSystem.writeAsStringAsync(exportPath, JSON.stringify(payload, null, 2));
+    await shareFileForExport(exportPath, 'Export photos');
+  }, [inventoryState]);
+
   const updateIngredient = useCallback(
     (id: number, input: CreateIngredientInput) => {
       let updated: Ingredient | undefined;
@@ -1247,6 +1382,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       clearBaseIngredient,
       createCocktail,
       createIngredient,
+      exportInventoryData,
+      exportInventoryPhotos,
       resetInventoryFromBundle,
       updateCocktail,
       updateIngredient,
@@ -1272,6 +1409,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     clearBaseIngredient,
     createCocktail,
     createIngredient,
+    exportInventoryData,
+    exportInventoryPhotos,
     resetInventoryFromBundle,
     updateCocktail,
     updateIngredient,
@@ -1282,7 +1421,6 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     getCocktailRating,
     handleSetIgnoreGarnish,
     handleSetAllowAllSubstitutes,
-    resetInventoryFromBundle,
   ]);
 
   return <InventoryContext.Provider value={value}>{children}</InventoryContext.Provider>;
