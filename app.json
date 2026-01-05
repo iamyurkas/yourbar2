@@ -1,17 +1,19 @@
 {
   "expo": {
-    "name": "yourbar2",
-    "slug": "yourbar2",
+    "name": "Your Bar",
+    "slug": "your-bar",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "yourbar2",
+    "scheme": "yourbar",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true
     },
     "android": {
+      "package": "com.yourbar.app",
+      "versionCode": 1,
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
