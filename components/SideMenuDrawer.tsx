@@ -1,6 +1,6 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { Alert, Animated, Dimensions, Modal, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Alert, Animated, Dimensions, Modal, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Colors } from '@/constants/theme';
 import { useInventory } from '@/providers/inventory-provider';
@@ -103,7 +103,10 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     setIsExportingData(true);
     try {
       const targetPath = await exportInventoryData();
-      Alert.alert('Export complete', `Saved inventory snapshot to:\n${targetPath}`);
+      const locationHint = Platform.OS === 'android'
+        ? 'Saved inventory snapshot to the folder you selected.'
+        : `Saved inventory snapshot to:\n${targetPath}`;
+      Alert.alert('Export complete', locationHint);
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unable to export inventory data.';
       Alert.alert('Export failed', message);

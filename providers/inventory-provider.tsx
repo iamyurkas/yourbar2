@@ -8,6 +8,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
+import { Platform } from 'react-native';
 
 import { clearInventorySnapshot, loadInventorySnapshot, persistInventorySnapshot } from '@/libs/inventory-storage';
 
@@ -297,6 +298,28 @@ function extractFileExtension(uri: string): string | undefined {
   }
 
   return basename.slice(lastDotIndex + 1);
+}
+
+function getMimeType(extension: string): string {
+  const normalized = extension.toLowerCase();
+
+  switch (normalized) {
+    case 'png':
+      return 'image/png';
+    case 'webp':
+      return 'image/webp';
+    case 'heic':
+    case 'heif':
+      return 'image/heic';
+    case 'gif':
+      return 'image/gif';
+    case 'bmp':
+      return 'image/bmp';
+    case 'svg':
+      return 'image/svg+xml';
+    default:
+      return 'image/jpeg';
+  }
 }
 
 function collectPhotoUris(state: InventoryState): Set<string> {
@@ -1298,6 +1321,20 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     });
   }, []);
 
+  const requestExportDirectoryFromUser = useCallback(async () => {
+    if (Platform.OS !== 'android') {
+      throw new Error('Selecting a destination folder is only supported on Android for now.');
+    }
+
+    const permissions = await FileSystem.StorageAccessFramework.requestDirectoryPermissionsAsync(true);
+
+    if (!permissions.granted || !permissions.directoryUri) {
+      throw new Error('Export canceled. No destination folder selected.');
+    }
+
+    return permissions.directoryUri;
+  }, []);
+
   const ensureExportDirectory = useCallback(async () => {
     const documentDirectory = FileSystem.documentDirectory;
 
@@ -1317,7 +1354,6 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       throw new Error('Inventory is still loading. Try again in a moment.');
     }
 
-    const exportDirectory = await ensureExportDirectory();
     const snapshot = createSnapshotFromInventory(inventoryState, {
       availableIngredientIds,
       shoppingIngredientIds,
@@ -1325,6 +1361,27 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       ignoreGarnish,
       allowAllSubstitutes,
     });
+
+    if (Platform.OS === 'android') {
+      const directoryUri = await requestExportDirectoryFromUser();
+      const targetUri = await FileSystem.StorageAccessFramework.createFileAsync(
+        directoryUri,
+        'inventory-state',
+        'application/json',
+      );
+
+      await FileSystem.StorageAccessFramework.writeAsStringAsync(
+        targetUri,
+        JSON.stringify(snapshot, null, 2),
+        {
+          encoding: FileSystem.EncodingType.UTF8,
+        },
+      );
+
+      return targetUri;
+    }
+
+    const exportDirectory = await ensureExportDirectory();
 
     const targetPath = `${exportDirectory}inventory-state.json`;
     await FileSystem.writeAsStringAsync(targetPath, JSON.stringify(snapshot, null, 2));
@@ -1345,16 +1402,64 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       throw new Error('Inventory is still loading. Try again in a moment.');
     }
 
-    const exportDirectory = await ensureExportDirectory();
-    const photosDirectory = createExportDirectoryPath(exportDirectory, PHOTO_EXPORT_DIRECTORY_NAME);
-    await FileSystem.makeDirectoryAsync(photosDirectory, { intermediates: true });
-
     const uris = Array.from(collectPhotoUris(inventoryState));
     const exported: string[] = [];
     const failed: string[] = [];
     const skipped: string[] = [];
 
     let counter = 1;
+
+    if (Platform.OS === 'android') {
+      const directoryUri = await requestExportDirectoryFromUser();
+
+      for (const uri of uris) {
+        if (!uri) {
+          continue;
+        }
+
+        if (BUNDLED_ASSET_PATTERN.test(uri) || REMOTE_URI_PATTERN.test(uri) || uri.startsWith('data:')) {
+          skipped.push(uri);
+          continue;
+        }
+
+        try {
+          const info = await FileSystem.getInfoAsync(uri);
+          if (!info.exists) {
+            failed.push(uri);
+            continue;
+          }
+
+          const extension = sanitizeFilename(extractFileExtension(uri) ?? 'jpg', 'jpg');
+          const candidateName = extractFileName(uri) ?? `photo-${counter}`;
+          const filename = sanitizeFilename(candidateName.replace(/\.[^.]+$/, ''), `photo-${counter}`);
+          const fileUri = await FileSystem.StorageAccessFramework.createFileAsync(
+            directoryUri,
+            `${filename}.${extension}`,
+            getMimeType(extension),
+          );
+
+          const photoContents = await FileSystem.readAsStringAsync(uri, {
+            encoding: FileSystem.EncodingType.Base64,
+          });
+
+          await FileSystem.StorageAccessFramework.writeAsStringAsync(fileUri, photoContents, {
+            encoding: FileSystem.EncodingType.Base64,
+          });
+
+          exported.push(fileUri);
+          counter += 1;
+        } catch (error) {
+          console.error('Failed to export photo', error);
+          failed.push(uri);
+        }
+      }
+
+      return { directory: directoryUri, exported, failed, skipped } satisfies PhotoExportResult;
+    }
+
+    const exportDirectory = await ensureExportDirectory();
+    const photosDirectory = createExportDirectoryPath(exportDirectory, PHOTO_EXPORT_DIRECTORY_NAME);
+    await FileSystem.makeDirectoryAsync(photosDirectory, { intermediates: true });
 
     for (const uri of uris) {
       if (!uri) {
@@ -1388,7 +1493,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     }
 
     return { directory: photosDirectory, exported, failed, skipped } satisfies PhotoExportResult;
-  }, [ensureExportDirectory, inventoryState]);
+  }, [ensureExportDirectory, inventoryState, requestExportDirectoryFromUser]);
 
   const value = useMemo<InventoryContextValue>(() => {
     return {
