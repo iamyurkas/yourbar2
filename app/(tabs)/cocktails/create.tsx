@@ -676,10 +676,13 @@ export default function CreateCocktailScreen() {
   const handleRequestCreateIngredient = useCallback((suggested: string) => {
     const trimmed = suggested.trim();
     if (!trimmed) {
-      router.push('/ingredients/create');
+      router.push({ pathname: '/ingredients/create', params: { returnTo: 'cocktail-form' } });
       return;
     }
-    router.push({ pathname: '/ingredients/create', params: { suggestedName: trimmed } });
+    router.push({
+      pathname: '/ingredients/create',
+      params: { suggestedName: trimmed, returnTo: 'cocktail-form' },
+    });
   }, []);
 
   const handleSelectSubstituteCandidate = useCallback(

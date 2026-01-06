@@ -39,11 +39,15 @@ type IngredientFormSnapshot = {
 };
 
 export default function CreateIngredientScreen() {
-  const params = useLocalSearchParams<{ suggestedName?: string }>();
+  const params = useLocalSearchParams<{ suggestedName?: string; returnTo?: string }>();
   const suggestedNameParam = useMemo(() => {
     const value = Array.isArray(params.suggestedName) ? params.suggestedName[0] : params.suggestedName;
     return typeof value === 'string' ? value : undefined;
   }, [params.suggestedName]);
+  const returnToParam = useMemo(() => {
+    const value = Array.isArray(params.returnTo) ? params.returnTo[0] : params.returnTo;
+    return value === 'cocktail-form' ? value : undefined;
+  }, [params.returnTo]);
 
   const navigation = useNavigation();
   const palette = Colors;
@@ -235,6 +239,11 @@ export default function CreateIngredientScreen() {
       return;
     }
 
+    if (returnToParam === 'cocktail-form') {
+      router.back();
+      return;
+    }
+
     router.replace({
       pathname: '/ingredients/[ingredientId]',
       params: { ingredientId: String(targetId) },
@@ -245,6 +254,7 @@ export default function CreateIngredientScreen() {
     description,
     imageUri,
     name,
+    returnToParam,
     setHasUnsavedChanges,
     showDialog,
     selectedTagIds,
