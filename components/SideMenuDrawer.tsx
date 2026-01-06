@@ -258,7 +258,6 @@ function StartScreenModal({ visible, selectedKey, onSelect, onClose }: StartScre
         <Pressable
           onPress={(event) => event.stopPropagation()}
           style={[styles.modalCard, { backgroundColor: palette.surface }]}
-          accessibilityRole="dialog"
           accessibilityLabel="Starting screen options">
           <Text style={[styles.modalTitle, { color: palette.onSurface }]}>Starting screen</Text>
           <View style={styles.modalOptions}>
