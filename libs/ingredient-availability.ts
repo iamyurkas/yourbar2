@@ -133,9 +133,10 @@ function collectVisibleIngredientIds(
 
   const record = lookup.ingredientById.get(ingredientId);
   const baseId = normalizeIngredientId(record?.baseIngredientId);
+  const allowBrandedForBase = allowBrand || baseId == null;
 
   if (baseId == null) {
-    if (allowBrand) {
+    if (allowBrandedForBase) {
       lookup.brandsByBaseId.get(ingredientId)?.forEach((id) => accumulator.add(id));
     }
     return;
@@ -145,7 +146,7 @@ function collectVisibleIngredientIds(
     accumulator.add(baseId);
   }
 
-  if (allowBrand) {
+  if (allowBrandedForBase) {
     lookup.brandsByBaseId.get(baseId)?.forEach((id) => accumulator.add(id));
   }
 }
@@ -196,11 +197,12 @@ export function resolveIngredientAvailability(
 
   const allowBase = ingredient.allowBaseSubstitution || allowAllSubstitutes;
   const allowBrand = ingredient.allowBrandSubstitution || allowAllSubstitutes;
+  const allowBrandedForBase = allowBrand || baseId == null;
 
   const baseSubstituteIds = allowBase && baseId != null ? [baseId] : [];
   const brandedSubstituteSet = new Set<number>();
 
-  if (allowBrand && baseId != null) {
+  if (allowBrandedForBase && baseId != null) {
     lookup.brandsByBaseId.get(baseId)?.forEach((id) => {
       if (id !== requestedId) {
         brandedSubstituteSet.add(id);
@@ -208,7 +210,7 @@ export function resolveIngredientAvailability(
     });
   }
 
-  if (allowBrand && requestedId != null && baseId == null) {
+  if (allowBrandedForBase && requestedId != null && baseId == null) {
     lookup.brandsByBaseId.get(requestedId)?.forEach((id) => {
       if (id !== requestedId) {
         brandedSubstituteSet.add(id);
@@ -236,9 +238,10 @@ export function resolveIngredientAvailability(
 
     const record = lookup.ingredientById.get(candidateId);
     const candidateBaseId = normalizeIngredientId(record?.baseIngredientId);
+    const allowBrandedCandidate = allowBrand || candidateBaseId == null;
 
     if (candidateBaseId == null) {
-      if (allowBrand) {
+      if (allowBrandedCandidate) {
         lookup.brandsByBaseId.get(candidateId)?.forEach((id) => addCandidate(id));
       }
       return;
@@ -248,7 +251,7 @@ export function resolveIngredientAvailability(
       addCandidate(candidateBaseId);
     }
 
-    if (allowBrand) {
+    if (allowBrandedCandidate) {
       lookup.brandsByBaseId.get(candidateBaseId)?.forEach((id) => addCandidate(id));
     }
   };
