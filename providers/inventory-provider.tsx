@@ -1,3 +1,4 @@
+import * as FileSystem from 'expo-file-system/legacy';
 import React, {
   createContext,
   useCallback,
@@ -7,6 +8,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
+import { Platform } from 'react-native';
 
 import { clearInventorySnapshot, loadInventorySnapshot, persistInventorySnapshot } from '@/libs/inventory-storage';
 
@@ -38,6 +40,12 @@ type CocktailRecord = Omit<BaseCocktailRecord, 'ingredients' | 'searchName' | 's
   searchTokens?: string[] | null;
 };
 type IngredientRecord = InventoryData['ingredients'][number];
+type PhotoExportResult = {
+  directory: string;
+  exported: string[];
+  failed: string[];
+  skipped: string[];
+};
 
 type NormalizedSearchFields = {
   searchNameNormalized: string;
@@ -71,6 +79,8 @@ type InventoryContextValue = {
   getCocktailRating: (cocktail: Cocktail) => number;
   setIgnoreGarnish: (value: boolean) => void;
   setAllowAllSubstitutes: (value: boolean) => void;
+  exportInventoryData: () => Promise<string>;
+  exportInventoryPhotos: () => Promise<PhotoExportResult>;
 };
 
 type InventoryState = {
@@ -132,6 +142,10 @@ type InventorySnapshot = {
 };
 
 const INVENTORY_SNAPSHOT_VERSION = 1;
+const EXPORT_DIRECTORY_NAME = 'yourbar-export';
+const PHOTO_EXPORT_DIRECTORY_NAME = 'photos';
+const BUNDLED_ASSET_PATTERN = /^assets\//i;
+const REMOTE_URI_PATTERN = /^https?:\/\//i;
 
 declare global {
   // eslint-disable-next-line no-var
@@ -253,6 +267,81 @@ function createSnapshotFromInventory(
     ignoreGarnish: options.ignoreGarnish,
     allowAllSubstitutes: options.allowAllSubstitutes,
   } satisfies InventorySnapshot;
+}
+
+function sanitizeFilename(candidate: string, fallback: string): string {
+  const sanitized = candidate.replace(/[^\w.-]/g, '_').replace(/_+/g, '_').replace(/^_+|_+$/g, '');
+
+  return sanitized || fallback;
+}
+
+function extractFileName(uri: string): string | undefined {
+  const segments = uri.split('/');
+  const lastSegment = segments[segments.length - 1];
+  if (!lastSegment) {
+    return undefined;
+  }
+
+  const [basename] = lastSegment.split(/[?#]/);
+  return basename || undefined;
+}
+
+function extractFileExtension(uri: string): string | undefined {
+  const basename = extractFileName(uri);
+  if (!basename) {
+    return undefined;
+  }
+
+  const lastDotIndex = basename.lastIndexOf('.');
+  if (lastDotIndex <= 0 || lastDotIndex === basename.length - 1) {
+    return undefined;
+  }
+
+  return basename.slice(lastDotIndex + 1);
+}
+
+function getMimeType(extension: string): string {
+  const normalized = extension.toLowerCase();
+
+  switch (normalized) {
+    case 'png':
+      return 'image/png';
+    case 'webp':
+      return 'image/webp';
+    case 'heic':
+    case 'heif':
+      return 'image/heic';
+    case 'gif':
+      return 'image/gif';
+    case 'bmp':
+      return 'image/bmp';
+    case 'svg':
+      return 'image/svg+xml';
+    default:
+      return 'image/jpeg';
+  }
+}
+
+function collectPhotoUris(state: InventoryState): Set<string> {
+  const uris = new Set<string>();
+
+  state.cocktails.forEach((cocktail) => {
+    if (cocktail.photoUri) {
+      uris.add(cocktail.photoUri);
+    }
+  });
+
+  state.ingredients.forEach((ingredient) => {
+    if (ingredient.photoUri) {
+      uris.add(ingredient.photoUri);
+    }
+  });
+
+  return uris;
+}
+
+function createExportDirectoryPath(directory: string, name: string): string {
+  return `${directory.replace(/\/?$/, '/')}${name.replace(/^\//, '')}/`;
 }
 
 const InventoryContext = createContext<InventoryContextValue | undefined>(undefined);
@@ -1232,6 +1321,180 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     });
   }, []);
 
+  const requestExportDirectoryFromUser = useCallback(async () => {
+    if (Platform.OS !== 'android') {
+      throw new Error('Selecting a destination folder is only supported on Android for now.');
+    }
+
+    const permissions = await FileSystem.StorageAccessFramework.requestDirectoryPermissionsAsync(true);
+
+    if (!permissions.granted || !permissions.directoryUri) {
+      throw new Error('Export canceled. No destination folder selected.');
+    }
+
+    return permissions.directoryUri;
+  }, []);
+
+  const ensureExportDirectory = useCallback(async () => {
+    const documentDirectory = FileSystem.documentDirectory;
+
+    if (!documentDirectory) {
+      throw new Error('Document directory is unavailable on this device.');
+    }
+
+    const exportDirectory = createExportDirectoryPath(documentDirectory, EXPORT_DIRECTORY_NAME);
+
+    await FileSystem.makeDirectoryAsync(exportDirectory, { intermediates: true });
+
+    return exportDirectory;
+  }, []);
+
+  const exportInventoryData = useCallback(async () => {
+    if (!inventoryState) {
+      throw new Error('Inventory is still loading. Try again in a moment.');
+    }
+
+    const snapshot = createSnapshotFromInventory(inventoryState, {
+      availableIngredientIds,
+      shoppingIngredientIds,
+      cocktailRatings,
+      ignoreGarnish,
+      allowAllSubstitutes,
+    });
+
+    if (Platform.OS === 'android') {
+      const directoryUri = await requestExportDirectoryFromUser();
+      const targetUri = await FileSystem.StorageAccessFramework.createFileAsync(
+        directoryUri,
+        'inventory-state',
+        'application/json',
+      );
+
+      await FileSystem.StorageAccessFramework.writeAsStringAsync(
+        targetUri,
+        JSON.stringify(snapshot, null, 2),
+        {
+          encoding: FileSystem.EncodingType.UTF8,
+        },
+      );
+
+      return targetUri;
+    }
+
+    const exportDirectory = await ensureExportDirectory();
+
+    const targetPath = `${exportDirectory}inventory-state.json`;
+    await FileSystem.writeAsStringAsync(targetPath, JSON.stringify(snapshot, null, 2));
+
+    return targetPath;
+  }, [
+    allowAllSubstitutes,
+    availableIngredientIds,
+    cocktailRatings,
+    ensureExportDirectory,
+    ignoreGarnish,
+    inventoryState,
+    shoppingIngredientIds,
+  ]);
+
+  const exportInventoryPhotos = useCallback(async () => {
+    if (!inventoryState) {
+      throw new Error('Inventory is still loading. Try again in a moment.');
+    }
+
+    const uris = Array.from(collectPhotoUris(inventoryState));
+    const exported: string[] = [];
+    const failed: string[] = [];
+    const skipped: string[] = [];
+
+    let counter = 1;
+
+    if (Platform.OS === 'android') {
+      const directoryUri = await requestExportDirectoryFromUser();
+
+      for (const uri of uris) {
+        if (!uri) {
+          continue;
+        }
+
+        if (BUNDLED_ASSET_PATTERN.test(uri) || REMOTE_URI_PATTERN.test(uri) || uri.startsWith('data:')) {
+          skipped.push(uri);
+          continue;
+        }
+
+        try {
+          const info = await FileSystem.getInfoAsync(uri);
+          if (!info.exists) {
+            failed.push(uri);
+            continue;
+          }
+
+          const extension = sanitizeFilename(extractFileExtension(uri) ?? 'jpg', 'jpg');
+          const candidateName = extractFileName(uri) ?? `photo-${counter}`;
+          const filename = sanitizeFilename(candidateName.replace(/\.[^.]+$/, ''), `photo-${counter}`);
+          const fileUri = await FileSystem.StorageAccessFramework.createFileAsync(
+            directoryUri,
+            `${filename}.${extension}`,
+            getMimeType(extension),
+          );
+
+          const photoContents = await FileSystem.readAsStringAsync(uri, {
+            encoding: FileSystem.EncodingType.Base64,
+          });
+
+          await FileSystem.StorageAccessFramework.writeAsStringAsync(fileUri, photoContents, {
+            encoding: FileSystem.EncodingType.Base64,
+          });
+
+          exported.push(fileUri);
+          counter += 1;
+        } catch (error) {
+          console.error('Failed to export photo', error);
+          failed.push(uri);
+        }
+      }
+
+      return { directory: directoryUri, exported, failed, skipped } satisfies PhotoExportResult;
+    }
+
+    const exportDirectory = await ensureExportDirectory();
+    const photosDirectory = createExportDirectoryPath(exportDirectory, PHOTO_EXPORT_DIRECTORY_NAME);
+    await FileSystem.makeDirectoryAsync(photosDirectory, { intermediates: true });
+
+    for (const uri of uris) {
+      if (!uri) {
+        continue;
+      }
+
+      if (BUNDLED_ASSET_PATTERN.test(uri) || REMOTE_URI_PATTERN.test(uri) || uri.startsWith('data:')) {
+        skipped.push(uri);
+        continue;
+      }
+
+      try {
+        const info = await FileSystem.getInfoAsync(uri);
+        if (!info.exists) {
+          failed.push(uri);
+          continue;
+        }
+
+        const extension = sanitizeFilename(extractFileExtension(uri) ?? 'jpg', 'jpg');
+        const candidateName = extractFileName(uri) ?? `photo-${counter}`;
+        const filename = sanitizeFilename(candidateName.replace(/\.[^.]+$/, ''), `photo-${counter}`);
+        const targetPath = `${photosDirectory}${filename}.${extension}`;
+
+        await FileSystem.copyAsync({ from: uri, to: targetPath });
+        exported.push(targetPath);
+        counter += 1;
+      } catch (error) {
+        console.error('Failed to export photo', error);
+        failed.push(uri);
+      }
+    }
+
+    return { directory: photosDirectory, exported, failed, skipped } satisfies PhotoExportResult;
+  }, [ensureExportDirectory, inventoryState, requestExportDirectoryFromUser]);
+
   const value = useMemo<InventoryContextValue>(() => {
     return {
       cocktails: cocktailsWithRatings,
@@ -1257,6 +1520,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       getCocktailRating,
       setIgnoreGarnish: handleSetIgnoreGarnish,
       setAllowAllSubstitutes: handleSetAllowAllSubstitutes,
+      exportInventoryData,
+      exportInventoryPhotos,
     };
   }, [
     cocktailsWithRatings,
@@ -1283,6 +1548,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     handleSetIgnoreGarnish,
     handleSetAllowAllSubstitutes,
     resetInventoryFromBundle,
+    exportInventoryData,
+    exportInventoryPhotos,
   ]);
 
   return <InventoryContext.Provider value={value}>{children}</InventoryContext.Provider>;
