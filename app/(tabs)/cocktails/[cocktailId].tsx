@@ -11,16 +11,16 @@ import { ListRow, Thumb } from '@/components/RowParts';
 import { TagPill } from '@/components/TagPill';
 import { COCKTAIL_UNIT_DICTIONARY } from '@/constants/cocktail-units';
 import { Colors } from '@/constants/theme';
-import {
-  useInventory,
-  type Cocktail,
-} from '@/providers/inventory-provider';
+import { resolveImageSource } from '@/libs/image-source';
 import {
   createIngredientLookup,
   resolveIngredientAvailability,
   type IngredientLookup,
 } from '@/libs/ingredient-availability';
-import { resolveImageSource } from '@/libs/image-source';
+import {
+  useInventory,
+  type Cocktail,
+} from '@/providers/inventory-provider';
 import { palette as appPalette } from '@/theme/theme';
 
 type RecipeIngredient = NonNullable<Cocktail['ingredients']>[number];
@@ -747,7 +747,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     paddingVertical: 8,
     paddingHorizontal: 20,
-    borderRadius: 999,
+    borderRadius: 8,
     borderWidth: 1,
   },
   toggleUnitsLabel: {
