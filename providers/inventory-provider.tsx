@@ -57,6 +57,7 @@ type InventoryContextValue = {
   allowAllSubstitutes: boolean;
   useImperialUnits: boolean;
   keepScreenAwake: boolean;
+  favoritesMinRating: number;
   setIngredientAvailability: (id: number, available: boolean) => void;
   toggleIngredientAvailability: (id: number) => void;
   toggleIngredientShopping: (id: number) => void;
@@ -75,6 +76,7 @@ type InventoryContextValue = {
   setAllowAllSubstitutes: (value: boolean) => void;
   setUseImperialUnits: (value: boolean) => void;
   setKeepScreenAwake: (value: boolean) => void;
+  setFavoritesMinRating: (value: number) => void;
 };
 
 type InventoryState = {
@@ -135,6 +137,7 @@ type InventorySnapshot = {
   allowAllSubstitutes?: boolean;
   useImperialUnits?: boolean;
   keepScreenAwake?: boolean;
+  favoritesMinRating?: number;
 };
 
 const INVENTORY_SNAPSHOT_VERSION = 1;
@@ -156,6 +159,13 @@ declare global {
   var __yourbarInventoryUseImperialUnits: boolean | undefined;
   // eslint-disable-next-line no-var
   var __yourbarInventoryKeepScreenAwake: boolean | undefined;
+  // eslint-disable-next-line no-var
+  var __yourbarInventoryFavoritesMinRating: number | undefined;
+}
+
+function sanitizeFavoritesMinRating(value?: number | null): number {
+  const normalized = Math.round(Number(value) || 0);
+  return Math.min(5, Math.max(1, normalized || 1));
 }
 
 function normalizeSearchFields<T extends { name?: string | null; searchName?: string | null; searchTokens?: string[] | null }>(
@@ -244,6 +254,7 @@ function createSnapshotFromInventory(
     allowAllSubstitutes: boolean;
     useImperialUnits: boolean;
     keepScreenAwake: boolean;
+    favoritesMinRating: number;
   },
 ): InventorySnapshot {
   const sanitizedRatings = sanitizeCocktailRatings(options.cocktailRatings);
@@ -266,6 +277,7 @@ function createSnapshotFromInventory(
     allowAllSubstitutes: options.allowAllSubstitutes,
     useImperialUnits: options.useImperialUnits,
     keepScreenAwake: options.keepScreenAwake,
+    favoritesMinRating: sanitizeFavoritesMinRating(options.favoritesMinRating),
   } satisfies InventorySnapshot;
 }
 
@@ -305,6 +317,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   const [keepScreenAwake, setKeepScreenAwake] = useState<boolean>(
     () => globalThis.__yourbarInventoryKeepScreenAwake ?? false,
   );
+  const [favoritesMinRating, setFavoritesMinRating] = useState<number>(() =>
+    sanitizeFavoritesMinRating(globalThis.__yourbarInventoryFavoritesMinRating),
+  );
   const lastPersistedSnapshot = useRef<string | undefined>(undefined);
 
   useEffect(() => {
@@ -327,6 +342,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           const nextAllowAllSubstitutes = stored.allowAllSubstitutes ?? false;
           const nextUseImperialUnits = stored.useImperialUnits ?? false;
           const nextKeepScreenAwake = stored.keepScreenAwake ?? false;
+          const nextFavoritesMinRating = sanitizeFavoritesMinRating(
+            stored.favoritesMinRating ?? 1,
+          );
 
           setInventoryState(nextInventoryState);
           setAvailableIngredientIds(nextAvailableIds);
@@ -336,6 +354,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           setAllowAllSubstitutes(nextAllowAllSubstitutes);
           setUseImperialUnits(nextUseImperialUnits);
           setKeepScreenAwake(nextKeepScreenAwake);
+          setFavoritesMinRating(nextFavoritesMinRating);
           return;
         }
       } catch (error) {
@@ -353,6 +372,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           setAllowAllSubstitutes(false);
           setUseImperialUnits(false);
           setKeepScreenAwake(false);
+          setFavoritesMinRating(1);
         }
       } catch (error) {
         console.error('Failed to import bundled inventory', error);
@@ -381,6 +401,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     globalThis.__yourbarInventoryAllowAllSubstitutes = allowAllSubstitutes;
     globalThis.__yourbarInventoryUseImperialUnits = useImperialUnits;
     globalThis.__yourbarInventoryKeepScreenAwake = keepScreenAwake;
+    globalThis.__yourbarInventoryFavoritesMinRating = favoritesMinRating;
 
     const snapshot = createSnapshotFromInventory(inventoryState, {
       availableIngredientIds,
@@ -390,6 +411,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       allowAllSubstitutes,
       useImperialUnits,
       keepScreenAwake,
+      favoritesMinRating,
     });
     const serialized = JSON.stringify(snapshot);
 
@@ -411,6 +433,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     allowAllSubstitutes,
     useImperialUnits,
     keepScreenAwake,
+    favoritesMinRating,
   ]);
 
   const cocktails = inventoryState?.cocktails ?? [];
@@ -1247,6 +1270,10 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     setKeepScreenAwake(Boolean(value));
   }, []);
 
+  const handleSetFavoritesMinRating = useCallback((value: number) => {
+    setFavoritesMinRating(sanitizeFavoritesMinRating(value));
+  }, []);
+
   const clearBaseIngredient = useCallback((id: number) => {
     setInventoryState((prev) => {
       if (!prev) {
@@ -1284,6 +1311,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       allowAllSubstitutes,
       useImperialUnits,
       keepScreenAwake,
+      favoritesMinRating,
       setIngredientAvailability,
       toggleIngredientAvailability,
       toggleIngredientShopping,
@@ -1298,10 +1326,12 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       cocktailRatings,
       setCocktailRating,
       getCocktailRating,
+      favoritesMinRating,
       setIgnoreGarnish: handleSetIgnoreGarnish,
       setAllowAllSubstitutes: handleSetAllowAllSubstitutes,
       setUseImperialUnits: handleSetUseImperialUnits,
       setKeepScreenAwake: handleSetKeepScreenAwake,
+      setFavoritesMinRating: handleSetFavoritesMinRating,
     };
   }, [
     cocktailsWithRatings,
@@ -1313,6 +1343,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     allowAllSubstitutes,
     useImperialUnits,
     keepScreenAwake,
+    favoritesMinRating,
     setIngredientAvailability,
     toggleIngredientAvailability,
     toggleIngredientShopping,
@@ -1327,10 +1358,12 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     cocktailRatings,
     setCocktailRating,
     getCocktailRating,
+    favoritesMinRating,
     handleSetIgnoreGarnish,
     handleSetAllowAllSubstitutes,
     handleSetUseImperialUnits,
     handleSetKeepScreenAwake,
+    handleSetFavoritesMinRating,
     resetInventoryFromBundle,
   ]);
 

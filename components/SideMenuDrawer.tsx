@@ -24,6 +24,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     setUseImperialUnits,
     keepScreenAwake,
     setKeepScreenAwake,
+    favoritesMinRating,
+    setFavoritesMinRating,
     resetInventoryFromBundle,
   } = useInventory();
   const [isMounted, setIsMounted] = useState(visible);
@@ -96,6 +98,10 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
   const toggleKeepScreenAwake = () => {
     setKeepScreenAwake(!keepScreenAwake);
+  };
+
+  const handleFavoritesRatingChange = (value: number) => {
+    setFavoritesMinRating(value);
   };
 
   const handleResetInventory = async () => {
@@ -237,6 +243,46 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>Prevent sleep on cocktail view</Text>
               </View>
             </Pressable>
+            <View
+              accessibilityRole="adjustable"
+              accessibilityLabel="Favorites rating filter"
+              style={[
+                styles.settingRow,
+                {
+                  borderColor: palette.outline,
+                  backgroundColor: palette.surface,
+                },
+              ]}>
+              <View style={styles.settingTextContainer}>
+                <Text style={[styles.settingLabel, { color: palette.onSurface }]}>Favorites rating</Text>
+                <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>Minimum stars to show</Text>
+              </View>
+              <View style={styles.ratingOptions}>
+                {[1, 2, 3, 4, 5].map((value) => {
+                  const isActive = favoritesMinRating >= value;
+                  return (
+                    <Pressable
+                      key={value}
+                      accessibilityRole="button"
+                      accessibilityLabel={`Set favorites rating to ${value} star${value > 1 ? 's' : ''}`}
+                      onPress={() => handleFavoritesRatingChange(value)}
+                      style={[
+                        styles.ratingButton,
+                        {
+                          borderColor: isActive ? palette.tint : palette.outlineVariant,
+                          backgroundColor: isActive ? palette.tint : 'transparent',
+                        },
+                      ]}>
+                      <MaterialCommunityIcons
+                        name={isActive ? 'star' : 'star-outline'}
+                        size={18}
+                        color={isActive ? palette.background : palette.onSurfaceVariant}
+                      />
+                    </Pressable>
+                  );
+                })}
+              </View>
+            </View>
             <Pressable
               accessibilityRole="button"
               accessibilityLabel="Reload bundled inventory"
@@ -340,5 +386,18 @@ const styles = StyleSheet.create({
   },
   settingCaption: {
     fontSize: 12,
+  },
+  ratingOptions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  ratingButton: {
+    width: 32,
+    height: 32,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: StyleSheet.hairlineWidth,
   },
 });
