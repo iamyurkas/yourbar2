@@ -944,6 +944,7 @@ export default function CreateCocktailScreen() {
         message: 'Your changes will be lost if you leave this screen.',
         actions: [
           { label: 'Stay', variant: 'secondary' },
+          { label: 'Save', onPress: handleSubmit },
           {
             label: 'Leave',
             variant: 'destructive',
@@ -955,7 +956,7 @@ export default function CreateCocktailScreen() {
         ],
       });
     },
-    [setHasUnsavedChanges, showDialog],
+    [handleSubmit, setHasUnsavedChanges, showDialog],
   );
 
   useEffect(() => {
