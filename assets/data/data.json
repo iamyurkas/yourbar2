@@ -498,7 +498,7 @@
     {
       "id": 252791,
       "name": "Apple Juice",
-      "description": "",
+      "description": "Sweet pressed apple juice with crisp acidity. Adds gentle fruitiness to punches and highballs. Works with rum, bourbon, and cider-inspired cocktails.",
       "tags": [
         {
           "id": 5,
@@ -1587,7 +1587,7 @@
     {
       "id": 135444,
       "name": "Cherry Juice",
-      "description": "",
+      "description": "Tart, ruby-colored juice with rich cherry flavor. Ideal for sours, spritzes, or topping soda cocktails. Balances whiskey and rum drinks.",
       "tags": [
         {
           "id": 5,
@@ -2175,7 +2175,7 @@
     {
       "id": 81569,
       "name": "Cranberry Juice",
-      "description": "Cranberry juice is the juice of the cranberry. The term, used on its own, usually refers to a sweetened version.\r\n\r\nA cup of standard 100% cranberry juice, amounting to 248 grams or 8 ounces, is a rich source of antioxidants, vitamin C and salicylic acid. It also supplies calcium, magnesium, manganese, phosphorus, and potassium minerals. Cranberry juice is classified as an acidic drink with a typical pH between 2.3 and 2.5.",
+      "description": "Cranberry juice is a tart, ruby drink often sweetened for cocktails. It adds acidity and color to drinks like the Cosmopolitan and Cape Codder. Typically acidic with a pH around 2.3–2.5.",
       "tags": [
         {
           "id": 5,
@@ -3322,7 +3322,7 @@
     {
       "id": 539724,
       "name": "Grape Juice",
-      "description": "",
+      "description": "Sweet purple grape juice with jammy notes. Useful for spritzes, sangria bases, or nonalcoholic mixes. Pairs with vodka, gin, or sparkling wine.",
       "tags": [
         {
           "id": 5,
@@ -3378,7 +3378,7 @@
     {
       "id": 131206,
       "name": "Grapefruit Juice",
-      "description": "",
+      "description": "Bitter-sweet citrus juice with bright aroma. Great for Palomas, Greyhounds, and other highballs. Adds refreshing bitterness to balance sweet liqueurs.",
       "tags": [
         {
           "id": 5,
@@ -4094,7 +4094,7 @@
     {
       "id": 734220,
       "name": "Lemon Juice",
-      "description": "",
+      "description": "Fresh lemon juice with sharp acidity. Essential for sours and lemonades. Brightens spirits from gin to whiskey.",
       "tags": [
         {
           "id": 5,
@@ -4231,7 +4231,7 @@
     {
       "id": 525624,
       "name": "Lime Juice",
-      "description": "",
+      "description": "Fresh lime juice that delivers tangy citrus oils. Classic in margaritas, daiquiris, and mojitos. Provides crisp acidity to balance sweetness.",
       "tags": [
         {
           "id": 5,
@@ -4648,7 +4648,7 @@
     {
       "id": 38131,
       "name": "Orange Juice",
-      "description": "",
+      "description": "Sweet, sunny citrus juice with gentle acidity. Popular in brunch cocktails like the Mimosa or Screwdriver. Adds body and brightness to tropical mixes.",
       "tags": [
         {
           "id": 5,
@@ -4899,7 +4899,7 @@
     {
       "id": 41068,
       "name": "Passion fruit juice",
-      "description": "",
+      "description": "Tangy tropical juice with floral aroma. Brings sweet-tart punch to tiki drinks and sours. Pairs especially well with rum, tequila, and sparkling wine.",
       "tags": [
         {
           "id": 5,
@@ -5249,7 +5249,7 @@
     {
       "id": 494177,
       "name": "Pineapple Juice",
-      "description": "",
+      "description": "Sweet, tropical pineapple juice with natural froth. Key for piña coladas, painkillers, and tiki punches. Provides body, acidity, and aroma when shaken.",
       "tags": [
         {
           "id": 5,
