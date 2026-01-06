@@ -254,6 +254,12 @@ export default function CocktailDetailsScreen() {
     [cocktails, resolvedParam],
   );
 
+  const [showImperialUnits, setShowImperialUnits] = useState(useImperialUnits);
+
+  useEffect(() => {
+    setShowImperialUnits(useImperialUnits);
+  }, [useImperialUnits]);
+
   const ingredientLookup: IngredientLookup = useMemo(
     () => createIngredientLookup(ingredients),
     [ingredients],
@@ -381,6 +387,10 @@ export default function CocktailDetailsScreen() {
     setIsDescriptionExpanded((current) => !current);
   }, []);
 
+  const handleToggleUnits = useCallback(() => {
+    setShowImperialUnits((current) => !current);
+  }, []);
+
   const handleEditPress = useCallback(() => {
     if (!cocktail) {
       return;
@@ -475,6 +485,17 @@ export default function CocktailDetailsScreen() {
                 })}
               </View>
 
+              <Pressable
+                onPress={handleToggleUnits}
+                style={[styles.toggleUnitsButton, { borderColor: '#4DABF7', backgroundColor: '#FFFFFF' }]}
+                accessibilityRole="button"
+                accessibilityLabel={showImperialUnits ? 'Show in metric' : 'Show in imperial'}
+              >
+                <Text style={[styles.toggleUnitsLabel, { color: '#4DABF7' }]}>
+                  {showImperialUnits ? 'Show in metric' : 'Show in imperial'}
+                </Text>
+              </Pressable>
+
               {photoSource && glassSource && glassLabel ? (
                 <View style={styles.glassInfo}>
                   <View style={styles.glassImageWrapper}>
@@ -539,7 +560,7 @@ export default function CocktailDetailsScreen() {
                 <Text style={[styles.sectionTitle, { color: palette.onSurface }]}>Ingredients</Text>
                 <View style={styles.ingredientsList}>
                   {sortedIngredients.map((ingredient, index) => {
-                    const quantity = formatIngredientQuantity(ingredient, useImperialUnits);
+                    const quantity = formatIngredientQuantity(ingredient, showImperialUnits);
                     const qualifier = getIngredientQualifier(ingredient);
                     const key = `${ingredient.ingredientId ?? ingredient.name}-${ingredient.order}`;
                     const resolution = resolvedIngredients[index];
@@ -718,6 +739,18 @@ const styles = StyleSheet.create({
     height: 32,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  toggleUnitsButton: {
+    alignSelf: 'center',
+    paddingVertical: 8,
+    paddingHorizontal: 20,
+    borderRadius: 999,
+    borderWidth: 1,
+  },
+  toggleUnitsLabel: {
+    fontSize: 14,
+    fontWeight: '600',
+    textAlign: 'center',
   },
   glassInfo: {
     flexDirection: 'row',
