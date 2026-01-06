@@ -644,14 +644,20 @@ export default function CreateIngredientScreen() {
       <Modal
         visible={isBaseModalVisible}
         transparent
-        animationType="slide"
-        presentationStyle="overFullScreen"
+        animationType="fade"
         onRequestClose={handleCloseBaseModal}
       >
         <Pressable style={styles.modalOverlay} onPress={handleCloseBaseModal} accessibilityRole="button">
           <Pressable
             onPress={(event) => event.stopPropagation?.()}
-            style={[styles.modalCard, { backgroundColor: palette.surface }]}
+            style={[
+              styles.modalCard,
+              {
+                backgroundColor: palette.surface,
+                borderColor: palette.outline,
+                shadowColor: palette.shadow,
+              },
+            ]}
             accessibilityRole="menu"
           >
             <View style={styles.modalHeader}>
@@ -858,16 +864,23 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 16,
-    backgroundColor: Colors.backdrop,
+    padding: 24,
+    backgroundColor: 'rgba(0,0,0,0.4)',
   },
   modalCard: {
     width: '100%',
     maxHeight: '92%',
-    borderRadius: 16,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    borderRadius: 12,
+    paddingTop: 12,
+    paddingRight: 16,
+    paddingBottom: 20,
+    paddingLeft: 16,
     gap: 12,
+    borderWidth: StyleSheet.hairlineWidth,
+    shadowOpacity: 0.12,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 6 },
+    elevation: 10,
   },
   modalHeader: {
     flexDirection: 'row',
@@ -876,15 +889,16 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   modalTitle: {
-    fontSize: 16,
-    fontWeight: '600',
+    fontSize: 20,
+    fontWeight: '700',
+    marginTop: 4,
   },
   modalSearchInput: {
     borderWidth: StyleSheet.hairlineWidth,
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: Platform.select({ ios: 14, default: 12 }),
-    fontSize: 14,
+    fontSize: 16,
   },
   modalListContent: {
     flexGrow: 1,
