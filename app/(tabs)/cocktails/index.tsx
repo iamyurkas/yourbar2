@@ -1,6 +1,6 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import { useScrollToTop } from '@react-navigation/native';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   FlatList,
@@ -95,6 +95,7 @@ export default function CocktailsScreen() {
   const router = useRouter();
   const ingredientLookup = useMemo(() => createIngredientLookup(ingredients), [ingredients]);
   const defaultTagColor = palette.tagYellow ?? palette.highlightFaint;
+  const { tab: tabParam } = useLocalSearchParams<{ tab?: string | string[] }>();
 
   const availableTagOptions = useMemo<CocktailTagOption[]>(() => {
     const map = new Map<string, CocktailTagOption>();
@@ -181,6 +182,13 @@ export default function CocktailsScreen() {
   useEffect(() => {
     setLastCocktailTab(activeTab);
   }, [activeTab]);
+
+  useEffect(() => {
+    const normalizedTab = Array.isArray(tabParam) ? tabParam[0] : tabParam;
+    if (normalizedTab === 'all' || normalizedTab === 'my' || normalizedTab === 'favorites') {
+      setActiveTab(normalizedTab);
+    }
+  }, [tabParam]);
 
   const handleHeaderLayout = useCallback((event: LayoutChangeEvent) => {
     const nextLayout = event.nativeEvent.layout;
