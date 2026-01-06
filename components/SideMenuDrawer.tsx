@@ -36,7 +36,7 @@ const START_SCREEN_OPTIONS: StartScreenOption[] = [
     key: 'cocktails_my',
     label: 'My cocktails',
     description: 'See your creations first',
-    icon: { type: 'icon', name: 'glass-cocktail' },
+    icon: { type: 'icon', name: 'cup-water' },
   },
   {
     key: 'cocktails_favorites',
