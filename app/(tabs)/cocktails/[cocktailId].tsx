@@ -487,11 +487,14 @@ export default function CocktailDetailsScreen() {
 
               <Pressable
                 onPress={handleToggleUnits}
-                style={[styles.toggleUnitsButton, { borderColor: '#4DABF7', backgroundColor: '#FFFFFF' }]}
+                style={[
+                  styles.toggleUnitsButton,
+                  { borderColor: palette.primary, backgroundColor: palette.surfaceBright },
+                ]}
                 accessibilityRole="button"
                 accessibilityLabel={showImperialUnits ? 'Show in metric' : 'Show in imperial'}
               >
-                <Text style={[styles.toggleUnitsLabel, { color: '#4DABF7' }]}>
+                <Text style={[styles.toggleUnitsLabel, { color: palette.primary }]}>
                   {showImperialUnits ? 'Show in metric' : 'Show in imperial'}
                 </Text>
               </Pressable>
