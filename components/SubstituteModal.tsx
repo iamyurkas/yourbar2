@@ -291,12 +291,19 @@ export function SubstituteModal({
     <Modal
       visible={visible}
       transparent
-      animationType="slide"
+      animationType="fade"
       onRequestClose={onClose}
       onShow={handleFocusInput}>
       <Pressable style={styles.modalOverlay} onPress={onClose} accessibilityRole="button">
         <Pressable
-          style={[styles.modalCard, { backgroundColor: paletteColors.surface }]}
+          style={[
+            styles.modalCard,
+            {
+              backgroundColor: paletteColors.surface,
+              borderColor: paletteColors.outline,
+              shadowColor: paletteColors.shadow,
+            },
+          ]}
           onPress={() => {}}
           accessibilityRole="menu">
           <View style={styles.modalHeader}>
@@ -351,29 +358,36 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 16,
-    backgroundColor: Colors.backdrop,
+    padding: 24,
+    backgroundColor: 'rgba(0,0,0,0.4)',
   },
   modalCard: {
     width: '100%',
     maxHeight: '92%',
-    borderRadius: 16,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    borderRadius: 12,
+    paddingTop: 12,
+    paddingRight: 16,
+    paddingBottom: 20,
+    paddingLeft: 16,
+    borderWidth: StyleSheet.hairlineWidth,
+    shadowOpacity: 0.12,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 6 },
+    elevation: 10,
   },
   modalHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    gap: 12,
-    paddingBottom: 12,
+    gap: 8,
+    paddingBottom: 4,
   },
   modalTitle: {
-    fontSize: 16,
-    fontWeight: '600',
+    fontSize: 20,
+    fontWeight: '700',
   },
   modalSubtitle: {
-    fontSize: 14,
+    fontSize: 12,
     marginTop: 4,
   },
   modalListContent: {
@@ -382,6 +396,7 @@ const styles = StyleSheet.create({
   modalEmptyText: {
     textAlign: 'center',
     paddingVertical: 24,
+    fontSize: 12,
   },
   input: {
     borderRadius: 12,

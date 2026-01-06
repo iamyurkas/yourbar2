@@ -1281,7 +1281,15 @@ export default function CreateCocktailScreen() {
         animationType="fade"
         onRequestClose={() => setIsGlassModalVisible(false)}>
         <View style={styles.modalOverlay}>
-          <View style={[styles.modalCard, { backgroundColor: palette.surface }]}>
+          <View
+            style={[
+              styles.modalCard,
+              {
+                backgroundColor: palette.surface,
+                borderColor: palette.outline,
+                shadowColor: palette.shadow,
+              },
+            ]}>
             <View style={styles.modalHeader}>
               <Text style={[styles.modalTitle, { color: palette.onSurface }]}>Select glass</Text>
               <Pressable
@@ -1342,7 +1350,15 @@ export default function CreateCocktailScreen() {
         animationType="fade"
         onRequestClose={handleCloseUnitPicker}>
         <Pressable style={styles.modalOverlay} onPress={handleCloseUnitPicker}>
-          <View style={[styles.modalCardSmall, { backgroundColor: palette.surface }]}>
+          <View
+            style={[
+              styles.modalCardSmall,
+              {
+                backgroundColor: palette.surface,
+                borderColor: palette.outline,
+                shadowColor: palette.shadow,
+              },
+            ]}>
             <View style={styles.modalHeader}>
               <Text style={[styles.modalTitle, { color: palette.onSurface }]}>Select unit</Text>
               <Pressable
@@ -2255,27 +2271,44 @@ const styles = StyleSheet.create({
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: Colors.backdrop,
+    backgroundColor: 'rgba(0,0,0,0.4)',
     justifyContent: 'center',
+    alignItems: 'center',
     padding: 24,
   },
   modalCard: {
     borderRadius: 12,
-    padding: 20,
+    paddingTop: 12,
+    paddingRight: 16,
+    paddingBottom: 20,
+    paddingLeft: 16,
     gap: 16,
     maxHeight: '90%',
+    borderWidth: StyleSheet.hairlineWidth,
+    shadowOpacity: 0.12,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 6 },
+    elevation: 10,
   },
   modalCardSmall: {
     borderRadius: 12,
-    padding: 20,
+    paddingTop: 12,
+    paddingRight: 16,
+    paddingBottom: 20,
+    paddingLeft: 16,
     gap: 12,
+    borderWidth: StyleSheet.hairlineWidth,
+    shadowOpacity: 0.12,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 6 },
+    elevation: 10,
   },
   modalTitle: {
-    fontSize: 16,
-    fontWeight: '600',
+    fontSize: 20,
+    fontWeight: '700',
   },
   modalSubtitle: {
-    fontSize: 14,
+    fontSize: 12,
     marginTop: 4,
   },
   modalActionButton: {
@@ -2292,6 +2325,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    gap: 8,
   },
   modalListContent: {
     gap: 8,
@@ -2299,7 +2333,7 @@ const styles = StyleSheet.create({
   },
   modalEmptyText: {
     textAlign: 'center',
-    fontSize: 14,
+    fontSize: 12,
     marginTop: 24,
   },
   unitList: {

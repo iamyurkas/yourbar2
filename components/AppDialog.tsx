@@ -29,12 +29,19 @@ export function AppDialog({ visible, title, message, actions, onRequestClose }: 
   return (
     <Modal visible={visible} transparent animationType="fade" onRequestClose={onRequestClose}>
       <Pressable
-        style={[styles.overlay, { backgroundColor: Colors.backdrop }]}
+        style={styles.overlay}
         onPress={onRequestClose}
         accessibilityRole="button"
         accessibilityLabel="Close dialog">
         <Pressable
-          style={[styles.card, { backgroundColor: Colors.surface }]}
+          style={[
+            styles.card,
+            {
+              backgroundColor: Colors.surface,
+              borderColor: Colors.outline,
+              shadowColor: Colors.shadow,
+            },
+          ]}
           onPress={(event) => event.stopPropagation()}>
           <Text style={[styles.title, { color: Colors.onSurface }]}>{title}</Text>
           {message ? <Text style={[styles.message, { color: Colors.onSurfaceVariant }]}>{message}</Text> : null}
@@ -93,23 +100,32 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 24,
+    backgroundColor: 'rgba(0,0,0,0.4)',
   },
   card: {
     width: '100%',
     maxWidth: 420,
-    borderRadius: 20,
-    paddingVertical: 22,
-    paddingHorizontal: 20,
+    borderRadius: 12,
+    paddingTop: 12,
+    paddingRight: 16,
+    paddingBottom: 20,
+    paddingLeft: 16,
     gap: 12,
+    borderWidth: StyleSheet.hairlineWidth,
+    shadowOpacity: 0.12,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 6 },
+    elevation: 10,
   },
   title: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: '700',
     textAlign: 'center',
+    marginTop: 4,
   },
   message: {
-    fontSize: 15,
-    lineHeight: 22,
+    fontSize: 14,
+    lineHeight: 20,
     textAlign: 'center',
   },
   actions: {
