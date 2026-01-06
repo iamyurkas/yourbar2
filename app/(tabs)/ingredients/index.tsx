@@ -1,6 +1,6 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import { useScrollToTop } from '@react-navigation/native';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { memo, useCallback, useEffect, useMemo, useRef, useState, useTransition } from 'react';
 import {
   FlatList,
@@ -225,12 +225,20 @@ export default function IngredientsScreen() {
   const [, startAvailabilityTransition] = useTransition();
   const paletteColors = Colors;
   const defaultTagColor = palette.tagYellow ?? palette.highlightFaint;
+  const { tab: tabParam } = useLocalSearchParams<{ tab?: string | string[] }>();
 
   useScrollToTop(listRef);
 
   useEffect(() => {
     setLastIngredientTab(activeTab);
   }, [activeTab]);
+
+  useEffect(() => {
+    const normalizedTab = Array.isArray(tabParam) ? tabParam[0] : tabParam;
+    if (normalizedTab === 'all' || normalizedTab === 'my' || normalizedTab === 'shopping') {
+      setActiveTab(normalizedTab);
+    }
+  }, [tabParam]);
 
   const availableTagOptions = useMemo<IngredientTagOption[]>(() => {
     const map = new Map<string, IngredientTagOption>();
