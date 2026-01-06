@@ -578,7 +578,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                       },
                       pressed ? { opacity: 0.85 } : null,
                     ]}>
-                    <View style={[styles.startScreenIcon, { backgroundColor: palette.surfaceVariant }]}>
+                    <View style={[styles.startScreenIcon, { backgroundColor: palette.surfaceBright }]}>
                       {renderStartScreenIcon(option, isSelected)}
                     </View>
                     <View style={styles.startScreenTextContainer}>
