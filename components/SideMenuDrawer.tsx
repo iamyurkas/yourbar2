@@ -318,7 +318,6 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 shadowColor: palette.shadow,
               },
             ]}
-            accessibilityRole="dialog"
             accessibilityLabel="Favorites rating"
             onPress={() => {}}>
             <View style={styles.modalHeader}>
