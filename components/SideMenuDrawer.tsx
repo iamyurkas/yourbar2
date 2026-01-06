@@ -4,6 +4,7 @@ import { Animated, Dimensions, Modal, Pressable, StyleSheet, Text, View } from '
 
 import { Colors } from '@/constants/theme';
 import { useInventory } from '@/providers/inventory-provider';
+import { STARTING_SCREEN_OPTIONS, type StartingScreenOption } from '@/libs/starting-screen';
 
 const MENU_WIDTH = Math.round(Dimensions.get('window').width * 0.75);
 const ANIMATION_DURATION = 200;
@@ -26,11 +27,15 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     setKeepScreenAwake,
     ratingFilterThreshold,
     setRatingFilterThreshold,
+    startingScreen,
+    setStartingScreen,
     resetInventoryFromBundle,
   } = useInventory();
   const [isMounted, setIsMounted] = useState(visible);
   const [isRatingModalVisible, setRatingModalVisible] = useState(false);
+  const [isStartingScreenModalVisible, setStartingScreenModalVisible] = useState(false);
   const ratingModalCloseTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const startingScreenModalCloseTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const translateX = useRef(new Animated.Value(-MENU_WIDTH)).current;
   const backdropOpacity = useRef(new Animated.Value(0)).current;
 
@@ -128,10 +133,46 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     }, 250);
   };
 
+  const handleStartingScreenPress = () => {
+    setStartingScreenModalVisible(true);
+  };
+
+  const handleCloseStartingScreenModal = () => {
+    if (startingScreenModalCloseTimeout.current) {
+      clearTimeout(startingScreenModalCloseTimeout.current);
+      startingScreenModalCloseTimeout.current = null;
+    }
+
+    setStartingScreenModalVisible(false);
+  };
+
+  const handleSelectStartingScreen = (value: StartingScreenOption) => {
+    if (startingScreenModalCloseTimeout.current) {
+      clearTimeout(startingScreenModalCloseTimeout.current);
+    }
+
+    setStartingScreen(value);
+    startingScreenModalCloseTimeout.current = setTimeout(() => {
+      setStartingScreenModalVisible(false);
+      startingScreenModalCloseTimeout.current = null;
+    }, 250);
+  };
+
+  const selectedStartingScreen = useMemo(() => {
+    return (
+      STARTING_SCREEN_OPTIONS.find((option) => option.key === startingScreen) ??
+      STARTING_SCREEN_OPTIONS[0]
+    );
+  }, [startingScreen]);
+
   useEffect(() => {
     return () => {
       if (ratingModalCloseTimeout.current) {
         clearTimeout(ratingModalCloseTimeout.current);
+      }
+
+      if (startingScreenModalCloseTimeout.current) {
+        clearTimeout(startingScreenModalCloseTimeout.current);
       }
     };
   }, []);
@@ -302,6 +343,32 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
             </Pressable>
             <Pressable
               accessibilityRole="button"
+              accessibilityLabel="Set starting screen"
+              onPress={handleStartingScreenPress}
+              style={[
+                styles.settingRow,
+                {
+                  borderColor: palette.outline,
+                  backgroundColor: palette.surface,
+                },
+              ]}>
+              <View
+                style={[
+                  styles.checkbox,
+                  {
+                    borderColor: palette.tint,
+                    backgroundColor: palette.surfaceVariant,
+                  },
+                ]}>
+                <MaterialCommunityIcons name="home-outline" size={16} color={palette.tint} />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text style={[styles.settingLabel, { color: palette.onSurface }]}>Starting screen</Text>
+                <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>Open {selectedStartingScreen.label}</Text>
+              </View>
+            </Pressable>
+            <Pressable
+              accessibilityRole="button"
               accessibilityLabel="Reload bundled inventory"
               onPress={handleResetInventory}
               style={[
@@ -385,6 +452,71 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                       ]}>
                       {value}+
                     </Text>
+                  </Pressable>
+                );
+              })}
+            </View>
+          </Pressable>
+        </Pressable>
+      </Modal>
+      <Modal
+        transparent
+        visible={isStartingScreenModalVisible}
+        animationType="fade"
+        onRequestClose={handleCloseStartingScreenModal}>
+        <Pressable style={styles.modalOverlay} onPress={handleCloseStartingScreenModal} accessibilityRole="button">
+          <Pressable
+            style={[
+              styles.selectionModalContent,
+              {
+                backgroundColor: palette.surface,
+                borderColor: palette.outline,
+                shadowColor: palette.shadow,
+              },
+            ]}
+            accessibilityLabel="Starting screen"
+            onPress={() => {}}>
+            <View style={styles.modalHeader}>
+              <View style={{ flex: 1 }}>
+                <Text style={[styles.title, { color: palette.onSurface }]}>Starting screen</Text>
+                <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>Choose what opens on launch</Text>
+              </View>
+              <Pressable
+                onPress={handleCloseStartingScreenModal}
+                accessibilityRole="button"
+                accessibilityLabel="Close">
+                <MaterialCommunityIcons name="close" size={22} color={palette.onSurfaceVariant} />
+              </Pressable>
+            </View>
+            <View style={styles.selectionList}>
+              {STARTING_SCREEN_OPTIONS.map((option) => {
+                const isSelected = option.key === startingScreen;
+                return (
+                  <Pressable
+                    key={`starting-screen-${option.key}`}
+                    accessibilityRole="button"
+                    accessibilityState={{ selected: isSelected }}
+                    accessibilityLabel={`Open ${option.label}`}
+                    onPress={() => handleSelectStartingScreen(option.key)}
+                    style={({ pressed }) => [
+                      styles.selectionOption,
+                      {
+                        borderColor: isSelected ? palette.tint : palette.outlineVariant,
+                        backgroundColor: isSelected ? palette.surfaceVariant : 'transparent',
+                      },
+                      pressed ? { opacity: 0.85 } : null,
+                    ]}>
+                    <View
+                      style={[
+                        styles.selectionRadio,
+                        {
+                          borderColor: isSelected ? palette.tint : palette.outlineVariant,
+                          backgroundColor: isSelected ? palette.surface : 'transparent',
+                        },
+                      ]}>
+                      {isSelected ? <View style={[styles.selectionRadioDot, { backgroundColor: palette.tint }]} /> : null}
+                    </View>
+                    <Text style={[styles.settingLabel, { color: palette.onSurface }]}>{option.label}</Text>
                   </Pressable>
                 );
               })}
@@ -508,5 +640,41 @@ const styles = StyleSheet.create({
   },
   ratingOptionLabel: {
     fontWeight: '700',
+  },
+  selectionModalContent: {
+    width: '100%',
+    borderRadius: 16,
+    padding: 20,
+    gap: 12,
+    borderWidth: StyleSheet.hairlineWidth,
+    shadowOpacity: 0.12,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 6 },
+    elevation: 10,
+  },
+  selectionList: {
+    gap: 8,
+  },
+  selectionOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 12,
+    borderRadius: 12,
+    borderWidth: StyleSheet.hairlineWidth,
+  },
+  selectionRadio: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    borderWidth: StyleSheet.hairlineWidth,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  selectionRadioDot: {
+    width: 10,
+    height: 10,
+    borderRadius: 6,
   },
 });
