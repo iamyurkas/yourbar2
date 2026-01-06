@@ -2,7 +2,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { Image, type ImageSource } from 'expo-image';
 import React, { useEffect, useMemo, useRef, useState, type ComponentProps } from 'react';
-import { Animated, Dimensions, Modal, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Animated, Dimensions, Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import CocktailIcon from '@/assets/images/cocktails.svg';
 import IngredientsIcon from '@/assets/images/ingredients.svg';
@@ -557,7 +557,10 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               </Pressable>
             </View>
             <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>Select where the app opens</Text>
-            <View style={styles.startScreenOptionList}>
+            <ScrollView
+              style={styles.startScreenModalScroll}
+              contentContainerStyle={styles.startScreenOptionList}
+              showsVerticalScrollIndicator={false}>
               {START_SCREEN_OPTIONS.map((option) => {
                 const isSelected = startScreen === option.key;
                 return (
@@ -571,11 +574,11 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                       styles.startScreenOption,
                       {
                         borderColor: isSelected ? palette.tint : palette.outlineVariant,
-                        backgroundColor: isSelected ? palette.tint + '22' : palette.surfaceBright,
+                        backgroundColor: isSelected ? palette.highlightFaint : palette.surfaceBright,
                       },
                       pressed ? { opacity: 0.85 } : null,
                     ]}>
-                    <View style={[styles.startScreenIcon, { backgroundColor: palette.surfaceVariant }]}>
+                    <View style={[styles.startScreenIcon, { backgroundColor: palette.surfaceBright }]}>
                       {renderStartScreenIcon(option, isSelected)}
                     </View>
                     <View style={styles.startScreenTextContainer}>
@@ -590,7 +593,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   </Pressable>
                 );
               })}
-            </View>
+            </ScrollView>
           </Pressable>
         </Pressable>
       </Modal>
@@ -682,6 +685,7 @@ const styles = StyleSheet.create({
   modalCard: {
     width: '100%',
     maxHeight: '92%',
+    flexShrink: 1,
     borderRadius: 12,
     paddingTop: 12,
     paddingRight: 16,
@@ -704,6 +708,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '700',
     marginTop: 4,
+  },
+  startScreenModalScroll: {
+    maxHeight: '100%',
+    width: '100%',
   },
   startScreenOptionList: {
     gap: 4,

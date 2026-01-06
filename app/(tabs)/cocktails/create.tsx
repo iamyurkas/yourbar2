@@ -1341,10 +1341,23 @@ export default function CreateCocktailScreen() {
         transparent
         animationType="fade"
         onRequestClose={handleCloseUnitPicker}>
-        <Pressable style={styles.modalOverlay} onPress={handleCloseUnitPicker}>
-          <View style={[styles.modalCardSmall, { backgroundColor: palette.surface }]}>
-            <View style={styles.modalHeader}>
-              <Text style={[styles.modalTitle, { color: palette.onSurface }]}>Select unit</Text>
+        <Pressable
+          style={styles.unitModalOverlay}
+          onPress={handleCloseUnitPicker}
+          accessibilityRole="button">
+          <Pressable
+            onPress={(event) => event.stopPropagation?.()}
+            style={[
+              styles.unitModalCard,
+              {
+                backgroundColor: palette.surface,
+                borderColor: palette.outline,
+                shadowColor: palette.shadow,
+              },
+            ]}
+            accessibilityRole="menu">
+            <View style={styles.unitModalHeader}>
+              <Text style={[styles.unitModalTitle, { color: palette.onSurface }]}>Select unit</Text>
               <Pressable
                 onPress={handleCloseUnitPicker}
                 accessibilityRole="button"
@@ -1352,17 +1365,28 @@ export default function CreateCocktailScreen() {
                 <MaterialCommunityIcons name="close" size={22} color={palette.onSurfaceVariant} />
               </Pressable>
             </View>
-            <ScrollView contentContainerStyle={styles.unitList}>
+            <ScrollView
+              style={styles.unitModalScroll}
+              contentContainerStyle={styles.unitModalList}
+              showsVerticalScrollIndicator={false}
+              keyboardShouldPersistTaps="handled">
               {COCKTAIL_UNIT_OPTIONS.map((option) => {
                 const optionLabel = usePluralUnitsInPicker
                   ? COCKTAIL_UNIT_DICTIONARY[option.id]?.plural ?? option.label
                   : option.label;
                 const displayLabel = optionLabel || ' ';
+                const isSelected = option.id === targetUnitPickerIngredient?.unitId;
                 return (
                   <Pressable
                     key={option.id}
                     onPress={() => handleSelectUnit(option.id)}
-                    style={[styles.unitOption, { borderColor: palette.outlineVariant }]}
+                    style={[
+                      styles.unitOption,
+                      {
+                        borderColor: isSelected ? palette.tint : palette.outlineVariant,
+                        backgroundColor: isSelected ? palette.highlightFaint : palette.surfaceBright,
+                      },
+                    ]}
                     accessibilityRole="button"
                     accessibilityLabel={displayLabel.trim()
                       ? `Select ${displayLabel.trim()}`
@@ -1372,7 +1396,7 @@ export default function CreateCocktailScreen() {
                 );
               })}
             </ScrollView>
-          </View>
+          </Pressable>
         </Pressable>
       </Modal>
 
@@ -2173,7 +2197,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
   },
   unitLabel: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: '400',
   },
   toggleRow: {
@@ -2270,9 +2294,37 @@ const styles = StyleSheet.create({
     padding: 20,
     gap: 12,
   },
+  unitModalOverlay: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 24,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+  },
+  unitModalCard: {
+    width: '100%',
+    maxHeight: '92%',
+    flexShrink: 1,
+    borderRadius: 12,
+    paddingTop: 12,
+    paddingRight: 16,
+    paddingBottom: 20,
+    paddingLeft: 16,
+    gap: 12,
+    borderWidth: StyleSheet.hairlineWidth,
+    shadowOpacity: 0.12,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 6 },
+    elevation: 10,
+  },
   modalTitle: {
     fontSize: 16,
     fontWeight: '600',
+  },
+  unitModalTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    marginTop: 4,
   },
   modalSubtitle: {
     fontSize: 14,
@@ -2293,6 +2345,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
+  unitModalHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 12,
+  },
   modalListContent: {
     gap: 8,
     paddingBottom: 12,
@@ -2303,6 +2361,15 @@ const styles = StyleSheet.create({
     marginTop: 24,
   },
   unitList: {
+  },
+  unitModalScroll: {
+    maxHeight: '100%',
+    width: '100%',
+  },
+  unitModalList: {
+    flexGrow: 1,
+    paddingVertical: 8,
+    gap: 4,
   },
   unitOption: {
     borderWidth: StyleSheet.hairlineWidth,
