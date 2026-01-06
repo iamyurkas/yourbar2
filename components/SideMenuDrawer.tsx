@@ -3,10 +3,55 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Animated, Dimensions, Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Colors } from '@/constants/theme';
-import { useInventory } from '@/providers/inventory-provider';
+import { useInventory, type StartScreen } from '@/providers/inventory-provider';
 
 const MENU_WIDTH = Math.round(Dimensions.get('window').width * 0.75);
 const ANIMATION_DURATION = 200;
+
+const START_SCREEN_OPTIONS: { key: StartScreen; label: string; description: string; icon: string }[] = [
+  {
+    key: 'cocktails_all',
+    label: 'All cocktails',
+    description: 'Browse every recipe',
+    icon: 'glass-cocktail',
+  },
+  {
+    key: 'cocktails_my',
+    label: 'My cocktails',
+    description: 'See your creations first',
+    icon: 'account-outline',
+  },
+  {
+    key: 'cocktails_favorites',
+    label: 'Favorite cocktails',
+    description: 'Jump into saved cocktails',
+    icon: 'heart',
+  },
+  {
+    key: 'shaker',
+    label: 'Shaker',
+    description: 'Mix based on your inventory',
+    icon: 'bottle-wine',
+  },
+  {
+    key: 'ingredients_all',
+    label: 'All ingredients',
+    description: 'Manage every ingredient',
+    icon: 'food-apple-outline',
+  },
+  {
+    key: 'ingredients_my',
+    label: 'My ingredients',
+    description: 'Start with what you own',
+    icon: 'basket',
+  },
+  {
+    key: 'ingredients_shopping',
+    label: 'Shopping list',
+    description: 'Head to your shopping items',
+    icon: 'cart',
+  },
+];
 
 type SideMenuDrawerProps = {
   visible: boolean;
@@ -26,11 +71,15 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     setKeepScreenAwake,
     ratingFilterThreshold,
     setRatingFilterThreshold,
+    startScreen,
+    setStartScreen,
     resetInventoryFromBundle,
   } = useInventory();
   const [isMounted, setIsMounted] = useState(visible);
   const [isRatingModalVisible, setRatingModalVisible] = useState(false);
   const ratingModalCloseTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [isStartScreenModalVisible, setStartScreenModalVisible] = useState(false);
+  const startScreenModalCloseTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const translateX = useRef(new Animated.Value(-MENU_WIDTH)).current;
   const backdropOpacity = useRef(new Animated.Value(0)).current;
 
@@ -45,6 +94,11 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       },
     ],
     [palette.outline, palette.shadow, palette.surface],
+  );
+
+  const selectedStartScreenOption = useMemo(
+    () => START_SCREEN_OPTIONS.find((option) => option.key === startScreen),
+    [startScreen],
   );
 
   useEffect(() => {
@@ -128,10 +182,39 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     }, 250);
   };
 
+  const handleStartScreenPress = () => {
+    setStartScreenModalVisible(true);
+  };
+
+  const handleCloseStartScreenModal = () => {
+    if (startScreenModalCloseTimeout.current) {
+      clearTimeout(startScreenModalCloseTimeout.current);
+      startScreenModalCloseTimeout.current = null;
+    }
+
+    setStartScreenModalVisible(false);
+  };
+
+  const handleSelectStartScreen = (value: StartScreen) => {
+    if (startScreenModalCloseTimeout.current) {
+      clearTimeout(startScreenModalCloseTimeout.current);
+    }
+
+    setStartScreen(value);
+    startScreenModalCloseTimeout.current = setTimeout(() => {
+      setStartScreenModalVisible(false);
+      startScreenModalCloseTimeout.current = null;
+    }, 250);
+  };
+
   useEffect(() => {
     return () => {
       if (ratingModalCloseTimeout.current) {
         clearTimeout(ratingModalCloseTimeout.current);
+      }
+
+      if (startScreenModalCloseTimeout.current) {
+        clearTimeout(startScreenModalCloseTimeout.current);
       }
     };
   }, []);
@@ -302,6 +385,32 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
             </Pressable>
             <Pressable
               accessibilityRole="button"
+              accessibilityLabel="Set starting screen"
+              onPress={handleStartScreenPress}
+              style={[
+                styles.settingRow,
+                {
+                  borderColor: palette.outline,
+                  backgroundColor: palette.surface,
+                },
+              ]}>
+              <View
+                style={[
+                  styles.checkbox,
+                  {
+                    borderColor: palette.tint,
+                    backgroundColor: palette.surfaceVariant,
+                  },
+                ]}>
+                <MaterialCommunityIcons name="home-variant" size={16} color={palette.tint} />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text style={[styles.settingLabel, { color: palette.onSurface }]}>Starting screen</Text>
+                <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>Open {selectedStartScreenOption?.label ?? 'All cocktails'}</Text>
+              </View>
+            </Pressable>
+            <Pressable
+              accessibilityRole="button"
               accessibilityLabel="Reload bundled inventory"
               onPress={handleResetInventory}
               style={[
@@ -385,6 +494,73 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                       ]}>
                       {value}+
                     </Text>
+                  </Pressable>
+                );
+              })}
+            </View>
+          </Pressable>
+        </Pressable>
+      </Modal>
+      <Modal
+        transparent
+        visible={isStartScreenModalVisible}
+        animationType="fade"
+        onRequestClose={handleCloseStartScreenModal}>
+        <Pressable style={styles.modalOverlay} onPress={handleCloseStartScreenModal} accessibilityRole="button">
+          <Pressable
+            style={[
+              styles.ratingModalContent,
+              {
+                backgroundColor: palette.surface,
+                borderColor: palette.outline,
+                shadowColor: palette.shadow,
+              },
+            ]}
+            accessibilityLabel="Starting screen"
+            onPress={() => {}}>
+            <View style={styles.modalHeader}>
+              <View style={{ flex: 1 }}>
+                <Text style={[styles.title, { color: palette.onSurface }]}>Starting screen</Text>
+                <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>Select where the app opens</Text>
+              </View>
+              <Pressable onPress={handleCloseStartScreenModal} accessibilityRole="button" accessibilityLabel="Close">
+                <MaterialCommunityIcons name="close" size={22} color={palette.onSurfaceVariant} />
+              </Pressable>
+            </View>
+            <View style={styles.startScreenOptionList}>
+              {START_SCREEN_OPTIONS.map((option) => {
+                const isSelected = startScreen === option.key;
+                return (
+                  <Pressable
+                    key={`start-screen-${option.key}`}
+                    accessibilityRole="button"
+                    accessibilityState={{ selected: isSelected }}
+                    accessibilityLabel={`Open ${option.label} first`}
+                    onPress={() => handleSelectStartScreen(option.key)}
+                    style={({ pressed }) => [
+                      styles.startScreenOption,
+                      {
+                        borderColor: isSelected ? palette.tint : palette.outlineVariant,
+                        backgroundColor: isSelected ? palette.tint + '22' : 'transparent',
+                      },
+                      pressed ? { opacity: 0.85 } : null,
+                    ]}>
+                    <View style={[styles.startScreenIcon, { backgroundColor: palette.surfaceVariant }]}>
+                      <MaterialCommunityIcons
+                        name={option.icon as never}
+                        size={20}
+                        color={isSelected ? palette.tint : palette.onSurfaceVariant}
+                      />
+                    </View>
+                    <View style={styles.startScreenTextContainer}>
+                      <Text style={[styles.settingLabel, { color: palette.onSurface }]}>{option.label}</Text>
+                      <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>{option.description}</Text>
+                    </View>
+                    <MaterialCommunityIcons
+                      name={isSelected ? 'check-circle' : 'checkbox-blank-circle-outline'}
+                      size={20}
+                      color={isSelected ? palette.tint : palette.onSurfaceVariant}
+                    />
                   </Pressable>
                 );
               })}
@@ -492,6 +668,29 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
     gap: 12,
+  },
+  startScreenOptionList: {
+    gap: 10,
+  },
+  startScreenOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 12,
+    borderRadius: 12,
+    borderWidth: StyleSheet.hairlineWidth,
+  },
+  startScreenIcon: {
+    width: 34,
+    height: 34,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  startScreenTextContainer: {
+    flex: 1,
+    gap: 4,
   },
   ratingOptionRow: {
     flexDirection: 'row',
