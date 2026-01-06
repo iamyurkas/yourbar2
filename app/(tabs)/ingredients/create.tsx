@@ -256,8 +256,8 @@ export default function CreateIngredientScreen() {
         title: 'Leave without saving?',
         message: 'Your changes will be lost if you leave this screen.',
         actions: [
-          { label: 'Stay', variant: 'secondary' },
           { label: 'Save', onPress: handleSubmit },
+          { label: 'Stay', variant: 'secondary' },
           {
             label: 'Leave',
             variant: 'destructive',
