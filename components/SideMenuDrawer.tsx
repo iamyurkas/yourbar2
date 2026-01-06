@@ -82,10 +82,6 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     }
   }, [backdropOpacity, translateX, visible]);
 
-  if (!isMounted) {
-    return null;
-  }
-
   const toggleIgnoreGarnish = () => {
     setIgnoreGarnish(!ignoreGarnish);
   };
@@ -139,6 +135,10 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       }
     };
   }, []);
+
+  if (!isMounted) {
+    return null;
+  }
 
   return (
     <Modal transparent visible={isMounted} statusBarTranslucent animationType="none" onRequestClose={onClose}>
