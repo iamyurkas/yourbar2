@@ -328,7 +328,7 @@ export function SubstituteModal({
               {
                 borderColor: paletteColors.outlineVariant,
                 color: paletteColors.text,
-                backgroundColor: palette.surfaceVariant,
+                backgroundColor: palette.surfaceBright,
               },
             ]}
             autoFocus
@@ -360,7 +360,7 @@ const styles = StyleSheet.create({
   },
   modalCard: {
     width: '100%',
-    maxHeight: '92%',
+    maxHeight: '90%',
     borderRadius: 12,
     paddingTop: 12,
     paddingRight: 16,
