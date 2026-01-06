@@ -346,9 +346,10 @@ export default function CocktailsScreen() {
 
       const record = ingredientLookup.ingredientById.get(ingredientId);
       const baseId = normalizeIngredientId(record?.baseIngredientId);
+      const allowBrandedForBase = allowBrand || baseId == null;
 
       if (baseId == null) {
-        if (allowBrand) {
+        if (allowBrandedForBase) {
           ingredientLookup.brandsByBaseId.get(ingredientId)?.forEach((brandId) => {
             const brandName = resolveNameFromId(brandId);
             if (brandName) {
@@ -366,7 +367,7 @@ export default function CocktailsScreen() {
         }
       }
 
-      if (allowBrand) {
+      if (allowBrandedForBase) {
         ingredientLookup.brandsByBaseId.get(baseId)?.forEach((brandId) => {
           const brandName = resolveNameFromId(brandId);
           if (brandName) {
