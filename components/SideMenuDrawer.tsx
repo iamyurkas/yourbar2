@@ -20,6 +20,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     setIgnoreGarnish,
     allowAllSubstitutes,
     setAllowAllSubstitutes,
+    useImperialUnits,
+    setUseImperialUnits,
     resetInventoryFromBundle,
   } = useInventory();
   const [isMounted, setIsMounted] = useState(visible);
@@ -84,6 +86,10 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
   const toggleAllowAllSubstitutes = () => {
     setAllowAllSubstitutes(!allowAllSubstitutes);
+  };
+
+  const toggleUseImperialUnits = () => {
+    setUseImperialUnits(!useImperialUnits);
   };
 
   const handleResetInventory = async () => {
@@ -160,9 +166,39 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               </View>
               <View style={styles.settingTextContainer}>
                 <Text style={[styles.settingLabel, { color: palette.onSurface }]}>Allow all substitutes</Text>
-                <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>
+                <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}> 
                   Use base or branded alternative regardless of a recipe
                 </Text>
+              </View>
+            </Pressable>
+            <Pressable
+              accessibilityRole="checkbox"
+              accessibilityState={{ checked: useImperialUnits }}
+              onPress={toggleUseImperialUnits}
+              style={[
+                styles.settingRow,
+                {
+                  borderColor: palette.outline,
+                  backgroundColor: palette.surface,
+                },
+              ]}>
+              <View
+                style={[
+                  styles.checkbox,
+                  {
+                    borderColor: useImperialUnits ? palette.tint : palette.outlineVariant,
+                    backgroundColor: useImperialUnits ? palette.tint : 'transparent',
+                  },
+                ]}>
+                <MaterialCommunityIcons
+                  name="check"
+                  size={16}
+                  color={useImperialUnits ? palette.background : palette.outlineVariant}
+                />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text style={[styles.settingLabel, { color: palette.onSurface }]}>Show in imperial</Text>
+                <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>Use oz instead of ml/g</Text>
               </View>
             </Pressable>
             <Pressable

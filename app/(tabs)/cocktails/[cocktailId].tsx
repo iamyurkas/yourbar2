@@ -25,6 +25,11 @@ import { palette as appPalette } from '@/theme/theme';
 
 type RecipeIngredient = NonNullable<Cocktail['ingredients']>[number];
 
+const METRIC_UNIT_ID = 11;
+const IMPERIAL_UNIT_ID = 12;
+const GRAM_UNIT_ID = 8;
+const UNIT_CONVERSION_RATIO = 30;
+
 const GLASS_LABELS: Record<string, string> = {
   bowl: 'Punch bowl',
   champagne_flute: 'Champagne flute',
@@ -70,33 +75,74 @@ function resolveCocktail(
   return cocktails.find((item) => item.name?.toLowerCase() === normalized);
 }
 
-function formatIngredientQuantity(ingredient: RecipeIngredient): string {
+function formatAmount(value: number): string {
+  const rounded = Math.round(value * 100) / 100;
+  if (Number.isInteger(rounded)) {
+    return String(rounded);
+  }
+
+  return Number(rounded.toFixed(2)).toString();
+}
+
+function convertIngredientAmount(
+  amount: number,
+  unitId: number | undefined,
+  useImperialUnits: boolean,
+): { value: number; unitId?: number } {
+  if (unitId == null) {
+    return { value: amount, unitId };
+  }
+
+  if (useImperialUnits && (unitId === METRIC_UNIT_ID || unitId === GRAM_UNIT_ID)) {
+    return { value: amount / UNIT_CONVERSION_RATIO, unitId: IMPERIAL_UNIT_ID };
+  }
+
+  if (!useImperialUnits && unitId === IMPERIAL_UNIT_ID) {
+    return { value: amount * UNIT_CONVERSION_RATIO, unitId: METRIC_UNIT_ID };
+  }
+
+  return { value: amount, unitId };
+}
+
+function formatIngredientQuantity(ingredient: RecipeIngredient, useImperialUnits: boolean): string {
   const amountRaw = ingredient.amount ?? '';
   const amount = amountRaw.trim();
+  const hasAmount = amount.length > 0;
   const unitId = typeof ingredient.unitId === 'number' ? ingredient.unitId : undefined;
-  const unitDetails = unitId != null ? COCKTAIL_UNIT_DICTIONARY[unitId] : undefined;
   const parsedAmount = Number(amount);
-  const isNumeric = !Number.isNaN(parsedAmount);
+  const isNumeric = hasAmount && !Number.isNaN(parsedAmount);
+
+  let displayAmount = amount;
+  let displayUnitId = unitId;
+
+  if (isNumeric) {
+    const { value, unitId: nextUnitId } = convertIngredientAmount(parsedAmount, unitId, useImperialUnits);
+    displayAmount = formatAmount(value);
+    displayUnitId = nextUnitId;
+  }
+
+  const unitDetails = displayUnitId != null ? COCKTAIL_UNIT_DICTIONARY[displayUnitId] : undefined;
 
   let unitText = '';
   if (unitDetails) {
-    const isSingular = !isNumeric || parsedAmount === 1;
+    const numericAmount = isNumeric ? Number(displayAmount) : undefined;
+    const isSingular = numericAmount == null || numericAmount === 1;
     unitText = isSingular ? unitDetails.singular : unitDetails.plural ?? `${unitDetails.singular}s`;
   }
 
-  if (!amount && !unitText) {
+  if (!displayAmount && !unitText) {
     return 'As needed';
   }
 
-  if (!amount && unitText) {
+  if (!displayAmount && unitText) {
     return unitText;
   }
 
   if (unitText) {
-    return `${amount} ${unitText}`;
+    return `${displayAmount} ${unitText}`;
   }
 
-  return amount;
+  return displayAmount;
 }
 
 function getIngredientQualifier(ingredient: RecipeIngredient): string | undefined {
@@ -140,6 +186,7 @@ export default function CocktailDetailsScreen() {
     getCocktailRating,
     ignoreGarnish,
     allowAllSubstitutes,
+    useImperialUnits,
   } = useInventory();
 
   const resolvedParam = Array.isArray(cocktailId) ? cocktailId[0] : cocktailId;
@@ -433,7 +480,7 @@ export default function CocktailDetailsScreen() {
                 <Text style={[styles.sectionTitle, { color: palette.onSurface }]}>Ingredients</Text>
                 <View style={styles.ingredientsList}>
                   {sortedIngredients.map((ingredient, index) => {
-                    const quantity = formatIngredientQuantity(ingredient);
+                    const quantity = formatIngredientQuantity(ingredient, useImperialUnits);
                     const qualifier = getIngredientQualifier(ingredient);
                     const key = `${ingredient.ingredientId ?? ingredient.name}-${ingredient.order}`;
                     const resolution = resolvedIngredients[index];
