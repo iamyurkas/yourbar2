@@ -78,6 +78,7 @@ export default function CocktailsScreen() {
     ingredients,
     ignoreGarnish,
     allowAllSubstitutes,
+    ratingFilterThreshold,
     shoppingIngredientIds,
     toggleIngredientShopping,
   } = useInventory();
@@ -248,9 +249,9 @@ export default function CocktailsScreen() {
   const ratedCocktails = useMemo(() => {
     return cocktails.filter((cocktail) => {
       const ratingValue = Number((cocktail as { userRating?: number }).userRating ?? 0);
-      return ratingValue > 0;
+      return ratingValue >= ratingFilterThreshold;
     });
-  }, [cocktails]);
+  }, [cocktails, ratingFilterThreshold]);
 
   const baseTabCocktails = useMemo(() => {
     if (activeTab === 'favorites') {
