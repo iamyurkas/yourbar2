@@ -308,8 +308,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
         visible={isRatingModalVisible}
         animationType="fade"
         onRequestClose={handleCloseRatingModal}>
-        <Pressable style={styles.modalOverlay} onPress={handleCloseRatingModal}>
-          <View
+        <Pressable style={styles.modalOverlay} onPress={handleCloseRatingModal} accessibilityRole="button">
+          <Pressable
             style={[
               styles.ratingModalContent,
               {
@@ -317,11 +317,24 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 borderColor: palette.outline,
                 shadowColor: palette.shadow,
               },
-            ]}>
-            <Text style={[styles.title, { color: palette.onSurface }]}>Favorites rating</Text>
-            <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>
-              Choose the minimum rating to show on Favorites
-            </Text>
+            ]}
+            accessibilityRole="dialog"
+            accessibilityLabel="Favorites rating"
+            onPress={() => {}}>
+            <View style={styles.modalHeader}>
+              <View style={{ flex: 1 }}>
+                <Text style={[styles.title, { color: palette.onSurface }]}>Favorites rating</Text>
+                <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>
+                  Choose the minimum rating to show on Favorites
+                </Text>
+              </View>
+              <Pressable
+                onPress={handleCloseRatingModal}
+                accessibilityRole="button"
+                accessibilityLabel="Close">
+                <MaterialCommunityIcons name="close" size={22} color={palette.onSurfaceVariant} />
+              </Pressable>
+            </View>
             <View style={styles.ratingOptionRow}>
               {[1, 2, 3, 4, 5].map((value) => {
                 const isSelected = value === ratingFilterThreshold;
@@ -356,7 +369,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 );
               })}
             </View>
-          </View>
+          </Pressable>
         </Pressable>
       </Modal>
     </Modal>
@@ -456,6 +469,11 @@ const styles = StyleSheet.create({
     shadowRadius: 12,
     shadowOffset: { width: 0, height: 6 },
     elevation: 10,
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 12,
   },
   ratingOptionRow: {
     flexDirection: 'row',
