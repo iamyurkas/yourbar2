@@ -1,19 +1,30 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Image, type ImageSource } from 'expo-image';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Animated, Dimensions, Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Colors } from '@/constants/theme';
 import { useInventory, type StartScreen } from '@/providers/inventory-provider';
+import CocktailIcon from '@/assets/images/cocktails.svg';
+import IngredientsIcon from '@/assets/images/ingredients.svg';
+import ShakerIcon from '@/assets/images/shaker.svg';
 
 const MENU_WIDTH = Math.round(Dimensions.get('window').width * 0.75);
 const ANIMATION_DURATION = 200;
 
-const START_SCREEN_OPTIONS: { key: StartScreen; label: string; description: string; icon: string }[] = [
+type StartScreenOption = {
+  key: StartScreen;
+  label: string;
+  description: string;
+  icon: { type: 'icon'; name: string } | { type: 'asset'; source: ImageSource };
+};
+
+const START_SCREEN_OPTIONS: StartScreenOption[] = [
   {
     key: 'cocktails_all',
     label: 'All cocktails',
     description: 'Browse every recipe',
-    icon: 'glass-cocktail',
+    icon: { type: 'asset', source: CocktailIcon },
   },
   {
     key: 'cocktails_my',
@@ -25,19 +36,19 @@ const START_SCREEN_OPTIONS: { key: StartScreen; label: string; description: stri
     key: 'cocktails_favorites',
     label: 'Favorite cocktails',
     description: 'Jump into saved cocktails',
-    icon: 'heart',
+    icon: { type: 'icon', name: 'star' },
   },
   {
     key: 'shaker',
     label: 'Shaker',
     description: 'Mix based on your inventory',
-    icon: 'bottle-wine',
+    icon: { type: 'asset', source: ShakerIcon },
   },
   {
     key: 'ingredients_all',
     label: 'All ingredients',
     description: 'Manage every ingredient',
-    icon: 'food-apple-outline',
+    icon: { type: 'asset', source: IngredientsIcon },
   },
   {
     key: 'ingredients_my',
@@ -100,6 +111,22 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     () => START_SCREEN_OPTIONS.find((option) => option.key === startScreen),
     [startScreen],
   );
+
+  const renderStartScreenIcon = (option: StartScreenOption, isSelected: boolean) => {
+    const iconColor = isSelected ? palette.tint : palette.onSurfaceVariant;
+
+    if (option.icon.type === 'asset') {
+      return (
+        <Image
+          source={option.icon.source}
+          style={{ width: 20, height: 20, tintColor: iconColor }}
+          contentFit="contain"
+        />
+      );
+    }
+
+    return <MaterialCommunityIcons name={option.icon.name as never} size={20} color={iconColor} />;
+  };
 
   useEffect(() => {
     if (visible) {
@@ -546,11 +573,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                       pressed ? { opacity: 0.85 } : null,
                     ]}>
                     <View style={[styles.startScreenIcon, { backgroundColor: palette.surfaceVariant }]}>
-                      <MaterialCommunityIcons
-                        name={option.icon as never}
-                        size={20}
-                        color={isSelected ? palette.tint : palette.onSurfaceVariant}
-                      />
+                      {renderStartScreenIcon(option, isSelected)}
                     </View>
                     <View style={styles.startScreenTextContainer}>
                       <Text style={[styles.settingLabel, { color: palette.onSurface }]}>{option.label}</Text>
