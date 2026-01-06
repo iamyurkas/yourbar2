@@ -15,6 +15,7 @@ export type InventorySnapshot<TCocktail, TIngredient> = {
   ignoreGarnish?: boolean;
   allowAllSubstitutes?: boolean;
   useImperialUnits?: boolean;
+  ratingFilterThreshold?: number;
 };
 
 function joinDirectoryPath(directory: string | null | undefined, filename: string): string | undefined {

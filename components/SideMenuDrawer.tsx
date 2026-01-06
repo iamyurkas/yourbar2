@@ -24,9 +24,13 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     setUseImperialUnits,
     keepScreenAwake,
     setKeepScreenAwake,
+    ratingFilterThreshold,
+    setRatingFilterThreshold,
     resetInventoryFromBundle,
   } = useInventory();
   const [isMounted, setIsMounted] = useState(visible);
+  const [isRatingModalVisible, setRatingModalVisible] = useState(false);
+  const ratingModalCloseTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const translateX = useRef(new Animated.Value(-MENU_WIDTH)).current;
   const backdropOpacity = useRef(new Animated.Value(0)).current;
 
@@ -102,6 +106,39 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     await resetInventoryFromBundle();
     onClose();
   };
+
+  const handleRatingThresholdPress = () => {
+    setRatingModalVisible(true);
+  };
+
+  const handleCloseRatingModal = () => {
+    if (ratingModalCloseTimeout.current) {
+      clearTimeout(ratingModalCloseTimeout.current);
+      ratingModalCloseTimeout.current = null;
+    }
+
+    setRatingModalVisible(false);
+  };
+
+  const handleSelectRatingThreshold = (value: number) => {
+    if (ratingModalCloseTimeout.current) {
+      clearTimeout(ratingModalCloseTimeout.current);
+    }
+
+    setRatingFilterThreshold(value);
+    ratingModalCloseTimeout.current = setTimeout(() => {
+      setRatingModalVisible(false);
+      ratingModalCloseTimeout.current = null;
+    }, 250);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (ratingModalCloseTimeout.current) {
+        clearTimeout(ratingModalCloseTimeout.current);
+      }
+    };
+  }, []);
 
   return (
     <Modal transparent visible={isMounted} statusBarTranslucent animationType="none" onRequestClose={onClose}>
@@ -239,6 +276,32 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
             </Pressable>
             <Pressable
               accessibilityRole="button"
+              accessibilityLabel="Set favorites rating filter"
+              onPress={handleRatingThresholdPress}
+              style={[
+                styles.settingRow,
+                {
+                  borderColor: palette.outline,
+                  backgroundColor: palette.surface,
+                },
+              ]}>
+              <View
+                style={[
+                  styles.checkbox,
+                  {
+                    borderColor: palette.tint,
+                    backgroundColor: palette.surfaceVariant,
+                  },
+                ]}>
+                <MaterialCommunityIcons name="star" size={16} color={palette.tint} />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text style={[styles.settingLabel, { color: palette.onSurface }]}>Favorites rating filter</Text>
+                <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>Showing {ratingFilterThreshold}+ stars</Text>
+              </View>
+            </Pressable>
+            <Pressable
+              accessibilityRole="button"
               accessibilityLabel="Reload bundled inventory"
               onPress={handleResetInventory}
               style={[
@@ -261,6 +324,74 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
           </View>
         </Animated.View>
       </View>
+      <Modal
+        transparent
+        visible={isRatingModalVisible}
+        animationType="fade"
+        onRequestClose={handleCloseRatingModal}>
+        <Pressable style={styles.modalOverlay} onPress={handleCloseRatingModal} accessibilityRole="button">
+          <Pressable
+            style={[
+              styles.ratingModalContent,
+              {
+                backgroundColor: palette.surface,
+                borderColor: palette.outline,
+                shadowColor: palette.shadow,
+              },
+            ]}
+            accessibilityLabel="Favorites rating"
+            onPress={() => {}}>
+            <View style={styles.modalHeader}>
+              <View style={{ flex: 1 }}>
+                <Text style={[styles.title, { color: palette.onSurface }]}>Favorites rating</Text>
+                <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>
+                  Choose the minimum rating to show on Favorites
+                </Text>
+              </View>
+              <Pressable
+                onPress={handleCloseRatingModal}
+                accessibilityRole="button"
+                accessibilityLabel="Close">
+                <MaterialCommunityIcons name="close" size={22} color={palette.onSurfaceVariant} />
+              </Pressable>
+            </View>
+            <View style={styles.ratingOptionRow}>
+              {[1, 2, 3, 4, 5].map((value) => {
+                const isSelected = value === ratingFilterThreshold;
+                return (
+                  <Pressable
+                    key={`rating-threshold-${value}`}
+                    accessibilityRole="button"
+                    accessibilityState={{ selected: isSelected }}
+                    accessibilityLabel={`Show ${value} star${value === 1 ? '' : 's'} and up`}
+                    onPress={() => handleSelectRatingThreshold(value)}
+                    style={({ pressed }) => [
+                      styles.ratingOption,
+                      {
+                        borderColor: isSelected ? palette.tint : palette.outlineVariant,
+                        backgroundColor: isSelected ? palette.tint : 'transparent',
+                      },
+                      pressed ? { opacity: 0.8 } : null,
+                    ]}>
+                    <MaterialCommunityIcons
+                      name="star"
+                      size={20}
+                      color={isSelected ? palette.background : palette.onSurfaceVariant}
+                    />
+                    <Text
+                      style={[
+                        styles.ratingOptionLabel,
+                        { color: isSelected ? palette.background : palette.onSurface },
+                      ]}>
+                      {value}+
+                    </Text>
+                  </Pressable>
+                );
+              })}
+            </View>
+          </Pressable>
+        </Pressable>
+      </Modal>
     </Modal>
   );
 }
@@ -340,5 +471,44 @@ const styles = StyleSheet.create({
   },
   settingCaption: {
     fontSize: 12,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 24,
+  },
+  ratingModalContent: {
+    width: '100%',
+    borderRadius: 16,
+    padding: 20,
+    gap: 12,
+    borderWidth: StyleSheet.hairlineWidth,
+    shadowOpacity: 0.12,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 6 },
+    elevation: 10,
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 12,
+  },
+  ratingOptionRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: 10,
+  },
+  ratingOption: {
+    flex: 1,
+    alignItems: 'center',
+    paddingVertical: 12,
+    borderRadius: 12,
+    borderWidth: StyleSheet.hairlineWidth,
+    gap: 6,
+  },
+  ratingOptionLabel: {
+    fontWeight: '700',
   },
 });

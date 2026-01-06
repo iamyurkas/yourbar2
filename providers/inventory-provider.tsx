@@ -57,6 +57,7 @@ type InventoryContextValue = {
   allowAllSubstitutes: boolean;
   useImperialUnits: boolean;
   keepScreenAwake: boolean;
+  ratingFilterThreshold: number;
   setIngredientAvailability: (id: number, available: boolean) => void;
   toggleIngredientAvailability: (id: number) => void;
   toggleIngredientShopping: (id: number) => void;
@@ -75,6 +76,7 @@ type InventoryContextValue = {
   setAllowAllSubstitutes: (value: boolean) => void;
   setUseImperialUnits: (value: boolean) => void;
   setKeepScreenAwake: (value: boolean) => void;
+  setRatingFilterThreshold: (value: number) => void;
 };
 
 type InventoryState = {
@@ -135,6 +137,7 @@ type InventorySnapshot = {
   allowAllSubstitutes?: boolean;
   useImperialUnits?: boolean;
   keepScreenAwake?: boolean;
+  ratingFilterThreshold?: number;
 };
 
 const INVENTORY_SNAPSHOT_VERSION = 1;
@@ -244,6 +247,7 @@ function createSnapshotFromInventory(
     allowAllSubstitutes: boolean;
     useImperialUnits: boolean;
     keepScreenAwake: boolean;
+    ratingFilterThreshold: number;
   },
 ): InventorySnapshot {
   const sanitizedRatings = sanitizeCocktailRatings(options.cocktailRatings);
@@ -266,6 +270,7 @@ function createSnapshotFromInventory(
     allowAllSubstitutes: options.allowAllSubstitutes,
     useImperialUnits: options.useImperialUnits,
     keepScreenAwake: options.keepScreenAwake,
+    ratingFilterThreshold: options.ratingFilterThreshold,
   } satisfies InventorySnapshot;
 }
 
@@ -305,6 +310,11 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   const [keepScreenAwake, setKeepScreenAwake] = useState<boolean>(
     () => globalThis.__yourbarInventoryKeepScreenAwake ?? false,
   );
+  const [ratingFilterThreshold, setRatingFilterThreshold] = useState<number>(() =>
+    typeof globalThis.__yourbarInventoryRatingFilterThreshold === 'number'
+      ? Math.min(5, Math.max(1, Math.round(globalThis.__yourbarInventoryRatingFilterThreshold)))
+      : 1,
+  );
   const lastPersistedSnapshot = useRef<string | undefined>(undefined);
 
   useEffect(() => {
@@ -327,6 +337,10 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           const nextAllowAllSubstitutes = stored.allowAllSubstitutes ?? false;
           const nextUseImperialUnits = stored.useImperialUnits ?? false;
           const nextKeepScreenAwake = stored.keepScreenAwake ?? false;
+          const nextRatingFilterThreshold = Math.min(
+            5,
+            Math.max(1, Math.round(stored.ratingFilterThreshold ?? 1)),
+          );
 
           setInventoryState(nextInventoryState);
           setAvailableIngredientIds(nextAvailableIds);
@@ -336,6 +350,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           setAllowAllSubstitutes(nextAllowAllSubstitutes);
           setUseImperialUnits(nextUseImperialUnits);
           setKeepScreenAwake(nextKeepScreenAwake);
+          setRatingFilterThreshold(nextRatingFilterThreshold);
           return;
         }
       } catch (error) {
@@ -381,6 +396,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     globalThis.__yourbarInventoryAllowAllSubstitutes = allowAllSubstitutes;
     globalThis.__yourbarInventoryUseImperialUnits = useImperialUnits;
     globalThis.__yourbarInventoryKeepScreenAwake = keepScreenAwake;
+    globalThis.__yourbarInventoryRatingFilterThreshold = ratingFilterThreshold;
 
     const snapshot = createSnapshotFromInventory(inventoryState, {
       availableIngredientIds,
@@ -390,6 +406,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       allowAllSubstitutes,
       useImperialUnits,
       keepScreenAwake,
+      ratingFilterThreshold,
     });
     const serialized = JSON.stringify(snapshot);
 
@@ -411,6 +428,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     allowAllSubstitutes,
     useImperialUnits,
     keepScreenAwake,
+    ratingFilterThreshold,
   ]);
 
   const cocktails = inventoryState?.cocktails ?? [];
@@ -1247,6 +1265,11 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     setKeepScreenAwake(Boolean(value));
   }, []);
 
+  const handleSetRatingFilterThreshold = useCallback((value: number) => {
+    const normalized = Math.min(5, Math.max(1, Math.round(value)));
+    setRatingFilterThreshold(normalized);
+  }, []);
+
   const clearBaseIngredient = useCallback((id: number) => {
     setInventoryState((prev) => {
       if (!prev) {
@@ -1284,6 +1307,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       allowAllSubstitutes,
       useImperialUnits,
       keepScreenAwake,
+      ratingFilterThreshold,
       setIngredientAvailability,
       toggleIngredientAvailability,
       toggleIngredientShopping,
@@ -1302,6 +1326,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       setAllowAllSubstitutes: handleSetAllowAllSubstitutes,
       setUseImperialUnits: handleSetUseImperialUnits,
       setKeepScreenAwake: handleSetKeepScreenAwake,
+      setRatingFilterThreshold: handleSetRatingFilterThreshold,
     };
   }, [
     cocktailsWithRatings,
@@ -1313,6 +1338,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     allowAllSubstitutes,
     useImperialUnits,
     keepScreenAwake,
+    ratingFilterThreshold,
     setIngredientAvailability,
     toggleIngredientAvailability,
     toggleIngredientShopping,
@@ -1331,6 +1357,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     handleSetAllowAllSubstitutes,
     handleSetUseImperialUnits,
     handleSetKeepScreenAwake,
+    handleSetRatingFilterThreshold,
     resetInventoryFromBundle,
   ]);
 
