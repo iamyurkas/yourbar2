@@ -4,11 +4,11 @@ import { Image, type ImageSource } from 'expo-image';
 import React, { useEffect, useMemo, useRef, useState, type ComponentProps } from 'react';
 import { Animated, Dimensions, Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 
-import { Colors } from '@/constants/theme';
-import { useInventory, type StartScreen } from '@/providers/inventory-provider';
 import CocktailIcon from '@/assets/images/cocktails.svg';
 import IngredientsIcon from '@/assets/images/ingredients.svg';
 import ShakerIcon from '@/assets/images/shaker.svg';
+import { Colors } from '@/constants/theme';
+import { useInventory, type StartScreen } from '@/providers/inventory-provider';
 
 const MENU_WIDTH = Math.round(Dimensions.get('window').width * 0.75);
 const ANIMATION_DURATION = 200;
@@ -688,8 +688,11 @@ const styles = StyleSheet.create({
   },
   ratingModalContent: {
     width: '100%',
-    borderRadius: 16,
-    padding: 20,
+    borderRadius: 12,
+    paddingTop: 12, 
+    paddingRight: 16,
+    paddingBottom: 20,
+    paddingLeft: 16,
     gap: 12,
     borderWidth: StyleSheet.hairlineWidth,
     shadowOpacity: 0.12,
@@ -712,9 +715,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
-    paddingVertical: 12,
-    paddingHorizontal: 12,
     borderRadius: 12,
+    paddingTop: 12, 
+    paddingRight: 16,
+    paddingBottom: 20,
+    paddingLeft: 16,
     borderWidth: StyleSheet.hairlineWidth,
   },
   startScreenIcon: {
