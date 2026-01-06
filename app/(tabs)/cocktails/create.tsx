@@ -2061,7 +2061,6 @@ const styles = StyleSheet.create({
   glassOptionLabel: {
     textAlign: 'center',
     fontSize: 14,
-    fontWeight: '500',
   },
   glassList: {
     gap: 12,
