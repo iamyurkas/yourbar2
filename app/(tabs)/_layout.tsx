@@ -1,5 +1,5 @@
 import { Image } from 'expo-image';
-import { Tabs, usePathname, useRouter } from 'expo-router';
+import { Tabs, usePathname, useRootNavigationState, useRouter } from 'expo-router';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { BottomTabBarButtonProps } from '@react-navigation/bottom-tabs';
 
@@ -64,6 +64,7 @@ export default function TabLayout() {
   const { startingScreen } = useInventory();
   const router = useRouter();
   const pathname = usePathname();
+  const rootNavigationState = useRootNavigationState();
   const hasAppliedStartingScreen = useRef(false);
 
   const startingTarget = useMemo(() => resolveStartingScreenTarget(startingScreen), [startingScreen]);
@@ -82,6 +83,10 @@ export default function TabLayout() {
       return;
     }
 
+    if (!rootNavigationState?.key) {
+      return;
+    }
+
     if (startingTarget.cocktailTab) {
       setLastCocktailTab(startingTarget.cocktailTab);
     }
@@ -94,7 +99,7 @@ export default function TabLayout() {
     }
 
     hasAppliedStartingScreen.current = true;
-  }, [pathname, router, startingTarget]);
+  }, [pathname, rootNavigationState?.key, router, startingTarget]);
 
   return (
     <>
