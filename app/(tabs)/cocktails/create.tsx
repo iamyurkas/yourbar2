@@ -1341,10 +1341,23 @@ export default function CreateCocktailScreen() {
         transparent
         animationType="fade"
         onRequestClose={handleCloseUnitPicker}>
-        <Pressable style={styles.modalOverlay} onPress={handleCloseUnitPicker}>
-          <View style={[styles.modalCardSmall, { backgroundColor: palette.surface }]}>
-            <View style={styles.modalHeader}>
-              <Text style={[styles.modalTitle, { color: palette.onSurface }]}>Select unit</Text>
+        <Pressable
+          style={styles.unitModalOverlay}
+          onPress={handleCloseUnitPicker}
+          accessibilityRole="button">
+          <Pressable
+            onPress={(event) => event.stopPropagation?.()}
+            style={[
+              styles.unitModalCard,
+              {
+                backgroundColor: palette.surface,
+                borderColor: palette.outline,
+                shadowColor: palette.shadow,
+              },
+            ]}
+            accessibilityRole="menu">
+            <View style={styles.unitModalHeader}>
+              <Text style={[styles.unitModalTitle, { color: palette.onSurface }]}>Select unit</Text>
               <Pressable
                 onPress={handleCloseUnitPicker}
                 accessibilityRole="button"
@@ -1352,7 +1365,7 @@ export default function CreateCocktailScreen() {
                 <MaterialCommunityIcons name="close" size={22} color={palette.onSurfaceVariant} />
               </Pressable>
             </View>
-            <ScrollView contentContainerStyle={styles.unitList}>
+            <ScrollView contentContainerStyle={styles.unitModalList} showsVerticalScrollIndicator={false}>
               {COCKTAIL_UNIT_OPTIONS.map((option) => {
                 const optionLabel = usePluralUnitsInPicker
                   ? COCKTAIL_UNIT_DICTIONARY[option.id]?.plural ?? option.label
@@ -1362,7 +1375,10 @@ export default function CreateCocktailScreen() {
                   <Pressable
                     key={option.id}
                     onPress={() => handleSelectUnit(option.id)}
-                    style={[styles.unitOption, { borderColor: palette.outlineVariant }]}
+                    style={[
+                      styles.unitOption,
+                      { borderColor: palette.outlineVariant, backgroundColor: palette.surfaceBright },
+                    ]}
                     accessibilityRole="button"
                     accessibilityLabel={displayLabel.trim()
                       ? `Select ${displayLabel.trim()}`
@@ -1372,7 +1388,7 @@ export default function CreateCocktailScreen() {
                 );
               })}
             </ScrollView>
-          </View>
+          </Pressable>
         </Pressable>
       </Modal>
 
@@ -2173,8 +2189,8 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
   },
   unitLabel: {
-    fontSize: 14,
-    fontWeight: '400',
+    fontSize: 16,
+    fontWeight: '500',
   },
   toggleRow: {
     flexDirection: 'row',
@@ -2270,9 +2286,36 @@ const styles = StyleSheet.create({
     padding: 20,
     gap: 12,
   },
+  unitModalOverlay: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 24,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+  },
+  unitModalCard: {
+    width: '100%',
+    maxHeight: '92%',
+    borderRadius: 12,
+    paddingTop: 12,
+    paddingRight: 16,
+    paddingBottom: 20,
+    paddingLeft: 16,
+    gap: 12,
+    borderWidth: StyleSheet.hairlineWidth,
+    shadowOpacity: 0.12,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 6 },
+    elevation: 10,
+  },
   modalTitle: {
     fontSize: 16,
     fontWeight: '600',
+  },
+  unitModalTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    marginTop: 4,
   },
   modalSubtitle: {
     fontSize: 14,
@@ -2293,6 +2336,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
+  unitModalHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 12,
+  },
   modalListContent: {
     gap: 8,
     paddingBottom: 12,
@@ -2303,6 +2352,11 @@ const styles = StyleSheet.create({
     marginTop: 24,
   },
   unitList: {
+  },
+  unitModalList: {
+    flexGrow: 1,
+    paddingVertical: 8,
+    gap: 8,
   },
   unitOption: {
     borderWidth: StyleSheet.hairlineWidth,
