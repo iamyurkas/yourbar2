@@ -1365,7 +1365,11 @@ export default function CreateCocktailScreen() {
                 <MaterialCommunityIcons name="close" size={22} color={palette.onSurfaceVariant} />
               </Pressable>
             </View>
-            <ScrollView contentContainerStyle={styles.unitModalList} showsVerticalScrollIndicator={false}>
+            <ScrollView
+              style={styles.unitModalScroll}
+              contentContainerStyle={styles.unitModalList}
+              showsVerticalScrollIndicator={false}
+              keyboardShouldPersistTaps="handled">
               {COCKTAIL_UNIT_OPTIONS.map((option) => {
                 const optionLabel = usePluralUnitsInPicker
                   ? COCKTAIL_UNIT_DICTIONARY[option.id]?.plural ?? option.label
@@ -2296,6 +2300,7 @@ const styles = StyleSheet.create({
   unitModalCard: {
     width: '100%',
     maxHeight: '92%',
+    flexShrink: 1,
     borderRadius: 12,
     paddingTop: 12,
     paddingRight: 16,
@@ -2352,6 +2357,10 @@ const styles = StyleSheet.create({
     marginTop: 24,
   },
   unitList: {
+  },
+  unitModalScroll: {
+    maxHeight: '100%',
+    width: '100%',
   },
   unitModalList: {
     flexGrow: 1,
