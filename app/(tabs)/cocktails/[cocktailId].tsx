@@ -1,5 +1,6 @@
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
+import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
 import React, { useCallback, useEffect, useMemo, useState, useTransition } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
@@ -246,6 +247,7 @@ export default function CocktailDetailsScreen() {
     ignoreGarnish,
     allowAllSubstitutes,
     useImperialUnits,
+    keepScreenAwake,
   } = useInventory();
 
   const resolvedParam = Array.isArray(cocktailId) ? cocktailId[0] : cocktailId;
@@ -259,6 +261,22 @@ export default function CocktailDetailsScreen() {
   useEffect(() => {
     setShowImperialUnits(useImperialUnits);
   }, [useImperialUnits]);
+
+  useEffect(() => {
+    const keepAwakeTag = 'cocktail-details';
+
+    if (keepScreenAwake) {
+      void activateKeepAwakeAsync(keepAwakeTag);
+
+      return () => {
+        void deactivateKeepAwake(keepAwakeTag);
+      };
+    }
+
+    void deactivateKeepAwake(keepAwakeTag);
+
+    return undefined;
+  }, [keepScreenAwake]);
 
   const ingredientLookup: IngredientLookup = useMemo(
     () => createIngredientLookup(ingredients),

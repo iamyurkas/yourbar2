@@ -22,6 +22,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     setAllowAllSubstitutes,
     useImperialUnits,
     setUseImperialUnits,
+    keepScreenAwake,
+    setKeepScreenAwake,
     resetInventoryFromBundle,
   } = useInventory();
   const [isMounted, setIsMounted] = useState(visible);
@@ -90,6 +92,10 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
   const toggleUseImperialUnits = () => {
     setUseImperialUnits(!useImperialUnits);
+  };
+
+  const toggleKeepScreenAwake = () => {
+    setKeepScreenAwake(!keepScreenAwake);
   };
 
   const handleResetInventory = async () => {
@@ -199,6 +205,36 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               <View style={styles.settingTextContainer}>
                 <Text style={[styles.settingLabel, { color: palette.onSurface }]}>Show in imperial</Text>
                 <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>Use oz instead of ml/g</Text>
+              </View>
+            </Pressable>
+            <Pressable
+              accessibilityRole="checkbox"
+              accessibilityState={{ checked: keepScreenAwake }}
+              onPress={toggleKeepScreenAwake}
+              style={[
+                styles.settingRow,
+                {
+                  borderColor: palette.outline,
+                  backgroundColor: palette.surface,
+                },
+              ]}>
+              <View
+                style={[
+                  styles.checkbox,
+                  {
+                    borderColor: keepScreenAwake ? palette.tint : palette.outlineVariant,
+                    backgroundColor: keepScreenAwake ? palette.tint : 'transparent',
+                  },
+                ]}>
+                <MaterialCommunityIcons
+                  name="check"
+                  size={16}
+                  color={keepScreenAwake ? palette.background : palette.outlineVariant}
+                />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text style={[styles.settingLabel, { color: palette.onSurface }]}>Keep screen awake</Text>
+                <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>Prevent sleep on cocktail view</Text>
               </View>
             </Pressable>
             <Pressable

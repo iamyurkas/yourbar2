@@ -56,6 +56,7 @@ type InventoryContextValue = {
   ignoreGarnish: boolean;
   allowAllSubstitutes: boolean;
   useImperialUnits: boolean;
+  keepScreenAwake: boolean;
   setIngredientAvailability: (id: number, available: boolean) => void;
   toggleIngredientAvailability: (id: number) => void;
   toggleIngredientShopping: (id: number) => void;
@@ -73,6 +74,7 @@ type InventoryContextValue = {
   setIgnoreGarnish: (value: boolean) => void;
   setAllowAllSubstitutes: (value: boolean) => void;
   setUseImperialUnits: (value: boolean) => void;
+  setKeepScreenAwake: (value: boolean) => void;
 };
 
 type InventoryState = {
@@ -132,6 +134,7 @@ type InventorySnapshot = {
   ignoreGarnish?: boolean;
   allowAllSubstitutes?: boolean;
   useImperialUnits?: boolean;
+  keepScreenAwake?: boolean;
 };
 
 const INVENTORY_SNAPSHOT_VERSION = 1;
@@ -151,6 +154,8 @@ declare global {
   var __yourbarInventoryAllowAllSubstitutes: boolean | undefined;
   // eslint-disable-next-line no-var
   var __yourbarInventoryUseImperialUnits: boolean | undefined;
+  // eslint-disable-next-line no-var
+  var __yourbarInventoryKeepScreenAwake: boolean | undefined;
 }
 
 function normalizeSearchFields<T extends { name?: string | null; searchName?: string | null; searchTokens?: string[] | null }>(
@@ -238,6 +243,7 @@ function createSnapshotFromInventory(
     ignoreGarnish: boolean;
     allowAllSubstitutes: boolean;
     useImperialUnits: boolean;
+    keepScreenAwake: boolean;
   },
 ): InventorySnapshot {
   const sanitizedRatings = sanitizeCocktailRatings(options.cocktailRatings);
@@ -259,6 +265,7 @@ function createSnapshotFromInventory(
     ignoreGarnish: options.ignoreGarnish,
     allowAllSubstitutes: options.allowAllSubstitutes,
     useImperialUnits: options.useImperialUnits,
+    keepScreenAwake: options.keepScreenAwake,
   } satisfies InventorySnapshot;
 }
 
@@ -295,6 +302,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   const [useImperialUnits, setUseImperialUnits] = useState<boolean>(
     () => globalThis.__yourbarInventoryUseImperialUnits ?? false,
   );
+  const [keepScreenAwake, setKeepScreenAwake] = useState<boolean>(
+    () => globalThis.__yourbarInventoryKeepScreenAwake ?? false,
+  );
   const lastPersistedSnapshot = useRef<string | undefined>(undefined);
 
   useEffect(() => {
@@ -316,6 +326,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           const nextIgnoreGarnish = stored.ignoreGarnish ?? true;
           const nextAllowAllSubstitutes = stored.allowAllSubstitutes ?? false;
           const nextUseImperialUnits = stored.useImperialUnits ?? false;
+          const nextKeepScreenAwake = stored.keepScreenAwake ?? false;
 
           setInventoryState(nextInventoryState);
           setAvailableIngredientIds(nextAvailableIds);
@@ -324,6 +335,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           setIgnoreGarnish(nextIgnoreGarnish);
           setAllowAllSubstitutes(nextAllowAllSubstitutes);
           setUseImperialUnits(nextUseImperialUnits);
+          setKeepScreenAwake(nextKeepScreenAwake);
           return;
         }
       } catch (error) {
@@ -340,6 +352,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           setIgnoreGarnish(true);
           setAllowAllSubstitutes(false);
           setUseImperialUnits(false);
+          setKeepScreenAwake(false);
         }
       } catch (error) {
         console.error('Failed to import bundled inventory', error);
@@ -367,6 +380,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     globalThis.__yourbarInventoryIgnoreGarnish = ignoreGarnish;
     globalThis.__yourbarInventoryAllowAllSubstitutes = allowAllSubstitutes;
     globalThis.__yourbarInventoryUseImperialUnits = useImperialUnits;
+    globalThis.__yourbarInventoryKeepScreenAwake = keepScreenAwake;
 
     const snapshot = createSnapshotFromInventory(inventoryState, {
       availableIngredientIds,
@@ -375,6 +389,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       ignoreGarnish,
       allowAllSubstitutes,
       useImperialUnits,
+      keepScreenAwake,
     });
     const serialized = JSON.stringify(snapshot);
 
@@ -395,6 +410,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     ignoreGarnish,
     allowAllSubstitutes,
     useImperialUnits,
+    keepScreenAwake,
   ]);
 
   const cocktails = inventoryState?.cocktails ?? [];
@@ -1227,6 +1243,10 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     setUseImperialUnits(Boolean(value));
   }, []);
 
+  const handleSetKeepScreenAwake = useCallback((value: boolean) => {
+    setKeepScreenAwake(Boolean(value));
+  }, []);
+
   const clearBaseIngredient = useCallback((id: number) => {
     setInventoryState((prev) => {
       if (!prev) {
@@ -1263,6 +1283,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       ignoreGarnish,
       allowAllSubstitutes,
       useImperialUnits,
+      keepScreenAwake,
       setIngredientAvailability,
       toggleIngredientAvailability,
       toggleIngredientShopping,
@@ -1280,6 +1301,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       setIgnoreGarnish: handleSetIgnoreGarnish,
       setAllowAllSubstitutes: handleSetAllowAllSubstitutes,
       setUseImperialUnits: handleSetUseImperialUnits,
+      setKeepScreenAwake: handleSetKeepScreenAwake,
     };
   }, [
     cocktailsWithRatings,
@@ -1290,6 +1312,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     ignoreGarnish,
     allowAllSubstitutes,
     useImperialUnits,
+    keepScreenAwake,
     setIngredientAvailability,
     toggleIngredientAvailability,
     toggleIngredientShopping,
@@ -1307,6 +1330,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     handleSetIgnoreGarnish,
     handleSetAllowAllSubstitutes,
     handleSetUseImperialUnits,
+    handleSetKeepScreenAwake,
     resetInventoryFromBundle,
   ]);
 
