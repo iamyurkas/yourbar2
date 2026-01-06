@@ -9,6 +9,7 @@ import React, {
 } from 'react';
 
 import { clearInventorySnapshot, loadInventorySnapshot, persistInventorySnapshot } from '@/libs/inventory-storage';
+import { exportInventoryPhotos, exportInventorySnapshot } from '@/libs/inventory-export';
 
 type InventoryData = typeof import('@/assets/data/data.json');
 
@@ -71,6 +72,8 @@ type InventoryContextValue = {
   getCocktailRating: (cocktail: Cocktail) => number;
   setIgnoreGarnish: (value: boolean) => void;
   setAllowAllSubstitutes: (value: boolean) => void;
+  exportInventoryData: () => Promise<void>;
+  exportInventoryMedia: () => Promise<void>;
 };
 
 type InventoryState = {
@@ -253,6 +256,13 @@ function createSnapshotFromInventory(
     ignoreGarnish: options.ignoreGarnish,
     allowAllSubstitutes: options.allowAllSubstitutes,
   } satisfies InventorySnapshot;
+}
+
+function collectPhotoUris(state: InventoryState): string[] {
+  const cocktailPhotos = state.cocktails.map((cocktail) => cocktail.photoUri).filter(Boolean) as string[];
+  const ingredientPhotos = state.ingredients.map((ingredient) => ingredient.photoUri).filter(Boolean) as string[];
+
+  return Array.from(new Set([...cocktailPhotos, ...ingredientPhotos]));
 }
 
 const InventoryContext = createContext<InventoryContextValue | undefined>(undefined);
@@ -1206,6 +1216,38 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     setAllowAllSubstitutes(Boolean(value));
   }, []);
 
+  const handleExportInventoryData = useCallback(async () => {
+    if (!inventoryState) {
+      return;
+    }
+
+    const snapshot = createSnapshotFromInventory(inventoryState, {
+      availableIngredientIds,
+      shoppingIngredientIds,
+      cocktailRatings,
+      ignoreGarnish,
+      allowAllSubstitutes,
+    });
+
+    await exportInventorySnapshot(snapshot);
+  }, [
+    allowAllSubstitutes,
+    availableIngredientIds,
+    cocktailRatings,
+    ignoreGarnish,
+    inventoryState,
+    shoppingIngredientIds,
+  ]);
+
+  const handleExportInventoryMedia = useCallback(async () => {
+    if (!inventoryState) {
+      return;
+    }
+
+    const photoUris = collectPhotoUris(inventoryState);
+    await exportInventoryPhotos(photoUris);
+  }, [inventoryState]);
+
   const clearBaseIngredient = useCallback((id: number) => {
     setInventoryState((prev) => {
       if (!prev) {
@@ -1257,6 +1299,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       getCocktailRating,
       setIgnoreGarnish: handleSetIgnoreGarnish,
       setAllowAllSubstitutes: handleSetAllowAllSubstitutes,
+      exportInventoryData: handleExportInventoryData,
+      exportInventoryMedia: handleExportInventoryMedia,
     };
   }, [
     cocktailsWithRatings,
@@ -1282,7 +1326,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     getCocktailRating,
     handleSetIgnoreGarnish,
     handleSetAllowAllSubstitutes,
-    resetInventoryFromBundle,
+    handleExportInventoryData,
+    handleExportInventoryMedia,
   ]);
 
   return <InventoryContext.Provider value={value}>{children}</InventoryContext.Provider>;
