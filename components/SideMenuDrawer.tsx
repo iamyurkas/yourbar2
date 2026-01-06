@@ -432,10 +432,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
-    paddingVertical: 12,
+    paddingVertical: 8,
     paddingRight: 10,
-    borderRadius: 12,
-    borderWidth: StyleSheet.hairlineWidth,
   },
   actionRow: {
     flexDirection: 'row',
