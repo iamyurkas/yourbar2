@@ -29,20 +29,20 @@ export const START_SCREEN_OPTIONS: StartScreenOption[] = [
 export function getStartScreenPath(key: StartScreenKey): string {
   switch (key) {
     case 'cocktails-my':
-      return '/(tabs)/cocktails?tab=my';
+      return '/cocktails?tab=my';
     case 'cocktails-favorites':
-      return '/(tabs)/cocktails?tab=favorites';
+      return '/cocktails?tab=favorites';
     case 'shaker':
-      return '/(tabs)/shaker';
+      return '/shaker';
     case 'ingredients-my':
-      return '/(tabs)/ingredients?tab=my';
+      return '/ingredients?tab=my';
     case 'ingredients-shopping':
-      return '/(tabs)/ingredients?tab=shopping';
+      return '/ingredients?tab=shopping';
     case 'ingredients-all':
-      return '/(tabs)/ingredients?tab=all';
+      return '/ingredients?tab=all';
     case 'cocktails-all':
     default:
-      return '/(tabs)/cocktails?tab=all';
+      return '/cocktails?tab=all';
   }
 }
 
