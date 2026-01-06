@@ -194,44 +194,6 @@ export default function CreateIngredientScreen() {
     }
   }, [ensureMediaPermission, isPickingImage, showDialog]);
 
-  const confirmLeave = useCallback(
-    (onLeave: () => void) => {
-      showDialog({
-        title: 'Leave without saving?',
-        message: 'Your changes will be lost if you leave this screen.',
-        actions: [
-          { label: 'Stay', variant: 'secondary' },
-          {
-            label: 'Leave',
-            variant: 'destructive',
-            onPress: () => {
-              setHasUnsavedChanges(false);
-              onLeave();
-            },
-          },
-        ],
-      });
-    },
-    [setHasUnsavedChanges, showDialog],
-  );
-
-  useEffect(() => {
-    if (!hasUnsavedChanges) {
-      return;
-    }
-
-    const unsubscribe = navigation.addListener('beforeRemove', (event) => {
-      if (!hasUnsavedChanges || isNavigatingAfterSaveRef.current) {
-        return;
-      }
-
-      event.preventDefault();
-      confirmLeave(() => navigation.dispatch(event.data.action));
-    });
-
-    return unsubscribe;
-  }, [confirmLeave, hasUnsavedChanges, navigation]);
-
   const handleSubmit = useCallback(() => {
     const trimmedName = name.trim();
     if (!trimmedName) {
@@ -287,6 +249,45 @@ export default function CreateIngredientScreen() {
     showDialog,
     selectedTagIds,
   ]);
+
+  const confirmLeave = useCallback(
+    (onLeave: () => void) => {
+      showDialog({
+        title: 'Leave without saving?',
+        message: 'Your changes will be lost if you leave this screen.',
+        actions: [
+          { label: 'Save', onPress: handleSubmit },
+          { label: 'Stay', variant: 'secondary' },
+          {
+            label: 'Leave',
+            variant: 'destructive',
+            onPress: () => {
+              setHasUnsavedChanges(false);
+              onLeave();
+            },
+          },
+        ],
+      });
+    },
+    [handleSubmit, setHasUnsavedChanges, showDialog],
+  );
+
+  useEffect(() => {
+    if (!hasUnsavedChanges) {
+      return;
+    }
+
+    const unsubscribe = navigation.addListener('beforeRemove', (event) => {
+      if (!hasUnsavedChanges || isNavigatingAfterSaveRef.current) {
+        return;
+      }
+
+      event.preventDefault();
+      confirmLeave(() => navigation.dispatch(event.data.action));
+    });
+
+    return unsubscribe;
+  }, [confirmLeave, hasUnsavedChanges, navigation]);
 
   const baseIngredient = useMemo(() => {
     if (baseIngredientId == null) {
