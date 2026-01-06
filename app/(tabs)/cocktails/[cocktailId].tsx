@@ -84,6 +84,38 @@ function formatAmount(value: number): string {
   return Number(rounded.toFixed(2)).toString();
 }
 
+const IMPERIAL_FRACTIONS: { decimal: number; glyph: string }[] = [
+  { decimal: 0.125, glyph: '⅛' },
+  { decimal: 0.25, glyph: '¼' },
+  { decimal: 0.33, glyph: '⅓' },
+  { decimal: 0.375, glyph: '⅜' },
+  { decimal: 0.5, glyph: '½' },
+  { decimal: 0.625, glyph: '⅝' },
+  { decimal: 0.67, glyph: '⅔' },
+  { decimal: 0.75, glyph: '¾' },
+  { decimal: 0.875, glyph: '⅞' },
+];
+
+function formatOunceAmount(value: number): string {
+  const normalized = Math.round(value * 100) / 100;
+  const wholeNumberPortion = Math.trunc(normalized);
+  const fractionalPortion = Math.abs(normalized - wholeNumberPortion);
+
+  const matchedFraction = IMPERIAL_FRACTIONS.find(
+    (fraction) => Math.abs(fractionalPortion - fraction.decimal) < 0.02,
+  );
+
+  if (!matchedFraction) {
+    return formatAmount(normalized);
+  }
+
+  if (wholeNumberPortion === 0) {
+    return matchedFraction.glyph;
+  }
+
+  return `${wholeNumberPortion}${matchedFraction.glyph}`;
+}
+
 function convertIngredientAmount(
   amount: number,
   unitId: number | undefined,
@@ -114,18 +146,24 @@ function formatIngredientQuantity(ingredient: RecipeIngredient, useImperialUnits
 
   let displayAmount = amount;
   let displayUnitId = unitId;
+  let numericAmount: number | undefined;
 
   if (isNumeric) {
     const { value, unitId: nextUnitId } = convertIngredientAmount(parsedAmount, unitId, useImperialUnits);
-    displayAmount = formatAmount(value);
+    numericAmount = value;
     displayUnitId = nextUnitId;
+
+    if (useImperialUnits && displayUnitId === IMPERIAL_UNIT_ID) {
+      displayAmount = formatOunceAmount(value);
+    } else {
+      displayAmount = formatAmount(value);
+    }
   }
 
   const unitDetails = displayUnitId != null ? COCKTAIL_UNIT_DICTIONARY[displayUnitId] : undefined;
 
   let unitText = '';
   if (unitDetails) {
-    const numericAmount = isNumeric ? Number(displayAmount) : undefined;
     const isSingular = numericAmount == null || numericAmount === 1;
     unitText = isSingular ? unitDetails.singular : unitDetails.plural ?? `${unitDetails.singular}s`;
   }
