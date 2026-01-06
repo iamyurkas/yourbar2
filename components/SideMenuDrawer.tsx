@@ -510,7 +510,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                       styles.ratingOption,
                       {
                         borderColor: isSelected ? palette.tint : palette.outlineVariant,
-                        backgroundColor: isSelected ? palette.tint : 'transparent',
+                        backgroundColor: isSelected ? palette.tint : palette.surfaceBright,
                       },
                       pressed ? { opacity: 0.8 } : null,
                     ]}>
@@ -571,7 +571,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                       styles.startScreenOption,
                       {
                         borderColor: isSelected ? palette.tint : palette.outlineVariant,
-                        backgroundColor: isSelected ? palette.tint + '22' : 'transparent',
+                        backgroundColor: isSelected ? palette.tint + '22' : palette.surfaceBright,
                       },
                       pressed ? { opacity: 0.85 } : null,
                     ]}>
@@ -706,7 +706,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   startScreenOptionList: {
-    gap: 10,
+    gap: 4,
   },
   startScreenOption: {
     flexDirection: 'row',
