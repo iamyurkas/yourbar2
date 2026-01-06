@@ -291,27 +291,31 @@ export function SubstituteModal({
     <Modal
       visible={visible}
       transparent
-      animationType="slide"
+      animationType="fade"
       onRequestClose={onClose}
       onShow={handleFocusInput}>
       <Pressable style={styles.modalOverlay} onPress={onClose} accessibilityRole="button">
         <Pressable
-          style={[styles.modalCard, { backgroundColor: paletteColors.surface }]}
+          style={[
+            styles.modalCard,
+            {
+              backgroundColor: paletteColors.surface,
+              borderColor: paletteColors.outline,
+              shadowColor: paletteColors.shadow,
+            },
+          ]}
           onPress={() => {}}
           accessibilityRole="menu">
           <View style={styles.modalHeader}>
-            <View>
-              <Text style={[styles.modalTitle, { color: paletteColors.onSurface }]}>Add substitute</Text>
-              {ingredientName ? (
-                <Text style={[styles.modalSubtitle, { color: paletteColors.onSurfaceVariant }]}>For {ingredientName}</Text>
-              ) : null}
+            <View style={styles.modalTitleRow}>
+              <Text style={[styles.modalTitle, { color: paletteColors.onSurface, flex: 1 }]}>Add substitute</Text>
+              <Pressable onPress={onClose} accessibilityRole="button" accessibilityLabel="Close">
+                <MaterialCommunityIcons name="close" size={22} color={paletteColors.onSurfaceVariant} />
+              </Pressable>
             </View>
-            <Pressable
-              onPress={onClose}
-              accessibilityRole="button"
-              accessibilityLabel="Close">
-              <MaterialCommunityIcons name="close" size={22} color={paletteColors.onSurfaceVariant} />
-            </Pressable>
+            {ingredientName ? (
+              <Text style={[styles.modalSubtitle, { color: paletteColors.onSurfaceVariant }]}>For {ingredientName}</Text>
+            ) : null}
           </View>
           <TextInput
             ref={inputRef}
@@ -324,7 +328,7 @@ export function SubstituteModal({
               {
                 borderColor: paletteColors.outlineVariant,
                 color: paletteColors.text,
-                backgroundColor: palette.surfaceBright,
+                backgroundColor: palette.surfaceVariant,
               },
             ]}
             autoFocus
@@ -351,30 +355,38 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 16,
-    backgroundColor: Colors.backdrop,
+    padding: 24,
+    backgroundColor: 'rgba(0,0,0,0.4)',
   },
   modalCard: {
     width: '100%',
     maxHeight: '92%',
-    borderRadius: 16,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    borderRadius: 12,
+    paddingTop: 12,
+    paddingRight: 16,
+    paddingBottom: 20,
+    paddingLeft: 16,
+    gap: 12,
+    borderWidth: StyleSheet.hairlineWidth,
+    shadowOpacity: 0.12,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 6 },
+    elevation: 10,
   },
   modalHeader: {
+    gap: 8,
+  },
+  modalTitleRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
     gap: 12,
-    paddingBottom: 12,
   },
   modalTitle: {
-    fontSize: 16,
-    fontWeight: '600',
+    fontSize: 20,
+    fontWeight: '700',
   },
   modalSubtitle: {
-    fontSize: 14,
-    marginTop: 4,
+    fontSize: 12,
   },
   modalListContent: {
     paddingVertical: 8,
@@ -388,7 +400,6 @@ const styles = StyleSheet.create({
     borderWidth: StyleSheet.hairlineWidth,
     padding: 12,
     fontSize: 16,
-    marginBottom: 8,
   },
   shoppingIcon: {
     marginTop: 4,
