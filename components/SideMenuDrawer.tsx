@@ -550,56 +550,49 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
             ]}
             accessibilityLabel="Starting screen"
             onPress={() => {}}>
+            <View style={styles.modalHeader}>
+              <Text style={[styles.modalTitle, { color: palette.onSurface, flex: 1 }]}>Starting screen</Text>
+              <Pressable onPress={handleCloseStartScreenModal} accessibilityRole="button" accessibilityLabel="Close">
+                <MaterialCommunityIcons name="close" size={22} color={palette.onSurfaceVariant} />
+              </Pressable>
+            </View>
+            <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>Select where the app opens</Text>
             <ScrollView
               style={styles.startScreenModalScroll}
-              contentContainerStyle={styles.startScreenModalContent}
+              contentContainerStyle={styles.startScreenOptionList}
               showsVerticalScrollIndicator={false}>
-              <View style={styles.modalHeader}>
-                <Text style={[styles.modalTitle, { color: palette.onSurface, flex: 1 }]}>Starting screen</Text>
-                <Pressable
-                  onPress={handleCloseStartScreenModal}
-                  accessibilityRole="button"
-                  accessibilityLabel="Close">
-                  <MaterialCommunityIcons name="close" size={22} color={palette.onSurfaceVariant} />
-                </Pressable>
-              </View>
-              <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>Select where the app opens</Text>
-              <View style={styles.startScreenOptionList}>
-                {START_SCREEN_OPTIONS.map((option) => {
-                  const isSelected = startScreen === option.key;
-                  return (
-                    <Pressable
-                      key={`start-screen-${option.key}`}
-                      accessibilityRole="button"
-                      accessibilityState={{ selected: isSelected }}
-                      accessibilityLabel={`Open ${option.label} first`}
-                      onPress={() => handleSelectStartScreen(option.key)}
-                      style={({ pressed }) => [
-                        styles.startScreenOption,
-                        {
-                          borderColor: isSelected ? palette.tint : palette.outlineVariant,
-                          backgroundColor: isSelected ? palette.tint + '22' : palette.surfaceBright,
-                        },
-                        pressed ? { opacity: 0.85 } : null,
-                      ]}>
-                      <View style={[styles.startScreenIcon, { backgroundColor: palette.surfaceVariant }]}>
-                        {renderStartScreenIcon(option, isSelected)}
-                      </View>
-                      <View style={styles.startScreenTextContainer}>
-                        <Text style={[styles.settingLabel, { color: palette.onSurface }]}>{option.label}</Text>
-                        <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>
-                          {option.description}
-                        </Text>
-                      </View>
-                      <MaterialCommunityIcons
-                        name={isSelected ? 'check-circle' : 'checkbox-blank-circle-outline'}
-                        size={20}
-                        color={isSelected ? palette.tint : palette.onSurfaceVariant}
-                      />
-                    </Pressable>
-                  );
-                })}
-              </View>
+              {START_SCREEN_OPTIONS.map((option) => {
+                const isSelected = startScreen === option.key;
+                return (
+                  <Pressable
+                    key={`start-screen-${option.key}`}
+                    accessibilityRole="button"
+                    accessibilityState={{ selected: isSelected }}
+                    accessibilityLabel={`Open ${option.label} first`}
+                    onPress={() => handleSelectStartScreen(option.key)}
+                    style={({ pressed }) => [
+                      styles.startScreenOption,
+                      {
+                        borderColor: isSelected ? palette.tint : palette.outlineVariant,
+                        backgroundColor: isSelected ? palette.highlightFaint : palette.surfaceBright,
+                      },
+                      pressed ? { opacity: 0.85 } : null,
+                    ]}>
+                    <View style={[styles.startScreenIcon, { backgroundColor: palette.surfaceVariant }]}>
+                      {renderStartScreenIcon(option, isSelected)}
+                    </View>
+                    <View style={styles.startScreenTextContainer}>
+                      <Text style={[styles.settingLabel, { color: palette.onSurface }]}>{option.label}</Text>
+                      <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>{option.description}</Text>
+                    </View>
+                    <MaterialCommunityIcons
+                      name={isSelected ? 'check-circle' : 'checkbox-blank-circle-outline'}
+                      size={20}
+                      color={isSelected ? palette.tint : palette.onSurfaceVariant}
+                    />
+                  </Pressable>
+                );
+              })}
             </ScrollView>
           </Pressable>
         </Pressable>
@@ -719,10 +712,6 @@ const styles = StyleSheet.create({
   startScreenModalScroll: {
     maxHeight: '100%',
     width: '100%',
-  },
-  startScreenModalContent: {
-    flexGrow: 1,
-    gap: 12,
   },
   startScreenOptionList: {
     gap: 4,

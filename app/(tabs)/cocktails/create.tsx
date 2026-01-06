@@ -1375,13 +1375,17 @@ export default function CreateCocktailScreen() {
                   ? COCKTAIL_UNIT_DICTIONARY[option.id]?.plural ?? option.label
                   : option.label;
                 const displayLabel = optionLabel || ' ';
+                const isSelected = option.id === targetUnitPickerIngredient?.unitId;
                 return (
                   <Pressable
                     key={option.id}
                     onPress={() => handleSelectUnit(option.id)}
                     style={[
                       styles.unitOption,
-                      { borderColor: palette.outlineVariant, backgroundColor: palette.surfaceBright },
+                      {
+                        borderColor: isSelected ? palette.tint : palette.outlineVariant,
+                        backgroundColor: isSelected ? palette.highlightFaint : palette.surfaceBright,
+                      },
                     ]}
                     accessibilityRole="button"
                     accessibilityLabel={displayLabel.trim()
@@ -2194,7 +2198,7 @@ const styles = StyleSheet.create({
   },
   unitLabel: {
     fontSize: 16,
-    fontWeight: '500',
+    fontWeight: '400',
   },
   toggleRow: {
     flexDirection: 'row',
@@ -2365,7 +2369,7 @@ const styles = StyleSheet.create({
   unitModalList: {
     flexGrow: 1,
     paddingVertical: 8,
-    gap: 8,
+    gap: 4,
   },
   unitOption: {
     borderWidth: StyleSheet.hairlineWidth,
