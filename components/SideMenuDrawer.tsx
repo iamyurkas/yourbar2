@@ -21,6 +21,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     allowAllSubstitutes,
     setAllowAllSubstitutes,
     resetInventoryFromBundle,
+    exportInventoryData,
+    exportInventoryPhotos,
   } = useInventory();
   const [isMounted, setIsMounted] = useState(visible);
   const translateX = useRef(new Animated.Value(-MENU_WIDTH)).current;
@@ -88,6 +90,16 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
   const handleResetInventory = async () => {
     await resetInventoryFromBundle();
+    onClose();
+  };
+
+  const handleExportData = async () => {
+    await exportInventoryData();
+    onClose();
+  };
+
+  const handleExportPhotos = async () => {
+    await exportInventoryPhotos();
     onClose();
   };
 
@@ -183,6 +195,48 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 <Text style={[styles.settingLabel, { color: palette.onSurface }]}>Reload bundled data</Text>
                 <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>
                   Clear saved inventory and reload assets from data.json
+                </Text>
+              </View>
+            </Pressable>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Export inventory data"
+              onPress={handleExportData}
+              style={[
+                styles.actionRow,
+                {
+                  borderColor: palette.outline,
+                  backgroundColor: palette.surface,
+                },
+              ]}>
+              <View style={[styles.actionIcon, { backgroundColor: palette.surfaceVariant }]}> 
+                <MaterialCommunityIcons name="file-export" size={16} color={palette.onSurfaceVariant} />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text style={[styles.settingLabel, { color: palette.onSurface }]}>Export data</Text>
+                <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>
+                  Share current inventory as a backup file
+                </Text>
+              </View>
+            </Pressable>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Export custom photos"
+              onPress={handleExportPhotos}
+              style={[
+                styles.actionRow,
+                {
+                  borderColor: palette.outline,
+                  backgroundColor: palette.surface,
+                },
+              ]}>
+              <View style={[styles.actionIcon, { backgroundColor: palette.surfaceVariant }]}> 
+                <MaterialCommunityIcons name="image-multiple" size={16} color={palette.onSurfaceVariant} />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text style={[styles.settingLabel, { color: palette.onSurface }]}>Export photos</Text>
+                <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>
+                  Share user-added cocktail and ingredient photos
                 </Text>
               </View>
             </Pressable>
