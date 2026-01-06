@@ -790,7 +790,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   listContent: {
-    paddingTop: 16,
+    paddingTop: 0,
     paddingHorizontal: 0,
     paddingBottom: 120,
   },
