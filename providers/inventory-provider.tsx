@@ -8,6 +8,7 @@ import React, {
   useState,
 } from 'react';
 
+import { exportPhotosWithPicker, exportSnapshotWithPicker } from '@/libs/inventory-export';
 import { clearInventorySnapshot, loadInventorySnapshot, persistInventorySnapshot } from '@/libs/inventory-storage';
 
 type InventoryData = typeof import('@/assets/data/data.json');
@@ -61,6 +62,8 @@ type InventoryContextValue = {
   clearBaseIngredient: (id: number) => void;
   createCocktail: (input: CreateCocktailInput) => Cocktail | undefined;
   createIngredient: (input: CreateIngredientInput) => Ingredient | undefined;
+  exportInventoryData: () => Promise<void>;
+  exportInventoryPhotos: () => Promise<{ saved: number; failed: number }>;
   resetInventoryFromBundle: () => Promise<void>;
   updateIngredient: (id: number, input: CreateIngredientInput) => Ingredient | undefined;
   updateCocktail: (id: number, input: CreateCocktailInput) => Cocktail | undefined;
@@ -383,6 +386,47 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
 
   const cocktails = inventoryState?.cocktails ?? [];
   const ingredients = inventoryState?.ingredients ?? [];
+
+  const exportInventoryData = useCallback(async () => {
+    if (!inventoryState) {
+      return;
+    }
+
+    const snapshot = createSnapshotFromInventory(inventoryState, {
+      availableIngredientIds,
+      shoppingIngredientIds,
+      cocktailRatings,
+      ignoreGarnish,
+      allowAllSubstitutes,
+    });
+
+    await exportSnapshotWithPicker(snapshot);
+  }, [
+    allowAllSubstitutes,
+    availableIngredientIds,
+    cocktailRatings,
+    ignoreGarnish,
+    inventoryState,
+    shoppingIngredientIds,
+  ]);
+
+  const exportInventoryPhotos = useCallback(async () => {
+    const photoUris = new Set<string>();
+
+    cocktails.forEach((cocktail) => {
+      if (cocktail.photoUri) {
+        photoUris.add(cocktail.photoUri);
+      }
+    });
+
+    ingredients.forEach((ingredient) => {
+      if (ingredient.photoUri) {
+        photoUris.add(ingredient.photoUri);
+      }
+    });
+
+    await exportPhotosWithPicker(Array.from(photoUris));
+  }, [cocktails, ingredients]);
 
   const resolveCocktailKey = useCallback((cocktail: Cocktail) => {
     const id = cocktail.id;
@@ -1247,6 +1291,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       clearBaseIngredient,
       createCocktail,
       createIngredient,
+      exportInventoryData,
+      exportInventoryPhotos,
       resetInventoryFromBundle,
       updateCocktail,
       updateIngredient,
@@ -1272,6 +1318,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     clearBaseIngredient,
     createCocktail,
     createIngredient,
+    exportInventoryData,
+    exportInventoryPhotos,
     resetInventoryFromBundle,
     updateCocktail,
     updateIngredient,
@@ -1282,7 +1330,6 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     getCocktailRating,
     handleSetIgnoreGarnish,
     handleSetAllowAllSubstitutes,
-    resetInventoryFromBundle,
   ]);
 
   return <InventoryContext.Provider value={value}>{children}</InventoryContext.Provider>;
