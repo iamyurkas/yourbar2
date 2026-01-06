@@ -1,6 +1,7 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { Image, type ImageSource } from 'expo-image';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState, type ComponentProps } from 'react';
 import { Animated, Dimensions, Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Colors } from '@/constants/theme';
@@ -12,11 +13,16 @@ import ShakerIcon from '@/assets/images/shaker.svg';
 const MENU_WIDTH = Math.round(Dimensions.get('window').width * 0.75);
 const ANIMATION_DURATION = 200;
 
+type StartScreenIcon =
+  | { type: 'icon'; name: ComponentProps<typeof MaterialCommunityIcons>['name'] }
+  | { type: 'materialIcon'; name: ComponentProps<typeof MaterialIcons>['name'] }
+  | { type: 'asset'; source: ImageSource };
+
 type StartScreenOption = {
   key: StartScreen;
   label: string;
   description: string;
-  icon: { type: 'icon'; name: string } | { type: 'asset'; source: ImageSource };
+  icon: StartScreenIcon;
 };
 
 const START_SCREEN_OPTIONS: StartScreenOption[] = [
@@ -30,7 +36,7 @@ const START_SCREEN_OPTIONS: StartScreenOption[] = [
     key: 'cocktails_my',
     label: 'My cocktails',
     description: 'See your creations first',
-    icon: 'account-outline',
+    icon: { type: 'icon', name: 'glass-cocktail' },
   },
   {
     key: 'cocktails_favorites',
@@ -54,13 +60,13 @@ const START_SCREEN_OPTIONS: StartScreenOption[] = [
     key: 'ingredients_my',
     label: 'My ingredients',
     description: 'Start with what you own',
-    icon: 'basket',
+    icon: { type: 'icon', name: 'check-circle' },
   },
   {
     key: 'ingredients_shopping',
     label: 'Shopping list',
     description: 'Head to your shopping items',
-    icon: 'cart',
+    icon: { type: 'materialIcon', name: 'shopping-cart' },
   },
 ];
 
@@ -125,7 +131,11 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       );
     }
 
-    return <MaterialCommunityIcons name={option.icon.name as never} size={20} color={iconColor} />;
+    if (option.icon.type === 'materialIcon') {
+      return <MaterialIcons name={option.icon.name} size={20} color={iconColor} />;
+    }
+
+    return <MaterialCommunityIcons name={option.icon.name} size={20} color={iconColor} />;
   };
 
   useEffect(() => {
