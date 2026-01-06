@@ -595,9 +595,9 @@
       "description": "Sweet, thick apricot juice blend that brings mellow stone-fruit flavor. Great for tiki drinks, spritzes, and punches.",
       "tags": [
         {
-          "id": 6,
-          "name": "fruit",
-          "color": "#81C784"
+          "id": 5,
+          "name": "juice",
+          "color": "#AED581"
         }
       ],
       "usageCount": 0,
