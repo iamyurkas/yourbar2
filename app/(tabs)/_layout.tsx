@@ -1,6 +1,6 @@
 import { Image } from 'expo-image';
 import { Tabs, usePathname, useRouter } from 'expo-router';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { BottomTabBarButtonProps } from '@react-navigation/bottom-tabs';
 
 import CocktailIcon from '@/assets/images/cocktails.svg';
@@ -8,8 +8,10 @@ import LemonIcon from '@/assets/images/ingredients.svg';
 import ShakerIcon from '@/assets/images/shaker.svg';
 import { AppDialog, type DialogOptions } from '@/components/AppDialog';
 import { HapticTab } from '@/components/haptic-tab';
-import { getLastCocktailTab, getLastIngredientTab } from '@/libs/collection-tabs';
+import { getLastCocktailTab, getLastIngredientTab, setLastCocktailTab, setLastIngredientTab } from '@/libs/collection-tabs';
+import { resolveStartingScreenTarget } from '@/libs/starting-screen';
 import { useUnsavedChanges } from '@/providers/unsaved-changes-provider';
+import { useInventory } from '@/providers/inventory-provider';
 import { palette } from '@/theme/theme';
 
 const EDITING_PATH_PATTERN = /^\/(cocktails\/create|ingredients\/create|ingredients\/[^/]+\/edit)(\/|$)/;
@@ -59,6 +61,13 @@ function TabBarButton({ onOpenDialog, ...props }: TabBarButtonProps) {
 
 export default function TabLayout() {
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(null);
+  const { startingScreen } = useInventory();
+  const router = useRouter();
+  const pathname = usePathname();
+  const hasAppliedStartingScreen = useRef(false);
+
+  const startingTarget = useMemo(() => resolveStartingScreenTarget(startingScreen), [startingScreen]);
+  const initialTabRoute = useMemo(() => startingTarget.path.replace('/', ''), [startingTarget.path]);
 
   const closeDialog = useCallback(() => {
     setDialogOptions(null);
@@ -68,10 +77,29 @@ export default function TabLayout() {
     setDialogOptions(options);
   }, []);
 
+  useEffect(() => {
+    if (hasAppliedStartingScreen.current) {
+      return;
+    }
+
+    if (startingTarget.cocktailTab) {
+      setLastCocktailTab(startingTarget.cocktailTab);
+    }
+    if (startingTarget.ingredientTab) {
+      setLastIngredientTab(startingTarget.ingredientTab);
+    }
+
+    if (pathname !== startingTarget.path) {
+      router.replace(startingTarget.path);
+    }
+
+    hasAppliedStartingScreen.current = true;
+  }, [pathname, router, startingTarget]);
+
   return (
     <>
       <Tabs
-        initialRouteName="cocktails"
+        initialRouteName={initialTabRoute as 'cocktails' | 'shaker' | 'ingredients'}
         screenOptions={{
           headerShown: false,
           tabBarActiveTintColor: palette.primary,

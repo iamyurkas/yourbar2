@@ -8,7 +8,14 @@ import React, {
   useState,
 } from 'react';
 
+import { setLastCocktailTab, setLastIngredientTab } from '@/libs/collection-tabs';
 import { clearInventorySnapshot, loadInventorySnapshot, persistInventorySnapshot } from '@/libs/inventory-storage';
+import {
+  STARTING_SCREEN_DEFAULT,
+  type StartingScreenOption,
+  resolveStartingScreenTarget,
+  sanitizeStartingScreen,
+} from '@/libs/starting-screen';
 
 type InventoryData = typeof import('@/assets/data/data.json');
 
@@ -58,6 +65,7 @@ type InventoryContextValue = {
   useImperialUnits: boolean;
   keepScreenAwake: boolean;
   ratingFilterThreshold: number;
+  startingScreen: StartingScreenOption;
   setIngredientAvailability: (id: number, available: boolean) => void;
   toggleIngredientAvailability: (id: number) => void;
   toggleIngredientShopping: (id: number) => void;
@@ -77,6 +85,7 @@ type InventoryContextValue = {
   setUseImperialUnits: (value: boolean) => void;
   setKeepScreenAwake: (value: boolean) => void;
   setRatingFilterThreshold: (value: number) => void;
+  setStartingScreen: (value: StartingScreenOption) => void;
 };
 
 type InventoryState = {
@@ -138,6 +147,7 @@ type InventorySnapshot = {
   useImperialUnits?: boolean;
   keepScreenAwake?: boolean;
   ratingFilterThreshold?: number;
+  startingScreen?: StartingScreenOption;
 };
 
 const INVENTORY_SNAPSHOT_VERSION = 1;
@@ -159,6 +169,8 @@ declare global {
   var __yourbarInventoryUseImperialUnits: boolean | undefined;
   // eslint-disable-next-line no-var
   var __yourbarInventoryKeepScreenAwake: boolean | undefined;
+  // eslint-disable-next-line no-var
+  var __yourbarInventoryStartingScreen: StartingScreenOption | undefined;
 }
 
 function normalizeSearchFields<T extends { name?: string | null; searchName?: string | null; searchTokens?: string[] | null }>(
@@ -248,6 +260,7 @@ function createSnapshotFromInventory(
     useImperialUnits: boolean;
     keepScreenAwake: boolean;
     ratingFilterThreshold: number;
+    startingScreen: StartingScreenOption;
   },
 ): InventorySnapshot {
   const sanitizedRatings = sanitizeCocktailRatings(options.cocktailRatings);
@@ -271,6 +284,7 @@ function createSnapshotFromInventory(
     useImperialUnits: options.useImperialUnits,
     keepScreenAwake: options.keepScreenAwake,
     ratingFilterThreshold: options.ratingFilterThreshold,
+    startingScreen: options.startingScreen,
   } satisfies InventorySnapshot;
 }
 
@@ -315,6 +329,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       ? Math.min(5, Math.max(1, Math.round(globalThis.__yourbarInventoryRatingFilterThreshold)))
       : 1,
   );
+  const [startingScreen, setStartingScreen] = useState<StartingScreenOption>(
+    () => globalThis.__yourbarInventoryStartingScreen ?? STARTING_SCREEN_DEFAULT,
+  );
   const lastPersistedSnapshot = useRef<string | undefined>(undefined);
 
   useEffect(() => {
@@ -341,6 +358,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             5,
             Math.max(1, Math.round(stored.ratingFilterThreshold ?? 1)),
           );
+          const nextStartingScreen = sanitizeStartingScreen(stored.startingScreen);
 
           setInventoryState(nextInventoryState);
           setAvailableIngredientIds(nextAvailableIds);
@@ -351,6 +369,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           setUseImperialUnits(nextUseImperialUnits);
           setKeepScreenAwake(nextKeepScreenAwake);
           setRatingFilterThreshold(nextRatingFilterThreshold);
+          setStartingScreen(nextStartingScreen);
           return;
         }
       } catch (error) {
@@ -368,6 +387,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           setAllowAllSubstitutes(false);
           setUseImperialUnits(false);
           setKeepScreenAwake(false);
+          setStartingScreen(STARTING_SCREEN_DEFAULT);
         }
       } catch (error) {
         console.error('Failed to import bundled inventory', error);
@@ -397,6 +417,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     globalThis.__yourbarInventoryUseImperialUnits = useImperialUnits;
     globalThis.__yourbarInventoryKeepScreenAwake = keepScreenAwake;
     globalThis.__yourbarInventoryRatingFilterThreshold = ratingFilterThreshold;
+    globalThis.__yourbarInventoryStartingScreen = startingScreen;
 
     const snapshot = createSnapshotFromInventory(inventoryState, {
       availableIngredientIds,
@@ -407,6 +428,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       useImperialUnits,
       keepScreenAwake,
       ratingFilterThreshold,
+      startingScreen,
     });
     const serialized = JSON.stringify(snapshot);
 
@@ -429,6 +451,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     useImperialUnits,
     keepScreenAwake,
     ratingFilterThreshold,
+    startingScreen,
   ]);
 
   const cocktails = inventoryState?.cocktails ?? [];
@@ -1270,6 +1293,24 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     setRatingFilterThreshold(normalized);
   }, []);
 
+  const handleSetStartingScreen = useCallback((value: StartingScreenOption) => {
+    setStartingScreen((previous) => {
+      if (previous === value) {
+        return previous;
+      }
+
+      const target = resolveStartingScreenTarget(value);
+      if (target.cocktailTab) {
+        setLastCocktailTab(target.cocktailTab);
+      }
+      if (target.ingredientTab) {
+        setLastIngredientTab(target.ingredientTab);
+      }
+
+      return value;
+    });
+  }, []);
+
   const clearBaseIngredient = useCallback((id: number) => {
     setInventoryState((prev) => {
       if (!prev) {
@@ -1308,6 +1349,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       useImperialUnits,
       keepScreenAwake,
       ratingFilterThreshold,
+      startingScreen,
       setIngredientAvailability,
       toggleIngredientAvailability,
       toggleIngredientShopping,
@@ -1327,6 +1369,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       setUseImperialUnits: handleSetUseImperialUnits,
       setKeepScreenAwake: handleSetKeepScreenAwake,
       setRatingFilterThreshold: handleSetRatingFilterThreshold,
+      setStartingScreen: handleSetStartingScreen,
     };
   }, [
     cocktailsWithRatings,
@@ -1339,6 +1382,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     useImperialUnits,
     keepScreenAwake,
     ratingFilterThreshold,
+    startingScreen,
     setIngredientAvailability,
     toggleIngredientAvailability,
     toggleIngredientShopping,
@@ -1358,6 +1402,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     handleSetUseImperialUnits,
     handleSetKeepScreenAwake,
     handleSetRatingFilterThreshold,
+    handleSetStartingScreen,
     resetInventoryFromBundle,
   ]);
 
