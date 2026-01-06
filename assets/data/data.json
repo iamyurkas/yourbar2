@@ -101,7 +101,7 @@
     {
       "id": 773514,
       "name": "Agave Syrup",
-      "description": "Agave nectar (more accurately called agave syrup) is a sweetener commercially produced from several species of agave, including Agave tequilana (blue agave) and Agave salmiana. Agave syrup is sweeter than honey and tends to be less viscous. Most agave syrup comes from Mexico and South Africa.\r\n\r\nTo produce agave syrup from the Agave americana and A. tequilana plants, the leaves are cut off the plant after it has been growing for seven to fourteen years. The juice is then extracted from the core of the agave, called the piña. The juice is filtered, then heated to break the complex components (the polysaccharides) into simple sugars.[citation needed] The main polysaccharide is called inulin or fructosan and is mostly fructose. This filtered juice is then concentrated to a syrupy liquid, slightly thinner than honey. Its color varies from light- to dark-amber, depending on the degree of processing.\r\n\r\nAgave salmiana is processed differently from Agave tequiliana. As the plant develops, it starts to grow a stalk called a quiote. The stalk is cut off before it fully grows, creating a hole in the center of the plant that fills with a liquid called aguamiel. The liquid is collected daily. The liquid is then heated, breaking down its complex components into fructose and glucose and preventing it from fermenting into pulque.\r\n\r\nAn alternative method used to process the agave juice without heat is described in a United States patent for a process that uses enzymes derived from the mold Aspergillus niger to convert the inulin-rich extract into fructose. Aspergillus niger, a fungus commonly used in industrial fermentations, is \"generally recognized as safe\" (GRAS) by the U.S. Food and Drug Administration.",
+      "description": "Agave syrup is a honey-like sweetener made from blue agave and related plants. It has a mellow caramel sweetness and dissolves quickly in cold drinks. Common in margaritas and other tequila cocktails.",
       "tags": [
         {
           "id": 4,
@@ -1151,7 +1151,7 @@
     {
       "id": 1755771415451,
       "name": "Blue Curaçao Syrup",
-      "description": "",
+      "description": "Blue Curaçao syrup delivers sweet orange flavor with a vivid blue hue. It mimics the taste of curaçao liqueur without alcohol. Great for colorful tropical cocktails and lemonades.",
       "tags": [
         {
           "id": 4,
@@ -1719,7 +1719,7 @@
     {
       "id": 863110,
       "name": "Chocolate Syrup",
-      "description": "",
+      "description": "Chocolate syrup is a rich cocoa sweetener used for dessert drinks. It adds chocolate aroma and body to milkshakes or creamy cocktails. Drizzle inside glasses for garnish.",
       "tags": [
         {
           "id": 4,
@@ -1775,7 +1775,7 @@
     {
       "id": 1755450448103,
       "name": "Cinnamon Syrup",
-      "description": "",
+      "description": "Cinnamon syrup combines sugar with warming cinnamon spice. It brings cozy baking notes to tiki drinks, punches, or coffee cocktails. Keep refrigerated for best flavor.",
       "tags": [
         {
           "id": 4,
@@ -1948,7 +1948,7 @@
     {
       "id": 219375,
       "name": "Coconut Syrup",
-      "description": "",
+      "description": "Coconut syrup delivers sweet, creamy coconut flavor in a pourable form. Use it to mimic coconut cream without the heaviness. Perfect for coladas, spritzers, or coffee drinks.",
       "tags": [
         {
           "id": 4,
@@ -2137,7 +2137,7 @@
     {
       "id": 867968,
       "name": "Corn Syrup",
-      "description": "",
+      "description": "Corn syrup is a neutral, viscous sweetener made from corn starch. It keeps sauces smooth and prevents crystallization in syrups. Bartenders sometimes use it for stable homemade sodas or garnishes.",
       "tags": [
         {
           "id": 4,
@@ -2900,7 +2900,7 @@
     {
       "id": 888089,
       "name": "Falernum",
-      "description": "Falernum (pronounced fah-learn-um) is a sweet syrup used in Caribbean and tropical drinks. It contains flavors of almond, ginger, lime, and sometimes vanilla, cloves, and allspice. It is used in cocktails in a manner similar to orgeat syrup or can be drunk on the rocks.\r\n\r\nThe syrup form can be alcoholic or nonalcoholic.\r\n\r\nThe consistency is thick, the color can be white to light amber, and it may be clear or translucent.",
+      "description": "Falernum is a Caribbean syrup flavored with almond, ginger, lime, and baking spices. It can be alcoholic or not but is always thick and lightly spiced. Use it to bring tropical warmth to tiki recipes.",
       "tags": [
         {
           "id": 4,
@@ -3146,7 +3146,7 @@
     {
       "id": 109858,
       "name": "Ginger Syrup",
-      "description": "",
+      "description": "Ginger syrup packs spicy, fresh ginger heat balanced with sweetness. It mixes easily into highballs, sours, and zero-proof drinks. Adds a zesty kick without muddling fresh ginger.",
       "tags": [
         {
           "id": 4,
@@ -3474,7 +3474,7 @@
     {
       "id": 803536,
       "name": "Grenadine",
-      "description": "Grenadine is a commonly used, non-alcoholic bar syrup, characterised by a flavour that is both tart and sweet, and by a deep red colour. It is popular as an ingredient in cocktails, both for its flavour and to give a reddish/pink tint to mixed drinks.\r\n\r\nThe name grenadine originated from the French word grenade which means pomegranate, with pomme meaning apple and granate derived from the Italian word for seeds.\r\n\r\nGrenadine was originally prepared from pomegranate juice, sugar, and water.\r\n\r\nAs grenadine is subject to minimal regulation, its basic flavour profile can alternatively be obtained from a mixture of blackcurrant juice and other fruit juices with the blackcurrant flavour dominating.",
+      "description": "Grenadine is a deep-red, nonalcoholic syrup with tart-sweet pomegranate flavor. It colors cocktails pink or crimson while adding fruity brightness. Quality versions lean on real pomegranate instead of artificial cherry.",
       "tags": [
         {
           "id": 4,
@@ -4362,7 +4362,7 @@
     {
       "id": 182121,
       "name": "Maple syrup",
-      "description": "",
+      "description": "Maple syrup is a natural sweetener made from reduced maple sap. Its caramelized, woody notes pair well with whiskey and coffee cocktails. Use sparingly since it is richer than simple syrup.",
       "tags": [
         {
           "id": 4,
@@ -4879,7 +4879,7 @@
     {
       "id": 623211,
       "name": "Passion Fruit Syrup",
-      "description": "",
+      "description": "Passion fruit syrup delivers tropical tartness with perfumed aroma. It brightens tiki cocktails like the Hurricane or Jamaican classics. Also works in spritzes or sodas when you want sharp fruit acidity.",
       "tags": [
         {
           "id": 4,
@@ -5458,7 +5458,7 @@
     {
       "id": 196062,
       "name": "Raspberry Syrup",
-      "description": "",
+      "description": "Raspberry syrup offers vivid berry sweetness with gentle tartness. It provides the signature flavor in Clover Club and other gin drinks. Swirl into sodas or desserts for color and aroma.",
       "tags": [
         {
           "id": 4,
@@ -5635,7 +5635,7 @@
     {
       "id": 889197,
       "name": "Rose Syrup",
-      "description": "",
+      "description": "Rose syrup is floral and sweet, capturing fragrant rose petals. A few drops add aromatic lift to gin, vodka, or nonalcoholic spritzes. Use lightly to avoid overpowering other flavors.",
       "tags": [
         {
           "id": 4,
@@ -6415,7 +6415,7 @@
     {
       "id": 188075,
       "name": "Vanilla Syrup",
-      "description": "",
+      "description": "Vanilla syrup infuses simple syrup with warm vanilla bean flavor. It softens sharp spirits and rounds out coffee or espresso cocktails. Drizzle in whipped cream drinks or soda floats.",
       "tags": [
         {
           "id": 4,
