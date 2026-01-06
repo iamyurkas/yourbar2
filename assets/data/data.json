@@ -157,7 +157,7 @@
     {
       "id": 73154,
       "name": "Allspice",
-      "description": "",
+      "description": "Warm spice with clove, cinnamon, and nutmeg notes often used in tiki syrups and punches.",
       "tags": [
         {
           "id": 8,
@@ -331,7 +331,7 @@
     {
       "id": 677547,
       "name": "Angelica root",
-      "description": "",
+      "description": "Earthy, herbal root that adds dry bitterness to gins and aromatic bitters.",
       "tags": [
         {
           "id": 8,
@@ -388,7 +388,7 @@
     {
       "id": 1755522272938,
       "name": "Anise",
-      "description": "",
+      "description": "Licorice-scented spice that brightens syrups, liqueurs, and garnishes.",
       "tags": [
         {
           "id": 8,
@@ -959,7 +959,7 @@
     {
       "id": 220504,
       "name": "Black Pepper",
-      "description": "",
+      "description": "Cracked peppercorn heat for savory cocktails or rimming a spicy Bloody Mary.",
       "tags": [
         {
           "id": 8,
@@ -1413,7 +1413,7 @@
     {
       "id": 813081,
       "name": "Cardamon",
-      "description": "",
+      "description": "Fragrant cardamom pods bring citrusy, eucalyptus spice to syrups and infusions.",
       "tags": [
         {
           "id": 8,
@@ -1450,7 +1450,7 @@
     {
       "id": 520181,
       "name": "Celery Salt",
-      "description": "",
+      "description": "Seasoned salt with celery seed that adds savory lift to Bloody Marys and Micheladas.",
       "tags": [
         {
           "id": 8,
@@ -1738,7 +1738,7 @@
     {
       "id": 46858,
       "name": "Cinnamon",
-      "description": "",
+      "description": "Sweet warming spice that blends into syrups and dustings for tiki and winter drinks.",
       "tags": [
         {
           "id": 8,
@@ -1794,7 +1794,7 @@
     {
       "id": 214731,
       "name": "Cloves",
-      "description": "",
+      "description": "Potent warming buds used sparingly in syrups, mulled mixes, and garnishes.",
       "tags": [
         {
           "id": 8,
@@ -2119,7 +2119,7 @@
     {
       "id": 439920,
       "name": "Coriander",
-      "description": "",
+      "description": "Citrusy coriander seeds used to add bright spice to gin-inspired syrups and bitters.",
       "tags": [
         {
           "id": 8,
@@ -3069,7 +3069,7 @@
     {
       "id": 830493,
       "name": "Ginger",
-      "description": "",
+      "description": "Spicy, aromatic root used fresh or ground for syrups, mules, and punches.",
       "tags": [
         {
           "id": 8,
@@ -3648,7 +3648,7 @@
     {
       "id": 435279,
       "name": "Hot Sauce",
-      "description": "",
+      "description": "Vinegar-forward chili sauce that brings heat to Micheladas, Bloody Marys, and spicy rims.",
       "tags": [
         {
           "id": 8,
@@ -4495,7 +4495,7 @@
     {
       "id": 591435,
       "name": "Nutmeg",
-      "description": "",
+      "description": "Warm aromatic spice often grated over punches, eggnogs, and tiki drinks.",
       "tags": [
         {
           "id": 8,
@@ -5768,7 +5768,7 @@
     {
       "id": 728001,
       "name": "Salt",
-      "description": "Table salt or common salt is a mineral composed primarily of sodium chloride (NaCl), a chemical compound belonging to the larger class of salts; salt in its natural form as a crystalline mineral is known as rock salt or halite. Salt is present in vast quantities in seawater, where it is the main mineral constituent. The open ocean has about 35 grams (1.2 oz) of solids per litre, a salinity of 3.5%.",
+      "description": "Common seasoning of sodium chloride used to balance sweetness or bitterness in drinks. Often rimming margarita glasses or highlighting citrus-forward cocktails.",
       "tags": [
         {
           "id": 8,
@@ -6377,7 +6377,7 @@
     {
       "id": 653040,
       "name": "Vanilla",
-      "description": "",
+      "description": "Sweet floral bean used to infuse spirits or syrups with mellow bakery notes.",
       "tags": [
         {
           "id": 8,
@@ -6395,7 +6395,7 @@
     {
       "id": 116001,
       "name": "Vanilla Extract",
-      "description": "",
+      "description": "Concentrated vanilla flavoring; a few drops round out creamy or dessert-style cocktails.",
       "tags": [
         {
           "id": 8,
