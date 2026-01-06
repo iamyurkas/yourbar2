@@ -478,7 +478,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
         <Pressable style={styles.modalOverlay} onPress={handleCloseRatingModal} accessibilityRole="button">
           <Pressable
             style={[
-              styles.ratingModalContent,
+              styles.modalCard,
               {
                 backgroundColor: palette.surface,
                 borderColor: palette.outline,
@@ -488,19 +488,14 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
             accessibilityLabel="Favorites rating"
             onPress={() => {}}>
             <View style={styles.modalHeader}>
-              <View style={styles.modalTitleRow}>
-                <Text style={[styles.title, { color: palette.onSurface, flex: 1 }]}>Favorites rating</Text>
-                <Pressable
-                  onPress={handleCloseRatingModal}
-                  accessibilityRole="button"
-                  accessibilityLabel="Close">
-                  <MaterialCommunityIcons name="close" size={22} color={palette.onSurfaceVariant} />
-                </Pressable>
-              </View>
-              <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}> 
-                Choose the minimum rating to show on Favorites
-              </Text>
+              <Text style={[styles.modalTitle, { color: palette.onSurface, flex: 1 }]}>Favorites rating</Text>
+              <Pressable onPress={handleCloseRatingModal} accessibilityRole="button" accessibilityLabel="Close">
+                <MaterialCommunityIcons name="close" size={22} color={palette.onSurfaceVariant} />
+              </Pressable>
             </View>
+            <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>
+              Choose the minimum rating to show on Favorites
+            </Text>
             <View style={styles.ratingOptionRow}>
               {[1, 2, 3, 4, 5].map((value) => {
                 const isSelected = value === ratingFilterThreshold;
@@ -546,7 +541,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
         <Pressable style={styles.modalOverlay} onPress={handleCloseStartScreenModal} accessibilityRole="button">
           <Pressable
             style={[
-              styles.ratingModalContent,
+              styles.modalCard,
               {
                 backgroundColor: palette.surface,
                 borderColor: palette.outline,
@@ -556,14 +551,12 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
             accessibilityLabel="Starting screen"
             onPress={() => {}}>
             <View style={styles.modalHeader}>
-              <View style={styles.modalTitleRow}>
-                <Text style={[styles.title, { color: palette.onSurface, flex: 1 }]}>Starting screen</Text>
-                <Pressable onPress={handleCloseStartScreenModal} accessibilityRole="button" accessibilityLabel="Close">
-                  <MaterialCommunityIcons name="close" size={22} color={palette.onSurfaceVariant} />
-                </Pressable>
-              </View>
-              <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>Select where the app opens</Text>
+              <Text style={[styles.modalTitle, { color: palette.onSurface, flex: 1 }]}>Starting screen</Text>
+              <Pressable onPress={handleCloseStartScreenModal} accessibilityRole="button" accessibilityLabel="Close">
+                <MaterialCommunityIcons name="close" size={22} color={palette.onSurfaceVariant} />
+              </Pressable>
             </View>
+            <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>Select where the app opens</Text>
             <View style={styles.startScreenOptionList}>
               {START_SCREEN_OPTIONS.map((option) => {
                 const isSelected = startScreen === option.key;
@@ -686,10 +679,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 24,
   },
-  ratingModalContent: {
+  modalCard: {
     width: '100%',
+    maxHeight: '92%',
     borderRadius: 12,
-    paddingTop: 12, 
+    paddingTop: 12,
     paddingRight: 16,
     paddingBottom: 20,
     paddingLeft: 16,
@@ -701,12 +695,15 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   modalHeader: {
-    gap: 8,
-  },
-  modalTitleRow: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     gap: 12,
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    marginTop: 4,
   },
   startScreenOptionList: {
     gap: 10,
