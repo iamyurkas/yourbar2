@@ -1074,7 +1074,7 @@
     {
       "id": 767055,
       "name": "Blackcurrant Cordial",
-      "description": "",
+      "description": "Sweet blackcurrant syrup with deep berry color and tangy sweetness. Dilute with soda or water for a refreshing base. Great for spritzes, punches, or zero-proof cocktails.",
       "tags": [
         {
           "id": 3,
@@ -1813,7 +1813,7 @@
     {
       "id": 767607,
       "name": "Coca-Cola",
-      "description": "Coca-Cola, or Coke, is a carbonated soft drink[1] produced by The Coca-Cola Company. Originally intended as a patent medicine, it was invented in the late 19th century by John Pemberton and was bought out by businessman Asa Griggs Candler, whose marketing tactics led Coca-Cola to its dominance of the world soft-drink market throughout the 20th century. The drink's name refers to two of its original ingredients, which were kola nuts (a source of caffeine) and coca leaves. The current formula of Coca-Cola remains a trade secret, although a variety of reported recipes and experimental recreations have been published.\r\n\r\nThe Coca-Cola Company produces concentrate, which is then sold to licensed Coca-Cola bottlers throughout the world. The bottlers, who hold exclusive territory contracts with the company, produce the finished product in cans and bottles from the concentrate, in combination with filtered water and sweeteners. A typical 12-US-fluid-ounce (350 ml) can contains 38 grams (1.3 oz) of sugar (usually in the form of high fructose corn syrup). The bottlers then sell, distribute, and merchandise Coca-Cola to retail stores, restaurants, and vending machines throughout the world. The Coca-Cola Company also sells concentrate for soda fountains of major restaurants and foodservice distributors.\r\n\r\nThe Coca-Cola Company has on occasion introduced other cola drinks under the Coke name. The most common of these is Diet Coke, along with others including Caffeine-Free Coca-Cola, Diet Coke Caffeine-Free, Coca-Cola Cherry, Coca-Cola Zero, Coca-Cola Vanilla, and special versions with lemon, lime, and coffee. Based on Interbrand's \"best global brand\" study of 2015, Coca-Cola was the world's third most valuable brand, after Apple and Google. In 2013, Coke products were sold in over 200 countries worldwide, with consumers downing more than 1.8 billion company beverage servings each day.",
+      "description": "Coca-Cola is a caramelized cola soda created in the late 19th century. Its blend of caffeine, sweetness, and spice makes it a versatile mixer with rum or whiskey. Bottlers worldwide sell it in cans, bottles, and fountain formats.",
       "tags": [
         {
           "id": 3,
@@ -2634,7 +2634,7 @@
     {
       "id": 478041,
       "name": "Dr. Pepper",
-      "description": "",
+      "description": "Dr Pepper is a cherry-spice cola with its signature blend of 23 flavors. It brings caramel and vanilla notes that pair well with whiskey or rum. Adds sweetness and fizz without extra citrus.",
       "tags": [
         {
           "id": 3,
@@ -2864,7 +2864,7 @@
     {
       "id": 750837,
       "name": "Espresso",
-      "description": "",
+      "description": "Concentrated coffee shot with rich crema and intense bitterness. Adds depth to coffee cocktails like an Espresso Martini. Use freshly pulled espresso for the best foam and aroma.",
       "tags": [
         {
           "id": 3,
@@ -3013,7 +3013,7 @@
     {
       "id": 126369,
       "name": "Fresca",
-      "description": "",
+      "description": "Fresca is a grapefruit-flavored diet soda with a crisp, dry finish. Zero sugar keeps cocktails lighter while adding bubbles. Mix with tequila, gin, or vodka for bright spritzes.",
       "tags": [
         {
           "id": 3,
@@ -3341,7 +3341,7 @@
     {
       "id": 889993,
       "name": "Grape Soda",
-      "description": "",
+      "description": "Sweet, purple grape-flavored soda with a bubbly texture. Adds candy-like fruit notes to playful cocktails. Works well in punches or low-ABV spritzes.",
       "tags": [
         {
           "id": 3,
@@ -4113,7 +4113,7 @@
     {
       "id": 972300,
       "name": "Lemon Tonic",
-      "description": "",
+      "description": "Lemon tonic water combines quinine bitterness with bright lemon. Adds citrus zip and carbonation to gin or vodka drinks. Use when you want more zest than standard tonic.",
       "tags": [
         {
           "id": 3,
@@ -4132,7 +4132,7 @@
     {
       "id": 73931,
       "name": "Lemon-Lime Soda",
-      "description": "",
+      "description": "Classic lemon-lime soda with gentle citrus sweetness and plenty of fizz. Balances tart spirits or liqueurs while keeping drinks light. Ideal for highballs and party punches.",
       "tags": [
         {
           "id": 3,
@@ -4152,7 +4152,7 @@
     {
       "id": 906592,
       "name": "Lemonade",
-      "description": "Lemonade is any of various sweetened beverages found around the world, all characterized by lemon flavour.\r\n\r\nMost lemonade varieties can be separated into two distinct types: cloudy and clear; each is known simply as \"lemonade\" (or a cognate) in countries where dominant. Cloudy lemonade, generally found in North America and India, is a traditionally homemade drink made with lemon juice, water, and sweetener such as cane sugar or honey. Found in the United Kingdom, Ireland, South Africa, Australia, and New Zealand, clear lemonade is a lemon flavoured carbonated soft drink. It should not be confused with Sprite, a lemon-lime flavoured soft drink.\r\n\r\nA popular cloudy variation is pink lemonade, made with added fruit flavours such as raspberry or strawberry among others, giving a distinctive pink color. The \"-ade\" suffix may also be applied to other similar drinks made with different fruits, such as limeade, orangeade, or cherryade. Alcoholic varieties are known as hard lemonade.\r\n\r\nIn many European countries, the French word limonade has come to mean \"soft drink\", regardless of flavour.[citation needed]",
+      "description": "Lemonade is a sweetened lemon beverage served either still or carbonated. Cloudy styles mix lemon juice, water, and sugar, while clear versions resemble fizzy lemon soda. Variations include pink lemonade or hard lemonade for boozy spins.",
       "tags": [
         {
           "id": 3,
@@ -5113,7 +5113,7 @@
     {
       "id": 261291,
       "name": "Pepsi Cola",
-      "description": "",
+      "description": "Pepsi is a caramel-forward cola with vanilla and citrus notes. It adds sweetness, color, and bubbles to rum or whiskey mixes. Slightly softer than Coke for smoother highballs.",
       "tags": [
         {
           "id": 3,
@@ -5287,7 +5287,7 @@
     {
       "id": 715770,
       "name": "Pink Lemonade",
-      "description": "",
+      "description": "Pink lemonade is a lemon-based soft drink tinted with red fruit. It offers sweet-tart citrus with a hint of berry. Great for spritzes, slushies, or colorful punches.",
       "tags": [
         {
           "id": 3,
@@ -5616,7 +5616,7 @@
     {
       "id": 122449,
       "name": "Root Beer",
-      "description": "Root beer is a sweet North American soft drink traditionally made using the sassafras tree Sassafras albidum (sassafras) or the vine Smilax ornata (sarsaparilla) as the primary flavour. Root beer may be alcoholic or non-alcoholic, come naturally free of caffeine or have caffeine added, and be carbonated or non-carbonated. It usually has a thick, foamy head when poured. Modern, commercially produced root beer is generally sweet, foamy, carbonated, nonalcoholic, and flavoured using artificial sassafras flavouring.",
+      "description": "Root beer is a sweet North American soft drink traditionally flavored with sassafras or sarsaparilla. It can be caffeinated or not and usually pours with a thick, foamy head. Modern versions are nonalcoholic, carbonated, and use artificial sassafras flavoring.",
       "tags": [
         {
           "id": 3,
@@ -6018,7 +6018,7 @@
     {
       "id": 94556,
       "name": "Sprite",
-      "description": "",
+      "description": "Sprite is a caffeine-free lemon-lime soda with bright citrus fizz. Provides sweetness and effervescence without heavy flavors. Reliable mixer for vodka, gin, or whiskey highballs.",
       "tags": [
         {
           "id": 3,
