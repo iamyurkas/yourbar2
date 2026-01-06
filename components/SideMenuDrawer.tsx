@@ -488,18 +488,18 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
             accessibilityLabel="Favorites rating"
             onPress={() => {}}>
             <View style={styles.modalHeader}>
-              <View style={{ flex: 1 }}>
-                <Text style={[styles.title, { color: palette.onSurface }]}>Favorites rating</Text>
-                <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>
-                  Choose the minimum rating to show on Favorites
-                </Text>
+              <View style={styles.modalTitleRow}>
+                <Text style={[styles.title, { color: palette.onSurface, flex: 1 }]}>Favorites rating</Text>
+                <Pressable
+                  onPress={handleCloseRatingModal}
+                  accessibilityRole="button"
+                  accessibilityLabel="Close">
+                  <MaterialCommunityIcons name="close" size={22} color={palette.onSurfaceVariant} />
+                </Pressable>
               </View>
-              <Pressable
-                onPress={handleCloseRatingModal}
-                accessibilityRole="button"
-                accessibilityLabel="Close">
-                <MaterialCommunityIcons name="close" size={22} color={palette.onSurfaceVariant} />
-              </Pressable>
+              <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}> 
+                Choose the minimum rating to show on Favorites
+              </Text>
             </View>
             <View style={styles.ratingOptionRow}>
               {[1, 2, 3, 4, 5].map((value) => {
@@ -556,13 +556,13 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
             accessibilityLabel="Starting screen"
             onPress={() => {}}>
             <View style={styles.modalHeader}>
-              <View style={{ flex: 1 }}>
-                <Text style={[styles.title, { color: palette.onSurface }]}>Starting screen</Text>
-                <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>Select where the app opens</Text>
+              <View style={styles.modalTitleRow}>
+                <Text style={[styles.title, { color: palette.onSurface, flex: 1 }]}>Starting screen</Text>
+                <Pressable onPress={handleCloseStartScreenModal} accessibilityRole="button" accessibilityLabel="Close">
+                  <MaterialCommunityIcons name="close" size={22} color={palette.onSurfaceVariant} />
+                </Pressable>
               </View>
-              <Pressable onPress={handleCloseStartScreenModal} accessibilityRole="button" accessibilityLabel="Close">
-                <MaterialCommunityIcons name="close" size={22} color={palette.onSurfaceVariant} />
-              </Pressable>
+              <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>Select where the app opens</Text>
             </View>
             <View style={styles.startScreenOptionList}>
               {START_SCREEN_OPTIONS.map((option) => {
@@ -698,8 +698,11 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   modalHeader: {
+    gap: 8,
+  },
+  modalTitleRow: {
     flexDirection: 'row',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     gap: 12,
   },
   startScreenOptionList: {
