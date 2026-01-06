@@ -85,14 +85,23 @@ function formatAmount(value: number): string {
 }
 
 const IMPERIAL_FRACTIONS: { decimal: number; glyph: string }[] = [
+  { decimal: 0.1, glyph: '⅒' },
+  { decimal: 0.111, glyph: '⅑' },
   { decimal: 0.125, glyph: '⅛' },
+  { decimal: 0.143, glyph: '⅐' },
+  { decimal: 0.167, glyph: '⅙' },
+  { decimal: 0.2, glyph: '⅕' },
   { decimal: 0.25, glyph: '¼' },
-  { decimal: 0.33, glyph: '⅓' },
+  { decimal: 0.333, glyph: '⅓' },
   { decimal: 0.375, glyph: '⅜' },
+  { decimal: 0.4, glyph: '⅖' },
   { decimal: 0.5, glyph: '½' },
+  { decimal: 0.6, glyph: '⅗' },
   { decimal: 0.625, glyph: '⅝' },
-  { decimal: 0.67, glyph: '⅔' },
+  { decimal: 0.667, glyph: '⅔' },
   { decimal: 0.75, glyph: '¾' },
+  { decimal: 0.8, glyph: '⅘' },
+  { decimal: 0.833, glyph: '⅚' },
   { decimal: 0.875, glyph: '⅞' },
 ];
 
@@ -101,9 +110,21 @@ function formatOunceAmount(value: number): string {
   const wholeNumberPortion = Math.trunc(normalized);
   const fractionalPortion = Math.abs(normalized - wholeNumberPortion);
 
-  const matchedFraction = IMPERIAL_FRACTIONS.find(
-    (fraction) => Math.abs(fractionalPortion - fraction.decimal) < 0.02,
-  );
+  const matchedFraction = IMPERIAL_FRACTIONS.reduce<
+    { fraction: (typeof IMPERIAL_FRACTIONS)[number]; difference: number } | undefined
+  >((closest, fraction) => {
+    const difference = Math.abs(fractionalPortion - fraction.decimal);
+
+    if (difference >= 0.02) {
+      return closest;
+    }
+
+    if (!closest || difference < closest.difference) {
+      return { fraction, difference };
+    }
+
+    return closest;
+  }, undefined)?.fraction;
 
   if (!matchedFraction) {
     return formatAmount(normalized);
