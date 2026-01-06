@@ -30,6 +30,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   } = useInventory();
   const [isMounted, setIsMounted] = useState(visible);
   const [isRatingModalVisible, setRatingModalVisible] = useState(false);
+  const ratingModalCloseTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const translateX = useRef(new Animated.Value(-MENU_WIDTH)).current;
   const backdropOpacity = useRef(new Animated.Value(0)).current;
 
@@ -111,13 +112,33 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   };
 
   const handleCloseRatingModal = () => {
+    if (ratingModalCloseTimeout.current) {
+      clearTimeout(ratingModalCloseTimeout.current);
+      ratingModalCloseTimeout.current = null;
+    }
+
     setRatingModalVisible(false);
   };
 
   const handleSelectRatingThreshold = (value: number) => {
+    if (ratingModalCloseTimeout.current) {
+      clearTimeout(ratingModalCloseTimeout.current);
+    }
+
     setRatingFilterThreshold(value);
-    setRatingModalVisible(false);
+    ratingModalCloseTimeout.current = setTimeout(() => {
+      setRatingModalVisible(false);
+      ratingModalCloseTimeout.current = null;
+    }, 250);
   };
+
+  useEffect(() => {
+    return () => {
+      if (ratingModalCloseTimeout.current) {
+        clearTimeout(ratingModalCloseTimeout.current);
+      }
+    };
+  }, []);
 
   return (
     <Modal transparent visible={isMounted} statusBarTranslucent animationType="none" onRequestClose={onClose}>
