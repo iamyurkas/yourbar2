@@ -80,6 +80,7 @@ export const ingredientImages: Record<string, number> = {
   'assets/ingredients/1758626570572-coconut-water.jpg': require('./ingredients/1758626570572-coconut-water.jpg'),
   'assets/ingredients/1758750410858-amaro.jpg': require('./ingredients/1758750410858-amaro.jpg'),
   'assets/ingredients/1759244905934-anejo-tequila.jpg': require('./ingredients/1759244905934-anejo-tequila.jpg'),
+  'assets/ingredients/147675-luxardo-maraschino.jpg': require('./ingredients/147675-luxardo-maraschino.jpg'),
   'assets/ingredients/1759246381381-peppermint-candy.jpg': require('./ingredients/1759246381381-peppermint-candy.jpg'),
   'assets/ingredients/1759248231223-creole-bitters.jpg': require('./ingredients/1759248231223-creole-bitters.jpg'),
   'assets/ingredients/1759336939666-bizon-grass-vodka.jpg': require('./ingredients/1759336939666-bizon-grass-vodka.jpg'),
