@@ -1,6 +1,7 @@
 import { Image } from 'expo-image';
 import { Tabs, usePathname, useRouter } from 'expo-router';
 import React, { useCallback, useState } from 'react';
+import { StyleSheet, View, useColorScheme } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { BottomTabBarButtonProps } from '@react-navigation/bottom-tabs';
 
@@ -61,6 +62,10 @@ function TabBarButton({ onOpenDialog, ...props }: TabBarButtonProps) {
 export default function TabLayout() {
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(null);
   const insets = useSafeAreaInsets();
+  const colorScheme = useColorScheme();
+  const isDarkMode = colorScheme === 'dark';
+
+  const tabBarInsetColor = isDarkMode ? palette.inverseSurface : palette.surface;
 
   const closeDialog = useCallback(() => {
     setDialogOptions(null);
@@ -82,11 +87,18 @@ export default function TabLayout() {
             height: 72 + insets.bottom,
             paddingTop: 8,
             paddingBottom: insets.bottom,
+            backgroundColor: 'transparent',
           },
           tabBarItemStyle: {
             justifyContent: 'center',
             alignItems: 'center',
           },
+          tabBarBackground: () => (
+            <View style={styles.tabBarBackground}>
+              <View style={styles.tabBarSurface} />
+              <View style={[styles.tabBarInset, { height: insets.bottom, backgroundColor: tabBarInsetColor }]} />
+            </View>
+          ),
         }}>
         <Tabs.Screen
           name="cocktails"
@@ -161,3 +173,18 @@ export default function TabLayout() {
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  tabBarBackground: {
+    ...StyleSheet.absoluteFillObject,
+    flexDirection: 'column',
+  },
+  tabBarSurface: {
+    flex: 1,
+    backgroundColor: palette.surface,
+  },
+  tabBarInset: {
+    height: 0,
+    backgroundColor: palette.surface,
+  },
+});
