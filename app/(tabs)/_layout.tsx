@@ -1,6 +1,7 @@
 import { Image } from 'expo-image';
 import { Tabs, usePathname, useRouter } from 'expo-router';
 import React, { useCallback, useState } from 'react';
+import { useColorScheme } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { BottomTabBarButtonProps } from '@react-navigation/bottom-tabs';
 
@@ -61,6 +62,8 @@ function TabBarButton({ onOpenDialog, ...props }: TabBarButtonProps) {
 export default function TabLayout() {
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(null);
   const insets = useSafeAreaInsets();
+  const colorScheme = useColorScheme();
+  const tabBarBackground = colorScheme === 'dark' ? palette.inverseSurface : palette.surface;
 
   const closeDialog = useCallback(() => {
     setDialogOptions(null);
@@ -82,6 +85,7 @@ export default function TabLayout() {
             height: 72 + insets.bottom,
             paddingTop: 8,
             paddingBottom: insets.bottom,
+            backgroundColor: tabBarBackground,
           },
           tabBarItemStyle: {
             justifyContent: 'center',
