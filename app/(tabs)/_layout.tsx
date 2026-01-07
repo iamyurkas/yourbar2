@@ -1,6 +1,7 @@
 import { Image } from 'expo-image';
 import { Tabs, usePathname, useRouter } from 'expo-router';
 import React, { useCallback, useState } from 'react';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { BottomTabBarButtonProps } from '@react-navigation/bottom-tabs';
 
 import CocktailIcon from '@/assets/images/cocktails.svg';
@@ -59,6 +60,7 @@ function TabBarButton({ onOpenDialog, ...props }: TabBarButtonProps) {
 
 export default function TabLayout() {
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(null);
+  const insets = useSafeAreaInsets();
 
   const closeDialog = useCallback(() => {
     setDialogOptions(null);
@@ -77,8 +79,9 @@ export default function TabLayout() {
           tabBarActiveTintColor: palette.primary,
           tabBarInactiveTintColor: palette.onSurfaceVariant,
           tabBarStyle: {
-            height: 72,
-            paddingVertical: 8,
+            height: 72 + insets.bottom,
+            paddingTop: 8,
+            paddingBottom: insets.bottom,
           },
           tabBarItemStyle: {
             justifyContent: 'center',
