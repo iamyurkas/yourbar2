@@ -642,9 +642,23 @@ export default function CocktailDetailsScreen() {
                         return;
                       }
 
+                      const returnToParam =
+                        cocktail?.id != null ? String(cocktail.id) : resolvedParam ? String(resolvedParam) : undefined;
+                      const returnToParams = returnToParam
+                        ? JSON.stringify({ cocktailId: returnToParam })
+                        : undefined;
+
                       router.push({
                         pathname: '/ingredients/[ingredientId]',
-                        params: { ingredientId: String(routeParam) },
+                        params: {
+                          ingredientId: String(routeParam),
+                          ...(returnToParams
+                            ? {
+                                returnToPath: '/cocktails/[cocktailId]',
+                                returnToParams,
+                              }
+                            : {}),
+                        },
                       });
                     };
 
