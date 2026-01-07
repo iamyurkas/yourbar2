@@ -367,8 +367,22 @@ export default function IngredientDetailsScreen() {
       return;
     }
 
-    router.push({ pathname: '/cocktails/[cocktailId]', params: { cocktailId: String(cocktailId) } });
-  }, []);
+    const returnToParam = ingredient?.id != null ? String(ingredient.id) : ingredientId;
+    const returnToParams = returnToParam ? JSON.stringify({ ingredientId: returnToParam }) : undefined;
+
+    router.push({
+      pathname: '/cocktails/[cocktailId]',
+      params: {
+        cocktailId: String(cocktailId),
+        ...(returnToParams
+          ? {
+              returnToPath: '/ingredients/[ingredientId]',
+              returnToParams,
+            }
+          : {}),
+      },
+    });
+  }, [ingredient?.id, ingredientId]);
 
   const handleRemoveBranded = useCallback(
     (brandedIngredient: Ingredient) =>
