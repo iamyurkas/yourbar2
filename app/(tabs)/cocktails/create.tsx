@@ -209,6 +209,25 @@ export default function CreateCocktailScreen() {
   const ingredientNameParam = getParamValue(params.ingredientName);
   const cocktailParam = getParamValue(params.cocktailId);
   const cocktailNameParam = getParamValue(params.cocktailName);
+  const returnToParams = useMemo(() => {
+    const payload = {
+      mode: modeParam,
+      source: sourceParam,
+      ingredientId: ingredientParam,
+      ingredientName: ingredientNameParam,
+      cocktailId: cocktailParam,
+      cocktailName: cocktailNameParam,
+    };
+    const json = JSON.stringify(payload);
+    return json === '{}' ? undefined : json;
+  }, [
+    cocktailNameParam,
+    cocktailParam,
+    ingredientNameParam,
+    ingredientParam,
+    modeParam,
+    sourceParam,
+  ]);
 
   const [name, setName] = useState('');
   const [glassId, setGlassId] = useState<string | null>('cocktail_glass');
@@ -676,11 +695,17 @@ export default function CreateCocktailScreen() {
   const handleRequestCreateIngredient = useCallback((suggested: string) => {
     const trimmed = suggested.trim();
     if (!trimmed) {
-      router.push('/ingredients/create');
+      router.push({
+        pathname: '/ingredients/create',
+        params: { returnToPath: '/cocktails/create', returnToParams },
+      });
       return;
     }
-    router.push({ pathname: '/ingredients/create', params: { suggestedName: trimmed } });
-  }, []);
+    router.push({
+      pathname: '/ingredients/create',
+      params: { suggestedName: trimmed, returnToPath: '/cocktails/create', returnToParams },
+    });
+  }, [returnToParams]);
 
   const handleSelectSubstituteCandidate = useCallback(
     (candidate: Ingredient) => {
