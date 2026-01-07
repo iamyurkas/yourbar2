@@ -1,4 +1,5 @@
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import { Image } from 'expo-image';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
 import React, { useCallback, useEffect, useMemo, useState, useTransition } from 'react';
@@ -48,7 +49,13 @@ function useResolvedIngredient(param: string | undefined, ingredients: Ingredien
 
 export default function IngredientDetailsScreen() {
   const palette = Colors;
-  const { ingredientId } = useLocalSearchParams<{ ingredientId?: string }>();
+  const params = useLocalSearchParams<{
+    ingredientId?: string;
+    returnToPath?: string;
+    returnToParams?: string;
+  }>();
+  const navigation = useNavigation();
+  const { ingredientId } = params;
   const {
     ingredients,
     cocktails,
@@ -65,6 +72,31 @@ export default function IngredientDetailsScreen() {
     Array.isArray(ingredientId) ? ingredientId[0] : ingredientId,
     ingredients,
   );
+
+  const returnToPath = useMemo(() => {
+    const value = Array.isArray(params.returnToPath) ? params.returnToPath[0] : params.returnToPath;
+    return typeof value === 'string' && value.length > 0 ? value : undefined;
+  }, [params.returnToPath]);
+
+  const returnToParams = useMemo(() => {
+    const value = Array.isArray(params.returnToParams) ? params.returnToParams[0] : params.returnToParams;
+    if (typeof value !== 'string' || value.length === 0) {
+      return undefined;
+    }
+
+    try {
+      const parsed = JSON.parse(value);
+      if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+        return undefined;
+      }
+
+      const entries = Object.entries(parsed).filter(([, entryValue]) => typeof entryValue === 'string');
+      return entries.length ? Object.fromEntries(entries) : undefined;
+    } catch (error) {
+      console.warn('Failed to parse return params', error);
+      return undefined;
+    }
+  }, [params.returnToParams]);
 
   const ingredientLookup = useMemo(() => createIngredientLookup(ingredients), [ingredients]);
 
@@ -366,6 +398,28 @@ export default function IngredientDetailsScreen() {
     [clearBaseIngredient, ingredient?.name, showDialog],
   );
 
+  const handleReturn = useCallback(() => {
+    if (returnToPath) {
+      router.navigate({ pathname: returnToPath, params: returnToParams });
+      return;
+    }
+
+    router.back();
+  }, [returnToParams, returnToPath]);
+
+  useEffect(() => {
+    if (!returnToPath) {
+      return undefined;
+    }
+
+    const unsubscribe = navigation.addListener('beforeRemove', (event) => {
+      event.preventDefault();
+      handleReturn();
+    });
+
+    return unsubscribe;
+  }, [handleReturn, navigation, returnToPath]);
+
   return (
     <SafeAreaView style={[styles.safeArea, { backgroundColor: palette.background }]} edges={['left', 'right']}>
       <Stack.Screen
@@ -377,7 +431,7 @@ export default function IngredientDetailsScreen() {
           headerShadowVisible: false,
           headerLeft: () => (
             <Pressable
-              onPress={() => router.back()}
+              onPress={handleReturn}
               accessibilityRole="button"
               accessibilityLabel="Go back"
               style={styles.headerButton}

@@ -581,7 +581,7 @@ export default function CocktailsScreen() {
       if (ingredientId >= 0) {
         router.push({
           pathname: '/ingredients/[ingredientId]',
-          params: { ingredientId: String(ingredientId) },
+          params: { ingredientId: String(ingredientId), returnToPath: '/cocktails' },
         });
       }
     },
