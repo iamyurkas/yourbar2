@@ -333,13 +333,13 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     () => globalThis.__yourbarInventoryIgnoreGarnish ?? true,
   );
   const [allowAllSubstitutes, setAllowAllSubstitutes] = useState<boolean>(
-    () => globalThis.__yourbarInventoryAllowAllSubstitutes ?? false,
+    () => globalThis.__yourbarInventoryAllowAllSubstitutes ?? true,
   );
   const [useImperialUnits, setUseImperialUnits] = useState<boolean>(
     () => globalThis.__yourbarInventoryUseImperialUnits ?? false,
   );
   const [keepScreenAwake, setKeepScreenAwake] = useState<boolean>(
-    () => globalThis.__yourbarInventoryKeepScreenAwake ?? false,
+    () => globalThis.__yourbarInventoryKeepScreenAwake ?? true,
   );
   const [ratingFilterThreshold, setRatingFilterThreshold] = useState<number>(() =>
     typeof globalThis.__yourbarInventoryRatingFilterThreshold === 'number'
@@ -368,9 +368,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           const nextShoppingIds = createIngredientIdSet(stored.shoppingIngredientIds);
           const nextRatings = sanitizeCocktailRatings(stored.cocktailRatings);
           const nextIgnoreGarnish = stored.ignoreGarnish ?? true;
-          const nextAllowAllSubstitutes = stored.allowAllSubstitutes ?? false;
+          const nextAllowAllSubstitutes = stored.allowAllSubstitutes ?? true;
           const nextUseImperialUnits = stored.useImperialUnits ?? false;
-          const nextKeepScreenAwake = stored.keepScreenAwake ?? false;
+          const nextKeepScreenAwake = stored.keepScreenAwake ?? true;
           const nextRatingFilterThreshold = Math.min(
             5,
             Math.max(1, Math.round(stored.ratingFilterThreshold ?? 1)),
@@ -401,9 +401,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           setShoppingIngredientIds(new Set());
           setCocktailRatings({});
           setIgnoreGarnish(true);
-          setAllowAllSubstitutes(false);
+          setAllowAllSubstitutes(true);
           setUseImperialUnits(false);
-          setKeepScreenAwake(false);
+          setKeepScreenAwake(true);
           setStartScreen(DEFAULT_START_SCREEN);
         }
       } catch (error) {
