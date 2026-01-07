@@ -315,6 +315,23 @@ export default function CocktailsScreen() {
     );
   }, [filteredByTags, normalizedQuery]);
 
+  const sortedFavorites = useMemo(() => {
+    if (activeTab !== 'favorites') {
+      return filteredCocktails;
+    }
+
+    return [...filteredCocktails].sort((a, b) => {
+      const ratingA = Number((a as { userRating?: number }).userRating ?? 0);
+      const ratingB = Number((b as { userRating?: number }).userRating ?? 0);
+
+      if (ratingA !== ratingB) {
+        return ratingB - ratingA;
+      }
+
+      return (a.name ?? '').localeCompare(b.name ?? '');
+    });
+  }, [activeTab, filteredCocktails]);
+
   const myTabListData = useMemo(() => {
     if (activeTab !== 'my') {
       return null;
@@ -720,7 +737,7 @@ export default function CocktailsScreen() {
 
   const isFilterActive = selectedTagKeys.size > 0;
   const isMyTab = activeTab === 'my';
-  const listData = isMyTab ? myTabListData?.items ?? [] : filteredCocktails;
+  const listData = isMyTab ? myTabListData?.items ?? [] : sortedFavorites;
   const filterMenuTop = useMemo(() => {
     if (headerLayout && filterAnchorLayout) {
       return headerLayout.y + filterAnchorLayout.y + filterAnchorLayout.height + 6;
