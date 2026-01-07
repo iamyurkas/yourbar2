@@ -79,9 +79,9 @@ export default function TabLayout() {
           tabBarActiveTintColor: palette.primary,
           tabBarInactiveTintColor: palette.onSurfaceVariant,
           tabBarStyle: {
-            height: 72 + insets.bottom,
+            height: 72 + Math.max(insets.bottom, 12),
             paddingTop: 8,
-            paddingBottom: insets.bottom,
+            paddingBottom: Math.max(insets.bottom, 12),
           },
           tabBarItemStyle: {
             justifyContent: 'center',
