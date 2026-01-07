@@ -111,6 +111,7 @@ type ListRowProps = {
   selected?: boolean;
   highlightColor?: string;
   tagColor?: string;
+  tagColors?: string[];
   control?: ReactNode;
   metaFooter?: ReactNode;
   thumbnail?: ReactNode;
@@ -128,6 +129,7 @@ export function ListRow({
   selected,
   highlightColor,
   tagColor,
+  tagColors,
   control,
   metaFooter,
   thumbnail,
@@ -147,6 +149,8 @@ export function ListRow({
       : styles.metaContentSpaceBetween;
   const showBrandIndicator = brandIndicatorColor != null;
   const indicatorColor = brandIndicatorColor ?? paletteColors.primary;
+  const resolvedTagColors = tagColors?.filter(Boolean) ?? (tagColor ? [tagColor] : []);
+
   return (
     <Pressable
       onPress={onPress}
@@ -171,8 +175,12 @@ export function ListRow({
       <View style={styles.metaColumn}>
         <View style={styles.metaContent}>
           <View style={styles.metaTop}>
-            {tagColor ? (
-              <TagDot color={tagColor} />
+            {resolvedTagColors.length ? (
+              <View style={styles.tagDots}>
+                {resolvedTagColors.map((color, index) => (
+                  <TagDot key={`${color}-${index}`} color={color} />
+                ))}
+              </View>
             ) : (
               <View style={styles.tagDotPlaceholder} />
             )}
@@ -231,6 +239,12 @@ const styles = StyleSheet.create({
     height: 16,
     alignItems: 'flex-end',
     justifyContent: 'center',
+  },
+  tagDots: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    gap: 4,
   },
   metaMiddle: {
     flex: 1,
