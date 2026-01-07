@@ -362,13 +362,30 @@ export default function IngredientDetailsScreen() {
     router.push({ pathname: '/ingredients/[ingredientId]', params: { ingredientId: String(id) } });
   }, []);
 
-  const handleNavigateToCocktail = useCallback((cocktailId: number | string | undefined) => {
-    if (cocktailId == null) {
-      return;
-    }
+  const handleNavigateToCocktail = useCallback(
+    (cocktailId: number | string | undefined) => {
+      if (cocktailId == null) {
+        return;
+      }
 
-    router.push({ pathname: '/cocktails/[cocktailId]', params: { cocktailId: String(cocktailId) } });
-  }, []);
+      const returnIngredientId = ingredient?.id ?? ingredientId ?? ingredient?.name;
+      if (returnIngredientId != null) {
+        const returnToParams = JSON.stringify({ ingredientId: String(returnIngredientId) });
+        router.push({
+          pathname: '/cocktails/[cocktailId]',
+          params: {
+            cocktailId: String(cocktailId),
+            returnToPath: '/ingredients/[ingredientId]',
+            returnToParams,
+          },
+        });
+        return;
+      }
+
+      router.push({ pathname: '/cocktails/[cocktailId]', params: { cocktailId: String(cocktailId) } });
+    },
+    [ingredient?.id, ingredient?.name, ingredientId],
+  );
 
   const handleRemoveBranded = useCallback(
     (brandedIngredient: Ingredient) =>

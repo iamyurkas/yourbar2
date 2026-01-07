@@ -1,4 +1,5 @@
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import { Image } from 'expo-image';
 import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
@@ -236,7 +237,13 @@ function formatGlassLabel(glassId?: string | null) {
 
 export default function CocktailDetailsScreen() {
   const palette = Colors;
-  const { cocktailId } = useLocalSearchParams<{ cocktailId?: string }>();
+  const params = useLocalSearchParams<{
+    cocktailId?: string;
+    returnToPath?: string;
+    returnToParams?: string;
+  }>();
+  const navigation = useNavigation();
+  const { cocktailId } = params;
   const {
     cocktails,
     ingredients,
@@ -256,11 +263,58 @@ export default function CocktailDetailsScreen() {
     [cocktails, resolvedParam],
   );
 
+  const returnToPath = useMemo(() => {
+    const value = Array.isArray(params.returnToPath) ? params.returnToPath[0] : params.returnToPath;
+    return typeof value === 'string' && value.length > 0 ? value : undefined;
+  }, [params.returnToPath]);
+
+  const returnToParams = useMemo(() => {
+    const value = Array.isArray(params.returnToParams) ? params.returnToParams[0] : params.returnToParams;
+    if (typeof value !== 'string' || value.length === 0) {
+      return undefined;
+    }
+
+    try {
+      const parsed = JSON.parse(value);
+      if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+        return undefined;
+      }
+
+      const entries = Object.entries(parsed).filter(([, entryValue]) => typeof entryValue === 'string');
+      return entries.length ? Object.fromEntries(entries) : undefined;
+    } catch (error) {
+      console.warn('Failed to parse return params', error);
+      return undefined;
+    }
+  }, [params.returnToParams]);
+
   const [showImperialUnits, setShowImperialUnits] = useState(useImperialUnits);
 
   useEffect(() => {
     setShowImperialUnits(useImperialUnits);
   }, [useImperialUnits]);
+
+  const handleReturn = useCallback(() => {
+    if (returnToPath) {
+      router.navigate({ pathname: returnToPath, params: returnToParams });
+      return;
+    }
+
+    router.back();
+  }, [returnToParams, returnToPath]);
+
+  useEffect(() => {
+    if (!returnToPath) {
+      return undefined;
+    }
+
+    const unsubscribe = navigation.addListener('beforeRemove', (event) => {
+      event.preventDefault();
+      handleReturn();
+    });
+
+    return unsubscribe;
+  }, [handleReturn, navigation, returnToPath]);
 
   useEffect(() => {
     const keepAwakeTag = 'cocktail-details';
