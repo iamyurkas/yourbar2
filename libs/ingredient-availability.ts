@@ -68,7 +68,7 @@ export function isRecipeIngredientAvailable(
   options?: IngredientAvailabilityOptions,
 ) {
   const ignoreGarnish = options?.ignoreGarnish ?? true;
-  const allowAllSubstitutes = options?.allowAllSubstitutes ?? false;
+  const allowAllSubstitutes = options?.allowAllSubstitutes ?? true;
   const allowBase = ingredient.allowBaseSubstitution || allowAllSubstitutes;
   const allowBrand = ingredient.allowBrandSubstitution || allowAllSubstitutes;
 
@@ -156,7 +156,7 @@ export function getVisibleIngredientIdsForCocktail(
   lookup: IngredientLookup,
   options?: IngredientAvailabilityOptions,
 ): Set<number> {
-  const allowAllSubstitutes = options?.allowAllSubstitutes ?? false;
+  const allowAllSubstitutes = options?.allowAllSubstitutes ?? true;
   const visibleIngredientIds = new Set<number>();
 
   (cocktail.ingredients ?? []).forEach((ingredient) => {
@@ -185,7 +185,7 @@ export function resolveIngredientAvailability(
   options?: IngredientAvailabilityOptions,
 ): IngredientResolution {
   const ignoreGarnish = options?.ignoreGarnish ?? true;
-  const allowAllSubstitutes = options?.allowAllSubstitutes ?? false;
+  const allowAllSubstitutes = options?.allowAllSubstitutes ?? true;
 
   const requestedId = typeof ingredient.ingredientId === 'number' ? ingredient.ingredientId : undefined;
   const requestedIngredient = requestedId != null ? lookup.ingredientById.get(requestedId) : undefined;

@@ -8,7 +8,7 @@ import {
 
 const DEFAULT_AVAILABILITY_OPTIONS: IngredientAvailabilityOptions = {
   ignoreGarnish: true,
-  allowAllSubstitutes: false,
+  allowAllSubstitutes: true,
 };
 
 export type CocktailAvailabilitySummary = {
