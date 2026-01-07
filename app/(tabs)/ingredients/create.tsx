@@ -39,11 +39,55 @@ type IngredientFormSnapshot = {
 };
 
 export default function CreateIngredientScreen() {
-  const params = useLocalSearchParams<{ suggestedName?: string }>();
+  const params = useLocalSearchParams<{
+    suggestedName?: string;
+    returnTo?: string;
+    returnToPath?: string;
+    returnToParams?: string;
+  }>();
   const suggestedNameParam = useMemo(() => {
     const value = Array.isArray(params.suggestedName) ? params.suggestedName[0] : params.suggestedName;
     return typeof value === 'string' ? value : undefined;
   }, [params.suggestedName]);
+  const returnToPathParam = useMemo(() => {
+    const value = Array.isArray(params.returnToPath) ? params.returnToPath[0] : params.returnToPath;
+    return typeof value === 'string' && value.length > 0 ? value : undefined;
+  }, [params.returnToPath]);
+  const returnToParamsParam = useMemo(() => {
+    const value = Array.isArray(params.returnToParams) ? params.returnToParams[0] : params.returnToParams;
+    return typeof value === 'string' && value.length > 0 ? value : undefined;
+  }, [params.returnToParams]);
+  const legacyReturnToParam = useMemo(() => {
+    const value = Array.isArray(params.returnTo) ? params.returnTo[0] : params.returnTo;
+    return value === 'cocktail-form' ? value : undefined;
+  }, [params.returnTo]);
+  const returnToPath = useMemo(() => {
+    if (returnToPathParam) {
+      return returnToPathParam;
+    }
+    if (legacyReturnToParam === 'cocktail-form') {
+      return '/cocktails/create';
+    }
+    return undefined;
+  }, [legacyReturnToParam, returnToPathParam]);
+  const returnToParams = useMemo(() => {
+    if (!returnToParamsParam) {
+      return undefined;
+    }
+
+    try {
+      const parsed = JSON.parse(returnToParamsParam);
+      if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+        return undefined;
+      }
+
+      const entries = Object.entries(parsed).filter(([, value]) => typeof value === 'string');
+      return entries.length ? Object.fromEntries(entries) : undefined;
+    } catch (error) {
+      console.warn('Failed to parse return params', error);
+      return undefined;
+    }
+  }, [returnToParamsParam]);
 
   const navigation = useNavigation();
   const palette = Colors;
@@ -235,6 +279,11 @@ export default function CreateIngredientScreen() {
       return;
     }
 
+    if (returnToPath) {
+      router.navigate({ pathname: returnToPath, params: returnToParams });
+      return;
+    }
+
     router.replace({
       pathname: '/ingredients/[ingredientId]',
       params: { ingredientId: String(targetId) },
@@ -245,6 +294,8 @@ export default function CreateIngredientScreen() {
     description,
     imageUri,
     name,
+    returnToParams,
+    returnToPath,
     setHasUnsavedChanges,
     showDialog,
     selectedTagIds,
