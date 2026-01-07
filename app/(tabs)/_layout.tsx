@@ -1,9 +1,9 @@
+import type { BottomTabBarButtonProps } from '@react-navigation/bottom-tabs';
 import { Image } from 'expo-image';
 import { Tabs, usePathname, useRouter } from 'expo-router';
 import React, { useCallback, useState } from 'react';
 import { StyleSheet, View, useColorScheme } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import type { BottomTabBarButtonProps } from '@react-navigation/bottom-tabs';
 
 import CocktailIcon from '@/assets/images/cocktails.svg';
 import LemonIcon from '@/assets/images/ingredients.svg';
@@ -65,7 +65,7 @@ export default function TabLayout() {
   const colorScheme = useColorScheme();
   const isDarkMode = colorScheme === 'dark';
 
-  const tabBarInsetColor = isDarkMode ? palette.inverseSurface : palette.surface;
+  const tabBarInsetColor = isDarkMode ? palette.onSurfaceVariant : palette.surface;
 
   const closeDialog = useCallback(() => {
     setDialogOptions(null);
