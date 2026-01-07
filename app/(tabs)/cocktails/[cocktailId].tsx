@@ -430,6 +430,26 @@ export default function CocktailDetailsScreen() {
     });
   }, [cocktail]);
 
+  const handleCopyPress = useCallback(() => {
+    if (!cocktail) {
+      return;
+    }
+
+    const targetId = cocktail.id ?? cocktail.name;
+    if (!targetId) {
+      return;
+    }
+
+    router.push({
+      pathname: '/cocktails/create',
+      params: {
+        cocktailId: String(targetId),
+        cocktailName: cocktail.name ?? undefined,
+        source: 'cocktails',
+      },
+    });
+  }, [cocktail]);
+
   return (
     <SafeAreaView
       style={[styles.safeArea, { backgroundColor: palette.background }]}
@@ -447,9 +467,14 @@ export default function CocktailDetailsScreen() {
             </HeaderIconButton>
           ),
           headerRight: () => (
-            <HeaderIconButton onPress={handleEditPress} accessibilityLabel="Edit cocktail">
-              <MaterialCommunityIcons name="pencil-outline" size={20} color={palette.onSurface} />
-            </HeaderIconButton>
+            <View style={styles.headerActions}>
+              <HeaderIconButton onPress={handleCopyPress} accessibilityLabel="Copy cocktail">
+                <MaterialCommunityIcons name="content-copy" size={20} color={palette.onSurface} />
+              </HeaderIconButton>
+              <HeaderIconButton onPress={handleEditPress} accessibilityLabel="Edit cocktail">
+                <MaterialCommunityIcons name="pencil-outline" size={20} color={palette.onSurface} />
+              </HeaderIconButton>
+            </View>
           ),
         }}
       />
@@ -708,6 +733,11 @@ export default function CocktailDetailsScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
+  },
+  headerActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
   },
   content: {
     paddingHorizontal: 24,
