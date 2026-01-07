@@ -24983,11 +24983,6 @@
       "glassId": "wine_glass",
       "tags": [
         {
-          "id": 11,
-          "name": "custom",
-          "color": "#a8a8a8"
-        },
-        {
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
@@ -25645,9 +25640,9 @@
       "glassId": "coupe",
       "tags": [
         {
-          "id": 11,
-          "name": "custom",
-          "color": "#a8a8a8"
+          "id": 5,
+          "name": "strong",
+          "color": "#ec5a5a"
         }
       ],
       "description": "",
@@ -30172,11 +30167,6 @@
       "glassId": "wine_glass",
       "tags": [
         {
-          "id": 11,
-          "name": "custom",
-          "color": "#a8a8a8"
-        },
-        {
           "id": 5,
           "name": "strong",
           "color": "#ec5a5a"
@@ -34067,9 +34057,9 @@
       "glassId": "rocks_glass",
       "tags": [
         {
-          "id": 11,
-          "name": "custom",
-          "color": "#a8a8a8"
+          "id": 6,
+          "name": "moderate",
+          "color": "#F06292"
         }
       ],
       "description": "A creamy punch blending spiced rum with milk, vanilla and warm spices.",
@@ -35065,9 +35055,9 @@
       "glassId": "cocktail_glass",
       "tags": [
         {
-          "id": 11,
-          "name": "custom",
-          "color": "#a8a8a8"
+          "id": 5,
+          "name": "strong",
+          "color": "#ec5a5a"
         }
       ],
       "description": "A custom mix of gin, maraschino liqueur, green Chartreuse and a smoky Laphroaig float.",
@@ -35125,9 +35115,9 @@
       "glassId": "rocks_glass",
       "tags": [
         {
-          "id": 11,
-          "name": "custom",
-          "color": "#a8a8a8"
+          "id": 6,
+          "name": "moderate",
+          "color": "#F06292"
         }
       ],
       "description": "A simple Polish cocktail pairing \u017bubr\u00f3wka with apple juice and cinnamon.",
@@ -35187,9 +35177,9 @@
       "glassId": "collins_glass",
       "tags": [
         {
-          "id": 11,
-          "name": "custom",
-          "color": "#a8a8a8"
+          "id": 6,
+          "name": "moderate",
+          "color": "#F06292"
         }
       ],
       "description": "A refreshing long drink of gin, Campari and pineapple juice topped with soda.",
@@ -35471,11 +35461,6 @@
       "name": "That's my word",
       "glassId": "coupe",
       "tags": [
-        {
-          "id": 11,
-          "name": "custom",
-          "color": "#a8a8a8"
-        },
         {
           "id": 6,
           "name": "moderate",
@@ -38528,9 +38513,9 @@
       "glassId": "collins_glass",
       "tags": [
         {
-          "id": 11,
-          "name": "custom",
-          "color": "#a8a8a8"
+          "id": 6,
+          "name": "moderate",
+          "color": "#F06292"
         }
       ],
       "description": "",
