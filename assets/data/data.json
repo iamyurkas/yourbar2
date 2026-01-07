@@ -14773,54 +14773,7 @@
         }
       ],
       "createdAt": 1757000000119,
-      "updatedAt": 1758453407050
-    },
-    {
-      "id": 1758746837350,
-      "name": "Cape Cod",
-      "glassId": "collins_glass",
-      "tags": [
-        {
-          "id": 5,
-          "name": "strong",
-          "color": "#ec5a5a"
-        }
-      ],
-      "description": "",
-      "instructions": "",
-      "ingredients": [
-        {
-          "order": 1,
-          "ingredientId": 60012,
-          "name": "Cranberry Vodka",
-          "amount": "45",
-          "unitId": 11
-        },
-        {
-          "order": 2,
-          "ingredientId": 81569,
-          "name": "Cranberry Juice",
-          "amount": "10",
-          "unitId": 11
-        },
-        {
-          "order": 3,
-          "ingredientId": 346304,
-          "name": "Ice",
-          "amount": "150",
-          "unitId": 8
-        },
-        {
-          "order": 4,
-          "ingredientId": 336572,
-          "name": "Lime",
-          "amount": "1",
-          "unitId": 27,
-          "garnish": true
-        }
-      ],
-      "createdAt": 1758746837350,
-      "updatedAt": 1758747010992,
+      "updatedAt": 1758453407050,
       "photoUri": "assets/cocktails/1758746837350-cape-cod.jpg"
     },
     {
@@ -17281,13 +17234,7 @@
           "ingredientId": 166341,
           "name": "Benedictine",
           "amount": "7.5",
-          "unitId": 11,
-          "substitutes": [
-            {
-              "id": 366531,
-              "name": "Yellow Chartreuse"
-            }
-          ]
+          "unitId": 11
         },
         {
           "order": 5,
@@ -18359,7 +18306,7 @@
     },
     {
       "id": 1757000000148,
-      "name": "Eggnog",
+      "name": "Eggnog (personal)",
       "glassId": "rocks_glass",
       "tags": [
         {
@@ -21899,7 +21846,7 @@
           "ingredientId": 173236,
           "name": "Fernet Branca",
           "amount": "7.5",
-          "unitId": 6
+          "unitId": 11
         },
         {
           "order": 4,
@@ -21913,70 +21860,6 @@
       "createdAt": 1755959676878,
       "updatedAt": 1758453407051,
       "photoUri": "assets/cocktails/1755800000045-hanky-panky.jpg"
-    },
-    {
-      "id": 1757000000181,
-      "name": "Hanky Panky",
-      "glassId": "cocktail_glass",
-      "tags": [
-        {
-          "id": 1,
-          "name": "IBA Official",
-          "color": "#81C784"
-        },
-        {
-          "id": 2,
-          "name": "Unforgettables",
-          "color": "#9575CD"
-        },
-        {
-          "id": 5,
-          "name": "strong",
-          "color": "#ec5a5a"
-        }
-      ],
-      "description": "This IBA official cocktail was invented at the beginning of the 20th century by Ada Coleman, the head bartender of the Savoy Hotel.",
-      "instructions": "Fill a mixing glass with ice cubes.\nPour 45ml of London Dry Gin, 45ml of sweet red vermouth and 8ml of Fernet-Branca.\nStir well and strain into a chilled cocktail glass.\nGarnish with orange zest.",
-      "ingredients": [
-        {
-          "order": 1,
-          "ingredientId": 863081,
-          "name": "Gin",
-          "amount": "45",
-          "unitId": 11
-        },
-        {
-          "order": 2,
-          "ingredientId": 898334,
-          "name": "Red Vermouth",
-          "amount": "45",
-          "unitId": 11
-        },
-        {
-          "order": 3,
-          "ingredientId": 173236,
-          "name": "Fernet Branca",
-          "amount": "8",
-          "unitId": 11
-        },
-        {
-          "order": 4,
-          "ingredientId": 454059,
-          "name": "Orange",
-          "amount": "1",
-          "unitId": 26,
-          "garnish": true
-        },
-        {
-          "order": 5,
-          "ingredientId": 346304,
-          "name": "Ice",
-          "amount": "150",
-          "unitId": 8
-        }
-      ],
-      "createdAt": 1757000000181,
-      "updatedAt": 1758453407051
     },
     {
       "id": 1758493549281,
@@ -28443,14 +28326,14 @@
           "order": 5,
           "ingredientId": 440131,
           "name": "Absinthe",
-          "amount": "7",
+          "amount": "7.5",
           "unitId": 11
         },
         {
           "order": 6,
           "ingredientId": 399740,
           "name": "Green Chartreuse",
-          "amount": "7",
+          "amount": "7.5",
           "unitId": 11
         },
         {
@@ -30173,7 +30056,7 @@
         }
       ],
       "description": "A smoky take on the Last Word with Laphroaig, maraschino liqueur and green Chartreuse.",
-      "instructions": "Fill a shaker with ice cubes.\nAdd 30ml of Laphroaig, 30ml of maraschino liqueur, 30ml of green Chartreuse and the juice of half a lime.\nShake and strain into a chilled wine glass.",
+      "instructions": "Fill a shaker with ice cubes.\nAdd 30ml of Laphroaig, 30ml of maraschino liqueur, 30ml of green Chartreuse and 15ml of lime juice.\nShake and strain into a chilled wine glass.",
       "ingredients": [
         {
           "order": 1,
@@ -30200,8 +30083,8 @@
           "order": 4,
           "ingredientId": 336572,
           "name": "Lime",
-          "amount": "0.5",
-          "unitId": 9
+          "amount": "15",
+          "unitId": 11
         }
       ],
       "createdAt": 1757000000251,
