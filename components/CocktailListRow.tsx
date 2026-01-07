@@ -117,7 +117,10 @@ const CocktailListRowComponent = ({
     ratingValue,
   ]);
 
-  const tagColor = cocktail.tags?.[0]?.color ?? undefined;
+  const tagColors = useMemo(
+    () => (cocktail.tags ?? []).map((tag) => tag?.color).filter(Boolean) as string[],
+    [cocktail.tags],
+  );
 
   const hasBrandedIngredient = useMemo(() => {
     const recipe = cocktail.ingredients ?? [];
@@ -179,7 +182,7 @@ const CocktailListRowComponent = ({
       onPress={onPress}
       selected={isReady}
       highlightColor={highlightColor}
-      tagColor={tagColor}
+      tagColors={tagColors}
       control={ratingContent}
       thumbnail={thumbnail}
       brandIndicatorColor={brandIndicatorColor}
