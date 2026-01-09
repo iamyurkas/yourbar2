@@ -1,4 +1,5 @@
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+import { Image, type ImageSource } from 'expo-image';
 import { useScrollToTop } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -19,6 +20,7 @@ import { FabAdd } from '@/components/FabAdd';
 import { ListRow, Thumb } from '@/components/RowParts';
 import { SideMenuDrawer } from '@/components/SideMenuDrawer';
 import { TagPill } from '@/components/TagPill';
+import ShakerIcon from '@/assets/images/shaker.svg';
 import type { SegmentTabOption } from '@/components/TopBars';
 import { getCocktailMethods, type CocktailMethod } from '@/constants/cocktail-methods';
 import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
@@ -43,6 +45,21 @@ type CocktailMethodOption = {
 type IngredientOption = {
   id: number;
   name: string;
+};
+
+type MethodIcon =
+  | { type: 'icon'; name: React.ComponentProps<typeof MaterialCommunityIcons>['name'] }
+  | { type: 'asset'; source: ImageSource };
+
+const METHOD_ICON_SIZE = 16;
+const METHOD_ICON_MAP: Record<CocktailMethod['id'], MethodIcon> = {
+  build: { type: 'icon', name: 'beer' },
+  stir: { type: 'icon', name: 'delete-variant' },
+  shake: { type: 'asset', source: ShakerIcon },
+  muddle: { type: 'icon', name: 'bottle-soda' },
+  layer: { type: 'icon', name: 'layers' },
+  blend: { type: 'icon', name: 'blender' },
+  throwing: { type: 'icon', name: 'swap-horizontal' },
 };
 
 type MyTabListItem =
@@ -261,6 +278,29 @@ export default function CocktailsScreen() {
     setSelectedTagKeys((previous) => (previous.size === 0 ? previous : new Set<string>()));
     setSelectedMethodIds((previous) => (previous.size === 0 ? previous : new Set<CocktailMethod['id']>()));
   }, []);
+
+  const renderMethodIcon = useCallback(
+    (methodId: CocktailMethod['id'], selected: boolean) => {
+      const icon = METHOD_ICON_MAP[methodId];
+      if (!icon) {
+        return null;
+      }
+
+      const tintColor = selected ? paletteColors.surface : paletteColors.tint;
+      if (icon.type === 'asset') {
+        return (
+          <Image
+            source={icon.source}
+            style={[styles.methodIcon, { tintColor }]}
+            contentFit="contain"
+          />
+        );
+      }
+
+      return <MaterialCommunityIcons name={icon.name} size={METHOD_ICON_SIZE} color={tintColor} />;
+    },
+    [paletteColors.surface, paletteColors.tint],
+  );
 
   const ratedCocktails = useMemo(() => {
     return cocktails.filter((cocktail) => {
@@ -885,6 +925,7 @@ export default function CocktailsScreen() {
                           label={method.label}
                           color={paletteColors.tint}
                           selected={selected}
+                          icon={renderMethodIcon(method.id, selected)}
                           onPress={() => handleMethodFilterToggle(method.id)}
                           accessibilityRole="checkbox"
                           accessibilityState={{ checked: selected }}
@@ -1050,6 +1091,10 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     gap: 8,
     alignItems: 'flex-start',
+  },
+  methodIcon: {
+    width: METHOD_ICON_SIZE,
+    height: METHOD_ICON_SIZE,
   },
   filterTagList: {
     flexDirection: 'column',
