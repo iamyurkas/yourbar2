@@ -9,6 +9,7 @@ import React, {
   useMemo,
   useRef,
   useState,
+  type ComponentProps,
 } from 'react';
 import {
   FlatList,
@@ -52,6 +53,15 @@ import { useUnsavedChanges } from '@/providers/unsaved-changes-provider';
 const DEFAULT_UNIT_ID = 11;
 const MIN_AUTOCOMPLETE_LENGTH = 2;
 const MAX_SUGGESTIONS = 8;
+const METHOD_ICON_MAP: Record<CocktailMethodId, ComponentProps<typeof MaterialCommunityIcons>['name']> = {
+  build: 'cup',
+  stir: 'spoon',
+  shake: 'shaker-outline',
+  muddle: 'fruit-cherries',
+  layer: 'layers',
+  blend: 'blender',
+  throwing: 'swap-horizontal',
+};
 
 type EditableSubstitute = {
   key: string;
@@ -1600,6 +1610,8 @@ export default function CreateCocktailScreen() {
               </Pressable>
               {COCKTAIL_METHODS.map((method) => {
                 const isSelected = methodIds.includes(method.id);
+                const iconName = METHOD_ICON_MAP[method.id];
+                const iconColor = isSelected ? palette.tint : palette.onSurfaceVariant;
                 return (
                   <Pressable
                     key={method.id}
@@ -1614,7 +1626,12 @@ export default function CreateCocktailScreen() {
                     accessibilityRole="button"
                     accessibilityLabel={`Select ${method.label}`}>
                     <View style={styles.methodOptionHeader}>
-                      <Text style={[styles.methodOptionLabel, { color: palette.onSurface }]}>{method.label}</Text>
+                      <View style={styles.methodOptionTitle}>
+                        <View style={[styles.methodOptionIcon, { backgroundColor: palette.surfaceVariant }]}>
+                          <MaterialCommunityIcons name={iconName} size={18} color={iconColor} />
+                        </View>
+                        <Text style={[styles.methodOptionLabel, { color: palette.onSurface }]}>{method.label}</Text>
+                      </View>
                     </View>
                     <Text style={[styles.methodOptionDescription, { color: palette.onSurfaceVariant }]}>
                       {method.description}
@@ -2678,6 +2695,18 @@ const styles = StyleSheet.create({
     alignItems: 'baseline',
     justifyContent: 'space-between',
     gap: 8,
+  },
+  methodOptionTitle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  methodOptionIcon: {
+    width: 28,
+    height: 28,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   methodOptionLabel: {
     fontSize: 15,
