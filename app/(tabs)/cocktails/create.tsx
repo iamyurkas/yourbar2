@@ -1615,9 +1615,6 @@ export default function CreateCocktailScreen() {
                     accessibilityLabel={`Select ${method.label}`}>
                     <View style={styles.methodOptionHeader}>
                       <Text style={[styles.methodOptionLabel, { color: palette.onSurface }]}>{method.label}</Text>
-                      <Text style={[styles.methodOptionTitle, { color: palette.onSurfaceVariant }]}>
-                        {method.title}
-                      </Text>
                     </View>
                     <Text style={[styles.methodOptionDescription, { color: palette.onSurfaceVariant }]}>
                       {method.description}
@@ -2685,9 +2682,6 @@ const styles = StyleSheet.create({
   methodOptionLabel: {
     fontSize: 15,
     fontWeight: '600',
-  },
-  methodOptionTitle: {
-    fontSize: 13,
   },
   methodOptionDescription: {
     fontSize: 13,
