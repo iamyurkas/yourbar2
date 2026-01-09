@@ -974,7 +974,7 @@ const styles = StyleSheet.create({
   startScreenIcon: {
     width: 34,
     height: 34,
-    borderRadius: 10,
+    borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
   },
