@@ -4,12 +4,12 @@ import { Image, type ImageSource } from 'expo-image';
 import * as ImagePicker from 'expo-image-picker';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
 import React, {
-  type ComponentProps,
   useCallback,
   useEffect,
   useMemo,
   useRef,
   useState,
+  type ComponentProps,
 } from 'react';
 import {
   FlatList,
@@ -34,12 +34,12 @@ import { ListRow, Thumb } from '@/components/RowParts';
 import { SubstituteModal } from '@/components/SubstituteModal';
 import { TagEditorModal } from '@/components/TagEditorModal';
 import { TagPill } from '@/components/TagPill';
-import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
 import {
   COCKTAIL_METHODS,
   getCocktailMethodById,
   type CocktailMethodId,
 } from '@/constants/cocktail-methods';
+import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
 import { COCKTAIL_UNIT_DICTIONARY, COCKTAIL_UNIT_OPTIONS } from '@/constants/cocktail-units';
 import { GLASSWARE } from '@/constants/glassware';
 import { Colors } from '@/constants/theme';
@@ -60,7 +60,7 @@ type MethodIcon =
   | { type: 'asset'; source: ImageSource };
 
 const METHOD_ICON_MAP: Record<CocktailMethodId, MethodIcon> = {
-  build: { type: 'icon', name: 'beer-outline' },
+  build: { type: 'icon', name: 'beer' },
   stir: { type: 'icon', name: 'delete-variant' },
   shake: { type: 'asset', source: ShakerIcon },
   muddle: { type: 'icon', name: 'bottle-soda' },
