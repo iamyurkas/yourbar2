@@ -634,9 +634,6 @@ export default function CocktailDetailsScreen() {
                 <Text style={[styles.bodyText, { color: palette.onSurfaceVariant }]}>
                   {methodDetails.description}
                 </Text>
-                <Text style={[styles.methodExample, { color: palette.onSurfaceVariant }]}>
-                  {methodDetails.example}
-                </Text>
               </View>
             ) : null}
 
@@ -925,10 +922,6 @@ const styles = StyleSheet.create({
   bodyText: {
     fontSize: 14,
     lineHeight: 22,
-  },
-  methodExample: {
-    fontSize: 13,
-    lineHeight: 20,
   },
   descriptionText: {
     color: Colors.onSurfaceMuted,

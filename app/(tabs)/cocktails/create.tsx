@@ -1601,9 +1601,6 @@ export default function CreateCocktailScreen() {
                     <Text style={[styles.methodOptionDescription, { color: palette.onSurfaceVariant }]}>
                       {method.description}
                     </Text>
-                    <Text style={[styles.methodOptionExample, { color: palette.onSurfaceVariant }]}>
-                      {method.example}
-                    </Text>
                   </Pressable>
                 );
               })}
@@ -2673,9 +2670,6 @@ const styles = StyleSheet.create({
   },
   methodOptionDescription: {
     fontSize: 13,
-  },
-  methodOptionExample: {
-    fontSize: 12,
   },
   removePhotoButton: {
     position: 'absolute',
