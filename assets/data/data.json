@@ -6761,7 +6761,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Mezcal, Cognac, and Punt e Mes.",
       "instructions": "",
       "ingredients": [
         {
@@ -7169,7 +7169,7 @@
           "color": "#FFD54F"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Amaro Nonino, Aperol, and Orange Juice.",
       "instructions": "",
       "ingredients": [
         {
@@ -7230,7 +7230,7 @@
           "color": "#ec5a5a"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Tequila Blanco, Red Vermouth, and Campari.",
       "instructions": "",
       "ingredients": [
         {
@@ -7290,7 +7290,7 @@
           "color": "#FFB74D"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Vodka, Southern Comfort, and Amaretto.",
       "instructions": "",
       "ingredients": [
         {
@@ -7372,7 +7372,7 @@
           "color": "#FF8A65"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Amaretto, Southern Comfort, and Sloe Gin.",
       "instructions": "",
       "ingredients": [
         {
@@ -7435,7 +7435,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Gin, Creme de Cacao White, and Cream.",
       "instructions": "",
       "ingredients": [
         {
@@ -7496,7 +7496,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Vodka, Coffee Liqueur, and Creme de Cacao White.",
       "instructions": "",
       "ingredients": [
         {
@@ -7563,7 +7563,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Gin, Triple Sec, and Blue Curaçao.",
       "instructions": "",
       "ingredients": [
         {
@@ -7646,7 +7646,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Gin, Creme de Menthe Green, and Cream.",
       "instructions": "",
       "ingredients": [
         {
@@ -7720,7 +7720,7 @@
           "color": "#FF8A65"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Peach Schnapps, Baileys, and Blue Curaçao.",
       "instructions": "",
       "ingredients": [
         {
@@ -7779,7 +7779,7 @@
           "color": "#ec5a5a"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Bourbon, Amaretto, and Demerara Sugar Syrup.",
       "instructions": "",
       "ingredients": [
         {
@@ -7857,7 +7857,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Peppermint Schnapps, Creme de Cacao White, and Milk.",
       "instructions": "",
       "ingredients": [
         {
@@ -7904,7 +7904,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring White Rum, Lime Juice, and Rose Syrup.",
       "instructions": "",
       "ingredients": [
         {
@@ -7957,7 +7957,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Kiwi, White Rum, and Elderflower Cordial.",
       "instructions": "",
       "ingredients": [
         {
@@ -8034,7 +8034,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Amaretto and Lemon.",
       "instructions": "",
       "ingredients": [
         {
@@ -8075,7 +8075,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Tequila Blanco, Amaro Nonino, and Grapefruit Juice.",
       "instructions": "",
       "ingredients": [
         {
@@ -8158,7 +8158,7 @@
           "color": "#FFD54F"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Tequila Blanco, Orange Juice, and Simple Syrup.",
       "instructions": "",
       "ingredients": [
         {
@@ -8213,7 +8213,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Scotch Whiskey, White Rum, and Tequila.",
       "instructions": "",
       "ingredients": [
         {
@@ -8280,7 +8280,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Applejack, Rye Whisky, and Demerara Sugar Syrup.",
       "instructions": "",
       "ingredients": [
         {
@@ -8611,7 +8611,7 @@
           "color": "#FF8A65"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Creme de Cacao White, Sloe Gin, and Brandy.",
       "instructions": "1. Pour 15ml of crème de cacao white into a shooter glass.\n2. Carefully pour 10ml of sloe gin on top of the crème de cacao and 10ml of brandy on top of the gin.\n3. Carefully top with 10ml of cream or whipped cream.",
       "methodIds": [
         "build"
@@ -8678,7 +8678,7 @@
           "color": "#FF8A65"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Creme de Cacao Brown, Maraschino Liqueur, and Cream.",
       "instructions": "",
       "ingredients": [
         {
@@ -8742,7 +8742,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Mezcal, Punt e Mes, and Cherry Heering.",
       "instructions": "",
       "ingredients": [
         {
@@ -8867,7 +8867,7 @@
           "color": "#ec5a5a"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Calvados, Triple Sec, and Lemon Juice.",
       "instructions": "",
       "ingredients": [
         {
@@ -8933,7 +8933,7 @@
           "color": "#FFB74D"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Lemon Juice, Creme de Cassis, and Calvados.",
       "instructions": "",
       "ingredients": [
         {
@@ -8987,7 +8987,7 @@
           "color": "#ec5a5a"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Vodka, Apple Schnapps, and Cointreau.",
       "instructions": "",
       "ingredients": [
         {
@@ -9050,7 +9050,7 @@
           "color": "#FFB74D"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Overproof Rum, Coconut Rum, and Midori Melon Liqueur.",
       "instructions": "",
       "ingredients": [
         {
@@ -9124,7 +9124,7 @@
           "color": "#FF8A65"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Kiwi Liqueur, Melon Liqueur, and Cream.",
       "instructions": "",
       "ingredients": [
         {
@@ -9170,7 +9170,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Pisco, Amaro, and Honey.",
       "instructions": "",
       "ingredients": [
         {
@@ -9437,7 +9437,7 @@
           "color": "#ec5a5a"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Brandy and Benedictine.",
       "instructions": "",
       "ingredients": [
         {
@@ -9525,7 +9525,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring White Rum, Lime Juice, and Grenadine.",
       "instructions": "",
       "ingredients": [
         {
@@ -9572,7 +9572,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Bacardi Limon and Lemonade.",
       "instructions": "",
       "ingredients": [
         {
@@ -9611,7 +9611,7 @@
           "color": "#ec5a5a"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Gin, Green Chartreuse, and Campari.",
       "instructions": "",
       "ingredients": [
         {
@@ -9678,7 +9678,7 @@
           "color": "#FFB74D"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring White Rum, Coconut Rum, and Cherry Brandy.",
       "instructions": "",
       "ingredients": [
         {
@@ -9763,7 +9763,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring White Rum, Pisang Ambon, and Pineapple Juice.",
       "instructions": "",
       "ingredients": [
         {
@@ -9819,7 +9819,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Vodka, Banana Liqueur Green, and Pineapple Juice.",
       "instructions": "",
       "ingredients": [
         {
@@ -9874,7 +9874,7 @@
           "color": "#ec5a5a"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Dry Sherry, Dry Vermouth, and Orange Bitters.",
       "instructions": "",
       "ingredients": [
         {
@@ -9937,7 +9937,7 @@
           "color": "#ec5a5a"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Dry Sherry, Red Vermouth, and Dry Vermouth.",
       "instructions": "",
       "ingredients": [
         {
@@ -10006,7 +10006,7 @@
           "color": "#ec5a5a"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Gin, Dry Sherry, and Banana Liqueur.",
       "instructions": "",
       "ingredients": [
         {
@@ -10078,7 +10078,7 @@
           "color": "#FFB74D"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring White Rum, Coconut Syrup, and Banana Liqueur.",
       "instructions": "",
       "ingredients": [
         {
@@ -10152,7 +10152,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring White Rum, Lime Juice, and Simple Syrup.",
       "instructions": "",
       "ingredients": [
         {
@@ -10235,7 +10235,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Aged Rum, Banana Liqueur, and Lime Juice.",
       "instructions": "",
       "ingredients": [
         {
@@ -10326,7 +10326,7 @@
           "color": "#DCE775"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Banana, White Rum, and Coconut Syrup.",
       "instructions": "",
       "ingredients": [
         {
@@ -10390,7 +10390,7 @@
           "color": "#DCE775"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Banana, Peach, and Orange Juice.",
       "instructions": "",
       "ingredients": [
         {
@@ -10437,7 +10437,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Banana, Cachaça, and Aged rum.",
       "instructions": "",
       "ingredients": [
         {
@@ -10588,7 +10588,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Vodka, Creme de Cacao White, and Milk.",
       "instructions": "",
       "ingredients": [
         {
@@ -10727,7 +10727,7 @@
           "color": "#ec5a5a"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Bourbon, Simple Syrup, and Basil.",
       "instructions": "",
       "ingredients": [
         {
@@ -10788,7 +10788,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Cachaça, Coconut Water, and Condensed Milk.",
       "instructions": "",
       "ingredients": [
         {
@@ -10847,7 +10847,7 @@
           "color": "#FFB74D"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Vodka, Cranberry Juice, and Pineapple Juice.",
       "instructions": "",
       "ingredients": [
         {
@@ -10902,7 +10902,7 @@
           "color": "#FFB74D"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Banana, Egg Liqueur, and Overproof Rum.",
       "instructions": "",
       "ingredients": [
         {
@@ -11035,7 +11035,7 @@
           "color": "#ec5a5a"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Everclear, Lemon Juice, and Honey Syrup.",
       "instructions": "",
       "ingredients": [
         {
@@ -11153,7 +11153,7 @@
           "color": "#FFB74D"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Calvados, Dubonnet, and Orange Bitters.",
       "instructions": "",
       "ingredients": [
         {
@@ -11213,7 +11213,7 @@
           "color": "#FF8A65"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Rumple Minze, Goldschläger, and Jägermeister.",
       "instructions": "",
       "ingredients": [
         {
@@ -11395,7 +11395,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Spiced Rum, Aperol, and Pineapple Juice.",
       "instructions": "",
       "ingredients": [
         {
@@ -11482,7 +11482,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring White Rum, Root Beer, and Orange Juice.",
       "instructions": "",
       "ingredients": [
         {
@@ -11542,7 +11542,7 @@
           "color": "#ec5a5a"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Cachaça, Orange Curaçao, and Punt e Mes.",
       "instructions": "",
       "ingredients": [
         {
@@ -11671,7 +11671,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Tequila Blanco, Lime Juice, and Agave Syrup.",
       "instructions": "",
       "ingredients": [
         {
@@ -11747,7 +11747,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Scotch Whiskey, Orange Juice, and Red Vermouth.",
       "instructions": "",
       "ingredients": [
         {
@@ -11977,7 +11977,7 @@
           "color": "#FFB74D"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring White Rum, Vodka, and Blue Curaçao.",
       "instructions": "",
       "ingredients": [
         {
@@ -12066,7 +12066,7 @@
           "color": "#DCE775"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Pineapple Juice, Orange Juice, and Lemon Juice.",
       "instructions": "",
       "ingredients": [
         {
@@ -12198,7 +12198,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Blue Curaçao, Gin, and Lemon Juice.",
       "instructions": "",
       "ingredients": [
         {
@@ -12251,7 +12251,7 @@
           "color": "#FFB74D"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Vodka, Blue Curaçao, and Lemonade.",
       "instructions": "",
       "ingredients": [
         {
@@ -12311,7 +12311,7 @@
           "color": "#DCE775"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Lemonade, Orange Juice, and Blue Curaçao Syrup.",
       "instructions": "",
       "ingredients": [
         {
@@ -12366,7 +12366,7 @@
           "color": "#FFD54F"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Vodka, Blue Curaçao, and Simple Syrup.",
       "instructions": "",
       "ingredients": [
         {
@@ -12426,7 +12426,7 @@
           "color": "#FFD54F"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Amaretto, Grand Marnier, and Black Tea.",
       "instructions": "",
       "ingredients": [
         {
@@ -12547,7 +12547,7 @@
           "color": "#ec5a5a"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Scotch Whiskey, Red Vermouth, and Benedictine.",
       "instructions": "",
       "ingredients": [
         {
@@ -12601,7 +12601,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring White Rum, Lime Juice, and Orange Juice.",
       "instructions": "",
       "ingredients": [
         {
@@ -12665,7 +12665,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Cognac, Advocaat, and Whipped Cream.",
       "instructions": "",
       "ingredients": [
         {
@@ -12718,7 +12718,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Cognac, Advocaat, and Espresso.",
       "instructions": "",
       "ingredients": [
         {
@@ -12778,7 +12778,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Gold Rum, Advocaat, and Whipped Cream.",
       "instructions": "",
       "ingredients": [
         {
@@ -12839,7 +12839,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Whisky, Advocaat, and Whipped Cream.",
       "instructions": "",
       "ingredients": [
         {
@@ -13324,7 +13324,7 @@
           "color": "#FFB74D"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Brandy, Milk, and Simple Syrup.",
       "instructions": "Fill a shaker with ice cubes.\nAdd 40ml of brandy, 50ml of milk, 10ml of simple syrup and an egg yolk.\nShake well and strain into a highball glass with ice.\nSprinkle with grated nutmeg.",
       "methodIds": [
         "shake"
@@ -13388,7 +13388,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Cognac, Tawny Port, and Rich Simple Syrup.",
       "instructions": "",
       "ingredients": [
         {
@@ -13496,7 +13496,7 @@
           "color": "#ec5a5a"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Tequila Blanco and Kahlua.",
       "instructions": "Fill a rocks glass with ice cubes.\nPour 50ml of silver tequila and 30ml of Kahlua.\nStir a little bit to lightly mix the ingredients.",
       "methodIds": [
         "stir"
@@ -13546,7 +13546,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Bourbon and Root Beer.",
       "instructions": "",
       "ingredients": [
         {
@@ -13585,7 +13585,7 @@
           "color": "#ec5a5a"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Gin, Triple Sec, and Lemon Juice.",
       "instructions": "Add 50ml of gin, 15ml of triple sec, 15ml of lemon juice and 1 teaspoon of marmalade to a shaker and stir to break up marmalade.\nAdd ice and shake.\nStrain into a chilled cocktail glass.\nGarnish with grated lemon zest.",
       "methodIds": [
         "shake",
@@ -13996,7 +13996,7 @@
           "color": "#ec5a5a"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring White Rum, Simple Syrup, and Water.",
       "instructions": "",
       "ingredients": [
         {
@@ -14311,7 +14311,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Lime, Sugar, and Licor Beirão.",
       "instructions": "Muddle lime wedges and sugar in a rocks glass.\nFill the glass with crushed ice.\nPour Licor Beirão over the ice.\nStir gently.",
       "methodIds": [
         "stir",
@@ -14419,7 +14419,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Lime, Sugar, and White Rum.",
       "instructions": "Muddle lime wedges and sugar in a rocks glass.\nFill the glass with crushed ice.\nPour rum over the ice.\nStir gently.",
       "methodIds": [
         "stir",
@@ -14483,7 +14483,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Vodka, Lime, and Sugar.",
       "instructions": "Muddle lime wedges and sugar in a rocks glass.\nFill the glass with crushed ice.\nPour vodka over the ice.\nStir gently.",
       "methodIds": [
         "stir",
@@ -15134,7 +15134,7 @@
           "color": "#FFD54F"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Lychee, Coconut Liqueur, and Strawberry Liqueur.",
       "instructions": "",
       "ingredients": [
         {
@@ -15221,7 +15221,7 @@
           "color": "#FFB74D"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Overproof Rum, Malibu Rum, and Pineapple Juice.",
       "instructions": "",
       "ingredients": [
         {
@@ -15267,7 +15267,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Orange Vodka, Vodka Vanilla, and Coconut Liqueur.",
       "instructions": "",
       "ingredients": [
         {
@@ -15520,7 +15520,7 @@
           "color": "#ec5a5a"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Cognac, Green Chartreuse, and Lemon.",
       "instructions": "",
       "ingredients": [
         {
@@ -15588,7 +15588,7 @@
           "color": "#ec5a5a"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Apricot Brandy, Sloe Gin, and Lime Juice.",
       "instructions": "",
       "ingredients": [
         {
@@ -15720,7 +15720,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Vodka Vanilla, Cherry Heering, and Creme de Cacao White.",
       "instructions": "",
       "ingredients": [
         {
@@ -15804,7 +15804,7 @@
           "color": "#FFB74D"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Cherry Brandy and Orange Juice.",
       "instructions": "",
       "ingredients": [
         {
@@ -15851,7 +15851,7 @@
           "color": "#FFD54F"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Pisco, Lime Juice, and Angostura Bitters.",
       "instructions": "",
       "ingredients": [
         {
@@ -15912,7 +15912,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Tequila Blanco, Chocolate Liqueur, and Corn Syrup.",
       "instructions": "",
       "ingredients": [
         {
@@ -15973,7 +15973,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Vodka, Coffee Liqueur, and Espresso.",
       "instructions": "",
       "ingredients": [
         {
@@ -16060,7 +16060,7 @@
           "color": "#ec5a5a"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Gin, Punt e Mes, and Strucchi Bitter.",
       "instructions": "",
       "ingredients": [
         {
@@ -16128,7 +16128,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Egg Liqueur, Gin, and Fino Sherry.",
       "instructions": "",
       "ingredients": [
         {
@@ -16231,7 +16231,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Rosemary, Grand Marnier, and Cranberry Juice.",
       "instructions": "",
       "ingredients": [
         {
@@ -16312,7 +16312,7 @@
           "color": "#FF8A65"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Whisky, Apricot Nectar, and Lime Juice.",
       "instructions": "",
       "ingredients": [
         {
@@ -16363,7 +16363,7 @@
           "color": "#ec5a5a"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Gin, Dry Vermouth, and Aperol.",
       "instructions": "",
       "ingredients": [
         {
@@ -16417,7 +16417,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Gin, Red Vermouth, and Cherry Liqueur.",
       "instructions": "",
       "ingredients": [
         {
@@ -16484,7 +16484,7 @@
           "color": "#ec5a5a"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Gin, Punt e Mes, and Strucchi Bitter.",
       "instructions": "",
       "ingredients": [
         {
@@ -16558,7 +16558,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Corona, Tequila, and Orange Juice.",
       "instructions": "",
       "ingredients": [
         {
@@ -16613,7 +16613,7 @@
           "color": "#ec5a5a"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Cognac, Calvados, and Red Vermouth.",
       "instructions": "",
       "ingredients": [
         {
@@ -16799,7 +16799,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Vodka Citron, Cointreau, and Cream.",
       "instructions": "",
       "ingredients": [
         {
@@ -16867,7 +16867,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Vodka, Egg Liqueur, and Cream.",
       "instructions": "",
       "ingredients": [
         {
@@ -16921,7 +16921,7 @@
           "color": "#ec5a5a"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Rye Whisky, Strucchi Bitter, and Punt e Mes.",
       "instructions": "",
       "ingredients": [
         {
@@ -17069,7 +17069,7 @@
           "color": "#FFB74D"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring White Rum, Sugar, and Lime.",
       "instructions": "",
       "ingredients": [
         {
@@ -17186,7 +17186,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Gin, Orange Curaçao, and Red Vermouth.",
       "instructions": "",
       "ingredients": [
         {
@@ -17254,7 +17254,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Rye Whisky, Lemon, and Orange Juice.",
       "instructions": "",
       "ingredients": [
         {
@@ -17329,7 +17329,7 @@
           "color": "#ec5a5a"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Whisky, Dubonnet, and Cointreau.",
       "instructions": "",
       "ingredients": [
         {
@@ -17454,7 +17454,7 @@
           "color": "#ec5a5a"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Scotch Whiskey, Gin, and Punt e Mes.",
       "instructions": "",
       "ingredients": [
         {
@@ -17523,7 +17523,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Absinthe and Sparkling Wine.",
       "instructions": "",
       "ingredients": [
         {
@@ -17555,7 +17555,7 @@
           "color": "#ec5a5a"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Sambuca, Cointreau, and Lemon Juice.",
       "instructions": "",
       "ingredients": [
         {
@@ -17606,7 +17606,7 @@
           "color": "#ec5a5a"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Gin and Peach Bitters.",
       "instructions": "",
       "ingredients": [
         {
@@ -17653,7 +17653,7 @@
           "color": "#ec5a5a"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Bourbon, Benedictine, and Angostura Bitters.",
       "instructions": "",
       "ingredients": [
         {
@@ -17707,7 +17707,7 @@
           "color": "#FFD54F"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Coconut Liqueur and Cola.",
       "instructions": "",
       "ingredients": [
         {
@@ -17762,7 +17762,7 @@
           "color": "#ec5a5a"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Tequila Blanco, Lime Juice, and Simple Syrup.",
       "instructions": "",
       "ingredients": [
         {
@@ -17828,7 +17828,7 @@
           "color": "#FFB74D"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring White Rum, Coffee Liqueur, and Banana Liqueur.",
       "instructions": "",
       "ingredients": [
         {
@@ -17975,7 +17975,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Vodka, Grenadine, and Lime.",
       "instructions": "",
       "ingredients": [
         {
@@ -18111,7 +18111,7 @@
           "color": "#FFB74D"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Tequila Blanco, Lemon Juice, and Simple Syrup.",
       "instructions": "",
       "ingredients": [
         {
@@ -18186,7 +18186,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Dr. Pepper, Dry Vermouth, and Bitters.",
       "instructions": "",
       "ingredients": [
         {
@@ -18245,7 +18245,7 @@
           "color": "#FF8A65"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Sambuca, Midori Melon Liqueur, and Lemon Juice.",
       "instructions": "",
       "ingredients": [
         {
@@ -18358,7 +18358,7 @@
           "color": "#ec5a5a"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Dubonnet and Gin.",
       "instructions": "",
       "ingredients": [
         {
@@ -18406,7 +18406,7 @@
           "color": "#FFB74D"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Creme de Cassis, Dubonnet, and Soda Water.",
       "instructions": "",
       "ingredients": [
         {
@@ -18459,7 +18459,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Vodka, Apricot Brandy, and Rose Syrup.",
       "instructions": "",
       "ingredients": [
         {
@@ -18513,7 +18513,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Gin, Simple Syrup, and Lime Juice.",
       "instructions": "",
       "ingredients": [
         {
@@ -18573,7 +18573,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Egg White, Dry Sherry, and Spiced Rum.",
       "instructions": "",
       "ingredients": [
         {
@@ -18658,7 +18658,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Tequila, Creme de Cassis, and Lime Juice.",
       "instructions": "",
       "ingredients": [
         {
@@ -18719,7 +18719,7 @@
           "color": "#ec5a5a"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring White Rum, Dry Vermouth, and Orange Curaçao.",
       "instructions": "",
       "ingredients": [
         {
@@ -18872,7 +18872,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Irish Whisky, Pisang Ambon, and Amaro Montenegro.",
       "instructions": "",
       "ingredients": [
         {
@@ -18935,7 +18935,7 @@
           "color": "#ec5a5a"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Old Tom Gin, Red Vermouth, and Lime Juice.",
       "instructions": "",
       "ingredients": [
         {
@@ -18981,7 +18981,7 @@
           "color": "#ec5a5a"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Laphroaig, Campari, and Green Chartreuse.",
       "instructions": "",
       "ingredients": [
         {
@@ -19020,7 +19020,7 @@
           "color": "#ec5a5a"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Baileys, Absolut Vodka, and Rumple Minze.",
       "instructions": "",
       "ingredients": [
         {
@@ -19137,7 +19137,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Gin, Punt e Mes, and Strucchi Bitter.",
       "instructions": "",
       "ingredients": [
         {
@@ -19369,7 +19369,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Gin, Maraschino Liqueur, and Dry Vermouth.",
       "instructions": "Combine gin, maraschino liqueur, dry vermouth, Aperol and lime juice in a shaker with ice.\nShake well and strain into a chilled glass.",
       "methodIds": [
         "shake"
@@ -19661,7 +19661,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Port, Aged Rum, and Raspberry Syrup.",
       "instructions": "",
       "ingredients": [
         {
@@ -19847,7 +19847,7 @@
           "color": "#ec5a5a"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Rye Whisky, Punt e Mes, and Benedictine.",
       "instructions": "",
       "ingredients": [
         {
@@ -20020,7 +20020,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Rosemary, Black Pepper, and Cognac.",
       "instructions": "",
       "ingredients": [
         {
@@ -20170,7 +20170,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Mint, Gin, and Pastis.",
       "instructions": "",
       "ingredients": [
         {
@@ -20240,7 +20240,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Strawberry, White Rum, and Lime Juice.",
       "instructions": "",
       "ingredients": [
         {
@@ -20321,7 +20321,7 @@
           "color": "#FF8A65"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Peppermint Schnapps and Cognac.",
       "instructions": "",
       "ingredients": [
         {
@@ -20579,7 +20579,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Aged rum, Cognac, and Lime Juice.",
       "instructions": "",
       "ingredients": [
         {
@@ -20662,7 +20662,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Oude Genever, Orange Curaçao, and Red Vermouth.",
       "instructions": "",
       "ingredients": [
         {
@@ -20879,7 +20879,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Gin and Tonic.",
       "instructions": "",
       "ingredients": [
         {
@@ -21717,7 +21717,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Ouzo, Red Vermouth, and Raspberry Liqueur.",
       "instructions": "",
       "ingredients": [
         {
@@ -21899,7 +21899,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Bizon Grass Vodka, Pisang Ambon, and Creme de Menthe White.",
       "instructions": "",
       "ingredients": [
         {
@@ -22074,7 +22074,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Amaro Montenegro, Creme de Mure, and Lime Juice.",
       "instructions": "",
       "ingredients": [
         {
@@ -22255,7 +22255,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Brandy, Red Vermouth, and Angelica root.",
       "instructions": "",
       "ingredients": [
         {
@@ -22307,7 +22307,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Calvados, Punt e Mes, and Cynar.",
       "instructions": "",
       "ingredients": [
         {
@@ -22462,7 +22462,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Cognac, Creme de Cacao Brown, and Hazelnut Liqueur.",
       "instructions": "",
       "ingredients": [
         {
@@ -22761,7 +22761,7 @@
           "color": "#FF8A65"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Sambuca, Baileys, and Absinthe.",
       "instructions": "Pour 20ml of sambuca into a shooter glass.\nCarefully pour 15ml of Baileys and 15ml of absinthe.\nAdd several grenadine drops using a straw.",
       "methodIds": [
         "build"
@@ -22810,7 +22810,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Rosemary, Bourbon, and Yellow Chartreuse.",
       "instructions": "",
       "ingredients": [
         {
@@ -23617,7 +23617,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Gin, Rosemary Syrup, and Lime Juice.",
       "instructions": "",
       "ingredients": [
         {
@@ -23716,7 +23716,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Irish Cream, Cognac, and Cream.",
       "instructions": "",
       "ingredients": [
         {
@@ -23776,7 +23776,7 @@
           "color": "#FFD54F"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Irish Whisky, Apple Juice, and Cinnamon.",
       "instructions": "",
       "ingredients": [
         {
@@ -24035,7 +24035,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Irish Whisky, Vanilla Syrup, and Apple Juice.",
       "instructions": "",
       "ingredients": [
         {
@@ -24112,7 +24112,7 @@
           "color": "#ec5a5a"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Red Vermouth, Scotch Whiskey, and Anisette.",
       "instructions": "",
       "ingredients": [
         {
@@ -24919,7 +24919,7 @@
           "color": "#ec5a5a"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Scotch Highland Whiskey, Islay Scotch Whiskey, and Luxardo Maraschino.",
       "instructions": "",
       "ingredients": [
         {
@@ -25024,7 +25024,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Champagne and Creme de Cassis.",
       "instructions": "",
       "ingredients": [
         {
@@ -25375,7 +25375,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Gin, Campari, and Green Chartreuse.",
       "instructions": "Combine gin, Campari, green Chartreuse and lime juice in a shaker with ice.\nShake well and strain into a chilled wine glass.",
       "methodIds": [
         "shake"
@@ -25635,7 +25635,7 @@
           "color": "#ec5a5a"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Gin, Black Sambuca, and Rich Simple Syrup.",
       "instructions": "",
       "ingredients": [
         {
@@ -25695,7 +25695,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Port, Gin, and St. Germain.",
       "instructions": "",
       "ingredients": [
         {
@@ -25998,7 +25998,7 @@
           "color": "#ec5a5a"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Punt e Mes, Rye Whisky, and Amaro.",
       "instructions": "",
       "ingredients": [
         {
@@ -26053,7 +26053,7 @@
           "color": "#ec5a5a"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Campari, Green Chartreuse, and Lime.",
       "instructions": "Add Campari, green Chartreuse, lime juice and sugar syrup into a shaker with ice.\nShake well and strain into a chilled coupe.\nAdd a pinch of salt on top if desired.",
       "methodIds": [
         "shake"
@@ -26110,7 +26110,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Cognac, Strucchi Bitter, and Red Vermouth.",
       "instructions": "",
       "ingredients": [
         {
@@ -26745,7 +26745,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Port, Irish Whisky, and Campari.",
       "instructions": "",
       "ingredients": [
         {
@@ -27222,7 +27222,7 @@
           "color": "#ec5a5a"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Mezcal, Elderflower Cordial, and Punt e Mes.",
       "instructions": "",
       "ingredients": [
         {
@@ -27284,7 +27284,7 @@
           "color": "#ec5a5a"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Rye Whisky, Punt e Mes, and Maraschino Liqueur.",
       "instructions": "",
       "ingredients": [
         {
@@ -27399,7 +27399,7 @@
           "color": "#FFD54F"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Coconut Liqueur and Apple Juice.",
       "instructions": "",
       "ingredients": [
         {
@@ -27880,7 +27880,7 @@
           "color": "#ec5a5a"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Vodka, Coffee Liqueur, and Tonic.",
       "instructions": "Fill a rocks glass with ice cubes.\nAdd 30ml of vodka, 30ml of coffee liqueur and 30ml of tonic water.\nStir slightly.",
       "methodIds": [
         "stir"
@@ -28237,7 +28237,7 @@
           "color": "#FFB74D"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Pastis, Almond (Orgeat) Syrup, and Soda Water.",
       "instructions": "",
       "ingredients": [
         {
@@ -28403,7 +28403,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Ginger, Coriander, and Vodka Citron.",
       "instructions": "",
       "ingredients": [
         {
@@ -28478,7 +28478,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Pisco, Pineapple Syrup, and Grapefruit Juice.",
       "instructions": "",
       "ingredients": [
         {
@@ -29094,7 +29094,7 @@
           "color": "#FF8A65"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Firewater and Goldschläger.",
       "instructions": "",
       "ingredients": [
         {
@@ -29447,7 +29447,7 @@
           "color": "#FF8A65"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Black Sambuca, Espresso, and Cream.",
       "instructions": "",
       "ingredients": [
         {
@@ -29603,7 +29603,7 @@
           "color": "#FF8A65"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Vodka, Ouzo, and Rich Simple Syrup.",
       "instructions": "",
       "ingredients": [
         {
@@ -29657,7 +29657,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Mango, Dark Rum, and Coconut Liqueur.",
       "instructions": "",
       "ingredients": [
         {
@@ -29732,7 +29732,7 @@
           "color": "#FFD54F"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Passion Fruit Liqueur, Apricot Brandy, and Grape Soda.",
       "instructions": "",
       "ingredients": [
         {
@@ -29867,7 +29867,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Sloe Gin, Apricot Brandy, and Grapefruit Juice.",
       "instructions": "",
       "ingredients": [
         {
@@ -30136,7 +30136,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Papaya Juice, White Rum, and Orange Juice.",
       "instructions": "2 oz papaya juice (about ½ cup of papaya chunks)\n1 oz white rum\n1 oz orange juice, freshly squeezed\n½ oz triple sec\n¼ oz simple syrup\n2 oz club soda",
       "methodIds": [
         "build"
@@ -30214,7 +30214,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Papaya, Agave Syrup, and Añejo Tequila.",
       "instructions": "2 papaya slices, divided\n3/4 ounce agave nectar\n1 1/2 ounces añejo tequila\n1/2 ounce Aperol\n3/4 ounce freshly squeezed lime juice\n1/2 ounce freshly squeezed orange juice",
       "methodIds": [
         "build"
@@ -30396,7 +30396,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Coconut Liqueur, Simple Syrup, and Lime Juice.",
       "instructions": "",
       "ingredients": [
         {
@@ -30472,7 +30472,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Port, Gin, and Lemon Juice.",
       "instructions": "",
       "ingredients": [
         {
@@ -30541,7 +30541,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Peach Liqueur, Grenadine, and Champagne.",
       "instructions": "",
       "ingredients": [
         {
@@ -30803,7 +30803,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring White Rum, Pineapple Syrup, and Coconut Water.",
       "instructions": "",
       "ingredients": [
         {
@@ -31246,7 +31246,7 @@
           "color": "#ec5a5a"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Cognac, Cynar, and Punt e Mes.",
       "instructions": "",
       "ingredients": [
         {
@@ -31452,7 +31452,7 @@
           "color": "#ec5a5a"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Cognac, Yellow Chartreuse, and Punt e Mes.",
       "instructions": "",
       "ingredients": [
         {
@@ -31584,7 +31584,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Irish Cream, Coconut Liqueur, and Vanilla Syrup.",
       "instructions": "",
       "ingredients": [
         {
@@ -31805,7 +31805,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Rye Whisky, Punt e Mes, and Maraschino Liqueur.",
       "instructions": "",
       "ingredients": [
         {
@@ -31860,7 +31860,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Vodka and Cherry Brandy.",
       "instructions": "",
       "ingredients": [
         {
@@ -32188,7 +32188,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Coconut Liqueur and Sprite.",
       "instructions": "",
       "ingredients": [
         {
@@ -32327,7 +32327,7 @@
           "color": "#ec5a5a"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Cognac, Punt e Mes, and Grenadine.",
       "instructions": "",
       "ingredients": [
         {
@@ -32466,7 +32466,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Vodka, Pink Lemonade, and Rose Wine.",
       "instructions": "",
       "ingredients": [
         {
@@ -32517,7 +32517,7 @@
           "color": "#64B5F6"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Strawberry and Prosecco.",
       "instructions": "",
       "ingredients": [
         {
@@ -32619,7 +32619,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring White Rum, Cola, and Lime.",
       "instructions": "",
       "ingredients": [
         {
@@ -32866,7 +32866,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Baileys, Rumple Minze, and Hot Chocolate (Cacao).",
       "instructions": "",
       "ingredients": [
         {
@@ -33255,7 +33255,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Red Vermouth, Scotch Whiskey, and Ouzo.",
       "instructions": "",
       "ingredients": [
         {
@@ -33434,7 +33434,7 @@
           "color": "#ec5a5a"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Scotch Whiskey, Punt e Mes, and Ruby Port.",
       "instructions": "",
       "ingredients": [
         {
@@ -33678,7 +33678,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Cognac, Cherry Heering, and Rose Syrup.",
       "instructions": "",
       "ingredients": [
         {
@@ -34067,7 +34067,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Islay Scotch Whiskey, Lemon Juice, and Chestnut Liqueur.",
       "instructions": "",
       "ingredients": [
         {
@@ -34185,7 +34185,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Cardamon, White Rum, and Lime Juice.",
       "instructions": "",
       "ingredients": [
         {
@@ -34480,7 +34480,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Apple Cider, Beer, and Creme de Cassis.",
       "instructions": "",
       "ingredients": [
         {
@@ -34696,7 +34696,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Apple Cider, Bourbon, and Apple Brandy.",
       "instructions": "",
       "ingredients": [
         {
@@ -35140,7 +35140,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Rye Whisky, Apple Cider, and Angostura Bitters.",
       "instructions": "",
       "ingredients": [
         {
@@ -35313,7 +35313,7 @@
           "color": "#ec5a5a"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Strawberry Liqueur, White Rum, and Lime Juice.",
       "instructions": "",
       "ingredients": [
         {
@@ -35530,7 +35530,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Blueberry Schnapps, Vodka, and Cranberry Juice.",
       "instructions": "",
       "ingredients": [
         {
@@ -36014,7 +36014,7 @@
           "color": "#DCE775"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Grape Juice, Orange Juice, and Lemon Juice.",
       "instructions": "",
       "ingredients": [
         {
@@ -36291,7 +36291,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Rosemary, Cognac, and Scotch Whiskey.",
       "instructions": "",
       "ingredients": [
         {
@@ -36399,7 +36399,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring White Rum, Bianco Vermouth, and Pineapple Syrup.",
       "instructions": "",
       "ingredients": [
         {
@@ -36467,7 +36467,7 @@
           "color": "#ec5a5a"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Bourbon, Rye Whisky, and Punt e Mes.",
       "instructions": "",
       "ingredients": [
         {
@@ -36556,7 +36556,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Rye Whisky, Punt e Mes, and Apricot Brandy.",
       "instructions": "",
       "ingredients": [
         {
@@ -36721,7 +36721,7 @@
           "color": "#64B5F6"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Prosecco and Pomegranate juice.",
       "instructions": "",
       "ingredients": [
         {
@@ -36866,7 +36866,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Old Tom Gin, Cherry Heering, and Maraschino Liqueur.",
       "instructions": "",
       "ingredients": [
         {
@@ -37029,7 +37029,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Old Tom Gin, Lemon Juice, and Simple Syrup.",
       "instructions": "Add Old Tom gin, lemon juice, and simple syrup into a collins glass filled with ice.\nTop with soda water and stir gently.\nGarnish with a lemon slice and a maraschino cherry.",
       "methodIds": [
         "stir"
@@ -37316,7 +37316,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Gin, Coconut Liqueur, and Simple Syrup.",
       "instructions": "",
       "ingredients": [
         {
@@ -37404,7 +37404,7 @@
           "color": "#FFD54F"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Coconut Liqueur, White Wine, and Simple Syrup.",
       "instructions": "",
       "ingredients": [
         {
@@ -37563,7 +37563,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Gold Rum, Coconut Liqueur, and Caramel Syrup.",
       "instructions": "",
       "ingredients": [
         {
@@ -38187,7 +38187,7 @@
           "color": "#DCE775"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Grape Juice, Soda Water, and Apple Juice.",
       "instructions": "",
       "ingredients": [
         {
@@ -38279,7 +38279,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Coconut Liqueur, Cranberry Juice, and Lime.",
       "instructions": "",
       "ingredients": [
         {
@@ -38834,7 +38834,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Vodka Vanilla, Peppermint Schnapps, and Half-and-half.",
       "instructions": "",
       "ingredients": [
         {
@@ -38994,7 +38994,7 @@
           "color": "#ec5a5a"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Vodka, Coffee Liqueur, and Cream.",
       "instructions": "",
       "ingredients": [
         {
@@ -39034,7 +39034,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Coconut Liqueur, Melon Liqueur, and Orange Juice.",
       "instructions": "",
       "ingredients": [
         {
@@ -39260,7 +39260,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring Japanese Whisky, Bianco Vermouth, and Amaro Montenegro.",
       "instructions": "",
       "ingredients": [
         {
@@ -39384,7 +39384,7 @@
           "color": "#F06292"
         }
       ],
-      "description": "",
+      "description": "A cocktail featuring White Rum, Limoncello, and Lemon Tonic.",
       "instructions": "",
       "ingredients": [
         {
