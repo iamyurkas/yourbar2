@@ -11,6 +11,7 @@ import { resolveGlasswareUriFromId } from '@/assets/image-manifest';
 import { HeaderIconButton } from '@/components/HeaderIconButton';
 import { ListRow, Thumb } from '@/components/RowParts';
 import { TagPill } from '@/components/TagPill';
+import { getCocktailMethodById } from '@/constants/cocktail-methods';
 import { COCKTAIL_UNIT_DICTIONARY } from '@/constants/cocktail-units';
 import { Colors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
@@ -438,6 +439,16 @@ export default function CocktailDetailsScreen() {
 
   const displayedImageSource = photoSource ?? glassSource;
   const glassLabel = useMemo(() => formatGlassLabel(cocktail?.glassId), [cocktail?.glassId]);
+  const methodDetails = useMemo(() => {
+    const legacyMethodId = (cocktail as { methodId?: string | null }).methodId ?? null;
+    const nextMethodIds =
+      cocktail?.methodIds && cocktail.methodIds.length > 0
+        ? cocktail.methodIds
+        : legacyMethodId
+          ? [legacyMethodId]
+          : [];
+    return nextMethodIds.map((id) => getCocktailMethodById(id)).filter(Boolean);
+  }, [cocktail?.methodIds, cocktail]);
 
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   const [shouldTruncateDescription, setShouldTruncateDescription] = useState(false);
@@ -616,6 +627,22 @@ export default function CocktailDetailsScreen() {
                     selected
                     accessibilityLabel={tag.name ?? 'Tag'}
                   />
+                ))}
+              </View>
+            ) : null}
+
+            {methodDetails.length ? (
+              <View style={styles.textBlock}>
+                <Text style={[styles.sectionTitle, { color: palette.onSurface }]}>Method</Text>
+                {methodDetails.map((method) => (
+                  <View key={method.id} style={styles.methodEntry}>
+                    <Text style={[styles.bodyText, { color: palette.onSurfaceVariant }]}>
+                      {`${method.label} — ${method.title}`}
+                    </Text>
+                    <Text style={[styles.bodyText, { color: palette.onSurfaceVariant }]}>
+                      {method.description}
+                    </Text>
+                  </View>
                 ))}
               </View>
             ) : null}
@@ -897,6 +924,9 @@ const styles = StyleSheet.create({
   },
   textBlock: {
     gap: 12,
+  },
+  methodEntry: {
+    gap: 4,
   },
   sectionTitle: {
     fontSize: 16,

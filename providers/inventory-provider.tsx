@@ -9,6 +9,7 @@ import React, {
 } from 'react';
 
 import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
+import { type CocktailMethodId } from '@/constants/cocktail-methods';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { TAG_COLORS } from '@/constants/tag-colors';
 import { clearInventorySnapshot, loadInventorySnapshot, persistInventorySnapshot } from '@/libs/inventory-storage';
@@ -39,6 +40,8 @@ type CocktailRecord = Omit<BaseCocktailRecord, 'ingredients' | 'searchName' | 's
   ingredients?: CocktailIngredient[];
   searchName?: string | null;
   searchTokens?: string[] | null;
+  methodId?: CocktailMethodId | null;
+  methodIds?: CocktailMethodId[] | null;
 };
 type IngredientRecord = InventoryData['ingredients'][number];
 
@@ -135,6 +138,7 @@ type CreateCocktailInput = {
   instructions?: string | null;
   photoUri?: string | null;
   glassId?: string | null;
+  methodIds?: CocktailMethodId[] | null;
   tags?: CocktailTag[] | null;
   ingredients: CreateCocktailIngredientInput[];
 };
@@ -762,6 +766,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         const instructions = input.instructions?.trim() || undefined;
         const photoUri = input.photoUri?.trim() || undefined;
         const glassId = input.glassId?.trim() || undefined;
+        const methodIds = input.methodIds
+          ? Array.from(new Set(input.methodIds)).filter(Boolean)
+          : undefined;
 
         const tagMap = new Map<number, CocktailTag>();
         (input.tags ?? []).forEach((tag) => {
@@ -786,6 +793,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           instructions,
           photoUri,
           glassId,
+          methodIds: methodIds && methodIds.length > 0 ? methodIds : undefined,
           tags,
           ingredients: sanitizedIngredients.map((ingredient, index) => ({
             ...ingredient,
@@ -1155,6 +1163,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       const instructions = input.instructions?.trim() || undefined;
       const photoUri = input.photoUri?.trim() || undefined;
       const glassId = input.glassId?.trim() || undefined;
+      const methodIds = input.methodIds
+        ? Array.from(new Set(input.methodIds)).filter(Boolean)
+        : undefined;
 
       const tagMap = new Map<number, CocktailTag>();
       (input.tags ?? []).forEach((tag) => {
@@ -1180,6 +1191,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         instructions,
         photoUri,
         glassId,
+        methodIds: methodIds && methodIds.length > 0 ? methodIds : undefined,
         tags,
         ingredients: sanitizedIngredients.map((ingredient, index) => ({
           ...ingredient,

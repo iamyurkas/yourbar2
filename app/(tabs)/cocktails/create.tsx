@@ -33,6 +33,11 @@ import { SubstituteModal } from '@/components/SubstituteModal';
 import { TagEditorModal } from '@/components/TagEditorModal';
 import { TagPill } from '@/components/TagPill';
 import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
+import {
+  COCKTAIL_METHODS,
+  getCocktailMethodById,
+  type CocktailMethodId,
+} from '@/constants/cocktail-methods';
 import { COCKTAIL_UNIT_DICTIONARY, COCKTAIL_UNIT_OPTIONS } from '@/constants/cocktail-units';
 import { GLASSWARE } from '@/constants/glassware';
 import { Colors } from '@/constants/theme';
@@ -72,6 +77,7 @@ type EditableIngredient = {
 type CocktailFormSnapshot = {
   name: string;
   glassId: string | null;
+  methodIds: CocktailMethodId[];
   description: string;
   instructions: string;
   imageUri: string | null;
@@ -235,6 +241,8 @@ export default function CreateCocktailScreen() {
   const [name, setName] = useState('');
   const [glassId, setGlassId] = useState<string | null>('cocktail_glass');
   const [isGlassModalVisible, setIsGlassModalVisible] = useState(false);
+  const [methodIds, setMethodIds] = useState<CocktailMethodId[]>([]);
+  const [isMethodModalVisible, setIsMethodModalVisible] = useState(false);
   const [imageUri, setImageUri] = useState<string | null>(null);
   const [isPickingImage, setIsPickingImage] = useState(false);
   const [description, setDescription] = useState('');
@@ -281,6 +289,7 @@ export default function CreateCocktailScreen() {
     return {
       name,
       glassId,
+      methodIds,
       description,
       instructions,
       imageUri,
@@ -302,7 +311,7 @@ export default function CreateCocktailScreen() {
         })),
       })),
     };
-  }, [description, glassId, imageUri, ingredientsState, instructions, name, selectedTagIds]);
+  }, [description, glassId, imageUri, ingredientsState, instructions, methodIds, name, selectedTagIds]);
 
   useEffect(() => {
     if (!isInitialized || initialSnapshot) {
@@ -391,6 +400,10 @@ export default function CreateCocktailScreen() {
   const placeholderLabel = useMemo(() => (imageUri ? 'Change photo' : 'Add photo'), [imageUri]);
 
   const selectedGlass = useMemo(() => GLASSWARE.find((item) => item.id === glassId), [glassId]);
+  const selectedMethods = useMemo(
+    () => methodIds.map((id) => getCocktailMethodById(id)).filter(Boolean),
+    [methodIds],
+  );
 
   const availableCocktailTags = useMemo(() => {
     const sortedCustom = [...customCocktailTags].sort((a, b) =>
@@ -477,6 +490,14 @@ export default function CreateCocktailScreen() {
       setPrefilledCocktail(baseCocktail);
       setName(baseCocktail.name ?? '');
       setGlassId(baseCocktail.glassId ?? 'cocktail_glass');
+      const legacyMethodId = (baseCocktail as { methodId?: CocktailMethodId | null }).methodId ?? null;
+      const nextMethodIds =
+        baseCocktail.methodIds && baseCocktail.methodIds.length > 0
+          ? baseCocktail.methodIds
+          : legacyMethodId
+            ? [legacyMethodId]
+            : [];
+      setMethodIds(nextMethodIds);
       setDescription(baseCocktail.description ?? '');
       setInstructions(baseCocktail.instructions ?? '');
       setImageUri(baseCocktail.photoUri ?? null);
@@ -704,6 +725,20 @@ export default function CreateCocktailScreen() {
     setUnitPickerTarget(null);
   }, []);
 
+  const handleToggleMethod = useCallback((targetId: CocktailMethodId) => {
+    setMethodIds((prev) => {
+      if (prev.includes(targetId)) {
+        return prev.filter((id) => id !== targetId);
+      }
+      return [...prev, targetId];
+    });
+  }, []);
+
+  const handleClearMethods = useCallback(() => {
+    setMethodIds([]);
+    setIsMethodModalVisible(false);
+  }, []);
+
   const targetUnitPickerIngredient = useMemo(
     () => ingredientsState.find((item) => item.key === unitPickerTarget),
     [ingredientsState, unitPickerTarget],
@@ -889,6 +924,7 @@ export default function CreateCocktailScreen() {
           ? updateCocktail(Number(prefilledCocktail.id), {
               name: trimmedName,
               glassId: glassId ?? undefined,
+              methodIds,
               photoUri: imageUri ?? undefined,
               description: descriptionValue || undefined,
               instructions: instructionsValue || undefined,
@@ -898,6 +934,7 @@ export default function CreateCocktailScreen() {
           : createCocktail({
               name: trimmedName,
               glassId: glassId ?? undefined,
+              methodIds,
               photoUri: imageUri ?? undefined,
               description: descriptionValue || undefined,
               instructions: instructionsValue || undefined,
@@ -1226,6 +1263,36 @@ export default function CreateCocktailScreen() {
           </View>
 
           <View style={styles.section}>
+            <Text style={[styles.label, { color: palette.onSurface }]}>Method</Text>
+            <Pressable
+              style={[
+                styles.methodPicker,
+                { borderColor: palette.outlineVariant, backgroundColor: palette.surface },
+              ]}
+              accessibilityRole="button"
+              accessibilityLabel="Select method"
+              onPress={() => setIsMethodModalVisible(true)}>
+              <View style={styles.methodPickerContent}>
+                <Text
+                  style={[styles.methodPickerLabel, { color: palette.onSurface }]}
+                  numberOfLines={1}>
+                  {selectedMethods.length
+                    ? selectedMethods.map((method) => method.label).join(', ')
+                    : 'Select methods'}
+                </Text>
+                <Text
+                  style={[styles.methodPickerDescription, { color: palette.onSurfaceVariant }]}
+                  numberOfLines={2}>
+                  {selectedMethods.length
+                    ? selectedMethods.map((method) => method.title).join(' • ')
+                    : 'Optional'}
+                </Text>
+              </View>
+              <MaterialCommunityIcons name="chevron-down" size={20} color={palette.onSurfaceVariant} />
+            </Pressable>
+          </View>
+
+          <View style={styles.section}>
             <View style={styles.tagHeader}>
               <Text style={[styles.label, { color: palette.onSurface }]}>Tags</Text>
               <Pressable
@@ -1473,6 +1540,85 @@ export default function CreateCocktailScreen() {
                       ? `Select ${displayLabel.trim()}`
                       : 'Select empty unit'}>
                     <Text style={[styles.unitLabel, { color: palette.onSurface }]}>{displayLabel}</Text>
+                  </Pressable>
+                );
+              })}
+            </ScrollView>
+          </Pressable>
+        </Pressable>
+      </Modal>
+
+      <Modal
+        visible={isMethodModalVisible}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setIsMethodModalVisible(false)}>
+        <Pressable
+          style={styles.unitModalOverlay}
+          onPress={() => setIsMethodModalVisible(false)}
+          accessibilityRole="button">
+          <Pressable
+            onPress={(event) => event.stopPropagation?.()}
+            style={[
+              styles.unitModalCard,
+              {
+                backgroundColor: palette.surface,
+                borderColor: palette.outline,
+                shadowColor: palette.shadow,
+              },
+            ]}
+            accessibilityRole="menu">
+            <View style={styles.unitModalHeader}>
+              <Text style={[styles.unitModalTitle, { color: palette.onSurface }]}>Select method</Text>
+              <Pressable
+                onPress={() => setIsMethodModalVisible(false)}
+                accessibilityRole="button"
+                accessibilityLabel="Close">
+                <MaterialCommunityIcons name="close" size={22} color={palette.onSurfaceVariant} />
+              </Pressable>
+            </View>
+            <ScrollView
+              style={styles.unitModalScroll}
+              contentContainerStyle={styles.methodModalList}
+              showsVerticalScrollIndicator={false}
+              keyboardShouldPersistTaps="handled">
+              <Pressable
+                onPress={handleClearMethods}
+                style={[
+                  styles.methodOption,
+                  {
+                    borderColor: methodIds.length === 0 ? palette.tint : palette.outlineVariant,
+                    backgroundColor: methodIds.length === 0 ? palette.highlightFaint : palette.surfaceBright,
+                  },
+                ]}
+                accessibilityRole="button"
+                accessibilityLabel="Clear methods">
+                <Text style={[styles.methodOptionLabel, { color: palette.onSurface }]}>Not specified</Text>
+                <Text style={[styles.methodOptionDescription, { color: palette.onSurfaceVariant }]}>
+                  Clear all selected methods.
+                </Text>
+              </Pressable>
+              {COCKTAIL_METHODS.map((method) => {
+                const isSelected = methodIds.includes(method.id);
+                return (
+                  <Pressable
+                    key={method.id}
+                    onPress={() => handleToggleMethod(method.id)}
+                    style={[
+                      styles.methodOption,
+                      {
+                        borderColor: isSelected ? palette.tint : palette.outlineVariant,
+                        backgroundColor: isSelected ? palette.highlightFaint : palette.surfaceBright,
+                      },
+                    ]}
+                    accessibilityRole="button"
+                    accessibilityLabel={`Select ${method.label}`}>
+                    <View style={styles.methodOptionHeader}>
+                      <Text style={[styles.methodOptionLabel, { color: palette.onSurface }]}>{method.label}</Text>
+                    </View>
+                    <Text style={[styles.methodOptionDescription, { color: palette.onSurfaceVariant }]}>
+                      {method.description}
+                    </Text>
                   </Pressable>
                 );
               })}
@@ -2116,6 +2262,26 @@ const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: Colors.background,
   },
+  methodPicker: {
+    borderWidth: StyleSheet.hairlineWidth,
+    borderRadius: 12,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  methodPickerContent: {
+    flex: 1,
+    gap: 4,
+  },
+  methodPickerLabel: {
+    fontSize: 15,
+    fontWeight: '600',
+  },
+  methodPickerDescription: {
+    fontSize: 13,
+  },
   glassRow: {
     justifyContent: 'space-between',
     gap: 16,
@@ -2490,11 +2656,35 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     gap: 4,
   },
+  methodModalList: {
+    flexGrow: 1,
+    paddingVertical: 8,
+    gap: 12,
+  },
   unitOption: {
     borderWidth: StyleSheet.hairlineWidth,
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 12,
+  },
+  methodOption: {
+    borderWidth: StyleSheet.hairlineWidth,
+    borderRadius: 12,
+    padding: 14,
+    gap: 6,
+  },
+  methodOptionHeader: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    justifyContent: 'space-between',
+    gap: 8,
+  },
+  methodOptionLabel: {
+    fontSize: 15,
+    fontWeight: '600',
+  },
+  methodOptionDescription: {
+    fontSize: 13,
   },
   removePhotoButton: {
     position: 'absolute',
