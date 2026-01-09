@@ -1,13 +1,14 @@
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import { Image } from 'expo-image';
+import { Image, type ImageSource } from 'expo-image';
 import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
-import React, { useCallback, useEffect, useMemo, useState, useTransition } from 'react';
+import React, { useCallback, useEffect, useMemo, useState, useTransition, type ComponentProps } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { resolveGlasswareUriFromId } from '@/assets/image-manifest';
+import ShakerIcon from '@/assets/images/shaker.svg';
 import { HeaderIconButton } from '@/components/HeaderIconButton';
 import { ListRow, Thumb } from '@/components/RowParts';
 import { TagPill } from '@/components/TagPill';
@@ -32,6 +33,20 @@ const METRIC_UNIT_ID = 11;
 const IMPERIAL_UNIT_ID = 12;
 const GRAM_UNIT_ID = 8;
 const UNIT_CONVERSION_RATIO = 30;
+
+type MethodIcon =
+  | { type: 'icon'; name: ComponentProps<typeof MaterialCommunityIcons>['name'] }
+  | { type: 'asset'; source: ImageSource };
+
+const METHOD_ICON_MAP: Record<string, MethodIcon> = {
+  build: { type: 'icon', name: 'beer' },
+  stir: { type: 'icon', name: 'delete-variant' },
+  shake: { type: 'asset', source: ShakerIcon },
+  muddle: { type: 'icon', name: 'bottle-soda' },
+  layer: { type: 'icon', name: 'layers' },
+  blend: { type: 'icon', name: 'blender' },
+  throwing: { type: 'icon', name: 'swap-horizontal' },
+};
 
 const GLASS_LABELS: Record<string, string> = {
   bowl: 'Punch bowl',
@@ -452,6 +467,7 @@ export default function CocktailDetailsScreen() {
 
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   const [shouldTruncateDescription, setShouldTruncateDescription] = useState(false);
+  const [expandedMethodIds, setExpandedMethodIds] = useState<Set<string>>(new Set());
 
   const handleDescriptionLayout = useCallback(
     (event: { nativeEvent: { lines: { length: number }[] } }) => {
@@ -470,8 +486,41 @@ export default function CocktailDetailsScreen() {
     setIsDescriptionExpanded((current) => !current);
   }, []);
 
+  const toggleMethodDescription = useCallback((methodId: string) => {
+    setExpandedMethodIds((previous) => {
+      const next = new Set(previous);
+      if (next.has(methodId)) {
+        next.delete(methodId);
+      } else {
+        next.add(methodId);
+      }
+      return next;
+    });
+  }, []);
+
   const handleToggleUnits = useCallback(() => {
     setShowImperialUnits((current) => !current);
+  }, []);
+
+  const renderMethodIcon = useCallback((methodId: string, iconColor: string) => {
+    const icon = METHOD_ICON_MAP[methodId];
+    if (!icon) {
+      return (
+        <MaterialCommunityIcons name="silverware-fork-knife" size={18} color={iconColor} />
+      );
+    }
+
+    if (icon.type === 'asset') {
+      return (
+        <Image
+          source={icon.source}
+          style={[styles.methodIcon, { tintColor: iconColor }]}
+          contentFit="contain"
+        />
+      );
+    }
+
+    return <MaterialCommunityIcons name={icon.name} size={18} color={iconColor} />;
   }, []);
 
   const handleEditPress = useCallback(() => {
@@ -617,6 +666,41 @@ export default function CocktailDetailsScreen() {
               ) : null}
             </View>
 
+            {methodDetails.length ? (
+              <View style={styles.methodSummary}>
+                {methodDetails.map((method) => {
+                  const isExpanded = expandedMethodIds.has(method.id);
+                  return (
+                    <View key={method.id} style={styles.methodSummaryEntry}>
+                      <View style={styles.methodSummaryHeader}>
+                        {renderMethodIcon(method.id, palette.onSurfaceVariant)}
+                        <Text style={[styles.methodTitle, { color: palette.onSurface }]}>
+                          {method.title}
+                        </Text>
+                        <Pressable
+                          onPress={() => toggleMethodDescription(method.id)}
+                          accessibilityRole="button"
+                          accessibilityLabel={
+                            isExpanded
+                              ? `Hide details for ${method.title}`
+                              : `Show details for ${method.title}`
+                          }
+                          hitSlop={8}
+                        >
+                          <Text style={[styles.methodInfoIcon, { color: palette.tint }]}>ⓘ</Text>
+                        </Pressable>
+                      </View>
+                      {isExpanded ? (
+                        <Text style={[styles.methodDescription, { color: palette.onSurfaceVariant }]}>
+                          {method.description}
+                        </Text>
+                      ) : null}
+                    </View>
+                  );
+                })}
+              </View>
+            ) : null}
+
             {cocktail.tags && cocktail.tags.length ? (
               <View style={styles.tagList}>
                 {cocktail.tags.map((tag) => (
@@ -627,22 +711,6 @@ export default function CocktailDetailsScreen() {
                     selected
                     accessibilityLabel={tag.name ?? 'Tag'}
                   />
-                ))}
-              </View>
-            ) : null}
-
-            {methodDetails.length ? (
-              <View style={styles.textBlock}>
-                <Text style={[styles.sectionTitle, { color: palette.onSurface }]}>Method</Text>
-                {methodDetails.map((method) => (
-                  <View key={method.id} style={styles.methodEntry}>
-                    <Text style={[styles.bodyText, { color: palette.onSurfaceVariant }]}>
-                      {`${method.label} — ${method.title}`}
-                    </Text>
-                    <Text style={[styles.bodyText, { color: palette.onSurfaceVariant }]}>
-                      {method.description}
-                    </Text>
-                  </View>
                 ))}
               </View>
             ) : null}
@@ -915,6 +983,34 @@ const styles = StyleSheet.create({
   glassLabel: {
     fontSize: 16,
   },
+  methodSummary: {
+    alignSelf: 'stretch',
+    gap: 8,
+  },
+  methodSummaryEntry: {
+    gap: 6,
+  },
+  methodSummaryHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  methodIcon: {
+    width: 20,
+    height: 20,
+  },
+  methodTitle: {
+    fontSize: 15,
+    fontWeight: '600',
+  },
+  methodInfoIcon: {
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  methodDescription: {
+    fontSize: 13,
+    lineHeight: 20,
+  },
   tagList: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -924,9 +1020,6 @@ const styles = StyleSheet.create({
   },
   textBlock: {
     gap: 12,
-  },
-  methodEntry: {
-    gap: 4,
   },
   sectionTitle: {
     fontSize: 16,
