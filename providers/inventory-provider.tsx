@@ -172,6 +172,8 @@ declare global {
   // eslint-disable-next-line no-var
   var __yourbarInventoryKeepScreenAwake: boolean | undefined;
   // eslint-disable-next-line no-var
+  var __yourbarInventoryRatingFilterThreshold: number | undefined;
+  // eslint-disable-next-line no-var
   var __yourbarInventoryStartScreen: StartScreen | undefined;
 }
 
@@ -858,8 +860,11 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     setShoppingIngredientIds(new Set());
     setCocktailRatings({});
     setIgnoreGarnish(true);
-    setAllowAllSubstitutes(false);
+    setAllowAllSubstitutes(true);
     setUseImperialUnits(false);
+    setKeepScreenAwake(true);
+    setRatingFilterThreshold(1);
+    setStartScreen(DEFAULT_START_SCREEN);
   }, []);
 
   const updateIngredient = useCallback(

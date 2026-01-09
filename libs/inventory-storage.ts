@@ -15,6 +15,7 @@ export type InventorySnapshot<TCocktail, TIngredient> = {
   ignoreGarnish?: boolean;
   allowAllSubstitutes?: boolean;
   useImperialUnits?: boolean;
+  keepScreenAwake?: boolean;
   ratingFilterThreshold?: number;
   startScreen?: string;
 };
