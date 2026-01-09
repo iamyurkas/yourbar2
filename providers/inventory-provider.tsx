@@ -12,19 +12,8 @@ import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
 import { type CocktailMethodId } from '@/constants/cocktail-methods';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { TAG_COLORS } from '@/constants/tag-colors';
+import { loadInventoryData, reloadInventoryData, type InventoryData } from '@/libs/inventory-data';
 import { clearInventorySnapshot, loadInventorySnapshot, persistInventorySnapshot } from '@/libs/inventory-storage';
-
-type InventoryData = typeof import('@/assets/data/data.json');
-
-let cachedInventoryData: InventoryData | undefined;
-
-function loadInventoryData(): InventoryData {
-  if (!cachedInventoryData) {
-    cachedInventoryData = require('@/assets/data/data.json');
-  }
-
-  return cachedInventoryData!;
-}
 
 type BaseCocktailRecord = InventoryData['cocktails'][number];
 type CocktailIngredientRecord = NonNullable<BaseCocktailRecord['ingredients']>[number];
@@ -945,7 +934,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       console.warn('Failed to clear inventory snapshot', error);
     }
 
-    const data = loadInventoryData();
+    const data = reloadInventoryData();
     setInventoryState(createInventoryStateFromData(data, true));
     setAvailableIngredientIds(new Set());
     setShoppingIngredientIds(new Set());

@@ -35,8 +35,8 @@ import { SubstituteModal } from '@/components/SubstituteModal';
 import { TagEditorModal } from '@/components/TagEditorModal';
 import { TagPill } from '@/components/TagPill';
 import {
-  COCKTAIL_METHODS,
   getCocktailMethodById,
+  getCocktailMethods,
   type CocktailMethodId,
 } from '@/constants/cocktail-methods';
 import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
@@ -1631,7 +1631,7 @@ export default function CreateCocktailScreen() {
                   Clear all selected methods.
                 </Text>
               </Pressable>
-              {COCKTAIL_METHODS.map((method) => {
+              {getCocktailMethods().map((method) => {
                 const isSelected = methodIds.includes(method.id);
                 const iconColor = isSelected ? palette.tint : palette.onSurfaceVariant;
                 return (
