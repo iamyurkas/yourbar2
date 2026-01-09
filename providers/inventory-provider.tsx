@@ -9,7 +9,7 @@ import React, {
 } from 'react';
 
 import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
-import { COCKTAIL_METHODS, type CocktailMethodId } from '@/constants/cocktail-methods';
+import { type CocktailMethodId } from '@/constants/cocktail-methods';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { TAG_COLORS } from '@/constants/tag-colors';
 import { clearInventorySnapshot, loadInventorySnapshot, persistInventorySnapshot } from '@/libs/inventory-storage';
@@ -26,10 +26,7 @@ function loadInventoryData(): InventoryData {
   return cachedInventoryData!;
 }
 
-type BaseCocktailRecord = InventoryData['cocktails'][number] & {
-  methodId?: CocktailMethodId | null;
-  methodIds?: CocktailMethodId[] | null;
-};
+type BaseCocktailRecord = InventoryData['cocktails'][number];
 type CocktailIngredientRecord = NonNullable<BaseCocktailRecord['ingredients']>[number];
 type CocktailSubstituteRecord = NonNullable<CocktailIngredientRecord['substitutes']>[number];
 type CocktailTag = NonNullable<BaseCocktailRecord['tags']>[number];
@@ -222,79 +219,9 @@ function normalizeSearchFields<T extends { name?: string | null; searchName?: st
   });
 }
 
-const METHOD_MATCHERS: Record<CocktailMethodId, RegExp[]> = {
-  build: [/\bbuild\b/, /\bpour\b/, /\bfill\b/, /\btop\b/],
-  stir: [/\bstir(red|ring)?\b/],
-  shake: [/\bshake\b/, /\bdry shake\b/],
-  muddle: [/\bmuddle\b/, /\bmuddled\b/],
-  layer: [/\blayer\b/, /\bfloat\b/],
-  blend: [/\bblend\b/, /\bblended\b/],
-  throwing: [/\bthrow\b/, /\bthrown\b/],
-};
-
-const METHOD_ID_ORDER = COCKTAIL_METHODS.map((method) => method.id);
-
-function sanitizeMethodIds(values?: readonly (CocktailMethodId | string | null)[] | null): CocktailMethodId[] {
-  if (!values || values.length === 0) {
-    return [];
-  }
-
-  const allowed = new Set<CocktailMethodId>(METHOD_ID_ORDER);
-  return Array.from(
-    new Set(
-      values
-        .map((value) => (value ? String(value) : ''))
-        .filter((value): value is CocktailMethodId => allowed.has(value as CocktailMethodId)),
-    ),
-  );
-}
-
-function deriveMethodIds(cocktail: BaseCocktailRecord): CocktailMethodId[] | undefined {
-  const explicitMethodIds = sanitizeMethodIds(cocktail.methodIds ?? []);
-  if (explicitMethodIds.length > 0) {
-    return explicitMethodIds;
-  }
-
-  const legacyMethodId = cocktail.methodId ? sanitizeMethodIds([cocktail.methodId]) : [];
-  if (legacyMethodId.length > 0) {
-    return legacyMethodId;
-  }
-
-  const text = `${cocktail.description ?? ''}\n${cocktail.instructions ?? ''}`.toLowerCase().trim();
-  if (!text) {
-    return undefined;
-  }
-
-  const detected = new Set<CocktailMethodId>();
-
-  METHOD_ID_ORDER.filter((id) => id !== 'build').forEach((id) => {
-    const matchers = METHOD_MATCHERS[id] ?? [];
-    if (matchers.some((matcher) => matcher.test(text))) {
-      detected.add(id);
-    }
-  });
-
-  if (detected.size === 0) {
-    const buildMatchers = METHOD_MATCHERS.build ?? [];
-    if (buildMatchers.some((matcher) => matcher.test(text))) {
-      detected.add('build');
-    } else {
-      detected.add('build');
-    }
-  }
-
-  const ordered = METHOD_ID_ORDER.filter((id) => detected.has(id));
-  return ordered.length > 0 ? ordered : undefined;
-}
-
 function createInventoryStateFromData(data: InventoryData, imported: boolean): InventoryState {
   return {
-    cocktails: normalizeSearchFields(
-      data.cocktails.map((cocktail) => ({
-        ...cocktail,
-        methodIds: deriveMethodIds(cocktail),
-      })),
-    ) as Cocktail[],
+    cocktails: normalizeSearchFields(data.cocktails) as Cocktail[],
     ingredients: normalizeSearchFields(data.ingredients) as Ingredient[],
     imported,
   } satisfies InventoryState;
