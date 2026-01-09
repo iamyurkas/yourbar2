@@ -2,11 +2,12 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { Image, type ImageSource } from 'expo-image';
 import React, { useEffect, useMemo, useRef, useState, type ComponentProps } from 'react';
-import { Alert, Animated, Dimensions, Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Animated, Dimensions, Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import CocktailIcon from '@/assets/images/cocktails.svg';
 import IngredientsIcon from '@/assets/images/ingredients.svg';
 import ShakerIcon from '@/assets/images/shaker.svg';
+import { AppDialog, type DialogOptions } from '@/components/AppDialog';
 import { TagEditorModal } from '@/components/TagEditorModal';
 import { TagPill } from '@/components/TagPill';
 import { Colors } from '@/constants/theme';
@@ -112,6 +113,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   const [tagEditorMode, setTagEditorMode] = useState<'create' | 'edit'>('create');
   const [tagEditorType, setTagEditorType] = useState<'cocktail' | 'ingredient'>('cocktail');
   const [tagEditorTarget, setTagEditorTarget] = useState<{ id: number; name: string; color: string } | null>(null);
+  const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(null);
   const translateX = useRef(new Animated.Value(-MENU_WIDTH)).current;
   const backdropOpacity = useRef(new Animated.Value(0)).current;
 
@@ -281,6 +283,10 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     setTagEditorVisible(false);
   };
 
+  const handleCloseDialog = () => {
+    setDialogOptions(null);
+  };
+
   const handleSaveTagEditor = (data: { name: string; color: string }) => {
     if (tagEditorMode === 'create') {
       if (tagEditorType === 'cocktail') {
@@ -300,20 +306,24 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   };
 
   const handleDeleteTag = (type: 'cocktail' | 'ingredient', tag: { id: number; name: string }) => {
-    Alert.alert('Delete tag', `Remove "${tag.name}"?`, [
-      { text: 'Cancel', style: 'cancel' },
-      {
-        text: 'Delete',
-        style: 'destructive',
-        onPress: () => {
-          if (type === 'cocktail') {
-            deleteCustomCocktailTag(tag.id);
-          } else {
-            deleteCustomIngredientTag(tag.id);
-          }
+    setDialogOptions({
+      title: 'Delete tag',
+      message: `Remove "${tag.name}"?`,
+      actions: [
+        { label: 'Cancel', variant: 'secondary' },
+        {
+          label: 'Delete',
+          variant: 'destructive',
+          onPress: () => {
+            if (type === 'cocktail') {
+              deleteCustomCocktailTag(tag.id);
+            } else {
+              deleteCustomIngredientTag(tag.id);
+            }
+          },
         },
-      },
-    ]);
+      ],
+    });
   };
 
   useEffect(() => {
@@ -759,6 +769,13 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
         initialColor={tagEditorTarget?.color}
         onClose={handleCloseTagEditor}
         onSave={handleSaveTagEditor}
+      />
+      <AppDialog
+        visible={dialogOptions != null}
+        title={dialogOptions?.title ?? ''}
+        message={dialogOptions?.message}
+        actions={dialogOptions?.actions ?? []}
+        onRequestClose={handleCloseDialog}
       />
       <Modal
         transparent
