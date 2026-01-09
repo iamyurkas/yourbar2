@@ -1,8 +1,10 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import React, { memo, useMemo } from 'react';
+import { Image, type ImageSource } from 'expo-image';
+import React, { memo, useMemo, type ComponentProps } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { resolveGlasswareUriFromId } from '@/assets/image-manifest';
+import ShakerIcon from '@/assets/images/shaker.svg';
 import { Colors } from '@/constants/theme';
 import type { Cocktail, Ingredient } from '@/providers/inventory-provider';
 import { createIngredientLookup, type IngredientLookup } from '@/libs/ingredient-availability';
@@ -19,6 +21,7 @@ type CocktailListRowProps = {
   highlightColor?: string;
   ignoreGarnish?: boolean;
   allowAllSubstitutes?: boolean;
+  showMethodIcons?: boolean;
   onPress?: () => void;
 };
 
@@ -46,6 +49,21 @@ const areCocktailRowPropsEqual = (
 };
 
 const MAX_RATING = 5;
+const METHOD_ICON_SIZE = 16;
+
+type MethodIcon =
+  | { type: 'icon'; name: ComponentProps<typeof MaterialCommunityIcons>['name'] }
+  | { type: 'asset'; source: ImageSource };
+
+const METHOD_ICON_MAP: Record<string, MethodIcon> = {
+  build: { type: 'icon', name: 'beer' },
+  stir: { type: 'icon', name: 'delete-variant' },
+  shake: { type: 'asset', source: ShakerIcon },
+  muddle: { type: 'icon', name: 'bottle-soda' },
+  layer: { type: 'icon', name: 'layers' },
+  blend: { type: 'icon', name: 'blender' },
+  throwing: { type: 'icon', name: 'swap-horizontal' },
+};
 
 const CocktailListRowComponent = ({
   cocktail,
@@ -55,6 +73,7 @@ const CocktailListRowComponent = ({
   highlightColor = palette.highlightFaint,
   ignoreGarnish = true,
   allowAllSubstitutes = false,
+  showMethodIcons = false,
   onPress,
 }: CocktailListRowProps) => {
   const paletteColors = Colors;
@@ -122,6 +141,48 @@ const CocktailListRowComponent = ({
     [cocktail.tags],
   );
 
+  const methodIds = useMemo(() => {
+    const legacyMethodId = (cocktail as { methodId?: string | null }).methodId ?? null;
+    if (cocktail.methodIds && cocktail.methodIds.length > 0) {
+      return cocktail.methodIds;
+    }
+
+    return legacyMethodId ? [legacyMethodId] : [];
+  }, [cocktail.methodIds, cocktail]);
+
+  const methodIconContent = useMemo(() => {
+    if (!showMethodIcons) {
+      return null;
+    }
+
+    const icons = methodIds.map((id) => METHOD_ICON_MAP[id]).filter(Boolean);
+    if (!icons.length) {
+      return null;
+    }
+
+    return (
+      <View style={styles.methodIconRow}>
+        {icons.map((icon, index) =>
+          icon.type === 'asset' ? (
+            <Image
+              key={`method-icon-${index}`}
+              source={icon.source}
+              style={[styles.methodIcon, { tintColor: paletteColors.onSurfaceVariant }]}
+              contentFit="contain"
+            />
+          ) : (
+            <MaterialCommunityIcons
+              key={`method-icon-${index}`}
+              name={icon.name}
+              size={METHOD_ICON_SIZE}
+              color={paletteColors.onSurfaceVariant}
+            />
+          ),
+        )}
+      </View>
+    );
+  }, [methodIds, paletteColors.onSurfaceVariant, showMethodIcons]);
+
   const hasBrandedIngredient = useMemo(() => {
     const recipe = cocktail.ingredients ?? [];
     if (!recipe.length) {
@@ -186,6 +247,7 @@ const CocktailListRowComponent = ({
       control={ratingContent}
       thumbnail={thumbnail}
       brandIndicatorColor={brandIndicatorColor}
+      metaFooter={methodIconContent}
       accessibilityRole={onPress ? 'button' : undefined}
       metaAlignment="center"
     />
@@ -204,5 +266,15 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
     paddingHorizontal: 6,
     borderWidth: StyleSheet.hairlineWidth,
+  },
+  methodIconRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    gap: 2,
+  },
+  methodIcon: {
+    width: METHOD_ICON_SIZE,
+    height: METHOD_ICON_SIZE,
   },
 });
