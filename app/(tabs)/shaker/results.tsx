@@ -362,6 +362,7 @@ export default function ShakerResultsScreen() {
         ingredientLookup={ingredientLookup}
         ignoreGarnish={ignoreGarnish}
         allowAllSubstitutes={allowAllSubstitutes}
+        showMethodIcons
         onPress={() => handlePressCocktail(item)}
       />
     ),
