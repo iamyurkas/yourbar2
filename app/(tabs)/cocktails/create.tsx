@@ -27,6 +27,7 @@ import {
 } from 'react-native';
 
 import { resolveAssetFromCatalog } from '@/assets/image-manifest';
+import ShakerIcon from '@/assets/images/shaker.svg';
 import { AppDialog, type DialogOptions } from '@/components/AppDialog';
 import { HeaderIconButton } from '@/components/HeaderIconButton';
 import { ListRow, Thumb } from '@/components/RowParts';
@@ -53,14 +54,17 @@ import { useUnsavedChanges } from '@/providers/unsaved-changes-provider';
 const DEFAULT_UNIT_ID = 11;
 const MIN_AUTOCOMPLETE_LENGTH = 2;
 const MAX_SUGGESTIONS = 8;
-const METHOD_ICON_MAP: Record<CocktailMethodId, ComponentProps<typeof MaterialCommunityIcons>['name']> = {
-  build: 'cup',
-  stir: 'spoon',
-  shake: 'shaker-outline',
-  muddle: 'fruit-cherries',
-  layer: 'layers',
-  blend: 'blender',
-  throwing: 'swap-horizontal',
+type MethodIcon =
+  | { type: 'icon'; name: ComponentProps<typeof MaterialCommunityIcons>['name'] }
+  | { type: 'asset'; source: typeof ShakerIcon };
+const METHOD_ICON_MAP: Record<CocktailMethodId, MethodIcon> = {
+  build: { type: 'icon', name: 'beer-outline' },
+  stir: { type: 'icon', name: 'delete-variant' },
+  shake: { type: 'asset', source: ShakerIcon },
+  muddle: { type: 'icon', name: 'bottle-soda' },
+  layer: { type: 'icon', name: 'layers' },
+  blend: { type: 'icon', name: 'blender' },
+  throwing: { type: 'icon', name: 'swap-horizontal' },
 };
 
 type EditableSubstitute = {
@@ -1610,7 +1614,7 @@ export default function CreateCocktailScreen() {
               </Pressable>
               {COCKTAIL_METHODS.map((method) => {
                 const isSelected = methodIds.includes(method.id);
-                const iconName = METHOD_ICON_MAP[method.id];
+                const icon = METHOD_ICON_MAP[method.id];
                 const iconColor = isSelected ? palette.tint : palette.onSurfaceVariant;
                 return (
                   <Pressable
@@ -1628,7 +1632,15 @@ export default function CreateCocktailScreen() {
                     <View style={styles.methodOptionHeader}>
                       <View style={styles.methodOptionTitle}>
                         <View style={[styles.methodOptionIcon, { backgroundColor: palette.surfaceVariant }]}>
-                          <MaterialCommunityIcons name={iconName} size={18} color={iconColor} />
+                          {icon.type === 'icon' ? (
+                            <MaterialCommunityIcons name={icon.name} size={18} color={iconColor} />
+                          ) : (
+                            <Image
+                              source={icon.source}
+                              style={[styles.methodOptionIconImage, { tintColor: iconColor }]}
+                              contentFit="contain"
+                            />
+                          )}
                         </View>
                         <Text style={[styles.methodOptionLabel, { color: palette.onSurface }]}>{method.label}</Text>
                       </View>
@@ -2707,6 +2719,10 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  methodOptionIconImage: {
+    width: 18,
+    height: 18,
   },
   methodOptionLabel: {
     fontSize: 15,
