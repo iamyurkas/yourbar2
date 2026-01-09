@@ -11,6 +11,7 @@ import { resolveGlasswareUriFromId } from '@/assets/image-manifest';
 import { HeaderIconButton } from '@/components/HeaderIconButton';
 import { ListRow, Thumb } from '@/components/RowParts';
 import { TagPill } from '@/components/TagPill';
+import { getCocktailMethodById } from '@/constants/cocktail-methods';
 import { COCKTAIL_UNIT_DICTIONARY } from '@/constants/cocktail-units';
 import { Colors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
@@ -438,6 +439,10 @@ export default function CocktailDetailsScreen() {
 
   const displayedImageSource = photoSource ?? glassSource;
   const glassLabel = useMemo(() => formatGlassLabel(cocktail?.glassId), [cocktail?.glassId]);
+  const methodDetails = useMemo(
+    () => getCocktailMethodById(cocktail?.methodId ?? null),
+    [cocktail?.methodId],
+  );
 
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   const [shouldTruncateDescription, setShouldTruncateDescription] = useState(false);
@@ -617,6 +622,21 @@ export default function CocktailDetailsScreen() {
                     accessibilityLabel={tag.name ?? 'Tag'}
                   />
                 ))}
+              </View>
+            ) : null}
+
+            {methodDetails ? (
+              <View style={styles.textBlock}>
+                <Text style={[styles.sectionTitle, { color: palette.onSurface }]}>Method</Text>
+                <Text style={[styles.bodyText, { color: palette.onSurfaceVariant }]}>
+                  {`${methodDetails.label} — ${methodDetails.title}`}
+                </Text>
+                <Text style={[styles.bodyText, { color: palette.onSurfaceVariant }]}>
+                  {methodDetails.description}
+                </Text>
+                <Text style={[styles.methodExample, { color: palette.onSurfaceVariant }]}>
+                  {methodDetails.example}
+                </Text>
               </View>
             ) : null}
 
@@ -905,6 +925,10 @@ const styles = StyleSheet.create({
   bodyText: {
     fontSize: 14,
     lineHeight: 22,
+  },
+  methodExample: {
+    fontSize: 13,
+    lineHeight: 20,
   },
   descriptionText: {
     color: Colors.onSurfaceMuted,
