@@ -605,6 +605,7 @@ export default function CocktailsScreen() {
         ingredientLookup={ingredientLookup}
         ignoreGarnish={ignoreGarnish}
         allowAllSubstitutes={allowAllSubstitutes}
+        showMethodIcons
         onPress={() => handleSelectCocktail(item)}
       />
     ),
@@ -678,6 +679,7 @@ export default function CocktailsScreen() {
           ingredientLookup={ingredientLookup}
           ignoreGarnish={ignoreGarnish}
           allowAllSubstitutes={allowAllSubstitutes}
+          showMethodIcons
           onPress={() => handleSelectCocktail(item.cocktail)}
         />
       );

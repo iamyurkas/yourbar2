@@ -706,6 +706,7 @@ export default function IngredientDetailsScreen() {
                           ingredientLookup={ingredientLookup}
                           onPress={() => handleNavigateToCocktail(cocktail.id ?? cocktail.name)}
                           highlightColor={isReady ? undefined : palette.highlightFaint}
+                          showMethodIcons
                         />
                       </React.Fragment>
                     );
