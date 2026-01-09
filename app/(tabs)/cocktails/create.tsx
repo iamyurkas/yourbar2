@@ -1,6 +1,6 @@
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import { Image } from 'expo-image';
+import { Image, type ImageSource } from 'expo-image';
 import * as ImagePicker from 'expo-image-picker';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
 import React, {
@@ -9,6 +9,7 @@ import React, {
   useMemo,
   useRef,
   useState,
+  type ComponentProps,
 } from 'react';
 import {
   FlatList,
@@ -26,18 +27,19 @@ import {
 } from 'react-native';
 
 import { resolveAssetFromCatalog } from '@/assets/image-manifest';
+import ShakerIcon from '@/assets/images/shaker.svg';
 import { AppDialog, type DialogOptions } from '@/components/AppDialog';
 import { HeaderIconButton } from '@/components/HeaderIconButton';
 import { ListRow, Thumb } from '@/components/RowParts';
 import { SubstituteModal } from '@/components/SubstituteModal';
 import { TagEditorModal } from '@/components/TagEditorModal';
 import { TagPill } from '@/components/TagPill';
-import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
 import {
   COCKTAIL_METHODS,
   getCocktailMethodById,
   type CocktailMethodId,
 } from '@/constants/cocktail-methods';
+import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
 import { COCKTAIL_UNIT_DICTIONARY, COCKTAIL_UNIT_OPTIONS } from '@/constants/cocktail-units';
 import { GLASSWARE } from '@/constants/glassware';
 import { Colors } from '@/constants/theme';
@@ -52,6 +54,20 @@ import { useUnsavedChanges } from '@/providers/unsaved-changes-provider';
 const DEFAULT_UNIT_ID = 11;
 const MIN_AUTOCOMPLETE_LENGTH = 2;
 const MAX_SUGGESTIONS = 8;
+
+type MethodIcon =
+  | { type: 'icon'; name: ComponentProps<typeof MaterialCommunityIcons>['name'] }
+  | { type: 'asset'; source: ImageSource };
+
+const METHOD_ICON_MAP: Record<CocktailMethodId, MethodIcon> = {
+  build: { type: 'icon', name: 'beer' },
+  stir: { type: 'icon', name: 'delete-variant' },
+  shake: { type: 'asset', source: ShakerIcon },
+  muddle: { type: 'icon', name: 'bottle-soda' },
+  layer: { type: 'icon', name: 'layers' },
+  blend: { type: 'icon', name: 'blender' },
+  throwing: { type: 'icon', name: 'swap-horizontal' },
+};
 
 type EditableSubstitute = {
   key: string;
@@ -260,6 +276,22 @@ export default function CreateCocktailScreen() {
   const [isInitialized, setIsInitialized] = useState(false);
   const [initialSnapshot, setInitialSnapshot] = useState<CocktailFormSnapshot | null>(null);
   const [isTagModalVisible, setTagModalVisible] = useState(false);
+
+  const renderMethodIcon = (methodId: CocktailMethodId, iconColor: string) => {
+    const icon = METHOD_ICON_MAP[methodId];
+
+    if (icon.type === 'asset') {
+      return (
+        <Image
+          source={icon.source}
+          style={[styles.methodOptionIcon, { tintColor: iconColor }]}
+          contentFit="contain"
+        />
+      );
+    }
+
+    return <MaterialCommunityIcons name={icon.name} size={18} color={iconColor} />;
+  };
 
   const initializedRef = useRef(false);
   const isNavigatingAfterSaveRef = useRef(false);
@@ -1600,6 +1632,7 @@ export default function CreateCocktailScreen() {
               </Pressable>
               {COCKTAIL_METHODS.map((method) => {
                 const isSelected = methodIds.includes(method.id);
+                const iconColor = isSelected ? palette.tint : palette.onSurfaceVariant;
                 return (
                   <Pressable
                     key={method.id}
@@ -1614,7 +1647,10 @@ export default function CreateCocktailScreen() {
                     accessibilityRole="button"
                     accessibilityLabel={`Select ${method.label}`}>
                     <View style={styles.methodOptionHeader}>
-                      <Text style={[styles.methodOptionLabel, { color: palette.onSurface }]}>{method.label}</Text>
+                      <View style={styles.methodOptionTitleRow}>
+                        {renderMethodIcon(method.id, iconColor)}
+                        <Text style={[styles.methodOptionLabel, { color: palette.onSurface }]}>{method.label}</Text>
+                      </View>
                     </View>
                     <Text style={[styles.methodOptionDescription, { color: palette.onSurfaceVariant }]}>
                       {method.description}
@@ -2675,9 +2711,18 @@ const styles = StyleSheet.create({
   },
   methodOptionHeader: {
     flexDirection: 'row',
-    alignItems: 'baseline',
-    justifyContent: 'space-between',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
     gap: 8,
+  },
+  methodOptionTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  methodOptionIcon: {
+    width: 18,
+    height: 18,
   },
   methodOptionLabel: {
     fontSize: 15,
