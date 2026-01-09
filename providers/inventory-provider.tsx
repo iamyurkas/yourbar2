@@ -8,6 +8,9 @@ import React, {
   useState,
 } from 'react';
 
+import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
+import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
+import { TAG_COLORS } from '@/constants/tag-colors';
 import { clearInventorySnapshot, loadInventorySnapshot, persistInventorySnapshot } from '@/libs/inventory-storage';
 
 type InventoryData = typeof import('@/assets/data/data.json');
@@ -62,6 +65,8 @@ type InventoryContextValue = {
   loading: boolean;
   availableIngredientIds: Set<number>;
   shoppingIngredientIds: Set<number>;
+  customCocktailTags: CocktailTag[];
+  customIngredientTags: IngredientTag[];
   ignoreGarnish: boolean;
   allowAllSubstitutes: boolean;
   useImperialUnits: boolean;
@@ -78,6 +83,12 @@ type InventoryContextValue = {
   updateCocktail: (id: number, input: CreateCocktailInput) => Cocktail | undefined;
   deleteCocktail: (id: number) => boolean;
   deleteIngredient: (id: number) => boolean;
+  createCustomCocktailTag: (input: { name: string; color?: string | null }) => CocktailTag | undefined;
+  updateCustomCocktailTag: (id: number, input: { name: string; color?: string | null }) => CocktailTag | undefined;
+  deleteCustomCocktailTag: (id: number) => boolean;
+  createCustomIngredientTag: (input: { name: string; color?: string | null }) => IngredientTag | undefined;
+  updateCustomIngredientTag: (id: number, input: { name: string; color?: string | null }) => IngredientTag | undefined;
+  deleteCustomIngredientTag: (id: number) => boolean;
   cocktailRatings: Record<string, number>;
   setCocktailRating: (cocktail: Cocktail, rating: number) => void;
   getCocktailRating: (cocktail: Cocktail) => number;
@@ -141,6 +152,8 @@ type InventorySnapshot = {
   cocktails: Cocktail[];
   ingredients: Ingredient[];
   imported?: boolean;
+  customCocktailTags?: CocktailTag[];
+  customIngredientTags?: IngredientTag[];
   availableIngredientIds?: number[];
   shoppingIngredientIds?: number[];
   cocktailRatings?: Record<string, number>;
@@ -175,6 +188,10 @@ declare global {
   var __yourbarInventoryRatingFilterThreshold: number | undefined;
   // eslint-disable-next-line no-var
   var __yourbarInventoryStartScreen: StartScreen | undefined;
+  // eslint-disable-next-line no-var
+  var __yourbarInventoryCustomCocktailTags: CocktailTag[] | undefined;
+  // eslint-disable-next-line no-var
+  var __yourbarInventoryCustomIngredientTags: IngredientTag[] | undefined;
 }
 
 function normalizeSearchFields<T extends { name?: string | null; searchName?: string | null; searchTokens?: string[] | null }>(
@@ -268,6 +285,50 @@ function sanitizeStartScreen(value?: string | null): StartScreen {
   }
 }
 
+const DEFAULT_TAG_COLOR = TAG_COLORS[0];
+const BUILTIN_COCKTAIL_TAG_MAX = BUILTIN_COCKTAIL_TAGS.reduce((max, tag) => Math.max(max, tag.id), 0);
+const BUILTIN_INGREDIENT_TAG_MAX = BUILTIN_INGREDIENT_TAGS.reduce((max, tag) => Math.max(max, tag.id), 0);
+
+function sanitizeCustomTags<TTag extends { id?: number | null; name?: string | null; color?: string | null }>(
+  tags: readonly TTag[] | null | undefined,
+  fallbackColor: string,
+): Array<{ id: number; name: string; color: string }> {
+  if (!tags || tags.length === 0) {
+    return [];
+  }
+
+  const map = new Map<number, { id: number; name: string; color: string }>();
+
+  tags.forEach((tag) => {
+    const rawId = Number(tag.id ?? -1);
+    if (!Number.isFinite(rawId) || rawId < 0) {
+      return;
+    }
+
+    const name = tag.name?.trim();
+    if (!name) {
+      return;
+    }
+
+    const color = typeof tag.color === 'string' && tag.color.trim() ? tag.color : fallbackColor;
+    map.set(rawId, { id: Math.trunc(rawId), name, color });
+  });
+
+  return Array.from(map.values()).sort((a, b) => a.name.localeCompare(b.name));
+}
+
+function getNextCustomTagId(tags: readonly { id?: number | null }[], minimum: number): number {
+  const maxId = tags.reduce((max, tag) => {
+    const id = Number(tag.id ?? -1);
+    if (!Number.isFinite(id) || id < 0) {
+      return max;
+    }
+    return Math.max(max, Math.trunc(id));
+  }, minimum);
+
+  return maxId + 1;
+}
+
 function createSnapshotFromInventory(
   state: InventoryState,
   options: {
@@ -280,6 +341,8 @@ function createSnapshotFromInventory(
     keepScreenAwake: boolean;
     ratingFilterThreshold: number;
     startScreen: StartScreen;
+    customCocktailTags: CocktailTag[];
+    customIngredientTags: IngredientTag[];
   },
 ): InventorySnapshot {
   const sanitizedRatings = sanitizeCocktailRatings(options.cocktailRatings);
@@ -289,6 +352,8 @@ function createSnapshotFromInventory(
     cocktails: state.cocktails,
     ingredients: state.ingredients,
     imported: state.imported,
+    customCocktailTags: options.customCocktailTags,
+    customIngredientTags: options.customIngredientTags,
     availableIngredientIds:
       options.availableIngredientIds.size > 0
         ? toSortedArray(options.availableIngredientIds)
@@ -351,6 +416,12 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   const [startScreen, setStartScreen] = useState<StartScreen>(
     () => globalThis.__yourbarInventoryStartScreen ?? DEFAULT_START_SCREEN,
   );
+  const [customCocktailTags, setCustomCocktailTags] = useState<CocktailTag[]>(() =>
+    sanitizeCustomTags(globalThis.__yourbarInventoryCustomCocktailTags, DEFAULT_TAG_COLOR),
+  );
+  const [customIngredientTags, setCustomIngredientTags] = useState<IngredientTag[]>(() =>
+    sanitizeCustomTags(globalThis.__yourbarInventoryCustomIngredientTags, DEFAULT_TAG_COLOR),
+  );
   const lastPersistedSnapshot = useRef<string | undefined>(undefined);
 
   useEffect(() => {
@@ -378,6 +449,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             Math.max(1, Math.round(stored.ratingFilterThreshold ?? 1)),
           );
           const nextStartScreen = sanitizeStartScreen(stored.startScreen);
+          const nextCustomCocktailTags = sanitizeCustomTags(stored.customCocktailTags, DEFAULT_TAG_COLOR);
+          const nextCustomIngredientTags = sanitizeCustomTags(stored.customIngredientTags, DEFAULT_TAG_COLOR);
 
           setInventoryState(nextInventoryState);
           setAvailableIngredientIds(nextAvailableIds);
@@ -389,6 +462,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           setKeepScreenAwake(nextKeepScreenAwake);
           setRatingFilterThreshold(nextRatingFilterThreshold);
           setStartScreen(nextStartScreen);
+          setCustomCocktailTags(nextCustomCocktailTags);
+          setCustomIngredientTags(nextCustomIngredientTags);
           return;
         }
       } catch (error) {
@@ -407,6 +482,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           setUseImperialUnits(false);
           setKeepScreenAwake(true);
           setStartScreen(DEFAULT_START_SCREEN);
+          setCustomCocktailTags([]);
+          setCustomIngredientTags([]);
         }
       } catch (error) {
         console.error('Failed to import bundled inventory', error);
@@ -437,6 +514,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     globalThis.__yourbarInventoryKeepScreenAwake = keepScreenAwake;
     globalThis.__yourbarInventoryRatingFilterThreshold = ratingFilterThreshold;
     globalThis.__yourbarInventoryStartScreen = startScreen;
+    globalThis.__yourbarInventoryCustomCocktailTags = customCocktailTags;
+    globalThis.__yourbarInventoryCustomIngredientTags = customIngredientTags;
 
     const snapshot = createSnapshotFromInventory(inventoryState, {
       availableIngredientIds,
@@ -448,6 +527,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       keepScreenAwake,
       ratingFilterThreshold,
       startScreen,
+      customCocktailTags,
+      customIngredientTags,
     });
     const serialized = JSON.stringify(snapshot);
 
@@ -471,6 +552,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     keepScreenAwake,
     ratingFilterThreshold,
     startScreen,
+    customCocktailTags,
+    customIngredientTags,
   ]);
 
   const cocktails = inventoryState?.cocktails ?? [];
@@ -865,6 +948,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     setKeepScreenAwake(true);
     setRatingFilterThreshold(1);
     setStartScreen(DEFAULT_START_SCREEN);
+    setCustomCocktailTags([]);
+    setCustomIngredientTags([]);
   }, []);
 
   const updateIngredient = useCallback(
@@ -1319,6 +1404,274 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     setStartScreen(sanitizeStartScreen(value));
   }, []);
 
+  const createCustomCocktailTag = useCallback((input: { name: string; color?: string | null }) => {
+    const trimmedName = input.name?.trim();
+    if (!trimmedName) {
+      return undefined;
+    }
+
+    const color = input.color?.trim() || DEFAULT_TAG_COLOR;
+    let created: CocktailTag | undefined;
+
+    setCustomCocktailTags((prev) => {
+      const nextId = getNextCustomTagId(prev, BUILTIN_COCKTAIL_TAG_MAX);
+      created = { id: nextId, name: trimmedName, color };
+      return [...prev, created].sort((a, b) => (a.name ?? '').localeCompare(b.name ?? ''));
+    });
+
+    return created;
+  }, []);
+
+  const updateCustomCocktailTag = useCallback(
+    (id: number, input: { name: string; color?: string | null }) => {
+      const tagId = Number(id);
+      if (!Number.isFinite(tagId) || tagId < 0) {
+        return undefined;
+      }
+
+      const trimmedName = input.name?.trim();
+      if (!trimmedName) {
+        return undefined;
+      }
+
+      const color = input.color?.trim() || DEFAULT_TAG_COLOR;
+      let updated: CocktailTag | undefined;
+
+      setCustomCocktailTags((prev) => {
+        const index = prev.findIndex((tag) => Number(tag.id ?? -1) === Math.trunc(tagId));
+        if (index < 0) {
+          return prev;
+        }
+
+        updated = { id: prev[index].id, name: trimmedName, color };
+        const next = [...prev];
+        next[index] = updated;
+        next.sort((a, b) => (a.name ?? '').localeCompare(b.name ?? ''));
+        return next;
+      });
+
+      if (updated) {
+        setInventoryState((prev) => {
+          if (!prev) {
+            return prev;
+          }
+
+          let didChange = false;
+          const nextCocktails = prev.cocktails.map((cocktail) => {
+            if (!cocktail.tags?.length) {
+              return cocktail;
+            }
+
+            let didUpdateTag = false;
+            const nextTags = cocktail.tags.map((tag) => {
+              if (Number(tag.id ?? -1) === updated!.id) {
+                didUpdateTag = true;
+                return { ...tag, name: updated!.name, color: updated!.color };
+              }
+              return tag;
+            });
+
+            if (!didUpdateTag) {
+              return cocktail;
+            }
+
+            didChange = true;
+            return { ...cocktail, tags: nextTags } satisfies Cocktail;
+          });
+
+          return didChange
+            ? ({
+                ...prev,
+                cocktails: nextCocktails,
+              } satisfies InventoryState)
+            : prev;
+        });
+      }
+
+      return updated;
+    },
+    [],
+  );
+
+  const deleteCustomCocktailTag = useCallback((id: number) => {
+    const tagId = Number(id);
+    if (!Number.isFinite(tagId) || tagId < 0) {
+      return false;
+    }
+
+    let didRemove = false;
+    setCustomCocktailTags((prev) => {
+      const next = prev.filter((tag) => Number(tag.id ?? -1) !== Math.trunc(tagId));
+      didRemove = next.length !== prev.length;
+      return didRemove ? next : prev;
+    });
+
+    if (didRemove) {
+      setInventoryState((prev) => {
+        if (!prev) {
+          return prev;
+        }
+
+        let didChange = false;
+        const nextCocktails = prev.cocktails.map((cocktail) => {
+          if (!cocktail.tags?.length) {
+            return cocktail;
+          }
+
+          const nextTags = cocktail.tags.filter((tag) => Number(tag.id ?? -1) !== Math.trunc(tagId));
+          if (nextTags.length !== cocktail.tags.length) {
+            didChange = true;
+            return { ...cocktail, tags: nextTags.length ? nextTags : undefined } satisfies Cocktail;
+          }
+          return cocktail;
+        });
+
+        return didChange
+          ? ({
+              ...prev,
+              cocktails: nextCocktails,
+            } satisfies InventoryState)
+          : prev;
+      });
+    }
+
+    return didRemove;
+  }, []);
+
+  const createCustomIngredientTag = useCallback((input: { name: string; color?: string | null }) => {
+    const trimmedName = input.name?.trim();
+    if (!trimmedName) {
+      return undefined;
+    }
+
+    const color = input.color?.trim() || DEFAULT_TAG_COLOR;
+    let created: IngredientTag | undefined;
+
+    setCustomIngredientTags((prev) => {
+      const nextId = getNextCustomTagId(prev, BUILTIN_INGREDIENT_TAG_MAX);
+      created = { id: nextId, name: trimmedName, color };
+      return [...prev, created].sort((a, b) => (a.name ?? '').localeCompare(b.name ?? ''));
+    });
+
+    return created;
+  }, []);
+
+  const updateCustomIngredientTag = useCallback(
+    (id: number, input: { name: string; color?: string | null }) => {
+      const tagId = Number(id);
+      if (!Number.isFinite(tagId) || tagId < 0) {
+        return undefined;
+      }
+
+      const trimmedName = input.name?.trim();
+      if (!trimmedName) {
+        return undefined;
+      }
+
+      const color = input.color?.trim() || DEFAULT_TAG_COLOR;
+      let updated: IngredientTag | undefined;
+
+      setCustomIngredientTags((prev) => {
+        const index = prev.findIndex((tag) => Number(tag.id ?? -1) === Math.trunc(tagId));
+        if (index < 0) {
+          return prev;
+        }
+
+        updated = { id: prev[index].id, name: trimmedName, color };
+        const next = [...prev];
+        next[index] = updated;
+        next.sort((a, b) => (a.name ?? '').localeCompare(b.name ?? ''));
+        return next;
+      });
+
+      if (updated) {
+        setInventoryState((prev) => {
+          if (!prev) {
+            return prev;
+          }
+
+          let didChange = false;
+          const nextIngredients = prev.ingredients.map((ingredient) => {
+            if (!ingredient.tags?.length) {
+              return ingredient;
+            }
+
+            let didUpdateTag = false;
+            const nextTags = ingredient.tags.map((tag) => {
+              if (Number(tag.id ?? -1) === updated!.id) {
+                didUpdateTag = true;
+                return { ...tag, name: updated!.name, color: updated!.color };
+              }
+              return tag;
+            });
+
+            if (!didUpdateTag) {
+              return ingredient;
+            }
+
+            didChange = true;
+            return { ...ingredient, tags: nextTags } satisfies Ingredient;
+          });
+
+          return didChange
+            ? ({
+                ...prev,
+                ingredients: nextIngredients,
+              } satisfies InventoryState)
+            : prev;
+        });
+      }
+
+      return updated;
+    },
+    [],
+  );
+
+  const deleteCustomIngredientTag = useCallback((id: number) => {
+    const tagId = Number(id);
+    if (!Number.isFinite(tagId) || tagId < 0) {
+      return false;
+    }
+
+    let didRemove = false;
+    setCustomIngredientTags((prev) => {
+      const next = prev.filter((tag) => Number(tag.id ?? -1) !== Math.trunc(tagId));
+      didRemove = next.length !== prev.length;
+      return didRemove ? next : prev;
+    });
+
+    if (didRemove) {
+      setInventoryState((prev) => {
+        if (!prev) {
+          return prev;
+        }
+
+        let didChange = false;
+        const nextIngredients = prev.ingredients.map((ingredient) => {
+          if (!ingredient.tags?.length) {
+            return ingredient;
+          }
+
+          const nextTags = ingredient.tags.filter((tag) => Number(tag.id ?? -1) !== Math.trunc(tagId));
+          if (nextTags.length !== ingredient.tags.length) {
+            didChange = true;
+            return { ...ingredient, tags: nextTags.length ? nextTags : undefined } satisfies Ingredient;
+          }
+          return ingredient;
+        });
+
+        return didChange
+          ? ({
+              ...prev,
+              ingredients: nextIngredients,
+            } satisfies InventoryState)
+          : prev;
+      });
+    }
+
+    return didRemove;
+  }, []);
+
   const clearBaseIngredient = useCallback((id: number) => {
     setInventoryState((prev) => {
       if (!prev) {
@@ -1352,6 +1705,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       loading,
       availableIngredientIds,
       shoppingIngredientIds,
+      customCocktailTags,
+      customIngredientTags,
       ignoreGarnish,
       allowAllSubstitutes,
       useImperialUnits,
@@ -1369,6 +1724,12 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       updateIngredient,
       deleteCocktail,
       deleteIngredient,
+      createCustomCocktailTag,
+      updateCustomCocktailTag,
+      deleteCustomCocktailTag,
+      createCustomIngredientTag,
+      updateCustomIngredientTag,
+      deleteCustomIngredientTag,
       cocktailRatings,
       setCocktailRating,
       getCocktailRating,
@@ -1385,6 +1746,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     loading,
     availableIngredientIds,
     shoppingIngredientIds,
+    customCocktailTags,
+    customIngredientTags,
     ignoreGarnish,
     allowAllSubstitutes,
     useImperialUnits,
@@ -1402,6 +1765,12 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     updateIngredient,
     deleteCocktail,
     deleteIngredient,
+    createCustomCocktailTag,
+    updateCustomCocktailTag,
+    deleteCustomCocktailTag,
+    createCustomIngredientTag,
+    updateCustomIngredientTag,
+    deleteCustomIngredientTag,
     cocktailRatings,
     setCocktailRating,
     getCocktailRating,

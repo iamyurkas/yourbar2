@@ -30,6 +30,7 @@ import { AppDialog, type DialogOptions } from '@/components/AppDialog';
 import { HeaderIconButton } from '@/components/HeaderIconButton';
 import { ListRow, Thumb } from '@/components/RowParts';
 import { SubstituteModal } from '@/components/SubstituteModal';
+import { TagEditorModal } from '@/components/TagEditorModal';
 import { TagPill } from '@/components/TagPill';
 import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
 import { COCKTAIL_UNIT_DICTIONARY, COCKTAIL_UNIT_OPTIONS } from '@/constants/cocktail-units';
@@ -198,6 +199,8 @@ export default function CreateCocktailScreen() {
     createCocktail,
     updateCocktail,
     deleteCocktail,
+    customCocktailTags,
+    createCustomCocktailTag,
   } = useInventory();
   const params = useLocalSearchParams();
   const { setHasUnsavedChanges } = useUnsavedChanges();
@@ -248,6 +251,7 @@ export default function CreateCocktailScreen() {
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(null);
   const [isInitialized, setIsInitialized] = useState(false);
   const [initialSnapshot, setInitialSnapshot] = useState<CocktailFormSnapshot | null>(null);
+  const [isTagModalVisible, setTagModalVisible] = useState(false);
 
   const initializedRef = useRef(false);
   const isNavigatingAfterSaveRef = useRef(false);
@@ -388,13 +392,39 @@ export default function CreateCocktailScreen() {
 
   const selectedGlass = useMemo(() => GLASSWARE.find((item) => item.id === glassId), [glassId]);
 
+  const availableCocktailTags = useMemo(() => {
+    const sortedCustom = [...customCocktailTags].sort((a, b) =>
+      (a.name ?? '').localeCompare(b.name ?? ''),
+    );
+    return [...BUILTIN_COCKTAIL_TAGS, ...sortedCustom];
+  }, [customCocktailTags]);
+
   const tagSelection = useMemo(() => {
     const set = new Set(selectedTagIds);
-    return BUILTIN_COCKTAIL_TAGS.map((tag) => ({
+    return availableCocktailTags.map((tag) => ({
       ...tag,
       selected: set.has(tag.id),
     }));
-  }, [selectedTagIds]);
+  }, [availableCocktailTags, selectedTagIds]);
+
+  const handleOpenTagModal = useCallback(() => {
+    setTagModalVisible(true);
+  }, []);
+
+  const handleCloseTagModal = useCallback(() => {
+    setTagModalVisible(false);
+  }, []);
+
+  const handleCreateTag = useCallback(
+    (data: { name: string; color: string }) => {
+      const created = createCustomCocktailTag(data);
+      if (created?.id != null) {
+        setSelectedTagIds((prev) => (prev.includes(created.id) ? prev : [...prev, created.id]));
+      }
+      setTagModalVisible(false);
+    },
+    [createCustomCocktailTag],
+  );
 
   const scrollFieldIntoView = useCallback((target?: number | null) => {
     if (target == null) {
@@ -849,8 +879,8 @@ export default function CreateCocktailScreen() {
     const descriptionValue = description.trim();
     const instructionsValue = instructions.trim();
     const tags = selectedTagIds
-      .map((tagId) => BUILTIN_COCKTAIL_TAGS.find((tag) => tag.id === tagId))
-      .filter((tag): tag is (typeof BUILTIN_COCKTAIL_TAGS)[number] => Boolean(tag));
+      .map((tagId) => availableCocktailTags.find((tag) => tag.id === tagId))
+      .filter((tag): tag is (typeof availableCocktailTags)[number] => Boolean(tag));
 
     setIsSaving(true);
     try {
@@ -897,6 +927,7 @@ export default function CreateCocktailScreen() {
       setIsSaving(false);
     }
   }, [
+    availableCocktailTags,
     createCocktail,
     updateCocktail,
     description,
@@ -1195,7 +1226,17 @@ export default function CreateCocktailScreen() {
           </View>
 
           <View style={styles.section}>
-            <Text style={[styles.label, { color: palette.onSurface }]}>Tags</Text>
+            <View style={styles.tagHeader}>
+              <Text style={[styles.label, { color: palette.onSurface }]}>Tags</Text>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel="Create tag"
+                onPress={handleOpenTagModal}
+                style={[styles.tagAddButton, { borderColor: palette.outlineVariant }]}>
+                <MaterialCommunityIcons name="plus" size={16} color={palette.tint} />
+                <Text style={[styles.tagAddLabel, { color: palette.tint }]}>Create tag</Text>
+              </Pressable>
+            </View>
             <Text style={[styles.hint, { color: palette.onSurfaceVariant }]}>Select one or more tags</Text>
             <View style={styles.tagList}>
               {tagSelection.map((tag) => (
@@ -1456,6 +1497,14 @@ export default function CreateCocktailScreen() {
         message={dialogOptions?.message}
         actions={dialogOptions?.actions ?? []}
         onRequestClose={closeDialog}
+      />
+
+      <TagEditorModal
+        visible={isTagModalVisible}
+        title="New tag"
+        confirmLabel="Create"
+        onClose={handleCloseTagModal}
+        onSave={handleCreateTag}
       />
     </>
   );
@@ -2091,6 +2140,25 @@ const styles = StyleSheet.create({
   glassList: {
     gap: 12,
     paddingVertical: 8,
+  },
+  tagHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 12,
+  },
+  tagAddButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 999,
+    borderWidth: StyleSheet.hairlineWidth,
+  },
+  tagAddLabel: {
+    fontSize: 12,
+    fontWeight: '600',
   },
   tagList: {
     flexDirection: 'row',

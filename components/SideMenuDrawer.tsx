@@ -2,11 +2,13 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { Image, type ImageSource } from 'expo-image';
 import React, { useEffect, useMemo, useRef, useState, type ComponentProps } from 'react';
-import { Animated, Dimensions, Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Alert, Animated, Dimensions, Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import CocktailIcon from '@/assets/images/cocktails.svg';
 import IngredientsIcon from '@/assets/images/ingredients.svg';
 import ShakerIcon from '@/assets/images/shaker.svg';
+import { TagEditorModal } from '@/components/TagEditorModal';
+import { TagPill } from '@/components/TagPill';
 import { Colors } from '@/constants/theme';
 import { useInventory, type StartScreen } from '@/providers/inventory-provider';
 
@@ -91,12 +93,25 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     startScreen,
     setStartScreen,
     resetInventoryFromBundle,
+    customCocktailTags,
+    customIngredientTags,
+    createCustomCocktailTag,
+    updateCustomCocktailTag,
+    deleteCustomCocktailTag,
+    createCustomIngredientTag,
+    updateCustomIngredientTag,
+    deleteCustomIngredientTag,
   } = useInventory();
   const [isMounted, setIsMounted] = useState(visible);
   const [isRatingModalVisible, setRatingModalVisible] = useState(false);
   const ratingModalCloseTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [isStartScreenModalVisible, setStartScreenModalVisible] = useState(false);
   const startScreenModalCloseTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [isTagManagerVisible, setTagManagerVisible] = useState(false);
+  const [isTagEditorVisible, setTagEditorVisible] = useState(false);
+  const [tagEditorMode, setTagEditorMode] = useState<'create' | 'edit'>('create');
+  const [tagEditorType, setTagEditorType] = useState<'cocktail' | 'ingredient'>('cocktail');
+  const [tagEditorTarget, setTagEditorTarget] = useState<{ id: number; name: string; color: string } | null>(null);
   const translateX = useRef(new Animated.Value(-MENU_WIDTH)).current;
   const backdropOpacity = useRef(new Animated.Value(0)).current;
 
@@ -242,6 +257,63 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       setStartScreenModalVisible(false);
       startScreenModalCloseTimeout.current = null;
     }, 250);
+  };
+
+  const handleOpenTagManager = () => {
+    setTagManagerVisible(true);
+  };
+
+  const handleCloseTagManager = () => {
+    setTagManagerVisible(false);
+  };
+
+  const handleOpenTagEditor = (
+    type: 'cocktail' | 'ingredient',
+    tag?: { id: number; name: string; color: string },
+  ) => {
+    setTagEditorType(type);
+    setTagEditorMode(tag ? 'edit' : 'create');
+    setTagEditorTarget(tag ?? null);
+    setTagEditorVisible(true);
+  };
+
+  const handleCloseTagEditor = () => {
+    setTagEditorVisible(false);
+  };
+
+  const handleSaveTagEditor = (data: { name: string; color: string }) => {
+    if (tagEditorMode === 'create') {
+      if (tagEditorType === 'cocktail') {
+        createCustomCocktailTag(data);
+      } else {
+        createCustomIngredientTag(data);
+      }
+    } else if (tagEditorTarget) {
+      if (tagEditorType === 'cocktail') {
+        updateCustomCocktailTag(tagEditorTarget.id, data);
+      } else {
+        updateCustomIngredientTag(tagEditorTarget.id, data);
+      }
+    }
+
+    setTagEditorVisible(false);
+  };
+
+  const handleDeleteTag = (type: 'cocktail' | 'ingredient', tag: { id: number; name: string }) => {
+    Alert.alert('Delete tag', `Remove "${tag.name}"?`, [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Delete',
+        style: 'destructive',
+        onPress: () => {
+          if (type === 'cocktail') {
+            deleteCustomCocktailTag(tag.id);
+          } else {
+            deleteCustomIngredientTag(tag.id);
+          }
+        },
+      },
+    ]);
   };
 
   useEffect(() => {
@@ -448,6 +520,32 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
             </Pressable>
             <Pressable
               accessibilityRole="button"
+              accessibilityLabel="Manage custom tags"
+              onPress={handleOpenTagManager}
+              style={[
+                styles.settingRow,
+                {
+                  borderColor: palette.outline,
+                  backgroundColor: palette.surface,
+                },
+              ]}>
+              <View
+                style={[
+                  styles.checkbox,
+                  {
+                    borderColor: palette.tint,
+                    backgroundColor: palette.surfaceVariant,
+                  },
+                ]}>
+                <MaterialCommunityIcons name="tag-multiple" size={16} color={palette.tint} />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text style={[styles.settingLabel, { color: palette.onSurface }]}>Manage tags</Text>
+                <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>Create or update your tags</Text>
+              </View>
+            </Pressable>
+            <Pressable
+              accessibilityRole="button"
               accessibilityLabel="Reload bundled inventory"
               onPress={handleResetInventory}
               style={[
@@ -533,6 +631,135 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
           </Pressable>
         </Pressable>
       </Modal>
+      <Modal transparent visible={isTagManagerVisible} animationType="fade" onRequestClose={handleCloseTagManager}>
+        <Pressable style={styles.modalOverlay} onPress={handleCloseTagManager} accessibilityRole="button">
+          <Pressable
+            style={[
+              styles.modalCard,
+              {
+                backgroundColor: palette.surface,
+                borderColor: palette.outline,
+                shadowColor: palette.shadow,
+              },
+            ]}
+            accessibilityLabel="Manage tags"
+            onPress={() => {}}>
+            <View style={styles.modalHeader}>
+              <Text style={[styles.modalTitle, { color: palette.onSurface, flex: 1 }]}>Manage tags</Text>
+              <Pressable onPress={handleCloseTagManager} accessibilityRole="button" accessibilityLabel="Close">
+                <MaterialCommunityIcons name="close" size={22} color={palette.onSurfaceVariant} />
+              </Pressable>
+            </View>
+            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.tagManagerContent}>
+              <View style={styles.tagSection}>
+                <View style={styles.tagSectionHeader}>
+                  <Text style={[styles.settingLabel, { color: palette.onSurface }]}>Cocktail tags</Text>
+                  <Pressable
+                    accessibilityRole="button"
+                    onPress={() => handleOpenTagEditor('cocktail')}
+                    style={[styles.tagAddButton, { borderColor: palette.outlineVariant }]}
+                  >
+                    <MaterialCommunityIcons name="plus" size={16} color={palette.tint} />
+                    <Text style={[styles.tagAddLabel, { color: palette.tint }]}>Add</Text>
+                  </Pressable>
+                </View>
+                {customCocktailTags.length === 0 ? (
+                  <Text style={[styles.tagEmpty, { color: palette.onSurfaceVariant }]}>
+                    No custom cocktail tags yet.
+                  </Text>
+                ) : (
+                  <View style={styles.tagRows}>
+                    {customCocktailTags.map((tag) => (
+                      <View key={`cocktail-tag-${tag.id}`} style={styles.tagRow}>
+                        <TagPill label={tag.name ?? ''} color={tag.color ?? palette.tint} />
+                        <View style={styles.tagActions}>
+                          <Pressable
+                            accessibilityRole="button"
+                            accessibilityLabel={`Edit ${tag.name ?? 'tag'}`}
+                            onPress={() =>
+                              handleOpenTagEditor('cocktail', {
+                                id: Number(tag.id),
+                                name: tag.name ?? '',
+                                color: tag.color ?? palette.tint,
+                              })
+                            }
+                          >
+                            <MaterialCommunityIcons name="pencil" size={18} color={palette.onSurfaceVariant} />
+                          </Pressable>
+                          <Pressable
+                            accessibilityRole="button"
+                            accessibilityLabel={`Delete ${tag.name ?? 'tag'}`}
+                            onPress={() => handleDeleteTag('cocktail', { id: Number(tag.id), name: tag.name ?? 'Tag' })}
+                          >
+                            <MaterialCommunityIcons name="trash-can-outline" size={18} color={palette.error} />
+                          </Pressable>
+                        </View>
+                      </View>
+                    ))}
+                  </View>
+                )}
+              </View>
+              <View style={styles.tagSection}>
+                <View style={styles.tagSectionHeader}>
+                  <Text style={[styles.settingLabel, { color: palette.onSurface }]}>Ingredient tags</Text>
+                  <Pressable
+                    accessibilityRole="button"
+                    onPress={() => handleOpenTagEditor('ingredient')}
+                    style={[styles.tagAddButton, { borderColor: palette.outlineVariant }]}
+                  >
+                    <MaterialCommunityIcons name="plus" size={16} color={palette.tint} />
+                    <Text style={[styles.tagAddLabel, { color: palette.tint }]}>Add</Text>
+                  </Pressable>
+                </View>
+                {customIngredientTags.length === 0 ? (
+                  <Text style={[styles.tagEmpty, { color: palette.onSurfaceVariant }]}>
+                    No custom ingredient tags yet.
+                  </Text>
+                ) : (
+                  <View style={styles.tagRows}>
+                    {customIngredientTags.map((tag) => (
+                      <View key={`ingredient-tag-${tag.id}`} style={styles.tagRow}>
+                        <TagPill label={tag.name ?? ''} color={tag.color ?? palette.tint} />
+                        <View style={styles.tagActions}>
+                          <Pressable
+                            accessibilityRole="button"
+                            accessibilityLabel={`Edit ${tag.name ?? 'tag'}`}
+                            onPress={() =>
+                              handleOpenTagEditor('ingredient', {
+                                id: Number(tag.id),
+                                name: tag.name ?? '',
+                                color: tag.color ?? palette.tint,
+                              })
+                            }
+                          >
+                            <MaterialCommunityIcons name="pencil" size={18} color={palette.onSurfaceVariant} />
+                          </Pressable>
+                          <Pressable
+                            accessibilityRole="button"
+                            accessibilityLabel={`Delete ${tag.name ?? 'tag'}`}
+                            onPress={() => handleDeleteTag('ingredient', { id: Number(tag.id), name: tag.name ?? 'Tag' })}
+                          >
+                            <MaterialCommunityIcons name="trash-can-outline" size={18} color={palette.error} />
+                          </Pressable>
+                        </View>
+                      </View>
+                    ))}
+                  </View>
+                )}
+              </View>
+            </ScrollView>
+          </Pressable>
+        </Pressable>
+      </Modal>
+      <TagEditorModal
+        visible={isTagEditorVisible}
+        title={tagEditorMode === 'create' ? 'New tag' : 'Edit tag'}
+        confirmLabel={tagEditorMode === 'create' ? 'Create' : 'Save'}
+        initialName={tagEditorTarget?.name}
+        initialColor={tagEditorTarget?.color}
+        onClose={handleCloseTagEditor}
+        onSave={handleSaveTagEditor}
+      />
       <Modal
         transparent
         visible={isStartScreenModalVisible}
@@ -737,6 +964,47 @@ const styles = StyleSheet.create({
   startScreenTextContainer: {
     flex: 1,
     gap: 4,
+  },
+  tagManagerContent: {
+    gap: 16,
+  },
+  tagSection: {
+    gap: 10,
+  },
+  tagSectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  tagAddButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 999,
+    borderWidth: StyleSheet.hairlineWidth,
+  },
+  tagAddLabel: {
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  tagRows: {
+    gap: 12,
+  },
+  tagRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 12,
+  },
+  tagActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  tagEmpty: {
+    fontSize: 12,
   },
   ratingOptionRow: {
     flexDirection: 'row',
