@@ -49,7 +49,7 @@ const areCocktailRowPropsEqual = (
 };
 
 const MAX_RATING = 5;
-const METHOD_ICON_SIZE = 12;
+const METHOD_ICON_SIZE = 16;
 
 type MethodIcon =
   | { type: 'icon'; name: ComponentProps<typeof MaterialCommunityIcons>['name'] }
