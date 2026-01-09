@@ -1,3 +1,5 @@
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Image, type ImageSource } from 'expo-image';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
@@ -15,6 +17,8 @@ import { CocktailListRow } from '@/components/CocktailListRow';
 import { CollectionHeader } from '@/components/CollectionHeader';
 import { SideMenuDrawer } from '@/components/SideMenuDrawer';
 import { TagPill } from '@/components/TagPill';
+import ShakerIcon from '@/assets/images/shaker.svg';
+import { getCocktailMethods, type CocktailMethod } from '@/constants/cocktail-methods';
 import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
 import { Colors } from '@/constants/theme';
 import { isCocktailReady } from '@/libs/cocktail-availability';
@@ -55,6 +59,21 @@ function resolveCocktailByKey(key: string, cocktails: Cocktail[]) {
   return cocktails.find((item) => item.name?.toLowerCase() === normalized);
 }
 
+type MethodIcon =
+  | { type: 'icon'; name: React.ComponentProps<typeof MaterialCommunityIcons>['name'] }
+  | { type: 'asset'; source: ImageSource };
+
+const METHOD_ICON_SIZE = 16;
+const METHOD_ICON_MAP: Record<CocktailMethod['id'], MethodIcon> = {
+  build: { type: 'icon', name: 'beer' },
+  stir: { type: 'icon', name: 'delete-variant' },
+  shake: { type: 'asset', source: ShakerIcon },
+  muddle: { type: 'icon', name: 'bottle-soda' },
+  layer: { type: 'icon', name: 'layers' },
+  blend: { type: 'icon', name: 'blender' },
+  throwing: { type: 'icon', name: 'swap-horizontal' },
+};
+
 export default function ShakerResultsScreen() {
   const router = useRouter();
   const paletteColors = Colors;
@@ -70,6 +89,9 @@ export default function ShakerResultsScreen() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isFilterMenuVisible, setFilterMenuVisible] = useState(false);
   const [selectedTagKeys, setSelectedTagKeys] = useState<Set<string>>(() => new Set());
+  const [selectedMethodIds, setSelectedMethodIds] = useState<Set<CocktailMethod['id']>>(
+    () => new Set(),
+  );
   const [headerLayout, setHeaderLayout] = useState<LayoutRectangle | null>(null);
   const [filterAnchorLayout, setFilterAnchorLayout] = useState<LayoutRectangle | null>(null);
 
@@ -184,6 +206,29 @@ export default function ShakerResultsScreen() {
     });
   }, [defaultTagColor, listData]);
 
+  const availableMethodOptions = useMemo(() => {
+    const methodOrder = getCocktailMethods();
+    const methodMap = new Map(methodOrder.map((method) => [method.id, method]));
+    const usedMethods = new Set<CocktailMethod['id']>();
+
+    listData.forEach((cocktail) => {
+      const legacyMethodId =
+        (cocktail as { methodId?: CocktailMethod['id'] | null }).methodId ?? null;
+      const methodIds = cocktail.methodIds?.length
+        ? cocktail.methodIds
+        : legacyMethodId
+          ? [legacyMethodId]
+          : [];
+      methodIds.forEach((methodId) => {
+        if (methodMap.has(methodId)) {
+          usedMethods.add(methodId);
+        }
+      });
+    });
+
+    return methodOrder.filter((method) => usedMethods.has(method.id));
+  }, [listData]);
+
   useEffect(() => {
     setSelectedTagKeys((previous) => {
       if (previous.size === 0) {
@@ -209,6 +254,32 @@ export default function ShakerResultsScreen() {
       return next;
     });
   }, [availableTagOptions]);
+
+  useEffect(() => {
+    setSelectedMethodIds((previous) => {
+      if (previous.size === 0) {
+        return previous;
+      }
+
+      const validIds = new Set(availableMethodOptions.map((method) => method.id));
+      let didChange = false;
+      const next = new Set<CocktailMethod['id']>();
+
+      previous.forEach((id) => {
+        if (validIds.has(id)) {
+          next.add(id);
+        } else {
+          didChange = true;
+        }
+      });
+
+      if (!didChange && next.size === previous.size) {
+        return previous;
+      }
+
+      return next;
+    });
+  }, [availableMethodOptions]);
 
   const handleHeaderLayout = useCallback((event: LayoutChangeEvent) => {
     const nextLayout = event.nativeEvent.layout;
@@ -263,15 +334,45 @@ export default function ShakerResultsScreen() {
     });
   }, []);
 
-  const handleClearTagFilters = useCallback(() => {
-    setSelectedTagKeys((previous) => {
-      if (previous.size === 0) {
-        return previous;
+  const handleMethodFilterToggle = useCallback((methodId: CocktailMethod['id']) => {
+    setSelectedMethodIds((previous) => {
+      const next = new Set(previous);
+      if (next.has(methodId)) {
+        next.delete(methodId);
+      } else {
+        next.add(methodId);
       }
-
-      return new Set<string>();
+      return next;
     });
   }, []);
+
+  const handleClearFilters = useCallback(() => {
+    setSelectedTagKeys((previous) => (previous.size === 0 ? previous : new Set<string>()));
+    setSelectedMethodIds((previous) => (previous.size === 0 ? previous : new Set<CocktailMethod['id']>()));
+  }, []);
+
+  const renderMethodIcon = useCallback(
+    (methodId: CocktailMethod['id'], selected: boolean) => {
+      const icon = METHOD_ICON_MAP[methodId];
+      if (!icon) {
+        return null;
+      }
+
+      const tintColor = selected ? paletteColors.surface : paletteColors.tint;
+      if (icon.type === 'asset') {
+        return (
+          <Image
+            source={icon.source}
+            style={[styles.methodIcon, { tintColor }]}
+            contentFit="contain"
+          />
+        );
+      }
+
+      return <MaterialCommunityIcons name={icon.name} size={METHOD_ICON_SIZE} color={tintColor} />;
+    },
+    [paletteColors.surface, paletteColors.tint],
+  );
 
   const normalizedQuery = useMemo(() => {
     const trimmed = query.trim().toLowerCase();
@@ -279,12 +380,34 @@ export default function ShakerResultsScreen() {
     return { text: trimmed, tokens };
   }, [query]);
 
-  const filteredByTags = useMemo(() => {
-    if (selectedTagKeys.size === 0) {
+  const filteredByMethods = useMemo(() => {
+    if (selectedMethodIds.size === 0) {
       return listData;
     }
 
     return listData.filter((cocktail) => {
+      const legacyMethodId =
+        (cocktail as { methodId?: CocktailMethod['id'] | null }).methodId ?? null;
+      const methodIds = cocktail.methodIds?.length
+        ? cocktail.methodIds
+        : legacyMethodId
+          ? [legacyMethodId]
+          : [];
+      if (methodIds.length === 0) {
+        return false;
+      }
+
+      return methodIds.some((methodId) => selectedMethodIds.has(methodId));
+    });
+  }, [listData, selectedMethodIds]);
+
+  const filteredByTags = useMemo(() => {
+    const base = filteredByMethods;
+    if (selectedTagKeys.size === 0) {
+      return base;
+    }
+
+    return base.filter((cocktail) => {
       const tags = cocktail.tags ?? [];
       if (tags.length === 0) {
         return false;
@@ -303,7 +426,7 @@ export default function ShakerResultsScreen() {
         return selectedTagKeys.has(key);
       });
     });
-  }, [listData, selectedTagKeys]);
+  }, [filteredByMethods, selectedTagKeys]);
 
   const filteredCocktails = useMemo(() => {
     const base = filteredByTags;
@@ -326,7 +449,7 @@ export default function ShakerResultsScreen() {
     );
   }, [filteredByTags, normalizedQuery]);
 
-  const isFilterActive = selectedTagKeys.size > 0;
+  const isFilterActive = selectedTagKeys.size > 0 || selectedMethodIds.size > 0;
   const filterMenuTop = useMemo(() => {
     if (headerLayout && filterAnchorLayout) {
       return headerLayout.y + filterAnchorLayout.y + filterAnchorLayout.height + 6;
@@ -439,34 +562,67 @@ export default function ShakerResultsScreen() {
                 },
               ]}
             >
-              {availableTagOptions.length > 0 ? (
-                <View style={styles.filterTagList}>
-                  {availableTagOptions.map((tag) => {
-                    const selected = selectedTagKeys.has(tag.key);
-                    return (
-                      <TagPill
-                        key={tag.key}
-                        label={tag.name}
-                        color={tag.color}
-                        selected={selected}
-                        onPress={() => handleTagFilterToggle(tag.key)}
-                        accessibilityRole="checkbox"
-                        accessibilityState={{ checked: selected }}
-                        androidRippleColor={`${paletteColors.surfaceVariant}33`}
-                      />
-                    );
-                  })}
+              <View style={styles.filterMenuContent}>
+                <View style={styles.filterMethodList}>
+                  {availableMethodOptions.length > 0 ? (
+                    availableMethodOptions.map((method) => {
+                      const selected = selectedMethodIds.has(method.id);
+                      return (
+                        <TagPill
+                          key={method.id}
+                          label={method.label}
+                          color={paletteColors.tint}
+                          selected={selected}
+                          icon={renderMethodIcon(method.id, selected)}
+                          onPress={() => handleMethodFilterToggle(method.id)}
+                          accessibilityRole="checkbox"
+                          accessibilityState={{ checked: selected }}
+                          androidRippleColor={`${paletteColors.surfaceVariant}33`}
+                        />
+                      );
+                    })
+                  ) : (
+                    <Text style={[styles.filterMenuEmpty, { color: paletteColors.onSurfaceVariant }]}>
+                      No methods available
+                    </Text>
+                  )}
                 </View>
-              ) : (
-                <Text style={[styles.filterMenuEmpty, { color: paletteColors.onSurfaceVariant }]}>
-                  No tags available
-                </Text>
-              )}
-              {selectedTagKeys.size > 0 ? (
+                <View style={styles.filterSeparator}>
+                  <View style={[styles.filterSeparatorLine, { backgroundColor: paletteColors.outline }]} />
+                  <Text style={[styles.filterSeparatorLabel, { color: paletteColors.onSurfaceVariant }]}>
+                    AND
+                  </Text>
+                  <View style={[styles.filterSeparatorLine, { backgroundColor: paletteColors.outline }]} />
+                </View>
+                <View style={styles.filterTagList}>
+                  {availableTagOptions.length > 0 ? (
+                    availableTagOptions.map((tag) => {
+                      const selected = selectedTagKeys.has(tag.key);
+                      return (
+                        <TagPill
+                          key={tag.key}
+                          label={tag.name}
+                          color={tag.color}
+                          selected={selected}
+                          onPress={() => handleTagFilterToggle(tag.key)}
+                          accessibilityRole="checkbox"
+                          accessibilityState={{ checked: selected }}
+                          androidRippleColor={`${paletteColors.surfaceVariant}33`}
+                        />
+                      );
+                    })
+                  ) : (
+                    <Text style={[styles.filterMenuEmpty, { color: paletteColors.onSurfaceVariant }]}>
+                      No tags available
+                    </Text>
+                  )}
+                </View>
+              </View>
+              {selectedTagKeys.size > 0 || selectedMethodIds.size > 0 ? (
                 <Pressable
                   accessibilityRole="button"
-                  accessibilityLabel="Clear selected tag filters"
-                  onPress={handleClearTagFilters}
+                  accessibilityLabel="Clear selected filters"
+                  onPress={handleClearFilters}
                   style={styles.filterMenuClearButton}
                 >
                   <Text style={[styles.filterMenuClearLabel, { color: paletteColors.tint }]}>
@@ -529,17 +685,46 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderRadius: 12,
     borderWidth: StyleSheet.hairlineWidth,
-    alignItems: 'flex-end',
+    alignItems: 'stretch',
     zIndex: 4,
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.12,
     shadowRadius: 12,
     elevation: 8,
   },
+  filterMenuContent: {
+    flexDirection: 'row',
+    alignItems: 'stretch',
+  },
+  filterMethodList: {
+    flexDirection: 'column',
+    gap: 8,
+    alignItems: 'flex-start',
+  },
+  methodIcon: {
+    width: METHOD_ICON_SIZE,
+    height: METHOD_ICON_SIZE,
+  },
   filterTagList: {
     flexDirection: 'column',
     gap: 8,
     alignItems: 'flex-end',
+  },
+  filterSeparator: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 10,
+  },
+  filterSeparatorLine: {
+    width: StyleSheet.hairlineWidth,
+    flex: 1,
+  },
+  filterSeparatorLabel: {
+    fontSize: 12,
+    fontWeight: '700',
+    letterSpacing: 0.6,
+    textTransform: 'uppercase',
+    paddingVertical: 4,
   },
   filterMenuEmpty: {
     fontSize: 14,

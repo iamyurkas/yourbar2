@@ -19,6 +19,7 @@ export type TagPillProps = {
   label: string;
   color: string;
   selected?: boolean;
+  icon?: React.ReactNode;
   onPress?: (event: GestureResponderEvent) => void;
   disabled?: boolean;
   style?: StyleProp<ViewStyle>;
@@ -34,6 +35,7 @@ export function TagPill({
   label,
   color,
   selected = false,
+  icon,
   onPress,
   disabled = false,
   style,
@@ -48,15 +50,18 @@ export function TagPill({
   const palette = Colors;
 
   const content = (
-    <Text
-      style={[
-        styles.label,
-        { color: selected ? palette.surface : color },
-        textStyle,
-      ]}
-    >
-      {label}
-    </Text>
+    <View style={styles.contentRow}>
+      {icon}
+      <Text
+        style={[
+          styles.label,
+          { color: selected ? palette.surface : color },
+          textStyle,
+        ]}
+      >
+        {label}
+      </Text>
+    </View>
   );
 
   const baseStyle = [
@@ -107,6 +112,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '500',
     textAlign: 'center',
+  },
+  contentRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
   },
   pressed: {
     opacity: 0.85,
