@@ -77,7 +77,7 @@ type EditableIngredient = {
 type CocktailFormSnapshot = {
   name: string;
   glassId: string | null;
-  methodId: CocktailMethodId | null;
+  methodIds: CocktailMethodId[];
   description: string;
   instructions: string;
   imageUri: string | null;
@@ -241,7 +241,7 @@ export default function CreateCocktailScreen() {
   const [name, setName] = useState('');
   const [glassId, setGlassId] = useState<string | null>('cocktail_glass');
   const [isGlassModalVisible, setIsGlassModalVisible] = useState(false);
-  const [methodId, setMethodId] = useState<CocktailMethodId | null>(null);
+  const [methodIds, setMethodIds] = useState<CocktailMethodId[]>([]);
   const [isMethodModalVisible, setIsMethodModalVisible] = useState(false);
   const [imageUri, setImageUri] = useState<string | null>(null);
   const [isPickingImage, setIsPickingImage] = useState(false);
@@ -289,7 +289,7 @@ export default function CreateCocktailScreen() {
     return {
       name,
       glassId,
-      methodId,
+      methodIds,
       description,
       instructions,
       imageUri,
@@ -311,7 +311,7 @@ export default function CreateCocktailScreen() {
         })),
       })),
     };
-  }, [description, glassId, imageUri, ingredientsState, instructions, methodId, name, selectedTagIds]);
+  }, [description, glassId, imageUri, ingredientsState, instructions, methodIds, name, selectedTagIds]);
 
   useEffect(() => {
     if (!isInitialized || initialSnapshot) {
@@ -400,7 +400,10 @@ export default function CreateCocktailScreen() {
   const placeholderLabel = useMemo(() => (imageUri ? 'Change photo' : 'Add photo'), [imageUri]);
 
   const selectedGlass = useMemo(() => GLASSWARE.find((item) => item.id === glassId), [glassId]);
-  const selectedMethod = useMemo(() => getCocktailMethodById(methodId), [methodId]);
+  const selectedMethods = useMemo(
+    () => methodIds.map((id) => getCocktailMethodById(id)).filter(Boolean),
+    [methodIds],
+  );
 
   const availableCocktailTags = useMemo(() => {
     const sortedCustom = [...customCocktailTags].sort((a, b) =>
@@ -487,7 +490,14 @@ export default function CreateCocktailScreen() {
       setPrefilledCocktail(baseCocktail);
       setName(baseCocktail.name ?? '');
       setGlassId(baseCocktail.glassId ?? 'cocktail_glass');
-      setMethodId(baseCocktail.methodId ?? null);
+      const legacyMethodId = (baseCocktail as { methodId?: CocktailMethodId | null }).methodId ?? null;
+      const nextMethodIds =
+        baseCocktail.methodIds && baseCocktail.methodIds.length > 0
+          ? baseCocktail.methodIds
+          : legacyMethodId
+            ? [legacyMethodId]
+            : [];
+      setMethodIds(nextMethodIds);
       setDescription(baseCocktail.description ?? '');
       setInstructions(baseCocktail.instructions ?? '');
       setImageUri(baseCocktail.photoUri ?? null);
@@ -715,8 +725,17 @@ export default function CreateCocktailScreen() {
     setUnitPickerTarget(null);
   }, []);
 
-  const handleSelectMethod = useCallback((nextMethodId: CocktailMethodId | null) => {
-    setMethodId(nextMethodId);
+  const handleToggleMethod = useCallback((targetId: CocktailMethodId) => {
+    setMethodIds((prev) => {
+      if (prev.includes(targetId)) {
+        return prev.filter((id) => id !== targetId);
+      }
+      return [...prev, targetId];
+    });
+  }, []);
+
+  const handleClearMethods = useCallback(() => {
+    setMethodIds([]);
     setIsMethodModalVisible(false);
   }, []);
 
@@ -905,7 +924,7 @@ export default function CreateCocktailScreen() {
           ? updateCocktail(Number(prefilledCocktail.id), {
               name: trimmedName,
               glassId: glassId ?? undefined,
-              methodId: methodId ?? undefined,
+              methodIds,
               photoUri: imageUri ?? undefined,
               description: descriptionValue || undefined,
               instructions: instructionsValue || undefined,
@@ -915,7 +934,7 @@ export default function CreateCocktailScreen() {
           : createCocktail({
               name: trimmedName,
               glassId: glassId ?? undefined,
-              methodId: methodId ?? undefined,
+              methodIds,
               photoUri: imageUri ?? undefined,
               description: descriptionValue || undefined,
               instructions: instructionsValue || undefined,
@@ -1257,14 +1276,16 @@ export default function CreateCocktailScreen() {
                 <Text
                   style={[styles.methodPickerLabel, { color: palette.onSurface }]}
                   numberOfLines={1}>
-                  {selectedMethod
-                    ? `${selectedMethod.label} — ${selectedMethod.title}`
-                    : 'Select method'}
+                  {selectedMethods.length
+                    ? selectedMethods.map((method) => method.label).join(', ')
+                    : 'Select methods'}
                 </Text>
                 <Text
                   style={[styles.methodPickerDescription, { color: palette.onSurfaceVariant }]}
                   numberOfLines={2}>
-                  {selectedMethod ? selectedMethod.description : 'Optional'}
+                  {selectedMethods.length
+                    ? selectedMethods.map((method) => method.title).join(' • ')
+                    : 'Optional'}
                 </Text>
               </View>
               <MaterialCommunityIcons name="chevron-down" size={20} color={palette.onSurfaceVariant} />
@@ -1562,27 +1583,27 @@ export default function CreateCocktailScreen() {
               showsVerticalScrollIndicator={false}
               keyboardShouldPersistTaps="handled">
               <Pressable
-                onPress={() => handleSelectMethod(null)}
+                onPress={handleClearMethods}
                 style={[
                   styles.methodOption,
                   {
-                    borderColor: methodId == null ? palette.tint : palette.outlineVariant,
-                    backgroundColor: methodId == null ? palette.highlightFaint : palette.surfaceBright,
+                    borderColor: methodIds.length === 0 ? palette.tint : palette.outlineVariant,
+                    backgroundColor: methodIds.length === 0 ? palette.highlightFaint : palette.surfaceBright,
                   },
                 ]}
                 accessibilityRole="button"
-                accessibilityLabel="Clear method">
+                accessibilityLabel="Clear methods">
                 <Text style={[styles.methodOptionLabel, { color: palette.onSurface }]}>Not specified</Text>
                 <Text style={[styles.methodOptionDescription, { color: palette.onSurfaceVariant }]}>
-                  Leave the method empty.
+                  Clear all selected methods.
                 </Text>
               </Pressable>
               {COCKTAIL_METHODS.map((method) => {
-                const isSelected = method.id === methodId;
+                const isSelected = methodIds.includes(method.id);
                 return (
                   <Pressable
                     key={method.id}
-                    onPress={() => handleSelectMethod(method.id)}
+                    onPress={() => handleToggleMethod(method.id)}
                     style={[
                       styles.methodOption,
                       {

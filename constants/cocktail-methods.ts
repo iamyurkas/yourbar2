@@ -17,47 +17,47 @@ export type CocktailMethod = {
 export const COCKTAIL_METHODS: CocktailMethod[] = [
   {
     id: 'build',
-    label: 'Build (Білд)',
-    title: 'Побудова',
+    label: 'Build',
+    title: 'Build',
     description: 'Pour ingredients directly into the serving glass.',
   },
   {
     id: 'stir',
-    label: 'Stir (Стір)',
-    title: 'Перемішування',
+    label: 'Stir',
+    title: 'Stir',
     description: 'Stir with a bar spoon in a mixing glass full of ice.',
   },
   {
     id: 'shake',
-    label: 'Shake (Шейк)',
-    title: 'Збивання',
+    label: 'Shake',
+    title: 'Shake',
     description:
       'Shake hard with ice. Best for citrus, syrup, cream, or egg white to aerate and chill.',
   },
   {
     id: 'muddle',
-    label: 'Muddle (Мадлінг)',
-    title: 'Розтирання',
+    label: 'Muddle',
+    title: 'Muddle',
     description:
       'Press fruit, berries, or herbs to release oils and juice.',
   },
   {
     id: 'layer',
-    label: 'Layer (Лейєринг)',
-    title: 'Нашарування',
+    label: 'Layer',
+    title: 'Layer',
     description:
       'Float ingredients in layers using a bar spoon for visual effect.',
   },
   {
     id: 'blend',
-    label: 'Blend (Бленд)',
-    title: 'Збивання в блендері',
+    label: 'Blend',
+    title: 'Blend',
     description: 'Blend with crushed ice into a frozen texture.',
   },
   {
     id: 'throwing',
-    label: 'Throwing (Троуінг)',
-    title: 'Переливання',
+    label: 'Throwing',
+    title: 'Throwing',
     description:
       'Pour between tins from a distance to aerate without cloudiness.',
   },

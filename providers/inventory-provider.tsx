@@ -41,6 +41,7 @@ type CocktailRecord = Omit<BaseCocktailRecord, 'ingredients' | 'searchName' | 's
   searchName?: string | null;
   searchTokens?: string[] | null;
   methodId?: CocktailMethodId | null;
+  methodIds?: CocktailMethodId[] | null;
 };
 type IngredientRecord = InventoryData['ingredients'][number];
 
@@ -137,7 +138,7 @@ type CreateCocktailInput = {
   instructions?: string | null;
   photoUri?: string | null;
   glassId?: string | null;
-  methodId?: CocktailMethodId | null;
+  methodIds?: CocktailMethodId[] | null;
   tags?: CocktailTag[] | null;
   ingredients: CreateCocktailIngredientInput[];
 };
@@ -765,7 +766,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         const instructions = input.instructions?.trim() || undefined;
         const photoUri = input.photoUri?.trim() || undefined;
         const glassId = input.glassId?.trim() || undefined;
-        const methodId = input.methodId ?? undefined;
+        const methodIds = input.methodIds
+          ? Array.from(new Set(input.methodIds)).filter(Boolean)
+          : undefined;
 
         const tagMap = new Map<number, CocktailTag>();
         (input.tags ?? []).forEach((tag) => {
@@ -790,7 +793,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           instructions,
           photoUri,
           glassId,
-          methodId,
+          methodIds: methodIds && methodIds.length > 0 ? methodIds : undefined,
           tags,
           ingredients: sanitizedIngredients.map((ingredient, index) => ({
             ...ingredient,
@@ -1160,7 +1163,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       const instructions = input.instructions?.trim() || undefined;
       const photoUri = input.photoUri?.trim() || undefined;
       const glassId = input.glassId?.trim() || undefined;
-      const methodId = input.methodId ?? undefined;
+      const methodIds = input.methodIds
+        ? Array.from(new Set(input.methodIds)).filter(Boolean)
+        : undefined;
 
       const tagMap = new Map<number, CocktailTag>();
       (input.tags ?? []).forEach((tag) => {
@@ -1186,7 +1191,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         instructions,
         photoUri,
         glassId,
-        methodId,
+        methodIds: methodIds && methodIds.length > 0 ? methodIds : undefined,
         tags,
         ingredients: sanitizedIngredients.map((ingredient, index) => ({
           ...ingredient,
