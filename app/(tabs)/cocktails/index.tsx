@@ -830,7 +830,7 @@ export default function CocktailsScreen() {
           renderItem={isMyTab ? renderMyItem : renderItem}
           ItemSeparatorComponent={isMyTab ? renderMySeparator : renderSeparator}
           contentContainerStyle={styles.listContent}
-          showsVerticalScrollIndicator={false}
+          showsVerticalScrollIndicator
           ListEmptyComponent={
             <Text style={[styles.emptyLabel, { color: paletteColors.onSurfaceVariant }]}>No cocktails yet</Text>
           }
