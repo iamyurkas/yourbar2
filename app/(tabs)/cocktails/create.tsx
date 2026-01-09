@@ -1006,6 +1006,7 @@ export default function CreateCocktailScreen() {
     instructions,
     isSaving,
     isEditMode,
+    methodIds,
     name,
     prefilledCocktail?.id,
     selectedTagIds,
