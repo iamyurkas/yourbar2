@@ -6762,7 +6762,7 @@
         }
       ],
       "description": "A bold, spirit-forward agave spirit drink built around Mezcal, Cognac, Punt e Mes—bitter-leaning, aromatic, and best served well chilled. Garnished with orange.",
-      "instructions": "",
+      "instructions": "1. Add mezcal, cognac, and Punt e Mes to a mixing glass filled with ice.\n2. Stir gently until well chilled and properly diluted. \n3. Strain into a chilled coupe glass. \n4. Express an orange peel over the surface to release the oils, then garnish with the peel.",
       "ingredients": [
         {
           "order": 1,
@@ -7170,7 +7170,7 @@
         }
       ],
       "description": "A complex liqueur cocktail where Amaro Nonino, Aperol meets citrus—bittersweet, zesty, and nicely structured. Garnished with orange.",
-      "instructions": "",
+      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add Amaro Nonino, Aperol, fresh citrus juice, and any additional specified ingredients.\n3. Shake vigorously for 10–12 seconds until well chilled.\n4. Strain into a chilled cocktail glass.\n5. Garnish with an orange peel or slice, expressing the oils over the drink before serving.",
       "ingredients": [
         {
           "order": 1,
@@ -7231,7 +7231,7 @@
         }
       ],
       "description": "A bold, spirit-forward agave spirit drink built around Tequila Blanco, Red Vermouth, Campari—bitter-leaning, aromatic, and best served well chilled. Garnished with orange.",
-      "instructions": "",
+      "instructions": "1. Add Tequila Blanco, red vermouth, and Campari to a mixing glass filled with ice.\n2. Stir gently for 20–30 seconds until the drink is well chilled and properly diluted.\n3. Strain the mixture over a large ice cube into a chilled rocks glass.\n4. Express an orange peel over the drink to release its oils, then garnish with the peel.",
       "ingredients": [
         {
           "order": 1,
@@ -7290,8 +7290,8 @@
           "color": "#FFB74D"
         }
       ],
-      "description": "A spirit-forward vodka cocktail showcasing Vodka, Southern Comfort, Amaretto—deep, aromatic, and meant to be savored. Garnished with orange.",
-      "instructions": "",
+      "description": "A bold and fruity Southern classic combining Southern Comfort, Amaretto, and Sloe Gin, topped with orange juice. Sweet, rich, and deceptively strong, with a smooth almond and stone-fruit depth.",
+      "instructions": "1. Fill a highball glass with ice.\n2. Pour in the Southern Comfort, Amaretto, and Sloe Gin.\n3. Top up with fresh orange juice.\n4. Gently stir to combine the ingredients.\n5. Garnish with an orange slice or wedge.\n6. Serve immediately.",
       "ingredients": [
         {
           "order": 1,
@@ -7372,8 +7372,8 @@
           "color": "#FF8A65"
         }
       ],
-      "description": "A spirit-forward gin cocktail showcasing Amaretto, Southern Comfort, Sloe Gin—deep, aromatic, and meant to be savored. Garnished with cherry.",
-      "instructions": "",
+      "description": "A classic Southern party shot made with Amaretto, Southern Comfort, and Sloe Gin, balanced with orange juice. Sweet, fruity, and deceptively strong.",
+      "instructions": "1. Add Amaretto, Southern Comfort, Sloe Gin, and orange juice into a shaker filled with ice.\n2. Shake well until the mixture is thoroughly chilled.\n3. Strain into a chilled shooter glass.\n4. Serve immediately.",
       "ingredients": [
         {
           "order": 1,
