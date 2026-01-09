@@ -22,6 +22,7 @@ import {
 import { AppDialog, type DialogOptions } from '@/components/AppDialog';
 import { ListRow, Thumb } from '@/components/RowParts';
 import { TagPill } from '@/components/TagPill';
+import { TagEditorModal } from '@/components/TagEditorModal';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { Colors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
@@ -60,8 +61,15 @@ export default function EditIngredientScreen() {
   const paletteColors = Colors;
   const navigation = useNavigation();
   const { ingredientId } = useLocalSearchParams<{ ingredientId?: string }>();
-  const { ingredients, shoppingIngredientIds, availableIngredientIds, updateIngredient, deleteIngredient } =
-    useInventory();
+  const {
+    ingredients,
+    shoppingIngredientIds,
+    availableIngredientIds,
+    updateIngredient,
+    deleteIngredient,
+    customIngredientTags,
+    createCustomIngredientTag,
+  } = useInventory();
   const { setHasUnsavedChanges } = useUnsavedChanges();
   const isNavigatingAfterSaveRef = useRef(false);
 
@@ -81,6 +89,7 @@ export default function EditIngredientScreen() {
   const [imageUri, setImageUri] = useState<string | null>(null);
   const [isPickingImage, setIsPickingImage] = useState(false);
   const [selectedTagIds, setSelectedTagIds] = useState<number[]>([]);
+  const [isTagModalVisible, setTagModalVisible] = useState(false);
   const [baseIngredientId, setBaseIngredientId] = useState<number | null>(null);
   const [isBaseModalVisible, setIsBaseModalVisible] = useState(false);
   const [baseSearch, setBaseSearch] = useState('');
@@ -171,13 +180,39 @@ export default function EditIngredientScreen() {
     });
   }, []);
 
+  const availableIngredientTags = useMemo(() => {
+    const sortedCustom = [...customIngredientTags].sort((a, b) =>
+      (a.name ?? '').localeCompare(b.name ?? ''),
+    );
+    return [...BUILTIN_INGREDIENT_TAGS, ...sortedCustom];
+  }, [customIngredientTags]);
+
   const tagSelection = useMemo(() => {
     const set = new Set(selectedTagIds);
-    return BUILTIN_INGREDIENT_TAGS.map((tag) => ({
+    return availableIngredientTags.map((tag) => ({
       ...tag,
       selected: set.has(tag.id),
     }));
-  }, [selectedTagIds]);
+  }, [availableIngredientTags, selectedTagIds]);
+
+  const handleOpenTagModal = useCallback(() => {
+    setTagModalVisible(true);
+  }, []);
+
+  const handleCloseTagModal = useCallback(() => {
+    setTagModalVisible(false);
+  }, []);
+
+  const handleCreateTag = useCallback(
+    (data: { name: string; color: string }) => {
+      const created = createCustomIngredientTag(data);
+      if (created?.id != null) {
+        setSelectedTagIds((prev) => (prev.includes(created.id) ? prev : [...prev, created.id]));
+      }
+      setTagModalVisible(false);
+    },
+    [createCustomIngredientTag],
+  );
 
   const ensureMediaPermission = useCallback(async () => {
     if (permissionStatus?.granted) {
@@ -259,8 +294,8 @@ export default function EditIngredientScreen() {
 
     const descriptionValue = description.trim();
     const selectedTags = selectedTagIds
-      .map((tagId) => BUILTIN_INGREDIENT_TAGS.find((tag) => tag.id === tagId))
-      .filter((tag): tag is (typeof BUILTIN_INGREDIENT_TAGS)[number] => Boolean(tag));
+      .map((tagId) => availableIngredientTags.find((tag) => tag.id === tagId))
+      .filter((tag): tag is (typeof availableIngredientTags)[number] => Boolean(tag));
 
     const updated = updateIngredient(numericIngredientId, {
       name: trimmedName,
@@ -283,6 +318,7 @@ export default function EditIngredientScreen() {
     isNavigatingAfterSaveRef.current = true;
     router.back();
   }, [
+    availableIngredientTags,
     baseIngredientId,
     description,
     imageUri,
@@ -652,7 +688,17 @@ export default function EditIngredientScreen() {
         </View>
 
         <View style={styles.section}>
-          <Text style={[styles.label, { color: paletteColors.onSurface }]}>Tags</Text>
+          <View style={styles.tagHeader}>
+            <Text style={[styles.label, { color: paletteColors.onSurface }]}>Tags</Text>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Create tag"
+              onPress={handleOpenTagModal}
+              style={[styles.tagAddButton, { borderColor: paletteColors.outlineVariant }]}>
+              <MaterialCommunityIcons name="plus" size={16} color={paletteColors.tint} />
+              <Text style={[styles.tagAddLabel, { color: paletteColors.tint }]}>Create tag</Text>
+            </Pressable>
+          </View>
           <Text style={[styles.hint, { color: paletteColors.onSurfaceVariant }]}>Select one or more tags</Text>
           <View style={styles.tagList}>
             {tagSelection.map((tag) => (
@@ -825,6 +871,14 @@ export default function EditIngredientScreen() {
         actions={dialogOptions?.actions ?? []}
         onRequestClose={closeDialog}
       />
+
+      <TagEditorModal
+        visible={isTagModalVisible}
+        title="New tag"
+        confirmLabel="Create"
+        onClose={handleCloseTagModal}
+        onSave={handleCreateTag}
+      />
     </>
   );
 }
@@ -917,6 +971,25 @@ const styles = StyleSheet.create({
   placeholderHint: {
     fontSize: 12,
     textAlign: 'center',
+  },
+  tagHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 12,
+  },
+  tagAddButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 999,
+    borderWidth: StyleSheet.hairlineWidth,
+  },
+  tagAddLabel: {
+    fontSize: 12,
+    fontWeight: '600',
   },
   tagList: {
     flexDirection: 'row',
