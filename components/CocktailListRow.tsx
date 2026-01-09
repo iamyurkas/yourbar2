@@ -54,7 +54,7 @@ const CocktailListRowComponent = ({
   ingredientLookup,
   highlightColor = palette.highlightFaint,
   ignoreGarnish = true,
-  allowAllSubstitutes = false,
+  allowAllSubstitutes = true,
   onPress,
 }: CocktailListRowProps) => {
   const paletteColors = Colors;
