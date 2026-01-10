@@ -204,7 +204,7 @@ function formatIngredientQuantity(ingredient: RecipeIngredient, useImperialUnits
   let unitText = '';
   if (unitDetails) {
     const isSingular = numericAmount == null || numericAmount === 1;
-    unitText = isSingular ? unitDetails.singular : unitDetails.plural ?? `${unitDetails.singular}s`;
+    unitText = isSingular ? unitDetails.singular : unitDetails.plural ?? unitDetails.singular;
   }
 
   if (!displayAmount && !unitText) {
