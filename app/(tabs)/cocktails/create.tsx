@@ -1889,10 +1889,10 @@ function EditableIngredientRow({
     }
     const entry = COCKTAIL_UNIT_DICTIONARY[ingredient.unitId];
     if (!entry) {
-      return 'Custom';
+      return '';
     }
     const label = usePluralUnits ? entry.plural ?? entry.singular : entry.singular;
-    return label || 'Custom';
+    return label || '';
   }, [ingredient.unitId, usePluralUnits]);
 
   useEffect(() => {
