@@ -6325,23 +6325,6 @@
       "photoUri": "assets/ingredients/787067-tequila-gold.jpg"
     },
     {
-      "id": 1762901952345,
-      "name": "Test",
-      "description": "Placeholder ingredient for testing entries. Not intended for real cocktails. Replace with real data before production use.",
-      "tags": [
-        {
-          "id": 10,
-          "name": "other",
-          "color": "#a8a8a8"
-        }
-      ],
-      "usageCount": 0,
-      "searchName": "test",
-      "searchTokens": [
-        "test"
-      ]
-    },
-    {
       "id": 213703,
       "name": "Tia Maria",
       "description": "Coffee liqueur from Jamaica made with rum, coffee beans, and vanilla, around 20% ABV. Smooth and sweet with rich espresso notes. Used in espresso martinis and dessert cocktails.",
