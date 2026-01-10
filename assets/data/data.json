@@ -3833,7 +3833,7 @@
           "color": "#ec5a5a"
         }
       ],
-      "baseIngredientId": 342124,
+      "baseIngredientId": 830162,
       "usageCount": 0,
       "searchName": "jack daniels",
       "searchTokens": [
@@ -6823,7 +6823,10 @@
       ],
       "createdAt": 1759436028203,
       "updatedAt": 1759443722331,
-      "photoUri": "assets/cocktails/1759436028203-1910.jpg"
+      "photoUri": "assets/cocktails/1759436028203-1910.jpg",
+      "methodIds": [
+        "stir"
+      ]
     },
     {
       "id": 1756467849702,
@@ -7224,7 +7227,10 @@
       ],
       "createdAt": 1756473540959,
       "updatedAt": 1758584495780,
-      "photoUri": "assets/cocktails/1756473540959-adriatique.jpg"
+      "photoUri": "assets/cocktails/1756473540959-adriatique.jpg",
+      "methodIds": [
+        "shake"
+      ]
     },
     {
       "id": 1756473721983,
@@ -7279,7 +7285,10 @@
       ],
       "createdAt": 1756473721983,
       "updatedAt": 1758453407047,
-      "photoUri": "assets/cocktails/1756473721983-agavoni.jpg"
+      "photoUri": "assets/cocktails/1756473721983-agavoni.jpg",
+      "methodIds": [
+        "stir"
+      ]
     },
     {
       "id": 1756474813321,
@@ -7361,7 +7370,10 @@
       ],
       "createdAt": 1756474813321,
       "updatedAt": 1758453407047,
-      "photoUri": "assets/cocktails/1756474813321-alabama-slammer-long.jpg"
+      "photoUri": "assets/cocktails/1756474813321-alabama-slammer-long.jpg",
+      "methodIds": [
+        "stir"
+      ]
     },
     {
       "id": 1756474177669,
@@ -7436,7 +7448,10 @@
       ],
       "createdAt": 1756474177669,
       "updatedAt": 1758453407048,
-      "photoUri": "assets/cocktails/1756474177669-alabama-slammer-shot.jpg"
+      "photoUri": "assets/cocktails/1756474177669-alabama-slammer-shot.jpg",
+      "methodIds": [
+        "shake"
+      ]
     },
     {
       "id": 1756478015170,
@@ -7497,7 +7512,10 @@
       ],
       "createdAt": 1756478015170,
       "updatedAt": 1758453407048,
-      "photoUri": "assets/cocktails/1756478015170-alexander.jpg"
+      "photoUri": "assets/cocktails/1756478015170-alexander.jpg",
+      "methodIds": [
+        "shake"
+      ]
     },
     {
       "id": 1756475833739,
@@ -7564,7 +7582,10 @@
       ],
       "createdAt": 1756475833739,
       "updatedAt": 1758628848255,
-      "photoUri": "assets/cocktails/1756475833739-alexander-the-great.jpg"
+      "photoUri": "assets/cocktails/1756475833739-alexander-the-great.jpg",
+      "methodIds": [
+        "shake"
+      ]
     },
     {
       "id": 1756476650661,
@@ -7647,7 +7668,10 @@
       ],
       "createdAt": 1756476650661,
       "updatedAt": 1758453407048,
-      "photoUri": "assets/cocktails/1756476650661-alexanders-big-brother.jpg"
+      "photoUri": "assets/cocktails/1756476650661-alexanders-big-brother.jpg",
+      "methodIds": [
+        "shake"
+      ]
     },
     {
       "id": 1756479678627,
@@ -7716,7 +7740,10 @@
       ],
       "createdAt": 1756479678628,
       "updatedAt": 1758453407048,
-      "photoUri": "assets/cocktails/1756479678627-alexanders-sister.jpg"
+      "photoUri": "assets/cocktails/1756479678627-alexanders-sister.jpg",
+      "methodIds": [
+        "shake"
+      ]
     },
     {
       "id": 1756482200535,
@@ -7787,7 +7814,10 @@
       ],
       "createdAt": 1756482200535,
       "updatedAt": 1758453407048,
-      "photoUri": "assets/cocktails/1756482200535-alien-brain-hemorrhage.jpg"
+      "photoUri": "assets/cocktails/1756482200535-alien-brain-hemorrhage.jpg",
+      "methodIds": [
+        "layer"
+      ]
     },
     {
       "id": 1756482784515,
@@ -7865,7 +7895,11 @@
       ],
       "createdAt": 1756482784515,
       "updatedAt": 1758453407048,
-      "photoUri": "assets/cocktails/1756482784515-almond-old-fashioned.jpg"
+      "photoUri": "assets/cocktails/1756482784515-almond-old-fashioned.jpg",
+      "methodIds": [
+        "muddle",
+        "build"
+      ]
     },
     {
       "id": 1759480212593,
@@ -7912,7 +7946,10 @@
         }
       ],
       "createdAt": 1759480212593,
-      "updatedAt": 1759480250721
+      "updatedAt": 1759480250721,
+      "methodIds": [
+        "build"
+      ]
     },
     {
       "id": 1759446000874,
@@ -7965,7 +8002,10 @@
         }
       ],
       "createdAt": 1759446000874,
-      "updatedAt": 1759446000955
+      "updatedAt": 1759446000955,
+      "methodIds": [
+        "shake"
+      ]
     },
     {
       "id": 1758844263671,
@@ -7979,7 +8019,7 @@
         }
       ],
       "description": "A light, sparkling rum cocktail designed for effortless sipping. Fresh kiwi and floral elderflower are balanced by white rum and lifted with bubbly mixers over ice, finished with a cooling mint garnish.",
-      "instructions": "1. Chill a coupe glass in the freezer or by filling it with ice and water, then discard before use.\n2. In a shaker, muddle fresh kiwi pieces to release juice and aroma.\n3. Add white rum and elderflower cordial to the shaker.\n4. Fill the shaker with ice and shake briefly to combine and chill.\n5. Strain the mixture into the prepared coupe glass.\n6. Top gently with sparkling mixer (such as soda water or prosecco) to maintain carbonation.\n7. Give a light stir to integrate the layers without losing bubbles.\n8. Garnish with a fresh mint sprig and, if desired, a thin slice of kiwi.",
+      "instructions": "1. Cut kiwi fruit in half and use a spoon to scoop flesh from one half into shaker. \n2. In a shaker, muddle fresh kiwi pieces to release juice and aroma.\n3. Add white rum and elderflower cordial to the shaker.\n4. Fill the shaker with ice and shake briefly to combine and chill.\n5. Strain the mixture into a chilled coupe glass.\n6. Top gently with ginger ale.\n7. Give a light stir to integrate the layers without losing bubbles.\n8. Garnish with a fresh mint sprig and, if desired, a thin slice of kiwi.",
       "ingredients": [
         {
           "order": 1,
@@ -8042,7 +8082,13 @@
       ],
       "createdAt": 1758844263671,
       "updatedAt": 1758844944623,
-      "photoUri": "assets/cocktails/1758844263671-amalia.jpg"
+      "photoUri": "assets/cocktails/1758844263671-amalia.jpg",
+      "methodIds": [
+        "shake",
+        "muddle",
+        "stir",
+        "layer"
+      ]
     },
     {
       "id": 1756483482781,
@@ -8083,7 +8129,10 @@
       ],
       "createdAt": 1756483482781,
       "updatedAt": 1758453407048,
-      "photoUri": "assets/cocktails/1756483482781-amaretto-sour.jpg"
+      "photoUri": "assets/cocktails/1756483482781-amaretto-sour.jpg",
+      "methodIds": [
+        "shake"
+      ]
     },
     {
       "id": 1756483934301,
@@ -8166,7 +8215,10 @@
       ],
       "createdAt": 1756483934301,
       "updatedAt": 1758453407048,
-      "photoUri": "assets/cocktails/1756483934301-amaro-paloma.jpg"
+      "photoUri": "assets/cocktails/1756483934301-amaro-paloma.jpg",
+      "methodIds": [
+        "stir"
+      ]
     },
     {
       "id": 1756484833703,
@@ -8221,7 +8273,10 @@
       ],
       "createdAt": 1756484833703,
       "updatedAt": 1758453407048,
-      "photoUri": "assets/cocktails/1756484833703-ambassador.jpg"
+      "photoUri": "assets/cocktails/1756484833703-ambassador.jpg",
+      "methodIds": [
+        "shake"
+      ]
     },
     {
       "id": 1759444918614,
@@ -8288,7 +8343,11 @@
         }
       ],
       "createdAt": 1759444918614,
-      "updatedAt": 1759445057539
+      "updatedAt": 1759445057539,
+      "methodIds": [
+        "shake",
+        "stir"
+      ]
     },
     {
       "id": 1758535830379,
@@ -8349,7 +8408,10 @@
       ],
       "createdAt": 1758535830379,
       "updatedAt": 1758535856561,
-      "photoUri": "assets/cocktails/1758535830379-american-trilogy.jpg"
+      "photoUri": "assets/cocktails/1758535830379-american-trilogy.jpg",
+      "methodIds": [
+        "shake"
+      ]
     },
     {
       "id": 1755800000050,
@@ -8764,7 +8826,10 @@
       ],
       "createdAt": 1756498812800,
       "updatedAt": 1758614644715,
-      "photoUri": "assets/cocktails/1756498812800-angels-tit.jpg"
+      "photoUri": "assets/cocktails/1756498812800-angels-tit.jpg",
+      "methodIds": [
+        "layer"
+      ]
     },
     {
       "id": 1759435526187,
@@ -8832,7 +8897,10 @@
       ],
       "createdAt": 1759435526187,
       "updatedAt": 1759435573729,
-      "photoUri": "assets/cocktails/1759435526187-another-sunken-boat.jpg"
+      "photoUri": "assets/cocktails/1759435526187-another-sunken-boat.jpg",
+      "methodIds": [
+        "stir"
+      ]
     },
     {
       "id": 1755800000107,
@@ -8853,7 +8921,7 @@
       "description": "Bittersweet aperitif of Aperol, prosecco, and soda.",
       "instructions": "1. Fill a wine glass with ice.\n2. Add prosecco and Aperol.\n3. Top with soda water.\n4. Stir gently.\n5. Garnish with an orange slice.",
       "methodIds": [
-        "stir"
+        "build"
       ],
       "ingredients": [
         {
@@ -8950,7 +9018,10 @@
       ],
       "createdAt": 1756499452749,
       "updatedAt": 1758453407048,
-      "photoUri": "assets/cocktails/1756499452749-apple-cart.jpg"
+      "photoUri": "assets/cocktails/1756499452749-apple-cart.jpg",
+      "methodIds": [
+        "stir"
+      ]
     },
     {
       "id": 1756499728081,
@@ -9009,7 +9080,11 @@
       ],
       "createdAt": 1756499728082,
       "updatedAt": 1758453407048,
-      "photoUri": "assets/cocktails/1756499728081-apple-sunrise.jpg"
+      "photoUri": "assets/cocktails/1756499728081-apple-sunrise.jpg",
+      "methodIds": [
+        "stir",
+        "layer"
+      ]
     },
     {
       "id": 1756500510594,
@@ -9067,7 +9142,10 @@
       ],
       "createdAt": 1756500510594,
       "updatedAt": 1760345754073,
-      "photoUri": "assets/cocktails/1756500510594-appletini.jpg"
+      "photoUri": "assets/cocktails/1756500510594-appletini.jpg",
+      "methodIds": [
+        "shake"
+      ]
     },
     {
       "id": 1756500842115,
@@ -9141,7 +9219,10 @@
       ],
       "createdAt": 1756500842115,
       "updatedAt": 1758453407048,
-      "photoUri": "assets/cocktails/1756500842115-asian-hooker.jpg"
+      "photoUri": "assets/cocktails/1756500842115-asian-hooker.jpg",
+      "methodIds": [
+        "build"
+      ]
     },
     {
       "id": 1758844622624,
@@ -9192,7 +9273,10 @@
         }
       ],
       "createdAt": 1758844622624,
-      "updatedAt": 1758844622672
+      "updatedAt": 1758844622672,
+      "methodIds": [
+        "layer"
+      ]
     },
     {
       "id": 1758750530958,
@@ -9253,7 +9337,10 @@
         }
       ],
       "createdAt": 1758750530958,
-      "updatedAt": 1758750531047
+      "updatedAt": 1758750531047,
+      "methodIds": [
+        "shake"
+      ]
     },
     {
       "id": 1755800000052,
@@ -9353,7 +9440,7 @@
       "description": "The name of this IBA official cocktail refers to the US B-52 Stratofortress long-range bomber.",
       "instructions": "1. Pour 20ml of Kahlua into a shooter glass.\n2. Very carefully pour Baileys on top of the Kahlua, followed by Grand Marnier.\n3. Serve flamed, and drink flamed using a long straw.",
       "methodIds": [
-        "build"
+        "layer"
       ],
       "ingredients": [
         {
@@ -9430,7 +9517,7 @@
       "description": "A popular variation of the B-52 shooter.",
       "instructions": "1. Pour 20ml of Kahlua or another coffee liqueur into a shooter glass.\n2. Pour 20ml of Baileys on top of the Kahlua.\n3. Very carefully pour 15ml of absinthe on top of the Baileys.",
       "methodIds": [
-        "build"
+        "layer"
       ],
       "ingredients": [
         {
@@ -9515,7 +9602,10 @@
       ],
       "createdAt": 1756501209333,
       "updatedAt": 1758453407048,
-      "photoUri": "assets/cocktails/1756501209333-bandb.jpg"
+      "photoUri": "assets/cocktails/1756501209333-bandb.jpg",
+      "methodIds": [
+        "stir"
+      ]
     },
     {
       "id": 1756502550966,
@@ -9535,9 +9625,6 @@
       ],
       "description": "This layered shooter was named for its appearance — it looks like a tiny glass of stout. The Baileys can also be whipped and spooned on top, for a frothy presentation.",
       "instructions": "1. Pour 30ml of coffee liqueur into a shooter glass.\n2. Carefully pour 15ml of Irish cream liqueur on top.",
-      "methodIds": [
-        "layer"
-      ],
       "ingredients": [
         {
           "order": 1,
@@ -9569,7 +9656,10 @@
       ],
       "createdAt": 1756502550966,
       "updatedAt": 1758629029870,
-      "photoUri": "assets/cocktails/1756502550966-baby-guinness.jpg"
+      "photoUri": "assets/cocktails/1756502550966-baby-guinness.jpg",
+      "methodIds": [
+        "layer"
+      ]
     },
     {
       "id": 1756503037693,
@@ -9616,7 +9706,10 @@
       ],
       "createdAt": 1756503037693,
       "updatedAt": 1758453407049,
-      "photoUri": "assets/cocktails/1756503037693-bacardi-cocktail.jpg"
+      "photoUri": "assets/cocktails/1756503037693-bacardi-cocktail.jpg",
+      "methodIds": [
+        "shake"
+      ]
     },
     {
       "id": 1758537354568,
@@ -9655,7 +9748,10 @@
         }
       ],
       "createdAt": 1758537354568,
-      "updatedAt": 1758537374320
+      "updatedAt": 1758537374320,
+      "methodIds": [
+        "stir"
+      ]
     },
     {
       "id": 1756504045558,
@@ -9717,7 +9813,10 @@
       ],
       "createdAt": 1756504045558,
       "updatedAt": 1758453407049,
-      "photoUri": "assets/cocktails/1756504045558-bad-word.jpg"
+      "photoUri": "assets/cocktails/1756504045558-bad-word.jpg",
+      "methodIds": [
+        "shake"
+      ]
     },
     {
       "id": 1756504288043,
@@ -9807,7 +9906,10 @@
       ],
       "createdAt": 1756504288043,
       "updatedAt": 1758453407049,
-      "photoUri": "assets/cocktails/1756504288043-bahama-mama.jpg"
+      "photoUri": "assets/cocktails/1756504288043-bahama-mama.jpg",
+      "methodIds": [
+        "shake"
+      ]
     },
     {
       "id": 1759336070098,
@@ -9863,7 +9965,10 @@
       ],
       "createdAt": 1759336070098,
       "updatedAt": 1759336112951,
-      "photoUri": "assets/cocktails/1759336070098-bali-rum-trader.jpg"
+      "photoUri": "assets/cocktails/1759336070098-bali-rum-trader.jpg",
+      "methodIds": [
+        "shake"
+      ]
     },
     {
       "id": 1759337532331,
@@ -9918,7 +10023,10 @@
       ],
       "createdAt": 1759337532331,
       "updatedAt": 1759337532418,
-      "photoUri": "assets/cocktails/1759337532331-bali-trader.jpg"
+      "photoUri": "assets/cocktails/1759337532331-bali-trader.jpg",
+      "methodIds": [
+        "shake"
+      ]
     },
     {
       "id": 1756505066119,
@@ -9981,7 +10089,10 @@
       ],
       "createdAt": 1756505066119,
       "updatedAt": 1760346304840,
-      "photoUri": "assets/cocktails/1756505066119-bamboo-classic.jpg"
+      "photoUri": "assets/cocktails/1756505066119-bamboo-classic.jpg",
+      "methodIds": [
+        "stir"
+      ]
     },
     {
       "id": 1756505533186,
@@ -10050,7 +10161,10 @@
       ],
       "createdAt": 1756505533186,
       "updatedAt": 1758453407049,
-      "photoUri": "assets/cocktails/1756505533186-bamboo-modern.jpg"
+      "photoUri": "assets/cocktails/1756505533186-bamboo-modern.jpg",
+      "methodIds": [
+        "stir"
+      ]
     },
     {
       "id": 1756506444466,
@@ -10117,7 +10231,10 @@
       ],
       "createdAt": 1756506444467,
       "updatedAt": 1759482118580,
-      "photoUri": "assets/cocktails/1756506444466-banana-calling.jpg"
+      "photoUri": "assets/cocktails/1756506444466-banana-calling.jpg",
+      "methodIds": [
+        "shake"
+      ]
     },
     {
       "id": 1756507024952,
@@ -10196,7 +10313,10 @@
       ],
       "createdAt": 1756507024952,
       "updatedAt": 1759482157528,
-      "photoUri": "assets/cocktails/1756507024952-banana-colada.jpg"
+      "photoUri": "assets/cocktails/1756507024952-banana-colada.jpg",
+      "methodIds": [
+        "blend"
+      ]
     },
     {
       "id": 1756513125340,
@@ -10279,7 +10399,10 @@
       ],
       "createdAt": 1756513125340,
       "updatedAt": 1760346334684,
-      "photoUri": "assets/cocktails/1756513125340-banana-daiquiri.jpg"
+      "photoUri": "assets/cocktails/1756513125340-banana-daiquiri.jpg",
+      "methodIds": [
+        "blend"
+      ]
     },
     {
       "id": 1759482831928,
@@ -10360,7 +10483,10 @@
         }
       ],
       "createdAt": 1759482831928,
-      "updatedAt": 1759483385915
+      "updatedAt": 1759483385915,
+      "methodIds": [
+        "shake"
+      ]
     },
     {
       "id": 1756587051731,
@@ -10434,7 +10560,11 @@
       ],
       "createdAt": 1756587051731,
       "updatedAt": 1758453407049,
-      "photoUri": "assets/cocktails/1756587051731-banana-fantasy.jpg"
+      "photoUri": "assets/cocktails/1756587051731-banana-fantasy.jpg",
+      "methodIds": [
+        "shake",
+        "shake"
+      ]
     },
     {
       "id": 1756635079616,
@@ -10481,7 +10611,10 @@
       ],
       "createdAt": 1756635079616,
       "updatedAt": 1758453407049,
-      "photoUri": "assets/cocktails/1756635079616-banana-flash.jpg"
+      "photoUri": "assets/cocktails/1756635079616-banana-flash.jpg",
+      "methodIds": [
+        "blend"
+      ]
     },
     {
       "id": 1758747463094,
@@ -10561,7 +10694,10 @@
         }
       ],
       "createdAt": 1758747463094,
-      "updatedAt": 1759481990868
+      "updatedAt": 1759481990868,
+      "methodIds": [
+        "shake"
+      ]
     },
     {
       "id": 1756635284679,
@@ -10581,9 +10717,6 @@
       ],
       "description": "This mild, sweet and creamy shot is named after a female spirit in Irish and Celtic folklore, who foretells the death of a family member of the person who hears her wailing screams. This recipe is for 3 shots.",
       "instructions": "1. Pour 50ml of banana liqueur, 50ml of crème de cacao white and 50ml of light cream into a cocktail shaker with ice.\n2. Shake well and strain into shooter glasses.",
-      "methodIds": [
-        "shake"
-      ],
       "ingredients": [
         {
           "order": 1,
@@ -10632,7 +10765,10 @@
       ],
       "createdAt": 1756635284679,
       "updatedAt": 1759482236600,
-      "photoUri": "assets/cocktails/1756635284679-banshee.jpg"
+      "photoUri": "assets/cocktails/1756635284679-banshee.jpg",
+      "methodIds": [
+        "shake"
+      ]
     },
     {
       "id": 1756635954431,
@@ -10681,7 +10817,10 @@
       ],
       "createdAt": 1756635954431,
       "updatedAt": 1758453407049,
-      "photoUri": "assets/cocktails/1756635954431-barbara.jpg"
+      "photoUri": "assets/cocktails/1756635954431-barbara.jpg",
+      "methodIds": [
+        "shake"
+      ]
     },
     {
       "id": 1756637682106,
@@ -10706,9 +10845,6 @@
       ],
       "description": "An IBA official sparkling cocktail.",
       "instructions": "1. Fill a highball glass with ice cubes.\n2. Add 45ml of gold rum, 15ml of Galliano, 60ml of pineapple juice and a dash of lime juice.\n3. Top with sparkling wine.",
-      "methodIds": [
-        "build"
-      ],
       "ingredients": [
         {
           "order": 1,
@@ -10771,7 +10907,10 @@
       ],
       "createdAt": 1756637682106,
       "updatedAt": 1758453407049,
-      "photoUri": "assets/cocktails/1756637682106-barracuda.jpg"
+      "photoUri": "assets/cocktails/1756637682106-barracuda.jpg",
+      "methodIds": [
+        "build"
+      ]
     },
     {
       "id": 1756587698877,
@@ -10832,7 +10971,11 @@
       ],
       "createdAt": 1756587698877,
       "updatedAt": 1760346376232,
-      "photoUri": "assets/cocktails/1756587698877-basil-julep.jpg"
+      "photoUri": "assets/cocktails/1756587698877-basil-julep.jpg",
+      "methodIds": [
+        "build",
+        "muddle"
+      ]
     },
     {
       "id": 1758733773661,
@@ -10886,7 +11029,10 @@
       ],
       "createdAt": 1758733773661,
       "updatedAt": 1758733851088,
-      "photoUri": "assets/cocktails/1758733773661-batida.jpg"
+      "photoUri": "assets/cocktails/1758733773661-batida.jpg",
+      "methodIds": [
+        "shake"
+      ]
     },
     {
       "id": 1756816459218,
@@ -10905,7 +11051,7 @@
         }
       ],
       "description": "A spirit-forward vodka cocktail showcasing Vodka, Cranberry Juice, Pineapple Juice—deep, aromatic, and meant to be savored. Garnished with lime juice.",
-      "instructions": "",
+      "instructions": "1. Shake all ingredients with ice.\n2. Strain into ice-filled glass.",
       "ingredients": [
         {
           "order": 1,
@@ -10930,8 +11076,8 @@
         },
         {
           "order": 4,
-          "ingredientId": 525624,
-          "name": "Lime Juice",
+          "ingredientId": 336572,
+          "name": "Lime",
           "amount": "1",
           "unitId": 27,
           "garnish": true
@@ -10946,7 +11092,10 @@
       ],
       "createdAt": 1756816459218,
       "updatedAt": 1758453407049,
-      "photoUri": "assets/cocktails/1756816459218-bay-breeze.jpg"
+      "photoUri": "assets/cocktails/1756816459218-bay-breeze.jpg",
+      "methodIds": [
+        "stir"
+      ]
     },
     {
       "id": 1756637986457,
@@ -11007,7 +11156,10 @@
       ],
       "createdAt": 1756637986457,
       "updatedAt": 1758453407049,
-      "photoUri": "assets/cocktails/1756637986457-beach-blonde.jpg"
+      "photoUri": "assets/cocktails/1756637986457-beach-blonde.jpg",
+      "methodIds": [
+        "shake"
+      ]
     },
     {
       "id": 1755800000053,
@@ -11027,9 +11179,6 @@
       ],
       "description": "A Prohibition-era mix of gin, lemon, and honey for a bright, silky sour.",
       "instructions": "Add gin, lemon juice, and honey syrup into a shaker with ice.\nShake well.\nStrain into a chilled cocktail glass.\nGarnish with a lemon twist.",
-      "methodIds": [
-        "shake"
-      ],
       "ingredients": [
         {
           "order": 1,
@@ -11079,7 +11228,10 @@
       ],
       "createdAt": 1755959676876,
       "updatedAt": 1760346877039,
-      "photoUri": "assets/cocktails/1755800000053-bees-knees.jpg"
+      "photoUri": "assets/cocktails/1755800000053-bees-knees.jpg",
+      "methodIds": [
+        "shake"
+      ]
     },
     {
       "id": 1758749034168,
@@ -11146,7 +11298,10 @@
         }
       ],
       "createdAt": 1758749034168,
-      "updatedAt": 1758749034239
+      "updatedAt": 1758749034239,
+      "methodIds": [
+        "build"
+      ]
     },
     {
       "id": 1755800000054,
@@ -11167,7 +11322,7 @@
       "description": "Italian sparkling wine mixed with peach purée for a light, fruity spritz.",
       "instructions": "Pour peach purée into a chilled champagne flute.\nTop with chilled prosecco.\nStir gently.",
       "methodIds": [
-        "stir"
+        "build"
       ],
       "ingredients": [
         {
@@ -11252,7 +11407,10 @@
       ],
       "createdAt": 1756818370696,
       "updatedAt": 1758453407049,
-      "photoUri": "assets/cocktails/1756818370696-bentley.jpg"
+      "photoUri": "assets/cocktails/1756818370696-bentley.jpg",
+      "methodIds": [
+        "build"
+      ]
     },
     {
       "id": 1759480518250,
@@ -11303,7 +11461,10 @@
         }
       ],
       "createdAt": 1759480518250,
-      "updatedAt": 1759480594040
+      "updatedAt": 1759480594040,
+      "methodIds": [
+        "stir"
+      ]
     },
     {
       "id": 1755800000055,
@@ -11453,7 +11614,7 @@
         }
       ],
       "description": "A tropical rum cocktail with Spiced Rum, Aperol, Pineapple Juice, layered with citrus and sweetness for a lush, beachy vibe. Garnished with pineapple.",
-      "instructions": "",
+      "instructions": "1. Add all ingredients (except garnish) to a shaker with ice.\n2. Shake until very cold.\n3. Strain into a chilled glass filled with ice.\n4. Garnish with pinaple leaves and/or cherry.",
       "ingredients": [
         {
           "order": 1,
@@ -11526,67 +11687,10 @@
       ],
       "createdAt": 1756589035105,
       "updatedAt": 1758453407049,
-      "photoUri": "assets/cocktails/1756589035105-bird-of-paradise.jpg"
-    },
-    {
-      "id": 1759445400666,
-      "name": "Bite .e",
-      "glassId": "cocktail_glass",
-      "tags": [
-        {
-          "id": 6,
-          "name": "moderate",
-          "color": "#F06292"
-        }
-      ],
-      "description": "A long, sparkling rum drink built for easy sipping, pairing White Rum, Root Beer with bubbly mixers over ice.",
-      "instructions": "",
-      "ingredients": [
-        {
-          "order": 1,
-          "ingredientId": 861551,
-          "name": "White Rum",
-          "amount": "30",
-          "unitId": 11,
-          "substitutes": [
-            {
-              "id": 811139,
-              "name": "Gold Rum"
-            },
-            {
-              "id": 908571,
-              "name": "Spiced Rum"
-            },
-            {
-              "id": 962705,
-              "name": "Dark Rum"
-            }
-          ]
-        },
-        {
-          "order": 2,
-          "ingredientId": 122449,
-          "name": "Root Beer",
-          "amount": "30",
-          "unitId": 11
-        },
-        {
-          "order": 3,
-          "ingredientId": 38131,
-          "name": "Orange Juice",
-          "amount": "30",
-          "unitId": 11
-        },
-        {
-          "order": 4,
-          "ingredientId": 346304,
-          "name": "Ice",
-          "amount": "150",
-          "unitId": 8
-        }
-      ],
-      "createdAt": 1759445400669,
-      "updatedAt": 1759445400717
+      "photoUri": "assets/cocktails/1756589035105-bird-of-paradise.jpg",
+      "methodIds": [
+        "shake"
+      ]
     },
     {
       "id": 1759438451658,
@@ -11600,7 +11704,7 @@
         }
       ],
       "description": "A tropical rum cocktail with Cachaça, Orange Curaçao, Punt e Mes, layered with citrus and sweetness for a lush, beachy vibe.",
-      "instructions": "",
+      "instructions": "1. Stir all ingredients with ice.\n2. Strain into ice-filled glass (preferably a large cube or chunk of block ice).\n3. Express orange zest twist over the cocktail and use as garnish.",
       "ingredients": [
         {
           "order": 1,
@@ -11667,7 +11771,10 @@
       ],
       "createdAt": 1759438451658,
       "updatedAt": 1759438497590,
-      "photoUri": "assets/cocktails/1759438451658-bitter-in-brazil.jpg"
+      "photoUri": "assets/cocktails/1759438451658-bitter-in-brazil.jpg",
+      "methodIds": [
+        "shake"
+      ]
     },
     {
       "id": 1755800000056,
@@ -11688,8 +11795,7 @@
       "description": "Simple and spirit-forward blend of vodka and coffee liqueur.",
       "instructions": "Fill a rocks glass with ice.\nPour vodka and coffee liqueur over the ice.\nStir gently.",
       "methodIds": [
-        "stir",
-        "blend"
+        "build"
       ],
       "ingredients": [
         {
@@ -11729,7 +11835,7 @@
         }
       ],
       "description": "A bright agave spirit sour balancing Tequila Blanco, Agave Syrup, Blackberry with fresh citrus and a touch of sweetness for a crisp, refreshing sip. Garnished with figs.",
-      "instructions": "",
+      "instructions": "1. Rim serving glass with salt and fill with ice.\n2. Fill a cocktail shaker with tequila, lime juice, chopped blackberries, chopped figs, water, agave nectar, and ice.\n3. Shake and strain mixture into a serving glass.\nGarnish with the other fig.",
       "ingredients": [
         {
           "order": 1,
@@ -11791,7 +11897,10 @@
         }
       ],
       "createdAt": 1758749551431,
-      "updatedAt": 1758749551525
+      "updatedAt": 1758749551525,
+      "methodIds": [
+        "shake"
+      ]
     },
     {
       "id": 1756589486524,
@@ -11805,7 +11914,7 @@
         }
       ],
       "description": "A complex whiskey cocktail where Scotch Whiskey, Red Vermouth, Cherry Brandy meets citrus—bittersweet, zesty, and nicely structured. Garnished with orange.",
-      "instructions": "",
+      "instructions": "1. Shake all ingredients with ice.\n2. Fine strain into chilled glass.\n3. Express orange zest twist over the cocktail and use as garnish.",
       "ingredients": [
         {
           "order": 1,
@@ -11870,7 +11979,10 @@
       ],
       "createdAt": 1756589486524,
       "updatedAt": 1760346908981,
-      "photoUri": "assets/cocktails/1756589486524-blood-and-sand.jpg"
+      "photoUri": "assets/cocktails/1756589486524-blood-and-sand.jpg",
+      "methodIds": [
+        "shake"
+      ]
     },
     {
       "id": 1755800000057,
@@ -11891,7 +12003,7 @@
       "description": "A savory vodka cocktail with tomato juice, spices, and a peppery bite.",
       "instructions": "Add all ingredients into a mixing glass with ice. Stir gently.\nPour all ingredients into a highball glass filled with ice.\nGarnish with a celery stalk and a lemon wedge.",
       "methodIds": [
-        "stir"
+        "build"
       ],
       "ingredients": [
         {
@@ -11986,7 +12098,7 @@
       "description": "A delicious and very popular shooter with controversial references.",
       "instructions": "1. Pour 20ml of amaretto liqueur into a shooter glass.\n2. Carefully pour 20ml of Baileys on top of the amaretto.\n3. Top with whipped cream.",
       "methodIds": [
-        "build"
+        "layer"
       ],
       "ingredients": [
         {
@@ -12042,7 +12154,7 @@
         }
       ],
       "description": "A tropical rum cocktail with White Rum, Vodka, Blue Curaçao, layered with citrus and sweetness for a lush, beachy vibe. Garnished with cherry.",
-      "instructions": "",
+      "instructions": "1. Blend ingredients with crushed ice.\n2. Pour into glass.\n3. Serve with straws.",
       "ingredients": [
         {
           "order": 1,
@@ -12106,13 +12218,16 @@
           "order": 9,
           "ingredientId": 346304,
           "name": "Ice",
-          "amount": "150",
+          "amount": "180",
           "unitId": 8
         }
       ],
       "createdAt": 1756823317843,
       "updatedAt": 1760964370559,
-      "photoUri": "assets/cocktails/1756823317843-blue-hawaii.jpg"
+      "photoUri": "assets/cocktails/1756823317843-blue-hawaii.jpg",
+      "methodIds": [
+        "blend"
+      ]
     },
     {
       "id": 1758544591658,
@@ -12131,7 +12246,7 @@
         }
       ],
       "description": "A tropical liqueur cocktail with Pineapple Juice, Blue Curaçao Syrup, layered with citrus and sweetness for a lush, beachy vibe. Garnished with cherry.",
-      "instructions": "",
+      "instructions": "1. Blend ingredients with crushed ice.\n2. Pour into glass.\n3. Serve with straws.",
       "ingredients": [
         {
           "order": 1,
@@ -12188,13 +12303,16 @@
           "order": 8,
           "ingredientId": 346304,
           "name": "Ice",
-          "amount": "150",
+          "amount": "180",
           "unitId": 8
         }
       ],
       "createdAt": 1758544591658,
       "updatedAt": 1760965542337,
-      "photoUri": "assets/cocktails/1758544591658-blue-hawaii-mocktail.jpg"
+      "photoUri": "assets/cocktails/1758544591658-blue-hawaii-mocktail.jpg",
+      "methodIds": [
+        "blend"
+      ]
     },
     {
       "id": 1756823642522,
@@ -12263,7 +12381,7 @@
         }
       ],
       "description": "A rich, creamy gin drink featuring Blue Curaçao, Gin, Egg White—dessert-like, smooth, and indulgent.",
-      "instructions": "",
+      "instructions": "1. Shake all ingredients with ice and strain back into shaker.\n2. Dry shake (without ice).\n3. Fine strain into chilled glass.",
       "ingredients": [
         {
           "order": 1,
@@ -12297,7 +12415,10 @@
       ],
       "createdAt": 1758544228142,
       "updatedAt": 1758544228220,
-      "photoUri": "assets/cocktails/1758544228142-blue-lady.jpg"
+      "photoUri": "assets/cocktails/1758544228142-blue-lady.jpg",
+      "methodIds": [
+        "shake"
+      ]
     },
     {
       "id": 1756825058541,
@@ -12316,13 +12437,13 @@
         }
       ],
       "description": "A spirit-forward vodka cocktail showcasing Vodka, Blue Curaçao, Lemonade—deep, aromatic, and meant to be savored. Garnished with pineapple.",
-      "instructions": "",
+      "instructions": "1. Fill a highball glass with ice cubes to chill it.\n2. Pour the vodka and blue curaçao over the ice in the glass.\n3. Top off with lemonade and stir gently to mix.\n4. Garnish with a lemon slice on the rim of the glass.",
       "ingredients": [
         {
           "order": 1,
           "ingredientId": 16862,
           "name": "Vodka",
-          "amount": "30",
+          "amount": "60",
           "unitId": 11
         },
         {
@@ -12357,7 +12478,10 @@
       ],
       "createdAt": 1756825058541,
       "updatedAt": 1760965411320,
-      "photoUri": "assets/cocktails/1756825058541-blue-lagoon.jpg"
+      "photoUri": "assets/cocktails/1756825058541-blue-lagoon.jpg",
+      "methodIds": [
+        "build"
+      ]
     },
     {
       "id": 1758544483444,
@@ -12376,27 +12500,27 @@
         }
       ],
       "description": "A bright liqueur sour balancing Lemonade, Blue Curaçao Syrup with fresh citrus and a touch of sweetness for a crisp, refreshing sip. Garnished with pineapple.",
-      "instructions": "",
+      "instructions": "1. Fill a highball glass with ice cubes to chill it.\n2. Pour orange juice and blue curaçao syrup over the ice in the glass.\n3. Top off with lemonade and stir gently to mix.\n4. Garnish with a lemon slice on the rim of the glass.",
       "ingredients": [
         {
           "order": 1,
-          "ingredientId": 906592,
-          "name": "Lemonade",
-          "amount": "120",
-          "unitId": 11
-        },
-        {
-          "order": 2,
           "ingredientId": 38131,
           "name": "Orange Juice",
           "amount": "30",
           "unitId": 11
         },
         {
-          "order": 3,
+          "order": 2,
           "ingredientId": 1755771415451,
           "name": "Blue Curaçao Syrup",
           "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 906592,
+          "name": "Lemonade",
+          "amount": "120",
           "unitId": 11
         },
         {
@@ -12417,12 +12541,15 @@
       ],
       "createdAt": 1758544483444,
       "updatedAt": 1760965472274,
-      "photoUri": "assets/cocktails/1758544483444-blue-lagoon-mocktail.jpg"
+      "photoUri": "assets/cocktails/1758544483444-blue-lagoon-mocktail.jpg",
+      "methodIds": [
+        "build"
+      ]
     },
     {
       "id": 1756837759398,
       "name": "Blue Ocean",
-      "glassId": "rocks_glass",
+      "glassId": "champagne_flute",
       "tags": [
         {
           "id": 7,
@@ -12431,7 +12558,7 @@
         }
       ],
       "description": "A bright vodka sour balancing Vodka, Blue Curaçao, Grapefruit Juice with fresh citrus and a touch of sweetness for a crisp, refreshing sip.",
-      "instructions": "",
+      "instructions": "1. Shake all the liquid ingredients with Ice.\n2. Fine strain into a chilled Champagne Flute.\n3. Garnish with an orange slice on the rim of the glass.",
       "ingredients": [
         {
           "order": 1,
@@ -12466,7 +12593,8 @@
           "ingredientId": 454059,
           "name": "Orange",
           "amount": "1",
-          "unitId": 19
+          "unitId": 19,
+          "garnish": true
         },
         {
           "order": 6,
@@ -12477,7 +12605,10 @@
         }
       ],
       "createdAt": 1756837759398,
-      "updatedAt": 1758453407049
+      "updatedAt": 1758453407049,
+      "methodIds": [
+        "shake"
+      ]
     },
     {
       "id": 1756839855535,
@@ -12491,7 +12622,7 @@
         }
       ],
       "description": "A spirit-forward spirit cocktail showcasing Amaretto, Grand Marnier, Black Tea—deep, aromatic, and meant to be savored. Garnished with lemon.",
-      "instructions": "",
+      "instructions": "1. Select and pre-heat an Irish Coffee Glass.\n2. Pour all ingredients into pre-warmed glass.\n3. Express lemon zest twist over the cocktail and discard.\n4. Garnish with cinnamon stick.",
       "ingredients": [
         {
           "order": 1,
@@ -12540,12 +12671,15 @@
       ],
       "createdAt": 1756839855535,
       "updatedAt": 1760345084836,
-      "photoUri": "assets/cocktails/1756839855535-blueberry-tea.jpg"
+      "photoUri": "assets/cocktails/1756839855535-blueberry-tea.jpg",
+      "methodIds": [
+        "build"
+      ]
     },
     {
       "id": 1756840009423,
       "name": "BMW",
-      "glassId": "rocks_glass",
+      "glassId": "shooter",
       "tags": [
         {
           "id": 5,
@@ -12553,15 +12687,15 @@
           "color": "#ec5a5a"
         },
         {
-          "id": 8,
-          "name": "long",
-          "color": "#FFB74D"
+          "id": 9,
+          "name": "shooter",
+          "color": "#FF8A65"
         }
       ],
-      "description": "Baileys, Malibu, Wisky",
-      "instructions": "",
+      "description": "Baileys, Malibu, Whiskey",
+      "instructions": "3 portions.\n1. Add all ingredients to a cocktail shaker.\n2. Shake well for 10-15 seconds\n3. Strain into a chilled cocktail glass and serve",
       "methodIds": [
-        "build"
+        "shake"
       ],
       "ingredients": [
         {
@@ -12585,7 +12719,7 @@
         {
           "order": 3,
           "ingredientId": 830162,
-          "name": "Whisky",
+          "name": "Whiskey",
           "amount": "45",
           "unitId": 11
         },
@@ -13515,7 +13649,7 @@
       "description": "A variation of the 'White Russian', this cocktail is close to the 'Sneaky Pete', but smoother. The amount of milk can be varied according to taste.",
       "instructions": "1. Fill a rocks glass with ice cubes.\n2. Add 15ml of coffee liqueur, 30ml of brandy and 100ml of milk.\n3. Stir gently.",
       "methodIds": [
-        "stir"
+        "build"
       ],
       "ingredients": [
         {
@@ -13847,7 +13981,7 @@
       "description": "A long drink of orange juice topped with sparkling wine.",
       "instructions": "Pour 50ml of orange juice into the glass.\nTop with 100ml of champagne or dry sparkling wine and stir gently.\nGarnish with an orange twist.",
       "methodIds": [
-        "stir"
+        "build"
       ],
       "ingredients": [
         {
@@ -13901,7 +14035,7 @@
       "description": "This is a variation of the Bloody Mary that became a popular cocktail.",
       "instructions": "Put ice cubes into a highball glass.\nAdd 1 dash of Worcestershire sauce, Tabasco, salt, and pepper.\nPour 30ml of vodka, 60ml of beef bouillon and 10ml of lemon juice over the ice.\nStir gently and garnish with a celery stalk and a lemon wedge.",
       "methodIds": [
-        "stir"
+        "build"
       ],
       "ingredients": [
         {
@@ -13994,7 +14128,7 @@
       "description": "A strong and invigorating cocktail, something you'd want to order in a nightclub.",
       "instructions": "Put some ice into a pub glass.\nPour 30ml of white rum, 30ml of vodka, 30ml of tequila, 30ml of blue curaçao and 30ml of gin.\nPour in a full can of Red Bull and stir gently.",
       "methodIds": [
-        "stir"
+        "build"
       ],
       "ingredients": [
         {
@@ -14266,7 +14400,7 @@
       "description": "A not-so-sweet and very soft, creamy cocktail.",
       "instructions": "Fill a rocks glass with ice cubes.\nPour 30ml of butterscotch liqueur and 30ml of Baileys Irish Cream.\nAdd 60ml of milk on top.\nStir gently.",
       "methodIds": [
-        "stir"
+        "build"
       ],
       "ingredients": [
         {
@@ -14392,7 +14526,7 @@
       "description": "A bright spirit sour balancing Lime, Sugar, Licor Beirão with fresh citrus and a touch of sweetness for a crisp, refreshing sip.",
       "instructions": "Muddle lime wedges and sugar in a rocks glass.\nFill the glass with crushed ice.\nPour Licor Beirão over the ice.\nStir gently.",
       "methodIds": [
-        "stir",
+        "build",
         "muddle"
       ],
       "ingredients": [
@@ -14446,7 +14580,7 @@
       "description": "Brazil's national cocktail of muddled lime, sugar, and cachaça served over ice.",
       "instructions": "Muddle lime wedges and sugar in a rocks glass.\nFill the glass with crushed ice.\nPour cachaça over the ice.\nStir gently.",
       "methodIds": [
-        "stir",
+        "build",
         "muddle"
       ],
       "ingredients": [
@@ -14500,7 +14634,7 @@
       "description": "A bright rum sour balancing Lime, Sugar, White Rum with fresh citrus and a touch of sweetness for a crisp, refreshing sip.",
       "instructions": "Muddle lime wedges and sugar in a rocks glass.\nFill the glass with crushed ice.\nPour rum over the ice.\nStir gently.",
       "methodIds": [
-        "stir",
+        "build",
         "muddle"
       ],
       "ingredients": [
@@ -14564,7 +14698,7 @@
       "description": "A bright vodka sour balancing Vodka, Lime, Sugar with fresh citrus and a touch of sweetness for a crisp, refreshing sip.",
       "instructions": "Muddle lime wedges and sugar in a rocks glass.\nFill the glass with crushed ice.\nPour vodka over the ice.\nStir gently.",
       "methodIds": [
-        "stir",
+        "build",
         "muddle"
       ],
       "ingredients": [
@@ -14613,7 +14747,7 @@
       "description": "A fizzy cocktail that mimics the taste of root beer with coffee and vanilla notes.",
       "instructions": "Put some ice into a highball glass.\nPour 30ml of coffee liqueur, 30ml of Galliano, 60ml of soda and 30ml of cola.\nTop with a splash of beer and stir gently.",
       "methodIds": [
-        "stir"
+        "build"
       ],
       "ingredients": [
         {
@@ -14769,7 +14903,7 @@
       "description": "A simple classic cocktail, but with the bitterness of Campari and a hint of sweetness.",
       "instructions": "Fill a highball glass with ice.\nAdd 40ml of gin, 20ml of Campari and 100ml of tonic.\nStir gently and garnish with an orange wedge.",
       "methodIds": [
-        "stir"
+        "build"
       ],
       "ingredients": [
         {
@@ -17094,7 +17228,7 @@
       "description": "A simple mix of rum, cola, and lime for a refreshing long drink.",
       "instructions": "Fill a highball glass with ice.\nPour rum and lime juice over the ice.\nTop with cola and stir gently.\nGarnish with a lime wedge.",
       "methodIds": [
-        "stir"
+        "build"
       ],
       "ingredients": [
         {
@@ -17165,11 +17299,12 @@
           "unitId": 24
         },
         {
-          "order": 3,
-          "ingredientId": 336572,
-          "name": "Lime",
+          "order": 5,
+          "ingredientId": 525624,
+          "name": "Lime Juice",
           "amount": "15",
-          "unitId": 11
+          "unitId": 27,
+          "garnish": true
         },
         {
           "order": 4,
@@ -17177,14 +17312,6 @@
           "name": "Cranberry Juice",
           "amount": "120",
           "unitId": 11
-        },
-        {
-          "order": 5,
-          "ingredientId": 525624,
-          "name": "Lime Juice",
-          "amount": "15",
-          "unitId": 27,
-          "garnish": true
         },
         {
           "order": 6,
@@ -19290,7 +19417,7 @@
       "description": "Argentina's favorite mix of Fernet and cola over ice.",
       "instructions": "Fill a highball glass with ice.\nPour Fernet over the ice.\nTop with cola and stir gently.\nGarnish with a lemon wedge.",
       "methodIds": [
-        "stir"
+        "build"
       ],
       "ingredients": [
         {
@@ -20079,8 +20206,7 @@
       "description": "Equal-parts blend of cognac and amaretto served over ice.",
       "instructions": "Pour all ingredients into an ice-filled rocks glass.\nStir gently.",
       "methodIds": [
-        "stir",
-        "blend"
+        "build"
       ],
       "ingredients": [
         {
@@ -20644,7 +20770,7 @@
       "description": "Italian mix of bitter Campari and fresh orange juice.",
       "instructions": "Fill a highball glass with ice.\nPour in Campari and orange juice.\nStir gently.\nGarnish with an orange wedge.",
       "methodIds": [
-        "stir"
+        "build"
       ],
       "ingredients": [
         {
@@ -22520,7 +22646,7 @@
       "description": "This IBA official cocktail was invented in 1952 by famous three-time world champion mixologist Donato \"Duke\" Antone.",
       "instructions": "Fill a highball glass with ice cubes.\nPour 45ml of vodka and 90ml of orange juice over the ice.\nStir gently and top with 15ml of Galliano.\nGarnish with an orange slice and a maraschino cherry.",
       "methodIds": [
-        "stir"
+        "build"
       ],
       "ingredients": [
         {
@@ -23705,7 +23831,7 @@
       "description": "A vibrant green mix of cognac and Hpnotiq named after the comic book hero.",
       "instructions": "Fill a rocks glass with ice.\nPour 50ml of Hpnotiq and 50ml of cognac over the ice.\nStir gently.",
       "methodIds": [
-        "stir"
+        "build"
       ],
       "ingredients": [
         {
@@ -24330,7 +24456,7 @@
       "description": "Simple and popular mix of Jack Daniel's and cola.",
       "instructions": "Fill a collins glass with ice.\nPour 50ml of Jack Daniel's and 150ml of cola over the ice.\nStir gently.",
       "methodIds": [
-        "stir"
+        "build"
       ],
       "ingredients": [
         {
@@ -24659,7 +24785,7 @@
       "description": "A mild and nice-looking shot that slightly resembles a jellyfish.",
       "instructions": "Pour 25ml of crème de cacao white into a shooter glass.\nGently add 10ml of amaretto on top.\nGently pour 15ml of Baileys on top of the amaretto.\nAdd a few drops of grenadine.",
       "methodIds": [
-        "build"
+        "layer"
       ],
       "ingredients": [
         {
@@ -24720,7 +24846,7 @@
       "description": "A stronger variation of the Jellyfish cocktail.",
       "instructions": "Pour 15ml of sambuca into a shooter glass.\nGently add 15ml of blue curaçao on top.\nGently pour 15ml of Baileys on top of the blue curaçao.\nAdd a few drops of grenadine.",
       "methodIds": [
-        "build"
+        "layer"
       ],
       "ingredients": [
         {
@@ -24781,7 +24907,7 @@
       "description": "Yet another variation of the Jellyfish cocktail. This one is the strongest one.",
       "instructions": "Pour 15ml of blue curaçao into a shooter glass.\nGently add 15ml of tequila on top.\nGently add 15ml of absinthe on top of the tequila.\nAdd a drop of Baileys.",
       "methodIds": [
-        "build"
+        "layer"
       ],
       "ingredients": [
         {
@@ -24847,7 +24973,7 @@
       "description": "Refreshing gin highball with lemon, sugar, and soda.",
       "instructions": "Add gin, lemon juice, and simple syrup into a collins glass filled with ice.\nTop with soda water and stir gently.\nGarnish with a lemon slice and a maraschino cherry.",
       "methodIds": [
-        "stir"
+        "build"
       ],
       "ingredients": [
         {
@@ -25171,7 +25297,7 @@
       "description": "Simple mix of white wine and blackcurrant liqueur.",
       "instructions": "Pour creme de cassis into a wine glass.\nTop with white wine.\nStir gently.",
       "methodIds": [
-        "stir"
+        "build"
       ],
       "ingredients": [
         {
@@ -27925,7 +28051,7 @@
       "description": "One of the classic sours.",
       "instructions": "Fill a rocks glass with ice cubes.\nAdd 50ml of Midori, 20ml of lemon juice and 20ml of sugar syrup.\nStir gently.",
       "methodIds": [
-        "stir"
+        "build"
       ],
       "ingredients": [
         {
@@ -28029,7 +28155,7 @@
       "description": "Brunch favorite combining sparkling wine and fresh orange juice.",
       "instructions": "Pour orange juice into a chilled champagne flute.\nTop with champagne.\nStir gently.",
       "methodIds": [
-        "stir"
+        "build"
       ],
       "ingredients": [
         {
@@ -29555,7 +29681,7 @@
       "description": "Time-honored mix of whiskey, sugar, and bitters.",
       "instructions": "Place sugar in a rocks glass and saturate with bitters.\nAdd a splash of water and muddle until dissolved.\nFill the glass with ice and add bourbon.\nStir gently.\nGarnish with an orange twist and a maraschino cherry.",
       "methodIds": [
-        "stir",
+        "build",
         "muddle"
       ],
       "ingredients": [
@@ -30154,7 +30280,7 @@
       "description": "Refreshing tequila highball with grapefruit soda and lime.",
       "instructions": "Rim a highball glass with salt.\nFill the glass with ice and add tequila and lime juice.\nTop with grapefruit soda and stir gently.\nGarnish with a lime wedge.",
       "methodIds": [
-        "stir"
+        "build"
       ],
       "ingredients": [
         {
@@ -33132,7 +33258,7 @@
       "description": "Scotch whisky tempered with sweet, herbal Drambuie.",
       "instructions": "Pour scotch whiskey and Drambuie into a rocks glass filled with ice.\nStir gently.\nGarnish with a lemon twist.",
       "methodIds": [
-        "stir"
+        "build"
       ],
       "ingredients": [
         {
@@ -33786,7 +33912,7 @@
       "description": "A simple and popular IBA official cocktail. The drink reportedly got its name because American petroleum engineers in Saudi Arabia secretly added vodka to small cans of orange juice and stirred the mixture with their screwdrivers.",
       "instructions": "Fill a highball glass with ice cubes.\nPour 50ml of vodka and 100ml of orange juice over the ice.\nStir gently and garnish with an orange slice.",
       "methodIds": [
-        "stir"
+        "build"
       ],
       "ingredients": [
         {
@@ -33966,7 +34092,7 @@
       "description": "Fruity vodka highball with peach, orange, and cranberry.",
       "instructions": "Fill a highball glass with ice.\nPour vodka, peach schnapps, orange juice, and cranberry juice over the ice.\nStir gently.\nGarnish with an orange slice.",
       "methodIds": [
-        "stir"
+        "build"
       ],
       "ingredients": [
         {
@@ -36107,7 +36233,7 @@
       "description": "A simple Polish cocktail pairing Żubrówka with apple juice and cinnamon.",
       "instructions": "Fill a rocks glass with ice.\nPour 60ml of Żubrówka and 120ml of apple juice.\nAdd a pinch of grated cinnamon and stir gently.\nGarnish with a cinnamon stick and an apple slice.",
       "methodIds": [
-        "stir"
+        "build"
       ],
       "ingredients": [
         {
@@ -36172,7 +36298,7 @@
       "description": "A refreshing long drink of gin, Campari and pineapple juice topped with soda.",
       "instructions": "Fill a collins glass with ice.\nPour 30ml of gin and 30ml of Campari.\nAdd 45ml of pineapple juice, 15ml of sugar syrup and 15ml of lemon juice.\nTop with soda water and stir gently.",
       "methodIds": [
-        "stir"
+        "build"
       ],
       "ingredients": [
         {
@@ -37257,7 +37383,7 @@
       "description": "A long, sparkling gin drink built for easy sipping, pairing Old Tom Gin, Lemon Juice, Simple Syrup with bubbly mixers over ice.",
       "instructions": "Add Old Tom gin, lemon juice, and simple syrup into a collins glass filled with ice.\nTop with soda water and stir gently.\nGarnish with a lemon slice and a maraschino cherry.",
       "methodIds": [
-        "stir"
+        "build"
       ],
       "ingredients": [
         {
@@ -38337,7 +38463,7 @@
       "description": "A non-alcoholic version of the \"Bloody Mary\" cocktail. It is also called the \"Bloody Shame\", \"Bloody Virgin\" or \"Bloody Barbara\".",
       "instructions": "Put ice cubes into a highball glass.\nAdd Worcestershire sauce, Tabasco, salt and black pepper.\nPour tomato juice and the juice of a quarter lemon.\nStir gently and garnish with a celery stalk or lemon wedge.",
       "methodIds": [
-        "stir"
+        "build"
       ],
       "ingredients": [
         {
