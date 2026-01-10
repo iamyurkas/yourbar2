@@ -12729,7 +12729,7 @@
         }
       ],
       "description": "A complex whiskey cocktail where Scotch Whiskey, Red Vermouth, Benedictine meets citrus—bittersweet, zesty, and nicely structured.",
-      "instructions": "",
+      "instructions": "1. Stir all ingredients with ice.\n2. Fine strain into chilled glass.\nGarnish:\nEXPRESS lemon zest twist over the cocktail and discard.\nGarnish with skewered maraschino cherry.",
       "ingredients": [
         {
           "order": 1,
@@ -12769,7 +12769,10 @@
       ],
       "createdAt": 1756840374849,
       "updatedAt": 1758453407049,
-      "photoUri": "assets/cocktails/1756840374849-bobby-burns.jpg"
+      "photoUri": "assets/cocktails/1756840374849-bobby-burns.jpg",
+      "methodIds": [
+        "stir"
+      ]
     },
     {
       "id": 1756589718396,
@@ -13073,7 +13076,7 @@
         }
       ],
       "description": "A whiskey-based Negroni with bourbon, sweet vermouth, and Campari.",
-      "instructions": "Add all ingredients into a mixing glass with ice.\nStir well.\nStrain into a chilled cocktail glass.\nGarnish with an orange twist.",
+      "instructions": "1. Add all ingredients into a mixing glass with ice.\n2. Stir well.\nStrain into a chilled cocktail glass.\n3. Garnish with an orange twist.",
       "methodIds": [
         "stir"
       ],
