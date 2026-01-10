@@ -4,8 +4,8 @@ const STORAGE_FILENAME = 'inventory-state.json';
 let hasLoggedDocumentDirectoryWarning = false;
 let hasLoggedCacheDirectoryWarning = false;
 
-export type InventorySnapshot<TCocktail, TIngredient> = {
-  version: number;
+export type InventorySnapshotV1<TCocktail, TIngredient> = {
+  version: 1;
   cocktails: TCocktail[];
   ingredients: TIngredient[];
   imported?: boolean;
@@ -19,6 +19,36 @@ export type InventorySnapshot<TCocktail, TIngredient> = {
   ratingFilterThreshold?: number;
   startScreen?: string;
 };
+
+export type InventoryDeltaSnapshot<TCocktail, TIngredient> = {
+  version: 2;
+  delta: {
+    cocktails?: {
+      created?: TCocktail[];
+      updated?: TCocktail[];
+      deletedIds?: number[];
+    };
+    ingredients?: {
+      created?: TIngredient[];
+      updated?: TIngredient[];
+      deletedIds?: number[];
+    };
+  };
+  imported?: boolean;
+  availableIngredientIds?: number[];
+  shoppingIngredientIds?: number[];
+  cocktailRatings?: Record<string, number>;
+  ignoreGarnish?: boolean;
+  allowAllSubstitutes?: boolean;
+  useImperialUnits?: boolean;
+  keepScreenAwake?: boolean;
+  ratingFilterThreshold?: number;
+  startScreen?: string;
+};
+
+export type InventorySnapshot<TCocktail, TIngredient> =
+  | InventorySnapshotV1<TCocktail, TIngredient>
+  | InventoryDeltaSnapshot<TCocktail, TIngredient>;
 
 function joinDirectoryPath(directory: string | null | undefined, filename: string): string | undefined {
   if (!directory) {
