@@ -455,15 +455,19 @@ export default function CocktailDetailsScreen() {
   const displayedImageSource = photoSource ?? glassSource;
   const glassLabel = useMemo(() => formatGlassLabel(cocktail?.glassId), [cocktail?.glassId]);
   const methodDetails = useMemo(() => {
+    if (!cocktail) {
+      return [];
+    }
+
     const legacyMethodId = (cocktail as { methodId?: string | null }).methodId ?? null;
     const nextMethodIds =
-      cocktail?.methodIds && cocktail.methodIds.length > 0
+      cocktail.methodIds && cocktail.methodIds.length > 0
         ? cocktail.methodIds
         : legacyMethodId
           ? [legacyMethodId]
           : [];
     return nextMethodIds.map((id) => getCocktailMethodById(id)).filter(Boolean);
-  }, [cocktail?.methodIds, cocktail]);
+  }, [cocktail]);
 
   const [expandedMethodIds, setExpandedMethodIds] = useState<string[]>([]);
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
