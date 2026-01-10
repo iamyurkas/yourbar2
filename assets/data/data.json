@@ -6966,7 +6966,7 @@
       "description": "The abbreviation stands for amaretto, Baileys and cognac.",
       "instructions": "1. Pour 15ml of amaretto into a shooter glass.\n2. Carefully pour 15ml of Baileys on top of the amaretto.\n3. Helping yourself with a teaspoon, pour 15ml of cognac on top of the Baileys.",
       "methodIds": [
-        "build"
+        "layer"
       ],
       "ingredients": [
         {
@@ -8680,7 +8680,7 @@
       "description": "A rich, creamy gin drink featuring Creme de Cacao White, Sloe Gin, Brandy—dessert-like, smooth, and indulgent.",
       "instructions": "1. Pour 15ml of crème de cacao white into a shooter glass.\n2. Carefully pour 10ml of sloe gin on top of the crème de cacao and 10ml of brandy on top of the gin.\n3. Carefully top with 10ml of cream or whipped cream.",
       "methodIds": [
-        "build"
+        "layer"
       ],
       "ingredients": [
         {
@@ -14443,7 +14443,7 @@
       "description": "A variation of the \"Slippery Nipple\" cocktail but with butterscotch instead of Sambuca. This one is even sweeter and softer than the original.",
       "instructions": "Pour 25ml of butterscotch liqueur into a shooter glass.\nCarefully pour 25ml of Baileys on top.\nOptionally, add a dash of grenadine syrup.",
       "methodIds": [
-        "build"
+        "layer"
       ],
       "ingredients": [
         {
@@ -19628,7 +19628,7 @@
       "description": "Although Dr Pepper is not one of ingredients of this cocktail, it is claimed that it tastes like Dr Pepper.",
       "instructions": "Pour a pint of beer.\nPour 30ml of amaretto into a shot glass.\nCarefully pour 15ml of overproof rum on top of the amaretto.\nLight the shot and allow it to burn for several seconds.\nDrop the flaming shot into the beer and drink.",
       "methodIds": [
-        "build"
+        "layer"
       ],
       "ingredients": [
         {
@@ -19682,7 +19682,7 @@
       "description": "A very strong and beautiful cocktail.",
       "instructions": "Pour 30ml of coffee liqueur into a cocktail glass.\nCarefully pour 30ml of sambuca over the coffee liqueur.\nPrepare 30ml of Baileys and 30ml of blue curaçao in two separate shots.\nLight the sambuca and start drinking through the straw.\nDon't stop – drink the two shots into the glass just before you finish the sambuca.",
       "methodIds": [
-        "build"
+        "layer"
       ],
       "ingredients": [
         {
@@ -19824,7 +19824,7 @@
       "description": "A strong and really invigorating shot.",
       "instructions": "Pour 20ml of sambuca into a shooter.\nCarefully pour 25ml of tequila on top of the sambuca.\nAdd a dash of Tabasco.",
       "methodIds": [
-        "build"
+        "layer"
       ],
       "ingredients": [
         {
@@ -22080,7 +22080,7 @@
       "description": "The shot variation of the \"Green Mexican\" cocktail.",
       "instructions": "Pour 20ml of Midori into a shooter glass.\nCarefully add 10ml of lime juice and 20ml of tequila.",
       "methodIds": [
-        "build"
+        "layer"
       ],
       "ingredients": [
         {
@@ -22993,7 +22993,7 @@
       "description": "A rich, creamy spirit drink featuring Sambuca, Baileys, Absinthe—dessert-like, smooth, and indulgent.",
       "instructions": "Pour 20ml of sambuca into a shooter glass.\nCarefully pour 15ml of Baileys and 15ml of absinthe.\nAdd several grenadine drops using a straw.",
       "methodIds": [
-        "build"
+        "layer"
       ],
       "ingredients": [
         {
@@ -34688,7 +34688,7 @@
       "description": "A very smooth and beautiful shot.",
       "instructions": "Pour 20ml of sambuca into a shooter glass.\nCarefully pour 25ml of Baileys on top of the sambuca.\nAdd a dash of grenadine syrup (optional).",
       "methodIds": [
-        "build"
+        "layer"
       ],
       "ingredients": [
         {
