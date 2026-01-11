@@ -7,13 +7,16 @@ import 'react-native-reanimated';
 import { Colors } from '@/constants/theme';
 import { InventoryProvider } from '@/providers/inventory-provider';
 import { UnsavedChangesProvider } from '@/providers/unsaved-changes-provider';
-import { getAppTheme } from '@/theme/theme';
+import { getAppTheme, palette } from '@/theme/theme';
+import { useColorScheme } from 'react-native';
 
 export const unstable_settings = {
   anchor: '(tabs)',
 };
 
 export default function RootLayout() {
+  const colorScheme = useColorScheme();
+  const isDarkMode = colorScheme === 'dark';
   const navigationTheme = ({
     ...DefaultTheme,
     colors: {
@@ -36,7 +39,10 @@ export default function RootLayout() {
               <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
               <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
             </Stack>
-            <StatusBar style="dark" />
+            <StatusBar
+              style={isDarkMode ? 'light' : 'dark'}
+              backgroundColor={isDarkMode ? palette.inverseSurface : undefined}
+            />
           </ThemeProvider>
         </PaperProvider>
       </InventoryProvider>
