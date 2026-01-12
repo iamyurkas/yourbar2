@@ -5,15 +5,6 @@ import { type ComponentProps } from 'react';
 import ShakerIcon from '@/assets/images/shaker.svg';
 import { loadInventoryData } from '@/libs/inventory-data';
 
-export type CocktailMethodId =
-  | 'build'
-  | 'stir'
-  | 'shake'
-  | 'muddle'
-  | 'layer'
-  | 'blend'
-  | 'throwing';
-
 export type CocktailMethod = {
   id: CocktailMethodId;
   label: string;
@@ -31,7 +22,7 @@ export function getCocktailMethods(): CocktailMethod[] {
 
 export const COCKTAIL_METHODS: CocktailMethod[] = getCocktailMethods();
 
-export const METHOD_ICON_MAP: Record<CocktailMethodId, MethodIcon> = {
+export const METHOD_ICON_MAP = {
   build: { type: 'icon', name: 'beer' },
   stir: { type: 'icon', name: 'delete-variant' },
   shake: { type: 'asset', source: ShakerIcon },
@@ -39,7 +30,9 @@ export const METHOD_ICON_MAP: Record<CocktailMethodId, MethodIcon> = {
   layer: { type: 'icon', name: 'layers' },
   blend: { type: 'icon', name: 'blender' },
   throwing: { type: 'icon', name: 'swap-horizontal' },
-};
+} as const satisfies Record<string, MethodIcon>;
+
+export type CocktailMethodId = keyof typeof METHOD_ICON_MAP;
 
 export function getCocktailMethodById(id?: string | null): CocktailMethod | undefined {
   if (!id) {
