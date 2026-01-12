@@ -94,6 +94,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     startScreen,
     setStartScreen,
     resetInventoryFromBundle,
+    exportInventoryData,
     customCocktailTags,
     customIngredientTags,
     createCustomCocktailTag,
@@ -209,6 +210,34 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   const handleResetInventory = async () => {
     await resetInventoryFromBundle();
     onClose();
+  };
+
+  const handleExportData = async () => {
+    try {
+      const exportedPath = await exportInventoryData();
+      if (!exportedPath) {
+        setDialogOptions({
+          title: 'Export failed',
+          message: 'Unable to export your data. Please try again.',
+          actions: [{ label: 'OK' }],
+        });
+        return;
+      }
+
+      setDialogOptions({
+        title: 'Export complete',
+        message: `Saved to ${exportedPath}`,
+        actions: [{ label: 'OK' }],
+      });
+      onClose();
+    } catch (error) {
+      console.error('Failed to export inventory data', error);
+      setDialogOptions({
+        title: 'Export failed',
+        message: 'Unable to export your data. Please try again.',
+        actions: [{ label: 'OK' }],
+      });
+    }
   };
 
   const handleRatingThresholdPress = () => {
@@ -572,6 +601,27 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 <Text style={[styles.settingLabel, { color: palette.onSurface }]}>Reload bundled data</Text>
                 <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>
                   Clear saved inventory and reload assets from data.json
+                </Text>
+              </View>
+            </Pressable>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Export cocktail and ingredient data"
+              onPress={handleExportData}
+              style={[
+                styles.actionRow,
+                {
+                  borderColor: palette.outline,
+                  backgroundColor: palette.surface,
+                },
+              ]}>
+              <View style={[styles.actionIcon, { backgroundColor: palette.surfaceVariant }]}>
+                <MaterialCommunityIcons name="download" size={16} color={palette.onSurfaceVariant} />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text style={[styles.settingLabel, { color: palette.onSurface }]}>Export data</Text>
+                <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>
+                  Save cocktails and ingredients as JSON
                 </Text>
               </View>
             </Pressable>

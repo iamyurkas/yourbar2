@@ -1,3 +1,4 @@
+import * as FileSystem from 'expo-file-system/legacy';
 import React, {
   createContext,
   useCallback,
@@ -97,6 +98,7 @@ type InventoryContextValue = {
   setRatingFilterThreshold: (value: number) => void;
   startScreen: StartScreen;
   setStartScreen: (value: StartScreen) => void;
+  exportInventoryData: () => Promise<string | null>;
 };
 
 type InventoryState = {
@@ -150,6 +152,7 @@ type CocktailStorageRecord = Omit<CocktailRecord, 'searchName' | 'searchTokens'>
 type IngredientStorageRecord = Omit<IngredientRecord, 'searchName' | 'searchTokens'>;
 
 const INVENTORY_SNAPSHOT_VERSION = 2;
+const EXPORT_FILENAME_PREFIX = 'yourbar-data';
 
 declare global {
   // eslint-disable-next-line no-var
@@ -197,6 +200,38 @@ function normalizeSearchFields<T extends { name?: string | null; searchName?: st
       searchTokensNormalized,
     };
   });
+}
+
+function buildSearchFields<T extends { name?: string | null; searchName?: string | null; searchTokens?: string[] | null }>(
+  item: T,
+) {
+  const baseName = item.searchName ?? item.name ?? '';
+  const searchName = baseName.trim().toLowerCase();
+  const searchTokens = (item.searchTokens && item.searchTokens.length > 0
+    ? item.searchTokens
+    : searchName.split(/\s+/)
+  )
+    .map((token) => token.toLowerCase())
+    .filter(Boolean);
+
+  return { searchName, searchTokens };
+}
+
+function joinDirectoryPath(directory: string | null | undefined, filename: string): string | undefined {
+  if (!directory) {
+    return undefined;
+  }
+
+  return `${directory.replace(/\/?$/, '/')}${filename}`;
+}
+
+function resolveExportPath(filename: string): string | undefined {
+  const documentPath = joinDirectoryPath(FileSystem.documentDirectory, filename);
+  if (documentPath) {
+    return documentPath;
+  }
+
+  return joinDirectoryPath(FileSystem.cacheDirectory, filename);
 }
 
 function createInventoryStateFromData(data: InventoryData, imported: boolean): InventoryState {
@@ -307,6 +342,28 @@ function toIngredientStorageRecord(ingredient: Ingredient | IngredientRecord): I
     usageCount: ingredient.usageCount ?? undefined,
     photoUri: ingredient.photoUri ?? undefined,
   } satisfies IngredientStorageRecord;
+}
+
+function toIngredientExportRecord(ingredient: Ingredient): InventoryData['ingredients'][number] {
+  const storageRecord = toIngredientStorageRecord(ingredient);
+  const { searchName, searchTokens } = buildSearchFields(ingredient);
+
+  return {
+    ...storageRecord,
+    searchName,
+    searchTokens,
+  } satisfies InventoryData['ingredients'][number];
+}
+
+function toCocktailExportRecord(cocktail: Cocktail): InventoryData['cocktails'][number] {
+  const storageRecord = toCocktailStorageRecord(cocktail);
+  const { searchName, searchTokens } = buildSearchFields(cocktail);
+
+  return {
+    ...storageRecord,
+    searchName,
+    searchTokens,
+  } satisfies InventoryData['cocktails'][number];
 }
 
 function areStorageRecordsEqual<TRecord>(left: TRecord, right: TRecord): boolean {
@@ -1231,6 +1288,27 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     setCustomIngredientTags([]);
   }, []);
 
+  const exportInventoryData = useCallback(async (): Promise<string | null> => {
+    if (!inventoryState) {
+      return null;
+    }
+
+    const exportData: InventoryData = {
+      cocktails: inventoryState.cocktails.map(toCocktailExportRecord),
+      ingredients: inventoryState.ingredients.map(toIngredientExportRecord),
+    };
+    const serialized = JSON.stringify(exportData, null, 2);
+    const filename = `${EXPORT_FILENAME_PREFIX}-${Date.now()}.json`;
+    const outputPath = resolveExportPath(filename);
+
+    if (!outputPath) {
+      return null;
+    }
+
+    await FileSystem.writeAsStringAsync(outputPath, serialized);
+    return outputPath;
+  }, [inventoryState]);
+
   const updateIngredient = useCallback(
     (id: number, input: CreateIngredientInput) => {
       let updated: Ingredient | undefined;
@@ -2022,6 +2100,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       setKeepScreenAwake: handleSetKeepScreenAwake,
       setRatingFilterThreshold: handleSetRatingFilterThreshold,
       setStartScreen: handleSetStartScreen,
+      exportInventoryData,
     };
   }, [
     cocktailsWithRatings,
@@ -2064,6 +2143,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     handleSetRatingFilterThreshold,
     handleSetStartScreen,
     resetInventoryFromBundle,
+    exportInventoryData,
   ]);
 
   return <InventoryContext.Provider value={value}>{children}</InventoryContext.Provider>;
