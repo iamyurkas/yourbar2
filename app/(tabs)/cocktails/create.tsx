@@ -27,9 +27,9 @@ import { SubstituteModal } from '@/components/SubstituteModal';
 import { TagEditorModal } from '@/components/TagEditorModal';
 import { TagPill } from '@/components/TagPill';
 import {
+  METHOD_ICON_MAP,
   getCocktailMethodById,
   getCocktailMethods,
-  METHOD_ICON_MAP,
   type CocktailMethodId,
 } from '@/constants/cocktail-methods';
 import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
@@ -1290,7 +1290,7 @@ export default function CreateCocktailScreen() {
                   numberOfLines={1}>
                   {selectedMethods.length
                     ? selectedMethods.map((method) => method.label).join(', ')
-                    : 'Select methods'}
+                    : 'Not specified'}
                 </Text>
               </View>
               <MaterialCommunityIcons name="chevron-down" size={20} color={palette.onSurfaceVariant} />
@@ -2287,7 +2287,7 @@ const styles = StyleSheet.create({
   },
   methodPickerLabel: {
     fontSize: 15,
-    fontWeight: '600',
+    fontWeight: '400',
     flex: 1,
   },
   glassRow: {
