@@ -167,7 +167,6 @@ export function TagEditorModal({
               { offset: '83%', color: '#5e5ce6' },
               { offset: '100%', color: '#ff3b30' },
             ]}
-            palette={palette}
           />
           <ColorSlider
             label="Tone"
@@ -177,7 +176,6 @@ export function TagEditorModal({
               { offset: '0%', color: `hsl(${hue}, 80%, 15%)` },
               { offset: '100%', color: `hsl(${hue}, 80%, 85%)` },
             ]}
-            palette={palette}
           />
           <Pressable
             accessibilityRole="button"
@@ -201,10 +199,9 @@ type ColorSliderProps = {
   value: number;
   onChange: (value: number) => void;
   gradientStops: Array<{ offset: string; color: string }>;
-  palette: typeof Colors;
 };
 
-function ColorSlider({ label, value, onChange, gradientStops, palette }: ColorSliderProps) {
+function ColorSlider({ label, value, onChange, gradientStops }: ColorSliderProps) {
   const [trackWidth, setTrackWidth] = useState(0);
 
   const updateValue = useCallback(
