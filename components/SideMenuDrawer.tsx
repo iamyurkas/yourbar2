@@ -2,7 +2,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { Image, type ImageSource } from 'expo-image';
 import React, { useEffect, useMemo, useRef, useState, type ComponentProps } from 'react';
-import { Animated, Dimensions, Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Animated, Dimensions, Modal, Pressable, ScrollView, Share, StyleSheet, Text, View } from 'react-native';
 
 import CocktailIcon from '@/assets/images/cocktails.svg';
 import IngredientsIcon from '@/assets/images/ingredients.svg';
@@ -224,12 +224,20 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
         return;
       }
 
-      setDialogOptions({
-        title: 'Export complete',
-        message: `Saved to ${exportedPath}`,
-        actions: [{ label: 'OK' }],
+      const shareResult = await Share.share({
+        title: 'Export data',
+        message: 'Cocktail and ingredient export',
+        url: exportedPath,
       });
-      onClose();
+
+      setDialogOptions({
+        title: shareResult.action === Share.sharedAction ? 'Export ready' : 'Export canceled',
+        message:
+          shareResult.action === Share.sharedAction
+            ? 'Choose where to save or share your export.'
+            : 'The export file is still available if you want to try again.',
+        actions: [{ label: 'OK', onPress: onClose }],
+      });
     } catch (error) {
       console.error('Failed to export inventory data', error);
       setDialogOptions({
