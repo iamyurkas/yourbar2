@@ -668,6 +668,7 @@ const styles = StyleSheet.create({
   filterMenu: {
     position: 'absolute',
     right: 16,
+    minHeight: 49,
     paddingHorizontal: 12,
     paddingVertical: 12,
     borderRadius: 12,
