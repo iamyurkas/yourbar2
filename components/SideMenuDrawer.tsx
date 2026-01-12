@@ -1,8 +1,21 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { Image, type ImageSource } from 'expo-image';
+import * as FileSystem from 'expo-file-system/legacy';
 import React, { useEffect, useMemo, useRef, useState, type ComponentProps } from 'react';
-import { Animated, Dimensions, Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import {
+  Animated,
+  Dimensions,
+  Modal,
+  Pressable,
+  ScrollView,
+  Platform,
+  Share,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 
 import CocktailIcon from '@/assets/images/cocktails.svg';
 import IngredientsIcon from '@/assets/images/ingredients.svg';
@@ -102,6 +115,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     createCustomIngredientTag,
     updateCustomIngredientTag,
     deleteCustomIngredientTag,
+    exportInventoryData,
   } = useInventory();
   const [isMounted, setIsMounted] = useState(visible);
   const [isRatingModalVisible, setRatingModalVisible] = useState(false);
@@ -114,6 +128,9 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   const [tagEditorType, setTagEditorType] = useState<'cocktail' | 'ingredient'>('cocktail');
   const [tagEditorTarget, setTagEditorTarget] = useState<{ id: number; name: string; color: string } | null>(null);
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(null);
+  const [isExportModalVisible, setExportModalVisible] = useState(false);
+  const [exportFileName, setExportFileName] = useState('yourbar-data.json');
+  const [isExporting, setIsExporting] = useState(false);
   const translateX = useRef(new Animated.Value(-MENU_WIDTH)).current;
   const backdropOpacity = useRef(new Animated.Value(0)).current;
 
@@ -283,8 +300,78 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     setTagEditorVisible(false);
   };
 
+  const handleOpenExportModal = () => {
+    setExportFileName('yourbar-data.json');
+    setExportModalVisible(true);
+  };
+
+  const handleCloseExportModal = () => {
+    if (isExporting) {
+      return;
+    }
+    setExportModalVisible(false);
+  };
+
   const handleCloseDialog = () => {
     setDialogOptions(null);
+  };
+
+  const handleConfirmExport = async () => {
+    if (isExporting) {
+      return;
+    }
+
+    const exportData = exportInventoryData();
+    if (!exportData) {
+      setDialogOptions({
+        title: 'Export failed',
+        message: 'Inventory data is still loading. Please try again in a moment.',
+        actions: [{ label: 'OK' }],
+      });
+      return;
+    }
+
+    const trimmedName = exportFileName.trim();
+    const baseName = trimmedName || 'yourbar-data.json';
+    const safeName = baseName.replace(/[\\/]/g, '-');
+    const filename = safeName.toLowerCase().endsWith('.json') ? safeName : `${safeName}.json`;
+    const directory = FileSystem.cacheDirectory;
+
+    if (!directory) {
+      setDialogOptions({
+        title: 'Export failed',
+        message: 'Unable to access storage for export.',
+        actions: [{ label: 'OK' }],
+      });
+      return;
+    }
+
+    try {
+      setIsExporting(true);
+      const fileUri = `${directory.replace(/\/?$/, '/')}${filename}`;
+      const contents = JSON.stringify(exportData, null, 2);
+      await FileSystem.writeAsStringAsync(fileUri, contents);
+
+      const shareUri =
+        Platform.OS === 'android' ? await FileSystem.getContentUriAsync(fileUri) : fileUri;
+
+      await Share.share({
+        title: 'Export cocktails & ingredients',
+        url: shareUri,
+        message: 'YourBar export data (JSON).',
+      });
+      setExportModalVisible(false);
+      onClose();
+    } catch (error) {
+      console.warn('Unable to export data', error);
+      setDialogOptions({
+        title: 'Export failed',
+        message: 'We could not generate the export file. Please try again.',
+        actions: [{ label: 'OK' }],
+      });
+    } finally {
+      setIsExporting(false);
+    }
   };
 
   const handleSaveTagEditor = (data: { name: string; color: string }) => {
@@ -556,6 +643,27 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
             </Pressable>
             <Pressable
               accessibilityRole="button"
+              accessibilityLabel="Export recipes and ingredients"
+              onPress={handleOpenExportModal}
+              style={[
+                styles.actionRow,
+                {
+                  borderColor: palette.outline,
+                  backgroundColor: palette.surface,
+                },
+              ]}>
+              <View style={[styles.actionIcon, { backgroundColor: palette.surfaceVariant }]}>
+                <MaterialCommunityIcons name="export-variant" size={16} color={palette.onSurfaceVariant} />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text style={[styles.settingLabel, { color: palette.onSurface }]}>Export data</Text>
+                <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>
+                  Save all cocktails and ingredients as JSON
+                </Text>
+              </View>
+            </Pressable>
+            <Pressable
+              accessibilityRole="button"
               accessibilityLabel="Reload bundled inventory"
               onPress={handleResetInventory}
               style={[
@@ -770,6 +878,84 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
         onClose={handleCloseTagEditor}
         onSave={handleSaveTagEditor}
       />
+      <Modal
+        transparent
+        visible={isExportModalVisible}
+        animationType="fade"
+        onRequestClose={handleCloseExportModal}>
+        <Pressable style={styles.modalOverlay} onPress={handleCloseExportModal} accessibilityRole="button">
+          <Pressable
+            style={[
+              styles.modalCard,
+              {
+                backgroundColor: palette.surface,
+                borderColor: palette.outline,
+                shadowColor: palette.shadow,
+              },
+            ]}
+            accessibilityLabel="Export data"
+            onPress={() => {}}>
+            <View style={styles.modalHeader}>
+              <Text style={[styles.modalTitle, { color: palette.onSurface, flex: 1 }]}>Export data</Text>
+              <Pressable onPress={handleCloseExportModal} accessibilityRole="button" accessibilityLabel="Close">
+                <MaterialCommunityIcons name="close" size={22} color={palette.onSurfaceVariant} />
+              </Pressable>
+            </View>
+            <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>
+              Choose a file name for the JSON export.
+            </Text>
+            <TextInput
+              value={exportFileName}
+              onChangeText={setExportFileName}
+              style={[
+                styles.exportInput,
+                {
+                  borderColor: palette.outline,
+                  color: palette.onSurface,
+                  backgroundColor: palette.surfaceBright,
+                },
+              ]}
+              autoCapitalize="none"
+              autoCorrect={false}
+              placeholder="yourbar-data.json"
+              placeholderTextColor={palette.onSurfaceVariant}
+              accessibilityLabel="Export file name"
+              editable={!isExporting}
+            />
+            <View style={styles.exportActions}>
+              <Pressable
+                accessibilityRole="button"
+                onPress={handleCloseExportModal}
+                style={[
+                  styles.exportActionButton,
+                  {
+                    backgroundColor: palette.surfaceVariant,
+                    borderColor: palette.outlineVariant,
+                  },
+                ]}
+                disabled={isExporting}>
+                <Text style={[styles.exportActionLabel, { color: palette.onSurface }]}>Cancel</Text>
+              </Pressable>
+              <Pressable
+                accessibilityRole="button"
+                onPress={handleConfirmExport}
+                style={[
+                  styles.exportActionButton,
+                  {
+                    backgroundColor: palette.tint,
+                    borderColor: palette.tint,
+                    opacity: isExporting ? 0.7 : 1,
+                  },
+                ]}
+                disabled={isExporting}>
+                <Text style={[styles.exportActionLabel, { color: palette.onPrimary }]}>
+                  {isExporting ? 'Exporting…' : 'Export'}
+                </Text>
+              </Pressable>
+            </View>
+          </Pressable>
+        </Pressable>
+      </Modal>
       <AppDialog
         visible={dialogOptions != null}
         title={dialogOptions?.title ?? ''}
@@ -952,6 +1138,29 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '700',
     marginTop: 4,
+  },
+  exportInput: {
+    borderWidth: StyleSheet.hairlineWidth,
+    borderRadius: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    fontSize: 15,
+  },
+  exportActions: {
+    flexDirection: 'row',
+    gap: 12,
+    justifyContent: 'flex-end',
+  },
+  exportActionButton: {
+    flex: 1,
+    paddingVertical: 12,
+    borderRadius: 12,
+    borderWidth: StyleSheet.hairlineWidth,
+  },
+  exportActionLabel: {
+    textAlign: 'center',
+    fontWeight: '600',
+    fontSize: 15,
   },
   startScreenModalScroll: {
     maxHeight: '100%',

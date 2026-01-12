@@ -97,6 +97,7 @@ type InventoryContextValue = {
   setRatingFilterThreshold: (value: number) => void;
   startScreen: StartScreen;
   setStartScreen: (value: StartScreen) => void;
+  exportInventoryData: () => InventoryData | null;
 };
 
 type InventoryState = {
@@ -307,6 +308,28 @@ function toIngredientStorageRecord(ingredient: Ingredient | IngredientRecord): I
     usageCount: ingredient.usageCount ?? undefined,
     photoUri: ingredient.photoUri ?? undefined,
   } satisfies IngredientStorageRecord;
+}
+
+function toIngredientExportRecord(ingredient: Ingredient | IngredientRecord): IngredientRecord {
+  const normalizedTags = normalizeTagList(ingredient.tags);
+  const fallbackName = ingredient.name?.trim() ?? '';
+  const normalizedName = ingredient.searchName?.trim() || fallbackName.toLowerCase();
+  const searchTokens =
+    ingredient.searchTokens && ingredient.searchTokens.length > 0
+      ? ingredient.searchTokens
+      : normalizedName.split(/\s+/).filter(Boolean);
+
+  return {
+    id: ingredient.id,
+    name: ingredient.name,
+    description: ingredient.description ?? undefined,
+    tags: normalizedTags && normalizedTags.length > 0 ? normalizedTags : undefined,
+    baseIngredientId: ingredient.baseIngredientId ?? undefined,
+    usageCount: ingredient.usageCount ?? undefined,
+    searchName: normalizedName,
+    searchTokens,
+    photoUri: ingredient.photoUri ?? undefined,
+  } satisfies IngredientRecord;
 }
 
 function areStorageRecordsEqual<TRecord>(left: TRecord, right: TRecord): boolean {
@@ -1981,6 +2004,17 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     });
   }, []);
 
+  const exportInventoryData = useCallback((): InventoryData | null => {
+    if (!inventoryState) {
+      return null;
+    }
+
+    return {
+      cocktails: inventoryState.cocktails.map((cocktail) => toCocktailStorageRecord(cocktail)),
+      ingredients: inventoryState.ingredients.map((ingredient) => toIngredientExportRecord(ingredient)),
+    };
+  }, [inventoryState]);
+
   const value = useMemo<InventoryContextValue>(() => {
     return {
       cocktails: cocktailsWithRatings,
@@ -2022,6 +2056,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       setKeepScreenAwake: handleSetKeepScreenAwake,
       setRatingFilterThreshold: handleSetRatingFilterThreshold,
       setStartScreen: handleSetStartScreen,
+      exportInventoryData,
     };
   }, [
     cocktailsWithRatings,
@@ -2063,6 +2098,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     handleSetKeepScreenAwake,
     handleSetRatingFilterThreshold,
     handleSetStartScreen,
+    exportInventoryData,
     resetInventoryFromBundle,
   ]);
 
