@@ -85,6 +85,8 @@ type SideMenuDrawerProps = {
 export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   const palette = Colors;
   const {
+    cocktails,
+    ingredients,
     ignoreGarnish,
     setIgnoreGarnish,
     allowAllSubstitutes,
@@ -122,6 +124,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(null);
   const [isExporting, setIsExporting] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
+  const [isBackingUpPhotos, setIsBackingUpPhotos] = useState(false);
   const translateX = useRef(new Animated.Value(-MENU_WIDTH)).current;
   const backdropOpacity = useRef(new Animated.Value(0)).current;
 
@@ -419,6 +422,142 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     setTagEditorVisible(false);
   };
 
+  const handleBackupPhotos = async () => {
+    if (isBackingUpPhotos) {
+      return;
+    }
+
+    const photoEntries = new Map<
+      string,
+      { sourceType: 'cocktail' | 'ingredient'; sourceId?: number; sourceName?: string }
+    >();
+
+    cocktails.forEach((cocktail) => {
+      const uri = cocktail.photoUri?.trim();
+      if (!uri) {
+        return;
+      }
+
+      if (!photoEntries.has(uri)) {
+        photoEntries.set(uri, {
+          sourceType: 'cocktail',
+          sourceId: typeof cocktail.id === 'number' ? cocktail.id : undefined,
+          sourceName: cocktail.name ?? undefined,
+        });
+      }
+    });
+
+    ingredients.forEach((ingredient) => {
+      const uri = ingredient.photoUri?.trim();
+      if (!uri) {
+        return;
+      }
+
+      if (!photoEntries.has(uri)) {
+        photoEntries.set(uri, {
+          sourceType: 'ingredient',
+          sourceId: typeof ingredient.id === 'number' ? ingredient.id : undefined,
+          sourceName: ingredient.name ?? undefined,
+        });
+      }
+    });
+
+    if (photoEntries.size === 0) {
+      showDialogMessage('No photos found', 'Add photos to cocktails or ingredients before backing them up.');
+      return;
+    }
+
+    setIsBackingUpPhotos(true);
+
+    const failures: Array<{ uri: string; reason: string }> = [];
+    const photos: Array<{
+      sourceType: 'cocktail' | 'ingredient';
+      sourceId?: number;
+      sourceName?: string;
+      filename: string;
+      dataBase64: string;
+    }> = [];
+
+    try {
+      const sharingAvailable = await Sharing.isAvailableAsync();
+      if (!sharingAvailable) {
+        showDialogMessage('Sharing unavailable', 'Sharing is not available on this device.');
+        return;
+      }
+
+      const directory = FileSystem.cacheDirectory ?? FileSystem.documentDirectory;
+      if (!directory) {
+        showDialogMessage('Backup failed', 'Unable to access device storage.');
+        return;
+      }
+
+      const baseDirectory = directory.replace(/\/?$/, '/');
+      const timestamp = new Date().toISOString().slice(0, 10);
+      const exportUri = `${baseDirectory}yourbar-photos-${timestamp}.json`;
+      let index = 0;
+
+      for (const [uri, source] of photoEntries.entries()) {
+        index += 1;
+        const extensionMatch = uri.match(/\.(\w+)(?:\?|#|$)/);
+        const extension = extensionMatch?.[1] ?? 'jpg';
+        const filename = `${source.sourceType}-${source.sourceId ?? index}.${extension}`;
+
+        try {
+          let localUri = uri;
+
+          if (/^https?:/i.test(uri)) {
+            const downloadTarget = `${baseDirectory}photo-backup-${index}.${extension}`;
+            const downloadResult = await FileSystem.downloadAsync(uri, downloadTarget);
+            localUri = downloadResult.uri;
+          }
+
+          const dataBase64 = await FileSystem.readAsStringAsync(localUri, {
+            encoding: FileSystem.EncodingType.Base64,
+          });
+
+          photos.push({
+            sourceType: source.sourceType,
+            sourceId: source.sourceId,
+            sourceName: source.sourceName,
+            filename,
+            dataBase64,
+          });
+        } catch (error) {
+          failures.push({ uri, reason: error instanceof Error ? error.message : 'Unknown error' });
+        }
+      }
+
+      const payload = {
+        exportedAt: new Date().toISOString(),
+        count: photos.length,
+        photos,
+        failures,
+      };
+
+      await FileSystem.writeAsStringAsync(exportUri, JSON.stringify(payload, null, 2), {
+        encoding: FileSystem.EncodingType.UTF8,
+      });
+
+      await Sharing.shareAsync(exportUri, {
+        mimeType: 'application/json',
+        dialogTitle: 'Backup photos',
+        UTI: 'public.json',
+      });
+
+      if (failures.length > 0) {
+        showDialogMessage(
+          'Backup completed with warnings',
+          `Saved ${photos.length} photo${photos.length === 1 ? '' : 's'}. ${failures.length} failed to export.`,
+        );
+      }
+    } catch (error) {
+      console.error('Failed to backup photos', error);
+      showDialogMessage('Backup failed', 'Please try again.');
+    } finally {
+      setIsBackingUpPhotos(false);
+    }
+  };
+
   const handleDeleteTag = (type: 'cocktail' | 'ingredient', tag: { id: number; name: string }) => {
     setDialogOptions({
       title: 'Delete tag',
@@ -693,6 +832,31 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 </Text>
                 <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>
                   Backup data to a file
+                </Text>
+              </View>
+            </Pressable>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Backup photos"
+              onPress={handleBackupPhotos}
+              disabled={isBackingUpPhotos || isExporting || isImporting}
+              style={({ pressed }) => [
+                styles.actionRow,
+                {
+                  borderColor: palette.outline,
+                  backgroundColor: palette.surface,
+                },
+                pressed || isBackingUpPhotos ? { opacity: 0.8 } : null,
+              ]}>
+              <View style={[styles.actionIcon, { backgroundColor: palette.surfaceVariant }]}>
+                <MaterialCommunityIcons name="image-multiple" size={16} color={palette.onSurfaceVariant} />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text style={[styles.settingLabel, { color: palette.onSurface }]}>
+                  {isBackingUpPhotos ? 'Backing up photos...' : 'Backup photos'}
+                </Text>
+                <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>
+                  Save all cocktail and ingredient photos
                 </Text>
               </View>
             </Pressable>
