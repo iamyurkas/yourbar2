@@ -552,7 +552,7 @@ export default function IngredientsScreen() {
   const emptyMessage = useMemo(() => {
     switch (activeTab) {
       case 'my':
-        return 'Mark which ingredients you already have to see them here.';
+        return 'Mark ingredients you have to see them here.';
       case 'shopping':
         return 'There are no ingredients in your shopping list yet.';
       default:
