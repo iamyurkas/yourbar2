@@ -21,8 +21,8 @@ import { TagPill } from '@/components/TagPill';
 import type { SegmentTabOption } from '@/components/TopBars';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { Colors } from '@/constants/theme';
-import { getLastIngredientTab, setLastIngredientTab, type IngredientTabKey } from '@/libs/collection-tabs';
 import { isCocktailReady } from '@/libs/cocktail-availability';
+import { getLastIngredientTab, setLastIngredientTab, type IngredientTabKey } from '@/libs/collection-tabs';
 import {
   createIngredientLookup,
   getVisibleIngredientIdsForCocktail,
@@ -771,7 +771,7 @@ export default function IngredientsScreen() {
           contentContainerStyle={styles.listContent}
           showsVerticalScrollIndicator
           ListEmptyComponent={
-            <Text style={[styles.emptyLabel, { color: paletteColors.onSurfaceVariant }]}>No ingredients yet</Text>
+            <Text style={[styles.emptyLabel, { color: paletteColors.onSurfaceVariant }]}>No ingredients in the list</Text>
           }
         />
       </View>
