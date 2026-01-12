@@ -23,13 +23,13 @@ export function getCocktailMethods(): CocktailMethod[] {
 export const COCKTAIL_METHODS: CocktailMethod[] = getCocktailMethods();
 
 export const METHOD_ICON_MAP = {
-  build: { type: 'icon', name: 'beer' },
-  stir: { type: 'icon', name: 'delete-variant' },
-  shake: { type: 'asset', source: ShakerIcon },
-  muddle: { type: 'icon', name: 'bottle-soda' },
-  layer: { type: 'icon', name: 'layers' },
   blend: { type: 'icon', name: 'blender' },
+  muddle: { type: 'icon', name: 'bottle-soda' },
+  shake: { type: 'asset', source: ShakerIcon },
+  stir: { type: 'icon', name: 'delete-variant' },
   throwing: { type: 'icon', name: 'swap-horizontal' },
+  build: { type: 'icon', name: 'beer' },
+  layer: { type: 'icon', name: 'layers' },
 } as const satisfies Record<string, MethodIcon>;
 
 export type CocktailMethodId = keyof typeof METHOD_ICON_MAP;
