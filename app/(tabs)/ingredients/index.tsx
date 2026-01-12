@@ -874,6 +874,7 @@ const styles = StyleSheet.create({
   },
   filterMenuScroll: {
     maxHeight: 540,
+    paddingBottom: 2,
   },
   filterTagList: {
     flexDirection: 'column',
