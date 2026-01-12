@@ -9,6 +9,7 @@ import {
   StyleSheet,
   Text,
   View,
+  useWindowDimensions,
   type LayoutChangeEvent,
   type LayoutRectangle,
 } from 'react-native';
@@ -42,6 +43,8 @@ const TAB_OPTIONS: SegmentTabOption[] = [
   { key: 'my', label: 'My' },
   { key: 'shopping', label: 'Shopping' },
 ];
+const FILTER_MENU_MAX_HEIGHT = 540;
+const FILTER_MENU_VERTICAL_PADDING = 24;
 
 type IngredientTagOption = {
   key: string;
@@ -223,6 +226,7 @@ export default function IngredientsScreen() {
   const [optimisticAvailability, setOptimisticAvailability] = useState<Map<number, boolean>>(
     () => new Map(),
   );
+  const { height: windowHeight } = useWindowDimensions();
   const [, startAvailabilityTransition] = useTransition();
   const paletteColors = Colors;
   const defaultTagColor = tagColors.yellow ?? paletteColors.highlightFaint;
@@ -561,16 +565,20 @@ export default function IngredientsScreen() {
     }
   }, [activeTab]);
   const filterMenuTop = useMemo(() => {
+    let nextTop = 0;
     if (headerLayout && filterAnchorLayout) {
-      return headerLayout.y + filterAnchorLayout.y + filterAnchorLayout.height + 6;
+      nextTop = headerLayout.y + filterAnchorLayout.y + filterAnchorLayout.height + 6;
+    } else if (headerLayout) {
+      nextTop = headerLayout.y + headerLayout.height;
     }
 
-    if (headerLayout) {
-      return headerLayout.y + headerLayout.height;
+    if (windowHeight > 0) {
+      const maxTop = Math.max(0, windowHeight - FILTER_MENU_MAX_HEIGHT - 16);
+      return Math.min(nextTop, maxTop);
     }
 
-    return 0;
-  }, [filterAnchorLayout, headerLayout]);
+    return nextTop;
+  }, [filterAnchorLayout, headerLayout, windowHeight]);
 
   const effectiveAvailableIngredientIds = useMemo(() => {
     if (optimisticAvailability.size === 0) {
@@ -863,6 +871,7 @@ const styles = StyleSheet.create({
     right: 16,
     paddingHorizontal: 12,
     paddingVertical: 12,
+    maxHeight: FILTER_MENU_MAX_HEIGHT,
     borderRadius: 12,
     borderWidth: StyleSheet.hairlineWidth,
     alignItems: 'flex-end',
@@ -873,7 +882,7 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   filterMenuScroll: {
-    maxHeight: 540,
+    maxHeight: FILTER_MENU_MAX_HEIGHT - FILTER_MENU_VERTICAL_PADDING,
   },
   filterTagList: {
     flexDirection: 'column',

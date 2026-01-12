@@ -9,6 +9,7 @@ import {
   StyleSheet,
   Text,
   View,
+  useWindowDimensions,
   type LayoutChangeEvent,
   type LayoutRectangle,
 } from 'react-native';
@@ -24,6 +25,9 @@ import { Colors } from '@/constants/theme';
 import { isCocktailReady } from '@/libs/cocktail-availability';
 import { createIngredientLookup } from '@/libs/ingredient-availability';
 import { useInventory, type Cocktail } from '@/providers/inventory-provider';
+
+const FILTER_MENU_MAX_HEIGHT = 540;
+const FILTER_MENU_VERTICAL_PADDING = 24;
 
 function parseListParam(param?: string | string[]) {
   if (!param) {
@@ -81,6 +85,7 @@ export default function ShakerResultsScreen() {
   );
   const [headerLayout, setHeaderLayout] = useState<LayoutRectangle | null>(null);
   const [filterAnchorLayout, setFilterAnchorLayout] = useState<LayoutRectangle | null>(null);
+  const { height: windowHeight } = useWindowDimensions();
 
   const availableIds = useMemo(() => parseListParam(params.available), [params.available]);
   const unavailableIds = useMemo(() => parseListParam(params.unavailable), [params.unavailable]);
@@ -438,16 +443,20 @@ export default function ShakerResultsScreen() {
 
   const isFilterActive = selectedTagKeys.size > 0 || selectedMethodIds.size > 0;
   const filterMenuTop = useMemo(() => {
+    let nextTop = 0;
     if (headerLayout && filterAnchorLayout) {
-      return headerLayout.y + filterAnchorLayout.y + filterAnchorLayout.height + 6;
+      nextTop = headerLayout.y + filterAnchorLayout.y + filterAnchorLayout.height + 6;
+    } else if (headerLayout) {
+      nextTop = headerLayout.y + headerLayout.height;
     }
 
-    if (headerLayout) {
-      return headerLayout.y + headerLayout.height;
+    if (windowHeight > 0) {
+      const maxTop = Math.max(0, windowHeight - FILTER_MENU_MAX_HEIGHT - 16);
+      return Math.min(nextTop, maxTop);
     }
 
-    return 0;
-  }, [filterAnchorLayout, headerLayout]);
+    return nextTop;
+  }, [filterAnchorLayout, headerLayout, windowHeight]);
 
   const handlePressCocktail = useCallback(
     (cocktail: Cocktail) => {
@@ -670,6 +679,7 @@ const styles = StyleSheet.create({
     right: 16,
     paddingHorizontal: 12,
     paddingVertical: 12,
+    maxHeight: FILTER_MENU_MAX_HEIGHT,
     borderRadius: 12,
     borderWidth: StyleSheet.hairlineWidth,
     alignItems: 'stretch',
@@ -680,7 +690,7 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   filterMenuScroll: {
-    maxHeight: 540,
+    maxHeight: FILTER_MENU_MAX_HEIGHT - FILTER_MENU_VERTICAL_PADDING,
   },
   filterMenuContent: {
     flexDirection: 'row',
