@@ -1073,7 +1073,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: StyleSheet.hairlineWidth,
     alignItems: 'stretch',
-    height: 300,
     zIndex: 4,
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.12,
@@ -1081,7 +1080,7 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   filterMenuScroll: {
-    flex: 1,
+    maxHeight: 560,
   },
   filterMenuContent: {
     flexDirection: 'row',

@@ -5,6 +5,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   FlatList,
   Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   View,
@@ -546,76 +547,76 @@ export default function ShakerResultsScreen() {
                   borderColor: paletteColors.outline,
                   shadowColor: paletteColors.shadow,
                 },
-              ]}
-            >
-              <View style={styles.filterMenuContent}>
-                <View style={styles.filterMethodList}>
-                  {availableMethodOptions.length > 0 ? (
-                    availableMethodOptions.map((method) => {
-                      const selected = selectedMethodIds.has(method.id);
-                      return (
-                        <TagPill
-                          key={method.id}
-                          label={method.label}
-                          color={paletteColors.tint}
-                          selected={selected}
-                          icon={renderMethodIcon(method.id, selected)}
-                          onPress={() => handleMethodFilterToggle(method.id)}
-                          accessibilityRole="checkbox"
-                          accessibilityState={{ checked: selected }}
-                          androidRippleColor={`${paletteColors.surfaceVariant}33`}
-                        />
-                      );
-                    })
-                  ) : (
-                    <Text style={[styles.filterMenuEmpty, { color: paletteColors.onSurfaceVariant }]}>
-                      No methods available
+              ]}>
+              <ScrollView style={styles.filterMenuScroll} showsVerticalScrollIndicator>
+                <View style={styles.filterMenuContent}>
+                  <View style={styles.filterMethodList}>
+                    {availableMethodOptions.length > 0 ? (
+                      availableMethodOptions.map((method) => {
+                        const selected = selectedMethodIds.has(method.id);
+                        return (
+                          <TagPill
+                            key={method.id}
+                            label={method.label}
+                            color={paletteColors.tint}
+                            selected={selected}
+                            icon={renderMethodIcon(method.id, selected)}
+                            onPress={() => handleMethodFilterToggle(method.id)}
+                            accessibilityRole="checkbox"
+                            accessibilityState={{ checked: selected }}
+                            androidRippleColor={`${paletteColors.surfaceVariant}33`}
+                          />
+                        );
+                      })
+                    ) : (
+                      <Text style={[styles.filterMenuEmpty, { color: paletteColors.onSurfaceVariant }]}>
+                        No methods available
+                      </Text>
+                    )}
+                  </View>
+                  <View style={styles.filterSeparator}>
+                    <View style={[styles.filterSeparatorLine, { backgroundColor: paletteColors.outline }]} />
+                    <Text style={[styles.filterSeparatorLabel, { color: paletteColors.onSurfaceVariant }]}>
+                      AND
                     </Text>
-                  )}
+                    <View style={[styles.filterSeparatorLine, { backgroundColor: paletteColors.outline }]} />
+                  </View>
+                  <View style={styles.filterTagList}>
+                    {availableTagOptions.length > 0 ? (
+                      availableTagOptions.map((tag) => {
+                        const selected = selectedTagKeys.has(tag.key);
+                        return (
+                          <TagPill
+                            key={tag.key}
+                            label={tag.name}
+                            color={tag.color}
+                            selected={selected}
+                            onPress={() => handleTagFilterToggle(tag.key)}
+                            accessibilityRole="checkbox"
+                            accessibilityState={{ checked: selected }}
+                            androidRippleColor={`${paletteColors.surfaceVariant}33`}
+                          />
+                        );
+                      })
+                    ) : (
+                      <Text style={[styles.filterMenuEmpty, { color: paletteColors.onSurfaceVariant }]}>
+                        No tags available
+                      </Text>
+                    )}
+                  </View>
                 </View>
-                <View style={styles.filterSeparator}>
-                  <View style={[styles.filterSeparatorLine, { backgroundColor: paletteColors.outline }]} />
-                  <Text style={[styles.filterSeparatorLabel, { color: paletteColors.onSurfaceVariant }]}>
-                    AND
-                  </Text>
-                  <View style={[styles.filterSeparatorLine, { backgroundColor: paletteColors.outline }]} />
-                </View>
-                <View style={styles.filterTagList}>
-                  {availableTagOptions.length > 0 ? (
-                    availableTagOptions.map((tag) => {
-                      const selected = selectedTagKeys.has(tag.key);
-                      return (
-                        <TagPill
-                          key={tag.key}
-                          label={tag.name}
-                          color={tag.color}
-                          selected={selected}
-                          onPress={() => handleTagFilterToggle(tag.key)}
-                          accessibilityRole="checkbox"
-                          accessibilityState={{ checked: selected }}
-                          androidRippleColor={`${paletteColors.surfaceVariant}33`}
-                        />
-                      );
-                    })
-                  ) : (
-                    <Text style={[styles.filterMenuEmpty, { color: paletteColors.onSurfaceVariant }]}>
-                      No tags available
+                {selectedTagKeys.size > 0 || selectedMethodIds.size > 0 ? (
+                  <Pressable
+                    accessibilityRole="button"
+                    accessibilityLabel="Clear selected filters"
+                    onPress={handleClearFilters}
+                    style={styles.filterMenuClearButton}>
+                    <Text style={[styles.filterMenuClearLabel, { color: paletteColors.tint }]}>
+                      Clear filters
                     </Text>
-                  )}
-                </View>
-              </View>
-              {selectedTagKeys.size > 0 || selectedMethodIds.size > 0 ? (
-                <Pressable
-                  accessibilityRole="button"
-                  accessibilityLabel="Clear selected filters"
-                  onPress={handleClearFilters}
-                  style={styles.filterMenuClearButton}
-                >
-                  <Text style={[styles.filterMenuClearLabel, { color: paletteColors.tint }]}>
-                    Clear filters
-                  </Text>
-                </Pressable>
-              ) : null}
+                  </Pressable>
+                ) : null}
+              </ScrollView>
             </View>
           </>
         ) : null}
@@ -677,6 +678,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.12,
     shadowRadius: 12,
     elevation: 8,
+  },
+  filterMenuScroll: {
+    maxHeight: 560,
   },
   filterMenuContent: {
     flexDirection: 'row',
