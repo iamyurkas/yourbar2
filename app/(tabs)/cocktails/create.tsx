@@ -1,16 +1,9 @@
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import { Image, type ImageSource } from 'expo-image';
+import { Image } from 'expo-image';
 import * as ImagePicker from 'expo-image-picker';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  type ComponentProps,
-} from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   FlatList,
   KeyboardAvoidingView,
@@ -27,13 +20,13 @@ import {
 } from 'react-native';
 
 import { resolveAssetFromCatalog } from '@/assets/image-manifest';
-import ShakerIcon from '@/assets/images/shaker.svg';
 import { AppDialog, type DialogOptions } from '@/components/AppDialog';
 import { HeaderIconButton } from '@/components/HeaderIconButton';
 import { ListRow, Thumb } from '@/components/RowParts';
 import { SubstituteModal } from '@/components/SubstituteModal';
 import { TagEditorModal } from '@/components/TagEditorModal';
 import { TagPill } from '@/components/TagPill';
+import { METHOD_ICON_MAP } from '@/constants/cocktail-method-icons';
 import {
   getCocktailMethodById,
   getCocktailMethods,
@@ -54,20 +47,6 @@ import { useUnsavedChanges } from '@/providers/unsaved-changes-provider';
 const DEFAULT_UNIT_ID = 11;
 const MIN_AUTOCOMPLETE_LENGTH = 2;
 const MAX_SUGGESTIONS = 8;
-
-type MethodIcon =
-  | { type: 'icon'; name: ComponentProps<typeof MaterialCommunityIcons>['name'] }
-  | { type: 'asset'; source: ImageSource };
-
-const METHOD_ICON_MAP: Record<CocktailMethodId, MethodIcon> = {
-  build: { type: 'icon', name: 'beer' },
-  stir: { type: 'icon', name: 'delete-variant' },
-  shake: { type: 'asset', source: ShakerIcon },
-  muddle: { type: 'icon', name: 'bottle-soda' },
-  layer: { type: 'icon', name: 'layers' },
-  blend: { type: 'icon', name: 'blender' },
-  throwing: { type: 'icon', name: 'swap-horizontal' },
-};
 
 type EditableSubstitute = {
   key: string;
