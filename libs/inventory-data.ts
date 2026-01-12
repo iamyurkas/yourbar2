@@ -14,7 +14,7 @@ function normalizeInventoryData(data: unknown): InventoryData {
 export function loadInventoryData(): InventoryData {
   if (!cachedInventoryData) {
     cachedInventoryData = normalizeInventoryData(bundledData);
-    if (!cachedInventoryData?.cocktailMethods?.length) {
+    if (!cachedInventoryData?.ingredients?.length) {
       cachedInventoryData = reloadInventoryData();
     }
   }
