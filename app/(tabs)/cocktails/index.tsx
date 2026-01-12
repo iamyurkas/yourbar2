@@ -2,7 +2,7 @@ import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { useScrollToTop } from '@react-navigation/native';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   FlatList,
   Pressable,
@@ -853,9 +853,9 @@ export default function CocktailsScreen() {
   const emptyMessage = useMemo(() => {
       switch (activeTab) {
         case 'my':
-          return 'Mark ingredients you have to see available cocktails here.';
+          return 'Mark ingredients you have to see available cocktails here.';
         case 'favorites':
-          return 'Rate cocktails and/or adjust the rating threshold in the menu.';
+          return 'Rate cocktails and/or adjust the rating threshold in the menu.';
         default:
           return 'No cocktails yet';
       }

@@ -1,7 +1,7 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import { useScrollToTop } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
-import React, { memo, useCallback, useEffect, useMemo, useRef, useState, useTransition } from 'react';
+import { memo, useCallback, useEffect, useMemo, useRef, useState, useTransition } from 'react';
 import {
   FlatList,
   Pressable,
@@ -554,7 +554,7 @@ export default function IngredientsScreen() {
       case 'my':
         return 'Mark ingredients you have to see them here.';
       case 'shopping':
-        return 'There are no ingredients in your shopping list yet.';
+        return 'There are no ingredients in your\nshopping list yet.';
       default:
         return 'No ingredients in the list';
     }
