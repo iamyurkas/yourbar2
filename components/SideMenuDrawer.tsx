@@ -836,32 +836,6 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
             </Pressable>
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel="Set favorites rating filter"
-              onPress={handleRatingThresholdPress}
-              style={[
-                styles.settingRow,
-                {
-                  borderColor: palette.outline,
-                  backgroundColor: palette.surface,
-                },
-              ]}>
-              <View
-                style={[
-                  styles.checkbox,
-                  {
-                    borderColor: palette.tint,
-                    backgroundColor: palette.surfaceVariant,
-                  },
-                ]}>
-                <MaterialCommunityIcons name="star" size={16} color={palette.tint} />
-              </View>
-              <View style={styles.settingTextContainer}>
-                <Text style={[styles.settingLabel, { color: palette.onSurface }]}>Favorites rating filter</Text>
-                <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>Showing {ratingFilterThreshold}+ stars cocktails</Text>
-              </View>
-            </Pressable>
-            <Pressable
-              accessibilityRole="button"
               accessibilityLabel="Set starting screen"
               onPress={handleStartScreenPress}
               style={[
@@ -886,6 +860,33 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>Open {selectedStartScreenOption?.label ?? 'All cocktails'}</Text>
               </View>
             </Pressable>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Set favorites rating filter"
+              onPress={handleRatingThresholdPress}
+              style={[
+                styles.settingRow,
+                {
+                  borderColor: palette.outline,
+                  backgroundColor: palette.surface,
+                },
+              ]}>
+              <View
+                style={[
+                  styles.checkbox,
+                  {
+                    borderColor: palette.tint,
+                    backgroundColor: palette.surfaceVariant,
+                  },
+                ]}>
+                <MaterialCommunityIcons name="star" size={16} color={palette.tint} />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text style={[styles.settingLabel, { color: palette.onSurface }]}>Favorites rating filter</Text>
+                <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>Showing {ratingFilterThreshold}+ stars cocktails</Text>
+              </View>
+            </Pressable>
+            
             <Pressable
               accessibilityRole="button"
               accessibilityLabel="Manage custom tags"
@@ -958,7 +959,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   {isImporting ? 'Importing data...' : 'Import data'}
                 </Text>
                 <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>
-                  Load a file from a backup file
+                  Load backup from a file
                 </Text>
               </View>
             </Pressable>
@@ -1285,13 +1286,13 @@ const styles = StyleSheet.create({
   menuContent: {
     flexGrow: 1,
     paddingHorizontal: 24,
-    paddingTop: 16,
+    paddingTop: 0,
     paddingBottom: 24,
-    gap: 16,
+    gap: 8,
   },
   headerContainer: {
     paddingHorizontal: 24,
-    paddingTop: 24,
+    paddingTop: 40,
     paddingBottom: 8,
   },
   title: {
