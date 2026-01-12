@@ -1,18 +1,17 @@
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import { Image, type ImageSource } from 'expo-image';
+import { Image } from 'expo-image';
 import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
-import React, { useCallback, useEffect, useMemo, useState, useTransition, type ComponentProps } from 'react';
+import React, { useCallback, useEffect, useMemo, useState, useTransition } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { resolveGlasswareUriFromId } from '@/assets/image-manifest';
-import ShakerIcon from '@/assets/images/shaker.svg';
 import { HeaderIconButton } from '@/components/HeaderIconButton';
 import { ListRow, Thumb } from '@/components/RowParts';
 import { TagPill } from '@/components/TagPill';
-import { getCocktailMethodById } from '@/constants/cocktail-methods';
+import { getCocktailMethodById, METHOD_ICON_MAP } from '@/constants/cocktail-methods';
 import { COCKTAIL_UNIT_DICTIONARY } from '@/constants/cocktail-units';
 import { Colors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
@@ -33,20 +32,6 @@ const METRIC_UNIT_ID = 11;
 const IMPERIAL_UNIT_ID = 12;
 const GRAM_UNIT_ID = 8;
 const UNIT_CONVERSION_RATIO = 30;
-
-type MethodIcon =
-  | { type: 'icon'; name: ComponentProps<typeof MaterialCommunityIcons>['name'] }
-  | { type: 'asset'; source: ImageSource };
-
-const METHOD_ICON_MAP: Record<string, MethodIcon> = {
-  build: { type: 'icon', name: 'beer' },
-  stir: { type: 'icon', name: 'delete-variant' },
-  shake: { type: 'asset', source: ShakerIcon },
-  muddle: { type: 'icon', name: 'bottle-soda' },
-  layer: { type: 'icon', name: 'layers' },
-  blend: { type: 'icon', name: 'blender' },
-  throwing: { type: 'icon', name: 'swap-horizontal' },
-};
 
 const GLASS_LABELS: Record<string, string> = {
   bowl: 'Punch bowl',
