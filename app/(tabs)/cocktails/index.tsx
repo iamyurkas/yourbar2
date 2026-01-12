@@ -1,6 +1,6 @@
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
-import { Image } from 'expo-image';
 import { useScrollToTop } from '@react-navigation/native';
+import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
@@ -25,8 +25,8 @@ import type { SegmentTabOption } from '@/components/TopBars';
 import { getCocktailMethods, METHOD_ICON_MAP, type CocktailMethod } from '@/constants/cocktail-methods';
 import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
 import { Colors } from '@/constants/theme';
-import { getLastCocktailTab, setLastCocktailTab, type CocktailTabKey } from '@/libs/collection-tabs';
 import { isCocktailReady } from '@/libs/cocktail-availability';
+import { getLastCocktailTab, setLastCocktailTab, type CocktailTabKey } from '@/libs/collection-tabs';
 import { createIngredientLookup } from '@/libs/ingredient-availability';
 import { useInventory, type Cocktail } from '@/providers/inventory-provider';
 import { tagColors } from '@/theme/theme';
@@ -851,11 +851,16 @@ export default function CocktailsScreen() {
   const isFilterActive = selectedTagKeys.size > 0 || selectedMethodIds.size > 0;
   const isMyTab = activeTab === 'my';
   const listData = isMyTab ? myTabListData?.items ?? [] : sortedFavorites;
-  const emptyMessage = isMyTab
-    ? 'Mark which ingredients you have available.'
-    : activeTab === 'favorites'
-      ? 'Rate cocktails and/or adjust the rating threshold in the side menu.'
-      : 'No cocktails yet';
+  const emptyMessage = useMemo(() => {
+      switch (activeTab) {
+        case 'my':
+          return 'Mark ingredients you have to see available cocktails here.';
+        case 'favorites':
+          return 'Rate cocktails and/or adjust the rating threshold in the menu.';
+        default:
+          return 'No cocktails yet';
+      }
+    }, [activeTab]);
   const filterMenuTop = useMemo(() => {
     if (headerLayout && filterAnchorLayout) {
       return headerLayout.y + filterAnchorLayout.y + filterAnchorLayout.height + 6;
