@@ -36,6 +36,7 @@ import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
 import { COCKTAIL_UNIT_DICTIONARY, COCKTAIL_UNIT_OPTIONS } from '@/constants/cocktail-units';
 import { GLASSWARE } from '@/constants/glassware';
 import { Colors } from '@/constants/theme';
+import { tagColors } from '@/theme/theme';
 import {
   useInventory,
   type Cocktail,
@@ -1983,7 +1984,7 @@ function EditableIngredientRow({
             const baseGroupId = getBaseGroupId(candidate.id);
             const isAvailable = candidateId >= 0 && availableIngredientIds.has(candidateId);
             const isOnShoppingList = candidateId >= 0 && shoppingIngredientIds.has(candidateId);
-            const tagColor = candidate.tags?.[0]?.color ?? palette.tagYellow;
+            const tagColor = candidate.tags?.[0]?.color ?? tagColors.yellow;
             const subtitle = renderSubtitle(baseGroupId);
             const brandIndicatorColor = candidate.baseIngredientId != null ? Colors.primary : undefined;
             const isLast = index === suggestions.length - 1;

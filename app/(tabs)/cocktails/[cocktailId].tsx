@@ -24,6 +24,7 @@ import {
   useInventory,
   type Cocktail,
 } from '@/providers/inventory-provider';
+import { tagColors } from '@/theme/theme';
 
 type RecipeIngredient = NonNullable<Cocktail['ingredients']>[number];
 
@@ -748,7 +749,7 @@ export default function CocktailDetailsScreen() {
                       resolvedIngredient?.tags?.[0]?.color ??
                       ingredient.tags?.[0]?.color ??
                       catalogEntry?.tags?.[0]?.color ??
-                      appPalette.tagYellow;
+                      tagColors.yellow;
                     const brandIndicatorColor =
                       resolvedIngredient?.baseIngredientId != null || catalogEntry?.baseIngredientId != null
                         ? Colors.primary
