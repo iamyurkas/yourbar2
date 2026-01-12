@@ -358,7 +358,6 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       await Share.share({
         title: 'Export cocktails & ingredients',
         url: shareUri,
-        message: 'YourBar export data (JSON).',
       });
       setExportModalVisible(false);
       onClose();
