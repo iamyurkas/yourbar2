@@ -1,7 +1,6 @@
 import { StyleSheet, Text, type TextProps } from 'react-native';
 
 import { Colors } from '@/constants/theme';
-import { palette } from '@/theme/theme';
 
 export type ThemedTextProps = TextProps & {
   lightColor?: string;
@@ -54,6 +53,6 @@ const styles = StyleSheet.create({
   link: {
     lineHeight: 24,
     fontSize: 15,
-    color: palette.primary,
+    color: Colors.primary,
   },
 });

@@ -24,7 +24,6 @@ import {
   useInventory,
   type Cocktail,
 } from '@/providers/inventory-provider';
-import { palette as appPalette } from '@/theme/theme';
 
 type RecipeIngredient = NonNullable<Cocktail['ingredients']>[number];
 
@@ -426,7 +425,7 @@ export default function CocktailDetailsScreen() {
       .filter(Boolean);
   }, [cocktail?.instructions]);
 
-  const ingredientHighlightColor = appPalette.highlightFaint;
+  const ingredientHighlightColor = Colors.highlightFaint;
 
   const photoSource = useMemo(
     () => resolveImageSource(cocktail?.photoUri),

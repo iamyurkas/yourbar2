@@ -3,7 +3,6 @@ import { Pressable, StyleSheet, View } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
 import { Colors } from '@/constants/theme';
-import { palette } from '@/theme/theme';
 
 type TabItem = {
   key: string;
@@ -26,7 +25,7 @@ export function MD3TopTabs({ tabs, activeKey, onTabChange }: MD3TopTabsProps) {
         {
           backgroundColor: paletteColors.surfaceVariant,
           borderColor: paletteColors.outline,
-          shadowColor: palette.shadow,
+          shadowColor: paletteColors.shadow,
           shadowOffset: { width: 0, height: 6 },
           shadowRadius: 12,
           shadowOpacity: 0.05,
@@ -42,10 +41,10 @@ export function MD3TopTabs({ tabs, activeKey, onTabChange }: MD3TopTabsProps) {
             style={({ pressed }) => [
               styles.tab,
               {
-                backgroundColor: isActive ? paletteColors.tint : palette.surfaceBright,
+                backgroundColor: isActive ? paletteColors.tint : paletteColors.surfaceBright,
                 borderColor: isActive ? 'transparent' : paletteColors.outlineVariant,
                 opacity: pressed ? 0.9 : 1,
-                shadowColor: isActive ? palette.primary : 'transparent',
+                shadowColor: isActive ? paletteColors.primary : 'transparent',
                 shadowOffset: { width: 0, height: isActive ? 8 : 0 },
                 shadowRadius: isActive ? 12 : 0,
                 shadowOpacity: isActive ? 0.24 : 0,
@@ -57,13 +56,13 @@ export function MD3TopTabs({ tabs, activeKey, onTabChange }: MD3TopTabsProps) {
               style={[
                 styles.label,
                 {
-                  color: isActive ? palette.onPrimary : palette.onSurfaceMuted,
+                  color: isActive ? paletteColors.onPrimary : paletteColors.onSurfaceMuted,
                 },
               ]}>
               {tab.label}
             </ThemedText>
             {isActive ? (
-              <View style={[styles.activeDot, { backgroundColor: palette.overlayOnPrimary }]} />
+              <View style={[styles.activeDot, { backgroundColor: paletteColors.overlayOnPrimary }]} />
             ) : null}
           </Pressable>
         );
@@ -103,4 +102,3 @@ const styles = StyleSheet.create({
 });
 
 export type { TabItem };
-

@@ -28,7 +28,7 @@ import { getLastCocktailTab, setLastCocktailTab, type CocktailTabKey } from '@/l
 import { isCocktailReady } from '@/libs/cocktail-availability';
 import { createIngredientLookup } from '@/libs/ingredient-availability';
 import { useInventory, type Cocktail } from '@/providers/inventory-provider';
-import { palette } from '@/theme/theme';
+import { tagColors } from '@/theme/theme';
 
 type CocktailTagOption = {
   key: string;
@@ -107,7 +107,7 @@ export default function CocktailsScreen() {
   const paletteColors = Colors;
   const router = useRouter();
   const ingredientLookup = useMemo(() => createIngredientLookup(ingredients), [ingredients]);
-  const defaultTagColor = palette.tagYellow ?? palette.highlightFaint;
+  const defaultTagColor = tagColors.yellow ?? paletteColors.highlightFaint;
 
   const availableTagOptions = useMemo<CocktailTagOption[]>(() => {
     const map = new Map<string, CocktailTagOption>();
@@ -599,7 +599,7 @@ export default function CocktailsScreen() {
         const group = groups.get(option.id) ?? {
           name: option.name,
           photoUri: ingredientRecord?.photoUri ?? null,
-          tagColor: ingredientRecord?.tags?.[0]?.color ?? palette.tagYellow,
+          tagColor: ingredientRecord?.tags?.[0]?.color ?? tagColors.yellow,
           cocktails: [],
           keys: new Set<string>(),
         };
@@ -897,7 +897,7 @@ export default function CocktailsScreen() {
                   top: filterMenuTop,
                   backgroundColor: paletteColors.surface,
                   borderColor: paletteColors.outline,
-                  shadowColor: palette.shadow,
+                  shadowColor: paletteColors.shadow,
                 },
               ]}>
               <View style={styles.filterMenuContent}>

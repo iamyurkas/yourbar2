@@ -25,7 +25,7 @@ import {
   getVisibleIngredientIdsForCocktail,
 } from '@/libs/ingredient-availability';
 import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
-import { palette } from '@/theme/theme';
+import { tagColors } from '@/theme/theme';
 
 type IngredientTagOption = {
   key: string;
@@ -55,7 +55,7 @@ const IngredientRow = memo(function IngredientRow({
   onToggle,
 }: IngredientRowProps) {
   const ingredientId = Number(ingredient.id ?? -1);
-  const tagColor = ingredient.tags?.[0]?.color ?? palette.tagYellow;
+  const tagColor = ingredient.tags?.[0]?.color ?? tagColors.yellow;
   const brandIndicatorColor = ingredient.baseIngredientId != null ? Colors.primary : undefined;
 
   const handlePress = useCallback(() => {
@@ -64,7 +64,7 @@ const IngredientRow = memo(function IngredientRow({
     }
   }, [ingredientId, onToggle]);
 
-  const highlightColor = isSelected ? palette.highlightSubtle : palette.highlightFaint;
+  const highlightColor = isSelected ? Colors.highlightSubtle : Colors.highlightFaint;
   const thumbnail = useMemo(
     () => <Thumb label={ingredient.name} uri={ingredient.photoUri} />,
     [ingredient.name, ingredient.photoUri],
@@ -133,7 +133,7 @@ export default function ShakerScreen() {
   const listRef = useRef<FlatList<unknown>>(null);
   const paletteColors = Colors;
   const insets = useSafeAreaInsets();
-  const defaultTagColor = palette.tagYellow ?? palette.highlightFaint;
+  const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
 
   useScrollToTop(listRef);
 
@@ -833,7 +833,7 @@ const styles = StyleSheet.create({
   },
   clearButtonBase: {
     borderWidth: 1,
-    borderColor: palette.danger,
+    borderColor: Colors.danger,
     borderRadius: 12,
     paddingHorizontal: 18,
     paddingVertical: 8,

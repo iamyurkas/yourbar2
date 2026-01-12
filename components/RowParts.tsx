@@ -13,7 +13,7 @@ import {
 
 import { Colors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
-import { palette, tagColors } from '@/theme/theme';
+import { tagColors } from '@/theme/theme';
 
 const THUMB_SIZE = 56;
 
@@ -38,7 +38,7 @@ export function Thumb({ uri, label, fallbackUri, fallbackLabel }: ThumbProps) {
   }
 
   return (
-    <View style={[styles.thumb, { backgroundColor: palette.surfaceBright }]}>
+    <View style={[styles.thumb, { backgroundColor: Colors.surfaceBright }]}>
       {source ? (
         <Image source={source} style={styles.thumbImage} contentFit="contain" />
       ) : fallbackText ? (

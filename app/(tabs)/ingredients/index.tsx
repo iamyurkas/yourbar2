@@ -28,7 +28,7 @@ import {
   getVisibleIngredientIdsForCocktail,
 } from '@/libs/ingredient-availability';
 import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
-import { palette } from '@/theme/theme';
+import { tagColors } from '@/theme/theme';
 
 type IngredientSection = {
   key: string;
@@ -88,7 +88,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
   const router = useRouter();
   const id = Number(ingredient.id ?? -1);
   const isAvailable = id >= 0 && availableIngredientIds.has(id);
-  const tagColor = ingredient.tags?.[0]?.color ?? palette.tagYellow;
+  const tagColor = ingredient.tags?.[0]?.color ?? tagColors.yellow;
 
   const handleToggleAvailability = useCallback(() => {
     if (id >= 0) {
@@ -224,7 +224,7 @@ export default function IngredientsScreen() {
   );
   const [, startAvailabilityTransition] = useTransition();
   const paletteColors = Colors;
-  const defaultTagColor = palette.tagYellow ?? palette.highlightFaint;
+  const defaultTagColor = tagColors.yellow ?? paletteColors.highlightFaint;
 
   useScrollToTop(listRef);
 
@@ -547,7 +547,7 @@ export default function IngredientsScreen() {
     );
   }, [filteredByTags, normalizedQuery]);
 
-  const highlightColor = palette.highlightFaint;
+  const highlightColor = paletteColors.highlightFaint;
   const isFilterActive = selectedTagKeys.size > 0;
   const filterMenuTop = useMemo(() => {
     if (headerLayout && filterAnchorLayout) {
@@ -726,7 +726,7 @@ export default function IngredientsScreen() {
                   top: filterMenuTop,
                   backgroundColor: paletteColors.surface,
                   borderColor: paletteColors.outline,
-                  shadowColor: palette.shadow,
+                  shadowColor: paletteColors.shadow,
                 },
               ]}>
               {availableTagOptions.length > 0 ? (

@@ -3,7 +3,6 @@ import { Pressable, StyleSheet, TextInput, View } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
 import { Colors } from '@/constants/theme';
-import { palette } from '@/theme/theme';
 
 type SearchBarProps = {
   placeholder: string;
@@ -21,9 +20,9 @@ export function SearchBar({
   onPressTrailingAction,
 }: SearchBarProps) {
   const paletteColors = Colors;
-  const backgroundColor = palette.surfaceBright;
+  const backgroundColor = paletteColors.surfaceBright;
   const borderColor = paletteColors.outline;
-  const placeholderColor = palette.placeholder;
+  const placeholderColor = paletteColors.placeholder;
   const textColor = paletteColors.text;
   const accent = paletteColors.tint;
 
@@ -76,7 +75,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     gap: 12,
     height: 44,
-    shadowColor: palette.shadow,
+    shadowColor: Colors.shadow,
     shadowOffset: { width: 0, height: 6 },
     shadowRadius: 12,
     shadowOpacity: 0.08,
@@ -89,7 +88,7 @@ const styles = StyleSheet.create({
   },
   iconGlyph: {
     fontSize: 16,
-    color: palette.placeholder,
+    color: Colors.placeholder,
   },
   input: {
     flex: 1,
@@ -108,4 +107,3 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
   },
 });
-
