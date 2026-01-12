@@ -19,12 +19,11 @@ export function SearchBar({
   trailingActionLabel,
   onPressTrailingAction,
 }: SearchBarProps) {
-  const paletteColors = Colors;
-  const backgroundColor = paletteColors.surfaceBright;
-  const borderColor = paletteColors.outline;
-  const placeholderColor = paletteColors.placeholder;
-  const textColor = paletteColors.text;
-  const accent = paletteColors.tint;
+  const backgroundColor = Colors.surfaceBright;
+  const borderColor = Colors.outline;
+  const placeholderColor = Colors.placeholder;
+  const textColor = Colors.text;
+  const accent = Colors.tint;
 
   return (
     <View

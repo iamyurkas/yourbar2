@@ -57,7 +57,6 @@ function useResolvedIngredient(param: string | undefined, ingredients: Ingredien
 }
 
 export default function EditIngredientScreen() {
-  const paletteColors = Colors;
   const navigation = useNavigation();
   const { ingredientId } = useLocalSearchParams<{ ingredientId?: string }>();
   const {
@@ -532,7 +531,7 @@ export default function EditIngredientScreen() {
 
       const control = isOnShoppingList ? (
         <View style={styles.baseShoppingIndicator}>
-          <MaterialIcons name="shopping-cart" size={20} color={paletteColors.tint} />
+          <MaterialIcons name="shopping-cart" size={20} color={Colors.tint} />
         </View>
       ) : undefined;
 
@@ -541,7 +540,7 @@ export default function EditIngredientScreen() {
           title={item.name ?? ''}
           onPress={() => handleSelectBaseIngredient(item)}
           selected={isAvailable}
-          highlightColor={paletteColors.highlightFaint}
+          highlightColor={Colors.highlightFaint}
           thumbnail={<Thumb label={item.name ?? undefined} uri={item.photoUri} />}
           tagColor={tagColor}
           accessibilityRole="button"
@@ -555,7 +554,7 @@ export default function EditIngredientScreen() {
       availableIngredientIds,
       baseIngredientId,
       handleSelectBaseIngredient,
-      paletteColors.tint,
+      Colors.tint,
       shoppingIngredientIds,
     ],
   );
@@ -615,7 +614,7 @@ export default function EditIngredientScreen() {
       <>
         <Stack.Screen options={{ title: 'Edit ingredient' }} />
         <View style={[styles.container, styles.emptyState]}>
-          <Text style={[styles.emptyMessage, { color: paletteColors.onSurfaceVariant }]}>Ingredient not found</Text>
+          <Text style={[styles.emptyMessage, { color: Colors.onSurfaceVariant }]}>Ingredient not found</Text>
         </View>
       </>
     );
@@ -633,7 +632,7 @@ export default function EditIngredientScreen() {
               accessibilityLabel="Delete ingredient"
               style={styles.headerButton}
               hitSlop={8}>
-              <MaterialIcons name="delete-outline" size={22} color={paletteColors.onSurface} />
+              <MaterialIcons name="delete-outline" size={22} color={Colors.onSurface} />
             </Pressable>
           ),
         }}
@@ -644,13 +643,13 @@ export default function EditIngredientScreen() {
         style={styles.container}
         keyboardShouldPersistTaps="handled">
         <View style={styles.section}>
-          <Text style={[styles.label, { color: paletteColors.onSurface }]}>Name</Text>
+          <Text style={[styles.label, { color: Colors.onSurface }]}>Name</Text>
           <TextInput
             value={name}
             onChangeText={setName}
             placeholder="e.g. Ginger syrup"
-            style={[styles.input, { borderColor: paletteColors.outlineVariant, color: paletteColors.text, backgroundColor: paletteColors.surface }]}
-            placeholderTextColor={`${paletteColors.onSurfaceVariant}99`}
+            style={[styles.input, { borderColor: Colors.outlineVariant, color: Colors.text, backgroundColor: Colors.surface }]}
+            placeholderTextColor={`${Colors.onSurfaceVariant}99`}
           />
         </View>
 
@@ -660,17 +659,17 @@ export default function EditIngredientScreen() {
             accessibilityLabel={placeholderLabel}
             style={[
               styles.imagePlaceholder,
-              { borderColor: paletteColors.outlineVariant },
-              !imageSource && { backgroundColor: paletteColors.surface },
+              { borderColor: Colors.outlineVariant },
+              !imageSource && { backgroundColor: Colors.surface },
             ]}
             onPress={handlePickImage}
-            android_ripple={{ color: `${paletteColors.surface}33` }}>
+            android_ripple={{ color: `${Colors.surface}33` }}>
             {imageSource ? (
               <Image source={imageSource} style={styles.image} contentFit="contain" />
             ) : (
               <View style={styles.placeholderContent}>
-                <MaterialCommunityIcons name="image-plus" size={28} color={`${paletteColors.onSurfaceVariant}99`} />
-                <Text style={[styles.placeholderHint, { color: `${paletteColors.onSurfaceVariant}99` }]}>Tap to add a photo</Text>
+                <MaterialCommunityIcons name="image-plus" size={28} color={`${Colors.onSurfaceVariant}99`} />
+                <Text style={[styles.placeholderHint, { color: `${Colors.onSurfaceVariant}99` }]}>Tap to add a photo</Text>
               </View>
             )}
           </Pressable>
@@ -681,24 +680,24 @@ export default function EditIngredientScreen() {
               style={styles.removePhotoButton}
               accessibilityRole="button"
               accessibilityLabel="Remove photo">
-              <MaterialCommunityIcons name="trash-can-outline" size={18} color={paletteColors.error} />
+              <MaterialCommunityIcons name="trash-can-outline" size={18} color={Colors.error} />
             </Pressable>
           ) : null}
         </View>
 
         <View style={styles.section}>
           <View style={styles.tagHeader}>
-            <Text style={[styles.label, { color: paletteColors.onSurface }]}>Tags</Text>
+            <Text style={[styles.label, { color: Colors.onSurface }]}>Tags</Text>
             <Pressable
               accessibilityRole="button"
               accessibilityLabel="Create tag"
               onPress={handleOpenTagModal}
-              style={[styles.tagAddButton, { borderColor: paletteColors.outlineVariant }]}>
-              <MaterialCommunityIcons name="plus" size={16} color={paletteColors.tint} />
-              <Text style={[styles.tagAddLabel, { color: paletteColors.tint }]}>Create tag</Text>
+              style={[styles.tagAddButton, { borderColor: Colors.outlineVariant }]}>
+              <MaterialCommunityIcons name="plus" size={16} color={Colors.tint} />
+              <Text style={[styles.tagAddLabel, { color: Colors.tint }]}>Create tag</Text>
             </Pressable>
           </View>
-          <Text style={[styles.hint, { color: paletteColors.onSurfaceVariant }]}>Select one or more tags</Text>
+          <Text style={[styles.hint, { color: Colors.onSurfaceVariant }]}>Select one or more tags</Text>
           <View style={styles.tagList}>
             {tagSelection.map((tag) => (
               <TagPill
@@ -709,19 +708,19 @@ export default function EditIngredientScreen() {
                 onPress={() => toggleTag(tag.id)}
                 accessibilityRole="checkbox"
                 accessibilityState={{ checked: tag.selected }}
-                androidRippleColor={`${paletteColors.surface}33`}
+                androidRippleColor={`${Colors.surface}33`}
               />
             ))}
           </View>
         </View>
 
         <View style={styles.section}>
-          <Text style={[styles.label, { color: paletteColors.onSurface }]}>Base ingredient</Text>
+          <Text style={[styles.label, { color: Colors.onSurface }]}>Base ingredient</Text>
           <Pressable
             accessibilityRole="button"
             accessibilityLabel={baseIngredient ? 'Change base ingredient' : 'Select base ingredient'}
             onPress={handleOpenBaseModal}
-            style={[styles.baseSelector, { borderColor: paletteColors.outlineVariant, backgroundColor: paletteColors.surface }]}
+            style={[styles.baseSelector, { borderColor: Colors.outlineVariant, backgroundColor: Colors.surface }]}
           >
             {baseIngredient ? (
               <>
@@ -731,17 +730,17 @@ export default function EditIngredientScreen() {
                       <Image source={baseIngredientPhotoSource} style={styles.baseImage} contentFit="contain" />
                     ) : (
                       <View
-                        style={[styles.basePlaceholder, { backgroundColor: paletteColors.onSurfaceVariant }]}
+                        style={[styles.basePlaceholder, { backgroundColor: Colors.onSurfaceVariant }]}
                       >
                         <MaterialCommunityIcons
                           name="image-off"
                           size={20}
-                          color={paletteColors.onSurfaceVariant}
+                          color={Colors.onSurfaceVariant}
                         />
                       </View>
                     )}
                   </View>
-                  <Text style={[styles.baseName, { color: paletteColors.onSurface }]} numberOfLines={2}>
+                  <Text style={[styles.baseName, { color: Colors.onSurface }]} numberOfLines={2}>
                     {baseIngredient.name}
                   </Text>
                 </View>
@@ -755,14 +754,14 @@ export default function EditIngredientScreen() {
                   <MaterialCommunityIcons
                     name="link-off"
                     size={20}
-                    color={paletteColors.error}
+                    color={Colors.error}
                   />
                 </Pressable>
               </>
             ) : (
               <View style={styles.basePlaceholderRow}>
 
-                <Text style={[styles.basePlaceholderText, { color: paletteColors.onSurfaceVariant }]}>
+                <Text style={[styles.basePlaceholderText, { color: Colors.onSurfaceVariant }]}>
                   None
                 </Text>
               </View>
@@ -771,7 +770,7 @@ export default function EditIngredientScreen() {
         </View>
 
         <View style={[styles.section, styles.descriptionSection]}>
-          <Text style={[styles.label, { color: paletteColors.onSurface }]}>Description</Text>
+          <Text style={[styles.label, { color: Colors.onSurface }]}>Description</Text>
           <TextInput
             value={description}
             onChangeText={setDescription}
@@ -779,9 +778,9 @@ export default function EditIngredientScreen() {
               style={[
                 styles.input,
                 styles.multilineInput,
-                { borderColor: paletteColors.outlineVariant, color: paletteColors.text, backgroundColor: paletteColors.surface },
+                { borderColor: Colors.outlineVariant, color: Colors.text, backgroundColor: Colors.surface },
               ]}
-            placeholderTextColor={`${paletteColors.onSurfaceVariant}99`}
+            placeholderTextColor={`${Colors.onSurfaceVariant}99`}
             multiline
             numberOfLines={4}
             textAlignVertical="top"
@@ -791,10 +790,10 @@ export default function EditIngredientScreen() {
 
         <Pressable
           accessibilityRole="button"
-          style={[styles.submitButton, { backgroundColor: paletteColors.tint }]}
+          style={[styles.submitButton, { backgroundColor: Colors.tint }]}
           onPress={handleSubmit}
           disabled={isPickingImage}>
-          <Text style={[styles.submitLabel, { color: paletteColors.onPrimary }]}>Save changes</Text>
+          <Text style={[styles.submitLabel, { color: Colors.onPrimary }]}>Save changes</Text>
         </Pressable>
         <View style={styles.bottomSpacer} />
       </ScrollView>
@@ -814,16 +813,16 @@ export default function EditIngredientScreen() {
             style={[
               styles.modalCard,
               {
-                backgroundColor: paletteColors.surface,
-                borderColor: paletteColors.outline,
-                shadowColor: paletteColors.shadow,
+                backgroundColor: Colors.surface,
+                borderColor: Colors.outline,
+                shadowColor: Colors.shadow,
               },
             ]}
             accessibilityRole="menu">
             <View style={styles.modalHeader}>
-              <Text style={[styles.modalTitle, { color: paletteColors.onSurface }]}>Select base ingredient</Text>
+              <Text style={[styles.modalTitle, { color: Colors.onSurface }]}>Select base ingredient</Text>
               <Pressable onPress={handleCloseBaseModal} accessibilityRole="button" accessibilityLabel="Close">
-                <MaterialCommunityIcons name="close" size={22} color={paletteColors.onSurfaceVariant} />
+                <MaterialCommunityIcons name="close" size={22} color={Colors.onSurfaceVariant} />
               </Pressable>
             </View>
             <TextInput
@@ -831,13 +830,13 @@ export default function EditIngredientScreen() {
               value={baseSearch}
               onChangeText={setBaseSearch}
               placeholder="Search ingredients"
-              placeholderTextColor={`${paletteColors.onSurfaceVariant}99`}
+              placeholderTextColor={`${Colors.onSurfaceVariant}99`}
               style={[
                 styles.modalSearchInput,
                 {
-                  borderColor: paletteColors.outlineVariant,
-                  color: paletteColors.text,
-                  backgroundColor: paletteColors.surfaceBright,
+                  borderColor: Colors.outlineVariant,
+                  color: Colors.text,
+                  backgroundColor: Colors.surfaceBright,
                 },
               ]}
               autoFocus
@@ -851,12 +850,12 @@ export default function EditIngredientScreen() {
               ItemSeparatorComponent={({ leadingItem }) => {
                 const ingredientId = Number((leadingItem as Ingredient | null)?.id ?? -1);
                 const isAvailable = ingredientId >= 0 && availableIngredientIds.has(ingredientId);
-                const backgroundColor = isAvailable ? paletteColors.outline : paletteColors.outlineVariant;
+                const backgroundColor = isAvailable ? Colors.outline : Colors.outlineVariant;
                 return <View style={[styles.modalSeparator, { backgroundColor }]} />;
               }}
               contentContainerStyle={styles.modalListContent}
               ListEmptyComponent={() => (
-                <Text style={[styles.modalEmptyText, { color: paletteColors.onSurfaceVariant }]}>No ingredients found</Text>
+                <Text style={[styles.modalEmptyText, { color: Colors.onSurfaceVariant }]}>No ingredients found</Text>
               )}
             />
           </Pressable>

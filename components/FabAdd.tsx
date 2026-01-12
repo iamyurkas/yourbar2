@@ -12,7 +12,6 @@ type FabAddProps = {
 
 export function FabAdd({ label = 'Add', onPress }: FabAddProps) {
   const insets = useSafeAreaInsets();
-  const paletteColors = Colors;
 
   return (
     <View style={[styles.container, { bottom: insets.bottom + 16 }]}>
@@ -20,9 +19,9 @@ export function FabAdd({ label = 'Add', onPress }: FabAddProps) {
         accessibilityRole="button"
         accessibilityLabel={label}
         onPress={onPress}
-        style={[styles.fab, { backgroundColor: paletteColors.tint }]}
-        android_ripple={{ color: `${paletteColors.surface}33`, borderless: true }}>
-        <MaterialCommunityIcons name="plus" size={26} color={paletteColors.surface} />
+        style={[styles.fab, { backgroundColor: Colors.tint }]}
+        android_ripple={{ color: `${Colors.surface}33`, borderless: true }}>
+        <MaterialCommunityIcons name="plus" size={26} color={Colors.surface} />
       </Pressable>
     </View>
   );

@@ -61,7 +61,6 @@ const CocktailListRowComponent = ({
   showMethodIcons = false,
   onPress,
 }: CocktailListRowProps) => {
-  const paletteColors = Colors;
   const lookup = useMemo(() => {
     if (ingredientLookup) {
       return ingredientLookup;
@@ -102,22 +101,22 @@ const CocktailListRowComponent = ({
       <View
         style={[
           styles.ratingPill,
-          { backgroundColor: paletteColors.background, borderColor: paletteColors.outline },
+          { backgroundColor: Colors.background, borderColor: Colors.outline },
         ]}>
         {Array.from({ length: totalStars }).map((_, index) => (
           <MaterialCommunityIcons
             key={`rating-icon-${index}`}
             name="star"
             size={8}
-            color={paletteColors.tint}
+            color={Colors.tint}
           />
         ))}
       </View>
     );
   }, [
-    paletteColors.background,
-    paletteColors.outline,
-    paletteColors.tint,
+    Colors.background,
+    Colors.outline,
+    Colors.tint,
     ratingValue,
   ]);
 
@@ -152,7 +151,7 @@ const CocktailListRowComponent = ({
             <Image
               key={`method-icon-${index}`}
               source={icon.source}
-              style={[styles.methodIcon, { tintColor: paletteColors.onSurfaceVariant }]}
+              style={[styles.methodIcon, { tintColor: Colors.onSurfaceVariant }]}
               contentFit="contain"
             />
           ) : (
@@ -160,13 +159,13 @@ const CocktailListRowComponent = ({
               key={`method-icon-${index}`}
               name={icon.name}
               size={METHOD_ICON_SIZE}
-              color={paletteColors.onSurfaceVariant}
+              color={Colors.onSurfaceVariant}
             />
           ),
         )}
       </View>
     );
-  }, [methodIds, paletteColors.onSurfaceVariant, showMethodIcons]);
+  }, [methodIds, Colors.onSurfaceVariant, showMethodIcons]);
 
   const hasBrandedIngredient = useMemo(() => {
     const recipe = cocktail.ingredients ?? [];
@@ -214,7 +213,7 @@ const CocktailListRowComponent = ({
     return false;
   }, [cocktail.ingredients, lookup.ingredientById]);
 
-  const brandIndicatorColor = hasBrandedIngredient ? paletteColors.primary : undefined;
+  const brandIndicatorColor = hasBrandedIngredient ? Colors.primary : undefined;
 
   const thumbnail = useMemo(
     () => <Thumb label={cocktail.name} uri={cocktail.photoUri} fallbackUri={glasswareUri} />,
