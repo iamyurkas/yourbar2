@@ -83,7 +83,6 @@ type SideMenuDrawerProps = {
 };
 
 export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
-  const palette = Colors;
   const {
     ignoreGarnish,
     setIgnoreGarnish,
@@ -131,12 +130,12 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       styles.drawer,
       {
         width: MENU_WIDTH,
-        backgroundColor: palette.surface,
-        shadowColor: palette.shadow,
-        borderColor: palette.outline,
+        backgroundColor: Colors.surface,
+        shadowColor: Colors.shadow,
+        borderColor: Colors.outline,
       },
     ],
-    [palette.outline, palette.shadow, palette.surface],
+    [Colors.outline, Colors.shadow, Colors.surface],
   );
 
   const selectedStartScreenOption = useMemo(
@@ -145,7 +144,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   );
 
   const renderStartScreenIcon = (option: StartScreenOption, isSelected: boolean) => {
-    const iconColor = isSelected ? palette.tint : palette.onSurfaceVariant;
+    const iconColor = isSelected ? Colors.tint : Colors.onSurfaceVariant;
 
     if (option.icon.type === 'asset') {
       return (
@@ -701,12 +700,12 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
         <Pressable accessibilityRole="button" accessibilityLabel="Close menu" onPress={onClose} style={styles.backdropArea}>
           <Animated.View
             pointerEvents="none"
-            style={[styles.backdrop, { backgroundColor: palette.backdrop, opacity: backdropOpacity }]}
+            style={[styles.backdrop, { backgroundColor: Colors.backdrop, opacity: backdropOpacity }]}
           />
         </Pressable>
         <Animated.View style={[drawerStyle, { transform: [{ translateX }] }]}>
-          <View style={[styles.headerContainer, { backgroundColor: palette.surface }]}>
-            <Text style={[styles.title, { color: palette.onSurface }]}>Settings</Text>
+          <View style={[styles.headerContainer, { backgroundColor: Colors.surface }]}>
+            <Text style={[styles.title, { color: Colors.onSurface }]}>Settings</Text>
           </View>
           <ScrollView
             style={styles.menuScroll}
@@ -719,27 +718,27 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               style={[
                 styles.settingRow,
                 {
-                  borderColor: palette.outline,
-                  backgroundColor: palette.surface,
+                  borderColor: Colors.outline,
+                  backgroundColor: Colors.surface,
                 },
               ]}>
               <View
                 style={[
                   styles.checkbox,
                   {
-                    borderColor: ignoreGarnish ? palette.tint : palette.outlineVariant,
-                    backgroundColor: ignoreGarnish ? palette.tint : 'transparent',
+                    borderColor: ignoreGarnish ? Colors.tint : Colors.outlineVariant,
+                    backgroundColor: ignoreGarnish ? Colors.tint : 'transparent',
                   },
                 ]}>
                 <MaterialCommunityIcons
                   name="check"
                   size={16}
-                  color={ignoreGarnish ? palette.background : palette.outlineVariant}
+                  color={ignoreGarnish ? Colors.background : Colors.outlineVariant}
                 />
               </View>
               <View style={styles.settingTextContainer}>
-                <Text style={[styles.settingLabel, { color: palette.onSurface }]}>Ignore garnish</Text>
-                <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>All garnishes are optional</Text>
+                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>Ignore garnish</Text>
+                <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>All garnishes are optional</Text>
               </View>
             </Pressable>
             <Pressable
@@ -749,27 +748,27 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               style={[
                 styles.settingRow,
                 {
-                  borderColor: palette.outline,
-                  backgroundColor: palette.surface,
+                  borderColor: Colors.outline,
+                  backgroundColor: Colors.surface,
                 },
               ]}>
               <View
                 style={[
                   styles.checkbox,
                   {
-                    borderColor: allowAllSubstitutes ? palette.tint : palette.outlineVariant,
-                    backgroundColor: allowAllSubstitutes ? palette.tint : 'transparent',
+                    borderColor: allowAllSubstitutes ? Colors.tint : Colors.outlineVariant,
+                    backgroundColor: allowAllSubstitutes ? Colors.tint : 'transparent',
                   },
                 ]}>
                 <MaterialCommunityIcons
                   name="check"
                   size={16}
-                  color={allowAllSubstitutes ? palette.background : palette.outlineVariant}
+                  color={allowAllSubstitutes ? Colors.background : Colors.outlineVariant}
                 />
               </View>
               <View style={styles.settingTextContainer}>
-                <Text style={[styles.settingLabel, { color: palette.onSurface }]}>Allow all substitutes</Text>
-                <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}> 
+                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>Allow all substitutes</Text>
+                <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}> 
                   Always use substitutes
                 </Text>
               </View>
@@ -781,27 +780,27 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               style={[
                 styles.settingRow,
                 {
-                  borderColor: palette.outline,
-                  backgroundColor: palette.surface,
+                  borderColor: Colors.outline,
+                  backgroundColor: Colors.surface,
                 },
               ]}>
               <View
                 style={[
                   styles.checkbox,
                   {
-                    borderColor: useImperialUnits ? palette.tint : palette.outlineVariant,
-                    backgroundColor: useImperialUnits ? palette.tint : 'transparent',
+                    borderColor: useImperialUnits ? Colors.tint : Colors.outlineVariant,
+                    backgroundColor: useImperialUnits ? Colors.tint : 'transparent',
                   },
                 ]}>
                 <MaterialCommunityIcons
                   name="check"
                   size={16}
-                  color={useImperialUnits ? palette.background : palette.outlineVariant}
+                  color={useImperialUnits ? Colors.background : Colors.outlineVariant}
                 />
               </View>
               <View style={styles.settingTextContainer}>
-                <Text style={[styles.settingLabel, { color: palette.onSurface }]}>Show in imperial</Text>
-                <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>Use oz instead of ml and grams</Text>
+                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>Show in imperial</Text>
+                <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>Use oz instead of ml and grams</Text>
               </View>
             </Pressable>
             <Pressable
@@ -811,27 +810,27 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               style={[
                 styles.settingRow,
                 {
-                  borderColor: palette.outline,
-                  backgroundColor: palette.surface,
+                  borderColor: Colors.outline,
+                  backgroundColor: Colors.surface,
                 },
               ]}>
               <View
                 style={[
                   styles.checkbox,
                   {
-                    borderColor: keepScreenAwake ? palette.tint : palette.outlineVariant,
-                    backgroundColor: keepScreenAwake ? palette.tint : 'transparent',
+                    borderColor: keepScreenAwake ? Colors.tint : Colors.outlineVariant,
+                    backgroundColor: keepScreenAwake ? Colors.tint : 'transparent',
                   },
                 ]}>
                 <MaterialCommunityIcons
                   name="check"
                   size={16}
-                  color={keepScreenAwake ? palette.background : palette.outlineVariant}
+                  color={keepScreenAwake ? Colors.background : Colors.outlineVariant}
                 />
               </View>
               <View style={styles.settingTextContainer}>
-                <Text style={[styles.settingLabel, { color: palette.onSurface }]}>Keep screen awake</Text>
-                <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>Prevent sleep on cocktail view</Text>
+                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>Keep screen awake</Text>
+                <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>Prevent sleep on cocktail view</Text>
               </View>
             </Pressable>
             <Pressable
@@ -841,23 +840,23 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               style={[
                 styles.settingRow,
                 {
-                  borderColor: palette.outline,
-                  backgroundColor: palette.surface,
+                  borderColor: Colors.outline,
+                  backgroundColor: Colors.surface,
                 },
               ]}>
               <View
                 style={[
                   styles.checkbox,
                   {
-                    borderColor: palette.tint,
-                    backgroundColor: palette.surfaceVariant,
+                    borderColor: Colors.tint,
+                    backgroundColor: Colors.surfaceVariant,
                   },
                 ]}>
-                <MaterialCommunityIcons name="home-variant" size={16} color={palette.tint} />
+                <MaterialCommunityIcons name="home-variant" size={16} color={Colors.tint} />
               </View>
               <View style={styles.settingTextContainer}>
-                <Text style={[styles.settingLabel, { color: palette.onSurface }]}>Starting screen</Text>
-                <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>Open {selectedStartScreenOption?.label ?? 'All cocktails'}</Text>
+                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>Starting screen</Text>
+                <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>Open {selectedStartScreenOption?.label ?? 'All cocktails'}</Text>
               </View>
             </Pressable>
             <Pressable
@@ -867,23 +866,23 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               style={[
                 styles.settingRow,
                 {
-                  borderColor: palette.outline,
-                  backgroundColor: palette.surface,
+                  borderColor: Colors.outline,
+                  backgroundColor: Colors.surface,
                 },
               ]}>
               <View
                 style={[
                   styles.checkbox,
                   {
-                    borderColor: palette.tint,
-                    backgroundColor: palette.surfaceVariant,
+                    borderColor: Colors.tint,
+                    backgroundColor: Colors.surfaceVariant,
                   },
                 ]}>
-                <MaterialCommunityIcons name="star" size={16} color={palette.tint} />
+                <MaterialCommunityIcons name="star" size={16} color={Colors.tint} />
               </View>
               <View style={styles.settingTextContainer}>
-                <Text style={[styles.settingLabel, { color: palette.onSurface }]}>Favorites rating filter</Text>
-                <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>Showing {ratingFilterThreshold}+ stars cocktails</Text>
+                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>Favorites rating filter</Text>
+                <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>Showing {ratingFilterThreshold}+ stars cocktails</Text>
               </View>
             </Pressable>
             
@@ -894,23 +893,23 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               style={[
                 styles.settingRow,
                 {
-                  borderColor: palette.outline,
-                  backgroundColor: palette.surface,
+                  borderColor: Colors.outline,
+                  backgroundColor: Colors.surface,
                 },
               ]}>
               <View
                 style={[
                   styles.checkbox,
                   {
-                    borderColor: palette.tint,
-                    backgroundColor: palette.surfaceVariant,
+                    borderColor: Colors.tint,
+                    backgroundColor: Colors.surfaceVariant,
                   },
                 ]}>
-                <MaterialCommunityIcons name="tag-multiple" size={16} color={palette.tint} />
+                <MaterialCommunityIcons name="tag-multiple" size={16} color={Colors.tint} />
               </View>
               <View style={styles.settingTextContainer}>
-                <Text style={[styles.settingLabel, { color: palette.onSurface }]}>Manage tags</Text>
-                <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>Create or update your tags</Text>
+                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>Manage tags</Text>
+                <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>Create or update your tags</Text>
               </View>
             </Pressable>
             <Pressable
@@ -921,19 +920,19 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               style={({ pressed }) => [
                 styles.actionRow,
                 {
-                  borderColor: palette.outline,
-                  backgroundColor: palette.surface,
+                  borderColor: Colors.outline,
+                  backgroundColor: Colors.surface,
                 },
                 pressed || isExporting ? { opacity: 0.8 } : null,
               ]}>
-              <View style={[styles.actionIcon, { backgroundColor: palette.surfaceVariant }]}>
-                <MaterialCommunityIcons name="file-export-outline" size={16} color={palette.onSurfaceVariant} />
+              <View style={[styles.actionIcon, { backgroundColor: Colors.surfaceVariant }]}>
+                <MaterialCommunityIcons name="file-export-outline" size={16} color={Colors.onSurfaceVariant} />
               </View>
               <View style={styles.settingTextContainer}>
-                <Text style={[styles.settingLabel, { color: palette.onSurface }]}>
+                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>
                   {isExporting ? 'Exporting data...' : 'Export data'}
                 </Text>
-                <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>
+                <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>
                   Backup data to a file
                 </Text>
               </View>
@@ -946,19 +945,19 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               style={({ pressed }) => [
                 styles.actionRow,
                 {
-                  borderColor: palette.outline,
-                  backgroundColor: palette.surface,
+                  borderColor: Colors.outline,
+                  backgroundColor: Colors.surface,
                 },
                 pressed || isImporting ? { opacity: 0.8 } : null,
               ]}>
-              <View style={[styles.actionIcon, { backgroundColor: palette.surfaceVariant }]}>
-                <MaterialCommunityIcons name="file-import-outline" size={16} color={palette.onSurfaceVariant} />
+              <View style={[styles.actionIcon, { backgroundColor: Colors.surfaceVariant }]}>
+                <MaterialCommunityIcons name="file-import-outline" size={16} color={Colors.onSurfaceVariant} />
               </View>
               <View style={styles.settingTextContainer}>
-                <Text style={[styles.settingLabel, { color: palette.onSurface }]}>
+                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>
                   {isImporting ? 'Importing data...' : 'Import data'}
                 </Text>
-                <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>
+                <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>
                   Load backup from a file
                 </Text>
               </View>
@@ -971,19 +970,19 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               style={({ pressed }) => [
                 styles.actionRow,
                 {
-                  borderColor: palette.outline,
-                  backgroundColor: palette.surface,
+                  borderColor: Colors.outline,
+                  backgroundColor: Colors.surface,
                 },
                 pressed || isBackingUpPhotos ? { opacity: 0.8 } : null,
               ]}>
-              <View style={[styles.actionIcon, { backgroundColor: palette.surfaceVariant }]}>
-                <MaterialCommunityIcons name="image-multiple" size={16} color={palette.onSurfaceVariant} />
+              <View style={[styles.actionIcon, { backgroundColor: Colors.surfaceVariant }]}>
+                <MaterialCommunityIcons name="image-multiple" size={16} color={Colors.onSurfaceVariant} />
               </View>
               <View style={styles.settingTextContainer}>
-                <Text style={[styles.settingLabel, { color: palette.onSurface }]}>
+                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>
                   {isBackingUpPhotos ? 'Preparing photo backup...' : 'Export photos'}
                 </Text>
-                <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>
+                <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>
                   Save photos as an archive
                 </Text>
               </View>
@@ -1001,20 +1000,20 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
             style={[
               styles.modalCard,
               {
-                backgroundColor: palette.surface,
-                borderColor: palette.outline,
-                shadowColor: palette.shadow,
+                backgroundColor: Colors.surface,
+                borderColor: Colors.outline,
+                shadowColor: Colors.shadow,
               },
             ]}
             accessibilityLabel="Favorites rating"
             onPress={() => {}}>
             <View style={styles.modalHeader}>
-              <Text style={[styles.modalTitle, { color: palette.onSurface, flex: 1 }]}>Favorites rating</Text>
+              <Text style={[styles.modalTitle, { color: Colors.onSurface, flex: 1 }]}>Favorites rating</Text>
               <Pressable onPress={handleCloseRatingModal} accessibilityRole="button" accessibilityLabel="Close">
-                <MaterialCommunityIcons name="close" size={22} color={palette.onSurfaceVariant} />
+                <MaterialCommunityIcons name="close" size={22} color={Colors.onSurfaceVariant} />
               </Pressable>
             </View>
-            <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>
+            <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>
               Choose the minimum rating to show on Favorites
             </Text>
             <View style={styles.ratingOptionRow}>
@@ -1030,20 +1029,20 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     style={({ pressed }) => [
                       styles.ratingOption,
                       {
-                        borderColor: isSelected ? palette.tint : palette.outlineVariant,
-                        backgroundColor: isSelected ? palette.tint : palette.surfaceBright,
+                        borderColor: isSelected ? Colors.tint : Colors.outlineVariant,
+                        backgroundColor: isSelected ? Colors.tint : Colors.surfaceBright,
                       },
                       pressed ? { opacity: 0.8 } : null,
                     ]}>
                     <MaterialCommunityIcons
                       name="star"
                       size={20}
-                      color={isSelected ? palette.background : palette.onSurfaceVariant}
+                      color={isSelected ? Colors.background : Colors.onSurfaceVariant}
                     />
                     <Text
                       style={[
                         styles.ratingOptionLabel,
-                        { color: isSelected ? palette.background : palette.onSurface },
+                        { color: isSelected ? Colors.background : Colors.onSurface },
                       ]}>
                       {value}+
                     </Text>
@@ -1060,41 +1059,41 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
             style={[
               styles.modalCard,
               {
-                backgroundColor: palette.surface,
-                borderColor: palette.outline,
-                shadowColor: palette.shadow,
+                backgroundColor: Colors.surface,
+                borderColor: Colors.outline,
+                shadowColor: Colors.shadow,
               },
             ]}
             accessibilityLabel="Manage tags"
             onPress={() => {}}>
             <View style={styles.modalHeader}>
-              <Text style={[styles.modalTitle, { color: palette.onSurface, flex: 1 }]}>Manage tags</Text>
+              <Text style={[styles.modalTitle, { color: Colors.onSurface, flex: 1 }]}>Manage tags</Text>
               <Pressable onPress={handleCloseTagManager} accessibilityRole="button" accessibilityLabel="Close">
-                <MaterialCommunityIcons name="close" size={22} color={palette.onSurfaceVariant} />
+                <MaterialCommunityIcons name="close" size={22} color={Colors.onSurfaceVariant} />
               </Pressable>
             </View>
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.tagManagerContent}>
               <View style={styles.tagSection}>
                 <View style={styles.tagSectionHeader}>
-                  <Text style={[styles.settingLabel, { color: palette.onSurface }]}>Cocktail tags</Text>
+                  <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>Cocktail tags</Text>
                   <Pressable
                     accessibilityRole="button"
                     onPress={() => handleOpenTagEditor('cocktail')}
-                    style={[styles.tagAddButton, { borderColor: palette.outlineVariant }]}
+                    style={[styles.tagAddButton, { borderColor: Colors.outlineVariant }]}
                   >
-                    <MaterialCommunityIcons name="plus" size={16} color={palette.tint} />
-                    <Text style={[styles.tagAddLabel, { color: palette.tint }]}>Add</Text>
+                    <MaterialCommunityIcons name="plus" size={16} color={Colors.tint} />
+                    <Text style={[styles.tagAddLabel, { color: Colors.tint }]}>Add</Text>
                   </Pressable>
                 </View>
                 {customCocktailTags.length === 0 ? (
-                  <Text style={[styles.tagEmpty, { color: palette.onSurfaceVariant }]}>
+                  <Text style={[styles.tagEmpty, { color: Colors.onSurfaceVariant }]}>
                     No custom cocktail tags yet.
                   </Text>
                 ) : (
                   <View style={styles.tagRows}>
                     {customCocktailTags.map((tag) => (
                       <View key={`cocktail-tag-${tag.id}`} style={styles.tagRow}>
-                        <TagPill label={tag.name ?? ''} color={tag.color ?? palette.tint} />
+                        <TagPill label={tag.name ?? ''} color={tag.color ?? Colors.tint} />
                         <View style={styles.tagActions}>
                           <Pressable
                             accessibilityRole="button"
@@ -1103,18 +1102,18 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                               handleOpenTagEditor('cocktail', {
                                 id: Number(tag.id),
                                 name: tag.name ?? '',
-                                color: tag.color ?? palette.tint,
+                                color: tag.color ?? Colors.tint,
                               })
                             }
                           >
-                            <MaterialCommunityIcons name="pencil" size={18} color={palette.onSurfaceVariant} />
+                            <MaterialCommunityIcons name="pencil" size={18} color={Colors.onSurfaceVariant} />
                           </Pressable>
                           <Pressable
                             accessibilityRole="button"
                             accessibilityLabel={`Delete ${tag.name ?? 'tag'}`}
                             onPress={() => handleDeleteTag('cocktail', { id: Number(tag.id), name: tag.name ?? 'Tag' })}
                           >
-                            <MaterialCommunityIcons name="trash-can-outline" size={18} color={palette.error} />
+                            <MaterialCommunityIcons name="trash-can-outline" size={18} color={Colors.error} />
                           </Pressable>
                         </View>
                       </View>
@@ -1124,25 +1123,25 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               </View>
               <View style={styles.tagSection}>
                 <View style={styles.tagSectionHeader}>
-                  <Text style={[styles.settingLabel, { color: palette.onSurface }]}>Ingredient tags</Text>
+                  <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>Ingredient tags</Text>
                   <Pressable
                     accessibilityRole="button"
                     onPress={() => handleOpenTagEditor('ingredient')}
-                    style={[styles.tagAddButton, { borderColor: palette.outlineVariant }]}
+                    style={[styles.tagAddButton, { borderColor: Colors.outlineVariant }]}
                   >
-                    <MaterialCommunityIcons name="plus" size={16} color={palette.tint} />
-                    <Text style={[styles.tagAddLabel, { color: palette.tint }]}>Add</Text>
+                    <MaterialCommunityIcons name="plus" size={16} color={Colors.tint} />
+                    <Text style={[styles.tagAddLabel, { color: Colors.tint }]}>Add</Text>
                   </Pressable>
                 </View>
                 {customIngredientTags.length === 0 ? (
-                  <Text style={[styles.tagEmpty, { color: palette.onSurfaceVariant }]}>
+                  <Text style={[styles.tagEmpty, { color: Colors.onSurfaceVariant }]}>
                     No custom ingredient tags yet.
                   </Text>
                 ) : (
                   <View style={styles.tagRows}>
                     {customIngredientTags.map((tag) => (
                       <View key={`ingredient-tag-${tag.id}`} style={styles.tagRow}>
-                        <TagPill label={tag.name ?? ''} color={tag.color ?? palette.tint} />
+                        <TagPill label={tag.name ?? ''} color={tag.color ?? Colors.tint} />
                         <View style={styles.tagActions}>
                           <Pressable
                             accessibilityRole="button"
@@ -1151,18 +1150,18 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                               handleOpenTagEditor('ingredient', {
                                 id: Number(tag.id),
                                 name: tag.name ?? '',
-                                color: tag.color ?? palette.tint,
+                                color: tag.color ?? Colors.tint,
                               })
                             }
                           >
-                            <MaterialCommunityIcons name="pencil" size={18} color={palette.onSurfaceVariant} />
+                            <MaterialCommunityIcons name="pencil" size={18} color={Colors.onSurfaceVariant} />
                           </Pressable>
                           <Pressable
                             accessibilityRole="button"
                             accessibilityLabel={`Delete ${tag.name ?? 'tag'}`}
                             onPress={() => handleDeleteTag('ingredient', { id: Number(tag.id), name: tag.name ?? 'Tag' })}
                           >
-                            <MaterialCommunityIcons name="trash-can-outline" size={18} color={palette.error} />
+                            <MaterialCommunityIcons name="trash-can-outline" size={18} color={Colors.error} />
                           </Pressable>
                         </View>
                       </View>
@@ -1200,20 +1199,20 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
             style={[
               styles.modalCard,
               {
-                backgroundColor: palette.surface,
-                borderColor: palette.outline,
-                shadowColor: palette.shadow,
+                backgroundColor: Colors.surface,
+                borderColor: Colors.outline,
+                shadowColor: Colors.shadow,
               },
             ]}
             accessibilityLabel="Starting screen"
             onPress={() => {}}>
             <View style={styles.modalHeader}>
-              <Text style={[styles.modalTitle, { color: palette.onSurface, flex: 1 }]}>Starting screen</Text>
+              <Text style={[styles.modalTitle, { color: Colors.onSurface, flex: 1 }]}>Starting screen</Text>
               <Pressable onPress={handleCloseStartScreenModal} accessibilityRole="button" accessibilityLabel="Close">
-                <MaterialCommunityIcons name="close" size={22} color={palette.onSurfaceVariant} />
+                <MaterialCommunityIcons name="close" size={22} color={Colors.onSurfaceVariant} />
               </Pressable>
             </View>
-            <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>Select where the app opens</Text>
+            <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>Select where the app opens</Text>
             <ScrollView
               style={styles.startScreenModalScroll}
               contentContainerStyle={styles.startScreenOptionList}
@@ -1230,22 +1229,22 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     style={({ pressed }) => [
                       styles.startScreenOption,
                       {
-                        borderColor: isSelected ? palette.tint : palette.outlineVariant,
-                        backgroundColor: isSelected ? palette.highlightFaint : palette.surfaceBright,
+                        borderColor: isSelected ? Colors.tint : Colors.outlineVariant,
+                        backgroundColor: isSelected ? Colors.highlightFaint : Colors.surfaceBright,
                       },
                       pressed ? { opacity: 0.85 } : null,
                     ]}>
-                    <View style={[styles.startScreenIcon, { backgroundColor: palette.surfaceBright }]}>
+                    <View style={[styles.startScreenIcon, { backgroundColor: Colors.surfaceBright }]}>
                       {renderStartScreenIcon(option, isSelected)}
                     </View>
                     <View style={styles.startScreenTextContainer}>
-                      <Text style={[styles.settingLabel, { color: palette.onSurface }]}>{option.label}</Text>
-                      <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>{option.description}</Text>
+                      <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>{option.label}</Text>
+                      <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>{option.description}</Text>
                     </View>
                     <MaterialCommunityIcons
                       name={isSelected ? 'check-circle' : 'checkbox-blank-circle-outline'}
                       size={20}
-                      color={isSelected ? palette.tint : palette.onSurfaceVariant}
+                      color={isSelected ? Colors.tint : Colors.onSurfaceVariant}
                     />
                   </Pressable>
                 );
