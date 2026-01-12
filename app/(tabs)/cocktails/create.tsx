@@ -1383,7 +1383,6 @@ export default function CreateCocktailScreen() {
                   onRequestCreateIngredient={handleRequestCreateIngredient}
                   onInputFocus={scrollFieldIntoView}
                   onOpenDialog={showDialog}
-                  palette={palette}
                   index={index}
                   totalCount={ingredientsState.length}
                 />
@@ -1683,7 +1682,6 @@ type EditableIngredientRowProps = {
   onOpenDialog: (options: DialogOptions) => void;
   index: number;
   totalCount: number;
-  palette: typeof Colors;
 };
 
 function EditableIngredientRow({
@@ -1704,7 +1702,6 @@ function EditableIngredientRow({
   onOpenDialog,
   index,
   totalCount,
-  palette,
 }: EditableIngredientRowProps) {
   const [isFocused, setIsFocused] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -2057,8 +2054,8 @@ function EditableIngredientRow({
       </View>
 
       <View style={styles.toggleRow}>
-        <ToggleChip label="Garnish" active={ingredient.garnish} onToggle={handleToggleGarnish} palette={palette} />
-        <ToggleChip label="Optional" active={ingredient.optional} onToggle={handleToggleOptional} palette={palette} />
+        <ToggleChip label="Garnish" active={ingredient.garnish} onToggle={handleToggleGarnish} />
+        <ToggleChip label="Optional" active={ingredient.optional} onToggle={handleToggleOptional} />
       </View>
 
       {isBrandedIngredient ? (
@@ -2075,7 +2072,6 @@ function EditableIngredientRow({
                 actions: [{ label: 'OK' }],
               })
             }
-            palette={palette}
           />
           <ToggleChip
             label="Allow branded substitute"
@@ -2089,7 +2085,6 @@ function EditableIngredientRow({
                 actions: [{ label: 'OK' }],
               })
             }
-            palette={palette}
           />
         </View>
       ) : null}
@@ -2141,10 +2136,9 @@ type ToggleChipProps = {
   active: boolean;
   onToggle: () => void;
   onInfo?: () => void;
-  palette: typeof Colors;
 };
 
-function ToggleChip({ label, active, onToggle, onInfo, palette }: ToggleChipProps) {
+function ToggleChip({ label, active, onToggle, onInfo }: ToggleChipProps) {
   return (
     <View style={styles.toggleChipContainer}>
       <Pressable
