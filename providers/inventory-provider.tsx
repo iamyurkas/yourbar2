@@ -77,6 +77,8 @@ type InventoryContextValue = {
   createCocktail: (input: CreateCocktailInput) => Cocktail | undefined;
   createIngredient: (input: CreateIngredientInput) => Ingredient | undefined;
   resetInventoryFromBundle: () => Promise<void>;
+  exportInventoryData: () => InventoryData | null;
+  importInventoryData: (data: InventoryData) => void;
   updateIngredient: (id: number, input: CreateIngredientInput) => Ingredient | undefined;
   updateCocktail: (id: number, input: CreateCocktailInput) => Cocktail | undefined;
   deleteCocktail: (id: number) => boolean;
@@ -1231,6 +1233,40 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     setCustomIngredientTags([]);
   }, []);
 
+  const exportInventoryData = useCallback((): InventoryData | null => {
+    if (!inventoryState) {
+      return null;
+    }
+
+    const cocktails = inventoryState.cocktails.map((cocktail) => toCocktailStorageRecord(cocktail));
+    const ingredients = inventoryState.ingredients.map((ingredient) => {
+      const baseName = ingredient.searchName ?? ingredient.name ?? '';
+      const normalizedSearchName = baseName.trim().toLowerCase();
+      const searchTokens =
+        ingredient.searchTokens && ingredient.searchTokens.length > 0
+          ? ingredient.searchTokens
+          : normalizedSearchName.split(/\s+/).filter(Boolean);
+
+      return {
+        ...toIngredientStorageRecord(ingredient),
+        searchName: normalizedSearchName,
+        searchTokens,
+      };
+    });
+
+    return {
+      cocktails,
+      ingredients,
+    };
+  }, [inventoryState]);
+
+  const importInventoryData = useCallback((data: InventoryData) => {
+    setInventoryState(createInventoryStateFromData(data, true));
+    setAvailableIngredientIds(new Set());
+    setShoppingIngredientIds(new Set());
+    setCocktailRatings({});
+  }, []);
+
   const updateIngredient = useCallback(
     (id: number, input: CreateIngredientInput) => {
       let updated: Ingredient | undefined;
@@ -2003,6 +2039,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       createCocktail,
       createIngredient,
       resetInventoryFromBundle,
+      exportInventoryData,
+      importInventoryData,
       updateCocktail,
       updateIngredient,
       deleteCocktail,
@@ -2044,6 +2082,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     createCocktail,
     createIngredient,
     resetInventoryFromBundle,
+    exportInventoryData,
+    importInventoryData,
     updateCocktail,
     updateIngredient,
     deleteCocktail,
@@ -2063,7 +2103,6 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     handleSetKeepScreenAwake,
     handleSetRatingFilterThreshold,
     handleSetStartScreen,
-    resetInventoryFromBundle,
   ]);
 
   return <InventoryContext.Provider value={value}>{children}</InventoryContext.Provider>;
