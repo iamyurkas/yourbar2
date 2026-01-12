@@ -8067,10 +8067,8 @@
       "updatedAt": 1758844944623,
       "photoUri": "assets/cocktails/1758844263671-amalia.jpg",
       "methodIds": [
-        "shake",
         "muddle",
-        "stir",
-        "layer"
+        "shake"
       ]
     },
     {
