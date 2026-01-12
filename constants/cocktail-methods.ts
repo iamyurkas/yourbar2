@@ -1,6 +1,4 @@
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { ImageSource } from 'expo-image';
-import type { ComponentProps } from 'react';
 
 import ShakerIcon from '@/assets/images/shaker.svg';
 
@@ -20,9 +18,7 @@ export type CocktailMethod = {
   description: string;
 };
 
-export type MethodIcon =
-  | { type: 'icon'; name: ComponentProps<typeof MaterialCommunityIcons>['name'] }
-  | { type: 'asset'; source: ImageSource };
+export type MethodIcon = { type: 'icon'; name: string } | { type: 'asset'; source: ImageSource };
 
 export const COCKTAIL_METHODS: CocktailMethod[] = [
   {
