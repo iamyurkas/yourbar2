@@ -220,7 +220,6 @@ export const ingredientImages: Record<string, number> = {
   'assets/ingredients/591435-nutmeg.jpg': require('./ingredients/591435-nutmeg.jpg'),
   'assets/ingredients/596123-creme-de-menthe-white.jpg': require('./ingredients/596123-creme-de-menthe-white.jpg'),
   'assets/ingredients/5992-peach.jpg': require('./ingredients/5992-peach.jpg'),
-  'assets/ingredients/60012-cranberry-vodka.jpg': require('./ingredients/60012-cranberry-vodka.jpg'),
   'assets/ingredients/605672-strawberry-schnapps.jpg': require('./ingredients/605672-strawberry-schnapps.jpg'),
   'assets/ingredients/607153-maraschino-cherry.jpg': require('./ingredients/607153-maraschino-cherry.jpg'),
   'assets/ingredients/609552-banana.jpg': require('./ingredients/609552-banana.jpg'),

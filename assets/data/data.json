@@ -2085,24 +2085,6 @@
       "photoUri": "assets/ingredients/81569-cranberry-juice.jpg"
     },
     {
-      "id": 60012,
-      "name": "Cranberry Vodka",
-      "description": "Vodka infused with cranberry flavor, usually around 35–40% ABV. Brings tart berry notes and bright color. Ideal for cosmopolitan-style drinks and spritzes.",
-      "tags": [
-        {
-          "id": 1,
-          "name": "strong alcohol",
-          "color": "#ec5a5a"
-        }
-      ],
-      "searchName": "cranberry vodka",
-      "searchTokens": [
-        "cranberry",
-        "vodka"
-      ],
-      "photoUri": "assets/ingredients/60012-cranberry-vodka.jpg"
-    },
-    {
       "id": 564821,
       "name": "Cream",
       "description": "Cream is the high-fat layer skimmed from milk. It lends body and mellow sweetness to shaken drinks, flips, and dessert cocktails.",
