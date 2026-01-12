@@ -853,7 +853,7 @@ export default function CocktailsScreen() {
   const emptyMessage = isMyTab
     ? 'Mark which ingredients you have available.'
     : activeTab === 'favorites'
-      ? 'Rate cocktails and/or adjust the rating threshold in the side menu.'
+      ? 'No ingredients in the shopping list.'
       : 'No cocktails yet';
   const filterMenuTop = useMemo(() => {
     if (headerLayout && filterAnchorLayout) {

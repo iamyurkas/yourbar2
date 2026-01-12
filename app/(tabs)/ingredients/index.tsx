@@ -548,6 +548,12 @@ export default function IngredientsScreen() {
   }, [filteredByTags, normalizedQuery]);
 
   const highlightColor = paletteColors.highlightFaint;
+  const emptyMessage =
+    activeTab === 'my'
+      ? 'Mark which ingredients you have available.'
+      : activeTab === 'shopping'
+        ? 'No ingredients in the shopping list.'
+        : 'No ingredients in the list';
   const isFilterActive = selectedTagKeys.size > 0;
   const filterMenuTop = useMemo(() => {
     if (headerLayout && filterAnchorLayout) {
@@ -771,7 +777,9 @@ export default function IngredientsScreen() {
           contentContainerStyle={styles.listContent}
           showsVerticalScrollIndicator
           ListEmptyComponent={
-            <Text style={[styles.emptyLabel, { color: paletteColors.onSurfaceVariant }]}>No ingredients in the list</Text>
+            <Text style={[styles.emptyLabel, { color: paletteColors.onSurfaceVariant }]}>
+              {emptyMessage}
+            </Text>
           }
         />
       </View>
