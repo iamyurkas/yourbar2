@@ -3,6 +3,7 @@ import { Redirect } from 'expo-router';
 
 import { setLastCocktailTab, setLastIngredientTab } from '@/libs/collection-tabs';
 import { useInventory, type StartScreen } from '@/providers/inventory-provider';
+import { SplashScreen } from '@/components/SplashScreen';
 
 function getHrefForStartScreen(screen: StartScreen): string {
   switch (screen) {
@@ -58,7 +59,7 @@ export default function Index() {
   const targetHref = useMemo(() => getHrefForStartScreen(startScreen), [startScreen]);
 
   if (loading) {
-    return null;
+    return <SplashScreen />;
   }
 
   return <Redirect href={targetHref} />;
