@@ -1,10 +1,11 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Image, type ImageSource } from 'expo-image';
-import React, { memo, useMemo, type ComponentProps } from 'react';
+import { Image } from 'expo-image';
+import React, { memo, useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { resolveGlasswareUriFromId } from '@/assets/image-manifest';
-import ShakerIcon from '@/assets/images/shaker.svg';
+import { METHOD_ICON_MAP } from '@/constants/cocktail-method-icons';
+import type { CocktailMethodId } from '@/constants/cocktail-methods';
 import { Colors } from '@/constants/theme';
 import type { Cocktail, Ingredient } from '@/providers/inventory-provider';
 import { createIngredientLookup, type IngredientLookup } from '@/libs/ingredient-availability';
@@ -50,20 +51,6 @@ const areCocktailRowPropsEqual = (
 
 const MAX_RATING = 5;
 const METHOD_ICON_SIZE = 16;
-
-type MethodIcon =
-  | { type: 'icon'; name: ComponentProps<typeof MaterialCommunityIcons>['name'] }
-  | { type: 'asset'; source: ImageSource };
-
-const METHOD_ICON_MAP: Record<string, MethodIcon> = {
-  build: { type: 'icon', name: 'beer' },
-  stir: { type: 'icon', name: 'delete-variant' },
-  shake: { type: 'asset', source: ShakerIcon },
-  muddle: { type: 'icon', name: 'bottle-soda' },
-  layer: { type: 'icon', name: 'layers' },
-  blend: { type: 'icon', name: 'blender' },
-  throwing: { type: 'icon', name: 'swap-horizontal' },
-};
 
 const CocktailListRowComponent = ({
   cocktail,
@@ -142,7 +129,7 @@ const CocktailListRowComponent = ({
   );
 
   const methodIds = useMemo(() => {
-    const legacyMethodId = (cocktail as { methodId?: string | null }).methodId ?? null;
+    const legacyMethodId = (cocktail as { methodId?: CocktailMethodId | null }).methodId ?? null;
     if (cocktail.methodIds && cocktail.methodIds.length > 0) {
       return cocktail.methodIds;
     }

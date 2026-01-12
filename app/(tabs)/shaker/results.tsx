@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Image, type ImageSource } from 'expo-image';
+import { Image } from 'expo-image';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
@@ -17,7 +17,7 @@ import { CocktailListRow } from '@/components/CocktailListRow';
 import { CollectionHeader } from '@/components/CollectionHeader';
 import { SideMenuDrawer } from '@/components/SideMenuDrawer';
 import { TagPill } from '@/components/TagPill';
-import ShakerIcon from '@/assets/images/shaker.svg';
+import { METHOD_ICON_MAP } from '@/constants/cocktail-method-icons';
 import { getCocktailMethods, type CocktailMethod } from '@/constants/cocktail-methods';
 import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
 import { Colors } from '@/constants/theme';
@@ -59,20 +59,7 @@ function resolveCocktailByKey(key: string, cocktails: Cocktail[]) {
   return cocktails.find((item) => item.name?.toLowerCase() === normalized);
 }
 
-type MethodIcon =
-  | { type: 'icon'; name: React.ComponentProps<typeof MaterialCommunityIcons>['name'] }
-  | { type: 'asset'; source: ImageSource };
-
 const METHOD_ICON_SIZE = 16;
-const METHOD_ICON_MAP: Record<CocktailMethod['id'], MethodIcon> = {
-  build: { type: 'icon', name: 'beer' },
-  stir: { type: 'icon', name: 'delete-variant' },
-  shake: { type: 'asset', source: ShakerIcon },
-  muddle: { type: 'icon', name: 'bottle-soda' },
-  layer: { type: 'icon', name: 'layers' },
-  blend: { type: 'icon', name: 'blender' },
-  throwing: { type: 'icon', name: 'swap-horizontal' },
-};
 
 export default function ShakerResultsScreen() {
   const router = useRouter();
