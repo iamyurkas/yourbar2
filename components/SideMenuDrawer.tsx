@@ -1,6 +1,9 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import * as DocumentPicker from 'expo-document-picker';
 import { Image, type ImageSource } from 'expo-image';
+import * as FileSystem from 'expo-file-system/legacy';
+import * as Sharing from 'expo-sharing';
 import React, { useEffect, useMemo, useRef, useState, type ComponentProps } from 'react';
 import { Animated, Dimensions, Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
@@ -11,6 +14,7 @@ import { AppDialog, type DialogOptions } from '@/components/AppDialog';
 import { TagEditorModal } from '@/components/TagEditorModal';
 import { TagPill } from '@/components/TagPill';
 import { Colors } from '@/constants/theme';
+import { type InventoryData } from '@/libs/inventory-data';
 import { useInventory, type StartScreen } from '@/providers/inventory-provider';
 
 const MENU_WIDTH = Math.round(Dimensions.get('window').width * 0.75);
@@ -94,6 +98,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     startScreen,
     setStartScreen,
     resetInventoryFromBundle,
+    exportInventoryData,
+    importInventoryData,
     customCocktailTags,
     customIngredientTags,
     createCustomCocktailTag,
@@ -114,6 +120,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   const [tagEditorType, setTagEditorType] = useState<'cocktail' | 'ingredient'>('cocktail');
   const [tagEditorTarget, setTagEditorTarget] = useState<{ id: number; name: string; color: string } | null>(null);
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(null);
+  const [isExporting, setIsExporting] = useState(false);
+  const [isImporting, setIsImporting] = useState(false);
   const translateX = useRef(new Animated.Value(-MENU_WIDTH)).current;
   const backdropOpacity = useRef(new Animated.Value(0)).current;
 
@@ -285,6 +293,112 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
   const handleCloseDialog = () => {
     setDialogOptions(null);
+  };
+
+  const showDialogMessage = (title: string, message: string) => {
+    setDialogOptions({
+      title,
+      message,
+      actions: [{ label: 'OK' }],
+    });
+  };
+
+  const isValidInventoryData = (candidate: unknown): candidate is InventoryData => {
+    if (!candidate || typeof candidate !== 'object') {
+      return false;
+    }
+
+    const record = candidate as { cocktails?: unknown; ingredients?: unknown };
+    return Array.isArray(record.cocktails) && Array.isArray(record.ingredients);
+  };
+
+  const handleExportInventory = async () => {
+    if (isExporting) {
+      return;
+    }
+
+    const data = exportInventoryData();
+    if (!data) {
+      showDialogMessage('Export unavailable', 'Load your inventory before exporting.');
+      return;
+    }
+
+    setIsExporting(true);
+
+    try {
+      const sharingAvailable = await Sharing.isAvailableAsync();
+      if (!sharingAvailable) {
+        showDialogMessage('Sharing unavailable', 'Sharing is not available on this device.');
+        return;
+      }
+
+      const directory = FileSystem.cacheDirectory ?? FileSystem.documentDirectory;
+      if (!directory) {
+        showDialogMessage('Export failed', 'Unable to access device storage.');
+        return;
+      }
+
+      const timestamp = new Date().toISOString().slice(0, 10);
+      const filename = `yourbar-data-${timestamp}.json`;
+      const fileUri = `${directory.replace(/\/?$/, '/')}${filename}`;
+      const payload = JSON.stringify(data, null, 2);
+
+      await FileSystem.writeAsStringAsync(fileUri, payload, {
+        encoding: FileSystem.EncodingType.UTF8,
+      });
+
+      await Sharing.shareAsync(fileUri, {
+        mimeType: 'application/json',
+        dialogTitle: 'Export cocktails & ingredients',
+        UTI: 'public.json',
+      });
+    } catch (error) {
+      console.error('Failed to export inventory data', error);
+      showDialogMessage('Export failed', 'Please try again.');
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
+  const handleImportInventory = async () => {
+    if (isImporting) {
+      return;
+    }
+
+    setIsImporting(true);
+
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        type: 'application/json',
+        copyToCacheDirectory: true,
+      });
+
+      if (result.canceled) {
+        return;
+      }
+
+      const asset = result.assets?.[0];
+      if (!asset?.uri) {
+        showDialogMessage('Import failed', 'Unable to read the selected file.');
+        return;
+      }
+
+      const contents = await FileSystem.readAsStringAsync(asset.uri);
+      const parsed = JSON.parse(contents) as unknown;
+
+      if (!isValidInventoryData(parsed)) {
+        showDialogMessage('Invalid file', 'The selected file does not match the expected data format.');
+        return;
+      }
+
+      importInventoryData(parsed);
+      onClose();
+    } catch (error) {
+      console.error('Failed to import inventory data', error);
+      showDialogMessage('Import failed', 'Please try again with a valid JSON file.');
+    } finally {
+      setIsImporting(false);
+    }
   };
 
   const handleSaveTagEditor = (data: { name: string; color: string }) => {
@@ -552,6 +666,56 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               <View style={styles.settingTextContainer}>
                 <Text style={[styles.settingLabel, { color: palette.onSurface }]}>Manage tags</Text>
                 <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>Create or update your tags</Text>
+              </View>
+            </Pressable>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Export cocktails and ingredients"
+              onPress={handleExportInventory}
+              disabled={isExporting || isImporting}
+              style={({ pressed }) => [
+                styles.actionRow,
+                {
+                  borderColor: palette.outline,
+                  backgroundColor: palette.surface,
+                },
+                pressed || isExporting ? { opacity: 0.8 } : null,
+              ]}>
+              <View style={[styles.actionIcon, { backgroundColor: palette.surfaceVariant }]}>
+                <MaterialCommunityIcons name="file-export-outline" size={16} color={palette.onSurfaceVariant} />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text style={[styles.settingLabel, { color: palette.onSurface }]}>
+                  {isExporting ? 'Exporting data...' : 'Export recipes & ingredients'}
+                </Text>
+                <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>
+                  Share a JSON backup from this device
+                </Text>
+              </View>
+            </Pressable>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Import cocktails and ingredients"
+              onPress={handleImportInventory}
+              disabled={isExporting || isImporting}
+              style={({ pressed }) => [
+                styles.actionRow,
+                {
+                  borderColor: palette.outline,
+                  backgroundColor: palette.surface,
+                },
+                pressed || isImporting ? { opacity: 0.8 } : null,
+              ]}>
+              <View style={[styles.actionIcon, { backgroundColor: palette.surfaceVariant }]}>
+                <MaterialCommunityIcons name="file-import-outline" size={16} color={palette.onSurfaceVariant} />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text style={[styles.settingLabel, { color: palette.onSurface }]}>
+                  {isImporting ? 'Importing data...' : 'Import recipes & ingredients'}
+                </Text>
+                <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>
+                  Load a JSON file from your device
+                </Text>
               </View>
             </Pressable>
             <Pressable
