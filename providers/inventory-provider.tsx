@@ -309,6 +309,37 @@ function toIngredientStorageRecord(ingredient: Ingredient | IngredientRecord): I
   } satisfies IngredientStorageRecord;
 }
 
+export function createInventoryExportData(cocktails: Cocktail[], ingredients: Ingredient[]): InventoryData {
+  const exportCocktails = cocktails.map((cocktail) => {
+    const base = toCocktailStorageRecord(cocktail);
+    const searchName = cocktail.searchName ?? cocktail.name?.toLowerCase() ?? '';
+    const searchTokens = cocktail.searchTokens ?? searchName.split(/\s+/).filter(Boolean);
+
+    return {
+      ...base,
+      searchName,
+      searchTokens: searchTokens.length > 0 ? searchTokens : undefined,
+    } satisfies InventoryData['cocktails'][number];
+  });
+
+  const exportIngredients = ingredients.map((ingredient) => {
+    const base = toIngredientStorageRecord(ingredient);
+    const searchName = ingredient.searchName ?? ingredient.name?.toLowerCase() ?? '';
+    const searchTokens = ingredient.searchTokens ?? searchName.split(/\s+/).filter(Boolean);
+
+    return {
+      ...base,
+      searchName,
+      searchTokens: searchTokens.length > 0 ? searchTokens : undefined,
+    } satisfies InventoryData['ingredients'][number];
+  });
+
+  return {
+    cocktails: exportCocktails,
+    ingredients: exportIngredients,
+  };
+}
+
 function areStorageRecordsEqual<TRecord>(left: TRecord, right: TRecord): boolean {
   return JSON.stringify(left) === JSON.stringify(right);
 }
