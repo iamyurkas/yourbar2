@@ -981,7 +981,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               </View>
               <View style={styles.settingTextContainer}>
                 <Text style={[styles.settingLabel, { color: palette.onSurface }]}>
-                  {isBackingUpPhotos ? 'Preparing photo backup...' : 'Backup photos'}
+                  {isBackingUpPhotos ? 'Preparing photo backup...' : 'Export photos'}
                 </Text>
                 <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>
                   Save photos as an archive
