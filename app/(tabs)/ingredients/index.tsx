@@ -5,6 +5,7 @@ import React, { memo, useCallback, useEffect, useMemo, useRef, useState, useTran
 import {
   FlatList,
   Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   View,
@@ -729,36 +730,40 @@ export default function IngredientsScreen() {
                   shadowColor: paletteColors.shadow,
                 },
               ]}>
-              {availableTagOptions.length > 0 ? (
-                <View style={styles.filterTagList}>
-                  {availableTagOptions.map((tag) => {
-                    const selected = selectedTagKeys.has(tag.key);
-                    return (
-                      <TagPill
-                        key={tag.key}
-                        label={tag.name}
-                        color={tag.color}
-                        selected={selected}
-                        onPress={() => handleTagFilterToggle(tag.key)}
-                        accessibilityRole="checkbox"
-                        accessibilityState={{ checked: selected }}
-                        androidRippleColor={`${paletteColors.surfaceVariant}33`}
-                      />
-                    );
-                  })}
-                </View>
-              ) : (
-                <Text style={[styles.filterMenuEmpty, { color: paletteColors.onSurfaceVariant }]}>No tags available</Text>
-              )}
-              {selectedTagKeys.size > 0 ? (
-                <Pressable
-                  accessibilityRole="button"
-                  accessibilityLabel="Clear selected tag filters"
-                  onPress={handleClearTagFilters}
-                  style={styles.filterMenuClearButton}>
-                  <Text style={[styles.filterMenuClearLabel, { color: paletteColors.tint }]}>Clear filters</Text>
-                </Pressable>
-              ) : null}
+              <ScrollView style={styles.filterMenuScroll} showsVerticalScrollIndicator>
+                {availableTagOptions.length > 0 ? (
+                  <View style={styles.filterTagList}>
+                    {availableTagOptions.map((tag) => {
+                      const selected = selectedTagKeys.has(tag.key);
+                      return (
+                        <TagPill
+                          key={tag.key}
+                          label={tag.name}
+                          color={tag.color}
+                          selected={selected}
+                          onPress={() => handleTagFilterToggle(tag.key)}
+                          accessibilityRole="checkbox"
+                          accessibilityState={{ checked: selected }}
+                          androidRippleColor={`${paletteColors.surfaceVariant}33`}
+                        />
+                      );
+                    })}
+                  </View>
+                ) : (
+                  <Text style={[styles.filterMenuEmpty, { color: paletteColors.onSurfaceVariant }]}>
+                    No tags available
+                  </Text>
+                )}
+                {selectedTagKeys.size > 0 ? (
+                  <Pressable
+                    accessibilityRole="button"
+                    accessibilityLabel="Clear selected tag filters"
+                    onPress={handleClearTagFilters}
+                    style={styles.filterMenuClearButton}>
+                    <Text style={[styles.filterMenuClearLabel, { color: paletteColors.tint }]}>Clear filters</Text>
+                  </Pressable>
+                ) : null}
+              </ScrollView>
             </View>
           </>
         ) : null}
@@ -856,6 +861,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.12,
     shadowRadius: 12,
     elevation: 8,
+  },
+  filterMenuScroll: {
+    maxHeight: 560,
   },
   filterTagList: {
     flexDirection: 'column',
