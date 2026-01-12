@@ -97,6 +97,7 @@ type InventoryContextValue = {
   setRatingFilterThreshold: (value: number) => void;
   startScreen: StartScreen;
   setStartScreen: (value: StartScreen) => void;
+  getExportData: () => InventoryData;
 };
 
 type InventoryState = {
@@ -833,6 +834,16 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
 
   const cocktails = inventoryState?.cocktails ?? [];
   const ingredients = inventoryState?.ingredients ?? [];
+  const getExportData = useCallback((): InventoryData => {
+    if (!inventoryState) {
+      return loadInventoryData();
+    }
+
+    return {
+      cocktails: inventoryState.cocktails.map((cocktail) => toCocktailStorageRecord(cocktail)),
+      ingredients: inventoryState.ingredients.map((ingredient) => toIngredientStorageRecord(ingredient)),
+    };
+  }, [inventoryState]);
 
   const resolveCocktailKey = useCallback((cocktail: Cocktail) => {
     const id = cocktail.id;
@@ -2022,6 +2033,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       setKeepScreenAwake: handleSetKeepScreenAwake,
       setRatingFilterThreshold: handleSetRatingFilterThreshold,
       setStartScreen: handleSetStartScreen,
+      getExportData,
     };
   }, [
     cocktailsWithRatings,
@@ -2064,6 +2076,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     handleSetRatingFilterThreshold,
     handleSetStartScreen,
     resetInventoryFromBundle,
+    getExportData,
   ]);
 
   return <InventoryContext.Provider value={value}>{children}</InventoryContext.Provider>;

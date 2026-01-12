@@ -1,8 +1,9 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { Image, type ImageSource } from 'expo-image';
+import * as FileSystem from 'expo-file-system/legacy';
 import React, { useEffect, useMemo, useRef, useState, type ComponentProps } from 'react';
-import { Animated, Dimensions, Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Animated, Dimensions, Modal, Pressable, ScrollView, Share, StyleSheet, Text, View } from 'react-native';
 
 import CocktailIcon from '@/assets/images/cocktails.svg';
 import IngredientsIcon from '@/assets/images/ingredients.svg';
@@ -102,6 +103,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     createCustomIngredientTag,
     updateCustomIngredientTag,
     deleteCustomIngredientTag,
+    getExportData,
   } = useInventory();
   const [isMounted, setIsMounted] = useState(visible);
   const [isRatingModalVisible, setRatingModalVisible] = useState(false);
@@ -209,6 +211,39 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   const handleResetInventory = async () => {
     await resetInventoryFromBundle();
     onClose();
+  };
+
+  const handleExportInventory = async () => {
+    const directory = FileSystem.cacheDirectory ?? FileSystem.documentDirectory;
+    if (!directory) {
+      setDialogOptions({
+        title: 'Export unavailable',
+        message: 'Storage access is unavailable on this device.',
+        actions: [{ label: 'OK', variant: 'primary' }],
+      });
+      return;
+    }
+
+    const exportData = getExportData();
+    const exportPayload = JSON.stringify(exportData, null, 2);
+    const fileUri = `${directory.replace(/\/?$/, '/')}yourbar-data.json`;
+
+    try {
+      await FileSystem.writeAsStringAsync(fileUri, exportPayload);
+      await Share.share({
+        title: 'Export cocktails & ingredients',
+        message: 'Cocktail export',
+        url: fileUri,
+      });
+      onClose();
+    } catch (error) {
+      console.error('Failed to export inventory', error);
+      setDialogOptions({
+        title: 'Export failed',
+        message: 'We could not export your cocktail data. Please try again.',
+        actions: [{ label: 'OK', variant: 'primary' }],
+      });
+    }
   };
 
   const handleRatingThresholdPress = () => {
@@ -572,6 +607,27 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 <Text style={[styles.settingLabel, { color: palette.onSurface }]}>Reload bundled data</Text>
                 <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>
                   Clear saved inventory and reload assets from data.json
+                </Text>
+              </View>
+            </Pressable>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Export cocktails and ingredients"
+              onPress={handleExportInventory}
+              style={[
+                styles.actionRow,
+                {
+                  borderColor: palette.outline,
+                  backgroundColor: palette.surface,
+                },
+              ]}>
+              <View style={[styles.actionIcon, { backgroundColor: palette.surfaceVariant }]}>
+                <MaterialCommunityIcons name="share-variant" size={16} color={palette.onSurfaceVariant} />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text style={[styles.settingLabel, { color: palette.onSurface }]}>Export data</Text>
+                <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>
+                  Share cocktails and ingredients as data.json
                 </Text>
               </View>
             </Pressable>
