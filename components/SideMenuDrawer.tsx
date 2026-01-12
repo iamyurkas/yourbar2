@@ -1,8 +1,8 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import * as DocumentPicker from 'expo-document-picker';
-import { Image, type ImageSource } from 'expo-image';
 import * as FileSystem from 'expo-file-system/legacy';
+import { Image, type ImageSource } from 'expo-image';
 import * as Sharing from 'expo-sharing';
 import React, { useEffect, useMemo, useRef, useState, type ComponentProps } from 'react';
 import { Animated, Dimensions, Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
@@ -529,7 +529,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               <View style={styles.settingTextContainer}>
                 <Text style={[styles.settingLabel, { color: palette.onSurface }]}>Allow all substitutes</Text>
                 <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}> 
-                  Use base or branded alternative regardless of a recipe
+                  Always use substitutes
                 </Text>
               </View>
             </Pressable>
@@ -560,7 +560,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               </View>
               <View style={styles.settingTextContainer}>
                 <Text style={[styles.settingLabel, { color: palette.onSurface }]}>Show in imperial</Text>
-                <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>Use oz instead of ml/g</Text>
+                <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>Use oz instead of ml and grams</Text>
               </View>
             </Pressable>
             <Pressable
@@ -616,7 +616,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               </View>
               <View style={styles.settingTextContainer}>
                 <Text style={[styles.settingLabel, { color: palette.onSurface }]}>Favorites rating filter</Text>
-                <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>Showing {ratingFilterThreshold}+ stars</Text>
+                <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>Showing {ratingFilterThreshold}+ stars cocktails</Text>
               </View>
             </Pressable>
             <Pressable
@@ -689,10 +689,10 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               </View>
               <View style={styles.settingTextContainer}>
                 <Text style={[styles.settingLabel, { color: palette.onSurface }]}>
-                  {isExporting ? 'Exporting data...' : 'Export recipes & ingredients'}
+                  {isExporting ? 'Exporting data...' : 'Export data'}
                 </Text>
                 <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>
-                  Share a JSON backup from this device
+                  Backup data to a file
                 </Text>
               </View>
             </Pressable>
@@ -714,10 +714,10 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               </View>
               <View style={styles.settingTextContainer}>
                 <Text style={[styles.settingLabel, { color: palette.onSurface }]}>
-                  {isImporting ? 'Importing data...' : 'Import recipes & ingredients'}
+                  {isImporting ? 'Importing data...' : 'Import data'}
                 </Text>
                 <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>
-                  Load a JSON file from your device
+                  Load a file from a backup file
                 </Text>
               </View>
             </Pressable>
