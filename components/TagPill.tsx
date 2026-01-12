@@ -47,7 +47,6 @@ export function TagPill({
   hitSlop,
   testID,
 }: TagPillProps) {
-  const palette = Colors;
 
   const content = (
     <View style={styles.contentRow}>
@@ -55,7 +54,7 @@ export function TagPill({
       <Text
         style={[
           styles.label,
-          { color: selected ? palette.surface : color },
+          { color: selected ? Colors.surface : color },
           textStyle,
         ]}
       >
@@ -68,7 +67,7 @@ export function TagPill({
     styles.pill,
     {
       borderColor: color,
-      backgroundColor: selected ? color : palette.surface,
+      backgroundColor: selected ? color : Colors.surface,
       opacity: disabled ? 0.5 : 1,
     },
     style,

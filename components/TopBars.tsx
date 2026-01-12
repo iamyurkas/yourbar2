@@ -47,7 +47,6 @@ export function SearchTopBar({
   filterExpanded = false,
   onFilterLayout,
 }: SearchTopBarProps) {
-  const palette = Colors;
 
   const handleSubmit = (event: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
     onSubmit?.(event.nativeEvent.text);
@@ -58,8 +57,8 @@ export function SearchTopBar({
       style={[
         styles.topBar,
         {
-          backgroundColor: palette.background,
-          borderBottomColor: palette.outline,
+          backgroundColor: Colors.background,
+          borderBottomColor: Colors.outline,
           borderBottomWidth: StyleSheet.hairlineWidth,
         },
       ]}>
@@ -68,18 +67,18 @@ export function SearchTopBar({
         accessibilityLabel="Open navigation"
         onPress={onMenuPress}
         style={styles.iconButton}>
-        <MaterialCommunityIcons name="menu" size={24} color={palette.onSurface} />
+        <MaterialCommunityIcons name="menu" size={24} color={Colors.onSurface} />
       </Pressable>
-      <View style={[styles.searchContainer, { backgroundColor: palette.surface, borderColor: palette.background }]}>
-        <MaterialCommunityIcons name="magnify" size={20} color={palette.onSurface} style={styles.searchIcon} />
+      <View style={[styles.searchContainer, { backgroundColor: Colors.surface, borderColor: Colors.background }]}>
+        <MaterialCommunityIcons name="magnify" size={20} color={Colors.onSurface} style={styles.searchIcon} />
         <TextInput
           value={value}
           onChangeText={onChangeText}
           placeholder={placeholder}
-          placeholderTextColor={`${palette.onSurfaceVariant}99`}
+          placeholderTextColor={`${Colors.onSurfaceVariant}99`}
           returnKeyType="search"
           onSubmitEditing={handleSubmit}
-          style={[styles.searchInput, { color: palette.text, fontWeight: '400' }]}
+          style={[styles.searchInput, { color: Colors.text, fontWeight: '400' }]}
         />
         {value ? (
           <Pressable
@@ -87,7 +86,7 @@ export function SearchTopBar({
             accessibilityLabel="Clear search query"
             onPress={() => onChangeText('')}
             style={styles.clearButton}>
-            <MaterialCommunityIcons name="close" size={18} color={palette.onSurface} />
+            <MaterialCommunityIcons name="close" size={18} color={Colors.onSurface} />
           </Pressable>
         ) : null}
       </View>
@@ -100,13 +99,13 @@ export function SearchTopBar({
         style={[
           styles.iconButton,
           filterActive
-            ? { backgroundColor: `${palette.tint}1A` }
+            ? { backgroundColor: `${Colors.tint}1A` }
             : null,
         ]}>
         <MaterialCommunityIcons
           name="filter-variant"
           size={24}
-          color={filterActive ? palette.tint : palette.icon}
+          color={filterActive ? Colors.tint : Colors.icon}
         />
       </Pressable>
     </View>
@@ -114,10 +113,9 @@ export function SearchTopBar({
 }
 
 export function SegmentTabs({ options, value, onChange }: SegmentTabsProps) {
-  const palette = Colors;
 
   return (
-    <View style={[styles.tabs, { backgroundColor: palette.surface }]}> 
+    <View style={[styles.tabs, { backgroundColor: Colors.surface }]}> 
       {options.map((option) => {
         const focused = option.key === value;
         return (
@@ -131,7 +129,7 @@ export function SegmentTabs({ options, value, onChange }: SegmentTabsProps) {
               style={[
                 styles.tabLabel,
                 {
-                  color: focused ? palette.tint : palette.onSurfaceVariant,
+                  color: focused ? Colors.tint : Colors.onSurfaceVariant,
                   fontWeight: focused ? '600' : '400',
                 },
               ]}>
@@ -141,7 +139,7 @@ export function SegmentTabs({ options, value, onChange }: SegmentTabsProps) {
               style={[
                 styles.tabIndicator,
                 {
-                  backgroundColor: focused ? palette.tint : 'transparent',
+                  backgroundColor: focused ? Colors.tint : 'transparent',
                 },
               ]}
             />

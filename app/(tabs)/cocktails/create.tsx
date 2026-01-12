@@ -191,7 +191,6 @@ function mapRecipeIngredientToEditable(recipe: NonNullable<Cocktail['ingredients
 }
 
 export default function CreateCocktailScreen() {
-  const palette = Colors;
   const navigation = useNavigation();
   const {
     ingredients: inventoryIngredients,
@@ -1153,19 +1152,19 @@ export default function CreateCocktailScreen() {
         options={{
           title: isEditMode ? 'Edit cocktail' : 'Add cocktail',
           headerTitleAlign: 'center',
-          headerStyle: { backgroundColor: palette.surface },
+          headerStyle: { backgroundColor: Colors.surface },
           headerShadowVisible: false,
-          headerTitleStyle: { color: palette.onSurface, fontSize: 16, fontWeight: '600' },
+          headerTitleStyle: { color: Colors.onSurface, fontSize: 16, fontWeight: '600' },
           headerLeft: () => (
             <HeaderIconButton onPress={handleGoBack} accessibilityLabel="Go back">
-              <MaterialCommunityIcons name="arrow-left" size={22} color={palette.onSurface} />
+              <MaterialCommunityIcons name="arrow-left" size={22} color={Colors.onSurface} />
             </HeaderIconButton>
           ),
           headerRight: () => {
             if (isEditMode) {
               return (
                 <HeaderIconButton onPress={handleDeletePress} accessibilityLabel="Delete cocktail">
-                  <MaterialIcons name="delete-outline" size={20} color={palette.onSurface} />
+                  <MaterialIcons name="delete-outline" size={20} color={Colors.onSurface} />
                 </HeaderIconButton>
               );
             }
@@ -1193,7 +1192,7 @@ export default function CreateCocktailScreen() {
                   })
                 }
                 accessibilityLabel="Edit cocktail">
-                <MaterialCommunityIcons name="pencil-outline" size={20} color={palette.onSurface} />
+                <MaterialCommunityIcons name="pencil-outline" size={20} color={Colors.onSurface} />
               </HeaderIconButton>
             );
           },
@@ -1206,26 +1205,26 @@ export default function CreateCocktailScreen() {
         keyboardVerticalOffset={Platform.select({ ios: 96, default: 0 })}>
         <ScrollView
           ref={scrollRef}
-          style={[styles.flex, { backgroundColor: palette.background }]}
+          style={[styles.flex, { backgroundColor: Colors.background }]}
           contentContainerStyle={styles.content}
           keyboardShouldPersistTaps="handled">
           <View style={styles.section}>
-          <Text style={[styles.label, { color: palette.onSurface }]}>Name</Text>
+          <Text style={[styles.label, { color: Colors.onSurface }]}>Name</Text>
           <TextInput
             value={name}
             onChangeText={setName}
             placeholder="e.g. Margarita"
             style={[
               styles.input,
-              { borderColor: palette.outlineVariant, color: palette.text, backgroundColor: palette.surface },
+              { borderColor: Colors.outlineVariant, color: Colors.text, backgroundColor: Colors.surface },
             ]}
-            placeholderTextColor={`${palette.onSurfaceVariant}99`}
+            placeholderTextColor={`${Colors.onSurfaceVariant}99`}
           />
         </View>
 
           <View style={[styles.section, styles.rowWrap]}>
-            <View style={[styles.card, styles.halfCard, { backgroundColor: palette.background }]}>
-              <Text style={[styles.cardLabel, { color: palette.onSurface }]}>Glass</Text>
+            <View style={[styles.card, styles.halfCard, { backgroundColor: Colors.background }]}>
+              <Text style={[styles.cardLabel, { color: Colors.onSurface }]}>Glass</Text>
               <Pressable
                 style={styles.glassTile}
                 accessibilityRole="button"
@@ -1234,30 +1233,30 @@ export default function CreateCocktailScreen() {
                 {glassImageSource ? (
                   <Image source={glassImageSource} style={styles.glassPreview} contentFit="contain" />
                 ) : (
-                  <MaterialCommunityIcons name="glass-cocktail" size={48} color={palette.onSurfaceVariant} />
+                  <MaterialCommunityIcons name="glass-cocktail" size={48} color={Colors.onSurfaceVariant} />
                 )}
               </Pressable>
             </View>
 
-            <View style={[styles.card, styles.halfCard, { backgroundColor: palette.background }]}>
-              <Text style={[styles.cardLabel, { color: palette.onSurface }]}>Photo</Text>
+            <View style={[styles.card, styles.halfCard, { backgroundColor: Colors.background }]}>
+              <Text style={[styles.cardLabel, { color: Colors.onSurface }]}>Photo</Text>
               <View style={styles.photoTileWrapper}>
                 <Pressable
                   accessibilityRole="button"
                   accessibilityLabel={placeholderLabel}
                   style={[
                     styles.photoTile,
-                    { borderColor: palette.outlineVariant },
-                    !imageSource && { backgroundColor: palette.surface },
+                    { borderColor: Colors.outlineVariant },
+                    !imageSource && { backgroundColor: Colors.surface },
                   ]}
                   onPress={handlePickImage}
-                  android_ripple={{ color: `${palette.surface}33` }}>
+                  android_ripple={{ color: `${Colors.surface}33` }}>
                   {imageSource ? (
                     <Image source={imageSource} style={styles.photoPreview} contentFit="contain" />
                   ) : (
                     <View style={styles.photoPlaceholderContent}>
-                      <MaterialCommunityIcons name="image-plus" size={28} color={`${palette.onSurfaceVariant}99`} />
-                      <Text style={[styles.cardHint, { color: `${palette.onSurfaceVariant}99` }]}>Tap to select image</Text>
+                      <MaterialCommunityIcons name="image-plus" size={28} color={`${Colors.onSurfaceVariant}99`} />
+                      <Text style={[styles.cardHint, { color: `${Colors.onSurfaceVariant}99` }]}>Tap to select image</Text>
                     </View>
                   )}
                 </Pressable>
@@ -1268,7 +1267,7 @@ export default function CreateCocktailScreen() {
                     style={styles.removePhotoButton}
                     accessibilityRole="button"
                     accessibilityLabel="Remove photo">
-                    <MaterialCommunityIcons name="trash-can-outline" size={18} color={palette.error} />
+                    <MaterialCommunityIcons name="trash-can-outline" size={18} color={Colors.error} />
                   </Pressable>
                 ) : null}
               </View>
@@ -1276,41 +1275,41 @@ export default function CreateCocktailScreen() {
           </View>
 
           <View style={styles.section}>
-            <Text style={[styles.label, { color: palette.onSurface }]}>Method</Text>
+            <Text style={[styles.label, { color: Colors.onSurface }]}>Method</Text>
             <Pressable
               style={[
                 styles.methodPicker,
-                { borderColor: palette.outlineVariant, backgroundColor: palette.surface },
+                { borderColor: Colors.outlineVariant, backgroundColor: Colors.surface },
               ]}
               accessibilityRole="button"
               accessibilityLabel="Select method"
               onPress={() => setIsMethodModalVisible(true)}>
               <View style={styles.methodPickerContent}>
                 <Text
-                  style={[styles.methodPickerLabel, { color: palette.onSurface }]}
+                  style={[styles.methodPickerLabel, { color: Colors.onSurface }]}
                   numberOfLines={1}>
                   {selectedMethods.length
                     ? selectedMethods.map((method) => method.label).join(', ')
                     : 'Not specified'}
                 </Text>
               </View>
-              <MaterialCommunityIcons name="chevron-down" size={20} color={palette.onSurfaceVariant} />
+              <MaterialCommunityIcons name="chevron-down" size={20} color={Colors.onSurfaceVariant} />
             </Pressable>
           </View>
 
           <View style={styles.section}>
             <View style={styles.tagHeader}>
-              <Text style={[styles.label, { color: palette.onSurface }]}>Tags</Text>
+              <Text style={[styles.label, { color: Colors.onSurface }]}>Tags</Text>
               <Pressable
                 accessibilityRole="button"
                 accessibilityLabel="Create tag"
                 onPress={handleOpenTagModal}
-                style={[styles.tagAddButton, { borderColor: palette.outlineVariant }]}>
-                <MaterialCommunityIcons name="plus" size={16} color={palette.tint} />
-                <Text style={[styles.tagAddLabel, { color: palette.tint }]}>Create tag</Text>
+                style={[styles.tagAddButton, { borderColor: Colors.outlineVariant }]}>
+                <MaterialCommunityIcons name="plus" size={16} color={Colors.tint} />
+                <Text style={[styles.tagAddLabel, { color: Colors.tint }]}>Create tag</Text>
               </Pressable>
             </View>
-            <Text style={[styles.hint, { color: palette.onSurfaceVariant }]}>Select one or more tags</Text>
+            <Text style={[styles.hint, { color: Colors.onSurfaceVariant }]}>Select one or more tags</Text>
             <View style={styles.tagList}>
               {tagSelection.map((tag) => (
                 <TagPill
@@ -1321,23 +1320,23 @@ export default function CreateCocktailScreen() {
                   onPress={() => handleToggleTag(tag.id)}
                   accessibilityRole="checkbox"
                   accessibilityState={{ checked: tag.selected }}
-                  androidRippleColor={`${palette.surface}33`}
+                  androidRippleColor={`${Colors.surface}33`}
                 />
               ))}
             </View>
           </View>
 
           <View style={styles.section}>
-            <Text style={[styles.label, { color: palette.onSurface }]}>Description</Text>
+            <Text style={[styles.label, { color: Colors.onSurface }]}>Description</Text>
             <TextInput
               value={description}
               onChangeText={setDescription}
               placeholder="Optional description"
-              placeholderTextColor={`${palette.onSurfaceVariant}99`}
+              placeholderTextColor={`${Colors.onSurfaceVariant}99`}
               style={[
                 styles.input,
                 styles.multilineInput,
-                { borderColor: palette.outlineVariant, color: palette.text, backgroundColor: palette.surface },
+                { borderColor: Colors.outlineVariant, color: Colors.text, backgroundColor: Colors.surface },
               ]}
               multiline
               textAlignVertical="top"
@@ -1346,16 +1345,16 @@ export default function CreateCocktailScreen() {
           </View>
 
           <View style={styles.section}>
-            <Text style={[styles.label, { color: palette.onSurface }]}>Instructions</Text>
+            <Text style={[styles.label, { color: Colors.onSurface }]}>Instructions</Text>
             <TextInput
               value={instructions}
               onChangeText={setInstructions}
               placeholder="1. Grab some ice..."
-              placeholderTextColor={`${palette.onSurfaceVariant}99`}
+              placeholderTextColor={`${Colors.onSurfaceVariant}99`}
               style={[
                 styles.input,
                 styles.multilineInput,
-                { borderColor: palette.outlineVariant, color: palette.text, backgroundColor: palette.surface },
+                { borderColor: Colors.outlineVariant, color: Colors.text, backgroundColor: Colors.surface },
               ]}
               multiline
               textAlignVertical="top"
@@ -1364,7 +1363,7 @@ export default function CreateCocktailScreen() {
           </View>
 
           <View style={styles.section}>
-            <Text style={[styles.label, { color: palette.onSurface }]}>Ingredients</Text>
+            <Text style={[styles.label, { color: Colors.onSurface }]}>Ingredients</Text>
             <View style={styles.ingredientsList}>
               {ingredientsState.map((ingredient, index) => (
                 <EditableIngredientRow
@@ -1384,7 +1383,6 @@ export default function CreateCocktailScreen() {
                   onRequestCreateIngredient={handleRequestCreateIngredient}
                   onInputFocus={scrollFieldIntoView}
                   onOpenDialog={showDialog}
-                  palette={palette}
                   index={index}
                   totalCount={ingredientsState.length}
                 />
@@ -1394,22 +1392,22 @@ export default function CreateCocktailScreen() {
             onPress={handleAddIngredient}
             style={[
               styles.addIngredientButton,
-              { borderColor: palette.outlineVariant, backgroundColor: palette.surface },
+              { borderColor: Colors.outlineVariant, backgroundColor: Colors.surface },
             ]}
             accessibilityRole="button"
             accessibilityLabel="Add ingredient">
-              <MaterialCommunityIcons name="plus" size={18} color={palette.tint} />
-              <Text style={[styles.addIngredientLabel, { color: palette.tint }]}>Add ingredient</Text>
+              <MaterialCommunityIcons name="plus" size={18} color={Colors.tint} />
+              <Text style={[styles.addIngredientLabel, { color: Colors.tint }]}>Add ingredient</Text>
             </Pressable>
           </View>
 
           <Pressable
             onPress={handleSubmit}
             disabled={isSaving}
-            style={[styles.submitButton, { backgroundColor: palette.tint, opacity: isSaving ? 0.6 : 1 }]}
+            style={[styles.submitButton, { backgroundColor: Colors.tint, opacity: isSaving ? 0.6 : 1 }]}
             accessibilityRole="button"
             accessibilityLabel="Save cocktail">
-            <Text style={[styles.submitLabel, { color: palette.onPrimary }]}>Save</Text>
+            <Text style={[styles.submitLabel, { color: Colors.onPrimary }]}>Save</Text>
           </Pressable>
           <View style={styles.bottomSpacer} />
         </ScrollView>
@@ -1430,19 +1428,19 @@ export default function CreateCocktailScreen() {
             style={[
               styles.modalCard,
               {
-                backgroundColor: palette.surface,
-                borderColor: palette.outline,
-                shadowColor: palette.shadow,
+                backgroundColor: Colors.surface,
+                borderColor: Colors.outline,
+                shadowColor: Colors.shadow,
               },
             ]}
             accessibilityRole="menu">
             <View style={styles.modalHeader}>
-              <Text style={[styles.modalTitle, { color: palette.onSurface }]}>Select glass</Text>
+              <Text style={[styles.modalTitle, { color: Colors.onSurface }]}>Select glass</Text>
               <Pressable
                 onPress={() => setIsGlassModalVisible(false)}
                 accessibilityRole="button"
                 accessibilityLabel="Close">
-                <MaterialCommunityIcons name="close" size={22} color={palette.onSurfaceVariant} />
+                <MaterialCommunityIcons name="close" size={22} color={Colors.onSurfaceVariant} />
               </Pressable>
             </View>
             <FlatList
@@ -1462,8 +1460,8 @@ export default function CreateCocktailScreen() {
                     style={[
                       styles.glassOption,
                       {
-                        borderColor: isSelected ? palette.outline : palette.outlineVariant,
-                        backgroundColor: isSelected ? palette.highlightFaint : palette.surfaceBright,
+                        borderColor: isSelected ? Colors.outline : Colors.outlineVariant,
+                        backgroundColor: isSelected ? Colors.highlightFaint : Colors.surfaceBright,
                       },
                     ]}
                     accessibilityRole="button"
@@ -1474,10 +1472,10 @@ export default function CreateCocktailScreen() {
                       <MaterialCommunityIcons
                         name="glass-cocktail"
                         size={32}
-                        color={palette.onSurfaceVariant}
+                        color={Colors.onSurfaceVariant}
                       />
                     )}
-                    <Text style={[styles.glassOptionLabel, { color: palette.onSurface }]} numberOfLines={2}>
+                    <Text style={[styles.glassOptionLabel, { color: Colors.onSurface }]} numberOfLines={2}>
                       {item.name}
                     </Text>
                   </Pressable>
@@ -1504,19 +1502,19 @@ export default function CreateCocktailScreen() {
             style={[
               styles.unitModalCard,
               {
-                backgroundColor: palette.surface,
-                borderColor: palette.outline,
-                shadowColor: palette.shadow,
+                backgroundColor: Colors.surface,
+                borderColor: Colors.outline,
+                shadowColor: Colors.shadow,
               },
             ]}
             accessibilityRole="menu">
             <View style={styles.unitModalHeader}>
-              <Text style={[styles.unitModalTitle, { color: palette.onSurface }]}>Select unit</Text>
+              <Text style={[styles.unitModalTitle, { color: Colors.onSurface }]}>Select unit</Text>
               <Pressable
                 onPress={handleCloseUnitPicker}
                 accessibilityRole="button"
                 accessibilityLabel="Close">
-                <MaterialCommunityIcons name="close" size={22} color={palette.onSurfaceVariant} />
+                <MaterialCommunityIcons name="close" size={22} color={Colors.onSurfaceVariant} />
               </Pressable>
             </View>
             <ScrollView
@@ -1537,15 +1535,15 @@ export default function CreateCocktailScreen() {
                     style={[
                       styles.unitOption,
                       {
-                        borderColor: isSelected ? palette.tint : palette.outlineVariant,
-                        backgroundColor: isSelected ? palette.highlightFaint : palette.surfaceBright,
+                        borderColor: isSelected ? Colors.tint : Colors.outlineVariant,
+                        backgroundColor: isSelected ? Colors.highlightFaint : Colors.surfaceBright,
                       },
                     ]}
                     accessibilityRole="button"
                     accessibilityLabel={displayLabel.trim()
                       ? `Select ${displayLabel.trim()}`
                       : 'Select empty unit'}>
-                    <Text style={[styles.unitLabel, { color: palette.onSurface }]}>{displayLabel}</Text>
+                    <Text style={[styles.unitLabel, { color: Colors.onSurface }]}>{displayLabel}</Text>
                   </Pressable>
                 );
               })}
@@ -1568,19 +1566,19 @@ export default function CreateCocktailScreen() {
             style={[
               styles.unitModalCard,
               {
-                backgroundColor: palette.surface,
-                borderColor: palette.outline,
-                shadowColor: palette.shadow,
+                backgroundColor: Colors.surface,
+                borderColor: Colors.outline,
+                shadowColor: Colors.shadow,
               },
             ]}
             accessibilityRole="menu">
             <View style={styles.unitModalHeader}>
-              <Text style={[styles.unitModalTitle, { color: palette.onSurface }]}>Select method</Text>
+              <Text style={[styles.unitModalTitle, { color: Colors.onSurface }]}>Select method</Text>
               <Pressable
                 onPress={() => setIsMethodModalVisible(false)}
                 accessibilityRole="button"
                 accessibilityLabel="Close">
-                <MaterialCommunityIcons name="close" size={22} color={palette.onSurfaceVariant} />
+                <MaterialCommunityIcons name="close" size={22} color={Colors.onSurfaceVariant} />
               </Pressable>
             </View>
             <ScrollView
@@ -1593,20 +1591,20 @@ export default function CreateCocktailScreen() {
                 style={[
                   styles.methodOption,
                   {
-                    borderColor: methodIds.length === 0 ? palette.tint : palette.outlineVariant,
-                    backgroundColor: methodIds.length === 0 ? palette.highlightFaint : palette.surfaceBright,
+                    borderColor: methodIds.length === 0 ? Colors.tint : Colors.outlineVariant,
+                    backgroundColor: methodIds.length === 0 ? Colors.highlightFaint : Colors.surfaceBright,
                   },
                 ]}
                 accessibilityRole="button"
                 accessibilityLabel="Clear methods">
-                <Text style={[styles.methodOptionLabel, { color: palette.onSurface }]}>Not specified</Text>
-                <Text style={[styles.methodOptionDescription, { color: palette.onSurfaceVariant }]}>
+                <Text style={[styles.methodOptionLabel, { color: Colors.onSurface }]}>Not specified</Text>
+                <Text style={[styles.methodOptionDescription, { color: Colors.onSurfaceVariant }]}>
                   Clear all selected methods.
                 </Text>
               </Pressable>
               {getCocktailMethods().map((method) => {
                 const isSelected = methodIds.includes(method.id);
-                const iconColor = isSelected ? palette.tint : palette.onSurfaceVariant;
+                const iconColor = isSelected ? Colors.tint : Colors.onSurfaceVariant;
                 return (
                   <Pressable
                     key={method.id}
@@ -1614,8 +1612,8 @@ export default function CreateCocktailScreen() {
                     style={[
                       styles.methodOption,
                       {
-                        borderColor: isSelected ? palette.tint : palette.outlineVariant,
-                        backgroundColor: isSelected ? palette.highlightFaint : palette.surfaceBright,
+                        borderColor: isSelected ? Colors.tint : Colors.outlineVariant,
+                        backgroundColor: isSelected ? Colors.highlightFaint : Colors.surfaceBright,
                       },
                     ]}
                     accessibilityRole="button"
@@ -1623,10 +1621,10 @@ export default function CreateCocktailScreen() {
                     <View style={styles.methodOptionHeader}>
                       <View style={styles.methodOptionTitleRow}>
                         {renderMethodIcon(method.id, iconColor)}
-                        <Text style={[styles.methodOptionLabel, { color: palette.onSurface }]}>{method.label}</Text>
+                        <Text style={[styles.methodOptionLabel, { color: Colors.onSurface }]}>{method.label}</Text>
                       </View>
                     </View>
-                    <Text style={[styles.methodOptionDescription, { color: palette.onSurfaceVariant }]}>
+                    <Text style={[styles.methodOptionDescription, { color: Colors.onSurfaceVariant }]}>
                       {method.description}
                     </Text>
                   </Pressable>
@@ -1684,7 +1682,6 @@ type EditableIngredientRowProps = {
   onOpenDialog: (options: DialogOptions) => void;
   index: number;
   totalCount: number;
-  palette: typeof Colors;
 };
 
 function EditableIngredientRow({
@@ -1705,7 +1702,6 @@ function EditableIngredientRow({
   onOpenDialog,
   index,
   totalCount,
-  palette,
 }: EditableIngredientRowProps) {
   const [isFocused, setIsFocused] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -1878,10 +1874,10 @@ function EditableIngredientRow({
   }, []);
 
   return (
-    <View style={[styles.ingredientCard, { borderColor: palette.outlineVariant, backgroundColor: palette.surface }]}>
+    <View style={[styles.ingredientCard, { borderColor: Colors.outlineVariant, backgroundColor: Colors.surface }]}>
       <View style={styles.ingredientHeaderSimple}>
         <View style={styles.ingredientTitleRow}>
-          <Text style={[styles.ingredientHeading, { color: palette.onSurface }]}>{`${index + 1}. Ingredient`}</Text>
+          <Text style={[styles.ingredientHeading, { color: Colors.onSurface }]}>{`${index + 1}. Ingredient`}</Text>
           <View
             style={[
               styles.reorderControls,
@@ -1898,7 +1894,7 @@ function EditableIngredientRow({
               <MaterialIcons
                 name="keyboard-arrow-up"
                 size={18}
-                color={canMoveUp ? palette.onSurfaceVariant : `${palette.onSurfaceVariant}66`}
+                color={canMoveUp ? Colors.onSurfaceVariant : `${Colors.onSurfaceVariant}66`}
               />
             </Pressable>
             <Pressable
@@ -1911,7 +1907,7 @@ function EditableIngredientRow({
               <MaterialIcons
                 name="keyboard-arrow-down"
                 size={18}
-                color={canMoveDown ? palette.onSurfaceVariant : `${palette.onSurfaceVariant}66`}
+                color={canMoveDown ? Colors.onSurfaceVariant : `${Colors.onSurfaceVariant}66`}
               />
             </Pressable>
           </View>
@@ -1923,7 +1919,7 @@ function EditableIngredientRow({
           accessibilityLabel="Remove ingredient"
           style={!canReorder && styles.hiddenControl}
           pointerEvents={canReorder ? 'auto' : 'none'}>
-          <MaterialIcons name="delete-outline" size={20} color={palette.error} />
+          <MaterialIcons name="delete-outline" size={20} color={Colors.error} />
         </Pressable>
       </View>
       <View style={styles.ingredientNameWrapper}>
@@ -1941,13 +1937,13 @@ function EditableIngredientRow({
             }
           }}
           placeholder="Type ingredient name"
-          placeholderTextColor={`${palette.onSurfaceVariant}99`}
+          placeholderTextColor={`${Colors.onSurfaceVariant}99`}
           style={[
             styles.input,
             styles.ingredientNameInput,
             {
-              borderColor: palette.outlineVariant,
-              color: palette.text,
+              borderColor: Colors.outlineVariant,
+              color: Colors.text,
               paddingRight:
                 showAddButton ? 72 : 16,
             },
@@ -1966,18 +1962,18 @@ function EditableIngredientRow({
               setShowSuggestions(false);
               onRequestCreateIngredient(ingredient.name);
             }}
-            style={[styles.ingredientNameCreate, { backgroundColor: palette.background }]}
+            style={[styles.ingredientNameCreate, { backgroundColor: Colors.background }]}
             accessibilityRole="button"
             accessibilityLabel="Create new ingredient"
             hitSlop={8}>
-            <Text style={[styles.ingredientNameCreateLabel, { color: palette.tint }]}>+ Add</Text>
+            <Text style={[styles.ingredientNameCreateLabel, { color: Colors.tint }]}>+ Add</Text>
           </Pressable>
         ) : null}
       </View>
 
       {showSuggestions && suggestions.length ? (
         <View
-          style={[styles.suggestionList, { borderColor: palette.outlineVariant, backgroundColor: palette.surface }]}
+          style={[styles.suggestionList, { borderColor: Colors.outlineVariant, backgroundColor: Colors.surface }]}
           pointerEvents={isFocused ? 'auto' : 'none'}>
           {suggestions.map((candidate, index) => {
             const candidateId = Number(candidate.id ?? -1);
@@ -1988,7 +1984,7 @@ function EditableIngredientRow({
             const subtitle = renderSubtitle(baseGroupId);
             const brandIndicatorColor = candidate.baseIngredientId != null ? Colors.primary : undefined;
             const isLast = index === suggestions.length - 1;
-            const separatorColor = isAvailable ? palette.outline : palette.outlineVariant;
+            const separatorColor = isAvailable ? Colors.outline : Colors.outlineVariant;
 
             return (
               <React.Fragment key={candidate.id ?? candidate.name}>
@@ -1997,7 +1993,7 @@ function EditableIngredientRow({
                   subtitle={subtitle}
                   onPress={() => handleSelectSuggestion(candidate)}
                   selected={isAvailable}
-                  highlightColor={palette.highlightFaint}
+                  highlightColor={Colors.highlightFaint}
                   tagColor={tagColor}
                   thumbnail={<Thumb label={candidate.name ?? undefined} uri={candidate.photoUri} />}
                   brandIndicatorColor={brandIndicatorColor}
@@ -2033,33 +2029,33 @@ function EditableIngredientRow({
 
       <View style={styles.rowInputs}>
         <View style={styles.amountColumn}>
-          <Text style={[styles.inputLabel, { color: palette.onSurfaceVariant }]}>Amount</Text>
+          <Text style={[styles.inputLabel, { color: Colors.onSurfaceVariant }]}>Amount</Text>
           <TextInput
             value={ingredient.amount}
             onChangeText={(text) => onChange(ingredient.key, { amount: text })}
             placeholder="e.g. 45"
-            placeholderTextColor={`${palette.onSurfaceVariant}99`}
+            placeholderTextColor={`${Colors.onSurfaceVariant}99`}
             keyboardType="decimal-pad"
-            style={[styles.input, { borderColor: palette.outlineVariant, color: palette.text }]}
+            style={[styles.input, { borderColor: Colors.outlineVariant, color: Colors.text }]}
             onFocus={(event) => onInputFocus(event.nativeEvent.target)}
           />
         </View>
         <View style={styles.unitColumn}>
-          <Text style={[styles.inputLabel, { color: palette.onSurfaceVariant }]}>Unit</Text>
+          <Text style={[styles.inputLabel, { color: Colors.onSurfaceVariant }]}>Unit</Text>
           <Pressable
             onPress={() => onRequestUnitPicker(ingredient.key)}
-            style={[styles.unitSelector, { borderColor: palette.outlineVariant, backgroundColor: palette.background }]}
+            style={[styles.unitSelector, { borderColor: Colors.outlineVariant, backgroundColor: Colors.background }]}
             accessibilityRole="button"
             accessibilityLabel="Select unit">
-            <Text style={[styles.unitLabel, { color: palette.onSurface }]}>{unitLabel}</Text>
-            <MaterialIcons name="expand-more" size={18} color={palette.onSurfaceVariant} />
+            <Text style={[styles.unitLabel, { color: Colors.onSurface }]}>{unitLabel}</Text>
+            <MaterialIcons name="expand-more" size={18} color={Colors.onSurfaceVariant} />
           </Pressable>
         </View>
       </View>
 
       <View style={styles.toggleRow}>
-        <ToggleChip label="Garnish" active={ingredient.garnish} onToggle={handleToggleGarnish} palette={palette} />
-        <ToggleChip label="Optional" active={ingredient.optional} onToggle={handleToggleOptional} palette={palette} />
+        <ToggleChip label="Garnish" active={ingredient.garnish} onToggle={handleToggleGarnish} />
+        <ToggleChip label="Optional" active={ingredient.optional} onToggle={handleToggleOptional} />
       </View>
 
       {isBrandedIngredient ? (
@@ -2076,7 +2072,6 @@ function EditableIngredientRow({
                 actions: [{ label: 'OK' }],
               })
             }
-            palette={palette}
           />
           <ToggleChip
             label="Allow branded substitute"
@@ -2090,7 +2085,6 @@ function EditableIngredientRow({
                 actions: [{ label: 'OK' }],
               })
             }
-            palette={palette}
           />
         </View>
       ) : null}
@@ -2100,12 +2094,12 @@ function EditableIngredientRow({
           onPress={() => onRequestAddSubstitute(ingredient.key)}
           style={[
             styles.addSubstituteButton,
-            { borderColor: palette.outlineVariant, backgroundColor: palette.background },
+            { borderColor: Colors.outlineVariant, backgroundColor: Colors.background },
           ]}
           accessibilityRole="button"
           accessibilityLabel="Add substitute">
-          <MaterialCommunityIcons name="plus" size={16} color={palette.tint} />
-          <Text style={[styles.addSubstituteLabel, { color: palette.tint }]}>Add substitute</Text>
+          <MaterialCommunityIcons name="plus" size={16} color={Colors.tint} />
+          <Text style={[styles.addSubstituteLabel, { color: Colors.tint }]}>Add substitute</Text>
         </Pressable>
         {ingredient.substitutes.length ? (
           <View style={styles.substitutesList}>
@@ -2114,10 +2108,10 @@ function EditableIngredientRow({
                 key={substitute.key}
                 style={[
                   styles.substitutePill,
-                  { borderColor: palette.outlineVariant, backgroundColor: `${palette.tint}1A` },
-                  substitute.isBrand && { borderLeftColor: palette.tint, borderLeftWidth: 4 },
+                  { borderColor: Colors.outlineVariant, backgroundColor: `${Colors.tint}1A` },
+                  substitute.isBrand && { borderLeftColor: Colors.tint, borderLeftWidth: 4 },
                 ]}>
-                <Text style={[styles.substituteLabel, { color: palette.onSurface }]} numberOfLines={1}>
+                <Text style={[styles.substituteLabel, { color: Colors.onSurface }]} numberOfLines={1}>
                   {substitute.name}
                   {substitute.isBrand ? ' • brand' : ''}
                 </Text>
@@ -2126,7 +2120,7 @@ function EditableIngredientRow({
                   hitSlop={8}
                   accessibilityRole="button"
                   accessibilityLabel={`Remove ${substitute.name}`}>
-                  <MaterialCommunityIcons name="close" size={16} color={palette.onSurfaceVariant} />
+                  <MaterialCommunityIcons name="close" size={16} color={Colors.onSurfaceVariant} />
                 </Pressable>
               </View>
             ))}
@@ -2142,10 +2136,9 @@ type ToggleChipProps = {
   active: boolean;
   onToggle: () => void;
   onInfo?: () => void;
-  palette: typeof Colors;
 };
 
-function ToggleChip({ label, active, onToggle, onInfo, palette }: ToggleChipProps) {
+function ToggleChip({ label, active, onToggle, onInfo }: ToggleChipProps) {
   return (
     <View style={styles.toggleChipContainer}>
       <Pressable
@@ -2153,7 +2146,7 @@ function ToggleChip({ label, active, onToggle, onInfo, palette }: ToggleChipProp
         style={[
           styles.toggleChip,
           {
-            backgroundColor: active ? `${palette.tint}1A` : 'transparent',
+            backgroundColor: active ? `${Colors.tint}1A` : 'transparent',
           },
         ]}
         accessibilityRole="checkbox"
@@ -2161,15 +2154,15 @@ function ToggleChip({ label, active, onToggle, onInfo, palette }: ToggleChipProp
         <MaterialCommunityIcons
           name={active ? 'checkbox-marked-outline' : 'checkbox-blank-outline'}
           size={18}
-          color={active ? palette.tint : palette.onSurfaceVariant}
+          color={active ? Colors.tint : Colors.onSurfaceVariant}
         />
-        <Text style={[styles.toggleChipLabel, { color: palette.onSurfaceVariant }]} numberOfLines={1}>
+        <Text style={[styles.toggleChipLabel, { color: Colors.onSurfaceVariant }]} numberOfLines={1}>
           {label}
         </Text>
       </Pressable>
       {onInfo ? (
         <Pressable onPress={onInfo} hitSlop={8} accessibilityRole="button" accessibilityLabel={`About ${label}`}>
-          <MaterialCommunityIcons name="information-outline" size={16} color={palette.onSurfaceVariant} />
+          <MaterialCommunityIcons name="information-outline" size={16} color={Colors.onSurfaceVariant} />
         </Pressable>
       ) : null}
     </View>

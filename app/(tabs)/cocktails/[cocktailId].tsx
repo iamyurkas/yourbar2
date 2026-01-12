@@ -237,7 +237,6 @@ function formatGlassLabel(glassId?: string | null) {
 }
 
 export default function CocktailDetailsScreen() {
-  const palette = Colors;
   const params = useLocalSearchParams<{
     cocktailId?: string;
     returnToPath?: string;
@@ -528,27 +527,27 @@ export default function CocktailDetailsScreen() {
 
   return (
     <SafeAreaView
-      style={[styles.safeArea, { backgroundColor: palette.background }]}
+      style={[styles.safeArea, { backgroundColor: Colors.background }]}
       edges={['left', 'right']}>
       <Stack.Screen
         options={{
           title: 'Cocktail details',
           headerTitleAlign: 'center',
-          headerStyle: { backgroundColor: palette.surface },
-          headerTitleStyle: { color: palette.onSurface, fontSize: 16, fontWeight: '600' },
+          headerStyle: { backgroundColor: Colors.surface },
+          headerTitleStyle: { color: Colors.onSurface, fontSize: 16, fontWeight: '600' },
           headerShadowVisible: false,
           headerLeft: () => (
             <HeaderIconButton onPress={() => router.back()} accessibilityLabel="Go back">
-              <MaterialCommunityIcons name="arrow-left" size={22} color={palette.onSurface} />
+              <MaterialCommunityIcons name="arrow-left" size={22} color={Colors.onSurface} />
             </HeaderIconButton>
           ),
           headerRight: () => (
             <View style={styles.headerActions}>
               <HeaderIconButton onPress={handleCopyPress} accessibilityLabel="Copy cocktail">
-                <MaterialCommunityIcons name="content-copy" size={20} color={palette.onSurface} />
+                <MaterialCommunityIcons name="content-copy" size={20} color={Colors.onSurface} />
               </HeaderIconButton>
               <HeaderIconButton onPress={handleEditPress} accessibilityLabel="Edit cocktail">
-                <MaterialCommunityIcons name="pencil-outline" size={20} color={palette.onSurface} />
+                <MaterialCommunityIcons name="pencil-outline" size={20} color={Colors.onSurface} />
               </HeaderIconButton>
             </View>
           ),
@@ -558,7 +557,7 @@ export default function CocktailDetailsScreen() {
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         {cocktail ? (
           <View style={styles.section}>
-            <Text style={[styles.name, { color: palette.onSurface }]}>{cocktail.name}</Text>
+            <Text style={[styles.name, { color: Colors.onSurface }]}>{cocktail.name}</Text>
 
             <View style={styles.mediaSection}>
               <View style={styles.photoWrapper}>
@@ -572,10 +571,10 @@ export default function CocktailDetailsScreen() {
                   <View
                     style={[
                       styles.photoPlaceholder,
-                      { borderColor: palette.outline },
+                      { borderColor: Colors.outline },
                     ]}>
-                    <MaterialCommunityIcons name="image-off" size={36} color={palette.onSurfaceVariant} />
-                    <Text style={[styles.photoPlaceholderText, { color: palette.onSurfaceVariant }]}>No photo</Text>
+                    <MaterialCommunityIcons name="image-off" size={36} color={Colors.onSurfaceVariant} />
+                    <Text style={[styles.photoPlaceholderText, { color: Colors.onSurfaceVariant }]}>No photo</Text>
                   </View>
                 )}
               </View>
@@ -598,7 +597,7 @@ export default function CocktailDetailsScreen() {
                       }
                       style={styles.ratingStar}
                       hitSlop={8}>
-                      <MaterialCommunityIcons name={icon} size={32} color={palette.tint} />
+                      <MaterialCommunityIcons name={icon} size={32} color={Colors.tint} />
                     </Pressable>
                   );
                 })}
@@ -608,12 +607,12 @@ export default function CocktailDetailsScreen() {
                 onPress={handleToggleUnits}
                 style={[
                   styles.toggleUnitsButton,
-                  { borderColor: palette.primary, backgroundColor: palette.surfaceBright },
+                  { borderColor: Colors.primary, backgroundColor: Colors.surfaceBright },
                 ]}
                 accessibilityRole="button"
                 accessibilityLabel={showImperialUnits ? 'Show in metric' : 'Show in imperial'}
               >
-                <Text style={[styles.toggleUnitsLabel, { color: palette.primary }]}>
+                <Text style={[styles.toggleUnitsLabel, { color: Colors.primary }]}>
                   {showImperialUnits ? 'Show in metric' : 'Show in imperial'}
                 </Text>
               </Pressable>
@@ -623,7 +622,7 @@ export default function CocktailDetailsScreen() {
                   <View style={styles.glassImageWrapper}>
                     <Image source={glassSource} style={styles.glassImage} contentFit="contain" />
                   </View>
-                  <Text style={[styles.glassLabel, { color: palette.onSurface }]}>{glassLabel}</Text>
+                  <Text style={[styles.glassLabel, { color: Colors.onSurface }]}>{glassLabel}</Text>
                 </View>
               ) : null}
             </View>
@@ -643,11 +642,11 @@ export default function CocktailDetailsScreen() {
                             <MaterialCommunityIcons
                               name={icon?.type === 'icon' ? icon.name : 'information-outline'}
                               size={18}
-                              color={palette.onSurfaceVariant}
+                              color={Colors.onSurfaceVariant}
                             />
                           )}
                         </View>
-                        <Text style={[styles.methodLabel, { color: palette.onSurface }]}>
+                        <Text style={[styles.methodLabel, { color: Colors.onSurface }]}>
                           {method.label}
                         </Text>
                         <Pressable
@@ -660,11 +659,11 @@ export default function CocktailDetailsScreen() {
                           }
                           hitSlop={8}
                         >
-                          <Text style={[styles.methodInfoIcon, { color: palette.primary }]}>ⓘ</Text>
+                          <Text style={[styles.methodInfoIcon, { color: Colors.primary }]}>ⓘ</Text>
                         </Pressable>
                       </View>
                       {isExpanded ? (
-                        <Text style={[styles.methodDescription, { color: palette.onSurfaceVariant }]}>
+                        <Text style={[styles.methodDescription, { color: Colors.onSurfaceVariant }]}>
                           {method.description}
                         </Text>
                       ) : null}
@@ -680,7 +679,7 @@ export default function CocktailDetailsScreen() {
                   <TagPill
                     key={tag.id ?? tag.name}
                     label={tag.name ?? 'Tag'}
-                    color={tag.color ?? palette.tint}
+                    color={tag.color ?? Colors.tint}
                     selected
                     accessibilityLabel={tag.name ?? 'Tag'}
                   />
@@ -691,7 +690,7 @@ export default function CocktailDetailsScreen() {
             {cocktail.description ? (
               <View style={styles.textBlock}>
                 <Text
-                  style={[styles.bodyText, styles.descriptionText, { color: palette.onSurfaceVariant }]}
+                  style={[styles.bodyText, styles.descriptionText, { color: Colors.onSurfaceVariant }]}
                   numberOfLines={!isDescriptionExpanded && shouldTruncateDescription ? 5 : undefined}
                   onTextLayout={handleDescriptionLayout}
                 >
@@ -699,7 +698,7 @@ export default function CocktailDetailsScreen() {
                 </Text>
                 {shouldTruncateDescription ? (
                   <Pressable onPress={toggleDescription} accessibilityRole="button">
-                    <Text style={[styles.toggleDescription, { color: palette.tint }]}>
+                    <Text style={[styles.toggleDescription, { color: Colors.tint }]}>
                       {isDescriptionExpanded ? 'Show less' : 'Show more'}
                     </Text>
                   </Pressable>
@@ -709,12 +708,12 @@ export default function CocktailDetailsScreen() {
 
             {instructionsParagraphs.length ? (
               <View style={styles.textBlock}>
-                <Text style={[styles.instructionsTitle, { color: palette.onSurface }]}>Instructions</Text>
+                <Text style={[styles.instructionsTitle, { color: Colors.onSurface }]}>Instructions</Text>
                 <View style={styles.instructionsList}>
                   {instructionsParagraphs.map((paragraph, index) => (
                     <Text
                       key={`instruction-${index}`}
-                      style={[styles.instructionsText, { color: palette.onSurface }]}
+                      style={[styles.instructionsText, { color: Colors.onSurface }]}
                     >
                       {paragraph}
                     </Text>
@@ -725,7 +724,7 @@ export default function CocktailDetailsScreen() {
 
             {sortedIngredients.length ? (
               <View style={styles.textBlock}>
-                <Text style={[styles.sectionTitle, { color: palette.onSurface }]}>Ingredients</Text>
+                <Text style={[styles.sectionTitle, { color: Colors.onSurface }]}>Ingredients</Text>
                 <View style={styles.ingredientsList}>
                   {sortedIngredients.map((ingredient, index) => {
                     const quantity = formatIngredientQuantity(ingredient, showImperialUnits);
@@ -743,8 +742,8 @@ export default function CocktailDetailsScreen() {
                     const previousIngredient = sortedIngredients[index - 1];
                     const previousResolution = previousIngredient ? resolvedIngredients[index - 1] : undefined;
                     const dividerColor = previousResolution?.isAvailable
-                      ? palette.outline
-                      : palette.outlineVariant;
+                      ? Colors.outline
+                      : Colors.outlineVariant;
                     const tagColor =
                       resolvedIngredient?.tags?.[0]?.color ??
                       ingredient.tags?.[0]?.color ??
@@ -806,7 +805,7 @@ export default function CocktailDetailsScreen() {
                           subtitle={subtitle}
                           subtitleStyle={
                             subtitle
-                              ? [styles.ingredientSubtitle, { color: palette.onSurfaceVariant }]
+                              ? [styles.ingredientSubtitle, { color: Colors.onSurfaceVariant }]
                               : undefined
                           }
                           thumbnail={
@@ -819,7 +818,7 @@ export default function CocktailDetailsScreen() {
                           control={
                             <View style={styles.quantityContainer}>
                               <Text
-                                style={[styles.quantityLabel, { color: palette.onSurfaceVariant }]}
+                                style={[styles.quantityLabel, { color: Colors.onSurfaceVariant }]}
                                 numberOfLines={1}>
                                 {quantity}
                               </Text>
@@ -830,7 +829,7 @@ export default function CocktailDetailsScreen() {
                               <MaterialIcons
                                 name="shopping-cart"
                                 size={16}
-                                color={palette.tint}
+                                color={Colors.tint}
                                 style={styles.shoppingIcon}
                                 accessibilityRole="image"
                                 accessibilityLabel="On shopping list"
@@ -857,8 +856,8 @@ export default function CocktailDetailsScreen() {
           </View>
         ) : (
           <View style={styles.emptyState}>
-            <MaterialCommunityIcons name="glass-cocktail" size={42} color={palette.onSurfaceVariant} />
-            <Text style={[styles.emptyText, { color: palette.onSurfaceVariant }]}>Cocktail not found</Text>
+            <MaterialCommunityIcons name="glass-cocktail" size={42} color={Colors.onSurfaceVariant} />
+            <Text style={[styles.emptyText, { color: Colors.onSurfaceVariant }]}>Cocktail not found</Text>
           </View>
         )}
       </ScrollView>

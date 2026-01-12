@@ -25,7 +25,6 @@ export function TagEditorModal({
   onClose,
   onSave,
 }: TagEditorModalProps) {
-  const palette = Colors;
   const [name, setName] = useState(initialName ?? '');
   const [hue, setHue] = useState(210);
   const [lightness, setLightness] = useState(0.5);
@@ -128,32 +127,32 @@ export function TagEditorModal({
         <Pressable
           style={[
             styles.card,
-            { backgroundColor: palette.surface, borderColor: palette.outline, shadowColor: palette.shadow },
+            { backgroundColor: Colors.surface, borderColor: Colors.outline, shadowColor: Colors.shadow },
           ]}
           onPress={(event) => event.stopPropagation?.()}
           accessibilityRole="menu"
         >
           <View style={styles.header}>
-            <Text style={[styles.title, { color: palette.onSurface }]}>{title}</Text>
+            <Text style={[styles.title, { color: Colors.onSurface }]}>{title}</Text>
             <Pressable onPress={onClose} accessibilityRole="button" accessibilityLabel="Close">
-              <MaterialCommunityIcons name="close" size={22} color={palette.onSurfaceVariant} />
+              <MaterialCommunityIcons name="close" size={22} color={Colors.onSurfaceVariant} />
             </Pressable>
           </View>
-          <Text style={[styles.label, { color: palette.onSurfaceVariant }]}>Tag name</Text>
+          <Text style={[styles.label, { color: Colors.onSurfaceVariant }]}>Tag name</Text>
           <TextInput
             value={name}
             onChangeText={setName}
             placeholder="New tag"
-            placeholderTextColor={`${palette.onSurfaceVariant}99`}
+            placeholderTextColor={`${Colors.onSurfaceVariant}99`}
             style={[
               styles.input,
-              { borderColor: palette.outlineVariant, color: palette.text, backgroundColor: palette.surface },
+              { borderColor: Colors.outlineVariant, color: Colors.text, backgroundColor: Colors.surface },
             ]}
           />
-          <Text style={[styles.label, { color: palette.onSurfaceVariant }]}>Color</Text>
+          <Text style={[styles.label, { color: Colors.onSurfaceVariant }]}>Color</Text>
           <View style={styles.colorPreviewRow}>
-            <View style={[styles.colorPreview, { backgroundColor: selectedColor, borderColor: palette.outlineVariant }]} />
-            <Text style={[styles.colorValue, { color: palette.onSurfaceVariant }]}>{selectedColor}</Text>
+            <View style={[styles.colorPreview, { backgroundColor: selectedColor, borderColor: Colors.outlineVariant }]} />
+            <Text style={[styles.colorValue, { color: Colors.onSurfaceVariant }]}>{selectedColor}</Text>
           </View>
           <ColorSlider
             label="Hue"
@@ -168,7 +167,6 @@ export function TagEditorModal({
               { offset: '83%', color: '#5e5ce6' },
               { offset: '100%', color: '#ff3b30' },
             ]}
-            palette={palette}
           />
           <ColorSlider
             label="Tone"
@@ -178,7 +176,6 @@ export function TagEditorModal({
               { offset: '0%', color: `hsl(${hue}, 80%, 15%)` },
               { offset: '100%', color: `hsl(${hue}, 80%, 85%)` },
             ]}
-            palette={palette}
           />
           <Pressable
             accessibilityRole="button"
@@ -186,10 +183,10 @@ export function TagEditorModal({
             onPress={handleSave}
             style={[
               styles.saveButton,
-              { backgroundColor: canSave ? palette.tint : palette.outlineVariant },
+              { backgroundColor: canSave ? Colors.tint : Colors.outlineVariant },
             ]}
           >
-            <Text style={[styles.saveLabel, { color: palette.onPrimary }]}>{confirmLabel}</Text>
+            <Text style={[styles.saveLabel, { color: Colors.onPrimary }]}>{confirmLabel}</Text>
           </Pressable>
         </Pressable>
       </Pressable>
@@ -202,10 +199,9 @@ type ColorSliderProps = {
   value: number;
   onChange: (value: number) => void;
   gradientStops: Array<{ offset: string; color: string }>;
-  palette: typeof Colors;
 };
 
-function ColorSlider({ label, value, onChange, gradientStops, palette }: ColorSliderProps) {
+function ColorSlider({ label, value, onChange, gradientStops }: ColorSliderProps) {
   const [trackWidth, setTrackWidth] = useState(0);
 
   const updateValue = useCallback(
@@ -228,7 +224,7 @@ function ColorSlider({ label, value, onChange, gradientStops, palette }: ColorSl
 
   return (
     <View style={styles.sliderBlock}>
-      <Text style={[styles.sliderLabel, { color: palette.onSurfaceVariant }]}>{label}</Text>
+      <Text style={[styles.sliderLabel, { color: Colors.onSurfaceVariant }]}>{label}</Text>
       <View
         style={styles.sliderTrack}
         onLayout={(event) => setTrackWidth(event.nativeEvent.layout.width)}
@@ -252,8 +248,8 @@ function ColorSlider({ label, value, onChange, gradientStops, palette }: ColorSl
             styles.sliderThumb,
             {
               left: trackWidth ? value * trackWidth - 8 : 0,
-              borderColor: palette.surface,
-              backgroundColor: palette.onSurface,
+              borderColor: Colors.surface,
+              backgroundColor: Colors.onSurface,
             },
           ]}
         />
