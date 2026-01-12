@@ -1292,13 +1292,6 @@ export default function CreateCocktailScreen() {
                     ? selectedMethods.map((method) => method.label).join(', ')
                     : 'Select methods'}
                 </Text>
-                <Text
-                  style={[styles.methodPickerDescription, { color: palette.onSurfaceVariant }]}
-                  numberOfLines={2}>
-                  {selectedMethods.length
-                    ? selectedMethods.map((method) => method.title).join(' • ')
-                    : 'Optional'}
-                </Text>
               </View>
               <MaterialCommunityIcons name="chevron-down" size={20} color={palette.onSurfaceVariant} />
             </Pressable>
@@ -2289,14 +2282,13 @@ const styles = StyleSheet.create({
   },
   methodPickerContent: {
     flex: 1,
-    gap: 4,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   methodPickerLabel: {
     fontSize: 15,
     fontWeight: '600',
-  },
-  methodPickerDescription: {
-    fontSize: 13,
+    flex: 1,
   },
   glassRow: {
     justifyContent: 'space-between',
