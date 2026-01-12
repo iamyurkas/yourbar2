@@ -850,6 +850,11 @@ export default function CocktailsScreen() {
   const isFilterActive = selectedTagKeys.size > 0 || selectedMethodIds.size > 0;
   const isMyTab = activeTab === 'my';
   const listData = isMyTab ? myTabListData?.items ?? [] : sortedFavorites;
+  const emptyMessage = isMyTab
+    ? 'Mark which ingredients you have available.'
+    : activeTab === 'favorites'
+      ? 'Rate cocktails and/or adjust the rating threshold in the side menu.'
+      : 'No cocktails yet';
   const filterMenuTop = useMemo(() => {
     if (headerLayout && filterAnchorLayout) {
       return headerLayout.y + filterAnchorLayout.y + filterAnchorLayout.height + 6;
@@ -977,7 +982,9 @@ export default function CocktailsScreen() {
           contentContainerStyle={styles.listContent}
           showsVerticalScrollIndicator
           ListEmptyComponent={
-            <Text style={[styles.emptyLabel, { color: paletteColors.onSurfaceVariant }]}>No cocktails yet</Text>
+            <Text style={[styles.emptyLabel, { color: paletteColors.onSurfaceVariant }]}>
+              {emptyMessage}
+            </Text>
           }
         />
       </View>
