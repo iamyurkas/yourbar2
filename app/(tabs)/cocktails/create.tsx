@@ -26,10 +26,10 @@ import { ListRow, Thumb } from '@/components/RowParts';
 import { SubstituteModal } from '@/components/SubstituteModal';
 import { TagEditorModal } from '@/components/TagEditorModal';
 import { TagPill } from '@/components/TagPill';
-import { METHOD_ICON_MAP } from '@/constants/cocktail-method-icons';
 import {
   getCocktailMethodById,
   getCocktailMethods,
+  METHOD_ICON_MAP,
   type CocktailMethodId,
 } from '@/constants/cocktail-methods';
 import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
