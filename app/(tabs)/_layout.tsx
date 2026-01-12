@@ -1,6 +1,4 @@
-import type { BottomTabBarButtonProps } from '@react-navigation/bottom-tabs';
-import { Image } from 'expo-image';
-import { Tabs, usePathname, useRouter } from 'expo-router';
+import { Tabs } from 'expo-router';
 import React, { useCallback, useState } from 'react';
 import { StyleSheet, View, useColorScheme } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -9,55 +7,46 @@ import CocktailIcon from '@/assets/images/cocktails.svg';
 import LemonIcon from '@/assets/images/ingredients.svg';
 import ShakerIcon from '@/assets/images/shaker.svg';
 import { AppDialog, type DialogOptions } from '@/components/AppDialog';
-import { HapticTab } from '@/components/haptic-tab';
+import { TabBarButton } from '@/components/tab-bar/TabBarButton';
+import { TabBarIcon } from '@/components/tab-bar/TabBarIcon';
 import { Colors } from '@/constants/theme';
 import { getLastCocktailTab, getLastIngredientTab } from '@/libs/collection-tabs';
-import { useUnsavedChanges } from '@/providers/unsaved-changes-provider';
 
-const EDITING_PATH_PATTERN = /^\/(cocktails\/create|ingredients\/create|ingredients\/[^/]+\/edit)(\/|$)/;
+type TabPressHandler = (navigation: { navigate: (...args: never[]) => void }, route: { name: string }) => void;
 
-type TabBarButtonProps = BottomTabBarButtonProps & {
-  onOpenDialog: (options: DialogOptions) => void;
-};
-
-function TabBarButton({ onOpenDialog, ...props }: TabBarButtonProps) {
-  const pathname = usePathname();
-  const router = useRouter();
-  const { hasUnsavedChanges, setHasUnsavedChanges } = useUnsavedChanges();
-  const isEditingRoute = EDITING_PATH_PATTERN.test(pathname);
-
-  const handlePress = useCallback(() => {
-    const proceed = () => {
-      if (isEditingRoute) {
-        if (pathname.startsWith('/cocktails')) {
-          router.replace('/cocktails');
-        } else if (pathname.startsWith('/ingredients')) {
-          router.replace('/ingredients');
-        } else if (pathname.startsWith('/shaker')) {
-          router.replace('/shaker');
-        }
-      }
-      setHasUnsavedChanges(false);
-      props.onPress?.();
-    };
-
-    if (hasUnsavedChanges) {
-      onOpenDialog({
-        title: 'Leave without saving?',
-        message: 'Your changes will be lost if you leave this screen.',
-        actions: [
-          { label: 'Stay', variant: 'secondary' },
-          { label: 'Leave', variant: 'destructive', onPress: proceed },
-        ],
-      });
-      return;
-    }
-
-    proceed();
-  }, [hasUnsavedChanges, isEditingRoute, onOpenDialog, pathname, props, router, setHasUnsavedChanges]);
-
-  return <HapticTab {...props} onPress={handlePress} />;
-}
+const TAB_SCREENS: Array<{
+  name: 'cocktails' | 'shaker' | 'ingredients';
+  title: string;
+  icon: typeof CocktailIcon;
+  onTabPress: TabPressHandler;
+}> = [
+  {
+    name: 'cocktails',
+    title: 'Cocktails',
+    icon: CocktailIcon,
+    onTabPress: (navigation, route) => {
+      getLastCocktailTab();
+      navigation.navigate(route.name as never, { screen: 'index' } as never);
+    },
+  },
+  {
+    name: 'shaker',
+    title: 'Shaker',
+    icon: ShakerIcon,
+    onTabPress: (navigation, route) => {
+      navigation.navigate(route.name as never, { screen: 'index' } as never);
+    },
+  },
+  {
+    name: 'ingredients',
+    title: 'Ingredients',
+    icon: LemonIcon,
+    onTabPress: (navigation, route) => {
+      getLastIngredientTab();
+      navigation.navigate(route.name as never, { screen: 'index' } as never);
+    },
+  },
+];
 
 export default function TabLayout() {
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(null);
@@ -100,68 +89,23 @@ export default function TabLayout() {
             </View>
           ),
         }}>
-        <Tabs.Screen
-          name="cocktails"
-          options={{
-            title: 'Cocktails',
-            tabBarButton: (props) => <TabBarButton {...props} onOpenDialog={showDialog} />,
-            tabBarIcon: ({ color, focused }) => (
-              <Image
-                source={CocktailIcon}
-                style={{ width: 24, height: 24, tintColor: color, opacity: focused ? 1 : 0.72 }}
-                contentFit="contain"
-              />
-            ),
-          }}
-          listeners={({ navigation, route }) => ({
-            tabPress: (event) => {
-              event.preventDefault();
-              getLastCocktailTab();
-              navigation.navigate(route.name as never, { screen: 'index' } as never);
-            },
-          })}
-        />
-        <Tabs.Screen
-          name="shaker"
-          options={{
-            title: 'Shaker',
-            tabBarButton: (props) => <TabBarButton {...props} onOpenDialog={showDialog} />,
-            tabBarIcon: ({ color, focused }) => (
-              <Image
-                source={ShakerIcon}
-                style={{ width: 24, height: 24, tintColor: color, opacity: focused ? 1 : 0.72 }}
-                contentFit="contain"
-              />
-            ),
-          }}
-          listeners={({ navigation, route }) => ({
-            tabPress: (event) => {
-              event.preventDefault();
-              navigation.navigate(route.name as never, { screen: 'index' } as never);
-            },
-          })}
-        />
-        <Tabs.Screen
-          name="ingredients"
-          options={{
-            title: 'Ingredients',
-            tabBarButton: (props) => <TabBarButton {...props} onOpenDialog={showDialog} />,
-            tabBarIcon: ({ color, focused }) => (
-              <Image
-                source={LemonIcon}
-                style={{ width: 24, height: 24, tintColor: color, opacity: focused ? 1 : 0.72 }}
-                contentFit="contain"
-              />
-            ),
-          }}
-          listeners={({ navigation, route }) => ({
-            tabPress: (event) => {
-              event.preventDefault();
-              getLastIngredientTab();
-              navigation.navigate(route.name as never, { screen: 'index' } as never);
-            },
-          })}
-        />
+        {TAB_SCREENS.map(({ name, title, icon, onTabPress }) => (
+          <Tabs.Screen
+            key={name}
+            name={name}
+            options={{
+              title,
+              tabBarButton: (props) => <TabBarButton {...props} onOpenDialog={showDialog} />,
+              tabBarIcon: ({ color, focused }) => <TabBarIcon source={icon} color={color} focused={focused} />,
+            }}
+            listeners={({ navigation, route }) => ({
+              tabPress: (event) => {
+                event.preventDefault();
+                onTabPress(navigation, route);
+              },
+            })}
+          />
+        ))}
       </Tabs>
       <AppDialog
         visible={dialogOptions != null}
