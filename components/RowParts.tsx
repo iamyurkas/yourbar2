@@ -25,7 +25,6 @@ export type ThumbProps = {
 };
 
 export function Thumb({ uri, label, fallbackUri, fallbackLabel }: ThumbProps) {
-  const paletteColors = Colors;
   const effectiveLabel = label ?? fallbackLabel;
   const trimmed = effectiveLabel?.trim();
   const fallbackText = trimmed ? trimmed.slice(0, 2).toUpperCase() : undefined;
@@ -42,9 +41,9 @@ export function Thumb({ uri, label, fallbackUri, fallbackLabel }: ThumbProps) {
       {source ? (
         <Image source={source} style={styles.thumbImage} contentFit="contain" />
       ) : fallbackText ? (
-        <Text style={[styles.thumbFallback, { color: paletteColors.onSurfaceVariant }]}>{fallbackText}</Text>
+        <Text style={[styles.thumbFallback, { color: Colors.onSurfaceVariant }]}>{fallbackText}</Text>
       ) : (
-        <MaterialCommunityIcons name="image-off" size={24} color={paletteColors.onSurfaceVariant} />
+        <MaterialCommunityIcons name="image-off" size={24} color={Colors.onSurfaceVariant} />
       )}
     </View>
   );
@@ -64,11 +63,10 @@ type PresenceCheckProps = {
 };
 
 export function PresenceCheck({ checked, onToggle }: PresenceCheckProps) {
-  const paletteColors = Colors;
-  const idleColor = paletteColors.outlineVariant;
-  const borderColor = checked ? paletteColors.tint : idleColor;
-  const backgroundColor = checked ? paletteColors.tint : 'transparent';
-  const iconColor = checked ? paletteColors.background : idleColor;
+  const idleColor = Colors.outlineVariant;
+  const borderColor = checked ? Colors.tint : idleColor;
+  const backgroundColor = checked ? Colors.tint : 'transparent';
+  const iconColor = checked ? Colors.background : idleColor;
 
   return (
     <Pressable
@@ -88,9 +86,8 @@ type FavoriteStarProps = {
 };
 
 export function FavoriteStar({ active, onToggle }: FavoriteStarProps) {
-  const paletteColors = Colors;
   const icon = active ? 'star' : 'star-outline';
-  const color = active ? paletteColors.secondary : paletteColors.onSurfaceVariant;
+  const color = active ? Colors.secondary : Colors.onSurfaceVariant;
 
   return (
     <Pressable
@@ -139,8 +136,7 @@ export function ListRow({
   metaAlignment = 'space-between',
   brandIndicatorColor,
 }: ListRowProps) {
-  const paletteColors = Colors;
-  const backgroundColor = selected ? highlightColor ?? `${paletteColors.tint}1F` : paletteColors.background;
+  const backgroundColor = selected ? highlightColor ?? `${Colors.tint}1F` : Colors.background;
   const metaAlignmentStyle =
     metaAlignment === 'center'
       ? styles.metaContentCenter
@@ -148,7 +144,7 @@ export function ListRow({
       ? styles.metaContentStart
       : styles.metaContentSpaceBetween;
   const showBrandIndicator = brandIndicatorColor != null;
-  const indicatorColor = brandIndicatorColor ?? paletteColors.primary;
+  const indicatorColor = brandIndicatorColor ?? Colors.primary;
   const resolvedTagColors = tagColors?.filter(Boolean) ?? (tagColor ? [tagColor] : []);
 
   return (
@@ -163,11 +159,11 @@ export function ListRow({
       ) : null}
       <View style={styles.thumbSlot}>{thumbnail}</View>
       <View style={styles.textColumn}>
-        <Text style={[styles.title, { color: paletteColors.text }]} numberOfLines={1}>
+        <Text style={[styles.title, { color: Colors.text }]} numberOfLines={1}>
           {title}
         </Text>
         {subtitle ? (
-          <Text style={[styles.subtitle, { color: paletteColors.icon }, subtitleStyle]} numberOfLines={1}>
+          <Text style={[styles.subtitle, { color: Colors.icon }, subtitleStyle]} numberOfLines={1}>
             {subtitle}
           </Text>
         ) : null}

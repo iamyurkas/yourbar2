@@ -63,7 +63,6 @@ const METHOD_ICON_SIZE = 16;
 
 export default function ShakerResultsScreen() {
   const router = useRouter();
-  const paletteColors = Colors;
   const {
     cocktails,
     availableIngredientIds,
@@ -135,7 +134,7 @@ export default function ShakerResultsScreen() {
   );
 
   const ingredientLookup = useMemo(() => createIngredientLookup(ingredients), [ingredients]);
-  const defaultTagColor = paletteColors.tint;
+  const defaultTagColor = Colors.tint;
 
   const availableTagOptions = useMemo(() => {
     const map = new Map<string, { key: string; name: string; color: string }>();
@@ -345,7 +344,7 @@ export default function ShakerResultsScreen() {
         return null;
       }
 
-      const tintColor = selected ? paletteColors.surface : paletteColors.tint;
+      const tintColor = selected ? Colors.surface : Colors.tint;
       if (icon.type === 'asset') {
         return (
           <Image
@@ -358,7 +357,7 @@ export default function ShakerResultsScreen() {
 
       return <MaterialCommunityIcons name={icon.name} size={METHOD_ICON_SIZE} color={tintColor} />;
     },
-    [paletteColors.surface, paletteColors.tint],
+    [Colors.surface, Colors.tint],
   );
 
   const normalizedQuery = useMemo(() => {
@@ -493,7 +492,7 @@ export default function ShakerResultsScreen() {
             allowAllSubstitutes,
           })
         : false;
-      const backgroundColor = isReady ? paletteColors.outline : paletteColors.outlineVariant;
+      const backgroundColor = isReady ? Colors.outline : Colors.outlineVariant;
 
       return <View style={[styles.divider, { backgroundColor }]} />;
     },
@@ -502,14 +501,14 @@ export default function ShakerResultsScreen() {
       availableIngredientIds,
       ignoreGarnish,
       ingredientLookup,
-      paletteColors.outline,
-      paletteColors.outlineVariant,
+      Colors.outline,
+      Colors.outlineVariant,
     ],
   );
 
   return (
     <SafeAreaView
-      style={[styles.safeArea, { backgroundColor: paletteColors.background }]}
+      style={[styles.safeArea, { backgroundColor: Colors.background }]}
       edges={['top', 'left', 'right']}
     >
       <Stack.Screen
@@ -543,9 +542,9 @@ export default function ShakerResultsScreen() {
                 styles.filterMenu,
                 {
                   top: filterMenuTop,
-                  backgroundColor: paletteColors.surface,
-                  borderColor: paletteColors.outline,
-                  shadowColor: paletteColors.shadow,
+                  backgroundColor: Colors.surface,
+                  borderColor: Colors.outline,
+                  shadowColor: Colors.shadow,
                 },
               ]}>
               <ScrollView style={styles.filterMenuScroll} showsVerticalScrollIndicator>
@@ -558,28 +557,28 @@ export default function ShakerResultsScreen() {
                           <TagPill
                             key={method.id}
                             label={method.label}
-                            color={paletteColors.tint}
+                            color={Colors.tint}
                             selected={selected}
                             icon={renderMethodIcon(method.id, selected)}
                             onPress={() => handleMethodFilterToggle(method.id)}
                             accessibilityRole="checkbox"
                             accessibilityState={{ checked: selected }}
-                            androidRippleColor={`${paletteColors.surfaceVariant}33`}
+                            androidRippleColor={`${Colors.surfaceVariant}33`}
                           />
                         );
                       })
                     ) : (
-                      <Text style={[styles.filterMenuEmpty, { color: paletteColors.onSurfaceVariant }]}>
+                      <Text style={[styles.filterMenuEmpty, { color: Colors.onSurfaceVariant }]}>
                         No methods available
                       </Text>
                     )}
                   </View>
                   <View style={styles.filterSeparator}>
-                    <View style={[styles.filterSeparatorLine, { backgroundColor: paletteColors.outline }]} />
-                    <Text style={[styles.filterSeparatorLabel, { color: paletteColors.onSurfaceVariant }]}>
+                    <View style={[styles.filterSeparatorLine, { backgroundColor: Colors.outline }]} />
+                    <Text style={[styles.filterSeparatorLabel, { color: Colors.onSurfaceVariant }]}>
                       AND
                     </Text>
-                    <View style={[styles.filterSeparatorLine, { backgroundColor: paletteColors.outline }]} />
+                    <View style={[styles.filterSeparatorLine, { backgroundColor: Colors.outline }]} />
                   </View>
                   <View style={styles.filterTagList}>
                     {availableTagOptions.length > 0 ? (
@@ -594,12 +593,12 @@ export default function ShakerResultsScreen() {
                             onPress={() => handleTagFilterToggle(tag.key)}
                             accessibilityRole="checkbox"
                             accessibilityState={{ checked: selected }}
-                            androidRippleColor={`${paletteColors.surfaceVariant}33`}
+                            androidRippleColor={`${Colors.surfaceVariant}33`}
                           />
                         );
                       })
                     ) : (
-                      <Text style={[styles.filterMenuEmpty, { color: paletteColors.onSurfaceVariant }]}>
+                      <Text style={[styles.filterMenuEmpty, { color: Colors.onSurfaceVariant }]}>
                         No tags available
                       </Text>
                     )}
@@ -611,7 +610,7 @@ export default function ShakerResultsScreen() {
                     accessibilityLabel="Clear selected filters"
                     onPress={handleClearFilters}
                     style={styles.filterMenuClearButton}>
-                    <Text style={[styles.filterMenuClearLabel, { color: paletteColors.tint }]}>
+                    <Text style={[styles.filterMenuClearLabel, { color: Colors.tint }]}>
                       Clear filters
                     </Text>
                   </Pressable>
@@ -627,7 +626,7 @@ export default function ShakerResultsScreen() {
           ItemSeparatorComponent={renderSeparator}
           contentContainerStyle={styles.listContent}
           ListEmptyComponent={
-            <Text style={[styles.emptyLabel, { color: paletteColors.onSurfaceVariant }]}>
+            <Text style={[styles.emptyLabel, { color: Colors.onSurfaceVariant }]}>
               No matching recipes
             </Text>
           }

@@ -53,7 +53,6 @@ export function SubstituteModal({
   selectedSubstituteIds,
   selectedSubstituteNames,
 }: SubstituteModalProps) {
-  const paletteColors = Colors;
   const { ingredients, availableIngredientIds, shoppingIngredientIds, cocktails } = useInventory();
   const [searchValue, setSearchValue] = useState('');
   const inputRef = useRef<TextInput | null>(null);
@@ -244,7 +243,7 @@ export function SubstituteModal({
           subtitle={subtitle}
           onPress={() => onSelect(item)}
           selected={isAvailable}
-          highlightColor={paletteColors.highlightFaint}
+          highlightColor={Colors.highlightFaint}
           tagColor={tagColor}
           thumbnail={<Thumb label={item.name ?? undefined} uri={item.photoUri} />}
           brandIndicatorColor={brandIndicatorColor}
@@ -280,11 +279,11 @@ export function SubstituteModal({
     ({ leadingItem }: { leadingItem?: Ingredient | null }) => {
       const ingredientId = Number(leadingItem?.id ?? -1);
       const isAvailable = ingredientId >= 0 && availableIngredientIds.has(ingredientId);
-      const backgroundColor = isAvailable ? paletteColors.outline : paletteColors.outlineVariant;
+      const backgroundColor = isAvailable ? Colors.outline : Colors.outlineVariant;
 
       return <View style={[styles.modalSeparator, { backgroundColor }]} />;
     },
-    [availableIngredientIds, paletteColors.outline, paletteColors.outlineVariant],
+    [availableIngredientIds, Colors.outline, Colors.outlineVariant],
   );
 
   return (
@@ -299,22 +298,22 @@ export function SubstituteModal({
           style={[
             styles.modalCard,
             {
-              backgroundColor: paletteColors.surface,
-              borderColor: paletteColors.outline,
-              shadowColor: paletteColors.shadow,
+              backgroundColor: Colors.surface,
+              borderColor: Colors.outline,
+              shadowColor: Colors.shadow,
             },
           ]}
           onPress={() => {}}
           accessibilityRole="menu">
           <View style={styles.modalHeader}>
             <View style={styles.modalTitleRow}>
-              <Text style={[styles.modalTitle, { color: paletteColors.onSurface, flex: 1 }]}>Add substitute</Text>
+              <Text style={[styles.modalTitle, { color: Colors.onSurface, flex: 1 }]}>Add substitute</Text>
               <Pressable onPress={onClose} accessibilityRole="button" accessibilityLabel="Close">
-                <MaterialCommunityIcons name="close" size={22} color={paletteColors.onSurfaceVariant} />
+                <MaterialCommunityIcons name="close" size={22} color={Colors.onSurfaceVariant} />
               </Pressable>
             </View>
             {ingredientName ? (
-              <Text style={[styles.modalSubtitle, { color: paletteColors.onSurfaceVariant }]}>For {ingredientName}</Text>
+              <Text style={[styles.modalSubtitle, { color: Colors.onSurfaceVariant }]}>For {ingredientName}</Text>
             ) : null}
           </View>
           <TextInput
@@ -322,13 +321,13 @@ export function SubstituteModal({
             value={searchValue}
             onChangeText={setSearchValue}
             placeholder="Search ingredients"
-            placeholderTextColor={`${paletteColors.onSurfaceVariant}99`}
+            placeholderTextColor={`${Colors.onSurfaceVariant}99`}
             style={[
               styles.input,
               {
-                borderColor: paletteColors.outlineVariant,
-                color: paletteColors.text,
-                backgroundColor: paletteColors.surfaceBright,
+                borderColor: Colors.outlineVariant,
+                color: Colors.text,
+                backgroundColor: Colors.surfaceBright,
               },
             ]}
             autoFocus
@@ -341,7 +340,7 @@ export function SubstituteModal({
             keyboardShouldPersistTaps="handled"
             contentContainerStyle={styles.modalListContent}
             ListEmptyComponent={
-              <Text style={[styles.modalEmptyText, { color: paletteColors.onSurfaceVariant }]}>No ingredients found</Text>
+              <Text style={[styles.modalEmptyText, { color: Colors.onSurfaceVariant }]}>No ingredients found</Text>
             }
           />
         </Pressable>

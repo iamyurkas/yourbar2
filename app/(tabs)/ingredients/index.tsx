@@ -224,8 +224,7 @@ export default function IngredientsScreen() {
     () => new Map(),
   );
   const [, startAvailabilityTransition] = useTransition();
-  const paletteColors = Colors;
-  const defaultTagColor = tagColors.yellow ?? paletteColors.highlightFaint;
+  const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
 
   useScrollToTop(listRef);
 
@@ -548,7 +547,7 @@ export default function IngredientsScreen() {
     );
   }, [filteredByTags, normalizedQuery]);
 
-  const highlightColor = paletteColors.highlightFaint;
+  const highlightColor = Colors.highlightFaint;
   const isFilterActive = selectedTagKeys.size > 0;
   const emptyMessage = useMemo(() => {
     switch (activeTab) {
@@ -670,7 +669,7 @@ export default function IngredientsScreen() {
           availableIngredientIds={effectiveAvailableIngredientIds}
           onToggleAvailability={handleToggle}
           subtitle={subtitleText}
-          surfaceVariantColor={paletteColors.onSurfaceVariant ?? paletteColors.icon}
+          surfaceVariantColor={Colors.onSurfaceVariant ?? Colors.icon}
           isOnShoppingList={isOnShoppingList}
           showAvailabilityToggle={activeTab !== 'shopping'}
           onShoppingToggle={activeTab === 'shopping' ? handleShoppingToggle : undefined}
@@ -684,8 +683,8 @@ export default function IngredientsScreen() {
       handleShoppingToggle,
       highlightColor,
       makeableCocktailCounts,
-      paletteColors.icon,
-      paletteColors.onSurfaceVariant,
+      Colors.icon,
+      Colors.onSurfaceVariant,
       shoppingIngredientIds,
       totalCocktailCounts,
     ],
@@ -695,16 +694,16 @@ export default function IngredientsScreen() {
     ({ leadingItem }: { leadingItem?: Ingredient | null }) => {
       const ingredientId = Number(leadingItem?.id ?? -1);
       const isAvailable = ingredientId >= 0 && effectiveAvailableIngredientIds.has(ingredientId);
-      const backgroundColor = isAvailable ? paletteColors.outline : paletteColors.outlineVariant;
+      const backgroundColor = isAvailable ? Colors.outline : Colors.outlineVariant;
 
       return <View style={[styles.divider, { backgroundColor }]} />;
     },
-    [effectiveAvailableIngredientIds, paletteColors.outline, paletteColors.outlineVariant],
+    [effectiveAvailableIngredientIds, Colors.outline, Colors.outlineVariant],
   );
 
   return (
     <SafeAreaView
-      style={[styles.safeArea, { backgroundColor: paletteColors.background }]}
+      style={[styles.safeArea, { backgroundColor: Colors.background }]}
       edges={['top', 'left', 'right']}>
       <View style={styles.container}>
         <View style={styles.headerWrapper} onLayout={handleHeaderLayout}>
@@ -735,9 +734,9 @@ export default function IngredientsScreen() {
                 styles.filterMenu,
                 {
                   top: filterMenuTop,
-                  backgroundColor: paletteColors.surface,
-                  borderColor: paletteColors.outline,
-                  shadowColor: paletteColors.shadow,
+                  backgroundColor: Colors.surface,
+                  borderColor: Colors.outline,
+                  shadowColor: Colors.shadow,
                 },
               ]}>
               <ScrollView style={styles.filterMenuScroll} showsVerticalScrollIndicator>
@@ -754,13 +753,13 @@ export default function IngredientsScreen() {
                           onPress={() => handleTagFilterToggle(tag.key)}
                           accessibilityRole="checkbox"
                           accessibilityState={{ checked: selected }}
-                          androidRippleColor={`${paletteColors.surfaceVariant}33`}
+                          androidRippleColor={`${Colors.surfaceVariant}33`}
                         />
                       );
                     })}
                   </View>
                 ) : (
-                  <Text style={[styles.filterMenuEmpty, { color: paletteColors.onSurfaceVariant }]}>
+                  <Text style={[styles.filterMenuEmpty, { color: Colors.onSurfaceVariant }]}>
                     No tags available
                   </Text>
                 )}
@@ -770,7 +769,7 @@ export default function IngredientsScreen() {
                     accessibilityLabel="Clear selected tag filters"
                     onPress={handleClearTagFilters}
                     style={styles.filterMenuClearButton}>
-                    <Text style={[styles.filterMenuClearLabel, { color: paletteColors.tint }]}>Clear filters</Text>
+                    <Text style={[styles.filterMenuClearLabel, { color: Colors.tint }]}>Clear filters</Text>
                   </Pressable>
                 ) : null}
               </ScrollView>
@@ -786,7 +785,7 @@ export default function IngredientsScreen() {
           contentContainerStyle={styles.listContent}
           showsVerticalScrollIndicator
           ListEmptyComponent={
-            <Text style={[styles.emptyLabel, { color: paletteColors.onSurfaceVariant }]}>{emptyMessage}</Text>
+            <Text style={[styles.emptyLabel, { color: Colors.onSurfaceVariant }]}>{emptyMessage}</Text>
           }
         />
       </View>

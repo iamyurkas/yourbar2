@@ -105,10 +105,9 @@ export default function CocktailsScreen() {
   const listRef = useRef<FlatList<unknown>>(null);
 
   useScrollToTop(listRef);
-  const paletteColors = Colors;
   const router = useRouter();
   const ingredientLookup = useMemo(() => createIngredientLookup(ingredients), [ingredients]);
-  const defaultTagColor = tagColors.yellow ?? paletteColors.highlightFaint;
+  const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
 
   const availableTagOptions = useMemo<CocktailTagOption[]>(() => {
     const map = new Map<string, CocktailTagOption>();
@@ -273,7 +272,7 @@ export default function CocktailsScreen() {
         return null;
       }
 
-      const tintColor = selected ? paletteColors.surface : paletteColors.tint;
+      const tintColor = selected ? Colors.surface : Colors.tint;
       if (icon.type === 'asset') {
         return (
           <Image
@@ -286,7 +285,7 @@ export default function CocktailsScreen() {
 
       return <MaterialCommunityIcons name={icon.name} size={METHOD_ICON_SIZE} color={tintColor} />;
     },
-    [paletteColors.surface, paletteColors.tint],
+    [Colors.surface, Colors.tint],
   );
 
   const ratedCocktails = useMemo(() => {
@@ -734,7 +733,7 @@ export default function CocktailsScreen() {
       if (item.type === 'separator') {
         return (
           <View style={styles.moreIngredientsWrapper}>
-            <Text style={[styles.moreIngredientsLabel, { color: paletteColors.onSurfaceVariant }]}>
+            <Text style={[styles.moreIngredientsLabel, { color: Colors.onSurfaceVariant }]}>
               More ingredients needed
             </Text>
           </View>
@@ -756,7 +755,7 @@ export default function CocktailsScreen() {
             title={item.name}
             subtitle={subtitleLabel}
             selected
-            highlightColor={paletteColors.highlightSubtle}
+            highlightColor={Colors.highlightSubtle}
             tagColor={item.tagColor}
             thumbnail={thumbnail}
             onPress={() => handleSelectIngredient(item.ingredientId)}
@@ -773,7 +772,7 @@ export default function CocktailsScreen() {
                   <MaterialIcons
                     name={isOnShoppingList ? 'shopping-cart' : 'add-shopping-cart'}
                     size={20}
-                    color={isOnShoppingList ? paletteColors.tint : paletteColors.onSurfaceVariant}
+                    color={isOnShoppingList ? Colors.tint : Colors.onSurfaceVariant}
                     style={styles.shoppingIcon}
                   />
                 </Pressable>
@@ -803,10 +802,10 @@ export default function CocktailsScreen() {
       handleShoppingToggle,
       ignoreGarnish,
       ingredientLookup,
-      paletteColors.onSurface,
-      paletteColors.onSurfaceVariant,
-      paletteColors.outlineVariant,
-      paletteColors.tint,
+      Colors.onSurface,
+      Colors.onSurfaceVariant,
+      Colors.outlineVariant,
+      Colors.tint,
       shoppingIngredientIds,
     ],
   );
@@ -819,7 +818,7 @@ export default function CocktailsScreen() {
             allowAllSubstitutes,
           })
         : false;
-      const backgroundColor = isReady ? paletteColors.outline : paletteColors.outlineVariant;
+      const backgroundColor = isReady ? Colors.outline : Colors.outlineVariant;
 
       return <View style={[styles.divider, { backgroundColor }]} />;
     },
@@ -828,8 +827,8 @@ export default function CocktailsScreen() {
       allowAllSubstitutes,
       ignoreGarnish,
       ingredientLookup,
-      paletteColors.outline,
-      paletteColors.outlineVariant,
+      Colors.outline,
+      Colors.outlineVariant,
     ],
   );
 
@@ -841,11 +840,11 @@ export default function CocktailsScreen() {
 
       const cocktailKey = String(leadingItem.cocktail.id ?? leadingItem.cocktail.name);
       const isReady = myTabListData?.availabilityMap.get(cocktailKey) ?? false;
-      const backgroundColor = isReady ? paletteColors.outline : paletteColors.outlineVariant;
+      const backgroundColor = isReady ? Colors.outline : Colors.outlineVariant;
 
       return <View style={[styles.divider, { backgroundColor }]} />;
     },
-    [myTabListData, paletteColors.outline, paletteColors.outlineVariant],
+    [myTabListData, Colors.outline, Colors.outlineVariant],
   );
 
   const isFilterActive = selectedTagKeys.size > 0 || selectedMethodIds.size > 0;
@@ -875,7 +874,7 @@ export default function CocktailsScreen() {
 
   return (
     <SafeAreaView
-      style={[styles.safeArea, { backgroundColor: paletteColors.background }]}
+      style={[styles.safeArea, { backgroundColor: Colors.background }]}
       edges={['top', 'left', 'right']}>
       <View style={styles.container}>
         <View style={styles.headerWrapper} onLayout={handleHeaderLayout}>
@@ -906,9 +905,9 @@ export default function CocktailsScreen() {
                 styles.filterMenu,
                 {
                   top: filterMenuTop,
-                  backgroundColor: paletteColors.surface,
-                  borderColor: paletteColors.outline,
-                  shadowColor: paletteColors.shadow,
+                  backgroundColor: Colors.surface,
+                  borderColor: Colors.outline,
+                  shadowColor: Colors.shadow,
                 },
               ]}>
               <ScrollView style={styles.filterMenuScroll} showsVerticalScrollIndicator>
@@ -921,28 +920,28 @@ export default function CocktailsScreen() {
                           <TagPill
                             key={method.id}
                             label={method.label}
-                            color={paletteColors.tint}
+                            color={Colors.tint}
                             selected={selected}
                             icon={renderMethodIcon(method.id, selected)}
                             onPress={() => handleMethodFilterToggle(method.id)}
                             accessibilityRole="checkbox"
                             accessibilityState={{ checked: selected }}
-                            androidRippleColor={`${paletteColors.surfaceVariant}33`}
+                            androidRippleColor={`${Colors.surfaceVariant}33`}
                           />
                         );
                       })
                     ) : (
-                      <Text style={[styles.filterMenuEmpty, { color: paletteColors.onSurfaceVariant }]}>
+                      <Text style={[styles.filterMenuEmpty, { color: Colors.onSurfaceVariant }]}>
                         No methods available
                       </Text>
                     )}
                   </View>
                   <View style={styles.filterSeparator}>
-                    <View style={[styles.filterSeparatorLine, { backgroundColor: paletteColors.outline }]} />
-                    <Text style={[styles.filterSeparatorLabel, { color: paletteColors.onSurfaceVariant }]}>
+                    <View style={[styles.filterSeparatorLine, { backgroundColor: Colors.outline }]} />
+                    <Text style={[styles.filterSeparatorLabel, { color: Colors.onSurfaceVariant }]}>
                       AND
                     </Text>
-                    <View style={[styles.filterSeparatorLine, { backgroundColor: paletteColors.outline }]} />
+                    <View style={[styles.filterSeparatorLine, { backgroundColor: Colors.outline }]} />
                   </View>
                   <View style={styles.filterTagList}>
                     {availableTagOptions.length > 0 ? (
@@ -957,12 +956,12 @@ export default function CocktailsScreen() {
                             onPress={() => handleTagFilterToggle(tag.key)}
                             accessibilityRole="checkbox"
                             accessibilityState={{ checked: selected }}
-                            androidRippleColor={`${paletteColors.surfaceVariant}33`}
+                            androidRippleColor={`${Colors.surfaceVariant}33`}
                           />
                         );
                       })
                     ) : (
-                      <Text style={[styles.filterMenuEmpty, { color: paletteColors.onSurfaceVariant }]}>
+                      <Text style={[styles.filterMenuEmpty, { color: Colors.onSurfaceVariant }]}>
                         No tags available
                       </Text>
                     )}
@@ -974,7 +973,7 @@ export default function CocktailsScreen() {
                     accessibilityLabel="Clear selected filters"
                     onPress={handleClearFilters}
                     style={styles.filterMenuClearButton}>
-                    <Text style={[styles.filterMenuClearLabel, { color: paletteColors.tint }]}>Clear filters</Text>
+                    <Text style={[styles.filterMenuClearLabel, { color: Colors.tint }]}>Clear filters</Text>
                   </Pressable>
                 ) : null}
               </ScrollView>
@@ -990,7 +989,7 @@ export default function CocktailsScreen() {
           contentContainerStyle={styles.listContent}
           showsVerticalScrollIndicator
           ListEmptyComponent={
-            <Text style={[styles.emptyLabel, { color: paletteColors.onSurfaceVariant }]}>
+            <Text style={[styles.emptyLabel, { color: Colors.onSurfaceVariant }]}>
               {emptyMessage}
             </Text>
           }
