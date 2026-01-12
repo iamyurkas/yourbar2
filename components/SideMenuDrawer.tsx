@@ -705,14 +705,13 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
           />
         </Pressable>
         <Animated.View style={[drawerStyle, { transform: [{ translateX }] }]}>
+          <View style={[styles.headerContainer, { backgroundColor: palette.surface }]}>
+            <Text style={[styles.title, { color: palette.onSurface }]}>Settings</Text>
+          </View>
           <ScrollView
             style={styles.menuScroll}
             contentContainerStyle={styles.menuContent}
-            stickyHeaderIndices={[0]}
             showsVerticalScrollIndicator={false}>
-            <View style={[styles.headerContainer, { backgroundColor: palette.surface }]}>
-              <Text style={[styles.title, { color: palette.onSurface }]}>Settings</Text>
-            </View>
             <Pressable
               accessibilityRole="checkbox"
               accessibilityState={{ checked: ignoreGarnish }}
@@ -1285,11 +1284,15 @@ const styles = StyleSheet.create({
   },
   menuContent: {
     flexGrow: 1,
-    padding: 24,
+    paddingHorizontal: 24,
+    paddingTop: 16,
+    paddingBottom: 24,
     gap: 16,
   },
   headerContainer: {
-    paddingTop: 8,
+    paddingHorizontal: 24,
+    paddingTop: 24,
+    paddingBottom: 8,
   },
   title: {
     fontSize: 20,
