@@ -937,31 +937,6 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
             </Pressable>
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel="Backup cocktail and ingredient photos"
-              onPress={handleBackupPhotos}
-              disabled={isExporting || isImporting || isBackingUpPhotos}
-              style={({ pressed }) => [
-                styles.actionRow,
-                {
-                  borderColor: palette.outline,
-                  backgroundColor: palette.surface,
-                },
-                pressed || isBackingUpPhotos ? { opacity: 0.8 } : null,
-              ]}>
-              <View style={[styles.actionIcon, { backgroundColor: palette.surfaceVariant }]}>
-                <MaterialCommunityIcons name="image-multiple" size={16} color={palette.onSurfaceVariant} />
-              </View>
-              <View style={styles.settingTextContainer}>
-                <Text style={[styles.settingLabel, { color: palette.onSurface }]}>
-                  {isBackingUpPhotos ? 'Preparing photo backup...' : 'Backup photos'}
-                </Text>
-                <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>
-                  Save cocktail and ingredient photos as an archive
-                </Text>
-              </View>
-            </Pressable>
-            <Pressable
-              accessibilityRole="button"
               accessibilityLabel="Import cocktails and ingredients"
               onPress={handleImportInventory}
               disabled={isExporting || isImporting}
@@ -987,22 +962,26 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
             </Pressable>
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel="Reload bundled inventory"
-              onPress={handleResetInventory}
-              style={[
+              accessibilityLabel="Backup cocktail and ingredient photos"
+              onPress={handleBackupPhotos}
+              disabled={isExporting || isImporting || isBackingUpPhotos}
+              style={({ pressed }) => [
                 styles.actionRow,
                 {
                   borderColor: palette.outline,
                   backgroundColor: palette.surface,
                 },
+                pressed || isBackingUpPhotos ? { opacity: 0.8 } : null,
               ]}>
               <View style={[styles.actionIcon, { backgroundColor: palette.surfaceVariant }]}>
-                <MaterialCommunityIcons name="refresh" size={16} color={palette.onSurfaceVariant} />
+                <MaterialCommunityIcons name="image-multiple" size={16} color={palette.onSurfaceVariant} />
               </View>
               <View style={styles.settingTextContainer}>
-                <Text style={[styles.settingLabel, { color: palette.onSurface }]}>Reload bundled data</Text>
+                <Text style={[styles.settingLabel, { color: palette.onSurface }]}>
+                  {isBackingUpPhotos ? 'Preparing photo backup...' : 'Backup photos'}
+                </Text>
                 <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>
-                  Clear saved inventory and reload assets from data.json
+                  Save photos as an archive
                 </Text>
               </View>
             </Pressable>
