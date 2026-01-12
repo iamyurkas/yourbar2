@@ -66,7 +66,7 @@ export const tagPalette = [
   '#4DB6AC',
   '#81C784',
   '#AED581',
-  '#DCE775',
+  '#CBD664',
   '#FFD54F',
   '#FFB74D',
   '#FF8A65',
