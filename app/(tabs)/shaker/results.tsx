@@ -680,7 +680,7 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   filterMenuScroll: {
-    maxHeight: 560,
+    maxHeight: 540,
   },
   filterMenuContent: {
     flexDirection: 'row',
