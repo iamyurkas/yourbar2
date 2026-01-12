@@ -38,7 +38,7 @@ export const COCKTAIL_METHODS: CocktailMethod[] = [
     id: 'stir',
     label: 'Stir',
     title: 'Stir',
-    description: 'Stir with a bar spoon in a mixing glass full of ice.',
+    description: 'Stir with a bar spoon in a mixing glass full of ice. Best for herbal mixers.',
   },
   {
     id: 'throwing',
