@@ -1,6 +1,6 @@
 import { Platform } from 'react-native';
 
-import { lightTheme } from '@/theme/theme';
+import { lightTheme, palette } from '@/theme/theme';
 
 const lightColors = lightTheme.colors;
 const tintColor = lightColors.primary;
@@ -12,6 +12,10 @@ export const Colors = {
   icon: lightColors.onSurfaceVariant,
   tabIconDefault: lightColors.onSurfaceVariant,
   tabIconSelected: tintColor,
+  danger: palette.danger,
+  disabled: palette.disabled,
+  placeholder: palette.placeholder,
+  success: palette.success,
 } as const;
 
 export const Fonts = Platform.select({

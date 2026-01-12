@@ -28,7 +28,6 @@ import { Colors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
 import { useUnsavedChanges } from '@/providers/unsaved-changes-provider';
-import { palette as appPalette } from '@/theme/theme';
 
 type IngredientFormSnapshot = {
   name: string;
@@ -542,7 +541,7 @@ export default function EditIngredientScreen() {
           title={item.name ?? ''}
           onPress={() => handleSelectBaseIngredient(item)}
           selected={isAvailable}
-          highlightColor={appPalette.highlightFaint}
+          highlightColor={paletteColors.highlightFaint}
           thumbnail={<Thumb label={item.name ?? undefined} uri={item.photoUri} />}
           tagColor={tagColor}
           accessibilityRole="button"

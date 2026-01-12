@@ -14,7 +14,7 @@ import {
 import { ListRow, Thumb } from '@/components/RowParts';
 import { Colors } from '@/constants/theme';
 import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
-import { palette } from '@/theme/theme';
+import { tagColors } from '@/theme/theme';
 
 const MIN_AUTOCOMPLETE_LENGTH = 2;
 const MAX_SUGGESTIONS = 8;
@@ -234,7 +234,7 @@ export function SubstituteModal({
       const baseGroupId = getBaseGroupId(item.id);
       const isAvailable = candidateId >= 0 && availableIngredientIds.has(candidateId);
       const isOnShoppingList = candidateId >= 0 && shoppingIngredientIds.has(candidateId);
-      const tagColor = item.tags?.[0]?.color ?? palette.tagYellow;
+      const tagColor = item.tags?.[0]?.color ?? tagColors.yellow;
       const subtitle = renderSubtitle(baseGroupId);
       const brandIndicatorColor = item.baseIngredientId != null ? Colors.primary : undefined;
 
@@ -244,7 +244,7 @@ export function SubstituteModal({
           subtitle={subtitle}
           onPress={() => onSelect(item)}
           selected={isAvailable}
-          highlightColor={palette.highlightFaint}
+          highlightColor={paletteColors.highlightFaint}
           tagColor={tagColor}
           thumbnail={<Thumb label={item.name ?? undefined} uri={item.photoUri} />}
           brandIndicatorColor={brandIndicatorColor}
@@ -328,7 +328,7 @@ export function SubstituteModal({
               {
                 borderColor: paletteColors.outlineVariant,
                 color: paletteColors.text,
-                backgroundColor: palette.surfaceBright,
+                backgroundColor: paletteColors.surfaceBright,
               },
             ]}
             autoFocus

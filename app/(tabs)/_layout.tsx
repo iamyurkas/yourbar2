@@ -10,9 +10,9 @@ import LemonIcon from '@/assets/images/ingredients.svg';
 import ShakerIcon from '@/assets/images/shaker.svg';
 import { AppDialog, type DialogOptions } from '@/components/AppDialog';
 import { HapticTab } from '@/components/haptic-tab';
+import { Colors } from '@/constants/theme';
 import { getLastCocktailTab, getLastIngredientTab } from '@/libs/collection-tabs';
 import { useUnsavedChanges } from '@/providers/unsaved-changes-provider';
-import { palette } from '@/theme/theme';
 
 const EDITING_PATH_PATTERN = /^\/(cocktails\/create|ingredients\/create|ingredients\/[^/]+\/edit)(\/|$)/;
 
@@ -65,7 +65,7 @@ export default function TabLayout() {
   const colorScheme = useColorScheme();
   const isDarkMode = colorScheme === 'dark';
 
-  const tabBarInsetColor = isDarkMode ? palette.onSurfaceVariant : palette.surface;
+  const tabBarInsetColor = isDarkMode ? Colors.onSurfaceVariant : Colors.surface;
 
   const closeDialog = useCallback(() => {
     setDialogOptions(null);
@@ -81,8 +81,8 @@ export default function TabLayout() {
         initialRouteName="cocktails"
         screenOptions={{
           headerShown: false,
-          tabBarActiveTintColor: palette.primary,
-          tabBarInactiveTintColor: palette.onSurfaceVariant,
+          tabBarActiveTintColor: Colors.primary,
+          tabBarInactiveTintColor: Colors.onSurfaceVariant,
           tabBarStyle: {
             height: 72 + insets.bottom,
             paddingTop: 8,
@@ -181,10 +181,10 @@ const styles = StyleSheet.create({
   },
   tabBarSurface: {
     flex: 1,
-    backgroundColor: palette.surface,
+    backgroundColor: Colors.surface,
   },
   tabBarInset: {
     height: 0,
-    backgroundColor: palette.surface,
+    backgroundColor: Colors.surface,
   },
 });

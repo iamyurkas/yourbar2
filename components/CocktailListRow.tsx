@@ -9,7 +9,6 @@ import { Colors } from '@/constants/theme';
 import type { Cocktail, Ingredient } from '@/providers/inventory-provider';
 import { createIngredientLookup, type IngredientLookup } from '@/libs/ingredient-availability';
 import { summariseCocktailAvailability } from '@/libs/cocktail-availability';
-import { palette } from '@/theme/theme';
 
 import { ListRow, Thumb } from './RowParts';
 
@@ -56,7 +55,7 @@ const CocktailListRowComponent = ({
   availableIngredientIds,
   ingredients,
   ingredientLookup,
-  highlightColor = palette.highlightFaint,
+  highlightColor = Colors.highlightFaint,
   ignoreGarnish = true,
   allowAllSubstitutes = false,
   showMethodIcons = false,
