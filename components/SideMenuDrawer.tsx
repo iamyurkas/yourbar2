@@ -708,8 +708,11 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
           <ScrollView
             style={styles.menuScroll}
             contentContainerStyle={styles.menuContent}
+            stickyHeaderIndices={[0]}
             showsVerticalScrollIndicator={false}>
-            <Text style={[styles.title, { color: palette.onSurface }]}>Settings</Text>
+            <View style={[styles.headerContainer, { backgroundColor: palette.surface }]}>
+              <Text style={[styles.title, { color: palette.onSurface }]}>Settings</Text>
+            </View>
             <Pressable
               accessibilityRole="checkbox"
               accessibilityState={{ checked: ignoreGarnish }}
@@ -1285,10 +1288,12 @@ const styles = StyleSheet.create({
     padding: 24,
     gap: 16,
   },
+  headerContainer: {
+    paddingTop: 8,
+  },
   title: {
     fontSize: 20,
     fontWeight: '700',
-    marginTop: 8,
   },
   settingRow: {
     flexDirection: 'row',
