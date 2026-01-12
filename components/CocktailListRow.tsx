@@ -4,8 +4,7 @@ import React, { memo, useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { resolveGlasswareUriFromId } from '@/assets/image-manifest';
-import { METHOD_ICON_MAP } from '@/constants/cocktail-method-icons';
-import type { CocktailMethodId } from '@/constants/cocktail-methods';
+import { METHOD_ICON_MAP, type CocktailMethodId } from '@/constants/cocktail-methods';
 import { Colors } from '@/constants/theme';
 import type { Cocktail, Ingredient } from '@/providers/inventory-provider';
 import { createIngredientLookup, type IngredientLookup } from '@/libs/ingredient-availability';
