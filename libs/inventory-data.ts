@@ -1,6 +1,9 @@
 import bundledData from '@/assets/data/data.json';
+import { COCKTAIL_METHODS } from '@/constants/cocktail-methods';
 
-export type InventoryData = typeof bundledData;
+export type InventoryData = typeof bundledData & {
+  cocktailMethods: typeof COCKTAIL_METHODS;
+};
 
 let cachedInventoryData: InventoryData | undefined;
 
@@ -14,6 +17,12 @@ function normalizeInventoryData(data: unknown): InventoryData {
 export function loadInventoryData(): InventoryData {
   if (!cachedInventoryData) {
     cachedInventoryData = normalizeInventoryData(bundledData);
+    if (!cachedInventoryData.cocktailMethods?.length) {
+      cachedInventoryData = {
+        ...cachedInventoryData,
+        cocktailMethods: COCKTAIL_METHODS,
+      };
+    }
   }
 
   return cachedInventoryData;
@@ -21,5 +30,11 @@ export function loadInventoryData(): InventoryData {
 
 export function reloadInventoryData(): InventoryData {
   cachedInventoryData = normalizeInventoryData(require('@/assets/data/data.json'));
+  if (!cachedInventoryData.cocktailMethods?.length) {
+    cachedInventoryData = {
+      ...cachedInventoryData,
+      cocktailMethods: COCKTAIL_METHODS,
+    };
+  }
   return cachedInventoryData;
 }
