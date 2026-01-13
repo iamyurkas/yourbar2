@@ -28,6 +28,7 @@ import { Colors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
 import { skipDuplicateBack } from '@/libs/navigation';
 import { shouldStorePhoto, storePhoto } from '@/libs/photo-storage';
+import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
 import { useUnsavedChanges } from '@/providers/unsaved-changes-provider';
 
@@ -53,8 +54,8 @@ function useResolvedIngredient(param: string | undefined, ingredients: Ingredien
       }
     }
 
-    const normalized = param.toLowerCase();
-    return ingredients.find((item) => item.name?.toLowerCase() === normalized);
+    const normalized = normalizeSearchText(param);
+    return ingredients.find((item) => normalizeSearchText(item.name ?? '') === normalized);
   }, [ingredients, param]);
 }
 
@@ -489,10 +490,10 @@ export default function EditIngredientScreen() {
   }, []);
 
   const handleCloseBaseModal = useCallback(() => {
-    const normalized = baseSearch.trim().toLowerCase();
+    const normalized = normalizeSearchText(baseSearch);
     if (normalized) {
       const match = baseIngredientOptions.find((item) =>
-        item.name ? item.name.trim().toLowerCase() === normalized : false,
+        item.name ? normalizeSearchText(item.name) === normalized : false,
       );
 
       if (match?.id != null) {
@@ -507,7 +508,7 @@ export default function EditIngredientScreen() {
     setBaseSearch('');
   }, [baseIngredientOptions, baseSearch]);
 
-  const normalizedBaseQuery = useMemo(() => baseSearch.trim().toLowerCase(), [baseSearch]);
+  const normalizedBaseQuery = useMemo(() => normalizeSearchText(baseSearch), [baseSearch]);
 
   const baseIngredientOptions = useMemo(() => {
     const currentId = numericIngredientId;
@@ -535,7 +536,7 @@ export default function EditIngredientScreen() {
     }
 
     return baseIngredientOptions.filter((candidate) => {
-      const nameNormalized = candidate.searchNameNormalized ?? '';
+      const nameNormalized = candidate.searchNameNormalized ?? normalizeSearchText(candidate.name ?? '');
       if (nameNormalized.startsWith(normalizedBaseQuery)) {
         return true;
       }

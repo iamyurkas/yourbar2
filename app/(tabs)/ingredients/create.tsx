@@ -29,6 +29,7 @@ import { Colors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
 import { skipDuplicateBack } from '@/libs/navigation';
 import { shouldStorePhoto, storePhoto } from '@/libs/photo-storage';
+import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
 import { useUnsavedChanges } from '@/providers/unsaved-changes-provider';
 
@@ -454,10 +455,10 @@ export default function CreateIngredientScreen() {
   );
 
   const handleCloseBaseModal = useCallback(() => {
-    const normalized = baseSearch.trim().toLowerCase();
+    const normalized = normalizeSearchText(baseSearch);
     if (normalized) {
       const match = baseIngredientOptions.find((item) =>
-        item.name ? item.name.trim().toLowerCase() === normalized : false,
+        item.name ? normalizeSearchText(item.name) === normalized : false,
       );
 
       if (match?.id != null) {
@@ -472,7 +473,7 @@ export default function CreateIngredientScreen() {
     setBaseSearch('');
   }, [baseIngredientOptions, baseSearch]);
 
-  const normalizedBaseQuery = useMemo(() => baseSearch.trim().toLowerCase(), [baseSearch]);
+  const normalizedBaseQuery = useMemo(() => normalizeSearchText(baseSearch), [baseSearch]);
 
   const baseIngredientOptions = useMemo(
     () => ingredients.filter((ingredient) => ingredient.baseIngredientId == null),
@@ -485,7 +486,7 @@ export default function CreateIngredientScreen() {
     }
 
     return baseIngredientOptions.filter((ingredient) => {
-      const nameNormalized = ingredient.searchNameNormalized ?? '';
+      const nameNormalized = ingredient.searchNameNormalized ?? normalizeSearchText(ingredient.name ?? '');
       if (nameNormalized.startsWith(normalizedBaseQuery)) {
         return true;
       }

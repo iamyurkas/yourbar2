@@ -21,6 +21,7 @@ import {
   type IngredientLookup,
 } from '@/libs/ingredient-availability';
 import { skipDuplicateBack } from '@/libs/navigation';
+import { normalizeSearchText } from '@/libs/search-normalization';
 import {
   useInventory,
   type Cocktail,
@@ -75,8 +76,8 @@ function resolveCocktail(
     }
   }
 
-  const normalized = param.toLowerCase();
-  return cocktails.find((item) => item.name?.toLowerCase() === normalized);
+  const normalized = normalizeSearchText(param);
+  return cocktails.find((item) => normalizeSearchText(item.name ?? '') === normalized);
 }
 
 function formatAmount(value: number): string {

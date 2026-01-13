@@ -28,6 +28,7 @@ import { Colors } from '@/constants/theme';
 import { isCocktailReady } from '@/libs/cocktail-availability';
 import { getLastCocktailTab, setLastCocktailTab, type CocktailTabKey } from '@/libs/collection-tabs';
 import { createIngredientLookup } from '@/libs/ingredient-availability';
+import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Cocktail } from '@/providers/inventory-provider';
 import { tagColors } from '@/theme/theme';
 
@@ -355,9 +356,9 @@ export default function CocktailsScreen() {
   }, [availableMethodOptions]);
 
   const normalizedQuery = useMemo(() => {
-    const trimmed = query.trim().toLowerCase();
-    const tokens = trimmed ? trimmed.split(/\s+/).filter(Boolean) : [];
-    return { text: trimmed, tokens };
+    const normalized = normalizeSearchText(query);
+    const tokens = normalized ? normalized.split(/\s+/).filter(Boolean) : [];
+    return { text: normalized, tokens };
   }, [query]);
 
   const filteredByMethods = useMemo(() => {

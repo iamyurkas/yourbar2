@@ -13,6 +13,7 @@ import {
 
 import { ListRow, Thumb } from '@/components/RowParts';
 import { Colors } from '@/constants/theme';
+import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
 import { tagColors } from '@/theme/theme';
 
@@ -25,7 +26,7 @@ function filterIngredientsByQuery(options: Ingredient[], query: string) {
   }
 
   return options.filter((candidate) => {
-    const nameNormalized = candidate.searchNameNormalized ?? candidate.name?.toLowerCase() ?? '';
+    const nameNormalized = candidate.searchNameNormalized ?? normalizeSearchText(candidate.name ?? '');
     if (nameNormalized.includes(query)) {
       return true;
     }
@@ -104,7 +105,7 @@ export function SubstituteModal({
 
     cocktails.forEach((cocktail: Cocktail) => {
       const id = cocktail.id;
-      const cocktailKey = id != null ? String(id) : cocktail.name?.trim().toLowerCase();
+      const cocktailKey = id != null ? String(id) : normalizeSearchText(cocktail.name ?? '');
       if (!cocktailKey) {
         return;
       }
@@ -136,7 +137,7 @@ export function SubstituteModal({
   );
 
   const candidateIngredients = useMemo(() => {
-    const normalized = searchValue.trim().toLowerCase();
+    const normalized = normalizeSearchText(searchValue);
     const filtered = normalized.length >= MIN_AUTOCOMPLETE_LENGTH
       ? filterIngredientsByQuery(ingredients, normalized)
       : ingredients;
@@ -153,7 +154,7 @@ export function SubstituteModal({
           return false;
         }
 
-        const normalizedName = item.name?.trim().toLowerCase();
+        const normalizedName = normalizeSearchText(item.name ?? '');
         if (normalizedName && selectedSubstituteNames?.has(normalizedName)) {
           return false;
         }

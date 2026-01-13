@@ -36,6 +36,7 @@ import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
 import { COCKTAIL_UNIT_DICTIONARY, COCKTAIL_UNIT_OPTIONS } from '@/constants/cocktail-units';
 import { GLASSWARE } from '@/constants/glassware';
 import { Colors } from '@/constants/theme';
+import { normalizeSearchText } from '@/libs/search-normalization';
 import { skipDuplicateBack } from '@/libs/navigation';
 import { shouldStorePhoto, storePhoto } from '@/libs/photo-storage';
 import { tagColors } from '@/theme/theme';
@@ -385,7 +386,7 @@ export default function CreateCocktailScreen() {
 
     cocktails.forEach((cocktail: Cocktail) => {
       const id = cocktail.id;
-      const cocktailKey = id != null ? String(id) : cocktail.name?.trim().toLowerCase();
+      const cocktailKey = id != null ? String(id) : normalizeSearchText(cocktail.name ?? '');
       if (!cocktailKey) {
         return;
       }
@@ -495,8 +496,8 @@ export default function CreateCocktailScreen() {
           return byId;
         }
       }
-      const normalized = value.trim().toLowerCase();
-      return cocktails.find((item) => item.name?.trim().toLowerCase() === normalized);
+      const normalized = normalizeSearchText(value);
+      return cocktails.find((item) => normalizeSearchText(item.name ?? '') === normalized);
     };
 
     const baseCocktail = resolveCocktail(cocktailParam) ?? resolveCocktail(cocktailNameParam);
@@ -542,18 +543,18 @@ export default function CreateCocktailScreen() {
               return byId;
             }
           }
-          const normalized = value.trim().toLowerCase();
+          const normalized = normalizeSearchText(value);
           const bySlug = inventoryIngredients.find(
-            (item) => item.name?.trim().toLowerCase() === normalized,
+            (item) => normalizeSearchText(item.name ?? '') === normalized,
           );
           if (bySlug) {
             return bySlug;
           }
         }
         if (fallbackName) {
-          const normalized = fallbackName.trim().toLowerCase();
+          const normalized = normalizeSearchText(fallbackName);
           return inventoryIngredients.find(
-            (item) => item.name?.trim().toLowerCase() === normalized,
+            (item) => normalizeSearchText(item.name ?? '') === normalized,
           );
         }
         return undefined;
@@ -810,12 +811,12 @@ export default function CreateCocktailScreen() {
       };
 
       handleUpdateSubstitutes(substituteTarget, (items) => {
-        const normalizedName = trimmedName.toLowerCase();
+        const normalizedName = normalizeSearchText(trimmedName);
         const exists = items.some((item) => {
           if (numericId != null && item.ingredientId === numericId) {
             return true;
           }
-          return item.name.trim().toLowerCase() === normalizedName;
+          return normalizeSearchText(item.name) === normalizedName;
         });
         if (exists) {
           return items;
@@ -1188,7 +1189,7 @@ export default function CreateCocktailScreen() {
 
     const names = new Set<string>();
     substituteModalIngredient.substitutes.forEach((item) => {
-      const normalized = item.name.trim().toLowerCase();
+      const normalized = normalizeSearchText(item.name);
       if (normalized) {
         names.add(normalized);
       }
@@ -1758,7 +1759,7 @@ function EditableIngredientRow({
   const [showSuggestions, setShowSuggestions] = useState(false);
   const hideSuggestionsTimeout = useRef<NodeJS.Timeout | null>(null);
 
-  const normalizedName = ingredient.name.trim().toLowerCase();
+  const normalizedName = normalizeSearchText(ingredient.name);
 
   const canReorder = totalCount > 1;
   const canMoveUp = canReorder && index > 0;
@@ -1792,7 +1793,7 @@ function EditableIngredientRow({
     }
 
     const filtered = inventoryIngredients.filter((candidate) => {
-      const nameNormalized = candidate.searchNameNormalized ?? candidate.name?.toLowerCase() ?? '';
+      const nameNormalized = candidate.searchNameNormalized ?? normalizeSearchText(candidate.name ?? '');
       if (nameNormalized.startsWith(normalizedName)) {
         return true;
       }
@@ -1809,7 +1810,7 @@ function EditableIngredientRow({
     }
 
     return inventoryIngredients.some((candidate) => {
-      const nameNormalized = candidate.searchNameNormalized ?? candidate.name?.toLowerCase() ?? '';
+      const nameNormalized = candidate.searchNameNormalized ?? normalizeSearchText(candidate.name ?? '');
       return nameNormalized === normalizedName;
     });
   }, [inventoryIngredients, normalizedName]);
@@ -1838,7 +1839,7 @@ function EditableIngredientRow({
       return;
     }
     const exactMatch = inventoryIngredients.find((candidate) => {
-      const nameNormalized = candidate.searchNameNormalized ?? candidate.name?.toLowerCase() ?? '';
+      const nameNormalized = candidate.searchNameNormalized ?? normalizeSearchText(candidate.name ?? '');
       return nameNormalized === normalizedName;
     });
     const exactId = Number(exactMatch?.id ?? -1);
@@ -1977,7 +1978,7 @@ function EditableIngredientRow({
         <TextInput
           value={ingredient.name}
           onChangeText={(text) => {
-            const nextNormalized = text.trim().toLowerCase();
+            const nextNormalized = normalizeSearchText(text);
             const shouldClearId = ingredient.ingredientId != null && nextNormalized !== normalizedName;
             onChange(ingredient.key, {
               name: text,
