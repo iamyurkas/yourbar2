@@ -130,8 +130,11 @@ export async function persistInventorySnapshot<TCocktail, TIngredient>(
   }
 
   try {
+    console.time('inventory:snapshot:write');
     await FileSystem.writeAsStringAsync(storagePath, JSON.stringify(snapshot));
+    console.timeEnd('inventory:snapshot:write');
   } catch (error) {
+    console.timeEnd('inventory:snapshot:write');
     console.error('Unable to persist inventory snapshot', error);
     throw error;
   }

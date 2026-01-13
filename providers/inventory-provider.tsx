@@ -815,9 +815,14 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
 
     lastPersistedSnapshot.current = serialized;
 
-    void persistInventorySnapshot(snapshot).catch((error) => {
-      console.error('Failed to persist inventory snapshot', error);
-    });
+    console.time('inventory:snapshot:persist');
+    void persistInventorySnapshot(snapshot)
+      .finally(() => {
+        console.timeEnd('inventory:snapshot:persist');
+      })
+      .catch((error) => {
+        console.error('Failed to persist inventory snapshot', error);
+      });
   }, [
     inventoryState,
     availableIngredientIds,
