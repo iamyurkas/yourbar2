@@ -686,6 +686,27 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
             style={styles.menuScroll}
             contentContainerStyle={styles.menuContent}
             showsVerticalScrollIndicator={false}>
+              <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Reload bundled inventory"
+              onPress={handleResetInventory}
+              style={[
+                styles.actionRow,
+                {
+                  borderColor: Colors.outline,
+                  backgroundColor: Colors.surface,
+                },
+              ]}>
+              <View style={[styles.actionIcon, { backgroundColor: Colors.surfaceVariant }]}>
+                <MaterialCommunityIcons name="refresh" size={16} color={Colors.onSurfaceVariant} />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>Reload bundled data</Text>
+                <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>
+                  Clear saved inventory and reload assets from data.json
+                </Text>
+              </View>
+            </Pressable>
             <Pressable
               accessibilityRole="checkbox"
               accessibilityState={{ checked: ignoreGarnish }}

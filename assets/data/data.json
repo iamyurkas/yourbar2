@@ -1122,7 +1122,7 @@
       "name": "Alpine Avenger",
       "description": "A rich, creamy dessert cocktail combining the cool freshness of Peppermint Schnapps with the smooth sweetness of White Crème de Cacao and milk. Velvety, chocolatey, and refreshing at the same time, it tastes like a liquid mint chocolate dessert served warm or chilled.",
       "instructions": "1. Add Peppermint Schnapps and White Crème de Cacao into a heat-resistant glass or Irish coffee glass.\n2. Heat the milk gently until hot but not boiling.\n3. Pour the hot milk into the glass and stir gently to combine all ingredients.\n4. Garnish with grated chocolate, chocolate shavings, or a light dusting of cocoa powder.\n5. Serve immediately while warm and enjoy.",
-      "photoUri": "",
+      "photoUri": "assets/cocktails/1759480212593-alpine-avenger.jpg",
       "glassId": "irish_coffee_glass",
       "methodIds": [
         "build"
@@ -2334,7 +2334,6 @@
       "name": "Aussie Boomerang",
       "description": "A smooth, creamy shooter combining bright kiwi and melon liqueurs with rich cream. Sweet, fruity, and dessert-like, it’s a playful, easy-drinking shot with a soft tropical finish.",
       "instructions": "1. Chill a shooter glass in advance for a cleaner, smoother taste.\n2. Pour the Kiwi Liqueur into the glass as the first layer.\n3. Slowly add the Melon Liqueur over the back of a spoon to create a distinct layer.\n4. Gently float the cream on top using a spoon to achieve a clean layered effect.\n5. Serve immediately and drink in one smooth shot.",
-      "photoUri": "",
       "glassId": "shooter",
       "methodIds": [
         "layer"
@@ -6538,7 +6537,6 @@
       "name": "Brandy Eggnog",
       "description": "A rich, creamy brandy drink featuring Brandy, Milk, Egg—dessert-like, smooth, and indulgent. Garnished with nutmeg.",
       "instructions": "Fill a shaker with ice cubes.\nAdd 40ml of brandy, 50ml of milk, 10ml of simple syrup and an egg yolk.\nShake well and strain into a highball glass with ice.\nSprinkle with grated nutmeg.",
-      "photoUri": "",
       "glassId": "highball_glass",
       "methodIds": [
         "shake"
@@ -6758,7 +6756,7 @@
       "id": 1759444606454,
       "name": "BRB",
       "description": "A spirit-forward whiskey cocktail showcasing Bourbon, Root Beer—deep, aromatic, and meant to be savored.",
-      "instructions": "",
+      "photoUri": "assets/cocktails/1759444606454-brb.jpg",
       "glassId": "highball_glass",
       "tags": [
         {
@@ -6789,8 +6787,7 @@
           "amount": "150",
           "unitId": 8
         }
-      ],
-      "updatedAt": 1759444606496
+      ]
     },
     {
       "id": 1757000000106,
@@ -11680,7 +11677,6 @@
       "id": 1757000000148,
       "name": "Eggnog (personal)",
       "description": "A rich, creamy wine drink featuring Egg White, Dry Sherry, Spiced Rum—dessert-like, smooth, and indulgent. Garnished with nutmeg.",
-      "photoUri": "",
       "glassId": "rocks_glass",
       "tags": [
         {
