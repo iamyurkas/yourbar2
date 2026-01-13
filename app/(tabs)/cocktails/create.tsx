@@ -36,7 +36,7 @@ import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
 import { COCKTAIL_UNIT_DICTIONARY, COCKTAIL_UNIT_OPTIONS } from '@/constants/cocktail-units';
 import { GLASSWARE } from '@/constants/glassware';
 import { Colors } from '@/constants/theme';
-import { isJpgAsset, persistLocalImage } from '@/libs/image-storage';
+import { ensureJpgImageUri, persistLocalImage } from '@/libs/image-storage';
 import { tagColors } from '@/theme/theme';
 import {
   useInventory,
@@ -626,18 +626,11 @@ export default function CreateCocktailScreen() {
 
       if (!result.canceled && result.assets?.length) {
         const asset = result.assets[0];
-        if (!isJpgAsset(asset)) {
-          showDialog({
-            title: 'JPG images only',
-            message: 'Please choose a JPG image to use as the cocktail photo.',
-            actions: [{ label: 'OK' }],
-          });
+        const convertedUri = await ensureJpgImageUri(asset);
+        if (!convertedUri) {
           return;
         }
-
-        if (asset?.uri) {
-          setImageUri(asset.uri);
-        }
+        setImageUri(convertedUri);
       }
     } catch (error) {
       console.warn('Failed to pick image', error);
@@ -953,15 +946,6 @@ export default function CreateCocktailScreen() {
 
     let photoUri = imageUri ?? undefined;
     if (photoUri) {
-      if (!isJpgAsset({ uri: photoUri })) {
-        showDialog({
-          title: 'JPG images only',
-          message: 'Cocktail photos must be JPG images.',
-          actions: [{ label: 'OK' }],
-        });
-        return;
-      }
-
       try {
         photoUri =
           (await persistLocalImage({

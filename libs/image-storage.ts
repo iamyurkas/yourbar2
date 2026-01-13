@@ -1,4 +1,5 @@
 import * as FileSystem from 'expo-file-system/legacy';
+import * as ImageManipulator from 'expo-image-manipulator';
 
 export type ImageCategory = 'cocktails' | 'ingredients';
 
@@ -30,6 +31,31 @@ export const isJpgAsset = (asset?: {
   );
 };
 
+export async function ensureJpgImageUri(asset?: {
+  uri?: string | null;
+  fileName?: string | null;
+  mimeType?: string | null;
+}): Promise<string | undefined> {
+  if (!asset?.uri) {
+    return undefined;
+  }
+
+  if (isJpgAsset(asset)) {
+    return asset.uri;
+  }
+
+  if (!LOCAL_URI_PATTERN.test(asset.uri)) {
+    return asset.uri;
+  }
+
+  const result = await ImageManipulator.manipulateAsync(asset.uri, [], {
+    compress: 1,
+    format: ImageManipulator.SaveFormat.JPEG,
+  });
+
+  return result.uri;
+}
+
 const toSlug = (value: string) => {
   const slug = value
     .trim()
@@ -59,29 +85,34 @@ export async function persistLocalImage({
     return undefined;
   }
 
-  if (!LOCAL_URI_PATTERN.test(sourceUri)) {
-    return sourceUri;
+  const normalizedSourceUri =
+    !isJpgUri(sourceUri) && LOCAL_URI_PATTERN.test(sourceUri)
+      ? await ensureJpgImageUri({ uri: sourceUri })
+      : sourceUri;
+
+  if (!normalizedSourceUri || !LOCAL_URI_PATTERN.test(normalizedSourceUri)) {
+    return normalizedSourceUri;
   }
 
   if (!FileSystem.documentDirectory) {
-    return sourceUri;
+    return normalizedSourceUri;
   }
 
   const directory = `${FileSystem.documentDirectory}images/${category}/`;
   await FileSystem.makeDirectoryAsync(directory, { intermediates: true });
 
   const targetUri = `${directory}${buildImageFileName(id, name)}`;
-  if (sourceUri === targetUri) {
+  if (normalizedSourceUri === targetUri) {
     return targetUri;
   }
 
-  if (sourceUri.startsWith(directory)) {
+  if (normalizedSourceUri.startsWith(directory)) {
     await FileSystem.deleteAsync(targetUri, { idempotent: true });
-    await FileSystem.moveAsync({ from: sourceUri, to: targetUri });
+    await FileSystem.moveAsync({ from: normalizedSourceUri, to: targetUri });
     return targetUri;
   }
 
   await FileSystem.deleteAsync(targetUri, { idempotent: true });
-  await FileSystem.copyAsync({ from: sourceUri, to: targetUri });
+  await FileSystem.copyAsync({ from: normalizedSourceUri, to: targetUri });
   return targetUri;
 }

@@ -26,7 +26,7 @@ import { TagEditorModal } from '@/components/TagEditorModal';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { Colors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
-import { isJpgAsset, persistLocalImage } from '@/libs/image-storage';
+import { ensureJpgImageUri, persistLocalImage } from '@/libs/image-storage';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
 import { useUnsavedChanges } from '@/providers/unsaved-changes-provider';
 
@@ -255,18 +255,11 @@ export default function EditIngredientScreen() {
 
       if (!result.canceled && result.assets?.length) {
         const asset = result.assets[0];
-        if (!isJpgAsset(asset)) {
-          showDialog({
-            title: 'JPG images only',
-            message: 'Please choose a JPG image to use as the ingredient photo.',
-            actions: [{ label: 'OK' }],
-          });
+        const convertedUri = await ensureJpgImageUri(asset);
+        if (!convertedUri) {
           return;
         }
-
-        if (asset?.uri) {
-          setImageUri(asset.uri);
-        }
+        setImageUri(convertedUri);
       }
     } catch (error) {
       console.warn('Failed to pick image', error);
@@ -307,15 +300,6 @@ export default function EditIngredientScreen() {
 
     let photoUri = imageUri ?? undefined;
     if (photoUri) {
-      if (!isJpgAsset({ uri: photoUri })) {
-        showDialog({
-          title: 'JPG images only',
-          message: 'Ingredient photos must be JPG images.',
-          actions: [{ label: 'OK' }],
-        });
-        return;
-      }
-
       try {
         photoUri =
           (await persistLocalImage({
