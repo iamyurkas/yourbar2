@@ -39,6 +39,12 @@ type CocktailRecord = Omit<BaseCocktailRecord, 'ingredients' | 'searchName' | 's
   methodIds?: CocktailMethodId[] | null;
 };
 type IngredientRecord = InventoryData['ingredients'][number];
+type PhotoBackupEntry = {
+  type: 'cocktails' | 'ingredients';
+  id?: number | string | null;
+  name?: string | null;
+  uri?: string | null;
+};
 
 type NormalizedSearchFields = {
   searchNameNormalized: string;
@@ -78,6 +84,7 @@ type InventoryContextValue = {
   createIngredient: (input: CreateIngredientInput) => Ingredient | undefined;
   resetInventoryFromBundle: () => Promise<void>;
   exportInventoryData: () => InventoryData | null;
+  exportInventoryPhotoEntries: () => PhotoBackupEntry[] | null;
   importInventoryData: (data: InventoryData) => void;
   updateIngredient: (id: number, input: CreateIngredientInput) => Ingredient | undefined;
   updateCocktail: (id: number, input: CreateCocktailInput) => Cocktail | undefined;
@@ -1289,6 +1296,27 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     };
   }, [inventoryState]);
 
+  const exportInventoryPhotoEntries = useCallback((): PhotoBackupEntry[] | null => {
+    if (!inventoryState) {
+      return null;
+    }
+
+    return [
+      ...inventoryState.cocktails.map((cocktail) => ({
+        type: 'cocktails' as const,
+        id: cocktail.id ?? '',
+        name: cocktail.name ?? 'cocktail',
+        uri: cocktail.photoUri ?? undefined,
+      })),
+      ...inventoryState.ingredients.map((ingredient) => ({
+        type: 'ingredients' as const,
+        id: ingredient.id ?? '',
+        name: ingredient.name ?? 'ingredient',
+        uri: ingredient.photoUri ?? undefined,
+      })),
+    ];
+  }, [inventoryState]);
+
   const importInventoryData = useCallback((data: InventoryData) => {
     setInventoryState(createInventoryStateFromData(data, true));
     setAvailableIngredientIds(new Set());
@@ -2069,6 +2097,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       createIngredient,
       resetInventoryFromBundle,
       exportInventoryData,
+      exportInventoryPhotoEntries,
       importInventoryData,
       updateCocktail,
       updateIngredient,
@@ -2112,6 +2141,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     createIngredient,
     resetInventoryFromBundle,
     exportInventoryData,
+    exportInventoryPhotoEntries,
     importInventoryData,
     updateCocktail,
     updateIngredient,
