@@ -85,8 +85,10 @@ const toSlug = (value: string) => {
   return slug || 'image';
 };
 
-export const buildImageFileName = (id: number, name: string) =>
-  `${id}-${toSlug(name)}.jpg`;
+export const buildImageFileName = (id: number, name: string) => {
+  const normalizedId = Number.isFinite(id) ? Math.trunc(id) : id;
+  return `${normalizedId}-${toSlug(name)}.jpg`;
+};
 
 export async function persistLocalImage({
   sourceUri,
