@@ -2,7 +2,7 @@ import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { Image } from 'expo-image';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
-import React, { useCallback, useEffect, useMemo, useState, useTransition } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState, useTransition } from 'react';
 import {
   Pressable,
   ScrollView,
@@ -111,6 +111,7 @@ export default function IngredientDetailsScreen() {
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(null);
   const [, startAvailabilityTransition] = useTransition();
   const [, startShoppingTransition] = useTransition();
+  const isHandlingBackRef = useRef(false);
 
   const isAvailable = useMemo(() => {
     if (numericIngredientId == null) {
@@ -426,8 +427,22 @@ export default function IngredientDetailsScreen() {
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('beforeRemove', (event) => {
+      if (isHandlingBackRef.current) {
+        return;
+      }
+
+      if (event.data.action.type !== 'GO_BACK') {
+        return;
+      }
+
       event.preventDefault();
+
+      isHandlingBackRef.current = true;
       handleReturn();
+
+      setTimeout(() => {
+        isHandlingBackRef.current = false;
+      }, 0);
     });
 
     return unsubscribe;

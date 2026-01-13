@@ -100,6 +100,7 @@ export default function EditIngredientScreen() {
 
   const didInitializeRef = useRef(false);
   const scrollRef = useRef<ScrollView | null>(null);
+  const isHandlingBackRef = useRef(false);
 
   useEffect(() => {
     if (!ingredient || didInitializeRef.current) {
@@ -372,19 +373,33 @@ export default function EditIngredientScreen() {
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('beforeRemove', (event) => {
-      if (isNavigatingAfterSaveRef.current) {
+      if (isNavigatingAfterSaveRef.current || isHandlingBackRef.current) {
         return;
       }
 
       if (hasUnsavedChanges) {
         event.preventDefault();
-        confirmLeave(() => skipDuplicateBack(navigation));
+        confirmLeave(() => {
+          isHandlingBackRef.current = true;
+          if (event.data.action.type === 'GO_BACK') {
+            skipDuplicateBack(navigation);
+          } else {
+            navigation.dispatch(event.data.action);
+          }
+          setTimeout(() => {
+            isHandlingBackRef.current = false;
+          }, 0);
+        });
         return;
       }
 
       if (event.data.action.type === 'GO_BACK') {
         event.preventDefault();
+        isHandlingBackRef.current = true;
         skipDuplicateBack(navigation);
+        setTimeout(() => {
+          isHandlingBackRef.current = false;
+        }, 0);
       }
     });
 
