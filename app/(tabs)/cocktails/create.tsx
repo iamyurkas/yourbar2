@@ -960,6 +960,7 @@ export default function CreateCocktailScreen() {
                       id: prefilledCocktail.id,
                       name: trimmedName,
                       category: 'cocktails',
+                      suffix: String(Date.now()),
                     })
                   : submission.photoUri,
             })

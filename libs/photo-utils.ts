@@ -13,4 +13,10 @@ export const buildPhotoFileName = (
   id: number | string,
   name: string,
   extension = 'jpg',
-) => `${buildPhotoBaseName(id, name)}.${extension}`;
+  suffix?: string,
+) => {
+  const baseName = buildPhotoBaseName(id, name);
+  const normalizedSuffix = suffix ? sanitizeFileSegment(suffix) : '';
+  const fileBase = normalizedSuffix ? `${baseName}-${normalizedSuffix}` : baseName;
+  return `${fileBase}.${extension}`;
+};

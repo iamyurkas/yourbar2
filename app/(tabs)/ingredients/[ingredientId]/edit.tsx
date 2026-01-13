@@ -318,6 +318,7 @@ export default function EditIngredientScreen() {
               id: numericIngredientId,
               name: trimmedName,
               category: 'ingredients',
+              suffix: String(Date.now()),
             })
           : submission.photoUri,
     });
