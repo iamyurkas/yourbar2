@@ -20,6 +20,7 @@ import {
   type InventoryDeltaSnapshot,
   type InventorySnapshot,
 } from '@/libs/inventory-storage';
+import { normalizeSearchText } from '@/libs/search-normalization';
 
 type BaseCocktailRecord = InventoryData['cocktails'][number];
 type CocktailIngredientRecord = NonNullable<BaseCocktailRecord['ingredients']>[number];
@@ -192,12 +193,12 @@ function normalizeSearchFields<T extends { name?: string | null; searchName?: st
 ): (T & NormalizedSearchFields)[] {
   return items.map((item) => {
     const baseName = item.searchName ?? item.name ?? '';
-    const searchNameNormalized = baseName.toLowerCase();
+    const searchNameNormalized = normalizeSearchText(baseName);
     const searchTokensNormalized = (item.searchTokens && item.searchTokens.length > 0
       ? item.searchTokens
       : searchNameNormalized.split(/\s+/)
     )
-      .map((token) => token.toLowerCase())
+      .map((token) => normalizeSearchText(token))
       .filter(Boolean);
 
     return {
@@ -870,7 +871,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     }
 
     if (cocktail.name) {
-      return cocktail.name.trim().toLowerCase();
+      return normalizeSearchText(cocktail.name);
     }
 
     return undefined;
@@ -1274,7 +1275,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     });
     const ingredients = inventoryState.ingredients.map((ingredient) => {
       const baseName = ingredient.searchName ?? ingredient.name ?? '';
-      const normalizedSearchName = baseName.trim().toLowerCase();
+      const normalizedSearchName = normalizeSearchText(baseName);
       const searchTokens =
         ingredient.searchTokens && ingredient.searchTokens.length > 0
           ? ingredient.searchTokens
@@ -1717,7 +1718,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           didChange = true;
         }
 
-        const nameKey = targetCocktail.name?.trim().toLowerCase();
+        const nameKey = targetCocktail.name ? normalizeSearchText(targetCocktail.name) : undefined;
         if (nameKey && nameKey in next) {
           delete next[nameKey];
           didChange = true;

@@ -27,6 +27,7 @@ import {
 } from '@/libs/ingredient-availability';
 import { resolveImageSource } from '@/libs/image-source';
 import { skipDuplicateBack } from '@/libs/navigation';
+import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
 
 function useResolvedIngredient(param: string | undefined, ingredients: Ingredient[]) {
@@ -43,8 +44,8 @@ function useResolvedIngredient(param: string | undefined, ingredients: Ingredien
       }
     }
 
-    const normalized = param.toLowerCase();
-    return ingredients.find((item) => item.name?.toLowerCase() === normalized);
+    const normalized = normalizeSearchText(param);
+    return ingredients.find((item) => normalizeSearchText(item.name ?? '') === normalized);
   }, [ingredients, param]);
 }
 

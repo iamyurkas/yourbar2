@@ -28,6 +28,7 @@ import {
   createIngredientLookup,
   getVisibleIngredientIdsForCocktail,
 } from '@/libs/ingredient-availability';
+import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
 import { tagColors } from '@/theme/theme';
 
@@ -494,9 +495,9 @@ export default function IngredientsScreen() {
   const activeSection = sections[activeTab] ?? sections.all;
 
   const normalizedQuery = useMemo(() => {
-    const trimmed = query.trim().toLowerCase();
-    const tokens = trimmed ? trimmed.split(/\s+/).filter(Boolean) : [];
-    return { text: trimmed, tokens };
+    const normalized = normalizeSearchText(query);
+    const tokens = normalized ? normalized.split(/\s+/).filter(Boolean) : [];
+    return { text: normalized, tokens };
   }, [query]);
 
   const filteredByTags = useMemo(() => {

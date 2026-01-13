@@ -23,6 +23,7 @@ import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
 import { Colors } from '@/constants/theme';
 import { isCocktailReady } from '@/libs/cocktail-availability';
 import { createIngredientLookup } from '@/libs/ingredient-availability';
+import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Cocktail } from '@/providers/inventory-provider';
 
 function parseListParam(param?: string | string[]) {
@@ -55,8 +56,8 @@ function resolveCocktailByKey(key: string, cocktails: Cocktail[]) {
     }
   }
 
-  const normalized = key.trim().toLowerCase();
-  return cocktails.find((item) => item.name?.toLowerCase() === normalized);
+  const normalized = normalizeSearchText(key);
+  return cocktails.find((item) => normalizeSearchText(item.name ?? '') === normalized);
 }
 
 const METHOD_ICON_SIZE = 16;
@@ -361,9 +362,9 @@ export default function ShakerResultsScreen() {
   );
 
   const normalizedQuery = useMemo(() => {
-    const trimmed = query.trim().toLowerCase();
-    const tokens = trimmed ? trimmed.split(/\s+/).filter(Boolean) : [];
-    return { text: trimmed, tokens };
+    const normalized = normalizeSearchText(query);
+    const tokens = normalized ? normalized.split(/\s+/).filter(Boolean) : [];
+    return { text: normalized, tokens };
   }, [query]);
 
   const filteredByMethods = useMemo(() => {
