@@ -36,6 +36,7 @@ import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
 import { COCKTAIL_UNIT_DICTIONARY, COCKTAIL_UNIT_OPTIONS } from '@/constants/cocktail-units';
 import { GLASSWARE } from '@/constants/glassware';
 import { Colors } from '@/constants/theme';
+import { skipDuplicateBack } from '@/libs/navigation';
 import { shouldStorePhoto, storePhoto } from '@/libs/photo-storage';
 import { tagColors } from '@/theme/theme';
 import {
@@ -1113,7 +1114,7 @@ export default function CreateCocktailScreen() {
   }, [confirmLeave, hasUnsavedChanges, navigation]);
 
   const handleGoBack = useCallback(() => {
-    navigation.goBack();
+    skipDuplicateBack(navigation);
   }, [navigation]);
 
   const imageSource = useMemo(() => {

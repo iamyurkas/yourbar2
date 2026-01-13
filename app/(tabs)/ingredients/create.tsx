@@ -27,6 +27,7 @@ import { TagEditorModal } from '@/components/TagEditorModal';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { Colors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
+import { skipDuplicateBack } from '@/libs/navigation';
 import { shouldStorePhoto, storePhoto } from '@/libs/photo-storage';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
 import { useUnsavedChanges } from '@/providers/unsaved-changes-provider';
@@ -332,7 +333,7 @@ export default function CreateIngredientScreen() {
     isNavigatingAfterSaveRef.current = true;
     const targetId = created.id ?? created.name;
     if (!targetId) {
-      router.back();
+      skipDuplicateBack(navigation);
       return;
     }
 
@@ -553,8 +554,8 @@ export default function CreateIngredientScreen() {
   }, [isBaseModalVisible]);
 
   const handleGoBack = useCallback(() => {
-    router.back();
-  }, []);
+    skipDuplicateBack(navigation);
+  }, [navigation]);
 
   const handleRemoveImage = useCallback(() => {
     setImageUri(null);
