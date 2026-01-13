@@ -305,17 +305,13 @@ export default function CocktailDetailsScreen() {
   }, [navigation, returnToParams, returnToPath]);
 
   useEffect(() => {
-    if (!returnToPath) {
-      return undefined;
-    }
-
     const unsubscribe = navigation.addListener('beforeRemove', (event) => {
       event.preventDefault();
       handleReturn();
     });
 
     return unsubscribe;
-  }, [handleReturn, navigation, returnToPath]);
+  }, [handleReturn, navigation]);
 
   useEffect(() => {
     const keepAwakeTag = 'cocktail-details';

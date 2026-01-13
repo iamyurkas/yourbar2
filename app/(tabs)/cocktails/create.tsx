@@ -1097,17 +1097,21 @@ export default function CreateCocktailScreen() {
   );
 
   useEffect(() => {
-    if (!hasUnsavedChanges) {
-      return;
-    }
-
     const unsubscribe = navigation.addListener('beforeRemove', (event) => {
-      if (!hasUnsavedChanges || isNavigatingAfterSaveRef.current) {
+      if (isNavigatingAfterSaveRef.current) {
         return;
       }
 
-      event.preventDefault();
-      confirmLeave(() => navigation.dispatch(event.data.action));
+      if (hasUnsavedChanges) {
+        event.preventDefault();
+        confirmLeave(() => skipDuplicateBack(navigation));
+        return;
+      }
+
+      if (event.data.action.type === 'GO_BACK') {
+        event.preventDefault();
+        skipDuplicateBack(navigation);
+      }
     });
 
     return unsubscribe;

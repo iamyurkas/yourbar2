@@ -425,17 +425,13 @@ export default function IngredientDetailsScreen() {
   }, [navigation, returnToParams, returnToPath]);
 
   useEffect(() => {
-    if (!returnToPath) {
-      return undefined;
-    }
-
     const unsubscribe = navigation.addListener('beforeRemove', (event) => {
       event.preventDefault();
       handleReturn();
     });
 
     return unsubscribe;
-  }, [handleReturn, navigation, returnToPath]);
+  }, [handleReturn, navigation]);
 
   return (
     <SafeAreaView style={[styles.safeArea, { backgroundColor: Colors.background }]} edges={['left', 'right']}>
