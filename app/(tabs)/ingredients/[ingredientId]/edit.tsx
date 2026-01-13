@@ -26,6 +26,7 @@ import { TagEditorModal } from '@/components/TagEditorModal';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { Colors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
+import { goBackSkippingDuplicates } from '@/libs/navigation';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
 import { useUnsavedChanges } from '@/providers/unsaved-changes-provider';
 
@@ -314,7 +315,7 @@ export default function EditIngredientScreen() {
 
     setHasUnsavedChanges(false);
     isNavigatingAfterSaveRef.current = true;
-    router.back();
+    goBackSkippingDuplicates(navigation);
   }, [
     availableIngredientTags,
     baseIngredientId,
@@ -326,6 +327,7 @@ export default function EditIngredientScreen() {
     showDialog,
     selectedTagIds,
     updateIngredient,
+    navigation,
   ]);
 
   const confirmLeave = useCallback(

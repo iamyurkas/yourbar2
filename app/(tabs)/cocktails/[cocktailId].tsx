@@ -15,6 +15,7 @@ import { getCocktailMethodById, METHOD_ICON_MAP } from '@/constants/cocktail-met
 import { COCKTAIL_UNIT_DICTIONARY } from '@/constants/cocktail-units';
 import { Colors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
+import { goBackSkippingDuplicates } from '@/libs/navigation';
 import {
   createIngredientLookup,
   resolveIngredientAvailability,
@@ -300,8 +301,8 @@ export default function CocktailDetailsScreen() {
       return;
     }
 
-    router.back();
-  }, [returnToParams, returnToPath]);
+    goBackSkippingDuplicates(navigation);
+  }, [navigation, returnToParams, returnToPath]);
 
   useEffect(() => {
     if (!returnToPath) {
@@ -537,7 +538,7 @@ export default function CocktailDetailsScreen() {
           headerTitleStyle: { color: Colors.onSurface, fontSize: 16, fontWeight: '600' },
           headerShadowVisible: false,
           headerLeft: () => (
-            <HeaderIconButton onPress={() => router.back()} accessibilityLabel="Go back">
+            <HeaderIconButton onPress={handleReturn} accessibilityLabel="Go back">
               <MaterialCommunityIcons name="arrow-left" size={22} color={Colors.onSurface} />
             </HeaderIconButton>
           ),

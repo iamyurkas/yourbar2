@@ -26,6 +26,7 @@ import {
   getVisibleIngredientIdsForCocktail,
 } from '@/libs/ingredient-availability';
 import { resolveImageSource } from '@/libs/image-source';
+import { goBackSkippingDuplicates } from '@/libs/navigation';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
 
 function useResolvedIngredient(param: string | undefined, ingredients: Ingredient[]) {
@@ -420,8 +421,8 @@ export default function IngredientDetailsScreen() {
       return;
     }
 
-    router.back();
-  }, [returnToParams, returnToPath]);
+    goBackSkippingDuplicates(navigation);
+  }, [navigation, returnToParams, returnToPath]);
 
   useEffect(() => {
     if (!returnToPath) {

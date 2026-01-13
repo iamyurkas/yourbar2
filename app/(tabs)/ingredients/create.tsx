@@ -27,6 +27,7 @@ import { TagEditorModal } from '@/components/TagEditorModal';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { Colors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
+import { goBackSkippingDuplicates } from '@/libs/navigation';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
 import { useUnsavedChanges } from '@/providers/unsaved-changes-provider';
 
@@ -308,7 +309,7 @@ export default function CreateIngredientScreen() {
     isNavigatingAfterSaveRef.current = true;
     const targetId = created.id ?? created.name;
     if (!targetId) {
-      router.back();
+      goBackSkippingDuplicates(navigation);
       return;
     }
 
@@ -328,6 +329,7 @@ export default function CreateIngredientScreen() {
     description,
     imageUri,
     name,
+    navigation,
     returnToParams,
     returnToPath,
     setHasUnsavedChanges,
@@ -526,8 +528,8 @@ export default function CreateIngredientScreen() {
   }, [isBaseModalVisible]);
 
   const handleGoBack = useCallback(() => {
-    router.back();
-  }, []);
+    goBackSkippingDuplicates(navigation);
+  }, [navigation]);
 
   const handleRemoveImage = useCallback(() => {
     setImageUri(null);
