@@ -36,6 +36,7 @@ import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
 import { COCKTAIL_UNIT_DICTIONARY, COCKTAIL_UNIT_OPTIONS } from '@/constants/cocktail-units';
 import { GLASSWARE } from '@/constants/glassware';
 import { Colors } from '@/constants/theme';
+import { skipDuplicateBack } from '@/libs/navigation';
 import { shouldStorePhoto, storePhoto } from '@/libs/photo-storage';
 import { tagColors } from '@/theme/theme';
 import {
@@ -276,6 +277,7 @@ export default function CreateCocktailScreen() {
   const initializedRef = useRef(false);
   const isNavigatingAfterSaveRef = useRef(false);
   const scrollRef = useRef<ScrollView | null>(null);
+  const isHandlingBackRef = useRef(false);
 
   const ingredientById = useMemo(() => {
     const map = new Map<number, Ingredient>();
@@ -1096,24 +1098,42 @@ export default function CreateCocktailScreen() {
   );
 
   useEffect(() => {
-    if (!hasUnsavedChanges) {
-      return;
-    }
-
     const unsubscribe = navigation.addListener('beforeRemove', (event) => {
-      if (!hasUnsavedChanges || isNavigatingAfterSaveRef.current) {
+      if (isNavigatingAfterSaveRef.current || isHandlingBackRef.current) {
         return;
       }
 
-      event.preventDefault();
-      confirmLeave(() => navigation.dispatch(event.data.action));
+      if (hasUnsavedChanges) {
+        event.preventDefault();
+        confirmLeave(() => {
+          isHandlingBackRef.current = true;
+          if (event.data.action.type === 'GO_BACK') {
+            skipDuplicateBack(navigation);
+          } else {
+            navigation.dispatch(event.data.action);
+          }
+          setTimeout(() => {
+            isHandlingBackRef.current = false;
+          }, 0);
+        });
+        return;
+      }
+
+      if (event.data.action.type === 'GO_BACK') {
+        event.preventDefault();
+        isHandlingBackRef.current = true;
+        skipDuplicateBack(navigation);
+        setTimeout(() => {
+          isHandlingBackRef.current = false;
+        }, 0);
+      }
     });
 
     return unsubscribe;
   }, [confirmLeave, hasUnsavedChanges, navigation]);
 
   const handleGoBack = useCallback(() => {
-    navigation.goBack();
+    skipDuplicateBack(navigation);
   }, [navigation]);
 
   const imageSource = useMemo(() => {

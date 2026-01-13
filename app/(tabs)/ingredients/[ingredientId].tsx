@@ -2,7 +2,7 @@ import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { Image } from 'expo-image';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
-import React, { useCallback, useEffect, useMemo, useState, useTransition } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState, useTransition } from 'react';
 import {
   Pressable,
   ScrollView,
@@ -26,6 +26,7 @@ import {
   getVisibleIngredientIdsForCocktail,
 } from '@/libs/ingredient-availability';
 import { resolveImageSource } from '@/libs/image-source';
+import { skipDuplicateBack } from '@/libs/navigation';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
 
 function useResolvedIngredient(param: string | undefined, ingredients: Ingredient[]) {
@@ -110,6 +111,7 @@ export default function IngredientDetailsScreen() {
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(null);
   const [, startAvailabilityTransition] = useTransition();
   const [, startShoppingTransition] = useTransition();
+  const isHandlingBackRef = useRef(false);
 
   const isAvailable = useMemo(() => {
     if (numericIngredientId == null) {
@@ -420,21 +422,31 @@ export default function IngredientDetailsScreen() {
       return;
     }
 
-    router.back();
-  }, [returnToParams, returnToPath]);
+    skipDuplicateBack(navigation);
+  }, [navigation, returnToParams, returnToPath]);
 
   useEffect(() => {
-    if (!returnToPath) {
-      return undefined;
-    }
-
     const unsubscribe = navigation.addListener('beforeRemove', (event) => {
+      if (isHandlingBackRef.current) {
+        return;
+      }
+
+      if (event.data.action.type !== 'GO_BACK') {
+        return;
+      }
+
       event.preventDefault();
+
+      isHandlingBackRef.current = true;
       handleReturn();
+
+      setTimeout(() => {
+        isHandlingBackRef.current = false;
+      }, 0);
     });
 
     return unsubscribe;
-  }, [handleReturn, navigation, returnToPath]);
+  }, [handleReturn, navigation]);
 
   return (
     <SafeAreaView style={[styles.safeArea, { backgroundColor: Colors.background }]} edges={['left', 'right']}>

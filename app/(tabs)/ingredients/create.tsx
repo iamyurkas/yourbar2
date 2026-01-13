@@ -27,6 +27,7 @@ import { TagEditorModal } from '@/components/TagEditorModal';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { Colors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
+import { skipDuplicateBack } from '@/libs/navigation';
 import { shouldStorePhoto, storePhoto } from '@/libs/photo-storage';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
 import { useUnsavedChanges } from '@/providers/unsaved-changes-provider';
@@ -115,6 +116,7 @@ export default function CreateIngredientScreen() {
   const scrollRef = useRef<ScrollView | null>(null);
   const isNavigatingAfterSaveRef = useRef(false);
   const [initialSnapshot, setInitialSnapshot] = useState<IngredientFormSnapshot | null>(null);
+  const isHandlingBackRef = useRef(false);
 
   useEffect(() => {
     if (suggestedNameParam && !name) {
@@ -332,7 +334,7 @@ export default function CreateIngredientScreen() {
     isNavigatingAfterSaveRef.current = true;
     const targetId = created.id ?? created.name;
     if (!targetId) {
-      router.back();
+      skipDuplicateBack(navigation);
       return;
     }
 
@@ -385,17 +387,35 @@ export default function CreateIngredientScreen() {
   );
 
   useEffect(() => {
-    if (!hasUnsavedChanges) {
-      return;
-    }
-
     const unsubscribe = navigation.addListener('beforeRemove', (event) => {
-      if (!hasUnsavedChanges || isNavigatingAfterSaveRef.current) {
+      if (isNavigatingAfterSaveRef.current || isHandlingBackRef.current) {
         return;
       }
 
-      event.preventDefault();
-      confirmLeave(() => navigation.dispatch(event.data.action));
+      if (hasUnsavedChanges) {
+        event.preventDefault();
+        confirmLeave(() => {
+          isHandlingBackRef.current = true;
+          if (event.data.action.type === 'GO_BACK') {
+            skipDuplicateBack(navigation);
+          } else {
+            navigation.dispatch(event.data.action);
+          }
+          setTimeout(() => {
+            isHandlingBackRef.current = false;
+          }, 0);
+        });
+        return;
+      }
+
+      if (event.data.action.type === 'GO_BACK') {
+        event.preventDefault();
+        isHandlingBackRef.current = true;
+        skipDuplicateBack(navigation);
+        setTimeout(() => {
+          isHandlingBackRef.current = false;
+        }, 0);
+      }
     });
 
     return unsubscribe;
@@ -553,8 +573,8 @@ export default function CreateIngredientScreen() {
   }, [isBaseModalVisible]);
 
   const handleGoBack = useCallback(() => {
-    router.back();
-  }, []);
+    skipDuplicateBack(navigation);
+  }, [navigation]);
 
   const handleRemoveImage = useCallback(() => {
     setImageUri(null);

@@ -3,7 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Image } from 'expo-image';
 import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
-import React, { useCallback, useEffect, useMemo, useState, useTransition } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState, useTransition } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -15,6 +15,7 @@ import { getCocktailMethodById, METHOD_ICON_MAP } from '@/constants/cocktail-met
 import { COCKTAIL_UNIT_DICTIONARY } from '@/constants/cocktail-units';
 import { Colors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
+import { skipDuplicateBack } from '@/libs/navigation';
 import {
   createIngredientLookup,
   resolveIngredientAvailability,
@@ -289,6 +290,7 @@ export default function CocktailDetailsScreen() {
   }, [params.returnToParams]);
 
   const [showImperialUnits, setShowImperialUnits] = useState(useImperialUnits);
+  const isHandlingBackRef = useRef(false);
 
   useEffect(() => {
     setShowImperialUnits(useImperialUnits);
@@ -300,21 +302,31 @@ export default function CocktailDetailsScreen() {
       return;
     }
 
-    router.back();
-  }, [returnToParams, returnToPath]);
+    skipDuplicateBack(navigation);
+  }, [navigation, returnToParams, returnToPath]);
 
   useEffect(() => {
-    if (!returnToPath) {
-      return undefined;
-    }
-
     const unsubscribe = navigation.addListener('beforeRemove', (event) => {
+      if (isHandlingBackRef.current) {
+        return;
+      }
+
+      if (event.data.action.type !== 'GO_BACK') {
+        return;
+      }
+
       event.preventDefault();
+
+      isHandlingBackRef.current = true;
       handleReturn();
+
+      setTimeout(() => {
+        isHandlingBackRef.current = false;
+      }, 0);
     });
 
     return unsubscribe;
-  }, [handleReturn, navigation, returnToPath]);
+  }, [handleReturn, navigation]);
 
   useEffect(() => {
     const keepAwakeTag = 'cocktail-details';
@@ -537,7 +549,7 @@ export default function CocktailDetailsScreen() {
           headerTitleStyle: { color: Colors.onSurface, fontSize: 16, fontWeight: '600' },
           headerShadowVisible: false,
           headerLeft: () => (
-            <HeaderIconButton onPress={() => router.back()} accessibilityLabel="Go back">
+            <HeaderIconButton onPress={handleReturn} accessibilityLabel="Go back">
               <MaterialCommunityIcons name="arrow-left" size={22} color={Colors.onSurface} />
             </HeaderIconButton>
           ),

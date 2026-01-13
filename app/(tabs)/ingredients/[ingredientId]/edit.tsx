@@ -26,6 +26,7 @@ import { TagEditorModal } from '@/components/TagEditorModal';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { Colors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
+import { skipDuplicateBack } from '@/libs/navigation';
 import { shouldStorePhoto, storePhoto } from '@/libs/photo-storage';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
 import { useUnsavedChanges } from '@/providers/unsaved-changes-provider';
@@ -99,6 +100,7 @@ export default function EditIngredientScreen() {
 
   const didInitializeRef = useRef(false);
   const scrollRef = useRef<ScrollView | null>(null);
+  const isHandlingBackRef = useRef(false);
 
   useEffect(() => {
     if (!ingredient || didInitializeRef.current) {
@@ -330,7 +332,7 @@ export default function EditIngredientScreen() {
 
     setHasUnsavedChanges(false);
     isNavigatingAfterSaveRef.current = true;
-    router.back();
+    skipDuplicateBack(navigation);
   }, [
     availableIngredientTags,
     baseIngredientId,
@@ -370,21 +372,43 @@ export default function EditIngredientScreen() {
   );
 
   useEffect(() => {
-    if (!hasUnsavedChanges) {
-      return;
-    }
-
     const unsubscribe = navigation.addListener('beforeRemove', (event) => {
-      if (!hasUnsavedChanges || isNavigatingAfterSaveRef.current) {
+      if (isNavigatingAfterSaveRef.current || isHandlingBackRef.current) {
         return;
       }
 
-      event.preventDefault();
-      confirmLeave(() => navigation.dispatch(event.data.action));
+      if (hasUnsavedChanges) {
+        event.preventDefault();
+        confirmLeave(() => {
+          isHandlingBackRef.current = true;
+          if (event.data.action.type === 'GO_BACK') {
+            skipDuplicateBack(navigation);
+          } else {
+            navigation.dispatch(event.data.action);
+          }
+          setTimeout(() => {
+            isHandlingBackRef.current = false;
+          }, 0);
+        });
+        return;
+      }
+
+      if (event.data.action.type === 'GO_BACK') {
+        event.preventDefault();
+        isHandlingBackRef.current = true;
+        skipDuplicateBack(navigation);
+        setTimeout(() => {
+          isHandlingBackRef.current = false;
+        }, 0);
+      }
     });
 
     return unsubscribe;
   }, [confirmLeave, hasUnsavedChanges, navigation]);
+
+  const handleGoBack = useCallback(() => {
+    skipDuplicateBack(navigation);
+  }, [navigation]);
 
   const handleDeletePress = useCallback(() => {
     if (numericIngredientId == null) {
@@ -631,7 +655,21 @@ export default function EditIngredientScreen() {
   if (!ingredient) {
     return (
       <>
-        <Stack.Screen options={{ title: 'Edit ingredient' }} />
+        <Stack.Screen
+          options={{
+            title: 'Edit ingredient',
+            headerLeft: () => (
+              <Pressable
+                onPress={handleGoBack}
+                accessibilityRole="button"
+                accessibilityLabel="Go back"
+                style={styles.headerButton}
+                hitSlop={8}>
+                <MaterialCommunityIcons name="arrow-left" size={22} color={Colors.onSurface} />
+              </Pressable>
+            ),
+          }}
+        />
         <View style={[styles.container, styles.emptyState]}>
           <Text style={[styles.emptyMessage, { color: Colors.onSurfaceVariant }]}>Ingredient not found</Text>
         </View>
@@ -644,6 +682,16 @@ export default function EditIngredientScreen() {
       <Stack.Screen
         options={{
           title: 'Edit ingredient',
+          headerLeft: () => (
+            <Pressable
+              onPress={handleGoBack}
+              accessibilityRole="button"
+              accessibilityLabel="Go back"
+              style={styles.headerButton}
+              hitSlop={8}>
+              <MaterialCommunityIcons name="arrow-left" size={22} color={Colors.onSurface} />
+            </Pressable>
+          ),
           headerRight: () => (
             <Pressable
               onPress={handleDeletePress}
