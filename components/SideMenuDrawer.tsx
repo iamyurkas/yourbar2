@@ -99,6 +99,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     setStartScreen,
     resetInventoryFromBundle,
     exportInventoryData,
+    exportInventoryPhotoEntries,
     importInventoryData,
     customCocktailTags,
     customIngredientTags,
@@ -486,8 +487,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       return;
     }
 
-    const data = exportInventoryData();
-    if (!data) {
+    const photoEntries = exportInventoryPhotoEntries();
+    if (!photoEntries) {
       showDialogMessage('Backup unavailable', 'Load your inventory before backing up photos.');
       return;
     }
@@ -507,20 +508,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
         return;
       }
 
-      const entries = [
-        ...data.cocktails.map((cocktail) => ({
-          type: 'cocktails',
-          id: cocktail.id ?? '',
-          name: cocktail.name ?? 'cocktail',
-          uri: cocktail.photoUri ?? undefined,
-        })),
-        ...data.ingredients.map((ingredient) => ({
-          type: 'ingredients',
-          id: ingredient.id ?? '',
-          name: ingredient.name ?? 'ingredient',
-          uri: ingredient.photoUri ?? undefined,
-        })),
-      ].filter((entry) => entry.uri);
+      const entries = photoEntries.filter((entry) => entry.uri);
 
       if (entries.length === 0) {
         showDialogMessage('No photos to backup', 'Add photos to cocktails or ingredients first.');
