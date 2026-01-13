@@ -510,22 +510,12 @@ function getNextCustomTagId(tags: readonly { id?: number | null }[], minimum: nu
   return maxId + 1;
 }
 
-function createDeltaSnapshotFromInventory(
-  state: InventoryState,
-  options: {
-    availableIngredientIds: Set<number>;
-    shoppingIngredientIds: Set<number>;
-    cocktailRatings: Record<string, number>;
-    ignoreGarnish: boolean;
-    allowAllSubstitutes: boolean;
-    useImperialUnits: boolean;
-    keepScreenAwake: boolean;
-    ratingFilterThreshold: number;
-    startScreen: StartScreen;
-    customCocktailTags: CocktailTag[];
-    customIngredientTags: IngredientTag[];
-  },
-): InventoryDeltaSnapshot<CocktailStorageRecord, IngredientStorageRecord> {
+type InventoryDeltaSnapshotBase = Pick<
+  InventoryDeltaSnapshot<CocktailStorageRecord, IngredientStorageRecord>,
+  'version' | 'delta' | 'imported'
+>;
+
+function createDeltaSnapshotBase(state: InventoryState): InventoryDeltaSnapshotBase {
   const baseData = loadInventoryData();
   const baseCocktails = new Map<number, CocktailStorageRecord>(
     baseData.cocktails
@@ -605,7 +595,6 @@ function createDeltaSnapshotFromInventory(
   });
 
   const deletedIngredientIds = Array.from(baseIngredients.keys()).filter((id) => !currentIngredientIds.has(id));
-  const sanitizedRatings = sanitizeCocktailRatings(options.cocktailRatings);
 
   return {
     version: INVENTORY_SNAPSHOT_VERSION,
@@ -628,24 +617,7 @@ function createDeltaSnapshotFromInventory(
           : undefined,
     },
     imported: state.imported,
-    customCocktailTags: options.customCocktailTags,
-    customIngredientTags: options.customIngredientTags,
-    availableIngredientIds:
-      options.availableIngredientIds.size > 0
-        ? toSortedArray(options.availableIngredientIds)
-        : undefined,
-    shoppingIngredientIds:
-      options.shoppingIngredientIds.size > 0
-        ? toSortedArray(options.shoppingIngredientIds)
-        : undefined,
-    cocktailRatings: Object.keys(sanitizedRatings).length > 0 ? sanitizedRatings : undefined,
-    ignoreGarnish: options.ignoreGarnish,
-    allowAllSubstitutes: options.allowAllSubstitutes,
-    useImperialUnits: options.useImperialUnits,
-    keepScreenAwake: options.keepScreenAwake,
-    ratingFilterThreshold: options.ratingFilterThreshold,
-    startScreen: options.startScreen,
-  } satisfies InventoryDeltaSnapshot<CocktailStorageRecord, IngredientStorageRecord>;
+  } satisfies InventoryDeltaSnapshotBase;
 }
 
 const InventoryContext = createContext<InventoryContextValue | undefined>(undefined);
@@ -699,6 +671,10 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     sanitizeCustomTags(globalThis.__yourbarInventoryCustomIngredientTags, DEFAULT_TAG_COLOR),
   );
   const lastPersistedSnapshot = useRef<string | undefined>(undefined);
+  const inventoryDeltaSnapshotBase = useMemo(
+    () => (inventoryState ? createDeltaSnapshotBase(inventoryState) : undefined),
+    [inventoryState],
+  );
 
   useEffect(() => {
     if (inventoryState) {
@@ -794,19 +770,22 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     globalThis.__yourbarInventoryCustomCocktailTags = customCocktailTags;
     globalThis.__yourbarInventoryCustomIngredientTags = customIngredientTags;
 
-    const snapshot = createDeltaSnapshotFromInventory(inventoryState, {
-      availableIngredientIds,
-      shoppingIngredientIds,
-      cocktailRatings,
+    const sanitizedRatings = sanitizeCocktailRatings(cocktailRatings);
+    const snapshot = {
+      ...inventoryDeltaSnapshotBase,
+      customCocktailTags,
+      customIngredientTags,
+      availableIngredientIds:
+        availableIngredientIds.size > 0 ? toSortedArray(availableIngredientIds) : undefined,
+      shoppingIngredientIds: shoppingIngredientIds.size > 0 ? toSortedArray(shoppingIngredientIds) : undefined,
+      cocktailRatings: Object.keys(sanitizedRatings).length > 0 ? sanitizedRatings : undefined,
       ignoreGarnish,
       allowAllSubstitutes,
       useImperialUnits,
       keepScreenAwake,
       ratingFilterThreshold,
       startScreen,
-      customCocktailTags,
-      customIngredientTags,
-    });
+    } satisfies InventoryDeltaSnapshot<CocktailStorageRecord, IngredientStorageRecord>;
     const serialized = JSON.stringify(snapshot);
 
     if (lastPersistedSnapshot.current === serialized) {
