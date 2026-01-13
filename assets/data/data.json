@@ -185,23 +185,6 @@
       "photoUri": "assets/ingredients/621594-allspice-dram.jpg"
     },
     {
-      "id": 1756483214932,
-      "name": "Almond",
-      "description": "Crunchy nut with mild sweetness used for garnishes or infusions. Adds nutty aroma to liqueurs and syrups. Common allergen so label cocktails clearly.",
-      "tags": [
-        {
-          "id": 10,
-          "name": "other",
-          "color": "#a8a8a8"
-        }
-      ],
-      "searchName": "almond",
-      "searchTokens": [
-        "almond"
-      ],
-      "photoUri": "assets/ingredients/1756483214932-almond.jpg"
-    },
-    {
       "id": 860438,
       "name": "Almond (Orgeat) Syrup",
       "description": "Almond syrup, often known as orgeat, is a sweet, nutty syrup made from almonds, sugar, and orange flower water. It adds a creamy, aromatic quality to tropical and tiki cocktails. Its subtle nuttiness balances citrus and rum, making it essential in drinks like the Mai Tai.",
@@ -7389,86 +7372,6 @@
       "photoUri": "assets/cocktails/1756482200535-alien-brain-hemorrhage.jpg",
       "methodIds": [
         "layer"
-      ]
-    },
-    {
-      "id": 1756482784515,
-      "name": "Almond Old Fashioned",
-      "glassId": "rocks_glass",
-      "tags": [
-        {
-          "id": 5,
-          "name": "strong",
-          "color": "#ec5a5a"
-        }
-      ],
-      "description": "A bold, spirit-forward whiskey drink built around Bourbon, Amaretto, Demerara Sugar Syrup—bitter-leaning, aromatic, and best served well chilled. Garnished with orange.",
-      "instructions": "1. Add the demerara sugar syrup and bitters to a mixing glass.\n2. Pour in the bourbon and amaretto.\n3. Fill the mixing glass with ice and stir for 20–30 seconds until well chilled and diluted.\n4. Strain the mixture into a rocks glass over a large ice cube.\n5. Express an orange peel over the drink to release the oils, then garnish with almonds and serve.",
-      "ingredients": [
-        {
-          "order": 1,
-          "ingredientId": 342124,
-          "name": "Bourbon",
-          "amount": "60",
-          "unitId": 11
-        },
-        {
-          "order": 2,
-          "ingredientId": 728860,
-          "name": "Amaretto",
-          "amount": "10",
-          "unitId": 11
-        },
-        {
-          "order": 3,
-          "ingredientId": 1755453836546,
-          "name": "Demerara Sugar Syrup",
-          "amount": "5",
-          "unitId": 11,
-          "substitutes": [
-            {
-              "id": 150490,
-              "name": "Simple Syrup"
-            }
-          ]
-        },
-        {
-          "order": 4,
-          "ingredientId": 401724,
-          "name": "Angostura Bitters",
-          "amount": "1",
-          "unitId": 6,
-          "allowBaseSubstitution": true
-        },
-        {
-          "order": 5,
-          "ingredientId": 454059,
-          "name": "Orange",
-          "amount": "1",
-          "unitId": 26,
-          "garnish": true,
-          "optional": true
-        },
-        {
-          "order": 6,
-          "ingredientId": 346304,
-          "name": "Ice",
-          "amount": "150",
-          "unitId": 8
-        },
-        {
-          "order": 7,
-          "ingredientId": 1756483214932,
-          "name": "Almond",
-          "amount": "3",
-          "unitId": 1,
-          "garnish": true
-        }
-      ],
-      "photoUri": "assets/cocktails/1756482784515-almond-old-fashioned.jpg",
-      "methodIds": [
-        "muddle",
-        "build"
       ]
     },
     {
