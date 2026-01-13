@@ -36,6 +36,7 @@ import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
 import { COCKTAIL_UNIT_DICTIONARY, COCKTAIL_UNIT_OPTIONS } from '@/constants/cocktail-units';
 import { GLASSWARE } from '@/constants/glassware';
 import { Colors } from '@/constants/theme';
+import { shouldStorePhoto, storePhoto } from '@/libs/photo-storage';
 import { tagColors } from '@/theme/theme';
 import {
   useInventory,
@@ -823,7 +824,7 @@ export default function CreateCocktailScreen() {
     [handleUpdateSubstitutes, substituteTarget],
   );
 
-  const handleSubmit = useCallback(() => {
+  const handleSubmit = useCallback(async () => {
     if (isSaving) {
       return;
     }
@@ -930,28 +931,36 @@ export default function CreateCocktailScreen() {
 
     setIsSaving(true);
     try {
-      const persisted =
+      const photoHasChanged = imageUri !== prefilledCocktail?.photoUri;
+      const shouldProcessPhoto = shouldStorePhoto(imageUri) && (!isEditMode || photoHasChanged);
+      const initialPhotoUri = shouldProcessPhoto ? undefined : imageUri ?? undefined;
+
+      const submission = {
+        name: trimmedName,
+        glassId: glassId ?? undefined,
+        methodIds,
+        photoUri: initialPhotoUri,
+        description: descriptionValue || undefined,
+        instructions: instructionsValue || undefined,
+        tags,
+        ingredients: sanitizedIngredients,
+      } satisfies CreateCocktailInput;
+
+      let persisted =
         isEditMode && prefilledCocktail?.id != null
           ? updateCocktail(Number(prefilledCocktail.id), {
-              name: trimmedName,
-              glassId: glassId ?? undefined,
-              methodIds,
-              photoUri: imageUri ?? undefined,
-              description: descriptionValue || undefined,
-              instructions: instructionsValue || undefined,
-              tags,
-              ingredients: sanitizedIngredients,
+              ...submission,
+              photoUri:
+                imageUri && shouldProcessPhoto && prefilledCocktail?.id != null
+                  ? await storePhoto({
+                      uri: imageUri,
+                      id: prefilledCocktail.id,
+                      name: trimmedName,
+                      category: 'cocktails',
+                    })
+                  : submission.photoUri,
             })
-          : createCocktail({
-              name: trimmedName,
-              glassId: glassId ?? undefined,
-              methodIds,
-              photoUri: imageUri ?? undefined,
-              description: descriptionValue || undefined,
-              instructions: instructionsValue || undefined,
-              tags,
-              ingredients: sanitizedIngredients,
-            });
+          : createCocktail(submission);
 
       if (!persisted) {
         showDialog({
@@ -960,6 +969,25 @@ export default function CreateCocktailScreen() {
           actions: [{ label: 'OK' }],
         });
         return;
+      }
+
+      if (!isEditMode && shouldProcessPhoto && imageUri && persisted.id != null) {
+        const storedPhotoUri = await storePhoto({
+          uri: imageUri,
+          id: persisted.id,
+          name: trimmedName,
+          category: 'cocktails',
+        });
+
+        if (storedPhotoUri && storedPhotoUri !== persisted.photoUri) {
+          const updated = updateCocktail(Number(persisted.id), {
+            ...submission,
+            photoUri: storedPhotoUri,
+          });
+          if (updated) {
+            persisted = updated;
+          }
+        }
       }
 
       setHasUnsavedChanges(false);
@@ -988,9 +1016,12 @@ export default function CreateCocktailScreen() {
     methodIds,
     name,
     prefilledCocktail?.id,
+    prefilledCocktail?.photoUri,
     selectedTagIds,
     setHasUnsavedChanges,
     showDialog,
+    shouldStorePhoto,
+    storePhoto,
   ]);
 
   const handleDeletePress = useCallback(() => {

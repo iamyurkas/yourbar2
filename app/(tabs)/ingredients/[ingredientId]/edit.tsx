@@ -26,6 +26,7 @@ import { TagEditorModal } from '@/components/TagEditorModal';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { Colors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
+import { shouldStorePhoto, storePhoto } from '@/libs/photo-storage';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
 import { useUnsavedChanges } from '@/providers/unsaved-changes-provider';
 
@@ -270,7 +271,7 @@ export default function EditIngredientScreen() {
     }
   }, [ensureMediaPermission, isPickingImage, showDialog]);
 
-  const handleSubmit = useCallback(() => {
+  const handleSubmit = useCallback(async () => {
     const trimmedName = name.trim();
     if (!trimmedName) {
       showDialog({
@@ -295,12 +296,27 @@ export default function EditIngredientScreen() {
       .map((tagId) => availableIngredientTags.find((tag) => tag.id === tagId))
       .filter((tag): tag is (typeof availableIngredientTags)[number] => Boolean(tag));
 
-    const updated = updateIngredient(numericIngredientId, {
+    const photoHasChanged = imageUri !== ingredient?.photoUri;
+    const shouldProcessPhoto = shouldStorePhoto(imageUri) && photoHasChanged;
+    const submission = {
       name: trimmedName,
       description: descriptionValue || undefined,
-      photoUri: imageUri ?? undefined,
+      photoUri: shouldProcessPhoto ? undefined : imageUri ?? undefined,
       baseIngredientId,
       tags: selectedTags,
+    };
+
+    const updated = updateIngredient(numericIngredientId, {
+      ...submission,
+      photoUri:
+        imageUri && shouldProcessPhoto
+          ? await storePhoto({
+              uri: imageUri,
+              id: numericIngredientId,
+              name: trimmedName,
+              category: 'ingredients',
+            })
+          : submission.photoUri,
     });
 
     if (!updated) {
@@ -320,11 +336,14 @@ export default function EditIngredientScreen() {
     baseIngredientId,
     description,
     imageUri,
+    ingredient?.photoUri,
     name,
     numericIngredientId,
     setHasUnsavedChanges,
     showDialog,
     selectedTagIds,
+    shouldStorePhoto,
+    storePhoto,
     updateIngredient,
   ]);
 
