@@ -311,6 +311,26 @@ function toIngredientStorageRecord(ingredient: Ingredient | IngredientRecord): I
   } satisfies IngredientStorageRecord;
 }
 
+const BACKUP_PHOTO_URI_PATTERN = /\/photos\/(cocktails|ingredients)\/([^/]+)$/;
+
+function normalizePhotoUriForBackup(uri?: string | null): string | undefined {
+  if (!uri) {
+    return undefined;
+  }
+
+  if (uri.startsWith('assets/')) {
+    return uri;
+  }
+
+  const match = uri.match(BACKUP_PHOTO_URI_PATTERN);
+  if (!match) {
+    return uri;
+  }
+
+  const [, category, filename] = match;
+  return `assets/${category}/${filename}`;
+}
+
 function areStorageRecordsEqual<TRecord>(left: TRecord, right: TRecord): boolean {
   return JSON.stringify(left) === JSON.stringify(right);
 }
@@ -1238,7 +1258,13 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       return null;
     }
 
-    const cocktails = inventoryState.cocktails.map((cocktail) => toCocktailStorageRecord(cocktail));
+    const cocktails = inventoryState.cocktails.map((cocktail) => {
+      const record = toCocktailStorageRecord(cocktail);
+      return {
+        ...record,
+        photoUri: normalizePhotoUriForBackup(record.photoUri),
+      };
+    });
     const ingredients = inventoryState.ingredients.map((ingredient) => {
       const baseName = ingredient.searchName ?? ingredient.name ?? '';
       const normalizedSearchName = baseName.trim().toLowerCase();
@@ -1247,10 +1273,13 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           ? ingredient.searchTokens
           : normalizedSearchName.split(/\s+/).filter(Boolean);
 
+      const record = toIngredientStorageRecord(ingredient);
+
       return {
-        ...toIngredientStorageRecord(ingredient),
+        ...record,
         searchName: normalizedSearchName,
         searchTokens,
+        photoUri: normalizePhotoUriForBackup(record.photoUri),
       };
     });
 
