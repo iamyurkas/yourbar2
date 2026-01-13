@@ -543,7 +543,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
         }
 
         const baseName = buildPhotoBaseName(entry.id || 'photo', entry.name);
-        const nameKey = `${entry.type}/${baseName}.jpg`;
+        const nameKey = `assets/${entry.type}/${baseName}.jpg`;
         const duplicateCount = nameCounts.get(nameKey) ?? 0;
         nameCounts.set(nameKey, duplicateCount + 1);
         const fileName =
@@ -553,7 +553,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
         });
         const contents = base64ToBytes(contentsBase64);
 
-        const archivePath = `${entry.type}/${fileName}`;
+        const archivePath = `assets/${entry.type}/${fileName}`;
         files.push({ path: archivePath, contents });
         addedCount += 1;
       }
