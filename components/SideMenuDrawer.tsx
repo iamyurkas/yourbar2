@@ -15,6 +15,7 @@ import { TagEditorModal } from '@/components/TagEditorModal';
 import { TagPill } from '@/components/TagPill';
 import { Colors } from '@/constants/theme';
 import { type InventoryData } from '@/libs/inventory-data';
+import { buildPhotoBaseName } from '@/libs/photo-utils';
 import { useInventory, type StartScreen } from '@/providers/inventory-provider';
 
 const MENU_WIDTH = Math.round(Dimensions.get('window').width * 0.75);
@@ -360,20 +361,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     }
   };
 
-  const sanitizeFileSegment = (value: string) => {
-    const trimmed = value.trim().toLowerCase();
-    const sanitized = trimmed.replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-    return sanitized || 'photo';
-  };
-
   const base64Chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
-
-  const getPhotoExtension = (uri: string) => {
-    const sanitizedUri = uri.split('?')[0];
-    const lastSegment = sanitizedUri.split('/').pop() ?? '';
-    const match = lastSegment.match(/\.([a-z0-9]+)$/i);
-    return match?.[1]?.toLowerCase() ?? 'jpg';
-  };
 
   const base64ToBytes = (base64: string) => {
     const cleaned = base64.replace(/[^A-Za-z0-9+/=]/g, '');
@@ -554,13 +542,12 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
           continue;
         }
 
-        const baseName = `${sanitizeFileSegment(entry.name)}-${entry.id || 'photo'}`;
-        const extension = getPhotoExtension(uri);
-        const nameKey = `${entry.type}/${baseName}.${extension}`;
+        const baseName = buildPhotoBaseName(entry.id || 'photo', entry.name);
+        const nameKey = `${entry.type}/${baseName}.jpg`;
         const duplicateCount = nameCounts.get(nameKey) ?? 0;
         nameCounts.set(nameKey, duplicateCount + 1);
         const fileName =
-          duplicateCount > 0 ? `${baseName}-${duplicateCount + 1}.${extension}` : `${baseName}.${extension}`;
+          duplicateCount > 0 ? `${baseName}-${duplicateCount + 1}.jpg` : `${baseName}.jpg`;
         const contentsBase64 = await FileSystem.readAsStringAsync(uri, {
           encoding: FileSystem.EncodingType.Base64,
         });

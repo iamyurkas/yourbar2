@@ -27,6 +27,7 @@ import { TagEditorModal } from '@/components/TagEditorModal';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { Colors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
+import { shouldStorePhoto, storePhoto } from '@/libs/photo-storage';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
 import { useUnsavedChanges } from '@/providers/unsaved-changes-provider';
 
@@ -95,6 +96,7 @@ export default function CreateIngredientScreen() {
     shoppingIngredientIds,
     availableIngredientIds,
     createIngredient,
+    updateIngredient,
     customIngredientTags,
     createCustomIngredientTag,
   } = useInventory();
@@ -271,7 +273,7 @@ export default function CreateIngredientScreen() {
     }
   }, [ensureMediaPermission, isPickingImage, showDialog]);
 
-  const handleSubmit = useCallback(() => {
+  const handleSubmit = useCallback(async () => {
     const trimmedName = name.trim();
     if (!trimmedName) {
       showDialog({
@@ -287,13 +289,16 @@ export default function CreateIngredientScreen() {
       .map((tagId) => availableIngredientTags.find((tag) => tag.id === tagId))
       .filter((tag): tag is (typeof availableIngredientTags)[number] => Boolean(tag));
 
-    const created = createIngredient({
+    const shouldProcessPhoto = shouldStorePhoto(imageUri);
+    const submission = {
       name: trimmedName,
       description: descriptionValue || undefined,
-      photoUri: imageUri ?? undefined,
+      photoUri: shouldProcessPhoto ? undefined : imageUri ?? undefined,
       baseIngredientId,
       tags: selectedTags,
-    });
+    };
+
+    let created = createIngredient(submission);
 
     if (!created) {
       showDialog({
@@ -302,6 +307,25 @@ export default function CreateIngredientScreen() {
         actions: [{ label: 'OK' }],
       });
       return;
+    }
+
+    if (shouldProcessPhoto && imageUri && created.id != null) {
+      const storedPhotoUri = await storePhoto({
+        uri: imageUri,
+        id: created.id,
+        name: trimmedName,
+        category: 'ingredients',
+      });
+
+      if (storedPhotoUri && storedPhotoUri !== created.photoUri) {
+        const updated = updateIngredient(Number(created.id), {
+          ...submission,
+          photoUri: storedPhotoUri,
+        });
+        if (updated) {
+          created = updated;
+        }
+      }
     }
 
     setHasUnsavedChanges(false);
@@ -333,6 +357,9 @@ export default function CreateIngredientScreen() {
     setHasUnsavedChanges,
     showDialog,
     selectedTagIds,
+    shouldStorePhoto,
+    storePhoto,
+    updateIngredient,
   ]);
 
   const confirmLeave = useCallback(
