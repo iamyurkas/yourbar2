@@ -4,7 +4,7 @@ import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system/legacy';
 import { Image, type ImageSource } from 'expo-image';
 import * as Sharing from 'expo-sharing';
-import React, { useEffect, useMemo, useRef, useState, type ComponentProps } from 'react';
+import { useEffect, useMemo, useRef, useState, type ComponentProps } from 'react';
 import { Animated, Dimensions, Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import CocktailIcon from '@/assets/images/cocktails.svg';
@@ -967,7 +967,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               </View>
               <View style={styles.settingTextContainer}>
                 <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>
-                  {isBackingUpPhotos ? 'Preparing photo backup...' : 'Export photos'}
+                  {isBackingUpPhotos ? 'Exporting photos...' : 'Export photos'}
                 </Text>
                 <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>
                   Save photos as an archive
