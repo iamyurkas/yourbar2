@@ -2,8 +2,8 @@ import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { Image } from 'expo-image';
 import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
-import { Stack, router, useLocalSearchParams } from 'expo-router';
-import React, { useCallback, useEffect, useMemo, useRef, useState, useTransition } from 'react';
+import { router, Stack, useLocalSearchParams } from 'expo-router';
+import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -15,12 +15,12 @@ import { getCocktailMethodById, METHOD_ICON_MAP } from '@/constants/cocktail-met
 import { COCKTAIL_UNIT_DICTIONARY } from '@/constants/cocktail-units';
 import { Colors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
-import { skipDuplicateBack } from '@/libs/navigation';
 import {
   createIngredientLookup,
   resolveIngredientAvailability,
   type IngredientLookup,
 } from '@/libs/ingredient-availability';
+import { skipDuplicateBack } from '@/libs/navigation';
 import {
   useInventory,
   type Cocktail,
@@ -1044,7 +1044,7 @@ const styles = StyleSheet.create({
     height: StyleSheet.hairlineWidth,
   },
   quantityContainer: {
-    minWidth: 88,
+    minWidth: 8,
     alignItems: 'flex-end',
     justifyContent: 'center',
   },
