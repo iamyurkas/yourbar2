@@ -1,5 +1,6 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { Asset } from 'expo-asset';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system/legacy';
 import { Image, type ImageSource } from 'expo-image';
@@ -10,6 +11,7 @@ import { Animated, Dimensions, Modal, Pressable, ScrollView, StyleSheet, Text, V
 import CocktailIcon from '@/assets/images/cocktails.svg';
 import IngredientsIcon from '@/assets/images/ingredients.svg';
 import ShakerIcon from '@/assets/images/shaker.svg';
+import { cocktailImages, ingredientImages, resolveAssetFromCatalog } from '@/assets/image-manifest';
 import { AppDialog, type DialogOptions } from '@/components/AppDialog';
 import { TagEditorModal } from '@/components/TagEditorModal';
 import { TagPill } from '@/components/TagPill';
@@ -481,6 +483,24 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     return bytesToBase64(archive);
   };
 
+  const resolveAssetContents = async (assetId: number) => {
+    const asset = Asset.fromModule(assetId);
+    if (!asset.localUri) {
+      await asset.downloadAsync();
+    }
+
+    const assetUri = asset.localUri ?? asset.uri;
+    if (!assetUri) {
+      return null;
+    }
+
+    const contentsBase64 = await FileSystem.readAsStringAsync(assetUri, {
+      encoding: FileSystem.EncodingType.Base64,
+    });
+
+    return contentsBase64;
+  };
+
   const handleBackupPhotos = async () => {
     if (isBackingUpPhotos) {
       return;
@@ -507,20 +527,50 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
         return;
       }
 
-      const entries = [
-        ...data.cocktails.map((cocktail) => ({
+      const entryMap = new Map<
+        string,
+        {
+          type: 'cocktails' | 'ingredients';
+          id?: string | number;
+          name: string;
+          uri: string;
+        }
+      >();
+      const addEntry = (entry: { type: 'cocktails' | 'ingredients'; id?: string | number; name: string; uri?: string }) => {
+        if (!entry.uri) {
+          return;
+        }
+
+        if (!entryMap.has(entry.uri)) {
+          entryMap.set(entry.uri, { ...entry, uri: entry.uri });
+        }
+      };
+
+      data.cocktails.forEach((cocktail) =>
+        addEntry({
           type: 'cocktails',
           id: cocktail.id ?? '',
           name: cocktail.name ?? 'cocktail',
           uri: cocktail.photoUri ?? undefined,
-        })),
-        ...data.ingredients.map((ingredient) => ({
+        }),
+      );
+      data.ingredients.forEach((ingredient) =>
+        addEntry({
           type: 'ingredients',
           id: ingredient.id ?? '',
           name: ingredient.name ?? 'ingredient',
           uri: ingredient.photoUri ?? undefined,
-        })),
-      ].filter((entry) => entry.uri);
+        }),
+      );
+
+      Object.keys(cocktailImages).forEach((uri) => {
+        addEntry({ type: 'cocktails', name: uri.split('/').pop() ?? 'cocktail', uri });
+      });
+      Object.keys(ingredientImages).forEach((uri) => {
+        addEntry({ type: 'ingredients', name: uri.split('/').pop() ?? 'ingredient', uri });
+      });
+
+      const entries = [...entryMap.values()];
 
       if (entries.length === 0) {
         showDialogMessage('No photos to backup', 'Add photos to cocktails or ingredients first.');
@@ -537,23 +587,44 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
           continue;
         }
 
-        const info = await FileSystem.getInfoAsync(uri);
-        if (!info.exists || info.isDirectory) {
+        const assetId = resolveAssetFromCatalog(uri);
+        let fileName: string | null = null;
+        let contentsBase64: string | null = null;
+
+        if (assetId) {
+          const assetContents = await resolveAssetContents(assetId);
+          if (!assetContents) {
+            continue;
+          }
+          contentsBase64 = assetContents;
+          fileName = uri.split('/').pop() ?? 'photo.jpg';
+        } else {
+          const info = await FileSystem.getInfoAsync(uri);
+          if (!info.exists || info.isDirectory) {
+            continue;
+          }
+
+          const baseName = buildPhotoBaseName(entry.id || 'photo', entry.name);
+          fileName = `${baseName}.jpg`;
+          contentsBase64 = await FileSystem.readAsStringAsync(uri, {
+            encoding: FileSystem.EncodingType.Base64,
+          });
+        }
+
+        if (!contentsBase64 || !fileName) {
           continue;
         }
 
-        const baseName = buildPhotoBaseName(entry.id || 'photo', entry.name);
-        const nameKey = `${entry.type}/${baseName}.jpg`;
+        const nameKey = `${entry.type}/${fileName}`;
         const duplicateCount = nameCounts.get(nameKey) ?? 0;
         nameCounts.set(nameKey, duplicateCount + 1);
-        const fileName =
-          duplicateCount > 0 ? `${baseName}-${duplicateCount + 1}.jpg` : `${baseName}.jpg`;
-        const contentsBase64 = await FileSystem.readAsStringAsync(uri, {
-          encoding: FileSystem.EncodingType.Base64,
-        });
+        const resolvedFileName =
+          duplicateCount > 0
+            ? fileName.replace(/(\.[^.]+)?$/, `-${duplicateCount + 1}$1`)
+            : fileName;
         const contents = base64ToBytes(contentsBase64);
 
-        const archivePath = `${entry.type}/${fileName}`;
+        const archivePath = `${entry.type}/${resolvedFileName}`;
         files.push({ path: archivePath, contents });
         addedCount += 1;
       }
