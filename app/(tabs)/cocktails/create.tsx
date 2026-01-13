@@ -36,6 +36,7 @@ import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
 import { COCKTAIL_UNIT_DICTIONARY, COCKTAIL_UNIT_OPTIONS } from '@/constants/cocktail-units';
 import { GLASSWARE } from '@/constants/glassware';
 import { Colors } from '@/constants/theme';
+import { isJpgAsset, persistLocalImage } from '@/libs/image-storage';
 import { tagColors } from '@/theme/theme';
 import {
   useInventory,
@@ -625,6 +626,15 @@ export default function CreateCocktailScreen() {
 
       if (!result.canceled && result.assets?.length) {
         const asset = result.assets[0];
+        if (!isJpgAsset(asset)) {
+          showDialog({
+            title: 'JPG images only',
+            message: 'Please choose a JPG image to use as the cocktail photo.',
+            actions: [{ label: 'OK' }],
+          });
+          return;
+        }
+
         if (asset?.uri) {
           setImageUri(asset.uri);
         }
@@ -823,7 +833,7 @@ export default function CreateCocktailScreen() {
     [handleUpdateSubstitutes, substituteTarget],
   );
 
-  const handleSubmit = useCallback(() => {
+  const handleSubmit = useCallback(async () => {
     if (isSaving) {
       return;
     }
@@ -928,6 +938,49 @@ export default function CreateCocktailScreen() {
       .map((tagId) => availableCocktailTags.find((tag) => tag.id === tagId))
       .filter((tag): tag is (typeof availableCocktailTags)[number] => Boolean(tag));
 
+    const targetId = isEditMode ? Number(prefilledCocktail?.id) : undefined;
+    const nextId =
+      targetId != null && Number.isFinite(targetId) && targetId >= 0
+        ? Math.trunc(targetId)
+        : cocktails.reduce((maxId, cocktail) => {
+            const id = Number(cocktail.id ?? -1);
+            if (!Number.isFinite(id) || id < 0) {
+              return maxId;
+            }
+
+            return Math.max(maxId, id);
+          }, 0) + 1;
+
+    let photoUri = imageUri ?? undefined;
+    if (photoUri) {
+      if (!isJpgAsset({ uri: photoUri })) {
+        showDialog({
+          title: 'JPG images only',
+          message: 'Cocktail photos must be JPG images.',
+          actions: [{ label: 'OK' }],
+        });
+        return;
+      }
+
+      try {
+        photoUri =
+          (await persistLocalImage({
+            sourceUri: photoUri,
+            category: 'cocktails',
+            id: nextId,
+            name: trimmedName,
+          })) ?? photoUri;
+      } catch (error) {
+        console.warn('Failed to store cocktail image', error);
+        showDialog({
+          title: 'Could not save image',
+          message: 'Please try again with a JPG image.',
+          actions: [{ label: 'OK' }],
+        });
+        return;
+      }
+    }
+
     setIsSaving(true);
     try {
       const persisted =
@@ -936,7 +989,7 @@ export default function CreateCocktailScreen() {
               name: trimmedName,
               glassId: glassId ?? undefined,
               methodIds,
-              photoUri: imageUri ?? undefined,
+              photoUri,
               description: descriptionValue || undefined,
               instructions: instructionsValue || undefined,
               tags,
@@ -946,7 +999,7 @@ export default function CreateCocktailScreen() {
               name: trimmedName,
               glassId: glassId ?? undefined,
               methodIds,
-              photoUri: imageUri ?? undefined,
+              photoUri,
               description: descriptionValue || undefined,
               instructions: instructionsValue || undefined,
               tags,
@@ -976,6 +1029,7 @@ export default function CreateCocktailScreen() {
     }
   }, [
     availableCocktailTags,
+    cocktails,
     createCocktail,
     updateCocktail,
     description,

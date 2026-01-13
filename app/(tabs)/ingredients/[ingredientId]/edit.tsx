@@ -26,6 +26,7 @@ import { TagEditorModal } from '@/components/TagEditorModal';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { Colors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
+import { isJpgAsset, persistLocalImage } from '@/libs/image-storage';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
 import { useUnsavedChanges } from '@/providers/unsaved-changes-provider';
 
@@ -254,6 +255,15 @@ export default function EditIngredientScreen() {
 
       if (!result.canceled && result.assets?.length) {
         const asset = result.assets[0];
+        if (!isJpgAsset(asset)) {
+          showDialog({
+            title: 'JPG images only',
+            message: 'Please choose a JPG image to use as the ingredient photo.',
+            actions: [{ label: 'OK' }],
+          });
+          return;
+        }
+
         if (asset?.uri) {
           setImageUri(asset.uri);
         }
@@ -270,7 +280,7 @@ export default function EditIngredientScreen() {
     }
   }, [ensureMediaPermission, isPickingImage, showDialog]);
 
-  const handleSubmit = useCallback(() => {
+  const handleSubmit = useCallback(async () => {
     const trimmedName = name.trim();
     if (!trimmedName) {
       showDialog({
@@ -295,10 +305,40 @@ export default function EditIngredientScreen() {
       .map((tagId) => availableIngredientTags.find((tag) => tag.id === tagId))
       .filter((tag): tag is (typeof availableIngredientTags)[number] => Boolean(tag));
 
+    let photoUri = imageUri ?? undefined;
+    if (photoUri) {
+      if (!isJpgAsset({ uri: photoUri })) {
+        showDialog({
+          title: 'JPG images only',
+          message: 'Ingredient photos must be JPG images.',
+          actions: [{ label: 'OK' }],
+        });
+        return;
+      }
+
+      try {
+        photoUri =
+          (await persistLocalImage({
+            sourceUri: photoUri,
+            category: 'ingredients',
+            id: numericIngredientId,
+            name: trimmedName,
+          })) ?? photoUri;
+      } catch (error) {
+        console.warn('Failed to store ingredient image', error);
+        showDialog({
+          title: 'Could not save image',
+          message: 'Please try again with a JPG image.',
+          actions: [{ label: 'OK' }],
+        });
+        return;
+      }
+    }
+
     const updated = updateIngredient(numericIngredientId, {
       name: trimmedName,
       description: descriptionValue || undefined,
-      photoUri: imageUri ?? undefined,
+      photoUri,
       baseIngredientId,
       tags: selectedTags,
     });
