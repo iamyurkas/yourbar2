@@ -2334,6 +2334,7 @@
       "name": "Aussie Boomerang",
       "description": "A smooth, creamy shooter combining bright kiwi and melon liqueurs with rich cream. Sweet, fruity, and dessert-like, it’s a playful, easy-drinking shot with a soft tropical finish.",
       "instructions": "1. Chill a shooter glass in advance for a cleaner, smoother taste.\n2. Pour the Kiwi Liqueur into the glass as the first layer.\n3. Slowly add the Melon Liqueur over the back of a spoon to create a distinct layer.\n4. Gently float the cream on top using a spoon to achieve a clean layered effect.\n5. Serve immediately and drink in one smooth shot.",
+      "photoUri": "assets/cocktails/1758844622624-aussie-boomerang.jpg",
       "glassId": "shooter",
       "methodIds": [
         "layer"
@@ -2797,46 +2798,6 @@
         },
         {
           "order": 4,
-          "ingredientId": 346304,
-          "name": "Ice",
-          "amount": "150",
-          "unitId": 8
-        }
-      ]
-    },
-    {
-      "id": 1758537354568,
-      "name": "Bacardi Limonade",
-      "description": "A refreshing, citrus-forward highball that combines the bright lemon notes of Bacardi Limón with crisp, sparkling lemonade. Light, zesty, and easy-drinking, this cocktail is perfect for warm days and casual gatherings.",
-      "instructions": "1. Fill a highball glass with fresh ice cubes.\n2. Pour Bacardi Limón over the ice.\n3. Top up with chilled lemonade.\n4. Gently stir to combine the ingredients.\n5. Garnish with a lemon slice or wedge and serve immediately.",
-      "glassId": "highball_glass",
-      "methodIds": [
-        "stir"
-      ],
-      "tags": [
-        {
-          "id": 6,
-          "name": "moderate",
-          "color": "#F06292"
-        }
-      ],
-      "ingredients": [
-        {
-          "order": 1,
-          "ingredientId": 156894,
-          "name": "Bacardi Limon",
-          "amount": "45",
-          "unitId": 11
-        },
-        {
-          "order": 2,
-          "ingredientId": 906592,
-          "name": "Lemonade",
-          "amount": "90",
-          "unitId": 11
-        },
-        {
-          "order": 3,
           "ingredientId": 346304,
           "name": "Ice",
           "amount": "150",
@@ -3482,6 +3443,7 @@
       "name": "Banana Daiquiri (shaken)",
       "description": "A vibrant, tropical twist on the classic Daiquiri, combining aged rum with rich banana liqueur, fresh lime juice, and a hint of bitters. The result is a smooth yet zesty cocktail with balanced sweetness, bright acidity, and a soft banana aroma, finished with a clean, refreshing profile.",
       "instructions": "1. Add the aged rum, banana liqueur, fresh lime juice, simple syrup, and Daiquiri bitters into a shaker.\n2. Fill the shaker with ice and seal tightly.\n3. Shake vigorously for 10–15 seconds until well chilled.\n4. Double strain the mixture into a chilled coupe glass.\n5. Garnish with a fresh banana slice or banana chip and serve immediately.",
+      "photoUri": "assets/cocktails/1759482831928-banana-daiquiri-shaken.jpg",
       "glassId": "coupe",
       "methodIds": [
         "shake"
@@ -3503,14 +3465,17 @@
           "substitutes": [
             {
               "id": 811139,
+              "ingredientId": 811139,
               "name": "Gold Rum"
             },
             {
               "id": 861551,
+              "ingredientId": 861551,
               "name": "White Rum"
             },
             {
               "id": 908571,
+              "ingredientId": 908571,
               "name": "Spiced Rum"
             }
           ]
@@ -3524,6 +3489,7 @@
           "substitutes": [
             {
               "id": 777829,
+              "ingredientId": 777829,
               "name": "Creme de Banane"
             }
           ]
@@ -3683,10 +3649,11 @@
       ]
     },
     {
-      "id": 1758747463094,
+      "id": 1760963780622,
       "name": "Bananarama",
-      "description": "A bright and playful rum sour that balances ripe banana notes with grassy cachaça, rich aged rum, and fresh citrus, finished with a gentle sweetness for a crisp yet indulgent sip.",
-      "instructions": "1. Add all ingredients to a shaker filled with ice.\n2. Shake hard for 10–15 seconds until well chilled and slightly frothy.\n3. Double strain into a chilled coupe glass.\n4. Garnish with a thin banana slice or a light dusting of grated nutmeg, if desired.\n5. Serve immediately while cold and aromatic.",
+      "description": "A Bananarama cocktail is a tropical, fruit-forward drink that typically features banana liqueur or purée as its primary flavour. Because it is a modern creation, recipes vary significantly depending on the desired profile.",
+      "instructions": "1. Muddle the banana slices with the cachaça and rum in the base of a shaker.\n2. Add all other ingredients and fill the shaker with ice.\n3. Shake vigorously and fine-strain into a chilled coupe glass.",
+      "photoUri": "assets/cocktails/1760963780622-bananarama.jpg",
       "glassId": "coupe",
       "methodIds": [
         "shake"
@@ -3701,37 +3668,38 @@
       "ingredients": [
         {
           "order": 1,
-          "ingredientId": 609552,
-          "name": "Banana",
-          "amount": "3",
-          "unitId": 19
-        },
-        {
-          "order": 2,
           "ingredientId": 131453,
           "name": "Cachaça",
           "amount": "30",
           "unitId": 11
         },
         {
-          "order": 3,
+          "order": 2,
           "ingredientId": 123517,
-          "name": "Aged rum",
+          "name": "Aged Rum",
           "amount": "20",
           "unitId": 11
         },
         {
-          "order": 4,
-          "ingredientId": 777829,
-          "name": "Creme de Banane",
+          "order": 3,
+          "ingredientId": 490583,
+          "name": "Banana Liqueur",
           "amount": "15",
           "unitId": 11,
           "substitutes": [
             {
-              "id": 490583,
-              "name": "Banana Liqueur"
+              "id": 777829,
+              "ingredientId": 777829,
+              "name": "Creme de Banane"
             }
           ]
+        },
+        {
+          "order": 4,
+          "ingredientId": 1756480488556,
+          "name": "Fino Sherry",
+          "amount": "10",
+          "unitId": 11
         },
         {
           "order": 5,
@@ -3742,24 +3710,39 @@
         },
         {
           "order": 6,
-          "ingredientId": 1756480488556,
-          "name": "Fino Sherry",
-          "amount": "10",
-          "unitId": 11
-        },
-        {
-          "order": 7,
           "ingredientId": 525624,
           "name": "Lime Juice",
           "amount": "5",
           "unitId": 11
         },
         {
-          "order": 8,
+          "order": 7,
           "ingredientId": 728001,
           "name": "Salt",
-          "amount": "0.5",
+          "amount": "1",
           "unitId": 15
+        },
+        {
+          "order": 8,
+          "ingredientId": 609552,
+          "name": "Banana",
+          "amount": "3",
+          "unitId": 19
+        },
+        {
+          "order": 9,
+          "ingredientId": 346304,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 11
+        },
+        {
+          "order": 10,
+          "ingredientId": 609552,
+          "name": "Banana",
+          "amount": "1",
+          "unitId": 19,
+          "garnish": true
         }
       ]
     },
@@ -5896,8 +5879,12 @@
       "id": 1760963369297,
       "name": "Bombardino",
       "description": "A rich, creamy brandy drink featuring Cognac, Advocaat, Whipped Cream—dessert-like, smooth, and indulgent.",
+      "instructions": "1. Heat the Liqueur: Gently heat the egg liqueur in a small saucepan over medium-low heat. Do not let it boil, as this may cause the eggs to curdle.\n2. Add Brandy: Once hot, stir in the brandy. Some recipes suggest heating the brandy with the liqueur, while others recommend adding it directly to the serving glass before pouring in the hot liqueur.\n3. Garnish: Pour into a heat-resistant glass or mug. Top with a generous dollop of whipped cream and a sprinkle of cinnamon or cocoa.",
       "photoUri": "assets/cocktails/1760963369297-bombardino.jpg",
       "glassId": "cup",
+      "methodIds": [
+        "build"
+      ],
       "tags": [
         {
           "id": 6,
@@ -5925,7 +5912,8 @@
           "ingredientId": 487674,
           "name": "Advocaat",
           "amount": "100",
-          "unitId": 11
+          "unitId": 11,
+          "allowBaseSubstitution": true
         },
         {
           "order": 3,
@@ -5939,7 +5927,17 @@
           "ingredientId": 46858,
           "name": "Cinnamon",
           "amount": "1",
-          "unitId": 15
+          "unitId": 15,
+          "garnish": true
+        },
+        {
+          "order": 5,
+          "ingredientId": 795313,
+          "name": "Cocoa Powder",
+          "amount": "1",
+          "unitId": 15,
+          "optional": true,
+          "garnish": true
         }
       ]
     },
@@ -5949,6 +5947,9 @@
       "description": "A rich, creamy brandy drink featuring Cognac, Advocaat, Espresso—dessert-like, smooth, and indulgent.",
       "photoUri": "assets/cocktails/1760963459859-bombardino-calimero.jpg",
       "glassId": "cup",
+      "methodIds": [
+        "build"
+      ],
       "tags": [
         {
           "id": 6,
@@ -5976,7 +5977,8 @@
           "ingredientId": 487674,
           "name": "Advocaat",
           "amount": "50",
-          "unitId": 11
+          "unitId": 11,
+          "allowBaseSubstitution": true
         },
         {
           "order": 3,
@@ -5997,7 +5999,17 @@
           "ingredientId": 46858,
           "name": "Cinnamon",
           "amount": "1",
-          "unitId": 15
+          "unitId": 15,
+          "garnish": true
+        },
+        {
+          "order": 6,
+          "ingredientId": 795313,
+          "name": "Cocoa Powder",
+          "amount": "1",
+          "unitId": 15,
+          "optional": true,
+          "garnish": true
         }
       ]
     },
@@ -6005,8 +6017,12 @@
       "id": 1760963707858,
       "name": "Bombardino Pirata",
       "description": "A rich, creamy rum drink featuring Gold Rum, Advocaat, Whipped Cream—dessert-like, smooth, and indulgent.",
+      "instructions": "1. Heat the Liqueur: Pour the egg liqueur into a small saucepan. Heat it over medium-low heat until hot but not boiling (boiling may cause the egg base to curdle).\n2. Combine: In a heat-safe glass or small mug, add the rum. Pour the hot egg liqueur over the rum and stir gently to combine.\n3. Garnish: Top with a generous dollop of whipped cream.\n4. Finish: Sprinkle cocoa powder or cinnamon on top and serve immediately while hot.",
       "photoUri": "assets/cocktails/1760963707858-bombardino-pirata.jpg",
       "glassId": "cup",
+      "methodIds": [
+        "build"
+      ],
       "tags": [
         {
           "id": 6,
@@ -6044,7 +6060,8 @@
           "ingredientId": 487674,
           "name": "Advocaat",
           "amount": "100",
-          "unitId": 11
+          "unitId": 11,
+          "allowBaseSubstitution": true
         },
         {
           "order": 3,
@@ -6058,7 +6075,17 @@
           "ingredientId": 46858,
           "name": "Cinnamon",
           "amount": "1",
-          "unitId": 15
+          "unitId": 15,
+          "garnish": true
+        },
+        {
+          "order": 5,
+          "ingredientId": 795313,
+          "name": "Cocoa Powder",
+          "amount": "1",
+          "unitId": 15,
+          "optional": true,
+          "garnish": true
         }
       ]
     },
@@ -6536,8 +6563,9 @@
       "id": 1757000000103,
       "name": "Brandy Eggnog",
       "description": "A rich, creamy brandy drink featuring Brandy, Milk, Egg—dessert-like, smooth, and indulgent. Garnished with nutmeg.",
-      "instructions": "Fill a shaker with ice cubes.\nAdd 40ml of brandy, 50ml of milk, 10ml of simple syrup and an egg yolk.\nShake well and strain into a highball glass with ice.\nSprinkle with grated nutmeg.",
-      "glassId": "highball_glass",
+      "instructions": "1. Fill a shaker with ice cubes.\n2. Add 40ml of brandy, 50ml of milk, 10ml of simple syrup and an egg yolk.\n3. Shake well and strain into a highball glass with ice.\n4. Sprinkle with grated nutmeg.",
+      "photoUri": "assets/cocktails/1757000000103-brandy-eggnog.jpg",
+      "glassId": "rocks_glass",
       "methodIds": [
         "shake"
       ],
@@ -6577,25 +6605,34 @@
         },
         {
           "order": 4,
-          "ingredientId": 368774,
-          "name": "Egg",
+          "ingredientId": 777131,
+          "name": "Egg Yolk",
           "amount": "1",
           "unitId": 1
         },
         {
           "order": 5,
-          "ingredientId": 591435,
-          "name": "Nutmeg",
-          "amount": "2",
-          "unitId": 8,
-          "garnish": true
-        },
-        {
-          "order": 6,
           "ingredientId": 346304,
           "name": "Ice",
           "amount": "150",
           "unitId": 8
+        },
+        {
+          "order": 6,
+          "ingredientId": 591435,
+          "name": "Nutmeg",
+          "amount": "1",
+          "unitId": 15,
+          "garnish": true
+        },
+        {
+          "order": 7,
+          "ingredientId": 331650,
+          "name": "Cinnamon Sticks",
+          "amount": "1",
+          "unitId": 1,
+          "optional": true,
+          "garnish": true
         }
       ]
     },
@@ -6793,11 +6830,11 @@
       "id": 1757000000106,
       "name": "Breakfast Martini",
       "description": "A spirit-forward gin cocktail showcasing Gin, Triple Sec, Orange Marmalade—deep, aromatic, and meant to be savored. Garnished with lemon.",
-      "instructions": "Add 50ml of gin, 15ml of triple sec, 15ml of lemon juice and 1 teaspoon of marmalade to a shaker and stir to break up marmalade.\nAdd ice and shake.\nStrain into a chilled cocktail glass.\nGarnish with grated lemon zest.",
+      "instructions": "1. Add 50ml of gin, 15ml of triple sec, 15ml of lemon juice and 1 teaspoon of marmalade to a shaker and stir to break up the marmalade.\n1. Add ice and shake.\n1. Strain into a chilled cocktail glass.\n1. Garnish with grated lemon zest.",
       "glassId": "cocktail_glass",
       "methodIds": [
-        "shake",
-        "stir"
+        "stir",
+        "shake"
       ],
       "tags": [
         {
@@ -6850,8 +6887,7 @@
           "amount": "150",
           "unitId": 8
         }
-      ],
-      "updatedAt": 1758453407049
+      ]
     },
     {
       "id": 1755800000020,
@@ -6910,69 +6946,10 @@
       ]
     },
     {
-      "id": 1757000000107,
-      "name": "Buck cocktails",
-      "description": "Cocktails from the \"buck\" family use ginger ale or beer and citrus juice with a base liquor.",
-      "instructions": "Fill a collins glass with ice.\nPour 50ml of base liquor over the ice.\nAdd lime juice, and top with ginger ale or ginger beer.",
-      "glassId": "collins_glass",
-      "methodIds": [
-        "build"
-      ],
-      "tags": [
-        {
-          "id": 7,
-          "name": "soft",
-          "color": "#FFD54F"
-        },
-        {
-          "id": 8,
-          "name": "long",
-          "color": "#FFB74D"
-        }
-      ],
-      "ingredients": [
-        {
-          "order": 1,
-          "ingredientId": 861551,
-          "name": "White Rum",
-          "amount": "50",
-          "unitId": 11
-        },
-        {
-          "order": 2,
-          "ingredientId": 336572,
-          "name": "Lime",
-          "amount": "1",
-          "unitId": 27
-        },
-        {
-          "order": 3,
-          "ingredientId": 474349,
-          "name": "Ginger Ale",
-          "amount": "100",
-          "unitId": 11,
-          "substitutes": [
-            {
-              "id": 353113,
-              "name": "Ginger Beer"
-            }
-          ]
-        },
-        {
-          "order": 4,
-          "ingredientId": 346304,
-          "name": "Ice",
-          "amount": "150",
-          "unitId": 8
-        }
-      ],
-      "updatedAt": 1758453407049
-    },
-    {
       "id": 1757000000108,
       "name": "Buck's Fizz",
       "description": "A long drink of orange juice topped with sparkling wine.",
-      "instructions": "Pour 50ml of orange juice into the glass.\nTop with 100ml of champagne or dry sparkling wine and stir gently.\nGarnish with an orange twist.",
+      "instructions": "1. Pour 50ml of orange juice into the glass.\n2. Top with 100ml of champagne or dry sparkling wine and stir gently.\n3. Garnish with an orange twist.",
       "glassId": "champagne_flute",
       "methodIds": [
         "build"
@@ -6999,6 +6976,7 @@
           "substitutes": [
             {
               "id": 435337,
+              "ingredientId": 435337,
               "name": "Champagne"
             }
           ]
@@ -7018,8 +6996,7 @@
           "unitId": 26,
           "garnish": true
         }
-      ],
-      "updatedAt": 1758453407049
+      ]
     },
     {
       "id": 1757000000109,
@@ -7505,11 +7482,11 @@
       "name": "Caipirão",
       "description": "A bright spirit sour balancing Lime, Sugar, Licor Beirão with fresh citrus and a touch of sweetness for a crisp, refreshing sip.",
       "instructions": "Muddle lime wedges and sugar in a rocks glass.\nFill the glass with crushed ice.\nPour Licor Beirão over the ice.\nStir gently.",
-      "photoUri": "assets/cocktails/1756463822185-caipirao.jpg",
+      "photoUri": "assets/cocktails/1756463822185-caipir-o.jpg",
       "glassId": "rocks_glass",
       "methodIds": [
-        "build",
-        "muddle"
+        "muddle",
+        "build"
       ],
       "tags": [
         {
@@ -7560,8 +7537,8 @@
       "photoUri": "assets/cocktails/1755800000021-caipirinha.jpg",
       "glassId": "rocks_glass",
       "methodIds": [
-        "build",
-        "muddle"
+        "muddle",
+        "build"
       ],
       "tags": [
         {
@@ -7583,24 +7560,24 @@
       "ingredients": [
         {
           "order": 1,
+          "ingredientId": 131453,
+          "name": "Cachaça",
+          "amount": "60",
+          "unitId": 11
+        },
+        {
+          "order": 2,
           "ingredientId": 336572,
           "name": "Lime",
           "amount": "8",
           "unitId": 27
         },
         {
-          "order": 2,
+          "order": 3,
           "ingredientId": 217733,
           "name": "Sugar",
           "amount": "4",
           "unitId": 24
-        },
-        {
-          "order": 3,
-          "ingredientId": 131453,
-          "name": "Cachaça",
-          "amount": "60",
-          "unitId": 11
         }
       ]
     },
@@ -7612,8 +7589,8 @@
       "photoUri": "assets/cocktails/1756463553442-caipirissima.jpg",
       "glassId": "rocks_glass",
       "methodIds": [
-        "build",
-        "muddle"
+        "muddle",
+        "build"
       ],
       "tags": [
         {
@@ -7656,10 +7633,12 @@
           "substitutes": [
             {
               "id": 811139,
+              "ingredientId": 811139,
               "name": "Gold Rum"
             },
             {
               "id": 908571,
+              "ingredientId": 908571,
               "name": "Spiced Rum"
             }
           ]
@@ -7670,12 +7649,12 @@
       "id": 1756462968613,
       "name": "Caipiroska",
       "description": "A bright vodka sour balancing Vodka, Lime, Sugar with fresh citrus and a touch of sweetness for a crisp, refreshing sip.",
-      "instructions": "Muddle lime wedges and sugar in a rocks glass.\nFill the glass with crushed ice.\nPour vodka over the ice.\nStir gently.",
+      "instructions": "1. Muddle lime wedges and sugar in a rocks glass.\n2. Fill the glass with crushed ice.\n3. Pour vodka over the ice.\n4. Stir gently.",
       "photoUri": "assets/cocktails/1756462968613-caipiroska.jpg",
       "glassId": "rocks_glass",
       "methodIds": [
-        "build",
-        "muddle"
+        "muddle",
+        "build"
       ],
       "tags": [
         {
@@ -10527,7 +10506,7 @@
       "id": 1755800000032,
       "name": "Dark 'n Stormy",
       "description": "Spicy ginger beer topped with dark rum for a stormy refresher.",
-      "instructions": "Fill a highball glass with ice.\nPour dark rum and lime juice over the ice.\nTop with ginger beer.\nGarnish with a lime wedge.",
+      "instructions": "1. Fill a highball glass with ice.\n2. Pour dark rum and lime juice over the ice.\n3. Top with ginger beer.\n4. Garnish with a lime wedge.",
       "photoUri": "assets/cocktails/1755800000032-dark-n-stormy.jpg",
       "glassId": "highball_glass",
       "methodIds": [
@@ -11672,90 +11651,6 @@
         }
       ],
       "updatedAt": 1760347138802
-    },
-    {
-      "id": 1757000000148,
-      "name": "Eggnog (personal)",
-      "description": "A rich, creamy wine drink featuring Egg White, Dry Sherry, Spiced Rum—dessert-like, smooth, and indulgent. Garnished with nutmeg.",
-      "glassId": "rocks_glass",
-      "tags": [
-        {
-          "id": 6,
-          "name": "moderate",
-          "color": "#F06292"
-        }
-      ],
-      "ingredients": [
-        {
-          "order": 1,
-          "ingredientId": 450591,
-          "name": "Egg White",
-          "amount": "1",
-          "unitId": 1
-        },
-        {
-          "order": 2,
-          "ingredientId": 218380,
-          "name": "Dry Sherry",
-          "amount": "30",
-          "unitId": 11
-        },
-        {
-          "order": 3,
-          "ingredientId": 908571,
-          "name": "Spiced Rum",
-          "amount": "30",
-          "unitId": 11,
-          "substitutes": [
-            {
-              "id": 811139,
-              "ingredientId": 811139,
-              "name": "Gold Rum"
-            },
-            {
-              "id": 861551,
-              "ingredientId": 861551,
-              "name": "White Rum"
-            }
-          ]
-        },
-        {
-          "order": 4,
-          "ingredientId": 564821,
-          "name": "Cream",
-          "amount": "30",
-          "unitId": 11
-        },
-        {
-          "order": 5,
-          "ingredientId": 38882,
-          "name": "Milk",
-          "amount": "30",
-          "unitId": 11
-        },
-        {
-          "order": 6,
-          "ingredientId": 1755453836546,
-          "name": "Demerara Sugar Syrup",
-          "amount": "30",
-          "unitId": 11
-        },
-        {
-          "order": 7,
-          "ingredientId": 346304,
-          "name": "Ice",
-          "amount": "150",
-          "unitId": 8
-        },
-        {
-          "order": 8,
-          "ingredientId": 591435,
-          "name": "Nutmeg",
-          "amount": "1",
-          "unitId": 15,
-          "garnish": true
-        }
-      ]
     },
     {
       "id": 1760961933773,
@@ -17209,7 +17104,8 @@
       "id": 1757000000198,
       "name": "Jack and Coke",
       "description": "Simple and popular mix of Jack Daniel's and cola.",
-      "instructions": "Fill a collins glass with ice.\nPour 50ml of Jack Daniel's and 150ml of cola over the ice.\nStir gently.",
+      "instructions": "1. Fill a collins glass with ice.\n2. Pour 50ml of Jack Daniel's and 150ml of cola over the ice.\n3. Stir gently.",
+      "photoUri": "assets/cocktails/1757000000198-jack-and-coke.jpg",
       "glassId": "collins_glass",
       "methodIds": [
         "build"
@@ -17248,8 +17144,7 @@
           "amount": "150",
           "unitId": 8
         }
-      ],
-      "updatedAt": 1758453407052
+      ]
     },
     {
       "id": 1757000000199,
@@ -20924,10 +20819,11 @@
       "id": 1757000000236,
       "name": "Mind Eraser",
       "description": "A long, sparkling vodka drink built for easy sipping, pairing Vodka, Coffee Liqueur, Tonic with bubbly mixers over ice.",
-      "instructions": "Fill a rocks glass with ice cubes.\nAdd 30ml of vodka, 30ml of coffee liqueur and 30ml of tonic water.\nStir slightly.",
+      "instructions": "1. Fill a rocks glass with ice cubes.\n2. Add 30ml of vodka, 30ml of coffee liqueur and 30ml of tonic water.\n3. Stir slightly.",
+      "photoUri": "assets/cocktails/1757000000236-mind-eraser.jpg",
       "glassId": "rocks_glass",
       "methodIds": [
-        "stir"
+        "build"
       ],
       "tags": [
         {
@@ -20965,8 +20861,7 @@
           "amount": "150",
           "unitId": 8
         }
-      ],
-      "updatedAt": 1758453407053
+      ]
     },
     {
       "id": 1755800000066,
@@ -25638,6 +25533,164 @@
       ]
     },
     {
+      "id": 1757000000107,
+      "name": "Rum Buck",
+      "description": "Cocktails from the \"buck\" family use ginger ale or beer and citrus juice with a base liquor.",
+      "instructions": "1. Fill a collins glass with ice.\n2. Pour 50ml of base liquor over the ice.\n3. Add lime juice, and top with ginger ale or ginger beer.",
+      "photoUri": "assets/cocktails/1757000000107-rum-buck.jpg",
+      "glassId": "collins_glass",
+      "methodIds": [
+        "build"
+      ],
+      "tags": [
+        {
+          "id": 7,
+          "name": "soft",
+          "color": "#FFD54F"
+        },
+        {
+          "id": 8,
+          "name": "long",
+          "color": "#FFB74D"
+        }
+      ],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 861551,
+          "name": "White Rum",
+          "amount": "50",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 474349,
+          "name": "Ginger Ale",
+          "amount": "100",
+          "unitId": 11,
+          "substitutes": [
+            {
+              "id": 353113,
+              "ingredientId": 353113,
+              "name": "Ginger Beer"
+            }
+          ]
+        },
+        {
+          "order": 3,
+          "ingredientId": 346304,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8
+        },
+        {
+          "order": 4,
+          "ingredientId": 336572,
+          "name": "Lime",
+          "amount": "1",
+          "unitId": 27,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 1757000000148,
+      "name": "Rum Eggnog",
+      "description": "A rich, creamy wine drink featuring Egg White, Dry Sherry, Spiced Rum—dessert-like, smooth, and indulgent. Garnished with nutmeg.",
+      "photoUri": "assets/cocktails/1757000000148-rum-eggnog.jpg",
+      "glassId": "rocks_glass",
+      "methodIds": [
+        "shake"
+      ],
+      "tags": [
+        {
+          "id": 6,
+          "name": "moderate",
+          "color": "#F06292"
+        }
+      ],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 450591,
+          "name": "Egg White",
+          "amount": "1",
+          "unitId": 1
+        },
+        {
+          "order": 2,
+          "ingredientId": 218380,
+          "name": "Dry Sherry",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 908571,
+          "name": "Spiced Rum",
+          "amount": "30",
+          "unitId": 11,
+          "substitutes": [
+            {
+              "id": 811139,
+              "ingredientId": 811139,
+              "name": "Gold Rum"
+            },
+            {
+              "id": 861551,
+              "ingredientId": 861551,
+              "name": "White Rum"
+            }
+          ]
+        },
+        {
+          "order": 4,
+          "ingredientId": 564821,
+          "name": "Cream",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 38882,
+          "name": "Milk",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 1755453836546,
+          "name": "Demerara Sugar Syrup",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 7,
+          "ingredientId": 346304,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8
+        },
+        {
+          "order": 8,
+          "ingredientId": 591435,
+          "name": "Nutmeg",
+          "amount": "1",
+          "unitId": 15,
+          "garnish": true
+        },
+        {
+          "order": 9,
+          "ingredientId": 331650,
+          "name": "Cinnamon Sticks",
+          "amount": "1",
+          "unitId": 1,
+          "optional": true,
+          "garnish": true
+        }
+      ]
+    },
+    {
       "id": 1757000000262,
       "name": "Rum Old Fashioned",
       "description": "A variation of the classic \"Old Fashioned\" cocktail with aged rum instead of bourbon or rye. Some recipes also suggest adding a small amount of high-proof overproof rum.",
@@ -30263,6 +30316,83 @@
       "updatedAt": 1758453407055
     },
     {
+      "id": 1758747463094,
+      "name": "Tropical Bananarama",
+      "description": "A Bananarama cocktail is a tropical, fruit-forward drink that typically features banana liqueur or purée as its primary flavour. Because it is a modern creation, recipes vary significantly depending on the desired profile.",
+      "instructions": "1. Add ice and all liquid ingredients to a blender.\n2. Add a fresh banana.\n3. Blend until silky smooth.\n4. Pour into a hurricane glass and garnish with a fresh banana slice.",
+      "photoUri": "assets/cocktails/1758747463094-tropical-bananarama.jpg",
+      "glassId": "hurricane_glass",
+      "methodIds": [
+        "blend"
+      ],
+      "tags": [
+        {
+          "id": 6,
+          "name": "moderate",
+          "color": "#F06292"
+        }
+      ],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 16862,
+          "name": "Vodka",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 705618,
+          "name": "Coffee Liqueur",
+          "amount": "20",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 1759483024682,
+          "name": "Whiskey Cream",
+          "amount": "15",
+          "unitId": 11,
+          "substitutes": [
+            {
+              "id": 626592,
+              "ingredientId": 626592,
+              "name": "Irish Cream"
+            }
+          ]
+        },
+        {
+          "order": 4,
+          "ingredientId": 564821,
+          "name": "Cream",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 609552,
+          "name": "Banana",
+          "amount": "0.5",
+          "unitId": 1
+        },
+        {
+          "order": 6,
+          "ingredientId": 346304,
+          "name": "Ice",
+          "amount": "240",
+          "unitId": 8
+        },
+        {
+          "order": 7,
+          "ingredientId": 609552,
+          "name": "Banana",
+          "amount": "1",
+          "unitId": 19,
+          "garnish": true
+        }
+      ]
+    },
+    {
       "id": 1758627022244,
       "name": "Tropical Queen",
       "description": "A tropical gin cocktail with Gin, Coconut Liqueur, Cinnamon Syrup, layered with citrus and sweetness for a lush, beachy vibe.",
@@ -30970,6 +31100,62 @@
           "name": "Lemon",
           "amount": "1",
           "unitId": 26,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 1760963780623,
+      "name": "Virgin Bananarama",
+      "description": "A Bananarama cocktail is a tropical, fruit-forward drink that typically features banana liqueur or purée as its primary flavour. Because it is a modern creation, recipes vary significantly depending on the desired profile.",
+      "instructions": "Combine all ingredients in a blender with ice and blend until smooth.",
+      "photoUri": "assets/cocktails/1760963780623-virgin-bananarama.jpg",
+      "glassId": "hurricane_glass",
+      "methodIds": [
+        "blend"
+      ],
+      "tags": [
+        {
+          "id": 10,
+          "name": "non-alcoholic",
+          "color": "#CBD664"
+        }
+      ],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 105618,
+          "name": "Apricot Nectar",
+          "amount": "120",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 140127,
+          "name": "Coconut Milk",
+          "amount": "45",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 609552,
+          "name": "Banana",
+          "amount": "0.5",
+          "unitId": 1
+        },
+        {
+          "order": 4,
+          "ingredientId": 346304,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 609552,
+          "name": "Banana",
+          "amount": "1",
+          "unitId": 19,
           "garnish": true
         }
       ]
@@ -38727,6 +38913,7 @@
         }
       ],
       "usageCount": 0,
+      "photoUri": "assets/ingredients/1759483024681-tequila-reposado.jpg",
       "searchName": "tequila reposado",
       "searchTokens": [
         "tequila",
@@ -38748,6 +38935,17 @@
       "searchName": "almond",
       "searchTokens": [
         "almond"
+      ]
+    },
+    {
+      "id": 1759483024682,
+      "name": "Whiskey Cream",
+      "usageCount": 0,
+      "photoUri": "assets/ingredients/1759483024682-whiskey-cream.jpg",
+      "searchName": "whiskey cream",
+      "searchTokens": [
+        "whiskey",
+        "cream"
       ]
     }
   ]
