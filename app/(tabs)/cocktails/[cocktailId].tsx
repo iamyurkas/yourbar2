@@ -815,6 +815,7 @@ export default function CocktailDetailsScreen() {
                         <ListRow
                           title={resolution.resolvedName || ingredient.name || ''}
                           subtitle={subtitle}
+                          subtitleNumberOfLines={2}
                           subtitleStyle={
                             subtitle
                               ? [styles.ingredientSubtitle, { color: Colors.onSurfaceVariant }]
