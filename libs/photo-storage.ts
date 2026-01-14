@@ -1,3 +1,4 @@
+import { Buffer } from 'buffer';
 import * as FileSystem from 'expo-file-system/legacy';
 import * as ImageManipulator from 'expo-image-manipulator';
 
@@ -68,28 +69,46 @@ export const storePhoto = async ({ uri, id, name, category, suffix }: StorePhoto
       height,
     );
 
-    const actions: ImageManipulator.Action[] = [];
-
-    if (Number.isFinite(width) && Number.isFinite(height)) {
-      actions.push({
-        extent: { width, height, backgroundColor: '#ffffff' },
-      });
-    }
-
-    if (shouldResize) {
-      actions.push({ resize: { width: targetWidth, height: targetHeight } });
-    }
+    const actions: ImageManipulator.Action[] = shouldResize
+      ? [{ resize: { width: targetWidth, height: targetHeight } }]
+      : [];
 
     const result = await ImageManipulator.manipulateAsync(uri, actions, {
       compress: 0.9,
-      format: ImageManipulator.SaveFormat.JPEG,
+      format: ImageManipulator.SaveFormat.PNG,
+      base64: true,
     });
 
     const fileName = buildPhotoFileName(id, name, 'jpg', suffix);
     const targetUri = `${directory}${fileName}`;
 
+    let flattenedUri: string | null = null;
+    const base64 = result.base64;
+
+    if (base64) {
+      try {
+        const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" width="${result.width}" height="${result.height}"><rect width="100%" height="100%" fill="white"/><image href="data:image/png;base64,${base64}" width="100%" height="100%"/></svg>`;
+        const svgUri = `data:image/svg+xml;base64,${Buffer.from(svgMarkup).toString('base64')}`;
+        const flattened = await ImageManipulator.manipulateAsync(svgUri, [], {
+          compress: 0.9,
+          format: ImageManipulator.SaveFormat.JPEG,
+        });
+        flattenedUri = flattened.uri;
+      } catch (innerError) {
+        console.warn('Failed to flatten photo with SVG background', innerError);
+      }
+    }
+
+    if (!flattenedUri) {
+      const fallback = await ImageManipulator.manipulateAsync(result.uri, [], {
+        compress: 0.9,
+        format: ImageManipulator.SaveFormat.JPEG,
+      });
+      flattenedUri = fallback.uri;
+    }
+
     await FileSystem.deleteAsync(targetUri, { idempotent: true });
-    await FileSystem.moveAsync({ from: result.uri, to: targetUri });
+    await FileSystem.moveAsync({ from: flattenedUri, to: targetUri });
 
     return targetUri;
   } catch (error) {
