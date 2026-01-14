@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
 import { Redirect } from 'expo-router';
 
+import { SplashScreen } from '@/components/SplashScreen';
 import { setLastCocktailTab, setLastIngredientTab } from '@/libs/collection-tabs';
 import { useInventory, type StartScreen } from '@/providers/inventory-provider';
 
@@ -58,7 +59,7 @@ export default function Index() {
   const targetHref = useMemo(() => getHrefForStartScreen(startScreen), [startScreen]);
 
   if (loading) {
-    return null;
+    return <SplashScreen />;
   }
 
   return <Redirect href={targetHref} />;
