@@ -13,6 +13,7 @@ type StorePhotoInput = {
   id: number | string;
   name: string;
   category: PhotoCategory;
+  suffix?: string;
 };
 
 const ensurePhotoDirectory = async (category: PhotoCategory) => {
@@ -45,7 +46,7 @@ const getResizedDimensions = (width: number, height: number) => {
   };
 };
 
-export const storePhoto = async ({ uri, id, name, category }: StorePhotoInput) => {
+export const storePhoto = async ({ uri, id, name, category, suffix }: StorePhotoInput) => {
   if (!uri) {
     return undefined;
   }
@@ -76,7 +77,7 @@ export const storePhoto = async ({ uri, id, name, category }: StorePhotoInput) =
       format: ImageManipulator.SaveFormat.JPEG,
     });
 
-    const fileName = buildPhotoFileName(id, name, 'jpg');
+    const fileName = buildPhotoFileName(id, name, 'jpg', suffix);
     const targetUri = `${directory}${fileName}`;
 
     await FileSystem.deleteAsync(targetUri, { idempotent: true });
