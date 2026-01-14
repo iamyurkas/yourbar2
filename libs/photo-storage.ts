@@ -68,9 +68,23 @@ export const storePhoto = async ({ uri, id, name, category, suffix }: StorePhoto
       height,
     );
 
-    const actions = shouldResize
-      ? [{ resize: { width: targetWidth, height: targetHeight } }]
-      : [];
+    const actions: ImageManipulator.Action[] = [];
+
+    if (shouldResize) {
+      actions.push({ resize: { width: targetWidth, height: targetHeight } });
+    }
+
+    if (Number.isFinite(targetWidth) && Number.isFinite(targetHeight) && targetWidth > 0 && targetHeight > 0) {
+      actions.push({
+        extent: {
+          backgroundColor: '#ffffff',
+          originX: 0,
+          originY: 0,
+          width: targetWidth,
+          height: targetHeight,
+        },
+      });
+    }
 
     const result = await ImageManipulator.manipulateAsync(uri, actions, {
       compress: 0.9,
