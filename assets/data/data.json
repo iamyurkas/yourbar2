@@ -6692,7 +6692,7 @@
       "name": "Brandy Separator",
       "description": "A variation of the 'White Russian', this cocktail is close to the 'Sneaky Pete', but smoother. The amount of milk can be varied according to taste.",
       "instructions": "1. Fill a rocks glass with ice cubes.\n2. Add 15ml of coffee liqueur, 30ml of brandy and 100ml of milk.\n3. Stir gently.",
-      "photoUri": "assets/cocktails/1757000000104-brandy-separator-1768348870130.jpg",
+      "photoUri": "assets/cocktails/1757000000104-brandy-separator.jpg",
       "glassId": "rocks_glass",
       "methodIds": [
         "build"
@@ -6747,7 +6747,7 @@
       "name": "Brave Bull",
       "description": "A spirit-forward agave spirit cocktail showcasing Tequila Blanco, Kahlua—deep, aromatic, and meant to be savored.",
       "instructions": "1. Fill a rocks glass with ice cubes.\n2. Pour 50ml of silver tequila and 30ml of Kahlua.\n3. Stir a little bit to lightly mix the ingredients.",
-      "photoUri": "assets/cocktails/1757000000105-brave-bull-1768425328987.jpg",
+      "photoUri": "assets/cocktails/1757000000105-brave-bull.jpg",
       "glassId": "rocks_glass",
       "methodIds": [
         "stir"
