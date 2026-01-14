@@ -5,6 +5,7 @@ import { buildPhotoFileName } from '@/libs/photo-utils';
 
 const PHOTO_MAX_SIDE = 150;
 const PHOTO_ROOT = 'photos';
+const PHOTO_BACKGROUND_COLOR = '#ffffff';
 
 type PhotoCategory = 'cocktails' | 'ingredients';
 
@@ -63,14 +64,29 @@ export const storePhoto = async ({ uri, id, name, category, suffix }: StorePhoto
   try {
     const metadata = await ImageManipulator.manipulateAsync(uri, [], { base64: false });
     const { width, height } = metadata;
+    const hasValidDimensions =
+      Number.isFinite(width) && Number.isFinite(height) && width > 0 && height > 0;
     const { width: targetWidth, height: targetHeight, shouldResize } = getResizedDimensions(
       width,
       height,
     );
 
-    const actions = shouldResize
-      ? [{ resize: { width: targetWidth, height: targetHeight } }]
-      : [];
+    const actions: ImageManipulator.Action[] = [];
+
+    if (shouldResize) {
+      actions.push({ resize: { width: targetWidth, height: targetHeight } });
+    }
+    if (hasValidDimensions) {
+      actions.push({
+        extent: {
+          originX: 0,
+          originY: 0,
+          width: shouldResize ? targetWidth : width,
+          height: shouldResize ? targetHeight : height,
+          backgroundColor: PHOTO_BACKGROUND_COLOR,
+        },
+      });
+    }
 
     const result = await ImageManipulator.manipulateAsync(uri, actions, {
       compress: 0.9,
