@@ -20,6 +20,7 @@ import {
   type InventoryDeltaSnapshot,
   type InventorySnapshot,
 } from '@/libs/inventory-storage';
+import { buildPhotoBaseName } from '@/libs/photo-utils';
 import { normalizeSearchText } from '@/libs/search-normalization';
 
 type BaseCocktailRecord = InventoryData['cocktails'][number];
@@ -321,7 +322,19 @@ function toIngredientStorageRecord(ingredient: Ingredient | IngredientRecord): I
 
 const BACKUP_PHOTO_URI_PATTERN = /\/photos\/(cocktails|ingredients)\/([^/]+)$/;
 
-function normalizePhotoUriForBackup(uri?: string | null): string | undefined {
+type PhotoBackupContext = {
+  uri?: string | null;
+  category: 'cocktails' | 'ingredients';
+  id?: number | string | null;
+  name?: string | null;
+};
+
+function normalizePhotoUriForBackup({
+  uri,
+  category,
+  id,
+  name,
+}: PhotoBackupContext): string | undefined {
   if (!uri) {
     return undefined;
   }
@@ -335,8 +348,8 @@ function normalizePhotoUriForBackup(uri?: string | null): string | undefined {
     return uri;
   }
 
-  const [, category, filename] = match;
-  return `assets/${category}/${filename}`;
+  const baseName = buildPhotoBaseName(id ?? 'photo', name ?? 'photo');
+  return `assets/${category}/${baseName}.jpg`;
 }
 
 function areStorageRecordsEqual<TRecord>(left: TRecord, right: TRecord): boolean {
@@ -1270,7 +1283,12 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       const record = toCocktailStorageRecord(cocktail);
       return {
         ...record,
-        photoUri: normalizePhotoUriForBackup(record.photoUri),
+        photoUri: normalizePhotoUriForBackup({
+          uri: record.photoUri,
+          category: 'cocktails',
+          id: record.id,
+          name: record.name,
+        }),
       };
     });
     const ingredients = inventoryState.ingredients.map((ingredient) => {
@@ -1287,7 +1305,12 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         ...record,
         searchName: normalizedSearchName,
         searchTokens,
-        photoUri: normalizePhotoUriForBackup(record.photoUri),
+        photoUri: normalizePhotoUriForBackup({
+          uri: record.photoUri,
+          category: 'ingredients',
+          id: record.id,
+          name: record.name,
+        }),
       };
     });
 
