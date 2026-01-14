@@ -6692,6 +6692,7 @@
       "name": "Brandy Separator",
       "description": "A variation of the 'White Russian', this cocktail is close to the 'Sneaky Pete', but smoother. The amount of milk can be varied according to taste.",
       "instructions": "1. Fill a rocks glass with ice cubes.\n2. Add 15ml of coffee liqueur, 30ml of brandy and 100ml of milk.\n3. Stir gently.",
+      "photoUri": "assets/cocktails/1757000000104-brandy-separator-1768348870130.jpg",
       "glassId": "rocks_glass",
       "methodIds": [
         "build"
@@ -6706,46 +6707,47 @@
       "ingredients": [
         {
           "order": 1,
-          "ingredientId": 705618,
-          "name": "Coffee Liqueur",
-          "amount": "15",
+          "ingredientId": 435165,
+          "name": "Brandy",
+          "amount": "45",
           "unitId": 11,
           "substitutes": [
             {
-              "id": 406487,
-              "name": "Coffee Brandy"
+              "id": 502166,
+              "ingredientId": 502166,
+              "name": "Cognac"
             }
           ]
         },
         {
           "order": 2,
-          "ingredientId": 435165,
-          "name": "Brandy",
-          "amount": "30",
-          "unitId": 11
+          "ingredientId": 705618,
+          "name": "Coffee Liqueur",
+          "amount": "22.5",
+          "unitId": 11,
+          "substitutes": [
+            {
+              "id": 406487,
+              "ingredientId": 406487,
+              "name": "Coffee Brandy"
+            }
+          ]
         },
         {
           "order": 3,
-          "ingredientId": 38882,
-          "name": "Milk",
-          "amount": "100",
-          "unitId": 11
-        },
-        {
-          "order": 4,
           "ingredientId": 346304,
           "name": "Ice",
-          "amount": "150",
+          "amount": "90",
           "unitId": 8
         }
-      ],
-      "updatedAt": 1758628995442
+      ]
     },
     {
       "id": 1757000000105,
       "name": "Brave Bull",
       "description": "A spirit-forward agave spirit cocktail showcasing Tequila Blanco, Kahlua—deep, aromatic, and meant to be savored.",
-      "instructions": "Fill a rocks glass with ice cubes.\nPour 50ml of silver tequila and 30ml of Kahlua.\nStir a little bit to lightly mix the ingredients.",
+      "instructions": "1. Fill a rocks glass with ice cubes.\n2. Pour 50ml of silver tequila and 30ml of Kahlua.\n3. Stir a little bit to lightly mix the ingredients.",
+      "photoUri": "assets/cocktails/1757000000105-brave-bull-1768425328987.jpg",
       "glassId": "rocks_glass",
       "methodIds": [
         "stir"
@@ -6775,6 +6777,7 @@
           "substitutes": [
             {
               "id": 406487,
+              "ingredientId": 406487,
               "name": "Coffee Brandy"
             }
           ]
@@ -6786,8 +6789,7 @@
           "amount": "150",
           "unitId": 8
         }
-      ],
-      "updatedAt": 1758629108802
+      ]
     },
     {
       "id": 1759444606454,

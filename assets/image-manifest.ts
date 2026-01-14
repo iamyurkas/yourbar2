@@ -588,6 +588,8 @@ export const cocktailImages: Record<string, number> = {
   'assets/cocktails/1757000000101-brain-tumor.jpg': require('./cocktails/1757000000101-brain-tumor.jpg'),
   'assets/cocktails/1757000000102-brandy-daisy.jpg': require('./cocktails/1757000000102-brandy-daisy.jpg'),
   'assets/cocktails/1757000000103-brandy-eggnog.jpg': require('./cocktails/1757000000103-brandy-eggnog.jpg'),
+  'assets/cocktails/1757000000104-brandy-separator.jpg': require('./cocktails/1757000000104-brandy-separator.jpg'),
+  'assets/cocktails/1757000000105-brave-bull.jpg': require('./cocktails/1757000000105-brave-bull.jpg'),
   'assets/cocktails/1757000000106-breakfast-martini.jpg': require('./cocktails/1757000000106-breakfast-martini.jpg'),
   'assets/cocktails/1757000000107-rum-buck.jpg': require('./cocktails/1757000000107-rum-buck.jpg'),
   'assets/cocktails/1757000000115-calypso-coffee.jpg': require('./cocktails/1757000000115-calypso-coffee.jpg'),
