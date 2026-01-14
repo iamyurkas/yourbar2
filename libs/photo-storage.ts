@@ -64,31 +64,33 @@ export const storePhoto = async ({ uri, id, name, category, suffix }: StorePhoto
   try {
     const metadata = await ImageManipulator.manipulateAsync(uri, [], { base64: false });
     const { width, height } = metadata;
-    const hasValidDimensions =
-      Number.isFinite(width) && Number.isFinite(height) && width > 0 && height > 0;
     const { width: targetWidth, height: targetHeight, shouldResize } = getResizedDimensions(
       width,
       height,
     );
 
-    const actions: ImageManipulator.Action[] = [];
+    const resizeActions: ImageManipulator.Action[] = shouldResize
+      ? [{ resize: { width: targetWidth, height: targetHeight } }]
+      : [];
 
-    if (shouldResize) {
-      actions.push({ resize: { width: targetWidth, height: targetHeight } });
-    }
-    if (hasValidDimensions) {
-      actions.push({
+    const resizedResult = await ImageManipulator.manipulateAsync(uri, resizeActions, {
+      compress: 1,
+      format: ImageManipulator.SaveFormat.PNG,
+    });
+
+    const extentActions: ImageManipulator.Action[] = [
+      {
         extent: {
           originX: 0,
           originY: 0,
-          width: shouldResize ? targetWidth : width,
-          height: shouldResize ? targetHeight : height,
+          width: resizedResult.width,
+          height: resizedResult.height,
           backgroundColor: PHOTO_BACKGROUND_COLOR,
         },
-      });
-    }
+      },
+    ];
 
-    const result = await ImageManipulator.manipulateAsync(uri, actions, {
+    const result = await ImageManipulator.manipulateAsync(resizedResult.uri, extentActions, {
       compress: 0.9,
       format: ImageManipulator.SaveFormat.JPEG,
     });
