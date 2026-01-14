@@ -1,6 +1,5 @@
 import * as FileSystem from 'expo-file-system/legacy';
 import * as ImageManipulator from 'expo-image-manipulator';
-import { Platform } from 'react-native';
 
 import { buildPhotoFileName } from '@/libs/photo-utils';
 
@@ -29,23 +28,6 @@ const ensurePhotoDirectory = async (category: PhotoCategory) => {
 };
 
 const isLocalFileUri = (uri: string) => uri.startsWith('file:') || uri.startsWith('content:');
-
-const isPngUri = (uri: string) => /\.png(?:$|[?#])/i.test(uri);
-
-const resolveSaveOptions = (uri: string) => {
-  const isPngSource = isPngUri(uri);
-  const shouldFlattenTransparency = isPngSource && Platform.OS === 'web';
-  const format =
-    isPngSource && Platform.OS !== 'web'
-      ? ImageManipulator.SaveFormat.PNG
-      : ImageManipulator.SaveFormat.JPEG;
-
-  return {
-    format,
-    extension: format === ImageManipulator.SaveFormat.PNG ? 'png' : 'jpg',
-    shouldFlattenTransparency,
-  };
-};
 
 const getResizedDimensions = (width: number, height: number) => {
   const longestSide = Math.max(width, height);
@@ -86,20 +68,13 @@ export const storePhoto = async ({ uri, id, name, category, suffix }: StorePhoto
       height,
     );
 
-    const { format, extension, shouldFlattenTransparency } = resolveSaveOptions(uri);
     const actions: ImageManipulator.Action[] = [];
 
     if (shouldResize) {
       actions.push({ resize: { width: targetWidth, height: targetHeight } });
     }
 
-    if (
-      shouldFlattenTransparency &&
-      Number.isFinite(targetWidth) &&
-      Number.isFinite(targetHeight) &&
-      targetWidth > 0 &&
-      targetHeight > 0
-    ) {
+    if (Number.isFinite(targetWidth) && Number.isFinite(targetHeight) && targetWidth > 0 && targetHeight > 0) {
       actions.push({
         extent: {
           backgroundColor: '#ffffff',
@@ -113,10 +88,10 @@ export const storePhoto = async ({ uri, id, name, category, suffix }: StorePhoto
 
     const result = await ImageManipulator.manipulateAsync(uri, actions, {
       compress: 0.9,
-      format,
+      format: ImageManipulator.SaveFormat.JPEG,
     });
 
-    const fileName = buildPhotoFileName(id, name, extension, suffix);
+    const fileName = buildPhotoFileName(id, name, 'jpg', suffix);
     const targetUri = `${directory}${fileName}`;
 
     await FileSystem.deleteAsync(targetUri, { idempotent: true });
