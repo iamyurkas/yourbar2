@@ -1038,86 +1038,6 @@
       ]
     },
     {
-      "id": 1756482784515,
-      "name": "Almond Old Fashioned",
-      "description": "A bold, spirit-forward whiskey drink built around Bourbon, Amaretto, Demerara Sugar Syrup—bitter-leaning, aromatic, and best served well chilled. Garnished with orange.",
-      "instructions": "1. Add the demerara sugar syrup and bitters to a mixing glass.\n2. Pour in the bourbon and amaretto.\n3. Fill the mixing glass with ice and stir for 20–30 seconds until well chilled and diluted.\n4. Strain the mixture into a rocks glass over a large ice cube.\n5. Express an orange peel over the drink to release the oils, then garnish with almonds and serve.",
-      "photoUri": "assets/cocktails/1756482784515-almond-old-fashioned.jpg",
-      "glassId": "rocks_glass",
-      "methodIds": [
-        "muddle",
-        "build"
-      ],
-      "tags": [
-        {
-          "id": 5,
-          "name": "strong",
-          "color": "#ec5a5a"
-        }
-      ],
-      "ingredients": [
-        {
-          "order": 1,
-          "ingredientId": 342124,
-          "name": "Bourbon",
-          "amount": "60",
-          "unitId": 11
-        },
-        {
-          "order": 2,
-          "ingredientId": 728860,
-          "name": "Amaretto",
-          "amount": "10",
-          "unitId": 11
-        },
-        {
-          "order": 3,
-          "ingredientId": 1755453836546,
-          "name": "Demerara Sugar Syrup",
-          "amount": "5",
-          "unitId": 11,
-          "substitutes": [
-            {
-              "id": 150490,
-              "name": "Simple Syrup"
-            }
-          ]
-        },
-        {
-          "order": 4,
-          "ingredientId": 401724,
-          "name": "Angostura Bitters",
-          "amount": "1",
-          "unitId": 6,
-          "allowBaseSubstitution": true
-        },
-        {
-          "order": 5,
-          "ingredientId": 454059,
-          "name": "Orange",
-          "amount": "1",
-          "unitId": 26,
-          "optional": true,
-          "garnish": true
-        },
-        {
-          "order": 6,
-          "ingredientId": 346304,
-          "name": "Ice",
-          "amount": "150",
-          "unitId": 8
-        },
-        {
-          "order": 7,
-          "ingredientId": 1756483214932,
-          "name": "Almond",
-          "amount": "3",
-          "unitId": 1,
-          "garnish": true
-        }
-      ]
-    },
-    {
       "id": 1759480212593,
       "name": "Alpine Avenger",
       "description": "A rich, creamy dessert cocktail combining the cool freshness of Peppermint Schnapps with the smooth sweetness of White Crème de Cacao and milk. Velvety, chocolatey, and refreshing at the same time, it tastes like a liquid mint chocolate dessert served warm or chilled.",
@@ -9910,8 +9830,12 @@
       "id": 1757000000129,
       "name": "Corpse Reviver",
       "description": "A bold, spirit-forward brandy drink built around Cognac, Calvados, Red Vermouth—bitter-leaning, aromatic, and best served well chilled.",
-      "instructions": "",
+      "instructions": "1. Shake all ingredients with ice and strain into a cocktail glass. \n2. Garnish with an orange wedge.",
+      "photoUri": "assets/cocktails/1757000000129-corpse-reviver.jpg",
       "glassId": "cocktail_glass",
+      "methodIds": [
+        "shake"
+      ],
       "tags": [
         {
           "id": 5,
@@ -9925,7 +9849,14 @@
           "ingredientId": 502166,
           "name": "Cognac",
           "amount": "60",
-          "unitId": 11
+          "unitId": 11,
+          "substitutes": [
+            {
+              "id": 435165,
+              "ingredientId": 435165,
+              "name": "Brandy"
+            }
+          ]
         },
         {
           "order": 2,
@@ -9947,9 +9878,16 @@
           "name": "Ice",
           "amount": "150",
           "unitId": 8
+        },
+        {
+          "order": 5,
+          "ingredientId": 454059,
+          "name": "Orange",
+          "amount": "1",
+          "unitId": 27,
+          "garnish": true
         }
-      ],
-      "updatedAt": 1758453407050
+      ]
     },
     {
       "id": 1755800000028,
@@ -10623,6 +10561,7 @@
       "id": 1757000000134,
       "name": "Dandy",
       "description": "A bold, spirit-forward whiskey drink built around Whisky, Dubonnet, Cointreau—bitter-leaning, aromatic, and best served well chilled. Garnished with orange.",
+      "instructions": "1. Add whiskey, Dubonnet, bitters, and Cointreau into a mixing glass filled with ice.\n2. Stir well until thoroughly chilled (do not shake for this version to maintain clarity).\n3. Strain into a chilled cocktail or coupe glass.\n4. Express both the lemon and orange peels over the drink and drop them in.",
       "photoUri": "assets/cocktails/1757000000134-dandy.jpg",
       "glassId": "cocktail_glass",
       "methodIds": [
@@ -10685,14 +10624,15 @@
           "name": "Orange",
           "amount": "1",
           "unitId": 26,
-          "garnish": true,
-          "substitutes": [
-            {
-              "id": 108496,
-              "ingredientId": 108496,
-              "name": "Lemon"
-            }
-          ]
+          "garnish": true
+        },
+        {
+          "order": 7,
+          "ingredientId": 108496,
+          "name": "Lemon",
+          "amount": "1",
+          "unitId": 26,
+          "garnish": true
         }
       ]
     },
@@ -10748,9 +10688,12 @@
       "id": 1759437385614,
       "name": "Death & Taxes",
       "description": "A complex whiskey cocktail where Scotch Whiskey, Gin, Punt e Mes meets citrus—bittersweet, zesty, and nicely structured. Garnished with lemon.",
-      "instructions": "",
+      "instructions": "1. Add all ingredients into a mixing glass filled with ice.\n2. Stir for approximately 20–30 seconds until the drink is well-chilled and properly diluted.\n3. Strain into a pre-chilled coupe or Nick & Nora glass.\n4. Express the oils from a lemon twist over the surface of the drink and drop it in.",
       "photoUri": "assets/cocktails/1759437385614-death-and-taxes.jpg",
       "glassId": "nick_and_nora",
+      "methodIds": [
+        "stir"
+      ],
       "tags": [
         {
           "id": 5,
@@ -10762,7 +10705,7 @@
         {
           "order": 1,
           "ingredientId": 140867,
-          "name": "Scotch Whiskey",
+          "name": "Scotch Whisky",
           "amount": "30",
           "unitId": 11
         },
@@ -10815,8 +10758,12 @@
       "id": 1757000000135,
       "name": "Death In The Afternoon",
       "description": "A spirit-forward wine cocktail showcasing Absinthe, Sparkling Wine—deep, aromatic, and meant to be savored.",
-      "instructions": "",
+      "instructions": "1. Pour the absinthe (and simple syrup, if using) into a chilled Champagne flute or coupe glass.\n2. Slowly top with the chilled Champagne to trigger the clouding effect.\n3. Garnish with a lemon twist or rose petal.",
+      "photoUri": "assets/cocktails/1757000000135-death-in-the-afternoon.jpg",
       "glassId": "champagne_flute",
+      "methodIds": [
+        "build"
+      ],
       "tags": [
         {
           "id": 6,
@@ -10834,20 +10781,40 @@
         },
         {
           "order": 2,
+          "ingredientId": 150490,
+          "name": "Simple Syrup",
+          "amount": "10",
+          "unitId": 11,
+          "optional": true
+        },
+        {
+          "order": 3,
           "ingredientId": 756362,
           "name": "Sparkling Wine",
           "amount": "100",
           "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 108496,
+          "name": "Lemon",
+          "amount": "1",
+          "unitId": 26,
+          "optional": true,
+          "garnish": true
         }
-      ],
-      "updatedAt": 1758453407050
+      ]
     },
     {
       "id": 1757000000136,
       "name": "Delta Sunset",
-      "description": "A spirit-forward spirit cocktail showcasing Sambuca, Cointreau—deep, aromatic, and meant to be savored.",
-      "instructions": "",
+      "description": "Delta Sunset is a glorious, quite strong cocktail. Stirred with 30ml orange liqueur Cointreau and 30ml orange liqueur Continental with 30ml lemon juice, as well as 150gr and best served with farinaceous starchy dishes.",
+      "instructions": "1. Place ice into mixing glass then add ingredients to mixing glass and stir well until mixed. \n2. Fine strain into glass and served in a martini glass cold.",
+      "photoUri": "assets/cocktails/1757000000136-delta-sunset.jpg",
       "glassId": "cocktail_glass",
+      "methodIds": [
+        "stir"
+      ],
       "tags": [
         {
           "id": 5,
@@ -10858,23 +10825,24 @@
       "ingredients": [
         {
           "order": 1,
-          "ingredientId": 267073,
-          "name": "Sambuca",
-          "amount": "20",
-          "unitId": 11
+          "ingredientId": 354943,
+          "name": "Cointreau",
+          "amount": "30",
+          "unitId": 11,
+          "allowBaseSubstitution": true
         },
         {
           "order": 2,
-          "ingredientId": 38880,
-          "name": "Cointreau",
-          "amount": "25",
+          "ingredientId": 421867,
+          "name": "Orange Liqueur",
+          "amount": "30",
           "unitId": 11
         },
         {
           "order": 3,
           "ingredientId": 734220,
           "name": "Lemon Juice",
-          "amount": "25",
+          "amount": "30",
           "unitId": 11
         },
         {
@@ -10884,66 +10852,18 @@
           "amount": "150",
           "unitId": 8
         }
-      ],
-      "updatedAt": 1758453407050
-    },
-    {
-      "id": 1757000000137,
-      "name": "Derby IBA",
-      "description": "A bold, spirit-forward gin drink built around Gin, Peach Bitters—bitter-leaning, aromatic, and best served well chilled. Garnished with mint.",
-      "instructions": "",
-      "glassId": "cocktail_glass",
-      "tags": [
-        {
-          "id": 1,
-          "name": "IBA Official",
-          "color": "#81C784"
-        },
-        {
-          "id": 5,
-          "name": "strong",
-          "color": "#ec5a5a"
-        }
-      ],
-      "ingredients": [
-        {
-          "order": 1,
-          "ingredientId": 863081,
-          "name": "Gin",
-          "amount": "60",
-          "unitId": 11
-        },
-        {
-          "order": 2,
-          "ingredientId": 950849,
-          "name": "Peach Bitters",
-          "amount": "5",
-          "unitId": 11
-        },
-        {
-          "order": 3,
-          "ingredientId": 304217,
-          "name": "Mint",
-          "amount": "2",
-          "unitId": 1,
-          "garnish": true
-        },
-        {
-          "order": 4,
-          "ingredientId": 346304,
-          "name": "Ice",
-          "amount": "150",
-          "unitId": 8
-        }
-      ],
-      "updatedAt": 1758453407050
+      ]
     },
     {
       "id": 1757000000138,
       "name": "Derby Popular",
       "description": "A bold, spirit-forward whiskey drink built around Bourbon, Benedictine, Angostura Bitters—bitter-leaning, aromatic, and best served well chilled. Garnished with lemon.",
-      "instructions": "",
-      "glassId": "cocktail_glass",
+      "instructions": "1. Stir with ice until chilled.\n2. Pour into a Nick & Nora glass. \n3. Garnish with a lemon twist.",
+      "photoUri": "assets/cocktails/1757000000138-derby-popular.jpg",
+      "glassId": "nick_and_nora",
+      "methodIds": [
+        "stir"
+      ],
       "tags": [
         {
           "id": 5,
@@ -10975,29 +10895,31 @@
         },
         {
           "order": 4,
+          "ingredientId": 346304,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8
+        },
+        {
+          "order": 5,
           "ingredientId": 108496,
           "name": "Lemon",
           "amount": "1",
           "unitId": 26,
           "garnish": true
-        },
-        {
-          "order": 5,
-          "ingredientId": 346304,
-          "name": "Ice",
-          "amount": "150",
-          "unitId": 8
         }
-      ],
-      "updatedAt": 1758453407050
+      ]
     },
     {
       "id": 1758615657716,
       "name": "Desert Island",
       "description": "A long, sparkling liqueur drink built for easy sipping, pairing Coconut Liqueur, Cola with bubbly mixers over ice. Garnished with lime.",
-      "instructions": "",
+      "instructions": "1. Fill a highball glass to the top with ice cubes.\n2. Pour in the coconut liqueur.\n3. Top with cola and stir gently to combine.\n4. Garnish with both a lemon wheel and a lime wheel.",
       "photoUri": "assets/cocktails/1758615657716-desert-island.jpg",
       "glassId": "highball_glass",
+      "methodIds": [
+        "build"
+      ],
       "tags": [
         {
           "id": 7,
@@ -11015,6 +10937,7 @@
           "substitutes": [
             {
               "id": 783639,
+              "ingredientId": 783639,
               "name": "Coconut Rum"
             }
           ]
@@ -11048,8 +10971,13 @@
       "id": 1757000000139,
       "name": "Devil's Margarita",
       "description": "A bright agave spirit sour balancing Tequila Blanco, Red Wine with fresh citrus and a touch of sweetness for a crisp, refreshing sip. Garnished with lime.",
-      "instructions": "",
-      "glassId": "cocktail_glass",
+      "instructions": "1. Shake first 3 ingredients with ice and fine-strain into a chilled glass. \n2. Carefully float the wine.",
+      "photoUri": "assets/cocktails/1757000000139-devil-s-margarita.jpg",
+      "glassId": "margarita_glass",
+      "methodIds": [
+        "shake",
+        "layer"
+      ],
       "tags": [
         {
           "id": 5,
@@ -11081,35 +11009,38 @@
         },
         {
           "order": 4,
+          "ingredientId": 346304,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8
+        },
+        {
+          "order": 5,
           "ingredientId": 421197,
           "name": "Red Wine",
           "amount": "15",
           "unitId": 11
         },
         {
-          "order": 5,
+          "order": 6,
           "ingredientId": 336572,
           "name": "Lime",
           "amount": "1",
           "unitId": 27,
           "garnish": true
-        },
-        {
-          "order": 6,
-          "ingredientId": 346304,
-          "name": "Ice",
-          "amount": "150",
-          "unitId": 8
         }
-      ],
-      "updatedAt": 1758453407050
+      ]
     },
     {
       "id": 1757000000140,
       "name": "Dirty Banana",
       "description": "A rich, creamy rum drink featuring White Rum, Coffee Liqueur, Banana Liqueur—dessert-like, smooth, and indulgent. Garnished with banana.",
-      "instructions": "",
+      "instructions": "1. Blend all ingredients with crushed ice.\n2. Pour into a chilled glass.\n3. Garnish with a banana slice on the rim",
+      "photoUri": "assets/cocktails/1757000000140-dirty-banana.jpg",
       "glassId": "hurricane_glass",
+      "methodIds": [
+        "blend"
+      ],
       "tags": [
         {
           "id": 6,
@@ -11125,8 +11056,8 @@
       "ingredients": [
         {
           "order": 1,
-          "ingredientId": 861551,
-          "name": "White Rum",
+          "ingredientId": 123517,
+          "name": "Aged Rum",
           "amount": "60",
           "unitId": 11
         },
@@ -11139,6 +11070,7 @@
           "substitutes": [
             {
               "id": 406487,
+              "ingredientId": 406487,
               "name": "Coffee Brandy"
             }
           ]
@@ -11152,6 +11084,7 @@
           "substitutes": [
             {
               "id": 777829,
+              "ingredientId": 777829,
               "name": "Creme de Banane"
             }
           ]
@@ -11172,28 +11105,35 @@
         },
         {
           "order": 6,
+          "ingredientId": 564821,
+          "name": "Cream",
+          "amount": "60",
+          "unitId": 11
+        },
+        {
+          "order": 7,
           "ingredientId": 346304,
           "name": "Ice",
           "amount": "150",
           "unitId": 8
         },
         {
-          "order": 7,
+          "order": 8,
           "ingredientId": 609552,
           "name": "Banana",
           "amount": "1",
           "unitId": 19,
           "garnish": true
         }
-      ],
-      "updatedAt": 1759486965848
+      ]
     },
     {
       "id": 1757000000141,
       "name": "Dirty Girl Scout",
-      "description": "A sweet and strong shot. The recipe here is for 3 shots.",
-      "instructions": "1. Fill a shaker with ice cubes.\n2. Pour 30ml of vodka, 30ml of coffee liqueur, 30ml of Baileys and 30ml of creme de menthe white.\n3. Shake and strain into shot glasses.",
-      "glassId": "shooter",
+      "description": "A sweet and strong cocktail.",
+      "instructions": "1. Fill a shaker with ice cubes.\n2. Pour 30ml of vodka, 30ml of coffee liqueur, 30ml of Baileys and 30ml of creme de menthe white.\n3. Shake and strain into a glass. \nMay be served as 3 shots.",
+      "photoUri": "assets/cocktails/1757000000141-dirty-girl-scout.jpg",
+      "glassId": "cocktail_glass",
       "methodIds": [
         "shake"
       ],
@@ -11226,6 +11166,7 @@
           "substitutes": [
             {
               "id": 406487,
+              "ingredientId": 406487,
               "name": "Coffee Brandy"
             }
           ]
@@ -11250,16 +11191,36 @@
           "name": "Ice",
           "amount": "150",
           "unitId": 8
+        },
+        {
+          "order": 6,
+          "ingredientId": 477462,
+          "name": "Whipped Cream",
+          "amount": "30",
+          "unitId": 11,
+          "optional": true,
+          "garnish": true
+        },
+        {
+          "order": 7,
+          "ingredientId": 499545,
+          "name": "Chocolate",
+          "amount": "2",
+          "unitId": 15,
+          "garnish": true
         }
-      ],
-      "updatedAt": 1758629387366
+      ]
     },
     {
       "id": 1757000000142,
       "name": "Dirty Shyrly",
       "description": "A long, sparkling vodka drink built for easy sipping, pairing Vodka, Grenadine, Lime with bubbly mixers over ice. Garnished with maraschino cherry.",
-      "instructions": "",
-      "glassId": "highball_glass",
+      "instructions": "1. Pour in 2 oz of vodka and 1 oz of grenadine in a highball or Collins glass.\n2. Fill the remainder of the glass with lemon-lime soda.\n3. Stir gently with a bar spoon.\n4. Garnish with a maraschino cherry or a lime wedge.",
+      "photoUri": "assets/cocktails/1757000000142-dirty-shyrly.jpg",
+      "glassId": "collins_glass",
+      "methodIds": [
+        "build"
+      ],
       "tags": [
         {
           "id": 6,
@@ -11284,41 +11245,33 @@
         },
         {
           "order": 3,
-          "ingredientId": 336572,
-          "name": "Lime",
-          "amount": "2",
-          "unitId": 27
+          "ingredientId": 73931,
+          "name": "Lemon-Lime Soda",
+          "amount": "120",
+          "unitId": 11,
+          "substitutes": [
+            {
+              "id": 807431,
+              "ingredientId": 807431,
+              "name": "Soda Water"
+            }
+          ]
         },
         {
           "order": 4,
-          "ingredientId": 150490,
-          "name": "Simple Syrup",
-          "amount": "30",
-          "unitId": 11
-        },
-        {
-          "order": 5,
-          "ingredientId": 807431,
-          "name": "Soda Water",
-          "amount": "60",
-          "unitId": 11
-        },
-        {
-          "order": 6,
           "ingredientId": 607153,
           "name": "Maraschino Cherry",
           "amount": "1",
           "unitId": 1,
           "garnish": true
         }
-      ],
-      "updatedAt": 1758453407050
+      ]
     },
     {
       "id": 1755800000033,
       "name": "Don's Special Daiquiri",
       "description": "A tiki-style daiquiri with grapefruit and honey notes.",
-      "instructions": "Add all ingredients into a shaker with ice.\nShake well.\nStrain into a chilled cocktail glass.\nGarnish with a lime slice.",
+      "instructions": "1. Add all ingredients into a shaker with ice.\n2. Shake well.\n3. Strain into a chilled cocktail glass.\n4. Garnish with a lime slice.",
       "photoUri": "assets/cocktails/1755800000033-dons-special-daiquiri.jpg",
       "glassId": "tiki",
       "methodIds": [
@@ -11386,8 +11339,12 @@
       "id": 1757000000143,
       "name": "Doralto",
       "description": "A long, sparkling agave spirit drink built for easy sipping, pairing Tequila Blanco, Angostura Bitters, Tonic with bubbly mixers over ice. Garnished with lime.",
-      "instructions": "",
+      "instructions": "1. Shake all ingredients, except tonic with ice. \n2. Strain into a chilled glass.\n3. Fill up with tonic.\n4. Garnish with lemon wheel.",
+      "photoUri": "assets/cocktails/1757000000143-doralto.jpg",
       "glassId": "highball_glass",
+      "methodIds": [
+        "shake"
+      ],
       "tags": [
         {
           "id": 7,
@@ -11411,6 +11368,7 @@
           "substitutes": [
             {
               "id": 787067,
+              "ingredientId": 787067,
               "name": "Tequila Gold"
             }
           ]
@@ -11448,7 +11406,7 @@
           "ingredientId": 336572,
           "name": "Lime",
           "amount": "1",
-          "unitId": 27,
+          "unitId": 19,
           "garnish": true
         },
         {
@@ -11458,118 +11416,7 @@
           "amount": "150",
           "unitId": 8
         }
-      ],
-      "updatedAt": 1758453407050
-    },
-    {
-      "id": 1758748199623,
-      "name": "Dr. Vermouth",
-      "description": "A bold, spirit-forward wine drink built around Dr. Pepper, Dry Vermouth, Bitters—bitter-leaning, aromatic, and best served well chilled. Garnished with lemon.",
-      "instructions": "",
-      "glassId": "collins_glass",
-      "tags": [
-        {
-          "id": 6,
-          "name": "moderate",
-          "color": "#F06292"
-        }
-      ],
-      "ingredients": [
-        {
-          "order": 1,
-          "ingredientId": 478041,
-          "name": "Dr. Pepper",
-          "amount": "60",
-          "unitId": 11
-        },
-        {
-          "order": 2,
-          "ingredientId": 569330,
-          "name": "Dry Vermouth",
-          "amount": "90",
-          "unitId": 11
-        },
-        {
-          "order": 3,
-          "ingredientId": 804376,
-          "name": "Bitters",
-          "amount": "2",
-          "unitId": 6
-        },
-        {
-          "order": 4,
-          "ingredientId": 346304,
-          "name": "Ice",
-          "amount": "150",
-          "unitId": 8
-        },
-        {
-          "order": 5,
-          "ingredientId": 108496,
-          "name": "Lemon",
-          "amount": "1",
-          "unitId": 26,
-          "garnish": true
-        }
-      ],
-      "updatedAt": 1758748199698
-    },
-    {
-      "id": 1757000000144,
-      "name": "Drunk Melon",
-      "description": "A bright gin sour balancing Sambuca, Midori Melon Liqueur, Gin with fresh citrus and a touch of sweetness for a crisp, refreshing sip.",
-      "instructions": "",
-      "glassId": "shooter",
-      "tags": [
-        {
-          "id": 6,
-          "name": "moderate",
-          "color": "#F06292"
-        },
-        {
-          "id": 9,
-          "name": "shooter",
-          "color": "#FF8A65"
-        }
-      ],
-      "ingredients": [
-        {
-          "order": 1,
-          "ingredientId": 267073,
-          "name": "Sambuca",
-          "amount": "15",
-          "unitId": 11
-        },
-        {
-          "order": 2,
-          "ingredientId": 118387,
-          "name": "Midori Melon Liqueur",
-          "amount": "10",
-          "unitId": 11
-        },
-        {
-          "order": 3,
-          "ingredientId": 734220,
-          "name": "Lemon Juice",
-          "amount": "10",
-          "unitId": 11
-        },
-        {
-          "order": 4,
-          "ingredientId": 863081,
-          "name": "Gin",
-          "amount": "10",
-          "unitId": 11
-        },
-        {
-          "order": 5,
-          "ingredientId": 346304,
-          "name": "Ice",
-          "amount": "45",
-          "unitId": 8
-        }
-      ],
-      "updatedAt": 1758453407050
+      ]
     },
     {
       "id": 1755800000034,
@@ -33065,23 +32912,6 @@
       "searchTokens": [
         "allspice",
         "dram"
-      ]
-    },
-    {
-      "id": 1756483214932,
-      "name": "Almond",
-      "description": "Crunchy nut with mild sweetness used for garnishes or infusions. Adds nutty aroma to liqueurs and syrups. Common allergen so label cocktails clearly.",
-      "tags": [
-        {
-          "id": 10,
-          "name": "other",
-          "color": "#a8a8a8"
-        }
-      ],
-      "photoUri": "assets/ingredients/1756483214932-almond.jpg",
-      "searchName": "almond",
-      "searchTokens": [
-        "almond"
       ]
     },
     {
