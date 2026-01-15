@@ -240,7 +240,6 @@ function buildMissingSubstituteLines(
   const orderedSubstitutes = [
     ...resolution.substitutes.declared,
     ...(isBrandedIngredient ? resolution.substitutes.base : []),
-    ...resolution.substitutes.branded,
   ];
 
   const seen = new Set<string>();
