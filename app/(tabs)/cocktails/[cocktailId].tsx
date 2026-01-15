@@ -18,6 +18,7 @@ import { resolveImageSource } from '@/libs/image-source';
 import {
   createIngredientLookup,
   resolveIngredientAvailability,
+  type IngredientResolution,
   type IngredientLookup,
 } from '@/libs/ingredient-availability';
 import { skipDuplicateBack } from '@/libs/navigation';
@@ -221,6 +222,39 @@ function getIngredientQualifier(ingredient: RecipeIngredient): string | undefine
   }
 
   return qualifiers.join(', ') || undefined;
+}
+
+function getMissingSubstituteNames(
+  resolution: IngredientResolution,
+  isBrandedIngredient: boolean,
+): string[] {
+  const orderedOptions = [
+    ...resolution.substitutes.declared,
+    ...(isBrandedIngredient ? resolution.substitutes.base : []),
+    ...resolution.substitutes.branded,
+  ];
+
+  const normalizedMain = normalizeSearchText(resolution.resolvedName);
+  const seen = new Set<string>();
+  const results: string[] = [];
+
+  orderedOptions.forEach((option) => {
+    const name = option.name.trim();
+    if (!name) {
+      return;
+    }
+    const normalized = normalizeSearchText(name);
+    if (normalizedMain && normalized === normalizedMain) {
+      return;
+    }
+    if (seen.has(normalized)) {
+      return;
+    }
+    seen.add(normalized);
+    results.push(name);
+  });
+
+  return results;
 }
 
 function formatGlassLabel(glassId?: string | null) {
@@ -757,6 +791,9 @@ export default function CocktailDetailsScreen() {
                     const dividerColor = previousResolution?.isAvailable
                       ? Colors.outline
                       : Colors.outlineVariant;
+                    const isBrandedIngredient = catalogEntry?.baseIngredientId != null;
+                    const missingSubstituteNames = getMissingSubstituteNames(resolution, isBrandedIngredient);
+                    const shouldShowSubstitutes = !resolution.isAvailable && missingSubstituteNames.length > 0;
                     const tagColor =
                       resolvedIngredient?.tags?.[0]?.color ??
                       ingredient.tags?.[0]?.color ??
@@ -860,6 +897,18 @@ export default function CocktailDetailsScreen() {
                           accessibilityState={resolution.isAvailable ? { selected: true } : undefined}
                           metaAlignment="center"
                         />
+                        {shouldShowSubstitutes ? (
+                          <View style={styles.substituteList}>
+                            {missingSubstituteNames.map((name, substituteIndex) => (
+                              <Text
+                                key={`${key}-substitute-${substituteIndex}`}
+                                style={[styles.substituteText, { color: Colors.onSurfaceVariant }]}
+                              >
+                                {`or ${name}`}
+                              </Text>
+                            ))}
+                          </View>
+                        ) : null}
                       </View>
                     );
                   })}
@@ -1055,6 +1104,16 @@ const styles = StyleSheet.create({
   },
   ingredientSubtitle: {
     fontSize: 12,
+  },
+  substituteList: {
+    paddingLeft: 88,
+    paddingRight: 16,
+    paddingBottom: 8,
+    gap: 4,
+  },
+  substituteText: {
+    fontSize: 12,
+    lineHeight: 18,
   },
   shoppingIcon: {
     width: 16,
