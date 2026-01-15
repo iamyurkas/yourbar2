@@ -18,9 +18,11 @@ export type InventorySnapshotV1<TCocktail, TIngredient> = {
   keepScreenAwake?: boolean;
   ratingFilterThreshold?: number;
   startScreen?: string;
+  customCocktailTags?: Array<{ id: number; name: string; color?: string | null }>;
+  customIngredientTags?: Array<{ id: number; name: string; color?: string | null }>;
 };
 
-export type InventoryDeltaSnapshot<TCocktail, TIngredient> = {
+export type InventoryDeltaSnapshotV2<TCocktail, TIngredient> = {
   version: 2;
   delta: {
     cocktails?: {
@@ -44,7 +46,41 @@ export type InventoryDeltaSnapshot<TCocktail, TIngredient> = {
   keepScreenAwake?: boolean;
   ratingFilterThreshold?: number;
   startScreen?: string;
+  customCocktailTags?: Array<{ id: number; name: string; color?: string | null }>;
+  customIngredientTags?: Array<{ id: number; name: string; color?: string | null }>;
 };
+
+export type InventoryDeltaSnapshotV3<TCocktail, TIngredient> = {
+  version: 3;
+  delta: {
+    cocktails?: {
+      created?: TCocktail[];
+      updated?: Array<{ id: number; changes: Partial<TCocktail>; full: TCocktail }>;
+      deletedIds?: number[];
+    };
+    ingredients?: {
+      created?: TIngredient[];
+      updated?: Array<{ id: number; changes: Partial<TIngredient>; full: TIngredient }>;
+      deletedIds?: number[];
+    };
+  };
+  imported?: boolean;
+  availableIngredientIds?: number[];
+  shoppingIngredientIds?: number[];
+  cocktailRatings?: Record<string, number>;
+  ignoreGarnish?: boolean;
+  allowAllSubstitutes?: boolean;
+  useImperialUnits?: boolean;
+  keepScreenAwake?: boolean;
+  ratingFilterThreshold?: number;
+  startScreen?: string;
+  customCocktailTags?: Array<{ id: number; name: string; color?: string | null }>;
+  customIngredientTags?: Array<{ id: number; name: string; color?: string | null }>;
+};
+
+export type InventoryDeltaSnapshot<TCocktail, TIngredient> =
+  | InventoryDeltaSnapshotV2<TCocktail, TIngredient>
+  | InventoryDeltaSnapshotV3<TCocktail, TIngredient>;
 
 export type InventorySnapshot<TCocktail, TIngredient> =
   | InventorySnapshotV1<TCocktail, TIngredient>

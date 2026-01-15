@@ -17,6 +17,8 @@ import {
   clearInventorySnapshot,
   loadInventorySnapshot,
   persistInventorySnapshot,
+  type InventoryDeltaSnapshotV2,
+  type InventoryDeltaSnapshotV3,
   type InventoryDeltaSnapshot,
   type InventorySnapshot,
 } from '@/libs/inventory-storage';
@@ -160,7 +162,7 @@ type CreateIngredientInput = {
 type CocktailStorageRecord = Omit<CocktailRecord, 'searchName' | 'searchTokens'>;
 type IngredientStorageRecord = Omit<IngredientRecord, 'searchName' | 'searchTokens'>;
 
-const INVENTORY_SNAPSHOT_VERSION = 2;
+const INVENTORY_SNAPSHOT_VERSION = 3;
 
 declare global {
   // eslint-disable-next-line no-var
@@ -356,9 +358,73 @@ function areStorageRecordsEqual<TRecord>(left: TRecord, right: TRecord): boolean
   return JSON.stringify(left) === JSON.stringify(right);
 }
 
+function areFieldValuesEqual(left: unknown, right: unknown): boolean {
+  return JSON.stringify(left) === JSON.stringify(right);
+}
+
+function getRecordChanges<TRecord extends Record<string, unknown>>(
+  base: TRecord,
+  current: TRecord,
+  keys: Array<keyof TRecord>,
+): Partial<TRecord> {
+  const changes: Partial<TRecord> = {};
+
+  keys.forEach((key) => {
+    if (!areFieldValuesEqual(base[key], current[key])) {
+      changes[key] = current[key];
+    }
+  });
+
+  return changes;
+}
+
+function hasRecordChanges<TRecord>(changes: Partial<TRecord>, keys: Array<keyof TRecord>): boolean {
+  return keys.some((key) => Object.prototype.hasOwnProperty.call(changes, key));
+}
+
+const COCKTAIL_STORAGE_KEYS: Array<keyof CocktailStorageRecord> = [
+  'name',
+  'description',
+  'instructions',
+  'photoUri',
+  'glassId',
+  'methodIds',
+  'tags',
+  'ingredients',
+  'createdAt',
+  'updatedAt',
+];
+
+const INGREDIENT_STORAGE_KEYS: Array<keyof IngredientStorageRecord> = [
+  'name',
+  'description',
+  'tags',
+  'baseIngredientId',
+  'usageCount',
+  'photoUri',
+];
+
+type DeltaUpdateEntry<TRecord> = TRecord | { id: number; changes: Partial<TRecord>; full: TRecord };
+type DeltaCollection<TRecord> = {
+  created?: TRecord[];
+  updated?: Array<DeltaUpdateEntry<TRecord>>;
+  deletedIds?: number[];
+};
+
+function isDeltaPatch<TRecord extends { id?: number | null }>(
+  record: DeltaUpdateEntry<TRecord>,
+): record is { id: number; changes: Partial<TRecord>; full: TRecord } {
+  return (
+    typeof record === 'object' &&
+    record !== null &&
+    'changes' in record &&
+    typeof (record as { changes?: unknown }).changes === 'object'
+  );
+}
+
 function applyDeltaToCollection<TRecord extends { id?: number | null }>(
   baseItems: readonly TRecord[],
-  delta?: { created?: TRecord[]; updated?: TRecord[]; deletedIds?: number[] },
+  delta?: DeltaCollection<TRecord>,
 ): TRecord[] {
   if (!delta) {
     return [...baseItems];
@@ -371,7 +437,7 @@ function applyDeltaToCollection<TRecord extends { id?: number | null }>(
       .map((id) => Math.trunc(id)),
   );
 
-  const updatedMap = new Map<number, TRecord>();
+  const updatedMap = new Map<number, DeltaUpdateEntry<TRecord>>();
   (delta.updated ?? []).forEach((record) => {
     const id = Number(record.id ?? -1);
     if (!Number.isFinite(id) || id < 0) {
@@ -403,7 +469,15 @@ function applyDeltaToCollection<TRecord extends { id?: number | null }>(
     }
 
     const updated = updatedMap.get(normalizedId);
-    next.push(updated ?? record);
+    if (updated) {
+      if (isDeltaPatch(updated)) {
+        next.push({ ...record, ...updated.changes, id: updated.id } as TRecord);
+      } else {
+        next.push(updated);
+      }
+    } else {
+      next.push(record);
+    }
     seen.add(normalizedId);
   });
 
@@ -411,7 +485,11 @@ function applyDeltaToCollection<TRecord extends { id?: number | null }>(
     if (seen.has(id) || deletedSet.has(id)) {
       return;
     }
-    next.push(record);
+    if (isDeltaPatch(record)) {
+      next.push(record.full);
+    } else {
+      next.push(record);
+    }
     seen.add(id);
   });
 
@@ -426,10 +504,11 @@ function applyDeltaToCollection<TRecord extends { id?: number | null }>(
   return next;
 }
 
-function applyDeltaToInventoryData(
-  baseData: InventoryData,
-  delta: InventoryDeltaSnapshot<CocktailStorageRecord, IngredientStorageRecord>['delta'],
-): InventoryData {
+type InventoryDeltaV2 = InventoryDeltaSnapshotV2<CocktailStorageRecord, IngredientStorageRecord>['delta'];
+type InventoryDeltaV3 = InventoryDeltaSnapshotV3<CocktailStorageRecord, IngredientStorageRecord>['delta'];
+type InventoryDelta = InventoryDeltaV2 | InventoryDeltaV3;
+
+function applyDeltaToInventoryData(baseData: InventoryData, delta: InventoryDelta): InventoryData {
   return {
     ...baseData,
     cocktails: applyDeltaToCollection(baseData.cocktails, delta.cocktails),
@@ -594,7 +673,7 @@ function createDeltaSnapshotFromInventory(
   );
 
   const createdCocktails: CocktailStorageRecord[] = [];
-  const updatedCocktails: CocktailStorageRecord[] = [];
+  const updatedCocktails: Array<{ id: number; changes: Partial<CocktailStorageRecord>; full: CocktailStorageRecord }> = [];
   const currentCocktailIds = new Set<number>();
 
   state.cocktails.forEach((cocktail) => {
@@ -614,14 +693,21 @@ function createDeltaSnapshotFromInventory(
     }
 
     if (!areStorageRecordsEqual(normalized, baseRecord)) {
-      updatedCocktails.push(normalized);
+      const changes = getRecordChanges(baseRecord, normalized, COCKTAIL_STORAGE_KEYS);
+      if (hasRecordChanges(changes, COCKTAIL_STORAGE_KEYS)) {
+        updatedCocktails.push({ id: normalizedId, changes, full: normalized });
+      }
     }
   });
 
   const deletedCocktailIds = Array.from(baseCocktails.keys()).filter((id) => !currentCocktailIds.has(id));
 
   const createdIngredients: IngredientStorageRecord[] = [];
-  const updatedIngredients: IngredientStorageRecord[] = [];
+  const updatedIngredients: Array<{
+    id: number;
+    changes: Partial<IngredientStorageRecord>;
+    full: IngredientStorageRecord;
+  }> = [];
   const currentIngredientIds = new Set<number>();
 
   state.ingredients.forEach((ingredient) => {
@@ -641,7 +727,10 @@ function createDeltaSnapshotFromInventory(
     }
 
     if (!areStorageRecordsEqual(normalized, baseRecord)) {
-      updatedIngredients.push(normalized);
+      const changes = getRecordChanges(baseRecord, normalized, INGREDIENT_STORAGE_KEYS);
+      if (hasRecordChanges(changes, INGREDIENT_STORAGE_KEYS)) {
+        updatedIngredients.push({ id: normalizedId, changes, full: normalized });
+      }
     }
   });
 
@@ -752,7 +841,11 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     void (async () => {
       try {
         const stored = await loadInventorySnapshot<CocktailStorageRecord, IngredientStorageRecord>();
-        if (stored && (stored.version === INVENTORY_SNAPSHOT_VERSION || stored.version === 1) && !cancelled) {
+        if (
+          stored &&
+          (stored.version === INVENTORY_SNAPSHOT_VERSION || stored.version === 2 || stored.version === 1) &&
+          !cancelled
+        ) {
           const baseData = loadInventoryData();
           const nextInventoryState = createInventoryStateFromSnapshot(stored, baseData);
           const nextAvailableIds = createIngredientIdSet(stored.availableIngredientIds);
