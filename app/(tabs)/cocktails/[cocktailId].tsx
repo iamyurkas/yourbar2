@@ -806,7 +806,38 @@ export default function CocktailDetailsScreen() {
                       subtitleParts.push(`Substitute for ${resolution.substituteFor}`);
                     }
 
-                    const subtitle = subtitleParts.length ? subtitleParts.join(' • ') : undefined;
+                    const missingSubstituteLines: string[] = [];
+                    if (!resolution.isAvailable) {
+                      const seenNames = new Set<string>();
+                      const addMissingSubstitute = (name: string) => {
+                        const normalized = name.trim();
+                        if (!normalized || normalized === resolution.resolvedName || seenNames.has(normalized)) {
+                          return;
+                        }
+
+                        seenNames.add(normalized);
+                        missingSubstituteLines.push(`or ${normalized}`);
+                      };
+
+                      resolution.substitutes.declared.forEach((option) => {
+                        addMissingSubstitute(option.name);
+                      });
+
+                      resolution.substitutes.base.forEach((option) => {
+                        addMissingSubstitute(option.name);
+                      });
+                    }
+
+                    const subtitleLines: string[] = [];
+                    if (subtitleParts.length) {
+                      subtitleLines.push(subtitleParts.join(' • '));
+                    }
+
+                    if (missingSubstituteLines.length) {
+                      subtitleLines.push(...missingSubstituteLines);
+                    }
+
+                    const subtitle = subtitleLines.length ? subtitleLines.join('\n') : undefined;
 
                     return (
                       <View key={key}>
