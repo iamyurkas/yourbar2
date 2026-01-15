@@ -18,6 +18,7 @@ import { resolveImageSource } from '@/libs/image-source';
 import {
   createIngredientLookup,
   resolveIngredientAvailability,
+  type IngredientResolution,
   type IngredientLookup,
 } from '@/libs/ingredient-availability';
 import { skipDuplicateBack } from '@/libs/navigation';
@@ -221,6 +222,45 @@ function getIngredientQualifier(ingredient: RecipeIngredient): string | undefine
   }
 
   return qualifiers.join(', ') || undefined;
+}
+
+function buildMissingSubstituteLines(
+  ingredient: RecipeIngredient,
+  resolution: IngredientResolution,
+  lookup: IngredientLookup,
+): string[] {
+  if (resolution.isAvailable) {
+    return [];
+  }
+
+  const ingredientId = typeof ingredient.ingredientId === 'number' ? ingredient.ingredientId : undefined;
+  const requestedIngredient = ingredientId != null ? lookup.ingredientById.get(ingredientId) : undefined;
+  const isBrandedIngredient = requestedIngredient?.baseIngredientId != null;
+
+  const orderedSubstitutes = [
+    ...resolution.substitutes.declared,
+    ...(isBrandedIngredient ? resolution.substitutes.base : []),
+  ];
+
+  const seen = new Set<string>();
+  const lines: string[] = [];
+
+  orderedSubstitutes.forEach((option) => {
+    const name = option.name.trim();
+    if (!name) {
+      return;
+    }
+
+    const key = option.id != null ? `id:${option.id}` : `name:${name.toLowerCase()}`;
+    if (seen.has(key)) {
+      return;
+    }
+
+    seen.add(key);
+    lines.push(`or ${name}`);
+  });
+
+  return lines;
 }
 
 function formatGlassLabel(glassId?: string | null) {
@@ -806,7 +846,19 @@ export default function CocktailDetailsScreen() {
                       subtitleParts.push(`Substitute for ${resolution.substituteFor}`);
                     }
 
-                    const subtitle = subtitleParts.length ? subtitleParts.join(' • ') : undefined;
+                    const missingSubstituteLines = buildMissingSubstituteLines(
+                      ingredient,
+                      resolution,
+                      ingredientLookup,
+                    );
+                    const subtitleLines = [...subtitleParts];
+
+                    if (!resolution.isAvailable && missingSubstituteLines.length) {
+                      subtitleLines.push(...missingSubstituteLines);
+                    }
+
+                    const subtitle = subtitleLines.length ? subtitleLines.join('\n') : undefined;
+                    const subtitleNumberOfLines = subtitleLines.length || 1;
 
                     return (
                       <View key={key}>
@@ -821,6 +873,7 @@ export default function CocktailDetailsScreen() {
                               ? [styles.ingredientSubtitle, { color: Colors.onSurfaceVariant }]
                               : undefined
                           }
+                          subtitleNumberOfLines={subtitleNumberOfLines}
                           thumbnail={
                             <Thumb
                               label={resolution.resolvedName ?? ingredient.name ?? undefined}
