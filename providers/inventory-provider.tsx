@@ -55,6 +55,11 @@ type NormalizedSearchFields = {
 
 type Cocktail = CocktailRecord & NormalizedSearchFields & { userRating?: number };
 type Ingredient = IngredientRecord & NormalizedSearchFields;
+export type OnboardingInventorySnapshot = {
+  availableIngredientIds: number[];
+  shoppingIngredientIds: number[];
+  cocktailRatings: Record<string, number>;
+};
 export type StartScreen =
   | 'cocktails_all'
   | 'cocktails_my'
@@ -108,6 +113,8 @@ type InventoryContextValue = {
   setRatingFilterThreshold: (value: number) => void;
   startScreen: StartScreen;
   setStartScreen: (value: StartScreen) => void;
+  getOnboardingSnapshot: () => OnboardingInventorySnapshot;
+  restoreOnboardingSnapshot: (snapshot: OnboardingInventorySnapshot) => void;
 };
 
 type InventoryState = {
@@ -1764,6 +1771,23 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     setKeepScreenAwake(Boolean(value));
   }, []);
 
+  const getOnboardingSnapshot = useCallback<() => OnboardingInventorySnapshot>(() => {
+    return {
+      availableIngredientIds: Array.from(availableIngredientIds),
+      shoppingIngredientIds: Array.from(shoppingIngredientIds),
+      cocktailRatings: { ...cocktailRatings },
+    };
+  }, [availableIngredientIds, cocktailRatings, shoppingIngredientIds]);
+
+  const restoreOnboardingSnapshot = useCallback(
+    (snapshot: OnboardingInventorySnapshot) => {
+      setAvailableIngredientIds(new Set(snapshot.availableIngredientIds));
+      setShoppingIngredientIds(new Set(snapshot.shoppingIngredientIds));
+      setCocktailRatings({ ...snapshot.cocktailRatings });
+    },
+    [setAvailableIngredientIds, setShoppingIngredientIds],
+  );
+
   const handleSetRatingFilterThreshold = useCallback((value: number) => {
     const normalized = Math.min(5, Math.max(1, Math.round(value)));
     setRatingFilterThreshold(normalized);
@@ -2111,6 +2135,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       setKeepScreenAwake: handleSetKeepScreenAwake,
       setRatingFilterThreshold: handleSetRatingFilterThreshold,
       setStartScreen: handleSetStartScreen,
+      getOnboardingSnapshot,
+      restoreOnboardingSnapshot,
     };
   }, [
     cocktailsWithRatings,
@@ -2155,6 +2181,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     handleSetKeepScreenAwake,
     handleSetRatingFilterThreshold,
     handleSetStartScreen,
+    getOnboardingSnapshot,
+    restoreOnboardingSnapshot,
   ]);
 
   return <InventoryContext.Provider value={value}>{children}</InventoryContext.Provider>;
@@ -2170,4 +2198,11 @@ export function useInventory() {
   return context;
 }
 
-export type { Cocktail, Ingredient, CreateIngredientInput, CreateCocktailInput, StartScreen };
+export type {
+  Cocktail,
+  Ingredient,
+  CreateIngredientInput,
+  CreateCocktailInput,
+  StartScreen,
+  OnboardingInventorySnapshot,
+};

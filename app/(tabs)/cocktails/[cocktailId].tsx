@@ -23,10 +23,8 @@ import {
 } from '@/libs/ingredient-availability';
 import { skipDuplicateBack } from '@/libs/navigation';
 import { normalizeSearchText } from '@/libs/search-normalization';
-import {
-  useInventory,
-  type Cocktail,
-} from '@/providers/inventory-provider';
+import { useInventory, type Cocktail } from '@/providers/inventory-provider';
+import { useOnboardingTarget } from '@/src/onboarding/target-registry';
 import { tagColors } from '@/theme/theme';
 
 type RecipeIngredient = NonNullable<Cocktail['ingredients']>[number];
@@ -439,6 +437,7 @@ export default function CocktailDetailsScreen() {
   const [optimisticRating, setOptimisticRating] = useState<number | null>(null);
   const [, startRatingTransition] = useTransition();
   const displayedRating = optimisticRating ?? userRating;
+  const ratingTarget = useOnboardingTarget('cocktailDetails:ratingStars');
 
   useEffect(() => {
     setOptimisticRating((previous) => {
@@ -632,7 +631,7 @@ export default function CocktailDetailsScreen() {
                 )}
               </View>
 
-              <View style={styles.ratingRow}>
+              <View ref={ratingTarget.ref} testID={ratingTarget.testID} style={styles.ratingRow}>
                 {Array.from({ length: MAX_RATING }).map((_, index) => {
                   const starValue = index + 1;
                   const isActive = displayedRating >= starValue;

@@ -26,6 +26,9 @@ import {
 } from '@/libs/ingredient-availability';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
+import { useOnboarding } from '@/src/onboarding/OnboardingProvider';
+import { ONBOARDING_STEPS } from '@/src/onboarding/onboarding-steps';
+import { useOnboardingTarget, useOptionalOnboardingTarget } from '@/src/onboarding/target-registry';
 import { tagColors } from '@/theme/theme';
 
 type IngredientTagOption = {
@@ -58,6 +61,16 @@ const IngredientRow = memo(function IngredientRow({
   const ingredientId = Number(ingredient.id ?? -1);
   const tagColor = ingredient.tags?.[0]?.color ?? tagColors.yellow;
   const brandIndicatorColor = ingredient.baseIngredientId != null ? Colors.primary : undefined;
+  const normalizedName = normalizeSearchText(ingredient.name ?? '');
+  const targetId =
+    normalizedName === 'whiskey'
+      ? 'shaker:ingredientOption:Whiskey'
+      : normalizedName === 'white rum'
+        ? 'shaker:ingredientOption:WhiteRum'
+        : normalizedName === 'cola'
+          ? 'shaker:ingredientOption:Cola'
+          : undefined;
+  const target = useOptionalOnboardingTarget(targetId);
 
   const handlePress = useCallback(() => {
     if (ingredientId >= 0) {
@@ -72,20 +85,22 @@ const IngredientRow = memo(function IngredientRow({
   );
 
   return (
-    <ListRow
-      title={ingredient.name}
-      subtitle={subtitle}
-      subtitleStyle={subtitleStyle}
-      onPress={handlePress}
-      selected={isSelected || isAvailable}
-      highlightColor={highlightColor}
-      tagColor={tagColor}
-      thumbnail={thumbnail}
-      accessibilityRole="button"
-      accessibilityState={isSelected ? { selected: true } : undefined}
-      brandIndicatorColor={brandIndicatorColor}
-      metaAlignment="center"
-    />
+    <View ref={target.ref} testID={target.testID} collapsable={false}>
+      <ListRow
+        title={ingredient.name}
+        subtitle={subtitle}
+        subtitleStyle={subtitleStyle}
+        onPress={handlePress}
+        selected={isSelected || isAvailable}
+        highlightColor={highlightColor}
+        tagColor={tagColor}
+        thumbnail={thumbnail}
+        accessibilityRole="button"
+        accessibilityState={isSelected ? { selected: true } : undefined}
+        brandIndicatorColor={brandIndicatorColor}
+        metaAlignment="center"
+      />
+    </View>
   );
 });
 
@@ -134,6 +149,11 @@ export default function ShakerScreen() {
   const listRef = useRef<FlatList<unknown>>(null);
   const insets = useSafeAreaInsets();
   const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
+  const filterTarget = useOnboardingTarget('shaker:filterArea');
+  const showButtonTarget = useOnboardingTarget('shaker:showButton');
+  const { isActive: isOnboardingActive, currentStepIndex, lastNextStepId } = useOnboarding();
+  const handledOnboardingStep = useRef<string | null>(null);
+  const handledNextStep = useRef<string | null>(null);
 
   useScrollToTop(listRef);
 
@@ -142,6 +162,48 @@ export default function ShakerScreen() {
     const tokens = normalized ? normalized.split(/\s+/).filter(Boolean) : [];
     return { text: normalized, tokens };
   }, [query]);
+
+  const resolveIngredientByName = useCallback(
+    (name: string) => {
+      const normalized = normalizeSearchText(name);
+      return ingredients.find(
+        (ingredient) => normalizeSearchText(ingredient.name ?? '') === normalized,
+      );
+    },
+    [ingredients],
+  );
+
+  const scrollToGroupKey = useCallback(
+    (groupKey: string) => {
+      const index = ingredientGroups.findIndex((group) => group.key === groupKey);
+      if (index < 0) {
+        return false;
+      }
+      listRef.current?.scrollToIndex({ index, animated: true, viewPosition: 0 });
+      return true;
+    },
+    [ingredientGroups],
+  );
+
+  const expandGroupForIngredient = useCallback(
+    (name: string) => {
+      const ingredient = resolveIngredientByName(name);
+      if (!ingredient) {
+        return undefined;
+      }
+      const key = getIngredientTagKey(ingredient);
+      setExpandedTagKeys((previous) => {
+        if (previous.has(key)) {
+          return previous;
+        }
+        const next = new Set(previous);
+        next.add(key);
+        return next;
+      });
+      return key;
+    },
+    [resolveIngredientByName],
+  );
 
   const filteredIngredients = useMemo(() => {
     let base = ingredients;
@@ -523,6 +585,15 @@ export default function ShakerScreen() {
     setSelectedIngredientIds((previous) => (previous.size === 0 ? previous : new Set()));
   }, []);
 
+  const handleScrollToIndexFailed = useCallback(
+    ({ index }: { index: number }) => {
+      setTimeout(() => {
+        listRef.current?.scrollToIndex({ index, animated: true, viewPosition: 0 });
+      }, 100);
+    },
+    [],
+  );
+
   const handleShowResults = useCallback(() => {
     router.push({
       pathname: '/shaker/results',
@@ -532,6 +603,97 @@ export default function ShakerScreen() {
       },
     });
   }, [matchingCocktailSummary.availableKeys, matchingCocktailSummary.unavailableKeys, router]);
+
+  const handleSelectIngredientByName = useCallback(
+    (name: string) => {
+      const ingredient = resolveIngredientByName(name);
+      const ingredientId = Number(ingredient?.id ?? -1);
+      if (!Number.isFinite(ingredientId) || ingredientId < 0) {
+        return;
+      }
+
+      setSelectedIngredientIds((previous) => {
+        if (previous.has(ingredientId)) {
+          return previous;
+        }
+        const next = new Set(previous);
+        next.add(ingredientId);
+        return next;
+      });
+    },
+    [resolveIngredientByName],
+  );
+
+  useEffect(() => {
+    if (!isOnboardingActive) {
+      handledOnboardingStep.current = null;
+      handledNextStep.current = null;
+      return;
+    }
+
+    const step = ONBOARDING_STEPS[currentStepIndex];
+    if (!step || handledOnboardingStep.current === step.id) {
+      return;
+    }
+
+    if (step.id.startsWith('shaker-')) {
+      if (step.id === 'shaker-select-whiskey') {
+        const key = expandGroupForIngredient('Whiskey');
+        if (key && scrollToGroupKey(key)) {
+          handledOnboardingStep.current = step.id;
+        }
+        return;
+      }
+      if (step.id === 'shaker-select-white-rum') {
+        const key = expandGroupForIngredient('White Rum');
+        if (key && scrollToGroupKey(key)) {
+          handledOnboardingStep.current = step.id;
+        }
+        return;
+      }
+      if (step.id === 'shaker-select-cola') {
+        const key = expandGroupForIngredient('Cola');
+        if (key && scrollToGroupKey(key)) {
+          handledOnboardingStep.current = step.id;
+        }
+        return;
+      }
+      if (step.id === 'shaker-show' || step.id === 'shaker-intro') {
+        handledOnboardingStep.current = step.id;
+      }
+    }
+  }, [
+    currentStepIndex,
+    expandGroupForIngredient,
+    isOnboardingActive,
+    scrollToGroupKey,
+  ]);
+
+  useEffect(() => {
+    if (!lastNextStepId || handledNextStep.current === lastNextStepId) {
+      return;
+    }
+
+    if (lastNextStepId === 'shaker-select-whiskey') {
+      handleSelectIngredientByName('Whiskey');
+      handledNextStep.current = lastNextStepId;
+      return;
+    }
+    if (lastNextStepId === 'shaker-select-white-rum') {
+      handleSelectIngredientByName('White Rum');
+      handledNextStep.current = lastNextStepId;
+      return;
+    }
+    if (lastNextStepId === 'shaker-select-cola') {
+      handleSelectIngredientByName('Cola');
+      handledNextStep.current = lastNextStepId;
+      return;
+    }
+    if (lastNextStepId === 'shaker-show') {
+      handleShowResults();
+      handledNextStep.current = lastNextStepId;
+    }
+  }, [handleSelectIngredientByName, handleShowResults, lastNextStepId]);
 
   const renderGroup = useCallback(
     ({ item }: ListRenderItemInfo<IngredientGroup>) => {
@@ -665,14 +827,17 @@ export default function ShakerScreen() {
             <PresenceCheck checked={inStockOnly} onToggle={() => setInStockOnly((previous) => !previous)} />
           </View>
         </View>
-        <FlatList
-          ref={listRef}
-          data={ingredientGroups}
-          keyExtractor={(item) => item.key}
-          renderItem={renderGroup}
-          contentContainerStyle={[styles.listContent, { paddingBottom: 140 + insets.bottom }]}
-          showsVerticalScrollIndicator={false}
-        />
+        <View ref={filterTarget.ref} testID={filterTarget.testID} collapsable={false}>
+          <FlatList
+            ref={listRef}
+            data={ingredientGroups}
+            keyExtractor={(item) => item.key}
+            renderItem={renderGroup}
+            onScrollToIndexFailed={handleScrollToIndexFailed}
+            contentContainerStyle={[styles.listContent, { paddingBottom: 140 + insets.bottom }]}
+            showsVerticalScrollIndicator={false}
+          />
+        </View>
         <View
           style={[
             styles.bottomPanel,
@@ -702,6 +867,7 @@ export default function ShakerScreen() {
             </Text>
           </View>
           <Pressable
+            ref={showButtonTarget.ref}
             accessibilityRole="button"
             accessibilityLabel="Show matching recipes"
             accessibilityState={{
@@ -709,6 +875,7 @@ export default function ShakerScreen() {
             }}
             disabled={matchingCocktailSummary.recipeCount === 0 || selectedIngredientIds.size === 0}
             onPress={handleShowResults}
+            testID={showButtonTarget.testID}
             style={({ pressed }) => [
               styles.showButton,
               {

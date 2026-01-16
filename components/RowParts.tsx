@@ -1,6 +1,6 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Image, type ImageSource } from 'expo-image';
-import React, { type ReactNode } from 'react';
+import React, { forwardRef, type ReactNode } from 'react';
 import {
   Pressable,
   StyleProp,
@@ -60,9 +60,13 @@ export function TagDot({ color = tagColors.default }: TagDotProps) {
 type PresenceCheckProps = {
   checked: boolean;
   onToggle?: () => void;
+  testID?: string;
 };
 
-export function PresenceCheck({ checked, onToggle }: PresenceCheckProps) {
+export const PresenceCheck = forwardRef<Pressable, PresenceCheckProps>(function PresenceCheck(
+  { checked, onToggle, testID },
+  ref,
+) {
   const idleColor = Colors.outlineVariant;
   const borderColor = checked ? Colors.tint : idleColor;
   const backgroundColor = checked ? Colors.tint : 'transparent';
@@ -70,15 +74,17 @@ export function PresenceCheck({ checked, onToggle }: PresenceCheckProps) {
 
   return (
     <Pressable
+      ref={ref}
       accessibilityRole="checkbox"
       accessibilityState={{ checked }}
       onPress={onToggle}
+      testID={testID}
       style={[styles.checkbox, { borderColor, backgroundColor }]}
       hitSlop={8}>
       <MaterialCommunityIcons name="check" color={iconColor} size={12} />
     </Pressable>
   );
-}
+});
 
 type FavoriteStarProps = {
   active: boolean;

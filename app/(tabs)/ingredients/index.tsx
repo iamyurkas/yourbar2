@@ -30,6 +30,9 @@ import {
 } from '@/libs/ingredient-availability';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
+import { useOnboarding } from '@/src/onboarding/OnboardingProvider';
+import { ONBOARDING_STEPS } from '@/src/onboarding/onboarding-steps';
+import { useOptionalOnboardingTarget } from '@/src/onboarding/target-registry';
 import { tagColors } from '@/theme/theme';
 
 type IngredientSection = {
@@ -91,6 +94,17 @@ const IngredientListItem = memo(function IngredientListItemComponent({
   const id = Number(ingredient.id ?? -1);
   const isAvailable = id >= 0 && availableIngredientIds.has(id);
   const tagColor = ingredient.tags?.[0]?.color ?? tagColors.yellow;
+  const normalizedName = normalizeSearchText(ingredient.name ?? '');
+  const availabilityTargetId =
+    normalizedName === 'champagne'
+      ? 'ingredientRow:Champagne'
+      : normalizedName === 'peach'
+        ? 'ingredientRow:Peach'
+        : undefined;
+  const availabilityTarget = useOptionalOnboardingTarget(availabilityTargetId);
+  const shoppingTargetId =
+    normalizedName === 'orange juice' && onShoppingToggle ? 'shoppingRow:OrangeJuice' : undefined;
+  const shoppingTarget = useOptionalOnboardingTarget(shoppingTargetId);
 
   const handleToggleAvailability = useCallback(() => {
     if (id >= 0) {
@@ -126,9 +140,11 @@ const IngredientListItem = memo(function IngredientListItemComponent({
     if (onShoppingToggle) {
       return (
         <Pressable
+          ref={shoppingTarget.ref}
           accessibilityRole="button"
           accessibilityLabel={shoppingLabel}
           onPress={handleShoppingToggle}
+          testID={shoppingTarget.testID}
           hitSlop={8}
           style={({ pressed }) => [styles.shoppingButton, pressed ? styles.shoppingButtonPressed : null]}>
           <MaterialIcons
@@ -151,7 +167,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
         accessibilityLabel={shoppingLabel}
       />
     );
-  }, [handleShoppingToggle, isOnShoppingList, onShoppingToggle]);
+  }, [handleShoppingToggle, isOnShoppingList, onShoppingToggle, shoppingTarget]);
 
   const control = useMemo(() => {
     if (onShoppingToggle) {
@@ -161,13 +177,25 @@ const IngredientListItem = memo(function IngredientListItemComponent({
     return (
       <View style={styles.presenceSlot}>
         {showAvailabilityToggle ? (
-          <PresenceCheck checked={isAvailable} onToggle={handleToggleAvailability} />
+          <PresenceCheck
+            ref={availabilityTarget.ref}
+            testID={availabilityTarget.testID}
+            checked={isAvailable}
+            onToggle={handleToggleAvailability}
+          />
         ) : (
           <View style={styles.presencePlaceholder} />
         )}
       </View>
     );
-  }, [handleToggleAvailability, isAvailable, onShoppingToggle, showAvailabilityToggle, shoppingControl]);
+  }, [
+    availabilityTarget,
+    handleToggleAvailability,
+    isAvailable,
+    onShoppingToggle,
+    showAvailabilityToggle,
+    shoppingControl,
+  ]);
 
   const handlePress = useCallback(() => {
     const routeParam = ingredient.id ?? ingredient.name;
@@ -226,6 +254,8 @@ export default function IngredientsScreen() {
   );
   const [, startAvailabilityTransition] = useTransition();
   const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
+  const { isActive: isOnboardingActive, currentStepIndex } = useOnboarding();
+  const handledOnboardingStep = useRef<string | null>(null);
 
   useScrollToTop(listRef);
 
@@ -377,6 +407,78 @@ export default function IngredientsScreen() {
       return new Set<string>();
     });
   }, []);
+
+  const handleScrollToIndexFailed = useCallback(
+    ({ index }: { index: number }) => {
+      setTimeout(() => {
+        listRef.current?.scrollToIndex({ index, animated: true, viewPosition: 0.2 });
+      }, 100);
+    },
+    [],
+  );
+
+  const scrollToIngredientName = useCallback(
+    (name: string) => {
+      const normalized = normalizeSearchText(name);
+      const index = filteredIngredients.findIndex(
+        (ingredient) => normalizeSearchText(ingredient.name ?? '') === normalized,
+      );
+      if (index < 0) {
+        return false;
+      }
+
+      listRef.current?.scrollToIndex({ index, animated: true, viewPosition: 0.2 });
+      return true;
+    },
+    [filteredIngredients],
+  );
+
+  useEffect(() => {
+    if (!isOnboardingActive) {
+      handledOnboardingStep.current = null;
+      return;
+    }
+
+    const step = ONBOARDING_STEPS[currentStepIndex];
+    if (!step || handledOnboardingStep.current === step.id) {
+      return;
+    }
+
+    if (step.id === 'ingredients-all') {
+      if (activeTab !== 'all') {
+        setActiveTab('all');
+        return;
+      }
+      if (scrollToIngredientName('Champagne')) {
+        handledOnboardingStep.current = step.id;
+      }
+      return;
+    }
+
+    if (step.id === 'ingredients-my') {
+      if (activeTab !== 'my') {
+        setActiveTab('my');
+        return;
+      }
+      handledOnboardingStep.current = step.id;
+      return;
+    }
+
+    if (step.id === 'ingredients-shopping') {
+      if (activeTab !== 'shopping') {
+        setActiveTab('shopping');
+        return;
+      }
+      if (scrollToIngredientName('Orange Juice')) {
+        handledOnboardingStep.current = step.id;
+      }
+    }
+  }, [
+    activeTab,
+    currentStepIndex,
+    isOnboardingActive,
+    scrollToIngredientName,
+  ]);
 
   const ingredientLookup = useMemo(() => createIngredientLookup(ingredients), [ingredients]);
 
@@ -783,6 +885,7 @@ export default function IngredientsScreen() {
           keyExtractor={keyExtractor}
           renderItem={renderItem}
           ItemSeparatorComponent={renderSeparator}
+          onScrollToIndexFailed={handleScrollToIndexFailed}
           contentContainerStyle={styles.listContent}
           showsVerticalScrollIndicator
           ListEmptyComponent={

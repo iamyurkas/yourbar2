@@ -29,6 +29,7 @@ import { resolveImageSource } from '@/libs/image-source';
 import { skipDuplicateBack } from '@/libs/navigation';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
+import { useOnboardingTarget } from '@/src/onboarding/target-registry';
 
 function useResolvedIngredient(param: string | undefined, ingredients: Ingredient[]) {
   return useMemo(() => {
@@ -113,6 +114,7 @@ export default function IngredientDetailsScreen() {
   const [, startAvailabilityTransition] = useTransition();
   const [, startShoppingTransition] = useTransition();
   const isHandlingBackRef = useRef(false);
+  const shoppingTarget = useOnboardingTarget('ingredientDetails:addToShopping');
 
   const isAvailable = useMemo(() => {
     if (numericIngredientId == null) {
@@ -503,6 +505,7 @@ export default function IngredientDetailsScreen() {
 
               <View style={styles.statusRow}>
                 <Pressable
+                  ref={shoppingTarget.ref}
                   onPress={handleToggleShopping}
                   accessibilityRole="button"
                   accessibilityLabel={
@@ -510,6 +513,7 @@ export default function IngredientDetailsScreen() {
                       ? 'Remove ingredient from shopping list'
                       : 'Add ingredient to shopping list'
                   }
+                  testID={shoppingTarget.testID}
                   hitSlop={8}
                   style={styles.statusIconButton}
                 >

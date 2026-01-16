@@ -2,7 +2,7 @@ import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { useScrollToTop } from '@react-navigation/native';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   FlatList,
   Pressable,
@@ -30,6 +30,9 @@ import { getLastCocktailTab, setLastCocktailTab, type CocktailTabKey } from '@/l
 import { createIngredientLookup } from '@/libs/ingredient-availability';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Cocktail } from '@/providers/inventory-provider';
+import { useOnboarding } from '@/src/onboarding/OnboardingProvider';
+import { ONBOARDING_STEPS } from '@/src/onboarding/onboarding-steps';
+import { useOptionalOnboardingTarget } from '@/src/onboarding/target-registry';
 import { tagColors } from '@/theme/theme';
 
 type CocktailTagOption = {
@@ -49,6 +52,100 @@ type IngredientOption = {
 };
 
 const METHOD_ICON_SIZE = 16;
+
+type CocktailRowItemProps = {
+  item: Cocktail;
+  availableIngredientIds: Set<number>;
+  ingredientLookup: ReturnType<typeof createIngredientLookup>;
+  ignoreGarnish: boolean;
+  allowAllSubstitutes: boolean;
+  onSelect: (cocktail: Cocktail) => void;
+};
+
+const CocktailRowItem = memo(function CocktailRowItem({
+  item,
+  availableIngredientIds,
+  ingredientLookup,
+  ignoreGarnish,
+  allowAllSubstitutes,
+  onSelect,
+}: CocktailRowItemProps) {
+  const normalizedName = normalizeSearchText(item.name ?? '');
+  const targetId = normalizedName === 'bellini' ? 'cocktailRow:Bellini' : undefined;
+  const target = useOptionalOnboardingTarget(targetId);
+
+  return (
+    <View ref={target.ref} testID={target.testID} collapsable={false}>
+      <CocktailListRow
+        cocktail={item}
+        availableIngredientIds={availableIngredientIds}
+        ingredientLookup={ingredientLookup}
+        ignoreGarnish={ignoreGarnish}
+        allowAllSubstitutes={allowAllSubstitutes}
+        showMethodIcons
+        onPress={() => onSelect(item)}
+      />
+    </View>
+  );
+});
+
+type MyIngredientHeaderProps = {
+  item: Extract<MyTabListItem, { type: 'ingredient-header' }>;
+  shoppingIngredientIds: Set<number>;
+  onSelectIngredient: (ingredientId: number) => void;
+  onToggleShopping: (ingredientId: number) => void;
+};
+
+const MyIngredientHeaderRow = memo(function MyIngredientHeaderRow({
+  item,
+  shoppingIngredientIds,
+  onSelectIngredient,
+  onToggleShopping,
+}: MyIngredientHeaderProps) {
+  const isOnShoppingList = shoppingIngredientIds.has(item.ingredientId);
+  const accessibilityLabel = isOnShoppingList
+    ? 'Remove ingredient from shopping list'
+    : 'Add ingredient to shopping list';
+  const normalizedName = normalizeSearchText(item.name ?? '');
+  const shoppingTargetId =
+    normalizedName === 'orange juice' ? 'myCocktails:addOrangeJuiceToShopping' : undefined;
+  const shoppingTarget = useOptionalOnboardingTarget(shoppingTargetId);
+  const subtitleLabel = `Make ${item.cocktailCount} ${item.cocktailCount === 1 ? 'cocktail' : 'cocktails'}`;
+  const thumbnail = <Thumb label={item.name} uri={item.photoUri ?? undefined} />;
+
+  return (
+    <ListRow
+      title={item.name}
+      subtitle={subtitleLabel}
+      selected
+      highlightColor={Colors.highlightSubtle}
+      tagColor={item.tagColor}
+      thumbnail={thumbnail}
+      onPress={() => onSelectIngredient(item.ingredientId)}
+      accessibilityRole="button"
+      metaAlignment="center"
+      control={
+        <View style={styles.shoppingSlot}>
+          <Pressable
+            ref={shoppingTarget.ref}
+            accessibilityRole="button"
+            accessibilityLabel={accessibilityLabel}
+            onPress={() => onToggleShopping(item.ingredientId)}
+            testID={shoppingTarget.testID}
+            hitSlop={8}
+            style={({ pressed }) => [styles.shoppingButton, pressed ? styles.shoppingButtonPressed : null]}>
+            <MaterialIcons
+              name={isOnShoppingList ? 'shopping-cart' : 'add-shopping-cart'}
+              size={20}
+              color={isOnShoppingList ? Colors.tint : Colors.onSurfaceVariant}
+              style={styles.shoppingIcon}
+            />
+          </Pressable>
+        </View>
+      }
+    />
+  );
+});
 
 type MyTabListItem =
   | { type: 'cocktail'; key: string; cocktail: Cocktail }
@@ -104,6 +201,8 @@ export default function CocktailsScreen() {
   const [headerLayout, setHeaderLayout] = useState<LayoutRectangle | null>(null);
   const [filterAnchorLayout, setFilterAnchorLayout] = useState<LayoutRectangle | null>(null);
   const listRef = useRef<FlatList<unknown>>(null);
+  const { isActive: isOnboardingActive, currentStepIndex } = useOnboarding();
+  const handledOnboardingStep = useRef<string | null>(null);
 
   useScrollToTop(listRef);
   const router = useRouter();
@@ -710,14 +809,13 @@ export default function CocktailsScreen() {
 
   const renderItem = useCallback(
     ({ item }: { item: Cocktail }) => (
-      <CocktailListRow
-        cocktail={item}
+      <CocktailRowItem
+        item={item}
         availableIngredientIds={availableIngredientIds}
         ingredientLookup={ingredientLookup}
         ignoreGarnish={ignoreGarnish}
         allowAllSubstitutes={allowAllSubstitutes}
-        showMethodIcons
-        onPress={() => handleSelectCocktail(item)}
+        onSelect={handleSelectCocktail}
       />
     ),
     [
@@ -742,43 +840,12 @@ export default function CocktailsScreen() {
       }
 
       if (item.type === 'ingredient-header') {
-        const isOnShoppingList = shoppingIngredientIds.has(item.ingredientId);
-        const accessibilityLabel = isOnShoppingList
-          ? 'Remove ingredient from shopping list'
-          : 'Add ingredient to shopping list';
-        const subtitleLabel = `Make ${item.cocktailCount} ${
-          item.cocktailCount === 1 ? 'cocktail' : 'cocktails'
-        }`;
-        const thumbnail = <Thumb label={item.name} uri={item.photoUri ?? undefined} />;
-
         return (
-          <ListRow
-            title={item.name}
-            subtitle={subtitleLabel}
-            selected
-            highlightColor={Colors.highlightSubtle}
-            tagColor={item.tagColor}
-            thumbnail={thumbnail}
-            onPress={() => handleSelectIngredient(item.ingredientId)}
-            accessibilityRole="button"
-            metaAlignment="center"
-            control={
-              <View style={styles.shoppingSlot}>
-                <Pressable
-                  accessibilityRole="button"
-                  accessibilityLabel={accessibilityLabel}
-                  onPress={() => handleShoppingToggle(item.ingredientId)}
-                  hitSlop={8}
-                  style={({ pressed }) => [styles.shoppingButton, pressed ? styles.shoppingButtonPressed : null]}>
-                  <MaterialIcons
-                    name={isOnShoppingList ? 'shopping-cart' : 'add-shopping-cart'}
-                    size={20}
-                    color={isOnShoppingList ? Colors.tint : Colors.onSurfaceVariant}
-                    style={styles.shoppingIcon}
-                  />
-                </Pressable>
-              </View>
-            }
+          <MyIngredientHeaderRow
+            item={item}
+            shoppingIngredientIds={shoppingIngredientIds}
+            onSelectIngredient={handleSelectIngredient}
+            onToggleShopping={handleShoppingToggle}
           />
         );
       }
@@ -851,6 +918,87 @@ export default function CocktailsScreen() {
   const isFilterActive = selectedTagKeys.size > 0 || selectedMethodIds.size > 0;
   const isMyTab = activeTab === 'my';
   const listData = isMyTab ? myTabListData?.items ?? [] : sortedFavorites;
+  const handleScrollToIndexFailed = useCallback(
+    ({ index }: { index: number }) => {
+      setTimeout(() => {
+        listRef.current?.scrollToIndex({ index, animated: true, viewPosition: 0 });
+      }, 100);
+    },
+    [],
+  );
+
+  const scrollToBellini = useCallback(() => {
+    if (isMyTab) {
+      const items = listData as MyTabListItem[];
+      const index = items.findIndex(
+        (item) =>
+          item.type === 'cocktail' &&
+          normalizeSearchText(item.cocktail.name ?? '') === 'bellini',
+      );
+      if (index >= 0) {
+        listRef.current?.scrollToIndex({ index, animated: true, viewPosition: 0 });
+        return true;
+      }
+      return false;
+    }
+
+    const items = listData as Cocktail[];
+    const index = items.findIndex(
+      (item) => normalizeSearchText(item.name ?? '') === 'bellini',
+    );
+    if (index >= 0) {
+      listRef.current?.scrollToIndex({ index, animated: true, viewPosition: 0 });
+      return true;
+    }
+    return false;
+  }, [isMyTab, listData]);
+
+  useEffect(() => {
+    if (!isOnboardingActive) {
+      handledOnboardingStep.current = null;
+      return;
+    }
+
+    const step = ONBOARDING_STEPS[currentStepIndex];
+    if (!step || handledOnboardingStep.current === step.id) {
+      return;
+    }
+
+    if (step.id === 'cocktails-all') {
+      if (activeTab !== 'all') {
+        setActiveTab('all');
+        return;
+      }
+      if (scrollToBellini()) {
+        handledOnboardingStep.current = step.id;
+      }
+      return;
+    }
+
+    if (step.id === 'cocktails-my-shopping' || step.id === 'cocktails-my-rating') {
+      if (activeTab !== 'my') {
+        setActiveTab('my');
+        return;
+      }
+      handledOnboardingStep.current = step.id;
+      return;
+    }
+
+    if (step.id === 'cocktails-favorites') {
+      if (activeTab !== 'favorites') {
+        setActiveTab('favorites');
+        return;
+      }
+      if (scrollToBellini()) {
+        handledOnboardingStep.current = step.id;
+      }
+    }
+  }, [
+    activeTab,
+    currentStepIndex,
+    isOnboardingActive,
+    scrollToBellini,
+  ]);
   const emptyMessage = useMemo(() => {
       switch (activeTab) {
         case 'my':
@@ -987,6 +1135,7 @@ export default function CocktailsScreen() {
           keyExtractor={isMyTab ? myTabKeyExtractor : keyExtractor}
           renderItem={isMyTab ? renderMyItem : renderItem}
           ItemSeparatorComponent={isMyTab ? renderMySeparator : renderSeparator}
+          onScrollToIndexFailed={handleScrollToIndexFailed}
           contentContainerStyle={styles.listContent}
           showsVerticalScrollIndicator
           ListEmptyComponent={
