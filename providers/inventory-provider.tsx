@@ -193,6 +193,7 @@ function normalizeSearchFields<T extends { name?: string | null; searchName?: st
   items: readonly T[] = [],
 ): (T & NormalizedSearchFields)[] {
   return items.map((item) => {
+    const { searchName: _searchName, searchTokens: _searchTokens, ...rest } = item;
     const baseName = item.name ?? '';
     const searchNameNormalized = normalizeSearchText(baseName);
     const searchTokensNormalized = searchNameNormalized
@@ -201,7 +202,7 @@ function normalizeSearchFields<T extends { name?: string | null; searchName?: st
       .filter(Boolean);
 
     return {
-      ...item,
+      ...rest,
       searchNameNormalized,
       searchTokensNormalized,
     };
