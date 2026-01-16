@@ -6,6 +6,7 @@ import "react-native-reanimated";
 import { Colors } from "@/constants/theme";
 import { PaperProvider } from "@/libs/react-native-paper";
 import { InventoryProvider } from "@/providers/inventory-provider";
+import { OnboardingProvider } from "@/providers/onboarding-provider";
 import { UnsavedChangesProvider } from "@/providers/unsaved-changes-provider";
 import { getAppTheme } from "@/theme/theme";
 
@@ -30,18 +31,20 @@ export default function RootLayout() {
   return (
     <UnsavedChangesProvider>
       <InventoryProvider>
-        <PaperProvider theme={paperTheme}>
-          <ThemeProvider value={navigationTheme}>
-            <Stack>
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-              <Stack.Screen
-                name="modal"
-                options={{ presentation: "modal", title: "Modal" }}
-              />
-            </Stack>
-            <StatusBar style="dark" />
-          </ThemeProvider>
-        </PaperProvider>
+        <OnboardingProvider>
+          <PaperProvider theme={paperTheme}>
+            <ThemeProvider value={navigationTheme}>
+              <Stack>
+                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                <Stack.Screen
+                  name="modal"
+                  options={{ presentation: "modal", title: "Modal" }}
+                />
+              </Stack>
+              <StatusBar style="dark" />
+            </ThemeProvider>
+          </PaperProvider>
+        </OnboardingProvider>
       </InventoryProvider>
     </UnsavedChangesProvider>
   );
