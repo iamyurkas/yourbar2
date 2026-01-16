@@ -4,6 +4,7 @@ import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system/legacy';
 import { Image, type ImageSource } from 'expo-image';
 import * as Sharing from 'expo-sharing';
+import { useRouter } from 'expo-router';
 import { useEffect, useMemo, useRef, useState, type ComponentProps } from 'react';
 import { Animated, Dimensions, Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
@@ -84,6 +85,7 @@ type SideMenuDrawerProps = {
 };
 
 export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
+  const router = useRouter();
   const {
     ignoreGarnish,
     setIgnoreGarnish,
@@ -97,6 +99,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     setRatingFilterThreshold,
     startScreen,
     setStartScreen,
+    setHasSeenIngredientsOnboarding,
     resetInventoryFromBundle,
     exportInventoryData,
     exportInventoryPhotoEntries,
@@ -269,6 +272,13 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       setStartScreenModalVisible(false);
       startScreenModalCloseTimeout.current = null;
     }, 250);
+  };
+
+  const handleRunIngredientsOnboarding = () => {
+    setHasSeenIngredientsOnboarding(false);
+    setStartScreen('ingredients_all');
+    router.replace('/ingredients');
+    onClose();
   };
 
   const handleOpenTagManager = () => {
@@ -879,6 +889,34 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               <View style={styles.settingTextContainer}>
                 <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>Favorites rating filter</Text>
                 <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>Showing {ratingFilterThreshold}+ stars cocktails</Text>
+              </View>
+            </Pressable>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Run ingredients onboarding"
+              onPress={handleRunIngredientsOnboarding}
+              style={[
+                styles.settingRow,
+                {
+                  borderColor: Colors.outline,
+                  backgroundColor: Colors.surface,
+                },
+              ]}>
+              <View
+                style={[
+                  styles.checkbox,
+                  {
+                    borderColor: Colors.tint,
+                    backgroundColor: Colors.surfaceVariant,
+                  },
+                ]}>
+                <MaterialCommunityIcons name="help-circle-outline" size={16} color={Colors.tint} />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>Ingredients help</Text>
+                <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>
+                  Replay the ingredients walkthrough
+                </Text>
               </View>
             </Pressable>
             
