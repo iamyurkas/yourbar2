@@ -12,6 +12,8 @@
       "supportsTablet": true
     },
     "android": {
+      "enableProguardInRelease": true,
+      "enableShrinkResourcesInRelease": true,
       "adaptiveIcon": {
         "backgroundColor": "#4DABF7",
         "foregroundImage": "./assets/images/icon.png",
