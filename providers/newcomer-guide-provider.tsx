@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
 
 import { Colors } from '@/constants/theme';
@@ -25,6 +25,7 @@ type GuideContextValue = {
   requestedCocktailTab: CocktailTabKey | null;
   shakerSelectionNames: string[];
   shouldAutoShowShakerResults: boolean;
+  advanceStep: () => void;
 };
 
 type GuideStep = {
@@ -42,6 +43,9 @@ type GuideStep = {
 type GuideStepHelpers = {
   schedule: (callback: () => void, delayMs: number) => void;
   navigateToTab: (path: '/ingredients' | '/cocktails' | '/shaker') => void;
+  requestIngredientTab: (tab: IngredientTabKey) => void;
+  requestCocktailTab: (tab: CocktailTabKey) => void;
+  requestShakerSelection: (names: string[], autoShow: boolean) => void;
   openIngredientDetail: (name: string) => void;
   openCocktailDetail: (name: string) => void;
   ensureIngredientAvailability: (name: string, available: boolean) => void;
@@ -69,7 +73,6 @@ export function NewcomerGuideProvider({ children }: { children: React.ReactNode 
   } = useInventory();
   const [isRunning, setIsRunning] = useState(false);
   const [stepIndex, setStepIndex] = useState(0);
-  const [activeStepId, setActiveStepId] = useState<GuideStepId | null>(null);
   const [requestedIngredientTab, setRequestedIngredientTab] = useState<IngredientTabKey | null>(null);
   const [requestedCocktailTab, setRequestedCocktailTab] = useState<CocktailTabKey | null>(null);
   const [shakerSelectionNames, setShakerSelectionNames] = useState<string[]>([]);
@@ -114,8 +117,9 @@ export function NewcomerGuideProvider({ children }: { children: React.ReactNode 
           'In Ingredients → All, mark Champagne and Peach as in stock. This teaches the app what is available in your bar.',
         durationMs: 3600,
         ingredientTab: 'all',
-        onEnter: ({ navigateToTab, ensureIngredientAvailability }) => {
+        onEnter: ({ navigateToTab, requestIngredientTab, ensureIngredientAvailability }) => {
           navigateToTab('/ingredients');
+          requestIngredientTab('all');
           ensureIngredientAvailability('Champagne', true);
           ensureIngredientAvailability('Peach', true);
         },
@@ -127,8 +131,9 @@ export function NewcomerGuideProvider({ children }: { children: React.ReactNode 
           'Open Orange Juice and add it to your shopping list so you can track what to buy next.',
         durationMs: 3600,
         ingredientTab: 'my',
-        onEnter: ({ navigateToTab, schedule, openIngredientDetail, ensureIngredientShopping }) => {
+        onEnter: ({ navigateToTab, requestIngredientTab, schedule, openIngredientDetail, ensureIngredientShopping }) => {
           navigateToTab('/ingredients');
+          requestIngredientTab('my');
           schedule(() => openIngredientDetail('Orange Juice'), 700);
           schedule(() => ensureIngredientShopping('Orange Juice', true), 1400);
         },
@@ -140,8 +145,9 @@ export function NewcomerGuideProvider({ children }: { children: React.ReactNode 
           'Switch to Ingredients → Shopping and remove Orange Juice to keep the list up to date.',
         durationMs: 3200,
         ingredientTab: 'shopping',
-        onEnter: ({ navigateToTab, schedule, ensureIngredientShopping }) => {
+        onEnter: ({ navigateToTab, requestIngredientTab, schedule, ensureIngredientShopping }) => {
           navigateToTab('/ingredients');
+          requestIngredientTab('shopping');
           ensureIngredientShopping('Orange Juice', true);
           schedule(() => ensureIngredientShopping('Orange Juice', false), 1600);
         },
@@ -152,8 +158,9 @@ export function NewcomerGuideProvider({ children }: { children: React.ReactNode 
         message: 'In Cocktails → All, scroll to Bellini at the top to explore its details.',
         durationMs: 3200,
         cocktailTab: 'all',
-        onEnter: ({ navigateToTab }) => {
+        onEnter: ({ navigateToTab, requestCocktailTab }) => {
           navigateToTab('/cocktails');
+          requestCocktailTab('all');
         },
       },
       {
@@ -163,8 +170,9 @@ export function NewcomerGuideProvider({ children }: { children: React.ReactNode 
           'In Cocktails → My, add Orange Juice to the shopping list to plan what you need.',
         durationMs: 3200,
         cocktailTab: 'my',
-        onEnter: ({ navigateToTab, ensureIngredientShopping }) => {
+        onEnter: ({ navigateToTab, requestCocktailTab, ensureIngredientShopping }) => {
           navigateToTab('/cocktails');
+          requestCocktailTab('my');
           ensureIngredientShopping('Orange Juice', true);
         },
       },
@@ -174,7 +182,8 @@ export function NewcomerGuideProvider({ children }: { children: React.ReactNode 
         message: 'Open Bellini and rate it 3 stars to remember your favorites.',
         durationMs: 3200,
         cocktailTab: 'my',
-        onEnter: ({ schedule, openCocktailDetail, setCocktailRating }) => {
+        onEnter: ({ requestCocktailTab, schedule, openCocktailDetail, setCocktailRating }) => {
+          requestCocktailTab('my');
           schedule(() => openCocktailDetail('Bellini'), 600);
           schedule(() => setCocktailRating('Bellini', 3), 1300);
         },
@@ -185,8 +194,9 @@ export function NewcomerGuideProvider({ children }: { children: React.ReactNode 
         message: 'Switch to Cocktails → Favorites to see the cocktails you rate highly.',
         durationMs: 2800,
         cocktailTab: 'favorites',
-        onEnter: ({ navigateToTab }) => {
+        onEnter: ({ navigateToTab, requestCocktailTab }) => {
           navigateToTab('/cocktails');
+          requestCocktailTab('favorites');
         },
       },
       {
@@ -195,7 +205,8 @@ export function NewcomerGuideProvider({ children }: { children: React.ReactNode 
         message: 'Open Bellini again and set it to 4 stars to make it stand out.',
         durationMs: 3200,
         cocktailTab: 'favorites',
-        onEnter: ({ schedule, openCocktailDetail, setCocktailRating }) => {
+        onEnter: ({ requestCocktailTab, schedule, openCocktailDetail, setCocktailRating }) => {
+          requestCocktailTab('favorites');
           schedule(() => openCocktailDetail('Bellini'), 600);
           schedule(() => setCocktailRating('Bellini', 4), 1300);
         },
@@ -208,12 +219,16 @@ export function NewcomerGuideProvider({ children }: { children: React.ReactNode 
         durationMs: 4000,
         shakerSelectionNames: ['Whiskey', 'White Rum', 'Cola'],
         shouldAutoShowShakerResults: true,
-        onEnter: ({ navigateToTab }) => {
+        onEnter: ({ navigateToTab, requestShakerSelection }) => {
           navigateToTab('/shaker');
+          requestShakerSelection(['Whiskey', 'White Rum', 'Cola'], true);
         },
       },
     ];
   }, []);
+
+  const currentStep = isRunning ? steps[stepIndex] ?? null : null;
+  const activeStepId = currentStep?.id ?? null;
 
   const resolveIngredientId = (name: string): number | undefined => {
     const normalized = normalizeName(name);
@@ -229,43 +244,32 @@ export function NewcomerGuideProvider({ children }: { children: React.ReactNode 
     return cocktailsRef.current.find((cocktail) => normalizeName(cocktail.name ?? '') === normalized);
   };
 
-  useEffect(() => {
-    if (!isRunning) {
-      setActiveStepId(null);
-      setRequestedIngredientTab(null);
-      setRequestedCocktailTab(null);
-      setShakerSelectionNames([]);
-      setShouldAutoShowShakerResults(false);
-      return;
-    }
-
-    const currentStep = steps[stepIndex];
-
+  const advanceStep = React.useCallback(() => {
     if (!currentStep) {
-      setIsRunning(false);
-      setHasSeenNewcomerGuide(true);
-      setActiveStepId(null);
-      setRequestedIngredientTab(null);
-      setRequestedCocktailTab(null);
-      setShakerSelectionNames([]);
-      setShouldAutoShowShakerResults(false);
       return;
     }
 
-    setActiveStepId(currentStep.id);
-    setRequestedIngredientTab(currentStep.ingredientTab ?? null);
-    setRequestedCocktailTab(currentStep.cocktailTab ?? null);
-    setShakerSelectionNames(currentStep.shakerSelectionNames ?? []);
-    setShouldAutoShowShakerResults(Boolean(currentStep.shouldAutoShowShakerResults));
-
-    const timeouts: Array<ReturnType<typeof setTimeout>> = [];
+    setRequestedIngredientTab(null);
+    setRequestedCocktailTab(null);
+    setShakerSelectionNames([]);
+    setShouldAutoShowShakerResults(false);
 
     const helpers: GuideStepHelpers = {
       schedule: (callback, delayMs) => {
-        timeouts.push(setTimeout(callback, delayMs));
+        setTimeout(callback, delayMs);
       },
       navigateToTab: (path) => {
         router.push(path);
+      },
+      requestIngredientTab: (tab) => {
+        setRequestedIngredientTab(tab);
+      },
+      requestCocktailTab: (tab) => {
+        setRequestedCocktailTab(tab);
+      },
+      requestShakerSelection: (names, autoShow) => {
+        setShakerSelectionNames(names);
+        setShouldAutoShowShakerResults(autoShow);
       },
       openIngredientDetail: (name) => {
         const ingredientId = resolveIngredientId(name);
@@ -322,22 +326,23 @@ export function NewcomerGuideProvider({ children }: { children: React.ReactNode 
 
     currentStep.onEnter?.(helpers);
 
-    const advanceTimeout = setTimeout(() => {
-      setStepIndex((previous) => previous + 1);
-    }, currentStep.durationMs);
+    const nextIndex = stepIndex + 1;
+    if (nextIndex >= steps.length) {
+      setIsRunning(false);
+      setHasSeenNewcomerGuide(true);
+      setStepIndex(0);
+      return;
+    }
 
-    return () => {
-      timeouts.forEach(clearTimeout);
-      clearTimeout(advanceTimeout);
-    };
+    setStepIndex(nextIndex);
   }, [
-    isRunning,
+    currentStep,
     router,
+    setCocktailRating,
     setHasSeenNewcomerGuide,
     setIngredientAvailability,
-    setCocktailRating,
-    steps,
     stepIndex,
+    steps.length,
     toggleIngredientShopping,
   ]);
 
@@ -349,6 +354,7 @@ export function NewcomerGuideProvider({ children }: { children: React.ReactNode 
       requestedCocktailTab,
       shakerSelectionNames,
       shouldAutoShowShakerResults,
+      advanceStep,
     }),
     [
       isRunning,
@@ -357,6 +363,7 @@ export function NewcomerGuideProvider({ children }: { children: React.ReactNode 
       requestedCocktailTab,
       shakerSelectionNames,
       shouldAutoShowShakerResults,
+      advanceStep,
     ],
   );
 
@@ -374,7 +381,7 @@ export function useNewcomerGuide() {
 }
 
 export function NewcomerGuideOverlay() {
-  const { activeStepId, isRunning } = useNewcomerGuide();
+  const { activeStepId, isRunning, advanceStep } = useNewcomerGuide();
 
   const stepCopy = useMemo(() => {
     switch (activeStepId) {
@@ -438,13 +445,13 @@ export function NewcomerGuideOverlay() {
   }
 
   return (
-    <View pointerEvents="none" style={styles.overlay}>
+    <Pressable style={styles.overlay} onPress={advanceStep}>
       <View style={styles.backdrop} />
       <View style={styles.card}>
         <Text style={styles.title}>{stepCopy.title}</Text>
         <Text style={styles.message}>{stepCopy.message}</Text>
       </View>
-    </View>
+    </Pressable>
   );
 }
 

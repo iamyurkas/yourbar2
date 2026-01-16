@@ -130,8 +130,7 @@ export default function ShakerScreen() {
     ignoreGarnish,
     allowAllSubstitutes,
   } = useInventory();
-  const { activeStepId, isRunning, shakerSelectionNames, shouldAutoShowShakerResults } =
-    useNewcomerGuide();
+  const { activeStepId, shakerSelectionNames, shouldAutoShowShakerResults } = useNewcomerGuide();
   const [query, setQuery] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [inStockOnly, setInStockOnly] = useState(false);
@@ -142,22 +141,24 @@ export default function ShakerScreen() {
   const didAutoShowRef = useRef(false);
   const insets = useSafeAreaInsets();
   const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
-  const guideSelectionSet = useMemo(
-    () => new Set(shakerSelectionNames.map((name) => normalizeSearchText(name))),
-    [shakerSelectionNames],
-  );
+  const guideHighlightSet = useMemo(() => {
+    if (activeStepId !== 'shaker') {
+      return new Set<string>();
+    }
+
+    return new Set(['whiskey', 'white rum', 'cola']);
+  }, [activeStepId]);
 
   useScrollToTop(listRef);
 
   useEffect(() => {
-    if (activeStepId !== 'shaker') {
+    if (shakerSelectionNames.length === 0) {
       didAutoSelectRef.current = false;
       didAutoShowRef.current = false;
+      return;
     }
-  }, [activeStepId]);
 
-  useEffect(() => {
-    if (!isRunning || activeStepId !== 'shaker' || didAutoSelectRef.current) {
+    if (didAutoSelectRef.current) {
       return;
     }
 
@@ -185,12 +186,10 @@ export default function ShakerScreen() {
       setExpandedTagKeys(nextExpandedTags);
       didAutoSelectRef.current = true;
     }
-  }, [activeStepId, ingredients, isRunning, shakerSelectionNames]);
+  }, [ingredients, shakerSelectionNames]);
 
   useEffect(() => {
     if (
-      !isRunning ||
-      activeStepId !== 'shaker' ||
       !shouldAutoShowShakerResults ||
       didAutoShowRef.current ||
       selectedIngredientIds.size === 0
@@ -204,7 +203,7 @@ export default function ShakerScreen() {
     }, 1200);
 
     return () => clearTimeout(timeout);
-  }, [activeStepId, handleShowResults, isRunning, selectedIngredientIds.size, shouldAutoShowShakerResults]);
+  }, [handleShowResults, selectedIngredientIds.size, shouldAutoShowShakerResults]);
 
   const normalizedQuery = useMemo(() => {
     const normalized = normalizeSearchText(query);
@@ -635,8 +634,7 @@ export default function ShakerScreen() {
                   ? Colors.outline
                   : Colors.outlineVariant;
                 const normalizedName = normalizeSearchText(ingredient.name ?? '');
-                const isGuideHighlighted =
-                  isRunning && activeStepId === 'shaker' && guideSelectionSet.has(normalizedName);
+                const isGuideHighlighted = guideHighlightSet.has(normalizedName);
                 const makeableCount = ingredientId >= 0 ? makeableCocktailCounts.get(ingredientId) ?? 0 : 0;
                 const totalCount = ingredientId >= 0 ? totalCocktailCounts.get(ingredientId) ?? 0 : 0;
                 const label = makeableCount === 1 ? 'cocktail' : 'cocktails';
@@ -671,13 +669,11 @@ export default function ShakerScreen() {
       );
     },
     [
-      activeStepId,
       availableIngredientIds,
       expandedTagKeys,
-      guideSelectionSet,
+      guideHighlightSet,
       handleToggleGroup,
       handleToggleIngredient,
-      isRunning,
       makeableCocktailCounts,
       totalCocktailCounts,
       Colors.onSurface,
