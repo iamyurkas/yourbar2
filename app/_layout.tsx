@@ -5,6 +5,7 @@ import "react-native-reanimated";
 
 import { Colors } from "@/constants/theme";
 import { PaperProvider } from "@/libs/react-native-paper";
+import { OnboardingGate } from "@/components/OnboardingGate";
 import { InventoryProvider } from "@/providers/inventory-provider";
 import { OnboardingProvider } from "@/providers/onboarding-provider";
 import { UnsavedChangesProvider } from "@/providers/unsaved-changes-provider";
@@ -41,6 +42,7 @@ export default function RootLayout() {
                   options={{ presentation: "modal", title: "Modal" }}
                 />
               </Stack>
+              <OnboardingGate />
               <StatusBar style="dark" />
             </ThemeProvider>
           </PaperProvider>
