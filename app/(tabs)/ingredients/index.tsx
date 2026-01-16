@@ -252,6 +252,7 @@ export default function IngredientsScreen() {
   const [headerLayout, setHeaderLayout] = useState<LayoutRectangle | null>(null);
   const [filterAnchorLayout, setFilterAnchorLayout] = useState<LayoutRectangle | null>(null);
   const [onboardingStep, setOnboardingStep] = useState<number | null>(null);
+  const [onboardingHasScrolled, setOnboardingHasScrolled] = useState(false);
   const [presenceLayouts, setPresenceLayouts] = useState<Record<number, LayoutRectangle>>({});
   const listRef = useRef<FlatList<unknown>>(null);
   const [optimisticAvailability, setOptimisticAvailability] = useState<Map<number, boolean>>(
@@ -265,10 +266,12 @@ export default function IngredientsScreen() {
   useEffect(() => {
     if (!hasSeenIngredientsOnboarding) {
       setOnboardingStep((previous) => previous ?? 0);
+      setOnboardingHasScrolled(false);
       return;
     }
 
     setOnboardingStep(null);
+    setOnboardingHasScrolled(false);
   }, [hasSeenIngredientsOnboarding]);
 
   useEffect(() => {
@@ -679,6 +682,11 @@ export default function IngredientsScreen() {
 
     const targetIndex = Math.min(...onboardingTargetIndices);
     listRef.current?.scrollToIndex({ index: targetIndex, animated: true, viewPosition: 0.3 });
+    const timeout = setTimeout(() => {
+      setOnboardingHasScrolled(true);
+    }, 350);
+
+    return () => clearTimeout(timeout);
   }, [onboardingActive, onboardingStep, onboardingTargetIndices]);
 
   const effectiveAvailableIngredientIds = useMemo(() => {
@@ -756,6 +764,12 @@ export default function IngredientsScreen() {
     }
 
     if (onboardingStep === 0) {
+      if (!onboardingHasScrolled && onboardingTargetIndices.length > 0) {
+        const targetIndex = Math.min(...onboardingTargetIndices);
+        listRef.current?.scrollToIndex({ index: targetIndex, animated: true, viewPosition: 0.3 });
+        setOnboardingHasScrolled(true);
+        return;
+      }
       onboardingTargetIds.forEach((id) => {
         setIngredientAvailability(id, true);
       });
@@ -770,6 +784,8 @@ export default function IngredientsScreen() {
     setOnboardingStep(null);
   }, [
     onboardingStep,
+    onboardingHasScrolled,
+    onboardingTargetIndices,
     onboardingTargetIds,
     setHasSeenIngredientsOnboarding,
     setIngredientAvailability,
