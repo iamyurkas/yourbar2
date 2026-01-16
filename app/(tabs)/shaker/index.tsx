@@ -26,6 +26,7 @@ import {
 } from '@/libs/ingredient-availability';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
+import { useNewcomerGuide } from '@/providers/newcomer-guide-provider';
 import { tagColors } from '@/theme/theme';
 
 type IngredientTagOption = {
@@ -45,6 +46,7 @@ type IngredientRowProps = {
   subtitle?: string;
   subtitleStyle?: StyleProp<TextStyle>;
   onToggle: (id: number) => void;
+  highlighted?: boolean;
 };
 
 const IngredientRow = memo(function IngredientRow({
@@ -54,6 +56,7 @@ const IngredientRow = memo(function IngredientRow({
   subtitle,
   subtitleStyle,
   onToggle,
+  highlighted = false,
 }: IngredientRowProps) {
   const ingredientId = Number(ingredient.id ?? -1);
   const tagColor = ingredient.tags?.[0]?.color ?? tagColors.yellow;
@@ -81,6 +84,7 @@ const IngredientRow = memo(function IngredientRow({
       highlightColor={highlightColor}
       tagColor={tagColor}
       thumbnail={thumbnail}
+      highlighted={highlighted}
       accessibilityRole="button"
       accessibilityState={isSelected ? { selected: true } : undefined}
       brandIndicatorColor={brandIndicatorColor}
@@ -126,16 +130,81 @@ export default function ShakerScreen() {
     ignoreGarnish,
     allowAllSubstitutes,
   } = useInventory();
+  const { activeStepId, isRunning, shakerSelectionNames, shouldAutoShowShakerResults } =
+    useNewcomerGuide();
   const [query, setQuery] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [inStockOnly, setInStockOnly] = useState(false);
   const [expandedTagKeys, setExpandedTagKeys] = useState<Set<string>>(() => new Set());
   const [selectedIngredientIds, setSelectedIngredientIds] = useState<Set<number>>(() => new Set());
   const listRef = useRef<FlatList<unknown>>(null);
+  const didAutoSelectRef = useRef(false);
+  const didAutoShowRef = useRef(false);
   const insets = useSafeAreaInsets();
   const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
+  const guideSelectionSet = useMemo(
+    () => new Set(shakerSelectionNames.map((name) => normalizeSearchText(name))),
+    [shakerSelectionNames],
+  );
 
   useScrollToTop(listRef);
+
+  useEffect(() => {
+    if (activeStepId !== 'shaker') {
+      didAutoSelectRef.current = false;
+      didAutoShowRef.current = false;
+    }
+  }, [activeStepId]);
+
+  useEffect(() => {
+    if (!isRunning || activeStepId !== 'shaker' || didAutoSelectRef.current) {
+      return;
+    }
+
+    const normalizedTargets = new Set(
+      shakerSelectionNames.map((name) => normalizeSearchText(name)),
+    );
+    const nextSelectedIds = new Set<number>();
+    const nextExpandedTags = new Set<string>();
+
+    ingredients.forEach((ingredient) => {
+      const normalizedName = normalizeSearchText(ingredient.name ?? '');
+      if (!normalizedTargets.has(normalizedName)) {
+        return;
+      }
+
+      const ingredientId = Number(ingredient.id ?? -1);
+      if (Number.isFinite(ingredientId) && ingredientId >= 0) {
+        nextSelectedIds.add(Math.trunc(ingredientId));
+        nextExpandedTags.add(getIngredientTagKey(ingredient));
+      }
+    });
+
+    if (nextSelectedIds.size > 0) {
+      setSelectedIngredientIds(nextSelectedIds);
+      setExpandedTagKeys(nextExpandedTags);
+      didAutoSelectRef.current = true;
+    }
+  }, [activeStepId, ingredients, isRunning, shakerSelectionNames]);
+
+  useEffect(() => {
+    if (
+      !isRunning ||
+      activeStepId !== 'shaker' ||
+      !shouldAutoShowShakerResults ||
+      didAutoShowRef.current ||
+      selectedIngredientIds.size === 0
+    ) {
+      return;
+    }
+
+    const timeout = setTimeout(() => {
+      handleShowResults();
+      didAutoShowRef.current = true;
+    }, 1200);
+
+    return () => clearTimeout(timeout);
+  }, [activeStepId, handleShowResults, isRunning, selectedIngredientIds.size, shouldAutoShowShakerResults]);
 
   const normalizedQuery = useMemo(() => {
     const normalized = normalizeSearchText(query);
@@ -565,6 +634,9 @@ export default function ShakerScreen() {
                 const separatorColor = isAvailable
                   ? Colors.outline
                   : Colors.outlineVariant;
+                const normalizedName = normalizeSearchText(ingredient.name ?? '');
+                const isGuideHighlighted =
+                  isRunning && activeStepId === 'shaker' && guideSelectionSet.has(normalizedName);
                 const makeableCount = ingredientId >= 0 ? makeableCocktailCounts.get(ingredientId) ?? 0 : 0;
                 const totalCount = ingredientId >= 0 ? totalCocktailCounts.get(ingredientId) ?? 0 : 0;
                 const label = makeableCount === 1 ? 'cocktail' : 'cocktails';
@@ -585,6 +657,7 @@ export default function ShakerScreen() {
                       subtitle={subtitleText}
                       subtitleStyle={{ color: Colors.onSurfaceVariant }}
                       onToggle={handleToggleIngredient}
+                      highlighted={isGuideHighlighted}
                     />
                     {index < item.ingredients.length - 1 ? (
                       <View style={[styles.divider, { backgroundColor: separatorColor }]} />
@@ -598,10 +671,13 @@ export default function ShakerScreen() {
       );
     },
     [
+      activeStepId,
       availableIngredientIds,
       expandedTagKeys,
+      guideSelectionSet,
       handleToggleGroup,
       handleToggleIngredient,
+      isRunning,
       makeableCocktailCounts,
       totalCocktailCounts,
       Colors.onSurface,

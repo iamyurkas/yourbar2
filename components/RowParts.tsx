@@ -118,6 +118,7 @@ type ListRowProps = {
   subtitleStyle?: StyleProp<TextStyle>;
   metaAlignment?: 'flex-start' | 'center' | 'space-between';
   brandIndicatorColor?: string;
+  highlighted?: boolean;
 };
 
 export function ListRow({
@@ -137,8 +138,13 @@ export function ListRow({
   subtitleStyle,
   metaAlignment = 'space-between',
   brandIndicatorColor,
+  highlighted = false,
 }: ListRowProps) {
-  const backgroundColor = selected ? highlightColor ?? `${Colors.tint}1F` : Colors.background;
+  const backgroundColor = selected
+    ? highlightColor ?? `${Colors.tint}1F`
+    : highlighted
+      ? `${Colors.tint}14`
+      : Colors.background;
   const metaAlignmentStyle =
     metaAlignment === 'center'
       ? styles.metaContentCenter
@@ -154,7 +160,7 @@ export function ListRow({
       onPress={onPress}
       accessibilityRole={accessibilityRole}
       accessibilityState={accessibilityState}
-      style={[styles.row, { backgroundColor }]}
+      style={[styles.row, { backgroundColor }, highlighted ? styles.rowHighlighted : null]}
     >
       {showBrandIndicator ? (
         <View pointerEvents="none" style={[styles.brandIndicator, { backgroundColor: indicatorColor }]} />
@@ -207,6 +213,10 @@ const styles = StyleSheet.create({
     minHeight: 76,
     width: '100%',
     position: 'relative',
+  },
+  rowHighlighted: {
+    borderWidth: 1,
+    borderColor: Colors.tint,
   },
   brandIndicator: {
     position: 'absolute',

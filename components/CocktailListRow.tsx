@@ -22,6 +22,7 @@ type CocktailListRowProps = {
   allowAllSubstitutes?: boolean;
   showMethodIcons?: boolean;
   onPress?: () => void;
+  highlighted?: boolean;
 };
 
 const areCocktailRowPropsEqual = (
@@ -43,6 +44,7 @@ const areCocktailRowPropsEqual = (
     prev.ignoreGarnish === next.ignoreGarnish &&
     prev.allowAllSubstitutes === next.allowAllSubstitutes &&
     prev.highlightColor === next.highlightColor &&
+    prev.highlighted === next.highlighted &&
     onPressEqual
   );
 };
@@ -60,6 +62,7 @@ const CocktailListRowComponent = ({
   allowAllSubstitutes = false,
   showMethodIcons = false,
   onPress,
+  highlighted = false,
 }: CocktailListRowProps) => {
   const lookup = useMemo(() => {
     if (ingredientLookup) {
@@ -232,6 +235,7 @@ const CocktailListRowComponent = ({
       thumbnail={thumbnail}
       brandIndicatorColor={brandIndicatorColor}
       metaFooter={methodIconContent}
+      highlighted={highlighted}
       accessibilityRole={onPress ? 'button' : undefined}
       metaAlignment="center"
     />

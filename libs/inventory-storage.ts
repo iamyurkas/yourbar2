@@ -18,6 +18,7 @@ export type InventorySnapshotV1<TCocktail, TIngredient> = {
   keepScreenAwake?: boolean;
   ratingFilterThreshold?: number;
   startScreen?: string;
+  hasSeenNewcomerGuide?: boolean;
 };
 
 export type InventoryDeltaSnapshot<TCocktail, TIngredient> = {
@@ -44,6 +45,7 @@ export type InventoryDeltaSnapshot<TCocktail, TIngredient> = {
   keepScreenAwake?: boolean;
   ratingFilterThreshold?: number;
   startScreen?: string;
+  hasSeenNewcomerGuide?: boolean;
 };
 
 export type InventorySnapshot<TCocktail, TIngredient> =

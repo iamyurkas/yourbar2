@@ -11,6 +11,7 @@ import { TabBarButton } from '@/components/tab-bar/TabBarButton';
 import { TabBarIcon } from '@/components/tab-bar/TabBarIcon';
 import { Colors } from '@/constants/theme';
 import { getLastCocktailTab, getLastIngredientTab } from '@/libs/collection-tabs';
+import { NewcomerGuideOverlay, NewcomerGuideProvider } from '@/providers/newcomer-guide-provider';
 
 type TabPressHandler = (navigation: { navigate: (...args: never[]) => void }, route: { name: string }) => void;
 
@@ -65,56 +66,59 @@ export default function TabLayout() {
   }, []);
 
   return (
-    <>
-      <Tabs
-        initialRouteName="cocktails"
-        screenOptions={{
-          headerShown: false,
-          tabBarActiveTintColor: Colors.primary,
-          tabBarInactiveTintColor: Colors.onSurfaceVariant,
-          tabBarStyle: {
-            height: 72 + insets.bottom,
-            paddingTop: 8,
-            paddingBottom: insets.bottom,
-            backgroundColor: 'transparent',
-          },
-          tabBarItemStyle: {
-            justifyContent: 'center',
-            alignItems: 'center',
-          },
-          tabBarBackground: () => (
-            <View style={styles.tabBarBackground}>
-              <View style={styles.tabBarSurface} />
-              <View style={[styles.tabBarInset, { height: insets.bottom, backgroundColor: tabBarInsetColor }]} />
-            </View>
-          ),
-        }}>
-        {TAB_SCREENS.map(({ name, title, icon, onTabPress }) => (
-          <Tabs.Screen
-            key={name}
-            name={name}
-            options={{
-              title,
-              tabBarButton: (props) => <TabBarButton {...props} onOpenDialog={showDialog} />,
-              tabBarIcon: ({ color, focused }) => <TabBarIcon source={icon} color={color} focused={focused} />,
-            }}
-            listeners={({ navigation, route }) => ({
-              tabPress: (event) => {
-                event.preventDefault();
-                onTabPress(navigation, route);
-              },
-            })}
-          />
-        ))}
-      </Tabs>
-      <AppDialog
-        visible={dialogOptions != null}
-        title={dialogOptions?.title ?? ''}
-        message={dialogOptions?.message}
-        actions={dialogOptions?.actions ?? []}
-        onRequestClose={closeDialog}
-      />
-    </>
+    <NewcomerGuideProvider>
+      <>
+        <Tabs
+          initialRouteName="cocktails"
+          screenOptions={{
+            headerShown: false,
+            tabBarActiveTintColor: Colors.primary,
+            tabBarInactiveTintColor: Colors.onSurfaceVariant,
+            tabBarStyle: {
+              height: 72 + insets.bottom,
+              paddingTop: 8,
+              paddingBottom: insets.bottom,
+              backgroundColor: 'transparent',
+            },
+            tabBarItemStyle: {
+              justifyContent: 'center',
+              alignItems: 'center',
+            },
+            tabBarBackground: () => (
+              <View style={styles.tabBarBackground}>
+                <View style={styles.tabBarSurface} />
+                <View style={[styles.tabBarInset, { height: insets.bottom, backgroundColor: tabBarInsetColor }]} />
+              </View>
+            ),
+          }}>
+          {TAB_SCREENS.map(({ name, title, icon, onTabPress }) => (
+            <Tabs.Screen
+              key={name}
+              name={name}
+              options={{
+                title,
+                tabBarButton: (props) => <TabBarButton {...props} onOpenDialog={showDialog} />,
+                tabBarIcon: ({ color, focused }) => <TabBarIcon source={icon} color={color} focused={focused} />,
+              }}
+              listeners={({ navigation, route }) => ({
+                tabPress: (event) => {
+                  event.preventDefault();
+                  onTabPress(navigation, route);
+                },
+              })}
+            />
+          ))}
+        </Tabs>
+        <NewcomerGuideOverlay />
+        <AppDialog
+          visible={dialogOptions != null}
+          title={dialogOptions?.title ?? ''}
+          message={dialogOptions?.message}
+          actions={dialogOptions?.actions ?? []}
+          onRequestClose={closeDialog}
+        />
+      </>
+    </NewcomerGuideProvider>
   );
 }
 

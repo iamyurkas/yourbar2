@@ -108,6 +108,8 @@ type InventoryContextValue = {
   setRatingFilterThreshold: (value: number) => void;
   startScreen: StartScreen;
   setStartScreen: (value: StartScreen) => void;
+  hasSeenNewcomerGuide: boolean;
+  setHasSeenNewcomerGuide: (value: boolean) => void;
 };
 
 type InventoryState = {
@@ -183,6 +185,8 @@ declare global {
   var __yourbarInventoryRatingFilterThreshold: number | undefined;
   // eslint-disable-next-line no-var
   var __yourbarInventoryStartScreen: StartScreen | undefined;
+  // eslint-disable-next-line no-var
+  var __yourbarHasSeenNewcomerGuide: boolean | undefined;
   // eslint-disable-next-line no-var
   var __yourbarInventoryCustomCocktailTags: CocktailTag[] | undefined;
   // eslint-disable-next-line no-var
@@ -564,6 +568,7 @@ function createDeltaSnapshotFromInventory(
     startScreen: StartScreen;
     customCocktailTags: CocktailTag[];
     customIngredientTags: IngredientTag[];
+    hasSeenNewcomerGuide: boolean;
   },
 ): InventoryDeltaSnapshot<CocktailStorageRecord, IngredientStorageRecord> {
   const baseData = loadInventoryData();
@@ -685,6 +690,7 @@ function createDeltaSnapshotFromInventory(
     keepScreenAwake: options.keepScreenAwake,
     ratingFilterThreshold: options.ratingFilterThreshold,
     startScreen: options.startScreen,
+    hasSeenNewcomerGuide: options.hasSeenNewcomerGuide,
   } satisfies InventoryDeltaSnapshot<CocktailStorageRecord, IngredientStorageRecord>;
 }
 
@@ -732,6 +738,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   const [startScreen, setStartScreen] = useState<StartScreen>(
     () => globalThis.__yourbarInventoryStartScreen ?? DEFAULT_START_SCREEN,
   );
+  const [hasSeenNewcomerGuide, setHasSeenNewcomerGuide] = useState<boolean>(
+    () => globalThis.__yourbarHasSeenNewcomerGuide ?? false,
+  );
   const [customCocktailTags, setCustomCocktailTags] = useState<CocktailTag[]>(() =>
     sanitizeCustomTags(globalThis.__yourbarInventoryCustomCocktailTags, DEFAULT_TAG_COLOR),
   );
@@ -766,6 +775,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             Math.max(1, Math.round(stored.ratingFilterThreshold ?? 1)),
           );
           const nextStartScreen = sanitizeStartScreen(stored.startScreen);
+          const nextHasSeenNewcomerGuide = stored.hasSeenNewcomerGuide ?? false;
           const nextCustomCocktailTags = sanitizeCustomTags(stored.customCocktailTags, DEFAULT_TAG_COLOR);
           const nextCustomIngredientTags = sanitizeCustomTags(stored.customIngredientTags, DEFAULT_TAG_COLOR);
 
@@ -779,6 +789,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           setKeepScreenAwake(nextKeepScreenAwake);
           setRatingFilterThreshold(nextRatingFilterThreshold);
           setStartScreen(nextStartScreen);
+          setHasSeenNewcomerGuide(nextHasSeenNewcomerGuide);
           setCustomCocktailTags(nextCustomCocktailTags);
           setCustomIngredientTags(nextCustomIngredientTags);
           return;
@@ -799,6 +810,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           setUseImperialUnits(false);
           setKeepScreenAwake(true);
           setStartScreen(DEFAULT_START_SCREEN);
+          setHasSeenNewcomerGuide(false);
           setCustomCocktailTags([]);
           setCustomIngredientTags([]);
         }
@@ -831,6 +843,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     globalThis.__yourbarInventoryKeepScreenAwake = keepScreenAwake;
     globalThis.__yourbarInventoryRatingFilterThreshold = ratingFilterThreshold;
     globalThis.__yourbarInventoryStartScreen = startScreen;
+    globalThis.__yourbarHasSeenNewcomerGuide = hasSeenNewcomerGuide;
     globalThis.__yourbarInventoryCustomCocktailTags = customCocktailTags;
     globalThis.__yourbarInventoryCustomIngredientTags = customIngredientTags;
 
@@ -844,6 +857,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       keepScreenAwake,
       ratingFilterThreshold,
       startScreen,
+      hasSeenNewcomerGuide,
       customCocktailTags,
       customIngredientTags,
     });
@@ -869,6 +883,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     keepScreenAwake,
     ratingFilterThreshold,
     startScreen,
+    hasSeenNewcomerGuide,
     customCocktailTags,
     customIngredientTags,
   ]);
@@ -2111,6 +2126,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       setKeepScreenAwake: handleSetKeepScreenAwake,
       setRatingFilterThreshold: handleSetRatingFilterThreshold,
       setStartScreen: handleSetStartScreen,
+      hasSeenNewcomerGuide,
+      setHasSeenNewcomerGuide,
     };
   }, [
     cocktailsWithRatings,
@@ -2126,6 +2143,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     keepScreenAwake,
     ratingFilterThreshold,
     startScreen,
+    hasSeenNewcomerGuide,
     setIngredientAvailability,
     toggleIngredientAvailability,
     toggleIngredientShopping,
@@ -2155,6 +2173,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     handleSetKeepScreenAwake,
     handleSetRatingFilterThreshold,
     handleSetStartScreen,
+    setHasSeenNewcomerGuide,
   ]);
 
   return <InventoryContext.Provider value={value}>{children}</InventoryContext.Provider>;

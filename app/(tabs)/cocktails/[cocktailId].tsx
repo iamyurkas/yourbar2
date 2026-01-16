@@ -27,6 +27,7 @@ import {
   useInventory,
   type Cocktail,
 } from '@/providers/inventory-provider';
+import { useNewcomerGuide } from '@/providers/newcomer-guide-provider';
 import { tagColors } from '@/theme/theme';
 
 type RecipeIngredient = NonNullable<Cocktail['ingredients']>[number];
@@ -298,6 +299,7 @@ export default function CocktailDetailsScreen() {
     useImperialUnits,
     keepScreenAwake,
   } = useInventory();
+  const { activeStepId, isRunning } = useNewcomerGuide();
 
   const resolvedParam = Array.isArray(cocktailId) ? cocktailId[0] : cocktailId;
   const cocktail = useMemo(
@@ -439,6 +441,13 @@ export default function CocktailDetailsScreen() {
   const [optimisticRating, setOptimisticRating] = useState<number | null>(null);
   const [, startRatingTransition] = useTransition();
   const displayedRating = optimisticRating ?? userRating;
+  const guideRatingTarget = isRunning
+    ? activeStepId === 'cocktails_my_detail'
+      ? 3
+      : activeStepId === 'cocktails_favorites_detail'
+        ? 4
+        : null
+    : null;
 
   useEffect(() => {
     setOptimisticRating((previous) => {
@@ -648,7 +657,10 @@ export default function CocktailDetailsScreen() {
                           ? 'Clear rating'
                           : `Set rating to ${starValue}`
                       }
-                      style={styles.ratingStar}
+                      style={[
+                        styles.ratingStar,
+                        guideRatingTarget === starValue ? styles.guideHighlight : null,
+                      ]}
                       hitSlop={8}>
                       <MaterialCommunityIcons name={icon} size={32} color={Colors.tint} />
                     </Pressable>
@@ -991,6 +1003,11 @@ const styles = StyleSheet.create({
     height: 32,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  guideHighlight: {
+    borderWidth: 2,
+    borderColor: Colors.tint,
+    borderRadius: 8,
   },
   toggleUnitsButton: {
     alignSelf: 'center',

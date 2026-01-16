@@ -30,6 +30,7 @@ import { getLastCocktailTab, setLastCocktailTab, type CocktailTabKey } from '@/l
 import { createIngredientLookup } from '@/libs/ingredient-availability';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Cocktail } from '@/providers/inventory-provider';
+import { useNewcomerGuide } from '@/providers/newcomer-guide-provider';
 import { tagColors } from '@/theme/theme';
 
 type CocktailTagOption = {
@@ -93,6 +94,7 @@ export default function CocktailsScreen() {
     shoppingIngredientIds,
     toggleIngredientShopping,
   } = useInventory();
+  const { activeStepId, isRunning, requestedCocktailTab } = useNewcomerGuide();
   const [activeTab, setActiveTab] = useState<CocktailTabKey>(() => getLastCocktailTab());
   const [query, setQuery] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -109,6 +111,39 @@ export default function CocktailsScreen() {
   const router = useRouter();
   const ingredientLookup = useMemo(() => createIngredientLookup(ingredients), [ingredients]);
   const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
+  useEffect(() => {
+    if (isRunning && requestedCocktailTab && requestedCocktailTab !== activeTab) {
+      setActiveTab(requestedCocktailTab);
+    }
+  }, [activeTab, isRunning, requestedCocktailTab]);
+  const guideHighlightCocktails = useMemo(() => {
+    if (!isRunning) {
+      return new Set<string>();
+    }
+
+    switch (activeStepId) {
+      case 'cocktails_all':
+      case 'cocktails_my':
+      case 'cocktails_my_detail':
+      case 'cocktails_favorites':
+      case 'cocktails_favorites_detail':
+        return new Set(['bellini']);
+      default:
+        return new Set<string>();
+    }
+  }, [activeStepId, isRunning]);
+  const guideHighlightIngredients = useMemo(() => {
+    if (!isRunning) {
+      return new Set<string>();
+    }
+
+    switch (activeStepId) {
+      case 'cocktails_my':
+        return new Set(['orange juice']);
+      default:
+        return new Set<string>();
+    }
+  }, [activeStepId, isRunning]);
 
   const availableTagOptions = useMemo<CocktailTagOption[]>(() => {
     const map = new Map<string, CocktailTagOption>();
@@ -709,20 +744,27 @@ export default function CocktailsScreen() {
   );
 
   const renderItem = useCallback(
-    ({ item }: { item: Cocktail }) => (
-      <CocktailListRow
-        cocktail={item}
-        availableIngredientIds={availableIngredientIds}
-        ingredientLookup={ingredientLookup}
-        ignoreGarnish={ignoreGarnish}
-        allowAllSubstitutes={allowAllSubstitutes}
-        showMethodIcons
-        onPress={() => handleSelectCocktail(item)}
-      />
-    ),
+    ({ item }: { item: Cocktail }) => {
+      const normalizedName = normalizeSearchText(item.name ?? '');
+      const isGuideHighlighted = guideHighlightCocktails.has(normalizedName);
+
+      return (
+        <CocktailListRow
+          cocktail={item}
+          availableIngredientIds={availableIngredientIds}
+          ingredientLookup={ingredientLookup}
+          ignoreGarnish={ignoreGarnish}
+          allowAllSubstitutes={allowAllSubstitutes}
+          showMethodIcons
+          highlighted={isGuideHighlighted}
+          onPress={() => handleSelectCocktail(item)}
+        />
+      );
+    },
     [
       availableIngredientIds,
       allowAllSubstitutes,
+      guideHighlightCocktails,
       handleSelectCocktail,
       ignoreGarnish,
       ingredientLookup,
@@ -762,6 +804,7 @@ export default function CocktailsScreen() {
             onPress={() => handleSelectIngredient(item.ingredientId)}
             accessibilityRole="button"
             metaAlignment="center"
+            highlighted={guideHighlightIngredients.has(normalizeSearchText(item.name))}
             control={
               <View style={styles.shoppingSlot}>
                 <Pressable
@@ -791,6 +834,7 @@ export default function CocktailsScreen() {
           ignoreGarnish={ignoreGarnish}
           allowAllSubstitutes={allowAllSubstitutes}
           showMethodIcons
+          highlighted={guideHighlightCocktails.has(normalizeSearchText(item.cocktail.name ?? ''))}
           onPress={() => handleSelectCocktail(item.cocktail)}
         />
       );
@@ -798,6 +842,8 @@ export default function CocktailsScreen() {
     [
       allowAllSubstitutes,
       availableIngredientIds,
+      guideHighlightCocktails,
+      guideHighlightIngredients,
       handleSelectCocktail,
       handleSelectIngredient,
       handleShoppingToggle,
@@ -872,6 +918,14 @@ export default function CocktailsScreen() {
 
     return 0;
   }, [filterAnchorLayout, headerLayout]);
+
+  useEffect(() => {
+    if (!isRunning || activeStepId !== 'cocktails_all' || activeTab !== 'all') {
+      return;
+    }
+
+    listRef.current?.scrollToOffset({ offset: 0, animated: true });
+  }, [activeStepId, activeTab, isRunning]);
 
   return (
     <SafeAreaView

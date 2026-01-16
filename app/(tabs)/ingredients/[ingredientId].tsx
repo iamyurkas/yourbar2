@@ -29,6 +29,7 @@ import { resolveImageSource } from '@/libs/image-source';
 import { skipDuplicateBack } from '@/libs/navigation';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
+import { useNewcomerGuide } from '@/providers/newcomer-guide-provider';
 
 function useResolvedIngredient(param: string | undefined, ingredients: Ingredient[]) {
   return useMemo(() => {
@@ -68,6 +69,7 @@ export default function IngredientDetailsScreen() {
     ignoreGarnish,
     allowAllSubstitutes,
   } = useInventory();
+  const { activeStepId, isRunning } = useNewcomerGuide();
 
   const ingredient = useResolvedIngredient(
     Array.isArray(ingredientId) ? ingredientId[0] : ingredientId,
@@ -130,6 +132,7 @@ export default function IngredientDetailsScreen() {
 
   const effectiveIsAvailable = optimisticAvailability ?? isAvailable;
   const effectiveIsOnShoppingList = optimisticShopping ?? isOnShoppingList;
+  const highlightShoppingButton = isRunning && activeStepId === 'ingredients_my_detail';
 
   useEffect(() => {
     setOptimisticAvailability((previous) => {
@@ -511,7 +514,7 @@ export default function IngredientDetailsScreen() {
                       : 'Add ingredient to shopping list'
                   }
                   hitSlop={8}
-                  style={styles.statusIconButton}
+                  style={[styles.statusIconButton, highlightShoppingButton ? styles.guideHighlight : null]}
                 >
                   <MaterialIcons
                     name={
@@ -821,6 +824,11 @@ const styles = StyleSheet.create({
     height: 24,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  guideHighlight: {
+    borderWidth: 2,
+    borderColor: Colors.tint,
+    borderRadius: 8,
   },
   cocktailList: {
     marginHorizontal: -24,

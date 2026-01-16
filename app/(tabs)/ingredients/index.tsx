@@ -30,6 +30,7 @@ import {
 } from '@/libs/ingredient-availability';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
+import { useNewcomerGuide } from '@/providers/newcomer-guide-provider';
 import { tagColors } from '@/theme/theme';
 
 type IngredientSection = {
@@ -60,6 +61,7 @@ type IngredientListItemProps = {
   isOnShoppingList: boolean;
   showAvailabilityToggle?: boolean;
   onShoppingToggle?: (id: number) => void;
+  highlighted?: boolean;
 };
 
 const areIngredientPropsEqual = (
@@ -74,7 +76,8 @@ const areIngredientPropsEqual = (
   prev.surfaceVariantColor === next.surfaceVariantColor &&
   prev.isOnShoppingList === next.isOnShoppingList &&
   prev.showAvailabilityToggle === next.showAvailabilityToggle &&
-  prev.onShoppingToggle === next.onShoppingToggle;
+  prev.onShoppingToggle === next.onShoppingToggle &&
+  prev.highlighted === next.highlighted;
 
 const IngredientListItem = memo(function IngredientListItemComponent({
   ingredient,
@@ -86,6 +89,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
   isOnShoppingList,
   showAvailabilityToggle = true,
   onShoppingToggle,
+  highlighted = false,
 }: IngredientListItemProps) {
   const router = useRouter();
   const id = Number(ingredient.id ?? -1);
@@ -190,6 +194,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
       selected={isAvailable}
       highlightColor={highlightColor}
       tagColor={tagColor}
+      highlighted={highlighted}
       accessibilityRole="button"
       accessibilityState={showAvailabilityToggle && isAvailable ? { selected: true } : undefined}
       thumbnail={thumbnail}
@@ -213,6 +218,7 @@ export default function IngredientsScreen() {
     ignoreGarnish,
     allowAllSubstitutes,
   } = useInventory();
+  const { activeStepId, isRunning, requestedIngredientTab } = useNewcomerGuide();
   const [activeTab, setActiveTab] = useState<IngredientTabKey>(() => getLastIngredientTab());
   const [query, setQuery] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -226,8 +232,29 @@ export default function IngredientsScreen() {
   );
   const [, startAvailabilityTransition] = useTransition();
   const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
+  const guideHighlightNames = useMemo(() => {
+    if (!isRunning) {
+      return new Set<string>();
+    }
+
+    switch (activeStepId) {
+      case 'ingredients_all':
+        return new Set(['champagne', 'peach']);
+      case 'ingredients_my_detail':
+      case 'ingredients_shopping':
+        return new Set(['orange juice']);
+      default:
+        return new Set<string>();
+    }
+  }, [activeStepId, isRunning]);
 
   useScrollToTop(listRef);
+
+  useEffect(() => {
+    if (isRunning && requestedIngredientTab && requestedIngredientTab !== activeTab) {
+      setActiveTab(requestedIngredientTab);
+    }
+  }, [activeTab, isRunning, requestedIngredientTab]);
 
   useEffect(() => {
     setLastIngredientTab(activeTab);
@@ -647,6 +674,8 @@ export default function IngredientsScreen() {
     ({ item }: { item: Ingredient }) => {
       const ingredientId = Number(item.id ?? -1);
       const isOnShoppingList = ingredientId >= 0 && shoppingIngredientIds.has(ingredientId);
+      const normalizedName = normalizeSearchText(item.name ?? '');
+      const isGuideHighlighted = guideHighlightNames.has(normalizedName);
 
       const isMyTab = activeTab === 'my';
       const countsMap = isMyTab ? makeableCocktailCounts : totalCocktailCounts;
@@ -674,6 +703,7 @@ export default function IngredientsScreen() {
           isOnShoppingList={isOnShoppingList}
           showAvailabilityToggle={activeTab !== 'shopping'}
           onShoppingToggle={activeTab === 'shopping' ? handleShoppingToggle : undefined}
+          highlighted={isGuideHighlighted}
         />
       );
     },
@@ -683,6 +713,7 @@ export default function IngredientsScreen() {
       handleToggle,
       handleShoppingToggle,
       highlightColor,
+      guideHighlightNames,
       makeableCocktailCounts,
       Colors.icon,
       Colors.onSurfaceVariant,
