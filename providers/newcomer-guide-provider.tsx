@@ -25,6 +25,7 @@ type GuideContextValue = {
   requestedCocktailTab: CocktailTabKey | null;
   shakerSelectionNames: string[];
   shouldAutoShowShakerResults: boolean;
+  ingredientsAllPhase: 'intro' | 'select';
   startGuide: () => void;
   advanceStep: () => void;
 };
@@ -78,6 +79,7 @@ export function NewcomerGuideProvider({ children }: { children: React.ReactNode 
   const [requestedCocktailTab, setRequestedCocktailTab] = useState<CocktailTabKey | null>(null);
   const [shakerSelectionNames, setShakerSelectionNames] = useState<string[]>([]);
   const [shouldAutoShowShakerResults, setShouldAutoShowShakerResults] = useState(false);
+  const [ingredientsAllPhase, setIngredientsAllPhase] = useState<'intro' | 'select'>('intro');
 
   const ingredientsRef = useRef<Ingredient[]>(ingredients);
   const cocktailsRef = useRef<Cocktail[]>(cocktails);
@@ -105,17 +107,24 @@ export function NewcomerGuideProvider({ children }: { children: React.ReactNode 
       return;
     }
 
-    setIsRunning(true);
+    setHasSeenNewcomerGuide(false);
+    setRequestedIngredientTab('all');
+    setRequestedCocktailTab(null);
+    setShakerSelectionNames([]);
+    setShouldAutoShowShakerResults(false);
+    setIngredientsAllPhase('intro');
+    router.push('/ingredients');
     setStepIndex(0);
-  }, [hasSeenNewcomerGuide, loading]);
+    setIsRunning(true);
+  }, [hasSeenNewcomerGuide, loading, router, setHasSeenNewcomerGuide]);
 
   const steps = useMemo<GuideStep[]>(() => {
     return [
       {
         id: 'ingredients_all',
-        title: 'Ingredients: what you already have',
+        title: 'Ingredients: What do you have?',
         message:
-          'In Ingredients → All, mark Champagne and Peach as in stock. This teaches the app what is available in your bar.',
+          'Mark what do you have to see what cocktails are available.',
         durationMs: 3600,
         ingredientTab: 'all',
         onEnter: ({ navigateToTab, requestIngredientTab, ensureIngredientAvailability }) => {
@@ -233,13 +242,15 @@ export function NewcomerGuideProvider({ children }: { children: React.ReactNode 
 
   const startGuide = React.useCallback(() => {
     setHasSeenNewcomerGuide(false);
-    setRequestedIngredientTab(null);
+    setRequestedIngredientTab('all');
     setRequestedCocktailTab(null);
     setShakerSelectionNames([]);
     setShouldAutoShowShakerResults(false);
+    setIngredientsAllPhase('intro');
+    router.push('/ingredients');
     setStepIndex(0);
     setIsRunning(true);
-  }, [setHasSeenNewcomerGuide]);
+  }, [router, setHasSeenNewcomerGuide]);
 
   const resolveIngredientId = (name: string): number | undefined => {
     const normalized = normalizeName(name);
@@ -260,10 +271,87 @@ export function NewcomerGuideProvider({ children }: { children: React.ReactNode 
       return;
     }
 
+    if (currentStep.id === 'ingredients_all' && ingredientsAllPhase === 'intro') {
+      setIngredientsAllPhase('select');
+      const ingredientActions: GuideStepHelpers = {
+        schedule: (callback, delayMs) => {
+          setTimeout(callback, delayMs);
+        },
+        navigateToTab: (path) => {
+          router.push(path);
+        },
+        requestIngredientTab: (tab) => {
+          setRequestedIngredientTab(tab);
+        },
+        requestCocktailTab: (tab) => {
+          setRequestedCocktailTab(tab);
+        },
+        requestShakerSelection: (names, autoShow) => {
+          setShakerSelectionNames(names);
+          setShouldAutoShowShakerResults(autoShow);
+        },
+        openIngredientDetail: (name) => {
+          const ingredientId = resolveIngredientId(name);
+          if (!ingredientId) {
+            return;
+          }
+          router.push({
+            pathname: '/ingredients/[ingredientId]',
+            params: { ingredientId: String(ingredientId) },
+          });
+        },
+        openCocktailDetail: (name) => {
+          const cocktail = resolveCocktail(name);
+          if (!cocktail) {
+            return;
+          }
+          const routeParam = cocktail.id ?? cocktail.name;
+          if (routeParam == null) {
+            return;
+          }
+          router.push({
+            pathname: '/cocktails/[cocktailId]',
+            params: { cocktailId: String(routeParam) },
+          });
+        },
+        ensureIngredientAvailability: (name, available) => {
+          const ingredientId = resolveIngredientId(name);
+          if (!ingredientId) {
+            return;
+          }
+          const isAvailable = availableIngredientIdsRef.current.has(ingredientId);
+          if (isAvailable !== available) {
+            setIngredientAvailability(ingredientId, available);
+          }
+        },
+        ensureIngredientShopping: (name, inShoppingList) => {
+          const ingredientId = resolveIngredientId(name);
+          if (!ingredientId) {
+            return;
+          }
+          const isInList = shoppingIngredientIdsRef.current.has(ingredientId);
+          if (isInList !== inShoppingList) {
+            toggleIngredientShopping(ingredientId);
+          }
+        },
+        setCocktailRating: (name, rating) => {
+          const cocktail = resolveCocktail(name);
+          if (!cocktail) {
+            return;
+          }
+          setCocktailRating(cocktail, rating);
+        },
+      };
+
+      currentStep.onEnter?.(ingredientActions);
+      return;
+    }
+
     setRequestedIngredientTab(null);
     setRequestedCocktailTab(null);
     setShakerSelectionNames([]);
     setShouldAutoShowShakerResults(false);
+    setIngredientsAllPhase('intro');
 
     const helpers: GuideStepHelpers = {
       schedule: (callback, delayMs) => {
@@ -352,6 +440,7 @@ export function NewcomerGuideProvider({ children }: { children: React.ReactNode 
     setCocktailRating,
     setHasSeenNewcomerGuide,
     setIngredientAvailability,
+    ingredientsAllPhase,
     stepIndex,
     steps.length,
     toggleIngredientShopping,
@@ -365,6 +454,7 @@ export function NewcomerGuideProvider({ children }: { children: React.ReactNode 
       requestedCocktailTab,
       shakerSelectionNames,
       shouldAutoShowShakerResults,
+      ingredientsAllPhase,
       startGuide,
       advanceStep,
     }),
@@ -375,6 +465,7 @@ export function NewcomerGuideProvider({ children }: { children: React.ReactNode 
       requestedCocktailTab,
       shakerSelectionNames,
       shouldAutoShowShakerResults,
+      ingredientsAllPhase,
       startGuide,
       advanceStep,
     ],
@@ -394,15 +485,15 @@ export function useNewcomerGuide() {
 }
 
 export function NewcomerGuideOverlay() {
-  const { activeStepId, isRunning, advanceStep } = useNewcomerGuide();
+  const { activeStepId, ingredientsAllPhase, isRunning, advanceStep } = useNewcomerGuide();
 
   const stepCopy = useMemo(() => {
     switch (activeStepId) {
       case 'ingredients_all':
         return {
-          title: 'Ingredients: what you already have',
+          title: 'Ingredients: What do you have?',
           message:
-            'In Ingredients → All, mark Champagne and Peach as in stock. This teaches the app what is available in your bar.',
+            'Mark what do you have to see what cocktails are available.',
         };
       case 'ingredients_my_detail':
         return {
@@ -457,8 +548,15 @@ export function NewcomerGuideOverlay() {
     return null;
   }
 
+  const overlayStyle = [
+    styles.overlay,
+    activeStepId === 'ingredients_all' && ingredientsAllPhase === 'intro'
+      ? styles.overlayCentered
+      : null,
+  ];
+
   return (
-    <Pressable style={styles.overlay} onPress={advanceStep}>
+    <Pressable style={overlayStyle} onPress={advanceStep}>
       <View style={styles.backdrop} />
       <View style={styles.card}>
         <Text style={styles.title}>{stepCopy.title}</Text>
@@ -477,6 +575,10 @@ const styles = StyleSheet.create({
     paddingBottom: 32,
     zIndex: 10,
     elevation: 10,
+  },
+  overlayCentered: {
+    justifyContent: 'center',
+    paddingBottom: 0,
   },
   backdrop: {
     ...StyleSheet.absoluteFillObject,

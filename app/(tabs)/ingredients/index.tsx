@@ -62,6 +62,7 @@ type IngredientListItemProps = {
   showAvailabilityToggle?: boolean;
   onShoppingToggle?: (id: number) => void;
   highlighted?: boolean;
+  showAvailabilitySpotlight?: boolean;
 };
 
 const areIngredientPropsEqual = (
@@ -77,7 +78,8 @@ const areIngredientPropsEqual = (
   prev.isOnShoppingList === next.isOnShoppingList &&
   prev.showAvailabilityToggle === next.showAvailabilityToggle &&
   prev.onShoppingToggle === next.onShoppingToggle &&
-  prev.highlighted === next.highlighted;
+  prev.highlighted === next.highlighted &&
+  prev.showAvailabilitySpotlight === next.showAvailabilitySpotlight;
 
 const IngredientListItem = memo(function IngredientListItemComponent({
   ingredient,
@@ -90,6 +92,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
   showAvailabilityToggle = true,
   onShoppingToggle,
   highlighted = false,
+  showAvailabilitySpotlight = false,
 }: IngredientListItemProps) {
   const router = useRouter();
   const id = Number(ingredient.id ?? -1);
@@ -165,13 +168,23 @@ const IngredientListItem = memo(function IngredientListItemComponent({
     return (
       <View style={styles.presenceSlot}>
         {showAvailabilityToggle ? (
-          <PresenceCheck checked={isAvailable} onToggle={handleToggleAvailability} />
+          <View style={styles.presenceSpotlightWrap}>
+            {showAvailabilitySpotlight ? <View style={styles.presenceSpotlight} /> : null}
+            <PresenceCheck checked={isAvailable} onToggle={handleToggleAvailability} />
+          </View>
         ) : (
           <View style={styles.presencePlaceholder} />
         )}
       </View>
     );
-  }, [handleToggleAvailability, isAvailable, onShoppingToggle, showAvailabilityToggle, shoppingControl]);
+  }, [
+    handleToggleAvailability,
+    isAvailable,
+    onShoppingToggle,
+    showAvailabilitySpotlight,
+    showAvailabilityToggle,
+    shoppingControl,
+  ]);
 
   const handlePress = useCallback(() => {
     const routeParam = ingredient.id ?? ingredient.name;
@@ -218,7 +231,7 @@ export default function IngredientsScreen() {
     ignoreGarnish,
     allowAllSubstitutes,
   } = useInventory();
-  const { activeStepId, isRunning, requestedIngredientTab } = useNewcomerGuide();
+  const { activeStepId, ingredientsAllPhase, isRunning, requestedIngredientTab } = useNewcomerGuide();
   const [activeTab, setActiveTab] = useState<IngredientTabKey>(() => getLastIngredientTab());
   const [query, setQuery] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -247,6 +260,8 @@ export default function IngredientsScreen() {
         return new Set<string>();
     }
   }, [activeStepId, isRunning]);
+  const shouldShowAvailabilitySpotlight =
+    isRunning && activeStepId === 'ingredients_all' && ingredientsAllPhase === 'select';
 
   useScrollToTop(listRef);
 
@@ -704,6 +719,7 @@ export default function IngredientsScreen() {
           showAvailabilityToggle={activeTab !== 'shopping'}
           onShoppingToggle={activeTab === 'shopping' ? handleShoppingToggle : undefined}
           highlighted={isGuideHighlighted}
+          showAvailabilitySpotlight={isGuideHighlighted && shouldShowAvailabilitySpotlight}
         />
       );
     },
@@ -714,6 +730,7 @@ export default function IngredientsScreen() {
       handleShoppingToggle,
       highlightColor,
       guideHighlightNames,
+      shouldShowAvailabilitySpotlight,
       makeableCocktailCounts,
       Colors.icon,
       Colors.onSurfaceVariant,
@@ -843,6 +860,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     minWidth: 24,
+  },
+  presenceSpotlightWrap: {
+    width: 44,
+    height: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  presenceSpotlight: {
+    position: 'absolute',
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    borderWidth: 2,
+    borderColor: 'rgba(255, 255, 255, 0.8)',
   },
   presencePlaceholder: {
     height: 16,
