@@ -193,12 +193,10 @@ function normalizeSearchFields<T extends { name?: string | null; searchName?: st
   items: readonly T[] = [],
 ): (T & NormalizedSearchFields)[] {
   return items.map((item) => {
-    const baseName = item.searchName ?? item.name ?? '';
+    const baseName = item.name ?? '';
     const searchNameNormalized = normalizeSearchText(baseName);
-    const searchTokensNormalized = (item.searchTokens && item.searchTokens.length > 0
-      ? item.searchTokens
-      : searchNameNormalized.split(/\s+/)
-    )
+    const searchTokensNormalized = searchNameNormalized
+      .split(/\s+/)
       .map((token) => normalizeSearchText(token))
       .filter(Boolean);
 
@@ -1097,9 +1095,6 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         });
         const tags = tagMap.size > 0 ? Array.from(tagMap.values()) : undefined;
 
-        const normalizedName = trimmedName.toLowerCase();
-        const searchTokens = normalizedName.split(/\s+/).filter(Boolean);
-
         const candidateRecord: CocktailRecord = {
           id: nextId,
           name: trimmedName,
@@ -1113,8 +1108,6 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             ...ingredient,
             order: index + 1,
           })),
-          searchName: normalizedName,
-          searchTokens,
         } satisfies CocktailRecord;
 
         const [normalized] = normalizeSearchFields([candidateRecord]);
@@ -1190,9 +1183,6 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         });
         const tags = tagMap.size > 0 ? Array.from(tagMap.values()) : undefined;
 
-        const normalizedName = trimmedName.toLowerCase();
-        const searchTokens = normalizedName.split(/\s+/).filter(Boolean);
-
         const candidateRecord: IngredientRecord = {
           id: nextId,
           name: trimmedName,
@@ -1200,8 +1190,6 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           tags,
           baseIngredientId,
           usageCount: 0,
-          searchName: normalizedName,
-          searchTokens,
           photoUri,
         };
 
@@ -1292,19 +1280,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       };
     });
     const ingredients = inventoryState.ingredients.map((ingredient) => {
-      const baseName = ingredient.searchName ?? ingredient.name ?? '';
-      const normalizedSearchName = normalizeSearchText(baseName);
-      const searchTokens =
-        ingredient.searchTokens && ingredient.searchTokens.length > 0
-          ? ingredient.searchTokens
-          : normalizedSearchName.split(/\s+/).filter(Boolean);
-
       const record = toIngredientStorageRecord(ingredient);
-
       return {
         ...record,
-        searchName: normalizedSearchName,
-        searchTokens,
         photoUri: normalizePhotoUriForBackup({
           uri: record.photoUri,
           category: 'ingredients',
@@ -1402,9 +1380,6 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         });
         const tags = tagMap.size > 0 ? Array.from(tagMap.values()) : undefined;
 
-        const normalizedName = trimmedName.toLowerCase();
-        const searchTokens = normalizedName.split(/\s+/).filter(Boolean);
-
         const previous = prev.ingredients[ingredientIndex];
         const candidateRecord: IngredientRecord = {
           ...previous,
@@ -1414,8 +1389,6 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           tags,
           baseIngredientId,
           usageCount: previous.usageCount,
-          searchName: normalizedName,
-          searchTokens,
           photoUri,
         };
 
@@ -1568,9 +1541,6 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       });
       const tags = tagMap.size > 0 ? Array.from(tagMap.values()) : undefined;
 
-      const normalizedName = trimmedName.toLowerCase();
-      const searchTokens = normalizedName.split(/\s+/).filter(Boolean);
-
       const existing = prev.cocktails[existingIndex];
       const candidateRecord: CocktailRecord = {
         id: existing.id,
@@ -1585,8 +1555,6 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           ...ingredient,
           order: index + 1,
         })),
-        searchName: normalizedName,
-        searchTokens,
       } satisfies CocktailRecord;
 
       const [normalized] = normalizeSearchFields([candidateRecord]);
