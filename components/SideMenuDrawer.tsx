@@ -17,6 +17,7 @@ import { Colors } from '@/constants/theme';
 import { type InventoryData } from '@/libs/inventory-data';
 import { buildPhotoBaseName } from '@/libs/photo-utils';
 import { useInventory, type StartScreen } from '@/providers/inventory-provider';
+import { useNewcomerGuide } from '@/providers/newcomer-guide-provider';
 
 const MENU_WIDTH = Math.round(Dimensions.get('window').width * 0.75);
 const ANIMATION_DURATION = 200;
@@ -84,6 +85,7 @@ type SideMenuDrawerProps = {
 };
 
 export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
+  const { startGuide } = useNewcomerGuide();
   const {
     ignoreGarnish,
     setIgnoreGarnish,
@@ -214,6 +216,11 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
   const toggleKeepScreenAwake = () => {
     setKeepScreenAwake(!keepScreenAwake);
+  };
+
+  const handleStartGuide = () => {
+    startGuide();
+    onClose();
   };
 
   const handleResetInventory = async () => {
@@ -686,7 +693,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
             style={styles.menuScroll}
             contentContainerStyle={styles.menuContent}
             showsVerticalScrollIndicator={false}>
-              <Pressable
+            <Pressable
               accessibilityRole="button"
               accessibilityLabel="Reload bundled inventory"
               onPress={handleResetInventory}
@@ -704,6 +711,27 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>Reload bundled data</Text>
                 <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>
                   Clear saved inventory and reload assets from data.json
+                </Text>
+              </View>
+            </Pressable>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Run newcomer guide"
+              onPress={handleStartGuide}
+              style={[
+                styles.actionRow,
+                {
+                  borderColor: Colors.outline,
+                  backgroundColor: Colors.surface,
+                },
+              ]}>
+              <View style={[styles.actionIcon, { backgroundColor: Colors.surfaceVariant }]}>
+                <MaterialCommunityIcons name="compass-outline" size={16} color={Colors.onSurfaceVariant} />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>Run newcomer guide</Text>
+                <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>
+                  Walk through the app basics again
                 </Text>
               </View>
             </Pressable>

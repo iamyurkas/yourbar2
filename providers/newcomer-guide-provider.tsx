@@ -25,6 +25,7 @@ type GuideContextValue = {
   requestedCocktailTab: CocktailTabKey | null;
   shakerSelectionNames: string[];
   shouldAutoShowShakerResults: boolean;
+  startGuide: () => void;
   advanceStep: () => void;
 };
 
@@ -230,6 +231,16 @@ export function NewcomerGuideProvider({ children }: { children: React.ReactNode 
   const currentStep = isRunning ? steps[stepIndex] ?? null : null;
   const activeStepId = currentStep?.id ?? null;
 
+  const startGuide = React.useCallback(() => {
+    setHasSeenNewcomerGuide(false);
+    setRequestedIngredientTab(null);
+    setRequestedCocktailTab(null);
+    setShakerSelectionNames([]);
+    setShouldAutoShowShakerResults(false);
+    setStepIndex(0);
+    setIsRunning(true);
+  }, [setHasSeenNewcomerGuide]);
+
   const resolveIngredientId = (name: string): number | undefined => {
     const normalized = normalizeName(name);
     const entry = ingredientsRef.current.find(
@@ -354,6 +365,7 @@ export function NewcomerGuideProvider({ children }: { children: React.ReactNode 
       requestedCocktailTab,
       shakerSelectionNames,
       shouldAutoShowShakerResults,
+      startGuide,
       advanceStep,
     }),
     [
@@ -363,6 +375,7 @@ export function NewcomerGuideProvider({ children }: { children: React.ReactNode 
       requestedCocktailTab,
       shakerSelectionNames,
       shouldAutoShowShakerResults,
+      startGuide,
       advanceStep,
     ],
   );
