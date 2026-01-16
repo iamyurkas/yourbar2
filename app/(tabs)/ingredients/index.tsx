@@ -44,6 +44,9 @@ const TAB_OPTIONS: SegmentTabOption[] = [
   { key: 'shopping', label: 'Shopping' },
 ];
 
+const ONBOARDING_TARGET_NAMES = ['champagne', 'peach'];
+const ONBOARDING_SPOTLIGHT_RADIUS = 50;
+
 type IngredientTagOption = {
   key: string;
   name: string;
@@ -60,6 +63,7 @@ type IngredientListItemProps = {
   isOnShoppingList: boolean;
   showAvailabilityToggle?: boolean;
   onShoppingToggle?: (id: number) => void;
+  onPresenceLayout?: (ingredientId: number, layout: LayoutRectangle) => void;
 };
 
 const areIngredientPropsEqual = (
@@ -74,7 +78,8 @@ const areIngredientPropsEqual = (
   prev.surfaceVariantColor === next.surfaceVariantColor &&
   prev.isOnShoppingList === next.isOnShoppingList &&
   prev.showAvailabilityToggle === next.showAvailabilityToggle &&
-  prev.onShoppingToggle === next.onShoppingToggle;
+  prev.onShoppingToggle === next.onShoppingToggle &&
+  prev.onPresenceLayout === next.onPresenceLayout;
 
 const IngredientListItem = memo(function IngredientListItemComponent({
   ingredient,
@@ -86,11 +91,13 @@ const IngredientListItem = memo(function IngredientListItemComponent({
   isOnShoppingList,
   showAvailabilityToggle = true,
   onShoppingToggle,
+  onPresenceLayout,
 }: IngredientListItemProps) {
   const router = useRouter();
   const id = Number(ingredient.id ?? -1);
   const isAvailable = id >= 0 && availableIngredientIds.has(id);
   const tagColor = ingredient.tags?.[0]?.color ?? tagColors.yellow;
+  const presenceRef = useRef<View>(null);
 
   const handleToggleAvailability = useCallback(() => {
     if (id >= 0) {
@@ -103,6 +110,16 @@ const IngredientListItem = memo(function IngredientListItemComponent({
       onShoppingToggle(id);
     }
   }, [id, onShoppingToggle]);
+
+  const handlePresenceLayout = useCallback(() => {
+    if (!onPresenceLayout || !presenceRef.current || id < 0) {
+      return;
+    }
+
+    presenceRef.current.measureInWindow((x, y, width, height) => {
+      onPresenceLayout(id, { x, y, width, height });
+    });
+  }, [id, onPresenceLayout]);
 
   const subtitleStyle = surfaceVariantColor ? { color: surfaceVariantColor } : undefined;
 
@@ -161,13 +178,22 @@ const IngredientListItem = memo(function IngredientListItemComponent({
     return (
       <View style={styles.presenceSlot}>
         {showAvailabilityToggle ? (
-          <PresenceCheck checked={isAvailable} onToggle={handleToggleAvailability} />
+          <View ref={presenceRef} onLayout={handlePresenceLayout} collapsable={false}>
+            <PresenceCheck checked={isAvailable} onToggle={handleToggleAvailability} />
+          </View>
         ) : (
           <View style={styles.presencePlaceholder} />
         )}
       </View>
     );
-  }, [handleToggleAvailability, isAvailable, onShoppingToggle, showAvailabilityToggle, shoppingControl]);
+  }, [
+    handlePresenceLayout,
+    handleToggleAvailability,
+    isAvailable,
+    onShoppingToggle,
+    showAvailabilityToggle,
+    shoppingControl,
+  ]);
 
   const handlePress = useCallback(() => {
     const routeParam = ingredient.id ?? ingredient.name;
@@ -210,8 +236,13 @@ export default function IngredientsScreen() {
     shoppingIngredientIds,
     toggleIngredientShopping,
     toggleIngredientAvailability,
+    setIngredientAvailability,
     ignoreGarnish,
     allowAllSubstitutes,
+    hasSeenIngredientsOnboarding,
+    setHasSeenIngredientsOnboarding,
+    startScreen,
+    setStartScreen,
   } = useInventory();
   const [activeTab, setActiveTab] = useState<IngredientTabKey>(() => getLastIngredientTab());
   const [query, setQuery] = useState('');
@@ -220,6 +251,8 @@ export default function IngredientsScreen() {
   const [selectedTagKeys, setSelectedTagKeys] = useState<Set<string>>(() => new Set());
   const [headerLayout, setHeaderLayout] = useState<LayoutRectangle | null>(null);
   const [filterAnchorLayout, setFilterAnchorLayout] = useState<LayoutRectangle | null>(null);
+  const [onboardingStep, setOnboardingStep] = useState<number | null>(null);
+  const [presenceLayouts, setPresenceLayouts] = useState<Record<number, LayoutRectangle>>({});
   const listRef = useRef<FlatList<unknown>>(null);
   const [optimisticAvailability, setOptimisticAvailability] = useState<Map<number, boolean>>(
     () => new Map(),
@@ -230,8 +263,23 @@ export default function IngredientsScreen() {
   useScrollToTop(listRef);
 
   useEffect(() => {
+    if (!hasSeenIngredientsOnboarding) {
+      setOnboardingStep((previous) => previous ?? 0);
+      return;
+    }
+
+    setOnboardingStep(null);
+  }, [hasSeenIngredientsOnboarding]);
+
+  useEffect(() => {
     setLastIngredientTab(activeTab);
   }, [activeTab]);
+
+  useEffect(() => {
+    if (!hasSeenIngredientsOnboarding && activeTab !== 'all') {
+      setActiveTab('all');
+    }
+  }, [activeTab, hasSeenIngredientsOnboarding]);
 
   const availableTagOptions = useMemo<IngredientTagOption[]>(() => {
     const map = new Map<string, IngredientTagOption>();
@@ -378,7 +426,39 @@ export default function IngredientsScreen() {
     });
   }, []);
 
+  const handlePresenceLayout = useCallback((ingredientId: number, layout: LayoutRectangle) => {
+    setPresenceLayouts((previous) => {
+      const current = previous[ingredientId];
+      if (
+        current &&
+        Math.abs(current.x - layout.x) < 0.5 &&
+        Math.abs(current.y - layout.y) < 0.5 &&
+        Math.abs(current.width - layout.width) < 0.5 &&
+        Math.abs(current.height - layout.height) < 0.5
+      ) {
+        return previous;
+      }
+
+      return { ...previous, [ingredientId]: layout };
+    });
+  }, []);
+
   const ingredientLookup = useMemo(() => createIngredientLookup(ingredients), [ingredients]);
+  const onboardingTargetIds = useMemo(() => {
+    const targets = new Set(ONBOARDING_TARGET_NAMES);
+    return ingredients
+      .map((ingredient) => {
+        const name = normalizeSearchText(ingredient.name ?? '');
+        if (!targets.has(name)) {
+          return undefined;
+        }
+
+        const id = Number(ingredient.id ?? -1);
+        return Number.isFinite(id) && id >= 0 ? Math.trunc(id) : undefined;
+      })
+      .filter((id): id is number => id != null);
+  }, [ingredients]);
+  const onboardingTargetSet = useMemo(() => new Set(onboardingTargetIds), [onboardingTargetIds]);
 
   const resolveCocktailKey = useCallback((cocktail: Cocktail) => {
     const id = cocktail.id;
@@ -548,6 +628,22 @@ export default function IngredientsScreen() {
     );
   }, [filteredByTags, normalizedQuery]);
 
+  const onboardingActive = onboardingStep != null;
+  const onboardingTargetIndices = useMemo(() => {
+    if (onboardingTargetSet.size === 0) {
+      return [];
+    }
+
+    const indices: number[] = [];
+    filteredIngredients.forEach((ingredient, index) => {
+      const id = Number(ingredient.id ?? -1);
+      if (id >= 0 && onboardingTargetSet.has(id)) {
+        indices.push(index);
+      }
+    });
+    return indices;
+  }, [filteredIngredients, onboardingTargetSet]);
+
   const highlightColor = Colors.highlightFaint;
   const isFilterActive = selectedTagKeys.size > 0;
   const emptyMessage = useMemo(() => {
@@ -571,6 +667,19 @@ export default function IngredientsScreen() {
 
     return 0;
   }, [filterAnchorLayout, headerLayout]);
+
+  useEffect(() => {
+    if (!onboardingActive || onboardingStep !== 0) {
+      return;
+    }
+
+    if (onboardingTargetIndices.length === 0) {
+      return;
+    }
+
+    const targetIndex = Math.min(...onboardingTargetIndices);
+    listRef.current?.scrollToIndex({ index: targetIndex, animated: true, viewPosition: 0.3 });
+  }, [onboardingActive, onboardingStep, onboardingTargetIndices]);
 
   const effectiveAvailableIngredientIds = useMemo(() => {
     if (optimisticAvailability.size === 0) {
@@ -641,12 +750,46 @@ export default function IngredientsScreen() {
     [toggleIngredientShopping],
   );
 
+  const handleOnboardingPress = useCallback(() => {
+    if (onboardingStep == null) {
+      return;
+    }
+
+    if (onboardingStep === 0) {
+      onboardingTargetIds.forEach((id) => {
+        setIngredientAvailability(id, true);
+      });
+      setOnboardingStep(1);
+      return;
+    }
+
+    setHasSeenIngredientsOnboarding(true);
+    if (startScreen === 'ingredients_all') {
+      setStartScreen('cocktails_all');
+    }
+    setOnboardingStep(null);
+  }, [
+    onboardingStep,
+    onboardingTargetIds,
+    setHasSeenIngredientsOnboarding,
+    setIngredientAvailability,
+    setStartScreen,
+    startScreen,
+  ]);
+
+  const handleScrollToIndexFailed = useCallback((info: { index: number; averageItemLength: number }) => {
+    const offset = info.averageItemLength * info.index;
+    listRef.current?.scrollToOffset({ offset, animated: true });
+  }, []);
+
   const keyExtractor = useCallback((item: Ingredient) => String(item.id ?? item.name), []);
 
   const renderItem = useCallback(
     ({ item }: { item: Ingredient }) => {
       const ingredientId = Number(item.id ?? -1);
       const isOnShoppingList = ingredientId >= 0 && shoppingIngredientIds.has(ingredientId);
+      const shouldTrackPresenceLayout =
+        onboardingActive && activeTab === 'all' && ingredientId >= 0 && onboardingTargetSet.has(ingredientId);
 
       const isMyTab = activeTab === 'my';
       const countsMap = isMyTab ? makeableCocktailCounts : totalCocktailCounts;
@@ -674,6 +817,7 @@ export default function IngredientsScreen() {
           isOnShoppingList={isOnShoppingList}
           showAvailabilityToggle={activeTab !== 'shopping'}
           onShoppingToggle={activeTab === 'shopping' ? handleShoppingToggle : undefined}
+          onPresenceLayout={shouldTrackPresenceLayout ? handlePresenceLayout : undefined}
         />
       );
     },
@@ -682,8 +826,11 @@ export default function IngredientsScreen() {
       effectiveAvailableIngredientIds,
       handleToggle,
       handleShoppingToggle,
+      handlePresenceLayout,
       highlightColor,
       makeableCocktailCounts,
+      onboardingActive,
+      onboardingTargetSet,
       Colors.icon,
       Colors.onSurfaceVariant,
       shoppingIngredientIds,
@@ -785,6 +932,7 @@ export default function IngredientsScreen() {
           ItemSeparatorComponent={renderSeparator}
           contentContainerStyle={styles.listContent}
           showsVerticalScrollIndicator
+          onScrollToIndexFailed={handleScrollToIndexFailed}
           ListEmptyComponent={
             <Text style={[styles.emptyLabel, { color: Colors.onSurfaceVariant }]}>{emptyMessage}</Text>
           }
@@ -792,6 +940,54 @@ export default function IngredientsScreen() {
       </View>
       <FabAdd label="Add ingredient" onPress={() => router.push('/ingredients/create')} />
       <SideMenuDrawer visible={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
+      {onboardingActive ? (
+        <Pressable style={styles.onboardingOverlay} onPress={handleOnboardingPress}>
+          <View style={styles.onboardingScrim} />
+          {onboardingStep === 0 ? (
+            <View
+              style={[
+                styles.onboardingCard,
+                {
+                  backgroundColor: Colors.surface,
+                  shadowColor: Colors.shadow,
+                },
+              ]}>
+              <Text style={[styles.onboardingTitle, { color: Colors.onSurface }]}>
+                Ingredients: What do you have?
+              </Text>
+              <Text style={[styles.onboardingBody, { color: Colors.onSurfaceVariant }]}>
+                Mark what do you have to see what cocktails are available.
+              </Text>
+            </View>
+          ) : null}
+          {onboardingStep === 1
+            ? onboardingTargetIds.map((id) => {
+                const layout = presenceLayouts[id];
+                if (!layout) {
+                  return null;
+                }
+
+                const left = layout.x + layout.width / 2 - ONBOARDING_SPOTLIGHT_RADIUS;
+                const top = layout.y + layout.height / 2 - ONBOARDING_SPOTLIGHT_RADIUS;
+                return (
+                  <View
+                    key={`onboarding-spotlight-${id}`}
+                    style={[
+                      styles.onboardingSpotlight,
+                      {
+                        left,
+                        top,
+                        width: ONBOARDING_SPOTLIGHT_RADIUS * 2,
+                        height: ONBOARDING_SPOTLIGHT_RADIUS * 2,
+                        borderRadius: ONBOARDING_SPOTLIGHT_RADIUS,
+                      },
+                    ]}
+                  />
+                );
+              })
+            : null}
+        </Pressable>
+      ) : null}
     </SafeAreaView>
   );
 }
@@ -897,5 +1093,46 @@ const styles = StyleSheet.create({
   filterMenuClearLabel: {
     fontSize: 14,
     fontWeight: '600',
+  },
+  onboardingOverlay: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    zIndex: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  onboardingScrim: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+  },
+  onboardingCard: {
+    width: '80%',
+    paddingHorizontal: 20,
+    paddingVertical: 18,
+    borderRadius: 16,
+    alignItems: 'center',
+    shadowOpacity: 0.2,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 8 },
+    elevation: 10,
+  },
+  onboardingTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    textAlign: 'center',
+    marginBottom: 8,
+  },
+  onboardingBody: {
+    fontSize: 14,
+    textAlign: 'center',
+  },
+  onboardingSpotlight: {
+    position: 'absolute',
+    borderWidth: 2,
+    borderColor: 'rgba(255, 255, 255, 0.7)',
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
   },
 });

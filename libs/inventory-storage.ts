@@ -9,6 +9,7 @@ export type InventorySnapshotV1<TCocktail, TIngredient> = {
   cocktails: TCocktail[];
   ingredients: TIngredient[];
   imported?: boolean;
+  hasSeenIngredientsOnboarding?: boolean;
   availableIngredientIds?: number[];
   shoppingIngredientIds?: number[];
   cocktailRatings?: Record<string, number>;
@@ -35,6 +36,7 @@ export type InventoryDeltaSnapshot<TCocktail, TIngredient> = {
     };
   };
   imported?: boolean;
+  hasSeenIngredientsOnboarding?: boolean;
   availableIngredientIds?: number[];
   shoppingIngredientIds?: number[];
   cocktailRatings?: Record<string, number>;

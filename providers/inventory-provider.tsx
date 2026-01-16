@@ -78,6 +78,7 @@ type InventoryContextValue = {
   useImperialUnits: boolean;
   keepScreenAwake: boolean;
   ratingFilterThreshold: number;
+  hasSeenIngredientsOnboarding: boolean;
   setIngredientAvailability: (id: number, available: boolean) => void;
   toggleIngredientAvailability: (id: number) => void;
   toggleIngredientShopping: (id: number) => void;
@@ -108,6 +109,7 @@ type InventoryContextValue = {
   setRatingFilterThreshold: (value: number) => void;
   startScreen: StartScreen;
   setStartScreen: (value: StartScreen) => void;
+  setHasSeenIngredientsOnboarding: (value: boolean) => void;
 };
 
 type InventoryState = {
@@ -183,6 +185,8 @@ declare global {
   var __yourbarInventoryRatingFilterThreshold: number | undefined;
   // eslint-disable-next-line no-var
   var __yourbarInventoryStartScreen: StartScreen | undefined;
+  // eslint-disable-next-line no-var
+  var __yourbarInventoryHasSeenIngredientsOnboarding: boolean | undefined;
   // eslint-disable-next-line no-var
   var __yourbarInventoryCustomCocktailTags: CocktailTag[] | undefined;
   // eslint-disable-next-line no-var
@@ -562,6 +566,7 @@ function createDeltaSnapshotFromInventory(
     keepScreenAwake: boolean;
     ratingFilterThreshold: number;
     startScreen: StartScreen;
+    hasSeenIngredientsOnboarding: boolean;
     customCocktailTags: CocktailTag[];
     customIngredientTags: IngredientTag[];
   },
@@ -668,6 +673,7 @@ function createDeltaSnapshotFromInventory(
           : undefined,
     },
     imported: state.imported,
+    hasSeenIngredientsOnboarding: options.hasSeenIngredientsOnboarding,
     customCocktailTags: options.customCocktailTags,
     customIngredientTags: options.customIngredientTags,
     availableIngredientIds:
@@ -732,6 +738,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   const [startScreen, setStartScreen] = useState<StartScreen>(
     () => globalThis.__yourbarInventoryStartScreen ?? DEFAULT_START_SCREEN,
   );
+  const [hasSeenIngredientsOnboarding, setHasSeenIngredientsOnboarding] = useState<boolean>(
+    () => globalThis.__yourbarInventoryHasSeenIngredientsOnboarding ?? true,
+  );
   const [customCocktailTags, setCustomCocktailTags] = useState<CocktailTag[]>(() =>
     sanitizeCustomTags(globalThis.__yourbarInventoryCustomCocktailTags, DEFAULT_TAG_COLOR),
   );
@@ -766,6 +775,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             Math.max(1, Math.round(stored.ratingFilterThreshold ?? 1)),
           );
           const nextStartScreen = sanitizeStartScreen(stored.startScreen);
+          const nextHasSeenIngredientsOnboarding = stored.hasSeenIngredientsOnboarding ?? true;
           const nextCustomCocktailTags = sanitizeCustomTags(stored.customCocktailTags, DEFAULT_TAG_COLOR);
           const nextCustomIngredientTags = sanitizeCustomTags(stored.customIngredientTags, DEFAULT_TAG_COLOR);
 
@@ -779,6 +789,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           setKeepScreenAwake(nextKeepScreenAwake);
           setRatingFilterThreshold(nextRatingFilterThreshold);
           setStartScreen(nextStartScreen);
+          setHasSeenIngredientsOnboarding(nextHasSeenIngredientsOnboarding);
           setCustomCocktailTags(nextCustomCocktailTags);
           setCustomIngredientTags(nextCustomIngredientTags);
           return;
@@ -798,7 +809,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           setAllowAllSubstitutes(true);
           setUseImperialUnits(false);
           setKeepScreenAwake(true);
-          setStartScreen(DEFAULT_START_SCREEN);
+          setStartScreen('ingredients_all');
+          setHasSeenIngredientsOnboarding(false);
           setCustomCocktailTags([]);
           setCustomIngredientTags([]);
         }
@@ -831,6 +843,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     globalThis.__yourbarInventoryKeepScreenAwake = keepScreenAwake;
     globalThis.__yourbarInventoryRatingFilterThreshold = ratingFilterThreshold;
     globalThis.__yourbarInventoryStartScreen = startScreen;
+    globalThis.__yourbarInventoryHasSeenIngredientsOnboarding = hasSeenIngredientsOnboarding;
     globalThis.__yourbarInventoryCustomCocktailTags = customCocktailTags;
     globalThis.__yourbarInventoryCustomIngredientTags = customIngredientTags;
 
@@ -844,6 +857,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       keepScreenAwake,
       ratingFilterThreshold,
       startScreen,
+      hasSeenIngredientsOnboarding,
       customCocktailTags,
       customIngredientTags,
     });
@@ -869,6 +883,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     keepScreenAwake,
     ratingFilterThreshold,
     startScreen,
+    hasSeenIngredientsOnboarding,
     customCocktailTags,
     customIngredientTags,
   ]);
@@ -2082,6 +2097,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       keepScreenAwake,
       ratingFilterThreshold,
       startScreen,
+      hasSeenIngredientsOnboarding,
       setIngredientAvailability,
       toggleIngredientAvailability,
       toggleIngredientShopping,
@@ -2111,6 +2127,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       setKeepScreenAwake: handleSetKeepScreenAwake,
       setRatingFilterThreshold: handleSetRatingFilterThreshold,
       setStartScreen: handleSetStartScreen,
+      setHasSeenIngredientsOnboarding,
     };
   }, [
     cocktailsWithRatings,
@@ -2126,6 +2143,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     keepScreenAwake,
     ratingFilterThreshold,
     startScreen,
+    hasSeenIngredientsOnboarding,
     setIngredientAvailability,
     toggleIngredientAvailability,
     toggleIngredientShopping,
@@ -2155,6 +2173,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     handleSetKeepScreenAwake,
     handleSetRatingFilterThreshold,
     handleSetStartScreen,
+    setHasSeenIngredientsOnboarding,
   ]);
 
   return <InventoryContext.Provider value={value}>{children}</InventoryContext.Provider>;
