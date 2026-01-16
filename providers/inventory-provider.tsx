@@ -401,8 +401,8 @@ function applyDeltaToCollection<TRecord extends { id?: number | null }>(
       return;
     }
 
-    const updated = updatedMap.get(normalizedId);
-    next.push(updated ?? record);
+    const replacement = updatedMap.get(normalizedId) ?? createdMap.get(normalizedId);
+    next.push(replacement ?? record);
     seen.add(normalizedId);
   });
 
