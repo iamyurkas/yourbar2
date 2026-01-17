@@ -1,3 +1,4 @@
+import { setLastIngredientTab } from '@/libs/collection-tabs';
 import type { OnboardingStep } from '@/src/onboarding/onboarding-types';
 
 export const ONBOARDING_STEPS: OnboardingStep[] = [
@@ -17,8 +18,9 @@ export const ONBOARDING_STEPS: OnboardingStep[] = [
     title: 'Track your ingredients',
     body: 'Mark what you have in stock and build a shopping list.',
     targetId: 'ingredients-header',
-    onEnter: async () => {
-      // TODO: Navigate to the ingredients tab explicitly.
+    onEnter: async ({ router }) => {
+      setLastIngredientTab('all');
+      router.replace('/ingredients');
     },
     onNext: async () => {
       // TODO: Toggle ingredient availability/shopping list entries.
