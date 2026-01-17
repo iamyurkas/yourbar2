@@ -108,6 +108,8 @@ type InventoryContextValue = {
   setRatingFilterThreshold: (value: number) => void;
   startScreen: StartScreen;
   setStartScreen: (value: StartScreen) => void;
+  getInventorySnapshot: () => InventorySnapshot | null;
+  restoreInventorySnapshot: (snapshot: InventorySnapshot) => void;
 };
 
 type InventoryState = {
@@ -117,6 +119,21 @@ type InventoryState = {
 };
 
 type IngredientTag = NonNullable<IngredientRecord['tags']>[number];
+
+export type InventorySnapshot = {
+  inventoryData: InventoryData;
+  availableIngredientIds: number[];
+  shoppingIngredientIds: number[];
+  cocktailRatings: Record<string, number>;
+  ignoreGarnish: boolean;
+  allowAllSubstitutes: boolean;
+  useImperialUnits: boolean;
+  keepScreenAwake: boolean;
+  ratingFilterThreshold: number;
+  startScreen: StartScreen;
+  customCocktailTags: CocktailTag[];
+  customIngredientTags: IngredientTag[];
+};
 
 type CreateCocktailSubstituteInput = {
   id?: number | string | null;
@@ -1320,6 +1337,56 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     ];
   }, [inventoryState]);
 
+  const getInventorySnapshot = useCallback((): InventorySnapshot | null => {
+    const data = exportInventoryData();
+    if (!data) {
+      return null;
+    }
+
+    return {
+      inventoryData: data,
+      availableIngredientIds: Array.from(availableIngredientIds),
+      shoppingIngredientIds: Array.from(shoppingIngredientIds),
+      cocktailRatings,
+      ignoreGarnish,
+      allowAllSubstitutes,
+      useImperialUnits,
+      keepScreenAwake,
+      ratingFilterThreshold,
+      startScreen,
+      customCocktailTags,
+      customIngredientTags,
+    };
+  }, [
+    allowAllSubstitutes,
+    availableIngredientIds,
+    cocktailRatings,
+    customCocktailTags,
+    customIngredientTags,
+    exportInventoryData,
+    ignoreGarnish,
+    keepScreenAwake,
+    ratingFilterThreshold,
+    shoppingIngredientIds,
+    startScreen,
+    useImperialUnits,
+  ]);
+
+  const restoreInventorySnapshot = useCallback((snapshot: InventorySnapshot) => {
+    setInventoryState(createInventoryStateFromData(snapshot.inventoryData, true));
+    setAvailableIngredientIds(new Set(snapshot.availableIngredientIds));
+    setShoppingIngredientIds(new Set(snapshot.shoppingIngredientIds));
+    setCocktailRatings(snapshot.cocktailRatings);
+    setIgnoreGarnish(snapshot.ignoreGarnish);
+    setAllowAllSubstitutes(snapshot.allowAllSubstitutes);
+    setUseImperialUnits(snapshot.useImperialUnits);
+    setKeepScreenAwake(snapshot.keepScreenAwake);
+    setRatingFilterThreshold(snapshot.ratingFilterThreshold);
+    setStartScreen(snapshot.startScreen);
+    setCustomCocktailTags(snapshot.customCocktailTags);
+    setCustomIngredientTags(snapshot.customIngredientTags);
+  }, []);
+
   const importInventoryData = useCallback((data: InventoryData) => {
     setInventoryState(createInventoryStateFromData(data, true));
     setAvailableIngredientIds(new Set());
@@ -2111,6 +2178,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       setKeepScreenAwake: handleSetKeepScreenAwake,
       setRatingFilterThreshold: handleSetRatingFilterThreshold,
       setStartScreen: handleSetStartScreen,
+      getInventorySnapshot,
+      restoreInventorySnapshot,
     };
   }, [
     cocktailsWithRatings,
@@ -2155,6 +2224,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     handleSetKeepScreenAwake,
     handleSetRatingFilterThreshold,
     handleSetStartScreen,
+    getInventorySnapshot,
+    restoreInventorySnapshot,
   ]);
 
   return <InventoryContext.Provider value={value}>{children}</InventoryContext.Provider>;
@@ -2170,4 +2241,4 @@ export function useInventory() {
   return context;
 }
 
-export type { Cocktail, Ingredient, CreateIngredientInput, CreateCocktailInput, StartScreen };
+export type { Cocktail, Ingredient, CreateIngredientInput, CreateCocktailInput, StartScreen, InventorySnapshot };
