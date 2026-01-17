@@ -130,6 +130,7 @@ export function OnboardingProvider({ children }: { children: React.ReactNode }) 
       }
 
       snapshotRef.current = inventory.getInventorySnapshot();
+      setUiAction(null);
       setIsActive(true);
       setCurrentStepIndex(0);
     },
@@ -143,6 +144,7 @@ export function OnboardingProvider({ children }: { children: React.ReactNode }) 
     }
 
     snapshotRef.current = null;
+    setUiAction(null);
     setIsActive(false);
     setCurrentStepIndex(0);
   }, [inventory]);
