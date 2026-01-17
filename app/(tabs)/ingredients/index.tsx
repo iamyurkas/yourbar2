@@ -31,6 +31,7 @@ import {
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
 import { ONBOARDING_TARGETS } from '@/src/onboarding/onboarding-steps';
+import { useOnboarding } from '@/src/onboarding/OnboardingProvider';
 import { useOnboardingTarget } from '@/src/onboarding/target-registry';
 import { tagColors } from '@/theme/theme';
 
@@ -215,6 +216,7 @@ export default function IngredientsScreen() {
     ignoreGarnish,
     allowAllSubstitutes,
   } = useInventory();
+  const { isActive: isOnboardingActive, steps, currentStepIndex } = useOnboarding();
   const [activeTab, setActiveTab] = useState<IngredientTabKey>(() => getLastIngredientTab());
   const [query, setQuery] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -231,6 +233,27 @@ export default function IngredientsScreen() {
   const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
 
   useScrollToTop(listRef);
+
+  useEffect(() => {
+    const currentStep = steps[currentStepIndex];
+    const isIngredientsOnboardingStep = isOnboardingActive && currentStep?.id === 'ingredients-manage';
+
+    if (!isIngredientsOnboardingStep) {
+      setOptimisticAvailability(new Map());
+      return;
+    }
+
+    setActiveTab('all');
+    setQuery('Champagne');
+
+    const targetNames = new Set(['peach', 'champagne']);
+    const targetIds = ingredients
+      .filter((ingredient) => ingredient.name && targetNames.has(ingredient.name.trim().toLowerCase()))
+      .map((ingredient) => Number(ingredient.id ?? -1))
+      .filter((id) => Number.isFinite(id) && id >= 0);
+
+    setOptimisticAvailability(new Map(targetIds.map((id) => [id, true])));
+  }, [currentStepIndex, ingredients, isOnboardingActive, steps]);
 
   useEffect(() => {
     setLastIngredientTab(activeTab);
