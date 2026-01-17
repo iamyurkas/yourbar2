@@ -29,8 +29,8 @@ export const ONBOARDING_STEPS: OnboardingStep[] = [
   },
   {
     id: 'favorites',
-    title: 'Save your favorites',
-    body: 'Rate cocktails to surface your favorites later.',
+    title: 'Mark what you have',
+    body: 'You will see available cocktails with your ingredients.',
     onEnter: async () => {
       // TODO: Navigate to a cocktail details screen explicitly.
     },
