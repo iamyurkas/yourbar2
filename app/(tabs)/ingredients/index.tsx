@@ -32,6 +32,7 @@ import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
 import { tagColors } from '@/theme/theme';
 import { useOnboardingTarget } from '@/src/onboarding/target-registry';
+import { useOnboarding } from '@/src/onboarding/OnboardingProvider';
 
 type IngredientSection = {
   key: string;
@@ -229,8 +230,20 @@ export default function IngredientsScreen() {
   const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
   const { ref: onboardingHeaderRef, testID: onboardingHeaderTestID } =
     useOnboardingTarget('ingredients-header');
+  const { uiAction, clearUiAction, isActive } = useOnboarding();
 
   useScrollToTop(listRef);
+
+  useEffect(() => {
+    if (!isActive || !uiAction) {
+      return;
+    }
+
+    if (uiAction.type === 'ingredients_search' && uiAction.stepId === 'ingredients') {
+      setQuery(uiAction.value);
+      clearUiAction();
+    }
+  }, [clearUiAction, isActive, uiAction]);
 
   useEffect(() => {
     setLastIngredientTab(activeTab);

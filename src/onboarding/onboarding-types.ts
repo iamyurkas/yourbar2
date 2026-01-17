@@ -23,6 +23,7 @@ export type OnboardingInventoryActions = {
 export type OnboardingStepContext = {
   router: Router;
   inventory: OnboardingInventoryActions;
+  emitUiAction: (action: OnboardingUiAction) => void;
 };
 
 export type OnboardingStep = {
@@ -33,3 +34,10 @@ export type OnboardingStep = {
   onEnter?: (context: OnboardingStepContext) => void | Promise<void>;
   onNext?: (context: OnboardingStepContext) => void | Promise<void>;
 };
+
+export type OnboardingUiAction =
+  | {
+      type: 'ingredients_search';
+      value: string;
+      stepId: string;
+    };

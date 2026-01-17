@@ -22,7 +22,8 @@ export const ONBOARDING_STEPS: OnboardingStep[] = [
       setLastIngredientTab('all');
       router.replace('/ingredients');
     },
-    onNext: async () => {
+    onNext: async ({ emitUiAction }) => {
+      emitUiAction({ type: 'ingredients_search', value: 'Champagne', stepId: 'ingredients' });
       // TODO: Toggle ingredient availability/shopping list entries.
     },
   },

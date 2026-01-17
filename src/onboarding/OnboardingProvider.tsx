@@ -6,6 +6,7 @@ import type {
   OnboardingInventoryActions,
   OnboardingStep,
   OnboardingStepContext,
+  OnboardingUiAction,
 } from '@/src/onboarding/onboarding-types';
 import { loadOnboardingState, persistOnboardingState } from '@/src/onboarding/onboarding-storage';
 import { useInventory, type Cocktail } from '@/providers/inventory-provider';
@@ -19,6 +20,9 @@ type OnboardingContextValue = {
   stop: () => void;
   next: () => void;
   prev: () => void;
+  uiAction: OnboardingUiAction | null;
+  emitUiAction: (action: OnboardingUiAction) => void;
+  clearUiAction: () => void;
 };
 
 const OnboardingContext = createContext<OnboardingContextValue | null>(null);
@@ -30,6 +34,7 @@ export function OnboardingProvider({ children }: { children: React.ReactNode }) 
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [hasSeenOnboarding, setHasSeenOnboarding] = useState(false);
   const [isReady, setIsReady] = useState(false);
+  const [uiAction, setUiAction] = useState<OnboardingUiAction | null>(null);
   const snapshotRef = useRef(inventory.getInventorySnapshot());
 
   const steps = ONBOARDING_STEPS;
@@ -57,6 +62,9 @@ export function OnboardingProvider({ children }: { children: React.ReactNode }) 
     return {
       router,
       inventory: inventoryActions,
+      emitUiAction: (action: OnboardingUiAction) => {
+        setUiAction(action);
+      },
     };
   }, [inventoryActions, router]);
 
@@ -172,6 +180,9 @@ export function OnboardingProvider({ children }: { children: React.ReactNode }) 
       stop,
       next,
       prev,
+      uiAction,
+      emitUiAction: setUiAction,
+      clearUiAction: () => setUiAction(null),
     }),
     [
       currentStepIndex,
@@ -179,6 +190,7 @@ export function OnboardingProvider({ children }: { children: React.ReactNode }) 
       isActive,
       next,
       prev,
+      uiAction,
       start,
       steps,
       stop,
