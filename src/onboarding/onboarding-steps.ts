@@ -22,7 +22,8 @@ export const ONBOARDING_STEPS: OnboardingStep[] = [
       setLastIngredientTab('all');
       router.replace('/ingredients');
     },
-    onNext: async ({ emitUiAction }) => {
+    onNext: async ({ emitUiAction, inventory }) => {
+      inventory.setIngredientAvailabilityByName('Peach', true);
       emitUiAction({ type: 'ingredients_search', value: 'Champagne', stepId: 'ingredients' });
       // TODO: Toggle ingredient availability/shopping list entries.
     },
@@ -32,6 +33,7 @@ export const ONBOARDING_STEPS: OnboardingStep[] = [
     title: 'Mark what you have',
     body: 'You will see available cocktails with your ingredients.',
     targetId: 'ingredients-first-item',
+    tooltipOffsetY: 10,
     spotlightOffsetY: 30,
     onEnter: async ({ router }) => {
       setLastIngredientTab('all');

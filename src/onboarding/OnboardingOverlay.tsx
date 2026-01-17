@@ -53,17 +53,18 @@ export function OnboardingOverlay() {
   }, [resolveTarget, targetId]);
 
   const tooltipStyle = useMemo(() => {
+    const offsetY = step?.tooltipOffsetY ?? 0;
     if (!targetRect) {
       return {
         left: (screen.width - TOOLTIP_WIDTH) / 2,
-        top: screen.height * 0.35,
+        top: screen.height * 0.35 + offsetY,
       };
     }
 
     const preferredLeft = targetRect.x + targetRect.width / 2 - TOOLTIP_WIDTH / 2;
     const clampedLeft = Math.max(16, Math.min(preferredLeft, screen.width - TOOLTIP_WIDTH - 16));
     const top = Math.min(
-      targetRect.y + targetRect.height + 16,
+      targetRect.y + targetRect.height + 16 + offsetY,
       screen.height - 200,
     );
 
@@ -71,7 +72,7 @@ export function OnboardingOverlay() {
       left: clampedLeft,
       top,
     };
-  }, [screen.height, screen.width, targetRect]);
+  }, [screen.height, screen.width, step?.tooltipOffsetY, targetRect]);
 
   if (!isActive || !step) {
     return null;
