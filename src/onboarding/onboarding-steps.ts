@@ -33,8 +33,8 @@ export const ONBOARDING_STEPS: OnboardingStep[] = [
     title: 'Mark what you have',
     body: 'You will see available cocktails with your ingredients.',
     targetId: 'ingredients-first-item',
-    tooltipOffsetY: 10,
-    spotlightOffsetY: 30,
+    tooltipOffsetY: 20,
+    spotlightOffsetY: 60,
     onEnter: async ({ router }) => {
       setLastIngredientTab('all');
       router.replace('/ingredients');
