@@ -13,6 +13,7 @@ export type SpotlightTarget = {
 
 export type OnboardingInventoryActions = {
   toggleIngredientAvailability: (id: number) => void;
+  setIngredientAvailabilityByName: (name: string, available: boolean) => void;
   toggleIngredientShopping: (id: number) => void;
   setCocktailRating: (cocktailId: string, rating: number) => void;
   setStartScreen: (value: StartScreen) => void;

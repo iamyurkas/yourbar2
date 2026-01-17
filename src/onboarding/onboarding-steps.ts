@@ -31,11 +31,13 @@ export const ONBOARDING_STEPS: OnboardingStep[] = [
     id: 'favorites',
     title: 'Mark what you have',
     body: 'You will see available cocktails with your ingredients.',
-    onEnter: async () => {
-      // TODO: Navigate to a cocktail details screen explicitly.
+    targetId: 'ingredients-first-item',
+    onEnter: async ({ router }) => {
+      setLastIngredientTab('all');
+      router.replace('/ingredients');
     },
-    onNext: async () => {
-      // TODO: Set a rating for a cocktail.
+    onNext: async ({ inventory }) => {
+      inventory.setIngredientAvailabilityByName('Champagne', true);
     },
   },
 ];

@@ -9,6 +9,7 @@ import type {
   OnboardingUiAction,
 } from '@/src/onboarding/onboarding-types';
 import { loadOnboardingState, persistOnboardingState } from '@/src/onboarding/onboarding-storage';
+import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Cocktail } from '@/providers/inventory-provider';
 
 type OnboardingContextValue = {
@@ -42,6 +43,17 @@ export function OnboardingProvider({ children }: { children: React.ReactNode }) 
   const inventoryActions = useMemo<OnboardingInventoryActions>(
     () => ({
       toggleIngredientAvailability: inventory.toggleIngredientAvailability,
+      setIngredientAvailabilityByName: (name: string, available: boolean) => {
+        const normalizedName = normalizeSearchText(name);
+        const targetIngredient = inventory.ingredients.find((candidate) => {
+          const candidateName = normalizeSearchText(candidate.name ?? '');
+          return candidateName === normalizedName;
+        });
+        const ingredientId = Number(targetIngredient?.id ?? -1);
+        if (ingredientId >= 0) {
+          inventory.setIngredientAvailability(ingredientId, available);
+        }
+      },
       toggleIngredientShopping: inventory.toggleIngredientShopping,
       setCocktailRating: (cocktailId: string, rating: number) => {
         const targetCocktail = inventory.cocktails.find(

@@ -230,6 +230,8 @@ export default function IngredientsScreen() {
   const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
   const { ref: onboardingHeaderRef, testID: onboardingHeaderTestID } =
     useOnboardingTarget('ingredients-header');
+  const { ref: onboardingFirstItemRef, testID: onboardingFirstItemTestID } =
+    useOnboardingTarget('ingredients-first-item');
   const { uiAction, clearUiAction, isActive } = useOnboarding();
 
   useScrollToTop(listRef);
@@ -660,7 +662,7 @@ export default function IngredientsScreen() {
   const keyExtractor = useCallback((item: Ingredient) => String(item.id ?? item.name), []);
 
   const renderItem = useCallback(
-    ({ item }: { item: Ingredient }) => {
+    ({ item, index }: { item: Ingredient; index: number }) => {
       const ingredientId = Number(item.id ?? -1);
       const isOnShoppingList = ingredientId >= 0 && shoppingIngredientIds.has(ingredientId);
 
@@ -679,7 +681,7 @@ export default function IngredientsScreen() {
         }
       }
 
-      return (
+      const row = (
         <IngredientListItem
           ingredient={item}
           highlightColor={highlightColor}
@@ -692,6 +694,16 @@ export default function IngredientsScreen() {
           onShoppingToggle={activeTab === 'shopping' ? handleShoppingToggle : undefined}
         />
       );
+
+      if (index !== 0) {
+        return row;
+      }
+
+      return (
+        <View ref={onboardingFirstItemRef} testID={onboardingFirstItemTestID}>
+          {row}
+        </View>
+      );
     },
     [
       activeTab,
@@ -699,6 +711,8 @@ export default function IngredientsScreen() {
       handleToggle,
       handleShoppingToggle,
       highlightColor,
+      onboardingFirstItemRef,
+      onboardingFirstItemTestID,
       makeableCocktailCounts,
       Colors.icon,
       Colors.onSurfaceVariant,
