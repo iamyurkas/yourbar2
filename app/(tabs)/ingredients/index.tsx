@@ -223,6 +223,7 @@ export default function IngredientsScreen() {
   const [isFilterMenuVisible, setFilterMenuVisible] = useState(false);
   const [selectedTagKeys, setSelectedTagKeys] = useState<Set<string>>(() => new Set());
   const menuTargetRef = useOnboardingTarget(ONBOARDING_TARGETS.ingredientsMenu);
+  const firstIngredientTargetRef = useOnboardingTarget(ONBOARDING_TARGETS.ingredientsFirstItem);
   const [headerLayout, setHeaderLayout] = useState<LayoutRectangle | null>(null);
   const [filterAnchorLayout, setFilterAnchorLayout] = useState<LayoutRectangle | null>(null);
   const listRef = useRef<FlatList<unknown>>(null);
@@ -254,6 +255,8 @@ export default function IngredientsScreen() {
 
     setOptimisticAvailability(new Map(targetIds.map((id) => [id, true])));
   }, [currentStepIndex, ingredients, isOnboardingActive, steps]);
+
+  const isIngredientsOnboardingStep = isOnboardingActive && steps[currentStepIndex]?.id === 'ingredients-manage';
 
   useEffect(() => {
     setLastIngredientTab(activeTab);
@@ -689,7 +692,10 @@ export default function IngredientsScreen() {
         }
       }
 
-      return (
+      const isFirstOnboardingItem =
+        isIngredientsOnboardingStep && item.name?.trim().toLowerCase() === 'champagne';
+
+      const content = (
         <IngredientListItem
           ingredient={item}
           highlightColor={highlightColor}
@@ -702,13 +708,25 @@ export default function IngredientsScreen() {
           onShoppingToggle={activeTab === 'shopping' ? handleShoppingToggle : undefined}
         />
       );
+
+      if (!isFirstOnboardingItem) {
+        return content;
+      }
+
+      return (
+        <View ref={firstIngredientTargetRef} testID={ONBOARDING_TARGETS.ingredientsFirstItem}>
+          {content}
+        </View>
+      );
     },
     [
       activeTab,
       effectiveAvailableIngredientIds,
+      firstIngredientTargetRef,
       handleToggle,
       handleShoppingToggle,
       highlightColor,
+      isIngredientsOnboardingStep,
       makeableCocktailCounts,
       Colors.icon,
       Colors.onSurfaceVariant,

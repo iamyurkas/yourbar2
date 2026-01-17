@@ -92,18 +92,14 @@ export function OnboardingOverlay() {
     const centerX = spotlightRect.x + spotlightRect.width / 2;
     const left = clamp(centerX - tooltipWidth / 2, TOOLTIP_MARGIN, width - tooltipWidth - TOOLTIP_MARGIN);
     const belowTop = spotlightRect.y + spotlightRect.height + TOOLTIP_GAP;
-    const aboveTop = spotlightRect.y - DEFAULT_TOOLTIP_HEIGHT - TOOLTIP_GAP;
-    const canShowBelow = belowTop + DEFAULT_TOOLTIP_HEIGHT < height - insets.bottom - TOOLTIP_MARGIN;
-    const top = canShowBelow
-      ? belowTop
-      : clamp(aboveTop, insets.top + TOOLTIP_MARGIN, height - DEFAULT_TOOLTIP_HEIGHT - TOOLTIP_MARGIN);
+    const top = Math.max(belowTop, insets.top + TOOLTIP_MARGIN);
 
     return {
       width: tooltipWidth,
       left,
       top,
     };
-  }, [currentStep, height, insets.bottom, insets.top, spotlightRect, width]);
+  }, [currentStep, insets.top, spotlightRect, width]);
 
   if (!isActive || !currentStep) {
     return null;
@@ -221,7 +217,7 @@ export function OnboardingOverlay() {
               { backgroundColor: isTargetReady ? Colors.tint : Colors.outline },
               pressed ? styles.buttonPressed : null,
             ]}>
-            <Text style={[styles.primaryButtonText, { color: Colors.onSurface }]}>
+            <Text style={[styles.primaryButtonText, { color: '#FFFFFF' }]}>
               {currentStep.nextLabel ?? 'Next'}
             </Text>
           </Pressable>

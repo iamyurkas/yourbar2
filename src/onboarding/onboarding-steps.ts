@@ -3,6 +3,7 @@ import type { OnboardingStep } from '@/src/onboarding/onboarding-types';
 export const ONBOARDING_TARGETS = {
   cocktailsMenu: 'onboarding-cocktails-menu',
   ingredientsMenu: 'onboarding-ingredients-menu',
+  ingredientsFirstItem: 'onboarding-ingredients-first-item',
 } as const;
 
 const TARGET_INGREDIENTS = ['Peach', 'Champagne'] as const;
@@ -23,7 +24,7 @@ export function createOnboardingSteps(): OnboardingStep[] {
   return [
     {
       id: 'ingredients-manage',
-      targetId: ONBOARDING_TARGETS.ingredientsMenu,
+      targetId: ONBOARDING_TARGETS.ingredientsFirstItem,
       title: 'Manage ingredients',
       description: 'Mark ingredients you have to see available cocktails.',
       onEnter: ({ router }) => {
