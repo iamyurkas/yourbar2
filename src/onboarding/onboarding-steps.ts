@@ -18,9 +18,8 @@ export const ONBOARDING_STEPS: OnboardingStep[] = [
     title: 'Track your ingredients',
     body: 'Search by name or by tags (categories).',
     targetId: 'ingredients-header',
-    onEnter: async ({ router }) => {
-      setLastIngredientTab('all');
-      router.replace('/ingredients');
+    onEnter: async () => {
+      // TODO: Keep the Ingredients screen active for this step without resetting search state.
     },
     onNext: async ({ emitUiAction, inventory }) => {
       inventory.setIngredientAvailabilityByName('Peach', true);
