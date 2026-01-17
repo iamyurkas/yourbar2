@@ -26,6 +26,8 @@ import {
 } from '@/libs/ingredient-availability';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
+import { setShakerOnboardingActions } from '@/src/onboarding/onboarding-helpers';
+import { useOnboardingTarget } from '@/src/onboarding/useOnboardingTarget';
 import { tagColors } from '@/theme/theme';
 
 type IngredientTagOption = {
@@ -45,6 +47,7 @@ type IngredientRowProps = {
   subtitle?: string;
   subtitleStyle?: StyleProp<TextStyle>;
   onToggle: (id: number) => void;
+  onboardingTargetId?: string | null;
 };
 
 const IngredientRow = memo(function IngredientRow({
@@ -54,10 +57,12 @@ const IngredientRow = memo(function IngredientRow({
   subtitle,
   subtitleStyle,
   onToggle,
+  onboardingTargetId,
 }: IngredientRowProps) {
   const ingredientId = Number(ingredient.id ?? -1);
   const tagColor = ingredient.tags?.[0]?.color ?? tagColors.yellow;
   const brandIndicatorColor = ingredient.baseIngredientId != null ? Colors.primary : undefined;
+  const onboardingTarget = useOnboardingTarget(onboardingTargetId ?? null);
 
   const handlePress = useCallback(() => {
     if (ingredientId >= 0) {
@@ -72,20 +77,119 @@ const IngredientRow = memo(function IngredientRow({
   );
 
   return (
-    <ListRow
-      title={ingredient.name}
-      subtitle={subtitle}
-      subtitleStyle={subtitleStyle}
-      onPress={handlePress}
-      selected={isSelected || isAvailable}
-      highlightColor={highlightColor}
-      tagColor={tagColor}
-      thumbnail={thumbnail}
-      accessibilityRole="button"
-      accessibilityState={isSelected ? { selected: true } : undefined}
-      brandIndicatorColor={brandIndicatorColor}
-      metaAlignment="center"
-    />
+    <View ref={onboardingTarget.ref} onLayout={onboardingTarget.onLayout} testID={onboardingTarget.testID}>
+      <ListRow
+        title={ingredient.name}
+        subtitle={subtitle}
+        subtitleStyle={subtitleStyle}
+        onPress={handlePress}
+        selected={isSelected || isAvailable}
+        highlightColor={highlightColor}
+        tagColor={tagColor}
+        thumbnail={thumbnail}
+        accessibilityRole="button"
+        accessibilityState={isSelected ? { selected: true } : undefined}
+        brandIndicatorColor={brandIndicatorColor}
+        metaAlignment="center"
+      />
+    </View>
+  );
+});
+
+type GroupCardProps = {
+  group: IngredientGroup;
+  index: number;
+  expandedTagKeys: Set<string>;
+  availableIngredientIds: Set<number>;
+  selectedIngredientIds: Set<number>;
+  makeableCocktailCounts: Map<number, number>;
+  totalCocktailCounts: Map<number, number>;
+  onToggleGroup: (key: string) => void;
+  onToggleIngredient: (id: number) => void;
+};
+
+const GroupCard = memo(function GroupCard({
+  group,
+  index,
+  expandedTagKeys,
+  availableIngredientIds,
+  selectedIngredientIds,
+  makeableCocktailCounts,
+  totalCocktailCounts,
+  onToggleGroup,
+  onToggleIngredient,
+}: GroupCardProps) {
+  const isExpanded = expandedTagKeys.has(group.key);
+  const iconRotation = isExpanded ? '180deg' : '0deg';
+  const backgroundColor = group.color;
+  const filterAreaTarget = useOnboardingTarget(index === 0 ? 'shaker:filterArea' : null);
+
+  return (
+    <View style={styles.groupCard}>
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel={`${group.name} ingredients`}
+        accessibilityState={{ expanded: isExpanded }}
+        onPress={() => onToggleGroup(group.key)}
+        style={[styles.groupHeader, { backgroundColor }]}
+        ref={filterAreaTarget.ref}
+        onLayout={filterAreaTarget.onLayout}
+        testID={filterAreaTarget.testID}
+      >
+        <Text style={[styles.groupTitle, { color: Colors.onPrimary }]}>{group.name}</Text>
+        <MaterialIcons
+          name="expand-more"
+          size={22}
+          color={Colors.onPrimary}
+          style={{ transform: [{ rotate: iconRotation }] }}
+        />
+      </Pressable>
+      {isExpanded ? (
+        <View style={styles.groupList}>
+          {group.ingredients.map((ingredient, rowIndex) => {
+            const ingredientId = Number(ingredient.id ?? -1);
+            const isAvailable = ingredientId >= 0 && availableIngredientIds.has(ingredientId);
+            const isSelected = ingredientId >= 0 && selectedIngredientIds.has(ingredientId);
+            const separatorColor = isAvailable ? Colors.outline : Colors.outlineVariant;
+            const makeableCount = ingredientId >= 0 ? makeableCocktailCounts.get(ingredientId) ?? 0 : 0;
+            const totalCount = ingredientId >= 0 ? totalCocktailCounts.get(ingredientId) ?? 0 : 0;
+            const label = makeableCount === 1 ? 'cocktail' : 'cocktails';
+            const recipeLabel = totalCount === 1 ? 'recipe' : 'recipes';
+            const subtitleText =
+              makeableCount > 0
+                ? `Make ${makeableCount} ${label}`
+                : totalCount > 0
+                  ? `${totalCount} ${recipeLabel}`
+                  : undefined;
+            const onboardingTargetId =
+              ingredient.name === 'Whiskey'
+                ? 'shaker:ingredientOption:Whiskey'
+                : ingredient.name === 'White Rum'
+                  ? 'shaker:ingredientOption:WhiteRum'
+                  : ingredient.name === 'Cola'
+                    ? 'shaker:ingredientOption:Cola'
+                    : null;
+
+            return (
+              <View key={String(ingredient.id ?? ingredient.name)}>
+                <IngredientRow
+                  ingredient={ingredient}
+                  isAvailable={isAvailable}
+                  isSelected={isSelected}
+                  subtitle={subtitleText}
+                  subtitleStyle={{ color: Colors.onSurfaceVariant }}
+                  onToggle={onToggleIngredient}
+                  onboardingTargetId={onboardingTargetId}
+                />
+                {rowIndex < group.ingredients.length - 1 ? (
+                  <View style={[styles.divider, { backgroundColor: separatorColor }]} />
+                ) : null}
+              </View>
+            );
+          })}
+        </View>
+      ) : null}
+    </View>
   );
 });
 
@@ -132,10 +236,13 @@ export default function ShakerScreen() {
   const [expandedTagKeys, setExpandedTagKeys] = useState<Set<string>>(() => new Set());
   const [selectedIngredientIds, setSelectedIngredientIds] = useState<Set<number>>(() => new Set());
   const listRef = useRef<FlatList<unknown>>(null);
+  const [onboardingGroupRequest, setOnboardingGroupRequest] = useState<string | null>(null);
   const insets = useSafeAreaInsets();
   const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
+  const showButtonTarget = useOnboardingTarget('shaker:showButton');
 
   useScrollToTop(listRef);
+
 
   const normalizedQuery = useMemo(() => {
     const normalized = normalizeSearchText(query);
@@ -296,6 +403,20 @@ export default function ShakerScreen() {
         return a.name.localeCompare(b.name);
       });
   }, [availableTagOptions, defaultTagColor, filteredIngredients]);
+
+  useEffect(() => {
+    if (!onboardingGroupRequest) {
+      return;
+    }
+
+    const targetIndex = ingredientGroups.findIndex((group) => group.key === onboardingGroupRequest);
+    if (targetIndex < 0) {
+      return;
+    }
+
+    listRef.current?.scrollToIndex({ index: targetIndex, animated: true });
+    setOnboardingGroupRequest(null);
+  }, [ingredientGroups, onboardingGroupRequest]);
 
   useEffect(() => {
     setExpandedTagKeys((previous) => {
@@ -533,80 +654,84 @@ export default function ShakerScreen() {
     });
   }, [matchingCocktailSummary.availableKeys, matchingCocktailSummary.unavailableKeys, router]);
 
+  useEffect(() => {
+    setShakerOnboardingActions({
+      resetFilters: () => {
+        setQuery('');
+        setInStockOnly(false);
+        setSelectedIngredientIds(new Set());
+        setExpandedTagKeys(new Set());
+      },
+      ensureIngredientVisible: (name) => {
+        const normalizedName = name.trim().toLowerCase();
+        const group = ingredientGroups.find((candidate) =>
+          candidate.ingredients.some(
+            (ingredient) => ingredient.name?.trim().toLowerCase() === normalizedName,
+          ),
+        );
+
+        if (!group) {
+          return;
+        }
+
+        setExpandedTagKeys((previous) => {
+          const next = new Set(previous);
+          next.add(group.key);
+          return next;
+        });
+        setOnboardingGroupRequest(group.key);
+      },
+      selectIngredient: (name) => {
+        const normalizedName = name.trim().toLowerCase();
+        const ingredient = ingredients.find(
+          (candidate) => candidate.name?.trim().toLowerCase() === normalizedName,
+        );
+        const id = Number(ingredient?.id ?? -1);
+        if (id < 0) {
+          return;
+        }
+
+        setSelectedIngredientIds((previous) => {
+          if (previous.has(id)) {
+            return previous;
+          }
+          const next = new Set(previous);
+          next.add(id);
+          return next;
+        });
+      },
+      showResults: () => {
+        handleShowResults();
+      },
+    });
+
+    return () => {
+      setShakerOnboardingActions(null);
+    };
+  }, [handleShowResults, ingredientGroups, ingredients]);
+
   const renderGroup = useCallback(
-    ({ item }: ListRenderItemInfo<IngredientGroup>) => {
-      const isExpanded = expandedTagKeys.has(item.key);
-      const iconRotation = isExpanded ? '180deg' : '0deg';
-      const backgroundColor = item.color;
-
-      return (
-        <View style={styles.groupCard}>
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel={`${item.name} ingredients`}
-            accessibilityState={{ expanded: isExpanded }}
-            onPress={() => handleToggleGroup(item.key)}
-            style={[styles.groupHeader, { backgroundColor }]}
-          >
-            <Text style={[styles.groupTitle, { color: Colors.onPrimary }]}>{item.name}</Text>
-            <MaterialIcons
-              name="expand-more"
-              size={22}
-              color={Colors.onPrimary}
-              style={{ transform: [{ rotate: iconRotation }] }}
-            />
-          </Pressable>
-          {isExpanded ? (
-            <View style={styles.groupList}>
-              {item.ingredients.map((ingredient, index) => {
-                const ingredientId = Number(ingredient.id ?? -1);
-                const isAvailable = ingredientId >= 0 && availableIngredientIds.has(ingredientId);
-                const isSelected = ingredientId >= 0 && selectedIngredientIds.has(ingredientId);
-                const separatorColor = isAvailable
-                  ? Colors.outline
-                  : Colors.outlineVariant;
-                const makeableCount = ingredientId >= 0 ? makeableCocktailCounts.get(ingredientId) ?? 0 : 0;
-                const totalCount = ingredientId >= 0 ? totalCocktailCounts.get(ingredientId) ?? 0 : 0;
-                const label = makeableCount === 1 ? 'cocktail' : 'cocktails';
-                const recipeLabel = totalCount === 1 ? 'recipe' : 'recipes';
-                const subtitleText =
-                  makeableCount > 0
-                    ? `Make ${makeableCount} ${label}`
-                    : totalCount > 0
-                    ? `${totalCount} ${recipeLabel}`
-                    : undefined;
-
-                return (
-                  <View key={String(ingredient.id ?? ingredient.name)}>
-                    <IngredientRow
-                      ingredient={ingredient}
-                      isAvailable={isAvailable}
-                      isSelected={isSelected}
-                      subtitle={subtitleText}
-                      subtitleStyle={{ color: Colors.onSurfaceVariant }}
-                      onToggle={handleToggleIngredient}
-                    />
-                    {index < item.ingredients.length - 1 ? (
-                      <View style={[styles.divider, { backgroundColor: separatorColor }]} />
-                    ) : null}
-                  </View>
-                );
-              })}
-            </View>
-          ) : null}
-        </View>
-      );
-    },
+    ({ item, index }: ListRenderItemInfo<IngredientGroup>) => (
+      <GroupCard
+        group={item}
+        index={index}
+        expandedTagKeys={expandedTagKeys}
+        availableIngredientIds={availableIngredientIds}
+        selectedIngredientIds={selectedIngredientIds}
+        makeableCocktailCounts={makeableCocktailCounts}
+        totalCocktailCounts={totalCocktailCounts}
+        onToggleGroup={handleToggleGroup}
+        onToggleIngredient={handleToggleIngredient}
+      />
+    ),
     [
       availableIngredientIds,
       expandedTagKeys,
       handleToggleGroup,
       handleToggleIngredient,
       makeableCocktailCounts,
-      totalCocktailCounts,
-      Colors.onSurface,
-      Colors.onSurfaceVariant,
       selectedIngredientIds,
+      totalCocktailCounts,
     ],
   );
 
@@ -721,6 +846,9 @@ export default function ShakerScreen() {
                 ? styles.showButtonPressed
                 : null,
             ]}
+            ref={showButtonTarget.ref}
+            onLayout={showButtonTarget.onLayout}
+            testID={showButtonTarget.testID}
           >
             <Text
               style={[

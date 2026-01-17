@@ -8,6 +8,7 @@ import {
   Text,
   View,
   type AccessibilityState,
+  type LayoutChangeEvent,
   type TextStyle,
 } from 'react-native';
 
@@ -60,9 +61,12 @@ export function TagDot({ color = tagColors.default }: TagDotProps) {
 type PresenceCheckProps = {
   checked: boolean;
   onToggle?: () => void;
+  testID?: string;
+  onLayout?: (event: LayoutChangeEvent) => void;
+  targetRef?: React.RefObject<unknown>;
 };
 
-export function PresenceCheck({ checked, onToggle }: PresenceCheckProps) {
+export function PresenceCheck({ checked, onToggle, testID, onLayout, targetRef }: PresenceCheckProps) {
   const idleColor = Colors.outlineVariant;
   const borderColor = checked ? Colors.tint : idleColor;
   const backgroundColor = checked ? Colors.tint : 'transparent';
@@ -73,6 +77,9 @@ export function PresenceCheck({ checked, onToggle }: PresenceCheckProps) {
       accessibilityRole="checkbox"
       accessibilityState={{ checked }}
       onPress={onToggle}
+      onLayout={onLayout}
+      ref={targetRef as never}
+      testID={testID}
       style={[styles.checkbox, { borderColor, backgroundColor }]}
       hitSlop={8}>
       <MaterialCommunityIcons name="check" color={iconColor} size={12} />

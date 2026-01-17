@@ -27,6 +27,7 @@ import {
   useInventory,
   type Cocktail,
 } from '@/providers/inventory-provider';
+import { useOnboardingTarget } from '@/src/onboarding/useOnboardingTarget';
 import { tagColors } from '@/theme/theme';
 
 type RecipeIngredient = NonNullable<Cocktail['ingredients']>[number];
@@ -491,6 +492,9 @@ export default function CocktailDetailsScreen() {
 
   const displayedImageSource = photoSource ?? glassSource;
   const glassLabel = useMemo(() => formatGlassLabel(cocktail?.glassId), [cocktail?.glassId]);
+  const ratingStarsTarget = useOnboardingTarget(
+    cocktail?.name?.trim().toLowerCase() === 'bellini' ? 'cocktailDetails:ratingStars' : null,
+  );
   const methodDetails = useMemo(() => {
     if (!cocktail) {
       return [];
@@ -632,7 +636,11 @@ export default function CocktailDetailsScreen() {
                 )}
               </View>
 
-              <View style={styles.ratingRow}>
+              <View
+                style={styles.ratingRow}
+                ref={ratingStarsTarget.ref}
+                onLayout={ratingStarsTarget.onLayout}
+                testID={ratingStarsTarget.testID}>
                 {Array.from({ length: MAX_RATING }).map((_, index) => {
                   const starValue = index + 1;
                   const isActive = displayedRating >= starValue;

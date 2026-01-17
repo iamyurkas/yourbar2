@@ -30,6 +30,8 @@ import {
 } from '@/libs/ingredient-availability';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
+import { setIngredientsOnboardingActions } from '@/src/onboarding/onboarding-helpers';
+import { useOnboardingTarget } from '@/src/onboarding/useOnboardingTarget';
 import { tagColors } from '@/theme/theme';
 
 type IngredientSection = {
@@ -91,6 +93,18 @@ const IngredientListItem = memo(function IngredientListItemComponent({
   const id = Number(ingredient.id ?? -1);
   const isAvailable = id >= 0 && availableIngredientIds.has(id);
   const tagColor = ingredient.tags?.[0]?.color ?? tagColors.yellow;
+  const availabilityTargetId =
+    ingredient.name === 'Champagne'
+      ? 'ingredientRow:Champagne toggle'
+      : ingredient.name === 'Peach'
+        ? 'ingredientRow:Peach toggle'
+        : null;
+  const availabilityTarget = useOnboardingTarget(availabilityTargetId);
+  const shoppingRemoveTargetId =
+    ingredient.name === 'Orange Juice' && onShoppingToggle
+      ? 'shoppingRow:OrangeJuice remove button'
+      : null;
+  const shoppingRemoveTarget = useOnboardingTarget(shoppingRemoveTargetId);
 
   const handleToggleAvailability = useCallback(() => {
     if (id >= 0) {
@@ -130,7 +144,10 @@ const IngredientListItem = memo(function IngredientListItemComponent({
           accessibilityLabel={shoppingLabel}
           onPress={handleShoppingToggle}
           hitSlop={8}
-          style={({ pressed }) => [styles.shoppingButton, pressed ? styles.shoppingButtonPressed : null]}>
+          style={({ pressed }) => [styles.shoppingButton, pressed ? styles.shoppingButtonPressed : null]}
+          ref={shoppingRemoveTarget.ref}
+          onLayout={shoppingRemoveTarget.onLayout}
+          testID={shoppingRemoveTarget.testID}>
           <MaterialIcons
             name={shoppingIconName}
             size={20}
@@ -161,7 +178,13 @@ const IngredientListItem = memo(function IngredientListItemComponent({
     return (
       <View style={styles.presenceSlot}>
         {showAvailabilityToggle ? (
-          <PresenceCheck checked={isAvailable} onToggle={handleToggleAvailability} />
+          <PresenceCheck
+            checked={isAvailable}
+            onToggle={handleToggleAvailability}
+            testID={availabilityTarget.testID}
+            onLayout={availabilityTarget.onLayout}
+            targetRef={availabilityTarget.ref}
+          />
         ) : (
           <View style={styles.presencePlaceholder} />
         )}
@@ -221,13 +244,54 @@ export default function IngredientsScreen() {
   const [headerLayout, setHeaderLayout] = useState<LayoutRectangle | null>(null);
   const [filterAnchorLayout, setFilterAnchorLayout] = useState<LayoutRectangle | null>(null);
   const listRef = useRef<FlatList<unknown>>(null);
+  const [onboardingScrollRequest, setOnboardingScrollRequest] = useState<{
+    name: string;
+    tab: IngredientTabKey;
+  } | null>(null);
   const [optimisticAvailability, setOptimisticAvailability] = useState<Map<number, boolean>>(
     () => new Map(),
   );
   const [, startAvailabilityTransition] = useTransition();
   const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
+  const ingredientsTabTarget = useOnboardingTarget('onboarding-ingredients-tab');
 
   useScrollToTop(listRef);
+
+  useEffect(() => {
+    setIngredientsOnboardingActions({
+      focusTab: (tab) => {
+        setFilterMenuVisible(false);
+        setSelectedTagKeys(new Set());
+        setQuery('');
+        setActiveTab(tab);
+      },
+      scrollToIngredient: (name, tab) => {
+        setFilterMenuVisible(false);
+        setSelectedTagKeys(new Set());
+        setQuery('');
+        setActiveTab(tab);
+        setOnboardingScrollRequest({ name, tab });
+      },
+      openIngredientDetails: (name) => {
+        const target = ingredients.find(
+          (ingredient) => ingredient.name?.trim().toLowerCase() === name.trim().toLowerCase(),
+        );
+        const routeParam = target?.id ?? target?.name;
+        if (!routeParam) {
+          return;
+        }
+
+        router.push({
+          pathname: '/ingredients/[ingredientId]',
+          params: { ingredientId: String(routeParam) },
+        });
+      },
+    });
+
+    return () => {
+      setIngredientsOnboardingActions(null);
+    };
+  }, [ingredients, router]);
 
   useEffect(() => {
     setLastIngredientTab(activeTab);
@@ -494,6 +558,29 @@ export default function IngredientsScreen() {
 
   const activeSection = sections[activeTab] ?? sections.all;
 
+  useEffect(() => {
+    if (!onboardingScrollRequest) {
+      return;
+    }
+
+    if (activeTab !== onboardingScrollRequest.tab) {
+      return;
+    }
+
+    const data = sections[onboardingScrollRequest.tab]?.data ?? [];
+    const targetIndex = data.findIndex(
+      (item) =>
+        item.name?.trim().toLowerCase() === onboardingScrollRequest.name.trim().toLowerCase(),
+    );
+
+    if (targetIndex < 0) {
+      return;
+    }
+
+    listRef.current?.scrollToIndex({ index: targetIndex, animated: true });
+    setOnboardingScrollRequest(null);
+  }, [activeTab, onboardingScrollRequest, sections]);
+
   const normalizedQuery = useMemo(() => {
     const normalized = normalizeSearchText(query);
     const tokens = normalized ? normalized.split(/\s+/).filter(Boolean) : [];
@@ -707,7 +794,14 @@ export default function IngredientsScreen() {
       style={[styles.safeArea, { backgroundColor: Colors.background }]}
       edges={['top', 'left', 'right']}>
       <View style={styles.container}>
-        <View style={styles.headerWrapper} onLayout={handleHeaderLayout}>
+        <View
+          style={styles.headerWrapper}
+          onLayout={(event) => {
+            ingredientsTabTarget.onLayout(event.nativeEvent.layout);
+            handleHeaderLayout(event);
+          }}
+          ref={ingredientsTabTarget.ref}
+          testID={ingredientsTabTarget.testID}>
           <CollectionHeader
             searchValue={query}
             onSearchChange={setQuery}

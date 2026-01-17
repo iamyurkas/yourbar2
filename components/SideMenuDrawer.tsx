@@ -17,6 +17,7 @@ import { Colors } from '@/constants/theme';
 import { type InventoryData } from '@/libs/inventory-data';
 import { buildPhotoBaseName } from '@/libs/photo-utils';
 import { useInventory, type StartScreen } from '@/providers/inventory-provider';
+import { useOnboarding } from '@/src/onboarding/OnboardingProvider';
 
 const MENU_WIDTH = Math.round(Dimensions.get('window').width * 0.75);
 const ANIMATION_DURATION = 200;
@@ -110,6 +111,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     updateCustomIngredientTag,
     deleteCustomIngredientTag,
   } = useInventory();
+  const { start: startOnboarding } = useOnboarding();
   const [isMounted, setIsMounted] = useState(visible);
   const [isRatingModalVisible, setRatingModalVisible] = useState(false);
   const ratingModalCloseTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -126,6 +128,11 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   const [isBackingUpPhotos, setIsBackingUpPhotos] = useState(false);
   const translateX = useRef(new Animated.Value(-MENU_WIDTH)).current;
   const backdropOpacity = useRef(new Animated.Value(0)).current;
+
+  const handleRunOnboarding = () => {
+    onClose();
+    startOnboarding(true);
+  };
 
   const drawerStyle = useMemo(
     () => [
@@ -704,6 +711,27 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>Reload bundled data</Text>
                 <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>
                   Clear saved inventory and reload assets from data.json
+                </Text>
+              </View>
+            </Pressable>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Run onboarding"
+              onPress={handleRunOnboarding}
+              style={[
+                styles.actionRow,
+                {
+                  borderColor: Colors.outline,
+                  backgroundColor: Colors.surface,
+                },
+              ]}>
+              <View style={[styles.actionIcon, { backgroundColor: Colors.surfaceVariant }]}>
+                <MaterialCommunityIcons name="play-circle-outline" size={16} color={Colors.onSurfaceVariant} />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>Run onboarding</Text>
+                <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>
+                  Replay the guided tour from the beginning
                 </Text>
               </View>
             </Pressable>

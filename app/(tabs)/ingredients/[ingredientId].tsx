@@ -29,6 +29,7 @@ import { resolveImageSource } from '@/libs/image-source';
 import { skipDuplicateBack } from '@/libs/navigation';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
+import { useOnboardingTarget } from '@/src/onboarding/useOnboardingTarget';
 
 function useResolvedIngredient(param: string | undefined, ingredients: Ingredient[]) {
   return useMemo(() => {
@@ -72,6 +73,9 @@ export default function IngredientDetailsScreen() {
   const ingredient = useResolvedIngredient(
     Array.isArray(ingredientId) ? ingredientId[0] : ingredientId,
     ingredients,
+  );
+  const addToShoppingTarget = useOnboardingTarget(
+    ingredient?.name?.trim().toLowerCase() === 'orange juice' ? 'ingredientDetails:addToShopping' : null,
   );
 
   const returnToPath = useMemo(() => {
@@ -512,7 +516,9 @@ export default function IngredientDetailsScreen() {
                   }
                   hitSlop={8}
                   style={styles.statusIconButton}
-                >
+                  ref={addToShoppingTarget.ref}
+                  onLayout={addToShoppingTarget.onLayout}
+                  testID={addToShoppingTarget.testID}>
                   <MaterialIcons
                     name={
                       effectiveIsOnShoppingList ? 'shopping-cart' : 'add-shopping-cart'

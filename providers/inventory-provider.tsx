@@ -80,6 +80,7 @@ type InventoryContextValue = {
   ratingFilterThreshold: number;
   setIngredientAvailability: (id: number, available: boolean) => void;
   toggleIngredientAvailability: (id: number) => void;
+  setIngredientShopping: (id: number, isShopping: boolean) => void;
   toggleIngredientShopping: (id: number) => void;
   clearBaseIngredient: (id: number) => void;
   createCocktail: (input: CreateCocktailInput) => Cocktail | undefined;
@@ -1748,6 +1749,18 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     });
   }, []);
 
+  const setIngredientShopping = useCallback((id: number, isShopping: boolean) => {
+    setShoppingIngredientIds((prev) => {
+      const next = new Set(prev);
+      if (isShopping) {
+        next.add(id);
+      } else {
+        next.delete(id);
+      }
+      return next;
+    });
+  }, []);
+
   const handleSetIgnoreGarnish = useCallback((value: boolean) => {
     setIgnoreGarnish(Boolean(value));
   }, []);
@@ -2084,6 +2097,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       startScreen,
       setIngredientAvailability,
       toggleIngredientAvailability,
+      setIngredientShopping,
       toggleIngredientShopping,
       clearBaseIngredient,
       createCocktail,
@@ -2128,6 +2142,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     startScreen,
     setIngredientAvailability,
     toggleIngredientAvailability,
+    setIngredientShopping,
     toggleIngredientShopping,
     clearBaseIngredient,
     createCocktail,

@@ -30,6 +30,8 @@ import { getLastCocktailTab, setLastCocktailTab, type CocktailTabKey } from '@/l
 import { createIngredientLookup } from '@/libs/ingredient-availability';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Cocktail } from '@/providers/inventory-provider';
+import { setCocktailsOnboardingActions } from '@/src/onboarding/onboarding-helpers';
+import { useOnboardingTarget } from '@/src/onboarding/useOnboardingTarget';
 import { tagColors } from '@/theme/theme';
 
 type CocktailTagOption = {
@@ -62,6 +64,105 @@ type MyTabListItem =
       tagColor?: string;
       cocktailCount: number;
     };
+
+type CocktailRowTargetProps = {
+  cocktail: Cocktail;
+  onPress: () => void;
+  availableIngredientIds: Set<number>;
+  ingredientLookup: ReturnType<typeof createIngredientLookup>;
+  ignoreGarnish: boolean;
+  allowAllSubstitutes: boolean;
+};
+
+const CocktailRowTarget = ({
+  cocktail,
+  onPress,
+  availableIngredientIds,
+  ingredientLookup,
+  ignoreGarnish,
+  allowAllSubstitutes,
+}: CocktailRowTargetProps) => {
+  const targetId = cocktail.name === 'Bellini' ? 'cocktailRow:Bellini' : null;
+  const target = useOnboardingTarget(targetId);
+
+  return (
+    <View ref={target.ref} onLayout={target.onLayout} testID={target.testID}>
+      <CocktailListRow
+        cocktail={cocktail}
+        availableIngredientIds={availableIngredientIds}
+        ingredientLookup={ingredientLookup}
+        ignoreGarnish={ignoreGarnish}
+        allowAllSubstitutes={allowAllSubstitutes}
+        showMethodIcons
+        onPress={onPress}
+      />
+    </View>
+  );
+};
+
+type MyIngredientHeaderProps = {
+  ingredientId: number;
+  name: string;
+  photoUri?: string | null;
+  tagColor?: string;
+  cocktailCount: number;
+  isOnShoppingList: boolean;
+  onPress: () => void;
+  onToggleShopping: () => void;
+};
+
+const MyIngredientHeaderRow = ({
+  ingredientId,
+  name,
+  photoUri,
+  tagColor,
+  cocktailCount,
+  isOnShoppingList,
+  onPress,
+  onToggleShopping,
+}: MyIngredientHeaderProps) => {
+  const accessibilityLabel = isOnShoppingList
+    ? 'Remove ingredient from shopping list'
+    : 'Add ingredient to shopping list';
+  const subtitleLabel = `Make ${cocktailCount} ${cocktailCount === 1 ? 'cocktail' : 'cocktails'}`;
+  const thumbnail = <Thumb label={name} uri={photoUri ?? undefined} />;
+  const shoppingTargetId = name === 'Orange Juice' ? 'myCocktails:addOrangeJuiceToShopping' : null;
+  const shoppingTarget = useOnboardingTarget(shoppingTargetId);
+
+  return (
+    <ListRow
+      title={name}
+      subtitle={subtitleLabel}
+      selected
+      highlightColor={Colors.highlightSubtle}
+      tagColor={tagColor}
+      thumbnail={thumbnail}
+      onPress={onPress}
+      accessibilityRole="button"
+      metaAlignment="center"
+      control={
+        <View style={styles.shoppingSlot}>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={accessibilityLabel}
+            onPress={onToggleShopping}
+            hitSlop={8}
+            style={({ pressed }) => [styles.shoppingButton, pressed ? styles.shoppingButtonPressed : null]}
+            ref={shoppingTarget.ref}
+            onLayout={shoppingTarget.onLayout}
+            testID={shoppingTarget.testID}>
+            <MaterialIcons
+              name={isOnShoppingList ? 'shopping-cart' : 'add-shopping-cart'}
+              size={20}
+              color={isOnShoppingList ? Colors.tint : Colors.onSurfaceVariant}
+              style={styles.shoppingIcon}
+            />
+          </Pressable>
+        </View>
+      }
+    />
+  );
+};
 
 const TAB_OPTIONS: SegmentTabOption[] = [
   { key: 'all', label: 'All' },
@@ -104,11 +205,53 @@ export default function CocktailsScreen() {
   const [headerLayout, setHeaderLayout] = useState<LayoutRectangle | null>(null);
   const [filterAnchorLayout, setFilterAnchorLayout] = useState<LayoutRectangle | null>(null);
   const listRef = useRef<FlatList<unknown>>(null);
+  const [onboardingScrollRequest, setOnboardingScrollRequest] = useState<{
+    name: string;
+    tab: CocktailTabKey;
+  } | null>(null);
 
   useScrollToTop(listRef);
   const router = useRouter();
   const ingredientLookup = useMemo(() => createIngredientLookup(ingredients), [ingredients]);
   const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
+
+  useEffect(() => {
+    setCocktailsOnboardingActions({
+      focusTab: (tab) => {
+        setFilterMenuVisible(false);
+        setSelectedTagKeys(new Set());
+        setSelectedMethodIds(new Set());
+        setQuery('');
+        setActiveTab(tab);
+      },
+      scrollToCocktail: (name, tab) => {
+        setFilterMenuVisible(false);
+        setSelectedTagKeys(new Set());
+        setSelectedMethodIds(new Set());
+        setQuery('');
+        setActiveTab(tab);
+        setOnboardingScrollRequest({ name, tab });
+      },
+      openCocktailDetails: (name) => {
+        const target = cocktails.find(
+          (cocktail) => cocktail.name?.trim().toLowerCase() === name.trim().toLowerCase(),
+        );
+        const routeParam = target?.id ?? target?.name;
+        if (!routeParam) {
+          return;
+        }
+
+        router.push({
+          pathname: '/cocktails/[cocktailId]',
+          params: { cocktailId: String(routeParam) },
+        });
+      },
+    });
+
+    return () => {
+      setCocktailsOnboardingActions(null);
+    };
+  }, [cocktails, router]);
 
   const availableTagOptions = useMemo<CocktailTagOption[]>(() => {
     const map = new Map<string, CocktailTagOption>();
@@ -710,13 +853,12 @@ export default function CocktailsScreen() {
 
   const renderItem = useCallback(
     ({ item }: { item: Cocktail }) => (
-      <CocktailListRow
+      <CocktailRowTarget
         cocktail={item}
         availableIngredientIds={availableIngredientIds}
         ingredientLookup={ingredientLookup}
         ignoreGarnish={ignoreGarnish}
         allowAllSubstitutes={allowAllSubstitutes}
-        showMethodIcons
         onPress={() => handleSelectCocktail(item)}
       />
     ),
@@ -743,54 +885,28 @@ export default function CocktailsScreen() {
 
       if (item.type === 'ingredient-header') {
         const isOnShoppingList = shoppingIngredientIds.has(item.ingredientId);
-        const accessibilityLabel = isOnShoppingList
-          ? 'Remove ingredient from shopping list'
-          : 'Add ingredient to shopping list';
-        const subtitleLabel = `Make ${item.cocktailCount} ${
-          item.cocktailCount === 1 ? 'cocktail' : 'cocktails'
-        }`;
-        const thumbnail = <Thumb label={item.name} uri={item.photoUri ?? undefined} />;
 
         return (
-          <ListRow
-            title={item.name}
-            subtitle={subtitleLabel}
-            selected
-            highlightColor={Colors.highlightSubtle}
+          <MyIngredientHeaderRow
+            ingredientId={item.ingredientId}
+            name={item.name}
+            photoUri={item.photoUri}
             tagColor={item.tagColor}
-            thumbnail={thumbnail}
+            cocktailCount={item.cocktailCount}
+            isOnShoppingList={isOnShoppingList}
             onPress={() => handleSelectIngredient(item.ingredientId)}
-            accessibilityRole="button"
-            metaAlignment="center"
-            control={
-              <View style={styles.shoppingSlot}>
-                <Pressable
-                  accessibilityRole="button"
-                  accessibilityLabel={accessibilityLabel}
-                  onPress={() => handleShoppingToggle(item.ingredientId)}
-                  hitSlop={8}
-                  style={({ pressed }) => [styles.shoppingButton, pressed ? styles.shoppingButtonPressed : null]}>
-                  <MaterialIcons
-                    name={isOnShoppingList ? 'shopping-cart' : 'add-shopping-cart'}
-                    size={20}
-                    color={isOnShoppingList ? Colors.tint : Colors.onSurfaceVariant}
-                    style={styles.shoppingIcon}
-                  />
-                </Pressable>
-              </View>
-            }
+            onToggleShopping={() => handleShoppingToggle(item.ingredientId)}
           />
         );
       }
 
       return (
-        <CocktailListRow
+        <CocktailRowTarget
           cocktail={item.cocktail}
           availableIngredientIds={availableIngredientIds}
           ingredientLookup={ingredientLookup}
           ignoreGarnish={ignoreGarnish}
           allowAllSubstitutes={allowAllSubstitutes}
-          showMethodIcons
           onPress={() => handleSelectCocktail(item.cocktail)}
         />
       );
@@ -803,10 +919,6 @@ export default function CocktailsScreen() {
       handleShoppingToggle,
       ignoreGarnish,
       ingredientLookup,
-      Colors.onSurface,
-      Colors.onSurfaceVariant,
-      Colors.outlineVariant,
-      Colors.tint,
       shoppingIngredientIds,
     ],
   );
@@ -872,6 +984,45 @@ export default function CocktailsScreen() {
 
     return 0;
   }, [filterAnchorLayout, headerLayout]);
+
+  useEffect(() => {
+    if (!onboardingScrollRequest) {
+      return;
+    }
+
+    if (activeTab !== onboardingScrollRequest.tab) {
+      return;
+    }
+
+    if (activeTab === 'my') {
+      const items = myTabListData?.items ?? [];
+      const targetIndex = items.findIndex((item) => {
+        if (item.type === 'ingredient-header') {
+          return item.name?.trim().toLowerCase() === onboardingScrollRequest.name.trim().toLowerCase();
+        }
+        if (item.type === 'cocktail') {
+          return item.cocktail.name?.trim().toLowerCase() === onboardingScrollRequest.name.trim().toLowerCase();
+        }
+        return false;
+      });
+
+      if (targetIndex >= 0) {
+        listRef.current?.scrollToIndex({ index: targetIndex, animated: true });
+        setOnboardingScrollRequest(null);
+      }
+      return;
+    }
+
+    const items = listData ?? [];
+    const targetIndex = items.findIndex(
+      (cocktail) => cocktail.name?.trim().toLowerCase() === onboardingScrollRequest.name.trim().toLowerCase(),
+    );
+
+    if (targetIndex >= 0) {
+      listRef.current?.scrollToIndex({ index: targetIndex, animated: true });
+      setOnboardingScrollRequest(null);
+    }
+  }, [activeTab, listData, myTabListData, onboardingScrollRequest]);
 
   return (
     <SafeAreaView
