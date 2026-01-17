@@ -47,7 +47,7 @@ export function OnboardingProvider({ children }: { children: React.ReactNode }) 
         const normalizedName = normalizeSearchText(name);
         const targetIngredient = inventory.ingredients.find((candidate) => {
           const candidateName = normalizeSearchText(candidate.name ?? '');
-          return candidateName === normalizedName;
+          return candidateName === normalizedName || candidateName.includes(normalizedName);
         });
         const ingredientId = Number(targetIngredient?.id ?? -1);
         if (ingredientId >= 0) {
