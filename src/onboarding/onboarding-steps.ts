@@ -16,7 +16,7 @@ export const ONBOARDING_STEPS: OnboardingStep[] = [
   {
     id: 'ingredients',
     title: 'Track your ingredients',
-    body: 'Mark what you have in stock and build a shopping list.',
+    body: 'Search by name or by tags (categories).',
     targetId: 'ingredients-header',
     onEnter: async ({ router }) => {
       setLastIngredientTab('all');
