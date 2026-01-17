@@ -32,6 +32,7 @@ export type OnboardingStep = {
   title?: string;
   body: string;
   targetId?: SpotlightTargetId;
+  spotlightOffsetY?: number;
   onEnter?: (context: OnboardingStepContext) => void | Promise<void>;
   onNext?: (context: OnboardingStepContext) => void | Promise<void>;
 };

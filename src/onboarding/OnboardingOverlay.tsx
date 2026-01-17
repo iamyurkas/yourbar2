@@ -86,8 +86,9 @@ export function OnboardingOverlay() {
       return null;
     }
 
+    const offsetY = step?.spotlightOffsetY ?? 0;
     const x = Math.max(0, targetRect.x - TARGET_PADDING);
-    const y = Math.max(0, targetRect.y - TARGET_PADDING);
+    const y = Math.max(0, targetRect.y - TARGET_PADDING + offsetY);
     const width = Math.min(screen.width, targetRect.width + TARGET_PADDING * 2);
     const height = Math.min(screen.height, targetRect.height + TARGET_PADDING * 2);
 
@@ -97,7 +98,7 @@ export function OnboardingOverlay() {
       width,
       height,
     };
-  }, [screen.height, screen.width, targetRect]);
+  }, [screen.height, screen.width, step?.spotlightOffsetY, targetRect]);
 
   return (
     <View pointerEvents="auto" style={styles.overlay}>
