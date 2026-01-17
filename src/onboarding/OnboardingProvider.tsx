@@ -1,21 +1,11 @@
 import { useRouter } from 'expo-router';
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
-import type { LayoutRectangle } from 'react-native';
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 
 import { ONBOARDING_STEPS } from '@/src/onboarding/onboarding-steps';
 import type {
   OnboardingInventoryActions,
   OnboardingStep,
   OnboardingStepContext,
-  SpotlightTargetId,
 } from '@/src/onboarding/onboarding-types';
 import { loadOnboardingState, persistOnboardingState } from '@/src/onboarding/onboarding-storage';
 import { useInventory, type Cocktail } from '@/providers/inventory-provider';
@@ -29,8 +19,6 @@ type OnboardingContextValue = {
   stop: () => void;
   next: () => void;
   prev: () => void;
-  registerTarget: (id: SpotlightTargetId, layout: LayoutRectangle, testID: string) => void;
-  targetLayouts: Record<SpotlightTargetId, { layout: LayoutRectangle; testID: string }>;
 };
 
 const OnboardingContext = createContext<OnboardingContextValue | null>(null);
@@ -42,9 +30,6 @@ export function OnboardingProvider({ children }: { children: React.ReactNode }) 
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [hasSeenOnboarding, setHasSeenOnboarding] = useState(false);
   const [isReady, setIsReady] = useState(false);
-  const [targetLayouts, setTargetLayouts] = useState<
-    Record<SpotlightTargetId, { layout: LayoutRectangle; testID: string }>
-  >({});
   const snapshotRef = useRef(inventory.getInventorySnapshot());
 
   const steps = ONBOARDING_STEPS;
@@ -113,19 +98,6 @@ export function OnboardingProvider({ children }: { children: React.ReactNode }) 
 
     void step.onEnter?.(createStepContext());
   }, [createStepContext, currentStepIndex, isActive, isReady, steps]);
-
-  const registerTarget = useCallback(
-    (id: SpotlightTargetId, layout: LayoutRectangle, testID: string) => {
-      setTargetLayouts((prev) => ({
-        ...prev,
-        [id]: {
-          layout,
-          testID,
-        },
-      }));
-    },
-    [],
-  );
 
   const start = useCallback(
     (force = false) => {
@@ -200,8 +172,6 @@ export function OnboardingProvider({ children }: { children: React.ReactNode }) 
       stop,
       next,
       prev,
-      registerTarget,
-      targetLayouts,
     }),
     [
       currentStepIndex,
@@ -209,11 +179,9 @@ export function OnboardingProvider({ children }: { children: React.ReactNode }) 
       isActive,
       next,
       prev,
-      registerTarget,
       start,
       steps,
       stop,
-      targetLayouts,
     ],
   );
 
@@ -228,21 +196,4 @@ export function useOnboarding() {
   }
 
   return context;
-}
-
-export function useSpotlightTarget(id: SpotlightTargetId) {
-  const { registerTarget } = useOnboarding();
-
-  const testID = `onboarding-target-${id}`;
-  const handleLayout = useCallback(
-    (event: { nativeEvent: { layout: LayoutRectangle } }) => {
-      registerTarget(id, event.nativeEvent.layout, testID);
-    },
-    [id, registerTarget, testID],
-  );
-
-  return {
-    testID,
-    onLayout: handleLayout,
-  };
 }

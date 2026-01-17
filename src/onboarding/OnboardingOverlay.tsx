@@ -1,33 +1,69 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Dimensions, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Colors } from '@/constants/theme';
 import { useOnboarding } from '@/src/onboarding/OnboardingProvider';
+import { getTargetRect, subscribeToTargetRegistry } from '@/src/onboarding/target-registry';
 
 const TOOLTIP_WIDTH = 280;
+const TARGET_PADDING = 8;
 
 export function OnboardingOverlay() {
-  const { isActive, currentStepIndex, steps, next, targetLayouts } = useOnboarding();
+  const { isActive, currentStepIndex, steps, next } = useOnboarding();
   const step = steps[currentStepIndex];
+  const targetId = step?.targetId;
+  const [targetRect, setTargetRect] = useState<{
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  } | null>(null);
+  const [isResolvingTarget, setIsResolvingTarget] = useState(false);
 
   const screen = Dimensions.get('window');
   const totalSteps = steps.length;
   const stepNumber = currentStepIndex + 1;
 
-  const target = step?.targetId ? targetLayouts[step.targetId] : undefined;
+  const resolveTarget = useCallback(async () => {
+    if (!targetId) {
+      setTargetRect(null);
+      setIsResolvingTarget(false);
+      return;
+    }
+
+    setIsResolvingTarget(true);
+    const rect = await getTargetRect(targetId);
+    setTargetRect(rect);
+    setIsResolvingTarget(false);
+  }, [targetId]);
+
+  useEffect(() => {
+    void resolveTarget();
+  }, [resolveTarget]);
+
+  useEffect(() => {
+    if (!targetId) {
+      return;
+    }
+
+    const unsubscribe = subscribeToTargetRegistry(() => {
+      void resolveTarget();
+    });
+    return unsubscribe;
+  }, [resolveTarget, targetId]);
 
   const tooltipStyle = useMemo(() => {
-    if (!target) {
+    if (!targetRect) {
       return {
         left: (screen.width - TOOLTIP_WIDTH) / 2,
         top: screen.height * 0.35,
       };
     }
 
-    const preferredLeft = target.layout.x + target.layout.width / 2 - TOOLTIP_WIDTH / 2;
+    const preferredLeft = targetRect.x + targetRect.width / 2 - TOOLTIP_WIDTH / 2;
     const clampedLeft = Math.max(16, Math.min(preferredLeft, screen.width - TOOLTIP_WIDTH - 16));
     const top = Math.min(
-      target.layout.y + target.layout.height + 16,
+      targetRect.y + targetRect.height + 16,
       screen.height - 200,
     );
 
@@ -35,45 +71,109 @@ export function OnboardingOverlay() {
       left: clampedLeft,
       top,
     };
-  }, [screen.height, screen.width, target]);
+  }, [screen.height, screen.width, targetRect]);
 
   if (!isActive || !step) {
     return null;
   }
 
   const isLastStep = stepNumber >= totalSteps;
+  const isTargetReady = Boolean(targetRect);
+  const showLoading = Boolean(targetId) && !isTargetReady;
+
+  const paddedTarget = useMemo(() => {
+    if (!targetRect) {
+      return null;
+    }
+
+    const x = Math.max(0, targetRect.x - TARGET_PADDING);
+    const y = Math.max(0, targetRect.y - TARGET_PADDING);
+    const width = Math.min(screen.width, targetRect.width + TARGET_PADDING * 2);
+    const height = Math.min(screen.height, targetRect.height + TARGET_PADDING * 2);
+
+    return {
+      x,
+      y,
+      width,
+      height,
+    };
+  }, [screen.height, screen.width, targetRect]);
 
   return (
-    <View pointerEvents="box-none" style={styles.overlay}>
-      <View style={styles.backdrop} />
-      {target ? (
-        <View
-          pointerEvents="none"
-          style={[
-            styles.spotlight,
-            {
-              left: target.layout.x - 8,
-              top: target.layout.y - 8,
-              width: target.layout.width + 16,
-              height: target.layout.height + 16,
-            },
-          ]}
-        />
-      ) : null}
+    <View pointerEvents="auto" style={styles.overlay}>
+      <Pressable style={StyleSheet.absoluteFillObject} onPress={() => {}} />
+      {paddedTarget ? (
+        <>
+          <View style={[styles.dimPane, { top: 0, left: 0, right: 0, height: paddedTarget.y }]} />
+          <View
+            style={[
+              styles.dimPane,
+              {
+                top: paddedTarget.y,
+                left: 0,
+                width: paddedTarget.x,
+                height: paddedTarget.height,
+              },
+            ]}
+          />
+          <View
+            style={[
+              styles.dimPane,
+              {
+                top: paddedTarget.y,
+                left: paddedTarget.x + paddedTarget.width,
+                right: 0,
+                height: paddedTarget.height,
+              },
+            ]}
+          />
+          <View
+            style={[
+              styles.dimPane,
+              {
+                top: paddedTarget.y + paddedTarget.height,
+                left: 0,
+                right: 0,
+                bottom: 0,
+              },
+            ]}
+          />
+          <View
+            pointerEvents="none"
+            style={[
+              styles.spotlight,
+              {
+                left: paddedTarget.x,
+                top: paddedTarget.y,
+                width: paddedTarget.width,
+                height: paddedTarget.height,
+              },
+            ]}
+          />
+        </>
+      ) : (
+        <View style={styles.backdrop} />
+      )}
       <View style={[styles.tooltip, { backgroundColor: Colors.surface }, tooltipStyle]}>
-        <Text style={[styles.title, { color: Colors.onSurface }]}>{step.title}</Text>
-        <Text style={[styles.body, { color: Colors.onSurfaceVariant }]}>{step.body}</Text>
+        {step.title ? (
+          <Text style={[styles.title, { color: Colors.onSurface }]}>{step.title}</Text>
+        ) : null}
+        <Text style={[styles.body, { color: Colors.onSurfaceVariant }]}>
+          {showLoading ? 'Loading…' : step.body}
+        </Text>
         <Text style={[styles.stepIndicator, { color: Colors.onSurfaceVariant }]}>
-          Step {stepNumber} of {totalSteps}
+          Step {stepNumber} / {totalSteps}
         </Text>
         <Pressable
           accessibilityRole="button"
           accessibilityLabel={isLastStep ? 'Finish onboarding' : 'Next onboarding step'}
           onPress={next}
+          disabled={showLoading || isResolvingTarget}
           style={({ pressed }) => [
             styles.nextButton,
             { backgroundColor: Colors.primary },
             pressed ? { opacity: 0.8 } : null,
+            showLoading || isResolvingTarget ? { opacity: 0.5 } : null,
           ]}>
           <Text style={[styles.nextButtonLabel, { color: Colors.onPrimary }]}>
             {isLastStep ? 'Finish' : 'Next'}
@@ -92,6 +192,10 @@ const styles = StyleSheet.create({
   },
   backdrop: {
     ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.55)',
+  },
+  dimPane: {
+    position: 'absolute',
     backgroundColor: 'rgba(0, 0, 0, 0.55)',
   },
   spotlight: {
@@ -136,4 +240,3 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
-

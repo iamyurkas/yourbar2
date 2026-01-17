@@ -5,7 +5,6 @@ export const ONBOARDING_STEPS: OnboardingStep[] = [
     id: 'welcome',
     title: 'Welcome to YourBar',
     body: 'Let’s take a quick tour of the essentials. Tap Next to continue.',
-    targetId: 'tab-cocktails',
     onEnter: async () => {
       // TODO: Navigate to the cocktails tab explicitly.
     },
@@ -17,7 +16,7 @@ export const ONBOARDING_STEPS: OnboardingStep[] = [
     id: 'ingredients',
     title: 'Track your ingredients',
     body: 'Mark what you have in stock and build a shopping list.',
-    targetId: 'tab-ingredients',
+    targetId: 'ingredients-header',
     onEnter: async () => {
       // TODO: Navigate to the ingredients tab explicitly.
     },
@@ -29,7 +28,6 @@ export const ONBOARDING_STEPS: OnboardingStep[] = [
     id: 'favorites',
     title: 'Save your favorites',
     body: 'Rate cocktails to surface your favorites later.',
-    targetId: 'cocktail-rating',
     onEnter: async () => {
       // TODO: Navigate to a cocktail details screen explicitly.
     },
@@ -38,4 +36,3 @@ export const ONBOARDING_STEPS: OnboardingStep[] = [
     },
   },
 ];
-
