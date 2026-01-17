@@ -30,6 +30,8 @@ import {
 } from '@/libs/ingredient-availability';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
+import { ONBOARDING_TARGETS } from '@/src/onboarding/onboarding-steps';
+import { useOnboardingTarget } from '@/src/onboarding/target-registry';
 import { tagColors } from '@/theme/theme';
 
 type IngredientSection = {
@@ -218,6 +220,7 @@ export default function IngredientsScreen() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isFilterMenuVisible, setFilterMenuVisible] = useState(false);
   const [selectedTagKeys, setSelectedTagKeys] = useState<Set<string>>(() => new Set());
+  const menuTargetRef = useOnboardingTarget(ONBOARDING_TARGETS.ingredientsMenu);
   const [headerLayout, setHeaderLayout] = useState<LayoutRectangle | null>(null);
   const [filterAnchorLayout, setFilterAnchorLayout] = useState<LayoutRectangle | null>(null);
   const listRef = useRef<FlatList<unknown>>(null);
@@ -713,6 +716,8 @@ export default function IngredientsScreen() {
             onSearchChange={setQuery}
             placeholder="Search"
             onMenuPress={() => setIsMenuOpen(true)}
+            menuButtonTestId={ONBOARDING_TARGETS.ingredientsMenu}
+            menuButtonRef={menuTargetRef}
             tabs={TAB_OPTIONS}
             activeTab={activeTab}
             onTabChange={setActiveTab}

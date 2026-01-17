@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import React from 'react';
+import React, { type Ref } from 'react';
 import {
   Pressable,
   StyleSheet,
@@ -23,6 +23,8 @@ type SearchTopBarProps = {
   filterActive?: boolean;
   filterExpanded?: boolean;
   onFilterLayout?: (layout: LayoutRectangle) => void;
+  menuButtonTestId?: string;
+  menuButtonRef?: Ref<View>;
 };
 
 export type SegmentTabOption = {
@@ -46,6 +48,8 @@ export function SearchTopBar({
   filterActive = false,
   filterExpanded = false,
   onFilterLayout,
+  menuButtonTestId,
+  menuButtonRef,
 }: SearchTopBarProps) {
 
   const handleSubmit = (event: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
@@ -63,6 +67,8 @@ export function SearchTopBar({
         },
       ]}>
       <Pressable
+        ref={menuButtonRef}
+        testID={menuButtonTestId}
         accessibilityRole="button"
         accessibilityLabel="Open navigation"
         onPress={onMenuPress}

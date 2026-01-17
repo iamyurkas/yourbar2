@@ -30,6 +30,8 @@ import { getLastCocktailTab, setLastCocktailTab, type CocktailTabKey } from '@/l
 import { createIngredientLookup } from '@/libs/ingredient-availability';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Cocktail } from '@/providers/inventory-provider';
+import { ONBOARDING_TARGETS } from '@/src/onboarding/onboarding-steps';
+import { useOnboardingTarget } from '@/src/onboarding/target-registry';
 import { tagColors } from '@/theme/theme';
 
 type CocktailTagOption = {
@@ -101,6 +103,7 @@ export default function CocktailsScreen() {
   const [selectedMethodIds, setSelectedMethodIds] = useState<Set<CocktailMethod['id']>>(
     () => new Set(),
   );
+  const menuTargetRef = useOnboardingTarget(ONBOARDING_TARGETS.cocktailsMenu);
   const [headerLayout, setHeaderLayout] = useState<LayoutRectangle | null>(null);
   const [filterAnchorLayout, setFilterAnchorLayout] = useState<LayoutRectangle | null>(null);
   const listRef = useRef<FlatList<unknown>>(null);
@@ -884,6 +887,8 @@ export default function CocktailsScreen() {
             onSearchChange={setQuery}
             placeholder="Search"
             onMenuPress={() => setIsMenuOpen(true)}
+            menuButtonTestId={ONBOARDING_TARGETS.cocktailsMenu}
+            menuButtonRef={menuTargetRef}
             tabs={TAB_OPTIONS}
             activeTab={activeTab}
             onTabChange={setActiveTab}

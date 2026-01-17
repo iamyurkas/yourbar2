@@ -7,6 +7,8 @@ import { Colors } from "@/constants/theme";
 import { PaperProvider } from "@/libs/react-native-paper";
 import { InventoryProvider } from "@/providers/inventory-provider";
 import { UnsavedChangesProvider } from "@/providers/unsaved-changes-provider";
+import { OnboardingOverlay } from "@/src/onboarding/OnboardingOverlay";
+import { OnboardingProvider } from "@/src/onboarding/OnboardingProvider";
 import { getAppTheme } from "@/theme/theme";
 
 export const unstable_settings = {
@@ -30,18 +32,21 @@ export default function RootLayout() {
   return (
     <UnsavedChangesProvider>
       <InventoryProvider>
-        <PaperProvider theme={paperTheme}>
-          <ThemeProvider value={navigationTheme}>
-            <Stack>
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-              <Stack.Screen
-                name="modal"
-                options={{ presentation: "modal", title: "Modal" }}
-              />
-            </Stack>
-            <StatusBar style="dark" />
-          </ThemeProvider>
-        </PaperProvider>
+        <OnboardingProvider>
+          <PaperProvider theme={paperTheme}>
+            <ThemeProvider value={navigationTheme}>
+              <Stack>
+                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                <Stack.Screen
+                  name="modal"
+                  options={{ presentation: "modal", title: "Modal" }}
+                />
+              </Stack>
+              <OnboardingOverlay />
+              <StatusBar style="dark" />
+            </ThemeProvider>
+          </PaperProvider>
+        </OnboardingProvider>
       </InventoryProvider>
     </UnsavedChangesProvider>
   );

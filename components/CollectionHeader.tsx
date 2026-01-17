@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type Ref } from 'react';
 import { StyleSheet, View, type LayoutRectangle, type StyleProp, type ViewStyle } from 'react-native';
 
 import { SearchTopBar, SegmentTabs, type SegmentTabOption } from '@/components/TopBars';
@@ -17,6 +17,8 @@ type CollectionHeaderProps = {
   activeTab?: string;
   onTabChange?: (key: string) => void;
   style?: StyleProp<ViewStyle>;
+  menuButtonTestId?: string;
+  menuButtonRef?: Ref<View>;
 };
 
 export function CollectionHeader({
@@ -33,6 +35,8 @@ export function CollectionHeader({
   activeTab,
   onTabChange,
   style,
+  menuButtonTestId,
+  menuButtonRef,
 }: CollectionHeaderProps) {
   const shouldShowTabs = Boolean(tabs?.length && activeTab !== undefined && onTabChange);
 
@@ -48,6 +52,8 @@ export function CollectionHeader({
         filterActive={filterActive}
         filterExpanded={filterExpanded}
         onFilterLayout={onFilterLayout}
+        menuButtonTestId={menuButtonTestId}
+        menuButtonRef={menuButtonRef}
       />
       {shouldShowTabs && tabs ? (
         <SegmentTabs options={tabs} value={activeTab!} onChange={onTabChange!} />
@@ -61,4 +67,3 @@ const styles = StyleSheet.create({
     gap: 0,
   },
 });
-
