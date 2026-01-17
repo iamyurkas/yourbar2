@@ -10,6 +10,8 @@ const HOLE_PADDING = 8;
 const TOOLTIP_MARGIN = 16;
 const TOOLTIP_GAP = 12;
 const DEFAULT_TOOLTIP_HEIGHT = 180;
+const FIRST_STEP_SPOTLIGHT_OFFSET_Y = 20;
+const FIRST_STEP_TOOLTIP_OFFSET_Y = 40;
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
@@ -66,8 +68,10 @@ export function OnboardingOverlay() {
       return null;
     }
 
+    const extraOffsetY =
+      currentStep?.id === 'ingredients-manage' ? FIRST_STEP_SPOTLIGHT_OFFSET_Y : 0;
     const paddedX = Math.max(0, targetRect.x - HOLE_PADDING);
-    const paddedY = Math.max(0, targetRect.y - HOLE_PADDING);
+    const paddedY = Math.max(0, targetRect.y - HOLE_PADDING + extraOffsetY);
     const paddedWidth = Math.min(width - paddedX, targetRect.width + HOLE_PADDING * 2);
     const paddedHeight = Math.min(height - paddedY, targetRect.height + HOLE_PADDING * 2);
 
@@ -77,7 +81,7 @@ export function OnboardingOverlay() {
       width: paddedWidth,
       height: paddedHeight,
     };
-  }, [height, targetRect, width]);
+  }, [currentStep?.id, height, targetRect, width]);
 
   const tooltipLayout = useMemo(() => {
     if (!currentStep || !spotlightRect) {
@@ -92,14 +96,16 @@ export function OnboardingOverlay() {
     const centerX = spotlightRect.x + spotlightRect.width / 2;
     const left = clamp(centerX - tooltipWidth / 2, TOOLTIP_MARGIN, width - tooltipWidth - TOOLTIP_MARGIN);
     const belowTop = spotlightRect.y + spotlightRect.height + TOOLTIP_GAP;
-    const top = Math.max(belowTop, insets.top + TOOLTIP_MARGIN);
+    const tooltipOffset =
+      currentStep?.id === 'ingredients-manage' ? FIRST_STEP_TOOLTIP_OFFSET_Y : 0;
+    const top = Math.max(belowTop + tooltipOffset, insets.top + TOOLTIP_MARGIN);
 
     return {
       width: tooltipWidth,
       left,
       top,
     };
-  }, [currentStep, insets.top, spotlightRect, width]);
+  }, [currentStep?.id, insets.top, spotlightRect, width]);
 
   if (!isActive || !currentStep) {
     return null;
