@@ -4,6 +4,7 @@ const path = require('path');
 const repoRoot = path.resolve(__dirname, '..');
 const assetsDir = path.join(repoRoot, 'assets');
 const outputPath = path.join(assetsDir, 'image-manifest.ts');
+const dataPath = path.join(assetsDir, 'data', 'data.json');
 
 const imageExtensions = new Set(['.jpg', '.jpeg', '.png', '.webp']);
 
@@ -40,6 +41,45 @@ const listImages = (subdir) => {
     .sort((a, b) => a.localeCompare(b));
 };
 
+const buildReferencedImages = () => {
+  if (!fs.existsSync(dataPath)) {
+    return new Set();
+  }
+  const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
+  const referenced = new Set();
+  const addUri = (uri) => {
+    if (typeof uri === 'string' && uri.startsWith('assets/')) {
+      referenced.add(uri);
+    }
+  };
+  if (Array.isArray(data.cocktails)) {
+    data.cocktails.forEach((cocktail) => addUri(cocktail?.photoUri));
+  }
+  if (Array.isArray(data.ingredients)) {
+    data.ingredients.forEach((ingredient) => addUri(ingredient?.photoUri));
+  }
+  return referenced;
+};
+
+const pruneUnusedImages = () => {
+  const referenced = buildReferencedImages();
+  if (referenced.size === 0) {
+    console.log('No referenced images found in assets/data/data.json.');
+    return;
+  }
+  const subdirs = ['ingredients', 'cocktails'];
+  subdirs.forEach((subdir) => {
+    const files = listImages(subdir);
+    files.forEach((file) => {
+      const uri = `assets/${subdir}/${file}`;
+      if (!referenced.has(uri)) {
+        fs.unlinkSync(path.join(assetsDir, subdir, file));
+        console.log(`Removed ${uri}`);
+      }
+    });
+  });
+};
+
 const renderImageMap = (constName, subdir, files) =>
   [
     `export const ${constName}Images: Record<string, number> = {`,
@@ -58,8 +98,12 @@ const renderGlasswareUriById = () =>
       ([id, filename]) => `  ${id}: 'assets/glassware/${filename}',`
     ),
     '};',
-    '',
-  ].join('\n');
+  '',
+].join('\n');
+
+if (process.argv.includes('--prune-unused')) {
+  pruneUnusedImages();
+}
 
 const ingredientFiles = listImages('ingredients');
 const glasswareFiles = listImages('glassware');
