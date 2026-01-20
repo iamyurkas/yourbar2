@@ -839,7 +839,8 @@ export default function CocktailDetailsScreen() {
                       });
                     };
 
-                    const subtitleLines: string[] = [];
+                    const substitutionLines: string[] = [];
+                    const qualifierLines: string[] = [];
 
                     const isBaseToBrandSubstitution =
                       Boolean(resolution.substituteFor) &&
@@ -848,7 +849,7 @@ export default function CocktailDetailsScreen() {
                       resolvedIngredient.baseIngredientId === ingredientId;
 
                     if (resolution.substituteFor && !isBaseToBrandSubstitution) {
-                      subtitleLines.push(`Substitute for ${resolution.substituteFor}`);
+                      substitutionLines.push(`Substitute for ${resolution.substituteFor}`);
                     }
 
                     const missingSubstituteLines = buildMissingSubstituteLines(
@@ -858,15 +859,46 @@ export default function CocktailDetailsScreen() {
                     );
 
                     if (!resolution.isAvailable && missingSubstituteLines.length) {
-                      subtitleLines.push(...missingSubstituteLines);
+                      substitutionLines.push(...missingSubstituteLines);
                     }
 
                     if (qualifier) {
-                      subtitleLines.push(qualifier.charAt(0).toUpperCase() + qualifier.slice(1));
+                      qualifierLines.push(qualifier.charAt(0).toUpperCase() + qualifier.slice(1));
                     }
 
-                    const subtitle = subtitleLines.length ? subtitleLines.join('\n') : undefined;
-                    const subtitleNumberOfLines = subtitleLines.length || 1;
+                    const subtitleEntries = [
+                      ...substitutionLines.map((line, lineIndex) => ({
+                        line,
+                        marginTop: lineIndex === 0 ? 0 : 2,
+                      })),
+                      ...qualifierLines.map((line, lineIndex) => ({
+                        line,
+                        marginTop:
+                          substitutionLines.length > 0
+                            ? lineIndex === 0
+                              ? 4
+                              : 2
+                            : lineIndex === 0
+                              ? 0
+                              : 2,
+                      })),
+                    ];
+                    const subtitleContent = subtitleEntries.length ? (
+                      <View style={styles.ingredientSubtitleList}>
+                        {subtitleEntries.map((entry, entryIndex) => (
+                          <Text
+                            key={`${key}-subtitle-${entryIndex}`}
+                            style={[
+                              styles.ingredientSubtitle,
+                              { color: Colors.onSurfaceVariant },
+                              entry.marginTop > 0 && { marginTop: entry.marginTop },
+                            ]}
+                          >
+                            {entry.line}
+                          </Text>
+                        ))}
+                      </View>
+                    ) : undefined;
 
                     return (
                       <View key={key}>
@@ -875,13 +907,7 @@ export default function CocktailDetailsScreen() {
                         ) : null}
                         <ListRow
                           title={resolution.resolvedName || ingredient.name || ''}
-                          subtitle={subtitle}
-                          subtitleStyle={
-                            subtitle
-                              ? [styles.ingredientSubtitle, { color: Colors.onSurfaceVariant }]
-                              : undefined
-                          }
-                          subtitleNumberOfLines={subtitleNumberOfLines}
+                          subtitleContent={subtitleContent}
                           thumbnail={
                             <Thumb
                               label={resolution.resolvedName ?? ingredient.name ?? undefined}
@@ -1116,6 +1142,9 @@ const styles = StyleSheet.create({
   },
   ingredientSubtitle: {
     fontSize: 12,
+  },
+  ingredientSubtitleList: {
+    alignItems: 'flex-start',
   },
   shoppingIcon: {
     width: 16,
