@@ -107,6 +107,7 @@ export default function CreateIngredientScreen() {
   const [description, setDescription] = useState('');
   const [imageUri, setImageUri] = useState<string | null>(null);
   const [isPickingImage, setIsPickingImage] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [selectedTagIds, setSelectedTagIds] = useState<number[]>([]);
   const [isTagModalVisible, setTagModalVisible] = useState(false);
   const [baseIngredientId, setBaseIngredientId] = useState<number | null>(null);
@@ -277,6 +278,10 @@ export default function CreateIngredientScreen() {
   }, [ensureMediaPermission, isPickingImage, showDialog]);
 
   const handleSubmit = useCallback(async () => {
+    if (isSaving) {
+      return;
+    }
+
     const trimmedName = name.trim();
     if (!trimmedName) {
       showDialog({
@@ -301,59 +306,68 @@ export default function CreateIngredientScreen() {
       tags: selectedTags,
     };
 
-    let created = createIngredient(submission);
+    setIsSaving(true);
+    let created: Ingredient | undefined;
+    try {
+      created = createIngredient(submission);
 
-    if (!created) {
-      showDialog({
-        title: 'Could not save ingredient',
-        message: 'Please try again later.',
-        actions: [{ label: 'OK' }],
-      });
-      return;
-    }
-
-    if (shouldProcessPhoto && imageUri && created.id != null) {
-      const storedPhotoUri = await storePhoto({
-        uri: imageUri,
-        id: created.id,
-        name: trimmedName,
-        category: 'ingredients',
-      });
-
-      if (storedPhotoUri && storedPhotoUri !== created.photoUri) {
-        const updated = updateIngredient(Number(created.id), {
-          ...submission,
-          photoUri: storedPhotoUri,
+      if (!created) {
+        showDialog({
+          title: 'Could not save ingredient',
+          message: 'Please try again later.',
+          actions: [{ label: 'OK' }],
         });
-        if (updated) {
-          created = updated;
+        return;
+      }
+
+      if (shouldProcessPhoto && imageUri && created.id != null) {
+        const storedPhotoUri = await storePhoto({
+          uri: imageUri,
+          id: created.id,
+          name: trimmedName,
+          category: 'ingredients',
+        });
+
+        if (storedPhotoUri && storedPhotoUri !== created.photoUri) {
+          const updated = updateIngredient(Number(created.id), {
+            ...submission,
+            photoUri: storedPhotoUri,
+          });
+          if (updated) {
+            created = updated;
+          }
         }
       }
+    } finally {
+      setIsSaving(false);
     }
 
-    setHasUnsavedChanges(false);
-    isNavigatingAfterSaveRef.current = true;
-    const targetId = created.id ?? created.name;
-    if (!targetId) {
-      skipDuplicateBack(navigation);
-      return;
-    }
+    if (created) {
+      setHasUnsavedChanges(false);
+      isNavigatingAfterSaveRef.current = true;
+      const targetId = created.id ?? created.name;
+      if (!targetId) {
+        skipDuplicateBack(navigation);
+        return;
+      }
 
-    if (returnToPath) {
-      router.navigate({ pathname: returnToPath, params: returnToParams });
-      return;
-    }
+      if (returnToPath) {
+        router.navigate({ pathname: returnToPath, params: returnToParams });
+        return;
+      }
 
-    router.replace({
-      pathname: '/ingredients/[ingredientId]',
-      params: { ingredientId: String(targetId) },
-    });
+      router.replace({
+        pathname: '/ingredients/[ingredientId]',
+        params: { ingredientId: String(targetId) },
+      });
+    }
   }, [
     availableIngredientTags,
     baseIngredientId,
     createIngredient,
     description,
     imageUri,
+    isSaving,
     name,
     returnToParams,
     returnToPath,
@@ -776,9 +790,12 @@ export default function CreateIngredientScreen() {
 
           <Pressable
             accessibilityRole="button"
-            style={[styles.submitButton, { backgroundColor: Colors.tint }]}
+            style={[
+              styles.submitButton,
+              { backgroundColor: Colors.tint, opacity: isSaving ? 0.6 : 1 },
+            ]}
             onPress={handleSubmit}
-            disabled={isPickingImage}>
+            disabled={isPickingImage || isSaving}>
             <Text style={[styles.submitLabel, { color: Colors.onPrimary }]}>Save</Text>
           </Pressable>
           <View style={styles.bottomSpacer} />
