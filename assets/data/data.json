@@ -900,6 +900,24 @@
           "name": "Ice",
           "amount": "150",
           "unitId": 8
+        },
+        {
+          "order": 7,
+          "ingredientId": 795313,
+          "name": "Cocoa Powder",
+          "amount": "1",
+          "unitId": 15,
+          "optional": true,
+          "garnish": true
+        },
+        {
+          "order": 8,
+          "ingredientId": 499545,
+          "name": "Chocolate",
+          "amount": "1",
+          "unitId": 15,
+          "optional": true,
+          "garnish": true
         }
       ]
     },
@@ -1071,6 +1089,14 @@
           "amount": "1",
           "unitId": 10,
           "garnish": true
+        },
+        {
+          "order": 8,
+          "ingredientId": 591435,
+          "name": "Nutmeg",
+          "amount": "1",
+          "unitId": 15,
+          "garnish": true
         }
       ]
     },
@@ -1179,6 +1205,14 @@
           "name": "Chocolate",
           "amount": "5",
           "unitId": 18,
+          "garnish": true
+        },
+        {
+          "order": 5,
+          "ingredientId": 795313,
+          "name": "Cocoa Powder",
+          "amount": "1",
+          "unitId": 15,
           "garnish": true
         }
       ]
@@ -1583,6 +1617,24 @@
         },
         {
           "order": 7,
+          "ingredientId": 108496,
+          "name": "Lemon",
+          "amount": "1",
+          "unitId": 14,
+          "optional": true,
+          "garnish": true
+        },
+        {
+          "order": 8,
+          "ingredientId": 767167,
+          "name": "Apple",
+          "amount": "1",
+          "unitId": 19,
+          "optional": true,
+          "garnish": true
+        },
+        {
+          "order": 9,
           "ingredientId": 346304,
           "name": "Ice",
           "amount": "120",
@@ -1953,10 +2005,12 @@
           "substitutes": [
             {
               "id": 794666,
+              "ingredientId": 794666,
               "name": "Chocolate Liqueur"
             },
             {
               "id": 838213,
+              "ingredientId": 838213,
               "name": "Creme de Cacao White"
             }
           ]
@@ -1977,14 +2031,15 @@
           "substitutes": [
             {
               "id": 754486,
+              "ingredientId": 754486,
               "name": "Half-and-half"
             }
           ]
         },
         {
           "order": 4,
-          "ingredientId": 791672,
-          "name": "Cherry",
+          "ingredientId": 607153,
+          "name": "Maraschino Cherry",
           "amount": "1",
           "unitId": 1,
           "garnish": true
@@ -2243,20 +2298,30 @@
         },
         {
           "order": 5,
-          "ingredientId": 767167,
-          "name": "Apple",
-          "amount": "1",
-          "unitId": 27
-        },
-        {
-          "order": 6,
           "ingredientId": 346304,
           "name": "Ice",
           "amount": "150",
           "unitId": 8
         },
         {
+          "order": 6,
+          "ingredientId": 767167,
+          "name": "Apple",
+          "amount": "1",
+          "unitId": 27,
+          "garnish": true
+        },
+        {
           "order": 7,
+          "ingredientId": 108496,
+          "name": "Lemon",
+          "amount": "1",
+          "unitId": 14,
+          "optional": true,
+          "garnish": true
+        },
+        {
+          "order": 8,
           "ingredientId": 346304,
           "name": "Ice",
           "amount": "120",
@@ -2296,10 +2361,12 @@
           "substitutes": [
             {
               "id": 31941,
+              "ingredientId": 31941,
               "name": "Apple Brandy"
             },
             {
               "id": 797544,
+              "ingredientId": 797544,
               "name": "Apple Liqueur"
             }
           ]
@@ -2314,6 +2381,7 @@
           "substitutes": [
             {
               "id": 587125,
+              "ingredientId": 587125,
               "name": "Orange Curaçao"
             }
           ]
@@ -2327,6 +2395,24 @@
         },
         {
           "order": 5,
+          "ingredientId": 767167,
+          "name": "Apple",
+          "amount": "1",
+          "unitId": 19,
+          "optional": true,
+          "garnish": true
+        },
+        {
+          "order": 6,
+          "ingredientId": 108496,
+          "name": "Lemon",
+          "amount": "1",
+          "unitId": 26,
+          "optional": true,
+          "garnish": true
+        },
+        {
+          "order": 7,
           "ingredientId": 346304,
           "name": "Ice",
           "amount": "120",
@@ -2848,6 +2934,24 @@
           "name": "Ice",
           "amount": "150",
           "unitId": 8
+        },
+        {
+          "order": 5,
+          "ingredientId": 336572,
+          "name": "Lime",
+          "amount": "1",
+          "unitId": 19,
+          "optional": true,
+          "garnish": true
+        },
+        {
+          "order": 6,
+          "ingredientId": 791672,
+          "name": "Cherry",
+          "amount": "1",
+          "unitId": 1,
+          "optional": true,
+          "garnish": true
         }
       ]
     },
@@ -2963,10 +3067,12 @@
           "substitutes": [
             {
               "id": 325668,
+              "ingredientId": 325668,
               "name": "Cherry Heering"
             },
             {
               "id": 999967,
+              "ingredientId": 999967,
               "name": "Cherry Liqueur"
             }
           ]
@@ -3008,6 +3114,22 @@
         },
         {
           "order": 9,
+          "ingredientId": 607153,
+          "name": "Maraschino Cherry",
+          "amount": "1",
+          "unitId": 1,
+          "garnish": true
+        },
+        {
+          "order": 10,
+          "ingredientId": 932849,
+          "name": "Pineapple",
+          "amount": "1",
+          "unitId": 19,
+          "garnish": true
+        },
+        {
+          "order": 11,
           "ingredientId": 346304,
           "name": "Ice",
           "amount": "120",
@@ -3307,6 +3429,7 @@
           "substitutes": [
             {
               "id": 777829,
+              "ingredientId": 777829,
               "name": "Creme de Banane"
             }
           ]
@@ -3334,6 +3457,24 @@
         },
         {
           "order": 7,
+          "ingredientId": 609552,
+          "name": "Banana",
+          "amount": "1",
+          "unitId": 19,
+          "optional": true,
+          "garnish": true
+        },
+        {
+          "order": 8,
+          "ingredientId": 108496,
+          "name": "Lemon",
+          "amount": "1",
+          "unitId": 26,
+          "optional": true,
+          "garnish": true
+        },
+        {
+          "order": 9,
           "ingredientId": 346304,
           "name": "Ice",
           "amount": "120",
@@ -3385,6 +3526,7 @@
           "substitutes": [
             {
               "id": 777829,
+              "ingredientId": 777829,
               "name": "Creme de Banane"
             }
           ]
@@ -3405,17 +3547,34 @@
         },
         {
           "order": 6,
-          "ingredientId": 609552,
-          "name": "Banana",
-          "amount": "1",
-          "unitId": 19
+          "ingredientId": 346304,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8
         },
         {
           "order": 7,
-          "ingredientId": 346304,
-          "name": "Ice",
-          "amount": "120",
-          "unitId": 8
+          "ingredientId": 609552,
+          "name": "Banana",
+          "amount": "1",
+          "unitId": 19,
+          "garnish": true
+        },
+        {
+          "order": 8,
+          "ingredientId": 932849,
+          "name": "Pineapple",
+          "amount": "1",
+          "unitId": 27,
+          "garnish": true
+        },
+        {
+          "order": 9,
+          "ingredientId": 791672,
+          "name": "Cherry",
+          "amount": "1",
+          "unitId": 1,
+          "garnish": true
         }
       ]
     },
@@ -3919,6 +4078,24 @@
           "name": "Ice",
           "amount": "150",
           "unitId": 8
+        },
+        {
+          "order": 5,
+          "ingredientId": 795313,
+          "name": "Cocoa Powder",
+          "amount": "1",
+          "unitId": 15,
+          "optional": true,
+          "garnish": true
+        },
+        {
+          "order": 6,
+          "ingredientId": 499545,
+          "name": "Chocolate",
+          "amount": "1",
+          "unitId": 15,
+          "optional": true,
+          "garnish": true
         }
       ]
     },
@@ -3926,7 +4103,7 @@
       "id": 1756637682106,
       "name": "Barracuda",
       "description": "An IBA official sparkling cocktail.",
-      "instructions": "1. Combine gold rum, Galliano, pineapple juice, and lime juice in a cocktail shaker.\n2. Add ice to the shaker and shake until well-chilled.\n3. Strain the mixture into the chilled glass.\n4. Top with Prosecco and gently stir.\n5. Garnish with a pineapple wedge and a maraschino cherry. ",
+      "instructions": "1. Combine gold rum, Galliano, pineapple juice, and lime juice in a cocktail shaker.\n2. Add ice to the shaker and shake until well-chilled.\n3. Strain the mixture into the chilled glass.\n4. Top with Prosecco and gently stir.\n5. Garnish with a pineapple wedge and a maraschino cherry.",
       "photoUri": "assets/cocktails/1756637682106-barracuda.jpg",
       "glassId": "coupe",
       "methodIds": ["shake"],
@@ -3957,6 +4134,7 @@
           "substitutes": [
             {
               "id": 908571,
+              "ingredientId": 908571,
               "name": "Spiced Rum"
             }
           ]
@@ -3991,10 +4169,12 @@
           "substitutes": [
             {
               "id": 435337,
+              "ingredientId": 435337,
               "name": "Champagne"
             },
             {
               "id": 588255,
+              "ingredientId": 588255,
               "name": "Prosecco"
             }
           ]
@@ -4016,11 +4196,13 @@
         },
         {
           "order": 8,
-          "ingredientId": 791672,
-          "name": "Cherry",
+          "ingredientId": 607153,
+          "name": "Maraschino Cherry",
           "amount": "1",
           "unitId": 1,
-          "garnish": true
+          "garnish": true,
+          "allowBaseSubstitution": true,
+          "allowBrandSubstitution": true
         },
         {
           "order": 9,
@@ -4219,18 +4401,18 @@
         },
         {
           "order": 6,
+          "ingredientId": 346304,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
+        },
+        {
+          "order": 6,
           "ingredientId": 607153,
           "name": "Maraschino Cherry",
           "amount": "3",
           "unitId": 1,
           "garnish": true
-        },
-        {
-          "order": 6,
-          "ingredientId": 346304,
-          "name": "Ice",
-          "amount": "120",
-          "unitId": 8
         }
       ]
     },
@@ -5947,7 +6129,7 @@
       "id": 1756840374849,
       "name": "Bobby Burns",
       "description": "A complex whiskey cocktail where Scotch Whiskey, Red Vermouth, Benedictine meets citrus—bittersweet, zesty, and nicely structured.",
-      "instructions": "1. Stir all ingredients with ice.\n2. Fine strain into chilled glass.\n3. Garnish:\n4. EXPRESS lemon zest twist over the cocktail and discard.\n5. Garnish with skewered maraschino cherry.",
+      "instructions": "1. Stir all ingredients with ice.\n2. Fine strain into chilled glass.\n3. Express lemon zest twist over the cocktail and garnish.",
       "photoUri": "assets/cocktails/1756840374849-bobby-burns.jpg",
       "glassId": "goblet",
       "methodIds": ["stir"],
@@ -5982,17 +6164,18 @@
         },
         {
           "order": 4,
-          "ingredientId": 108496,
-          "name": "Lemon",
-          "amount": "1",
-          "unitId": 14
-        },
-        {
-          "order": 5,
           "ingredientId": 346304,
           "name": "Ice",
           "amount": "150",
           "unitId": 8
+        },
+        {
+          "order": 5,
+          "ingredientId": 108496,
+          "name": "Lemon",
+          "amount": "1",
+          "unitId": 14,
+          "garnish": true
         }
       ]
     },
@@ -6880,6 +7063,15 @@
           "name": "Ice",
           "amount": "150",
           "unitId": 8
+        },
+        {
+          "order": 5,
+          "ingredientId": 591435,
+          "name": "Nutmeg",
+          "amount": "1",
+          "unitId": 15,
+          "optional": true,
+          "garnish": true
         }
       ]
     },
@@ -7517,7 +7709,7 @@
       "id": 1757000000111,
       "name": "Bushwacker",
       "description": "A delicious, creamy long cocktail that is very similar to the Piña Colada. The recipe here is for 3 cocktails. A blender should be big enough to fit at least 1 liter of the mixture.",
-      "instructions": "1. Combine: Add the rum, coffee liqueur, crème de cacao, cream of coconut, milk, and ice into a blender.\n2. Blend: Process on high until the mixture is smooth, frothy, and reaches a milkshake-like consistency (typically 10–25 seconds).\n3. Prep the Glass: Optional but traditional: drizzle chocolate syrup in a swirl inside a chilled hurricane glass.\n4. Pour and Garnish: Pour the blended mixture into the glass. Top with a sprinkle of freshly grated nutmeg and maraschino cherries.",
+      "instructions": "1. Add the rum, coffee liqueur, crème de cacao, cream of coconut, milk, and ice into a blender.\n2. Blend on high until the mixture is smooth, frothy, and reaches a milkshake-like consistency (typically 10–25 seconds).\n3. Optional but traditional: drizzle chocolate syrup in a swirl inside a chilled hurricane glass.\n4. Pour the blended mixture into the glass. Top with a sprinkle of freshly grated nutmeg and maraschino cherries.",
       "photoUri": "assets/cocktails/1757000000111-bushwacker.jpg",
       "glassId": "hurricane_glass",
       "methodIds": ["blend"],
@@ -7613,6 +7805,14 @@
           "name": "Maraschino Cherry",
           "amount": "3",
           "unitId": 1,
+          "garnish": true
+        },
+        {
+          "order": 8,
+          "ingredientId": 591435,
+          "name": "Nutmeg",
+          "amount": "1",
+          "unitId": 15,
           "garnish": true
         }
       ]
@@ -8533,10 +8733,10 @@
       "id": 1757000000120,
       "name": "Car Crash",
       "description": "A sweet and fruity long drink.",
-      "instructions": "1. Shake the Base: Fill a cocktail shaker with ice. Add amaretto, peach liqueur, orange juice, and sour mix.\n2. Strain: Shake well until chilled and strain into a tall Collins glass filled with fresh ice.\n3. The \"Crash\": Slowly pour the grenadine over the back of a spoon. It will sink to the bottom, creating a red \"crash\" effect.\n4. Garnish: Finish with an orange slice and a maraschino cherry.",
+      "instructions": "1. Fill a cocktail shaker with ice. Add amaretto, peach liqueur, orange juice, and lemon juice and simple syrup.\n2. Shake well until chilled and strain into a tall Collins glass filled with fresh ice.\n3. Slowly pour the grenadine over the back of a spoon. It will sink to the bottom, creating a red \"crash\" effect.\n4. Garnish with an orange slice and a maraschino cherry.",
       "photoUri": "assets/cocktails/1757000000120-car-crash.jpg",
       "glassId": "collins_glass",
-      "methodIds": ["build"],
+      "methodIds": ["shake", "layer"],
       "tags": [
         {
           "id": 7,
@@ -8570,7 +8770,7 @@
           "name": "Southern Comfort",
           "amount": "30",
           "unitId": 11,
-          "garnish": true
+          "optional": true
         },
         {
           "order": 4,
@@ -8849,11 +9049,13 @@
         },
         {
           "order": 7,
-          "ingredientId": 791672,
-          "name": "Cherry",
+          "ingredientId": 607153,
+          "name": "Maraschino Cherry",
           "amount": "1",
           "unitId": 1,
-          "garnish": true
+          "garnish": true,
+          "allowBaseSubstitution": true,
+          "allowBrandSubstitution": true
         },
         {
           "order": 8,
@@ -8931,10 +9133,18 @@
         },
         {
           "order": 7,
+          "ingredientId": 346304,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8
+        },
+        {
+          "order": 8,
           "ingredientId": 769178,
           "name": "Grapefruit",
           "amount": "1",
           "unitId": 27,
+          "garnish": true,
           "substitutes": [
             {
               "id": 932849,
@@ -8942,13 +9152,6 @@
               "name": "Pineapple"
             }
           ]
-        },
-        {
-          "order": 8,
-          "ingredientId": 346304,
-          "name": "Ice",
-          "amount": "150",
-          "unitId": 8
         },
         {
           "order": 9,
@@ -9424,10 +9627,18 @@
         },
         {
           "order": 7,
-          "ingredientId": 607153,
-          "name": "Maraschino Cherry",
+          "ingredientId": 791672,
+          "name": "Cherry",
           "amount": "1",
           "unitId": 1,
+          "garnish": true
+        },
+        {
+          "order": 8,
+          "ingredientId": 591435,
+          "name": "Nutmeg",
+          "amount": "1",
+          "unitId": 15,
           "garnish": true
         }
       ]
@@ -9564,7 +9775,7 @@
       "id": 1757000000126,
       "name": "Chocolate Espresso Martini",
       "description": "A spirit-forward vodka cocktail showcasing Vodka, Coffee Liqueur, Espresso—deep, aromatic, and meant to be savored. Garnished with chocolate syrup.",
-      "instructions": "1. Combine: Add all liquid ingredients into a cocktail shaker filled with plenty of ice.\n2. Shake Hard: Shake vigorously for at least 15–20 seconds. This is essential to create the signature frothy top.\n3. Strain: Double-strain into your chilled glass to ensure a smooth texture without ice chips.\n4. \n5. Presentation and Garnishes\n6. To elevate the visual appeal, you can:\n7. • Rim the glass: Dip the rim in chocolate syrup, then into cocoa powder or chocolate shavings.\n8. • Drizzle: Spiral chocolate syrup inside the glass before pouring the drink.\n9. • Top: Garnish with the traditional three coffee beans, a dusting of cocoa powder, or fine chocolate curls.",
+      "instructions": "1. Add all liquid ingredients into a cocktail shaker filled with plenty of ice.\n2. Shake vigorously for at least 15–20 seconds. This is essential to create the signature frothy top.\n3. Double-strain into your chilled glass to ensure a smooth texture without ice chips.\n\nTo elevate the visual appeal, you can:\n• Rim the glass: Dip the rim in chocolate syrup, then into cocoa powder or chocolate shavings.\n• Drizzle: Spiral chocolate syrup inside the glass before pouring the drink.\n• Top: Garnish with the traditional three coffee beans, a dusting of cocoa powder, or fine chocolate curls.",
       "photoUri": "assets/cocktails/1757000000126-chocolate-espresso-martini.jpg",
       "glassId": "cocktail_glass",
       "methodIds": ["shake"],
@@ -9630,15 +9841,6 @@
         },
         {
           "order": 7,
-          "ingredientId": 217733,
-          "name": "Sugar",
-          "amount": "20",
-          "unitId": 8,
-          "optional": true,
-          "garnish": true
-        },
-        {
-          "order": 8,
           "ingredientId": 499545,
           "name": "Chocolate",
           "amount": "1",
@@ -9647,11 +9849,20 @@
           "garnish": true
         },
         {
+          "order": 8,
+          "ingredientId": 795313,
+          "name": "Cocoa Powder",
+          "amount": "1",
+          "unitId": 15,
+          "garnish": true
+        },
+        {
           "order": 9,
-          "ingredientId": 346304,
-          "name": "Ice",
-          "amount": "120",
-          "unitId": 8
+          "ingredientId": 128442,
+          "name": "Coffee Beans",
+          "amount": "3",
+          "unitId": 1,
+          "garnish": true
         }
       ]
     },
@@ -10311,8 +10522,8 @@
         },
         {
           "order": 7,
-          "ingredientId": 454059,
-          "name": "Orange",
+          "ingredientId": 108496,
+          "name": "Lemon",
           "amount": "1",
           "unitId": 26,
           "garnish": true
@@ -10357,6 +10568,7 @@
           "substitutes": [
             {
               "id": 587125,
+              "ingredientId": 587125,
               "name": "Orange Curaçao"
             }
           ]
@@ -10384,8 +10596,8 @@
         },
         {
           "order": 6,
-          "ingredientId": 108496,
-          "name": "Lemon",
+          "ingredientId": 454059,
+          "name": "Orange",
           "amount": "1",
           "unitId": 26,
           "garnish": true
@@ -10689,8 +10901,8 @@
     {
       "id": 1757000000132,
       "name": "Culto A La Vida",
-      "description": "A bright rum sour balancing White Rum, Sugar, Lime with fresh citrus and a touch of sweetness for a crisp, refreshing sip. Garnished with lime juice.",
-      "instructions": "1. Dissolve the Sugar: In a long drink glass (highball or Collins glass), combine the lime juice and the sugar.\n2. Stir until the sugar is fully dissolved.\n3. Add Ice: Fill the glass with fresh ice cubes.\n4. Mix in Liquids: Pour in the cranberry juice followed by the dark rum.\n5. Stir and Serve: Stir the mixture well to combine the flavors. Garnish with a lime wedge on the rim and serve immediately.",
+      "description": "A bright rum sour balancing Dark Rum, Sugar, Lime with fresh citrus and a touch of sweetness for a crisp, refreshing sip. Garnished with lime juice.",
+      "instructions": "1. In a long drink glass (highball or Collins glass), combine the lime juice and the sugar. \n2. Stir until the sugar is fully dissolved.\n3. Fill the glass with fresh ice cubes.\n4. Pour in the cranberry juice followed by the dark rum.\n5. Stir the mixture well to combine the flavours. \n6. Garnish with a lime wedge on the rim and serve immediately.",
       "photoUri": "assets/cocktails/1757000000132-culto-a-la-vida.jpg",
       "glassId": "collins_glass",
       "methodIds": ["build"],
@@ -10709,10 +10921,27 @@
       "ingredients": [
         {
           "order": 1,
-          "ingredientId": 861551,
-          "name": "White Rum",
+          "ingredientId": 962705,
+          "name": "Dark Rum",
           "amount": "60",
-          "unitId": 11
+          "unitId": 11,
+          "substitutes": [
+            {
+              "id": 811139,
+              "ingredientId": 811139,
+              "name": "Gold Rum"
+            },
+            {
+              "id": 908571,
+              "ingredientId": 908571,
+              "name": "Spiced Rum"
+            },
+            {
+              "id": 1756051163896,
+              "ingredientId": 1756051163896,
+              "name": "Jamaican Dark Rum"
+            }
+          ]
         },
         {
           "order": 2,
@@ -10733,8 +10962,7 @@
           "ingredientId": 525624,
           "name": "Lime Juice",
           "amount": "15",
-          "unitId": 27,
-          "garnish": true
+          "unitId": 11
         },
         {
           "order": 5,
@@ -10742,6 +10970,14 @@
           "name": "Ice",
           "amount": "120",
           "unitId": 8
+        },
+        {
+          "order": 6,
+          "ingredientId": 336572,
+          "name": "Lime",
+          "amount": "1",
+          "unitId": 27,
+          "garnish": true
         }
       ]
     },
@@ -10939,19 +11175,26 @@
         },
         {
           "order": 7,
-          "ingredientId": 607153,
-          "name": "Maraschino cherry",
-          "amount": "1",
-          "unitId": 1,
-          "garnish": true
-        },
-        {
-          "order": 8,
           "ingredientId": 401724,
           "name": "Angostura Bitters",
           "amount": "2",
           "unitId": 6,
           "garnish": true
+        },
+        {
+          "order": 8,
+          "ingredientId": 791672,
+          "name": "Cherry",
+          "amount": "1",
+          "unitId": 1,
+          "garnish": true
+        },
+        {
+          "order": 9,
+          "ingredientId": 346304,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
         }
       ]
     },
@@ -11660,6 +11903,22 @@
           "amount": "1",
           "unitId": 1,
           "garnish": true
+        },
+        {
+          "order": 5,
+          "ingredientId": 336572,
+          "name": "Lime",
+          "amount": "1",
+          "unitId": 27,
+          "optional": true,
+          "garnish": true
+        },
+        {
+          "order": 6,
+          "ingredientId": 346304,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
         }
       ]
     },
@@ -11667,7 +11926,7 @@
       "id": 1755800000033,
       "name": "Don's Special Daiquiri",
       "description": "A tiki-style daiquiri with grapefruit and honey notes.",
-      "instructions": "1. Add all ingredients into a shaker with ice.\n2. Shake well.\n3. Strain into a chilled cocktail glass.\n4. Garnish with a lime slice.",
+      "instructions": "1. Add all ingredients into a shaker with ice.\n2. Shake well.\n3. Strain into a chilled cocktail glass.\n4. Garnish with half of a passion fruit.",
       "photoUri": "assets/cocktails/1755800000033-dons-special-daiquiri.jpg",
       "glassId": "tiki",
       "methodIds": ["shake"],
@@ -11686,17 +11945,36 @@
       "ingredients": [
         {
           "order": 1,
-          "ingredientId": 811139,
-          "name": "Gold Rum",
-          "amount": "45",
-          "unitId": 11
+          "ingredientId": 1759483024689,
+          "name": "Gold Jamaican Rum",
+          "amount": "30",
+          "unitId": 11,
+          "substitutes": [
+            {
+              "id": 811139,
+              "ingredientId": 811139,
+              "name": "Gold Rum"
+            },
+            {
+              "id": 1755989023035,
+              "ingredientId": 1755989023035,
+              "name": "Gold Puerto Rican Rum"
+            }
+          ]
         },
         {
           "order": 2,
-          "ingredientId": 861551,
-          "name": "White Rum",
+          "ingredientId": 1759483024692,
+          "name": "Cuban Rum",
           "amount": "15",
-          "unitId": 11
+          "unitId": 11,
+          "substitutes": [
+            {
+              "id": 861551,
+              "ingredientId": 861551,
+              "name": "White Rum"
+            }
+          ]
         },
         {
           "order": 3,
@@ -11733,6 +12011,13 @@
           "amount": "1",
           "unitId": 9,
           "garnish": true
+        },
+        {
+          "order": 8,
+          "ingredientId": 346304,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
         }
       ]
     },
@@ -11740,7 +12025,7 @@
       "id": 1757000000143,
       "name": "Doralto",
       "description": "A long, sparkling agave spirit drink built for easy sipping, pairing Tequila Blanco, Angostura Bitters, Tonic with bubbly mixers over ice. Garnished with lime.",
-      "instructions": "1. Shake all ingredients, except tonic with ice.\n2. Strain into a chilled glass.\n3. Fill up with tonic.\n4. Garnish with lemon wheel.",
+      "instructions": "1. Shake all ingredients, except tonic with ice.\n2. Strain into a chilled glass over fresh ice.\n3. Fill up with tonic.\n4. Garnish with lime or lemon wheel.",
       "photoUri": "assets/cocktails/1757000000143-doralto.jpg",
       "glassId": "highball_glass",
       "methodIds": ["shake"],
@@ -11781,8 +12066,8 @@
         },
         {
           "order": 3,
-          "ingredientId": 150490,
-          "name": "Simple Syrup",
+          "ingredientId": 429018,
+          "name": "Rich Simple Syrup",
           "amount": "15",
           "unitId": 11
         },
@@ -11797,7 +12082,7 @@
           "order": 5,
           "ingredientId": 676673,
           "name": "Tonic",
-          "amount": "60",
+          "amount": "100",
           "unitId": 11
         },
         {
@@ -11813,7 +12098,21 @@
           "name": "Lime",
           "amount": "1",
           "unitId": 19,
-          "garnish": true
+          "garnish": true,
+          "substitutes": [
+            {
+              "id": 108496,
+              "ingredientId": 108496,
+              "name": "Lemon"
+            }
+          ]
+        },
+        {
+          "order": 8,
+          "ingredientId": 346304,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
         }
       ]
     },
@@ -11992,6 +12291,15 @@
           "name": "Ice",
           "amount": "150",
           "unitId": 8
+        },
+        {
+          "order": 6,
+          "ingredientId": 108496,
+          "name": "Lemon",
+          "amount": "1",
+          "unitId": 26,
+          "optional": true,
+          "garnish": true
         }
       ]
     },
@@ -12405,11 +12713,13 @@
         },
         {
           "order": 6,
-          "ingredientId": 791672,
-          "name": "Cherry",
+          "ingredientId": 607153,
+          "name": "Maraschino Cherry",
           "amount": "1",
           "unitId": 1,
-          "garnish": true
+          "garnish": true,
+          "allowBaseSubstitution": true,
+          "allowBrandSubstitution": true
         },
         {
           "order": 7,
@@ -12936,6 +13246,23 @@
           "name": "Ice",
           "amount": "150",
           "unitId": 8
+        },
+        {
+          "order": 7,
+          "ingredientId": 791672,
+          "name": "Cherry",
+          "amount": "1",
+          "unitId": 1,
+          "garnish": true
+        },
+        {
+          "order": 8,
+          "ingredientId": 454059,
+          "name": "Orange",
+          "amount": "1",
+          "unitId": 14,
+          "optional": true,
+          "garnish": true
         }
       ]
     },
@@ -13251,6 +13578,14 @@
         },
         {
           "order": 7,
+          "ingredientId": 454059,
+          "name": "Orange",
+          "amount": "1",
+          "unitId": 19,
+          "garnish": true
+        },
+        {
+          "order": 8,
           "ingredientId": 346304,
           "name": "Ice",
           "amount": "120",
@@ -13843,7 +14178,7 @@
       "id": 1759480948620,
       "name": "Frost Bite",
       "description": "This cocktail features a striking blue color from blue curaçao layered with creamy sweetness.",
-      "instructions": "1. In a cocktail shaker, pour the tequila, blue curaçao, crème de cacao, and cream. Fill with ice.\n2. Shake well.\n3. Shake the cocktail shaker.\n4. Garnish with a cherry.",
+      "instructions": "1. In a cocktail shaker, pour the tequila, blue curaçao, crème de cacao, and cream. Fill with ice.\n2. Shake well.\n3. Shake the cocktail shaker.\n4. Garnish with 2 Maraschino cherries.",
       "photoUri": "assets/cocktails/1759480948620-frost-bite.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["shake"],
@@ -13976,11 +14311,13 @@
         },
         {
           "order": 7,
-          "ingredientId": 791672,
-          "name": "Cherry",
+          "ingredientId": 607153,
+          "name": "Maraschino Cherry",
           "amount": "1",
           "unitId": 1,
-          "garnish": true
+          "garnish": true,
+          "allowBaseSubstitution": true,
+          "allowBrandSubstitution": true
         }
       ]
     },
@@ -15578,11 +15915,18 @@
         },
         {
           "order": 5,
-          "ingredientId": 108496,
-          "name": "Lemon",
+          "ingredientId": 336572,
+          "name": "Lime",
           "amount": "1",
-          "unitId": 26,
-          "garnish": true
+          "unitId": 14,
+          "garnish": true,
+          "substitutes": [
+            {
+              "id": 108496,
+              "ingredientId": 108496,
+              "name": "Lemon"
+            }
+          ]
         }
       ]
     },
@@ -15717,6 +16061,24 @@
         },
         {
           "order": 7,
+          "ingredientId": 367696,
+          "name": "Blackberry",
+          "amount": "1",
+          "unitId": 1,
+          "optional": true,
+          "garnish": true
+        },
+        {
+          "order": 8,
+          "ingredientId": 336572,
+          "name": "Lime",
+          "amount": "1",
+          "unitId": 19,
+          "optional": true,
+          "garnish": true
+        },
+        {
+          "order": 9,
           "ingredientId": 346304,
           "name": "Ice",
           "amount": "120",
@@ -16865,7 +17227,7 @@
       "instructions": "1. Add all ingredients except garnishes into a shaker with ice.\n2. Shake well.\n3. Strain into a tiki glass filled with crushed ice.\n4. Garnish with mint and pineapple.",
       "photoUri": "assets/cocktails/1755800000048-iba-tiki.jpg",
       "glassId": "tiki",
-      "methodIds": ["shake", "blend"],
+      "methodIds": ["shake"],
       "tags": [
         {
           "id": 1,
@@ -16967,6 +17329,14 @@
         },
         {
           "order": 13,
+          "ingredientId": 304217,
+          "name": "Mint",
+          "amount": "1",
+          "unitId": 1,
+          "garnish": true
+        },
+        {
+          "order": 14,
           "ingredientId": 346304,
           "name": "Ice",
           "amount": "120",
@@ -18521,6 +18891,24 @@
           "name": "Ice",
           "amount": "150",
           "unitId": 8
+        },
+        {
+          "order": 6,
+          "ingredientId": 108496,
+          "name": "Lemon",
+          "amount": "1",
+          "unitId": 26,
+          "optional": true,
+          "garnish": true
+        },
+        {
+          "order": 7,
+          "ingredientId": 791672,
+          "name": "Cherry",
+          "amount": "1",
+          "unitId": 1,
+          "optional": true,
+          "garnish": true
         }
       ]
     },
@@ -18626,7 +19014,7 @@
       "id": 1757000000209,
       "name": "Ladykiller",
       "description": "The very sweet and beautiful 1984 championship-winning cocktail created by Peter Roth from the Kronenhalle bar in Zürich.",
-      "instructions": "1. Fill a cocktail shaker with ice cubes.\n2. Pour 30ml of gin, 15ml of Cointreau and 15ml of apricot brandy.\n3. Add 60ml of passion fruit juice and 60ml of pineapple juice.\n4. Shake and strain into a highball glass with 6-8 ice cubes.\n5. Garnish with an orange peel, a cherry and mint leaves.",
+      "instructions": "1. Fill a cocktail shaker with ice cubes.\n2. Pour 30ml of gin, 15ml of Cointreau and 15ml of apricot brandy.\n3. Add 60ml of passion fruit juice and 60ml of pineapple juice.\n4. Shake and strain into a highball glass with 6-8 ice cubes.\n5. Garnish with an orange slice, a cherry and mint leaves.",
       "photoUri": "assets/cocktails/1757000000209-ladykiller.jpg",
       "glassId": "highball_glass",
       "methodIds": ["shake"],
@@ -18692,13 +19080,13 @@
           "ingredientId": 454059,
           "name": "Orange",
           "amount": "1",
-          "unitId": 27,
+          "unitId": 19,
           "garnish": true
         },
         {
           "order": 8,
-          "ingredientId": 607153,
-          "name": "Maraschino Cherry",
+          "ingredientId": 791672,
+          "name": "Cherry",
           "amount": "1",
           "unitId": 1,
           "garnish": true
@@ -18709,6 +19097,7 @@
           "name": "Mint",
           "amount": "1",
           "unitId": 10,
+          "optional": true,
           "garnish": true
         },
         {
@@ -20096,8 +20485,8 @@
         },
         {
           "order": 5,
-          "ingredientId": 791672,
-          "name": "Cherry",
+          "ingredientId": 607153,
+          "name": "Maraschino Cherry",
           "amount": "1",
           "unitId": 1,
           "garnish": true
@@ -20467,6 +20856,7 @@
           "substitutes": [
             {
               "id": 794666,
+              "ingredientId": 794666,
               "name": "Chocolate Liqueur"
             }
           ]
@@ -20488,6 +20878,7 @@
           "substitutes": [
             {
               "id": 795313,
+              "ingredientId": 795313,
               "name": "Cocoa Powder"
             }
           ]
@@ -20942,6 +21333,24 @@
           "name": "Ice",
           "amount": "120",
           "unitId": 8
+        },
+        {
+          "order": 5,
+          "ingredientId": 454059,
+          "name": "Orange",
+          "amount": "1",
+          "unitId": 19,
+          "optional": true,
+          "garnish": true
+        },
+        {
+          "order": 6,
+          "ingredientId": 1759483024687,
+          "name": "Honeydew Melon",
+          "amount": "1",
+          "unitId": 17,
+          "optional": true,
+          "garnish": true
         }
       ]
     },
@@ -24330,10 +24739,10 @@
         },
         {
           "order": 6,
-          "ingredientId": 804376,
-          "name": "Bitters",
+          "ingredientId": 401724,
+          "name": "Angostura Bitters",
           "amount": "3",
-          "unitId": 6,
+          "unitId": 7,
           "garnish": true
         }
       ]
@@ -26146,7 +26555,7 @@
       "description": "A variation of the classic \"Old Fashioned\" cocktail with aged rum instead of bourbon or rye. Some recipes also suggest adding a small amount of high-proof overproof rum.",
       "instructions": "1. Place a sugar cube in a rocks glass and saturate it with Angostura bitters and, optionally, orange bitters.\n2. Add a few dashes of plain water, and stir until the sugar is dissolved, and add 45ml of quality aged rum and, optionally, 10ml of overproof rum.\n3. Add some ice cubes and stir again.\n4. Garnish with an orange or lemon peel, and squeeze it a bit to release the oils.",
       "glassId": "rocks_glass",
-      "methodIds": ["stir"],
+      "methodIds": ["build"],
       "tags": [
         {
           "id": 5,
@@ -26164,10 +26573,12 @@
           "substitutes": [
             {
               "id": 409677,
+              "ingredientId": 409677,
               "name": "Brown Sugar"
             },
             {
               "id": 832354,
+              "ingredientId": 832354,
               "name": "Demerara Sugar"
             }
           ]
@@ -26181,10 +26592,12 @@
           "substitutes": [
             {
               "id": 811139,
+              "ingredientId": 811139,
               "name": "Gold Rum"
             },
             {
               "id": 908571,
+              "ingredientId": 908571,
               "name": "Spiced Rum"
             }
           ]
@@ -26231,8 +26644,15 @@
           "ingredientId": 454059,
           "name": "Orange",
           "amount": "1",
-          "unitId": 27,
-          "garnish": true
+          "unitId": 14,
+          "garnish": true,
+          "substitutes": [
+            {
+              "id": 108496,
+              "ingredientId": 108496,
+              "name": "Lemon"
+            }
+          ]
         }
       ]
     },
@@ -26751,6 +27171,24 @@
         },
         {
           "order": 5,
+          "ingredientId": 108496,
+          "name": "Lemon",
+          "amount": "1",
+          "unitId": 14,
+          "optional": true,
+          "garnish": true
+        },
+        {
+          "order": 6,
+          "ingredientId": 898828,
+          "name": "Olive",
+          "amount": "1",
+          "unitId": 1,
+          "optional": true,
+          "garnish": true
+        },
+        {
+          "order": 7,
           "ingredientId": 346304,
           "name": "Ice",
           "amount": "120",
@@ -30734,6 +31172,22 @@
           "name": "Ice",
           "amount": "120",
           "unitId": 8
+        },
+        {
+          "order": 6,
+          "ingredientId": 607153,
+          "name": "Maraschino Cherry",
+          "amount": "1",
+          "unitId": 1,
+          "garnish": true
+        },
+        {
+          "order": 7,
+          "ingredientId": 108496,
+          "name": "Lemon",
+          "amount": "1",
+          "unitId": 19,
+          "garnish": true
         }
       ]
     },
@@ -32314,8 +32768,8 @@
         },
         {
           "order": 6,
-          "ingredientId": 607153,
-          "name": "Maraschino Cherry",
+          "ingredientId": 791672,
+          "name": "Cherry",
           "amount": "1",
           "unitId": 1,
           "garnish": true
@@ -32583,6 +33037,14 @@
         },
         {
           "order": 6,
+          "ingredientId": 108496,
+          "name": "Lemon",
+          "amount": "1",
+          "unitId": 27,
+          "garnish": true
+        },
+        {
+          "order": 7,
           "ingredientId": 346304,
           "name": "Ice",
           "amount": "120",
@@ -33324,6 +33786,7 @@
           "substitutes": [
             {
               "id": 962705,
+              "ingredientId": 962705,
               "name": "Dark Rum"
             }
           ]
@@ -33337,6 +33800,7 @@
           "substitutes": [
             {
               "id": 811139,
+              "ingredientId": 811139,
               "name": "Gold Rum"
             }
           ]
@@ -33350,7 +33814,7 @@
         },
         {
           "order": 4,
-          "ingredientId": 734220,
+          "ingredientId": 525624,
           "name": "Lime Juice",
           "amount": "20",
           "unitId": 11
@@ -33400,8 +33864,8 @@
         },
         {
           "order": 11,
-          "ingredientId": 607153,
-          "name": "Maraschino cherry",
+          "ingredientId": 791672,
+          "name": "Cherry",
           "amount": "1",
           "unitId": 1,
           "garnish": true
@@ -35070,6 +35534,20 @@
       "photoUri": "assets/ingredients/1756039412725-cuban-aguardiente.jpg"
     },
     {
+      "id": 1759483024692,
+      "name": "Cuban Rum",
+      "description": "Cuban rum is defined by a specific \"Spanish-style\" production method that results in a profile typically lighter, drier, and crisper than its Caribbean neighbours.",
+      "tags": [
+        {
+          "id": 1,
+          "name": "strong alcohol",
+          "color": "#ec5a5a"
+        }
+      ],
+      "usageCount": 0,
+      "photoUri": "assets/ingredients/1759483024692-cuban-rum.jpg"
+    },
+    {
       "id": 910105,
       "name": "Cucumber",
       "description": "Cool, crisp fruit with refreshing vegetal notes. Excellent for muddling into gin cocktails and light spritzes.",
@@ -35555,6 +36033,13 @@
       ],
       "baseIngredientId": 794666,
       "photoUri": "assets/ingredients/698510-godiva-liqueur.jpg"
+    },
+    {
+      "id": 1759483024689,
+      "name": "Gold Jamaican Rum",
+      "description": "The primary difference for gold Jamaican rum lies in its aging process, which gives it a richer, more complex flavor profile than white rum, while being less bold and aged than dark rum. Jamaican rums in general are known for their distinct \"funky\" character due to a unique high-ester fermentation process.",
+      "usageCount": 0,
+      "photoUri": "assets/ingredients/1759483024689-gold-jamaican-rum.jpg"
     },
     {
       "id": 1755989023035,

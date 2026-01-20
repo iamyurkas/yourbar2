@@ -99,6 +99,8 @@ export const ingredientImages: Record<string, number> = {
   'assets/ingredients/1759483024686-plum-brandy.jpg': require('./ingredients/1759483024686-plum-brandy.jpg'),
   'assets/ingredients/1759483024687-honeydew-melon.jpg': require('./ingredients/1759483024687-honeydew-melon.jpg'),
   'assets/ingredients/1759483024688-disaronno-velvet.jpg': require('./ingredients/1759483024688-disaronno-velvet.jpg'),
+  'assets/ingredients/1759483024689-gold-jamaican-rum.jpg': require('./ingredients/1759483024689-gold-jamaican-rum.jpg'),
+  'assets/ingredients/1759483024692-cuban-rum.jpg': require('./ingredients/1759483024692-cuban-rum.jpg'),
   'assets/ingredients/182121-maple-syrup.jpg': require('./ingredients/182121-maple-syrup.jpg'),
   'assets/ingredients/183722-ricard.jpg': require('./ingredients/183722-ricard.jpg'),
   'assets/ingredients/186397-cynar.jpg': require('./ingredients/186397-cynar.jpg'),
