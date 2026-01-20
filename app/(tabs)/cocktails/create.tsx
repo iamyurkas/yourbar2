@@ -6,6 +6,7 @@ import { Stack, router, useLocalSearchParams } from 'expo-router';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   FlatList,
+  ActivityIndicator,
   KeyboardAvoidingView,
   Modal,
   Platform,
@@ -1457,10 +1458,22 @@ export default function CreateCocktailScreen() {
           <Pressable
             onPress={handleSubmit}
             disabled={isSaving}
-            style={[styles.submitButton, { backgroundColor: Colors.tint, opacity: isSaving ? 0.6 : 1 }]}
+            style={[
+              styles.submitButton,
+              { backgroundColor: isSaving ? Colors.outlineVariant : Colors.tint },
+            ]}
             accessibilityRole="button"
             accessibilityLabel="Save cocktail">
-            <Text style={[styles.submitLabel, { color: Colors.onPrimary }]}>Save</Text>
+            <View style={styles.submitContent}>
+              <Text style={[styles.submitLabel, { color: Colors.onPrimary }]}>Save</Text>
+              {isSaving ? (
+                <ActivityIndicator
+                  size="small"
+                  color={Colors.onPrimary}
+                  style={styles.submitSpinner}
+                />
+              ) : null}
+            </View>
           </Pressable>
           <View style={styles.bottomSpacer} />
         </ScrollView>
@@ -2601,6 +2614,13 @@ const styles = StyleSheet.create({
   submitLabel: {
     fontSize: 16,
     fontWeight: '600',
+  },
+  submitContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  submitSpinner: {
+    marginLeft: 8,
   },
   bottomSpacer: {
     height: 200,

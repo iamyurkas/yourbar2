@@ -5,6 +5,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
+  ActivityIndicator,
   FlatList,
   KeyboardAvoidingView,
   Modal,
@@ -174,6 +175,8 @@ export default function CreateIngredientScreen() {
 
     return 'Add image';
   }, [imageUri]);
+
+  const isSubmitDisabled = isSaving || isPickingImage;
 
   const toggleTag = useCallback((tagId: number) => {
     setSelectedTagIds((prev) => {
@@ -792,11 +795,16 @@ export default function CreateIngredientScreen() {
             accessibilityRole="button"
             style={[
               styles.submitButton,
-              { backgroundColor: Colors.tint, opacity: isSaving ? 0.6 : 1 },
+              { backgroundColor: isSubmitDisabled ? Colors.outlineVariant : Colors.tint },
             ]}
             onPress={handleSubmit}
-            disabled={isPickingImage || isSaving}>
-            <Text style={[styles.submitLabel, { color: Colors.onPrimary }]}>Save</Text>
+            disabled={isSubmitDisabled}>
+            <View style={styles.submitContent}>
+              <Text style={[styles.submitLabel, { color: Colors.onPrimary }]}>Save</Text>
+              {isSaving ? (
+                <ActivityIndicator size="small" color={Colors.onPrimary} style={styles.submitSpinner} />
+              ) : null}
+            </View>
           </Pressable>
           <View style={styles.bottomSpacer} />
         </ScrollView>
@@ -991,6 +999,13 @@ const styles = StyleSheet.create({
   submitLabel: {
     fontSize: 16,
     fontWeight: '600',
+  },
+  submitContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  submitSpinner: {
+    marginLeft: 8,
   },
   baseSelector: {
     flexDirection: 'row',
