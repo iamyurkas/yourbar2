@@ -245,7 +245,8 @@ function buildMissingSubstituteLines(
   ];
 
   const seen = new Set<string>();
-  const lines: string[] = [];
+  const groupedLines: { prefix: string; names: string[] }[] = [];
+  const lineIndexByPrefix = new Map<string, number>();
 
   orderedSubstitutes.forEach(({ option, source }) => {
     const name = option.name.trim();
@@ -260,10 +261,17 @@ function buildMissingSubstituteLines(
 
     seen.add(key);
     const prefix = source === 'base' && isBrandedIngredient ? 'or any' : 'or';
-    lines.push(`${prefix} ${name}`);
+    const existingIndex = lineIndexByPrefix.get(prefix);
+    if (existingIndex != null) {
+      groupedLines[existingIndex]?.names.push(name);
+      return;
+    }
+
+    lineIndexByPrefix.set(prefix, groupedLines.length);
+    groupedLines.push({ prefix, names: [name] });
   });
 
-  return lines;
+  return groupedLines.map(({ prefix, names }) => `${prefix} ${names.join(', ')}`);
 }
 
 function formatGlassLabel(glassId?: string | null) {
