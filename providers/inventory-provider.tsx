@@ -1071,6 +1071,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   const createIngredient = useCallback(
     (input: CreateIngredientInput) => {
       let created: Ingredient | undefined;
+      let matchedExisting = false;
 
       setInventoryState((prev) => {
         if (!prev) {
@@ -1079,6 +1080,16 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
 
         const trimmedName = input.name?.trim();
         if (!trimmedName) {
+          return prev;
+        }
+
+        const normalizedName = normalizeSearchText(trimmedName);
+        const existing = prev.ingredients.find(
+          (ingredient) => ingredient.searchNameNormalized === normalizedName,
+        );
+        if (existing) {
+          created = existing;
+          matchedExisting = true;
           return prev;
         }
 
@@ -1149,25 +1160,27 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       if (created?.id != null) {
         const id = Number(created.id);
         if (Number.isFinite(id) && id >= 0) {
-          setAvailableIngredientIds((prev) => {
-            if (prev.has(id)) {
-              return prev;
-            }
+          if (!matchedExisting) {
+            setAvailableIngredientIds((prev) => {
+              if (prev.has(id)) {
+                return prev;
+              }
 
-            const next = new Set(prev);
-            next.add(id);
-            return next;
-          });
+              const next = new Set(prev);
+              next.add(id);
+              return next;
+            });
 
-          setShoppingIngredientIds((prev) => {
-            if (!prev.has(id)) {
-              return prev;
-            }
+            setShoppingIngredientIds((prev) => {
+              if (!prev.has(id)) {
+                return prev;
+              }
 
-            const next = new Set(prev);
-            next.delete(id);
-            return next;
-          });
+              const next = new Set(prev);
+              next.delete(id);
+              return next;
+            });
+          }
         }
       }
 
