@@ -249,13 +249,6 @@
               "name": "Brandy"
             }
           ]
-        },
-        {
-          "order": 4,
-          "ingredientId": 346304,
-          "name": "Ice",
-          "amount": "45",
-          "unitId": 8
         }
       ]
     },
@@ -1140,13 +1133,6 @@
           "name": "Grenadine",
           "amount": "1",
           "unitId": 6
-        },
-        {
-          "order": 5,
-          "ingredientId": 346304,
-          "name": "Ice",
-          "amount": "45",
-          "unitId": 8
         }
       ]
     },
@@ -1157,7 +1143,7 @@
       "instructions": "1. Add Peppermint Schnapps and White Crème de Cacao into a heat-resistant glass or Irish coffee glass.\n2. Heat the milk gently until hot but not boiling.\n3. Pour the hot milk into the glass and stir gently to combine all ingredients.\n4. Garnish with grated chocolate, chocolate shavings, or a light dusting of cocoa powder.\n5. Serve immediately while warm and enjoy.",
       "photoUri": "assets/cocktails/1759480212593-alpine-avenger.jpg",
       "glassId": "irish_coffee_glass",
-      "methodIds": ["build", "heating"],
+      "methodIds": ["heating", "build"],
       "tags": [
         {
           "id": 6,
@@ -1934,13 +1920,6 @@
               "name": "Whipped Cream"
             }
           ]
-        },
-        {
-          "order": 5,
-          "ingredientId": 346304,
-          "name": "Ice",
-          "amount": "45",
-          "unitId": 8
         }
       ]
     },
@@ -2009,13 +1988,6 @@
           "amount": "1",
           "unitId": 1,
           "garnish": true
-        },
-        {
-          "order": 5,
-          "ingredientId": 346304,
-          "name": "Ice",
-          "amount": "45",
-          "unitId": 8
         }
       ]
     },
@@ -2475,13 +2447,6 @@
           "name": "Cream",
           "amount": "10",
           "unitId": 11
-        },
-        {
-          "order": 4,
-          "ingredientId": 346304,
-          "name": "Ice",
-          "amount": "150",
-          "unitId": 8
         }
       ]
     },
@@ -2703,13 +2668,6 @@
               "name": "Orange Curaçao"
             }
           ]
-        },
-        {
-          "order": 4,
-          "ingredientId": 346304,
-          "name": "Ice",
-          "amount": "45",
-          "unitId": 8
         }
       ]
     },
@@ -2762,13 +2720,6 @@
           "name": "Absinthe",
           "amount": "15",
           "unitId": 11
-        },
-        {
-          "order": 4,
-          "ingredientId": 346304,
-          "name": "Ice",
-          "amount": "45",
-          "unitId": 8
         }
       ]
     },
@@ -2792,14 +2743,14 @@
           "order": 1,
           "ingredientId": 435165,
           "name": "Brandy",
-          "amount": "50",
+          "amount": "60",
           "unitId": 11
         },
         {
           "order": 2,
           "ingredientId": 166341,
           "name": "Benedictine",
-          "amount": "50",
+          "amount": "60",
           "unitId": 11
         },
         {
@@ -2851,13 +2802,6 @@
           "name": "Baileys",
           "amount": "15",
           "unitId": 11
-        },
-        {
-          "order": 3,
-          "ingredientId": 346304,
-          "name": "Ice",
-          "amount": "45",
-          "unitId": 8
         }
       ]
     },
@@ -3982,10 +3926,10 @@
       "id": 1756637682106,
       "name": "Barracuda",
       "description": "An IBA official sparkling cocktail.",
-      "instructions": "1. Fill a highball glass with ice cubes.\n2. Add 45ml of gold rum, 15ml of Galliano, 60ml of pineapple juice and a dash of lime juice.\n3. Top with sparkling wine.",
+      "instructions": "1. Combine gold rum, Galliano, pineapple juice, and lime juice in a cocktail shaker.\n2. Add ice to the shaker and shake until well-chilled.\n3. Strain the mixture into the chilled glass.\n4. Top with Prosecco and gently stir.\n5. Garnish with a pineapple wedge and a maraschino cherry. ",
       "photoUri": "assets/cocktails/1756637682106-barracuda.jpg",
-      "glassId": "highball_glass",
-      "methodIds": ["build"],
+      "glassId": "coupe",
+      "methodIds": ["shake"],
       "tags": [
         {
           "id": 1,
@@ -4057,6 +4001,29 @@
         },
         {
           "order": 6,
+          "ingredientId": 346304,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8
+        },
+        {
+          "order": 7,
+          "ingredientId": 932849,
+          "name": "Pineapple",
+          "amount": "1",
+          "unitId": 27,
+          "garnish": true
+        },
+        {
+          "order": 8,
+          "ingredientId": 791672,
+          "name": "Cherry",
+          "amount": "1",
+          "unitId": 1,
+          "garnish": true
+        },
+        {
+          "order": 9,
           "ingredientId": 346304,
           "name": "Ice",
           "amount": "120",
@@ -4178,6 +4145,14 @@
         },
         {
           "order": 6,
+          "ingredientId": 336572,
+          "name": "Lime",
+          "amount": "1",
+          "unitId": 27,
+          "garnish": true
+        },
+        {
+          "order": 7,
           "ingredientId": 346304,
           "name": "Ice",
           "amount": "120",
@@ -4236,10 +4211,18 @@
         },
         {
           "order": 5,
-          "ingredientId": 336572,
-          "name": "Lime",
+          "ingredientId": 932849,
+          "name": "Pineapple",
           "amount": "1",
           "unitId": 27,
+          "garnish": true
+        },
+        {
+          "order": 6,
+          "ingredientId": 607153,
+          "name": "Maraschino Cherry",
+          "amount": "3",
+          "unitId": 1,
           "garnish": true
         },
         {
@@ -5308,13 +5291,6 @@
           "amount": "20",
           "unitId": 11,
           "optional": true
-        },
-        {
-          "order": 4,
-          "ingredientId": 346304,
-          "name": "Ice",
-          "amount": "45",
-          "unitId": 8
         }
       ]
     },
@@ -5859,7 +5835,7 @@
       "instructions": "1. Select and pre-heat an Irish Coffee Glass.\n2. Pour all ingredients into pre-warmed glass.\n3. Express lemon zest twist over the cocktail and discard.\n4. Garnish with cinnamon stick.",
       "photoUri": "assets/cocktails/1756839855535-blueberry-tea.jpg",
       "glassId": "irish_coffee_glass",
-      "methodIds": ["build", "heating"],
+      "methodIds": ["heating", "build"],
       "tags": [
         {
           "id": 7,
@@ -5918,7 +5894,7 @@
       "id": 1756840009423,
       "name": "BMW",
       "description": "Baileys, Malibu, Whiskey",
-      "instructions": "1. 3 portions.\n2. Add all ingredients to a cocktail shaker.\n3. Shake well for 10-15 seconds\n4. Strain into a chilled cocktail glass and serve",
+      "instructions": "3 portions.\n1. Add all ingredients to a cocktail shaker.\n2. Shake well for 10-15 seconds\n3. Strain into a chilled cocktail glass and serve",
       "photoUri": "assets/cocktails/1756840009423-bmw.jpg",
       "glassId": "shooter",
       "methodIds": ["shake", "layer"],
@@ -13139,13 +13115,6 @@
           "name": "Tabasco",
           "amount": "1",
           "unitId": 6
-        },
-        {
-          "order": 4,
-          "ingredientId": 346304,
-          "name": "Ice",
-          "amount": "45",
-          "unitId": 8
         }
       ]
     },
@@ -16424,13 +16393,6 @@
           "name": "Grenadine",
           "amount": "1",
           "unitId": 6
-        },
-        {
-          "order": 5,
-          "ingredientId": 346304,
-          "name": "Ice",
-          "amount": "45",
-          "unitId": 8
         }
       ]
     },
@@ -16656,7 +16618,7 @@
       "instructions": "1. Put 1 teaspoon of butter into a toddy (Irish coffee) glass.\n2. Add 1-2 teaspoons of dark sugar, 1 dash of ground cinnamon and 1/16 teaspoon of ground nutmeg.\n3. Pour 50ml of rum and top with 100ml of hot (not boiling) water.\n4. Stir well until the butter and sugar are dissolved.\n5. Garnish with a cinnamon stick and a lemon slice.",
       "photoUri": "assets/cocktails/1757000000189-hot-buttered-rum.jpg",
       "glassId": "irish_coffee_glass",
-      "methodIds": ["build", "heating"],
+      "methodIds": ["heating", "build"],
       "tags": [
         {
           "id": 7,
@@ -16734,7 +16696,7 @@
       "instructions": "1. Put 1 teaspoon of honey on the bottom of an Irish coffee glass.\n2. Pour 45ml of whiskey and squeeze in a quarter of a lemon.\n3. Fill the glass with 100ml of hot water or tea.",
       "photoUri": "assets/cocktails/1757000000190-hot-toddy.jpg",
       "glassId": "irish_coffee_glass",
-      "methodIds": ["build", "heating"],
+      "methodIds": ["heating", "build"],
       "tags": [
         {
           "id": 6,
@@ -17441,7 +17403,7 @@
       "instructions": "1. Add brown sugar to a heatproof glass.\n2. Pour in hot coffee and stir until dissolved.\n3. Add Irish whisky and stir.\n4. Float lightly whipped cream on top.",
       "photoUri": "assets/cocktails/1755800000073-irish-coffee.jpg",
       "glassId": "irish_coffee_glass",
-      "methodIds": ["heating", "layer", "blend"],
+      "methodIds": ["heating", "build", "layer"],
       "tags": [
         {
           "id": 1,
@@ -17532,13 +17494,6 @@
           "name": "Grand Marnier",
           "amount": "15",
           "unitId": 11
-        },
-        {
-          "order": 4,
-          "ingredientId": 346304,
-          "name": "Ice",
-          "amount": "45",
-          "unitId": 8
         }
       ]
     },
@@ -22890,7 +22845,7 @@
     {
       "id": 1758536592633,
       "name": "Opal Café",
-      "description": "A sophisticated and velvety layered shooter that combines the bold, anise-flavored depth of Black Sambuca with rich espresso and a silky cream float.",
+      "description": "A  velvety layered shooter that combines the bold, anise-flavored depth of Black Sambuca with rich espresso and a silky cream float.",
       "instructions": "1. Pour the Black Sambuca into a chilled shooter glass.\n2. Gently layer the espresso over the sambuca using the back of a bar spoon.\n3. Carefully float the cream on top as the final layer.\n4. Serve immediately to maintain the distinct layers.",
       "photoUri": "assets/cocktails/1758536592633-opal-cafe.jpg",
       "glassId": "shooter",
@@ -22928,13 +22883,6 @@
           "name": "Cream",
           "amount": "10",
           "unitId": 11
-        },
-        {
-          "order": 4,
-          "ingredientId": 346304,
-          "name": "Ice",
-          "amount": "45",
-          "unitId": 8
         }
       ]
     },
@@ -22943,8 +22891,8 @@
       "name": "Orgasm",
       "description": "A popular, indulgent dessert cocktail known for its sweet, creamy profile. This version features a potent mix of orange liqueurs and Irish cream served over ice.",
       "instructions": "1. Fill a rocks glass with fresh ice cubes.\n2. Pour the Cointreau, Baileys, and Grand Marnier over the ice.\n3. Stir gently to combine and chill the ingredients.\n4. Garnish with a maraschino cherry and serve.",
-      "glassId": "shooter",
-      "methodIds": ["layer"],
+      "glassId": "rocks_glass",
+      "methodIds": ["build"],
       "tags": [
         {
           "id": 6,
@@ -23004,7 +22952,7 @@
       "description": "A nuttier and more aromatic variation of the classic Orgasm, replacing orange notes with the warm flavors of almond and coffee.",
       "instructions": "1. Pour the coffee liqueur into the bottom of a shooter glass.\n2. Slowly pour the Baileys over the back of a spoon to create a second layer.\n3. Finish by layering the amaretto on top using the same technique.\n4. Serve as a beautiful three-layered shot.",
       "glassId": "shooter",
-      "methodIds": ["build"],
+      "methodIds": ["layer"],
       "tags": [
         {
           "id": 6,
@@ -23038,13 +22986,6 @@
           "name": "Amaretto",
           "amount": "15",
           "unitId": 11
-        },
-        {
-          "order": 4,
-          "ingredientId": 346304,
-          "name": "Ice",
-          "amount": "45",
-          "unitId": 8
         }
       ]
     },
@@ -23101,7 +23042,7 @@
           "order": 5,
           "ingredientId": 346304,
           "name": "Ice",
-          "amount": "150",
+          "amount": "45",
           "unitId": 8
         }
       ]
@@ -23898,10 +23839,10 @@
       "id": 1755800000087,
       "name": "Penicillin",
       "description": "Smoky scotch cocktail with honey, ginger, and lemon.",
-      "instructions": "1. Add blended scotch, lemon juice, honey syrup, and ginger syrup into a shaker with ice.\n2. Shake well.\n3. Strain into a rocks glass over fresh ice.\n4. Float Islay scotch on top and garnish with a slice of ginger.",
+      "instructions": "1. Muddle 3 pieces of fresh ginger in a top tin.\n2. Add blended scotch, lemon juice, and honey syrup into a shaker with ice.\n3. Shake well.\n4. Double strain into a rocks glass over fresh ice.\n5. Float Islay scotch on top and garnish with a ginger candy.",
       "photoUri": "assets/cocktails/1755800000087-penicillin.jpg",
       "glassId": "rocks_glass",
-      "methodIds": ["shake", "layer", "blend"],
+      "methodIds": ["muddle", "shake", "layer"],
       "tags": [
         {
           "id": 1,
