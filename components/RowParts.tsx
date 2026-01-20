@@ -139,6 +139,7 @@ export function ListRow({
   brandIndicatorColor,
 }: ListRowProps) {
   const backgroundColor = selected ? highlightColor ?? `${Colors.tint}1F` : Colors.background;
+  const subtitleLines = subtitle ? subtitle.split('\n').filter((line) => line.trim().length > 0) : [];
   const metaAlignmentStyle =
     metaAlignment === 'center'
       ? styles.metaContentCenter
@@ -164,12 +165,17 @@ export function ListRow({
         <Text style={[styles.title, { color: Colors.text }]} numberOfLines={1}>
           {title}
         </Text>
-        {subtitle ? (
-          <Text
-            style={[styles.subtitle, { color: Colors.icon }, subtitleStyle]}
-            numberOfLines={subtitleNumberOfLines ?? 1}>
-            {subtitle}
-          </Text>
+        {subtitleLines.length ? (
+          <View style={styles.subtitleColumn}>
+            {subtitleLines.map((line, index) => (
+              <Text
+                key={`${line}-${index}`}
+                style={[styles.subtitle, { color: Colors.icon }, subtitleStyle]}
+                numberOfLines={subtitleLines.length === 1 ? subtitleNumberOfLines ?? 1 : 1}>
+                {line}
+              </Text>
+            ))}
+          </View>
         ) : null}
       </View>
       <View style={styles.metaColumn}>
@@ -223,6 +229,9 @@ const styles = StyleSheet.create({
   },
   textColumn: {
     flex: 1,
+    gap: 4,
+  },
+  subtitleColumn: {
     gap: 4,
   },
   metaColumn: {
