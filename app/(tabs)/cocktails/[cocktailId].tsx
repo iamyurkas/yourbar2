@@ -238,14 +238,16 @@ function buildMissingSubstituteLines(
   const isBrandedIngredient = requestedIngredient?.baseIngredientId != null;
 
   const orderedSubstitutes = [
-    ...resolution.substitutes.declared,
-    ...(isBrandedIngredient ? resolution.substitutes.base : []),
+    ...resolution.substitutes.declared.map((option) => ({ option, source: 'declared' as const })),
+    ...(isBrandedIngredient
+      ? resolution.substitutes.base.map((option) => ({ option, source: 'base' as const }))
+      : []),
   ];
 
   const seen = new Set<string>();
   const lines: string[] = [];
 
-  orderedSubstitutes.forEach((option) => {
+  orderedSubstitutes.forEach(({ option, source }) => {
     const name = option.name.trim();
     if (!name) {
       return;
@@ -257,7 +259,8 @@ function buildMissingSubstituteLines(
     }
 
     seen.add(key);
-    lines.push(`or ${name}`);
+    const prefix = source === 'base' && isBrandedIngredient ? 'or any' : 'or';
+    lines.push(`${prefix} ${name}`);
   });
 
   return lines;
@@ -836,14 +839,10 @@ export default function CocktailDetailsScreen() {
                       });
                     };
 
-                    const subtitleParts: string[] = [];
-
-                    if (qualifier) {
-                      subtitleParts.push(qualifier.charAt(0).toUpperCase() + qualifier.slice(1));
-                    }
+                    const subtitleLines: string[] = [];
 
                     if (resolution.substituteFor) {
-                      subtitleParts.push(`Substitute for ${resolution.substituteFor}`);
+                      subtitleLines.push(`Substitute for ${resolution.substituteFor}`);
                     }
 
                     const missingSubstituteLines = buildMissingSubstituteLines(
@@ -851,10 +850,13 @@ export default function CocktailDetailsScreen() {
                       resolution,
                       ingredientLookup,
                     );
-                    const subtitleLines = [...subtitleParts];
 
                     if (!resolution.isAvailable && missingSubstituteLines.length) {
                       subtitleLines.push(...missingSubstituteLines);
+                    }
+
+                    if (qualifier) {
+                      subtitleLines.push(qualifier.charAt(0).toUpperCase() + qualifier.slice(1));
                     }
 
                     const subtitle = subtitleLines.length ? subtitleLines.join('\n') : undefined;
