@@ -789,7 +789,7 @@
       "id": 1756478015170,
       "name": "Alexander",
       "description": "A classic, rich, and velvety cocktail combining gin, white crème de cacao, and cream. The Alexander is smooth, lightly sweet, and dessert-like, with subtle chocolate notes balanced by botanical gin and a luxurious, silky texture.",
-      "instructions": "1. Add gin, white cr\u00e8me de cacao, and cream to a cocktail shaker.\n2. Fill the shaker with ice.\n3. Shake vigorously for 10\u201315 seconds until well chilled and slightly frothy.\n4. Discard the ice from the chilled coupe glass.\n5. Double strain the cocktail into the prepared glass.\n6. Garnish with freshly grated nutmeg on top, if desired.\n7. Serve immediately.",
+      "instructions": "1. Add gin, white crème de cacao, and cream to a cocktail shaker.\n2. Fill the shaker with ice.\n3. Shake vigorously for 10–15 seconds until well chilled and slightly frothy.\n4. Discard the ice from the chilled coupe glass.\n5. Double strain the cocktail into the prepared glass.\n6. Garnish with freshly grated nutmeg on top, if desired.\n7. Serve immediately.",
       "photoUri": "assets/cocktails/1756478015170-alexander.jpg",
       "glassId": "coupe",
       "methodIds": [
@@ -940,7 +940,7 @@
       "id": 1756476650661,
       "name": "Alexander's Big Brother",
       "description": "A decadent, creamy gin-based cocktail combining Gin, Triple Sec, and Blue Curaçao. Silky, dessert-like, and indulgent, with a subtle citrus brightness and a striking color. Garnished with physalis for a lightly tart contrast.",
-      "instructions": "1. Add Gin, Triple Sec, Blue Cura\u00e7ao, and cream to a cocktail shaker.\n2. Fill the shaker with ice and shake vigorously for 12\u201315 seconds until well chilled and slightly frothy.\n3. Discard the ice from the chilled coupe glass.\n4. Double strain the cocktail into the prepared glass for a smooth, velvety texture.\n5. Garnish with a physalis on the rim or floated gently on the surface and serve immediately.",
+      "instructions": "1. Add Gin, Triple Sec, Blue Curaçao, and cream to a cocktail shaker.\n2. Fill the shaker with ice and shake vigorously for 12–15 seconds until well chilled and slightly frothy.\n3. Discard the ice from the chilled coupe glass.\n4. Double strain the cocktail into the prepared glass for a smooth, velvety texture.\n5. Garnish with a physalis on the rim or floated gently on the surface and serve immediately.",
       "photoUri": "assets/cocktails/1756476650661-alexanders-big-brother.jpg",
       "glassId": "coupe",
       "methodIds": [
@@ -1190,7 +1190,8 @@
       "photoUri": "assets/cocktails/1759480212593-alpine-avenger.jpg",
       "glassId": "irish_coffee_glass",
       "methodIds": [
-        "build"
+        "build",
+        "heating"
       ],
       "tags": [
         {
@@ -2082,7 +2083,7 @@
       "id": 1759435526187,
       "name": "Another Sunken Boat",
       "description": "A dark, spirit-forward agave cocktail where smoky mezcal meets the bitter-sweet complexity of Punt e Mes and the lush cherry richness of Cherry Heering. Deep, aromatic, and slightly brooding, this drink is layered with herbal bitterness, gentle sweetness, and lingering smoke. Designed for slow sipping and quiet contemplation, it is finished with a maraschino cherry for a subtle, nostalgic touch.",
-      "instructions": "1. Add mezcal, Punt e Mes, and Cherry Heering to a mixing glass filled with ice.\n2. Stir gently for 20\u201325 seconds until well chilled and properly diluted.\n3. Discard the ice from the chilled glass.\n4. Strain the cocktail into the Nick and Nora glass.\n5. Garnish with a maraschino cherry and serve.",
+      "instructions": "1. Add mezcal, Punt e Mes, and Cherry Heering to a mixing glass filled with ice.\n2. Stir gently for 20–25 seconds until well chilled and properly diluted.\n3. Discard the ice from the chilled glass.\n4. Strain the cocktail into the Nick and Nora glass.\n5. Garnish with a maraschino cherry and serve.",
       "photoUri": "assets/cocktails/1759435526187-another-sunken-boat.jpg",
       "glassId": "nick_and_nora",
       "methodIds": [
@@ -2220,7 +2221,7 @@
       "id": 1756499452749,
       "name": "Apple Cart",
       "description": "A spirit-forward brandy cocktail built around Calvados and Triple Sec, delivering deep apple aromatics, gentle citrus sweetness, and a warm, lingering finish. Elegant, bold, and designed for slow sipping.",
-      "instructions": "1. Add Calvados, Triple Sec, and any additional modifiers to a mixing glass filled with ice.\n2. Stir gently for 20\u201330 seconds until well chilled and properly diluted.\n3. Discard the ice from the chilled cocktail glass.\n4. Strain the cocktail into the prepared glass.\n5. Garnish with a thin slice of fresh apple or an apple fan on the rim.\n6. Serve immediately and enjoy slowly.",
+      "instructions": "1. Add Calvados, Triple Sec, and any additional modifiers to a mixing glass filled with ice.\n2. Stir gently for 20–30 seconds until well chilled and properly diluted.\n3. Discard the ice from the chilled cocktail glass.\n4. Strain the cocktail into the prepared glass.\n5. Garnish with a thin slice of fresh apple or an apple fan on the rim.\n6. Serve immediately and enjoy slowly.",
       "photoUri": "assets/cocktails/1756499452749-apple-cart.jpg",
       "glassId": "cocktail_glass",
       "methodIds": [
@@ -2364,7 +2365,7 @@
       "id": 1756500510594,
       "name": "Appletini",
       "description": "A crisp, spirit-forward vodka cocktail with bright green apple notes and a subtle citrus lift from Cointreau. Clean, aromatic, and deceptively smooth, the Appletini balances sharp freshness with a gentle sweetness.",
-      "instructions": "1. Fill a shaker with plenty of ice.\n2. Add vodka, apple schnapps, and Cointreau to the shaker.\n3. Shake vigorously for 10\u201315 seconds until well chilled.\n4. Discard the ice from the glass and strain the cocktail into the chilled glass.\n5. Garnish with a thin apple slice or a lemon twist if desired.",
+      "instructions": "1. Fill a shaker with plenty of ice.\n2. Add vodka, apple schnapps, and Cointreau to the shaker.\n3. Shake vigorously for 10–15 seconds until well chilled.\n4. Discard the ice from the glass and strain the cocktail into the chilled glass.\n5. Garnish with a thin apple slice or a lemon twist if desired.",
       "photoUri": "assets/cocktails/1756500510594-appletini.jpg",
       "glassId": "cocktail_glass",
       "methodIds": [
@@ -3167,7 +3168,7 @@
       "id": 1759336070098,
       "name": "Bali Rum Trader",
       "description": "A lush, tropical rum cocktail inspired by Southeast Asian flavors. White rum forms a clean, crisp base, while Pisang Ambon brings sweet banana depth and pineapple juice adds bright acidity. The result is a smooth, aromatic drink that balances fruitiness with gentle strength, finished with a playful banana garnish.",
-      "instructions": "1. Add white rum, Pisang Ambon, and pineapple juice to a shaker filled with ice.\n2. Shake vigorously for 10\u201312 seconds until well chilled and slightly frothy.\n3. Discard the ice from the coupe glass.\n4. Strain the cocktail into the chilled glass.\n5. Garnish with a fresh banana slice or banana chip on the rim and serve immediately.",
+      "instructions": "1. Add white rum, Pisang Ambon, and pineapple juice to a shaker filled with ice.\n2. Shake vigorously for 10–12 seconds until well chilled and slightly frothy.\n3. Discard the ice from the coupe glass.\n4. Strain the cocktail into the chilled glass.\n5. Garnish with a fresh banana slice or banana chip on the rim and serve immediately.",
       "photoUri": "assets/cocktails/1759336070098-bali-rum-trader.jpg",
       "glassId": "coupe",
       "methodIds": [
@@ -6034,7 +6035,8 @@
       "photoUri": "assets/cocktails/1756839855535-blueberry-tea.jpg",
       "glassId": "irish_coffee_glass",
       "methodIds": [
-        "build"
+        "build",
+        "heating"
       ],
       "tags": [
         {
@@ -6276,7 +6278,8 @@
       "photoUri": "assets/cocktails/1760963369297-bombardino.jpg",
       "glassId": "cup",
       "methodIds": [
-        "build"
+        "build",
+        "heating"
       ],
       "tags": [
         {
@@ -6414,7 +6417,8 @@
       "photoUri": "assets/cocktails/1760963707858-bombardino-pirata.jpg",
       "glassId": "cup",
       "methodIds": [
-        "build"
+        "build",
+        "heating"
       ],
       "tags": [
         {
@@ -9873,7 +9877,7 @@
       "id": 1757000000126,
       "name": "Chocolate Espresso Martini",
       "description": "A spirit-forward vodka cocktail showcasing Vodka, Coffee Liqueur, Espresso—deep, aromatic, and meant to be savored. Garnished with chocolate syrup.",
-      "instructions": "1. Combine: Add all liquid ingredients into a cocktail shaker filled with plenty of ice.\n2. Shake Hard: Shake vigorously for at least 15\u201320 seconds. This is essential to create the signature frothy top.\n3. Strain: Double-strain into your chilled glass to ensure a smooth texture without ice chips.\n4. \n5. Presentation and Garnishes\n6. To elevate the visual appeal, you can:\n7. \u2022 Rim the glass: Dip the rim in chocolate syrup, then into cocoa powder or chocolate shavings.\n8. \u2022 Drizzle: Spiral chocolate syrup inside the glass before pouring the drink.\n9. \u2022 Top: Garnish with the traditional three coffee beans, a dusting of cocoa powder, or fine chocolate curls.",
+      "instructions": "1. Combine: Add all liquid ingredients into a cocktail shaker filled with plenty of ice.\n2. Shake Hard: Shake vigorously for at least 15–20 seconds. This is essential to create the signature frothy top.\n3. Strain: Double-strain into your chilled glass to ensure a smooth texture without ice chips.\n4. \n5. Presentation and Garnishes\n6. To elevate the visual appeal, you can:\n7. • Rim the glass: Dip the rim in chocolate syrup, then into cocoa powder or chocolate shavings.\n8. • Drizzle: Spiral chocolate syrup inside the glass before pouring the drink.\n9. • Top: Garnish with the traditional three coffee beans, a dusting of cocoa powder, or fine chocolate curls.",
       "photoUri": "assets/cocktails/1757000000126-chocolate-espresso-martini.jpg",
       "glassId": "cocktail_glass",
       "methodIds": [
@@ -17162,7 +17166,8 @@
       "photoUri": "assets/cocktails/1757000000189-hot-buttered-rum.jpg",
       "glassId": "irish_coffee_glass",
       "methodIds": [
-        "build"
+        "build",
+        "heating"
       ],
       "tags": [
         {
@@ -17242,7 +17247,8 @@
       "photoUri": "assets/cocktails/1757000000190-hot-toddy.jpg",
       "glassId": "irish_coffee_glass",
       "methodIds": [
-        "build"
+        "build",
+        "heating"
       ],
       "tags": [
         {
@@ -17970,7 +17976,8 @@
       "methodIds": [
         "stir",
         "layer",
-        "blend"
+        "blend",
+        "heating"
       ],
       "tags": [
         {
@@ -18517,7 +18524,8 @@
       "photoUri": "assets/cocktails/1757000000200-jagertee.jpg",
       "glassId": "cup",
       "methodIds": [
-        "build"
+        "build",
+        "heating"
       ],
       "tags": [
         {
@@ -22700,7 +22708,8 @@
       "photoUri": "assets/cocktails/1757000000239-mulled-wine.jpg",
       "glassId": "irish_coffee_glass",
       "methodIds": [
-        "build"
+        "build",
+        "heating"
       ],
       "tags": [
         {
@@ -23220,7 +23229,7 @@
       "id": 1758750003165,
       "name": "Nuclear Meltdown",
       "description": "A potent and fiery shooter that combines the intense heat of cinnamon-infused Firewater with the sweet, gold-flecked luxury of Goldschläger. It is a spirit-forward drink designed for those who enjoy a spicy kick and a shimmering presentation.",
-      "instructions": "1. Fill a mixing glass or shaker with ice cubes.\n2. Pour 20ml of Firewater and 20ml of Goldschl\u00e4ger over the ice.\n3. Stir gently to chill the mixture without over-diluting the spirits.\n4. Strain the mixture into the chilled shooter glass.\n5. Serve immediately.",
+      "instructions": "1. Fill a mixing glass or shaker with ice cubes.\n2. Pour 20ml of Firewater and 20ml of Goldschläger over the ice.\n3. Stir gently to chill the mixture without over-diluting the spirits.\n4. Strain the mixture into the chilled shooter glass.\n5. Serve immediately.",
       "glassId": "shooter",
       "methodIds": [
         "stir"
@@ -27172,7 +27181,8 @@
       "instructions": "1. Prepare your hot chocolate in a separate container and ensure it is steaming hot.\n2. Pour the Baileys Irish Cream and Rumple Minze peppermint schnapps into an Irish coffee glass.\n3. Fill the remainder of the glass with the hot chocolate and stir gently to combine.\n4. Top with a generous dollop of whipped cream.",
       "glassId": "irish_coffee_glass",
       "methodIds": [
-        "build"
+        "build",
+        "heating"
       ],
       "tags": [
         {
@@ -28446,7 +28456,8 @@
       "instructions": "1. Combine the Islay Scotch Whiskey, lemon juice, chestnut liqueur, and honey syrup in a heat-resistant glass or mug.\n2. Add the whiskey-barrel aged bitters.\n3. Pour in the boiling water and stir gently to combine all ingredients.\n4. Grate fresh nutmeg over the top for aroma.\n5. Serve warm in a cocktail glass or toddy mug.",
       "glassId": "cocktail_glass",
       "methodIds": [
-        "build"
+        "build",
+        "heating"
       ],
       "tags": [
         {
@@ -28567,7 +28578,7 @@
       "id": 1760963780621,
       "name": "Silverhand",
       "description": "Silverhand is a bold, tequila-based cocktail with agave sweetness, aromatic bitters, and a splash of beer. Finished with orange peel and red chilli, it delivers a sharp, spicy kick with a rebellious edge.",
-      "instructions": "1. Add plenty of ice to a mixing glass.\n2. Pour in 60 ml tequila reposado.\n3. Add 1 bar spoon of agave syrup.\n4. Add 3 dashes Angostura bitters.\n5. Stir well for about 15\u201320 seconds until chilled.\n6. Dump the ice from the rocks glass and add fresh ice (one big cube if you have it).\n7. Strain the stirred mix into the glass.\n8. Gently top with 30 ml Corona (or another light lager), trying not to over-fizz.\n9. Express an orange peel over the drink and discard it.\n10. Add a red chilli as garnish.",
+      "instructions": "1. Add plenty of ice to a mixing glass.\n2. Pour in 60 ml tequila reposado.\n3. Add 1 bar spoon of agave syrup.\n4. Add 3 dashes Angostura bitters.\n5. Stir well for about 15–20 seconds until chilled.\n6. Dump the ice from the rocks glass and add fresh ice (one big cube if you have it).\n7. Strain the stirred mix into the glass.\n8. Gently top with 30 ml Corona (or another light lager), trying not to over-fizz.\n9. Express an orange peel over the drink and discard it.\n10. Add a red chilli as garnish.",
       "photoUri": "assets/cocktails/1760963780621-silverhand.jpg",
       "glassId": "rocks_glass",
       "methodIds": [
@@ -31598,7 +31609,8 @@
       "instructions": "1. Separate the egg white from the yolk and beat them in separate bowls until the whites are stiff and yolks are creamy.\n2. Gently fold the egg whites into the yolks in an Irish coffee glass or mug.\n3. Add simple syrup, dark rum, and cognac to the egg mixture.\n4. Fill the rest of the glass with hot milk while stirring gently to combine.\n5. Garnish with a generous dusting of freshly grated nutmeg.",
       "glassId": "irish_coffee_glass",
       "methodIds": [
-        "build"
+        "build",
+        "heating"
       ],
       "tags": [
         {

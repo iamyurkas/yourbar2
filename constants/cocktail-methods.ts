@@ -29,6 +29,12 @@ export const COCKTAIL_METHODS: CocktailMethod[] = [
     description: 'Press fruit, berries, or herbs to release oils and juice.',
   },
   {
+    id: 'heating',
+    label: 'Heating',
+    title: 'Heating',
+    description: 'Warm ingredients gently to blend flavors without boiling.',
+  },
+  {
     id: 'shake',
     label: 'Shake',
     title: 'Shake',
@@ -72,6 +78,7 @@ export const METHOD_ICON_MAP = {
   throwing: { type: 'icon', name: 'swap-horizontal' },
   build: { type: 'icon', name: 'beer' },
   layer: { type: 'icon', name: 'layers' },
+  heating: { type: 'icon', name: 'fire' },
 } as const satisfies Record<string, MethodIcon>;
 
 export type CocktailMethodId = keyof typeof METHOD_ICON_MAP;
