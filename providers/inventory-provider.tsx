@@ -9,7 +9,6 @@ import React, {
 } from 'react';
 
 import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
-import { type CocktailMethodId } from '@/constants/cocktail-methods';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { TAG_COLORS } from '@/constants/tag-colors';
 import { loadInventoryData, reloadInventoryData, type InventoryData } from '@/libs/inventory-data';
@@ -22,47 +21,22 @@ import {
 } from '@/libs/inventory-storage';
 import { buildPhotoBaseName } from '@/libs/photo-utils';
 import { normalizeSearchText } from '@/libs/search-normalization';
+import {
+  type Cocktail,
+  type CocktailIngredient,
+  type CocktailStorageRecord,
+  type CocktailSubstitute,
+  type CocktailTag,
+  type BaseCocktailRecord,
+  type CreateCocktailInput,
+  type CreateIngredientInput,
+  type Ingredient,
+  type IngredientStorageRecord,
+  type IngredientTag,
+  type PhotoBackupEntry,
+  type StartScreen,
+} from '@/providers/inventory-types';
 
-type BaseCocktailRecord = InventoryData['cocktails'][number];
-type CocktailIngredientRecord = NonNullable<BaseCocktailRecord['ingredients']>[number];
-type CocktailSubstituteRecord = NonNullable<CocktailIngredientRecord['substitutes']>[number];
-type CocktailTag = NonNullable<BaseCocktailRecord['tags']>[number];
-type CocktailSubstitute = CocktailSubstituteRecord & { brand?: boolean };
-type CocktailIngredient = Omit<CocktailIngredientRecord, 'substitutes'> & {
-  allowBaseSubstitution?: boolean;
-  allowBrandSubstitution?: boolean;
-  substitutes?: CocktailSubstitute[];
-};
-type CocktailRecord = Omit<BaseCocktailRecord, 'ingredients' | 'searchName' | 'searchTokens'> & {
-  ingredients?: CocktailIngredient[];
-  searchName?: string | null;
-  searchTokens?: string[] | null;
-  methodId?: CocktailMethodId | null;
-  methodIds?: CocktailMethodId[] | null;
-};
-type IngredientRecord = InventoryData['ingredients'][number];
-type PhotoBackupEntry = {
-  type: 'cocktails' | 'ingredients';
-  id?: number | string | null;
-  name?: string | null;
-  uri?: string | null;
-};
-
-type NormalizedSearchFields = {
-  searchNameNormalized: string;
-  searchTokensNormalized: string[];
-};
-
-type Cocktail = CocktailRecord & NormalizedSearchFields & { userRating?: number };
-type Ingredient = IngredientRecord & NormalizedSearchFields;
-export type StartScreen =
-  | 'cocktails_all'
-  | 'cocktails_my'
-  | 'cocktails_favorites'
-  | 'shaker'
-  | 'ingredients_all'
-  | 'ingredients_my'
-  | 'ingredients_shopping';
 const DEFAULT_START_SCREEN: StartScreen = 'cocktails_all';
 
 type InventoryContextValue = {
@@ -116,49 +90,10 @@ type InventoryState = {
   imported: boolean;
 };
 
-type IngredientTag = NonNullable<IngredientRecord['tags']>[number];
-
-type CreateCocktailSubstituteInput = {
-  id?: number | string | null;
-  ingredientId?: number | string | null;
-  name?: string | null;
-  brand?: boolean | null;
+type NormalizedSearchFields = {
+  searchNameNormalized: string;
+  searchTokensNormalized: string[];
 };
-
-type CreateCocktailIngredientInput = {
-  ingredientId?: number | string | null;
-  name?: string | null;
-  amount?: string | null;
-  unitId?: number | string | null;
-  optional?: boolean | null;
-  garnish?: boolean | null;
-  allowBaseSubstitution?: boolean | null;
-  allowBrandSubstitution?: boolean | null;
-  substitutes?: CreateCocktailSubstituteInput[] | null;
-  order?: number | null;
-};
-
-type CreateCocktailInput = {
-  name: string;
-  description?: string | null;
-  instructions?: string | null;
-  photoUri?: string | null;
-  glassId?: string | null;
-  methodIds?: CocktailMethodId[] | null;
-  tags?: CocktailTag[] | null;
-  ingredients: CreateCocktailIngredientInput[];
-};
-
-type CreateIngredientInput = {
-  name: string;
-  description?: string | null;
-  photoUri?: string | null;
-  baseIngredientId?: number | null;
-  tags?: IngredientTag[] | null;
-};
-
-type CocktailStorageRecord = Omit<CocktailRecord, 'searchName' | 'searchTokens'>;
-type IngredientStorageRecord = Omit<IngredientRecord, 'searchName' | 'searchTokens'>;
 
 const INVENTORY_SNAPSHOT_VERSION = 2;
 

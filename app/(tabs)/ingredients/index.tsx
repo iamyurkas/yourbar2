@@ -29,6 +29,7 @@ import {
   getVisibleIngredientIdsForCocktail,
 } from '@/libs/ingredient-availability';
 import { normalizeSearchText } from '@/libs/search-normalization';
+import { buildTagOptions, type TagOption } from '@/libs/tag-options';
 import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
 import { tagColors } from '@/theme/theme';
 
@@ -43,12 +44,6 @@ const TAB_OPTIONS: SegmentTabOption[] = [
   { key: 'my', label: 'My' },
   { key: 'shopping', label: 'Shopping' },
 ];
-
-type IngredientTagOption = {
-  key: string;
-  name: string;
-  color: string;
-};
 
 type IngredientListItemProps = {
   ingredient: Ingredient;
@@ -233,61 +228,11 @@ export default function IngredientsScreen() {
     setLastIngredientTab(activeTab);
   }, [activeTab]);
 
-  const availableTagOptions = useMemo<IngredientTagOption[]>(() => {
-    const map = new Map<string, IngredientTagOption>();
-    const builtinTagOrder = new Map<string, number>();
-
-    BUILTIN_INGREDIENT_TAGS.forEach((tag, index) => {
-      builtinTagOrder.set(String(tag.id), index);
-      if (tag.name) {
-        builtinTagOrder.set(tag.name.trim().toLowerCase(), index);
-      }
-    });
-
-    ingredients.forEach((ingredient) => {
-      (ingredient.tags ?? []).forEach((tag) => {
-        if (!tag) {
-          return;
-        }
-
-        const key = tag.id != null ? String(tag.id) : tag.name?.toLowerCase();
-        if (!key) {
-          return;
-        }
-
-        if (!map.has(key)) {
-          map.set(key, {
-            key,
-            name: tag.name ?? 'Unnamed tag',
-            color: tag.color ?? defaultTagColor,
-          });
-        }
-      });
-    });
-
-    return Array.from(map.values()).sort((a, b) => {
-      const normalizedNameA = a.name.trim().toLowerCase();
-      const normalizedNameB = b.name.trim().toLowerCase();
-      const orderA = builtinTagOrder.get(a.key) ?? builtinTagOrder.get(normalizedNameA);
-      const orderB = builtinTagOrder.get(b.key) ?? builtinTagOrder.get(normalizedNameB);
-
-      if (orderA != null || orderB != null) {
-        if (orderA == null) {
-          return 1;
-        }
-
-        if (orderB == null) {
-          return -1;
-        }
-
-        if (orderA !== orderB) {
-          return orderA - orderB;
-        }
-      }
-
-      return normalizedNameA.localeCompare(normalizedNameB);
-    });
-  }, [defaultTagColor, ingredients]);
+  const availableTagOptions = useMemo<TagOption[]>(
+    () =>
+      buildTagOptions(ingredients, (ingredient) => ingredient.tags ?? [], BUILTIN_INGREDIENT_TAGS, defaultTagColor),
+    [defaultTagColor, ingredients],
+  );
 
   useEffect(() => {
     setSelectedTagKeys((previous) => {
