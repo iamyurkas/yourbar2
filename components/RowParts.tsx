@@ -104,6 +104,7 @@ export function FavoriteStar({ active, onToggle }: FavoriteStarProps) {
 type ListRowProps = {
   title: string;
   subtitle?: string;
+  subtitleContent?: ReactNode;
   subtitleNumberOfLines?: number;
   onPress?: () => void;
   selected?: boolean;
@@ -123,6 +124,7 @@ type ListRowProps = {
 export function ListRow({
   title,
   subtitle,
+  subtitleContent,
   subtitleNumberOfLines,
   onPress,
   selected,
@@ -164,7 +166,9 @@ export function ListRow({
         <Text style={[styles.title, { color: Colors.text }]} numberOfLines={1}>
           {title}
         </Text>
-        {subtitle ? (
+        {subtitleContent ? (
+          subtitleContent
+        ) : subtitle ? (
           <Text
             style={[styles.subtitle, { color: Colors.icon }, subtitleStyle]}
             numberOfLines={subtitleNumberOfLines ?? 1}>
