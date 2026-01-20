@@ -861,12 +861,30 @@ export default function CocktailDetailsScreen() {
                       subtitleLines.push(...missingSubstituteLines);
                     }
 
-                    if (qualifier) {
-                      subtitleLines.push(qualifier.charAt(0).toUpperCase() + qualifier.slice(1));
-                    }
-
+                    const qualifierLine = qualifier
+                      ? qualifier.charAt(0).toUpperCase() + qualifier.slice(1)
+                      : undefined;
                     const subtitle = subtitleLines.length ? subtitleLines.join('\n') : undefined;
-                    const subtitleNumberOfLines = subtitleLines.length || 1;
+                    const subtitleContent =
+                      subtitle || qualifierLine ? (
+                        <View>
+                          {subtitle ? (
+                            <Text style={[styles.ingredientSubtitle, { color: Colors.onSurfaceVariant }]}>
+                              {subtitle}
+                            </Text>
+                          ) : null}
+                          {qualifierLine ? (
+                            <Text
+                              style={[
+                                styles.ingredientSubtitle,
+                                subtitle ? styles.ingredientQualifier : undefined,
+                                { color: Colors.onSurfaceVariant },
+                              ]}>
+                              {qualifierLine}
+                            </Text>
+                          ) : null}
+                        </View>
+                      ) : undefined;
 
                     return (
                       <View key={key}>
@@ -875,13 +893,7 @@ export default function CocktailDetailsScreen() {
                         ) : null}
                         <ListRow
                           title={resolution.resolvedName || ingredient.name || ''}
-                          subtitle={subtitle}
-                          subtitleStyle={
-                            subtitle
-                              ? [styles.ingredientSubtitle, { color: Colors.onSurfaceVariant }]
-                              : undefined
-                          }
-                          subtitleNumberOfLines={subtitleNumberOfLines}
+                          subtitleContent={subtitleContent}
                           thumbnail={
                             <Thumb
                               label={resolution.resolvedName ?? ingredient.name ?? undefined}
@@ -1116,6 +1128,9 @@ const styles = StyleSheet.create({
   },
   ingredientSubtitle: {
     fontSize: 12,
+  },
+  ingredientQualifier: {
+    marginTop: 4,
   },
   shoppingIcon: {
     width: 16,
