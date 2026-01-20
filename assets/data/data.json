@@ -789,7 +789,7 @@
       "id": 1756478015170,
       "name": "Alexander",
       "description": "A classic, rich, and velvety cocktail combining gin, white crème de cacao, and cream. The Alexander is smooth, lightly sweet, and dessert-like, with subtle chocolate notes balanced by botanical gin and a luxurious, silky texture.",
-      "instructions": "1. Chill a coupe glass by filling it with ice or placing it in the freezer.\n2. Add gin, white crème de cacao, and cream to a cocktail shaker.\n3. Fill the shaker with ice.\n4. Shake vigorously for 10–15 seconds until well chilled and slightly frothy.\n5. Discard the ice from the chilled coupe glass.\n6. Double strain the cocktail into the prepared glass.\n7. Garnish with freshly grated nutmeg on top, if desired.\n8. Serve immediately.",
+      "instructions": "1. Add gin, white cr\u00e8me de cacao, and cream to a cocktail shaker.\n2. Fill the shaker with ice.\n3. Shake vigorously for 10\u201315 seconds until well chilled and slightly frothy.\n4. Discard the ice from the chilled coupe glass.\n5. Double strain the cocktail into the prepared glass.\n6. Garnish with freshly grated nutmeg on top, if desired.\n7. Serve immediately.",
       "photoUri": "assets/cocktails/1756478015170-alexander.jpg",
       "glassId": "coupe",
       "methodIds": [
@@ -940,7 +940,7 @@
       "id": 1756476650661,
       "name": "Alexander's Big Brother",
       "description": "A decadent, creamy gin-based cocktail combining Gin, Triple Sec, and Blue Curaçao. Silky, dessert-like, and indulgent, with a subtle citrus brightness and a striking color. Garnished with physalis for a lightly tart contrast.",
-      "instructions": "1. Chill a coupe glass in the freezer or by filling it with ice and water.\n2. Add Gin, Triple Sec, Blue Curaçao, and cream to a cocktail shaker.\n3. Fill the shaker with ice and shake vigorously for 12–15 seconds until well chilled and slightly frothy.\n4. Discard the ice from the chilled coupe glass.\n5. Double strain the cocktail into the prepared glass for a smooth, velvety texture.\n6. Garnish with a physalis on the rim or floated gently on the surface and serve immediately.",
+      "instructions": "1. Add Gin, Triple Sec, Blue Cura\u00e7ao, and cream to a cocktail shaker.\n2. Fill the shaker with ice and shake vigorously for 12\u201315 seconds until well chilled and slightly frothy.\n3. Discard the ice from the chilled coupe glass.\n4. Double strain the cocktail into the prepared glass for a smooth, velvety texture.\n5. Garnish with a physalis on the rim or floated gently on the surface and serve immediately.",
       "photoUri": "assets/cocktails/1756476650661-alexanders-big-brother.jpg",
       "glassId": "coupe",
       "methodIds": [
@@ -2082,7 +2082,7 @@
       "id": 1759435526187,
       "name": "Another Sunken Boat",
       "description": "A dark, spirit-forward agave cocktail where smoky mezcal meets the bitter-sweet complexity of Punt e Mes and the lush cherry richness of Cherry Heering. Deep, aromatic, and slightly brooding, this drink is layered with herbal bitterness, gentle sweetness, and lingering smoke. Designed for slow sipping and quiet contemplation, it is finished with a maraschino cherry for a subtle, nostalgic touch.",
-      "instructions": "1. Chill a Nick and Nora glass with ice or in the freezer.\n2. Add mezcal, Punt e Mes, and Cherry Heering to a mixing glass filled with ice.\n3. Stir gently for 20–25 seconds until well chilled and properly diluted.\n4. Discard the ice from the chilled glass.\n5. Strain the cocktail into the Nick and Nora glass.\n6. Garnish with a maraschino cherry and serve.",
+      "instructions": "1. Add mezcal, Punt e Mes, and Cherry Heering to a mixing glass filled with ice.\n2. Stir gently for 20\u201325 seconds until well chilled and properly diluted.\n3. Discard the ice from the chilled glass.\n4. Strain the cocktail into the Nick and Nora glass.\n5. Garnish with a maraschino cherry and serve.",
       "photoUri": "assets/cocktails/1759435526187-another-sunken-boat.jpg",
       "glassId": "nick_and_nora",
       "methodIds": [
@@ -2220,7 +2220,7 @@
       "id": 1756499452749,
       "name": "Apple Cart",
       "description": "A spirit-forward brandy cocktail built around Calvados and Triple Sec, delivering deep apple aromatics, gentle citrus sweetness, and a warm, lingering finish. Elegant, bold, and designed for slow sipping.",
-      "instructions": "1. Chill a cocktail glass by filling it with ice or placing it in the freezer.\n2. Add Calvados, Triple Sec, and any additional modifiers to a mixing glass filled with ice.\n3. Stir gently for 20–30 seconds until well chilled and properly diluted.\n4. Discard the ice from the chilled cocktail glass.\n5. Strain the cocktail into the prepared glass.\n6. Garnish with a thin slice of fresh apple or an apple fan on the rim.\n7. Serve immediately and enjoy slowly.",
+      "instructions": "1. Add Calvados, Triple Sec, and any additional modifiers to a mixing glass filled with ice.\n2. Stir gently for 20\u201330 seconds until well chilled and properly diluted.\n3. Discard the ice from the chilled cocktail glass.\n4. Strain the cocktail into the prepared glass.\n5. Garnish with a thin slice of fresh apple or an apple fan on the rim.\n6. Serve immediately and enjoy slowly.",
       "photoUri": "assets/cocktails/1756499452749-apple-cart.jpg",
       "glassId": "cocktail_glass",
       "methodIds": [
@@ -2364,7 +2364,7 @@
       "id": 1756500510594,
       "name": "Appletini",
       "description": "A crisp, spirit-forward vodka cocktail with bright green apple notes and a subtle citrus lift from Cointreau. Clean, aromatic, and deceptively smooth, the Appletini balances sharp freshness with a gentle sweetness.",
-      "instructions": "1. Chill the cocktail glass by filling it with ice or placing it in the freezer.\n2. Fill a shaker with plenty of ice.\n3. Add vodka, apple schnapps, and Cointreau to the shaker.\n4. Shake vigorously for 10–15 seconds until well chilled.\n5. Discard the ice from the glass and strain the cocktail into the chilled glass.\n6. Garnish with a thin apple slice or a lemon twist if desired.",
+      "instructions": "1. Fill a shaker with plenty of ice.\n2. Add vodka, apple schnapps, and Cointreau to the shaker.\n3. Shake vigorously for 10\u201315 seconds until well chilled.\n4. Discard the ice from the glass and strain the cocktail into the chilled glass.\n5. Garnish with a thin apple slice or a lemon twist if desired.",
       "photoUri": "assets/cocktails/1756500510594-appletini.jpg",
       "glassId": "cocktail_glass",
       "methodIds": [
@@ -3167,7 +3167,7 @@
       "id": 1759336070098,
       "name": "Bali Rum Trader",
       "description": "A lush, tropical rum cocktail inspired by Southeast Asian flavors. White rum forms a clean, crisp base, while Pisang Ambon brings sweet banana depth and pineapple juice adds bright acidity. The result is a smooth, aromatic drink that balances fruitiness with gentle strength, finished with a playful banana garnish.",
-      "instructions": "1. Chill a coupe glass by filling it with ice or placing it in the freezer.\n2. Add white rum, Pisang Ambon, and pineapple juice to a shaker filled with ice.\n3. Shake vigorously for 10–12 seconds until well chilled and slightly frothy.\n4. Discard the ice from the coupe glass.\n5. Strain the cocktail into the chilled glass.\n6. Garnish with a fresh banana slice or banana chip on the rim and serve immediately.",
+      "instructions": "1. Add white rum, Pisang Ambon, and pineapple juice to a shaker filled with ice.\n2. Shake vigorously for 10\u201312 seconds until well chilled and slightly frothy.\n3. Discard the ice from the coupe glass.\n4. Strain the cocktail into the chilled glass.\n5. Garnish with a fresh banana slice or banana chip on the rim and serve immediately.",
       "photoUri": "assets/cocktails/1759336070098-bali-rum-trader.jpg",
       "glassId": "coupe",
       "methodIds": [
@@ -9873,7 +9873,7 @@
       "id": 1757000000126,
       "name": "Chocolate Espresso Martini",
       "description": "A spirit-forward vodka cocktail showcasing Vodka, Coffee Liqueur, Espresso—deep, aromatic, and meant to be savored. Garnished with chocolate syrup.",
-      "instructions": "1. Chill the glass: Place your martini or coupe glass in the freezer beforehand.\n2. Combine: Add all liquid ingredients into a cocktail shaker filled with plenty of ice.\n3. Shake Hard: Shake vigorously for at least 15–20 seconds. This is essential to create the signature frothy top.\n4. Strain: Double-strain into your chilled glass to ensure a smooth texture without ice chips.\n5.\n6. Presentation and Garnishes\n7. To elevate the visual appeal, you can:\n8. • Rim the glass: Dip the rim in chocolate syrup, then into cocoa powder or chocolate shavings.\n9. • Drizzle: Spiral chocolate syrup inside the glass before pouring the drink.\n10. • Top: Garnish with the traditional three coffee beans, a dusting of cocoa powder, or fine chocolate curls.",
+      "instructions": "1. Combine: Add all liquid ingredients into a cocktail shaker filled with plenty of ice.\n2. Shake Hard: Shake vigorously for at least 15\u201320 seconds. This is essential to create the signature frothy top.\n3. Strain: Double-strain into your chilled glass to ensure a smooth texture without ice chips.\n4. \n5. Presentation and Garnishes\n6. To elevate the visual appeal, you can:\n7. \u2022 Rim the glass: Dip the rim in chocolate syrup, then into cocoa powder or chocolate shavings.\n8. \u2022 Drizzle: Spiral chocolate syrup inside the glass before pouring the drink.\n9. \u2022 Top: Garnish with the traditional three coffee beans, a dusting of cocoa powder, or fine chocolate curls.",
       "photoUri": "assets/cocktails/1757000000126-chocolate-espresso-martini.jpg",
       "glassId": "cocktail_glass",
       "methodIds": [
@@ -10729,7 +10729,7 @@
       "id": 1757000000130,
       "name": "Creamsicle",
       "description": "A luscious and velvety cocktail that perfectly captures the nostalgic flavor of an orange creamsicle. It balances the bright, citrusy notes of vodka and Grand Mariner with the rich, smooth texture of fresh cream.",
-      "instructions": "1. Chill your cocktail glass by placing it in the freezer or filling it with ice.\n2. Add Vodka, Grand Marnier, cream, and simple syrup (if desired) into a cocktail shaker.\n3. Fill the shaker with ice and shake vigorously for about 15 seconds until well-chilled.\n4. Strain the mixture into the chilled cocktail glass.\n5. Garnish with a fresh orange slice or zest.",
+      "instructions": "1. Add Vodka, Grand Marnier, cream, and simple syrup (if desired) into a cocktail shaker.\n2. Fill the shaker with ice and shake vigorously for about 15 seconds until well-chilled.\n3. Strain the mixture into the chilled cocktail glass.\n4. Garnish with a fresh orange slice or zest.",
       "photoUri": "assets/cocktails/1757000000130-creamsicle.jpg",
       "glassId": "coupe",
       "methodIds": [
@@ -19828,9 +19828,12 @@
       "id": 1758536935697,
       "name": "Liquorice",
       "description": "A sophisticated, spirit-forward cocktail that highlights the botanical notes of gin balanced by the deep, anise-flavored complexity of Black Sambuca. This drink is smooth, aromatic, and perfect for those who enjoy bold, herbal profiles.",
-      "instructions": "1. Chill your cocktail glass in the freezer or by filling it with ice.\n2. Combine gin, Black Sambuca, and rich simple syrup in a mixing glass.\n3. Add 150g of ice to the mixing glass.\n4. Stir gently with a bar spoon for about 20-30 seconds until well-chilled.\n5. Strain the mixture into the chilled cocktail glass.\n6. Garnish with a piece of liquorice for an extra aromatic touch.",
+      "instructions": "1. Combine gin, Black Sambuca, and rich simple syrup in a mixing glass.\n2. Add 150g of ice to the mixing glass.\n3. Stir gently with a bar spoon for about 20-30 seconds until well-chilled.\n4. Strain the mixture into the chilled cocktail glass.\n5. Garnish with a piece of liquorice for an extra aromatic touch.",
       "photoUri": "assets/cocktails/1758536935697-liquorice.jpg",
       "glassId": "cocktail_glass",
+      "methodIds": [
+        "stir"
+      ],
       "tags": [
         {
           "id": 5,
@@ -19888,6 +19891,9 @@
       "description": "A refined European twist on the classic Martini. The rich, fruity notes of Port wine blend seamlessly with the crispness of gin and the delicate floral sweetness of St. Germain elderflower liqueur, finished with a citrusy dash of bitters.",
       "instructions": "1. Add the Port, Gin, St. Germain, and bitters into a mixing glass filled with ice.\n2. Stir the ingredients thoroughly until the mixing glass feels very cold to the touch.\n3. Double strain the mixture into a chilled cocktail glass to ensure a smooth texture.\n4. Serve immediately, perhaps with a twist of lemon or orange peel to enhance the aromas.",
       "glassId": "cocktail_glass",
+      "methodIds": [
+        "stir"
+      ],
       "tags": [
         {
           "id": 6,
@@ -20201,6 +20207,9 @@
       "instructions": "1. Combine Rye Whisky, Punt e Mes, and Amaro in a mixing glass.\n2. Fill the mixing glass with ice and stir well for about 20-30 seconds until thoroughly chilled.\n3. Strain the mixture into a rocks glass over a large ice cube.\n4. Garnish with an orange zest or slice.",
       "photoUri": "assets/cocktails/1759436893087-longshoreman.jpg",
       "glassId": "rocks_glass",
+      "methodIds": [
+        "stir"
+      ],
       "tags": [
         {
           "id": 5,
@@ -20970,8 +20979,11 @@
       "id": 1759432054418,
       "name": "Maria McClaire",
       "description": "A sophisticated and bold spirit-forward drink that harmoniously blends the richness of Port with the warmth of Irish whiskey and the botanical bitterness of Campari.",
-      "instructions": "1. Chill your cocktail glass in the freezer or by filling it with ice.\n2. Add the Port, Irish Whisky, Campari, and Creole Bitters into a mixing glass.\n3. Fill the mixing glass with ice cubes.\n4. Stir gently with a bar spoon for about 20-30 seconds until well-chilled.\n5. Strain the mixture into the chilled cocktail glass.",
+      "instructions": "1. Add the Port, Irish Whisky, Campari, and Creole Bitters into a mixing glass.\n2. Fill the mixing glass with ice cubes.\n3. Stir gently with a bar spoon for about 20-30 seconds until well-chilled.\n4. Strain the mixture into the chilled cocktail glass.",
       "glassId": "cocktail_glass",
+      "methodIds": [
+        "stir"
+      ],
       "tags": [
         {
           "id": 6,
@@ -21445,9 +21457,12 @@
       "id": 1759437114412,
       "name": "Maximilian Affair",
       "description": "A sophisticated and bright agave spirit sour that masterfully balances the smokiness of Mezcal with the floral notes of Elderflower and the bitter-sweet complexity of Punt e Mes.",
-      "instructions": "1. Chill your coupe glass in the freezer or by filling it with ice.\n2. Combine Mezcal, Elderflower Cordial, Punt e Mes, and lemon juice in a cocktail shaker.\n3. Fill the shaker with ice and shake vigorously for about 10-15 seconds until well-chilled.\n4. Double strain the mixture into the chilled coupe glass.\n5. Garnish with a lemon twist or wheel.",
+      "instructions": "1. Combine Mezcal, Elderflower Cordial, Punt e Mes, and lemon juice in a cocktail shaker.\n2. Fill the shaker with ice and shake vigorously for about 10-15 seconds until well-chilled.\n3. Double strain the mixture into the chilled coupe glass.\n4. Garnish with a lemon twist or wheel.",
       "photoUri": "assets/cocktails/1759437114412-maximilian-affair.jpg",
       "glassId": "coupe",
+      "methodIds": [
+        "shake"
+      ],
       "tags": [
         {
           "id": 5,
@@ -21507,6 +21522,9 @@
       "description": "A robust, spirit-forward variation of a modern classic. This cocktail pairs the spice of Rye with aromatic vermouth and a haunting hint of Islay smoke.",
       "instructions": "1. Add the Rye Whisky, Punt e Mes, Maraschino Liqueur, and Islay Scotch Whiskey into a mixing glass.\n2. Fill the mixing glass with ice cubes.\n3. Stir gently for about 30 seconds to achieve the perfect dilution and temperature.\n4. Strain the liquid into a chilled Nick and Nora glass.\n5. Garnish with a maraschino cherry.",
       "glassId": "nick_and_nora",
+      "methodIds": [
+        "stir"
+      ],
       "tags": [
         {
           "id": 5,
@@ -21619,6 +21637,9 @@
       "instructions": "1. Fill a highball glass with ice cubes.\n2. Pour 60ml of coconut liqueur over the ice.\n3. Top up the glass with 150ml of apple juice.\n4. Stir gently to combine the flavors.\n5. Garnish with apple slices.",
       "photoUri": "assets/cocktails/1758624030607-metropolis.jpg",
       "glassId": "highball_glass",
+      "methodIds": [
+        "build"
+      ],
       "tags": [
         {
           "id": 7,
@@ -22477,6 +22498,10 @@
       "instructions": "1. Muddle the fresh ginger and coriander leaves in a shaker to release their aromatic oils.\n2. Add the Vodka Citron, Limoncello, pineapple juice, and apple juice to the shaker.\n3. Fill the shaker with ice and shake vigorously until well-chilled.\n4. Double strain the mixture into a chilled cocktail glass to remove small bits of ginger and herbs.\n5. Garnish with a fresh sprig of coriander.",
       "photoUri": "assets/cocktails/1758744805979-motox.jpg",
       "glassId": "cocktail_glass",
+      "methodIds": [
+        "muddle",
+        "shake"
+      ],
       "tags": [
         {
           "id": 6,
@@ -22550,6 +22575,9 @@
       "instructions": "1. Combine Pisco, pineapple syrup, grapefruit juice, lime juice, and Creole bitters in a cocktail shaker with ice.\n2. Shake well until the exterior of the shaker feels cold.\n3. Strain the mixture into a chilled champagne flute.\n4. Top up the glass with Prosecco.\n5. Garnish with a fresh pineapple wedge.",
       "photoUri": "assets/cocktails/1759248306670-mrs-daisy-robinson.jpg",
       "glassId": "champagne_flute",
+      "methodIds": [
+        "shake"
+      ],
       "tags": [
         {
           "id": 6,
@@ -23192,8 +23220,11 @@
       "id": 1758750003165,
       "name": "Nuclear Meltdown",
       "description": "A potent and fiery shooter that combines the intense heat of cinnamon-infused Firewater with the sweet, gold-flecked luxury of Goldschläger. It is a spirit-forward drink designed for those who enjoy a spicy kick and a shimmering presentation.",
-      "instructions": "1. Chill a shooter glass in the freezer for a few minutes.\n2. Fill a mixing glass or shaker with ice cubes.\n3. Pour 20ml of Firewater and 20ml of Goldschläger over the ice.\n4. Stir gently to chill the mixture without over-diluting the spirits.\n5. Strain the mixture into the chilled shooter glass.\n6. Serve immediately.",
+      "instructions": "1. Fill a mixing glass or shaker with ice cubes.\n2. Pour 20ml of Firewater and 20ml of Goldschl\u00e4ger over the ice.\n3. Stir gently to chill the mixture without over-diluting the spirits.\n4. Strain the mixture into the chilled shooter glass.\n5. Serve immediately.",
       "glassId": "shooter",
+      "methodIds": [
+        "stir"
+      ],
       "tags": [
         {
           "id": 5,
@@ -23566,6 +23597,9 @@
       "instructions": "1. Pour the Black Sambuca into a chilled shooter glass.\n2. Gently layer the espresso over the sambuca using the back of a bar spoon.\n3. Carefully float the cream on top as the final layer.\n4. Serve immediately to maintain the distinct layers.",
       "photoUri": "assets/cocktails/1758536592633-opal-cafe.jpg",
       "glassId": "shooter",
+      "methodIds": [
+        "layer"
+      ],
       "tags": [
         {
           "id": 5,
@@ -23730,6 +23764,9 @@
       "instructions": "1. Add Vodka, Ouzo, Rich Simple Syrup, and Lemon Juice into a cocktail shaker.\n2. Fill the shaker with ice cubes.\n3. Shake vigorously for about 10-15 seconds until well-chilled.\n4. Strain the mixture into a chilled shooter glass.",
       "photoUri": "assets/cocktails/1758847662571-ouzi.jpg",
       "glassId": "shooter",
+      "methodIds": [
+        "shake"
+      ],
       "tags": [
         {
           "id": 5,
@@ -23787,6 +23824,11 @@
       "instructions": "1. Muddle the mango pieces in the bottom of a shaker or blender.\n2. Add Dark Rum, Coconut Liqueur, Grenadine, and Pineapple Juice.\n3. Fill with ice and shake well (or blend briefly for a frozen texture).\n4. Pour the contents into a hurricane glass.\n5. Garnish with two cherries on top.",
       "photoUri": "assets/cocktails/1758622838989-pacha-sao-paulo.jpg",
       "glassId": "hurricane_glass",
+      "methodIds": [
+        "muddle",
+        "shake",
+        "blend"
+      ],
       "tags": [
         {
           "id": 6,
@@ -23859,6 +23901,9 @@
       "description": "A long, sparkling brandy drink built for easy sipping, pairing Passion Fruit Liqueur, Apricot Brandy, Grape Soda with bubbly mixers over ice.",
       "instructions": "1. Fill a rocks glass with ice cubes.\n2. Pour the Passion Fruit Liqueur and Apricot Brandy over the ice.\n3. Add the Orange Juice and Grape Soda.\n4. Top with Lemonade (or lemon-lime soda).\n5. Stir gently to combine the flavors without losing the carbonation.",
       "glassId": "rocks_glass",
+      "methodIds": [
+        "build"
+      ],
       "tags": [
         {
           "id": 7,
@@ -23991,6 +24036,9 @@
       "instructions": "1. Fill a cocktail shaker with ice cubes.\n2. Add the sloe gin, apricot brandy, grapefruit juice, lime juice, and absinthe.\n3. Shake well until chilled.\n4. Strain the mixture into a chilled Collins glass filled with fresh ice.\n5. Top with ale and stir gently to combine.",
       "photoUri": "assets/cocktails/1758492577523-pale-charlie.jpg",
       "glassId": "collins_glass",
+      "methodIds": [
+        "shake"
+      ],
       "tags": [
         {
           "id": 6,
@@ -24727,9 +24775,12 @@
       "id": 1759247416006,
       "name": "Piña Clara",
       "description": "A sophisticated, lighter take on the classic tropical profile. This cocktail combines white rum with clear coconut water and pineapple syrup for a crisp, refreshing, and translucent summer drink.",
-      "instructions": "1. Chill a collins glass with ice or in the freezer.\n2. Add white rum, pineapple syrup, and coconut water into a mixing glass with ice.\n3. Stir gently to combine and chill without over-diluting.\n4. Strain the mixture into the prepared collins glass filled with fresh ice.\n5. Garnish with a fresh pineapple wedge or leaf.",
+      "instructions": "1. Add white rum, pineapple syrup, and coconut water into a mixing glass with ice.\n2. Stir gently to combine and chill without over-diluting.\n3. Strain the mixture into the prepared collins glass filled with fresh ice.\n4. Garnish with a fresh pineapple wedge or leaf.",
       "photoUri": "assets/cocktails/1759247416006-pina-clara.jpg",
       "glassId": "collins_glass",
+      "methodIds": [
+        "stir"
+      ],
       "tags": [
         {
           "id": 6,
@@ -25186,9 +25237,12 @@
       "id": 1759442051734,
       "name": "Popinjay",
       "description": "A sophisticated and spirit-forward cocktail that balances the warmth of Cognac with the herbal bitterness of Cynar and the botanical complexity of Punt e Mes.",
-      "instructions": "1. Chill a Nick and Nora glass in the freezer or by filling it with ice.\n2. Combine Cognac, Cynar, and Punt e Mes in a mixing glass filled with ice.\n3. Stir gently for about 20-30 seconds until well-chilled.\n4. Strain the mixture into the chilled glass.\n5. Express the oils of an orange zest over the drink and garnish.",
+      "instructions": "1. Combine Cognac, Cynar, and Punt e Mes in a mixing glass filled with ice.\n2. Stir gently for about 20-30 seconds until well-chilled.\n3. Strain the mixture into the chilled glass.\n4. Express the oils of an orange zest over the drink and garnish.",
       "photoUri": "assets/cocktails/1759442051734-popinjay.jpg",
       "glassId": "nick_and_nora",
+      "methodIds": [
+        "stir"
+      ],
       "tags": [
         {
           "id": 5,
@@ -25403,6 +25457,9 @@
       "instructions": "1. Combine the Cognac, Yellow Chartreuse, Punt e Mes, and Islay Scotch Whiskey in a mixing glass.\n2. Fill the mixing glass with ice cubes.\n3. Stir gently for about 20-30 seconds until well-chilled.\n4. Strain the mixture into a chilled Nick and Nora glass.\n5. Garnish with a lemon twist to add a bright citrus aroma.",
       "photoUri": "assets/cocktails/1759442398603-purgatory-a-la-francaise.jpg",
       "glassId": "nick_and_nora",
+      "methodIds": [
+        "stir"
+      ],
       "tags": [
         {
           "id": 5,
@@ -26259,6 +26316,9 @@
       "instructions": "1. Fill a highball glass with ice cubes.\n2. Pour 60ml of Coconut Liqueur over the ice.\n3. Top up the glass with 150ml of Sprite.\n4. Gently stir to combine the ingredients.\n5. Garnish with lime slices and a sprig of fresh mint.",
       "photoUri": "assets/cocktails/1758625156207-robinson.jpg",
       "glassId": "highball_glass",
+      "methodIds": [
+        "build"
+      ],
       "tags": [
         {
           "id": 6,
@@ -26400,6 +26460,9 @@
       "instructions": "1. Add Cognac, Punt e Mes, Grenadine, and Creole bitters into a mixing glass filled with ice.\n2. Stir well until chilled.\n3. Strain the mixture into a chilled coupe glass.\n4. Top with 45ml of Prosecco.\n5. Garnish with a Maraschino cherry.",
       "photoUri": "assets/cocktails/1759442653429-rome-is-burning.jpg",
       "glassId": "coupe",
+      "methodIds": [
+        "stir"
+      ],
       "tags": [
         {
           "id": 5,
@@ -26534,6 +26597,9 @@
       "description": "A light and refreshing floral spritz that elegantly balances premium vodka with the delicate notes of rosé wine and the bright sweetness of pink lemonade.",
       "instructions": "1. Fill a wine glass with 150g of ice cubes.\n2. Pour 50ml of vodka over the ice.\n3. Add 50ml of rosé wine.\n4. Top the glass with 100ml of pink lemonade.\n5. Stir gently to combine the ingredients without losing carbonation.",
       "glassId": "wine_glass",
+      "methodIds": [
+        "build"
+      ],
       "tags": [
         {
           "id": 6,
@@ -26579,6 +26645,9 @@
       "instructions": "1. Purée or muddle 50g of fresh strawberries until smooth.\n2. Pour the strawberry purée into a chilled champagne flute.\n3. Gently pour 100ml of chilled Prosecco into the glass.\n4. Stir very slowly with a bar spoon to lift the purée and blend.\n5. Garnish with a fresh strawberry on the rim.",
       "photoUri": "assets/cocktails/1756459353215-rossini.jpg",
       "glassId": "champagne_flute",
+      "methodIds": [
+        "build"
+      ],
       "tags": [
         {
           "id": 1,
@@ -27102,6 +27171,9 @@
       "description": "A comforting and decadent winter warmer that combines the rich sweetness of hot chocolate with creamy Baileys and a sharp, refreshing peppermint kick from Rumple Minze.",
       "instructions": "1. Prepare your hot chocolate in a separate container and ensure it is steaming hot.\n2. Pour the Baileys Irish Cream and Rumple Minze peppermint schnapps into an Irish coffee glass.\n3. Fill the remainder of the glass with the hot chocolate and stir gently to combine.\n4. Top with a generous dollop of whipped cream.",
       "glassId": "irish_coffee_glass",
+      "methodIds": [
+        "build"
+      ],
       "tags": [
         {
           "id": 6,
@@ -27506,7 +27578,7 @@
       "id": 1758847185194,
       "name": "Santorini",
       "description": "A sophisticated, spirit-forward cocktail that captures the essence of the Mediterranean. It balances the herbal depth of Red Vermouth with the smoky notes of Scotch, finished with a distinct aromatic touch of Ouzo.",
-      "instructions": "1. Chill a rocks glass by filling it with ice or placing it in the freezer.\n2. In a mixing glass filled with ice, combine the Red Vermouth, Scotch Whiskey, and Ouzo.\n3. Stir the mixture gently for about 20-30 seconds until well-chilled.\n4. Strain the liquid into the chilled rocks glass over fresh ice.\n5. Garnish with a lemon peel or an olive if desired.",
+      "instructions": "1. In a mixing glass filled with ice, combine the Red Vermouth, Scotch Whiskey, and Ouzo.\n2. Stir the mixture gently for about 20-30 seconds until well-chilled.\n3. Strain the liquid into the chilled rocks glass over fresh ice.\n4. Garnish with a lemon peel or an olive if desired.",
       "photoUri": "assets/cocktails/1758847185194-santorini.jpg",
       "glassId": "rocks_glass",
       "methodIds": [
@@ -27703,8 +27775,11 @@
       "id": 1759443276017,
       "name": "Scotch Point",
       "description": "A sophisticated, spirit-forward cocktail that balances the smoky depth of Scotch whisky with the bitter-sweet complexity of Punt e Mes and the rich, fruity notes of Ruby Port. A dash of Creole bitters adds a unique spicy finish.",
-      "instructions": "1. Chill a rocks glass by filling it with ice or placing it in the freezer.\n2. In a mixing glass, combine the Scotch whiskey, Punt e Mes, Ruby Port, and Creole bitters.\n3. Fill the mixing glass with ice and stir well for about 20-30 seconds until perfectly chilled.\n4. Strain the mixture into the prepared rocks glass over fresh ice.\n5. Express the oils from a lemon peel over the drink and garnish.",
+      "instructions": "1. In a mixing glass, combine the Scotch whiskey, Punt e Mes, Ruby Port, and Creole bitters.\n2. Fill the mixing glass with ice and stir well for about 20-30 seconds until perfectly chilled.\n3. Strain the mixture into the prepared rocks glass over fresh ice.\n4. Express the oils from a lemon peel over the drink and garnish.",
       "glassId": "rocks_glass",
+      "methodIds": [
+        "stir"
+      ],
       "tags": [
         {
           "id": 5,
@@ -27955,6 +28030,9 @@
       "description": "A sophisticated and aromatic spirit-forward drink that balances the richness of Cognac with floral rose and deep cherry notes, finished with a crisp lager top.",
       "instructions": "1. Chill your champagne flute in the freezer or with ice water.\n2. In a mixing glass filled with ice, combine the Cognac, Cherry Heering, and rose syrup.\n3. Stir gently for about 20 seconds to chill and dilute the mixture.\n4. Strain the mixture into the chilled champagne flute.\n5. Top slowly with the cold Pilsner lager.\n6. Stir very briefly and carefully to integrate without losing carbonation.",
       "glassId": "champagne_flute",
+      "methodIds": [
+        "stir"
+      ],
       "tags": [
         {
           "id": 6,
@@ -28367,6 +28445,9 @@
       "description": "A sophisticated and warming whiskey cocktail that balances the smoky depth of Islay Scotch with the nutty sweetness of chestnut and honey, finished with a hint of spice.",
       "instructions": "1. Combine the Islay Scotch Whiskey, lemon juice, chestnut liqueur, and honey syrup in a heat-resistant glass or mug.\n2. Add the whiskey-barrel aged bitters.\n3. Pour in the boiling water and stir gently to combine all ingredients.\n4. Grate fresh nutmeg over the top for aroma.\n5. Serve warm in a cocktail glass or toddy mug.",
       "glassId": "cocktail_glass",
+      "methodIds": [
+        "build"
+      ],
       "tags": [
         {
           "id": 6,
@@ -28486,7 +28567,7 @@
       "id": 1760963780621,
       "name": "Silverhand",
       "description": "Silverhand is a bold, tequila-based cocktail with agave sweetness, aromatic bitters, and a splash of beer. Finished with orange peel and red chilli, it delivers a sharp, spicy kick with a rebellious edge.",
-      "instructions": "1. Chill a rocks glass (fill with ice and set aside).\n2. Add plenty of ice to a mixing glass.\n3. Pour in 60 ml tequila reposado.\n4. Add 1 bar spoon of agave syrup.\n5. Add 3 dashes Angostura bitters.\n6. Stir well for about 15–20 seconds until chilled.\n7. Dump the ice from the rocks glass and add fresh ice (one big cube if you have it).\n8. Strain the stirred mix into the glass.\n9. Gently top with 30 ml Corona (or another light lager), trying not to over-fizz.\n10. Express an orange peel over the drink and discard it.\n11. Add a red chilli as garnish.",
+      "instructions": "1. Add plenty of ice to a mixing glass.\n2. Pour in 60 ml tequila reposado.\n3. Add 1 bar spoon of agave syrup.\n4. Add 3 dashes Angostura bitters.\n5. Stir well for about 15\u201320 seconds until chilled.\n6. Dump the ice from the rocks glass and add fresh ice (one big cube if you have it).\n7. Strain the stirred mix into the glass.\n8. Gently top with 30 ml Corona (or another light lager), trying not to over-fizz.\n9. Express an orange peel over the drink and discard it.\n10. Add a red chilli as garnish.",
       "photoUri": "assets/cocktails/1760963780621-silverhand.jpg",
       "glassId": "rocks_glass",
       "methodIds": [
@@ -28578,6 +28659,10 @@
       "description": "A sophisticated and bright rum sour that artfully balances the aromatic warmth of cardamom with crisp white rum, smooth vanilla, and sharp citrus notes.",
       "instructions": "1. Muddle the cardamom pods in the bottom of a cocktail shaker to release their essential oils.\n2. Add the white rum, lime juice, vanilla syrup, and Strucchi Bitter to the shaker.\n3. Fill the shaker with ice and shake vigorously for about 10-15 seconds until well-chilled.\n4. Double strain the mixture through a fine-mesh sieve into a chilled cocktail glass to remove cardamom bits.\n5. Serve immediately and enjoy.",
       "glassId": "cocktail_glass",
+      "methodIds": [
+        "muddle",
+        "shake"
+      ],
       "tags": [
         {
           "id": 6,
@@ -28894,6 +28979,9 @@
       "instructions": "1. Pour 240ml of chilled beer into a pub glass.\n2. Gently add 240ml of apple cider to maintain the carbonation.\n3. Top with a dash (1 tsp) of Creme de Cassis for flavor and color.\n4. Stir very lightly if needed and serve immediately.",
       "photoUri": "assets/cocktails/1758534889180-snakebite.jpg",
       "glassId": "pub_glass",
+      "methodIds": [
+        "build"
+      ],
       "tags": [
         {
           "id": 6,
@@ -29115,6 +29203,9 @@
       "description": "A bright whiskey sour balancing Apple Cider, Bourbon, Apple Brandy with fresh citrus and a touch of sweetness for a crisp, refreshing sip. Garnished with cloves.",
       "instructions": "1. Combine apple cider, bourbon, apple brandy, lemon juice, demerara syrup, and bitters in a cocktail shaker.\n2. Fill the shaker with ice and shake vigorously for about 10-15 seconds.\n3. Strain the mixture into a rocks glass filled with fresh ice.\n4. Garnish with two whole cloves to add a seasonal aroma.",
       "glassId": "rocks_glass",
+      "methodIds": [
+        "shake"
+      ],
       "tags": [
         {
           "id": 6,
@@ -29580,6 +29671,9 @@
       "description": "A historic American colonial classic that combines the robust warmth of rye whiskey with the crisp, refreshing profile of apple cider. This version is enhanced with a dash of aromatic bitters and a fresh mint garnish for a complex, spirit-forward experience.",
       "instructions": "1. Fill a tall pub glass with ice cubes.\n2. Pour 60ml of Rye Whisky over the ice.\n3. Add 1 dash of Angostura Bitters.\n4. Top the glass with approximately 440ml of Apple Cider.\n5. Stir gently to combine the ingredients without losing carbonation.\n6. Garnish with a fresh sprig of mint and serve immediately.",
       "glassId": "pub_glass",
+      "methodIds": [
+        "build"
+      ],
       "tags": [
         {
           "id": 6,
@@ -29754,9 +29848,12 @@
       "id": 1759484662626,
       "name": "Strawberry Daiquiri",
       "description": "A sophisticated and bright rum sour that perfectly balances fruity strawberry liqueur with the crispness of white rum and fresh lime. A pinch of salt and black pepper enhances the berry profile for a complex finish.",
-      "instructions": "1. Chill your coupe glass in the freezer or by filling it with ice.\n2. Add the white rum, strawberry liqueur, lime juice, and rich simple syrup into a cocktail shaker.\n3. Add a pinch of salt and a light crack of black pepper to the shaker.\n4. Fill the shaker with ice and shake vigorously for about 10-15 seconds until well-chilled.\n5. Double strain the mixture into the chilled coupe glass.\n6. Garnish with a fresh strawberry on the rim.",
+      "instructions": "1. Add the white rum, strawberry liqueur, lime juice, and rich simple syrup into a cocktail shaker.\n2. Add a pinch of salt and a light crack of black pepper to the shaker.\n3. Fill the shaker with ice and shake vigorously for about 10-15 seconds until well-chilled.\n4. Double strain the mixture into the chilled coupe glass.\n5. Garnish with a fresh strawberry on the rim.",
       "photoUri": "assets/cocktails/1759484662626-strawberry-daiquiri.jpg",
       "glassId": "coupe",
+      "methodIds": [
+        "shake"
+      ],
       "tags": [
         {
           "id": 5,
@@ -29965,9 +30062,12 @@
       "id": 1758544887872,
       "name": "Streamtini",
       "description": "A sophisticated spirit-forward cocktail that balances the botanical notes of vodka with the sweet, tart profile of blueberry schnapps and cranberry juice. It is a deep, aromatic drink designed for slow sipping.",
-      "instructions": "1. Chill your cocktail glass by filling it with ice or placing it in the freezer.\n2. Fill a cocktail shaker with 150g of ice.\n3. Pour 30ml of Vodka, 30ml of Blueberry Schnapps, and 60ml of Cranberry Juice into the shaker.\n4. Shake vigorously for about 10-15 seconds until well-chilled.\n5. Strain the mixture into the chilled cocktail glass.\n6. Serve immediately.",
+      "instructions": "1. Fill a cocktail shaker with 150g of ice.\n2. Pour 30ml of Vodka, 30ml of Blueberry Schnapps, and 60ml of Cranberry Juice into the shaker.\n3. Shake vigorously for about 10-15 seconds until well-chilled.\n4. Strain the mixture into the chilled cocktail glass.\n5. Serve immediately.",
       "photoUri": "assets/cocktails/1758544887872-streamtini.jpg",
       "glassId": "cocktail_glass",
+      "methodIds": [
+        "shake"
+      ],
       "tags": [
         {
           "id": 6,
@@ -30508,6 +30608,9 @@
       "instructions": "1. Fill a highball glass with 150g of ice.\n2. Pour in 60ml of grape juice, 30ml of orange juice, and 30ml of lemon juice.\n3. Top up the glass with soda water.\n4. Stir gently to combine the flavors without losing the carbonation.",
       "photoUri": "assets/cocktails/1758788493428-temperance-punch.jpg",
       "glassId": "highball_glass",
+      "methodIds": [
+        "build"
+      ],
       "tags": [
         {
           "id": 10,
@@ -30796,6 +30899,10 @@
       "instructions": "1. Gently muddle the fresh rosemary sprig in the bottom of a mixing glass to release its aromatic oils.\n2. Add the Cognac, Scotch Whiskey, Cherry Heering, Punt e Mes, and cinnamon syrup to the mixing glass.\n3. Fill the glass with ice and stir well for about 20-30 seconds until properly chilled and diluted.\n4. Strain the mixture into a rocks glass over a large ice cube or fresh ice.\n5. Express the oils from a lemon peel over the drink and discard the peel or use it as garnish.\n6. Garnish with a fresh rosemary sprig and a cinnamon stick for a fragrant presentation.",
       "photoUri": "assets/cocktails/1759447347844-the-cheshire-cat.jpg",
       "glassId": "rocks_glass",
+      "methodIds": [
+        "muddle",
+        "stir"
+      ],
       "tags": [
         {
           "id": 6,
@@ -30902,6 +31009,9 @@
       "instructions": "1. Fill a Collins glass with ice to chill it down.\n2. In a cocktail shaker, combine the white rum, bianco vermouth, pineapple syrup, and lemon juice.\n3. Add ice to the shaker and shake vigorously for about 10 seconds until well-chilled.\n4. Strain the mixture into the prepared Collins glass filled with fresh ice.\n5. Top the glass with ginger ale and give it a very gentle stir to combine the flavors without losing carbonation.\n6. Garnish with a fresh pineapple wedge.",
       "photoUri": "assets/cocktails/1759247836982-the-haole.jpg",
       "glassId": "collins_glass",
+      "methodIds": [
+        "shake"
+      ],
       "tags": [
         {
           "id": 6,
@@ -31056,9 +31166,12 @@
       "id": 1759435206347,
       "name": "The Slope",
       "description": "A sophisticated, spirit-forward cocktail that offers a perfect balance between the spice of rye whiskey, the herbal bitterness of Punt e Mes, and the stone-fruit sweetness of apricot brandy.",
-      "instructions": "1. Chill your coupe glass in the freezer or fill it with ice water.\n2. Combine Rye Whisky, Punt e Mes, Apricot Brandy, and Angostura bitters in a mixing glass.\n3. Fill the mixing glass with ice cubes.\n4. Stir gently for about 30 seconds until the drink is well-chilled and properly diluted.\n5. Strain the mixture into the chilled coupe glass.\n6. Garnish with a dried apricot.",
+      "instructions": "1. Combine Rye Whisky, Punt e Mes, Apricot Brandy, and Angostura bitters in a mixing glass.\n2. Fill the mixing glass with ice cubes.\n3. Stir gently for about 30 seconds until the drink is well-chilled and properly diluted.\n4. Strain the mixture into the chilled coupe glass.\n5. Garnish with a dried apricot.",
       "photoUri": "assets/cocktails/1759435206347-the-slope.jpg",
       "glassId": "coupe",
+      "methodIds": [
+        "stir"
+      ],
       "tags": [
         {
           "id": 6,
@@ -31229,6 +31342,9 @@
       "instructions": "1. Pour the chilled pomegranate juice into a chilled flute or cocktail glass.\n2. Gently top with chilled Prosecco.\n3. Stir very lightly and carefully with a bar spoon to combine without losing the carbonation.\n4. Serve immediately while cold.",
       "photoUri": "assets/cocktails/1756041427585-tintoretto.jpg",
       "glassId": "cocktail_glass",
+      "methodIds": [
+        "build"
+      ],
       "tags": [
         {
           "id": 1,
@@ -31384,7 +31500,7 @@
       "id": 1758546071521,
       "name": "Tom & Cherry",
       "description": "A sophisticated and vibrant twist on a gin sour, featuring the botanical richness of Old Tom Gin paired with deep cherry notes and a hint of bitter complexity.",
-      "instructions": "1. Chill your Nick & Nora glass in the freezer or by filling it with ice.\n2. Add Old Tom Gin, Cherry Heering, Maraschino liqueur, cherry juice, grapefruit juice, and Strucchi bitter into a cocktail shaker.\n3. Fill the shaker with ice and shake vigorously for about 10-15 seconds until well-chilled.\n4. Fine strain the mixture into the chilled glass.\n5. Garnish with a fresh or brandied cherry if desired.",
+      "instructions": "1. Add Old Tom Gin, Cherry Heering, Maraschino liqueur, cherry juice, grapefruit juice, and Strucchi bitter into a cocktail shaker.\n2. Fill the shaker with ice and shake vigorously for about 10-15 seconds until well-chilled.\n3. Fine strain the mixture into the chilled glass.\n4. Garnish with a fresh or brandied cherry if desired.",
       "photoUri": "assets/cocktails/1758546071521-tom-and-cherry.jpg",
       "glassId": "nick_and_nora",
       "methodIds": [
@@ -31938,9 +32054,12 @@
       "id": 1758627022244,
       "name": "Tropical Queen",
       "description": "An elegant and exotic gin-based delight that balances the botanical notes of gin with creamy coconut and a warm hint of cinnamon. Fresh citrus and grapefruit juices add a vibrant, refreshing finish perfect for a sunset escape.",
-      "instructions": "1. Chill your cocktail glass by filling it with ice or placing it in the freezer.\n2. Add gin, coconut liqueur, cinnamon syrup, simple syrup, lime juice, grapefruit juice, and coconut water into a cocktail shaker.\n3. Fill the shaker with 150g of ice.\n4. Shake vigorously for about 10-15 seconds until well-chilled.\n5. Strain the mixture into the chilled cocktail glass.\n6. Garnish with a cinnamon stick for a fragrant tropical aroma.",
+      "instructions": "1. Add gin, coconut liqueur, cinnamon syrup, simple syrup, lime juice, grapefruit juice, and coconut water into a cocktail shaker.\n2. Fill the shaker with 150g of ice.\n3. Shake vigorously for about 10-15 seconds until well-chilled.\n4. Strain the mixture into the chilled cocktail glass.\n5. Garnish with a cinnamon stick for a fragrant tropical aroma.",
       "photoUri": "assets/cocktails/1758627022244-tropical-queen.jpg",
       "glassId": "cocktail_glass",
+      "methodIds": [
+        "shake"
+      ],
       "tags": [
         {
           "id": 6,
@@ -32027,6 +32146,9 @@
       "instructions": "1. Slice the orange and kiwi into rounds or wedges, and hull the strawberries.\n2. In a large pitcher, combine the fruit pieces with coconut liqueur, white wine, and simple syrup.\n3. Stir gently and let it sit in the refrigerator for at least 30 minutes to allow the flavors to meld.\n4. When ready to serve, add 150g of ice to the pitcher.\n5. Top with soda water and stir briefly to combine.\n6. Pour into glasses, ensuring each serve gets a portion of the fresh fruit.",
       "photoUri": "assets/cocktails/1758624641640-tropical-sangria.jpg",
       "glassId": "pitcher",
+      "methodIds": [
+        "build"
+      ],
       "tags": [
         {
           "id": 7,
@@ -32103,7 +32225,7 @@
       "id": 1755800000115,
       "name": "Tuxedo",
       "description": "A sophisticated and complex dry gin martini variation from the late 19th century. The addition of maraschino liqueur and a hint of absinthe creates a herbal, slightly sweet profile that is both elegant and timeless.",
-      "instructions": "1. Chill a cocktail glass in the freezer or with ice water.\n2. Add Old Tom gin, dry vermouth, maraschino liqueur, absinthe, and orange bitters into a mixing glass filled with ice.\n3. Stir the mixture well for about 30 seconds to achieve the perfect dilution and temperature.\n4. Strain the liquid into the chilled cocktail glass.\n5. Garnish with a maraschino cherry and a twist of lemon zest.",
+      "instructions": "1. Add Old Tom gin, dry vermouth, maraschino liqueur, absinthe, and orange bitters into a mixing glass filled with ice.\n2. Stir the mixture well for about 30 seconds to achieve the perfect dilution and temperature.\n3. Strain the liquid into the chilled cocktail glass.\n4. Garnish with a maraschino cherry and a twist of lemon zest.",
       "photoUri": "assets/cocktails/1755800000115-tuxedo.jpg",
       "glassId": "cocktail_glass",
       "methodIds": [
@@ -32196,6 +32318,9 @@
       "instructions": "1. Place the gold rum, coconut liqueur, caramel syrup, apple juice, heavy cream, and banana into a blender.\n2. Add the ice (150g) to the mixture.\n3. Blend until the consistency is smooth and creamy.\n4. Pour the contents into a chilled coupe glass.\n5. Garnish with coconut flakes, a banana slice, and a sprig of fresh mint.",
       "photoUri": "assets/cocktails/1758622373175-vacation-in-jamaica.jpg",
       "glassId": "coupe",
+      "methodIds": [
+        "blend"
+      ],
       "tags": [
         {
           "id": 6,
@@ -32902,6 +33027,9 @@
       "instructions": "1. Fill a goblet glass with ice.\n2. Pour the grape juice, apple juice, orange juice, lime juice, and simple syrup into the glass.\n3. Stir gently to combine the juices.\n4. Top with soda water.\n5. Garnish with slices of lemon, orange, and apple for a fruity presentation.",
       "photoUri": "assets/cocktails/1758788190920-virgini-sangria.jpg",
       "glassId": "goblet",
+      "methodIds": [
+        "build"
+      ],
       "tags": [
         {
           "id": 10,
@@ -32992,6 +33120,9 @@
       "instructions": "1. Fill a highball glass with ice.\n2. Add the coconut liqueur (or coconut rum), cranberry juice, and fresh lime juice.\n3. Stir well to ensure the flavors are thoroughly mixed.\n4. Garnish with a fresh lime wedge on the rim.",
       "photoUri": "assets/cocktails/1758615175313-virginia.jpg",
       "glassId": "highball_glass",
+      "methodIds": [
+        "build"
+      ],
       "tags": [
         {
           "id": 6,
@@ -33603,9 +33734,12 @@
       "id": 1759246411417,
       "name": "White Christmas Martini",
       "description": "A festive and creamy spirit-forward cocktail that blends smooth vanilla vodka with a refreshing peppermint kick. This elegant drink is perfectly balanced with half-and-half for a velvety texture, making it a sophisticated choice for holiday celebrations.",
-      "instructions": "1. Chill your cocktail glass in the freezer or fill it with ice water.\n2. Add the vanilla vodka, peppermint schnapps, and half-and-half into a cocktail shaker.\n3. Fill the shaker with 150g of ice cubes.\n4. Shake vigorously for about 15 seconds until the outside of the shaker feels very cold.\n5. Strain the mixture into the chilled cocktail glass.\n6. Garnish with a peppermint candy on the rim or dropped inside.",
+      "instructions": "1. Add the vanilla vodka, peppermint schnapps, and half-and-half into a cocktail shaker.\n2. Fill the shaker with 150g of ice cubes.\n3. Shake vigorously for about 15 seconds until the outside of the shaker feels very cold.\n4. Strain the mixture into the chilled cocktail glass.\n5. Garnish with a peppermint candy on the rim or dropped inside.",
       "photoUri": "assets/cocktails/1759246411417-white-christmas-martini.jpg",
       "glassId": "cocktail_glass",
+      "methodIds": [
+        "shake"
+      ],
       "tags": [
         {
           "id": 6,
@@ -33775,6 +33909,10 @@
       "instructions": "1. Fill a rocks glass with ice cubes.\n2. Pour the vodka and coffee liqueur over the ice.\n3. Gently pour the cream on top so it swirls into the dark liquid.\n4. Stir lightly if desired, or serve layered for a striking visual effect.",
       "photoUri": "assets/cocktails/1756462309763-white-russian.jpg",
       "glassId": "rocks_glass",
+      "methodIds": [
+        "build",
+        "layer"
+      ],
       "tags": [
         {
           "id": 5,
@@ -33820,6 +33958,9 @@
       "instructions": "1. Fill a collins glass with ice.\n2. Add the coconut liqueur and melon liqueur to the glass.\n3. Pour in the orange juice and pineapple juice.\n4. Stir the ingredients together until well chilled.\n5. Garnish with an orange slice and a lime wedge.",
       "photoUri": "assets/cocktails/1758615390318-wizard-of-oz.jpg",
       "glassId": "collins_glass",
+      "methodIds": [
+        "build"
+      ],
       "tags": [
         {
           "id": 6,
@@ -34039,9 +34180,12 @@
       "id": 1758843695554,
       "name": "Yamabuki",
       "description": "A sophisticated and harmonious blend where the depth of Japanese whisky meets the herbal sweetness of Bianco Vermouth and Amaro Montenegro. This cocktail offers a perfectly structured balance of citrus brightness and bittersweet complexity.",
-      "instructions": "1. Chill your Nick and Nora glass in the freezer or by filling it with ice.\n2. Add the Japanese whisky, Bianco Vermouth, Amaro Montenegro, and orange bitters into a mixing glass filled with ice.\n3. Stir gently for about 20-30 seconds until well-chilled.\n4. Strain the mixture into the chilled glass.\n5. Garnish with a fresh lemon twist.",
+      "instructions": "1. Add the Japanese whisky, Bianco Vermouth, Amaro Montenegro, and orange bitters into a mixing glass filled with ice.\n2. Stir gently for about 20-30 seconds until well-chilled.\n3. Strain the mixture into the chilled glass.\n4. Garnish with a fresh lemon twist.",
       "photoUri": "assets/cocktails/1758843695554-yamabuki.jpg",
       "glassId": "nick_and_nora",
+      "methodIds": [
+        "stir"
+      ],
       "tags": [
         {
           "id": 6,
@@ -34162,6 +34306,9 @@
       "instructions": "1. Fill a Collins glass with plenty of ice.\n2. Pour the white rum and Limoncello over the ice.\n3. Top up the glass with lemon tonic.\n4. Stir gently with a bar spoon to combine the ingredients without losing carbonation.\n5. Garnish with a fresh orange slice.",
       "photoUri": "assets/cocktails/1758846419510-yo-ho.jpg",
       "glassId": "collins_glass",
+      "methodIds": [
+        "build"
+      ],
       "tags": [
         {
           "id": 6,
