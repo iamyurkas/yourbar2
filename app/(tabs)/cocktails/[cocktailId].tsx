@@ -839,7 +839,7 @@ export default function CocktailDetailsScreen() {
                       });
                     };
 
-                    const subtitleLines: string[] = [];
+                    const subtitleLines: { text: string; type?: 'substitute' | 'qualifier' | 'default' }[] = [];
 
                     const isBaseToBrandSubstitution =
                       Boolean(resolution.substituteFor) &&
@@ -848,7 +848,10 @@ export default function CocktailDetailsScreen() {
                       resolvedIngredient.baseIngredientId === ingredientId;
 
                     if (resolution.substituteFor && !isBaseToBrandSubstitution) {
-                      subtitleLines.push(`Substitute for ${resolution.substituteFor}`);
+                      subtitleLines.push({
+                        text: `Substitute for ${resolution.substituteFor}`,
+                        type: 'substitute',
+                      });
                     }
 
                     const missingSubstituteLines = buildMissingSubstituteLines(
@@ -858,15 +861,20 @@ export default function CocktailDetailsScreen() {
                     );
 
                     if (!resolution.isAvailable && missingSubstituteLines.length) {
-                      subtitleLines.push(...missingSubstituteLines);
+                      subtitleLines.push(
+                        ...missingSubstituteLines.map((line) => ({
+                          text: line,
+                          type: 'substitute' as const,
+                        })),
+                      );
                     }
 
                     if (qualifier) {
-                      subtitleLines.push(qualifier.charAt(0).toUpperCase() + qualifier.slice(1));
+                      subtitleLines.push({
+                        text: qualifier.charAt(0).toUpperCase() + qualifier.slice(1),
+                        type: 'qualifier',
+                      });
                     }
-
-                    const subtitle = subtitleLines.length ? subtitleLines.join('\n') : undefined;
-                    const subtitleNumberOfLines = subtitleLines.length || 1;
 
                     return (
                       <View key={key}>
@@ -875,13 +883,12 @@ export default function CocktailDetailsScreen() {
                         ) : null}
                         <ListRow
                           title={resolution.resolvedName || ingredient.name || ''}
-                          subtitle={subtitle}
+                          subtitleLines={subtitleLines.length ? subtitleLines : undefined}
                           subtitleStyle={
-                            subtitle
+                            subtitleLines.length
                               ? [styles.ingredientSubtitle, { color: Colors.onSurfaceVariant }]
                               : undefined
                           }
-                          subtitleNumberOfLines={subtitleNumberOfLines}
                           thumbnail={
                             <Thumb
                               label={resolution.resolvedName ?? ingredient.name ?? undefined}

@@ -104,6 +104,7 @@ export function FavoriteStar({ active, onToggle }: FavoriteStarProps) {
 type ListRowProps = {
   title: string;
   subtitle?: string;
+  subtitleLines?: { text: string; type?: 'substitute' | 'qualifier' | 'default' }[];
   subtitleNumberOfLines?: number;
   onPress?: () => void;
   selected?: boolean;
@@ -123,6 +124,7 @@ type ListRowProps = {
 export function ListRow({
   title,
   subtitle,
+  subtitleLines,
   subtitleNumberOfLines,
   onPress,
   selected,
@@ -139,7 +141,7 @@ export function ListRow({
   brandIndicatorColor,
 }: ListRowProps) {
   const backgroundColor = selected ? highlightColor ?? `${Colors.tint}1F` : Colors.background;
-  const subtitleLines = subtitle ? subtitle.split('\n').filter((line) => line.trim().length > 0) : [];
+  const subtitleTextLines = subtitle ? subtitle.split('\n').filter((line) => line.trim().length > 0) : [];
   const metaAlignmentStyle =
     metaAlignment === 'center'
       ? styles.metaContentCenter
@@ -165,13 +167,33 @@ export function ListRow({
         <Text style={[styles.title, { color: Colors.text }]} numberOfLines={1}>
           {title}
         </Text>
-        {subtitleLines.length ? (
+        {subtitleLines?.length ? (
           <View style={styles.subtitleColumn}>
-            {subtitleLines.map((line, index) => (
+            {subtitleLines.map((line, index) => {
+              const previous = subtitleLines[index - 1];
+              const isSubstitute = line.type === 'substitute';
+              const isPreviousSubstitute = previous?.type === 'substitute';
+              const marginTop =
+                index === 0 ? 0 : isSubstitute && isPreviousSubstitute ? 2 : 4;
+
+              return (
+                <Text
+                  key={`${line.text}-${index}`}
+                  style={[styles.subtitle, { color: Colors.icon }, subtitleStyle, { marginTop }]}
+                  numberOfLines={1}
+                >
+                  {line.text}
+                </Text>
+              );
+            })}
+          </View>
+        ) : subtitleTextLines.length ? (
+          <View style={styles.subtitleColumn}>
+            {subtitleTextLines.map((line, index) => (
               <Text
                 key={`${line}-${index}`}
                 style={[styles.subtitle, { color: Colors.icon }, subtitleStyle]}
-                numberOfLines={subtitleLines.length === 1 ? subtitleNumberOfLines ?? 1 : 1}>
+                numberOfLines={subtitleTextLines.length === 1 ? subtitleNumberOfLines ?? 1 : 1}>
                 {line}
               </Text>
             ))}
