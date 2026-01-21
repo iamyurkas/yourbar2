@@ -760,6 +760,14 @@ export default function EditIngredientScreen() {
                 <Text style={[styles.placeholderHint, { color: `${Colors.onSurfaceVariant}99` }]}>Tap to add a photo</Text>
               </View>
             )}
+            {imageSource ? (
+              <View
+                pointerEvents="none"
+                style={[styles.cropFrame, { borderColor: Colors.tint }]}
+                accessibilityElementsHidden
+                importantForAccessibility="no-hide-descendants"
+              />
+            ) : null}
           </Pressable>
           {imageSource ? (
             <Pressable
@@ -1031,6 +1039,16 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     resizeMode: 'contain',
+  },
+  cropFrame: {
+    position: 'absolute',
+    top: 10,
+    bottom: 10,
+    left: 10,
+    right: 10,
+    borderRadius: 10,
+    borderWidth: 2,
+    borderStyle: 'dashed',
   },
   photoTileWrapper: {
     width: 150,
