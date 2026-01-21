@@ -114,16 +114,24 @@ export default function CreateIngredientScreen() {
   const [baseSearch, setBaseSearch] = useState('');
   const [permissionStatus, requestPermission] = ImagePicker.useMediaLibraryPermissions();
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
   const scrollRef = useRef<ScrollView | null>(null);
   const isNavigatingAfterSaveRef = useRef(false);
   const [initialSnapshot, setInitialSnapshot] = useState<IngredientFormSnapshot | null>(null);
   const isHandlingBackRef = useRef(false);
 
   useEffect(() => {
-    if (suggestedNameParam && !name) {
-      setName(suggestedNameParam);
-    }
-  }, [name, suggestedNameParam]);
+    setName(suggestedNameParam ?? '');
+    setDescription('');
+    setImageUri(null);
+    setSelectedTagIds([]);
+    setBaseIngredientId(null);
+    setBaseSearch('');
+    setTagModalVisible(false);
+    setIsBaseModalVisible(false);
+    setInitialSnapshot(null);
+    setIsSaving(false);
+  }, [suggestedNameParam]);
 
   const closeDialog = useCallback(() => {
     setDialogOptions(null);
@@ -277,6 +285,10 @@ export default function CreateIngredientScreen() {
   }, [ensureMediaPermission, isPickingImage, showDialog]);
 
   const handleSubmit = useCallback(async () => {
+    if (isSaving) {
+      return;
+    }
+
     const trimmedName = name.trim();
     if (!trimmedName) {
       showDialog({
@@ -287,6 +299,7 @@ export default function CreateIngredientScreen() {
       return;
     }
 
+    setIsSaving(true);
     const descriptionValue = description.trim();
     const selectedTags = selectedTagIds
       .map((tagId) => availableIngredientTags.find((tag) => tag.id === tagId))
@@ -304,6 +317,7 @@ export default function CreateIngredientScreen() {
     let created = createIngredient(submission);
 
     if (!created) {
+      setIsSaving(false);
       showDialog({
         title: 'Could not save ingredient',
         message: 'Please try again later.',
@@ -354,6 +368,7 @@ export default function CreateIngredientScreen() {
     createIngredient,
     description,
     imageUri,
+    isSaving,
     name,
     returnToParams,
     returnToPath,
@@ -776,9 +791,12 @@ export default function CreateIngredientScreen() {
 
           <Pressable
             accessibilityRole="button"
-            style={[styles.submitButton, { backgroundColor: Colors.tint }]}
+            style={[
+              styles.submitButton,
+              { backgroundColor: Colors.tint, opacity: isSaving ? 0.6 : 1 },
+            ]}
             onPress={handleSubmit}
-            disabled={isPickingImage}>
+            disabled={isSaving || isPickingImage}>
             <Text style={[styles.submitLabel, { color: Colors.onPrimary }]}>Save</Text>
           </Pressable>
           <View style={styles.bottomSpacer} />
