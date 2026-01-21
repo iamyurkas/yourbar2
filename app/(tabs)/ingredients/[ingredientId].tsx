@@ -211,6 +211,7 @@ export default function IngredientDetailsScreen() {
     });
   }, [allowAllSubstitutes, cocktails, ingredientLookup, numericIngredientId]);
 
+  const COCKTAIL_PAGE_SIZE = 20;
   const cocktailEntries = useMemo(
     () =>
       cocktailsWithIngredient.map((cocktail) => ({
@@ -231,6 +232,18 @@ export default function IngredientDetailsScreen() {
       ingredientLookup,
     ],
   );
+  const [visibleCocktailCount, setVisibleCocktailCount] = useState(COCKTAIL_PAGE_SIZE);
+
+  useEffect(() => {
+    setVisibleCocktailCount(COCKTAIL_PAGE_SIZE);
+  }, [numericIngredientId]);
+
+  const visibleCocktailEntries = useMemo(
+    () => cocktailEntries.slice(0, visibleCocktailCount),
+    [cocktailEntries, visibleCocktailCount],
+  );
+
+  const hasMoreCocktails = visibleCocktailCount < cocktailEntries.length;
 
   const handleToggleAvailability = useCallback(() => {
     if (numericIngredientId != null) {
@@ -416,6 +429,12 @@ export default function IngredientDetailsScreen() {
       },
     [clearBaseIngredient, ingredient?.name, showDialog],
   );
+
+  const handleShowMoreCocktails = useCallback(() => {
+    setVisibleCocktailCount((previous) =>
+      Math.min(previous + COCKTAIL_PAGE_SIZE, cocktailEntries.length),
+    );
+  }, [cocktailEntries.length]);
 
   const handleReturn = useCallback(() => {
     if (returnToPath) {
@@ -703,8 +722,9 @@ export default function IngredientDetailsScreen() {
               <Text style={[styles.sectionTitle, { color: Colors.onSurface }]}>Cocktails</Text>
               {cocktailEntries.length ? (
                 <View style={styles.cocktailList}>
-                  {cocktailEntries.map(({ cocktail, isReady }, index) => {
-                    const previousReady = index > 0 ? cocktailEntries[index - 1]?.isReady : undefined;
+                  {visibleCocktailEntries.map(({ cocktail, isReady }, index) => {
+                    const previousReady =
+                      index > 0 ? visibleCocktailEntries[index - 1]?.isReady : undefined;
                     const dividerColor = previousReady ? Colors.outline : Colors.outlineVariant;
 
                     return (
@@ -723,6 +743,16 @@ export default function IngredientDetailsScreen() {
                       </React.Fragment>
                     );
                   })}
+                  {hasMoreCocktails ? (
+                    <Pressable
+                      style={[styles.showMoreButton, { borderColor: Colors.tint, backgroundColor: Colors.surface }]}
+                      onPress={handleShowMoreCocktails}
+                      accessibilityRole="button"
+                      accessibilityLabel="Show more cocktails"
+                    >
+                      <Text style={[styles.showMoreLabel, { color: Colors.tint }]}>Show more</Text>
+                    </Pressable>
+                  ) : null}
                 </View>
               ) : (
                 <Text style={[styles.placeholderText, { color: Colors.onSurfaceVariant }]}>No cocktails yet</Text>
@@ -827,6 +857,18 @@ const styles = StyleSheet.create({
   },
   cocktailDivider: {
     height: StyleSheet.hairlineWidth,
+  },
+  showMoreButton: {
+    alignSelf: 'center',
+    marginTop: 12,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 999,
+    borderWidth: 1,
+  },
+  showMoreLabel: {
+    fontSize: 14,
+    fontWeight: '600',
   },
   placeholderText: {
     fontSize: 14,
