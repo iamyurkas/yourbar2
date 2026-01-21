@@ -1,8 +1,8 @@
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { type ImageSource } from 'expo-image';
-import { type ComponentProps } from 'react';
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { type ImageSource } from "expo-image";
+import { type ComponentProps } from "react";
 
-import ShakerIcon from '@/assets/images/shaker.svg';
+import ShakerIcon from "@/assets/images/shaker.svg";
 
 export type CocktailMethod = {
   id: CocktailMethodId;
@@ -12,57 +12,64 @@ export type CocktailMethod = {
 };
 
 export type MethodIcon =
-  | { type: 'icon'; name: ComponentProps<typeof MaterialCommunityIcons>['name'] }
-  | { type: 'asset'; source: ImageSource };
+  | {
+      type: "icon";
+      name: ComponentProps<typeof MaterialCommunityIcons>["name"];
+    }
+  | { type: "asset"; source: ImageSource };
 
 export const COCKTAIL_METHODS: CocktailMethod[] = [
   {
-    id: 'blend',
-    label: 'Blend',
-    title: 'Blend',
-    description: 'Blend with crushed ice into a frozen texture.',
+    id: "blend",
+    label: "Blend",
+    title: "Blend",
+    description: "Blend with crushed ice into a frozen texture.",
   },
   {
-    id: 'muddle',
-    label: 'Muddle',
-    title: 'Muddle',
-    description: 'Press fruit, berries, or herbs to release oils and juice.',
+    id: "muddle",
+    label: "Muddle",
+    title: "Muddle",
+    description: "Press fruit, berries, or herbs to release oils and juice.",
   },
   {
-    id: 'heat',
-    label: 'Heating',
-    title: 'Heating',
-    description: 'Warm ingredients gently to blend flavors without boiling.',
+    id: "heat",
+    label: "Heat",
+    title: "Heat",
+    description: "Warm ingredients gently to blend flavors without boiling.",
   },
   {
-    id: 'shake',
-    label: 'Shake',
-    title: 'Shake',
-    description: 'Shake with ice. Best for citrus, syrup, cream, or egg white to aerate and chill.',
+    id: "shake",
+    label: "Shake",
+    title: "Shake",
+    description:
+      "Shake with ice. Best for citrus, syrup, cream, or egg white to aerate and chill.",
   },
   {
-    id: 'stir',
-    label: 'Stir',
-    title: 'Stir',
-    description: 'Stir with a bar spoon in a mixing glass full of ice. Best for herbal mixers.',
+    id: "stir",
+    label: "Stir",
+    title: "Stir",
+    description:
+      "Stir with a bar spoon in a mixing glass full of ice. Best for herbal mixers.",
   },
   {
-    id: 'throw',
-    label: 'Throwing',
-    title: 'Throwing',
-    description: 'Pour between tins from a distance to aerate without cloudiness.',
+    id: "throw",
+    label: "Throw",
+    title: "Throw",
+    description:
+      "Pour between tins from a distance to aerate without cloudiness.",
   },
   {
-    id: 'build',
-    label: 'Build',
-    title: 'Build',
-    description: 'Pour ingredients directly into the serving glass.',
+    id: "build",
+    label: "Build",
+    title: "Build",
+    description: "Pour ingredients directly into the serving glass.",
   },
   {
-    id: 'layer',
-    label: 'Layer',
-    title: 'Layer',
-    description: 'Float ingredients in layers using a bar spoon for visual effect.',
+    id: "layer",
+    label: "Layer",
+    title: "Layer",
+    description:
+      "Float ingredients in layers using a bar spoon for visual effect.",
   },
 ];
 
@@ -71,19 +78,21 @@ export function getCocktailMethods(): CocktailMethod[] {
 }
 
 export const METHOD_ICON_MAP = {
-  blend: { type: 'icon', name: 'blender' },
-  muddle: { type: 'icon', name: 'bottle-soda' },
-  shake: { type: 'asset', source: ShakerIcon },
-  stir: { type: 'icon', name: 'delete-variant' },
-  throw: { type: 'icon', name: 'swap-horizontal' },
-  build: { type: 'icon', name: 'beer' },
-  layer: { type: 'icon', name: 'layers' },
-  heat: { type: 'icon', name: 'fire' },
+  blend: { type: "icon", name: "blender" },
+  muddle: { type: "icon", name: "bottle-soda" },
+  shake: { type: "asset", source: ShakerIcon },
+  stir: { type: "icon", name: "delete-variant" },
+  throw: { type: "icon", name: "swap-horizontal" },
+  build: { type: "icon", name: "beer" },
+  layer: { type: "icon", name: "layers" },
+  heat: { type: "icon", name: "fire" },
 } as const satisfies Record<string, MethodIcon>;
 
 export type CocktailMethodId = keyof typeof METHOD_ICON_MAP;
 
-export function getCocktailMethodById(id?: string | null): CocktailMethod | undefined {
+export function getCocktailMethodById(
+  id?: string | null,
+): CocktailMethod | undefined {
   if (!id) {
     return undefined;
   }
