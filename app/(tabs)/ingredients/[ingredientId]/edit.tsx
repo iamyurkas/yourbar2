@@ -1047,8 +1047,7 @@ const styles = StyleSheet.create({
     left: 10,
     right: 10,
     borderRadius: 10,
-    borderWidth: 2,
-    borderStyle: 'dashed',
+    borderWidth: 0,
   },
   photoTileWrapper: {
     width: 150,
