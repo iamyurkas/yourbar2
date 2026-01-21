@@ -671,6 +671,10 @@ export default function EditIngredientScreen() {
         <Stack.Screen
           options={{
             title: 'Edit ingredient',
+            headerTitleAlign: 'center',
+            headerStyle: { backgroundColor: Colors.surface },
+            headerShadowVisible: false,
+            headerTitleStyle: { color: Colors.onSurface, fontSize: 16, fontWeight: '600' },
             headerLeft: () => (
               <Pressable
                 onPress={handleGoBack}
@@ -695,6 +699,10 @@ export default function EditIngredientScreen() {
       <Stack.Screen
         options={{
           title: 'Edit ingredient',
+          headerTitleAlign: 'center',
+          headerStyle: { backgroundColor: Colors.surface },
+          headerShadowVisible: false,
+          headerTitleStyle: { color: Colors.onSurface, fontSize: 16, fontWeight: '600' },
           headerLeft: () => (
             <Pressable
               onPress={handleGoBack}
