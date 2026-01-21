@@ -456,12 +456,27 @@ export default function ShakerResultsScreen() {
         return;
       }
 
+      const availableParam = Array.isArray(params.available)
+        ? params.available[0]
+        : params.available;
+      const unavailableParam = Array.isArray(params.unavailable)
+        ? params.unavailable[0]
+        : params.unavailable;
+      const returnToParams = JSON.stringify({
+        available: availableParam ?? '',
+        unavailable: unavailableParam ?? '',
+      });
+
       router.push({
         pathname: '/cocktails/[cocktailId]',
-        params: { cocktailId: String(targetId) },
+        params: {
+          cocktailId: String(targetId),
+          returnToPath: '/shaker/results',
+          returnToParams,
+        },
       });
     },
-    [router],
+    [params.available, params.unavailable, router],
   );
 
   const renderItem = useCallback(
