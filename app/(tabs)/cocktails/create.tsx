@@ -649,6 +649,8 @@ export default function CreateCocktailScreen() {
     setImageUri(null);
   }, []);
 
+  const isSaveDisabled = isSaving || isPickingImage;
+
   const handleToggleTag = useCallback((tagId: number) => {
     setSelectedTagIds((prev) => {
       if (prev.includes(tagId)) {
@@ -1456,8 +1458,11 @@ export default function CreateCocktailScreen() {
 
           <Pressable
             onPress={handleSubmit}
-            disabled={isSaving}
-            style={[styles.submitButton, { backgroundColor: Colors.tint, opacity: isSaving ? 0.6 : 1 }]}
+            disabled={isSaveDisabled}
+            style={[
+              styles.submitButton,
+              { backgroundColor: Colors.tint, opacity: isSaveDisabled ? 0.6 : 1 },
+            ]}
             accessibilityRole="button"
             accessibilityLabel="Save cocktail">
             <Text style={[styles.submitLabel, { color: Colors.onPrimary }]}>Save</Text>
