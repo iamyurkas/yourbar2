@@ -336,10 +336,10 @@
       "id": 1756473246728,
       "name": "Adonis",
       "description": "A classic cocktail created in 1884 and named after the first Broadway musical to run for more than 500 performances. The ratio of sherry and vermouth may be varied to make the cocktail sweeter or drier accordingly.",
-      "instructions": "1. Combine liquids in a tin with ice and throw 5–6 times. This adds a silky texture that balances the sweetness of the vermouth.\n2. Strain into a cocktail glass.\n3. Garnish with orange zest.",
+      "instructions": "1. Add dry sherry, red vermouth, and orange bitters to a mixing glass filled with ice.\n2. Stir until well chilled and properly diluted.\n3. Strain into a cocktail glass.\n4. Garnish with orange zest.",
       "photoUri": "assets/cocktails/1756473246728-adonis.jpg",
       "glassId": "coupe",
-      "methodIds": ["throwing"],
+      "methodIds": ["stir"],
       "tags": [
         {
           "id": 6,
@@ -530,10 +530,10 @@
       "id": 1756473721983,
       "name": "Agavoni",
       "description": "A bold, spirit-forward agave spirit drink built around Tequila Blanco, Red Vermouth, Campari—bitter-leaning, aromatic, and best served well chilled. Garnished with orange.",
-      "instructions": "1. Add Tequila Blanco, red vermouth, and Campari to a tin with ice.\n2. Throw the mixture 5-6 times.\n3. Strain over a large ice cube into a chilled rocks glass.\n4. Garnish with an orange wedge.",
+      "instructions": "1. Add Tequila Blanco, red vermouth, and Campari to a mixing glass filled with ice.\n2. Stir until well chilled and properly diluted.\n3. Strain over a large ice cube into a chilled rocks glass.\n4. Garnish with an orange wedge.",
       "photoUri": "assets/cocktails/1756473721983-agavoni.jpg",
       "glassId": "rocks_glass",
-      "methodIds": ["throwing"],
+      "methodIds": ["stir"],
       "tags": [
         {
           "id": 5,
@@ -1646,10 +1646,10 @@
       "id": 1755800000050,
       "name": "Americano",
       "description": "Bitter Campari and sweet vermouth lengthened with fizzy soda.",
-      "instructions": "1. Pour Campari and red vermouth over ice into a tin with ice.\n2. Throw the mixture 5-6 times.\n3. Strain into a rock glass over fresh ice.\n4. Top with soda water and briefly stir.\n5. Garnish with an orange slice and a lemon twist.",
+      "instructions": "1. Add Campari and red vermouth to a mixing glass filled with ice.\n2. Stir until well chilled and properly diluted.\n3. Strain into a rock glass over fresh ice.\n4. Top with soda water and briefly stir.\n5. Garnish with an orange slice and a lemon twist.",
       "photoUri": "assets/cocktails/1755800000050-americano.jpg",
       "glassId": "rocks_glass",
-      "methodIds": ["throwing"],
+      "methodIds": ["stir"],
       "tags": [
         {
           "id": 1,
@@ -3257,10 +3257,10 @@
       "id": 1756505066119,
       "name": "Bamboo Classic",
       "description": "A refined, low-ABV classic that showcases the dry, nutty character of sherry balanced with herbal vermouth and bright orange bitters. Elegant, crisp, and quietly complex, with a refreshing citrus lift from the lemon garnish.",
-      "instructions": "1. Add ingredients to a tin with ice.\n2. Throw 6 times to open up the delicate wine aromas.\n3. Strain into a chilled coupe or Nick & Nora glass.\n4. Garnish with a lemon twist.",
+      "instructions": "1. Add ingredients to a mixing glass filled with ice.\n2. Stir until well chilled and properly diluted.\n3. Strain into a chilled coupe or Nick & Nora glass.\n4. Garnish with a lemon twist.",
       "photoUri": "assets/cocktails/1756505066119-bamboo-classic.jpg",
       "glassId": "nick_and_nora",
-      "methodIds": ["throwing"],
+      "methodIds": ["stir"],
       "tags": [
         {
           "id": 5,
@@ -3326,10 +3326,10 @@
       "id": 1756505533186,
       "name": "Bamboo Modern",
       "description": "A modern, aromatic twist on the classic Bamboo cocktail. Dry sherry forms the backbone, layered with both red and dry vermouth for herbal depth, while fresh citrus brightens the profile. Balanced, complex, and elegantly bittersweet, finished with an expressive orange garnish.",
-      "instructions": "1. Add ingredients to a tin with ice.\n2. Throw 6 times to open up the delicate wine aromas.\n3. Strain into a chilled coupe or Nick & Nora glass.\n4. Express an orange peel over the drink, garnish, and serve.",
+      "instructions": "1. Add ingredients to a mixing glass filled with ice.\n2. Stir until well chilled and properly diluted.\n3. Strain into a chilled coupe or Nick & Nora glass.\n4. Express an orange peel over the drink, garnish, and serve.",
       "photoUri": "assets/cocktails/1756505533186-bamboo-modern.jpg",
       "glassId": "nick_and_nora",
-      "methodIds": ["throwing"],
+      "methodIds": ["stir"],
       "tags": [
         {
           "id": 5,
@@ -6503,10 +6503,10 @@
       "id": 1755800000058,
       "name": "Boulevardier",
       "description": "A whiskey-based Negroni with bourbon, sweet vermouth, and Campari.",
-      "instructions": "1. Add all ingredients into a tin with ice.\n2. Throw 5-6 times.\n3. Strain into a chilled cocktail glass.\n4. Garnish with an orange twist.",
+      "instructions": "1. Add all ingredients into a mixing glass filled with ice.\n2. Stir until well chilled and properly diluted.\n3. Strain into a chilled cocktail glass.\n4. Garnish with an orange twist.",
       "photoUri": "assets/cocktails/1755800000058-boulevardier.jpg",
       "glassId": "cocktail_glass",
-      "methodIds": ["throwing"],
+      "methodIds": ["stir"],
       "tags": [
         {
           "id": 1,
@@ -8838,10 +8838,10 @@
       "id": 1755800000023,
       "name": "Cardinale",
       "description": "A dry, bittersweet Negroni variation with gin, Campari, and dry vermouth.",
-      "instructions": "1. Add all ingredients into a tin with ice.\n2. Throw 5-6 times\n3. Strain into a chilled cocktail glass.\n4. Garnish with a lemon twist.",
+      "instructions": "1. Add all ingredients into a mixing glass filled with ice.\n2. Stir until well chilled and properly diluted.\n3. Strain into a chilled cocktail glass.\n4. Garnish with a lemon twist.",
       "photoUri": "assets/cocktails/1755800000023-cardinale.jpg",
       "glassId": "cocktail_glass",
-      "methodIds": ["throwing"],
+      "methodIds": ["stir"],
       "tags": [
         {
           "id": 1,
@@ -12734,10 +12734,10 @@
       "id": 1757000000152,
       "name": "End of the Road",
       "description": "A bold, spirit-forward liqueur drink built around Laphroaig, Campari, Green Chartreuse—bitter-leaning, aromatic, and best served well chilled.",
-      "instructions": "1. Add all three ingredients into a tin filled with ice.\n2. Throw 4-5 times.\n3. Strain into a chilled coupe or Nick and Nora glass.",
+      "instructions": "1. Add all three ingredients into a mixing glass filled with ice.\n2. Stir until well chilled and properly diluted.\n3. Strain into a chilled coupe or Nick and Nora glass.",
       "photoUri": "assets/cocktails/1757000000152-end-of-the-road.jpg",
       "glassId": "coupe",
-      "methodIds": ["throwing"],
+      "methodIds": ["stir"],
       "tags": [
         {
           "id": 5,
@@ -18034,10 +18034,10 @@
       "id": 1758533905244,
       "name": "Islander",
       "description": "A sophisticated, spirit-forward cocktail for those who appreciate complex herbal notes. This drink blends the botanical richness of Red Vermouth with the smoky depth of Scotch, finished with a subtle hint of anise.",
-      "instructions": "1. Combine liquids in a tin with ice and throw 5–6 times.\n2. Fine strain the liquid into the chilled coupe glass.\n3. Express the oils from a lemon peel over the drink and use it as a garnish.",
+      "instructions": "1. Combine liquids in a mixing glass with ice and stir until well chilled and properly diluted.\n2. Fine strain the liquid into the chilled coupe glass.\n3. Express the oils from a lemon peel over the drink and use it as a garnish.",
       "photoUri": "assets/cocktails/1758533905244-islander.jpg",
       "glassId": "coupe",
-      "methodIds": ["throwing"],
+      "methodIds": ["stir"],
       "tags": [
         {
           "id": 5,
@@ -19892,10 +19892,10 @@
       "id": 1758584061897,
       "name": "Lovelight",
       "description": "An elegant and sophisticated brandy-based drink. It combines the warmth of Cognac with the spicy depth of cinnamon and chocolate bitters, rounded out by bitter and vermouth notes.",
-      "instructions": "1. Add Cognac, Strucchi Bitter, Red Vermouth, cinnamon syrup, and chocolate bitters to a tin with ice\n2. Throw 5-6 times\n3. Strain into a rocks glass filled with fresh ice.\n4. Garnish with an orange peel and a small piece of chocolate on the side.",
+      "instructions": "1. Add Cognac, Strucchi Bitter, Red Vermouth, cinnamon syrup, and chocolate bitters to a mixing glass with ice.\n2. Stir until well chilled and properly diluted.\n3. Strain into a rocks glass filled with fresh ice.\n4. Garnish with an orange peel and a small piece of chocolate on the side.",
       "photoUri": "assets/cocktails/1758584061897-lovelight.jpg",
       "glassId": "rocks_glass",
-      "methodIds": ["throwing"],
+      "methodIds": ["stir"],
       "tags": [
         {
           "id": 6,
@@ -20598,10 +20598,10 @@
       "id": 1755800000063,
       "name": "Martinez",
       "description": "A legendary pre-Prohibition classic, often considered the father of the Martini, offering a perfect balance of sweet vermouth and botanical gin.",
-      "instructions": "1. Combine all liquids in a tin with ice and throw 5–6 times. This adds a silky texture that balances the sweetness of the vermouth.\n2. Strain into a cocktail glass\n3. Express the oils of a lemon twist over the drink and use it as a garnish.",
+      "instructions": "1. Combine all liquids in a mixing glass with ice.\n2. Stir until well chilled and properly diluted.\n3. Strain into a cocktail glass.\n4. Express the oils of a lemon twist over the drink and use it as a garnish.",
       "photoUri": "assets/cocktails/1755800000063-martinez.jpg",
       "glassId": "cocktail_glass",
-      "methodIds": ["throwing"],
+      "methodIds": ["stir"],
       "tags": [
         {
           "id": 1,
@@ -22529,10 +22529,10 @@
       "id": 1755800000080,
       "name": "Negroni",
       "description": "Classic Italian aperitif of gin, bitters, and sweet vermouth.",
-      "instructions": "1. Combine all liquids in a tin with ice.\n2. Hold the second empty tin below and slightly to the side of the first one.\n3. Pour the cocktail in a long, controlled stream from the first tin into the second tin.\n4. Let the liquid fall through the air — this aerates the drink and chills it gently.\n5. Pour the liquid back into the first tin in the same way.\n6. Repeat this back-and-forth “throw” 5 times.\n7. The goal is to chill and lightly dilute the drink without over-diluting or bruising it.\n8. Strain into a chilled rocks glass over fresh ice.\n9. Garnish with an orange twist.",
+      "instructions": "1. Combine gin, Campari, and red vermouth in a mixing glass filled with ice.\n2. Stir until well chilled and properly diluted.\n3. Strain into a chilled rocks glass over fresh ice.\n4. Garnish with an orange twist.",
       "photoUri": "assets/cocktails/1755800000080-negroni.jpg",
       "glassId": "rocks_glass",
-      "methodIds": ["throwing"],
+      "methodIds": ["stir"],
       "tags": [
         {
           "id": 1,
@@ -22595,10 +22595,10 @@
       "id": 1757000000241,
       "name": "Negroni Sbagliato",
       "description": "A twist on the classic Negroni where prosecco replaces gin, yielding a lighter and fruitier drink.",
-      "instructions": "1. Combine Campari and Red Vermouth in a tin with ice and throw 5–6 times. This adds a silky texture that balances the sweetness of the vermouth.\n2. Strain into a rock glass.\n3. Top with sparkling wine.\n4. Garnish with an orange slice.",
+      "instructions": "1. Combine Campari and Red Vermouth in a mixing glass filled with ice.\n2. Stir until well chilled and properly diluted.\n3. Strain into a rock glass.\n4. Top with sparkling wine.\n5. Garnish with an orange slice.",
       "photoUri": "assets/cocktails/1757000000241-negroni-sbagliato.jpg",
       "glassId": "rocks_glass",
-      "methodIds": ["throwing"],
+      "methodIds": ["stir"],
       "tags": [
         {
           "id": 4,
@@ -33141,10 +33141,10 @@
       "id": 1757000000304,
       "name": "White Negroni",
       "description": "A modern floral twist on the traditional Negroni. Substituting sweet vermouth and Campari with Lillet Blanc and Suze, this cocktail offers a unique herbal bitterness and a clear, golden hue.",
-      "instructions": "1. Combine gin, Suze, and Lillet Blanc in a tin with ice and throw 5–6 times. This adds a silky texture that balances the sweetness of the vermouth.\n2. Strain into a rock glass.\n3. Garnish with a fresh orange slice or zest.",
+      "instructions": "1. Combine gin, Suze, and Lillet Blanc in a mixing glass filled with ice.\n2. Stir until well chilled and properly diluted.\n3. Strain into a rock glass.\n4. Garnish with a fresh orange slice or zest.",
       "photoUri": "assets/cocktails/1757000000304-white-negroni.jpg",
       "glassId": "rocks_glass",
-      "methodIds": ["throwing"],
+      "methodIds": ["stir"],
       "tags": [
         {
           "id": 5,
