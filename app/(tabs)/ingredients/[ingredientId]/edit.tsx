@@ -96,6 +96,7 @@ export default function EditIngredientScreen() {
   const [baseSearch, setBaseSearch] = useState('');
   const [permissionStatus, requestPermission] = ImagePicker.useMediaLibraryPermissions();
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
   const [initialSnapshot, setInitialSnapshot] = useState<IngredientFormSnapshot | null>(null);
 
@@ -275,6 +276,10 @@ export default function EditIngredientScreen() {
   }, [ensureMediaPermission, isPickingImage, showDialog]);
 
   const handleSubmit = useCallback(async () => {
+    if (isSaving) {
+      return;
+    }
+
     const trimmedName = name.trim();
     if (!trimmedName) {
       showDialog({
@@ -294,53 +299,59 @@ export default function EditIngredientScreen() {
       return;
     }
 
-    const descriptionValue = description.trim();
-    const selectedTags = selectedTagIds
-      .map((tagId) => availableIngredientTags.find((tag) => tag.id === tagId))
-      .filter((tag): tag is (typeof availableIngredientTags)[number] => Boolean(tag));
+    setIsSaving(true);
+    try {
+      const descriptionValue = description.trim();
+      const selectedTags = selectedTagIds
+        .map((tagId) => availableIngredientTags.find((tag) => tag.id === tagId))
+        .filter((tag): tag is (typeof availableIngredientTags)[number] => Boolean(tag));
 
-    const photoHasChanged = imageUri !== ingredient?.photoUri;
-    const shouldProcessPhoto = shouldStorePhoto(imageUri) && photoHasChanged;
-    const submission = {
-      name: trimmedName,
-      description: descriptionValue || undefined,
-      photoUri: shouldProcessPhoto ? undefined : imageUri ?? undefined,
-      baseIngredientId,
-      tags: selectedTags,
-    };
+      const photoHasChanged = imageUri !== ingredient?.photoUri;
+      const shouldProcessPhoto = shouldStorePhoto(imageUri) && photoHasChanged;
+      const submission = {
+        name: trimmedName,
+        description: descriptionValue || undefined,
+        photoUri: shouldProcessPhoto ? undefined : imageUri ?? undefined,
+        baseIngredientId,
+        tags: selectedTags,
+      };
 
-    const updated = updateIngredient(numericIngredientId, {
-      ...submission,
-      photoUri:
-        imageUri && shouldProcessPhoto
-          ? await storePhoto({
-              uri: imageUri,
-              id: numericIngredientId,
-              name: trimmedName,
-              category: 'ingredients',
-              suffix: String(Date.now()),
-            })
-          : submission.photoUri,
-    });
-
-    if (!updated) {
-      showDialog({
-        title: 'Could not save ingredient',
-        message: 'Please try again later.',
-        actions: [{ label: 'OK' }],
+      const updated = updateIngredient(numericIngredientId, {
+        ...submission,
+        photoUri:
+          imageUri && shouldProcessPhoto
+            ? await storePhoto({
+                uri: imageUri,
+                id: numericIngredientId,
+                name: trimmedName,
+                category: 'ingredients',
+                suffix: String(Date.now()),
+              })
+            : submission.photoUri,
       });
-      return;
-    }
 
-    setHasUnsavedChanges(false);
-    isNavigatingAfterSaveRef.current = true;
-    skipDuplicateBack(navigation);
+      if (!updated) {
+        showDialog({
+          title: 'Could not save ingredient',
+          message: 'Please try again later.',
+          actions: [{ label: 'OK' }],
+        });
+        return;
+      }
+
+      setHasUnsavedChanges(false);
+      isNavigatingAfterSaveRef.current = true;
+      skipDuplicateBack(navigation);
+    } finally {
+      setIsSaving(false);
+    }
   }, [
     availableIngredientTags,
     baseIngredientId,
     description,
     imageUri,
     ingredient?.photoUri,
+    isSaving,
     name,
     numericIngredientId,
     setHasUnsavedChanges,
@@ -859,9 +870,12 @@ export default function EditIngredientScreen() {
 
         <Pressable
           accessibilityRole="button"
-          style={[styles.submitButton, { backgroundColor: Colors.tint }]}
+          style={[
+            styles.submitButton,
+            { backgroundColor: Colors.tint, opacity: isSaving ? 0.6 : 1 },
+          ]}
           onPress={handleSubmit}
-          disabled={isPickingImage}>
+          disabled={isSaving || isPickingImage}>
           <Text style={[styles.submitLabel, { color: Colors.onPrimary }]}>Save changes</Text>
         </Pressable>
         <View style={styles.bottomSpacer} />
