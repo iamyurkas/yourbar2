@@ -685,6 +685,14 @@ export default function CreateIngredientScreen() {
                   </Text>
                 </View>
               )}
+              {imageUri ? (
+                <View
+                  pointerEvents="none"
+                  style={[styles.cropFrame, { borderColor: Colors.tint }]}
+                  accessibilityElementsHidden
+                  importantForAccessibility="no-hide-descendants"
+                />
+              ) : null}
             </Pressable>
             {imageUri ? (
               <Pressable
@@ -935,6 +943,16 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     resizeMode: 'contain',
+  },
+  cropFrame: {
+    position: 'absolute',
+    top: 10,
+    bottom: 10,
+    left: 10,
+    right: 10,
+    borderRadius: 10,
+    borderWidth: 2,
+    borderStyle: 'dashed',
   },
   photoTileWrapper: {
     width: 150,
