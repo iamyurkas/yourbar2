@@ -121,10 +121,17 @@ export default function CreateIngredientScreen() {
   const isHandlingBackRef = useRef(false);
 
   useEffect(() => {
-    if (suggestedNameParam && !name) {
-      setName(suggestedNameParam);
-    }
-  }, [name, suggestedNameParam]);
+    setName(suggestedNameParam ?? '');
+    setDescription('');
+    setImageUri(null);
+    setSelectedTagIds([]);
+    setBaseIngredientId(null);
+    setBaseSearch('');
+    setTagModalVisible(false);
+    setIsBaseModalVisible(false);
+    setInitialSnapshot(null);
+    setIsSaving(false);
+  }, [suggestedNameParam]);
 
   const closeDialog = useCallback(() => {
     setDialogOptions(null);
