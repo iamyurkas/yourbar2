@@ -185,9 +185,7 @@ export function ListRow({
                   <TagDot key={`${color}-${index}`} color={color} />
                 ))}
               </View>
-            ) : (
-              <View style={styles.tagDotPlaceholder} />
-            )}
+            ) : null}
           </View>
           <View style={[styles.metaMiddle, metaAlignmentStyle]}>
             {control ?? <View style={styles.metaControlPlaceholder} />}
@@ -288,10 +286,6 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 8,
-  },
-  tagDotPlaceholder: {
-    width: 16,
-    height: 16,
   },
   checkbox: {
     width: 20,
