@@ -1169,7 +1169,7 @@
       "instructions": "1. Add Peppermint Schnapps and White Crème de Cacao into a heat-resistant glass or Irish coffee glass.\n2. Heat the milk gently until hot but not boiling.\n3. Pour the hot milk into the glass and stir gently to combine all ingredients.\n4. Garnish with grated chocolate, chocolate shavings, or a light dusting of cocoa powder.\n5. Serve immediately while warm and enjoy.",
       "photoUri": "assets/cocktails/1759480212593-alpine-avenger.jpg",
       "glassId": "irish_coffee_glass",
-      "methodIds": ["heating", "build"],
+      "methodIds": ["heat", "build"],
       "tags": [
         {
           "id": 6,
@@ -5332,7 +5332,7 @@
       "instructions": "1. Combine all ingredients in a tin with ice.\n2. Throw the mixture 5 times to integrate the spices and aerate the tomato juice without making it watery. 3. Strain into a highball glass.\n3. Garnish with a celery stalk and a lemon wedge.",
       "photoUri": "assets/cocktails/1755800000057-bloody-mary.jpg",
       "glassId": "highball_glass",
-      "methodIds": ["throwing"],
+      "methodIds": ["throw"],
       "tags": [
         {
           "id": 1,
@@ -6017,7 +6017,7 @@
       "instructions": "1. Select and pre-heat an Irish Coffee Glass.\n2. Pour all ingredients into pre-warmed glass.\n3. Express lemon zest twist over the cocktail and discard.\n4. Garnish with cinnamon stick.",
       "photoUri": "assets/cocktails/1756839855535-blueberry-tea.jpg",
       "glassId": "irish_coffee_glass",
-      "methodIds": ["heating", "build"],
+      "methodIds": ["heat", "build"],
       "tags": [
         {
           "id": 7,
@@ -6248,10 +6248,10 @@
       "id": 1760963369297,
       "name": "Bombardino",
       "description": "A rich, creamy brandy drink featuring Cognac, Advocaat, Whipped Cream—dessert-like, smooth, and indulgent.",
-      "instructions": "1. Heat the Liqueur: Gently heat the egg liqueur in a small saucepan over medium-low heat. Do not let it boil, as this may cause the eggs to curdle.\n2. Add Brandy: Once hot, stir in the brandy. Some recipes suggest heating the brandy with the liqueur, while others recommend adding it directly to the serving glass before pouring in the hot liqueur.\n3. Garnish: Pour into a heat-resistant glass or mug. Top with a generous dollop of whipped cream and a sprinkle of cinnamon or cocoa.",
+      "instructions": "1. Heat the Liqueur: Gently heat the egg liqueur in a small saucepan over medium-low heat. Do not let it boil, as this may cause the eggs to curdle.\n2. Add Brandy: Once hot, stir in the brandy. Some recipes suggest heat the brandy with the liqueur, while others recommend adding it directly to the serving glass before pouring in the hot liqueur.\n3. Garnish: Pour into a heat-resistant glass or mug. Top with a generous dollop of whipped cream and a sprinkle of cinnamon or cocoa.",
       "photoUri": "assets/cocktails/1760963369297-bombardino.jpg",
       "glassId": "cup",
-      "methodIds": ["heating", "build"],
+      "methodIds": ["heat", "build"],
       "tags": [
         {
           "id": 6,
@@ -6315,7 +6315,7 @@
       "instructions": "1. Warm the advocaat and espresso together in a small saucepan over low heat until hot but not boiling.\n2. Add the cognac to a heat-safe cup.\n3. Pour the hot advocaat-espresso mixture over the cognac and stir gently.\n4. Top with whipped cream.\n5. Finish with a dusting of cinnamon and optional cocoa powder, then serve immediately.",
       "photoUri": "assets/cocktails/1760963459859-bombardino-calimero.jpg",
       "glassId": "cup",
-      "methodIds": ["heating", "build"],
+      "methodIds": ["heat", "build"],
       "tags": [
         {
           "id": 6,
@@ -6386,7 +6386,7 @@
       "instructions": "1. Heat the Liqueur: Pour the egg liqueur into a small saucepan. Heat it over medium-low heat until hot but not boiling (boiling may cause the egg base to curdle).\n2. Combine: In a heat-safe glass or small mug, add the rum. Pour the hot egg liqueur over the rum and stir gently to combine.\n3. Garnish: Top with a generous dollop of whipped cream.\n4. Finish: Sprinkle cocoa powder or cinnamon on top and serve immediately while hot.",
       "photoUri": "assets/cocktails/1760963707858-bombardino-pirata.jpg",
       "glassId": "cup",
-      "methodIds": ["heating", "build"],
+      "methodIds": ["heat", "build"],
       "tags": [
         {
           "id": 6,
@@ -6460,7 +6460,7 @@
       "instructions": "1. Warm the advocaat in a small saucepan over low heat until hot but not boiling.\n2. Add the whisky to a heat-safe cup.\n3. Pour the hot advocaat over the whisky and stir gently to combine.\n4. Top with whipped cream.\n5. Sprinkle with cinnamon and serve immediately.",
       "photoUri": "assets/cocktails/1760963780619-bombardino-scozzese.jpg",
       "glassId": "cup",
-      "methodIds": ["heating", "build"],
+      "methodIds": ["heat", "build"],
       "tags": [
         {
           "id": 6,
@@ -9873,7 +9873,7 @@
       "instructions": "1. Combine liquids in a tin with ice and throw 5–6 times.\n2. Strain into a rocks glass filled with fresh ice.\n3. Express the oils from an orange zest over the drink and drop it in as a garnish.",
       "photoUri": "assets/cocktails/1759436634049-chocolate-negroni.jpg",
       "glassId": "rocks_glass",
-      "methodIds": ["throwing"],
+      "methodIds": ["throw"],
       "tags": [
         {
           "id": 5,
@@ -10268,7 +10268,7 @@
       "instructions": "1. Combine liquids in a tin with ice and throw 5–6 times.\n2. Strain into a chilled cocktail glass.\n3. Express the oils from an orange zest over the drink and garnish.",
       "photoUri": "assets/cocktails/1759437773389-cornwall-negroni.jpg",
       "glassId": "cocktail_glass",
-      "methodIds": ["throwing"],
+      "methodIds": ["throw"],
       "tags": [
         {
           "id": 5,
@@ -10750,7 +10750,7 @@
       "instructions": "1. Combine the Rye Whisky, Strucchi Bitter, Punt e Mes, Cherry Heering, and Crème de Café in a tin with ice.\n2. Throw 5-6 times.\n3. Strain into a chilled rocks glass over a large ice cube or fresh ice.\n4. Garnish with a Maraschino cherry.",
       "photoUri": "assets/cocktails/1759441105022-crimson-king.jpg",
       "glassId": "rocks_glass",
-      "methodIds": ["throwing"],
+      "methodIds": ["throw"],
       "tags": [
         {
           "id": 5,
@@ -12959,7 +12959,7 @@
       "instructions": "1. Pour 50ml of Gin, 30ml of Punt e Mes, and 20ml of Strucchi Bitter into a tin with ice.\n2. Throw 5-6 times.\n3. Strain into a rocks glass over a large ice cube of fresh ice.\n4. Express the oils from a lemon peel over the drink and garnish.",
       "photoUri": "assets/cocktails/1759439523703-fergroni.jpg",
       "glassId": "rocks_glass",
-      "methodIds": ["throwing"],
+      "methodIds": ["throw"],
       "tags": [
         {
           "id": 6,
@@ -16288,7 +16288,7 @@
       "instructions": "1. Combine liquids in a tin with ice and throw 5–6 times.\n2. Strain into a rocks glass over fresh ice.\n3. Garnish with a fresh apple slice.",
       "photoUri": "assets/cocktails/1759439837561-harvest-negroni.jpg",
       "glassId": "rocks_glass",
-      "methodIds": ["throwing"],
+      "methodIds": ["throw"],
       "tags": [
         {
           "id": 6,
@@ -16983,7 +16983,7 @@
       "instructions": "1. Put 1 teaspoon of butter into a toddy (Irish coffee) glass.\n2. Add 1-2 teaspoons of dark sugar, 1 dash of ground cinnamon and 1/16 teaspoon of ground nutmeg.\n3. Pour 50ml of rum and top with 100ml of hot (not boiling) water.\n4. Stir well until the butter and sugar are dissolved.\n5. Garnish with a cinnamon stick and a lemon slice.",
       "photoUri": "assets/cocktails/1757000000189-hot-buttered-rum.jpg",
       "glassId": "irish_coffee_glass",
-      "methodIds": ["heating", "build"],
+      "methodIds": ["heat", "build"],
       "tags": [
         {
           "id": 7,
@@ -17061,7 +17061,7 @@
       "instructions": "1. Put 1 teaspoon of honey on the bottom of an Irish coffee glass.\n2. Pour 45ml of whiskey and squeeze in a quarter of a lemon.\n3. Fill the glass with 100ml of hot water or tea.",
       "photoUri": "assets/cocktails/1757000000190-hot-toddy.jpg",
       "glassId": "irish_coffee_glass",
-      "methodIds": ["heating", "build"],
+      "methodIds": ["heat", "build"],
       "tags": [
         {
           "id": 6,
@@ -17776,7 +17776,7 @@
       "instructions": "1. Add brown sugar to a heatproof glass.\n2. Pour in hot coffee and stir until dissolved.\n3. Add Irish whisky and stir.\n4. Float lightly whipped cream on top.",
       "photoUri": "assets/cocktails/1755800000073-irish-coffee.jpg",
       "glassId": "irish_coffee_glass",
-      "methodIds": ["heating", "build", "layer"],
+      "methodIds": ["heat", "build", "layer"],
       "tags": [
         {
           "id": 1,
@@ -18296,7 +18296,7 @@
       "instructions": "1. Add the tea, wine, rum, brandy, and juice to a pot.\n2. Toss in the cinnamon, cloves, and citrus slices.\n3. Simmer on low-medium heat for about 5 minutes. Do not let it boil.\n4. Remove from heat, stir in honey or sugar to your preference, and strain before serving in a mug.",
       "photoUri": "assets/cocktails/1757000000200-jagertee.jpg",
       "glassId": "cup",
-      "methodIds": ["heating", "build"],
+      "methodIds": ["heat", "build"],
       "tags": [
         {
           "id": 7,
@@ -22321,7 +22321,7 @@
       "instructions": "1. Heat a bottle or more of red wine in a pan.\n2. Add cinnamon sticks, cloves, sugar and vanilla pods.\n3. Add lemon wedges, and wait 10 minutes.\n4. Heat until the wine almost boils, and serve in cups.",
       "photoUri": "assets/cocktails/1757000000239-mulled-wine.jpg",
       "glassId": "irish_coffee_glass",
-      "methodIds": ["heating", "build"],
+      "methodIds": ["heat", "build"],
       "tags": [
         {
           "id": 6,
@@ -26528,7 +26528,7 @@
       "instructions": "1. Prepare your hot chocolate in a separate container and ensure it is steaming hot.\n2. Pour the Baileys Irish Cream and Rumple Minze peppermint schnapps into an Irish coffee glass.\n3. Fill the remainder of the glass with the hot chocolate and stir gently to combine.\n4. Top with a generous dollop of whipped cream.",
       "photoUri": "assets/cocktails/1759479792638-rumplesnuggler.jpg",
       "glassId": "irish_coffee_glass",
-      "methodIds": ["heating", "build"],
+      "methodIds": ["heat", "build"],
       "tags": [
         {
           "id": 6,
@@ -27821,7 +27821,7 @@
       "description": "A sophisticated and warming whiskey cocktail that balances the smoky depth of Islay Scotch with the nutty sweetness of chestnut and honey, finished with a hint of spice.",
       "instructions": "1. Combine the Islay Scotch Whiskey, lemon juice, chestnut liqueur, and honey syrup in a heat-resistant glass or mug.\n2. Add the whiskey-barrel aged bitters.\n3. Pour in the boiling water and stir gently to combine all ingredients.\n4. Grate fresh nutmeg over the top for aroma.\n5. Serve warm in a cocktail glass or toddy mug.",
       "glassId": "cocktail_glass",
-      "methodIds": ["heating", "build"],
+      "methodIds": ["heat", "build"],
       "tags": [
         {
           "id": 6,
@@ -30384,7 +30384,7 @@
       "instructions": "1. Combine the Bourbon, Rye Whisky, Punt e Mes, Strucchi Bitter (or Campari), and Creme de Mure in a tin with ice.\n2. Add the dashes of Angostura and Orange bitters.\n3. Throw 5-6 times.\n4. Strain the drink into a chilled coupe glass.\n5. Garnish with a fresh blackberry dropped into the glass or on a cocktail pick.",
       "photoUri": "assets/cocktails/1759440363887-the-ridgwell.jpg",
       "glassId": "coupe",
-      "methodIds": ["throwing"],
+      "methodIds": ["throw"],
       "tags": [
         {
           "id": 5,
@@ -30897,7 +30897,7 @@
       "description": "A legendary warm holiday punch that serves as a creamy, spiced embrace during the winter season.",
       "instructions": "1. Separate the egg white from the yolk and beat them in separate bowls until the whites are stiff and yolks are creamy.\n2. Gently fold the egg whites into the yolks in an Irish coffee glass or mug.\n3. Add simple syrup, dark rum, and cognac to the egg mixture.\n4. Fill the rest of the glass with hot milk while stirring gently to combine.\n5. Garnish with a generous dusting of freshly grated nutmeg.",
       "glassId": "irish_coffee_glass",
-      "methodIds": ["heating", "build"],
+      "methodIds": ["heat", "build"],
       "tags": [
         {
           "id": 6,
