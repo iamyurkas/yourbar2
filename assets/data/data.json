@@ -2830,7 +2830,14 @@
           "ingredientId": 435165,
           "name": "Brandy",
           "amount": "60",
-          "unitId": 11
+          "unitId": 11,
+          "substitutes": [
+            {
+              "id": 502166,
+              "ingredientId": 502166,
+              "name": "Cognac"
+            }
+          ]
         },
         {
           "order": 2,
@@ -6885,7 +6892,14 @@
           "ingredientId": 435165,
           "name": "Brandy",
           "amount": "60",
-          "unitId": 11
+          "unitId": 11,
+          "substitutes": [
+            {
+              "id": 502166,
+              "ingredientId": 502166,
+              "name": "Cognac"
+            }
+          ]
         },
         {
           "order": 2,
@@ -6957,7 +6971,14 @@
           "ingredientId": 435165,
           "name": "Brandy",
           "amount": "40",
-          "unitId": 11
+          "unitId": 11,
+          "substitutes": [
+            {
+              "id": 502166,
+              "ingredientId": 502166,
+              "name": "Cognac"
+            }
+          ]
         },
         {
           "order": 2,
@@ -7958,7 +7979,7 @@
       "id": 1757000000113,
       "name": "Buttery Nipple",
       "description": "A variation of the \"Slippery Nipple\" cocktail but with butterscotch instead of Sambuca. This one is even sweeter and softer than the original.",
-      "instructions": "1. Pour 30ml of butterscotch liqueur into a shooter glass.\n2. Carefully pour 15ml of Baileys on top.\n3. Optionally, add a dash of grenadine syrup.",
+      "instructions": "1. If you use grenadine syrup, pour it on the bottom layer. \n2. Pour 30ml of butterscotch liqueur into a shooter glass.\n3. Carefully pour 15ml of Baileys on top.",
       "photoUri": "assets/cocktails/1757000000113-buttery-nipple.jpg",
       "glassId": "shooter",
       "methodIds": ["layer"],
@@ -9867,6 +9888,67 @@
       ]
     },
     {
+      "id": 1757000000223,
+      "name": "Chocolate Martini",
+      "description": "An indulgent and velvety dessert cocktail that combines premium vodka with the deep, rich notes of chocolate for a luxurious treat.",
+      "instructions": "1. Fill a cocktail shaker with a generous amount of ice cubes.\n2. Pour the Vodka and Creme de Cacao (or chocolate liqueur) into the shaker.\n3. Shake vigorously for about 15 seconds to ensure a frothy and cold consistency.\n4. Fine-strain the mixture into a chilled cocktail glass.\n5. Garnish the top with freshly grated chocolate or a dusting of cocoa powder.",
+      "photoUri": "assets/cocktails/1757000000223-chocolate-martini.jpg",
+      "glassId": "cocktail_glass",
+      "methodIds": ["shake"],
+      "tags": [
+        {
+          "id": 6,
+          "name": "moderate",
+          "color": "#F06292"
+        }
+      ],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 16862,
+          "name": "Vodka",
+          "amount": "45",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 519309,
+          "name": "Creme de Cacao Brown",
+          "amount": "45",
+          "unitId": 11,
+          "substitutes": [
+            {
+              "id": 794666,
+              "ingredientId": 794666,
+              "name": "Chocolate Liqueur"
+            }
+          ]
+        },
+        {
+          "order": 3,
+          "ingredientId": 346304,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8
+        },
+        {
+          "order": 4,
+          "ingredientId": 499545,
+          "name": "Chocolate",
+          "amount": "1",
+          "unitId": 18,
+          "garnish": true,
+          "substitutes": [
+            {
+              "id": 795313,
+              "ingredientId": 795313,
+              "name": "Cocoa Powder"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": 1759436634049,
       "name": "Chocolate Negroni",
       "description": "A decadent twist on the classic Negroni. This version balances the botanical depth of gin and the bittersweet complexity of Punt e Mes and Strucchi Bitter with smooth notes of white cacao and aromatic chocolate bitters.",
@@ -10423,6 +10505,11 @@
               "id": 342124,
               "ingredientId": 342124,
               "name": "Bourbon"
+            },
+            {
+              "id": 435165,
+              "ingredientId": 435165,
+              "name": "Brandy"
             }
           ]
         },
@@ -11848,6 +11935,60 @@
           "name": "Chocolate",
           "amount": "2",
           "unitId": 15,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 1757000000224,
+      "name": "Dirty Martini",
+      "description": "An IBA official variation of the Martini drink.",
+      "instructions": "1. Fill a mixing glass with ice cubes.\n2. Add 60ml of vodka, 10ml of dry vermouth and 10ml of olive juice.\n3. Stir and strain into a cocktail glass.\n4. Garnish with an olive.",
+      "photoUri": "assets/cocktails/1757000000224-dirty-martini.jpg",
+      "glassId": "cocktail_glass",
+      "methodIds": ["stir"],
+      "tags": [
+        {
+          "id": 5,
+          "name": "strong",
+          "color": "#ec5a5a"
+        }
+      ],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 16862,
+          "name": "Vodka",
+          "amount": "60",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 569330,
+          "name": "Dry Vermouth",
+          "amount": "10",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 670094,
+          "name": "Olive Brine",
+          "amount": "10",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 346304,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8
+        },
+        {
+          "order": 5,
+          "ingredientId": 898828,
+          "name": "Olive",
+          "amount": "3",
+          "unitId": 1,
           "garnish": true
         }
       ]
@@ -13355,7 +13496,14 @@
           "ingredientId": 435165,
           "name": "Brandy",
           "amount": "30",
-          "unitId": 11
+          "unitId": 11,
+          "substitutes": [
+            {
+              "id": 502166,
+              "ingredientId": 502166,
+              "name": "Cognac"
+            }
+          ]
         },
         {
           "order": 3,
@@ -14106,7 +14254,7 @@
       "description": "A vibrant and sophisticated twist on the classic Daiquiri. This cocktail combines the lush sweetness of muddled strawberries with crisp white rum and zesty lime, enhanced by a subtle pinch of black pepper and salt to elevate the fruity notes.",
       "instructions": "1. Place 7 fresh strawberries into a shaker and muddle thoroughly to release their juices.\n2. Add the white rum, fresh lime juice, rich simple syrup, black pepper, and salt to the shaker.\n3. Fill the shaker with ice and shake vigorously for about 10-15 seconds until well-chilled.\n4. Double strain the mixture through a fine-mesh sieve into a chilled coupe glass to remove strawberry seeds and pulp.\n5. Garnish with a fresh strawberry on the rim.",
       "photoUri": "assets/cocktails/1759484571256-fresh-strawberry-daiquiri.jpg",
-      "glassId": "coupe",
+      "glassId": "cocktail_glass",
       "methodIds": ["muddle", "shake"],
       "tags": [
         {
@@ -14171,6 +14319,15 @@
           "name": "Strawberry",
           "amount": "1",
           "unitId": 1,
+          "garnish": true
+        },
+        {
+          "order": 9,
+          "ingredientId": 336572,
+          "name": "Lime",
+          "amount": "1",
+          "unitId": 19,
+          "optional": true,
           "garnish": true
         }
       ]
@@ -14319,6 +14476,83 @@
           "garnish": true,
           "allowBaseSubstitution": true,
           "allowBrandSubstitution": true
+        }
+      ]
+    },
+    {
+      "id": 1757000000282,
+      "name": "Frozen Strawberry Daiquiri",
+      "description": "A vibrant, frozen-style party punch that blends a generous amount of fresh strawberries with zesty citrus and light rum. Ideal for sharing with friends on a warm day.",
+      "instructions": "1. Place the frozen strawberries and sugar into a high-speed blender.\n2. Pour in the white rum, lemon juice, and lime juice.\n3. Add the ice to the blender container.\n4. Blend on high speed until the mixture reaches a smooth, slushy consistency.\n5. Pour the punch into chilled glasses.\n6. Garnish each glass with a fresh strawberry.",
+      "photoUri": "assets/cocktails/1757000000282-frozen-strawberry-daiquiri.jpg",
+      "glassId": "cocktail_glass",
+      "methodIds": ["blend"],
+      "tags": [
+        {
+          "id": 6,
+          "name": "moderate",
+          "color": "#F06292"
+        }
+      ],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 969224,
+          "name": "Strawberry",
+          "amount": "120",
+          "unitId": 8
+        },
+        {
+          "order": 2,
+          "ingredientId": 861551,
+          "name": "White Rum",
+          "amount": "180",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 525624,
+          "name": "Lime Juice",
+          "amount": "25",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 734220,
+          "name": "Lemon Juice",
+          "amount": "100",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 217733,
+          "name": "Sugar",
+          "amount": "50",
+          "unitId": 8
+        },
+        {
+          "order": 6,
+          "ingredientId": 346304,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8
+        },
+        {
+          "order": 7,
+          "ingredientId": 969224,
+          "name": "Strawberry",
+          "amount": "1",
+          "unitId": 1,
+          "garnish": true
+        },
+        {
+          "order": 8,
+          "ingredientId": 336572,
+          "name": "Lime",
+          "amount": "1",
+          "unitId": 19,
+          "optional": true,
+          "garnish": true
         }
       ]
     },
@@ -16942,7 +17176,14 @@
           "ingredientId": 502166,
           "name": "Cognac",
           "amount": "45",
-          "unitId": 11
+          "unitId": 11,
+          "substitutes": [
+            {
+              "id": 435165,
+              "ingredientId": 435165,
+              "name": "Brandy"
+            }
+          ]
         },
         {
           "order": 2,
@@ -17538,7 +17779,14 @@
           "ingredientId": 502166,
           "name": "Cognac",
           "amount": "50",
-          "unitId": 11
+          "unitId": 11,
+          "substitutes": [
+            {
+              "id": 435165,
+              "ingredientId": 435165,
+              "name": "Brandy"
+            }
+          ]
         },
         {
           "order": 2,
@@ -18617,6 +18865,87 @@
           "order": 6,
           "ingredientId": 607153,
           "name": "Maraschino Cherry",
+          "amount": "1",
+          "unitId": 1,
+          "garnish": true
+        },
+        {
+          "order": 7,
+          "ingredientId": 346304,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
+        }
+      ]
+    },
+    {
+      "id": 1760963780621,
+      "name": "Johnny Silverhand",
+      "description": "A Johnny Silverhand is a fictional cocktail from the video game Cyberpunk 2077 that has been adapted into several popular real-world recipes. It is generally described as a Tequila Old Fashioned with a beer float.",
+      "instructions": "1. Add plenty of ice to a mixing glass.\n2. Pour in 60 ml tequila reposado.\n3. Add 1 bar spoon of agave syrup.\n4. Add 3 dashes Angostura bitters.\n5. Stir well for about 15–20 seconds until chilled.\n6. Dump the ice from the rocks glass and add fresh ice (one big cube if you have it).\n7. Strain the stirred mix into the glass.\n8. Gently top with 30 ml Corona (or another light lager), trying not to over-fizz.\n9. Express an orange peel over the drink and discard it.\n10. Add a red chilli as garnish.",
+      "photoUri": "assets/cocktails/1760963780621-johnny-silverhand.jpg",
+      "glassId": "rocks_glass",
+      "methodIds": ["stir"],
+      "tags": [
+        {
+          "id": 5,
+          "name": "strong",
+          "color": "#ec5a5a"
+        }
+      ],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 1759244905934,
+          "name": "Tequila Añejo",
+          "amount": "60",
+          "unitId": 11,
+          "substitutes": [
+            {
+              "id": 97568,
+              "ingredientId": 97568,
+              "name": "Tequila"
+            },
+            {
+              "id": 1759483024681,
+              "ingredientId": 1759483024681,
+              "name": "Tequila Reposado"
+            }
+          ]
+        },
+        {
+          "order": 2,
+          "ingredientId": 773514,
+          "name": "Agave Syrup",
+          "amount": "1",
+          "unitId": 2
+        },
+        {
+          "order": 3,
+          "ingredientId": 401724,
+          "name": "Angostura Bitters",
+          "amount": "3",
+          "unitId": 6
+        },
+        {
+          "order": 4,
+          "ingredientId": 782289,
+          "name": "Corona",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 454059,
+          "name": "Orange",
+          "amount": "1",
+          "unitId": 14,
+          "garnish": true
+        },
+        {
+          "order": 6,
+          "ingredientId": 281512,
+          "name": "Chili Pepper",
           "amount": "1",
           "unitId": 1,
           "garnish": true
@@ -20661,186 +20990,6 @@
       ]
     },
     {
-      "id": 1757000000223,
-      "name": "Chocolate Martini",
-      "description": "An indulgent and velvety dessert cocktail that combines premium vodka with the deep, rich notes of chocolate for a luxurious treat.",
-      "instructions": "1. Fill a cocktail shaker with a generous amount of ice cubes.\n2. Pour the Vodka and Creme de Cacao (or chocolate liqueur) into the shaker.\n3. Shake vigorously for about 15 seconds to ensure a frothy and cold consistency.\n4. Fine-strain the mixture into a chilled cocktail glass.\n5. Garnish the top with freshly grated chocolate or a dusting of cocoa powder.",
-      "photoUri": "assets/cocktails/1757000000223-chocolate-martini.jpg",
-      "glassId": "cocktail_glass",
-      "methodIds": ["shake"],
-      "tags": [
-        {
-          "id": 6,
-          "name": "moderate",
-          "color": "#F06292"
-        }
-      ],
-      "ingredients": [
-        {
-          "order": 1,
-          "ingredientId": 16862,
-          "name": "Vodka",
-          "amount": "45",
-          "unitId": 11
-        },
-        {
-          "order": 2,
-          "ingredientId": 519309,
-          "name": "Creme de Cacao Brown",
-          "amount": "45",
-          "unitId": 11,
-          "substitutes": [
-            {
-              "id": 794666,
-              "ingredientId": 794666,
-              "name": "Chocolate Liqueur"
-            }
-          ]
-        },
-        {
-          "order": 3,
-          "ingredientId": 346304,
-          "name": "Ice",
-          "amount": "150",
-          "unitId": 8
-        },
-        {
-          "order": 4,
-          "ingredientId": 499545,
-          "name": "Chocolate",
-          "amount": "1",
-          "unitId": 18,
-          "garnish": true,
-          "substitutes": [
-            {
-              "id": 795313,
-              "ingredientId": 795313,
-              "name": "Cocoa Powder"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": 1757000000224,
-      "name": "Dirty Martini",
-      "description": "An IBA official variation of the Martini drink.",
-      "instructions": "1. Fill a mixing glass with ice cubes.\n2. Add 60ml of vodka, 10ml of dry vermouth and 10ml of olive juice.\n3. Stir and strain into a cocktail glass.\n4. Garnish with an olive.",
-      "photoUri": "assets/cocktails/1757000000224-dirty-martini.jpg",
-      "glassId": "cocktail_glass",
-      "methodIds": ["stir"],
-      "tags": [
-        {
-          "id": 5,
-          "name": "strong",
-          "color": "#ec5a5a"
-        }
-      ],
-      "ingredients": [
-        {
-          "order": 1,
-          "ingredientId": 16862,
-          "name": "Vodka",
-          "amount": "60",
-          "unitId": 11
-        },
-        {
-          "order": 2,
-          "ingredientId": 569330,
-          "name": "Dry Vermouth",
-          "amount": "10",
-          "unitId": 11
-        },
-        {
-          "order": 3,
-          "ingredientId": 670094,
-          "name": "Olive Brine",
-          "amount": "10",
-          "unitId": 11
-        },
-        {
-          "order": 4,
-          "ingredientId": 346304,
-          "name": "Ice",
-          "amount": "150",
-          "unitId": 8
-        },
-        {
-          "order": 5,
-          "ingredientId": 898828,
-          "name": "Olive",
-          "amount": "3",
-          "unitId": 1,
-          "garnish": true
-        }
-      ]
-    },
-    {
-      "id": 1757000000226,
-      "name": "Perfect Martini",
-      "description": "This is a combination of the Dry and Sweet Martini cocktails that makes a good pre-dinner cocktail. The amount of gin can be varied according to your taste.",
-      "instructions": "1. Fill a mixing glass with ice cubes.\n2. Add 60ml of gin, 10ml of dry vermouth and 10ml of red vermouth.\n3. Stir well and strain into a chilled cocktail glass.\n4. Garnish with a lemon peel and a maraschino cherry.",
-      "photoUri": "assets/cocktails/1757000000226-perfect-martini.jpg",
-      "glassId": "cocktail_glass",
-      "methodIds": ["stir"],
-      "tags": [
-        {
-          "id": 5,
-          "name": "strong",
-          "color": "#ec5a5a"
-        }
-      ],
-      "ingredients": [
-        {
-          "order": 1,
-          "ingredientId": 863081,
-          "name": "Gin",
-          "amount": "60",
-          "unitId": 11
-        },
-        {
-          "order": 2,
-          "ingredientId": 569330,
-          "name": "Dry Vermouth",
-          "amount": "10",
-          "unitId": 11
-        },
-        {
-          "order": 3,
-          "ingredientId": 898334,
-          "name": "Red Vermouth",
-          "amount": "10",
-          "unitId": 11
-        },
-        {
-          "order": 4,
-          "ingredientId": 346304,
-          "name": "Ice",
-          "amount": "150",
-          "unitId": 8
-        },
-        {
-          "order": 5,
-          "ingredientId": 108496,
-          "name": "Lemon",
-          "amount": "1",
-          "unitId": 26,
-          "garnish": true
-        },
-        {
-          "order": 6,
-          "ingredientId": 607153,
-          "name": "Maraschino Cherry",
-          "amount": "1",
-          "unitId": 1,
-          "optional": true,
-          "garnish": true,
-          "allowBaseSubstitution": true,
-          "allowBrandSubstitution": true
-        }
-      ]
-    },
-    {
       "id": 1757000000227,
       "name": "Martini Sweet",
       "description": "This is a variation of the Martini cocktail with sweet red vermouth instead of dry vermouth. The vodka to vermouth ratio can be varied according to your taste.",
@@ -20886,61 +21035,6 @@
           "garnish": true,
           "allowBaseSubstitution": true,
           "allowBrandSubstitution": true
-        }
-      ]
-    },
-    {
-      "id": 1757000000228,
-      "name": "Vodka Martini",
-      "description": "This is a vodka-based variation of the Martini cocktail.",
-      "instructions": "1. Fill a mixing glass with ice cubes.\n2. Add 60ml of vodka and 15ml of dry vermouth.\n3. Stir and strain into a cocktail glass.\n4. Squeeze a lemon peel into the drink and garnish with a green olive.",
-      "photoUri": "assets/cocktails/1757000000228-vodka-martini.jpg",
-      "glassId": "cocktail_glass",
-      "methodIds": ["stir"],
-      "tags": [
-        {
-          "id": 5,
-          "name": "strong",
-          "color": "#ec5a5a"
-        }
-      ],
-      "ingredients": [
-        {
-          "order": 1,
-          "ingredientId": 16862,
-          "name": "Vodka",
-          "amount": "60",
-          "unitId": 11
-        },
-        {
-          "order": 2,
-          "ingredientId": 569330,
-          "name": "Dry Vermouth",
-          "amount": "15",
-          "unitId": 11
-        },
-        {
-          "order": 3,
-          "ingredientId": 346304,
-          "name": "Ice",
-          "amount": "150",
-          "unitId": 8
-        },
-        {
-          "order": 4,
-          "ingredientId": 108496,
-          "name": "Lemon",
-          "amount": "1",
-          "unitId": 26,
-          "garnish": true
-        },
-        {
-          "order": 5,
-          "ingredientId": 898828,
-          "name": "Olive",
-          "amount": "1",
-          "unitId": 1,
-          "garnish": true
         }
       ]
     },
@@ -21773,7 +21867,7 @@
       "instructions": "1. Muddle mint leaves, sugar, and water in a rocks glass.\n2. Fill the glass with crushed ice.\n3. Add bourbon and stir until chilled.\n4. Garnish with a mint sprig.",
       "photoUri": "assets/cocktails/1755800000066-mint-julep.jpg",
       "glassId": "rocks_glass",
-      "methodIds": ["muddle", "stir"],
+      "methodIds": ["muddle", "build"],
       "tags": [
         {
           "id": 1,
@@ -21817,13 +21911,6 @@
         },
         {
           "order": 5,
-          "ingredientId": 346304,
-          "name": "Ice",
-          "amount": "150",
-          "unitId": 8
-        },
-        {
-          "order": 6,
           "ingredientId": 304217,
           "name": "Mint",
           "amount": "1",
@@ -21831,7 +21918,7 @@
           "garnish": true
         },
         {
-          "order": 7,
+          "order": 6,
           "ingredientId": 346304,
           "name": "Ice",
           "amount": "120",
@@ -22239,6 +22326,77 @@
           "name": "Pineapple",
           "amount": "1",
           "unitId": 27,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 1760963780632,
+      "name": "Mudslide (frozen)",
+      "description": "A rich, creamy, and indulgent cocktail. This decadent mix of vodka, coffee liqueur, Irish cream and heavy cream.",
+      "instructions": "1. Fill a rocks glass with fresh ice cubes.\n2. Pour the vodka, coffee liqueur, and Baileys directly over the ice.\n3. Stir gently with a bar spoon or mixing tin to combine the ingredients without over-diluting.\n4. Serve immediately.",
+      "photoUri": "assets/cocktails/1760963780632-mudslide-frozen.jpg",
+      "glassId": "hurricane_glass",
+      "methodIds": ["build"],
+      "tags": [
+        {
+          "id": 6,
+          "name": "moderate",
+          "color": "#F06292"
+        }
+      ],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 16862,
+          "name": "Vodka",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 705618,
+          "name": "Coffee Liqueur",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 626592,
+          "name": "Irish Cream",
+          "amount": "30",
+          "unitId": 11,
+          "allowBaseSubstitution": true,
+          "allowBrandSubstitution": true
+        },
+        {
+          "order": 4,
+          "ingredientId": 175777,
+          "name": "Ice Cream",
+          "amount": "2",
+          "unitId": 17
+        },
+        {
+          "order": 5,
+          "ingredientId": 346304,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
+        },
+        {
+          "order": 6,
+          "ingredientId": 863110,
+          "name": "Chocolate Syrup",
+          "amount": "5",
+          "unitId": 11,
+          "garnish": true
+        },
+        {
+          "order": 7,
+          "ingredientId": 499545,
+          "name": "Chocolate",
+          "amount": "2",
+          "unitId": 18,
           "garnish": true
         }
       ]
@@ -23252,6 +23410,50 @@
       ]
     },
     {
+      "id": 1760963780633,
+      "name": "Orgasm (shot)",
+      "description": "This screaming orgasm shot is a layered delight with coffee liqueur, Irish cream, and amaretto.",
+      "instructions": "1. Pour coffee liqueur into the base of a shot glass.\n2. Layer on Amaretto\n3. Top with a layer of Irish cream.",
+      "photoUri": "assets/cocktails/1760963780633-orgasm-shot.jpg",
+      "glassId": "shooter",
+      "methodIds": ["layer"],
+      "tags": [
+        {
+          "id": 6,
+          "name": "moderate",
+          "color": "#F06292"
+        },
+        {
+          "id": 9,
+          "name": "shooter",
+          "color": "#FF8A65"
+        }
+      ],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 705618,
+          "name": "Coffee Liqueur",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 626592,
+          "name": "Irish Cream",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 728860,
+          "name": "Amaretto",
+          "amount": "15",
+          "unitId": 11
+        }
+      ]
+    },
+    {
       "id": 1758847662571,
       "name": "Ouzi",
       "description": "A bright vodka sour balancing Vodka, Ouzo, Rich Simple Syrup with fresh citrus and a touch of sweetness for a crisp, refreshing sip.",
@@ -23626,7 +23828,14 @@
           "ingredientId": 502166,
           "name": "Cognac",
           "amount": "30",
-          "unitId": 11
+          "unitId": 11,
+          "substitutes": [
+            {
+              "id": 435165,
+              "ingredientId": 435165,
+              "name": "Brandy"
+            }
+          ]
         },
         {
           "order": 2,
@@ -24137,6 +24346,71 @@
           "name": "Ice",
           "amount": "120",
           "unitId": 8
+        }
+      ]
+    },
+    {
+      "id": 1757000000226,
+      "name": "Perfect Martini",
+      "description": "This is a combination of the Dry and Sweet Martini cocktails that makes a good pre-dinner cocktail. The amount of gin can be varied according to your taste.",
+      "instructions": "1. Fill a mixing glass with ice cubes.\n2. Add 60ml of gin, 10ml of dry vermouth and 10ml of red vermouth.\n3. Stir well and strain into a chilled cocktail glass.\n4. Garnish with a lemon peel and a maraschino cherry.",
+      "photoUri": "assets/cocktails/1757000000226-perfect-martini.jpg",
+      "glassId": "cocktail_glass",
+      "methodIds": ["stir"],
+      "tags": [
+        {
+          "id": 5,
+          "name": "strong",
+          "color": "#ec5a5a"
+        }
+      ],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 863081,
+          "name": "Gin",
+          "amount": "60",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 569330,
+          "name": "Dry Vermouth",
+          "amount": "10",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 898334,
+          "name": "Red Vermouth",
+          "amount": "10",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 346304,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8
+        },
+        {
+          "order": 5,
+          "ingredientId": 108496,
+          "name": "Lemon",
+          "amount": "1",
+          "unitId": 26,
+          "garnish": true
+        },
+        {
+          "order": 6,
+          "ingredientId": 607153,
+          "name": "Maraschino Cherry",
+          "amount": "1",
+          "unitId": 1,
+          "optional": true,
+          "garnish": true,
+          "allowBaseSubstitution": true,
+          "allowBrandSubstitution": true
         }
       ]
     },
@@ -27064,7 +27338,13 @@
           "substitutes": [
             {
               "id": 160433,
+              "ingredientId": 160433,
               "name": "Rye Whisky"
+            },
+            {
+              "id": 435165,
+              "ingredientId": 435165,
+              "name": "Brandy"
             }
           ]
         },
@@ -27550,9 +27830,10 @@
     },
     {
       "id": 1757000000270,
-      "name": "Sexy Alligator",
+      "name": "Sex With an Alligator (long)",
       "description": "An eye-catching layered cocktail that features a sweet melon and pineapple base with heavy herbal and almond accents settled at the top and bottom.",
       "instructions": "1. Fill a cocktail shaker with ice cubes.\n2. Add the Midori melon liqueur and pineapple juice to the shaker.\n3. Shake vigorously until well-chilled.\n4. Strain the mixture into a chilled cocktail (martini) glass.\n5. Carefully pour the amaretto down the side of the glass so it sinks to the bottom.\n6. Finish by slowly layering the Jägermeister on the very top using the back of a spoon.",
+      "photoUri": "assets/cocktails/1757000000270-sex-with-an-alligator-long.jpg",
       "glassId": "cocktail_glass",
       "methodIds": ["shake", "layer"],
       "tags": [
@@ -27560,6 +27841,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 8,
+          "name": "long",
+          "color": "#FFB74D"
         }
       ],
       "ingredients": [
@@ -27568,7 +27854,76 @@
           "ingredientId": 118387,
           "name": "Midori Melon Liqueur",
           "amount": "30",
+          "unitId": 11,
+          "allowBaseSubstitution": true,
+          "allowBrandSubstitution": true
+        },
+        {
+          "order": 2,
+          "ingredientId": 494177,
+          "name": "Pineapple Juice",
+          "amount": "120",
           "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 346304,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8
+        },
+        {
+          "order": 4,
+          "ingredientId": 728860,
+          "name": "Amaretto",
+          "amount": "30",
+          "unitId": 11,
+          "substitutes": [
+            {
+              "id": 881736,
+              "ingredientId": 881736,
+              "name": "Chambord Raspberry Liqueur"
+            }
+          ]
+        },
+        {
+          "order": 5,
+          "ingredientId": 579784,
+          "name": "Jägermeister",
+          "amount": "30",
+          "unitId": 11
+        }
+      ]
+    },
+    {
+      "id": 1760963780634,
+      "name": "Sex With an Alligator (shot)",
+      "description": "An eye-catching layered cocktail that features a sweet melon and pineapple base with heavy herbal and almond accents settled at the top and bottom.",
+      "instructions": "For two shots:\n1. Fill a cocktail shaker with ice cubes.\n2. Add the Midori melon liqueur and pineapple juice to the shaker.\n3. Shake vigorously until well-chilled.\n4. Strain the mixture into a chilled cocktail (martini) glass.\n5. Carefully pour the Chambord down the side of the glass so it sinks to the bottom.\n6. Finish by slowly layering the Jägermeister on the very top using the back of a spoon.",
+      "photoUri": "assets/cocktails/1760963780634-sex-with-an-alligator-shot.jpg",
+      "glassId": "cocktail_glass",
+      "methodIds": ["shake", "layer"],
+      "tags": [
+        {
+          "id": 6,
+          "name": "moderate",
+          "color": "#F06292"
+        },
+        {
+          "id": 9,
+          "name": "shooter",
+          "color": "#FF8A65"
+        }
+      ],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 118387,
+          "name": "Midori Melon Liqueur",
+          "amount": "30",
+          "unitId": 11,
+          "allowBaseSubstitution": true,
+          "allowBrandSubstitution": true
         },
         {
           "order": 2,
@@ -27579,24 +27934,33 @@
         },
         {
           "order": 3,
-          "ingredientId": 728860,
-          "name": "Amaretto",
-          "amount": "30",
-          "unitId": 11
-        },
-        {
-          "order": 4,
-          "ingredientId": 579784,
-          "name": "Jägermeister",
-          "amount": "15",
-          "unitId": 11
-        },
-        {
-          "order": 5,
           "ingredientId": 346304,
           "name": "Ice",
           "amount": "150",
           "unitId": 8
+        },
+        {
+          "order": 4,
+          "ingredientId": 881736,
+          "name": "Chambord",
+          "amount": "30",
+          "unitId": 11,
+          "allowBaseSubstitution": true,
+          "allowBrandSubstitution": true,
+          "substitutes": [
+            {
+              "id": 728860,
+              "ingredientId": 728860,
+              "name": "Amaretto"
+            }
+          ]
+        },
+        {
+          "order": 5,
+          "ingredientId": 579784,
+          "name": "Jägermeister",
+          "amount": "30",
+          "unitId": 11
         }
       ]
     },
@@ -27688,8 +28052,9 @@
       "name": "Shirley Temple",
       "description": "A simple and popular non-alcoholic cocktail.",
       "instructions": "1. Fill a collins glass with ice cubes.\n2. Add 60ml of ginger ale and 60ml of lemonade, or just add 120ml of ginger ale.\n3. Add 5ml of grenadine.\n4. Stir well and garnish with a maraschino cherry.",
+      "photoUri": "assets/cocktails/1757000000271-shirley-temple.jpg",
       "glassId": "collins_glass",
-      "methodIds": ["stir"],
+      "methodIds": ["build"],
       "tags": [
         {
           "id": 10,
@@ -27724,7 +28089,7 @@
           "order": 4,
           "ingredientId": 346304,
           "name": "Ice",
-          "amount": "150",
+          "amount": "120",
           "unitId": 8
         },
         {
@@ -27734,13 +28099,6 @@
           "amount": "1",
           "unitId": 1,
           "garnish": true
-        },
-        {
-          "order": 6,
-          "ingredientId": 346304,
-          "name": "Ice",
-          "amount": "120",
-          "unitId": 8
         }
       ]
     },
@@ -27820,7 +28178,8 @@
       "name": "Silver Bay",
       "description": "A sophisticated and warming whiskey cocktail that balances the smoky depth of Islay Scotch with the nutty sweetness of chestnut and honey, finished with a hint of spice.",
       "instructions": "1. Combine the Islay Scotch Whiskey, lemon juice, chestnut liqueur, and honey syrup in a heat-resistant glass or mug.\n2. Add the whiskey-barrel aged bitters.\n3. Pour in the boiling water and stir gently to combine all ingredients.\n4. Grate fresh nutmeg over the top for aroma.\n5. Serve warm in a cocktail glass or toddy mug.",
-      "glassId": "cocktail_glass",
+      "photoUri": "assets/cocktails/1758582789552-silver-bay.jpg",
+      "glassId": "nick_and_nora",
       "methodIds": ["heat", "build"],
       "tags": [
         {
@@ -27878,23 +28237,17 @@
           "name": "Nutmeg",
           "amount": "1",
           "unitId": 15
-        },
-        {
-          "order": 8,
-          "ingredientId": 346304,
-          "name": "Ice",
-          "amount": "120",
-          "unitId": 8
         }
       ]
     },
     {
       "id": 1757000000272,
       "name": "Silver Bullet",
-      "description": "A potent and bold combination of gin and Scotch whiskey, designed for those who appreciate a strong, spirit-forward drink with a sharp, clean finish.",
-      "instructions": "1. Fill a mixing glass or shaker with ice cubes.\n2. Pour in the gin and Scotch whiskey.\n3. Stir well for about 20 seconds to ensure the drink is properly chilled and diluted.\n4. Strain the mixture into a chilled cocktail glass.\n5. Garnish with a fresh lemon twist by expressing the oils over the drink.",
+      "description": "A potent and bold combination of gin and kümmel liqueur, designed for those who appreciate a strong, spirit-forward drink with a sharp, clean finish.",
+      "instructions": "1. Fill a mixing glass or shaker with ice cubes.\n2. Pour in the gin and kümmel liqueur.\n3. Stir well for about 20 seconds to ensure the drink is properly chilled and diluted.\n4. Strain the mixture into a chilled cocktail glass.\n5. Garnish with a fresh lemon twist by expressing the oils over the drink.",
+      "photoUri": "assets/cocktails/1757000000272-silver-bullet.jpg",
       "glassId": "cocktail_glass",
-      "methodIds": ["shake", "stir"],
+      "methodIds": ["shake"],
       "tags": [
         {
           "id": 5,
@@ -27905,27 +28258,34 @@
       "ingredients": [
         {
           "order": 1,
-          "ingredientId": 140867,
-          "name": "Scotch Whisky",
-          "amount": "30",
+          "ingredientId": 863081,
+          "name": "Gin",
+          "amount": "45",
           "unitId": 11
         },
         {
           "order": 2,
-          "ingredientId": 863081,
-          "name": "Gin",
-          "amount": "60",
+          "ingredientId": 1759483024695,
+          "name": "Kümmel liqueur",
+          "amount": "22.5",
           "unitId": 11
         },
         {
           "order": 3,
+          "ingredientId": 734220,
+          "name": "Lemon Juice",
+          "amount": "10",
+          "unitId": 11
+        },
+        {
+          "order": 4,
           "ingredientId": 346304,
           "name": "Ice",
           "amount": "150",
           "unitId": 8
         },
         {
-          "order": 4,
+          "order": 5,
           "ingredientId": 108496,
           "name": "Lemon",
           "amount": "1",
@@ -27935,98 +28295,11 @@
       ]
     },
     {
-      "id": 1760963780621,
-      "name": "Silverhand",
-      "description": "Silverhand is a bold, tequila-based cocktail with agave sweetness, aromatic bitters, and a splash of beer. Finished with orange peel and red chilli, it delivers a sharp, spicy kick with a rebellious edge.",
-      "instructions": "1. Add plenty of ice to a mixing glass.\n2. Pour in 60 ml tequila reposado.\n3. Add 1 bar spoon of agave syrup.\n4. Add 3 dashes Angostura bitters.\n5. Stir well for about 15–20 seconds until chilled.\n6. Dump the ice from the rocks glass and add fresh ice (one big cube if you have it).\n7. Strain the stirred mix into the glass.\n8. Gently top with 30 ml Corona (or another light lager), trying not to over-fizz.\n9. Express an orange peel over the drink and discard it.\n10. Add a red chilli as garnish.",
-      "photoUri": "assets/cocktails/1760963780621-silverhand.jpg",
-      "glassId": "rocks_glass",
-      "methodIds": ["stir"],
-      "tags": [
-        {
-          "id": 5,
-          "name": "strong",
-          "color": "#ec5a5a"
-        }
-      ],
-      "ingredients": [
-        {
-          "order": 1,
-          "ingredientId": 1759244905934,
-          "name": "Tequila Añejo",
-          "amount": "60",
-          "unitId": 11,
-          "substitutes": [
-            {
-              "id": 97568,
-              "ingredientId": 97568,
-              "name": "Tequila"
-            },
-            {
-              "id": 1759483024681,
-              "ingredientId": 1759483024681,
-              "name": "Tequila Reposado"
-            }
-          ]
-        },
-        {
-          "order": 2,
-          "ingredientId": 773514,
-          "name": "Agave Syrup",
-          "amount": "1",
-          "unitId": 2
-        },
-        {
-          "order": 3,
-          "ingredientId": 401724,
-          "name": "Angostura Bitters",
-          "amount": "3",
-          "unitId": 6
-        },
-        {
-          "order": 4,
-          "ingredientId": 782289,
-          "name": "Corona",
-          "amount": "30",
-          "unitId": 11
-        },
-        {
-          "order": 5,
-          "ingredientId": 346304,
-          "name": "Ice",
-          "amount": "150",
-          "unitId": 8
-        },
-        {
-          "order": 6,
-          "ingredientId": 454059,
-          "name": "Orange",
-          "amount": "1",
-          "unitId": 14,
-          "garnish": true
-        },
-        {
-          "order": 7,
-          "ingredientId": 281512,
-          "name": "Red Chili Pepper",
-          "amount": "1",
-          "unitId": 1,
-          "garnish": true
-        },
-        {
-          "order": 8,
-          "ingredientId": 346304,
-          "name": "Ice",
-          "amount": "120",
-          "unitId": 8
-        }
-      ]
-    },
-    {
       "id": 1758545455634,
-      "name": "Sin Limits",
-      "description": "A sophisticated and bright rum sour that artfully balances the aromatic warmth of cardamom with crisp white rum, smooth vanilla, and sharp citrus notes.",
-      "instructions": "1. Muddle the cardamom pods in the bottom of a cocktail shaker to release their essential oils.\n2. Add the white rum, lime juice, vanilla syrup, and Strucchi Bitter to the shaker.\n3. Fill the shaker with ice and shake vigorously for about 10-15 seconds until well-chilled.\n4. Double strain the mixture through a fine-mesh sieve into a chilled cocktail glass to remove cardamom bits.\n5. Serve immediately and enjoy.",
+      "name": "Sin Limites",
+      "description": "A bright rum sour that artfully balances the aromatic warmth of cardamom with crisp white rum, smooth vanilla, and sharp citrus notes.",
+      "instructions": "1. Muddle the cardamom pods in the bottom of a cocktail shaker to release their essential oils.\n2. Add the white rum, lime juice, vanilla syrup, and Strucchi Bitter to the shaker.\n3. Fill the shaker with ice and shake vigorously.\n4. Double-strain into a chilled cocktail glass.",
+      "photoUri": "assets/cocktails/1758545455634-sin-limites.jpg",
       "glassId": "cocktail_glass",
       "methodIds": ["muddle", "shake"],
       "tags": [
@@ -28074,6 +28347,7 @@
           "substitutes": [
             {
               "id": 705866,
+              "ingredientId": 705866,
               "name": "Campari"
             }
           ]
@@ -28210,7 +28484,8 @@
       "id": 1757000000273,
       "name": "Slippery Nipple",
       "description": "A very smooth and beautiful shot.",
-      "instructions": "1. Pour 20ml of sambuca into a shooter glass.\n2. Carefully pour 25ml of Baileys on top of the sambuca.\n3. Add a dash of grenadine syrup (optional).",
+      "instructions": "1. If you use grenadine syrup, pour it on the bottom layer. \n2. Pour 20ml of sambuca into a shooter glass.\n3. Carefully pour 20ml of Baileys on top of the sambuca.",
+      "photoUri": "assets/cocktails/1757000000273-slippery-nipple.jpg",
       "glassId": "shooter",
       "methodIds": ["layer"],
       "tags": [
@@ -28228,32 +28503,27 @@
       "ingredients": [
         {
           "order": 1,
+          "ingredientId": 803536,
+          "name": "Grenadine",
+          "amount": "5",
+          "unitId": 11,
+          "optional": true
+        },
+        {
+          "order": 2,
           "ingredientId": 267073,
           "name": "Sambuca",
           "amount": "20",
           "unitId": 11
         },
         {
-          "order": 2,
+          "order": 3,
           "ingredientId": 436447,
           "name": "Baileys",
-          "amount": "25",
-          "unitId": 11
-        },
-        {
-          "order": 3,
-          "ingredientId": 803536,
-          "name": "Grenadine",
-          "amount": "1",
-          "unitId": 6,
-          "optional": true
-        },
-        {
-          "order": 4,
-          "ingredientId": 346304,
-          "name": "Ice",
-          "amount": "45",
-          "unitId": 8
+          "amount": "20",
+          "unitId": 11,
+          "allowBaseSubstitution": true,
+          "allowBrandSubstitution": true
         }
       ]
     },
@@ -28262,6 +28532,7 @@
       "name": "Smoky Whiskey Sour",
       "description": "A variation of the classic \"Whisky Sour\" created by Simon Difford for people who like the distinct smoky flavor of Scotch Islay whisky.",
       "instructions": "1. Combine 30ml of Islay single malt Scotch and 30ml of scotch whisky in a cocktail shaker.\n2. Add 30ml of lemon juice, 20ml of maple syrup and a dash of Angostura bitters.\n3. Add 1 egg white and dry shake without ice.\n4. Add ice and shake again.\n5. Strain into a rocks glass filled with ice.\n6. Garnish with a lemon peel.",
+      "photoUri": "assets/cocktails/1757000000274-smoky-whiskey-sour.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["shake"],
       "tags": [
@@ -28276,47 +28547,54 @@
           "order": 1,
           "ingredientId": 140867,
           "name": "Scotch Whisky",
-          "amount": "60",
+          "amount": "30",
           "unitId": 11
         },
         {
           "order": 2,
-          "ingredientId": 108496,
-          "name": "Lemon",
-          "amount": "1",
-          "unitId": 9
+          "ingredientId": 563527,
+          "name": "Islay Scotch Whisky",
+          "amount": "30",
+          "unitId": 11
         },
         {
           "order": 3,
+          "ingredientId": 734220,
+          "name": "Lemon Juice",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 4,
           "ingredientId": 182121,
           "name": "Maple syrup",
           "amount": "20",
           "unitId": 11
         },
         {
-          "order": 4,
+          "order": 5,
           "ingredientId": 401724,
           "name": "Angostura Bitters",
           "amount": "1",
           "unitId": 6
         },
         {
-          "order": 5,
-          "ingredientId": 368774,
-          "name": "Egg",
+          "order": 6,
+          "ingredientId": 450591,
+          "name": "Egg White",
           "amount": "1",
           "unitId": 1,
           "optional": true
         },
         {
-          "order": 6,
+          "order": 7,
           "ingredientId": 346304,
           "name": "Ice",
           "amount": "150",
           "unitId": 8
         },
         {
-          "order": 7,
+          "order": 8,
           "ingredientId": 108496,
           "name": "Lemon",
           "amount": "1",
@@ -28324,7 +28602,7 @@
           "garnish": true
         },
         {
-          "order": 8,
+          "order": 9,
           "ingredientId": 346304,
           "name": "Ice",
           "amount": "120",
@@ -28392,8 +28670,9 @@
       "name": "Sneaky Pete",
       "description": "A bold and creamy variation of the White Russian, swapping vodka for the spicy, robust notes of rye whiskey.",
       "instructions": "1. Fill a rocks glass with ice cubes.\n2. Pour 30ml of rye whiskey over the ice.\n3. Add 30ml of coffee liqueur.\n4. Pour in 30ml of milk and stir well to combine.",
+      "photoUri": "assets/cocktails/1757000000275-sneaky-pete.jpg",
       "glassId": "rocks_glass",
-      "methodIds": ["stir"],
+      "methodIds": ["build"],
       "tags": [
         {
           "id": 6,
@@ -28427,13 +28706,6 @@
           "order": 4,
           "ingredientId": 346304,
           "name": "Ice",
-          "amount": "150",
-          "unitId": 8
-        },
-        {
-          "order": 5,
-          "ingredientId": 346304,
-          "name": "Ice",
           "amount": "120",
           "unitId": 8
         }
@@ -28443,7 +28715,8 @@
       "id": 1757000000276,
       "name": "Snowball",
       "description": "A festive and nostalgic favorite in the UK, this 'Winter Warmer' is sweet, fizzy, and pleasantly creamy.",
-      "instructions": "1. Pour 60ml of egg liqueur into a chilled collins glass.\n2. Optionally, squeeze in 15ml of fresh lime juice to balance the sweetness.\n3. Carefully fill the rest of the glass with lemonade.\n4. Stir gently to mix the thick liqueur with the soda without losing the fizz.",
+      "instructions": "1. Pour 60ml of egg liqueur into an ice-filled Collins glass.\n2. Optionally, squeeze in 15ml of fresh lime juice to balance the sweetness.\n3. Carefully fill the rest of the glass with lemonade.\n4. Stir gently to mix the thick liqueur with the soda without losing the fizz.",
+      "photoUri": "assets/cocktails/1757000000276-snowball.jpg",
       "glassId": "collins_glass",
       "methodIds": ["build"],
       "tags": [
@@ -28468,18 +28741,33 @@
         },
         {
           "order": 2,
-          "ingredientId": 336572,
-          "name": "Lime",
-          "amount": "1",
-          "unitId": 9,
+          "ingredientId": 525624,
+          "name": "Lime Juice",
+          "amount": "15",
+          "unitId": 11,
           "optional": true
         },
         {
           "order": 3,
           "ingredientId": 906592,
           "name": "Lemonade",
-          "amount": "90",
+          "amount": "60",
           "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 346304,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
+        },
+        {
+          "order": 5,
+          "ingredientId": 791672,
+          "name": "Cherry",
+          "amount": "1",
+          "unitId": 1,
+          "garnish": true
         }
       ]
     },
@@ -28552,8 +28840,9 @@
     {
       "id": 1758534678046,
       "name": "Spiced Apple-Bourbon Punch",
-      "description": "A bright whiskey sour balancing Apple Cider, Bourbon, Apple Brandy with fresh citrus and a touch of sweetness for a crisp, refreshing sip. Garnished with cloves.",
-      "instructions": "1. Combine apple cider, bourbon, apple brandy, lemon juice, demerara syrup, and bitters in a cocktail shaker.\n2. Fill the shaker with ice and shake vigorously for about 10-15 seconds.\n3. Strain the mixture into a rocks glass filled with fresh ice.\n4. Garnish with two whole cloves to add a seasonal aroma.",
+      "description": "A bright whiskey sour balancing Apple Cider, Bourbon, Apple Brandy with fresh citrus and a touch of sweetness for a crisp, refreshing sip.",
+      "instructions": "1. Combine apple cider, bourbon, apple brandy, lemon juice, demerara syrup, and bitters in a cocktail shaker.\n2. Fill the shaker with ice and shake vigorously.\n3. Strain into a rocks glass filled with fresh ice.\n4. Garnish with two whole cloves to add a seasonal aroma.",
+      "photoUri": "assets/cocktails/1758534678046-spiced-apple-bourbon-punch.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["shake"],
       "tags": [
@@ -28587,14 +28876,17 @@
           "substitutes": [
             {
               "id": 150452,
+              "ingredientId": 150452,
               "name": "Apple Schnapps"
             },
             {
               "id": 337536,
+              "ingredientId": 337536,
               "name": "Applejack"
             },
             {
               "id": 797544,
+              "ingredientId": 797544,
               "name": "Apple Liqueur"
             }
           ]
@@ -28648,9 +28940,10 @@
       "id": 1757000000277,
       "name": "Spiced Rum Milk Punch",
       "description": "A creamy, comforting punch blending spiced rum with milk, vanilla, and warm winter spices for a smooth dessert-like finish.",
-      "instructions": "1. Fill a rocks glass with fresh ice.\n2. Add the spiced rum, milk, and simple syrup to the glass.\n3. Add a dash of vanilla extract.\n4. Stir gently to combine the ingredients and chill the drink.\n5. Garnish with a fresh dusting of grated cinnamon and nutmeg.",
+      "instructions": "1. Combine all ingredients into a cocktail shaker.\n2. Add one medium or two small ice cubes to the cocktail shaker and shake until the ice fully melts.\n3. Without a strainer, pour the chilled and aerated drink into a glass with ice.",
+      "photoUri": "assets/cocktails/1757000000277-spiced-rum-milk-punch.jpg",
       "glassId": "rocks_glass",
-      "methodIds": ["stir", "blend"],
+      "methodIds": ["build"],
       "tags": [
         {
           "id": 6,
@@ -28663,8 +28956,25 @@
           "order": 1,
           "ingredientId": 908571,
           "name": "Spiced Rum",
-          "amount": "45",
-          "unitId": 11
+          "amount": "60",
+          "unitId": 11,
+          "substitutes": [
+            {
+              "id": 811139,
+              "ingredientId": 811139,
+              "name": "Gold Rum"
+            },
+            {
+              "id": 1755989023035,
+              "ingredientId": 1755989023035,
+              "name": "Gold Puerto Rican Rum"
+            },
+            {
+              "id": 1759483024689,
+              "ingredientId": 1759483024689,
+              "name": "Gold Jamaican Rum"
+            }
+          ]
         },
         {
           "order": 2,
@@ -28675,9 +28985,9 @@
         },
         {
           "order": 3,
-          "ingredientId": 150490,
-          "name": "Simple Syrup",
-          "amount": "22.5",
+          "ingredientId": 429018,
+          "name": "Rich Simple Syrup",
+          "amount": "15",
           "unitId": 11
         },
         {
@@ -28685,13 +28995,13 @@
           "ingredientId": 116001,
           "name": "Vanilla Extract",
           "amount": "1",
-          "unitId": 6
+          "unitId": 7
         },
         {
           "order": 5,
           "ingredientId": 346304,
           "name": "Ice",
-          "amount": "150",
+          "amount": "60",
           "unitId": 8
         },
         {
@@ -28803,6 +29113,7 @@
       "name": "Spritz Veneziano",
       "description": "An IBA official sparkling cocktail. Prosecco is recommended for the sparkling wine.",
       "instructions": "1. Fill a wine glass with ice.\n2. Add 90ml of sparkling wine and 60ml of Aperol.\n3. Top with a splash of soda water.\n4. Garnish with an orange slice.",
+      "photoUri": "assets/cocktails/1757000000278-spritz-veneziano.jpg",
       "glassId": "wine_glass",
       "methodIds": ["build"],
       "tags": [
@@ -28827,10 +29138,17 @@
         },
         {
           "order": 2,
-          "ingredientId": 167992,
-          "name": "Aperol",
+          "ingredientId": 1759483024694,
+          "name": "Select",
           "amount": "60",
-          "unitId": 11
+          "unitId": 11,
+          "substitutes": [
+            {
+              "id": 167992,
+              "ingredientId": 167992,
+              "name": "Aperol"
+            }
+          ]
         },
         {
           "order": 3,
@@ -28860,7 +29178,54 @@
       "id": 1757000000279,
       "name": "Squashed Frog",
       "description": "Despite its name, this layered shot is very mild and sweet.",
-      "instructions": "1. Pour 15ml of grenadine into a shooter glass.\n2. Carefully add 15ml of melon liqueur and 15ml of egg liqueur on top using a bar spoon.",
+      "instructions": "1. Pour 5ml of grenadine into a shooter glass.\n2. Carefully add 30ml of melon liqueur and 15ml of egg liqueur on top using a bar spoon.",
+      "photoUri": "assets/cocktails/1757000000279-squashed-frog.jpg",
+      "glassId": "shooter",
+      "methodIds": ["layer"],
+      "tags": [
+        {
+          "id": 6,
+          "name": "moderate",
+          "color": "#F06292"
+        },
+        {
+          "id": 9,
+          "name": "shooter",
+          "color": "#FF8A65"
+        }
+      ],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 803536,
+          "name": "Grenadine",
+          "amount": "5",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 118387,
+          "name": "Midori Melon Liqueur",
+          "amount": "30",
+          "unitId": 11,
+          "allowBaseSubstitution": true,
+          "allowBrandSubstitution": true
+        },
+        {
+          "order": 3,
+          "ingredientId": 438075,
+          "name": "Egg Liqueur",
+          "amount": "15",
+          "unitId": 11
+        }
+      ]
+    },
+    {
+      "id": 1760963780636,
+      "name": "Squashed Irish Frog",
+      "description": "Despite its name, this layered shot is very mild and sweet.",
+      "instructions": "1. Pour 5ml of grenadine into a shooter glass.\n2. Carefully add 30ml of melon liqueur and 15ml of egg liqueur on top using a bar spoon.",
+      "photoUri": "assets/cocktails/1760963780636-squashed-irish-frog.jpg",
       "glassId": "shooter",
       "methodIds": ["layer"],
       "tags": [
@@ -28888,21 +29253,16 @@
           "ingredientId": 118387,
           "name": "Midori Melon Liqueur",
           "amount": "15",
-          "unitId": 11
+          "unitId": 11,
+          "allowBaseSubstitution": true,
+          "allowBrandSubstitution": true
         },
         {
           "order": 3,
-          "ingredientId": 438075,
-          "name": "Egg Liqueur",
+          "ingredientId": 626592,
+          "name": "Irish Cream",
           "amount": "15",
           "unitId": 11
-        },
-        {
-          "order": 4,
-          "ingredientId": 346304,
-          "name": "Ice",
-          "amount": "45",
-          "unitId": 8
         }
       ]
     },
@@ -28911,6 +29271,7 @@
       "name": "Stay Sober",
       "description": "A delightful, refreshing non-alcoholic cocktail. The ratio of ingredients can be varied according to your taste.",
       "instructions": "1. Fill a highball glass with ice cubes.\n2. Pour 30ml of apple juice and 30ml of cranberry juice.\n3. Top with ginger beer.",
+      "photoUri": "assets/cocktails/1757000000280-stay-sober.jpg",
       "glassId": "highball_glass",
       "methodIds": ["build"],
       "tags": [
@@ -28948,6 +29309,15 @@
           "name": "Ice",
           "amount": "120",
           "unitId": 8
+        },
+        {
+          "order": 5,
+          "ingredientId": 336572,
+          "name": "Lime",
+          "amount": "1",
+          "unitId": 19,
+          "optional": true,
+          "garnish": true
         }
       ]
     },
@@ -29010,9 +29380,10 @@
     },
     {
       "id": 1758535425218,
-      "name": "Stonefence",
+      "name": "Stone Fence",
       "description": "A historic American colonial classic that combines the robust warmth of rye whiskey with the crisp, refreshing profile of apple cider. This version is enhanced with a dash of aromatic bitters and a fresh mint garnish for a complex, spirit-forward experience.",
       "instructions": "1. Fill a tall pub glass with ice cubes.\n2. Pour 60ml of Rye Whisky over the ice.\n3. Add 1 dash of Angostura Bitters.\n4. Top the glass with approximately 440ml of Apple Cider.\n5. Stir gently to combine the ingredients without losing carbonation.\n6. Garnish with a fresh sprig of mint and serve immediately.",
+      "photoUri": "assets/cocktails/1758535425218-stone-fence.jpg",
       "glassId": "pub_glass",
       "methodIds": ["build"],
       "tags": [
@@ -29032,26 +29403,32 @@
           "substitutes": [
             {
               "id": 342124,
+              "ingredientId": 342124,
               "name": "Bourbon"
             },
             {
               "id": 435165,
+              "ingredientId": 435165,
               "name": "Brandy"
             },
             {
               "id": 811139,
+              "ingredientId": 811139,
               "name": "Gold Rum"
             },
             {
               "id": 861551,
+              "ingredientId": 861551,
               "name": "White Rum"
             },
             {
               "id": 908571,
+              "ingredientId": 908571,
               "name": "Spiced Rum"
             },
             {
               "id": 962705,
+              "ingredientId": 962705,
               "name": "Dark Rum"
             }
           ]
@@ -29092,9 +29469,10 @@
       "id": 1757000000281,
       "name": "Strawberry Colada",
       "description": "A vibrant and fruity twist on the traditional Piña Colada. This tropical delight blends white rum and creamy coconut with the sweet, tart flavor of fresh strawberries, creating a lush pink cocktail perfect for summer sipping.",
-      "instructions": "1. Fill a blender with 150g of ice or crushed ice.\n2. Add 30ml of White Rum and 20ml of Strawberry Liqueur.\n3. Add 50g of fresh strawberries (or strawberry puree), 30ml of Coconut Cream, and 90ml of Pineapple Juice.\n4. Blend on high speed until the mixture reaches a smooth, slushy consistency.\n5. Pour the contents into a chilled goblet glass.\n6. Garnish with a pineapple wedge and a maraschino cherry.\n7. Optionally, top with a dollop of whipped cream for extra decadence.",
-      "glassId": "goblet",
-      "methodIds": ["shake", "blend"],
+      "instructions": "1. Fill a blender with 150g of ice or crushed ice.\n2. Add 30ml of White Rum and 20ml of Strawberry Liqueur.\n3. Add 50g of fresh strawberries (or strawberry puree), 30ml of Coconut Cream, and 90ml of Pineapple Juice.\n4. Blend on high speed until the mixture reaches a smooth, slushy consistency.\n5. Pour the contents into a hurricane or chilled goblet glass.\n6. Garnish with a strawberry.\n7. Optionally, top with a dollop of whipped cream for extra decadence.",
+      "photoUri": "assets/cocktails/1757000000281-strawberry-colada.jpg",
+      "glassId": "hurricane_glass",
+      "methodIds": ["blend"],
       "tags": [
         {
           "id": 7,
@@ -29124,6 +29502,7 @@
           "substitutes": [
             {
               "id": 605672,
+              "ingredientId": 605672,
               "name": "Strawberry Schnapps"
             }
           ]
@@ -29158,37 +29537,32 @@
         },
         {
           "order": 7,
-          "ingredientId": 932849,
-          "name": "Pineapple",
+          "ingredientId": 969224,
+          "name": "Strawberry",
           "amount": "1",
-          "unitId": 19,
-          "garnish": true
+          "unitId": 1,
+          "garnish": true,
+          "allowBaseSubstitution": true,
+          "allowBrandSubstitution": true
         },
         {
           "order": 8,
-          "ingredientId": 607153,
-          "name": "Maraschino Cherry",
-          "amount": "1",
-          "unitId": 1,
-          "garnish": true
-        },
-        {
-          "order": 9,
           "ingredientId": 477462,
           "name": "Whipped Cream",
           "amount": "30",
           "unitId": 11,
-          "optional": true
+          "optional": true,
+          "garnish": true
         }
       ]
     },
     {
       "id": 1759484662626,
       "name": "Strawberry Daiquiri",
-      "description": "A sophisticated and bright rum sour that perfectly balances fruity strawberry liqueur with the crispness of white rum and fresh lime. A pinch of salt and black pepper enhances the berry profile for a complex finish.",
+      "description": "A bright rum sour that perfectly balances fruity strawberry liqueur with the crispness of white rum and fresh lime. A pinch of salt and black pepper enhances the berry profile for a complex finish.",
       "instructions": "1. Add the white rum, strawberry liqueur, lime juice, and rich simple syrup into a cocktail shaker.\n2. Add a pinch of salt and a light crack of black pepper to the shaker.\n3. Fill the shaker with ice and shake vigorously for about 10-15 seconds until well-chilled.\n4. Double strain the mixture into the chilled coupe glass.\n5. Garnish with a fresh strawberry on the rim.",
       "photoUri": "assets/cocktails/1759484662626-strawberry-daiquiri.jpg",
-      "glassId": "coupe",
+      "glassId": "cocktail_glass",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -29200,6 +29574,13 @@
       "ingredients": [
         {
           "order": 1,
+          "ingredientId": 861551,
+          "name": "White Rum",
+          "amount": "60",
+          "unitId": 11
+        },
+        {
+          "order": 2,
           "ingredientId": 896547,
           "name": "Strawberry Liqueur",
           "amount": "30",
@@ -29207,16 +29588,10 @@
           "substitutes": [
             {
               "id": 605672,
+              "ingredientId": 605672,
               "name": "Strawberry Schnapps"
             }
           ]
-        },
-        {
-          "order": 2,
-          "ingredientId": 861551,
-          "name": "White Rum",
-          "amount": "60",
-          "unitId": 11
         },
         {
           "order": 3,
@@ -29260,72 +29635,14 @@
           "amount": "1",
           "unitId": 1,
           "garnish": true
-        }
-      ]
-    },
-    {
-      "id": 1757000000282,
-      "name": "Strawberry Daiquiri Punch",
-      "description": "A vibrant, frozen-style party punch that blends a generous amount of fresh strawberries with zesty citrus and light rum. Ideal for sharing with friends on a warm day.",
-      "instructions": "1. Place the fresh strawberries and sugar into a high-speed blender.\n2. Pour in the white rum, lemon juice, and lime juice.\n3. Add the ice to the blender container.\n4. Blend on high speed until the mixture reaches a smooth, slushy consistency.\n5. Pour the punch into chilled glasses.\n6. Garnish each glass with a fresh strawberry.",
-      "glassId": "cocktail_glass",
-      "methodIds": ["blend"],
-      "tags": [
-        {
-          "id": 6,
-          "name": "moderate",
-          "color": "#F06292"
-        }
-      ],
-      "ingredients": [
-        {
-          "order": 1,
-          "ingredientId": 969224,
-          "name": "Strawberry",
-          "amount": "120",
-          "unitId": 8
         },
         {
-          "order": 2,
-          "ingredientId": 861551,
-          "name": "White Rum",
-          "amount": "180",
-          "unitId": 11
-        },
-        {
-          "order": 3,
-          "ingredientId": 525624,
-          "name": "Lime Juice",
-          "amount": "25",
-          "unitId": 11
-        },
-        {
-          "order": 4,
-          "ingredientId": 734220,
-          "name": "Lemon Juice",
-          "amount": "100",
-          "unitId": 11
-        },
-        {
-          "order": 5,
-          "ingredientId": 217733,
-          "name": "Sugar",
-          "amount": "50",
-          "unitId": 8
-        },
-        {
-          "order": 6,
-          "ingredientId": 346304,
-          "name": "Ice",
-          "amount": "150",
-          "unitId": 8
-        },
-        {
-          "order": 7,
-          "ingredientId": 969224,
-          "name": "Strawberry",
+          "order": 9,
+          "ingredientId": 336572,
+          "name": "Lime",
           "amount": "1",
-          "unitId": 1,
+          "unitId": 19,
+          "optional": true,
           "garnish": true
         }
       ]
@@ -29335,6 +29652,7 @@
       "name": "Strawberry Margarita",
       "description": "A luscious and bold twist on the classic Margarita, combining the earthy notes of Tequila Blanco with sweet strawberries and the orange accents of Cointreau.",
       "instructions": "1. Combine the fresh strawberries, tequila blanco, Cointreau, and lime juice in a blender.\n2. Add the ice to the mixture.\n3. Blend until the texture is perfectly smooth and frozen.\n4. Optional: Rim your margarita glasses with salt or sugar if desired.\n5. Pour the blended cocktail into the prepared glasses.\n6. Finish with a strawberry garnish on each glass.",
+      "photoUri": "assets/cocktails/1757000000283-strawberry-margarita.jpg",
       "glassId": "margarita_glass",
       "methodIds": ["blend"],
       "tags": [
@@ -29364,7 +29682,9 @@
           "ingredientId": 354943,
           "name": "Cointreau",
           "amount": "120",
-          "unitId": 11
+          "unitId": 11,
+          "allowBaseSubstitution": true,
+          "allowBrandSubstitution": true
         },
         {
           "order": 4,
@@ -29394,7 +29714,7 @@
       "id": 1758544887872,
       "name": "Streamtini",
       "description": "A sophisticated spirit-forward cocktail that balances the botanical notes of vodka with the sweet, tart profile of blueberry schnapps and cranberry juice. It is a deep, aromatic drink designed for slow sipping.",
-      "instructions": "1. Fill a cocktail shaker with 150g of ice.\n2. Pour 30ml of Vodka, 30ml of Blueberry Schnapps, and 60ml of Cranberry Juice into the shaker.\n3. Shake vigorously for about 10-15 seconds until well-chilled.\n4. Strain the mixture into the chilled cocktail glass.\n5. Serve immediately.",
+      "instructions": "1. Fill a cocktail shaker with 150g of ice.\n2. Pour 30ml of Vodka, 30ml of Blueberry Schnapps, and 60ml of Cranberry Juice into the shaker.\n3. Shake vigorously.\n4. Strain into the chilled cocktail glass.",
       "photoUri": "assets/cocktails/1758544887872-streamtini.jpg",
       "glassId": "cocktail_glass",
       "methodIds": ["shake"],
@@ -29441,6 +29761,7 @@
       "name": "Suburban",
       "description": "A robust and complex cocktail reminiscent of an Old Fashioned. It features a rich blend of bourbon, dark rum, and port wine, accented by the aromatic depth of two types of bitters.",
       "instructions": "1. Fill a mixing glass with ice.\n2. Add 50ml of bourbon, 25ml of aged dark rum, and 25ml of aged tawny port wine.\n3. Add 1 dash of Angostura bitters and 1 dash of orange bitters.\n4. Stir the ingredients well for about 20-30 seconds to achieve proper dilution and temperature.\n5. Strain the liquid into a rocks glass over fresh ice.\n6. Garnish with a twist of orange peel.",
+      "photoUri": "assets/cocktails/1757000000284-suburban.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["stir"],
       "tags": [
@@ -29516,7 +29837,7 @@
       "description": "A refreshing and historic highball that combines the punch of gin and brandy with the zesty kick of lime and the spicy effervescence of ginger beer.",
       "instructions": "1. Add 30ml of gin, 30ml of cognac (or brandy), 15ml of lime juice, and 2 dashes of Angostura bitters into a cocktail shaker with ice.\n2. Shake briefly to chill the ingredients.\n3. Strain the mixture into a highball glass filled with fresh ice.\n4. Top the glass with 90ml of ginger beer.\n5. Garnish with a fresh mint sprig and a slice of orange.",
       "photoUri": "assets/cocktails/1755800000109-suffering-bastard.jpg",
-      "glassId": "highball_glass",
+      "glassId": "tiki",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -29540,6 +29861,7 @@
           "substitutes": [
             {
               "id": 435165,
+              "ingredientId": 435165,
               "name": "Brandy"
             }
           ]
@@ -29649,6 +29971,7 @@
       "name": "Swimming Pool",
       "description": "A tropical cocktail with vodka, rum, coconut and pineapple flavors.",
       "instructions": "1. Fill a shaker with ice.\n2. Pour 30ml of vodka and 60ml of white rum.\n3. Add 15ml of cream, 30ml of coconut milk and 60ml of pineapple juice.\n4. Shake well and strain into a hurricane glass filled with ice.\n5. Pour 15ml of blue curacao on the top.\n6. Garnish with a pineapple wedge.",
+      "photoUri": "assets/cocktails/1757000000285-swimming-pool.jpg",
       "glassId": "hurricane_glass",
       "methodIds": ["shake"],
       "tags": [
@@ -29735,7 +30058,8 @@
       "name": "Symphony",
       "description": "A custom mix of gin, maraschino liqueur, green Chartreuse and a smoky Laphroaig float.",
       "instructions": "1. Fill a mixing glass with ice.\n2. Pour 30ml of gin, 20ml of maraschino liqueur, 20ml of green Chartreuse and 20ml of lemon juice.\n3. Stir and strain into a chilled cocktail glass.\n4. Float 5ml of Laphroaig on top.",
-      "glassId": "cocktail_glass",
+      "photoUri": "assets/cocktails/1757000000286-symphony.jpg",
+      "glassId": "nick_and_nora",
       "methodIds": ["stir", "layer"],
       "tags": [
         {
@@ -29763,7 +30087,7 @@
           "order": 3,
           "ingredientId": 399740,
           "name": "Green Chartreuse",
-          "amount": "20",
+          "amount": "10",
           "unitId": 11
         },
         {
@@ -29794,6 +30118,7 @@
       "name": "Szarlotka",
       "description": "A simple Polish cocktail pairing Żubrówka with apple juice and cinnamon.",
       "instructions": "1. Fill a rocks glass with ice.\n2. Pour 60ml of Żubrówka and 120ml of apple juice.\n3. Add a pinch of grated cinnamon and stir gently.\n4. Garnish with a cinnamon stick and an apple slice.",
+      "photoUri": "assets/cocktails/1757000000287-szarlotka.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["build"],
       "tags": [
@@ -29823,10 +30148,17 @@
           "ingredientId": 46858,
           "name": "Cinnamon",
           "amount": "1",
-          "unitId": 6
+          "unitId": 15
         },
         {
           "order": 4,
+          "ingredientId": 346304,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
+        },
+        {
+          "order": 5,
           "ingredientId": 331650,
           "name": "Cinnamon Sticks",
           "amount": "1",
@@ -29834,19 +30166,12 @@
           "garnish": true
         },
         {
-          "order": 5,
+          "order": 6,
           "ingredientId": 767167,
           "name": "Apple",
           "amount": "1",
           "unitId": 27,
           "garnish": true
-        },
-        {
-          "order": 6,
-          "ingredientId": 346304,
-          "name": "Ice",
-          "amount": "120",
-          "unitId": 8
         }
       ]
     },
@@ -30636,6 +30961,95 @@
       ]
     },
     {
+      "id": 1760963780635,
+      "name": "Tiger's Milk",
+      "description": "This is a rich, old-school cocktail often compared to eggnog or a boozy milkshake.",
+      "instructions": "1. Shake all ingredients with ice.\n2. Strain into an ice-filled glass.\n3. Garnish with a pinch of freshly grated nutmeg.",
+      "photoUri": "assets/cocktails/1760963780635-tiger-s-milk.jpg",
+      "glassId": "rocks_glass",
+      "methodIds": ["shake"],
+      "tags": [
+        {
+          "id": 6,
+          "name": "moderate",
+          "color": "#F06292"
+        }
+      ],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 502166,
+          "name": "Cognac",
+          "amount": "60",
+          "unitId": 11,
+          "substitutes": [
+            {
+              "id": 435165,
+              "ingredientId": 435165,
+              "name": "Brandy"
+            }
+          ]
+        },
+        {
+          "order": 2,
+          "ingredientId": 116001,
+          "name": "Vanilla Extract",
+          "amount": "2",
+          "unitId": 7
+        },
+        {
+          "order": 3,
+          "ingredientId": 46858,
+          "name": "Cinnamon",
+          "amount": "1",
+          "unitId": 15
+        },
+        {
+          "order": 4,
+          "ingredientId": 429018,
+          "name": "Rich Simple Syrup",
+          "amount": "7.5",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 38882,
+          "name": "Milk",
+          "amount": "22.5",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 945886,
+          "name": "Heavy Cream",
+          "amount": "22.5",
+          "unitId": 11
+        },
+        {
+          "order": 7,
+          "ingredientId": 450591,
+          "name": "Egg White",
+          "amount": "1",
+          "unitId": 1
+        },
+        {
+          "order": 8,
+          "ingredientId": 346304,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8
+        },
+        {
+          "order": 9,
+          "ingredientId": 591435,
+          "name": "Nutmeg",
+          "amount": "1",
+          "unitId": 15,
+          "garnish": true
+        }
+      ]
+    },
+    {
       "id": 1756041427585,
       "name": "Tintoretto",
       "description": "A Venetian classic, this cocktail is a vibrant variation of the Bellini. It pairs the crisp bubbles of Prosecco with the tart, ruby-red essence of fresh pomegranate juice.",
@@ -30896,6 +31310,7 @@
       "name": "Tom and Jerry",
       "description": "A legendary warm holiday punch that serves as a creamy, spiced embrace during the winter season.",
       "instructions": "1. Separate the egg white from the yolk and beat them in separate bowls until the whites are stiff and yolks are creamy.\n2. Gently fold the egg whites into the yolks in an Irish coffee glass or mug.\n3. Add simple syrup, dark rum, and cognac to the egg mixture.\n4. Fill the rest of the glass with hot milk while stirring gently to combine.\n5. Garnish with a generous dusting of freshly grated nutmeg.",
+      "photoUri": "assets/cocktails/1757000000292-tom-and-jerry.jpg",
       "glassId": "irish_coffee_glass",
       "methodIds": ["heat", "build"],
       "tags": [
@@ -30937,7 +31352,14 @@
           "ingredientId": 502166,
           "name": "Cognac",
           "amount": "30",
-          "unitId": 11
+          "unitId": 11,
+          "substitutes": [
+            {
+              "id": 435165,
+              "ingredientId": 435165,
+              "name": "Brandy"
+            }
+          ]
         },
         {
           "order": 5,
@@ -31040,7 +31462,7 @@
       "name": "Tommy's Margarita",
       "description": "A simplified margarita using agave syrup instead of orange liqueur.",
       "instructions": "1. Add tequila, lime juice, and agave syrup into a shaker with ice.\n2. Shake well.\n3. Strain into a rocks glass filled with ice.\n4. Garnish with a lime wedge.",
-      "photoUri": "assets/cocktails/1755800000113-tommys-margarita.jpg",
+      "photoUri": "assets/cocktails/1755800000113-tommy-s-margarita.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["shake"],
       "tags": [
@@ -31716,6 +32138,7 @@
       "name": "Vampiro",
       "description": "A vibrant and spicy Mexican-style cocktail. It is a savory blend of tequila and fruit juices, enhanced with honey, onion, and chili for a complex, bold kick.",
       "instructions": "1. Add tequila blanco, tomato juice, and orange juice into a shaker.\n2. Squeeze the juice from half a lime into the shaker.\n3. Add the honey, finely chopped onion, and slices of red chili pepper.\n4. Add a few drops of Worcestershire sauce and a pinch of salt.\n5. Fill the shaker with ice and shake vigorously.\n6. Strain the mixture into a highball glass filled with fresh ice.\n7. Garnish with a lime wedge and a whole red chili pepper.",
+      "photoUri": "assets/cocktails/1757000000295-vampiro.jpg",
       "glassId": "highball_glass",
       "methodIds": ["shake"],
       "tags": [
@@ -31738,8 +32161,8 @@
       "ingredients": [
         {
           "order": 1,
-          "ingredientId": 266182,
-          "name": "Tequila Blanco",
+          "ingredientId": 1759483024681,
+          "name": "Tequila Reposado",
           "amount": "50",
           "unitId": 11
         },
@@ -32019,10 +32442,10 @@
     },
     {
       "id": 1755800000118,
-      "name": "Vieux Carre",
+      "name": "Vieux Carré",
       "description": "New Orleans classic combining rye, cognac, vermouth, and Benedictine.",
       "instructions": "1. Add all ingredients into a mixing glass with ice.\n2. Stir well.\n3. Strain into a rocks glass filled with ice.\n4. Garnish with a lemon twist.",
-      "photoUri": "assets/cocktails/1755800000118-vieux-carre.jpg",
+      "photoUri": "assets/cocktails/1755800000118-vieux-carr.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["stir"],
       "tags": [
@@ -32054,6 +32477,7 @@
           "substitutes": [
             {
               "id": 435165,
+              "ingredientId": 435165,
               "name": "Brandy"
             }
           ]
@@ -32301,11 +32725,11 @@
     },
     {
       "id": 1758788190920,
-      "name": "Virgini Sangria",
+      "name": "Virgin Sangria",
       "description": "A refreshing non-alcoholic take on the classic Sangria. This vibrant mocktail combines deep grape and crisp apple flavors with a splash of citrus, topped with sparkling soda for a light, festive finish.",
       "instructions": "1. Fill a goblet glass with ice.\n2. Pour the grape juice, apple juice, orange juice, lime juice, and simple syrup into the glass.\n3. Stir gently to combine the juices.\n4. Top with soda water.\n5. Garnish with slices of lemon, orange, and apple for a fruity presentation.",
-      "photoUri": "assets/cocktails/1758788190920-virgini-sangria.jpg",
-      "glassId": "goblet",
+      "photoUri": "assets/cocktails/1758788190920-virgin-sangria.jpg",
+      "glassId": "pitcher",
       "methodIds": ["build"],
       "tags": [
         {
@@ -32319,46 +32743,53 @@
           "order": 1,
           "ingredientId": 539724,
           "name": "Grape Juice",
-          "amount": "60",
+          "amount": "240",
           "unitId": 11
         },
         {
           "order": 2,
-          "ingredientId": 807431,
-          "name": "Soda Water",
-          "amount": "30",
+          "ingredientId": 252791,
+          "name": "Apple Juice",
+          "amount": "60",
           "unitId": 11
         },
         {
           "order": 3,
-          "ingredientId": 252791,
-          "name": "Apple Juice",
-          "amount": "15",
+          "ingredientId": 38131,
+          "name": "Orange Juice",
+          "amount": "60",
           "unitId": 11
         },
         {
           "order": 4,
-          "ingredientId": 38131,
-          "name": "Orange Juice",
-          "amount": "15",
+          "ingredientId": 525624,
+          "name": "Lime Juice",
+          "amount": "30",
           "unitId": 11
         },
         {
           "order": 5,
-          "ingredientId": 525624,
-          "name": "Lime Juice",
-          "amount": "7.5",
+          "ingredientId": 150490,
+          "name": "Simple Syrup",
+          "amount": "30",
           "unitId": 11
         },
         {
           "order": 6,
-          "ingredientId": 150490,
-          "name": "Simple Syrup",
-          "amount": "7.5",
+          "ingredientId": 807431,
+          "name": "Soda Water",
+          "amount": "120",
           "unitId": 11
         },
         {
           "order": 7,
+          "ingredientId": 346304,
+          "name": "Ice",
+          "amount": "300",
+          "unitId": 8
+        },
+        {
+          "order": 8,
           "ingredientId": 108496,
           "name": "Lemon",
           "amount": "1",
@@ -32366,7 +32797,7 @@
           "garnish": true
         },
         {
-          "order": 8,
+          "order": 9,
           "ingredientId": 454059,
           "name": "Orange",
           "amount": "1",
@@ -32374,19 +32805,12 @@
           "garnish": true
         },
         {
-          "order": 9,
+          "order": 10,
           "ingredientId": 767167,
           "name": "Apple",
-          "amount": "1",
-          "unitId": 19,
+          "amount": "2",
+          "unitId": 4,
           "garnish": true
-        },
-        {
-          "order": 10,
-          "ingredientId": 346304,
-          "name": "Ice",
-          "amount": "120",
-          "unitId": 8
         }
       ]
     },
@@ -32498,6 +32922,61 @@
           "name": "Lime",
           "amount": "1",
           "unitId": 27,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 1757000000228,
+      "name": "Vodka Martini",
+      "description": "This is a vodka-based variation of the Martini cocktail.",
+      "instructions": "1. Fill a mixing glass with ice cubes.\n2. Add 60ml of vodka and 15ml of dry vermouth.\n3. Stir and strain into a cocktail glass.\n4. Squeeze a lemon peel into the drink and garnish with a green olive.",
+      "photoUri": "assets/cocktails/1757000000228-vodka-martini.jpg",
+      "glassId": "cocktail_glass",
+      "methodIds": ["stir"],
+      "tags": [
+        {
+          "id": 5,
+          "name": "strong",
+          "color": "#ec5a5a"
+        }
+      ],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 16862,
+          "name": "Vodka",
+          "amount": "60",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 569330,
+          "name": "Dry Vermouth",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 346304,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8
+        },
+        {
+          "order": 4,
+          "ingredientId": 108496,
+          "name": "Lemon",
+          "amount": "1",
+          "unitId": 26,
+          "garnish": true
+        },
+        {
+          "order": 5,
+          "ingredientId": 898828,
+          "name": "Olive",
+          "amount": "1",
+          "unitId": 1,
           "garnish": true
         }
       ]
@@ -32747,8 +33226,9 @@
     {
       "id": 1757000000302,
       "name": "Weng Weng",
-      "description": "A potent Filipino party drink combining six spirits with juices and grenadine.",
-      "instructions": "1. Put some ice into a collins glass.\n2. Pour 20ml of vodka, 20ml of tequila, 20ml of brandy, 20ml of bourbon, 20ml of Scotch whiskey and 20ml of orange juice.\n3. Fill with equal parts orange juice and pineapple juice to the top.\n4. Add a dash of grenadine.",
+      "description": "A potent Filipino party drink combining many spirits with juices and grenadine.",
+      "instructions": "1. Put some ice into a Collins glass.\n2. Pour 10ml of vodka, 10ml of gin, 10ml of white rum, 10ml of scotch, 10ml of bourbon 10ml of of tequila, 10ml of triple sec, 10ml of brandy, and 10ml of coconut rum..\n3. Fill with equal parts orange juice and pineapple juice to the top.\n4. Add a dash of grenadine.\n5. Garnish with an orange slice and a cherry.",
+      "photoUri": "assets/cocktails/1757000000302-weng-weng.jpg",
       "glassId": "collins_glass",
       "methodIds": ["build"],
       "tags": [
@@ -32768,64 +33248,114 @@
           "order": 1,
           "ingredientId": 16862,
           "name": "Vodka",
-          "amount": "20",
+          "amount": "10",
           "unitId": 11
         },
         {
           "order": 2,
-          "ingredientId": 266182,
-          "name": "Tequila Blanco",
-          "amount": "20",
+          "ingredientId": 863081,
+          "name": "Gin",
+          "amount": "10",
           "unitId": 11
         },
         {
           "order": 3,
-          "ingredientId": 435165,
-          "name": "Brandy",
-          "amount": "20",
+          "ingredientId": 861551,
+          "name": "White Rum",
+          "amount": "10",
           "unitId": 11
         },
         {
           "order": 4,
-          "ingredientId": 342124,
-          "name": "Bourbon",
-          "amount": "20",
+          "ingredientId": 140867,
+          "name": "Scotch Whisky",
+          "amount": "10",
           "unitId": 11
         },
         {
           "order": 5,
-          "ingredientId": 140867,
-          "name": "Scotch Whisky",
-          "amount": "20",
+          "ingredientId": 342124,
+          "name": "Bourbon",
+          "amount": "10",
           "unitId": 11
         },
         {
           "order": 6,
+          "ingredientId": 266182,
+          "name": "Tequila Blanco",
+          "amount": "10",
+          "unitId": 11
+        },
+        {
+          "order": 7,
+          "ingredientId": 38880,
+          "name": "Triple Sec",
+          "amount": "10",
+          "unitId": 11
+        },
+        {
+          "order": 8,
+          "ingredientId": 435165,
+          "name": "Brandy",
+          "amount": "10",
+          "unitId": 11,
+          "substitutes": [
+            {
+              "id": 502166,
+              "ingredientId": 502166,
+              "name": "Cognac"
+            }
+          ]
+        },
+        {
+          "order": 9,
+          "ingredientId": 783639,
+          "name": "Coconut Rum",
+          "amount": "10",
+          "unitId": 11
+        },
+        {
+          "order": 10,
           "ingredientId": 38131,
           "name": "Orange Juice",
           "amount": "20",
           "unitId": 11
         },
         {
-          "order": 7,
+          "order": 11,
           "ingredientId": 494177,
           "name": "Pineapple Juice",
           "amount": "20",
           "unitId": 11
         },
         {
-          "order": 8,
+          "order": 12,
           "ingredientId": 803536,
           "name": "Grenadine",
           "amount": "1",
           "unitId": 6
         },
         {
-          "order": 9,
+          "order": 13,
           "ingredientId": 346304,
           "name": "Ice",
           "amount": "120",
           "unitId": 8
+        },
+        {
+          "order": 14,
+          "ingredientId": 454059,
+          "name": "Orange",
+          "amount": "1",
+          "unitId": 19,
+          "garnish": true
+        },
+        {
+          "order": 15,
+          "ingredientId": 791672,
+          "name": "Cherry",
+          "amount": "1",
+          "unitId": 1
         }
       ]
     },
@@ -32833,7 +33363,8 @@
       "id": 1757000000303,
       "name": "Whiskey Rebellion",
       "description": "Whiskey and Pimm's combine with citrus and syrup for a refreshing twist.",
-      "instructions": "1. Pour 30ml of Pimm's No. 1 and 30ml of rye whiskey into a cocktail shaker with ice cubes.\n2. Add 15ml of lemon juice and 15ml of simple syrup.\n3. Shake well and strain into a rocks glass over ice cubes.\n4. Garnish with a lemon wedge.",
+      "instructions": "1. Pour 37.5ml of rye whiskey and 30ml of Pimm's No. 1into a cocktail shaker with ice cubes.\n2. Add 15ml of lemon juice and 15ml of simple syrup.\n3. Shake well and strain into a rocks glass over ice cubes.\n4. Garnish with a lemon wedge.",
+      "photoUri": "assets/cocktails/1757000000303-whiskey-rebellion.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["shake"],
       "tags": [
@@ -32848,7 +33379,7 @@
           "order": 1,
           "ingredientId": 160433,
           "name": "Rye Whiskey",
-          "amount": "30",
+          "amount": "37.5",
           "unitId": 11
         },
         {
@@ -33083,7 +33614,7 @@
       "id": 1755800000120,
       "name": "White Lady",
       "description": "A crisp and sophisticated classic gin sour. The bright citrus notes of lemon and the orange sweetness of triple sec create a clean, refreshing profile with a beautiful silky finish.",
-      "instructions": "1. Combine the gin, triple sec, and fresh lemon juice in a cocktail shaker.\n2. Fill the shaker with ice cubes.\n3. Shake vigorously to ensure the drink is well-aerated and chilled.\n4. Fine strain the mixture into a chilled cocktail glass to remove any ice shards.",
+      "instructions": "1. Combine the gin, triple sec, and fresh lemon juice in a cocktail shaker.\n2. Fill the shaker with ice cubes.\n3. Shake vigorously.\n4. Fine-strain the mixture into a chilled cocktail glass.",
       "photoUri": "assets/cocktails/1755800000120-white-lady.jpg",
       "glassId": "cocktail_glass",
       "methodIds": ["shake"],
@@ -33126,13 +33657,6 @@
           "ingredientId": 346304,
           "name": "Ice",
           "amount": "150",
-          "unitId": 8
-        },
-        {
-          "order": 5,
-          "ingredientId": 346304,
-          "name": "Ice",
-          "amount": "120",
           "unitId": 8
         }
       ]
@@ -33784,121 +34308,6 @@
           "amount": "1",
           "unitId": 1,
           "garnish": true
-        }
-      ]
-    },
-    {
-      "id": 1760963780632,
-      "name": "Mudslide (frozen)",
-      "description": "A rich, creamy, and indulgent cocktail. This decadent mix of vodka, coffee liqueur, Irish cream and heavy cream.",
-      "instructions": "1. Fill a rocks glass with fresh ice cubes.\n2. Pour the vodka, coffee liqueur, and Baileys directly over the ice.\n3. Stir gently with a bar spoon or mixing tin to combine the ingredients without over-diluting.\n4. Serve immediately.",
-      "photoUri": "assets/cocktails/1760963780632-mudslide-frozen.jpg",
-      "glassId": "hurricane_glass",
-      "methodIds": ["build"],
-      "tags": [
-        {
-          "id": 6,
-          "name": "moderate",
-          "color": "#F06292"
-        }
-      ],
-      "ingredients": [
-        {
-          "order": 1,
-          "ingredientId": 16862,
-          "name": "Vodka",
-          "amount": "30",
-          "unitId": 11
-        },
-        {
-          "order": 2,
-          "ingredientId": 705618,
-          "name": "Coffee Liqueur",
-          "amount": "30",
-          "unitId": 11
-        },
-        {
-          "order": 3,
-          "ingredientId": 626592,
-          "name": "Irish Cream",
-          "amount": "30",
-          "unitId": 11,
-          "allowBaseSubstitution": true,
-          "allowBrandSubstitution": true
-        },
-        {
-          "order": 4,
-          "ingredientId": 175777,
-          "name": "Ice Cream",
-          "amount": "2",
-          "unitId": 17
-        },
-        {
-          "order": 5,
-          "ingredientId": 346304,
-          "name": "Ice",
-          "amount": "120",
-          "unitId": 8
-        },
-        {
-          "order": 6,
-          "ingredientId": 863110,
-          "name": "Chocolate Syrup",
-          "amount": "5",
-          "unitId": 11,
-          "garnish": true
-        },
-        {
-          "order": 7,
-          "ingredientId": 499545,
-          "name": "Chocolate",
-          "amount": "2",
-          "unitId": 18,
-          "garnish": true
-        }
-      ]
-    },
-    {
-      "id": 1760963780633,
-      "name": "Orgasm (shot)",
-      "description": "This screaming orgasm shot is a layered delight with coffee liqueur, Irish cream, and amaretto.",
-      "instructions": "1. Pour coffee liqueur into the base of a shot glass.\n2. Layer on Amaretto\n3. Top with a layer of Irish cream.",
-      "photoUri": "assets/cocktails/1760963780633-orgasm-shot.jpg",
-      "glassId": "shooter",
-      "methodIds": ["layer"],
-      "tags": [
-        {
-          "id": 6,
-          "name": "moderate",
-          "color": "#F06292"
-        },
-        {
-          "id": 9,
-          "name": "shooter",
-          "color": "#FF8A65"
-        }
-      ],
-      "ingredients": [
-        {
-          "order": 1,
-          "ingredientId": 705618,
-          "name": "Coffee Liqueur",
-          "amount": "15",
-          "unitId": 11
-        },
-        {
-          "order": 2,
-          "ingredientId": 626592,
-          "name": "Irish Cream",
-          "amount": "15",
-          "unitId": 11
-        },
-        {
-          "order": 3,
-          "ingredientId": 728860,
-          "name": "Amaretto",
-          "amount": "15",
-          "unitId": 11
         }
       ]
     }
@@ -34893,7 +35302,7 @@
     },
     {
       "id": 881736,
-      "name": "Chambord Raspberry Liqueur",
+      "name": "Chambord",
       "description": "Chambord is a black raspberry liqueur from France by Brown‑Forman, 16.5% ABV. Great in a French Martini or Kir Royale.",
       "tags": [
         {
@@ -38590,6 +38999,34 @@
       ],
       "usageCount": 0,
       "photoUri": "assets/ingredients/1759483024693-chamomile-flowers.jpg"
+    },
+    {
+      "id": 1759483024695,
+      "name": "Kümmel liqueur",
+      "description": "Kummel is a sweet, aromatic liqueur flavoured primarily with caraway seeds, cumin, and fennel, often with hints of anise and citrus. It is traditionally served ice-cold as a digestif after meals. Kummel liqueur typically has an alcohol by volume (ABV) ranging from 35% to 40%.",
+      "tags": [
+        {
+          "id": 1,
+          "name": "strong alcohol",
+          "color": "#ec5a5a"
+        }
+      ],
+      "usageCount": 0,
+      "photoUri": "assets/ingredients/1759483024695-k-mmel-liqueur.jpg"
+    },
+    {
+      "id": 1759483024694,
+      "name": "Select",
+      "description": "Aperitivo Select is a classic, bittersweet Italian aperitif from Venice, known as the essential ingredient for the original Venetian Spritz, featuring complex notes from 30 botanicals. Select Aperitivo has an alcohol by volume (ABV) of 17.5%.",
+      "tags": [
+        {
+          "id": 2,
+          "name": "soft alcohol",
+          "color": "#F06292"
+        }
+      ],
+      "usageCount": 0,
+      "photoUri": "assets/ingredients/1759483024694-select.jpg"
     }
   ]
 }
