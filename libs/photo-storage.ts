@@ -71,10 +71,12 @@ const saveJpegWithWhiteBg = async (
 
   // Draw the original image on top
   const imagePaint = Skia.Paint();
-  canvas.drawImageRect(
+  canvas.drawImageRectCubic(
     image,
     Skia.XYWHRect(0, 0, image.width(), image.height()),
     Skia.XYWHRect(0, 0, targetWidth, targetHeight),
+    0,
+    0.5,
     imagePaint,
   );
 
