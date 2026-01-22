@@ -6,6 +6,8 @@ import { buildPhotoFileName } from '@/libs/photo-utils';
 
 const PHOTO_MAX_SIDE = 150;
 const PHOTO_ROOT = 'photos';
+const PHOTO_JPEG_QUALITY = 1;
+const PHOTO_FLATTEN_QUALITY = 100;
 
 type PhotoCategory = 'cocktails' | 'ingredients';
 
@@ -56,7 +58,7 @@ const getResizedDimensions = (width: number, height: number) => {
 
 const flattenToJpegWithWhiteBg = async (
   uri: string,
-  quality = 90,
+  quality = PHOTO_FLATTEN_QUALITY,
 ): Promise<string> => {
   // Read the source image as base64
   const base64 = await FileSystem.readAsStringAsync(uri, {
@@ -147,14 +149,14 @@ export const storePhoto = async ({
     const needsFlatten = isPng(uri);
 
     const intermediate = await ImageManipulator.manipulateAsync(uri, actions, {
-      compress: 1,
+      compress: PHOTO_JPEG_QUALITY,
       format: needsFlatten
         ? ImageManipulator.SaveFormat.PNG
         : ImageManipulator.SaveFormat.JPEG,
     });
 
     const finalTempUri = needsFlatten
-      ? await flattenToJpegWithWhiteBg(intermediate.uri, 90)
+      ? await flattenToJpegWithWhiteBg(intermediate.uri)
       : intermediate.uri;
 
     const fileName = buildPhotoFileName(id, name, 'jpg', suffix);
