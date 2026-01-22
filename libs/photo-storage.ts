@@ -75,8 +75,8 @@ const saveWebpWithWhiteBg = async (
     image,
     Skia.XYWHRect(0, 0, image.width(), image.height()),
     Skia.XYWHRect(0, 0, targetWidth, targetHeight),
-    0,
-    0.5,
+    1 / 3,
+    1 / 3,
     imagePaint,
   );
 
