@@ -39,18 +39,14 @@ const getResizedDimensions = (width: number, height: number) => {
     return { width, height, shouldResize: false };
   }
 
-  if (longestSide <= PHOTO_MAX_SIDE) {
-    return { width, height, shouldResize: false };
-  }
-
-  const scale = PHOTO_MAX_SIDE / longestSide;
+  const scale = Math.min(1, PHOTO_MAX_SIDE / longestSide);
   const targetWidth = Math.max(1, Math.round(width * scale));
   const targetHeight = Math.max(1, Math.round(height * scale));
 
   return {
     width: targetWidth,
     height: targetHeight,
-    shouldResize: targetWidth !== width || targetHeight !== height,
+    shouldResize: scale < 1,
   };
 };
 
@@ -133,13 +129,15 @@ export const storePhoto = async ({
 
     const width = img.width();
     const height = img.height();
-    const { width: targetWidth, height: targetHeight, shouldResize } =
-      getResizedDimensions(width, height);
+    const { width: targetWidth, height: targetHeight } = getResizedDimensions(
+      width,
+      height,
+    );
 
     const finalTempUri = await saveJpegWithWhiteBg(
       img,
-      shouldResize ? targetWidth : width,
-      shouldResize ? targetHeight : height,
+      targetWidth,
+      targetHeight,
       90,
     );
 
