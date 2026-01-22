@@ -30,14 +30,15 @@ const ensurePhotoDirectory = async (category: PhotoCategory) => {
   return directory;
 };
 
-
-const isLocalFileUri = (uri: string) =>
-  uri.startsWith('file:') || uri.startsWith('content:');
-
+const isLocalFileUri = (uri: string) => uri.startsWith('file:') || uri.startsWith('content:');
 
 const getResizedDimensions = (width: number, height: number) => {
   const longestSide = Math.max(width, height);
   if (!Number.isFinite(longestSide) || longestSide <= 0) {
+    return { width, height, shouldResize: false };
+  }
+
+  if (longestSide <= PHOTO_MAX_SIDE) {
     return { width, height, shouldResize: false };
   }
 
