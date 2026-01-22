@@ -50,7 +50,7 @@ const getResizedDimensions = (width: number, height: number) => {
   };
 };
 
-const saveJpegWithWhiteBg = async (
+const saveWebpWithWhiteBg = async (
   image: SkImage,
   targetWidth: number,
   targetHeight: number,
@@ -82,19 +82,19 @@ const saveJpegWithWhiteBg = async (
 
   surface.flush();
 
-  // Snapshot and encode as JPEG
+  // Snapshot and encode as WebP
   const snapshot = surface.makeImageSnapshot();
-  const jpegBase64 = snapshot.encodeToBase64(ImageFormat.JPEG, quality);
-  if (!jpegBase64) {
-    throw new Error('Skia: failed to encode JPEG');
+  const webpBase64 = snapshot.encodeToBase64(ImageFormat.WEBP, quality);
+  if (!webpBase64) {
+    throw new Error('Skia: failed to encode WebP');
   }
 
   // Save into cache directory
   const outputUri =
     `${FileSystem.cacheDirectory ?? FileSystem.documentDirectory ?? ''}` +
-    `flatten_${Date.now()}.jpg`;
+    `flatten_${Date.now()}.webp`;
 
-  await FileSystem.writeAsStringAsync(outputUri, jpegBase64, {
+  await FileSystem.writeAsStringAsync(outputUri, webpBase64, {
     encoding: FileSystem.EncodingType.Base64,
   });
 
@@ -138,14 +138,14 @@ export const storePhoto = async ({
       height,
     );
 
-    const finalTempUri = await saveJpegWithWhiteBg(
+    const finalTempUri = await saveWebpWithWhiteBg(
       img,
       targetWidth,
       targetHeight,
       90,
     );
 
-    const fileName = buildPhotoFileName(id, name, 'jpg', suffix);
+    const fileName = buildPhotoFileName(id, name, 'webp', suffix);
     const targetUri = `${directory}${fileName}`;
 
     await FileSystem.deleteAsync(targetUri, { idempotent: true });
