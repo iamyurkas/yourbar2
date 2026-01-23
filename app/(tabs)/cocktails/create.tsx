@@ -1,7 +1,7 @@
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { Image } from 'expo-image';
-import * as ImagePicker from 'expo-image-picker';
+import ImageCropPicker from 'react-native-image-crop-picker';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
@@ -253,7 +253,6 @@ export default function CreateCocktailScreen() {
   const [unitPickerTarget, setUnitPickerTarget] = useState<string | null>(null);
   const [substituteTarget, setSubstituteTarget] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
-  const [permissionStatus, requestPermission] = ImagePicker.useMediaLibraryPermissions();
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(null);
   const [isInitialized, setIsInitialized] = useState(false);
   const [initialSnapshot, setInitialSnapshot] = useState<CocktailFormSnapshot | null>(null);
@@ -587,53 +586,33 @@ export default function CreateCocktailScreen() {
     inventoryIngredients,
   ]);
 
-  const ensureMediaPermission = useCallback(async () => {
-    if (permissionStatus?.granted) {
-      return true;
-    }
-
-    const { status, granted, canAskAgain } = await requestPermission();
-    if (granted || status === ImagePicker.PermissionStatus.GRANTED) {
-      return true;
-    }
-
-    if (!canAskAgain) {
-      showDialog({
-        title: 'Media access required',
-        message: 'Enable photo library permissions in system settings to add a cocktail photo.',
-        actions: [{ label: 'OK' }],
-      });
-    }
-
-    return false;
-  }, [permissionStatus?.granted, requestPermission, showDialog]);
-
   const handlePickImage = useCallback(async () => {
     if (isPickingImage) {
       return;
     }
 
-    const hasPermission = await ensureMediaPermission();
-    if (!hasPermission) {
-      return;
-    }
-
     try {
       setIsPickingImage(true);
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ['images'],
-        allowsEditing: true,
-        quality: 1,
-        exif: false,
+      const result = await ImageCropPicker.openPicker({
+        mediaType: 'photo',
+        cropping: true,
+        compressImageQuality: 1,
+        cropperToolbarTitle: 'Crop photo',
+        includeExif: false,
       });
 
-      if (!result.canceled && result.assets?.length) {
-        const asset = result.assets[0];
-        if (asset?.uri) {
-          setImageUri(asset.uri);
-        }
+      if (result?.path) {
+        setImageUri(result.path);
       }
     } catch (error) {
+      const errorCode =
+        typeof error === 'object' && error && 'code' in error
+          ? (error as { code?: string }).code
+          : undefined;
+      if (errorCode === 'E_PICKER_CANCELLED') {
+        return;
+      }
+
       console.warn('Failed to pick image', error);
       showDialog({
         title: 'Could not pick image',
@@ -643,7 +622,7 @@ export default function CreateCocktailScreen() {
     } finally {
       setIsPickingImage(false);
     }
-  }, [ensureMediaPermission, isPickingImage, showDialog]);
+  }, [isPickingImage, showDialog]);
 
   const handleRemovePhoto = useCallback(() => {
     setImageUri(null);

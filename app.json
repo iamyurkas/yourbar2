@@ -30,6 +30,7 @@
     },
     "plugins": [
       "expo-router",
+      "react-native-image-crop-picker",
       [
         "expo-splash-screen",
         {
