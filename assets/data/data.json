@@ -392,7 +392,7 @@
       "description": "A complex liqueur cocktail where Amaro Nonino, Aperol meets citrus—bittersweet, zesty, and nicely structured. Garnished with orange.",
       "instructions": "1. Fill a cocktail shaker with ice.\n2. Add Amaro Nonino, Aperol, fresh citrus juice, and any additional specified ingredients.\n3. Shake vigorously for 10–12 seconds until well chilled.\n4. Strain into a chilled cocktail glass.\n5. Garnish with an orange peel or slice, expressing the oils over the drink before serving.",
       "photoUri": "assets/cocktails/1756473540959-adriatique.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -836,7 +836,7 @@
       "description": "A luxurious, dessert-style cocktail that blends smooth vodka with rich coffee liqueur and white crème de cacao, finished with fresh cream for a silky, indulgent texture and gentle chocolate-coffee sweetness.",
       "instructions": "1. Fill a cocktail shaker with ice.\n2. Add vodka, coffee liqueur, and white crème de cacao.\n3. Pour in the fresh cream.\n4. Shake vigorously until well chilled and fully combined.\n5. Strain into a chilled cocktail glass.\n6. Garnish lightly with grated chocolate or a dusting of cocoa powder if desired.",
       "photoUri": "assets/cocktails/1756475833739-alexander-the-great.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -1023,7 +1023,7 @@
       "description": "A classic creamy gin cocktail with bright green Crème de Menthe and smooth cream, creating a dessert-like balance of herbal freshness and silky sweetness. Elegant, refreshing, and indulgent, often served as an after-dinner drink and garnished with fresh mint or grated nutmeg.",
       "instructions": "1. Add gin, green Crème de Menthe, and cream to a cocktail shaker.\n2. Fill the shaker with ice.\n3. Shake vigorously for 10–15 seconds until well chilled and slightly frothy.\n4. Strain into a chilled cocktail glass.\n5. Garnish with a fresh mint leaf or a light dusting of grated nutmeg before serving.",
       "photoUri": "assets/cocktails/1756479678627-alexanders-sister.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -1867,7 +1867,7 @@
       "description": "Equal-parts mix of gin, apricot brandy, and Calvados.",
       "instructions": "1. Add all ingredients into a mixing glass with ice.\n2. Stir well.\n3. Strain into a chilled cocktail glass.",
       "photoUri": "assets/cocktails/1755800000051-angel-face.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["stir"],
       "tags": [
         {
@@ -2187,7 +2187,7 @@
       "description": "A spirit-forward brandy cocktail built around Calvados and Triple Sec, delivering deep apple aromatics, gentle citrus sweetness, and a warm, lingering finish. Elegant, bold, and designed for slow sipping.",
       "instructions": "1. Add Calvados, Triple Sec, and any additional modifiers to a mixing glass filled with ice.\n2. Stir gently for 20–30 seconds until well chilled and properly diluted.\n3. Discard the ice from the chilled cocktail glass.\n4. Strain the cocktail into the prepared glass.\n5. Garnish with a thin slice of fresh apple or an apple fan on the rim.\n6. Serve immediately and enjoy slowly.",
       "photoUri": "assets/cocktails/1756499452749-apple-cart.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["stir"],
       "tags": [
         {
@@ -2337,7 +2337,7 @@
       "description": "A crisp, spirit-forward vodka cocktail with bright green apple notes and a subtle citrus lift from Cointreau. Clean, aromatic, and deceptively smooth, the Appletini balances sharp freshness with a gentle sweetness.",
       "instructions": "1. Fill a shaker with plenty of ice.\n2. Add vodka, apple schnapps, and Cointreau to the shaker.\n3. Shake vigorously for 10–15 seconds until well chilled.\n4. Discard the ice from the glass and strain the cocktail into the chilled glass.\n5. Garnish with a thin apple slice or a lemon twist if desired.",
       "photoUri": "assets/cocktails/1756500510594-appletini.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -2620,7 +2620,7 @@
       "description": "A floral gin sour with maraschino and lemon, tinted by crème de violette.",
       "instructions": "1. Add all ingredients into a cocktail shaker filled with ice.\n2. Shake well.\n3. Strain into a chilled cocktail glass.\n4. Garnish with a maraschino cherry.",
       "photoUri": "assets/cocktails/1755800000052-aviation.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -2906,7 +2906,7 @@
       "description": "A classic rum sour cocktail that combines crisp white rum with fresh lime juice and grenadine, creating a perfectly balanced drink that is both tart and gently sweet with a vibrant pink hue.",
       "instructions": "1. Add white rum, fresh lime juice and grenadine to a cocktail shaker.\n2. Fill the shaker with ice and shake vigorously for 10–15 seconds until well chilled.\n3. Strain the mixture into a chilled cocktail glass.\n4. Garnish with a lime wheel or cherry if desired.\n5. Serve immediately while cold and fresh.",
       "photoUri": "assets/cocktails/1756503037693-bacardi-cocktail.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -3214,7 +3214,7 @@
       "description": "A lush, tropical vodka cocktail combining the sweetness of green banana liqueur with juicy pineapple and bright citrus. Light, fruity, and refreshing, it evokes warm beach evenings and exotic island markets. Finished with a fresh banana garnish for extra aroma and visual appeal.",
       "instructions": "1. Fill a cocktail shaker with ice.\n2. Add vodka, green banana liqueur, pineapple juice, and fresh citrus juice.\n3. Shake well for 10–15 seconds until thoroughly chilled.\n4. Strain into a chilled cocktail glass.\n5. Garnish with a slice of fresh banana on the rim or a cocktail pick.\n6. Serve immediately and enjoy.",
       "photoUri": "assets/cocktails/1759337532331-bali-trader.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -4498,7 +4498,7 @@
       "description": "A Prohibition-era mix of gin, lemon, and honey for a bright, silky sour.",
       "instructions": "1. Add gin, lemon juice, and honey syrup into a shaker with ice.\n2. Shake well.\n3. Strain into a chilled cocktail glass.\n4. Garnish with a lemon twist.",
       "photoUri": "assets/cocktails/1755800000053-bees-knees.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -4573,7 +4573,7 @@
       "description": "A long, sparkling wine drink built for easy sipping, pairing Everclear, Honey Syrup, Prosecco with bubbly mixers over ice. Garnished with lemon.",
       "instructions": "1. Fill a chilled cocktail glass with ice.\n2. Add Everclear, lemon juice, and honey syrup.\n3. Stir briefly to combine.\n4. Top with chilled prosecco.\n5. Garnish with a lemon wedge and serve immediately.",
       "photoUri": "assets/cocktails/1758749034168-bee-s-nice.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["build"],
       "tags": [
         {
@@ -4807,7 +4807,7 @@
       "description": "A citrus-forward variation on the Sidecar with cognac, rum, and triple sec.",
       "instructions": "1. Add all ingredients into a cocktail shaker filled with ice.\n2. Shake well.\n3. Strain into a chilled cocktail glass.\n4. Serve without garnish.",
       "photoUri": "assets/cocktails/1755800000055-between-the-sheets.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -4887,7 +4887,7 @@
       "description": "First described in Harry Johnson's book 'Bartender's Manual', this herbal cocktail is a classic from the late 1800s. The original recipe had equal parts gin, Chartreuse and vermouth, but it was adapted because many found that the Chartreuse was too dominant.",
       "instructions": "1. Combine 60ml of gin, 30ml of sweet vermouth and 20ml of Chartreuse with ice in a mixing glass.\n2. Add a dash of orange bitters, and stir well.\n3. Strain into a chilled cocktail glass and, optionally, garnish with a lemon peel.",
       "photoUri": "assets/cocktails/1756588129960-bijou.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["stir"],
       "tags": [
         {
@@ -5270,7 +5270,7 @@
       "description": "A complex whiskey cocktail where Scotch Whiskey, Red Vermouth, Cherry Brandy meets citrus—bittersweet, zesty, and nicely structured. Garnished with orange.",
       "instructions": "1. Shake all ingredients with ice.\n2. Fine strain into chilled glass.\n3. Express orange zest twist over the cocktail and use as garnish.",
       "photoUri": "assets/cocktails/1756589486524-blood-and-sand.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -5780,7 +5780,7 @@
       "description": "A rich, creamy gin drink featuring Blue Curaçao, Gin, Egg White—dessert-like, smooth, and indulgent.",
       "instructions": "1. Shake all ingredients with ice and strain back into shaker.\n2. Dry shake (without ice).\n3. Fine strain into chilled glass.",
       "photoUri": "assets/cocktails/1758544228142-blue-lady.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -6205,7 +6205,7 @@
       "description": "A complex rum cocktail where White Rum, Angostura Bitters meets citrus—bittersweet, zesty, and nicely structured.",
       "instructions": "1. Fill a shaker with ice cubes.\n2. Add 45ml of light rum.\n3. Add  20ml lemon juice.\n4. Add 10ml of orange juice.\n5. Add 10ml of simple syrup.\n6. Shake.\n7. Strain into a cocktail glass.",
       "photoUri": "assets/cocktails/1756589718396-bolo-cocktail.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -6525,7 +6525,7 @@
       "description": "A whiskey-based Negroni with bourbon, sweet vermouth, and Campari.",
       "instructions": "1. Add all ingredients into a mixing glass filled with ice.\n2. Stir until well chilled and properly diluted.\n3. Strain into a chilled cocktail glass.\n4. Garnish with an orange twist.",
       "photoUri": "assets/cocktails/1755800000058-boulevardier.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["stir"],
       "tags": [
         {
@@ -6792,7 +6792,7 @@
       "description": "A citrusy brandy cocktail with curaçao, maraschino, and bitters served in a sugar-crusted glass.",
       "instructions": "1. Rim a cocktail glass with sugar.\n2. Add all ingredients into a shaker with ice.\n3. Shake well.\n4. Strain into the prepared glass.\n5. Garnish with a long lemon twist.",
       "photoUri": "assets/cocktails/1755800000019-brandy-crusta.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -6892,7 +6892,7 @@
       "description": "A classic cocktail that dates back to the 19th century.",
       "instructions": "1. Fill a cocktail shaker with ice cubes.\n2. Pour 60ml of brandy, a few dashes of white rum and orange curaçao.\n3. Add sugar syrup and 15ml of lemon juice.\n4. Shake well and strain into a cocktail glass.\n5. Top with a little soda water.",
       "photoUri": "assets/cocktails/1757000000102-brandy-daisy.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -7263,7 +7263,7 @@
       "description": "A spirit-forward gin cocktail showcasing Gin, Triple Sec, Orange Marmalade—deep, aromatic, and meant to be savored. Garnished with lemon.",
       "instructions": "1. Add 50ml of gin, 15ml of triple sec, 15ml of lemon juice and 1 teaspoon of marmalade to a shaker and stir to break up the marmalade.\n2. Add ice and shake.\n3. Strain into a chilled cocktail glass.\n4. Garnish with grated lemon zest or tiny toast with orange marmalade.",
       "photoUri": "assets/cocktails/1757000000106-breakfast-martini.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -7324,7 +7324,7 @@
       "description": "A classic gin cocktail with sweet and dry vermouth brightened by orange juice.",
       "instructions": "1. Add all ingredients into a shaker with ice.\n2. Shake well.\n3. Strain into a chilled cocktail glass.\n4. Garnish with an orange peel.",
       "photoUri": "assets/cocktails/1755800000020-bronx.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -8505,7 +8505,7 @@
       "description": "A bold combination of wine and egg liqueur.",
       "instructions": "1. Combine 60ml of egg liqueur, 60ml of white wine and 20ml of lemon juice in a cocktail shaker with ice.\n2. Shake well and strain into a big chilled Martini glass.\n3. Garnish with lemon zest.",
       "photoUri": "assets/cocktails/1757000000117-canary-flip.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -8869,7 +8869,7 @@
       "description": "A dry, bittersweet Negroni variation with gin, Campari, and dry vermouth.",
       "instructions": "1. Add all ingredients into a mixing glass filled with ice.\n2. Stir until well chilled and properly diluted.\n3. Strain into a chilled cocktail glass.\n4. Garnish with a lemon twist.",
       "photoUri": "assets/cocktails/1755800000023-cardinale.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["stir"],
       "tags": [
         {
@@ -9197,7 +9197,7 @@
       "description": "A classic gin sour with maraschino and orange bitters.",
       "instructions": "1. Add all ingredients into a cocktail shaker with ice.\n2. Shake well.\n3. Strain into a chilled cocktail glass.\n4. Garnish with a lemon twist and a maraschino cherry.",
       "photoUri": "assets/cocktails/1755800000024-casino.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -9447,7 +9447,7 @@
       "description": "A spirit-forward brandy cocktail showcasing Apricot Brandy, Sloe Gin—deep, aromatic, and meant to be savored. Garnished with lime.",
       "instructions": "1. Pour the sloe gin, apricot brandy, and lime juice into a cocktail shaker filled with ice.\n2. Shake vigorously for at least 15–30 seconds to ensure proper dilution and a cold temperature.\n3. Strain into a chilled glass.\n4. Express the oils from a lime twist over the drink and drop it in.",
       "photoUri": "assets/cocktails/1757000000123-charlie-chaplin.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -9806,7 +9806,7 @@
       "description": "A spirit-forward vodka cocktail showcasing Vodka, Coffee Liqueur, Espresso—deep, aromatic, and meant to be savored. Garnished with chocolate syrup.",
       "instructions": "1. Add all liquid ingredients into a cocktail shaker filled with plenty of ice.\n2. Shake vigorously for at least 15–20 seconds. This is essential to create the signature frothy top.\n3. Double-strain into your chilled glass to ensure a smooth texture without ice chips.\n\nTo elevate the visual appeal, you can:\n• Rim the glass: Dip the rim in chocolate syrup, then into cocoa powder or chocolate shavings.\n• Drizzle: Spiral chocolate syrup inside the glass before pouring the drink.\n• Top: Garnish with the traditional three coffee beans, a dusting of cocoa powder, or fine chocolate curls.",
       "photoUri": "assets/cocktails/1757000000126-chocolate-espresso-martini.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -9901,7 +9901,7 @@
       "description": "An indulgent and velvety dessert cocktail that combines premium vodka with the deep, rich notes of chocolate for a luxurious treat.",
       "instructions": "1. Fill a cocktail shaker with a generous amount of ice cubes.\n2. Pour the Vodka and Creme de Cacao (or chocolate liqueur) into the shaker.\n3. Shake vigorously for about 15 seconds to ensure a frothy and cold consistency.\n4. Fine-strain the mixture into a chilled cocktail glass.\n5. Garnish the top with freshly grated chocolate or a dusting of cocoa powder.",
       "photoUri": "assets/cocktails/1757000000223-chocolate-martini.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -10089,7 +10089,7 @@
       "description": "A pre-Prohibition gin sour colored with raspberry syrup and bound with egg white.",
       "instructions": "1. Add all ingredients into a shaker without ice and dry shake.\n2. Add ice and shake again.\n3. Strain into a chilled cocktail glass.",
       "photoUri": "assets/cocktails/1755800000027-clover-club.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -10357,7 +10357,7 @@
       "description": "A sophisticated, gin-forward riff on the classic Negroni. This version balances the herbal complexity of Punt e Mes and Strucchi Bitter with a bright touch of orange, resulting in a perfectly structured, bittersweet, and aromatic aperitivo.",
       "instructions": "1. Combine liquids in a tin with ice and throw 5–6 times.\n2. Strain into a chilled cocktail glass.\n3. Express the oils from an orange zest over the drink and garnish.",
       "photoUri": "assets/cocktails/1759437773389-cornwall-negroni.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["throw"],
       "tags": [
         {
@@ -10570,7 +10570,7 @@
       "description": "A balanced mix of gin, citrus, and aromatics traditionally taken as a morning pick-me-up.",
       "instructions": "1. Rinse a chilled cocktail glass with absinthe and discard the excess.\n2. Shake gin, Cointreau, Lillet Blanc, and lemon juice with ice.\n3. Strain into the prepared glass.\n4. Garnish with a lemon twist.",
       "photoUri": "assets/cocktails/1755800000028-corpse-reviver-2.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -10643,7 +10643,7 @@
       "description": "A citrusy vodka cocktail with cranberry and orange notes.",
       "instructions": "1. Add all ingredients into a shaker with ice.\n2. Shake well.\n3. Strain into a chilled cocktail glass.\n4. Garnish with an orange twist.",
       "photoUri": "assets/cocktails/1755800000029-cosmopolitan.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -11103,7 +11103,7 @@
       "description": "A classic rum sour balancing lime and sugar.",
       "instructions": "1. Add all ingredients into a shaker with ice.\n2. Shake well.\n3. Strain into a chilled cocktail glass.\n4. Garnish with a lime slice.",
       "photoUri": "assets/cocktails/1755800000031-daiquiri.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -11320,7 +11320,7 @@
       "description": "A bold, spirit-forward whiskey drink built around Whisky, Dubonnet, Cointreau—bitter-leaning, aromatic, and best served well chilled. Garnished with orange.",
       "instructions": "1. Add whiskey, Dubonnet, bitters, and Cointreau into a mixing glass filled with ice.\n2. Stir well until thoroughly chilled (do not shake for this version to maintain clarity).\n3. Strain into a chilled cocktail or coupe glass.\n4. Express both the lemon and orange peels over the drink and drop them in.",
       "photoUri": "assets/cocktails/1757000000134-dandy.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -11567,7 +11567,7 @@
       "description": "Delta Sunset is a glorious, quite strong cocktail. Stirred with 30ml orange liqueur Cointreau and 30ml orange liqueur Continental with 30ml lemon juice, as well as 150gr and best served with farinaceous starchy dishes.",
       "instructions": "1. Place ice into mixing glass then add ingredients to mixing glass and stir well until mixed.\n2. Fine strain into glass and served in a martini glass cold.",
       "photoUri": "assets/cocktails/1757000000136-delta-sunset.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["stir"],
       "tags": [
         {
@@ -11892,7 +11892,7 @@
       "description": "A sweet and strong cocktail.",
       "instructions": "1. Fill a shaker with ice cubes.\n2. Pour 30ml of vodka, 30ml of coffee liqueur, 30ml of Baileys and 30ml of creme de menthe white.\n3. Shake and strain into a glass.\n4. May be served as 3 shots.",
       "photoUri": "assets/cocktails/1757000000141-dirty-girl-scout.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -11974,7 +11974,7 @@
       "description": "An IBA official variation of the Martini drink.",
       "instructions": "1. Fill a mixing glass with ice cubes.\n2. Add 60ml of vodka, 10ml of dry vermouth and 10ml of olive juice.\n3. Stir and strain into a cocktail glass.\n4. Garnish with an olive.",
       "photoUri": "assets/cocktails/1757000000224-dirty-martini.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["stir"],
       "tags": [
         {
@@ -12292,7 +12292,7 @@
       "description": "A timeless mix of gin and dry vermouth served icy cold.",
       "instructions": "1. Add gin, vermouth, and bitters into a mixing glass with ice.\n2. Stir well.\n3. Strain into a chilled cocktail glass.\n4. Garnish with an olive or a lemon twist.",
       "photoUri": "assets/cocktails/1755800000034-dry-martini.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["stir"],
       "tags": [
         {
@@ -12479,7 +12479,7 @@
       "description": "A bright gin sour balancing Gin, Mint, Cucumber with fresh citrus and a touch of sweetness for a crisp, refreshing sip.",
       "instructions": "1. Muddle: Place the cucumber slices and simple syrup in a cocktail shaker. Muddle thoroughly to extract the juice.\n2. Add Mint: Drop in the mint leaves and muddle gently. Over-muddling mint can release bitter, \"grassy\" flavors.\n3. Combine: Add the gin and lime juice. Fill the shaker with ice.\n4. Shake: Shake vigorously for about 10–15 seconds until the outside of the shaker is frosty.\n5. Double Strain: Pour the mixture through a Hawthorne strainer and a fine-mesh tea strainer into a chilled coupe or martini glass. This prevents small mint fragments and cucumber pulp from entering the drink.\n6. Garnish: Float a thin cucumber wheel on the surface or garnish with a fresh mint sprig.",
       "photoUri": "assets/cocktails/1757000000147-eastside.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["muddle", "shake"],
       "tags": [
         {
@@ -12634,7 +12634,7 @@
       "description": "A sophisticated and sleek Cuban classic that balances the crispness of white rum with the herbal notes of dry vermouth and the bright citrus of orange curaçao. Often called the 'Aristocrat of Cocktails,' it offers a smooth, ruby-tinted elegance perfect for slow sipping.",
       "instructions": "1. Fill the mixing glass with ice cubes.\n2. Add the white rum, dry vermouth, orange curaçao, and grenadine into a mixing glass.\n3. Stir gently with a bar spoon for about 20-30 seconds until the drink is well-chilled.\n4. Strain the mixture through a Julep strainer into the chilled cocktail glass.\n5. Garnish with a twist of orange peel or an orange slice to release aromatic oils.",
       "photoUri": "assets/cocktails/1757000000149-el-presidente.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["stir"],
       "tags": [
         {
@@ -13068,7 +13068,7 @@
       "description": "A smooth vodka martini energized with espresso and coffee liqueur.",
       "instructions": "1. Add all ingredients into a shaker with ice.\n2. Shake well to create a foam.\n3. Strain into a chilled cocktail glass.\n4. Garnish with three coffee beans.",
       "photoUri": "assets/cocktails/1755800000035-espresso-martini.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -13378,7 +13378,7 @@
       "description": "A bright gin sour balancing Gin, Maraschino Liqueur, Dry Vermouth with fresh citrus and a touch of sweetness for a crisp, refreshing sip.",
       "instructions": "1. Combine: Add all liquid ingredients into a cocktail shaker.\n2. Ice: Fill the shaker with plenty of ice.\n3. Shake: Shake vigorously for about 10–15 seconds until the outside of the shaker is well-chilled.\n4. Strain: Double-strain the mixture into a chilled coupe or Nick & Nora glass.\n5. Garnish: Traditionally garnished with a cocktail cherry or an orange peel.",
       "photoUri": "assets/cocktails/1757000000155-first-word.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -13789,7 +13789,7 @@
       "description": "A stronger version of the cocktail. If you want something smoother, check out the 'Fluffy Duck 2'.",
       "instructions": "1. In a cocktail shaker, add ice, advocaat, cream, Cointreau or Triple Sec and white rum.\n2. Shake well until combined.\n3. Strain into an ice-filled glass.\n4. Top with cold lemonade.\n5. Garnish with a strawberry.",
       "photoUri": "assets/cocktails/1757000000160-fluffy-duck-modern.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -14161,7 +14161,7 @@
       "description": "Vodka shaken with raspberry liqueur and pineapple juice.",
       "instructions": "1. Add all ingredients into a shaker with ice.\n2. Shake well.\n3. Strain into a chilled cocktail glass.\n4. Squeeze oil from lemon peel onto the drink.",
       "photoUri": "assets/cocktails/1755800000039-french-martini.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -14296,7 +14296,7 @@
       "description": "A vibrant and sophisticated twist on the classic Daiquiri. This cocktail combines the lush sweetness of muddled strawberries with crisp white rum and zesty lime, enhanced by a subtle pinch of black pepper and salt to elevate the fruity notes.",
       "instructions": "1. Place 7 fresh strawberries into a shaker and muddle thoroughly to release their juices.\n2. Add the white rum, fresh lime juice, rich simple syrup, black pepper, and salt to the shaker.\n3. Fill the shaker with ice and shake vigorously for about 10-15 seconds until well-chilled.\n4. Double strain the mixture through a fine-mesh sieve into a chilled coupe glass to remove strawberry seeds and pulp.\n5. Garnish with a fresh strawberry on the rim.",
       "photoUri": "assets/cocktails/1759484571256-fresh-strawberry-daiquiri.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["muddle", "shake"],
       "tags": [
         {
@@ -14534,7 +14534,7 @@
       "description": "A vibrant, frozen-style party punch that blends a generous amount of fresh strawberries with zesty citrus and light rum. Ideal for sharing with friends on a warm day.",
       "instructions": "1. Place the frozen strawberries and sugar into a high-speed blender.\n2. Pour in the white rum, lemon juice, and lime juice.\n3. Add the ice to the blender container.\n4. Blend on high speed until the mixture reaches a smooth, slushy consistency.\n5. Pour the punch into chilled glasses.\n6. Garnish each glass with a fresh strawberry.",
       "photoUri": "assets/cocktails/1757000000282-frozen-strawberry-daiquiri.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["blend"],
       "tags": [
         {
@@ -14973,7 +14973,7 @@
       "description": "A strong gin martini garnished with a silverskin onion.",
       "instructions": "1. Fill a mixing glass with ice and add 60ml of gin and 10ml of dry vermouth.\n2. Stir and strain into a cocktail glass.\n3. Garnish with a silverskin onion.",
       "photoUri": "assets/cocktails/1757000000165-gibson.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["stir"],
       "tags": [
         {
@@ -15020,7 +15020,7 @@
       "description": "A classic gin-based cocktail with a long history.",
       "instructions": "1. Fill a mixing glass with ice cubes.\n2. Add 60ml of gin and 15ml of lime juice.\n3. Optionally, add 15ml of sugar syrup.\n4. Stir and strain into a chilled cocktail glass.\n5. Garnish with a lime wedge.",
       "photoUri": "assets/cocktails/1757000000166-gimlet.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["stir"],
       "tags": [
         {
@@ -15123,7 +15123,7 @@
       "description": "This cocktail's name speaks for itself. Bright, strong and good for adventure. It may be prepared as a shot.",
       "instructions": "1. Fill a shaker with ice cubes.\n2. Add 30ml of gin, 30ml of lemon juice, 30ml of orange juice and a dash of grenadine.\n3. Shake well and strain into a cocktail glass.",
       "photoUri": "assets/cocktails/1757000000167-gin-and-sin.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -15785,7 +15785,7 @@
       "description": "An IBA official cocktail.",
       "instructions": "1. Fill a shaker with ice cubes.\n2. Add 20ml of Galliano, 20ml of triple sec, 20ml of orange juice and 10ml of cream.\n3. Shake well and strain into a cocktail glass.",
       "photoUri": "assets/cocktails/1757000000175-golden-dream.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -15925,7 +15925,7 @@
       "description": "Creamy after-dinner mix of mint and chocolate liqueurs.",
       "instructions": "1. Add all ingredients into a shaker with ice.\n2. Shake well.\n3. Strain into a chilled cocktail glass.",
       "photoUri": "assets/cocktails/1755800000044-grasshopper.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -16090,7 +16090,7 @@
       "description": "A sophisticated and aromatic vodka cocktail that blends the herbal notes of Bison Grass Vodka with the tropical sweetness of Pisang Ambon and a subtle cooling hint of white mint. Despite its name, it contains no tea, but offers a complex, spirit-forward profile complemented by crisp apple juice.",
       "instructions": "1. Add the Bison Grass Vodka, Pisang Ambon, Creme de Menthe White, and apple juice into a mixing glass or shaker.\n2. Fill the shaker with 150g of ice.\n3. Shake well for about 10-15 seconds.\n4. Strain into the chilled cocktail glass.\n5. Garnish with a fresh banana slice or peel to enhance the tropical aroma.",
       "photoUri": "assets/cocktails/1759336666291-green-tea.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -16152,7 +16152,7 @@
       "description": "A popular variation of the \"Vesper\" cocktail invented by James Bond in \"Casino Royale\". The original recipe has Kina Lillet instead of absinthe.",
       "instructions": "1. Fill a shaker with ice.\n2. Add 60ml of gin, 20ml of vodka and 10ml of absinthe.\n3. Shake well and strain into a cocktail glass.\n4. Garnish with a lime peel.",
       "photoUri": "assets/cocktails/1757000000178-green-vesper.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["stir"],
       "tags": [
         {
@@ -16443,7 +16443,7 @@
       "description": "Classic gin and vermouth cocktail with a hint of Fernet.",
       "instructions": "1. Add all ingredients into a mixing glass with ice.\n2. Stir well.\n3. Strain into a chilled cocktail glass.\n4. Garnish with an orange twist.",
       "photoUri": "assets/cocktails/1755800000045-hanky-panky.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["stir"],
       "tags": [
         {
@@ -16819,7 +16819,7 @@
       "description": "An interesting Martini variation with Frangelico (hazelnut liqueur) and cacao liqueur. If you like it mild, some recipes also suggest adding about a half shot of cream.",
       "instructions": "1. Prepare your martini glasses before shaking up your martinis by gently drizzling chocolate syrup into a martini glass.\n2. Combine 90ml of vodka, 15ml of Frangelico and 15ml of crème de cacao white in a shaker with ice.\n3. Shake well and strain into a chilled cocktail glass.",
       "photoUri": "assets/cocktails/1757000000183-hazelnut-martini.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -16874,7 +16874,7 @@
       "description": "A tart rum sour with grapefruit and maraschino liqueur.",
       "instructions": "1. Add all ingredients into a shaker with ice.\n2. Shake well.\n3. Strain into a chilled cocktail glass.",
       "photoUri": "assets/cocktails/1755800000046-hemingway-special.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -17643,7 +17643,7 @@
       "description": "Smoky mezcal balanced with herbal Chartreuse and lime.",
       "instructions": "1. Add all ingredients into a shaker with ice.\n2. Shake well.\n3. Strain into a chilled cocktail glass.",
       "photoUri": "assets/cocktails/1755800000072-illegal.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -18688,7 +18688,7 @@
       "description": "This popular cocktail was created in 1984 by Jean-Paul Bourguignon at Mietta's Restaurant in Melbourne.",
       "instructions": "1. Fill a shaker with ice cubes.\n2. Add 30ml of Midori, 30ml of Cointreau and 30ml of lemon juice.\n3. Shake well and strain into a cocktail glass.\n4. Garnish with a small slice of honeydew melon and a Maraschino Cherry.",
       "photoUri": "assets/cocktails/1757000000201-japanese-slipper.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -19506,7 +19506,7 @@
       "description": "Equal-parts gin, Chartreuse, maraschino, and lime.",
       "instructions": "1. Add all ingredients into a shaker with ice.\n2. Shake well.\n3. Strain into a chilled cocktail glass.\n4. Garnish with a maraschino cherry.",
       "photoUri": "assets/cocktails/1755800000077-last-word.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -19654,7 +19654,7 @@
       "description": "An IBA official variation of the Martini drink that is served as an all-day cocktail.",
       "instructions": "1. Fill a shaker with ice cubes.\n2. Add 30ml of vodka, 20ml of triple sec and 15ml of lemon juice.\n3. Shake and strain into a chilled cocktail glass rimmed with sugar.",
       "photoUri": "assets/cocktails/1755800000078-lemon-drop-martini.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -19774,7 +19774,7 @@
       "description": "A sophisticated, spirit-forward cocktail that highlights the botanical notes of gin balanced by the deep, anise-flavored complexity of Black Sambuca. This drink is smooth, aromatic, and perfect for those who enjoy bold, herbal profiles.",
       "instructions": "1. Combine gin, Black Sambuca, and rich simple syrup in a mixing glass.\n2. Add 150g of ice to the mixing glass.\n3. Stir gently with a bar spoon for about 20-30 seconds until well-chilled.\n4. Strain the mixture into the chilled cocktail glass.\n5. Garnish with a piece of liquorice for an extra aromatic touch.",
       "photoUri": "assets/cocktails/1758536935697-liquorice.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["stir"],
       "tags": [
         {
@@ -19833,7 +19833,7 @@
       "description": "A refined European twist on the classic Martini. The rich, fruity notes of Port wine blend seamlessly with the crispness of gin and the delicate floral sweetness of St. Germain elderflower liqueur, finished with a citrusy dash of bitters.",
       "instructions": "1. Add the port, gin, St. Germain, and bitters into a mixing glass filled with ice.\n2. Stir the ingredients thoroughly.\n3. Double-strain the mixture into a chilled cocktail glass.\n4. Twist a lemon peel over the cocktail, rub it along the sides of the glass, and discard.\n5. Garnish with chamomile flowers.",
       "photoUri": "assets/cocktails/1759431826093-lisbon-martini.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["stir"],
       "tags": [
         {
@@ -20387,7 +20387,7 @@
       "description": "A cocktail named after Lucien Gaudin, a French fencer who won two gold medals in the 1924 and 1928 Olympic games, named similarly to the Negroni, with the addition of orange liqueur and with dry vermouth instead of sweet vermouth.",
       "instructions": "1. Combine 30ml of gin, 15ml of dry vermouth, 15ml of Cointreau and 15ml of Campari in a mixing glass with ice.\n2. Stir well and strain into a chilled cocktail glass.\n3. Garnish with an orange twist.",
       "photoUri": "assets/cocktails/1757000000218-lucien-gaudin.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["stir"],
       "tags": [
         {
@@ -20665,7 +20665,7 @@
       "description": "Spirit-forward mix of rye whisky, sweet vermouth, and bitters.",
       "instructions": "1. Add all ingredients into a mixing glass with ice.\n2. Stir well.\n3. Strain into a chilled cocktail glass.\n4. Garnish with a maraschino cherry.",
       "photoUri": "assets/cocktails/1755800000061-manhattan.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["stir"],
       "tags": [
         {
@@ -20724,7 +20724,7 @@
       "description": "A good pre-dinner cocktail that is a variation of the Manhattan with dry vermouth.",
       "instructions": "1. Fill a mixing glass with ice cubes.\n2. Pour 50ml of rye or Canadian whisky with 20ml of dry vermouth into a mixing glass.\n3. Add 1 dash of Angostura bitters.\n4. Stir well and strain into a chilled cocktail glass.\n5. Garnish with a lemon twist.",
       "photoUri": "assets/cocktails/1757000000221-manhattan-dry.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["stir"],
       "tags": [
         {
@@ -20785,7 +20785,7 @@
       "description": "Also called Perfect Manhattan, this is a combination of Manhattan and Manhattan Dry.",
       "instructions": "1. Fill a mixing glass with ice cubes.\n2. Pour 50ml of rye or Canadian whisky with 10ml of dry vermouth and 10ml of red vermouth into a mixing glass.\n3. Add 1 dash of Angostura bitters.\n4. Stir well and strain into a chilled cocktail glass.\n5. Garnish with a maraschino cherry and a lemon twist.",
       "photoUri": "assets/cocktails/1757000000222-manhattan-medium.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["stir"],
       "tags": [
         {
@@ -20943,7 +20943,7 @@
       "description": "A sophisticated and bold spirit-forward drink that harmoniously blends the richness of Port with the warmth of Irish whiskey and the botanical bitterness of Campari.",
       "instructions": "1. Add the Port, Irish Whisky, Campari, and Creole Bitters into a mixing glass.\n2. Fill the mixing glass with ice cubes.\n3. Stir gently with a bar spoon for about 20-30 seconds until well-chilled.\n4. Strain the mixture into the chilled cocktail glass.",
       "photoUri": "assets/cocktails/1759432054418-maria-mcclaire.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["stir"],
       "tags": [
         {
@@ -21003,7 +21003,7 @@
       "description": "A legendary pre-Prohibition classic, often considered the father of the Martini, offering a perfect balance of sweet vermouth and botanical gin.",
       "instructions": "1. Combine all liquids in a mixing glass with ice.\n2. Stir until well chilled and properly diluted.\n3. Strain into a cocktail glass.\n4. Express the oils of a lemon twist over the drink and use it as a garnish.",
       "photoUri": "assets/cocktails/1755800000063-martinez.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["stir"],
       "tags": [
         {
@@ -21069,7 +21069,7 @@
       "description": "This is a variation of the Martini cocktail with sweet red vermouth instead of dry vermouth. The vodka to vermouth ratio can be varied according to your taste.",
       "instructions": "1. Fill a mixing glass with ice cubes.\n2. Add 60ml of gin and 60ml of sweet red vermouth.\n3. Stir well and strain into a cocktail glass.\n4. Garnish with a maraschino cherry.",
       "photoUri": "assets/cocktails/1757000000227-martini-sweet.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["stir"],
       "tags": [
         {
@@ -21491,7 +21491,7 @@
       "description": "A sophisticated and dry cocktail that combines the smokiness of Scotch with the herbal notes of dry vermouth and the tartness of fresh grapefruit juice.",
       "instructions": "1. Fill a cocktail shaker with ice cubes.\n2. Add 30ml of Scotch whiskey, 30ml of dry vermouth, and 30ml of grapefruit juice to the shaker.\n3. Shake vigorously until the mixture is well-chilled.\n4. Strain the liquid into a chilled cocktail glass.",
       "photoUri": "assets/cocktails/1757000000231-miami-beach.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -22261,7 +22261,7 @@
       "description": "A refreshing and aromatic citrus-forward cocktail that balances the spicy kick of fresh ginger and coriander with the bright notes of lemon vodka and limoncello, rounded off with tropical juices.",
       "instructions": "1. Muddle the fresh ginger and coriander leaves in a shaker to release their aromatic oils.\n2. Add the Vodka Citron, Limoncello, pineapple juice, and apple juice to the shaker.\n3. Fill the shaker with ice and shake vigorously until well-chilled.\n4. Double strain the mixture into a chilled cocktail glass to remove small bits of ginger and herbs.\n5. Garnish with a fresh sprig of coriander.",
       "photoUri": "assets/cocktails/1758744805979-motox.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["muddle", "shake"],
       "tags": [
         {
@@ -22637,7 +22637,7 @@
       "description": "Equal parts mezcal, Aperol, yellow chartreuse, and lime for a smoky, bittersweet sour.",
       "instructions": "1. Add all ingredients into a shaker with ice.\n2. Shake well.\n3. Strain into a chilled cocktail glass.",
       "photoUri": "assets/cocktails/1755800000071-naked-and-famous.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -22695,7 +22695,7 @@
       "description": "A very interesting combination of gentle sweetness and a light touch of sour, resulting in a delicious, classic drink.",
       "instructions": "1. Fill a shaker with ice cubes.\n2. Add 50ml of white rum and 50ml of red vermouth.\n3. Add 10ml of apricot brandy, 10ml of grenadine and 10ml of lemon juice.\n4. Shake well and strain into a chilled cocktail glass.\n5. Garnish with a lemon peel.",
       "photoUri": "assets/cocktails/1757000000240-naked-lady.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -23887,7 +23887,7 @@
       "description": "A creamy and elegant dessert cocktail, this variation of the Brandy Alexander uses white crème de cacao for a lighter, more refined look.",
       "instructions": "1. Fill a cocktail shaker with ice cubes.\n2. Add the cognac, white crème de cacao, and fresh cream.\n3. Shake vigorously until the shaker is well-frosted.\n4. Strain the mixture into a chilled cocktail glass.\n5. Garnish with a light dusting of freshly grated nutmeg.",
       "photoUri": "assets/cocktails/1757000000248-panama.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -23948,7 +23948,7 @@
       "description": "The Pantera Rosa — meaning Pink Panther — was named for its vibrant pink color.",
       "instructions": "1. Fill a cocktail shaker with ice cubes.\n2. Add 45ml of gin, 15ml of limoncello, 30ml of lemon juice, 20ml of simple syrup and 2 raspberries.\n3. Shake and strain into a chilled cocktail glass.\n4. Garnish with a float of fresh mint.",
       "photoUri": "assets/cocktails/1757000000249-pantera-rosa.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake", "layer"],
       "tags": [
         {
@@ -24231,7 +24231,7 @@
       "description": "Pre-Prohibition blend of gin, apricot brandy, and orange juice.",
       "instructions": "1. Add all ingredients into a shaker with ice.\n2. Shake well.\n3. Strain into a chilled cocktail glass.",
       "photoUri": "assets/cocktails/1755800000086-paradise.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -24282,7 +24282,7 @@
       "description": "The Pedro Manhattan is a variation on the classic Manhattan cocktail that replaces the traditional sweet vermouth with Pedro Ximenez sherry. The Pedro Manhattan is a great choice for those who enjoy the classic Manhattan cocktail but want to try something a little different, with a unique flavor profile.",
       "instructions": "1. Fill a mixing glass with ice cubes.\n2. Add 50ml of bourbon, 20ml of Pedro Ximenez, 1 dash of Angostura Bitters and 2 dashes of Peychaud's Bitters.\n3. Stir well and strain into a chilled cocktail glass.\n4. Garnish with a maraschino cherry.",
       "photoUri": "assets/cocktails/1757000000250-pedro-manhattan.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["stir"],
       "tags": [
         {
@@ -24429,7 +24429,7 @@
       "description": "This is a combination of the Dry and Sweet Martini cocktails that makes a good pre-dinner cocktail. The amount of gin can be varied according to your taste.",
       "instructions": "1. Fill a mixing glass with ice cubes.\n2. Add 60ml of gin, 10ml of dry vermouth and 10ml of red vermouth.\n3. Stir well and strain into a chilled cocktail glass.\n4. Garnish with a lemon peel and a maraschino cherry.",
       "photoUri": "assets/cocktails/1757000000226-perfect-martini.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["stir"],
       "tags": [
         {
@@ -24842,7 +24842,7 @@
       "description": "Peruvian classic with pisco, lime, and creamy egg white foam.",
       "instructions": "1. Add pisco, lime juice, simple syrup, and egg white into a shaker without ice.\n2. Dry shake to mix.\n3. Add ice and shake again until chilled.\n4. Strain into a chilled cocktail glass.\n5. Garnish the foam with a few drops of Angostura bitters.",
       "photoUri": "assets/cocktails/1755800000090-pisco-sour.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -25061,7 +25061,7 @@
       "description": "An exotic and visually stunning modern classic, featuring vibrant passion fruit flavors and served with a celebratory sidecar of sparkling wine.",
       "instructions": "1. Add vanilla vodka, passion fruit liqueur, passion fruit syrup, lime juice, and vanilla syrup into a shaker with ice.\n2. Shake vigorously until the outside of the shaker feels very cold.\n3. Fine strain the mixture into a chilled cocktail glass.\n4. Garnish with half a passion fruit floating on top.\n5. Serve with a chilled shot of Prosecco or Champagne on the side.",
       "photoUri": "assets/cocktails/1755800000092-porn-star-martini.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -25148,7 +25148,7 @@
       "description": "A velvety and decadent dessert cocktail that combines the richness of Port wine and Cognac with a creamy texture from a fresh egg yolk.",
       "instructions": "1. Add Cognac, Tawny Port, and egg yolk into a shaker.\n2. Dry shake (without ice) first to emulsify the egg yolk.\n3. Add ice to the shaker and shake vigorously again until well-chilled.\n4. Strain into a chilled cocktail glass or small goblet.\n5. Dust the surface with freshly grated nutmeg for aroma.",
       "photoUri": "assets/cocktails/1755800000093-porto-flip.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake", "blend"],
       "tags": [
         {
@@ -25757,7 +25757,7 @@
       "description": "A Manhattan variation with rye whisky, cherry heering, and a hint of absinthe.",
       "instructions": "1. Rinse a chilled cocktail glass with absinthe and discard the excess.\n2. Add rye whisky, cherry heering, and red vermouth into a mixing glass with ice.\n3. Stir well.\n4. Strain into the prepared glass.\n5. Garnish with a maraschino cherry.",
       "photoUri": "assets/cocktails/1755800000096-remember-the-maine.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["stir"],
       "tags": [
         {
@@ -26214,7 +26214,7 @@
       "description": "An IBA official pre-dinner cocktail.",
       "instructions": "1. Fill a mixing glass with ice.\n2. Add 60ml of dry vermouth, 30ml of kirsch and 3 dashes of strawberry syrup.\n3. Stir well and strain into a cocktail glass.",
       "photoUri": "assets/cocktails/1757000000260-rose.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["stir"],
       "tags": [
         {
@@ -27474,7 +27474,7 @@
       "description": "A vibrant and refreshing long drink named after the iconic Southern belle. It combines the unique stone-fruit flavors of Southern Comfort with tart cranberry and lime for a perfectly balanced sip.",
       "instructions": "1. Shake all ingredients with ice.\n2. Strain into an ice-filled glass.\n3. Garnish with lime wedge",
       "photoUri": "assets/cocktails/1757000000267-scarlett-o-hara.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -27909,7 +27909,7 @@
       "description": "An eye-catching layered cocktail that features a sweet melon and pineapple base with heavy herbal and almond accents settled at the top and bottom.",
       "instructions": "1. Fill a cocktail shaker with ice cubes.\n2. Add the Midori melon liqueur and pineapple juice to the shaker.\n3. Shake vigorously until well-chilled.\n4. Strain the mixture into a chilled cocktail (martini) glass.\n5. Carefully pour the amaretto down the side of the glass so it sinks to the bottom.\n6. Finish by slowly layering the Jägermeister on the very top using the back of a spoon.",
       "photoUri": "assets/cocktails/1757000000270-sex-with-an-alligator-long.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake", "layer"],
       "tags": [
         {
@@ -27976,7 +27976,7 @@
       "description": "An eye-catching layered cocktail that features a sweet melon and pineapple base with heavy herbal and almond accents settled at the top and bottom.",
       "instructions": "For two shots:\n1. Fill a cocktail shaker with ice cubes.\n2. Add the Midori melon liqueur and pineapple juice to the shaker.\n3. Shake vigorously until well-chilled.\n4. Strain the mixture into a chilled cocktail (martini) glass.\n5. Carefully pour the Chambord down the side of the glass so it sinks to the bottom.\n6. Finish by slowly layering the Jägermeister on the very top using the back of a spoon.",
       "photoUri": "assets/cocktails/1760963780634-sex-with-an-alligator-shot.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake", "layer"],
       "tags": [
         {
@@ -28183,7 +28183,7 @@
       "description": "Cognac sour sweetened with orange liqueur.",
       "instructions": "1. Add cognac, Cointreau, and lemon juice into a shaker with ice.\n2. Shake well.\n3. Strain into a chilled cocktail glass.\n4. Garnish with an orange twist.",
       "photoUri": "assets/cocktails/1755800000103-sidecar.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -28321,7 +28321,7 @@
       "description": "A potent and bold combination of gin and kümmel liqueur, designed for those who appreciate a strong, spirit-forward drink with a sharp, clean finish.",
       "instructions": "1. Fill a mixing glass or shaker with ice cubes.\n2. Pour in the gin and kümmel liqueur.\n3. Stir well for about 20 seconds to ensure the drink is properly chilled and diluted.\n4. Strain the mixture into a chilled cocktail glass.\n5. Garnish with a fresh lemon twist by expressing the oils over the drink.",
       "photoUri": "assets/cocktails/1757000000272-silver-bullet.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -28375,7 +28375,7 @@
       "description": "A bright rum sour that artfully balances the aromatic warmth of cardamom with crisp white rum, smooth vanilla, and sharp citrus notes.",
       "instructions": "1. Muddle the cardamom pods in the bottom of a cocktail shaker to release their essential oils.\n2. Add the white rum, lime juice, vanilla syrup, and Strucchi Bitter to the shaker.\n3. Fill the shaker with ice and shake vigorously.\n4. Double-strain into a chilled cocktail glass.",
       "photoUri": "assets/cocktails/1758545455634-sin-limites.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["muddle", "shake"],
       "tags": [
         {
@@ -28852,7 +28852,7 @@
       "description": "Herbal gin sour brightened with mint.",
       "instructions": "1. Add gin, lemon juice, simple syrup, and mint leaves into a shaker with ice.\n2. Shake well.\n3. Fine strain into a chilled cocktail glass.\n4. Garnish with a mint leaf.",
       "photoUri": "assets/cocktails/1755800000105-south-side.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -29110,7 +29110,7 @@
       "description": "An elegant yet bold vanilla vodka sour that perfectly balances the floral notes of elderflower with the sharp heat of fresh red chili.",
       "instructions": "1. Place a slice of red chili pepper in the bottom of a cocktail shaker and muddle gently to release the heat.\n2. Add the vanilla vodka, elderflower cordial, lime juice, and honey syrup.\n3. Fill the shaker with ice and shake hard until well-chilled.\n4. Fine strain the mixture into a chilled cocktail glass to remove chili seeds and pulp.\n5. Garnish with a fresh red chili slice.",
       "photoUri": "assets/cocktails/1755800000106-spicy-fifty.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["muddle", "shake"],
       "tags": [
         {
@@ -29402,7 +29402,7 @@
       "description": "Brandy and crème de menthe served straight up.",
       "instructions": "1. Add cognac and white crème de menthe into a mixing glass with ice.\n2. Stir well.\n3. Strain into a chilled cocktail glass.",
       "photoUri": "assets/cocktails/1755800000108-stinger.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["stir"],
       "tags": [
         {
@@ -29637,7 +29637,7 @@
       "description": "A bright rum sour that perfectly balances fruity strawberry liqueur with the crispness of white rum and fresh lime. A pinch of salt and black pepper enhances the berry profile for a complex finish.",
       "instructions": "1. Add the white rum, strawberry liqueur, lime juice, and rich simple syrup into a cocktail shaker.\n2. Add a pinch of salt and a light crack of black pepper to the shaker.\n3. Fill the shaker with ice and shake vigorously for about 10-15 seconds until well-chilled.\n4. Double strain the mixture into the chilled coupe glass.\n5. Garnish with a fresh strawberry on the rim.",
       "photoUri": "assets/cocktails/1759484662626-strawberry-daiquiri.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -29791,7 +29791,7 @@
       "description": "A sophisticated spirit-forward cocktail that balances the botanical notes of vodka with the sweet, tart profile of blueberry schnapps and cranberry juice. It is a deep, aromatic drink designed for slow sipping.",
       "instructions": "1. Fill a cocktail shaker with 150g of ice.\n2. Pour 30ml of Vodka, 30ml of Blueberry Schnapps, and 60ml of Cranberry Juice into the shaker.\n3. Shake vigorously.\n4. Strain into the chilled cocktail glass.",
       "photoUri": "assets/cocktails/1758544887872-streamtini.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -31148,7 +31148,7 @@
       "description": "A Venetian classic, this cocktail is a vibrant variation of the Bellini. It pairs the crisp bubbles of Prosecco with the tart, ruby-red essence of fresh pomegranate juice.",
       "instructions": "1. Pour the chilled pomegranate juice into a chilled flute or cocktail glass.\n2. Gently top with chilled Prosecco.\n3. Stir very lightly and carefully with a bar spoon to combine without losing the carbonation.\n4. Serve immediately while cold.",
       "photoUri": "assets/cocktails/1756041427585-tintoretto.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["build"],
       "tags": [
         {
@@ -31192,7 +31192,7 @@
       "description": "Irish whiskey stirred with green Chartreuse and sweet vermouth.",
       "instructions": "1. Add all ingredients into a mixing glass with ice.\n2. Stir well.\n3. Strain into a chilled cocktail glass.\n4. Garnish with a lemon twist.",
       "photoUri": "assets/cocktails/1755800000112-tipperary.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["stir"],
       "tags": [
         {
@@ -31686,7 +31686,7 @@
       "description": "Bitters-heavy sour with rye and orgeat for balance.",
       "instructions": "1. Add all ingredients into a shaker with ice.\n2. Shake well.\n3. Strain into a chilled cocktail glass.",
       "photoUri": "assets/cocktails/1755800000114-trinidad-sour.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -31819,7 +31819,7 @@
       "description": "An elegant and exotic gin-based delight that balances the botanical notes of gin with creamy coconut and a warm hint of cinnamon. Fresh citrus and grapefruit juices add a vibrant, refreshing finish perfect for a sunset escape.",
       "instructions": "1. Add gin, coconut liqueur, cinnamon syrup, simple syrup, lime juice, grapefruit juice, and coconut water into a cocktail shaker.\n2. Fill the shaker with 150g of ice.\n3. Shake vigorously for about 10-15 seconds until well-chilled.\n4. Strain the mixture into the chilled cocktail glass.\n5. Garnish with a cinnamon stick for a fragrant tropical aroma.",
       "photoUri": "assets/cocktails/1758627022244-tropical-queen.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -31987,7 +31987,7 @@
       "description": "A sophisticated and complex dry gin martini variation from the late 19th century. The addition of maraschino liqueur and a hint of absinthe creates a herbal, slightly sweet profile that is both elegant and timeless.",
       "instructions": "1. Add Old Tom gin, dry vermouth, maraschino liqueur, absinthe, and orange bitters into a mixing glass filled with ice.\n2. Stir the mixture well for about 30 seconds to achieve the perfect dilution and temperature.\n3. Strain the liquid into the chilled cocktail glass.\n4. Garnish with a maraschino cherry and a twist of lemon zest.",
       "photoUri": "assets/cocktails/1755800000115-tuxedo.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["stir"],
       "tags": [
         {
@@ -32427,7 +32427,7 @@
       "description": "James Bond's martini with gin, vodka, and Lillet Blanc.",
       "instructions": "1. Add gin, vodka, and Lillet Blanc into a shaker with ice.\n2. Shake well.\n3. Strain into a chilled cocktail glass.\n4. Garnish with a lemon twist.",
       "photoUri": "assets/cocktails/1755800000117-vesper.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -32977,7 +32977,7 @@
       "description": "This is a vodka-based variation of the Martini cocktail.",
       "instructions": "1. Fill a mixing glass with ice cubes.\n2. Add 60ml of vodka and 15ml of dry vermouth.\n3. Stir and strain into a cocktail glass.\n4. Squeeze a lemon peel into the drink and garnish with a green olive.",
       "photoUri": "assets/cocktails/1757000000228-vodka-martini.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["stir"],
       "tags": [
         {
@@ -33091,7 +33091,7 @@
       "description": "A classic whiskey cocktail with citrus and a touch of grenadine.",
       "instructions": "1. Fill a shaker with ice cubes.\n2. Add 60ml of rye whiskey, 15ml of lemon juice, 15ml of orange juice and a dash of grenadine.\n3. Shake well and strain into a cocktail glass.\n4. Garnish with a cherry.",
       "photoUri": "assets/cocktails/1757000000299-ward-8.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -33637,7 +33637,7 @@
       "description": "A festive and creamy spirit-forward cocktail that blends smooth vanilla vodka with a refreshing peppermint kick. This elegant drink is perfectly balanced with half-and-half for a velvety texture, making it a sophisticated choice for holiday celebrations.",
       "instructions": "1. Add the vanilla vodka, peppermint schnapps, and half-and-half into a cocktail shaker.\n2. Fill the shaker with 150g of ice cubes.\n3. Shake vigorously for about 15 seconds until the outside of the shaker feels very cold.\n4. Strain the mixture into the chilled cocktail glass.\n5. Garnish with a peppermint candy on the rim or dropped inside.",
       "photoUri": "assets/cocktails/1759246411417-white-christmas-martini.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -33691,7 +33691,7 @@
       "description": "A crisp and sophisticated classic gin sour. The bright citrus notes of lemon and the orange sweetness of triple sec create a clean, refreshing profile with a beautiful silky finish.",
       "instructions": "1. Combine the gin, triple sec, and fresh lemon juice in a cocktail shaker.\n2. Fill the shaker with ice cubes.\n3. Shake vigorously.\n4. Fine-strain the mixture into a chilled cocktail glass.",
       "photoUri": "assets/cocktails/1755800000120-white-lady.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [
         {

@@ -1,35 +1,42 @@
-import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
-import { Image } from 'expo-image';
-import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
-import { router, Stack, useLocalSearchParams } from 'expo-router';
-import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import { Image } from "expo-image";
+import { activateKeepAwakeAsync, deactivateKeepAwake } from "expo-keep-awake";
+import { router, Stack, useLocalSearchParams } from "expo-router";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useTransition,
+} from "react";
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-import { resolveGlasswareUriFromId } from '@/assets/image-manifest';
-import { HeaderIconButton } from '@/components/HeaderIconButton';
-import { ListRow, Thumb } from '@/components/RowParts';
-import { TagPill } from '@/components/TagPill';
-import { getCocktailMethodById, METHOD_ICON_MAP } from '@/constants/cocktail-methods';
-import { COCKTAIL_UNIT_DICTIONARY } from '@/constants/cocktail-units';
-import { Colors } from '@/constants/theme';
-import { resolveImageSource } from '@/libs/image-source';
+import { resolveGlasswareUriFromId } from "@/assets/image-manifest";
+import { HeaderIconButton } from "@/components/HeaderIconButton";
+import { ListRow, Thumb } from "@/components/RowParts";
+import { TagPill } from "@/components/TagPill";
+import {
+  getCocktailMethodById,
+  METHOD_ICON_MAP,
+} from "@/constants/cocktail-methods";
+import { COCKTAIL_UNIT_DICTIONARY } from "@/constants/cocktail-units";
+import { Colors } from "@/constants/theme";
+import { resolveImageSource } from "@/libs/image-source";
 import {
   createIngredientLookup,
   resolveIngredientAvailability,
-  type IngredientResolution,
   type IngredientLookup,
-} from '@/libs/ingredient-availability';
-import { skipDuplicateBack } from '@/libs/navigation';
-import { normalizeSearchText } from '@/libs/search-normalization';
-import {
-  useInventory,
-  type Cocktail,
-} from '@/providers/inventory-provider';
-import { tagColors } from '@/theme/theme';
+  type IngredientResolution,
+} from "@/libs/ingredient-availability";
+import { skipDuplicateBack } from "@/libs/navigation";
+import { normalizeSearchText } from "@/libs/search-normalization";
+import { useInventory, type Cocktail } from "@/providers/inventory-provider";
+import { tagColors } from "@/theme/theme";
 
-type RecipeIngredient = NonNullable<Cocktail['ingredients']>[number];
+type RecipeIngredient = NonNullable<Cocktail["ingredients"]>[number];
 
 const METRIC_UNIT_ID = 11;
 const IMPERIAL_UNIT_ID = 12;
@@ -37,26 +44,26 @@ const GRAM_UNIT_ID = 8;
 const UNIT_CONVERSION_RATIO = 30;
 
 const GLASS_LABELS: Record<string, string> = {
-  bowl: 'Punch bowl',
-  champagne_flute: 'Champagne flute',
-  cocktail_glass: 'Cocktail glass',
-  collins_glass: 'Collins glass',
-  copper_mug: 'Copper mug',
-  coupe: 'Coupe glass',
-  cup: 'Cup',
-  goblet: 'Goblet',
-  highball_glass: 'Highball glass',
-  hurricane_glass: 'Hurricane glass',
-  irish_coffee_glass: 'Irish coffee glass',
-  margarita_glass: 'Margarita glass',
-  nick_and_nora: 'Nick & Nora glass',
-  pitcher: 'Pitcher',
-  pub_glass: 'Pub glass',
-  rocks_glass: 'Rocks glass',
-  shooter: 'Shooter glass',
-  snifter: 'Snifter',
-  tiki: 'Tiki mug',
-  wine_glass: 'Wine glass',
+  bowl: "Punch bowl",
+  champagne_flute: "Champagne flute",
+  martini: "Martini glass",
+  collins_glass: "Collins glass",
+  copper_mug: "Copper mug",
+  coupe: "Coupe glass",
+  cup: "Cup",
+  goblet: "Goblet",
+  highball_glass: "Highball glass",
+  hurricane_glass: "Hurricane glass",
+  irish_coffee_glass: "Irish coffee glass",
+  margarita_glass: "Margarita glass",
+  nick_and_nora: "Nick & Nora glass",
+  pitcher: "Pitcher",
+  pub_glass: "Pub glass",
+  rocks_glass: "Rocks glass",
+  shooter: "Shooter glass",
+  snifter: "Snifter",
+  tiki: "Tiki mug",
+  wine_glass: "Wine glass",
 };
 
 const MAX_RATING = 5;
@@ -78,7 +85,9 @@ function resolveCocktail(
   }
 
   const normalized = normalizeSearchText(param);
-  return cocktails.find((item) => normalizeSearchText(item.name ?? '') === normalized);
+  return cocktails.find(
+    (item) => normalizeSearchText(item.name ?? "") === normalized,
+  );
 }
 
 function formatAmount(value: number): string {
@@ -91,24 +100,24 @@ function formatAmount(value: number): string {
 }
 
 const IMPERIAL_FRACTIONS: { decimal: number; glyph: string }[] = [
-  { decimal: 0.1, glyph: '⅒' },
-  { decimal: 0.111, glyph: '⅑' },
-  { decimal: 0.125, glyph: '⅛' },
-  { decimal: 0.143, glyph: '⅐' },
-  { decimal: 0.167, glyph: '⅙' },
-  { decimal: 0.2, glyph: '⅕' },
-  { decimal: 0.25, glyph: '¼' },
-  { decimal: 0.333, glyph: '⅓' },
-  { decimal: 0.375, glyph: '⅜' },
-  { decimal: 0.4, glyph: '⅖' },
-  { decimal: 0.5, glyph: '½' },
-  { decimal: 0.6, glyph: '⅗' },
-  { decimal: 0.625, glyph: '⅝' },
-  { decimal: 0.667, glyph: '⅔' },
-  { decimal: 0.75, glyph: '¾' },
-  { decimal: 0.8, glyph: '⅘' },
-  { decimal: 0.833, glyph: '⅚' },
-  { decimal: 0.875, glyph: '⅞' },
+  { decimal: 0.1, glyph: "⅒" },
+  { decimal: 0.111, glyph: "⅑" },
+  { decimal: 0.125, glyph: "⅛" },
+  { decimal: 0.143, glyph: "⅐" },
+  { decimal: 0.167, glyph: "⅙" },
+  { decimal: 0.2, glyph: "⅕" },
+  { decimal: 0.25, glyph: "¼" },
+  { decimal: 0.333, glyph: "⅓" },
+  { decimal: 0.375, glyph: "⅜" },
+  { decimal: 0.4, glyph: "⅖" },
+  { decimal: 0.5, glyph: "½" },
+  { decimal: 0.6, glyph: "⅗" },
+  { decimal: 0.625, glyph: "⅝" },
+  { decimal: 0.667, glyph: "⅔" },
+  { decimal: 0.75, glyph: "¾" },
+  { decimal: 0.8, glyph: "⅘" },
+  { decimal: 0.833, glyph: "⅚" },
+  { decimal: 0.875, glyph: "⅞" },
 ];
 
 function formatOunceAmount(value: number): string {
@@ -117,7 +126,8 @@ function formatOunceAmount(value: number): string {
   const fractionalPortion = Math.abs(normalized - wholeNumberPortion);
 
   const matchedFraction = IMPERIAL_FRACTIONS.reduce<
-    { fraction: (typeof IMPERIAL_FRACTIONS)[number]; difference: number } | undefined
+    | { fraction: (typeof IMPERIAL_FRACTIONS)[number]; difference: number }
+    | undefined
   >((closest, fraction) => {
     const difference = Math.abs(fractionalPortion - fraction.decimal);
 
@@ -152,7 +162,10 @@ function convertIngredientAmount(
     return { value: amount, unitId };
   }
 
-  if (useImperialUnits && (unitId === METRIC_UNIT_ID || unitId === GRAM_UNIT_ID)) {
+  if (
+    useImperialUnits &&
+    (unitId === METRIC_UNIT_ID || unitId === GRAM_UNIT_ID)
+  ) {
     return { value: amount / UNIT_CONVERSION_RATIO, unitId: IMPERIAL_UNIT_ID };
   }
 
@@ -163,11 +176,15 @@ function convertIngredientAmount(
   return { value: amount, unitId };
 }
 
-function formatIngredientQuantity(ingredient: RecipeIngredient, useImperialUnits: boolean): string {
-  const amountRaw = ingredient.amount ?? '';
+function formatIngredientQuantity(
+  ingredient: RecipeIngredient,
+  useImperialUnits: boolean,
+): string {
+  const amountRaw = ingredient.amount ?? "";
   const amount = amountRaw.trim();
   const hasAmount = amount.length > 0;
-  const unitId = typeof ingredient.unitId === 'number' ? ingredient.unitId : undefined;
+  const unitId =
+    typeof ingredient.unitId === "number" ? ingredient.unitId : undefined;
   const parsedAmount = Number(amount);
   const isNumeric = hasAmount && !Number.isNaN(parsedAmount);
 
@@ -176,7 +193,11 @@ function formatIngredientQuantity(ingredient: RecipeIngredient, useImperialUnits
   let numericAmount: number | undefined;
 
   if (isNumeric) {
-    const { value, unitId: nextUnitId } = convertIngredientAmount(parsedAmount, unitId, useImperialUnits);
+    const { value, unitId: nextUnitId } = convertIngredientAmount(
+      parsedAmount,
+      unitId,
+      useImperialUnits,
+    );
     numericAmount = value;
     displayUnitId = nextUnitId;
 
@@ -187,16 +208,19 @@ function formatIngredientQuantity(ingredient: RecipeIngredient, useImperialUnits
     }
   }
 
-  const unitDetails = displayUnitId != null ? COCKTAIL_UNIT_DICTIONARY[displayUnitId] : undefined;
+  const unitDetails =
+    displayUnitId != null ? COCKTAIL_UNIT_DICTIONARY[displayUnitId] : undefined;
 
-  let unitText = '';
+  let unitText = "";
   if (unitDetails) {
     const isSingular = numericAmount == null || numericAmount === 1;
-    unitText = isSingular ? unitDetails.singular : unitDetails.plural ?? unitDetails.singular;
+    unitText = isSingular
+      ? unitDetails.singular
+      : (unitDetails.plural ?? unitDetails.singular);
   }
 
   if (!displayAmount && !unitText) {
-    return 'As needed';
+    return "As needed";
   }
 
   if (!displayAmount && unitText) {
@@ -210,18 +234,20 @@ function formatIngredientQuantity(ingredient: RecipeIngredient, useImperialUnits
   return displayAmount;
 }
 
-function getIngredientQualifier(ingredient: RecipeIngredient): string | undefined {
+function getIngredientQualifier(
+  ingredient: RecipeIngredient,
+): string | undefined {
   const qualifiers: string[] = [];
 
   if (ingredient.garnish) {
-    qualifiers.push('garnish');
+    qualifiers.push("garnish");
   }
 
   if (ingredient.optional) {
-    qualifiers.push('optional');
+    qualifiers.push("optional");
   }
 
-  return qualifiers.join(', ') || undefined;
+  return qualifiers.join(", ") || undefined;
 }
 
 function buildMissingSubstituteLines(
@@ -233,14 +259,24 @@ function buildMissingSubstituteLines(
     return [];
   }
 
-  const ingredientId = typeof ingredient.ingredientId === 'number' ? ingredient.ingredientId : undefined;
-  const requestedIngredient = ingredientId != null ? lookup.ingredientById.get(ingredientId) : undefined;
+  const ingredientId =
+    typeof ingredient.ingredientId === "number"
+      ? ingredient.ingredientId
+      : undefined;
+  const requestedIngredient =
+    ingredientId != null ? lookup.ingredientById.get(ingredientId) : undefined;
   const isBrandedIngredient = requestedIngredient?.baseIngredientId != null;
 
   const orderedSubstitutes = [
-    ...resolution.substitutes.declared.map((option) => ({ option, source: 'declared' as const })),
+    ...resolution.substitutes.declared.map((option) => ({
+      option,
+      source: "declared" as const,
+    })),
     ...(isBrandedIngredient
-      ? resolution.substitutes.base.map((option) => ({ option, source: 'base' as const }))
+      ? resolution.substitutes.base.map((option) => ({
+          option,
+          source: "base" as const,
+        }))
       : []),
   ];
 
@@ -253,13 +289,14 @@ function buildMissingSubstituteLines(
       return;
     }
 
-    const key = option.id != null ? `id:${option.id}` : `name:${name.toLowerCase()}`;
+    const key =
+      option.id != null ? `id:${option.id}` : `name:${name.toLowerCase()}`;
     if (seen.has(key)) {
       return;
     }
 
     seen.add(key);
-    const prefix = source === 'base' && isBrandedIngredient ? 'or any' : 'or';
+    const prefix = source === "base" && isBrandedIngredient ? "or any" : "or";
     lines.push(`${prefix} ${name}`);
   });
 
@@ -277,7 +314,7 @@ function formatGlassLabel(glassId?: string | null) {
       .split(/[_\s]+/)
       .filter(Boolean)
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ')
+      .join(" ")
   );
 }
 
@@ -309,26 +346,32 @@ export default function CocktailDetailsScreen() {
   );
 
   const returnToPath = useMemo(() => {
-    const value = Array.isArray(params.returnToPath) ? params.returnToPath[0] : params.returnToPath;
-    return typeof value === 'string' && value.length > 0 ? value : undefined;
+    const value = Array.isArray(params.returnToPath)
+      ? params.returnToPath[0]
+      : params.returnToPath;
+    return typeof value === "string" && value.length > 0 ? value : undefined;
   }, [params.returnToPath]);
 
   const returnToParams = useMemo(() => {
-    const value = Array.isArray(params.returnToParams) ? params.returnToParams[0] : params.returnToParams;
-    if (typeof value !== 'string' || value.length === 0) {
+    const value = Array.isArray(params.returnToParams)
+      ? params.returnToParams[0]
+      : params.returnToParams;
+    if (typeof value !== "string" || value.length === 0) {
       return undefined;
     }
 
     try {
       const parsed = JSON.parse(value);
-      if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+      if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
         return undefined;
       }
 
-      const entries = Object.entries(parsed).filter(([, entryValue]) => typeof entryValue === 'string');
+      const entries = Object.entries(parsed).filter(
+        ([, entryValue]) => typeof entryValue === "string",
+      );
       return entries.length ? Object.fromEntries(entries) : undefined;
     } catch (error) {
-      console.warn('Failed to parse return params', error);
+      console.warn("Failed to parse return params", error);
       return undefined;
     }
   }, [params.returnToParams]);
@@ -350,12 +393,12 @@ export default function CocktailDetailsScreen() {
   }, [navigation, returnToParams, returnToPath]);
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('beforeRemove', (event) => {
+    const unsubscribe = navigation.addListener("beforeRemove", (event) => {
       if (isHandlingBackRef.current) {
         return;
       }
 
-      if (event.data.action.type !== 'GO_BACK') {
+      if (event.data.action.type !== "GO_BACK") {
         return;
       }
 
@@ -373,7 +416,7 @@ export default function CocktailDetailsScreen() {
   }, [handleReturn, navigation]);
 
   useEffect(() => {
-    const keepAwakeTag = 'cocktail-details';
+    const keepAwakeTag = "cocktail-details";
 
     if (keepScreenAwake) {
       void activateKeepAwakeAsync(keepAwakeTag);
@@ -401,10 +444,15 @@ export default function CocktailDetailsScreen() {
   const resolvedIngredients = useMemo(
     () =>
       sortedIngredients.map((ingredient) =>
-        resolveIngredientAvailability(ingredient, availableIngredientIds, ingredientLookup, {
-          ignoreGarnish,
-          allowAllSubstitutes,
-        }),
+        resolveIngredientAvailability(
+          ingredient,
+          availableIngredientIds,
+          ingredientLookup,
+          {
+            ignoreGarnish,
+            allowAllSubstitutes,
+          },
+        ),
       ),
     [
       allowAllSubstitutes,
@@ -417,11 +465,11 @@ export default function CocktailDetailsScreen() {
 
   const parseIngredientId = useCallback((ingredient: RecipeIngredient) => {
     const ingredientIdRaw = ingredient.ingredientId;
-    if (typeof ingredientIdRaw === 'number') {
+    if (typeof ingredientIdRaw === "number") {
       return ingredientIdRaw;
     }
 
-    if (typeof ingredientIdRaw === 'string') {
+    if (typeof ingredientIdRaw === "string") {
       const parsed = Number(ingredientIdRaw);
       if (!Number.isNaN(parsed)) {
         return parsed;
@@ -488,18 +536,25 @@ export default function CocktailDetailsScreen() {
     [cocktail?.photoUri],
   );
 
-  const glassUri = useMemo(() => resolveGlasswareUriFromId(cocktail?.glassId), [cocktail?.glassId]);
+  const glassUri = useMemo(
+    () => resolveGlasswareUriFromId(cocktail?.glassId),
+    [cocktail?.glassId],
+  );
 
   const glassSource = useMemo(() => resolveImageSource(glassUri), [glassUri]);
 
   const displayedImageSource = photoSource ?? glassSource;
-  const glassLabel = useMemo(() => formatGlassLabel(cocktail?.glassId), [cocktail?.glassId]);
+  const glassLabel = useMemo(
+    () => formatGlassLabel(cocktail?.glassId),
+    [cocktail?.glassId],
+  );
   const methodDetails = useMemo(() => {
     if (!cocktail) {
       return [];
     }
 
-    const legacyMethodId = (cocktail as { methodId?: string | null }).methodId ?? null;
+    const legacyMethodId =
+      (cocktail as { methodId?: string | null }).methodId ?? null;
     const nextMethodIds =
       cocktail.methodIds && cocktail.methodIds.length > 0
         ? cocktail.methodIds
@@ -511,7 +566,8 @@ export default function CocktailDetailsScreen() {
 
   const [expandedMethodIds, setExpandedMethodIds] = useState<string[]>([]);
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
-  const [shouldTruncateDescription, setShouldTruncateDescription] = useState(false);
+  const [shouldTruncateDescription, setShouldTruncateDescription] =
+    useState(false);
 
   const handleDescriptionLayout = useCallback(
     (event: { nativeEvent: { lines: { length: number }[] } }) => {
@@ -536,7 +592,9 @@ export default function CocktailDetailsScreen() {
 
   const toggleMethodDescription = useCallback((methodId: string) => {
     setExpandedMethodIds((current) =>
-      current.includes(methodId) ? current.filter((id) => id !== methodId) : [...current, methodId],
+      current.includes(methodId)
+        ? current.filter((id) => id !== methodId)
+        : [...current, methodId],
     );
   }, []);
 
@@ -551,12 +609,12 @@ export default function CocktailDetailsScreen() {
     }
 
     router.push({
-      pathname: '/cocktails/create',
+      pathname: "/cocktails/create",
       params: {
         cocktailId: String(targetId),
         cocktailName: cocktail.name ?? undefined,
-        mode: 'edit',
-        source: 'cocktails',
+        mode: "edit",
+        source: "cocktails",
       },
     });
   }, [cocktail]);
@@ -572,11 +630,11 @@ export default function CocktailDetailsScreen() {
     }
 
     router.push({
-      pathname: '/cocktails/create',
+      pathname: "/cocktails/create",
       params: {
         cocktailId: String(targetId),
         cocktailName: cocktail.name ?? undefined,
-        source: 'cocktails',
+        source: "cocktails",
       },
     });
   }, [cocktail]);
@@ -584,36 +642,67 @@ export default function CocktailDetailsScreen() {
   return (
     <SafeAreaView
       style={[styles.safeArea, { backgroundColor: Colors.background }]}
-      edges={['left', 'right']}>
+      edges={["left", "right"]}
+    >
       <Stack.Screen
         options={{
-          title: 'Cocktail details',
-          headerTitleAlign: 'center',
+          title: "Cocktail details",
+          headerTitleAlign: "center",
           headerStyle: { backgroundColor: Colors.surface },
-          headerTitleStyle: { color: Colors.onSurface, fontSize: 16, fontWeight: '600' },
+          headerTitleStyle: {
+            color: Colors.onSurface,
+            fontSize: 16,
+            fontWeight: "600",
+          },
           headerShadowVisible: false,
           headerLeft: () => (
-            <HeaderIconButton onPress={handleReturn} accessibilityLabel="Go back">
-              <MaterialCommunityIcons name="arrow-left" size={22} color={Colors.onSurface} />
+            <HeaderIconButton
+              onPress={handleReturn}
+              accessibilityLabel="Go back"
+            >
+              <MaterialCommunityIcons
+                name="arrow-left"
+                size={22}
+                color={Colors.onSurface}
+              />
             </HeaderIconButton>
           ),
           headerRight: () => (
             <View style={styles.headerActions}>
-              <HeaderIconButton onPress={handleCopyPress} accessibilityLabel="Copy cocktail">
-                <MaterialCommunityIcons name="content-copy" size={20} color={Colors.onSurface} />
+              <HeaderIconButton
+                onPress={handleCopyPress}
+                accessibilityLabel="Copy cocktail"
+              >
+                <MaterialCommunityIcons
+                  name="content-copy"
+                  size={20}
+                  color={Colors.onSurface}
+                />
               </HeaderIconButton>
-              <HeaderIconButton onPress={handleEditPress} accessibilityLabel="Edit cocktail">
-                <MaterialCommunityIcons name="pencil-outline" size={20} color={Colors.onSurface} />
+              <HeaderIconButton
+                onPress={handleEditPress}
+                accessibilityLabel="Edit cocktail"
+              >
+                <MaterialCommunityIcons
+                  name="pencil-outline"
+                  size={20}
+                  color={Colors.onSurface}
+                />
               </HeaderIconButton>
             </View>
           ),
         }}
       />
 
-      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}
+      >
         {cocktail ? (
           <View style={styles.section}>
-            <Text style={[styles.name, { color: Colors.onSurface }]}>{cocktail.name}</Text>
+            <Text style={[styles.name, { color: Colors.onSurface }]}>
+              {cocktail.name}
+            </Text>
 
             <View style={styles.mediaSection}>
               <View style={styles.photoWrapper}>
@@ -628,9 +717,21 @@ export default function CocktailDetailsScreen() {
                     style={[
                       styles.photoPlaceholder,
                       { borderColor: Colors.outline },
-                    ]}>
-                    <MaterialCommunityIcons name="image-off" size={36} color={Colors.onSurfaceVariant} />
-                    <Text style={[styles.photoPlaceholderText, { color: Colors.onSurfaceVariant }]}>No photo</Text>
+                    ]}
+                  >
+                    <MaterialCommunityIcons
+                      name="image-off"
+                      size={36}
+                      color={Colors.onSurfaceVariant}
+                    />
+                    <Text
+                      style={[
+                        styles.photoPlaceholderText,
+                        { color: Colors.onSurfaceVariant },
+                      ]}
+                    >
+                      No photo
+                    </Text>
                   </View>
                 )}
               </View>
@@ -639,7 +740,7 @@ export default function CocktailDetailsScreen() {
                 {Array.from({ length: MAX_RATING }).map((_, index) => {
                   const starValue = index + 1;
                   const isActive = displayedRating >= starValue;
-                  const icon = isActive ? 'star' : 'star-outline';
+                  const icon = isActive ? "star" : "star-outline";
 
                   return (
                     <Pressable
@@ -648,12 +749,17 @@ export default function CocktailDetailsScreen() {
                       accessibilityRole="button"
                       accessibilityLabel={
                         displayedRating === starValue
-                          ? 'Clear rating'
+                          ? "Clear rating"
                           : `Set rating to ${starValue}`
                       }
                       style={styles.ratingStar}
-                      hitSlop={8}>
-                      <MaterialCommunityIcons name={icon} size={32} color={Colors.tint} />
+                      hitSlop={8}
+                    >
+                      <MaterialCommunityIcons
+                        name={icon}
+                        size={32}
+                        color={Colors.tint}
+                      />
                     </Pressable>
                   );
                 })}
@@ -663,22 +769,37 @@ export default function CocktailDetailsScreen() {
                 onPress={handleToggleUnits}
                 style={[
                   styles.toggleUnitsButton,
-                  { borderColor: Colors.primary, backgroundColor: Colors.surfaceBright },
+                  {
+                    borderColor: Colors.primary,
+                    backgroundColor: Colors.surfaceBright,
+                  },
                 ]}
                 accessibilityRole="button"
-                accessibilityLabel={showImperialUnits ? 'Show in metric' : 'Show in imperial'}
+                accessibilityLabel={
+                  showImperialUnits ? "Show in metric" : "Show in imperial"
+                }
               >
-                <Text style={[styles.toggleUnitsLabel, { color: Colors.primary }]}>
-                  {showImperialUnits ? 'Show in metric' : 'Show in imperial'}
+                <Text
+                  style={[styles.toggleUnitsLabel, { color: Colors.primary }]}
+                >
+                  {showImperialUnits ? "Show in metric" : "Show in imperial"}
                 </Text>
               </Pressable>
 
               {photoSource && glassSource && glassLabel ? (
                 <View style={styles.glassInfo}>
                   <View style={styles.glassImageWrapper}>
-                    <Image source={glassSource} style={styles.glassImage} contentFit="contain" />
+                    <Image
+                      source={glassSource}
+                      style={styles.glassImage}
+                      contentFit="contain"
+                    />
                   </View>
-                  <Text style={[styles.glassLabel, { color: Colors.onSurface }]}>{glassLabel}</Text>
+                  <Text
+                    style={[styles.glassLabel, { color: Colors.onSurface }]}
+                  >
+                    {glassLabel}
+                  </Text>
                 </View>
               ) : null}
             </View>
@@ -692,17 +813,30 @@ export default function CocktailDetailsScreen() {
                     <View key={method.id} style={styles.methodEntry}>
                       <View style={styles.methodHeader}>
                         <View style={styles.methodIconWrapper}>
-                          {icon?.type === 'asset' ? (
-                            <Image source={icon.source} style={styles.methodIcon} contentFit="contain" />
+                          {icon?.type === "asset" ? (
+                            <Image
+                              source={icon.source}
+                              style={styles.methodIcon}
+                              contentFit="contain"
+                            />
                           ) : (
                             <MaterialCommunityIcons
-                              name={icon?.type === 'icon' ? icon.name : 'information-outline'}
+                              name={
+                                icon?.type === "icon"
+                                  ? icon.name
+                                  : "information-outline"
+                              }
                               size={18}
                               color={Colors.onSurfaceVariant}
                             />
                           )}
                         </View>
-                        <Text style={[styles.methodLabel, { color: Colors.onSurface }]}>
+                        <Text
+                          style={[
+                            styles.methodLabel,
+                            { color: Colors.onSurface },
+                          ]}
+                        >
                           {method.label}
                         </Text>
                         <Pressable
@@ -715,11 +849,23 @@ export default function CocktailDetailsScreen() {
                           }
                           hitSlop={8}
                         >
-                          <Text style={[styles.methodInfoIcon, { color: Colors.primary }]}>ⓘ</Text>
+                          <Text
+                            style={[
+                              styles.methodInfoIcon,
+                              { color: Colors.primary },
+                            ]}
+                          >
+                            ⓘ
+                          </Text>
                         </Pressable>
                       </View>
                       {isExpanded ? (
-                        <Text style={[styles.methodDescription, { color: Colors.onSurfaceVariant }]}>
+                        <Text
+                          style={[
+                            styles.methodDescription,
+                            { color: Colors.onSurfaceVariant },
+                          ]}
+                        >
                           {method.description}
                         </Text>
                       ) : null}
@@ -734,10 +880,10 @@ export default function CocktailDetailsScreen() {
                 {cocktail.tags.map((tag) => (
                   <TagPill
                     key={tag.id ?? tag.name}
-                    label={tag.name ?? 'Tag'}
+                    label={tag.name ?? "Tag"}
                     color={tag.color ?? Colors.tint}
                     selected
-                    accessibilityLabel={tag.name ?? 'Tag'}
+                    accessibilityLabel={tag.name ?? "Tag"}
                   />
                 ))}
               </View>
@@ -746,16 +892,29 @@ export default function CocktailDetailsScreen() {
             {cocktail.description ? (
               <View style={styles.textBlock}>
                 <Text
-                  style={[styles.bodyText, styles.descriptionText, { color: Colors.onSurfaceVariant }]}
-                  numberOfLines={!isDescriptionExpanded && shouldTruncateDescription ? 5 : undefined}
+                  style={[
+                    styles.bodyText,
+                    styles.descriptionText,
+                    { color: Colors.onSurfaceVariant },
+                  ]}
+                  numberOfLines={
+                    !isDescriptionExpanded && shouldTruncateDescription
+                      ? 5
+                      : undefined
+                  }
                   onTextLayout={handleDescriptionLayout}
                 >
                   {cocktail.description}
                 </Text>
                 {shouldTruncateDescription ? (
-                  <Pressable onPress={toggleDescription} accessibilityRole="button">
-                    <Text style={[styles.toggleDescription, { color: Colors.tint }]}>
-                      {isDescriptionExpanded ? 'Show less' : 'Show more'}
+                  <Pressable
+                    onPress={toggleDescription}
+                    accessibilityRole="button"
+                  >
+                    <Text
+                      style={[styles.toggleDescription, { color: Colors.tint }]}
+                    >
+                      {isDescriptionExpanded ? "Show less" : "Show more"}
                     </Text>
                   </Pressable>
                 ) : null}
@@ -764,12 +923,22 @@ export default function CocktailDetailsScreen() {
 
             {instructionsParagraphs.length ? (
               <View style={styles.textBlock}>
-                <Text style={[styles.instructionsTitle, { color: Colors.onSurface }]}>Instructions</Text>
+                <Text
+                  style={[
+                    styles.instructionsTitle,
+                    { color: Colors.onSurface },
+                  ]}
+                >
+                  Instructions
+                </Text>
                 <View style={styles.instructionsList}>
                   {instructionsParagraphs.map((paragraph, index) => (
                     <Text
                       key={`instruction-${index}`}
-                      style={[styles.instructionsText, { color: Colors.onSurface }]}
+                      style={[
+                        styles.instructionsText,
+                        { color: Colors.onSurface },
+                      ]}
                     >
                       {paragraph}
                     </Text>
@@ -780,10 +949,17 @@ export default function CocktailDetailsScreen() {
 
             {sortedIngredients.length ? (
               <View style={styles.textBlock}>
-                <Text style={[styles.sectionTitle, { color: Colors.onSurface }]}>Ingredients</Text>
+                <Text
+                  style={[styles.sectionTitle, { color: Colors.onSurface }]}
+                >
+                  Ingredients
+                </Text>
                 <View style={styles.ingredientsList}>
                   {sortedIngredients.map((ingredient, index) => {
-                    const quantity = formatIngredientQuantity(ingredient, showImperialUnits);
+                    const quantity = formatIngredientQuantity(
+                      ingredient,
+                      showImperialUnits,
+                    );
                     const qualifier = getIngredientQualifier(ingredient);
                     const key = `${ingredient.ingredientId ?? ingredient.name}-${ingredient.order}`;
                     const resolution = resolvedIngredients[index];
@@ -793,10 +969,18 @@ export default function CocktailDetailsScreen() {
                       resolvedId != null && resolvedId >= 0
                         ? ingredientLookup.ingredientById.get(resolvedId)
                         : undefined;
-                    const catalogEntry = ingredientId >= 0 ? ingredientLookup.ingredientById.get(ingredientId) : undefined;
-                    const photoUri = ingredient.photoUri ?? resolvedIngredient?.photoUri ?? catalogEntry?.photoUri;
+                    const catalogEntry =
+                      ingredientId >= 0
+                        ? ingredientLookup.ingredientById.get(ingredientId)
+                        : undefined;
+                    const photoUri =
+                      ingredient.photoUri ??
+                      resolvedIngredient?.photoUri ??
+                      catalogEntry?.photoUri;
                     const previousIngredient = sortedIngredients[index - 1];
-                    const previousResolution = previousIngredient ? resolvedIngredients[index - 1] : undefined;
+                    const previousResolution = previousIngredient
+                      ? resolvedIngredients[index - 1]
+                      : undefined;
                     const dividerColor = previousResolution?.isAvailable
                       ? Colors.outline
                       : Colors.outlineVariant;
@@ -806,32 +990,39 @@ export default function CocktailDetailsScreen() {
                       catalogEntry?.tags?.[0]?.color ??
                       tagColors.yellow;
                     const brandIndicatorColor =
-                      resolvedIngredient?.baseIngredientId != null || catalogEntry?.baseIngredientId != null
+                      resolvedIngredient?.baseIngredientId != null ||
+                      catalogEntry?.baseIngredientId != null
                         ? Colors.primary
                         : undefined;
-                    const isOnShoppingList = ingredientId >= 0 && shoppingIngredientIds.has(ingredientId);
+                    const isOnShoppingList =
+                      ingredientId >= 0 &&
+                      shoppingIngredientIds.has(ingredientId);
                     const handlePress = () => {
                       const routeParam =
                         resolvedId != null && resolvedId >= 0
                           ? resolvedId
-                          : catalogEntry?.id ?? ingredient.name;
+                          : (catalogEntry?.id ?? ingredient.name);
                       if (routeParam == null) {
                         return;
                       }
 
                       const returnToParam =
-                        cocktail?.id != null ? String(cocktail.id) : resolvedParam ? String(resolvedParam) : undefined;
+                        cocktail?.id != null
+                          ? String(cocktail.id)
+                          : resolvedParam
+                            ? String(resolvedParam)
+                            : undefined;
                       const returnToParams = returnToParam
                         ? JSON.stringify({ cocktailId: returnToParam })
                         : undefined;
 
                       router.push({
-                        pathname: '/ingredients/[ingredientId]',
+                        pathname: "/ingredients/[ingredientId]",
                         params: {
                           ingredientId: String(routeParam),
                           ...(returnToParams
                             ? {
-                                returnToPath: '/cocktails/[cocktailId]',
+                                returnToPath: "/cocktails/[cocktailId]",
                                 returnToParams,
                               }
                             : {}),
@@ -847,8 +1038,13 @@ export default function CocktailDetailsScreen() {
                       resolvedIngredient?.baseIngredientId != null &&
                       resolvedIngredient.baseIngredientId === ingredientId;
 
-                    if (resolution.substituteFor && !isBaseToBrandSubstitution) {
-                      subtitleLines.push(`Substitute for ${resolution.substituteFor}`);
+                    if (
+                      resolution.substituteFor &&
+                      !isBaseToBrandSubstitution
+                    ) {
+                      subtitleLines.push(
+                        `Substitute for ${resolution.substituteFor}`,
+                      );
                     }
 
                     const missingSubstituteLines = buildMissingSubstituteLines(
@@ -857,19 +1053,29 @@ export default function CocktailDetailsScreen() {
                       ingredientLookup,
                     );
 
-                    if (!resolution.isAvailable && missingSubstituteLines.length) {
+                    if (
+                      !resolution.isAvailable &&
+                      missingSubstituteLines.length
+                    ) {
                       subtitleLines.push(...missingSubstituteLines);
                     }
 
                     const qualifierLine = qualifier
                       ? qualifier.charAt(0).toUpperCase() + qualifier.slice(1)
                       : undefined;
-                    const subtitle = subtitleLines.length ? subtitleLines.join('\n') : undefined;
+                    const subtitle = subtitleLines.length
+                      ? subtitleLines.join("\n")
+                      : undefined;
                     const subtitleContent =
                       subtitle || qualifierLine ? (
                         <View>
                           {subtitle ? (
-                            <Text style={[styles.ingredientSubtitle, { color: Colors.onSurfaceVariant }]}>
+                            <Text
+                              style={[
+                                styles.ingredientSubtitle,
+                                { color: Colors.onSurfaceVariant },
+                              ]}
+                            >
                               {subtitle}
                             </Text>
                           ) : null}
@@ -877,9 +1083,12 @@ export default function CocktailDetailsScreen() {
                             <Text
                               style={[
                                 styles.ingredientSubtitle,
-                                subtitle ? styles.ingredientQualifier : undefined,
+                                subtitle
+                                  ? styles.ingredientQualifier
+                                  : undefined,
                                 { color: Colors.onSurfaceVariant },
-                              ]}>
+                              ]}
+                            >
                               {qualifierLine}
                             </Text>
                           ) : null}
@@ -889,14 +1098,25 @@ export default function CocktailDetailsScreen() {
                     return (
                       <View key={key}>
                         {index > 0 ? (
-                          <View style={[styles.ingredientDivider, { backgroundColor: dividerColor }]} />
+                          <View
+                            style={[
+                              styles.ingredientDivider,
+                              { backgroundColor: dividerColor },
+                            ]}
+                          />
                         ) : null}
                         <ListRow
-                          title={resolution.resolvedName || ingredient.name || ''}
+                          title={
+                            resolution.resolvedName || ingredient.name || ""
+                          }
                           subtitleContent={subtitleContent}
                           thumbnail={
                             <Thumb
-                              label={resolution.resolvedName ?? ingredient.name ?? undefined}
+                              label={
+                                resolution.resolvedName ??
+                                ingredient.name ??
+                                undefined
+                              }
                               uri={photoUri}
                               fallbackUri={catalogEntry?.photoUri}
                             />
@@ -904,8 +1124,12 @@ export default function CocktailDetailsScreen() {
                           control={
                             <View style={styles.quantityContainer}>
                               <Text
-                                style={[styles.quantityLabel, { color: Colors.onSurfaceVariant }]}
-                                numberOfLines={1}>
+                                style={[
+                                  styles.quantityLabel,
+                                  { color: Colors.onSurfaceVariant },
+                                ]}
+                                numberOfLines={1}
+                              >
                                 {quantity}
                               </Text>
                             </View>
@@ -930,7 +1154,11 @@ export default function CocktailDetailsScreen() {
                           tagColor={tagColor}
                           brandIndicatorColor={brandIndicatorColor}
                           accessibilityRole="button"
-                          accessibilityState={resolution.isAvailable ? { selected: true } : undefined}
+                          accessibilityState={
+                            resolution.isAvailable
+                              ? { selected: true }
+                              : undefined
+                          }
                           metaAlignment="center"
                         />
                       </View>
@@ -942,8 +1170,16 @@ export default function CocktailDetailsScreen() {
           </View>
         ) : (
           <View style={styles.emptyState}>
-            <MaterialCommunityIcons name="glass-cocktail" size={42} color={Colors.onSurfaceVariant} />
-            <Text style={[styles.emptyText, { color: Colors.onSurfaceVariant }]}>Cocktail not found</Text>
+            <MaterialCommunityIcons
+              name="glass-cocktail"
+              size={42}
+              color={Colors.onSurfaceVariant}
+            />
+            <Text
+              style={[styles.emptyText, { color: Colors.onSurfaceVariant }]}
+            >
+              Cocktail not found
+            </Text>
           </View>
         )}
       </ScrollView>
@@ -956,8 +1192,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   headerActions: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 8,
   },
   content: {
@@ -969,23 +1205,23 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 20,
-    fontWeight: '700',
-    textAlign: 'center',
+    fontWeight: "700",
+    textAlign: "center",
   },
   mediaSection: {
     gap: 16,
-    alignItems: 'center',
+    alignItems: "center",
   },
   photoWrapper: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    alignSelf: 'center',
+    alignItems: "center",
+    justifyContent: "center",
+    alignSelf: "center",
   },
   photo: {
     width: 150,
     height: 150,
     borderRadius: 12,
-    overflow: 'hidden',
+    overflow: "hidden",
     backgroundColor: Colors.surfaceBright,
   },
   photoPlaceholder: {
@@ -993,8 +1229,8 @@ const styles = StyleSheet.create({
     height: 150,
     borderRadius: 12,
     borderWidth: StyleSheet.hairlineWidth,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     gap: 8,
     backgroundColor: Colors.surfaceBright,
   },
@@ -1002,18 +1238,18 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   ratingRow: {
-    flexDirection: 'row',
-    justifyContent: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
     gap: 8,
   },
   ratingStar: {
     width: 32,
     height: 32,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   toggleUnitsButton: {
-    alignSelf: 'center',
+    alignSelf: "center",
     paddingVertical: 8,
     paddingHorizontal: 20,
     borderRadius: 8,
@@ -1021,36 +1257,36 @@ const styles = StyleSheet.create({
   },
   toggleUnitsLabel: {
     fontSize: 14,
-    fontWeight: '600',
-    textAlign: 'center',
+    fontWeight: "600",
+    textAlign: "center",
   },
   glassInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 12,
-    alignSelf: 'flex-start',
+    alignSelf: "flex-start",
   },
   glassImageWrapper: {
     width: 48,
     height: 48,
   },
   glassImage: {
-    width: '100%',
-    height: '100%',
+    width: "100%",
+    height: "100%",
   },
   glassLabel: {
     fontSize: 16,
   },
   tagList: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'flex-start',
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "flex-start",
     gap: 8,
-    alignSelf: 'stretch',
+    alignSelf: "stretch",
   },
   methodList: {
     gap: 12,
-    alignSelf: 'stretch',
+    alignSelf: "stretch",
   },
   textBlock: {
     gap: 12,
@@ -1059,15 +1295,15 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   methodHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 8,
   },
   methodIconWrapper: {
     width: 20,
     height: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   methodIcon: {
     width: 18,
@@ -1075,11 +1311,11 @@ const styles = StyleSheet.create({
   },
   methodLabel: {
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   methodInfoIcon: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   methodDescription: {
     fontSize: 13,
@@ -1087,7 +1323,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   bodyText: {
     fontSize: 14,
@@ -1098,11 +1334,11 @@ const styles = StyleSheet.create({
   },
   toggleDescription: {
     fontSize: 14,
-    fontWeight: '500',
+    fontWeight: "500",
   },
   instructionsTitle: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   instructionsText: {
     fontSize: 14,
@@ -1119,12 +1355,12 @@ const styles = StyleSheet.create({
   },
   quantityContainer: {
     minWidth: 8,
-    alignItems: 'flex-end',
-    justifyContent: 'center',
+    alignItems: "flex-end",
+    justifyContent: "center",
   },
   quantityLabel: {
     fontSize: 14,
-    textAlign: 'right',
+    textAlign: "right",
   },
   ingredientSubtitle: {
     fontSize: 12,
@@ -1135,17 +1371,17 @@ const styles = StyleSheet.create({
   shoppingIcon: {
     width: 16,
     height: 16,
-    alignSelf: 'flex-end',
+    alignSelf: "flex-end",
   },
   shoppingIconPlaceholder: {
     width: 16,
     height: 16,
-    alignSelf: 'flex-end',
+    alignSelf: "flex-end",
   },
   emptyState: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     gap: 12,
     marginTop: 80,
   },
