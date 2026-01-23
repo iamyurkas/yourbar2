@@ -1,13 +1,13 @@
-import type { SkImage } from '@shopify/react-native-skia';
-import { ImageFormat, Skia } from '@shopify/react-native-skia';
-import * as FileSystem from 'expo-file-system/legacy';
+import type { SkImage } from "@shopify/react-native-skia";
+import { ImageFormat, Skia } from "@shopify/react-native-skia";
+import * as FileSystem from "expo-file-system/legacy";
 
-import { buildPhotoFileName } from '@/libs/photo-utils';
+import { buildPhotoFileName } from "@/libs/photo-utils";
 
-const PHOTO_MAX_SIDE = 150;
-const PHOTO_ROOT = 'photos';
+const PHOTO_MAX_SIDE = 300;
+const PHOTO_ROOT = "photos";
 
-type PhotoCategory = 'cocktails' | 'ingredients';
+type PhotoCategory = "cocktails" | "ingredients";
 
 type StorePhotoInput = {
   uri: string;
@@ -18,20 +18,19 @@ type StorePhotoInput = {
 };
 
 const ensurePhotoDirectory = async (category: PhotoCategory) => {
-  const rootDirectory = FileSystem.documentDirectory ?? FileSystem.cacheDirectory;
+  const rootDirectory =
+    FileSystem.documentDirectory ?? FileSystem.cacheDirectory;
   if (!rootDirectory) {
     return null;
   }
 
-  const directory = `${rootDirectory.replace(/\/?$/, '/')}${PHOTO_ROOT}/${category}/`;
+  const directory = `${rootDirectory.replace(/\/?$/, "/")}${PHOTO_ROOT}/${category}/`;
   await FileSystem.makeDirectoryAsync(directory, { intermediates: true });
   return directory;
 };
 
-
 const isLocalFileUri = (uri: string) =>
-  uri.startsWith('file:') || uri.startsWith('content:');
-
+  uri.startsWith("file:") || uri.startsWith("content:");
 
 const getResizedDimensions = (width: number, height: number) => {
   const longestSide = Math.max(width, height);
@@ -59,14 +58,14 @@ const saveJpegWithWhiteBg = async (
   // Create an offscreen surface
   const surface = Skia.Surface.MakeOffscreen(targetWidth, targetHeight);
   if (!surface) {
-    throw new Error('Skia: failed to create offscreen surface');
+    throw new Error("Skia: failed to create offscreen surface");
   }
 
   const canvas = surface.getCanvas();
 
   // Fill background with white
   const paint = Skia.Paint();
-  paint.setColor(Skia.Color('#FFFFFF'));
+  paint.setColor(Skia.Color("#FFFFFF"));
   canvas.drawRect(Skia.XYWHRect(0, 0, targetWidth, targetHeight), paint);
 
   // Draw the original image on top
@@ -84,12 +83,12 @@ const saveJpegWithWhiteBg = async (
   const snapshot = surface.makeImageSnapshot();
   const jpegBase64 = snapshot.encodeToBase64(ImageFormat.JPEG, quality);
   if (!jpegBase64) {
-    throw new Error('Skia: failed to encode JPEG');
+    throw new Error("Skia: failed to encode JPEG");
   }
 
   // Save into cache directory
   const outputUri =
-    `${FileSystem.cacheDirectory ?? FileSystem.documentDirectory ?? ''}` +
+    `${FileSystem.cacheDirectory ?? FileSystem.documentDirectory ?? ""}` +
     `flatten_${Date.now()}.jpg`;
 
   await FileSystem.writeAsStringAsync(outputUri, jpegBase64, {
@@ -126,7 +125,7 @@ export const storePhoto = async ({
     const data = Skia.Data.fromBase64(base64);
     const img = Skia.Image.MakeImageFromEncoded(data);
     if (!img) {
-      throw new Error('Skia: failed to decode image');
+      throw new Error("Skia: failed to decode image");
     }
 
     const width = img.width();
@@ -143,7 +142,7 @@ export const storePhoto = async ({
       90,
     );
 
-    const fileName = buildPhotoFileName(id, name, 'jpg', suffix);
+    const fileName = buildPhotoFileName(id, name, "jpg", suffix);
     const targetUri = `${directory}${fileName}`;
 
     await FileSystem.deleteAsync(targetUri, { idempotent: true });
@@ -151,10 +150,10 @@ export const storePhoto = async ({
 
     return targetUri;
   } catch (error) {
-    console.warn('Failed to store photo', error);
+    console.warn("Failed to store photo", error);
     return uri;
   }
 };
 
 export const shouldStorePhoto = (uri?: string | null) =>
-  typeof uri === 'string' && isLocalFileUri(uri);
+  typeof uri === "string" && isLocalFileUri(uri);
