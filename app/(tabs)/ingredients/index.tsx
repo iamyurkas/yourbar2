@@ -9,6 +9,8 @@ import {
   StyleSheet,
   Text,
   View,
+  type NativeScrollEvent,
+  type NativeSyntheticEvent,
   type LayoutChangeEvent,
   type LayoutRectangle,
 } from 'react-native';
@@ -216,6 +218,9 @@ export default function IngredientsScreen() {
   const [headerLayout, setHeaderLayout] = useState<LayoutRectangle | null>(null);
   const [filterAnchorLayout, setFilterAnchorLayout] = useState<LayoutRectangle | null>(null);
   const listRef = useRef<FlatList<unknown>>(null);
+  const lastScrollOffset = useRef(0);
+  const searchStartOffset = useRef<number | null>(null);
+  const previousQuery = useRef(query);
   const [optimisticAvailability, setOptimisticAvailability] = useState<Map<number, boolean>>(
     () => new Map(),
   );
@@ -223,6 +228,27 @@ export default function IngredientsScreen() {
   const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
 
   useScrollToTop(listRef);
+
+  useEffect(() => {
+    const wasEmpty = previousQuery.current.length === 0;
+    const isEmpty = query.length === 0;
+
+    if (wasEmpty && !isEmpty) {
+      searchStartOffset.current = lastScrollOffset.current;
+    } else if (!wasEmpty && isEmpty && searchStartOffset.current !== null) {
+      const restoreOffset = searchStartOffset.current;
+      searchStartOffset.current = null;
+      requestAnimationFrame(() => {
+        listRef.current?.scrollToOffset({ offset: restoreOffset, animated: false });
+      });
+    }
+
+    previousQuery.current = query;
+  }, [query]);
+
+  const handleScroll = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    lastScrollOffset.current = event.nativeEvent.contentOffset.y;
+  }, []);
 
   useEffect(() => {
     setLastIngredientTab(activeTab);
@@ -737,6 +763,8 @@ export default function IngredientsScreen() {
           keyboardDismissMode="on-drag"
           // Let the first tap both dismiss the keyboard and activate the row.
           keyboardShouldPersistTaps="handled"
+          onScroll={handleScroll}
+          scrollEventThrottle={16}
           ListEmptyComponent={
             <Text style={[styles.emptyLabel, { color: Colors.onSurfaceVariant }]}>{emptyMessage}</Text>
           }

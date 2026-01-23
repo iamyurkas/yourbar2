@@ -1,7 +1,7 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   FlatList,
   Pressable,
@@ -9,6 +9,8 @@ import {
   StyleSheet,
   Text,
   View,
+  type NativeScrollEvent,
+  type NativeSyntheticEvent,
   type LayoutChangeEvent,
   type LayoutRectangle,
 } from 'react-native';
@@ -81,6 +83,10 @@ export default function ShakerResultsScreen() {
   );
   const [headerLayout, setHeaderLayout] = useState<LayoutRectangle | null>(null);
   const [filterAnchorLayout, setFilterAnchorLayout] = useState<LayoutRectangle | null>(null);
+  const listRef = useRef<FlatList<Cocktail>>(null);
+  const lastScrollOffset = useRef(0);
+  const searchStartOffset = useRef<number | null>(null);
+  const previousQuery = useRef(query);
 
   const availableIds = useMemo(() => parseListParam(params.available), [params.available]);
   const unavailableIds = useMemo(() => parseListParam(params.unavailable), [params.unavailable]);
@@ -133,6 +139,27 @@ export default function ShakerResultsScreen() {
     () => [...availableCocktails, ...unavailableCocktails],
     [availableCocktails, unavailableCocktails],
   );
+
+  useEffect(() => {
+    const wasEmpty = previousQuery.current.length === 0;
+    const isEmpty = query.length === 0;
+
+    if (wasEmpty && !isEmpty) {
+      searchStartOffset.current = lastScrollOffset.current;
+    } else if (!wasEmpty && isEmpty && searchStartOffset.current !== null) {
+      const restoreOffset = searchStartOffset.current;
+      searchStartOffset.current = null;
+      requestAnimationFrame(() => {
+        listRef.current?.scrollToOffset({ offset: restoreOffset, animated: false });
+      });
+    }
+
+    previousQuery.current = query;
+  }, [query]);
+
+  const handleScroll = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    lastScrollOffset.current = event.nativeEvent.contentOffset.y;
+  }, []);
 
   const ingredientLookup = useMemo(() => createIngredientLookup(ingredients), [ingredients]);
   const defaultTagColor = Colors.tint;
@@ -640,6 +667,7 @@ export default function ShakerResultsScreen() {
           </>
         ) : null}
         <FlatList
+          ref={listRef}
           data={filteredCocktails}
           keyExtractor={(item) => String(item.id ?? item.name)}
           renderItem={renderItem}
@@ -654,6 +682,8 @@ export default function ShakerResultsScreen() {
           keyboardDismissMode="on-drag"
           // Keep list item taps active while the keyboard dismisses.
           keyboardShouldPersistTaps="handled"
+          onScroll={handleScroll}
+          scrollEventThrottle={16}
         />
       </View>
       <SideMenuDrawer visible={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
