@@ -682,11 +682,13 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
           <View style={[styles.headerContainer, { backgroundColor: Colors.surface }]}>
             <Text style={[styles.title, { color: Colors.onSurface }]}>Settings</Text>
           </View>
+          {/* Preserve menu taps even if a text field elsewhere keeps the keyboard open. */}
           <ScrollView
             style={styles.menuScroll}
             contentContainerStyle={styles.menuContent}
-            showsVerticalScrollIndicator={false}>
-              <Pressable
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled">
+            <Pressable
               accessibilityRole="button"
               accessibilityLabel="Reload bundled inventory"
               onPress={handleResetInventory}
@@ -1068,7 +1070,10 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 <MaterialCommunityIcons name="close" size={22} color={Colors.onSurfaceVariant} />
               </Pressable>
             </View>
-            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.tagManagerContent}>
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={styles.tagManagerContent}
+              keyboardShouldPersistTaps="handled">
               <View style={styles.tagSection}>
                 <View style={styles.tagSectionHeader}>
                   <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>Cocktail tags</Text>
@@ -1212,7 +1217,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
             <ScrollView
               style={styles.startScreenModalScroll}
               contentContainerStyle={styles.startScreenOptionList}
-              showsVerticalScrollIndicator={false}>
+              showsVerticalScrollIndicator={false}
+              keyboardShouldPersistTaps="handled">
               {START_SCREEN_OPTIONS.map((option) => {
                 const isSelected = startScreen === option.key;
                 return (

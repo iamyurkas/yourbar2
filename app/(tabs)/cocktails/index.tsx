@@ -855,7 +855,11 @@ export default function CocktailsScreen() {
                   shadowColor: Colors.shadow,
                 },
               ]}>
-              <ScrollView style={styles.filterMenuScroll} showsVerticalScrollIndicator>
+              {/* Allow filter taps to work even if the search input keeps focus/keyboard open. */}
+              <ScrollView
+                style={styles.filterMenuScroll}
+                showsVerticalScrollIndicator
+                keyboardShouldPersistTaps="handled">
                 <View style={styles.filterMenuContent}>
                   <View style={styles.filterMethodList}>
                     {availableMethodOptions.length > 0 ? (
@@ -933,6 +937,9 @@ export default function CocktailsScreen() {
           ItemSeparatorComponent={isMyTab ? renderMySeparator : renderSeparator}
           contentContainerStyle={styles.listContent}
           showsVerticalScrollIndicator
+          keyboardDismissMode="on-drag"
+          // Ensure first tap triggers row actions while dismissing the keyboard.
+          keyboardShouldPersistTaps="handled"
           ListEmptyComponent={
             <Text style={[styles.emptyLabel, { color: Colors.onSurfaceVariant }]}>
               {emptyMessage}

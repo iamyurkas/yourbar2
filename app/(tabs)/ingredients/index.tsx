@@ -685,7 +685,11 @@ export default function IngredientsScreen() {
                   shadowColor: Colors.shadow,
                 },
               ]}>
-              <ScrollView style={styles.filterMenuScroll} showsVerticalScrollIndicator>
+              {/* Keep filter chip taps responsive when the search field has focus. */}
+              <ScrollView
+                style={styles.filterMenuScroll}
+                showsVerticalScrollIndicator
+                keyboardShouldPersistTaps="handled">
                 {availableTagOptions.length > 0 ? (
                   <View style={styles.filterTagList}>
                     {availableTagOptions.map((tag) => {
@@ -730,6 +734,9 @@ export default function IngredientsScreen() {
           ItemSeparatorComponent={renderSeparator}
           contentContainerStyle={styles.listContent}
           showsVerticalScrollIndicator
+          keyboardDismissMode="on-drag"
+          // Let the first tap both dismiss the keyboard and activate the row.
+          keyboardShouldPersistTaps="handled"
           ListEmptyComponent={
             <Text style={[styles.emptyLabel, { color: Colors.onSurfaceVariant }]}>{emptyMessage}</Text>
           }

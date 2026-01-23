@@ -672,6 +672,9 @@ export default function ShakerScreen() {
           renderItem={renderGroup}
           contentContainerStyle={[styles.listContent, { paddingBottom: 140 + insets.bottom }]}
           showsVerticalScrollIndicator={false}
+          keyboardDismissMode="on-drag"
+          // Allow the first tap to toggle items while dismissing the keyboard.
+          keyboardShouldPersistTaps="handled"
         />
         <View
           style={[
