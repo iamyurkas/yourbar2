@@ -2085,6 +2085,7 @@
           "substitutes": [
             {
               "id": 999967,
+              "ingredientId": 999967,
               "name": "Cherry Liqueur"
             }
           ]
@@ -2212,6 +2213,7 @@
           "substitutes": [
             {
               "id": 587125,
+              "ingredientId": 587125,
               "name": "Orange Curaçao"
             }
           ]
@@ -4961,15 +4963,22 @@
           "order": 1,
           "ingredientId": 908571,
           "name": "Spiced Rum",
-          "amount": "40",
+          "amount": "45",
           "unitId": 11,
           "substitutes": [
             {
+              "id": 266182,
+              "ingredientId": 266182,
+              "name": "Tequila Blanco"
+            },
+            {
               "id": 811139,
+              "ingredientId": 811139,
               "name": "Gold Rum"
             },
             {
               "id": 861551,
+              "ingredientId": 861551,
               "name": "White Rum"
             }
           ]
@@ -4978,14 +4987,14 @@
           "order": 2,
           "ingredientId": 167992,
           "name": "Aperol",
-          "amount": "20",
+          "amount": "22.5",
           "unitId": 11
         },
         {
           "order": 3,
           "ingredientId": 494177,
           "name": "Pineapple Juice",
-          "amount": "40",
+          "amount": "45",
           "unitId": 11
         },
         {
@@ -5023,6 +5032,7 @@
           "name": "Cherry",
           "amount": "1",
           "unitId": 1,
+          "optional": true,
           "garnish": true
         },
         {
@@ -5279,40 +5289,43 @@
           "substitutes": [
             {
               "id": 1755776402585,
+              "ingredientId": 1755776402585,
               "name": "Scotch Highland Whiskey"
             }
           ]
         },
         {
           "order": 2,
-          "ingredientId": 38131,
-          "name": "Orange Juice",
+          "ingredientId": 829460,
+          "name": "Cherry Brandy",
           "amount": "30",
-          "unitId": 11
+          "unitId": 11,
+          "substitutes": [
+            {
+              "id": 325668,
+              "ingredientId": 325668,
+              "name": "Cherry Heering"
+            },
+            {
+              "id": 999967,
+              "ingredientId": 999967,
+              "name": "Cherry Liqueur"
+            }
+          ]
         },
         {
           "order": 3,
           "ingredientId": 898334,
           "name": "Red Vermouth",
-          "amount": "25",
+          "amount": "30",
           "unitId": 11
         },
         {
           "order": 4,
-          "ingredientId": 829460,
-          "name": "Cherry Brandy",
-          "amount": "25",
-          "unitId": 11,
-          "substitutes": [
-            {
-              "id": 325668,
-              "name": "Cherry Heering"
-            },
-            {
-              "id": 999967,
-              "name": "Cherry Liqueur"
-            }
-          ]
+          "ingredientId": 38131,
+          "name": "Orange Juice",
+          "amount": "30",
+          "unitId": 11
         },
         {
           "order": 5,
@@ -6704,9 +6717,9 @@
       "id": 1755800000049,
       "name": "Brandy Alexander",
       "description": "A creamy blend of cognac and chocolate liqueur.",
-      "instructions": "1. Add all ingredients into a cocktail shaker filled with ice.\n2. Shake well.\n3. Strain into a chilled cocktail glass.\n4. Sprinkle nutmeg on top.",
+      "instructions": "1. Add all ingredients into a cocktail shaker filled with ice.\n2. Shake well.\n3. Strain into a chilled coupe glass.\n4. Sprinkle nutmeg on top.",
       "photoUri": "assets/cocktails/1755800000049-brandy-alexander.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "coupe",
       "methodIds": ["shake", "blend"],
       "tags": [
         {
@@ -6730,6 +6743,7 @@
           "substitutes": [
             {
               "id": 435165,
+              "ingredientId": 435165,
               "name": "Brandy"
             }
           ]
@@ -6743,6 +6757,7 @@
           "substitutes": [
             {
               "id": 794666,
+              "ingredientId": 794666,
               "name": "Chocolate Liqueur"
             }
           ]
@@ -7246,7 +7261,7 @@
       "id": 1757000000106,
       "name": "Breakfast Martini",
       "description": "A spirit-forward gin cocktail showcasing Gin, Triple Sec, Orange Marmalade—deep, aromatic, and meant to be savored. Garnished with lemon.",
-      "instructions": "1. Add 50ml of gin, 15ml of triple sec, 15ml of lemon juice and 1 teaspoon of marmalade to a shaker and stir to break up the marmalade.\n2. Add ice and shake.\n3. Strain into a chilled cocktail glass.\n4. Garnish with grated lemon zest.",
+      "instructions": "1. Add 50ml of gin, 15ml of triple sec, 15ml of lemon juice and 1 teaspoon of marmalade to a shaker and stir to break up the marmalade.\n2. Add ice and shake.\n3. Strain into a chilled cocktail glass.\n4. Garnish with grated lemon zest or tiny toast with orange marmalade.",
       "photoUri": "assets/cocktails/1757000000106-breakfast-martini.jpg",
       "glassId": "cocktail_glass",
       "methodIds": ["shake"],
@@ -8698,7 +8713,7 @@
       "instructions": "1. Fill a highball glass with ice.\n2. Add 40ml of vodka and 120ml of cranberry juice.\n3. Stir well and garnish with a lime wedge.",
       "photoUri": "assets/cocktails/1758746837350-cape-cod.jpg",
       "glassId": "highball_glass",
-      "methodIds": ["stir"],
+      "methodIds": ["build"],
       "tags": [
         {
           "id": 7,
@@ -8730,7 +8745,7 @@
           "order": 3,
           "ingredientId": 346304,
           "name": "Ice",
-          "amount": "150",
+          "amount": "120",
           "unitId": 8
         },
         {
@@ -8740,13 +8755,6 @@
           "amount": "1",
           "unitId": 27,
           "garnish": true
-        },
-        {
-          "order": 5,
-          "ingredientId": 346304,
-          "name": "Ice",
-          "amount": "120",
-          "unitId": 8
         }
       ]
     },
@@ -10442,10 +10450,22 @@
         },
         {
           "order": 2,
-          "ingredientId": 97568,
-          "name": "Tequila",
+          "ingredientId": 266182,
+          "name": "Tequila Blanco",
           "amount": "45",
-          "unitId": 11
+          "unitId": 11,
+          "substitutes": [
+            {
+              "id": 97568,
+              "ingredientId": 97568,
+              "name": "Tequila"
+            },
+            {
+              "id": 787067,
+              "ingredientId": 787067,
+              "name": "Tequila Gold"
+            }
+          ]
         },
         {
           "order": 3,
@@ -10919,6 +10939,15 @@
         },
         {
           "order": 8,
+          "ingredientId": 108496,
+          "name": "Lemon",
+          "amount": "1",
+          "unitId": 1,
+          "optional": true,
+          "garnish": true
+        },
+        {
+          "order": 9,
           "ingredientId": 346304,
           "name": "Ice",
           "amount": "120",
@@ -12538,10 +12567,22 @@
       "ingredients": [
         {
           "order": 1,
-          "ingredientId": 97568,
-          "name": "Tequila",
+          "ingredientId": 266182,
+          "name": "Tequila Blanco",
           "amount": "45",
-          "unitId": 11
+          "unitId": 11,
+          "substitutes": [
+            {
+              "id": 97568,
+              "ingredientId": 97568,
+              "name": "Tequila"
+            },
+            {
+              "id": 787067,
+              "ingredientId": 787067,
+              "name": "Tequila Gold"
+            }
+          ]
         },
         {
           "order": 2,
@@ -12980,6 +13021,7 @@
       "name": "Eskimo Slugger",
       "description": "A potent and refreshing dessert cocktail that strikes a perfect balance between the creamy sweetness of Irish cream, the purity of vodka, and the intense peppermint chill of Rumple Minze.",
       "instructions": "1. In a cocktail shaker half-filled with ice cubes, combine Irish cream, vodka, and peppermint liqueur.\n2. Shake the mixture vigorously until it is well-chilled.\n3. Strain into a rocks glass.",
+      "photoUri": "assets/cocktails/1759480768932-eskimo-slugger.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["shake"],
       "tags": [
@@ -14350,10 +14392,17 @@
       "ingredients": [
         {
           "order": 1,
-          "ingredientId": 97568,
-          "name": "Tequila",
+          "ingredientId": 266182,
+          "name": "Tequila Blanco",
           "amount": "45",
-          "unitId": 11
+          "unitId": 11,
+          "substitutes": [
+            {
+              "id": 97568,
+              "ingredientId": 97568,
+              "name": "Tequila"
+            }
+          ]
         },
         {
           "order": 2,
@@ -18907,6 +18956,16 @@
               "name": "Tequila"
             },
             {
+              "id": 266182,
+              "ingredientId": 266182,
+              "name": "Tequila Blanco"
+            },
+            {
+              "id": 787067,
+              "ingredientId": 787067,
+              "name": "Tequila Gold"
+            },
+            {
               "id": 1759483024681,
               "ingredientId": 1759483024681,
               "name": "Tequila Reposado"
@@ -19774,7 +19833,7 @@
       "description": "A refined European twist on the classic Martini. The rich, fruity notes of Port wine blend seamlessly with the crispness of gin and the delicate floral sweetness of St. Germain elderflower liqueur, finished with a citrusy dash of bitters.",
       "instructions": "1. Add the port, gin, St. Germain, and bitters into a mixing glass filled with ice.\n2. Stir the ingredients thoroughly.\n3. Double-strain the mixture into a chilled cocktail glass.\n4. Twist a lemon peel over the cocktail, rub it along the sides of the glass, and discard.\n5. Garnish with chamomile flowers.",
       "photoUri": "assets/cocktails/1759431826093-lisbon-martini.jpg",
-      "glassId": "coupe",
+      "glassId": "cocktail_glass",
       "methodIds": ["stir"],
       "tags": [
         {
@@ -20023,10 +20082,17 @@
         },
         {
           "order": 2,
-          "ingredientId": 97568,
-          "name": "Tequila",
+          "ingredientId": 266182,
+          "name": "Tequila Blanco",
           "amount": "15",
-          "unitId": 11
+          "unitId": 11,
+          "substitutes": [
+            {
+              "id": 787067,
+              "ingredientId": 787067,
+              "name": "Tequila Gold"
+            }
+          ]
         },
         {
           "order": 3,
@@ -20812,10 +20878,17 @@
       "ingredients": [
         {
           "order": 1,
-          "ingredientId": 97568,
-          "name": "Tequila",
+          "ingredientId": 266182,
+          "name": "Tequila Blanco",
           "amount": "50",
-          "unitId": 11
+          "unitId": 11,
+          "substitutes": [
+            {
+              "id": 97568,
+              "ingredientId": 97568,
+              "name": "Tequila"
+            }
+          ]
         },
         {
           "order": 2,
@@ -25047,6 +25120,7 @@
           "substitutes": [
             {
               "id": 588255,
+              "ingredientId": 588255,
               "name": "Prosecco"
             }
           ]
@@ -30319,10 +30393,17 @@
       "ingredients": [
         {
           "order": 1,
-          "ingredientId": 97568,
-          "name": "Tequila",
+          "ingredientId": 266182,
+          "name": "Tequila Blanco",
           "amount": "50",
-          "unitId": 11
+          "unitId": 11,
+          "substitutes": [
+            {
+              "id": 787067,
+              "ingredientId": 787067,
+              "name": "Tequila Gold"
+            }
+          ]
         },
         {
           "order": 2,
@@ -30422,10 +30503,17 @@
       "ingredients": [
         {
           "order": 1,
-          "ingredientId": 97568,
-          "name": "Tequila",
+          "ingredientId": 266182,
+          "name": "Tequila Blanco",
           "amount": "45",
-          "unitId": 11
+          "unitId": 11,
+          "substitutes": [
+            {
+              "id": 787067,
+              "ingredientId": 787067,
+              "name": "Tequila Gold"
+            }
+          ]
         },
         {
           "order": 2,
@@ -31485,10 +31573,22 @@
       "ingredients": [
         {
           "order": 1,
-          "ingredientId": 97568,
-          "name": "Tequila",
+          "ingredientId": 266182,
+          "name": "Tequila Blanco",
           "amount": "60",
-          "unitId": 11
+          "unitId": 11,
+          "substitutes": [
+            {
+              "id": 97568,
+              "ingredientId": 97568,
+              "name": "Tequila"
+            },
+            {
+              "id": 787067,
+              "ingredientId": 787067,
+              "name": "Tequila Gold"
+            }
+          ]
         },
         {
           "order": 2,
