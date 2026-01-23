@@ -38,6 +38,7 @@ import { GLASSWARE } from '@/constants/glassware';
 import { Colors } from '@/constants/theme';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { skipDuplicateBack } from '@/libs/navigation';
+import { pickImageWithCrop } from '@/libs/photo-cropper';
 import { shouldStorePhoto, storePhoto } from '@/libs/photo-storage';
 import { tagColors } from '@/theme/theme';
 import {
@@ -620,18 +621,9 @@ export default function CreateCocktailScreen() {
 
     try {
       setIsPickingImage(true);
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ['images'],
-        allowsEditing: true,
-        quality: 1,
-        exif: false,
-      });
-
-      if (!result.canceled && result.assets?.length) {
-        const asset = result.assets[0];
-        if (asset?.uri) {
-          setImageUri(asset.uri);
-        }
+      const result = await pickImageWithCrop({ router, aspect: 1 });
+      if (result?.uri) {
+        setImageUri(result.uri);
       }
     } catch (error) {
       console.warn('Failed to pick image', error);

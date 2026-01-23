@@ -34,6 +34,7 @@ export default function RootLayout() {
           <ThemeProvider value={navigationTheme}>
             <Stack>
               <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              <Stack.Screen name="crop" options={{ headerShown: false }} />
               <Stack.Screen
                 name="modal"
                 options={{ presentation: "modal", title: "Modal" }}
