@@ -563,7 +563,11 @@ export default function ShakerResultsScreen() {
                   shadowColor: Colors.shadow,
                 },
               ]}>
-              <ScrollView style={styles.filterMenuScroll} showsVerticalScrollIndicator>
+              {/* Allow filter taps to register even when the search input is focused. */}
+              <ScrollView
+                style={styles.filterMenuScroll}
+                showsVerticalScrollIndicator
+                keyboardShouldPersistTaps="handled">
                 <View style={styles.filterMenuContent}>
                   <View style={styles.filterMethodList}>
                     {availableMethodOptions.length > 0 ? (
@@ -647,6 +651,9 @@ export default function ShakerResultsScreen() {
             </Text>
           }
           showsVerticalScrollIndicator={false}
+          keyboardDismissMode="on-drag"
+          // Keep list item taps active while the keyboard dismisses.
+          keyboardShouldPersistTaps="handled"
         />
       </View>
       <SideMenuDrawer visible={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
