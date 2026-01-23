@@ -39,6 +39,7 @@ import { Colors } from '@/constants/theme';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { skipDuplicateBack } from '@/libs/navigation';
 import { shouldStorePhoto, storePhoto } from '@/libs/photo-storage';
+import { pickImageWithCrop } from '@/libs/image-cropper';
 import { tagColors } from '@/theme/theme';
 import {
   useInventory,
@@ -620,18 +621,9 @@ export default function CreateCocktailScreen() {
 
     try {
       setIsPickingImage(true);
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ['images'],
-        allowsEditing: true,
-        quality: 1,
-        exif: false,
-      });
-
-      if (!result.canceled && result.assets?.length) {
-        const asset = result.assets[0];
-        if (asset?.uri) {
-          setImageUri(asset.uri);
-        }
+      const croppedUri = await pickImageWithCrop({ source: 'library', quality: 1 });
+      if (croppedUri) {
+        setImageUri(croppedUri);
       }
     } catch (error) {
       console.warn('Failed to pick image', error);

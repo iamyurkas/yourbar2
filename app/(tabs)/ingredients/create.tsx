@@ -28,6 +28,7 @@ import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { Colors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
 import { skipDuplicateBack } from '@/libs/navigation';
+import { pickImageWithCrop } from '@/libs/image-cropper';
 import { shouldStorePhoto, storePhoto } from '@/libs/photo-storage';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
@@ -259,18 +260,9 @@ export default function CreateIngredientScreen() {
 
     try {
       setIsPickingImage(true);
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ['images'],
-        allowsEditing: true,
-        quality: 1,
-        exif: false,
-      });
-
-      if (!result.canceled && result.assets?.length) {
-        const asset = result.assets[0];
-        if (asset?.uri) {
-          setImageUri(asset.uri);
-        }
+      const croppedUri = await pickImageWithCrop({ source: 'library', quality: 1 });
+      if (croppedUri) {
+        setImageUri(croppedUri);
       }
     } catch (error) {
       console.warn('Failed to pick image', error);
