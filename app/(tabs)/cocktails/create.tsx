@@ -39,6 +39,7 @@ import { Colors } from '@/constants/theme';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { skipDuplicateBack } from '@/libs/navigation';
 import { shouldStorePhoto, storePhoto } from '@/libs/photo-storage';
+import { parseCropResult, pickImageAndOpenCrop } from '@/libs/crop-image';
 import { tagColors } from '@/theme/theme';
 import {
   useInventory,
@@ -216,6 +217,7 @@ export default function CreateCocktailScreen() {
   const ingredientNameParam = getParamValue(params.ingredientName);
   const cocktailParam = getParamValue(params.cocktailId);
   const cocktailNameParam = getParamValue(params.cocktailName);
+  const cropResultParam = getParamValue(params.cropResult);
   const returnToParams = useMemo(() => {
     const payload = {
       mode: modeParam,
@@ -258,6 +260,14 @@ export default function CreateCocktailScreen() {
   const [isInitialized, setIsInitialized] = useState(false);
   const [initialSnapshot, setInitialSnapshot] = useState<CocktailFormSnapshot | null>(null);
   const [isTagModalVisible, setTagModalVisible] = useState(false);
+
+  const cropResult = useMemo(() => parseCropResult(cropResultParam), [cropResultParam]);
+
+  useEffect(() => {
+    if (cropResult?.uri) {
+      setImageUri(cropResult.uri);
+    }
+  }, [cropResult?.uri]);
 
   const renderMethodIcon = (methodId: CocktailMethodId, iconColor: string) => {
     const icon = METHOD_ICON_MAP[methodId];
@@ -620,19 +630,11 @@ export default function CreateCocktailScreen() {
 
     try {
       setIsPickingImage(true);
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ['images'],
-        allowsEditing: true,
-        quality: 1,
-        exif: false,
+      await pickImageAndOpenCrop({
+        aspect: 1,
+        returnToPath: '/cocktails/create',
+        returnToParams,
       });
-
-      if (!result.canceled && result.assets?.length) {
-        const asset = result.assets[0];
-        if (asset?.uri) {
-          setImageUri(asset.uri);
-        }
-      }
     } catch (error) {
       console.warn('Failed to pick image', error);
       showDialog({
@@ -643,7 +645,7 @@ export default function CreateCocktailScreen() {
     } finally {
       setIsPickingImage(false);
     }
-  }, [ensureMediaPermission, isPickingImage, showDialog]);
+  }, [ensureMediaPermission, isPickingImage, returnToParams, showDialog]);
 
   const handleRemovePhoto = useCallback(() => {
     setImageUri(null);

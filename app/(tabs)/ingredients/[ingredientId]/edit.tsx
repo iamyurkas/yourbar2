@@ -28,6 +28,7 @@ import { Colors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
 import { skipDuplicateBack } from '@/libs/navigation';
 import { shouldStorePhoto, storePhoto } from '@/libs/photo-storage';
+import { parseCropResult, pickImageAndOpenCrop } from '@/libs/crop-image';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
 import { useUnsavedChanges } from '@/providers/unsaved-changes-provider';
@@ -61,7 +62,7 @@ function useResolvedIngredient(param: string | undefined, ingredients: Ingredien
 
 export default function EditIngredientScreen() {
   const navigation = useNavigation();
-  const { ingredientId } = useLocalSearchParams<{ ingredientId?: string }>();
+  const params = useLocalSearchParams<{ ingredientId?: string; cropResult?: string }>();
   const {
     ingredients,
     shoppingIngredientIds,
@@ -75,15 +76,27 @@ export default function EditIngredientScreen() {
   const isNavigatingAfterSaveRef = useRef(false);
 
   const ingredient = useResolvedIngredient(
-    Array.isArray(ingredientId) ? ingredientId[0] : ingredientId,
+    Array.isArray(params.ingredientId) ? params.ingredientId[0] : params.ingredientId,
     ingredients,
   );
 
   const numericIngredientId = useMemo(() => {
-    const candidate = ingredient?.id ?? (Array.isArray(ingredientId) ? ingredientId[0] : ingredientId);
+    const candidate =
+      ingredient?.id ?? (Array.isArray(params.ingredientId) ? params.ingredientId[0] : params.ingredientId);
     const parsed = Number(candidate);
     return Number.isNaN(parsed) ? undefined : parsed;
-  }, [ingredient?.id, ingredientId]);
+  }, [ingredient?.id, params.ingredientId]);
+
+  const ingredientIdParam = useMemo(
+    () => (Array.isArray(params.ingredientId) ? params.ingredientId[0] : params.ingredientId),
+    [params.ingredientId],
+  );
+  const cropReturnParams = useMemo(() => {
+    if (!ingredientIdParam) {
+      return undefined;
+    }
+    return JSON.stringify({ ingredientId: ingredientIdParam });
+  }, [ingredientIdParam]);
 
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -103,6 +116,14 @@ export default function EditIngredientScreen() {
   const didInitializeRef = useRef(false);
   const scrollRef = useRef<ScrollView | null>(null);
   const isHandlingBackRef = useRef(false);
+
+  const cropResult = useMemo(() => parseCropResult(params.cropResult), [params.cropResult]);
+
+  useEffect(() => {
+    if (cropResult?.uri) {
+      setImageUri(cropResult.uri);
+    }
+  }, [cropResult?.uri]);
 
   useEffect(() => {
     if (!ingredient || didInitializeRef.current) {
@@ -250,19 +271,11 @@ export default function EditIngredientScreen() {
 
     try {
       setIsPickingImage(true);
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ['images'],
-        allowsEditing: true,
-        quality: 1,
-        exif: false,
+      await pickImageAndOpenCrop({
+        aspect: 1,
+        returnToPath: '/ingredients/[ingredientId]/edit',
+        returnToParams: cropReturnParams,
       });
-
-      if (!result.canceled && result.assets?.length) {
-        const asset = result.assets[0];
-        if (asset?.uri) {
-          setImageUri(asset.uri);
-        }
-      }
     } catch (error) {
       console.warn('Failed to pick image', error);
       showDialog({
@@ -273,7 +286,7 @@ export default function EditIngredientScreen() {
     } finally {
       setIsPickingImage(false);
     }
-  }, [ensureMediaPermission, isPickingImage, showDialog]);
+  }, [cropReturnParams, ensureMediaPermission, isPickingImage, showDialog]);
 
   const handleSubmit = useCallback(async () => {
     if (isSaving) {

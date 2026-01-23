@@ -29,6 +29,7 @@ import { Colors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
 import { skipDuplicateBack } from '@/libs/navigation';
 import { shouldStorePhoto, storePhoto } from '@/libs/photo-storage';
+import { parseCropResult, pickImageAndOpenCrop } from '@/libs/crop-image';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
 import { useUnsavedChanges } from '@/providers/unsaved-changes-provider';
@@ -47,6 +48,7 @@ export default function CreateIngredientScreen() {
     returnTo?: string;
     returnToPath?: string;
     returnToParams?: string;
+    cropResult?: string;
   }>();
   const suggestedNameParam = useMemo(() => {
     const value = Array.isArray(params.suggestedName) ? params.suggestedName[0] : params.suggestedName;
@@ -92,6 +94,18 @@ export default function CreateIngredientScreen() {
     }
   }, [returnToParamsParam]);
 
+  const cropReturnParams = useMemo(() => {
+    const payload = {
+      suggestedName: suggestedNameParam,
+      returnTo: legacyReturnToParam,
+      returnToPath: returnToPathParam,
+      returnToParams: returnToParamsParam,
+    };
+    const entries = Object.entries(payload).filter(([, value]) => value !== undefined);
+    const json = JSON.stringify(Object.fromEntries(entries));
+    return json === '{}' ? undefined : json;
+  }, [legacyReturnToParam, returnToParamsParam, returnToPathParam, suggestedNameParam]);
+
   const navigation = useNavigation();
   const {
     ingredients,
@@ -119,6 +133,14 @@ export default function CreateIngredientScreen() {
   const isNavigatingAfterSaveRef = useRef(false);
   const [initialSnapshot, setInitialSnapshot] = useState<IngredientFormSnapshot | null>(null);
   const isHandlingBackRef = useRef(false);
+
+  const cropResult = useMemo(() => parseCropResult(params.cropResult), [params.cropResult]);
+
+  useEffect(() => {
+    if (cropResult?.uri) {
+      setImageUri(cropResult.uri);
+    }
+  }, [cropResult?.uri]);
 
   useEffect(() => {
     setName(suggestedNameParam ?? '');
@@ -259,19 +281,11 @@ export default function CreateIngredientScreen() {
 
     try {
       setIsPickingImage(true);
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ['images'],
-        allowsEditing: true,
-        quality: 1,
-        exif: false,
+      await pickImageAndOpenCrop({
+        aspect: 1,
+        returnToPath: '/ingredients/create',
+        returnToParams: cropReturnParams,
       });
-
-      if (!result.canceled && result.assets?.length) {
-        const asset = result.assets[0];
-        if (asset?.uri) {
-          setImageUri(asset.uri);
-        }
-      }
     } catch (error) {
       console.warn('Failed to pick image', error);
       showDialog({
@@ -282,7 +296,7 @@ export default function CreateIngredientScreen() {
     } finally {
       setIsPickingImage(false);
     }
-  }, [ensureMediaPermission, isPickingImage, showDialog]);
+  }, [cropReturnParams, ensureMediaPermission, isPickingImage, showDialog]);
 
   const handleSubmit = useCallback(async () => {
     if (isSaving) {
