@@ -2,6 +2,7 @@ import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import "react-native-reanimated";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import { Colors } from "@/constants/theme";
 import { PaperProvider } from "@/libs/react-native-paper";
@@ -28,21 +29,23 @@ export default function RootLayout() {
   const paperTheme = getAppTheme();
 
   return (
-    <UnsavedChangesProvider>
-      <InventoryProvider>
-        <PaperProvider theme={paperTheme}>
-          <ThemeProvider value={navigationTheme}>
-            <Stack>
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-              <Stack.Screen
-                name="modal"
-                options={{ presentation: "modal", title: "Modal" }}
-              />
-            </Stack>
-            <StatusBar style="dark" />
-          </ThemeProvider>
-        </PaperProvider>
-      </InventoryProvider>
-    </UnsavedChangesProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <UnsavedChangesProvider>
+        <InventoryProvider>
+          <PaperProvider theme={paperTheme}>
+            <ThemeProvider value={navigationTheme}>
+              <Stack>
+                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                <Stack.Screen
+                  name="modal"
+                  options={{ presentation: "modal", title: "Modal" }}
+                />
+              </Stack>
+              <StatusBar style="dark" />
+            </ThemeProvider>
+          </PaperProvider>
+        </InventoryProvider>
+      </UnsavedChangesProvider>
+    </GestureHandlerRootView>
   );
 }
