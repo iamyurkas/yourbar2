@@ -26,6 +26,7 @@ import { TagPill } from '@/components/TagPill';
 import { TagEditorModal } from '@/components/TagEditorModal';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { Colors } from '@/constants/theme';
+import { pickImageWithCrop } from '@/libs/image-cropper';
 import { resolveImageSource } from '@/libs/image-source';
 import { skipDuplicateBack } from '@/libs/navigation';
 import { shouldStorePhoto, storePhoto } from '@/libs/photo-storage';
@@ -259,18 +260,9 @@ export default function CreateIngredientScreen() {
 
     try {
       setIsPickingImage(true);
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ['images'],
-        allowsEditing: true,
-        quality: 1,
-        exif: false,
-      });
-
-      if (!result.canceled && result.assets?.length) {
-        const asset = result.assets[0];
-        if (asset?.uri) {
-          setImageUri(asset.uri);
-        }
+      const croppedUri = await pickImageWithCrop(router, { aspect: 1 });
+      if (croppedUri) {
+        setImageUri(croppedUri);
       }
     } catch (error) {
       console.warn('Failed to pick image', error);

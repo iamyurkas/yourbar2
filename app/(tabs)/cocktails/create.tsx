@@ -36,6 +36,7 @@ import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
 import { COCKTAIL_UNIT_DICTIONARY, COCKTAIL_UNIT_OPTIONS } from '@/constants/cocktail-units';
 import { GLASSWARE } from '@/constants/glassware';
 import { Colors } from '@/constants/theme';
+import { pickImageWithCrop } from '@/libs/image-cropper';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { skipDuplicateBack } from '@/libs/navigation';
 import { shouldStorePhoto, storePhoto } from '@/libs/photo-storage';
@@ -620,18 +621,9 @@ export default function CreateCocktailScreen() {
 
     try {
       setIsPickingImage(true);
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ['images'],
-        allowsEditing: true,
-        quality: 1,
-        exif: false,
-      });
-
-      if (!result.canceled && result.assets?.length) {
-        const asset = result.assets[0];
-        if (asset?.uri) {
-          setImageUri(asset.uri);
-        }
+      const croppedUri = await pickImageWithCrop(router, { aspect: 1 });
+      if (croppedUri) {
+        setImageUri(croppedUri);
       }
     } catch (error) {
       console.warn('Failed to pick image', error);
