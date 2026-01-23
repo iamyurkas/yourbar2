@@ -264,7 +264,7 @@
       "id": 1756469191370,
       "name": "Acapulco",
       "description": "A stronger variation uses lime juice and sweet and sour instead of grapefruit and pineapple juice and is served in a cocktail glass.",
-      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 50ml of Tequila Blanco, 50ml of White Rum, 75ml of Pineapple Juice, 50ml of Grapefruit Juice, 15 of Lime Juice, and 10ml of Simple Syrup.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Hurricane glass.",
+      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 50ml of Tequila Blanco, 50ml of White Rum, 75ml of Pineapple Juice, 50ml of Grapefruit Juice, 15ml of Lime Juice, and 10ml of Simple Syrup.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Hurricane glass.",
       "photoUri": "assets/cocktails/1756469191370-acapulco.jpg",
       "glassId": "hurricane_glass",
       "methodIds": [
@@ -706,7 +706,7 @@
       "id": 1756474177669,
       "name": "Alabama Slammer (shot)",
       "description": "A classic Southern party shot made with Amaretto, Southern Comfort, and Sloe Gin, balanced with orange juice. Sweet, fruity, and deceptively strong.",
-      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 15ml of Amaretto, 15ml of Southern Comfort, 15ml of Sloe Gin, 7.5ml of Orange Juice, and 7.5ml of Lemon Juice.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Shooter glass.\n5. Garnish with a Cherry",
+      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 15ml of Amaretto, 15ml of Southern Comfort, 15ml of Sloe Gin, 7.5ml of Orange Juice, and 7.5ml of Lemon Juice.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Shooter glass.\n5. Garnish with a Cherry.",
       "photoUri": "assets/cocktails/1756474177669-alabama-slammer-shot.jpg",
       "glassId": "shooter",
       "methodIds": [
@@ -1397,7 +1397,7 @@
       "id": 1756483482781,
       "name": "Amaretto Sour",
       "description": "A classic balance of sweet and sour, the Amaretto Sour combines rich almond liqueur with fresh lemon juice for a smooth, slightly nutty cocktail with a bright citrus edge. Soft, approachable, and dangerously drinkable, it is traditionally garnished with a cherry for a touch of fruit sweetness.",
-      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 60ml of Amaretto and 30ml of Lemon Juice.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Rocks glass.\n5. Garnish with 3 slices of Cherry",
+      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 60ml of Amaretto and 30ml of Lemon Juice.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Rocks glass.\n5. Garnish with 3 Cherry slices.",
       "photoUri": "assets/cocktails/1756483482781-amaretto-sour.jpg",
       "glassId": "rocks_glass",
       "methodIds": [
@@ -3867,7 +3867,7 @@
       "id": 1756587051731,
       "name": "Banana Fantasy",
       "description": "A creamy tropical mocktail with ripe banana, coconut syrup, and bright citrus notes. Smooth, refreshing, and perfectly balanced between sweetness and freshness, served long for an easy, beach-style sip.",
-      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 1 of Banana, 50ml of White Rum, 30ml of Coconut Syrup, and 100ml of Pineapple Juice.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Hurricane glass.\n5. Garnish with a Cherry",
+      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 1 Banana, 50ml of White Rum, 30ml of Coconut Syrup, and 100ml of Pineapple Juice.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Hurricane glass.\n5. Garnish with a Cherry.",
       "photoUri": "assets/cocktails/1756587051731-banana-fantasy.jpg",
       "glassId": "hurricane_glass",
       "methodIds": [
@@ -4232,7 +4232,7 @@
       "id": 1756637682106,
       "name": "Barracuda",
       "description": "An IBA official sparkling cocktail.",
-      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 45ml of Gold Rum, 15ml of Galliano, 60ml of Pineapple Juice, 1 dash of Lime Juice, and 45ml of Sparkling Wine.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Coupe glass.\n5. Garnish with a wedge of Pineapple and a Maraschino Cherry",
+      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 45ml of Gold Rum, 15ml of Galliano, 60ml of Pineapple Juice, 1 dash of Lime Juice, and 45ml of Sparkling Wine.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Coupe glass.\n5. Garnish with a wedge of Pineapple and a Maraschino Cherry.",
       "photoUri": "assets/cocktails/1756637682106-barracuda.jpg",
       "glassId": "coupe",
       "methodIds": [
@@ -5337,7 +5337,7 @@
       "id": 1758749551431,
       "name": "Blackberry Fig Smash",
       "description": "A bright agave spirit sour balancing Tequila Blanco, Agave Syrup, Blackberry with fresh citrus and a touch of sweetness for a crisp, refreshing sip. Garnished with figs.",
-      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 60ml of Tequila Blanco, 30ml of Lime Juice, 30ml of Agave Syrup, 8 of Blackberry, and 1 of Fig.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Rocks glass.\n5. Garnish with a half of Fig and 5 gr of Salt",
+      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 60ml of Tequila Blanco, 30ml of Lime Juice, 30ml of Agave Syrup, 8 Blackberries, and 1 Fig.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Rocks glass.\n5. Garnish with half a Fig and 5 g of Salt.",
       "photoUri": "assets/cocktails/1758749551431-blackberry-fig-smash.jpg",
       "glassId": "rocks_glass",
       "methodIds": [
@@ -7175,7 +7175,7 @@
       "id": 1757000000103,
       "name": "Brandy Eggnog",
       "description": "A rich, creamy brandy drink featuring Brandy, Milk, Egg—dessert-like, smooth, and indulgent. Garnished with nutmeg.",
-      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 40ml of Brandy, 50ml of Milk, 10ml of Simple Syrup, and 1 of Egg Yolk.\n3. Dry shake (without ice) vigorously for about 15 seconds to emulsify egg.\n4. Add ice and shake vigorously for about 15 seconds until well chilled.\n5. Strain into chilled Rocks glass.\n6. Garnish with a pinch of Nutmeg and a Cinnamon Sticks.",
+      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 40ml of Brandy, 50ml of Milk, 10ml of Simple Syrup, and 1 Egg Yolk.\n3. Dry shake (without ice) vigorously for about 15 seconds to emulsify egg.\n4. Add ice and shake vigorously for about 15 seconds until well chilled.\n5. Strain into chilled Rocks glass.\n6. Garnish with a pinch of Nutmeg and a Cinnamon Stick.",
       "photoUri": "assets/cocktails/1757000000103-brandy-eggnog.jpg",
       "glassId": "rocks_glass",
       "methodIds": [
@@ -8092,7 +8092,7 @@
       "id": 1757000000112,
       "name": "Butterfinger",
       "description": "A Butterfinger cocktail or shot is a dessert-inspired drink designed to mimic the nutty, buttery flavors of the classic candy bar. Most variations rely on a blend of butterscotch and creamy liqueurs.",
-      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 30ml of Vodka Vanilla, 30ml of Butterscotch Liqueur, 30ml of Baileys, and 30ml of Kahlua.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Rocks glass.\n5. Garnish with a Cherry",
+      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 30ml of Vodka Vanilla, 30ml of Butterscotch Liqueur, 30ml of Baileys, and 30ml of Kahlua.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Rocks glass.\n5. Garnish with a Cherry.",
       "photoUri": "assets/cocktails/1757000000112-butterfinger.jpg",
       "glassId": "rocks_glass",
       "methodIds": [
@@ -9291,7 +9291,7 @@
       "id": 1757000000121,
       "name": "Caribou Lou",
       "description": "A spirit-forward rum cocktail showcasing Overproof Rum, Malibu Rum, Pineapple Juice—deep, aromatic, and meant to be savored.",
-      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 45ml of Overproof Rum, 30ml of Malibu Rum, 150ml of Pineapple Juice, and 2 dashes of Angostura Bitters.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Highball glass.\n5. Garnish with a wedge of Pineapple and a Maraschino Cherry",
+      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 45ml of Overproof Rum, 30ml of Malibu Rum, 150ml of Pineapple Juice, and 2 dashes of Angostura Bitters.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Highball glass.\n5. Garnish with a wedge of Pineapple and a Maraschino Cherry.",
       "photoUri": "assets/cocktails/1757000000121-caribou-lou.jpg",
       "glassId": "highball_glass",
       "methodIds": [
@@ -10390,7 +10390,7 @@
       "id": 1755800000027,
       "name": "Clover Club",
       "description": "A pre-Prohibition gin sour colored with raspberry syrup and bound with egg white.",
-      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 45ml of Gin, 15ml of Raspberry Syrup, 15ml of Lemon Juice, and 1 of Egg White.\n3. Dry shake (without ice) vigorously for about 15 seconds to emulsify egg.\n4. Add ice and shake vigorously for about 15 seconds until well chilled.\n5. Strain into chilled Martini glass.",
+      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 45ml of Gin, 15ml of Raspberry Syrup, 15ml of Lemon Juice, and 1 Egg White.\n3. Dry shake (without ice) vigorously for about 15 seconds to emulsify egg.\n4. Add ice and shake vigorously for about 15 seconds until well chilled.\n5. Strain into chilled Martini glass.",
       "photoUri": "assets/cocktails/1755800000027-clover-club.jpg",
       "glassId": "martini",
       "methodIds": [
@@ -11571,7 +11571,7 @@
       "id": 1757000000133,
       "name": "Dan Sabo's Whiskey Sour",
       "description": "A rich, creamy whiskey drink featuring Rye Whisky, Lemon, Egg White—dessert-like, smooth, and indulgent. Garnished with maraschino cherry.",
-      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 60ml of Rye Whiskey, 15ml of Lemon Juice, 15ml of Orange Juice, 15ml of Simple Syrup, and 1 of Egg White.\n3. Dry shake (without ice) vigorously for about 15 seconds to emulsify egg.\n4. Add ice and shake vigorously for about 15 seconds until well chilled.\n5. Strain into chilled Rocks glass.\n6. Garnish with 2 dashes of Angostura Bitters and a Cherry.",
+      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 60ml of Rye Whiskey, 15ml of Lemon Juice, 15ml of Orange Juice, 15ml of Simple Syrup, and 1 Egg White.\n3. Dry shake (without ice) vigorously for about 15 seconds to emulsify egg.\n4. Add ice and shake vigorously for about 15 seconds until well chilled.\n5. Strain into chilled Rocks glass.\n6. Garnish with 2 dashes of Angostura Bitters and a Cherry.",
       "photoUri": "assets/cocktails/1757000000133-dan-sabo-s-whiskey-sour.jpg",
       "glassId": "rocks_glass",
       "methodIds": [
@@ -13778,7 +13778,7 @@
       "id": 1757000000155,
       "name": "First Word",
       "description": "A bright gin sour balancing Gin, Maraschino Liqueur, Dry Vermouth with fresh citrus and a touch of sweetness for a crisp, refreshing sip.",
-      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 40ml of Gin, 25ml of Luxardo Maraschino, 25ml of Dry Vermouth, 15ml of Aperol, and 25ml of Lime Juice.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Martini glass.\n5. Garnish with a Cherry and a peel of Orange",
+      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 40ml of Gin, 25ml of Luxardo Maraschino, 25ml of Dry Vermouth, 15ml of Aperol, and 25ml of Lime Juice.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Martini glass.\n5. Garnish with a Cherry and a peel of Orange.",
       "photoUri": "assets/cocktails/1757000000155-first-word.jpg",
       "glassId": "martini",
       "methodIds": [
@@ -14050,7 +14050,7 @@
       "id": 1759432761867,
       "name": "Flip #27",
       "description": "A sophisticated and velvety dessert cocktail that masterfully blends the richness of Port with the deep notes of Aged Rum. The addition of raspberry syrup and heavy cream creates a luxurious, smooth texture, while the whole egg provides the classic frothy 'flip' finish.",
-      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 30ml of Port, 30ml of Aged Rum, 15ml of Raspberry Syrup, 15ml of Heavy Cream, and 1 of Egg.\n3. Dry shake (without ice) vigorously for about 15 seconds to emulsify egg.\n4. Add ice and shake vigorously for about 15 seconds until well chilled.\n5. Strain into chilled Goblet glass.\n6. Garnish with 2 Raspberries.",
+      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 30ml of Port, 30ml of Aged Rum, 15ml of Raspberry Syrup, 15ml of Heavy Cream, and 1 Egg.\n3. Dry shake (without ice) vigorously for about 15 seconds to emulsify egg.\n4. Add ice and shake vigorously for about 15 seconds until well chilled.\n5. Strain into chilled Goblet glass.\n6. Garnish with 2 Raspberries.",
       "photoUri": "assets/cocktails/1759432761867-flip-27.jpg",
       "glassId": "goblet",
       "methodIds": [
@@ -15845,7 +15845,7 @@
       "id": 1757000000169,
       "name": "Gin Sour",
       "description": "The Gin Sour is a classic 'sour' cocktail. It can be served in a cocktail glass or a rocks glass.",
-      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 60ml of Gin, 30ml of Lemon Juice, 15ml of Simple Syrup, and 1 of Egg White.\n3. Dry shake (without ice) vigorously for about 15 seconds to emulsify egg.\n4. Add ice and shake vigorously for about 15 seconds until well chilled.\n5. Strain into chilled Rocks glass.\n6. Garnish with a slice of Lemon, a Maraschino Cherry, and 3 dashes of Angostura Bitters.",
+      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 60ml of Gin, 30ml of Lemon Juice, 15ml of Simple Syrup, and 1 Egg White.\n3. Dry shake (without ice) vigorously for about 15 seconds to emulsify egg.\n4. Add ice and shake vigorously for about 15 seconds until well chilled.\n5. Strain into chilled Rocks glass.\n6. Garnish with a slice of Lemon, a Maraschino Cherry, and 3 dashes of Angostura Bitters.",
       "photoUri": "assets/cocktails/1757000000169-gin-sour.jpg",
       "glassId": "rocks_glass",
       "methodIds": [
@@ -16457,7 +16457,7 @@
       "id": 1758847422361,
       "name": "Greek Tragedy",
       "description": "A sophisticated and vibrant wine-based sour that masterfully balances the herbal notes of Ouzo with the botanical depth of Red Vermouth. The addition of raspberry liqueur provides a lush fruity undertone, while fresh lime juice ensures a crisp, refreshing finish. Elegant and complex, it is a perfect modern twist on Mediterranean flavors.",
-      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 30ml of Ouzo, 30ml of Red Vermouth, 30ml of Raspberry Liqueur, and 20ml of Lime Juice.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Coupe glass.\n5. Garnish with a Cherry and a twist of Lime",
+      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 30ml of Ouzo, 30ml of Red Vermouth, 30ml of Raspberry Liqueur, and 20ml of Lime Juice.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Coupe glass.\n5. Garnish with a Cherry and a twist of Lime.",
       "photoUri": "assets/cocktails/1758847422361-greek-tragedy.jpg",
       "glassId": "coupe",
       "methodIds": [
@@ -18047,7 +18047,7 @@
       "id": 1755800000048,
       "name": "IBA Tiki",
       "description": "Fruity tiki blend of rums, juices, and exotic syrups.",
-      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 30ml of White Rum, 30ml of Dark Rum, 15ml of Amaretto, 5ml of Frangelico, 5ml of Luxardo Maraschino, 15ml of Passion Fruit Syrup, 90ml of Pineapple Juice, 30ml of Lime Juice, 2 dashes of Angostura Bitters, and 1 slice of Ginger.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Tiki glass.\n5. Garnish with a wedge of Pineapple and a Mint",
+      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 30ml of White Rum, 30ml of Dark Rum, 15ml of Amaretto, 5ml of Frangelico, 5ml of Luxardo Maraschino, 15ml of Passion Fruit Syrup, 90ml of Pineapple Juice, 30ml of Lime Juice, 2 dashes of Angostura Bitters, and 1 slice of Ginger.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Tiki glass.\n5. Garnish with a wedge of Pineapple and a Mint.",
       "photoUri": "assets/cocktails/1755800000048-iba-tiki.jpg",
       "glassId": "tiki",
       "methodIds": [
@@ -19671,7 +19671,7 @@
       "id": 1755800000075,
       "name": "Jungle Bird",
       "description": "Tiki favorite blending dark rum, Campari, and pineapple.",
-      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 45ml of Blackstrap Rum, 20ml of Campari, 45ml of Pineapple Juice, 15ml of Lime Juice, and 15ml of Demerara Sugar Syrup.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Rocks glass.\n5. Garnish with a wedge of Pineapple",
+      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 45ml of Blackstrap Rum, 20ml of Campari, 45ml of Pineapple Juice, 15ml of Lime Juice, and 15ml of Demerara Sugar Syrup.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Rocks glass.\n5. Garnish with a wedge of Pineapple.",
       "photoUri": "assets/cocktails/1755800000075-jungle-bird.jpg",
       "glassId": "rocks_glass",
       "methodIds": [
@@ -23012,7 +23012,7 @@
       "id": 1759248306670,
       "name": "Mrs Daisy Robinson",
       "description": "An elegant and sparkling Pisco-based drink that offers a sophisticated blend of tropical pineapple and tart grapefruit, finished with the effervescence of Prosecco.",
-      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 25ml of Pisco, 15ml of Pineapple Syrup, 15ml of Grapefruit Juice, 5ml of Lime Juice, 2 dashes of Creole Bitters, and 50ml of Prosecco.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Champagne flute glass.\n5. Garnish with a wedge of Pineapple",
+      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 25ml of Pisco, 15ml of Pineapple Syrup, 15ml of Grapefruit Juice, 5ml of Lime Juice, 2 dashes of Creole Bitters, and 50ml of Prosecco.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Champagne flute glass.\n5. Garnish with a wedge of Pineapple.",
       "photoUri": "assets/cocktails/1759248306670-mrs-daisy-robinson.jpg",
       "glassId": "champagne_flute",
       "methodIds": [
@@ -23589,7 +23589,7 @@
       "id": 1757000000242,
       "name": "Neptune's Wrath",
       "description": "The creation of this cocktail is credited to Toby Malone, who first prepared it for the Violet Hour in Chicago.",
-      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 45ml of Gin, 7.5ml of Absinthe, 15ml of Rich Simple Syrup, 22.5ml of Lemon Juice, 1 of Egg White, and 7.5ml of Green Chartreuse.\n3. Dry shake (without ice) vigorously for about 15 seconds to emulsify egg.\n4. Add ice and shake vigorously for about 15 seconds until well chilled.\n5. Strain into chilled Coupe glass.",
+      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 45ml of Gin, 7.5ml of Absinthe, 15ml of Rich Simple Syrup, 22.5ml of Lemon Juice, 1 Egg White, and 7.5ml of Green Chartreuse.\n3. Dry shake (without ice) vigorously for about 15 seconds to emulsify egg.\n4. Add ice and shake vigorously for about 15 seconds until well chilled.\n5. Strain into chilled Coupe glass.",
       "photoUri": "assets/cocktails/1757000000242-neptune-s-wrath.jpg",
       "glassId": "coupe",
       "methodIds": [
@@ -25445,7 +25445,7 @@
       "id": 1757000000252,
       "name": "Pink Lady",
       "description": "A classic Prohibition-era cocktail known for its beautiful rosy hue and silky texture. The combination of gin, grenadine, and egg white creates a sophisticated, creamy finish.",
-      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 45ml of Gin, 15ml of Strawberry Syrup, 15ml of Grenadine, and 1 of Egg White.\n3. Dry shake (without ice) vigorously for about 15 seconds to emulsify egg.\n4. Add ice and shake vigorously for about 15 seconds until well chilled.\n5. Strain into chilled Coupe glass.\n6. Garnish with a Maraschino Cherry.",
+      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 45ml of Gin, 15ml of Strawberry Syrup, 15ml of Grenadine, and 1 Egg White.\n3. Dry shake (without ice) vigorously for about 15 seconds to emulsify egg.\n4. Add ice and shake vigorously for about 15 seconds until well chilled.\n5. Strain into chilled Coupe glass.\n6. Garnish with a Maraschino Cherry.",
       "photoUri": "assets/cocktails/1757000000252-pink-lady.jpg",
       "glassId": "coupe",
       "methodIds": [
@@ -25510,7 +25510,7 @@
       "id": 1755800000089,
       "name": "Pisco Punch",
       "description": "Fruity highball of pisco with pineapple and citrus.",
-      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 60ml of Pisco, 22.5ml of Pineapple Juice, 15ml of Simple Syrup, 15ml of Lemon Juice, 30ml of White Wine, and 3 of Cloves.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Highball glass.\n5. Garnish with a wedge of Pineapple",
+      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 60ml of Pisco, 22.5ml of Pineapple Juice, 15ml of Simple Syrup, 15ml of Lemon Juice, 30ml of White Wine, and 3 Cloves.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Highball glass.\n5. Garnish with a wedge of Pineapple.",
       "photoUri": "assets/cocktails/1755800000089-pisco-punch.jpg",
       "glassId": "highball_glass",
       "methodIds": [
@@ -25600,7 +25600,7 @@
       "id": 1755800000090,
       "name": "Pisco Sour",
       "description": "Peruvian classic with pisco, lime, and creamy egg white foam.",
-      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 60ml of Pisco, 30ml of Lime Juice, 20ml of Simple Syrup, and 1 of Egg White.\n3. Dry shake (without ice) vigorously for about 15 seconds to emulsify egg.\n4. Add ice and shake vigorously for about 15 seconds until well chilled.\n5. Strain into chilled Martini glass.\n6. Garnish with 3 drops of Angostura Bitters.",
+      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 60ml of Pisco, 30ml of Lime Juice, 20ml of Simple Syrup, and 1 Egg White.\n3. Dry shake (without ice) vigorously for about 15 seconds to emulsify egg.\n4. Add ice and shake vigorously for about 15 seconds until well chilled.\n5. Strain into chilled Martini glass.\n6. Garnish with 3 drops of Angostura Bitters.",
       "photoUri": "assets/cocktails/1755800000090-pisco-sour.jpg",
       "glassId": "martini",
       "methodIds": [
@@ -25668,7 +25668,7 @@
       "id": 1755800000091,
       "name": "Planter's Punch",
       "description": "Jamaican rum punch with citrus, grenadine, and a touch of bitters.",
-      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 60ml of Jamaican Rum, 15ml of Lime Juice, 15ml of Rich Simple Syrup, 15ml of Orange Juice, 15ml of Pineapple Juice, 15ml of Grenadine, and 60ml of Soda Water.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Highball glass.\n5. Garnish with a wedge of Pineapple",
+      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 60ml of Jamaican Rum, 15ml of Lime Juice, 15ml of Rich Simple Syrup, 15ml of Orange Juice, 15ml of Pineapple Juice, 15ml of Grenadine, and 60ml of Soda Water.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Highball glass.\n5. Garnish with a wedge of Pineapple.",
       "photoUri": "assets/cocktails/1755800000091-planters-punch.jpg",
       "glassId": "highball_glass",
       "methodIds": [
@@ -26299,7 +26299,7 @@
       "id": 1757000000253,
       "name": "Rattlesnake",
       "description": "A strong whiskey-based cocktail from the 1930 \"The Savoy Cocktail Book.\" The comment for the drink says \"So called because it will either cure Rattlesnake bite, or kill Rattlesnake, and, moreover, make you see double.\"",
-      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 60ml of Rye Whiskey, 1 dash of Absinthe, 2 teaspoons of Lemon Juice, 2 teaspoons of Simple Syrup, and 1 of Egg White.\n3. Dry shake (without ice) vigorously for about 15 seconds to emulsify egg.\n4. Add ice and shake vigorously for about 15 seconds until well chilled.\n5. Strain into chilled Coupe glass.\n6. Garnish with a twist of Lemon.",
+      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 60ml of Rye Whiskey, 1 dash of Absinthe, 2 teaspoons of Lemon Juice, 2 teaspoons of Simple Syrup, and 1 Egg White.\n3. Dry shake (without ice) vigorously for about 15 seconds to emulsify egg.\n4. Add ice and shake vigorously for about 15 seconds until well chilled.\n5. Strain into chilled Coupe glass.\n6. Garnish with a twist of Lemon.",
       "photoUri": "assets/cocktails/1757000000253-rattlesnake.jpg",
       "glassId": "coupe",
       "methodIds": [
@@ -27392,7 +27392,7 @@
       "id": 1757000000148,
       "name": "Rum Eggnog",
       "description": "A rich, creamy wine drink featuring Egg White, Dry Sherry, Spiced Rum—dessert-like, smooth, and indulgent. Garnished with nutmeg.",
-      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 30ml of Spiced Rum, 30ml of Dry Sherry, 30ml of Demerara Sugar Syrup, 30ml of Milk, 30ml of Cream, and 1 of Egg White.\n3. Dry shake (without ice) vigorously for about 15 seconds to emulsify egg.\n4. Add ice and shake vigorously for about 15 seconds until well chilled.\n5. Strain into chilled Rocks glass.\n6. Garnish with a pinch of Nutmeg and a Cinnamon Sticks.",
+      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 30ml of Spiced Rum, 30ml of Dry Sherry, 30ml of Demerara Sugar Syrup, 30ml of Milk, 30ml of Cream, and 1 Egg White.\n3. Dry shake (without ice) vigorously for about 15 seconds to emulsify egg.\n4. Add ice and shake vigorously for about 15 seconds until well chilled.\n5. Strain into chilled Rocks glass.\n6. Garnish with a pinch of Nutmeg and a Cinnamon Stick.",
       "photoUri": "assets/cocktails/1757000000148-rum-eggnog.jpg",
       "glassId": "rocks_glass",
       "methodIds": [
@@ -29483,7 +29483,7 @@
       "id": 1757000000274,
       "name": "Smoky Whiskey Sour",
       "description": "A variation of the classic \"Whisky Sour\" created by Simon Difford for people who like the distinct smoky flavor of Scotch Islay whisky.",
-      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 30ml of Scotch Whisky, 30ml of Islay Scotch Whisky, 30ml of Lemon Juice, 20ml of Maple syrup, 1 dash of Angostura Bitters, and 1 of Egg White.\n3. Dry shake (without ice) vigorously for about 15 seconds to emulsify egg.\n4. Add ice and shake vigorously for about 15 seconds until well chilled.\n5. Strain into chilled Rocks glass.\n6. Garnish with a peel of Lemon.",
+      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 30ml of Scotch Whisky, 30ml of Islay Scotch Whisky, 30ml of Lemon Juice, 20ml of Maple syrup, 1 dash of Angostura Bitters, and 1 Egg White.\n3. Dry shake (without ice) vigorously for about 15 seconds to emulsify egg.\n4. Add ice and shake vigorously for about 15 seconds until well chilled.\n5. Strain into chilled Rocks glass.\n6. Garnish with a peel of Lemon.",
       "photoUri": "assets/cocktails/1757000000274-smoky-whiskey-sour.jpg",
       "glassId": "rocks_glass",
       "methodIds": [
@@ -32008,7 +32008,7 @@
       "id": 1760963780635,
       "name": "Tiger's Milk",
       "description": "This is a rich, old-school cocktail often compared to eggnog or a boozy milkshake.",
-      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 60ml of Cognac, 2 drops of Vanilla Extract, 1 pinch of Cinnamon, 7.5ml of Rich Simple Syrup, 22.5ml of Milk, 22.5ml of Heavy Cream, and 1 of Egg White.\n3. Dry shake (without ice) vigorously for about 15 seconds to emulsify egg.\n4. Add ice and shake vigorously for about 15 seconds until well chilled.\n5. Strain into chilled Rocks glass.\n6. Garnish with a pinch of Nutmeg.",
+      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 60ml of Cognac, 2 drops of Vanilla Extract, 1 pinch of Cinnamon, 7.5ml of Rich Simple Syrup, 22.5ml of Milk, 22.5ml of Heavy Cream, and 1 Egg White.\n3. Dry shake (without ice) vigorously for about 15 seconds to emulsify egg.\n4. Add ice and shake vigorously for about 15 seconds until well chilled.\n5. Strain into chilled Rocks glass.\n6. Garnish with a pinch of Nutmeg.",
       "photoUri": "assets/cocktails/1760963780635-tiger-s-milk.jpg",
       "glassId": "rocks_glass",
       "methodIds": [
@@ -33281,7 +33281,7 @@
       "id": 1755800000116,
       "name": "Ve.n.to",
       "description": "An elegant Grappa-based sour that beautifully balances the intensity of the spirit with the soothing notes of chamomile and honey syrup.",
-      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 45ml of Grappa, 25ml of Lemon Juice, 15ml of Honey Syrup, 15ml of Chamomile Cordial, and 1 of Egg White.\n3. Dry shake (without ice) vigorously for about 15 seconds to emulsify egg.\n4. Add ice and shake vigorously for about 15 seconds until well chilled.\n5. Strain into chilled Rocks glass.\n6. Garnish with a twist of Lemon and 3 Grapes.",
+      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 45ml of Grappa, 25ml of Lemon Juice, 15ml of Honey Syrup, 15ml of Chamomile Cordial, and 1 Egg White.\n3. Dry shake (without ice) vigorously for about 15 seconds to emulsify egg.\n4. Add ice and shake vigorously for about 15 seconds until well chilled.\n5. Strain into chilled Rocks glass.\n6. Garnish with a twist of Lemon and 3 Grapes.",
       "photoUri": "assets/cocktails/1755800000116-vento.jpg",
       "glassId": "rocks_glass",
       "methodIds": [
@@ -34097,7 +34097,7 @@
       "id": 1757000000299,
       "name": "Ward 8",
       "description": "A classic whiskey cocktail with citrus and a touch of grenadine.",
-      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 60ml of Rye Whiskey, 15ml of Lemon Juice, 15ml of Orange Juice, and 1 dash of Grenadine.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Martini glass.\n5. Garnish with a Cherry",
+      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 60ml of Rye Whiskey, 15ml of Lemon Juice, 15ml of Orange Juice, and 1 dash of Grenadine.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Martini glass.\n5. Garnish with a Cherry.",
       "photoUri": "assets/cocktails/1757000000299-ward-8.jpg",
       "glassId": "martini",
       "methodIds": [
@@ -34524,7 +34524,7 @@
       "id": 1755800000119,
       "name": "Whiskey Sour",
       "description": "Classic bourbon sour optionally enriched with egg white.",
-      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 60ml of Bourbon, 30ml of Lemon Juice, 15ml of Rich Simple Syrup, and 1 of Egg White.\n3. Dry shake (without ice) vigorously for about 15 seconds to emulsify egg.\n4. Add ice and shake vigorously for about 15 seconds until well chilled.\n5. Strain into chilled Rocks glass.\n6. Garnish with a slice of Orange, a Maraschino Cherry, and 3 Angostura Bitters.",
+      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 60ml of Bourbon, 30ml of Lemon Juice, 15ml of Rich Simple Syrup, and 1 Egg White.\n3. Dry shake (without ice) vigorously for about 15 seconds to emulsify egg.\n4. Add ice and shake vigorously for about 15 seconds until well chilled.\n5. Strain into chilled Rocks glass.\n6. Garnish with a slice of Orange, a Maraschino Cherry, and 3 Angostura Bitters.",
       "photoUri": "assets/cocktails/1755800000119-whiskey-sour.jpg",
       "glassId": "rocks_glass",
       "methodIds": [
@@ -35176,7 +35176,7 @@
       "id": 1757000000307,
       "name": "Yellow Bird",
       "description": "An IBA official all-day cocktail combining white rum, Galliano, triple sec and lime.",
-      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 30ml of White Rum, 15ml of Galliano, 15ml of Triple Sec, and 15ml of Lime Juice.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Collins glass.\n5. Garnish with a Cherry and a spring of Mint",
+      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 30ml of White Rum, 15ml of Galliano, 15ml of Triple Sec, and 15ml of Lime Juice.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Collins glass.\n5. Garnish with a Cherry and a spring of Mint.",
       "photoUri": "assets/cocktails/1757000000307-yellow-bird.jpg",
       "glassId": "collins_glass",
       "methodIds": [
