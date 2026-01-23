@@ -8,6 +8,8 @@ import {
   Text,
   TextInput,
   View,
+  type NativeScrollEvent,
+  type NativeSyntheticEvent,
   type StyleProp,
   type TextStyle,
   type ListRenderItemInfo,
@@ -132,10 +134,34 @@ export default function ShakerScreen() {
   const [expandedTagKeys, setExpandedTagKeys] = useState<Set<string>>(() => new Set());
   const [selectedIngredientIds, setSelectedIngredientIds] = useState<Set<number>>(() => new Set());
   const listRef = useRef<FlatList<unknown>>(null);
+  const lastScrollOffset = useRef(0);
+  const searchStartOffset = useRef<number | null>(null);
+  const previousQuery = useRef(query);
   const insets = useSafeAreaInsets();
   const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
 
   useScrollToTop(listRef);
+
+  useEffect(() => {
+    const wasEmpty = previousQuery.current.length === 0;
+    const isEmpty = query.length === 0;
+
+    if (wasEmpty && !isEmpty) {
+      searchStartOffset.current = lastScrollOffset.current;
+    } else if (!wasEmpty && isEmpty && searchStartOffset.current !== null) {
+      const restoreOffset = searchStartOffset.current;
+      searchStartOffset.current = null;
+      requestAnimationFrame(() => {
+        listRef.current?.scrollToOffset({ offset: restoreOffset, animated: false });
+      });
+    }
+
+    previousQuery.current = query;
+  }, [query]);
+
+  const handleScroll = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    lastScrollOffset.current = event.nativeEvent.contentOffset.y;
+  }, []);
 
   const normalizedQuery = useMemo(() => {
     const normalized = normalizeSearchText(query);
@@ -675,6 +701,8 @@ export default function ShakerScreen() {
           keyboardDismissMode="on-drag"
           // Allow the first tap to toggle items while dismissing the keyboard.
           keyboardShouldPersistTaps="handled"
+          onScroll={handleScroll}
+          scrollEventThrottle={16}
         />
         <View
           style={[
