@@ -99,6 +99,9 @@ export default function CocktailsScreen() {
   const [headerLayout, setHeaderLayout] = useState<LayoutRectangle | null>(null);
   const [filterAnchorLayout, setFilterAnchorLayout] = useState<LayoutRectangle | null>(null);
   const listRef = useRef<FlatList<unknown>>(null);
+  const scrollOffsetRef = useRef(0);
+  const searchRestoreOffsetRef = useRef<number | null>(null);
+  const lastQueryRef = useRef(query);
 
   useScrollToTop(listRef);
   const router = useRouter();
@@ -139,6 +142,24 @@ export default function CocktailsScreen() {
   useEffect(() => {
     setLastCocktailTab(activeTab);
   }, [activeTab]);
+
+  useEffect(() => {
+    const previousQuery = lastQueryRef.current;
+
+    if (!previousQuery && query) {
+      searchRestoreOffsetRef.current = scrollOffsetRef.current;
+    }
+
+    if (previousQuery && !query && searchRestoreOffsetRef.current != null) {
+      listRef.current?.scrollToOffset({
+        offset: searchRestoreOffsetRef.current,
+        animated: false,
+      });
+      searchRestoreOffsetRef.current = null;
+    }
+
+    lastQueryRef.current = query;
+  }, [query]);
 
   const handleHeaderLayout = useCallback((event: LayoutChangeEvent) => {
     const nextLayout = event.nativeEvent.layout;
@@ -938,6 +959,10 @@ export default function CocktailsScreen() {
           contentContainerStyle={styles.listContent}
           showsVerticalScrollIndicator
           keyboardDismissMode="on-drag"
+          onScroll={(event) => {
+            scrollOffsetRef.current = event.nativeEvent.contentOffset.y;
+          }}
+          scrollEventThrottle={16}
           // Ensure first tap triggers row actions while dismissing the keyboard.
           keyboardShouldPersistTaps="handled"
           ListEmptyComponent={
