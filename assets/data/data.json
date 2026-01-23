@@ -1378,8 +1378,8 @@
         },
         {
           "order": 2,
-          "ingredientId": 108496,
-          "name": "Lemon",
+          "ingredientId": 734220,
+          "name": "Lemon Juice",
           "amount": "30",
           "unitId": 11
         },
@@ -3086,8 +3086,8 @@
         },
         {
           "order": 4,
-          "ingredientId": 108496,
-          "name": "Lemon",
+          "ingredientId": 734220,
+          "name": "Lemon Juice",
           "amount": "15",
           "unitId": 11
         },
@@ -9364,7 +9364,7 @@
       "description": "A bright brandy sour balancing Cognac, Green Chartreuse, Lemon with fresh citrus and a touch of sweetness for a crisp, refreshing sip. Garnished with lemon.",
       "instructions": "1. Shake all ingredients with ice.\n2. Fine strain into chilled glass.\n3. Express lemon zest twist over the cocktail and use as garnish.",
       "photoUri": "assets/cocktails/1757000000122-champs-elysees.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "coupe",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -9397,8 +9397,8 @@
         },
         {
           "order": 3,
-          "ingredientId": 108496,
-          "name": "Lemon",
+          "ingredientId": 734220,
+          "name": "Lemon Juice",
           "amount": "20",
           "unitId": 11
         },
@@ -11227,8 +11227,8 @@
         },
         {
           "order": 2,
-          "ingredientId": 108496,
-          "name": "Lemon",
+          "ingredientId": 734220,
+          "name": "Lemon Juice",
           "amount": "15",
           "unitId": 11
         },
@@ -13257,8 +13257,8 @@
         },
         {
           "order": 4,
-          "ingredientId": 108496,
-          "name": "Lemon",
+          "ingredientId": 734220,
+          "name": "Lemon Juice",
           "amount": "20",
           "unitId": 11
         },
@@ -13376,8 +13376,8 @@
         },
         {
           "order": 5,
-          "ingredientId": 336572,
-          "name": "Lime",
+          "ingredientId": 525624,
+          "name": "Lime Juice",
           "amount": "25",
           "unitId": 11
         },
@@ -14990,8 +14990,8 @@
         },
         {
           "order": 2,
-          "ingredientId": 336572,
-          "name": "Lime",
+          "ingredientId": 525624,
+          "name": "Lime Juice",
           "amount": "15",
           "unitId": 11
         },
@@ -15352,8 +15352,8 @@
         },
         {
           "order": 2,
-          "ingredientId": 108496,
-          "name": "Lemon",
+          "ingredientId": 734220,
+          "name": "Lemon Juice",
           "amount": "30",
           "unitId": 11
         },
@@ -17701,8 +17701,8 @@
         },
         {
           "order": 3,
-          "ingredientId": 108496,
-          "name": "Lemon",
+          "ingredientId": 734220,
+          "name": "Lemon Juice",
           "amount": "30",
           "unitId": 11
         },
@@ -18672,8 +18672,8 @@
         },
         {
           "order": 3,
-          "ingredientId": 108496,
-          "name": "Lemon",
+          "ingredientId": 734220,
+          "name": "Lemon Juice",
           "amount": "45",
           "unitId": 11
         },
@@ -19661,7 +19661,8 @@
       "name": "Light Word",
       "description": "A complex gin cocktail where Gin, Campari, Green Chartreuse meets citrus—bittersweet, zesty, and nicely structured.",
       "instructions": "1. Combine gin, Campari, green Chartreuse and lime juice in a shaker with ice.\n2. Shake well and strain into a chilled wine glass.",
-      "glassId": "wine_glass",
+      "photoUri": "assets/cocktails/1757000000211-light-word.jpg",
+      "glassId": "coupe",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -19694,8 +19695,8 @@
         },
         {
           "order": 4,
-          "ingredientId": 336572,
-          "name": "Lime",
+          "ingredientId": 525624,
+          "name": "Lime Juice",
           "amount": "30",
           "unitId": 11
         },
@@ -19869,8 +19870,8 @@
         },
         {
           "order": 3,
-          "ingredientId": 108496,
-          "name": "Lemon",
+          "ingredientId": 734220,
+          "name": "Lemon Juice",
           "amount": "10",
           "unitId": 11
         },
@@ -20188,8 +20189,8 @@
         },
         {
           "order": 3,
-          "ingredientId": 336572,
-          "name": "Lime",
+          "ingredientId": 525624,
+          "name": "Lime Juice",
           "amount": "30",
           "unitId": 11
         },
@@ -20407,8 +20408,8 @@
         },
         {
           "order": 3,
-          "ingredientId": 108496,
-          "name": "Lemon",
+          "ingredientId": 734220,
+          "name": "Lemon Juice",
           "amount": "15",
           "unitId": 11
         },
@@ -24455,8 +24456,8 @@
         },
         {
           "order": 4,
-          "ingredientId": 336572,
-          "name": "Lime",
+          "ingredientId": 525624,
+          "name": "Lime Juice",
           "amount": "30",
           "unitId": 11
         },
@@ -25859,8 +25860,8 @@
         },
         {
           "order": 4,
-          "ingredientId": 336572,
-          "name": "Lime",
+          "ingredientId": 525624,
+          "name": "Lime Juice",
           "amount": "30",
           "unitId": 11
         },
@@ -30180,6 +30181,7 @@
       "name": "Tarzan",
       "description": "A refreshing long drink of gin, Campari and pineapple juice topped with soda.",
       "instructions": "1. Fill a collins glass with ice.\n2. Pour 30ml of gin and 30ml of Campari.\n3. Add 45ml of pineapple juice, 15ml of sugar syrup and 15ml of lemon juice.\n4. Top with soda water and stir gently.",
+      "photoUri": "assets/cocktails/1757000000288-tarzan.jpg",
       "glassId": "collins_glass",
       "methodIds": ["build"],
       "tags": [
@@ -30299,6 +30301,7 @@
       "name": "Tequila Rickey",
       "description": "A crisp, sugar-free classic from the Rickey family that highlights the earthy notes of tequila with fresh lime and sparkling water.",
       "instructions": "1. Add 150g of ice to a highball glass.\n2. Pour 50ml of tequila and 30ml of lime juice over the ice.\n3. Top with 100ml of soda water.\n4. Stir briefly and garnish with a fresh lime wedge.",
+      "photoUri": "assets/cocktails/1759450592610-tequila-rickey.jpg",
       "glassId": "highball_glass",
       "methodIds": ["build"],
       "tags": [
@@ -30357,6 +30360,7 @@
       "name": "Tequila Slammer",
       "description": "An energetic party shooter known for its explosive carbonation and ritualistic serving style, mixing tequila with lemon-lime soda.",
       "instructions": "1. Pour 50ml of Tequila Blanco into a rocks glass.\n2. Add 50ml of 7-Up or similar lemon-lime soda.\n3. Cover the top of the glass firmly with your hand or a coaster.\n4. Slam the glass onto a hard surface to trigger the fizz and drink it immediately while it's foaming.",
+      "photoUri": "assets/cocktails/1757000000289-tequila-slammer.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["build"],
       "tags": [
@@ -30471,10 +30475,11 @@
     },
     {
       "id": 1757000000290,
-      "name": "That's my word",
+      "name": "That's My Word",
       "description": "A floral riff on the Last Word with gin, St. Germain and yellow Chartreuse.",
-      "instructions": "1. Fill a shaker with ice cubes.\n2. Add gin, St. Germain, yellow Chartreuse and half a lime.\n3. Shake and strain into a chilled coupe.",
-      "glassId": "coupe",
+      "instructions": "1. Fill a shaker with ice cubes.\n2. Add gin, St. Germain, yellow Chartreuse and half a lime.\n3. Shake and strain into a chilled Nick & Nora or coupe glass",
+      "photoUri": "assets/cocktails/1757000000290-that-s-my-word.jpg",
+      "glassId": "nick_and_nora",
       "methodIds": ["shake"],
       "tags": [
         {
@@ -31528,6 +31533,7 @@
       "name": "Tootsie Roll",
       "description": "This nice and mild shot is an attempt to recall the famous \"Tootsie Roll\" candy. The recipe here is for 3–4 shots.",
       "instructions": "1. Fill a shaker with ice cubes.\n2. Pour coffee liqueur and orange juice.\n3. Add vodka if you want to make it stronger.\n4. Shake well and strain into a shooter.",
+      "photoUri": "assets/cocktails/1757000000293-tootsie-roll.jpg",
       "glassId": "shooter",
       "methodIds": ["shake"],
       "tags": [
@@ -31625,73 +31631,6 @@
         },
         {
           "order": 5,
-          "ingredientId": 346304,
-          "name": "Ice",
-          "amount": "150",
-          "unitId": 8
-        }
-      ]
-    },
-    {
-      "id": 1757000000294,
-      "name": "Tropic Dream",
-      "description": "A delicious non-alcoholic summer beverage.",
-      "instructions": "1. Put some ice, a banana and several strawberries into a blender.\n2. Add pineapple juice and coconut syrup.\n3. Blend until smooth, and pour into a hurricane glass.\n4. Top with whipped cream, and garnish with a strawberry.",
-      "glassId": "hurricane_glass",
-      "methodIds": ["blend"],
-      "tags": [
-        {
-          "id": 10,
-          "name": "non-alcoholic",
-          "color": "#CBD664"
-        }
-      ],
-      "ingredients": [
-        {
-          "order": 1,
-          "ingredientId": 609552,
-          "name": "Banana",
-          "amount": "1",
-          "unitId": 9
-        },
-        {
-          "order": 2,
-          "ingredientId": 969224,
-          "name": "Strawberry",
-          "amount": "50",
-          "unitId": 8
-        },
-        {
-          "order": 3,
-          "ingredientId": 494177,
-          "name": "Pineapple Juice",
-          "amount": "150",
-          "unitId": 11
-        },
-        {
-          "order": 4,
-          "ingredientId": 219375,
-          "name": "Coconut Syrup",
-          "amount": "30",
-          "unitId": 11
-        },
-        {
-          "order": 5,
-          "ingredientId": 477462,
-          "name": "Whipped Cream",
-          "amount": "30",
-          "unitId": 11
-        },
-        {
-          "order": 6,
-          "ingredientId": 969224,
-          "name": "Strawberry",
-          "amount": "1",
-          "unitId": 1,
-          "garnish": true
-        },
-        {
-          "order": 7,
           "ingredientId": 346304,
           "name": "Ice",
           "amount": "150",
@@ -32348,6 +32287,7 @@
       "name": "Vegas Bomb",
       "description": "A sweet and energetic bomb shot combining whisky, peach schnapps and Red Bull.",
       "instructions": "1. Pour half a can of Red Bull into a pub glass.\n2. Make a shot of rye whisky and peach schnapps, and drop it into the glass with the Red Bull.\n3. Drink quickly.",
+      "photoUri": "assets/cocktails/1757000000296-vegas-bomb.jpg",
       "glassId": "pub_glass",
       "methodIds": ["build"],
       "tags": [
@@ -32593,6 +32533,7 @@
       "name": "Virgin Colada",
       "description": "A non-alcoholic variation of the \"Piña Colada\".",
       "instructions": "1. Put some crushed ice into a blender.\n2. Add coconut milk and pineapple juice.\n3. Blend until smooth, and pour into a hurricane glass.\n4. Top with whipped cream, and garnish with a pineapple wedge and a maraschino cherry.",
+      "photoUri": "assets/cocktails/1757000000297-virgin-colada.jpg",
       "glassId": "hurricane_glass",
       "methodIds": ["blend"],
       "tags": [
@@ -32619,6 +32560,20 @@
         },
         {
           "order": 3,
+          "ingredientId": 477462,
+          "name": "Whipped Cream",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 346304,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8
+        },
+        {
+          "order": 5,
           "ingredientId": 932849,
           "name": "Pineapple",
           "amount": "1",
@@ -32626,26 +32581,14 @@
           "garnish": true
         },
         {
-          "order": 4,
+          "order": 6,
           "ingredientId": 607153,
           "name": "Maraschino Cherry",
           "amount": "1",
           "unitId": 1,
-          "garnish": true
-        },
-        {
-          "order": 5,
-          "ingredientId": 477462,
-          "name": "Whipped Cream",
-          "amount": "30",
-          "unitId": 11
-        },
-        {
-          "order": 6,
-          "ingredientId": 346304,
-          "name": "Ice",
-          "amount": "150",
-          "unitId": 8
+          "garnish": true,
+          "allowBaseSubstitution": true,
+          "allowBrandSubstitution": true
         }
       ]
     },
@@ -32654,6 +32597,7 @@
       "name": "Virgin Mary",
       "description": "A non-alcoholic version of the \"Bloody Mary\" cocktail. It is also called the \"Bloody Shame\", \"Bloody Virgin\" or \"Bloody Barbara\".",
       "instructions": "1. Put ice cubes into a highball glass.\n2. Add Worcestershire sauce, Tabasco, salt and black pepper.\n3. Pour tomato juice and the juice of a quarter lemon.\n4. Stir gently and garnish with a celery stalk or lemon wedge.",
+      "photoUri": "assets/cocktails/1757000000298-virgin-mary.jpg",
       "glassId": "highball_glass",
       "methodIds": ["build"],
       "tags": [
@@ -32708,18 +32652,18 @@
         },
         {
           "order": 7,
+          "ingredientId": 346304,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
+        },
+        {
+          "order": 8,
           "ingredientId": 146921,
           "name": "Celery",
           "amount": "1",
           "unitId": 22,
           "garnish": true
-        },
-        {
-          "order": 8,
-          "ingredientId": 346304,
-          "name": "Ice",
-          "amount": "120",
-          "unitId": 8
         }
       ]
     },
@@ -32839,6 +32783,7 @@
           "substitutes": [
             {
               "id": 783639,
+              "ingredientId": 783639,
               "name": "Coconut Rum"
             }
           ]
@@ -32852,15 +32797,15 @@
         },
         {
           "order": 3,
-          "ingredientId": 336572,
-          "name": "Lime",
+          "ingredientId": 525624,
+          "name": "Lime Juice",
           "amount": "0.75",
           "unitId": 12
         },
         {
           "order": 4,
-          "ingredientId": 336572,
-          "name": "Lime",
+          "ingredientId": 525624,
+          "name": "Lime Juice",
           "amount": "1",
           "unitId": 27,
           "garnish": true
@@ -32986,6 +32931,7 @@
       "name": "Vodka Rickey",
       "description": "A quintessential highball that defines crisp simplicity. This variation of the classic Rickey swap spirits for vodka, resulting in a clean, bubbly, and incredibly refreshing drink with a sharp citrus kick.",
       "instructions": "1. Fill a highball glass with ice cubes.\n2. Pour in the vodka and lime juice.\n3. Top the glass with chilled soda water.\n4. Stir briefly to combine.\n5. Garnish with a fresh lime wedge.",
+      "photoUri": "assets/cocktails/1759450356801-vodka-rickey.jpg",
       "glassId": "highball_glass",
       "methodIds": ["build"],
       "tags": [
@@ -33044,6 +32990,7 @@
       "name": "Ward 8",
       "description": "A classic whiskey cocktail with citrus and a touch of grenadine.",
       "instructions": "1. Fill a shaker with ice cubes.\n2. Add 60ml of rye whiskey, 15ml of lemon juice, 15ml of orange juice and a dash of grenadine.\n3. Shake well and strain into a cocktail glass.\n4. Garnish with a cherry.",
+      "photoUri": "assets/cocktails/1757000000299-ward-8.jpg",
       "glassId": "cocktail_glass",
       "methodIds": ["shake"],
       "tags": [
@@ -33102,10 +33049,11 @@
     {
       "id": 1757000000300,
       "name": "Washington Apple",
-      "description": "A crisp mix of rye whiskey, apple liqueur and cranberry juice.",
-      "instructions": "1. Fill a highball glass with ice cubes.\n2. Add 60ml of rye whiskey and 60ml of apple liqueur.\n3. Add about 60ml of cranberry juice to the top.",
-      "glassId": "highball_glass",
-      "methodIds": ["build"],
+      "description": "Combining whisky, sour apple schnapps, and cranberry juice, this cocktail delivers a lovely balance of flavors that are both sweet and tart.",
+      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add the whiskey, schnapps, and cranberry juice.\n3. Shake vigorously for 10-15 seconds until well-chilled.\n4. Strain the mixture into a rocks glass filled with fresh ice.\n5. Garnish with an apple slice.",
+      "photoUri": "assets/cocktails/1757000000300-washington-apple.jpg",
+      "glassId": "coupe",
+      "methodIds": ["shake"],
       "tags": [
         {
           "id": 6,
@@ -33121,25 +33069,27 @@
       "ingredients": [
         {
           "order": 1,
-          "ingredientId": 160433,
-          "name": "Rye Whiskey",
-          "amount": "60",
+          "ingredientId": 830162,
+          "name": "Whiskey",
+          "amount": "30",
           "unitId": 11
         },
         {
           "order": 2,
-          "ingredientId": 337536,
-          "name": "Applejack",
-          "amount": "60",
+          "ingredientId": 150452,
+          "name": "Apple Schnapps",
+          "amount": "30",
           "unitId": 11,
           "substitutes": [
             {
               "id": 150452,
+              "ingredientId": 150452,
               "name": "Apple Schnapps"
             },
             {
-              "id": 797544,
-              "name": "Apple Liqueur"
+              "id": 337536,
+              "ingredientId": 337536,
+              "name": "Applejack"
             }
           ]
         },
@@ -33147,15 +33097,30 @@
           "order": 3,
           "ingredientId": 81569,
           "name": "Cranberry Juice",
-          "amount": "60",
+          "amount": "30",
           "unitId": 11
         },
         {
           "order": 4,
           "ingredientId": 346304,
           "name": "Ice",
-          "amount": "120",
+          "amount": "150",
           "unitId": 8
+        },
+        {
+          "order": 5,
+          "ingredientId": 346304,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 767167,
+          "name": "Apple",
+          "amount": "1",
+          "unitId": 19,
+          "garnish": true
         }
       ]
     },
@@ -33164,8 +33129,9 @@
       "name": "Water Moccasin",
       "description": "Named after the venomous snake, this shooter blends peach schnapps with rye whiskey and citrus.",
       "instructions": "1. Fill a shaker with ice cubes.\n2. Add 30ml of peach schnapps, 30ml of rye whiskey, 15ml of lemon juice and 15ml of simple syrup.\n3. Pour a dash of triple sec or another orange liqueur.\n4. Shake well and strain into shot glasses.",
+      "photoUri": "assets/cocktails/1757000000301-water-moccasin.jpg",
       "glassId": "shooter",
-      "methodIds": ["shake", "blend"],
+      "methodIds": ["shake"],
       "tags": [
         {
           "id": 6,
@@ -33181,38 +33147,38 @@
       "ingredients": [
         {
           "order": 1,
-          "ingredientId": 669094,
-          "name": "Peach Schnapps",
-          "amount": "30",
-          "unitId": 11
-        },
-        {
-          "order": 2,
           "ingredientId": 160433,
           "name": "Rye Whiskey",
           "amount": "30",
           "unitId": 11
         },
         {
+          "order": 2,
+          "ingredientId": 669094,
+          "name": "Peach Schnapps",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
           "order": 3,
-          "ingredientId": 734220,
-          "name": "Lemon Juice",
+          "ingredientId": 38880,
+          "name": "Triple Sec",
           "amount": "15",
           "unitId": 11
         },
         {
           "order": 4,
-          "ingredientId": 150490,
-          "name": "Simple Syrup",
-          "amount": "15",
+          "ingredientId": 734220,
+          "name": "Lemon Juice",
+          "amount": "7.5",
           "unitId": 11
         },
         {
           "order": 5,
-          "ingredientId": 38880,
-          "name": "Triple Sec",
-          "amount": "1",
-          "unitId": 6
+          "ingredientId": 150490,
+          "name": "Simple Syrup",
+          "amount": "7.5",
+          "unitId": 11
         },
         {
           "order": 6,
@@ -33220,6 +33186,15 @@
           "name": "Ice",
           "amount": "150",
           "unitId": 8
+        },
+        {
+          "order": 7,
+          "ingredientId": 108496,
+          "name": "Lemon",
+          "amount": "1",
+          "unitId": 27,
+          "optional": true,
+          "garnish": true
         }
       ]
     },
