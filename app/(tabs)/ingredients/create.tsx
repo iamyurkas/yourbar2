@@ -41,27 +41,58 @@ type IngredientFormSnapshot = {
   selectedTagIds: number[];
 };
 
-export default function CreateIngredientScreen() {
+function getParamValue(value?: string | string[]): string | undefined {
+  if (Array.isArray(value)) {
+    return value[0];
+  }
+  return value;
+}
+
+function useResolvedIngredient(param: string | undefined, ingredients: Ingredient[]) {
+  return useMemo(() => {
+    if (!param) {
+      return undefined;
+    }
+
+    const numericId = Number(param);
+    if (!Number.isNaN(numericId)) {
+      const byId = ingredients.find((item) => Number(item.id ?? -1) === numericId);
+      if (byId) {
+        return byId;
+      }
+    }
+
+    const normalized = normalizeSearchText(param);
+    return ingredients.find((item) => normalizeSearchText(item.name ?? '') === normalized);
+  }, [ingredients, param]);
+}
+
+export default function IngredientFormScreen() {
   const params = useLocalSearchParams<{
     suggestedName?: string;
     returnTo?: string;
     returnToPath?: string;
     returnToParams?: string;
+    mode?: string;
+    ingredientId?: string;
   }>();
+  const modeParam = getParamValue(params.mode);
+  const isEditMode = modeParam === 'edit';
+  const ingredientParam = getParamValue(params.ingredientId);
   const suggestedNameParam = useMemo(() => {
-    const value = Array.isArray(params.suggestedName) ? params.suggestedName[0] : params.suggestedName;
+    const value = getParamValue(params.suggestedName);
     return typeof value === 'string' ? value : undefined;
   }, [params.suggestedName]);
   const returnToPathParam = useMemo(() => {
-    const value = Array.isArray(params.returnToPath) ? params.returnToPath[0] : params.returnToPath;
+    const value = getParamValue(params.returnToPath);
     return typeof value === 'string' && value.length > 0 ? value : undefined;
   }, [params.returnToPath]);
   const returnToParamsParam = useMemo(() => {
-    const value = Array.isArray(params.returnToParams) ? params.returnToParams[0] : params.returnToParams;
+    const value = getParamValue(params.returnToParams);
     return typeof value === 'string' && value.length > 0 ? value : undefined;
   }, [params.returnToParams]);
   const legacyReturnToParam = useMemo(() => {
-    const value = Array.isArray(params.returnTo) ? params.returnTo[0] : params.returnTo;
+    const value = getParamValue(params.returnTo);
     return value === 'cocktail-form' ? value : undefined;
   }, [params.returnTo]);
   const returnToPath = useMemo(() => {
@@ -99,11 +130,22 @@ export default function CreateIngredientScreen() {
     availableIngredientIds,
     createIngredient,
     updateIngredient,
+    deleteIngredient,
     customIngredientTags,
     createCustomIngredientTag,
   } = useInventory();
   const { setHasUnsavedChanges } = useUnsavedChanges();
-  const [name, setName] = useState(() => suggestedNameParam ?? '');
+  const isNavigatingAfterSaveRef = useRef(false);
+
+  const ingredient = useResolvedIngredient(ingredientParam, ingredients);
+
+  const numericIngredientId = useMemo(() => {
+    const candidate = ingredient?.id ?? ingredientParam;
+    const parsed = Number(candidate);
+    return Number.isNaN(parsed) ? undefined : parsed;
+  }, [ingredient?.id, ingredientParam]);
+
+  const [name, setName] = useState(() => (isEditMode ? '' : suggestedNameParam ?? ''));
   const [description, setDescription] = useState('');
   const [imageUri, setImageUri] = useState<string | null>(null);
   const [isPickingImage, setIsPickingImage] = useState(false);
@@ -115,12 +157,18 @@ export default function CreateIngredientScreen() {
   const [permissionStatus, requestPermission] = ImagePicker.useMediaLibraryPermissions();
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(null);
   const [isSaving, setIsSaving] = useState(false);
-  const scrollRef = useRef<ScrollView | null>(null);
-  const isNavigatingAfterSaveRef = useRef(false);
+  const [isInitialized, setIsInitialized] = useState(!isEditMode);
   const [initialSnapshot, setInitialSnapshot] = useState<IngredientFormSnapshot | null>(null);
+
+  const didInitializeRef = useRef(false);
+  const scrollRef = useRef<ScrollView | null>(null);
   const isHandlingBackRef = useRef(false);
 
   useEffect(() => {
+    if (isEditMode) {
+      return;
+    }
+
     setName(suggestedNameParam ?? '');
     setDescription('');
     setImageUri(null);
@@ -131,7 +179,28 @@ export default function CreateIngredientScreen() {
     setIsBaseModalVisible(false);
     setInitialSnapshot(null);
     setIsSaving(false);
-  }, [suggestedNameParam]);
+    setIsInitialized(true);
+  }, [isEditMode, suggestedNameParam]);
+
+  useEffect(() => {
+    if (!isEditMode || !ingredient || didInitializeRef.current) {
+      return;
+    }
+
+    didInitializeRef.current = true;
+    setName(ingredient.name ?? '');
+    setDescription(ingredient.description ?? '');
+    setImageUri(ingredient.photoUri ?? null);
+    setBaseIngredientId(
+      ingredient.baseIngredientId != null ? Number(ingredient.baseIngredientId) : null,
+    );
+
+    const initialTagIds = (ingredient.tags ?? [])
+      .map((tag) => Number(tag.id ?? -1))
+      .filter((id) => Number.isFinite(id) && id >= 0) as number[];
+    setSelectedTagIds(initialTagIds);
+    setIsInitialized(true);
+  }, [ingredient, isEditMode]);
 
   const closeDialog = useCallback(() => {
     setDialogOptions(null);
@@ -153,12 +222,12 @@ export default function CreateIngredientScreen() {
   }, [baseIngredientId, description, imageUri, name, selectedTagIds]);
 
   useEffect(() => {
-    if (initialSnapshot) {
+    if (!isInitialized || initialSnapshot) {
       return;
     }
 
     setInitialSnapshot(buildSnapshot());
-  }, [buildSnapshot, initialSnapshot]);
+  }, [buildSnapshot, initialSnapshot, isInitialized]);
 
   const hasUnsavedChanges = useMemo(() => {
     if (!initialSnapshot) {
@@ -174,13 +243,25 @@ export default function CreateIngredientScreen() {
 
   useEffect(() => () => setHasUnsavedChanges(false), [setHasUnsavedChanges]);
 
+  const imageSource = useMemo(() => {
+    if (isEditMode) {
+      return resolveImageSource(imageUri);
+    }
+
+    if (!imageUri) {
+      return undefined;
+    }
+
+    return { uri: imageUri };
+  }, [imageUri, isEditMode]);
+
   const placeholderLabel = useMemo(() => {
-    if (imageUri) {
+    if (imageSource) {
       return 'Change image';
     }
 
     return 'Add image';
-  }, [imageUri]);
+  }, [imageSource]);
 
   const toggleTag = useCallback((tagId: number) => {
     setSelectedTagIds((prev) => {
@@ -299,6 +380,65 @@ export default function CreateIngredientScreen() {
       return;
     }
 
+    if (isEditMode) {
+      if (numericIngredientId == null) {
+        showDialog({
+          title: 'Ingredient not found',
+          message: 'Please try again later.',
+          actions: [{ label: 'OK' }],
+        });
+        return;
+      }
+
+      setIsSaving(true);
+      try {
+        const descriptionValue = description.trim();
+        const selectedTags = selectedTagIds
+          .map((tagId) => availableIngredientTags.find((tag) => tag.id === tagId))
+          .filter((tag): tag is (typeof availableIngredientTags)[number] => Boolean(tag));
+
+        const photoHasChanged = imageUri !== ingredient?.photoUri;
+        const shouldProcessPhoto = shouldStorePhoto(imageUri) && photoHasChanged;
+        const submission = {
+          name: trimmedName,
+          description: descriptionValue || undefined,
+          photoUri: shouldProcessPhoto ? undefined : imageUri ?? undefined,
+          baseIngredientId,
+          tags: selectedTags,
+        };
+
+        const updated = updateIngredient(numericIngredientId, {
+          ...submission,
+          photoUri:
+            imageUri && shouldProcessPhoto
+              ? await storePhoto({
+                  uri: imageUri,
+                  id: numericIngredientId,
+                  name: trimmedName,
+                  category: 'ingredients',
+                  suffix: String(Date.now()),
+                })
+              : submission.photoUri,
+        });
+
+        if (!updated) {
+          showDialog({
+            title: 'Could not save ingredient',
+            message: 'Please try again later.',
+            actions: [{ label: 'OK' }],
+          });
+          return;
+        }
+
+        setHasUnsavedChanges(false);
+        isNavigatingAfterSaveRef.current = true;
+        skipDuplicateBack(navigation);
+      } finally {
+        setIsSaving(false);
+      }
+      return;
+    }
+
     setIsSaving(true);
     const descriptionValue = description.trim();
     const selectedTags = selectedTagIds
@@ -368,13 +508,17 @@ export default function CreateIngredientScreen() {
     createIngredient,
     description,
     imageUri,
+    ingredient?.photoUri,
+    isEditMode,
     isSaving,
     name,
+    navigation,
+    numericIngredientId,
     returnToParams,
     returnToPath,
+    selectedTagIds,
     setHasUnsavedChanges,
     showDialog,
-    selectedTagIds,
     shouldStorePhoto,
     storePhoto,
     updateIngredient,
@@ -437,6 +581,56 @@ export default function CreateIngredientScreen() {
     return unsubscribe;
   }, [confirmLeave, hasUnsavedChanges, navigation]);
 
+  const handleGoBack = useCallback(() => {
+    skipDuplicateBack(navigation);
+  }, [navigation]);
+
+  const handleDeletePress = useCallback(() => {
+    if (!isEditMode) {
+      return;
+    }
+
+    if (numericIngredientId == null) {
+      showDialog({
+        title: 'Ingredient not found',
+        message: 'Please try again later.',
+        actions: [{ label: 'OK' }],
+      });
+      return;
+    }
+
+    const trimmedName = ingredient?.name?.trim();
+    const message = trimmedName
+      ? `Are you sure you want to delete ${trimmedName}? This action cannot be undone.`
+      : 'Are you sure you want to delete this ingredient? This action cannot be undone.';
+
+    showDialog({
+      title: 'Delete ingredient',
+      message,
+      actions: [
+        { label: 'Cancel', variant: 'secondary' },
+        {
+          label: 'Delete',
+          variant: 'destructive',
+          onPress: () => {
+            const wasDeleted = deleteIngredient(numericIngredientId);
+            if (!wasDeleted) {
+              showDialog({
+                title: 'Could not delete ingredient',
+                message: 'Please try again later.',
+                actions: [{ label: 'OK' }],
+              });
+              return;
+            }
+
+            setHasUnsavedChanges(false);
+            router.replace('/ingredients');
+          },
+        },
+      ],
+    });
+  }, [deleteIngredient, ingredient?.name, isEditMode, numericIngredientId, setHasUnsavedChanges, showDialog]);
+
   const baseIngredient = useMemo(() => {
     if (baseIngredientId == null) {
       return undefined;
@@ -469,6 +663,10 @@ export default function CreateIngredientScreen() {
     [],
   );
 
+  const handleRemoveImage = useCallback(() => {
+    setImageUri(null);
+  }, []);
+
   const handleCloseBaseModal = useCallback(() => {
     const normalized = normalizeSearchText(baseSearch);
     if (normalized) {
@@ -477,9 +675,9 @@ export default function CreateIngredientScreen() {
       );
 
       if (match?.id != null) {
-        const numericId = Number(match.id);
-        if (Number.isFinite(numericId) && numericId >= 0) {
-          setBaseIngredientId(numericId);
+        const targetId = Number(match.id);
+        if (Number.isFinite(targetId) && targetId >= 0) {
+          setBaseIngredientId(targetId);
         }
       }
     }
@@ -490,40 +688,63 @@ export default function CreateIngredientScreen() {
 
   const normalizedBaseQuery = useMemo(() => normalizeSearchText(baseSearch), [baseSearch]);
 
-  const baseIngredientOptions = useMemo(
-    () => ingredients.filter((ingredient) => ingredient.baseIngredientId == null),
-    [ingredients],
-  );
+  const baseIngredientOptions = useMemo(() => {
+    if (!isEditMode) {
+      return ingredients.filter((item) => item.baseIngredientId == null);
+    }
+
+    const currentId = numericIngredientId;
+    return ingredients.filter((item) => {
+      const itemId = Number(item.id ?? -1);
+      if (!Number.isFinite(itemId) || itemId < 0) {
+        return false;
+      }
+
+      if (currentId != null && itemId === currentId) {
+        return false;
+      }
+
+      if (baseIngredientId != null && itemId === baseIngredientId) {
+        return true;
+      }
+
+      return item.baseIngredientId == null;
+    });
+  }, [baseIngredientId, ingredients, isEditMode, numericIngredientId]);
 
   const filteredBaseIngredients = useMemo(() => {
     if (!normalizedBaseQuery) {
       return baseIngredientOptions;
     }
 
-    return baseIngredientOptions.filter((ingredient) => {
-      const nameNormalized = ingredient.searchNameNormalized ?? normalizeSearchText(ingredient.name ?? '');
+    return baseIngredientOptions.filter((candidate) => {
+      const nameNormalized = candidate.searchNameNormalized ?? normalizeSearchText(candidate.name ?? '');
       if (nameNormalized.startsWith(normalizedBaseQuery)) {
         return true;
       }
 
-      return (ingredient.searchTokensNormalized ?? []).some((token) =>
+      return (candidate.searchTokensNormalized ?? []).some((token) =>
         token.startsWith(normalizedBaseQuery),
       );
     });
   }, [baseIngredientOptions, normalizedBaseQuery]);
 
   const handleSelectBaseIngredient = useCallback(
-    (ingredient: Ingredient) => {
-      const id = Number(ingredient.id ?? -1);
-      if (!Number.isFinite(id) || id < 0) {
+    (candidate: Ingredient) => {
+      const candidateId = Number(candidate.id ?? -1);
+      if (!Number.isFinite(candidateId) || candidateId < 0) {
         return;
       }
 
-      setBaseIngredientId(id);
+      if (isEditMode && numericIngredientId != null && candidateId === numericIngredientId) {
+        return;
+      }
+
+      setBaseIngredientId(candidateId);
       setBaseSearch('');
       setIsBaseModalVisible(false);
     },
-    [],
+    [isEditMode, numericIngredientId],
   );
 
   const renderBaseIngredient = useCallback(
@@ -588,14 +809,6 @@ export default function CreateIngredientScreen() {
     };
   }, [isBaseModalVisible]);
 
-  const handleGoBack = useCallback(() => {
-    skipDuplicateBack(navigation);
-  }, [navigation]);
-
-  const handleRemoveImage = useCallback(() => {
-    setImageUri(null);
-  }, []);
-
   const scrollFieldIntoView = useCallback((target?: number | null) => {
     if (target == null) {
       return;
@@ -620,11 +833,207 @@ export default function CreateIngredientScreen() {
     );
   }, []);
 
+  const contentStyle = isEditMode ? styles.contentEdit : styles.contentCreate;
+  const sectionStyle = isEditMode ? styles.sectionEdit : styles.sectionCreate;
+  const hintStyle = isEditMode ? styles.hintEdit : styles.hintCreate;
+  const tagListStyle = isEditMode ? styles.tagListEdit : styles.tagListCreate;
+  const submitButtonStyle = isEditMode ? styles.submitButtonEdit : styles.submitButtonCreate;
+
+  if (isEditMode && !ingredient) {
+    return (
+      <>
+        <Stack.Screen
+          options={{
+            title: 'Edit ingredient',
+            headerTitleAlign: 'center',
+            headerStyle: { backgroundColor: Colors.surface },
+            headerShadowVisible: false,
+            headerTitleStyle: { color: Colors.onSurface, fontSize: 16, fontWeight: '600' },
+            headerLeft: () => (
+              <Pressable
+                onPress={handleGoBack}
+                accessibilityRole="button"
+                accessibilityLabel="Go back"
+                style={styles.headerButton}
+                hitSlop={8}>
+                <MaterialCommunityIcons name="arrow-left" size={22} color={Colors.onSurface} />
+              </Pressable>
+            ),
+          }}
+        />
+        <View style={[styles.container, styles.emptyState]}>
+          <Text style={[styles.emptyMessage, { color: Colors.onSurfaceVariant }]}>Ingredient not found</Text>
+        </View>
+      </>
+    );
+  }
+
+  const formContent = (
+    <ScrollView
+      ref={scrollRef}
+      contentContainerStyle={contentStyle}
+      style={styles.container}
+      keyboardShouldPersistTaps="handled">
+      <View style={sectionStyle}>
+        <Text style={[styles.label, { color: Colors.onSurface }]}>Name</Text>
+        <TextInput
+          value={name}
+          onChangeText={setName}
+          placeholder="e.g. Ginger syrup"
+          style={[
+            styles.input,
+            { borderColor: Colors.outlineVariant, color: Colors.text, backgroundColor: Colors.surface },
+          ]}
+          placeholderTextColor={`${Colors.onSurfaceVariant}99`}
+        />
+      </View>
+
+      <View style={styles.photoTileWrapper}>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={placeholderLabel}
+          style={[
+            styles.imagePlaceholder,
+            { borderColor: Colors.outlineVariant },
+            !imageSource && { backgroundColor: Colors.surface },
+          ]}
+          onPress={handlePickImage}
+          android_ripple={{ color: `${Colors.surface}33` }}>
+          {imageSource ? (
+            <Image source={imageSource} style={styles.image} contentFit="contain" />
+          ) : (
+            <View style={styles.placeholderContent}>
+              <MaterialCommunityIcons name="image-plus" size={28} color={`${Colors.onSurfaceVariant}99`} />
+              <Text style={[styles.placeholderHint, { color: `${Colors.onSurfaceVariant}99` }]}>Tap to add a photo</Text>
+            </View>
+          )}
+          {imageSource ? (
+            <View
+              pointerEvents="none"
+              style={[styles.cropFrame, { borderColor: Colors.tint }]}
+              accessibilityElementsHidden
+              importantForAccessibility="no-hide-descendants"
+            />
+          ) : null}
+        </Pressable>
+        {imageSource ? (
+          <Pressable
+            onPress={handleRemoveImage}
+            hitSlop={8}
+            style={styles.removePhotoButton}
+            accessibilityRole="button"
+            accessibilityLabel="Remove photo">
+            <MaterialCommunityIcons name="trash-can-outline" size={18} color={Colors.error} />
+          </Pressable>
+        ) : null}
+      </View>
+
+      <View style={sectionStyle}>
+        <View style={styles.tagHeader}>
+          <Text style={[styles.label, { color: Colors.onSurface }]}>Tags</Text>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="Create tag"
+            onPress={handleOpenTagModal}
+            style={[styles.tagAddButton, { borderColor: Colors.outlineVariant }]}>
+            <MaterialCommunityIcons name="plus" size={16} color={Colors.tint} />
+            <Text style={[styles.tagAddLabel, { color: Colors.tint }]}>Create tag</Text>
+          </Pressable>
+        </View>
+        <Text style={[hintStyle, { color: Colors.onSurfaceVariant }]}>Select one or more tags</Text>
+        <View style={tagListStyle}>
+          {tagSelection.map((tag) => (
+            <TagPill
+              key={tag.id}
+              label={tag.name}
+              color={tag.color}
+              selected={tag.selected}
+              onPress={() => toggleTag(tag.id)}
+              accessibilityRole="checkbox"
+              accessibilityState={{ checked: tag.selected }}
+              androidRippleColor={`${Colors.surface}33`}
+            />
+          ))}
+        </View>
+      </View>
+
+      <View style={sectionStyle}>
+        <Text style={[styles.label, { color: Colors.onSurface }]}>Base ingredient</Text>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={baseIngredient ? 'Change base ingredient' : 'Select base ingredient'}
+          onPress={handleOpenBaseModal}
+          style={[styles.baseSelector, { borderColor: Colors.outlineVariant, backgroundColor: Colors.surface }]}>
+          {baseIngredient ? (
+            <>
+              <View style={styles.baseInfo}>
+                <View style={styles.baseThumb}>
+                  {baseIngredientPhotoSource ? (
+                    <Image source={baseIngredientPhotoSource} style={styles.baseImage} contentFit="contain" />
+                  ) : (
+                    <View style={[styles.basePlaceholder, { backgroundColor: Colors.onSurfaceVariant }]}>
+                      <MaterialCommunityIcons name="image-off" size={20} color={Colors.onSurfaceVariant} />
+                    </View>
+                  )}
+                </View>
+                <Text style={[styles.baseName, { color: Colors.onSurface }]} numberOfLines={2}>
+                  {baseIngredient.name}
+                </Text>
+              </View>
+              <Pressable
+                onPress={handleClearBaseIngredient}
+                accessibilityRole="button"
+                accessibilityLabel="Remove base ingredient"
+                hitSlop={8}
+                style={styles.unlinkButton}>
+                <MaterialCommunityIcons name="link-off" size={20} color={Colors.error} />
+              </Pressable>
+            </>
+          ) : (
+            <View style={styles.basePlaceholderRow}>
+              <Text style={[styles.basePlaceholderText, { color: Colors.onSurfaceVariant }]}>None</Text>
+            </View>
+          )}
+        </Pressable>
+      </View>
+
+      <View style={[sectionStyle, styles.descriptionSection]}>
+        <Text style={[styles.label, { color: Colors.onSurface }]}>Description</Text>
+        <TextInput
+          value={description}
+          onChangeText={setDescription}
+          placeholder="Add tasting notes or usage suggestions"
+          style={[
+            styles.input,
+            styles.multilineInput,
+            { borderColor: Colors.outlineVariant, color: Colors.text, backgroundColor: Colors.surface },
+          ]}
+          placeholderTextColor={`${Colors.onSurfaceVariant}99`}
+          multiline
+          numberOfLines={4}
+          textAlignVertical="top"
+          onFocus={(event) => scrollFieldIntoView(event.nativeEvent.target)}
+        />
+      </View>
+
+      <Pressable
+        accessibilityRole="button"
+        style={[submitButtonStyle, { backgroundColor: Colors.tint, opacity: isSaving ? 0.6 : 1 }]}
+        onPress={handleSubmit}
+        disabled={isSaving || isPickingImage}>
+        <Text style={[styles.submitLabel, { color: Colors.onPrimary }]}>
+          {isEditMode ? 'Save changes' : 'Save'}
+        </Text>
+      </Pressable>
+      <View style={styles.bottomSpacer} />
+    </ScrollView>
+  );
+
   return (
     <>
       <Stack.Screen
         options={{
-          title: 'Add ingredient',
+          title: isEditMode ? 'Edit ingredient' : 'Add ingredient',
           headerTitleAlign: 'center',
           headerStyle: { backgroundColor: Colors.surface },
           headerShadowVisible: false,
@@ -639,184 +1048,35 @@ export default function CreateIngredientScreen() {
               <MaterialCommunityIcons name="arrow-left" size={22} color={Colors.onSurface} />
             </Pressable>
           ),
+          headerRight: () =>
+            isEditMode ? (
+              <Pressable
+                onPress={handleDeletePress}
+                accessibilityRole="button"
+                accessibilityLabel="Delete ingredient"
+                style={styles.headerButton}
+                hitSlop={8}>
+                <MaterialIcons name="delete-outline" size={22} color={Colors.onSurface} />
+              </Pressable>
+            ) : null,
         }}
       />
-      <KeyboardAvoidingView
-        style={styles.flex}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        keyboardVerticalOffset={Platform.select({ ios: 96, default: 0 })}>
-        <ScrollView
-          ref={scrollRef}
-          contentContainerStyle={styles.content}
-          style={[styles.container, { backgroundColor: Colors.background }]}
-          keyboardShouldPersistTaps="handled">
-          <View style={styles.section}>
-            <Text style={[styles.label, { color: Colors.onSurface }]}>Name</Text>
-            <TextInput
-              value={name}
-              onChangeText={setName}
-              placeholder="e.g. Ginger syrup"
-              style={[
-                styles.input,
-                { borderColor: Colors.outlineVariant, color: Colors.text, backgroundColor: Colors.surface },
-              ]}
-              placeholderTextColor={`${Colors.onSurfaceVariant}99`}
-            />
-          </View>
-
-          <View style={styles.photoTileWrapper}>
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel={placeholderLabel}
-              style={[
-                styles.imagePlaceholder,
-                { borderColor: Colors.outlineVariant },
-                !imageUri && { backgroundColor: Colors.surface },
-              ]}
-              onPress={handlePickImage}
-              android_ripple={{ color: `${Colors.surface}33` }}>
-              {imageUri ? (
-                <Image source={{ uri: imageUri }} style={styles.image} contentFit="contain" />
-              ) : (
-                <View style={styles.placeholderContent}>
-                  <MaterialCommunityIcons name="image-plus" size={28} color={`${Colors.onSurfaceVariant}99`} />
-                  <Text style={[styles.placeholderHint, { color: `${Colors.onSurfaceVariant}99` }]}>
-                    Tap to add a photo
-                  </Text>
-                </View>
-              )}
-              {imageUri ? (
-                <View
-                  pointerEvents="none"
-                  style={[styles.cropFrame, { borderColor: Colors.tint }]}
-                  accessibilityElementsHidden
-                  importantForAccessibility="no-hide-descendants"
-                />
-              ) : null}
-            </Pressable>
-            {imageUri ? (
-              <Pressable
-                onPress={handleRemoveImage}
-                hitSlop={8}
-                style={styles.removePhotoButton}
-                accessibilityRole="button"
-                accessibilityLabel="Remove photo">
-                <MaterialCommunityIcons name="trash-can-outline" size={18} color={Colors.error} />
-              </Pressable>
-            ) : null}
-          </View>
-
-          <View style={styles.section}>
-            <View style={styles.tagHeader}>
-              <Text style={[styles.label, { color: Colors.onSurface }]}>Tags</Text>
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel="Create tag"
-                onPress={handleOpenTagModal}
-                style={[styles.tagAddButton, { borderColor: Colors.outlineVariant }]}>
-                <MaterialCommunityIcons name="plus" size={16} color={Colors.tint} />
-                <Text style={[styles.tagAddLabel, { color: Colors.tint }]}>Create tag</Text>
-              </Pressable>
-            </View>
-            <Text style={[styles.hint, { color: Colors.onSurfaceVariant }]}>Select one or more tags</Text>
-            <View style={styles.tagList}>
-              {tagSelection.map((tag) => (
-                <TagPill
-                  key={tag.id}
-                  label={tag.name}
-                  color={tag.color}
-                  selected={tag.selected}
-                  onPress={() => toggleTag(tag.id)}
-                  accessibilityRole="checkbox"
-                  accessibilityState={{ checked: tag.selected }}
-                  androidRippleColor={`${Colors.surface}33`}
-                />
-              ))}
-            </View>
-          </View>
-
-          <View style={styles.section}>
-            <Text style={[styles.label, { color: Colors.onSurface }]}>Base ingredient</Text>
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel={baseIngredient ? 'Change base ingredient' : 'Select base ingredient'}
-              onPress={handleOpenBaseModal}
-              style={[styles.baseSelector, { borderColor: Colors.outlineVariant, backgroundColor: Colors.surface }]}>
-              {baseIngredient ? (
-                <>
-                  <View style={styles.baseInfo}>
-                    <View style={styles.baseThumb}>
-                      {baseIngredientPhotoSource ? (
-                        <Image source={baseIngredientPhotoSource} style={styles.baseImage} contentFit="contain" />
-                      ) : (
-                        <View style={[styles.basePlaceholder, { backgroundColor: Colors.onSurfaceVariant }]}>
-                          <MaterialCommunityIcons name="image-off" size={20} color={Colors.onSurfaceVariant} />
-                        </View>
-                      )}
-                    </View>
-                    <Text style={[styles.baseName, { color: Colors.onSurface }]} numberOfLines={2}>
-                      {baseIngredient.name}
-                    </Text>
-                  </View>
-                  <Pressable
-                    onPress={handleClearBaseIngredient}
-                    accessibilityRole="button"
-                    accessibilityLabel="Remove base ingredient"
-                    hitSlop={8}
-                    style={styles.unlinkButton}>
-                    <MaterialCommunityIcons name="link-off" size={20} color={Colors.error} />
-                  </Pressable>
-                </>
-              ) : (
-                <View style={styles.basePlaceholderRow}>
-                  
-                  <Text style={[styles.basePlaceholderText, { color: Colors.onSurfaceVariant }]}>
-                    None
-                  </Text>
-                </View>
-              )}
-            </Pressable>
-          </View>
-
-          <View style={[styles.section, styles.descriptionSection]}>
-            <Text style={[styles.label, { color: Colors.onSurface }]}>Description</Text>
-            <TextInput
-              value={description}
-              onChangeText={setDescription}
-              placeholder="Add tasting notes or usage suggestions"
-              style={[
-                styles.input,
-                styles.multilineInput,
-                { borderColor: Colors.outlineVariant, color: Colors.text, backgroundColor: Colors.surface },
-              ]}
-              placeholderTextColor={`${Colors.onSurfaceVariant}99`}
-              multiline
-              numberOfLines={4}
-              textAlignVertical="top"
-              onFocus={(event) => scrollFieldIntoView(event.nativeEvent.target)}
-            />
-          </View>
-
-          <Pressable
-            accessibilityRole="button"
-            style={[
-              styles.submitButton,
-              { backgroundColor: Colors.tint, opacity: isSaving ? 0.6 : 1 },
-            ]}
-            onPress={handleSubmit}
-            disabled={isSaving || isPickingImage}>
-            <Text style={[styles.submitLabel, { color: Colors.onPrimary }]}>Save</Text>
-          </Pressable>
-          <View style={styles.bottomSpacer} />
-        </ScrollView>
-      </KeyboardAvoidingView>
+      {isEditMode ? (
+        formContent
+      ) : (
+        <KeyboardAvoidingView
+          style={styles.flex}
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+          keyboardVerticalOffset={Platform.select({ ios: 96, default: 0 })}>
+          {formContent}
+        </KeyboardAvoidingView>
+      )}
 
       <Modal
         visible={isBaseModalVisible}
         transparent
         animationType="fade"
-        onRequestClose={handleCloseBaseModal}
-      >
+        onRequestClose={handleCloseBaseModal}>
         <Pressable style={styles.modalOverlay} onPress={handleCloseBaseModal} accessibilityRole="button">
           <Pressable
             onPress={(event) => event.stopPropagation?.()}
@@ -828,8 +1088,7 @@ export default function CreateIngredientScreen() {
                 shadowColor: Colors.shadow,
               },
             ]}
-            accessibilityRole="menu"
-          >
+            accessibilityRole="menu">
             <View style={styles.modalHeader}>
               <Text style={[styles.modalTitle, { color: Colors.onSurface }]}>Select base ingredient</Text>
               <Pressable onPress={handleCloseBaseModal} accessibilityRole="button" accessibilityLabel="Close">
@@ -896,12 +1155,26 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.background,
   },
-  content: {
+  headerButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  contentCreate: {
     padding: 16,
     gap: 20,
   },
-  section: {
+  contentEdit: {
+    padding: 24,
+    gap: 24,
+  },
+  sectionCreate: {
     gap: 10,
+  },
+  sectionEdit: {
+    gap: 8,
   },
   descriptionSection: {
     paddingBottom: 0,
@@ -910,8 +1183,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
-  hint: {
+  hintCreate: {
     fontSize: 14,
+  },
+  hintEdit: {
+    fontSize: 12,
   },
   input: {
     borderWidth: StyleSheet.hairlineWidth,
@@ -959,6 +1235,16 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     position: 'relative',
   },
+  removePhotoButton: {
+    position: 'absolute',
+    top: 8,
+    right: 8,
+    padding: 4,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 8,
+    backgroundColor: Colors.surface,
+  },
   placeholderContent: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -971,9 +1257,6 @@ const styles = StyleSheet.create({
   placeholderHint: {
     fontSize: 12,
     textAlign: 'center',
-  },
-  bottomSpacer: {
-    height: 250,
   },
   tagHeader: {
     flexDirection: 'row',
@@ -994,17 +1277,31 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '600',
   },
-  tagList: {
+  tagListCreate: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 10,
   },
-  submitButton: {
+  tagListEdit: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 12,
+  },
+  bottomSpacer: {
+    height: 250,
+  },
+  submitButtonCreate: {
     borderRadius: 12,
     paddingVertical: 16,
     alignItems: 'center',
     justifyContent: 'center',
     minHeight: 56,
+  },
+  submitButtonEdit: {
+    borderRadius: 12,
+    paddingVertical: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   submitLabel: {
     fontSize: 16,
@@ -1118,21 +1415,15 @@ const styles = StyleSheet.create({
     fontSize: 14,
     paddingVertical: 24,
   },
-  headerButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  removePhotoButton: {
-    position: 'absolute',
-    top: 8,
-    right: 8,
-    padding: 4,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 8,
+  emptyState: {
+    flex: 1,
     backgroundColor: Colors.surface,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 24,
+  },
+  emptyMessage: {
+    fontSize: 14,
+    textAlign: 'center',
   },
 });

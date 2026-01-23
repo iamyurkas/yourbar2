@@ -779,13 +779,13 @@ export default function CreateCocktailScreen() {
     if (!trimmed) {
       router.push({
         pathname: '/ingredients/create',
-        params: { returnToPath: '/cocktails/create', returnToParams },
+        params: { mode: 'create', returnToPath: '/cocktails/create', returnToParams },
       });
       return;
     }
     router.push({
       pathname: '/ingredients/create',
-      params: { suggestedName: trimmed, returnToPath: '/cocktails/create', returnToParams },
+      params: { mode: 'create', suggestedName: trimmed, returnToPath: '/cocktails/create', returnToParams },
     });
   }, [returnToParams]);
 

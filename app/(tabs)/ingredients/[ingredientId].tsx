@@ -330,8 +330,8 @@ export default function IngredientDetailsScreen() {
     }
 
     router.push({
-      pathname: "/ingredients/[ingredientId]/edit",
-      params: { ingredientId: String(targetId) },
+      pathname: "/ingredients/create",
+      params: { ingredientId: String(targetId), mode: "edit" },
     });
   }, [ingredient]);
 
