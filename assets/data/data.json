@@ -3403,7 +3403,7 @@
       "id": 1756506444466,
       "name": "Banana Calling",
       "description": "A bright and aromatic gin sour balancing botanical gin, dry sherry and ripe banana liqueur with fresh citrus and a subtle touch of sweetness for a crisp yet tropical sip.",
-      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 50ml of Gin, 10ml of Dry Sherry, 15ml of Banana Liqueur, 20ml of Lemon Juice, and 10ml of Simple Syrup.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Goblet glass.\n5. Garnish with a slice of Banana and a twist of Lemon",
+      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 50ml of Gin, 10ml of Dry Sherry, 15ml of Banana Liqueur, 20ml of Lemon Juice, and 10ml of Simple Syrup.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Goblet glass.\n5. Garnish with a slice of banana or a lemon twist.",
       "photoUri": "assets/cocktails/1756506444466-banana-calling.jpg",
       "glassId": "goblet",
       "methodIds": ["shake"],
@@ -4496,7 +4496,7 @@
       "id": 1755800000053,
       "name": "Bee's Knees",
       "description": "A Prohibition-era mix of gin, lemon, and honey for a bright, silky sour.",
-      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 60ml of Gin, 15ml of Honey Syrup, 25ml of Lemon Juice, and 25ml of Orange Juice.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Martini glass.\n5. Garnish with a twist of Lemon and a twist of Orange",
+      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 60ml of Gin, 15ml of Honey Syrup, 25ml of Lemon Juice, and 25ml of Orange Juice.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Martini glass.\n5. Garnish with a  lemon or orange twist.",
       "photoUri": "assets/cocktails/1755800000053-bees-knees.jpg",
       "glassId": "martini",
       "methodIds": ["shake"],
@@ -4554,16 +4554,14 @@
           "name": "Lemon",
           "amount": "1",
           "unitId": 26,
-          "garnish": true
-        },
-        {
-          "order": 7,
-          "ingredientId": 454059,
-          "name": "Orange",
-          "amount": "1",
-          "unitId": 26,
-          "optional": true,
-          "garnish": true
+          "garnish": true,
+          "substitutes": [
+            {
+              "id": 454059,
+              "ingredientId": 454059,
+              "name": "Orange"
+            }
+          ]
         }
       ]
     },
@@ -11318,7 +11316,7 @@
       "id": 1757000000134,
       "name": "Dandy",
       "description": "A bold, spirit-forward whiskey drink built around Whisky, Dubonnet, Cointreau—bitter-leaning, aromatic, and best served well chilled. Garnished with orange.",
-      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 45ml of Whiskey, 45ml of Dubonnet, 15ml of Cointreau, and 1 dash of Angostura Bitters.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Martini glass.\n5. Garnish with a twist of Orange and a twist of Lemon",
+      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 45ml of Whiskey, 45ml of Dubonnet, 15ml of Cointreau, and 1 dash of Angostura Bitters.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Martini glass.\n5. Garnish with a twist of orange or lemon.",
       "photoUri": "assets/cocktails/1757000000134-dandy.jpg",
       "glassId": "martini",
       "methodIds": ["shake"],
@@ -11379,15 +11377,14 @@
           "name": "Orange",
           "amount": "1",
           "unitId": 26,
-          "garnish": true
-        },
-        {
-          "order": 7,
-          "ingredientId": 108496,
-          "name": "Lemon",
-          "amount": "1",
-          "unitId": 26,
-          "garnish": true
+          "garnish": true,
+          "substitutes": [
+            {
+              "id": 108496,
+              "ingredientId": 108496,
+              "name": "Lemon"
+            }
+          ]
         }
       ]
     },
@@ -13639,7 +13636,7 @@
       "id": 1759432761867,
       "name": "Flip #27",
       "description": "A sophisticated and velvety dessert cocktail that masterfully blends the richness of Port with the deep notes of Aged Rum. The addition of raspberry syrup and heavy cream creates a luxurious, smooth texture, while the whole egg provides the classic frothy 'flip' finish.",
-      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 30ml of Port, 30ml of Aged Rum, 15ml of Raspberry Syrup, 15ml of Heavy Cream, and 1 Egg.\n3. Dry shake (without ice) vigorously for about 15 seconds to emulsify egg.\n4. Add ice and shake vigorously for about 15 seconds until well chilled.\n5. Strain into chilled Goblet glass.\n6. Garnish with 2 Raspberries.",
+      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 30ml of Port, 30ml of Aged Rum, 15ml of Raspberry Syrup, 15ml of Heavy Cream, and 1 Egg.\n3. Dry shake (without ice) vigorously for about 20 seconds to emulsify egg.\n4. Add ice and shake vigorously for about 15 seconds until well chilled.\n5. Strain into chilled Goblet glass.\n6. Garnish with 2 Raspberries.",
       "photoUri": "assets/cocktails/1759432761867-flip-27.jpg",
       "glassId": "goblet",
       "methodIds": ["shake"],
@@ -31400,7 +31397,7 @@
     },
     {
       "id": 1757000000292,
-      "name": "Tom and Jerry",
+      "name": "Tom & Jerry",
       "description": "A legendary warm holiday punch that serves as a creamy, spiced embrace during the winter season.",
       "instructions": "1. Separate the egg white from the yolk and beat them in separate bowls until the whites are stiff and yolks are creamy.\n2. Gently fold the egg whites into the yolks in an Irish coffee glass or mug.\n3. Add simple syrup, dark rum, and cognac to the egg mixture.\n4. Fill the rest of the glass with hot milk while stirring gently to combine.\n5. Garnish with a generous dusting of freshly grated nutmeg.",
       "photoUri": "assets/cocktails/1757000000292-tom-and-jerry.jpg",
