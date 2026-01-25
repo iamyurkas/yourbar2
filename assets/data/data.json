@@ -15,6 +15,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -406,6 +411,11 @@
           "id": 7,
           "name": "soft",
           "color": "#FFD54F"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -549,6 +559,11 @@
           "id": 5,
           "name": "strong",
           "color": "#ec5a5a"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -1452,6 +1467,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -1681,6 +1701,11 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -2084,6 +2109,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -2165,6 +2195,11 @@
           "id": 3,
           "name": "Contemporary",
           "color": "#64B5F6"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -2577,6 +2612,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -3011,6 +3051,11 @@
           "id": 5,
           "name": "strong",
           "color": "#ec5a5a"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -5026,6 +5071,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -5126,6 +5176,11 @@
           "id": 5,
           "name": "strong",
           "color": "#ec5a5a"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -6660,6 +6715,11 @@
           "id": 3,
           "name": "Contemporary",
           "color": "#64B5F6"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -8618,6 +8678,11 @@
           "id": 8,
           "name": "long",
           "color": "#FFB74D"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -9043,6 +9108,11 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -10137,6 +10207,11 @@
           "id": 5,
           "name": "strong",
           "color": "#ec5a5a"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -10419,6 +10494,11 @@
           "id": 5,
           "name": "strong",
           "color": "#ec5a5a"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -10544,6 +10624,11 @@
           "id": 5,
           "name": "strong",
           "color": "#ec5a5a"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -11039,6 +11124,11 @@
           "id": 5,
           "name": "strong",
           "color": "#ec5a5a"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -11643,6 +11733,11 @@
           "id": 5,
           "name": "strong",
           "color": "#ec5a5a"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -12984,6 +13079,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -13120,6 +13220,11 @@
           "id": 5,
           "name": "strong",
           "color": "#ec5a5a"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -13361,6 +13466,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -13430,6 +13540,11 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -13600,6 +13715,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -14114,6 +14234,11 @@
           "id": 5,
           "name": "strong",
           "color": "#ec5a5a"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -15004,6 +15129,11 @@
           "id": 3,
           "name": "Contemporary",
           "color": "#64B5F6"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -16589,6 +16719,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -16755,6 +16890,11 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -16880,6 +17020,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -18636,6 +18781,7 @@
       "methodIds": [
         "build"
       ],
+      "tags": [],
       "ingredients": [
         {
           "order": 1,
@@ -19452,6 +19598,11 @@
           "id": 4,
           "name": "Tiki",
           "color": "#4DD0E1"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -19596,6 +19747,11 @@
           "id": 5,
           "name": "strong",
           "color": "#ec5a5a"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -20139,6 +20295,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -20603,6 +20764,11 @@
           "id": 5,
           "name": "strong",
           "color": "#ec5a5a"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -20659,6 +20825,11 @@
           "id": 5,
           "name": "strong",
           "color": "#ec5a5a"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -20722,6 +20893,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -20819,6 +20995,11 @@
           "id": 5,
           "name": "strong",
           "color": "#ec5a5a"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -21388,6 +21569,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -21627,6 +21813,11 @@
           "id": 5,
           "name": "strong",
           "color": "#ec5a5a"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -21690,6 +21881,11 @@
           "id": 5,
           "name": "strong",
           "color": "#ec5a5a"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -22261,6 +22457,11 @@
           "id": 7,
           "name": "soft",
           "color": "#FFD54F"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -23131,6 +23332,11 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -23256,6 +23462,11 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -23319,6 +23530,11 @@
           "id": 5,
           "name": "strong",
           "color": "#ec5a5a"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -24591,6 +24807,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -24681,6 +24902,11 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -25519,6 +25745,11 @@
           "id": 5,
           "name": "strong",
           "color": "#ec5a5a"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -25725,6 +25956,11 @@
           "id": 5,
           "name": "strong",
           "color": "#ec5a5a"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -25794,6 +26030,11 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -26107,6 +26348,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -26656,6 +26902,11 @@
           "id": 5,
           "name": "strong",
           "color": "#ec5a5a"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -28058,6 +28309,11 @@
           "id": 5,
           "name": "strong",
           "color": "#ec5a5a"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -28917,6 +29173,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -29742,6 +30003,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -30554,6 +30820,13 @@
       "methodIds": [
         "build"
       ],
+      "tags": [
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
+        }
+      ],
       "ingredients": [
         {
           "order": 1,
@@ -30817,6 +31090,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -31193,6 +31471,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -31378,6 +31661,11 @@
           "id": 5,
           "name": "strong",
           "color": "#ec5a5a"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -31468,6 +31756,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -31894,6 +32187,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -32264,6 +32562,11 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -34337,6 +34640,11 @@
           "id": 5,
           "name": "strong",
           "color": "#ec5a5a"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -34676,6 +34984,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
