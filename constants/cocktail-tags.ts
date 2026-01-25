@@ -4,7 +4,7 @@ import { TAG_COLORS } from './tag-colors';
 export const BUILTIN_COCKTAIL_TAGS = [
   { id: 1, name: 'IBA Official', color: TAG_COLORS[9] },
   { id: 2, name: 'Bitter', color: TAG_COLORS[3] },
-  { id: 3, name: 'Contemporary', color: TAG_COLORS[5] },
+  { id: 3, name: 'Equal Parts', color: TAG_COLORS[5] },
   { id: 4, name: 'Tiki', color: TAG_COLORS[7] },
   { id: 5, name: 'strong', color: TAG_COLORS[0] },
   { id: 6, name: 'moderate', color: TAG_COLORS[1] },
