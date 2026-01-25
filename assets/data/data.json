@@ -13,6 +13,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -83,11 +88,6 @@
       "glassId": "coupe",
       "methodIds": ["shake"],
       "tags": [
-        {
-          "id": 4,
-          "name": "New Era",
-          "color": "#4DD0E1"
-        },
         {
           "id": 5,
           "name": "strong",
@@ -343,6 +343,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 3,
+          "name": "Equal Parts",
+          "color": "#64B5F6"
         }
       ],
       "ingredients": [
@@ -397,6 +402,11 @@
           "id": 7,
           "name": "soft",
           "color": "#FFD54F"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -536,6 +546,16 @@
           "id": 5,
           "name": "strong",
           "color": "#ec5a5a"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
+        },
+        {
+          "id": 3,
+          "name": "Equal Parts",
+          "color": "#64B5F6"
         }
       ],
       "ingredients": [
@@ -1413,6 +1433,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -1639,8 +1664,13 @@
         },
         {
           "id": 2,
-          "name": "Unforgettables",
+          "name": "Bitter",
           "color": "#9575CD"
+        },
+        {
+          "id": 3,
+          "name": "Equal Parts",
+          "color": "#64B5F6"
         }
       ],
       "ingredients": [
@@ -1857,9 +1887,9 @@
           "color": "#81C784"
         },
         {
-          "id": 2,
-          "name": "Unforgettables",
-          "color": "#9575CD"
+          "id": 3,
+          "name": "Equal Parts",
+          "color": "#64B5F6"
         }
       ],
       "ingredients": [
@@ -2037,6 +2067,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -2113,9 +2148,9 @@
           "color": "#81C784"
         },
         {
-          "id": 3,
-          "name": "Contemporary",
-          "color": "#64B5F6"
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -2515,6 +2550,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -2591,11 +2631,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 2,
-          "name": "Unforgettables",
-          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -2788,6 +2823,11 @@
           "id": 5,
           "name": "strong",
           "color": "#ec5a5a"
+        },
+        {
+          "id": 3,
+          "name": "Equal Parts",
+          "color": "#64B5F6"
         }
       ],
       "ingredients": [
@@ -2940,6 +2980,16 @@
           "id": 5,
           "name": "strong",
           "color": "#ec5a5a"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
+        },
+        {
+          "id": 3,
+          "name": "Equal Parts",
+          "color": "#64B5F6"
         }
       ],
       "ingredients": [
@@ -3013,6 +3063,11 @@
           "id": 8,
           "name": "long",
           "color": "#FFB74D"
+        },
+        {
+          "id": 4,
+          "name": "Tiki",
+          "color": "#4DD0E1"
         }
       ],
       "ingredients": [
@@ -3120,6 +3175,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 4,
+          "name": "Tiki",
+          "color": "#4DD0E1"
         }
       ],
       "ingredients": [
@@ -3236,6 +3296,11 @@
           "id": 5,
           "name": "strong",
           "color": "#ec5a5a"
+        },
+        {
+          "id": 3,
+          "name": "Equal Parts",
+          "color": "#64B5F6"
         }
       ],
       "ingredients": [
@@ -4456,11 +4521,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 4,
-          "name": "New Era",
-          "color": "#4DD0E1"
         }
       ],
       "ingredients": [
@@ -4595,11 +4655,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 4,
-          "name": "New Era",
-          "color": "#4DD0E1"
         }
       ],
       "ingredients": [
@@ -4761,11 +4816,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 2,
-          "name": "Unforgettables",
-          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -4903,6 +4953,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -5001,6 +5056,11 @@
           "id": 5,
           "name": "strong",
           "color": "#ec5a5a"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -5088,11 +5148,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 3,
-          "name": "Contemporary",
-          "color": "#64B5F6"
         }
       ],
       "ingredients": [
@@ -5221,6 +5276,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 3,
+          "name": "Equal Parts",
+          "color": "#64B5F6"
         }
       ],
       "ingredients": [
@@ -5299,11 +5359,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 3,
-          "name": "Contemporary",
-          "color": "#64B5F6"
         }
       ],
       "ingredients": [
@@ -5455,6 +5510,11 @@
           "id": 8,
           "name": "long",
           "color": "#FFB74D"
+        },
+        {
+          "id": 4,
+          "name": "Tiki",
+          "color": "#4DD0E1"
         }
       ],
       "ingredients": [
@@ -6478,9 +6538,9 @@
           "color": "#81C784"
         },
         {
-          "id": 3,
-          "name": "Contemporary",
-          "color": "#64B5F6"
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -6585,11 +6645,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 4,
-          "name": "New Era",
-          "color": "#4DD0E1"
         }
       ],
       "ingredients": [
@@ -6669,11 +6724,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 2,
-          "name": "Unforgettables",
-          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -6740,11 +6790,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 2,
-          "name": "Unforgettables",
-          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -7811,6 +7856,11 @@
           "id": 7,
           "name": "soft",
           "color": "#FFD54F"
+        },
+        {
+          "id": 3,
+          "name": "Equal Parts",
+          "color": "#64B5F6"
         }
       ],
       "ingredients": [
@@ -7999,11 +8049,6 @@
           "color": "#81C784"
         },
         {
-          "id": 3,
-          "name": "Contemporary",
-          "color": "#64B5F6"
-        },
-        {
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
@@ -8055,11 +8100,6 @@
           "color": "#81C784"
         },
         {
-          "id": 3,
-          "name": "Contemporary",
-          "color": "#64B5F6"
-        },
-        {
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
@@ -8109,11 +8149,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 3,
-          "name": "Contemporary",
-          "color": "#64B5F6"
         },
         {
           "id": 6,
@@ -8175,11 +8210,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 3,
-          "name": "Contemporary",
-          "color": "#64B5F6"
         },
         {
           "id": 6,
@@ -8394,6 +8424,11 @@
           "id": 8,
           "name": "long",
           "color": "#FFB74D"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -8503,11 +8538,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 4,
-          "name": "New Era",
-          "color": "#4DD0E1"
         }
       ],
       "ingredients": [
@@ -8813,9 +8843,9 @@
           "color": "#81C784"
         },
         {
-          "id": 4,
-          "name": "New Era",
-          "color": "#4DD0E1"
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -9141,11 +9171,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 2,
-          "name": "Unforgettables",
-          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -9215,11 +9240,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 2,
-          "name": "Unforgettables",
-          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -9447,11 +9467,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 4,
-          "name": "New Era",
-          "color": "#4DD0E1"
         }
       ],
       "ingredients": [
@@ -9896,6 +9911,11 @@
           "id": 5,
           "name": "strong",
           "color": "#ec5a5a"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -10024,11 +10044,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 2,
-          "name": "Unforgettables",
-          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -10171,14 +10186,19 @@
       "methodIds": ["build"],
       "tags": [
         {
-          "id": 4,
-          "name": "New Era",
-          "color": "#4DD0E1"
-        },
-        {
           "id": 5,
           "name": "strong",
           "color": "#ec5a5a"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
+        },
+        {
+          "id": 3,
+          "name": "Equal Parts",
+          "color": "#64B5F6"
         }
       ],
       "ingredients": [
@@ -10300,6 +10320,11 @@
           "id": 5,
           "name": "strong",
           "color": "#ec5a5a"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -10510,9 +10535,9 @@
           "color": "#81C784"
         },
         {
-          "id": 2,
-          "name": "Unforgettables",
-          "color": "#9575CD"
+          "id": 3,
+          "name": "Equal Parts",
+          "color": "#64B5F6"
         }
       ],
       "ingredients": [
@@ -10581,11 +10606,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 4,
-          "name": "New Era",
-          "color": "#4DD0E1"
         }
       ],
       "ingredients": [
@@ -10791,6 +10811,11 @@
           "id": 5,
           "name": "strong",
           "color": "#ec5a5a"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -10893,11 +10918,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 3,
-          "name": "Contemporary",
-          "color": "#64B5F6"
         }
       ],
       "ingredients": [
@@ -11032,11 +11052,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 2,
-          "name": "Unforgettables",
-          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -11331,11 +11346,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 3,
-          "name": "Contemporary",
-          "color": "#64B5F6"
         }
       ],
       "ingredients": [
@@ -11384,6 +11394,11 @@
           "id": 5,
           "name": "strong",
           "color": "#ec5a5a"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -11501,6 +11516,11 @@
           "id": 5,
           "name": "strong",
           "color": "#ec5a5a"
+        },
+        {
+          "id": 3,
+          "name": "Equal Parts",
+          "color": "#64B5F6"
         }
       ],
       "ingredients": [
@@ -12014,7 +12034,7 @@
         },
         {
           "id": 4,
-          "name": "New Era",
+          "name": "Tiki",
           "color": "#4DD0E1"
         }
       ],
@@ -12200,11 +12220,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 2,
-          "name": "Unforgettables",
-          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -12690,6 +12705,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -12822,6 +12842,16 @@
           "id": 5,
           "name": "strong",
           "color": "#ec5a5a"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
+        },
+        {
+          "id": 3,
+          "name": "Equal Parts",
+          "color": "#64B5F6"
         }
       ],
       "ingredients": [
@@ -12987,11 +13017,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 4,
-          "name": "New Era",
-          "color": "#4DD0E1"
         }
       ],
       "ingredients": [
@@ -13060,6 +13085,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -13129,9 +13159,9 @@
           "color": "#81C784"
         },
         {
-          "id": 4,
-          "name": "New Era",
-          "color": "#4DD0E1"
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -13184,6 +13214,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 3,
+          "name": "Equal Parts",
+          "color": "#64B5F6"
         }
       ],
       "ingredients": [
@@ -13296,6 +13331,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -13434,6 +13474,11 @@
           "id": 8,
           "name": "long",
           "color": "#FFB74D"
+        },
+        {
+          "id": 4,
+          "name": "Tiki",
+          "color": "#4DD0E1"
         }
       ],
       "ingredients": [
@@ -13789,6 +13834,11 @@
           "id": 5,
           "name": "strong",
           "color": "#ec5a5a"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -13849,11 +13899,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 2,
-          "name": "Unforgettables",
-          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -13919,7 +13964,7 @@
         },
         {
           "id": 3,
-          "name": "Contemporary",
+          "name": "Equal Parts",
           "color": "#64B5F6"
         }
       ],
@@ -14090,11 +14135,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 4,
-          "name": "New Era",
-          "color": "#4DD0E1"
         }
       ],
       "ingredients": [
@@ -14551,6 +14591,11 @@
           "id": 8,
           "name": "long",
           "color": "#FFB74D"
+        },
+        {
+          "id": 3,
+          "name": "Equal Parts",
+          "color": "#64B5F6"
         }
       ],
       "ingredients": [
@@ -14659,9 +14704,9 @@
           "color": "#81C784"
         },
         {
-          "id": 3,
-          "name": "Contemporary",
-          "color": "#64B5F6"
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -15114,11 +15159,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 4,
-          "name": "New Era",
-          "color": "#4DD0E1"
         }
       ],
       "ingredients": [
@@ -15188,11 +15228,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 2,
-          "name": "Unforgettables",
-          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -15655,27 +15690,34 @@
       "ingredients": [
         {
           "order": 1,
-          "ingredientId": 872324,
-          "name": "Galliano",
-          "amount": "20",
+          "ingredientId": 838213,
+          "name": "Creme de Cacao White",
+          "amount": "30",
           "unitId": 11
         },
         {
           "order": 2,
-          "ingredientId": 838213,
-          "name": "Creme de Cacao White",
-          "amount": "20",
+          "ingredientId": 872324,
+          "name": "Galliano",
+          "amount": "15",
           "unitId": 11
         },
         {
           "order": 3,
-          "ingredientId": 564821,
-          "name": "Cream",
-          "amount": "20",
+          "ingredientId": 38131,
+          "name": "Orange Juice",
+          "amount": "45",
           "unitId": 11
         },
         {
           "order": 4,
+          "ingredientId": 945886,
+          "name": "Heavy Cream",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 5,
           "ingredientId": 346304,
           "name": "Ice",
           "amount": "150",
@@ -15778,11 +15820,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 4,
-          "name": "New Era",
-          "color": "#4DD0E1"
         }
       ],
       "ingredients": [
@@ -15868,9 +15905,9 @@
           "color": "#81C784"
         },
         {
-          "id": 2,
-          "name": "Unforgettables",
-          "color": "#9575CD"
+          "id": 3,
+          "name": "Equal Parts",
+          "color": "#64B5F6"
         }
       ],
       "ingredients": [
@@ -16217,6 +16254,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -16382,7 +16424,7 @@
         },
         {
           "id": 2,
-          "name": "Unforgettables",
+          "name": "Bitter",
           "color": "#9575CD"
         }
       ],
@@ -16505,6 +16547,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -16586,11 +16633,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 3,
-          "name": "Contemporary",
-          "color": "#64B5F6"
         },
         {
           "id": 7,
@@ -16805,11 +16847,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 3,
-          "name": "Contemporary",
-          "color": "#64B5F6"
         }
       ],
       "ingredients": [
@@ -17132,11 +17169,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 2,
-          "name": "Unforgettables",
-          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -17354,6 +17386,11 @@
           "id": 8,
           "name": "long",
           "color": "#FFB74D"
+        },
+        {
+          "id": 4,
+          "name": "Tiki",
+          "color": "#4DD0E1"
         }
       ],
       "ingredients": [
@@ -17447,7 +17484,7 @@
         },
         {
           "id": 4,
-          "name": "New Era",
+          "name": "Tiki",
           "color": "#4DD0E1"
         }
       ],
@@ -17568,11 +17605,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 4,
-          "name": "New Era",
-          "color": "#4DD0E1"
         }
       ],
       "ingredients": [
@@ -17736,6 +17768,11 @@
           "id": 5,
           "name": "strong",
           "color": "#ec5a5a"
+        },
+        {
+          "id": 3,
+          "name": "Equal Parts",
+          "color": "#64B5F6"
         }
       ],
       "ingredients": [
@@ -17990,11 +18027,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 3,
-          "name": "Contemporary",
-          "color": "#64B5F6"
         }
       ],
       "ingredients": [
@@ -18213,6 +18245,7 @@
       "photoUri": "assets/cocktails/1760963780625-irish-slammer.jpg",
       "glassId": "pub_glass",
       "methodIds": ["build"],
+      "tags": [],
       "ingredients": [
         {
           "order": 1,
@@ -18603,6 +18636,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 3,
+          "name": "Equal Parts",
+          "color": "#64B5F6"
         }
       ],
       "ingredients": [
@@ -18768,11 +18806,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 2,
-          "name": "Unforgettables",
-          "color": "#9575CD"
         },
         {
           "id": 6,
@@ -19005,8 +19038,13 @@
         },
         {
           "id": 4,
-          "name": "New Era",
+          "name": "Tiki",
           "color": "#4DD0E1"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -19147,6 +19185,11 @@
           "id": 5,
           "name": "strong",
           "color": "#ec5a5a"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -19218,11 +19261,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 3,
-          "name": "Contemporary",
-          "color": "#64B5F6"
         }
       ],
       "ingredients": [
@@ -19255,11 +19293,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 3,
-          "name": "Contemporary",
-          "color": "#64B5F6"
         },
         {
           "id": 6,
@@ -19466,9 +19499,9 @@
           "color": "#81C784"
         },
         {
-          "id": 4,
-          "name": "New Era",
-          "color": "#4DD0E1"
+          "id": 3,
+          "name": "Equal Parts",
+          "color": "#64B5F6"
         }
       ],
       "ingredients": [
@@ -19535,6 +19568,11 @@
           "id": 8,
           "name": "long",
           "color": "#FFB74D"
+        },
+        {
+          "id": 4,
+          "name": "Tiki",
+          "color": "#4DD0E1"
         }
       ],
       "ingredients": [
@@ -19612,11 +19650,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 4,
-          "name": "New Era",
-          "color": "#4DD0E1"
         }
       ],
       "ingredients": [
@@ -19679,6 +19712,16 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
+        },
+        {
+          "id": 3,
+          "name": "Equal Parts",
+          "color": "#64B5F6"
         }
       ],
       "ingredients": [
@@ -20016,11 +20059,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 3,
-          "name": "Contemporary",
-          "color": "#64B5F6"
         }
       ],
       "ingredients": [
@@ -20131,6 +20169,11 @@
           "id": 5,
           "name": "strong",
           "color": "#ec5a5a"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -20185,6 +20228,11 @@
           "id": 5,
           "name": "strong",
           "color": "#ec5a5a"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -20246,6 +20294,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -20341,6 +20394,11 @@
           "id": 5,
           "name": "strong",
           "color": "#ec5a5a"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -20472,9 +20530,9 @@
           "color": "#81C784"
         },
         {
-          "id": 3,
-          "name": "Contemporary",
-          "color": "#64B5F6"
+          "id": 4,
+          "name": "Tiki",
+          "color": "#4DD0E1"
         }
       ],
       "ingredients": [
@@ -20619,11 +20677,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 2,
-          "name": "Unforgettables",
-          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -20813,11 +20866,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 3,
-          "name": "Contemporary",
-          "color": "#64B5F6"
         }
       ],
       "ingredients": [
@@ -20894,6 +20942,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -20953,11 +21006,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 2,
-          "name": "Unforgettables",
-          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -21068,11 +21116,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 2,
-          "name": "Unforgettables",
-          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -21135,6 +21178,11 @@
           "id": 5,
           "name": "strong",
           "color": "#ec5a5a"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -21196,6 +21244,11 @@
           "id": 5,
           "name": "strong",
           "color": "#ec5a5a"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -21751,6 +21804,16 @@
           "id": 7,
           "name": "soft",
           "color": "#FFD54F"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
+        },
+        {
+          "id": 3,
+          "name": "Equal Parts",
+          "color": "#64B5F6"
         }
       ],
       "ingredients": [
@@ -21808,7 +21871,7 @@
         },
         {
           "id": 3,
-          "name": "Contemporary",
+          "name": "Equal Parts",
           "color": "#64B5F6"
         }
       ],
@@ -21850,6 +21913,11 @@
           "id": 5,
           "name": "strong",
           "color": "#ec5a5a"
+        },
+        {
+          "id": 3,
+          "name": "Equal Parts",
+          "color": "#64B5F6"
         }
       ],
       "ingredients": [
@@ -21896,11 +21964,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 3,
-          "name": "Contemporary",
-          "color": "#64B5F6"
         }
       ],
       "ingredients": [
@@ -21965,7 +22028,7 @@
         },
         {
           "id": 4,
-          "name": "New Era",
+          "name": "Tiki",
           "color": "#4DD0E1"
         }
       ],
@@ -22042,11 +22105,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 3,
-          "name": "Contemporary",
-          "color": "#64B5F6"
         }
       ],
       "ingredients": [
@@ -22594,9 +22652,14 @@
           "color": "#81C784"
         },
         {
-          "id": 4,
-          "name": "New Era",
-          "color": "#4DD0E1"
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
+        },
+        {
+          "id": 3,
+          "name": "Equal Parts",
+          "color": "#64B5F6"
         }
       ],
       "ingredients": [
@@ -22721,8 +22784,13 @@
         },
         {
           "id": 2,
-          "name": "Unforgettables",
+          "name": "Bitter",
           "color": "#9575CD"
+        },
+        {
+          "id": 3,
+          "name": "Equal Parts",
+          "color": "#64B5F6"
         }
       ],
       "ingredients": [
@@ -22781,14 +22849,14 @@
       "methodIds": ["stir"],
       "tags": [
         {
-          "id": 4,
-          "name": "New Era",
-          "color": "#4DD0E1"
-        },
-        {
           "id": 5,
           "name": "strong",
           "color": "#ec5a5a"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -22916,11 +22984,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 4,
-          "name": "New Era",
-          "color": "#4DD0E1"
         }
       ],
       "ingredients": [
@@ -23017,6 +23080,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 3,
+          "name": "Equal Parts",
+          "color": "#64B5F6"
         }
       ],
       "ingredients": [
@@ -23145,11 +23213,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 4,
-          "name": "New Era",
-          "color": "#4DD0E1"
         }
       ],
       "ingredients": [
@@ -23237,11 +23300,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 2,
-          "name": "Unforgettables",
-          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -23617,6 +23675,11 @@
           "id": 8,
           "name": "long",
           "color": "#FFB74D"
+        },
+        {
+          "id": 4,
+          "name": "Tiki",
+          "color": "#4DD0E1"
         }
       ],
       "ingredients": [
@@ -23759,11 +23822,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 3,
-          "name": "Contemporary",
-          "color": "#64B5F6"
         }
       ],
       "ingredients": [
@@ -23834,6 +23892,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 3,
+          "name": "Equal Parts",
+          "color": "#64B5F6"
         }
       ],
       "ingredients": [
@@ -24029,6 +24092,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -24119,9 +24187,14 @@
           "color": "#81C784"
         },
         {
-          "id": 4,
-          "name": "New Era",
-          "color": "#4DD0E1"
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
+        },
+        {
+          "id": 3,
+          "name": "Equal Parts",
+          "color": "#64B5F6"
         }
       ],
       "ingredients": [
@@ -24175,11 +24248,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 2,
-          "name": "Unforgettables",
-          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -24222,11 +24290,6 @@
       "glassId": "martini",
       "methodIds": ["stir"],
       "tags": [
-        {
-          "id": 4,
-          "name": "New Era",
-          "color": "#4DD0E1"
-        },
         {
           "id": 5,
           "name": "strong",
@@ -24292,11 +24355,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 4,
-          "name": "New Era",
-          "color": "#4DD0E1"
         }
       ],
       "ingredients": [
@@ -24438,6 +24496,11 @@
           "id": 5,
           "name": "strong",
           "color": "#ec5a5a"
+        },
+        {
+          "id": 3,
+          "name": "Equal Parts",
+          "color": "#64B5F6"
         }
       ],
       "ingredients": [
@@ -24550,14 +24613,14 @@
           "color": "#81C784"
         },
         {
-          "id": 3,
-          "name": "Contemporary",
-          "color": "#64B5F6"
-        },
-        {
           "id": 7,
           "name": "soft",
           "color": "#FFD54F"
+        },
+        {
+          "id": 4,
+          "name": "Tiki",
+          "color": "#4DD0E1"
         }
       ],
       "ingredients": [
@@ -24698,11 +24761,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 4,
-          "name": "New Era",
-          "color": "#4DD0E1"
         }
       ],
       "ingredients": [
@@ -24786,11 +24844,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 4,
-          "name": "New Era",
-          "color": "#4DD0E1"
         }
       ],
       "ingredients": [
@@ -24854,9 +24907,9 @@
           "color": "#81C784"
         },
         {
-          "id": 2,
-          "name": "Unforgettables",
-          "color": "#9575CD"
+          "id": 4,
+          "name": "Tiki",
+          "color": "#4DD0E1"
         }
       ],
       "ingredients": [
@@ -24953,6 +25006,11 @@
           "id": 5,
           "name": "strong",
           "color": "#ec5a5a"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -25012,11 +25070,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 4,
-          "name": "New Era",
-          "color": "#4DD0E1"
         }
       ],
       "ingredients": [
@@ -25098,11 +25151,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 2,
-          "name": "Unforgettables",
-          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -25163,6 +25211,11 @@
           "id": 5,
           "name": "strong",
           "color": "#ec5a5a"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -25232,9 +25285,9 @@
           "color": "#81C784"
         },
         {
-          "id": 4,
-          "name": "New Era",
-          "color": "#4DD0E1"
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -25363,11 +25416,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 2,
-          "name": "Unforgettables",
-          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -25545,6 +25593,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -25710,11 +25763,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 4,
-          "name": "New Era",
-          "color": "#4DD0E1"
         }
       ],
       "ingredients": [
@@ -25853,6 +25901,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 3,
+          "name": "Equal Parts",
+          "color": "#64B5F6"
         }
       ],
       "ingredients": [
@@ -25906,6 +25959,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 3,
+          "name": "Equal Parts",
+          "color": "#64B5F6"
         }
       ],
       "ingredients": [
@@ -26081,6 +26139,11 @@
           "id": 5,
           "name": "strong",
           "color": "#ec5a5a"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -26165,11 +26228,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 2,
-          "name": "Unforgettables",
-          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -26234,6 +26292,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 3,
+          "name": "Equal Parts",
+          "color": "#64B5F6"
         }
       ],
       "ingredients": [
@@ -26287,11 +26350,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 3,
-          "name": "Contemporary",
-          "color": "#64B5F6"
         }
       ],
       "ingredients": [
@@ -26853,11 +26911,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 2,
-          "name": "Unforgettables",
-          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -27315,11 +27368,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 2,
-          "name": "Unforgettables",
-          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -27457,6 +27505,11 @@
           "id": 5,
           "name": "strong",
           "color": "#ec5a5a"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -27633,11 +27686,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 3,
-          "name": "Contemporary",
-          "color": "#64B5F6"
         }
       ],
       "ingredients": [
@@ -27765,11 +27813,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 3,
-          "name": "Contemporary",
-          "color": "#64B5F6"
         }
       ],
       "ingredients": [
@@ -27965,11 +28008,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 2,
-          "name": "Unforgettables",
-          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -28103,11 +28141,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 2,
-          "name": "Unforgettables",
-          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -28295,6 +28328,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -28361,11 +28399,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 2,
-          "name": "Unforgettables",
-          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -28665,6 +28698,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 3,
+          "name": "Equal Parts",
+          "color": "#64B5F6"
         }
       ],
       "ingredients": [
@@ -28771,11 +28809,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 3,
-          "name": "Contemporary",
-          "color": "#64B5F6"
         }
       ],
       "ingredients": [
@@ -29023,11 +29056,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 4,
-          "name": "New Era",
-          "color": "#4DD0E1"
         }
       ],
       "ingredients": [
@@ -29107,6 +29135,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -29314,11 +29347,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 2,
-          "name": "Unforgettables",
-          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -29816,11 +29844,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 4,
-          "name": "New Era",
-          "color": "#4DD0E1"
         }
       ],
       "ingredients": [
@@ -29905,6 +29928,13 @@
       "photoUri": "assets/cocktails/1760963780627-suze-tonic.jpg",
       "glassId": "collins_glass",
       "methodIds": ["build"],
+      "tags": [
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
+        }
+      ],
       "ingredients": [
         {
           "order": 1,
@@ -30159,6 +30189,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -30388,11 +30423,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 3,
-          "name": "Contemporary",
-          "color": "#64B5F6"
         }
       ],
       "ingredients": [
@@ -30521,6 +30551,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -30702,6 +30737,11 @@
           "id": 5,
           "name": "strong",
           "color": "#ec5a5a"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -30790,6 +30830,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -30854,7 +30899,7 @@
         },
         {
           "id": 4,
-          "name": "New Era",
+          "name": "Tiki",
           "color": "#4DD0E1"
         }
       ],
@@ -31047,11 +31092,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 3,
-          "name": "Contemporary",
-          "color": "#64B5F6"
         }
       ],
       "ingredients": [
@@ -31091,11 +31131,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 2,
-          "name": "Unforgettables",
-          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -31209,6 +31244,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -31373,11 +31413,6 @@
           "color": "#81C784"
         },
         {
-          "id": 2,
-          "name": "Unforgettables",
-          "color": "#9575CD"
-        },
-        {
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
@@ -31450,11 +31485,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 4,
-          "name": "New Era",
-          "color": "#4DD0E1"
         }
       ],
       "ingredients": [
@@ -31580,9 +31610,9 @@
           "color": "#81C784"
         },
         {
-          "id": 4,
-          "name": "New Era",
-          "color": "#4DD0E1"
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -31878,11 +31908,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 2,
-          "name": "Unforgettables",
-          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -32190,11 +32215,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 4,
-          "name": "New Era",
-          "color": "#4DD0E1"
         }
       ],
       "ingredients": [
@@ -32318,11 +32338,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 3,
-          "name": "Contemporary",
-          "color": "#64B5F6"
         }
       ],
       "ingredients": [
@@ -32377,11 +32392,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 4,
-          "name": "New Era",
-          "color": "#4DD0E1"
         }
       ],
       "ingredients": [
@@ -32814,11 +32824,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 3,
-          "name": "Contemporary",
-          "color": "#64B5F6"
         }
       ],
       "ingredients": [
@@ -33046,6 +33051,11 @@
           "id": 8,
           "name": "long",
           "color": "#FFB74D"
+        },
+        {
+          "id": 3,
+          "name": "Equal Parts",
+          "color": "#64B5F6"
         }
       ],
       "ingredients": [
@@ -33394,11 +33404,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 2,
-          "name": "Unforgettables",
-          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -33576,11 +33581,6 @@
           "id": 1,
           "name": "IBA Official",
           "color": "#81C784"
-        },
-        {
-          "id": 2,
-          "name": "Unforgettables",
-          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -33627,6 +33627,16 @@
           "id": 5,
           "name": "strong",
           "color": "#ec5a5a"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
+        },
+        {
+          "id": 3,
+          "name": "Equal Parts",
+          "color": "#64B5F6"
         }
       ],
       "ingredients": [
@@ -33955,6 +33965,11 @@
           "id": 6,
           "name": "moderate",
           "color": "#F06292"
+        },
+        {
+          "id": 2,
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -34160,9 +34175,9 @@
           "color": "#81C784"
         },
         {
-          "id": 3,
-          "name": "Contemporary",
-          "color": "#64B5F6"
+          "id": 4,
+          "name": "Tiki",
+          "color": "#4DD0E1"
         }
       ],
       "ingredients": [
