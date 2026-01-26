@@ -1,50 +1,58 @@
-# Welcome to your Expo app 👋
+# YourBar
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+YourBar is a cross-platform Expo app for managing a home cocktail bar. It helps you track ingredients, build a shopping list, and discover which cocktails you can make based on what you already have.
 
-## Get started
+## Features
 
-1. Install dependencies
+- **Cocktail library** with search, filters, tags, and favorites.
+- **Ingredient inventory** with in-stock toggles, shopping list support, and brand/base ingredient tracking.
+- **Shaker mode** that surfaces cocktails you can make from selected ingredients.
+- **Ratings & preferences** including cocktail ratings, garnish/substitute rules, and start screen defaults.
+- **Local persistence** for inventory data using on-device storage.
+
+## Tech Stack
+
+- Expo + React Native with Expo Router for file-based navigation.
+- TypeScript with custom providers for inventory state management.
+- Expo FileSystem for local data snapshots.
+
+## Getting Started
+
+1. Install dependencies:
 
    ```bash
    npm install
    ```
 
-2. Start the app
+2. Start the app:
 
    ```bash
-   npx expo start
+   npm run start
    ```
 
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+You can also launch platform-specific builds:
 
 ```bash
-npm run reset-project
+npm run ios
+npm run android
+npm run web
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Useful Scripts
 
-## Learn more
+- `npm run lint` – run Expo linting.
+- `npm run update:image-manifest` – rebuild the image manifest used by the app.
+- `npm run prune:image-manifest` – remove unused image entries from the manifest.
+- `npm run reset-project` – reset starter assets and regenerate a clean Expo Router app tree.
 
-To learn more about developing your project with Expo, look at the following resources:
+## Project Structure
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+- `app/` – Expo Router screens and navigation.
+- `components/` – shared UI components.
+- `providers/` – app-wide state and data management.
+- `libs/` – data storage, filtering, and helper utilities.
+- `constants/` – static tag lists, theme tokens, and metadata.
 
-## Join the community
+## Data & Storage
 
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Inventory, settings, and ratings are stored locally in an on-device snapshot. You can export or import inventory data through the app to back up and restore your bar setup.
