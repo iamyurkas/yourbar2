@@ -1,6 +1,8 @@
 import { StackActions, type NavigationProp, type ParamListBase } from '@react-navigation/native';
+import { router } from 'expo-router';
 
 type RouteParams = Record<string, unknown> | undefined;
+type ReturnToParams = Record<string, string> | undefined;
 
 const areParamsEqual = (left?: RouteParams, right?: RouteParams): boolean => {
   if (!left && !right) {
@@ -54,4 +56,83 @@ export const skipDuplicateBack = (navigation: NavigationProp<ParamListBase>) => 
   }
 
   navigation.goBack();
+};
+
+export const buildReturnToParams = (
+  returnToPath?: string,
+  returnToParams?: Record<string, string | undefined>,
+): { returnToPath?: string; returnToParams?: string } => {
+  if (!returnToPath) {
+    return {};
+  }
+
+  const entries = Object.entries(returnToParams ?? {}).filter(
+    ([, value]) => typeof value === 'string' && value.length > 0,
+  ) as Array<[string, string]>;
+  const serialized = entries.length ? JSON.stringify(Object.fromEntries(entries)) : undefined;
+
+  return {
+    returnToPath,
+    ...(serialized ? { returnToParams: serialized } : {}),
+  };
+};
+
+export const parseReturnToParams = (
+  value?: string | string[],
+): ReturnToParams | undefined => {
+  const resolved = Array.isArray(value) ? value[0] : value;
+  if (typeof resolved !== 'string' || resolved.length === 0) {
+    return undefined;
+  }
+
+  try {
+    const parsed = JSON.parse(resolved);
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+      return undefined;
+    }
+
+    const entries = Object.entries(parsed).filter(([, entryValue]) => typeof entryValue === 'string');
+    return entries.length ? (Object.fromEntries(entries) as Record<string, string>) : undefined;
+  } catch (error) {
+    console.warn('Failed to parse return params', error);
+    return undefined;
+  }
+};
+
+export const navigateToDetailsWithReturnTo = ({
+  pathname,
+  params,
+  returnToPath,
+  returnToParams,
+}: {
+  pathname: string;
+  params: Record<string, string>;
+  returnToPath?: string;
+  returnToParams?: Record<string, string | undefined>;
+}) => {
+  router.push({
+    pathname,
+    params: {
+      ...params,
+      ...buildReturnToParams(returnToPath, returnToParams),
+    },
+  });
+};
+
+export const returnToSourceOrBack = (
+  navigation: NavigationProp<ParamListBase>,
+  {
+    returnToPath,
+    returnToParams,
+  }: {
+    returnToPath?: string;
+    returnToParams?: ReturnToParams;
+  },
+) => {
+  if (returnToPath) {
+    router.navigate({ pathname: returnToPath, params: returnToParams });
+    return;
+  }
+
+  skipDuplicateBack(navigation);
 };

@@ -31,7 +31,12 @@ import {
   type IngredientLookup,
   type IngredientResolution,
 } from "@/libs/ingredient-availability";
-import { skipDuplicateBack } from "@/libs/navigation";
+import {
+  buildReturnToParams,
+  navigateToDetailsWithReturnTo,
+  parseReturnToParams,
+  returnToSourceOrBack,
+} from "@/libs/navigation";
 import { normalizeSearchText } from "@/libs/search-normalization";
 import { useInventory, type Cocktail } from "@/providers/inventory-provider";
 import { tagColors } from "@/theme/theme";
@@ -353,27 +358,7 @@ export default function CocktailDetailsScreen() {
   }, [params.returnToPath]);
 
   const returnToParams = useMemo(() => {
-    const value = Array.isArray(params.returnToParams)
-      ? params.returnToParams[0]
-      : params.returnToParams;
-    if (typeof value !== "string" || value.length === 0) {
-      return undefined;
-    }
-
-    try {
-      const parsed = JSON.parse(value);
-      if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
-        return undefined;
-      }
-
-      const entries = Object.entries(parsed).filter(
-        ([, entryValue]) => typeof entryValue === "string",
-      );
-      return entries.length ? Object.fromEntries(entries) : undefined;
-    } catch (error) {
-      console.warn("Failed to parse return params", error);
-      return undefined;
-    }
+    return parseReturnToParams(params.returnToParams);
   }, [params.returnToParams]);
 
   const [showImperialUnits, setShowImperialUnits] = useState(useImperialUnits);
@@ -384,12 +369,7 @@ export default function CocktailDetailsScreen() {
   }, [useImperialUnits]);
 
   const handleReturn = useCallback(() => {
-    if (returnToPath) {
-      router.navigate({ pathname: returnToPath, params: returnToParams });
-      return;
-    }
-
-    skipDuplicateBack(navigation);
+    returnToSourceOrBack(navigation, { returnToPath, returnToParams });
   }, [navigation, returnToParams, returnToPath]);
 
   useEffect(() => {
@@ -407,9 +387,9 @@ export default function CocktailDetailsScreen() {
       isHandlingBackRef.current = true;
       handleReturn();
 
-      setTimeout(() => {
+      requestAnimationFrame(() => {
         isHandlingBackRef.current = false;
-      }, 0);
+      });
     });
 
     return unsubscribe;
@@ -615,9 +595,10 @@ export default function CocktailDetailsScreen() {
         cocktailName: cocktail.name ?? undefined,
         mode: "edit",
         source: "cocktails",
+        ...buildReturnToParams(returnToPath, returnToParams),
       },
     });
-  }, [cocktail]);
+  }, [cocktail, returnToParams, returnToPath]);
 
   const handleCopyPress = useCallback(() => {
     if (!cocktail) {
@@ -635,9 +616,10 @@ export default function CocktailDetailsScreen() {
         cocktailId: String(targetId),
         cocktailName: cocktail.name ?? undefined,
         source: "cocktails",
+        ...buildReturnToParams(returnToPath, returnToParams),
       },
     });
-  }, [cocktail]);
+  }, [cocktail, returnToParams, returnToPath]);
 
   return (
     <SafeAreaView
@@ -1012,21 +994,17 @@ export default function CocktailDetailsScreen() {
                           : resolvedParam
                             ? String(resolvedParam)
                             : undefined;
-                      const returnToParams = returnToParam
-                        ? JSON.stringify({ cocktailId: returnToParam })
-                        : undefined;
-
-                      router.push({
+                      navigateToDetailsWithReturnTo({
                         pathname: "/ingredients/[ingredientId]",
                         params: {
                           ingredientId: String(routeParam),
-                          ...(returnToParams
-                            ? {
-                                returnToPath: "/cocktails/[cocktailId]",
-                                returnToParams,
-                              }
-                            : {}),
                         },
+                        returnToPath: returnToParam
+                          ? "/cocktails/[cocktailId]"
+                          : undefined,
+                        returnToParams: returnToParam
+                          ? { cocktailId: returnToParam }
+                          : undefined,
                       });
                     };
 

@@ -30,6 +30,7 @@ import {
   createIngredientLookup,
   getVisibleIngredientIdsForCocktail,
 } from '@/libs/ingredient-availability';
+import { navigateToDetailsWithReturnTo } from '@/libs/navigation';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { buildTagOptions, type TagOption } from '@/libs/tag-options';
 import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
@@ -172,11 +173,12 @@ const IngredientListItem = memo(function IngredientListItemComponent({
       return;
     }
 
-    router.push({
+    navigateToDetailsWithReturnTo({
       pathname: '/ingredients/[ingredientId]',
       params: { ingredientId: String(routeParam) },
+      returnToPath: '/ingredients',
     });
-  }, [ingredient.id, ingredient.name, router]);
+  }, [ingredient.id, ingredient.name]);
 
   return (
     <ListRow

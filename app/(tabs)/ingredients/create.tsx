@@ -27,7 +27,7 @@ import { TagEditorModal } from '@/components/TagEditorModal';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { Colors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
-import { skipDuplicateBack } from '@/libs/navigation';
+import { buildReturnToParams, skipDuplicateBack } from '@/libs/navigation';
 import { shouldStorePhoto, storePhoto } from '@/libs/photo-storage';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
@@ -432,7 +432,18 @@ export default function IngredientFormScreen() {
 
         setHasUnsavedChanges(false);
         isNavigatingAfterSaveRef.current = true;
-        skipDuplicateBack(navigation);
+        if (navigation.canGoBack()) {
+          navigation.goBack();
+          return;
+        }
+
+        router.replace({
+          pathname: '/ingredients/[ingredientId]',
+          params: {
+            ingredientId: String(numericIngredientId),
+            ...buildReturnToParams(returnToPath, returnToParams),
+          },
+        });
       } finally {
         setIsSaving(false);
       }

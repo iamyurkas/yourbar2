@@ -45,7 +45,11 @@ import {
 } from "@/constants/cocktail-units";
 import { GLASSWARE } from "@/constants/glassware";
 import { Colors } from "@/constants/theme";
-import { skipDuplicateBack } from "@/libs/navigation";
+import {
+  buildReturnToParams,
+  parseReturnToParams,
+  skipDuplicateBack,
+} from "@/libs/navigation";
 import { shouldStorePhoto, storePhoto } from "@/libs/photo-storage";
 import { normalizeSearchText } from "@/libs/search-normalization";
 import {
@@ -245,7 +249,7 @@ export default function CreateCocktailScreen() {
   const ingredientNameParam = getParamValue(params.ingredientName);
   const cocktailParam = getParamValue(params.cocktailId);
   const cocktailNameParam = getParamValue(params.cocktailName);
-  const returnToParams = useMemo(() => {
+  const formReturnParams = useMemo(() => {
     const payload = {
       mode: modeParam,
       source: sourceParam,
@@ -264,6 +268,13 @@ export default function CreateCocktailScreen() {
     modeParam,
     sourceParam,
   ]);
+  const returnToPath = useMemo(() => {
+    const value = getParamValue(params.returnToPath);
+    return typeof value === "string" && value.length > 0 ? value : undefined;
+  }, [params.returnToPath]);
+  const returnToParams = useMemo(() => {
+    return parseReturnToParams(params.returnToParams);
+  }, [params.returnToParams]);
 
   const [name, setName] = useState("");
   const [glassId, setGlassId] = useState<string | null>("martini");
@@ -859,7 +870,7 @@ export default function CreateCocktailScreen() {
           params: {
             mode: "create",
             returnToPath: "/cocktails/create",
-            returnToParams,
+            returnToParams: formReturnParams,
           },
         });
         return;
@@ -870,11 +881,11 @@ export default function CreateCocktailScreen() {
           mode: "create",
           suggestedName: trimmed,
           returnToPath: "/cocktails/create",
-          returnToParams,
+          returnToParams: formReturnParams,
         },
       });
     },
-    [returnToParams],
+    [formReturnParams],
   );
 
   const handleSelectSubstituteCandidate = useCallback(
@@ -1110,10 +1121,18 @@ export default function CreateCocktailScreen() {
       setHasUnsavedChanges(false);
       isNavigatingAfterSaveRef.current = true;
       const targetId = persisted.id ?? persisted.name;
+      if (isEditMode && navigation.canGoBack()) {
+        navigation.goBack();
+        return;
+      }
+
       if (targetId) {
         router.replace({
           pathname: "/cocktails/[cocktailId]",
-          params: { cocktailId: String(targetId) },
+          params: {
+            cocktailId: String(targetId),
+            ...buildReturnToParams(returnToPath, returnToParams),
+          },
         });
         return;
       }
@@ -1135,8 +1154,11 @@ export default function CreateCocktailScreen() {
     isEditMode,
     methodIds,
     name,
+    navigation,
     prefilledCocktail?.id,
     prefilledCocktail?.photoUri,
+    returnToParams,
+    returnToPath,
     selectedTagIds,
     setHasUnsavedChanges,
     showDialog,
