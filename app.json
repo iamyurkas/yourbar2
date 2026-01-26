@@ -2,7 +2,7 @@
   "expo": {
     "name": "Your Bar",
     "slug": "yourbar",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "yourbar",
@@ -16,7 +16,7 @@
 
     "android": {
       "package": "com.iamyurkas.yourbar",
-      "versionCode": 4,
+      "versionCode": 5,
 
       "enableProguardInRelease": true,
       "enableShrinkResourcesInRelease": true,
