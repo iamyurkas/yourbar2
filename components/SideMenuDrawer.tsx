@@ -1,30 +1,48 @@
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import * as DocumentPicker from 'expo-document-picker';
-import * as FileSystem from 'expo-file-system/legacy';
-import { Image, type ImageSource } from 'expo-image';
-import * as Sharing from 'expo-sharing';
-import { useEffect, useMemo, useRef, useState, type ComponentProps } from 'react';
-import { Animated, Dimensions, Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import * as DocumentPicker from "expo-document-picker";
+import * as FileSystem from "expo-file-system/legacy";
+import { Image, type ImageSource } from "expo-image";
+import * as Sharing from "expo-sharing";
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ComponentProps,
+} from "react";
+import {
+  Animated,
+  Dimensions,
+  Modal,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 
-import CocktailIcon from '@/assets/images/cocktails.svg';
-import IngredientsIcon from '@/assets/images/ingredients.svg';
-import ShakerIcon from '@/assets/images/shaker.svg';
-import { AppDialog, type DialogOptions } from '@/components/AppDialog';
-import { TagEditorModal } from '@/components/TagEditorModal';
-import { TagPill } from '@/components/TagPill';
-import { Colors } from '@/constants/theme';
-import { type InventoryData } from '@/libs/inventory-data';
-import { buildPhotoBaseName } from '@/libs/photo-utils';
-import { useInventory, type StartScreen } from '@/providers/inventory-provider';
+import CocktailIcon from "@/assets/images/cocktails.svg";
+import IngredientsIcon from "@/assets/images/ingredients.svg";
+import ShakerIcon from "@/assets/images/shaker.svg";
+import { AppDialog, type DialogOptions } from "@/components/AppDialog";
+import { TagEditorModal } from "@/components/TagEditorModal";
+import { TagPill } from "@/components/TagPill";
+import { Colors } from "@/constants/theme";
+import { type InventoryData } from "@/libs/inventory-data";
+import { buildPhotoBaseName } from "@/libs/photo-utils";
+import { useInventory, type StartScreen } from "@/providers/inventory-provider";
 
-const MENU_WIDTH = Math.round(Dimensions.get('window').width * 0.75);
+const MENU_WIDTH = Math.round(Dimensions.get("window").width * 0.75);
 const ANIMATION_DURATION = 200;
 
 type StartScreenIcon =
-  | { type: 'icon'; name: ComponentProps<typeof MaterialCommunityIcons>['name'] }
-  | { type: 'materialIcon'; name: ComponentProps<typeof MaterialIcons>['name'] }
-  | { type: 'asset'; source: ImageSource };
+  | {
+      type: "icon";
+      name: ComponentProps<typeof MaterialCommunityIcons>["name"];
+    }
+  | { type: "materialIcon"; name: ComponentProps<typeof MaterialIcons>["name"] }
+  | { type: "asset"; source: ImageSource };
 
 type StartScreenOption = {
   key: StartScreen;
@@ -35,46 +53,46 @@ type StartScreenOption = {
 
 const START_SCREEN_OPTIONS: StartScreenOption[] = [
   {
-    key: 'cocktails_all',
-    label: 'All cocktails',
-    description: 'Browse every recipe',
-    icon: { type: 'asset', source: CocktailIcon },
+    key: "cocktails_all",
+    label: "All cocktails",
+    description: "Browse every recipe",
+    icon: { type: "asset", source: CocktailIcon },
   },
   {
-    key: 'cocktails_my',
-    label: 'My cocktails',
-    description: 'See your creations first',
-    icon: { type: 'icon', name: 'cup-water' },
+    key: "cocktails_my",
+    label: "My cocktails",
+    description: "See your creations first",
+    icon: { type: "icon", name: "cup-water" },
   },
   {
-    key: 'cocktails_favorites',
-    label: 'Favorite cocktails',
-    description: 'Jump into saved cocktails',
-    icon: { type: 'icon', name: 'star' },
+    key: "cocktails_favorites",
+    label: "Favorite cocktails",
+    description: "Jump into saved cocktails",
+    icon: { type: "icon", name: "star" },
   },
   {
-    key: 'shaker',
-    label: 'Shaker',
-    description: 'Mix based on your inventory',
-    icon: { type: 'asset', source: ShakerIcon },
+    key: "shaker",
+    label: "Shaker",
+    description: "Mix based on your inventory",
+    icon: { type: "asset", source: ShakerIcon },
   },
   {
-    key: 'ingredients_all',
-    label: 'All ingredients',
-    description: 'Manage every ingredient',
-    icon: { type: 'asset', source: IngredientsIcon },
+    key: "ingredients_all",
+    label: "All ingredients",
+    description: "Manage every ingredient",
+    icon: { type: "asset", source: IngredientsIcon },
   },
   {
-    key: 'ingredients_my',
-    label: 'My ingredients',
-    description: 'Start with what you own',
-    icon: { type: 'icon', name: 'check-circle' },
+    key: "ingredients_my",
+    label: "My ingredients",
+    description: "Start with what you own",
+    icon: { type: "icon", name: "check-circle" },
   },
   {
-    key: 'ingredients_shopping',
-    label: 'Shopping list',
-    description: 'Head to your shopping items',
-    icon: { type: 'materialIcon', name: 'shopping-cart' },
+    key: "ingredients_shopping",
+    label: "Shopping list",
+    description: "Head to your shopping items",
+    icon: { type: "materialIcon", name: "shopping-cart" },
   },
 ];
 
@@ -112,15 +130,30 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   } = useInventory();
   const [isMounted, setIsMounted] = useState(visible);
   const [isRatingModalVisible, setRatingModalVisible] = useState(false);
-  const ratingModalCloseTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const [isStartScreenModalVisible, setStartScreenModalVisible] = useState(false);
-  const startScreenModalCloseTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const ratingModalCloseTimeout = useRef<ReturnType<typeof setTimeout> | null>(
+    null,
+  );
+  const [isStartScreenModalVisible, setStartScreenModalVisible] =
+    useState(false);
+  const startScreenModalCloseTimeout = useRef<ReturnType<
+    typeof setTimeout
+  > | null>(null);
   const [isTagManagerVisible, setTagManagerVisible] = useState(false);
   const [isTagEditorVisible, setTagEditorVisible] = useState(false);
-  const [tagEditorMode, setTagEditorMode] = useState<'create' | 'edit'>('create');
-  const [tagEditorType, setTagEditorType] = useState<'cocktail' | 'ingredient'>('cocktail');
-  const [tagEditorTarget, setTagEditorTarget] = useState<{ id: number; name: string; color: string } | null>(null);
-  const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(null);
+  const [tagEditorMode, setTagEditorMode] = useState<"create" | "edit">(
+    "create",
+  );
+  const [tagEditorType, setTagEditorType] = useState<"cocktail" | "ingredient">(
+    "cocktail",
+  );
+  const [tagEditorTarget, setTagEditorTarget] = useState<{
+    id: number;
+    name: string;
+    color: string;
+  } | null>(null);
+  const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(
+    null,
+  );
   const [isExporting, setIsExporting] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
   const [isBackingUpPhotos, setIsBackingUpPhotos] = useState(false);
@@ -145,10 +178,13 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     [startScreen],
   );
 
-  const renderStartScreenIcon = (option: StartScreenOption, isSelected: boolean) => {
+  const renderStartScreenIcon = (
+    option: StartScreenOption,
+    isSelected: boolean,
+  ) => {
     const iconColor = isSelected ? Colors.tint : Colors.onSurfaceVariant;
 
-    if (option.icon.type === 'asset') {
+    if (option.icon.type === "asset") {
       return (
         <Image
           source={option.icon.source}
@@ -158,11 +194,19 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       );
     }
 
-    if (option.icon.type === 'materialIcon') {
-      return <MaterialIcons name={option.icon.name} size={20} color={iconColor} />;
+    if (option.icon.type === "materialIcon") {
+      return (
+        <MaterialIcons name={option.icon.name} size={20} color={iconColor} />
+      );
     }
 
-    return <MaterialCommunityIcons name={option.icon.name} size={20} color={iconColor} />;
+    return (
+      <MaterialCommunityIcons
+        name={option.icon.name}
+        size={20}
+        color={iconColor}
+      />
+    );
   };
 
   useEffect(() => {
@@ -280,11 +324,11 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   };
 
   const handleOpenTagEditor = (
-    type: 'cocktail' | 'ingredient',
+    type: "cocktail" | "ingredient",
     tag?: { id: number; name: string; color: string },
   ) => {
     setTagEditorType(type);
-    setTagEditorMode(tag ? 'edit' : 'create');
+    setTagEditorMode(tag ? "edit" : "create");
     setTagEditorTarget(tag ?? null);
     setTagEditorVisible(true);
   };
@@ -301,12 +345,14 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     setDialogOptions({
       title,
       message,
-      actions: [{ label: 'OK' }],
+      actions: [{ label: "OK" }],
     });
   };
 
-  const isValidInventoryData = (candidate: unknown): candidate is InventoryData => {
-    if (!candidate || typeof candidate !== 'object') {
+  const isValidInventoryData = (
+    candidate: unknown,
+  ): candidate is InventoryData => {
+    if (!candidate || typeof candidate !== "object") {
       return false;
     }
 
@@ -321,7 +367,10 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
     const data = exportInventoryData();
     if (!data) {
-      showDialogMessage('Export unavailable', 'Load your inventory before exporting.');
+      showDialogMessage(
+        "Export unavailable",
+        "Load your inventory before exporting.",
+      );
       return;
     }
 
@@ -330,19 +379,23 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     try {
       const sharingAvailable = await Sharing.isAvailableAsync();
       if (!sharingAvailable) {
-        showDialogMessage('Sharing unavailable', 'Sharing is not available on this device.');
+        showDialogMessage(
+          "Sharing unavailable",
+          "Sharing is not available on this device.",
+        );
         return;
       }
 
-      const directory = FileSystem.cacheDirectory ?? FileSystem.documentDirectory;
+      const directory =
+        FileSystem.cacheDirectory ?? FileSystem.documentDirectory;
       if (!directory) {
-        showDialogMessage('Export failed', 'Unable to access device storage.');
+        showDialogMessage("Export failed", "Unable to access device storage.");
         return;
       }
 
       const timestamp = new Date().toISOString().slice(0, 10);
       const filename = `yourbar-data-${timestamp}.json`;
-      const fileUri = `${directory.replace(/\/?$/, '/')}${filename}`;
+      const fileUri = `${directory.replace(/\/?$/, "/")}${filename}`;
       const payload = JSON.stringify(data, null, 2);
 
       await FileSystem.writeAsStringAsync(fileUri, payload, {
@@ -350,23 +403,24 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       });
 
       await Sharing.shareAsync(fileUri, {
-        mimeType: 'application/json',
-        dialogTitle: 'Export cocktails & ingredients',
-        UTI: 'public.json',
+        mimeType: "application/json",
+        dialogTitle: "Export cocktails & ingredients",
+        UTI: "public.json",
       });
     } catch (error) {
-      console.error('Failed to export inventory data', error);
-      showDialogMessage('Export failed', 'Please try again.');
+      console.error("Failed to export inventory data", error);
+      showDialogMessage("Export failed", "Please try again.");
     } finally {
       setIsExporting(false);
     }
   };
 
-  const base64Chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+  const base64Chars =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
   const base64ToBytes = (base64: string) => {
-    const cleaned = base64.replace(/[^A-Za-z0-9+/=]/g, '');
-    const padding = cleaned.endsWith('==') ? 2 : cleaned.endsWith('=') ? 1 : 0;
+    const cleaned = base64.replace(/[^A-Za-z0-9+/=]/g, "");
+    const padding = cleaned.endsWith("==") ? 2 : cleaned.endsWith("=") ? 1 : 0;
     const byteLength = (cleaned.length * 3) / 4 - padding;
     const bytes = new Uint8Array(byteLength);
     let byteIndex = 0;
@@ -382,10 +436,10 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       const byte3 = ((enc3 & 3) << 6) | enc4;
 
       bytes[byteIndex++] = byte1;
-      if (cleaned[i + 2] !== '=') {
+      if (cleaned[i + 2] !== "=") {
         bytes[byteIndex++] = byte2;
       }
-      if (cleaned[i + 3] !== '=') {
+      if (cleaned[i + 3] !== "=") {
         bytes[byteIndex++] = byte3;
       }
     }
@@ -408,26 +462,42 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       if (i + 1 >= bytes.length) {
         chunks.push(`${base64Chars[enc1]}${base64Chars[enc2]}==`);
       } else if (i + 2 >= bytes.length) {
-        chunks.push(`${base64Chars[enc1]}${base64Chars[enc2]}${base64Chars[enc3]}=`);
+        chunks.push(
+          `${base64Chars[enc1]}${base64Chars[enc2]}${base64Chars[enc3]}=`,
+        );
       } else {
-        chunks.push(`${base64Chars[enc1]}${base64Chars[enc2]}${base64Chars[enc3]}${base64Chars[enc4]}`);
+        chunks.push(
+          `${base64Chars[enc1]}${base64Chars[enc2]}${base64Chars[enc3]}${base64Chars[enc4]}`,
+        );
       }
     }
-    return chunks.join('');
+    return chunks.join("");
   };
 
-  const createTarArchive = (files: Array<{ path: string; contents: Uint8Array }>) => {
+  const createTarArchive = (
+    files: Array<{ path: string; contents: Uint8Array }>,
+  ) => {
     const encoder = new TextEncoder();
     const blocks: Uint8Array[] = [];
     let totalLength = 0;
 
-    const writeString = (buffer: Uint8Array, offset: number, text: string, length: number) => {
+    const writeString = (
+      buffer: Uint8Array,
+      offset: number,
+      text: string,
+      length: number,
+    ) => {
       const encoded = encoder.encode(text);
       buffer.set(encoded.slice(0, length), offset);
     };
 
-    const writeOctal = (buffer: Uint8Array, offset: number, length: number, value: number) => {
-      const octal = value.toString(8).padStart(length - 1, '0');
+    const writeOctal = (
+      buffer: Uint8Array,
+      offset: number,
+      length: number,
+      value: number,
+    ) => {
+      const octal = value.toString(8).padStart(length - 1, "0");
       writeString(buffer, offset, `${octal}\0`, length);
     };
 
@@ -436,22 +506,22 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       for (let i = 0; i < buffer.length; i += 1) {
         sum += buffer[i];
       }
-      const checksum = sum.toString(8).padStart(6, '0');
+      const checksum = sum.toString(8).padStart(6, "0");
       writeString(buffer, 148, `${checksum}\0 `, 8);
     };
 
     const addFile = (filePath: string, contents: Uint8Array) => {
       const header = new Uint8Array(512);
       writeString(header, 0, filePath, 100);
-      writeString(header, 100, '0000777\0', 8);
-      writeString(header, 108, '0000000\0', 8);
-      writeString(header, 116, '0000000\0', 8);
+      writeString(header, 100, "0000777\0", 8);
+      writeString(header, 108, "0000000\0", 8);
+      writeString(header, 116, "0000000\0", 8);
       writeOctal(header, 124, 12, contents.length);
       writeOctal(header, 136, 12, Math.floor(Date.now() / 1000));
-      writeString(header, 148, '        ', 8);
-      writeString(header, 156, '0', 1);
-      writeString(header, 257, 'ustar\0', 6);
-      writeString(header, 263, '00', 2);
+      writeString(header, 148, "        ", 8);
+      writeString(header, 156, "0", 1);
+      writeString(header, 257, "ustar\0", 6);
+      writeString(header, 263, "00", 2);
       writeChecksum(header);
 
       blocks.push(header);
@@ -489,7 +559,10 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
     const photoEntries = exportInventoryPhotoEntries();
     if (!photoEntries) {
-      showDialogMessage('Backup unavailable', 'Load your inventory before backing up photos.');
+      showDialogMessage(
+        "Backup unavailable",
+        "Load your inventory before backing up photos.",
+      );
       return;
     }
 
@@ -498,20 +571,27 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     try {
       const sharingAvailable = await Sharing.isAvailableAsync();
       if (!sharingAvailable) {
-        showDialogMessage('Sharing unavailable', 'Sharing is not available on this device.');
+        showDialogMessage(
+          "Sharing unavailable",
+          "Sharing is not available on this device.",
+        );
         return;
       }
 
-      const directory = FileSystem.cacheDirectory ?? FileSystem.documentDirectory;
+      const directory =
+        FileSystem.cacheDirectory ?? FileSystem.documentDirectory;
       if (!directory) {
-        showDialogMessage('Backup failed', 'Unable to access device storage.');
+        showDialogMessage("Backup failed", "Unable to access device storage.");
         return;
       }
 
       const entries = photoEntries.filter((entry) => entry.uri);
 
       if (entries.length === 0) {
-        showDialogMessage('No photos to backup', 'Add photos to cocktails or ingredients first.');
+        showDialogMessage(
+          "No photos to backup",
+          "Add photos to cocktails or ingredients first.",
+        );
         return;
       }
 
@@ -530,12 +610,14 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
           continue;
         }
 
-        const baseName = buildPhotoBaseName(entry.id || 'photo', entry.name);
+        const baseName = buildPhotoBaseName(entry.id || "photo", entry.name);
         const nameKey = `${entry.type}/${baseName}.jpg`;
         const duplicateCount = nameCounts.get(nameKey) ?? 0;
         nameCounts.set(nameKey, duplicateCount + 1);
         const fileName =
-          duplicateCount > 0 ? `${baseName}-${duplicateCount + 1}.jpg` : `${baseName}.jpg`;
+          duplicateCount > 0
+            ? `${baseName}-${duplicateCount + 1}.jpg`
+            : `${baseName}.jpg`;
         const contentsBase64 = await FileSystem.readAsStringAsync(uri, {
           encoding: FileSystem.EncodingType.Base64,
         });
@@ -547,13 +629,16 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       }
 
       if (addedCount === 0) {
-        showDialogMessage('Backup failed', 'Unable to find any stored photo files.');
+        showDialogMessage(
+          "Backup failed",
+          "Unable to find any stored photo files.",
+        );
         return;
       }
 
       const timestamp = new Date().toISOString().slice(0, 10);
       const filename = `yourbar-photos-${timestamp}.tar`;
-      const fileUri = `${directory.replace(/\/?$/, '/')}${filename}`;
+      const fileUri = `${directory.replace(/\/?$/, "/")}${filename}`;
       const archiveBase64 = createTarArchive(files);
 
       await FileSystem.writeAsStringAsync(fileUri, archiveBase64, {
@@ -561,13 +646,13 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       });
 
       await Sharing.shareAsync(fileUri, {
-        mimeType: 'application/x-tar',
-        dialogTitle: 'Backup cocktail & ingredient photos',
-        UTI: 'public.tar-archive',
+        mimeType: "application/x-tar",
+        dialogTitle: "Backup cocktail & ingredient photos",
+        UTI: "public.tar-archive",
       });
     } catch (error) {
-      console.error('Failed to backup photos', error);
-      showDialogMessage('Backup failed', 'Please try again.');
+      console.error("Failed to backup photos", error);
+      showDialogMessage("Backup failed", "Please try again.");
     } finally {
       setIsBackingUpPhotos(false);
     }
@@ -582,7 +667,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
     try {
       const result = await DocumentPicker.getDocumentAsync({
-        type: 'application/json',
+        type: "application/json",
         copyToCacheDirectory: true,
       });
 
@@ -592,7 +677,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
       const asset = result.assets?.[0];
       if (!asset?.uri) {
-        showDialogMessage('Import failed', 'Unable to read the selected file.');
+        showDialogMessage("Import failed", "Unable to read the selected file.");
         return;
       }
 
@@ -600,29 +685,35 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       const parsed = JSON.parse(contents) as unknown;
 
       if (!isValidInventoryData(parsed)) {
-        showDialogMessage('Invalid file', 'The selected file does not match the expected data format.');
+        showDialogMessage(
+          "Invalid file",
+          "The selected file does not match the expected data format.",
+        );
         return;
       }
 
       importInventoryData(parsed);
       onClose();
     } catch (error) {
-      console.error('Failed to import inventory data', error);
-      showDialogMessage('Import failed', 'Please try again with a valid JSON file.');
+      console.error("Failed to import inventory data", error);
+      showDialogMessage(
+        "Import failed",
+        "Please try again with a valid JSON file.",
+      );
     } finally {
       setIsImporting(false);
     }
   };
 
   const handleSaveTagEditor = (data: { name: string; color: string }) => {
-    if (tagEditorMode === 'create') {
-      if (tagEditorType === 'cocktail') {
+    if (tagEditorMode === "create") {
+      if (tagEditorType === "cocktail") {
         createCustomCocktailTag(data);
       } else {
         createCustomIngredientTag(data);
       }
     } else if (tagEditorTarget) {
-      if (tagEditorType === 'cocktail') {
+      if (tagEditorType === "cocktail") {
         updateCustomCocktailTag(tagEditorTarget.id, data);
       } else {
         updateCustomIngredientTag(tagEditorTarget.id, data);
@@ -632,17 +723,20 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     setTagEditorVisible(false);
   };
 
-  const handleDeleteTag = (type: 'cocktail' | 'ingredient', tag: { id: number; name: string }) => {
+  const handleDeleteTag = (
+    type: "cocktail" | "ingredient",
+    tag: { id: number; name: string },
+  ) => {
     setDialogOptions({
-      title: 'Delete tag',
+      title: "Delete tag",
       message: `Remove "${tag.name}"?`,
       actions: [
-        { label: 'Cancel', variant: 'secondary' },
+        { label: "Cancel", variant: "secondary" },
         {
-          label: 'Delete',
-          variant: 'destructive',
+          label: "Delete",
+          variant: "destructive",
           onPress: () => {
-            if (type === 'cocktail') {
+            if (type === "cocktail") {
               deleteCustomCocktailTag(tag.id);
             } else {
               deleteCustomIngredientTag(tag.id);
@@ -670,25 +764,47 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   }
 
   return (
-    <Modal transparent visible={isMounted} statusBarTranslucent animationType="none" onRequestClose={onClose}>
+    <Modal
+      transparent
+      visible={isMounted}
+      statusBarTranslucent
+      animationType="none"
+      onRequestClose={onClose}
+    >
       <View style={styles.container}>
-        <Pressable accessibilityRole="button" accessibilityLabel="Close menu" onPress={onClose} style={styles.backdropArea}>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Close menu"
+          onPress={onClose}
+          style={styles.backdropArea}
+        >
           <Animated.View
             pointerEvents="none"
-            style={[styles.backdrop, { backgroundColor: Colors.backdrop, opacity: backdropOpacity }]}
+            style={[
+              styles.backdrop,
+              { backgroundColor: Colors.backdrop, opacity: backdropOpacity },
+            ]}
           />
         </Pressable>
         <Animated.View style={[drawerStyle, { transform: [{ translateX }] }]}>
-          <View style={[styles.headerContainer, { backgroundColor: Colors.surface }]}>
-            <Text style={[styles.title, { color: Colors.onSurface }]}>Settings</Text>
+          <View
+            style={[
+              styles.headerContainer,
+              { backgroundColor: Colors.surface },
+            ]}
+          >
+            <Text style={[styles.title, { color: Colors.onSurface }]}>
+              Settings
+            </Text>
           </View>
           {/* Preserve menu taps even if a text field elsewhere keeps the keyboard open. */}
           <ScrollView
             style={styles.menuScroll}
             contentContainerStyle={styles.menuContent}
             showsVerticalScrollIndicator={false}
-            keyboardShouldPersistTaps="handled">
-            <Pressable
+            keyboardShouldPersistTaps="handled"
+          >
+            {/* <Pressable
               accessibilityRole="button"
               accessibilityLabel="Reload bundled inventory"
               onPress={handleResetInventory}
@@ -708,7 +824,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   Clear saved inventory and reload assets from data.json
                 </Text>
               </View>
-            </Pressable>
+            </Pressable> */}
             <Pressable
               accessibilityRole="checkbox"
               accessibilityState={{ checked: ignoreGarnish }}
@@ -719,24 +835,43 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   borderColor: Colors.outline,
                   backgroundColor: Colors.surface,
                 },
-              ]}>
+              ]}
+            >
               <View
                 style={[
                   styles.checkbox,
                   {
-                    borderColor: ignoreGarnish ? Colors.tint : Colors.outlineVariant,
-                    backgroundColor: ignoreGarnish ? Colors.tint : 'transparent',
+                    borderColor: ignoreGarnish
+                      ? Colors.tint
+                      : Colors.outlineVariant,
+                    backgroundColor: ignoreGarnish
+                      ? Colors.tint
+                      : "transparent",
                   },
-                ]}>
+                ]}
+              >
                 <MaterialCommunityIcons
                   name="check"
                   size={16}
-                  color={ignoreGarnish ? Colors.background : Colors.outlineVariant}
+                  color={
+                    ignoreGarnish ? Colors.background : Colors.outlineVariant
+                  }
                 />
               </View>
               <View style={styles.settingTextContainer}>
-                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>Ignore garnish</Text>
-                <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>All garnishes are optional</Text>
+                <Text
+                  style={[styles.settingLabel, { color: Colors.onSurface }]}
+                >
+                  Ignore garnish
+                </Text>
+                <Text
+                  style={[
+                    styles.settingCaption,
+                    { color: Colors.onSurfaceVariant },
+                  ]}
+                >
+                  All garnishes are optional
+                </Text>
               </View>
             </Pressable>
             <Pressable
@@ -749,24 +884,43 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   borderColor: Colors.outline,
                   backgroundColor: Colors.surface,
                 },
-              ]}>
+              ]}
+            >
               <View
                 style={[
                   styles.checkbox,
                   {
-                    borderColor: allowAllSubstitutes ? Colors.tint : Colors.outlineVariant,
-                    backgroundColor: allowAllSubstitutes ? Colors.tint : 'transparent',
+                    borderColor: allowAllSubstitutes
+                      ? Colors.tint
+                      : Colors.outlineVariant,
+                    backgroundColor: allowAllSubstitutes
+                      ? Colors.tint
+                      : "transparent",
                   },
-                ]}>
+                ]}
+              >
                 <MaterialCommunityIcons
                   name="check"
                   size={16}
-                  color={allowAllSubstitutes ? Colors.background : Colors.outlineVariant}
+                  color={
+                    allowAllSubstitutes
+                      ? Colors.background
+                      : Colors.outlineVariant
+                  }
                 />
               </View>
               <View style={styles.settingTextContainer}>
-                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>Allow all substitutes</Text>
-                <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}> 
+                <Text
+                  style={[styles.settingLabel, { color: Colors.onSurface }]}
+                >
+                  Allow all substitutes
+                </Text>
+                <Text
+                  style={[
+                    styles.settingCaption,
+                    { color: Colors.onSurfaceVariant },
+                  ]}
+                >
                   Always use substitutes
                 </Text>
               </View>
@@ -781,24 +935,43 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   borderColor: Colors.outline,
                   backgroundColor: Colors.surface,
                 },
-              ]}>
+              ]}
+            >
               <View
                 style={[
                   styles.checkbox,
                   {
-                    borderColor: useImperialUnits ? Colors.tint : Colors.outlineVariant,
-                    backgroundColor: useImperialUnits ? Colors.tint : 'transparent',
+                    borderColor: useImperialUnits
+                      ? Colors.tint
+                      : Colors.outlineVariant,
+                    backgroundColor: useImperialUnits
+                      ? Colors.tint
+                      : "transparent",
                   },
-                ]}>
+                ]}
+              >
                 <MaterialCommunityIcons
                   name="check"
                   size={16}
-                  color={useImperialUnits ? Colors.background : Colors.outlineVariant}
+                  color={
+                    useImperialUnits ? Colors.background : Colors.outlineVariant
+                  }
                 />
               </View>
               <View style={styles.settingTextContainer}>
-                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>Show in imperial</Text>
-                <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>Use oz instead of ml and grams</Text>
+                <Text
+                  style={[styles.settingLabel, { color: Colors.onSurface }]}
+                >
+                  Show in imperial
+                </Text>
+                <Text
+                  style={[
+                    styles.settingCaption,
+                    { color: Colors.onSurfaceVariant },
+                  ]}
+                >
+                  Use oz instead of ml and grams
+                </Text>
               </View>
             </Pressable>
             <Pressable
@@ -811,24 +984,43 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   borderColor: Colors.outline,
                   backgroundColor: Colors.surface,
                 },
-              ]}>
+              ]}
+            >
               <View
                 style={[
                   styles.checkbox,
                   {
-                    borderColor: keepScreenAwake ? Colors.tint : Colors.outlineVariant,
-                    backgroundColor: keepScreenAwake ? Colors.tint : 'transparent',
+                    borderColor: keepScreenAwake
+                      ? Colors.tint
+                      : Colors.outlineVariant,
+                    backgroundColor: keepScreenAwake
+                      ? Colors.tint
+                      : "transparent",
                   },
-                ]}>
+                ]}
+              >
                 <MaterialCommunityIcons
                   name="check"
                   size={16}
-                  color={keepScreenAwake ? Colors.background : Colors.outlineVariant}
+                  color={
+                    keepScreenAwake ? Colors.background : Colors.outlineVariant
+                  }
                 />
               </View>
               <View style={styles.settingTextContainer}>
-                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>Keep screen awake</Text>
-                <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>Prevent sleep on cocktail view</Text>
+                <Text
+                  style={[styles.settingLabel, { color: Colors.onSurface }]}
+                >
+                  Keep screen awake
+                </Text>
+                <Text
+                  style={[
+                    styles.settingCaption,
+                    { color: Colors.onSurfaceVariant },
+                  ]}
+                >
+                  Prevent sleep on cocktail view
+                </Text>
               </View>
             </Pressable>
             <Pressable
@@ -841,7 +1033,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   borderColor: Colors.outline,
                   backgroundColor: Colors.surface,
                 },
-              ]}>
+              ]}
+            >
               <View
                 style={[
                   styles.checkbox,
@@ -849,12 +1042,28 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     borderColor: Colors.tint,
                     backgroundColor: Colors.surfaceVariant,
                   },
-                ]}>
-                <MaterialCommunityIcons name="home-variant" size={16} color={Colors.tint} />
+                ]}
+              >
+                <MaterialCommunityIcons
+                  name="home-variant"
+                  size={16}
+                  color={Colors.tint}
+                />
               </View>
               <View style={styles.settingTextContainer}>
-                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>Starting screen</Text>
-                <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>Open {selectedStartScreenOption?.label ?? 'All cocktails'}</Text>
+                <Text
+                  style={[styles.settingLabel, { color: Colors.onSurface }]}
+                >
+                  Starting screen
+                </Text>
+                <Text
+                  style={[
+                    styles.settingCaption,
+                    { color: Colors.onSurfaceVariant },
+                  ]}
+                >
+                  Open {selectedStartScreenOption?.label ?? "All cocktails"}
+                </Text>
               </View>
             </Pressable>
             <Pressable
@@ -867,7 +1076,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   borderColor: Colors.outline,
                   backgroundColor: Colors.surface,
                 },
-              ]}>
+              ]}
+            >
               <View
                 style={[
                   styles.checkbox,
@@ -875,15 +1085,31 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     borderColor: Colors.tint,
                     backgroundColor: Colors.surfaceVariant,
                   },
-                ]}>
-                <MaterialCommunityIcons name="star" size={16} color={Colors.tint} />
+                ]}
+              >
+                <MaterialCommunityIcons
+                  name="star"
+                  size={16}
+                  color={Colors.tint}
+                />
               </View>
               <View style={styles.settingTextContainer}>
-                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>Favorites rating filter</Text>
-                <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>Showing {ratingFilterThreshold}+ stars cocktails</Text>
+                <Text
+                  style={[styles.settingLabel, { color: Colors.onSurface }]}
+                >
+                  Favorites rating filter
+                </Text>
+                <Text
+                  style={[
+                    styles.settingCaption,
+                    { color: Colors.onSurfaceVariant },
+                  ]}
+                >
+                  Showing {ratingFilterThreshold}+ stars cocktails
+                </Text>
               </View>
             </Pressable>
-            
+
             <Pressable
               accessibilityRole="button"
               accessibilityLabel="Manage custom tags"
@@ -894,7 +1120,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   borderColor: Colors.outline,
                   backgroundColor: Colors.surface,
                 },
-              ]}>
+              ]}
+            >
               <View
                 style={[
                   styles.checkbox,
@@ -902,12 +1129,28 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     borderColor: Colors.tint,
                     backgroundColor: Colors.surfaceVariant,
                   },
-                ]}>
-                <MaterialCommunityIcons name="tag-multiple" size={16} color={Colors.tint} />
+                ]}
+              >
+                <MaterialCommunityIcons
+                  name="tag-multiple"
+                  size={16}
+                  color={Colors.tint}
+                />
               </View>
               <View style={styles.settingTextContainer}>
-                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>Manage tags</Text>
-                <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>Create or update your tags</Text>
+                <Text
+                  style={[styles.settingLabel, { color: Colors.onSurface }]}
+                >
+                  Manage tags
+                </Text>
+                <Text
+                  style={[
+                    styles.settingCaption,
+                    { color: Colors.onSurfaceVariant },
+                  ]}
+                >
+                  Create or update your tags
+                </Text>
               </View>
             </Pressable>
             <Pressable
@@ -922,15 +1165,32 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   backgroundColor: Colors.surface,
                 },
                 pressed || isExporting ? { opacity: 0.8 } : null,
-              ]}>
-              <View style={[styles.actionIcon, { backgroundColor: Colors.surfaceVariant }]}>
-                <MaterialCommunityIcons name="file-export-outline" size={16} color={Colors.onSurfaceVariant} />
+              ]}
+            >
+              <View
+                style={[
+                  styles.actionIcon,
+                  { backgroundColor: Colors.surfaceVariant },
+                ]}
+              >
+                <MaterialCommunityIcons
+                  name="file-export-outline"
+                  size={16}
+                  color={Colors.onSurfaceVariant}
+                />
               </View>
               <View style={styles.settingTextContainer}>
-                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>
-                  {isExporting ? 'Exporting data...' : 'Export data'}
+                <Text
+                  style={[styles.settingLabel, { color: Colors.onSurface }]}
+                >
+                  {isExporting ? "Exporting data..." : "Export data"}
                 </Text>
-                <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>
+                <Text
+                  style={[
+                    styles.settingCaption,
+                    { color: Colors.onSurfaceVariant },
+                  ]}
+                >
                   Backup data to a file
                 </Text>
               </View>
@@ -947,15 +1207,32 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   backgroundColor: Colors.surface,
                 },
                 pressed || isImporting ? { opacity: 0.8 } : null,
-              ]}>
-              <View style={[styles.actionIcon, { backgroundColor: Colors.surfaceVariant }]}>
-                <MaterialCommunityIcons name="file-import-outline" size={16} color={Colors.onSurfaceVariant} />
+              ]}
+            >
+              <View
+                style={[
+                  styles.actionIcon,
+                  { backgroundColor: Colors.surfaceVariant },
+                ]}
+              >
+                <MaterialCommunityIcons
+                  name="file-import-outline"
+                  size={16}
+                  color={Colors.onSurfaceVariant}
+                />
               </View>
               <View style={styles.settingTextContainer}>
-                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>
-                  {isImporting ? 'Importing data...' : 'Import data'}
+                <Text
+                  style={[styles.settingLabel, { color: Colors.onSurface }]}
+                >
+                  {isImporting ? "Importing data..." : "Import data"}
                 </Text>
-                <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>
+                <Text
+                  style={[
+                    styles.settingCaption,
+                    { color: Colors.onSurfaceVariant },
+                  ]}
+                >
                   Load backup from a file
                 </Text>
               </View>
@@ -972,15 +1249,32 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   backgroundColor: Colors.surface,
                 },
                 pressed || isBackingUpPhotos ? { opacity: 0.8 } : null,
-              ]}>
-              <View style={[styles.actionIcon, { backgroundColor: Colors.surfaceVariant }]}>
-                <MaterialCommunityIcons name="image-multiple" size={16} color={Colors.onSurfaceVariant} />
+              ]}
+            >
+              <View
+                style={[
+                  styles.actionIcon,
+                  { backgroundColor: Colors.surfaceVariant },
+                ]}
+              >
+                <MaterialCommunityIcons
+                  name="image-multiple"
+                  size={16}
+                  color={Colors.onSurfaceVariant}
+                />
               </View>
               <View style={styles.settingTextContainer}>
-                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>
-                  {isBackingUpPhotos ? 'Exporting photos...' : 'Export photos'}
+                <Text
+                  style={[styles.settingLabel, { color: Colors.onSurface }]}
+                >
+                  {isBackingUpPhotos ? "Exporting photos..." : "Export photos"}
                 </Text>
-                <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>
+                <Text
+                  style={[
+                    styles.settingCaption,
+                    { color: Colors.onSurfaceVariant },
+                  ]}
+                >
                   Save photos as an archive
                 </Text>
               </View>
@@ -992,8 +1286,13 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
         transparent
         visible={isRatingModalVisible}
         animationType="fade"
-        onRequestClose={handleCloseRatingModal}>
-        <Pressable style={styles.modalOverlay} onPress={handleCloseRatingModal} accessibilityRole="button">
+        onRequestClose={handleCloseRatingModal}
+      >
+        <Pressable
+          style={styles.modalOverlay}
+          onPress={handleCloseRatingModal}
+          accessibilityRole="button"
+        >
           <Pressable
             style={[
               styles.modalCard,
@@ -1004,14 +1303,35 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               },
             ]}
             accessibilityLabel="Favorites rating"
-            onPress={() => {}}>
+            onPress={() => {}}
+          >
             <View style={styles.modalHeader}>
-              <Text style={[styles.modalTitle, { color: Colors.onSurface, flex: 1 }]}>Favorites rating</Text>
-              <Pressable onPress={handleCloseRatingModal} accessibilityRole="button" accessibilityLabel="Close">
-                <MaterialCommunityIcons name="close" size={22} color={Colors.onSurfaceVariant} />
+              <Text
+                style={[
+                  styles.modalTitle,
+                  { color: Colors.onSurface, flex: 1 },
+                ]}
+              >
+                Favorites rating
+              </Text>
+              <Pressable
+                onPress={handleCloseRatingModal}
+                accessibilityRole="button"
+                accessibilityLabel="Close"
+              >
+                <MaterialCommunityIcons
+                  name="close"
+                  size={22}
+                  color={Colors.onSurfaceVariant}
+                />
               </Pressable>
             </View>
-            <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>
+            <Text
+              style={[
+                styles.settingCaption,
+                { color: Colors.onSurfaceVariant },
+              ]}
+            >
               Choose the minimum rating to show on Favorites
             </Text>
             <View style={styles.ratingOptionRow}>
@@ -1022,26 +1342,38 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     key={`rating-threshold-${value}`}
                     accessibilityRole="button"
                     accessibilityState={{ selected: isSelected }}
-                    accessibilityLabel={`Show ${value} star${value === 1 ? '' : 's'} and up`}
+                    accessibilityLabel={`Show ${value} star${value === 1 ? "" : "s"} and up`}
                     onPress={() => handleSelectRatingThreshold(value)}
                     style={({ pressed }) => [
                       styles.ratingOption,
                       {
-                        borderColor: isSelected ? Colors.tint : Colors.outlineVariant,
-                        backgroundColor: isSelected ? Colors.tint : Colors.surfaceBright,
+                        borderColor: isSelected
+                          ? Colors.tint
+                          : Colors.outlineVariant,
+                        backgroundColor: isSelected
+                          ? Colors.tint
+                          : Colors.surfaceBright,
                       },
                       pressed ? { opacity: 0.8 } : null,
-                    ]}>
+                    ]}
+                  >
                     <MaterialCommunityIcons
                       name="star"
                       size={20}
-                      color={isSelected ? Colors.background : Colors.onSurfaceVariant}
+                      color={
+                        isSelected ? Colors.background : Colors.onSurfaceVariant
+                      }
                     />
                     <Text
                       style={[
                         styles.ratingOptionLabel,
-                        { color: isSelected ? Colors.background : Colors.onSurface },
-                      ]}>
+                        {
+                          color: isSelected
+                            ? Colors.background
+                            : Colors.onSurface,
+                        },
+                      ]}
+                    >
                       {value}+
                     </Text>
                   </Pressable>
@@ -1051,8 +1383,17 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
           </Pressable>
         </Pressable>
       </Modal>
-      <Modal transparent visible={isTagManagerVisible} animationType="fade" onRequestClose={handleCloseTagManager}>
-        <Pressable style={styles.modalOverlay} onPress={handleCloseTagManager} accessibilityRole="button">
+      <Modal
+        transparent
+        visible={isTagManagerVisible}
+        animationType="fade"
+        onRequestClose={handleCloseTagManager}
+      >
+        <Pressable
+          style={styles.modalOverlay}
+          onPress={handleCloseTagManager}
+          accessibilityRole="button"
+        >
           <Pressable
             style={[
               styles.modalCard,
@@ -1063,58 +1404,112 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               },
             ]}
             accessibilityLabel="Manage tags"
-            onPress={() => {}}>
+            onPress={() => {}}
+          >
             <View style={styles.modalHeader}>
-              <Text style={[styles.modalTitle, { color: Colors.onSurface, flex: 1 }]}>Manage tags</Text>
-              <Pressable onPress={handleCloseTagManager} accessibilityRole="button" accessibilityLabel="Close">
-                <MaterialCommunityIcons name="close" size={22} color={Colors.onSurfaceVariant} />
+              <Text
+                style={[
+                  styles.modalTitle,
+                  { color: Colors.onSurface, flex: 1 },
+                ]}
+              >
+                Manage tags
+              </Text>
+              <Pressable
+                onPress={handleCloseTagManager}
+                accessibilityRole="button"
+                accessibilityLabel="Close"
+              >
+                <MaterialCommunityIcons
+                  name="close"
+                  size={22}
+                  color={Colors.onSurfaceVariant}
+                />
               </Pressable>
             </View>
             <ScrollView
               showsVerticalScrollIndicator={false}
               contentContainerStyle={styles.tagManagerContent}
-              keyboardShouldPersistTaps="handled">
+              keyboardShouldPersistTaps="handled"
+            >
               <View style={styles.tagSection}>
                 <View style={styles.tagSectionHeader}>
-                  <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>Cocktail tags</Text>
+                  <Text
+                    style={[styles.settingLabel, { color: Colors.onSurface }]}
+                  >
+                    Cocktail tags
+                  </Text>
                   <Pressable
                     accessibilityRole="button"
-                    onPress={() => handleOpenTagEditor('cocktail')}
-                    style={[styles.tagAddButton, { borderColor: Colors.outlineVariant }]}
+                    onPress={() => handleOpenTagEditor("cocktail")}
+                    style={[
+                      styles.tagAddButton,
+                      { borderColor: Colors.outlineVariant },
+                    ]}
                   >
-                    <MaterialCommunityIcons name="plus" size={16} color={Colors.tint} />
-                    <Text style={[styles.tagAddLabel, { color: Colors.tint }]}>Add</Text>
+                    <MaterialCommunityIcons
+                      name="plus"
+                      size={16}
+                      color={Colors.tint}
+                    />
+                    <Text style={[styles.tagAddLabel, { color: Colors.tint }]}>
+                      Add
+                    </Text>
                   </Pressable>
                 </View>
                 {customCocktailTags.length === 0 ? (
-                  <Text style={[styles.tagEmpty, { color: Colors.onSurfaceVariant }]}>
+                  <Text
+                    style={[
+                      styles.tagEmpty,
+                      { color: Colors.onSurfaceVariant },
+                    ]}
+                  >
                     No custom cocktail tags yet.
                   </Text>
                 ) : (
                   <View style={styles.tagRows}>
                     {customCocktailTags.map((tag) => (
-                      <View key={`cocktail-tag-${tag.id}`} style={styles.tagRow}>
-                        <TagPill label={tag.name ?? ''} color={tag.color ?? Colors.tint} />
+                      <View
+                        key={`cocktail-tag-${tag.id}`}
+                        style={styles.tagRow}
+                      >
+                        <TagPill
+                          label={tag.name ?? ""}
+                          color={tag.color ?? Colors.tint}
+                        />
                         <View style={styles.tagActions}>
                           <Pressable
                             accessibilityRole="button"
-                            accessibilityLabel={`Edit ${tag.name ?? 'tag'}`}
+                            accessibilityLabel={`Edit ${tag.name ?? "tag"}`}
                             onPress={() =>
-                              handleOpenTagEditor('cocktail', {
+                              handleOpenTagEditor("cocktail", {
                                 id: Number(tag.id),
-                                name: tag.name ?? '',
+                                name: tag.name ?? "",
                                 color: tag.color ?? Colors.tint,
                               })
                             }
                           >
-                            <MaterialCommunityIcons name="pencil" size={18} color={Colors.onSurfaceVariant} />
+                            <MaterialCommunityIcons
+                              name="pencil"
+                              size={18}
+                              color={Colors.onSurfaceVariant}
+                            />
                           </Pressable>
                           <Pressable
                             accessibilityRole="button"
-                            accessibilityLabel={`Delete ${tag.name ?? 'tag'}`}
-                            onPress={() => handleDeleteTag('cocktail', { id: Number(tag.id), name: tag.name ?? 'Tag' })}
+                            accessibilityLabel={`Delete ${tag.name ?? "tag"}`}
+                            onPress={() =>
+                              handleDeleteTag("cocktail", {
+                                id: Number(tag.id),
+                                name: tag.name ?? "Tag",
+                              })
+                            }
                           >
-                            <MaterialCommunityIcons name="trash-can-outline" size={18} color={Colors.error} />
+                            <MaterialCommunityIcons
+                              name="trash-can-outline"
+                              size={18}
+                              color={Colors.error}
+                            />
                           </Pressable>
                         </View>
                       </View>
@@ -1124,45 +1519,82 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               </View>
               <View style={styles.tagSection}>
                 <View style={styles.tagSectionHeader}>
-                  <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>Ingredient tags</Text>
+                  <Text
+                    style={[styles.settingLabel, { color: Colors.onSurface }]}
+                  >
+                    Ingredient tags
+                  </Text>
                   <Pressable
                     accessibilityRole="button"
-                    onPress={() => handleOpenTagEditor('ingredient')}
-                    style={[styles.tagAddButton, { borderColor: Colors.outlineVariant }]}
+                    onPress={() => handleOpenTagEditor("ingredient")}
+                    style={[
+                      styles.tagAddButton,
+                      { borderColor: Colors.outlineVariant },
+                    ]}
                   >
-                    <MaterialCommunityIcons name="plus" size={16} color={Colors.tint} />
-                    <Text style={[styles.tagAddLabel, { color: Colors.tint }]}>Add</Text>
+                    <MaterialCommunityIcons
+                      name="plus"
+                      size={16}
+                      color={Colors.tint}
+                    />
+                    <Text style={[styles.tagAddLabel, { color: Colors.tint }]}>
+                      Add
+                    </Text>
                   </Pressable>
                 </View>
                 {customIngredientTags.length === 0 ? (
-                  <Text style={[styles.tagEmpty, { color: Colors.onSurfaceVariant }]}>
+                  <Text
+                    style={[
+                      styles.tagEmpty,
+                      { color: Colors.onSurfaceVariant },
+                    ]}
+                  >
                     No custom ingredient tags yet.
                   </Text>
                 ) : (
                   <View style={styles.tagRows}>
                     {customIngredientTags.map((tag) => (
-                      <View key={`ingredient-tag-${tag.id}`} style={styles.tagRow}>
-                        <TagPill label={tag.name ?? ''} color={tag.color ?? Colors.tint} />
+                      <View
+                        key={`ingredient-tag-${tag.id}`}
+                        style={styles.tagRow}
+                      >
+                        <TagPill
+                          label={tag.name ?? ""}
+                          color={tag.color ?? Colors.tint}
+                        />
                         <View style={styles.tagActions}>
                           <Pressable
                             accessibilityRole="button"
-                            accessibilityLabel={`Edit ${tag.name ?? 'tag'}`}
+                            accessibilityLabel={`Edit ${tag.name ?? "tag"}`}
                             onPress={() =>
-                              handleOpenTagEditor('ingredient', {
+                              handleOpenTagEditor("ingredient", {
                                 id: Number(tag.id),
-                                name: tag.name ?? '',
+                                name: tag.name ?? "",
                                 color: tag.color ?? Colors.tint,
                               })
                             }
                           >
-                            <MaterialCommunityIcons name="pencil" size={18} color={Colors.onSurfaceVariant} />
+                            <MaterialCommunityIcons
+                              name="pencil"
+                              size={18}
+                              color={Colors.onSurfaceVariant}
+                            />
                           </Pressable>
                           <Pressable
                             accessibilityRole="button"
-                            accessibilityLabel={`Delete ${tag.name ?? 'tag'}`}
-                            onPress={() => handleDeleteTag('ingredient', { id: Number(tag.id), name: tag.name ?? 'Tag' })}
+                            accessibilityLabel={`Delete ${tag.name ?? "tag"}`}
+                            onPress={() =>
+                              handleDeleteTag("ingredient", {
+                                id: Number(tag.id),
+                                name: tag.name ?? "Tag",
+                              })
+                            }
                           >
-                            <MaterialCommunityIcons name="trash-can-outline" size={18} color={Colors.error} />
+                            <MaterialCommunityIcons
+                              name="trash-can-outline"
+                              size={18}
+                              color={Colors.error}
+                            />
                           </Pressable>
                         </View>
                       </View>
@@ -1176,8 +1608,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       </Modal>
       <TagEditorModal
         visible={isTagEditorVisible}
-        title={tagEditorMode === 'create' ? 'New tag' : 'Edit tag'}
-        confirmLabel={tagEditorMode === 'create' ? 'Create' : 'Save'}
+        title={tagEditorMode === "create" ? "New tag" : "Edit tag"}
+        confirmLabel={tagEditorMode === "create" ? "Create" : "Save"}
         initialName={tagEditorTarget?.name}
         initialColor={tagEditorTarget?.color}
         onClose={handleCloseTagEditor}
@@ -1185,7 +1617,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       />
       <AppDialog
         visible={dialogOptions != null}
-        title={dialogOptions?.title ?? ''}
+        title={dialogOptions?.title ?? ""}
         message={dialogOptions?.message}
         actions={dialogOptions?.actions ?? []}
         onRequestClose={handleCloseDialog}
@@ -1194,8 +1626,13 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
         transparent
         visible={isStartScreenModalVisible}
         animationType="fade"
-        onRequestClose={handleCloseStartScreenModal}>
-        <Pressable style={styles.modalOverlay} onPress={handleCloseStartScreenModal} accessibilityRole="button">
+        onRequestClose={handleCloseStartScreenModal}
+      >
+        <Pressable
+          style={styles.modalOverlay}
+          onPress={handleCloseStartScreenModal}
+          accessibilityRole="button"
+        >
           <Pressable
             style={[
               styles.modalCard,
@@ -1206,19 +1643,43 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               },
             ]}
             accessibilityLabel="Starting screen"
-            onPress={() => {}}>
+            onPress={() => {}}
+          >
             <View style={styles.modalHeader}>
-              <Text style={[styles.modalTitle, { color: Colors.onSurface, flex: 1 }]}>Starting screen</Text>
-              <Pressable onPress={handleCloseStartScreenModal} accessibilityRole="button" accessibilityLabel="Close">
-                <MaterialCommunityIcons name="close" size={22} color={Colors.onSurfaceVariant} />
+              <Text
+                style={[
+                  styles.modalTitle,
+                  { color: Colors.onSurface, flex: 1 },
+                ]}
+              >
+                Starting screen
+              </Text>
+              <Pressable
+                onPress={handleCloseStartScreenModal}
+                accessibilityRole="button"
+                accessibilityLabel="Close"
+              >
+                <MaterialCommunityIcons
+                  name="close"
+                  size={22}
+                  color={Colors.onSurfaceVariant}
+                />
               </Pressable>
             </View>
-            <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>Select where the app opens</Text>
+            <Text
+              style={[
+                styles.settingCaption,
+                { color: Colors.onSurfaceVariant },
+              ]}
+            >
+              Select where the app opens
+            </Text>
             <ScrollView
               style={styles.startScreenModalScroll}
               contentContainerStyle={styles.startScreenOptionList}
               showsVerticalScrollIndicator={false}
-              keyboardShouldPersistTaps="handled">
+              keyboardShouldPersistTaps="handled"
+            >
               {START_SCREEN_OPTIONS.map((option) => {
                 const isSelected = startScreen === option.key;
                 return (
@@ -1231,20 +1692,48 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     style={({ pressed }) => [
                       styles.startScreenOption,
                       {
-                        borderColor: isSelected ? Colors.tint : Colors.outlineVariant,
-                        backgroundColor: isSelected ? Colors.highlightFaint : Colors.surfaceBright,
+                        borderColor: isSelected
+                          ? Colors.tint
+                          : Colors.outlineVariant,
+                        backgroundColor: isSelected
+                          ? Colors.highlightFaint
+                          : Colors.surfaceBright,
                       },
                       pressed ? { opacity: 0.85 } : null,
-                    ]}>
-                    <View style={[styles.startScreenIcon, { backgroundColor: Colors.surfaceBright }]}>
+                    ]}
+                  >
+                    <View
+                      style={[
+                        styles.startScreenIcon,
+                        { backgroundColor: Colors.surfaceBright },
+                      ]}
+                    >
                       {renderStartScreenIcon(option, isSelected)}
                     </View>
                     <View style={styles.startScreenTextContainer}>
-                      <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>{option.label}</Text>
-                      <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>{option.description}</Text>
+                      <Text
+                        style={[
+                          styles.settingLabel,
+                          { color: Colors.onSurface },
+                        ]}
+                      >
+                        {option.label}
+                      </Text>
+                      <Text
+                        style={[
+                          styles.settingCaption,
+                          { color: Colors.onSurfaceVariant },
+                        ]}
+                      >
+                        {option.description}
+                      </Text>
                     </View>
                     <MaterialCommunityIcons
-                      name={isSelected ? 'check-circle' : 'checkbox-blank-circle-outline'}
+                      name={
+                        isSelected
+                          ? "check-circle"
+                          : "checkbox-blank-circle-outline"
+                      }
                       size={20}
                       color={isSelected ? Colors.tint : Colors.onSurfaceVariant}
                     />
@@ -1262,7 +1751,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'transparent',
+    backgroundColor: "transparent",
   },
   backdropArea: {
     ...StyleSheet.absoluteFillObject,
@@ -1271,7 +1760,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   drawer: {
-    position: 'absolute',
+    position: "absolute",
     left: 0,
     top: 0,
     bottom: 0,
@@ -1298,18 +1787,18 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    fontWeight: '700',
+    fontWeight: "700",
   },
   settingRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 12,
     paddingVertical: 12,
     paddingRight: 10,
   },
   actionRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 12,
     paddingVertical: 12,
     paddingHorizontal: 10,
@@ -1321,15 +1810,15 @@ const styles = StyleSheet.create({
     height: 22,
     borderRadius: 4,
     borderWidth: 2,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   actionIcon: {
     width: 22,
     height: 22,
     borderRadius: 6,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   settingTextContainer: {
     flex: 1,
@@ -1337,21 +1826,21 @@ const styles = StyleSheet.create({
   },
   settingLabel: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   settingCaption: {
     fontSize: 12,
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.4)',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "rgba(0,0,0,0.4)",
+    alignItems: "center",
+    justifyContent: "center",
     padding: 24,
   },
   modalCard: {
-    width: '100%',
-    maxHeight: '92%',
+    width: "100%",
+    maxHeight: "92%",
     flexShrink: 1,
     borderRadius: 12,
     paddingTop: 12,
@@ -1366,29 +1855,29 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   modalHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     gap: 12,
   },
   modalTitle: {
     fontSize: 20,
-    fontWeight: '700',
+    fontWeight: "700",
     marginTop: 4,
   },
   startScreenModalScroll: {
-    maxHeight: '100%',
-    width: '100%',
+    maxHeight: "100%",
+    width: "100%",
   },
   startScreenOptionList: {
     gap: 4,
   },
   startScreenOption: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 12,
     borderRadius: 12,
-    paddingTop: 12, 
+    paddingTop: 12,
     paddingRight: 16,
     paddingBottom: 20,
     paddingLeft: 16,
@@ -1398,8 +1887,8 @@ const styles = StyleSheet.create({
     width: 34,
     height: 34,
     borderRadius: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   startScreenTextContainer: {
     flex: 1,
@@ -1412,13 +1901,13 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   tagSectionHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   tagAddButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 6,
     paddingHorizontal: 10,
     paddingVertical: 6,
@@ -1427,39 +1916,39 @@ const styles = StyleSheet.create({
   },
   tagAddLabel: {
     fontSize: 12,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   tagRows: {
     gap: 12,
   },
   tagRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     gap: 12,
   },
   tagActions: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 12,
   },
   tagEmpty: {
     fontSize: 12,
   },
   ratingOptionRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     gap: 10,
   },
   ratingOption: {
     flex: 1,
-    alignItems: 'center',
+    alignItems: "center",
     paddingVertical: 12,
     borderRadius: 12,
     borderWidth: StyleSheet.hairlineWidth,
     gap: 6,
   },
   ratingOptionLabel: {
-    fontWeight: '700',
+    fontWeight: "700",
   },
 });
