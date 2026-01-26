@@ -1,6 +1,6 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
-import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
+import { Stack, useLocalSearchParams } from 'expo-router';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   FlatList,
@@ -25,6 +25,7 @@ import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
 import { Colors } from '@/constants/theme';
 import { isCocktailReady } from '@/libs/cocktail-availability';
 import { createIngredientLookup } from '@/libs/ingredient-availability';
+import { navigateToDetailsWithReturnTo } from '@/libs/navigation';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Cocktail } from '@/providers/inventory-provider';
 
@@ -65,7 +66,6 @@ function resolveCocktailByKey(key: string, cocktails: Cocktail[]) {
 const METHOD_ICON_SIZE = 16;
 
 export default function ShakerResultsScreen() {
-  const router = useRouter();
   const {
     cocktails,
     availableIngredientIds,
@@ -489,21 +489,19 @@ export default function ShakerResultsScreen() {
       const unavailableParam = Array.isArray(params.unavailable)
         ? params.unavailable[0]
         : params.unavailable;
-      const returnToParams = JSON.stringify({
-        available: availableParam ?? '',
-        unavailable: unavailableParam ?? '',
-      });
-
-      router.push({
+      navigateToDetailsWithReturnTo({
         pathname: '/cocktails/[cocktailId]',
         params: {
           cocktailId: String(targetId),
-          returnToPath: '/shaker/results',
-          returnToParams,
+        },
+        returnToPath: '/shaker/results',
+        returnToParams: {
+          available: availableParam ?? '',
+          unavailable: unavailableParam ?? '',
         },
       });
     },
-    [params.available, params.unavailable, router],
+    [params.available, params.unavailable],
   );
 
   const renderItem = useCallback(

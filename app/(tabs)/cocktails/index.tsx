@@ -30,6 +30,7 @@ import { Colors } from '@/constants/theme';
 import { isCocktailReady } from '@/libs/cocktail-availability';
 import { getLastCocktailTab, setLastCocktailTab, type CocktailTabKey } from '@/libs/collection-tabs';
 import { createIngredientLookup } from '@/libs/ingredient-availability';
+import { navigateToDetailsWithReturnTo } from '@/libs/navigation';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { buildTagOptions, type TagOption } from '@/libs/tag-options';
 import { useInventory, type Cocktail } from '@/providers/inventory-provider';
@@ -652,21 +653,26 @@ export default function CocktailsScreen() {
         return;
       }
 
-      router.push({ pathname: '/cocktails/[cocktailId]', params: { cocktailId: String(candidateId) } });
+      navigateToDetailsWithReturnTo({
+        pathname: '/cocktails/[cocktailId]',
+        params: { cocktailId: String(candidateId) },
+        returnToPath: '/cocktails',
+      });
     },
-    [router],
+    [],
   );
 
   const handleSelectIngredient = useCallback(
     (ingredientId: number) => {
       if (ingredientId >= 0) {
-        router.push({
+        navigateToDetailsWithReturnTo({
           pathname: '/ingredients/[ingredientId]',
-          params: { ingredientId: String(ingredientId), returnToPath: '/cocktails' },
+          params: { ingredientId: String(ingredientId) },
+          returnToPath: '/cocktails',
         });
       }
     },
-    [router],
+    [],
   );
 
   const handleShoppingToggle = useCallback(

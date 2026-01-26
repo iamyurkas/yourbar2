@@ -33,7 +33,12 @@ import {
   createIngredientLookup,
   getVisibleIngredientIdsForCocktail,
 } from "@/libs/ingredient-availability";
-import { skipDuplicateBack } from "@/libs/navigation";
+import {
+  buildReturnToParams,
+  navigateToDetailsWithReturnTo,
+  parseReturnToParams,
+  returnToSourceOrBack,
+} from "@/libs/navigation";
 import { normalizeSearchText } from "@/libs/search-normalization";
 import { useInventory, type Ingredient } from "@/providers/inventory-provider";
 
@@ -96,27 +101,7 @@ export default function IngredientDetailsScreen() {
   }, [params.returnToPath]);
 
   const returnToParams = useMemo(() => {
-    const value = Array.isArray(params.returnToParams)
-      ? params.returnToParams[0]
-      : params.returnToParams;
-    if (typeof value !== "string" || value.length === 0) {
-      return undefined;
-    }
-
-    try {
-      const parsed = JSON.parse(value);
-      if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
-        return undefined;
-      }
-
-      const entries = Object.entries(parsed).filter(
-        ([, entryValue]) => typeof entryValue === "string",
-      );
-      return entries.length ? Object.fromEntries(entries) : undefined;
-    } catch (error) {
-      console.warn("Failed to parse return params", error);
-      return undefined;
-    }
+    return parseReturnToParams(params.returnToParams);
   }, [params.returnToParams]);
 
   const ingredientLookup = useMemo(
@@ -331,9 +316,13 @@ export default function IngredientDetailsScreen() {
 
     router.push({
       pathname: "/ingredients/create",
-      params: { ingredientId: String(targetId), mode: "edit" },
+      params: {
+        ingredientId: String(targetId),
+        mode: "edit",
+        ...buildReturnToParams(returnToPath, returnToParams),
+      },
     });
-  }, [ingredient]);
+  }, [ingredient, returnToParams, returnToPath]);
 
   const handleAddCocktail = useCallback(() => {
     if (!ingredient) {
@@ -445,16 +434,13 @@ export default function IngredientDetailsScreen() {
       const returnIngredientId =
         ingredient?.id ?? ingredientId ?? ingredient?.name;
       if (returnIngredientId != null) {
-        const returnToParams = JSON.stringify({
-          ingredientId: String(returnIngredientId),
-        });
-        router.push({
+        navigateToDetailsWithReturnTo({
           pathname: "/cocktails/[cocktailId]",
           params: {
             cocktailId: String(cocktailId),
-            returnToPath: "/ingredients/[ingredientId]",
-            returnToParams,
           },
+          returnToPath: "/ingredients/[ingredientId]",
+          returnToParams: { ingredientId: String(returnIngredientId) },
         });
         return;
       }
@@ -501,12 +487,7 @@ export default function IngredientDetailsScreen() {
   }, [cocktailEntries.length]);
 
   const handleReturn = useCallback(() => {
-    if (returnToPath) {
-      router.navigate({ pathname: returnToPath, params: returnToParams });
-      return;
-    }
-
-    skipDuplicateBack(navigation);
+    returnToSourceOrBack(navigation, { returnToPath, returnToParams });
   }, [navigation, returnToParams, returnToPath]);
 
   useEffect(() => {
@@ -524,9 +505,9 @@ export default function IngredientDetailsScreen() {
       isHandlingBackRef.current = true;
       handleReturn();
 
-      setTimeout(() => {
+      requestAnimationFrame(() => {
         isHandlingBackRef.current = false;
-      }, 0);
+      });
     });
 
     return unsubscribe;
