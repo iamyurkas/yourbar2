@@ -56,3 +56,7 @@ npm run web
 ## Data & Storage
 
 Inventory, settings, and ratings are stored locally in an on-device snapshot. You can export or import inventory data through the app to back up and restore your bar setup.
+
+## Privacy
+
+YourBar does not collect any personal data. The only information sent off-device is crash diagnostics reported via Sentry to help improve app stability.
