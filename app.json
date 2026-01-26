@@ -42,6 +42,14 @@
             "backgroundColor": "#4DABF7"
           }
         }
+      ],
+      [
+        "@sentry/react-native/expo",
+        {
+          "url": "https://sentry.io/",
+          "project": "react-native",
+          "organization": "your-bar"
+        }
       ]
     ],
     "experiments": {
