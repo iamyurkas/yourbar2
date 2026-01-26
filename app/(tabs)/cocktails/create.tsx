@@ -61,7 +61,8 @@ import {
 import { useUnsavedChanges } from "@/providers/unsaved-changes-provider";
 import { tagColors } from "@/theme/theme";
 
-const DEFAULT_UNIT_ID = 11;
+const DEFAULT_METRIC_UNIT_ID = 11;
+const DEFAULT_IMPERIAL_UNIT_ID = 12;
 const MIN_AUTOCOMPLETE_LENGTH = 2;
 const MAX_SUGGESTIONS = 8;
 
@@ -157,6 +158,7 @@ function createEditableSubstitute(
 }
 
 function createEditableIngredient(
+  defaultUnitId: number,
   initial?: Partial<EditableIngredient>,
 ): EditableIngredient {
   return {
@@ -164,7 +166,7 @@ function createEditableIngredient(
     ingredientId: initial?.ingredientId,
     name: initial?.name ?? "",
     amount: initial?.amount ?? "",
-    unitId: initial?.unitId ?? DEFAULT_UNIT_ID,
+    unitId: initial?.unitId ?? defaultUnitId,
     optional: initial?.optional ?? false,
     garnish: initial?.garnish ?? false,
     allowBaseSubstitution: initial?.allowBaseSubstitution ?? false,
@@ -183,6 +185,7 @@ function shouldUsePluralUnits(amountRaw?: string) {
 
 function mapRecipeIngredientToEditable(
   recipe: NonNullable<Cocktail["ingredients"]>[number],
+  defaultUnitId: number,
 ): EditableIngredient {
   const key = createUniqueKey("ingredient");
   const unitId =
@@ -213,7 +216,7 @@ function mapRecipeIngredientToEditable(
         : undefined,
     name: recipe.name ?? "",
     amount: recipe.amount ?? "",
-    unitId: unitId ?? DEFAULT_UNIT_ID,
+    unitId: unitId ?? defaultUnitId,
     optional: Boolean(recipe.optional),
     garnish: Boolean(recipe.garnish),
     allowBaseSubstitution: Boolean(
@@ -238,6 +241,7 @@ export default function CreateCocktailScreen() {
     deleteCocktail,
     customCocktailTags,
     createCustomCocktailTag,
+    useImperialUnits,
   } = useInventory();
   const params = useLocalSearchParams();
   const { setHasUnsavedChanges } = useUnsavedChanges();
@@ -288,7 +292,11 @@ export default function CreateCocktailScreen() {
   const [selectedTagIds, setSelectedTagIds] = useState<number[]>([]);
   const [ingredientsState, setIngredientsState] = useState<
     EditableIngredient[]
-  >(() => [createEditableIngredient()]);
+  >(() => [
+    createEditableIngredient(
+      useImperialUnits ? DEFAULT_IMPERIAL_UNIT_ID : DEFAULT_METRIC_UNIT_ID,
+    ),
+  ]);
   const [prefilledCocktail, setPrefilledCocktail] = useState<
     Cocktail | undefined
   >(undefined);
@@ -304,6 +312,9 @@ export default function CreateCocktailScreen() {
   const [initialSnapshot, setInitialSnapshot] =
     useState<CocktailFormSnapshot | null>(null);
   const [isTagModalVisible, setTagModalVisible] = useState(false);
+  const defaultUnitId = useImperialUnits
+    ? DEFAULT_IMPERIAL_UNIT_ID
+    : DEFAULT_METRIC_UNIT_ID;
 
   const renderMethodIcon = (methodId: CocktailMethodId, iconColor: string) => {
     const icon = METHOD_ICON_MAP[methodId];
@@ -599,7 +610,9 @@ export default function CreateCocktailScreen() {
         (a, b) => (a?.order ?? 0) - (b?.order ?? 0),
       );
       if (recipe.length) {
-        setIngredientsState(recipe.map(mapRecipeIngredientToEditable));
+        setIngredientsState(
+          recipe.map((item) => mapRecipeIngredientToEditable(item, defaultUnitId)),
+        );
       }
       prefillCompleted = true;
     }
@@ -639,7 +652,7 @@ export default function CreateCocktailScreen() {
       );
       if (baseIngredient) {
         const ingredientId = Number(baseIngredient.id ?? -1);
-        const preset = createEditableIngredient({
+        const preset = createEditableIngredient(defaultUnitId, {
           ingredientId:
             Number.isFinite(ingredientId) && ingredientId >= 0
               ? ingredientId
@@ -652,7 +665,7 @@ export default function CreateCocktailScreen() {
     }
 
     if (!prefillCompleted) {
-      setIngredientsState([createEditableIngredient()]);
+      setIngredientsState([createEditableIngredient(defaultUnitId)]);
     }
 
     initializedRef.current = true;
@@ -661,6 +674,7 @@ export default function CreateCocktailScreen() {
     cocktails,
     cocktailNameParam,
     cocktailParam,
+    defaultUnitId,
     ingredientNameParam,
     ingredientParam,
     inventoryIngredients,
@@ -749,12 +763,17 @@ export default function CreateCocktailScreen() {
     [],
   );
 
-  const handleRemoveIngredient = useCallback((key: string) => {
-    setIngredientsState((prev) => {
-      const next = prev.filter((item) => item.key !== key);
-      return next.length > 0 ? next : [createEditableIngredient()];
-    });
-  }, []);
+  const handleRemoveIngredient = useCallback(
+    (key: string) => {
+      setIngredientsState((prev) => {
+        const next = prev.filter((item) => item.key !== key);
+        return next.length > 0
+          ? next
+          : [createEditableIngredient(defaultUnitId)];
+      });
+    },
+    [defaultUnitId],
+  );
 
   const handleMoveIngredient = useCallback(
     (key: string, direction: "up" | "down") => {
@@ -780,8 +799,11 @@ export default function CreateCocktailScreen() {
   );
 
   const handleAddIngredient = useCallback(() => {
-    setIngredientsState((prev) => [...prev, createEditableIngredient()]);
-  }, []);
+    setIngredientsState((prev) => [
+      ...prev,
+      createEditableIngredient(defaultUnitId),
+    ]);
+  }, [defaultUnitId]);
 
   const handleUpdateSubstitutes = useCallback(
     (
