@@ -10,7 +10,7 @@ export const BUILTIN_COCKTAIL_TAGS = [
   { id: 6, name: 'mild', color: TAG_COLORS[1] },
   { id: 7, name: 'soft', color: TAG_COLORS[12] },
   { id: 8, name: 'long', color: TAG_COLORS[13] },
-  { id: 9, name: 'short', color: TAG_COLORS[14] },
+  { id: 9, name: 'shot', color: TAG_COLORS[14] },
   { id: 10, name: 'non-alcoholic', color: TAG_COLORS[11] },
   { id: 11, name: 'custom', color: TAG_COLORS[15] },
 ] as const;
