@@ -11,11 +11,11 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
-          "id": 2,
+          "id": 3,
           "name": "Bitter",
           "color": "#9575CD"
         }
@@ -210,12 +210,12 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
           "id": 9,
-          "name": "shooter",
+          "name": "shot",
           "color": "#FF8A65"
         }
       ],
@@ -341,11 +341,11 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
-          "id": 3,
+          "id": 2,
           "name": "Equal Parts",
           "color": "#64B5F6"
         }
@@ -404,7 +404,7 @@
           "color": "#FFD54F"
         },
         {
-          "id": 2,
+          "id": 3,
           "name": "Bitter",
           "color": "#9575CD"
         }
@@ -549,13 +549,13 @@
         },
         {
           "id": 2,
-          "name": "Bitter",
-          "color": "#9575CD"
+          "name": "Equal Parts",
+          "color": "#64B5F6"
         },
         {
           "id": 3,
-          "name": "Equal Parts",
-          "color": "#64B5F6"
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -715,7 +715,7 @@
         },
         {
           "id": 9,
-          "name": "shooter",
+          "name": "shot",
           "color": "#FF8A65"
         }
       ],
@@ -784,7 +784,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -851,7 +851,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -942,7 +942,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -1031,7 +1031,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -1114,12 +1114,12 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
           "id": 9,
-          "name": "shooter",
+          "name": "shot",
           "color": "#FF8A65"
         }
       ],
@@ -1176,7 +1176,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -1231,7 +1231,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -1292,7 +1292,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -1368,7 +1368,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -1431,11 +1431,11 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
-          "id": 2,
+          "id": 3,
           "name": "Bitter",
           "color": "#9575CD"
         }
@@ -1584,7 +1584,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -1664,13 +1664,13 @@
         },
         {
           "id": 2,
-          "name": "Bitter",
-          "color": "#9575CD"
+          "name": "Equal Parts",
+          "color": "#64B5F6"
         },
         {
           "id": 3,
-          "name": "Equal Parts",
-          "color": "#64B5F6"
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -1843,7 +1843,7 @@
         },
         {
           "id": 9,
-          "name": "shooter",
+          "name": "shot",
           "color": "#FF8A65"
         }
       ],
@@ -1887,7 +1887,7 @@
           "color": "#81C784"
         },
         {
-          "id": 3,
+          "id": 2,
           "name": "Equal Parts",
           "color": "#64B5F6"
         }
@@ -1934,12 +1934,12 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
           "id": 9,
-          "name": "shooter",
+          "name": "shot",
           "color": "#FF8A65"
         }
       ],
@@ -2002,7 +2002,7 @@
         },
         {
           "id": 9,
-          "name": "shooter",
+          "name": "shot",
           "color": "#FF8A65"
         }
       ],
@@ -2065,11 +2065,11 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
-          "id": 2,
+          "id": 3,
           "name": "Bitter",
           "color": "#9575CD"
         }
@@ -2148,7 +2148,7 @@
           "color": "#81C784"
         },
         {
-          "id": 2,
+          "id": 3,
           "name": "Bitter",
           "color": "#9575CD"
         }
@@ -2504,12 +2504,12 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
           "id": 9,
-          "name": "shooter",
+          "name": "shot",
           "color": "#FF8A65"
         }
       ],
@@ -2548,11 +2548,11 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
-          "id": 2,
+          "id": 3,
           "name": "Bitter",
           "color": "#9575CD"
         }
@@ -2706,12 +2706,12 @@
         },
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
           "id": 9,
-          "name": "shooter",
+          "name": "shot",
           "color": "#FF8A65"
         }
       ],
@@ -2774,7 +2774,7 @@
         },
         {
           "id": 9,
-          "name": "shooter",
+          "name": "shot",
           "color": "#FF8A65"
         }
       ],
@@ -2825,7 +2825,7 @@
           "color": "#ec5a5a"
         },
         {
-          "id": 3,
+          "id": 2,
           "name": "Equal Parts",
           "color": "#64B5F6"
         }
@@ -2871,12 +2871,12 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
           "id": 9,
-          "name": "shooter",
+          "name": "shot",
           "color": "#FF8A65"
         }
       ],
@@ -2914,7 +2914,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -2983,13 +2983,13 @@
         },
         {
           "id": 2,
-          "name": "Bitter",
-          "color": "#9575CD"
+          "name": "Equal Parts",
+          "color": "#64B5F6"
         },
         {
           "id": 3,
-          "name": "Equal Parts",
-          "color": "#64B5F6"
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -3173,7 +3173,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
@@ -3240,7 +3240,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -3298,7 +3298,7 @@
           "color": "#ec5a5a"
         },
         {
-          "id": 3,
+          "id": 2,
           "name": "Equal Parts",
           "color": "#64B5F6"
         }
@@ -3527,7 +3527,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
@@ -3622,7 +3622,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -3704,7 +3704,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -3911,7 +3911,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -4006,12 +4006,12 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
           "id": 9,
-          "name": "shooter",
+          "name": "shot",
           "color": "#FF8A65"
         }
       ],
@@ -4073,7 +4073,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -4309,7 +4309,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -4754,7 +4754,7 @@
         },
         {
           "id": 9,
-          "name": "shooter",
+          "name": "shot",
           "color": "#FF8A65"
         }
       ],
@@ -4951,11 +4951,11 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
-          "id": 2,
+          "id": 3,
           "name": "Bitter",
           "color": "#9575CD"
         }
@@ -5058,7 +5058,7 @@
           "color": "#ec5a5a"
         },
         {
-          "id": 2,
+          "id": 3,
           "name": "Bitter",
           "color": "#9575CD"
         }
@@ -5191,7 +5191,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -5274,11 +5274,11 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
-          "id": 3,
+          "id": 2,
           "name": "Equal Parts",
           "color": "#64B5F6"
         }
@@ -5457,12 +5457,12 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
           "id": 9,
-          "name": "shooter",
+          "name": "shot",
           "color": "#FF8A65"
         }
       ],
@@ -5677,12 +5677,12 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
           "id": 9,
-          "name": "shooter",
+          "name": "shot",
           "color": "#FF8A65"
         }
       ],
@@ -5734,12 +5734,12 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
           "id": 9,
-          "name": "shooter",
+          "name": "shot",
           "color": "#FF8A65"
         }
       ],
@@ -5785,7 +5785,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -6116,7 +6116,7 @@
         },
         {
           "id": 9,
-          "name": "shooter",
+          "name": "shot",
           "color": "#FF8A65"
         }
       ],
@@ -6221,7 +6221,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -6284,7 +6284,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -6347,7 +6347,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -6417,7 +6417,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -6488,7 +6488,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -6538,7 +6538,7 @@
           "color": "#81C784"
         },
         {
-          "id": 2,
+          "id": 3,
           "name": "Bitter",
           "color": "#9575CD"
         }
@@ -6599,12 +6599,12 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
           "id": 9,
-          "name": "shooter",
+          "name": "shot",
           "color": "#FF8A65"
         }
       ],
@@ -6980,7 +6980,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
@@ -7068,7 +7068,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -7129,7 +7129,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -7233,7 +7233,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -7858,7 +7858,7 @@
           "color": "#FFD54F"
         },
         {
-          "id": 3,
+          "id": 2,
           "name": "Equal Parts",
           "color": "#64B5F6"
         }
@@ -7993,12 +7993,12 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
           "id": 9,
-          "name": "shooter",
+          "name": "shot",
           "color": "#FF8A65"
         }
       ],
@@ -8050,7 +8050,7 @@
         },
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -8101,7 +8101,7 @@
         },
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -8152,7 +8152,7 @@
         },
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -8213,7 +8213,7 @@
         },
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -8339,7 +8339,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -8426,7 +8426,7 @@
           "color": "#FFB74D"
         },
         {
-          "id": 2,
+          "id": 3,
           "name": "Bitter",
           "color": "#9575CD"
         }
@@ -8481,7 +8481,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -8843,7 +8843,7 @@
           "color": "#81C784"
         },
         {
-          "id": 2,
+          "id": 3,
           "name": "Bitter",
           "color": "#9575CD"
         }
@@ -8992,7 +8992,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
@@ -9075,7 +9075,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -9527,7 +9527,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -9756,7 +9756,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -9850,7 +9850,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -9913,7 +9913,7 @@
           "color": "#ec5a5a"
         },
         {
-          "id": 2,
+          "id": 3,
           "name": "Bitter",
           "color": "#9575CD"
         }
@@ -9988,7 +9988,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -10105,7 +10105,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -10192,13 +10192,13 @@
         },
         {
           "id": 2,
-          "name": "Bitter",
-          "color": "#9575CD"
+          "name": "Equal Parts",
+          "color": "#64B5F6"
         },
         {
           "id": 3,
-          "name": "Equal Parts",
-          "color": "#64B5F6"
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -10251,7 +10251,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -10322,7 +10322,7 @@
           "color": "#ec5a5a"
         },
         {
-          "id": 2,
+          "id": 3,
           "name": "Bitter",
           "color": "#9575CD"
         }
@@ -10396,7 +10396,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -10535,7 +10535,7 @@
           "color": "#81C784"
         },
         {
-          "id": 3,
+          "id": 2,
           "name": "Equal Parts",
           "color": "#64B5F6"
         }
@@ -10672,7 +10672,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -10749,7 +10749,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -10813,7 +10813,7 @@
           "color": "#ec5a5a"
         },
         {
-          "id": 2,
+          "id": 3,
           "name": "Bitter",
           "color": "#9575CD"
         }
@@ -11104,7 +11104,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -11178,7 +11178,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -11396,7 +11396,7 @@
           "color": "#ec5a5a"
         },
         {
-          "id": 2,
+          "id": 3,
           "name": "Bitter",
           "color": "#9575CD"
         }
@@ -11465,7 +11465,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -11518,7 +11518,7 @@
           "color": "#ec5a5a"
         },
         {
-          "id": 3,
+          "id": 2,
           "name": "Equal Parts",
           "color": "#64B5F6"
         }
@@ -11749,7 +11749,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
@@ -11841,12 +11841,12 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
           "id": 9,
-          "name": "shooter",
+          "name": "shot",
           "color": "#FF8A65"
         }
       ],
@@ -11960,7 +11960,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -12338,7 +12338,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -12400,7 +12400,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -12476,7 +12476,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -12703,11 +12703,11 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
-          "id": 2,
+          "id": 3,
           "name": "Bitter",
           "color": "#9575CD"
         }
@@ -12845,13 +12845,13 @@
         },
         {
           "id": 2,
-          "name": "Bitter",
-          "color": "#9575CD"
+          "name": "Equal Parts",
+          "color": "#64B5F6"
         },
         {
           "id": 3,
-          "name": "Equal Parts",
-          "color": "#64B5F6"
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -12898,7 +12898,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -13083,11 +13083,11 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
-          "id": 2,
+          "id": 3,
           "name": "Bitter",
           "color": "#9575CD"
         }
@@ -13159,7 +13159,7 @@
           "color": "#81C784"
         },
         {
-          "id": 2,
+          "id": 3,
           "name": "Bitter",
           "color": "#9575CD"
         }
@@ -13212,11 +13212,11 @@
         },
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
-          "id": 3,
+          "id": 2,
           "name": "Equal Parts",
           "color": "#64B5F6"
         }
@@ -13283,7 +13283,7 @@
         },
         {
           "id": 9,
-          "name": "shooter",
+          "name": "shot",
           "color": "#FF8A65"
         }
       ],
@@ -13329,11 +13329,11 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
-          "id": 2,
+          "id": 3,
           "name": "Bitter",
           "color": "#9575CD"
         }
@@ -13416,7 +13416,7 @@
         },
         {
           "id": 9,
-          "name": "shooter",
+          "name": "shot",
           "color": "#FF8A65"
         }
       ],
@@ -13467,7 +13467,7 @@
         },
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
@@ -13562,7 +13562,7 @@
         },
         {
           "id": 9,
-          "name": "shooter",
+          "name": "shot",
           "color": "#FF8A65"
         }
       ],
@@ -13601,7 +13601,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -13749,7 +13749,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -13836,7 +13836,7 @@
           "color": "#ec5a5a"
         },
         {
-          "id": 2,
+          "id": 3,
           "name": "Bitter",
           "color": "#9575CD"
         }
@@ -13963,7 +13963,7 @@
           "color": "#81C784"
         },
         {
-          "id": 3,
+          "id": 2,
           "name": "Equal Parts",
           "color": "#64B5F6"
         }
@@ -14009,7 +14009,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -14196,7 +14196,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -14272,7 +14272,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -14356,7 +14356,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -14507,7 +14507,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -14593,7 +14593,7 @@
           "color": "#FFB74D"
         },
         {
-          "id": 3,
+          "id": 2,
           "name": "Equal Parts",
           "color": "#64B5F6"
         }
@@ -14650,12 +14650,12 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
           "id": 9,
-          "name": "shooter",
+          "name": "shot",
           "color": "#FF8A65"
         }
       ],
@@ -14704,7 +14704,7 @@
           "color": "#81C784"
         },
         {
-          "id": 2,
+          "id": 3,
           "name": "Bitter",
           "color": "#9575CD"
         }
@@ -14752,7 +14752,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -14834,7 +14834,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -14995,7 +14995,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -15050,7 +15050,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -15097,7 +15097,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -15442,7 +15442,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -15622,7 +15622,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -15683,7 +15683,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -15758,7 +15758,7 @@
         },
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -15905,7 +15905,7 @@
           "color": "#81C784"
         },
         {
-          "id": 3,
+          "id": 2,
           "name": "Equal Parts",
           "color": "#64B5F6"
         }
@@ -15952,7 +15952,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -16021,12 +16021,12 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
           "id": 9,
-          "name": "shooter",
+          "name": "shot",
           "color": "#FF8A65"
         }
       ],
@@ -16066,7 +16066,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -16252,11 +16252,11 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
-          "id": 2,
+          "id": 3,
           "name": "Bitter",
           "color": "#9575CD"
         }
@@ -16352,7 +16352,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
@@ -16423,7 +16423,7 @@
           "color": "#81C784"
         },
         {
-          "id": 2,
+          "id": 3,
           "name": "Bitter",
           "color": "#9575CD"
         }
@@ -16478,7 +16478,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -16545,11 +16545,11 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
-          "id": 2,
+          "id": 3,
           "name": "Bitter",
           "color": "#9575CD"
         }
@@ -16703,7 +16703,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -16790,7 +16790,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -16968,7 +16968,7 @@
         },
         {
           "id": 9,
-          "name": "shooter",
+          "name": "shot",
           "color": "#FF8A65"
         }
       ],
@@ -17014,7 +17014,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -17306,7 +17306,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
@@ -17379,7 +17379,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
@@ -17677,7 +17677,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -17770,7 +17770,7 @@
           "color": "#ec5a5a"
         },
         {
-          "id": 3,
+          "id": 2,
           "name": "Equal Parts",
           "color": "#64B5F6"
         }
@@ -17816,7 +17816,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -17891,7 +17891,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -18077,12 +18077,12 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
           "id": 9,
-          "name": "shooter",
+          "name": "shot",
           "color": "#FF8A65"
         }
       ],
@@ -18121,12 +18121,12 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
           "id": 9,
-          "name": "shooter",
+          "name": "shot",
           "color": "#FF8A65"
         }
       ],
@@ -18158,7 +18158,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -18503,12 +18503,12 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
           "id": 9,
-          "name": "shooter",
+          "name": "shot",
           "color": "#FF8A65"
         }
       ],
@@ -18634,11 +18634,11 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
-          "id": 3,
+          "id": 2,
           "name": "Equal Parts",
           "color": "#64B5F6"
         }
@@ -18709,12 +18709,12 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
           "id": 9,
-          "name": "shooter",
+          "name": "shot",
           "color": "#FF8A65"
         }
       ],
@@ -18753,12 +18753,12 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
           "id": 9,
-          "name": "shooter",
+          "name": "shot",
           "color": "#FF8A65"
         }
       ],
@@ -18809,7 +18809,7 @@
         },
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -19042,7 +19042,7 @@
           "color": "#4DD0E1"
         },
         {
-          "id": 2,
+          "id": 3,
           "name": "Bitter",
           "color": "#9575CD"
         }
@@ -19129,7 +19129,7 @@
         },
         {
           "id": 9,
-          "name": "shooter",
+          "name": "shot",
           "color": "#FF8A65"
         }
       ],
@@ -19187,7 +19187,7 @@
           "color": "#ec5a5a"
         },
         {
-          "id": 2,
+          "id": 3,
           "name": "Bitter",
           "color": "#9575CD"
         }
@@ -19296,7 +19296,7 @@
         },
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -19344,7 +19344,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
@@ -19499,7 +19499,7 @@
           "color": "#81C784"
         },
         {
-          "id": 3,
+          "id": 2,
           "name": "Equal Parts",
           "color": "#64B5F6"
         }
@@ -19710,18 +19710,18 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
           "id": 2,
-          "name": "Bitter",
-          "color": "#9575CD"
+          "name": "Equal Parts",
+          "color": "#64B5F6"
         },
         {
           "id": 3,
-          "name": "Equal Parts",
-          "color": "#64B5F6"
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -19832,7 +19832,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -19970,7 +19970,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
@@ -20171,7 +20171,7 @@
           "color": "#ec5a5a"
         },
         {
-          "id": 2,
+          "id": 3,
           "name": "Bitter",
           "color": "#9575CD"
         }
@@ -20230,7 +20230,7 @@
           "color": "#ec5a5a"
         },
         {
-          "id": 2,
+          "id": 3,
           "name": "Bitter",
           "color": "#9575CD"
         }
@@ -20292,11 +20292,11 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
-          "id": 2,
+          "id": 3,
           "name": "Bitter",
           "color": "#9575CD"
         }
@@ -20396,7 +20396,7 @@
           "color": "#ec5a5a"
         },
         {
-          "id": 2,
+          "id": 3,
           "name": "Bitter",
           "color": "#9575CD"
         }
@@ -20458,7 +20458,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -20940,11 +20940,11 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
-          "id": 2,
+          "id": 3,
           "name": "Bitter",
           "color": "#9575CD"
         }
@@ -21180,7 +21180,7 @@
           "color": "#ec5a5a"
         },
         {
-          "id": 2,
+          "id": 3,
           "name": "Bitter",
           "color": "#9575CD"
         }
@@ -21246,7 +21246,7 @@
           "color": "#ec5a5a"
         },
         {
-          "id": 2,
+          "id": 3,
           "name": "Bitter",
           "color": "#9575CD"
         }
@@ -21636,7 +21636,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -21711,7 +21711,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -21807,13 +21807,13 @@
         },
         {
           "id": 2,
-          "name": "Bitter",
-          "color": "#9575CD"
+          "name": "Equal Parts",
+          "color": "#64B5F6"
         },
         {
           "id": 3,
-          "name": "Equal Parts",
-          "color": "#64B5F6"
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -21870,7 +21870,7 @@
           "color": "#81C784"
         },
         {
-          "id": 3,
+          "id": 2,
           "name": "Equal Parts",
           "color": "#64B5F6"
         }
@@ -21915,7 +21915,7 @@
           "color": "#ec5a5a"
         },
         {
-          "id": 3,
+          "id": 2,
           "name": "Equal Parts",
           "color": "#64B5F6"
         }
@@ -22272,7 +22272,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -22346,7 +22346,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -22421,7 +22421,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -22492,7 +22492,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -22563,7 +22563,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -22653,13 +22653,13 @@
         },
         {
           "id": 2,
-          "name": "Bitter",
-          "color": "#9575CD"
+          "name": "Equal Parts",
+          "color": "#64B5F6"
         },
         {
           "id": 3,
-          "name": "Equal Parts",
-          "color": "#64B5F6"
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -22784,13 +22784,13 @@
         },
         {
           "id": 2,
-          "name": "Bitter",
-          "color": "#9575CD"
+          "name": "Equal Parts",
+          "color": "#64B5F6"
         },
         {
           "id": 3,
-          "name": "Equal Parts",
-          "color": "#64B5F6"
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -22854,7 +22854,7 @@
           "color": "#ec5a5a"
         },
         {
-          "id": 2,
+          "id": 3,
           "name": "Bitter",
           "color": "#9575CD"
         }
@@ -23078,11 +23078,11 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
-          "id": 3,
+          "id": 2,
           "name": "Equal Parts",
           "color": "#64B5F6"
         }
@@ -23146,12 +23146,12 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
           "id": 9,
-          "name": "shooter",
+          "name": "shot",
           "color": "#FF8A65"
         }
       ],
@@ -23392,7 +23392,7 @@
         },
         {
           "id": 9,
-          "name": "shooter",
+          "name": "shot",
           "color": "#FF8A65"
         }
       ],
@@ -23431,12 +23431,12 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
           "id": 9,
-          "name": "shooter",
+          "name": "shot",
           "color": "#FF8A65"
         }
       ],
@@ -23492,12 +23492,12 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
           "id": 9,
-          "name": "shooter",
+          "name": "shot",
           "color": "#FF8A65"
         }
       ],
@@ -23541,7 +23541,7 @@
         },
         {
           "id": 9,
-          "name": "shooter",
+          "name": "shot",
           "color": "#FF8A65"
         }
       ],
@@ -23594,7 +23594,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -23746,7 +23746,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -23890,11 +23890,11 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
-          "id": 3,
+          "id": 2,
           "name": "Equal Parts",
           "color": "#64B5F6"
         }
@@ -23955,7 +23955,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -24023,7 +24023,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -24090,11 +24090,11 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
-          "id": 2,
+          "id": 3,
           "name": "Bitter",
           "color": "#9575CD"
         }
@@ -24188,13 +24188,13 @@
         },
         {
           "id": 2,
-          "name": "Bitter",
-          "color": "#9575CD"
+          "name": "Equal Parts",
+          "color": "#64B5F6"
         },
         {
           "id": 3,
-          "name": "Equal Parts",
-          "color": "#64B5F6"
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -24498,7 +24498,7 @@
           "color": "#ec5a5a"
         },
         {
-          "id": 3,
+          "id": 2,
           "name": "Equal Parts",
           "color": "#64B5F6"
         }
@@ -24554,7 +24554,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -25008,7 +25008,7 @@
           "color": "#ec5a5a"
         },
         {
-          "id": 2,
+          "id": 3,
           "name": "Bitter",
           "color": "#9575CD"
         }
@@ -25213,7 +25213,7 @@
           "color": "#ec5a5a"
         },
         {
-          "id": 2,
+          "id": 3,
           "name": "Bitter",
           "color": "#9575CD"
         }
@@ -25285,7 +25285,7 @@
           "color": "#81C784"
         },
         {
-          "id": 2,
+          "id": 3,
           "name": "Bitter",
           "color": "#9575CD"
         }
@@ -25355,7 +25355,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -25591,11 +25591,11 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
-          "id": 2,
+          "id": 3,
           "name": "Bitter",
           "color": "#9575CD"
         }
@@ -25650,7 +25650,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -25695,12 +25695,12 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
           "id": 9,
-          "name": "shooter",
+          "name": "shot",
           "color": "#FF8A65"
         }
       ],
@@ -25832,7 +25832,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -25899,11 +25899,11 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
-          "id": 3,
+          "id": 2,
           "name": "Equal Parts",
           "color": "#64B5F6"
         }
@@ -25957,11 +25957,11 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
-          "id": 3,
+          "id": 2,
           "name": "Equal Parts",
           "color": "#64B5F6"
         }
@@ -26075,7 +26075,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -26141,7 +26141,7 @@
           "color": "#ec5a5a"
         },
         {
-          "id": 2,
+          "id": 3,
           "name": "Bitter",
           "color": "#9575CD"
         }
@@ -26290,11 +26290,11 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
-          "id": 3,
+          "id": 2,
           "name": "Equal Parts",
           "color": "#64B5F6"
         }
@@ -26448,7 +26448,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -26576,7 +26576,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -26862,7 +26862,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -27029,7 +27029,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -27295,7 +27295,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -27444,7 +27444,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
@@ -27507,7 +27507,7 @@
           "color": "#ec5a5a"
         },
         {
-          "id": 2,
+          "id": 3,
           "name": "Bitter",
           "color": "#9575CD"
         }
@@ -27576,12 +27576,12 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
           "id": 9,
-          "name": "shooter",
+          "name": "shot",
           "color": "#FF8A65"
         }
       ],
@@ -27745,7 +27745,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -27872,7 +27872,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
@@ -27938,12 +27938,12 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
           "id": 9,
-          "name": "shooter",
+          "name": "shot",
           "color": "#FF8A65"
         }
       ],
@@ -28205,7 +28205,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -28326,11 +28326,11 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
-          "id": 2,
+          "id": 3,
           "name": "Bitter",
           "color": "#9575CD"
         }
@@ -28511,12 +28511,12 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
           "id": 9,
-          "name": "shooter",
+          "name": "shot",
           "color": "#FF8A65"
         }
       ],
@@ -28558,7 +28558,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -28641,7 +28641,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -28696,11 +28696,11 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
-          "id": 3,
+          "id": 2,
           "name": "Equal Parts",
           "color": "#64B5F6"
         }
@@ -28747,7 +28747,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
@@ -28868,7 +28868,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -28964,7 +28964,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -29133,11 +29133,11 @@
         },
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
-          "id": 2,
+          "id": 3,
           "name": "Bitter",
           "color": "#9575CD"
         }
@@ -29198,12 +29198,12 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
           "id": 9,
-          "name": "shooter",
+          "name": "shot",
           "color": "#FF8A65"
         }
       ],
@@ -29244,12 +29244,12 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
           "id": 9,
-          "name": "shooter",
+          "name": "shot",
           "color": "#FF8A65"
         }
       ],
@@ -29397,7 +29397,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -29721,7 +29721,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -29930,7 +29930,7 @@
       "methodIds": ["build"],
       "tags": [
         {
-          "id": 2,
+          "id": 3,
           "name": "Bitter",
           "color": "#9575CD"
         }
@@ -29978,7 +29978,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
@@ -30125,7 +30125,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -30187,11 +30187,11 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
-          "id": 2,
+          "id": 3,
           "name": "Bitter",
           "color": "#9575CD"
         }
@@ -30377,12 +30377,12 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
           "id": 9,
-          "name": "shooter",
+          "name": "shot",
           "color": "#FF8A65"
         }
       ],
@@ -30496,7 +30496,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -30549,11 +30549,11 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
-          "id": 2,
+          "id": 3,
           "name": "Bitter",
           "color": "#9575CD"
         }
@@ -30661,7 +30661,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -30739,7 +30739,7 @@
           "color": "#ec5a5a"
         },
         {
-          "id": 2,
+          "id": 3,
           "name": "Bitter",
           "color": "#9575CD"
         }
@@ -30828,11 +30828,11 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
-          "id": 2,
+          "id": 3,
           "name": "Bitter",
           "color": "#9575CD"
         }
@@ -31002,7 +31002,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -31190,7 +31190,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -31242,11 +31242,11 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
-          "id": 2,
+          "id": 3,
           "name": "Bitter",
           "color": "#9575CD"
         }
@@ -31337,7 +31337,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
@@ -31414,7 +31414,7 @@
         },
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -31554,12 +31554,12 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
           "id": 9,
-          "name": "shooter",
+          "name": "shot",
           "color": "#FF8A65"
         }
       ],
@@ -31610,7 +31610,7 @@
           "color": "#81C784"
         },
         {
-          "id": 2,
+          "id": 3,
           "name": "Bitter",
           "color": "#9575CD"
         }
@@ -31664,7 +31664,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -31738,7 +31738,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -31989,7 +31989,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -32297,7 +32297,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -32762,7 +32762,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -33044,7 +33044,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
@@ -33053,7 +33053,7 @@
           "color": "#FFB74D"
         },
         {
-          "id": 3,
+          "id": 2,
           "name": "Equal Parts",
           "color": "#64B5F6"
         }
@@ -33125,12 +33125,12 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
           "id": 9,
-          "name": "shooter",
+          "name": "shot",
           "color": "#FF8A65"
         }
       ],
@@ -33334,7 +33334,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -33525,7 +33525,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -33630,13 +33630,13 @@
         },
         {
           "id": 2,
-          "name": "Bitter",
-          "color": "#9575CD"
+          "name": "Equal Parts",
+          "color": "#64B5F6"
         },
         {
           "id": 3,
-          "name": "Equal Parts",
-          "color": "#64B5F6"
+          "name": "Bitter",
+          "color": "#9575CD"
         }
       ],
       "ingredients": [
@@ -33735,7 +33735,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -33810,7 +33810,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
@@ -33963,11 +33963,11 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         },
         {
-          "id": 2,
+          "id": 3,
           "name": "Bitter",
           "color": "#9575CD"
         }
@@ -34041,7 +34041,7 @@
         },
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
@@ -34117,7 +34117,7 @@
       "tags": [
         {
           "id": 6,
-          "name": "moderate",
+          "name": "mild",
           "color": "#F06292"
         }
       ],
