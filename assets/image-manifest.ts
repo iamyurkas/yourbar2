@@ -907,6 +907,13 @@ export const cocktailImages: Record<string, number> = {
   'assets/cocktails/1760963780635-tiger-s-milk.jpg': require('./cocktails/1760963780635-tiger-s-milk.jpg'),
   'assets/cocktails/1760963780636-squashed-irish-frog.jpg': require('./cocktails/1760963780636-squashed-irish-frog.jpg'),
   'assets/cocktails/1760963780637-larkwood.jpg': require('./cocktails/1760963780637-larkwood.jpg'),
+  'assets/cocktails/1760963780638-b-54.jpg': require('./cocktails/1760963780638-b-54.jpg'),
+  'assets/cocktails/1760963780639-alien-brain-tumor.jpg': require('./cocktails/1760963780639-alien-brain-tumor.jpg'),
+  'assets/cocktails/1760963780640-zombie-brain-tumor.jpg': require('./cocktails/1760963780640-zombie-brain-tumor.jpg'),
+  'assets/cocktails/1760963780641-tequila-sunrise-shot.jpg': require('./cocktails/1760963780641-tequila-sunrise-shot.jpg'),
+  'assets/cocktails/1760963780642-jam-roly-poly.jpg': require('./cocktails/1760963780642-jam-roly-poly.jpg'),
+  'assets/cocktails/1760963780643-mini-snowball.jpg': require('./cocktails/1760963780643-mini-snowball.jpg'),
+  'assets/cocktails/1760963780644-triffle.jpg': require('./cocktails/1760963780644-triffle.jpg'),
 };
 
 export function resolveAssetFromCatalog(uri?: string | null) {
