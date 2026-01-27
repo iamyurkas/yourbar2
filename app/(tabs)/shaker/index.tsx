@@ -638,23 +638,25 @@ export default function ShakerScreen() {
         const backgroundColor = item.group.color;
 
         return (
-          <View style={[styles.groupHeaderWrapper, item.isLast ? styles.groupSpacing : null]}>
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel={`${item.group.name} ingredients`}
-              accessibilityState={{ expanded: isExpanded }}
-              onPress={() => handleToggleGroup(item.group.key)}
-              style={[styles.groupHeader, { backgroundColor }]}
-            >
-              <Text style={[styles.groupTitle, { color: Colors.onPrimary }]}>{item.group.name}</Text>
-              <MaterialIcons
-                name="expand-more"
-                size={22}
-                color={Colors.onPrimary}
-                style={{ transform: [{ rotate: iconRotation }] }}
-              />
-            </Pressable>
-          </View>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={`${item.group.name} ingredients`}
+            accessibilityState={{ expanded: isExpanded }}
+            onPress={() => handleToggleGroup(item.group.key)}
+            style={[
+              styles.groupHeader,
+              { backgroundColor },
+              item.isLast ? styles.groupSpacing : null,
+            ]}
+          >
+            <Text style={[styles.groupTitle, { color: Colors.onPrimary }]}>{item.group.name}</Text>
+            <MaterialIcons
+              name="expand-more"
+              size={22}
+              color={Colors.onPrimary}
+              style={{ transform: [{ rotate: iconRotation }] }}
+            />
+          </Pressable>
         );
       }
 
@@ -892,9 +894,6 @@ const styles = StyleSheet.create({
     paddingTop: 0,
     paddingHorizontal: 0,
     paddingBottom: 120,
-  },
-  groupHeaderWrapper: {
-    marginBottom: 0,
   },
   groupSpacing: {
     marginBottom: 2,
