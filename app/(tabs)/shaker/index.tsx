@@ -44,6 +44,7 @@ type IngredientRowProps = {
   ingredient: Ingredient;
   isSelected: boolean;
   isAvailable: boolean;
+  isOnShoppingList: boolean;
   subtitle?: string;
   subtitleStyle?: StyleProp<TextStyle>;
   onToggle: (id: number) => void;
@@ -53,6 +54,7 @@ const IngredientRow = memo(function IngredientRow({
   ingredient,
   isSelected,
   isAvailable,
+  isOnShoppingList,
   subtitle,
   subtitleStyle,
   onToggle,
@@ -72,6 +74,22 @@ const IngredientRow = memo(function IngredientRow({
     () => <Thumb label={ingredient.name} uri={ingredient.photoUri} />,
     [ingredient.name, ingredient.photoUri],
   );
+  const shoppingControl = useMemo(() => {
+    if (!isOnShoppingList) {
+      return <View style={styles.shoppingIconPlaceholder} />;
+    }
+
+    return (
+      <MaterialIcons
+        name="shopping-cart"
+        size={20}
+        color={Colors.tint}
+        style={styles.shoppingIcon}
+        accessibilityRole="image"
+        accessibilityLabel="On shopping list"
+      />
+    );
+  }, [isOnShoppingList]);
 
   return (
     <ListRow
@@ -87,6 +105,7 @@ const IngredientRow = memo(function IngredientRow({
       accessibilityState={isSelected ? { selected: true } : undefined}
       brandIndicatorColor={brandIndicatorColor}
       metaAlignment="center"
+      metaFooter={shoppingControl}
     />
   );
 });
@@ -125,6 +144,7 @@ export default function ShakerScreen() {
     cocktails,
     ingredients,
     availableIngredientIds,
+    shoppingIngredientIds,
     ignoreGarnish,
     allowAllSubstitutes,
   } = useInventory();
@@ -588,6 +608,8 @@ export default function ShakerScreen() {
                 const ingredientId = Number(ingredient.id ?? -1);
                 const isAvailable = ingredientId >= 0 && availableIngredientIds.has(ingredientId);
                 const isSelected = ingredientId >= 0 && selectedIngredientIds.has(ingredientId);
+                const isOnShoppingList =
+                  ingredientId >= 0 && shoppingIngredientIds.has(ingredientId);
                 const separatorColor = isAvailable
                   ? Colors.outline
                   : Colors.outlineVariant;
@@ -608,6 +630,7 @@ export default function ShakerScreen() {
                       ingredient={ingredient}
                       isAvailable={isAvailable}
                       isSelected={isSelected}
+                      isOnShoppingList={isOnShoppingList}
                       subtitle={subtitleText}
                       subtitleStyle={{ color: Colors.onSurfaceVariant }}
                       onToggle={handleToggleIngredient}
@@ -633,6 +656,7 @@ export default function ShakerScreen() {
       Colors.onSurface,
       Colors.onSurfaceVariant,
       selectedIngredientIds,
+      shoppingIngredientIds,
     ],
   );
 
@@ -861,6 +885,16 @@ const styles = StyleSheet.create({
   },
   divider: {
     height: StyleSheet.hairlineWidth,
+  },
+  shoppingIcon: {
+    width: 20,
+    height: 20,
+    alignSelf: 'flex-end',
+  },
+  shoppingIconPlaceholder: {
+    width: 20,
+    height: 20,
+    alignSelf: 'flex-end',
   },
   clearButtonBase: {
     borderWidth: 1,
