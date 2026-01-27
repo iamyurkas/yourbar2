@@ -609,6 +609,10 @@ export default function ShakerScreen() {
             accessibilityLabel={`${section.name} ingredients`}
             accessibilityState={{ expanded: isExpanded }}
             onPressIn={() => {
+              if (isDragging.current) {
+                return;
+              }
+
               const scrollResponder = listRef.current?.getScrollResponder?.();
               scrollResponder?.scrollTo?.({
                 y: lastScrollOffset.current,
