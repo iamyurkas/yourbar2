@@ -162,8 +162,7 @@ export default function ShakerScreen() {
   const [selectedIngredientIds, setSelectedIngredientIds] = useState<Set<number>>(() => new Set());
   const listRef = useRef<SectionList<Ingredient, IngredientSection>>(null);
   const lastScrollOffset = useRef(0);
-  const isScrolling = useRef(false);
-  const scrollIdleTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const isDragging = useRef(false);
   const searchStartOffset = useRef<number | null>(null);
   const previousQuery = useRef(query);
   const insets = useSafeAreaInsets();
@@ -188,23 +187,8 @@ export default function ShakerScreen() {
     previousQuery.current = query;
   }, [query]);
 
-  useEffect(() => {
-    return () => {
-      if (scrollIdleTimeout.current) {
-        clearTimeout(scrollIdleTimeout.current);
-      }
-    };
-  }, []);
-
   const handleScroll = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
     lastScrollOffset.current = event.nativeEvent.contentOffset.y;
-    isScrolling.current = true;
-    if (scrollIdleTimeout.current) {
-      clearTimeout(scrollIdleTimeout.current);
-    }
-    scrollIdleTimeout.current = setTimeout(() => {
-      isScrolling.current = false;
-    }, 120);
   }, []);
 
   const normalizedQuery = useMemo(() => {
@@ -625,7 +609,7 @@ export default function ShakerScreen() {
             accessibilityLabel={`${section.name} ingredients`}
             accessibilityState={{ expanded: isExpanded }}
             onPress={() => {
-              if (isScrolling.current) {
+              if (isDragging.current) {
                 return;
               }
               handleToggleGroup(section.key);
@@ -760,16 +744,10 @@ export default function ShakerScreen() {
           // Allow the first tap to toggle items while dismissing the keyboard.
           keyboardShouldPersistTaps="handled"
           onScrollBeginDrag={() => {
-            isScrolling.current = true;
+            isDragging.current = true;
           }}
           onScrollEndDrag={() => {
-            isScrolling.current = false;
-          }}
-          onMomentumScrollBegin={() => {
-            isScrolling.current = true;
-          }}
-          onMomentumScrollEnd={() => {
-            isScrolling.current = false;
+            isDragging.current = false;
           }}
           onScroll={handleScroll}
           scrollEventThrottle={16}
