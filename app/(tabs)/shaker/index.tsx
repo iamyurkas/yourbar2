@@ -197,7 +197,8 @@ export default function ShakerScreen() {
           return previous === null ? previous : null;
         }
 
-        const shouldPin = offset > layout.y;
+        const headerHeight = typeof styles.groupHeader.height === 'number' ? styles.groupHeader.height : 0;
+        const shouldPin = offset >= layout.y + headerHeight;
         const next = shouldPin ? activeTagKey : null;
         return previous === next ? previous : next;
       });
