@@ -90,6 +90,13 @@ const IngredientRow = memo(function IngredientRow({
       />
     );
   }, [isOnShoppingList]);
+  const selectionControl = useMemo(() => {
+    if (!isSelected) {
+      return null;
+    }
+
+    return <Text style={styles.selectedCheckmark}>✓</Text>;
+  }, [isSelected]);
 
   return (
     <ListRow
@@ -105,6 +112,7 @@ const IngredientRow = memo(function IngredientRow({
       accessibilityState={isSelected ? { selected: true } : undefined}
       brandIndicatorColor={brandIndicatorColor}
       metaAlignment="center"
+      control={selectionControl}
       metaFooter={shoppingControl}
     />
   );
@@ -895,6 +903,11 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     alignSelf: 'flex-end',
+  },
+  selectedCheckmark: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: Colors.tint,
   },
   clearButtonBase: {
     borderWidth: 1,
