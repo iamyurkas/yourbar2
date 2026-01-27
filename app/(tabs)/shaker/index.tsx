@@ -43,6 +43,7 @@ type IngredientGroup = IngredientTagOption & {
 type IngredientListItem =
   | {
       type: 'header';
+      groupKey: string;
       key: string;
       name: string;
       color: string;
@@ -50,6 +51,7 @@ type IngredientListItem =
     }
   | {
       type: 'ingredient';
+      groupKey: string;
       key: string;
       ingredient: Ingredient;
       showDivider: boolean;
@@ -605,6 +607,7 @@ export default function ShakerScreen() {
       const headerIndex = items.length;
       items.push({
         type: 'header',
+        groupKey: group.key,
         key: `header-${group.key}`,
         name: group.name,
         color: group.color,
@@ -615,7 +618,8 @@ export default function ShakerScreen() {
         group.ingredients.forEach((ingredient, index) => {
           items.push({
             type: 'ingredient',
-            key: `ingredient-${String(ingredient.id ?? ingredient.name)}`,
+            groupKey: group.key,
+            key: `ingredient-${group.key}-${String(ingredient.id ?? ingredient.name)}`,
             ingredient,
             showDivider: index < group.ingredients.length - 1,
           });
@@ -637,7 +641,7 @@ export default function ShakerScreen() {
               accessibilityRole="button"
               accessibilityLabel={`${item.name} ingredients`}
               accessibilityState={{ expanded: item.isExpanded }}
-              onPress={() => handleToggleGroup(item.key.replace('header-', ''))}
+              onPress={() => handleToggleGroup(item.groupKey)}
               style={[styles.groupHeader, { backgroundColor: item.color }]}
             >
               <Text style={[styles.groupTitle, { color: Colors.onPrimary }]}>{item.name}</Text>
