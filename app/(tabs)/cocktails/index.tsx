@@ -1,7 +1,7 @@
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { useScrollToTop } from '@react-navigation/native';
 import { Image } from 'expo-image';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   FlatList,
@@ -105,8 +105,39 @@ export default function CocktailsScreen() {
   const lastScrollOffset = useRef(0);
   const searchStartOffset = useRef<number | null>(null);
   const previousQuery = useRef(query);
+  const pendingReturnScrollOffset = useRef<number | null>(null);
+  const returnParamsHandled = useRef(false);
+  const returnParams = useLocalSearchParams<{
+    returnScrollOffset?: string;
+    returnTab?: string;
+  }>();
 
   useScrollToTop(listRef);
+
+  const returnScrollOffset = useMemo(() => {
+    const value = Array.isArray(returnParams.returnScrollOffset)
+      ? returnParams.returnScrollOffset[0]
+      : returnParams.returnScrollOffset;
+    if (typeof value !== 'string' || value.length === 0) {
+      return null;
+    }
+
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : null;
+  }, [returnParams.returnScrollOffset]);
+
+  const returnTab = useMemo(() => {
+    const value = Array.isArray(returnParams.returnTab) ? returnParams.returnTab[0] : returnParams.returnTab;
+    if (typeof value !== 'string' || value.length === 0) {
+      return undefined;
+    }
+
+    if (value === 'all' || value === 'my' || value === 'favorites') {
+      return value as CocktailTabKey;
+    }
+
+    return undefined;
+  }, [returnParams.returnTab]);
 
   useEffect(() => {
     const wasEmpty = previousQuery.current.length === 0;
@@ -124,6 +155,22 @@ export default function CocktailsScreen() {
 
     previousQuery.current = query;
   }, [query]);
+
+  useEffect(() => {
+    if (returnParamsHandled.current) {
+      return;
+    }
+
+    if (returnTab && returnTab !== activeTab) {
+      setActiveTab(returnTab);
+    }
+
+    if (returnScrollOffset != null) {
+      pendingReturnScrollOffset.current = returnScrollOffset;
+    }
+
+    returnParamsHandled.current = true;
+  }, [activeTab, returnScrollOffset, returnTab]);
 
   const handleScroll = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
     lastScrollOffset.current = event.nativeEvent.contentOffset.y;
@@ -657,9 +704,13 @@ export default function CocktailsScreen() {
         pathname: '/cocktails/[cocktailId]',
         params: { cocktailId: String(candidateId) },
         returnToPath: '/cocktails',
+        returnToParams: {
+          returnScrollOffset: String(lastScrollOffset.current),
+          returnTab: activeTab,
+        },
       });
     },
-    [],
+    [activeTab],
   );
 
   const handleSelectIngredient = useCallback(
@@ -848,6 +899,19 @@ export default function CocktailsScreen() {
 
     return 0;
   }, [filterAnchorLayout, headerLayout]);
+
+  useEffect(() => {
+    if (pendingReturnScrollOffset.current == null) {
+      return;
+    }
+
+    const restoreOffset = pendingReturnScrollOffset.current;
+    pendingReturnScrollOffset.current = null;
+    lastScrollOffset.current = restoreOffset;
+    requestAnimationFrame(() => {
+      listRef.current?.scrollToOffset({ offset: restoreOffset, animated: false });
+    });
+  }, [activeTab, listData.length]);
 
   return (
     <SafeAreaView
