@@ -3,6 +3,7 @@ import { useScrollToTop } from '@react-navigation/native';
 import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   FlatList,
+  type LayoutChangeEvent,
   Pressable,
   StyleSheet,
   Text,
@@ -35,6 +36,7 @@ type IngredientTagOption = {
   name: string;
   color: string;
 };
+
 
 type IngredientGroup = IngredientTagOption & {
   ingredients: Ingredient[];
@@ -155,8 +157,11 @@ export default function ShakerScreen() {
   const [inStockOnly, setInStockOnly] = useState(false);
   const [expandedTagKeys, setExpandedTagKeys] = useState<Set<string>>(() => new Set());
   const [selectedIngredientIds, setSelectedIngredientIds] = useState<Set<number>>(() => new Set());
+  const [scrollOffset, setScrollOffset] = useState(0);
+  const [headerLayoutVersion, setHeaderLayoutVersion] = useState(0);
   const listRef = useRef<FlatList<unknown>>(null);
   const lastScrollOffset = useRef(0);
+  const headerPositions = useRef(new Map<string, number>());
   const searchStartOffset = useRef<number | null>(null);
   const previousQuery = useRef(query);
   const insets = useSafeAreaInsets();
@@ -182,8 +187,23 @@ export default function ShakerScreen() {
   }, [query]);
 
   const handleScroll = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    lastScrollOffset.current = event.nativeEvent.contentOffset.y;
+    const offset = event.nativeEvent.contentOffset.y;
+    lastScrollOffset.current = offset;
+    setScrollOffset(offset);
   }, []);
+
+  const handleGroupHeaderLayout = useCallback(
+    (key: string) => (event: LayoutChangeEvent) => {
+      const nextY = event.nativeEvent.layout.y;
+      const currentY = headerPositions.current.get(key);
+      if (currentY === nextY) {
+        return;
+      }
+      headerPositions.current.set(key, nextY);
+      setHeaderLayoutVersion((version) => version + 1);
+    },
+    [],
+  );
 
   const normalizedQuery = useMemo(() => {
     const normalized = normalizeSearchText(query);
@@ -382,6 +402,41 @@ export default function ShakerScreen() {
       return next;
     });
   }, []);
+
+  const stickyGroup = useMemo(() => {
+    if (expandedTagKeys.size === 0) {
+      return null;
+    }
+
+    const entries = ingredientGroups
+      .map((group) => ({ key: group.key, y: headerPositions.current.get(group.key) }))
+      .filter((entry): entry is { key: string; y: number } => entry.y != null)
+      .sort((a, b) => a.y - b.y);
+
+    if (entries.length === 0) {
+      return null;
+    }
+
+    let candidateIndex = -1;
+    for (let index = 0; index < entries.length; index += 1) {
+      if (entries[index].y <= scrollOffset) {
+        candidateIndex = index;
+      } else {
+        break;
+      }
+    }
+
+    if (candidateIndex < 0) {
+      return null;
+    }
+
+    const candidate = entries[candidateIndex];
+    if (!expandedTagKeys.has(candidate.key)) {
+      return null;
+    }
+
+    return ingredientGroups.find((group) => group.key === candidate.key) ?? null;
+  }, [expandedTagKeys, headerLayoutVersion, ingredientGroups, scrollOffset]);
 
   const handleToggleIngredient = useCallback((id: number) => {
     if (id < 0) {
@@ -593,6 +648,7 @@ export default function ShakerScreen() {
             accessibilityRole="button"
             accessibilityLabel={`${item.name} ingredients`}
             accessibilityState={{ expanded: isExpanded }}
+            onLayout={handleGroupHeaderLayout(item.key)}
             onPress={() => handleToggleGroup(item.key)}
             style={[styles.groupHeader, { backgroundColor }]}
           >
@@ -717,19 +773,38 @@ export default function ShakerScreen() {
             <PresenceCheck checked={inStockOnly} onToggle={() => setInStockOnly((previous) => !previous)} />
           </View>
         </View>
-        <FlatList
-          ref={listRef}
-          data={ingredientGroups}
-          keyExtractor={(item) => item.key}
-          renderItem={renderGroup}
-          contentContainerStyle={[styles.listContent, { paddingBottom: 140 + insets.bottom }]}
-          showsVerticalScrollIndicator={false}
-          keyboardDismissMode="on-drag"
-          // Allow the first tap to toggle items while dismissing the keyboard.
-          keyboardShouldPersistTaps="handled"
-          onScroll={handleScroll}
-          scrollEventThrottle={16}
-        />
+        <View style={styles.listContainer}>
+          <FlatList
+            ref={listRef}
+            data={ingredientGroups}
+            keyExtractor={(item) => item.key}
+            renderItem={renderGroup}
+            contentContainerStyle={[styles.listContent, { paddingBottom: 140 + insets.bottom }]}
+            showsVerticalScrollIndicator={false}
+            keyboardDismissMode="on-drag"
+            // Allow the first tap to toggle items while dismissing the keyboard.
+            keyboardShouldPersistTaps="handled"
+            onScroll={handleScroll}
+            scrollEventThrottle={16}
+          />
+          {stickyGroup ? (
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={`${stickyGroup.name} ingredients`}
+              accessibilityState={{ expanded: true }}
+              onPress={() => handleToggleGroup(stickyGroup.key)}
+              style={[styles.stickyHeader, { backgroundColor: stickyGroup.color }]}
+            >
+              <Text style={[styles.groupTitle, { color: Colors.onPrimary }]}>{stickyGroup.name}</Text>
+              <MaterialIcons
+                name="expand-more"
+                size={22}
+                color={Colors.onPrimary}
+                style={{ transform: [{ rotate: '180deg' }] }}
+              />
+            </Pressable>
+          ) : null}
+        </View>
         <View
           style={[
             styles.bottomPanel,
@@ -851,6 +926,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 0,
     paddingBottom: 120,
   },
+  listContainer: {
+    flex: 1,
+  },
   groupCard: {
     marginBottom: 2,
   },
@@ -862,6 +940,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+  },
+  stickyHeader: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 64,
+    paddingHorizontal: 16,
+    paddingVertical: 0,
+    borderRadius: 0,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    zIndex: 10,
   },
   groupTitle: {
     fontSize: 14,
