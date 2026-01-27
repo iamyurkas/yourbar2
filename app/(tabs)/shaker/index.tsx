@@ -13,6 +13,7 @@ import {
   type StyleProp,
   type TextStyle,
   type ListRenderItemInfo,
+  type LayoutChangeEvent,
 } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
@@ -155,10 +156,13 @@ export default function ShakerScreen() {
   const [inStockOnly, setInStockOnly] = useState(false);
   const [expandedTagKeys, setExpandedTagKeys] = useState<Set<string>>(() => new Set());
   const [selectedIngredientIds, setSelectedIngredientIds] = useState<Set<number>>(() => new Set());
+  const [activeTagKey, setActiveTagKey] = useState<string | null>(null);
+  const [pinnedTagKey, setPinnedTagKey] = useState<string | null>(null);
   const listRef = useRef<FlatList<unknown>>(null);
   const lastScrollOffset = useRef(0);
   const searchStartOffset = useRef<number | null>(null);
   const previousQuery = useRef(query);
+  const groupHeaderLayouts = useRef(new Map<string, { y: number; height: number }>());
   const insets = useSafeAreaInsets();
   const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
 
@@ -181,9 +185,34 @@ export default function ShakerScreen() {
     previousQuery.current = query;
   }, [query]);
 
-  const handleScroll = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    lastScrollOffset.current = event.nativeEvent.contentOffset.y;
-  }, []);
+  const updatePinnedTag = useCallback(
+    (offset: number) => {
+      setPinnedTagKey((previous) => {
+        if (!activeTagKey || !expandedTagKeys.has(activeTagKey)) {
+          return previous === null ? previous : null;
+        }
+
+        const layout = groupHeaderLayouts.current.get(activeTagKey);
+        if (!layout) {
+          return previous === null ? previous : null;
+        }
+
+        const shouldPin = offset > layout.y;
+        const next = shouldPin ? activeTagKey : null;
+        return previous === next ? previous : next;
+      });
+    },
+    [activeTagKey, expandedTagKeys],
+  );
+
+  const handleScroll = useCallback(
+    (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+      const offset = event.nativeEvent.contentOffset.y;
+      lastScrollOffset.current = offset;
+      updatePinnedTag(offset);
+    },
+    [updatePinnedTag],
+  );
 
   const normalizedQuery = useMemo(() => {
     const normalized = normalizeSearchText(query);
@@ -371,17 +400,47 @@ export default function ShakerScreen() {
     });
   }, [ingredientGroups]);
 
-  const handleToggleGroup = useCallback((key: string) => {
-    setExpandedTagKeys((previous) => {
-      const next = new Set(previous);
-      if (next.has(key)) {
-        next.delete(key);
-      } else {
-        next.add(key);
-      }
-      return next;
-    });
-  }, []);
+  useEffect(() => {
+    if (!activeTagKey) {
+      return;
+    }
+
+    if (!expandedTagKeys.has(activeTagKey)) {
+      setActiveTagKey(null);
+      return;
+    }
+
+    const hasActiveGroup = ingredientGroups.some((group) => group.key === activeTagKey);
+    if (!hasActiveGroup) {
+      setActiveTagKey(null);
+    }
+  }, [activeTagKey, expandedTagKeys, ingredientGroups]);
+
+  useEffect(() => {
+    updatePinnedTag(lastScrollOffset.current);
+  }, [updatePinnedTag, ingredientGroups]);
+
+  const handleToggleGroup = useCallback(
+    (key: string) => {
+      const isCurrentlyExpanded = expandedTagKeys.has(key);
+      setExpandedTagKeys((previous) => {
+        const next = new Set(previous);
+        if (next.has(key)) {
+          next.delete(key);
+        } else {
+          next.add(key);
+        }
+        return next;
+      });
+      setActiveTagKey((previous) => {
+        if (isCurrentlyExpanded) {
+          return previous === key ? null : previous;
+        }
+        return key;
+      });
+    },
+    [expandedTagKeys],
+  );
 
   const handleToggleIngredient = useCallback((id: number) => {
     if (id < 0) {
@@ -581,29 +640,57 @@ export default function ShakerScreen() {
     });
   }, [matchingCocktailSummary.availableKeys, matchingCocktailSummary.unavailableKeys, router]);
 
+  const renderGroupHeader = useCallback(
+    (group: IngredientGroup, isExpanded: boolean) => {
+      const iconRotation = isExpanded ? '180deg' : '0deg';
+      return (
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={`${group.name} ingredients`}
+          accessibilityState={{ expanded: isExpanded }}
+          onPress={() => handleToggleGroup(group.key)}
+          style={[styles.groupHeader, { backgroundColor: group.color }]}
+        >
+          <Text style={[styles.groupTitle, { color: Colors.onPrimary }]}>{group.name}</Text>
+          <MaterialIcons
+            name="expand-more"
+            size={22}
+            color={Colors.onPrimary}
+            style={{ transform: [{ rotate: iconRotation }] }}
+          />
+        </Pressable>
+      );
+    },
+    [Colors.onPrimary, handleToggleGroup],
+  );
+
+  const handleGroupHeaderLayout = useCallback(
+    (key: string, event: LayoutChangeEvent) => {
+      const { y, height } = event.nativeEvent.layout;
+      const previous = groupHeaderLayouts.current.get(key);
+      if (!previous || previous.y !== y || previous.height !== height) {
+        groupHeaderLayouts.current.set(key, { y, height });
+      }
+
+      if (key === activeTagKey) {
+        updatePinnedTag(lastScrollOffset.current);
+      }
+    },
+    [activeTagKey, updatePinnedTag],
+  );
+
+  const pinnedGroup = useMemo(
+    () => ingredientGroups.find((group) => group.key === pinnedTagKey) ?? null,
+    [ingredientGroups, pinnedTagKey],
+  );
+
   const renderGroup = useCallback(
     ({ item }: ListRenderItemInfo<IngredientGroup>) => {
       const isExpanded = expandedTagKeys.has(item.key);
-      const iconRotation = isExpanded ? '180deg' : '0deg';
-      const backgroundColor = item.color;
 
       return (
-        <View style={styles.groupCard}>
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel={`${item.name} ingredients`}
-            accessibilityState={{ expanded: isExpanded }}
-            onPress={() => handleToggleGroup(item.key)}
-            style={[styles.groupHeader, { backgroundColor }]}
-          >
-            <Text style={[styles.groupTitle, { color: Colors.onPrimary }]}>{item.name}</Text>
-            <MaterialIcons
-              name="expand-more"
-              size={22}
-              color={Colors.onPrimary}
-              style={{ transform: [{ rotate: iconRotation }] }}
-            />
-          </Pressable>
+        <View style={styles.groupCard} onLayout={(event) => handleGroupHeaderLayout(item.key, event)}>
+          {renderGroupHeader(item, isExpanded)}
           {isExpanded ? (
             <View style={styles.groupList}>
               {item.ingredients.map((ingredient, index) => {
@@ -651,14 +738,14 @@ export default function ShakerScreen() {
     [
       availableIngredientIds,
       expandedTagKeys,
-      handleToggleGroup,
       handleToggleIngredient,
+      handleGroupHeaderLayout,
       makeableCocktailCounts,
       totalCocktailCounts,
-      Colors.onSurface,
       Colors.onSurfaceVariant,
       selectedIngredientIds,
       shoppingIngredientIds,
+      renderGroupHeader,
     ],
   );
 
@@ -717,19 +804,26 @@ export default function ShakerScreen() {
             <PresenceCheck checked={inStockOnly} onToggle={() => setInStockOnly((previous) => !previous)} />
           </View>
         </View>
-        <FlatList
-          ref={listRef}
-          data={ingredientGroups}
-          keyExtractor={(item) => item.key}
-          renderItem={renderGroup}
-          contentContainerStyle={[styles.listContent, { paddingBottom: 140 + insets.bottom }]}
-          showsVerticalScrollIndicator={false}
-          keyboardDismissMode="on-drag"
-          // Allow the first tap to toggle items while dismissing the keyboard.
-          keyboardShouldPersistTaps="handled"
-          onScroll={handleScroll}
-          scrollEventThrottle={16}
-        />
+        <View style={styles.listRegion}>
+          <FlatList
+            ref={listRef}
+            data={ingredientGroups}
+            keyExtractor={(item) => item.key}
+            renderItem={renderGroup}
+            contentContainerStyle={[styles.listContent, { paddingBottom: 140 + insets.bottom }]}
+            showsVerticalScrollIndicator={false}
+            keyboardDismissMode="on-drag"
+            // Allow the first tap to toggle items while dismissing the keyboard.
+            keyboardShouldPersistTaps="handled"
+            onScroll={handleScroll}
+            scrollEventThrottle={16}
+          />
+          {pinnedGroup && expandedTagKeys.has(pinnedGroup.key) ? (
+            <View style={styles.pinnedHeader}>
+              {renderGroupHeader(pinnedGroup, expandedTagKeys.has(pinnedGroup.key))}
+            </View>
+          ) : null}
+        </View>
         <View
           style={[
             styles.bottomPanel,
@@ -850,6 +944,16 @@ const styles = StyleSheet.create({
     paddingTop: 0,
     paddingHorizontal: 0,
     paddingBottom: 120,
+  },
+  listRegion: {
+    flex: 1,
+  },
+  pinnedHeader: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 2,
   },
   groupCard: {
     marginBottom: 2,
