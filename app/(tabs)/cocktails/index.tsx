@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
-import { useScrollToTop } from '@react-navigation/native';
+import { useIsFocused, useScrollToTop } from '@react-navigation/native';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -47,6 +47,7 @@ type IngredientOption = {
 };
 
 const METHOD_ICON_SIZE = 16;
+const savedScrollOffsets: Partial<Record<CocktailTabKey, number>> = {};
 
 type MyTabListItem =
   | { type: 'cocktail'; key: string; cocktail: Cocktail }
@@ -105,6 +106,8 @@ export default function CocktailsScreen() {
   const lastScrollOffset = useRef(0);
   const searchStartOffset = useRef<number | null>(null);
   const previousQuery = useRef(query);
+  const isFocused = useIsFocused();
+  const wasFocused = useRef(isFocused);
 
   useScrollToTop(listRef);
 
@@ -125,9 +128,14 @@ export default function CocktailsScreen() {
     previousQuery.current = query;
   }, [query]);
 
-  const handleScroll = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    lastScrollOffset.current = event.nativeEvent.contentOffset.y;
-  }, []);
+  const handleScroll = useCallback(
+    (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+      const offset = event.nativeEvent.contentOffset.y;
+      lastScrollOffset.current = offset;
+      savedScrollOffsets[activeTab] = offset;
+    },
+    [activeTab],
+  );
   const router = useRouter();
   const ingredientLookup = useMemo(() => createIngredientLookup(ingredients), [ingredients]);
   const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
@@ -166,6 +174,25 @@ export default function CocktailsScreen() {
   useEffect(() => {
     setLastCocktailTab(activeTab);
   }, [activeTab]);
+
+  const restoreScrollOffset = useCallback(() => {
+    const offset = savedScrollOffsets[activeTab] ?? 0;
+    if (offset <= 0) {
+      return;
+    }
+
+    requestAnimationFrame(() => {
+      lastScrollOffset.current = offset;
+      listRef.current?.scrollToOffset({ offset, animated: false });
+    });
+  }, [activeTab]);
+
+  useEffect(() => {
+    if (isFocused && !wasFocused.current) {
+      restoreScrollOffset();
+    }
+    wasFocused.current = isFocused;
+  }, [isFocused, restoreScrollOffset]);
 
   const handleHeaderLayout = useCallback((event: LayoutChangeEvent) => {
     const nextLayout = event.nativeEvent.layout;
