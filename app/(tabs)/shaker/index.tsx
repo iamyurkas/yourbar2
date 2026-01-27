@@ -614,8 +614,6 @@ export default function ShakerScreen() {
                 y: lastScrollOffset.current,
                 animated: false,
               });
-            }}
-            onPress={() => {
               handleToggleGroup(section.key);
             }}
             style={[styles.groupHeader, { backgroundColor }]}
