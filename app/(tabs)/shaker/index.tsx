@@ -162,6 +162,7 @@ export default function ShakerScreen() {
   const [selectedIngredientIds, setSelectedIngredientIds] = useState<Set<number>>(() => new Set());
   const listRef = useRef<SectionList<Ingredient, IngredientSection>>(null);
   const lastScrollOffset = useRef(0);
+  const isScrolling = useRef(false);
   const searchStartOffset = useRef<number | null>(null);
   const previousQuery = useRef(query);
   const insets = useSafeAreaInsets();
@@ -607,7 +608,12 @@ export default function ShakerScreen() {
             accessibilityRole="button"
             accessibilityLabel={`${section.name} ingredients`}
             accessibilityState={{ expanded: isExpanded }}
-            onPress={() => handleToggleGroup(section.key)}
+            onPress={() => {
+              if (isScrolling.current) {
+                return;
+              }
+              handleToggleGroup(section.key);
+            }}
             style={[styles.groupHeader, { backgroundColor }]}
           >
             <Text style={[styles.groupTitle, { color: Colors.onPrimary }]}>{section.name}</Text>
@@ -737,6 +743,18 @@ export default function ShakerScreen() {
           keyboardDismissMode="on-drag"
           // Allow the first tap to toggle items while dismissing the keyboard.
           keyboardShouldPersistTaps="handled"
+          onScrollBeginDrag={() => {
+            isScrolling.current = true;
+          }}
+          onScrollEndDrag={() => {
+            isScrolling.current = false;
+          }}
+          onMomentumScrollBegin={() => {
+            isScrolling.current = true;
+          }}
+          onMomentumScrollEnd={() => {
+            isScrolling.current = false;
+          }}
           onScroll={handleScroll}
           scrollEventThrottle={16}
         />
