@@ -609,12 +609,11 @@ export default function ShakerScreen() {
             accessibilityLabel={`${section.name} ingredients`}
             accessibilityState={{ expanded: isExpanded }}
             onPressIn={() => {
-              if (listRef.current) {
-                listRef.current.scrollToOffset({
-                  offset: lastScrollOffset.current,
-                  animated: false,
-                });
-              }
+              const scrollResponder = listRef.current?.getScrollResponder?.();
+              scrollResponder?.scrollTo?.({
+                y: lastScrollOffset.current,
+                animated: false,
+              });
             }}
             onPress={() => {
               handleToggleGroup(section.key);
