@@ -40,6 +40,21 @@ type IngredientGroup = IngredientTagOption & {
   ingredients: Ingredient[];
 };
 
+type ShakerListItem =
+  | {
+      type: 'header';
+      key: string;
+      group: IngredientGroup;
+      isLast: boolean;
+    }
+  | {
+      type: 'ingredient';
+      key: string;
+      group: IngredientGroup;
+      ingredient: Ingredient;
+      isLast: boolean;
+    };
+
 type IngredientRowProps = {
   ingredient: Ingredient;
   isSelected: boolean;
@@ -155,7 +170,7 @@ export default function ShakerScreen() {
   const [inStockOnly, setInStockOnly] = useState(false);
   const [expandedTagKeys, setExpandedTagKeys] = useState<Set<string>>(() => new Set());
   const [selectedIngredientIds, setSelectedIngredientIds] = useState<Set<number>>(() => new Set());
-  const listRef = useRef<FlatList<unknown>>(null);
+  const listRef = useRef<FlatList<ShakerListItem>>(null);
   const lastScrollOffset = useRef(0);
   const searchStartOffset = useRef<number | null>(null);
   const previousQuery = useRef(query);
@@ -581,70 +596,96 @@ export default function ShakerScreen() {
     });
   }, [matchingCocktailSummary.availableKeys, matchingCocktailSummary.unavailableKeys, router]);
 
+  const { listItems, stickyHeaderIndices } = useMemo(() => {
+    const items: ShakerListItem[] = [];
+    const stickyIndices: number[] = [];
+
+    ingredientGroups.forEach((group) => {
+      const isExpanded = expandedTagKeys.has(group.key);
+      const headerIndex = items.length;
+      stickyIndices.push(headerIndex);
+      items.push({
+        type: 'header',
+        key: `header-${group.key}`,
+        group,
+        isLast: !isExpanded || group.ingredients.length === 0,
+      });
+
+      if (!isExpanded) {
+        return;
+      }
+
+      group.ingredients.forEach((ingredient, index) => {
+        const isLast = index === group.ingredients.length - 1;
+        items.push({
+          type: 'ingredient',
+          key: `ingredient-${group.key}-${String(ingredient.id ?? ingredient.name)}`,
+          group,
+          ingredient,
+          isLast,
+        });
+      });
+    });
+
+    return { listItems: items, stickyHeaderIndices: stickyIndices };
+  }, [expandedTagKeys, ingredientGroups]);
+
   const renderGroup = useCallback(
-    ({ item }: ListRenderItemInfo<IngredientGroup>) => {
-      const isExpanded = expandedTagKeys.has(item.key);
-      const iconRotation = isExpanded ? '180deg' : '0deg';
-      const backgroundColor = item.color;
+    ({ item }: ListRenderItemInfo<ShakerListItem>) => {
+      if (item.type === 'header') {
+        const isExpanded = expandedTagKeys.has(item.group.key);
+        const iconRotation = isExpanded ? '180deg' : '0deg';
+        const backgroundColor = item.group.color;
+
+        return (
+          <View style={[styles.groupHeaderWrapper, item.isLast ? styles.groupSpacing : null]}>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={`${item.group.name} ingredients`}
+              accessibilityState={{ expanded: isExpanded }}
+              onPress={() => handleToggleGroup(item.group.key)}
+              style={[styles.groupHeader, { backgroundColor }]}
+            >
+              <Text style={[styles.groupTitle, { color: Colors.onPrimary }]}>{item.group.name}</Text>
+              <MaterialIcons
+                name="expand-more"
+                size={22}
+                color={Colors.onPrimary}
+                style={{ transform: [{ rotate: iconRotation }] }}
+              />
+            </Pressable>
+          </View>
+        );
+      }
+
+      const ingredientId = Number(item.ingredient.id ?? -1);
+      const isAvailable = ingredientId >= 0 && availableIngredientIds.has(ingredientId);
+      const isSelected = ingredientId >= 0 && selectedIngredientIds.has(ingredientId);
+      const isOnShoppingList = ingredientId >= 0 && shoppingIngredientIds.has(ingredientId);
+      const separatorColor = isAvailable ? Colors.outline : Colors.outlineVariant;
+      const makeableCount = ingredientId >= 0 ? makeableCocktailCounts.get(ingredientId) ?? 0 : 0;
+      const totalCount = ingredientId >= 0 ? totalCocktailCounts.get(ingredientId) ?? 0 : 0;
+      const label = makeableCount === 1 ? 'cocktail' : 'cocktails';
+      const recipeLabel = totalCount === 1 ? 'recipe' : 'recipes';
+      const subtitleText =
+        makeableCount > 0
+          ? `Make ${makeableCount} ${label}`
+          : totalCount > 0
+          ? `${totalCount} ${recipeLabel}`
+          : undefined;
 
       return (
-        <View style={styles.groupCard}>
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel={`${item.name} ingredients`}
-            accessibilityState={{ expanded: isExpanded }}
-            onPress={() => handleToggleGroup(item.key)}
-            style={[styles.groupHeader, { backgroundColor }]}
-          >
-            <Text style={[styles.groupTitle, { color: Colors.onPrimary }]}>{item.name}</Text>
-            <MaterialIcons
-              name="expand-more"
-              size={22}
-              color={Colors.onPrimary}
-              style={{ transform: [{ rotate: iconRotation }] }}
-            />
-          </Pressable>
-          {isExpanded ? (
-            <View style={styles.groupList}>
-              {item.ingredients.map((ingredient, index) => {
-                const ingredientId = Number(ingredient.id ?? -1);
-                const isAvailable = ingredientId >= 0 && availableIngredientIds.has(ingredientId);
-                const isSelected = ingredientId >= 0 && selectedIngredientIds.has(ingredientId);
-                const isOnShoppingList =
-                  ingredientId >= 0 && shoppingIngredientIds.has(ingredientId);
-                const separatorColor = isAvailable
-                  ? Colors.outline
-                  : Colors.outlineVariant;
-                const makeableCount = ingredientId >= 0 ? makeableCocktailCounts.get(ingredientId) ?? 0 : 0;
-                const totalCount = ingredientId >= 0 ? totalCocktailCounts.get(ingredientId) ?? 0 : 0;
-                const label = makeableCount === 1 ? 'cocktail' : 'cocktails';
-                const recipeLabel = totalCount === 1 ? 'recipe' : 'recipes';
-                const subtitleText =
-                  makeableCount > 0
-                    ? `Make ${makeableCount} ${label}`
-                    : totalCount > 0
-                    ? `${totalCount} ${recipeLabel}`
-                    : undefined;
-
-                return (
-                  <View key={String(ingredient.id ?? ingredient.name)}>
-                    <IngredientRow
-                      ingredient={ingredient}
-                      isAvailable={isAvailable}
-                      isSelected={isSelected}
-                      isOnShoppingList={isOnShoppingList}
-                      subtitle={subtitleText}
-                      subtitleStyle={{ color: Colors.onSurfaceVariant }}
-                      onToggle={handleToggleIngredient}
-                    />
-                    {index < item.ingredients.length - 1 ? (
-                      <View style={[styles.divider, { backgroundColor: separatorColor }]} />
-                    ) : null}
-                  </View>
-                );
-              })}
-            </View>
-          ) : null}
+        <View style={item.isLast ? styles.groupSpacing : null}>
+          <IngredientRow
+            ingredient={item.ingredient}
+            isAvailable={isAvailable}
+            isSelected={isSelected}
+            isOnShoppingList={isOnShoppingList}
+            subtitle={subtitleText}
+            subtitleStyle={{ color: Colors.onSurfaceVariant }}
+            onToggle={handleToggleIngredient}
+          />
+          {!item.isLast ? <View style={[styles.divider, { backgroundColor: separatorColor }]} /> : null}
         </View>
       );
     },
@@ -719,9 +760,10 @@ export default function ShakerScreen() {
         </View>
         <FlatList
           ref={listRef}
-          data={ingredientGroups}
+          data={listItems}
           keyExtractor={(item) => item.key}
           renderItem={renderGroup}
+          stickyHeaderIndices={stickyHeaderIndices}
           contentContainerStyle={[styles.listContent, { paddingBottom: 140 + insets.bottom }]}
           showsVerticalScrollIndicator={false}
           keyboardDismissMode="on-drag"
@@ -851,7 +893,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 0,
     paddingBottom: 120,
   },
-  groupCard: {
+  groupHeaderWrapper: {
+    marginBottom: 0,
+  },
+  groupSpacing: {
     marginBottom: 2,
   },
   groupHeader: {
@@ -867,11 +912,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
     textTransform: 'capitalize',
-  },
-  groupList: {
-    overflow: 'hidden',
-    borderRadius: 0,
-    marginTop: 0,
   },
   bottomPanel: {
     position: 'absolute',
