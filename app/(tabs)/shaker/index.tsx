@@ -140,6 +140,8 @@ function resolveCocktailKey(cocktail: Cocktail) {
   return undefined;
 }
 
+const GROUP_HEADER_HEIGHT = 64;
+
 export default function ShakerScreen() {
   const router = useRouter();
   const {
@@ -159,8 +161,10 @@ export default function ShakerScreen() {
   const lastScrollOffset = useRef(0);
   const searchStartOffset = useRef<number | null>(null);
   const previousQuery = useRef(query);
+  const groupLayouts = useRef<Map<string, number>>(new Map());
   const insets = useSafeAreaInsets();
   const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
+  const [stickyGroupKey, setStickyGroupKey] = useState<string | null>(null);
 
   useScrollToTop(listRef);
 
@@ -181,9 +185,47 @@ export default function ShakerScreen() {
     previousQuery.current = query;
   }, [query]);
 
-  const handleScroll = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    lastScrollOffset.current = event.nativeEvent.contentOffset.y;
-  }, []);
+  const updateStickyGroup = useCallback(
+    (offset: number, expandedKeys: Set<string>) => {
+      let nextStickyKey: string | null = null;
+
+      for (const group of ingredientGroups) {
+        const layoutY = groupLayouts.current.get(group.key);
+        if (layoutY == null) {
+          continue;
+        }
+
+        if (offset >= layoutY + GROUP_HEADER_HEIGHT && expandedKeys.has(group.key)) {
+          nextStickyKey = group.key;
+          continue;
+        }
+
+        if (layoutY > offset + GROUP_HEADER_HEIGHT) {
+          break;
+        }
+      }
+
+      setStickyGroupKey((previous) => (previous === nextStickyKey ? previous : nextStickyKey));
+    },
+    [ingredientGroups],
+  );
+
+  const handleScroll = useCallback(
+    (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+      const offset = event.nativeEvent.contentOffset.y;
+      lastScrollOffset.current = offset;
+      updateStickyGroup(offset, expandedTagKeys);
+    },
+    [expandedTagKeys, updateStickyGroup],
+  );
+
+  const handleGroupLayout = useCallback(
+    (key: string, layoutY: number) => {
+      groupLayouts.current.set(key, layoutY);
+      updateStickyGroup(lastScrollOffset.current, expandedTagKeys);
+    },
+    [expandedTagKeys, updateStickyGroup],
+  );
 
   const normalizedQuery = useMemo(() => {
     const normalized = normalizeSearchText(query);
@@ -588,7 +630,10 @@ export default function ShakerScreen() {
       const backgroundColor = item.color;
 
       return (
-        <View style={styles.groupCard}>
+        <View
+          style={styles.groupCard}
+          onLayout={(event) => handleGroupLayout(item.key, event.nativeEvent.layout.y)}
+        >
           <Pressable
             accessibilityRole="button"
             accessibilityLabel={`${item.name} ingredients`}
@@ -651,6 +696,7 @@ export default function ShakerScreen() {
     [
       availableIngredientIds,
       expandedTagKeys,
+      handleGroupLayout,
       handleToggleGroup,
       handleToggleIngredient,
       makeableCocktailCounts,
@@ -661,6 +707,18 @@ export default function ShakerScreen() {
       shoppingIngredientIds,
     ],
   );
+
+  useEffect(() => {
+    updateStickyGroup(lastScrollOffset.current, expandedTagKeys);
+  }, [expandedTagKeys, updateStickyGroup]);
+
+  const stickyGroup = useMemo(() => {
+    if (!stickyGroupKey) {
+      return undefined;
+    }
+
+    return ingredientGroups.find((group) => group.key === stickyGroupKey);
+  }, [ingredientGroups, stickyGroupKey]);
 
   return (
     <SafeAreaView
@@ -717,19 +775,41 @@ export default function ShakerScreen() {
             <PresenceCheck checked={inStockOnly} onToggle={() => setInStockOnly((previous) => !previous)} />
           </View>
         </View>
-        <FlatList
-          ref={listRef}
-          data={ingredientGroups}
-          keyExtractor={(item) => item.key}
-          renderItem={renderGroup}
-          contentContainerStyle={[styles.listContent, { paddingBottom: 140 + insets.bottom }]}
-          showsVerticalScrollIndicator={false}
-          keyboardDismissMode="on-drag"
-          // Allow the first tap to toggle items while dismissing the keyboard.
-          keyboardShouldPersistTaps="handled"
-          onScroll={handleScroll}
-          scrollEventThrottle={16}
-        />
+        <View style={styles.listWrapper}>
+          {stickyGroup ? (
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={`${stickyGroup.name} ingredients`}
+              accessibilityState={{ expanded: true }}
+              onPress={() => handleToggleGroup(stickyGroup.key)}
+              style={[
+                styles.stickyHeader,
+                { backgroundColor: stickyGroup.color, borderBottomColor: Colors.outline },
+              ]}
+            >
+              <Text style={[styles.groupTitle, { color: Colors.onPrimary }]}>{stickyGroup.name}</Text>
+              <MaterialIcons
+                name="expand-more"
+                size={22}
+                color={Colors.onPrimary}
+                style={{ transform: [{ rotate: '180deg' }] }}
+              />
+            </Pressable>
+          ) : null}
+          <FlatList
+            ref={listRef}
+            data={ingredientGroups}
+            keyExtractor={(item) => item.key}
+            renderItem={renderGroup}
+            contentContainerStyle={[styles.listContent, { paddingBottom: 140 + insets.bottom }]}
+            showsVerticalScrollIndicator={false}
+            keyboardDismissMode="on-drag"
+            // Allow the first tap to toggle items while dismissing the keyboard.
+            keyboardShouldPersistTaps="handled"
+            onScroll={handleScroll}
+            scrollEventThrottle={16}
+          />
+        </View>
         <View
           style={[
             styles.bottomPanel,
@@ -851,17 +931,35 @@ const styles = StyleSheet.create({
     paddingHorizontal: 0,
     paddingBottom: 120,
   },
+  listWrapper: {
+    flex: 1,
+  },
   groupCard: {
     marginBottom: 2,
   },
   groupHeader: {
-    height: 64,
+    height: GROUP_HEADER_HEIGHT,
     paddingHorizontal: 16,
     paddingVertical: 0,
     borderRadius: 0,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+  },
+  stickyHeader: {
+    height: GROUP_HEADER_HEIGHT,
+    paddingHorizontal: 16,
+    paddingVertical: 0,
+    borderRadius: 0,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 2,
+    borderBottomWidth: StyleSheet.hairlineWidth,
   },
   groupTitle: {
     fontSize: 14,
