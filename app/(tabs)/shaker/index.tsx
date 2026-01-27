@@ -195,12 +195,12 @@ export default function ShakerScreen() {
           continue;
         }
 
-        if (offset >= layoutY + GROUP_HEADER_HEIGHT && expandedKeys.has(group.key)) {
+        if (offset >= layoutY && expandedKeys.has(group.key)) {
           nextStickyKey = group.key;
           continue;
         }
 
-        if (layoutY > offset + GROUP_HEADER_HEIGHT) {
+        if (layoutY > offset) {
           break;
         }
       }
