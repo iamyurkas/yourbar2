@@ -59,6 +59,7 @@ type MyTabListItem =
       photoUri?: string | null;
       tagColor?: string;
       cocktailCount: number;
+      isBranded: boolean;
     };
 
 const TAB_OPTIONS: SegmentTabOption[] = [
@@ -572,6 +573,7 @@ export default function CocktailsScreen() {
           name: option.name,
           photoUri: ingredientRecord?.photoUri ?? null,
           tagColor: ingredientRecord?.tags?.[0]?.color ?? tagColors.yellow,
+          isBranded: ingredientRecord?.baseIngredientId != null,
           cocktails: [],
           keys: new Set<string>(),
         };
@@ -591,6 +593,7 @@ export default function CocktailsScreen() {
         name: group.name,
         photoUri: group.photoUri,
         tagColor: group.tagColor,
+        isBranded: group.isBranded,
         cocktails: group.cocktails.sort((a, b) =>
           (a.name ?? '').localeCompare(b.name ?? ''),
         ),
@@ -622,6 +625,7 @@ export default function CocktailsScreen() {
           photoUri: group.photoUri,
           tagColor: group.tagColor,
           cocktailCount: group.cocktails.length,
+          isBranded: group.isBranded,
         });
         group.cocktails.forEach((cocktail) => {
           items.push({
@@ -726,6 +730,7 @@ export default function CocktailsScreen() {
           item.cocktailCount === 1 ? 'cocktail' : 'cocktails'
         }`;
         const thumbnail = <Thumb label={item.name} uri={item.photoUri ?? undefined} />;
+        const brandIndicatorColor = item.isBranded ? Colors.primary : undefined;
 
         return (
           <ListRow
@@ -735,6 +740,7 @@ export default function CocktailsScreen() {
             highlightColor={Colors.highlightSubtle}
             tagColor={item.tagColor}
             thumbnail={thumbnail}
+            brandIndicatorColor={brandIndicatorColor}
             onPress={() => handleSelectIngredient(item.ingredientId)}
             accessibilityRole="button"
             metaAlignment="center"
