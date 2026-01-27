@@ -36,6 +36,7 @@ import {
   navigateToDetailsWithReturnTo,
   parseReturnToParams,
   returnToSourceOrBack,
+  skipDuplicateBack,
 } from "@/libs/navigation";
 import { normalizeSearchText } from "@/libs/search-normalization";
 import { useInventory, type Cocktail } from "@/providers/inventory-provider";
@@ -369,6 +370,11 @@ export default function CocktailDetailsScreen() {
   }, [useImperialUnits]);
 
   const handleReturn = useCallback(() => {
+    if (returnToPath === "/cocktails") {
+      skipDuplicateBack(navigation);
+      return;
+    }
+
     returnToSourceOrBack(navigation, { returnToPath, returnToParams });
   }, [navigation, returnToParams, returnToPath]);
 
