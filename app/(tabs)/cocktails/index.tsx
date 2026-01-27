@@ -107,7 +107,6 @@ export default function CocktailsScreen() {
   const searchStartOffset = useRef<number | null>(null);
   const previousQuery = useRef(query);
   const isFocused = useIsFocused();
-  const wasFocused = useRef(isFocused);
 
   useScrollToTop(listRef);
 
@@ -188,10 +187,9 @@ export default function CocktailsScreen() {
   }, [activeTab]);
 
   useEffect(() => {
-    if (isFocused && !wasFocused.current) {
+    if (isFocused) {
       restoreScrollOffset();
     }
-    wasFocused.current = isFocused;
   }, [isFocused, restoreScrollOffset]);
 
   const handleHeaderLayout = useCallback((event: LayoutChangeEvent) => {
