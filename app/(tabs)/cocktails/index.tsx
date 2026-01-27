@@ -1,7 +1,7 @@
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { useScrollToTop } from '@react-navigation/native';
 import { Image } from 'expo-image';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   FlatList,
@@ -81,6 +81,7 @@ const normalizeIngredientId = (value?: number | string | null): number | undefin
 };
 
 export default function CocktailsScreen() {
+  const params = useLocalSearchParams<{ tab?: string; scrollOffset?: string }>();
   const {
     cocktails,
     availableIngredientIds,
@@ -103,6 +104,7 @@ export default function CocktailsScreen() {
   const [filterAnchorLayout, setFilterAnchorLayout] = useState<LayoutRectangle | null>(null);
   const listRef = useRef<FlatList<unknown>>(null);
   const lastScrollOffset = useRef(0);
+  const restoredScrollOffset = useRef<string | null>(null);
   const searchStartOffset = useRef<number | null>(null);
   const previousQuery = useRef(query);
 
@@ -166,6 +168,32 @@ export default function CocktailsScreen() {
   useEffect(() => {
     setLastCocktailTab(activeTab);
   }, [activeTab]);
+
+  useEffect(() => {
+    const returnTab = Array.isArray(params.tab) ? params.tab[0] : params.tab;
+    if (returnTab && returnTab !== activeTab) {
+      setActiveTab(returnTab as CocktailTabKey);
+    }
+  }, [activeTab, params.tab]);
+
+  useEffect(() => {
+    const nextOffset = Array.isArray(params.scrollOffset)
+      ? params.scrollOffset[0]
+      : params.scrollOffset;
+    if (!nextOffset || nextOffset === restoredScrollOffset.current) {
+      return;
+    }
+
+    const parsed = Number(nextOffset);
+    if (!Number.isFinite(parsed)) {
+      return;
+    }
+
+    restoredScrollOffset.current = nextOffset;
+    requestAnimationFrame(() => {
+      listRef.current?.scrollToOffset({ offset: parsed, animated: false });
+    });
+  }, [params.scrollOffset]);
 
   const handleHeaderLayout = useCallback((event: LayoutChangeEvent) => {
     const nextLayout = event.nativeEvent.layout;
@@ -657,9 +685,13 @@ export default function CocktailsScreen() {
         pathname: '/cocktails/[cocktailId]',
         params: { cocktailId: String(candidateId) },
         returnToPath: '/cocktails',
+        returnToParams: {
+          tab: activeTab,
+          scrollOffset: String(lastScrollOffset.current),
+        },
       });
     },
-    [],
+    [activeTab],
   );
 
   const handleSelectIngredient = useCallback(
