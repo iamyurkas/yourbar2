@@ -1,7 +1,7 @@
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { useScrollToTop } from '@react-navigation/native';
 import { Image } from 'expo-image';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   FlatList,
@@ -102,9 +102,17 @@ export default function CocktailsScreen() {
   const [headerLayout, setHeaderLayout] = useState<LayoutRectangle | null>(null);
   const [filterAnchorLayout, setFilterAnchorLayout] = useState<LayoutRectangle | null>(null);
   const listRef = useRef<FlatList<unknown>>(null);
+  const scrollOffsets = useRef<Record<CocktailTabKey, number>>({
+    all: 0,
+    my: 0,
+    favorites: 0,
+  });
   const lastScrollOffset = useRef(0);
   const searchStartOffset = useRef<number | null>(null);
   const previousQuery = useRef(query);
+  const pendingScrollOffset = useRef<number | null>(null);
+  const restoredScrollToken = useRef<string | null>(null);
+  const params = useLocalSearchParams<{ scrollOffset?: string; tab?: string }>();
 
   useScrollToTop(listRef);
 
@@ -125,9 +133,14 @@ export default function CocktailsScreen() {
     previousQuery.current = query;
   }, [query]);
 
-  const handleScroll = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    lastScrollOffset.current = event.nativeEvent.contentOffset.y;
-  }, []);
+  const handleScroll = useCallback(
+    (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+      const offset = event.nativeEvent.contentOffset.y;
+      lastScrollOffset.current = offset;
+      scrollOffsets.current[activeTab] = offset;
+    },
+    [activeTab],
+  );
   const router = useRouter();
   const ingredientLookup = useMemo(() => createIngredientLookup(ingredients), [ingredients]);
   const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
@@ -166,6 +179,39 @@ export default function CocktailsScreen() {
   useEffect(() => {
     setLastCocktailTab(activeTab);
   }, [activeTab]);
+
+  useEffect(() => {
+    lastScrollOffset.current = scrollOffsets.current[activeTab] ?? 0;
+  }, [activeTab]);
+
+  useEffect(() => {
+    const rawTab = Array.isArray(params.tab) ? params.tab[0] : params.tab;
+    if (rawTab === 'all' || rawTab === 'my' || rawTab === 'favorites') {
+      if (rawTab !== activeTab) {
+        setActiveTab(rawTab);
+      }
+    }
+
+    const rawOffset = Array.isArray(params.scrollOffset)
+      ? params.scrollOffset[0]
+      : params.scrollOffset;
+    if (!rawOffset) {
+      return;
+    }
+
+    const offset = Number(rawOffset);
+    if (!Number.isFinite(offset)) {
+      return;
+    }
+
+    const token = `${rawTab ?? activeTab}:${rawOffset}`;
+    if (restoredScrollToken.current === token) {
+      return;
+    }
+
+    restoredScrollToken.current = token;
+    pendingScrollOffset.current = Math.max(0, offset);
+  }, [activeTab, params.scrollOffset, params.tab]);
 
   const handleHeaderLayout = useCallback((event: LayoutChangeEvent) => {
     const nextLayout = event.nativeEvent.layout;
@@ -657,9 +703,13 @@ export default function CocktailsScreen() {
         pathname: '/cocktails/[cocktailId]',
         params: { cocktailId: String(candidateId) },
         returnToPath: '/cocktails',
+        returnToParams: {
+          scrollOffset: String(lastScrollOffset.current),
+          tab: activeTab,
+        },
       });
     },
-    [],
+    [activeTab],
   );
 
   const handleSelectIngredient = useCallback(
@@ -669,10 +719,14 @@ export default function CocktailsScreen() {
           pathname: '/ingredients/[ingredientId]',
           params: { ingredientId: String(ingredientId) },
           returnToPath: '/cocktails',
+          returnToParams: {
+            scrollOffset: String(lastScrollOffset.current),
+            tab: activeTab,
+          },
         });
       }
     },
-    [],
+    [activeTab],
   );
 
   const handleShoppingToggle = useCallback(
@@ -827,6 +881,20 @@ export default function CocktailsScreen() {
   const isFilterActive = selectedTagKeys.size > 0 || selectedMethodIds.size > 0;
   const isMyTab = activeTab === 'my';
   const listData = isMyTab ? myTabListData?.items ?? [] : sortedFavorites;
+  useEffect(() => {
+    if (pendingScrollOffset.current == null) {
+      return;
+    }
+
+    const offset = pendingScrollOffset.current;
+    pendingScrollOffset.current = null;
+    lastScrollOffset.current = offset;
+    scrollOffsets.current[activeTab] = offset;
+
+    requestAnimationFrame(() => {
+      listRef.current?.scrollToOffset({ offset, animated: false });
+    });
+  }, [activeTab, isMyTab, listData]);
   const emptyMessage = useMemo(() => {
       switch (activeTab) {
         case 'my':
