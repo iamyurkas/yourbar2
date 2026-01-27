@@ -50,6 +50,11 @@ type IngredientRowProps = {
   onToggle: (id: number) => void;
 };
 
+type ShakerListItem =
+  | { type: 'header'; group: IngredientGroup }
+  | { type: 'ingredient'; group: IngredientGroup; ingredient: Ingredient; isLast: boolean }
+  | { type: 'spacer'; groupKey: string };
+
 const IngredientRow = memo(function IngredientRow({
   ingredient,
   isSelected,
@@ -155,7 +160,7 @@ export default function ShakerScreen() {
   const [inStockOnly, setInStockOnly] = useState(false);
   const [expandedTagKeys, setExpandedTagKeys] = useState<Set<string>>(() => new Set());
   const [selectedIngredientIds, setSelectedIngredientIds] = useState<Set<number>>(() => new Set());
-  const listRef = useRef<FlatList<unknown>>(null);
+  const listRef = useRef<FlatList<ShakerListItem>>(null);
   const lastScrollOffset = useRef(0);
   const searchStartOffset = useRef<number | null>(null);
   const previousQuery = useRef(query);
@@ -581,22 +586,56 @@ export default function ShakerScreen() {
     });
   }, [matchingCocktailSummary.availableKeys, matchingCocktailSummary.unavailableKeys, router]);
 
-  const renderGroup = useCallback(
-    ({ item }: ListRenderItemInfo<IngredientGroup>) => {
-      const isExpanded = expandedTagKeys.has(item.key);
-      const iconRotation = isExpanded ? '180deg' : '0deg';
-      const backgroundColor = item.color;
+  const listItems = useMemo<ShakerListItem[]>(() => {
+    const items: ShakerListItem[] = [];
 
-      return (
-        <View style={styles.groupCard}>
+    ingredientGroups.forEach((group) => {
+      items.push({ type: 'header', group });
+
+      if (expandedTagKeys.has(group.key)) {
+        group.ingredients.forEach((ingredient, index) => {
+          items.push({
+            type: 'ingredient',
+            group,
+            ingredient,
+            isLast: index === group.ingredients.length - 1,
+          });
+        });
+      }
+
+      items.push({ type: 'spacer', groupKey: group.key });
+    });
+
+    return items;
+  }, [expandedTagKeys, ingredientGroups]);
+
+  const stickyHeaderIndices = useMemo(
+    () =>
+      listItems.reduce<number[]>((indices, item, index) => {
+        if (item.type === 'header') {
+          indices.push(index);
+        }
+        return indices;
+      }, []),
+    [listItems],
+  );
+
+  const renderItem = useCallback(
+    ({ item }: ListRenderItemInfo<ShakerListItem>) => {
+      if (item.type === 'header') {
+        const isExpanded = expandedTagKeys.has(item.group.key);
+        const iconRotation = isExpanded ? '180deg' : '0deg';
+        const backgroundColor = item.group.color;
+
+        return (
           <Pressable
             accessibilityRole="button"
-            accessibilityLabel={`${item.name} ingredients`}
+            accessibilityLabel={`${item.group.name} ingredients`}
             accessibilityState={{ expanded: isExpanded }}
-            onPress={() => handleToggleGroup(item.key)}
+            onPress={() => handleToggleGroup(item.group.key)}
             style={[styles.groupHeader, { backgroundColor }]}
           >
-            <Text style={[styles.groupTitle, { color: Colors.onPrimary }]}>{item.name}</Text>
+            <Text style={[styles.groupTitle, { color: Colors.onPrimary }]}>{item.group.name}</Text>
             <MaterialIcons
               name="expand-more"
               size={22}
@@ -604,61 +643,57 @@ export default function ShakerScreen() {
               style={{ transform: [{ rotate: iconRotation }] }}
             />
           </Pressable>
-          {isExpanded ? (
-            <View style={styles.groupList}>
-              {item.ingredients.map((ingredient, index) => {
-                const ingredientId = Number(ingredient.id ?? -1);
-                const isAvailable = ingredientId >= 0 && availableIngredientIds.has(ingredientId);
-                const isSelected = ingredientId >= 0 && selectedIngredientIds.has(ingredientId);
-                const isOnShoppingList =
-                  ingredientId >= 0 && shoppingIngredientIds.has(ingredientId);
-                const separatorColor = isAvailable
-                  ? Colors.outline
-                  : Colors.outlineVariant;
-                const makeableCount = ingredientId >= 0 ? makeableCocktailCounts.get(ingredientId) ?? 0 : 0;
-                const totalCount = ingredientId >= 0 ? totalCocktailCounts.get(ingredientId) ?? 0 : 0;
-                const label = makeableCount === 1 ? 'cocktail' : 'cocktails';
-                const recipeLabel = totalCount === 1 ? 'recipe' : 'recipes';
-                const subtitleText =
-                  makeableCount > 0
-                    ? `Make ${makeableCount} ${label}`
-                    : totalCount > 0
-                    ? `${totalCount} ${recipeLabel}`
-                    : undefined;
+        );
+      }
 
-                return (
-                  <View key={String(ingredient.id ?? ingredient.name)}>
-                    <IngredientRow
-                      ingredient={ingredient}
-                      isAvailable={isAvailable}
-                      isSelected={isSelected}
-                      isOnShoppingList={isOnShoppingList}
-                      subtitle={subtitleText}
-                      subtitleStyle={{ color: Colors.onSurfaceVariant }}
-                      onToggle={handleToggleIngredient}
-                    />
-                    {index < item.ingredients.length - 1 ? (
-                      <View style={[styles.divider, { backgroundColor: separatorColor }]} />
-                    ) : null}
-                  </View>
-                );
-              })}
-            </View>
+      if (item.type === 'spacer') {
+        return <View style={styles.groupSpacer} />;
+      }
+
+      const ingredientId = Number(item.ingredient.id ?? -1);
+      const isAvailable = ingredientId >= 0 && availableIngredientIds.has(ingredientId);
+      const isSelected = ingredientId >= 0 && selectedIngredientIds.has(ingredientId);
+      const isOnShoppingList = ingredientId >= 0 && shoppingIngredientIds.has(ingredientId);
+      const separatorColor = isAvailable ? Colors.outline : Colors.outlineVariant;
+      const makeableCount = ingredientId >= 0 ? makeableCocktailCounts.get(ingredientId) ?? 0 : 0;
+      const totalCount = ingredientId >= 0 ? totalCocktailCounts.get(ingredientId) ?? 0 : 0;
+      const label = makeableCount === 1 ? 'cocktail' : 'cocktails';
+      const recipeLabel = totalCount === 1 ? 'recipe' : 'recipes';
+      const subtitleText =
+        makeableCount > 0
+          ? `Make ${makeableCount} ${label}`
+          : totalCount > 0
+          ? `${totalCount} ${recipeLabel}`
+          : undefined;
+
+      return (
+        <View>
+          <IngredientRow
+            ingredient={item.ingredient}
+            isAvailable={isAvailable}
+            isSelected={isSelected}
+            isOnShoppingList={isOnShoppingList}
+            subtitle={subtitleText}
+            subtitleStyle={{ color: Colors.onSurfaceVariant }}
+            onToggle={handleToggleIngredient}
+          />
+          {!item.isLast ? (
+            <View style={[styles.divider, { backgroundColor: separatorColor }]} />
           ) : null}
         </View>
       );
     },
     [
       availableIngredientIds,
+      Colors.onPrimary,
+      Colors.onSurfaceVariant,
       expandedTagKeys,
       handleToggleGroup,
       handleToggleIngredient,
       makeableCocktailCounts,
-      totalCocktailCounts,
-      Colors.onSurface,
-      Colors.onSurfaceVariant,
       selectedIngredientIds,
       shoppingIngredientIds,
+      totalCocktailCounts,
     ],
   );
 
@@ -719,9 +754,17 @@ export default function ShakerScreen() {
         </View>
         <FlatList
           ref={listRef}
-          data={ingredientGroups}
-          keyExtractor={(item) => item.key}
-          renderItem={renderGroup}
+          data={listItems}
+          keyExtractor={(item) => {
+            if (item.type === 'header') {
+              return `header-${item.group.key}`;
+            }
+            if (item.type === 'ingredient') {
+              return `ingredient-${item.group.key}-${String(item.ingredient.id ?? item.ingredient.name)}`;
+            }
+            return `spacer-${item.groupKey}`;
+          }}
+          renderItem={renderItem}
           contentContainerStyle={[styles.listContent, { paddingBottom: 140 + insets.bottom }]}
           showsVerticalScrollIndicator={false}
           keyboardDismissMode="on-drag"
@@ -729,6 +772,7 @@ export default function ShakerScreen() {
           keyboardShouldPersistTaps="handled"
           onScroll={handleScroll}
           scrollEventThrottle={16}
+          stickyHeaderIndices={stickyHeaderIndices}
         />
         <View
           style={[
@@ -851,8 +895,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 0,
     paddingBottom: 120,
   },
-  groupCard: {
-    marginBottom: 2,
+  groupSpacer: {
+    height: 2,
   },
   groupHeader: {
     height: 64,
@@ -867,11 +911,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
     textTransform: 'capitalize',
-  },
-  groupList: {
-    overflow: 'hidden',
-    borderRadius: 0,
-    marginTop: 0,
   },
   bottomPanel: {
     position: 'absolute',
