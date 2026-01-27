@@ -608,10 +608,15 @@ export default function ShakerScreen() {
             accessibilityRole="button"
             accessibilityLabel={`${section.name} ingredients`}
             accessibilityState={{ expanded: isExpanded }}
-            onPress={() => {
-              if (isDragging.current) {
-                return;
+            onPressIn={() => {
+              if (listRef.current) {
+                listRef.current.scrollToOffset({
+                  offset: lastScrollOffset.current,
+                  animated: false,
+                });
               }
+            }}
+            onPress={() => {
               handleToggleGroup(section.key);
             }}
             style={[styles.groupHeader, { backgroundColor }]}
