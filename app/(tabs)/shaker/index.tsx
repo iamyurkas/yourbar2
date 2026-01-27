@@ -164,6 +164,10 @@ export default function ShakerScreen() {
   const lastScrollOffset = useRef(0);
   const searchStartOffset = useRef<number | null>(null);
   const previousQuery = useRef(query);
+  const headerPressTimestamps = useRef<Map<string, number>>(new Map());
+  const headerTouchState = useRef<
+    Map<string, { startY: number; moved: boolean; didPress: boolean }>
+  >(new Map());
   const insets = useSafeAreaInsets();
   const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
 
@@ -607,7 +611,53 @@ export default function ShakerScreen() {
             accessibilityRole="button"
             accessibilityLabel={`${section.name} ingredients`}
             accessibilityState={{ expanded: isExpanded }}
-            onPress={() => handleToggleGroup(section.key)}
+            onStartShouldSetResponderCapture={() => true}
+            onResponderTerminationRequest={() => false}
+            onTouchStart={(event) => {
+              headerTouchState.current.set(section.key, {
+                startY: event.nativeEvent.pageY,
+                moved: false,
+                didPress: false,
+              });
+            }}
+            onTouchMove={(event) => {
+              const state = headerTouchState.current.get(section.key);
+              if (!state) {
+                headerTouchState.current.set(section.key, {
+                  startY: event.nativeEvent.pageY,
+                  moved: false,
+                  didPress: false,
+                });
+                return;
+              }
+
+              if (!state.moved && Math.abs(event.nativeEvent.pageY - state.startY) > 8) {
+                state.moved = true;
+                headerTouchState.current.set(section.key, state);
+              }
+            }}
+            onPressOut={() => {
+              const touchState = headerTouchState.current.get(section.key);
+              headerTouchState.current.delete(section.key);
+              if (touchState?.moved || touchState?.didPress) {
+                return;
+              }
+              const now = Date.now();
+              const lastPress = headerPressTimestamps.current.get(section.key);
+              if (lastPress == null || now - lastPress > 350) {
+                handleToggleGroup(section.key);
+              }
+            }}
+            onPress={() => {
+              const now = Date.now();
+              headerPressTimestamps.current.set(section.key, now);
+              const touchState = headerTouchState.current.get(section.key);
+              if (touchState) {
+                touchState.didPress = true;
+                headerTouchState.current.set(section.key, touchState);
+              }
+              handleToggleGroup(section.key);
+            }}
             style={[styles.groupHeader, { backgroundColor }]}
           >
             <Text style={[styles.groupTitle, { color: Colors.onPrimary }]}>{section.name}</Text>
@@ -862,7 +912,8 @@ const styles = StyleSheet.create({
     paddingBottom: 120,
   },
   groupCard: {
-    marginBottom: 2,
+    paddingBottom: 2,
+    backgroundColor: Colors.background,
   },
   groupHeader: {
     height: 64,
