@@ -774,6 +774,7 @@ export default function ShakerScreen() {
           scrollEventThrottle={16}
           stickyHeaderIndices={stickyHeaderIndices}
           stickyHeaderHiddenOnScroll={false}
+          removeClippedSubviews={false}
         />
         <View
           style={[
