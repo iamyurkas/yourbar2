@@ -2,7 +2,7 @@ import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { useScrollToTop } from '@react-navigation/native';
 import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
-  SectionList,
+  FlatList,
   Pressable,
   StyleSheet,
   Text,
@@ -12,8 +12,7 @@ import {
   type NativeSyntheticEvent,
   type StyleProp,
   type TextStyle,
-  type SectionListData,
-  type SectionListRenderItemInfo,
+  type ListRenderItemInfo,
 } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
@@ -41,12 +40,20 @@ type IngredientGroup = IngredientTagOption & {
   ingredients: Ingredient[];
 };
 
-type IngredientSection = {
-  key: string;
-  name: string;
-  color: string;
-  data: Ingredient[];
-};
+type IngredientListItem =
+  | {
+      type: 'header';
+      key: string;
+      name: string;
+      color: string;
+      isExpanded: boolean;
+    }
+  | {
+      type: 'ingredient';
+      key: string;
+      ingredient: Ingredient;
+      showDivider: boolean;
+    };
 
 type IngredientRowProps = {
   ingredient: Ingredient;
@@ -163,7 +170,7 @@ export default function ShakerScreen() {
   const [inStockOnly, setInStockOnly] = useState(false);
   const [expandedTagKeys, setExpandedTagKeys] = useState<Set<string>>(() => new Set());
   const [selectedIngredientIds, setSelectedIngredientIds] = useState<Set<number>>(() => new Set());
-  const listRef = useRef<SectionList<Ingredient, IngredientSection>>(null);
+  const listRef = useRef<FlatList<IngredientListItem>>(null);
   const lastScrollOffset = useRef(0);
   const searchStartOffset = useRef<number | null>(null);
   const previousQuery = useRef(query);
@@ -589,48 +596,63 @@ export default function ShakerScreen() {
     });
   }, [matchingCocktailSummary.availableKeys, matchingCocktailSummary.unavailableKeys, router]);
 
-  const ingredientSections = useMemo<IngredientSection[]>(
-    () =>
-      ingredientGroups.map((group) => ({
-        key: group.key,
+  const { ingredientItems, stickyHeaderIndices } = useMemo(() => {
+    const items: IngredientListItem[] = [];
+    const stickyIndices: number[] = [];
+
+    ingredientGroups.forEach((group) => {
+      const isExpanded = expandedTagKeys.has(group.key);
+      const headerIndex = items.length;
+      items.push({
+        type: 'header',
+        key: `header-${group.key}`,
         name: group.name,
         color: group.color,
-        data: expandedTagKeys.has(group.key) ? group.ingredients : [],
-      })),
-    [expandedTagKeys, ingredientGroups],
-  );
+        isExpanded,
+      });
+      if (isExpanded) {
+        stickyIndices.push(headerIndex);
+        group.ingredients.forEach((ingredient, index) => {
+          items.push({
+            type: 'ingredient',
+            key: `ingredient-${String(ingredient.id ?? ingredient.name)}`,
+            ingredient,
+            showDivider: index < group.ingredients.length - 1,
+          });
+        });
+      }
+    });
 
-  const renderSectionHeader = useCallback(
-    ({ section }: { section: SectionListData<Ingredient, IngredientSection> }) => {
-      const isExpanded = expandedTagKeys.has(section.key);
-      const iconRotation = isExpanded ? '180deg' : '0deg';
+    return { ingredientItems: items, stickyHeaderIndices: stickyIndices };
+  }, [expandedTagKeys, ingredientGroups]);
 
-      return (
-        <View style={styles.groupCard}>
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel={`${section.name} ingredients`}
-            accessibilityState={{ expanded: isExpanded }}
-            onPress={() => handleToggleGroup(section.key)}
-            style={[styles.groupHeader, { backgroundColor: section.color }]}
-          >
-            <Text style={[styles.groupTitle, { color: Colors.onPrimary }]}>{section.name}</Text>
-            <MaterialIcons
-              name="expand-more"
-              size={22}
-              color={Colors.onPrimary}
-              style={{ transform: [{ rotate: iconRotation }] }}
-            />
-          </Pressable>
-        </View>
-      );
-    },
-    [Colors.onPrimary, expandedTagKeys, handleToggleGroup],
-  );
+  const renderItem = useCallback(
+    ({ item }: ListRenderItemInfo<IngredientListItem>) => {
+      if (item.type === 'header') {
+        const iconRotation = item.isExpanded ? '180deg' : '0deg';
 
-  const renderIngredient = useCallback(
-    ({ item, index, section }: SectionListRenderItemInfo<Ingredient, IngredientSection>) => {
-      const ingredientId = Number(item.id ?? -1);
+        return (
+          <View style={styles.groupCard}>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={`${item.name} ingredients`}
+              accessibilityState={{ expanded: item.isExpanded }}
+              onPress={() => handleToggleGroup(item.key.replace('header-', ''))}
+              style={[styles.groupHeader, { backgroundColor: item.color }]}
+            >
+              <Text style={[styles.groupTitle, { color: Colors.onPrimary }]}>{item.name}</Text>
+              <MaterialIcons
+                name="expand-more"
+                size={22}
+                color={Colors.onPrimary}
+                style={{ transform: [{ rotate: iconRotation }] }}
+              />
+            </Pressable>
+          </View>
+        );
+      }
+
+      const ingredientId = Number(item.ingredient.id ?? -1);
       const isAvailable = ingredientId >= 0 && availableIngredientIds.has(ingredientId);
       const isSelected = ingredientId >= 0 && selectedIngredientIds.has(ingredientId);
       const isOnShoppingList = ingredientId >= 0 && shoppingIngredientIds.has(ingredientId);
@@ -649,7 +671,7 @@ export default function ShakerScreen() {
       return (
         <View>
           <IngredientRow
-            ingredient={item}
+            ingredient={item.ingredient}
             isAvailable={isAvailable}
             isSelected={isSelected}
             isOnShoppingList={isOnShoppingList}
@@ -657,17 +679,19 @@ export default function ShakerScreen() {
             subtitleStyle={{ color: Colors.onSurfaceVariant }}
             onToggle={handleToggleIngredient}
           />
-          {index < section.data.length - 1 ? (
+          {item.showDivider ? (
             <View style={[styles.divider, { backgroundColor: separatorColor }]} />
           ) : null}
         </View>
       );
     },
     [
+      Colors.onPrimary,
       Colors.onSurfaceVariant,
       Colors.outline,
       Colors.outlineVariant,
       availableIngredientIds,
+      handleToggleGroup,
       handleToggleIngredient,
       makeableCocktailCounts,
       selectedIngredientIds,
@@ -731,12 +755,11 @@ export default function ShakerScreen() {
             <PresenceCheck checked={inStockOnly} onToggle={() => setInStockOnly((previous) => !previous)} />
           </View>
         </View>
-        <SectionList
+        <FlatList
           ref={listRef}
-          sections={ingredientSections}
-          keyExtractor={(item) => String(item.id ?? item.name)}
-          renderItem={renderIngredient}
-          renderSectionHeader={renderSectionHeader}
+          data={ingredientItems}
+          keyExtractor={(item) => item.key}
+          renderItem={renderItem}
           contentContainerStyle={[styles.listContent, { paddingBottom: 140 + insets.bottom }]}
           showsVerticalScrollIndicator={false}
           keyboardDismissMode="on-drag"
@@ -744,7 +767,7 @@ export default function ShakerScreen() {
           keyboardShouldPersistTaps="handled"
           onScroll={handleScroll}
           scrollEventThrottle={16}
-          stickySectionHeadersEnabled
+          stickyHeaderIndices={stickyHeaderIndices}
         />
         <View
           style={[
