@@ -60,7 +60,9 @@ const IngredientRow = memo(function IngredientRow({
   onToggle,
 }: IngredientRowProps) {
   const ingredientId = Number(ingredient.id ?? -1);
-  const tagColor = ingredient.tags?.[0]?.color ?? tagColors.yellow;
+  const ingredientTagColors = (ingredient.tags ?? [])
+    .map((tag) => tag?.color ?? tagColors.yellow)
+    .filter(Boolean);
   const brandIndicatorColor = ingredient.baseIngredientId != null ? Colors.primary : undefined;
 
   const handlePress = useCallback(() => {
@@ -99,7 +101,7 @@ const IngredientRow = memo(function IngredientRow({
       onPress={handlePress}
       selected={isSelected || isAvailable}
       highlightColor={highlightColor}
-      tagColor={tagColor}
+      tagColors={ingredientTagColors}
       thumbnail={thumbnail}
       accessibilityRole="button"
       accessibilityState={isSelected ? { selected: true } : undefined}
