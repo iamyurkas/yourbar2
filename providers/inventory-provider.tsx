@@ -485,6 +485,51 @@ function getNextCustomTagId(tags: readonly { id?: number | null }[], minimum: nu
   return maxId + 1;
 }
 
+type InventoryChangeLog = {
+  dirtyCocktailIds?: Map<number, number>;
+  dirtyIngredientIds?: Map<number, number>;
+  deletedCocktailIds?: Map<number, number>;
+  deletedIngredientIds?: Map<number, number>;
+  baseCocktailMap?: Map<number, CocktailStorageRecord>;
+  baseIngredientMap?: Map<number, IngredientStorageRecord>;
+  snapshotGeneration?: number;
+};
+
+function buildBaseStorageMap<TInput, TOutput>(
+  items: TInput[],
+  normalize: (item: TInput) => TOutput,
+): Map<number, TOutput> {
+  return new Map<number, TOutput>(
+    items
+      .map((item) => {
+        const normalized = normalize(item);
+        const id = Number((normalized as { id?: number | string | null }).id ?? -1);
+        if (!Number.isFinite(id) || id < 0) {
+          return undefined;
+        }
+        return [Math.trunc(id), normalized] as const;
+      })
+      .filter((entry): entry is readonly [number, TOutput] => Boolean(entry)),
+  );
+}
+
+function filterChangeIds(
+  ids: Map<number, number> | undefined,
+  snapshotGeneration?: number,
+): number[] {
+  if (!ids || ids.size === 0) {
+    return [];
+  }
+
+  if (!snapshotGeneration) {
+    return Array.from(ids.keys());
+  }
+
+  return Array.from(ids.entries())
+    .filter(([, generation]) => generation <= snapshotGeneration)
+    .map(([id]) => id);
+}
+
 function createDeltaSnapshotFromInventory(
   state: InventoryState,
   options: {
@@ -500,86 +545,134 @@ function createDeltaSnapshotFromInventory(
     customCocktailTags: CocktailTag[];
     customIngredientTags: IngredientTag[];
   },
+  changeLog?: InventoryChangeLog,
 ): InventoryDeltaSnapshot<CocktailStorageRecord, IngredientStorageRecord> {
-  const baseData = loadInventoryData();
-  const baseCocktails = new Map<number, CocktailStorageRecord>(
-    baseData.cocktails
-      .map((cocktail) => {
-        const normalized = toCocktailStorageRecord(cocktail);
-        const id = Number(normalized.id ?? -1);
-        if (!Number.isFinite(id) || id < 0) {
-          return undefined;
-        }
-        return [Math.trunc(id), normalized] as const;
-      })
-      .filter((entry): entry is readonly [number, CocktailStorageRecord] => Boolean(entry)),
-  );
-  const baseIngredients = new Map<number, IngredientStorageRecord>(
-    baseData.ingredients
-      .map((ingredient) => {
-        const normalized = toIngredientStorageRecord(ingredient);
-        const id = Number(normalized.id ?? -1);
-        if (!Number.isFinite(id) || id < 0) {
-          return undefined;
-        }
-        return [Math.trunc(id), normalized] as const;
-      })
-      .filter((entry): entry is readonly [number, IngredientStorageRecord] => Boolean(entry)),
-  );
+  const baseData = changeLog?.baseCocktailMap && changeLog?.baseIngredientMap ? undefined : loadInventoryData();
+  const baseCocktails =
+    changeLog?.baseCocktailMap ??
+    buildBaseStorageMap(baseData?.cocktails ?? [], toCocktailStorageRecord);
+  const baseIngredients =
+    changeLog?.baseIngredientMap ??
+    buildBaseStorageMap(baseData?.ingredients ?? [], toIngredientStorageRecord);
 
   const createdCocktails: CocktailStorageRecord[] = [];
   const updatedCocktails: CocktailStorageRecord[] = [];
-  const currentCocktailIds = new Set<number>();
-
-  state.cocktails.forEach((cocktail) => {
-    const normalized = toCocktailStorageRecord(cocktail);
-    const id = Number(normalized.id ?? -1);
-    if (!Number.isFinite(id) || id < 0) {
-      return;
-    }
-
-    const normalizedId = Math.trunc(id);
-    currentCocktailIds.add(normalizedId);
-
-    const baseRecord = baseCocktails.get(normalizedId);
-    if (!baseRecord) {
-      createdCocktails.push(normalized);
-      return;
-    }
-
-    if (!areStorageRecordsEqual(normalized, baseRecord)) {
-      updatedCocktails.push(normalized);
-    }
-  });
-
-  const deletedCocktailIds = Array.from(baseCocktails.keys()).filter((id) => !currentCocktailIds.has(id));
+  const deletedCocktailIds: number[] = [];
 
   const createdIngredients: IngredientStorageRecord[] = [];
   const updatedIngredients: IngredientStorageRecord[] = [];
-  const currentIngredientIds = new Set<number>();
+  const deletedIngredientIds: number[] = [];
 
-  state.ingredients.forEach((ingredient) => {
-    const normalized = toIngredientStorageRecord(ingredient);
-    const id = Number(normalized.id ?? -1);
-    if (!Number.isFinite(id) || id < 0) {
-      return;
-    }
+  const shouldUseChangeLog = Boolean(
+    changeLog?.dirtyCocktailIds ||
+      changeLog?.dirtyIngredientIds ||
+      changeLog?.deletedCocktailIds ||
+      changeLog?.deletedIngredientIds,
+  );
 
-    const normalizedId = Math.trunc(id);
-    currentIngredientIds.add(normalizedId);
+  if (shouldUseChangeLog) {
+    const snapshotGeneration = changeLog?.snapshotGeneration;
+    const dirtyCocktailIds = filterChangeIds(changeLog?.dirtyCocktailIds, snapshotGeneration);
+    const dirtyIngredientIds = filterChangeIds(changeLog?.dirtyIngredientIds, snapshotGeneration);
 
-    const baseRecord = baseIngredients.get(normalizedId);
-    if (!baseRecord) {
-      createdIngredients.push(normalized);
-      return;
-    }
+    dirtyCocktailIds.forEach((id) => {
+      const record = state.cocktails.find((item) => Number(item.id ?? -1) === id);
+      if (!record) {
+        return;
+      }
+      const normalized = toCocktailStorageRecord(record);
+      const baseRecord = baseCocktails.get(id);
+      if (!baseRecord) {
+        createdCocktails.push(normalized);
+        return;
+      }
+      if (!areStorageRecordsEqual(normalized, baseRecord)) {
+        updatedCocktails.push(normalized);
+      }
+    });
 
-    if (!areStorageRecordsEqual(normalized, baseRecord)) {
-      updatedIngredients.push(normalized);
-    }
-  });
+    dirtyIngredientIds.forEach((id) => {
+      const record = state.ingredients.find((item) => Number(item.id ?? -1) === id);
+      if (!record) {
+        return;
+      }
+      const normalized = toIngredientStorageRecord(record);
+      const baseRecord = baseIngredients.get(id);
+      if (!baseRecord) {
+        createdIngredients.push(normalized);
+        return;
+      }
+      if (!areStorageRecordsEqual(normalized, baseRecord)) {
+        updatedIngredients.push(normalized);
+      }
+    });
 
-  const deletedIngredientIds = Array.from(baseIngredients.keys()).filter((id) => !currentIngredientIds.has(id));
+    filterChangeIds(changeLog?.deletedCocktailIds, snapshotGeneration).forEach((id) => {
+      if (baseCocktails.has(id)) {
+        deletedCocktailIds.push(id);
+      }
+    });
+
+    filterChangeIds(changeLog?.deletedIngredientIds, snapshotGeneration).forEach((id) => {
+      if (baseIngredients.has(id)) {
+        deletedIngredientIds.push(id);
+      }
+    });
+  } else {
+    const currentCocktailIds = new Set<number>();
+
+    state.cocktails.forEach((cocktail) => {
+      const normalized = toCocktailStorageRecord(cocktail);
+      const id = Number(normalized.id ?? -1);
+      if (!Number.isFinite(id) || id < 0) {
+        return;
+      }
+
+      const normalizedId = Math.trunc(id);
+      currentCocktailIds.add(normalizedId);
+
+      const baseRecord = baseCocktails.get(normalizedId);
+      if (!baseRecord) {
+        createdCocktails.push(normalized);
+        return;
+      }
+
+      if (!areStorageRecordsEqual(normalized, baseRecord)) {
+        updatedCocktails.push(normalized);
+      }
+    });
+
+    deletedCocktailIds.push(
+      ...Array.from(baseCocktails.keys()).filter((id) => !currentCocktailIds.has(id)),
+    );
+
+    const currentIngredientIds = new Set<number>();
+
+    state.ingredients.forEach((ingredient) => {
+      const normalized = toIngredientStorageRecord(ingredient);
+      const id = Number(normalized.id ?? -1);
+      if (!Number.isFinite(id) || id < 0) {
+        return;
+      }
+
+      const normalizedId = Math.trunc(id);
+      currentIngredientIds.add(normalizedId);
+
+      const baseRecord = baseIngredients.get(normalizedId);
+      if (!baseRecord) {
+        createdIngredients.push(normalized);
+        return;
+      }
+
+      if (!areStorageRecordsEqual(normalized, baseRecord)) {
+        updatedIngredients.push(normalized);
+      }
+    });
+
+    deletedIngredientIds.push(
+      ...Array.from(baseIngredients.keys()).filter((id) => !currentIngredientIds.has(id)),
+    );
+  }
   const sanitizedRatings = sanitizeCocktailRatings(options.cocktailRatings);
 
   return {
@@ -630,6 +723,15 @@ type InventoryProviderProps = {
 };
 
 export function InventoryProvider({ children }: InventoryProviderProps) {
+  const baseInventoryData = useMemo(() => loadInventoryData(), []);
+  const baseCocktailMap = useMemo(
+    () => buildBaseStorageMap(baseInventoryData.cocktails, toCocktailStorageRecord),
+    [baseInventoryData],
+  );
+  const baseIngredientMap = useMemo(
+    () => buildBaseStorageMap(baseInventoryData.ingredients, toIngredientStorageRecord),
+    [baseInventoryData],
+  );
   const [inventoryState, setInventoryState] = useState<InventoryState | undefined>(
     () => globalThis.__yourbarInventory,
   );
@@ -674,6 +776,68 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     sanitizeCustomTags(globalThis.__yourbarInventoryCustomIngredientTags, DEFAULT_TAG_COLOR),
   );
   const lastPersistedSnapshot = useRef<string | undefined>(undefined);
+  const changeCounterRef = useRef(0);
+  const dirtyCocktailIdsRef = useRef<Map<number, number>>(new Map());
+  const dirtyIngredientIdsRef = useRef<Map<number, number>>(new Map());
+  const deletedCocktailIdsRef = useRef<Map<number, number>>(new Map());
+  const deletedIngredientIdsRef = useRef<Map<number, number>>(new Map());
+
+  const resetChangeTracking = useCallback(() => {
+    changeCounterRef.current = 0;
+    dirtyCocktailIdsRef.current.clear();
+    dirtyIngredientIdsRef.current.clear();
+    deletedCocktailIdsRef.current.clear();
+    deletedIngredientIdsRef.current.clear();
+  }, []);
+
+  const markDirtyCocktail = useCallback((id: number) => {
+    changeCounterRef.current += 1;
+    dirtyCocktailIdsRef.current.set(id, changeCounterRef.current);
+    deletedCocktailIdsRef.current.delete(id);
+  }, []);
+
+  const markDirtyIngredient = useCallback((id: number) => {
+    changeCounterRef.current += 1;
+    dirtyIngredientIdsRef.current.set(id, changeCounterRef.current);
+    deletedIngredientIdsRef.current.delete(id);
+  }, []);
+
+  const markDeletedCocktail = useCallback(
+    (id: number) => {
+      changeCounterRef.current += 1;
+      dirtyCocktailIdsRef.current.delete(id);
+      if (baseCocktailMap.has(id)) {
+        deletedCocktailIdsRef.current.set(id, changeCounterRef.current);
+      }
+    },
+    [baseCocktailMap],
+  );
+
+  const markDeletedIngredient = useCallback(
+    (id: number) => {
+      changeCounterRef.current += 1;
+      dirtyIngredientIdsRef.current.delete(id);
+      if (baseIngredientMap.has(id)) {
+        deletedIngredientIdsRef.current.set(id, changeCounterRef.current);
+      }
+    },
+    [baseIngredientMap],
+  );
+
+  const pruneChangeTracking = useCallback((snapshotGeneration: number) => {
+    const pruneMap = (map: Map<number, number>) => {
+      Array.from(map.entries()).forEach(([id, generation]) => {
+        if (generation <= snapshotGeneration) {
+          map.delete(id);
+        }
+      });
+    };
+
+    pruneMap(dirtyCocktailIdsRef.current);
+    pruneMap(dirtyIngredientIdsRef.current);
+    pruneMap(deletedCocktailIdsRef.current);
+    pruneMap(deletedIngredientIdsRef.current);
+  }, []);
 
   useEffect(() => {
     if (inventoryState) {
@@ -689,6 +853,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         if (stored && (stored.version === INVENTORY_SNAPSHOT_VERSION || stored.version === 1) && !cancelled) {
           const baseData = loadInventoryData();
           const nextInventoryState = createInventoryStateFromSnapshot(stored, baseData);
+          resetChangeTracking();
           const nextAvailableIds = createIngredientIdSet(stored.availableIngredientIds);
           const nextShoppingIds = createIngredientIdSet(stored.shoppingIngredientIds);
           const nextRatings = sanitizeCocktailRatings(stored.cocktailRatings);
@@ -725,6 +890,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       try {
         const data = loadInventoryData();
         if (!cancelled) {
+          resetChangeTracking();
           setInventoryState(createInventoryStateFromData(data, true));
           setAvailableIngredientIds(new Set());
           setShoppingIngredientIds(new Set());
@@ -748,7 +914,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     return () => {
       cancelled = true;
     };
-  }, [inventoryState]);
+  }, [inventoryState, resetChangeTracking]);
 
   useEffect(() => {
     if (!inventoryState) {
@@ -769,7 +935,10 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     globalThis.__yourbarInventoryCustomCocktailTags = customCocktailTags;
     globalThis.__yourbarInventoryCustomIngredientTags = customIngredientTags;
 
-    const snapshot = createDeltaSnapshotFromInventory(inventoryState, {
+    const snapshotGeneration = changeCounterRef.current;
+    const snapshot = createDeltaSnapshotFromInventory(
+      inventoryState,
+      {
       availableIngredientIds,
       shoppingIngredientIds,
       cocktailRatings,
@@ -781,18 +950,33 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       startScreen,
       customCocktailTags,
       customIngredientTags,
-    });
+      },
+      {
+        dirtyCocktailIds: dirtyCocktailIdsRef.current,
+        dirtyIngredientIds: dirtyIngredientIdsRef.current,
+        deletedCocktailIds: deletedCocktailIdsRef.current,
+        deletedIngredientIds: deletedIngredientIdsRef.current,
+        baseCocktailMap,
+        baseIngredientMap,
+        snapshotGeneration,
+      },
+    );
     const serialized = JSON.stringify(snapshot);
 
     if (lastPersistedSnapshot.current === serialized) {
+      pruneChangeTracking(snapshotGeneration);
       return;
     }
 
     lastPersistedSnapshot.current = serialized;
 
-    void persistInventorySnapshot(snapshot).catch((error) => {
-      console.error('Failed to persist inventory snapshot', error);
-    });
+    void persistInventorySnapshot(snapshot)
+      .then(() => {
+        pruneChangeTracking(snapshotGeneration);
+      })
+      .catch((error) => {
+        console.error('Failed to persist inventory snapshot', error);
+      });
   }, [
     inventoryState,
     availableIngredientIds,
@@ -806,6 +990,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     startScreen,
     customCocktailTags,
     customIngredientTags,
+    baseCocktailMap,
+    baseIngredientMap,
+    pruneChangeTracking,
   ]);
 
   const cocktails = inventoryState?.cocktails ?? [];
@@ -1063,9 +1250,16 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         } satisfies InventoryState;
       });
 
+      if (created?.id != null) {
+        const id = Number(created.id);
+        if (Number.isFinite(id) && id >= 0) {
+          markDirtyCocktail(Math.trunc(id));
+        }
+      }
+
       return created;
     },
-    [],
+    [markDirtyCocktail],
   );
 
   const createIngredient = useCallback(
@@ -1168,12 +1362,14 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             next.delete(id);
             return next;
           });
+
+          markDirtyIngredient(Math.trunc(id));
         }
       }
 
       return created;
     },
-    [],
+    [markDirtyIngredient],
   );
 
   const resetInventoryFromBundle = useCallback(async () => {
@@ -1196,7 +1392,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     setStartScreen(DEFAULT_START_SCREEN);
     setCustomCocktailTags([]);
     setCustomIngredientTags([]);
-  }, []);
+    resetChangeTracking();
+  }, [resetChangeTracking]);
 
   const exportInventoryData = useCallback((): InventoryData | null => {
     if (!inventoryState) {
@@ -1260,7 +1457,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     setAvailableIngredientIds(new Set());
     setShoppingIngredientIds(new Set());
     setCocktailRatings({});
-  }, []);
+    resetChangeTracking();
+  }, [resetChangeTracking]);
 
   const updateIngredient = useCallback(
     (id: number, input: CreateIngredientInput) => {
@@ -1347,9 +1545,16 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         } satisfies InventoryState;
       });
 
+      if (updated?.id != null) {
+        const updatedId = Number(updated.id);
+        if (Number.isFinite(updatedId) && updatedId >= 0) {
+          markDirtyIngredient(Math.trunc(updatedId));
+        }
+      }
+
       return updated;
     },
-    [],
+    [markDirtyIngredient],
   );
 
   const updateCocktail = useCallback((id: number, input: CreateCocktailInput) => {
@@ -1513,8 +1718,15 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       } satisfies InventoryState;
     });
 
+    if (updated?.id != null) {
+      const updatedId = Number(updated.id);
+      if (Number.isFinite(updatedId) && updatedId >= 0) {
+        markDirtyCocktail(Math.trunc(updatedId));
+      }
+    }
+
     return updated;
-  }, []);
+  }, [markDirtyCocktail]);
 
   const deleteIngredient = useCallback((id: number) => {
     const normalizedId = Number(id);
@@ -1523,6 +1735,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     }
 
     let wasRemoved = false;
+    const dependentIds: number[] = [];
 
     setInventoryState((prev) => {
       if (!prev) {
@@ -1543,6 +1756,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           Number(ingredient.baseIngredientId) === normalizedId
         ) {
           didUpdateDependents = true;
+          if (ingredientId >= 0) {
+            dependentIds.push(ingredientId);
+          }
           acc.push({ ...ingredient, baseIngredientId: undefined } satisfies Ingredient);
           return acc;
         }
@@ -1571,6 +1787,11 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       return false;
     }
 
+    markDeletedIngredient(normalizedId);
+    dependentIds.forEach((dependentId) => {
+      markDirtyIngredient(dependentId);
+    });
+
     setAvailableIngredientIds((prev) => {
       if (!prev.has(normalizedId)) {
         return prev;
@@ -1592,7 +1813,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     });
 
     return true;
-  }, []);
+  }, [markDeletedIngredient, markDirtyIngredient]);
 
   const deleteCocktail = useCallback(
     (id: number) => {
@@ -1654,9 +1875,11 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         return didChange ? next : prev;
       });
 
+      markDeletedCocktail(normalizedId);
+
       return true;
     },
-    [resolveCocktailKey],
+    [markDeletedCocktail, resolveCocktailKey],
   );
 
   const toggleIngredientAvailability = useCallback((id: number) => {
