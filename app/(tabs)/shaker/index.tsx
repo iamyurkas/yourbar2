@@ -2,17 +2,18 @@ import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { useScrollToTop } from '@react-navigation/native';
 import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
-  FlatList,
   Pressable,
+  SectionList,
   StyleSheet,
   Text,
   TextInput,
   View,
   type NativeScrollEvent,
   type NativeSyntheticEvent,
+  type SectionListData,
+  type SectionListRenderItemInfo,
   type StyleProp,
   type TextStyle,
-  type ListRenderItemInfo,
 } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
@@ -38,6 +39,10 @@ type IngredientTagOption = {
 
 type IngredientGroup = IngredientTagOption & {
   ingredients: Ingredient[];
+};
+
+type IngredientSection = IngredientGroup & {
+  data: Ingredient[];
 };
 
 type IngredientRowProps = {
@@ -155,7 +160,7 @@ export default function ShakerScreen() {
   const [inStockOnly, setInStockOnly] = useState(false);
   const [expandedTagKeys, setExpandedTagKeys] = useState<Set<string>>(() => new Set());
   const [selectedIngredientIds, setSelectedIngredientIds] = useState<Set<number>>(() => new Set());
-  const listRef = useRef<FlatList<unknown>>(null);
+  const listRef = useRef<SectionList<Ingredient, IngredientSection>>(null);
   const lastScrollOffset = useRef(0);
   const searchStartOffset = useRef<number | null>(null);
   const previousQuery = useRef(query);
@@ -581,22 +586,31 @@ export default function ShakerScreen() {
     });
   }, [matchingCocktailSummary.availableKeys, matchingCocktailSummary.unavailableKeys, router]);
 
-  const renderGroup = useCallback(
-    ({ item }: ListRenderItemInfo<IngredientGroup>) => {
-      const isExpanded = expandedTagKeys.has(item.key);
+  const sections = useMemo<IngredientSection[]>(
+    () =>
+      ingredientGroups.map((group) => ({
+        ...group,
+        data: expandedTagKeys.has(group.key) ? group.ingredients : [],
+      })),
+    [expandedTagKeys, ingredientGroups],
+  );
+
+  const renderSectionHeader = useCallback(
+    ({ section }: { section: SectionListData<Ingredient, IngredientSection> }) => {
+      const isExpanded = expandedTagKeys.has(section.key);
       const iconRotation = isExpanded ? '180deg' : '0deg';
-      const backgroundColor = item.color;
+      const backgroundColor = section.color;
 
       return (
         <View style={styles.groupCard}>
           <Pressable
             accessibilityRole="button"
-            accessibilityLabel={`${item.name} ingredients`}
+            accessibilityLabel={`${section.name} ingredients`}
             accessibilityState={{ expanded: isExpanded }}
-            onPress={() => handleToggleGroup(item.key)}
+            onPress={() => handleToggleGroup(section.key)}
             style={[styles.groupHeader, { backgroundColor }]}
           >
-            <Text style={[styles.groupTitle, { color: Colors.onPrimary }]}>{item.name}</Text>
+            <Text style={[styles.groupTitle, { color: Colors.onPrimary }]}>{section.name}</Text>
             <MaterialIcons
               name="expand-more"
               size={22}
@@ -604,61 +618,55 @@ export default function ShakerScreen() {
               style={{ transform: [{ rotate: iconRotation }] }}
             />
           </Pressable>
-          {isExpanded ? (
-            <View style={styles.groupList}>
-              {item.ingredients.map((ingredient, index) => {
-                const ingredientId = Number(ingredient.id ?? -1);
-                const isAvailable = ingredientId >= 0 && availableIngredientIds.has(ingredientId);
-                const isSelected = ingredientId >= 0 && selectedIngredientIds.has(ingredientId);
-                const isOnShoppingList =
-                  ingredientId >= 0 && shoppingIngredientIds.has(ingredientId);
-                const separatorColor = isAvailable
-                  ? Colors.outline
-                  : Colors.outlineVariant;
-                const makeableCount = ingredientId >= 0 ? makeableCocktailCounts.get(ingredientId) ?? 0 : 0;
-                const totalCount = ingredientId >= 0 ? totalCocktailCounts.get(ingredientId) ?? 0 : 0;
-                const label = makeableCount === 1 ? 'cocktail' : 'cocktails';
-                const recipeLabel = totalCount === 1 ? 'recipe' : 'recipes';
-                const subtitleText =
-                  makeableCount > 0
-                    ? `Make ${makeableCount} ${label}`
-                    : totalCount > 0
-                    ? `${totalCount} ${recipeLabel}`
-                    : undefined;
+        </View>
+      );
+    },
+    [expandedTagKeys, handleToggleGroup],
+  );
 
-                return (
-                  <View key={String(ingredient.id ?? ingredient.name)}>
-                    <IngredientRow
-                      ingredient={ingredient}
-                      isAvailable={isAvailable}
-                      isSelected={isSelected}
-                      isOnShoppingList={isOnShoppingList}
-                      subtitle={subtitleText}
-                      subtitleStyle={{ color: Colors.onSurfaceVariant }}
-                      onToggle={handleToggleIngredient}
-                    />
-                    {index < item.ingredients.length - 1 ? (
-                      <View style={[styles.divider, { backgroundColor: separatorColor }]} />
-                    ) : null}
-                  </View>
-                );
-              })}
-            </View>
+  const renderIngredient = useCallback(
+    ({ item, index, section }: SectionListRenderItemInfo<Ingredient, IngredientSection>) => {
+      const ingredientId = Number(item.id ?? -1);
+      const isAvailable = ingredientId >= 0 && availableIngredientIds.has(ingredientId);
+      const isSelected = ingredientId >= 0 && selectedIngredientIds.has(ingredientId);
+      const isOnShoppingList = ingredientId >= 0 && shoppingIngredientIds.has(ingredientId);
+      const separatorColor = isAvailable ? Colors.outline : Colors.outlineVariant;
+      const makeableCount = ingredientId >= 0 ? makeableCocktailCounts.get(ingredientId) ?? 0 : 0;
+      const totalCount = ingredientId >= 0 ? totalCocktailCounts.get(ingredientId) ?? 0 : 0;
+      const label = makeableCount === 1 ? 'cocktail' : 'cocktails';
+      const recipeLabel = totalCount === 1 ? 'recipe' : 'recipes';
+      const subtitleText =
+        makeableCount > 0
+          ? `Make ${makeableCount} ${label}`
+          : totalCount > 0
+          ? `${totalCount} ${recipeLabel}`
+          : undefined;
+
+      return (
+        <View>
+          <IngredientRow
+            ingredient={item}
+            isAvailable={isAvailable}
+            isSelected={isSelected}
+            isOnShoppingList={isOnShoppingList}
+            subtitle={subtitleText}
+            subtitleStyle={{ color: Colors.onSurfaceVariant }}
+            onToggle={handleToggleIngredient}
+          />
+          {index < section.data.length - 1 ? (
+            <View style={[styles.divider, { backgroundColor: separatorColor }]} />
           ) : null}
         </View>
       );
     },
     [
       availableIngredientIds,
-      expandedTagKeys,
-      handleToggleGroup,
+      Colors.onSurfaceVariant,
       handleToggleIngredient,
       makeableCocktailCounts,
-      totalCocktailCounts,
-      Colors.onSurface,
-      Colors.onSurfaceVariant,
       selectedIngredientIds,
       shoppingIngredientIds,
+      totalCocktailCounts,
     ],
   );
 
@@ -717,11 +725,13 @@ export default function ShakerScreen() {
             <PresenceCheck checked={inStockOnly} onToggle={() => setInStockOnly((previous) => !previous)} />
           </View>
         </View>
-        <FlatList
+        <SectionList
           ref={listRef}
-          data={ingredientGroups}
-          keyExtractor={(item) => item.key}
-          renderItem={renderGroup}
+          sections={sections}
+          keyExtractor={(item) => String(item.id ?? item.name)}
+          renderItem={renderIngredient}
+          renderSectionHeader={renderSectionHeader}
+          stickySectionHeadersEnabled
           contentContainerStyle={[styles.listContent, { paddingBottom: 140 + insets.bottom }]}
           showsVerticalScrollIndicator={false}
           keyboardDismissMode="on-drag"
