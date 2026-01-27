@@ -972,11 +972,14 @@ export default function CocktailDetailsScreen() {
                     const dividerColor = previousResolution?.isAvailable
                       ? Colors.outline
                       : Colors.outlineVariant;
-                    const tagColor =
-                      resolvedIngredient?.tags?.[0]?.color ??
-                      ingredient.tags?.[0]?.color ??
-                      catalogEntry?.tags?.[0]?.color ??
-                      tagColors.yellow;
+                    const ingredientTagColors = (
+                      resolvedIngredient?.tags ??
+                      ingredient.tags ??
+                      catalogEntry?.tags ??
+                      []
+                    )
+                      .map((tag) => tag?.color ?? tagColors.yellow)
+                      .filter(Boolean);
                     const brandIndicatorColor =
                       resolvedIngredient?.baseIngredientId != null ||
                       catalogEntry?.baseIngredientId != null
@@ -1135,7 +1138,7 @@ export default function CocktailDetailsScreen() {
                           onPress={handlePress}
                           selected={resolution.isAvailable}
                           highlightColor={ingredientHighlightColor}
-                          tagColor={tagColor}
+                          tagColors={ingredientTagColors}
                           brandIndicatorColor={brandIndicatorColor}
                           accessibilityRole="button"
                           accessibilityState={
