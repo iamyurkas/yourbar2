@@ -163,6 +163,7 @@ export default function ShakerScreen() {
   const listRef = useRef<SectionList<Ingredient, IngredientSection>>(null);
   const lastScrollOffset = useRef(0);
   const isScrolling = useRef(false);
+  const scrollIdleTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const searchStartOffset = useRef<number | null>(null);
   const previousQuery = useRef(query);
   const insets = useSafeAreaInsets();
@@ -187,8 +188,23 @@ export default function ShakerScreen() {
     previousQuery.current = query;
   }, [query]);
 
+  useEffect(() => {
+    return () => {
+      if (scrollIdleTimeout.current) {
+        clearTimeout(scrollIdleTimeout.current);
+      }
+    };
+  }, []);
+
   const handleScroll = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
     lastScrollOffset.current = event.nativeEvent.contentOffset.y;
+    isScrolling.current = true;
+    if (scrollIdleTimeout.current) {
+      clearTimeout(scrollIdleTimeout.current);
+    }
+    scrollIdleTimeout.current = setTimeout(() => {
+      isScrolling.current = false;
+    }, 120);
   }, []);
 
   const normalizedQuery = useMemo(() => {
