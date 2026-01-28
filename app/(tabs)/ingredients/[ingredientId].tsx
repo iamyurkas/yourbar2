@@ -38,6 +38,7 @@ import {
   navigateToDetailsWithReturnTo,
   parseReturnToParams,
   returnToSourceOrBack,
+  skipDuplicateBack,
 } from "@/libs/navigation";
 import { normalizeSearchText } from "@/libs/search-normalization";
 import { useInventory, type Ingredient } from "@/providers/inventory-provider";
@@ -487,6 +488,11 @@ export default function IngredientDetailsScreen() {
   }, [cocktailEntries.length]);
 
   const handleReturn = useCallback(() => {
+    if (returnToPath === "/ingredients") {
+      skipDuplicateBack(navigation);
+      return;
+    }
+
     returnToSourceOrBack(navigation, { returnToPath, returnToParams });
   }, [navigation, returnToParams, returnToPath]);
 
