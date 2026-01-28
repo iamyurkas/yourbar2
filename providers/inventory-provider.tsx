@@ -30,6 +30,7 @@ import {
   type BaseCocktailRecord,
   type CreateCocktailInput,
   type CreateIngredientInput,
+  type InventoryExportData,
   type Ingredient,
   type IngredientStorageRecord,
   type IngredientTag,
@@ -38,6 +39,8 @@ import {
 } from '@/providers/inventory-types';
 
 const DEFAULT_START_SCREEN: StartScreen = 'cocktails_all';
+const BUILTIN_COCKTAIL_TAGS_BY_ID = new Map(BUILTIN_COCKTAIL_TAGS.map((tag) => [tag.id, tag]));
+const BUILTIN_INGREDIENT_TAGS_BY_ID = new Map(BUILTIN_INGREDIENT_TAGS.map((tag) => [tag.id, tag]));
 
 type InventoryContextValue = {
   cocktails: Cocktail[];
@@ -59,7 +62,7 @@ type InventoryContextValue = {
   createCocktail: (input: CreateCocktailInput) => Cocktail | undefined;
   createIngredient: (input: CreateIngredientInput) => Ingredient | undefined;
   resetInventoryFromBundle: () => Promise<void>;
-  exportInventoryData: () => InventoryData | null;
+  exportInventoryData: () => InventoryExportData | null;
   exportInventoryPhotoEntries: () => PhotoBackupEntry[] | null;
   importInventoryData: (data: InventoryData) => void;
   updateIngredient: (id: number, input: CreateIngredientInput) => Ingredient | undefined;
@@ -180,6 +183,66 @@ function normalizeTagList<TTag extends { id?: number | null; name?: string | nul
       color: tag.color,
     }))
     .sort((a, b) => a.id - b.id || a.name.localeCompare(b.name));
+}
+
+function normalizeTagIds<TTag extends { id?: number | null }>(
+  tags: readonly TTag[] | null | undefined,
+): Array<{ id: number }> | undefined {
+  if (!tags || tags.length === 0) {
+    return undefined;
+  }
+
+  const ids = new Set<number>();
+  tags.forEach((tag) => {
+    const id = Number(tag.id ?? -1);
+    if (!Number.isFinite(id) || id < 0) {
+      return;
+    }
+    ids.add(Math.trunc(id));
+  });
+
+  const sorted = Array.from(ids).sort((a, b) => a - b);
+  return sorted.length > 0 ? sorted.map((id) => ({ id })) : undefined;
+}
+
+function hydrateTagsFromCode<TTag extends { id?: number | null }>(
+  tags: readonly TTag[] | null | undefined,
+  lookup: Map<number, { id: number; name: string; color: string }>,
+): Array<{ id: number; name: string; color: string }> | undefined {
+  if (!tags || tags.length === 0) {
+    return undefined;
+  }
+
+  const resolved = new Map<number, { id: number; name: string; color: string }>();
+  tags.forEach((tag) => {
+    const id = Number(tag.id ?? -1);
+    if (!Number.isFinite(id) || id < 0) {
+      return;
+    }
+
+    const normalizedId = Math.trunc(id);
+    const match = lookup.get(normalizedId);
+    if (match) {
+      resolved.set(normalizedId, match);
+    }
+  });
+
+  const list = Array.from(resolved.values()).sort((a, b) => a.id - b.id || a.name.localeCompare(b.name));
+  return list.length > 0 ? list : undefined;
+}
+
+function hydrateInventoryTagsFromCode(data: InventoryData): InventoryData {
+  return {
+    ...data,
+    cocktails: data.cocktails.map((cocktail) => ({
+      ...cocktail,
+      tags: hydrateTagsFromCode(cocktail.tags, BUILTIN_COCKTAIL_TAGS_BY_ID),
+    })),
+    ingredients: data.ingredients.map((ingredient) => ({
+      ...ingredient,
+      tags: hydrateTagsFromCode(ingredient.tags, BUILTIN_INGREDIENT_TAGS_BY_ID),
+    })),
+  };
 }
 
 function normalizeSubstitutes(substitutes: readonly CocktailSubstitute[] | null | undefined): CocktailSubstitute[] | undefined {
@@ -1207,15 +1270,17 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     setCustomIngredientTags([]);
   }, []);
 
-  const exportInventoryData = useCallback((): InventoryData | null => {
+  const exportInventoryData = useCallback((): InventoryExportData | null => {
     if (!inventoryState) {
       return null;
     }
 
     const cocktails = inventoryState.cocktails.map((cocktail) => {
       const record = toCocktailStorageRecord(cocktail);
+      const tags = normalizeTagIds(cocktail.tags);
       return {
         ...record,
+        tags,
         photoUri: normalizePhotoUriForBackup({
           uri: record.photoUri,
           category: 'cocktails',
@@ -1226,8 +1291,10 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     });
     const ingredients = inventoryState.ingredients.map((ingredient) => {
       const record = toIngredientStorageRecord(ingredient);
+      const tags = normalizeTagIds(ingredient.tags);
       return {
         ...record,
+        tags,
         photoUri: normalizePhotoUriForBackup({
           uri: record.photoUri,
           category: 'ingredients',
@@ -1265,7 +1332,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   }, [inventoryState]);
 
   const importInventoryData = useCallback((data: InventoryData) => {
-    setInventoryState(createInventoryStateFromData(data, true));
+    const hydrated = hydrateInventoryTagsFromCode(data);
+    setInventoryState(createInventoryStateFromData(hydrated, true));
     setAvailableIngredientIds(new Set());
     setShoppingIngredientIds(new Set());
     setCocktailRatings({});
