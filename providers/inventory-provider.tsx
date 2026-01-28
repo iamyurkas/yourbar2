@@ -236,6 +236,7 @@ function toCocktailStorageRecord(cocktail: Cocktail | BaseCocktailRecord): Cockt
   return {
     id: cocktail.id,
     name: cocktail.name,
+    synonyms: cocktail.synonyms ?? undefined,
     description: cocktail.description ?? undefined,
     instructions: cocktail.instructions ?? undefined,
     photoUri: cocktail.photoUri ?? undefined,
