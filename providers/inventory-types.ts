@@ -85,3 +85,8 @@ export type CreateIngredientInput = {
 
 export type CocktailStorageRecord = Omit<CocktailRecord, 'searchName' | 'searchTokens'>;
 export type IngredientStorageRecord = Omit<IngredientRecord, 'searchName' | 'searchTokens'>;
+
+export type InventoryExportData = {
+  cocktails: Array<Omit<CocktailStorageRecord, 'tags'> & { tags?: number[] | null }>;
+  ingredients: Array<Omit<IngredientStorageRecord, 'tags'> & { tags?: number[] | null }>;
+};
