@@ -637,15 +637,24 @@ export default function IngredientDetailsScreen() {
 
             {ingredient.tags && ingredient.tags.length ? (
               <View style={styles.tagList}>
-                {ingredient.tags.map((tag) => (
-                  <TagPill
-                    key={tag.id ?? tag.name}
-                    label={tag.name ?? ""}
-                    color={tag.color ?? Colors.tint}
-                    selected
-                    accessibilityLabel={tag.name ?? "Tag"}
-                  />
-                ))}
+                {ingredient.tags.map((tag, index) => {
+                  const tagKey =
+                    tag.id != null
+                      ? `tag-${tag.id}`
+                      : tag.name
+                        ? `tag-${tag.name}`
+                        : `tag-${index}`;
+
+                  return (
+                    <TagPill
+                      key={tagKey}
+                      label={tag.name ?? ""}
+                      color={tag.color ?? Colors.tint}
+                      selected
+                      accessibilityLabel={tag.name ?? "Tag"}
+                    />
+                  );
+                })}
               </View>
             ) : null}
 

@@ -865,15 +865,24 @@ export default function CocktailDetailsScreen() {
 
             {cocktail.tags && cocktail.tags.length ? (
               <View style={styles.tagList}>
-                {cocktail.tags.map((tag) => (
-                  <TagPill
-                    key={tag.id ?? tag.name}
-                    label={tag.name ?? "Tag"}
-                    color={tag.color ?? Colors.tint}
-                    selected
-                    accessibilityLabel={tag.name ?? "Tag"}
-                  />
-                ))}
+                {cocktail.tags.map((tag, index) => {
+                  const tagKey =
+                    tag.id != null
+                      ? `tag-${tag.id}`
+                      : tag.name
+                        ? `tag-${tag.name}`
+                        : `tag-${index}`;
+
+                  return (
+                    <TagPill
+                      key={tagKey}
+                      label={tag.name ?? "Tag"}
+                      color={tag.color ?? Colors.tint}
+                      selected
+                      accessibilityLabel={tag.name ?? "Tag"}
+                    />
+                  );
+                })}
               </View>
             ) : null}
 
