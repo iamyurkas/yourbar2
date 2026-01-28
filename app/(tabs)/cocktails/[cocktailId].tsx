@@ -526,6 +526,12 @@ export default function CocktailDetailsScreen() {
       .map((segment) => segment.trim())
       .filter(Boolean);
   }, [cocktail?.description]);
+  const hasMultipleDescriptionParagraphs = descriptionParagraphs.length > 1;
+  const shouldShowDescriptionToggle =
+    shouldTruncateDescription || hasMultipleDescriptionParagraphs;
+  const visibleDescriptionParagraphs = isDescriptionExpanded
+    ? descriptionParagraphs
+    : descriptionParagraphs.slice(0, 1);
 
   const ingredientHighlightColor = Colors.highlightFaint;
 
@@ -900,31 +906,33 @@ export default function CocktailDetailsScreen() {
 
             {descriptionParagraphs.length ? (
               <View style={styles.textBlock}>
-                <Text
-                  style={[
-                    styles.instructionsText,
-                    styles.descriptionText,
-                    {
-                      color: isDescriptionExpanded
-                        ? Colors.onSurface
-                        : Colors.onSurfaceVariant,
-                    },
-                  ]}
-                  numberOfLines={
-                    !isDescriptionExpanded && shouldTruncateDescription
-                      ? 5
-                      : undefined
-                  }
-                  onTextLayout={handleDescriptionLayout}
-                >
-                  {descriptionParagraphs.map((paragraph, index) => (
-                    <Text key={`description-${index}`}>
+                <View style={styles.instructionsList}>
+                  {visibleDescriptionParagraphs.map((paragraph, index) => (
+                    <Text
+                      key={`description-${index}`}
+                      style={[
+                        styles.instructionsText,
+                        styles.descriptionText,
+                        {
+                          color: isDescriptionExpanded
+                            ? Colors.onSurface
+                            : Colors.onSurfaceVariant,
+                        },
+                      ]}
+                      numberOfLines={
+                        !isDescriptionExpanded && shouldTruncateDescription
+                          ? 5
+                          : undefined
+                      }
+                      onTextLayout={
+                        index === 0 ? handleDescriptionLayout : undefined
+                      }
+                    >
                       {paragraph}
-                      {index < descriptionParagraphs.length - 1 ? "\n\n" : ""}
                     </Text>
                   ))}
-                </Text>
-                {shouldTruncateDescription ? (
+                </View>
+                {shouldShowDescriptionToggle ? (
                   <Pressable
                     onPress={toggleDescription}
                     accessibilityRole="button"

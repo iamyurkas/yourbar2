@@ -377,6 +377,12 @@ export default function IngredientDetailsScreen() {
       .map((segment) => segment.trim())
       .filter(Boolean);
   }, [ingredient?.description]);
+  const hasMultipleDescriptionParagraphs = descriptionParagraphs.length > 1;
+  const shouldShowDescriptionToggle =
+    shouldTruncateDescription || hasMultipleDescriptionParagraphs;
+  const visibleDescriptionParagraphs = isDescriptionExpanded
+    ? descriptionParagraphs
+    : descriptionParagraphs.slice(0, 1);
 
   const photoSource = useMemo(
     () => resolveImageSource(ingredient?.photoUri),
@@ -678,31 +684,33 @@ export default function IngredientDetailsScreen() {
 
             {descriptionParagraphs.length ? (
               <View style={styles.textBlock}>
-                <Text
-                  style={[
-                    styles.instructionsText,
-                    styles.descriptionText,
-                    {
-                      color: isDescriptionExpanded
-                        ? Colors.onSurface
-                        : Colors.onSurfaceVariant,
-                    },
-                  ]}
-                  numberOfLines={
-                    !isDescriptionExpanded && shouldTruncateDescription
-                      ? DESCRIPTION_PREVIEW_LINES
-                      : undefined
-                  }
-                  onTextLayout={handleDescriptionLayout}
-                >
-                  {descriptionParagraphs.map((paragraph, index) => (
-                    <Text key={`description-${index}`}>
+                <View style={styles.instructionsList}>
+                  {visibleDescriptionParagraphs.map((paragraph, index) => (
+                    <Text
+                      key={`description-${index}`}
+                      style={[
+                        styles.instructionsText,
+                        styles.descriptionText,
+                        {
+                          color: isDescriptionExpanded
+                            ? Colors.onSurface
+                            : Colors.onSurfaceVariant,
+                        },
+                      ]}
+                      numberOfLines={
+                        !isDescriptionExpanded && shouldTruncateDescription
+                          ? DESCRIPTION_PREVIEW_LINES
+                          : undefined
+                      }
+                      onTextLayout={
+                        index === 0 ? handleDescriptionLayout : undefined
+                      }
+                    >
                       {paragraph}
-                      {index < descriptionParagraphs.length - 1 ? "\n\n" : ""}
                     </Text>
                   ))}
-                </Text>
-                {shouldTruncateDescription ? (
+                </View>
+                {shouldShowDescriptionToggle ? (
                   <Pressable
                     onPress={handleToggleDescription}
                     accessibilityRole="button"
