@@ -703,7 +703,11 @@ export default function IngredientDetailsScreen() {
                             styles.instructionsText,
                             { color: Colors.onSurfaceVariant },
                           ]}
-                          numberOfLines={DESCRIPTION_PREVIEW_LINES}
+                          numberOfLines={
+                            shouldTruncateDescription
+                              ? DESCRIPTION_PREVIEW_LINES
+                              : undefined
+                          }
                           onTextLayout={handleDescriptionLayout}
                         >
                           {paragraph}
