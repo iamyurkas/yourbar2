@@ -71,6 +71,7 @@ export const tagPalette = [
   '#FFB74D',
   '#FF8A65',
   '#a8a8a8',
+  '#E5E7EB',
 ] as const;
 
 export const tagColors = {
