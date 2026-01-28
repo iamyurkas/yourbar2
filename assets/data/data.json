@@ -149,6 +149,7 @@
     {
       "id": 1756468135042,
       "name": "7 & 7",
+      "synonyms": ["Seven and Seven"],
       "description": "This cocktail is similar to the Cuba Libre and may refer to any drink consisting of whiskey mixed with lemon soft drink. It was originally made with Seagram's Seven Crown Whiskey, but any whiskey can be used.",
       "instructions": "1. Fill a highball glass with ice.\n2. Add 50ml of whiskey and 150ml of 7-Up.\n3. Garnish with a lemon wedge.",
       "photoUri": "assets/cocktails/1756468135042-7-and-7.jpg",
@@ -2161,6 +2162,7 @@
     {
       "id": 1755800000107,
       "name": "Aperol Spritz",
+      "synonyms": ["Spritz Veneziano"],
       "description": "Bittersweet aperitif of Aperol, prosecco, and soda.",
       "instructions": "1. Fill a wine glass with ice.\n2. Add prosecco and Aperol.\n3. Top with soda water.\n4. Stir gently.\n5. Garnish with an orange slice.",
       "photoUri": "assets/cocktails/1755800000107-aperol-spritz.jpg",
@@ -11209,6 +11211,7 @@
     {
       "id": 1757000000133,
       "name": "Dan Sabo's Whiskey Sour",
+      "synonyms": ["Dan Sabo's Whisky Sour"],
       "description": "A rich, creamy whiskey drink featuring Rye Whisky, Lemon, Egg White—dessert-like, smooth, and indulgent. Garnished with maraschino cherry.",
       "instructions": "1.  Pour 60ml of Rye Whiskey, 15ml of Lemon Juice, 15ml of Orange Juice, 15ml of Simple Syrup, and an Egg White into a shaker.\n2. Dry shake (without ice) vigorously for about 15 seconds to emulsify egg.\n3. Add ice and shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Rocks glass over an ice cube.\n5. Garnish with 2 dashes of Angostura Bitters and a Cherry.",
       "photoUri": "assets/cocktails/1757000000133-dan-sabo-s-whiskey-sour.jpg",
@@ -13046,6 +13049,7 @@
     {
       "id": 1755800000035,
       "name": "Espresso Martini",
+      "synonyms": ["Vodka Espresso"],
       "description": "A smooth vodka martini energized with espresso and coffee liqueur.",
       "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 50ml of Vodka, 30ml of Kahlua, 30ml of Espresso, and 10ml of Simple Syrup.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled Martini glass.\n5. Garnish with 3 coffee beans.",
       "photoUri": "assets/cocktails/1755800000035-espresso-martini.jpg",
@@ -13928,6 +13932,7 @@
     {
       "id": 1755800000037,
       "name": "French 75",
+      "synonyms": ["French Seventy-Five", "Soixante-Quinze"],
       "description": "Crisp gin and lemon topped with sparkling champagne.",
       "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 30ml of Gin, 15ml of Lemon Juice, 15ml of Simple Syrup, and 60ml of Champagne.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Champagne flute glass.\n5. Garnish with a twist of Lemon",
       "photoUri": "assets/cocktails/1755800000037-french-75.jpg",
@@ -18835,6 +18840,7 @@
     {
       "id": 1755800000074,
       "name": "John Collins",
+      "synonyms": ["Gin Collins"],
       "description": "Refreshing gin highball with lemon, sugar, and soda.",
       "instructions": "1. Add gin, lemon juice, and simple syrup into a collins glass filled with ice.\n2. Top with soda water and stir gently.\n3. Garnish with a lemon slice and a maraschino cherry.",
       "photoUri": "assets/cocktails/1755800000074-john-collins.jpg",
@@ -21832,7 +21838,8 @@
     },
     {
       "id": 1757000000235,
-      "name": "Milano Torino",
+      "name": "Milano-Torino",
+      "synonyms": ["Americano", "Mi-To", "Milano Torino"],
       "description": "Also known as \"Mi-To,\" this cocktail was created around 1860 in a cafe in Milan, Italy. It is named after the ingredients: Campari is from Milan, and sweet vermouth is from Turin. With the addition of soda, this drink turns into the \"Americano\" cocktail, and with gin, it turns into the \"Negroni.\"",
       "instructions": "1. Fill a rocks glass with ice.\n2. Add 30ml of Campari and 30ml of sweet red vermouth.\n3. Stir and garnish with an orange slice.",
       "photoUri": "assets/cocktails/1757000000235-milano-torino.jpg",
@@ -27655,6 +27662,7 @@
     {
       "id": 1757000000269,
       "name": "Screwdriver",
+      "synonyms": ["Vodka Orange"],
       "description": "A world-famous, refreshing highball that perfectly marries the neutrality of vodka with the bright acidity of orange juice. Simple, classic, and an official IBA favorite.",
       "instructions": "1. Fill a highball glass with fresh ice cubes.\n2. Pour the vodka into the glass over the ice.\n3. Top the glass with orange juice.\n4. Stir gently to combine the ingredients without losing the chill.\n5. Garnish with a fresh orange slice and serve.",
       "photoUri": "assets/cocktails/1757000000269-screwdriver.jpg",
@@ -28587,6 +28595,7 @@
     {
       "id": 1757000000274,
       "name": "Smoky Whiskey Sour",
+      "synonyms": ["Smoky Whisky Sour"],
       "description": "A variation of the classic \"Whisky Sour\" created by Simon Difford for people who like the distinct smoky flavor of Scotch Islay whisky.",
       "instructions": "1. Pour 30ml of Scotch Whisky, 30ml of Islay Scotch Whisky, 30ml of Lemon Juice, 20ml of Maple syrup, 1 dash of Angostura Bitters, and an Egg White into a shaker.\n2. Dry shake (without ice) vigorously for about 15 seconds to emulsify egg.\n3. Add ice and shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Rocks glass over an ice cube.\n5. Garnish with a lemon peel.",
       "photoUri": "assets/cocktails/1757000000274-smoky-whiskey-sour.jpg",
@@ -33433,6 +33442,7 @@
     {
       "id": 1755800000119,
       "name": "Whiskey Sour",
+      "synonyms": ["Whisky Sour"],
       "description": "Classic bourbon sour optionally enriched with egg white.",
       "instructions": "1. Pour 60ml of Bourbon, 30ml of Lemon Juice, 15ml of Rich Simple Syrup, and an Egg White.\n2. Dry shake (without ice) vigorously for about 15 seconds to emulsify egg.\n3. Add ice and shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Rocks glass over an ice cube.\n5. Garnish with an orange slice a Maraschino Cherry, and 3 drops of Angostura Bitters.",
       "photoUri": "assets/cocktails/1755800000119-whiskey-sour.jpg",
