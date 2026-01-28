@@ -29,7 +29,7 @@ import { AppDialog, type DialogOptions } from "@/components/AppDialog";
 import { TagEditorModal } from "@/components/TagEditorModal";
 import { TagPill } from "@/components/TagPill";
 import { Colors } from "@/constants/theme";
-import { type InventoryData } from "@/libs/inventory-data";
+import { type InventoryExportData } from "@/providers/inventory-types";
 import { buildPhotoBaseName } from "@/libs/photo-utils";
 import { useInventory, type StartScreen } from "@/providers/inventory-provider";
 
@@ -351,7 +351,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
   const isValidInventoryData = (
     candidate: unknown,
-  ): candidate is InventoryData => {
+  ): candidate is InventoryExportData => {
     if (!candidate || typeof candidate !== "object") {
       return false;
     }

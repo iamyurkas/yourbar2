@@ -64,7 +64,7 @@ type InventoryContextValue = {
   resetInventoryFromBundle: () => Promise<void>;
   exportInventoryData: () => InventoryExportData | null;
   exportInventoryPhotoEntries: () => PhotoBackupEntry[] | null;
-  importInventoryData: (data: InventoryData) => void;
+  importInventoryData: (data: InventoryExportData) => void;
   updateIngredient: (id: number, input: CreateIngredientInput) => Ingredient | undefined;
   updateCocktail: (id: number, input: CreateCocktailInput) => Cocktail | undefined;
   deleteCocktail: (id: number) => boolean;
@@ -187,7 +187,7 @@ function normalizeTagList<TTag extends { id?: number | null; name?: string | nul
 
 function normalizeTagIds<TTag extends { id?: number | null }>(
   tags: readonly TTag[] | null | undefined,
-): Array<{ id: number }> | undefined {
+): number[] | undefined {
   if (!tags || tags.length === 0) {
     return undefined;
   }
@@ -202,11 +202,11 @@ function normalizeTagIds<TTag extends { id?: number | null }>(
   });
 
   const sorted = Array.from(ids).sort((a, b) => a - b);
-  return sorted.length > 0 ? sorted.map((id) => ({ id })) : undefined;
+  return sorted.length > 0 ? sorted : undefined;
 }
 
-function hydrateTagsFromCode<TTag extends { id?: number | null }>(
-  tags: readonly TTag[] | null | undefined,
+function hydrateTagsFromCode(
+  tags: readonly number[] | null | undefined,
   lookup: Map<number, { id: number; name: string; color: string }>,
 ): Array<{ id: number; name: string; color: string }> | undefined {
   if (!tags || tags.length === 0) {
@@ -214,8 +214,8 @@ function hydrateTagsFromCode<TTag extends { id?: number | null }>(
   }
 
   const resolved = new Map<number, { id: number; name: string; color: string }>();
-  tags.forEach((tag) => {
-    const id = Number(tag.id ?? -1);
+  tags.forEach((tagId) => {
+    const id = Number(tagId ?? -1);
     if (!Number.isFinite(id) || id < 0) {
       return;
     }
@@ -231,7 +231,7 @@ function hydrateTagsFromCode<TTag extends { id?: number | null }>(
   return list.length > 0 ? list : undefined;
 }
 
-function hydrateInventoryTagsFromCode(data: InventoryData): InventoryData {
+function hydrateInventoryTagsFromCode(data: InventoryExportData): InventoryData {
   return {
     ...data,
     cocktails: data.cocktails.map((cocktail) => ({
@@ -1331,7 +1331,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     ];
   }, [inventoryState]);
 
-  const importInventoryData = useCallback((data: InventoryData) => {
+  const importInventoryData = useCallback((data: InventoryExportData) => {
     const hydrated = hydrateInventoryTagsFromCode(data);
     setInventoryState(createInventoryStateFromData(hydrated, true));
     setAvailableIngredientIds(new Set());

@@ -86,11 +86,7 @@ export type CreateIngredientInput = {
 export type CocktailStorageRecord = Omit<CocktailRecord, 'searchName' | 'searchTokens'>;
 export type IngredientStorageRecord = Omit<IngredientRecord, 'searchName' | 'searchTokens'>;
 
-export type InventoryExportTag = {
-  id: number;
-};
-
 export type InventoryExportData = {
-  cocktails: Array<Omit<CocktailStorageRecord, 'tags'> & { tags?: InventoryExportTag[] | null }>;
-  ingredients: Array<Omit<IngredientStorageRecord, 'tags'> & { tags?: InventoryExportTag[] | null }>;
+  cocktails: Array<Omit<CocktailStorageRecord, 'tags'> & { tags?: number[] | null }>;
+  ingredients: Array<Omit<IngredientStorageRecord, 'tags'> & { tags?: number[] | null }>;
 };
