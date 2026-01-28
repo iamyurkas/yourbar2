@@ -196,7 +196,7 @@ export default function ShakerScreen() {
       const restoreOffset = searchStartOffset.current;
       searchStartOffset.current = null;
       requestAnimationFrame(() => {
-        listRef.current?.scrollToOffset({ offset: restoreOffset, animated: false });
+        listRef.current?.getScrollResponder?.()?.scrollTo({ y: restoreOffset, animated: false });
       });
     }
 
