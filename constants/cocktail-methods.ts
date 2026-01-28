@@ -42,7 +42,7 @@ export const COCKTAIL_METHODS: CocktailMethod[] = [
     label: "Shake",
     title: "Shake",
     description:
-      "Shake with ice. Best for citrus, syrup, cream, or egg white to aerate and chill.",
+      "Shake with ice. Best for drinks with citrus, syrup, cream, or egg white to aerate and chill.",
   },
   {
     id: "stir",

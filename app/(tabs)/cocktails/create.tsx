@@ -2652,12 +2652,12 @@ function EditableIngredientRow({
       {isBrandedIngredient ? (
         <View style={styles.toggleRow}>
           <ToggleChip
-            label="Allow base substitute"
+            label="Allow base substitutes"
             active={ingredient.allowBaseSubstitution}
             onToggle={handleToggleAllowBase}
             onInfo={() =>
               onOpenDialog({
-                title: "Allow base substitute",
+                title: "Allow base substitutes",
                 message:
                   "If the specified ingredient isn't available, the cocktail will be shown as available with its base ingredient.",
                 actions: [{ label: "OK" }],
@@ -2665,14 +2665,14 @@ function EditableIngredientRow({
             }
           />
           <ToggleChip
-            label="Allow branded substitute"
+            label="Allow branded substitutes"
             active={ingredient.allowBrandSubstitution}
             onToggle={handleToggleAllowBrand}
             onInfo={() =>
               onOpenDialog({
-                title: "Allow branded substitute",
+                title: "Allow branded substitutes",
                 message:
-                  "If the specified ingredient isn't available, the cocktail will be shown as available with branded ingredients of the base.",
+                  "If the specified ingredient isn't available, the cocktail will be shown as available with branded versions of the base ingredient.",
                 actions: [{ label: "OK" }],
               })
             }

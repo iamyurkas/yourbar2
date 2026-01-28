@@ -73,7 +73,7 @@ const START_SCREEN_OPTIONS: StartScreenOption[] = [
   {
     key: "shaker",
     label: "Shaker",
-    description: "Mix based on your inventory",
+    description: "Mix based on what's in your inventory",
     icon: { type: "asset", source: ShakerIcon },
   },
   {
@@ -91,7 +91,7 @@ const START_SCREEN_OPTIONS: StartScreenOption[] = [
   {
     key: "ingredients_shopping",
     label: "Shopping list",
-    description: "Head to your shopping items",
+    description: "Head to your shopping list",
     icon: { type: "materialIcon", name: "shopping-cart" },
   },
 ];
