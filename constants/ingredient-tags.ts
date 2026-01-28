@@ -1,7 +1,7 @@
 import { TAG_COLORS } from "./tag-colors";
 
 export const BUILTIN_INGREDIENT_TAGS = [
-  { id: 0, name: "base alcohol", color: TAG_COLORS[5] },
+  { id: 0, name: "base alcohol", color: TAG_COLORS[16] },
   { id: 1, name: "strong alcohol", color: TAG_COLORS[0] },
   { id: 2, name: "soft alcohol", color: TAG_COLORS[1] },
   { id: 3, name: "beverage", color: TAG_COLORS[3] },
