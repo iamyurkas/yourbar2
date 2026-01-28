@@ -892,7 +892,11 @@ export default function CocktailDetailsScreen() {
                   style={[
                     styles.bodyText,
                     styles.descriptionText,
-                    { color: Colors.onSurfaceVariant },
+                    {
+                      color: isDescriptionExpanded
+                        ? Colors.onSurface
+                        : Colors.onSurfaceVariant,
+                    },
                   ]}
                   numberOfLines={
                     !isDescriptionExpanded && shouldTruncateDescription
