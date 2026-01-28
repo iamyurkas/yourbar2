@@ -5162,7 +5162,8 @@
     },
     {
       "id": 1755800000056,
-      "name": "Black Russian",
+      "name": "Black Lebowski",
+      "synonyms": ["Black Russian"],
       "description": "Simple and spirit-forward blend of vodka and coffee liqueur.",
       "instructions": "1. Fill a rocks glass with ice.\n2. Pour vodka and coffee liqueur over the ice.\n3. Stir gently.",
       "photoUri": "assets/cocktails/1755800000056-black-russian.jpg",
@@ -7158,7 +7159,7 @@
     {
       "id": 1757000000104,
       "name": "Brandy Separator",
-      "description": "A variation of the 'White Russian', this cocktail is close to the 'Sneaky Pete', but smoother. The amount of milk can be varied according to taste.",
+      "description": "A variation of the 'White Lebowski', this cocktail is close to the 'Sneaky Pete', but smoother. The amount of milk can be varied according to taste.",
       "instructions": "1. Fill a rocks glass with ice cubes.\n2. Add 15ml of coffee liqueur, 30ml of brandy and 100ml of milk.\n3. Stir gently.",
       "photoUri": "assets/cocktails/1757000000104-brandy-separator.jpg",
       "glassId": "rocks_glass",
@@ -22593,7 +22594,7 @@
     {
       "id": 1757000000239,
       "name": "Mulled Wine",
-      "description": "Also called \"Glühwein\" in German, this drink is very popular in German-speaking countries, France and Russia. Spices can be varied greatly – just use what you like.",
+      "description": "Also called \"Glühwein\" in German, this drink is very popular in German-speaking countries and France. Spices can be varied greatly – just use what you like.",
       "instructions": "1. Heat a bottle or more of red wine in a pan.\n2. Add cinnamon sticks, cloves, sugar and vanilla pods.\n3. Add lemon wedges, and wait 10 minutes.\n4. Heat until the wine almost boils, and serve in cups.",
       "photoUri": "assets/cocktails/1757000000239-mulled-wine.jpg",
       "glassId": "irish_coffee_glass",
@@ -25675,7 +25676,8 @@
     },
     {
       "id": 1759485832039,
-      "name": "Red Russian",
+      "name": "Red Lebowski",
+      "synonyms": ["Red Russian"],
       "description": "A bold and minimalist two-ingredient drink. The neutral profile of vodka allows the deep, sweet, and tart notes of cherry brandy to take center stage for a smooth, dessert-like finish.",
       "instructions": "1. Fill a rocks glass with fresh ice cubes.\n2. Pour the Vodka over the ice.\n3. Add the Cherry Brandy (or Cherry Liqueur).\n4. Stir gently with a bar spoon to combine the ingredients and chill the drink.\n5. Serve immediately.",
       "photoUri": "assets/cocktails/1759485832039-red-russian.jpg",
@@ -28723,7 +28725,7 @@
     {
       "id": 1757000000275,
       "name": "Sneaky Pete",
-      "description": "A bold and creamy variation of the White Russian, swapping vodka for the spicy, robust notes of rye whiskey.",
+      "description": "A bold and creamy variation of the White Lebowski, swapping vodka for the spicy, robust notes of rye whiskey.",
       "instructions": "1. Fill a rocks glass with ice cubes.\n2. Pour 30ml of rye whiskey over the ice.\n3. Add 30ml of coffee liqueur.\n4. Pour in 30ml of milk and stir well to combine.",
       "photoUri": "assets/cocktails/1757000000275-sneaky-pete.jpg",
       "glassId": "rocks_glass",
@@ -33717,7 +33719,8 @@
     },
     {
       "id": 1756462309763,
-      "name": "White Russian",
+      "name": "White Lebowski",
+      "synonyms": ["White Russian"],
       "description": "A rich, creamy classic cocktail that perfectly balances the kick of vodka with the sweetness of coffee liqueur, topped with a velvety layer of fresh cream.",
       "instructions": "1. Fill a rocks glass with ice cubes.\n2. Pour the vodka and coffee liqueur over the ice.\n3. Gently pour the cream on top so it swirls into the dark liquid.\n4. Stir lightly if desired, or serve layered for a striking visual effect.",
       "photoUri": "assets/cocktails/1756462309763-white-russian.jpg",
@@ -36114,7 +36117,7 @@
     {
       "id": 705618,
       "name": "Coffee Liqueur",
-      "description": "Coffee liqueur is a sweet coffee spirit at 20–30% ABV. Perfect for a White Russian or Espresso Martini.",
+      "description": "Coffee liqueur is a sweet coffee spirit at 20–30% ABV. Perfect for a White Lebowski or Espresso Martini.",
       "tags": [
         {
           "id": 2,
@@ -36291,7 +36294,7 @@
     {
       "id": 1759440990018,
       "name": "Crème de Café",
-      "description": "Coffee-flavored liqueur with a smooth, sweet roast profile. Use it for White Russians, espresso cocktails, or dessert drinks.",
+      "description": "Coffee-flavored liqueur with a smooth, sweet roast profile. Use it for White Lebowski, espresso cocktails, or dessert drinks.",
       "tags": [
         {
           "id": 2,
@@ -37205,7 +37208,7 @@
     {
       "id": 1755511153175,
       "name": "Hazelnut Liqueur",
-      "description": "Hazelnut liqueur is sweet and nutty, around 20% ABV. Use it in a Nutty Russian or Chocolatini.",
+      "description": "Hazelnut liqueur is sweet and nutty, around 20% ABV. Use it in a Nutty Lebowski or Chocolatini.",
       "tags": [
         {
           "id": 2,
@@ -37529,7 +37532,7 @@
     {
       "id": 722227,
       "name": "Kahlua",
-      "description": "Kahlúa is a Mexican coffee liqueur by Pernod Ricard, 20% ABV. Perfect in a White Russian or Espresso Martini.",
+      "description": "Kahlúa is a Mexican coffee liqueur by Pernod Ricard, 20% ABV. Perfect in a White Lebowski or Espresso Martini.",
       "tags": [
         {
           "id": 2,
@@ -39148,7 +39151,7 @@
     {
       "id": 605672,
       "name": "Strawberry Schnapps",
-      "description": "Strawberry schnapps is a sugary strawberry spirit about 15–20% ABV. Great in a Strawberry Martini or Red Russian.",
+      "description": "Strawberry schnapps is a sugary strawberry spirit about 15–20% ABV. Great in a Strawberry Martini or Red Lebowski.",
       "tags": [
         {
           "id": 2,
