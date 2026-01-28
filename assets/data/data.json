@@ -32850,6 +32850,7 @@
     {
       "id": 1755800000070,
       "name": "Vodka Buck",
+      "synonyms": ["Moscow Mule"],
       "description": "Vodka and ginger beer built over ice with a bright lime kick.",
       "instructions": "1. Fill a copper mug with ice.\n2. Add vodka and lime juice.\n3. Top with ginger beer and gently stir.\n4. Garnish with a lime wedge.",
       "photoUri": "assets/cocktails/1755800000070-moscow-mule.jpg",
