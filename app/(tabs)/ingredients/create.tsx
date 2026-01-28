@@ -3,7 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Image } from 'expo-image';
 import * as ImagePicker from 'expo-image-picker';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   FlatList,
   KeyboardAvoidingView,
@@ -22,8 +22,8 @@ import {
 
 import { AppDialog, type DialogOptions } from '@/components/AppDialog';
 import { ListRow, Thumb } from '@/components/RowParts';
-import { TagPill } from '@/components/TagPill';
 import { TagEditorModal } from '@/components/TagEditorModal';
+import { TagPill } from '@/components/TagPill';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { Colors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
@@ -412,12 +412,12 @@ export default function IngredientFormScreen() {
           photoUri:
             imageUri && shouldProcessPhoto
               ? await storePhoto({
-                  uri: imageUri,
-                  id: numericIngredientId,
-                  name: trimmedName,
-                  category: 'ingredients',
-                  suffix: String(Date.now()),
-                })
+                uri: imageUri,
+                id: numericIngredientId,
+                name: trimmedName,
+                category: 'ingredients',
+                suffix: String(Date.now()),
+              })
               : submission.photoUri,
         });
 
@@ -835,7 +835,7 @@ export default function IngredientFormScreen() {
     UIManager.measureLayout(
       target,
       scrollNodeHandle,
-      () => {},
+      () => { },
       (_x, y) => {
         const HEADER_OFFSET = 56;
         const targetOffset = Math.max(0, y - HEADER_OFFSET);
@@ -890,7 +890,7 @@ export default function IngredientFormScreen() {
         <TextInput
           value={name}
           onChangeText={setName}
-          placeholder="e.g. Ginger syrup"
+          placeholder="e.g., Ginger syrup"
           style={[
             styles.input,
             { borderColor: Colors.outlineVariant, color: Colors.text, backgroundColor: Colors.surface },
@@ -1032,9 +1032,7 @@ export default function IngredientFormScreen() {
         style={[submitButtonStyle, { backgroundColor: Colors.tint, opacity: isSaving ? 0.6 : 1 }]}
         onPress={handleSubmit}
         disabled={isSaving || isPickingImage}>
-        <Text style={[styles.submitLabel, { color: Colors.onPrimary }]}>
-          {isEditMode ? 'Save changes' : 'Save'}
-        </Text>
+        <Text style={[styles.submitLabel, { color: Colors.onPrimary }]}>Save</Text>
       </Pressable>
       <View style={styles.bottomSpacer} />
     </ScrollView>

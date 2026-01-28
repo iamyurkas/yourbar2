@@ -190,8 +190,8 @@ function mapRecipeIngredientToEditable(
   const key = createUniqueKey("ingredient");
   const unitId =
     typeof recipe.unitId === "number" &&
-    Number.isFinite(recipe.unitId) &&
-    recipe.unitId >= 0
+      Number.isFinite(recipe.unitId) &&
+      recipe.unitId >= 0
       ? Math.trunc(recipe.unitId)
       : undefined;
 
@@ -211,7 +211,7 @@ function mapRecipeIngredientToEditable(
     key,
     ingredientId:
       typeof recipe.ingredientId === "number" &&
-      Number.isFinite(recipe.ingredientId)
+        Number.isFinite(recipe.ingredientId)
         ? Math.trunc(recipe.ingredientId)
         : undefined,
     name: recipe.name ?? "",
@@ -546,7 +546,7 @@ export default function CreateCocktailScreen() {
     UIManager.measureLayout(
       target,
       scrollNodeHandle,
-      () => {},
+      () => { },
       (_x, y) => {
         const HEADER_OFFSET = 56;
         const targetOffset = Math.max(0, y - HEADER_OFFSET);
@@ -814,9 +814,9 @@ export default function CreateCocktailScreen() {
         prev.map((item) =>
           item.key === key
             ? {
-                ...item,
-                substitutes: updater(item.substitutes),
-              }
+              ...item,
+              substitutes: updater(item.substitutes),
+            }
             : item,
         ),
       );
@@ -979,8 +979,8 @@ export default function CreateCocktailScreen() {
           item.ingredientId != null ? Number(item.ingredientId) : undefined;
         const ingredientId =
           normalizedIngredientId != null &&
-          Number.isFinite(normalizedIngredientId) &&
-          normalizedIngredientId >= 0
+            Number.isFinite(normalizedIngredientId) &&
+            normalizedIngredientId >= 0
             ? Math.trunc(normalizedIngredientId)
             : undefined;
 
@@ -988,8 +988,8 @@ export default function CreateCocktailScreen() {
           item.unitId != null ? Number(item.unitId) : undefined;
         const unitId =
           normalizedUnitId != null &&
-          Number.isFinite(normalizedUnitId) &&
-          normalizedUnitId >= 0
+            Number.isFinite(normalizedUnitId) &&
+            normalizedUnitId >= 0
             ? Math.trunc(normalizedUnitId)
             : undefined;
 
@@ -1013,8 +1013,8 @@ export default function CreateCocktailScreen() {
                 : undefined;
             const substituteIngredientId =
               rawIngredientLink != null &&
-              Number.isFinite(rawIngredientLink) &&
-              rawIngredientLink >= 0
+                Number.isFinite(rawIngredientLink) &&
+                rawIngredientLink >= 0
                 ? Math.trunc(rawIngredientLink)
                 : substituteId;
 
@@ -1093,18 +1093,18 @@ export default function CreateCocktailScreen() {
       let persisted =
         isEditMode && prefilledCocktail?.id != null
           ? updateCocktail(Number(prefilledCocktail.id), {
-              ...submission,
-              photoUri:
-                imageUri && shouldProcessPhoto && prefilledCocktail?.id != null
-                  ? await storePhoto({
-                      uri: imageUri,
-                      id: prefilledCocktail.id,
-                      name: trimmedName,
-                      category: "cocktails",
-                      suffix: String(Date.now()),
-                    })
-                  : submission.photoUri,
-            })
+            ...submission,
+            photoUri:
+              imageUri && shouldProcessPhoto && prefilledCocktail?.id != null
+                ? await storePhoto({
+                  uri: imageUri,
+                  id: prefilledCocktail.id,
+                  name: trimmedName,
+                  category: "cocktails",
+                  suffix: String(Date.now()),
+                })
+                : submission.photoUri,
+          })
           : createCocktail(submission);
 
       if (!persisted) {
@@ -1464,7 +1464,7 @@ export default function CreateCocktailScreen() {
             <TextInput
               value={name}
               onChangeText={setName}
-              placeholder="e.g. Margarita"
+              placeholder="e.g., Margarita"
               style={[
                 styles.input,
                 {
@@ -2472,7 +2472,7 @@ function EditableIngredientRow({
               );
             }
           }}
-          placeholder="Type ingredient name"
+          placeholder="Ingredient name"
           placeholderTextColor={`${Colors.onSurfaceVariant}99`}
           style={[
             styles.input,
@@ -2598,7 +2598,7 @@ function EditableIngredientRow({
           <TextInput
             value={ingredient.amount}
             onChangeText={(text) => onChange(ingredient.key, { amount: text })}
-            placeholder="e.g. 45"
+            placeholder="e.g., 45"
             placeholderTextColor={`${Colors.onSurfaceVariant}99`}
             keyboardType="decimal-pad"
             style={[
