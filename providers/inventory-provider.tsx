@@ -124,17 +124,25 @@ declare global {
   var __yourbarInventoryCustomIngredientTags: IngredientTag[] | undefined;
 }
 
-function normalizeSearchFields<T extends { name?: string | null; searchName?: string | null; searchTokens?: string[] | null }>(
-  items: readonly T[] = [],
-): (T & NormalizedSearchFields)[] {
+function normalizeSearchFields<
+  T extends {
+    name?: string | null;
+    searchName?: string | null;
+    searchTokens?: string[] | null;
+    synonyms?: string[] | null;
+  },
+>(items: readonly T[] = []): (T & NormalizedSearchFields)[] {
   return items.map((item) => {
     const { searchName: _searchName, searchTokens: _searchTokens, ...rest } = item;
     const baseName = item.name ?? '';
-    const searchNameNormalized = normalizeSearchText(baseName);
-    const searchTokensNormalized = searchNameNormalized
-      .split(/\s+/)
-      .map((token) => normalizeSearchText(token))
+    const synonyms = Array.isArray(item.synonyms) ? item.synonyms : [];
+    const normalizedNames = [baseName, ...synonyms]
+      .map((name) => normalizeSearchText(name ?? ''))
       .filter(Boolean);
+    const searchNameNormalized = normalizedNames.join(' ');
+    const searchTokensNormalized = Array.from(
+      new Set(normalizedNames.flatMap((name) => name.split(/\s+/).filter(Boolean))),
+    );
 
     return {
       ...rest,
