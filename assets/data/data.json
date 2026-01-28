@@ -35740,7 +35740,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "baseIngredientId": 1755300138380,
@@ -35759,7 +35759,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "baseIngredientId": 16862,
@@ -35807,7 +35807,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "photoUri": "assets/ingredients/123517-aged-rum.jpg"
@@ -36038,7 +36038,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "photoUri": "assets/ingredients/31941-apple-brandy.jpg"
@@ -36121,7 +36121,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "photoUri": "assets/ingredients/975435-apricot-brandy.jpg"
@@ -36152,7 +36152,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "baseIngredientId": 563527,
@@ -36171,7 +36171,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "baseIngredientId": 669831,
@@ -36378,7 +36378,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "photoUri": "assets/ingredients/1759336939666-bizon-grass-vodka.jpg"
@@ -36448,7 +36448,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "photoUri": "assets/ingredients/769096-blackberry-brandy.jpg"
@@ -36492,7 +36492,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "photoUri": "assets/ingredients/4130-blackstrap-rum.jpg"
@@ -36588,7 +36588,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "photoUri": "assets/ingredients/342124-bourbon.jpg"
@@ -36606,7 +36606,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "photoUri": "assets/ingredients/435165-brandy.jpg"
@@ -36683,7 +36683,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "photoUri": "assets/ingredients/131453-cachaca.jpg"
@@ -36847,7 +36847,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "photoUri": "assets/ingredients/829460-cherry-brandy.jpg"
@@ -37128,7 +37128,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "photoUri": "assets/ingredients/783639-coconut-rum.jpg"
@@ -37185,7 +37185,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "photoUri": "assets/ingredients/406487-coffee-brandy.jpg"
@@ -37216,7 +37216,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "usageCount": 12,
@@ -37471,7 +37471,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "baseIngredientId": 830162,
@@ -37503,7 +37503,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "usageCount": 0,
@@ -37561,7 +37561,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "photoUri": "assets/ingredients/962705-dark-rum.jpg"
@@ -37579,7 +37579,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "photoUri": "assets/ingredients/1756051374456-demerara-rum.jpg"
@@ -37926,7 +37926,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "usageCount": 26,
@@ -38024,7 +38024,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "usageCount": 0,
@@ -38043,7 +38043,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "photoUri": "assets/ingredients/1755989023035-gold-puerto-rican-rum.jpg"
@@ -38061,7 +38061,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "photoUri": "assets/ingredients/811139-gold-rum.jpg"
@@ -38105,7 +38105,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "baseIngredientId": 962705,
@@ -38320,7 +38320,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "baseIngredientId": 502166,
@@ -38451,7 +38451,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "photoUri": "assets/ingredients/489584-irish-whiskey.jpg"
@@ -38469,7 +38469,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "photoUri": "assets/ingredients/563527-islay-scotch-whisky.jpg"
@@ -38487,7 +38487,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "baseIngredientId": 830162,
@@ -38519,7 +38519,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "photoUri": "assets/ingredients/1756051163896-jamaican-dark-rum.jpg"
@@ -38537,7 +38537,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "photoUri": "assets/ingredients/1755681623932-jamaican-rum.jpg"
@@ -38555,7 +38555,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "photoUri": "assets/ingredients/1755776321280-japanese-whisky.jpg"
@@ -38573,7 +38573,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "baseIngredientId": 342124,
@@ -38592,7 +38592,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "baseIngredientId": 140867,
@@ -38692,7 +38692,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "baseIngredientId": 563527,
@@ -38724,7 +38724,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "baseIngredientId": 563527,
@@ -38940,7 +38940,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "baseIngredientId": 783639,
@@ -39013,7 +39013,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "photoUri": "assets/ingredients/50977-mezcal.jpg"
@@ -39085,7 +39085,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "photoUri": "assets/ingredients/289771-old-tom-gin.jpg"
@@ -39222,7 +39222,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "photoUri": "assets/ingredients/1758623401620-orange-vodka.jpg"
@@ -39266,7 +39266,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "photoUri": "assets/ingredients/669831-overproof-rum.jpg"
@@ -39429,7 +39429,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "photoUri": "assets/ingredients/330434-peach-brandy.jpg"
@@ -39660,7 +39660,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "photoUri": "assets/ingredients/340461-pisco.jpg"
@@ -39678,7 +39678,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "usageCount": 0,
@@ -39960,7 +39960,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "usageCount": 28,
@@ -40013,7 +40013,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "photoUri": "assets/ingredients/1755776402585-scotch-highland-whisky.jpg"
@@ -40031,7 +40031,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "usageCount": 17,
@@ -40050,7 +40050,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "baseIngredientId": 830162,
@@ -40123,7 +40123,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "photoUri": "assets/ingredients/706556-sloe-gin.jpg"
@@ -40180,7 +40180,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "photoUri": "assets/ingredients/908571-spiced-rum.jpg"
@@ -40343,7 +40343,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "photoUri": "assets/ingredients/97568-tequila.jpg"
@@ -40361,7 +40361,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "photoUri": "assets/ingredients/1759244905934-anejo-tequila.jpg"
@@ -40379,7 +40379,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "photoUri": "assets/ingredients/266182-tequila-blanco.jpg"
@@ -40397,7 +40397,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "photoUri": "assets/ingredients/787067-tequila-gold.jpg"
@@ -40415,7 +40415,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "usageCount": 0,
@@ -40434,7 +40434,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "baseIngredientId": 1755681623932,
@@ -40532,7 +40532,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "usageCount": 11,
@@ -40551,7 +40551,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "photoUri": "assets/ingredients/1755300138380-vodka-citron.jpg"
@@ -40569,7 +40569,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "photoUri": "assets/ingredients/118165-vodka-vanilla.jpg"
@@ -40613,7 +40613,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "usageCount": 22,
@@ -40628,7 +40628,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ]
     },
@@ -40645,7 +40645,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "baseIngredientId": 804376,
@@ -40664,7 +40664,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "usageCount": 14,
@@ -40696,7 +40696,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "baseIngredientId": 342124,
@@ -40741,7 +40741,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "baseIngredientId": 342124,
@@ -40760,7 +40760,7 @@
         {
           "id": 0,
           "name": "base alcohol",
-          "color": "#E5E7EB"
+          "color": "#555555"
         }
       ],
       "baseIngredientId": 1759336939666,
