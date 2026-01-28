@@ -145,6 +145,19 @@ function resolveCocktailKey(cocktail: Cocktail) {
   return undefined;
 }
 
+const COLLAPSED_HEADER_PREFIX = '__collapsed_header__';
+
+function makeCollapsedHeaderItem(key: string): Ingredient {
+  return {
+    id: `${COLLAPSED_HEADER_PREFIX}${key}`,
+    name: '',
+  } as Ingredient;
+}
+
+function isCollapsedHeaderItem(item: Ingredient) {
+  return typeof item.id === 'string' && item.id.startsWith(COLLAPSED_HEADER_PREFIX);
+}
+
 export default function ShakerScreen() {
   const router = useRouter();
   const {
@@ -594,14 +607,13 @@ export default function ShakerScreen() {
     () =>
       ingredientGroups.map((group) => ({
         ...group,
-        data: expandedTagKeys.has(group.key) ? group.ingredients : [],
+        data: expandedTagKeys.has(group.key) ? group.ingredients : [makeCollapsedHeaderItem(group.key)],
       })),
     [expandedTagKeys, ingredientGroups],
   );
 
-  const renderSectionHeader = useCallback(
-    ({ section }: { section: SectionListData<Ingredient, IngredientSection> }) => {
-      const isExpanded = expandedTagKeys.has(section.key);
+  const renderHeaderContent = useCallback(
+    (section: IngredientSection, isExpanded: boolean) => {
       const iconRotation = isExpanded ? '180deg' : '0deg';
       const backgroundColor = section.color;
 
@@ -671,11 +683,25 @@ export default function ShakerScreen() {
         </View>
       );
     },
-    [expandedTagKeys, handleToggleGroup],
+    [handleToggleGroup],
+  );
+
+  const renderSectionHeader = useCallback(
+    ({ section }: { section: SectionListData<Ingredient, IngredientSection> }) => {
+      const isExpanded = expandedTagKeys.has(section.key);
+      if (!isExpanded) {
+        return null;
+      }
+      return renderHeaderContent(section, isExpanded);
+    },
+    [expandedTagKeys, renderHeaderContent],
   );
 
   const renderIngredient = useCallback(
     ({ item, index, section }: SectionListRenderItemInfo<Ingredient, IngredientSection>) => {
+      if (isCollapsedHeaderItem(item)) {
+        return renderHeaderContent(section, false);
+      }
       const ingredientId = Number(item.id ?? -1);
       const isAvailable = ingredientId >= 0 && availableIngredientIds.has(ingredientId);
       const isSelected = ingredientId >= 0 && selectedIngredientIds.has(ingredientId);
@@ -714,6 +740,7 @@ export default function ShakerScreen() {
       Colors.onSurfaceVariant,
       handleToggleIngredient,
       makeableCocktailCounts,
+      renderHeaderContent,
       selectedIngredientIds,
       shoppingIngredientIds,
       totalCocktailCounts,
