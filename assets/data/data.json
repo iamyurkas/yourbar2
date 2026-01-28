@@ -1469,6 +1469,7 @@
     {
       "id": 1755800000050,
       "name": "Americano",
+      "synonyms": ["Milano-Torino"],
       "description": "Bitter Campari and sweet vermouth lengthened with fizzy soda.",
       "instructions": "1. Add Campari and red vermouth to a mixing glass filled with ice.\n2. Stir until well chilled and properly diluted.\n3. Strain into a rock glass over fresh ice.\n4. Top with soda water and briefly stir.\n5. Garnish with an orange slice and a lemon twist.",
       "photoUri": "assets/cocktails/1755800000050-americano.jpg",
@@ -4687,6 +4688,7 @@
     {
       "id": 1755800000057,
       "name": "Bloody Mary",
+      "synonyms": ["Red Snapper"],
       "description": "A savory vodka cocktail with tomato juice, spices, and a peppery bite.",
       "instructions": "1. Combine all ingredients in a tin with ice.\n2. Throw the mixture 5 times to integrate the spices and aerate the tomato juice without making it watery. 3. Strain into a highball glass.\n3. Garnish with a celery stalk and a lemon wedge.",
       "photoUri": "assets/cocktails/1755800000057-bloody-mary.jpg",
@@ -9322,6 +9324,7 @@
     {
       "id": 1755800000029,
       "name": "Cosmopolitan",
+      "synonyms": ["Cosmo"],
       "description": "A citrusy vodka cocktail with cranberry and orange notes.",
       "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 40ml of Vodka Citron, 15ml of Cointreau, 15ml of Lime Juice, and 30ml of Cranberry Juice.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Martini glass.\n5. Garnish with a twist of Orange",
       "photoUri": "assets/cocktails/1755800000029-cosmopolitan.jpg",
@@ -9605,6 +9608,7 @@
     {
       "id": 1755800000030,
       "name": "Cuba Libre",
+      "synonyms": ["Rum and Coke", "Rum & Coke"],
       "description": "A simple mix of rum, cola, and lime for a refreshing long drink.",
       "instructions": "1. Fill a highball glass with ice.\n2. Pour rum and lime juice over the ice.\n3. Top with cola and stir gently.\n4. Garnish with a lime wedge.",
       "photoUri": "assets/cocktails/1755800000030-cuba-libre.jpg",
@@ -20448,6 +20452,7 @@
     {
       "id": 1755800000083,
       "name": "Old Fashioned",
+      "synonyms": ["Old-Fashioned"],
       "description": "Time-honored mix of whiskey, sugar, and bitters.",
       "instructions": "1. Place sugar in a rocks glass and saturate with bitters.\n2. Add a splash of water and muddle until dissolved.\n3. Fill the glass with ice and add bourbon.\n4. Stir gently.\n5. Garnish with an orange twist and a maraschino cherry.",
       "photoUri": "assets/cocktails/1755800000083-old-fashioned.jpg",
@@ -27591,6 +27596,7 @@
     {
       "id": 1756464488397,
       "name": "Tom Collins",
+      "synonyms": ["Gin Collins"],
       "description": "A timeless IBA classic, this refreshing highball perfectly balances the sweetness of Old Tom Gin with crisp citrus and sparkling water.",
       "instructions": "1. Fill a Collins glass with plenty of ice cubes.\n2. Pour the Old Tom gin, fresh lemon juice, and simple syrup directly into the glass.\n3. Top up the glass with chilled soda water.\n4. Stir gently with a bar spoon to integrate the ingredients without losing carbonation.\n5. Garnish with a lemon slice and a maraschino cherry.",
       "photoUri": "assets/cocktails/1756464488397-tom-collins.jpg",
