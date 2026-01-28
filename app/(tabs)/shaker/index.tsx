@@ -158,6 +158,13 @@ function isCollapsedHeaderItem(item: Ingredient) {
   return typeof item.id === 'string' && item.id.startsWith(COLLAPSED_HEADER_PREFIX);
 }
 
+const scheduleNextFrame =
+  typeof requestAnimationFrame === 'function'
+    ? requestAnimationFrame
+    : (callback: FrameRequestCallback) => {
+        return setTimeout(() => callback(Date.now()), 0);
+      };
+
 export default function ShakerScreen() {
   const router = useRouter();
   const {
@@ -195,7 +202,7 @@ export default function ShakerScreen() {
     } else if (!wasEmpty && isEmpty && searchStartOffset.current !== null) {
       const restoreOffset = searchStartOffset.current;
       searchStartOffset.current = null;
-      requestAnimationFrame(() => {
+      scheduleNextFrame(() => {
         listRef.current?.scrollToOffset({ offset: restoreOffset, animated: false });
       });
     }
