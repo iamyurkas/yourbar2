@@ -17,8 +17,6 @@ import {
   Text,
   View,
   type GestureResponderEvent,
-  type NativeSyntheticEvent,
-  type TextLayoutEventData,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -343,28 +341,17 @@ export default function IngredientDetailsScreen() {
     router.push({ pathname: "/cocktails/create", params });
   }, [ingredient]);
 
-  const DESCRIPTION_PREVIEW_LINES = 5;
-  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
-  const [shouldTruncateDescription, setShouldTruncateDescription] =
-    useState(false);
+  const descriptionParagraphs = useMemo(() => {
+    const description = ingredient?.description?.trim();
+    if (!description) {
+      return [] as string[];
+    }
 
-  const handleDescriptionLayout = useCallback(
-    (event: NativeSyntheticEvent<TextLayoutEventData>) => {
-      if (shouldTruncateDescription) {
-        return;
-      }
-
-      const totalLines = event.nativeEvent?.lines?.length ?? 0;
-      if (totalLines > DESCRIPTION_PREVIEW_LINES) {
-        setShouldTruncateDescription(true);
-      }
-    },
-    [DESCRIPTION_PREVIEW_LINES, shouldTruncateDescription],
-  );
-
-  const handleToggleDescription = useCallback(() => {
-    setIsDescriptionExpanded((previous) => !previous);
-  }, []);
+    return description
+      .split(/\n+/)
+      .map((segment) => segment.trim())
+      .filter(Boolean);
+  }, [ingredient?.description]);
 
   const photoSource = useMemo(
     () => resolveImageSource(ingredient?.photoUri),
@@ -664,45 +651,21 @@ export default function IngredientDetailsScreen() {
               </View>
             ) : null}
 
-            {ingredient.description ? (
+            {descriptionParagraphs.length ? (
               <View style={styles.textBlock}>
-                <Text
-                  style={[
-                    styles.bodyText,
-                    styles.descriptionText,
-                    {
-                      color: isDescriptionExpanded
-                        ? Colors.onSurface
-                        : Colors.onSurfaceVariant,
-                    },
-                  ]}
-                  numberOfLines={
-                    !isDescriptionExpanded && shouldTruncateDescription
-                      ? DESCRIPTION_PREVIEW_LINES
-                      : undefined
-                  }
-                  onTextLayout={handleDescriptionLayout}
-                >
-                  {ingredient.description}
-                </Text>
-                {shouldTruncateDescription ? (
-                  <Pressable
-                    onPress={handleToggleDescription}
-                    accessibilityRole="button"
-                    accessibilityLabel={
-                      isDescriptionExpanded
-                        ? "Show less description"
-                        : "Show full description"
-                    }
-                    hitSlop={8}
-                  >
+                <View style={styles.instructionsList}>
+                  {descriptionParagraphs.map((paragraph, index) => (
                     <Text
-                      style={[styles.toggleDescription, { color: Colors.tint }]}
+                      key={`description-${index}`}
+                      style={[
+                        styles.instructionsText,
+                        { color: Colors.onSurface },
+                      ]}
                     >
-                      {isDescriptionExpanded ? "Show less" : "Show more"}
+                      {paragraph}
                     </Text>
-                  </Pressable>
-                ) : null}
+                  ))}
+                </View>
               </View>
             ) : null}
 
@@ -1087,16 +1050,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
   },
-  bodyText: {
+  instructionsText: {
     fontSize: 14,
     lineHeight: 22,
   },
-  descriptionText: {
-    color: Colors.onSurfaceMuted,
-  },
-  toggleDescription: {
-    fontSize: 14,
-    fontWeight: "500",
+  instructionsList: {
+    gap: 8,
   },
   baseIngredientRow: {
     flexDirection: "row",
