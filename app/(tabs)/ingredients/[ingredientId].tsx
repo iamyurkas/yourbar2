@@ -366,6 +366,24 @@ export default function IngredientDetailsScreen() {
     setIsDescriptionExpanded((previous) => !previous);
   }, []);
 
+  const descriptionParagraphs = useMemo(() => {
+    const description = ingredient?.description?.trim();
+    if (!description) {
+      return [] as string[];
+    }
+
+    return description
+      .split(/\n+/)
+      .map((segment) => segment.trim())
+      .filter(Boolean);
+  }, [ingredient?.description]);
+  const hasMultipleDescriptionParagraphs = descriptionParagraphs.length > 1;
+  const shouldShowDescriptionToggle =
+    shouldTruncateDescription || hasMultipleDescriptionParagraphs;
+  const visibleDescriptionParagraphs = isDescriptionExpanded
+    ? descriptionParagraphs
+    : descriptionParagraphs.slice(0, 1);
+
   const photoSource = useMemo(
     () => resolveImageSource(ingredient?.photoUri),
     [ingredient?.photoUri],
@@ -664,24 +682,35 @@ export default function IngredientDetailsScreen() {
               </View>
             ) : null}
 
-            {ingredient.description ? (
+            {descriptionParagraphs.length ? (
               <View style={styles.textBlock}>
-                <Text
-                  style={[
-                    styles.bodyText,
-                    styles.descriptionText,
-                    { color: Colors.onSurfaceVariant },
-                  ]}
-                  numberOfLines={
-                    !isDescriptionExpanded && shouldTruncateDescription
-                      ? DESCRIPTION_PREVIEW_LINES
-                      : undefined
-                  }
-                  onTextLayout={handleDescriptionLayout}
-                >
-                  {ingredient.description}
-                </Text>
-                {shouldTruncateDescription ? (
+                <View style={styles.instructionsList}>
+                  {visibleDescriptionParagraphs.map((paragraph, index) => (
+                    <Text
+                      key={`description-${index}`}
+                      style={[
+                        styles.instructionsText,
+                        styles.descriptionText,
+                        {
+                          color: isDescriptionExpanded
+                            ? Colors.onSurface
+                            : Colors.onSurfaceVariant,
+                        },
+                      ]}
+                      numberOfLines={
+                        !isDescriptionExpanded && shouldTruncateDescription
+                          ? DESCRIPTION_PREVIEW_LINES
+                          : undefined
+                      }
+                      onTextLayout={
+                        index === 0 ? handleDescriptionLayout : undefined
+                      }
+                    >
+                      {paragraph}
+                    </Text>
+                  ))}
+                </View>
+                {shouldShowDescriptionToggle ? (
                   <Pressable
                     onPress={handleToggleDescription}
                     accessibilityRole="button"
@@ -1084,6 +1113,10 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   bodyText: {
+    fontSize: 14,
+    lineHeight: 22,
+  },
+  instructionsText: {
     fontSize: 14,
     lineHeight: 22,
   },
