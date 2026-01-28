@@ -343,6 +343,18 @@ export default function IngredientDetailsScreen() {
     router.push({ pathname: "/cocktails/create", params });
   }, [ingredient]);
 
+  const descriptionParagraphs = useMemo(() => {
+    const description = ingredient?.description?.trim();
+    if (!description) {
+      return [] as string[];
+    }
+
+    return description
+      .split(/\n+/)
+      .map((segment) => segment.trim())
+      .filter(Boolean);
+  }, [ingredient?.description]);
+
   const DESCRIPTION_PREVIEW_LINES = 5;
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   const [shouldTruncateDescription, setShouldTruncateDescription] =
@@ -365,6 +377,11 @@ export default function IngredientDetailsScreen() {
   const handleToggleDescription = useCallback(() => {
     setIsDescriptionExpanded((previous) => !previous);
   }, []);
+
+  useEffect(() => {
+    setIsDescriptionExpanded(false);
+    setShouldTruncateDescription(descriptionParagraphs.length > 1);
+  }, [descriptionParagraphs.length]);
 
   const photoSource = useMemo(
     () => resolveImageSource(ingredient?.photoUri),
@@ -664,27 +681,39 @@ export default function IngredientDetailsScreen() {
               </View>
             ) : null}
 
-            {ingredient.description ? (
+            {descriptionParagraphs.length ? (
               <View style={styles.textBlock}>
-                <Text
-                  style={[
-                    styles.bodyText,
-                    styles.descriptionText,
-                    {
-                      color: isDescriptionExpanded
-                        ? Colors.onSurface
-                        : Colors.onSurfaceVariant,
-                    },
-                  ]}
-                  numberOfLines={
-                    !isDescriptionExpanded && shouldTruncateDescription
-                      ? DESCRIPTION_PREVIEW_LINES
-                      : undefined
-                  }
-                  onTextLayout={handleDescriptionLayout}
-                >
-                  {ingredient.description}
-                </Text>
+                <View style={styles.instructionsList}>
+                  {isDescriptionExpanded
+                    ? descriptionParagraphs.map((paragraph, index) => (
+                        <Text
+                          key={`description-${index}`}
+                          style={[
+                            styles.instructionsText,
+                            { color: Colors.onSurface },
+                          ]}
+                        >
+                          {paragraph}
+                        </Text>
+                      ))
+                    : descriptionParagraphs.slice(0, 1).map((paragraph, index) => (
+                        <Text
+                          key={`description-${index}`}
+                          style={[
+                            styles.instructionsText,
+                            { color: Colors.onSurfaceVariant },
+                          ]}
+                          numberOfLines={
+                            shouldTruncateDescription
+                              ? DESCRIPTION_PREVIEW_LINES
+                              : undefined
+                          }
+                          onTextLayout={handleDescriptionLayout}
+                        >
+                          {paragraph}
+                        </Text>
+                      ))}
+                </View>
                 {shouldTruncateDescription ? (
                   <Pressable
                     onPress={handleToggleDescription}
@@ -1087,12 +1116,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
   },
-  bodyText: {
+  instructionsText: {
     fontSize: 14,
     lineHeight: 22,
   },
-  descriptionText: {
-    color: Colors.onSurfaceMuted,
+  instructionsList: {
+    gap: 8,
   },
   toggleDescription: {
     fontSize: 14,

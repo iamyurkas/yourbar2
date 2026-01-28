@@ -515,6 +515,46 @@ export default function CocktailDetailsScreen() {
       .filter(Boolean);
   }, [cocktail?.instructions]);
 
+  const descriptionParagraphs = useMemo(() => {
+    const description = cocktail?.description?.trim();
+    if (!description) {
+      return [] as string[];
+    }
+
+    return description
+      .split(/\n+/)
+      .map((segment) => segment.trim())
+      .filter(Boolean);
+  }, [cocktail?.description]);
+
+  const DESCRIPTION_PREVIEW_LINES = 5;
+  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
+  const [shouldTruncateDescription, setShouldTruncateDescription] =
+    useState(false);
+
+  const handleDescriptionLayout = useCallback(
+    (event: { nativeEvent: { lines: { length: number }[] } }) => {
+      if (shouldTruncateDescription) {
+        return;
+      }
+
+      const totalLines = event.nativeEvent?.lines?.length ?? 0;
+      if (totalLines > DESCRIPTION_PREVIEW_LINES) {
+        setShouldTruncateDescription(true);
+      }
+    },
+    [DESCRIPTION_PREVIEW_LINES, shouldTruncateDescription],
+  );
+
+  const toggleDescription = useCallback(() => {
+    setIsDescriptionExpanded((current) => !current);
+  }, []);
+
+  useEffect(() => {
+    setIsDescriptionExpanded(false);
+    setShouldTruncateDescription(descriptionParagraphs.length > 1);
+  }, [descriptionParagraphs.length]);
+
   const ingredientHighlightColor = Colors.highlightFaint;
 
   const photoSource = useMemo(
@@ -551,26 +591,6 @@ export default function CocktailDetailsScreen() {
   }, [cocktail]);
 
   const [expandedMethodIds, setExpandedMethodIds] = useState<string[]>([]);
-  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
-  const [shouldTruncateDescription, setShouldTruncateDescription] =
-    useState(false);
-
-  const handleDescriptionLayout = useCallback(
-    (event: { nativeEvent: { lines: { length: number }[] } }) => {
-      if (shouldTruncateDescription) {
-        return;
-      }
-
-      if (event.nativeEvent.lines.length > 5) {
-        setShouldTruncateDescription(true);
-      }
-    },
-    [shouldTruncateDescription],
-  );
-
-  const toggleDescription = useCallback(() => {
-    setIsDescriptionExpanded((current) => !current);
-  }, []);
 
   const handleToggleUnits = useCallback(() => {
     setShowImperialUnits((current) => !current);
@@ -886,27 +906,39 @@ export default function CocktailDetailsScreen() {
               </View>
             ) : null}
 
-            {cocktail.description ? (
+            {descriptionParagraphs.length ? (
               <View style={styles.textBlock}>
-                <Text
-                  style={[
-                    styles.bodyText,
-                    styles.descriptionText,
-                    {
-                      color: isDescriptionExpanded
-                        ? Colors.onSurface
-                        : Colors.onSurfaceVariant,
-                    },
-                  ]}
-                  numberOfLines={
-                    !isDescriptionExpanded && shouldTruncateDescription
-                      ? 5
-                      : undefined
-                  }
-                  onTextLayout={handleDescriptionLayout}
-                >
-                  {cocktail.description}
-                </Text>
+                <View style={styles.instructionsList}>
+                  {isDescriptionExpanded
+                    ? descriptionParagraphs.map((paragraph, index) => (
+                        <Text
+                          key={`description-${index}`}
+                          style={[
+                            styles.instructionsText,
+                            { color: Colors.onSurface },
+                          ]}
+                        >
+                          {paragraph}
+                        </Text>
+                      ))
+                    : descriptionParagraphs.slice(0, 1).map((paragraph, index) => (
+                        <Text
+                          key={`description-${index}`}
+                          style={[
+                            styles.instructionsText,
+                            { color: Colors.onSurfaceVariant },
+                          ]}
+                          numberOfLines={
+                            shouldTruncateDescription
+                              ? DESCRIPTION_PREVIEW_LINES
+                              : undefined
+                          }
+                          onTextLayout={handleDescriptionLayout}
+                        >
+                          {paragraph}
+                        </Text>
+                      ))}
+                </View>
                 {shouldTruncateDescription ? (
                   <Pressable
                     onPress={toggleDescription}
@@ -1325,17 +1357,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
   },
-  bodyText: {
-    fontSize: 14,
-    lineHeight: 22,
-  },
-  descriptionText: {
-    color: Colors.onSurfaceMuted,
-  },
-  toggleDescription: {
-    fontSize: 14,
-    fontWeight: "500",
-  },
   instructionsTitle: {
     fontSize: 16,
     fontWeight: "600",
@@ -1346,6 +1367,10 @@ const styles = StyleSheet.create({
   },
   instructionsList: {
     gap: 8,
+  },
+  toggleDescription: {
+    fontSize: 14,
+    fontWeight: "500",
   },
   ingredientsList: {
     marginHorizontal: -24,
