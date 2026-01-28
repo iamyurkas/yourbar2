@@ -515,6 +515,18 @@ export default function CocktailDetailsScreen() {
       .filter(Boolean);
   }, [cocktail?.instructions]);
 
+  const descriptionParagraphs = useMemo(() => {
+    const description = cocktail?.description?.trim();
+    if (!description) {
+      return [] as string[];
+    }
+
+    return description
+      .split(/\n+/)
+      .map((segment) => segment.trim())
+      .filter(Boolean);
+  }, [cocktail?.description]);
+
   const ingredientHighlightColor = Colors.highlightFaint;
 
   const photoSource = useMemo(
@@ -886,13 +898,17 @@ export default function CocktailDetailsScreen() {
               </View>
             ) : null}
 
-            {cocktail.description ? (
+            {descriptionParagraphs.length ? (
               <View style={styles.textBlock}>
                 <Text
                   style={[
-                    styles.bodyText,
+                    styles.instructionsText,
                     styles.descriptionText,
-                    { color: Colors.onSurfaceVariant },
+                    {
+                      color: isDescriptionExpanded
+                        ? Colors.onSurface
+                        : Colors.onSurfaceVariant,
+                    },
                   ]}
                   numberOfLines={
                     !isDescriptionExpanded && shouldTruncateDescription
@@ -901,7 +917,12 @@ export default function CocktailDetailsScreen() {
                   }
                   onTextLayout={handleDescriptionLayout}
                 >
-                  {cocktail.description}
+                  {descriptionParagraphs.map((paragraph, index) => (
+                    <Text key={`description-${index}`}>
+                      {paragraph}
+                      {index < descriptionParagraphs.length - 1 ? "\n\n" : ""}
+                    </Text>
+                  ))}
                 </Text>
                 {shouldTruncateDescription ? (
                   <Pressable

@@ -366,6 +366,18 @@ export default function IngredientDetailsScreen() {
     setIsDescriptionExpanded((previous) => !previous);
   }, []);
 
+  const descriptionParagraphs = useMemo(() => {
+    const description = ingredient?.description?.trim();
+    if (!description) {
+      return [] as string[];
+    }
+
+    return description
+      .split(/\n+/)
+      .map((segment) => segment.trim())
+      .filter(Boolean);
+  }, [ingredient?.description]);
+
   const photoSource = useMemo(
     () => resolveImageSource(ingredient?.photoUri),
     [ingredient?.photoUri],
@@ -664,13 +676,17 @@ export default function IngredientDetailsScreen() {
               </View>
             ) : null}
 
-            {ingredient.description ? (
+            {descriptionParagraphs.length ? (
               <View style={styles.textBlock}>
                 <Text
                   style={[
-                    styles.bodyText,
+                    styles.instructionsText,
                     styles.descriptionText,
-                    { color: Colors.onSurfaceVariant },
+                    {
+                      color: isDescriptionExpanded
+                        ? Colors.onSurface
+                        : Colors.onSurfaceVariant,
+                    },
                   ]}
                   numberOfLines={
                     !isDescriptionExpanded && shouldTruncateDescription
@@ -679,7 +695,12 @@ export default function IngredientDetailsScreen() {
                   }
                   onTextLayout={handleDescriptionLayout}
                 >
-                  {ingredient.description}
+                  {descriptionParagraphs.map((paragraph, index) => (
+                    <Text key={`description-${index}`}>
+                      {paragraph}
+                      {index < descriptionParagraphs.length - 1 ? "\n\n" : ""}
+                    </Text>
+                  ))}
                 </Text>
                 {shouldTruncateDescription ? (
                   <Pressable
@@ -1084,6 +1105,10 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   bodyText: {
+    fontSize: 14,
+    lineHeight: 22,
+  },
+  instructionsText: {
     fontSize: 14,
     lineHeight: 22,
   },
