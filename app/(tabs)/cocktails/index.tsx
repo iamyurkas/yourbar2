@@ -520,9 +520,7 @@ export default function CocktailsScreen() {
         );
 
         (ingredient.substitutes ?? []).forEach((substitute) => {
-          const substituteId = normalizeIngredientId(
-            typeof substitute.ingredientId === 'number' ? substitute.ingredientId : substitute.id,
-          );
+          const substituteId = normalizeIngredientId(substitute.ingredientId);
           const substituteName = substitute.name ?? requestedName;
           collectIngredientOptions(
             substituteId,

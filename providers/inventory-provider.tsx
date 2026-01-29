@@ -252,17 +252,11 @@ function normalizeSubstitutes(substitutes: readonly CocktailSubstitute[] | null 
 
   return substitutes
     .map((substitute) => ({
-      id: substitute.id != null ? Math.trunc(Number(substitute.id)) : undefined,
       ingredientId: substitute.ingredientId != null ? Math.trunc(Number(substitute.ingredientId)) : undefined,
       name: substitute.name,
       brand: substitute.brand,
     }))
-    .filter((substitute) => substitute.name && Number.isFinite(Number(substitute.id ?? substitute.ingredientId ?? -1)))
-    .sort((a, b) => {
-      const aId = a.id ?? a.ingredientId ?? -1;
-      const bId = b.id ?? b.ingredientId ?? -1;
-      return aId - bId || a.name.localeCompare(b.name);
-    });
+    .filter((substitute) => substitute.name && Number.isFinite(Number(substitute.ingredientId ?? -1)));
 }
 
 function normalizeCocktailIngredients(
@@ -1026,31 +1020,29 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
                 return;
               }
 
-              const rawId = candidate.id != null ? Number(candidate.id) : undefined;
-              const substituteId =
-                rawId != null && Number.isFinite(rawId) && rawId >= 0 ? Math.trunc(rawId) : undefined;
+            const rawIngredientLink =
+              candidate.ingredientId != null ? Number(candidate.ingredientId) : undefined;
+            const substituteIngredientId =
+              rawIngredientLink != null && Number.isFinite(rawIngredientLink) && rawIngredientLink >= 0
+                ? Math.trunc(rawIngredientLink)
+                : undefined;
 
-              const rawIngredientLink =
-                candidate.ingredientId != null ? Number(candidate.ingredientId) : undefined;
-              const substituteIngredientId =
-                rawIngredientLink != null && Number.isFinite(rawIngredientLink) && rawIngredientLink >= 0
-                  ? Math.trunc(rawIngredientLink)
-                  : substituteId;
+            const key =
+              substituteIngredientId != null
+                ? `id:${substituteIngredientId}`
+                : `name:${substituteName.toLowerCase()}`;
+            if (seenKeys.has(key)) {
+              return;
+            }
+            seenKeys.add(key);
 
-              const key = substituteId != null ? `id:${substituteId}` : `name:${substituteName.toLowerCase()}`;
-              if (seenKeys.has(key)) {
-                return;
-              }
-              seenKeys.add(key);
+            const brand = candidate.brand ? true : undefined;
 
-              const brand = candidate.brand ? true : undefined;
-
-              substitutes.push({
-                id: substituteId ?? substituteIngredientId,
-                ingredientId: substituteIngredientId,
-                name: substituteName,
-                brand,
-              });
+            substitutes.push({
+              ingredientId: substituteIngredientId,
+              name: substituteName,
+              brand,
+            });
             });
 
             return {
@@ -1489,16 +1481,16 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
               return;
             }
 
-            const rawId = candidate.id != null ? Number(candidate.id) : undefined;
-            const substituteId = rawId != null && Number.isFinite(rawId) && rawId >= 0 ? Math.trunc(rawId) : undefined;
-
             const rawIngredientLink = candidate.ingredientId != null ? Number(candidate.ingredientId) : undefined;
             const substituteIngredientId =
               rawIngredientLink != null && Number.isFinite(rawIngredientLink) && rawIngredientLink >= 0
                 ? Math.trunc(rawIngredientLink)
-                : substituteId;
+                : undefined;
 
-            const key = substituteId != null ? `id:${substituteId}` : `name:${substituteName.toLowerCase()}`;
+            const key =
+              substituteIngredientId != null
+                ? `id:${substituteIngredientId}`
+                : `name:${substituteName.toLowerCase()}`;
             if (seenKeys.has(key)) {
               return;
             }
@@ -1507,7 +1499,6 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             const brand = candidate.brand ? true : undefined;
 
             substitutes.push({
-              id: substituteId ?? substituteIngredientId,
               ingredientId: substituteIngredientId,
               name: substituteName,
               brand,
