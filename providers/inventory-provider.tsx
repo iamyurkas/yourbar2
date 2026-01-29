@@ -257,12 +257,7 @@ function normalizeSubstitutes(substitutes: readonly CocktailSubstitute[] | null 
       name: substitute.name,
       brand: substitute.brand,
     }))
-    .filter((substitute) => substitute.name && Number.isFinite(Number(substitute.id ?? substitute.ingredientId ?? -1)))
-    .sort((a, b) => {
-      const aId = a.id ?? a.ingredientId ?? -1;
-      const bId = b.id ?? b.ingredientId ?? -1;
-      return aId - bId || a.name.localeCompare(b.name);
-    });
+    .filter((substitute) => substitute.name && Number.isFinite(Number(substitute.id ?? substitute.ingredientId ?? -1)));
 }
 
 function normalizeCocktailIngredients(
