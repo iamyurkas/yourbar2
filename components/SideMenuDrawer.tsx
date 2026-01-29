@@ -1282,6 +1282,14 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 </Text>
               </View>
             </Pressable>
+            <View style={styles.versionRow}>
+              <Text
+                style={[styles.versionText, { color: Colors.onSurfaceVariant }]}
+              >
+                Version {APP_VERSION}
+                {APP_VERSION_CODE != null ? ` (${APP_VERSION_CODE})` : ""}
+              </Text>
+            </View>
           </ScrollView>
         </Animated.View>
       </View>
@@ -1604,16 +1612,6 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     ))}
                   </View>
                 )}
-              </View>
-              <View style={styles.versionRow}>
-                <Text
-                  style={[styles.versionText, { color: Colors.onSurfaceVariant }]}
-                >
-                  Version {APP_VERSION}
-                  {APP_VERSION_CODE != null
-                    ? ` (${APP_VERSION_CODE})`
-                    : ""}
-                </Text>
               </View>
             </ScrollView>
           </Pressable>
@@ -1949,7 +1947,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   versionRow: {
-    marginTop: "auto",
+    marginTop: 4,
     alignItems: "center",
     paddingTop: 12,
   },
