@@ -383,7 +383,14 @@ export default function ShakerResultsScreen() {
         );
       }
 
-      return <MaterialCommunityIcons name={icon.name} size={METHOD_ICON_SIZE} color={tintColor} />;
+      return (
+        <MaterialCommunityIcons
+          name={icon.name}
+          size={METHOD_ICON_SIZE}
+          color={tintColor}
+          style={icon.style}
+        />
+      );
     },
     [Colors.surface, Colors.tint],
   );

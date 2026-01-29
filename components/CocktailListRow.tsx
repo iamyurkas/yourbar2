@@ -160,6 +160,7 @@ const CocktailListRowComponent = ({
               name={icon.name}
               size={METHOD_ICON_SIZE}
               color={Colors.onSurfaceVariant}
+              style={icon.style}
             />
           ),
         )}

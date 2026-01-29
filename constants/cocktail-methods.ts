@@ -15,6 +15,7 @@ export type MethodIcon =
   | {
       type: "icon";
       name: ComponentProps<typeof MaterialCommunityIcons>["name"];
+      style?: ComponentProps<typeof MaterialCommunityIcons>["style"];
     }
   | { type: "asset"; source: ImageSource };
 
@@ -79,7 +80,11 @@ export function getCocktailMethods(): CocktailMethod[] {
 
 export const METHOD_ICON_MAP = {
   blend: { type: "icon", name: "blender" },
-  muddle: { type: "icon", name: "bottle-soda" },
+  muddle: {
+    type: "icon",
+    name: "sign-pole",
+    style: { transform: [{ rotate: "180deg" }] },
+  },
   shake: { type: "asset", source: ShakerIcon },
   stir: { type: "icon", name: "delete-variant" },
   throw: { type: "icon", name: "swap-horizontal" },
