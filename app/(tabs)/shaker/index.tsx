@@ -102,7 +102,7 @@ const IngredientRow = memo(function IngredientRow({
       return null;
     }
 
-    return <Text style={styles.selectedCheckmark}>✓</Text>;
+    return <MaterialIcons name="check" size={18} color={Colors.tint} />;
   }, [isSelected]);
 
   return (
@@ -993,11 +993,6 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     alignSelf: 'flex-end',
-  },
-  selectedCheckmark: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: Colors.tint,
   },
   clearButtonBase: {
     borderWidth: 1,
