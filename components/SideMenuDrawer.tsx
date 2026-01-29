@@ -29,9 +29,9 @@ import { AppDialog, type DialogOptions } from "@/components/AppDialog";
 import { TagEditorModal } from "@/components/TagEditorModal";
 import { TagPill } from "@/components/TagPill";
 import { Colors } from "@/constants/theme";
-import { type InventoryExportData } from "@/providers/inventory-types";
 import { buildPhotoBaseName } from "@/libs/photo-utils";
 import { useInventory, type StartScreen } from "@/providers/inventory-provider";
+import { type InventoryExportData } from "@/providers/inventory-types";
 import appConfig from "../app.json";
 
 const MENU_WIDTH = Math.round(Dimensions.get("window").width * 0.75);
@@ -41,9 +41,9 @@ const APP_VERSION_CODE = appConfig.expo.android?.versionCode;
 
 type StartScreenIcon =
   | {
-      type: "icon";
-      name: ComponentProps<typeof MaterialCommunityIcons>["name"];
-    }
+    type: "icon";
+    name: ComponentProps<typeof MaterialCommunityIcons>["name"];
+  }
   | { type: "materialIcon"; name: ComponentProps<typeof MaterialIcons>["name"] }
   | { type: "asset"; source: ImageSource };
 
@@ -801,13 +801,13 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
             </Text>
           </View>
           {/* Preserve menu taps even if a text field elsewhere keeps the keyboard open. */}
-            <ScrollView
-              style={styles.menuScroll}
-              contentContainerStyle={styles.menuContent}
-              showsVerticalScrollIndicator={false}
-              keyboardShouldPersistTaps="handled"
-            >
-            {/* <Pressable
+          <ScrollView
+            style={styles.menuScroll}
+            contentContainerStyle={styles.menuContent}
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled"
+          >
+            <Pressable
               accessibilityRole="button"
               accessibilityLabel="Reload bundled inventory"
               onPress={handleResetInventory}
@@ -827,7 +827,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   Clear saved inventory and reload assets from data.json
                 </Text>
               </View>
-            </Pressable> */}
+            </Pressable>
             <Pressable
               accessibilityRole="checkbox"
               accessibilityState={{ checked: ignoreGarnish }}
@@ -1314,7 +1314,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               },
             ]}
             accessibilityLabel="Favorites rating"
-            onPress={() => {}}
+            onPress={() => { }}
           >
             <View style={styles.modalHeader}>
               <Text
@@ -1415,7 +1415,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               },
             ]}
             accessibilityLabel="Manage tags"
-            onPress={() => {}}
+            onPress={() => { }}
           >
             <View style={styles.modalHeader}>
               <Text
@@ -1654,7 +1654,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               },
             ]}
             accessibilityLabel="Starting screen"
-            onPress={() => {}}
+            onPress={() => { }}
           >
             <View style={styles.modalHeader}>
               <Text
