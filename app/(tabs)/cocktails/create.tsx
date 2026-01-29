@@ -321,7 +321,12 @@ export default function CreateCocktailScreen() {
     }
 
     return (
-      <MaterialCommunityIcons name={icon.name} size={18} color={iconColor} />
+      <MaterialCommunityIcons
+        name={icon.name}
+        size={18}
+        color={iconColor}
+        style={icon.style}
+      />
     );
   };
 
