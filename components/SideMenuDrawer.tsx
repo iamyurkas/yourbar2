@@ -32,9 +32,12 @@ import { Colors } from "@/constants/theme";
 import { type InventoryExportData } from "@/providers/inventory-types";
 import { buildPhotoBaseName } from "@/libs/photo-utils";
 import { useInventory, type StartScreen } from "@/providers/inventory-provider";
+import appConfig from "../app.json";
 
 const MENU_WIDTH = Math.round(Dimensions.get("window").width * 0.75);
 const ANIMATION_DURATION = 200;
+const APP_VERSION = appConfig.expo.version;
+const APP_VERSION_CODE = appConfig.expo.android?.versionCode;
 
 type StartScreenIcon =
   | {
@@ -798,12 +801,12 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
             </Text>
           </View>
           {/* Preserve menu taps even if a text field elsewhere keeps the keyboard open. */}
-          <ScrollView
-            style={styles.menuScroll}
-            contentContainerStyle={styles.menuContent}
-            showsVerticalScrollIndicator={false}
-            keyboardShouldPersistTaps="handled"
-          >
+            <ScrollView
+              style={styles.menuScroll}
+              contentContainerStyle={styles.menuContent}
+              showsVerticalScrollIndicator={false}
+              keyboardShouldPersistTaps="handled"
+            >
             {/* <Pressable
               accessibilityRole="button"
               accessibilityLabel="Reload bundled inventory"
@@ -1602,6 +1605,16 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   </View>
                 )}
               </View>
+              <View style={styles.versionRow}>
+                <Text
+                  style={[styles.versionText, { color: Colors.onSurfaceVariant }]}
+                >
+                  Version {APP_VERSION}
+                  {APP_VERSION_CODE != null
+                    ? ` (${APP_VERSION_CODE})`
+                    : ""}
+                </Text>
+              </View>
             </ScrollView>
           </Pressable>
         </Pressable>
@@ -1934,6 +1947,15 @@ const styles = StyleSheet.create({
   },
   tagEmpty: {
     fontSize: 12,
+  },
+  versionRow: {
+    marginTop: "auto",
+    alignItems: "center",
+    paddingTop: 12,
+  },
+  versionText: {
+    fontSize: 12,
+    fontWeight: "600",
   },
   ratingOptionRow: {
     flexDirection: "row",
