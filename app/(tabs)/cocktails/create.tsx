@@ -320,8 +320,14 @@ export default function CreateCocktailScreen() {
       );
     }
 
+    const iconStyle = icon.rotate ? { transform: [{ rotate: icon.rotate }] } : undefined;
     return (
-      <MaterialCommunityIcons name={icon.name} size={18} color={iconColor} />
+      <MaterialCommunityIcons
+        name={icon.name}
+        size={18}
+        color={iconColor}
+        style={iconStyle}
+      />
     );
   };
 
