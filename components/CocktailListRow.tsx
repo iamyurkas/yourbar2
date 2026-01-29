@@ -160,6 +160,9 @@ const CocktailListRowComponent = ({
               name={icon.name}
               size={METHOD_ICON_SIZE}
               color={Colors.onSurfaceVariant}
+              style={
+                icon.rotate ? { transform: [{ rotate: icon.rotate }] } : undefined
+              }
             />
           ),
         )}

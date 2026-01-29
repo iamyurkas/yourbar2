@@ -256,7 +256,15 @@ export default function CocktailsScreen() {
         );
       }
 
-      return <MaterialCommunityIcons name={icon.name} size={METHOD_ICON_SIZE} color={tintColor} />;
+      const iconStyle = icon.rotate ? { transform: [{ rotate: icon.rotate }] } : undefined;
+      return (
+        <MaterialCommunityIcons
+          name={icon.name}
+          size={METHOD_ICON_SIZE}
+          color={tintColor}
+          style={iconStyle}
+        />
+      );
     },
     [Colors.surface, Colors.tint],
   );

@@ -836,6 +836,11 @@ export default function CocktailDetailsScreen() {
                               }
                               size={18}
                               color={Colors.onSurfaceVariant}
+                              style={
+                                icon?.type === "icon" && icon.rotate
+                                  ? { transform: [{ rotate: icon.rotate }] }
+                                  : undefined
+                              }
                             />
                           )}
                         </View>
