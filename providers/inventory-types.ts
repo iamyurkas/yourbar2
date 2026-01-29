@@ -45,7 +45,6 @@ export type StartScreen =
 export type IngredientTag = NonNullable<IngredientRecord['tags']>[number];
 
 export type CreateCocktailSubstituteInput = {
-  id?: number | string | null;
   ingredientId?: number | string | null;
   name?: string | null;
   brand?: boolean | null;

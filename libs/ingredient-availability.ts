@@ -85,12 +85,7 @@ export function isRecipeIngredientAvailable(
   }
 
   (ingredient.substitutes ?? []).forEach((substitute) => {
-    const substituteId =
-      typeof substitute.ingredientId === 'number'
-        ? substitute.ingredientId
-        : typeof substitute.id === 'number'
-          ? substitute.id
-          : undefined;
+    const substituteId = typeof substitute.ingredientId === 'number' ? substitute.ingredientId : undefined;
     if (substituteId != null) {
       collectVisibleIngredientIds(substituteId, lookup, allowBase, allowBrand, candidateIds);
     }
@@ -167,9 +162,7 @@ export function getVisibleIngredientIdsForCocktail(
     collectVisibleIngredientIds(requestedId, lookup, allowBase, allowBrand, visibleIngredientIds);
 
     (ingredient.substitutes ?? []).forEach((substitute) => {
-      const substituteId = normalizeIngredientId(
-        typeof substitute.ingredientId === 'number' ? substitute.ingredientId : substitute.id,
-      );
+      const substituteId = normalizeIngredientId(substitute.ingredientId);
 
       collectVisibleIngredientIds(substituteId, lookup, allowBase, allowBrand, visibleIngredientIds);
     });
@@ -257,12 +250,7 @@ export function resolveIngredientAvailability(
   };
 
   (ingredient.substitutes ?? []).forEach((substitute) => {
-    const substituteId =
-      typeof substitute.ingredientId === 'number'
-        ? substitute.ingredientId
-        : typeof substitute.id === 'number'
-          ? substitute.id
-          : undefined;
+    const substituteId = typeof substitute.ingredientId === 'number' ? substitute.ingredientId : undefined;
 
     expandCandidateIds(substituteId);
   });
@@ -323,11 +311,7 @@ export function resolveIngredientAvailability(
   const brandedSubstitutes = brandedSubstituteIds.map((id) => resolveSubstituteOption(id));
   const declaredSubstitutes = (ingredient.substitutes ?? []).map((substitute) =>
     resolveSubstituteOption(
-      typeof substitute.ingredientId === 'number'
-        ? substitute.ingredientId
-        : typeof substitute.id === 'number'
-          ? substitute.id
-          : undefined,
+      typeof substitute.ingredientId === 'number' ? substitute.ingredientId : undefined,
       substitute.name ?? requestedCandidateName,
     ),
   );

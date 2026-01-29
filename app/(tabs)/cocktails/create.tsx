@@ -68,7 +68,6 @@ const MAX_SUGGESTIONS = 8;
 
 type EditableSubstitute = {
   key: string;
-  id?: number;
   ingredientId?: number;
   name: string;
   isBrand?: boolean;
@@ -105,7 +104,6 @@ type CocktailFormSnapshot = {
     allowBaseSubstitution: boolean;
     allowBrandSubstitution: boolean;
     substitutes: Array<{
-      id?: number;
       ingredientId?: number;
       name: string;
       isBrand?: boolean;
@@ -127,7 +125,6 @@ function createUniqueKey(prefix: string) {
 function createEditableSubstitute(
   parentKey: string,
   source: {
-    id?: number | null;
     ingredientId?: number | null;
     name?: string | null;
     brand?: boolean | null;
@@ -138,11 +135,7 @@ function createEditableSubstitute(
     return undefined;
   }
 
-  const idValue = Number(source.id ?? -1);
-  const substituteId =
-    Number.isFinite(idValue) && idValue >= 0 ? Math.trunc(idValue) : undefined;
-
-  const ingredientValue = Number(source.ingredientId ?? substituteId ?? -1);
+  const ingredientValue = Number(source.ingredientId ?? -1);
   const substituteIngredientId =
     Number.isFinite(ingredientValue) && ingredientValue >= 0
       ? Math.trunc(ingredientValue)
@@ -150,7 +143,6 @@ function createEditableSubstitute(
 
   return {
     key: createUniqueKey(`sub-${parentKey}`),
-    id: substituteId,
     ingredientId: substituteIngredientId,
     name,
     isBrand: source.brand ?? false,
@@ -198,7 +190,6 @@ function mapRecipeIngredientToEditable(
   const substitutes = (recipe.substitutes ?? [])
     .map((item) =>
       createEditableSubstitute(key, {
-        id: typeof item.id === "number" ? item.id : undefined,
         ingredientId:
           typeof item.ingredientId === "number" ? item.ingredientId : undefined,
         name: item.name,
@@ -378,7 +369,6 @@ export default function CreateCocktailScreen() {
         allowBaseSubstitution: item.allowBaseSubstitution,
         allowBrandSubstitution: item.allowBrandSubstitution,
         substitutes: item.substitutes.map((substitute) => ({
-          id: substitute.id,
           ingredientId: substitute.ingredientId,
           name: substitute.name,
           isBrand: substitute.isBrand,
@@ -931,7 +921,6 @@ export default function CreateCocktailScreen() {
       const newSubstitute: EditableSubstitute = {
         key: createUniqueKey(`sub-${substituteTarget}`),
         name: trimmedName,
-        id: numericId,
         ingredientId: numericId,
         isBrand: false,
       };
@@ -1000,13 +989,6 @@ export default function CreateCocktailScreen() {
               return undefined;
             }
 
-            const rawSubId =
-              substitute.id != null ? Number(substitute.id) : undefined;
-            const substituteId =
-              rawSubId != null && Number.isFinite(rawSubId) && rawSubId >= 0
-                ? Math.trunc(rawSubId)
-                : undefined;
-
             const rawIngredientLink =
               substitute.ingredientId != null
                 ? Number(substitute.ingredientId)
@@ -1016,10 +998,9 @@ export default function CreateCocktailScreen() {
                 Number.isFinite(rawIngredientLink) &&
                 rawIngredientLink >= 0
                 ? Math.trunc(rawIngredientLink)
-                : substituteId;
+                : undefined;
 
             return {
-              id: substituteId,
               ingredientId: substituteIngredientId,
               name: substituteName,
               brand: substitute.isBrand ?? false,
@@ -1029,7 +1010,6 @@ export default function CreateCocktailScreen() {
             (
               substitute,
             ): substitute is {
-              id?: number;
               ingredientId?: number;
               name: string;
               brand: boolean;
@@ -1344,8 +1324,7 @@ export default function CreateCocktailScreen() {
 
     const ids = new Set<number>();
     substituteModalIngredient.substitutes.forEach((item) => {
-      const source = item.ingredientId ?? item.id;
-      const normalized = source != null ? Number(source) : NaN;
+      const normalized = item.ingredientId != null ? Number(item.ingredientId) : NaN;
       if (Number.isFinite(normalized) && normalized >= 0) {
         ids.add(Math.trunc(normalized));
       }

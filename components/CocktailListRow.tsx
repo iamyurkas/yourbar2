@@ -195,7 +195,7 @@ const CocktailListRowComponent = ({
 
       (ingredient.substitutes ?? []).forEach((substitute) => {
         const substituteId = normalizeIngredientId(
-          substitute.ingredientId ?? substitute.id ?? undefined,
+          substitute.ingredientId ?? undefined,
         );
         if (substituteId != null) {
           candidateIds.push(substituteId);
