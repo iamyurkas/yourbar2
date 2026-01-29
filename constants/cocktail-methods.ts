@@ -82,7 +82,7 @@ export const METHOD_ICON_MAP = {
   muddle: { type: "icon", name: "sign-pole" },
   shake: { type: "asset", source: ShakerIcon },
   stir: { type: "icon", name: "delete-variant" },
-  throw: { type: "icon", name: "swap-horizontal" },
+  throw: { type: "icon", name: "swap-vertical" },
   build: { type: "icon", name: "beer" },
   layer: { type: "icon", name: "layers" },
   heat: { type: "icon", name: "fire" },
