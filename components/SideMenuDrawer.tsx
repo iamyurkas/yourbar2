@@ -1300,7 +1300,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               >
                 Version {APP_VERSION}
                 {APP_VERSION_CODE != null ? ` (${APP_VERSION_CODE})` : ""}
-                {BUILD_TIME ? ` · Build ${formatBuildTime(BUILD_TIME)}` : ""}
+                {BUILD_TIME ? `\nBuild ${formatBuildTime(BUILD_TIME)}` : ""}
               </Text>
             </View>
           </ScrollView>
