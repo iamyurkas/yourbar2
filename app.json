@@ -16,7 +16,7 @@
 
     "android": {
       "package": "com.iamyurkas.yourbar",
-      "versionCode": 5,
+      "versionCode": 6,
 
       "enableProguardInRelease": true,
       "enableShrinkResourcesInRelease": true,

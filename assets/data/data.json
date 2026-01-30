@@ -11373,7 +11373,6 @@
     {
       "id": 288,
       "name": "Espresso Martini",
-      "synonyms": ["Vodka Espresso"],
       "description": "A smooth vodka martini energized with espresso and coffee liqueur.",
       "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 50ml of Vodka, 30ml of Kahlua, 30ml of Espresso, and 10ml of Simple Syrup.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled Martini glass.\n5. Garnish with 3 coffee beans.",
       "photoUri": "assets/cocktails/288-espresso-martini.jpg",
@@ -11963,7 +11962,7 @@
       "description": "A stronger version of the cocktail. If you want something smoother, check out the 'Fluffy Duck 2'.",
       "instructions": "1. In a cocktail shaker, add ice, advocaat, cream, Cointreau or Triple Sec and white rum.\n2. Shake well until combined.\n3. Strain into an ice-filled glass.\n4. Top with cold lemonade.\n5. Garnish with a strawberry.",
       "photoUri": "assets/cocktails/299-fluffy-duck-modern.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [6],
       "ingredients": [
@@ -12399,7 +12398,7 @@
       "description": "A vibrant and sophisticated twist on the classic Daiquiri. This cocktail combines the lush sweetness of muddled strawberries with crisp white rum and zesty lime, enhanced by a subtle pinch of black pepper and salt to elevate the fruity notes.",
       "instructions": "1. Place 7 fresh strawberries into a shaker and muddle thoroughly to release their juices.\n2. Add the white rum, fresh lime juice, rich simple syrup, black pepper, and salt to the shaker.\n3. Fill the shaker with ice and shake vigorously for about 10-15 seconds until well-chilled.\n4. Double strain the mixture through a fine-mesh sieve into a chilled coupe glass to remove strawberry seeds and pulp.\n5. Garnish with a fresh strawberry on the rim.",
       "photoUri": "assets/cocktails/306-fresh-strawberry-daiquiri.jpg",
-      "glassId": "coupe",
+      "glassId": "martini",
       "methodIds": ["muddle", "shake"],
       "tags": [6],
       "ingredients": [
@@ -12977,7 +12976,7 @@
       "description": "A strong gin martini garnished with a silverskin onion.",
       "instructions": "1. Fill a mixing glass with ice.\n2. Add 60ml of Gin and 30ml of Dry Vermouth.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled cocktail glass.\n5. Garnish with 3 silver onions.",
       "photoUri": "assets/cocktails/315-gibson.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["stir"],
       "tags": [5],
       "ingredients": [
@@ -13018,7 +13017,7 @@
       "description": "A classic gin-based cocktail with a long history.",
       "instructions": "1. Fill a mixing glass with ice.\n2. Add 60ml of Gin, 15ml of Lime, and 15ml of Simple Syrup.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled cocktail glass.\n5. Garnish with a lime wedge.",
       "photoUri": "assets/cocktails/316-gimlet.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["stir"],
       "tags": [6],
       "ingredients": [
@@ -13062,53 +13061,12 @@
       ]
     },
     {
-      "id": 317,
-      "name": "Gin & Tonic",
-      "description": "A timeless and refreshing highball cocktail that perfectly balances the botanical notes of gin with the crisp bitterness of tonic water. This effervescent drink is elevated by a bright citrus aroma, making it a sophisticated yet simple choice for any occasion.",
-      "instructions": "1. Add 60ml of Gin and 120ml of Tonic to a Highball glass.\n2. Stir gently to combine.\n3. Garnish with a lime wedge.",
-      "photoUri": "assets/cocktails/317-gin-and-tonic.jpg",
-      "glassId": "highball_glass",
-      "methodIds": ["build"],
-      "tags": [6],
-      "ingredients": [
-        {
-          "order": 1,
-          "ingredientId": 260,
-          "name": "Gin",
-          "amount": "60",
-          "unitId": 11,
-          "substitutes": [
-            {
-              "ingredientId": 340,
-              "name": "Old Tom Gin"
-            }
-          ]
-        },
-        {
-          "order": 2,
-          "ingredientId": 436,
-          "name": "Tonic",
-          "amount": "120",
-          "unitId": 11
-        },
-        {
-          "order": 3,
-          "ingredientId": 324,
-          "name": "Lime",
-          "amount": "1",
-          "unitId": 27,
-          "optional": true,
-          "garnish": true
-        }
-      ]
-    },
-    {
       "id": 318,
-      "name": "Gin and Sin",
+      "name": "Gin & Sin",
       "description": "This cocktail's name speaks for itself. Bright, strong and good for adventure. It may be prepared as a shot.",
       "instructions": "1. Fill a shaker with ice cubes.\n2. Add 30ml of gin, 30ml of lemon juice, 30ml of orange juice and a dash of grenadine.\n3. Shake well and strain into a cocktail glass.",
-      "photoUri": "assets/cocktails/318-gin-and-sin.jpg",
-      "glassId": "cocktail_glass",
+      "photoUri": "assets/cocktails/318-gin-sin.jpg",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [6],
       "ingredients": [
@@ -13153,6 +13111,47 @@
           "name": "Lemon",
           "amount": "1",
           "unitId": 26
+        }
+      ]
+    },
+    {
+      "id": 317,
+      "name": "Gin & Tonic",
+      "description": "A timeless and refreshing highball cocktail that perfectly balances the botanical notes of gin with the crisp bitterness of tonic water. This effervescent drink is elevated by a bright citrus aroma, making it a sophisticated yet simple choice for any occasion.",
+      "instructions": "1. Add 60ml of Gin and 120ml of Tonic to a Highball glass.\n2. Stir gently to combine.\n3. Garnish with a lime wedge.",
+      "photoUri": "assets/cocktails/317-gin-and-tonic.jpg",
+      "glassId": "highball_glass",
+      "methodIds": ["build"],
+      "tags": [6],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 260,
+          "name": "Gin",
+          "amount": "60",
+          "unitId": 11,
+          "substitutes": [
+            {
+              "ingredientId": 340,
+              "name": "Old Tom Gin"
+            }
+          ]
+        },
+        {
+          "order": 2,
+          "ingredientId": 436,
+          "name": "Tonic",
+          "amount": "120",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 324,
+          "name": "Lime",
+          "amount": "1",
+          "unitId": 27,
+          "optional": true,
+          "garnish": true
         }
       ]
     },
@@ -13661,7 +13660,7 @@
       "description": "An IBA official cocktail.",
       "instructions": "Fill a shaker with ice cubes.\nAdd 20ml of Galliano, 20ml of triple sec, 20ml of orange juice and 10ml of cream.\nShake well and strain into a cocktail glass.",
       "photoUri": "assets/cocktails/328-golden-dream.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [1, 6],
       "ingredients": [
@@ -13771,7 +13770,7 @@
       "description": "Creamy after-dinner mix of mint and chocolate liqueurs.",
       "instructions": "1. Add all ingredients into a shaker with ice.\n2. Shake well.\n3. Strain into a chilled cocktail glass.",
       "photoUri": "assets/cocktails/330-grasshopper.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [1, 2],
       "ingredients": [
@@ -13901,7 +13900,7 @@
       "description": "A sophisticated and aromatic vodka cocktail that blends the herbal notes of Bison Grass Vodka with the tropical sweetness of Pisang Ambon and a subtle cooling hint of white mint. Despite its name, it contains no tea, but offers a complex, spirit-forward profile complemented by crisp apple juice.",
       "instructions": "1. Add the Bison Grass Vodka, Pisang Ambon, Creme de Menthe White, and apple juice into a mixing glass or shaker.\n2. Fill the shaker with 150g of ice.\n3. Shake well for about 10-15 seconds.\n4. Strain into the chilled cocktail glass.\n5. Garnish with a fresh banana slice or peel to enhance the tropical aroma.",
       "photoUri": "assets/cocktails/333-green-tea.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [6],
       "ingredients": [
@@ -13957,7 +13956,7 @@
       "description": "A popular variation of the \"Vesper\" cocktail invented by James Bond in \"Casino Royale\". The original recipe has Kina Lillet instead of absinthe.",
       "instructions": "1. Fill a mixing glass with ice.\n2. Add 60ml of Gin, 20ml of Vodka, and 10ml of Absinthe.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled cocktail glass.\n5. Garnish with a lemon twist.",
       "photoUri": "assets/cocktails/334-green-vesper.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["stir"],
       "tags": [5],
       "ingredients": [
@@ -13990,18 +13989,18 @@
         },
         {
           "order": 4,
+          "ingredientId": 295,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8
+        },
+        {
+          "order": 5,
           "ingredientId": 316,
           "name": "Lemon",
           "amount": "1",
           "unitId": 26,
           "garnish": true
-        },
-        {
-          "order": 5,
-          "ingredientId": 295,
-          "name": "Ice",
-          "amount": "150",
-          "unitId": 8
         }
       ]
     },
@@ -14478,7 +14477,7 @@
       "description": "An interesting Martini variation with Frangelico (hazelnut liqueur) and cacao liqueur. If you like it mild, some recipes also suggest adding about a half shot of cream.",
       "instructions": "1. Prepare your martini glasses before shaking up your martinis by gently drizzling chocolate syrup into a martini glass.\n2. Combine 90ml of vodka, 15ml of Frangelico and 15ml of crème de cacao white in a shaker with ice.\n3. Shake well and strain into a chilled cocktail glass.",
       "photoUri": "assets/cocktails/343-hazelnut-martini.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [6],
       "ingredients": [
@@ -14515,7 +14514,8 @@
           "order": 5,
           "ingredientId": 191,
           "name": "Chocolate Syrup",
-          "unitId": 11
+          "unitId": 11,
+          "garnish": true
         }
       ]
     },
@@ -14523,7 +14523,7 @@
       "id": 344,
       "name": "Hemingway Special",
       "description": "A tart rum sour with grapefruit and maraschino liqueur.",
-      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 60ml of White Rum, 40ml of Grapefruit Juice, 15ml of Luxardo Maraschino, and 15ml of Lime Juice.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Martini glass.",
+      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 60ml of White Rum, 40ml of Grapefruit Juice, 15ml of Luxardo Maraschino, and 15ml of Lime Juice.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled martini glass.\n5. Garnish with a lemon twist.",
       "photoUri": "assets/cocktails/344-hemingway-special.jpg",
       "glassId": "martini",
       "methodIds": ["shake"],
@@ -14563,6 +14563,15 @@
           "name": "Ice",
           "amount": "150",
           "unitId": 8
+        },
+        {
+          "order": 6,
+          "ingredientId": 316,
+          "name": "Lemon",
+          "amount": "1",
+          "unitId": 26,
+          "optional": true,
+          "garnish": true
         }
       ]
     },
@@ -16146,7 +16155,8 @@
           "unitId": 1,
           "optional": true,
           "garnish": true,
-          "allowBaseSubstitution": true
+          "allowBaseSubstitution": true,
+          "allowBrandSubstitution": true
         }
       ]
     },
@@ -16865,7 +16875,9 @@
           "name": "Maraschino Cherry",
           "amount": "1",
           "unitId": 1,
-          "garnish": true
+          "garnish": true,
+          "allowBaseSubstitution": true,
+          "allowBrandSubstitution": true
         }
       ]
     },
@@ -18093,7 +18105,7 @@
     {
       "id": 405,
       "name": "Maria McClaire",
-      "description": "A sophisticated and bold spirit-forward drink that harmoniously blends the richness of Port with the warmth of Irish whiskey and the botanical bitterness of Campari.",
+      "description": "A bold spirit-forward drink that harmoniously blends the richness of Port with the warmth of Irish whiskey and the botanical bitterness of Campari.",
       "instructions": "1. Fill a mixing glass with ice.\n2. Add 30ml of Port, 45ml of Irish Whiskey, 15ml of Campari, and 1 dash of Creole Bitters.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled martini glass.",
       "photoUri": "assets/cocktails/405-maria-mcclaire.jpg",
       "glassId": "martini",
@@ -18149,7 +18161,7 @@
       "description": "A legendary pre-Prohibition classic, often considered the father of the Martini, offering a perfect balance of sweet vermouth and botanical gin.",
       "instructions": "1. Add ingredients to a shaker with ice. \n2. Shake vigorously for about 15 seconds until well-chilled.\n3. Strain into a cocktail glass.\n4. Express the oils of a lemon twist over the drink and use it as a garnish.",
       "photoUri": "assets/cocktails/406-martinez.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [1, 2],
       "ingredients": [
@@ -24553,7 +24565,7 @@
       "description": "A bright rum sour that artfully balances the aromatic warmth of cardamom with crisp white rum, smooth vanilla, and sharp citrus notes.",
       "instructions": "1. Muddle the cardamom pods in the bottom of a cocktail shaker to release their essential oils.\n2. Add the white rum, lime juice, vanilla syrup, and Strucchi Bitter to the shaker.\n3. Fill the shaker with ice and shake vigorously.\n4. Double-strain into a chilled cocktail glass.",
       "photoUri": "assets/cocktails/513-sin-limites.jpg",
-      "glassId": "martini",
+      "glassId": "coupe",
       "methodIds": ["muddle", "shake"],
       "tags": [3, 6],
       "ingredients": [
@@ -25995,7 +26007,7 @@
       "name": "Sweet Martini",
       "description": "This is a variation of the Martini cocktail with sweet red vermouth instead of dry vermouth. The vodka to vermouth ratio can be varied according to your taste.",
       "instructions": "1. Fill a mixing glass with ice.\n2. Add 60ml of Gin and 60ml of Red Vermouth.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled martini glass.\n5. Garnish with a maraschino cherry.",
-      "photoUri": "assets/cocktails/536-martini-sweet.jpg",
+      "photoUri": "assets/cocktails/536-sweet-martini.jpg",
       "glassId": "martini",
       "methodIds": ["stir"],
       "tags": [5],
@@ -28207,7 +28219,7 @@
       "description": "James Bond's martini with gin, vodka, and Lillet Blanc.",
       "instructions": "1. Add gin, vodka, and Lillet Blanc into a shaker with ice.\n2. Shake well.\n3. Strain into a chilled cocktail glass.\n4. Garnish with a lemon twist.",
       "photoUri": "assets/cocktails/571-vesper.jpg",
-      "glassId": "cocktail_glass",
+      "glassId": "martini",
       "methodIds": ["shake"],
       "tags": [1, 3],
       "ingredients": [
