@@ -4,6 +4,7 @@ import * as DocumentPicker from "expo-document-picker";
 import * as FileSystem from "expo-file-system/legacy";
 import { Image, type ImageSource } from "expo-image";
 import * as Sharing from "expo-sharing";
+import Constants from "expo-constants";
 import {
   useEffect,
   useMemo,
@@ -38,6 +39,17 @@ const MENU_WIDTH = Math.round(Dimensions.get("window").width * 0.75);
 const ANIMATION_DURATION = 200;
 const APP_VERSION = appConfig.expo.version;
 const APP_VERSION_CODE = appConfig.expo.android?.versionCode;
+const BUILD_TIME = Constants.expoConfig?.extra?.buildTime as string | undefined;
+
+const formatBuildTime = (value: string) => {
+  const parsed = new Date(value);
+
+  if (Number.isNaN(parsed.getTime())) {
+    return value;
+  }
+
+  return parsed.toLocaleString();
+};
 
 type StartScreenIcon =
   | {
@@ -1288,6 +1300,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               >
                 Version {APP_VERSION}
                 {APP_VERSION_CODE != null ? ` (${APP_VERSION_CODE})` : ""}
+                {BUILD_TIME ? ` · Build ${formatBuildTime(BUILD_TIME)}` : ""}
               </Text>
             </View>
           </ScrollView>
