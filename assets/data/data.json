@@ -70,7 +70,8 @@
     },
     {
       "id": 101,
-      "name": "20th Century cocktail",
+      "name": "20th Century",
+      "synonyms": ["Twentieth Century"],
       "description": "The 20th Century Cocktail is a classic cocktail that was first created in 1937 by a British bartender C.A. Tuck and named in honor of the celebrated 20th Century Limited train which ran between New York City and Chicago. It's a sophisticated and elegant drink that combines London Dry Gin, Lillet Blanc (a French aperitif wine), lime juice, and creme de cacao white.",
       "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 30ml of Gin, 20ml of Lillet Blanc, 20ml of Creme de Cacao White, and 10ml of Lime Juice.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Coupe glass.\n5. Express orange zest twist over the cocktail and use as garnish",
       "photoUri": "assets/cocktails/101-20th-century-cocktail.jpg",
@@ -132,6 +133,7 @@
     {
       "id": 102,
       "name": "7 & 7",
+      "synonyms": ["Seven and Seven"],
       "description": "This cocktail is similar to the Cuba Libre and may refer to any drink consisting of whiskey mixed with lemon soft drink. It was originally made with Seagram's Seven Crown Whiskey, but any whiskey can be used.",
       "instructions": "1. Fill a Collins glass with ice.\n2. Add 50ml of Whiskey and 150ml of 7-Up.\n3. Stir gently to combine.\n4. Garnish with a lemon wedge.",
       "photoUri": "assets/cocktails/102-7-7.jpg",
@@ -1516,6 +1518,7 @@
     {
       "id": 125,
       "name": "Americano",
+      "synonyms": ["Mi To", "Mi-To", "Milano Torino"],
       "description": "Bitter Campari and sweet vermouth lengthened with fizzy soda.",
       "instructions": "1. Fill a mixing glass with ice.\n2. Add 30ml of Campari, 30ml of Red Vermouth, and 1 splash of Soda Water.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled rocks glass.\n5. Garnish with an orange slice and a lemon twist.",
       "photoUri": "assets/cocktails/125-americano.jpg",
@@ -1867,6 +1870,7 @@
     {
       "id": 131,
       "name": "Aperol Spritz",
+      "synonyms": ["Spritz Veneziano"],
       "description": "Bittersweet aperitif of Prosecco, Aperol, and soda.",
       "instructions": "1. Fill a Wine glass with ice.\n2. Add 90ml of Prosecco, 60ml of Aperol, and 30ml of Soda Water.\n3. Stir gently to combine.\n4. Garnish with an orange wedge.",
       "photoUri": "assets/cocktails/131-aperol-spritz.jpg",
@@ -9557,6 +9561,7 @@
     {
       "id": 257,
       "name": "Cuba Libre",
+      "synonyms": ["Rum and Coke", "Rum & Coke"],
       "description": "A simple mix of rum, cola, and lime for a refreshing long drink.",
       "instructions": "1. Fill a Highball glass with ice.\n2. Add 50ml of White Rum, 10ml of Lime Juice, and 120ml of Cola.\n3. Stir gently to combine.\n4. Garnish with a lime wedge.",
       "photoUri": "assets/cocktails/257-cuba-libre.jpg",
@@ -11373,6 +11378,7 @@
     {
       "id": 288,
       "name": "Espresso Martini",
+      "synonyms": ["Vodka Espresso"],
       "description": "A smooth vodka martini energized with espresso and coffee liqueur.",
       "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 50ml of Vodka, 30ml of Kahlua, 30ml of Espresso, and 10ml of Simple Syrup.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled Martini glass.\n5. Garnish with 3 coffee beans.",
       "photoUri": "assets/cocktails/288-espresso-martini.jpg",
@@ -12083,6 +12089,7 @@
     {
       "id": 301,
       "name": "French 75",
+      "synonyms": ["French Seventy-Five", "Soixante-Quinze"],
       "description": "Crisp gin and lemon topped with sparkling champagne.",
       "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 30ml of Gin, 15ml of Lemon Juice, 15ml of Simple Syrup, and 60ml of Champagne.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Champagne flute glass.\n5. Garnish with a twist of Lemon",
       "photoUri": "assets/cocktails/301-french-75.jpg",
@@ -13117,6 +13124,7 @@
     {
       "id": 317,
       "name": "Gin & Tonic",
+      "synonyms": ["G&T"],
       "description": "A timeless and refreshing highball cocktail that perfectly balances the botanical notes of gin with the crisp bitterness of tonic water. This effervescent drink is elevated by a bright citrus aroma, making it a sophisticated yet simple choice for any occasion.",
       "instructions": "1. Add 60ml of Gin and 120ml of Tonic to a Highball glass.\n2. Stir gently to combine.\n3. Garnish with a lime wedge.",
       "photoUri": "assets/cocktails/317-gin-and-tonic.jpg",
@@ -18814,6 +18822,7 @@
     {
       "id": 417,
       "name": "Milano-Torino",
+      "synonyms": ["Mi To", "Mi-To", "Milano Torino", "Americano"],
       "description": "Also known as \"Mi-To,\" this cocktail was created around 1860 in a cafe in Milan, Italy. It is named after the ingredients: Campari is from Milan, and sweet vermouth is from Turin. With the addition of soda, this drink turns into the \"Americano\" cocktail, and with gin, it turns into the \"Negroni.\"",
       "instructions": "1. Fill a Rocks glass with ice.\n2. Add 30ml of Campari and 30ml of Red Vermouth.\n3. Stir gently to combine.\n4. Garnish with an orange slice.",
       "photoUri": "assets/cocktails/417-milano-torino.jpg",
@@ -25277,6 +25286,7 @@
     {
       "id": 524,
       "name": "Spritz Veneziano",
+      "synonyms": ["Aperol Spritz"],
       "description": "An IBA official sparkling cocktail. Prosecco is recommended for the sparkling wine.",
       "instructions": "1. Fill a Wine glass with ice.\n2. Add 90ml of Prosecco, 60ml of Select, and 30ml of Soda Water.\n3. Stir gently to combine.\n4. Garnish with an orange slice.",
       "photoUri": "assets/cocktails/524-spritz-veneziano.jpg",
@@ -27352,6 +27362,7 @@
     {
       "id": 558,
       "name": "Tom Collins",
+      "synonyms": ["Gin Collins"],
       "description": "A timeless IBA classic, this refreshing highball perfectly balances the sweetness of Old Tom Gin with crisp citrus and sparkling water.",
       "instructions": "1. Fill a Collins glass with ice.\n2. Add 45ml of Old Tom Gin, 30ml of Lemon Juice, 15ml of Simple Syrup, and 60ml of Soda Water.\n3. Stir gently to combine.\n4. Garnish with a maraschino cherry and a lemon slice.",
       "photoUri": "assets/cocktails/558-tom-collins.jpg",
@@ -29201,6 +29212,7 @@
     {
       "id": 587,
       "name": "Whiskey Sour",
+      "synonyms": ["Whisky Sour"],
       "description": "Classic bourbon sour optionally enriched with egg white.",
       "instructions": "1. Pour 60ml of Bourbon, 30ml of Lemon Juice, 15ml of Rich Simple Syrup, and an Egg White.\n2. Dry shake (without ice) vigorously for about 15 seconds to emulsify egg.\n3. Add ice and shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Rocks glass over an ice cube.\n5. Garnish with an orange slice a Maraschino Cherry, and 3 drops of Angostura Bitters.",
       "photoUri": "assets/cocktails/587-whiskey-sour.jpg",
