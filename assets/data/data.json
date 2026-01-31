@@ -9789,7 +9789,6 @@
     {
       "id": 261,
       "name": "Dan Sabo's Whiskey Sour",
-      "synonyms": ["Dan Sabo's Whisky Sour"],
       "description": "A rich, creamy whiskey drink featuring Rye Whisky, Lemon, Egg White—dessert-like, smooth, and indulgent. Garnished with maraschino cherry.",
       "instructions": "1.  Pour 60ml of Rye Whiskey, 15ml of Lemon Juice, 15ml of Orange Juice, 15ml of Simple Syrup, and an Egg White into a shaker.\n2. Dry shake (without ice) vigorously for about 15 seconds to emulsify egg.\n3. Add ice and shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Rocks glass over an ice cube.\n5. Garnish with 2 dashes of Angostura Bitters and a Cherry.",
       "photoUri": "assets/cocktails/261-dan-sabo-s-whiskey-sour.jpg",
@@ -10781,7 +10780,7 @@
       "description": "A sophisticated and spirit-forward classic cocktail that perfectly balances the herbal complexity of Gin with the rich, wine-based aromatics of Dubonnet Rouge. Historically known as a favorite of the British Royal Family, it offers a deep, velvet texture and a refined botanical finish.",
       "instructions": "1. Fill a mixing glass with ice.\n2. Add 30ml of Gin and 60ml of Dubonnet.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled rocks glass.\n5. Garnish with a lemon wedge.",
       "photoUri": "assets/cocktails/277-dubonnet-cocktail.jpg",
-      "glassId": "rocks_glass",
+      "glassId": "martini",
       "methodIds": ["stir"],
       "tags": [5],
       "ingredients": [
@@ -18814,7 +18813,6 @@
     {
       "id": 417,
       "name": "Milano-Torino",
-      "synonyms": ["Americano", "Mi-To", "Milano Torino"],
       "description": "Also known as \"Mi-To,\" this cocktail was created around 1860 in a cafe in Milan, Italy. It is named after the ingredients: Campari is from Milan, and sweet vermouth is from Turin. With the addition of soda, this drink turns into the \"Americano\" cocktail, and with gin, it turns into the \"Negroni.\"",
       "instructions": "1. Fill a Rocks glass with ice.\n2. Add 30ml of Campari and 30ml of Red Vermouth.\n3. Stir gently to combine.\n4. Garnish with an orange slice.",
       "photoUri": "assets/cocktails/417-milano-torino.jpg",
@@ -22213,10 +22211,9 @@
     {
       "id": 473,
       "name": "Red Lebowski",
-      "synonyms": ["Red Russian"],
       "description": "A bold and minimalist two-ingredient drink. The neutral profile of vodka allows the deep, sweet, and tart notes of cherry brandy to take center stage for a smooth, dessert-like finish.",
       "instructions": "1. Fill a Rocks glass with ice.\n2. Add 30ml of Vodka and 30ml of Cherry Brandy.\n3. Stir gently to combine.",
-      "photoUri": "assets/cocktails/473-red-russian.jpg",
+      "photoUri": "assets/cocktails/473-red-lebowski.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["build"],
       "tags": [6],
@@ -24766,7 +24763,6 @@
     {
       "id": 516,
       "name": "Smoky Whiskey Sour",
-      "synonyms": ["Smoky Whisky Sour"],
       "description": "A variation of the classic \"Whisky Sour\" created by Simon Difford for people who like the distinct smoky flavor of Scotch Islay whisky.",
       "instructions": "1. Pour 30ml of Scotch Whisky, 30ml of Islay Scotch Whisky, 30ml of Lemon Juice, 20ml of Maple syrup, 1 dash of Angostura Bitters, and an Egg White into a shaker.\n2. Dry shake (without ice) vigorously for about 15 seconds to emulsify egg.\n3. Add ice and shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Rocks glass over an ice cube.\n5. Garnish with a lemon peel.",
       "photoUri": "assets/cocktails/516-smoky-whiskey-sour.jpg",
@@ -28107,7 +28103,7 @@
       "name": "Ve.n.to",
       "description": "An elegant Grappa-based sour that beautifully balances the intensity of the spirit with the soothing notes of chamomile and honey syrup.",
       "instructions": "1. Pour 45ml of Grappa, 25ml of Lemon Juice, 15ml of Honey Syrup, 15ml of Chamomile Cordial, and an Egg White into a shaker.\n2. Dry shake (without ice) vigorously for about 15 seconds to emulsify egg.\n3. Add ice and shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Rocks glass over an ice cube.\n5. Garnish with a lemon twist and 3 Grapes.",
-      "photoUri": "assets/cocktails/569-vento.jpg",
+      "photoUri": "assets/cocktails/569-ve-n-to.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["shake"],
       "tags": [1],
@@ -29203,7 +29199,6 @@
     {
       "id": 587,
       "name": "Whiskey Sour",
-      "synonyms": ["Whisky Sour"],
       "description": "Classic bourbon sour optionally enriched with egg white.",
       "instructions": "1. Pour 60ml of Bourbon, 30ml of Lemon Juice, 15ml of Rich Simple Syrup, and an Egg White.\n2. Dry shake (without ice) vigorously for about 15 seconds to emulsify egg.\n3. Add ice and shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Rocks glass over an ice cube.\n5. Garnish with an orange slice a Maraschino Cherry, and 3 drops of Angostura Bitters.",
       "photoUri": "assets/cocktails/587-whiskey-sour.jpg",
@@ -29409,10 +29404,9 @@
     {
       "id": 590,
       "name": "White Lebowski",
-      "synonyms": ["White Russian"],
       "description": "A rich, creamy classic cocktail that perfectly balances the kick of vodka with the sweetness of coffee liqueur, topped with a velvety layer of fresh cream.",
       "instructions": "1. Fill a rocks glass with ice cubes.\n2. Pour the vodka and coffee liqueur over the ice.\n3. Gently pour the cream on top so it swirls into the dark liquid.\n4. Stir lightly if desired, or serve layered for a striking visual effect.",
-      "photoUri": "assets/cocktails/590-white-russian.jpg",
+      "photoUri": "assets/cocktails/590-white-lebowski.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["build", "layer"],
       "tags": [5],
