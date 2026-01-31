@@ -4514,6 +4514,7 @@
     {
       "id": 174,
       "name": "Black Lebowski",
+      "synonyms": ["Black Russian"],
       "description": "Simple and spirit-forward blend of vodka and coffee liqueur.",
       "instructions": "1. Fill a Rocks glass with ice.\n2. Add 60ml of Vodka and 30ml of Coffee Liqueur.\n3. Stir gently to combine.",
       "photoUri": "assets/cocktails/174-black-lebowski.jpg",
@@ -22211,6 +22212,7 @@
     {
       "id": 473,
       "name": "Red Lebowski",
+      "synonyms": ["Red Russian"],
       "description": "A bold and minimalist two-ingredient drink. The neutral profile of vodka allows the deep, sweet, and tart notes of cherry brandy to take center stage for a smooth, dessert-like finish.",
       "instructions": "1. Fill a Rocks glass with ice.\n2. Add 30ml of Vodka and 30ml of Cherry Brandy.\n3. Stir gently to combine.",
       "photoUri": "assets/cocktails/473-red-lebowski.jpg",
@@ -29404,6 +29406,7 @@
     {
       "id": 590,
       "name": "White Lebowski",
+      "synonyms": ["White Russian"],
       "description": "A rich, creamy classic cocktail that perfectly balances the kick of vodka with the sweetness of coffee liqueur, topped with a velvety layer of fresh cream.",
       "instructions": "1. Fill a rocks glass with ice cubes.\n2. Pour the vodka and coffee liqueur over the ice.\n3. Gently pour the cream on top so it swirls into the dark liquid.\n4. Stir lightly if desired, or serve layered for a striking visual effect.",
       "photoUri": "assets/cocktails/590-white-lebowski.jpg",
