@@ -510,6 +510,7 @@ function sanitizeStartScreen(value?: string | null): StartScreen {
 const DEFAULT_TAG_COLOR = TAG_COLORS[0];
 const BUILTIN_COCKTAIL_TAG_MAX = BUILTIN_COCKTAIL_TAGS.reduce((max, tag) => Math.max(max, tag.id), 0);
 const BUILTIN_INGREDIENT_TAG_MAX = BUILTIN_INGREDIENT_TAGS.reduce((max, tag) => Math.max(max, tag.id), 0);
+const USER_CREATED_ID_START = 10000;
 
 function sanitizeCustomTags<TTag extends { id?: number | null; name?: string | null; color?: string | null }>(
   tags: readonly TTag[] | null | undefined,
@@ -1072,7 +1073,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             }
 
             return Math.max(maxId, id);
-          }, 0) + 1;
+          }, USER_CREATED_ID_START - 1) + 1;
 
         const description = input.description?.trim() || undefined;
         const instructions = input.instructions?.trim() || undefined;
@@ -1154,7 +1155,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             }
 
             return Math.max(maxId, id);
-          }, 0) + 1;
+          }, USER_CREATED_ID_START - 1) + 1;
 
         const normalizedBaseId =
           input.baseIngredientId != null ? Number(input.baseIngredientId) : undefined;
