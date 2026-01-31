@@ -30042,7 +30042,6 @@
       "description": "Swedish winter wheat vodka from Åhus bottled around 40% ABV. Known for a clean, neutral profile and consistent quality. Popular base for countless cocktails worldwide.",
       "tags": [0, 1],
       "baseIngredientId": 441,
-      "usageCount": 11,
       "photoUri": "assets/ingredients/103-absolut-vodka.jpg"
     },
     {
@@ -30051,7 +30050,6 @@
       "description": "Advocaat is a rich Dutch egg liqueur with sweet custard notes and 14–20% ABV. Try it in a Snowball or Bombardino.",
       "tags": [2],
       "baseIngredientId": 246,
-      "usageCount": 12,
       "photoUri": "assets/ingredients/104-advocaat.jpg"
     },
     {
@@ -30146,7 +30144,6 @@
       "description": "Concentrated Trinidad bitters at 44.7% ABV made with gentian, herbs, and spices. Famous oversized label and closely guarded recipe. A few dashes add spice and bitterness to classics like the Old Fashioned or Manhattan.",
       "tags": [10],
       "baseIngredientId": 146,
-      "usageCount": 18,
       "photoUri": "assets/ingredients/117-angostura-bitters.jpg"
     },
     {
@@ -30269,7 +30266,6 @@
       "name": "Banana",
       "description": "Soft, sweet fruit with creamy texture used for smoothies and tiki garnishes. Works well in frozen cocktails or batched punches.",
       "tags": [6],
-      "usageCount": 13,
       "photoUri": "assets/ingredients/134-banana.jpg"
     },
     {
@@ -30298,7 +30294,6 @@
       "name": "Becherovka",
       "description": "Becherovka is a traditional, 100% natural Czech herbal liqueur, made with a secret recipe of over 20 herbs and spices and an alcohol by volume (ABV) of 38%. It is often enjoyed as a digestif.",
       "tags": [1],
-      "usageCount": 0,
       "photoUri": "assets/ingredients/138-becherovka.jpg"
     },
     {
@@ -30357,7 +30352,6 @@
       "name": "Bitters",
       "description": "Aromatic bitters are alcohol-based flavor concentrates infused with herbs and spices. Just a few dashes add bitterness, spice, and balance to cocktails. Keep them on the rail for Old Fashioneds, Manhattans, and sours.",
       "tags": [10],
-      "usageCount": 18,
       "photoUri": "assets/ingredients/146-bitters.jpg"
     },
     {
@@ -30497,7 +30491,6 @@
       "id": 166,
       "name": "Butterginger candy bar",
       "description": "Butterfinger is a candy bar manufactured by the Ferrara Candy Company, a subsidiary of Ferrero. The bar consists of a layered crispy peanut butter core covered in chocolate.",
-      "usageCount": 0,
       "photoUri": "assets/ingredients/166-butterginger-candy-bar.jpg"
     },
     {
@@ -30583,7 +30576,6 @@
       "name": "Chamomile flowers",
       "description": "Chamomile flowers come from daisy-like plants and are primarily used for making calming herbal teas, in cooking, and in cosmetics due to their apple-like aroma.",
       "tags": [7],
-      "usageCount": 0,
       "photoUri": "assets/ingredients/178-chamomile-flowers.jpg"
     },
     {
@@ -30598,7 +30590,6 @@
       "name": "Cherry",
       "description": "Sweet or tart red stone fruit often used as a garnish or muddled ingredient. Adds a pop of color and gentle sweetness.",
       "tags": [6],
-      "usageCount": 18,
       "photoUri": "assets/ingredients/180-cherry.jpg"
     },
     {
@@ -30614,7 +30605,6 @@
       "description": "Cherry Heering is a Danish cherry liqueur by Heering, 24% ABV. Use it in a Singapore Sling or Blood & Sand.",
       "tags": [2],
       "baseIngredientId": 184,
-      "usageCount": 10,
       "photoUri": "assets/ingredients/182-cherry-heering.jpg"
     },
     {
@@ -30798,7 +30788,6 @@
       "name": "Cognac",
       "description": "French grape brandy from the Cognac region, double-distilled and aged in oak at 40% ABV. Shows dried fruit, vanilla, and floral notes. Premium choice for sipping or cocktails like the Sidecar.",
       "tags": [0, 1],
-      "usageCount": 12,
       "photoUri": "assets/ingredients/208-cognac.jpg"
     },
     {
@@ -30949,7 +30938,6 @@
       "name": "Cuban Rum",
       "description": "Cuban rum is defined by a specific \"Spanish-style\" production method that results in a profile typically lighter, drier, and crisper than its Caribbean neighbours.",
       "tags": [0, 1],
-      "usageCount": 0,
       "photoUri": "assets/ingredients/229-cuban-rum.jpg"
     },
     {
@@ -31006,7 +30994,6 @@
       "name": "Disaronno Velvet",
       "description": "Disaronno Velvet is a smooth, all-white cream liqueur that blends the classic almond flavour of the original Disaronno with creamy, velvety notes of chocolate and vanilla.\nDisaronno Velvet has an alcohol by volume (ABV) of 17% and is designed to be enjoyed primarily over ice.",
       "tags": [2],
-      "usageCount": 0,
       "photoUri": "assets/ingredients/237-disaronno-velvet.jpg"
     },
     {
@@ -31070,7 +31057,6 @@
       "name": "Egg Liqueur",
       "description": "Egg liqueur is a creamy egg-based spirit at 14–20% ABV. Sip it in a Snowball or Dutch Coffee.",
       "tags": [2],
-      "usageCount": 12,
       "photoUri": "assets/ingredients/246-egg-liqueur.jpg"
     },
     {
@@ -31171,7 +31157,6 @@
       "name": "Gin",
       "description": "Juniper-forward distilled spirit flavored with botanicals, typically 40–47% ABV. Offers piney, citrus, and spice notes depending on style. Foundation for martinis, gin and tonics, and many classics.",
       "tags": [0, 1],
-      "usageCount": 26,
       "photoUri": "assets/ingredients/260-gin.jpg"
     },
     {
@@ -31222,7 +31207,6 @@
       "name": "Gold Jamaican Rum",
       "description": "The primary difference for gold Jamaican rum lies in its aging process, which gives it a richer, more complex flavor profile than white rum, while being less bold and aged than dark rum. Jamaican rums in general are known for their distinct \"funky\" character due to a unique high-ester fermentation process.",
       "tags": [0, 1],
-      "usageCount": 0,
       "photoUri": "assets/ingredients/267-gold-jamaican-rum.jpg"
     },
     {
@@ -31373,7 +31357,6 @@
       "description": "Hennessy is a world-famous cognac brand with an ABV of 40%. It offers rich notes of fruit, vanilla, and oak from barrel aging. Enjoyed neat, on the rocks, or in classic cocktails.",
       "tags": [0, 1],
       "baseIngredientId": 208,
-      "usageCount": 12,
       "photoUri": "assets/ingredients/288-hennessy-xo.jpg"
     },
     {
@@ -31395,7 +31378,6 @@
       "name": "Honeydew Melon",
       "description": "The honeydew melon is a sweet, juicy, and refreshing fruit, known for its pale green flesh and smooth, creamy-yellow rind when ripe.",
       "tags": [6],
-      "usageCount": 0,
       "photoUri": "assets/ingredients/291-honeydew-melon.jpg"
     },
     {
@@ -31519,7 +31501,6 @@
       "name": "Kina Lillet",
       "description": "Kina Lillet was the original bitter, quinine-infused French aperitif (1887-1986) famously used in James Bond's Vesper Martini in Casino Royale, but it was reformulated without quinine in 1986, becoming the sweeter, less bitter Lillet Blanc we know today, with Cocchi Americano or Kina L'Avion often suggested as substitutes for the authentic bitter taste.",
       "tags": [2],
-      "usageCount": 0,
       "photoUri": "assets/ingredients/308-kina-lillet.jpg"
     },
     {
@@ -31548,7 +31529,6 @@
       "name": "Kümmel liqueur",
       "description": "Kummel is a sweet, aromatic liqueur flavoured primarily with caraway seeds, cumin, and fennel, often with hints of anise and citrus. It is traditionally served ice-cold as a digestif after meals. Kummel liqueur typically has an alcohol by volume (ABV) ranging from 35% to 40%.",
       "tags": [1],
-      "usageCount": 0,
       "photoUri": "assets/ingredients/312-k-mmel-liqueur.jpg"
     },
     {
@@ -31579,7 +31559,6 @@
       "name": "Lemon",
       "description": "Bright, acidic citrus used for juice, zest, and garnish. High in citric acid, it sharpens sours and punches. Essential for classics from the Lemon Drop to the Whiskey Sour.",
       "tags": [5, 6],
-      "usageCount": 28,
       "photoUri": "assets/ingredients/316-lemon.jpg"
     },
     {
@@ -31594,7 +31573,6 @@
       "name": "Lemon Juice",
       "description": "Fresh lemon juice with sharp acidity. Essential for sours and lemonades. Brightens spirits from gin to whiskey.",
       "tags": [5],
-      "usageCount": 39,
       "photoUri": "assets/ingredients/318-lemon-juice.jpg"
     },
     {
@@ -31637,7 +31615,6 @@
       "name": "Lime",
       "description": "Zesty green citrus with sharp, aromatic juice. Common in mojitos, margaritas, and highballs. Provides acidity and freshness when muddled or juiced.",
       "tags": [5, 6],
-      "usageCount": 13,
       "photoUri": "assets/ingredients/324-lime.jpg"
     },
     {
@@ -31645,7 +31622,6 @@
       "name": "Lime Juice",
       "description": "Fresh lime juice that delivers tangy citrus oils. Classic in margaritas, daiquiris, and mojitos. Provides crisp acidity to balance sweetness.",
       "tags": [5],
-      "usageCount": 20,
       "photoUri": "assets/ingredients/325-lime-juice.jpg"
     },
     {
@@ -31667,7 +31643,6 @@
       "name": "Luxardo Maraschino",
       "description": "Maraschino liqueur is a clear cherry spirit around 24% ABV. Classic in an Aviation or Last Word.",
       "tags": [2],
-      "usageCount": 22,
       "photoUri": "assets/ingredients/328-luxardo-maraschino.jpg"
     },
     {
@@ -31705,7 +31680,6 @@
       "description": "Sweet preserved cherry commonly used as a garnish. Brings candy-like fruit notes to sours and Old Fashioned riffs.\n\nSelf-made recipe:\n· Ingredients: 500g fresh cherries (pitted), 250ml Luxardo Maraschino Liqueur, 150g of sugar, 100ml of water, and a squeeze of lemon.\n· Process:\n1. Simmer Syrup: Combine sugar, water, and lemon juice in a saucepan. Bring to a simmer until sugar dissolves.\n2. Add Liqueur: Stir in the liqueur and simmer for 3 minutes to take the edge off the alcohol.\n3. Heat Cherries: Add pitted cherries and simmer for another 2–3 minutes until slightly tender but still firm.\n4. Cool & Store: Pour into a glass jar, ensuring cherries are submerged. Cool to room temperature before refrigerating.",
       "tags": [6],
       "baseIngredientId": 180,
-      "usageCount": 18,
       "photoUri": "assets/ingredients/333-maraschino-cherry.jpg"
     },
     {
@@ -31742,7 +31716,6 @@
       "name": "Mint",
       "description": "Lamiaceae (/ˌleɪmiˈeɪsiˌaɪ/ or /ˌleɪmiˈeɪsiiː/) or Labiatae is a family of flowering plants commonly known as the mint or deadnettle family.",
       "tags": [7],
-      "usageCount": 11,
       "photoUri": "assets/ingredients/338-mint.jpg"
     },
     {
@@ -31778,7 +31751,6 @@
       "name": "Orange",
       "description": "The orange is the fruit of the citrus species Citrus × sinensis in the family Rutaceae. It is also called sweet orange, to distinguish it from the related Citrus × aurantium, referred to as bitter orange. The sweet orange reproduces asexually (apomixis through nucellar embryony); varieties of sweet orange arise through mutations.",
       "tags": [6],
-      "usageCount": 20,
       "photoUri": "assets/ingredients/343-orange.jpg"
     },
     {
@@ -31807,7 +31779,6 @@
       "name": "Orange Juice",
       "description": "Sweet, sunny citrus juice with gentle acidity. Popular in brunch cocktails like the Mimosa or Screwdriver. Adds body and brightness to tropical mixes.",
       "tags": [5],
-      "usageCount": 10,
       "photoUri": "assets/ingredients/347-orange-juice.jpg"
     },
     {
@@ -31986,7 +31957,6 @@
       "name": "Peychaud's Bitters",
       "description": "Peychaud’s bitters have 35–45% ABV and a floral, anise-like aroma. Essential in the Sazerac cocktail. Adds depth and complexity to many drinks.",
       "tags": [10],
-      "usageCount": 47,
       "photoUri": "assets/ingredients/372-peychauds-bitters.jpg"
     },
     {
@@ -32058,7 +32028,6 @@
       "name": "Plum Brandy",
       "description": "Plum brandy is a popular fruit spirit made from fermented plum juice, widely celebrated in Central and Southeastern Europe. It typically has an alcohol by volume (ABV) ranging from 40% to 50%, though traditional or homemade varieties can be much stronger.",
       "tags": [1],
-      "usageCount": 0,
       "photoUri": "assets/ingredients/382-plum-brandy.jpg"
     },
     {
@@ -32122,7 +32091,6 @@
       "name": "Red Vermouth",
       "description": "Red vermouth is a sweet spiced fortified wine around 15–18% ABV. Essential in a Negroni or Manhattan.",
       "tags": [2],
-      "usageCount": 11,
       "photoUri": "assets/ingredients/391-red-vermouth.jpg"
     },
     {
@@ -32209,7 +32177,6 @@
       "name": "Rye Whiskey",
       "description": "Whiskey with a rye-heavy mash bill, generally 40–50% ABV. Spicier and drier than bourbon with peppery finish. Essential for Manhattans, Sazeracs, and other classics.",
       "tags": [0, 1],
-      "usageCount": 28,
       "photoUri": "assets/ingredients/403-rye-whiskey.jpg"
     },
     {
@@ -32232,7 +32199,6 @@
       "description": "Sauvignon Blanc is a popular, dry white wine celebrated for its crispness, high acidity, and vibrant flavors ranging from green, herbaceous notes to tropical fruits, depending on where it's grown. It is highly versatile and pairs well with a variety of foods.",
       "tags": [2],
       "baseIngredientId": 450,
-      "usageCount": 0,
       "photoUri": "assets/ingredients/406-sauvignon-blanc.jpg"
     },
     {
@@ -32247,7 +32213,6 @@
       "name": "Scotch Whisky",
       "description": "Whisky made in Scotland and aged at least three years in oak at 40% ABV or higher. Styles span light and floral to heavily peated. Classic base for highballs and stirred drinks.",
       "tags": [0, 1],
-      "usageCount": 17,
       "photoUri": "assets/ingredients/408-scotch-whisky.jpg"
     },
     {
@@ -32263,7 +32228,6 @@
       "name": "Select",
       "description": "Aperitivo Select is a classic, bittersweet Italian aperitif from Venice, known as the essential ingredient for the original Venetian Spritz, featuring complex notes from 30 botanicals. Select Aperitivo has an alcohol by volume (ABV) of 17.5%.",
       "tags": [2],
-      "usageCount": 0,
       "photoUri": "assets/ingredients/410-select.jpg"
     },
     {
@@ -32278,7 +32242,6 @@
       "name": "Simple Syrup",
       "description": "Sugar syrup, or simple syrup, is sugar dissolved in water 1:1. It blends easily into cocktails and is a bar staple.",
       "tags": [4],
-      "usageCount": 17,
       "photoUri": "assets/ingredients/413-simple-syrup.jpg"
     },
     {
@@ -32421,7 +32384,6 @@
       "name": "Tequila Reposado",
       "description": "Tequila Reposado, meaning \"rested,\" is a type of tequila aged in oak barrels for a minimum of two months to a maximum of one year, bridging the gap between unaged Blanco and aged Añejo. This ageing process imparts a golden hue and a smoother, more complex flavour with notes of wood, vanilla, or fruit, making it versatile for sipping neat, on the rocks, or in cocktails like Margaritas.",
       "tags": [0, 1],
-      "usageCount": 0,
       "photoUri": "assets/ingredients/433-tequila-reposado.jpg"
     },
     {
@@ -32451,7 +32413,6 @@
       "name": "Triple Sec",
       "description": "Triple sec is a clear orange liqueur at 20–40% ABV with bright citrus. Essential in a Margarita or Sidecar.",
       "tags": [2],
-      "usageCount": 10,
       "photoUri": "assets/ingredients/437-triple-sec.jpg"
     },
     {
@@ -32480,7 +32441,6 @@
       "name": "Vodka",
       "description": "Neutral spirit distilled from grains or potatoes and filtered for a clean taste, usually around 40% ABV. Clear and versatile for mixing. Backbone of martinis, bloody marys, and countless cocktails.",
       "tags": [0, 1],
-      "usageCount": 11,
       "photoUri": "assets/ingredients/441-vodka.jpg"
     },
     {
@@ -32516,7 +32476,6 @@
       "name": "Whiskey",
       "description": "Whisky or whiskey is a type of distilled alcoholic beverage made from fermented grain mash. Various grains (which may be malted) are used for different varieties, including barley, corn (maize), rye, and wheat. Whisky is typically aged in wooden casks, generally made of charred white oak.",
       "tags": [0, 1],
-      "usageCount": 22,
       "photoUri": "assets/ingredients/446-whiskey.jpg"
     },
     {
@@ -32524,7 +32483,6 @@
       "name": "Whiskey Cream",
       "tags": [2],
       "baseIngredientId": 297,
-      "usageCount": 0,
       "photoUri": "assets/ingredients/447-whiskey-cream.jpg"
     },
     {
@@ -32540,7 +32498,6 @@
       "name": "White Rum",
       "description": "Light rum with subtle sweetness, often filtered clear after aging, around 40% ABV. Clean flavor for mixing without heavy molasses. Standard choice for daiquiris and mojitos.",
       "tags": [0, 1],
-      "usageCount": 14,
       "photoUri": "assets/ingredients/449-white-rum.jpg"
     },
     {
