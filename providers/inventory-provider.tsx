@@ -342,7 +342,6 @@ function toIngredientStorageRecord(ingredient: Ingredient | IngredientRecord): I
     description: ingredient.description ?? undefined,
     tags: normalizedTags && normalizedTags.length > 0 ? normalizedTags : undefined,
     baseIngredientId: ingredient.baseIngredientId ?? undefined,
-    usageCount: ingredient.usageCount ?? undefined,
     photoUri: ingredient.photoUri ?? undefined,
   } satisfies IngredientStorageRecord;
 }
@@ -1219,7 +1218,6 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           description,
           tags,
           baseIngredientId,
-          usageCount: 0,
           photoUri,
         };
 
@@ -1423,7 +1421,6 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           description,
           tags,
           baseIngredientId,
-          usageCount: previous.usageCount,
           photoUri,
         };
 
