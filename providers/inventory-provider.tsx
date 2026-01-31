@@ -100,6 +100,33 @@ type NormalizedSearchFields = {
 
 const INVENTORY_SNAPSHOT_VERSION = 2;
 
+function normalizeSynonyms(values?: string[] | null): string[] | undefined {
+  if (!values || values.length === 0) {
+    return undefined;
+  }
+
+  const sanitized = values
+    .map((value) => value?.trim())
+    .filter((value): value is string => Boolean(value));
+  if (sanitized.length === 0) {
+    return undefined;
+  }
+
+  const seen = new Set<string>();
+  const unique: string[] = [];
+
+  sanitized.forEach((value) => {
+    const key = value.toLowerCase();
+    if (seen.has(key)) {
+      return;
+    }
+    seen.add(key);
+    unique.push(value);
+  });
+
+  return unique.length > 0 ? unique : undefined;
+}
+
 declare global {
   // eslint-disable-next-line no-var
   var __yourbarInventory: InventoryState | undefined;
@@ -1077,6 +1104,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
 
         const description = input.description?.trim() || undefined;
         const instructions = input.instructions?.trim() || undefined;
+        const synonyms = normalizeSynonyms(input.synonyms);
         const photoUri = input.photoUri?.trim() || undefined;
         const glassId = input.glassId?.trim() || undefined;
         const methodIds = input.methodIds
@@ -1101,6 +1129,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           name: trimmedName,
           description,
           instructions,
+          synonyms,
           photoUri,
           glassId,
           methodIds: methodIds && methodIds.length > 0 ? methodIds : undefined,
@@ -1547,11 +1576,16 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       const tags = tagMap.size > 0 ? Array.from(tagMap.values()) : undefined;
 
       const existing = prev.cocktails[existingIndex];
+      const synonyms =
+        input.synonyms !== undefined
+          ? normalizeSynonyms(input.synonyms)
+          : existing.synonyms ?? undefined;
       const candidateRecord: CocktailRecord = {
         id: existing.id,
         name: trimmedName,
         description,
         instructions,
+        synonyms,
         photoUri,
         glassId,
         methodIds: methodIds && methodIds.length > 0 ? methodIds : undefined,
