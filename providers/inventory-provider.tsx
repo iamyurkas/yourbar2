@@ -185,6 +185,31 @@ function normalizeTagList<TTag extends { id?: number | null; name?: string | nul
     .sort((a, b) => a.id - b.id || a.name.localeCompare(b.name));
 }
 
+function normalizeSynonyms(synonyms: string[] | null | undefined): string[] | undefined {
+  if (!synonyms || synonyms.length === 0) {
+    return undefined;
+  }
+
+  const seen = new Set<string>();
+  const normalized = synonyms.reduce<string[]>((acc, synonym) => {
+    const trimmed = synonym?.trim();
+    if (!trimmed) {
+      return acc;
+    }
+
+    const key = trimmed.toLowerCase();
+    if (seen.has(key)) {
+      return acc;
+    }
+
+    seen.add(key);
+    acc.push(trimmed);
+    return acc;
+  }, []);
+
+  return normalized.length > 0 ? normalized : undefined;
+}
+
 function normalizeTagIds<TTag extends { id?: number | null }>(
   tags: readonly TTag[] | null | undefined,
 ): number[] | undefined {
@@ -1074,6 +1099,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             return Math.max(maxId, id);
           }, 0) + 1;
 
+        const synonyms = normalizeSynonyms(input.synonyms);
         const description = input.description?.trim() || undefined;
         const instructions = input.instructions?.trim() || undefined;
         const photoUri = input.photoUri?.trim() || undefined;
@@ -1098,6 +1124,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         const candidateRecord: CocktailRecord = {
           id: nextId,
           name: trimmedName,
+          synonyms,
           description,
           instructions,
           photoUri,
@@ -1524,6 +1551,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         return prev;
       }
 
+      const existing = prev.cocktails[existingIndex];
+      const synonyms =
+        input.synonyms !== undefined ? normalizeSynonyms(input.synonyms) : normalizeSynonyms(existing.synonyms);
       const description = input.description?.trim() || undefined;
       const instructions = input.instructions?.trim() || undefined;
       const photoUri = input.photoUri?.trim() || undefined;
@@ -1545,10 +1575,10 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       });
       const tags = tagMap.size > 0 ? Array.from(tagMap.values()) : undefined;
 
-      const existing = prev.cocktails[existingIndex];
       const candidateRecord: CocktailRecord = {
         id: existing.id,
         name: trimmedName,
+        synonyms,
         description,
         instructions,
         photoUri,
