@@ -836,6 +836,7 @@ export default function CocktailDetailsScreen() {
                               }
                               size={18}
                               color={Colors.onSurfaceVariant}
+                              style={method.id === "muddle" ? styles.muddleIcon : undefined}
                             />
                           )}
                         </View>
@@ -1340,6 +1341,9 @@ const styles = StyleSheet.create({
   methodIcon: {
     width: 18,
     height: 18,
+  },
+  muddleIcon: {
+    transform: [{ scaleX: 2 }],
   },
   methodLabel: {
     fontSize: 14,

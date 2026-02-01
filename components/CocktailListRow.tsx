@@ -139,30 +139,41 @@ const CocktailListRowComponent = ({
       return null;
     }
 
-    const icons = methodIds.map((id) => METHOD_ICON_MAP[id]).filter(Boolean);
+    const icons = methodIds
+      .map((id) => ({ id, icon: METHOD_ICON_MAP[id] }))
+      .filter((item) => Boolean(item.icon));
     if (!icons.length) {
       return null;
     }
 
     return (
       <View style={styles.methodIconRow}>
-        {icons.map((icon, index) =>
-          icon.type === 'asset' ? (
-            <Image
+        {icons.map(({ id, icon }, index) => {
+          const isMuddle = id === 'muddle';
+          if (icon.type === 'asset') {
+            return (
+              <Image
+                key={`method-icon-${index}`}
+                source={icon.source}
+                style={[styles.methodIcon, { tintColor: Colors.onSurfaceVariant }]}
+                contentFit="contain"
+              />
+            );
+          }
+
+          return (
+            <View
               key={`method-icon-${index}`}
-              source={icon.source}
-              style={[styles.methodIcon, { tintColor: Colors.onSurfaceVariant }]}
-              contentFit="contain"
-            />
-          ) : (
-            <MaterialCommunityIcons
-              key={`method-icon-${index}`}
-              name={icon.name}
-              size={METHOD_ICON_SIZE}
-              color={Colors.onSurfaceVariant}
-            />
-          ),
-        )}
+              style={styles.methodIconWrapper}>
+              <MaterialCommunityIcons
+                name={icon.name}
+                size={METHOD_ICON_SIZE}
+                color={Colors.onSurfaceVariant}
+                style={isMuddle ? styles.muddleIcon : undefined}
+              />
+            </View>
+          );
+        })}
       </View>
     );
   }, [methodIds, Colors.onSurfaceVariant, showMethodIcons]);
@@ -260,5 +271,14 @@ const styles = StyleSheet.create({
   methodIcon: {
     width: METHOD_ICON_SIZE,
     height: METHOD_ICON_SIZE,
+  },
+  methodIconWrapper: {
+    width: METHOD_ICON_SIZE,
+    height: METHOD_ICON_SIZE,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  muddleIcon: {
+    transform: [{ scaleX: 2 }],
   },
 });
