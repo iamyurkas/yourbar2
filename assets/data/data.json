@@ -5738,9 +5738,9 @@
       "id": 195,
       "name": "Boulevardier",
       "description": "A whiskey-based Negroni with bourbon, sweet vermouth, and Campari.",
-      "instructions": "1. Fill a mixing glass with ice.\n2. Add 45ml of Bourbon, 30ml of Campari, and 30ml of Red Vermouth.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled martini glass.\n5. Garnish with an orange twist.",
+      "instructions": "1. Fill a mixing glass with ice.\n2. Add 45ml of Bourbon, 30ml of Campari, and 30ml of Red Vermouth.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a rock glass over fresh ice.\n5. Garnish with an orange twist.",
       "photoUri": "assets/cocktails/195-boulevardier.jpg",
-      "glassId": "martini",
+      "glassId": "rocks_glass",
       "methodIds": ["stir"],
       "tags": [1, 3],
       "ingredients": [
@@ -8443,62 +8443,6 @@
       ]
     },
     {
-      "id": 238,
-      "name": "Cherry Hooker",
-      "description": "A spirit-forward brandy cocktail showcasing Cherry Brandy, Orange Juice—deep, aromatic, and meant to be savored. Garnished with lime.",
-      "instructions": "1. Fill a Highball glass with ice.\n2. Add 30ml of Cherry Brandy, 210ml of Orange Juice, and 1 dash of Grenadine.\n3. Stir gently to combine.\n4. Garnish with an orange slice and a cherry.",
-      "photoUri": "assets/cocktails/238-cherry-hooker.jpg",
-      "glassId": "highball_glass",
-      "methodIds": ["build"],
-      "tags": [7, 8],
-      "ingredients": [
-        {
-          "order": 1,
-          "ingredientId": 181,
-          "name": "Cherry Brandy",
-          "amount": "30",
-          "unitId": 11
-        },
-        {
-          "order": 2,
-          "ingredientId": 347,
-          "name": "Orange Juice",
-          "amount": "210",
-          "unitId": 11
-        },
-        {
-          "order": 3,
-          "ingredientId": 283,
-          "name": "Grenadine",
-          "amount": "1",
-          "unitId": 6
-        },
-        {
-          "order": 4,
-          "ingredientId": 343,
-          "name": "Orange",
-          "amount": "1",
-          "unitId": 19,
-          "garnish": true
-        },
-        {
-          "order": 5,
-          "ingredientId": 180,
-          "name": "Cherry",
-          "amount": "1",
-          "unitId": 1,
-          "garnish": true
-        },
-        {
-          "order": 6,
-          "ingredientId": 295,
-          "name": "Ice",
-          "amount": "120",
-          "unitId": 8
-        }
-      ]
-    },
-    {
       "id": 239,
       "name": "Chilcano de Pisco",
       "description": "A long, sparkling brandy drink built for easy sipping, pairing Pisco, Angostura Bitters, Ginger Ale with bubbly mixers over ice. Garnished with lime.",
@@ -9993,7 +9937,7 @@
       "name": "Death & Taxes",
       "description": "A complex whiskey cocktail where Scotch Whiskey, Gin, Punt e Mes meets citrus—bittersweet, zesty, and nicely structured. Garnished with lemon.",
       "instructions": "1. Fill a mixing glass with ice.\n2. Add 30ml of Scotch Whisky, 30ml of Gin, 22.5ml of Punt e Mes, 7.5ml of Benedictine, and 2 dashes of Orange Bitters.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled Nick & Nora glass.\n5. Garnish with a lemon twist.",
-      "photoUri": "assets/cocktails/264-death-and-taxes.jpg",
+      "photoUri": "assets/cocktails/264-death-taxes.jpg",
       "glassId": "nick_and_nora",
       "methodIds": ["stir"],
       "tags": [3, 5],
@@ -13127,7 +13071,7 @@
       "synonyms": ["G&T"],
       "description": "A timeless and refreshing highball cocktail that perfectly balances the botanical notes of gin with the crisp bitterness of tonic water. This effervescent drink is elevated by a bright citrus aroma, making it a sophisticated yet simple choice for any occasion.",
       "instructions": "1. Add 60ml of Gin and 120ml of Tonic to a Highball glass.\n2. Stir gently to combine.\n3. Garnish with a lime wedge.",
-      "photoUri": "assets/cocktails/317-gin-and-tonic.jpg",
+      "photoUri": "assets/cocktails/317-gin-tonic.jpg",
       "glassId": "highball_glass",
       "methodIds": ["build"],
       "tags": [6],
@@ -15823,8 +15767,8 @@
       "name": "Jack & Coke",
       "description": "Simple and popular mix of Jack Daniel's and cola.",
       "instructions": "1. Fill a Collins glass with ice.\n2. Add 50ml of Jack Daniels and 150ml of Cola.\n3. Stir gently to combine.",
-      "photoUri": "assets/cocktails/366-jack-and-coke.jpg",
-      "glassId": "collins_glass",
+      "photoUri": "assets/cocktails/366-jack-coke.jpg",
+      "glassId": "highball_glass",
       "methodIds": ["build"],
       "tags": [7, 8],
       "ingredients": [
@@ -19051,7 +18995,7 @@
       "name": "Missionary's Downfall",
       "description": "Blended tiki mix of rum, peach liqueur, pineapple, mint, and honey.",
       "instructions": "1. Add all ingredients to a blender with ice.\n2. Blend until smooth.\n3. Pour into a highball glass.\n4. Garnish with a mint sprig.",
-      "photoUri": "assets/cocktails/422-missionarys-downfall.jpg",
+      "photoUri": "assets/cocktails/422-missionary-s-downfall.jpg",
       "glassId": "highball_glass",
       "methodIds": ["blend"],
       "tags": [1, 4],
@@ -21833,7 +21777,7 @@
       "name": "Purgatory a la Française",
       "description": "A sophisticated, spirit-forward twist on the classic Purgatory. This French-inspired version balances the boldness of Cognac with the herbal sweetness of Yellow Chartreuse and the bitter depth of Punt e Mes, finished with a subtle smoky whisper of Islay Scotch.",
       "instructions": "1. Fill a mixing glass with ice.\n2. Add 40ml of Cognac, 10ml of Yellow Chartreuse, 20ml of Punt e Mes, and 5ml of Islay Scotch Whisky.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled Nick & Nora glass.\n5. Garnish with a lemon twist.",
-      "photoUri": "assets/cocktails/467-purgatory-a-la-francaise.jpg",
+      "photoUri": "assets/cocktails/467-purgatory-a-la-fran-aise.jpg",
       "glassId": "nick_and_nora",
       "methodIds": ["stir"],
       "tags": [3, 5],
@@ -22919,7 +22863,7 @@
       "name": "Rum & Cola",
       "description": "A classic, refreshing highball that perfectly balances the sweetness of cola with the crisp notes of white rum, accented by a bright citrus kick from fresh lime.",
       "instructions": "1. Add 60ml of White Rum, 120ml of Cola, and 2 wedges of Lime to a Highball glass.\n2. Stir gently to combine.\n3. Garnish with 2 lime slices.",
-      "photoUri": "assets/cocktails/486-rum-and-cola.jpg",
+      "photoUri": "assets/cocktails/486-rum-cola.jpg",
       "glassId": "highball_glass",
       "methodIds": ["build"],
       "tags": [6],
@@ -25045,7 +24989,7 @@
       "id": 521,
       "name": "Spiced Apple-Bourbon Punch",
       "description": "A bright whiskey sour balancing Apple Cider, Bourbon, Apple Brandy with fresh citrus and a touch of sweetness for a crisp, refreshing sip.",
-      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 60ml of Apple Cider, 45ml of Bourbon, 15ml of Apple Brandy, 22.5ml of Lemon Juice, 15ml of Demerara Sugar Syrup, and 2 dashes of Angostura Bitters.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Rocks glass.\n5. Garnish with 2 Cloveses",
+      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 60ml of Apple Cider, 45ml of Bourbon, 15ml of Apple Brandy, 22.5ml of Lemon Juice, 15ml of Demerara Sugar Syrup, and 2 dashes of Angostura Bitters.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled rocks glass over fresh ice.\n5. Garnish with 2 cloves.",
       "photoUri": "assets/cocktails/521-spiced-apple-bourbon-punch.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["shake"],
@@ -27218,8 +27162,8 @@
       "id": 556,
       "name": "Tom & Cherry",
       "description": "A sophisticated and vibrant twist on a gin sour, featuring the botanical richness of Old Tom Gin paired with deep cherry notes and a hint of bitter complexity.",
-      "instructions": "1. Fill a mixing glass with ice.\n2. Add 30ml of Old Tom Gin, 10ml of Cherry Heering, 10ml of Luxardo Maraschino, 10ml of Cherry Juice, 5ml of Grapefruit Juice, and 2.5ml of Strucchi Bitter.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled Nick & Nora glass.",
-      "photoUri": "assets/cocktails/556-tom-and-cherry.jpg",
+      "instructions": "1. Fill a mixing glass with ice.\n2. Add 30ml of Old Tom Gin, 10ml of Cherry Heering, 10ml of Luxardo Maraschino, 10ml of Cherry Juice, 5ml of Grapefruit Juice, and 2.5ml of Strucchi Bitter.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled Nick & Nora glass.\n5. Garnish with a maraschino cherry.",
+      "photoUri": "assets/cocktails/556-tom-cherry.jpg",
       "glassId": "nick_and_nora",
       "methodIds": ["stir"],
       "tags": [3, 6],
@@ -27291,6 +27235,15 @@
         },
         {
           "order": 8,
+          "ingredientId": 333,
+          "name": "Maraschino Cherry",
+          "unitId": 11,
+          "garnish": true,
+          "allowBaseSubstitution": true,
+          "allowBrandSubstitution": true
+        },
+        {
+          "order": 9,
           "ingredientId": 295,
           "name": "Ice",
           "amount": "120",
