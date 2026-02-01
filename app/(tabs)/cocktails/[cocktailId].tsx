@@ -824,7 +824,10 @@ export default function CocktailDetailsScreen() {
                           {icon?.type === "asset" ? (
                             <Image
                               source={icon.source}
-                              style={styles.methodIcon}
+                              style={[
+                                styles.methodIcon,
+                                { tintColor: Colors.onSurfaceVariant },
+                              ]}
                               contentFit="contain"
                             />
                           ) : (
