@@ -164,7 +164,7 @@ const CocktailListRowComponent = ({
           return (
             <View
               key={`method-icon-${index}`}
-              style={[styles.methodIconWrapper, isMuddle && styles.methodIconWide]}>
+              style={styles.methodIconWrapper}>
               <MaterialCommunityIcons
                 name={icon.name}
                 size={METHOD_ICON_SIZE}
@@ -277,9 +277,6 @@ const styles = StyleSheet.create({
     height: METHOD_ICON_SIZE,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  methodIconWide: {
-    width: METHOD_ICON_SIZE * 2,
   },
   muddleIcon: {
     transform: [{ scaleX: 2 }],

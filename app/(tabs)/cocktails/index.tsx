@@ -258,7 +258,7 @@ export default function CocktailsScreen() {
 
       const isMuddle = methodId === 'muddle';
       return (
-        <View style={[styles.methodIconWrapper, isMuddle && styles.methodIconWrapperWide]}>
+        <View style={styles.methodIconWrapper}>
           <MaterialCommunityIcons
             name={icon.name}
             size={METHOD_ICON_SIZE}
@@ -1105,9 +1105,6 @@ const styles = StyleSheet.create({
     height: METHOD_ICON_SIZE,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  methodIconWrapperWide: {
-    width: METHOD_ICON_SIZE * 2,
   },
   muddleIcon: {
     transform: [{ scaleX: 2 }],

@@ -820,12 +820,7 @@ export default function CocktailDetailsScreen() {
                   return (
                     <View key={method.id} style={styles.methodEntry}>
                       <View style={styles.methodHeader}>
-                        <View
-                          style={[
-                            styles.methodIconWrapper,
-                            method.id === "muddle" && styles.methodIconWrapperWide,
-                          ]}
-                        >
+                        <View style={styles.methodIconWrapper}>
                           {icon?.type === "asset" ? (
                             <Image
                               source={icon.source}
@@ -1342,9 +1337,6 @@ const styles = StyleSheet.create({
     height: 20,
     alignItems: "center",
     justifyContent: "center",
-  },
-  methodIconWrapperWide: {
-    width: 40,
   },
   methodIcon: {
     width: 18,

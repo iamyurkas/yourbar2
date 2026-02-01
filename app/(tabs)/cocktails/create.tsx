@@ -313,12 +313,7 @@ export default function CreateCocktailScreen() {
 
     if (icon.type === "asset") {
       return (
-        <View
-          style={[
-            styles.methodOptionIconWrapper,
-            isMuddle && styles.methodOptionIconWrapperWide,
-          ]}
-        >
+        <View style={styles.methodOptionIconWrapper}>
           <Image
             source={icon.source}
             style={[styles.methodOptionIcon, { tintColor: iconColor }]}
@@ -329,12 +324,7 @@ export default function CreateCocktailScreen() {
     }
 
     return (
-      <View
-        style={[
-          styles.methodOptionIconWrapper,
-          isMuddle && styles.methodOptionIconWrapperWide,
-        ]}
-      >
+      <View style={styles.methodOptionIconWrapper}>
         <MaterialCommunityIcons
           name={icon.name}
           size={18}
@@ -3325,9 +3315,6 @@ const styles = StyleSheet.create({
     height: 18,
     alignItems: "center",
     justifyContent: "center",
-  },
-  methodOptionIconWrapperWide: {
-    width: 36,
   },
   methodOptionIcon: {
     width: 18,
