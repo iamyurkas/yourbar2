@@ -405,14 +405,20 @@ export default function CocktailDetailsScreen() {
     const keepAwakeTag = "cocktail-details";
 
     if (keepScreenAwake) {
-      void activateKeepAwakeAsync(keepAwakeTag);
+      void activateKeepAwakeAsync(keepAwakeTag).catch((error) => {
+        console.warn("Unable to activate keep awake", error);
+      });
 
       return () => {
-        void deactivateKeepAwake(keepAwakeTag);
+        void deactivateKeepAwake(keepAwakeTag).catch((error) => {
+          console.warn("Unable to deactivate keep awake", error);
+        });
       };
     }
 
-    void deactivateKeepAwake(keepAwakeTag);
+    void deactivateKeepAwake(keepAwakeTag).catch((error) => {
+      console.warn("Unable to deactivate keep awake", error);
+    });
 
     return undefined;
   }, [keepScreenAwake]);
