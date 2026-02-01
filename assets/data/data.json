@@ -139,7 +139,7 @@
       "photoUri": "assets/cocktails/102-7-7.jpg",
       "glassId": "collins_glass",
       "methodIds": ["build"],
-      "tags": [7, 8, 9],
+      "tags": [7, 8],
       "ingredients": [
         {
           "order": 1,
@@ -985,7 +985,7 @@
       "name": "Alien Brain Haemorrhage",
       "description": "A visually striking layered shooter that looks like a floating brain in liquid. Sweet peach schnapps forms the base, creamy Baileys curdles into brain-like shapes, and a splash of Blue Curaçao or grenadine adds an eerie, bloody effect. Smooth, sweet, and slightly citrusy.",
       "instructions": "1. Pour Peach Schnapps into a chilled shooter glass as the base.\n2. Slowly drip Baileys Irish Cream into the schnapps using a spoon or the back of a straw so it curdles and forms \"brain\" shapes.\n3. Gently add a few drops of Blue Curaçao and Grenadine on top to create a bleeding effect.\n4. Serve immediately and drink in one shot.",
-      "photoUri": "assets/cocktails/116-alien-brain-hemorrhage.jpg",
+      "photoUri": "assets/cocktails/116-alien-brain-haemorrhage.jpg",
       "glassId": "shooter",
       "methodIds": ["layer"],
       "tags": [6, 9],
@@ -2294,7 +2294,7 @@
       "photoUri": "assets/cocktails/138-aviation.jpg",
       "glassId": "martini",
       "methodIds": ["shake"],
-      "tags": [1],
+      "tags": [1, 6],
       "ingredients": [
         {
           "order": 1,
@@ -3963,7 +3963,7 @@
       "photoUri": "assets/cocktails/165-bee-s-knees.jpg",
       "glassId": "coupe",
       "methodIds": ["shake"],
-      "tags": [1],
+      "tags": [1, 6],
       "ingredients": [
         {
           "order": 1,
@@ -4085,7 +4085,7 @@
       "photoUri": "assets/cocktails/167-bellini.jpg",
       "glassId": "champagne_flute",
       "methodIds": ["build"],
-      "tags": [1],
+      "tags": [1, 6],
       "ingredients": [
         {
           "order": 1,
@@ -4223,7 +4223,7 @@
       "photoUri": "assets/cocktails/170-between-the-sheets.jpg",
       "glassId": "martini",
       "methodIds": ["shake"],
-      "tags": [1],
+      "tags": [1, 5],
       "ingredients": [
         {
           "order": 1,
@@ -4524,7 +4524,7 @@
       "photoUri": "assets/cocktails/174-black-lebowski.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["build"],
-      "tags": [1],
+      "tags": [1, 5],
       "ingredients": [
         {
           "order": 1,
@@ -4712,7 +4712,7 @@
       "photoUri": "assets/cocktails/177-bloody-mary.jpg",
       "glassId": "highball_glass",
       "methodIds": ["throw"],
-      "tags": [1, 3],
+      "tags": [1, 6],
       "ingredients": [
         {
           "order": 1,
@@ -5514,7 +5514,7 @@
       "description": "A rich, creamy brandy drink featuring Cognac, Advocaat, Whipped Cream—dessert-like, smooth, and indulgent.",
       "instructions": "1. Heat the Liqueur: Gently heat the egg liqueur in a small saucepan over medium-low heat. Do not let it boil, as this may cause the eggs to curdle.\n2. Add Brandy: Once hot, stir in the brandy. Some recipes suggest heating the brandy with the liqueur, while others recommend adding it directly to the serving glass before pouring in the hot liqueur.\n3. Garnish: Pour into a heat-resistant glass or mug. Top with a generous dollop of whipped cream and a sprinkle of cinnamon or cocoa.",
       "photoUri": "assets/cocktails/191-bombardino.jpg",
-      "glassId": "cup",
+      "glassId": "irish_coffee_glass",
       "methodIds": ["heat", "build"],
       "tags": [6],
       "ingredients": [
@@ -5571,7 +5571,7 @@
       "description": "A rich, creamy brandy drink featuring Cognac, Advocaat, Espresso—dessert-like, smooth, and indulgent.",
       "instructions": "1. Warm the advocaat and espresso together in a small saucepan over low heat until hot but not boiling.\n2. Add the cognac to a heat-safe cup.\n3. Pour the hot advocaat-espresso mixture over the cognac and stir gently.\n4. Top with whipped cream.\n5. Finish with a dusting of cinnamon and optional cocoa powder, then serve immediately.",
       "photoUri": "assets/cocktails/192-bombardino-calimero.jpg",
-      "glassId": "cup",
+      "glassId": "irish_coffee_glass",
       "methodIds": ["heat", "build"],
       "tags": [6],
       "ingredients": [
@@ -5635,7 +5635,7 @@
       "description": "A rich, creamy rum drink featuring Gold Rum, Advocaat, Whipped Cream—dessert-like, smooth, and indulgent.",
       "instructions": "1. Heat the Liqueur: Pour the egg liqueur into a small saucepan. Heat it over medium-low heat until hot but not boiling (boiling may cause the egg base to curdle).\n2. Combine: In a heat-safe glass or small mug, add the rum. Pour the hot egg liqueur over the rum and stir gently to combine.\n3. Garnish: Top with a generous dollop of whipped cream.\n4. Finish: Sprinkle cocoa powder or cinnamon on top and serve immediately while hot.",
       "photoUri": "assets/cocktails/193-bombardino-pirata.jpg",
-      "glassId": "cup",
+      "glassId": "irish_coffee_glass",
       "methodIds": ["heat", "build"],
       "tags": [6],
       "ingredients": [
@@ -5700,7 +5700,7 @@
       "description": "A rich, creamy whiskey drink featuring Whisky, Advocaat, Whipped Cream—dessert-like, smooth, and indulgent.",
       "instructions": "1. Warm the advocaat in a small saucepan over low heat until hot but not boiling.\n2. Add the whisky to a heat-safe cup.\n3. Pour the hot advocaat over the whisky and stir gently to combine.\n4. Top with whipped cream.\n5. Sprinkle with cinnamon and serve immediately.",
       "photoUri": "assets/cocktails/194-bombardino-scozzese.jpg",
-      "glassId": "cup",
+      "glassId": "irish_coffee_glass",
       "methodIds": ["heat", "build"],
       "tags": [6],
       "ingredients": [
@@ -5742,7 +5742,7 @@
       "photoUri": "assets/cocktails/195-boulevardier.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["stir"],
-      "tags": [1, 3],
+      "tags": [1, 3, 5],
       "ingredients": [
         {
           "order": 1,
@@ -5831,7 +5831,7 @@
       "photoUri": "assets/cocktails/197-bramble.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["shake"],
-      "tags": [1],
+      "tags": [1, 6],
       "ingredients": [
         {
           "order": 1,
@@ -5904,7 +5904,7 @@
       "photoUri": "assets/cocktails/198-brandy-alexander.jpg",
       "glassId": "coupe",
       "methodIds": ["shake"],
-      "tags": [1],
+      "tags": [1, 6],
       "ingredients": [
         {
           "order": 1,
@@ -5964,7 +5964,7 @@
       "photoUri": "assets/cocktails/199-brandy-crusta.jpg",
       "glassId": "coupe",
       "methodIds": ["shake"],
-      "tags": [1],
+      "tags": [1, 6],
       "ingredients": [
         {
           "order": 1,
@@ -7466,7 +7466,7 @@
       "photoUri": "assets/cocktails/224-canchanchara.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["stir"],
-      "tags": [1],
+      "tags": [1, 6],
       "ingredients": [
         {
           "order": 1,
@@ -8027,7 +8027,7 @@
       "photoUri": "assets/cocktails/232-casino.jpg",
       "glassId": "martini",
       "methodIds": ["shake"],
-      "tags": [1],
+      "tags": [1, 6],
       "ingredients": [
         {
           "order": 1,
@@ -8090,7 +8090,7 @@
       "photoUri": "assets/cocktails/233-champagne-cocktail.jpg",
       "glassId": "champagne_flute",
       "methodIds": ["build"],
-      "tags": [1],
+      "tags": [1, 5, 6],
       "ingredients": [
         {
           "order": 1,
@@ -8299,7 +8299,7 @@
       "photoUri": "assets/cocktails/236-chartreuse-swizzle.jpg",
       "glassId": "tiki",
       "methodIds": ["build"],
-      "tags": [1],
+      "tags": [1, 6],
       "ingredients": [
         {
           "order": 1,
@@ -8780,7 +8780,7 @@
       "photoUri": "assets/cocktails/245-clover-club.jpg",
       "glassId": "martini",
       "methodIds": ["shake"],
-      "tags": [1],
+      "tags": [1, 6],
       "ingredients": [
         {
           "order": 1,
@@ -9250,7 +9250,7 @@
       "photoUri": "assets/cocktails/253-cosmopolitan.jpg",
       "glassId": "martini",
       "methodIds": ["shake"],
-      "tags": [1],
+      "tags": [1, 6],
       "ingredients": [
         {
           "order": 1,
@@ -9511,7 +9511,7 @@
       "photoUri": "assets/cocktails/257-cuba-libre.jpg",
       "glassId": "highball_glass",
       "methodIds": ["build"],
-      "tags": [1],
+      "tags": [1, 6],
       "ingredients": [
         {
           "order": 1,
@@ -9628,7 +9628,7 @@
       "photoUri": "assets/cocktails/259-daiquiri.jpg",
       "glassId": "martini",
       "methodIds": ["shake"],
-      "tags": [1],
+      "tags": [1, 6],
       "ingredients": [
         {
           "order": 1,
@@ -9898,7 +9898,7 @@
       "photoUri": "assets/cocktails/263-dark-n-stormy.jpg",
       "glassId": "highball_glass",
       "methodIds": ["build"],
-      "tags": [1],
+      "tags": [1, 6],
       "ingredients": [
         {
           "order": 1,
@@ -10673,7 +10673,7 @@
       "photoUri": "assets/cocktails/276-dry-martini.jpg",
       "glassId": "martini",
       "methodIds": ["stir"],
-      "tags": [1],
+      "tags": [1, 5],
       "ingredients": [
         {
           "order": 1,
@@ -11328,7 +11328,7 @@
       "photoUri": "assets/cocktails/288-espresso-martini.jpg",
       "glassId": "martini",
       "methodIds": ["shake"],
-      "tags": [1],
+      "tags": [1, 6],
       "ingredients": [
         {
           "order": 1,
@@ -12039,7 +12039,7 @@
       "photoUri": "assets/cocktails/301-french-75.jpg",
       "glassId": "champagne_flute",
       "methodIds": ["shake"],
-      "tags": [1],
+      "tags": [1, 5, 6],
       "ingredients": [
         {
           "order": 1,
@@ -12231,7 +12231,7 @@
       "photoUri": "assets/cocktails/304-french-martini.jpg",
       "glassId": "martini",
       "methodIds": ["shake"],
-      "tags": [1],
+      "tags": [1, 6],
       "ingredients": [
         {
           "order": 1,
@@ -13115,7 +13115,7 @@
       "photoUri": "assets/cocktails/319-gin-basil-smash.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["muddle", "shake"],
-      "tags": [1],
+      "tags": [1, 6],
       "ingredients": [
         {
           "order": 1,
@@ -13126,16 +13126,16 @@
         },
         {
           "order": 2,
-          "ingredientId": 395,
-          "name": "Rich Simple Syrup",
-          "amount": "15",
+          "ingredientId": 318,
+          "name": "Lemon Juice",
+          "amount": "20",
           "unitId": 11
         },
         {
           "order": 3,
-          "ingredientId": 318,
-          "name": "Lemon Juice",
-          "amount": "30",
+          "ingredientId": 395,
+          "name": "Rich Simple Syrup",
+          "amount": "10",
           "unitId": 11
         },
         {
@@ -13174,11 +13174,11 @@
       "id": 320,
       "name": "Gin Fizz",
       "description": "Classic gin sour lengthened with soda water.",
-      "instructions": "1. Pour 60ml of Gin, 30ml of Lemon Juice, and 30ml of Rich Simple Syrup.\n2. Dry shake for about 20 seconds to emulsify egg.\n3. Add ice to the shaker.\n4. Shake vigorously for about 15 seconds until well chilled.\n5. Strain into a chilled Highball glass.\n6. Top with 60ml of soda.\n7. Garnish with a lemon slice.",
+      "instructions": "1. Pour 60ml of Gin, 30ml of Lemon Juice, and 15ml of Rich Simple Syrup.\n2. Dry shake for about 20 seconds to emulsify egg.\n3. Add ice to the shaker.\n4. Shake vigorously for about 15 seconds until well chilled.\n5. Strain into a chilled Highball glass.\n6. Top with 60ml of soda.\n7. Garnish with a lemon slice.",
       "photoUri": "assets/cocktails/320-gin-fizz.jpg",
       "glassId": "highball_glass",
       "methodIds": ["shake", "build"],
-      "tags": [1],
+      "tags": [1, 6],
       "ingredients": [
         {
           "order": 1,
@@ -13198,7 +13198,7 @@
           "order": 3,
           "ingredientId": 395,
           "name": "Rich Simple Syrup",
-          "amount": "30",
+          "amount": "15",
           "unitId": 11
         },
         {
@@ -14819,7 +14819,7 @@
       "instructions": "1. Add 2 teaspoons of Butter, 1 teaspoon of Sugar, 1 dash of Cinnamon, 1 dash of Nutmeg, 50ml of Dark Rum, and 100ml of Water to an Irish Coffee glass.\n2. Stir gently to combine.\n3. Garnish with a lemon slice and a cinnamon stick.",
       "photoUri": "assets/cocktails/350-hot-buttered-rum.jpg",
       "glassId": "irish_coffee_glass",
-      "methodIds": ["build"],
+      "methodIds": ["heat", "build"],
       "tags": [7],
       "ingredients": [
         {
@@ -14901,7 +14901,7 @@
       "instructions": "1. Add 1 teaspoon of Honey, 45ml of Whiskey, 1 quarter of Lemon, and 100ml of Boiling Water to an Irish Coffee glass.\n2. Stir gently to combine.\n3. Garnish with a lemon peel and 2 cloves.",
       "photoUri": "assets/cocktails/351-hot-toddy.jpg",
       "glassId": "irish_coffee_glass",
-      "methodIds": ["build"],
+      "methodIds": ["heat", "build"],
       "tags": [6, 8],
       "ingredients": [
         {
@@ -15446,61 +15446,6 @@
       ]
     },
     {
-      "id": 359,
-      "name": "Irish Apple Pie",
-      "description": "A comforting and aromatic highball that captures the essence of a freshly baked apple pie. The warmth of Irish Whisky blends perfectly with the sweetness of apple juice and the spicy kick of cinnamon, making it an ideal choice for cozy evenings.",
-      "instructions": "1. Add 45ml of Irish Whisky, 5ml of Apple Juice, and 1 pinch of Cinnamon to a Highball glass.\n2. Stir gently to combine.\n3. Garnish with a cinnamon stick and 3 apple slices.",
-      "photoUri": "assets/cocktails/359-irish-apple-pie.jpg",
-      "glassId": "highball_glass",
-      "methodIds": ["build"],
-      "tags": [7],
-      "ingredients": [
-        {
-          "order": 1,
-          "ingredientId": 298,
-          "name": "Irish Whisky",
-          "amount": "45",
-          "unitId": 11,
-          "substitutes": [
-            {
-              "ingredientId": 446,
-              "name": "Whisky"
-            }
-          ]
-        },
-        {
-          "order": 2,
-          "ingredientId": 125,
-          "name": "Apple Juice",
-          "amount": "5",
-          "unitId": 11
-        },
-        {
-          "order": 3,
-          "ingredientId": 192,
-          "name": "Cinnamon",
-          "amount": "1",
-          "unitId": 15
-        },
-        {
-          "order": 4,
-          "ingredientId": 193,
-          "name": "Cinnamon Sticks",
-          "amount": "1",
-          "unitId": 1,
-          "garnish": true
-        },
-        {
-          "order": 5,
-          "ingredientId": 122,
-          "name": "Apple",
-          "amount": "3",
-          "unitId": 19,
-          "garnish": true
-        }
-      ]
-    },
-    {
       "id": 360,
       "name": "Irish Coffee",
       "description": "Warm blend of Irish whiskey, hot coffee, and cream.",
@@ -15614,18 +15559,18 @@
     },
     {
       "id": 363,
-      "name": "Irish Pie Tobby",
+      "name": "Irish Pie Toddy",
       "description": "A delightful twist on the whiskey sour that evokes the flavors of a homemade apple pie. The warmth of Irish Whiskey pairs perfectly with sweet vanilla and crisp apple juice, balanced by a sharp citrus finish.",
-      "instructions": "1. In a cocktail shaker, combine the Irish Whiskey, vanilla syrup, apple juice, and fresh lemon juice.\n2. Fill the shaker with plenty of ice and shake vigorously.\n3. Strain a glass over fresh ice.\n5. Garnish with a fresh apple slice, a cinnamon stick for aroma, and an orange twist.",
+      "instructions": "1. Pour the whiskey, apple juice, vanilla syrup, and lemon juice into a small saucepan or milk pitcher.\n2. Stir over low heat until it is steaming and fragrant. Do not bring it to a boil, as this can scorch the juice and cause the alcohol to evaporate.\n3. Pour into a warm glass.\n4. Squeeze the orange zest over the top of the glass to release oils, then drop the peel in.\n5. Add the cinnamon stick and apple slice.",
       "photoUri": "assets/cocktails/363-irish-pie-tobby.jpg",
       "glassId": "irish_coffee_glass",
-      "methodIds": ["shake"],
+      "methodIds": ["heat", "build"],
       "tags": [6],
       "ingredients": [
         {
           "order": 1,
           "ingredientId": 298,
-          "name": "Irish Whisky",
+          "name": "Irish Whiskey",
           "amount": "45",
           "unitId": 11,
           "substitutes": [
@@ -15639,14 +15584,14 @@
           "order": 2,
           "ingredientId": 440,
           "name": "Vanilla Syrup",
-          "amount": "22.5",
+          "amount": "20",
           "unitId": 11
         },
         {
           "order": 3,
           "ingredientId": 125,
           "name": "Apple Juice",
-          "amount": "4",
+          "amount": "120",
           "unitId": 11
         },
         {
@@ -20192,7 +20137,7 @@
       "name": "Opal Café",
       "description": "A  velvety layered shooter that combines the bold, anise-flavored depth of Black Sambuca with rich espresso and a silky cream float.",
       "instructions": "1. Pour the Black Sambuca into a chilled shooter glass.\n2. Gently layer the espresso over the sambuca using the back of a bar spoon.\n3. Carefully float the cream on top as the final layer.\n4. Serve immediately to maintain the distinct layers.",
-      "photoUri": "assets/cocktails/440-opal-cafe.jpg",
+      "photoUri": "assets/cocktails/440-opal-caf.jpg",
       "glassId": "shooter",
       "methodIds": ["layer"],
       "tags": [5, 9],
@@ -27022,32 +26967,33 @@
       "id": 553,
       "name": "Tintoretto",
       "description": "A Venetian classic, this cocktail is a vibrant variation of the Bellini. It pairs the crisp bubbles of Prosecco with the tart, ruby-red essence of fresh pomegranate juice.",
-      "instructions": "1. Fill a Martini glass with ice.\n2. Add 100ml of Prosecco and 50ml of Pomegranate Juice.\n3. Stir gently to combine.",
+      "instructions": "1. Pour the pomegranate juice into the glass first. If using a sweetener, stir it into the juice now.\n2. Slowly pour the chilled Prosecco over the juice.",
       "photoUri": "assets/cocktails/553-tintoretto.jpg",
-      "glassId": "martini",
+      "glassId": "champagne_flute",
       "methodIds": ["build"],
       "tags": [1],
       "ingredients": [
         {
           "order": 1,
-          "ingredientId": 385,
-          "name": "Prosecco",
-          "amount": "100",
+          "ingredientId": 383,
+          "name": "Pomegranate Juice",
+          "amount": "60",
           "unitId": 11
         },
         {
           "order": 2,
-          "ingredientId": 383,
-          "name": "Pomegranate Juice",
-          "amount": "50",
-          "unitId": 11
+          "ingredientId": 413,
+          "name": "Simple Syrup",
+          "amount": "1",
+          "unitId": 24,
+          "optional": true
         },
         {
           "order": 3,
-          "ingredientId": 295,
-          "name": "Ice",
+          "ingredientId": 385,
+          "name": "Prosecco",
           "amount": "120",
-          "unitId": 8
+          "unitId": 11
         }
       ]
     },
@@ -28310,7 +28256,7 @@
       "name": "Vilnius",
       "description": "Despite its name, this layered shot is very mild and sweet.",
       "instructions": "1. Pour 5ml of grenadine into a shooter glass.\n2. Carefully add  15ml of egg liqueur and 30ml of Creme de Menthe Green on top using a bar spoon.",
-      "photoUri": "assets/cocktails/573-squashed-irish-frog.jpg",
+      "photoUri": "assets/cocktails/573-vilnius.jpg",
       "glassId": "shooter",
       "methodIds": ["layer"],
       "tags": [6, 9],
