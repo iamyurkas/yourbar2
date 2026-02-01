@@ -820,7 +820,12 @@ export default function CocktailDetailsScreen() {
                   return (
                     <View key={method.id} style={styles.methodEntry}>
                       <View style={styles.methodHeader}>
-                        <View style={styles.methodIconWrapper}>
+                        <View
+                          style={[
+                            styles.methodIconWrapper,
+                            method.id === "muddle" && styles.methodIconWrapperWide,
+                          ]}
+                        >
                           {icon?.type === "asset" ? (
                             <Image
                               source={icon.source}
@@ -836,6 +841,7 @@ export default function CocktailDetailsScreen() {
                               }
                               size={18}
                               color={Colors.onSurfaceVariant}
+                              style={method.id === "muddle" ? styles.muddleIcon : undefined}
                             />
                           )}
                         </View>
@@ -1337,9 +1343,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  methodIconWrapperWide: {
+    width: 40,
+  },
   methodIcon: {
     width: 18,
     height: 18,
+  },
+  muddleIcon: {
+    transform: [{ scaleX: 2 }],
   },
   methodLabel: {
     fontSize: 14,

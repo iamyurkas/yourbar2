@@ -383,7 +383,17 @@ export default function ShakerResultsScreen() {
         );
       }
 
-      return <MaterialCommunityIcons name={icon.name} size={METHOD_ICON_SIZE} color={tintColor} />;
+      const isMuddle = methodId === 'muddle';
+      return (
+        <View style={[styles.methodIconWrapper, isMuddle && styles.methodIconWrapperWide]}>
+          <MaterialCommunityIcons
+            name={icon.name}
+            size={METHOD_ICON_SIZE}
+            color={tintColor}
+            style={isMuddle ? styles.muddleIcon : undefined}
+          />
+        </View>
+      );
     },
     [Colors.surface, Colors.tint],
   );
@@ -745,6 +755,18 @@ const styles = StyleSheet.create({
   methodIcon: {
     width: METHOD_ICON_SIZE,
     height: METHOD_ICON_SIZE,
+  },
+  methodIconWrapper: {
+    width: METHOD_ICON_SIZE,
+    height: METHOD_ICON_SIZE,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  methodIconWrapperWide: {
+    width: METHOD_ICON_SIZE * 2,
+  },
+  muddleIcon: {
+    transform: [{ scaleX: 2 }],
   },
   filterTagList: {
     flexDirection: 'column',

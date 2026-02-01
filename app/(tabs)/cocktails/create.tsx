@@ -309,19 +309,39 @@ export default function CreateCocktailScreen() {
 
   const renderMethodIcon = (methodId: CocktailMethodId, iconColor: string) => {
     const icon = METHOD_ICON_MAP[methodId];
+    const isMuddle = methodId === "muddle";
 
     if (icon.type === "asset") {
       return (
-        <Image
-          source={icon.source}
-          style={[styles.methodOptionIcon, { tintColor: iconColor }]}
-          contentFit="contain"
-        />
+        <View
+          style={[
+            styles.methodOptionIconWrapper,
+            isMuddle && styles.methodOptionIconWrapperWide,
+          ]}
+        >
+          <Image
+            source={icon.source}
+            style={[styles.methodOptionIcon, { tintColor: iconColor }]}
+            contentFit="contain"
+          />
+        </View>
       );
     }
 
     return (
-      <MaterialCommunityIcons name={icon.name} size={18} color={iconColor} />
+      <View
+        style={[
+          styles.methodOptionIconWrapper,
+          isMuddle && styles.methodOptionIconWrapperWide,
+        ]}
+      >
+        <MaterialCommunityIcons
+          name={icon.name}
+          size={18}
+          color={iconColor}
+          style={isMuddle ? styles.muddleIcon : undefined}
+        />
+      </View>
     );
   };
 
@@ -3300,9 +3320,21 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 8,
   },
+  methodOptionIconWrapper: {
+    width: 18,
+    height: 18,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  methodOptionIconWrapperWide: {
+    width: 36,
+  },
   methodOptionIcon: {
     width: 18,
     height: 18,
+  },
+  muddleIcon: {
+    transform: [{ scaleX: 2 }],
   },
   methodOptionLabel: {
     fontSize: 15,
