@@ -1,10 +1,10 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import Constants from "expo-constants";
 import * as DocumentPicker from "expo-document-picker";
 import * as FileSystem from "expo-file-system/legacy";
 import { Image, type ImageSource } from "expo-image";
 import * as Sharing from "expo-sharing";
-import Constants from "expo-constants";
 import {
   useEffect,
   useMemo,
@@ -820,27 +820,6 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
             keyboardShouldPersistTaps="handled"
           >
             <Pressable
-              accessibilityRole="button"
-              accessibilityLabel="Reload bundled inventory"
-              onPress={handleResetInventory}
-              style={[
-                styles.actionRow,
-                {
-                  borderColor: Colors.outline,
-                  backgroundColor: Colors.surface,
-                },
-              ]}>
-              <View style={[styles.actionIcon, { backgroundColor: Colors.surfaceVariant }]}>
-                <MaterialCommunityIcons name="refresh" size={16} color={Colors.onSurfaceVariant} />
-              </View>
-              <View style={styles.settingTextContainer}>
-                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>Reload bundled data</Text>
-                <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>
-                  Clear saved inventory and reload assets from data.json
-                </Text>
-              </View>
-            </Pressable>
-            <Pressable
               accessibilityRole="checkbox"
               accessibilityState={{ checked: ignoreGarnish }}
               onPress={toggleIgnoreGarnish}
@@ -1294,13 +1273,34 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 </Text>
               </View>
             </Pressable>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Reload bundled inventory"
+              onPress={handleResetInventory}
+              style={[
+                styles.actionRow,
+                {
+                  borderColor: Colors.outline,
+                  backgroundColor: Colors.surface,
+                },
+              ]}>
+              <View style={[styles.actionIcon, { backgroundColor: Colors.surfaceVariant }]}>
+                <MaterialCommunityIcons name="refresh" size={16} color={Colors.onSurfaceVariant} />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>Restore bundled data</Text>
+                <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>
+                  Restore bundled cocktails and ingredients
+                </Text>
+              </View>
+            </Pressable>
             <View style={styles.versionRow}>
               <Text
                 style={[styles.versionText, { color: Colors.onSurfaceVariant }]}
               >
                 Version {APP_VERSION}
                 {APP_VERSION_CODE != null ? ` (${APP_VERSION_CODE})` : ""}
-                {BUILD_TIME ? `\nBuild ${formatBuildTime(BUILD_TIME)}` : ""}
+                {/* {BUILD_TIME ? `\nBuild ${formatBuildTime(BUILD_TIME)}` : ""} */}
               </Text>
             </View>
           </ScrollView>
@@ -1825,7 +1825,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 12,
     paddingVertical: 12,
-    paddingHorizontal: 10,
+    paddingRight: 10,
     borderRadius: 12,
     borderWidth: StyleSheet.hairlineWidth,
   },
@@ -1966,7 +1966,7 @@ const styles = StyleSheet.create({
   },
   versionText: {
     fontSize: 12,
-    fontWeight: "600",
+    fontWeight: "400",
   },
   ratingOptionRow: {
     flexDirection: "row",
