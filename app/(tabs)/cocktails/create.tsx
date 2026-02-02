@@ -2521,7 +2521,9 @@ function EditableIngredientRow({
               candidateId >= 0 && availableIngredientIds.has(candidateId);
             const isOnShoppingList =
               candidateId >= 0 && shoppingIngredientIds.has(candidateId);
-            const tagColor = candidate.tags?.[0]?.color ?? tagColors.yellow;
+            const candidateTagColors = (candidate.tags ?? [])
+              .filter(Boolean)
+              .map((tag) => tag?.color ?? tagColors.yellow);
             const subtitle = renderSubtitle(baseGroupId);
             const brandIndicatorColor =
               candidate.baseIngredientId != null ? Colors.primary : undefined;
@@ -2538,7 +2540,7 @@ function EditableIngredientRow({
                   onPress={() => handleSelectSuggestion(candidate)}
                   selected={isAvailable}
                   highlightColor={Colors.highlightFaint}
-                  tagColor={tagColor}
+                  tagColors={candidateTagColors}
                   thumbnail={
                     <Thumb
                       label={candidate.name ?? undefined}
