@@ -5,6 +5,7 @@ import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 
 import { TAG_COLORS } from '@/constants/tag-colors';
 import { Colors } from '@/constants/theme';
+import { useThemedStyles } from '@/libs/use-themed-styles';
 
 type TagEditorModalProps = {
   visible: boolean;
@@ -25,6 +26,7 @@ export function TagEditorModal({
   onClose,
   onSave,
 }: TagEditorModalProps) {
+  const styles = useThemedStyles(createStyles);
   const [name, setName] = useState(initialName ?? '');
   const [hue, setHue] = useState(210);
   const [lightness, setLightness] = useState(0.5);
@@ -258,7 +260,8 @@ function ColorSlider({ label, value, onChange, gradientStops }: ColorSliderProps
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = () =>
+  StyleSheet.create({
   overlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.4)',
@@ -339,4 +342,4 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '700',
   },
-});
+  });

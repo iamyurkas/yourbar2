@@ -26,6 +26,7 @@ import {
 import { COCKTAIL_UNIT_DICTIONARY } from "@/constants/cocktail-units";
 import { Colors } from "@/constants/theme";
 import { resolveImageSource } from "@/libs/image-source";
+import { useThemedStyles } from "@/libs/use-themed-styles";
 import {
   createIngredientLookup,
   resolveIngredientAvailability,
@@ -326,6 +327,7 @@ function formatGlassLabel(glassId?: string | null) {
 }
 
 export default function CocktailDetailsScreen() {
+  const styles = useThemedStyles(createStyles);
   const params = useLocalSearchParams<{
     cocktailId?: string;
     returnToPath?: string;
@@ -1224,7 +1226,8 @@ export default function CocktailDetailsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = () =>
+  StyleSheet.create({
   safeArea: {
     flex: 1,
   },
@@ -1421,4 +1424,4 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 14,
   },
-});
+  });

@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 
 import { Colors } from '@/constants/theme';
+import { useThemedStyles } from '@/libs/use-themed-styles';
 
 export type TagPillProps = {
   label: string;
@@ -47,6 +48,7 @@ export function TagPill({
   hitSlop,
   testID,
 }: TagPillProps) {
+  const styles = useThemedStyles(createStyles);
 
   const content = (
     <View style={styles.contentRow}>
@@ -98,7 +100,8 @@ export function TagPill({
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = () =>
+  StyleSheet.create({
   pill: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -120,4 +123,4 @@ const styles = StyleSheet.create({
   pressed: {
     opacity: 0.85,
   },
-});
+  });

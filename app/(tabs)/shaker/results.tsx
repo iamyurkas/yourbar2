@@ -27,6 +27,7 @@ import { isCocktailReady } from '@/libs/cocktail-availability';
 import { createIngredientLookup } from '@/libs/ingredient-availability';
 import { navigateToDetailsWithReturnTo } from '@/libs/navigation';
 import { normalizeSearchText } from '@/libs/search-normalization';
+import { useThemedStyles } from '@/libs/use-themed-styles';
 import { useInventory, type Cocktail } from '@/providers/inventory-provider';
 
 function parseListParam(param?: string | string[]) {
@@ -66,6 +67,7 @@ function resolveCocktailByKey(key: string, cocktails: Cocktail[]) {
 const METHOD_ICON_SIZE = 16;
 
 export default function ShakerResultsScreen() {
+  const styles = useThemedStyles(createStyles);
   const {
     cocktails,
     availableIngredientIds,
@@ -699,7 +701,8 @@ export default function ShakerResultsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = () =>
+  StyleSheet.create({
   safeArea: {
     flex: 1,
   },
@@ -808,4 +811,4 @@ const styles = StyleSheet.create({
     marginTop: 80,
     fontSize: 14,
   },
-});
+  });

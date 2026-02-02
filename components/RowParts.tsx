@@ -14,9 +14,11 @@ import {
 import { AppImage } from './AppImage';
 import { Colors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
+import { useThemedStyles } from '@/libs/use-themed-styles';
 import { tagColors } from '@/theme/theme';
 
 const THUMB_SIZE = 56;
+const useStyles = () => useThemedStyles(createStyles);
 
 export type ThumbProps = {
   uri?: string | null;
@@ -26,6 +28,7 @@ export type ThumbProps = {
 };
 
 export function Thumb({ uri, label, fallbackUri, fallbackLabel }: ThumbProps) {
+  const styles = useStyles();
   const effectiveLabel = label ?? fallbackLabel;
   const trimmed = effectiveLabel?.trim();
   const fallbackText = trimmed ? trimmed.slice(0, 2).toUpperCase() : undefined;
@@ -55,6 +58,7 @@ type TagDotProps = {
 };
 
 export function TagDot({ color = tagColors.default }: TagDotProps) {
+  const styles = useStyles();
   return <View style={[styles.tagDot, { backgroundColor: color }]} />;
 }
 
@@ -64,6 +68,7 @@ type PresenceCheckProps = {
 };
 
 export function PresenceCheck({ checked, onToggle }: PresenceCheckProps) {
+  const styles = useStyles();
   const idleColor = Colors.outlineVariant;
   const borderColor = checked ? Colors.tint : idleColor;
   const backgroundColor = checked ? Colors.tint : 'transparent';
@@ -87,6 +92,7 @@ type FavoriteStarProps = {
 };
 
 export function FavoriteStar({ active, onToggle }: FavoriteStarProps) {
+  const styles = useStyles();
   const icon = active ? 'star' : 'star-outline';
   const color = active ? Colors.secondary : Colors.onSurfaceVariant;
 
@@ -141,6 +147,7 @@ export function ListRow({
   metaAlignment = 'space-between',
   brandIndicatorColor,
 }: ListRowProps) {
+  const styles = useStyles();
   const backgroundColor = selected ? highlightColor ?? `${Colors.tint}1F` : Colors.background;
   const metaAlignmentStyle =
     metaAlignment === 'center'
@@ -200,7 +207,8 @@ export function ListRow({
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = () =>
+  StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -317,4 +325,4 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
   },
-});
+  });

@@ -14,6 +14,7 @@ import {
 import { ListRow, Thumb } from '@/components/RowParts';
 import { Colors } from '@/constants/theme';
 import { normalizeSearchText } from '@/libs/search-normalization';
+import { useThemedStyles } from '@/libs/use-themed-styles';
 import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
 import { tagColors } from '@/theme/theme';
 
@@ -54,6 +55,7 @@ export function SubstituteModal({
   selectedSubstituteIds,
   selectedSubstituteNames,
 }: SubstituteModalProps) {
+  const styles = useThemedStyles(createStyles);
   const { ingredients, availableIngredientIds, shoppingIngredientIds, cocktails } = useInventory();
   const [searchValue, setSearchValue] = useState('');
   const inputRef = useRef<TextInput | null>(null);
@@ -350,7 +352,8 @@ export function SubstituteModal({
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = () =>
+  StyleSheet.create({
   modalOverlay: {
     flex: 1,
     alignItems: 'center',
@@ -412,4 +415,4 @@ const styles = StyleSheet.create({
   modalSeparator: {
     height: StyleSheet.hairlineWidth,
   },
-});
+  });

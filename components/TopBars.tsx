@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 
 import { Colors } from '@/constants/theme';
+import { useThemedStyles } from '@/libs/use-themed-styles';
 
 type SearchTopBarProps = {
   value: string;
@@ -47,6 +48,7 @@ export function SearchTopBar({
   filterExpanded = false,
   onFilterLayout,
 }: SearchTopBarProps) {
+  const styles = useThemedStyles(createStyles);
 
   const handleSubmit = (event: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
     onSubmit?.(event.nativeEvent.text);
@@ -113,6 +115,7 @@ export function SearchTopBar({
 }
 
 export function SegmentTabs({ options, value, onChange }: SegmentTabsProps) {
+  const styles = useThemedStyles(createStyles);
 
   return (
     <View style={[styles.tabs, { backgroundColor: Colors.surface }]}> 
@@ -150,7 +153,8 @@ export function SegmentTabs({ options, value, onChange }: SegmentTabsProps) {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = () =>
+  StyleSheet.create({
   topBar: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -212,4 +216,4 @@ const styles = StyleSheet.create({
     height: 3,
     borderRadius: 2,
   },
-});
+  });

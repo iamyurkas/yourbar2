@@ -33,6 +33,7 @@ import {
 import { navigateToDetailsWithReturnTo } from '@/libs/navigation';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { buildTagOptions, type TagOption } from '@/libs/tag-options';
+import { useThemedStyles } from '@/libs/use-themed-styles';
 import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
 import { tagColors } from '@/theme/theme';
 
@@ -203,6 +204,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
 }, areIngredientPropsEqual);
 
 export default function IngredientsScreen() {
+  const styles = useThemedStyles(createStyles);
   const router = useRouter();
   const {
     cocktails,
@@ -780,7 +782,8 @@ export default function IngredientsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = () =>
+  StyleSheet.create({
   safeArea: {
     flex: 1,
   },
@@ -882,4 +885,4 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
   },
-});
+  });

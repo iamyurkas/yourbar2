@@ -28,6 +28,7 @@ import {
   getVisibleIngredientIdsForCocktail,
 } from '@/libs/ingredient-availability';
 import { normalizeSearchText } from '@/libs/search-normalization';
+import { useThemedStyles } from '@/libs/use-themed-styles';
 import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
 import { tagColors } from '@/theme/theme';
 
@@ -167,6 +168,7 @@ function isCollapsedHeaderItem(item: Ingredient) {
 }
 
 export default function ShakerScreen() {
+  const styles = useThemedStyles(createStyles);
   const router = useRouter();
   const {
     cocktails,
@@ -896,7 +898,8 @@ export default function ShakerScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = () =>
+  StyleSheet.create({
   safeArea: {
     flex: 1,
   },
@@ -1037,4 +1040,4 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
   },
-});
+  });

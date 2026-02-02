@@ -2,6 +2,7 @@ import React from 'react';
 import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Colors } from '@/constants/theme';
+import { useThemedStyles } from '@/libs/use-themed-styles';
 
 export type DialogAction = {
   label: string;
@@ -22,6 +23,7 @@ type AppDialogProps = DialogOptions & {
 };
 
 export function AppDialog({ visible, title, message, actions, onRequestClose }: AppDialogProps) {
+  const styles = useThemedStyles(createStyles);
   if (!visible) {
     return null;
   }
@@ -87,7 +89,8 @@ function getActionColors(variant: DialogAction['variant']) {
   }
 }
 
-const styles = StyleSheet.create({
+const createStyles = () =>
+  StyleSheet.create({
   overlay: {
     flex: 1,
     alignItems: 'center',
@@ -127,4 +130,4 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: 15,
   },
-});
+  });

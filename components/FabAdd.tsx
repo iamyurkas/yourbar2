@@ -3,6 +3,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Colors } from '@/constants/theme';
+import { useThemedStyles } from '@/libs/use-themed-styles';
 
 type FabAddProps = {
   label?: string;
@@ -11,6 +12,27 @@ type FabAddProps = {
 
 export function FabAdd({ label = 'Add', onPress }: FabAddProps) {
   const insets = useSafeAreaInsets();
+  const styles = useThemedStyles(() =>
+    StyleSheet.create({
+      container: {
+        position: 'absolute',
+        right: 24,
+        zIndex: 10,
+      },
+      fab: {
+        width: 56,
+        height: 56,
+        borderRadius: 12,
+        alignItems: 'center',
+        justifyContent: 'center',
+        elevation: 6,
+        shadowColor: Colors.shadow,
+        shadowOpacity: 0.18,
+        shadowOffset: { width: 0, height: 6 },
+        shadowRadius: 12,
+      },
+    }),
+  );
 
   return (
     <View style={[styles.container, { bottom: insets.bottom + 16 }]}>
@@ -25,23 +47,3 @@ export function FabAdd({ label = 'Add', onPress }: FabAddProps) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    position: 'absolute',
-    right: 24,
-    zIndex: 10,
-  },
-  fab: {
-    width: 56,
-    height: 56,
-    borderRadius: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-    elevation: 6,
-    shadowColor: Colors.shadow,
-    shadowOpacity: 0.18,
-    shadowOffset: { width: 0, height: 6 },
-    shadowRadius: 12,
-  },
-});

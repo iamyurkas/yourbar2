@@ -33,6 +33,7 @@ import { createIngredientLookup } from '@/libs/ingredient-availability';
 import { navigateToDetailsWithReturnTo } from '@/libs/navigation';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { buildTagOptions, type TagOption } from '@/libs/tag-options';
+import { useThemedStyles } from '@/libs/use-themed-styles';
 import { useInventory, type Cocktail } from '@/providers/inventory-provider';
 import { tagColors } from '@/theme/theme';
 
@@ -82,6 +83,7 @@ const normalizeIngredientId = (value?: number | string | null): number | undefin
 };
 
 export default function CocktailsScreen() {
+  const styles = useThemedStyles(createStyles);
   const {
     cocktails,
     availableIngredientIds,
@@ -1006,7 +1008,8 @@ export default function CocktailsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = () =>
+  StyleSheet.create({
   safeArea: {
     flex: 1,
   },
@@ -1147,4 +1150,4 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
   },
-});
+  });

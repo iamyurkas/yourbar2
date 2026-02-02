@@ -11,6 +11,7 @@ import { TabBarButton } from '@/components/tab-bar/TabBarButton';
 import { TabBarIcon } from '@/components/tab-bar/TabBarIcon';
 import { Colors } from '@/constants/theme';
 import { getLastCocktailTab, getLastIngredientTab } from '@/libs/collection-tabs';
+import { useThemedStyles } from '@/libs/use-themed-styles';
 import { useThemeSettings } from '@/providers/theme-provider';
 
 type TabPressHandler = (navigation: { navigate: (...args: never[]) => void }, route: { name: string }) => void;
@@ -53,6 +54,22 @@ export default function TabLayout() {
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(null);
   const insets = useSafeAreaInsets();
   const { isDarkMode } = useThemeSettings();
+  const styles = useThemedStyles(() =>
+    StyleSheet.create({
+      tabBarBackground: {
+        ...StyleSheet.absoluteFillObject,
+        flexDirection: 'column',
+      },
+      tabBarSurface: {
+        flex: 1,
+        backgroundColor: Colors.surface,
+      },
+      tabBarInset: {
+        height: 0,
+        backgroundColor: Colors.surface,
+      },
+    }),
+  );
 
   const tabBarInsetColor = isDarkMode ? Colors.onSurfaceVariant : Colors.surface;
 
@@ -117,18 +134,3 @@ export default function TabLayout() {
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  tabBarBackground: {
-    ...StyleSheet.absoluteFillObject,
-    flexDirection: 'column',
-  },
-  tabBarSurface: {
-    flex: 1,
-    backgroundColor: Colors.surface,
-  },
-  tabBarInset: {
-    height: 0,
-    backgroundColor: Colors.surface,
-  },
-});

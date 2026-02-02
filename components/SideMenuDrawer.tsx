@@ -31,6 +31,7 @@ import { TagEditorModal } from "@/components/TagEditorModal";
 import { TagPill } from "@/components/TagPill";
 import { Colors } from "@/constants/theme";
 import { buildPhotoBaseName } from "@/libs/photo-utils";
+import { useThemedStyles } from "@/libs/use-themed-styles";
 import { useInventory, type StartScreen } from "@/providers/inventory-provider";
 import { useThemeSettings } from "@/providers/theme-provider";
 import { type InventoryExportData } from "@/providers/inventory-types";
@@ -179,6 +180,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   const [isExporting, setIsExporting] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
   const [isBackingUpPhotos, setIsBackingUpPhotos] = useState(false);
+  const styles = useThemedStyles(createStyles);
   const translateX = useRef(new Animated.Value(-MENU_WIDTH)).current;
   const backdropOpacity = useRef(new Animated.Value(0)).current;
 
@@ -1848,7 +1850,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = () =>
+  StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "transparent",
@@ -2060,4 +2063,4 @@ const styles = StyleSheet.create({
   ratingOptionLabel: {
     fontWeight: "700",
   },
-});
+  });

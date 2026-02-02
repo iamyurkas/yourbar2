@@ -3,6 +3,7 @@ import { Pressable, StyleSheet, TextInput, View } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
 import { Colors } from '@/constants/theme';
+import { useThemedStyles } from '@/libs/use-themed-styles';
 
 type SearchBarProps = {
   placeholder: string;
@@ -19,6 +20,7 @@ export function SearchBar({
   trailingActionLabel,
   onPressTrailingAction,
 }: SearchBarProps) {
+  const styles = useThemedStyles(createStyles);
   const backgroundColor = Colors.surfaceBright;
   const borderColor = Colors.outline;
   const placeholderColor = Colors.placeholder;
@@ -65,7 +67,8 @@ export function SearchBar({
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = () =>
+  StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -105,4 +108,4 @@ const styles = StyleSheet.create({
     letterSpacing: 0.4,
     textTransform: 'uppercase',
   },
-});
+  });

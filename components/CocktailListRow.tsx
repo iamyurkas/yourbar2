@@ -9,6 +9,7 @@ import { Colors } from '@/constants/theme';
 import type { Cocktail, Ingredient } from '@/providers/inventory-provider';
 import { createIngredientLookup, type IngredientLookup } from '@/libs/ingredient-availability';
 import { summariseCocktailAvailability } from '@/libs/cocktail-availability';
+import { useThemedStyles } from '@/libs/use-themed-styles';
 
 import { ListRow, Thumb } from './RowParts';
 
@@ -61,6 +62,7 @@ const CocktailListRowComponent = ({
   showMethodIcons = false,
   onPress,
 }: CocktailListRowProps) => {
+  const styles = useThemedStyles(createStyles);
   const lookup = useMemo(() => {
     if (ingredientLookup) {
       return ingredientLookup;
@@ -251,7 +253,8 @@ const CocktailListRowComponent = ({
 
 export const CocktailListRow = memo(CocktailListRowComponent, areCocktailRowPropsEqual);
 
-const styles = StyleSheet.create({
+const createStyles = () =>
+  StyleSheet.create({
   ratingPill: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -281,4 +284,4 @@ const styles = StyleSheet.create({
   muddleIcon: {
     transform: [{ scaleX: 2 }],
   },
-});
+  });

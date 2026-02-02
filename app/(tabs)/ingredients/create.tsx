@@ -30,6 +30,7 @@ import { resolveImageSource } from '@/libs/image-source';
 import { buildReturnToParams, skipDuplicateBack } from '@/libs/navigation';
 import { shouldStorePhoto, storePhoto } from '@/libs/photo-storage';
 import { normalizeSearchText } from '@/libs/search-normalization';
+import { useThemedStyles } from '@/libs/use-themed-styles';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
 import { useUnsavedChanges } from '@/providers/unsaved-changes-provider';
 
@@ -68,6 +69,7 @@ function useResolvedIngredient(param: string | undefined, ingredients: Ingredien
 }
 
 export default function IngredientFormScreen() {
+  const styles = useThemedStyles(createStyles);
   const params = useLocalSearchParams<{
     suggestedName?: string;
     returnTo?: string;
@@ -1156,7 +1158,8 @@ export default function IngredientFormScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = () =>
+  StyleSheet.create({
   flex: {
     flex: 1,
   },
@@ -1434,4 +1437,4 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: 'center',
   },
-});
+  });

@@ -3,6 +3,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
 import { Colors } from '@/constants/theme';
+import { useThemedStyles } from '@/libs/use-themed-styles';
 
 type TabItem = {
   key: string;
@@ -16,6 +17,7 @@ type MD3TopTabsProps = {
 };
 
 export function MD3TopTabs({ tabs, activeKey, onTabChange }: MD3TopTabsProps) {
+  const styles = useThemedStyles(createStyles);
 
   return (
     <View
@@ -70,7 +72,8 @@ export function MD3TopTabs({ tabs, activeKey, onTabChange }: MD3TopTabsProps) {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = () =>
+  StyleSheet.create({
   container: {
     flexDirection: 'row',
     padding: 4,
@@ -98,6 +101,6 @@ const styles = StyleSheet.create({
     height: 6,
     borderRadius: 3,
   },
-});
+  });
 
 export type { TabItem };

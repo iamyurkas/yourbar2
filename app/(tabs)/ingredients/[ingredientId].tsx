@@ -29,6 +29,7 @@ import { TagPill } from "@/components/TagPill";
 import { Colors } from "@/constants/theme";
 import { isCocktailReady } from "@/libs/cocktail-availability";
 import { resolveImageSource } from "@/libs/image-source";
+import { useThemedStyles } from "@/libs/use-themed-styles";
 import {
   createIngredientLookup,
   getVisibleIngredientIdsForCocktail,
@@ -70,6 +71,7 @@ function useResolvedIngredient(
 }
 
 export default function IngredientDetailsScreen() {
+  const styles = useThemedStyles(createStyles);
   const params = useLocalSearchParams<{
     ingredientId?: string;
     returnToPath?: string;
@@ -1013,7 +1015,8 @@ export default function IngredientDetailsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = () =>
+  StyleSheet.create({
   safeArea: {
     flex: 1,
   },
@@ -1196,4 +1199,4 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingVertical: 80,
   },
-});
+  });

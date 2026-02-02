@@ -1,6 +1,7 @@
 import { StyleSheet, Text, type TextProps } from 'react-native';
 
 import { Colors } from '@/constants/theme';
+import { useThemedStyles } from '@/libs/use-themed-styles';
 
 export type ThemedTextProps = TextProps & {
   lightColor?: string;
@@ -13,6 +14,7 @@ export function ThemedText({
   type = 'default',
   ...rest
 }: ThemedTextProps) {
+  const styles = useThemedStyles(createStyles);
   const color = lightColor ?? Colors.text;
 
   return (
@@ -31,7 +33,8 @@ export function ThemedText({
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = () =>
+  StyleSheet.create({
   default: {
     fontSize: 15,
     lineHeight: 22,
@@ -55,4 +58,4 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: Colors.primary,
   },
-});
+  });

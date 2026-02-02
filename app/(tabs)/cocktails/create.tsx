@@ -53,6 +53,7 @@ import {
 } from "@/libs/navigation";
 import { shouldStorePhoto, storePhoto } from "@/libs/photo-storage";
 import { normalizeSearchText } from "@/libs/search-normalization";
+import { useThemedStyles } from "@/libs/use-themed-styles";
 import {
   useInventory,
   type Cocktail,
@@ -222,6 +223,7 @@ function mapRecipeIngredientToEditable(
 }
 
 export default function CreateCocktailScreen() {
+  const styles = useThemedStyles(createStyles);
   const navigation = useNavigation();
   const {
     ingredients: inventoryIngredients,
@@ -2788,7 +2790,8 @@ function ToggleChip({ label, active, onToggle, onInfo }: ToggleChipProps) {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = () =>
+  StyleSheet.create({
   flex: {
     flex: 1,
   },
@@ -3344,4 +3347,4 @@ const styles = StyleSheet.create({
     padding: 6,
     borderRadius: 8,
   },
-});
+  });
