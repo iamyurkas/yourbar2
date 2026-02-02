@@ -2853,7 +2853,6 @@ const styles = StyleSheet.create({
   glassPreview: {
     width: 150,
     height: 150,
-    resizeMode: "contain",
   },
   cardHint: {
     fontSize: 12,

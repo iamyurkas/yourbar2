@@ -11,7 +11,7 @@ export interface AppImageProps extends ImageProps {
 /**
  * A wrapper around `expo-image` that adds a white pixel background.
  */
-export function AppImage({ source, style, containerStyle, ...props }: AppImageProps) {
+export function AppImage({ source, style, containerStyle, contentFit, ...props }: AppImageProps) {
   if (!source) {
     return null;
   }
@@ -20,13 +20,14 @@ export function AppImage({ source, style, containerStyle, ...props }: AppImagePr
     <View style={[styles.container, containerStyle, style]}>
       <Image
         source={whitePixel}
-        style={styles.background}
-        contentFit="stretch"
+        style={StyleSheet.absoluteFill}
+        contentFit="fill"
         transition={0}
       />
       <Image
         source={source}
         style={[styles.foreground, style]}
+        contentFit={contentFit}
         {...props}
       />
     </View>
