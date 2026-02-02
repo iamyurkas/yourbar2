@@ -1,6 +1,6 @@
-import { Appearance } from "react-native";
-
 import { MD3LightTheme, type PaperTheme } from "@/libs/react-native-paper";
+
+export type ThemeScheme = "light" | "dark";
 
 const lightPalette = {
   primary: "#4DABF7",
@@ -110,8 +110,10 @@ const darkPalette = {
   overlayOnPrimary: "#00000055",
 } as const;
 
-export const palette =
-  Appearance.getColorScheme() === "dark" ? darkPalette : lightPalette;
+export const palette = {
+  light: lightPalette,
+  dark: darkPalette,
+} as const;
 
 export const tagPalette = [
   "#ec5a5a",
@@ -212,6 +214,10 @@ export const lightTheme: PaperTheme = lightThemeBase;
 
 export const darkTheme: PaperTheme = darkThemeBase;
 
-export function getAppTheme(): PaperTheme {
-  return Appearance.getColorScheme() === "dark" ? darkTheme : lightTheme;
+export function getPalette(scheme: ThemeScheme) {
+  return palette[scheme];
+}
+
+export function getAppTheme(scheme: ThemeScheme): PaperTheme {
+  return scheme === "dark" ? darkTheme : lightTheme;
 }

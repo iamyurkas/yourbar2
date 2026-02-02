@@ -1,22 +1,48 @@
-import { Platform } from 'react-native';
+import { Appearance, Platform } from 'react-native';
 
-import { getAppTheme, palette } from '@/theme/theme';
+import { getAppTheme, getPalette, type ThemeScheme } from '@/theme/theme';
 
-const themeColors = getAppTheme().colors;
-const tintColor = themeColors.primary;
+type ThemeColors = ReturnType<typeof getAppTheme>['colors'];
+type ThemePalette = ReturnType<typeof getPalette>;
+type AppColors = ThemeColors & {
+  text: string;
+  tint: string;
+  icon: string;
+  tabIconDefault: string;
+  tabIconSelected: string;
+  danger: string;
+  disabled: string;
+  placeholder: string;
+  success: string;
+};
 
-export const Colors = {
-  ...themeColors,
-  text: themeColors.onSurface,
-  tint: tintColor,
-  icon: themeColors.onSurfaceVariant,
-  tabIconDefault: themeColors.onSurfaceVariant,
-  tabIconSelected: tintColor,
-  danger: palette.danger,
-  disabled: palette.disabled,
-  placeholder: palette.placeholder,
-  success: palette.success,
-} as const;
+const buildColors = (scheme: ThemeScheme): AppColors => {
+  const themeColors = getAppTheme(scheme).colors;
+  const activePalette = getPalette(scheme);
+  const tintColor = themeColors.primary;
+
+  return {
+    ...themeColors,
+    text: themeColors.onSurface,
+    tint: tintColor,
+    icon: themeColors.onSurfaceVariant,
+    tabIconDefault: themeColors.onSurfaceVariant,
+    tabIconSelected: tintColor,
+    danger: activePalette.danger,
+    disabled: activePalette.disabled,
+    placeholder: activePalette.placeholder,
+    success: activePalette.success,
+  };
+};
+
+const initialScheme: ThemeScheme =
+  Appearance.getColorScheme() === 'dark' ? 'dark' : 'light';
+
+export const Colors = buildColors(initialScheme);
+
+export const setThemeScheme = (scheme: ThemeScheme) => {
+  Object.assign(Colors, buildColors(scheme));
+};
 
 export const Fonts = Platform.select({
   ios: {

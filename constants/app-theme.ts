@@ -1,3 +1,3 @@
 import { getAppTheme } from '@/theme/theme';
 
-export const AppTheme = getAppTheme();
+export const AppTheme = getAppTheme('light');

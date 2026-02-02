@@ -2,11 +2,11 @@ import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import "react-native-reanimated";
-import { useColorScheme } from "react-native";
 
 import { Colors } from "@/constants/theme";
 import { PaperProvider } from "@/libs/react-native-paper";
 import { InventoryProvider } from "@/providers/inventory-provider";
+import { ThemeProvider, useThemeSettings } from "@/providers/theme-provider";
 import { UnsavedChangesProvider } from "@/providers/unsaved-changes-provider";
 import { getAppTheme } from "@/theme/theme";
 import * as Sentry from '@sentry/react-native';
@@ -29,9 +29,8 @@ export const unstable_settings = {
   anchor: "(tabs)",
 };
 
-export default Sentry.wrap(function RootLayout() {
-  const colorScheme = useColorScheme();
-  const isDarkMode = colorScheme === "dark";
+function RootLayoutContent() {
+  const { effectiveScheme, isDarkMode } = useThemeSettings();
 
   const navigationTheme = ({
     ...DefaultTheme,
@@ -44,7 +43,7 @@ export default Sentry.wrap(function RootLayout() {
     },
   } satisfies typeof DefaultTheme);
 
-  const paperTheme = getAppTheme();
+  const paperTheme = getAppTheme(effectiveScheme);
 
   return (
     <UnsavedChangesProvider>
@@ -63,5 +62,13 @@ export default Sentry.wrap(function RootLayout() {
         </PaperProvider>
       </InventoryProvider>
     </UnsavedChangesProvider>
+  );
+}
+
+export default Sentry.wrap(function RootLayout() {
+  return (
+    <ThemeProvider>
+      <RootLayoutContent />
+    </ThemeProvider>
   );
 });

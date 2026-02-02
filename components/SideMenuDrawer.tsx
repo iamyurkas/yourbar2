@@ -32,6 +32,7 @@ import { TagPill } from "@/components/TagPill";
 import { Colors } from "@/constants/theme";
 import { buildPhotoBaseName } from "@/libs/photo-utils";
 import { useInventory, type StartScreen } from "@/providers/inventory-provider";
+import { useThemeSettings } from "@/providers/theme-provider";
 import { type InventoryExportData } from "@/providers/inventory-types";
 import appConfig from "../app.json";
 
@@ -143,6 +144,12 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     updateCustomIngredientTag,
     deleteCustomIngredientTag,
   } = useInventory();
+  const {
+    themePreference,
+    setThemePreference,
+    isDarkMode,
+    isSystemDark,
+  } = useThemeSettings();
   const [isMounted, setIsMounted] = useState(visible);
   const [isRatingModalVisible, setRatingModalVisible] = useState(false);
   const ratingModalCloseTimeout = useRef<ReturnType<typeof setTimeout> | null>(
@@ -273,6 +280,10 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
   const toggleKeepScreenAwake = () => {
     setKeepScreenAwake(!keepScreenAwake);
+  };
+
+  const toggleThemePreference = () => {
+    setThemePreference(themePreference === "dark" ? "light" : "dark");
   };
 
   const handleResetInventory = () => {
@@ -1028,6 +1039,57 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   ]}
                 >
                   Prevent sleep on cocktail view
+                </Text>
+              </View>
+            </Pressable>
+            <Pressable
+              accessibilityRole="checkbox"
+              accessibilityState={{ checked: isDarkMode }}
+              onPress={toggleThemePreference}
+              disabled={isSystemDark}
+              style={[
+                styles.settingRow,
+                {
+                  borderColor: Colors.outline,
+                  backgroundColor: Colors.surface,
+                  opacity: isSystemDark ? 0.6 : 1,
+                },
+              ]}
+            >
+              <View
+                style={[
+                  styles.checkbox,
+                  {
+                    borderColor: isDarkMode
+                      ? Colors.tint
+                      : Colors.outlineVariant,
+                    backgroundColor: isDarkMode
+                      ? Colors.tint
+                      : "transparent",
+                  },
+                ]}
+              >
+                <MaterialCommunityIcons
+                  name="check"
+                  size={16}
+                  color={isDarkMode ? Colors.background : Colors.outlineVariant}
+                />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text
+                  style={[styles.settingLabel, { color: Colors.onSurface }]}
+                >
+                  Dark theme
+                </Text>
+                <Text
+                  style={[
+                    styles.settingCaption,
+                    { color: Colors.onSurfaceVariant },
+                  ]}
+                >
+                  {isSystemDark
+                    ? "Enabled by system settings"
+                    : "Toggle between light and dark"}
                 </Text>
               </View>
             </Pressable>
