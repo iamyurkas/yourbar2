@@ -1306,10 +1306,13 @@ const styles = StyleSheet.create({
   glassImageWrapper: {
     width: 48,
     height: 48,
+    borderRadius: 12,
+    overflow: "hidden",
   },
   glassImage: {
     width: "100%",
     height: "100%",
+    borderRadius: 12,
   },
   glassLabel: {
     fontSize: 16,
