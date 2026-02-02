@@ -27431,6 +27431,7 @@
     {
       "id": 561,
       "name": "Triffle",
+      "description": "A layered shooter that balances sweet grenadine with creamy egg liqueur and whipped cream. Rich, dessert-like, and served as a quick indulgent sip.",
       "instructions": "1. Pour 10ml of Grenadine into a shooter glass.\n2. Carefully pour 45ml of Egg Liqueur on the top.\n3. Pour Whipped Cream on the top.",
       "photoUri": "assets/cocktails/561-triffle.jpg",
       "glassId": "shooter",
@@ -31654,6 +31655,7 @@
     {
       "id": 344,
       "name": "Orange Bitters",
+      "description": "Orange bitters are aromatic bitters flavored with orange peel and spices. Use a dash or two to add bright citrus and gentle bitterness to stirred cocktails.",
       "tags": [10],
       "photoUri": "assets/ingredients/344-orange-bitters.jpg"
     },
@@ -32378,6 +32380,7 @@
     {
       "id": 447,
       "name": "Whiskey Cream",
+      "description": "Whiskey cream is a creamy liqueur blending whiskey with dairy and sweetness. It brings a smooth, dessert-like richness to cocktails and after-dinner drinks.",
       "tags": [2],
       "baseIngredientId": 297,
       "photoUri": "assets/ingredients/447-whiskey-cream.jpg"
