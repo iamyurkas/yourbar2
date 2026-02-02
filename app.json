@@ -18,6 +18,7 @@
       "package": "com.iamyurkas.yourbar",
       "versionCode": 9,
 
+      "forceDarkAllowed": false,
       "enableProguardInRelease": true,
       "enableShrinkResourcesInRelease": true,
 
