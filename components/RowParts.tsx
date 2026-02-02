@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Image, type ImageSource } from 'expo-image';
+import { type ImageSource } from 'expo-image';
 import React, { type ReactNode } from 'react';
 import {
   Pressable,
@@ -11,6 +11,7 @@ import {
   type TextStyle,
 } from 'react-native';
 
+import { AppImage } from './AppImage';
 import { Colors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
 import { tagColors } from '@/theme/theme';
@@ -39,7 +40,7 @@ export function Thumb({ uri, label, fallbackUri, fallbackLabel }: ThumbProps) {
   return (
     <View style={[styles.thumb, { backgroundColor: Colors.surfaceBright }]}>
       {source ? (
-        <Image source={source} style={styles.thumbImage} contentFit="contain" />
+        <AppImage source={source} style={styles.thumbImage} contentFit="contain" />
       ) : fallbackText ? (
         <Text style={[styles.thumbFallback, { color: Colors.onSurfaceVariant }]}>{fallbackText}</Text>
       ) : (

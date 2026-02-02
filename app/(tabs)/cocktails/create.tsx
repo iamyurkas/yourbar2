@@ -26,6 +26,7 @@ import {
 } from "react-native";
 
 import { resolveAssetFromCatalog } from "@/assets/image-manifest";
+import { AppImage } from "@/components/AppImage";
 import { AppDialog, type DialogOptions } from "@/components/AppDialog";
 import { HeaderIconButton } from "@/components/HeaderIconButton";
 import { ListRow, Thumb } from "@/components/RowParts";
@@ -1484,7 +1485,7 @@ export default function CreateCocktailScreen() {
                 onPress={() => setIsGlassModalVisible(true)}
               >
                 {glassImageSource ? (
-                  <Image
+                  <AppImage
                     source={glassImageSource}
                     style={styles.glassPreview}
                     contentFit="contain"
@@ -1522,7 +1523,7 @@ export default function CreateCocktailScreen() {
                   android_ripple={{ color: `${Colors.surface}33` }}
                 >
                   {imageSource ? (
-                    <Image
+                    <AppImage
                       source={imageSource}
                       style={styles.photoPreview}
                       contentFit="contain"
@@ -1841,7 +1842,7 @@ export default function CreateCocktailScreen() {
                     accessibilityLabel={`Select ${item.name}`}
                   >
                     {asset ? (
-                      <Image
+                      <AppImage
                         source={asset}
                         style={styles.glassOptionImage}
                         contentFit="cover"

@@ -1,6 +1,5 @@
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { Image } from "expo-image";
 import { Stack, router, useLocalSearchParams } from "expo-router";
 import React, {
   useCallback,
@@ -22,6 +21,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { AppImage } from "@/components/AppImage";
 import { AppDialog, type DialogOptions } from "@/components/AppDialog";
 import { CocktailListRow } from "@/components/CocktailListRow";
 import { PresenceCheck } from "@/components/RowParts";
@@ -598,7 +598,7 @@ export default function IngredientDetailsScreen() {
             <View style={styles.mediaSection}>
               <View style={styles.photoWrapper}>
                 {photoSource ? (
-                  <Image
+                  <AppImage
                     source={photoSource}
                     style={styles.photo}
                     contentFit="contain"
@@ -759,7 +759,7 @@ export default function IngredientDetailsScreen() {
                   <View style={styles.baseIngredientInfo}>
                     <View style={styles.baseIngredientThumb}>
                       {baseIngredientPhotoSource ? (
-                        <Image
+                        <AppImage
                           source={baseIngredientPhotoSource}
                           style={styles.baseIngredientImage}
                           contentFit="contain"
@@ -841,7 +841,7 @@ export default function IngredientDetailsScreen() {
                         <View style={styles.baseIngredientInfo}>
                           <View style={styles.baseIngredientThumb}>
                             {brandedPhotoSource ? (
-                              <Image
+                              <AppImage
                                 source={brandedPhotoSource}
                                 style={styles.baseIngredientImage}
                                 contentFit="contain"
