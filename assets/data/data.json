@@ -9435,7 +9435,7 @@
         {
           "order": 1,
           "ingredientId": 403,
-          "name": "Rye Whisky",
+          "name": "Rye Whiskey",
           "amount": "30",
           "unitId": 11
         },
@@ -10895,8 +10895,8 @@
       "ingredients": [
         {
           "order": 1,
-          "ingredientId": 97568,
-          "name": "Tequila",
+          "ingredientId": 431,
+          "name": "Tequila Blanco",
           "amount": "45",
           "unitId": 11
         },
@@ -11080,7 +11080,7 @@
         {
           "order": 1,
           "ingredientId": 298,
-          "name": "Irish Whisky",
+          "name": "Irish Whiskey",
           "amount": "45",
           "unitId": 11,
           "substitutes": [
@@ -11489,7 +11489,7 @@
         {
           "order": 1,
           "ingredientId": 403,
-          "name": "Rye Whisky",
+          "name": "Rye Whiskey",
           "amount": "20",
           "unitId": 11
         },
@@ -11503,7 +11503,7 @@
         {
           "order": 3,
           "ingredientId": 328,
-          "name": "Maraschino Liqueur",
+          "name": "Luxardo Maraschino",
           "amount": "20",
           "unitId": 11
         },
@@ -12424,8 +12424,8 @@
       "ingredients": [
         {
           "order": 1,
-          "ingredientId": 97568,
-          "name": "Tequila",
+          "ingredientId": 431,
+          "name": "Tequila Blanco",
           "amount": "45",
           "unitId": 11
         },
@@ -12757,7 +12757,7 @@
         {
           "order": 1,
           "ingredientId": 106,
-          "name": "Aged rum",
+          "name": "Aged Rum",
           "amount": "30",
           "unitId": 11
         },
@@ -15227,7 +15227,7 @@
         {
           "order": 1,
           "ingredientId": 299,
-          "name": "Islay Scotch Whiskey",
+          "name": "Islay Scotch Whisky",
           "amount": "60",
           "unitId": 11
         },
@@ -15262,7 +15262,7 @@
         {
           "order": 6,
           "ingredientId": 328,
-          "name": "Maraschino Liqueur",
+          "name": "Luxardo Maraschino",
           "amount": "1",
           "unitId": 24
         },
@@ -15679,7 +15679,7 @@
         {
           "order": 2,
           "ingredientId": 408,
-          "name": "Scotch Whiskey",
+          "name": "Scotch Whisky",
           "amount": "22.5",
           "unitId": 11
         },
@@ -18079,7 +18079,7 @@
         {
           "order": 3,
           "ingredientId": 328,
-          "name": "Maraschino Liqueur",
+          "name": "Luxardo Maraschino",
           "amount": "1",
           "unitId": 2
         },
@@ -20923,7 +20923,7 @@
         {
           "order": 2,
           "ingredientId": 367,
-          "name": "Pedro Ximenez",
+          "name": "Pedro Ximenez Sherry",
           "amount": "20",
           "unitId": 11
         },
@@ -22072,7 +22072,7 @@
         {
           "order": 1,
           "ingredientId": 403,
-          "name": "Rye Whisky",
+          "name": "Rye Whiskey",
           "amount": "50",
           "unitId": 11
         },
@@ -22086,7 +22086,7 @@
         {
           "order": 3,
           "ingredientId": 328,
-          "name": "Maraschino Liqueur",
+          "name": "Luxardo Maraschino",
           "amount": "10",
           "unitId": 11
         },
@@ -22944,7 +22944,7 @@
         {
           "order": 2,
           "ingredientId": 367,
-          "name": "Pedro Ximenez",
+          "name": "Pedro Ximenez Sherry",
           "amount": "30",
           "unitId": 11,
           "substitutes": [
@@ -23590,7 +23590,7 @@
         {
           "order": 2,
           "ingredientId": 408,
-          "name": "Scotch Whiskey",
+          "name": "Scotch Whisky",
           "amount": "30",
           "unitId": 11
         },
@@ -24201,7 +24201,7 @@
         {
           "order": 4,
           "ingredientId": 353,
-          "name": "Palo Cortado",
+          "name": "Palo Cortado Sherry",
           "amount": "45",
           "unitId": 11,
           "allowBaseSubstitution": true
@@ -25151,7 +25151,7 @@
         {
           "order": 5,
           "ingredientId": 186,
-          "name": "Red Chili Pepper",
+          "name": "Chili Pepper",
           "amount": "1",
           "unitId": 19
         },
@@ -25165,7 +25165,7 @@
         {
           "order": 7,
           "ingredientId": 186,
-          "name": "Red Chili Pepper",
+          "name": "Chili Pepper",
           "amount": "1",
           "unitId": 19,
           "garnish": true
@@ -27960,7 +27960,7 @@
         {
           "order": 7,
           "ingredientId": 186,
-          "name": "Red Chili Pepper",
+          "name": "Chili Pepper",
           "amount": "3",
           "unitId": 19
         },
@@ -27996,7 +27996,7 @@
         {
           "order": 12,
           "ingredientId": 186,
-          "name": "Red Chili Pepper",
+          "name": "Chili Pepper",
           "amount": "1",
           "unitId": 19,
           "garnish": true
@@ -29573,7 +29573,7 @@
         {
           "order": 3,
           "ingredientId": 328,
-          "name": "Maraschino Liqueur",
+          "name": "Luxardo Maraschino",
           "amount": "15",
           "unitId": 11
         },
