@@ -45,7 +45,7 @@ import {
   COCKTAIL_UNIT_OPTIONS,
 } from "@/constants/cocktail-units";
 import { GLASSWARE } from "@/constants/glassware";
-import { Colors } from "@/constants/theme";
+import { useAppColors } from "@/constants/theme";
 import {
   buildReturnToParams,
   parseReturnToParams,
@@ -95,7 +95,7 @@ type CocktailFormSnapshot = {
   instructions: string;
   imageUri: string | null;
   selectedTagIds: number[];
-  ingredients: Array<{
+  ingredients: {
     ingredientId?: number;
     name: string;
     amount: string;
@@ -104,12 +104,12 @@ type CocktailFormSnapshot = {
     garnish: boolean;
     allowBaseSubstitution: boolean;
     allowBrandSubstitution: boolean;
-    substitutes: Array<{
+    substitutes: {
       ingredientId?: number;
       name: string;
       isBrand?: boolean;
-    }>;
-  }>;
+    }[];
+  }[];
 };
 
 function getParamValue(value?: string | string[]): string | undefined {
@@ -237,6 +237,7 @@ export default function CreateCocktailScreen() {
   } = useInventory();
   const params = useLocalSearchParams();
   const { setHasUnsavedChanges } = useUnsavedChanges();
+  const colors = useAppColors();
 
   const modeParam = getParamValue(params.mode);
   const isEditMode = modeParam === "edit";
@@ -1175,8 +1176,6 @@ export default function CreateCocktailScreen() {
     selectedTagIds,
     setHasUnsavedChanges,
     showDialog,
-    shouldStorePhoto,
-    storePhoto,
   ]);
 
   const handleDeletePress = useCallback(() => {
@@ -1366,10 +1365,10 @@ export default function CreateCocktailScreen() {
         options={{
           title: isEditMode ? "Edit cocktail" : "Add cocktail",
           headerTitleAlign: "center",
-          headerStyle: { backgroundColor: Colors.surface },
+          headerStyle: { backgroundColor: colors.surface },
           headerShadowVisible: false,
           headerTitleStyle: {
-            color: Colors.onSurface,
+            color: colors.onSurface,
             fontSize: 16,
             fontWeight: "600",
           },
@@ -1381,7 +1380,7 @@ export default function CreateCocktailScreen() {
               <MaterialCommunityIcons
                 name="arrow-left"
                 size={22}
-                color={Colors.onSurface}
+                color={colors.onSurface}
               />
             </HeaderIconButton>
           ),
@@ -1395,7 +1394,7 @@ export default function CreateCocktailScreen() {
                   <MaterialIcons
                     name="delete-outline"
                     size={20}
-                    color={Colors.onSurface}
+                    color={colors.onSurface}
                   />
                 </HeaderIconButton>
               );
@@ -1428,7 +1427,7 @@ export default function CreateCocktailScreen() {
                 <MaterialCommunityIcons
                   name="pencil-outline"
                   size={20}
-                  color={Colors.onSurface}
+                  color={colors.onSurface}
                 />
               </HeaderIconButton>
             );
@@ -1443,12 +1442,12 @@ export default function CreateCocktailScreen() {
       >
         <ScrollView
           ref={scrollRef}
-          style={[styles.flex, { backgroundColor: Colors.background }]}
+          style={[styles.flex, { backgroundColor: colors.background }]}
           contentContainerStyle={styles.content}
           keyboardShouldPersistTaps="handled"
         >
           <View style={styles.section}>
-            <Text style={[styles.label, { color: Colors.onSurface }]}>
+            <Text style={[styles.label, { color: colors.onSurface }]}>
               Name
             </Text>
             <TextInput
@@ -1458,12 +1457,12 @@ export default function CreateCocktailScreen() {
               style={[
                 styles.input,
                 {
-                  borderColor: Colors.outlineVariant,
-                  color: Colors.text,
-                  backgroundColor: Colors.surface,
+                  borderColor: colors.outlineVariant,
+                  color: colors.text,
+                  backgroundColor: colors.surface,
                 },
               ]}
-              placeholderTextColor={`${Colors.onSurfaceVariant}99`}
+              placeholderTextColor={`${colors.onSurfaceVariant}99`}
             />
           </View>
 
@@ -1472,10 +1471,10 @@ export default function CreateCocktailScreen() {
               style={[
                 styles.card,
                 styles.halfCard,
-                { backgroundColor: Colors.background },
+                { backgroundColor: colors.background },
               ]}
             >
-              <Text style={[styles.cardLabel, { color: Colors.onSurface }]}>
+              <Text style={[styles.cardLabel, { color: colors.onSurface }]}>
                 Glass
               </Text>
               <Pressable
@@ -1494,7 +1493,7 @@ export default function CreateCocktailScreen() {
                   <MaterialCommunityIcons
                     name="glass-cocktail"
                     size={48}
-                    color={Colors.onSurfaceVariant}
+                    color={colors.onSurfaceVariant}
                   />
                 )}
               </Pressable>
@@ -1504,10 +1503,10 @@ export default function CreateCocktailScreen() {
               style={[
                 styles.card,
                 styles.halfCard,
-                { backgroundColor: Colors.background },
+                { backgroundColor: colors.background },
               ]}
             >
-              <Text style={[styles.cardLabel, { color: Colors.onSurface }]}>
+              <Text style={[styles.cardLabel, { color: colors.onSurface }]}>
                 Photo
               </Text>
               <View style={styles.photoTileWrapper}>
@@ -1516,11 +1515,11 @@ export default function CreateCocktailScreen() {
                   accessibilityLabel={placeholderLabel}
                   style={[
                     styles.photoTile,
-                    { borderColor: Colors.outlineVariant },
-                    !imageSource && { backgroundColor: Colors.surface },
+                    { borderColor: colors.outlineVariant },
+                    !imageSource && { backgroundColor: colors.surface },
                   ]}
                   onPress={handlePickImage}
-                  android_ripple={{ color: `${Colors.surface}33` }}
+                  android_ripple={{ color: `${colors.surface}33` }}
                 >
                   {imageSource ? (
                     <AppImage
@@ -1533,12 +1532,12 @@ export default function CreateCocktailScreen() {
                       <MaterialCommunityIcons
                         name="image-plus"
                         size={28}
-                        color={`${Colors.onSurfaceVariant}99`}
+                        color={`${colors.onSurfaceVariant}99`}
                       />
                       <Text
                         style={[
                           styles.cardHint,
-                          { color: `${Colors.onSurfaceVariant}99` },
+                          { color: `${colors.onSurfaceVariant}99` },
                         ]}
                       >
                         Tap to select image
@@ -1548,7 +1547,7 @@ export default function CreateCocktailScreen() {
                   {imageSource ? (
                     <View
                       pointerEvents="none"
-                      style={[styles.cropFrame, { borderColor: Colors.tint }]}
+                      style={[styles.cropFrame, { borderColor: colors.tint }]}
                       accessibilityElementsHidden
                       importantForAccessibility="no-hide-descendants"
                     />
@@ -1565,7 +1564,7 @@ export default function CreateCocktailScreen() {
                     <MaterialCommunityIcons
                       name="trash-can-outline"
                       size={18}
-                      color={Colors.error}
+                      color={colors.error}
                     />
                   </Pressable>
                 ) : null}
@@ -1574,15 +1573,15 @@ export default function CreateCocktailScreen() {
           </View>
 
           <View style={styles.section}>
-            <Text style={[styles.label, { color: Colors.onSurface }]}>
+            <Text style={[styles.label, { color: colors.onSurface }]}>
               Method
             </Text>
             <Pressable
               style={[
                 styles.methodPicker,
                 {
-                  borderColor: Colors.outlineVariant,
-                  backgroundColor: Colors.surface,
+                  borderColor: colors.outlineVariant,
+                  backgroundColor: colors.surface,
                 },
               ]}
               accessibilityRole="button"
@@ -1593,7 +1592,7 @@ export default function CreateCocktailScreen() {
                 <Text
                   style={[
                     styles.methodPickerLabel,
-                    { color: Colors.onSurface },
+                    { color: colors.onSurface },
                   ]}
                   numberOfLines={1}
                 >
@@ -1605,14 +1604,14 @@ export default function CreateCocktailScreen() {
               <MaterialCommunityIcons
                 name="chevron-down"
                 size={20}
-                color={Colors.onSurfaceVariant}
+                color={colors.onSurfaceVariant}
               />
             </Pressable>
           </View>
 
           <View style={styles.section}>
             <View style={styles.tagHeader}>
-              <Text style={[styles.label, { color: Colors.onSurface }]}>
+              <Text style={[styles.label, { color: colors.onSurface }]}>
                 Tags
               </Text>
               <Pressable
@@ -1621,20 +1620,20 @@ export default function CreateCocktailScreen() {
                 onPress={handleOpenTagModal}
                 style={[
                   styles.tagAddButton,
-                  { borderColor: Colors.outlineVariant },
+                  { borderColor: colors.outlineVariant },
                 ]}
               >
                 <MaterialCommunityIcons
                   name="plus"
                   size={16}
-                  color={Colors.tint}
+                  color={colors.tint}
                 />
-                <Text style={[styles.tagAddLabel, { color: Colors.tint }]}>
+                <Text style={[styles.tagAddLabel, { color: colors.tint }]}>
                   Create tag
                 </Text>
               </Pressable>
             </View>
-            <Text style={[styles.hint, { color: Colors.onSurfaceVariant }]}>
+            <Text style={[styles.hint, { color: colors.onSurfaceVariant }]}>
               Select one or more tags
             </Text>
             <View style={styles.tagList}>
@@ -1647,28 +1646,28 @@ export default function CreateCocktailScreen() {
                   onPress={() => handleToggleTag(tag.id)}
                   accessibilityRole="checkbox"
                   accessibilityState={{ checked: tag.selected }}
-                  androidRippleColor={`${Colors.surface}33`}
+                  androidRippleColor={`${colors.surface}33`}
                 />
               ))}
             </View>
           </View>
 
           <View style={styles.section}>
-            <Text style={[styles.label, { color: Colors.onSurface }]}>
+            <Text style={[styles.label, { color: colors.onSurface }]}>
               Description
             </Text>
             <TextInput
               value={description}
               onChangeText={setDescription}
               placeholder="Optional description"
-              placeholderTextColor={`${Colors.onSurfaceVariant}99`}
+              placeholderTextColor={`${colors.onSurfaceVariant}99`}
               style={[
                 styles.input,
                 styles.multilineInput,
                 {
-                  borderColor: Colors.outlineVariant,
-                  color: Colors.text,
-                  backgroundColor: Colors.surface,
+                  borderColor: colors.outlineVariant,
+                  color: colors.text,
+                  backgroundColor: colors.surface,
                 },
               ]}
               multiline
@@ -1678,21 +1677,21 @@ export default function CreateCocktailScreen() {
           </View>
 
           <View style={styles.section}>
-            <Text style={[styles.label, { color: Colors.onSurface }]}>
+            <Text style={[styles.label, { color: colors.onSurface }]}>
               Instructions
             </Text>
             <TextInput
               value={instructions}
               onChangeText={setInstructions}
               placeholder="1. Grab some ice..."
-              placeholderTextColor={`${Colors.onSurfaceVariant}99`}
+              placeholderTextColor={`${colors.onSurfaceVariant}99`}
               style={[
                 styles.input,
                 styles.multilineInput,
                 {
-                  borderColor: Colors.outlineVariant,
-                  color: Colors.text,
-                  backgroundColor: Colors.surface,
+                  borderColor: colors.outlineVariant,
+                  color: colors.text,
+                  backgroundColor: colors.surface,
                 },
               ]}
               multiline
@@ -1702,7 +1701,7 @@ export default function CreateCocktailScreen() {
           </View>
 
           <View style={styles.section}>
-            <Text style={[styles.label, { color: Colors.onSurface }]}>
+            <Text style={[styles.label, { color: colors.onSurface }]}>
               Ingredients
             </Text>
             <View style={styles.ingredientsList}>
@@ -1734,8 +1733,8 @@ export default function CreateCocktailScreen() {
               style={[
                 styles.addIngredientButton,
                 {
-                  borderColor: Colors.outlineVariant,
-                  backgroundColor: Colors.surface,
+                  borderColor: colors.outlineVariant,
+                  backgroundColor: colors.surface,
                 },
               ]}
               accessibilityRole="button"
@@ -1744,9 +1743,9 @@ export default function CreateCocktailScreen() {
               <MaterialCommunityIcons
                 name="plus"
                 size={18}
-                color={Colors.tint}
+                color={colors.tint}
               />
-              <Text style={[styles.addIngredientLabel, { color: Colors.tint }]}>
+              <Text style={[styles.addIngredientLabel, { color: colors.tint }]}>
                 Add ingredient
               </Text>
             </Pressable>
@@ -1758,14 +1757,14 @@ export default function CreateCocktailScreen() {
             style={[
               styles.submitButton,
               {
-                backgroundColor: Colors.tint,
+                backgroundColor: colors.tint,
                 opacity: isSaveDisabled ? 0.6 : 1,
               },
             ]}
             accessibilityRole="button"
             accessibilityLabel="Save cocktail"
           >
-            <Text style={[styles.submitLabel, { color: Colors.onPrimary }]}>
+            <Text style={[styles.submitLabel, { color: colors.onPrimary }]}>
               Save
             </Text>
           </Pressable>
@@ -1790,15 +1789,15 @@ export default function CreateCocktailScreen() {
             style={[
               styles.modalCard,
               {
-                backgroundColor: Colors.surface,
-                borderColor: Colors.outline,
-                shadowColor: Colors.shadow,
+                backgroundColor: colors.surface,
+                borderColor: colors.outline,
+                shadowColor: colors.shadow,
               },
             ]}
             accessibilityRole="menu"
           >
             <View style={styles.modalHeader}>
-              <Text style={[styles.modalTitle, { color: Colors.onSurface }]}>
+              <Text style={[styles.modalTitle, { color: colors.onSurface }]}>
                 Select glass
               </Text>
               <Pressable
@@ -1809,7 +1808,7 @@ export default function CreateCocktailScreen() {
                 <MaterialCommunityIcons
                   name="close"
                   size={22}
-                  color={Colors.onSurfaceVariant}
+                  color={colors.onSurfaceVariant}
                 />
               </Pressable>
             </View>
@@ -1831,11 +1830,11 @@ export default function CreateCocktailScreen() {
                       styles.glassOption,
                       {
                         borderColor: isSelected
-                          ? Colors.outline
-                          : Colors.outlineVariant,
+                          ? colors.outline
+                          : colors.outlineVariant,
                         backgroundColor: isSelected
-                          ? Colors.highlightFaint
-                          : Colors.surfaceBright,
+                          ? colors.highlightFaint
+                          : colors.surfaceBright,
                       },
                     ]}
                     accessibilityRole="button"
@@ -1851,13 +1850,13 @@ export default function CreateCocktailScreen() {
                       <MaterialCommunityIcons
                         name="glass-cocktail"
                         size={32}
-                        color={Colors.onSurfaceVariant}
+                        color={colors.onSurfaceVariant}
                       />
                     )}
                     <Text
                       style={[
                         styles.glassOptionLabel,
-                        { color: Colors.onSurface },
+                        { color: colors.onSurface },
                       ]}
                       numberOfLines={2}
                     >
@@ -1889,16 +1888,16 @@ export default function CreateCocktailScreen() {
             style={[
               styles.unitModalCard,
               {
-                backgroundColor: Colors.surface,
-                borderColor: Colors.outline,
-                shadowColor: Colors.shadow,
+                backgroundColor: colors.surface,
+                borderColor: colors.outline,
+                shadowColor: colors.shadow,
               },
             ]}
             accessibilityRole="menu"
           >
             <View style={styles.unitModalHeader}>
               <Text
-                style={[styles.unitModalTitle, { color: Colors.onSurface }]}
+                style={[styles.unitModalTitle, { color: colors.onSurface }]}
               >
                 Select unit
               </Text>
@@ -1910,7 +1909,7 @@ export default function CreateCocktailScreen() {
                 <MaterialCommunityIcons
                   name="close"
                   size={22}
-                  color={Colors.onSurfaceVariant}
+                  color={colors.onSurfaceVariant}
                 />
               </Pressable>
             </View>
@@ -1936,11 +1935,11 @@ export default function CreateCocktailScreen() {
                       styles.unitOption,
                       {
                         borderColor: isSelected
-                          ? Colors.tint
-                          : Colors.outlineVariant,
+                          ? colors.tint
+                          : colors.outlineVariant,
                         backgroundColor: isSelected
-                          ? Colors.highlightFaint
-                          : Colors.surfaceBright,
+                          ? colors.highlightFaint
+                          : colors.surfaceBright,
                       },
                     ]}
                     accessibilityRole="button"
@@ -1951,7 +1950,7 @@ export default function CreateCocktailScreen() {
                     }
                   >
                     <Text
-                      style={[styles.unitLabel, { color: Colors.onSurface }]}
+                      style={[styles.unitLabel, { color: colors.onSurface }]}
                     >
                       {displayLabel}
                     </Text>
@@ -1979,16 +1978,16 @@ export default function CreateCocktailScreen() {
             style={[
               styles.unitModalCard,
               {
-                backgroundColor: Colors.surface,
-                borderColor: Colors.outline,
-                shadowColor: Colors.shadow,
+                backgroundColor: colors.surface,
+                borderColor: colors.outline,
+                shadowColor: colors.shadow,
               },
             ]}
             accessibilityRole="menu"
           >
             <View style={styles.unitModalHeader}>
               <Text
-                style={[styles.unitModalTitle, { color: Colors.onSurface }]}
+                style={[styles.unitModalTitle, { color: colors.onSurface }]}
               >
                 Select method
               </Text>
@@ -2000,7 +1999,7 @@ export default function CreateCocktailScreen() {
                 <MaterialCommunityIcons
                   name="close"
                   size={22}
-                  color={Colors.onSurfaceVariant}
+                  color={colors.onSurfaceVariant}
                 />
               </Pressable>
             </View>
@@ -2017,12 +2016,12 @@ export default function CreateCocktailScreen() {
                   {
                     borderColor:
                       methodIds.length === 0
-                        ? Colors.tint
-                        : Colors.outlineVariant,
+                        ? colors.tint
+                        : colors.outlineVariant,
                     backgroundColor:
                       methodIds.length === 0
-                        ? Colors.highlightFaint
-                        : Colors.surfaceBright,
+                        ? colors.highlightFaint
+                        : colors.surfaceBright,
                   },
                 ]}
                 accessibilityRole="button"
@@ -2031,7 +2030,7 @@ export default function CreateCocktailScreen() {
                 <Text
                   style={[
                     styles.methodOptionLabel,
-                    { color: Colors.onSurface },
+                    { color: colors.onSurface },
                   ]}
                 >
                   Not specified
@@ -2039,7 +2038,7 @@ export default function CreateCocktailScreen() {
                 <Text
                   style={[
                     styles.methodOptionDescription,
-                    { color: Colors.onSurfaceVariant },
+                    { color: colors.onSurfaceVariant },
                   ]}
                 >
                   Clear all selected methods.
@@ -2048,8 +2047,8 @@ export default function CreateCocktailScreen() {
               {getCocktailMethods().map((method) => {
                 const isSelected = methodIds.includes(method.id);
                 const iconColor = isSelected
-                  ? Colors.tint
-                  : Colors.onSurfaceVariant;
+                  ? colors.tint
+                  : colors.onSurfaceVariant;
                 return (
                   <Pressable
                     key={method.id}
@@ -2058,11 +2057,11 @@ export default function CreateCocktailScreen() {
                       styles.methodOption,
                       {
                         borderColor: isSelected
-                          ? Colors.tint
-                          : Colors.outlineVariant,
+                          ? colors.tint
+                          : colors.outlineVariant,
                         backgroundColor: isSelected
-                          ? Colors.highlightFaint
-                          : Colors.surfaceBright,
+                          ? colors.highlightFaint
+                          : colors.surfaceBright,
                       },
                     ]}
                     accessibilityRole="button"
@@ -2074,7 +2073,7 @@ export default function CreateCocktailScreen() {
                         <Text
                           style={[
                             styles.methodOptionLabel,
-                            { color: Colors.onSurface },
+                            { color: colors.onSurface },
                           ]}
                         >
                           {method.label}
@@ -2084,7 +2083,7 @@ export default function CreateCocktailScreen() {
                     <Text
                       style={[
                         styles.methodOptionDescription,
-                        { color: Colors.onSurfaceVariant },
+                        { color: colors.onSurfaceVariant },
                       ]}
                     >
                       {method.description}
@@ -2170,6 +2169,7 @@ function EditableIngredientRow({
   const [isFocused, setIsFocused] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const hideSuggestionsTimeout = useRef<NodeJS.Timeout | null>(null);
+  const colors = useAppColors();
 
   const normalizedName = normalizeSearchText(ingredient.name);
 
@@ -2374,13 +2374,13 @@ function EditableIngredientRow({
     <View
       style={[
         styles.ingredientCard,
-        { borderColor: Colors.outlineVariant, backgroundColor: Colors.surface },
+        { borderColor: colors.outlineVariant, backgroundColor: colors.surface },
       ]}
     >
       <View style={styles.ingredientHeaderSimple}>
         <View style={styles.ingredientTitleRow}>
           <Text
-            style={[styles.ingredientHeading, { color: Colors.onSurface }]}
+            style={[styles.ingredientHeading, { color: colors.onSurface }]}
           >{`${index + 1}. Ingredient`}</Text>
           <View
             style={[
@@ -2405,8 +2405,8 @@ function EditableIngredientRow({
                 size={18}
                 color={
                   canMoveUp
-                    ? Colors.onSurfaceVariant
-                    : `${Colors.onSurfaceVariant}66`
+                    ? colors.onSurfaceVariant
+                    : `${colors.onSurfaceVariant}66`
                 }
               />
             </Pressable>
@@ -2426,8 +2426,8 @@ function EditableIngredientRow({
                 size={18}
                 color={
                   canMoveDown
-                    ? Colors.onSurfaceVariant
-                    : `${Colors.onSurfaceVariant}66`
+                    ? colors.onSurfaceVariant
+                    : `${colors.onSurfaceVariant}66`
                 }
               />
             </Pressable>
@@ -2441,7 +2441,7 @@ function EditableIngredientRow({
           style={!canReorder && styles.hiddenControl}
           pointerEvents={canReorder ? "auto" : "none"}
         >
-          <MaterialIcons name="delete-outline" size={20} color={Colors.error} />
+          <MaterialIcons name="delete-outline" size={20} color={colors.error} />
         </Pressable>
       </View>
       <View style={styles.ingredientNameWrapper}>
@@ -2463,14 +2463,15 @@ function EditableIngredientRow({
             }
           }}
           placeholder="Ingredient name"
-          placeholderTextColor={`${Colors.onSurfaceVariant}99`}
+          placeholderTextColor={`${colors.onSurfaceVariant}99`}
           style={[
             styles.input,
             styles.ingredientNameInput,
             {
-              borderColor: Colors.outlineVariant,
-              color: Colors.text,
+              borderColor: colors.outlineVariant,
+              color: colors.text,
               paddingRight: showAddButton ? 72 : 16,
+              backgroundColor: colors.surface,
             },
           ]}
           onFocus={(event) => {
@@ -2489,14 +2490,14 @@ function EditableIngredientRow({
             }}
             style={[
               styles.ingredientNameCreate,
-              { backgroundColor: Colors.background },
+              { backgroundColor: colors.background },
             ]}
             accessibilityRole="button"
             accessibilityLabel="Create new ingredient"
             hitSlop={8}
           >
             <Text
-              style={[styles.ingredientNameCreateLabel, { color: Colors.tint }]}
+              style={[styles.ingredientNameCreateLabel, { color: colors.tint }]}
             >
               + Add
             </Text>
@@ -2509,8 +2510,8 @@ function EditableIngredientRow({
           style={[
             styles.suggestionList,
             {
-              borderColor: Colors.outlineVariant,
-              backgroundColor: Colors.surface,
+              borderColor: colors.outlineVariant,
+              backgroundColor: colors.surface,
             },
           ]}
           pointerEvents={isFocused ? "auto" : "none"}
@@ -2527,11 +2528,11 @@ function EditableIngredientRow({
               .map((tag) => tag?.color ?? tagColors.yellow);
             const subtitle = renderSubtitle(baseGroupId);
             const brandIndicatorColor =
-              candidate.baseIngredientId != null ? Colors.primary : undefined;
+              candidate.baseIngredientId != null ? colors.primary : undefined;
             const isLast = index === suggestions.length - 1;
             const separatorColor = isAvailable
-              ? Colors.outline
-              : Colors.outlineVariant;
+              ? colors.outline
+              : colors.outlineVariant;
 
             return (
               <React.Fragment key={candidate.id ?? candidate.name}>
@@ -2540,7 +2541,7 @@ function EditableIngredientRow({
                   subtitle={subtitle}
                   onPress={() => handleSelectSuggestion(candidate)}
                   selected={isAvailable}
-                  highlightColor={Colors.highlightFaint}
+                  highlightColor={colors.highlightFaint}
                   tagColors={candidateTagColors}
                   thumbnail={
                     <Thumb
@@ -2555,7 +2556,7 @@ function EditableIngredientRow({
                       <MaterialIcons
                         name="shopping-cart"
                         size={16}
-                        color={Colors.tint}
+                        color={colors.tint}
                         style={styles.shoppingIcon}
                         accessibilityRole="image"
                         accessibilityLabel="On shopping list"
@@ -2584,24 +2585,24 @@ function EditableIngredientRow({
 
       <View style={styles.rowInputs}>
         <View style={styles.amountColumn}>
-          <Text style={[styles.inputLabel, { color: Colors.onSurfaceVariant }]}>
+          <Text style={[styles.inputLabel, { color: colors.onSurfaceVariant }]}>
             Amount
           </Text>
           <TextInput
             value={ingredient.amount}
             onChangeText={(text) => onChange(ingredient.key, { amount: text })}
             placeholder="e.g., 45"
-            placeholderTextColor={`${Colors.onSurfaceVariant}99`}
+            placeholderTextColor={`${colors.onSurfaceVariant}99`}
             keyboardType="decimal-pad"
             style={[
               styles.input,
-              { borderColor: Colors.outlineVariant, color: Colors.text },
+              { borderColor: colors.outlineVariant, color: colors.text, backgroundColor: colors.surface },
             ]}
             onFocus={(event) => onInputFocus(event.nativeEvent.target)}
           />
         </View>
         <View style={styles.unitColumn}>
-          <Text style={[styles.inputLabel, { color: Colors.onSurfaceVariant }]}>
+          <Text style={[styles.inputLabel, { color: colors.onSurfaceVariant }]}>
             Unit
           </Text>
           <Pressable
@@ -2609,20 +2610,20 @@ function EditableIngredientRow({
             style={[
               styles.unitSelector,
               {
-                borderColor: Colors.outlineVariant,
-                backgroundColor: Colors.background,
+                borderColor: colors.outlineVariant,
+                backgroundColor: colors.background,
               },
             ]}
             accessibilityRole="button"
             accessibilityLabel="Select unit"
           >
-            <Text style={[styles.unitLabel, { color: Colors.onSurface }]}>
+            <Text style={[styles.unitLabel, { color: colors.onSurface }]}>
               {unitLabel}
             </Text>
             <MaterialIcons
               name="expand-more"
               size={18}
-              color={Colors.onSurfaceVariant}
+              color={colors.onSurfaceVariant}
             />
           </Pressable>
         </View>
@@ -2678,15 +2679,15 @@ function EditableIngredientRow({
           style={[
             styles.addSubstituteButton,
             {
-              borderColor: Colors.outlineVariant,
-              backgroundColor: Colors.background,
+              borderColor: colors.outlineVariant,
+              backgroundColor: colors.background,
             },
           ]}
           accessibilityRole="button"
           accessibilityLabel="Add substitute"
         >
-          <MaterialCommunityIcons name="plus" size={16} color={Colors.tint} />
-          <Text style={[styles.addSubstituteLabel, { color: Colors.tint }]}>
+          <MaterialCommunityIcons name="plus" size={16} color={colors.tint} />
+          <Text style={[styles.addSubstituteLabel, { color: colors.tint }]}>
             Add substitute
           </Text>
         </Pressable>
@@ -2698,17 +2699,17 @@ function EditableIngredientRow({
                 style={[
                   styles.substitutePill,
                   {
-                    borderColor: Colors.outlineVariant,
-                    backgroundColor: `${Colors.tint}1A`,
+                    borderColor: colors.outlineVariant,
+                    backgroundColor: `${colors.tint}1A`,
                   },
                   substitute.isBrand && {
-                    borderLeftColor: Colors.tint,
+                    borderLeftColor: colors.tint,
                     borderLeftWidth: 4,
                   },
                 ]}
               >
                 <Text
-                  style={[styles.substituteLabel, { color: Colors.onSurface }]}
+                  style={[styles.substituteLabel, { color: colors.onSurface }]}
                   numberOfLines={1}
                 >
                   {substitute.name}
@@ -2725,7 +2726,7 @@ function EditableIngredientRow({
                   <MaterialCommunityIcons
                     name="close"
                     size={16}
-                    color={Colors.onSurfaceVariant}
+                    color={colors.onSurfaceVariant}
                   />
                 </Pressable>
               </View>
@@ -2745,6 +2746,7 @@ type ToggleChipProps = {
 };
 
 function ToggleChip({ label, active, onToggle, onInfo }: ToggleChipProps) {
+  const colors = useAppColors();
   return (
     <View style={styles.toggleChipContainer}>
       <Pressable
@@ -2752,7 +2754,7 @@ function ToggleChip({ label, active, onToggle, onInfo }: ToggleChipProps) {
         style={[
           styles.toggleChip,
           {
-            backgroundColor: active ? `${Colors.tint}1A` : "transparent",
+            backgroundColor: active ? `${colors.tint}1A` : "transparent",
           },
         ]}
         accessibilityRole="checkbox"
@@ -2761,10 +2763,10 @@ function ToggleChip({ label, active, onToggle, onInfo }: ToggleChipProps) {
         <MaterialCommunityIcons
           name={active ? "checkbox-marked-outline" : "checkbox-blank-outline"}
           size={18}
-          color={active ? Colors.tint : Colors.onSurfaceVariant}
+          color={active ? colors.tint : colors.onSurfaceVariant}
         />
         <Text
-          style={[styles.toggleChipLabel, { color: Colors.onSurfaceVariant }]}
+          style={[styles.toggleChipLabel, { color: colors.onSurfaceVariant }]}
           numberOfLines={1}
         >
           {label}
@@ -2780,7 +2782,7 @@ function ToggleChip({ label, active, onToggle, onInfo }: ToggleChipProps) {
           <MaterialCommunityIcons
             name="information-outline"
             size={16}
-            color={Colors.onSurfaceVariant}
+            color={colors.onSurfaceVariant}
           />
         </Pressable>
       ) : null}
@@ -2818,7 +2820,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: Platform.select({ ios: 14, default: 12 }),
     fontSize: 16,
-    backgroundColor: Colors.background,
   },
   multilineInput: {
     minHeight: 120,
@@ -2832,7 +2833,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 12,
     gap: 8,
-    backgroundColor: Colors.surface,
   },
   halfCard: {
     flex: 1,
@@ -2871,7 +2871,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     overflow: "hidden",
     borderWidth: StyleSheet.hairlineWidth,
-    backgroundColor: Colors.background,
   },
   photoPlaceholderContent: {
     alignItems: "center",
@@ -2881,7 +2880,6 @@ const styles = StyleSheet.create({
   photoPreview: {
     width: "100%",
     height: "100%",
-    backgroundColor: Colors.background,
   },
   cropFrame: {
     position: "absolute",
@@ -3060,7 +3058,6 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     paddingTop: 0,
     paddingBottom: 4,
-    backgroundColor: Colors.surface,
   },
   suggestionSeparator: {
     height: StyleSheet.hairlineWidth,
@@ -3123,7 +3120,6 @@ const styles = StyleSheet.create({
   toggleChipLabel: {
     fontSize: 14,
     fontWeight: "400",
-    color: Colors.onSurfaceVariant,
   },
   substitutesSection: {
     gap: 10,

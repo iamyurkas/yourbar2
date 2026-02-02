@@ -1,22 +1,53 @@
 import { Platform } from 'react-native';
 
-import { lightTheme, palette } from '@/theme/theme';
+import { useTheme } from '@/libs/react-native-paper';
+import { lightTheme, lightPalette, darkPalette } from '@/theme/theme';
 
 const lightColors = lightTheme.colors;
-const tintColor = lightColors.primary;
+const lightTintColor = lightColors.primary;
 
+/**
+ * @deprecated Use `useAppColors` hook instead for dark mode support.
+ */
 export const Colors = {
   ...lightColors,
   text: lightColors.onSurface,
-  tint: tintColor,
+  tint: lightTintColor,
   icon: lightColors.onSurfaceVariant,
   tabIconDefault: lightColors.onSurfaceVariant,
-  tabIconSelected: tintColor,
-  danger: palette.danger,
-  disabled: palette.disabled,
-  placeholder: palette.placeholder,
-  success: palette.success,
+  tabIconSelected: lightTintColor,
+  danger: lightPalette.danger,
+  disabled: lightPalette.disabled,
+  placeholder: lightPalette.placeholder,
+  success: lightPalette.success,
 } as const;
+
+export const useAppColors = () => {
+  const theme = useTheme();
+  const colors = theme.colors;
+  const isDark = colors.background === darkPalette.background;
+  const palette = isDark ? darkPalette : lightPalette;
+  const tintColor = colors.primary;
+
+  return {
+    ...colors,
+    text: colors.onSurface,
+    tint: tintColor,
+    icon: colors.onSurfaceVariant,
+    tabIconDefault: colors.onSurfaceVariant,
+    tabIconSelected: tintColor,
+    danger: palette.danger,
+    disabled: palette.disabled,
+    placeholder: palette.placeholder,
+    success: palette.success,
+    highlightFaint: palette.highlightFaint,
+    highlightSubtle: palette.highlightSubtle,
+    overlayOnPrimary: palette.overlayOnPrimary,
+    shadow: palette.shadow,
+    onSurfaceMuted: palette.onSurfaceMuted,
+    surfaceBright: palette.surfaceBright,
+  };
+};
 
 export const Fonts = Platform.select({
   ios: {

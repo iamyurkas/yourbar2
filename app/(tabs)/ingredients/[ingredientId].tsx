@@ -26,7 +26,7 @@ import { AppDialog, type DialogOptions } from "@/components/AppDialog";
 import { CocktailListRow } from "@/components/CocktailListRow";
 import { PresenceCheck } from "@/components/RowParts";
 import { TagPill } from "@/components/TagPill";
-import { Colors } from "@/constants/theme";
+import { useAppColors } from "@/constants/theme";
 import { isCocktailReady } from "@/libs/cocktail-availability";
 import { resolveImageSource } from "@/libs/image-source";
 import {
@@ -88,6 +88,7 @@ export default function IngredientDetailsScreen() {
     ignoreGarnish,
     allowAllSubstitutes,
   } = useInventory();
+  const colors = useAppColors();
 
   const ingredient = useResolvedIngredient(
     Array.isArray(ingredientId) ? ingredientId[0] : ingredientId,
@@ -536,18 +537,20 @@ export default function IngredientDetailsScreen() {
     return unsubscribe;
   }, [handleReturn, navigation]);
 
+  const ingredientHighlightColor = colors.highlightFaint;
+
   return (
     <SafeAreaView
-      style={[styles.safeArea, { backgroundColor: Colors.background }]}
+      style={[styles.safeArea, { backgroundColor: colors.background }]}
       edges={["left", "right"]}
     >
       <Stack.Screen
         options={{
           title: "Ingredient details",
           headerTitleAlign: "center",
-          headerStyle: { backgroundColor: Colors.surface },
+          headerStyle: { backgroundColor: colors.surface },
           headerTitleStyle: {
-            color: Colors.onSurface,
+            color: colors.onSurface,
             fontSize: 16,
             fontWeight: "600",
           },
@@ -563,7 +566,7 @@ export default function IngredientDetailsScreen() {
               <MaterialCommunityIcons
                 name="arrow-left"
                 size={22}
-                color={Colors.onSurface}
+                color={colors.onSurface}
               />
             </Pressable>
           ),
@@ -578,7 +581,7 @@ export default function IngredientDetailsScreen() {
               <MaterialCommunityIcons
                 name="pencil-outline"
                 size={20}
-                color={Colors.onSurface}
+                color={colors.onSurface}
               />
             </Pressable>
           ),
@@ -591,7 +594,7 @@ export default function IngredientDetailsScreen() {
       >
         {ingredient ? (
           <View style={styles.section}>
-            <Text style={[styles.name, { color: Colors.onSurface }]}>
+            <Text style={[styles.name, { color: colors.onSurface }]}>
               {ingredient.name}
             </Text>
 
@@ -608,15 +611,15 @@ export default function IngredientDetailsScreen() {
                     style={[
                       styles.photoPlaceholder,
                       {
-                        borderColor: Colors.outline,
-                        backgroundColor: Colors.surface,
+                        borderColor: colors.outline,
+                        backgroundColor: colors.surface,
                       },
                     ]}
                   >
                     <Text
                       style={[
                         styles.photoPlaceholderText,
-                        { color: Colors.onSurfaceVariant },
+                        { color: colors.onSurfaceVariant },
                       ]}
                     >
                       No photo
@@ -646,8 +649,8 @@ export default function IngredientDetailsScreen() {
                     size={24}
                     color={
                       effectiveIsOnShoppingList
-                        ? Colors.tint
-                        : Colors.onSurfaceVariant
+                        ? colors.tint
+                        : colors.onSurfaceVariant
                     }
                   />
                 </Pressable>
@@ -672,7 +675,7 @@ export default function IngredientDetailsScreen() {
                     <TagPill
                       key={tagKey}
                       label={tag.name ?? ""}
-                      color={tag.color ?? Colors.tint}
+                      color={tag.color ?? colors.tint}
                       selected
                       accessibilityLabel={tag.name ?? "Tag"}
                     />
@@ -690,7 +693,7 @@ export default function IngredientDetailsScreen() {
                           key={`description-${index}`}
                           style={[
                             styles.instructionsText,
-                            { color: Colors.onSurface },
+                            { color: colors.onSurface },
                           ]}
                         >
                           {paragraph}
@@ -701,7 +704,7 @@ export default function IngredientDetailsScreen() {
                           key={`description-${index}`}
                           style={[
                             styles.instructionsText,
-                            { color: Colors.onSurfaceVariant },
+                            { color: colors.onSurfaceVariant },
                           ]}
                           numberOfLines={
                             shouldTruncateDescription
@@ -726,7 +729,7 @@ export default function IngredientDetailsScreen() {
                     hitSlop={8}
                   >
                     <Text
-                      style={[styles.toggleDescription, { color: Colors.tint }]}
+                      style={[styles.toggleDescription, { color: colors.tint }]}
                     >
                       {isDescriptionExpanded ? "Show less" : "Show more"}
                     </Text>
@@ -738,7 +741,7 @@ export default function IngredientDetailsScreen() {
             {baseIngredient ? (
               <View style={styles.textBlock}>
                 <Text
-                  style={[styles.sectionTitle, { color: Colors.onSurface }]}
+                  style={[styles.sectionTitle, { color: colors.onSurface }]}
                 >
                   Base ingredient
                 </Text>
@@ -749,15 +752,15 @@ export default function IngredientDetailsScreen() {
                   style={[
                     styles.baseIngredientRow,
                     {
-                      borderColor: Colors.outlineVariant,
+                      borderColor: colors.outlineVariant,
                       backgroundColor: isBaseIngredientAvailable
-                        ? Colors.highlightFaint
-                        : Colors.surfaceBright,
+                        ? colors.highlightFaint
+                        : colors.surfaceBright,
                     },
                   ]}
                 >
                   <View style={styles.baseIngredientInfo}>
-                    <View style={styles.baseIngredientThumb}>
+                    <View style={[styles.baseIngredientThumb, { backgroundColor: colors.background }]}>
                       {baseIngredientPhotoSource ? (
                         <AppImage
                           source={baseIngredientPhotoSource}
@@ -768,7 +771,7 @@ export default function IngredientDetailsScreen() {
                         <View
                           style={[
                             styles.baseIngredientPlaceholder,
-                            { backgroundColor: Colors.surfaceBright },
+                            { backgroundColor: colors.surfaceBright },
                           ]}
                         ></View>
                       )}
@@ -776,7 +779,7 @@ export default function IngredientDetailsScreen() {
                     <Text
                       style={[
                         styles.baseIngredientName,
-                        { color: Colors.onSurface },
+                        { color: colors.onSurface },
                       ]}
                       numberOfLines={2}
                     >
@@ -794,13 +797,13 @@ export default function IngredientDetailsScreen() {
                       <MaterialCommunityIcons
                         name="link-off"
                         size={20}
-                        color={Colors.error}
+                        color={colors.error}
                       />
                     </Pressable>
                     <MaterialIcons
                       name="chevron-right"
                       size={20}
-                      color={Colors.onSurfaceVariant}
+                      color={colors.onSurfaceVariant}
                     />
                   </View>
                 </Pressable>
@@ -810,7 +813,7 @@ export default function IngredientDetailsScreen() {
             {brandedIngredients.length ? (
               <View style={styles.textBlock}>
                 <Text
-                  style={[styles.sectionTitle, { color: Colors.onSurface }]}
+                  style={[styles.sectionTitle, { color: colors.onSurface }]}
                 >
                   Branded ingredients
                 </Text>
@@ -829,17 +832,17 @@ export default function IngredientDetailsScreen() {
                         style={[
                           styles.baseIngredientRow,
                           {
-                            borderColor: Colors.outlineVariant,
+                            borderColor: colors.outlineVariant,
                             backgroundColor: availableIngredientIds.has(
                               Number(branded.id ?? -1),
                             )
-                              ? Colors.highlightFaint
-                              : Colors.surfaceBright,
+                              ? colors.highlightFaint
+                              : colors.surfaceBright,
                           },
                         ]}
                       >
                         <View style={styles.baseIngredientInfo}>
-                          <View style={styles.baseIngredientThumb}>
+                          <View style={[styles.baseIngredientThumb, { backgroundColor: colors.background }]}>
                             {brandedPhotoSource ? (
                               <AppImage
                                 source={brandedPhotoSource}
@@ -850,13 +853,13 @@ export default function IngredientDetailsScreen() {
                               <View
                                 style={[
                                   styles.baseIngredientPlaceholder,
-                                  { backgroundColor: Colors.surfaceBright },
+                                  { backgroundColor: colors.surfaceBright },
                                 ]}
                               >
                                 <MaterialCommunityIcons
                                   name="image-off"
                                   size={20}
-                                  color={Colors.onSurfaceVariant}
+                                  color={colors.onSurfaceVariant}
                                 />
                               </View>
                             )}
@@ -864,7 +867,7 @@ export default function IngredientDetailsScreen() {
                           <Text
                             style={[
                               styles.baseIngredientName,
-                              { color: Colors.onSurface },
+                              { color: colors.onSurface },
                             ]}
                             numberOfLines={2}
                           >
@@ -882,13 +885,13 @@ export default function IngredientDetailsScreen() {
                             <MaterialCommunityIcons
                               name="link-off"
                               size={20}
-                              color={Colors.error}
+                              color={colors.error}
                             />
                           </Pressable>
                           <MaterialIcons
                             name="chevron-right"
                             size={20}
-                            color={Colors.onSurfaceVariant}
+                            color={colors.onSurfaceVariant}
                           />
                         </View>
                       </Pressable>
@@ -899,7 +902,7 @@ export default function IngredientDetailsScreen() {
             ) : null}
 
             <View style={[styles.textBlock, styles.cocktailBlock]}>
-              <Text style={[styles.sectionTitle, { color: Colors.onSurface }]}>
+              <Text style={[styles.sectionTitle, { color: colors.onSurface }]}>
                 Cocktails
               </Text>
               {cocktailEntries.length ? (
@@ -911,8 +914,8 @@ export default function IngredientDetailsScreen() {
                           ? visibleCocktailEntries[index - 1]?.isReady
                           : undefined;
                       const dividerColor = previousReady
-                        ? Colors.outline
-                        : Colors.outlineVariant;
+                        ? colors.outline
+                        : colors.outlineVariant;
 
                       return (
                         <React.Fragment key={cocktail.id ?? cocktail.name}>
@@ -934,7 +937,7 @@ export default function IngredientDetailsScreen() {
                               )
                             }
                             highlightColor={
-                              isReady ? undefined : Colors.highlightFaint
+                              isReady ? undefined : ingredientHighlightColor
                             }
                             showMethodIcons
                           />
@@ -947,8 +950,8 @@ export default function IngredientDetailsScreen() {
                       style={[
                         styles.showMoreButton,
                         {
-                          borderColor: Colors.tint,
-                          backgroundColor: Colors.background,
+                          borderColor: colors.tint,
+                          backgroundColor: colors.background,
                         },
                       ]}
                       onPress={handleShowMoreCocktails}
@@ -956,7 +959,7 @@ export default function IngredientDetailsScreen() {
                       accessibilityLabel="Show more cocktails"
                     >
                       <Text
-                        style={[styles.showMoreLabel, { color: Colors.tint }]}
+                        style={[styles.showMoreLabel, { color: colors.tint }]}
                       >
                         Show more
                       </Text>
@@ -967,7 +970,7 @@ export default function IngredientDetailsScreen() {
                 <Text
                   style={[
                     styles.placeholderText,
-                    { color: Colors.onSurfaceVariant },
+                    { color: colors.onSurfaceVariant },
                   ]}
                 >
                   No cocktails yet
@@ -976,13 +979,13 @@ export default function IngredientDetailsScreen() {
             </View>
 
             <Pressable
-              style={[styles.addButton, { backgroundColor: Colors.tint }]}
+              style={[styles.addButton, { backgroundColor: colors.tint }]}
               onPress={handleAddCocktail}
               accessibilityRole="button"
               accessibilityLabel="Add cocktail"
             >
               <Text
-                style={[styles.addButtonLabel, { color: Colors.onPrimary }]}
+                style={[styles.addButtonLabel, { color: colors.onPrimary }]}
               >
                 + Add cocktail
               </Text>
@@ -993,7 +996,7 @@ export default function IngredientDetailsScreen() {
             <Text
               style={[
                 styles.placeholderText,
-                { color: Colors.onSurfaceVariant },
+                { color: colors.onSurfaceVariant },
               ]}
             >
               Ingredient not found
@@ -1051,7 +1054,6 @@ const styles = StyleSheet.create({
     height: "100%",
     borderRadius: 12,
     overflow: "hidden",
-    backgroundColor: Colors.surfaceBright,
   },
   photoPlaceholder: {
     width: 150,
@@ -1147,7 +1149,6 @@ const styles = StyleSheet.create({
     height: 56,
     borderRadius: 8,
     overflow: "hidden",
-    backgroundColor: Colors.surfaceBright,
   },
   baseIngredientImage: {
     width: "100%",

@@ -24,7 +24,7 @@ import {
   METHOD_ICON_MAP,
 } from "@/constants/cocktail-methods";
 import { COCKTAIL_UNIT_DICTIONARY } from "@/constants/cocktail-units";
-import { Colors } from "@/constants/theme";
+import { useAppColors } from "@/constants/theme";
 import { resolveImageSource } from "@/libs/image-source";
 import {
   createIngredientLookup,
@@ -118,7 +118,7 @@ const IMPERIAL_FRACTIONS: { decimal: number; glyph: string }[] = [
   { decimal: 0.375, glyph: "⅜" },
   { decimal: 0.4, glyph: "⅖" },
   { decimal: 0.5, glyph: "½" },
-  { decimal: 0.6, glyph: "⅗" },
+  { decimal: 0.6, glyph: "⅕" },
   { decimal: 0.625, glyph: "⅝" },
   { decimal: 0.667, glyph: "⅔" },
   { decimal: 0.75, glyph: "¾" },
@@ -345,6 +345,7 @@ export default function CocktailDetailsScreen() {
     useImperialUnits,
     keepScreenAwake,
   } = useInventory();
+  const colors = useAppColors();
 
   const resolvedParam = Array.isArray(cocktailId) ? cocktailId[0] : cocktailId;
   const cocktail = useMemo(
@@ -556,7 +557,7 @@ export default function CocktailDetailsScreen() {
     setShouldTruncateDescription(descriptionParagraphs.length > 1);
   }, [descriptionParagraphs.length]);
 
-  const ingredientHighlightColor = Colors.highlightFaint;
+  const ingredientHighlightColor = colors.highlightFaint;
 
   const photoSource = useMemo(
     () => resolveImageSource(cocktail?.photoUri),
@@ -650,16 +651,16 @@ export default function CocktailDetailsScreen() {
 
   return (
     <SafeAreaView
-      style={[styles.safeArea, { backgroundColor: Colors.background }]}
+      style={[styles.safeArea, { backgroundColor: colors.background }]}
       edges={["left", "right"]}
     >
       <Stack.Screen
         options={{
           title: "Cocktail details",
           headerTitleAlign: "center",
-          headerStyle: { backgroundColor: Colors.surface },
+          headerStyle: { backgroundColor: colors.surface },
           headerTitleStyle: {
-            color: Colors.onSurface,
+            color: colors.onSurface,
             fontSize: 16,
             fontWeight: "600",
           },
@@ -672,7 +673,7 @@ export default function CocktailDetailsScreen() {
               <MaterialCommunityIcons
                 name="arrow-left"
                 size={22}
-                color={Colors.onSurface}
+                color={colors.onSurface}
               />
             </HeaderIconButton>
           ),
@@ -685,7 +686,7 @@ export default function CocktailDetailsScreen() {
                 <MaterialCommunityIcons
                   name="content-copy"
                   size={20}
-                  color={Colors.onSurface}
+                  color={colors.onSurface}
                 />
               </HeaderIconButton>
               <HeaderIconButton
@@ -695,7 +696,7 @@ export default function CocktailDetailsScreen() {
                 <MaterialCommunityIcons
                   name="pencil-outline"
                   size={20}
-                  color={Colors.onSurface}
+                  color={colors.onSurface}
                 />
               </HeaderIconButton>
             </View>
@@ -709,7 +710,7 @@ export default function CocktailDetailsScreen() {
       >
         {cocktail ? (
           <View style={styles.section}>
-            <Text style={[styles.name, { color: Colors.onSurface }]}>
+            <Text style={[styles.name, { color: colors.onSurface }]}>
               {cocktail.name}
             </Text>
 
@@ -725,18 +726,18 @@ export default function CocktailDetailsScreen() {
                   <View
                     style={[
                       styles.photoPlaceholder,
-                      { borderColor: Colors.outline },
+                      { borderColor: colors.outline, backgroundColor: colors.surfaceBright },
                     ]}
                   >
                     <MaterialCommunityIcons
                       name="image-off"
                       size={36}
-                      color={Colors.onSurfaceVariant}
+                      color={colors.onSurfaceVariant}
                     />
                     <Text
                       style={[
                         styles.photoPlaceholderText,
-                        { color: Colors.onSurfaceVariant },
+                        { color: colors.onSurfaceVariant },
                       ]}
                     >
                       No photo
@@ -767,7 +768,7 @@ export default function CocktailDetailsScreen() {
                       <MaterialCommunityIcons
                         name={icon}
                         size={32}
-                        color={Colors.tint}
+                        color={colors.tint}
                       />
                     </Pressable>
                   );
@@ -779,8 +780,8 @@ export default function CocktailDetailsScreen() {
                 style={[
                   styles.toggleUnitsButton,
                   {
-                    borderColor: Colors.primary,
-                    backgroundColor: Colors.surfaceBright,
+                    borderColor: colors.primary,
+                    backgroundColor: colors.surfaceBright,
                   },
                 ]}
                 accessibilityRole="button"
@@ -789,7 +790,7 @@ export default function CocktailDetailsScreen() {
                 }
               >
                 <Text
-                  style={[styles.toggleUnitsLabel, { color: Colors.primary }]}
+                  style={[styles.toggleUnitsLabel, { color: colors.primary }]}
                 >
                   {showImperialUnits ? "Show in metric" : "Show in imperial"}
                 </Text>
@@ -805,7 +806,7 @@ export default function CocktailDetailsScreen() {
                     />
                   </View>
                   <Text
-                    style={[styles.glassLabel, { color: Colors.onSurface }]}
+                    style={[styles.glassLabel, { color: colors.onSurface }]}
                   >
                     {glassLabel}
                   </Text>
@@ -827,7 +828,7 @@ export default function CocktailDetailsScreen() {
                               source={icon.source}
                               style={[
                                 styles.methodIcon,
-                                { tintColor: Colors.onSurfaceVariant },
+                                { tintColor: colors.onSurfaceVariant },
                               ]}
                               contentFit="contain"
                             />
@@ -839,7 +840,7 @@ export default function CocktailDetailsScreen() {
                                   : "information-outline"
                               }
                               size={18}
-                              color={Colors.onSurfaceVariant}
+                              color={colors.onSurfaceVariant}
                               style={method.id === "muddle" ? styles.muddleIcon : undefined}
                             />
                           )}
@@ -847,7 +848,7 @@ export default function CocktailDetailsScreen() {
                         <Text
                           style={[
                             styles.methodLabel,
-                            { color: Colors.onSurface },
+                            { color: colors.onSurface },
                           ]}
                         >
                           {method.label}
@@ -865,7 +866,7 @@ export default function CocktailDetailsScreen() {
                           <Text
                             style={[
                               styles.methodInfoIcon,
-                              { color: Colors.primary },
+                              { color: colors.primary },
                             ]}
                           >
                             ⓘ
@@ -876,7 +877,7 @@ export default function CocktailDetailsScreen() {
                         <Text
                           style={[
                             styles.methodDescription,
-                            { color: Colors.onSurfaceVariant },
+                            { color: colors.onSurfaceVariant },
                           ]}
                         >
                           {method.description}
@@ -902,7 +903,7 @@ export default function CocktailDetailsScreen() {
                     <TagPill
                       key={tagKey}
                       label={tag.name ?? "Tag"}
-                      color={tag.color ?? Colors.tint}
+                      color={tag.color ?? colors.tint}
                       selected
                       accessibilityLabel={tag.name ?? "Tag"}
                     />
@@ -920,7 +921,7 @@ export default function CocktailDetailsScreen() {
                           key={`description-${index}`}
                           style={[
                             styles.instructionsText,
-                            { color: Colors.onSurface },
+                            { color: colors.onSurface },
                           ]}
                         >
                           {paragraph}
@@ -931,7 +932,7 @@ export default function CocktailDetailsScreen() {
                           key={`description-${index}`}
                           style={[
                             styles.instructionsText,
-                            { color: Colors.onSurfaceVariant },
+                            { color: colors.onSurfaceVariant },
                           ]}
                           numberOfLines={
                             shouldTruncateDescription
@@ -950,7 +951,7 @@ export default function CocktailDetailsScreen() {
                     accessibilityRole="button"
                   >
                     <Text
-                      style={[styles.toggleDescription, { color: Colors.tint }]}
+                      style={[styles.toggleDescription, { color: colors.tint }]}
                     >
                       {isDescriptionExpanded ? "Show less" : "Show more"}
                     </Text>
@@ -964,7 +965,7 @@ export default function CocktailDetailsScreen() {
                 <Text
                   style={[
                     styles.instructionsTitle,
-                    { color: Colors.onSurface },
+                    { color: colors.onSurface },
                   ]}
                 >
                   Instructions
@@ -975,7 +976,7 @@ export default function CocktailDetailsScreen() {
                       key={`instruction-${index}`}
                       style={[
                         styles.instructionsText,
-                        { color: Colors.onSurface },
+                        { color: colors.onSurface },
                       ]}
                     >
                       {paragraph}
@@ -988,7 +989,7 @@ export default function CocktailDetailsScreen() {
             {sortedIngredients.length ? (
               <View style={styles.textBlock}>
                 <Text
-                  style={[styles.sectionTitle, { color: Colors.onSurface }]}
+                  style={[styles.sectionTitle, { color: colors.onSurface }]}
                 >
                   Ingredients
                 </Text>
@@ -1020,8 +1021,8 @@ export default function CocktailDetailsScreen() {
                       ? resolvedIngredients[index - 1]
                       : undefined;
                     const dividerColor = previousResolution?.isAvailable
-                      ? Colors.outline
-                      : Colors.outlineVariant;
+                      ? colors.outline
+                      : colors.outlineVariant;
                     const ingredientTagColors = (
                       resolvedIngredient?.tags ??
                       ingredient.tags ??
@@ -1033,7 +1034,7 @@ export default function CocktailDetailsScreen() {
                     const brandIndicatorColor =
                       resolvedIngredient?.baseIngredientId != null ||
                       catalogEntry?.baseIngredientId != null
-                        ? Colors.primary
+                        ? colors.primary
                         : undefined;
                     const isOnShoppingList =
                       ingredientId >= 0 &&
@@ -1110,7 +1111,7 @@ export default function CocktailDetailsScreen() {
                             <Text
                               style={[
                                 styles.ingredientSubtitle,
-                                { color: Colors.onSurfaceVariant },
+                                { color: colors.onSurfaceVariant },
                               ]}
                             >
                               {subtitle}
@@ -1123,7 +1124,7 @@ export default function CocktailDetailsScreen() {
                                 subtitle
                                   ? styles.ingredientQualifier
                                   : undefined,
-                                { color: Colors.onSurfaceVariant },
+                                { color: colors.onSurfaceVariant },
                               ]}
                             >
                               {qualifierLine}
@@ -1163,7 +1164,7 @@ export default function CocktailDetailsScreen() {
                               <Text
                                 style={[
                                   styles.quantityLabel,
-                                  { color: Colors.onSurfaceVariant },
+                                  { color: colors.onSurfaceVariant },
                                 ]}
                                 numberOfLines={1}
                               >
@@ -1176,7 +1177,7 @@ export default function CocktailDetailsScreen() {
                               <MaterialIcons
                                 name="shopping-cart"
                                 size={16}
-                                color={Colors.tint}
+                                color={colors.tint}
                                 style={styles.shoppingIcon}
                                 accessibilityRole="image"
                                 accessibilityLabel="On shopping list"
@@ -1210,10 +1211,10 @@ export default function CocktailDetailsScreen() {
             <MaterialCommunityIcons
               name="glass-cocktail"
               size={42}
-              color={Colors.onSurfaceVariant}
+              color={colors.onSurfaceVariant}
             />
             <Text
-              style={[styles.emptyText, { color: Colors.onSurfaceVariant }]}
+              style={[styles.emptyText, { color: colors.onSurfaceVariant }]}
             >
               Cocktail not found
             </Text>
@@ -1259,7 +1260,6 @@ const styles = StyleSheet.create({
     height: 150,
     borderRadius: 12,
     overflow: "hidden",
-    backgroundColor: Colors.surfaceBright,
   },
   photoPlaceholder: {
     width: 150,
@@ -1269,7 +1269,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     gap: 8,
-    backgroundColor: Colors.surfaceBright,
   },
   photoPlaceholderText: {
     fontSize: 14,

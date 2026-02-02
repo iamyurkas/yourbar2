@@ -22,7 +22,7 @@ import { SideMenuDrawer } from '@/components/SideMenuDrawer';
 import { TagPill } from '@/components/TagPill';
 import { getCocktailMethods, METHOD_ICON_MAP, type CocktailMethod } from '@/constants/cocktail-methods';
 import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
-import { Colors } from '@/constants/theme';
+import { useAppColors } from '@/constants/theme';
 import { isCocktailReady } from '@/libs/cocktail-availability';
 import { createIngredientLookup } from '@/libs/ingredient-availability';
 import { navigateToDetailsWithReturnTo } from '@/libs/navigation';
@@ -73,6 +73,7 @@ export default function ShakerResultsScreen() {
     ignoreGarnish,
     allowAllSubstitutes,
   } = useInventory();
+  const colors = useAppColors();
   const params = useLocalSearchParams();
   const [query, setQuery] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -162,7 +163,7 @@ export default function ShakerResultsScreen() {
   }, []);
 
   const ingredientLookup = useMemo(() => createIngredientLookup(ingredients), [ingredients]);
-  const defaultTagColor = Colors.tint;
+  const defaultTagColor = colors.tint;
 
   const availableTagOptions = useMemo(() => {
     const map = new Map<string, { key: string; name: string; color: string }>();
@@ -372,7 +373,7 @@ export default function ShakerResultsScreen() {
         return null;
       }
 
-      const tintColor = selected ? Colors.surface : Colors.tint;
+      const tintColor = selected ? colors.surface : colors.tint;
       if (icon.type === 'asset') {
         return (
           <Image
@@ -395,7 +396,7 @@ export default function ShakerResultsScreen() {
         </View>
       );
     },
-    [Colors.surface, Colors.tint],
+    [colors.surface, colors.tint],
   );
 
   const normalizedQuery = useMemo(() => {
@@ -543,7 +544,7 @@ export default function ShakerResultsScreen() {
             allowAllSubstitutes,
           })
         : false;
-      const backgroundColor = isReady ? Colors.outline : Colors.outlineVariant;
+      const backgroundColor = isReady ? colors.outline : colors.outlineVariant;
 
       return <View style={[styles.divider, { backgroundColor }]} />;
     },
@@ -552,14 +553,14 @@ export default function ShakerResultsScreen() {
       availableIngredientIds,
       ignoreGarnish,
       ingredientLookup,
-      Colors.outline,
-      Colors.outlineVariant,
+      colors.outline,
+      colors.outlineVariant,
     ],
   );
 
   return (
     <SafeAreaView
-      style={[styles.safeArea, { backgroundColor: Colors.background }]}
+      style={[styles.safeArea, { backgroundColor: colors.background }]}
       edges={['top', 'left', 'right']}
     >
       <Stack.Screen
@@ -593,9 +594,9 @@ export default function ShakerResultsScreen() {
                 styles.filterMenu,
                 {
                   top: filterMenuTop,
-                  backgroundColor: Colors.surface,
-                  borderColor: Colors.outline,
-                  shadowColor: Colors.shadow,
+                  backgroundColor: colors.surface,
+                  borderColor: colors.outline,
+                  shadowColor: colors.shadow,
                 },
               ]}>
               {/* Allow filter taps to register even when the search input is focused. */}
@@ -612,28 +613,28 @@ export default function ShakerResultsScreen() {
                           <TagPill
                             key={method.id}
                             label={method.label}
-                            color={Colors.tint}
+                            color={colors.tint}
                             selected={selected}
                             icon={renderMethodIcon(method.id, selected)}
                             onPress={() => handleMethodFilterToggle(method.id)}
                             accessibilityRole="checkbox"
                             accessibilityState={{ checked: selected }}
-                            androidRippleColor={`${Colors.surfaceVariant}33`}
+                            androidRippleColor={`${colors.surfaceVariant}33`}
                           />
                         );
                       })
                     ) : (
-                      <Text style={[styles.filterMenuEmpty, { color: Colors.onSurfaceVariant }]}>
+                      <Text style={[styles.filterMenuEmpty, { color: colors.onSurfaceVariant }]}>
                         No methods available
                       </Text>
                     )}
                   </View>
                   <View style={styles.filterSeparator}>
-                    <View style={[styles.filterSeparatorLine, { backgroundColor: Colors.outline }]} />
-                    <Text style={[styles.filterSeparatorLabel, { color: Colors.onSurfaceVariant }]}>
+                    <View style={[styles.filterSeparatorLine, { backgroundColor: colors.outline }]} />
+                    <Text style={[styles.filterSeparatorLabel, { color: colors.onSurfaceVariant }]}>
                       AND
                     </Text>
-                    <View style={[styles.filterSeparatorLine, { backgroundColor: Colors.outline }]} />
+                    <View style={[styles.filterSeparatorLine, { backgroundColor: colors.outline }]} />
                   </View>
                   <View style={styles.filterTagList}>
                     {availableTagOptions.length > 0 ? (
@@ -648,12 +649,12 @@ export default function ShakerResultsScreen() {
                             onPress={() => handleTagFilterToggle(tag.key)}
                             accessibilityRole="checkbox"
                             accessibilityState={{ checked: selected }}
-                            androidRippleColor={`${Colors.surfaceVariant}33`}
+                            androidRippleColor={`${colors.surfaceVariant}33`}
                           />
                         );
                       })
                     ) : (
-                      <Text style={[styles.filterMenuEmpty, { color: Colors.onSurfaceVariant }]}>
+                      <Text style={[styles.filterMenuEmpty, { color: colors.onSurfaceVariant }]}>
                         No tags available
                       </Text>
                     )}
@@ -665,7 +666,7 @@ export default function ShakerResultsScreen() {
                     accessibilityLabel="Clear selected filters"
                     onPress={handleClearFilters}
                     style={styles.filterMenuClearButton}>
-                    <Text style={[styles.filterMenuClearLabel, { color: Colors.tint }]}>
+                    <Text style={[styles.filterMenuClearLabel, { color: colors.tint }]}>
                       Clear filters
                     </Text>
                   </Pressable>
@@ -682,7 +683,7 @@ export default function ShakerResultsScreen() {
           ItemSeparatorComponent={renderSeparator}
           contentContainerStyle={styles.listContent}
           ListEmptyComponent={
-            <Text style={[styles.emptyLabel, { color: Colors.onSurfaceVariant }]}>
+            <Text style={[styles.emptyLabel, { color: colors.onSurfaceVariant }]}>
               No matching recipes
             </Text>
           }

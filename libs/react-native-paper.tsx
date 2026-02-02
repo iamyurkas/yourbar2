@@ -1,4 +1,4 @@
-import type { PropsWithChildren, ReactNode } from 'react';
+import React, { createContext, useContext, type PropsWithChildren, type ReactNode } from 'react';
 
 export type PaperTheme = {
   readonly version: number;
@@ -167,10 +167,16 @@ export const MD3DarkTheme: PaperTheme = {
   },
 };
 
+const ThemeContext = createContext<PaperTheme>(MD3LightTheme);
+
 type PaperProviderProps = PropsWithChildren<{
   theme?: PaperTheme;
 }>;
 
-export function PaperProvider({ children }: PaperProviderProps): ReactNode {
-  return children;
+export function PaperProvider({ children, theme = MD3LightTheme }: PaperProviderProps): ReactNode {
+  return <ThemeContext.Provider value={theme}>{children}</ThemeContext.Provider>;
+}
+
+export function useTheme() {
+  return useContext(ThemeContext);
 }

@@ -9,17 +9,17 @@ import ShakerIcon from '@/assets/images/shaker.svg';
 import { AppDialog, type DialogOptions } from '@/components/AppDialog';
 import { TabBarButton } from '@/components/tab-bar/TabBarButton';
 import { TabBarIcon } from '@/components/tab-bar/TabBarIcon';
-import { Colors } from '@/constants/theme';
+import { useAppColors } from '@/constants/theme';
 import { getLastCocktailTab, getLastIngredientTab } from '@/libs/collection-tabs';
 
 type TabPressHandler = (navigation: { navigate: (...args: never[]) => void }, route: { name: string }) => void;
 
-const TAB_SCREENS: Array<{
+const TAB_SCREENS: {
   name: 'cocktails' | 'shaker' | 'ingredients';
   title: string;
   icon: typeof CocktailIcon;
   onTabPress: TabPressHandler;
-}> = [
+}[] = [
   {
     name: 'cocktails',
     title: 'Cocktails',
@@ -52,9 +52,10 @@ export default function TabLayout() {
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(null);
   const insets = useSafeAreaInsets();
   const colorScheme = useColorScheme();
+  const colors = useAppColors();
   const isDarkMode = colorScheme === 'dark';
 
-  const tabBarInsetColor = isDarkMode ? Colors.onSurfaceVariant : Colors.surface;
+  const tabBarInsetColor = isDarkMode ? colors.onSurfaceVariant : colors.surface;
 
   const closeDialog = useCallback(() => {
     setDialogOptions(null);
@@ -70,8 +71,8 @@ export default function TabLayout() {
         initialRouteName="cocktails"
         screenOptions={{
           headerShown: false,
-          tabBarActiveTintColor: Colors.primary,
-          tabBarInactiveTintColor: Colors.onSurfaceVariant,
+          tabBarActiveTintColor: colors.primary,
+          tabBarInactiveTintColor: colors.onSurfaceVariant,
           tabBarStyle: {
             height: 72 + insets.bottom,
             paddingTop: 8,
@@ -84,7 +85,7 @@ export default function TabLayout() {
           },
           tabBarBackground: () => (
             <View style={styles.tabBarBackground}>
-              <View style={styles.tabBarSurface} />
+              <View style={[styles.tabBarSurface, { backgroundColor: colors.surface }]} />
               <View style={[styles.tabBarInset, { height: insets.bottom, backgroundColor: tabBarInsetColor }]} />
             </View>
           ),
@@ -125,10 +126,8 @@ const styles = StyleSheet.create({
   },
   tabBarSurface: {
     flex: 1,
-    backgroundColor: Colors.surface,
   },
   tabBarInset: {
     height: 0,
-    backgroundColor: Colors.surface,
   },
 });

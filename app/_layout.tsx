@@ -1,9 +1,9 @@
-import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
+import { DarkTheme, DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import { useColorScheme } from "react-native";
 import "react-native-reanimated";
 
-import { Colors } from "@/constants/theme";
 import { PaperProvider } from "@/libs/react-native-paper";
 import { InventoryProvider } from "@/providers/inventory-provider";
 import { UnsavedChangesProvider } from "@/providers/unsaved-changes-provider";
@@ -29,18 +29,22 @@ export const unstable_settings = {
 };
 
 export default Sentry.wrap(function RootLayout() {
-  const navigationTheme = ({
-    ...DefaultTheme,
-    colors: {
-      ...DefaultTheme.colors,
-      background: Colors.background,
-      card: Colors.surface,
-      text: Colors.text,
-      border: Colors.outline,
-    },
-  } satisfies typeof DefaultTheme);
+  const colorScheme = useColorScheme();
+  const paperTheme = getAppTheme(colorScheme);
+  const isDark = colorScheme === 'dark';
 
-  const paperTheme = getAppTheme();
+  const navigationTheme = {
+    ...(isDark ? DarkTheme : DefaultTheme),
+    colors: {
+      ...(isDark ? DarkTheme.colors : DefaultTheme.colors),
+      primary: paperTheme.colors.primary,
+      background: paperTheme.colors.background,
+      card: paperTheme.colors.surface,
+      text: paperTheme.colors.onSurface,
+      border: paperTheme.colors.outline,
+      notification: paperTheme.colors.error,
+    },
+  };
 
   return (
     <UnsavedChangesProvider>
@@ -54,7 +58,7 @@ export default Sentry.wrap(function RootLayout() {
                 options={{ presentation: "modal", title: "Modal" }}
               />
             </Stack>
-            <StatusBar style="dark" />
+            <StatusBar style="auto" />
           </ThemeProvider>
         </PaperProvider>
       </InventoryProvider>

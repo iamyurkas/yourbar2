@@ -4,7 +4,7 @@ import { Modal, Pressable, StyleSheet, Text, TextInput, View } from 'react-nativ
 import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 
 import { TAG_COLORS } from '@/constants/tag-colors';
-import { Colors } from '@/constants/theme';
+import { useAppColors } from '@/constants/theme';
 
 type TagEditorModalProps = {
   visible: boolean;
@@ -28,6 +28,7 @@ export function TagEditorModal({
   const [name, setName] = useState(initialName ?? '');
   const [hue, setHue] = useState(210);
   const [lightness, setLightness] = useState(0.5);
+  const colors = useAppColors();
 
   const parseHexToHsl = useCallback((value?: string | null) => {
     if (!value) {
@@ -127,32 +128,32 @@ export function TagEditorModal({
         <Pressable
           style={[
             styles.card,
-            { backgroundColor: Colors.surface, borderColor: Colors.outline, shadowColor: Colors.shadow },
+            { backgroundColor: colors.surface, borderColor: colors.outline, shadowColor: colors.shadow },
           ]}
           onPress={(event) => event.stopPropagation?.()}
           accessibilityRole="menu"
         >
           <View style={styles.header}>
-            <Text style={[styles.title, { color: Colors.onSurface }]}>{title}</Text>
+            <Text style={[styles.title, { color: colors.onSurface }]}>{title}</Text>
             <Pressable onPress={onClose} accessibilityRole="button" accessibilityLabel="Close">
-              <MaterialCommunityIcons name="close" size={22} color={Colors.onSurfaceVariant} />
+              <MaterialCommunityIcons name="close" size={22} color={colors.onSurfaceVariant} />
             </Pressable>
           </View>
-          <Text style={[styles.label, { color: Colors.onSurfaceVariant }]}>Tag name</Text>
+          <Text style={[styles.label, { color: colors.onSurfaceVariant }]}>Tag name</Text>
           <TextInput
             value={name}
             onChangeText={setName}
             placeholder="New tag"
-            placeholderTextColor={`${Colors.onSurfaceVariant}99`}
+            placeholderTextColor={`${colors.onSurfaceVariant}99`}
             style={[
               styles.input,
-              { borderColor: Colors.outlineVariant, color: Colors.text, backgroundColor: Colors.surface },
+              { borderColor: colors.outlineVariant, color: colors.text, backgroundColor: colors.surface },
             ]}
           />
-          <Text style={[styles.label, { color: Colors.onSurfaceVariant }]}>Color</Text>
+          <Text style={[styles.label, { color: colors.onSurfaceVariant }]}>Color</Text>
           <View style={styles.colorPreviewRow}>
-            <View style={[styles.colorPreview, { backgroundColor: selectedColor, borderColor: Colors.outlineVariant }]} />
-            <Text style={[styles.colorValue, { color: Colors.onSurfaceVariant }]}>{selectedColor}</Text>
+            <View style={[styles.colorPreview, { backgroundColor: selectedColor, borderColor: colors.outlineVariant }]} />
+            <Text style={[styles.colorValue, { color: colors.onSurfaceVariant }]}>{selectedColor}</Text>
           </View>
           <ColorSlider
             label="Hue"
@@ -183,10 +184,10 @@ export function TagEditorModal({
             onPress={handleSave}
             style={[
               styles.saveButton,
-              { backgroundColor: canSave ? Colors.tint : Colors.outlineVariant },
+              { backgroundColor: canSave ? colors.tint : colors.outlineVariant },
             ]}
           >
-            <Text style={[styles.saveLabel, { color: Colors.onPrimary }]}>{confirmLabel}</Text>
+            <Text style={[styles.saveLabel, { color: colors.onPrimary }]}>{confirmLabel}</Text>
           </Pressable>
         </Pressable>
       </Pressable>
@@ -198,11 +199,12 @@ type ColorSliderProps = {
   label: string;
   value: number;
   onChange: (value: number) => void;
-  gradientStops: Array<{ offset: string; color: string }>;
+  gradientStops: { offset: string; color: string }[];
 };
 
 function ColorSlider({ label, value, onChange, gradientStops }: ColorSliderProps) {
   const [trackWidth, setTrackWidth] = useState(0);
+  const colors = useAppColors();
 
   const updateValue = useCallback(
     (locationX: number) => {
@@ -224,7 +226,7 @@ function ColorSlider({ label, value, onChange, gradientStops }: ColorSliderProps
 
   return (
     <View style={styles.sliderBlock}>
-      <Text style={[styles.sliderLabel, { color: Colors.onSurfaceVariant }]}>{label}</Text>
+      <Text style={[styles.sliderLabel, { color: colors.onSurfaceVariant }]}>{label}</Text>
       <View
         style={styles.sliderTrack}
         onLayout={(event) => setTrackWidth(event.nativeEvent.layout.width)}
@@ -248,8 +250,8 @@ function ColorSlider({ label, value, onChange, gradientStops }: ColorSliderProps
             styles.sliderThumb,
             {
               left: trackWidth ? value * trackWidth - 8 : 0,
-              borderColor: Colors.surface,
-              backgroundColor: Colors.onSurface,
+              borderColor: colors.surface,
+              backgroundColor: colors.onSurface,
             },
           ]}
         />

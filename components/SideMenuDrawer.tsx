@@ -1,6 +1,5 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import Constants from "expo-constants";
 import * as DocumentPicker from "expo-document-picker";
 import * as FileSystem from "expo-file-system/legacy";
 import { Image, type ImageSource } from "expo-image";
@@ -29,7 +28,7 @@ import ShakerIcon from "@/assets/images/shaker.svg";
 import { AppDialog, type DialogOptions } from "@/components/AppDialog";
 import { TagEditorModal } from "@/components/TagEditorModal";
 import { TagPill } from "@/components/TagPill";
-import { Colors } from "@/constants/theme";
+import { useAppColors } from "@/constants/theme";
 import { buildPhotoBaseName } from "@/libs/photo-utils";
 import { useInventory, type StartScreen } from "@/providers/inventory-provider";
 import { type InventoryExportData } from "@/providers/inventory-types";
@@ -39,17 +38,6 @@ const MENU_WIDTH = Math.round(Dimensions.get("window").width * 0.75);
 const ANIMATION_DURATION = 200;
 const APP_VERSION = appConfig.expo.version;
 const APP_VERSION_CODE = appConfig.expo.android?.versionCode;
-const BUILD_TIME = Constants.expoConfig?.extra?.buildTime as string | undefined;
-
-const formatBuildTime = (value: string) => {
-  const parsed = new Date(value);
-
-  if (Number.isNaN(parsed.getTime())) {
-    return value;
-  }
-
-  return parsed.toLocaleString();
-};
 
 type StartScreenIcon =
   | {
@@ -143,6 +131,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     updateCustomIngredientTag,
     deleteCustomIngredientTag,
   } = useInventory();
+  const colors = useAppColors();
   const [isMounted, setIsMounted] = useState(visible);
   const [isRatingModalVisible, setRatingModalVisible] = useState(false);
   const ratingModalCloseTimeout = useRef<ReturnType<typeof setTimeout> | null>(
@@ -180,12 +169,12 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       styles.drawer,
       {
         width: MENU_WIDTH,
-        backgroundColor: Colors.surface,
-        shadowColor: Colors.shadow,
-        borderColor: Colors.outline,
+        backgroundColor: colors.surface,
+        shadowColor: colors.shadow,
+        borderColor: colors.outline,
       },
     ],
-    [Colors.outline, Colors.shadow, Colors.surface],
+    [colors.outline, colors.shadow, colors.surface],
   );
 
   const selectedStartScreenOption = useMemo(
@@ -197,7 +186,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     option: StartScreenOption,
     isSelected: boolean,
   ) => {
-    const iconColor = isSelected ? Colors.tint : Colors.onSurfaceVariant;
+    const iconColor = isSelected ? colors.tint : colors.onSurfaceVariant;
 
     if (option.icon.type === "asset") {
       return (
@@ -504,7 +493,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   };
 
   const createTarArchive = (
-    files: Array<{ path: string; contents: Uint8Array }>,
+    files: { path: string; contents: Uint8Array }[],
   ) => {
     const encoder = new TextEncoder();
     const blocks: Uint8Array[] = [];
@@ -624,7 +613,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
         return;
       }
 
-      const files: Array<{ path: string; contents: Uint8Array }> = [];
+      const files: { path: string; contents: Uint8Array }[] = [];
       const nameCounts = new Map<string, number>();
       let addedCount = 0;
 
@@ -811,7 +800,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
             pointerEvents="none"
             style={[
               styles.backdrop,
-              { backgroundColor: Colors.backdrop, opacity: backdropOpacity },
+              { backgroundColor: colors.backdrop, opacity: backdropOpacity },
             ]}
           />
         </Pressable>
@@ -819,10 +808,10 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
           <View
             style={[
               styles.headerContainer,
-              { backgroundColor: Colors.surface },
+              { backgroundColor: colors.surface },
             ]}
           >
-            <Text style={[styles.title, { color: Colors.onSurface }]}>
+            <Text style={[styles.title, { color: colors.onSurface }]}>
               Settings
             </Text>
           </View>
@@ -840,8 +829,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               style={[
                 styles.settingRow,
                 {
-                  borderColor: Colors.outline,
-                  backgroundColor: Colors.surface,
+                  borderColor: colors.outline,
+                  backgroundColor: colors.surface,
                 },
               ]}
             >
@@ -850,10 +839,10 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   styles.checkbox,
                   {
                     borderColor: ignoreGarnish
-                      ? Colors.tint
-                      : Colors.outlineVariant,
+                      ? colors.tint
+                      : colors.outlineVariant,
                     backgroundColor: ignoreGarnish
-                      ? Colors.tint
+                      ? colors.tint
                       : "transparent",
                   },
                 ]}
@@ -862,20 +851,20 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   name="check"
                   size={16}
                   color={
-                    ignoreGarnish ? Colors.background : Colors.outlineVariant
+                    ignoreGarnish ? colors.background : colors.outlineVariant
                   }
                 />
               </View>
               <View style={styles.settingTextContainer}>
                 <Text
-                  style={[styles.settingLabel, { color: Colors.onSurface }]}
+                  style={[styles.settingLabel, { color: colors.onSurface }]}
                 >
                   Ignore garnish
                 </Text>
                 <Text
                   style={[
                     styles.settingCaption,
-                    { color: Colors.onSurfaceVariant },
+                    { color: colors.onSurfaceVariant },
                   ]}
                 >
                   All garnishes are optional
@@ -889,8 +878,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               style={[
                 styles.settingRow,
                 {
-                  borderColor: Colors.outline,
-                  backgroundColor: Colors.surface,
+                  borderColor: colors.outline,
+                  backgroundColor: colors.surface,
                 },
               ]}
             >
@@ -899,10 +888,10 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   styles.checkbox,
                   {
                     borderColor: allowAllSubstitutes
-                      ? Colors.tint
-                      : Colors.outlineVariant,
+                      ? colors.tint
+                      : colors.outlineVariant,
                     backgroundColor: allowAllSubstitutes
-                      ? Colors.tint
+                      ? colors.tint
                       : "transparent",
                   },
                 ]}
@@ -912,21 +901,21 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   size={16}
                   color={
                     allowAllSubstitutes
-                      ? Colors.background
-                      : Colors.outlineVariant
+                      ? colors.background
+                      : colors.outlineVariant
                   }
                 />
               </View>
               <View style={styles.settingTextContainer}>
                 <Text
-                  style={[styles.settingLabel, { color: Colors.onSurface }]}
+                  style={[styles.settingLabel, { color: colors.onSurface }]}
                 >
                   Allow all substitutes
                 </Text>
                 <Text
                   style={[
                     styles.settingCaption,
-                    { color: Colors.onSurfaceVariant },
+                    { color: colors.onSurfaceVariant },
                   ]}
                 >
                   Always use substitutes
@@ -940,8 +929,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               style={[
                 styles.settingRow,
                 {
-                  borderColor: Colors.outline,
-                  backgroundColor: Colors.surface,
+                  borderColor: colors.outline,
+                  backgroundColor: colors.surface,
                 },
               ]}
             >
@@ -950,10 +939,10 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   styles.checkbox,
                   {
                     borderColor: useImperialUnits
-                      ? Colors.tint
-                      : Colors.outlineVariant,
+                      ? colors.tint
+                      : colors.outlineVariant,
                     backgroundColor: useImperialUnits
-                      ? Colors.tint
+                      ? colors.tint
                       : "transparent",
                   },
                 ]}
@@ -962,20 +951,20 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   name="check"
                   size={16}
                   color={
-                    useImperialUnits ? Colors.background : Colors.outlineVariant
+                    useImperialUnits ? colors.background : colors.outlineVariant
                   }
                 />
               </View>
               <View style={styles.settingTextContainer}>
                 <Text
-                  style={[styles.settingLabel, { color: Colors.onSurface }]}
+                  style={[styles.settingLabel, { color: colors.onSurface }]}
                 >
                   Show in imperial
                 </Text>
                 <Text
                   style={[
                     styles.settingCaption,
-                    { color: Colors.onSurfaceVariant },
+                    { color: colors.onSurfaceVariant },
                   ]}
                 >
                   Use oz instead of ml and grams
@@ -989,8 +978,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               style={[
                 styles.settingRow,
                 {
-                  borderColor: Colors.outline,
-                  backgroundColor: Colors.surface,
+                  borderColor: colors.outline,
+                  backgroundColor: colors.surface,
                 },
               ]}
             >
@@ -999,10 +988,10 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   styles.checkbox,
                   {
                     borderColor: keepScreenAwake
-                      ? Colors.tint
-                      : Colors.outlineVariant,
+                      ? colors.tint
+                      : colors.outlineVariant,
                     backgroundColor: keepScreenAwake
-                      ? Colors.tint
+                      ? colors.tint
                       : "transparent",
                   },
                 ]}
@@ -1011,20 +1000,20 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   name="check"
                   size={16}
                   color={
-                    keepScreenAwake ? Colors.background : Colors.outlineVariant
+                    keepScreenAwake ? colors.background : colors.outlineVariant
                   }
                 />
               </View>
               <View style={styles.settingTextContainer}>
                 <Text
-                  style={[styles.settingLabel, { color: Colors.onSurface }]}
+                  style={[styles.settingLabel, { color: colors.onSurface }]}
                 >
                   Keep screen awake
                 </Text>
                 <Text
                   style={[
                     styles.settingCaption,
-                    { color: Colors.onSurfaceVariant },
+                    { color: colors.onSurfaceVariant },
                   ]}
                 >
                   Prevent sleep on cocktail view
@@ -1038,8 +1027,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               style={[
                 styles.settingRow,
                 {
-                  borderColor: Colors.outline,
-                  backgroundColor: Colors.surface,
+                  borderColor: colors.outline,
+                  backgroundColor: colors.surface,
                 },
               ]}
             >
@@ -1047,27 +1036,27 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 style={[
                   styles.checkbox,
                   {
-                    borderColor: Colors.tint,
-                    backgroundColor: Colors.surfaceVariant,
+                    borderColor: colors.tint,
+                    backgroundColor: colors.surfaceVariant,
                   },
                 ]}
               >
                 <MaterialCommunityIcons
                   name="home-variant"
                   size={16}
-                  color={Colors.tint}
+                  color={colors.tint}
                 />
               </View>
               <View style={styles.settingTextContainer}>
                 <Text
-                  style={[styles.settingLabel, { color: Colors.onSurface }]}
+                  style={[styles.settingLabel, { color: colors.onSurface }]}
                 >
                   Starting screen
                 </Text>
                 <Text
                   style={[
                     styles.settingCaption,
-                    { color: Colors.onSurfaceVariant },
+                    { color: colors.onSurfaceVariant },
                   ]}
                 >
                   Open {selectedStartScreenOption?.label ?? "All cocktails"}
@@ -1081,8 +1070,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               style={[
                 styles.settingRow,
                 {
-                  borderColor: Colors.outline,
-                  backgroundColor: Colors.surface,
+                  borderColor: colors.outline,
+                  backgroundColor: colors.surface,
                 },
               ]}
             >
@@ -1090,27 +1079,27 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 style={[
                   styles.checkbox,
                   {
-                    borderColor: Colors.tint,
-                    backgroundColor: Colors.surfaceVariant,
+                    borderColor: colors.tint,
+                    backgroundColor: colors.surfaceVariant,
                   },
                 ]}
               >
                 <MaterialCommunityIcons
                   name="star"
                   size={16}
-                  color={Colors.tint}
+                  color={colors.tint}
                 />
               </View>
               <View style={styles.settingTextContainer}>
                 <Text
-                  style={[styles.settingLabel, { color: Colors.onSurface }]}
+                  style={[styles.settingLabel, { color: colors.onSurface }]}
                 >
                   Favorites rating filter
                 </Text>
                 <Text
                   style={[
                     styles.settingCaption,
-                    { color: Colors.onSurfaceVariant },
+                    { color: colors.onSurfaceVariant },
                   ]}
                 >
                   Showing {ratingFilterThreshold}+ stars cocktails
@@ -1125,8 +1114,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               style={[
                 styles.settingRow,
                 {
-                  borderColor: Colors.outline,
-                  backgroundColor: Colors.surface,
+                  borderColor: colors.outline,
+                  backgroundColor: colors.surface,
                 },
               ]}
             >
@@ -1134,27 +1123,27 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 style={[
                   styles.checkbox,
                   {
-                    borderColor: Colors.tint,
-                    backgroundColor: Colors.surfaceVariant,
+                    borderColor: colors.tint,
+                    backgroundColor: colors.surfaceVariant,
                   },
                 ]}
               >
                 <MaterialCommunityIcons
                   name="tag-multiple"
                   size={16}
-                  color={Colors.tint}
+                  color={colors.tint}
                 />
               </View>
               <View style={styles.settingTextContainer}>
                 <Text
-                  style={[styles.settingLabel, { color: Colors.onSurface }]}
+                  style={[styles.settingLabel, { color: colors.onSurface }]}
                 >
                   Manage tags
                 </Text>
                 <Text
                   style={[
                     styles.settingCaption,
-                    { color: Colors.onSurfaceVariant },
+                    { color: colors.onSurfaceVariant },
                   ]}
                 >
                   Create or update your tags
@@ -1169,8 +1158,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               style={({ pressed }) => [
                 styles.actionRow,
                 {
-                  borderColor: Colors.outline,
-                  backgroundColor: Colors.surface,
+                  borderColor: colors.outline,
+                  backgroundColor: colors.surface,
                 },
                 pressed || isExporting ? { opacity: 0.8 } : null,
               ]}
@@ -1178,25 +1167,25 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               <View
                 style={[
                   styles.actionIcon,
-                  { backgroundColor: Colors.surfaceVariant },
+                  { backgroundColor: colors.surfaceVariant },
                 ]}
               >
                 <MaterialCommunityIcons
                   name="file-export-outline"
                   size={16}
-                  color={Colors.onSurfaceVariant}
+                  color={colors.onSurfaceVariant}
                 />
               </View>
               <View style={styles.settingTextContainer}>
                 <Text
-                  style={[styles.settingLabel, { color: Colors.onSurface }]}
+                  style={[styles.settingLabel, { color: colors.onSurface }]}
                 >
                   {isExporting ? "Exporting data..." : "Export data"}
                 </Text>
                 <Text
                   style={[
                     styles.settingCaption,
-                    { color: Colors.onSurfaceVariant },
+                    { color: colors.onSurfaceVariant },
                   ]}
                 >
                   Backup data to a file
@@ -1211,8 +1200,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               style={({ pressed }) => [
                 styles.actionRow,
                 {
-                  borderColor: Colors.outline,
-                  backgroundColor: Colors.surface,
+                  borderColor: colors.outline,
+                  backgroundColor: colors.surface,
                 },
                 pressed || isImporting ? { opacity: 0.8 } : null,
               ]}
@@ -1220,25 +1209,25 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               <View
                 style={[
                   styles.actionIcon,
-                  { backgroundColor: Colors.surfaceVariant },
+                  { backgroundColor: colors.surfaceVariant },
                 ]}
               >
                 <MaterialCommunityIcons
                   name="file-import-outline"
                   size={16}
-                  color={Colors.onSurfaceVariant}
+                  color={colors.onSurfaceVariant}
                 />
               </View>
               <View style={styles.settingTextContainer}>
                 <Text
-                  style={[styles.settingLabel, { color: Colors.onSurface }]}
+                  style={[styles.settingLabel, { color: colors.onSurface }]}
                 >
                   {isImporting ? "Importing data..." : "Import data"}
                 </Text>
                 <Text
                   style={[
                     styles.settingCaption,
-                    { color: Colors.onSurfaceVariant },
+                    { color: colors.onSurfaceVariant },
                   ]}
                 >
                   Load backup from a file
@@ -1253,8 +1242,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               style={({ pressed }) => [
                 styles.actionRow,
                 {
-                  borderColor: Colors.outline,
-                  backgroundColor: Colors.surface,
+                  borderColor: colors.outline,
+                  backgroundColor: colors.surface,
                 },
                 pressed || isBackingUpPhotos ? { opacity: 0.8 } : null,
               ]}
@@ -1262,25 +1251,25 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               <View
                 style={[
                   styles.actionIcon,
-                  { backgroundColor: Colors.surfaceVariant },
+                  { backgroundColor: colors.surfaceVariant },
                 ]}
               >
                 <MaterialCommunityIcons
                   name="image-multiple"
                   size={16}
-                  color={Colors.onSurfaceVariant}
+                  color={colors.onSurfaceVariant}
                 />
               </View>
               <View style={styles.settingTextContainer}>
                 <Text
-                  style={[styles.settingLabel, { color: Colors.onSurface }]}
+                  style={[styles.settingLabel, { color: colors.onSurface }]}
                 >
                   {isBackingUpPhotos ? "Exporting photos..." : "Export photos"}
                 </Text>
                 <Text
                   style={[
                     styles.settingCaption,
-                    { color: Colors.onSurfaceVariant },
+                    { color: colors.onSurfaceVariant },
                   ]}
                 >
                   Save photos as an archive
@@ -1294,27 +1283,26 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               style={[
                 styles.actionRow,
                 {
-                  borderColor: Colors.outline,
-                  backgroundColor: Colors.surface,
+                  borderColor: colors.outline,
+                  backgroundColor: colors.surface,
                 },
               ]}>
-              <View style={[styles.actionIcon, { backgroundColor: Colors.surfaceVariant }]}>
-                <MaterialCommunityIcons name="refresh" size={16} color={Colors.onSurfaceVariant} />
+              <View style={[styles.actionIcon, { backgroundColor: colors.surfaceVariant }]}>
+                <MaterialCommunityIcons name="refresh" size={16} color={colors.onSurfaceVariant} />
               </View>
               <View style={styles.settingTextContainer}>
-                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>Restore bundled data</Text>
-                <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>
+                <Text style={[styles.settingLabel, { color: colors.onSurface }]}>Restore bundled data</Text>
+                <Text style={[styles.settingCaption, { color: colors.onSurfaceVariant }]}>
                   Restore bundled cocktails and ingredients
                 </Text>
               </View>
             </Pressable>
             <View style={styles.versionRow}>
               <Text
-                style={[styles.versionText, { color: Colors.onSurfaceVariant }]}
+                style={[styles.versionText, { color: colors.onSurfaceVariant }]}
               >
                 Version {APP_VERSION}
                 {APP_VERSION_CODE != null ? ` (${APP_VERSION_CODE})` : ""}
-                {/* {BUILD_TIME ? `\nBuild ${formatBuildTime(BUILD_TIME)}` : ""} */}
               </Text>
             </View>
           </ScrollView>
@@ -1335,9 +1323,9 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
             style={[
               styles.modalCard,
               {
-                backgroundColor: Colors.surface,
-                borderColor: Colors.outline,
-                shadowColor: Colors.shadow,
+                backgroundColor: colors.surface,
+                borderColor: colors.outline,
+                shadowColor: colors.shadow,
               },
             ]}
             accessibilityLabel="Favorites rating"
@@ -1347,7 +1335,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               <Text
                 style={[
                   styles.modalTitle,
-                  { color: Colors.onSurface, flex: 1 },
+                  { color: colors.onSurface, flex: 1 },
                 ]}
               >
                 Favorites rating
@@ -1360,14 +1348,14 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 <MaterialCommunityIcons
                   name="close"
                   size={22}
-                  color={Colors.onSurfaceVariant}
+                  color={colors.onSurfaceVariant}
                 />
               </Pressable>
             </View>
             <Text
               style={[
                 styles.settingCaption,
-                { color: Colors.onSurfaceVariant },
+                { color: colors.onSurfaceVariant },
               ]}
             >
               Choose the minimum rating to show on Favorites
@@ -1386,11 +1374,11 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                       styles.ratingOption,
                       {
                         borderColor: isSelected
-                          ? Colors.tint
-                          : Colors.outlineVariant,
+                          ? colors.tint
+                          : colors.outlineVariant,
                         backgroundColor: isSelected
-                          ? Colors.tint
-                          : Colors.surfaceBright,
+                          ? colors.tint
+                          : colors.surfaceBright,
                       },
                       pressed ? { opacity: 0.8 } : null,
                     ]}
@@ -1399,7 +1387,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                       name="star"
                       size={20}
                       color={
-                        isSelected ? Colors.background : Colors.onSurfaceVariant
+                        isSelected ? colors.background : colors.onSurfaceVariant
                       }
                     />
                     <Text
@@ -1407,8 +1395,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                         styles.ratingOptionLabel,
                         {
                           color: isSelected
-                            ? Colors.background
-                            : Colors.onSurface,
+                            ? colors.background
+                            : colors.onSurface,
                         },
                       ]}
                     >
@@ -1436,9 +1424,9 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
             style={[
               styles.modalCard,
               {
-                backgroundColor: Colors.surface,
-                borderColor: Colors.outline,
-                shadowColor: Colors.shadow,
+                backgroundColor: colors.surface,
+                borderColor: colors.outline,
+                shadowColor: colors.shadow,
               },
             ]}
             accessibilityLabel="Manage tags"
@@ -1448,7 +1436,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               <Text
                 style={[
                   styles.modalTitle,
-                  { color: Colors.onSurface, flex: 1 },
+                  { color: colors.onSurface, flex: 1 },
                 ]}
               >
                 Manage tags
@@ -1461,7 +1449,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 <MaterialCommunityIcons
                   name="close"
                   size={22}
-                  color={Colors.onSurfaceVariant}
+                  color={colors.onSurfaceVariant}
                 />
               </Pressable>
             </View>
@@ -1473,7 +1461,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               <View style={styles.tagSection}>
                 <View style={styles.tagSectionHeader}>
                   <Text
-                    style={[styles.settingLabel, { color: Colors.onSurface }]}
+                    style={[styles.settingLabel, { color: colors.onSurface }]}
                   >
                     Cocktail tags
                   </Text>
@@ -1482,15 +1470,15 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     onPress={() => handleOpenTagEditor("cocktail")}
                     style={[
                       styles.tagAddButton,
-                      { borderColor: Colors.outlineVariant },
+                      { borderColor: colors.outlineVariant },
                     ]}
                   >
                     <MaterialCommunityIcons
                       name="plus"
                       size={16}
-                      color={Colors.tint}
+                      color={colors.tint}
                     />
-                    <Text style={[styles.tagAddLabel, { color: Colors.tint }]}>
+                    <Text style={[styles.tagAddLabel, { color: colors.tint }]}>
                       Add
                     </Text>
                   </Pressable>
@@ -1499,7 +1487,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   <Text
                     style={[
                       styles.tagEmpty,
-                      { color: Colors.onSurfaceVariant },
+                      { color: colors.onSurfaceVariant },
                     ]}
                   >
                     No custom cocktail tags yet.
@@ -1513,7 +1501,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                       >
                         <TagPill
                           label={tag.name ?? ""}
-                          color={tag.color ?? Colors.tint}
+                          color={tag.color ?? colors.tint}
                         />
                         <View style={styles.tagActions}>
                           <Pressable
@@ -1523,14 +1511,14 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                               handleOpenTagEditor("cocktail", {
                                 id: Number(tag.id),
                                 name: tag.name ?? "",
-                                color: tag.color ?? Colors.tint,
+                                color: tag.color ?? colors.tint,
                               })
                             }
                           >
                             <MaterialCommunityIcons
                               name="pencil"
                               size={18}
-                              color={Colors.onSurfaceVariant}
+                              color={colors.onSurfaceVariant}
                             />
                           </Pressable>
                           <Pressable
@@ -1546,7 +1534,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                             <MaterialCommunityIcons
                               name="trash-can-outline"
                               size={18}
-                              color={Colors.error}
+                              color={colors.error}
                             />
                           </Pressable>
                         </View>
@@ -1558,7 +1546,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               <View style={styles.tagSection}>
                 <View style={styles.tagSectionHeader}>
                   <Text
-                    style={[styles.settingLabel, { color: Colors.onSurface }]}
+                    style={[styles.settingLabel, { color: colors.onSurface }]}
                   >
                     Ingredient tags
                   </Text>
@@ -1567,15 +1555,15 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     onPress={() => handleOpenTagEditor("ingredient")}
                     style={[
                       styles.tagAddButton,
-                      { borderColor: Colors.outlineVariant },
+                      { borderColor: colors.outlineVariant },
                     ]}
                   >
                     <MaterialCommunityIcons
                       name="plus"
                       size={16}
-                      color={Colors.tint}
+                      color={colors.tint}
                     />
-                    <Text style={[styles.tagAddLabel, { color: Colors.tint }]}>
+                    <Text style={[styles.tagAddLabel, { color: colors.tint }]}>
                       Add
                     </Text>
                   </Pressable>
@@ -1584,7 +1572,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   <Text
                     style={[
                       styles.tagEmpty,
-                      { color: Colors.onSurfaceVariant },
+                      { color: colors.onSurfaceVariant },
                     ]}
                   >
                     No custom ingredient tags yet.
@@ -1598,7 +1586,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                       >
                         <TagPill
                           label={tag.name ?? ""}
-                          color={tag.color ?? Colors.tint}
+                          color={tag.color ?? colors.tint}
                         />
                         <View style={styles.tagActions}>
                           <Pressable
@@ -1608,14 +1596,14 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                               handleOpenTagEditor("ingredient", {
                                 id: Number(tag.id),
                                 name: tag.name ?? "",
-                                color: tag.color ?? Colors.tint,
+                                color: tag.color ?? colors.tint,
                               })
                             }
                           >
                             <MaterialCommunityIcons
                               name="pencil"
                               size={18}
-                              color={Colors.onSurfaceVariant}
+                              color={colors.onSurfaceVariant}
                             />
                           </Pressable>
                           <Pressable
@@ -1631,7 +1619,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                             <MaterialCommunityIcons
                               name="trash-can-outline"
                               size={18}
-                              color={Colors.error}
+                              color={colors.error}
                             />
                           </Pressable>
                         </View>
@@ -1675,9 +1663,9 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
             style={[
               styles.modalCard,
               {
-                backgroundColor: Colors.surface,
-                borderColor: Colors.outline,
-                shadowColor: Colors.shadow,
+                backgroundColor: colors.surface,
+                borderColor: colors.outline,
+                shadowColor: colors.shadow,
               },
             ]}
             accessibilityLabel="Starting screen"
@@ -1687,7 +1675,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               <Text
                 style={[
                   styles.modalTitle,
-                  { color: Colors.onSurface, flex: 1 },
+                  { color: colors.onSurface, flex: 1 },
                 ]}
               >
                 Starting screen
@@ -1700,14 +1688,14 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 <MaterialCommunityIcons
                   name="close"
                   size={22}
-                  color={Colors.onSurfaceVariant}
+                  color={colors.onSurfaceVariant}
                 />
               </Pressable>
             </View>
             <Text
               style={[
                 styles.settingCaption,
-                { color: Colors.onSurfaceVariant },
+                { color: colors.onSurfaceVariant },
               ]}
             >
               Select where the app opens
@@ -1731,11 +1719,11 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                       styles.startScreenOption,
                       {
                         borderColor: isSelected
-                          ? Colors.tint
-                          : Colors.outlineVariant,
+                          ? colors.tint
+                          : colors.outlineVariant,
                         backgroundColor: isSelected
-                          ? Colors.highlightFaint
-                          : Colors.surfaceBright,
+                          ? colors.highlightFaint
+                          : colors.surfaceBright,
                       },
                       pressed ? { opacity: 0.85 } : null,
                     ]}
@@ -1743,7 +1731,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     <View
                       style={[
                         styles.startScreenIcon,
-                        { backgroundColor: Colors.surfaceBright },
+                        { backgroundColor: colors.surfaceBright },
                       ]}
                     >
                       {renderStartScreenIcon(option, isSelected)}
@@ -1752,7 +1740,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                       <Text
                         style={[
                           styles.settingLabel,
-                          { color: Colors.onSurface },
+                          { color: colors.onSurface },
                         ]}
                       >
                         {option.label}
@@ -1760,7 +1748,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                       <Text
                         style={[
                           styles.settingCaption,
-                          { color: Colors.onSurfaceVariant },
+                          { color: colors.onSurfaceVariant },
                         ]}
                       >
                         {option.description}
@@ -1773,7 +1761,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                           : "checkbox-blank-circle-outline"
                       }
                       size={20}
-                      color={isSelected ? Colors.tint : Colors.onSurfaceVariant}
+                      color={isSelected ? colors.tint : colors.onSurfaceVariant}
                     />
                   </Pressable>
                 );

@@ -13,7 +13,7 @@ import {
   type ViewStyle,
 } from 'react-native';
 
-import { Colors } from '@/constants/theme';
+import { useAppColors } from '@/constants/theme';
 
 export type TagPillProps = {
   label: string;
@@ -47,6 +47,7 @@ export function TagPill({
   hitSlop,
   testID,
 }: TagPillProps) {
+  const colors = useAppColors();
 
   const content = (
     <View style={styles.contentRow}>
@@ -54,7 +55,7 @@ export function TagPill({
       <Text
         style={[
           styles.label,
-          { color: selected ? Colors.surface : color },
+          { color: selected ? colors.surface : color },
           textStyle,
         ]}
       >
@@ -67,7 +68,7 @@ export function TagPill({
     styles.pill,
     {
       borderColor: color,
-      backgroundColor: selected ? color : Colors.surface,
+      backgroundColor: selected ? color : colors.surface,
       opacity: disabled ? 0.5 : 1,
     },
     style,

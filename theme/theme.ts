@@ -1,6 +1,6 @@
-import { MD3LightTheme, type PaperTheme } from "@/libs/react-native-paper";
+import { MD3LightTheme, MD3DarkTheme, type PaperTheme } from "@/libs/react-native-paper";
 
-export const palette = {
+export const lightPalette = {
   primary: "#4DABF7",
   primaryContainer: "#D5E6FA",
   onPrimary: "#FFFFFF",
@@ -54,6 +54,63 @@ export const palette = {
   overlayOnPrimary: "#FFFFFF55",
 } as const;
 
+export const darkPalette: typeof lightPalette = {
+  primary: "#9CCAFF",
+  primaryContainer: "#1E2936",
+  onPrimary: "#001529",
+  onPrimaryContainer: "#D6E4FF",
+
+  secondary: "#B0BEC5",
+  secondaryContainer: "#1F2A36",
+  onSecondary: "#0A141F",
+  onSecondaryContainer: "#DCE4EA",
+
+  tertiary: "#A5D8FF",
+  tertiaryContainer: "#14202B",
+  onTertiary: "#0B1721",
+  onTertiaryContainer: "#DFF3FF",
+
+  background: "#0B1017",
+  surface: "#0F1720",
+  surfaceBright: "#1B2733",
+  surfaceVariant: "#1B2733",
+
+  outline: "#3C4C5F",
+  outlineVariant: "#2A3947",
+
+  onSurface: "#E5EAF0",
+  onSurfaceMuted: "#B7C1CC",
+  onSurfaceVariant: "#A1A1A1",
+  onSurfaceDisabled: "rgba(255,255,255,0.38)",
+  onBackground: "#E5EAF0",
+
+  inversePrimary: "#4A90E2",
+  inverseSurface: "#E5EAF0",
+  inverseOnSurface: "#122030",
+
+  error: "#F28B82",
+  errorContainer: "#3B121A",
+  onError: "#3B121A",
+  onErrorContainer: "#FADADB",
+
+  success: "#81C784",
+  danger: "#F28B82",
+
+  disabled: "#3C4C5F",
+  placeholder: "#707070",
+
+  surfaceDisabled: "rgba(255,255,255,0.12)",
+  backdrop: "rgba(0,0,0,0.6)",
+  shadow: "#000000",
+
+  highlightFaint: "#1E2936",
+  highlightSubtle: "#1F2A36",
+  overlayOnPrimary: "#00000055",
+} as const;
+
+// For backward compatibility
+export const palette = lightPalette;
+
 export const tagPalette = [
   "#ec5a5a",
   "#F06292",
@@ -85,49 +142,97 @@ export const tagColors = {
 
 const lightColors: PaperTheme["colors"] = {
   ...MD3LightTheme.colors,
-  primary: palette.primary,
-  onPrimary: palette.onPrimary,
-  primaryContainer: palette.primaryContainer,
-  onPrimaryContainer: palette.onPrimaryContainer,
-  secondary: palette.secondary,
-  secondaryContainer: palette.secondaryContainer,
-  onSecondary: palette.onSecondary,
-  onSecondaryContainer: palette.onSecondaryContainer,
-  tertiary: palette.tertiary,
-  tertiaryContainer: palette.tertiaryContainer,
-  onTertiary: palette.onTertiary,
-  onTertiaryContainer: palette.onTertiaryContainer,
-  background: palette.background,
-  surface: palette.surface,
-  surfaceBright: palette.surfaceBright,
-  surfaceVariant: palette.surfaceVariant,
-  outline: palette.outline,
-  outlineVariant: palette.outlineVariant,
-  onSurface: palette.onSurface,
-  onSurfaceMuted: palette.onSurfaceMuted,
-  onSurfaceVariant: palette.onSurfaceVariant,
-  onBackground: palette.onBackground,
-  error: palette.error,
-  errorContainer: palette.errorContainer,
-  onError: palette.onError,
-  onErrorContainer: palette.onErrorContainer,
-  inversePrimary: palette.inversePrimary,
-  inverseOnSurface: palette.inverseOnSurface,
-  inverseSurface: palette.inverseSurface,
-  surfaceDisabled: palette.surfaceDisabled,
-  onSurfaceDisabled: palette.onSurfaceDisabled,
-  backdrop: palette.backdrop,
-  highlightFaint: palette.highlightFaint,
-  highlightSubtle: palette.highlightSubtle,
-  overlayOnPrimary: palette.overlayOnPrimary,
+  primary: lightPalette.primary,
+  onPrimary: lightPalette.onPrimary,
+  primaryContainer: lightPalette.primaryContainer,
+  onPrimaryContainer: lightPalette.onPrimaryContainer,
+  secondary: lightPalette.secondary,
+  secondaryContainer: lightPalette.secondaryContainer,
+  onSecondary: lightPalette.onSecondary,
+  onSecondaryContainer: lightPalette.onSecondaryContainer,
+  tertiary: lightPalette.tertiary,
+  tertiaryContainer: lightPalette.tertiaryContainer,
+  onTertiary: lightPalette.onTertiary,
+  onTertiaryContainer: lightPalette.onTertiaryContainer,
+  background: lightPalette.background,
+  surface: lightPalette.surface,
+  surfaceBright: lightPalette.surfaceBright,
+  surfaceVariant: lightPalette.surfaceVariant,
+  outline: lightPalette.outline,
+  outlineVariant: lightPalette.outlineVariant,
+  onSurface: lightPalette.onSurface,
+  onSurfaceMuted: lightPalette.onSurfaceMuted,
+  onSurfaceVariant: lightPalette.onSurfaceVariant,
+  onBackground: lightPalette.onBackground,
+  error: lightPalette.error,
+  errorContainer: lightPalette.errorContainer,
+  onError: lightPalette.onError,
+  onErrorContainer: lightPalette.onErrorContainer,
+  inversePrimary: lightPalette.inversePrimary,
+  inverseOnSurface: lightPalette.inverseOnSurface,
+  inverseSurface: lightPalette.inverseSurface,
+  surfaceDisabled: lightPalette.surfaceDisabled,
+  onSurfaceDisabled: lightPalette.onSurfaceDisabled,
+  backdrop: lightPalette.backdrop,
+  highlightFaint: lightPalette.highlightFaint,
+  highlightSubtle: lightPalette.highlightSubtle,
+  overlayOnPrimary: lightPalette.overlayOnPrimary,
   elevation: {
     ...MD3LightTheme.colors.elevation,
     level0: "transparent",
     level1: "rgba(255,255,255,0.95)",
     level2: "rgba(255,255,255,0.97)",
     level3: "rgba(255,255,255,0.99)",
-    level4: palette.surfaceBright,
-    level5: palette.surfaceBright,
+    level4: lightPalette.surfaceBright,
+    level5: lightPalette.surfaceBright,
+  },
+};
+
+const darkColors: PaperTheme["colors"] = {
+  ...MD3DarkTheme.colors,
+  primary: darkPalette.primary,
+  onPrimary: darkPalette.onPrimary,
+  primaryContainer: darkPalette.primaryContainer,
+  onPrimaryContainer: darkPalette.onPrimaryContainer,
+  secondary: darkPalette.secondary,
+  secondaryContainer: darkPalette.secondaryContainer,
+  onSecondary: darkPalette.onSecondary,
+  onSecondaryContainer: darkPalette.onSecondaryContainer,
+  tertiary: darkPalette.tertiary,
+  tertiaryContainer: darkPalette.tertiaryContainer,
+  onTertiary: darkPalette.onTertiary,
+  onTertiaryContainer: darkPalette.onTertiaryContainer,
+  background: darkPalette.background,
+  surface: darkPalette.surface,
+  surfaceBright: darkPalette.surfaceBright,
+  surfaceVariant: darkPalette.surfaceVariant,
+  outline: darkPalette.outline,
+  outlineVariant: darkPalette.outlineVariant,
+  onSurface: darkPalette.onSurface,
+  onSurfaceMuted: darkPalette.onSurfaceMuted,
+  onSurfaceVariant: darkPalette.onSurfaceVariant,
+  onBackground: darkPalette.onBackground,
+  error: darkPalette.error,
+  errorContainer: darkPalette.errorContainer,
+  onError: darkPalette.onError,
+  onErrorContainer: darkPalette.onErrorContainer,
+  inversePrimary: darkPalette.inversePrimary,
+  inverseOnSurface: darkPalette.inverseOnSurface,
+  inverseSurface: darkPalette.inverseSurface,
+  surfaceDisabled: darkPalette.surfaceDisabled,
+  onSurfaceDisabled: darkPalette.onSurfaceDisabled,
+  backdrop: darkPalette.backdrop,
+  highlightFaint: darkPalette.highlightFaint,
+  highlightSubtle: darkPalette.highlightSubtle,
+  overlayOnPrimary: darkPalette.overlayOnPrimary,
+  elevation: {
+    ...MD3DarkTheme.colors.elevation,
+    level0: "transparent",
+    level1: "rgba(15,23,32,0.7)",
+    level2: "rgba(17,25,35,0.72)",
+    level3: "rgba(19,27,38,0.74)",
+    level4: darkPalette.surfaceBright,
+    level5: darkPalette.surfaceBright,
   },
 };
 
@@ -136,6 +241,11 @@ export const lightTheme: PaperTheme = {
   colors: lightColors,
 };
 
-export function getAppTheme(): PaperTheme {
-  return lightTheme;
+export const darkTheme: PaperTheme = {
+  ...MD3DarkTheme,
+  colors: darkColors,
+};
+
+export function getAppTheme(scheme?: 'light' | 'dark' | null): PaperTheme {
+  return scheme === 'dark' ? darkTheme : lightTheme;
 }

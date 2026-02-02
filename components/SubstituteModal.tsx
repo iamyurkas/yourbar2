@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 
 import { ListRow, Thumb } from '@/components/RowParts';
-import { Colors } from '@/constants/theme';
+import { useAppColors } from '@/constants/theme';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
 import { tagColors } from '@/theme/theme';
@@ -57,6 +57,7 @@ export function SubstituteModal({
   const { ingredients, availableIngredientIds, shoppingIngredientIds, cocktails } = useInventory();
   const [searchValue, setSearchValue] = useState('');
   const inputRef = useRef<TextInput | null>(null);
+  const colors = useAppColors();
 
   const ingredientById = useMemo(() => {
     const map = new Map<number, Ingredient>();
@@ -236,7 +237,7 @@ export function SubstituteModal({
       const isOnShoppingList = candidateId >= 0 && shoppingIngredientIds.has(candidateId);
       const tagColor = item.tags?.[0]?.color ?? tagColors.yellow;
       const subtitle = renderSubtitle(baseGroupId);
-      const brandIndicatorColor = item.baseIngredientId != null ? Colors.primary : undefined;
+      const brandIndicatorColor = item.baseIngredientId != null ? colors.primary : undefined;
 
       return (
         <ListRow
@@ -244,7 +245,7 @@ export function SubstituteModal({
           subtitle={subtitle}
           onPress={() => onSelect(item)}
           selected={isAvailable}
-          highlightColor={Colors.highlightFaint}
+          highlightColor={colors.highlightFaint}
           tagColor={tagColor}
           thumbnail={<Thumb label={item.name ?? undefined} uri={item.photoUri} />}
           brandIndicatorColor={brandIndicatorColor}
@@ -254,7 +255,7 @@ export function SubstituteModal({
               <MaterialIcons
                 name="shopping-cart"
                 size={16}
-                color={Colors.tint}
+                color={colors.tint}
                 style={styles.shoppingIcon}
                 accessibilityRole="image"
                 accessibilityLabel="On shopping list"
@@ -273,6 +274,7 @@ export function SubstituteModal({
       onSelect,
       renderSubtitle,
       shoppingIngredientIds,
+      colors,
     ],
   );
 
@@ -280,11 +282,11 @@ export function SubstituteModal({
     ({ leadingItem }: { leadingItem?: Ingredient | null }) => {
       const ingredientId = Number(leadingItem?.id ?? -1);
       const isAvailable = ingredientId >= 0 && availableIngredientIds.has(ingredientId);
-      const backgroundColor = isAvailable ? Colors.outline : Colors.outlineVariant;
+      const backgroundColor = isAvailable ? colors.outline : colors.outlineVariant;
 
       return <View style={[styles.modalSeparator, { backgroundColor }]} />;
     },
-    [availableIngredientIds, Colors.outline, Colors.outlineVariant],
+    [availableIngredientIds, colors.outline, colors.outlineVariant],
   );
 
   return (
@@ -299,22 +301,22 @@ export function SubstituteModal({
           style={[
             styles.modalCard,
             {
-              backgroundColor: Colors.surface,
-              borderColor: Colors.outline,
-              shadowColor: Colors.shadow,
+              backgroundColor: colors.surface,
+              borderColor: colors.outline,
+              shadowColor: colors.shadow,
             },
           ]}
           onPress={() => {}}
           accessibilityRole="menu">
           <View style={styles.modalHeader}>
             <View style={styles.modalTitleRow}>
-              <Text style={[styles.modalTitle, { color: Colors.onSurface, flex: 1 }]}>Add substitute</Text>
+              <Text style={[styles.modalTitle, { color: colors.onSurface, flex: 1 }]}>Add substitute</Text>
               <Pressable onPress={onClose} accessibilityRole="button" accessibilityLabel="Close">
-                <MaterialCommunityIcons name="close" size={22} color={Colors.onSurfaceVariant} />
+                <MaterialCommunityIcons name="close" size={22} color={colors.onSurfaceVariant} />
               </Pressable>
             </View>
             {ingredientName ? (
-              <Text style={[styles.modalSubtitle, { color: Colors.onSurfaceVariant }]}>For {ingredientName}</Text>
+              <Text style={[styles.modalSubtitle, { color: colors.onSurfaceVariant }]}>For {ingredientName}</Text>
             ) : null}
           </View>
           <TextInput
@@ -322,13 +324,13 @@ export function SubstituteModal({
             value={searchValue}
             onChangeText={setSearchValue}
             placeholder="Search ingredients"
-            placeholderTextColor={`${Colors.onSurfaceVariant}99`}
+            placeholderTextColor={`${colors.onSurfaceVariant}99`}
             style={[
               styles.input,
               {
-                borderColor: Colors.outlineVariant,
-                color: Colors.text,
-                backgroundColor: Colors.surfaceBright,
+                borderColor: colors.outlineVariant,
+                color: colors.text,
+                backgroundColor: colors.surfaceBright,
               },
             ]}
             autoFocus
@@ -341,7 +343,7 @@ export function SubstituteModal({
             keyboardShouldPersistTaps="handled"
             contentContainerStyle={styles.modalListContent}
             ListEmptyComponent={
-              <Text style={[styles.modalEmptyText, { color: Colors.onSurfaceVariant }]}>No ingredients found</Text>
+              <Text style={[styles.modalEmptyText, { color: colors.onSurfaceVariant }]}>No ingredients found</Text>
             }
           />
         </Pressable>

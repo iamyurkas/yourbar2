@@ -2,7 +2,7 @@ import React from 'react';
 import { Pressable, StyleSheet, TextInput, View } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
-import { Colors } from '@/constants/theme';
+import { useAppColors } from '@/constants/theme';
 
 type SearchBarProps = {
   placeholder: string;
@@ -19,11 +19,13 @@ export function SearchBar({
   trailingActionLabel,
   onPressTrailingAction,
 }: SearchBarProps) {
-  const backgroundColor = Colors.surfaceBright;
-  const borderColor = Colors.outline;
-  const placeholderColor = Colors.placeholder;
-  const textColor = Colors.text;
-  const accent = Colors.tint;
+  const colors = useAppColors();
+
+  const backgroundColor = colors.surfaceBright;
+  const borderColor = colors.outline;
+  const placeholderColor = colors.placeholder;
+  const textColor = colors.text;
+  const accent = colors.tint;
 
   return (
     <View
@@ -33,10 +35,11 @@ export function SearchBar({
           backgroundColor,
           borderColor,
           shadowOpacity: 0.04,
+          shadowColor: colors.shadow,
         },
       ]}>
       <View style={styles.leadingIcon}>
-        <ThemedText style={styles.iconGlyph}>⌕</ThemedText>
+        <ThemedText style={[styles.iconGlyph, { color: colors.placeholder }]}>⌕</ThemedText>
       </View>
       <TextInput
         placeholder={placeholder}
@@ -74,7 +77,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     gap: 12,
     height: 44,
-    shadowColor: Colors.shadow,
     shadowOffset: { width: 0, height: 6 },
     shadowRadius: 12,
     shadowOpacity: 0.08,
@@ -87,7 +89,6 @@ const styles = StyleSheet.create({
   },
   iconGlyph: {
     fontSize: 16,
-    color: Colors.placeholder,
   },
   input: {
     flex: 1,

@@ -11,7 +11,7 @@ import {
   type TextInputSubmitEditingEventData,
 } from 'react-native';
 
-import { Colors } from '@/constants/theme';
+import { useAppColors } from '@/constants/theme';
 
 type SearchTopBarProps = {
   value: string;
@@ -47,6 +47,7 @@ export function SearchTopBar({
   filterExpanded = false,
   onFilterLayout,
 }: SearchTopBarProps) {
+  const colors = useAppColors();
 
   const handleSubmit = (event: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
     onSubmit?.(event.nativeEvent.text);
@@ -57,8 +58,8 @@ export function SearchTopBar({
       style={[
         styles.topBar,
         {
-          backgroundColor: Colors.background,
-          borderBottomColor: Colors.outline,
+          backgroundColor: colors.background,
+          borderBottomColor: colors.outline,
           borderBottomWidth: StyleSheet.hairlineWidth,
         },
       ]}>
@@ -67,18 +68,18 @@ export function SearchTopBar({
         accessibilityLabel="Open navigation"
         onPress={onMenuPress}
         style={styles.iconButton}>
-        <MaterialCommunityIcons name="menu" size={24} color={Colors.onSurface} />
+        <MaterialCommunityIcons name="menu" size={24} color={colors.onSurface} />
       </Pressable>
-      <View style={[styles.searchContainer, { backgroundColor: Colors.surface, borderColor: Colors.background }]}>
-        <MaterialCommunityIcons name="magnify" size={20} color={Colors.onSurface} style={styles.searchIcon} />
+      <View style={[styles.searchContainer, { backgroundColor: colors.surface, borderColor: colors.background }]}>
+        <MaterialCommunityIcons name="magnify" size={20} color={colors.onSurface} style={styles.searchIcon} />
         <TextInput
           value={value}
           onChangeText={onChangeText}
           placeholder={placeholder}
-          placeholderTextColor={`${Colors.onSurfaceVariant}99`}
+          placeholderTextColor={`${colors.onSurfaceVariant}99`}
           returnKeyType="search"
           onSubmitEditing={handleSubmit}
-          style={[styles.searchInput, { color: Colors.text, fontWeight: '400' }]}
+          style={[styles.searchInput, { color: colors.text, fontWeight: '400' }]}
         />
         {value ? (
           <Pressable
@@ -86,7 +87,7 @@ export function SearchTopBar({
             accessibilityLabel="Clear search query"
             onPress={() => onChangeText('')}
             style={styles.clearButton}>
-            <MaterialCommunityIcons name="close" size={18} color={Colors.onSurface} />
+            <MaterialCommunityIcons name="close" size={18} color={colors.onSurface} />
           </Pressable>
         ) : null}
       </View>
@@ -99,13 +100,13 @@ export function SearchTopBar({
         style={[
           styles.iconButton,
           filterActive
-            ? { backgroundColor: `${Colors.tint}1A` }
+            ? { backgroundColor: `${colors.tint}1A` }
             : null,
         ]}>
         <MaterialCommunityIcons
           name="filter-variant"
           size={24}
-          color={filterActive ? Colors.tint : Colors.icon}
+          color={filterActive ? colors.tint : colors.icon}
         />
       </Pressable>
     </View>
@@ -113,9 +114,10 @@ export function SearchTopBar({
 }
 
 export function SegmentTabs({ options, value, onChange }: SegmentTabsProps) {
+  const colors = useAppColors();
 
   return (
-    <View style={[styles.tabs, { backgroundColor: Colors.surface }]}> 
+    <View style={[styles.tabs, { backgroundColor: colors.surface }]}>
       {options.map((option) => {
         const focused = option.key === value;
         return (
@@ -129,7 +131,7 @@ export function SegmentTabs({ options, value, onChange }: SegmentTabsProps) {
               style={[
                 styles.tabLabel,
                 {
-                  color: focused ? Colors.tint : Colors.onSurfaceVariant,
+                  color: focused ? colors.tint : colors.onSurfaceVariant,
                   fontWeight: focused ? '600' : '400',
                 },
               ]}>
@@ -139,7 +141,7 @@ export function SegmentTabs({ options, value, onChange }: SegmentTabsProps) {
               style={[
                 styles.tabIndicator,
                 {
-                  backgroundColor: focused ? Colors.tint : 'transparent',
+                  backgroundColor: focused ? colors.tint : 'transparent',
                 },
               ]}
             />

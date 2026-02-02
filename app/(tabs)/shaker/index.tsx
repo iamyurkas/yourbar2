@@ -21,7 +21,7 @@ import { useRouter } from 'expo-router';
 import { ListRow, PresenceCheck, Thumb } from '@/components/RowParts';
 import { SideMenuDrawer } from '@/components/SideMenuDrawer';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
-import { Colors } from '@/constants/theme';
+import { useAppColors } from '@/constants/theme';
 import { isCocktailReady } from '@/libs/cocktail-availability';
 import {
   createIngredientLookup,
@@ -64,11 +64,12 @@ const IngredientRow = memo(function IngredientRow({
   subtitleStyle,
   onToggle,
 }: IngredientRowProps) {
+  const colors = useAppColors();
   const ingredientId = Number(ingredient.id ?? -1);
   const ingredientTagColors = (ingredient.tags ?? [])
     .map((tag) => tag?.color ?? tagColors.yellow)
     .filter(Boolean);
-  const brandIndicatorColor = ingredient.baseIngredientId != null ? Colors.primary : undefined;
+  const brandIndicatorColor = ingredient.baseIngredientId != null ? colors.primary : undefined;
 
   const handlePress = useCallback(() => {
     if (ingredientId >= 0) {
@@ -76,7 +77,7 @@ const IngredientRow = memo(function IngredientRow({
     }
   }, [ingredientId, onToggle]);
 
-  const highlightColor = isSelected ? Colors.highlightSubtle : Colors.highlightFaint;
+  const highlightColor = isSelected ? colors.highlightSubtle : colors.highlightFaint;
   const thumbnail = useMemo(
     () => <Thumb label={ingredient.name} uri={ingredient.photoUri} />,
     [ingredient.name, ingredient.photoUri],
@@ -90,20 +91,20 @@ const IngredientRow = memo(function IngredientRow({
       <MaterialIcons
         name="shopping-cart"
         size={20}
-        color={Colors.tint}
+        color={colors.tint}
         style={styles.shoppingIcon}
         accessibilityRole="image"
         accessibilityLabel="On shopping list"
       />
     );
-  }, [isOnShoppingList]);
+  }, [colors.tint, isOnShoppingList]);
   const selectionControl = useMemo(() => {
     if (!isSelected) {
       return null;
     }
 
-    return <MaterialIcons name="check" size={18} color={Colors.tint} />;
-  }, [isSelected]);
+    return <MaterialIcons name="check" size={18} color={colors.tint} />;
+  }, [colors.tint, isSelected]);
 
   return (
     <ListRow
@@ -176,6 +177,7 @@ export default function ShakerScreen() {
     ignoreGarnish,
     allowAllSubstitutes,
   } = useInventory();
+  const colors = useAppColors();
   const [query, setQuery] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [inStockOnly, setInStockOnly] = useState(false);
@@ -191,7 +193,7 @@ export default function ShakerScreen() {
   >(new Map());
   const insets = useSafeAreaInsets();
   const bottomInset = Math.min(insets.bottom, 8);
-  const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
+  const defaultTagColor = tagColors.yellow ?? colors.highlightFaint;
 
   useScrollToTop(listRef);
 
@@ -681,18 +683,18 @@ export default function ShakerScreen() {
             }}
             style={[styles.groupHeader, { backgroundColor }]}
           >
-            <Text style={[styles.groupTitle, { color: Colors.onPrimary }]}>{section.name}</Text>
+            <Text style={[styles.groupTitle, { color: colors.onPrimary }]}>{section.name}</Text>
             <MaterialIcons
               name="expand-more"
               size={22}
-              color={Colors.onPrimary}
+              color={colors.onPrimary}
               style={{ transform: [{ rotate: iconRotation }] }}
             />
           </Pressable>
         </View>
       );
     },
-    [handleToggleGroup],
+    [handleToggleGroup, colors.onPrimary],
   );
 
   const renderSectionHeader = useCallback(
@@ -715,7 +717,7 @@ export default function ShakerScreen() {
       const isAvailable = ingredientId >= 0 && availableIngredientIds.has(ingredientId);
       const isSelected = ingredientId >= 0 && selectedIngredientIds.has(ingredientId);
       const isOnShoppingList = ingredientId >= 0 && shoppingIngredientIds.has(ingredientId);
-      const separatorColor = isAvailable ? Colors.outline : Colors.outlineVariant;
+      const separatorColor = isAvailable ? colors.outline : colors.outlineVariant;
       const makeableCount = ingredientId >= 0 ? makeableCocktailCounts.get(ingredientId) ?? 0 : 0;
       const totalCount = ingredientId >= 0 ? totalCocktailCounts.get(ingredientId) ?? 0 : 0;
       const label = makeableCount === 1 ? 'cocktail' : 'cocktails';
@@ -735,7 +737,7 @@ export default function ShakerScreen() {
             isSelected={isSelected}
             isOnShoppingList={isOnShoppingList}
             subtitle={subtitleText}
-            subtitleStyle={{ color: Colors.onSurfaceVariant }}
+            subtitleStyle={{ color: colors.onSurfaceVariant }}
             onToggle={handleToggleIngredient}
           />
           {index < section.data.length - 1 ? (
@@ -746,7 +748,9 @@ export default function ShakerScreen() {
     },
     [
       availableIngredientIds,
-      Colors.onSurfaceVariant,
+      colors.onSurfaceVariant,
+      colors.outline,
+      colors.outlineVariant,
       handleToggleIngredient,
       makeableCocktailCounts,
       renderHeaderContent,
@@ -758,14 +762,14 @@ export default function ShakerScreen() {
 
   return (
     <SafeAreaView
-      style={[styles.safeArea, { backgroundColor: Colors.background }]}
+      style={[styles.safeArea, { backgroundColor: colors.background }]}
       edges={['top', 'left', 'right']}
     >
       <View style={styles.screen}>
         <View
           style={[
             styles.header,
-            { backgroundColor: Colors.background, borderBottomColor: Colors.outline },
+            { backgroundColor: colors.background, borderBottomColor: colors.outline },
           ]}
         >
           <Pressable
@@ -774,27 +778,27 @@ export default function ShakerScreen() {
             onPress={() => setIsMenuOpen(true)}
             style={styles.iconButton}
           >
-            <MaterialCommunityIcons name="menu" size={24} color={Colors.onSurface} />
+            <MaterialCommunityIcons name="menu" size={24} color={colors.onSurface} />
           </Pressable>
           <View
             style={[
               styles.searchContainer,
-              { backgroundColor: Colors.surface, borderColor: Colors.background },
+              { backgroundColor: colors.surface, borderColor: colors.background },
             ]}
           >
             <MaterialCommunityIcons
               name="magnify"
               size={20}
-              color={Colors.onSurface}
+              color={colors.onSurface}
               style={styles.searchIcon}
             />
             <TextInput
               value={query}
               onChangeText={setQuery}
               placeholder="Search"
-              placeholderTextColor={`${Colors.onSurfaceVariant}99`}
+              placeholderTextColor={`${colors.onSurfaceVariant}99`}
               returnKeyType="search"
-              style={[styles.searchInput, { color: Colors.text, fontWeight: '400' }]}
+              style={[styles.searchInput, { color: colors.text, fontWeight: '400' }]}
             />
             {query ? (
               <Pressable
@@ -803,7 +807,7 @@ export default function ShakerScreen() {
                 onPress={() => setQuery('')}
                 style={styles.clearButton}
               >
-                <MaterialCommunityIcons name="close" size={18} color={Colors.onSurface} />
+                <MaterialCommunityIcons name="close" size={18} color={colors.onSurface} />
               </Pressable>
             ) : null}
           </View>
@@ -830,8 +834,8 @@ export default function ShakerScreen() {
           style={[
             styles.bottomPanel,
             {
-              borderTopColor: Colors.outlineVariant,
-              backgroundColor: Colors.surface,
+              borderTopColor: colors.outlineVariant,
+              backgroundColor: colors.surface,
               paddingBottom: 12 + bottomInset,
             },
           ]}
@@ -840,16 +844,16 @@ export default function ShakerScreen() {
             accessibilityRole="button"
             accessibilityLabel="Clear selected ingredients"
             onPress={handleClearSelection}
-            style={({ pressed }) => [styles.clearButtonBase, pressed ? styles.clearButtonPressed : null]}
+            style={({ pressed }) => [styles.clearButtonBase, { borderColor: colors.error }, pressed ? styles.clearButtonPressed : null]}
           >
-            <Text style={[styles.clearButtonLabel, { color: Colors.error }]}>Clear</Text>
+            <Text style={[styles.clearButtonLabel, { color: colors.error }]}>Clear</Text>
           </Pressable>
           <View style={styles.countsColumn}>
-            <Text style={[styles.countsPrimary, { color: Colors.onSurface }]}
+            <Text style={[styles.countsPrimary, { color: colors.onSurface }]}
             >
               Cocktails: {matchingCocktailSummary.availableCount}
             </Text>
-            <Text style={[styles.countsSecondary, { color: Colors.onSurfaceVariant }]}
+            <Text style={[styles.countsSecondary, { color: colors.onSurfaceVariant }]}
             >
               (recipes: {matchingCocktailSummary.recipeCount})
             </Text>
@@ -867,8 +871,8 @@ export default function ShakerScreen() {
               {
                 backgroundColor:
                   matchingCocktailSummary.recipeCount === 0 || selectedIngredientIds.size === 0
-                    ? Colors.surfaceVariant
-                    : Colors.primary,
+                    ? colors.surfaceVariant
+                    : colors.primary,
               },
               pressed && matchingCocktailSummary.recipeCount > 0 && selectedIngredientIds.size > 0
                 ? styles.showButtonPressed
@@ -881,8 +885,8 @@ export default function ShakerScreen() {
                 {
                   color:
                     matchingCocktailSummary.recipeCount === 0 || selectedIngredientIds.size === 0
-                      ? Colors.onSurfaceVariant
-                      : Colors.onPrimary,
+                      ? colors.onSurfaceVariant
+                      : colors.onPrimary,
                 },
               ]}
             >
@@ -913,8 +917,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: StyleSheet.hairlineWidth,
   },
   iconButton: {
-    width: 40,
-    height: 40,
+    width: 40, height: 40,
     borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
@@ -949,7 +952,6 @@ const styles = StyleSheet.create({
   },
   groupCard: {
     paddingBottom: 2,
-    backgroundColor: Colors.background,
   },
   groupHeader: {
     height: 64,
@@ -997,7 +999,6 @@ const styles = StyleSheet.create({
   },
   clearButtonBase: {
     borderWidth: 1,
-    borderColor: Colors.danger,
     borderRadius: 12,
     paddingHorizontal: 18,
     paddingVertical: 8,

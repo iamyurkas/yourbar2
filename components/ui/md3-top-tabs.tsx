@@ -2,7 +2,7 @@ import React from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
-import { Colors } from '@/constants/theme';
+import { useAppColors } from '@/constants/theme';
 
 type TabItem = {
   key: string;
@@ -16,15 +16,16 @@ type MD3TopTabsProps = {
 };
 
 export function MD3TopTabs({ tabs, activeKey, onTabChange }: MD3TopTabsProps) {
+  const colors = useAppColors();
 
   return (
     <View
       style={[
         styles.container,
         {
-          backgroundColor: Colors.surfaceVariant,
-          borderColor: Colors.outline,
-          shadowColor: Colors.shadow,
+          backgroundColor: colors.surfaceVariant,
+          borderColor: colors.outline,
+          shadowColor: colors.shadow,
           shadowOffset: { width: 0, height: 6 },
           shadowRadius: 12,
           shadowOpacity: 0.05,
@@ -40,10 +41,10 @@ export function MD3TopTabs({ tabs, activeKey, onTabChange }: MD3TopTabsProps) {
             style={({ pressed }) => [
               styles.tab,
               {
-                backgroundColor: isActive ? Colors.tint : Colors.surfaceBright,
-                borderColor: isActive ? 'transparent' : Colors.outlineVariant,
+                backgroundColor: isActive ? colors.tint : colors.surfaceBright,
+                borderColor: isActive ? 'transparent' : colors.outlineVariant,
                 opacity: pressed ? 0.9 : 1,
-                shadowColor: isActive ? Colors.primary : 'transparent',
+                shadowColor: isActive ? colors.primary : 'transparent',
                 shadowOffset: { width: 0, height: isActive ? 8 : 0 },
                 shadowRadius: isActive ? 12 : 0,
                 shadowOpacity: isActive ? 0.24 : 0,
@@ -55,13 +56,13 @@ export function MD3TopTabs({ tabs, activeKey, onTabChange }: MD3TopTabsProps) {
               style={[
                 styles.label,
                 {
-                  color: isActive ? Colors.onPrimary : Colors.onSurfaceMuted,
+                  color: isActive ? colors.onPrimary : colors.onSurfaceMuted,
                 },
               ]}>
               {tab.label}
             </ThemedText>
             {isActive ? (
-              <View style={[styles.activeDot, { backgroundColor: Colors.overlayOnPrimary }]} />
+              <View style={[styles.activeDot, { backgroundColor: colors.overlayOnPrimary }]} />
             ) : null}
           </Pressable>
         );

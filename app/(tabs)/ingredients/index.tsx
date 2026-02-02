@@ -1,6 +1,6 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import { useScrollToTop } from '@react-navigation/native';
-import { useRouter } from 'expo-router';
+import { router } from 'expo-router';
 import { memo, useCallback, useEffect, useMemo, useRef, useState, useTransition } from 'react';
 import {
   FlatList,
@@ -23,7 +23,7 @@ import { SideMenuDrawer } from '@/components/SideMenuDrawer';
 import { TagPill } from '@/components/TagPill';
 import type { SegmentTabOption } from '@/components/TopBars';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
-import { Colors } from '@/constants/theme';
+import { useAppColors } from '@/constants/theme';
 import { isCocktailReady } from '@/libs/cocktail-availability';
 import { getLastIngredientTab, setLastIngredientTab, type IngredientTabKey } from '@/libs/collection-tabs';
 import {
@@ -85,7 +85,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
   showAvailabilityToggle = true,
   onShoppingToggle,
 }: IngredientListItemProps) {
-  const router = useRouter();
+  const colors = useAppColors();
   const id = Number(ingredient.id ?? -1);
   const isAvailable = id >= 0 && availableIngredientIds.has(id);
   const ingredientTagColors = (ingredient.tags ?? [])
@@ -111,13 +111,13 @@ const IngredientListItem = memo(function IngredientListItemComponent({
     [ingredient.name, ingredient.photoUri],
   );
 
-  const brandIndicatorColor = ingredient.baseIngredientId != null ? Colors.primary : undefined;
+  const brandIndicatorColor = ingredient.baseIngredientId != null ? colors.primary : undefined;
 
   const shoppingControl = useMemo(() => {
     const shoppingLabel = onShoppingToggle ? 'Remove from shopping list' : 'On shopping list';
     const isShoppingTab = Boolean(onShoppingToggle);
     const shoppingIconName = isShoppingTab ? 'remove-shopping-cart' : 'shopping-cart';
-    const shoppingIconColor = isShoppingTab ? Colors.error : Colors.tint;
+    const shoppingIconColor = isShoppingTab ? colors.error : colors.tint;
 
     if (!isOnShoppingList) {
       return <View style={styles.shoppingIconPlaceholder} />;
@@ -151,7 +151,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
         accessibilityLabel={shoppingLabel}
       />
     );
-  }, [handleShoppingToggle, isOnShoppingList, onShoppingToggle]);
+  }, [colors, handleShoppingToggle, isOnShoppingList, onShoppingToggle]);
 
   const control = useMemo(() => {
     if (onShoppingToggle) {
@@ -203,7 +203,6 @@ const IngredientListItem = memo(function IngredientListItemComponent({
 }, areIngredientPropsEqual);
 
 export default function IngredientsScreen() {
-  const router = useRouter();
   const {
     cocktails,
     ingredients,
@@ -214,6 +213,7 @@ export default function IngredientsScreen() {
     ignoreGarnish,
     allowAllSubstitutes,
   } = useInventory();
+  const colors = useAppColors();
   const [activeTab, setActiveTab] = useState<IngredientTabKey>(() => getLastIngredientTab());
   const [query, setQuery] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -229,7 +229,7 @@ export default function IngredientsScreen() {
     () => new Map(),
   );
   const [, startAvailabilityTransition] = useTransition();
-  const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
+  const defaultTagColor = tagColors.yellow ?? colors.highlightFaint;
 
   useScrollToTop(listRef);
 
@@ -523,7 +523,7 @@ export default function IngredientsScreen() {
     );
   }, [filteredByTags, normalizedQuery]);
 
-  const highlightColor = Colors.highlightFaint;
+  const highlightColor = colors.highlightFaint;
   const isFilterActive = selectedTagKeys.size > 0;
   const emptyMessage = useMemo(() => {
     switch (activeTab) {
@@ -645,7 +645,7 @@ export default function IngredientsScreen() {
           availableIngredientIds={effectiveAvailableIngredientIds}
           onToggleAvailability={handleToggle}
           subtitle={subtitleText}
-          surfaceVariantColor={Colors.onSurfaceVariant ?? Colors.icon}
+          surfaceVariantColor={colors.onSurfaceVariant ?? colors.icon}
           isOnShoppingList={isOnShoppingList}
           showAvailabilityToggle={activeTab !== 'shopping'}
           onShoppingToggle={activeTab === 'shopping' ? handleShoppingToggle : undefined}
@@ -659,8 +659,7 @@ export default function IngredientsScreen() {
       handleShoppingToggle,
       highlightColor,
       makeableCocktailCounts,
-      Colors.icon,
-      Colors.onSurfaceVariant,
+      colors,
       shoppingIngredientIds,
       totalCocktailCounts,
     ],
@@ -670,16 +669,16 @@ export default function IngredientsScreen() {
     ({ leadingItem }: { leadingItem?: Ingredient | null }) => {
       const ingredientId = Number(leadingItem?.id ?? -1);
       const isAvailable = ingredientId >= 0 && effectiveAvailableIngredientIds.has(ingredientId);
-      const backgroundColor = isAvailable ? Colors.outline : Colors.outlineVariant;
+      const backgroundColor = isAvailable ? colors.outline : colors.outlineVariant;
 
       return <View style={[styles.divider, { backgroundColor }]} />;
     },
-    [effectiveAvailableIngredientIds, Colors.outline, Colors.outlineVariant],
+    [effectiveAvailableIngredientIds, colors.outline, colors.outlineVariant],
   );
 
   return (
     <SafeAreaView
-      style={[styles.safeArea, { backgroundColor: Colors.background }]}
+      style={[styles.safeArea, { backgroundColor: colors.background }]}
       edges={['top', 'left', 'right']}>
       <View style={styles.container}>
         <View style={styles.headerWrapper} onLayout={handleHeaderLayout}>
@@ -710,9 +709,9 @@ export default function IngredientsScreen() {
                 styles.filterMenu,
                 {
                   top: filterMenuTop,
-                  backgroundColor: Colors.surface,
-                  borderColor: Colors.outline,
-                  shadowColor: Colors.shadow,
+                  backgroundColor: colors.surface,
+                  borderColor: colors.outline,
+                  shadowColor: colors.shadow,
                 },
               ]}>
               {/* Keep filter chip taps responsive when the search field has focus. */}
@@ -733,13 +732,13 @@ export default function IngredientsScreen() {
                           onPress={() => handleTagFilterToggle(tag.key)}
                           accessibilityRole="checkbox"
                           accessibilityState={{ checked: selected }}
-                          androidRippleColor={`${Colors.surfaceVariant}33`}
+                          androidRippleColor={`${colors.surfaceVariant}33`}
                         />
                       );
                     })}
                   </View>
                 ) : (
-                  <Text style={[styles.filterMenuEmpty, { color: Colors.onSurfaceVariant }]}>
+                  <Text style={[styles.filterMenuEmpty, { color: colors.onSurfaceVariant }]}>
                     No tags available
                   </Text>
                 )}
@@ -749,7 +748,7 @@ export default function IngredientsScreen() {
                     accessibilityLabel="Clear selected tag filters"
                     onPress={handleClearTagFilters}
                     style={styles.filterMenuClearButton}>
-                    <Text style={[styles.filterMenuClearLabel, { color: Colors.tint }]}>Clear filters</Text>
+                    <Text style={[styles.filterMenuClearLabel, { color: colors.tint }]}>Clear filters</Text>
                   </Pressable>
                 ) : null}
               </ScrollView>
@@ -770,7 +769,7 @@ export default function IngredientsScreen() {
           onScroll={handleScroll}
           scrollEventThrottle={16}
           ListEmptyComponent={
-            <Text style={[styles.emptyLabel, { color: Colors.onSurfaceVariant }]}>{emptyMessage}</Text>
+            <Text style={[styles.emptyLabel, { color: colors.onSurfaceVariant }]}>{emptyMessage}</Text>
           }
         />
       </View>

@@ -5,7 +5,7 @@ import { StyleSheet, View } from 'react-native';
 
 import { resolveGlasswareUriFromId } from '@/assets/image-manifest';
 import { METHOD_ICON_MAP, type CocktailMethodId } from '@/constants/cocktail-methods';
-import { Colors } from '@/constants/theme';
+import { useAppColors } from '@/constants/theme';
 import type { Cocktail, Ingredient } from '@/providers/inventory-provider';
 import { createIngredientLookup, type IngredientLookup } from '@/libs/ingredient-availability';
 import { summariseCocktailAvailability } from '@/libs/cocktail-availability';
@@ -55,12 +55,15 @@ const CocktailListRowComponent = ({
   availableIngredientIds,
   ingredients,
   ingredientLookup,
-  highlightColor = Colors.highlightFaint,
+  highlightColor,
   ignoreGarnish = true,
   allowAllSubstitutes = false,
   showMethodIcons = false,
   onPress,
 }: CocktailListRowProps) => {
+  const colors = useAppColors();
+  const effectiveHighlightColor = highlightColor ?? colors.highlightFaint;
+
   const lookup = useMemo(() => {
     if (ingredientLookup) {
       return ingredientLookup;
@@ -101,22 +104,22 @@ const CocktailListRowComponent = ({
       <View
         style={[
           styles.ratingPill,
-          { backgroundColor: Colors.background, borderColor: Colors.outline },
+          { backgroundColor: colors.background, borderColor: colors.outline },
         ]}>
         {Array.from({ length: totalStars }).map((_, index) => (
           <MaterialCommunityIcons
             key={`rating-icon-${index}`}
             name="star"
             size={8}
-            color={Colors.tint}
+            color={colors.tint}
           />
         ))}
       </View>
     );
   }, [
-    Colors.background,
-    Colors.outline,
-    Colors.tint,
+    colors.background,
+    colors.outline,
+    colors.tint,
     ratingValue,
   ]);
 
@@ -132,7 +135,7 @@ const CocktailListRowComponent = ({
     }
 
     return legacyMethodId ? [legacyMethodId] : [];
-  }, [cocktail.methodIds, cocktail]);
+  }, [cocktail]);
 
   const methodIconContent = useMemo(() => {
     if (!showMethodIcons) {
@@ -155,7 +158,7 @@ const CocktailListRowComponent = ({
               <Image
                 key={`method-icon-${index}`}
                 source={icon.source}
-                style={[styles.methodIcon, { tintColor: Colors.onSurfaceVariant }]}
+                style={[styles.methodIcon, { tintColor: colors.onSurfaceVariant }]}
                 contentFit="contain"
               />
             );
@@ -168,7 +171,7 @@ const CocktailListRowComponent = ({
               <MaterialCommunityIcons
                 name={icon.name}
                 size={METHOD_ICON_SIZE}
-                color={Colors.onSurfaceVariant}
+                color={colors.onSurfaceVariant}
                 style={isMuddle ? styles.muddleIcon : undefined}
               />
             </View>
@@ -176,7 +179,7 @@ const CocktailListRowComponent = ({
         })}
       </View>
     );
-  }, [methodIds, Colors.onSurfaceVariant, showMethodIcons]);
+  }, [methodIds, colors.onSurfaceVariant, showMethodIcons]);
 
   const hasBrandedIngredient = useMemo(() => {
     const recipe = cocktail.ingredients ?? [];
@@ -224,7 +227,7 @@ const CocktailListRowComponent = ({
     return false;
   }, [cocktail.ingredients, lookup.ingredientById]);
 
-  const brandIndicatorColor = hasBrandedIngredient ? Colors.primary : undefined;
+  const brandIndicatorColor = hasBrandedIngredient ? colors.primary : undefined;
 
   const thumbnail = useMemo(
     () => <Thumb label={cocktail.name} uri={cocktail.photoUri} fallbackUri={glasswareUri} />,
@@ -237,7 +240,7 @@ const CocktailListRowComponent = ({
       subtitle={subtitle}
       onPress={onPress}
       selected={isReady}
-      highlightColor={highlightColor}
+      highlightColor={effectiveHighlightColor}
       tagColors={tagColors}
       control={ratingContent}
       thumbnail={thumbnail}

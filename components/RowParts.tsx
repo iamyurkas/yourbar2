@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 
 import { AppImage } from './AppImage';
-import { Colors } from '@/constants/theme';
+import { useAppColors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
 import { tagColors } from '@/theme/theme';
 
@@ -26,6 +26,7 @@ export type ThumbProps = {
 };
 
 export function Thumb({ uri, label, fallbackUri, fallbackLabel }: ThumbProps) {
+  const colors = useAppColors();
   const effectiveLabel = label ?? fallbackLabel;
   const trimmed = effectiveLabel?.trim();
   const fallbackText = trimmed ? trimmed.slice(0, 2).toUpperCase() : undefined;
@@ -38,13 +39,13 @@ export function Thumb({ uri, label, fallbackUri, fallbackLabel }: ThumbProps) {
   }
 
   return (
-    <View style={[styles.thumb, { backgroundColor: Colors.surfaceBright }]}>
+    <View style={[styles.thumb, { backgroundColor: colors.surfaceBright }]}>
       {source ? (
         <AppImage source={source} style={styles.thumbImage} contentFit="contain" />
       ) : fallbackText ? (
-        <Text style={[styles.thumbFallback, { color: Colors.onSurfaceVariant }]}>{fallbackText}</Text>
+        <Text style={[styles.thumbFallback, { color: colors.onSurfaceVariant }]}>{fallbackText}</Text>
       ) : (
-        <MaterialCommunityIcons name="image-off" size={24} color={Colors.onSurfaceVariant} />
+        <MaterialCommunityIcons name="image-off" size={24} color={colors.onSurfaceVariant} />
       )}
     </View>
   );
@@ -64,10 +65,11 @@ type PresenceCheckProps = {
 };
 
 export function PresenceCheck({ checked, onToggle }: PresenceCheckProps) {
-  const idleColor = Colors.outlineVariant;
-  const borderColor = checked ? Colors.tint : idleColor;
-  const backgroundColor = checked ? Colors.tint : 'transparent';
-  const iconColor = checked ? Colors.background : idleColor;
+  const colors = useAppColors();
+  const idleColor = colors.outlineVariant;
+  const borderColor = checked ? colors.tint : idleColor;
+  const backgroundColor = checked ? colors.tint : 'transparent';
+  const iconColor = checked ? colors.background : idleColor;
 
   return (
     <Pressable
@@ -87,8 +89,9 @@ type FavoriteStarProps = {
 };
 
 export function FavoriteStar({ active, onToggle }: FavoriteStarProps) {
+  const colors = useAppColors();
   const icon = active ? 'star' : 'star-outline';
-  const color = active ? Colors.secondary : Colors.onSurfaceVariant;
+  const color = active ? colors.secondary : colors.onSurfaceVariant;
 
   return (
     <Pressable
@@ -141,7 +144,8 @@ export function ListRow({
   metaAlignment = 'space-between',
   brandIndicatorColor,
 }: ListRowProps) {
-  const backgroundColor = selected ? highlightColor ?? `${Colors.tint}1F` : Colors.background;
+  const colors = useAppColors();
+  const backgroundColor = selected ? highlightColor ?? `${colors.tint}1F` : colors.background;
   const metaAlignmentStyle =
     metaAlignment === 'center'
       ? styles.metaContentCenter
@@ -149,7 +153,7 @@ export function ListRow({
       ? styles.metaContentStart
       : styles.metaContentSpaceBetween;
   const showBrandIndicator = brandIndicatorColor != null;
-  const indicatorColor = brandIndicatorColor ?? Colors.primary;
+  const indicatorColor = brandIndicatorColor ?? colors.primary;
   const resolvedTagColors = tagColors?.filter(Boolean) ?? (tagColor ? [tagColor] : []);
 
   return (
@@ -162,16 +166,16 @@ export function ListRow({
       {showBrandIndicator ? (
         <View pointerEvents="none" style={[styles.brandIndicator, { backgroundColor: indicatorColor }]} />
       ) : null}
-      <View style={styles.thumbSlot}>{thumbnail}</View>
+      <View style={[styles.thumbSlot, { backgroundColor: colors.background }]}>{thumbnail}</View>
       <View style={styles.textColumn}>
-        <Text style={[styles.title, { color: Colors.text }]} numberOfLines={1}>
+        <Text style={[styles.title, { color: colors.text }]} numberOfLines={1}>
           {title}
         </Text>
         {subtitleContent ? (
           subtitleContent
         ) : subtitle ? (
           <Text
-            style={[styles.subtitle, { color: Colors.icon }, subtitleStyle]}
+            style={[styles.subtitle, { color: colors.icon }, subtitleStyle]}
             numberOfLines={subtitleNumberOfLines ?? 1}>
             {subtitle}
           </Text>
@@ -223,7 +227,6 @@ const styles = StyleSheet.create({
     height: THUMB_SIZE,
     borderRadius: 8,
     overflow: 'hidden',
-    backgroundColor: '#FFFFFF',
   },
   textColumn: {
     flex: 1,
