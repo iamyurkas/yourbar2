@@ -22,7 +22,7 @@ type ThemeContextValue = {
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
-export function ThemeProvider({ children }: PropsWithChildren) {
+export function ThemeSettingsProvider({ children }: PropsWithChildren) {
   const systemScheme = useColorScheme();
   const [themePreference, setThemePreference] =
     useState<ThemePreference>("light");
@@ -50,7 +50,9 @@ export function useThemeSettings() {
   const context = useContext(ThemeContext);
 
   if (!context) {
-    throw new Error("useThemeSettings must be used within ThemeProvider.");
+    throw new Error(
+      "useThemeSettings must be used within ThemeSettingsProvider.",
+    );
   }
 
   return context;

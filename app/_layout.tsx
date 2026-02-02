@@ -6,7 +6,10 @@ import "react-native-reanimated";
 import { Colors } from "@/constants/theme";
 import { PaperProvider } from "@/libs/react-native-paper";
 import { InventoryProvider } from "@/providers/inventory-provider";
-import { ThemeProvider, useThemeSettings } from "@/providers/theme-provider";
+import {
+  ThemeSettingsProvider,
+  useThemeSettings,
+} from "@/providers/theme-provider";
 import { UnsavedChangesProvider } from "@/providers/unsaved-changes-provider";
 import { getAppTheme } from "@/theme/theme";
 import * as Sentry from '@sentry/react-native';
@@ -67,8 +70,8 @@ function RootLayoutContent() {
 
 export default Sentry.wrap(function RootLayout() {
   return (
-    <ThemeProvider>
+    <ThemeSettingsProvider>
       <RootLayoutContent />
-    </ThemeProvider>
+    </ThemeSettingsProvider>
   );
 });
