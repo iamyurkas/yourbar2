@@ -1,3 +1,3 @@
-import { lightTheme } from '@/theme/theme';
+import { getAppTheme } from '@/theme/theme';
 
-export const AppTheme = lightTheme;
+export const AppTheme = getAppTheme();

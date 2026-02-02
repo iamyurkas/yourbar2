@@ -2,6 +2,7 @@ import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import "react-native-reanimated";
+import { useColorScheme } from "react-native";
 
 import { Colors } from "@/constants/theme";
 import { PaperProvider } from "@/libs/react-native-paper";
@@ -29,6 +30,9 @@ export const unstable_settings = {
 };
 
 export default Sentry.wrap(function RootLayout() {
+  const colorScheme = useColorScheme();
+  const isDarkMode = colorScheme === "dark";
+
   const navigationTheme = ({
     ...DefaultTheme,
     colors: {
@@ -54,7 +58,7 @@ export default Sentry.wrap(function RootLayout() {
                 options={{ presentation: "modal", title: "Modal" }}
               />
             </Stack>
-            <StatusBar style="dark" />
+            <StatusBar style={isDarkMode ? "light" : "dark"} />
           </ThemeProvider>
         </PaperProvider>
       </InventoryProvider>

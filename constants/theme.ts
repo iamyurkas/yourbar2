@@ -1,16 +1,16 @@
 import { Platform } from 'react-native';
 
-import { lightTheme, palette } from '@/theme/theme';
+import { getAppTheme, palette } from '@/theme/theme';
 
-const lightColors = lightTheme.colors;
-const tintColor = lightColors.primary;
+const themeColors = getAppTheme().colors;
+const tintColor = themeColors.primary;
 
 export const Colors = {
-  ...lightColors,
-  text: lightColors.onSurface,
+  ...themeColors,
+  text: themeColors.onSurface,
   tint: tintColor,
-  icon: lightColors.onSurfaceVariant,
-  tabIconDefault: lightColors.onSurfaceVariant,
+  icon: themeColors.onSurfaceVariant,
+  tabIconDefault: themeColors.onSurfaceVariant,
   tabIconSelected: tintColor,
   danger: palette.danger,
   disabled: palette.disabled,
