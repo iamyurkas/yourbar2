@@ -15,6 +15,7 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { resolveGlasswareUriFromId } from "@/assets/image-manifest";
+import { AppImage } from "@/components/AppImage";
 import { HeaderIconButton } from "@/components/HeaderIconButton";
 import { ListRow, Thumb } from "@/components/RowParts";
 import { TagPill } from "@/components/TagPill";
@@ -715,7 +716,7 @@ export default function CocktailDetailsScreen() {
             <View style={styles.mediaSection}>
               <View style={styles.photoWrapper}>
                 {displayedImageSource ? (
-                  <Image
+                  <AppImage
                     source={displayedImageSource}
                     style={styles.photo}
                     contentFit="contain"
@@ -797,7 +798,7 @@ export default function CocktailDetailsScreen() {
               {photoSource && glassSource && glassLabel ? (
                 <View style={styles.glassInfo}>
                   <View style={styles.glassImageWrapper}>
-                    <Image
+                    <AppImage
                       source={glassSource}
                       style={styles.glassImage}
                       contentFit="contain"

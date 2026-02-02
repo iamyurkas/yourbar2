@@ -1,6 +1,5 @@
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import { Image } from 'expo-image';
 import * as ImagePicker from 'expo-image-picker';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -20,6 +19,7 @@ import {
   type GestureResponderEvent,
 } from 'react-native';
 
+import { AppImage } from '@/components/AppImage';
 import { AppDialog, type DialogOptions } from '@/components/AppDialog';
 import { ListRow, Thumb } from '@/components/RowParts';
 import { TagEditorModal } from '@/components/TagEditorModal';
@@ -911,7 +911,7 @@ export default function IngredientFormScreen() {
           onPress={handlePickImage}
           android_ripple={{ color: `${Colors.surface}33` }}>
           {imageSource ? (
-            <Image source={imageSource} style={styles.image} contentFit="contain" />
+            <AppImage source={imageSource} style={styles.image} contentFit="contain" />
           ) : (
             <View style={styles.placeholderContent}>
               <MaterialCommunityIcons name="image-plus" size={28} color={`${Colors.onSurfaceVariant}99`} />
@@ -980,7 +980,7 @@ export default function IngredientFormScreen() {
               <View style={styles.baseInfo}>
                 <View style={styles.baseThumb}>
                   {baseIngredientPhotoSource ? (
-                    <Image source={baseIngredientPhotoSource} style={styles.baseImage} contentFit="contain" />
+                    <AppImage source={baseIngredientPhotoSource} style={styles.baseImage} contentFit="contain" />
                   ) : (
                     <View style={[styles.basePlaceholder, { backgroundColor: Colors.onSurfaceVariant }]}>
                       <MaterialCommunityIcons name="image-off" size={20} color={Colors.onSurfaceVariant} />
@@ -1227,7 +1227,6 @@ const styles = StyleSheet.create({
   image: {
     width: '100%',
     height: '100%',
-    resizeMode: 'contain',
   },
   cropFrame: {
     position: 'absolute',
