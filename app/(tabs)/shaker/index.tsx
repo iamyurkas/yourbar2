@@ -190,6 +190,7 @@ export default function ShakerScreen() {
     Map<string, { startY: number; moved: boolean; didPress: boolean }>
   >(new Map());
   const insets = useSafeAreaInsets();
+  const bottomInset = Math.min(insets.bottom, 8);
   const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
 
   useScrollToTop(listRef);
@@ -817,7 +818,7 @@ export default function ShakerScreen() {
           renderItem={renderIngredient}
           renderSectionHeader={renderSectionHeader}
           stickySectionHeadersEnabled
-          contentContainerStyle={[styles.listContent, { paddingBottom: 140 + insets.bottom }]}
+          contentContainerStyle={[styles.listContent, { paddingBottom: 140 + bottomInset }]}
           showsVerticalScrollIndicator={false}
           keyboardDismissMode="on-drag"
           // Allow the first tap to toggle items while dismissing the keyboard.
@@ -831,7 +832,7 @@ export default function ShakerScreen() {
             {
               borderTopColor: Colors.outlineVariant,
               backgroundColor: Colors.surface,
-              paddingBottom: 12 + insets.bottom,
+              paddingBottom: 12 + bottomInset,
             },
           ]}
         >
