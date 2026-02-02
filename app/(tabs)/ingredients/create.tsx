@@ -32,6 +32,7 @@ import { shouldStorePhoto, storePhoto } from '@/libs/photo-storage';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { useThemedStyles } from '@/libs/use-themed-styles';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
+import { useThemeSettings } from '@/providers/theme-provider';
 import { useUnsavedChanges } from '@/providers/unsaved-changes-provider';
 
 type IngredientFormSnapshot = {
@@ -70,6 +71,7 @@ function useResolvedIngredient(param: string | undefined, ingredients: Ingredien
 
 export default function IngredientFormScreen() {
   const styles = useThemedStyles(createStyles);
+  const { effectiveScheme } = useThemeSettings();
   const params = useLocalSearchParams<{
     suggestedName?: string;
     returnTo?: string;
@@ -1121,6 +1123,7 @@ export default function IngredientFormScreen() {
             />
             <FlatList
               data={filteredBaseIngredients}
+              extraData={effectiveScheme}
               keyExtractor={baseModalKeyExtractor}
               renderItem={renderBaseIngredient}
               keyboardShouldPersistTaps="handled"

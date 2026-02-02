@@ -35,6 +35,7 @@ import { normalizeSearchText } from '@/libs/search-normalization';
 import { buildTagOptions, type TagOption } from '@/libs/tag-options';
 import { useThemedStyles } from '@/libs/use-themed-styles';
 import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
+import { useThemeSettings } from '@/providers/theme-provider';
 import { tagColors } from '@/theme/theme';
 
 type IngredientSection = {
@@ -205,6 +206,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
 
 export default function IngredientsScreen() {
   const styles = useThemedStyles(createStyles);
+  const { effectiveScheme } = useThemeSettings();
   const router = useRouter();
   const {
     cocktails,
@@ -657,6 +659,7 @@ export default function IngredientsScreen() {
     [
       activeTab,
       effectiveAvailableIngredientIds,
+      effectiveScheme,
       handleToggle,
       handleShoppingToggle,
       highlightColor,
@@ -676,7 +679,7 @@ export default function IngredientsScreen() {
 
       return <View style={[styles.divider, { backgroundColor }]} />;
     },
-    [effectiveAvailableIngredientIds, Colors.outline, Colors.outlineVariant],
+    [effectiveAvailableIngredientIds, effectiveScheme, Colors.outline, Colors.outlineVariant],
   );
 
   return (
@@ -761,6 +764,7 @@ export default function IngredientsScreen() {
         <FlatList
           ref={listRef}
           data={filteredIngredients}
+          extraData={effectiveScheme}
           keyExtractor={keyExtractor}
           renderItem={renderItem}
           ItemSeparatorComponent={renderSeparator}

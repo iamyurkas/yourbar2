@@ -30,6 +30,7 @@ import {
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { useThemedStyles } from '@/libs/use-themed-styles';
 import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
+import { useThemeSettings } from '@/providers/theme-provider';
 import { tagColors } from '@/theme/theme';
 
 type IngredientTagOption = {
@@ -169,6 +170,7 @@ function isCollapsedHeaderItem(item: Ingredient) {
 
 export default function ShakerScreen() {
   const styles = useThemedStyles(createStyles);
+  const { effectiveScheme } = useThemeSettings();
   const router = useRouter();
   const {
     cocktails,
@@ -694,7 +696,7 @@ export default function ShakerScreen() {
         </View>
       );
     },
-    [handleToggleGroup],
+    [effectiveScheme, handleToggleGroup],
   );
 
   const renderSectionHeader = useCallback(
@@ -705,7 +707,7 @@ export default function ShakerScreen() {
       }
       return renderHeaderContent(section, isExpanded);
     },
-    [expandedTagKeys, renderHeaderContent],
+    [effectiveScheme, expandedTagKeys, renderHeaderContent],
   );
 
   const renderIngredient = useCallback(
@@ -748,6 +750,7 @@ export default function ShakerScreen() {
     },
     [
       availableIngredientIds,
+      effectiveScheme,
       Colors.onSurfaceVariant,
       handleToggleIngredient,
       makeableCocktailCounts,
@@ -816,6 +819,7 @@ export default function ShakerScreen() {
         <SectionList
           ref={listRef}
           sections={sections}
+          extraData={effectiveScheme}
           keyExtractor={(item) => String(item.id ?? item.name)}
           renderItem={renderIngredient}
           renderSectionHeader={renderSectionHeader}

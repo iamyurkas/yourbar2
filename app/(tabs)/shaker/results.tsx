@@ -29,6 +29,7 @@ import { navigateToDetailsWithReturnTo } from '@/libs/navigation';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { useThemedStyles } from '@/libs/use-themed-styles';
 import { useInventory, type Cocktail } from '@/providers/inventory-provider';
+import { useThemeSettings } from '@/providers/theme-provider';
 
 function parseListParam(param?: string | string[]) {
   if (!param) {
@@ -68,6 +69,7 @@ const METHOD_ICON_SIZE = 16;
 
 export default function ShakerResultsScreen() {
   const styles = useThemedStyles(createStyles);
+  const { effectiveScheme } = useThemeSettings();
   const {
     cocktails,
     availableIngredientIds,
@@ -531,6 +533,7 @@ export default function ShakerResultsScreen() {
     [
       allowAllSubstitutes,
       availableIngredientIds,
+      effectiveScheme,
       handlePressCocktail,
       ignoreGarnish,
       ingredientLookup,
@@ -552,6 +555,7 @@ export default function ShakerResultsScreen() {
     [
       allowAllSubstitutes,
       availableIngredientIds,
+      effectiveScheme,
       ignoreGarnish,
       ingredientLookup,
       Colors.outline,
@@ -679,6 +683,7 @@ export default function ShakerResultsScreen() {
         <FlatList
           ref={listRef}
           data={filteredCocktails}
+          extraData={effectiveScheme}
           keyExtractor={(item) => String(item.id ?? item.name)}
           renderItem={renderItem}
           ItemSeparatorComponent={renderSeparator}

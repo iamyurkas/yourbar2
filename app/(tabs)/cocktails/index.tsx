@@ -35,6 +35,7 @@ import { normalizeSearchText } from '@/libs/search-normalization';
 import { buildTagOptions, type TagOption } from '@/libs/tag-options';
 import { useThemedStyles } from '@/libs/use-themed-styles';
 import { useInventory, type Cocktail } from '@/providers/inventory-provider';
+import { useThemeSettings } from '@/providers/theme-provider';
 import { tagColors } from '@/theme/theme';
 
 type CocktailMethodOption = {
@@ -84,6 +85,7 @@ const normalizeIngredientId = (value?: number | string | null): number | undefin
 
 export default function CocktailsScreen() {
   const styles = useThemedStyles(createStyles);
+  const { effectiveScheme } = useThemeSettings();
   const {
     cocktails,
     availableIngredientIds,
@@ -713,6 +715,7 @@ export default function CocktailsScreen() {
     [
       availableIngredientIds,
       allowAllSubstitutes,
+      effectiveScheme,
       handleSelectCocktail,
       ignoreGarnish,
       ingredientLookup,
@@ -790,6 +793,7 @@ export default function CocktailsScreen() {
     [
       allowAllSubstitutes,
       availableIngredientIds,
+      effectiveScheme,
       handleSelectCocktail,
       handleSelectIngredient,
       handleShoppingToggle,
@@ -818,6 +822,7 @@ export default function CocktailsScreen() {
     [
       availableIngredientIds,
       allowAllSubstitutes,
+      effectiveScheme,
       ignoreGarnish,
       ingredientLookup,
       Colors.outline,
@@ -837,7 +842,7 @@ export default function CocktailsScreen() {
 
       return <View style={[styles.divider, { backgroundColor }]} />;
     },
-    [myTabListData, Colors.outline, Colors.outlineVariant],
+    [myTabListData, effectiveScheme, Colors.outline, Colors.outlineVariant],
   );
 
   const isFilterActive = selectedTagKeys.size > 0 || selectedMethodIds.size > 0;
@@ -980,6 +985,7 @@ export default function CocktailsScreen() {
         <FlatList
           ref={listRef}
           data={listData}
+          extraData={effectiveScheme}
           keyExtractor={isMyTab ? myTabKeyExtractor : keyExtractor}
           renderItem={isMyTab ? renderMyItem : renderItem}
           ItemSeparatorComponent={isMyTab ? renderMySeparator : renderSeparator}

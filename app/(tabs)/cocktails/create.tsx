@@ -60,6 +60,7 @@ import {
   type CreateCocktailInput,
   type Ingredient,
 } from "@/providers/inventory-provider";
+import { useThemeSettings } from "@/providers/theme-provider";
 import { useUnsavedChanges } from "@/providers/unsaved-changes-provider";
 import { tagColors } from "@/theme/theme";
 
@@ -224,6 +225,7 @@ function mapRecipeIngredientToEditable(
 
 export default function CreateCocktailScreen() {
   const styles = useThemedStyles(createStyles);
+  const { effectiveScheme } = useThemeSettings();
   const navigation = useNavigation();
   const {
     ingredients: inventoryIngredients,
@@ -1817,6 +1819,7 @@ export default function CreateCocktailScreen() {
             </View>
             <FlatList
               data={GLASSWARE}
+              extraData={effectiveScheme}
               keyExtractor={(item) => item.id}
               numColumns={2}
               columnWrapperStyle={styles.glassRow}
