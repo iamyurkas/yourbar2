@@ -26,7 +26,7 @@ export function AppImage({ source, style, containerStyle, contentFit, ...props }
       />
       <Image
         source={source}
-        style={[styles.foreground, style]}
+        style={[styles.foreground, style, { backgroundColor: 'transparent' }]}
         contentFit={contentFit}
         {...props}
       />
@@ -38,9 +38,6 @@ const styles = StyleSheet.create({
   container: {
     position: 'relative',
     overflow: 'hidden',
-  },
-  background: {
-    ...StyleSheet.absoluteFillObject,
   },
   foreground: {
     width: '100%',
