@@ -40,6 +40,15 @@ export type PaperTheme = {
     readonly shadow: string;
     readonly scrim: string;
     readonly backdrop: string;
+    readonly onSurfaceMuted: string;
+    readonly surfaceBright: string;
+    readonly highlightFaint: string;
+    readonly highlightSubtle: string;
+    readonly overlayOnPrimary: string;
+    readonly danger: string;
+    readonly success: string;
+    readonly disabled: string;
+    readonly placeholder: string;
     readonly elevation: {
       readonly level0: string;
       readonly level1: string;

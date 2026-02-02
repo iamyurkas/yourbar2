@@ -25,8 +25,6 @@ export const Colors = {
 export const useAppColors = () => {
   const theme = useTheme();
   const colors = theme.colors;
-  const isDark = colors.background === darkPalette.background;
-  const palette = isDark ? darkPalette : lightPalette;
   const tintColor = colors.primary;
 
   return {
@@ -36,16 +34,6 @@ export const useAppColors = () => {
     icon: colors.onSurfaceVariant,
     tabIconDefault: colors.onSurfaceVariant,
     tabIconSelected: tintColor,
-    danger: palette.danger,
-    disabled: palette.disabled,
-    placeholder: palette.placeholder,
-    success: palette.success,
-    highlightFaint: palette.highlightFaint,
-    highlightSubtle: palette.highlightSubtle,
-    overlayOnPrimary: palette.overlayOnPrimary,
-    shadow: palette.shadow,
-    onSurfaceMuted: palette.onSurfaceMuted,
-    surfaceBright: palette.surfaceBright,
   };
 };
 

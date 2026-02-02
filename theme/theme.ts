@@ -177,6 +177,11 @@ const lightColors: PaperTheme["colors"] = {
   highlightFaint: lightPalette.highlightFaint,
   highlightSubtle: lightPalette.highlightSubtle,
   overlayOnPrimary: lightPalette.overlayOnPrimary,
+  danger: lightPalette.danger,
+  success: lightPalette.success,
+  disabled: lightPalette.disabled,
+  placeholder: lightPalette.placeholder,
+  shadow: lightPalette.shadow,
   elevation: {
     ...MD3LightTheme.colors.elevation,
     level0: "transparent",
@@ -225,6 +230,11 @@ const darkColors: PaperTheme["colors"] = {
   highlightFaint: darkPalette.highlightFaint,
   highlightSubtle: darkPalette.highlightSubtle,
   overlayOnPrimary: darkPalette.overlayOnPrimary,
+  danger: darkPalette.danger,
+  success: darkPalette.success,
+  disabled: darkPalette.disabled,
+  placeholder: darkPalette.placeholder,
+  shadow: darkPalette.shadow,
   elevation: {
     ...MD3DarkTheme.colors.elevation,
     level0: "transparent",
