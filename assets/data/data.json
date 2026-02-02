@@ -14765,7 +14765,7 @@
       "photoUri": "assets/cocktails/349-horse-s-neck.jpg",
       "glassId": "collins_glass",
       "methodIds": ["build"],
-      "tags": [1],
+      "tags": [1, 6, 8],
       "ingredients": [
         {
           "order": 1,
@@ -15154,7 +15154,7 @@
       "photoUri": "assets/cocktails/354-illegal.jpg",
       "glassId": "martini",
       "methodIds": ["shake"],
-      "tags": [1],
+      "tags": [1, 4, 5],
       "ingredients": [
         {
           "order": 1,
@@ -15453,7 +15453,7 @@
       "photoUri": "assets/cocktails/360-irish-coffee.jpg",
       "glassId": "irish_coffee_glass",
       "methodIds": ["heat", "build", "layer"],
-      "tags": [1],
+      "tags": [1, 5],
       "ingredients": [
         {
           "order": 1,
@@ -16527,7 +16527,7 @@
       "photoUri": "assets/cocktails/381-kir.jpg",
       "glassId": "wine_glass",
       "methodIds": ["build"],
-      "tags": [1],
+      "tags": [1, 7],
       "ingredients": [
         {
           "order": 1,
@@ -16857,7 +16857,7 @@
       "photoUri": "assets/cocktails/387-lemon-drop-martini.jpg",
       "glassId": "martini",
       "methodIds": ["shake"],
-      "tags": [1],
+      "tags": [1, 5],
       "ingredients": [
         {
           "order": 1,
@@ -17221,7 +17221,7 @@
       "photoUri": "assets/cocktails/393-long-island-iced-tea.jpg",
       "glassId": "highball_glass",
       "methodIds": ["stir"],
-      "tags": [1],
+      "tags": [1, 5, 8],
       "ingredients": [
         {
           "order": 1,
@@ -17766,7 +17766,7 @@
       "photoUri": "assets/cocktails/401-manhattan.jpg",
       "glassId": "martini",
       "methodIds": ["stir"],
-      "tags": [1],
+      "tags": [1, 5],
       "ingredients": [
         {
           "order": 1,
@@ -17937,7 +17937,7 @@
       "photoUri": "assets/cocktails/404-margarita.jpg",
       "glassId": "margarita_glass",
       "methodIds": ["shake"],
-      "tags": [1],
+      "tags": [1, 5],
       "ingredients": [
         {
           "order": 1,
@@ -18108,7 +18108,7 @@
       "photoUri": "assets/cocktails/407-mary-pickford.jpg",
       "glassId": "coupe",
       "methodIds": ["shake"],
-      "tags": [1],
+      "tags": [1, 6],
       "ingredients": [
         {
           "order": 1,
@@ -18888,7 +18888,7 @@
       "photoUri": "assets/cocktails/421-mint-julep.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["muddle", "build"],
-      "tags": [1],
+      "tags": [1, 5],
       "ingredients": [
         {
           "order": 1,
@@ -19012,7 +19012,7 @@
       "photoUri": "assets/cocktails/423-mojito.jpg",
       "glassId": "highball_glass",
       "methodIds": ["muddle", "stir"],
-      "tags": [1],
+      "tags": [1, 6, 8],
       "ingredients": [
         {
           "order": 1,
@@ -19775,7 +19775,7 @@
       "photoUri": "assets/cocktails/435-new-york-sour.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["shake", "layer"],
-      "tags": [1],
+      "tags": [1, 5],
       "ingredients": [
         {
           "order": 1,
@@ -19976,7 +19976,7 @@
       "photoUri": "assets/cocktails/438-old-cuban.jpg",
       "glassId": "coupe",
       "methodIds": ["muddle", "shake"],
-      "tags": [1],
+      "tags": [1, 6],
       "ingredients": [
         {
           "order": 1,
@@ -20057,7 +20057,7 @@
       "photoUri": "assets/cocktails/439-old-fashioned.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["muddle", "build"],
-      "tags": [1],
+      "tags": [1, 5],
       "ingredients": [
         {
           "order": 1,
@@ -20501,7 +20501,7 @@
       "photoUri": "assets/cocktails/447-paloma.jpg",
       "glassId": "highball_glass",
       "methodIds": ["build"],
-      "tags": [1],
+      "tags": [1, 6, 8],
       "ingredients": [
         {
           "order": 1,
@@ -20871,7 +20871,7 @@
       "photoUri": "assets/cocktails/453-paradise.jpg",
       "glassId": "martini",
       "methodIds": ["shake"],
-      "tags": [1],
+      "tags": [1, 6],
       "ingredients": [
         {
           "order": 1,
@@ -20966,7 +20966,7 @@
       "photoUri": "assets/cocktails/455-penicillin.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["muddle", "shake", "layer"],
-      "tags": [1],
+      "tags": [1, 5],
       "ingredients": [
         {
           "order": 1,
@@ -21321,7 +21321,7 @@
       "photoUri": "assets/cocktails/461-pisco-punch.jpg",
       "glassId": "highball_glass",
       "methodIds": ["shake"],
-      "tags": [1],
+      "tags": [1, 6, 8],
       "ingredients": [
         {
           "order": 1,
@@ -21398,7 +21398,7 @@
       "photoUri": "assets/cocktails/462-pisco-sour.jpg",
       "glassId": "martini",
       "methodIds": ["shake"],
-      "tags": [1],
+      "tags": [1, 6],
       "ingredients": [
         {
           "order": 1,
@@ -21596,7 +21596,7 @@
       "photoUri": "assets/cocktails/465-porn-star-martini.jpg",
       "glassId": "martini",
       "methodIds": ["shake"],
-      "tags": [1],
+      "tags": [1, 6],
       "ingredients": [
         {
           "order": 1,
@@ -21671,7 +21671,7 @@
       "photoUri": "assets/cocktails/466-porto-flip.jpg",
       "glassId": "martini",
       "methodIds": ["shake"],
-      "tags": [1],
+      "tags": [1, 5],
       "ingredients": [
         {
           "order": 1,
@@ -21902,7 +21902,7 @@
       "photoUri": "assets/cocktails/470-ramos-gin-fizz.jpg",
       "glassId": "collins_glass",
       "methodIds": ["shake"],
-      "tags": [1],
+      "tags": [1, 6, 8],
       "ingredients": [
         {
           "order": 1,
@@ -22210,7 +22210,7 @@
       "photoUri": "assets/cocktails/475-remember-the-maine.jpg",
       "glassId": "martini",
       "methodIds": ["stir"],
-      "tags": [1],
+      "tags": [1, 5],
       "ingredients": [
         {
           "order": 1,
@@ -22618,7 +22618,7 @@
       "photoUri": "assets/cocktails/482-rose.jpg",
       "glassId": "martini",
       "methodIds": ["stir"],
-      "tags": [1],
+      "tags": [1, 7],
       "ingredients": [
         {
           "order": 1,
@@ -22723,7 +22723,7 @@
       "photoUri": "assets/cocktails/484-rossini.jpg",
       "glassId": "champagne_flute",
       "methodIds": ["muddle", "build"],
-      "tags": [1],
+      "tags": [1, 7],
       "ingredients": [
         {
           "order": 1,
@@ -23232,7 +23232,7 @@
       "photoUri": "assets/cocktails/492-rusty-nail.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["build"],
-      "tags": [1],
+      "tags": [1, 5],
       "ingredients": [
         {
           "order": 1,
@@ -23618,7 +23618,7 @@
       "photoUri": "assets/cocktails/498-sazerac.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["muddle", "stir"],
-      "tags": [1],
+      "tags": [1, 5],
       "ingredients": [
         {
           "order": 1,
@@ -23882,7 +23882,7 @@
       "photoUri": "assets/cocktails/503-sea-breeze.jpg",
       "glassId": "highball_glass",
       "methodIds": ["stir"],
-      "tags": [1],
+      "tags": [1, 6, 8],
       "ingredients": [
         {
           "order": 1,
@@ -23997,7 +23997,7 @@
       "photoUri": "assets/cocktails/505-sex-on-the-beach.jpg",
       "glassId": "highball_glass",
       "methodIds": ["build"],
-      "tags": [1],
+      "tags": [1, 6, 8],
       "ingredients": [
         {
           "order": 1,
@@ -24164,7 +24164,7 @@
       "photoUri": "assets/cocktails/508-sherry-cobbler.jpg",
       "glassId": "cup",
       "methodIds": ["muddle", "stir"],
-      "tags": [1],
+      "tags": [1, 7, 8],
       "ingredients": [
         {
           "order": 1,
@@ -24295,7 +24295,7 @@
       "photoUri": "assets/cocktails/510-sidecar.jpg",
       "glassId": "martini",
       "methodIds": ["shake"],
-      "tags": [1],
+      "tags": [1, 5],
       "ingredients": [
         {
           "order": 1,
@@ -24524,7 +24524,7 @@
       "photoUri": "assets/cocktails/514-singapore-sling.jpg",
       "glassId": "highball_glass",
       "methodIds": ["shake"],
-      "tags": [1],
+      "tags": [1, 6, 8],
       "ingredients": [
         {
           "order": 1,
@@ -24883,7 +24883,7 @@
       "photoUri": "assets/cocktails/520-south-side.jpg",
       "glassId": "coupe",
       "methodIds": ["shake"],
-      "tags": [1],
+      "tags": [1, 6],
       "ingredients": [
         {
           "order": 1,
@@ -25112,7 +25112,7 @@
       "photoUri": "assets/cocktails/523-spicy-fifty.jpg",
       "glassId": "coupe",
       "methodIds": ["muddle", "shake"],
-      "tags": [1],
+      "tags": [1, 6],
       "ingredients": [
         {
           "order": 1,
@@ -25333,7 +25333,7 @@
       "photoUri": "assets/cocktails/527-stinger.jpg",
       "glassId": "martini",
       "methodIds": ["stir"],
-      "tags": [1],
+      "tags": [1, 5],
       "ingredients": [
         {
           "order": 1,
@@ -26971,7 +26971,7 @@
       "photoUri": "assets/cocktails/553-tintoretto.jpg",
       "glassId": "champagne_flute",
       "methodIds": ["build"],
-      "tags": [1],
+      "tags": [1, 7],
       "ingredients": [
         {
           "order": 1,
@@ -27005,7 +27005,7 @@
       "photoUri": "assets/cocktails/554-tipperary.jpg",
       "glassId": "martini",
       "methodIds": ["stir"],
-      "tags": [1],
+      "tags": [1, 5],
       "ingredients": [
         {
           "order": 1,
@@ -27330,7 +27330,7 @@
       "photoUri": "assets/cocktails/559-tommy-s-margarita.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["shake"],
-      "tags": [1],
+      "tags": [1, 5],
       "ingredients": [
         {
           "order": 1,
@@ -27739,7 +27739,7 @@
       "photoUri": "assets/cocktails/566-tuxedo.jpg",
       "glassId": "martini",
       "methodIds": ["stir"],
-      "tags": [1],
+      "tags": [1, 5],
       "ingredients": [
         {
           "order": 1,
@@ -28018,7 +28018,7 @@
       "photoUri": "assets/cocktails/569-ve-n-to.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["shake"],
-      "tags": [1],
+      "tags": [1, 5],
       "ingredients": [
         {
           "order": 1,
@@ -28177,7 +28177,7 @@
       "photoUri": "assets/cocktails/572-vieux-carr.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["stir"],
-      "tags": [1],
+      "tags": [1, 5],
       "ingredients": [
         {
           "order": 1,
@@ -28609,7 +28609,7 @@
       "photoUri": "assets/cocktails/579-moscow-mule.jpg",
       "glassId": "copper_mug",
       "methodIds": ["build"],
-      "tags": [1],
+      "tags": [1, 6, 8],
       "ingredients": [
         {
           "order": 1,
@@ -29117,7 +29117,7 @@
       "photoUri": "assets/cocktails/587-whiskey-sour.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["shake"],
-      "tags": [1],
+      "tags": [1, 6],
       "ingredients": [
         {
           "order": 1,
@@ -29282,7 +29282,7 @@
       "photoUri": "assets/cocktails/589-white-lady.jpg",
       "glassId": "martini",
       "methodIds": ["shake"],
-      "tags": [1],
+      "tags": [1, 5],
       "ingredients": [
         {
           "order": 1,
