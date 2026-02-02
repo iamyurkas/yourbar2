@@ -11,6 +11,7 @@ import { TabBarButton } from '@/components/tab-bar/TabBarButton';
 import { TabBarIcon } from '@/components/tab-bar/TabBarIcon';
 import { useAppColors } from '@/constants/theme';
 import { getLastCocktailTab, getLastIngredientTab } from '@/libs/collection-tabs';
+import { useInventory } from '@/providers/inventory-provider';
 
 type TabPressHandler = (navigation: { navigate: (...args: never[]) => void }, route: { name: string }) => void;
 
@@ -51,7 +52,9 @@ const TAB_SCREENS: {
 export default function TabLayout() {
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(null);
   const insets = useSafeAreaInsets();
-  const colorScheme = useColorScheme();
+  const { appTheme } = useInventory();
+  const systemColorScheme = useColorScheme();
+  const colorScheme = appTheme === 'system' ? systemColorScheme : appTheme;
   const colors = useAppColors();
   const isDarkMode = colorScheme === 'dark';
 
