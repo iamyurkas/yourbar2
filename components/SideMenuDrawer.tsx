@@ -831,7 +831,6 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               style={[
                 styles.settingRow,
                 {
-                  borderColor: colors.outline,
                   backgroundColor: colors.surface,
                 },
               ]}
@@ -874,7 +873,6 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               style={[
                 styles.settingRow,
                 {
-                  borderColor: colors.outline,
                   backgroundColor: colors.surface,
                 },
               ]}
@@ -923,7 +921,6 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               style={[
                 styles.settingRow,
                 {
-                  borderColor: colors.outline,
                   backgroundColor: colors.surface,
                 },
               ]}
@@ -974,7 +971,6 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               style={[
                 styles.settingRow,
                 {
-                  borderColor: colors.outline,
                   backgroundColor: colors.surface,
                 },
               ]}
@@ -1023,7 +1019,6 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               style={[
                 styles.settingRow,
                 {
-                  borderColor: colors.outline,
                   backgroundColor: colors.surface,
                 },
               ]}
@@ -1072,7 +1067,6 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               style={[
                 styles.settingRow,
                 {
-                  borderColor: colors.outline,
                   backgroundColor: colors.surface,
                 },
               ]}
@@ -1115,7 +1109,6 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               style={[
                 styles.settingRow,
                 {
-                  borderColor: colors.outline,
                   backgroundColor: colors.surface,
                 },
               ]}
@@ -1159,7 +1152,6 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               style={[
                 styles.settingRow,
                 {
-                  borderColor: colors.outline,
                   backgroundColor: colors.surface,
                 },
               ]}
@@ -1203,7 +1195,6 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               style={({ pressed }) => [
                 styles.actionRow,
                 {
-                  borderColor: colors.outline,
                   backgroundColor: colors.surface,
                 },
                 pressed || isExporting ? { opacity: 0.8 } : null,
@@ -1245,7 +1236,6 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               style={({ pressed }) => [
                 styles.actionRow,
                 {
-                  borderColor: colors.outline,
                   backgroundColor: colors.surface,
                 },
                 pressed || isImporting ? { opacity: 0.8 } : null,
@@ -1287,7 +1277,6 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               style={({ pressed }) => [
                 styles.actionRow,
                 {
-                  borderColor: colors.outline,
                   backgroundColor: colors.surface,
                 },
                 pressed || isBackingUpPhotos ? { opacity: 0.8 } : null,
@@ -1328,7 +1317,6 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               style={[
                 styles.actionRow,
                 {
-                  borderColor: colors.outline,
                   backgroundColor: colors.surface,
                 },
               ]}>

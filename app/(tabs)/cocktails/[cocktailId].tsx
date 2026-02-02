@@ -118,7 +118,7 @@ const IMPERIAL_FRACTIONS: { decimal: number; glyph: string }[] = [
   { decimal: 0.375, glyph: "⅜" },
   { decimal: 0.4, glyph: "⅖" },
   { decimal: 0.5, glyph: "½" },
-  { decimal: 0.6, glyph: "⅕" },
+  { decimal: 0.6, glyph: "⅗" },
   { decimal: 0.625, glyph: "⅝" },
   { decimal: 0.667, glyph: "⅔" },
   { decimal: 0.75, glyph: "¾" },

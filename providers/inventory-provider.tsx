@@ -2197,7 +2197,6 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       setRatingFilterThreshold: handleSetRatingFilterThreshold,
       setStartScreen: handleSetStartScreen,
       setAppTheme: handleSetAppTheme,
-      appTheme,
     };
   }, [
     cocktailsWithRatings,
