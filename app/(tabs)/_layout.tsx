@@ -1,6 +1,6 @@
 import { Tabs } from 'expo-router';
 import React, { useCallback, useState } from 'react';
-import { StyleSheet, View, useColorScheme } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import CocktailIcon from '@/assets/images/cocktails.svg';
@@ -51,8 +51,7 @@ const TAB_SCREENS: Array<{
 export default function TabLayout() {
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(null);
   const insets = useSafeAreaInsets();
-  const colorScheme = useColorScheme();
-  const isDarkMode = colorScheme === 'dark';
+  const isDarkMode = false;
 
   const tabBarInsetColor = isDarkMode ? Colors.onSurfaceVariant : Colors.surface;
 

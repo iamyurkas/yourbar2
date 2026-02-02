@@ -37,6 +37,7 @@
     },
 
     "plugins": [
+      "./plugins/withDisableDarkMode.js",
       "expo-router",
 
       [
@@ -55,12 +56,7 @@
         {
           "image": "./assets/images/splash.png",
           "resizeMode": "contain",
-          "backgroundColor": "#4DABF7",
-          "dark": {
-            "image": "./assets/images/splash.png",
-            "resizeMode": "contain",
-            "backgroundColor": "#4DABF7"
-          }
+          "backgroundColor": "#4DABF7"
         }
       ],
 
