@@ -2849,10 +2849,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     gap: 8,
     alignSelf: "center",
+    borderRadius: 12,
+    overflow: "hidden",
   },
   glassPreview: {
     width: 150,
     height: 150,
+    borderRadius: 12,
   },
   cardHint: {
     fontSize: 12,
