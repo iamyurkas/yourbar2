@@ -1276,18 +1276,35 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     }
 
     const data = reloadInventoryData();
-    setInventoryState(createInventoryStateFromData(data, true));
-    setAvailableIngredientIds(new Set());
-    setShoppingIngredientIds(new Set());
-    setCocktailRatings({});
-    setIgnoreGarnish(true);
-    setAllowAllSubstitutes(true);
-    setUseImperialUnits(false);
-    setKeepScreenAwake(true);
-    setRatingFilterThreshold(1);
-    setStartScreen(DEFAULT_START_SCREEN);
-    setCustomCocktailTags([]);
-    setCustomIngredientTags([]);
+    setInventoryState((prev) => {
+      const baseState = createInventoryStateFromData(data, prev?.imported ?? false);
+      if (!prev) {
+        return baseState;
+      }
+
+      const userCocktails = prev.cocktails.filter((cocktail) => {
+        const id = Number(cocktail.id ?? -1);
+        return Number.isFinite(id) && id >= USER_CREATED_ID_START;
+      });
+      const userIngredients = prev.ingredients.filter((ingredient) => {
+        const id = Number(ingredient.id ?? -1);
+        return Number.isFinite(id) && id >= USER_CREATED_ID_START;
+      });
+
+      const cocktails = [...baseState.cocktails, ...userCocktails].sort((a, b) =>
+        a.searchNameNormalized.localeCompare(b.searchNameNormalized),
+      );
+      const ingredients = [...baseState.ingredients, ...userIngredients].sort((a, b) =>
+        a.searchNameNormalized.localeCompare(b.searchNameNormalized),
+      );
+
+      return {
+        ...baseState,
+        imported: prev.imported,
+        cocktails,
+        ingredients,
+      } satisfies InventoryState;
+    });
   }, []);
 
   const exportInventoryData = useCallback((): InventoryExportData | null => {

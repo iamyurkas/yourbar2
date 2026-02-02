@@ -275,9 +275,23 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     setKeepScreenAwake(!keepScreenAwake);
   };
 
-  const handleResetInventory = async () => {
-    await resetInventoryFromBundle();
-    onClose();
+  const handleResetInventory = () => {
+    setDialogOptions({
+      title: "Restore bundled data",
+      message:
+        "This will restore the bundled cocktails and ingredients. Your custom cocktails and ingredients will stay the same.",
+      actions: [
+        { label: "Cancel", variant: "secondary" },
+        {
+          label: "Restore",
+          variant: "destructive",
+          onPress: async () => {
+            await resetInventoryFromBundle();
+            onClose();
+          },
+        },
+      ],
+    });
   };
 
   const handleRatingThresholdPress = () => {
