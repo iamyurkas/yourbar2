@@ -16,7 +16,7 @@ export function ThemedText({
   ...rest
 }: ThemedTextProps) {
   const colors = useAppColors();
-  const color = (colors.background === '#FFFFFF' ? lightColor : darkColor) ?? colors.text;
+  const color = (colors.dark ? darkColor : lightColor) ?? colors.text;
 
   return (
     <Text

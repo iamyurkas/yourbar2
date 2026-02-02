@@ -29,6 +29,7 @@ export const useAppColors = () => {
 
   return {
     ...colors,
+    dark: theme.dark,
     text: colors.onSurface,
     tint: tintColor,
     icon: colors.onSurfaceVariant,

@@ -58,7 +58,7 @@ function RootLayoutContent() {
             options={{ presentation: "modal", title: "Modal" }}
           />
         </Stack>
-        <StatusBar style="auto" />
+        <StatusBar style={isDark ? "light" : "dark"} />
       </ThemeProvider>
     </PaperProvider>
   );

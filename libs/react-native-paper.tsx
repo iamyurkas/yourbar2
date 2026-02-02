@@ -1,6 +1,7 @@
 import React, { createContext, useContext, type PropsWithChildren, type ReactNode } from 'react';
 
 export type PaperTheme = {
+  readonly dark: boolean;
   readonly version: number;
   readonly isV3: boolean;
   readonly roundness: number;
@@ -62,6 +63,7 @@ export type PaperTheme = {
 };
 
 export const MD3LightTheme: PaperTheme = {
+  dark: false,
   isV3: true,
   version: 3,
   fonts: {
@@ -131,6 +133,7 @@ export const MD3LightTheme: PaperTheme = {
 
 export const MD3DarkTheme: PaperTheme = {
   ...MD3LightTheme,
+  dark: true,
   colors: {
     ...MD3LightTheme.colors,
     primary: '#9CCAFF',
