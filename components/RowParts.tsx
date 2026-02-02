@@ -222,6 +222,7 @@ const styles = StyleSheet.create({
     height: THUMB_SIZE,
     borderRadius: 8,
     overflow: 'hidden',
+    backgroundColor: '#FFFFFF',
   },
   textColumn: {
     flex: 1,
