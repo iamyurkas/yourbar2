@@ -1,4 +1,5 @@
-import { MD3LightTheme, type PaperTheme } from "@/libs/react-native-paper";
+import { MD3DarkTheme, MD3LightTheme, type PaperTheme } from "@/libs/react-native-paper";
+import type { ColorSchemeName } from "react-native";
 
 export const palette = {
   primary: "#4DABF7",
@@ -136,6 +137,51 @@ export const lightTheme: PaperTheme = {
   colors: lightColors,
 };
 
-export function getAppTheme(): PaperTheme {
-  return lightTheme;
+const darkColors: PaperTheme["colors"] = {
+  ...MD3DarkTheme.colors,
+  primary: MD3DarkTheme.colors.primary,
+  onPrimary: MD3DarkTheme.colors.onPrimary,
+  primaryContainer: MD3DarkTheme.colors.primaryContainer,
+  onPrimaryContainer: MD3DarkTheme.colors.onPrimaryContainer,
+  secondary: MD3DarkTheme.colors.secondary,
+  secondaryContainer: MD3DarkTheme.colors.secondaryContainer,
+  onSecondary: MD3DarkTheme.colors.onSecondary,
+  onSecondaryContainer: MD3DarkTheme.colors.onSecondaryContainer,
+  tertiary: MD3DarkTheme.colors.tertiary,
+  tertiaryContainer: MD3DarkTheme.colors.tertiaryContainer,
+  onTertiary: MD3DarkTheme.colors.onTertiary,
+  onTertiaryContainer: MD3DarkTheme.colors.onTertiaryContainer,
+  background: MD3DarkTheme.colors.background,
+  surface: MD3DarkTheme.colors.surface,
+  surfaceBright: MD3DarkTheme.colors.surfaceVariant,
+  surfaceVariant: MD3DarkTheme.colors.surfaceVariant,
+  outline: MD3DarkTheme.colors.outline,
+  outlineVariant: MD3DarkTheme.colors.outlineVariant,
+  onSurface: MD3DarkTheme.colors.onSurface,
+  onSurfaceMuted: MD3DarkTheme.colors.onSurfaceVariant,
+  onSurfaceVariant: MD3DarkTheme.colors.onSurfaceVariant,
+  onBackground: MD3DarkTheme.colors.onBackground,
+  error: MD3DarkTheme.colors.error,
+  errorContainer: MD3DarkTheme.colors.errorContainer,
+  onError: MD3DarkTheme.colors.onError,
+  onErrorContainer: MD3DarkTheme.colors.onErrorContainer,
+  inversePrimary: MD3DarkTheme.colors.inversePrimary,
+  inverseOnSurface: MD3DarkTheme.colors.inverseOnSurface,
+  inverseSurface: MD3DarkTheme.colors.inverseSurface,
+  surfaceDisabled: MD3DarkTheme.colors.surfaceDisabled,
+  onSurfaceDisabled: MD3DarkTheme.colors.onSurfaceDisabled,
+  backdrop: MD3DarkTheme.colors.backdrop,
+  highlightFaint: "rgba(156,202,255,0.12)",
+  highlightSubtle: "rgba(156,202,255,0.2)",
+  overlayOnPrimary: "rgba(0,21,41,0.35)",
+  elevation: MD3DarkTheme.colors.elevation,
+};
+
+export const darkTheme: PaperTheme = {
+  ...MD3DarkTheme,
+  colors: darkColors,
+};
+
+export function getAppTheme(colorScheme?: ColorSchemeName): PaperTheme {
+  return colorScheme === "dark" ? darkTheme : lightTheme;
 }

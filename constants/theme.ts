@@ -1,16 +1,18 @@
-import { Platform } from 'react-native';
+import { Appearance, Platform } from 'react-native';
 
-import { lightTheme, palette } from '@/theme/theme';
+import { darkTheme, lightTheme, palette } from '@/theme/theme';
 
-const lightColors = lightTheme.colors;
-const tintColor = lightColors.primary;
+const colorScheme = Appearance.getColorScheme();
+const activeTheme = colorScheme === 'dark' ? darkTheme : lightTheme;
+const activeColors = activeTheme.colors;
+const tintColor = activeColors.primary;
 
 export const Colors = {
-  ...lightColors,
-  text: lightColors.onSurface,
+  ...activeColors,
+  text: activeColors.onSurface,
   tint: tintColor,
-  icon: lightColors.onSurfaceVariant,
-  tabIconDefault: lightColors.onSurfaceVariant,
+  icon: activeColors.onSurfaceVariant,
+  tabIconDefault: activeColors.onSurfaceVariant,
   tabIconSelected: tintColor,
   danger: palette.danger,
   disabled: palette.disabled,
