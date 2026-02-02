@@ -31015,13 +31015,6 @@
       "photoUri": "assets/ingredients/255-fino-sherry.jpg"
     },
     {
-      "id": 256,
-      "name": "Firewater",
-      "description": "Firewater is a mixture of Canadian whisky blended with natural cinnamon flavour and sweeteners.  So it is technically not a whisky but probably closer to a whisky-based liquor.  It is bottled at 33 % ABV and produced by the Sazerac Company who also makes Buffalo Trace.",
-      "tags": [1],
-      "photoUri": "assets/ingredients/256-firewater.jpg"
-    },
-    {
       "id": 257,
       "name": "Frangelico",
       "description": "Frangelico is an Italian hazelnut liqueur by Gruppo Campari, 20% ABV. Works in a Nutty Martini or Chocolate Cake shot.",
@@ -31158,13 +31151,6 @@
       "description": "Sweet purple grape juice with jammy notes. Useful for spritzes, sangria bases, or nonalcoholic mixes. Pairs with vodka, gin, or sparkling wine.",
       "tags": [5],
       "photoUri": "assets/ingredients/275-grape-juice.jpg"
-    },
-    {
-      "id": 276,
-      "name": "Grape Soda",
-      "description": "Sweet, purple grape-flavored soda with a bubbly texture. Adds candy-like fruit notes to playful cocktails. Works well in punches or low-ABV spritzes.",
-      "tags": [3],
-      "photoUri": "assets/ingredients/276-grape-soda.jpg"
     },
     {
       "id": 277,
@@ -32034,13 +32020,6 @@
       "description": "Rose syrup is floral and sweet, capturing fragrant rose petals. A few drops add aromatic lift to gin, vodka, or nonalcoholic spritzes. Use lightly to avoid overpowering other flavors.",
       "tags": [4],
       "photoUri": "assets/ingredients/397-rose-syrup.jpg"
-    },
-    {
-      "id": 398,
-      "name": "Rose Wine",
-      "description": "Rosé wine is a pink-hued wine around 11–13% ABV with light berry notes. Serve in a Rosé Spritz or Kir Rosé.",
-      "tags": [2],
-      "photoUri": "assets/ingredients/398-rose-wine.jpg"
     },
     {
       "id": 399,
