@@ -3,11 +3,10 @@ import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import "react-native-reanimated";
 
-import { Colors } from "@/constants/theme";
 import { PaperProvider } from "@/libs/react-native-paper";
 import { InventoryProvider } from "@/providers/inventory-provider";
 import { UnsavedChangesProvider } from "@/providers/unsaved-changes-provider";
-import { getAppTheme } from "@/theme/theme";
+import { AppThemeProvider, useAppTheme } from "@/providers/theme-provider";
 import * as Sentry from '@sentry/react-native';
 
 Sentry.init({
@@ -28,24 +27,23 @@ export const unstable_settings = {
   anchor: "(tabs)",
 };
 
-export default Sentry.wrap(function RootLayout() {
+function RootLayoutContent() {
+  const { theme, isDarkMode } = useAppTheme();
   const navigationTheme = ({
     ...DefaultTheme,
     colors: {
       ...DefaultTheme.colors,
-      background: Colors.background,
-      card: Colors.surface,
-      text: Colors.text,
-      border: Colors.outline,
+      background: theme.colors.background,
+      card: theme.colors.surface,
+      text: theme.colors.onSurface,
+      border: theme.colors.outline,
     },
   } satisfies typeof DefaultTheme);
-
-  const paperTheme = getAppTheme();
 
   return (
     <UnsavedChangesProvider>
       <InventoryProvider>
-        <PaperProvider theme={paperTheme}>
+        <PaperProvider theme={theme}>
           <ThemeProvider value={navigationTheme}>
             <Stack>
               <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
@@ -54,10 +52,18 @@ export default Sentry.wrap(function RootLayout() {
                 options={{ presentation: "modal", title: "Modal" }}
               />
             </Stack>
-            <StatusBar style="dark" />
+            <StatusBar style={isDarkMode ? "light" : "dark"} />
           </ThemeProvider>
         </PaperProvider>
       </InventoryProvider>
     </UnsavedChangesProvider>
+  );
+}
+
+export default Sentry.wrap(function RootLayout() {
+  return (
+    <AppThemeProvider>
+      <RootLayoutContent />
+    </AppThemeProvider>
   );
 });

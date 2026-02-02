@@ -1,6 +1,6 @@
 import { Tabs } from 'expo-router';
 import React, { useCallback, useState } from 'react';
-import { StyleSheet, View, useColorScheme } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import CocktailIcon from '@/assets/images/cocktails.svg';
@@ -11,6 +11,7 @@ import { TabBarButton } from '@/components/tab-bar/TabBarButton';
 import { TabBarIcon } from '@/components/tab-bar/TabBarIcon';
 import { Colors } from '@/constants/theme';
 import { getLastCocktailTab, getLastIngredientTab } from '@/libs/collection-tabs';
+import { useAppTheme } from '@/providers/theme-provider';
 
 type TabPressHandler = (navigation: { navigate: (...args: never[]) => void }, route: { name: string }) => void;
 
@@ -51,8 +52,7 @@ const TAB_SCREENS: Array<{
 export default function TabLayout() {
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(null);
   const insets = useSafeAreaInsets();
-  const colorScheme = useColorScheme();
-  const isDarkMode = colorScheme === 'dark';
+  const { isDarkMode } = useAppTheme();
 
   const tabBarInsetColor = isDarkMode ? Colors.onSurfaceVariant : Colors.surface;
 

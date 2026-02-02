@@ -19,6 +19,7 @@ import {
   Pressable,
   ScrollView,
   StyleSheet,
+  Switch,
   Text,
   View,
 } from "react-native";
@@ -33,6 +34,7 @@ import { Colors } from "@/constants/theme";
 import { buildPhotoBaseName } from "@/libs/photo-utils";
 import { useInventory, type StartScreen } from "@/providers/inventory-provider";
 import { type InventoryExportData } from "@/providers/inventory-types";
+import { useAppTheme } from "@/providers/theme-provider";
 import appConfig from "../app.json";
 
 const MENU_WIDTH = Math.round(Dimensions.get("window").width * 0.75);
@@ -143,6 +145,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     updateCustomIngredientTag,
     deleteCustomIngredientTag,
   } = useInventory();
+  const { isDarkMode, toggleColorScheme } = useAppTheme();
   const [isMounted, setIsMounted] = useState(visible);
   const [isRatingModalVisible, setRatingModalVisible] = useState(false);
   const ratingModalCloseTimeout = useRef<ReturnType<typeof setTimeout> | null>(
@@ -1030,6 +1033,58 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   Prevent sleep on cocktail view
                 </Text>
               </View>
+            </Pressable>
+            <Pressable
+              accessibilityRole="switch"
+              accessibilityState={{ checked: isDarkMode }}
+              accessibilityLabel="Toggle dark theme"
+              onPress={toggleColorScheme}
+              style={[
+                styles.settingRow,
+                {
+                  borderColor: Colors.outline,
+                  backgroundColor: Colors.surface,
+                },
+              ]}
+            >
+              <View
+                style={[
+                  styles.checkbox,
+                  {
+                    borderColor: Colors.tint,
+                    backgroundColor: Colors.surfaceVariant,
+                  },
+                ]}
+              >
+                <MaterialCommunityIcons
+                  name={isDarkMode ? "weather-night" : "white-balance-sunny"}
+                  size={16}
+                  color={Colors.tint}
+                />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>
+                  Theme
+                </Text>
+                <Text
+                  style={[
+                    styles.settingCaption,
+                    { color: Colors.onSurfaceVariant },
+                  ]}
+                >
+                  {isDarkMode ? "Dark" : "Light"} appearance
+                </Text>
+              </View>
+              <Switch
+                value={isDarkMode}
+                onValueChange={toggleColorScheme}
+                trackColor={{
+                  false: Colors.outlineVariant,
+                  true: Colors.tint,
+                }}
+                thumbColor={Colors.surfaceBright}
+                ios_backgroundColor={Colors.outlineVariant}
+              />
             </Pressable>
             <Pressable
               accessibilityRole="button"

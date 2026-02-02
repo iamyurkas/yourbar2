@@ -1,22 +1,37 @@
 import { Platform } from 'react-native';
 
-import { lightTheme, palette } from '@/theme/theme';
+import { getAppTheme, getPalette, lightTheme, type AppColorScheme } from '@/theme/theme';
+import type { PaperTheme } from '@/libs/react-native-paper';
 
-const lightColors = lightTheme.colors;
-const tintColor = lightColors.primary;
+const buildColors = (
+  theme: PaperTheme,
+  paletteColors: ReturnType<typeof getPalette>,
+) => {
+  const tintColor = theme.colors.primary;
+
+  return {
+    ...theme.colors,
+    text: theme.colors.onSurface,
+    tint: tintColor,
+    icon: theme.colors.onSurfaceVariant,
+    tabIconDefault: theme.colors.onSurfaceVariant,
+    tabIconSelected: tintColor,
+    danger: paletteColors.danger,
+    disabled: paletteColors.disabled,
+    placeholder: paletteColors.placeholder,
+    success: paletteColors.success,
+  } as const;
+};
 
 export const Colors = {
-  ...lightColors,
-  text: lightColors.onSurface,
-  tint: tintColor,
-  icon: lightColors.onSurfaceVariant,
-  tabIconDefault: lightColors.onSurfaceVariant,
-  tabIconSelected: tintColor,
-  danger: palette.danger,
-  disabled: palette.disabled,
-  placeholder: palette.placeholder,
-  success: palette.success,
-} as const;
+  ...buildColors(lightTheme, getPalette('light')),
+};
+
+export const setColorsForScheme = (scheme: AppColorScheme) => {
+  const theme = getAppTheme(scheme);
+  const paletteColors = getPalette(scheme);
+  Object.assign(Colors, buildColors(theme, paletteColors));
+};
 
 export const Fonts = Platform.select({
   ios: {
