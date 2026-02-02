@@ -219,6 +219,7 @@ export default function IngredientsScreen() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isFilterMenuVisible, setFilterMenuVisible] = useState(false);
   const [selectedTagKeys, setSelectedTagKeys] = useState<Set<string>>(() => new Set());
+  const [showIngredientsWithoutCocktails, setShowIngredientsWithoutCocktails] = useState(false);
   const [headerLayout, setHeaderLayout] = useState<LayoutRectangle | null>(null);
   const [filterAnchorLayout, setFilterAnchorLayout] = useState<LayoutRectangle | null>(null);
   const listRef = useRef<FlatList<unknown>>(null);
@@ -343,7 +344,7 @@ export default function IngredientsScreen() {
     });
   }, []);
 
-  const handleClearTagFilters = useCallback(() => {
+  const handleClearFilters = useCallback(() => {
     setSelectedTagKeys((previous) => {
       if (previous.size === 0) {
         return previous;
@@ -351,6 +352,11 @@ export default function IngredientsScreen() {
 
       return new Set<string>();
     });
+    setShowIngredientsWithoutCocktails(false);
+  }, []);
+
+  const handleCocktailFilterToggle = useCallback(() => {
+    setShowIngredientsWithoutCocktails((previous) => !previous);
   }, []);
 
   const ingredientLookup = useMemo(() => createIngredientLookup(ingredients), [ingredients]);
@@ -502,8 +508,23 @@ export default function IngredientsScreen() {
     });
   }, [activeSection.data, selectedTagKeys]);
 
+  const filteredByCocktailPresence = useMemo(() => {
+    if (!showIngredientsWithoutCocktails) {
+      return filteredByTags;
+    }
+
+    return filteredByTags.filter((ingredient) => {
+      const ingredientId = Number(ingredient.id ?? -1);
+      if (ingredientId < 0) {
+        return true;
+      }
+
+      return (totalCocktailCounts.get(ingredientId) ?? 0) === 0;
+    });
+  }, [filteredByTags, showIngredientsWithoutCocktails, totalCocktailCounts]);
+
   const filteredIngredients = useMemo(() => {
-    const base = filteredByTags;
+    const base = filteredByCocktailPresence;
     if (!normalizedQuery.text) {
       return base;
     }
@@ -521,10 +542,10 @@ export default function IngredientsScreen() {
           ingredient.searchNameNormalized.includes(token),
       ),
     );
-  }, [filteredByTags, normalizedQuery]);
+  }, [filteredByCocktailPresence, normalizedQuery]);
 
   const highlightColor = Colors.highlightFaint;
-  const isFilterActive = selectedTagKeys.size > 0;
+  const isFilterActive = selectedTagKeys.size > 0 || showIngredientsWithoutCocktails;
   const emptyMessage = useMemo(() => {
     switch (activeTab) {
       case 'my':
@@ -743,11 +764,23 @@ export default function IngredientsScreen() {
                     No tags available
                   </Text>
                 )}
-                {selectedTagKeys.size > 0 ? (
+                <View style={styles.filterSection}>
+                  <Text style={[styles.filterSectionLabel, { color: Colors.onSurfaceVariant }]}>Other filters</Text>
+                  <TagPill
+                    label="No cocktails"
+                    color={Colors.tint}
+                    selected={showIngredientsWithoutCocktails}
+                    onPress={handleCocktailFilterToggle}
+                    accessibilityRole="checkbox"
+                    accessibilityState={{ checked: showIngredientsWithoutCocktails }}
+                    androidRippleColor={`${Colors.surfaceVariant}33`}
+                  />
+                </View>
+                {isFilterActive ? (
                   <Pressable
                     accessibilityRole="button"
                     accessibilityLabel="Clear selected tag filters"
-                    onPress={handleClearTagFilters}
+                    onPress={handleClearFilters}
                     style={styles.filterMenuClearButton}>
                     <Text style={[styles.filterMenuClearLabel, { color: Colors.tint }]}>Clear filters</Text>
                   </Pressable>
@@ -881,5 +914,15 @@ const styles = StyleSheet.create({
   filterMenuClearLabel: {
     fontSize: 14,
     fontWeight: '600',
+  },
+  filterSection: {
+    marginTop: 12,
+    alignItems: 'flex-end',
+    gap: 8,
+  },
+  filterSectionLabel: {
+    fontSize: 12,
+    textTransform: 'uppercase',
+    letterSpacing: 0.4,
   },
 });
