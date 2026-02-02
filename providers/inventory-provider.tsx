@@ -36,9 +36,11 @@ import {
   type IngredientTag,
   type PhotoBackupEntry,
   type StartScreen,
+  type AppTheme,
 } from '@/providers/inventory-types';
 
 const DEFAULT_START_SCREEN: StartScreen = 'cocktails_all';
+const DEFAULT_APP_THEME: AppTheme = 'system';
 const BUILTIN_COCKTAIL_TAGS_BY_ID = new Map(BUILTIN_COCKTAIL_TAGS.map((tag) => [tag.id, tag]));
 const BUILTIN_INGREDIENT_TAGS_BY_ID = new Map(BUILTIN_INGREDIENT_TAGS.map((tag) => [tag.id, tag]));
 
@@ -85,6 +87,8 @@ type InventoryContextValue = {
   setRatingFilterThreshold: (value: number) => void;
   startScreen: StartScreen;
   setStartScreen: (value: StartScreen) => void;
+  appTheme: AppTheme;
+  setAppTheme: (value: AppTheme) => void;
 };
 
 type InventoryState = {
@@ -148,6 +152,8 @@ declare global {
   var __yourbarInventoryRatingFilterThreshold: number | undefined;
   // eslint-disable-next-line no-var
   var __yourbarInventoryStartScreen: StartScreen | undefined;
+  // eslint-disable-next-line no-var
+  var __yourbarInventoryAppTheme: AppTheme | undefined;
   // eslint-disable-next-line no-var
   var __yourbarInventoryCustomCocktailTags: CocktailTag[] | undefined;
   // eslint-disable-next-line no-var
@@ -533,6 +539,17 @@ function sanitizeStartScreen(value?: string | null): StartScreen {
   }
 }
 
+function sanitizeAppTheme(value?: string | null): AppTheme {
+  switch (value) {
+    case 'system':
+    case 'light':
+    case 'dark':
+      return value;
+    default:
+      return DEFAULT_APP_THEME;
+  }
+}
+
 const DEFAULT_TAG_COLOR = TAG_COLORS[0];
 const BUILTIN_COCKTAIL_TAG_MAX = BUILTIN_COCKTAIL_TAGS.reduce((max, tag) => Math.max(max, tag.id), 0);
 const BUILTIN_INGREDIENT_TAG_MAX = BUILTIN_INGREDIENT_TAGS.reduce((max, tag) => Math.max(max, tag.id), 0);
@@ -590,6 +607,7 @@ function createDeltaSnapshotFromInventory(
     keepScreenAwake: boolean;
     ratingFilterThreshold: number;
     startScreen: StartScreen;
+    appTheme: AppTheme;
     customCocktailTags: CocktailTag[];
     customIngredientTags: IngredientTag[];
   },
@@ -713,6 +731,7 @@ function createDeltaSnapshotFromInventory(
     keepScreenAwake: options.keepScreenAwake,
     ratingFilterThreshold: options.ratingFilterThreshold,
     startScreen: options.startScreen,
+    appTheme: options.appTheme,
   } satisfies InventoryDeltaSnapshot<CocktailStorageRecord, IngredientStorageRecord>;
 }
 
@@ -760,6 +779,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   const [startScreen, setStartScreen] = useState<StartScreen>(
     () => globalThis.__yourbarInventoryStartScreen ?? DEFAULT_START_SCREEN,
   );
+  const [appTheme, setAppTheme] = useState<AppTheme>(
+    () => globalThis.__yourbarInventoryAppTheme ?? DEFAULT_APP_THEME,
+  );
   const [customCocktailTags, setCustomCocktailTags] = useState<CocktailTag[]>(() =>
     sanitizeCustomTags(globalThis.__yourbarInventoryCustomCocktailTags, DEFAULT_TAG_COLOR),
   );
@@ -794,6 +816,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             Math.max(1, Math.round(stored.ratingFilterThreshold ?? 1)),
           );
           const nextStartScreen = sanitizeStartScreen(stored.startScreen);
+          const nextAppTheme = sanitizeAppTheme(stored.appTheme);
           const nextCustomCocktailTags = sanitizeCustomTags(stored.customCocktailTags, DEFAULT_TAG_COLOR);
           const nextCustomIngredientTags = sanitizeCustomTags(stored.customIngredientTags, DEFAULT_TAG_COLOR);
 
@@ -807,6 +830,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           setKeepScreenAwake(nextKeepScreenAwake);
           setRatingFilterThreshold(nextRatingFilterThreshold);
           setStartScreen(nextStartScreen);
+          setAppTheme(nextAppTheme);
           setCustomCocktailTags(nextCustomCocktailTags);
           setCustomIngredientTags(nextCustomIngredientTags);
           return;
@@ -827,6 +851,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           setUseImperialUnits(false);
           setKeepScreenAwake(true);
           setStartScreen(DEFAULT_START_SCREEN);
+          setAppTheme(DEFAULT_APP_THEME);
           setCustomCocktailTags([]);
           setCustomIngredientTags([]);
         }
@@ -859,6 +884,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     globalThis.__yourbarInventoryKeepScreenAwake = keepScreenAwake;
     globalThis.__yourbarInventoryRatingFilterThreshold = ratingFilterThreshold;
     globalThis.__yourbarInventoryStartScreen = startScreen;
+    globalThis.__yourbarInventoryAppTheme = appTheme;
     globalThis.__yourbarInventoryCustomCocktailTags = customCocktailTags;
     globalThis.__yourbarInventoryCustomIngredientTags = customIngredientTags;
 
@@ -872,6 +898,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       keepScreenAwake,
       ratingFilterThreshold,
       startScreen,
+      appTheme,
       customCocktailTags,
       customIngredientTags,
     });
@@ -897,6 +924,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     keepScreenAwake,
     ratingFilterThreshold,
     startScreen,
+    appTheme,
     customCocktailTags,
     customIngredientTags,
   ]);
@@ -1825,6 +1853,10 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     setStartScreen(sanitizeStartScreen(value));
   }, []);
 
+  const handleSetAppTheme = useCallback((value: AppTheme) => {
+    setAppTheme(sanitizeAppTheme(value));
+  }, []);
+
   const createCustomCocktailTag = useCallback((input: { name: string; color?: string | null }) => {
     const trimmedName = input.name?.trim();
     if (!trimmedName) {
@@ -2134,6 +2166,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       keepScreenAwake,
       ratingFilterThreshold,
       startScreen,
+      appTheme,
       setIngredientAvailability,
       toggleIngredientAvailability,
       toggleIngredientShopping,
@@ -2163,6 +2196,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       setKeepScreenAwake: handleSetKeepScreenAwake,
       setRatingFilterThreshold: handleSetRatingFilterThreshold,
       setStartScreen: handleSetStartScreen,
+      setAppTheme: handleSetAppTheme,
+      appTheme,
     };
   }, [
     cocktailsWithRatings,
@@ -2207,6 +2242,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     handleSetKeepScreenAwake,
     handleSetRatingFilterThreshold,
     handleSetStartScreen,
+    handleSetAppTheme,
+    appTheme,
   ]);
 
   return <InventoryContext.Provider value={value}>{children}</InventoryContext.Provider>;

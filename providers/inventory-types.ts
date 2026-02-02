@@ -33,6 +33,9 @@ type NormalizedSearchFields = {
 
 export type Cocktail = CocktailRecord & NormalizedSearchFields & { userRating?: number };
 export type Ingredient = IngredientRecord & NormalizedSearchFields;
+
+export type AppTheme = 'system' | 'light' | 'dark';
+
 export type StartScreen =
   | 'cocktails_all'
   | 'cocktails_my'

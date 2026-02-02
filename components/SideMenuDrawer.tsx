@@ -130,6 +130,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     createCustomIngredientTag,
     updateCustomIngredientTag,
     deleteCustomIngredientTag,
+    appTheme,
+    setAppTheme,
   } = useInventory();
   const colors = useAppColors();
   const [isMounted, setIsMounted] = useState(visible);
@@ -822,6 +824,49 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
             showsVerticalScrollIndicator={false}
             keyboardShouldPersistTaps="handled"
           >
+            <Pressable
+              accessibilityRole="checkbox"
+              accessibilityState={{ checked: appTheme === "dark" }}
+              onPress={() => setAppTheme(appTheme === "dark" ? "light" : "dark")}
+              style={[
+                styles.settingRow,
+                {
+                  borderColor: colors.outline,
+                  backgroundColor: colors.surface,
+                },
+              ]}
+            >
+              <View
+                style={[
+                  styles.checkbox,
+                  {
+                    borderColor: appTheme === "dark" ? colors.tint : colors.outlineVariant,
+                    backgroundColor: appTheme === "dark" ? colors.tint : "transparent",
+                  },
+                ]}
+              >
+                <MaterialCommunityIcons
+                  name="check"
+                  size={16}
+                  color={appTheme === "dark" ? colors.background : colors.outlineVariant}
+                />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text
+                  style={[styles.settingLabel, { color: colors.onSurface }]}
+                >
+                  Dark theme
+                </Text>
+                <Text
+                  style={[
+                    styles.settingCaption,
+                    { color: colors.onSurfaceVariant },
+                  ]}
+                >
+                  Switch between light and dark
+                </Text>
+              </View>
+            </Pressable>
             <Pressable
               accessibilityRole="checkbox"
               accessibilityState={{ checked: ignoreGarnish }}
@@ -1828,8 +1873,6 @@ const styles = StyleSheet.create({
     gap: 12,
     paddingVertical: 12,
     paddingRight: 10,
-    borderRadius: 12,
-    borderWidth: StyleSheet.hairlineWidth,
   },
   checkbox: {
     width: 22,

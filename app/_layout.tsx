@@ -5,7 +5,7 @@ import { useColorScheme } from "react-native";
 import "react-native-reanimated";
 
 import { PaperProvider } from "@/libs/react-native-paper";
-import { InventoryProvider } from "@/providers/inventory-provider";
+import { InventoryProvider, useInventory } from "@/providers/inventory-provider";
 import { UnsavedChangesProvider } from "@/providers/unsaved-changes-provider";
 import { getAppTheme } from "@/theme/theme";
 import * as Sentry from '@sentry/react-native';
@@ -28,8 +28,10 @@ export const unstable_settings = {
   anchor: "(tabs)",
 };
 
-export default Sentry.wrap(function RootLayout() {
-  const colorScheme = useColorScheme();
+function RootLayoutContent() {
+  const { appTheme } = useInventory();
+  const systemColorScheme = useColorScheme();
+  const colorScheme = appTheme === 'system' ? systemColorScheme : appTheme;
   const paperTheme = getAppTheme(colorScheme);
   const isDark = colorScheme === 'dark';
 
@@ -47,20 +49,26 @@ export default Sentry.wrap(function RootLayout() {
   };
 
   return (
+    <PaperProvider theme={paperTheme}>
+      <ThemeProvider value={navigationTheme}>
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen
+            name="modal"
+            options={{ presentation: "modal", title: "Modal" }}
+          />
+        </Stack>
+        <StatusBar style="auto" />
+      </ThemeProvider>
+    </PaperProvider>
+  );
+}
+
+export default Sentry.wrap(function RootLayout() {
+  return (
     <UnsavedChangesProvider>
       <InventoryProvider>
-        <PaperProvider theme={paperTheme}>
-          <ThemeProvider value={navigationTheme}>
-            <Stack>
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-              <Stack.Screen
-                name="modal"
-                options={{ presentation: "modal", title: "Modal" }}
-              />
-            </Stack>
-            <StatusBar style="auto" />
-          </ThemeProvider>
-        </PaperProvider>
+        <RootLayoutContent />
       </InventoryProvider>
     </UnsavedChangesProvider>
   );
