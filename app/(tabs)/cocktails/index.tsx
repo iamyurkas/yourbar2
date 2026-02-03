@@ -33,6 +33,7 @@ import { createIngredientLookup } from '@/libs/ingredient-availability';
 import { navigateToDetailsWithReturnTo } from '@/libs/navigation';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { buildTagOptions, type TagOption } from '@/libs/tag-options';
+import { useCocktailTabLogic, type MyTabListItem } from '@/libs/use-cocktail-tab-logic';
 import { useInventory, type Cocktail } from '@/providers/inventory-provider';
 import { tagColors } from '@/theme/theme';
 
@@ -41,45 +42,13 @@ type CocktailMethodOption = {
   label: string;
 };
 
-type IngredientOption = {
-  id: number;
-  name: string;
-};
-
 const METHOD_ICON_SIZE = 16;
-
-type MyTabListItem =
-  | { type: 'cocktail'; key: string; cocktail: Cocktail }
-  | { type: 'separator'; key: string }
-  | {
-      type: 'ingredient-header';
-      key: string;
-      ingredientId: number;
-      name: string;
-      photoUri?: string | null;
-      tagColor?: string;
-      cocktailCount: number;
-      isBranded: boolean;
-    };
 
 const TAB_OPTIONS: SegmentTabOption[] = [
   { key: 'all', label: 'All' },
   { key: 'my', label: 'My' },
   { key: 'favorites', label: 'Favorites' },
 ];
-
-const normalizeIngredientId = (value?: number | string | null): number | undefined => {
-  if (value == null) {
-    return undefined;
-  }
-
-  const numeric = Number(value);
-  if (!Number.isFinite(numeric) || numeric < 0) {
-    return undefined;
-  }
-
-  return Math.trunc(numeric);
-};
 
 export default function CocktailsScreen() {
   const {
@@ -268,7 +237,7 @@ export default function CocktailsScreen() {
         </View>
       );
     },
-    [Colors.surface, Colors.tint],
+    [],
   );
 
   const ratedCocktails = useMemo(() => {
@@ -425,235 +394,15 @@ export default function CocktailsScreen() {
     });
   }, [activeTab, filteredCocktails]);
 
-  const myTabListData = useMemo(() => {
-    if (activeTab !== 'my') {
-      return null;
-    }
-
-    const resolveNameFromId = (id?: number, fallback?: string): string => {
-      if (id == null) {
-        return (fallback ?? '').trim();
-      }
-
-      const record = ingredientLookup.ingredientById.get(id);
-      return (record?.name ?? fallback ?? '').trim();
-    };
-
-    const collectIngredientOptions = (
-      ingredientId: number | undefined,
-      fallbackName: string | undefined,
-      allowBase: boolean,
-      allowBrand: boolean,
-      map: Map<number, string>,
-    ) => {
-      if (ingredientId == null) {
-        return;
-      }
-
-      const resolvedName = resolveNameFromId(ingredientId, fallbackName) || 'Unknown ingredient';
-      if (!map.has(ingredientId)) {
-        map.set(ingredientId, resolvedName);
-      }
-
-      const record = ingredientLookup.ingredientById.get(ingredientId);
-      const baseId = normalizeIngredientId(record?.baseIngredientId);
-      const allowBrandedForBase = allowBrand || baseId == null;
-
-      if (baseId == null) {
-        if (allowBrandedForBase) {
-          ingredientLookup.brandsByBaseId.get(ingredientId)?.forEach((brandId) => {
-            const brandName = resolveNameFromId(brandId);
-            if (brandName) {
-              map.set(brandId, brandName);
-            }
-          });
-        }
-        return;
-      }
-
-      if (allowBase) {
-        const baseName = resolveNameFromId(baseId);
-        if (baseName) {
-          map.set(baseId, baseName);
-        }
-      }
-
-      if (allowBrandedForBase) {
-        ingredientLookup.brandsByBaseId.get(baseId)?.forEach((brandId) => {
-          const brandName = resolveNameFromId(brandId);
-          if (brandName) {
-            map.set(brandId, brandName);
-          }
-        });
-      }
-    };
-
-    const groups = new Map<
-      number,
-      {
-        name: string;
-        photoUri?: string | null;
-        tagColor?: string;
-        cocktails: Cocktail[];
-        keys: Set<string>;
-      }
-    >();
-    const available: Cocktail[] = [];
-    const availabilityMap = new Map<string, boolean>();
-
-    filteredCocktails.forEach((cocktail) => {
-      const recipe = cocktail.ingredients ?? [];
-      const requiredIngredients = recipe.filter(
-        (item) => item && !item.optional && !(ignoreGarnish && item.garnish),
-      );
-
-      if (requiredIngredients.length === 0) {
-        return;
-      }
-
-      let missingCount = 0;
-      let missingOptions: IngredientOption[] = [];
-
-      requiredIngredients.forEach((ingredient) => {
-        const allowBase = Boolean(ingredient.allowBaseSubstitution || allowAllSubstitutes);
-        const allowBrand = Boolean(ingredient.allowBrandSubstitution || allowAllSubstitutes);
-        const candidateMap = new Map<number, string>();
-        const requestedId = normalizeIngredientId(ingredient.ingredientId);
-        const requestedName = resolveNameFromId(requestedId, ingredient.name ?? undefined);
-
-        collectIngredientOptions(
-          requestedId,
-          requestedName,
-          allowBase,
-          allowBrand,
-          candidateMap,
-        );
-
-        (ingredient.substitutes ?? []).forEach((substitute) => {
-          const substituteId = normalizeIngredientId(substitute.ingredientId);
-          const substituteName = substitute.name ?? requestedName;
-          collectIngredientOptions(
-            substituteId,
-            substituteName,
-            allowBase,
-            allowBrand,
-            candidateMap,
-          );
-        });
-
-        const candidateOptions = Array.from(candidateMap.entries()).map(([id, name]) => ({
-          id,
-          name,
-        }));
-
-        const isSatisfied = candidateOptions.some((option) =>
-          availableIngredientIds.has(option.id),
-        );
-
-        if (!isSatisfied) {
-          missingCount += 1;
-          if (missingCount === 1) {
-            missingOptions = candidateOptions;
-          }
-        }
-      });
-
-      const cocktailKey = String(cocktail.id ?? cocktail.name);
-      if (missingCount === 0) {
-        available.push(cocktail);
-        availabilityMap.set(cocktailKey, true);
-        return;
-      }
-
-      availabilityMap.set(cocktailKey, false);
-
-      if (missingCount !== 1) {
-        return;
-      }
-
-      missingOptions.forEach((option) => {
-        if (option.id == null) {
-          return;
-        }
-
-        const ingredientRecord = ingredientLookup.ingredientById.get(option.id);
-        const group = groups.get(option.id) ?? {
-          name: option.name,
-          photoUri: ingredientRecord?.photoUri ?? null,
-          tagColor: ingredientRecord?.tags?.[0]?.color ?? tagColors.yellow,
-          isBranded: ingredientRecord?.baseIngredientId != null,
-          cocktails: [],
-          keys: new Set<string>(),
-        };
-
-        if (!group.keys.has(cocktailKey)) {
-          group.cocktails.push(cocktail);
-          group.keys.add(cocktailKey);
-        }
-
-        groups.set(option.id, group);
-      });
-    });
-
-    const sortedGroups = Array.from(groups.entries())
-      .map(([ingredientId, group]) => ({
-        ingredientId,
-        name: group.name,
-        photoUri: group.photoUri,
-        tagColor: group.tagColor,
-        isBranded: group.isBranded,
-        cocktails: group.cocktails.sort((a, b) =>
-          (a.name ?? '').localeCompare(b.name ?? ''),
-        ),
-      }))
-      .sort((a, b) => {
-        if (a.cocktails.length !== b.cocktails.length) {
-          return b.cocktails.length - a.cocktails.length;
-        }
-        return a.name.localeCompare(b.name);
-      });
-
-    const items: MyTabListItem[] = [];
-    available.forEach((cocktail) => {
-      items.push({
-        type: 'cocktail',
-        key: `cocktail-${cocktail.id ?? cocktail.name}`,
-        cocktail,
-      });
-    });
-
-    if (sortedGroups.length > 0) {
-      items.push({ type: 'separator', key: 'more-ingredients-needed' });
-      sortedGroups.forEach((group) => {
-        items.push({
-          type: 'ingredient-header',
-          key: `ingredient-${group.ingredientId}`,
-          ingredientId: group.ingredientId,
-          name: group.name,
-          photoUri: group.photoUri,
-          tagColor: group.tagColor,
-          cocktailCount: group.cocktails.length,
-          isBranded: group.isBranded,
-        });
-        group.cocktails.forEach((cocktail) => {
-          items.push({
-            type: 'cocktail',
-            key: `cocktail-${cocktail.id ?? cocktail.name}-missing-${group.ingredientId}`,
-            cocktail,
-          });
-        });
-      });
-    }
-
-    return { items, availabilityMap };
-  }, [
+  const myTabListData = useCocktailTabLogic({
     activeTab,
     allowAllSubstitutes,
     availableIngredientIds,
     filteredCocktails,
     ignoreGarnish,
     ingredientLookup,
-  ]);
+    defaultTagColor,
+  });
 
   const keyExtractor = useCallback((item: Cocktail) => String(item.id ?? item.name), []);
   const myTabKeyExtractor = useCallback((item: MyTabListItem) => item.key, []);
@@ -793,10 +542,6 @@ export default function CocktailsScreen() {
       handleShoppingToggle,
       ignoreGarnish,
       ingredientLookup,
-      Colors.onSurface,
-      Colors.onSurfaceVariant,
-      Colors.outlineVariant,
-      Colors.tint,
       shoppingIngredientIds,
     ],
   );
@@ -818,8 +563,6 @@ export default function CocktailsScreen() {
       allowAllSubstitutes,
       ignoreGarnish,
       ingredientLookup,
-      Colors.outline,
-      Colors.outlineVariant,
     ],
   );
 
@@ -835,7 +578,7 @@ export default function CocktailsScreen() {
 
       return <View style={[styles.divider, { backgroundColor }]} />;
     },
-    [myTabListData, Colors.outline, Colors.outlineVariant],
+    [myTabListData],
   );
 
   const isFilterActive = selectedTagKeys.size > 0 || selectedMethodIds.size > 0;
