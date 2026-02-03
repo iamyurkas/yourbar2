@@ -19,8 +19,8 @@ import {
   type GestureResponderEvent,
 } from 'react-native';
 
-import { AppImage } from '@/components/AppImage';
 import { AppDialog, type DialogOptions } from '@/components/AppDialog';
+import { AppImage } from '@/components/AppImage';
 import { ListRow, Thumb } from '@/components/RowParts';
 import { TagEditorModal } from '@/components/TagEditorModal';
 import { TagPill } from '@/components/TagPill';
@@ -1123,6 +1123,7 @@ export default function IngredientFormScreen() {
               keyExtractor={baseModalKeyExtractor}
               renderItem={renderBaseIngredient}
               keyboardShouldPersistTaps="handled"
+              style={styles.modalList}
               ItemSeparatorComponent={({ leadingItem }) => {
                 const ingredientId = Number((leadingItem as Ingredient | null)?.id ?? -1);
                 const isAvailable = ingredientId >= 0 && availableIngredientIds.has(ingredientId);
@@ -1407,6 +1408,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: Platform.select({ ios: 14, default: 12 }),
     fontSize: 16,
+  },
+  modalList: {
+    borderRadius: 12,
   },
   modalListContent: {
     flexGrow: 1,

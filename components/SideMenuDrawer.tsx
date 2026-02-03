@@ -29,10 +29,10 @@ import { AppDialog, type DialogOptions } from "@/components/AppDialog";
 import { TagEditorModal } from "@/components/TagEditorModal";
 import { TagPill } from "@/components/TagPill";
 import { useAppColors } from "@/constants/theme";
-import { buildPhotoBaseName } from "@/libs/photo-utils";
-import { useInventory, type StartScreen, type AppTheme } from "@/providers/inventory-provider";
-import { type InventoryExportData } from "@/providers/inventory-types";
 import { base64ToBytes, createTarArchive } from "@/libs/archive-utils";
+import { buildPhotoBaseName } from "@/libs/photo-utils";
+import { useInventory, type AppTheme, type StartScreen } from "@/providers/inventory-provider";
+import { type InventoryExportData } from "@/providers/inventory-types";
 import appConfig from "../app.json";
 
 const MENU_WIDTH = Math.round(Dimensions.get("window").width * 0.75);
@@ -184,7 +184,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   const backdropOpacity = useRef(new Animated.Value(0)).current;
 
   const SURFACE_ROW_STYLE = useMemo(() => ({
-    borderColor: Colors.outline,
+    borderColor: Colors.surface,
     backgroundColor: Colors.surface,
   }), [Colors]);
 

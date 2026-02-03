@@ -1,4 +1,8 @@
-import { MD3LightTheme, MD3DarkTheme, type PaperTheme } from "@/libs/react-native-paper";
+import {
+  MD3DarkTheme,
+  MD3LightTheme,
+  type PaperTheme,
+} from "@/libs/react-native-paper";
 
 export const lightPalette = {
   primary: "#4DABF7",
@@ -70,7 +74,7 @@ export const darkPalette = {
 
   onSurface: "#E5EAF0",
   onSurfaceMuted: "#B7C1CC",
-  onSurfaceVariant: "#B7C1CC",
+  onSurfaceVariant: "#959CA5",
   onSurfaceDisabled: "rgba(255,255,255,0.38)",
   onBackground: "#E5EAF0",
 
@@ -94,7 +98,7 @@ export const darkPalette = {
   shadow: "#000000",
 
   highlightFaint: "#1E2936",
-  highlightSubtle: "#2C2100",
+  highlightSubtle: "#412f00",
   overlayOnPrimary: "#00000055",
 
   secondary: "#B0BEC5",
@@ -140,7 +144,10 @@ export const tagColors = {
   orange: "#FB8C00",
 } as const;
 
-function createTheme(baseTheme: PaperTheme, p: typeof lightPalette): PaperTheme {
+function createTheme(
+  baseTheme: PaperTheme,
+  p: typeof lightPalette,
+): PaperTheme {
   return {
     ...baseTheme,
     colors: {
@@ -190,9 +197,18 @@ function createTheme(baseTheme: PaperTheme, p: typeof lightPalette): PaperTheme 
       elevation: {
         ...baseTheme.colors.elevation,
         level0: "transparent",
-        level1: baseTheme === MD3LightTheme ? "rgba(255,255,255,0.95)" : "rgba(12,18,26,0.7)",
-        level2: baseTheme === MD3LightTheme ? "rgba(255,255,255,0.97)" : "rgba(14,20,29,0.72)",
-        level3: baseTheme === MD3LightTheme ? "rgba(255,255,255,0.99)" : "rgba(15,22,31,0.74)",
+        level1:
+          baseTheme === MD3LightTheme
+            ? "rgba(255,255,255,0.95)"
+            : "rgba(12,18,26,0.7)",
+        level2:
+          baseTheme === MD3LightTheme
+            ? "rgba(255,255,255,0.97)"
+            : "rgba(14,20,29,0.72)",
+        level3:
+          baseTheme === MD3LightTheme
+            ? "rgba(255,255,255,0.99)"
+            : "rgba(15,22,31,0.74)",
         level4: p.surfaceBright,
         level5: p.surfaceBright,
       },

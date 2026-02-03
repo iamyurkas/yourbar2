@@ -26,8 +26,8 @@ import {
 } from "react-native";
 
 import { resolveAssetFromCatalog } from "@/assets/image-manifest";
-import { AppImage } from "@/components/AppImage";
 import { AppDialog, type DialogOptions } from "@/components/AppDialog";
+import { AppImage } from "@/components/AppImage";
 import { HeaderIconButton } from "@/components/HeaderIconButton";
 import { ListRow, Thumb } from "@/components/RowParts";
 import { SubstituteModal } from "@/components/SubstituteModal";
@@ -1473,7 +1473,7 @@ export default function CreateCocktailScreen() {
               style={[
                 styles.card,
                 styles.halfCard,
-                { backgroundColor: Colors.surface },
+                { backgroundColor: Colors.background },
               ]}
             >
               <Text style={[styles.cardLabel, { color: Colors.onSurface }]}>
@@ -1505,7 +1505,7 @@ export default function CreateCocktailScreen() {
               style={[
                 styles.card,
                 styles.halfCard,
-                { backgroundColor: Colors.surface },
+                { backgroundColor: Colors.background },
               ]}
             >
               <Text style={[styles.cardLabel, { color: Colors.onSurface }]}>
@@ -2474,7 +2474,7 @@ function EditableIngredientRow({
             {
               borderColor: Colors.outlineVariant,
               color: Colors.text,
-              backgroundColor: Colors.surface,
+              backgroundColor: Colors.background,
               paddingRight: showAddButton ? 72 : 16,
             },
           ]}
@@ -2600,7 +2600,7 @@ function EditableIngredientRow({
             keyboardType="decimal-pad"
             style={[
               styles.input,
-              { borderColor: Colors.outlineVariant, color: Colors.text, backgroundColor: Colors.surface },
+              { borderColor: Colors.outlineVariant, color: Colors.text, backgroundColor: Colors.background },
             ]}
             onFocus={(event) => onInputFocus(event.nativeEvent.target)}
           />
