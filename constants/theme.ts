@@ -1,18 +1,10 @@
-import { Platform, useColorScheme } from 'react-native';
+import { Platform } from 'react-native';
 
-import { lightTheme, darkTheme, lightPalette, darkPalette } from '@/theme/theme';
-import { useInventory } from '@/providers/inventory-provider';
+import { lightTheme, lightPalette } from '@/theme/theme';
+import { useTheme } from '@/libs/react-native-paper';
 
 export function useAppColors() {
-  const { appTheme } = useInventory();
-  const systemColorScheme = useColorScheme();
-
-  const isDark = appTheme === 'system'
-    ? systemColorScheme === 'dark'
-    : appTheme === 'dark';
-
-  const theme = isDark ? darkTheme : lightTheme;
-  const p = isDark ? darkPalette : lightPalette;
+  const theme = useTheme();
 
   return {
     ...theme.colors,
@@ -21,10 +13,10 @@ export function useAppColors() {
     icon: theme.colors.onSurfaceVariant,
     tabIconDefault: theme.colors.onSurfaceVariant,
     tabIconSelected: theme.colors.primary,
-    danger: p.danger,
-    disabled: p.disabled,
-    placeholder: p.placeholder,
-    success: p.success,
+    danger: theme.colors.danger ?? lightPalette.danger,
+    disabled: theme.colors.disabled ?? lightPalette.disabled,
+    placeholder: theme.colors.placeholder ?? lightPalette.placeholder,
+    success: theme.colors.success ?? lightPalette.success,
   };
 }
 

@@ -42,6 +42,16 @@ export const lightPalette = {
   highlightFaint: "#DDEEFF",
   highlightSubtle: "#fff4dd",
   overlayOnPrimary: "#FFFFFF55",
+
+  secondary: "#625B71",
+  onSecondary: "#FFFFFF",
+  secondaryContainer: "#E8DEF8",
+  onSecondaryContainer: "#1D192B",
+
+  tertiary: "#7D5260",
+  onTertiary: "#FFFFFF",
+  tertiaryContainer: "#FFD8E4",
+  onTertiaryContainer: "#31111D",
 } as const;
 
 export const darkPalette = {
@@ -86,6 +96,16 @@ export const darkPalette = {
   highlightFaint: "#1E2936",
   highlightSubtle: "#2C2100",
   overlayOnPrimary: "#00000055",
+
+  secondary: "#B0BEC5",
+  onSecondary: "#0A141F",
+  secondaryContainer: "#1F2A36",
+  onSecondaryContainer: "#DCE4EA",
+
+  tertiary: "#A5D8FF",
+  onTertiary: "#0B1721",
+  tertiaryContainer: "#14202B",
+  onTertiaryContainer: "#DFF3FF",
 } as const;
 
 /** @deprecated Use lightPalette or darkPalette instead */
@@ -129,6 +149,17 @@ function createTheme(baseTheme: PaperTheme, p: typeof lightPalette): PaperTheme 
       onPrimary: p.onPrimary,
       primaryContainer: p.primaryContainer,
       onPrimaryContainer: p.onPrimaryContainer,
+
+      secondary: p.secondary,
+      onSecondary: p.onSecondary,
+      secondaryContainer: p.secondaryContainer,
+      onSecondaryContainer: p.onSecondaryContainer,
+
+      tertiary: p.tertiary,
+      onTertiary: p.onTertiary,
+      tertiaryContainer: p.tertiaryContainer,
+      onTertiaryContainer: p.onTertiaryContainer,
+
       background: p.background,
       surface: p.surface,
       surfaceBright: p.surfaceBright,
@@ -152,6 +183,10 @@ function createTheme(baseTheme: PaperTheme, p: typeof lightPalette): PaperTheme 
       highlightFaint: p.highlightFaint,
       highlightSubtle: p.highlightSubtle,
       overlayOnPrimary: p.overlayOnPrimary,
+      danger: p.danger,
+      success: p.success,
+      disabled: p.disabled,
+      placeholder: p.placeholder,
       elevation: {
         ...baseTheme.colors.elevation,
         level0: "transparent",

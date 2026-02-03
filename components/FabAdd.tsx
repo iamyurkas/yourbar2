@@ -20,9 +20,9 @@ export function FabAdd({ label = 'Add', onPress }: FabAddProps) {
         accessibilityRole="button"
         accessibilityLabel={label}
         onPress={onPress}
-        style={[styles.fab, { backgroundColor: Colors.highlightFaint, shadowColor: Colors.shadow }]}
+        style={[styles.fab, { backgroundColor: Colors.primaryContainer, shadowColor: Colors.shadow }]}
         android_ripple={{ color: `${Colors.surface}33`, borderless: true }}>
-        <MaterialCommunityIcons name="plus" size={26} color={Colors.secondary} />
+        <MaterialCommunityIcons name="plus" size={26} color={Colors.onPrimaryContainer} />
       </Pressable>
     </View>
   );
