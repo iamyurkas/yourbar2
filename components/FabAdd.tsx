@@ -11,9 +11,10 @@ type FabAddProps = {
 
 export function FabAdd({ label = 'Add', onPress }: FabAddProps) {
   const insets = useSafeAreaInsets();
+  const bottomInset = Math.min(insets.bottom, 8);
 
   return (
-    <View style={[styles.container, { bottom: insets.bottom + 16 }]}>
+    <View style={[styles.container, { bottom: bottomInset + 16 }]}>
       <Pressable
         accessibilityRole="button"
         accessibilityLabel={label}
