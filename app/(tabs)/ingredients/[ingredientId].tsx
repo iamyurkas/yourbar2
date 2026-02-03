@@ -928,6 +928,8 @@ export default function IngredientDetailsScreen() {
                             cocktail={cocktail}
                             availableIngredientIds={availableIngredientIds}
                             ingredientLookup={ingredientLookup}
+                            ignoreGarnish={ignoreGarnish}
+                            allowAllSubstitutes={allowAllSubstitutes}
                             onPress={() =>
                               handleNavigateToCocktail(
                                 cocktail.id ?? cocktail.name,
