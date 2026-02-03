@@ -156,19 +156,6 @@ function resolveCocktailKey(cocktail: Cocktail) {
   return undefined;
 }
 
-const COLLAPSED_HEADER_PREFIX = '__collapsed_header__';
-
-function makeCollapsedHeaderItem(key: string): Ingredient {
-  return {
-    id: `${COLLAPSED_HEADER_PREFIX}${key}`,
-    name: '',
-  } as Ingredient;
-}
-
-function isCollapsedHeaderItem(item: Ingredient) {
-  return typeof item.id === 'string' && item.id.startsWith(COLLAPSED_HEADER_PREFIX);
-}
-
 function makeSkeletonItem(key: string, index: number): Ingredient {
   return {
     id: `${SKELETON_ITEM_PREFIX}${key}_${index}`,
@@ -635,7 +622,7 @@ export default function ShakerScreen() {
           ? loading
             ? Array.from({ length: SKELETON_ROW_COUNT }, (_, index) => makeSkeletonItem(group.key, index))
             : group.ingredients
-          : [makeCollapsedHeaderItem(group.key)],
+          : [],
       })),
     [expandedTagKeys, ingredientGroups, loading],
   );
@@ -717,9 +704,6 @@ export default function ShakerScreen() {
   const renderSectionHeader = useCallback(
     ({ section }: { section: SectionListData<Ingredient, IngredientSection> }) => {
       const isExpanded = expandedTagKeys.has(section.key);
-      if (!isExpanded) {
-        return null;
-      }
       return renderHeaderContent(section, isExpanded);
     },
     [expandedTagKeys, renderHeaderContent],
@@ -727,9 +711,6 @@ export default function ShakerScreen() {
 
   const renderIngredient = useCallback(
     ({ item, index, section }: SectionListRenderItemInfo<Ingredient, IngredientSection>) => {
-      if (isCollapsedHeaderItem(item)) {
-        return renderHeaderContent(section, false);
-      }
       if (isSkeletonItem(item)) {
         return (
           <View style={styles.skeletonRow}>
