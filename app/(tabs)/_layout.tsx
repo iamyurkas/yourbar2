@@ -1,5 +1,5 @@
 import { Tabs } from 'expo-router';
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { StyleSheet, View, useColorScheme } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -21,33 +21,33 @@ const TAB_SCREENS: Array<{
   icon: typeof CocktailIcon;
   onTabPress: TabPressHandler;
 }> = [
-  {
-    name: 'cocktails',
-    title: 'Cocktails',
-    icon: CocktailIcon,
-    onTabPress: (navigation, route) => {
-      getLastCocktailTab();
-      navigation.navigate(route.name as never, { screen: 'index' } as never);
+    {
+      name: 'cocktails',
+      title: 'Cocktails',
+      icon: CocktailIcon,
+      onTabPress: (navigation, route) => {
+        getLastCocktailTab();
+        navigation.navigate(route.name as never, { screen: 'index' } as never);
+      },
     },
-  },
-  {
-    name: 'shaker',
-    title: 'Shaker',
-    icon: ShakerIcon,
-    onTabPress: (navigation, route) => {
-      navigation.navigate(route.name as never, { screen: 'index' } as never);
+    {
+      name: 'shaker',
+      title: 'Shaker',
+      icon: ShakerIcon,
+      onTabPress: (navigation, route) => {
+        navigation.navigate(route.name as never, { screen: 'index' } as never);
+      },
     },
-  },
-  {
-    name: 'ingredients',
-    title: 'Ingredients',
-    icon: LemonIcon,
-    onTabPress: (navigation, route) => {
-      getLastIngredientTab();
-      navigation.navigate(route.name as never, { screen: 'index' } as never);
+    {
+      name: 'ingredients',
+      title: 'Ingredients',
+      icon: LemonIcon,
+      onTabPress: (navigation, route) => {
+        getLastIngredientTab();
+        navigation.navigate(route.name as never, { screen: 'index' } as never);
+      },
     },
-  },
-];
+  ];
 
 export default function TabLayout() {
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(null);
@@ -59,8 +59,6 @@ export default function TabLayout() {
   const isDarkMode = appTheme === 'system'
     ? systemColorScheme === 'dark'
     : appTheme === 'dark';
-
-  const tabBarInsetColor = isDarkMode ? Colors.onSurfaceVariant : Colors.surface;
 
   const closeDialog = useCallback(() => {
     setDialogOptions(null);
@@ -91,7 +89,7 @@ export default function TabLayout() {
           tabBarBackground: () => (
             <View style={styles.tabBarBackground}>
               <View style={[styles.tabBarSurface, { backgroundColor: Colors.surface }]} />
-              <View style={[styles.tabBarInset, { height: insets.bottom, backgroundColor: tabBarInsetColor }]} />
+              <View style={[styles.tabBarInset, { height: insets.bottom, backgroundColor: Colors.surface }]} />
             </View>
           ),
         }}>
