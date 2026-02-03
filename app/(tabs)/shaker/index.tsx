@@ -55,6 +55,9 @@ type IngredientRowProps = {
   onToggle: (id: number) => void;
 };
 
+const SKELETON_ITEM_PREFIX = '__skeleton__';
+const SKELETON_ROW_COUNT = 5;
+
 const IngredientRow = memo(function IngredientRow({
   ingredient,
   isSelected,
@@ -166,11 +169,23 @@ function isCollapsedHeaderItem(item: Ingredient) {
   return typeof item.id === 'string' && item.id.startsWith(COLLAPSED_HEADER_PREFIX);
 }
 
+function makeSkeletonItem(key: string, index: number): Ingredient {
+  return {
+    id: `${SKELETON_ITEM_PREFIX}${key}_${index}`,
+    name: 'loading',
+  } as Ingredient;
+}
+
+function isSkeletonItem(item: Ingredient) {
+  return typeof item.id === 'string' && item.id.startsWith(SKELETON_ITEM_PREFIX);
+}
+
 export default function ShakerScreen() {
   const router = useRouter();
   const {
     cocktails,
     ingredients,
+    loading,
     availableIngredientIds,
     shoppingIngredientIds,
     ignoreGarnish,
@@ -616,9 +631,13 @@ export default function ShakerScreen() {
     () =>
       ingredientGroups.map((group) => ({
         ...group,
-        data: expandedTagKeys.has(group.key) ? group.ingredients : [makeCollapsedHeaderItem(group.key)],
+        data: expandedTagKeys.has(group.key)
+          ? loading
+            ? Array.from({ length: SKELETON_ROW_COUNT }, (_, index) => makeSkeletonItem(group.key, index))
+            : group.ingredients
+          : [makeCollapsedHeaderItem(group.key)],
       })),
-    [expandedTagKeys, ingredientGroups],
+    [expandedTagKeys, ingredientGroups, loading],
   );
 
   const renderHeaderContent = useCallback(
@@ -711,6 +730,17 @@ export default function ShakerScreen() {
       if (isCollapsedHeaderItem(item)) {
         return renderHeaderContent(section, false);
       }
+      if (isSkeletonItem(item)) {
+        return (
+          <View style={styles.skeletonRow}>
+            <View style={[styles.skeletonBlock, styles.skeletonTitle]} />
+            <View style={[styles.skeletonBlock, styles.skeletonSubtitle]} />
+            {index < section.data.length - 1 ? (
+              <View style={[styles.divider, { backgroundColor: Colors.outlineVariant }]} />
+            ) : null}
+          </View>
+        );
+      }
       const ingredientId = Number(item.id ?? -1);
       const isAvailable = ingredientId >= 0 && availableIngredientIds.has(ingredientId);
       const isSelected = ingredientId >= 0 && selectedIngredientIds.has(ingredientId);
@@ -747,6 +777,7 @@ export default function ShakerScreen() {
     [
       availableIngredientIds,
       Colors.onSurfaceVariant,
+      Colors.outlineVariant,
       handleToggleIngredient,
       makeableCocktailCounts,
       renderHeaderContent,
@@ -984,6 +1015,24 @@ const styles = StyleSheet.create({
   },
   divider: {
     height: StyleSheet.hairlineWidth,
+  },
+  skeletonRow: {
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    backgroundColor: Colors.background,
+  },
+  skeletonBlock: {
+    backgroundColor: Colors.surfaceVariant,
+    borderRadius: 6,
+  },
+  skeletonTitle: {
+    height: 16,
+    width: '55%',
+  },
+  skeletonSubtitle: {
+    height: 12,
+    width: '40%',
+    marginTop: 8,
   },
   shoppingIcon: {
     width: 20,
