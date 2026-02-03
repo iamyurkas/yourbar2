@@ -24,7 +24,7 @@ import {
   METHOD_ICON_MAP,
 } from "@/constants/cocktail-methods";
 import { COCKTAIL_UNIT_DICTIONARY } from "@/constants/cocktail-units";
-import { Colors } from "@/constants/theme";
+import { useAppColors } from "@/constants/theme";
 import { resolveImageSource } from "@/libs/image-source";
 import {
   createIngredientLookup,
@@ -332,6 +332,7 @@ export default function CocktailDetailsScreen() {
     returnToParams?: string;
   }>();
   const navigation = useNavigation();
+  const Colors = useAppColors();
   const { cocktailId } = params;
   const {
     cocktails,
@@ -718,14 +719,14 @@ export default function CocktailDetailsScreen() {
                 {displayedImageSource ? (
                   <AppImage
                     source={displayedImageSource}
-                    style={styles.photo}
+                    style={[styles.photo, { backgroundColor: Colors.surfaceBright }]}
                     contentFit="contain"
                   />
                 ) : (
                   <View
                     style={[
                       styles.photoPlaceholder,
-                      { borderColor: Colors.outline },
+                      { borderColor: Colors.outline, backgroundColor: Colors.surfaceBright },
                     ]}
                   >
                     <MaterialCommunityIcons
@@ -1259,7 +1260,6 @@ const styles = StyleSheet.create({
     height: 150,
     borderRadius: 12,
     overflow: "hidden",
-    backgroundColor: Colors.surfaceBright,
   },
   photoPlaceholder: {
     width: 150,
@@ -1269,7 +1269,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     gap: 8,
-    backgroundColor: Colors.surfaceBright,
   },
   photoPlaceholderText: {
     fontSize: 14,

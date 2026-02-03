@@ -18,7 +18,6 @@ type CocktailRecord = Omit<BaseCocktailRecord, 'ingredients' | 'searchName' | 's
   methodId?: CocktailMethodId | null;
   methodIds?: CocktailMethodId[] | null;
 };
-type IngredientRecord = InventoryData['ingredients'][number];
 export type PhotoBackupEntry = {
   type: 'cocktails' | 'ingredients';
   id?: number | string | null;
@@ -41,6 +40,8 @@ export type StartScreen =
   | 'ingredients_all'
   | 'ingredients_my'
   | 'ingredients_shopping';
+
+export type AppTheme = 'light' | 'dark' | 'system';
 
 export type IngredientTag = NonNullable<IngredientRecord['tags']>[number];
 

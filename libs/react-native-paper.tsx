@@ -1,4 +1,4 @@
-import type { PropsWithChildren, ReactNode } from 'react';
+import { createContext, useContext, type PropsWithChildren, type ReactNode } from 'react';
 
 export type PaperTheme = {
   readonly version: number;
@@ -16,6 +16,7 @@ export type PaperTheme = {
     readonly tertiaryContainer: string;
     readonly surface: string;
     readonly surfaceVariant: string;
+    readonly surfaceBright?: string;
     readonly surfaceDisabled: string;
     readonly background: string;
     readonly error: string;
@@ -27,6 +28,7 @@ export type PaperTheme = {
     readonly onTertiary: string;
     readonly onTertiaryContainer: string;
     readonly onSurface: string;
+    readonly onSurfaceMuted?: string;
     readonly onSurfaceVariant: string;
     readonly onSurfaceDisabled: string;
     readonly onError: string;
@@ -40,6 +42,13 @@ export type PaperTheme = {
     readonly shadow: string;
     readonly scrim: string;
     readonly backdrop: string;
+    readonly highlightFaint?: string;
+    readonly highlightSubtle?: string;
+    readonly overlayOnPrimary?: string;
+    readonly danger?: string;
+    readonly success?: string;
+    readonly disabled?: string;
+    readonly placeholder?: string;
     readonly elevation: {
       readonly level0: string;
       readonly level1: string;
@@ -167,10 +176,16 @@ export const MD3DarkTheme: PaperTheme = {
   },
 };
 
+const ThemeContext = createContext<PaperTheme>(MD3LightTheme);
+
 type PaperProviderProps = PropsWithChildren<{
   theme?: PaperTheme;
 }>;
 
-export function PaperProvider({ children }: PaperProviderProps): ReactNode {
-  return children;
+export function PaperProvider({ children, theme }: PaperProviderProps): ReactNode {
+  return <ThemeContext.Provider value={theme ?? MD3LightTheme}>{children}</ThemeContext.Provider>;
+}
+
+export function useTheme() {
+  return useContext(ThemeContext);
 }

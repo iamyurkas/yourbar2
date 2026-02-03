@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 
-import { Colors } from '@/constants/theme';
+import { useAppColors } from '@/constants/theme';
 
 export type DialogAction = {
   label: string;
@@ -22,9 +22,34 @@ type AppDialogProps = DialogOptions & {
 };
 
 export function AppDialog({ visible, title, message, actions, onRequestClose }: AppDialogProps) {
+  const Colors = useAppColors();
+
   if (!visible) {
     return null;
   }
+
+  const getActionColors = (variant: DialogAction['variant']) => {
+    switch (variant) {
+      case 'secondary':
+        return {
+          backgroundColor: Colors.surfaceVariant,
+          borderColor: Colors.outlineVariant,
+          textColor: Colors.onSurface,
+        } as const;
+      case 'destructive':
+        return {
+          backgroundColor: Colors.error,
+          borderColor: Colors.error,
+          textColor: Colors.onError,
+        } as const;
+      default:
+        return {
+          backgroundColor: Colors.tint,
+          borderColor: Colors.tint,
+          textColor: Colors.onPrimary,
+        } as const;
+    }
+  };
 
   return (
     <Modal visible={visible} transparent animationType="fade" onRequestClose={onRequestClose}>
@@ -62,29 +87,6 @@ export function AppDialog({ visible, title, message, actions, onRequestClose }: 
       </Pressable>
     </Modal>
   );
-}
-
-function getActionColors(variant: DialogAction['variant']) {
-  switch (variant) {
-    case 'secondary':
-      return {
-        backgroundColor: Colors.surfaceVariant,
-        borderColor: Colors.outlineVariant,
-        textColor: Colors.onSurface,
-      } as const;
-    case 'destructive':
-      return {
-        backgroundColor: Colors.error,
-        borderColor: Colors.error,
-        textColor: Colors.onError,
-      } as const;
-    default:
-      return {
-        backgroundColor: Colors.tint,
-        borderColor: Colors.tint,
-        textColor: Colors.onPrimary,
-      } as const;
-  }
 }
 
 const styles = StyleSheet.create({

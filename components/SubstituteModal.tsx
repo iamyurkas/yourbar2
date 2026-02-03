@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 
 import { ListRow, Thumb } from '@/components/RowParts';
-import { Colors } from '@/constants/theme';
+import { useAppColors } from '@/constants/theme';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
 import { tagColors } from '@/theme/theme';
@@ -55,6 +55,7 @@ export function SubstituteModal({
   selectedSubstituteNames,
 }: SubstituteModalProps) {
   const { ingredients, availableIngredientIds, shoppingIngredientIds, cocktails } = useInventory();
+  const Colors = useAppColors();
   const [searchValue, setSearchValue] = useState('');
   const inputRef = useRef<TextInput | null>(null);
 
@@ -273,6 +274,7 @@ export function SubstituteModal({
       onSelect,
       renderSubtitle,
       shoppingIngredientIds,
+      Colors,
     ],
   );
 
@@ -284,7 +286,7 @@ export function SubstituteModal({
 
       return <View style={[styles.modalSeparator, { backgroundColor }]} />;
     },
-    [availableIngredientIds, Colors.outline, Colors.outlineVariant],
+    [availableIngredientIds, Colors],
   );
 
   return (
