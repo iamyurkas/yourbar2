@@ -6,16 +6,6 @@ export const palette = {
   onPrimary: "#FFFFFF",
   onPrimaryContainer: "#0B2A4A",
 
-  secondary: "#74C0FC",
-  secondaryContainer: "#FFE9A6",
-  onSecondary: "#2B1D00",
-  onSecondaryContainer: "#3B2800",
-
-  tertiary: "#A5D8FF",
-  tertiaryContainer: "#CBF1EC",
-  onTertiary: "#003833",
-  onTertiaryContainer: "#00302B",
-
   background: "#FFFFFF",
   surface: "#F3F3F3",
   surfaceBright: "#FFFFFF",
