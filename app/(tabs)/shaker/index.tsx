@@ -131,7 +131,7 @@ function normalizeTagKey(tag?: { id?: number | null; name?: string | null }) {
   }
 
   if (tag.id != null) {
-    return String(tag.id);
+    return `tag-${tag.id}`;
   }
 
   return tag.name?.trim().toLowerCase();
@@ -746,7 +746,6 @@ export default function ShakerScreen() {
     },
     [
       availableIngredientIds,
-      Colors.onSurfaceVariant,
       handleToggleIngredient,
       makeableCocktailCounts,
       renderHeaderContent,
@@ -814,7 +813,9 @@ export default function ShakerScreen() {
         <SectionList
           ref={listRef}
           sections={sections}
-          keyExtractor={(item) => String(item.id ?? item.name)}
+          keyExtractor={(item) =>
+            isCollapsedHeaderItem(item) ? item.id : `ing-${item.id ?? item.name}`
+          }
           renderItem={renderIngredient}
           renderSectionHeader={renderSectionHeader}
           stickySectionHeadersEnabled
