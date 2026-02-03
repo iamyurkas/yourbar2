@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Your Bar",
+    "name": "Your Bar (Beta)",
     "slug": "yourbar",
     "version": "0.9.5",
     "orientation": "portrait",
@@ -17,7 +17,7 @@
 
     "android": {
       "package": "com.iamyurkas.yourbar",
-      "versionCode": 9,
+      "versionCode": 12,
 
       "enableProguardInRelease": true,
       "enableShrinkResourcesInRelease": true,
