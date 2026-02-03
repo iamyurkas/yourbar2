@@ -85,7 +85,6 @@ const IngredientListItem = memo(function IngredientListItemComponent({
   showAvailabilityToggle = true,
   onShoppingToggle,
 }: IngredientListItemProps) {
-  const router = useRouter();
   const id = Number(ingredient.id ?? -1);
   const isAvailable = id >= 0 && availableIngredientIds.has(id);
   const ingredientTagColors = (ingredient.tags ?? [])

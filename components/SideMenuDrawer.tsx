@@ -1,6 +1,5 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import Constants from "expo-constants";
 import * as DocumentPicker from "expo-document-picker";
 import * as FileSystem from "expo-file-system/legacy";
 import { Image, type ImageSource } from "expo-image";
@@ -33,23 +32,13 @@ import { Colors } from "@/constants/theme";
 import { buildPhotoBaseName } from "@/libs/photo-utils";
 import { useInventory, type StartScreen } from "@/providers/inventory-provider";
 import { type InventoryExportData } from "@/providers/inventory-types";
+import { base64ToBytes, createTarArchive } from "@/libs/archive-utils";
 import appConfig from "../app.json";
 
 const MENU_WIDTH = Math.round(Dimensions.get("window").width * 0.75);
 const ANIMATION_DURATION = 200;
 const APP_VERSION = appConfig.expo.version;
 const APP_VERSION_CODE = appConfig.expo.android?.versionCode;
-const BUILD_TIME = Constants.expoConfig?.extra?.buildTime as string | undefined;
-
-const formatBuildTime = (value: string) => {
-  const parsed = new Date(value);
-
-  if (Number.isNaN(parsed.getTime())) {
-    return value;
-  }
-
-  return parsed.toLocaleString();
-};
 
 type StartScreenIcon =
   | {
@@ -444,142 +433,6 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     }
   };
 
-  const base64Chars =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-
-  const base64ToBytes = (base64: string) => {
-    const cleaned = base64.replace(/[^A-Za-z0-9+/=]/g, "");
-    const padding = cleaned.endsWith("==") ? 2 : cleaned.endsWith("=") ? 1 : 0;
-    const byteLength = (cleaned.length * 3) / 4 - padding;
-    const bytes = new Uint8Array(byteLength);
-    let byteIndex = 0;
-
-    for (let i = 0; i < cleaned.length; i += 4) {
-      const enc1 = base64Chars.indexOf(cleaned[i]);
-      const enc2 = base64Chars.indexOf(cleaned[i + 1]);
-      const enc3 = base64Chars.indexOf(cleaned[i + 2]);
-      const enc4 = base64Chars.indexOf(cleaned[i + 3]);
-
-      const byte1 = (enc1 << 2) | (enc2 >> 4);
-      const byte2 = ((enc2 & 15) << 4) | (enc3 >> 2);
-      const byte3 = ((enc3 & 3) << 6) | enc4;
-
-      bytes[byteIndex++] = byte1;
-      if (cleaned[i + 2] !== "=") {
-        bytes[byteIndex++] = byte2;
-      }
-      if (cleaned[i + 3] !== "=") {
-        bytes[byteIndex++] = byte3;
-      }
-    }
-
-    return bytes;
-  };
-
-  const bytesToBase64 = (bytes: Uint8Array) => {
-    const chunks: string[] = [];
-    for (let i = 0; i < bytes.length; i += 3) {
-      const byte1 = bytes[i];
-      const byte2 = i + 1 < bytes.length ? bytes[i + 1] : 0;
-      const byte3 = i + 2 < bytes.length ? bytes[i + 2] : 0;
-
-      const enc1 = byte1 >> 2;
-      const enc2 = ((byte1 & 3) << 4) | (byte2 >> 4);
-      const enc3 = ((byte2 & 15) << 2) | (byte3 >> 6);
-      const enc4 = byte3 & 63;
-
-      if (i + 1 >= bytes.length) {
-        chunks.push(`${base64Chars[enc1]}${base64Chars[enc2]}==`);
-      } else if (i + 2 >= bytes.length) {
-        chunks.push(
-          `${base64Chars[enc1]}${base64Chars[enc2]}${base64Chars[enc3]}=`,
-        );
-      } else {
-        chunks.push(
-          `${base64Chars[enc1]}${base64Chars[enc2]}${base64Chars[enc3]}${base64Chars[enc4]}`,
-        );
-      }
-    }
-    return chunks.join("");
-  };
-
-  const createTarArchive = (
-    files: Array<{ path: string; contents: Uint8Array }>,
-  ) => {
-    const encoder = new TextEncoder();
-    const blocks: Uint8Array[] = [];
-    let totalLength = 0;
-
-    const writeString = (
-      buffer: Uint8Array,
-      offset: number,
-      text: string,
-      length: number,
-    ) => {
-      const encoded = encoder.encode(text);
-      buffer.set(encoded.slice(0, length), offset);
-    };
-
-    const writeOctal = (
-      buffer: Uint8Array,
-      offset: number,
-      length: number,
-      value: number,
-    ) => {
-      const octal = value.toString(8).padStart(length - 1, "0");
-      writeString(buffer, offset, `${octal}\0`, length);
-    };
-
-    const writeChecksum = (buffer: Uint8Array) => {
-      let sum = 0;
-      for (let i = 0; i < buffer.length; i += 1) {
-        sum += buffer[i];
-      }
-      const checksum = sum.toString(8).padStart(6, "0");
-      writeString(buffer, 148, `${checksum}\0 `, 8);
-    };
-
-    const addFile = (filePath: string, contents: Uint8Array) => {
-      const header = new Uint8Array(512);
-      writeString(header, 0, filePath, 100);
-      writeString(header, 100, "0000777\0", 8);
-      writeString(header, 108, "0000000\0", 8);
-      writeString(header, 116, "0000000\0", 8);
-      writeOctal(header, 124, 12, contents.length);
-      writeOctal(header, 136, 12, Math.floor(Date.now() / 1000));
-      writeString(header, 148, "        ", 8);
-      writeString(header, 156, "0", 1);
-      writeString(header, 257, "ustar\0", 6);
-      writeString(header, 263, "00", 2);
-      writeChecksum(header);
-
-      blocks.push(header);
-      totalLength += header.length;
-
-      blocks.push(contents);
-      totalLength += contents.length;
-
-      const paddingLength = (512 - (contents.length % 512)) % 512;
-      if (paddingLength > 0) {
-        blocks.push(new Uint8Array(paddingLength));
-        totalLength += paddingLength;
-      }
-    };
-
-    files.forEach((file) => addFile(file.path, file.contents));
-
-    blocks.push(new Uint8Array(1024));
-    totalLength += 1024;
-
-    const archive = new Uint8Array(totalLength);
-    let offset = 0;
-    blocks.forEach((block) => {
-      archive.set(block, offset);
-      offset += block.length;
-    });
-
-    return bytesToBase64(archive);
-  };
 
   const handleBackupPhotos = async () => {
     if (isBackingUpPhotos) {
@@ -1314,7 +1167,6 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               >
                 Version {APP_VERSION}
                 {APP_VERSION_CODE != null ? ` (${APP_VERSION_CODE})` : ""}
-                {/* {BUILD_TIME ? `\nBuild ${formatBuildTime(BUILD_TIME)}` : ""} */}
               </Text>
             </View>
           </ScrollView>
