@@ -39,6 +39,22 @@ const MENU_WIDTH = Math.round(Dimensions.get("window").width * 0.75);
 const ANIMATION_DURATION = 200;
 const APP_VERSION = appConfig.expo.version;
 const APP_VERSION_CODE = appConfig.expo.android?.versionCode;
+const SURFACE_ROW_STYLE = {
+  borderColor: Colors.outline,
+  backgroundColor: Colors.surface,
+};
+const MODAL_CARD_STYLE = {
+  backgroundColor: Colors.surface,
+  borderColor: Colors.outline,
+  shadowColor: Colors.shadow,
+};
+const ACTION_ICON_STYLE = {
+  backgroundColor: Colors.surfaceVariant,
+};
+const SURFACE_ICON_STYLE = {
+  borderColor: Colors.tint,
+  backgroundColor: Colors.surfaceVariant,
+};
 
 type StartScreenIcon =
   | {
@@ -164,6 +180,26 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   const translateX = useRef(new Animated.Value(-MENU_WIDTH)).current;
   const backdropOpacity = useRef(new Animated.Value(0)).current;
 
+  const clearTimeoutRef = (ref: {
+    current: ReturnType<typeof setTimeout> | null;
+  }) => {
+    if (ref.current) {
+      clearTimeout(ref.current);
+      ref.current = null;
+    }
+  };
+
+  const scheduleModalClose = (
+    ref: { current: ReturnType<typeof setTimeout> | null },
+    setVisible: (visible: boolean) => void,
+  ) => {
+    clearTimeoutRef(ref);
+    ref.current = setTimeout(() => {
+      setVisible(false);
+      ref.current = null;
+    }, 250);
+  };
+
   const drawerStyle = useMemo(
     () => [
       styles.drawer,
@@ -288,24 +324,13 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   };
 
   const handleCloseRatingModal = () => {
-    if (ratingModalCloseTimeout.current) {
-      clearTimeout(ratingModalCloseTimeout.current);
-      ratingModalCloseTimeout.current = null;
-    }
-
+    clearTimeoutRef(ratingModalCloseTimeout);
     setRatingModalVisible(false);
   };
 
   const handleSelectRatingThreshold = (value: number) => {
-    if (ratingModalCloseTimeout.current) {
-      clearTimeout(ratingModalCloseTimeout.current);
-    }
-
     setRatingFilterThreshold(value);
-    ratingModalCloseTimeout.current = setTimeout(() => {
-      setRatingModalVisible(false);
-      ratingModalCloseTimeout.current = null;
-    }, 250);
+    scheduleModalClose(ratingModalCloseTimeout, setRatingModalVisible);
   };
 
   const handleStartScreenPress = () => {
@@ -313,24 +338,13 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   };
 
   const handleCloseStartScreenModal = () => {
-    if (startScreenModalCloseTimeout.current) {
-      clearTimeout(startScreenModalCloseTimeout.current);
-      startScreenModalCloseTimeout.current = null;
-    }
-
+    clearTimeoutRef(startScreenModalCloseTimeout);
     setStartScreenModalVisible(false);
   };
 
   const handleSelectStartScreen = (value: StartScreen) => {
-    if (startScreenModalCloseTimeout.current) {
-      clearTimeout(startScreenModalCloseTimeout.current);
-    }
-
     setStartScreen(value);
-    startScreenModalCloseTimeout.current = setTimeout(() => {
-      setStartScreenModalVisible(false);
-      startScreenModalCloseTimeout.current = null;
-    }, 250);
+    scheduleModalClose(startScreenModalCloseTimeout, setStartScreenModalVisible);
   };
 
   const handleOpenTagManager = () => {
@@ -631,13 +645,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
   useEffect(() => {
     return () => {
-      if (ratingModalCloseTimeout.current) {
-        clearTimeout(ratingModalCloseTimeout.current);
-      }
-
-      if (startScreenModalCloseTimeout.current) {
-        clearTimeout(startScreenModalCloseTimeout.current);
-      }
+      clearTimeoutRef(ratingModalCloseTimeout);
+      clearTimeoutRef(startScreenModalCloseTimeout);
     };
   }, []);
 
@@ -690,13 +699,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               accessibilityRole="checkbox"
               accessibilityState={{ checked: ignoreGarnish }}
               onPress={toggleIgnoreGarnish}
-              style={[
-                styles.settingRow,
-                {
-                  borderColor: Colors.outline,
-                  backgroundColor: Colors.surface,
-                },
-              ]}
+              style={[styles.settingRow, SURFACE_ROW_STYLE]}
             >
               <View
                 style={[
@@ -739,13 +742,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               accessibilityRole="checkbox"
               accessibilityState={{ checked: allowAllSubstitutes }}
               onPress={toggleAllowAllSubstitutes}
-              style={[
-                styles.settingRow,
-                {
-                  borderColor: Colors.outline,
-                  backgroundColor: Colors.surface,
-                },
-              ]}
+              style={[styles.settingRow, SURFACE_ROW_STYLE]}
             >
               <View
                 style={[
@@ -790,13 +787,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               accessibilityRole="checkbox"
               accessibilityState={{ checked: useImperialUnits }}
               onPress={toggleUseImperialUnits}
-              style={[
-                styles.settingRow,
-                {
-                  borderColor: Colors.outline,
-                  backgroundColor: Colors.surface,
-                },
-              ]}
+              style={[styles.settingRow, SURFACE_ROW_STYLE]}
             >
               <View
                 style={[
@@ -839,13 +830,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               accessibilityRole="checkbox"
               accessibilityState={{ checked: keepScreenAwake }}
               onPress={toggleKeepScreenAwake}
-              style={[
-                styles.settingRow,
-                {
-                  borderColor: Colors.outline,
-                  backgroundColor: Colors.surface,
-                },
-              ]}
+              style={[styles.settingRow, SURFACE_ROW_STYLE]}
             >
               <View
                 style={[
@@ -888,23 +873,9 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               accessibilityRole="button"
               accessibilityLabel="Set starting screen"
               onPress={handleStartScreenPress}
-              style={[
-                styles.settingRow,
-                {
-                  borderColor: Colors.outline,
-                  backgroundColor: Colors.surface,
-                },
-              ]}
+              style={[styles.settingRow, SURFACE_ROW_STYLE]}
             >
-              <View
-                style={[
-                  styles.checkbox,
-                  {
-                    borderColor: Colors.tint,
-                    backgroundColor: Colors.surfaceVariant,
-                  },
-                ]}
-              >
+              <View style={[styles.checkbox, SURFACE_ICON_STYLE]}>
                 <MaterialCommunityIcons
                   name="home-variant"
                   size={16}
@@ -931,23 +902,9 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               accessibilityRole="button"
               accessibilityLabel="Set favorites rating filter"
               onPress={handleRatingThresholdPress}
-              style={[
-                styles.settingRow,
-                {
-                  borderColor: Colors.outline,
-                  backgroundColor: Colors.surface,
-                },
-              ]}
+              style={[styles.settingRow, SURFACE_ROW_STYLE]}
             >
-              <View
-                style={[
-                  styles.checkbox,
-                  {
-                    borderColor: Colors.tint,
-                    backgroundColor: Colors.surfaceVariant,
-                  },
-                ]}
-              >
+              <View style={[styles.checkbox, SURFACE_ICON_STYLE]}>
                 <MaterialCommunityIcons
                   name="star"
                   size={16}
@@ -975,23 +932,9 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               accessibilityRole="button"
               accessibilityLabel="Manage custom tags"
               onPress={handleOpenTagManager}
-              style={[
-                styles.settingRow,
-                {
-                  borderColor: Colors.outline,
-                  backgroundColor: Colors.surface,
-                },
-              ]}
+              style={[styles.settingRow, SURFACE_ROW_STYLE]}
             >
-              <View
-                style={[
-                  styles.checkbox,
-                  {
-                    borderColor: Colors.tint,
-                    backgroundColor: Colors.surfaceVariant,
-                  },
-                ]}
-              >
+              <View style={[styles.checkbox, SURFACE_ICON_STYLE]}>
                 <MaterialCommunityIcons
                   name="tag-multiple"
                   size={16}
@@ -1021,19 +964,11 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               disabled={isExporting || isImporting}
               style={({ pressed }) => [
                 styles.actionRow,
-                {
-                  borderColor: Colors.outline,
-                  backgroundColor: Colors.surface,
-                },
+                SURFACE_ROW_STYLE,
                 pressed || isExporting ? { opacity: 0.8 } : null,
               ]}
             >
-              <View
-                style={[
-                  styles.actionIcon,
-                  { backgroundColor: Colors.surfaceVariant },
-                ]}
-              >
+              <View style={[styles.actionIcon, ACTION_ICON_STYLE]}>
                 <MaterialCommunityIcons
                   name="file-export-outline"
                   size={16}
@@ -1063,19 +998,11 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               disabled={isExporting || isImporting}
               style={({ pressed }) => [
                 styles.actionRow,
-                {
-                  borderColor: Colors.outline,
-                  backgroundColor: Colors.surface,
-                },
+                SURFACE_ROW_STYLE,
                 pressed || isImporting ? { opacity: 0.8 } : null,
               ]}
             >
-              <View
-                style={[
-                  styles.actionIcon,
-                  { backgroundColor: Colors.surfaceVariant },
-                ]}
-              >
+              <View style={[styles.actionIcon, ACTION_ICON_STYLE]}>
                 <MaterialCommunityIcons
                   name="file-import-outline"
                   size={16}
@@ -1105,19 +1032,11 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               disabled={isExporting || isImporting || isBackingUpPhotos}
               style={({ pressed }) => [
                 styles.actionRow,
-                {
-                  borderColor: Colors.outline,
-                  backgroundColor: Colors.surface,
-                },
+                SURFACE_ROW_STYLE,
                 pressed || isBackingUpPhotos ? { opacity: 0.8 } : null,
               ]}
             >
-              <View
-                style={[
-                  styles.actionIcon,
-                  { backgroundColor: Colors.surfaceVariant },
-                ]}
-              >
+              <View style={[styles.actionIcon, ACTION_ICON_STYLE]}>
                 <MaterialCommunityIcons
                   name="image-multiple"
                   size={16}
@@ -1146,12 +1065,9 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               onPress={handleResetInventory}
               style={[
                 styles.actionRow,
-                {
-                  borderColor: Colors.outline,
-                  backgroundColor: Colors.surface,
-                },
+                SURFACE_ROW_STYLE,
               ]}>
-              <View style={[styles.actionIcon, { backgroundColor: Colors.surfaceVariant }]}>
+              <View style={[styles.actionIcon, ACTION_ICON_STYLE]}>
                 <MaterialCommunityIcons name="refresh" size={16} color={Colors.onSurfaceVariant} />
               </View>
               <View style={styles.settingTextContainer}>
@@ -1186,11 +1102,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
           <Pressable
             style={[
               styles.modalCard,
-              {
-                backgroundColor: Colors.surface,
-                borderColor: Colors.outline,
-                shadowColor: Colors.shadow,
-              },
+              MODAL_CARD_STYLE,
             ]}
             accessibilityLabel="Favorites rating"
             onPress={() => { }}
@@ -1287,11 +1199,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
           <Pressable
             style={[
               styles.modalCard,
-              {
-                backgroundColor: Colors.surface,
-                borderColor: Colors.outline,
-                shadowColor: Colors.shadow,
-              },
+              MODAL_CARD_STYLE,
             ]}
             accessibilityLabel="Manage tags"
             onPress={() => { }}
@@ -1526,11 +1434,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
           <Pressable
             style={[
               styles.modalCard,
-              {
-                backgroundColor: Colors.surface,
-                borderColor: Colors.outline,
-                shadowColor: Colors.shadow,
-              },
+              MODAL_CARD_STYLE,
             ]}
             accessibilityLabel="Starting screen"
             onPress={() => { }}
