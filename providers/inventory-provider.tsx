@@ -19,41 +19,37 @@ import {
   type InventoryDeltaSnapshot,
   type InventorySnapshot,
 } from '@/libs/inventory-storage';
+import {
+  areStorageRecordsEqual,
+  hydrateInventoryTagsFromCode,
+  normalizePhotoUriForBackup,
+  normalizeSearchFields,
+  normalizeSynonyms,
+  normalizeTagIds,
+  toCocktailStorageRecord,
+  toIngredientStorageRecord
+} from '@/libs/inventory-utils';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import {
+  type AppTheme,
+  type BaseCocktailRecord,
   type Cocktail,
   type CocktailIngredient,
   type CocktailStorageRecord,
   type CocktailSubstitute,
   type CocktailTag,
-  type BaseCocktailRecord,
   type CreateCocktailInput,
   type CreateIngredientInput,
-  type InventoryExportData,
   type Ingredient,
   type IngredientStorageRecord,
   type IngredientTag,
+  type InventoryExportData,
   type PhotoBackupEntry,
   type StartScreen,
-  type AppTheme,
 } from '@/providers/inventory-types';
-import {
-  BUILTIN_COCKTAIL_TAGS_BY_ID,
-  BUILTIN_INGREDIENT_TAGS_BY_ID,
-  normalizeSynonyms,
-  normalizeSearchFields,
-  normalizeTagList,
-  normalizeTagIds,
-  hydrateInventoryTagsFromCode,
-  normalizeCocktailIngredients,
-  toCocktailStorageRecord,
-  toIngredientStorageRecord,
-  normalizePhotoUriForBackup,
-  areStorageRecordsEqual,
-} from '@/libs/inventory-utils';
 
 const DEFAULT_START_SCREEN: StartScreen = 'cocktails_all';
-const DEFAULT_APP_THEME: AppTheme = 'system';
+const DEFAULT_APP_THEME: AppTheme = 'light';
 
 type InventoryContextValue = {
   cocktails: Cocktail[];
@@ -458,18 +454,18 @@ function createDeltaSnapshotFromInventory(
       cocktails:
         createdCocktails.length > 0 || updatedCocktails.length > 0 || deletedCocktailIds.length > 0
           ? {
-              created: createdCocktails.length > 0 ? createdCocktails : undefined,
-              updated: updatedCocktails.length > 0 ? updatedCocktails : undefined,
-              deletedIds: deletedCocktailIds.length > 0 ? deletedCocktailIds : undefined,
-            }
+            created: createdCocktails.length > 0 ? createdCocktails : undefined,
+            updated: updatedCocktails.length > 0 ? updatedCocktails : undefined,
+            deletedIds: deletedCocktailIds.length > 0 ? deletedCocktailIds : undefined,
+          }
           : undefined,
       ingredients:
         createdIngredients.length > 0 || updatedIngredients.length > 0 || deletedIngredientIds.length > 0
           ? {
-              created: createdIngredients.length > 0 ? createdIngredients : undefined,
-              updated: updatedIngredients.length > 0 ? updatedIngredients : undefined,
-              deletedIds: deletedIngredientIds.length > 0 ? deletedIngredientIds : undefined,
-            }
+            created: createdIngredients.length > 0 ? createdIngredients : undefined,
+            updated: updatedIngredients.length > 0 ? updatedIngredients : undefined,
+            deletedIds: deletedIngredientIds.length > 0 ? deletedIngredientIds : undefined,
+          }
           : undefined,
     },
     imported: state.imported,
@@ -807,8 +803,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
               ingredient.ingredientId != null ? Number(ingredient.ingredientId) : undefined;
             const ingredientId =
               normalizedIngredientId != null &&
-              Number.isFinite(normalizedIngredientId) &&
-              normalizedIngredientId >= 0
+                Number.isFinite(normalizedIngredientId) &&
+                normalizedIngredientId >= 0
                 ? Math.trunc(normalizedIngredientId)
                 : undefined;
 
@@ -834,29 +830,29 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
                 return;
               }
 
-            const rawIngredientLink =
-              candidate.ingredientId != null ? Number(candidate.ingredientId) : undefined;
-            const substituteIngredientId =
-              rawIngredientLink != null && Number.isFinite(rawIngredientLink) && rawIngredientLink >= 0
-                ? Math.trunc(rawIngredientLink)
-                : undefined;
+              const rawIngredientLink =
+                candidate.ingredientId != null ? Number(candidate.ingredientId) : undefined;
+              const substituteIngredientId =
+                rawIngredientLink != null && Number.isFinite(rawIngredientLink) && rawIngredientLink >= 0
+                  ? Math.trunc(rawIngredientLink)
+                  : undefined;
 
-            const key =
-              substituteIngredientId != null
-                ? `id:${substituteIngredientId}`
-                : `name:${substituteName.toLowerCase()}`;
-            if (seenKeys.has(key)) {
-              return;
-            }
-            seenKeys.add(key);
+              const key =
+                substituteIngredientId != null
+                  ? `id:${substituteIngredientId}`
+                  : `name:${substituteName.toLowerCase()}`;
+              if (seenKeys.has(key)) {
+                return;
+              }
+              seenKeys.add(key);
 
-            const brand = candidate.brand ? true : undefined;
+              const brand = candidate.brand ? true : undefined;
 
-            substitutes.push({
-              ingredientId: substituteIngredientId,
-              name: substituteName,
-              brand,
-            });
+              substitutes.push({
+                ingredientId: substituteIngredientId,
+                name: substituteName,
+                brand,
+              });
             });
 
             return {
@@ -1694,9 +1690,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
 
           return didChange
             ? ({
-                ...prev,
-                cocktails: nextCocktails,
-              } satisfies InventoryState)
+              ...prev,
+              cocktails: nextCocktails,
+            } satisfies InventoryState)
             : prev;
         });
       }
@@ -1741,9 +1737,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
 
         return didChange
           ? ({
-              ...prev,
-              cocktails: nextCocktails,
-            } satisfies InventoryState)
+            ...prev,
+            cocktails: nextCocktails,
+          } satisfies InventoryState)
           : prev;
       });
     }
@@ -1828,9 +1824,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
 
           return didChange
             ? ({
-                ...prev,
-                ingredients: nextIngredients,
-              } satisfies InventoryState)
+              ...prev,
+              ingredients: nextIngredients,
+            } satisfies InventoryState)
             : prev;
         });
       }
@@ -1875,9 +1871,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
 
         return didChange
           ? ({
-              ...prev,
-              ingredients: nextIngredients,
-            } satisfies InventoryState)
+            ...prev,
+            ingredients: nextIngredients,
+          } satisfies InventoryState)
           : prev;
       });
     }
@@ -2018,4 +2014,5 @@ export function useInventory() {
   return context;
 }
 
-export type { Cocktail, Ingredient, CreateIngredientInput, CreateCocktailInput, StartScreen, AppTheme };
+export type { AppTheme, Cocktail, CreateCocktailInput, CreateIngredientInput, Ingredient, StartScreen };
+
