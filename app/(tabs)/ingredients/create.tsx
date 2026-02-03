@@ -19,13 +19,13 @@ import {
   type GestureResponderEvent,
 } from 'react-native';
 
-import { AppImage } from '@/components/AppImage';
 import { AppDialog, type DialogOptions } from '@/components/AppDialog';
+import { AppImage } from '@/components/AppImage';
 import { ListRow, Thumb } from '@/components/RowParts';
 import { TagEditorModal } from '@/components/TagEditorModal';
 import { TagPill } from '@/components/TagPill';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
-import { Colors } from '@/constants/theme';
+import { useAppColors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
 import { buildReturnToParams, skipDuplicateBack } from '@/libs/navigation';
 import { shouldStorePhoto, storePhoto } from '@/libs/photo-storage';
@@ -124,6 +124,7 @@ export default function IngredientFormScreen() {
   }, [returnToParamsParam]);
 
   const navigation = useNavigation();
+  const Colors = useAppColors();
   const {
     ingredients,
     shoppingIngredientIds,
@@ -791,7 +792,7 @@ export default function IngredientFormScreen() {
       availableIngredientIds,
       baseIngredientId,
       handleSelectBaseIngredient,
-      Colors.tint,
+      Colors,
       shoppingIngredientIds,
     ],
   );
@@ -872,7 +873,7 @@ export default function IngredientFormScreen() {
             ),
           }}
         />
-        <View style={[styles.container, styles.emptyState]}>
+        <View style={[styles.container, styles.emptyState, { backgroundColor: Colors.surface }]}>
           <Text style={[styles.emptyMessage, { color: Colors.onSurfaceVariant }]}>Ingredient not found</Text>
         </View>
       </>
@@ -883,7 +884,7 @@ export default function IngredientFormScreen() {
     <ScrollView
       ref={scrollRef}
       contentContainerStyle={contentStyle}
-      style={styles.container}
+      style={[styles.container, { backgroundColor: Colors.background }]}
       keyboardShouldPersistTaps="handled">
       <View style={sectionStyle}>
         <Text style={[styles.label, { color: Colors.onSurface }]}>Name</Text>
@@ -911,7 +912,7 @@ export default function IngredientFormScreen() {
           onPress={handlePickImage}
           android_ripple={{ color: `${Colors.surface}33` }}>
           {imageSource ? (
-            <AppImage source={imageSource} style={styles.image} contentFit="contain" />
+            <AppImage source={imageSource} style={[styles.image, { backgroundColor: Colors.background }]} contentFit="contain" />
           ) : (
             <View style={styles.placeholderContent}>
               <MaterialCommunityIcons name="image-plus" size={28} color={`${Colors.onSurfaceVariant}99`} />
@@ -931,7 +932,7 @@ export default function IngredientFormScreen() {
           <Pressable
             onPress={handleRemoveImage}
             hitSlop={8}
-            style={styles.removePhotoButton}
+            style={[styles.removePhotoButton, { backgroundColor: Colors.surface }]}
             accessibilityRole="button"
             accessibilityLabel="Remove photo">
             <MaterialCommunityIcons name="trash-can-outline" size={18} color={Colors.error} />
@@ -978,7 +979,7 @@ export default function IngredientFormScreen() {
           {baseIngredient ? (
             <>
               <View style={styles.baseInfo}>
-                <View style={styles.baseThumb}>
+                <View style={[styles.baseThumb, { backgroundColor: Colors.background }]}>
                   {baseIngredientPhotoSource ? (
                     <AppImage source={baseIngredientPhotoSource} style={styles.baseImage} contentFit="contain" />
                   ) : (
@@ -1122,6 +1123,7 @@ export default function IngredientFormScreen() {
               keyExtractor={baseModalKeyExtractor}
               renderItem={renderBaseIngredient}
               keyboardShouldPersistTaps="handled"
+              style={styles.modalList}
               ItemSeparatorComponent={({ leadingItem }) => {
                 const ingredientId = Number((leadingItem as Ingredient | null)?.id ?? -1);
                 const isAvailable = ingredientId >= 0 && availableIngredientIds.has(ingredientId);
@@ -1162,7 +1164,6 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
   },
   headerButton: {
     width: 40,
@@ -1204,7 +1205,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: Platform.select({ ios: 14, default: 12 }),
     fontSize: 16,
-    backgroundColor: Colors.surface,
   },
   multilineInput: {
     minHeight: 120,
@@ -1251,7 +1251,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 8,
-    backgroundColor: Colors.surface,
   },
   placeholderContent: {
     alignItems: 'center',
@@ -1336,7 +1335,6 @@ const styles = StyleSheet.create({
     height: 56,
     borderRadius: 8,
     overflow: 'hidden',
-    backgroundColor: Colors.background,
   },
   baseImage: {
     width: '100%',
@@ -1411,6 +1409,9 @@ const styles = StyleSheet.create({
     paddingVertical: Platform.select({ ios: 14, default: 12 }),
     fontSize: 16,
   },
+  modalList: {
+    borderRadius: 12,
+  },
   modalListContent: {
     flexGrow: 1,
     paddingVertical: 8,
@@ -1425,7 +1426,6 @@ const styles = StyleSheet.create({
   },
   emptyState: {
     flex: 1,
-    backgroundColor: Colors.surface,
     alignItems: 'center',
     justifyContent: 'center',
     padding: 24,

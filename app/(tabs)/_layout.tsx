@@ -1,5 +1,5 @@
 import { Tabs } from 'expo-router';
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { StyleSheet, View, useColorScheme } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -9,8 +9,9 @@ import ShakerIcon from '@/assets/images/shaker.svg';
 import { AppDialog, type DialogOptions } from '@/components/AppDialog';
 import { TabBarButton } from '@/components/tab-bar/TabBarButton';
 import { TabBarIcon } from '@/components/tab-bar/TabBarIcon';
-import { Colors } from '@/constants/theme';
+import { useAppColors } from '@/constants/theme';
 import { getLastCocktailTab, getLastIngredientTab } from '@/libs/collection-tabs';
+import { useInventory } from '@/providers/inventory-provider';
 
 type TabPressHandler = (navigation: { navigate: (...args: never[]) => void }, route: { name: string }) => void;
 
@@ -20,41 +21,44 @@ const TAB_SCREENS: Array<{
   icon: typeof CocktailIcon;
   onTabPress: TabPressHandler;
 }> = [
-  {
-    name: 'cocktails',
-    title: 'Cocktails',
-    icon: CocktailIcon,
-    onTabPress: (navigation, route) => {
-      getLastCocktailTab();
-      navigation.navigate(route.name as never, { screen: 'index' } as never);
+    {
+      name: 'cocktails',
+      title: 'Cocktails',
+      icon: CocktailIcon,
+      onTabPress: (navigation, route) => {
+        getLastCocktailTab();
+        navigation.navigate(route.name as never, { screen: 'index' } as never);
+      },
     },
-  },
-  {
-    name: 'shaker',
-    title: 'Shaker',
-    icon: ShakerIcon,
-    onTabPress: (navigation, route) => {
-      navigation.navigate(route.name as never, { screen: 'index' } as never);
+    {
+      name: 'shaker',
+      title: 'Shaker',
+      icon: ShakerIcon,
+      onTabPress: (navigation, route) => {
+        navigation.navigate(route.name as never, { screen: 'index' } as never);
+      },
     },
-  },
-  {
-    name: 'ingredients',
-    title: 'Ingredients',
-    icon: LemonIcon,
-    onTabPress: (navigation, route) => {
-      getLastIngredientTab();
-      navigation.navigate(route.name as never, { screen: 'index' } as never);
+    {
+      name: 'ingredients',
+      title: 'Ingredients',
+      icon: LemonIcon,
+      onTabPress: (navigation, route) => {
+        getLastIngredientTab();
+        navigation.navigate(route.name as never, { screen: 'index' } as never);
+      },
     },
-  },
-];
+  ];
 
 export default function TabLayout() {
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(null);
   const insets = useSafeAreaInsets();
-  const colorScheme = useColorScheme();
-  const isDarkMode = colorScheme === 'dark';
+  const systemColorScheme = useColorScheme();
+  const { appTheme } = useInventory();
+  const Colors = useAppColors();
 
-  const tabBarInsetColor = isDarkMode ? Colors.onSurfaceVariant : Colors.surface;
+  const isDarkMode = appTheme === 'system'
+    ? systemColorScheme === 'dark'
+    : appTheme === 'dark';
 
   const closeDialog = useCallback(() => {
     setDialogOptions(null);
@@ -84,8 +88,8 @@ export default function TabLayout() {
           },
           tabBarBackground: () => (
             <View style={styles.tabBarBackground}>
-              <View style={styles.tabBarSurface} />
-              <View style={[styles.tabBarInset, { height: insets.bottom, backgroundColor: tabBarInsetColor }]} />
+              <View style={[styles.tabBarSurface, { backgroundColor: Colors.surface }]} />
+              <View style={[styles.tabBarInset, { height: insets.bottom, backgroundColor: Colors.surface }]} />
             </View>
           ),
         }}>
@@ -125,10 +129,8 @@ const styles = StyleSheet.create({
   },
   tabBarSurface: {
     flex: 1,
-    backgroundColor: Colors.surface,
   },
   tabBarInset: {
     height: 0,
-    backgroundColor: Colors.surface,
   },
 });

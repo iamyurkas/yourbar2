@@ -26,8 +26,8 @@ import {
 } from "react-native";
 
 import { resolveAssetFromCatalog } from "@/assets/image-manifest";
-import { AppImage } from "@/components/AppImage";
 import { AppDialog, type DialogOptions } from "@/components/AppDialog";
+import { AppImage } from "@/components/AppImage";
 import { HeaderIconButton } from "@/components/HeaderIconButton";
 import { ListRow, Thumb } from "@/components/RowParts";
 import { SubstituteModal } from "@/components/SubstituteModal";
@@ -45,7 +45,7 @@ import {
   COCKTAIL_UNIT_OPTIONS,
 } from "@/constants/cocktail-units";
 import { GLASSWARE } from "@/constants/glassware";
-import { Colors } from "@/constants/theme";
+import { useAppColors } from "@/constants/theme";
 import {
   buildReturnToParams,
   parseReturnToParams,
@@ -223,6 +223,7 @@ function mapRecipeIngredientToEditable(
 
 export default function CreateCocktailScreen() {
   const navigation = useNavigation();
+  const Colors = useAppColors();
   const {
     ingredients: inventoryIngredients,
     cocktails,
@@ -1516,7 +1517,7 @@ export default function CreateCocktailScreen() {
                   accessibilityLabel={placeholderLabel}
                   style={[
                     styles.photoTile,
-                    { borderColor: Colors.outlineVariant },
+                    { borderColor: Colors.outlineVariant, backgroundColor: Colors.background },
                     !imageSource && { backgroundColor: Colors.surface },
                   ]}
                   onPress={handlePickImage}
@@ -1525,7 +1526,7 @@ export default function CreateCocktailScreen() {
                   {imageSource ? (
                     <AppImage
                       source={imageSource}
-                      style={styles.photoPreview}
+                      style={[styles.photoPreview, { backgroundColor: Colors.background }]}
                       contentFit="contain"
                     />
                   ) : (
@@ -2170,6 +2171,7 @@ function EditableIngredientRow({
   const [isFocused, setIsFocused] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const hideSuggestionsTimeout = useRef<NodeJS.Timeout | null>(null);
+  const Colors = useAppColors();
 
   const normalizedName = normalizeSearchText(ingredient.name);
 
@@ -2397,6 +2399,7 @@ function EditableIngredientRow({
               accessibilityLabel="Move ingredient up"
               style={[
                 styles.reorderButton,
+                { borderColor: Colors.outlineVariant, backgroundColor: Colors.surface },
                 !canMoveUp && styles.reorderButtonDisabled,
               ]}
             >
@@ -2418,6 +2421,7 @@ function EditableIngredientRow({
               accessibilityLabel="Move ingredient down"
               style={[
                 styles.reorderButton,
+                { borderColor: Colors.outlineVariant, backgroundColor: Colors.surface },
                 !canMoveDown && styles.reorderButtonDisabled,
               ]}
             >
@@ -2470,6 +2474,7 @@ function EditableIngredientRow({
             {
               borderColor: Colors.outlineVariant,
               color: Colors.text,
+              backgroundColor: Colors.background,
               paddingRight: showAddButton ? 72 : 16,
             },
           ]}
@@ -2595,7 +2600,7 @@ function EditableIngredientRow({
             keyboardType="decimal-pad"
             style={[
               styles.input,
-              { borderColor: Colors.outlineVariant, color: Colors.text },
+              { borderColor: Colors.outlineVariant, color: Colors.text, backgroundColor: Colors.background },
             ]}
             onFocus={(event) => onInputFocus(event.nativeEvent.target)}
           />
@@ -2745,6 +2750,7 @@ type ToggleChipProps = {
 };
 
 function ToggleChip({ label, active, onToggle, onInfo }: ToggleChipProps) {
+  const Colors = useAppColors();
   return (
     <View style={styles.toggleChipContainer}>
       <Pressable
@@ -2818,7 +2824,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: Platform.select({ ios: 14, default: 12 }),
     fontSize: 16,
-    backgroundColor: Colors.background,
   },
   multilineInput: {
     minHeight: 120,
@@ -2832,7 +2837,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 12,
     gap: 8,
-    backgroundColor: Colors.surface,
   },
   halfCard: {
     flex: 1,
@@ -2874,7 +2878,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     overflow: "hidden",
     borderWidth: StyleSheet.hairlineWidth,
-    backgroundColor: Colors.background,
   },
   photoPlaceholderContent: {
     alignItems: "center",
@@ -2884,7 +2887,6 @@ const styles = StyleSheet.create({
   photoPreview: {
     width: "100%",
     height: "100%",
-    backgroundColor: Colors.background,
   },
   cropFrame: {
     position: "absolute",
@@ -3063,7 +3065,6 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     paddingTop: 0,
     paddingBottom: 4,
-    backgroundColor: Colors.surface,
   },
   suggestionSeparator: {
     height: StyleSheet.hairlineWidth,
@@ -3126,7 +3127,6 @@ const styles = StyleSheet.create({
   toggleChipLabel: {
     fontSize: 14,
     fontWeight: "400",
-    color: Colors.onSurfaceVariant,
   },
   substitutesSection: {
     gap: 10,

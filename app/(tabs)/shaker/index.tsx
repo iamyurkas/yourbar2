@@ -21,7 +21,7 @@ import { useRouter } from 'expo-router';
 import { ListRow, PresenceCheck, Thumb } from '@/components/RowParts';
 import { SideMenuDrawer } from '@/components/SideMenuDrawer';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
-import { Colors } from '@/constants/theme';
+import { useAppColors } from '@/constants/theme';
 import { isCocktailReady } from '@/libs/cocktail-availability';
 import {
   createIngredientLookup,
@@ -64,6 +64,7 @@ const IngredientRow = memo(function IngredientRow({
   subtitleStyle,
   onToggle,
 }: IngredientRowProps) {
+  const Colors = useAppColors();
   const ingredientId = Number(ingredient.id ?? -1);
   const ingredientTagColors = (ingredient.tags ?? [])
     .map((tag) => tag?.color ?? tagColors.yellow)
@@ -96,14 +97,14 @@ const IngredientRow = memo(function IngredientRow({
         accessibilityLabel="On shopping list"
       />
     );
-  }, [isOnShoppingList]);
+  }, [isOnShoppingList, Colors]);
   const selectionControl = useMemo(() => {
     if (!isSelected) {
       return null;
     }
 
     return <MaterialIcons name="check" size={18} color={Colors.tint} />;
-  }, [isSelected]);
+  }, [isSelected, Colors]);
 
   return (
     <ListRow
@@ -168,6 +169,7 @@ function isCollapsedHeaderItem(item: Ingredient) {
 
 export default function ShakerScreen() {
   const router = useRouter();
+  const Colors = useAppColors();
   const {
     cocktails,
     ingredients,
@@ -627,7 +629,7 @@ export default function ShakerScreen() {
       const backgroundColor = section.color;
 
       return (
-        <View style={styles.groupCard}>
+        <View style={[styles.groupCard, { backgroundColor: Colors.background }]}>
           <Pressable
             accessibilityRole="button"
             accessibilityLabel={`${section.name} ingredients`}
@@ -692,7 +694,7 @@ export default function ShakerScreen() {
         </View>
       );
     },
-    [handleToggleGroup],
+    [handleToggleGroup, Colors],
   );
 
   const renderSectionHeader = useCallback(
@@ -746,7 +748,7 @@ export default function ShakerScreen() {
     },
     [
       availableIngredientIds,
-      Colors.onSurfaceVariant,
+      Colors,
       handleToggleIngredient,
       makeableCocktailCounts,
       renderHeaderContent,
@@ -840,7 +842,7 @@ export default function ShakerScreen() {
             accessibilityRole="button"
             accessibilityLabel="Clear selected ingredients"
             onPress={handleClearSelection}
-            style={({ pressed }) => [styles.clearButtonBase, pressed ? styles.clearButtonPressed : null]}
+            style={({ pressed }) => [styles.clearButtonBase, { borderColor: Colors.danger }, pressed ? styles.clearButtonPressed : null]}
           >
             <Text style={[styles.clearButtonLabel, { color: Colors.error }]}>Clear</Text>
           </Pressable>
@@ -949,7 +951,6 @@ const styles = StyleSheet.create({
   },
   groupCard: {
     paddingBottom: 2,
-    backgroundColor: Colors.background,
   },
   groupHeader: {
     height: 64,
@@ -997,7 +998,6 @@ const styles = StyleSheet.create({
   },
   clearButtonBase: {
     borderWidth: 1,
-    borderColor: Colors.danger,
     borderRadius: 12,
     paddingHorizontal: 18,
     paddingVertical: 8,

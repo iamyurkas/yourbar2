@@ -22,7 +22,7 @@ import { SideMenuDrawer } from '@/components/SideMenuDrawer';
 import { TagPill } from '@/components/TagPill';
 import { getCocktailMethods, METHOD_ICON_MAP, type CocktailMethod } from '@/constants/cocktail-methods';
 import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
-import { Colors } from '@/constants/theme';
+import { useAppColors } from '@/constants/theme';
 import { isCocktailReady } from '@/libs/cocktail-availability';
 import { createIngredientLookup } from '@/libs/ingredient-availability';
 import { navigateToDetailsWithReturnTo } from '@/libs/navigation';
@@ -73,6 +73,7 @@ export default function ShakerResultsScreen() {
     ignoreGarnish,
     allowAllSubstitutes,
   } = useInventory();
+  const Colors = useAppColors();
   const params = useLocalSearchParams();
   const [query, setQuery] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -395,7 +396,7 @@ export default function ShakerResultsScreen() {
         </View>
       );
     },
-    [Colors.surface, Colors.tint],
+    [Colors],
   );
 
   const normalizedQuery = useMemo(() => {
@@ -552,8 +553,7 @@ export default function ShakerResultsScreen() {
       availableIngredientIds,
       ignoreGarnish,
       ingredientLookup,
-      Colors.outline,
-      Colors.outlineVariant,
+      Colors,
     ],
   );
 

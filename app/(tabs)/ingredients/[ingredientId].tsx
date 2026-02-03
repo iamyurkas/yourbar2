@@ -26,7 +26,7 @@ import { AppDialog, type DialogOptions } from "@/components/AppDialog";
 import { CocktailListRow } from "@/components/CocktailListRow";
 import { PresenceCheck } from "@/components/RowParts";
 import { TagPill } from "@/components/TagPill";
-import { Colors } from "@/constants/theme";
+import { useAppColors } from "@/constants/theme";
 import { isCocktailReady } from "@/libs/cocktail-availability";
 import { resolveImageSource } from "@/libs/image-source";
 import {
@@ -76,6 +76,7 @@ export default function IngredientDetailsScreen() {
     returnToParams?: string;
   }>();
   const navigation = useNavigation();
+  const Colors = useAppColors();
   const { ingredientId } = params;
   const {
     ingredients,
@@ -600,7 +601,7 @@ export default function IngredientDetailsScreen() {
                 {photoSource ? (
                   <AppImage
                     source={photoSource}
-                    style={styles.photo}
+                    style={[styles.photo, { backgroundColor: Colors.surfaceBright }]}
                     contentFit="contain"
                   />
                 ) : (
@@ -757,7 +758,7 @@ export default function IngredientDetailsScreen() {
                   ]}
                 >
                   <View style={styles.baseIngredientInfo}>
-                    <View style={styles.baseIngredientThumb}>
+                    <View style={[styles.baseIngredientThumb, { backgroundColor: Colors.surfaceBright }]}>
                       {baseIngredientPhotoSource ? (
                         <AppImage
                           source={baseIngredientPhotoSource}
@@ -839,7 +840,7 @@ export default function IngredientDetailsScreen() {
                         ]}
                       >
                         <View style={styles.baseIngredientInfo}>
-                          <View style={styles.baseIngredientThumb}>
+                          <View style={[styles.baseIngredientThumb, { backgroundColor: Colors.surfaceBright }]}>
                             {brandedPhotoSource ? (
                               <AppImage
                                 source={brandedPhotoSource}
@@ -1053,7 +1054,6 @@ const styles = StyleSheet.create({
     height: "100%",
     borderRadius: 12,
     overflow: "hidden",
-    backgroundColor: Colors.surfaceBright,
   },
   photoPlaceholder: {
     width: 150,
@@ -1149,7 +1149,6 @@ const styles = StyleSheet.create({
     height: 56,
     borderRadius: 8,
     overflow: "hidden",
-    backgroundColor: Colors.surfaceBright,
   },
   baseIngredientImage: {
     width: "100%",

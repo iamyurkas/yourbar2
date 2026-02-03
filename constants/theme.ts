@@ -1,21 +1,39 @@
 import { Platform } from 'react-native';
 
-import { lightTheme, palette } from '@/theme/theme';
+import { lightTheme, lightPalette } from '@/theme/theme';
+import { useTheme } from '@/libs/react-native-paper';
+
+export function useAppColors() {
+  const theme = useTheme();
+
+  return {
+    ...theme.colors,
+    text: theme.colors.onSurface,
+    tint: theme.colors.primary,
+    icon: theme.colors.onSurfaceVariant,
+    tabIconDefault: theme.colors.onSurfaceVariant,
+    tabIconSelected: theme.colors.primary,
+    danger: theme.colors.danger ?? lightPalette.danger,
+    disabled: theme.colors.disabled ?? lightPalette.disabled,
+    placeholder: theme.colors.placeholder ?? lightPalette.placeholder,
+    success: theme.colors.success ?? lightPalette.success,
+  };
+}
 
 const lightColors = lightTheme.colors;
-const tintColor = lightColors.primary;
 
+/** @deprecated Use useAppColors() hook instead for dynamic theme support */
 export const Colors = {
   ...lightColors,
   text: lightColors.onSurface,
-  tint: tintColor,
+  tint: lightColors.primary,
   icon: lightColors.onSurfaceVariant,
   tabIconDefault: lightColors.onSurfaceVariant,
-  tabIconSelected: tintColor,
-  danger: palette.danger,
-  disabled: palette.disabled,
-  placeholder: palette.placeholder,
-  success: palette.success,
+  tabIconSelected: lightColors.primary,
+  danger: lightPalette.danger,
+  disabled: lightPalette.disabled,
+  placeholder: lightPalette.placeholder,
+  success: lightPalette.success,
 } as const;
 
 export const Fonts = Platform.select({

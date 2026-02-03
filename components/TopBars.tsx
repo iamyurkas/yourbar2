@@ -11,7 +11,7 @@ import {
   type TextInputSubmitEditingEventData,
 } from 'react-native';
 
-import { Colors } from '@/constants/theme';
+import { useAppColors } from '@/constants/theme';
 
 type SearchTopBarProps = {
   value: string;
@@ -47,6 +47,7 @@ export function SearchTopBar({
   filterExpanded = false,
   onFilterLayout,
 }: SearchTopBarProps) {
+  const Colors = useAppColors();
 
   const handleSubmit = (event: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
     onSubmit?.(event.nativeEvent.text);
@@ -113,6 +114,7 @@ export function SearchTopBar({
 }
 
 export function SegmentTabs({ options, value, onChange }: SegmentTabsProps) {
+  const Colors = useAppColors();
 
   return (
     <View style={[styles.tabs, { backgroundColor: Colors.surface }]}> 

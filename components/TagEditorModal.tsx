@@ -4,7 +4,7 @@ import { Modal, Pressable, StyleSheet, Text, TextInput, View } from 'react-nativ
 import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 
 import { TAG_COLORS } from '@/constants/tag-colors';
-import { Colors } from '@/constants/theme';
+import { useAppColors } from '@/constants/theme';
 
 type TagEditorModalProps = {
   visible: boolean;
@@ -25,6 +25,7 @@ export function TagEditorModal({
   onClose,
   onSave,
 }: TagEditorModalProps) {
+  const Colors = useAppColors();
   const [name, setName] = useState(initialName ?? '');
   const [hue, setHue] = useState(210);
   const [lightness, setLightness] = useState(0.5);
@@ -202,6 +203,7 @@ type ColorSliderProps = {
 };
 
 function ColorSlider({ label, value, onChange, gradientStops }: ColorSliderProps) {
+  const Colors = useAppColors();
   const [trackWidth, setTrackWidth] = useState(0);
 
   const updateValue = useCallback(
