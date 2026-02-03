@@ -23,7 +23,7 @@ import { SideMenuDrawer } from '@/components/SideMenuDrawer';
 import { TagPill } from '@/components/TagPill';
 import type { SegmentTabOption } from '@/components/TopBars';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
-import { Colors } from '@/constants/theme';
+import { useAppColors } from '@/constants/theme';
 import { isCocktailReady } from '@/libs/cocktail-availability';
 import { getLastIngredientTab, setLastIngredientTab, type IngredientTabKey } from '@/libs/collection-tabs';
 import {
@@ -85,6 +85,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
   showAvailabilityToggle = true,
   onShoppingToggle,
 }: IngredientListItemProps) {
+  const Colors = useAppColors();
   const id = Number(ingredient.id ?? -1);
   const isAvailable = id >= 0 && availableIngredientIds.has(id);
   const ingredientTagColors = (ingredient.tags ?? [])
@@ -150,7 +151,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
         accessibilityLabel={shoppingLabel}
       />
     );
-  }, [handleShoppingToggle, isOnShoppingList, onShoppingToggle]);
+  }, [handleShoppingToggle, isOnShoppingList, onShoppingToggle, Colors]);
 
   const control = useMemo(() => {
     if (onShoppingToggle) {
@@ -203,6 +204,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
 
 export default function IngredientsScreen() {
   const router = useRouter();
+  const Colors = useAppColors();
   const {
     cocktails,
     ingredients,
@@ -658,8 +660,7 @@ export default function IngredientsScreen() {
       handleShoppingToggle,
       highlightColor,
       makeableCocktailCounts,
-      Colors.icon,
-      Colors.onSurfaceVariant,
+      Colors,
       shoppingIngredientIds,
       totalCocktailCounts,
     ],
@@ -673,7 +674,7 @@ export default function IngredientsScreen() {
 
       return <View style={[styles.divider, { backgroundColor }]} />;
     },
-    [effectiveAvailableIngredientIds, Colors.outline, Colors.outlineVariant],
+    [effectiveAvailableIngredientIds, Colors],
   );
 
   return (

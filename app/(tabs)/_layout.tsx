@@ -9,7 +9,7 @@ import ShakerIcon from '@/assets/images/shaker.svg';
 import { AppDialog, type DialogOptions } from '@/components/AppDialog';
 import { TabBarButton } from '@/components/tab-bar/TabBarButton';
 import { TabBarIcon } from '@/components/tab-bar/TabBarIcon';
-import { Colors } from '@/constants/theme';
+import { useAppColors } from '@/constants/theme';
 import { getLastCocktailTab, getLastIngredientTab } from '@/libs/collection-tabs';
 
 type TabPressHandler = (navigation: { navigate: (...args: never[]) => void }, route: { name: string }) => void;
@@ -51,8 +51,13 @@ const TAB_SCREENS: Array<{
 export default function TabLayout() {
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(null);
   const insets = useSafeAreaInsets();
-  const colorScheme = useColorScheme();
-  const isDarkMode = colorScheme === 'dark';
+  const systemColorScheme = useColorScheme();
+  const { appTheme } = useInventory();
+  const Colors = useAppColors();
+
+  const isDarkMode = appTheme === 'system'
+    ? systemColorScheme === 'dark'
+    : appTheme === 'dark';
 
   const tabBarInsetColor = isDarkMode ? Colors.onSurfaceVariant : Colors.surface;
 
@@ -84,7 +89,7 @@ export default function TabLayout() {
           },
           tabBarBackground: () => (
             <View style={styles.tabBarBackground}>
-              <View style={styles.tabBarSurface} />
+              <View style={[styles.tabBarSurface, { backgroundColor: Colors.surface }]} />
               <View style={[styles.tabBarInset, { height: insets.bottom, backgroundColor: tabBarInsetColor }]} />
             </View>
           ),
@@ -125,10 +130,8 @@ const styles = StyleSheet.create({
   },
   tabBarSurface: {
     flex: 1,
-    backgroundColor: Colors.surface,
   },
   tabBarInset: {
     height: 0,
-    backgroundColor: Colors.surface,
   },
 });

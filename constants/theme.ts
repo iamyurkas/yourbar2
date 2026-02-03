@@ -1,21 +1,47 @@
-import { Platform } from 'react-native';
+import { Platform, useColorScheme } from 'react-native';
 
-import { lightTheme, palette } from '@/theme/theme';
+import { lightTheme, darkTheme, lightPalette, darkPalette } from '@/theme/theme';
+import { useInventory } from '@/providers/inventory-provider';
+
+export function useAppColors() {
+  const { appTheme } = useInventory();
+  const systemColorScheme = useColorScheme();
+
+  const isDark = appTheme === 'system'
+    ? systemColorScheme === 'dark'
+    : appTheme === 'dark';
+
+  const theme = isDark ? darkTheme : lightTheme;
+  const p = isDark ? darkPalette : lightPalette;
+
+  return {
+    ...theme.colors,
+    text: theme.colors.onSurface,
+    tint: theme.colors.primary,
+    icon: theme.colors.onSurfaceVariant,
+    tabIconDefault: theme.colors.onSurfaceVariant,
+    tabIconSelected: theme.colors.primary,
+    danger: p.danger,
+    disabled: p.disabled,
+    placeholder: p.placeholder,
+    success: p.success,
+  };
+}
 
 const lightColors = lightTheme.colors;
-const tintColor = lightColors.primary;
 
+/** @deprecated Use useAppColors() hook instead for dynamic theme support */
 export const Colors = {
   ...lightColors,
   text: lightColors.onSurface,
-  tint: tintColor,
+  tint: lightColors.primary,
   icon: lightColors.onSurfaceVariant,
   tabIconDefault: lightColors.onSurfaceVariant,
-  tabIconSelected: tintColor,
-  danger: palette.danger,
-  disabled: palette.disabled,
-  placeholder: palette.placeholder,
-  success: palette.success,
+  tabIconSelected: lightColors.primary,
+  danger: lightPalette.danger,
+  disabled: lightPalette.disabled,
+  placeholder: lightPalette.placeholder,
+  success: lightPalette.success,
 } as const;
 
 export const Fonts = Platform.select({

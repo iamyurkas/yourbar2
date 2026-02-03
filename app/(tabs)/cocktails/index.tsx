@@ -26,7 +26,7 @@ import { TagPill } from '@/components/TagPill';
 import type { SegmentTabOption } from '@/components/TopBars';
 import { getCocktailMethods, METHOD_ICON_MAP, type CocktailMethod } from '@/constants/cocktail-methods';
 import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
-import { Colors } from '@/constants/theme';
+import { useAppColors } from '@/constants/theme';
 import { isCocktailReady } from '@/libs/cocktail-availability';
 import { getLastCocktailTab, setLastCocktailTab, type CocktailTabKey } from '@/libs/collection-tabs';
 import { createIngredientLookup } from '@/libs/ingredient-availability';
@@ -61,6 +61,7 @@ export default function CocktailsScreen() {
     shoppingIngredientIds,
     toggleIngredientShopping,
   } = useInventory();
+  const Colors = useAppColors();
   const [activeTab, setActiveTab] = useState<CocktailTabKey>(() => getLastCocktailTab());
   const [query, setQuery] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -237,7 +238,7 @@ export default function CocktailsScreen() {
         </View>
       );
     },
-    [],
+    [Colors],
   );
 
   const ratedCocktails = useMemo(() => {
@@ -543,6 +544,7 @@ export default function CocktailsScreen() {
       ignoreGarnish,
       ingredientLookup,
       shoppingIngredientIds,
+      Colors,
     ],
   );
 
@@ -563,6 +565,7 @@ export default function CocktailsScreen() {
       allowAllSubstitutes,
       ignoreGarnish,
       ingredientLookup,
+      Colors,
     ],
   );
 
@@ -578,7 +581,7 @@ export default function CocktailsScreen() {
 
       return <View style={[styles.divider, { backgroundColor }]} />;
     },
-    [myTabListData],
+    [myTabListData, Colors],
   );
 
   const isFilterActive = selectedTagKeys.size > 0 || selectedMethodIds.size > 0;

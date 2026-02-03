@@ -1,6 +1,6 @@
-import { MD3LightTheme, type PaperTheme } from "@/libs/react-native-paper";
+import { MD3LightTheme, MD3DarkTheme, type PaperTheme } from "@/libs/react-native-paper";
 
-export const palette = {
+export const lightPalette = {
   primary: "#4DABF7",
   primaryContainer: "#D5E6FA",
   onPrimary: "#FFFFFF",
@@ -44,6 +44,53 @@ export const palette = {
   overlayOnPrimary: "#FFFFFF55",
 } as const;
 
+export const darkPalette = {
+  primary: "#9CCAFF",
+  primaryContainer: "#1E2936",
+  onPrimary: "#001529",
+  onPrimaryContainer: "#D6E4FF",
+
+  background: "#0B1017",
+  surface: "#0F1720",
+  surfaceBright: "#1B2733",
+  surfaceVariant: "#1B2733",
+
+  outline: "#3C4C5F",
+  outlineVariant: "#2A3947",
+
+  onSurface: "#E5EAF0",
+  onSurfaceMuted: "#B7C1CC",
+  onSurfaceVariant: "#B7C1CC",
+  onSurfaceDisabled: "rgba(255,255,255,0.38)",
+  onBackground: "#E5EAF0",
+
+  inversePrimary: "#4DABF7",
+  inverseSurface: "#E5EAF0",
+  inverseOnSurface: "#122030",
+
+  error: "#F28B82",
+  errorContainer: "#3B121A",
+  onError: "#3B121A",
+  onErrorContainer: "#FADADB",
+
+  success: "#81C784",
+  danger: "#F28B82",
+
+  disabled: "#3C4C5F",
+  placeholder: "#B7C1CC",
+
+  surfaceDisabled: "rgba(255,255,255,0.12)",
+  backdrop: "rgba(15,23,32,0.6)",
+  shadow: "#000000",
+
+  highlightFaint: "#1E2936",
+  highlightSubtle: "#2C2100",
+  overlayOnPrimary: "#00000055",
+} as const;
+
+/** @deprecated Use lightPalette or darkPalette instead */
+export const palette = lightPalette;
+
 export const tagPalette = [
   "#ec5a5a",
   "#F06292",
@@ -73,59 +120,54 @@ export const tagColors = {
   orange: "#FB8C00",
 } as const;
 
-const lightColors: PaperTheme["colors"] = {
-  ...MD3LightTheme.colors,
-  primary: palette.primary,
-  onPrimary: palette.onPrimary,
-  primaryContainer: palette.primaryContainer,
-  onPrimaryContainer: palette.onPrimaryContainer,
-  secondary: palette.secondary,
-  secondaryContainer: palette.secondaryContainer,
-  onSecondary: palette.onSecondary,
-  onSecondaryContainer: palette.onSecondaryContainer,
-  tertiary: palette.tertiary,
-  tertiaryContainer: palette.tertiaryContainer,
-  onTertiary: palette.onTertiary,
-  onTertiaryContainer: palette.onTertiaryContainer,
-  background: palette.background,
-  surface: palette.surface,
-  surfaceBright: palette.surfaceBright,
-  surfaceVariant: palette.surfaceVariant,
-  outline: palette.outline,
-  outlineVariant: palette.outlineVariant,
-  onSurface: palette.onSurface,
-  onSurfaceMuted: palette.onSurfaceMuted,
-  onSurfaceVariant: palette.onSurfaceVariant,
-  onBackground: palette.onBackground,
-  error: palette.error,
-  errorContainer: palette.errorContainer,
-  onError: palette.onError,
-  onErrorContainer: palette.onErrorContainer,
-  inversePrimary: palette.inversePrimary,
-  inverseOnSurface: palette.inverseOnSurface,
-  inverseSurface: palette.inverseSurface,
-  surfaceDisabled: palette.surfaceDisabled,
-  onSurfaceDisabled: palette.onSurfaceDisabled,
-  backdrop: palette.backdrop,
-  highlightFaint: palette.highlightFaint,
-  highlightSubtle: palette.highlightSubtle,
-  overlayOnPrimary: palette.overlayOnPrimary,
-  elevation: {
-    ...MD3LightTheme.colors.elevation,
-    level0: "transparent",
-    level1: "rgba(255,255,255,0.95)",
-    level2: "rgba(255,255,255,0.97)",
-    level3: "rgba(255,255,255,0.99)",
-    level4: palette.surfaceBright,
-    level5: palette.surfaceBright,
-  },
-};
+function createTheme(baseTheme: PaperTheme, p: typeof lightPalette): PaperTheme {
+  return {
+    ...baseTheme,
+    colors: {
+      ...baseTheme.colors,
+      primary: p.primary,
+      onPrimary: p.onPrimary,
+      primaryContainer: p.primaryContainer,
+      onPrimaryContainer: p.onPrimaryContainer,
+      background: p.background,
+      surface: p.surface,
+      surfaceBright: p.surfaceBright,
+      surfaceVariant: p.surfaceVariant,
+      outline: p.outline,
+      outlineVariant: p.outlineVariant,
+      onSurface: p.onSurface,
+      onSurfaceMuted: p.onSurfaceMuted,
+      onSurfaceVariant: p.onSurfaceVariant,
+      onBackground: p.onBackground,
+      error: p.error,
+      errorContainer: p.errorContainer,
+      onError: p.onError,
+      onErrorContainer: p.onErrorContainer,
+      inversePrimary: p.inversePrimary,
+      inverseOnSurface: p.inverseOnSurface,
+      inverseSurface: p.inverseSurface,
+      surfaceDisabled: p.surfaceDisabled,
+      onSurfaceDisabled: p.onSurfaceDisabled,
+      backdrop: p.backdrop,
+      highlightFaint: p.highlightFaint,
+      highlightSubtle: p.highlightSubtle,
+      overlayOnPrimary: p.overlayOnPrimary,
+      elevation: {
+        ...baseTheme.colors.elevation,
+        level0: "transparent",
+        level1: baseTheme === MD3LightTheme ? "rgba(255,255,255,0.95)" : "rgba(12,18,26,0.7)",
+        level2: baseTheme === MD3LightTheme ? "rgba(255,255,255,0.97)" : "rgba(14,20,29,0.72)",
+        level3: baseTheme === MD3LightTheme ? "rgba(255,255,255,0.99)" : "rgba(15,22,31,0.74)",
+        level4: p.surfaceBright,
+        level5: p.surfaceBright,
+      },
+    },
+  };
+}
 
-export const lightTheme: PaperTheme = {
-  ...MD3LightTheme,
-  colors: lightColors,
-};
+export const lightTheme = createTheme(MD3LightTheme, lightPalette);
+export const darkTheme = createTheme(MD3DarkTheme, darkPalette);
 
-export function getAppTheme(): PaperTheme {
-  return lightTheme;
+export function getAppTheme(isDark?: boolean): PaperTheme {
+  return isDark ? darkTheme : lightTheme;
 }

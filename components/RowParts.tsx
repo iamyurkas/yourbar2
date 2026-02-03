@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 
 import { AppImage } from './AppImage';
-import { Colors } from '@/constants/theme';
+import { useAppColors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
 import { tagColors } from '@/theme/theme';
 
@@ -26,6 +26,7 @@ export type ThumbProps = {
 };
 
 export function Thumb({ uri, label, fallbackUri, fallbackLabel }: ThumbProps) {
+  const Colors = useAppColors();
   const effectiveLabel = label ?? fallbackLabel;
   const trimmed = effectiveLabel?.trim();
   const fallbackText = trimmed ? trimmed.slice(0, 2).toUpperCase() : undefined;
@@ -64,6 +65,7 @@ type PresenceCheckProps = {
 };
 
 export function PresenceCheck({ checked, onToggle }: PresenceCheckProps) {
+  const Colors = useAppColors();
   const idleColor = Colors.outlineVariant;
   const borderColor = checked ? Colors.tint : idleColor;
   const backgroundColor = checked ? Colors.tint : 'transparent';
@@ -87,6 +89,7 @@ type FavoriteStarProps = {
 };
 
 export function FavoriteStar({ active, onToggle }: FavoriteStarProps) {
+  const Colors = useAppColors();
   const icon = active ? 'star' : 'star-outline';
   const color = active ? Colors.secondary : Colors.onSurfaceVariant;
 
@@ -141,6 +144,7 @@ export function ListRow({
   metaAlignment = 'space-between',
   brandIndicatorColor,
 }: ListRowProps) {
+  const Colors = useAppColors();
   const backgroundColor = selected ? highlightColor ?? `${Colors.tint}1F` : Colors.background;
   const metaAlignmentStyle =
     metaAlignment === 'center'
@@ -162,7 +166,7 @@ export function ListRow({
       {showBrandIndicator ? (
         <View pointerEvents="none" style={[styles.brandIndicator, { backgroundColor: indicatorColor }]} />
       ) : null}
-      <View style={styles.thumbSlot}>{thumbnail}</View>
+      <View style={[styles.thumbSlot, { backgroundColor: Colors.surfaceBright }]}>{thumbnail}</View>
       <View style={styles.textColumn}>
         <Text style={[styles.title, { color: Colors.text }]} numberOfLines={1}>
           {title}
@@ -223,7 +227,6 @@ const styles = StyleSheet.create({
     height: THUMB_SIZE,
     borderRadius: 8,
     overflow: 'hidden',
-    backgroundColor: '#FFFFFF',
   },
   textColumn: {
     flex: 1,

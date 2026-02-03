@@ -28,9 +28,9 @@ import ShakerIcon from "@/assets/images/shaker.svg";
 import { AppDialog, type DialogOptions } from "@/components/AppDialog";
 import { TagEditorModal } from "@/components/TagEditorModal";
 import { TagPill } from "@/components/TagPill";
-import { Colors } from "@/constants/theme";
+import { useAppColors } from "@/constants/theme";
 import { buildPhotoBaseName } from "@/libs/photo-utils";
-import { useInventory, type StartScreen } from "@/providers/inventory-provider";
+import { useInventory, type StartScreen, type AppTheme } from "@/providers/inventory-provider";
 import { type InventoryExportData } from "@/providers/inventory-types";
 import { base64ToBytes, createTarArchive } from "@/libs/archive-utils";
 import appConfig from "../app.json";
@@ -39,22 +39,6 @@ const MENU_WIDTH = Math.round(Dimensions.get("window").width * 0.75);
 const ANIMATION_DURATION = 200;
 const APP_VERSION = appConfig.expo.version;
 const APP_VERSION_CODE = appConfig.expo.android?.versionCode;
-const SURFACE_ROW_STYLE = {
-  borderColor: Colors.outline,
-  backgroundColor: Colors.surface,
-};
-const MODAL_CARD_STYLE = {
-  backgroundColor: Colors.surface,
-  borderColor: Colors.outline,
-  shadowColor: Colors.shadow,
-};
-const ACTION_ICON_STYLE = {
-  backgroundColor: Colors.surfaceVariant,
-};
-const SURFACE_ICON_STYLE = {
-  borderColor: Colors.tint,
-  backgroundColor: Colors.surfaceVariant,
-};
 
 type StartScreenIcon =
   | {
@@ -116,6 +100,18 @@ const START_SCREEN_OPTIONS: StartScreenOption[] = [
   },
 ];
 
+type ThemeOption = {
+  key: AppTheme;
+  label: string;
+  icon: ComponentProps<typeof MaterialCommunityIcons>["name"];
+};
+
+const THEME_OPTIONS: ThemeOption[] = [
+  { key: "light", label: "Light", icon: "white-balance-sunny" },
+  { key: "dark", label: "Dark", icon: "moon-waning-crescent" },
+  { key: "system", label: "System", icon: "cellphone-settings" },
+];
+
 type SideMenuDrawerProps = {
   visible: boolean;
   onClose: () => void;
@@ -135,6 +131,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     setRatingFilterThreshold,
     startScreen,
     setStartScreen,
+    appTheme,
+    setAppTheme,
     resetInventoryFromBundle,
     exportInventoryData,
     exportInventoryPhotoEntries,
@@ -148,6 +146,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     updateCustomIngredientTag,
     deleteCustomIngredientTag,
   } = useInventory();
+  const Colors = useAppColors();
   const [isMounted, setIsMounted] = useState(visible);
   const [isRatingModalVisible, setRatingModalVisible] = useState(false);
   const ratingModalCloseTimeout = useRef<ReturnType<typeof setTimeout> | null>(
@@ -158,6 +157,10 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   const startScreenModalCloseTimeout = useRef<ReturnType<
     typeof setTimeout
   > | null>(null);
+  const [isThemeModalVisible, setThemeModalVisible] = useState(false);
+  const themeModalCloseTimeout = useRef<ReturnType<typeof setTimeout> | null>(
+    null,
+  );
   const [isTagManagerVisible, setTagManagerVisible] = useState(false);
   const [isTagEditorVisible, setTagEditorVisible] = useState(false);
   const [tagEditorMode, setTagEditorMode] = useState<"create" | "edit">(
@@ -179,6 +182,26 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   const [isBackingUpPhotos, setIsBackingUpPhotos] = useState(false);
   const translateX = useRef(new Animated.Value(-MENU_WIDTH)).current;
   const backdropOpacity = useRef(new Animated.Value(0)).current;
+
+  const SURFACE_ROW_STYLE = useMemo(() => ({
+    borderColor: Colors.outline,
+    backgroundColor: Colors.surface,
+  }), [Colors]);
+
+  const MODAL_CARD_STYLE = useMemo(() => ({
+    backgroundColor: Colors.surface,
+    borderColor: Colors.outline,
+    shadowColor: Colors.shadow,
+  }), [Colors]);
+
+  const ACTION_ICON_STYLE = useMemo(() => ({
+    backgroundColor: Colors.surfaceVariant,
+  }), [Colors]);
+
+  const SURFACE_ICON_STYLE = useMemo(() => ({
+    borderColor: Colors.tint,
+    backgroundColor: Colors.surfaceVariant,
+  }), [Colors]);
 
   const clearTimeoutRef = (ref: {
     current: ReturnType<typeof setTimeout> | null;
@@ -216,6 +239,11 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   const selectedStartScreenOption = useMemo(
     () => START_SCREEN_OPTIONS.find((option) => option.key === startScreen),
     [startScreen],
+  );
+
+  const selectedThemeOption = useMemo(
+    () => THEME_OPTIONS.find((option) => option.key === appTheme),
+    [appTheme],
   );
 
   const renderStartScreenIcon = (
@@ -345,6 +373,20 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   const handleSelectStartScreen = (value: StartScreen) => {
     setStartScreen(value);
     scheduleModalClose(startScreenModalCloseTimeout, setStartScreenModalVisible);
+  };
+
+  const handleThemePress = () => {
+    setThemeModalVisible(true);
+  };
+
+  const handleCloseThemeModal = () => {
+    clearTimeoutRef(themeModalCloseTimeout);
+    setThemeModalVisible(false);
+  };
+
+  const handleSelectTheme = (value: AppTheme) => {
+    setAppTheme(value);
+    scheduleModalClose(themeModalCloseTimeout, setThemeModalVisible);
   };
 
   const handleOpenTagManager = () => {
@@ -647,6 +689,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     return () => {
       clearTimeoutRef(ratingModalCloseTimeout);
       clearTimeoutRef(startScreenModalCloseTimeout);
+      clearTimeoutRef(themeModalCloseTimeout);
     };
   }, []);
 
@@ -895,6 +938,35 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   ]}
                 >
                   Open {selectedStartScreenOption?.label ?? "All cocktails"}
+                </Text>
+              </View>
+            </Pressable>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Set app theme"
+              onPress={handleThemePress}
+              style={[styles.settingRow, SURFACE_ROW_STYLE]}
+            >
+              <View style={[styles.checkbox, SURFACE_ICON_STYLE]}>
+                <MaterialCommunityIcons
+                  name={selectedThemeOption?.icon ?? "theme-light-dark"}
+                  size={16}
+                  color={Colors.tint}
+                />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text
+                  style={[styles.settingLabel, { color: Colors.onSurface }]}
+                >
+                  App theme
+                </Text>
+                <Text
+                  style={[
+                    styles.settingCaption,
+                    { color: Colors.onSurfaceVariant },
+                  ]}
+                >
+                  Current: {selectedThemeOption?.label ?? "System"}
                 </Text>
               </View>
             </Pressable>
@@ -1538,6 +1610,103 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
           </Pressable>
         </Pressable>
       </Modal>
+      <Modal
+        transparent
+        visible={isThemeModalVisible}
+        animationType="fade"
+        onRequestClose={handleCloseThemeModal}
+      >
+        <Pressable
+          style={styles.modalOverlay}
+          onPress={handleCloseThemeModal}
+          accessibilityRole="button"
+        >
+          <Pressable
+            style={[
+              styles.modalCard,
+              MODAL_CARD_STYLE,
+            ]}
+            accessibilityLabel="App theme"
+            onPress={() => { }}
+          >
+            <View style={styles.modalHeader}>
+              <Text
+                style={[
+                  styles.modalTitle,
+                  { color: Colors.onSurface, flex: 1 },
+                ]}
+              >
+                App theme
+              </Text>
+              <Pressable
+                onPress={handleCloseThemeModal}
+                accessibilityRole="button"
+                accessibilityLabel="Close"
+              >
+                <MaterialCommunityIcons
+                  name="close"
+                  size={22}
+                  color={Colors.onSurfaceVariant}
+                />
+              </Pressable>
+            </View>
+            <Text
+              style={[
+                styles.settingCaption,
+                { color: Colors.onSurfaceVariant },
+              ]}
+            >
+              Choose your preferred appearance
+            </Text>
+            <View style={styles.themeOptionRow}>
+              {THEME_OPTIONS.map((option) => {
+                const isSelected = appTheme === option.key;
+                return (
+                  <Pressable
+                    key={`theme-option-${option.key}`}
+                    accessibilityRole="button"
+                    accessibilityState={{ selected: isSelected }}
+                    accessibilityLabel={`Set ${option.label} theme`}
+                    onPress={() => handleSelectTheme(option.key)}
+                    style={({ pressed }) => [
+                      styles.themeOption,
+                      {
+                        borderColor: isSelected
+                          ? Colors.tint
+                          : Colors.outlineVariant,
+                        backgroundColor: isSelected
+                          ? Colors.tint
+                          : Colors.surfaceBright,
+                      },
+                      pressed ? { opacity: 0.85 } : null,
+                    ]}
+                  >
+                    <MaterialCommunityIcons
+                      name={option.icon}
+                      size={24}
+                      color={
+                        isSelected ? Colors.background : Colors.onSurfaceVariant
+                      }
+                    />
+                    <Text
+                      style={[
+                        styles.themeOptionLabel,
+                        {
+                          color: isSelected
+                            ? Colors.background
+                            : Colors.onSurface,
+                        },
+                      ]}
+                    >
+                      {option.label}
+                    </Text>
+                  </Pressable>
+                );
+              })}
+            </View>
+          </Pressable>
+        </Pressable>
+      </Modal>
     </Modal>
   );
 }
@@ -1752,6 +1921,24 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   ratingOptionLabel: {
+    fontWeight: "700",
+  },
+  themeOptionRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: 8,
+    marginTop: 8,
+  },
+  themeOption: {
+    flex: 1,
+    alignItems: "center",
+    paddingVertical: 16,
+    borderRadius: 12,
+    borderWidth: StyleSheet.hairlineWidth,
+    gap: 8,
+  },
+  themeOptionLabel: {
+    fontSize: 13,
     fontWeight: "700",
   },
 });

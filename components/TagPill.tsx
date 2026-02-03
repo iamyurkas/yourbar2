@@ -13,7 +13,7 @@ import {
   type ViewStyle,
 } from 'react-native';
 
-import { Colors } from '@/constants/theme';
+import { useAppColors } from '@/constants/theme';
 
 export type TagPillProps = {
   label: string;
@@ -47,6 +47,7 @@ export function TagPill({
   hitSlop,
   testID,
 }: TagPillProps) {
+  const Colors = useAppColors();
 
   const content = (
     <View style={styles.contentRow}>

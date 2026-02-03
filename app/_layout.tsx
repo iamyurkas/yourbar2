@@ -1,11 +1,11 @@
 import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import { useColorScheme } from "react-native";
 import "react-native-reanimated";
 
-import { Colors } from "@/constants/theme";
 import { PaperProvider } from "@/libs/react-native-paper";
-import { InventoryProvider } from "@/providers/inventory-provider";
+import { InventoryProvider, useInventory } from "@/providers/inventory-provider";
 import { UnsavedChangesProvider } from "@/providers/unsaved-changes-provider";
 import { getAppTheme } from "@/theme/theme";
 import * as Sentry from '@sentry/react-native';
@@ -28,31 +28,47 @@ export const unstable_settings = {
   anchor: "(tabs)",
 };
 
-export default Sentry.wrap(function RootLayout() {
+function ThemeAppWrapper({ children }: { children: React.ReactNode }) {
+  const { appTheme } = useInventory();
+  const systemColorScheme = useColorScheme();
+
+  const isDark = appTheme === 'system'
+    ? systemColorScheme === 'dark'
+    : appTheme === 'dark';
+
+  const paperTheme = getAppTheme(isDark);
+  const { colors } = paperTheme;
+
   const navigationTheme = ({
     ...DefaultTheme,
     colors: {
       ...DefaultTheme.colors,
-      background: Colors.background,
-      card: Colors.surface,
-      text: Colors.text,
-      border: Colors.outline,
+      background: colors.background,
+      card: colors.surface,
+      text: colors.onSurface,
+      border: colors.outline,
     },
   } satisfies typeof DefaultTheme);
 
-  const paperTheme = getAppTheme();
+  return (
+    <PaperProvider theme={paperTheme}>
+      <ThemeProvider value={navigationTheme}>
+        {children}
+        <StatusBar style={isDark ? "light" : "dark"} />
+      </ThemeProvider>
+    </PaperProvider>
+  );
+}
 
+export default Sentry.wrap(function RootLayout() {
   return (
     <UnsavedChangesProvider>
       <InventoryProvider>
-        <PaperProvider theme={paperTheme}>
-          <ThemeProvider value={navigationTheme}>
-            <Stack>
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            </Stack>
-            <StatusBar style="dark" />
-          </ThemeProvider>
-        </PaperProvider>
+        <ThemeAppWrapper>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          </Stack>
+        </ThemeAppWrapper>
       </InventoryProvider>
     </UnsavedChangesProvider>
   );
