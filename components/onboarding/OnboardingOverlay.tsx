@@ -51,7 +51,7 @@ export function OnboardingOverlay() {
     },
     {
       id: 3,
-      message: 'Select the "All" tab to see all available ingredients.',
+      message: 'On the All tab, you can see all available ingredients.',
       anchorName: 'ingredients-tab-all',
       buttonLabel: 'Next',
     },
@@ -132,6 +132,10 @@ export function OnboardingOverlay() {
 
   const currentStep = steps.find(s => s.id === onboardingStep);
 
+  const countableSteps = useMemo(() => steps.filter(s => !!s.buttonLabel), [steps]);
+  const totalCount = countableSteps.length;
+  const currentStepIndex = countableSteps.findIndex(s => s.id === onboardingStep) + 1;
+
   // Auto-advance logic
   React.useEffect(() => {
     if (onboardingCompleted) return;
@@ -150,7 +154,7 @@ export function OnboardingOverlay() {
   } : null;
 
   const handleNext = () => {
-    if (onboardingStep >= steps.length) {
+    if (onboardingStep >= steps[steps.length - 1].id) {
       completeOnboarding();
     } else {
       setOnboardingStep(onboardingStep + 1);
@@ -210,7 +214,7 @@ export function OnboardingOverlay() {
               <Text style={[styles.buttonText, { color: Colors.onPrimary }]}>{currentStep.buttonLabel}</Text>
             </Pressable>
             <Text style={[styles.stepCounter, { color: Colors.onSurfaceVariant }]}>
-              {onboardingStep} of {steps.length}
+              {currentStepIndex} of {totalCount}
             </Text>
           </>
         )}

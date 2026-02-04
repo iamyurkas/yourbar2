@@ -8,13 +8,13 @@ Starting Metro Bundler
 Waiting on http://localhost:8081
 Logs for your project will appear below.
 Web node_modules/expo-router/entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
-Web node_modules/expo-router/entry.js ▓▓▓▓▓▓▓▓▓▓▓░░░░░ 73.3% (1545/1998)
-λ node_modules/expo-router/node/render.js ▓▓▓▓▓▓▓▓▓▓▓░░░░░ 71.3% (1844/2190)
-λ Bundled 6868ms node_modules/expo-router/node/render.js (2812 modules)
+Web node_modules/expo-router/entry.js ▓▓▓▓▓▓▓▓▓▓▓░░░░░ 71.0% (1453/1929)
+λ node_modules/expo-router/node/render.js ▓▓▓▓▓▓▓▓▓▓▓▓░░░░ 75.5% (1901/2199)
+λ Bundled 6915ms node_modules/expo-router/node/render.js (2799 modules)
 Web node_modules/expo-router/entry.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░ 99.9% (2863/2863)
 "shadow*" style props are deprecated. Use "boxShadow".
 λ  WARN  props.pointerEvents is deprecated. Use style.pointerEvents
-Web Bundled 15516ms node_modules/expo-router/entry.js (2863 modules)
+Web Bundled 15908ms node_modules/expo-router/entry.js (2863 modules)
 Web node_modules/expo-router/entry.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░ 99.9% (2863/2863)
-Web Bundled 3299ms node_modules/expo-router/entry.js (2855 modules)
+Web Bundled 2816ms node_modules/expo-router/entry.js (2805 modules)
  LOG  [web] Logs will appear in the browser console
