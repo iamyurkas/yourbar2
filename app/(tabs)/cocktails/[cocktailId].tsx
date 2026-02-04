@@ -32,13 +32,7 @@ import {
   type IngredientLookup,
   type IngredientResolution,
 } from "@/libs/ingredient-availability";
-import {
-  buildReturnToParams,
-  navigateToDetailsWithReturnTo,
-  parseReturnToParams,
-  returnToSourceOrBack,
-  skipDuplicateBack,
-} from "@/libs/navigation";
+import { navigateToDetailsWithReturnTo, skipDuplicateBack } from "@/libs/navigation";
 import { normalizeSearchText } from "@/libs/search-normalization";
 import { useInventory, type Cocktail } from "@/providers/inventory-provider";
 import { tagColors } from "@/theme/theme";
@@ -353,17 +347,6 @@ export default function CocktailDetailsScreen() {
     [cocktails, resolvedParam],
   );
 
-  const returnToPath = useMemo(() => {
-    const value = Array.isArray(params.returnToPath)
-      ? params.returnToPath[0]
-      : params.returnToPath;
-    return typeof value === "string" && value.length > 0 ? value : undefined;
-  }, [params.returnToPath]);
-
-  const returnToParams = useMemo(() => {
-    return parseReturnToParams(params.returnToParams);
-  }, [params.returnToParams]);
-
   const [showImperialUnits, setShowImperialUnits] = useState(useImperialUnits);
   const isHandlingBackRef = useRef(false);
 
@@ -371,14 +354,21 @@ export default function CocktailDetailsScreen() {
     setShowImperialUnits(useImperialUnits);
   }, [useImperialUnits]);
 
-  const handleReturn = useCallback(() => {
-    if (returnToPath === "/cocktails") {
-      skipDuplicateBack(navigation);
-      return;
-    }
+  const isRouteValid = useCallback(
+    (route: { params?: Record<string, unknown> }) => {
+      const rawValue = route.params?.cocktailId;
+      if (!rawValue) {
+        return true;
+      }
+      const candidate = Array.isArray(rawValue) ? rawValue[0] : String(rawValue);
+      return Boolean(resolveCocktail(candidate, cocktails));
+    },
+    [cocktails],
+  );
 
-    returnToSourceOrBack(navigation, { returnToPath, returnToParams });
-  }, [navigation, returnToParams, returnToPath]);
+  const handleReturn = useCallback(() => {
+    skipDuplicateBack(navigation, { isRouteValid });
+  }, [isRouteValid, navigation]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", (event) => {
@@ -623,10 +613,9 @@ export default function CocktailDetailsScreen() {
         cocktailName: cocktail.name ?? undefined,
         mode: "edit",
         source: "cocktails",
-        ...buildReturnToParams(returnToPath, returnToParams),
       },
     });
-  }, [cocktail, returnToParams, returnToPath]);
+  }, [cocktail]);
 
   const handleCopyPress = useCallback(() => {
     if (!cocktail) {
@@ -644,10 +633,9 @@ export default function CocktailDetailsScreen() {
         cocktailId: String(targetId),
         cocktailName: cocktail.name ?? undefined,
         source: "cocktails",
-        ...buildReturnToParams(returnToPath, returnToParams),
       },
     });
-  }, [cocktail, returnToParams, returnToPath]);
+  }, [cocktail]);
 
   return (
     <SafeAreaView

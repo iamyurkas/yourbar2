@@ -46,11 +46,7 @@ import {
 } from "@/constants/cocktail-units";
 import { GLASSWARE } from "@/constants/glassware";
 import { useAppColors } from "@/constants/theme";
-import {
-  buildReturnToParams,
-  parseReturnToParams,
-  skipDuplicateBack,
-} from "@/libs/navigation";
+import { skipDuplicateBack } from "@/libs/navigation";
 import { shouldStorePhoto, storePhoto } from "@/libs/photo-storage";
 import { normalizeSearchText } from "@/libs/search-normalization";
 import {
@@ -176,6 +172,54 @@ function shouldUsePluralUnits(amountRaw?: string) {
   return Number.isFinite(numericAmount) && numericAmount !== 1;
 }
 
+function resolveIngredientByParam(
+  param: string | undefined,
+  ingredients: Ingredient[],
+): Ingredient | undefined {
+  if (!param) {
+    return undefined;
+  }
+
+  const numericId = Number(param);
+  if (!Number.isNaN(numericId)) {
+    const byId = ingredients.find(
+      (item) => Number(item.id ?? -1) === numericId,
+    );
+    if (byId) {
+      return byId;
+    }
+  }
+
+  const normalized = normalizeSearchText(param);
+  return ingredients.find(
+    (item) => normalizeSearchText(item.name ?? "") === normalized,
+  );
+}
+
+function resolveCocktailByParam(
+  param: string | undefined,
+  cocktails: Cocktail[],
+): Cocktail | undefined {
+  if (!param) {
+    return undefined;
+  }
+
+  const numericId = Number(param);
+  if (!Number.isNaN(numericId)) {
+    const byId = cocktails.find(
+      (item) => Number(item.id ?? -1) === numericId,
+    );
+    if (byId) {
+      return byId;
+    }
+  }
+
+  const normalized = normalizeSearchText(param);
+  return cocktails.find(
+    (item) => normalizeSearchText(item.name ?? "") === normalized,
+  );
+}
+
 function mapRecipeIngredientToEditable(
   recipe: NonNullable<Cocktail["ingredients"]>[number],
   defaultUnitId: number,
@@ -265,13 +309,6 @@ export default function CreateCocktailScreen() {
     modeParam,
     sourceParam,
   ]);
-  const returnToPath = useMemo(() => {
-    const value = getParamValue(params.returnToPath);
-    return typeof value === "string" && value.length > 0 ? value : undefined;
-  }, [params.returnToPath]);
-  const returnToParams = useMemo(() => {
-    return parseReturnToParams(params.returnToParams);
-  }, [params.returnToParams]);
 
   const [name, setName] = useState("");
   const [glassId, setGlassId] = useState<string | null>("martini");
@@ -341,6 +378,7 @@ export default function CreateCocktailScreen() {
   const isNavigatingAfterSaveRef = useRef(false);
   const scrollRef = useRef<ScrollView | null>(null);
   const isHandlingBackRef = useRef(false);
+  const shouldConfirmOnBack = sourceParam === "ingredient";
 
   const ingredientById = useMemo(() => {
     const map = new Map<number, Ingredient>();
@@ -352,6 +390,29 @@ export default function CreateCocktailScreen() {
     });
     return map;
   }, [inventoryIngredients]);
+
+  const isRouteValid = useCallback(
+    (route: { params?: Record<string, unknown> }) => {
+      const rawCocktailId = route.params?.cocktailId;
+      if (rawCocktailId) {
+        const candidate = Array.isArray(rawCocktailId)
+          ? rawCocktailId[0]
+          : String(rawCocktailId);
+        return Boolean(resolveCocktailByParam(candidate, cocktails));
+      }
+
+      const rawIngredientId = route.params?.ingredientId;
+      if (rawIngredientId) {
+        const candidate = Array.isArray(rawIngredientId)
+          ? rawIngredientId[0]
+          : String(rawIngredientId);
+        return Boolean(resolveIngredientByParam(candidate, inventoryIngredients));
+      }
+
+      return true;
+    },
+    [cocktails, inventoryIngredients],
+  );
 
   const closeDialog = useCallback(() => {
     setDialogOptions(null);
@@ -1135,23 +1196,17 @@ export default function CreateCocktailScreen() {
       setHasUnsavedChanges(false);
       isNavigatingAfterSaveRef.current = true;
       const targetId = persisted.id ?? persisted.name;
-      if (isEditMode && navigation.canGoBack()) {
-        navigation.goBack();
-        return;
-      }
-
       if (targetId) {
         router.replace({
           pathname: "/cocktails/[cocktailId]",
           params: {
             cocktailId: String(targetId),
-            ...buildReturnToParams(returnToPath, returnToParams),
           },
         });
         return;
       }
 
-      router.replace("/cocktails");
+      skipDuplicateBack(navigation, { isRouteValid });
     } finally {
       setIsSaving(false);
     }
@@ -1166,13 +1221,12 @@ export default function CreateCocktailScreen() {
     instructions,
     isSaving,
     isEditMode,
+    isRouteValid,
     methodIds,
     name,
     navigation,
     prefilledCocktail?.id,
     prefilledCocktail?.photoUri,
-    returnToParams,
-    returnToPath,
     selectedTagIds,
     setHasUnsavedChanges,
     showDialog,
@@ -1268,12 +1322,12 @@ export default function CreateCocktailScreen() {
         return;
       }
 
-      if (hasUnsavedChanges) {
+      if (hasUnsavedChanges || shouldConfirmOnBack) {
         event.preventDefault();
         confirmLeave(() => {
           isHandlingBackRef.current = true;
           if (event.data.action.type === "GO_BACK") {
-            skipDuplicateBack(navigation);
+            skipDuplicateBack(navigation, { isRouteValid });
           } else {
             navigation.dispatch(event.data.action);
           }
@@ -1287,7 +1341,7 @@ export default function CreateCocktailScreen() {
       if (event.data.action.type === "GO_BACK") {
         event.preventDefault();
         isHandlingBackRef.current = true;
-        skipDuplicateBack(navigation);
+        skipDuplicateBack(navigation, { isRouteValid });
         setTimeout(() => {
           isHandlingBackRef.current = false;
         }, 0);
@@ -1295,11 +1349,18 @@ export default function CreateCocktailScreen() {
     });
 
     return unsubscribe;
-  }, [confirmLeave, hasUnsavedChanges, navigation]);
+  }, [confirmLeave, hasUnsavedChanges, isRouteValid, navigation, shouldConfirmOnBack]);
 
   const handleGoBack = useCallback(() => {
-    skipDuplicateBack(navigation);
-  }, [navigation]);
+    if (hasUnsavedChanges || shouldConfirmOnBack) {
+      confirmLeave(() => {
+        skipDuplicateBack(navigation, { isRouteValid });
+      });
+      return;
+    }
+
+    skipDuplicateBack(navigation, { isRouteValid });
+  }, [confirmLeave, hasUnsavedChanges, isRouteValid, navigation, shouldConfirmOnBack]);
 
   const imageSource = useMemo(() => {
     if (!imageUri) {

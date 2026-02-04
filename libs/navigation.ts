@@ -3,6 +3,8 @@ import { router } from 'expo-router';
 
 type RouteParams = Record<string, unknown> | undefined;
 type ReturnToParams = Record<string, string> | undefined;
+type RouteLike = { name: string; params?: RouteParams };
+type RouteValidator = (route: RouteLike) => boolean;
 
 const areParamsEqual = (left?: RouteParams, right?: RouteParams): boolean => {
   if (!left && !right) {
@@ -37,7 +39,10 @@ const areRoutesEqual = (
   return areParamsEqual(left.params, right.params);
 };
 
-export const skipDuplicateBack = (navigation: NavigationProp<ParamListBase>) => {
+export const skipDuplicateBack = (
+  navigation: NavigationProp<ParamListBase>,
+  options?: { isRouteValid?: RouteValidator },
+) => {
   const state = navigation.getState();
   const currentIndex = state.index ?? 0;
 
@@ -47,11 +52,28 @@ export const skipDuplicateBack = (navigation: NavigationProp<ParamListBase>) => 
   }
 
   const current = state.routes[currentIndex];
-  const previous = state.routes[currentIndex - 1];
-  const shouldSkip = areRoutesEqual(current, previous);
+  let backSteps = 1;
 
-  if (shouldSkip && currentIndex >= 2) {
-    navigation.dispatch(StackActions.pop(2));
+  while (currentIndex - backSteps >= 0) {
+    const candidate = state.routes[currentIndex - backSteps];
+    if (areRoutesEqual(current, candidate)) {
+      backSteps += 1;
+      continue;
+    }
+    if (options?.isRouteValid && !options.isRouteValid(candidate)) {
+      backSteps += 1;
+      continue;
+    }
+    break;
+  }
+
+  if (currentIndex - backSteps < 0) {
+    navigation.dispatch(StackActions.pop(currentIndex));
+    return;
+  }
+
+  if (backSteps > 0) {
+    navigation.dispatch(StackActions.pop(backSteps));
     return;
   }
 

@@ -33,40 +33,42 @@ import {
   createIngredientLookup,
   getVisibleIngredientIdsForCocktail,
 } from "@/libs/ingredient-availability";
-import {
-  buildReturnToParams,
-  navigateToDetailsWithReturnTo,
-  parseReturnToParams,
-  returnToSourceOrBack,
-  skipDuplicateBack,
-} from "@/libs/navigation";
+import { navigateToDetailsWithReturnTo, skipDuplicateBack } from "@/libs/navigation";
 import { normalizeSearchText } from "@/libs/search-normalization";
 import { useInventory, type Ingredient } from "@/providers/inventory-provider";
+
+function resolveIngredientByParam(
+  param: string | undefined,
+  ingredients: Ingredient[],
+): Ingredient | undefined {
+  if (!param) {
+    return undefined;
+  }
+
+  const numericId = Number(param);
+  if (!Number.isNaN(numericId)) {
+    const byId = ingredients.find(
+      (item) => Number(item.id ?? -1) === numericId,
+    );
+    if (byId) {
+      return byId;
+    }
+  }
+
+  const normalized = normalizeSearchText(param);
+  return ingredients.find(
+    (item) => normalizeSearchText(item.name ?? "") === normalized,
+  );
+}
 
 function useResolvedIngredient(
   param: string | undefined,
   ingredients: Ingredient[],
 ) {
-  return useMemo(() => {
-    if (!param) {
-      return undefined;
-    }
-
-    const numericId = Number(param);
-    if (!Number.isNaN(numericId)) {
-      const byId = ingredients.find(
-        (item) => Number(item.id ?? -1) === numericId,
-      );
-      if (byId) {
-        return byId;
-      }
-    }
-
-    const normalized = normalizeSearchText(param);
-    return ingredients.find(
-      (item) => normalizeSearchText(item.name ?? "") === normalized,
-    );
-  }, [ingredients, param]);
+  return useMemo(
+    () => resolveIngredientByParam(param, ingredients),
+    [ingredients, param],
+  );
 }
 
 export default function IngredientDetailsScreen() {
@@ -94,17 +96,6 @@ export default function IngredientDetailsScreen() {
     Array.isArray(ingredientId) ? ingredientId[0] : ingredientId,
     ingredients,
   );
-
-  const returnToPath = useMemo(() => {
-    const value = Array.isArray(params.returnToPath)
-      ? params.returnToPath[0]
-      : params.returnToPath;
-    return typeof value === "string" && value.length > 0 ? value : undefined;
-  }, [params.returnToPath]);
-
-  const returnToParams = useMemo(() => {
-    return parseReturnToParams(params.returnToParams);
-  }, [params.returnToParams]);
 
   const ingredientLookup = useMemo(
     () => createIngredientLookup(ingredients),
@@ -321,10 +312,9 @@ export default function IngredientDetailsScreen() {
       params: {
         ingredientId: String(targetId),
         mode: "edit",
-        ...buildReturnToParams(returnToPath, returnToParams),
       },
     });
-  }, [ingredient, returnToParams, returnToPath]);
+  }, [ingredient]);
 
   const handleAddCocktail = useCallback(() => {
     if (!ingredient) {
@@ -505,14 +495,21 @@ export default function IngredientDetailsScreen() {
     );
   }, [cocktailEntries.length]);
 
-  const handleReturn = useCallback(() => {
-    if (returnToPath === "/ingredients") {
-      skipDuplicateBack(navigation);
-      return;
-    }
+  const isRouteValid = useCallback(
+    (route: { params?: Record<string, unknown> }) => {
+      const rawValue = route.params?.ingredientId;
+      if (!rawValue) {
+        return true;
+      }
+      const candidate = Array.isArray(rawValue) ? rawValue[0] : String(rawValue);
+      return Boolean(resolveIngredientByParam(candidate, ingredients));
+    },
+    [ingredients],
+  );
 
-    returnToSourceOrBack(navigation, { returnToPath, returnToParams });
-  }, [navigation, returnToParams, returnToPath]);
+  const handleReturn = useCallback(() => {
+    skipDuplicateBack(navigation, { isRouteValid });
+  }, [isRouteValid, navigation]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", (event) => {
