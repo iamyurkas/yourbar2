@@ -167,6 +167,7 @@ export default function IngredientFormScreen() {
   const didInitializeRef = useRef(false);
   const scrollRef = useRef<ScrollView | null>(null);
   const isHandlingBackRef = useRef(false);
+  const pendingReturnToCocktailRef = useRef(false);
 
   useEffect(() => {
     if (isEditMode) {
@@ -438,6 +439,14 @@ export default function IngredientFormScreen() {
         isNavigatingAfterSaveRef.current = true;
         markCurrentEntryAsSkip();
         markNextEntryAsSkip();
+        if (pendingReturnToCocktailRef.current) {
+          pendingReturnToCocktailRef.current = false;
+          router.replace({
+            pathname: returnToPath ?? '/cocktails/create',
+            params: returnToParams,
+          });
+          return;
+        }
         router.replace({
           pathname: '/ingredients/[ingredientId]',
           params: {
@@ -506,6 +515,14 @@ export default function IngredientFormScreen() {
     }
 
     markCurrentEntryAsSkip();
+    if (pendingReturnToCocktailRef.current) {
+      pendingReturnToCocktailRef.current = false;
+      router.replace({
+        pathname: returnToPath ?? '/cocktails/create',
+        params: returnToParams,
+      });
+      return;
+    }
     router.replace({
       pathname: '/ingredients/[ingredientId]',
       params: { ingredientId: String(targetId) },
@@ -562,6 +579,13 @@ export default function IngredientFormScreen() {
         title: 'Return to cocktail?',
         message: 'Leave this ingredient and return to your cocktail draft?',
         actions: [
+          {
+            label: 'Save',
+            onPress: () => {
+              pendingReturnToCocktailRef.current = true;
+              handleSubmit();
+            },
+          },
           { label: 'Stay', variant: 'secondary' },
           {
             label: 'Return',
@@ -574,7 +598,7 @@ export default function IngredientFormScreen() {
         ],
       });
     },
-    [setHasUnsavedChanges, showDialog],
+    [handleSubmit, setHasUnsavedChanges, showDialog],
   );
 
   useEffect(() => {
