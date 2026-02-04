@@ -32,6 +32,7 @@ import { getLastCocktailTab, setLastCocktailTab, type CocktailTabKey } from '@/l
 import { createIngredientLookup } from '@/libs/ingredient-availability';
 import { navigateToDetailsWithReturnTo } from '@/libs/navigation';
 import { normalizeSearchText } from '@/libs/search-normalization';
+import { useOnboardingAnchors } from '@/components/onboarding/OnboardingContext';
 import { buildTagOptions, type TagOption } from '@/libs/tag-options';
 import { useCocktailTabLogic, type MyTabListItem } from '@/libs/use-cocktail-tab-logic';
 import { useInventory, type Cocktail } from '@/providers/inventory-provider';
@@ -51,6 +52,7 @@ const TAB_OPTIONS: SegmentTabOption[] = [
 ];
 
 export default function CocktailsScreen() {
+  const { onTabChangeRequest } = useOnboardingAnchors();
   const {
     cocktails,
     availableIngredientIds,
@@ -78,6 +80,14 @@ export default function CocktailsScreen() {
   const previousQuery = useRef(query);
 
   useScrollToTop(listRef);
+
+  useEffect(() => {
+    return onTabChangeRequest((screen, tab) => {
+      if (screen === 'cocktails') {
+        setActiveTab(tab as CocktailTabKey);
+      }
+    });
+  }, [onTabChangeRequest]);
 
   useEffect(() => {
     const wasEmpty = previousQuery.current.length === 0;

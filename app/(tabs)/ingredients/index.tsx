@@ -34,6 +34,7 @@ import {
 import { navigateToDetailsWithReturnTo } from '@/libs/navigation';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { buildTagOptions, type TagOption } from '@/libs/tag-options';
+import { useOnboardingAnchors } from '@/components/onboarding/OnboardingContext';
 import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
 import { tagColors } from '@/theme/theme';
 
@@ -217,6 +218,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
 export default function IngredientsScreen() {
   const router = useRouter();
   const Colors = useAppColors();
+  const { onTabChangeRequest } = useOnboardingAnchors();
   const {
     cocktails,
     ingredients,
@@ -245,6 +247,14 @@ export default function IngredientsScreen() {
   const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
 
   useScrollToTop(listRef);
+
+  useEffect(() => {
+    return onTabChangeRequest((screen, tab) => {
+      if (screen === 'ingredients') {
+        setActiveTab(tab as IngredientTabKey);
+      }
+    });
+  }, [onTabChangeRequest]);
 
   useEffect(() => {
     const wasEmpty = previousQuery.current.length === 0;

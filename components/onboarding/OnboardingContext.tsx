@@ -10,12 +10,15 @@ type OnboardingContextValue = {
   anchors: Record<string, LayoutRectangle>;
   registerAnchor: (name: string, layout: LayoutRectangle) => void;
   unregisterAnchor: (name: string) => void;
+  requestTabChange: (screen: 'ingredients' | 'cocktails', tab: string) => void;
+  onTabChangeRequest: (callback: (screen: 'ingredients' | 'cocktails', tab: string) => void) => () => void;
 };
 
 const OnboardingContext = createContext<OnboardingContextValue | undefined>(undefined);
 
 export function OnboardingProvider({ children }: { children: React.ReactNode }) {
   const [anchors, setAnchors] = useState<Record<string, LayoutRectangle>>({});
+  const [listeners] = useState<Set<(screen: 'ingredients' | 'cocktails', tab: string) => void>>(new Set());
 
   const registerAnchor = useCallback((name: string, layout: LayoutRectangle) => {
     setAnchors((prev) => ({ ...prev, [name]: layout }));
@@ -32,8 +35,19 @@ export function OnboardingProvider({ children }: { children: React.ReactNode }) 
     });
   }, []);
 
+  const requestTabChange = useCallback((screen: 'ingredients' | 'cocktails', tab: string) => {
+    listeners.forEach(l => l(screen, tab));
+  }, [listeners]);
+
+  const onTabChangeRequest = useCallback((callback: (screen: 'ingredients' | 'cocktails', tab: string) => void) => {
+    listeners.add(callback);
+    return () => {
+      listeners.delete(callback);
+    };
+  }, [listeners]);
+
   return (
-    <OnboardingContext.Provider value={{ anchors, registerAnchor, unregisterAnchor }}>
+    <OnboardingContext.Provider value={{ anchors, registerAnchor, unregisterAnchor, requestTabChange, onTabChangeRequest }}>
       {children}
     </OnboardingContext.Provider>
   );

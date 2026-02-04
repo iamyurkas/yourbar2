@@ -18,11 +18,12 @@ type StepDef = {
   anchorName?: string;
   autoNext?: (inventory: any, pathname: string) => boolean;
   buttonLabel?: string;
+  onNext?: (inventory: any, requestTabChange: (screen: 'ingredients' | 'cocktails', tab: string) => void) => void;
 };
 
 export function OnboardingOverlay() {
   const { onboardingStep, setOnboardingStep, completeOnboarding, onboardingCompleted, ...inventory } = useInventory();
-  const { anchors } = useOnboardingAnchors();
+  const { anchors, requestTabChange } = useOnboardingAnchors();
   const Colors = useAppColors();
   const pathname = usePathname();
   const { height: screenHeight } = useWindowDimensions();
@@ -51,33 +52,23 @@ export function OnboardingOverlay() {
     },
     {
       id: 3,
-      message: 'On the All tab, you can see all available ingredients.',
+      message: 'On the "All ingredients" tab, you can see all ingredients. We will mark a few as available now.',
       anchorName: 'ingredients-tab-all',
       buttonLabel: 'Next',
-    },
-    {
-      id: 4,
-      message: 'Tap the checkmark to add Cola to your inventory.',
-      anchorName: 'ingredient-111',
-      autoNext: (inv) => inv.availableIngredientIds.has(111),
-    },
-    {
-      id: 5,
-      message: 'Now add some Ice.',
-      anchorName: 'ingredient-193',
-      autoNext: (inv) => inv.availableIngredientIds.has(193),
-    },
-    {
-      id: 6,
-      message: 'And some Spiced Rum.',
-      anchorName: 'ingredient-315',
-      autoNext: (inv) => inv.availableIngredientIds.has(315),
+      onNext: (inv) => {
+        inv.setIngredientAvailability(111, true); // Cola
+        inv.setIngredientAvailability(193, true); // Ice
+        inv.setIngredientAvailability(315, true); // Spiced Rum
+      },
     },
     {
       id: 7,
-      message: 'Great! Now go to the "My" tab to see your inventory.',
+      message: 'Now go to the "My ingredients" tab to see your inventory',
       anchorName: 'ingredients-tab-my',
       buttonLabel: 'Next',
+      onNext: (_, requestTab) => {
+        requestTab('ingredients', 'my');
+      },
     },
     {
       id: 8,
@@ -95,10 +86,13 @@ export function OnboardingOverlay() {
       message: 'Go to the "My" tab.',
       anchorName: 'cocktails-tab-my',
       buttonLabel: 'Next',
+      onNext: (_, requestTab) => {
+        requestTab('cocktails', 'my');
+      },
     },
     {
       id: 11,
-      message: 'Cocktails you can make right now are shown at the top.',
+      message: 'Cocktails you can make right now are shown at the top of "My cocktails tab".',
       buttonLabel: 'Next',
     },
     {
@@ -138,11 +132,16 @@ export function OnboardingOverlay() {
 
   // Auto-advance logic
   React.useEffect(() => {
-    if (onboardingCompleted) return;
-    if (currentStep?.autoNext?.(inventory, pathname)) {
-      setOnboardingStep(onboardingStep + 1);
+    if (onboardingCompleted || !currentStep?.autoNext) return;
+    if (currentStep.autoNext(inventory, pathname)) {
+      const currentIndex = steps.findIndex(s => s.id === onboardingStep);
+      if (currentIndex >= 0 && currentIndex < steps.length - 1) {
+        setOnboardingStep(steps[currentIndex + 1].id);
+      } else {
+        completeOnboarding();
+      }
     }
-  }, [currentStep, inventory, pathname, onboardingStep, setOnboardingStep, onboardingCompleted]);
+  }, [currentStep, inventory, pathname, onboardingStep, setOnboardingStep, onboardingCompleted, steps, completeOnboarding]);
 
   if (onboardingCompleted || !onboardingStep || onboardingStep <= 0 || !currentStep) return null;
 
@@ -154,10 +153,20 @@ export function OnboardingOverlay() {
   } : null;
 
   const handleNext = () => {
+    if (currentStep?.onNext) {
+      currentStep.onNext(inventory, requestTabChange);
+    }
+
     if (onboardingStep >= steps[steps.length - 1].id) {
       completeOnboarding();
     } else {
-      setOnboardingStep(onboardingStep + 1);
+      // Find the next step in the array (skipping gaps if any)
+      const currentIndex = steps.findIndex(s => s.id === onboardingStep);
+      if (currentIndex >= 0 && currentIndex < steps.length - 1) {
+        setOnboardingStep(steps[currentIndex + 1].id);
+      } else {
+        completeOnboarding();
+      }
     }
   };
 
