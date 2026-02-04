@@ -8,92 +8,13 @@ Starting Metro Bundler
 Waiting on http://localhost:8081
 Logs for your project will appear below.
 Web node_modules/expo-router/entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
-Web node_modules/expo-router/entry.js ▓▓▓▓▓▓░░░░░░░░░░ 40.5% ( 38/179)
-λ node_modules/expo-router/node/render.js ░░░░░░░░░░░░░░░░  6.1% ( 48/194)
-Web node_modules/expo-router/entry.js ▓▓▓▓▓▓░░░░░░░░░░ 40.5% ( 46/220)
-λ node_modules/expo-router/node/render.js ▓▓░░░░░░░░░░░░░░ 16.1% (127/317)
-Web node_modules/expo-router/entry.js ▓▓▓▓▓▓░░░░░░░░░░ 40.5% (180/379)
-λ node_modules/expo-router/node/render.js ▓▓░░░░░░░░░░░░░░ 16.1% (130/327)
-Web node_modules/expo-router/entry.js ▓▓▓▓▓▓░░░░░░░░░░ 40.5% (211/410)
-λ node_modules/expo-router/node/render.js ▓▓▓▓▓▓░░░░░░░░░░ 39.1% (312/499)
-Web node_modules/expo-router/entry.js ▓▓▓▓▓▓░░░░░░░░░░ 40.5% ( 378/1488)
-λ node_modules/expo-router/node/render.js ▓▓▓▓▓▓░░░░░░░░░░ 42.4% ( 344/1414)
-Web node_modules/expo-router/entry.js ▓▓▓▓▓▓▓▓▓▓░░░░░░ 68.2% (1279/1549)
-λ node_modules/expo-router/node/render.js ▓▓▓▓▓▓░░░░░░░░░░ 42.4% ( 509/1546)
-Web node_modules/expo-router/entry.js ▓▓▓▓▓▓▓▓▓▓░░░░░░ 68.4% (1480/1953)
-λ node_modules/expo-router/node/render.js ▓▓▓▓▓▓░░░░░░░░░░ 42.4% ( 768/1596)
-Web node_modules/expo-router/entry.js ▓▓▓▓▓▓▓▓▓▓░░░░░░ 68.4% (1572/2050)
-λ node_modules/expo-router/node/render.js ▓▓▓▓▓▓▓▓▓▓▓▓░░░░ 79.3% (1544/1971)
-Web node_modules/expo-router/entry.js ▓▓▓▓▓▓▓▓▓▓▓▓░░░░ 77.2% (1944/2213)
-λ node_modules/expo-router/node/render.js ▓▓▓▓▓▓▓▓▓▓▓▓░░░░ 79.3% (1613/2050)
-Web node_modules/expo-router/entry.js ▓▓▓▓▓▓▓▓▓▓▓▓░░░░ 80.9% (2029/2284)
-λ node_modules/expo-router/node/render.js ▓▓▓▓▓▓▓▓▓▓▓▓░░░░ 79.3% (1967/2217)
-Web node_modules/expo-router/entry.js ▓▓▓▓▓▓▓▓▓▓▓▓▓░░░ 84.4% (2216/2412)
-λ node_modules/expo-router/node/render.js ▓▓▓▓▓▓▓▓▓▓▓▓▓░░░ 83.9% (2180/2380)
-Web node_modules/expo-router/entry.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░ 88.7% (2532/2689)
-λ node_modules/expo-router/node/render.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░ 87.5% (2387/2582)
-Web node_modules/expo-router/entry.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░ 95.7% (2739/2800)
-λ node_modules/expo-router/node/render.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░ 94.9% (2636/2706)
-λ Bundled 47770ms node_modules/expo-router/node/render.js (2812 modules)
+Web node_modules/expo-router/entry.js ▓▓▓▓▓▓▓▓▓▓▓░░░░░ 73.3% (1545/1998)
+λ node_modules/expo-router/node/render.js ▓▓▓▓▓▓▓▓▓▓▓░░░░░ 71.3% (1844/2190)
+λ Bundled 6868ms node_modules/expo-router/node/render.js (2812 modules)
 Web node_modules/expo-router/entry.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░ 99.9% (2863/2863)
 "shadow*" style props are deprecated. Use "boxShadow".
 λ  WARN  props.pointerEvents is deprecated. Use style.pointerEvents
-Web Bundled 56527ms node_modules/expo-router/entry.js (2863 modules)
+Web Bundled 15516ms node_modules/expo-router/entry.js (2863 modules)
 Web node_modules/expo-router/entry.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░ 99.9% (2863/2863)
-Error: Premature close
-    at onclose (node:internal/streams/end-of-stream:171:30)
-    at processTicksAndRejections (node:internal/process/task_queues:85:11)
-Web node_modules/expo-router/entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
-λ Bundled 159ms node_modules/expo-router/node/render.js (1 module)
-"shadow*" style props are deprecated. Use "boxShadow".
-λ  WARN  props.pointerEvents is deprecated. Use style.pointerEvents
-Web Bundled 3092ms node_modules/expo-router/entry.js (1 module)
-Web node_modules/expo-router/entry.js ▓▓▓▓░░░░░░░░░░░░ 28.7% (15/28)
-Web node_modules/expo-router/entry.js ▓▓▓▓░░░░░░░░░░░░ 28.7% ( 50/209)
-Web node_modules/expo-router/entry.js ▓▓▓▓░░░░░░░░░░░░ 28.7% ( 185/1279)
-Web node_modules/expo-router/entry.js ▓▓▓▓▓▓▓▓░░░░░░░░ 55.3% (1220/1640)
-Web node_modules/expo-router/entry.js ▓▓▓▓▓▓▓▓▓▓░░░░░░ 65.9% (1629/2006)
-Web node_modules/expo-router/entry.js ▓▓▓▓▓▓▓▓▓▓▓▓░░░░ 78.5% (2106/2377)
-Web node_modules/expo-router/entry.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░ 91.8% (2595/2709)
-Web Bundled 23837ms node_modules/expo-router/entry.js (2865 modules)
- LOG  [web] Logs will appear in the browser console
-Web node_modules/expo-router/entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
-λ Bundled 756ms node_modules/expo-router/node/render.js (1 module)
-"shadow*" style props are deprecated. Use "boxShadow".
-λ  WARN  props.pointerEvents is deprecated. Use style.pointerEvents
-Web node_modules/expo-router/entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
-Web Bundled 5471ms node_modules/expo-router/entry.js (1 module)
-Web node_modules/expo-router/entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
-Web Bundled 1733ms node_modules/expo-router/entry.js (1 module)
- LOG  [web] Logs will appear in the browser console
-Web node_modules/expo-router/entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
-λ Bundled 103ms node_modules/expo-router/node/render.js (1 module)
-"shadow*" style props are deprecated. Use "boxShadow".
-λ  WARN  props.pointerEvents is deprecated. Use style.pointerEvents
-Web Bundled 2930ms node_modules/expo-router/entry.js (1 module)
-Web Bundled 112ms node_modules/expo-router/entry.js (1 module)
- LOG  [web] Logs will appear in the browser console
-Web node_modules/expo-router/entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
-λ Bundled 138ms node_modules/expo-router/node/render.js (1 module)
-"shadow*" style props are deprecated. Use "boxShadow".
-λ  WARN  props.pointerEvents is deprecated. Use style.pointerEvents
-Web node_modules/expo-router/entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
-Web Bundled 3992ms node_modules/expo-router/entry.js (1 module)
-Web node_modules/expo-router/entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
-Web Bundled 316ms node_modules/expo-router/entry.js (1 module)
- LOG  [web] Logs will appear in the browser console
-Web node_modules/expo-router/entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
-λ Bundled 103ms node_modules/expo-router/node/render.js (1 module)
-"shadow*" style props are deprecated. Use "boxShadow".
-λ  WARN  props.pointerEvents is deprecated. Use style.pointerEvents
-Web Bundled 3297ms node_modules/expo-router/entry.js (1 module)
-Web Bundled 110ms node_modules/expo-router/entry.js (1 module)
- LOG  [web] Logs will appear in the browser console
-Web node_modules/expo-router/entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
-λ Bundled 162ms node_modules/expo-router/node/render.js (1 module)
-"shadow*" style props are deprecated. Use "boxShadow".
-λ  WARN  props.pointerEvents is deprecated. Use style.pointerEvents
-Web Bundled 3465ms node_modules/expo-router/entry.js (1 module)
-Web node_modules/expo-router/entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
-Web Bundled 118ms node_modules/expo-router/entry.js (1 module)
+Web Bundled 3299ms node_modules/expo-router/entry.js (2855 modules)
  LOG  [web] Logs will appear in the browser console

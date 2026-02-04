@@ -202,12 +202,17 @@ export function OnboardingOverlay() {
       <View style={[styles.tooltip, { top: tooltipTop, backgroundColor: Colors.surface, borderColor: Colors.outline }]}>
         <Text style={[styles.message, { color: Colors.onSurface }]}>{currentStep.message}</Text>
         {currentStep.buttonLabel && (
-          <Pressable
-            style={[styles.button, { backgroundColor: Colors.primary }]}
-            onPress={handleNext}
-          >
-            <Text style={[styles.buttonText, { color: Colors.onPrimary }]}>{currentStep.buttonLabel}</Text>
-          </Pressable>
+          <>
+            <Pressable
+              style={[styles.button, { backgroundColor: Colors.primary }]}
+              onPress={handleNext}
+            >
+              <Text style={[styles.buttonText, { color: Colors.onPrimary }]}>{currentStep.buttonLabel}</Text>
+            </Pressable>
+            <Text style={[styles.stepCounter, { color: Colors.onSurfaceVariant }]}>
+              {onboardingStep} of {steps.length}
+            </Text>
+          </>
         )}
       </View>
     </View>
@@ -238,10 +243,15 @@ const styles = StyleSheet.create({
   button: {
     paddingHorizontal: 24,
     paddingVertical: 10,
-    borderRadius: 8,
+    borderRadius: 12,
   },
   buttonText: {
     fontSize: 14,
     fontWeight: '700',
+  },
+  stepCounter: {
+    fontSize: 12,
+    marginTop: 8,
+    opacity: 0.8,
   },
 });
