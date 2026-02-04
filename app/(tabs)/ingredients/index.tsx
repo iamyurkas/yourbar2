@@ -280,6 +280,12 @@ export default function IngredientsScreen() {
     setStep('ingredients_add');
   }, [activeTab, setStep, step]);
 
+  useEffect(() => {
+    if (step === 'ingredients_tab' && activeTab !== 'my') {
+      setActiveTab('my');
+    }
+  }, [activeTab, step]);
+
   const availableTagOptions = useMemo<TagOption[]>(
     () =>
       buildTagOptions(ingredients, (ingredient) => ingredient.tags ?? [], BUILTIN_INGREDIENT_TAGS, defaultTagColor),
@@ -897,7 +903,7 @@ export default function IngredientsScreen() {
       <OnboardingOverlay
         visible={step === 'ingredients_tab'}
         title="My ingredients"
-        message="Switch to the My tab to mark the ingredients you already have."
+        message="We will open the My tab for you so you can mark the ingredients you already have."
         targets={tabLayout ? [tabLayout] : undefined}
       />
       <OnboardingOverlay
