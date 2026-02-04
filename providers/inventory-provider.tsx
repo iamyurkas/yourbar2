@@ -557,7 +557,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     sanitizeCustomTags(globalThis.__yourbarInventoryCustomIngredientTags, DEFAULT_TAG_COLOR),
   );
   const [onboardingStep, setOnboardingStep] = useState<number>(
-    () => globalThis.__yourbarInventoryOnboardingStep ?? 0,
+    () => globalThis.__yourbarInventoryOnboardingStep ?? 1,
   );
   const [onboardingCompleted, setOnboardingCompleted] = useState<boolean>(
     () => globalThis.__yourbarInventoryOnboardingCompleted ?? false,
@@ -593,7 +593,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           const nextAppTheme = sanitizeAppTheme(stored.appTheme);
           const nextCustomCocktailTags = sanitizeCustomTags(stored.customCocktailTags, DEFAULT_TAG_COLOR);
           const nextCustomIngredientTags = sanitizeCustomTags(stored.customIngredientTags, DEFAULT_TAG_COLOR);
-          const nextOnboardingStep = stored.onboardingStep ?? 0;
+          const nextOnboardingStep = stored.onboardingStep ?? 1;
           const nextOnboardingCompleted = stored.onboardingCompleted ?? false;
 
           setInventoryState(nextInventoryState);
@@ -632,7 +632,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           setAppTheme(DEFAULT_APP_THEME);
           setCustomCocktailTags([]);
           setCustomIngredientTags([]);
-          setOnboardingStep(0);
+          setOnboardingStep(1);
           setOnboardingCompleted(false);
         }
       } catch (error) {

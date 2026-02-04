@@ -21,7 +21,7 @@ type StepDef = {
 };
 
 export function OnboardingOverlay() {
-  const { onboardingStep, setOnboardingStep, completeOnboarding, ...inventory } = useInventory();
+  const { onboardingStep, setOnboardingStep, completeOnboarding, onboardingCompleted, ...inventory } = useInventory();
   const { anchors } = useOnboardingAnchors();
   const Colors = useAppColors();
   const pathname = usePathname();
@@ -134,12 +134,13 @@ export function OnboardingOverlay() {
 
   // Auto-advance logic
   React.useEffect(() => {
+    if (onboardingCompleted) return;
     if (currentStep?.autoNext?.(inventory, pathname)) {
       setOnboardingStep(onboardingStep + 1);
     }
-  }, [currentStep, inventory, pathname, onboardingStep, setOnboardingStep]);
+  }, [currentStep, inventory, pathname, onboardingStep, setOnboardingStep, onboardingCompleted]);
 
-  if (!onboardingStep || onboardingStep <= 0 || !currentStep) return null;
+  if (onboardingCompleted || !onboardingStep || onboardingStep <= 0 || !currentStep) return null;
 
   const anchor = currentStep.anchorName ? anchors[currentStep.anchorName] : null;
   const adjustedAnchor = anchor ? {
