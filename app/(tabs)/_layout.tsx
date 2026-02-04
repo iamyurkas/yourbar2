@@ -12,6 +12,7 @@ import { TabBarIcon } from '@/components/tab-bar/TabBarIcon';
 import { useAppColors } from '@/constants/theme';
 import { getLastCocktailTab, getLastIngredientTab } from '@/libs/collection-tabs';
 import { useInventory } from '@/providers/inventory-provider';
+import { useOnboarding } from '@/providers/onboarding-provider';
 
 type TabPressHandler = (navigation: { navigate: (...args: never[]) => void }, route: { name: string }) => void;
 
@@ -54,6 +55,7 @@ export default function TabLayout() {
   const insets = useSafeAreaInsets();
   const systemColorScheme = useColorScheme();
   const { appTheme } = useInventory();
+  const { activeStep, isActive } = useOnboarding();
   const Colors = useAppColors();
 
   const isDarkMode = appTheme === 'system'
@@ -105,6 +107,9 @@ export default function TabLayout() {
             listeners={({ navigation, route }) => ({
               tabPress: (event) => {
                 event.preventDefault();
+                if (isActive && activeStep === 'ingredients' && route.name !== 'ingredients') {
+                  return;
+                }
                 onTabPress(navigation, route);
               },
             })}

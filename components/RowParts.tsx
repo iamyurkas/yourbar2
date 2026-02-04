@@ -62,21 +62,25 @@ export function TagDot({ color = tagColors.default }: TagDotProps) {
 type PresenceCheckProps = {
   checked: boolean;
   onToggle?: () => void;
+  highlighted?: boolean;
 };
 
-export function PresenceCheck({ checked, onToggle }: PresenceCheckProps) {
+export function PresenceCheck({ checked, onToggle, highlighted = false }: PresenceCheckProps) {
   const Colors = useAppColors();
   const idleColor = Colors.outlineVariant;
   const borderColor = checked ? Colors.tint : idleColor;
   const backgroundColor = checked ? Colors.tint : 'transparent';
   const iconColor = checked ? Colors.background : idleColor;
+  const highlightStyle = highlighted
+    ? [styles.checkboxHighlighted, { shadowColor: Colors.tint }]
+    : null;
 
   return (
     <Pressable
       accessibilityRole="checkbox"
       accessibilityState={{ checked }}
       onPress={onToggle}
-      style={[styles.checkbox, { borderColor, backgroundColor }]}
+      style={[styles.checkbox, { borderColor, backgroundColor }, highlightStyle]}
       hitSlop={8}>
       <MaterialCommunityIcons name="check" color={iconColor} size={12} />
     </Pressable>
@@ -299,6 +303,14 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  checkboxHighlighted: {
+    position: 'relative',
+    elevation: 6,
+    shadowOpacity: 0.4,
+    shadowOffset: { width: 0, height: 0 },
+    shadowRadius: 10,
+    zIndex: 2,
   },
   starButton: {
     padding: 2,

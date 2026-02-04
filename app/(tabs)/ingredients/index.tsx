@@ -62,7 +62,9 @@ type IngredientListItemProps = {
   surfaceVariantColor?: string;
   isOnShoppingList: boolean;
   showAvailabilityToggle?: boolean;
+  highlightAvailabilityToggle?: boolean;
   onShoppingToggle?: (id: number) => void;
+  disableNavigation?: boolean;
 };
 
 const areIngredientPropsEqual = (
@@ -77,7 +79,9 @@ const areIngredientPropsEqual = (
   prev.surfaceVariantColor === next.surfaceVariantColor &&
   prev.isOnShoppingList === next.isOnShoppingList &&
   prev.showAvailabilityToggle === next.showAvailabilityToggle &&
-  prev.onShoppingToggle === next.onShoppingToggle;
+  prev.highlightAvailabilityToggle === next.highlightAvailabilityToggle &&
+  prev.onShoppingToggle === next.onShoppingToggle &&
+  prev.disableNavigation === next.disableNavigation;
 
 const IngredientListItem = memo(function IngredientListItemComponent({
   ingredient,
@@ -88,7 +92,9 @@ const IngredientListItem = memo(function IngredientListItemComponent({
   surfaceVariantColor,
   isOnShoppingList,
   showAvailabilityToggle = true,
+  highlightAvailabilityToggle = false,
   onShoppingToggle,
+  disableNavigation = false,
 }: IngredientListItemProps) {
   const Colors = useAppColors();
   const id = Number(ingredient.id ?? -1);
@@ -166,13 +172,24 @@ const IngredientListItem = memo(function IngredientListItemComponent({
     return (
       <View style={styles.presenceSlot}>
         {showAvailabilityToggle ? (
-          <PresenceCheck checked={isAvailable} onToggle={handleToggleAvailability} />
+          <PresenceCheck
+            checked={isAvailable}
+            onToggle={handleToggleAvailability}
+            highlighted={highlightAvailabilityToggle}
+          />
         ) : (
           <View style={styles.presencePlaceholder} />
         )}
       </View>
     );
-  }, [handleToggleAvailability, isAvailable, onShoppingToggle, showAvailabilityToggle, shoppingControl]);
+  }, [
+    handleToggleAvailability,
+    highlightAvailabilityToggle,
+    isAvailable,
+    onShoppingToggle,
+    showAvailabilityToggle,
+    shoppingControl,
+  ]);
 
   const handlePress = useCallback(() => {
     const routeParam = ingredient.id ?? ingredient.name;
@@ -187,16 +204,18 @@ const IngredientListItem = memo(function IngredientListItemComponent({
     });
   }, [ingredient.id, ingredient.name]);
 
+  const rowPressHandler = disableNavigation ? undefined : handlePress;
+
   return (
     <ListRow
       title={ingredient.name}
       subtitle={subtitle}
       subtitleStyle={subtitleStyle}
-      onPress={handlePress}
+      onPress={rowPressHandler}
       selected={isAvailable}
       highlightColor={highlightColor}
       tagColors={ingredientTagColors}
-      accessibilityRole="button"
+      accessibilityRole={rowPressHandler ? 'button' : undefined}
       accessibilityState={showAvailabilityToggle && isAvailable ? { selected: true } : undefined}
       thumbnail={thumbnail}
       control={control}
@@ -685,7 +704,9 @@ export default function IngredientsScreen() {
           surfaceVariantColor={Colors.onSurfaceVariant ?? Colors.icon}
           isOnShoppingList={isOnShoppingList}
           showAvailabilityToggle={activeTab !== 'shopping'}
+          highlightAvailabilityToggle={isOnboardingTarget}
           onShoppingToggle={activeTab === 'shopping' ? handleShoppingToggle : undefined}
+          disableNavigation={isOnboardingIngredients}
         />
       );
     },
@@ -720,7 +741,10 @@ export default function IngredientsScreen() {
       style={[styles.safeArea, { backgroundColor: Colors.background }]}
       edges={['top', 'left', 'right']}>
       <View style={styles.container}>
-        <View style={styles.headerWrapper} onLayout={handleHeaderLayout}>
+        <View
+          style={styles.headerWrapper}
+          onLayout={handleHeaderLayout}
+          pointerEvents={isOnboardingIngredients ? 'none' : 'auto'}>
           <CollectionHeader
             searchValue={query}
             onSearchChange={setQuery}
@@ -812,6 +836,9 @@ export default function IngredientsScreen() {
           }
         />
         {isOnboardingIngredients ? (
+          <View pointerEvents="none" style={styles.onboardingBackdrop} />
+        ) : null}
+        {isOnboardingIngredients ? (
           <View style={styles.onboardingCardWrapper} pointerEvents="box-none">
             <OnboardingCard
               title="Step 1: Mark what you have"
@@ -828,7 +855,9 @@ export default function IngredientsScreen() {
           </View>
         ) : null}
       </View>
-      <FabAdd label="Add ingredient" onPress={() => router.push('/ingredients/create')} />
+      {isOnboardingIngredients ? null : (
+        <FabAdd label="Add ingredient" onPress={() => router.push('/ingredients/create')} />
+      )}
       <SideMenuDrawer visible={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
     </SafeAreaView>
   );
@@ -879,11 +908,17 @@ const styles = StyleSheet.create({
     paddingTop: 0,
     paddingBottom: 80,
   },
+  onboardingBackdrop: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.55)',
+    zIndex: 1,
+  },
   onboardingCardWrapper: {
     position: 'absolute',
     left: 16,
     right: 16,
     bottom: 96,
+    zIndex: 2,
   },
   divider: {
     height: StyleSheet.hairlineWidth,
