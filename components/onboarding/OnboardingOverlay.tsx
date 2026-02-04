@@ -101,7 +101,7 @@ export function OnboardingOverlay() {
       autoNext: (_, path) => path.startsWith('/ingredients'),
       onEnter: (inv) => {
         const availableIds = inv.availableIngredientIds as Set<number> | undefined;
-        const idsToSeed = [193, 159, 343, 111, 333, 214, 222];
+        const idsToSeed = [193, 159, 343, 111, 310, 333, 214, 222];
         const hasAll =
           availableIds && idsToSeed.every((id) => availableIds.has(id));
         if (hasAll) {
@@ -112,6 +112,7 @@ export function OnboardingOverlay() {
         inv.setIngredientAvailability(159, true); // Gin
         inv.setIngredientAvailability(343, true); // Whiskey
         inv.setIngredientAvailability(111, true); // Cola
+        inv.setIngredientAvailability(310, true); // Symple Syrup
         inv.setIngredientAvailability(333, true); // Tonic
         inv.setIngredientAvailability(214, true); // Lemon
         inv.setIngredientAvailability(222, true); // Lime
