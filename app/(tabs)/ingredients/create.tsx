@@ -150,7 +150,13 @@ export default function IngredientFormScreen() {
   const [description, setDescription] = useState('');
   const [imageUri, setImageUri] = useState<string | null>(null);
   const [isPickingImage, setIsPickingImage] = useState(false);
-  const [selectedTagIds, setSelectedTagIds] = useState<number[]>([]);
+  const defaultIngredientTagId = useMemo(
+    () => BUILTIN_INGREDIENT_TAGS.find((tag) => tag.name === 'other')?.id,
+    [],
+  );
+  const [selectedTagIds, setSelectedTagIds] = useState<number[]>(() =>
+    defaultIngredientTagId != null ? [defaultIngredientTagId] : [],
+  );
   const [isTagModalVisible, setTagModalVisible] = useState(false);
   const [baseIngredientId, setBaseIngredientId] = useState<number | null>(null);
   const [isBaseModalVisible, setIsBaseModalVisible] = useState(false);
@@ -173,7 +179,7 @@ export default function IngredientFormScreen() {
     setName(suggestedNameParam ?? '');
     setDescription('');
     setImageUri(null);
-    setSelectedTagIds([]);
+    setSelectedTagIds(defaultIngredientTagId != null ? [defaultIngredientTagId] : []);
     setBaseIngredientId(null);
     setBaseSearch('');
     setTagModalVisible(false);
@@ -181,7 +187,7 @@ export default function IngredientFormScreen() {
     setInitialSnapshot(null);
     setIsSaving(false);
     setIsInitialized(true);
-  }, [isEditMode, suggestedNameParam]);
+  }, [defaultIngredientTagId, isEditMode, suggestedNameParam]);
 
   useEffect(() => {
     if (!isEditMode || !ingredient || didInitializeRef.current) {

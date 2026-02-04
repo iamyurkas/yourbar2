@@ -13,6 +13,7 @@ export const BUILTIN_COCKTAIL_TAGS = [
   { id: 9, name: 'shot', color: TAG_COLORS[14] },
   { id: 10, name: 'non-alcoholic', color: TAG_COLORS[11] },
   { id: 11, name: 'custom', color: TAG_COLORS[15] },
+  { id: 12, name: 'other', color: TAG_COLORS[15] },
 ] as const;
 
 export type BuiltInCocktailTag = (typeof BUILTIN_COCKTAIL_TAGS)[number];

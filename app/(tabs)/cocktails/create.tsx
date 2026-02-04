@@ -282,7 +282,13 @@ export default function CreateCocktailScreen() {
   const [isPickingImage, setIsPickingImage] = useState(false);
   const [description, setDescription] = useState("");
   const [instructions, setInstructions] = useState("");
-  const [selectedTagIds, setSelectedTagIds] = useState<number[]>([]);
+  const defaultCocktailTagId = useMemo(
+    () => BUILTIN_COCKTAIL_TAGS.find((tag) => tag.name === "other")?.id,
+    [],
+  );
+  const [selectedTagIds, setSelectedTagIds] = useState<number[]>(() =>
+    defaultCocktailTagId != null ? [defaultCocktailTagId] : [],
+  );
   const [ingredientsState, setIngredientsState] = useState<
     EditableIngredient[]
   >(() => [
