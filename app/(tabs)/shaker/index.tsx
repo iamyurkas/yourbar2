@@ -694,6 +694,14 @@ export default function ShakerScreen() {
     (section: IngredientSection, isExpanded: boolean) => {
       const iconRotation = isExpanded ? '180deg' : '0deg';
       const backgroundColor = section.color;
+      const selectedCount = section.ingredients.reduce((count, ingredient) => {
+        const ingredientId = Number(ingredient.id ?? -1);
+        if (ingredientId >= 0 && selectedIngredientIds.has(ingredientId)) {
+          return count + 1;
+        }
+        return count;
+      }, 0);
+      const titleSuffix = selectedCount > 0 ? ` (${selectedCount})` : '';
 
       return (
         <View style={[styles.groupCard, { backgroundColor: Colors.background }]}>
@@ -750,7 +758,10 @@ export default function ShakerScreen() {
             }}
             style={[styles.groupHeader, { backgroundColor }]}
           >
-            <Text style={[styles.groupTitle, { color: Colors.onPrimary }]}>{section.name}</Text>
+            <Text style={[styles.groupTitle, { color: Colors.onPrimary }]}>
+              {section.name}
+              {titleSuffix}
+            </Text>
             <MaterialIcons
               name="expand-more"
               size={22}
@@ -761,7 +772,7 @@ export default function ShakerScreen() {
         </View>
       );
     },
-    [handleToggleGroup, Colors],
+    [handleToggleGroup, Colors, selectedIngredientIds],
   );
 
   const renderSectionHeader = useCallback(
