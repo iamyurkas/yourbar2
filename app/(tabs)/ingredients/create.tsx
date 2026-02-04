@@ -437,17 +437,13 @@ export default function IngredientFormScreen() {
         setHasUnsavedChanges(false);
         isNavigatingAfterSaveRef.current = true;
         markCurrentEntryAsSkip();
-        if (!returnToPath) {
-          markNextEntryAsSkip();
-        }
-        goBack({
-          pathname: returnToPath ?? '/ingredients/[ingredientId]',
-          params: returnToPath
-            ? returnToParams
-            : {
-                ingredientId: String(numericIngredientId),
-                ...buildReturnToParams(returnToPath, returnToParams),
-              },
+        markNextEntryAsSkip();
+        router.replace({
+          pathname: '/ingredients/[ingredientId]',
+          params: {
+            ingredientId: String(numericIngredientId),
+            ...buildReturnToParams(returnToPath, returnToParams),
+          },
         });
       } finally {
         setIsSaving(false);
@@ -505,19 +501,14 @@ export default function IngredientFormScreen() {
     isNavigatingAfterSaveRef.current = true;
     const targetId = created.id ?? created.name;
     if (!targetId) {
-      goBack();
+      router.replace('/ingredients');
       return;
     }
 
     markCurrentEntryAsSkip();
-    if (!returnToPath) {
-      markNextEntryAsSkip();
-    }
-    goBack({
-      pathname: returnToPath ?? '/ingredients/[ingredientId]',
-      params: returnToPath
-        ? returnToParams
-        : { ingredientId: String(targetId) },
+    router.replace({
+      pathname: '/ingredients/[ingredientId]',
+      params: { ingredientId: String(targetId) },
     });
   }, [
     availableIngredientTags,
@@ -530,9 +521,9 @@ export default function IngredientFormScreen() {
     isSaving,
     name,
     numericIngredientId,
-    goBack,
     markCurrentEntryAsSkip,
     markNextEntryAsSkip,
+    navigation,
     returnToParams,
     returnToPath,
     selectedTagIds,

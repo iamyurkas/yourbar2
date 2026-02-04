@@ -1247,19 +1247,22 @@ export default function CreateCocktailScreen() {
       setHasUnsavedChanges(false);
       isNavigatingAfterSaveRef.current = true;
       markCurrentEntryAsSkip();
-      const targetId = persisted.id ?? persisted.name;
-      if (targetId) {
+      if (isEditMode) {
         markNextEntryAsSkip();
       }
-      goBack({
-        pathname: targetId ? "/cocktails/[cocktailId]" : "/cocktails",
-        params: targetId
-          ? {
-              cocktailId: String(targetId),
-              ...buildReturnToParams(returnToPath, returnToParams),
-            }
-          : undefined,
-      });
+      const targetId = persisted.id ?? persisted.name;
+      if (targetId) {
+        router.replace({
+          pathname: "/cocktails/[cocktailId]",
+          params: {
+            cocktailId: String(targetId),
+            ...buildReturnToParams(returnToPath, returnToParams),
+          },
+        });
+        return;
+      }
+
+      router.replace("/cocktails");
     } finally {
       setIsSaving(false);
     }
@@ -1286,7 +1289,6 @@ export default function CreateCocktailScreen() {
     showDialog,
     shouldStorePhoto,
     storePhoto,
-    goBack,
     markCurrentEntryAsSkip,
     markNextEntryAsSkip,
   ]);
