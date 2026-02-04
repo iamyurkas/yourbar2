@@ -1,7 +1,7 @@
 import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { useColorScheme } from "react-native";
+import { useColorScheme, View } from "react-native";
 import "react-native-reanimated";
 
 import { PaperProvider } from "@/libs/react-native-paper";
@@ -64,17 +64,19 @@ function ThemeAppWrapper({ children }: { children: React.ReactNode }) {
 
 export default Sentry.wrap(function RootLayout() {
   return (
-    <UnsavedChangesProvider>
-      <InventoryProvider>
-        <OnboardingProvider>
-          <ThemeAppWrapper>
-            <Stack>
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            </Stack>
-            <OnboardingOverlay />
-          </ThemeAppWrapper>
-        </OnboardingProvider>
-      </InventoryProvider>
-    </UnsavedChangesProvider>
+    <View style={{ flex: 1 }}>
+      <UnsavedChangesProvider>
+        <InventoryProvider>
+          <OnboardingProvider>
+            <ThemeAppWrapper>
+              <Stack>
+                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              </Stack>
+              <OnboardingOverlay />
+            </ThemeAppWrapper>
+          </OnboardingProvider>
+        </InventoryProvider>
+      </UnsavedChangesProvider>
+    </View>
   );
 });

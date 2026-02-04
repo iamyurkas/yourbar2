@@ -25,7 +25,17 @@ export function OnboardingOverlay() {
   const { anchors } = useOnboardingAnchors();
   const Colors = useAppColors();
   const pathname = usePathname();
-  const { height } = useWindowDimensions();
+  const { height: screenHeight } = useWindowDimensions();
+  const [overlayOffset, setOverlayOffset] = React.useState({ x: 0, y: 0 });
+  const overlayRef = React.useRef<View>(null);
+
+  const handleLayout = () => {
+    overlayRef.current?.measureInWindow((x, y) => {
+      if (x !== overlayOffset.x || y !== overlayOffset.y) {
+        setOverlayOffset({ x, y });
+      }
+    });
+  };
 
   const steps = useMemo<StepDef[]>(() => [
     {
@@ -104,7 +114,7 @@ export function OnboardingOverlay() {
     },
     {
       id: 14,
-      message: 'Принцип роботи Шейкера: інгредієнти в межах однієї категорії взаємозамінні (OR), з різних категорій — обов’язкові (AND). Приклад: (Gin OR Whiskey) AND (Cola OR Tonic).',
+      message: 'Принцип роботи Шейкера: інгредієнти в межах однієї категорії взаємозамінні (OR), з різних категорій — обов’язкові (AND). Приклад: (Gin OR Whiskey) AND (Cola OR Tonic) AND (Lemon OR Lime).',
       buttonLabel: 'Далі',
     },
     {
@@ -132,6 +142,11 @@ export function OnboardingOverlay() {
   if (!onboardingStep || onboardingStep <= 0 || !currentStep) return null;
 
   const anchor = currentStep.anchorName ? anchors[currentStep.anchorName] : null;
+  const adjustedAnchor = anchor ? {
+    ...anchor,
+    x: anchor.x - overlayOffset.x,
+    y: anchor.y - overlayOffset.y,
+  } : null;
 
   const handleNext = () => {
     if (onboardingStep >= steps.length) {
@@ -141,22 +156,28 @@ export function OnboardingOverlay() {
     }
   };
 
-  const tooltipTop = anchor
-    ? (anchor.y + anchor.height + 20 > height - 150 ? anchor.y - 120 : anchor.y + anchor.height + 10)
-    : height / 2 - 50;
+  const tooltipTop = adjustedAnchor
+    ? (adjustedAnchor.y + adjustedAnchor.height + 20 > screenHeight - 150 ? adjustedAnchor.y - 120 : adjustedAnchor.y + adjustedAnchor.height + 10)
+    : screenHeight / 2 - 100;
 
   return (
-    <View style={StyleSheet.absoluteFill} pointerEvents="box-none">
+    <View
+      ref={overlayRef}
+      onLayout={handleLayout}
+      style={StyleSheet.absoluteFill}
+      pointerEvents="box-none"
+      collapsable={false}
+    >
       <Svg height="100%" width="100%" style={StyleSheet.absoluteFill}>
         <Defs>
           <Mask id="mask">
             <Rect height="100%" width="100%" fill="white" />
-            {anchor && (
+            {adjustedAnchor && (
               <Rect
-                x={anchor.x - 4}
-                y={anchor.y - 4}
-                width={anchor.width + 8}
-                height={anchor.height + 8}
+                x={adjustedAnchor.x - 4}
+                y={adjustedAnchor.y - 4}
+                width={adjustedAnchor.width + 8}
+                height={adjustedAnchor.height + 8}
                 rx={8}
                 fill="black"
               />
