@@ -1,6 +1,7 @@
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { useScrollToTop } from '@react-navigation/native';
 import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Pressable,
   SectionList,
@@ -22,7 +23,7 @@ import { ListRow, PresenceCheck, Thumb } from '@/components/RowParts';
 import { OnboardingAnchor } from '@/components/onboarding/OnboardingAnchor';
 import { useOnboardingAnchors } from '@/components/onboarding/OnboardingContext';
 import { SideMenuDrawer } from '@/components/SideMenuDrawer';
-import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
+import { getBuiltinIngredientTags } from '@/constants/ingredient-tags';
 import { useAppColors } from '@/constants/theme';
 import { isCocktailReady } from '@/libs/cocktail-availability';
 import {
@@ -170,6 +171,7 @@ function isCollapsedHeaderItem(item: Ingredient) {
 }
 
 export default function ShakerScreen() {
+  const { t } = useTranslation();
   const router = useRouter();
   const Colors = useAppColors();
   const {
@@ -269,7 +271,7 @@ export default function ShakerScreen() {
     const map = new Map<string, IngredientTagOption>();
     const builtinTagOrder = new Map<string, number>();
 
-    BUILTIN_INGREDIENT_TAGS.forEach((tag, index) => {
+    getBuiltinIngredientTags().forEach((tag, index) => {
       const key = normalizeTagKey(tag);
       if (key) {
         builtinTagOrder.set(key, index);
@@ -296,7 +298,7 @@ export default function ShakerScreen() {
       }
     });
 
-    const otherTag = BUILTIN_INGREDIENT_TAGS.find((tag) => tag.name === 'other');
+    const otherTag = getBuiltinIngredientTags().find((tag) => tag.id === 10); // ID 10 is 'other'
     const otherKey = normalizeTagKey(otherTag) ?? 'other';
     if (!map.has(otherKey)) {
       map.set(otherKey, {
@@ -860,7 +862,7 @@ export default function ShakerScreen() {
             <TextInput
               value={query}
               onChangeText={setQuery}
-              placeholder="Search"
+              placeholder={t('ingredients.search_placeholder')}
               placeholderTextColor={`${Colors.onSurfaceVariant}99`}
               returnKeyType="search"
               style={[styles.searchInput, { color: Colors.text, fontWeight: '400' }]}
@@ -909,20 +911,20 @@ export default function ShakerScreen() {
         >
           <Pressable
             accessibilityRole="button"
-            accessibilityLabel="Clear selected ingredients"
+            accessibilityLabel={t('ui.clear')}
             onPress={handleClearSelection}
             style={({ pressed }) => [styles.clearButtonBase, { borderColor: Colors.danger }, pressed ? styles.clearButtonPressed : null]}
           >
-            <Text style={[styles.clearButtonLabel, { color: Colors.error }]}>Clear</Text>
+            <Text style={[styles.clearButtonLabel, { color: Colors.error }]}>{t('ui.clear')}</Text>
           </Pressable>
           <View style={styles.countsColumn}>
             <Text style={[styles.countsPrimary, { color: Colors.onSurface }]}
             >
-              Cocktails: {matchingCocktailSummary.availableCount}
+              {t('screens.cocktails')}: {matchingCocktailSummary.availableCount}
             </Text>
             <Text style={[styles.countsSecondary, { color: Colors.onSurfaceVariant }]}
             >
-              (recipes: {matchingCocktailSummary.recipeCount})
+              ({t('shaker.recipes')}: {matchingCocktailSummary.recipeCount})
             </Text>
           </View>
           <OnboardingAnchor name="shaker-show-results">
@@ -958,7 +960,7 @@ export default function ShakerScreen() {
                   },
                 ]}
               >
-                Show
+                {t('ui.show')}
               </Text>
             </Pressable>
           </OnboardingAnchor>

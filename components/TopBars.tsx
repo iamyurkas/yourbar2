@@ -1,5 +1,6 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Pressable,
   StyleSheet,
@@ -41,7 +42,7 @@ type SegmentTabsProps = {
 export function SearchTopBar({
   value,
   onChangeText,
-  placeholder = 'Search',
+  placeholder,
   onSubmit,
   onMenuPress,
   onFilterPress,
@@ -49,6 +50,7 @@ export function SearchTopBar({
   filterExpanded = false,
   onFilterLayout,
 }: SearchTopBarProps) {
+  const { t } = useTranslation();
   const Colors = useAppColors();
 
   const handleSubmit = (event: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
@@ -67,7 +69,7 @@ export function SearchTopBar({
       ]}>
       <Pressable
         accessibilityRole="button"
-        accessibilityLabel="Open navigation"
+        accessibilityLabel={t('ui.open_navigation')}
         onPress={onMenuPress}
         style={styles.iconButton}>
         <MaterialCommunityIcons name="menu" size={24} color={Colors.onSurface} />
@@ -77,7 +79,7 @@ export function SearchTopBar({
         <TextInput
           value={value}
           onChangeText={onChangeText}
-          placeholder={placeholder}
+          placeholder={placeholder ?? t('ui.search')}
           placeholderTextColor={`${Colors.onSurfaceVariant}99`}
           returnKeyType="search"
           onSubmitEditing={handleSubmit}
@@ -86,7 +88,7 @@ export function SearchTopBar({
         {value ? (
           <Pressable
             accessibilityRole="button"
-            accessibilityLabel="Clear search query"
+            accessibilityLabel={t('ui.clear_search')}
             onPress={() => onChangeText('')}
             style={styles.clearButton}>
             <MaterialCommunityIcons name="close" size={18} color={Colors.onSurface} />
@@ -95,7 +97,7 @@ export function SearchTopBar({
       </View>
       <Pressable
         accessibilityRole="button"
-        accessibilityLabel="Filter items"
+        accessibilityLabel={t('ui.filter_items')}
         accessibilityState={filterExpanded ? { expanded: true } : undefined}
         onPress={onFilterPress}
         onLayout={(event) => onFilterLayout?.(event.nativeEvent.layout)}

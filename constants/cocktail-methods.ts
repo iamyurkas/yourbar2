@@ -3,6 +3,7 @@ import { type ImageSource } from "expo-image";
 import { type ComponentProps } from "react";
 
 import ShakerIcon from "@/assets/images/shaker.svg";
+import i18n from "@/libs/i18n";
 
 export type CocktailMethod = {
   id: CocktailMethodId;
@@ -18,63 +19,57 @@ export type MethodIcon =
     }
   | { type: "asset"; source: ImageSource };
 
-export const COCKTAIL_METHODS: CocktailMethod[] = [
-  {
-    id: "blend",
-    label: "Blend",
-    title: "Blend",
-    description: "Blend with crushed ice into a frozen texture.",
-  },
-  {
-    id: "muddle",
-    label: "Muddle",
-    title: "Muddle",
-    description: "Press fruit, berries, or herbs to release oils and juice.",
-  },
-  {
-    id: "heat",
-    label: "Heat",
-    title: "Heat",
-    description: "Warm ingredients gently to blend flavors without boiling.",
-  },
-  {
-    id: "shake",
-    label: "Shake",
-    title: "Shake",
-    description:
-      "Shake with ice. Best for citrus, syrup, cream, or egg white to aerate and chill.",
-  },
-  {
-    id: "stir",
-    label: "Stir",
-    title: "Stir",
-    description:
-      "Stir with a bar spoon in a mixing glass full of ice. Best for herbal mixers.",
-  },
-  {
-    id: "throw",
-    label: "Throw",
-    title: "Throw",
-    description:
-      "Pour between tins from a distance to aerate without cloudiness.",
-  },
-  {
-    id: "build",
-    label: "Build",
-    title: "Build",
-    description: "Pour ingredients directly into the serving glass.",
-  },
-  {
-    id: "layer",
-    label: "Layer",
-    title: "Layer",
-    description:
-      "Float ingredients in layers using a bar spoon for visual effect.",
-  },
-];
-
 export function getCocktailMethods(): CocktailMethod[] {
-  return COCKTAIL_METHODS;
+  return [
+    {
+      id: "blend",
+      label: i18n.t("methods.blend"),
+      title: i18n.t("methods.blend"),
+      description: i18n.t("methods.blend_desc"),
+    },
+    {
+      id: "muddle",
+      label: i18n.t("methods.muddle"),
+      title: i18n.t("methods.muddle"),
+      description: i18n.t("methods.muddle_desc"),
+    },
+    {
+      id: "heat",
+      label: i18n.t("methods.heat"),
+      title: i18n.t("methods.heat"),
+      description: i18n.t("methods.heat_desc"),
+    },
+    {
+      id: "shake",
+      label: i18n.t("methods.shake"),
+      title: i18n.t("methods.shake"),
+      description: i18n.t("methods.shake_desc"),
+    },
+    {
+      id: "stir",
+      label: i18n.t("methods.stir"),
+      title: i18n.t("methods.stir"),
+      description: i18n.t("methods.stir_desc"),
+    },
+    {
+      id: "throw",
+      label: i18n.t("methods.throw"),
+      title: i18n.t("methods.throw"),
+      description: i18n.t("methods.throw_desc"),
+    },
+    {
+      id: "build",
+      label: i18n.t("methods.build"),
+      title: i18n.t("methods.build"),
+      description: i18n.t("methods.build_desc"),
+    },
+    {
+      id: "layer",
+      label: i18n.t("methods.layer"),
+      title: i18n.t("methods.layer"),
+      description: i18n.t("methods.layer_desc"),
+    },
+  ];
 }
 
 export const METHOD_ICON_MAP = {

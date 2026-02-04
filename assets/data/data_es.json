@@ -1,0 +1,42 @@
+{
+  "cocktails": [
+    {
+      "id": 1,
+      "name": "1910",
+      "description": "Una bebida de espíritu de agave audaz y directa construida alrededor de Mezcal, Coñac, Punt e Mes: con tendencia amarga, aromática y mejor servida bien fría. Adornada con naranja.",
+      "instructions": "1. Llene un vaso mezclador con hielo.\n2. Agregue 22.5ml de Mezcal, 22.5ml de Coñac, 30ml de Punt e Mes, 15ml de Luxardo Maraschino y 2 toques de Creole Bitters.\n3. Revuelva suavemente durante unos 20 segundos hasta que esté bien frío.\n4. Cuele en una copa coupe fría.\n5. Adorne con un toque de naranja.",
+      "ingredients": [
+        { "order": 1, "name": "Mezcal" },
+        { "order": 2, "name": "Coñac" },
+        { "order": 3, "name": "Punt e Mes" },
+        { "order": 4, "name": "Luxardo Maraschino" },
+        { "order": 5, "name": "Creole Bitters" },
+        { "order": 6, "name": "Hielo" },
+        { "order": 7, "name": "Naranja" }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Siglo XX",
+      "description": "El cóctel Siglo XX es un cóctel clásico que fue creado por primera vez en 1937 por el barman británico C.A. Tuck y nombrado en honor al célebre tren 20th Century Limited que corría entre la ciudad de Nueva York y Chicago. Es una bebida sofisticada y elegante que combina London Dry Gin, Lillet Blanc (un vino aperitivo francés), jugo de lima y crema de cacao blanca.",
+      "instructions": "1. Llene una coctelera con hielo.\n2. Agregue 30ml de Ginebra, 20ml de Lillet Blanc, 20ml de Crema de Cacao Blanca y 10ml de Jugo de Lima.\n3. Agite vigorosamente durante unos 15 segundos hasta que esté bien frío.\n4. Cuele en una copa Coupe fría.\n5. Exprima un toque de cáscara de naranja sobre el cóctel y úselo como adorno.",
+      "ingredients": [
+        { "order": 1, "name": "Ginebra" },
+        { "order": 2, "name": "Lillet Blanc" },
+        { "order": 3, "name": "Crema de Cacao Blanca" },
+        { "order": 4, "name": "Jugo de Lima" },
+        { "order": 5, "name": "Hielo" },
+        { "order": 6, "name": "Naranja" }
+      ]
+    }
+  ],
+  "ingredients": [
+    { "id": 159, "name": "Ginebra", "description": "Bebida alcohólica destilada que obtiene su sabor predominante de las bayas de enebro." },
+    { "id": 193, "name": "Hielo" },
+    { "id": 242, "name": "Naranja" },
+    { "id": 233, "name": "Mezcal" },
+    { "id": 109, "name": "Coñac" },
+    { "id": 11, "name": "Lima" },
+    { "id": 12, "name": "Jugo de Lima" }
+  ]
+}

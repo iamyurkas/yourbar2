@@ -2,6 +2,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { Stack, useLocalSearchParams } from 'expo-router';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   FlatList,
   Pressable,
@@ -21,7 +22,7 @@ import { CollectionHeader } from '@/components/CollectionHeader';
 import { SideMenuDrawer } from '@/components/SideMenuDrawer';
 import { TagPill } from '@/components/TagPill';
 import { getCocktailMethods, METHOD_ICON_MAP, type CocktailMethod } from '@/constants/cocktail-methods';
-import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
+import { getBuiltinCocktailTags } from '@/constants/cocktail-tags';
 import { useAppColors } from '@/constants/theme';
 import { isCocktailReady } from '@/libs/cocktail-availability';
 import { createIngredientLookup } from '@/libs/ingredient-availability';
@@ -66,6 +67,7 @@ function resolveCocktailByKey(key: string, cocktails: Cocktail[]) {
 const METHOD_ICON_SIZE = 16;
 
 export default function ShakerResultsScreen() {
+  const { t } = useTranslation();
   const {
     cocktails,
     availableIngredientIds,
@@ -169,7 +171,7 @@ export default function ShakerResultsScreen() {
     const map = new Map<string, { key: string; name: string; color: string }>();
     const builtinTagOrder = new Map<string, number>();
 
-    BUILTIN_COCKTAIL_TAGS.forEach((tag, index) => {
+    getBuiltinCocktailTags().forEach((tag, index) => {
       builtinTagOrder.set(String(tag.id), index);
       if (tag.name) {
         builtinTagOrder.set(tag.name.trim().toLowerCase(), index);
@@ -570,9 +572,10 @@ export default function ShakerResultsScreen() {
       <View style={styles.container}>
         <View style={styles.headerWrapper} onLayout={handleHeaderLayout}>
           <CollectionHeader
+            title={t('shaker.results_title')}
             searchValue={query}
             onSearchChange={setQuery}
-            placeholder="Search"
+            placeholder={t('cocktails.search_placeholder')}
             onMenuPress={() => setIsMenuOpen(true)}
             onFilterPress={handleFilterPress}
             filterActive={isFilterActive}
@@ -624,14 +627,14 @@ export default function ShakerResultsScreen() {
                       })
                     ) : (
                       <Text style={[styles.filterMenuEmpty, { color: Colors.onSurfaceVariant }]}>
-                        No methods available
+                        {t('cocktails.no_methods_available')}
                       </Text>
                     )}
                   </View>
                   <View style={styles.filterSeparator}>
                     <View style={[styles.filterSeparatorLine, { backgroundColor: Colors.outline }]} />
                     <Text style={[styles.filterSeparatorLabel, { color: Colors.onSurfaceVariant }]}>
-                      AND
+                      {t('ui.and')}
                     </Text>
                     <View style={[styles.filterSeparatorLine, { backgroundColor: Colors.outline }]} />
                   </View>
@@ -654,7 +657,7 @@ export default function ShakerResultsScreen() {
                       })
                     ) : (
                       <Text style={[styles.filterMenuEmpty, { color: Colors.onSurfaceVariant }]}>
-                        No tags available
+                        {t('cocktails.no_tags_available')}
                       </Text>
                     )}
                   </View>
@@ -662,11 +665,11 @@ export default function ShakerResultsScreen() {
                 {selectedTagKeys.size > 0 || selectedMethodIds.size > 0 ? (
                   <Pressable
                     accessibilityRole="button"
-                    accessibilityLabel="Clear selected filters"
+                    accessibilityLabel={t('cocktails.clear_filters')}
                     onPress={handleClearFilters}
                     style={styles.filterMenuClearButton}>
                     <Text style={[styles.filterMenuClearLabel, { color: Colors.tint }]}>
-                      Clear filters
+                      {t('cocktails.clear_filters')}
                     </Text>
                   </Pressable>
                 ) : null}
@@ -683,7 +686,7 @@ export default function ShakerResultsScreen() {
           contentContainerStyle={styles.listContent}
           ListEmptyComponent={
             <Text style={[styles.emptyLabel, { color: Colors.onSurfaceVariant }]}>
-              No matching recipes
+              {t('shaker.no_matching_recipes')}
             </Text>
           }
           showsVerticalScrollIndicator={false}

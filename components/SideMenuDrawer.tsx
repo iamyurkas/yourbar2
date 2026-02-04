@@ -31,9 +31,10 @@ import { TagPill } from "@/components/TagPill";
 import { useAppColors } from "@/constants/theme";
 import { base64ToBytes, createTarArchive } from "@/libs/archive-utils";
 import { buildPhotoBaseName } from "@/libs/photo-utils";
-import { useInventory, type AppTheme, type StartScreen } from "@/providers/inventory-provider";
+import { useInventory, type AppLanguage, type AppTheme, type StartScreen } from "@/providers/inventory-provider";
 import { type InventoryExportData } from "@/providers/inventory-types";
 import appConfig from "../app.json";
+import { useTranslation } from "react-i18next";
 
 const MENU_WIDTH = Math.round(Dimensions.get("window").width * 0.75);
 const ANIMATION_DURATION = 200;
@@ -55,50 +56,52 @@ type StartScreenOption = {
   icon: StartScreenIcon;
 };
 
-const START_SCREEN_OPTIONS: StartScreenOption[] = [
-  {
-    key: "cocktails_all",
-    label: "All cocktails",
-    description: "Browse every recipe",
-    icon: { type: "asset", source: CocktailIcon },
-  },
-  {
-    key: "cocktails_my",
-    label: "My cocktails",
-    description: "See your creations first",
-    icon: { type: "icon", name: "cup-water" },
-  },
-  {
-    key: "cocktails_favorites",
-    label: "Favorite cocktails",
-    description: "Jump into saved cocktails",
-    icon: { type: "icon", name: "star" },
-  },
-  {
-    key: "shaker",
-    label: "Shaker",
-    description: "Mix based on your inventory",
-    icon: { type: "asset", source: ShakerIcon },
-  },
-  {
-    key: "ingredients_all",
-    label: "All ingredients",
-    description: "Manage every ingredient",
-    icon: { type: "asset", source: IngredientsIcon },
-  },
-  {
-    key: "ingredients_my",
-    label: "My ingredients",
-    description: "Start with what you own",
-    icon: { type: "icon", name: "check-circle" },
-  },
-  {
-    key: "ingredients_shopping",
-    label: "Shopping list",
-    description: "Head to your shopping items",
-    icon: { type: "materialIcon", name: "shopping-cart" },
-  },
-];
+function getStartScreenOptions(t: (key: string) => string): StartScreenOption[] {
+  return [
+    {
+      key: "cocktails_all",
+      label: t("ui.screens.cocktails_all"),
+      description: t("ui.screens.cocktails_all_desc"),
+      icon: { type: "asset", source: CocktailIcon },
+    },
+    {
+      key: "cocktails_my",
+      label: t("ui.screens.cocktails_my"),
+      description: t("ui.screens.cocktails_my_desc"),
+      icon: { type: "icon", name: "cup-water" },
+    },
+    {
+      key: "cocktails_favorites",
+      label: t("ui.screens.cocktails_favorites"),
+      description: t("ui.screens.cocktails_favorites_desc"),
+      icon: { type: "icon", name: "star" },
+    },
+    {
+      key: "shaker",
+      label: t("ui.screens.shaker"),
+      description: t("ui.screens.shaker_desc"),
+      icon: { type: "asset", source: ShakerIcon },
+    },
+    {
+      key: "ingredients_all",
+      label: t("ui.screens.ingredients_all"),
+      description: t("ui.screens.ingredients_all_desc"),
+      icon: { type: "asset", source: IngredientsIcon },
+    },
+    {
+      key: "ingredients_my",
+      label: t("ui.screens.ingredients_my"),
+      description: t("ui.screens.ingredients_my_desc"),
+      icon: { type: "icon", name: "check-circle" },
+    },
+    {
+      key: "ingredients_shopping",
+      label: t("ui.screens.ingredients_shopping"),
+      description: t("ui.screens.ingredients_shopping_desc"),
+      icon: { type: "materialIcon", name: "shopping-cart" },
+    },
+  ];
+}
 
 type ThemeOption = {
   key: AppTheme;
@@ -106,10 +109,24 @@ type ThemeOption = {
   icon: ComponentProps<typeof MaterialCommunityIcons>["name"];
 };
 
-const THEME_OPTIONS: ThemeOption[] = [
-  { key: "light", label: "Light", icon: "white-balance-sunny" },
-  { key: "dark", label: "Dark", icon: "moon-waning-crescent" },
-  { key: "system", label: "System", icon: "cellphone-settings" },
+function getThemeOptions(t: (key: string) => string): ThemeOption[] {
+  return [
+    { key: "light", label: t("ui.light"), icon: "white-balance-sunny" },
+    { key: "dark", label: t("ui.dark"), icon: "moon-waning-crescent" },
+    { key: "system", label: t("ui.system"), icon: "cellphone-settings" },
+  ];
+}
+
+type LanguageOption = {
+  key: AppLanguage;
+  label: string;
+  flag: string;
+};
+
+const LANGUAGE_OPTIONS: LanguageOption[] = [
+  { key: "en", label: "English", flag: "🇺🇸" },
+  { key: "es", label: "Español", flag: "🇪🇸" },
+  { key: "ua", label: "Українська", flag: "🇺🇦" },
 ];
 
 type SideMenuDrawerProps = {
@@ -118,6 +135,7 @@ type SideMenuDrawerProps = {
 };
 
 export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
+  const { t } = useTranslation();
   const {
     ignoreGarnish,
     setIgnoreGarnish,
@@ -133,6 +151,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     setStartScreen,
     appTheme,
     setAppTheme,
+    appLanguage,
+    setAppLanguage,
     restartOnboarding,
     resetInventoryFromBundle,
     exportInventoryData,
@@ -160,6 +180,10 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   > | null>(null);
   const [isThemeModalVisible, setThemeModalVisible] = useState(false);
   const themeModalCloseTimeout = useRef<ReturnType<typeof setTimeout> | null>(
+    null,
+  );
+  const [isLanguageModalVisible, setLanguageModalVisible] = useState(false);
+  const languageModalCloseTimeout = useRef<ReturnType<typeof setTimeout> | null>(
     null,
   );
   const [isTagManagerVisible, setTagManagerVisible] = useState(false);
@@ -237,14 +261,22 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     [Colors.outline, Colors.shadow, Colors.surface],
   );
 
+  const startScreenOptions = useMemo(() => getStartScreenOptions(t), [t]);
+  const themeOptions = useMemo(() => getThemeOptions(t), [t]);
+
   const selectedStartScreenOption = useMemo(
-    () => START_SCREEN_OPTIONS.find((option) => option.key === startScreen),
-    [startScreen],
+    () => startScreenOptions.find((option) => option.key === startScreen),
+    [startScreen, startScreenOptions],
   );
 
   const selectedThemeOption = useMemo(
-    () => THEME_OPTIONS.find((option) => option.key === appTheme),
-    [appTheme],
+    () => themeOptions.find((option) => option.key === appTheme),
+    [appTheme, themeOptions],
+  );
+
+  const selectedLanguageOption = useMemo(
+    () => LANGUAGE_OPTIONS.find((option) => option.key === appLanguage),
+    [appLanguage],
   );
 
   const renderStartScreenIcon = (
@@ -331,13 +363,12 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
   const handleResetInventory = () => {
     setDialogOptions({
-      title: "Restore bundled data",
-      message:
-        "This will restore the bundled cocktails and ingredients. Your custom cocktails and ingredients will stay the same.",
+      title: t("ui.restore_bundled_data"),
+      message: t("ui.restore_bundled_data_description"),
       actions: [
-        { label: "Cancel", variant: "secondary" },
+        { label: t("ui.cancel"), variant: "secondary" },
         {
-          label: "Restore",
+          label: t("actions.restore"),
           variant: "destructive",
           onPress: async () => {
             await resetInventoryFromBundle();
@@ -390,6 +421,20 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     scheduleModalClose(themeModalCloseTimeout, setThemeModalVisible);
   };
 
+  const handleLanguagePress = () => {
+    setLanguageModalVisible(true);
+  };
+
+  const handleCloseLanguageModal = () => {
+    clearTimeoutRef(languageModalCloseTimeout);
+    setLanguageModalVisible(false);
+  };
+
+  const handleSelectLanguage = (value: AppLanguage) => {
+    setAppLanguage(value);
+    scheduleModalClose(languageModalCloseTimeout, setLanguageModalVisible);
+  };
+
   const handleOpenTagManager = () => {
     setTagManagerVisible(true);
   };
@@ -420,7 +465,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     setDialogOptions({
       title,
       message,
-      actions: [{ label: "OK" }],
+      actions: [{ label: t("ui.ok") }],
     });
   };
 
@@ -443,8 +488,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     const data = exportInventoryData();
     if (!data) {
       showDialogMessage(
-        "Export unavailable",
-        "Load your inventory before exporting.",
+        t("ui.export_unavailable"),
+        t("ui.load_inventory_first"),
       );
       return;
     }
@@ -455,8 +500,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       const sharingAvailable = await Sharing.isAvailableAsync();
       if (!sharingAvailable) {
         showDialogMessage(
-          "Sharing unavailable",
-          "Sharing is not available on this device.",
+          t("ui.sharing_unavailable"),
+          t("ui.sharing_unavailable_desc"),
         );
         return;
       }
@@ -464,7 +509,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       const directory =
         FileSystem.cacheDirectory ?? FileSystem.documentDirectory;
       if (!directory) {
-        showDialogMessage("Export failed", "Unable to access device storage.");
+        showDialogMessage(t("ui.export_failed"), t("ui.access_storage_failed"));
         return;
       }
 
@@ -479,12 +524,12 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
       await Sharing.shareAsync(fileUri, {
         mimeType: "application/json",
-        dialogTitle: "Export cocktails & ingredients",
+        dialogTitle: t("ui.export_dialog_title"),
         UTI: "public.json",
       });
     } catch (error) {
       console.error("Failed to export inventory data", error);
-      showDialogMessage("Export failed", "Please try again.");
+      showDialogMessage(t("ui.export_failed"), t("ui.try_again"));
     } finally {
       setIsExporting(false);
     }
@@ -499,8 +544,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     const photoEntries = exportInventoryPhotoEntries();
     if (!photoEntries) {
       showDialogMessage(
-        "Backup unavailable",
-        "Load your inventory before backing up photos.",
+        t("ui.backup_unavailable"),
+        t("ui.load_inventory_backup"),
       );
       return;
     }
@@ -511,8 +556,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       const sharingAvailable = await Sharing.isAvailableAsync();
       if (!sharingAvailable) {
         showDialogMessage(
-          "Sharing unavailable",
-          "Sharing is not available on this device.",
+          t("ui.sharing_unavailable"),
+          t("ui.sharing_unavailable_desc"),
         );
         return;
       }
@@ -520,7 +565,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       const directory =
         FileSystem.cacheDirectory ?? FileSystem.documentDirectory;
       if (!directory) {
-        showDialogMessage("Backup failed", "Unable to access device storage.");
+        showDialogMessage(t("ui.backup_failed"), t("ui.access_storage_failed"));
         return;
       }
 
@@ -528,8 +573,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
       if (entries.length === 0) {
         showDialogMessage(
-          "No photos to backup",
-          "Add photos to cocktails or ingredients first.",
+          t("ui.no_photos_to_backup"),
+          t("ui.add_photos_first"),
         );
         return;
       }
@@ -569,8 +614,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
       if (addedCount === 0) {
         showDialogMessage(
-          "Backup failed",
-          "Unable to find any stored photo files.",
+          t("ui.backup_failed"),
+          t("ui.no_stored_photos"),
         );
         return;
       }
@@ -586,12 +631,12 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
       await Sharing.shareAsync(fileUri, {
         mimeType: "application/x-tar",
-        dialogTitle: "Backup cocktail & ingredient photos",
+        dialogTitle: t("ui.backup_dialog_title"),
         UTI: "public.tar-archive",
       });
     } catch (error) {
       console.error("Failed to backup photos", error);
-      showDialogMessage("Backup failed", "Please try again.");
+      showDialogMessage(t("ui.backup_failed"), t("ui.try_again"));
     } finally {
       setIsBackingUpPhotos(false);
     }
@@ -616,7 +661,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
       const asset = result.assets?.[0];
       if (!asset?.uri) {
-        showDialogMessage("Import failed", "Unable to read the selected file.");
+        showDialogMessage(t("ui.import_failed"), t("ui.read_file_failed"));
         return;
       }
 
@@ -625,8 +670,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
       if (!isValidInventoryData(parsed)) {
         showDialogMessage(
-          "Invalid file",
-          "The selected file does not match the expected data format.",
+          t("ui.invalid_file"),
+          t("ui.invalid_file_desc"),
         );
         return;
       }
@@ -636,8 +681,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     } catch (error) {
       console.error("Failed to import inventory data", error);
       showDialogMessage(
-        "Import failed",
-        "Please try again with a valid JSON file.",
+        t("ui.import_failed"),
+        t("ui.import_failed_json"),
       );
     } finally {
       setIsImporting(false);
@@ -667,12 +712,12 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     tag: { id: number; name: string },
   ) => {
     setDialogOptions({
-      title: "Delete tag",
-      message: `Remove "${tag.name}"?`,
+      title: t("ui.delete_tag"),
+      message: t("ui.delete_tag_confirmation", { name: tag.name }),
       actions: [
-        { label: "Cancel", variant: "secondary" },
+        { label: t("ui.cancel"), variant: "secondary" },
         {
-          label: "Delete",
+          label: t("ui.delete"),
           variant: "destructive",
           onPress: () => {
             if (type === "cocktail") {
@@ -691,6 +736,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       clearTimeoutRef(ratingModalCloseTimeout);
       clearTimeoutRef(startScreenModalCloseTimeout);
       clearTimeoutRef(themeModalCloseTimeout);
+      clearTimeoutRef(languageModalCloseTimeout);
     };
   }, []);
 
@@ -709,7 +755,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       <View style={styles.container}>
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel="Close menu"
+          accessibilityLabel={t("ui.ok")}
           onPress={onClose}
           style={styles.backdropArea}
         >
@@ -729,7 +775,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
             ]}
           >
             <Text style={[styles.title, { color: Colors.onSurface }]}>
-              Settings
+                {t("ui.settings")}
             </Text>
           </View>
           {/* Preserve menu taps even if a text field elsewhere keeps the keyboard open. */}
@@ -770,7 +816,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 <Text
                   style={[styles.settingLabel, { color: Colors.onSurface }]}
                 >
-                  Ignore garnish
+                  {t("ui.ignore_garnish")}
                 </Text>
                 <Text
                   style={[
@@ -778,7 +824,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     { color: Colors.onSurfaceVariant },
                   ]}
                 >
-                  All garnishes are optional
+                  {t("ui.ignore_garnish_description")}
                 </Text>
               </View>
             </Pressable>
@@ -815,7 +861,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 <Text
                   style={[styles.settingLabel, { color: Colors.onSurface }]}
                 >
-                  Allow all substitutes
+                  {t("ui.allow_all_substitutes")}
                 </Text>
                 <Text
                   style={[
@@ -823,7 +869,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     { color: Colors.onSurfaceVariant },
                   ]}
                 >
-                  Always use substitutes
+                  {t("ui.allow_all_substitutes_description")}
                 </Text>
               </View>
             </Pressable>
@@ -858,7 +904,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 <Text
                   style={[styles.settingLabel, { color: Colors.onSurface }]}
                 >
-                  Show in imperial
+                  {t("ui.show_in_imperial")}
                 </Text>
                 <Text
                   style={[
@@ -866,7 +912,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     { color: Colors.onSurfaceVariant },
                   ]}
                 >
-                  Use oz instead of ml and grams
+                  {t("ui.show_in_imperial_description")}
                 </Text>
               </View>
             </Pressable>
@@ -901,7 +947,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 <Text
                   style={[styles.settingLabel, { color: Colors.onSurface }]}
                 >
-                  Keep screen awake
+                  {t("ui.keep_screen_awake")}
                 </Text>
                 <Text
                   style={[
@@ -909,13 +955,13 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     { color: Colors.onSurfaceVariant },
                   ]}
                 >
-                  Prevent sleep on cocktail view
+                  {t("ui.keep_screen_awake_description")}
                 </Text>
               </View>
             </Pressable>
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel="Set starting screen"
+              accessibilityLabel={t("ui.starting_screen")}
               onPress={handleStartScreenPress}
               style={[styles.settingRow, SURFACE_ROW_STYLE]}
             >
@@ -930,7 +976,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 <Text
                   style={[styles.settingLabel, { color: Colors.onSurface }]}
                 >
-                  Starting screen
+                  {t("ui.starting_screen")}
                 </Text>
                 <Text
                   style={[
@@ -938,13 +984,13 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     { color: Colors.onSurfaceVariant },
                   ]}
                 >
-                  Open {selectedStartScreenOption?.label ?? "All cocktails"}
+                  {t("ui.starting_screen_description", { label: selectedStartScreenOption?.label ?? t("ui.screens.cocktails_all") })}
                 </Text>
               </View>
             </Pressable>
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel="Set app theme"
+              accessibilityLabel={t("ui.app_theme")}
               onPress={handleThemePress}
               style={[styles.settingRow, SURFACE_ROW_STYLE]}
             >
@@ -959,7 +1005,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 <Text
                   style={[styles.settingLabel, { color: Colors.onSurface }]}
                 >
-                  App theme
+                  {t("ui.app_theme")}
                 </Text>
                 <Text
                   style={[
@@ -967,13 +1013,40 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     { color: Colors.onSurfaceVariant },
                   ]}
                 >
-                  Current: {selectedThemeOption?.label ?? "System"}
+                  {t("ui.app_theme_description", { label: selectedThemeOption?.label ?? t("ui.system") })}
                 </Text>
               </View>
             </Pressable>
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel="Set favorites rating filter"
+              accessibilityLabel={t("ui.language")}
+              onPress={handleLanguagePress}
+              style={[styles.settingRow, SURFACE_ROW_STYLE]}
+            >
+              <View style={[styles.checkbox, SURFACE_ICON_STYLE]}>
+                <Text style={{ fontSize: 14 }}>
+                  {selectedLanguageOption?.flag ?? "🌐"}
+                </Text>
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text
+                  style={[styles.settingLabel, { color: Colors.onSurface }]}
+                >
+                  {t("ui.language")}
+                </Text>
+                <Text
+                  style={[
+                    styles.settingCaption,
+                    { color: Colors.onSurfaceVariant },
+                  ]}
+                >
+                  {t("ui.language_description", { label: selectedLanguageOption?.label ?? "English" })}
+                </Text>
+              </View>
+            </Pressable>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={t("ui.favorites_rating_filter")}
               onPress={handleRatingThresholdPress}
               style={[styles.settingRow, SURFACE_ROW_STYLE]}
             >
@@ -988,7 +1061,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 <Text
                   style={[styles.settingLabel, { color: Colors.onSurface }]}
                 >
-                  Favorites rating filter
+                  {t("ui.favorites_rating_filter")}
                 </Text>
                 <Text
                   style={[
@@ -996,14 +1069,14 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     { color: Colors.onSurfaceVariant },
                   ]}
                 >
-                  Showing {ratingFilterThreshold}+ stars cocktails
+                  {t("ui.favorites_rating_filter_description", { threshold: ratingFilterThreshold })}
                 </Text>
               </View>
             </Pressable>
 
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel="Manage custom tags"
+              accessibilityLabel={t("ui.manage_tags")}
               onPress={handleOpenTagManager}
               style={[styles.settingRow, SURFACE_ROW_STYLE]}
             >
@@ -1018,7 +1091,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 <Text
                   style={[styles.settingLabel, { color: Colors.onSurface }]}
                 >
-                  Manage tags
+                  {t("ui.manage_tags")}
                 </Text>
                 <Text
                   style={[
@@ -1026,13 +1099,13 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     { color: Colors.onSurfaceVariant },
                   ]}
                 >
-                  Create or update your tags
+                  {t("ui.manage_tags_description")}
                 </Text>
               </View>
             </Pressable>
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel="Export cocktails and ingredients"
+              accessibilityLabel={t("ui.export_data")}
               onPress={handleExportInventory}
               disabled={isExporting || isImporting}
               style={({ pressed }) => [
@@ -1052,7 +1125,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 <Text
                   style={[styles.settingLabel, { color: Colors.onSurface }]}
                 >
-                  {isExporting ? "Exporting data..." : "Export data"}
+                  {isExporting ? t("ui.exporting_data") : t("ui.export_data")}
                 </Text>
                 <Text
                   style={[
@@ -1060,13 +1133,13 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     { color: Colors.onSurfaceVariant },
                   ]}
                 >
-                  Backup data to a file
+                  {t("ui.export_data_description")}
                 </Text>
               </View>
             </Pressable>
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel="Import cocktails and ingredients"
+              accessibilityLabel={t("ui.import_data")}
               onPress={handleImportInventory}
               disabled={isExporting || isImporting}
               style={({ pressed }) => [
@@ -1086,7 +1159,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 <Text
                   style={[styles.settingLabel, { color: Colors.onSurface }]}
                 >
-                  {isImporting ? "Importing data..." : "Import data"}
+                  {isImporting ? t("ui.importing_data") : t("ui.import_data")}
                 </Text>
                 <Text
                   style={[
@@ -1094,13 +1167,13 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     { color: Colors.onSurfaceVariant },
                   ]}
                 >
-                  Load backup from a file
+                  {t("ui.import_data_description")}
                 </Text>
               </View>
             </Pressable>
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel="Backup cocktail and ingredient photos"
+              accessibilityLabel={t("ui.export_photos")}
               onPress={handleBackupPhotos}
               disabled={isExporting || isImporting || isBackingUpPhotos}
               style={({ pressed }) => [
@@ -1120,7 +1193,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 <Text
                   style={[styles.settingLabel, { color: Colors.onSurface }]}
                 >
-                  {isBackingUpPhotos ? "Exporting photos..." : "Export photos"}
+                  {isBackingUpPhotos ? t("ui.exporting_photos") : t("ui.export_photos")}
                 </Text>
                 <Text
                   style={[
@@ -1128,13 +1201,13 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     { color: Colors.onSurfaceVariant },
                   ]}
                 >
-                  Save photos as an archive
+                  {t("ui.export_photos_description")}
                 </Text>
               </View>
             </Pressable>
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel="Restart onboarding"
+              accessibilityLabel={t("ui.restart_onboarding")}
               onPress={() => {
                 restartOnboarding();
                 onClose();
@@ -1147,15 +1220,15 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 <MaterialCommunityIcons name="help-circle-outline" size={16} color={Colors.onSurfaceVariant} />
               </View>
               <View style={styles.settingTextContainer}>
-                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>Restart onboarding</Text>
+                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>{t("ui.restart_onboarding")}</Text>
                 <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>
-                  Show the guided tour again
+                  {t("ui.restart_onboarding_description")}
                 </Text>
               </View>
             </Pressable>
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel="Reload bundled inventory"
+              accessibilityLabel={t("ui.restore_bundled_data")}
               onPress={handleResetInventory}
               style={[
                 styles.actionRow,
@@ -1165,9 +1238,9 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 <MaterialCommunityIcons name="refresh" size={16} color={Colors.onSurfaceVariant} />
               </View>
               <View style={styles.settingTextContainer}>
-                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>Restore bundled data</Text>
+                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>{t("ui.restore_bundled_data")}</Text>
                 <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>
-                  Restore bundled cocktails and ingredients
+                  {t("ui.restore_bundled_data_description")}
                 </Text>
               </View>
             </Pressable>
@@ -1175,7 +1248,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               <Text
                 style={[styles.versionText, { color: Colors.onSurfaceVariant }]}
               >
-                Version {APP_VERSION}
+                {t("ui.version", { version: APP_VERSION })}
                 {APP_VERSION_CODE != null ? ` (${APP_VERSION_CODE})` : ""}
               </Text>
             </View>
@@ -1198,7 +1271,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               styles.modalCard,
               MODAL_CARD_STYLE,
             ]}
-            accessibilityLabel="Favorites rating"
+            accessibilityLabel={t("ui.favorites_rating_filter")}
             onPress={() => { }}
           >
             <View style={styles.modalHeader}>
@@ -1208,12 +1281,12 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   { color: Colors.onSurface, flex: 1 },
                 ]}
               >
-                Favorites rating
+                {t("ui.favorites_rating_filter")}
               </Text>
               <Pressable
                 onPress={handleCloseRatingModal}
                 accessibilityRole="button"
-                accessibilityLabel="Close"
+                accessibilityLabel={t("ui.cancel")}
               >
                 <MaterialCommunityIcons
                   name="close"
@@ -1228,7 +1301,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 { color: Colors.onSurfaceVariant },
               ]}
             >
-              Choose the minimum rating to show on Favorites
+              {t("ui.select_rating")}
             </Text>
             <View style={styles.ratingOptionRow}>
               {[1, 2, 3, 4, 5].map((value) => {
@@ -1295,7 +1368,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               styles.modalCard,
               MODAL_CARD_STYLE,
             ]}
-            accessibilityLabel="Manage tags"
+            accessibilityLabel={t("ui.manage_tags")}
             onPress={() => { }}
           >
             <View style={styles.modalHeader}>
@@ -1305,12 +1378,12 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   { color: Colors.onSurface, flex: 1 },
                 ]}
               >
-                Manage tags
+                {t("ui.manage_tags")}
               </Text>
               <Pressable
                 onPress={handleCloseTagManager}
                 accessibilityRole="button"
-                accessibilityLabel="Close"
+                accessibilityLabel={t("ui.ok")}
               >
                 <MaterialCommunityIcons
                   name="close"
@@ -1329,7 +1402,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   <Text
                     style={[styles.settingLabel, { color: Colors.onSurface }]}
                   >
-                    Cocktail tags
+                    {t("ui.cocktail_tags")}
                   </Text>
                   <Pressable
                     accessibilityRole="button"
@@ -1345,7 +1418,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                       color={Colors.tint}
                     />
                     <Text style={[styles.tagAddLabel, { color: Colors.tint }]}>
-                      Add
+                      {t("ui.add")}
                     </Text>
                   </Pressable>
                 </View>
@@ -1356,7 +1429,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                       { color: Colors.onSurfaceVariant },
                     ]}
                   >
-                    No custom cocktail tags yet.
+                    {t("ui.no_custom_tags", { type: t("ui.cocktail_tags").toLowerCase() })}
                   </Text>
                 ) : (
                   <View style={styles.tagRows}>
@@ -1393,7 +1466,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                             onPress={() =>
                               handleDeleteTag("cocktail", {
                                 id: Number(tag.id),
-                                name: tag.name ?? "Tag",
+                                name: tag.name ?? t("ui.this_item"),
                               })
                             }
                           >
@@ -1414,7 +1487,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   <Text
                     style={[styles.settingLabel, { color: Colors.onSurface }]}
                   >
-                    Ingredient tags
+                    {t("ui.ingredient_tags")}
                   </Text>
                   <Pressable
                     accessibilityRole="button"
@@ -1430,7 +1503,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                       color={Colors.tint}
                     />
                     <Text style={[styles.tagAddLabel, { color: Colors.tint }]}>
-                      Add
+                      {t("ui.add")}
                     </Text>
                   </Pressable>
                 </View>
@@ -1441,7 +1514,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                       { color: Colors.onSurfaceVariant },
                     ]}
                   >
-                    No custom ingredient tags yet.
+                    {t("ui.no_custom_tags", { type: t("ui.ingredient_tags").toLowerCase() })}
                   </Text>
                 ) : (
                   <View style={styles.tagRows}>
@@ -1478,7 +1551,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                             onPress={() =>
                               handleDeleteTag("ingredient", {
                                 id: Number(tag.id),
-                                name: tag.name ?? "Tag",
+                                name: tag.name ?? t("ui.this_item"),
                               })
                             }
                           >
@@ -1500,8 +1573,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       </Modal>
       <TagEditorModal
         visible={isTagEditorVisible}
-        title={tagEditorMode === "create" ? "New tag" : "Edit tag"}
-        confirmLabel={tagEditorMode === "create" ? "Create" : "Save"}
+        title={tagEditorMode === "create" ? t("ui.new_tag") : t("ui.edit_tag")}
+        confirmLabel={tagEditorMode === "create" ? t("ui.create") : t("ui.save")}
         initialName={tagEditorTarget?.name}
         initialColor={tagEditorTarget?.color}
         onClose={handleCloseTagEditor}
@@ -1530,7 +1603,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               styles.modalCard,
               MODAL_CARD_STYLE,
             ]}
-            accessibilityLabel="Starting screen"
+            accessibilityLabel={t("ui.starting_screen")}
             onPress={() => { }}
           >
             <View style={styles.modalHeader}>
@@ -1540,12 +1613,12 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   { color: Colors.onSurface, flex: 1 },
                 ]}
               >
-                Starting screen
+                {t("ui.starting_screen")}
               </Text>
               <Pressable
                 onPress={handleCloseStartScreenModal}
                 accessibilityRole="button"
-                accessibilityLabel="Close"
+                accessibilityLabel={t("ui.ok")}
               >
                 <MaterialCommunityIcons
                   name="close"
@@ -1560,7 +1633,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 { color: Colors.onSurfaceVariant },
               ]}
             >
-              Select where the app opens
+              {t("ui.select_start_screen")}
             </Text>
             <ScrollView
               style={styles.startScreenModalScroll}
@@ -1568,7 +1641,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               showsVerticalScrollIndicator={false}
               keyboardShouldPersistTaps="handled"
             >
-              {START_SCREEN_OPTIONS.map((option) => {
+              {startScreenOptions.map((option) => {
                 const isSelected = startScreen === option.key;
                 return (
                   <Pressable
@@ -1648,7 +1721,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               styles.modalCard,
               MODAL_CARD_STYLE,
             ]}
-            accessibilityLabel="App theme"
+            accessibilityLabel={t("ui.app_theme")}
             onPress={() => { }}
           >
             <View style={styles.modalHeader}>
@@ -1658,12 +1731,12 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   { color: Colors.onSurface, flex: 1 },
                 ]}
               >
-                App theme
+                {t("ui.app_theme")}
               </Text>
               <Pressable
                 onPress={handleCloseThemeModal}
                 accessibilityRole="button"
-                accessibilityLabel="Close"
+                accessibilityLabel={t("ui.ok")}
               >
                 <MaterialCommunityIcons
                   name="close"
@@ -1678,10 +1751,10 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 { color: Colors.onSurfaceVariant },
               ]}
             >
-              Choose your preferred appearance
+              {t("ui.select_theme")}
             </Text>
             <View style={styles.themeOptionRow}>
-              {THEME_OPTIONS.map((option) => {
+              {themeOptions.map((option) => {
                 const isSelected = appTheme === option.key;
                 return (
                   <Pressable
@@ -1710,6 +1783,97 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                         isSelected ? Colors.background : Colors.onSurfaceVariant
                       }
                     />
+                    <Text
+                      style={[
+                        styles.themeOptionLabel,
+                        {
+                          color: isSelected
+                            ? Colors.background
+                            : Colors.onSurface,
+                        },
+                      ]}
+                    >
+                      {option.label}
+                    </Text>
+                  </Pressable>
+                );
+              })}
+            </View>
+          </Pressable>
+        </Pressable>
+      </Modal>
+      <Modal
+        transparent
+        visible={isLanguageModalVisible}
+        animationType="fade"
+        onRequestClose={handleCloseLanguageModal}
+      >
+        <Pressable
+          style={styles.modalOverlay}
+          onPress={handleCloseLanguageModal}
+          accessibilityRole="button"
+        >
+          <Pressable
+            style={[
+              styles.modalCard,
+              MODAL_CARD_STYLE,
+            ]}
+            accessibilityLabel={t("ui.language")}
+            onPress={() => { }}
+          >
+            <View style={styles.modalHeader}>
+              <Text
+                style={[
+                  styles.modalTitle,
+                  { color: Colors.onSurface, flex: 1 },
+                ]}
+              >
+                {t("ui.language")}
+              </Text>
+              <Pressable
+                onPress={handleCloseLanguageModal}
+                accessibilityRole="button"
+                accessibilityLabel={t("ui.ok")}
+              >
+                <MaterialCommunityIcons
+                  name="close"
+                  size={22}
+                  color={Colors.onSurfaceVariant}
+                />
+              </Pressable>
+            </View>
+            <Text
+              style={[
+                styles.settingCaption,
+                { color: Colors.onSurfaceVariant },
+              ]}
+            >
+              {t("ui.language_description", { label: selectedLanguageOption?.label ?? "English" })}
+            </Text>
+            <View style={styles.themeOptionRow}>
+              {LANGUAGE_OPTIONS.map((option) => {
+                const isSelected = appLanguage === option.key;
+                return (
+                  <Pressable
+                    key={`language-option-${option.key}`}
+                    accessibilityRole="button"
+                    accessibilityState={{ selected: isSelected }}
+                    accessibilityLabel={`Set ${option.label} language`}
+                    onPress={() => handleSelectLanguage(option.key)}
+                    style={({ pressed }) => [
+                      styles.themeOption,
+                      {
+                        borderColor: isSelected
+                          ? Colors.tint
+                          : Colors.outlineVariant,
+                        backgroundColor: isSelected
+                          ? Colors.tint
+                          : Colors.surfaceBright,
+                      },
+                      pressed ? { opacity: 0.85 } : null,
+                    ]}
+                  >
+                    <Text style={{ fontSize: 24 }}>{option.flag}</Text>
                     <Text
                       style={[
                         styles.themeOptionLabel,

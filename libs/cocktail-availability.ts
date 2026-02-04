@@ -1,3 +1,4 @@
+import i18n from '@/libs/i18n';
 import type { Cocktail, Ingredient } from '@/providers/inventory-provider';
 import {
   createIngredientLookup,
@@ -73,9 +74,9 @@ export function summariseCocktailAvailability(
   if (missingCount === 0) {
     ingredientLine = resolvedNames.join(', ');
   } else if (missingCount >= 3 || missingNames.length === 0) {
-    ingredientLine = `Missing: ${missingCount} ingredients`;
+    ingredientLine = i18n.t('cocktails.missing_count', { count: missingCount });
   } else {
-    ingredientLine = `Missing: ${missingNames.join(', ')}`;
+    ingredientLine = i18n.t('cocktails.missing_ingredients', { names: missingNames.join(', ') });
   }
 
   const isReady = missingCount === 0 && requiredIngredients.length > 0;

@@ -1,6 +1,6 @@
 import bundledData from '@/assets/data/data.json';
-import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
-import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
+import { getBuiltinCocktailTags } from '@/constants/cocktail-tags';
+import { getBuiltinIngredientTags } from '@/constants/ingredient-tags';
 
 export type InventoryData = typeof bundledData;
 
@@ -11,9 +11,6 @@ type TagLike = {
   name?: string | null;
   color?: string | null;
 };
-
-const BUILTIN_COCKTAIL_TAGS_BY_ID = new Map(BUILTIN_COCKTAIL_TAGS.map((tag) => [tag.id, tag]));
-const BUILTIN_INGREDIENT_TAGS_BY_ID = new Map(BUILTIN_INGREDIENT_TAGS.map((tag) => [tag.id, tag]));
 
 function hydrateTagList(
   tags: readonly (TagLike | number | string | null | undefined)[] | null | undefined,
@@ -70,15 +67,18 @@ function hydrateTagList(
 }
 
 function hydrateInventoryTagsFromCode(data: InventoryData): InventoryData {
+  const cocktailTagsById = new Map(getBuiltinCocktailTags().map((tag) => [tag.id, tag]));
+  const ingredientTagsById = new Map(getBuiltinIngredientTags().map((tag) => [tag.id, tag]));
+
   return {
     ...data,
     cocktails: data.cocktails.map((cocktail) => ({
       ...cocktail,
-      tags: hydrateTagList(cocktail.tags, BUILTIN_COCKTAIL_TAGS_BY_ID),
+      tags: hydrateTagList(cocktail.tags, cocktailTagsById),
     })),
     ingredients: data.ingredients.map((ingredient) => ({
       ...ingredient,
-      tags: hydrateTagList(ingredient.tags, BUILTIN_INGREDIENT_TAGS_BY_ID),
+      tags: hydrateTagList(ingredient.tags, ingredientTagsById),
     })),
   };
 }
@@ -90,18 +90,63 @@ function normalizeInventoryData(data: unknown): InventoryData {
   return data as InventoryData;
 }
 
-export function loadInventoryData(): InventoryData {
-  if (!cachedInventoryData) {
-    cachedInventoryData = hydrateInventoryTagsFromCode(normalizeInventoryData(bundledData));
-    if (!cachedInventoryData?.ingredients?.length) {
-      cachedInventoryData = reloadInventoryData();
+export function loadInventoryData(lang: string = 'en'): InventoryData {
+  if (lang === 'en') {
+    if (!cachedInventoryData) {
+      cachedInventoryData = hydrateInventoryTagsFromCode(normalizeInventoryData(bundledData));
+      if (!cachedInventoryData?.ingredients?.length) {
+        cachedInventoryData = reloadInventoryData('en');
+      }
     }
+    return cachedInventoryData;
   }
 
-  return cachedInventoryData;
+  return reloadInventoryData(lang);
 }
 
-export function reloadInventoryData(): InventoryData {
-  cachedInventoryData = hydrateInventoryTagsFromCode(normalizeInventoryData(require('@/assets/data/data.json')));
-  return cachedInventoryData;
+export function reloadInventoryData(lang: string = 'en'): InventoryData {
+  const englishData = require('@/assets/data/data.json');
+  if (lang === 'en') {
+    const hydrated = hydrateInventoryTagsFromCode(normalizeInventoryData(englishData));
+    cachedInventoryData = hydrated;
+    return hydrated;
+  }
+
+  let localizedData;
+  try {
+    if (lang === 'es') {
+      localizedData = require('@/assets/data/data_es.json');
+    } else if (lang === 'ua') {
+      localizedData = require('@/assets/data/data_ua.json');
+    }
+  } catch {
+    // Fallback to English if file not found or error loading
+  }
+
+  if (!localizedData) {
+    return hydrateInventoryTagsFromCode(normalizeInventoryData(englishData));
+  }
+
+  // Merge localized names/descriptions into englishData
+  const merged = {
+    ...englishData,
+    cocktails: englishData.cocktails.map((ec: any) => {
+      const lc = localizedData.cocktails?.find((c: any) => c.id === ec.id);
+      if (!lc) return ec;
+      return {
+        ...ec,
+        ...lc,
+        ingredients: ec.ingredients?.map((ei: any) => {
+          const li = lc.ingredients?.find((i: any) => i.order === ei.order);
+          return li ? { ...ei, ...li } : ei;
+        }),
+      };
+    }),
+    ingredients: englishData.ingredients.map((ei: any) => {
+      const li = localizedData.ingredients?.find((i: any) => i.id === ei.id);
+      return li ? { ...ei, ...li } : ei;
+    }),
+  };
+
+  return hydrateInventoryTagsFromCode(normalizeInventoryData(merged));
 }

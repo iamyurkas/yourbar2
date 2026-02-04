@@ -8,8 +8,8 @@ import React, {
   useState,
 } from 'react';
 
-import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
-import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
+import { getBuiltinCocktailTags } from '@/constants/cocktail-tags';
+import { getBuiltinIngredientTags } from '@/constants/ingredient-tags';
 import { TAG_COLORS } from '@/constants/tag-colors';
 import { loadInventoryData, reloadInventoryData, type InventoryData } from '@/libs/inventory-data';
 import {
@@ -29,8 +29,10 @@ import {
   toCocktailStorageRecord,
   toIngredientStorageRecord
 } from '@/libs/inventory-utils';
+import i18n from '@/libs/i18n';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import {
+  type AppLanguage,
   type AppTheme,
   type BaseCocktailRecord,
   type Cocktail,
@@ -50,6 +52,7 @@ import {
 
 const DEFAULT_START_SCREEN: StartScreen = 'cocktails_all';
 const DEFAULT_APP_THEME: AppTheme = 'light';
+const DEFAULT_APP_LANGUAGE: AppLanguage = 'en';
 
 type InventoryContextValue = {
   cocktails: Cocktail[];
@@ -96,6 +99,8 @@ type InventoryContextValue = {
   setStartScreen: (value: StartScreen) => void;
   appTheme: AppTheme;
   setAppTheme: (value: AppTheme) => void;
+  appLanguage: AppLanguage;
+  setAppLanguage: (value: AppLanguage) => void;
   onboardingStep: number;
   setOnboardingStep: (step: number) => void;
   onboardingCompleted: boolean;
@@ -134,6 +139,8 @@ declare global {
   var __yourbarInventoryStartScreen: StartScreen | undefined;
   // eslint-disable-next-line no-var
   var __yourbarInventoryAppTheme: AppTheme | undefined;
+  // eslint-disable-next-line no-var
+  var __yourbarInventoryAppLanguage: AppLanguage | undefined;
   // eslint-disable-next-line no-var
   var __yourbarInventoryCustomCocktailTags: CocktailTag[] | undefined;
   // eslint-disable-next-line no-var
@@ -314,9 +321,18 @@ function sanitizeAppTheme(value?: string | null): AppTheme {
   }
 }
 
+function sanitizeAppLanguage(value?: string | null): AppLanguage {
+  switch (value) {
+    case 'en':
+    case 'es':
+    case 'ua':
+      return value;
+    default:
+      return DEFAULT_APP_LANGUAGE;
+  }
+}
+
 const DEFAULT_TAG_COLOR = TAG_COLORS[0];
-const BUILTIN_COCKTAIL_TAG_MAX = BUILTIN_COCKTAIL_TAGS.reduce((max, tag) => Math.max(max, tag.id), 0);
-const BUILTIN_INGREDIENT_TAG_MAX = BUILTIN_INGREDIENT_TAGS.reduce((max, tag) => Math.max(max, tag.id), 0);
 const USER_CREATED_ID_START = 10000;
 
 function sanitizeCustomTags<TTag extends { id?: number | null; name?: string | null; color?: string | null }>(
@@ -372,6 +388,7 @@ function createDeltaSnapshotFromInventory(
     ratingFilterThreshold: number;
     startScreen: StartScreen;
     appTheme: AppTheme;
+    appLanguage: AppLanguage;
     customCocktailTags: CocktailTag[];
     customIngredientTags: IngredientTag[];
     onboardingStep: number;
@@ -498,6 +515,7 @@ function createDeltaSnapshotFromInventory(
     ratingFilterThreshold: options.ratingFilterThreshold,
     startScreen: options.startScreen,
     appTheme: options.appTheme,
+    appLanguage: options.appLanguage,
     onboardingStep: options.onboardingStep,
     onboardingCompleted: options.onboardingCompleted,
   } satisfies InventoryDeltaSnapshot<CocktailStorageRecord, IngredientStorageRecord>;
@@ -550,6 +568,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   const [appTheme, setAppTheme] = useState<AppTheme>(
     () => globalThis.__yourbarInventoryAppTheme ?? DEFAULT_APP_THEME,
   );
+  const [appLanguage, setAppLanguage] = useState<AppLanguage>(
+    () => globalThis.__yourbarInventoryAppLanguage ?? DEFAULT_APP_LANGUAGE,
+  );
   const [customCocktailTags, setCustomCocktailTags] = useState<CocktailTag[]>(() =>
     sanitizeCustomTags(globalThis.__yourbarInventoryCustomCocktailTags, DEFAULT_TAG_COLOR),
   );
@@ -576,7 +597,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       try {
         const stored = await loadInventorySnapshot<CocktailStorageRecord, IngredientStorageRecord>();
         if (stored && (stored.version === INVENTORY_SNAPSHOT_VERSION || stored.version === 1) && !cancelled) {
-          const baseData = loadInventoryData();
+          const nextAppLanguage = sanitizeAppLanguage(stored.appLanguage);
+          const baseData = loadInventoryData(nextAppLanguage);
           const nextInventoryState = createInventoryStateFromSnapshot(stored, baseData);
           const nextAvailableIds = createIngredientIdSet(stored.availableIngredientIds);
           const nextShoppingIds = createIngredientIdSet(stored.shoppingIngredientIds);
@@ -591,6 +613,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           );
           const nextStartScreen = sanitizeStartScreen(stored.startScreen);
           const nextAppTheme = sanitizeAppTheme(stored.appTheme);
+          const nextAppLanguage = sanitizeAppLanguage(stored.appLanguage);
           const nextCustomCocktailTags = sanitizeCustomTags(stored.customCocktailTags, DEFAULT_TAG_COLOR);
           const nextCustomIngredientTags = sanitizeCustomTags(stored.customIngredientTags, DEFAULT_TAG_COLOR);
           const nextOnboardingStep = 0;
@@ -607,6 +630,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           setRatingFilterThreshold(nextRatingFilterThreshold);
           setStartScreen(nextStartScreen);
           setAppTheme(nextAppTheme);
+          setAppLanguage(nextAppLanguage);
           setCustomCocktailTags(nextCustomCocktailTags);
           setCustomIngredientTags(nextCustomIngredientTags);
           setOnboardingStep(nextOnboardingStep);
@@ -618,7 +642,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       }
 
       try {
-        const data = loadInventoryData();
+        const data = loadInventoryData(DEFAULT_APP_LANGUAGE);
         if (!cancelled) {
           setInventoryState(createInventoryStateFromData(data, true));
           setAvailableIngredientIds(new Set());
@@ -630,6 +654,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           setKeepScreenAwake(true);
           setStartScreen(DEFAULT_START_SCREEN);
           setAppTheme(DEFAULT_APP_THEME);
+          setAppLanguage(DEFAULT_APP_LANGUAGE);
           setCustomCocktailTags([]);
           setCustomIngredientTags([]);
           setOnboardingStep(1);
@@ -665,6 +690,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     globalThis.__yourbarInventoryRatingFilterThreshold = ratingFilterThreshold;
     globalThis.__yourbarInventoryStartScreen = startScreen;
     globalThis.__yourbarInventoryAppTheme = appTheme;
+    globalThis.__yourbarInventoryAppLanguage = appLanguage;
     globalThis.__yourbarInventoryCustomCocktailTags = customCocktailTags;
     globalThis.__yourbarInventoryCustomIngredientTags = customIngredientTags;
     globalThis.__yourbarInventoryOnboardingStep = onboardingStep;
@@ -681,6 +707,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       ratingFilterThreshold,
       startScreen,
       appTheme,
+      appLanguage,
       customCocktailTags,
       customIngredientTags,
       onboardingStep,
@@ -709,11 +736,50 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     ratingFilterThreshold,
     startScreen,
     appTheme,
+    appLanguage,
     customCocktailTags,
     customIngredientTags,
     onboardingStep,
     onboardingCompleted,
   ]);
+
+  useEffect(() => {
+    if (i18n.language !== appLanguage) {
+      void i18n.changeLanguage(appLanguage);
+
+      // Reload base data in the new language
+      if (inventoryState) {
+        const nextBaseData = reloadInventoryData(appLanguage);
+        setInventoryState((prev) => {
+          if (!prev) {
+            return prev;
+          }
+
+          const userCocktails = prev.cocktails.filter((cocktail) => {
+            const id = Number(cocktail.id ?? -1);
+            return Number.isFinite(id) && id >= USER_CREATED_ID_START;
+          });
+          const userIngredients = prev.ingredients.filter((ingredient) => {
+            const id = Number(ingredient.id ?? -1);
+            return Number.isFinite(id) && id >= USER_CREATED_ID_START;
+          });
+
+          const cocktails = [...nextBaseData.cocktails, ...userCocktails].sort((a, b) =>
+            a.searchNameNormalized.localeCompare(b.searchNameNormalized),
+          );
+          const ingredients = [...nextBaseData.ingredients, ...userIngredients].sort((a, b) =>
+            a.searchNameNormalized.localeCompare(b.searchNameNormalized),
+          );
+
+          return {
+            ...prev,
+            cocktails,
+            ingredients,
+          } satisfies InventoryState;
+        });
+      }
+    }
+  }, [appLanguage, inventoryState]);
 
   const cocktails = inventoryState?.cocktails ?? [];
   const ingredients = inventoryState?.ingredients ?? [];
@@ -1089,7 +1155,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       console.warn('Failed to clear inventory snapshot', error);
     }
 
-    const data = reloadInventoryData();
+    const data = reloadInventoryData(appLanguage);
     setInventoryState((prev) => {
       const baseState = createInventoryStateFromData(data, prev?.imported ?? false);
       if (!prev) {
@@ -1644,6 +1710,10 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     setAppTheme(sanitizeAppTheme(value));
   }, []);
 
+  const handleSetAppLanguage = useCallback((value: AppLanguage) => {
+    setAppLanguage(sanitizeAppLanguage(value));
+  }, []);
+
   const completeOnboarding = useCallback(() => {
     setOnboardingCompleted(true);
     setOnboardingStep(0);
@@ -1665,7 +1735,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     let created: CocktailTag | undefined;
 
     setCustomCocktailTags((prev) => {
-      const nextId = getNextCustomTagId(prev, BUILTIN_COCKTAIL_TAG_MAX);
+      const maxBuiltin = getBuiltinCocktailTags().reduce((max, tag) => Math.max(max, tag.id), 0);
+      const nextId = getNextCustomTagId(prev, maxBuiltin);
       created = { id: nextId, name: trimmedName, color };
       return [...prev, created].sort((a, b) => (a.name ?? '').localeCompare(b.name ?? ''));
     });
@@ -1799,7 +1870,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     let created: IngredientTag | undefined;
 
     setCustomIngredientTags((prev) => {
-      const nextId = getNextCustomTagId(prev, BUILTIN_INGREDIENT_TAG_MAX);
+      const maxBuiltin = getBuiltinIngredientTags().reduce((max, tag) => Math.max(max, tag.id), 0);
+      const nextId = getNextCustomTagId(prev, maxBuiltin);
       created = { id: nextId, name: trimmedName, color };
       return [...prev, created].sort((a, b) => (a.name ?? '').localeCompare(b.name ?? ''));
     });
@@ -1965,6 +2037,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       ratingFilterThreshold,
       startScreen,
       appTheme,
+      appLanguage,
       setIngredientAvailability,
       toggleIngredientAvailability,
       toggleIngredientShopping,
@@ -1995,6 +2068,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       setRatingFilterThreshold: handleSetRatingFilterThreshold,
       setStartScreen: handleSetStartScreen,
       setAppTheme: handleSetAppTheme,
+      setAppLanguage: handleSetAppLanguage,
       onboardingStep,
       setOnboardingStep,
       onboardingCompleted,
@@ -2046,6 +2120,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     handleSetRatingFilterThreshold,
     handleSetStartScreen,
     handleSetAppTheme,
+    handleSetAppLanguage,
     onboardingStep,
     onboardingCompleted,
     completeOnboarding,

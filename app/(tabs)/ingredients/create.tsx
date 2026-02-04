@@ -3,6 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   FlatList,
   KeyboardAvoidingView,
@@ -24,7 +25,7 @@ import { AppImage } from '@/components/AppImage';
 import { ListRow, Thumb } from '@/components/RowParts';
 import { TagEditorModal } from '@/components/TagEditorModal';
 import { TagPill } from '@/components/TagPill';
-import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
+import { getBuiltinIngredientTags } from '@/constants/ingredient-tags';
 import { useAppColors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
 import { buildReturnToParams, skipDuplicateBack } from '@/libs/navigation';
@@ -68,6 +69,7 @@ function useResolvedIngredient(param: string | undefined, ingredients: Ingredien
 }
 
 export default function IngredientFormScreen() {
+  const { t } = useTranslation();
   const params = useLocalSearchParams<{
     suggestedName?: string;
     returnTo?: string;
@@ -258,11 +260,11 @@ export default function IngredientFormScreen() {
 
   const placeholderLabel = useMemo(() => {
     if (imageSource) {
-      return 'Change image';
+      return t('ui.edit');
     }
 
-    return 'Add image';
-  }, [imageSource]);
+    return t('ui.add');
+  }, [imageSource, t]);
 
   const toggleTag = useCallback((tagId: number) => {
     setSelectedTagIds((prev) => {
@@ -278,7 +280,7 @@ export default function IngredientFormScreen() {
     const sortedCustom = [...customIngredientTags].sort((a, b) =>
       (a.name ?? '').localeCompare(b.name ?? ''),
     );
-    return [...BUILTIN_INGREDIENT_TAGS, ...sortedCustom];
+    return [...getBuiltinIngredientTags(), ...sortedCustom];
   }, [customIngredientTags]);
 
   const tagSelection = useMemo(() => {
@@ -320,14 +322,14 @@ export default function IngredientFormScreen() {
 
     if (!canAskAgain) {
       showDialog({
-        title: 'Media library access',
-        message: 'Enable photo library permissions in system settings to add an ingredient image.',
-        actions: [{ label: 'OK' }],
+        title: t('ui.media_access_required'),
+        message: t('ui.media_access_required_desc'),
+        actions: [{ label: t('ui.ok') }],
       });
     }
 
     return false;
-  }, [permissionStatus?.granted, requestPermission, showDialog]);
+  }, [permissionStatus?.granted, requestPermission, showDialog, t]);
 
   const handlePickImage = useCallback(async () => {
     if (isPickingImage) {
@@ -357,14 +359,14 @@ export default function IngredientFormScreen() {
     } catch (error) {
       console.warn('Failed to pick image', error);
       showDialog({
-        title: 'Could not pick image',
-        message: 'Please try again later.',
-        actions: [{ label: 'OK' }],
+        title: t('ui.could_not_save'),
+        message: t('ui.try_again_later'),
+        actions: [{ label: t('ui.ok') }],
       });
     } finally {
       setIsPickingImage(false);
     }
-  }, [ensureMediaPermission, isPickingImage, showDialog]);
+  }, [ensureMediaPermission, isPickingImage, showDialog, t]);
 
   const handleSubmit = useCallback(async () => {
     if (isSaving) {
@@ -374,9 +376,9 @@ export default function IngredientFormScreen() {
     const trimmedName = name.trim();
     if (!trimmedName) {
       showDialog({
-        title: 'Name is required',
-        message: 'Please enter the ingredient name.',
-        actions: [{ label: 'OK' }],
+        title: t('cocktails.name_required'),
+        message: t('cocktails.enter_name'),
+        actions: [{ label: t('ui.ok') }],
       });
       return;
     }
@@ -384,9 +386,9 @@ export default function IngredientFormScreen() {
     if (isEditMode) {
       if (numericIngredientId == null) {
         showDialog({
-          title: 'Ingredient not found',
-          message: 'Please try again later.',
-          actions: [{ label: 'OK' }],
+          title: t('ui.item_not_found'),
+          message: t('ui.try_again_later'),
+          actions: [{ label: t('ui.ok') }],
         });
         return;
       }
@@ -424,9 +426,9 @@ export default function IngredientFormScreen() {
 
         if (!updated) {
           showDialog({
-            title: 'Could not save ingredient',
-            message: 'Please try again later.',
-            actions: [{ label: 'OK' }],
+            title: t('ui.could_not_save'),
+            message: t('ui.try_again_later'),
+            actions: [{ label: t('ui.ok') }],
           });
           return;
         }
@@ -471,9 +473,9 @@ export default function IngredientFormScreen() {
     if (!created) {
       setIsSaving(false);
       showDialog({
-        title: 'Could not save ingredient',
-        message: 'Please try again later.',
-        actions: [{ label: 'OK' }],
+        title: t('ui.could_not_save'),
+        message: t('ui.try_again_later'),
+        actions: [{ label: t('ui.ok') }],
       });
       return;
     }
@@ -531,22 +533,21 @@ export default function IngredientFormScreen() {
     selectedTagIds,
     setHasUnsavedChanges,
     showDialog,
-    shouldStorePhoto,
-    storePhoto,
     updateIngredient,
+    t,
   ]);
 
   const confirmLeave = useCallback(
     (onLeave: () => void) => {
       showDialog({
-        title: 'Leave without saving?',
-        message: 'Your changes will be lost if you leave this screen.',
+        title: t('cocktails.leave_without_saving'),
+        message: t('cocktails.changes_lost'),
         actions: [
-          { label: 'Save', onPress: handleSubmit },
-          { label: 'Stay', variant: 'secondary' },
+          { label: t('ui.save'), onPress: handleSubmit },
+          { label: t('cocktails.stay'), variant: 'secondary' },
           {
-            label: 'Leave',
-            variant: 'destructive',
+            label: t('cocktails.leave'),
+            variant: "destructive",
             onPress: () => {
               setHasUnsavedChanges(false);
               onLeave();
@@ -555,7 +556,7 @@ export default function IngredientFormScreen() {
         ],
       });
     },
-    [handleSubmit, setHasUnsavedChanges, showDialog],
+    [handleSubmit, setHasUnsavedChanges, showDialog, t],
   );
 
   useEffect(() => {
@@ -604,33 +605,31 @@ export default function IngredientFormScreen() {
 
     if (numericIngredientId == null) {
       showDialog({
-        title: 'Ingredient not found',
-        message: 'Please try again later.',
-        actions: [{ label: 'OK' }],
+        title: t('ui.item_not_found'),
+        message: t('ui.try_again_later'),
+        actions: [{ label: t('ui.ok') }],
       });
       return;
     }
 
     const trimmedName = ingredient?.name?.trim();
-    const message = trimmedName
-      ? `Are you sure you want to delete ${trimmedName}? This action cannot be undone.`
-      : 'Are you sure you want to delete this ingredient? This action cannot be undone.';
+    const message = t('ingredients.delete_ingredient_confirmation', { name: trimmedName || t('ui.this_item') });
 
     showDialog({
-      title: 'Delete ingredient',
+      title: t('ingredients.delete_ingredient'),
       message,
       actions: [
-        { label: 'Cancel', variant: 'secondary' },
+        { label: t('ui.cancel'), variant: 'secondary' },
         {
-          label: 'Delete',
+          label: t('ui.delete'),
           variant: 'destructive',
           onPress: () => {
             const wasDeleted = deleteIngredient(numericIngredientId);
             if (!wasDeleted) {
               showDialog({
-                title: 'Could not delete ingredient',
-                message: 'Please try again later.',
-                actions: [{ label: 'OK' }],
+                title: t('ui.could_not_delete'),
+                message: t('ui.try_again_later'),
+                actions: [{ label: t('ui.ok') }],
               });
               return;
             }
@@ -641,7 +640,7 @@ export default function IngredientFormScreen() {
         },
       ],
     });
-  }, [deleteIngredient, ingredient?.name, isEditMode, numericIngredientId, setHasUnsavedChanges, showDialog]);
+  }, [deleteIngredient, ingredient?.name, isEditMode, numericIngredientId, setHasUnsavedChanges, showDialog, t]);
 
   const baseIngredient = useMemo(() => {
     if (baseIngredientId == null) {
@@ -856,7 +855,7 @@ export default function IngredientFormScreen() {
       <>
         <Stack.Screen
           options={{
-            title: 'Edit ingredient',
+            title: t('ingredients.edit_ingredient'),
             headerTitleAlign: 'center',
             headerStyle: { backgroundColor: Colors.surface },
             headerShadowVisible: false,
@@ -865,7 +864,7 @@ export default function IngredientFormScreen() {
               <Pressable
                 onPress={handleGoBack}
                 accessibilityRole="button"
-                accessibilityLabel="Go back"
+                accessibilityLabel={t('ui.ok')}
                 style={styles.headerButton}
                 hitSlop={8}>
                 <MaterialCommunityIcons name="arrow-left" size={22} color={Colors.onSurface} />
@@ -874,7 +873,7 @@ export default function IngredientFormScreen() {
           }}
         />
         <View style={[styles.container, styles.emptyState, { backgroundColor: Colors.surface }]}>
-          <Text style={[styles.emptyMessage, { color: Colors.onSurfaceVariant }]}>Ingredient not found</Text>
+          <Text style={[styles.emptyMessage, { color: Colors.onSurfaceVariant }]}>{t('ui.item_not_found')}</Text>
         </View>
       </>
     );
@@ -887,11 +886,11 @@ export default function IngredientFormScreen() {
       style={[styles.container, { backgroundColor: Colors.background }]}
       keyboardShouldPersistTaps="handled">
       <View style={sectionStyle}>
-        <Text style={[styles.label, { color: Colors.onSurface }]}>Name</Text>
+        <Text style={[styles.label, { color: Colors.onSurface }]}>{t('ui.name')}</Text>
         <TextInput
           value={name}
           onChangeText={setName}
-          placeholder="e.g., Ginger syrup"
+          placeholder={t('ui.name_placeholder')}
           style={[
             styles.input,
             { borderColor: Colors.outlineVariant, color: Colors.text, backgroundColor: Colors.surface },
@@ -916,7 +915,7 @@ export default function IngredientFormScreen() {
           ) : (
             <View style={styles.placeholderContent}>
               <MaterialCommunityIcons name="image-plus" size={28} color={`${Colors.onSurfaceVariant}99`} />
-              <Text style={[styles.placeholderHint, { color: `${Colors.onSurfaceVariant}99` }]}>Tap to add a photo</Text>
+              <Text style={[styles.placeholderHint, { color: `${Colors.onSurfaceVariant}99` }]}>{t('ingredients.tap_to_select')}</Text>
             </View>
           )}
           {imageSource ? (
@@ -942,17 +941,17 @@ export default function IngredientFormScreen() {
 
       <View style={sectionStyle}>
         <View style={styles.tagHeader}>
-          <Text style={[styles.label, { color: Colors.onSurface }]}>Tags</Text>
+          <Text style={[styles.label, { color: Colors.onSurface }]}>{t('cocktails.tags')}</Text>
           <Pressable
             accessibilityRole="button"
-            accessibilityLabel="Create tag"
+            accessibilityLabel={t('ui.new_tag')}
             onPress={handleOpenTagModal}
             style={[styles.tagAddButton, { borderColor: Colors.outlineVariant }]}>
             <MaterialCommunityIcons name="plus" size={16} color={Colors.tint} />
-            <Text style={[styles.tagAddLabel, { color: Colors.tint }]}>Create tag</Text>
+            <Text style={[styles.tagAddLabel, { color: Colors.tint }]}>{t('ui.create')}</Text>
           </Pressable>
         </View>
-        <Text style={[hintStyle, { color: Colors.onSurfaceVariant }]}>Select one or more tags</Text>
+        <Text style={[hintStyle, { color: Colors.onSurfaceVariant }]}>{t('ui.select_tags_hint')}</Text>
         <View style={tagListStyle}>
           {tagSelection.map((tag) => (
             <TagPill
@@ -970,10 +969,10 @@ export default function IngredientFormScreen() {
       </View>
 
       <View style={sectionStyle}>
-        <Text style={[styles.label, { color: Colors.onSurface }]}>Base ingredient</Text>
+        <Text style={[styles.label, { color: Colors.onSurface }]}>{t('ingredients.base_ingredient')}</Text>
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel={baseIngredient ? 'Change base ingredient' : 'Select base ingredient'}
+          accessibilityLabel={baseIngredient ? t('ui.edit') : t('ui.add')}
           onPress={handleOpenBaseModal}
           style={[styles.baseSelector, { borderColor: Colors.outlineVariant, backgroundColor: Colors.surface }]}>
           {baseIngredient ? (
@@ -1003,18 +1002,18 @@ export default function IngredientFormScreen() {
             </>
           ) : (
             <View style={styles.basePlaceholderRow}>
-              <Text style={[styles.basePlaceholderText, { color: Colors.onSurfaceVariant }]}>None</Text>
+              <Text style={[styles.basePlaceholderText, { color: Colors.onSurfaceVariant }]}>{t('ui.none')}</Text>
             </View>
           )}
         </Pressable>
       </View>
 
       <View style={[sectionStyle, styles.descriptionSection]}>
-        <Text style={[styles.label, { color: Colors.onSurface }]}>Description</Text>
+        <Text style={[styles.label, { color: Colors.onSurface }]}>{t('cocktails.description')}</Text>
         <TextInput
           value={description}
           onChangeText={setDescription}
-          placeholder="Add tasting notes or usage suggestions"
+          placeholder={t('ingredients.description_placeholder')}
           style={[
             styles.input,
             styles.multilineInput,
@@ -1033,7 +1032,7 @@ export default function IngredientFormScreen() {
         style={[submitButtonStyle, { backgroundColor: Colors.tint, opacity: isSaving ? 0.6 : 1 }]}
         onPress={handleSubmit}
         disabled={isSaving || isPickingImage}>
-        <Text style={[styles.submitLabel, { color: Colors.onPrimary }]}>Save</Text>
+        <Text style={[styles.submitLabel, { color: Colors.onPrimary }]}>{t('ui.save')}</Text>
       </Pressable>
       <View style={styles.bottomSpacer} />
     </ScrollView>
@@ -1043,7 +1042,7 @@ export default function IngredientFormScreen() {
     <>
       <Stack.Screen
         options={{
-          title: isEditMode ? 'Edit ingredient' : 'Add ingredient',
+          title: isEditMode ? t('ingredients.edit_ingredient') : t('ingredients.add_ingredient'),
           headerTitleAlign: 'center',
           headerStyle: { backgroundColor: Colors.surface },
           headerShadowVisible: false,
@@ -1052,7 +1051,7 @@ export default function IngredientFormScreen() {
             <Pressable
               onPress={handleGoBack}
               accessibilityRole="button"
-              accessibilityLabel="Go back"
+              accessibilityLabel={t('ui.ok')}
               style={styles.headerButton}
               hitSlop={8}>
               <MaterialCommunityIcons name="arrow-left" size={22} color={Colors.onSurface} />
@@ -1063,7 +1062,7 @@ export default function IngredientFormScreen() {
               <Pressable
                 onPress={handleDeletePress}
                 accessibilityRole="button"
-                accessibilityLabel="Delete ingredient"
+                accessibilityLabel={t('ingredients.delete_ingredient')}
                 style={styles.headerButton}
                 hitSlop={8}>
                 <MaterialIcons name="delete-outline" size={22} color={Colors.onSurface} />
@@ -1100,8 +1099,8 @@ export default function IngredientFormScreen() {
             ]}
             accessibilityRole="menu">
             <View style={styles.modalHeader}>
-              <Text style={[styles.modalTitle, { color: Colors.onSurface }]}>Select base ingredient</Text>
-              <Pressable onPress={handleCloseBaseModal} accessibilityRole="button" accessibilityLabel="Close">
+              <Text style={[styles.modalTitle, { color: Colors.onSurface }]}>{t('ingredients.base_ingredient')}</Text>
+              <Pressable onPress={handleCloseBaseModal} accessibilityRole="button" accessibilityLabel={t('ui.ok')}>
                 <MaterialCommunityIcons name="close" size={22} color={Colors.onSurfaceVariant} />
               </Pressable>
             </View>
@@ -1109,7 +1108,7 @@ export default function IngredientFormScreen() {
               ref={baseSearchInputRef}
               value={baseSearch}
               onChangeText={setBaseSearch}
-              placeholder="Search ingredients"
+              placeholder={t('ingredients.search_placeholder')}
               placeholderTextColor={`${Colors.onSurfaceVariant}99`}
               style={[
                 styles.modalSearchInput,
@@ -1132,7 +1131,7 @@ export default function IngredientFormScreen() {
               }}
               contentContainerStyle={styles.modalListContent}
               ListEmptyComponent={() => (
-                <Text style={[styles.modalEmptyText, { color: Colors.onSurfaceVariant }]}>No ingredients found</Text>
+                <Text style={[styles.modalEmptyText, { color: Colors.onSurfaceVariant }]}>{t('ingredients.all_tab_empty')}</Text>
               )}
             />
           </Pressable>
@@ -1149,8 +1148,8 @@ export default function IngredientFormScreen() {
 
       <TagEditorModal
         visible={isTagModalVisible}
-        title="New tag"
-        confirmLabel="Create"
+        title={t('ui.new_tag')}
+        confirmLabel={t('ui.create')}
         onClose={handleCloseTagModal}
         onSave={handleCreateTag}
       />

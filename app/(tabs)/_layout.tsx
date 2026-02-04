@@ -10,20 +10,24 @@ import { AppDialog, type DialogOptions } from '@/components/AppDialog';
 import { TabBarButton } from '@/components/tab-bar/TabBarButton';
 import { TabBarIcon } from '@/components/tab-bar/TabBarIcon';
 import { OnboardingAnchor } from '@/components/onboarding/OnboardingAnchor';
+import { useTranslation } from 'react-i18next';
 import { useAppColors } from '@/constants/theme';
 import { getLastCocktailTab, getLastIngredientTab } from '@/libs/collection-tabs';
 
 type TabPressHandler = (navigation: { navigate: (...args: never[]) => void }, route: { name: string }) => void;
 
-const TAB_SCREENS: Array<{
-  name: 'cocktails' | 'shaker' | 'ingredients';
-  title: string;
-  icon: typeof CocktailIcon;
-  onTabPress: TabPressHandler;
-}> = [
+export default function TabLayout() {
+  const { t } = useTranslation();
+
+  const TAB_SCREENS: Array<{
+    name: 'cocktails' | 'shaker' | 'ingredients';
+    title: string;
+    icon: typeof CocktailIcon;
+    onTabPress: TabPressHandler;
+  }> = useMemo(() => [
     {
       name: 'cocktails',
-      title: 'Cocktails',
+      title: t('screens.cocktails'),
       icon: CocktailIcon,
       onTabPress: (navigation, route) => {
         getLastCocktailTab();
@@ -32,7 +36,7 @@ const TAB_SCREENS: Array<{
     },
     {
       name: 'shaker',
-      title: 'Shaker',
+      title: t('screens.shaker'),
       icon: ShakerIcon,
       onTabPress: (navigation, route) => {
         navigation.navigate(route.name as never, { screen: 'index' } as never);
@@ -40,16 +44,15 @@ const TAB_SCREENS: Array<{
     },
     {
       name: 'ingredients',
-      title: 'Ingredients',
+      title: t('screens.ingredients'),
       icon: LemonIcon,
       onTabPress: (navigation, route) => {
         getLastIngredientTab();
         navigation.navigate(route.name as never, { screen: 'index' } as never);
       },
     },
-  ];
+  ], [t]);
 
-export default function TabLayout() {
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(null);
   const insets = useSafeAreaInsets();
   const Colors = useAppColors();

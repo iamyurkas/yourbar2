@@ -19,6 +19,7 @@ export type InventorySnapshotV1<TCocktail, TIngredient> = {
   ratingFilterThreshold?: number;
   startScreen?: string;
   appTheme?: string;
+  appLanguage?: string;
   onboardingStep?: number;
   onboardingCompleted?: boolean;
 };
@@ -48,6 +49,7 @@ export type InventoryDeltaSnapshot<TCocktail, TIngredient> = {
   ratingFilterThreshold?: number;
   startScreen?: string;
   appTheme?: string;
+  appLanguage?: string;
   onboardingStep?: number;
   onboardingCompleted?: boolean;
 };

@@ -3,6 +3,7 @@ import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useColorScheme, View } from "react-native";
 import "react-native-reanimated";
+import "@/libs/i18n";
 
 import { PaperProvider } from "@/libs/react-native-paper";
 import { OnboardingProvider } from "@/components/onboarding/OnboardingContext";

@@ -3,6 +3,7 @@ import { useScrollToTop } from '@react-navigation/native';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   FlatList,
   Pressable,
@@ -25,7 +26,7 @@ import { SideMenuDrawer } from '@/components/SideMenuDrawer';
 import { TagPill } from '@/components/TagPill';
 import type { SegmentTabOption } from '@/components/TopBars';
 import { getCocktailMethods, METHOD_ICON_MAP, type CocktailMethod } from '@/constants/cocktail-methods';
-import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
+import { getBuiltinCocktailTags } from '@/constants/cocktail-tags';
 import { useAppColors } from '@/constants/theme';
 import { isCocktailReady } from '@/libs/cocktail-availability';
 import { getLastCocktailTab, setLastCocktailTab, type CocktailTabKey } from '@/libs/collection-tabs';
@@ -45,13 +46,14 @@ type CocktailMethodOption = {
 
 const METHOD_ICON_SIZE = 16;
 
-const TAB_OPTIONS: SegmentTabOption[] = [
-  { key: 'all', label: 'All' },
-  { key: 'my', label: 'My' },
-  { key: 'favorites', label: 'Favorites' },
-];
-
 export default function CocktailsScreen() {
+  const { t } = useTranslation();
+
+  const TAB_OPTIONS: SegmentTabOption[] = useMemo(() => [
+    { key: 'all', label: t('ui.all') },
+    { key: 'my', label: t('ui.my') },
+    { key: 'favorites', label: t('ui.favorites') },
+  ], [t]);
   const { onTabChangeRequest } = useOnboardingAnchors();
   const {
     cocktails,
@@ -114,7 +116,7 @@ export default function CocktailsScreen() {
   const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
 
   const availableTagOptions = useMemo<TagOption[]>(
-    () => buildTagOptions(cocktails, (cocktail) => cocktail.tags ?? [], BUILTIN_COCKTAIL_TAGS, defaultTagColor),
+    () => buildTagOptions(cocktails, (cocktail) => cocktail.tags ?? [], getBuiltinCocktailTags(), defaultTagColor),
     [cocktails, defaultTagColor],
   );
 
@@ -483,7 +485,7 @@ export default function CocktailsScreen() {
         return (
           <View style={styles.moreIngredientsWrapper}>
             <Text style={[styles.moreIngredientsLabel, { color: Colors.onSurfaceVariant }]}>
-              More ingredients needed
+              {t('ingredients.more_ingredients_needed')}
             </Text>
           </View>
         );
@@ -492,11 +494,11 @@ export default function CocktailsScreen() {
       if (item.type === 'ingredient-header') {
         const isOnShoppingList = shoppingIngredientIds.has(item.ingredientId);
         const accessibilityLabel = isOnShoppingList
-          ? 'Remove ingredient from shopping list'
-          : 'Add ingredient to shopping list';
-        const subtitleLabel = `Make ${item.cocktailCount} ${
-          item.cocktailCount === 1 ? 'cocktail' : 'cocktails'
-        }`;
+          ? t('ingredients.remove_from_shopping_list')
+          : t('ingredients.add_to_shopping_list');
+        const subtitleLabel = t('ingredients.make_count_cocktails', {
+          count: item.cocktailCount
+        });
         const thumbnail = <Thumb label={item.name} uri={item.photoUri ?? undefined} />;
         const brandIndicatorColor = item.isBranded ? Colors.primary : undefined;
 
@@ -555,6 +557,7 @@ export default function CocktailsScreen() {
       ingredientLookup,
       shoppingIngredientIds,
       Colors,
+      t,
     ],
   );
 
@@ -600,13 +603,13 @@ export default function CocktailsScreen() {
   const emptyMessage = useMemo(() => {
       switch (activeTab) {
         case 'my':
-          return 'Mark ingredients you have to see available cocktails here.';
+          return t('cocktails.my_tab_empty');
         case 'favorites':
-          return 'Rate cocktails and/or adjust the rating threshold in the menu.';
+          return t('cocktails.favorites_tab_empty');
         default:
-          return 'No cocktails yet';
+          return t('cocktails.all_tab_empty');
       }
-    }, [activeTab]);
+    }, [activeTab, t]);
   const filterMenuTop = useMemo(() => {
     if (headerLayout && filterAnchorLayout) {
       return headerLayout.y + filterAnchorLayout.y + filterAnchorLayout.height + 6;
@@ -628,7 +631,7 @@ export default function CocktailsScreen() {
           <CollectionHeader
             searchValue={query}
             onSearchChange={setQuery}
-            placeholder="Search"
+            placeholder={t('cocktails.search_placeholder')}
             onMenuPress={() => setIsMenuOpen(true)}
             tabs={TAB_OPTIONS}
             activeTab={activeTab}
@@ -684,14 +687,14 @@ export default function CocktailsScreen() {
                       })
                     ) : (
                       <Text style={[styles.filterMenuEmpty, { color: Colors.onSurfaceVariant }]}>
-                        No methods available
+                        {t('cocktails.no_methods_available')}
                       </Text>
                     )}
                   </View>
                   <View style={styles.filterSeparator}>
                     <View style={[styles.filterSeparatorLine, { backgroundColor: Colors.outline }]} />
                     <Text style={[styles.filterSeparatorLabel, { color: Colors.onSurfaceVariant }]}>
-                      AND
+                      {t('ui.and')}
                     </Text>
                     <View style={[styles.filterSeparatorLine, { backgroundColor: Colors.outline }]} />
                   </View>
@@ -714,7 +717,7 @@ export default function CocktailsScreen() {
                       })
                     ) : (
                       <Text style={[styles.filterMenuEmpty, { color: Colors.onSurfaceVariant }]}>
-                        No tags available
+                        {t('cocktails.no_tags_available')}
                       </Text>
                     )}
                   </View>
@@ -722,10 +725,10 @@ export default function CocktailsScreen() {
                 {selectedTagKeys.size > 0 || selectedMethodIds.size > 0 ? (
                   <Pressable
                     accessibilityRole="button"
-                    accessibilityLabel="Clear selected filters"
+                    accessibilityLabel={t('cocktails.clear_filters')}
                     onPress={handleClearFilters}
                     style={styles.filterMenuClearButton}>
-                    <Text style={[styles.filterMenuClearLabel, { color: Colors.tint }]}>Clear filters</Text>
+                    <Text style={[styles.filterMenuClearLabel, { color: Colors.tint }]}>{t('cocktails.clear_filters')}</Text>
                   </Pressable>
                 ) : null}
               </ScrollView>
@@ -753,7 +756,7 @@ export default function CocktailsScreen() {
         />
       </View>
       <FabAdd
-        label="Add cocktail"
+        label={t('cocktails.add_cocktail')}
         onPress={() =>
           router.push({ pathname: '/cocktails/create', params: { source: 'cocktails' } })
         }

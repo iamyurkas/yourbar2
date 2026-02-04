@@ -1,6 +1,7 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import React, { memo, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 
 import { resolveGlasswareUriFromId } from '@/assets/image-manifest';
@@ -61,6 +62,7 @@ const CocktailListRowComponent = ({
   showMethodIcons = false,
   onPress,
 }: CocktailListRowProps) => {
+  const { t } = useTranslation();
   const Colors = useAppColors();
   const effectiveHighlightColor = highlightColor ?? Colors.highlightFaint;
   const lookup = useMemo(() => {
@@ -83,11 +85,11 @@ const CocktailListRowComponent = ({
 
   const subtitle = useMemo(() => {
     if (missingCount === 0 && recipeNames.length === 0) {
-      return 'All ingredients ready';
+      return t('cocktails.all_ready');
     }
 
     return ingredientLine || '\u00A0';
-  }, [ingredientLine, missingCount, recipeNames.length]);
+  }, [ingredientLine, missingCount, recipeNames.length, t]);
 
   const ratingValueRaw = (cocktail as { userRating?: number }).userRating ?? 0;
   const ratingValue = Math.max(0, Math.min(MAX_RATING, Number(ratingValueRaw) || 0));

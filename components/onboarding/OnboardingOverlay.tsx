@@ -10,6 +10,7 @@ import {
   View,
 } from 'react-native';
 import Svg, { Defs, Mask, Rect } from 'react-native-svg';
+import { useTranslation } from 'react-i18next';
 import { useOnboardingAnchors } from './OnboardingContext';
 
 type StepDef = {
@@ -72,6 +73,7 @@ const renderFormattedMessage = (message: string) => {
 };
 
 export function OnboardingOverlay() {
+  const { t } = useTranslation();
   const { onboardingStep, setOnboardingStep, completeOnboarding, onboardingCompleted, ...inventory } = useInventory();
   const { anchors, requestTabChange, triggerAction } = useOnboardingAnchors();
   const Colors = useAppColors();
@@ -91,12 +93,12 @@ export function OnboardingOverlay() {
   const steps = useMemo<StepDef[]>(() => [
     {
       id: 1,
-      message: '**Welcome!**\nLet’s set up your bar by adding a few ingredients.',
-      buttonLabel: 'Start',
+      message: t('onboarding.step1'),
+      buttonLabel: t('onboarding.start'),
     },
     {
       id: 2,
-      message: 'Tap **Ingredients** to start adding what you have.',
+      message: t('onboarding.step2'),
       anchorName: 'tab-ingredients',
       autoNext: (_, path) => path.startsWith('/ingredients'),
       onEnter: (inv) => {
@@ -120,29 +122,29 @@ export function OnboardingOverlay() {
     },
     {
       id: 3,
-      message: 'Here’s the full ingredients list.\nWe’ve already marked a few common basics for you.',
+      message: t('onboarding.step3'),
       anchorName: 'ingredients-tab-all',
-      buttonLabel: 'Next',
+      buttonLabel: t('onboarding.next'),
     },
     {
       id: 4,
-      message: '**My ingredients** shows what you have.\nYou’ll also see in how many available cocktails use each ingredient.',
+      message: t('onboarding.step4'),
       anchorName: 'ingredients-tab-my',
-      buttonLabel: 'Next',
+      buttonLabel: t('onboarding.next'),
       onEnter: (_, requestTab) => {
         requestTab('ingredients', 'my');
       },
     },
     {
       id: 5,
-      message: 'Now let’s check the cocktails.\nOpen the **Cocktails** screen.',
+      message: t('onboarding.step5'),
       anchorName: 'tab-cocktails',
       autoNext: (_, path) => path.startsWith('/cocktails'),
     },
     {
       id: 6,
-      message: 'At the top of **My cocktails** you’ll see cocktails you can make now.\n\nBelow are cocktails missing just one ingredient.',
-      buttonLabel: 'Next',
+      message: t('onboarding.step6'),
+      buttonLabel: t('onboarding.next'),
       anchorName: 'cocktails-tab-my',
       onEnter: (_, requestTab) => {
         requestTab('cocktails', 'my');
@@ -150,30 +152,30 @@ export function OnboardingOverlay() {
     },
     {
       id: 7,
-      message: 'Meet the **Shaker**.\nIt helps you find cocktails based on selected ingredients.',
+      message: t('onboarding.step7'),
       anchorName: 'tab-shaker',
       autoNext: (_, path) => path.startsWith('/shaker'),
     },
     {
       id: 8,
-      message: '**Shaker logic**\nIngredients from the same category can replace each other (*OR*).\nIngredients from different categories are required together (*AND*).\n\n**Example**\n(Gin *OR* Whiskey) AND (Cola *OR* Tonic) AND (Lemon *OR* Lime).',
-      buttonLabel: 'Next',
+      message: t('onboarding.step8'),
+      buttonLabel: t('onboarding.next'),
     },
     {
       id: 9,
-      message: 'Use this toggle to show only ingredients you have.',
+      message: t('onboarding.step9'),
       anchorName: 'shaker-availability-toggle',
-      buttonLabel: 'Next',
+      buttonLabel: t('onboarding.next'),
       onNext: (_, __, triggerAnchorAction) => {
         triggerAnchorAction('shaker-availability-toggle');
       },
     },
     {
       id: 10,
-      message: 'Tap a few ingredients, then hit **Show** to see matching cocktails.\n\nCheers!',
-      buttonLabel: 'Finish',
+      message: t('onboarding.step10'),
+      buttonLabel: t('onboarding.finish'),
     },
-  ], []);
+  ], [t]);
 
   const currentStep = steps.find(s => s.id === onboardingStep);
 
@@ -290,7 +292,7 @@ export function OnboardingOverlay() {
               <Text style={[styles.buttonText, { color: Colors.onPrimary }]}>{currentStep.buttonLabel}</Text>
             </Pressable>
             <Text style={[styles.stepCounter, { color: Colors.onSurfaceVariant }]}>
-              {currentStepIndex} of {totalCount}
+              {t('onboarding.step_counter', { current: currentStepIndex, total: totalCount })}
             </Text>
           </>
         )}

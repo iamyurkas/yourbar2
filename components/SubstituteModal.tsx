@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 
 import { ListRow, Thumb } from '@/components/RowParts';
+import { useTranslation } from 'react-i18next';
 import { useAppColors } from '@/constants/theme';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
@@ -54,6 +55,7 @@ export function SubstituteModal({
   selectedSubstituteIds,
   selectedSubstituteNames,
 }: SubstituteModalProps) {
+  const { t } = useTranslation();
   const { ingredients, availableIngredientIds, shoppingIngredientIds, cocktails } = useInventory();
   const Colors = useAppColors();
   const [searchValue, setSearchValue] = useState('');
@@ -221,10 +223,9 @@ export function SubstituteModal({
         return undefined;
       }
 
-      const label = count === 1 ? 'recipe' : 'recipes';
-      return `${count} ${label}`;
+      return t('ingredients.used_in_cocktails', { count });
     },
-    [cocktailsByBaseGroup],
+    [cocktailsByBaseGroup, t],
   );
 
   const keyExtractor = useCallback((item: Ingredient) => String(item.id ?? item.name), []);
@@ -258,7 +259,7 @@ export function SubstituteModal({
                 color={Colors.tint}
                 style={styles.shoppingIcon}
                 accessibilityRole="image"
-                accessibilityLabel="On shopping list"
+                accessibilityLabel={t('ingredients.on_shopping_list')}
               />
             ) : (
               <View style={styles.shoppingIconPlaceholder} />
@@ -275,6 +276,7 @@ export function SubstituteModal({
       renderSubtitle,
       shoppingIngredientIds,
       Colors,
+      t,
     ],
   );
 
@@ -310,20 +312,20 @@ export function SubstituteModal({
           accessibilityRole="menu">
           <View style={styles.modalHeader}>
             <View style={styles.modalTitleRow}>
-              <Text style={[styles.modalTitle, { color: Colors.onSurface, flex: 1 }]}>Add substitute</Text>
-              <Pressable onPress={onClose} accessibilityRole="button" accessibilityLabel="Close">
+              <Text style={[styles.modalTitle, { color: Colors.onSurface, flex: 1 }]}>{t('cocktails.add_substitute')}</Text>
+              <Pressable onPress={onClose} accessibilityRole="button" accessibilityLabel={t('ui.cancel')}>
                 <MaterialCommunityIcons name="close" size={22} color={Colors.onSurfaceVariant} />
               </Pressable>
             </View>
             {ingredientName ? (
-              <Text style={[styles.modalSubtitle, { color: Colors.onSurfaceVariant }]}>For {ingredientName}</Text>
+              <Text style={[styles.modalSubtitle, { color: Colors.onSurfaceVariant }]}>{t('cocktails.substitute_for', { name: ingredientName })}</Text>
             ) : null}
           </View>
           <TextInput
             ref={inputRef}
             value={searchValue}
             onChangeText={setSearchValue}
-            placeholder="Search ingredients"
+            placeholder={t('ingredients.search_placeholder')}
             placeholderTextColor={`${Colors.onSurfaceVariant}99`}
             style={[
               styles.input,
@@ -343,7 +345,7 @@ export function SubstituteModal({
             keyboardShouldPersistTaps="handled"
             contentContainerStyle={styles.modalListContent}
             ListEmptyComponent={
-              <Text style={[styles.modalEmptyText, { color: Colors.onSurfaceVariant }]}>No ingredients found</Text>
+              <Text style={[styles.modalEmptyText, { color: Colors.onSurfaceVariant }]}>{t('ingredients.all_tab_empty')}</Text>
             }
           />
         </Pressable>

@@ -5,60 +5,67 @@ export type CocktailUnit = {
   short?: string;
 };
 
-export const MEASURE_UNITS = [
-  { id: 1, singular: ' ', plural: ' ' },
-  { id: 2, singular: 'bar spoon', plural: 'bar spoons' },
-  { id: 3, singular: 'cl', plural: 'cl' },
-  { id: 4, singular: 'cube', plural: 'cubes' },
-  { id: 5, singular: 'cup', plural: 'cups' },
-  { id: 6, singular: 'dash', plural: 'dashes' },
-  { id: 7, singular: 'drop', plural: 'drops' },
-  { id: 8, singular: 'gr', plural: 'gr' },
-  { id: 9, singular: 'half', plural: 'halves' },
-  { id: 10, singular: 'leaf', plural: 'leaves' },
-  { id: 11, singular: 'ml', plural: 'ml' },
-  { id: 12, singular: 'oz', plural: 'oz' },
-  { id: 13, singular: 'part', plural: 'parts' },
-  { id: 14, singular: 'peel', plural: 'peels' },
-  { id: 15, singular: 'pinch', plural: 'pinches' },
-  { id: 16, singular: 'quarter', plural: 'quarters' },
-  { id: 17, singular: 'scoop', plural: 'scoops' },
-  { id: 18, singular: 'shaving', plural: 'shavings' },
-  { id: 19, singular: 'slice', plural: 'slices' },
-  { id: 20, singular: 'splash', plural: 'splashes' },
-  { id: 21, singular: 'spring', plural: 'springs' },
-  { id: 22, singular: 'stalk', plural: 'stalks' },
-  { id: 23, singular: 'tablespoon', plural: 'tablespoons' },
-  { id: 24, singular: 'teaspoon', plural: 'teaspoons' },
-  { id: 25, singular: 'third', plural: 'thirds' },
-  { id: 26, singular: 'twist', plural: 'twists' },
-  { id: 27, singular: 'wedge', plural: 'wedges' },
-] satisfies CocktailUnit[];
+import i18n from "@/libs/i18n";
 
-const NORMALIZED_MEASURE_UNITS: CocktailUnit[] = MEASURE_UNITS.map((unit) => ({
-  ...unit,
-  singular: unit.singular.trim(),
-  plural: unit.plural?.trim() || undefined,
-}));
+export function getMeasureUnits(): CocktailUnit[] {
+  return [
+    { id: 1, singular: ' ', plural: ' ' },
+    { id: 2, singular: i18n.t('units.bar_spoon'), plural: i18n.t('units.bar_spoon_plural') },
+    { id: 3, singular: i18n.t('units.cl'), plural: i18n.t('units.cl_plural') },
+    { id: 4, singular: i18n.t('units.cube'), plural: i18n.t('units.cube_plural') },
+    { id: 5, singular: i18n.t('units.cup'), plural: i18n.t('units.cup_plural') },
+    { id: 6, singular: i18n.t('units.dash'), plural: i18n.t('units.dash_plural') },
+    { id: 7, singular: i18n.t('units.drop'), plural: i18n.t('units.drop_plural') },
+    { id: 8, singular: i18n.t('units.gr'), plural: i18n.t('units.gr_plural') },
+    { id: 9, singular: i18n.t('units.half'), plural: i18n.t('units.half_plural') },
+    { id: 10, singular: i18n.t('units.leaf'), plural: i18n.t('units.leaf_plural') },
+    { id: 11, singular: i18n.t('units.ml'), plural: i18n.t('units.ml_plural') },
+    { id: 12, singular: i18n.t('units.oz'), plural: i18n.t('units.oz_plural') },
+    { id: 13, singular: i18n.t('units.part'), plural: i18n.t('units.part_plural') },
+    { id: 14, singular: i18n.t('units.peel'), plural: i18n.t('units.peel_plural') },
+    { id: 15, singular: i18n.t('units.pinch'), plural: i18n.t('units.pinch_plural') },
+    { id: 16, singular: i18n.t('units.quarter'), plural: i18n.t('units.quarter_plural') },
+    { id: 17, singular: i18n.t('units.scoop'), plural: i18n.t('units.scoop_plural') },
+    { id: 18, singular: i18n.t('units.shaving'), plural: i18n.t('units.shaving_plural') },
+    { id: 19, singular: i18n.t('units.slice'), plural: i18n.t('units.slice_plural') },
+    { id: 20, singular: i18n.t('units.splash'), plural: i18n.t('units.splash_plural') },
+    { id: 21, singular: i18n.t('units.spring'), plural: i18n.t('units.spring_plural') },
+    { id: 22, singular: i18n.t('units.stalk'), plural: i18n.t('units.stalk_plural') },
+    { id: 23, singular: i18n.t('units.tablespoon'), plural: i18n.t('units.tablespoon_plural') },
+    { id: 24, singular: i18n.t('units.teaspoon'), plural: i18n.t('units.teaspoon_plural') },
+    { id: 25, singular: i18n.t('units.third'), plural: i18n.t('units.third_plural') },
+    { id: 26, singular: i18n.t('units.twist'), plural: i18n.t('units.twist_plural') },
+    { id: 27, singular: i18n.t('units.wedge'), plural: i18n.t('units.wedge_plural') },
+  ];
+}
 
-export const COCKTAIL_UNIT_DICTIONARY: Record<number, CocktailUnit> = NORMALIZED_MEASURE_UNITS.reduce(
-  (dictionary, unit) => {
-    dictionary[unit.id] = unit;
-    return dictionary;
-  },
-  {} as Record<number, CocktailUnit>,
-);
+export function getCocktailUnitDictionary(): Record<number, CocktailUnit> {
+  return getMeasureUnits().reduce(
+    (dictionary, unit) => {
+      dictionary[unit.id] = {
+        ...unit,
+        singular: unit.singular.trim(),
+        plural: unit.plural?.trim() || undefined,
+      };
+      return dictionary;
+    },
+    {} as Record<number, CocktailUnit>,
+  );
+}
 
-export const COCKTAIL_UNIT_OPTIONS = NORMALIZED_MEASURE_UNITS.map((unit) => ({
-  id: unit.id,
-  label: unit.singular,
-})) satisfies { id: number; label: string }[];
+export function getCocktailUnitOptions(): { id: number; label: string }[] {
+  return getMeasureUnits().map((unit) => ({
+    id: unit.id,
+    label: unit.singular.trim(),
+  }));
+}
 
 export function getCocktailUnitLabel(unitId?: number | null): string | undefined {
   if (unitId == null) {
     return undefined;
   }
-  const entry = COCKTAIL_UNIT_DICTIONARY[unitId];
+  const dictionary = getCocktailUnitDictionary();
+  const entry = dictionary[unitId];
   const label = entry?.singular.trim();
   return label || undefined;
 }

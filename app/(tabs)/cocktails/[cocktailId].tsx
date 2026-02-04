@@ -13,6 +13,7 @@ import {
 } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useTranslation } from "react-i18next";
 
 import { resolveGlasswareUriFromId } from "@/assets/image-manifest";
 import { AppImage } from "@/components/AppImage";
@@ -23,7 +24,8 @@ import {
   getCocktailMethodById,
   METHOD_ICON_MAP,
 } from "@/constants/cocktail-methods";
-import { COCKTAIL_UNIT_DICTIONARY } from "@/constants/cocktail-units";
+import { getCocktailUnitDictionary } from "@/constants/cocktail-units";
+import { getGlassware } from "@/constants/glassware";
 import { useAppColors } from "@/constants/theme";
 import { resolveImageSource } from "@/libs/image-source";
 import {
@@ -50,28 +52,6 @@ const IMPERIAL_UNIT_ID = 12;
 const GRAM_UNIT_ID = 8;
 const UNIT_CONVERSION_RATIO = 30;
 
-const GLASS_LABELS: Record<string, string> = {
-  bowl: "Punch bowl",
-  champagne_flute: "Champagne flute",
-  martini: "Martini glass",
-  collins_glass: "Collins glass",
-  copper_mug: "Copper mug",
-  coupe: "Coupe glass",
-  cup: "Cup",
-  goblet: "Goblet",
-  highball_glass: "Highball glass",
-  hurricane_glass: "Hurricane glass",
-  irish_coffee_glass: "Irish coffee glass",
-  margarita_glass: "Margarita glass",
-  nick_and_nora: "Nick & Nora glass",
-  pitcher: "Pitcher",
-  pub_glass: "Pub glass",
-  rocks_glass: "Rocks glass",
-  shooter: "Shooter glass",
-  snifter: "Snifter",
-  tiki: "Tiki mug",
-  wine_glass: "Wine glass",
-};
 
 const MAX_RATING = 5;
 
@@ -216,7 +196,7 @@ function formatIngredientQuantity(
   }
 
   const unitDetails =
-    displayUnitId != null ? COCKTAIL_UNIT_DICTIONARY[displayUnitId] : undefined;
+    displayUnitId != null ? getCocktailUnitDictionary()[displayUnitId] : undefined;
 
   let unitText = "";
   if (unitDetails) {
@@ -227,7 +207,7 @@ function formatIngredientQuantity(
   }
 
   if (!displayAmount && !unitText) {
-    return "As needed";
+    return i18n.t("cocktails.as_needed");
   }
 
   if (!displayAmount && unitText) {
@@ -303,7 +283,9 @@ function buildMissingSubstituteLines(
     }
 
     seen.add(key);
-    const prefix = source === "base" && isBrandedIngredient ? "or any" : "or";
+    const prefix = source === "base" && isBrandedIngredient
+      ? i18n.t("cocktails.or_any", { name: "" }).trim()
+      : i18n.t("cocktails.or", { name: "" }).trim();
     lines.push(`${prefix} ${name}`);
   });
 
@@ -315,8 +297,12 @@ function formatGlassLabel(glassId?: string | null) {
     return undefined;
   }
 
+  const glass = getGlassware().find((g) => g.id === glassId);
+  if (glass) {
+    return glass.name;
+  }
+
   return (
-    GLASS_LABELS[glassId] ??
     glassId
       .split(/[_\s]+/)
       .filter(Boolean)
@@ -326,6 +312,7 @@ function formatGlassLabel(glassId?: string | null) {
 }
 
 export default function CocktailDetailsScreen() {
+  const { t } = useTranslation();
   const params = useLocalSearchParams<{
     cocktailId?: string;
     returnToPath?: string;
@@ -656,7 +643,7 @@ export default function CocktailDetailsScreen() {
     >
       <Stack.Screen
         options={{
-          title: "Cocktail details",
+          title: t("cocktails.details_title"),
           headerTitleAlign: "center",
           headerStyle: { backgroundColor: Colors.surface },
           headerTitleStyle: {
@@ -668,7 +655,7 @@ export default function CocktailDetailsScreen() {
           headerLeft: () => (
             <HeaderIconButton
               onPress={handleReturn}
-              accessibilityLabel="Go back"
+              accessibilityLabel={t("ui.ok")}
             >
               <MaterialCommunityIcons
                 name="arrow-left"
@@ -681,7 +668,7 @@ export default function CocktailDetailsScreen() {
             <View style={styles.headerActions}>
               <HeaderIconButton
                 onPress={handleCopyPress}
-                accessibilityLabel="Copy cocktail"
+                accessibilityLabel={t("cocktails.copy_cocktail")}
               >
                 <MaterialCommunityIcons
                   name="content-copy"
@@ -691,7 +678,7 @@ export default function CocktailDetailsScreen() {
               </HeaderIconButton>
               <HeaderIconButton
                 onPress={handleEditPress}
-                accessibilityLabel="Edit cocktail"
+                accessibilityLabel={t("cocktails.edit_cocktail")}
               >
                 <MaterialCommunityIcons
                   name="pencil-outline"
@@ -740,7 +727,7 @@ export default function CocktailDetailsScreen() {
                         { color: Colors.onSurfaceVariant },
                       ]}
                     >
-                      No photo
+                      {t("cocktails.no_photo")}
                     </Text>
                   </View>
                 )}
@@ -759,8 +746,8 @@ export default function CocktailDetailsScreen() {
                       accessibilityRole="button"
                       accessibilityLabel={
                         displayedRating === starValue
-                          ? "Clear rating"
-                          : `Set rating to ${starValue}`
+                          ? t("cocktails.clear_rating")
+                          : t("cocktails.set_rating", { count: starValue })
                       }
                       style={styles.ratingStar}
                       hitSlop={8}
@@ -786,13 +773,13 @@ export default function CocktailDetailsScreen() {
                 ]}
                 accessibilityRole="button"
                 accessibilityLabel={
-                  showImperialUnits ? "Show in metric" : "Show in imperial"
+                  showImperialUnits ? t("ui.show_in_metric") : t("ui.show_in_imperial")
                 }
               >
                 <Text
                   style={[styles.toggleUnitsLabel, { color: Colors.primary }]}
                 >
-                  {showImperialUnits ? "Show in metric" : "Show in imperial"}
+                  {showImperialUnits ? t("ui.show_in_metric") : t("ui.show_in_imperial")}
                 </Text>
               </Pressable>
 
@@ -953,7 +940,7 @@ export default function CocktailDetailsScreen() {
                     <Text
                       style={[styles.toggleDescription, { color: Colors.tint }]}
                     >
-                      {isDescriptionExpanded ? "Show less" : "Show more"}
+                      {isDescriptionExpanded ? t("cocktails.show_less") : t("cocktails.show_more")}
                     </Text>
                   </Pressable>
                 ) : null}
@@ -968,7 +955,7 @@ export default function CocktailDetailsScreen() {
                     { color: Colors.onSurface },
                   ]}
                 >
-                  Instructions
+                  {t("cocktails.instructions")}
                 </Text>
                 <View style={styles.instructionsList}>
                   {instructionsParagraphs.map((paragraph, index) => (
@@ -991,7 +978,7 @@ export default function CocktailDetailsScreen() {
                 <Text
                   style={[styles.sectionTitle, { color: Colors.onSurface }]}
                 >
-                  Ingredients
+                  {t("cocktails.ingredients")}
                 </Text>
                 <View style={styles.ingredientsList}>
                   {sortedIngredients.map((ingredient, index) => {
@@ -1081,7 +1068,7 @@ export default function CocktailDetailsScreen() {
                       !isBaseToBrandSubstitution
                     ) {
                       subtitleLines.push(
-                        `Substitute for ${resolution.substituteFor}`,
+                        t("cocktails.substitute_for", { name: resolution.substituteFor }),
                       );
                     }
 
@@ -1216,7 +1203,7 @@ export default function CocktailDetailsScreen() {
             <Text
               style={[styles.emptyText, { color: Colors.onSurfaceVariant }]}
             >
-              Cocktail not found
+              {t("ui.item_not_found")}
             </Text>
           </View>
         )}

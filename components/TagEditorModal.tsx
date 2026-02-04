@@ -1,6 +1,7 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Modal, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 
 import { TAG_COLORS } from '@/constants/tag-colors';
@@ -25,6 +26,7 @@ export function TagEditorModal({
   onClose,
   onSave,
 }: TagEditorModalProps) {
+  const { t } = useTranslation();
   const Colors = useAppColors();
   const [name, setName] = useState(initialName ?? '');
   const [hue, setHue] = useState(210);
@@ -135,28 +137,28 @@ export function TagEditorModal({
         >
           <View style={styles.header}>
             <Text style={[styles.title, { color: Colors.onSurface }]}>{title}</Text>
-            <Pressable onPress={onClose} accessibilityRole="button" accessibilityLabel="Close">
+            <Pressable onPress={onClose} accessibilityRole="button" accessibilityLabel={t('ui.cancel')}>
               <MaterialCommunityIcons name="close" size={22} color={Colors.onSurfaceVariant} />
             </Pressable>
           </View>
-          <Text style={[styles.label, { color: Colors.onSurfaceVariant }]}>Tag name</Text>
+          <Text style={[styles.label, { color: Colors.onSurfaceVariant }]}>{t('ui.name')}</Text>
           <TextInput
             value={name}
             onChangeText={setName}
-            placeholder="New tag"
+            placeholder={t('ui.new_tag')}
             placeholderTextColor={`${Colors.onSurfaceVariant}99`}
             style={[
               styles.input,
               { borderColor: Colors.outlineVariant, color: Colors.text, backgroundColor: Colors.surface },
             ]}
           />
-          <Text style={[styles.label, { color: Colors.onSurfaceVariant }]}>Color</Text>
+          <Text style={[styles.label, { color: Colors.onSurfaceVariant }]}>{t('ui.color')}</Text>
           <View style={styles.colorPreviewRow}>
             <View style={[styles.colorPreview, { backgroundColor: selectedColor, borderColor: Colors.outlineVariant }]} />
             <Text style={[styles.colorValue, { color: Colors.onSurfaceVariant }]}>{selectedColor}</Text>
           </View>
           <ColorSlider
-            label="Hue"
+            label={t('ui.hue')}
             value={hue / 360}
             onChange={(next) => setHue(Math.round(next * 360))}
             gradientStops={[
@@ -170,7 +172,7 @@ export function TagEditorModal({
             ]}
           />
           <ColorSlider
-            label="Tone"
+            label={t('ui.tone')}
             value={lightness}
             onChange={setLightness}
             gradientStops={[

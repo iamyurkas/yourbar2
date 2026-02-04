@@ -1,5 +1,5 @@
-import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
-import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
+import { getBuiltinCocktailTags } from '@/constants/cocktail-tags';
+import { getBuiltinIngredientTags } from '@/constants/ingredient-tags';
 import { buildPhotoBaseName } from '@/libs/photo-utils';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import {
@@ -15,8 +15,12 @@ import {
 } from '@/providers/inventory-types';
 import { type InventoryData } from '@/libs/inventory-data';
 
-export const BUILTIN_COCKTAIL_TAGS_BY_ID = new Map(BUILTIN_COCKTAIL_TAGS.map((tag) => [tag.id, tag]));
-export const BUILTIN_INGREDIENT_TAGS_BY_ID = new Map(BUILTIN_INGREDIENT_TAGS.map((tag) => [tag.id, tag]));
+export function getBuiltinCocktailTagsById() {
+  return new Map(getBuiltinCocktailTags().map((tag) => [tag.id, tag]));
+}
+export function getBuiltinIngredientTagsById() {
+  return new Map(getBuiltinIngredientTags().map((tag) => [tag.id, tag]));
+}
 
 export type NormalizedSearchFields = {
   searchNameNormalized: string;
@@ -151,11 +155,11 @@ export function hydrateInventoryTagsFromCode(data: InventoryExportData): Invento
     ...data,
     cocktails: data.cocktails.map((cocktail) => ({
       ...cocktail,
-      tags: hydrateTagsFromCode(cocktail.tags, BUILTIN_COCKTAIL_TAGS_BY_ID),
+      tags: hydrateTagsFromCode(cocktail.tags, getBuiltinCocktailTagsById()),
     })),
     ingredients: data.ingredients.map((ingredient) => ({
       ...ingredient,
-      tags: hydrateTagsFromCode(ingredient.tags, BUILTIN_INGREDIENT_TAGS_BY_ID),
+      tags: hydrateTagsFromCode(ingredient.tags, getBuiltinIngredientTagsById()),
     })),
   } as InventoryData;
 }

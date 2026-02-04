@@ -1,5 +1,6 @@
 import React from 'react';
 import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { useAppColors } from '@/constants/theme';
 
@@ -22,6 +23,7 @@ type AppDialogProps = DialogOptions & {
 };
 
 export function AppDialog({ visible, title, message, actions, onRequestClose }: AppDialogProps) {
+  const { t } = useTranslation();
   const Colors = useAppColors();
 
   if (!visible) {
@@ -57,7 +59,7 @@ export function AppDialog({ visible, title, message, actions, onRequestClose }: 
         style={[styles.overlay, { backgroundColor: Colors.backdrop }]}
         onPress={onRequestClose}
         accessibilityRole="button"
-        accessibilityLabel="Close dialog">
+        accessibilityLabel={t('ui.ok')}>
         <Pressable
           style={[styles.card, { backgroundColor: Colors.surface }]}
           onPress={(event) => event.stopPropagation()}>
