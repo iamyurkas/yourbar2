@@ -18,7 +18,11 @@ type StepDef = {
   anchorName?: string;
   autoNext?: (inventory: any, pathname: string) => boolean;
   buttonLabel?: string;
-  onNext?: (inventory: any, requestTabChange: (screen: 'ingredients' | 'cocktails', tab: string) => void) => void;
+  onNext?: (
+    inventory: any,
+    requestTabChange: (screen: 'ingredients' | 'cocktails', tab: string) => void,
+    triggerAnchorAction: (name: string) => void,
+  ) => void;
   onEnter?: (inventory: any, requestTabChange: (screen: 'ingredients' | 'cocktails', tab: string) => void) => void;
 };
 
@@ -69,7 +73,7 @@ const renderFormattedMessage = (message: string) => {
 
 export function OnboardingOverlay() {
   const { onboardingStep, setOnboardingStep, completeOnboarding, onboardingCompleted, ...inventory } = useInventory();
-  const { anchors, requestTabChange } = useOnboardingAnchors();
+  const { anchors, requestTabChange, triggerAction } = useOnboardingAnchors();
   const Colors = useAppColors();
   const pathname = usePathname();
   const { height: screenHeight } = useWindowDimensions();
@@ -159,6 +163,9 @@ export function OnboardingOverlay() {
       message: 'Use this toggle to show only ingredients you have.',
       anchorName: 'shaker-availability-toggle',
       buttonLabel: 'Next',
+      onNext: (_, __, triggerAnchorAction) => {
+        triggerAnchorAction('shaker-availability-toggle');
+      },
     },
     {
       id: 10,
@@ -209,7 +216,7 @@ export function OnboardingOverlay() {
 
   const handleNext = () => {
     if (currentStep?.onNext) {
-      currentStep.onNext(inventory, requestTabChange);
+      currentStep.onNext(inventory, requestTabChange, triggerAction);
     }
 
     if (onboardingStep >= steps[steps.length - 1].id) {

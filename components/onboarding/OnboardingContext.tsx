@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useCallback, useState } from 'react';
+import React, { createContext, useContext, useCallback, useRef, useState } from 'react';
 import { type LayoutRectangle } from 'react-native';
 
 export type AnchorInfo = {
@@ -12,6 +12,8 @@ type OnboardingContextValue = {
   unregisterAnchor: (name: string) => void;
   requestTabChange: (screen: 'ingredients' | 'cocktails', tab: string) => void;
   onTabChangeRequest: (callback: (screen: 'ingredients' | 'cocktails', tab: string) => void) => () => void;
+  registerAction: (name: string, action: () => void) => () => void;
+  triggerAction: (name: string) => void;
 };
 
 const OnboardingContext = createContext<OnboardingContextValue | undefined>(undefined);
@@ -19,6 +21,7 @@ const OnboardingContext = createContext<OnboardingContextValue | undefined>(unde
 export function OnboardingProvider({ children }: { children: React.ReactNode }) {
   const [anchors, setAnchors] = useState<Record<string, LayoutRectangle>>({});
   const [listeners] = useState<Set<(screen: 'ingredients' | 'cocktails', tab: string) => void>>(new Set());
+  const actionsRef = useRef<Map<string, () => void>>(new Map());
 
   const registerAnchor = useCallback((name: string, layout: LayoutRectangle) => {
     setAnchors((prev) => ({ ...prev, [name]: layout }));
@@ -46,8 +49,19 @@ export function OnboardingProvider({ children }: { children: React.ReactNode }) 
     };
   }, [listeners]);
 
+  const registerAction = useCallback((name: string, action: () => void) => {
+    actionsRef.current.set(name, action);
+    return () => {
+      actionsRef.current.delete(name);
+    };
+  }, []);
+
+  const triggerAction = useCallback((name: string) => {
+    actionsRef.current.get(name)?.();
+  }, []);
+
   return (
-    <OnboardingContext.Provider value={{ anchors, registerAnchor, unregisterAnchor, requestTabChange, onTabChangeRequest }}>
+    <OnboardingContext.Provider value={{ anchors, registerAnchor, unregisterAnchor, requestTabChange, onTabChangeRequest, registerAction, triggerAction }}>
       {children}
     </OnboardingContext.Provider>
   );
