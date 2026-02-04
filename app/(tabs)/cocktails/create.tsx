@@ -2,7 +2,7 @@ import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { Image } from "expo-image";
 import * as ImagePicker from "expo-image-picker";
-import { Stack, router, useLocalSearchParams } from "expo-router";
+import { Stack, router, useLocalSearchParams, usePathname } from "expo-router";
 import React, {
   useCallback,
   useEffect,
@@ -48,8 +48,9 @@ import { GLASSWARE } from "@/constants/glassware";
 import { useAppColors } from "@/constants/theme";
 import {
   buildReturnToParams,
+  createInventoryRouteValidator,
   parseReturnToParams,
-  skipDuplicateBack,
+  returnToSourceOrBack,
 } from "@/libs/navigation";
 import { shouldStorePhoto, storePhoto } from "@/libs/photo-storage";
 import { normalizeSearchText } from "@/libs/search-normalization";
@@ -238,6 +239,7 @@ export default function CreateCocktailScreen() {
   } = useInventory();
   const params = useLocalSearchParams();
   const { setHasUnsavedChanges } = useUnsavedChanges();
+  const pathname = usePathname();
 
   const modeParam = getParamValue(params.mode);
   const isEditMode = modeParam === "edit";
@@ -341,6 +343,10 @@ export default function CreateCocktailScreen() {
   const isNavigatingAfterSaveRef = useRef(false);
   const scrollRef = useRef<ScrollView | null>(null);
   const isHandlingBackRef = useRef(false);
+  const isRouteValid = useMemo(
+    () => createInventoryRouteValidator({ cocktails, ingredients: inventoryIngredients }),
+    [cocktails, inventoryIngredients],
+  );
 
   const ingredientById = useMemo(() => {
     const map = new Map<number, Ingredient>();
@@ -1273,7 +1279,12 @@ export default function CreateCocktailScreen() {
         confirmLeave(() => {
           isHandlingBackRef.current = true;
           if (event.data.action.type === "GO_BACK") {
-            skipDuplicateBack(navigation);
+            returnToSourceOrBack(navigation, {
+              returnToPath,
+              returnToParams,
+              currentPathname: pathname,
+              isRouteValid,
+            });
           } else {
             navigation.dispatch(event.data.action);
           }
@@ -1287,7 +1298,12 @@ export default function CreateCocktailScreen() {
       if (event.data.action.type === "GO_BACK") {
         event.preventDefault();
         isHandlingBackRef.current = true;
-        skipDuplicateBack(navigation);
+        returnToSourceOrBack(navigation, {
+          returnToPath,
+          returnToParams,
+          currentPathname: pathname,
+          isRouteValid,
+        });
         setTimeout(() => {
           isHandlingBackRef.current = false;
         }, 0);
@@ -1295,11 +1311,24 @@ export default function CreateCocktailScreen() {
     });
 
     return unsubscribe;
-  }, [confirmLeave, hasUnsavedChanges, navigation]);
+  }, [
+    confirmLeave,
+    hasUnsavedChanges,
+    isRouteValid,
+    navigation,
+    pathname,
+    returnToParams,
+    returnToPath,
+  ]);
 
   const handleGoBack = useCallback(() => {
-    skipDuplicateBack(navigation);
-  }, [navigation]);
+    returnToSourceOrBack(navigation, {
+      returnToPath,
+      returnToParams,
+      currentPathname: pathname,
+      isRouteValid,
+    });
+  }, [isRouteValid, navigation, pathname, returnToParams, returnToPath]);
 
   const imageSource = useMemo(() => {
     if (!imageUri) {

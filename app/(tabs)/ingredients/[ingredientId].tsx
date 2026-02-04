@@ -1,6 +1,6 @@
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { Stack, router, useLocalSearchParams } from "expo-router";
+import { Stack, router, useLocalSearchParams, usePathname } from "expo-router";
 import React, {
   useCallback,
   useEffect,
@@ -35,10 +35,10 @@ import {
 } from "@/libs/ingredient-availability";
 import {
   buildReturnToParams,
+  createInventoryRouteValidator,
   navigateToDetailsWithReturnTo,
   parseReturnToParams,
   returnToSourceOrBack,
-  skipDuplicateBack,
 } from "@/libs/navigation";
 import { normalizeSearchText } from "@/libs/search-normalization";
 import { useInventory, type Ingredient } from "@/providers/inventory-provider";
@@ -89,6 +89,7 @@ export default function IngredientDetailsScreen() {
     ignoreGarnish,
     allowAllSubstitutes,
   } = useInventory();
+  const pathname = usePathname();
 
   const ingredient = useResolvedIngredient(
     Array.isArray(ingredientId) ? ingredientId[0] : ingredientId,
@@ -131,6 +132,10 @@ export default function IngredientDetailsScreen() {
   const [, startAvailabilityTransition] = useTransition();
   const [, startShoppingTransition] = useTransition();
   const isHandlingBackRef = useRef(false);
+  const isRouteValid = useMemo(
+    () => createInventoryRouteValidator({ cocktails, ingredients }),
+    [cocktails, ingredients],
+  );
 
   const isAvailable = useMemo(() => {
     if (numericIngredientId == null) {
@@ -506,13 +511,13 @@ export default function IngredientDetailsScreen() {
   }, [cocktailEntries.length]);
 
   const handleReturn = useCallback(() => {
-    if (returnToPath === "/ingredients") {
-      skipDuplicateBack(navigation);
-      return;
-    }
-
-    returnToSourceOrBack(navigation, { returnToPath, returnToParams });
-  }, [navigation, returnToParams, returnToPath]);
+    returnToSourceOrBack(navigation, {
+      returnToPath,
+      returnToParams,
+      currentPathname: pathname,
+      isRouteValid,
+    });
+  }, [isRouteValid, navigation, pathname, returnToParams, returnToPath]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", (event) => {

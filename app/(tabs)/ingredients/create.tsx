@@ -1,7 +1,7 @@
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
-import { Stack, router, useLocalSearchParams } from 'expo-router';
+import { Stack, router, useLocalSearchParams, usePathname } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   FlatList,
@@ -27,7 +27,7 @@ import { TagPill } from '@/components/TagPill';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { useAppColors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
-import { buildReturnToParams, skipDuplicateBack } from '@/libs/navigation';
+import { buildReturnToParams, createInventoryRouteValidator, returnToSourceOrBack } from '@/libs/navigation';
 import { shouldStorePhoto, storePhoto } from '@/libs/photo-storage';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
@@ -126,6 +126,7 @@ export default function IngredientFormScreen() {
   const navigation = useNavigation();
   const Colors = useAppColors();
   const {
+    cocktails,
     ingredients,
     shoppingIngredientIds,
     availableIngredientIds,
@@ -137,6 +138,7 @@ export default function IngredientFormScreen() {
   } = useInventory();
   const { setHasUnsavedChanges } = useUnsavedChanges();
   const isNavigatingAfterSaveRef = useRef(false);
+  const pathname = usePathname();
 
   const ingredient = useResolvedIngredient(ingredientParam, ingredients);
 
@@ -164,6 +166,10 @@ export default function IngredientFormScreen() {
   const didInitializeRef = useRef(false);
   const scrollRef = useRef<ScrollView | null>(null);
   const isHandlingBackRef = useRef(false);
+  const isRouteValid = useMemo(
+    () => createInventoryRouteValidator({ cocktails, ingredients }),
+    [cocktails, ingredients],
+  );
 
   useEffect(() => {
     if (isEditMode) {
@@ -501,12 +507,22 @@ export default function IngredientFormScreen() {
     isNavigatingAfterSaveRef.current = true;
     const targetId = created.id ?? created.name;
     if (!targetId) {
-      skipDuplicateBack(navigation);
+      returnToSourceOrBack(navigation, {
+        returnToPath,
+        returnToParams,
+        currentPathname: pathname,
+        isRouteValid,
+      });
       return;
     }
 
     if (returnToPath) {
-      router.navigate({ pathname: returnToPath, params: returnToParams });
+      returnToSourceOrBack(navigation, {
+        returnToPath,
+        returnToParams,
+        currentPathname: pathname,
+        isRouteValid,
+      });
       return;
     }
 
@@ -569,7 +585,12 @@ export default function IngredientFormScreen() {
         confirmLeave(() => {
           isHandlingBackRef.current = true;
           if (event.data.action.type === 'GO_BACK') {
-            skipDuplicateBack(navigation);
+            returnToSourceOrBack(navigation, {
+              returnToPath,
+              returnToParams,
+              currentPathname: pathname,
+              isRouteValid,
+            });
           } else {
             navigation.dispatch(event.data.action);
           }
@@ -583,7 +604,12 @@ export default function IngredientFormScreen() {
       if (event.data.action.type === 'GO_BACK') {
         event.preventDefault();
         isHandlingBackRef.current = true;
-        skipDuplicateBack(navigation);
+        returnToSourceOrBack(navigation, {
+          returnToPath,
+          returnToParams,
+          currentPathname: pathname,
+          isRouteValid,
+        });
         setTimeout(() => {
           isHandlingBackRef.current = false;
         }, 0);
@@ -591,11 +617,24 @@ export default function IngredientFormScreen() {
     });
 
     return unsubscribe;
-  }, [confirmLeave, hasUnsavedChanges, navigation]);
+  }, [
+    confirmLeave,
+    hasUnsavedChanges,
+    isRouteValid,
+    navigation,
+    pathname,
+    returnToParams,
+    returnToPath,
+  ]);
 
   const handleGoBack = useCallback(() => {
-    skipDuplicateBack(navigation);
-  }, [navigation]);
+    returnToSourceOrBack(navigation, {
+      returnToPath,
+      returnToParams,
+      currentPathname: pathname,
+      isRouteValid,
+    });
+  }, [isRouteValid, navigation, pathname, returnToParams, returnToPath]);
 
   const handleDeletePress = useCallback(() => {
     if (!isEditMode) {

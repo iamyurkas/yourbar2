@@ -2,7 +2,7 @@ import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { Image } from "expo-image";
 import { activateKeepAwakeAsync, deactivateKeepAwake } from "expo-keep-awake";
-import { router, Stack, useLocalSearchParams } from "expo-router";
+import { router, Stack, useLocalSearchParams, usePathname } from "expo-router";
 import {
   useCallback,
   useEffect,
@@ -34,10 +34,10 @@ import {
 } from "@/libs/ingredient-availability";
 import {
   buildReturnToParams,
+  createInventoryRouteValidator,
   navigateToDetailsWithReturnTo,
   parseReturnToParams,
   returnToSourceOrBack,
-  skipDuplicateBack,
 } from "@/libs/navigation";
 import { normalizeSearchText } from "@/libs/search-normalization";
 import { useInventory, type Cocktail } from "@/providers/inventory-provider";
@@ -346,6 +346,7 @@ export default function CocktailDetailsScreen() {
     useImperialUnits,
     keepScreenAwake,
   } = useInventory();
+  const pathname = usePathname();
 
   const resolvedParam = Array.isArray(cocktailId) ? cocktailId[0] : cocktailId;
   const cocktail = useMemo(
@@ -366,19 +367,23 @@ export default function CocktailDetailsScreen() {
 
   const [showImperialUnits, setShowImperialUnits] = useState(useImperialUnits);
   const isHandlingBackRef = useRef(false);
+  const isRouteValid = useMemo(
+    () => createInventoryRouteValidator({ cocktails, ingredients }),
+    [cocktails, ingredients],
+  );
 
   useEffect(() => {
     setShowImperialUnits(useImperialUnits);
   }, [useImperialUnits]);
 
   const handleReturn = useCallback(() => {
-    if (returnToPath === "/cocktails") {
-      skipDuplicateBack(navigation);
-      return;
-    }
-
-    returnToSourceOrBack(navigation, { returnToPath, returnToParams });
-  }, [navigation, returnToParams, returnToPath]);
+    returnToSourceOrBack(navigation, {
+      returnToPath,
+      returnToParams,
+      currentPathname: pathname,
+      isRouteValid,
+    });
+  }, [isRouteValid, navigation, pathname, returnToParams, returnToPath]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", (event) => {
