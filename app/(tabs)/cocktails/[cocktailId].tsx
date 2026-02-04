@@ -34,10 +34,11 @@ import {
 } from "@/libs/ingredient-availability";
 import {
   buildReturnToParams,
+  getRouteParam,
+  navigateBack,
   navigateToDetailsWithReturnTo,
   parseReturnToParams,
-  returnToSourceOrBack,
-  skipDuplicateBack,
+  routeNameMatches,
 } from "@/libs/navigation";
 import { normalizeSearchText } from "@/libs/search-normalization";
 import { useInventory, type Cocktail } from "@/providers/inventory-provider";
@@ -372,13 +373,29 @@ export default function CocktailDetailsScreen() {
   }, [useImperialUnits]);
 
   const handleReturn = useCallback(() => {
-    if (returnToPath === "/cocktails") {
-      skipDuplicateBack(navigation);
-      return;
-    }
-
-    returnToSourceOrBack(navigation, { returnToPath, returnToParams });
-  }, [navigation, returnToParams, returnToPath]);
+    navigateBack(navigation, {
+      returnToPath,
+      returnToParams,
+      isRouteValid: (route) => {
+        if (routeNameMatches(route, "cocktails/[cocktailId]")) {
+          const param = getRouteParam(route, "cocktailId");
+          return Boolean(resolveCocktail(param, cocktails));
+        }
+        if (routeNameMatches(route, "ingredients/[ingredientId]")) {
+          const param = getRouteParam(route, "ingredientId");
+          return Boolean(
+            ingredients.find(
+              (item) =>
+                Number(item.id ?? -1) === Number(param ?? Number.NaN) ||
+                normalizeSearchText(item.name ?? "") ===
+                  normalizeSearchText(param ?? ""),
+            ),
+          );
+        }
+        return true;
+      },
+    });
+  }, [cocktails, ingredients, navigation, returnToParams, returnToPath]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", (event) => {

@@ -3,6 +3,8 @@ import { router } from 'expo-router';
 
 type RouteParams = Record<string, unknown> | undefined;
 type ReturnToParams = Record<string, string> | undefined;
+type RouteSnapshot = { name: string; params?: RouteParams };
+type RouteValidator = (route: RouteSnapshot) => boolean;
 
 const areParamsEqual = (left?: RouteParams, right?: RouteParams): boolean => {
   if (!left && !right) {
@@ -37,21 +39,79 @@ const areRoutesEqual = (
   return areParamsEqual(left.params, right.params);
 };
 
-export const skipDuplicateBack = (navigation: NavigationProp<ParamListBase>) => {
+const normalizeRouteName = (name: string) => name.replace(/^\/+/, '');
+
+export const routeNameMatches = (route: RouteSnapshot, target: string) =>
+  normalizeRouteName(route.name).includes(normalizeRouteName(target));
+
+export const getRouteParam = (route: RouteSnapshot, key: string): string | undefined => {
+  const params = route.params;
+  if (!params || typeof params !== 'object') {
+    return undefined;
+  }
+
+  const value = (params as Record<string, unknown>)[key];
+  if (Array.isArray(value)) {
+    const first = value[0];
+    return typeof first === 'string' || typeof first === 'number' ? String(first) : undefined;
+  }
+
+  return typeof value === 'string' || typeof value === 'number' ? String(value) : undefined;
+};
+
+export const navigateBack = (
+  navigation: NavigationProp<ParamListBase>,
+  {
+    returnToPath,
+    returnToParams,
+    isRouteValid,
+  }: {
+    returnToPath?: string;
+    returnToParams?: ReturnToParams;
+    isRouteValid?: RouteValidator;
+  } = {},
+) => {
   const state = navigation.getState();
   const currentIndex = state.index ?? 0;
 
+  const canReturnTo =
+    returnToPath &&
+    (!isRouteValid || isRouteValid({ name: returnToPath, params: returnToParams }));
+
   if (currentIndex <= 0) {
+    if (canReturnTo && returnToPath) {
+      router.navigate({ pathname: returnToPath, params: returnToParams });
+      return;
+    }
     navigation.goBack();
     return;
   }
 
   const current = state.routes[currentIndex];
-  const previous = state.routes[currentIndex - 1];
-  const shouldSkip = areRoutesEqual(current, previous);
+  let targetIndex: number | undefined;
 
-  if (shouldSkip && currentIndex >= 2) {
-    navigation.dispatch(StackActions.pop(2));
+  for (let index = currentIndex - 1; index >= 0; index -= 1) {
+    const candidate = state.routes[index];
+    if (areRoutesEqual(current, candidate)) {
+      continue;
+    }
+
+    if (isRouteValid && !isRouteValid(candidate)) {
+      continue;
+    }
+
+    targetIndex = index;
+    break;
+  }
+
+  if (targetIndex != null) {
+    const steps = currentIndex - targetIndex;
+    navigation.dispatch(StackActions.pop(steps));
+    return;
+  }
+
+  if (canReturnTo && returnToPath) {
+    router.navigate({ pathname: returnToPath, params: returnToParams });
     return;
   }
 
@@ -129,10 +189,5 @@ export const returnToSourceOrBack = (
     returnToParams?: ReturnToParams;
   },
 ) => {
-  if (returnToPath) {
-    router.navigate({ pathname: returnToPath, params: returnToParams });
-    return;
-  }
-
-  skipDuplicateBack(navigation);
+  navigateBack(navigation, { returnToPath, returnToParams });
 };
