@@ -613,7 +613,6 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           );
           const nextStartScreen = sanitizeStartScreen(stored.startScreen);
           const nextAppTheme = sanitizeAppTheme(stored.appTheme);
-          const nextAppLanguage = sanitizeAppLanguage(stored.appLanguage);
           const nextCustomCocktailTags = sanitizeCustomTags(stored.customCocktailTags, DEFAULT_TAG_COLOR);
           const nextCustomIngredientTags = sanitizeCustomTags(stored.customIngredientTags, DEFAULT_TAG_COLOR);
           const nextOnboardingStep = 0;
