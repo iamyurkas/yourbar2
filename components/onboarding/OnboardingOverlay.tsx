@@ -19,6 +19,7 @@ type StepDef = {
   autoNext?: (inventory: any, pathname: string) => boolean;
   buttonLabel?: string;
   onNext?: (inventory: any, requestTabChange: (screen: 'ingredients' | 'cocktails', tab: string) => void) => void;
+  onEnter?: (inventory: any, requestTabChange: (screen: 'ingredients' | 'cocktails', tab: string) => void) => void;
 };
 
 export function OnboardingOverlay() {
@@ -82,18 +83,12 @@ export function OnboardingOverlay() {
       autoNext: (_, path) => path.startsWith('/cocktails'),
     },
     {
-      id: 10,
-      message: 'Go to the "My" tab.',
-      anchorName: 'cocktails-tab-my',
+      id: 11,
+      message: 'Cocktails you can make right now are shown at the top of "My cocktails" tab.',
       buttonLabel: 'Next',
-      onNext: (_, requestTab) => {
+      onEnter: (_, requestTab) => {
         requestTab('cocktails', 'my');
       },
-    },
-    {
-      id: 11,
-      message: 'Cocktails you can make right now are shown at the top of "My cocktails tab".',
-      buttonLabel: 'Next',
     },
     {
       id: 12,
@@ -142,6 +137,12 @@ export function OnboardingOverlay() {
       }
     }
   }, [currentStep, inventory, pathname, onboardingStep, setOnboardingStep, onboardingCompleted, steps, completeOnboarding]);
+
+  // Handle onEnter actions
+  React.useEffect(() => {
+    if (onboardingCompleted || !currentStep?.onEnter) return;
+    currentStep.onEnter(inventory, requestTabChange);
+  }, [onboardingStep, onboardingCompleted, currentStep, inventory, requestTabChange]);
 
   if (onboardingCompleted || !onboardingStep || onboardingStep <= 0 || !currentStep) return null;
 
