@@ -121,7 +121,7 @@ export function OnboardingOverlay() {
     },
     {
       id: 4,
-      message: '**My ingredients** shows what you have.\nYou’ll also see how many cocktails each ingredient unlocks.',
+      message: '**My ingredients** shows what you have.\nYou’ll also see in how many cocktails each ingredient is used.',
       anchorName: 'ingredients-tab-my',
       buttonLabel: 'Next',
       onEnter: (_, requestTab) => {
@@ -136,31 +136,31 @@ export function OnboardingOverlay() {
     },
     {
       id: 6,
-      message: 'At the top of **My cocktails** are drinks you can make right now.\nBelow are cocktails missing just one ingredient.',
+      message: 'Drinks you can make right now are on the top of **My cocktails** .\n\nCocktails missing just one ingredient are below.',
       buttonLabel: 'Next',
       onEnter: (_, requestTab) => {
         requestTab('cocktails', 'my');
       },
     },
     {
-      id: 8,
+      id: 7,
       message: 'Finally, meet the **Shaker**.\nIt helps you find cocktails based on selected ingredients.',
       anchorName: 'tab-shaker',
       autoNext: (_, path) => path.startsWith('/shaker'),
     },
     {
-      id: 9,
-      message: '**Shaker logic**\nIngredients in the same category can replace each other (OR).\nIngredients from different categories are required together (AND).\n\n**Example**\n(Gin OR Whiskey) AND (Cola OR Tonic) AND (Lemon OR Lime).',
+      id: 8,
+      message: '**Shaker logic**\nIngredients in the same category can replace each other (*OR*).\nIngredients from different categories are required together (*AND*).\n\n**Example**\n(Gin *OR* Whiskey) AND (Cola *OR* Tonic) AND (Lemon *OR* Lime).',
       buttonLabel: 'Next',
     },
     {
-      id: 10,
+      id: 9,
       message: 'This toggle filters ingredients by availability.',
       anchorName: 'shaker-availability-toggle',
       buttonLabel: 'Next',
     },
     {
-      id: 11,
+      id: 10,
       message: 'Select the ingredients you want to use, then tap **Show** to see matching cocktails.\n\nCheers! 🍸',
       buttonLabel: 'Finish',
     },
