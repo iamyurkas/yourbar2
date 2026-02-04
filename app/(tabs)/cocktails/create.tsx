@@ -46,11 +46,7 @@ import {
 } from "@/constants/cocktail-units";
 import { GLASSWARE } from "@/constants/glassware";
 import { useAppColors } from "@/constants/theme";
-import {
-  buildReturnToParams,
-  parseReturnToParams,
-  skipDuplicateBack,
-} from "@/libs/navigation";
+import { buildReturnToParams, parseReturnToParams } from "@/libs/navigation";
 import { shouldStorePhoto, storePhoto } from "@/libs/photo-storage";
 import { normalizeSearchText } from "@/libs/search-normalization";
 import {
@@ -59,6 +55,7 @@ import {
   type CreateCocktailInput,
   type Ingredient,
 } from "@/providers/inventory-provider";
+import { useBackNavigation } from "@/providers/back-navigation-provider";
 import { useUnsavedChanges } from "@/providers/unsaved-changes-provider";
 import { tagColors } from "@/theme/theme";
 
@@ -110,6 +107,17 @@ type CocktailFormSnapshot = {
       isBrand?: boolean;
     }>;
   }>;
+};
+
+type CocktailDraftSnapshot = {
+  name: string;
+  glassId: string | null;
+  methodIds: CocktailMethodId[];
+  description: string;
+  instructions: string;
+  imageUri: string | null;
+  selectedTagIds: number[];
+  ingredientsState: EditableIngredient[];
 };
 
 function getParamValue(value?: string | string[]): string | undefined {
@@ -238,6 +246,7 @@ export default function CreateCocktailScreen() {
   } = useInventory();
   const params = useLocalSearchParams();
   const { setHasUnsavedChanges } = useUnsavedChanges();
+  const { goBack, markCurrentEntryAsSkip, markNextEntryAsSkip } = useBackNavigation();
 
   const modeParam = getParamValue(params.mode);
   const isEditMode = modeParam === "edit";
@@ -246,25 +255,24 @@ export default function CreateCocktailScreen() {
   const ingredientNameParam = getParamValue(params.ingredientName);
   const cocktailParam = getParamValue(params.cocktailId);
   const cocktailNameParam = getParamValue(params.cocktailName);
-  const formReturnParams = useMemo(() => {
-    const payload = {
+  const formReturnParamsPayload = useMemo(
+    () => ({
       mode: modeParam,
       source: sourceParam,
       ingredientId: ingredientParam,
       ingredientName: ingredientNameParam,
       cocktailId: cocktailParam,
       cocktailName: cocktailNameParam,
-    };
-    const json = JSON.stringify(payload);
-    return json === "{}" ? undefined : json;
-  }, [
+    }),
+    [
     cocktailNameParam,
     cocktailParam,
     ingredientNameParam,
     ingredientParam,
     modeParam,
     sourceParam,
-  ]);
+    ],
+  );
   const returnToPath = useMemo(() => {
     const value = getParamValue(params.returnToPath);
     return typeof value === "string" && value.length > 0 ? value : undefined;
@@ -272,6 +280,9 @@ export default function CreateCocktailScreen() {
   const returnToParams = useMemo(() => {
     return parseReturnToParams(params.returnToParams);
   }, [params.returnToParams]);
+  const draftParam = getParamValue(params.draft);
+  const isReturnToIngredientDetails =
+    sourceParam === "ingredient" && Boolean(ingredientParam ?? ingredientNameParam);
 
   const [name, setName] = useState("");
   const [glassId, setGlassId] = useState<string | null>("martini");
@@ -341,6 +352,56 @@ export default function CreateCocktailScreen() {
   const isNavigatingAfterSaveRef = useRef(false);
   const scrollRef = useRef<ScrollView | null>(null);
   const isHandlingBackRef = useRef(false);
+
+  const buildDraftSnapshot = useCallback(
+    (): CocktailDraftSnapshot => ({
+      name,
+      glassId,
+      methodIds,
+      description,
+      instructions,
+      imageUri,
+      selectedTagIds,
+      ingredientsState,
+    }),
+    [
+      description,
+      glassId,
+      imageUri,
+      ingredientsState,
+      instructions,
+      methodIds,
+      name,
+      selectedTagIds,
+    ],
+  );
+
+  const serializeReturnParams = useCallback(
+    (payload: Record<string, string | undefined>) => {
+      const entries = Object.entries(payload).filter(
+        ([, value]) => typeof value === "string" && value.length > 0,
+      ) as Array<[string, string]>;
+      return entries.length ? JSON.stringify(Object.fromEntries(entries)) : undefined;
+    },
+    [],
+  );
+
+  const resolvedDraft = useMemo(() => {
+    if (!draftParam) {
+      return undefined;
+    }
+
+    try {
+      const parsed = JSON.parse(draftParam);
+      if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+        return undefined;
+      }
+      return parsed as Partial<CocktailDraftSnapshot>;
+    } catch (error) {
+      console.warn("Failed to parse cocktail draft", error);
+      return undefined;
+    }
+  }, [draftParam]);
 
   const ingredientById = useMemo(() => {
     const map = new Map<number, Ingredient>();
@@ -564,6 +625,50 @@ export default function CreateCocktailScreen() {
 
     let prefillCompleted = false;
 
+    if (!isEditMode && resolvedDraft) {
+      const methodValues = Array.isArray(resolvedDraft.methodIds)
+        ? resolvedDraft.methodIds.filter(
+            (value): value is CocktailMethodId => typeof value === "string",
+          )
+        : [];
+      const tagValues = Array.isArray(resolvedDraft.selectedTagIds)
+        ? resolvedDraft.selectedTagIds.filter(
+            (value): value is number => Number.isFinite(value),
+          )
+        : [];
+      const draftIngredients = Array.isArray(resolvedDraft.ingredientsState)
+        ? resolvedDraft.ingredientsState
+        : [];
+
+      setName(typeof resolvedDraft.name === "string" ? resolvedDraft.name : "");
+      setGlassId(
+        typeof resolvedDraft.glassId === "string" || resolvedDraft.glassId === null
+          ? resolvedDraft.glassId ?? "martini"
+          : "martini",
+      );
+      setMethodIds(methodValues);
+      setDescription(
+        typeof resolvedDraft.description === "string"
+          ? resolvedDraft.description
+          : "",
+      );
+      setInstructions(
+        typeof resolvedDraft.instructions === "string"
+          ? resolvedDraft.instructions
+          : "",
+      );
+      setImageUri(
+        typeof resolvedDraft.imageUri === "string" ? resolvedDraft.imageUri : null,
+      );
+      setSelectedTagIds(tagValues);
+      setIngredientsState(
+        draftIngredients.length
+          ? (draftIngredients as EditableIngredient[])
+          : [createEditableIngredient(defaultUnitId)],
+      );
+      prefillCompleted = true;
+    }
+
     const resolveCocktail = (value?: string) => {
       if (!value) {
         return undefined;
@@ -680,6 +785,8 @@ export default function CreateCocktailScreen() {
     ingredientNameParam,
     ingredientParam,
     inventoryIngredients,
+    isEditMode,
+    resolvedDraft,
   ]);
 
   const ensureMediaPermission = useCallback(async () => {
@@ -888,13 +995,18 @@ export default function CreateCocktailScreen() {
   const handleRequestCreateIngredient = useCallback(
     (suggested: string) => {
       const trimmed = suggested.trim();
+      const draftSnapshot = JSON.stringify(buildDraftSnapshot());
+      const returnParams = serializeReturnParams({
+        ...formReturnParamsPayload,
+        draft: draftSnapshot,
+      });
       if (!trimmed) {
         router.push({
           pathname: "/ingredients/create",
           params: {
             mode: "create",
             returnToPath: "/cocktails/create",
-            returnToParams: formReturnParams,
+            returnToParams: returnParams,
           },
         });
         return;
@@ -905,11 +1017,11 @@ export default function CreateCocktailScreen() {
           mode: "create",
           suggestedName: trimmed,
           returnToPath: "/cocktails/create",
-          returnToParams: formReturnParams,
+          returnToParams: returnParams,
         },
       });
     },
-    [formReturnParams],
+    [buildDraftSnapshot, formReturnParamsPayload, serializeReturnParams],
   );
 
   const handleSelectSubstituteCandidate = useCallback(
@@ -1134,24 +1246,20 @@ export default function CreateCocktailScreen() {
 
       setHasUnsavedChanges(false);
       isNavigatingAfterSaveRef.current = true;
+      markCurrentEntryAsSkip();
       const targetId = persisted.id ?? persisted.name;
-      if (isEditMode && navigation.canGoBack()) {
-        navigation.goBack();
-        return;
-      }
-
       if (targetId) {
-        router.replace({
-          pathname: "/cocktails/[cocktailId]",
-          params: {
-            cocktailId: String(targetId),
-            ...buildReturnToParams(returnToPath, returnToParams),
-          },
-        });
-        return;
+        markNextEntryAsSkip();
       }
-
-      router.replace("/cocktails");
+      goBack({
+        pathname: targetId ? "/cocktails/[cocktailId]" : "/cocktails",
+        params: targetId
+          ? {
+              cocktailId: String(targetId),
+              ...buildReturnToParams(returnToPath, returnToParams),
+            }
+          : undefined,
+      });
     } finally {
       setIsSaving(false);
     }
@@ -1178,6 +1286,9 @@ export default function CreateCocktailScreen() {
     showDialog,
     shouldStorePhoto,
     storePhoto,
+    goBack,
+    markCurrentEntryAsSkip,
+    markNextEntryAsSkip,
   ]);
 
   const handleDeletePress = useCallback(() => {
@@ -1262,9 +1373,48 @@ export default function CreateCocktailScreen() {
     [handleSubmit, setHasUnsavedChanges, showDialog],
   );
 
+  const confirmReturnToIngredient = useCallback(
+    (onConfirm: () => void) => {
+      showDialog({
+        title: "Return to ingredient?",
+        message: "Leave this cocktail and return to ingredient details?",
+        actions: [
+          { label: "Stay", variant: "secondary" },
+          {
+            label: "Return",
+            variant: "destructive",
+            onPress: () => {
+              setHasUnsavedChanges(false);
+              onConfirm();
+            },
+          },
+        ],
+      });
+    },
+    [setHasUnsavedChanges, showDialog],
+  );
+
   useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", (event) => {
       if (isNavigatingAfterSaveRef.current || isHandlingBackRef.current) {
+        return;
+      }
+
+      if (isReturnToIngredientDetails && event.data.action.type === "GO_BACK") {
+        event.preventDefault();
+        confirmReturnToIngredient(() => {
+          isHandlingBackRef.current = true;
+          goBack({
+            pathname: "/ingredients/[ingredientId]",
+            params: {
+              ingredientId:
+                ingredientParam ?? ingredientNameParam ?? "",
+            },
+          });
+          setTimeout(() => {
+            isHandlingBackRef.current = false;
+          }, 0);
+        });
         return;
       }
 
@@ -1273,10 +1423,10 @@ export default function CreateCocktailScreen() {
         confirmLeave(() => {
           isHandlingBackRef.current = true;
           if (event.data.action.type === "GO_BACK") {
-            skipDuplicateBack(navigation);
-          } else {
-            navigation.dispatch(event.data.action);
+            goBack();
+            return;
           }
+          navigation.dispatch(event.data.action);
           setTimeout(() => {
             isHandlingBackRef.current = false;
           }, 0);
@@ -1287,7 +1437,7 @@ export default function CreateCocktailScreen() {
       if (event.data.action.type === "GO_BACK") {
         event.preventDefault();
         isHandlingBackRef.current = true;
-        skipDuplicateBack(navigation);
+        goBack();
         setTimeout(() => {
           isHandlingBackRef.current = false;
         }, 0);
@@ -1295,11 +1445,38 @@ export default function CreateCocktailScreen() {
     });
 
     return unsubscribe;
-  }, [confirmLeave, hasUnsavedChanges, navigation]);
+  }, [
+    confirmLeave,
+    confirmReturnToIngredient,
+    goBack,
+    hasUnsavedChanges,
+    ingredientNameParam,
+    ingredientParam,
+    isReturnToIngredientDetails,
+    navigation,
+  ]);
 
   const handleGoBack = useCallback(() => {
-    skipDuplicateBack(navigation);
-  }, [navigation]);
+    if (isReturnToIngredientDetails) {
+      confirmReturnToIngredient(() => {
+        goBack({
+          pathname: "/ingredients/[ingredientId]",
+          params: {
+            ingredientId: ingredientParam ?? ingredientNameParam ?? "",
+          },
+        });
+      });
+      return;
+    }
+
+    goBack();
+  }, [
+    confirmReturnToIngredient,
+    goBack,
+    ingredientNameParam,
+    ingredientParam,
+    isReturnToIngredientDetails,
+  ]);
 
   const imageSource = useMemo(() => {
     if (!imageUri) {

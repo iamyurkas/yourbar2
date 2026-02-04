@@ -37,11 +37,10 @@ import {
   buildReturnToParams,
   navigateToDetailsWithReturnTo,
   parseReturnToParams,
-  returnToSourceOrBack,
-  skipDuplicateBack,
 } from "@/libs/navigation";
 import { normalizeSearchText } from "@/libs/search-normalization";
 import { useInventory, type Ingredient } from "@/providers/inventory-provider";
+import { useBackNavigation } from "@/providers/back-navigation-provider";
 
 function useResolvedIngredient(
   param: string | undefined,
@@ -77,6 +76,7 @@ export default function IngredientDetailsScreen() {
   }>();
   const navigation = useNavigation();
   const Colors = useAppColors();
+  const { goBack } = useBackNavigation();
   const { ingredientId } = params;
   const {
     ingredients,
@@ -506,13 +506,15 @@ export default function IngredientDetailsScreen() {
   }, [cocktailEntries.length]);
 
   const handleReturn = useCallback(() => {
-    if (returnToPath === "/ingredients") {
-      skipDuplicateBack(navigation);
-      return;
-    }
-
-    returnToSourceOrBack(navigation, { returnToPath, returnToParams });
-  }, [navigation, returnToParams, returnToPath]);
+    goBack(
+      returnToPath
+        ? {
+            pathname: returnToPath,
+            params: returnToParams,
+          }
+        : undefined,
+    );
+  }, [goBack, returnToParams, returnToPath]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", (event) => {

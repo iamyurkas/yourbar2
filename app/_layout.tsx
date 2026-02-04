@@ -8,6 +8,7 @@ import { PaperProvider } from "@/libs/react-native-paper";
 import { OnboardingProvider } from "@/components/onboarding/OnboardingContext";
 import { OnboardingOverlay } from "@/components/onboarding/OnboardingOverlay";
 import { InventoryProvider, useInventory } from "@/providers/inventory-provider";
+import { BackNavigationProvider } from "@/providers/back-navigation-provider";
 import { UnsavedChangesProvider } from "@/providers/unsaved-changes-provider";
 import { getAppTheme } from "@/theme/theme";
 import * as Sentry from '@sentry/react-native';
@@ -67,14 +68,16 @@ export default Sentry.wrap(function RootLayout() {
     <View style={{ flex: 1 }}>
       <UnsavedChangesProvider>
         <InventoryProvider>
-          <OnboardingProvider>
-            <ThemeAppWrapper>
-              <Stack>
-                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-              </Stack>
-              <OnboardingOverlay />
-            </ThemeAppWrapper>
-          </OnboardingProvider>
+          <BackNavigationProvider>
+            <OnboardingProvider>
+              <ThemeAppWrapper>
+                <Stack>
+                  <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                </Stack>
+                <OnboardingOverlay />
+              </ThemeAppWrapper>
+            </OnboardingProvider>
+          </BackNavigationProvider>
         </InventoryProvider>
       </UnsavedChangesProvider>
     </View>
