@@ -62,7 +62,7 @@ function hydrateTagList(
     resolved.set(id, { id, name, color });
   });
 
-  const list = Array.from(resolved.values()).sort((a, b) => a.id - b.id || a.name.localeCompare(b.name));
+  const list = Array.from(resolved.values()).sort((a, b) => a.id - b.id || (a.name ?? "").localeCompare(b.name ?? ""));
   return list.length > 0 ? list : undefined;
 }
 

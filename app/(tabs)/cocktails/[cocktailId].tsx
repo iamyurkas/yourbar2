@@ -166,6 +166,7 @@ function convertIngredientAmount(
 function formatIngredientQuantity(
   ingredient: RecipeIngredient,
   useImperialUnits: boolean,
+  t: (key: string, options?: any) => string,
 ): string {
   const amountRaw = ingredient.amount ?? "";
   const amount = amountRaw.trim();
@@ -207,7 +208,7 @@ function formatIngredientQuantity(
   }
 
   if (!displayAmount && !unitText) {
-    return i18n.t("cocktails.as_needed");
+    return t("cocktails.as_needed");
   }
 
   if (!displayAmount && unitText) {
@@ -241,6 +242,7 @@ function buildMissingSubstituteLines(
   ingredient: RecipeIngredient,
   resolution: IngredientResolution,
   lookup: IngredientLookup,
+  t: (key: string, options?: any) => string,
 ): string[] {
   if (resolution.isAvailable) {
     return [];
@@ -284,8 +286,8 @@ function buildMissingSubstituteLines(
 
     seen.add(key);
     const prefix = source === "base" && isBrandedIngredient
-      ? i18n.t("cocktails.or_any", { name: "" }).trim()
-      : i18n.t("cocktails.or", { name: "" }).trim();
+      ? t("cocktails.or_any", { name: "" }).trim()
+      : t("cocktails.or", { name: "" }).trim();
     lines.push(`${prefix} ${name}`);
   });
 
@@ -985,6 +987,7 @@ export default function CocktailDetailsScreen() {
                     const quantity = formatIngredientQuantity(
                       ingredient,
                       showImperialUnits,
+                      t,
                     );
                     const qualifier = getIngredientQualifier(ingredient);
                     const key = `${ingredient.ingredientId ?? ingredient.name}-${ingredient.order}`;
@@ -1076,6 +1079,7 @@ export default function CocktailDetailsScreen() {
                       ingredient,
                       resolution,
                       ingredientLookup,
+                      t,
                     );
 
                     if (
