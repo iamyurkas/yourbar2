@@ -1,4 +1,12 @@
-import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 
 import { useInventory } from '@/providers/inventory-provider';
 
@@ -22,16 +30,35 @@ type OnboardingProviderProps = {
 const STEP_ORDER: OnboardingStep[] = ['ingredients', 'cocktails', 'shaker'];
 
 export function OnboardingProvider({ children }: OnboardingProviderProps) {
-  const { onboardingCompleted, setOnboardingCompleted } = useInventory();
+  const { ingredients, onboardingCompleted, setIngredientAvailability, setOnboardingCompleted } =
+    useInventory();
   const [activeStep, setActiveStep] = useState<OnboardingStep | null>(
     () => (onboardingCompleted ? null : STEP_ORDER[0]),
   );
   const [isActive, setIsActive] = useState<boolean>(() => !onboardingCompleted);
+  const onboardingIngredientsMarkedRef = useRef(false);
+
+  const markOnboardingIngredients = useCallback(() => {
+    if (ingredients.length === 0) {
+      return;
+    }
+
+    const onboardingIngredientNames = new Set(['spiced rum', 'gin', 'tonic', 'ice', 'cola']);
+
+    ingredients.forEach((ingredient) => {
+      if (onboardingIngredientNames.has(ingredient.name.trim().toLowerCase())) {
+        setIngredientAvailability(ingredient.id, true);
+      }
+    });
+
+    onboardingIngredientsMarkedRef.current = true;
+  }, [ingredients, setIngredientAvailability]);
 
   useEffect(() => {
     if (onboardingCompleted) {
       setActiveStep(null);
       setIsActive(false);
+      onboardingIngredientsMarkedRef.current = false;
       return;
     }
 
@@ -39,11 +66,19 @@ export function OnboardingProvider({ children }: OnboardingProviderProps) {
     setIsActive(true);
   }, [onboardingCompleted]);
 
+  useEffect(() => {
+    if (!onboardingCompleted && isActive && !onboardingIngredientsMarkedRef.current) {
+      markOnboardingIngredients();
+    }
+  }, [isActive, markOnboardingIngredients, onboardingCompleted]);
+
   const startOnboarding = useCallback(() => {
     setOnboardingCompleted(false);
     setActiveStep(STEP_ORDER[0]);
     setIsActive(true);
-  }, [setOnboardingCompleted]);
+    onboardingIngredientsMarkedRef.current = false;
+    markOnboardingIngredients();
+  }, [markOnboardingIngredients, setOnboardingCompleted]);
 
   const restartOnboarding = useCallback(() => {
     startOnboarding();
