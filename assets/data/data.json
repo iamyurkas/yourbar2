@@ -2912,10 +2912,18 @@
           "ingredientId": 18,
           "name": "Angostura Bitters",
           "amount": "2",
-          "unitId": 6
+          "unitId": 6,
+          "allowBaseSubstitution": true
         },
         {
           "order": 5,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8
+        },
+        {
+          "order": 6,
           "ingredientId": 214,
           "name": "Lemon",
           "amount": "1",
@@ -2977,18 +2985,18 @@
         },
         {
           "order": 6,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8
+        },
+        {
+          "order": 7,
           "ingredientId": 242,
           "name": "Orange",
           "amount": "1",
           "unitId": 26,
           "garnish": true
-        },
-        {
-          "order": 7,
-          "ingredientId": 193,
-          "name": "Ice",
-          "amount": "150",
-          "unitId": 8
         }
       ]
     },
@@ -4950,6 +4958,13 @@
         },
         {
           "order": 6,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "180",
+          "unitId": 8
+        },
+        {
+          "order": 7,
           "ingredientId": 81,
           "name": "Cherry",
           "amount": "1",
@@ -4957,19 +4972,12 @@
           "garnish": true
         },
         {
-          "order": 7,
+          "order": 8,
           "ingredientId": 275,
           "name": "Pineapple",
           "amount": "1",
           "unitId": 27,
           "garnish": true
-        },
-        {
-          "order": 8,
-          "ingredientId": 193,
-          "name": "Ice",
-          "amount": "180",
-          "unitId": 8
         }
       ]
     },
@@ -5204,6 +5212,13 @@
         },
         {
           "order": 4,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
+        },
+        {
+          "order": 5,
           "ingredientId": 214,
           "name": "Lemon",
           "amount": "1",
@@ -5211,19 +5226,12 @@
           "garnish": true
         },
         {
-          "order": 5,
+          "order": 6,
           "ingredientId": 81,
           "name": "Cherry",
           "amount": "1",
           "unitId": 1,
           "garnish": true
-        },
-        {
-          "order": 6,
-          "ingredientId": 193,
-          "name": "Ice",
-          "amount": "120",
-          "unitId": 8
         }
       ]
     },
@@ -8295,7 +8303,7 @@
       "id": 137,
       "name": "Chartreuse Swizzle",
       "description": "A tropical swizzle of green chartreuse, pineapple, lime, and falernum, finished with mint and nutmeg.",
-      "instructions": "1. Add 45ml of Green Chartreuse, 30ml of Pineapple Juice, 25.5ml of Lime Juice, and 15ml of Falernum to a Tiki.\n2. Stir gently to combine.\n3. Garnish with 3 mint leaves and a pinch of nutmeg.",
+      "instructions": "1. Add 45ml of Green Chartreuse, 30ml of Pineapple Juice, 25.5ml of Lime Juice, and 15ml of Falernum to a Tiki glass over ice.\n2. Stir gently to combine.\n3. Garnish with 3 mint leaves and a pinch of nutmeg.",
       "photoUri": "assets/cocktails/236-chartreuse-swizzle.jpg",
       "glassId": "tiki",
       "methodIds": ["build"],
@@ -8339,6 +8347,13 @@
         },
         {
           "order": 6,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 11
+        },
+        {
+          "order": 7,
           "ingredientId": 237,
           "name": "Nutmeg",
           "amount": "1",
@@ -8765,10 +8780,18 @@
         },
         {
           "order": 4,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 11
+        },
+        {
+          "order": 5,
           "ingredientId": 237,
           "name": "Nutmeg",
           "amount": "1",
-          "unitId": 15
+          "unitId": 15,
+          "garnish": true
         }
       ]
     },
@@ -9114,6 +9137,14 @@
         },
         {
           "order": 5,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8,
+          "optional": true
+        },
+        {
+          "order": 6,
           "ingredientId": 222,
           "name": "Lime",
           "amount": "1",
@@ -12220,6 +12251,21 @@
           "name": "Vanilla Extract",
           "amount": "2",
           "unitId": 7
+        },
+        {
+          "order": 10,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8
+        },
+        {
+          "order": 11,
+          "ingredientId": 297,
+          "name": "Rosemary",
+          "amount": "1",
+          "unitId": 22,
+          "garnish": true
         }
       ]
     },
@@ -12327,6 +12373,13 @@
         },
         {
           "order": 6,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8
+        },
+        {
+          "order": 7,
           "ingredientId": 222,
           "name": "Lime",
           "amount": "1",
@@ -12334,7 +12387,7 @@
           "garnish": true
         },
         {
-          "order": 7,
+          "order": 8,
           "ingredientId": 236,
           "name": "Mint",
           "amount": "2",
@@ -12880,6 +12933,13 @@
         },
         {
           "order": 7,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
+        },
+        {
+          "order": 8,
           "ingredientId": 242,
           "name": "Orange",
           "amount": "1",
@@ -12887,7 +12947,7 @@
           "garnish": true
         },
         {
-          "order": 8,
+          "order": 9,
           "ingredientId": 214,
           "name": "Lemon",
           "amount": "1",
@@ -12895,7 +12955,7 @@
           "garnish": true
         },
         {
-          "order": 9,
+          "order": 10,
           "ingredientId": 318,
           "name": "Strawberry",
           "amount": "4",
@@ -12903,7 +12963,7 @@
           "garnish": true
         },
         {
-          "order": 10,
+          "order": 11,
           "ingredientId": 236,
           "name": "Mint",
           "amount": "1",
@@ -12911,7 +12971,7 @@
           "garnish": true
         },
         {
-          "order": 11,
+          "order": 12,
           "ingredientId": 62,
           "name": "Borage",
           "amount": "1",
@@ -13098,6 +13158,13 @@
         },
         {
           "order": 3,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
+        },
+        {
+          "order": 4,
           "ingredientId": 222,
           "name": "Lime",
           "amount": "1",
@@ -13661,7 +13728,7 @@
       "photoUri": "assets/cocktails/329-grand-margarita.jpg",
       "glassId": "margarita_glass",
       "methodIds": ["shake"],
-      "tags": [1, 4],
+      "tags": [1, 6],
       "ingredients": [
         {
           "order": 1,
@@ -13700,6 +13767,13 @@
         },
         {
           "order": 5,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8
+        },
+        {
+          "order": 6,
           "ingredientId": 302,
           "name": "Salt",
           "amount": "1",
@@ -13707,7 +13781,7 @@
           "garnish": true
         },
         {
-          "order": 6,
+          "order": 7,
           "ingredientId": 222,
           "name": "Lime",
           "amount": "1",
@@ -13746,6 +13820,13 @@
           "name": "Cream",
           "amount": "20",
           "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8
         }
       ]
     },
@@ -14007,7 +14088,7 @@
       "id": 236,
       "name": "H.S.L. Special",
       "description": "A bright liqueur-based sour that masterfully balances the herbal complexity of Amaro Montenegro with the deep berry notes of Creme de Mure. The addition of fresh lime and a hint of absinthe creates a refreshing, multi-layered profile with a crisp finish.",
-      "instructions": "1. Combine Amaro Montenegro, Creme de Mure, lime juice, rich simple syrup, and a dash of absinthe in a cocktail shaker.\n2. Fill the shaker with plenty of ice and shake vigorously.\n3. Strain into a rock glass over fresh ice cube.\n4. Garnish with a fresh blackberry or a lime wheel if desired.",
+      "instructions": "1. Combine Amaro Montenegro, Creme de Mure, lime juice, rich simple syrup, and a dash of absinthe in a cocktail shaker.\n2. Fill the shaker with plenty of ice and shake vigorously.\n3. Strain into a rock glass over fresh ice cube.\n4. Garnish with a fresh blackberry or a lime wheel.",
       "photoUri": "assets/cocktails/336-h-s-l-special.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["shake"],
@@ -14057,6 +14138,36 @@
           "name": "Absinthe",
           "amount": "1",
           "unitId": 6
+        },
+        {
+          "order": 6,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8
+        },
+        {
+          "order": 7,
+          "ingredientId": 52,
+          "name": "Blackberry",
+          "amount": "1",
+          "unitId": 1,
+          "garnish": true
+        },
+        {
+          "order": 8,
+          "ingredientId": 222,
+          "name": "Lime",
+          "amount": "1",
+          "unitId": 19,
+          "garnish": true
+        },
+        {
+          "order": 9,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
         }
       ]
     },
@@ -14415,6 +14526,13 @@
         },
         {
           "order": 6,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8
+        },
+        {
+          "order": 7,
           "ingredientId": 89,
           "name": "Chocolate",
           "amount": "1",
@@ -15437,6 +15555,13 @@
         },
         {
           "order": 4,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8
+        },
+        {
+          "order": 5,
           "ingredientId": 98,
           "name": "Cocoa Powder",
           "amount": "1",
@@ -18093,6 +18218,13 @@
         },
         {
           "order": 5,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8
+        },
+        {
+          "order": 6,
           "ingredientId": 214,
           "name": "Lemon",
           "amount": "1",
@@ -19645,6 +19777,13 @@
         },
         {
           "order": 4,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
+        },
+        {
+          "order": 5,
           "ingredientId": 242,
           "name": "Orange",
           "amount": "0.5",
@@ -21241,6 +21380,13 @@
         },
         {
           "order": 5,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8
+        },
+        {
+          "order": 6,
           "ingredientId": 275,
           "name": "Pineapple",
           "amount": "1",
@@ -21248,7 +21394,7 @@
           "garnish": true
         },
         {
-          "order": 6,
+          "order": 7,
           "ingredientId": 231,
           "name": "Maraschino Cherry",
           "amount": "1",
@@ -22860,6 +23006,13 @@
         },
         {
           "order": 4,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
+        },
+        {
+          "order": 5,
           "ingredientId": 222,
           "name": "Lime",
           "amount": "2",
@@ -23482,14 +23635,8 @@
           "ingredientId": 193,
           "name": "Ice",
           "amount": "150",
-          "unitId": 8
-        },
-        {
-          "order": 9,
-          "ingredientId": 193,
-          "name": "Ice",
-          "amount": "120",
-          "unitId": 8
+          "unitId": 8,
+          "optional": true
         }
       ]
     },
@@ -23547,6 +23694,14 @@
         },
         {
           "order": 7,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "300",
+          "unitId": 8,
+          "optional": true
+        },
+        {
+          "order": 8,
           "ingredientId": 242,
           "name": "Orange",
           "amount": "1",
@@ -23561,7 +23716,7 @@
           ]
         },
         {
-          "order": 8,
+          "order": 9,
           "ingredientId": 87,
           "name": "Chili Pepper",
           "amount": "1",
@@ -28636,6 +28791,13 @@
         },
         {
           "order": 4,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 11
+        },
+        {
+          "order": 5,
           "ingredientId": 222,
           "name": "Lime",
           "amount": "1",
@@ -29857,10 +30019,18 @@
           "ingredientId": 270,
           "name": "Pernod",
           "amount": "1",
-          "unitId": 24
+          "unitId": 24,
+          "allowBaseSubstitution": true
         },
         {
           "order": 10,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
+        },
+        {
+          "order": 11,
           "ingredientId": 236,
           "name": "Mint",
           "amount": "1",
@@ -29868,7 +30038,7 @@
           "garnish": true
         },
         {
-          "order": 11,
+          "order": 12,
           "ingredientId": 81,
           "name": "Cherry",
           "amount": "1",
@@ -32270,7 +32440,7 @@
       "id": 331,
       "name": "Tia Maria",
       "description": "Coffee liqueur from Jamaica made with rum, coffee beans, and vanilla, around 20% ABV. Smooth and sweet with rich espresso notes. Used in espresso martinis and dessert cocktails.",
-      "tags": [0, 1],
+      "tags": [2],
       "baseIngredientId": 108,
       "photoUri": "assets/ingredients/434-tia-maria.jpg"
     },
