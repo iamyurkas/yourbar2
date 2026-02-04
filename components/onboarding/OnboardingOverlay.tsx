@@ -92,7 +92,7 @@ export function OnboardingOverlay() {
     },
     {
       id: 2,
-      message: 'Head to the **Ingredients** tab to begin.',
+      message: 'Head to the **Ingredients** screen to begin.',
       anchorName: 'tab-ingredients',
       autoNext: (_, path) => path.startsWith('/ingredients'),
       onEnter: (inv) => {
@@ -120,7 +120,7 @@ export function OnboardingOverlay() {
       buttonLabel: 'Next',
     },
     {
-      id: 7,
+      id: 4,
       message: '**My ingredients** shows the ingredients you have.\nYou’ll also see how many cocktails each one can be used in.',
       anchorName: 'ingredients-tab-my',
       buttonLabel: 'Next',
@@ -129,43 +129,43 @@ export function OnboardingOverlay() {
       },
     },
     {
-      id: 9,
-      message: 'Now let’s check the cocktails. Open the *Cocktails* tab.',
+      id: 5,
+      message: 'Now let’s check the cocktails.\nOpen the **Cocktails** screen.',
       anchorName: 'tab-cocktails',
       autoNext: (_, path) => path.startsWith('/cocktails'),
     },
     {
-      id: 11,
-      message: 'Cocktails you can make right now appear at the top of *My cocktails*.',
+      id: 6,
+      message: 'Cocktails you can make right now appear at the top of **My cocktails**.',
       buttonLabel: 'Next',
       onEnter: (_, requestTab) => {
         requestTab('cocktails', 'my');
       },
     },
     {
-      id: 12,
+      id: 7,
       message: 'Below are cocktails missing just one ingredient.',
       buttonLabel: 'Next',
     },
     {
-      id: 13,
+      id: 8,
       message: 'Finally, meet the **Shaker**.\nIt helps you find cocktails based on selected ingredients.',
       anchorName: 'tab-shaker',
       autoNext: (_, path) => path.startsWith('/shaker'),
     },
     {
-      id: 14,
+      id: 9,
       message: '**Shaker logic**\nIngredients within one category are interchangeable (*OR*), from different categories — mandatory (*AND*).\n\n**Example**\n(Gin *OR* Whiskey) *AND* (Cola *OR* Tonic) *AND* (Lemon *OR* Lime).',
       buttonLabel: 'Next',
     },
     {
-      id: 15,
+      id: 10,
       message: 'This toggle filters ingredients by availability.',
       anchorName: 'shaker-availability-toggle',
       buttonLabel: 'Next',
     },
     {
-      id: 16,
+      id: 11,
       message: 'Tap the ingredients you want to use in you next cocktail and tap "Show" to see the available recipes.\n\nEnjoy your cocktails!',
       buttonLabel: 'Finish',
     },
