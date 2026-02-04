@@ -308,6 +308,9 @@ export default function CreateCocktailScreen() {
   const defaultUnitId = useImperialUnits
     ? DEFAULT_IMPERIAL_UNIT_ID
     : DEFAULT_METRIC_UNIT_ID;
+  const defaultCocktailTagId = BUILTIN_COCKTAIL_TAGS.find(
+    (tag) => tag.name === "custom",
+  )?.id;
 
   const renderMethodIcon = (methodId: CocktailMethodId, iconColor: string) => {
     const icon = METHOD_ICON_MAP[methodId];
@@ -619,6 +622,12 @@ export default function CreateCocktailScreen() {
       prefillCompleted = true;
     }
 
+    if (!isEditMode && !baseCocktail && defaultCocktailTagId != null) {
+      setSelectedTagIds((prev) =>
+        prev.length ? prev : [defaultCocktailTagId],
+      );
+    }
+
     if (!prefillCompleted) {
       const resolveIngredient = (value?: string, fallbackName?: string) => {
         if (value) {
@@ -680,6 +689,8 @@ export default function CreateCocktailScreen() {
     ingredientNameParam,
     ingredientParam,
     inventoryIngredients,
+    isEditMode,
+    defaultCocktailTagId,
   ]);
 
   const ensureMediaPermission = useCallback(async () => {
