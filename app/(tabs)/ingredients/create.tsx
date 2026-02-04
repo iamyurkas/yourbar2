@@ -27,7 +27,7 @@ import { TagPill } from '@/components/TagPill';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { useAppColors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
-import { buildReturnToParams, skipDuplicateBack } from '@/libs/navigation';
+import { buildReturnToParams, popBackToValidRoute } from '@/libs/navigation';
 import { shouldStorePhoto, storePhoto } from '@/libs/photo-storage';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
@@ -122,11 +122,16 @@ export default function IngredientFormScreen() {
       return undefined;
     }
   }, [returnToParamsParam]);
+  const shouldConfirmOnBack = useMemo(
+    () => returnToPath === '/cocktails/create' || legacyReturnToParam === 'cocktail-form',
+    [legacyReturnToParam, returnToPath],
+  );
 
   const navigation = useNavigation();
   const Colors = useAppColors();
   const {
     ingredients,
+    cocktails,
     shoppingIngredientIds,
     availableIngredientIds,
     createIngredient,
@@ -210,6 +215,58 @@ export default function IngredientFormScreen() {
   const showDialog = useCallback((options: DialogOptions) => {
     setDialogOptions(options);
   }, []);
+
+  const resolveIngredientFromParam = useCallback(
+    (value: unknown): Ingredient | undefined => {
+      const raw = Array.isArray(value) ? value[0] : value;
+      if (raw == null) {
+        return undefined;
+      }
+
+      const numeric = Number(raw);
+      if (!Number.isNaN(numeric)) {
+        return ingredients.find((item) => Number(item.id ?? -1) === numeric);
+      }
+
+      const normalized = normalizeSearchText(String(raw));
+      return ingredients.find((item) => normalizeSearchText(item.name ?? '') === normalized);
+    },
+    [ingredients],
+  );
+
+  const resolveCocktailFromParam = useCallback(
+    (value: unknown) => {
+      const raw = Array.isArray(value) ? value[0] : value;
+      if (raw == null) {
+        return undefined;
+      }
+
+      const numeric = Number(raw);
+      if (!Number.isNaN(numeric)) {
+        return cocktails.find((item) => Number(item.id ?? -1) === numeric);
+      }
+
+      const normalized = normalizeSearchText(String(raw));
+      return cocktails.find((item) => normalizeSearchText(item.name ?? '') === normalized);
+    },
+    [cocktails],
+  );
+
+  const isRouteValid = useCallback(
+    (route: { name: string; params?: Record<string, unknown> }) => {
+      const params = route.params ?? {};
+      if (route.name.includes('ingredients/[ingredientId]')) {
+        return Boolean(resolveIngredientFromParam(params.ingredientId));
+      }
+
+      if (route.name.includes('cocktails/[cocktailId]')) {
+        return Boolean(resolveCocktailFromParam(params.cocktailId));
+      }
+
+      return true;
+    },
+    [resolveCocktailFromParam, resolveIngredientFromParam],
+  );
 
   const buildSnapshot = useCallback((): IngredientFormSnapshot => {
     const normalizedTags = [...selectedTagIds].sort((a, b) => a - b);
@@ -434,8 +491,9 @@ export default function IngredientFormScreen() {
         setHasUnsavedChanges(false);
         isNavigatingAfterSaveRef.current = true;
         if (navigation.canGoBack()) {
-          navigation.goBack();
-          return;
+          if (popBackToValidRoute(navigation, { isRouteValid })) {
+            return;
+          }
         }
 
         router.replace({
@@ -501,11 +559,20 @@ export default function IngredientFormScreen() {
     isNavigatingAfterSaveRef.current = true;
     const targetId = created.id ?? created.name;
     if (!targetId) {
-      skipDuplicateBack(navigation);
+      if (!popBackToValidRoute(navigation, { isRouteValid })) {
+        navigation.goBack();
+      }
       return;
     }
 
     if (returnToPath) {
+      if (navigation.canGoBack()) {
+        if (!popBackToValidRoute(navigation, { isRouteValid })) {
+          router.navigate({ pathname: returnToPath, params: returnToParams });
+        }
+        return;
+      }
+
       router.navigate({ pathname: returnToPath, params: returnToParams });
       return;
     }
@@ -526,6 +593,7 @@ export default function IngredientFormScreen() {
     name,
     navigation,
     numericIngredientId,
+    isRouteValid,
     returnToParams,
     returnToPath,
     selectedTagIds,
@@ -564,12 +632,14 @@ export default function IngredientFormScreen() {
         return;
       }
 
-      if (hasUnsavedChanges) {
+      if (hasUnsavedChanges || shouldConfirmOnBack) {
         event.preventDefault();
         confirmLeave(() => {
           isHandlingBackRef.current = true;
           if (event.data.action.type === 'GO_BACK') {
-            skipDuplicateBack(navigation);
+            if (!popBackToValidRoute(navigation, { isRouteValid })) {
+              navigation.goBack();
+            }
           } else {
             navigation.dispatch(event.data.action);
           }
@@ -583,7 +653,9 @@ export default function IngredientFormScreen() {
       if (event.data.action.type === 'GO_BACK') {
         event.preventDefault();
         isHandlingBackRef.current = true;
-        skipDuplicateBack(navigation);
+        if (!popBackToValidRoute(navigation, { isRouteValid })) {
+          navigation.goBack();
+        }
         setTimeout(() => {
           isHandlingBackRef.current = false;
         }, 0);
@@ -591,11 +663,22 @@ export default function IngredientFormScreen() {
     });
 
     return unsubscribe;
-  }, [confirmLeave, hasUnsavedChanges, navigation]);
+  }, [confirmLeave, hasUnsavedChanges, navigation, shouldConfirmOnBack, isRouteValid]);
 
   const handleGoBack = useCallback(() => {
-    skipDuplicateBack(navigation);
-  }, [navigation]);
+    if (hasUnsavedChanges || shouldConfirmOnBack) {
+      confirmLeave(() => {
+        if (!popBackToValidRoute(navigation, { isRouteValid })) {
+          navigation.goBack();
+        }
+      });
+      return;
+    }
+
+    if (!popBackToValidRoute(navigation, { isRouteValid })) {
+      navigation.goBack();
+    }
+  }, [confirmLeave, hasUnsavedChanges, isRouteValid, navigation, shouldConfirmOnBack]);
 
   const handleDeletePress = useCallback(() => {
     if (!isEditMode) {

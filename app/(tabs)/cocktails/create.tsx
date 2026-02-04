@@ -49,7 +49,7 @@ import { useAppColors } from "@/constants/theme";
 import {
   buildReturnToParams,
   parseReturnToParams,
-  skipDuplicateBack,
+  popBackToValidRoute,
 } from "@/libs/navigation";
 import { shouldStorePhoto, storePhoto } from "@/libs/photo-storage";
 import { normalizeSearchText } from "@/libs/search-normalization";
@@ -272,6 +272,7 @@ export default function CreateCocktailScreen() {
   const returnToParams = useMemo(() => {
     return parseReturnToParams(params.returnToParams);
   }, [params.returnToParams]);
+  const shouldConfirmOnBack = useMemo(() => sourceParam === "ingredient", [sourceParam]);
 
   const [name, setName] = useState("");
   const [glassId, setGlassId] = useState<string | null>("martini");
@@ -360,6 +361,65 @@ export default function CreateCocktailScreen() {
   const showDialog = useCallback((options: DialogOptions) => {
     setDialogOptions(options);
   }, []);
+
+  const resolveCocktailFromParam = useCallback(
+    (value: unknown) => {
+      const raw = Array.isArray(value) ? value[0] : value;
+      if (raw == null) {
+        return undefined;
+      }
+
+      const numeric = Number(raw);
+      if (!Number.isNaN(numeric)) {
+        return cocktails.find((item) => Number(item.id ?? -1) === numeric);
+      }
+
+      const normalized = normalizeSearchText(String(raw));
+      return cocktails.find(
+        (item) => normalizeSearchText(item.name ?? "") === normalized,
+      );
+    },
+    [cocktails],
+  );
+
+  const resolveIngredientFromParam = useCallback(
+    (value: unknown) => {
+      const raw = Array.isArray(value) ? value[0] : value;
+      if (raw == null) {
+        return undefined;
+      }
+
+      const numeric = Number(raw);
+      if (!Number.isNaN(numeric)) {
+        return inventoryIngredients.find(
+          (item) => Number(item.id ?? -1) === numeric,
+        );
+      }
+
+      const normalized = normalizeSearchText(String(raw));
+      return inventoryIngredients.find(
+        (item) => normalizeSearchText(item.name ?? "") === normalized,
+      );
+    },
+    [inventoryIngredients],
+  );
+
+  const isRouteValid = useCallback(
+    (route: { name: string; params?: Record<string, unknown> }) => {
+      const params = route.params ?? {};
+
+      if (route.name.includes("cocktails/[cocktailId]")) {
+        return Boolean(resolveCocktailFromParam(params.cocktailId));
+      }
+
+      if (route.name.includes("ingredients/[ingredientId]")) {
+        return Boolean(resolveIngredientFromParam(params.ingredientId));
+      }
+
+      return true;
+    },
+    [resolveCocktailFromParam, resolveIngredientFromParam],
+  );
 
   const buildSnapshot = useCallback((): CocktailFormSnapshot => {
     const normalizedTags = [...selectedTagIds].sort((a, b) => a - b);
@@ -1136,8 +1196,9 @@ export default function CreateCocktailScreen() {
       isNavigatingAfterSaveRef.current = true;
       const targetId = persisted.id ?? persisted.name;
       if (isEditMode && navigation.canGoBack()) {
-        navigation.goBack();
-        return;
+        if (popBackToValidRoute(navigation, { isRouteValid })) {
+          return;
+        }
       }
 
       if (targetId) {
@@ -1169,6 +1230,7 @@ export default function CreateCocktailScreen() {
     methodIds,
     name,
     navigation,
+    isRouteValid,
     prefilledCocktail?.id,
     prefilledCocktail?.photoUri,
     returnToParams,
@@ -1268,12 +1330,14 @@ export default function CreateCocktailScreen() {
         return;
       }
 
-      if (hasUnsavedChanges) {
+      if (hasUnsavedChanges || shouldConfirmOnBack) {
         event.preventDefault();
         confirmLeave(() => {
           isHandlingBackRef.current = true;
           if (event.data.action.type === "GO_BACK") {
-            skipDuplicateBack(navigation);
+            if (!popBackToValidRoute(navigation, { isRouteValid })) {
+              navigation.goBack();
+            }
           } else {
             navigation.dispatch(event.data.action);
           }
@@ -1287,7 +1351,9 @@ export default function CreateCocktailScreen() {
       if (event.data.action.type === "GO_BACK") {
         event.preventDefault();
         isHandlingBackRef.current = true;
-        skipDuplicateBack(navigation);
+        if (!popBackToValidRoute(navigation, { isRouteValid })) {
+          navigation.goBack();
+        }
         setTimeout(() => {
           isHandlingBackRef.current = false;
         }, 0);
@@ -1295,11 +1361,28 @@ export default function CreateCocktailScreen() {
     });
 
     return unsubscribe;
-  }, [confirmLeave, hasUnsavedChanges, navigation]);
+  }, [
+    confirmLeave,
+    hasUnsavedChanges,
+    isRouteValid,
+    navigation,
+    shouldConfirmOnBack,
+  ]);
 
   const handleGoBack = useCallback(() => {
-    skipDuplicateBack(navigation);
-  }, [navigation]);
+    if (hasUnsavedChanges || shouldConfirmOnBack) {
+      confirmLeave(() => {
+        if (!popBackToValidRoute(navigation, { isRouteValid })) {
+          navigation.goBack();
+        }
+      });
+      return;
+    }
+
+    if (!popBackToValidRoute(navigation, { isRouteValid })) {
+      navigation.goBack();
+    }
+  }, [confirmLeave, hasUnsavedChanges, isRouteValid, navigation, shouldConfirmOnBack]);
 
   const imageSource = useMemo(() => {
     if (!imageUri) {

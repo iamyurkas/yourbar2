@@ -37,25 +37,59 @@ const areRoutesEqual = (
   return areParamsEqual(left.params, right.params);
 };
 
-export const skipDuplicateBack = (navigation: NavigationProp<ParamListBase>) => {
+type RoutePredicate = (route: { name: string; params?: RouteParams }) => boolean;
+
+export const popBackToValidRoute = (
+  navigation: NavigationProp<ParamListBase>,
+  {
+    isRouteValid,
+  }: {
+    isRouteValid?: RoutePredicate;
+  } = {},
+): boolean => {
   const state = navigation.getState();
-  const currentIndex = state.index ?? 0;
+  const routes = state.routes ?? [];
+  const currentIndex = typeof state.index === 'number' ? state.index : routes.length - 1;
 
   if (currentIndex <= 0) {
+    return false;
+  }
+
+  const current = routes[currentIndex];
+  let targetIndex = currentIndex - 1;
+
+  while (targetIndex >= 0) {
+    const candidate = routes[targetIndex];
+    if (current && areRoutesEqual(current, candidate)) {
+      targetIndex -= 1;
+      continue;
+    }
+
+    if (isRouteValid && !isRouteValid(candidate)) {
+      targetIndex -= 1;
+      continue;
+    }
+
+    break;
+  }
+
+  if (targetIndex < 0) {
+    return false;
+  }
+
+  const popCount = currentIndex - targetIndex;
+  if (popCount <= 0) {
+    return false;
+  }
+
+  navigation.dispatch(StackActions.pop(popCount));
+  return true;
+};
+
+export const skipDuplicateBack = (navigation: NavigationProp<ParamListBase>) => {
+  if (!popBackToValidRoute(navigation)) {
     navigation.goBack();
-    return;
   }
-
-  const current = state.routes[currentIndex];
-  const previous = state.routes[currentIndex - 1];
-  const shouldSkip = areRoutesEqual(current, previous);
-
-  if (shouldSkip && currentIndex >= 2) {
-    navigation.dispatch(StackActions.pop(2));
-    return;
-  }
-
-  navigation.goBack();
 };
 
 export const buildReturnToParams = (
@@ -124,11 +158,22 @@ export const returnToSourceOrBack = (
   {
     returnToPath,
     returnToParams,
+    isRouteValid,
   }: {
     returnToPath?: string;
     returnToParams?: ReturnToParams;
+    isRouteValid?: RoutePredicate;
   },
 ) => {
+  if (navigation.canGoBack()) {
+    if (!popBackToValidRoute(navigation, { isRouteValid })) {
+      if (returnToPath) {
+        router.navigate({ pathname: returnToPath, params: returnToParams });
+      }
+    }
+    return;
+  }
+
   if (returnToPath) {
     router.navigate({ pathname: returnToPath, params: returnToParams });
     return;

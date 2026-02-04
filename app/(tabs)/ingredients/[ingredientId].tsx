@@ -38,7 +38,6 @@ import {
   navigateToDetailsWithReturnTo,
   parseReturnToParams,
   returnToSourceOrBack,
-  skipDuplicateBack,
 } from "@/libs/navigation";
 import { normalizeSearchText } from "@/libs/search-normalization";
 import { useInventory, type Ingredient } from "@/providers/inventory-provider";
@@ -505,14 +504,70 @@ export default function IngredientDetailsScreen() {
     );
   }, [cocktailEntries.length]);
 
-  const handleReturn = useCallback(() => {
-    if (returnToPath === "/ingredients") {
-      skipDuplicateBack(navigation);
-      return;
-    }
+  const resolveIngredientParam = useCallback(
+    (value: unknown) => {
+      const raw = Array.isArray(value) ? value[0] : value;
+      if (raw == null) {
+        return undefined;
+      }
 
-    returnToSourceOrBack(navigation, { returnToPath, returnToParams });
-  }, [navigation, returnToParams, returnToPath]);
+      const numeric = Number(raw);
+      if (!Number.isNaN(numeric)) {
+        return ingredients.find((item) => Number(item.id ?? -1) === numeric);
+      }
+
+      const normalized = normalizeSearchText(String(raw));
+      return ingredients.find(
+        (item) => normalizeSearchText(item.name ?? "") === normalized,
+      );
+    },
+    [ingredients],
+  );
+
+  const resolveCocktailParam = useCallback(
+    (value: unknown) => {
+      const raw = Array.isArray(value) ? value[0] : value;
+      if (raw == null) {
+        return undefined;
+      }
+
+      const numeric = Number(raw);
+      if (!Number.isNaN(numeric)) {
+        return cocktails.find((item) => Number(item.id ?? -1) === numeric);
+      }
+
+      const normalized = normalizeSearchText(String(raw));
+      return cocktails.find(
+        (item) => normalizeSearchText(item.name ?? "") === normalized,
+      );
+    },
+    [cocktails],
+  );
+
+  const isRouteValid = useCallback(
+    (route: { name: string; params?: Record<string, unknown> }) => {
+      const params = route.params ?? {};
+
+      if (route.name.includes("ingredients/[ingredientId]")) {
+        return Boolean(resolveIngredientParam(params.ingredientId));
+      }
+
+      if (route.name.includes("cocktails/[cocktailId]")) {
+        return Boolean(resolveCocktailParam(params.cocktailId));
+      }
+
+      return true;
+    },
+    [resolveCocktailParam, resolveIngredientParam],
+  );
+
+  const handleReturn = useCallback(() => {
+    returnToSourceOrBack(navigation, {
+      returnToPath,
+      returnToParams,
+      isRouteValid,
+    });
+  }, [isRouteValid, navigation, returnToParams, returnToPath]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", (event) => {
