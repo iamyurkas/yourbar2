@@ -1042,7 +1042,7 @@ export default function IngredientFormScreen() {
           headerTitleStyle: { color: Colors.onSurface, fontSize: 16, fontWeight: '600' },
           headerLeft: () => (
             <Pressable
-              onPress={handleGoBack}
+              onPress={handleBack}
               accessibilityRole="button"
               accessibilityLabel="Go back"
               style={styles.headerButton}
