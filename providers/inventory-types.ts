@@ -30,6 +30,8 @@ type NormalizedSearchFields = {
   searchTokensNormalized: string[];
 };
 
+export type IngredientRecord = InventoryData['ingredients'][number];
+
 export type Cocktail = CocktailRecord & NormalizedSearchFields & { userRating?: number };
 export type Ingredient = IngredientRecord & NormalizedSearchFields;
 export type StartScreen =

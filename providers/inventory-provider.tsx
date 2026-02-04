@@ -763,10 +763,13 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             return Number.isFinite(id) && id >= USER_CREATED_ID_START;
           });
 
-          const cocktails = [...nextBaseData.cocktails, ...userCocktails].sort((a, b) =>
+          const normalizedBaseCocktails = normalizeSearchFields(nextBaseData.cocktails);
+          const normalizedBaseIngredients = normalizeSearchFields(nextBaseData.ingredients);
+
+          const cocktails = [...normalizedBaseCocktails, ...userCocktails].sort((a, b) =>
             a.searchNameNormalized.localeCompare(b.searchNameNormalized),
           );
-          const ingredients = [...nextBaseData.ingredients, ...userIngredients].sort((a, b) =>
+          const ingredients = [...normalizedBaseIngredients, ...userIngredients].sort((a, b) =>
             a.searchNameNormalized.localeCompare(b.searchNameNormalized),
           );
 
