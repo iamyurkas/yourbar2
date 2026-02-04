@@ -27,7 +27,7 @@ const TAB_SCREENS: Array<{
       icon: CocktailIcon,
       onTabPress: (navigation, route) => {
         getLastCocktailTab();
-        navigation.navigate(route.name as never, { screen: 'index' } as never);
+        navigation.navigate(route.name as never);
       },
     },
     {
@@ -35,7 +35,7 @@ const TAB_SCREENS: Array<{
       title: 'Shaker',
       icon: ShakerIcon,
       onTabPress: (navigation, route) => {
-        navigation.navigate(route.name as never, { screen: 'index' } as never);
+        navigation.navigate(route.name as never);
       },
     },
     {
@@ -44,7 +44,7 @@ const TAB_SCREENS: Array<{
       icon: LemonIcon,
       onTabPress: (navigation, route) => {
         getLastIngredientTab();
-        navigation.navigate(route.name as never, { screen: 'index' } as never);
+        navigation.navigate(route.name as never);
       },
     },
   ];
