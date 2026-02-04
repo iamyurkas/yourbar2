@@ -20,6 +20,7 @@ import { useRouter } from 'expo-router';
 
 import { ListRow, PresenceCheck, Thumb } from '@/components/RowParts';
 import { OnboardingAnchor } from '@/components/onboarding/OnboardingAnchor';
+import { useOnboardingAnchors } from '@/components/onboarding/OnboardingContext';
 import { SideMenuDrawer } from '@/components/SideMenuDrawer';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { useAppColors } from '@/constants/theme';
@@ -193,11 +194,20 @@ export default function ShakerScreen() {
   const headerTouchState = useRef<
     Map<string, { startY: number; moved: boolean; didPress: boolean }>
   >(new Map());
+  const { registerAction } = useOnboardingAnchors();
   const insets = useSafeAreaInsets();
   const bottomInset = Math.min(insets.bottom, 8);
   const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
 
   useScrollToTop(listRef);
+
+  useEffect(
+    () =>
+      registerAction('shaker-availability-toggle', () => {
+        setInStockOnly((previous) => (previous ? previous : true));
+      }),
+    [registerAction],
+  );
 
   useEffect(() => {
     const wasEmpty = previousQuery.current.length === 0;

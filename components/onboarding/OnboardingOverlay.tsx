@@ -18,7 +18,11 @@ type StepDef = {
   anchorName?: string;
   autoNext?: (inventory: any, pathname: string) => boolean;
   buttonLabel?: string;
-  onNext?: (inventory: any, requestTabChange: (screen: 'ingredients' | 'cocktails', tab: string) => void) => void;
+  onNext?: (
+    inventory: any,
+    requestTabChange: (screen: 'ingredients' | 'cocktails', tab: string) => void,
+    triggerAnchorAction: (name: string) => void,
+  ) => void;
   onEnter?: (inventory: any, requestTabChange: (screen: 'ingredients' | 'cocktails', tab: string) => void) => void;
 };
 
@@ -69,7 +73,7 @@ const renderFormattedMessage = (message: string) => {
 
 export function OnboardingOverlay() {
   const { onboardingStep, setOnboardingStep, completeOnboarding, onboardingCompleted, ...inventory } = useInventory();
-  const { anchors, requestTabChange } = useOnboardingAnchors();
+  const { anchors, requestTabChange, triggerAction } = useOnboardingAnchors();
   const Colors = useAppColors();
   const pathname = usePathname();
   const { height: screenHeight } = useWindowDimensions();
@@ -97,7 +101,7 @@ export function OnboardingOverlay() {
       autoNext: (_, path) => path.startsWith('/ingredients'),
       onEnter: (inv) => {
         const availableIds = inv.availableIngredientIds as Set<number> | undefined;
-        const idsToSeed = [193, 159, 343, 111, 333, 214, 222];
+        const idsToSeed = [193, 159, 343, 111, 310, 333, 214, 222];
         const hasAll =
           availableIds && idsToSeed.every((id) => availableIds.has(id));
         if (hasAll) {
@@ -108,6 +112,7 @@ export function OnboardingOverlay() {
         inv.setIngredientAvailability(159, true); // Gin
         inv.setIngredientAvailability(343, true); // Whiskey
         inv.setIngredientAvailability(111, true); // Cola
+        inv.setIngredientAvailability(310, true); // Symple Syrup
         inv.setIngredientAvailability(333, true); // Tonic
         inv.setIngredientAvailability(214, true); // Lemon
         inv.setIngredientAvailability(222, true); // Lime
@@ -159,6 +164,9 @@ export function OnboardingOverlay() {
       message: 'Use this toggle to show only ingredients you have.',
       anchorName: 'shaker-availability-toggle',
       buttonLabel: 'Next',
+      onNext: (_, __, triggerAnchorAction) => {
+        triggerAnchorAction('shaker-availability-toggle');
+      },
     },
     {
       id: 10,
@@ -209,7 +217,7 @@ export function OnboardingOverlay() {
 
   const handleNext = () => {
     if (currentStep?.onNext) {
-      currentStep.onNext(inventory, requestTabChange);
+      currentStep.onNext(inventory, requestTabChange, triggerAction);
     }
 
     if (onboardingStep >= steps[steps.length - 1].id) {
