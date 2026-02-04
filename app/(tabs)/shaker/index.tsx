@@ -411,8 +411,14 @@ export default function ShakerScreen() {
       return;
     }
 
-    setInStockOnly(true);
-    setExpandedTagKeys(new Set(ingredientGroups.map((group) => group.key)));
+    setInStockOnly((previous) => (previous ? previous : true));
+    setExpandedTagKeys((previous) => {
+      const nextKeys = ingredientGroups.map((group) => group.key);
+      if (previous.size === nextKeys.length && nextKeys.every((key) => previous.has(key))) {
+        return previous;
+      }
+      return new Set(nextKeys);
+    });
   }, [ingredientGroups, onboardingStep]);
 
   const handleToggleGroup = useCallback((key: string) => {

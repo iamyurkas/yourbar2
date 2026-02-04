@@ -51,6 +51,14 @@ export function OnboardingOverlay() {
       anchorName: 'tab-ingredients',
       autoNext: (_, path) => path.startsWith('/ingredients'),
       onEnter: (inv) => {
+        const availableIds = inv.availableIngredientIds as Set<number> | undefined;
+        const idsToSeed = [193, 159, 315, 111, 333, 214, 222];
+        const hasAll =
+          availableIds && idsToSeed.every((id) => availableIds.has(id));
+        if (hasAll) {
+          return;
+        }
+
         inv.setIngredientAvailability(193, true); // Ice
         inv.setIngredientAvailability(159, true); // Gin
         inv.setIngredientAvailability(315, true); // Spiced Rum
