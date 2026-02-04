@@ -566,13 +566,15 @@ export default function IngredientFormScreen() {
     [handleNavigateBack, handleSubmit, setHasUnsavedChanges, showDialog],
   );
 
+  const shouldConfirmLeave = hasUnsavedChanges || returnToPath != null;
+
   useEffect(() => {
     const unsubscribe = navigation.addListener('beforeRemove', (event) => {
       if (isNavigatingAfterSaveRef.current || isHandlingBackRef.current) {
         return;
       }
 
-      if (hasUnsavedChanges) {
+      if (shouldConfirmLeave) {
         event.preventDefault();
         confirmLeave(() => {
           isHandlingBackRef.current = true;
@@ -599,15 +601,15 @@ export default function IngredientFormScreen() {
     });
 
     return unsubscribe;
-  }, [confirmLeave, hasUnsavedChanges, navigation]);
+  }, [confirmLeave, handleNavigateBack, navigation, shouldConfirmLeave]);
 
   const handleGoBack = useCallback(() => {
-    if (hasUnsavedChanges) {
+    if (shouldConfirmLeave) {
       confirmLeave();
       return;
     }
     handleNavigateBack();
-  }, [confirmLeave, handleNavigateBack, hasUnsavedChanges]);
+  }, [confirmLeave, handleNavigateBack, shouldConfirmLeave]);
 
   const handleDeletePress = useCallback(() => {
     if (!isEditMode) {
