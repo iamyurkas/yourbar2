@@ -16,6 +16,7 @@ type CollectionHeaderProps = {
   tabs?: SegmentTabOption[];
   activeTab?: string;
   onTabChange?: (key: string) => void;
+  highlightedTabs?: ReadonlySet<string> | string[];
   style?: StyleProp<ViewStyle>;
 };
 
@@ -32,6 +33,7 @@ export function CollectionHeader({
   tabs,
   activeTab,
   onTabChange,
+  highlightedTabs,
   style,
 }: CollectionHeaderProps) {
   const shouldShowTabs = Boolean(tabs?.length && activeTab !== undefined && onTabChange);
@@ -50,7 +52,12 @@ export function CollectionHeader({
         onFilterLayout={onFilterLayout}
       />
       {shouldShowTabs && tabs ? (
-        <SegmentTabs options={tabs} value={activeTab!} onChange={onTabChange!} />
+        <SegmentTabs
+          options={tabs}
+          value={activeTab!}
+          onChange={onTabChange!}
+          highlightedKeys={highlightedTabs}
+        />
       ) : null}
     </View>
   );
@@ -61,4 +68,3 @@ const styles = StyleSheet.create({
     gap: 0,
   },
 });
-
