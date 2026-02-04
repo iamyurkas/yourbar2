@@ -764,6 +764,8 @@ export default function CocktailsScreen() {
               title="Step 2: My Cocktails"
               message="This tab shows cocktails you can make right now. Below it, you will see recipes missing only one ingredient."
               actionLabel="Go to Shaker"
+              currentStep={2}
+              totalSteps={3}
               onAction={() => {
                 goToStep('shaker');
                 router.push('/shaker');

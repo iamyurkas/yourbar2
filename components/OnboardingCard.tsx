@@ -9,6 +9,8 @@ type OnboardingCardProps = {
   actionLabel?: string;
   onAction?: () => void;
   actionDisabled?: boolean;
+  currentStep?: number;
+  totalSteps?: number;
 };
 
 export function OnboardingCard({
@@ -17,6 +19,8 @@ export function OnboardingCard({
   actionLabel,
   onAction,
   actionDisabled = false,
+  currentStep,
+  totalSteps,
 }: OnboardingCardProps) {
   const Colors = useAppColors();
 
@@ -35,28 +39,35 @@ export function OnboardingCard({
       <Text style={[styles.title, { color: Colors.onSurface }]}>{title}</Text>
       <Text style={[styles.message, { color: Colors.onSurfaceVariant }]}>{message}</Text>
       {actionLabel ? (
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={actionLabel}
-          onPress={onAction}
-          disabled={actionDisabled}
-          style={({ pressed }) => [
-            styles.actionButton,
-            {
-              backgroundColor: actionDisabled ? Colors.surfaceVariant : Colors.tint,
-            },
-            pressed && !actionDisabled ? styles.actionButtonPressed : null,
-          ]}
-        >
-          <Text
-            style={[
-              styles.actionLabel,
-              { color: actionDisabled ? Colors.onSurfaceVariant : Colors.onPrimary },
+        <View style={styles.actionWrapper}>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={actionLabel}
+            onPress={onAction}
+            disabled={actionDisabled}
+            style={({ pressed }) => [
+              styles.actionButton,
+              {
+                backgroundColor: actionDisabled ? Colors.surfaceVariant : Colors.tint,
+              },
+              pressed && !actionDisabled ? styles.actionButtonPressed : null,
             ]}
           >
-            {actionLabel}
-          </Text>
-        </Pressable>
+            <Text
+              style={[
+                styles.actionLabel,
+                { color: actionDisabled ? Colors.onSurfaceVariant : Colors.onPrimary },
+              ]}
+            >
+              {actionLabel}
+            </Text>
+          </Pressable>
+          {typeof currentStep === 'number' && typeof totalSteps === 'number' ? (
+            <Text style={[styles.stepLabel, { color: Colors.onSurfaceVariant }]}>
+              {currentStep} / {totalSteps}
+            </Text>
+          ) : null}
+        </View>
       ) : null}
     </View>
   );
@@ -83,9 +94,10 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   actionButton: {
-    alignSelf: 'flex-start',
-    paddingHorizontal: 14,
-    paddingVertical: 8,
+    marginTop: 12,
+    alignSelf: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 12,
     borderRadius: 12,
   },
   actionButtonPressed: {
@@ -94,5 +106,13 @@ const styles = StyleSheet.create({
   actionLabel: {
     fontSize: 14,
     fontWeight: '600',
+  },
+  actionWrapper: {
+    alignItems: 'center',
+  },
+  stepLabel: {
+    marginTop: 8,
+    fontSize: 12,
+    fontWeight: '500',
   },
 });

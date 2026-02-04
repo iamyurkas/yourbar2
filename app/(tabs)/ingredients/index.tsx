@@ -818,6 +818,8 @@ export default function IngredientsScreen() {
               message="Add Cola, Ice, and Spiced Rum to your inventory. Tap the checkmarks next to each ingredient."
               actionLabel="Go to My Cocktails"
               actionDisabled={!hasAllRequiredIngredients}
+              currentStep={1}
+              totalSteps={3}
               onAction={() => {
                 goToStep('cocktails');
                 router.push('/cocktails');

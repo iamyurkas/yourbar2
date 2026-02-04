@@ -913,6 +913,8 @@ export default function ShakerScreen() {
               title="Step 3: Shaker logic"
               message="Ingredients within the same category are interchangeable (OR). Ingredients from different categories are required together (AND). Example: (Gin OR Whiskey) AND (Cola OR Tonic) AND (Lemon OR Lime). Use the checkmark above to filter by ingredients you already have."
               actionLabel="Finish onboarding"
+              currentStep={3}
+              totalSteps={3}
               onAction={completeOnboarding}
             />
           </View>
