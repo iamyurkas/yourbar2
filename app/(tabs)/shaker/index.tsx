@@ -10,6 +10,7 @@ import {
   View,
   type NativeScrollEvent,
   type NativeSyntheticEvent,
+  type LayoutRectangle,
   type SectionListData,
   type SectionListRenderItemInfo,
   type StyleProp,
@@ -20,6 +21,7 @@ import { useRouter } from 'expo-router';
 
 import { ListRow, PresenceCheck, Thumb } from '@/components/RowParts';
 import { SideMenuDrawer } from '@/components/SideMenuDrawer';
+import { OnboardingOverlay } from '@/components/OnboardingOverlay';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { useAppColors } from '@/constants/theme';
 import { isCocktailReady } from '@/libs/cocktail-availability';
@@ -29,6 +31,7 @@ import {
 } from '@/libs/ingredient-availability';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
+import { useOnboarding } from '@/providers/onboarding-provider';
 import { tagColors } from '@/theme/theme';
 
 type IngredientTagOption = {
@@ -183,6 +186,8 @@ export default function ShakerScreen() {
   const [inStockOnly, setInStockOnly] = useState(false);
   const [expandedTagKeys, setExpandedTagKeys] = useState<Set<string>>(() => new Set());
   const [selectedIngredientIds, setSelectedIngredientIds] = useState<Set<number>>(() => new Set());
+  const [inStockLayout, setInStockLayout] = useState<LayoutRectangle | null>(null);
+  const inStockRef = useRef<View>(null);
   const listRef = useRef<SectionList<Ingredient, IngredientSection>>(null);
   const lastScrollOffset = useRef(0);
   const searchStartOffset = useRef<number | null>(null);
@@ -194,6 +199,7 @@ export default function ShakerScreen() {
   const insets = useSafeAreaInsets();
   const bottomInset = Math.min(insets.bottom, 8);
   const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
+  const { step, completeOnboarding } = useOnboarding();
 
   useScrollToTop(listRef);
 
@@ -216,6 +222,12 @@ export default function ShakerScreen() {
 
   const handleScroll = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
     lastScrollOffset.current = event.nativeEvent.contentOffset.y;
+  }, []);
+
+  const handleInStockLayout = useCallback(() => {
+    inStockRef.current?.measureInWindow((x, y, width, height) => {
+      setInStockLayout({ x, y, width, height });
+    });
   }, []);
 
   const normalizedQuery = useMemo(() => {
@@ -809,7 +821,7 @@ export default function ShakerScreen() {
               </Pressable>
             ) : null}
           </View>
-          <View style={styles.iconButton}>
+          <View ref={inStockRef} onLayout={handleInStockLayout} style={styles.iconButton}>
             <PresenceCheck checked={inStockOnly} onToggle={() => setInStockOnly((previous) => !previous)} />
           </View>
         </View>
@@ -893,6 +905,18 @@ export default function ShakerScreen() {
           </Pressable>
         </View>
         <SideMenuDrawer visible={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
+        <OnboardingOverlay
+          visible={step === 'shaker_explain'}
+          title="Shaker"
+          message={
+            'Інгредієнти в межах однієї категорії взаємозамінні (OR), з різних категорій — обовʼязкові (AND).\n' +
+            'Приклад: (Gin OR Whiskey) AND (Cola OR Tonic) AND (Lemon OR Lime).\n' +
+            'Галочка вгорі фільтрує інгредієнти за наявністю.'
+          }
+          targets={inStockLayout ? [inStockLayout] : undefined}
+          actionLabel="Готово"
+          onAction={completeOnboarding}
+        />
       </View>
     </SafeAreaView>
   );

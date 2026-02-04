@@ -20,6 +20,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { CocktailListRow } from '@/components/CocktailListRow';
 import { CollectionHeader } from '@/components/CollectionHeader';
 import { FabAdd } from '@/components/FabAdd';
+import { OnboardingOverlay } from '@/components/OnboardingOverlay';
 import { ListRow, Thumb } from '@/components/RowParts';
 import { SideMenuDrawer } from '@/components/SideMenuDrawer';
 import { TagPill } from '@/components/TagPill';
@@ -35,6 +36,7 @@ import { normalizeSearchText } from '@/libs/search-normalization';
 import { buildTagOptions, type TagOption } from '@/libs/tag-options';
 import { useCocktailTabLogic, type MyTabListItem } from '@/libs/use-cocktail-tab-logic';
 import { useInventory, type Cocktail } from '@/providers/inventory-provider';
+import { useOnboarding } from '@/providers/onboarding-provider';
 import { tagColors } from '@/theme/theme';
 
 type CocktailMethodOption = {
@@ -72,10 +74,13 @@ export default function CocktailsScreen() {
   );
   const [headerLayout, setHeaderLayout] = useState<LayoutRectangle | null>(null);
   const [filterAnchorLayout, setFilterAnchorLayout] = useState<LayoutRectangle | null>(null);
+  const [listLayout, setListLayout] = useState<LayoutRectangle | null>(null);
+  const listContainerRef = useRef<View>(null);
   const listRef = useRef<FlatList<unknown>>(null);
   const lastScrollOffset = useRef(0);
   const searchStartOffset = useRef<number | null>(null);
   const previousQuery = useRef(query);
+  const { step, setStep } = useOnboarding();
 
   useScrollToTop(listRef);
 
@@ -138,6 +143,12 @@ export default function CocktailsScreen() {
     setLastCocktailTab(activeTab);
   }, [activeTab]);
 
+  useEffect(() => {
+    if (step === 'cocktails_explain' && activeTab !== 'my') {
+      setActiveTab('my');
+    }
+  }, [activeTab, step]);
+
   const handleHeaderLayout = useCallback((event: LayoutChangeEvent) => {
     const nextLayout = event.nativeEvent.layout;
     setHeaderLayout((previous) => {
@@ -171,6 +182,12 @@ export default function CocktailsScreen() {
     });
   }, []);
 
+  const handleListLayout = useCallback(() => {
+    listContainerRef.current?.measureInWindow((x, y, width, height) => {
+      setListLayout({ x, y, width, height });
+    });
+  }, []);
+
   const handleFilterPress = useCallback(() => {
     setFilterMenuVisible((previous) => !previous);
   }, []);
@@ -178,6 +195,11 @@ export default function CocktailsScreen() {
   const handleCloseFilterMenu = useCallback(() => {
     setFilterMenuVisible(false);
   }, []);
+
+  const handleContinueOnboarding = useCallback(() => {
+    router.replace('/shaker');
+    setStep('shaker_explain');
+  }, [router, setStep]);
 
   const handleTagFilterToggle = useCallback((key: string) => {
     setSelectedTagKeys((previous) => {
@@ -721,25 +743,27 @@ export default function CocktailsScreen() {
             </View>
           </>
         ) : null}
-        <FlatList
-          ref={listRef}
-          data={listData}
-          keyExtractor={isMyTab ? myTabKeyExtractor : keyExtractor}
-          renderItem={isMyTab ? renderMyItem : renderItem}
-          ItemSeparatorComponent={isMyTab ? renderMySeparator : renderSeparator}
-          contentContainerStyle={styles.listContent}
-          showsVerticalScrollIndicator
-          keyboardDismissMode="on-drag"
-          // Ensure first tap triggers row actions while dismissing the keyboard.
-          keyboardShouldPersistTaps="handled"
-          onScroll={handleScroll}
-          scrollEventThrottle={16}
-          ListEmptyComponent={
-            <Text style={[styles.emptyLabel, { color: Colors.onSurfaceVariant }]}>
-              {emptyMessage}
-            </Text>
-          }
-        />
+        <View ref={listContainerRef} onLayout={handleListLayout} style={styles.listContainer}>
+          <FlatList
+            ref={listRef}
+            data={listData}
+            keyExtractor={isMyTab ? myTabKeyExtractor : keyExtractor}
+            renderItem={isMyTab ? renderMyItem : renderItem}
+            ItemSeparatorComponent={isMyTab ? renderMySeparator : renderSeparator}
+            contentContainerStyle={styles.listContent}
+            showsVerticalScrollIndicator
+            keyboardDismissMode="on-drag"
+            // Ensure first tap triggers row actions while dismissing the keyboard.
+            keyboardShouldPersistTaps="handled"
+            onScroll={handleScroll}
+            scrollEventThrottle={16}
+            ListEmptyComponent={
+              <Text style={[styles.emptyLabel, { color: Colors.onSurfaceVariant }]}>
+                {emptyMessage}
+              </Text>
+            }
+          />
+        </View>
       </View>
       <FabAdd
         label="Add cocktail"
@@ -748,6 +772,17 @@ export default function CocktailsScreen() {
         }
       />
       <SideMenuDrawer visible={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
+      <OnboardingOverlay
+        visible={step === 'cocktails_explain'}
+        title="My Cocktails"
+        message={
+          'Після того як ви додали Cola, Ice та Spiced Rum, у My Cocktails зʼявляються коктейлі, ' +
+          'які доступні прямо зараз. Нижче показані коктейлі, яким не вистачає лише одного інгредієнта.'
+        }
+        targets={listLayout ? [listLayout] : undefined}
+        actionLabel="Перейти до Shaker"
+        onAction={handleContinueOnboarding}
+      />
     </SafeAreaView>
   );
 }
@@ -759,6 +794,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     position: 'relative',
+  },
+  listContainer: {
+    flex: 1,
   },
   headerWrapper: {
     zIndex: 2,

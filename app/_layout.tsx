@@ -6,6 +6,7 @@ import "react-native-reanimated";
 
 import { PaperProvider } from "@/libs/react-native-paper";
 import { InventoryProvider, useInventory } from "@/providers/inventory-provider";
+import { OnboardingProvider } from "@/providers/onboarding-provider";
 import { UnsavedChangesProvider } from "@/providers/unsaved-changes-provider";
 import { getAppTheme } from "@/theme/theme";
 import * as Sentry from '@sentry/react-native';
@@ -64,11 +65,13 @@ export default Sentry.wrap(function RootLayout() {
   return (
     <UnsavedChangesProvider>
       <InventoryProvider>
-        <ThemeAppWrapper>
-          <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          </Stack>
-        </ThemeAppWrapper>
+        <OnboardingProvider>
+          <ThemeAppWrapper>
+            <Stack>
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            </Stack>
+          </ThemeAppWrapper>
+        </OnboardingProvider>
       </InventoryProvider>
     </UnsavedChangesProvider>
   );

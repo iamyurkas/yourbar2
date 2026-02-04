@@ -4,6 +4,7 @@ import * as DocumentPicker from "expo-document-picker";
 import * as FileSystem from "expo-file-system/legacy";
 import { Image, type ImageSource } from "expo-image";
 import * as Sharing from "expo-sharing";
+import { useRouter } from "expo-router";
 import {
   useEffect,
   useMemo,
@@ -30,8 +31,10 @@ import { TagEditorModal } from "@/components/TagEditorModal";
 import { TagPill } from "@/components/TagPill";
 import { useAppColors } from "@/constants/theme";
 import { base64ToBytes, createTarArchive } from "@/libs/archive-utils";
+import { setLastIngredientTab } from "@/libs/collection-tabs";
 import { buildPhotoBaseName } from "@/libs/photo-utils";
 import { useInventory, type AppTheme, type StartScreen } from "@/providers/inventory-provider";
+import { useOnboarding } from "@/providers/onboarding-provider";
 import { type InventoryExportData } from "@/providers/inventory-types";
 import appConfig from "../app.json";
 
@@ -118,6 +121,7 @@ type SideMenuDrawerProps = {
 };
 
 export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
+  const router = useRouter();
   const {
     ignoreGarnish,
     setIgnoreGarnish,
@@ -146,6 +150,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     updateCustomIngredientTag,
     deleteCustomIngredientTag,
   } = useInventory();
+  const { restartOnboarding } = useOnboarding();
   const Colors = useAppColors();
   const [isMounted, setIsMounted] = useState(visible);
   const [isRatingModalVisible, setRatingModalVisible] = useState(false);
@@ -326,6 +331,13 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
   const toggleKeepScreenAwake = () => {
     setKeepScreenAwake(!keepScreenAwake);
+  };
+
+  const handleRestartOnboarding = () => {
+    setLastIngredientTab("all");
+    restartOnboarding();
+    onClose();
+    router.replace("/ingredients");
   };
 
   const handleResetInventory = () => {
@@ -967,6 +979,35 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   ]}
                 >
                   Current: {selectedThemeOption?.label ?? "System"}
+                </Text>
+              </View>
+            </Pressable>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Restart onboarding"
+              onPress={handleRestartOnboarding}
+              style={[styles.settingRow, SURFACE_ROW_STYLE]}
+            >
+              <View style={[styles.checkbox, SURFACE_ICON_STYLE]}>
+                <MaterialCommunityIcons
+                  name="restart"
+                  size={16}
+                  color={Colors.tint}
+                />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text
+                  style={[styles.settingLabel, { color: Colors.onSurface }]}
+                >
+                  Restart onboarding
+                </Text>
+                <Text
+                  style={[
+                    styles.settingCaption,
+                    { color: Colors.onSurfaceVariant },
+                  ]}
+                >
+                  Show the guided tour again
                 </Text>
               </View>
             </Pressable>

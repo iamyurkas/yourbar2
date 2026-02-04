@@ -16,6 +16,8 @@ type CollectionHeaderProps = {
   tabs?: SegmentTabOption[];
   activeTab?: string;
   onTabChange?: (key: string) => void;
+  tabsContainerRef?: React.Ref<View>;
+  onTabsLayout?: (layout: LayoutRectangle) => void;
   style?: StyleProp<ViewStyle>;
 };
 
@@ -32,6 +34,8 @@ export function CollectionHeader({
   tabs,
   activeTab,
   onTabChange,
+  tabsContainerRef,
+  onTabsLayout,
   style,
 }: CollectionHeaderProps) {
   const shouldShowTabs = Boolean(tabs?.length && activeTab !== undefined && onTabChange);
@@ -50,7 +54,13 @@ export function CollectionHeader({
         onFilterLayout={onFilterLayout}
       />
       {shouldShowTabs && tabs ? (
-        <SegmentTabs options={tabs} value={activeTab!} onChange={onTabChange!} />
+        <SegmentTabs
+          options={tabs}
+          value={activeTab!}
+          onChange={onTabChange!}
+          containerRef={tabsContainerRef}
+          onContainerLayout={onTabsLayout}
+        />
       ) : null}
     </View>
   );
@@ -61,4 +71,3 @@ const styles = StyleSheet.create({
     gap: 0,
   },
 });
-

@@ -18,6 +18,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { CollectionHeader } from '@/components/CollectionHeader';
 import { FabAdd } from '@/components/FabAdd';
+import { OnboardingOverlay } from '@/components/OnboardingOverlay';
 import { ListRow, PresenceCheck, Thumb } from '@/components/RowParts';
 import { SideMenuDrawer } from '@/components/SideMenuDrawer';
 import { TagPill } from '@/components/TagPill';
@@ -25,15 +26,22 @@ import type { SegmentTabOption } from '@/components/TopBars';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { useAppColors } from '@/constants/theme';
 import { isCocktailReady } from '@/libs/cocktail-availability';
-import { getLastIngredientTab, setLastIngredientTab, type IngredientTabKey } from '@/libs/collection-tabs';
+import {
+  getLastIngredientTab,
+  setLastCocktailTab,
+  setLastIngredientTab,
+  type IngredientTabKey,
+} from '@/libs/collection-tabs';
 import {
   createIngredientLookup,
   getVisibleIngredientIdsForCocktail,
 } from '@/libs/ingredient-availability';
+import { ONBOARDING_REQUIRED_INGREDIENTS } from '@/libs/onboarding';
 import { navigateToDetailsWithReturnTo } from '@/libs/navigation';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { buildTagOptions, type TagOption } from '@/libs/tag-options';
 import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
+import { useOnboarding } from '@/providers/onboarding-provider';
 import { tagColors } from '@/theme/theme';
 
 type IngredientSection = {
@@ -222,10 +230,15 @@ export default function IngredientsScreen() {
   const [selectedTagKeys, setSelectedTagKeys] = useState<Set<string>>(() => new Set());
   const [headerLayout, setHeaderLayout] = useState<LayoutRectangle | null>(null);
   const [filterAnchorLayout, setFilterAnchorLayout] = useState<LayoutRectangle | null>(null);
+  const [tabLayout, setTabLayout] = useState<LayoutRectangle | null>(null);
+  const [onboardingItemLayouts, setOnboardingItemLayouts] = useState<Record<number, LayoutRectangle>>({});
+  const tabContainerRef = useRef<View>(null);
+  const onboardingItemRefs = useRef<Map<number, View>>(new Map());
   const listRef = useRef<FlatList<unknown>>(null);
   const lastScrollOffset = useRef(0);
   const searchStartOffset = useRef<number | null>(null);
   const previousQuery = useRef(query);
+  const { step, setStep } = useOnboarding();
   const [optimisticAvailability, setOptimisticAvailability] = useState<Map<number, boolean>>(
     () => new Map(),
   );
@@ -258,6 +271,14 @@ export default function IngredientsScreen() {
   useEffect(() => {
     setLastIngredientTab(activeTab);
   }, [activeTab]);
+
+  useEffect(() => {
+    if (step !== 'ingredients_tab' || activeTab !== 'my') {
+      return;
+    }
+
+    setStep('ingredients_add');
+  }, [activeTab, setStep, step]);
 
   const availableTagOptions = useMemo<TagOption[]>(
     () =>
@@ -324,6 +345,34 @@ export default function IngredientsScreen() {
     });
   }, []);
 
+  const handleTabsLayout = useCallback((_layout: LayoutRectangle) => {
+    tabContainerRef.current?.measureInWindow((x, y, width, height) => {
+      setTabLayout({ x, y, width, height });
+    });
+  }, []);
+
+  const updateOnboardingItemLayout = useCallback((id: number) => {
+    const node = onboardingItemRefs.current.get(id);
+    if (!node) {
+      return;
+    }
+
+    node.measureInWindow((x, y, width, height) => {
+      setOnboardingItemLayouts((previous) => ({
+        ...previous,
+        [id]: { x, y, width, height },
+      }));
+    });
+  }, []);
+
+  const setOnboardingItemRef = useCallback((id: number, node: View | null) => {
+    if (node) {
+      onboardingItemRefs.current.set(id, node);
+    } else {
+      onboardingItemRefs.current.delete(id);
+    }
+  }, []);
+
   const handleFilterPress = useCallback(() => {
     setFilterMenuVisible((previous) => !previous);
   }, []);
@@ -331,6 +380,12 @@ export default function IngredientsScreen() {
   const handleCloseFilterMenu = useCallback(() => {
     setFilterMenuVisible(false);
   }, []);
+
+  const handleContinueOnboarding = useCallback(() => {
+    setLastCocktailTab('my');
+    router.replace('/cocktails');
+    setStep('cocktails_explain');
+  }, [router, setStep]);
 
   const handleTagFilterToggle = useCallback((key: string) => {
     setSelectedTagKeys((previous) => {
@@ -524,6 +579,23 @@ export default function IngredientsScreen() {
     );
   }, [filteredByTags, normalizedQuery]);
 
+  useEffect(() => {
+    if (step !== 'ingredients_add') {
+      return;
+    }
+
+    const targetIds = ONBOARDING_REQUIRED_INGREDIENTS.map((item) => item.id);
+    const targetIndex = filteredIngredients.findIndex((ingredient) =>
+      targetIds.includes(Number(ingredient.id ?? -1)),
+    );
+
+    if (targetIndex >= 0) {
+      requestAnimationFrame(() => {
+        listRef.current?.scrollToIndex({ index: targetIndex, animated: true });
+      });
+    }
+  }, [filteredIngredients, step]);
+
   const highlightColor = Colors.highlightFaint;
   const isFilterActive = selectedTagKeys.size > 0;
   const emptyMessage = useMemo(() => {
@@ -639,7 +711,11 @@ export default function IngredientsScreen() {
         }
       }
 
-      return (
+      const isOnboardingTarget =
+        step === 'ingredients_add' &&
+        ONBOARDING_REQUIRED_INGREDIENTS.some((ingredient) => ingredient.id === ingredientId);
+
+      const content = (
         <IngredientListItem
           ingredient={item}
           highlightColor={highlightColor}
@@ -652,6 +728,19 @@ export default function IngredientsScreen() {
           onShoppingToggle={activeTab === 'shopping' ? handleShoppingToggle : undefined}
         />
       );
+
+      if (!isOnboardingTarget) {
+        return content;
+      }
+
+      return (
+        <View
+          ref={(node) => setOnboardingItemRef(ingredientId, node)}
+          onLayout={() => updateOnboardingItemLayout(ingredientId)}
+        >
+          {content}
+        </View>
+      );
     },
     [
       activeTab,
@@ -662,7 +751,10 @@ export default function IngredientsScreen() {
       makeableCocktailCounts,
       Colors,
       shoppingIngredientIds,
+      step,
       totalCocktailCounts,
+      setOnboardingItemRef,
+      updateOnboardingItemLayout,
     ],
   );
 
@@ -675,6 +767,18 @@ export default function IngredientsScreen() {
       return <View style={[styles.divider, { backgroundColor }]} />;
     },
     [effectiveAvailableIngredientIds, Colors],
+  );
+
+  const onboardingTargetLayouts = useMemo(
+    () =>
+      ONBOARDING_REQUIRED_INGREDIENTS
+        .map((item) => onboardingItemLayouts[item.id])
+        .filter((layout): layout is LayoutRectangle => Boolean(layout)),
+    [onboardingItemLayouts],
+  );
+
+  const hasRequiredOnboardingIngredients = ONBOARDING_REQUIRED_INGREDIENTS.every((item) =>
+    effectiveAvailableIngredientIds.has(item.id),
   );
 
   return (
@@ -691,6 +795,8 @@ export default function IngredientsScreen() {
             tabs={TAB_OPTIONS}
             activeTab={activeTab}
             onTabChange={setActiveTab}
+            tabsContainerRef={tabContainerRef}
+            onTabsLayout={handleTabsLayout}
             onFilterPress={handleFilterPress}
             filterActive={isFilterActive}
             filterExpanded={isFilterMenuVisible}
@@ -776,6 +882,21 @@ export default function IngredientsScreen() {
       </View>
       <FabAdd label="Add ingredient" onPress={() => router.push('/ingredients/create')} />
       <SideMenuDrawer visible={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
+      <OnboardingOverlay
+        visible={step === 'ingredients_tab'}
+        title="Мої інгредієнти"
+        message="Перейдіть на вкладку My, щоб позначати інгредієнти, які у вас є."
+        targets={tabLayout ? [tabLayout] : undefined}
+      />
+      <OnboardingOverlay
+        visible={step === 'ingredients_add'}
+        title="Позначте наявні інгредієнти"
+        message="Додайте як «у вас є» Cola, Ice та Spiced Rum. Тапніть по чекбоксах справа."
+        targets={onboardingTargetLayouts}
+        actionLabel="Далі → My Cocktails"
+        onAction={handleContinueOnboarding}
+        actionDisabled={!hasRequiredOnboardingIngredients}
+      />
     </SafeAreaView>
   );
 }

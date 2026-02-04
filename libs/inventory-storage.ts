@@ -12,6 +12,7 @@ export type InventorySnapshotV1<TCocktail, TIngredient> = {
   availableIngredientIds?: number[];
   shoppingIngredientIds?: number[];
   cocktailRatings?: Record<string, number>;
+  onboardingCompleted?: boolean;
   ignoreGarnish?: boolean;
   allowAllSubstitutes?: boolean;
   useImperialUnits?: boolean;
@@ -39,6 +40,7 @@ export type InventoryDeltaSnapshot<TCocktail, TIngredient> = {
   availableIngredientIds?: number[];
   shoppingIngredientIds?: number[];
   cocktailRatings?: Record<string, number>;
+  onboardingCompleted?: boolean;
   ignoreGarnish?: boolean;
   allowAllSubstitutes?: boolean;
   useImperialUnits?: boolean;

@@ -34,6 +34,8 @@ type SegmentTabsProps = {
   options: SegmentTabOption[];
   value: string;
   onChange: (key: string) => void;
+  containerRef?: React.Ref<View>;
+  onContainerLayout?: (layout: LayoutRectangle) => void;
 };
 
 export function SearchTopBar({
@@ -113,11 +115,15 @@ export function SearchTopBar({
   );
 }
 
-export function SegmentTabs({ options, value, onChange }: SegmentTabsProps) {
+export function SegmentTabs({ options, value, onChange, containerRef, onContainerLayout }: SegmentTabsProps) {
   const Colors = useAppColors();
 
   return (
-    <View style={[styles.tabs, { backgroundColor: Colors.surface }]}> 
+    <View
+      ref={containerRef}
+      onLayout={(event) => onContainerLayout?.(event.nativeEvent.layout)}
+      style={[styles.tabs, { backgroundColor: Colors.surface }]}
+    >
       {options.map((option) => {
         const focused = option.key === value;
         return (
