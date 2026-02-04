@@ -98,33 +98,9 @@ export function OnboardingOverlay() {
       id: 8,
       message: 'Finally, meet the "Shaker" — it helps you find cocktails based on selected ingredients.',
       anchorName: 'tab-shaker',
-      buttonLabel: 'Next',
+      buttonLabel: 'Finish',
       autoNext: (_, path) => path.startsWith('/shaker'),
       highlightPadding: { x: 20, y: 0 },
-    },
-    {
-      id: 9,
-      message: 'Shaker logic: ingredients within one category are interchangeable (OR), from different categories — mandatory (AND). Example: (Gin OR Whiskey) AND (Cola OR Tonic) AND (Lemon OR Lime).',
-      buttonLabel: 'Next',
-      onEnter: (_, __, requestShaker) => {
-        requestShaker('set-in-stock', true);
-        requestShaker('expand-all', true);
-      },
-    },
-    {
-      id: 10,
-      message: 'This toggle filters ingredients by your availability.',
-      anchorName: 'shaker-availability-toggle',
-      buttonLabel: 'Next',
-      onEnter: (_, __, requestShaker) => {
-        requestShaker('set-in-stock', true);
-        requestShaker('expand-all', true);
-      },
-    },
-    {
-      id: 11,
-      message: "You're ready! Enjoy your cocktails!",
-      buttonLabel: 'Finish',
     },
   ], []);
 
