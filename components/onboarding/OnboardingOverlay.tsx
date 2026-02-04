@@ -156,7 +156,7 @@ export function OnboardingOverlay() {
     },
     {
       id: 8,
-      message: '**Shaker logic**\nIngredients in the same category can replace each other (*OR*).\nIngredients from different categories are required together (*AND*).\n\n**Example**\n(Gin *OR* Whiskey) AND (Cola *OR* Tonic) AND (Lemon *OR* Lime).',
+      message: '**Shaker logic**\nIngredients from the same category can replace each other (*OR*).\nIngredients from different categories are required together (*AND*).\n\n**Example**\n(Gin *OR* Whiskey) AND (Cola *OR* Tonic) AND (Lemon *OR* Lime).',
       buttonLabel: 'Next',
     },
     {
