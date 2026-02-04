@@ -16,6 +16,7 @@ type CollectionHeaderProps = {
   tabs?: SegmentTabOption[];
   activeTab?: string;
   onTabChange?: (key: string) => void;
+  anchorPrefix?: string;
   style?: StyleProp<ViewStyle>;
 };
 
@@ -50,7 +51,12 @@ export function CollectionHeader({
         onFilterLayout={onFilterLayout}
       />
       {shouldShowTabs && tabs ? (
-        <SegmentTabs options={tabs} value={activeTab!} onChange={onTabChange!} />
+        <SegmentTabs
+          options={tabs}
+          value={activeTab!}
+          onChange={onTabChange!}
+          anchorPrefix={anchorPrefix}
+        />
       ) : null}
     </View>
   );

@@ -19,6 +19,7 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useRouter } from 'expo-router';
 
 import { ListRow, PresenceCheck, Thumb } from '@/components/RowParts';
+import { OnboardingAnchor } from '@/components/onboarding/OnboardingAnchor';
 import { SideMenuDrawer } from '@/components/SideMenuDrawer';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { useAppColors } from '@/constants/theme';
@@ -810,7 +811,9 @@ export default function ShakerScreen() {
             ) : null}
           </View>
           <View style={styles.iconButton}>
-            <PresenceCheck checked={inStockOnly} onToggle={() => setInStockOnly((previous) => !previous)} />
+            <OnboardingAnchor name="shaker-availability-toggle">
+              <PresenceCheck checked={inStockOnly} onToggle={() => setInStockOnly((previous) => !previous)} />
+            </OnboardingAnchor>
           </View>
         </View>
         <SectionList
@@ -856,41 +859,43 @@ export default function ShakerScreen() {
               (recipes: {matchingCocktailSummary.recipeCount})
             </Text>
           </View>
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel="Show matching recipes"
-            accessibilityState={{
-              disabled: matchingCocktailSummary.recipeCount === 0 || selectedIngredientIds.size === 0,
-            }}
-            disabled={matchingCocktailSummary.recipeCount === 0 || selectedIngredientIds.size === 0}
-            onPress={handleShowResults}
-            style={({ pressed }) => [
-              styles.showButton,
-              {
-                backgroundColor:
-                  matchingCocktailSummary.recipeCount === 0 || selectedIngredientIds.size === 0
-                    ? Colors.surfaceVariant
-                    : Colors.primary,
-              },
-              pressed && matchingCocktailSummary.recipeCount > 0 && selectedIngredientIds.size > 0
-                ? styles.showButtonPressed
-                : null,
-            ]}
-          >
-            <Text
-              style={[
-                styles.showButtonLabel,
+          <OnboardingAnchor name="shaker-show-results">
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Show matching recipes"
+              accessibilityState={{
+                disabled: matchingCocktailSummary.recipeCount === 0 || selectedIngredientIds.size === 0,
+              }}
+              disabled={matchingCocktailSummary.recipeCount === 0 || selectedIngredientIds.size === 0}
+              onPress={handleShowResults}
+              style={({ pressed }) => [
+                styles.showButton,
                 {
-                  color:
+                  backgroundColor:
                     matchingCocktailSummary.recipeCount === 0 || selectedIngredientIds.size === 0
-                      ? Colors.onSurfaceVariant
-                      : Colors.onPrimary,
+                      ? Colors.surfaceVariant
+                      : Colors.primary,
                 },
+                pressed && matchingCocktailSummary.recipeCount > 0 && selectedIngredientIds.size > 0
+                  ? styles.showButtonPressed
+                  : null,
               ]}
             >
-              Show
-            </Text>
-          </Pressable>
+              <Text
+                style={[
+                  styles.showButtonLabel,
+                  {
+                    color:
+                      matchingCocktailSummary.recipeCount === 0 || selectedIngredientIds.size === 0
+                        ? Colors.onSurfaceVariant
+                        : Colors.onPrimary,
+                  },
+                ]}
+              >
+                Show
+              </Text>
+            </Pressable>
+          </OnboardingAnchor>
         </View>
         <SideMenuDrawer visible={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       </View>

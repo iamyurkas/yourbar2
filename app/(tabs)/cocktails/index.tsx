@@ -623,6 +623,7 @@ export default function CocktailsScreen() {
             tabs={TAB_OPTIONS}
             activeTab={activeTab}
             onTabChange={setActiveTab}
+            anchorPrefix="cocktails-tab"
             onFilterPress={handleFilterPress}
             filterActive={isFilterActive}
             filterExpanded={isFilterMenuVisible}

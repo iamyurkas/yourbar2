@@ -133,6 +133,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     setStartScreen,
     appTheme,
     setAppTheme,
+    restartOnboarding,
     resetInventoryFromBundle,
     exportInventoryData,
     exportInventoryPhotoEntries,
@@ -1128,6 +1129,27 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   ]}
                 >
                   Save photos as an archive
+                </Text>
+              </View>
+            </Pressable>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Restart onboarding"
+              onPress={() => {
+                restartOnboarding();
+                onClose();
+              }}
+              style={[
+                styles.actionRow,
+                SURFACE_ROW_STYLE,
+              ]}>
+              <View style={[styles.actionIcon, ACTION_ICON_STYLE]}>
+                <MaterialCommunityIcons name="help-circle-outline" size={16} color={Colors.onSurfaceVariant} />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>Restart onboarding</Text>
+                <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>
+                  Show the guided tour again
                 </Text>
               </View>
             </Pressable>
