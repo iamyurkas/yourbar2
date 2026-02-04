@@ -27,7 +27,12 @@ import { TagPill } from '@/components/TagPill';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { useAppColors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
-import { buildReturnToParams, skipDuplicateBack } from '@/libs/navigation';
+import {
+  buildReturnToParams,
+  createEntityRouteValidator,
+  navigateBackWithHistory,
+  popToRoute,
+} from '@/libs/navigation';
 import { shouldStorePhoto, storePhoto } from '@/libs/photo-storage';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
@@ -127,6 +132,7 @@ export default function IngredientFormScreen() {
   const Colors = useAppColors();
   const {
     ingredients,
+    cocktails,
     shoppingIngredientIds,
     availableIngredientIds,
     createIngredient,
@@ -135,8 +141,12 @@ export default function IngredientFormScreen() {
     customIngredientTags,
     createCustomIngredientTag,
   } = useInventory();
-  const { setHasUnsavedChanges } = useUnsavedChanges();
+  const { registerSaveHandler, setHasUnsavedChanges } = useUnsavedChanges();
   const isNavigatingAfterSaveRef = useRef(false);
+  const isRouteValid = useMemo(
+    () => createEntityRouteValidator({ ingredients, cocktails }),
+    [ingredients, cocktails],
+  );
 
   const ingredient = useResolvedIngredient(ingredientParam, ingredients);
 
@@ -433,8 +443,13 @@ export default function IngredientFormScreen() {
 
         setHasUnsavedChanges(false);
         isNavigatingAfterSaveRef.current = true;
-        if (navigation.canGoBack()) {
-          navigation.goBack();
+        if (
+          popToRoute(navigation, {
+            path: '/ingredients/[ingredientId]',
+            params: { ingredientId: String(numericIngredientId) },
+            isRouteValid,
+          })
+        ) {
           return;
         }
 
@@ -501,11 +516,14 @@ export default function IngredientFormScreen() {
     isNavigatingAfterSaveRef.current = true;
     const targetId = created.id ?? created.name;
     if (!targetId) {
-      skipDuplicateBack(navigation);
+      navigateBackWithHistory(navigation, { returnToPath, returnToParams, isRouteValid });
       return;
     }
 
     if (returnToPath) {
+      if (popToRoute(navigation, { path: returnToPath, params: returnToParams, isRouteValid })) {
+        return;
+      }
       router.navigate({ pathname: returnToPath, params: returnToParams });
       return;
     }
@@ -536,6 +554,11 @@ export default function IngredientFormScreen() {
     updateIngredient,
   ]);
 
+  useEffect(() => {
+    registerSaveHandler(() => handleSubmit);
+    return () => registerSaveHandler(null);
+  }, [handleSubmit, registerSaveHandler]);
+
   const confirmLeave = useCallback(
     (onLeave: () => void) => {
       showDialog({
@@ -558,44 +581,43 @@ export default function IngredientFormScreen() {
     [handleSubmit, setHasUnsavedChanges, showDialog],
   );
 
+  const handleLeave = useCallback(
+    (action?: { type?: string }) => {
+      if (isHandlingBackRef.current) {
+        return;
+      }
+
+      confirmLeave(() => {
+        isHandlingBackRef.current = true;
+        if (!action || action.type === 'GO_BACK') {
+          navigateBackWithHistory(navigation, { returnToPath, returnToParams, isRouteValid });
+        } else {
+          navigation.dispatch(action);
+        }
+        setTimeout(() => {
+          isHandlingBackRef.current = false;
+        }, 0);
+      });
+    },
+    [confirmLeave, isRouteValid, navigation, returnToParams, returnToPath],
+  );
+
   useEffect(() => {
     const unsubscribe = navigation.addListener('beforeRemove', (event) => {
       if (isNavigatingAfterSaveRef.current || isHandlingBackRef.current) {
         return;
       }
 
-      if (hasUnsavedChanges) {
-        event.preventDefault();
-        confirmLeave(() => {
-          isHandlingBackRef.current = true;
-          if (event.data.action.type === 'GO_BACK') {
-            skipDuplicateBack(navigation);
-          } else {
-            navigation.dispatch(event.data.action);
-          }
-          setTimeout(() => {
-            isHandlingBackRef.current = false;
-          }, 0);
-        });
-        return;
-      }
-
-      if (event.data.action.type === 'GO_BACK') {
-        event.preventDefault();
-        isHandlingBackRef.current = true;
-        skipDuplicateBack(navigation);
-        setTimeout(() => {
-          isHandlingBackRef.current = false;
-        }, 0);
-      }
+      event.preventDefault();
+      handleLeave(event.data.action);
     });
 
     return unsubscribe;
-  }, [confirmLeave, hasUnsavedChanges, navigation]);
+  }, [handleLeave, navigation]);
 
   const handleGoBack = useCallback(() => {
-    skipDuplicateBack(navigation);
-  }, [navigation]);
+    handleLeave({ type: 'GO_BACK' });
+  }, [handleLeave]);
 
   const handleDeletePress = useCallback(() => {
     if (!isEditMode) {

@@ -35,10 +35,10 @@ import {
 } from "@/libs/ingredient-availability";
 import {
   buildReturnToParams,
+  createEntityRouteValidator,
+  navigateBackWithHistory,
   navigateToDetailsWithReturnTo,
   parseReturnToParams,
-  returnToSourceOrBack,
-  skipDuplicateBack,
 } from "@/libs/navigation";
 import { normalizeSearchText } from "@/libs/search-normalization";
 import { useInventory, type Ingredient } from "@/providers/inventory-provider";
@@ -109,6 +109,10 @@ export default function IngredientDetailsScreen() {
   const ingredientLookup = useMemo(
     () => createIngredientLookup(ingredients),
     [ingredients],
+  );
+  const isRouteValid = useMemo(
+    () => createEntityRouteValidator({ ingredients, cocktails }),
+    [ingredients, cocktails],
   );
 
   const numericIngredientId = useMemo(() => {
@@ -333,7 +337,12 @@ export default function IngredientDetailsScreen() {
     }
 
     const targetId = ingredient.id ?? ingredient.name;
-    const params: Record<string, string> = { source: "ingredient" };
+    const params: Record<string, string> = {
+      source: "ingredient",
+      ...buildReturnToParams("/ingredients/[ingredientId]", {
+        ingredientId: String(targetId),
+      }),
+    };
     if (targetId != null) {
       params.ingredientId = String(targetId);
     }
@@ -506,13 +515,12 @@ export default function IngredientDetailsScreen() {
   }, [cocktailEntries.length]);
 
   const handleReturn = useCallback(() => {
-    if (returnToPath === "/ingredients") {
-      skipDuplicateBack(navigation);
-      return;
-    }
-
-    returnToSourceOrBack(navigation, { returnToPath, returnToParams });
-  }, [navigation, returnToParams, returnToPath]);
+    navigateBackWithHistory(navigation, {
+      returnToPath,
+      returnToParams,
+      isRouteValid,
+    });
+  }, [isRouteValid, navigation, returnToParams, returnToPath]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", (event) => {

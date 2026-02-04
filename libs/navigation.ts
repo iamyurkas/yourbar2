@@ -1,8 +1,11 @@
 import { StackActions, type NavigationProp, type ParamListBase } from '@react-navigation/native';
 import { router } from 'expo-router';
 
+import { normalizeSearchText } from '@/libs/search-normalization';
+
 type RouteParams = Record<string, unknown> | undefined;
 type ReturnToParams = Record<string, string> | undefined;
+type NavigationRoute = { name: string; params?: RouteParams };
 
 const areParamsEqual = (left?: RouteParams, right?: RouteParams): boolean => {
   if (!left && !right) {
@@ -56,6 +59,192 @@ export const skipDuplicateBack = (navigation: NavigationProp<ParamListBase>) => 
   }
 
   navigation.goBack();
+};
+
+const normalizePath = (path: string) => path.replace(/^\//, '');
+
+const getParamString = (value: unknown): string | undefined => {
+  if (Array.isArray(value)) {
+    const entry = value[0];
+    return entry != null ? String(entry) : undefined;
+  }
+
+  if (typeof value === 'string' || typeof value === 'number') {
+    return String(value);
+  }
+
+  return undefined;
+};
+
+const doParamsMatch = (routeParams: RouteParams, expected?: ReturnToParams): boolean => {
+  if (!expected) {
+    return true;
+  }
+
+  if (!routeParams) {
+    return false;
+  }
+
+  return Object.entries(expected).every(
+    ([key, value]) => getParamString(routeParams[key]) === value,
+  );
+};
+
+export const isRouteMatch = (
+  route: NavigationRoute,
+  path: string,
+  params?: ReturnToParams,
+): boolean => {
+  const normalizedPath = normalizePath(path);
+  const matchesName =
+    route.name === normalizedPath ||
+    route.name.endsWith(`/${normalizedPath}`) ||
+    route.name.endsWith(normalizedPath);
+
+  if (!matchesName) {
+    return false;
+  }
+
+  return doParamsMatch(route.params, params);
+};
+
+export const popToRoute = (
+  navigation: NavigationProp<ParamListBase>,
+  {
+    path,
+    params,
+    isRouteValid,
+  }: {
+    path: string;
+    params?: ReturnToParams;
+    isRouteValid?: (route: NavigationRoute) => boolean;
+  },
+): boolean => {
+  const state = navigation.getState();
+  const currentIndex = state.index ?? 0;
+
+  for (let index = currentIndex - 1; index >= 0; index -= 1) {
+    const route = state.routes[index];
+    if (!isRouteMatch(route, path, params)) {
+      continue;
+    }
+    if (isRouteValid && !isRouteValid(route)) {
+      continue;
+    }
+
+    navigation.dispatch(StackActions.pop(currentIndex - index));
+    return true;
+  }
+
+  return false;
+};
+
+export const navigateBackWithHistory = (
+  navigation: NavigationProp<ParamListBase>,
+  {
+    returnToPath,
+    returnToParams,
+    isRouteValid,
+  }: {
+    returnToPath?: string;
+    returnToParams?: ReturnToParams;
+    isRouteValid?: (route: NavigationRoute) => boolean;
+  } = {},
+) => {
+  if (returnToPath && popToRoute(navigation, { path: returnToPath, params: returnToParams, isRouteValid })) {
+    return;
+  }
+
+  const state = navigation.getState();
+  const currentIndex = state.index ?? 0;
+
+  if (currentIndex <= 0) {
+    navigation.goBack();
+    return;
+  }
+
+  const current = state.routes[currentIndex];
+
+  for (let index = currentIndex - 1; index >= 0; index -= 1) {
+    const route = state.routes[index];
+    if (areRoutesEqual(current, route)) {
+      continue;
+    }
+    if (isRouteValid && !isRouteValid(route)) {
+      continue;
+    }
+
+    navigation.dispatch(StackActions.pop(currentIndex - index));
+    return;
+  }
+
+  navigation.goBack();
+};
+
+const buildEntityLookup = (entities: Array<{ id?: number | string; name?: string }>) => {
+  const ids = new Set<number>();
+  const names = new Set<string>();
+
+  entities.forEach((item) => {
+    const rawId = item.id;
+    if (rawId != null) {
+      const numericId = Number(rawId);
+      if (!Number.isNaN(numericId)) {
+        ids.add(numericId);
+      }
+    }
+
+    const normalizedName = normalizeSearchText(item.name ?? '');
+    if (normalizedName) {
+      names.add(normalizedName);
+    }
+  });
+
+  return { ids, names };
+};
+
+export const createEntityRouteValidator = ({
+  ingredients,
+  cocktails,
+}: {
+  ingredients: Array<{ id?: number | string; name?: string }>;
+  cocktails: Array<{ id?: number | string; name?: string }>;
+}) => {
+  const ingredientLookup = buildEntityLookup(ingredients);
+  const cocktailLookup = buildEntityLookup(cocktails);
+
+  return (route: NavigationRoute) => {
+    const isIngredientDetail = route.name.includes('ingredients/[ingredientId]');
+    const isCocktailDetail = route.name.includes('cocktails/[cocktailId]');
+
+    if (!isIngredientDetail && !isCocktailDetail) {
+      return true;
+    }
+
+    const params = route.params ?? {};
+
+    if (isIngredientDetail) {
+      const paramValue = getParamString(params.ingredientId);
+      if (!paramValue) {
+        return false;
+      }
+      const numericId = Number(paramValue);
+      if (!Number.isNaN(numericId)) {
+        return ingredientLookup.ids.has(numericId);
+      }
+      return ingredientLookup.names.has(normalizeSearchText(paramValue));
+    }
+
+    const paramValue = getParamString(params.cocktailId);
+    if (!paramValue) {
+      return false;
+    }
+    const numericId = Number(paramValue);
+    if (!Number.isNaN(numericId)) {
+      return cocktailLookup.ids.has(numericId);
+    }
+    return cocktailLookup.names.has(normalizeSearchText(paramValue));
+  };
 };
 
 export const buildReturnToParams = (
@@ -129,10 +318,5 @@ export const returnToSourceOrBack = (
     returnToParams?: ReturnToParams;
   },
 ) => {
-  if (returnToPath) {
-    router.navigate({ pathname: returnToPath, params: returnToParams });
-    return;
-  }
-
-  skipDuplicateBack(navigation);
+  navigateBackWithHistory(navigation, { returnToPath, returnToParams });
 };

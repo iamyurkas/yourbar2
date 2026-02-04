@@ -1,5 +1,5 @@
 import type { BottomTabBarButtonProps } from '@react-navigation/bottom-tabs';
-import { usePathname, useRouter } from 'expo-router';
+import { usePathname } from 'expo-router';
 import React, { useCallback } from 'react';
 
 import { HapticTab } from '@/components/haptic-tab';
@@ -14,24 +14,28 @@ type TabBarButtonProps = BottomTabBarButtonProps & {
 
 export function TabBarButton({ onOpenDialog, ...props }: TabBarButtonProps) {
   const pathname = usePathname();
-  const router = useRouter();
-  const { hasUnsavedChanges, setHasUnsavedChanges } = useUnsavedChanges();
+  const { hasUnsavedChanges, registerSaveHandler, saveHandler, setHasUnsavedChanges } = useUnsavedChanges();
   const isEditingRoute = EDITING_PATH_PATTERN.test(pathname);
 
   const handlePress = useCallback(() => {
     const proceed = () => {
-      if (isEditingRoute) {
-        if (pathname.startsWith('/cocktails')) {
-          router.replace('/cocktails');
-        } else if (pathname.startsWith('/ingredients')) {
-          router.replace('/ingredients');
-        } else if (pathname.startsWith('/shaker')) {
-          router.replace('/shaker');
-        }
-      }
       setHasUnsavedChanges(false);
+      registerSaveHandler(null);
       props.onPress?.();
     };
+
+    if (isEditingRoute) {
+      onOpenDialog({
+        title: 'Leave without saving?',
+        message: 'Your changes will be lost if you leave this screen.',
+        actions: [
+          { label: 'Save', onPress: saveHandler ?? undefined },
+          { label: 'Stay', variant: 'secondary' },
+          { label: 'Leave', variant: 'destructive', onPress: proceed },
+        ],
+      });
+      return;
+    }
 
     if (hasUnsavedChanges) {
       onOpenDialog({
@@ -46,7 +50,15 @@ export function TabBarButton({ onOpenDialog, ...props }: TabBarButtonProps) {
     }
 
     proceed();
-  }, [hasUnsavedChanges, isEditingRoute, onOpenDialog, pathname, props, router, setHasUnsavedChanges]);
+  }, [
+    hasUnsavedChanges,
+    isEditingRoute,
+    onOpenDialog,
+    props,
+    registerSaveHandler,
+    saveHandler,
+    setHasUnsavedChanges,
+  ]);
 
   return <HapticTab {...props} onPress={handlePress} />;
 }

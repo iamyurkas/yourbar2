@@ -34,10 +34,10 @@ import {
 } from "@/libs/ingredient-availability";
 import {
   buildReturnToParams,
+  createEntityRouteValidator,
+  navigateBackWithHistory,
   navigateToDetailsWithReturnTo,
   parseReturnToParams,
-  returnToSourceOrBack,
-  skipDuplicateBack,
 } from "@/libs/navigation";
 import { normalizeSearchText } from "@/libs/search-normalization";
 import { useInventory, type Cocktail } from "@/providers/inventory-provider";
@@ -366,19 +366,22 @@ export default function CocktailDetailsScreen() {
 
   const [showImperialUnits, setShowImperialUnits] = useState(useImperialUnits);
   const isHandlingBackRef = useRef(false);
+  const isRouteValid = useMemo(
+    () => createEntityRouteValidator({ ingredients, cocktails }),
+    [ingredients, cocktails],
+  );
 
   useEffect(() => {
     setShowImperialUnits(useImperialUnits);
   }, [useImperialUnits]);
 
   const handleReturn = useCallback(() => {
-    if (returnToPath === "/cocktails") {
-      skipDuplicateBack(navigation);
-      return;
-    }
-
-    returnToSourceOrBack(navigation, { returnToPath, returnToParams });
-  }, [navigation, returnToParams, returnToPath]);
+    navigateBackWithHistory(navigation, {
+      returnToPath,
+      returnToParams,
+      isRouteValid,
+    });
+  }, [isRouteValid, navigation, returnToParams, returnToPath]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", (event) => {

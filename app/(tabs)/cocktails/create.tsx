@@ -48,8 +48,10 @@ import { GLASSWARE } from "@/constants/glassware";
 import { useAppColors } from "@/constants/theme";
 import {
   buildReturnToParams,
+  createEntityRouteValidator,
+  navigateBackWithHistory,
   parseReturnToParams,
-  skipDuplicateBack,
+  popToRoute,
 } from "@/libs/navigation";
 import { shouldStorePhoto, storePhoto } from "@/libs/photo-storage";
 import { normalizeSearchText } from "@/libs/search-normalization";
@@ -237,7 +239,7 @@ export default function CreateCocktailScreen() {
     useImperialUnits,
   } = useInventory();
   const params = useLocalSearchParams();
-  const { setHasUnsavedChanges } = useUnsavedChanges();
+  const { registerSaveHandler, setHasUnsavedChanges } = useUnsavedChanges();
 
   const modeParam = getParamValue(params.mode);
   const isEditMode = modeParam === "edit";
@@ -341,6 +343,10 @@ export default function CreateCocktailScreen() {
   const isNavigatingAfterSaveRef = useRef(false);
   const scrollRef = useRef<ScrollView | null>(null);
   const isHandlingBackRef = useRef(false);
+  const isRouteValid = useMemo(
+    () => createEntityRouteValidator({ ingredients: inventoryIngredients, cocktails }),
+    [cocktails, inventoryIngredients],
+  );
 
   const ingredientById = useMemo(() => {
     const map = new Map<number, Ingredient>();
@@ -1135,8 +1141,32 @@ export default function CreateCocktailScreen() {
       setHasUnsavedChanges(false);
       isNavigatingAfterSaveRef.current = true;
       const targetId = persisted.id ?? persisted.name;
-      if (isEditMode && navigation.canGoBack()) {
-        navigation.goBack();
+      if (isEditMode && targetId) {
+        if (
+          popToRoute(navigation, {
+            path: "/cocktails/[cocktailId]",
+            params: { cocktailId: String(targetId) },
+            isRouteValid,
+          })
+        ) {
+          return;
+        }
+
+        router.replace({
+          pathname: "/cocktails/[cocktailId]",
+          params: {
+            cocktailId: String(targetId),
+            ...buildReturnToParams(returnToPath, returnToParams),
+          },
+        });
+        return;
+      }
+
+      if (!isEditMode && returnToPath) {
+        if (popToRoute(navigation, { path: returnToPath, params: returnToParams, isRouteValid })) {
+          return;
+        }
+        router.navigate({ pathname: returnToPath, params: returnToParams });
         return;
       }
 
@@ -1179,6 +1209,11 @@ export default function CreateCocktailScreen() {
     shouldStorePhoto,
     storePhoto,
   ]);
+
+  useEffect(() => {
+    registerSaveHandler(() => handleSubmit);
+    return () => registerSaveHandler(null);
+  }, [handleSubmit, registerSaveHandler]);
 
   const handleDeletePress = useCallback(() => {
     if (!isEditMode) {
@@ -1262,44 +1297,43 @@ export default function CreateCocktailScreen() {
     [handleSubmit, setHasUnsavedChanges, showDialog],
   );
 
+  const handleLeave = useCallback(
+    (action?: { type?: string }) => {
+      if (isHandlingBackRef.current) {
+        return;
+      }
+
+      confirmLeave(() => {
+        isHandlingBackRef.current = true;
+        if (!action || action.type === "GO_BACK") {
+          navigateBackWithHistory(navigation, { returnToPath, returnToParams, isRouteValid });
+        } else {
+          navigation.dispatch(action);
+        }
+        setTimeout(() => {
+          isHandlingBackRef.current = false;
+        }, 0);
+      });
+    },
+    [confirmLeave, isRouteValid, navigation, returnToParams, returnToPath],
+  );
+
   useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", (event) => {
       if (isNavigatingAfterSaveRef.current || isHandlingBackRef.current) {
         return;
       }
 
-      if (hasUnsavedChanges) {
-        event.preventDefault();
-        confirmLeave(() => {
-          isHandlingBackRef.current = true;
-          if (event.data.action.type === "GO_BACK") {
-            skipDuplicateBack(navigation);
-          } else {
-            navigation.dispatch(event.data.action);
-          }
-          setTimeout(() => {
-            isHandlingBackRef.current = false;
-          }, 0);
-        });
-        return;
-      }
-
-      if (event.data.action.type === "GO_BACK") {
-        event.preventDefault();
-        isHandlingBackRef.current = true;
-        skipDuplicateBack(navigation);
-        setTimeout(() => {
-          isHandlingBackRef.current = false;
-        }, 0);
-      }
+      event.preventDefault();
+      handleLeave(event.data.action);
     });
 
     return unsubscribe;
-  }, [confirmLeave, hasUnsavedChanges, navigation]);
+  }, [handleLeave, navigation]);
 
   const handleGoBack = useCallback(() => {
-    skipDuplicateBack(navigation);
-  }, [navigation]);
+    handleLeave({ type: "GO_BACK" });
+  }, [handleLeave]);
 
   const imageSource = useMemo(() => {
     if (!imageUri) {
