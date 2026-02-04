@@ -18,7 +18,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { CollectionHeader } from '@/components/CollectionHeader';
 import { FabAdd } from '@/components/FabAdd';
-import { OnboardingCard } from '@/components/OnboardingCard';
 import { ListRow, PresenceCheck, Thumb } from '@/components/RowParts';
 import { SideMenuDrawer } from '@/components/SideMenuDrawer';
 import { TagPill } from '@/components/TagPill';
@@ -35,7 +34,6 @@ import { navigateToDetailsWithReturnTo } from '@/libs/navigation';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { buildTagOptions, type TagOption } from '@/libs/tag-options';
 import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
-import { useOnboarding } from '@/providers/onboarding-provider';
 import { tagColors } from '@/theme/theme';
 
 type IngredientSection = {
@@ -49,9 +47,6 @@ const TAB_OPTIONS: SegmentTabOption[] = [
   { key: 'my', label: 'My' },
   { key: 'shopping', label: 'Shopping' },
 ];
-
-const REQUIRED_ONBOARDING_INGREDIENTS = ['Cola', 'Ice', 'Spiced Rum'];
-const normalizeName = (name: string) => name.trim().toLowerCase();
 
 type IngredientListItemProps = {
   ingredient: Ingredient;
@@ -220,7 +215,6 @@ export default function IngredientsScreen() {
     ignoreGarnish,
     allowAllSubstitutes,
   } = useInventory();
-  const { activeStep, isActive, goToStep } = useOnboarding();
   const [activeTab, setActiveTab] = useState<IngredientTabKey>(() => getLastIngredientTab());
   const [query, setQuery] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -237,27 +231,6 @@ export default function IngredientsScreen() {
   );
   const [, startAvailabilityTransition] = useTransition();
   const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
-  const isOnboardingIngredients = isActive && activeStep === 'ingredients';
-  const requiredNameSet = useMemo(
-    () => new Set(REQUIRED_ONBOARDING_INGREDIENTS.map(normalizeName)),
-    [],
-  );
-  const requiredIngredientIds = useMemo(
-    () =>
-      ingredients
-        .filter((ingredient) => requiredNameSet.has(normalizeName(ingredient.name ?? '')))
-        .map((ingredient) => Number(ingredient.id ?? -1))
-        .filter((id) => Number.isFinite(id) && id >= 0)
-        .map((id) => Math.trunc(id)),
-    [ingredients, requiredNameSet],
-  );
-  const hasAllRequiredIngredients = useMemo(() => {
-    if (requiredIngredientIds.length === 0) {
-      return false;
-    }
-
-    return requiredIngredientIds.every((id) => availableIngredientIds.has(id));
-  }, [availableIngredientIds, requiredIngredientIds]);
 
   useScrollToTop(listRef);
 
@@ -285,12 +258,6 @@ export default function IngredientsScreen() {
   useEffect(() => {
     setLastIngredientTab(activeTab);
   }, [activeTab]);
-
-  useEffect(() => {
-    if (isOnboardingIngredients && activeTab !== 'all') {
-      setActiveTab('all');
-    }
-  }, [activeTab, isOnboardingIngredients]);
 
   const availableTagOptions = useMemo<TagOption[]>(
     () =>
@@ -656,9 +623,6 @@ export default function IngredientsScreen() {
     ({ item }: { item: Ingredient }) => {
       const ingredientId = Number(item.id ?? -1);
       const isOnShoppingList = ingredientId >= 0 && shoppingIngredientIds.has(ingredientId);
-      const isOnboardingTarget =
-        isOnboardingIngredients && requiredNameSet.has(normalizeName(item.name ?? ''));
-      const rowHighlightColor = isOnboardingTarget ? Colors.highlightSubtle : highlightColor;
 
       const isMyTab = activeTab === 'my';
       const countsMap = isMyTab ? makeableCocktailCounts : totalCocktailCounts;
@@ -678,7 +642,7 @@ export default function IngredientsScreen() {
       return (
         <IngredientListItem
           ingredient={item}
-          highlightColor={rowHighlightColor}
+          highlightColor={highlightColor}
           availableIngredientIds={effectiveAvailableIngredientIds}
           onToggleAvailability={handleToggle}
           subtitle={subtitleText}
@@ -695,10 +659,8 @@ export default function IngredientsScreen() {
       handleToggle,
       handleShoppingToggle,
       highlightColor,
-      isOnboardingIngredients,
       makeableCocktailCounts,
       Colors,
-      requiredNameSet,
       shoppingIngredientIds,
       totalCocktailCounts,
     ],
@@ -811,20 +773,6 @@ export default function IngredientsScreen() {
             <Text style={[styles.emptyLabel, { color: Colors.onSurfaceVariant }]}>{emptyMessage}</Text>
           }
         />
-        {isOnboardingIngredients ? (
-          <View style={styles.onboardingCardWrapper} pointerEvents="box-none">
-            <OnboardingCard
-              title="Step 1: Mark what you have"
-              message="Add Cola, Ice, and Spiced Rum to your inventory. Tap the checkmarks next to each ingredient."
-              actionLabel="Go to My Cocktails"
-              actionDisabled={!hasAllRequiredIngredients}
-              onAction={() => {
-                goToStep('cocktails');
-                router.push('/cocktails');
-              }}
-            />
-          </View>
-        ) : null}
       </View>
       <FabAdd label="Add ingredient" onPress={() => router.push('/ingredients/create')} />
       <SideMenuDrawer visible={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
@@ -876,12 +824,6 @@ const styles = StyleSheet.create({
   listContent: {
     paddingTop: 0,
     paddingBottom: 80,
-  },
-  onboardingCardWrapper: {
-    position: 'absolute',
-    left: 16,
-    right: 16,
-    bottom: 96,
   },
   divider: {
     height: StyleSheet.hairlineWidth,

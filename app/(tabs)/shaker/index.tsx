@@ -18,7 +18,6 @@ import {
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 
-import { OnboardingCard } from '@/components/OnboardingCard';
 import { ListRow, PresenceCheck, Thumb } from '@/components/RowParts';
 import { SideMenuDrawer } from '@/components/SideMenuDrawer';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
@@ -30,7 +29,6 @@ import {
 } from '@/libs/ingredient-availability';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
-import { useOnboarding } from '@/providers/onboarding-provider';
 import { tagColors } from '@/theme/theme';
 
 type IngredientTagOption = {
@@ -180,7 +178,6 @@ export default function ShakerScreen() {
     ignoreGarnish,
     allowAllSubstitutes,
   } = useInventory();
-  const { activeStep, isActive, completeOnboarding } = useOnboarding();
   const [query, setQuery] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [inStockOnly, setInStockOnly] = useState(false);
@@ -197,7 +194,6 @@ export default function ShakerScreen() {
   const insets = useSafeAreaInsets();
   const bottomInset = Math.min(insets.bottom, 8);
   const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
-  const isOnboardingShaker = isActive && activeStep === 'shaker';
 
   useScrollToTop(listRef);
 
@@ -813,17 +809,7 @@ export default function ShakerScreen() {
               </Pressable>
             ) : null}
           </View>
-          <View
-            style={[
-              styles.iconButton,
-              isOnboardingShaker
-                ? {
-                  backgroundColor: `${Colors.tint}1A`,
-                  borderColor: Colors.tint,
-                }
-                : null,
-            ]}
-          >
+          <View style={styles.iconButton}>
             <PresenceCheck checked={inStockOnly} onToggle={() => setInStockOnly((previous) => !previous)} />
           </View>
         </View>
@@ -907,16 +893,6 @@ export default function ShakerScreen() {
           </Pressable>
         </View>
         <SideMenuDrawer visible={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
-        {isOnboardingShaker ? (
-          <View style={styles.onboardingCardWrapper} pointerEvents="box-none">
-            <OnboardingCard
-              title="Step 3: Shaker logic"
-              message="Ingredients within the same category are interchangeable (OR). Ingredients from different categories are required together (AND). Example: (Gin OR Whiskey) AND (Cola OR Tonic) AND (Lemon OR Lime). Use the checkmark above to filter by ingredients you already have."
-              actionLabel="Finish onboarding"
-              onAction={completeOnboarding}
-            />
-          </View>
-        ) : null}
       </View>
     </SafeAreaView>
   );
@@ -944,8 +920,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: 'transparent',
   },
   searchContainer: {
     flex: 1,
@@ -1062,11 +1036,5 @@ const styles = StyleSheet.create({
   showButtonLabel: {
     fontSize: 14,
     fontWeight: '600',
-  },
-  onboardingCardWrapper: {
-    position: 'absolute',
-    left: 16,
-    right: 16,
-    bottom: 120,
   },
 });

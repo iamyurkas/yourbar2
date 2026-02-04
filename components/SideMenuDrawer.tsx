@@ -32,10 +32,8 @@ import { useAppColors } from "@/constants/theme";
 import { base64ToBytes, createTarArchive } from "@/libs/archive-utils";
 import { buildPhotoBaseName } from "@/libs/photo-utils";
 import { useInventory, type AppTheme, type StartScreen } from "@/providers/inventory-provider";
-import { useOnboarding } from "@/providers/onboarding-provider";
 import { type InventoryExportData } from "@/providers/inventory-types";
 import appConfig from "../app.json";
-import { useRouter } from "expo-router";
 
 const MENU_WIDTH = Math.round(Dimensions.get("window").width * 0.75);
 const ANIMATION_DURATION = 200;
@@ -120,7 +118,6 @@ type SideMenuDrawerProps = {
 };
 
 export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
-  const router = useRouter();
   const {
     ignoreGarnish,
     setIgnoreGarnish,
@@ -149,7 +146,6 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     updateCustomIngredientTag,
     deleteCustomIngredientTag,
   } = useInventory();
-  const { restartOnboarding } = useOnboarding();
   const Colors = useAppColors();
   const [isMounted, setIsMounted] = useState(visible);
   const [isRatingModalVisible, setRatingModalVisible] = useState(false);
@@ -349,12 +345,6 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
         },
       ],
     });
-  };
-
-  const handleRestartOnboarding = () => {
-    restartOnboarding();
-    onClose();
-    router.replace('/ingredients');
   };
 
   const handleRatingThresholdPress = () => {
@@ -1036,35 +1026,6 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   ]}
                 >
                   Create or update your tags
-                </Text>
-              </View>
-            </Pressable>
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel="Restart onboarding"
-              onPress={handleRestartOnboarding}
-              style={[styles.actionRow, SURFACE_ROW_STYLE]}
-            >
-              <View style={[styles.actionIcon, ACTION_ICON_STYLE]}>
-                <MaterialCommunityIcons
-                  name="replay"
-                  size={16}
-                  color={Colors.onSurfaceVariant}
-                />
-              </View>
-              <View style={styles.settingTextContainer}>
-                <Text
-                  style={[styles.settingLabel, { color: Colors.onSurface }]}
-                >
-                  Restart onboarding
-                </Text>
-                <Text
-                  style={[
-                    styles.settingCaption,
-                    { color: Colors.onSurfaceVariant },
-                  ]}
-                >
-                  Replay the walkthrough
                 </Text>
               </View>
             </Pressable>

@@ -20,7 +20,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { CocktailListRow } from '@/components/CocktailListRow';
 import { CollectionHeader } from '@/components/CollectionHeader';
 import { FabAdd } from '@/components/FabAdd';
-import { OnboardingCard } from '@/components/OnboardingCard';
 import { ListRow, Thumb } from '@/components/RowParts';
 import { SideMenuDrawer } from '@/components/SideMenuDrawer';
 import { TagPill } from '@/components/TagPill';
@@ -36,7 +35,6 @@ import { normalizeSearchText } from '@/libs/search-normalization';
 import { buildTagOptions, type TagOption } from '@/libs/tag-options';
 import { useCocktailTabLogic, type MyTabListItem } from '@/libs/use-cocktail-tab-logic';
 import { useInventory, type Cocktail } from '@/providers/inventory-provider';
-import { useOnboarding } from '@/providers/onboarding-provider';
 import { tagColors } from '@/theme/theme';
 
 type CocktailMethodOption = {
@@ -63,7 +61,6 @@ export default function CocktailsScreen() {
     shoppingIngredientIds,
     toggleIngredientShopping,
   } = useInventory();
-  const { activeStep, isActive, goToStep } = useOnboarding();
   const Colors = useAppColors();
   const [activeTab, setActiveTab] = useState<CocktailTabKey>(() => getLastCocktailTab());
   const [query, setQuery] = useState('');
@@ -105,7 +102,6 @@ export default function CocktailsScreen() {
   const router = useRouter();
   const ingredientLookup = useMemo(() => createIngredientLookup(ingredients), [ingredients]);
   const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
-  const isOnboardingCocktails = isActive && activeStep === 'cocktails';
 
   const availableTagOptions = useMemo<TagOption[]>(
     () => buildTagOptions(cocktails, (cocktail) => cocktail.tags ?? [], BUILTIN_COCKTAIL_TAGS, defaultTagColor),
@@ -141,12 +137,6 @@ export default function CocktailsScreen() {
   useEffect(() => {
     setLastCocktailTab(activeTab);
   }, [activeTab]);
-
-  useEffect(() => {
-    if (isOnboardingCocktails && activeTab !== 'my') {
-      setActiveTab('my');
-    }
-  }, [activeTab, isOnboardingCocktails]);
 
   const handleHeaderLayout = useCallback((event: LayoutChangeEvent) => {
     const nextLayout = event.nativeEvent.layout;
@@ -481,13 +471,7 @@ export default function CocktailsScreen() {
     ({ item }: { item: MyTabListItem }) => {
       if (item.type === 'separator') {
         return (
-          <View
-            style={[
-              styles.moreIngredientsWrapper,
-              isOnboardingCocktails ? styles.moreIngredientsHighlight : null,
-              isOnboardingCocktails ? { backgroundColor: Colors.highlightFaint } : null,
-            ]}
-          >
+          <View style={styles.moreIngredientsWrapper}>
             <Text style={[styles.moreIngredientsLabel, { color: Colors.onSurfaceVariant }]}>
               More ingredients needed
             </Text>
@@ -561,7 +545,6 @@ export default function CocktailsScreen() {
       ingredientLookup,
       shoppingIngredientIds,
       Colors,
-      isOnboardingCocktails,
     ],
   );
 
@@ -640,7 +623,6 @@ export default function CocktailsScreen() {
             tabs={TAB_OPTIONS}
             activeTab={activeTab}
             onTabChange={setActiveTab}
-            highlightedTabs={isOnboardingCocktails ? ['my'] : undefined}
             onFilterPress={handleFilterPress}
             filterActive={isFilterActive}
             filterExpanded={isFilterMenuVisible}
@@ -758,19 +740,6 @@ export default function CocktailsScreen() {
             </Text>
           }
         />
-        {isOnboardingCocktails ? (
-          <View style={styles.onboardingCardWrapper} pointerEvents="box-none">
-            <OnboardingCard
-              title="Step 2: My Cocktails"
-              message="This tab shows cocktails you can make right now. Below it, you will see recipes missing only one ingredient."
-              actionLabel="Go to Shaker"
-              onAction={() => {
-                goToStep('shaker');
-                router.push('/shaker');
-              }}
-            />
-          </View>
-        ) : null}
       </View>
       <FabAdd
         label="Add cocktail"
@@ -805,11 +774,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
   },
-  moreIngredientsHighlight: {
-    borderRadius: 12,
-    marginHorizontal: 12,
-    marginVertical: 8,
-  },
   moreIngredientsLabel: {
     fontSize: 13,
     fontWeight: '600',
@@ -841,12 +805,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 80,
     fontSize: 14,
-  },
-  onboardingCardWrapper: {
-    position: 'absolute',
-    left: 16,
-    right: 16,
-    bottom: 96,
   },
   filterMenuBackdrop: {
     position: 'absolute',

@@ -34,7 +34,6 @@ type SegmentTabsProps = {
   options: SegmentTabOption[];
   value: string;
   onChange: (key: string) => void;
-  highlightedKeys?: ReadonlySet<string> | string[];
 };
 
 export function SearchTopBar({
@@ -114,30 +113,20 @@ export function SearchTopBar({
   );
 }
 
-export function SegmentTabs({ options, value, onChange, highlightedKeys }: SegmentTabsProps) {
+export function SegmentTabs({ options, value, onChange }: SegmentTabsProps) {
   const Colors = useAppColors();
-  const highlightSet = Array.isArray(highlightedKeys) ? new Set(highlightedKeys) : highlightedKeys;
 
   return (
     <View style={[styles.tabs, { backgroundColor: Colors.surface }]}> 
       {options.map((option) => {
         const focused = option.key === value;
-        const isHighlighted = highlightSet ? highlightSet.has(option.key) : false;
         return (
           <Pressable
             key={option.key}
             accessibilityRole="tab"
             accessibilityState={focused ? { selected: true } : {}}
             onPress={() => onChange(option.key)}
-            style={[
-              styles.tabButton,
-              isHighlighted
-                ? {
-                  backgroundColor: `${Colors.tint}1A`,
-                  borderColor: Colors.tint,
-                }
-                : null,
-            ]}>
+            style={styles.tabButton}>
             <Text
               style={[
                 styles.tabLabel,
@@ -216,9 +205,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingTop: 12,
     gap: 6,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: 'transparent',
   },
   tabLabel: {
     fontSize: 14,
