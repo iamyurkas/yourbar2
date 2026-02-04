@@ -352,6 +352,7 @@ export default function CreateCocktailScreen() {
   const isNavigatingAfterSaveRef = useRef(false);
   const scrollRef = useRef<ScrollView | null>(null);
   const isHandlingBackRef = useRef(false);
+  const pendingReturnToIngredientRef = useRef<string | null>(null);
 
   const buildDraftSnapshot = useCallback(
     (): CocktailDraftSnapshot => ({
@@ -1251,6 +1252,16 @@ export default function CreateCocktailScreen() {
         markNextEntryAsSkip();
       }
       const targetId = persisted.id ?? persisted.name;
+      const pendingIngredientId = pendingReturnToIngredientRef.current;
+      if (pendingIngredientId) {
+        pendingReturnToIngredientRef.current = null;
+        router.replace({
+          pathname: "/ingredients/[ingredientId]",
+          params: { ingredientId: pendingIngredientId },
+        });
+        return;
+      }
+
       if (targetId) {
         router.replace({
           pathname: "/cocktails/[cocktailId]",
@@ -1381,6 +1392,17 @@ export default function CreateCocktailScreen() {
         title: "Return to ingredient?",
         message: "Leave this cocktail and return to ingredient details?",
         actions: [
+          {
+            label: "Save",
+            onPress: () => {
+              const returnIngredientId =
+                ingredientParam ?? ingredientNameParam ?? "";
+              if (returnIngredientId) {
+                pendingReturnToIngredientRef.current = returnIngredientId;
+              }
+              handleSubmit();
+            },
+          },
           { label: "Stay", variant: "secondary" },
           {
             label: "Return",
@@ -1393,7 +1415,7 @@ export default function CreateCocktailScreen() {
         ],
       });
     },
-    [setHasUnsavedChanges, showDialog],
+    [handleSubmit, ingredientNameParam, ingredientParam, setHasUnsavedChanges, showDialog],
   );
 
   useEffect(() => {
