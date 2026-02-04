@@ -36,8 +36,7 @@ import {
   buildReturnToParams,
   navigateToDetailsWithReturnTo,
   parseReturnToParams,
-  returnToSourceOrBack,
-  skipDuplicateBack,
+  skipBack,
 } from "@/libs/navigation";
 import { normalizeSearchText } from "@/libs/search-normalization";
 import { useInventory, type Cocktail } from "@/providers/inventory-provider";
@@ -367,18 +366,78 @@ export default function CocktailDetailsScreen() {
   const [showImperialUnits, setShowImperialUnits] = useState(useImperialUnits);
   const isHandlingBackRef = useRef(false);
 
+  const hasCocktail = useCallback(
+    (candidate: unknown) => {
+      if (candidate == null) {
+        return false;
+      }
+
+      const value = Array.isArray(candidate) ? candidate[0] : candidate;
+      if (typeof value !== "string" && typeof value !== "number") {
+        return false;
+      }
+
+      const key = String(value);
+      return resolveCocktail(key, cocktails) != null;
+    },
+    [cocktails],
+  );
+
+  const hasIngredient = useCallback(
+    (candidate: unknown) => {
+      if (candidate == null) {
+        return false;
+      }
+
+      const value = Array.isArray(candidate) ? candidate[0] : candidate;
+      if (typeof value !== "string" && typeof value !== "number") {
+        return false;
+      }
+
+      const key = String(value);
+      const numericId = Number(key);
+      if (!Number.isNaN(numericId)) {
+        return ingredients.some((item) => Number(item.id ?? -1) === numericId);
+      }
+
+      const normalized = normalizeSearchText(key);
+      return ingredients.some(
+        (item) => normalizeSearchText(item.name ?? "") === normalized,
+      );
+    },
+    [ingredients],
+  );
+
+  const shouldSkipBackRoute = useCallback(
+    (route: { name: string; params?: Record<string, unknown> }) => {
+      const name = route?.name ?? "";
+      const params = route?.params ?? {};
+
+      if (name.endsWith("cocktails/[cocktailId]")) {
+        return !hasCocktail(params.cocktailId);
+      }
+
+      if (name.endsWith("ingredients/[ingredientId]")) {
+        return !hasIngredient(params.ingredientId);
+      }
+
+      return false;
+    },
+    [hasCocktail, hasIngredient],
+  );
+
   useEffect(() => {
     setShowImperialUnits(useImperialUnits);
   }, [useImperialUnits]);
 
   const handleReturn = useCallback(() => {
-    if (returnToPath === "/cocktails") {
-      skipDuplicateBack(navigation);
-      return;
-    }
-
-    returnToSourceOrBack(navigation, { returnToPath, returnToParams });
-  }, [navigation, returnToParams, returnToPath]);
+    skipBack(navigation, {
+      shouldSkipRoute: shouldSkipBackRoute,
+      ...(returnToPath
+        ? { fallback: { pathname: returnToPath, params: returnToParams } }
+        : {}),
+    });
+  }, [navigation, returnToParams, returnToPath, shouldSkipBackRoute]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", (event) => {

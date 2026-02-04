@@ -37,25 +37,64 @@ const areRoutesEqual = (
   return areParamsEqual(left.params, right.params);
 };
 
-export const skipDuplicateBack = (navigation: NavigationProp<ParamListBase>) => {
+type SkipBackOptions = {
+  shouldSkipRoute?: (route: { name: string; params?: RouteParams }) => boolean;
+  fallback?: {
+    pathname: string;
+    params?: ReturnToParams;
+  };
+};
+
+export const skipBack = (
+  navigation: NavigationProp<ParamListBase>,
+  options?: SkipBackOptions,
+) => {
   const state = navigation.getState();
   const currentIndex = state.index ?? 0;
 
   if (currentIndex <= 0) {
+    if (options?.fallback) {
+      router.navigate({ pathname: options.fallback.pathname, params: options.fallback.params });
+      return;
+    }
     navigation.goBack();
     return;
   }
 
   const current = state.routes[currentIndex];
-  const previous = state.routes[currentIndex - 1];
-  const shouldSkip = areRoutesEqual(current, previous);
+  let targetIndex = currentIndex - 1;
 
-  if (shouldSkip && currentIndex >= 2) {
-    navigation.dispatch(StackActions.pop(2));
+  while (targetIndex >= 0) {
+    const candidate = state.routes[targetIndex];
+    const shouldSkip =
+      areRoutesEqual(current, candidate) || options?.shouldSkipRoute?.(candidate) === true;
+
+    if (!shouldSkip) {
+      break;
+    }
+
+    targetIndex -= 1;
+  }
+
+  if (targetIndex < 0) {
+    if (options?.fallback) {
+      router.navigate({ pathname: options.fallback.pathname, params: options.fallback.params });
+      return;
+    }
+    navigation.goBack();
     return;
   }
 
-  navigation.goBack();
+  const popCount = currentIndex - targetIndex;
+  if (popCount > 0) {
+    navigation.dispatch(StackActions.pop(popCount));
+  } else {
+    navigation.goBack();
+  }
+};
+
+export const skipDuplicateBack = (navigation: NavigationProp<ParamListBase>) => {
+  skipBack(navigation);
 };
 
 export const buildReturnToParams = (
@@ -129,10 +168,5 @@ export const returnToSourceOrBack = (
     returnToParams?: ReturnToParams;
   },
 ) => {
-  if (returnToPath) {
-    router.navigate({ pathname: returnToPath, params: returnToParams });
-    return;
-  }
-
-  skipDuplicateBack(navigation);
+  skipBack(navigation, returnToPath ? { fallback: { pathname: returnToPath, params: returnToParams } } : undefined);
 };

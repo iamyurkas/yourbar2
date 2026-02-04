@@ -37,8 +37,7 @@ import {
   buildReturnToParams,
   navigateToDetailsWithReturnTo,
   parseReturnToParams,
-  returnToSourceOrBack,
-  skipDuplicateBack,
+  skipBack,
 } from "@/libs/navigation";
 import { normalizeSearchText } from "@/libs/search-normalization";
 import { useInventory, type Ingredient } from "@/providers/inventory-provider";
@@ -131,6 +130,74 @@ export default function IngredientDetailsScreen() {
   const [, startAvailabilityTransition] = useTransition();
   const [, startShoppingTransition] = useTransition();
   const isHandlingBackRef = useRef(false);
+
+  const hasIngredient = useCallback(
+    (candidate: unknown) => {
+      if (candidate == null) {
+        return false;
+      }
+
+      const value = Array.isArray(candidate) ? candidate[0] : candidate;
+      if (typeof value !== "string" && typeof value !== "number") {
+        return false;
+      }
+
+      const key = String(value);
+      const numericId = Number(key);
+      if (!Number.isNaN(numericId)) {
+        return ingredients.some((item) => Number(item.id ?? -1) === numericId);
+      }
+
+      const normalized = normalizeSearchText(key);
+      return ingredients.some(
+        (item) => normalizeSearchText(item.name ?? "") === normalized,
+      );
+    },
+    [ingredients],
+  );
+
+  const hasCocktail = useCallback(
+    (candidate: unknown) => {
+      if (candidate == null) {
+        return false;
+      }
+
+      const value = Array.isArray(candidate) ? candidate[0] : candidate;
+      if (typeof value !== "string" && typeof value !== "number") {
+        return false;
+      }
+
+      const key = String(value);
+      const numericId = Number(key);
+      if (!Number.isNaN(numericId)) {
+        return cocktails.some((item) => Number(item.id ?? -1) === numericId);
+      }
+
+      const normalized = normalizeSearchText(key);
+      return cocktails.some(
+        (item) => normalizeSearchText(item.name ?? "") === normalized,
+      );
+    },
+    [cocktails],
+  );
+
+  const shouldSkipBackRoute = useCallback(
+    (route: { name: string; params?: Record<string, unknown> }) => {
+      const name = route?.name ?? "";
+      const params = route?.params ?? {};
+
+      if (name.endsWith("ingredients/[ingredientId]")) {
+        return !hasIngredient(params.ingredientId);
+      }
+
+      if (name.endsWith("cocktails/[cocktailId]")) {
+        return !hasCocktail(params.cocktailId);
+      }
+
+      return false;
+    },
+    [hasCocktail, hasIngredient],
+  );
 
   const isAvailable = useMemo(() => {
     if (numericIngredientId == null) {
@@ -506,13 +573,13 @@ export default function IngredientDetailsScreen() {
   }, [cocktailEntries.length]);
 
   const handleReturn = useCallback(() => {
-    if (returnToPath === "/ingredients") {
-      skipDuplicateBack(navigation);
-      return;
-    }
-
-    returnToSourceOrBack(navigation, { returnToPath, returnToParams });
-  }, [navigation, returnToParams, returnToPath]);
+    skipBack(navigation, {
+      shouldSkipRoute: shouldSkipBackRoute,
+      ...(returnToPath
+        ? { fallback: { pathname: returnToPath, params: returnToParams } }
+        : {}),
+    });
+  }, [navigation, returnToParams, returnToPath, shouldSkipBackRoute]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", (event) => {
