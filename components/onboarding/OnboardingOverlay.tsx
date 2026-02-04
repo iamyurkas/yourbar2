@@ -43,21 +43,21 @@ export function OnboardingOverlay() {
   const steps = useMemo<StepDef[]>(() => [
     {
       id: 1,
-      message: 'Welcome! Let\'s learn how to use the app. First, let\'s add some ingredients.',
+      message: "Welcome! Let's learn how to use the app. First, let's add some ingredients.",
       buttonLabel: 'Start',
     },
     {
       id: 2,
-      message: 'Go to the Ingredients tab.',
+      message: 'Head to the "Ingredients" tab to begin.',
       anchorName: 'tab-ingredients',
       autoNext: (_, path) => path.startsWith('/ingredients'),
     },
     {
       id: 3,
-      message: 'On the "All ingredients" tab, you can see all ingredients. We will mark a few as available now.',
+      message: "Here’s the full ingredient list. We already marked a few ingredients as available.",
       anchorName: 'ingredients-tab-all',
       buttonLabel: 'Next',
-      onNext: (inv) => {
+      onNext: (inv, requestTab) => {
         inv.setIngredientAvailability(193, true); // Ice
         inv.setIngredientAvailability(159, true); // Gin
         inv.setIngredientAvailability(315, true); // Spiced Rum
@@ -65,71 +65,42 @@ export function OnboardingOverlay() {
         inv.setIngredientAvailability(333, true); // Tonic
         inv.setIngredientAvailability(214, true); // Lemon
         inv.setIngredientAvailability(222, true); // Lime
-      },
-    },
-    {
-      id: 7,
-      message: 'Now go to the "My ingredients" tab to see your inventory',
-      anchorName: 'ingredients-tab-my',
-      buttonLabel: 'Next',
-      onNext: (_, requestTab) => {
         requestTab('ingredients', 'my');
       },
     },
     {
-      id: 8,
-      message: 'Here you can see the ingredients you have. You can also see how many cocktails can be made with each.',
+      id: 4,
+      message: "Here are the ingredients you have. You’ll also see how many cocktails each one can be used in.",
+      anchorName: 'ingredients-tab-my',
       buttonLabel: 'Next',
     },
     {
-      id: 9,
-      message: 'Now let\'s check the cocktails. Go to the Cocktails tab.',
+      id: 5,
+      message: 'Now let’s check the cocktails. Open the "Cocktails" tab.',
       anchorName: 'tab-cocktails',
       autoNext: (_, path) => path.startsWith('/cocktails'),
     },
     {
-      id: 11,
-      message: 'Cocktails you can make right now are shown at the top of "My cocktails" tab.',
+      id: 6,
+      message: "Cocktails you can make right now appear at the top of My cocktails.",
+      anchorName: 'cocktails-tab-my',
       buttonLabel: 'Next',
       onEnter: (_, requestTab) => {
         requestTab('cocktails', 'my');
       },
     },
     {
-      id: 12,
-      message: 'Below you will find cocktails where you are missing just one ingredient.',
+      id: 7,
+      message: "Below are cocktails missing just one ingredient.",
       buttonLabel: 'Next',
     },
     {
-      id: 13,
-      message: 'Finally, let\'s look at the Shaker. It helps you find recipes based on selected ingredients.',
+      id: 8,
+      message: 'Finally, meet the "Shaker" — it helps you find cocktails based on selected ingredients.',
       anchorName: 'tab-shaker',
+      buttonLabel: 'Finish',
       autoNext: (_, path) => path.startsWith('/shaker'),
       highlightPadding: { x: 20, y: 0 },
-    },
-    {
-      id: 14,
-      message: 'Shaker logic: ingredients within one category are interchangeable (OR), from different categories — mandatory (AND). Example: (Gin OR Whiskey) AND (Cola OR Tonic) AND (Lemon OR Lime).',
-      buttonLabel: 'Next',
-      onEnter: (_, __, requestShaker) => {
-        requestShaker('set-in-stock', true);
-        requestShaker('expand-all', true);
-      },
-    },
-    {
-      id: 15,
-      message: 'This toggle filters ingredients by your availability.',
-      anchorName: 'shaker-availability-toggle',
-      buttonLabel: 'Next',
-      onEnter: (_, __, requestShaker) => {
-        requestShaker('set-in-stock', true);
-        requestShaker('expand-all', true);
-      },
-    },
-    {
-      id: 16,
-      message: 'You\'re ready! Enjoy your cocktails!',
-      buttonLabel: 'Finish',
     },
   ], []);
 
