@@ -909,12 +909,12 @@ export default function ShakerScreen() {
           visible={step === 'shaker_explain'}
           title="Shaker"
           message={
-            'Інгредієнти в межах однієї категорії взаємозамінні (OR), з різних категорій — обовʼязкові (AND).\n' +
-            'Приклад: (Gin OR Whiskey) AND (Cola OR Tonic) AND (Lemon OR Lime).\n' +
-            'Галочка вгорі фільтрує інгредієнти за наявністю.'
+            'Ingredients within the same category are interchangeable (OR), while different categories are required (AND).\n' +
+            'Example: (Gin OR Whiskey) AND (Cola OR Tonic) AND (Lemon OR Lime).\n' +
+            'The checkmark at the top filters ingredients by availability.'
           }
           targets={inStockLayout ? [inStockLayout] : undefined}
-          actionLabel="Готово"
+          actionLabel="Done"
           onAction={completeOnboarding}
         />
       </View>

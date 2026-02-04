@@ -776,11 +776,11 @@ export default function CocktailsScreen() {
         visible={step === 'cocktails_explain'}
         title="My Cocktails"
         message={
-          'Після того як ви додали Cola, Ice та Spiced Rum, у My Cocktails зʼявляються коктейлі, ' +
-          'які доступні прямо зараз. Нижче показані коктейлі, яким не вистачає лише одного інгредієнта.'
+          'After you add Cola, Ice, and Spiced Rum, My Cocktails shows the cocktails you can make right now. ' +
+          'Below that, you will see cocktails that are missing only one ingredient.'
         }
         targets={listLayout ? [listLayout] : undefined}
-        actionLabel="Перейти до Shaker"
+        actionLabel="Go to Shaker"
         onAction={handleContinueOnboarding}
       />
     </SafeAreaView>

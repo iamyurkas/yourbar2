@@ -345,11 +345,15 @@ export default function IngredientsScreen() {
     });
   }, []);
 
-  const handleTabsLayout = useCallback((_layout: LayoutRectangle) => {
+  const measureTabLayout = useCallback(() => {
     tabContainerRef.current?.measureInWindow((x, y, width, height) => {
       setTabLayout({ x, y, width, height });
     });
   }, []);
+
+  const handleTabsLayout = useCallback((_layout: LayoutRectangle) => {
+    requestAnimationFrame(() => measureTabLayout());
+  }, [measureTabLayout]);
 
   const updateOnboardingItemLayout = useCallback((id: number) => {
     const node = onboardingItemRefs.current.get(id);
@@ -595,6 +599,14 @@ export default function IngredientsScreen() {
       });
     }
   }, [filteredIngredients, step]);
+
+  useEffect(() => {
+    if (step !== 'ingredients_tab') {
+      return;
+    }
+
+    requestAnimationFrame(() => measureTabLayout());
+  }, [measureTabLayout, step]);
 
   const highlightColor = Colors.highlightFaint;
   const isFilterActive = selectedTagKeys.size > 0;
@@ -884,16 +896,16 @@ export default function IngredientsScreen() {
       <SideMenuDrawer visible={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       <OnboardingOverlay
         visible={step === 'ingredients_tab'}
-        title="Мої інгредієнти"
-        message="Перейдіть на вкладку My, щоб позначати інгредієнти, які у вас є."
+        title="My ingredients"
+        message="Switch to the My tab to mark the ingredients you already have."
         targets={tabLayout ? [tabLayout] : undefined}
       />
       <OnboardingOverlay
         visible={step === 'ingredients_add'}
-        title="Позначте наявні інгредієнти"
-        message="Додайте як «у вас є» Cola, Ice та Spiced Rum. Тапніть по чекбоксах справа."
+        title="Mark your ingredients"
+        message="Add Cola, Ice, and Spiced Rum as items you have. Tap the checkmarks on the right."
         targets={onboardingTargetLayouts}
-        actionLabel="Далі → My Cocktails"
+        actionLabel="Next → My Cocktails"
         onAction={handleContinueOnboarding}
         actionDisabled={!hasRequiredOnboardingIngredients}
       />
