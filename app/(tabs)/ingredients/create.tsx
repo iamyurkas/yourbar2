@@ -27,7 +27,7 @@ import { TagPill } from '@/components/TagPill';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { useAppColors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
-import { buildReturnToParams, skipDuplicateBack } from '@/libs/navigation';
+import { buildReturnToParams, skipBack, skipDuplicateBack } from '@/libs/navigation';
 import { shouldStorePhoto, storePhoto } from '@/libs/photo-storage';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
@@ -536,8 +536,12 @@ export default function IngredientFormScreen() {
     updateIngredient,
   ]);
 
+  const handleNavigateBack = useCallback(() => {
+    skipBack(navigation, returnToPath ? { fallback: { pathname: returnToPath, params: returnToParams } } : undefined);
+  }, [navigation, returnToParams, returnToPath]);
+
   const confirmLeave = useCallback(
-    (onLeave: () => void) => {
+    (onLeave?: () => void) => {
       showDialog({
         title: 'Leave without saving?',
         message: 'Your changes will be lost if you leave this screen.',
@@ -549,13 +553,17 @@ export default function IngredientFormScreen() {
             variant: 'destructive',
             onPress: () => {
               setHasUnsavedChanges(false);
-              onLeave();
+              if (onLeave) {
+                onLeave();
+                return;
+              }
+              handleNavigateBack();
             },
           },
         ],
       });
     },
-    [handleSubmit, setHasUnsavedChanges, showDialog],
+    [handleNavigateBack, handleSubmit, setHasUnsavedChanges, showDialog],
   );
 
   useEffect(() => {
@@ -569,7 +577,7 @@ export default function IngredientFormScreen() {
         confirmLeave(() => {
           isHandlingBackRef.current = true;
           if (event.data.action.type === 'GO_BACK') {
-            skipDuplicateBack(navigation);
+            handleNavigateBack();
           } else {
             navigation.dispatch(event.data.action);
           }
@@ -583,7 +591,7 @@ export default function IngredientFormScreen() {
       if (event.data.action.type === 'GO_BACK') {
         event.preventDefault();
         isHandlingBackRef.current = true;
-        skipDuplicateBack(navigation);
+        handleNavigateBack();
         setTimeout(() => {
           isHandlingBackRef.current = false;
         }, 0);
@@ -594,8 +602,12 @@ export default function IngredientFormScreen() {
   }, [confirmLeave, hasUnsavedChanges, navigation]);
 
   const handleGoBack = useCallback(() => {
-    skipDuplicateBack(navigation);
-  }, [navigation]);
+    if (hasUnsavedChanges) {
+      confirmLeave();
+      return;
+    }
+    handleNavigateBack();
+  }, [confirmLeave, handleNavigateBack, hasUnsavedChanges]);
 
   const handleDeletePress = useCallback(() => {
     if (!isEditMode) {
