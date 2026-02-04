@@ -33,6 +33,7 @@ export function CollectionHeader({
   tabs,
   activeTab,
   onTabChange,
+  anchorPrefix,
   style,
 }: CollectionHeaderProps) {
   const shouldShowTabs = Boolean(tabs?.length && activeTab !== undefined && onTabChange);
