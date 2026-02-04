@@ -47,44 +47,56 @@ export function OnboardingOverlay() {
     },
     {
       id: 2,
-      message: 'Go to the Ingredients tab.',
+      message: 'Head to the "Ingredients" tab to begin.',
       anchorName: 'tab-ingredients',
       autoNext: (_, path) => path.startsWith('/ingredients'),
-    },
-    {
-      id: 3,
-      message: 'On the "All ingredients" tab, you can see all ingredients. We will mark a few as available now.',
-      anchorName: 'ingredients-tab-all',
-      buttonLabel: 'Next',
-      onNext: (inv) => {
-        inv.setIngredientAvailability(111, true); // Cola
+      onEnter: (inv) => {
+        const availableIds = inv.availableIngredientIds as Set<number> | undefined;
+        const idsToSeed = [193, 159, 315, 111, 333, 214, 222];
+        const hasAll =
+          availableIds && idsToSeed.every((id) => availableIds.has(id));
+        if (hasAll) {
+          return;
+        }
+
         inv.setIngredientAvailability(193, true); // Ice
+        inv.setIngredientAvailability(159, true); // Gin
         inv.setIngredientAvailability(315, true); // Spiced Rum
+        inv.setIngredientAvailability(111, true); // Cola
+        inv.setIngredientAvailability(333, true); // Tonic
+        inv.setIngredientAvailability(214, true); // Lemon
+        inv.setIngredientAvailability(222, true); // Lime
       },
     },
     {
+      id: 3,
+      message: 'Here’s the full ingredient list. We already marked a few ingredients as available.',
+      anchorName: 'ingredients-tab-all',
+      buttonLabel: 'Next',
+    },
+    {
       id: 7,
-      message: 'Now go to the "My ingredients" tab to see your inventory',
+      message: 'Here are the ingredients you have. You’ll also see how many cocktails each one can be used in.',
       anchorName: 'ingredients-tab-my',
       buttonLabel: 'Next',
-      onNext: (_, requestTab) => {
+      onEnter: (_, requestTab) => {
         requestTab('ingredients', 'my');
       },
     },
     {
       id: 8,
-      message: 'Here you can see the ingredients you have. You can also see how many cocktails can be made with each.',
+      message: 'Now let’s check the cocktails. Open the "Cocktails" tab.',
       buttonLabel: 'Next',
     },
     {
       id: 9,
-      message: 'Now let\'s check the cocktails. Go to the Cocktails tab.',
+      message: 'Now let’s check the cocktails. Open the "Cocktails" tab.',
       anchorName: 'tab-cocktails',
       autoNext: (_, path) => path.startsWith('/cocktails'),
     },
     {
       id: 11,
-      message: 'Cocktails you can make right now are shown at the top of "My cocktails" tab.',
+      message: 'Cocktails you can make right now appear at the top of My cocktails.',
       buttonLabel: 'Next',
       onEnter: (_, requestTab) => {
         requestTab('cocktails', 'my');
@@ -92,12 +104,12 @@ export function OnboardingOverlay() {
     },
     {
       id: 12,
-      message: 'Below you will find cocktails where you are missing just one ingredient.',
+      message: 'Below are cocktails missing just one ingredient.',
       buttonLabel: 'Next',
     },
     {
       id: 13,
-      message: 'Finally, let\'s look at the Shaker. It helps you find recipes based on selected ingredients.',
+      message: 'Finally, meet the "Shaker" — it helps you find cocktails based on selected ingredients.',
       anchorName: 'tab-shaker',
       autoNext: (_, path) => path.startsWith('/shaker'),
     },
@@ -147,6 +159,10 @@ export function OnboardingOverlay() {
   if (onboardingCompleted || !onboardingStep || onboardingStep <= 0 || !currentStep) return null;
 
   const anchor = currentStep.anchorName ? anchors[currentStep.anchorName] : null;
+  const isShakerTabHighlight = currentStep.anchorName === 'tab-shaker';
+  const highlightPaddingX = isShakerTabHighlight ? 14 : 4;
+  const highlightPaddingY = 4;
+  const highlightRadius = isShakerTabHighlight ? 0 : 8;
   const adjustedAnchor = anchor ? {
     ...anchor,
     x: anchor.x - overlayOffset.x,
@@ -194,11 +210,11 @@ export function OnboardingOverlay() {
             <Rect height="100%" width="100%" fill="white" />
             {adjustedAnchor && (
               <Rect
-                x={adjustedAnchor.x - 4}
-                y={adjustedAnchor.y - 4}
-                width={adjustedAnchor.width + 8}
-                height={adjustedAnchor.height + 8}
-                rx={8}
+                x={adjustedAnchor.x - highlightPaddingX}
+                y={adjustedAnchor.y - highlightPaddingY}
+                width={adjustedAnchor.width + highlightPaddingX * 2}
+                height={adjustedAnchor.height + highlightPaddingY * 2}
+                rx={highlightRadius}
                 fill="black"
               />
             )}

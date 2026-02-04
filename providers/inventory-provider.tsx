@@ -557,7 +557,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     sanitizeCustomTags(globalThis.__yourbarInventoryCustomIngredientTags, DEFAULT_TAG_COLOR),
   );
   const [onboardingStep, setOnboardingStep] = useState<number>(
-    () => globalThis.__yourbarInventoryOnboardingStep ?? 1,
+    () => globalThis.__yourbarInventoryOnboardingStep ?? 0,
   );
   const [onboardingCompleted, setOnboardingCompleted] = useState<boolean>(
     () => globalThis.__yourbarInventoryOnboardingCompleted ?? false,
@@ -593,7 +593,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           const nextAppTheme = sanitizeAppTheme(stored.appTheme);
           const nextCustomCocktailTags = sanitizeCustomTags(stored.customCocktailTags, DEFAULT_TAG_COLOR);
           const nextCustomIngredientTags = sanitizeCustomTags(stored.customIngredientTags, DEFAULT_TAG_COLOR);
-          const nextOnboardingStep = stored.onboardingStep ?? 1;
+          const nextOnboardingStep = 0;
           const nextOnboardingCompleted = stored.onboardingCompleted ?? false;
 
           setInventoryState(nextInventoryState);
@@ -2066,4 +2066,3 @@ export function useInventory() {
 }
 
 export type { AppTheme, Cocktail, CreateCocktailInput, CreateIngredientInput, Ingredient, StartScreen };
-

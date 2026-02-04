@@ -178,6 +178,7 @@ export default function ShakerScreen() {
     shoppingIngredientIds,
     ignoreGarnish,
     allowAllSubstitutes,
+    onboardingStep,
   } = useInventory();
   const [query, setQuery] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -404,6 +405,21 @@ export default function ShakerScreen() {
       return next;
     });
   }, [ingredientGroups]);
+
+  useEffect(() => {
+    if (onboardingStep !== 15) {
+      return;
+    }
+
+    setInStockOnly((previous) => (previous ? previous : true));
+    setExpandedTagKeys((previous) => {
+      const nextKeys = ingredientGroups.map((group) => group.key);
+      if (previous.size === nextKeys.length && nextKeys.every((key) => previous.has(key))) {
+        return previous;
+      }
+      return new Set(nextKeys);
+    });
+  }, [ingredientGroups, onboardingStep]);
 
   const handleToggleGroup = useCallback((key: string) => {
     setExpandedTagKeys((previous) => {
