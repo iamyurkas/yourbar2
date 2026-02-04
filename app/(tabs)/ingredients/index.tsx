@@ -19,6 +19,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { CollectionHeader } from '@/components/CollectionHeader';
 import { FabAdd } from '@/components/FabAdd';
 import { ListRow, PresenceCheck, Thumb } from '@/components/RowParts';
+import { OnboardingAnchor } from '@/components/onboarding/OnboardingAnchor';
 import { SideMenuDrawer } from '@/components/SideMenuDrawer';
 import { TagPill } from '@/components/TagPill';
 import type { SegmentTabOption } from '@/components/TopBars';
@@ -33,6 +34,7 @@ import {
 import { navigateToDetailsWithReturnTo } from '@/libs/navigation';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { buildTagOptions, type TagOption } from '@/libs/tag-options';
+import { useOnboardingAnchors } from '@/components/onboarding/OnboardingContext';
 import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
 import { tagColors } from '@/theme/theme';
 
@@ -86,23 +88,23 @@ const IngredientListItem = memo(function IngredientListItemComponent({
   onShoppingToggle,
 }: IngredientListItemProps) {
   const Colors = useAppColors();
-  const id = Number(ingredient.id ?? -1);
-  const isAvailable = id >= 0 && availableIngredientIds.has(id);
+  const ingredientId = Number(ingredient.id ?? -1);
+  const isAvailable = ingredientId >= 0 && availableIngredientIds.has(ingredientId);
   const ingredientTagColors = (ingredient.tags ?? [])
     .map((tag) => tag?.color ?? tagColors.yellow)
     .filter(Boolean);
 
   const handleToggleAvailability = useCallback(() => {
-    if (id >= 0) {
-      onToggleAvailability(id);
+    if (ingredientId >= 0) {
+      onToggleAvailability(ingredientId);
     }
-  }, [id, onToggleAvailability]);
+  }, [ingredientId, onToggleAvailability]);
 
   const handleShoppingToggle = useCallback(() => {
-    if (id >= 0 && onShoppingToggle) {
-      onShoppingToggle(id);
+    if (ingredientId >= 0 && onShoppingToggle) {
+      onShoppingToggle(ingredientId);
     }
-  }, [id, onShoppingToggle]);
+  }, [ingredientId, onShoppingToggle]);
 
   const subtitleStyle = surfaceVariantColor ? { color: surfaceVariantColor } : undefined;
 
@@ -182,7 +184,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
     });
   }, [ingredient.id, ingredient.name]);
 
-  return (
+  const row = (
     <ListRow
       title={ingredient.name}
       subtitle={subtitle}
@@ -200,11 +202,23 @@ const IngredientListItem = memo(function IngredientListItemComponent({
       metaAlignment="center"
     />
   );
+
+  const onboardingIds = [111, 193, 315];
+  if (onboardingIds.includes(ingredientId)) {
+    return (
+      <OnboardingAnchor name={`ingredient-${ingredientId}`}>
+        {row}
+      </OnboardingAnchor>
+    );
+  }
+
+  return row;
 }, areIngredientPropsEqual);
 
 export default function IngredientsScreen() {
   const router = useRouter();
   const Colors = useAppColors();
+  const { onTabChangeRequest } = useOnboardingAnchors();
   const {
     cocktails,
     ingredients,
@@ -233,6 +247,14 @@ export default function IngredientsScreen() {
   const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
 
   useScrollToTop(listRef);
+
+  useEffect(() => {
+    return onTabChangeRequest((screen, tab) => {
+      if (screen === 'ingredients') {
+        setActiveTab(tab as IngredientTabKey);
+      }
+    });
+  }, [onTabChangeRequest]);
 
   useEffect(() => {
     const wasEmpty = previousQuery.current.length === 0;
@@ -691,6 +713,7 @@ export default function IngredientsScreen() {
             tabs={TAB_OPTIONS}
             activeTab={activeTab}
             onTabChange={setActiveTab}
+            anchorPrefix="ingredients-tab"
             onFilterPress={handleFilterPress}
             filterActive={isFilterActive}
             filterExpanded={isFilterMenuVisible}

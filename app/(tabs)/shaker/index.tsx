@@ -19,6 +19,8 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useRouter } from 'expo-router';
 
 import { ListRow, PresenceCheck, Thumb } from '@/components/RowParts';
+import { OnboardingAnchor } from '@/components/onboarding/OnboardingAnchor';
+import { useOnboardingAnchors } from '@/components/onboarding/OnboardingContext';
 import { SideMenuDrawer } from '@/components/SideMenuDrawer';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { useAppColors } from '@/constants/theme';
@@ -177,6 +179,7 @@ export default function ShakerScreen() {
     shoppingIngredientIds,
     ignoreGarnish,
     allowAllSubstitutes,
+    onboardingStep,
   } = useInventory();
   const [query, setQuery] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -191,11 +194,20 @@ export default function ShakerScreen() {
   const headerTouchState = useRef<
     Map<string, { startY: number; moved: boolean; didPress: boolean }>
   >(new Map());
+  const { registerAction } = useOnboardingAnchors();
   const insets = useSafeAreaInsets();
   const bottomInset = Math.min(insets.bottom, 8);
   const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
 
   useScrollToTop(listRef);
+
+  useEffect(
+    () =>
+      registerAction('shaker-availability-toggle', () => {
+        setInStockOnly((previous) => (previous ? previous : true));
+      }),
+    [registerAction],
+  );
 
   useEffect(() => {
     const wasEmpty = previousQuery.current.length === 0;
@@ -378,6 +390,34 @@ export default function ShakerScreen() {
       });
   }, [availableTagOptions, defaultTagColor, filteredIngredients]);
 
+  const onboardingSampleIds = useMemo(() => {
+    const picks: number[] = [];
+
+    ingredients.forEach((ingredient) => {
+      if (picks.length >= 3) {
+        return;
+      }
+      const ingredientId = Number(ingredient.id ?? -1);
+      if (ingredientId >= 0 && availableIngredientIds.has(ingredientId)) {
+        picks.push(ingredientId);
+      }
+    });
+
+    if (picks.length < 2) {
+      ingredients.forEach((ingredient) => {
+        if (picks.length >= 3) {
+          return;
+        }
+        const ingredientId = Number(ingredient.id ?? -1);
+        if (ingredientId >= 0 && !picks.includes(ingredientId)) {
+          picks.push(ingredientId);
+        }
+      });
+    }
+
+    return picks;
+  }, [availableIngredientIds, ingredients]);
+
   useEffect(() => {
     setExpandedTagKeys((previous) => {
       if (previous.size === 0) {
@@ -403,6 +443,33 @@ export default function ShakerScreen() {
       return next;
     });
   }, [ingredientGroups]);
+
+  useEffect(() => {
+    if (onboardingStep !== 15) {
+      return;
+    }
+
+    setInStockOnly((previous) => (previous ? previous : true));
+    setExpandedTagKeys((previous) => {
+      const nextKeys = ingredientGroups.map((group) => group.key);
+      if (previous.size === nextKeys.length && nextKeys.every((key) => previous.has(key))) {
+        return previous;
+      }
+      return new Set(nextKeys);
+    });
+  }, [ingredientGroups, onboardingStep]);
+
+  useEffect(() => {
+    if (onboardingStep !== 11) {
+      return;
+    }
+
+    if (selectedIngredientIds.size > 0 || onboardingSampleIds.length === 0) {
+      return;
+    }
+
+    setSelectedIngredientIds(new Set(onboardingSampleIds));
+  }, [onboardingSampleIds, onboardingStep, selectedIngredientIds.size]);
 
   const handleToggleGroup = useCallback((key: string) => {
     setExpandedTagKeys((previous) => {
@@ -810,7 +877,9 @@ export default function ShakerScreen() {
             ) : null}
           </View>
           <View style={styles.iconButton}>
-            <PresenceCheck checked={inStockOnly} onToggle={() => setInStockOnly((previous) => !previous)} />
+            <OnboardingAnchor name="shaker-availability-toggle">
+              <PresenceCheck checked={inStockOnly} onToggle={() => setInStockOnly((previous) => !previous)} />
+            </OnboardingAnchor>
           </View>
         </View>
         <SectionList
@@ -856,41 +925,43 @@ export default function ShakerScreen() {
               (recipes: {matchingCocktailSummary.recipeCount})
             </Text>
           </View>
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel="Show matching recipes"
-            accessibilityState={{
-              disabled: matchingCocktailSummary.recipeCount === 0 || selectedIngredientIds.size === 0,
-            }}
-            disabled={matchingCocktailSummary.recipeCount === 0 || selectedIngredientIds.size === 0}
-            onPress={handleShowResults}
-            style={({ pressed }) => [
-              styles.showButton,
-              {
-                backgroundColor:
-                  matchingCocktailSummary.recipeCount === 0 || selectedIngredientIds.size === 0
-                    ? Colors.surfaceVariant
-                    : Colors.primary,
-              },
-              pressed && matchingCocktailSummary.recipeCount > 0 && selectedIngredientIds.size > 0
-                ? styles.showButtonPressed
-                : null,
-            ]}
-          >
-            <Text
-              style={[
-                styles.showButtonLabel,
+          <OnboardingAnchor name="shaker-show-results">
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Show matching recipes"
+              accessibilityState={{
+                disabled: matchingCocktailSummary.recipeCount === 0 || selectedIngredientIds.size === 0,
+              }}
+              disabled={matchingCocktailSummary.recipeCount === 0 || selectedIngredientIds.size === 0}
+              onPress={handleShowResults}
+              style={({ pressed }) => [
+                styles.showButton,
                 {
-                  color:
+                  backgroundColor:
                     matchingCocktailSummary.recipeCount === 0 || selectedIngredientIds.size === 0
-                      ? Colors.onSurfaceVariant
-                      : Colors.onPrimary,
+                      ? Colors.surfaceVariant
+                      : Colors.primary,
                 },
+                pressed && matchingCocktailSummary.recipeCount > 0 && selectedIngredientIds.size > 0
+                  ? styles.showButtonPressed
+                  : null,
               ]}
             >
-              Show
-            </Text>
-          </Pressable>
+              <Text
+                style={[
+                  styles.showButtonLabel,
+                  {
+                    color:
+                      matchingCocktailSummary.recipeCount === 0 || selectedIngredientIds.size === 0
+                        ? Colors.onSurfaceVariant
+                        : Colors.onPrimary,
+                  },
+                ]}
+              >
+                Show
+              </Text>
+            </Pressable>
+          </OnboardingAnchor>
         </View>
         <SideMenuDrawer visible={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       </View>

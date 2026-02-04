@@ -1,6 +1,6 @@
 import { Tabs } from 'expo-router';
 import { useCallback, useState } from 'react';
-import { StyleSheet, View, useColorScheme } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import CocktailIcon from '@/assets/images/cocktails.svg';
@@ -9,9 +9,9 @@ import ShakerIcon from '@/assets/images/shaker.svg';
 import { AppDialog, type DialogOptions } from '@/components/AppDialog';
 import { TabBarButton } from '@/components/tab-bar/TabBarButton';
 import { TabBarIcon } from '@/components/tab-bar/TabBarIcon';
+import { OnboardingAnchor } from '@/components/onboarding/OnboardingAnchor';
 import { useAppColors } from '@/constants/theme';
 import { getLastCocktailTab, getLastIngredientTab } from '@/libs/collection-tabs';
-import { useInventory } from '@/providers/inventory-provider';
 
 type TabPressHandler = (navigation: { navigate: (...args: never[]) => void }, route: { name: string }) => void;
 
@@ -52,13 +52,7 @@ const TAB_SCREENS: Array<{
 export default function TabLayout() {
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(null);
   const insets = useSafeAreaInsets();
-  const systemColorScheme = useColorScheme();
-  const { appTheme } = useInventory();
   const Colors = useAppColors();
-
-  const isDarkMode = appTheme === 'system'
-    ? systemColorScheme === 'dark'
-    : appTheme === 'dark';
 
   const closeDialog = useCallback(() => {
     setDialogOptions(null);
@@ -99,7 +93,11 @@ export default function TabLayout() {
             name={name}
             options={{
               title,
-              tabBarButton: (props) => <TabBarButton {...props} onOpenDialog={showDialog} />,
+              tabBarButton: (props) => (
+                <OnboardingAnchor name={`tab-${name}`} style={styles.tabAnchor}>
+                  <TabBarButton {...props} onOpenDialog={showDialog} />
+                </OnboardingAnchor>
+              ),
               tabBarIcon: ({ color, focused }) => <TabBarIcon source={icon} color={color} focused={focused} />,
             }}
             listeners={({ navigation, route }) => ({
@@ -132,5 +130,8 @@ const styles = StyleSheet.create({
   },
   tabBarInset: {
     height: 0,
+  },
+  tabAnchor: {
+    flex: 1,
   },
 });
