@@ -84,11 +84,6 @@ export function OnboardingOverlay() {
       },
     },
     {
-      id: 8,
-      message: 'Now let’s check the cocktails. Open the "Cocktails" tab.',
-      buttonLabel: 'Next',
-    },
-    {
       id: 9,
       message: 'Now let’s check the cocktails. Open the "Cocktails" tab.',
       anchorName: 'tab-cocktails',
