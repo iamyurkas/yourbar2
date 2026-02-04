@@ -224,15 +224,16 @@ function formatIngredientQuantity(
 
 function getIngredientQualifier(
   ingredient: RecipeIngredient,
+  t: (key: string) => string,
 ): string | undefined {
   const qualifiers: string[] = [];
 
   if (ingredient.garnish) {
-    qualifiers.push("garnish");
+    qualifiers.push(t("cocktails.garnish").toLowerCase());
   }
 
   if (ingredient.optional) {
-    qualifiers.push("optional");
+    qualifiers.push(t("cocktails.optional").toLowerCase());
   }
 
   return qualifiers.join(", ") || undefined;
@@ -989,7 +990,7 @@ export default function CocktailDetailsScreen() {
                       showImperialUnits,
                       t,
                     );
-                    const qualifier = getIngredientQualifier(ingredient);
+                    const qualifier = getIngredientQualifier(ingredient, t);
                     const key = `${ingredient.ingredientId ?? ingredient.name}-${ingredient.order}`;
                     const resolution = resolvedIngredients[index];
                     const ingredientId = parseIngredientId(ingredient);

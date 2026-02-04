@@ -2168,6 +2168,7 @@ function EditableIngredientRow({
   index,
   totalCount,
 }: EditableIngredientRowProps) {
+  const { t } = useTranslation();
   const [isFocused, setIsFocused] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const hideSuggestionsTimeout = useRef<NodeJS.Timeout | null>(null);
@@ -2253,7 +2254,7 @@ function EditableIngredientRow({
 
       return t("ingredients.used_in_cocktails", { count });
     },
-    [cocktailsByBaseGroup],
+    [cocktailsByBaseGroup, t],
   );
 
   useEffect(() => {
@@ -2361,7 +2362,7 @@ function EditableIngredientRow({
       ? (entry.plural ?? entry.singular)
       : entry.singular;
     return label || "";
-  }, [ingredient.unitId, usePluralUnits]);
+  }, [ingredient.unitId, usePluralUnits, t]);
 
   useEffect(() => {
     return () => {

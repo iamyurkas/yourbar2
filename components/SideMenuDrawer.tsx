@@ -124,7 +124,7 @@ type LanguageOption = {
 };
 
 const LANGUAGE_OPTIONS: LanguageOption[] = [
-  { key: "en", label: "English", flag: "🇺🇸" },
+  { key: "en", label: "English", flag: "🇬🇧" },
   { key: "es", label: "Español", flag: "🇪🇸" },
   { key: "ua", label: "Українська", flag: "🇺🇦" },
 ];
@@ -1019,33 +1019,6 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
             </Pressable>
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel={t("ui.language")}
-              onPress={handleLanguagePress}
-              style={[styles.settingRow, SURFACE_ROW_STYLE]}
-            >
-              <View style={[styles.checkbox, SURFACE_ICON_STYLE]}>
-                <Text style={{ fontSize: 14 }}>
-                  {selectedLanguageOption?.flag ?? "🌐"}
-                </Text>
-              </View>
-              <View style={styles.settingTextContainer}>
-                <Text
-                  style={[styles.settingLabel, { color: Colors.onSurface }]}
-                >
-                  {t("ui.language")}
-                </Text>
-                <Text
-                  style={[
-                    styles.settingCaption,
-                    { color: Colors.onSurfaceVariant },
-                  ]}
-                >
-                  {t("ui.language_description", { label: selectedLanguageOption?.label ?? "English" })}
-                </Text>
-              </View>
-            </Pressable>
-            <Pressable
-              accessibilityRole="button"
               accessibilityLabel={t("ui.favorites_rating_filter")}
               onPress={handleRatingThresholdPress}
               style={[styles.settingRow, SURFACE_ROW_STYLE]}
@@ -1100,6 +1073,33 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   ]}
                 >
                   {t("ui.manage_tags_description")}
+                </Text>
+              </View>
+            </Pressable>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={t("ui.language")}
+              onPress={handleLanguagePress}
+              style={[styles.settingRow, SURFACE_ROW_STYLE]}
+            >
+              <View style={styles.flagIconContainer}>
+                <Text style={styles.flagIcon}>
+                  {selectedLanguageOption?.flag ?? "🌐"}
+                </Text>
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text
+                  style={[styles.settingLabel, { color: Colors.onSurface }]}
+                >
+                  {t("ui.language")}
+                </Text>
+                <Text
+                  style={[
+                    styles.settingCaption,
+                    { color: Colors.onSurfaceVariant },
+                  ]}
+                >
+                  {t("ui.language_description", { label: selectedLanguageOption?.label ?? "English" })}
                 </Text>
               </View>
             </Pressable>
@@ -1873,7 +1873,9 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                       pressed ? { opacity: 0.85 } : null,
                     ]}
                   >
-                    <Text style={{ fontSize: 24 }}>{option.flag}</Text>
+                    <View style={styles.modalFlagContainer}>
+                      <Text style={styles.modalFlagText}>{option.flag}</Text>
+                    </View>
                     <Text
                       style={[
                         styles.themeOptionLabel,
@@ -2126,5 +2128,26 @@ const styles = StyleSheet.create({
   themeOptionLabel: {
     fontSize: 13,
     fontWeight: "700",
+  },
+  flagIconContainer: {
+    width: 22,
+    height: 22,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  flagIcon: {
+    fontSize: 16,
+    lineHeight: 22,
+    textAlignVertical: "center",
+  },
+  modalFlagContainer: {
+    height: 32,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  modalFlagText: {
+    fontSize: 24,
+    lineHeight: 32,
+    textAlignVertical: "center",
   },
 });
