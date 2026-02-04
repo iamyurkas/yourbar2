@@ -22,6 +22,51 @@ type StepDef = {
   onEnter?: (inventory: any, requestTabChange: (screen: 'ingredients' | 'cocktails', tab: string) => void) => void;
 };
 
+const renderFormattedMessage = (message: string) => {
+  const segments: Array<{ text: string; bold: boolean; italic: boolean }> = [];
+  let buffer = '';
+  let bold = false;
+  let italic = false;
+
+  const flushBuffer = () => {
+    if (buffer.length > 0) {
+      segments.push({ text: buffer, bold, italic });
+      buffer = '';
+    }
+  };
+
+  for (let i = 0; i < message.length; i += 1) {
+    if (message.startsWith('**', i)) {
+      flushBuffer();
+      bold = !bold;
+      i += 1;
+      continue;
+    }
+
+    if (message[i] === '*') {
+      flushBuffer();
+      italic = !italic;
+      continue;
+    }
+
+    buffer += message[i];
+  }
+
+  flushBuffer();
+
+  return segments.map((segment, index) => (
+    <Text
+      key={`${segment.text}-${index}`}
+      style={[
+        segment.bold && styles.boldText,
+        segment.italic && styles.italicText,
+      ]}
+    >
+      {segment.text}
+    </Text>
+  ));
+};
+
 export function OnboardingOverlay() {
   const { onboardingStep, setOnboardingStep, completeOnboarding, onboardingCompleted, ...inventory } = useInventory();
   const { anchors, requestTabChange } = useOnboardingAnchors();
@@ -42,7 +87,7 @@ export function OnboardingOverlay() {
   const steps = useMemo<StepDef[]>(() => [
     {
       id: 1,
-      message: 'Welcome! Let\'s learn how to use the app. First, let\'s add some ingredients.',
+      message: 'Welcome! Let\'s learn how to use the app. First, let\'s add some **ingredients**.',
       buttonLabel: 'Start',
     },
     {
@@ -85,7 +130,7 @@ export function OnboardingOverlay() {
     },
     {
       id: 9,
-      message: 'Now let’s check the cocktails. Open the "Cocktails" tab.',
+      message: 'Now let’s check the **cocktails**. Open the *"Cocktails"* tab.',
       anchorName: 'tab-cocktails',
       autoNext: (_, path) => path.startsWith('/cocktails'),
     },
@@ -104,7 +149,7 @@ export function OnboardingOverlay() {
     },
     {
       id: 13,
-      message: 'Finally, meet the "Shaker" — it helps you find cocktails based on selected ingredients.',
+      message: 'Finally, meet the **"Shaker"** — it helps you find cocktails based on *selected* ingredients.',
       anchorName: 'tab-shaker',
       autoNext: (_, path) => path.startsWith('/shaker'),
     },
@@ -225,7 +270,9 @@ export function OnboardingOverlay() {
       </Svg>
 
       <View style={[styles.tooltip, { top: tooltipTop, backgroundColor: Colors.surface, borderColor: Colors.outline }]}>
-        <Text style={[styles.message, { color: Colors.onSurface }]}>{currentStep.message}</Text>
+        <Text style={[styles.message, { color: Colors.onSurface }]}>
+          {renderFormattedMessage(currentStep.message)}
+        </Text>
         {currentStep.buttonLabel && (
           <>
             <Pressable
@@ -264,6 +311,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 16,
     lineHeight: 22,
+  },
+  boldText: {
+    fontWeight: '700',
+  },
+  italicText: {
+    fontStyle: 'italic',
   },
   button: {
     paddingHorizontal: 24,
