@@ -1,16 +1,16 @@
+import { useAppColors } from '@/constants/theme';
+import { useInventory } from '@/providers/inventory-provider';
+import { usePathname } from 'expo-router';
 import React, { useMemo } from 'react';
 import {
-  StyleSheet,
-  View,
-  Text,
   Pressable,
+  StyleSheet,
+  Text,
   useWindowDimensions,
+  View,
 } from 'react-native';
 import Svg, { Defs, Mask, Rect } from 'react-native-svg';
-import { useInventory } from '@/providers/inventory-provider';
 import { useOnboardingAnchors } from './OnboardingContext';
-import { useAppColors } from '@/constants/theme';
-import { usePathname } from 'expo-router';
 
 type StepDef = {
   id: number;
@@ -20,6 +20,51 @@ type StepDef = {
   buttonLabel?: string;
   onNext?: (inventory: any, requestTabChange: (screen: 'ingredients' | 'cocktails', tab: string) => void) => void;
   onEnter?: (inventory: any, requestTabChange: (screen: 'ingredients' | 'cocktails', tab: string) => void) => void;
+};
+
+const renderFormattedMessage = (message: string) => {
+  const segments: Array<{ text: string; bold: boolean; italic: boolean }> = [];
+  let buffer = '';
+  let bold = false;
+  let italic = false;
+
+  const flushBuffer = () => {
+    if (buffer.length > 0) {
+      segments.push({ text: buffer, bold, italic });
+      buffer = '';
+    }
+  };
+
+  for (let i = 0; i < message.length; i += 1) {
+    if (message.startsWith('**', i)) {
+      flushBuffer();
+      bold = !bold;
+      i += 1;
+      continue;
+    }
+
+    if (message[i] === '*') {
+      flushBuffer();
+      italic = !italic;
+      continue;
+    }
+
+    buffer += message[i];
+  }
+
+  flushBuffer();
+
+  return segments.map((segment, index) => (
+    <Text
+      key={`${segment.text}-${index}`}
+      style={[
+        segment.bold && styles.boldText,
+        segment.italic && styles.italicText,
+      ]}
+    >
+      {segment.text}
+    </Text>
+  ));
 };
 
 export function OnboardingOverlay() {
@@ -42,17 +87,17 @@ export function OnboardingOverlay() {
   const steps = useMemo<StepDef[]>(() => [
     {
       id: 1,
-      message: 'Welcome! Let\'s learn how to use the app. First, let\'s add some ingredients.',
+      message: '**Welcome!**\nLet\'s learn how to use the app.\nFirst, let\'s add some ingredients.',
       buttonLabel: 'Start',
     },
     {
       id: 2,
-      message: 'Head to the "Ingredients" tab to begin.',
+      message: 'Head to the **Ingredients** tab to begin.',
       anchorName: 'tab-ingredients',
       autoNext: (_, path) => path.startsWith('/ingredients'),
       onEnter: (inv) => {
         const availableIds = inv.availableIngredientIds as Set<number> | undefined;
-        const idsToSeed = [193, 159, 315, 111, 333, 214, 222];
+        const idsToSeed = [193, 159, 343, 111, 333, 214, 222];
         const hasAll =
           availableIds && idsToSeed.every((id) => availableIds.has(id));
         if (hasAll) {
@@ -61,7 +106,7 @@ export function OnboardingOverlay() {
 
         inv.setIngredientAvailability(193, true); // Ice
         inv.setIngredientAvailability(159, true); // Gin
-        inv.setIngredientAvailability(315, true); // Spiced Rum
+        inv.setIngredientAvailability(343, true); // Whiskey
         inv.setIngredientAvailability(111, true); // Cola
         inv.setIngredientAvailability(333, true); // Tonic
         inv.setIngredientAvailability(214, true); // Lemon
@@ -70,13 +115,13 @@ export function OnboardingOverlay() {
     },
     {
       id: 3,
-      message: 'Here’s the full ingredient list. We already marked a few ingredients as available.',
+      message: 'Here’s the full ingredients list.\nWe already marked some as available.',
       anchorName: 'ingredients-tab-all',
       buttonLabel: 'Next',
     },
     {
       id: 7,
-      message: 'Here are the ingredients you have. You’ll also see how many cocktails each one can be used in.',
+      message: '**My ingredients** shows the ingredients you have.\nYou’ll also see how many cocktails each one can be used in.',
       anchorName: 'ingredients-tab-my',
       buttonLabel: 'Next',
       onEnter: (_, requestTab) => {
@@ -85,13 +130,13 @@ export function OnboardingOverlay() {
     },
     {
       id: 9,
-      message: 'Now let’s check the cocktails. Open the "Cocktails" tab.',
+      message: 'Now let’s check the cocktails. Open the *Cocktails* tab.',
       anchorName: 'tab-cocktails',
       autoNext: (_, path) => path.startsWith('/cocktails'),
     },
     {
       id: 11,
-      message: 'Cocktails you can make right now appear at the top of My cocktails.',
+      message: 'Cocktails you can make right now appear at the top of *My cocktails*.',
       buttonLabel: 'Next',
       onEnter: (_, requestTab) => {
         requestTab('cocktails', 'my');
@@ -104,24 +149,24 @@ export function OnboardingOverlay() {
     },
     {
       id: 13,
-      message: 'Finally, meet the "Shaker" — it helps you find cocktails based on selected ingredients.',
+      message: 'Finally, meet the **Shaker**.\nIt helps you find cocktails based on selected ingredients.',
       anchorName: 'tab-shaker',
       autoNext: (_, path) => path.startsWith('/shaker'),
     },
     {
       id: 14,
-      message: 'Shaker logic: ingredients within one category are interchangeable (OR), from different categories — mandatory (AND). Example: (Gin OR Whiskey) AND (Cola OR Tonic) AND (Lemon OR Lime).',
+      message: '**Shaker logic**\nIngredients within one category are interchangeable (*OR*), from different categories — mandatory (*AND*).\n\n**Example**\n(Gin *OR* Whiskey) *AND* (Cola *OR* Tonic) *AND* (Lemon *OR* Lime).',
       buttonLabel: 'Next',
     },
     {
       id: 15,
-      message: 'This toggle filters ingredients by your availability.',
+      message: 'This toggle filters ingredients by availability.',
       anchorName: 'shaker-availability-toggle',
       buttonLabel: 'Next',
     },
     {
       id: 16,
-      message: 'You\'re ready! Enjoy your cocktails!',
+      message: 'Tap the ingredients you want to use in you next cocktail and tap "Show" to see the available recipes.\n\nEnjoy your cocktails!',
       buttonLabel: 'Finish',
     },
   ], []);
@@ -225,7 +270,9 @@ export function OnboardingOverlay() {
       </Svg>
 
       <View style={[styles.tooltip, { top: tooltipTop, backgroundColor: Colors.surface, borderColor: Colors.outline }]}>
-        <Text style={[styles.message, { color: Colors.onSurface }]}>{currentStep.message}</Text>
+        <Text style={[styles.message, { color: Colors.onSurface }]}>
+          {renderFormattedMessage(currentStep.message)}
+        </Text>
         {currentStep.buttonLabel && (
           <>
             <Pressable
@@ -264,6 +311,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 16,
     lineHeight: 22,
+  },
+  boldText: {
+    fontWeight: '700',
+  },
+  italicText: {
+    fontStyle: 'italic',
   },
   button: {
     paddingHorizontal: 24,
