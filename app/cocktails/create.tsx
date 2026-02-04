@@ -49,8 +49,9 @@ import { useAppColors } from "@/constants/theme";
 import {
   buildReturnToParams,
   parseReturnToParams,
-  skipDuplicateBack,
+  performNaturalBack,
 } from "@/libs/navigation";
+import { useNaturalBackHandler } from "@/libs/use-natural-back-handler";
 import { shouldStorePhoto, storePhoto } from "@/libs/photo-storage";
 import { normalizeSearchText } from "@/libs/search-normalization";
 import {
@@ -341,6 +342,9 @@ export default function CreateCocktailScreen() {
   const isNavigatingAfterSaveRef = useRef(false);
   const scrollRef = useRef<ScrollView | null>(null);
   const isHandlingBackRef = useRef(false);
+  const { handleBack } = useNaturalBackHandler({
+    disabled: hasUnsavedChanges || isSaving || isNavigatingAfterSaveRef.current,
+  });
 
   const ingredientById = useMemo(() => {
     const map = new Map<number, Ingredient>();
@@ -1273,33 +1277,20 @@ export default function CreateCocktailScreen() {
         confirmLeave(() => {
           isHandlingBackRef.current = true;
           if (event.data.action.type === "GO_BACK") {
-            skipDuplicateBack(navigation);
+            performNaturalBack(navigation, cocktails, inventoryIngredients);
           } else {
             navigation.dispatch(event.data.action);
           }
           setTimeout(() => {
             isHandlingBackRef.current = false;
-          }, 0);
+          }, 300);
         });
         return;
-      }
-
-      if (event.data.action.type === "GO_BACK") {
-        event.preventDefault();
-        isHandlingBackRef.current = true;
-        skipDuplicateBack(navigation);
-        setTimeout(() => {
-          isHandlingBackRef.current = false;
-        }, 0);
       }
     });
 
     return unsubscribe;
-  }, [confirmLeave, hasUnsavedChanges, navigation]);
-
-  const handleGoBack = useCallback(() => {
-    skipDuplicateBack(navigation);
-  }, [navigation]);
+  }, [cocktails, confirmLeave, hasUnsavedChanges, inventoryIngredients, navigation]);
 
   const imageSource = useMemo(() => {
     if (!imageUri) {
@@ -1376,7 +1367,7 @@ export default function CreateCocktailScreen() {
           },
           headerLeft: () => (
             <HeaderIconButton
-              onPress={handleGoBack}
+              onPress={handleBack}
               accessibilityLabel="Go back"
             >
               <MaterialCommunityIcons

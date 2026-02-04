@@ -26,6 +26,7 @@ import { useAppColors } from '@/constants/theme';
 import { isCocktailReady } from '@/libs/cocktail-availability';
 import { createIngredientLookup } from '@/libs/ingredient-availability';
 import { navigateToDetailsWithReturnTo } from '@/libs/navigation';
+import { useNaturalBackHandler } from '@/libs/use-natural-back-handler';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Cocktail } from '@/providers/inventory-provider';
 
@@ -73,6 +74,7 @@ export default function ShakerResultsScreen() {
     ignoreGarnish,
     allowAllSubstitutes,
   } = useInventory();
+  const { handleBack } = useNaturalBackHandler();
   const Colors = useAppColors();
   const params = useLocalSearchParams();
   const [query, setQuery] = useState('');
@@ -564,7 +566,31 @@ export default function ShakerResultsScreen() {
     >
       <Stack.Screen
         options={{
-          headerShown: false,
+          headerShown: true,
+          headerTitle: 'Results',
+          headerTitleAlign: 'center',
+          headerStyle: { backgroundColor: Colors.surface },
+          headerShadowVisible: false,
+          headerTitleStyle: {
+            color: Colors.onSurface,
+            fontSize: 16,
+            fontWeight: '600',
+          },
+          headerLeft: () => (
+            <Pressable
+              onPress={handleBack}
+              accessibilityRole="button"
+              accessibilityLabel="Go back"
+              style={styles.headerButton}
+              hitSlop={8}
+            >
+              <MaterialCommunityIcons
+                name="arrow-left"
+                size={22}
+                color={Colors.onSurface}
+              />
+            </Pressable>
+          ),
         }}
       />
       <View style={styles.container}>
@@ -578,6 +604,7 @@ export default function ShakerResultsScreen() {
             filterActive={isFilterActive}
             filterExpanded={isFilterMenuVisible}
             onFilterLayout={handleFilterLayout}
+            hideMenu
           />
         </View>
         {isFilterMenuVisible ? (
@@ -702,6 +729,13 @@ export default function ShakerResultsScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
+  },
+  headerButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   container: {
     flex: 1,

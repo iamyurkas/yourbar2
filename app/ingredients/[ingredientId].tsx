@@ -1,11 +1,9 @@
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
 import { Stack, router, useLocalSearchParams } from "expo-router";
 import React, {
   useCallback,
   useEffect,
   useMemo,
-  useRef,
   useState,
   useTransition,
 } from "react";
@@ -37,9 +35,8 @@ import {
   buildReturnToParams,
   navigateToDetailsWithReturnTo,
   parseReturnToParams,
-  returnToSourceOrBack,
-  skipDuplicateBack,
 } from "@/libs/navigation";
+import { useNaturalBackHandler } from "@/libs/use-natural-back-handler";
 import { normalizeSearchText } from "@/libs/search-normalization";
 import { useInventory, type Ingredient } from "@/providers/inventory-provider";
 
@@ -75,7 +72,6 @@ export default function IngredientDetailsScreen() {
     returnToPath?: string;
     returnToParams?: string;
   }>();
-  const navigation = useNavigation();
   const Colors = useAppColors();
   const { ingredientId } = params;
   const {
@@ -130,7 +126,7 @@ export default function IngredientDetailsScreen() {
   );
   const [, startAvailabilityTransition] = useTransition();
   const [, startShoppingTransition] = useTransition();
-  const isHandlingBackRef = useRef(false);
+  const { handleBack } = useNaturalBackHandler();
 
   const isAvailable = useMemo(() => {
     if (numericIngredientId == null) {
@@ -505,37 +501,6 @@ export default function IngredientDetailsScreen() {
     );
   }, [cocktailEntries.length]);
 
-  const handleReturn = useCallback(() => {
-    if (returnToPath === "/ingredients") {
-      skipDuplicateBack(navigation);
-      return;
-    }
-
-    returnToSourceOrBack(navigation, { returnToPath, returnToParams });
-  }, [navigation, returnToParams, returnToPath]);
-
-  useEffect(() => {
-    const unsubscribe = navigation.addListener("beforeRemove", (event) => {
-      if (isHandlingBackRef.current) {
-        return;
-      }
-
-      if (event.data.action.type !== "GO_BACK") {
-        return;
-      }
-
-      event.preventDefault();
-
-      isHandlingBackRef.current = true;
-      handleReturn();
-
-      requestAnimationFrame(() => {
-        isHandlingBackRef.current = false;
-      });
-    });
-
-    return unsubscribe;
-  }, [handleReturn, navigation]);
 
   return (
     <SafeAreaView
@@ -555,7 +520,7 @@ export default function IngredientDetailsScreen() {
           headerShadowVisible: false,
           headerLeft: () => (
             <Pressable
-              onPress={handleReturn}
+              onPress={handleBack}
               accessibilityRole="button"
               accessibilityLabel="Go back"
               style={styles.headerButton}

@@ -27,7 +27,8 @@ import { TagPill } from '@/components/TagPill';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { useAppColors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
-import { buildReturnToParams, skipDuplicateBack } from '@/libs/navigation';
+import { buildReturnToParams, performNaturalBack } from '@/libs/navigation';
+import { useNaturalBackHandler } from '@/libs/use-natural-back-handler';
 import { shouldStorePhoto, storePhoto } from '@/libs/photo-storage';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
@@ -126,6 +127,7 @@ export default function IngredientFormScreen() {
   const navigation = useNavigation();
   const Colors = useAppColors();
   const {
+    cocktails,
     ingredients,
     shoppingIngredientIds,
     availableIngredientIds,
@@ -164,6 +166,9 @@ export default function IngredientFormScreen() {
   const didInitializeRef = useRef(false);
   const scrollRef = useRef<ScrollView | null>(null);
   const isHandlingBackRef = useRef(false);
+  const { handleBack } = useNaturalBackHandler({
+    disabled: hasUnsavedChanges || isSaving || isNavigatingAfterSaveRef.current,
+  });
 
   useEffect(() => {
     if (isEditMode) {
@@ -569,33 +574,20 @@ export default function IngredientFormScreen() {
         confirmLeave(() => {
           isHandlingBackRef.current = true;
           if (event.data.action.type === 'GO_BACK') {
-            skipDuplicateBack(navigation);
+            performNaturalBack(navigation, cocktails, ingredients);
           } else {
             navigation.dispatch(event.data.action);
           }
           setTimeout(() => {
             isHandlingBackRef.current = false;
-          }, 0);
+          }, 300);
         });
         return;
-      }
-
-      if (event.data.action.type === 'GO_BACK') {
-        event.preventDefault();
-        isHandlingBackRef.current = true;
-        skipDuplicateBack(navigation);
-        setTimeout(() => {
-          isHandlingBackRef.current = false;
-        }, 0);
       }
     });
 
     return unsubscribe;
-  }, [confirmLeave, hasUnsavedChanges, navigation]);
-
-  const handleGoBack = useCallback(() => {
-    skipDuplicateBack(navigation);
-  }, [navigation]);
+  }, [cocktails, confirmLeave, hasUnsavedChanges, ingredients, navigation]);
 
   const handleDeletePress = useCallback(() => {
     if (!isEditMode) {
@@ -863,7 +855,7 @@ export default function IngredientFormScreen() {
             headerTitleStyle: { color: Colors.onSurface, fontSize: 16, fontWeight: '600' },
             headerLeft: () => (
               <Pressable
-                onPress={handleGoBack}
+                onPress={handleBack}
                 accessibilityRole="button"
                 accessibilityLabel="Go back"
                 style={styles.headerButton}

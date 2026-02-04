@@ -22,7 +22,7 @@ const areParamsEqual = (left?: RouteParams, right?: RouteParams): boolean => {
   return leftKeys.every((key) => rightKeys.includes(key) && left[key] === right[key]);
 };
 
-const areRoutesEqual = (
+export const areRoutesEqual = (
   left?: { name: string; params?: RouteParams },
   right?: { name: string; params?: RouteParams },
 ): boolean => {
@@ -37,24 +37,74 @@ const areRoutesEqual = (
   return areParamsEqual(left.params, right.params);
 };
 
-export const skipDuplicateBack = (navigation: NavigationProp<ParamListBase>) => {
+export const isRouteValid = (
+  route: { name: string; params?: RouteParams },
+  cocktails: Array<{ id?: number | string | null; name?: string | null }>,
+  ingredients: Array<{ id?: number | string | null; name?: string | null }>,
+): boolean => {
+  const { name, params } = route;
+
+  if (name === 'cocktails/[cocktailId]') {
+    const id = params?.cocktailId;
+    if (id == null) return true;
+    return cocktails.some((c) => String(c.id ?? c.name) === String(id));
+  }
+
+  if (name === 'ingredients/[ingredientId]') {
+    const id = params?.ingredientId;
+    if (id == null) return true;
+    return ingredients.some((i) => String(i.id ?? i.name) === String(id));
+  }
+
+  return true;
+};
+
+export const findValidBackTarget = (
+  state: { index: number; routes: Array<{ name: string; params?: RouteParams }> },
+  cocktails: Array<{ id?: number | string | null; name?: string | null }>,
+  ingredients: Array<{ id?: number | string | null; name?: string | null }>,
+): number => {
+  const currentRoute = state.routes[state.index];
+  if (!currentRoute) return -1;
+
+  for (let i = state.index - 1; i >= 0; i--) {
+    const prevRoute = state.routes[i];
+    if (areRoutesEqual(currentRoute, prevRoute)) {
+      continue;
+    }
+
+    if (!isRouteValid(prevRoute, cocktails, ingredients)) {
+      continue;
+    }
+
+    return i;
+  }
+
+  return -1;
+};
+
+export const performNaturalBack = (
+  navigation: NavigationProp<ParamListBase>,
+  cocktails: Array<{ id?: number | string | null; name?: string | null }>,
+  ingredients: Array<{ id?: number | string | null; name?: string | null }>,
+) => {
   const state = navigation.getState();
-  const currentIndex = state.index ?? 0;
+  const targetIndex = findValidBackTarget(state as any, cocktails, ingredients);
 
-  if (currentIndex <= 0) {
+  if (targetIndex >= 0) {
+    const popCount = state.index - targetIndex;
+    if (popCount > 0) {
+      navigation.dispatch(StackActions.pop(popCount));
+      return;
+    }
+  }
+
+  if (navigation.canGoBack()) {
     navigation.goBack();
-    return;
   }
+};
 
-  const current = state.routes[currentIndex];
-  const previous = state.routes[currentIndex - 1];
-  const shouldSkip = areRoutesEqual(current, previous);
-
-  if (shouldSkip && currentIndex >= 2) {
-    navigation.dispatch(StackActions.pop(2));
-    return;
-  }
-
+export const skipDuplicateBack = (navigation: NavigationProp<ParamListBase>) => {
   navigation.goBack();
 };
 

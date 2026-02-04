@@ -24,6 +24,7 @@ type SearchTopBarProps = {
   filterActive?: boolean;
   filterExpanded?: boolean;
   onFilterLayout?: (layout: LayoutRectangle) => void;
+  hideMenu?: boolean;
 };
 
 export type SegmentTabOption = {
@@ -48,6 +49,7 @@ export function SearchTopBar({
   filterActive = false,
   filterExpanded = false,
   onFilterLayout,
+  hideMenu = false,
 }: SearchTopBarProps) {
   const Colors = useAppColors();
 
@@ -65,13 +67,15 @@ export function SearchTopBar({
           borderBottomWidth: StyleSheet.hairlineWidth,
         },
       ]}>
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel="Open navigation"
-        onPress={onMenuPress}
-        style={styles.iconButton}>
-        <MaterialCommunityIcons name="menu" size={24} color={Colors.onSurface} />
-      </Pressable>
+      {!hideMenu ? (
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Open navigation"
+          onPress={onMenuPress}
+          style={styles.iconButton}>
+          <MaterialCommunityIcons name="menu" size={24} color={Colors.onSurface} />
+        </Pressable>
+      ) : null}
       <View style={[styles.searchContainer, { backgroundColor: Colors.surface, borderColor: Colors.background }]}>
         <MaterialCommunityIcons name="magnify" size={20} color={Colors.onSurface} style={styles.searchIcon} />
         <TextInput

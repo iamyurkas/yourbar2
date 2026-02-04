@@ -1,5 +1,4 @@
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
 import { Image } from "expo-image";
 import { activateKeepAwakeAsync, deactivateKeepAwake } from "expo-keep-awake";
 import { router, Stack, useLocalSearchParams } from "expo-router";
@@ -7,7 +6,6 @@ import {
   useCallback,
   useEffect,
   useMemo,
-  useRef,
   useState,
   useTransition,
 } from "react";
@@ -36,9 +34,8 @@ import {
   buildReturnToParams,
   navigateToDetailsWithReturnTo,
   parseReturnToParams,
-  returnToSourceOrBack,
-  skipDuplicateBack,
 } from "@/libs/navigation";
+import { useNaturalBackHandler } from "@/libs/use-natural-back-handler";
 import { normalizeSearchText } from "@/libs/search-normalization";
 import { useInventory, type Cocktail } from "@/providers/inventory-provider";
 import { tagColors } from "@/theme/theme";
@@ -331,7 +328,6 @@ export default function CocktailDetailsScreen() {
     returnToPath?: string;
     returnToParams?: string;
   }>();
-  const navigation = useNavigation();
   const Colors = useAppColors();
   const { cocktailId } = params;
   const {
@@ -365,43 +361,11 @@ export default function CocktailDetailsScreen() {
   }, [params.returnToParams]);
 
   const [showImperialUnits, setShowImperialUnits] = useState(useImperialUnits);
-  const isHandlingBackRef = useRef(false);
+  const { handleBack } = useNaturalBackHandler();
 
   useEffect(() => {
     setShowImperialUnits(useImperialUnits);
   }, [useImperialUnits]);
-
-  const handleReturn = useCallback(() => {
-    if (returnToPath === "/cocktails") {
-      skipDuplicateBack(navigation);
-      return;
-    }
-
-    returnToSourceOrBack(navigation, { returnToPath, returnToParams });
-  }, [navigation, returnToParams, returnToPath]);
-
-  useEffect(() => {
-    const unsubscribe = navigation.addListener("beforeRemove", (event) => {
-      if (isHandlingBackRef.current) {
-        return;
-      }
-
-      if (event.data.action.type !== "GO_BACK") {
-        return;
-      }
-
-      event.preventDefault();
-
-      isHandlingBackRef.current = true;
-      handleReturn();
-
-      requestAnimationFrame(() => {
-        isHandlingBackRef.current = false;
-      });
-    });
-
-    return unsubscribe;
-  }, [handleReturn, navigation]);
 
   useEffect(() => {
     const keepAwakeTag = "cocktail-details";
@@ -667,7 +631,7 @@ export default function CocktailDetailsScreen() {
           headerShadowVisible: false,
           headerLeft: () => (
             <HeaderIconButton
-              onPress={handleReturn}
+              onPress={handleBack}
               accessibilityLabel="Go back"
             >
               <MaterialCommunityIcons
