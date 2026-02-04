@@ -92,7 +92,7 @@ export function OnboardingOverlay() {
     },
     {
       id: 2,
-      message: 'Head to the **Ingredients** screen to begin.',
+      message: 'Tap **Ingredients** to start adding what you have.',
       anchorName: 'tab-ingredients',
       autoNext: (_, path) => path.startsWith('/ingredients'),
       onEnter: (inv) => {
@@ -115,13 +115,13 @@ export function OnboardingOverlay() {
     },
     {
       id: 3,
-      message: 'This is the full ingredients list.\nWe’ve already marked a few common ones for you.',
+      message: 'Here’s the full ingredients list.\nWe’ve already marked a few common basics for you.',
       anchorName: 'ingredients-tab-all',
       buttonLabel: 'Next',
     },
     {
       id: 4,
-      message: '**My ingredients** shows what you have.\nYou’ll also see in how many cocktails each ingredient is used.',
+      message: '**My ingredients** shows what you have.\nYou’ll also see in how many available cocktails use each ingredient.',
       anchorName: 'ingredients-tab-my',
       buttonLabel: 'Next',
       onEnter: (_, requestTab) => {
@@ -136,15 +136,16 @@ export function OnboardingOverlay() {
     },
     {
       id: 6,
-      message: 'Drinks you can make right now are on the top of **My cocktails** .\n\nCocktails missing just one ingredient are below.',
+      message: 'At the top of **My cocktails** you’ll see cocktails you can make now.\n\nBelow are cocktails missing just one ingredient.',
       buttonLabel: 'Next',
+      anchorName: 'cocktails-tab-my',
       onEnter: (_, requestTab) => {
         requestTab('cocktails', 'my');
       },
     },
     {
       id: 7,
-      message: 'Finally, meet the **Shaker**.\nIt helps you find cocktails based on selected ingredients.',
+      message: 'Meet the **Shaker**.\nIt helps you find cocktails based on selected ingredients.',
       anchorName: 'tab-shaker',
       autoNext: (_, path) => path.startsWith('/shaker'),
     },
@@ -155,13 +156,13 @@ export function OnboardingOverlay() {
     },
     {
       id: 9,
-      message: 'This toggle filters ingredients by availability.',
+      message: 'Use this toggle to show only ingredients you have.',
       anchorName: 'shaker-availability-toggle',
       buttonLabel: 'Next',
     },
     {
       id: 10,
-      message: 'Select the ingredients you want to use, then tap **Show** to see matching cocktails.\n\nCheers! 🍸',
+      message: 'Tap a few ingredients, then hit **Show** to see matching cocktails.\n\nCheers!',
       buttonLabel: 'Finish',
     },
   ], []);
@@ -194,10 +195,12 @@ export function OnboardingOverlay() {
   if (onboardingCompleted || !onboardingStep || onboardingStep <= 0 || !currentStep) return null;
 
   const anchor = currentStep.anchorName ? anchors[currentStep.anchorName] : null;
-  const isShakerTabHighlight = currentStep.anchorName === 'tab-shaker';
-  const highlightPaddingX = isShakerTabHighlight ? 14 : 4;
+  const isTabPrompt = ['tab-ingredients', 'tab-cocktails', 'tab-shaker'].includes(
+    currentStep.anchorName ?? ''
+  );
+  const highlightPaddingX = 14;
   const highlightPaddingY = 4;
-  const highlightRadius = isShakerTabHighlight ? 0 : 8;
+  const highlightRadius = 8;
   const adjustedAnchor = anchor ? {
     ...anchor,
     x: anchor.x - overlayOffset.x,
@@ -222,9 +225,10 @@ export function OnboardingOverlay() {
     }
   };
 
-  const tooltipOffset = currentStep.id === 7 ? -20 : 0;
   const tooltipTop = adjustedAnchor
-    ? (adjustedAnchor.y + adjustedAnchor.height + 20 > screenHeight - 150 ? adjustedAnchor.y - 120 : adjustedAnchor.y + adjustedAnchor.height + 10)
+    ? (adjustedAnchor.y + adjustedAnchor.height + 20 > screenHeight - 150
+      ? adjustedAnchor.y - 120
+      : adjustedAnchor.y + adjustedAnchor.height + 10) - (isTabPrompt ? 20 : 0)
     : screenHeight / 2 - 100;
 
   return (
@@ -265,7 +269,7 @@ export function OnboardingOverlay() {
         />
       </Svg>
 
-      <View style={[styles.tooltip, { top: tooltipTop + tooltipOffset, backgroundColor: Colors.surface, borderColor: Colors.outline }]}>
+      <View style={[styles.tooltip, { top: tooltipTop, backgroundColor: Colors.surface, borderColor: Colors.outline }]}>
         <Text style={[styles.message, { color: Colors.onSurface }]}>
           {renderFormattedMessage(currentStep.message)}
         </Text>
