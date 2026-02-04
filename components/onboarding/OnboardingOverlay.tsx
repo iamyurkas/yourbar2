@@ -222,6 +222,7 @@ export function OnboardingOverlay() {
     }
   };
 
+  const tooltipOffset = currentStep.id === 7 ? -20 : 0;
   const tooltipTop = adjustedAnchor
     ? (adjustedAnchor.y + adjustedAnchor.height + 20 > screenHeight - 150 ? adjustedAnchor.y - 120 : adjustedAnchor.y + adjustedAnchor.height + 10)
     : screenHeight / 2 - 100;
@@ -264,7 +265,7 @@ export function OnboardingOverlay() {
         />
       </Svg>
 
-      <View style={[styles.tooltip, { top: tooltipTop, backgroundColor: Colors.surface, borderColor: Colors.outline }]}>
+      <View style={[styles.tooltip, { top: tooltipTop + tooltipOffset, backgroundColor: Colors.surface, borderColor: Colors.outline }]}>
         <Text style={[styles.message, { color: Colors.onSurface }]}>
           {renderFormattedMessage(currentStep.message)}
         </Text>
