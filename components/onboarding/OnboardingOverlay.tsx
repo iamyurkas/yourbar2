@@ -87,7 +87,7 @@ export function OnboardingOverlay() {
   const steps = useMemo<StepDef[]>(() => [
     {
       id: 1,
-      message: '**Welcome!**\nLet\'s learn how to use the app.\nFirst, let\'s add some ingredients.',
+      message: '**Welcome!**\nLet’s set up your bar by adding a few ingredients.',
       buttonLabel: 'Start',
     },
     {
@@ -115,13 +115,13 @@ export function OnboardingOverlay() {
     },
     {
       id: 3,
-      message: 'Here’s the full ingredients list.\nWe already marked some as available.',
+      message: 'This is the full ingredients list.\nWe’ve already marked a few common ones for you.',
       anchorName: 'ingredients-tab-all',
       buttonLabel: 'Next',
     },
     {
       id: 4,
-      message: '**My ingredients** shows the ingredients you have.\nYou’ll also see how many cocktails each one can be used in.',
+      message: '**My ingredients** shows what you have.\nYou’ll also see how many cocktails each ingredient unlocks.',
       anchorName: 'ingredients-tab-my',
       buttonLabel: 'Next',
       onEnter: (_, requestTab) => {
@@ -136,16 +136,11 @@ export function OnboardingOverlay() {
     },
     {
       id: 6,
-      message: 'Cocktails you can make right now appear at the top of **My cocktails**.',
+      message: 'At the top of **My cocktails** are drinks you can make right now.\nBelow are cocktails missing just one ingredient.',
       buttonLabel: 'Next',
       onEnter: (_, requestTab) => {
         requestTab('cocktails', 'my');
       },
-    },
-    {
-      id: 7,
-      message: 'Below are cocktails missing just one ingredient.',
-      buttonLabel: 'Next',
     },
     {
       id: 8,
@@ -155,7 +150,7 @@ export function OnboardingOverlay() {
     },
     {
       id: 9,
-      message: '**Shaker logic**\nIngredients within one category are interchangeable (*OR*), from different categories — mandatory (*AND*).\n\n**Example**\n(Gin *OR* Whiskey) *AND* (Cola *OR* Tonic) *AND* (Lemon *OR* Lime).',
+      message: '**Shaker logic**\nIngredients in the same category can replace each other (OR).\nIngredients from different categories are required together (AND).\n\n**Example**\n(Gin OR Whiskey) AND (Cola OR Tonic) AND (Lemon OR Lime).',
       buttonLabel: 'Next',
     },
     {
@@ -166,7 +161,7 @@ export function OnboardingOverlay() {
     },
     {
       id: 11,
-      message: 'Tap the ingredients you want to use in you next cocktail and tap "Show" to see the available recipes.\n\nEnjoy your cocktails!',
+      message: 'Select the ingredients you want to use, then tap **Show** to see matching cocktails.\n\nCheers! 🍸',
       buttonLabel: 'Finish',
     },
   ], []);

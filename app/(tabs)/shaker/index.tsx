@@ -380,6 +380,34 @@ export default function ShakerScreen() {
       });
   }, [availableTagOptions, defaultTagColor, filteredIngredients]);
 
+  const onboardingSampleIds = useMemo(() => {
+    const picks: number[] = [];
+
+    ingredients.forEach((ingredient) => {
+      if (picks.length >= 3) {
+        return;
+      }
+      const ingredientId = Number(ingredient.id ?? -1);
+      if (ingredientId >= 0 && availableIngredientIds.has(ingredientId)) {
+        picks.push(ingredientId);
+      }
+    });
+
+    if (picks.length < 2) {
+      ingredients.forEach((ingredient) => {
+        if (picks.length >= 3) {
+          return;
+        }
+        const ingredientId = Number(ingredient.id ?? -1);
+        if (ingredientId >= 0 && !picks.includes(ingredientId)) {
+          picks.push(ingredientId);
+        }
+      });
+    }
+
+    return picks;
+  }, [availableIngredientIds, ingredients]);
+
   useEffect(() => {
     setExpandedTagKeys((previous) => {
       if (previous.size === 0) {
@@ -420,6 +448,18 @@ export default function ShakerScreen() {
       return new Set(nextKeys);
     });
   }, [ingredientGroups, onboardingStep]);
+
+  useEffect(() => {
+    if (onboardingStep !== 11) {
+      return;
+    }
+
+    if (selectedIngredientIds.size > 0 || onboardingSampleIds.length === 0) {
+      return;
+    }
+
+    setSelectedIngredientIds(new Set(onboardingSampleIds));
+  }, [onboardingSampleIds, onboardingStep, selectedIngredientIds.size]);
 
   const handleToggleGroup = useCallback((key: string) => {
     setExpandedTagKeys((previous) => {
