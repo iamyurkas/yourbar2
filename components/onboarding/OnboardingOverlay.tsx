@@ -40,93 +40,93 @@ export function OnboardingOverlay() {
   const steps = useMemo<StepDef[]>(() => [
     {
       id: 1,
-      message: 'Ласкаво просимо! Давайте познайомимося з додатком. Спочатку додамо інгредієнти.',
-      buttonLabel: 'Почати',
+      message: 'Welcome! Let\'s learn how to use the app. First, let\'s add some ingredients.',
+      buttonLabel: 'Start',
     },
     {
       id: 2,
-      message: 'Перейдіть на вкладку Інгредієнти.',
+      message: 'Go to the Ingredients tab.',
       anchorName: 'tab-ingredients',
       autoNext: (_, path) => path.startsWith('/ingredients'),
     },
     {
       id: 3,
-      message: 'Виберіть вкладку "Усі", щоб побачити доступні інгредієнти.',
+      message: 'Select the "All" tab to see all available ingredients.',
       anchorName: 'ingredients-tab-all',
-      buttonLabel: 'Далі',
+      buttonLabel: 'Next',
     },
     {
       id: 4,
-      message: 'Натисніть на галочку, щоб додату Cola до вашого бару.',
+      message: 'Tap the checkmark to add Cola to your inventory.',
       anchorName: 'ingredient-111',
       autoNext: (inv) => inv.availableIngredientIds.has(111),
     },
     {
       id: 5,
-      message: 'Тепер додайте Ice.',
+      message: 'Now add some Ice.',
       anchorName: 'ingredient-193',
       autoNext: (inv) => inv.availableIngredientIds.has(193),
     },
     {
       id: 6,
-      message: 'І Spiced Rum.',
+      message: 'And some Spiced Rum.',
       anchorName: 'ingredient-315',
       autoNext: (inv) => inv.availableIngredientIds.has(315),
     },
     {
       id: 7,
-      message: 'Чудово! Тепер перейдіть на вкладку "Мої", щоб побачити ваш інвентар.',
+      message: 'Great! Now go to the "My" tab to see your inventory.',
       anchorName: 'ingredients-tab-my',
-      buttonLabel: 'Далі',
+      buttonLabel: 'Next',
     },
     {
       id: 8,
-      message: 'Тут відображаються ваші інгредієнти. Також видно, скільки коктейлів можна приготувати з кожним із них.',
-      buttonLabel: 'Далі',
+      message: 'Here you can see the ingredients you have. You can also see how many cocktails can be made with each.',
+      buttonLabel: 'Next',
     },
     {
       id: 9,
-      message: 'Тепер поглянемо на коктейлі. Перейдіть на вкладку Коктейлі.',
+      message: 'Now let\'s check the cocktails. Go to the Cocktails tab.',
       anchorName: 'tab-cocktails',
       autoNext: (_, path) => path.startsWith('/cocktails'),
     },
     {
       id: 10,
-      message: 'Перейдіть на вкладку "Мої".',
+      message: 'Go to the "My" tab.',
       anchorName: 'cocktails-tab-my',
-      buttonLabel: 'Далі',
+      buttonLabel: 'Next',
     },
     {
       id: 11,
-      message: 'Коктейлі, які ви можете приготувати прямо зараз, відображаються вгорі.',
-      buttonLabel: 'Далі',
+      message: 'Cocktails you can make right now are shown at the top.',
+      buttonLabel: 'Next',
     },
     {
       id: 12,
-      message: 'Нижче ви знайдете коктейлі, для яких не вистачає лише одного інгредієнта.',
-      buttonLabel: 'Далі',
+      message: 'Below you will find cocktails where you are missing just one ingredient.',
+      buttonLabel: 'Next',
     },
     {
       id: 13,
-      message: 'Нарешті, поглянемо на Шейкер. Він допомагає підібрати рецепти за вибраними інгредієнтами.',
+      message: 'Finally, let\'s look at the Shaker. It helps you find recipes based on selected ingredients.',
       anchorName: 'tab-shaker',
       autoNext: (_, path) => path.startsWith('/shaker'),
     },
     {
       id: 14,
-      message: 'Принцип роботи Шейкера: інгредієнти в межах однієї категорії взаємозамінні (OR), з різних категорій — обов’язкові (AND). Приклад: (Gin OR Whiskey) AND (Cola OR Tonic) AND (Lemon OR Lime).',
-      buttonLabel: 'Далі',
+      message: 'Shaker logic: ingredients within one category are interchangeable (OR), from different categories — mandatory (AND). Example: (Gin OR Whiskey) AND (Cola OR Tonic) AND (Lemon OR Lime).',
+      buttonLabel: 'Next',
     },
     {
       id: 15,
-      message: 'Цей перемикач фільтрує інгредієнти за вашою наявністю.',
+      message: 'This toggle filters ingredients by your availability.',
       anchorName: 'shaker-availability-toggle',
-      buttonLabel: 'Далі',
+      buttonLabel: 'Next',
     },
     {
       id: 16,
-      message: 'Ви готові! Насолоджуйтесь вашими коктейлями!',
-      buttonLabel: 'Завершити',
+      message: 'You\'re ready! Enjoy your cocktails!',
+      buttonLabel: 'Finish',
     },
   ], []);
 
@@ -168,7 +168,12 @@ export function OnboardingOverlay() {
       pointerEvents="box-none"
       collapsable={false}
     >
-      <Svg height="100%" width="100%" style={StyleSheet.absoluteFill}>
+      <Svg
+        height="100%"
+        width="100%"
+        style={StyleSheet.absoluteFill}
+        pointerEvents="none"
+      >
         <Defs>
           <Mask id="mask">
             <Rect height="100%" width="100%" fill="white" />
