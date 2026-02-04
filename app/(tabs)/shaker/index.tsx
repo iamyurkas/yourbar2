@@ -178,6 +178,7 @@ export default function ShakerScreen() {
     shoppingIngredientIds,
     ignoreGarnish,
     allowAllSubstitutes,
+    onboardingStep,
   } = useInventory();
   const [query, setQuery] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -404,6 +405,15 @@ export default function ShakerScreen() {
       return next;
     });
   }, [ingredientGroups]);
+
+  useEffect(() => {
+    if (onboardingStep !== 15) {
+      return;
+    }
+
+    setInStockOnly(true);
+    setExpandedTagKeys(new Set(ingredientGroups.map((group) => group.key)));
+  }, [ingredientGroups, onboardingStep]);
 
   const handleToggleGroup = useCallback((key: string) => {
     setExpandedTagKeys((previous) => {
