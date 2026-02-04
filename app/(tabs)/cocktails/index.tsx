@@ -19,6 +19,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { CocktailListRow } from '@/components/CocktailListRow';
 import { CollectionHeader } from '@/components/CollectionHeader';
+import { OnboardingAnchor } from '@/components/OnboardingAnchor';
 import { FabAdd } from '@/components/FabAdd';
 import { ListRow, Thumb } from '@/components/RowParts';
 import { SideMenuDrawer } from '@/components/SideMenuDrawer';
@@ -34,6 +35,7 @@ import { navigateToDetailsWithReturnTo } from '@/libs/navigation';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { buildTagOptions, type TagOption } from '@/libs/tag-options';
 import { useCocktailTabLogic, type MyTabListItem } from '@/libs/use-cocktail-tab-logic';
+import { useOnboarding } from '@/providers/onboarding-provider';
 import { useInventory, type Cocktail } from '@/providers/inventory-provider';
 import { tagColors } from '@/theme/theme';
 
@@ -51,6 +53,7 @@ const TAB_OPTIONS: SegmentTabOption[] = [
 ];
 
 export default function CocktailsScreen() {
+  const { onTabChangeRequest } = useOnboarding();
   const {
     cocktails,
     availableIngredientIds,
@@ -137,6 +140,14 @@ export default function CocktailsScreen() {
   useEffect(() => {
     setLastCocktailTab(activeTab);
   }, [activeTab]);
+
+  useEffect(() => {
+    return onTabChangeRequest((tab) => {
+      if (tab === 'all' || tab === 'my' || tab === 'favorites') {
+        setActiveTab(tab as CocktailTabKey);
+      }
+    });
+  }, [onTabChangeRequest]);
 
   const handleHeaderLayout = useCallback((event: LayoutChangeEvent) => {
     const nextLayout = event.nativeEvent.layout;
@@ -471,11 +482,13 @@ export default function CocktailsScreen() {
     ({ item }: { item: MyTabListItem }) => {
       if (item.type === 'separator') {
         return (
-          <View style={styles.moreIngredientsWrapper}>
-            <Text style={[styles.moreIngredientsLabel, { color: Colors.onSurfaceVariant }]}>
-              More ingredients needed
-            </Text>
-          </View>
+          <OnboardingAnchor anchorId="cocktails_missing_separator">
+            <View style={styles.moreIngredientsWrapper}>
+              <Text style={[styles.moreIngredientsLabel, { color: Colors.onSurfaceVariant }]}>
+                More ingredients needed
+              </Text>
+            </View>
+          </OnboardingAnchor>
         );
       }
 
@@ -627,6 +640,7 @@ export default function CocktailsScreen() {
             filterActive={isFilterActive}
             filterExpanded={isFilterMenuVisible}
             onFilterLayout={handleFilterLayout}
+            anchorIdPrefix="cocktails_tab"
           />
         </View>
         {isFilterMenuVisible ? (
@@ -721,6 +735,7 @@ export default function CocktailsScreen() {
             </View>
           </>
         ) : null}
+        <OnboardingAnchor anchorId="cocktails_list" style={styles.listAnchor}>
         <FlatList
           ref={listRef}
           data={listData}
@@ -740,6 +755,7 @@ export default function CocktailsScreen() {
             </Text>
           }
         />
+        </OnboardingAnchor>
       </View>
       <FabAdd
         label="Add cocktail"
@@ -805,6 +821,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 80,
     fontSize: 14,
+  },
+  listAnchor: {
+    flex: 1,
   },
   filterMenuBackdrop: {
     position: 'absolute',

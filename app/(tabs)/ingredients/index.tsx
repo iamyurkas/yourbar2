@@ -17,6 +17,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { CollectionHeader } from '@/components/CollectionHeader';
+import { OnboardingAnchor } from '@/components/OnboardingAnchor';
 import { FabAdd } from '@/components/FabAdd';
 import { ListRow, PresenceCheck, Thumb } from '@/components/RowParts';
 import { SideMenuDrawer } from '@/components/SideMenuDrawer';
@@ -33,6 +34,7 @@ import {
 import { navigateToDetailsWithReturnTo } from '@/libs/navigation';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { buildTagOptions, type TagOption } from '@/libs/tag-options';
+import { useOnboarding } from '@/providers/onboarding-provider';
 import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
 import { tagColors } from '@/theme/theme';
 
@@ -58,6 +60,7 @@ type IngredientListItemProps = {
   isOnShoppingList: boolean;
   showAvailabilityToggle?: boolean;
   onShoppingToggle?: (id: number) => void;
+  anchorId?: string;
 };
 
 const areIngredientPropsEqual = (
@@ -84,6 +87,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
   isOnShoppingList,
   showAvailabilityToggle = true,
   onShoppingToggle,
+  anchorId,
 }: IngredientListItemProps) {
   const Colors = useAppColors();
   const id = Number(ingredient.id ?? -1);
@@ -182,7 +186,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
     });
   }, [ingredient.id, ingredient.name]);
 
-  return (
+  const row = (
     <ListRow
       title={ingredient.name}
       subtitle={subtitle}
@@ -200,11 +204,18 @@ const IngredientListItem = memo(function IngredientListItemComponent({
       metaAlignment="center"
     />
   );
+
+  if (anchorId) {
+    return <OnboardingAnchor anchorId={anchorId}>{row}</OnboardingAnchor>;
+  }
+
+  return row;
 }, areIngredientPropsEqual);
 
 export default function IngredientsScreen() {
   const router = useRouter();
   const Colors = useAppColors();
+  const { onTabChangeRequest, nextStep, currentStep } = useOnboarding();
   const {
     cocktails,
     ingredients,
@@ -257,7 +268,21 @@ export default function IngredientsScreen() {
 
   useEffect(() => {
     setLastIngredientTab(activeTab);
-  }, [activeTab]);
+
+    if (currentStep?.id === 'ingredients_all_tab' && activeTab === 'all') {
+      nextStep();
+    } else if (currentStep?.id === 'ingredients_my_tab' && activeTab === 'my') {
+      nextStep();
+    }
+  }, [activeTab, currentStep, nextStep]);
+
+  useEffect(() => {
+    return onTabChangeRequest((tab) => {
+      if (tab === 'all' || tab === 'my' || tab === 'shopping') {
+        setActiveTab(tab as IngredientTabKey);
+      }
+    });
+  }, [onTabChangeRequest]);
 
   const availableTagOptions = useMemo<TagOption[]>(
     () =>
@@ -591,6 +616,14 @@ export default function IngredientsScreen() {
   const handleToggle = useCallback(
     (id: number) => {
       if (id >= 0) {
+        if (
+          (currentStep?.id === 'ingredients_add_cola' && id === 210) ||
+          (currentStep?.id === 'ingredients_add_ice' && id === 295) ||
+          (currentStep?.id === 'ingredients_add_rum' && id === 418)
+        ) {
+          nextStep();
+        }
+
         setOptimisticAvailability((previous) => {
           const next = new Map(previous);
           const current = next.has(id)
@@ -605,7 +638,7 @@ export default function IngredientsScreen() {
         });
       }
     },
-    [availableIngredientIds, startAvailabilityTransition, toggleIngredientAvailability],
+    [availableIngredientIds, currentStep?.id, nextStep, startAvailabilityTransition, toggleIngredientAvailability],
   );
 
   const handleShoppingToggle = useCallback(
@@ -622,6 +655,11 @@ export default function IngredientsScreen() {
   const renderItem = useCallback(
     ({ item }: { item: Ingredient }) => {
       const ingredientId = Number(item.id ?? -1);
+      let anchorId: string | undefined;
+      if (ingredientId === 210) anchorId = 'ingredient_210';
+      if (ingredientId === 295) anchorId = 'ingredient_295';
+      if (ingredientId === 418) anchorId = 'ingredient_418';
+
       const isOnShoppingList = ingredientId >= 0 && shoppingIngredientIds.has(ingredientId);
 
       const isMyTab = activeTab === 'my';
@@ -650,6 +688,7 @@ export default function IngredientsScreen() {
           isOnShoppingList={isOnShoppingList}
           showAvailabilityToggle={activeTab !== 'shopping'}
           onShoppingToggle={activeTab === 'shopping' ? handleShoppingToggle : undefined}
+          anchorId={anchorId}
         />
       );
     },
@@ -695,6 +734,7 @@ export default function IngredientsScreen() {
             filterActive={isFilterActive}
             filterExpanded={isFilterMenuVisible}
             onFilterLayout={handleFilterLayout}
+            anchorIdPrefix="ingredients_tab"
           />
         </View>
         {isFilterMenuVisible ? (
@@ -756,6 +796,7 @@ export default function IngredientsScreen() {
             </View>
           </>
         ) : null}
+        <OnboardingAnchor anchorId="ingredients_list" style={styles.listAnchor}>
         <FlatList
           ref={listRef}
           data={filteredIngredients}
@@ -773,6 +814,7 @@ export default function IngredientsScreen() {
             <Text style={[styles.emptyLabel, { color: Colors.onSurfaceVariant }]}>{emptyMessage}</Text>
           }
         />
+        </OnboardingAnchor>
       </View>
       <FabAdd label="Add ingredient" onPress={() => router.push('/ingredients/create')} />
       <SideMenuDrawer visible={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
@@ -832,6 +874,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 80,
     fontSize: 14,
+  },
+  listAnchor: {
+    flex: 1,
   },
   filterMenuBackdrop: {
     position: 'absolute',

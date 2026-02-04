@@ -1,6 +1,6 @@
 import { Tabs } from 'expo-router';
 import { useCallback, useState } from 'react';
-import { StyleSheet, View, useColorScheme } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import CocktailIcon from '@/assets/images/cocktails.svg';
@@ -11,18 +11,19 @@ import { TabBarButton } from '@/components/tab-bar/TabBarButton';
 import { TabBarIcon } from '@/components/tab-bar/TabBarIcon';
 import { useAppColors } from '@/constants/theme';
 import { getLastCocktailTab, getLastIngredientTab } from '@/libs/collection-tabs';
-import { useInventory } from '@/providers/inventory-provider';
 
 type TabPressHandler = (navigation: { navigate: (...args: never[]) => void }, route: { name: string }) => void;
 
-const TAB_SCREENS: Array<{
+const TAB_SCREENS: {
   name: 'cocktails' | 'shaker' | 'ingredients';
   title: string;
   icon: typeof CocktailIcon;
   onTabPress: TabPressHandler;
-}> = [
+  anchorId: string;
+}[] = [
     {
       name: 'cocktails',
+      anchorId: 'tab_cocktails',
       title: 'Cocktails',
       icon: CocktailIcon,
       onTabPress: (navigation, route) => {
@@ -34,6 +35,7 @@ const TAB_SCREENS: Array<{
       name: 'shaker',
       title: 'Shaker',
       icon: ShakerIcon,
+      anchorId: 'tab_shaker',
       onTabPress: (navigation, route) => {
         navigation.navigate(route.name as never, { screen: 'index' } as never);
       },
@@ -42,6 +44,7 @@ const TAB_SCREENS: Array<{
       name: 'ingredients',
       title: 'Ingredients',
       icon: LemonIcon,
+      anchorId: 'tab_ingredients',
       onTabPress: (navigation, route) => {
         getLastIngredientTab();
         navigation.navigate(route.name as never, { screen: 'index' } as never);
@@ -52,13 +55,8 @@ const TAB_SCREENS: Array<{
 export default function TabLayout() {
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(null);
   const insets = useSafeAreaInsets();
-  const systemColorScheme = useColorScheme();
-  const { appTheme } = useInventory();
   const Colors = useAppColors();
 
-  const isDarkMode = appTheme === 'system'
-    ? systemColorScheme === 'dark'
-    : appTheme === 'dark';
 
   const closeDialog = useCallback(() => {
     setDialogOptions(null);
@@ -93,13 +91,13 @@ export default function TabLayout() {
             </View>
           ),
         }}>
-        {TAB_SCREENS.map(({ name, title, icon, onTabPress }) => (
+        {TAB_SCREENS.map(({ name, title, icon, onTabPress, anchorId }) => (
           <Tabs.Screen
             key={name}
             name={name}
             options={{
               title,
-              tabBarButton: (props) => <TabBarButton {...props} onOpenDialog={showDialog} />,
+              tabBarButton: (props) => <TabBarButton {...props} onOpenDialog={showDialog} anchorId={anchorId} />,
               tabBarIcon: ({ color, focused }) => <TabBarIcon source={icon} color={color} focused={focused} />,
             }}
             listeners={({ navigation, route }) => ({

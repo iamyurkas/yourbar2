@@ -1,5 +1,7 @@
 import * as FileSystem from 'expo-file-system/legacy';
 
+import { type OnboardingState } from '@/providers/inventory-types';
+
 const STORAGE_FILENAME = 'inventory-state.json';
 let hasLoggedDocumentDirectoryWarning = false;
 let hasLoggedCacheDirectoryWarning = false;
@@ -19,6 +21,7 @@ export type InventorySnapshotV1<TCocktail, TIngredient> = {
   ratingFilterThreshold?: number;
   startScreen?: string;
   appTheme?: string;
+  onboardingState?: OnboardingState;
 };
 
 export type InventoryDeltaSnapshot<TCocktail, TIngredient> = {
@@ -46,6 +49,7 @@ export type InventoryDeltaSnapshot<TCocktail, TIngredient> = {
   ratingFilterThreshold?: number;
   startScreen?: string;
   appTheme?: string;
+  onboardingState?: OnboardingState;
 };
 
 export type InventorySnapshot<TCocktail, TIngredient> =

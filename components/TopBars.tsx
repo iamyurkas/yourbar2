@@ -11,6 +11,7 @@ import {
   type TextInputSubmitEditingEventData,
 } from 'react-native';
 
+import { OnboardingAnchor } from '@/components/OnboardingAnchor';
 import { useAppColors } from '@/constants/theme';
 
 type SearchTopBarProps = {
@@ -34,6 +35,7 @@ type SegmentTabsProps = {
   options: SegmentTabOption[];
   value: string;
   onChange: (key: string) => void;
+  anchorIdPrefix?: string;
 };
 
 export function SearchTopBar({
@@ -113,16 +115,15 @@ export function SearchTopBar({
   );
 }
 
-export function SegmentTabs({ options, value, onChange }: SegmentTabsProps) {
+export function SegmentTabs({ options, value, onChange, anchorIdPrefix }: SegmentTabsProps) {
   const Colors = useAppColors();
 
   return (
-    <View style={[styles.tabs, { backgroundColor: Colors.surface }]}> 
+    <View style={[styles.tabs, { backgroundColor: Colors.surface }]}>
       {options.map((option) => {
         const focused = option.key === value;
-        return (
+        const button = (
           <Pressable
-            key={option.key}
             accessibilityRole="tab"
             accessibilityState={focused ? { selected: true } : {}}
             onPress={() => onChange(option.key)}
@@ -146,6 +147,18 @@ export function SegmentTabs({ options, value, onChange }: SegmentTabsProps) {
               ]}
             />
           </Pressable>
+        );
+
+        return (
+          <View key={option.key} style={styles.tabWrapper}>
+            {anchorIdPrefix ? (
+              <OnboardingAnchor anchorId={`${anchorIdPrefix}_${option.key}`} style={styles.tabAnchor}>
+                {button}
+              </OnboardingAnchor>
+            ) : (
+              button
+            )}
+          </View>
         );
       })}
     </View>
@@ -198,6 +211,12 @@ const styles = StyleSheet.create({
     paddingBottom: 0,
     elevation: 4,
     zIndex: 1,
+  },
+  tabWrapper: {
+    flex: 1,
+  },
+  tabAnchor: {
+    flex: 1,
   },
   tabButton: {
     flex: 1,

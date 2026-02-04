@@ -44,12 +44,17 @@ import {
   type IngredientStorageRecord,
   type IngredientTag,
   type InventoryExportData,
+  type OnboardingState,
   type PhotoBackupEntry,
   type StartScreen,
 } from '@/providers/inventory-types';
 
 const DEFAULT_START_SCREEN: StartScreen = 'cocktails_all';
 const DEFAULT_APP_THEME: AppTheme = 'light';
+const DEFAULT_ONBOARDING_STATE: OnboardingState = {
+  stepIndex: 0,
+  completed: false,
+};
 
 type InventoryContextValue = {
   cocktails: Cocktail[];
@@ -96,6 +101,9 @@ type InventoryContextValue = {
   setStartScreen: (value: StartScreen) => void;
   appTheme: AppTheme;
   setAppTheme: (value: AppTheme) => void;
+  onboardingState: OnboardingState;
+  setOnboardingState: (state: Partial<OnboardingState>) => void;
+  restartOnboarding: () => void;
 };
 
 type InventoryState = {
@@ -133,6 +141,8 @@ declare global {
   var __yourbarInventoryCustomCocktailTags: CocktailTag[] | undefined;
   // eslint-disable-next-line no-var
   var __yourbarInventoryCustomIngredientTags: IngredientTag[] | undefined;
+  // eslint-disable-next-line no-var
+  var __yourbarInventoryOnboardingState: OnboardingState | undefined;
 }
 
 function createInventoryStateFromData(data: InventoryData, imported: boolean): InventoryState {
@@ -365,6 +375,7 @@ function createDeltaSnapshotFromInventory(
     appTheme: AppTheme;
     customCocktailTags: CocktailTag[];
     customIngredientTags: IngredientTag[];
+    onboardingState: OnboardingState;
   },
 ): InventoryDeltaSnapshot<CocktailStorageRecord, IngredientStorageRecord> {
   const baseData = loadInventoryData();
@@ -487,6 +498,7 @@ function createDeltaSnapshotFromInventory(
     ratingFilterThreshold: options.ratingFilterThreshold,
     startScreen: options.startScreen,
     appTheme: options.appTheme,
+    onboardingState: options.onboardingState,
   } satisfies InventoryDeltaSnapshot<CocktailStorageRecord, IngredientStorageRecord>;
 }
 
@@ -543,6 +555,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   const [customIngredientTags, setCustomIngredientTags] = useState<IngredientTag[]>(() =>
     sanitizeCustomTags(globalThis.__yourbarInventoryCustomIngredientTags, DEFAULT_TAG_COLOR),
   );
+  const [onboardingState, setOnboardingStateInternal] = useState<OnboardingState>(
+    () => globalThis.__yourbarInventoryOnboardingState ?? DEFAULT_ONBOARDING_STATE,
+  );
   const lastPersistedSnapshot = useRef<string | undefined>(undefined);
 
   useEffect(() => {
@@ -574,6 +589,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           const nextAppTheme = sanitizeAppTheme(stored.appTheme);
           const nextCustomCocktailTags = sanitizeCustomTags(stored.customCocktailTags, DEFAULT_TAG_COLOR);
           const nextCustomIngredientTags = sanitizeCustomTags(stored.customIngredientTags, DEFAULT_TAG_COLOR);
+          const nextOnboardingState = stored.onboardingState ?? DEFAULT_ONBOARDING_STATE;
 
           setInventoryState(nextInventoryState);
           setAvailableIngredientIds(nextAvailableIds);
@@ -588,6 +604,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           setAppTheme(nextAppTheme);
           setCustomCocktailTags(nextCustomCocktailTags);
           setCustomIngredientTags(nextCustomIngredientTags);
+          setOnboardingStateInternal(nextOnboardingState);
           return;
         }
       } catch (error) {
@@ -609,6 +626,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           setAppTheme(DEFAULT_APP_THEME);
           setCustomCocktailTags([]);
           setCustomIngredientTags([]);
+          setOnboardingStateInternal(DEFAULT_ONBOARDING_STATE);
         }
       } catch (error) {
         console.error('Failed to import bundled inventory', error);
@@ -642,6 +660,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     globalThis.__yourbarInventoryAppTheme = appTheme;
     globalThis.__yourbarInventoryCustomCocktailTags = customCocktailTags;
     globalThis.__yourbarInventoryCustomIngredientTags = customIngredientTags;
+    globalThis.__yourbarInventoryOnboardingState = onboardingState;
 
     const snapshot = createDeltaSnapshotFromInventory(inventoryState, {
       availableIngredientIds,
@@ -656,6 +675,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       appTheme,
       customCocktailTags,
       customIngredientTags,
+      onboardingState,
     });
     const serialized = JSON.stringify(snapshot);
 
@@ -682,6 +702,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     appTheme,
     customCocktailTags,
     customIngredientTags,
+    onboardingState,
   ]);
 
   const cocktails = inventoryState?.cocktails ?? [];
@@ -1953,6 +1974,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       setRatingFilterThreshold: handleSetRatingFilterThreshold,
       setStartScreen: handleSetStartScreen,
       setAppTheme: handleSetAppTheme,
+      onboardingState,
+      setOnboardingState,
+      restartOnboarding,
     };
   }, [
     cocktailsWithRatings,
@@ -1999,6 +2023,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     handleSetRatingFilterThreshold,
     handleSetStartScreen,
     handleSetAppTheme,
+    onboardingState,
+    setOnboardingState,
+    restartOnboarding,
   ]);
 
   return <InventoryContext.Provider value={value}>{children}</InventoryContext.Provider>;

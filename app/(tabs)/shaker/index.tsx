@@ -20,6 +20,7 @@ import { useRouter } from 'expo-router';
 
 import { ListRow, PresenceCheck, Thumb } from '@/components/RowParts';
 import { SideMenuDrawer } from '@/components/SideMenuDrawer';
+import { OnboardingAnchor } from '@/components/OnboardingAnchor';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { useAppColors } from '@/constants/theme';
 import { isCocktailReady } from '@/libs/cocktail-availability';
@@ -28,6 +29,7 @@ import {
   getVisibleIngredientIdsForCocktail,
 } from '@/libs/ingredient-availability';
 import { normalizeSearchText } from '@/libs/search-normalization';
+import { useOnboarding } from '@/providers/onboarding-provider';
 import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
 import { tagColors } from '@/theme/theme';
 
@@ -170,6 +172,7 @@ function isCollapsedHeaderItem(item: Ingredient) {
 export default function ShakerScreen() {
   const router = useRouter();
   const Colors = useAppColors();
+  const { onShakerChangeRequest, nextStep, currentStep } = useOnboarding();
   const {
     cocktails,
     ingredients,
@@ -377,6 +380,21 @@ export default function ShakerScreen() {
         return a.name.localeCompare(b.name);
       });
   }, [availableTagOptions, defaultTagColor, filteredIngredients]);
+
+  useEffect(() => {
+    return onShakerChangeRequest((inStock, expandedKeys) => {
+      setInStockOnly(inStock);
+      if (expandedKeys) {
+        setExpandedTagKeys(new Set(expandedKeys));
+      }
+    });
+  }, [onShakerChangeRequest]);
+
+  useEffect(() => {
+    if (currentStep?.id === 'shaker_filter' && inStockOnly) {
+      nextStep();
+    }
+  }, [inStockOnly, currentStep, nextStep]);
 
   useEffect(() => {
     setExpandedTagKeys((previous) => {
@@ -683,7 +701,13 @@ export default function ShakerScreen() {
             }}
             style={[styles.groupHeader, { backgroundColor }]}
           >
-            <Text style={[styles.groupTitle, { color: Colors.onPrimary }]}>{section.name}</Text>
+            {section.key === '0' || section.key === 'base alcohol' ? (
+              <OnboardingAnchor anchorId="shaker_group_spirit" style={styles.groupAnchor}>
+                <Text style={[styles.groupTitle, { color: Colors.onPrimary }]}>{section.name}</Text>
+              </OnboardingAnchor>
+            ) : (
+              <Text style={[styles.groupTitle, { color: Colors.onPrimary }]}>{section.name}</Text>
+            )}
             <MaterialIcons
               name="expand-more"
               size={22}
@@ -810,24 +834,28 @@ export default function ShakerScreen() {
             ) : null}
           </View>
           <View style={styles.iconButton}>
-            <PresenceCheck checked={inStockOnly} onToggle={() => setInStockOnly((previous) => !previous)} />
+            <OnboardingAnchor anchorId="shaker_in_stock_toggle">
+              <PresenceCheck checked={inStockOnly} onToggle={() => setInStockOnly((previous) => !previous)} />
+            </OnboardingAnchor>
           </View>
         </View>
-        <SectionList
-          ref={listRef}
-          sections={sections}
-          keyExtractor={(item) => String(item.id ?? item.name)}
-          renderItem={renderIngredient}
-          renderSectionHeader={renderSectionHeader}
-          stickySectionHeadersEnabled
-          contentContainerStyle={[styles.listContent, { paddingBottom: 140 + bottomInset }]}
-          showsVerticalScrollIndicator={false}
-          keyboardDismissMode="on-drag"
-          // Allow the first tap to toggle items while dismissing the keyboard.
-          keyboardShouldPersistTaps="handled"
-          onScroll={handleScroll}
-          scrollEventThrottle={16}
-        />
+        <OnboardingAnchor anchorId="shaker_list" style={styles.listAnchor}>
+          <SectionList
+            ref={listRef}
+            sections={sections}
+            keyExtractor={(item) => String(item.id ?? item.name)}
+            renderItem={renderIngredient}
+            renderSectionHeader={renderSectionHeader}
+            stickySectionHeadersEnabled
+            contentContainerStyle={[styles.listContent, { paddingBottom: 140 + bottomInset }]}
+            showsVerticalScrollIndicator={false}
+            keyboardDismissMode="on-drag"
+            // Allow the first tap to toggle items while dismissing the keyboard.
+            keyboardShouldPersistTaps="handled"
+            onScroll={handleScroll}
+            scrollEventThrottle={16}
+          />
+        </OnboardingAnchor>
         <View
           style={[
             styles.bottomPanel,
@@ -965,6 +993,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
     textTransform: 'capitalize',
+  },
+  groupAnchor: {
+    flex: 1,
+  },
+  listAnchor: {
+    flex: 1,
   },
   groupList: {
     overflow: 'hidden',

@@ -43,6 +43,11 @@ export type StartScreen =
 
 export type AppTheme = 'light' | 'dark' | 'system';
 
+export type OnboardingState = {
+  stepIndex: number;
+  completed: boolean;
+};
+
 export type IngredientTag = NonNullable<IngredientRecord['tags']>[number];
 
 export type CreateCocktailSubstituteInput = {

@@ -3,6 +3,7 @@ import { usePathname, useRouter } from 'expo-router';
 import React, { useCallback } from 'react';
 
 import { HapticTab } from '@/components/haptic-tab';
+import { OnboardingAnchor } from '@/components/OnboardingAnchor';
 import type { DialogOptions } from '@/components/AppDialog';
 import { useUnsavedChanges } from '@/providers/unsaved-changes-provider';
 
@@ -10,9 +11,10 @@ const EDITING_PATH_PATTERN = /^\/(cocktails\/create|ingredients\/create|ingredie
 
 type TabBarButtonProps = BottomTabBarButtonProps & {
   onOpenDialog: (options: DialogOptions) => void;
+  anchorId?: string;
 };
 
-export function TabBarButton({ onOpenDialog, ...props }: TabBarButtonProps) {
+export function TabBarButton({ onOpenDialog, anchorId, ...props }: TabBarButtonProps) {
   const pathname = usePathname();
   const router = useRouter();
   const { hasUnsavedChanges, setHasUnsavedChanges } = useUnsavedChanges();
@@ -48,5 +50,21 @@ export function TabBarButton({ onOpenDialog, ...props }: TabBarButtonProps) {
     proceed();
   }, [hasUnsavedChanges, isEditingRoute, onOpenDialog, pathname, props, router, setHasUnsavedChanges]);
 
-  return <HapticTab {...props} onPress={handlePress} />;
+  const tabButton = <HapticTab {...props} onPress={handlePress} />;
+
+  if (anchorId) {
+    return (
+      <OnboardingAnchor anchorId={anchorId} style={styles.tabAnchor}>
+        {tabButton}
+      </OnboardingAnchor>
+    );
+  }
+
+  return tabButton;
 }
+
+const styles = {
+  tabAnchor: {
+    flex: 1,
+  },
+};
