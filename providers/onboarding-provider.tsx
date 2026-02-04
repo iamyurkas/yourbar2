@@ -1,5 +1,6 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
+import { ONBOARDING_AVAILABLE_INGREDIENTS } from '@/constants/onboarding';
 import { useInventory } from '@/providers/inventory-provider';
 
 export type OnboardingStep = 'ingredients' | 'cocktails' | 'shaker';
@@ -19,12 +20,13 @@ type OnboardingProviderProps = {
   children: React.ReactNode;
 };
 
-const STEP_ORDER: OnboardingStep[] = ['ingredients', 'cocktails', 'shaker'];
+export const ONBOARDING_STEP_ORDER: OnboardingStep[] = ['ingredients', 'cocktails', 'shaker'];
+const normalizeName = (name: string) => name.trim().toLowerCase();
 
 export function OnboardingProvider({ children }: OnboardingProviderProps) {
-  const { onboardingCompleted, setOnboardingCompleted } = useInventory();
+  const { onboardingCompleted, setOnboardingCompleted, ingredients, setIngredientAvailability } = useInventory();
   const [activeStep, setActiveStep] = useState<OnboardingStep | null>(
-    () => (onboardingCompleted ? null : STEP_ORDER[0]),
+    () => (onboardingCompleted ? null : ONBOARDING_STEP_ORDER[0]),
   );
   const [isActive, setIsActive] = useState<boolean>(() => !onboardingCompleted);
 
@@ -35,13 +37,13 @@ export function OnboardingProvider({ children }: OnboardingProviderProps) {
       return;
     }
 
-    setActiveStep((previous) => previous ?? STEP_ORDER[0]);
+    setActiveStep((previous) => previous ?? ONBOARDING_STEP_ORDER[0]);
     setIsActive(true);
   }, [onboardingCompleted]);
 
   const startOnboarding = useCallback(() => {
     setOnboardingCompleted(false);
-    setActiveStep(STEP_ORDER[0]);
+    setActiveStep(ONBOARDING_STEP_ORDER[0]);
     setIsActive(true);
   }, [setOnboardingCompleted]);
 
@@ -53,6 +55,25 @@ export function OnboardingProvider({ children }: OnboardingProviderProps) {
     setActiveStep(step);
     setIsActive(true);
   }, []);
+
+  useEffect(() => {
+    if (!isActive || ingredients.length === 0) {
+      return;
+    }
+
+    const targetNames = new Set(ONBOARDING_AVAILABLE_INGREDIENTS.map(normalizeName));
+    ingredients.forEach((ingredient) => {
+      const name = ingredient.name;
+      const id = Number(ingredient.id ?? -1);
+      if (!name || !Number.isFinite(id) || id < 0) {
+        return;
+      }
+
+      if (targetNames.has(normalizeName(name))) {
+        setIngredientAvailability(id, true);
+      }
+    });
+  }, [ingredients, isActive, setIngredientAvailability]);
 
   const completeOnboarding = useCallback(() => {
     setActiveStep(null);

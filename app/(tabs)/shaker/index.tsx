@@ -30,7 +30,7 @@ import {
 } from '@/libs/ingredient-availability';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
-import { useOnboarding } from '@/providers/onboarding-provider';
+import { ONBOARDING_STEP_ORDER, useOnboarding } from '@/providers/onboarding-provider';
 import { tagColors } from '@/theme/theme';
 
 type IngredientTagOption = {
@@ -198,6 +198,11 @@ export default function ShakerScreen() {
   const bottomInset = Math.min(insets.bottom, 8);
   const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
   const isOnboardingShaker = isActive && activeStep === 'shaker';
+  const onboardingStepIndex = useMemo(
+    () => ONBOARDING_STEP_ORDER.indexOf('shaker') + 1,
+    [],
+  );
+  const onboardingStepCount = ONBOARDING_STEP_ORDER.length;
 
   useScrollToTop(listRef);
 
@@ -913,6 +918,8 @@ export default function ShakerScreen() {
               title="Step 3: Shaker logic"
               message="Ingredients within the same category are interchangeable (OR). Ingredients from different categories are required together (AND). Example: (Gin OR Whiskey) AND (Cola OR Tonic) AND (Lemon OR Lime). Use the checkmark above to filter by ingredients you already have."
               actionLabel="Finish onboarding"
+              stepIndex={onboardingStepIndex}
+              stepCount={onboardingStepCount}
               onAction={completeOnboarding}
             />
           </View>

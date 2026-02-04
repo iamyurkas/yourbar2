@@ -24,6 +24,7 @@ import { SideMenuDrawer } from '@/components/SideMenuDrawer';
 import { TagPill } from '@/components/TagPill';
 import type { SegmentTabOption } from '@/components/TopBars';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
+import { ONBOARDING_AVAILABLE_INGREDIENTS } from '@/constants/onboarding';
 import { useAppColors } from '@/constants/theme';
 import { isCocktailReady } from '@/libs/cocktail-availability';
 import { getLastIngredientTab, setLastIngredientTab, type IngredientTabKey } from '@/libs/collection-tabs';
@@ -35,7 +36,7 @@ import { navigateToDetailsWithReturnTo } from '@/libs/navigation';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { buildTagOptions, type TagOption } from '@/libs/tag-options';
 import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
-import { useOnboarding } from '@/providers/onboarding-provider';
+import { ONBOARDING_STEP_ORDER, useOnboarding } from '@/providers/onboarding-provider';
 import { tagColors } from '@/theme/theme';
 
 type IngredientSection = {
@@ -50,7 +51,6 @@ const TAB_OPTIONS: SegmentTabOption[] = [
   { key: 'shopping', label: 'Shopping' },
 ];
 
-const REQUIRED_ONBOARDING_INGREDIENTS = ['Cola', 'Ice', 'Spiced Rum'];
 const normalizeName = (name: string) => name.trim().toLowerCase();
 
 type IngredientListItemProps = {
@@ -63,6 +63,8 @@ type IngredientListItemProps = {
   isOnShoppingList: boolean;
   showAvailabilityToggle?: boolean;
   onShoppingToggle?: (id: number) => void;
+  isOnboardingActive: boolean;
+  isOnboardingTarget: boolean;
 };
 
 const areIngredientPropsEqual = (
@@ -77,7 +79,9 @@ const areIngredientPropsEqual = (
   prev.surfaceVariantColor === next.surfaceVariantColor &&
   prev.isOnShoppingList === next.isOnShoppingList &&
   prev.showAvailabilityToggle === next.showAvailabilityToggle &&
-  prev.onShoppingToggle === next.onShoppingToggle;
+  prev.onShoppingToggle === next.onShoppingToggle &&
+  prev.isOnboardingActive === next.isOnboardingActive &&
+  prev.isOnboardingTarget === next.isOnboardingTarget;
 
 const IngredientListItem = memo(function IngredientListItemComponent({
   ingredient,
@@ -89,6 +93,8 @@ const IngredientListItem = memo(function IngredientListItemComponent({
   isOnShoppingList,
   showAvailabilityToggle = true,
   onShoppingToggle,
+  isOnboardingActive,
+  isOnboardingTarget,
 }: IngredientListItemProps) {
   const Colors = useAppColors();
   const id = Number(ingredient.id ?? -1);
@@ -158,6 +164,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
     );
   }, [handleShoppingToggle, isOnShoppingList, onShoppingToggle, Colors]);
 
+  const canToggleAvailability = !isOnboardingActive || isOnboardingTarget;
   const control = useMemo(() => {
     if (onShoppingToggle) {
       return <View style={styles.presenceSlot}>{shoppingControl}</View>;
@@ -166,13 +173,29 @@ const IngredientListItem = memo(function IngredientListItemComponent({
     return (
       <View style={styles.presenceSlot}>
         {showAvailabilityToggle ? (
-          <PresenceCheck checked={isAvailable} onToggle={handleToggleAvailability} />
+          <View
+            style={
+              isOnboardingTarget
+                ? [styles.onboardingCheckboxHighlight, { backgroundColor: Colors.highlightSubtle }]
+                : null
+            }>
+            <PresenceCheck checked={isAvailable} onToggle={canToggleAvailability ? handleToggleAvailability : undefined} />
+          </View>
         ) : (
           <View style={styles.presencePlaceholder} />
         )}
       </View>
     );
-  }, [handleToggleAvailability, isAvailable, onShoppingToggle, showAvailabilityToggle, shoppingControl]);
+  }, [
+    Colors.highlightSubtle,
+    canToggleAvailability,
+    handleToggleAvailability,
+    isAvailable,
+    isOnboardingTarget,
+    onShoppingToggle,
+    showAvailabilityToggle,
+    shoppingControl,
+  ]);
 
   const handlePress = useCallback(() => {
     const routeParam = ingredient.id ?? ingredient.name;
@@ -188,22 +211,24 @@ const IngredientListItem = memo(function IngredientListItemComponent({
   }, [ingredient.id, ingredient.name]);
 
   return (
-    <ListRow
-      title={ingredient.name}
-      subtitle={subtitle}
-      subtitleStyle={subtitleStyle}
-      onPress={handlePress}
-      selected={isAvailable}
-      highlightColor={highlightColor}
-      tagColors={ingredientTagColors}
-      accessibilityRole="button"
-      accessibilityState={showAvailabilityToggle && isAvailable ? { selected: true } : undefined}
-      thumbnail={thumbnail}
-      control={control}
-      metaFooter={onShoppingToggle ? undefined : shoppingControl}
-      brandIndicatorColor={brandIndicatorColor}
-      metaAlignment="center"
-    />
+    <View style={isOnboardingTarget ? styles.onboardingRowHighlight : null}>
+      <ListRow
+        title={ingredient.name}
+        subtitle={subtitle}
+        subtitleStyle={subtitleStyle}
+        onPress={isOnboardingActive ? undefined : handlePress}
+        selected={isAvailable}
+        highlightColor={highlightColor}
+        tagColors={ingredientTagColors}
+        accessibilityRole="button"
+        accessibilityState={showAvailabilityToggle && isAvailable ? { selected: true } : undefined}
+        thumbnail={thumbnail}
+        control={control}
+        metaFooter={onShoppingToggle ? undefined : shoppingControl}
+        brandIndicatorColor={brandIndicatorColor}
+        metaAlignment="center"
+      />
+    </View>
   );
 }, areIngredientPropsEqual);
 
@@ -239,9 +264,14 @@ export default function IngredientsScreen() {
   const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
   const isOnboardingIngredients = isActive && activeStep === 'ingredients';
   const requiredNameSet = useMemo(
-    () => new Set(REQUIRED_ONBOARDING_INGREDIENTS.map(normalizeName)),
+    () => new Set(ONBOARDING_AVAILABLE_INGREDIENTS.map(normalizeName)),
     [],
   );
+  const onboardingStepIndex = useMemo(
+    () => ONBOARDING_STEP_ORDER.indexOf('ingredients') + 1,
+    [],
+  );
+  const onboardingStepCount = ONBOARDING_STEP_ORDER.length;
   const requiredIngredientIds = useMemo(
     () =>
       ingredients
@@ -291,6 +321,13 @@ export default function IngredientsScreen() {
       setActiveTab('all');
     }
   }, [activeTab, isOnboardingIngredients]);
+
+  useEffect(() => {
+    if (isOnboardingIngredients) {
+      setIsMenuOpen(false);
+      setFilterMenuVisible(false);
+    }
+  }, [isOnboardingIngredients]);
 
   const availableTagOptions = useMemo<TagOption[]>(
     () =>
@@ -686,6 +723,8 @@ export default function IngredientsScreen() {
           isOnShoppingList={isOnShoppingList}
           showAvailabilityToggle={activeTab !== 'shopping'}
           onShoppingToggle={activeTab === 'shopping' ? handleShoppingToggle : undefined}
+          isOnboardingActive={isOnboardingIngredients}
+          isOnboardingTarget={isOnboardingTarget}
         />
       );
     },
@@ -720,7 +759,10 @@ export default function IngredientsScreen() {
       style={[styles.safeArea, { backgroundColor: Colors.background }]}
       edges={['top', 'left', 'right']}>
       <View style={styles.container}>
-        <View style={styles.headerWrapper} onLayout={handleHeaderLayout}>
+        <View
+          style={styles.headerWrapper}
+          onLayout={handleHeaderLayout}
+          pointerEvents={isOnboardingIngredients ? 'none' : 'auto'}>
           <CollectionHeader
             searchValue={query}
             onSearchChange={setQuery}
@@ -812,12 +854,17 @@ export default function IngredientsScreen() {
           }
         />
         {isOnboardingIngredients ? (
+          <View style={[styles.onboardingDim, { backgroundColor: Colors.backdrop }]} pointerEvents="none" />
+        ) : null}
+        {isOnboardingIngredients ? (
           <View style={styles.onboardingCardWrapper} pointerEvents="box-none">
             <OnboardingCard
               title="Step 1: Mark what you have"
-              message="Add Cola, Ice, and Spiced Rum to your inventory. Tap the checkmarks next to each ingredient."
+              message="Add Cola, Ice, Spiced Rum, Gin, and Tonic to your inventory. Tap the checkmarks next to each ingredient."
               actionLabel="Go to My Cocktails"
               actionDisabled={!hasAllRequiredIngredients}
+              stepIndex={onboardingStepIndex}
+              stepCount={onboardingStepCount}
               onAction={() => {
                 goToStep('cocktails');
                 router.push('/cocktails');
@@ -826,7 +873,9 @@ export default function IngredientsScreen() {
           </View>
         ) : null}
       </View>
-      <FabAdd label="Add ingredient" onPress={() => router.push('/ingredients/create')} />
+      <View pointerEvents={isOnboardingIngredients ? 'none' : 'auto'}>
+        <FabAdd label="Add ingredient" onPress={() => router.push('/ingredients/create')} />
+      </View>
       <SideMenuDrawer visible={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
     </SafeAreaView>
   );
@@ -842,6 +891,10 @@ const styles = StyleSheet.create({
   },
   headerWrapper: {
     zIndex: 2,
+  },
+  onboardingDim: {
+    ...StyleSheet.absoluteFillObject,
+    zIndex: 1,
   },
   presenceSlot: {
     minHeight: 24,
@@ -882,6 +935,15 @@ const styles = StyleSheet.create({
     left: 16,
     right: 16,
     bottom: 96,
+    zIndex: 3,
+  },
+  onboardingRowHighlight: {
+    position: 'relative',
+    zIndex: 2,
+  },
+  onboardingCheckboxHighlight: {
+    padding: 4,
+    borderRadius: 12,
   },
   divider: {
     height: StyleSheet.hairlineWidth,

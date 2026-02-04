@@ -9,6 +9,8 @@ type OnboardingCardProps = {
   actionLabel?: string;
   onAction?: () => void;
   actionDisabled?: boolean;
+  stepIndex?: number;
+  stepCount?: number;
 };
 
 export function OnboardingCard({
@@ -17,8 +19,11 @@ export function OnboardingCard({
   actionLabel,
   onAction,
   actionDisabled = false,
+  stepIndex,
+  stepCount,
 }: OnboardingCardProps) {
   const Colors = useAppColors();
+  const showStepIndicator = Number.isFinite(stepIndex) && Number.isFinite(stepCount);
 
   return (
     <View
@@ -58,6 +63,11 @@ export function OnboardingCard({
           </Text>
         </Pressable>
       ) : null}
+      {showStepIndicator ? (
+        <Text style={[styles.stepIndicator, { color: Colors.onSurfaceVariant }]}>
+          {stepIndex} / {stepCount}
+        </Text>
+      ) : null}
     </View>
   );
 }
@@ -83,9 +93,10 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   actionButton: {
-    alignSelf: 'flex-start',
-    paddingHorizontal: 14,
-    paddingVertical: 8,
+    marginTop: 12,
+    alignSelf: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 12,
     borderRadius: 12,
   },
   actionButtonPressed: {
@@ -94,5 +105,10 @@ const styles = StyleSheet.create({
   actionLabel: {
     fontSize: 14,
     fontWeight: '600',
+  },
+  stepIndicator: {
+    fontSize: 13,
+    fontWeight: '500',
+    textAlign: 'center',
   },
 });

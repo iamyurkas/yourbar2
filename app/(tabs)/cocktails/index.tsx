@@ -36,7 +36,7 @@ import { normalizeSearchText } from '@/libs/search-normalization';
 import { buildTagOptions, type TagOption } from '@/libs/tag-options';
 import { useCocktailTabLogic, type MyTabListItem } from '@/libs/use-cocktail-tab-logic';
 import { useInventory, type Cocktail } from '@/providers/inventory-provider';
-import { useOnboarding } from '@/providers/onboarding-provider';
+import { ONBOARDING_STEP_ORDER, useOnboarding } from '@/providers/onboarding-provider';
 import { tagColors } from '@/theme/theme';
 
 type CocktailMethodOption = {
@@ -106,6 +106,11 @@ export default function CocktailsScreen() {
   const ingredientLookup = useMemo(() => createIngredientLookup(ingredients), [ingredients]);
   const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
   const isOnboardingCocktails = isActive && activeStep === 'cocktails';
+  const onboardingStepIndex = useMemo(
+    () => ONBOARDING_STEP_ORDER.indexOf('cocktails') + 1,
+    [],
+  );
+  const onboardingStepCount = ONBOARDING_STEP_ORDER.length;
 
   const availableTagOptions = useMemo<TagOption[]>(
     () => buildTagOptions(cocktails, (cocktail) => cocktail.tags ?? [], BUILTIN_COCKTAIL_TAGS, defaultTagColor),
@@ -764,6 +769,8 @@ export default function CocktailsScreen() {
               title="Step 2: My Cocktails"
               message="This tab shows cocktails you can make right now. Below it, you will see recipes missing only one ingredient."
               actionLabel="Go to Shaker"
+              stepIndex={onboardingStepIndex}
+              stepCount={onboardingStepCount}
               onAction={() => {
                 goToStep('shaker');
                 router.push('/shaker');
