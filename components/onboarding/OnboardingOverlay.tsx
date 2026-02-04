@@ -18,13 +18,14 @@ type StepDef = {
   anchorName?: string;
   autoNext?: (inventory: any, pathname: string) => boolean;
   buttonLabel?: string;
-  onNext?: (inventory: any, requestTabChange: (screen: 'ingredients' | 'cocktails', tab: string) => void) => void;
-  onEnter?: (inventory: any, requestTabChange: (screen: 'ingredients' | 'cocktails', tab: string) => void) => void;
+  onNext?: (inventory: any, requestTabChange: (screen: 'ingredients' | 'cocktails', tab: string) => void, requestShakerChange: (action: 'set-in-stock' | 'expand-all', value: boolean) => void) => void;
+  onEnter?: (inventory: any, requestTabChange: (screen: 'ingredients' | 'cocktails', tab: string) => void, requestShakerChange: (action: 'set-in-stock' | 'expand-all', value: boolean) => void) => void;
+  highlightPadding?: { x: number; y: number };
 };
 
 export function OnboardingOverlay() {
   const { onboardingStep, setOnboardingStep, completeOnboarding, onboardingCompleted, ...inventory } = useInventory();
-  const { anchors, requestTabChange } = useOnboardingAnchors();
+  const { anchors, requestTabChange, requestShakerChange } = useOnboardingAnchors();
   const Colors = useAppColors();
   const pathname = usePathname();
   const { height: screenHeight } = useWindowDimensions();
@@ -57,9 +58,13 @@ export function OnboardingOverlay() {
       anchorName: 'ingredients-tab-all',
       buttonLabel: 'Next',
       onNext: (inv) => {
-        inv.setIngredientAvailability(111, true); // Cola
         inv.setIngredientAvailability(193, true); // Ice
+        inv.setIngredientAvailability(159, true); // Gin
         inv.setIngredientAvailability(315, true); // Spiced Rum
+        inv.setIngredientAvailability(111, true); // Cola
+        inv.setIngredientAvailability(333, true); // Tonic
+        inv.setIngredientAvailability(214, true); // Lemon
+        inv.setIngredientAvailability(222, true); // Lime
       },
     },
     {
@@ -100,17 +105,26 @@ export function OnboardingOverlay() {
       message: 'Finally, let\'s look at the Shaker. It helps you find recipes based on selected ingredients.',
       anchorName: 'tab-shaker',
       autoNext: (_, path) => path.startsWith('/shaker'),
+      highlightPadding: { x: 20, y: 0 },
     },
     {
       id: 14,
       message: 'Shaker logic: ingredients within one category are interchangeable (OR), from different categories — mandatory (AND). Example: (Gin OR Whiskey) AND (Cola OR Tonic) AND (Lemon OR Lime).',
       buttonLabel: 'Next',
+      onEnter: (_, __, requestShaker) => {
+        requestShaker('set-in-stock', true);
+        requestShaker('expand-all', true);
+      },
     },
     {
       id: 15,
       message: 'This toggle filters ingredients by your availability.',
       anchorName: 'shaker-availability-toggle',
       buttonLabel: 'Next',
+      onEnter: (_, __, requestShaker) => {
+        requestShaker('set-in-stock', true);
+        requestShaker('expand-all', true);
+      },
     },
     {
       id: 16,
@@ -141,8 +155,8 @@ export function OnboardingOverlay() {
   // Handle onEnter actions
   React.useEffect(() => {
     if (onboardingCompleted || !currentStep?.onEnter) return;
-    currentStep.onEnter(inventory, requestTabChange);
-  }, [onboardingStep, onboardingCompleted, currentStep, inventory, requestTabChange]);
+    currentStep.onEnter(inventory, requestTabChange, requestShakerChange);
+  }, [onboardingStep, onboardingCompleted, currentStep, inventory, requestTabChange, requestShakerChange]);
 
   if (onboardingCompleted || !onboardingStep || onboardingStep <= 0 || !currentStep) return null;
 
@@ -155,7 +169,7 @@ export function OnboardingOverlay() {
 
   const handleNext = () => {
     if (currentStep?.onNext) {
-      currentStep.onNext(inventory, requestTabChange);
+      currentStep.onNext(inventory, requestTabChange, requestShakerChange);
     }
 
     if (onboardingStep >= steps[steps.length - 1].id) {
@@ -194,11 +208,11 @@ export function OnboardingOverlay() {
             <Rect height="100%" width="100%" fill="white" />
             {adjustedAnchor && (
               <Rect
-                x={adjustedAnchor.x - 4}
-                y={adjustedAnchor.y - 4}
-                width={adjustedAnchor.width + 8}
-                height={adjustedAnchor.height + 8}
-                rx={8}
+                x={adjustedAnchor.x - 4 - (currentStep.highlightPadding?.x ?? 0)}
+                y={adjustedAnchor.y - 4 - (currentStep.highlightPadding?.y ?? 0)}
+                width={adjustedAnchor.width + 8 + (currentStep.highlightPadding?.x ?? 0) * 2}
+                height={adjustedAnchor.height + 8 + (currentStep.highlightPadding?.y ?? 0) * 2}
+                rx={currentStep.highlightPadding ? 4 : 8}
                 fill="black"
               />
             )}

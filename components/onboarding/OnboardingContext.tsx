@@ -12,6 +12,8 @@ type OnboardingContextValue = {
   unregisterAnchor: (name: string) => void;
   requestTabChange: (screen: 'ingredients' | 'cocktails', tab: string) => void;
   onTabChangeRequest: (callback: (screen: 'ingredients' | 'cocktails', tab: string) => void) => () => void;
+  requestShakerChange: (action: 'set-in-stock' | 'expand-all', value: boolean) => void;
+  onShakerChangeRequest: (callback: (action: 'set-in-stock' | 'expand-all', value: boolean) => void) => () => void;
 };
 
 const OnboardingContext = createContext<OnboardingContextValue | undefined>(undefined);
@@ -19,6 +21,7 @@ const OnboardingContext = createContext<OnboardingContextValue | undefined>(unde
 export function OnboardingProvider({ children }: { children: React.ReactNode }) {
   const [anchors, setAnchors] = useState<Record<string, LayoutRectangle>>({});
   const [listeners] = useState<Set<(screen: 'ingredients' | 'cocktails', tab: string) => void>>(new Set());
+  const [shakerListeners] = useState<Set<(action: 'set-in-stock' | 'expand-all', value: boolean) => void>>(new Set());
 
   const registerAnchor = useCallback((name: string, layout: LayoutRectangle) => {
     setAnchors((prev) => ({ ...prev, [name]: layout }));
@@ -46,8 +49,27 @@ export function OnboardingProvider({ children }: { children: React.ReactNode }) 
     };
   }, [listeners]);
 
+  const requestShakerChange = useCallback((action: 'set-in-stock' | 'expand-all', value: boolean) => {
+    shakerListeners.forEach(l => l(action, value));
+  }, [shakerListeners]);
+
+  const onShakerChangeRequest = useCallback((callback: (action: 'set-in-stock' | 'expand-all', value: boolean) => void) => {
+    shakerListeners.add(callback);
+    return () => {
+      shakerListeners.delete(callback);
+    };
+  }, [shakerListeners]);
+
   return (
-    <OnboardingContext.Provider value={{ anchors, registerAnchor, unregisterAnchor, requestTabChange, onTabChangeRequest }}>
+    <OnboardingContext.Provider value={{
+      anchors,
+      registerAnchor,
+      unregisterAnchor,
+      requestTabChange,
+      onTabChangeRequest,
+      requestShakerChange,
+      onShakerChangeRequest
+    }}>
       {children}
     </OnboardingContext.Provider>
   );

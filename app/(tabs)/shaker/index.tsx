@@ -29,6 +29,7 @@ import {
   getVisibleIngredientIdsForCocktail,
 } from '@/libs/ingredient-availability';
 import { normalizeSearchText } from '@/libs/search-normalization';
+import { useOnboardingAnchors } from '@/components/onboarding/OnboardingContext';
 import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
 import { tagColors } from '@/theme/theme';
 
@@ -171,6 +172,7 @@ function isCollapsedHeaderItem(item: Ingredient) {
 export default function ShakerScreen() {
   const router = useRouter();
   const Colors = useAppColors();
+  const { onShakerChangeRequest } = useOnboardingAnchors();
   const {
     cocktails,
     ingredients,
@@ -197,6 +199,16 @@ export default function ShakerScreen() {
   const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
 
   useScrollToTop(listRef);
+
+  useEffect(() => {
+    return onShakerChangeRequest((action, value) => {
+      if (action === 'set-in-stock') {
+        setInStockOnly(value);
+      } else if (action === 'expand-all' && value) {
+        setExpandedTagKeys(new Set(ingredientGroups.map((group) => group.key)));
+      }
+    });
+  }, [onShakerChangeRequest, ingredientGroups]);
 
   useEffect(() => {
     const wasEmpty = previousQuery.current.length === 0;
