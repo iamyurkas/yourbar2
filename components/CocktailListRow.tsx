@@ -134,7 +134,7 @@ const CocktailListRowComponent = ({
     }
 
     return legacyMethodId ? [legacyMethodId] : [];
-  }, [cocktail.methodIds, cocktail]);
+  }, [cocktail]);
 
   const methodIconContent = useMemo(() => {
     if (!showMethodIcons) {

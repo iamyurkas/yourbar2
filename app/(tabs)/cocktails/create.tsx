@@ -47,10 +47,9 @@ import {
 import { GLASSWARE } from "@/constants/glassware";
 import { useAppColors } from "@/constants/theme";
 import {
-  buildReturnToParams,
   parseReturnToParams,
-  skipDuplicateBack,
 } from "@/libs/navigation";
+import { useNaturalBackHandler } from "@/libs/use-natural-back-handler";
 import { shouldStorePhoto, storePhoto } from "@/libs/photo-storage";
 import { normalizeSearchText } from "@/libs/search-normalization";
 import {
@@ -237,7 +236,7 @@ export default function CreateCocktailScreen() {
     useImperialUnits,
   } = useInventory();
   const params = useLocalSearchParams();
-  const { setHasUnsavedChanges } = useUnsavedChanges();
+  const { setHasUnsavedChanges, registerSaveAction } = useUnsavedChanges();
 
   const modeParam = getParamValue(params.mode);
   const isEditMode = modeParam === "edit";
@@ -343,7 +342,6 @@ export default function CreateCocktailScreen() {
   const initializedRef = useRef(false);
   const isNavigatingAfterSaveRef = useRef(false);
   const scrollRef = useRef<ScrollView | null>(null);
-  const isHandlingBackRef = useRef(false);
 
   const ingredientById = useMemo(() => {
     const map = new Map<number, Ingredient>();
@@ -420,6 +418,15 @@ export default function CreateCocktailScreen() {
   useEffect(() => {
     setHasUnsavedChanges(hasUnsavedChanges);
   }, [hasUnsavedChanges, setHasUnsavedChanges]);
+
+  useEffect(() => {
+    const action = async () => {
+      await handleSubmit();
+      return true;
+    };
+    registerSaveAction(action);
+    return () => registerSaveAction(null);
+  }, [handleSubmit, registerSaveAction]);
 
   useEffect(() => () => setHasUnsavedChanges(false), [setHasUnsavedChanges]);
 
@@ -1146,6 +1153,12 @@ export default function CreateCocktailScreen() {
       setHasUnsavedChanges(false);
       isNavigatingAfterSaveRef.current = true;
       const targetId = persisted.id ?? persisted.name;
+
+      if (returnToPath) {
+        router.navigate({ pathname: returnToPath as any, params: returnToParams as any });
+        return;
+      }
+
       if (isEditMode && navigation.canGoBack()) {
         navigation.goBack();
         return;
@@ -1156,7 +1169,6 @@ export default function CreateCocktailScreen() {
           pathname: "/cocktails/[cocktailId]",
           params: {
             cocktailId: String(targetId),
-            ...buildReturnToParams(returnToPath, returnToParams),
           },
         });
         return;
@@ -1187,9 +1199,35 @@ export default function CreateCocktailScreen() {
     selectedTagIds,
     setHasUnsavedChanges,
     showDialog,
-    shouldStorePhoto,
-    storePhoto,
   ]);
+
+  const confirmLeave = useCallback(
+    (onLeave: () => void) => {
+      showDialog({
+        title: "Leave without saving?",
+        message: "Your changes will be lost if you leave this screen.",
+        actions: [
+          { label: "Save", onPress: handleSubmit },
+          { label: "Stay", variant: "secondary" },
+          {
+            label: "Leave",
+            variant: "destructive",
+            onPress: () => {
+              setHasUnsavedChanges(false);
+              onLeave();
+            },
+          },
+        ],
+      });
+    },
+    [handleSubmit, setHasUnsavedChanges, showDialog],
+  );
+
+  const { handleBack: handleGoBack } = useNaturalBackHandler({
+    returnToPath,
+    returnToParams,
+    onConfirmLeave: confirmLeave,
+  });
 
   const handleDeletePress = useCallback(() => {
     if (!isEditMode) {
@@ -1237,80 +1275,20 @@ export default function CreateCocktailScreen() {
             }
 
             setHasUnsavedChanges(false);
-            router.replace("/cocktails");
+            handleGoBack();
           },
         },
       ],
     });
   }, [
     deleteCocktail,
+    handleGoBack,
     isEditMode,
     prefilledCocktail?.id,
     prefilledCocktail?.name,
     setHasUnsavedChanges,
     showDialog,
   ]);
-
-  const confirmLeave = useCallback(
-    (onLeave: () => void) => {
-      showDialog({
-        title: "Leave without saving?",
-        message: "Your changes will be lost if you leave this screen.",
-        actions: [
-          { label: "Save", onPress: handleSubmit },
-          { label: "Stay", variant: "secondary" },
-          {
-            label: "Leave",
-            variant: "destructive",
-            onPress: () => {
-              setHasUnsavedChanges(false);
-              onLeave();
-            },
-          },
-        ],
-      });
-    },
-    [handleSubmit, setHasUnsavedChanges, showDialog],
-  );
-
-  useEffect(() => {
-    const unsubscribe = navigation.addListener("beforeRemove", (event) => {
-      if (isNavigatingAfterSaveRef.current || isHandlingBackRef.current) {
-        return;
-      }
-
-      if (hasUnsavedChanges) {
-        event.preventDefault();
-        confirmLeave(() => {
-          isHandlingBackRef.current = true;
-          if (event.data.action.type === "GO_BACK") {
-            skipDuplicateBack(navigation);
-          } else {
-            navigation.dispatch(event.data.action);
-          }
-          setTimeout(() => {
-            isHandlingBackRef.current = false;
-          }, 0);
-        });
-        return;
-      }
-
-      if (event.data.action.type === "GO_BACK") {
-        event.preventDefault();
-        isHandlingBackRef.current = true;
-        skipDuplicateBack(navigation);
-        setTimeout(() => {
-          isHandlingBackRef.current = false;
-        }, 0);
-      }
-    });
-
-    return unsubscribe;
-  }, [confirmLeave, hasUnsavedChanges, navigation]);
-
-  const handleGoBack = useCallback(() => {
-    skipDuplicateBack(navigation);
-  }, [navigation]);
 
   const imageSource = useMemo(() => {
     if (!imageUri) {

@@ -3,6 +3,8 @@ import React, { createContext, useCallback, useContext, useMemo, useState } from
 type UnsavedChangesContextValue = {
   hasUnsavedChanges: boolean;
   setHasUnsavedChanges: (value: boolean) => void;
+  registerSaveAction: (action: (() => Promise<boolean>) | null) => void;
+  requestSave: () => Promise<boolean>;
 };
 
 const UnsavedChangesContext = createContext<UnsavedChangesContextValue | null>(null);
@@ -13,17 +15,31 @@ type UnsavedChangesProviderProps = {
 
 export function UnsavedChangesProvider({ children }: UnsavedChangesProviderProps) {
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  const saveActionRef = React.useRef<(() => Promise<boolean>) | null>(null);
 
   const updateHasUnsavedChanges = useCallback((value: boolean) => {
     setHasUnsavedChanges(value);
+  }, []);
+
+  const registerSaveAction = useCallback((action: (() => Promise<boolean>) | null) => {
+    saveActionRef.current = action;
+  }, []);
+
+  const requestSave = useCallback(async () => {
+    if (saveActionRef.current) {
+      return await saveActionRef.current();
+    }
+    return true;
   }, []);
 
   const value = useMemo(
     () => ({
       hasUnsavedChanges,
       setHasUnsavedChanges: updateHasUnsavedChanges,
+      registerSaveAction,
+      requestSave,
     }),
-    [hasUnsavedChanges, updateHasUnsavedChanges],
+    [hasUnsavedChanges, updateHasUnsavedChanges, registerSaveAction, requestSave],
   );
 
   return <UnsavedChangesContext.Provider value={value}>{children}</UnsavedChangesContext.Provider>;

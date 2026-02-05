@@ -1,8 +1,56 @@
 import { StackActions, type NavigationProp, type ParamListBase } from '@react-navigation/native';
 import { router } from 'expo-router';
 
+import { normalizeSearchText } from './search-normalization';
+
 type RouteParams = Record<string, unknown> | undefined;
 type ReturnToParams = Record<string, string> | undefined;
+
+function resolveCocktail(
+  param: string | undefined,
+  cocktails: any[],
+): any | undefined {
+  if (!param) {
+    return undefined;
+  }
+
+  const numericId = Number(param);
+  if (!Number.isNaN(numericId)) {
+    const byId = cocktails.find((item) => Number(item.id ?? -1) === numericId);
+    if (byId) {
+      return byId;
+    }
+  }
+
+  const normalized = normalizeSearchText(param);
+  return cocktails.find(
+    (item) => normalizeSearchText(item.name ?? "") === normalized,
+  );
+}
+
+function resolveIngredient(
+  param: string | undefined,
+  ingredients: any[],
+): any | undefined {
+  if (!param) {
+    return undefined;
+  }
+
+  const numericId = Number(param);
+  if (!Number.isNaN(numericId)) {
+    const byId = ingredients.find(
+      (item) => Number(item.id ?? -1) === numericId,
+    );
+    if (byId) {
+      return byId;
+    }
+  }
+
+  const normalized = normalizeSearchText(param);
+  return ingredients.find(
+    (item) => normalizeSearchText(item.name ?? "") === normalized,
+  );
+}
 
 const areParamsEqual = (left?: RouteParams, right?: RouteParams): boolean => {
   if (!left && !right) {
@@ -13,13 +61,14 @@ const areParamsEqual = (left?: RouteParams, right?: RouteParams): boolean => {
     return false;
   }
 
-  const leftKeys = Object.keys(left);
-  const rightKeys = Object.keys(right);
+  const leftKeys = Object.keys(left).filter(k => k !== 'returnToPath' && k !== 'returnToParams');
+  const rightKeys = Object.keys(right).filter(k => k !== 'returnToPath' && k !== 'returnToParams');
+
   if (leftKeys.length !== rightKeys.length) {
     return false;
   }
 
-  return leftKeys.every((key) => rightKeys.includes(key) && left[key] === right[key]);
+  return leftKeys.every((key) => rightKeys.includes(key) && String(left[key]) === String(right[key]));
 };
 
 const areRoutesEqual = (
@@ -30,11 +79,101 @@ const areRoutesEqual = (
     return false;
   }
 
-  if (left.name !== right.name) {
+  // Normalize names for comparison
+  const leftName = left.name.replace(/\/index$/, '');
+  const rightName = right.name.replace(/\/index$/, '');
+
+  if (leftName !== rightName) {
     return false;
   }
 
   return areParamsEqual(left.params, right.params);
+};
+
+function isDetailViewForSameEntity(detailRoute: any, createRoute: any): boolean {
+  if (!detailRoute.name.includes('[') || !createRoute.name.endsWith('/create')) {
+    return false;
+  }
+
+  const detailType = detailRoute.name.split('/')[0];
+  const createType = createRoute.name.split('/')[0];
+
+  if (detailType !== createType) {
+    return false;
+  }
+
+  // If it's an edit mode, check ID
+  if (createRoute.params?.mode === 'edit') {
+    const detailId = detailRoute.params?.cocktailId || detailRoute.params?.ingredientId;
+    const createId = createRoute.params?.cocktailId || createRoute.params?.ingredientId;
+    return detailId && createId && String(detailId) === String(createId);
+  }
+
+  // For new creations, if we are on a details page of the same type, we assume it's the result of that creation
+  return true;
+}
+
+export const performNaturalBack = (
+  navigation: NavigationProp<ParamListBase>,
+  inventory: { cocktails: any[]; ingredients: any[] },
+) => {
+  const state = navigation.getState();
+  if (!state) {
+    navigation.goBack();
+    return;
+  }
+
+  const routes = state.routes;
+  const currentIndex = state.index ?? (routes.length - 1);
+  const currentRoute = routes[currentIndex];
+
+  let targetIndex = currentIndex - 1;
+
+  while (targetIndex >= 0) {
+    const route = routes[targetIndex];
+
+    // 1. Skip if it refers to a deleted entity
+    if (route.name.includes('cocktails/[cocktailId]')) {
+      const id = (route.params as any)?.cocktailId;
+      if (id && !resolveCocktail(String(id), inventory.cocktails)) {
+        targetIndex--;
+        continue;
+      }
+    }
+    if (route.name.includes('ingredients/[ingredientId]')) {
+      const id = (route.params as any)?.ingredientId;
+      if (id && !resolveIngredient(String(id), inventory.ingredients)) {
+        targetIndex--;
+        continue;
+      }
+    }
+
+    // 2. Skip if it's the same screen instance (Duplicate)
+    if (areRoutesEqual(currentRoute, route)) {
+      targetIndex--;
+      continue;
+    }
+
+    // 3. Skip if it's an Edit/Create screen (Transient)
+    // ONLY if we are currently on a detail view for the same entity (successful save scenario)
+    if (route.name.endsWith('/create') && isDetailViewForSameEntity(currentRoute, route)) {
+      targetIndex--;
+      continue;
+    }
+
+    // Valid target found
+    break;
+  }
+
+  if (targetIndex >= 0) {
+    const popCount = currentIndex - targetIndex;
+    if (popCount > 1) {
+      navigation.dispatch(StackActions.pop(popCount));
+      return;
+    }
+  }
+
+  navigation.goBack();
 };
 
 export const skipDuplicateBack = (navigation: NavigationProp<ParamListBase>) => {
@@ -134,5 +273,5 @@ export const returnToSourceOrBack = (
     return;
   }
 
-  skipDuplicateBack(navigation);
+  navigation.goBack();
 };

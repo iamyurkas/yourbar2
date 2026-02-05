@@ -1,5 +1,5 @@
-import { Tabs } from 'expo-router';
-import { useCallback, useState } from 'react';
+import { Stack, usePathname, useRouter } from 'expo-router';
+import { useCallback, useMemo, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -13,39 +13,31 @@ import { OnboardingAnchor } from '@/components/onboarding/OnboardingAnchor';
 import { useAppColors } from '@/constants/theme';
 import { getLastCocktailTab, getLastIngredientTab } from '@/libs/collection-tabs';
 
-type TabPressHandler = (navigation: { navigate: (...args: never[]) => void }, route: { name: string }) => void;
+type TabName = 'cocktails' | 'shaker' | 'ingredients';
 
 const TAB_SCREENS: Array<{
-  name: 'cocktails' | 'shaker' | 'ingredients';
+  name: TabName;
   title: string;
   icon: typeof CocktailIcon;
-  onTabPress: TabPressHandler;
+  path: string;
 }> = [
     {
       name: 'cocktails',
       title: 'Cocktails',
       icon: CocktailIcon,
-      onTabPress: (navigation, route) => {
-        getLastCocktailTab();
-        navigation.navigate(route.name as never, { screen: 'index' } as never);
-      },
+      path: '/cocktails',
     },
     {
       name: 'shaker',
       title: 'Shaker',
       icon: ShakerIcon,
-      onTabPress: (navigation, route) => {
-        navigation.navigate(route.name as never, { screen: 'index' } as never);
-      },
+      path: '/shaker',
     },
     {
       name: 'ingredients',
       title: 'Ingredients',
       icon: LemonIcon,
-      onTabPress: (navigation, route) => {
-        getLastIngredientTab();
-        navigation.navigate(route.name as never, { screen: 'index' } as never);
-      },
+      path: '/ingredients',
     },
   ];
 
@@ -53,6 +45,15 @@ export default function TabLayout() {
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(null);
   const insets = useSafeAreaInsets();
   const Colors = useAppColors();
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const activeTab = useMemo<TabName>(() => {
+    if (pathname.startsWith('/cocktails')) return 'cocktails';
+    if (pathname.startsWith('/shaker')) return 'shaker';
+    if (pathname.startsWith('/ingredients')) return 'ingredients';
+    return 'cocktails';
+  }, [pathname]);
 
   const closeDialog = useCallback(() => {
     setDialogOptions(null);
@@ -62,53 +63,64 @@ export default function TabLayout() {
     setDialogOptions(options);
   }, []);
 
+  const handleTabPress = useCallback((name: TabName) => {
+    switch (name) {
+      case 'cocktails':
+        getLastCocktailTab();
+        router.navigate('/cocktails');
+        break;
+      case 'shaker':
+        router.navigate('/shaker');
+        break;
+      case 'ingredients':
+        getLastIngredientTab();
+        router.navigate('/ingredients');
+        break;
+    }
+  }, [router]);
+
   return (
-    <>
-      <Tabs
-        initialRouteName="cocktails"
+    <View style={styles.container}>
+      <Stack
         screenOptions={{
           headerShown: false,
-          tabBarActiveTintColor: Colors.primary,
-          tabBarInactiveTintColor: Colors.onSurfaceVariant,
-          tabBarStyle: {
-            height: 72 + insets.bottom,
-            paddingTop: 8,
-            paddingBottom: insets.bottom,
-            backgroundColor: 'transparent',
-          },
-          tabBarItemStyle: {
-            justifyContent: 'center',
-            alignItems: 'center',
-          },
-          tabBarBackground: () => (
-            <View style={styles.tabBarBackground}>
-              <View style={[styles.tabBarSurface, { backgroundColor: Colors.surface }]} />
-              <View style={[styles.tabBarInset, { height: insets.bottom, backgroundColor: Colors.surface }]} />
-            </View>
-          ),
+          animation: 'simple_push',
         }}>
-        {TAB_SCREENS.map(({ name, title, icon, onTabPress }) => (
-          <Tabs.Screen
-            key={name}
-            name={name}
-            options={{
-              title,
-              tabBarButton: (props) => (
-                <OnboardingAnchor name={`tab-${name}`} style={styles.tabAnchor}>
-                  <TabBarButton {...props} onOpenDialog={showDialog} />
-                </OnboardingAnchor>
-              ),
-              tabBarIcon: ({ color, focused }) => <TabBarIcon source={icon} color={color} focused={focused} />,
-            }}
-            listeners={({ navigation, route }) => ({
-              tabPress: (event) => {
-                event.preventDefault();
-                onTabPress(navigation, route);
-              },
-            })}
-          />
-        ))}
-      </Tabs>
+        <Stack.Screen name="cocktails/index" options={{ title: 'Cocktails' }} />
+        <Stack.Screen name="cocktails/[cocktailId]" options={{ title: 'Cocktail details' }} />
+        <Stack.Screen name="cocktails/create" options={{ title: 'Add cocktail' }} />
+        <Stack.Screen name="ingredients/index" options={{ title: 'Ingredients' }} />
+        <Stack.Screen name="ingredients/[ingredientId]" options={{ title: 'Ingredient details' }} />
+        <Stack.Screen name="ingredients/create" options={{ title: 'Add ingredient' }} />
+        <Stack.Screen name="shaker/index" options={{ title: 'Shaker' }} />
+        <Stack.Screen name="shaker/results" options={{ title: 'Shaker results' }} />
+      </Stack>
+
+      <View style={[styles.tabBarContainer, { height: 72 + insets.bottom, paddingBottom: insets.bottom }]}>
+        <View style={styles.tabBarBackground}>
+          <View style={[styles.tabBarSurface, { backgroundColor: Colors.surface }]} />
+          <View style={[styles.tabBarInset, { height: insets.bottom, backgroundColor: Colors.surface }]} />
+        </View>
+        <View style={styles.tabBarContent}>
+          {TAB_SCREENS.map(({ name, title, icon }) => {
+            const focused = activeTab === name;
+            const color = focused ? Colors.primary : Colors.onSurfaceVariant;
+            return (
+              <OnboardingAnchor key={name} name={`tab-${name}`} style={styles.tabAnchor}>
+                <TabBarButton
+                  onOpenDialog={showDialog}
+                  onPress={() => handleTabPress(name)}
+                  accessibilityLabel={title}
+                  style={styles.tabButton}
+                >
+                  <TabBarIcon source={icon} color={color} focused={focused} />
+                </TabBarButton>
+              </OnboardingAnchor>
+            );
+          })}
+        </View>
+      </View>
+
       <AppDialog
         visible={dialogOptions != null}
         title={dialogOptions?.title ?? ''}
@@ -116,11 +128,21 @@ export default function TabLayout() {
         actions={dialogOptions?.actions ?? []}
         onRequestClose={closeDialog}
       />
-    </>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  tabBarContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: 'transparent',
+  },
   tabBarBackground: {
     ...StyleSheet.absoluteFillObject,
     flexDirection: 'column',
@@ -131,7 +153,16 @@ const styles = StyleSheet.create({
   tabBarInset: {
     height: 0,
   },
+  tabBarContent: {
+    flex: 1,
+    flexDirection: 'row',
+  },
   tabAnchor: {
     flex: 1,
+  },
+  tabButton: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
