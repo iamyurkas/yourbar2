@@ -3,7 +3,7 @@ import { initReactI18next } from 'react-i18next';
 
 import commonEn from '@/assets/locales/en/common.json';
 import commonEs from '@/assets/locales/es/common.json';
-import commonUa from '@/assets/locales/ua/common.json';
+import commonUk from '@/assets/locales/uk/common.json';
 
 const resources = {
   en: {
@@ -12,8 +12,8 @@ const resources = {
   es: {
     common: commonEs,
   },
-  ua: {
-    common: commonUa,
+  uk: {
+    common: commonUk,
   },
 };
 

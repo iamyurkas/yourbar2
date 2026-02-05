@@ -325,7 +325,7 @@ function sanitizeAppLanguage(value?: string | null): AppLanguage {
   switch (value) {
     case 'en':
     case 'es':
-    case 'ua':
+    case 'uk':
       return value;
     default:
       return DEFAULT_APP_LANGUAGE;

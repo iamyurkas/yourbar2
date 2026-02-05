@@ -6,13 +6,13 @@
       "description": "Una bebida de espíritu de agave audaz y directa construida alrededor de Mezcal, Coñac, Punt e Mes: con tendencia amarga, aromática y mejor servida bien fría. Adornada con naranja.",
       "instructions": "1. Llene un vaso mezclador con hielo.\n2. Agregue 22.5ml de Mezcal, 22.5ml de Coñac, 30ml de Punt e Mes, 15ml de Luxardo Maraschino y 2 toques de Creole Bitters.\n3. Revuelva suavemente durante unos 20 segundos hasta que esté bien frío.\n4. Cuele en una copa coupe fría.\n5. Adorne con un toque de naranja.",
       "ingredients": [
-        { "order": 1, "name": "Mezcal" },
-        { "order": 2, "name": "Coñac" },
-        { "order": 3, "name": "Punt e Mes" },
-        { "order": 4, "name": "Luxardo Maraschino" },
-        { "order": 5, "name": "Creole Bitters" },
-        { "order": 6, "name": "Hielo" },
-        { "order": 7, "name": "Naranja" }
+        { "ingredientId": 233, "name": "Mezcal" },
+        { "ingredientId": 109, "name": "Coñac" },
+        { "ingredientId": 285, "name": "Punt e Mes" },
+        { "ingredientId": 226, "name": "Luxardo Maraschino" },
+        { "ingredientId": 127, "name": "Creole Bitters" },
+        { "ingredientId": 193, "name": "Hielo" },
+        { "ingredientId": 242, "name": "Naranja" }
       ]
     },
     {
@@ -21,22 +21,141 @@
       "description": "El cóctel Siglo XX es un cóctel clásico que fue creado por primera vez en 1937 por el barman británico C.A. Tuck y nombrado en honor al célebre tren 20th Century Limited que corría entre la ciudad de Nueva York y Chicago. Es una bebida sofisticada y elegante que combina London Dry Gin, Lillet Blanc (un vino aperitivo francés), jugo de lima y crema de cacao blanca.",
       "instructions": "1. Llene una coctelera con hielo.\n2. Agregue 30ml de Ginebra, 20ml de Lillet Blanc, 20ml de Crema de Cacao Blanca y 10ml de Jugo de Lima.\n3. Agite vigorosamente durante unos 15 segundos hasta que esté bien frío.\n4. Cuele en una copa Coupe fría.\n5. Exprima un toque de cáscara de naranja sobre el cóctel y úselo como adorno.",
       "ingredients": [
-        { "order": 1, "name": "Ginebra" },
-        { "order": 2, "name": "Lillet Blanc" },
-        { "order": 3, "name": "Crema de Cacao Blanca" },
-        { "order": 4, "name": "Jugo de Lima" },
-        { "order": 5, "name": "Hielo" },
-        { "order": 6, "name": "Naranja" }
+        { "ingredientId": 159, "name": "Ginebra" },
+        { "ingredientId": 221, "name": "Lillet Blanc" },
+        { "ingredientId": 120, "name": "Crema de Cacao Blanca" },
+        { "ingredientId": 223, "name": "Jugo de Lima" },
+        { "ingredientId": 193, "name": "Hielo" },
+        { "ingredientId": 242, "name": "Naranja" }
+      ]
+    },
+    {
+      "id": 39,
+      "name": "Aviation",
+      "description": "Un cóctel clásico de principios del siglo XX, conocido por su color azul cielo. Floral, ácido y sofisticado.",
+      "instructions": "1. Llene una coctelera con hielo.\n2. Añada ginebra, marrasquino, jugo de limón y crema de violeta.\n3. Agite bien y cuele en una copa de cóctel fría.\n4. Decore con una cereza.",
+      "ingredients": [
+        { "ingredientId": 159, "name": "Ginebra" },
+        { "ingredientId": 226, "name": "Marrasquino" },
+        { "ingredientId": 216, "name": "Jugo de limón" },
+        { "ingredientId": 126, "name": "Crema de violeta" }
+      ]
+    },
+    {
+      "id": 303,
+      "name": "Margarita",
+      "description": "Cóctel mexicano clásico a base de tequila, Cointreau y jugo de lima.",
+      "instructions": "1. Frote el borde de una copa enfriada con una rodaja de lima y sumérjala en sal.\n2. Añada el tequila, el Cointreau y el jugo de lima en una coctelera con hielo.\n3. Agite bien y cuele en la copa preparada.",
+      "ingredients": [
+        { "ingredientId": 328, "name": "Tequila" },
+        { "ingredientId": 334, "name": "Cointreau" },
+        { "ingredientId": 223, "name": "Jugo de lima" }
+      ]
+    },
+    {
+      "id": 322,
+      "name": "Mojito",
+      "description": "Clásico cubano, una mezcla perfecta de menta, lima y ron.",
+      "instructions": "1. Maje las hojas de menta con el azúcar y el jugo de lima en un vaso alto.\n2. Añada hielo picado y ron.\n3. Rellene con soda y remueva suavemente.\n4. Decore con una rama de menta.",
+      "ingredients": [
+        { "ingredientId": 346, "name": "Ron blanco" },
+        { "ingredientId": 236, "name": "Menta" },
+        { "ingredientId": 222, "name": "Lima" },
+        { "ingredientId": 323, "name": "Jarabe de azúcar" },
+        { "ingredientId": 312, "name": "Soda" }
+      ]
+    },
+    {
+      "id": 331,
+      "name": "Negroni",
+      "description": "Obra maestra italiana, equilibrio ideal entre amargor y dulzor.",
+      "instructions": "1. Mezcle partes iguales de ginebra, Campari y vermut dulce en un vaso bajo con hielo.\n2. Remueva durante 30 segundos.\n3. Decore con una rodaja de naranja.",
+      "ingredients": [
+        { "ingredientId": 159, "name": "Ginebra" },
+        { "ingredientId": 72, "name": "Campari" },
+        { "ingredientId": 290, "name": "Vermut dulce" }
+      ]
+    },
+    {
+      "id": 300,
+      "name": "Manhattan",
+      "description": "Un cóctel elegante y fuerte a base de whisky, vermut dulce y amargos.",
+      "instructions": "1. Remueva todos los ingredientes con hielo en un vaso mezclador.\n2. Cuele en una copa de cóctel fría.\n3. Decore con una cereza.",
+      "ingredients": [
+        { "ingredientId": 301, "name": "Whisky de centeno" },
+        { "ingredientId": 290, "name": "Vermut dulce" },
+        { "ingredientId": 18, "name": "Amargo de Angostura" }
+      ]
+    },
+    {
+      "id": 338,
+      "name": "Old Fashioned",
+      "description": "Probablemente el primer cóctel del mundo. Whisky, azúcar y amargo.",
+      "instructions": "1. Disuelva el azúcar con el amargo y un poco de agua en un vaso bajo.\n2. Añada hielo y whisky.\n3. Remueva y decore con piel de naranja.",
+      "ingredients": [
+        { "ingredientId": 63, "name": "Bourbon" },
+        { "ingredientId": 323, "name": "Azúcar" },
+        { "ingredientId": 18, "name": "Amargo de Angostura" }
+      ]
+    },
+    {
+      "id": 176,
+      "name": "Martini",
+      "description": "El rey de los cócteles, símbolo de elegancia. Ginebra y vermut seco.",
+      "instructions": "1. Vierta la ginebra y el vermut en un vaso mezclador con hielo.\n2. Remueva hasta que esté frío.\n3. Cuele en una copa de martini fría.\n4. Decore con una aceituna o piel de limón.",
+      "ingredients": [
+        { "ingredientId": 159, "name": "Ginebra" },
+        { "ingredientId": 142, "name": "Vermut seco" }
+      ]
+    },
+    {
+      "id": 159,
+      "name": "Daiquirí",
+      "description": "Cóctel clásico cubano, equilibrio perfecto entre ron, cítricos y azúcar.",
+      "instructions": "1. Añada todos los ingredientes en una coctelera con hielo.\n2. Agite bien y cuele en una copa coupe fría.",
+      "ingredients": [
+        { "ingredientId": 346, "name": "Ron blanco" },
+        { "ingredientId": 223, "name": "Jugo de lima" },
+        { "ingredientId": 310, "name": "Jarabe de azúcar" }
       ]
     }
   ],
   "ingredients": [
-    { "id": 159, "name": "Ginebra", "description": "Bebida alcohólica destilada que obtiene su sabor predominante de las bayas de enebro." },
-    { "id": 193, "name": "Hielo" },
-    { "id": 242, "name": "Naranja" },
-    { "id": 233, "name": "Mezcal" },
+    { "id": 1, "name": "7-Up" },
+    { "id": 2, "name": "Absenta" },
+    { "id": 4, "name": "Vodka", "description": "Bebida destilada fuerte y clara." },
+    { "id": 6, "name": "Jarabe de agave" },
+    { "id": 7, "name": "Ron añejo" },
+    { "id": 11, "name": "Jugo de lima" },
+    { "id": 12, "name": "Amaretto" },
+    { "id": 13, "name": "Amaro" },
+    { "id": 18, "name": "Amargo de Angostura" },
+    { "id": 22, "name": "Aperol" },
+    { "id": 23, "name": "Naranja" },
+    { "id": 24, "name": "Brandy de manzana" },
+    { "id": 26, "name": "Jugo de manzana" },
+    { "id": 30, "name": "Brandy de albaricoque" },
+    { "id": 34, "name": "Baileys" },
+    { "id": 38, "name": "Albahaca" },
+    { "id": 41, "name": "Cerveza" },
+    { "id": 55, "name": "Bourbon" },
+    { "id": 59, "name": "Cola" },
     { "id": 109, "name": "Coñac" },
-    { "id": 11, "name": "Lima" },
-    { "id": 12, "name": "Jugo de Lima" }
+    { "id": 120, "name": "Crema de cacao blanca" },
+    { "id": 159, "name": "Ginebra", "description": "Bebida fuerte aromatizada con bayas de enebro." },
+    { "id": 193, "name": "Hielo" },
+    { "id": 216, "name": "Jugo de limón" },
+    { "id": 217, "name": "Lima" },
+    { "id": 242, "name": "Naranja" },
+    { "id": 244, "name": "Jugo de naranja" },
+    { "id": 252, "name": "Jarabe de azúcar" },
+    { "id": 264, "name": "Soda" },
+    { "id": 285, "name": "Vermut dulce" },
+    { "id": 286, "name": "Vermut seco" },
+    { "id": 305, "name": "Tequila" },
+    { "id": 333, "name": "Tónica" },
+    { "id": 318, "name": "Triple Seco" },
+    { "id": 341, "name": "Ron blanco" },
+    { "id": 221, "name": "Lillet Blanc" }
   ]
 }

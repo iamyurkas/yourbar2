@@ -116,8 +116,8 @@ export function reloadInventoryData(lang: string = 'en'): InventoryData {
   try {
     if (lang === 'es') {
       localizedData = require('@/assets/data/data_es.json');
-    } else if (lang === 'ua') {
-      localizedData = require('@/assets/data/data_ua.json');
+    } else if (lang === 'uk') {
+      localizedData = require('@/assets/data/data_uk.json');
     }
   } catch {
     // Fallback to English if file not found or error loading
@@ -137,7 +137,7 @@ export function reloadInventoryData(lang: string = 'en'): InventoryData {
         ...ec,
         ...lc,
         ingredients: ec.ingredients?.map((ei: any) => {
-          const li = lc.ingredients?.find((i: any) => i.order === ei.order);
+          const li = lc.ingredients?.find((i: any) => i.ingredientId === ei.ingredientId);
           return li ? { ...ei, ...li } : ei;
         }),
       };

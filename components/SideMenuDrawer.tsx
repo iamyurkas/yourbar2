@@ -126,7 +126,7 @@ type LanguageOption = {
 const LANGUAGE_OPTIONS: LanguageOption[] = [
   { key: "en", label: "English", flag: "🇬🇧" },
   { key: "es", label: "Español", flag: "🇪🇸" },
-  { key: "ua", label: "Українська", flag: "🇺🇦" },
+  { key: "uk", label: "Українська", flag: "🇺🇦" },
 ];
 
 type SideMenuDrawerProps = {
@@ -2134,6 +2134,7 @@ const styles = StyleSheet.create({
     height: 22,
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: "transparent",
   },
   flagIcon: {
     fontSize: 16,

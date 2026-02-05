@@ -223,7 +223,7 @@ function mapRecipeIngredientToEditable(
 }
 
 export default function CreateCocktailScreen() {
-  const { t } = useTranslation();
+  const { t: translate } = useTranslation();
   const navigation = useNavigation();
   const Colors = useAppColors();
   const {
@@ -486,8 +486,8 @@ export default function CreateCocktailScreen() {
   }, [cocktails, getBaseGroupId]);
 
   const placeholderLabel = useMemo(
-    () => (imageUri ? t("ui.edit") : t("ui.add")),
-    [imageUri, t],
+    () => (imageUri ? translate("ui.edit") : translate("ui.add")),
+    [imageUri, translate],
   );
 
   const selectedGlass = useMemo(
@@ -696,14 +696,14 @@ export default function CreateCocktailScreen() {
 
     if (!canAskAgain) {
       showDialog({
-        title: t("ui.media_access_required"),
-        message: t("ui.media_access_required_desc"),
-        actions: [{ label: t("ui.ok") }],
+        title: translate("ui.media_access_required"),
+        message: translate("ui.media_access_required_desc"),
+        actions: [{ label: translate("ui.ok") }],
       });
     }
 
     return false;
-  }, [permissionStatus?.granted, requestPermission, showDialog, t]);
+  }, [permissionStatus?.granted, requestPermission, showDialog, translate]);
 
   const handlePickImage = useCallback(async () => {
     if (isPickingImage) {
@@ -733,14 +733,14 @@ export default function CreateCocktailScreen() {
     } catch (error) {
       console.warn("Failed to pick image", error);
       showDialog({
-        title: t("ui.could_not_save"),
-        message: t("ui.try_again_later"),
-        actions: [{ label: t("ui.ok") }],
+        title: translate("ui.could_not_save"),
+        message: translate("ui.try_again_later"),
+        actions: [{ label: translate("ui.ok") }],
       });
     } finally {
       setIsPickingImage(false);
     }
-  }, [ensureMediaPermission, isPickingImage, showDialog, t]);
+  }, [ensureMediaPermission, isPickingImage, showDialog, translate]);
 
   const handleRemovePhoto = useCallback(() => {
     setImageUri(null);
@@ -963,9 +963,9 @@ export default function CreateCocktailScreen() {
     const trimmedName = name.trim();
     if (!trimmedName) {
       showDialog({
-        title: t("cocktails.name_required"),
-        message: t("cocktails.enter_name"),
-        actions: [{ label: t("ui.ok") }],
+        title: translate("cocktails.name_required"),
+        message: translate("cocktails.enter_name"),
+        actions: [{ label: translate("ui.ok") }],
       });
       return;
     }
@@ -1048,9 +1048,9 @@ export default function CreateCocktailScreen() {
 
     if (!sanitizedIngredients.length) {
       showDialog({
-        title: t("cocktails.recipe_required"),
-        message: t("cocktails.add_at_least_one"),
-        actions: [{ label: t("ui.ok") }],
+        title: translate("cocktails.recipe_required"),
+        message: translate("cocktails.add_at_least_one"),
+        actions: [{ label: translate("ui.ok") }],
       });
       return;
     }
@@ -1102,9 +1102,9 @@ export default function CreateCocktailScreen() {
 
       if (!persisted) {
         showDialog({
-          title: t("ui.could_not_save"),
-          message: t("ui.try_again_later"),
-          actions: [{ label: t("ui.ok") }],
+          title: translate("ui.could_not_save"),
+          message: translate("ui.try_again_later"),
+          actions: [{ label: translate("ui.ok") }],
         });
         return;
       }
@@ -1177,7 +1177,7 @@ export default function CreateCocktailScreen() {
     selectedTagIds,
     setHasUnsavedChanges,
     showDialog,
-    t,
+    translate,
   ]);
 
   const handleDeletePress = useCallback(() => {
@@ -1194,31 +1194,31 @@ export default function CreateCocktailScreen() {
 
     if (numericId == null) {
       showDialog({
-        title: t("ui.item_not_found"),
-        message: t("ui.try_again_later"),
-        actions: [{ label: t("ui.ok") }],
+        title: translate("ui.item_not_found"),
+        message: translate("ui.try_again_later"),
+        actions: [{ label: translate("ui.ok") }],
       });
       return;
     }
 
     const trimmedName = prefilledCocktail?.name?.trim();
-    const message = t("cocktails.delete_cocktail_confirmation", { name: trimmedName || t("ui.this_item") });
+    const message = translate("cocktails.delete_cocktail_confirmation", { name: trimmedName || translate("ui.this_item") });
 
     showDialog({
-      title: t("cocktails.delete_cocktail"),
+      title: translate("cocktails.delete_cocktail"),
       message,
       actions: [
-        { label: t("ui.cancel"), variant: "secondary" },
+        { label: translate("ui.cancel"), variant: "secondary" },
         {
-          label: t("ui.delete"),
+          label: translate("ui.delete"),
           variant: "destructive",
           onPress: () => {
             const wasDeleted = deleteCocktail(numericId);
             if (!wasDeleted) {
               showDialog({
-                title: t("ui.could_not_delete"),
-                message: t("ui.try_again_later"),
-                actions: [{ label: t("ui.ok") }],
+                title: translate("ui.could_not_delete"),
+                message: translate("ui.try_again_later"),
+                actions: [{ label: translate("ui.ok") }],
               });
               return;
             }
@@ -1236,19 +1236,19 @@ export default function CreateCocktailScreen() {
     prefilledCocktail?.name,
     setHasUnsavedChanges,
     showDialog,
-    t,
+    translate,
   ]);
 
   const confirmLeave = useCallback(
     (onLeave: () => void) => {
       showDialog({
-        title: t("cocktails.leave_without_saving"),
-        message: t("cocktails.changes_lost"),
+        title: translate("cocktails.leave_without_saving"),
+        message: translate("cocktails.changes_lost"),
         actions: [
-          { label: t("ui.save"), onPress: handleSubmit },
-          { label: t("cocktails.stay"), variant: "secondary" },
+          { label: translate("ui.save"), onPress: handleSubmit },
+          { label: translate("cocktails.stay"), variant: "secondary" },
           {
-            label: t("cocktails.leave"),
+            label: translate("cocktails.leave"),
             variant: "destructive",
             onPress: () => {
               setHasUnsavedChanges(false);
@@ -1258,7 +1258,7 @@ export default function CreateCocktailScreen() {
         ],
       });
     },
-    [handleSubmit, setHasUnsavedChanges, showDialog, t],
+    [handleSubmit, setHasUnsavedChanges, showDialog, translate],
   );
 
   useEffect(() => {
@@ -1364,7 +1364,7 @@ export default function CreateCocktailScreen() {
     <>
       <Stack.Screen
         options={{
-          title: isEditMode ? t("cocktails.edit_cocktail") : t("cocktails.add_cocktail"),
+          title: isEditMode ? translate("cocktails.edit_cocktail") : translate("cocktails.add_cocktail"),
           headerTitleAlign: "center",
           headerStyle: { backgroundColor: Colors.surface },
           headerShadowVisible: false,
@@ -1376,7 +1376,7 @@ export default function CreateCocktailScreen() {
           headerLeft: () => (
             <HeaderIconButton
               onPress={handleGoBack}
-              accessibilityLabel={t("ui.ok")}
+              accessibilityLabel={translate("ui.ok")}
             >
               <MaterialCommunityIcons
                 name="arrow-left"
@@ -1390,7 +1390,7 @@ export default function CreateCocktailScreen() {
               return (
                 <HeaderIconButton
                   onPress={handleDeletePress}
-                  accessibilityLabel={t("cocktails.delete_cocktail")}
+                  accessibilityLabel={translate("cocktails.delete_cocktail")}
                 >
                   <MaterialIcons
                     name="delete-outline"
@@ -1423,7 +1423,7 @@ export default function CreateCocktailScreen() {
                     },
                   })
                 }
-                accessibilityLabel={t("cocktails.edit_cocktail")}
+            accessibilityLabel={translate("cocktails.edit_cocktail")}
               >
                 <MaterialCommunityIcons
                   name="pencil-outline"
@@ -1449,12 +1449,12 @@ export default function CreateCocktailScreen() {
         >
           <View style={styles.section}>
             <Text style={[styles.label, { color: Colors.onSurface }]}>
-              {t("ui.name")}
+              {translate("ui.name")}
             </Text>
             <TextInput
               value={name}
               onChangeText={setName}
-              placeholder={t("ui.name_placeholder")}
+              placeholder={translate("ui.name_placeholder")}
               style={[
                 styles.input,
                 {
@@ -1476,12 +1476,12 @@ export default function CreateCocktailScreen() {
               ]}
             >
               <Text style={[styles.cardLabel, { color: Colors.onSurface }]}>
-                {t("cocktails.glass")}
+                {translate("cocktails.glass")}
               </Text>
               <Pressable
                 style={styles.glassTile}
                 accessibilityRole="button"
-                accessibilityLabel={t("ui.select_glass")}
+                accessibilityLabel={translate("ui.select_glass")}
                 onPress={() => setIsGlassModalVisible(true)}
               >
                 {glassImageSource ? (
@@ -1508,7 +1508,7 @@ export default function CreateCocktailScreen() {
               ]}
             >
               <Text style={[styles.cardLabel, { color: Colors.onSurface }]}>
-                {t("cocktails.photo")}
+                {translate("cocktails.photo")}
               </Text>
               <View style={styles.photoTileWrapper}>
                 <Pressable
@@ -1575,7 +1575,7 @@ export default function CreateCocktailScreen() {
 
           <View style={styles.section}>
             <Text style={[styles.label, { color: Colors.onSurface }]}>
-              {t("cocktails.method")}
+              {translate("cocktails.method")}
             </Text>
             <Pressable
               style={[
@@ -1586,7 +1586,7 @@ export default function CreateCocktailScreen() {
                 },
               ]}
               accessibilityRole="button"
-                accessibilityLabel={t("ui.select_method")}
+              accessibilityLabel={translate("ui.select_method")}
               onPress={() => setIsMethodModalVisible(true)}
             >
               <View style={styles.methodPickerContent}>
@@ -1613,11 +1613,11 @@ export default function CreateCocktailScreen() {
           <View style={styles.section}>
             <View style={styles.tagHeader}>
               <Text style={[styles.label, { color: Colors.onSurface }]}>
-                {t("cocktails.tags")}
+                {translate("cocktails.tags")}
               </Text>
               <Pressable
                 accessibilityRole="button"
-                accessibilityLabel={t("ui.new_tag")}
+                accessibilityLabel={translate("ui.new_tag")}
                 onPress={handleOpenTagModal}
                 style={[
                   styles.tagAddButton,
@@ -1630,12 +1630,12 @@ export default function CreateCocktailScreen() {
                   color={Colors.tint}
                 />
                 <Text style={[styles.tagAddLabel, { color: Colors.tint }]}>
-                  {t("ui.create")}
+                  {translate("ui.create")}
                 </Text>
               </Pressable>
             </View>
             <Text style={[styles.hint, { color: Colors.onSurfaceVariant }]}>
-              {t("ui.select_tags_hint")}
+              {translate("ui.select_tags_hint")}
             </Text>
             <View style={styles.tagList}>
               {tagSelection.map((tag) => (
@@ -1655,12 +1655,12 @@ export default function CreateCocktailScreen() {
 
           <View style={styles.section}>
             <Text style={[styles.label, { color: Colors.onSurface }]}>
-              {t("cocktails.description")}
+              {translate("cocktails.description")}
             </Text>
             <TextInput
               value={description}
               onChangeText={setDescription}
-              placeholder={t("cocktails.optional_description")}
+              placeholder={translate("cocktails.optional_description")}
               placeholderTextColor={`${Colors.onSurfaceVariant}99`}
               style={[
                 styles.input,
@@ -1679,12 +1679,12 @@ export default function CreateCocktailScreen() {
 
           <View style={styles.section}>
             <Text style={[styles.label, { color: Colors.onSurface }]}>
-              {t("cocktails.instructions")}
+              {translate("cocktails.instructions")}
             </Text>
             <TextInput
               value={instructions}
               onChangeText={setInstructions}
-              placeholder={t("cocktails.optional_instructions")}
+              placeholder={translate("cocktails.optional_instructions")}
               placeholderTextColor={`${Colors.onSurfaceVariant}99`}
               style={[
                 styles.input,
@@ -1703,7 +1703,7 @@ export default function CreateCocktailScreen() {
 
           <View style={styles.section}>
             <Text style={[styles.label, { color: Colors.onSurface }]}>
-              {t("cocktails.ingredients")}
+              {translate("cocktails.ingredients")}
             </Text>
             <View style={styles.ingredientsList}>
               {ingredientsState.map((ingredient, index) => (
@@ -1739,7 +1739,7 @@ export default function CreateCocktailScreen() {
                 },
               ]}
               accessibilityRole="button"
-              accessibilityLabel={t("cocktails.add_ingredient")}
+              accessibilityLabel={translate("cocktails.add_ingredient")}
             >
               <MaterialCommunityIcons
                 name="plus"
@@ -1747,7 +1747,7 @@ export default function CreateCocktailScreen() {
                 color={Colors.tint}
               />
               <Text style={[styles.addIngredientLabel, { color: Colors.tint }]}>
-                {t("cocktails.add_ingredient")}
+                {translate("cocktails.add_ingredient")}
               </Text>
             </Pressable>
           </View>
@@ -1763,10 +1763,10 @@ export default function CreateCocktailScreen() {
               },
             ]}
             accessibilityRole="button"
-            accessibilityLabel={t("ui.save")}
+            accessibilityLabel={translate("ui.save")}
           >
             <Text style={[styles.submitLabel, { color: Colors.onPrimary }]}>
-              {t("ui.save")}
+              {translate("ui.save")}
             </Text>
           </Pressable>
           <View style={styles.bottomSpacer} />
@@ -1783,7 +1783,7 @@ export default function CreateCocktailScreen() {
           style={styles.modalOverlay}
           onPress={() => setIsGlassModalVisible(false)}
           accessibilityRole="button"
-          accessibilityLabel={t("ui.cancel")}
+          accessibilityLabel={translate("ui.cancel")}
         >
           <Pressable
             onPress={(event) => event.stopPropagation?.()}
@@ -1799,12 +1799,12 @@ export default function CreateCocktailScreen() {
           >
             <View style={styles.modalHeader}>
               <Text style={[styles.modalTitle, { color: Colors.onSurface }]}>
-                {t("ui.select_glass")}
+                {translate("ui.select_glass")}
               </Text>
               <Pressable
                 onPress={() => setIsGlassModalVisible(false)}
                 accessibilityRole="button"
-                accessibilityLabel={t("ui.cancel")}
+                accessibilityLabel={translate("ui.cancel")}
               >
                 <MaterialCommunityIcons
                   name="close"
@@ -1839,7 +1839,7 @@ export default function CreateCocktailScreen() {
                       },
                     ]}
                     accessibilityRole="button"
-                    accessibilityLabel={t("ui.select_item_name", { name: item.name })}
+                    accessibilityLabel={translate("ui.select_item_name", { name: item.name })}
                   >
                     {asset ? (
                       <AppImage
@@ -1900,12 +1900,12 @@ export default function CreateCocktailScreen() {
               <Text
                 style={[styles.unitModalTitle, { color: Colors.onSurface }]}
               >
-                {t("ui.select_unit")}
+                {translate("ui.select_unit")}
               </Text>
               <Pressable
                 onPress={handleCloseUnitPicker}
                 accessibilityRole="button"
-                accessibilityLabel={t("ui.cancel")}
+                accessibilityLabel={translate("ui.cancel")}
               >
                 <MaterialCommunityIcons
                   name="close"
@@ -1991,12 +1991,12 @@ export default function CreateCocktailScreen() {
               <Text
                 style={[styles.unitModalTitle, { color: Colors.onSurface }]}
               >
-                {t("ui.select_method")}
+                {translate("ui.select_method")}
               </Text>
               <Pressable
                 onPress={() => setIsMethodModalVisible(false)}
                 accessibilityRole="button"
-                accessibilityLabel={t("ui.cancel")}
+                accessibilityLabel={translate("ui.cancel")}
               >
                 <MaterialCommunityIcons
                   name="close"
@@ -2027,7 +2027,7 @@ export default function CreateCocktailScreen() {
                   },
                 ]}
                 accessibilityRole="button"
-                accessibilityLabel={t("cocktails.clear_methods")}
+                accessibilityLabel={translate("cocktails.clear_methods")}
               >
                 <Text
                   style={[
@@ -2035,7 +2035,7 @@ export default function CreateCocktailScreen() {
                     { color: Colors.onSurface },
                   ]}
                 >
-                  {t("ui.not_specified")}
+                  {translate("ui.not_specified")}
                 </Text>
                 <Text
                   style={[
@@ -2043,7 +2043,7 @@ export default function CreateCocktailScreen() {
                     { color: Colors.onSurfaceVariant },
                   ]}
                 >
-                  {t("cocktails.clear_methods_desc")}
+                  {translate("cocktails.clear_methods_desc")}
                 </Text>
               </Pressable>
               {getCocktailMethods().map((method) => {
@@ -2067,7 +2067,7 @@ export default function CreateCocktailScreen() {
                       },
                     ]}
                     accessibilityRole="button"
-                    accessibilityLabel={t("ui.select_item_name", { name: method.label })}
+                    accessibilityLabel={translate("ui.select_item_name", { name: method.label })}
                   >
                     <View style={styles.methodOptionHeader}>
                       <View style={styles.methodOptionTitleRow}>
@@ -2118,8 +2118,8 @@ export default function CreateCocktailScreen() {
 
       <TagEditorModal
         visible={isTagModalVisible}
-        title={t("ui.new_tag")}
-        confirmLabel={t("ui.create")}
+        title={translate("ui.new_tag")}
+        confirmLabel={translate("ui.create")}
         onClose={handleCloseTagModal}
         onSave={handleCreateTag}
       />
@@ -2168,7 +2168,7 @@ function EditableIngredientRow({
   index,
   totalCount,
 }: EditableIngredientRowProps) {
-  const { t } = useTranslation();
+  const { t: translate } = useTranslation();
   const [isFocused, setIsFocused] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const hideSuggestionsTimeout = useRef<NodeJS.Timeout | null>(null);
@@ -2252,9 +2252,9 @@ function EditableIngredientRow({
         return undefined;
       }
 
-      return t("ingredients.used_in_cocktails", { count });
+      return translate("ingredients.used_in_cocktails", { count });
     },
-    [cocktailsByBaseGroup, t],
+    [cocktailsByBaseGroup, translate],
   );
 
   useEffect(() => {
@@ -2351,7 +2351,7 @@ function EditableIngredientRow({
 
   const unitLabel = useMemo(() => {
     if (ingredient.unitId == null) {
-      return t("ui.no_unit");
+      return translate("ui.no_unit");
     }
     const dictionary = getCocktailUnitDictionary();
     const entry = dictionary[ingredient.unitId];
@@ -2362,7 +2362,7 @@ function EditableIngredientRow({
       ? (entry.plural ?? entry.singular)
       : entry.singular;
     return label || "";
-  }, [ingredient.unitId, usePluralUnits, t]);
+  }, [ingredient.unitId, usePluralUnits, translate]);
 
   useEffect(() => {
     return () => {
@@ -2384,7 +2384,7 @@ function EditableIngredientRow({
         <View style={styles.ingredientTitleRow}>
           <Text
             style={[styles.ingredientHeading, { color: Colors.onSurface }]}
-          >{`${index + 1}. ${t("cocktails.ingredient")}`}</Text>
+          >{`${index + 1}. ${translate("cocktails.ingredient")}`}</Text>
           <View
             style={[
               styles.reorderControls,
@@ -2397,7 +2397,7 @@ function EditableIngredientRow({
               disabled={!canMoveUp}
               hitSlop={8}
               accessibilityRole="button"
-              accessibilityLabel={t("ui.move_up")}
+              accessibilityLabel={translate("ui.move_up")}
               style={[
                 styles.reorderButton,
                 { borderColor: Colors.outlineVariant, backgroundColor: Colors.surface },
@@ -2419,7 +2419,7 @@ function EditableIngredientRow({
               disabled={!canMoveDown}
               hitSlop={8}
               accessibilityRole="button"
-              accessibilityLabel={t("ui.move_down")}
+              accessibilityLabel={translate("ui.move_down")}
               style={[
                 styles.reorderButton,
                 { borderColor: Colors.outlineVariant, backgroundColor: Colors.surface },
@@ -2442,7 +2442,7 @@ function EditableIngredientRow({
           onPress={() => onRemove(ingredient.key)}
           hitSlop={8}
           accessibilityRole="button"
-          accessibilityLabel={t("ui.delete")}
+          accessibilityLabel={translate("ui.delete")}
           style={!canReorder && styles.hiddenControl}
           pointerEvents={canReorder ? "auto" : "none"}
         >
@@ -2467,7 +2467,7 @@ function EditableIngredientRow({
               );
             }
           }}
-          placeholder={t("cocktails.ingredient_name_placeholder")}
+          placeholder={translate("cocktails.ingredient_name_placeholder")}
           placeholderTextColor={`${Colors.onSurfaceVariant}99`}
           style={[
             styles.input,
@@ -2498,13 +2498,13 @@ function EditableIngredientRow({
               { backgroundColor: Colors.background },
             ]}
             accessibilityRole="button"
-            accessibilityLabel={t("ingredients.create")}
+            accessibilityLabel={translate("ingredients.create")}
             hitSlop={8}
           >
             <Text
               style={[styles.ingredientNameCreateLabel, { color: Colors.tint }]}
             >
-              {`+ ${t("ui.add")}`}
+              {`+ ${translate("ui.add")}`}
             </Text>
           </Pressable>
         ) : null}
@@ -2591,12 +2591,12 @@ function EditableIngredientRow({
       <View style={styles.rowInputs}>
         <View style={styles.amountColumn}>
           <Text style={[styles.inputLabel, { color: Colors.onSurfaceVariant }]}>
-            {t("ui.amount")}
+            {translate("ui.amount")}
           </Text>
           <TextInput
             value={ingredient.amount}
             onChangeText={(text) => onChange(ingredient.key, { amount: text })}
-            placeholder={t("cocktails.amount_placeholder")}
+            placeholder={translate("cocktails.amount_placeholder")}
             placeholderTextColor={`${Colors.onSurfaceVariant}99`}
             keyboardType="decimal-pad"
             style={[
@@ -2608,7 +2608,7 @@ function EditableIngredientRow({
         </View>
         <View style={styles.unitColumn}>
           <Text style={[styles.inputLabel, { color: Colors.onSurfaceVariant }]}>
-            {t("ui.unit")}
+            {translate("ui.unit")}
           </Text>
           <Pressable
             onPress={() => onRequestUnitPicker(ingredient.key)}
@@ -2620,7 +2620,7 @@ function EditableIngredientRow({
               },
             ]}
             accessibilityRole="button"
-            accessibilityLabel={t("ui.select_unit")}
+            accessibilityLabel={translate("ui.select_unit")}
           >
             <Text style={[styles.unitLabel, { color: Colors.onSurface }]}>
               {unitLabel}
@@ -2636,12 +2636,12 @@ function EditableIngredientRow({
 
       <View style={styles.toggleRow}>
         <ToggleChip
-          label={t("cocktails.garnish")}
+          label={translate("cocktails.garnish")}
           active={ingredient.garnish}
           onToggle={handleToggleGarnish}
         />
         <ToggleChip
-          label={t("cocktails.optional")}
+          label={translate("cocktails.optional")}
           active={ingredient.optional}
           onToggle={handleToggleOptional}
         />
@@ -2650,26 +2650,26 @@ function EditableIngredientRow({
       {isBrandedIngredient ? (
         <View style={styles.toggleRow}>
           <ToggleChip
-            label={t("cocktails.allow_base_substitute")}
+            label={translate("cocktails.allow_base_substitute")}
             active={ingredient.allowBaseSubstitution}
             onToggle={handleToggleAllowBase}
             onInfo={() =>
               onOpenDialog({
-                title: t("cocktails.allow_base_substitute"),
-                message: t("cocktails.allow_base_substitute_desc"),
-                actions: [{ label: t("ui.ok") }],
+                title: translate("cocktails.allow_base_substitute"),
+                message: translate("cocktails.allow_base_substitute_desc"),
+                actions: [{ label: translate("ui.ok") }],
               })
             }
           />
           <ToggleChip
-            label={t("cocktails.allow_branded_substitute")}
+            label={translate("cocktails.allow_branded_substitute")}
             active={ingredient.allowBrandSubstitution}
             onToggle={handleToggleAllowBrand}
             onInfo={() =>
               onOpenDialog({
-                title: t("cocktails.allow_branded_substitute"),
-                message: t("cocktails.allow_branded_substitute_desc"),
-                actions: [{ label: t("ui.ok") }],
+                title: translate("cocktails.allow_branded_substitute"),
+                message: translate("cocktails.allow_branded_substitute_desc"),
+                actions: [{ label: translate("ui.ok") }],
               })
             }
           />
@@ -2687,11 +2687,11 @@ function EditableIngredientRow({
             },
           ]}
           accessibilityRole="button"
-          accessibilityLabel={t("cocktails.add_substitute")}
+          accessibilityLabel={translate("cocktails.add_substitute")}
         >
           <MaterialCommunityIcons name="plus" size={16} color={Colors.tint} />
           <Text style={[styles.addSubstituteLabel, { color: Colors.tint }]}>
-                {t("cocktails.add_substitute")}
+            {translate("cocktails.add_substitute")}
           </Text>
         </Pressable>
         {ingredient.substitutes.length ? (
@@ -2716,7 +2716,7 @@ function EditableIngredientRow({
                   numberOfLines={1}
                 >
                   {substitute.name}
-                  {substitute.isBrand ? ` • ${t("ui.brand")}` : ""}
+                  {substitute.isBrand ? ` • ${translate("ui.brand")}` : ""}
                 </Text>
                 <Pressable
                   onPress={() =>
@@ -2724,7 +2724,7 @@ function EditableIngredientRow({
                   }
                   hitSlop={8}
                   accessibilityRole="button"
-                  accessibilityLabel={t("ui.delete_item_name", { name: substitute.name })}
+                  accessibilityLabel={translate("ui.delete_item_name", { name: substitute.name })}
                 >
                   <MaterialCommunityIcons
                     name="close"
@@ -2749,7 +2749,7 @@ type ToggleChipProps = {
 };
 
 function ToggleChip({ label, active, onToggle, onInfo }: ToggleChipProps) {
-  const { t } = useTranslation();
+  const { t: translate } = useTranslation();
   const Colors = useAppColors();
   return (
     <View style={styles.toggleChipContainer}>
@@ -2782,7 +2782,7 @@ function ToggleChip({ label, active, onToggle, onInfo }: ToggleChipProps) {
           onPress={onInfo}
           hitSlop={8}
           accessibilityRole="button"
-          accessibilityLabel={t("ui.info_about_item", { name: label })}
+          accessibilityLabel={translate("ui.info_about_item", { name: label })}
         >
           <MaterialCommunityIcons
             name="information-outline"

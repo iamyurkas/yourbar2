@@ -44,7 +44,7 @@ export type StartScreen =
   | 'ingredients_shopping';
 
 export type AppTheme = 'light' | 'dark' | 'system';
-export type AppLanguage = 'en' | 'es' | 'ua';
+export type AppLanguage = 'en' | 'es' | 'uk';
 
 export type IngredientTag = NonNullable<IngredientRecord['tags']>[number];
 
