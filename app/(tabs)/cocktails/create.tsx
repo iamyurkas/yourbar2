@@ -237,7 +237,7 @@ export default function CreateCocktailScreen() {
     useImperialUnits,
   } = useInventory();
   const params = useLocalSearchParams();
-  const { setHasUnsavedChanges } = useUnsavedChanges();
+  const { setHasUnsavedChanges, setSaveHandler } = useUnsavedChanges();
 
   const modeParam = getParamValue(params.mode);
   const isEditMode = modeParam === "edit";
@@ -1277,6 +1277,13 @@ export default function CreateCocktailScreen() {
     },
     [handleSubmit, setHasUnsavedChanges, showDialog],
   );
+
+  useEffect(() => {
+    setSaveHandler(() => handleSubmit);
+    return () => {
+      setSaveHandler(null);
+    };
+  }, [handleSubmit, setSaveHandler]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", (event) => {
