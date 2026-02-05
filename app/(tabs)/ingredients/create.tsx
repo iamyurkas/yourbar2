@@ -122,6 +122,10 @@ export default function IngredientFormScreen() {
       return undefined;
     }
   }, [returnToParamsParam]);
+  const shouldConfirmOnLeave = useMemo(
+    () => !isEditMode && returnToPath === '/cocktails/create',
+    [isEditMode, returnToPath],
+  );
 
   const navigation = useNavigation();
   const Colors = useAppColors();
@@ -576,7 +580,7 @@ export default function IngredientFormScreen() {
         return;
       }
 
-      if (hasUnsavedChanges) {
+      if (hasUnsavedChanges || shouldConfirmOnLeave) {
         event.preventDefault();
         confirmLeave(() => {
           isHandlingBackRef.current = true;
@@ -603,7 +607,7 @@ export default function IngredientFormScreen() {
     });
 
     return unsubscribe;
-  }, [confirmLeave, hasUnsavedChanges, navigation]);
+  }, [confirmLeave, hasUnsavedChanges, navigation, shouldConfirmOnLeave]);
 
   const handleGoBack = useCallback(() => {
     skipDuplicateBack(navigation);
