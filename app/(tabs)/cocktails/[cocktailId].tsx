@@ -34,10 +34,10 @@ import {
 } from "@/libs/ingredient-availability";
 import {
   buildReturnToParams,
+  createInventoryRouteValidator,
   navigateToDetailsWithReturnTo,
   parseReturnToParams,
   returnToSourceOrBack,
-  skipDuplicateBack,
 } from "@/libs/navigation";
 import { normalizeSearchText } from "@/libs/search-normalization";
 import { useInventory, type Cocktail } from "@/providers/inventory-provider";
@@ -352,6 +352,34 @@ export default function CocktailDetailsScreen() {
     () => resolveCocktail(resolvedParam, cocktails),
     [cocktails, resolvedParam],
   );
+  const ingredientIdSet = useMemo(() => {
+    const ids = new Set<number>();
+    ingredients.forEach((item) => {
+      const candidate = Number(item.id ?? -1);
+      if (Number.isFinite(candidate) && candidate >= 0) {
+        ids.add(Math.trunc(candidate));
+      }
+    });
+    return ids;
+  }, [ingredients]);
+  const cocktailIdSet = useMemo(() => {
+    const ids = new Set<number>();
+    cocktails.forEach((item) => {
+      const candidate = Number(item.id ?? -1);
+      if (Number.isFinite(candidate) && candidate >= 0) {
+        ids.add(Math.trunc(candidate));
+      }
+    });
+    return ids;
+  }, [cocktails]);
+  const routeValidator = useMemo(
+    () =>
+      createInventoryRouteValidator({
+        ingredientIds: ingredientIdSet,
+        cocktailIds: cocktailIdSet,
+      }),
+    [cocktailIdSet, ingredientIdSet],
+  );
 
   const returnToPath = useMemo(() => {
     const value = Array.isArray(params.returnToPath)
@@ -372,13 +400,12 @@ export default function CocktailDetailsScreen() {
   }, [useImperialUnits]);
 
   const handleReturn = useCallback(() => {
-    if (returnToPath === "/cocktails") {
-      skipDuplicateBack(navigation);
-      return;
-    }
-
-    returnToSourceOrBack(navigation, { returnToPath, returnToParams });
-  }, [navigation, returnToParams, returnToPath]);
+    returnToSourceOrBack(navigation, {
+      returnToPath,
+      returnToParams,
+      isRouteValid: routeValidator,
+    });
+  }, [navigation, returnToParams, returnToPath, routeValidator]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", (event) => {
@@ -402,6 +429,29 @@ export default function CocktailDetailsScreen() {
 
     return unsubscribe;
   }, [handleReturn, navigation]);
+
+  useEffect(() => {
+    if (cocktail || isHandlingBackRef.current) {
+      return;
+    }
+
+    isHandlingBackRef.current = true;
+    returnToSourceOrBack(navigation, {
+      returnToPath,
+      returnToParams,
+      isRouteValid: routeValidator,
+    });
+
+    requestAnimationFrame(() => {
+      isHandlingBackRef.current = false;
+    });
+  }, [
+    cocktail,
+    navigation,
+    returnToParams,
+    returnToPath,
+    routeValidator,
+  ]);
 
   useEffect(() => {
     const keepAwakeTag = "cocktail-details";

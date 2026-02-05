@@ -35,10 +35,10 @@ import {
 } from "@/libs/ingredient-availability";
 import {
   buildReturnToParams,
+  createInventoryRouteValidator,
   navigateToDetailsWithReturnTo,
   parseReturnToParams,
   returnToSourceOrBack,
-  skipDuplicateBack,
 } from "@/libs/navigation";
 import { normalizeSearchText } from "@/libs/search-normalization";
 import { useInventory, type Ingredient } from "@/providers/inventory-provider";
@@ -109,6 +109,34 @@ export default function IngredientDetailsScreen() {
   const ingredientLookup = useMemo(
     () => createIngredientLookup(ingredients),
     [ingredients],
+  );
+  const ingredientIdSet = useMemo(() => {
+    const ids = new Set<number>();
+    ingredients.forEach((item) => {
+      const candidate = Number(item.id ?? -1);
+      if (Number.isFinite(candidate) && candidate >= 0) {
+        ids.add(Math.trunc(candidate));
+      }
+    });
+    return ids;
+  }, [ingredients]);
+  const cocktailIdSet = useMemo(() => {
+    const ids = new Set<number>();
+    cocktails.forEach((item) => {
+      const candidate = Number(item.id ?? -1);
+      if (Number.isFinite(candidate) && candidate >= 0) {
+        ids.add(Math.trunc(candidate));
+      }
+    });
+    return ids;
+  }, [cocktails]);
+  const routeValidator = useMemo(
+    () =>
+      createInventoryRouteValidator({
+        ingredientIds: ingredientIdSet,
+        cocktailIds: cocktailIdSet,
+      }),
+    [cocktailIdSet, ingredientIdSet],
   );
 
   const numericIngredientId = useMemo(() => {
@@ -333,7 +361,12 @@ export default function IngredientDetailsScreen() {
     }
 
     const targetId = ingredient.id ?? ingredient.name;
-    const params: Record<string, string> = { source: "ingredient" };
+    const params: Record<string, string> = {
+      source: "ingredient",
+      ...buildReturnToParams("/ingredients/[ingredientId]", {
+        ingredientId: String(targetId),
+      }),
+    };
     if (targetId != null) {
       params.ingredientId = String(targetId);
     }
@@ -506,13 +539,12 @@ export default function IngredientDetailsScreen() {
   }, [cocktailEntries.length]);
 
   const handleReturn = useCallback(() => {
-    if (returnToPath === "/ingredients") {
-      skipDuplicateBack(navigation);
-      return;
-    }
-
-    returnToSourceOrBack(navigation, { returnToPath, returnToParams });
-  }, [navigation, returnToParams, returnToPath]);
+    returnToSourceOrBack(navigation, {
+      returnToPath,
+      returnToParams,
+      isRouteValid: routeValidator,
+    });
+  }, [navigation, returnToParams, returnToPath, routeValidator]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", (event) => {
@@ -536,6 +568,29 @@ export default function IngredientDetailsScreen() {
 
     return unsubscribe;
   }, [handleReturn, navigation]);
+
+  useEffect(() => {
+    if (ingredient || isHandlingBackRef.current) {
+      return;
+    }
+
+    isHandlingBackRef.current = true;
+    returnToSourceOrBack(navigation, {
+      returnToPath,
+      returnToParams,
+      isRouteValid: routeValidator,
+    });
+
+    requestAnimationFrame(() => {
+      isHandlingBackRef.current = false;
+    });
+  }, [
+    ingredient,
+    navigation,
+    returnToParams,
+    returnToPath,
+    routeValidator,
+  ]);
 
   return (
     <SafeAreaView

@@ -48,7 +48,9 @@ import { GLASSWARE } from "@/constants/glassware";
 import { useAppColors } from "@/constants/theme";
 import {
   buildReturnToParams,
+  createInventoryRouteValidator,
   parseReturnToParams,
+  returnToSourceOrBack,
   skipDuplicateBack,
 } from "@/libs/navigation";
 import { shouldStorePhoto, storePhoto } from "@/libs/photo-storage";
@@ -355,6 +357,34 @@ export default function CreateCocktailScreen() {
     });
     return map;
   }, [inventoryIngredients]);
+  const ingredientIdSet = useMemo(() => {
+    const ids = new Set<number>();
+    inventoryIngredients.forEach((item) => {
+      const candidate = Number(item.id ?? -1);
+      if (Number.isFinite(candidate) && candidate >= 0) {
+        ids.add(Math.trunc(candidate));
+      }
+    });
+    return ids;
+  }, [inventoryIngredients]);
+  const cocktailIdSet = useMemo(() => {
+    const ids = new Set<number>();
+    cocktails.forEach((item) => {
+      const candidate = Number(item.id ?? -1);
+      if (Number.isFinite(candidate) && candidate >= 0) {
+        ids.add(Math.trunc(candidate));
+      }
+    });
+    return ids;
+  }, [cocktails]);
+  const routeValidator = useMemo(
+    () =>
+      createInventoryRouteValidator({
+        ingredientIds: ingredientIdSet,
+        cocktailIds: cocktailIdSet,
+      }),
+    [cocktailIdSet, ingredientIdSet],
+  );
 
   const closeDialog = useCallback(() => {
     setDialogOptions(null);
@@ -1147,11 +1177,20 @@ export default function CreateCocktailScreen() {
       isNavigatingAfterSaveRef.current = true;
       const targetId = persisted.id ?? persisted.name;
       if (isEditMode && navigation.canGoBack()) {
-        navigation.goBack();
+        skipDuplicateBack(navigation, { isRouteValid: routeValidator });
         return;
       }
 
       if (targetId) {
+        if (returnToPath) {
+          returnToSourceOrBack(navigation, {
+            returnToPath,
+            returnToParams,
+            isRouteValid: routeValidator,
+          });
+          return;
+        }
+
         router.replace({
           pathname: "/cocktails/[cocktailId]",
           params: {
@@ -1237,16 +1276,32 @@ export default function CreateCocktailScreen() {
             }
 
             setHasUnsavedChanges(false);
-            router.replace("/cocktails");
+            const nextCocktailIds = new Set(cocktailIdSet);
+            nextCocktailIds.delete(numericId);
+            const deleteValidator = createInventoryRouteValidator({
+              ingredientIds: ingredientIdSet,
+              cocktailIds: nextCocktailIds,
+            });
+            returnToSourceOrBack(navigation, {
+              returnToPath,
+              returnToParams,
+              isRouteValid: deleteValidator,
+            });
           },
         },
       ],
     });
   }, [
+    cocktailIdSet,
     deleteCocktail,
     isEditMode,
+    ingredientIdSet,
+    navigation,
     prefilledCocktail?.id,
     prefilledCocktail?.name,
+    returnToParams,
+    returnToPath,
+    routeValidator,
     setHasUnsavedChanges,
     showDialog,
   ]);
@@ -1284,7 +1339,11 @@ export default function CreateCocktailScreen() {
         confirmLeave(() => {
           isHandlingBackRef.current = true;
           if (event.data.action.type === "GO_BACK") {
-            skipDuplicateBack(navigation);
+            returnToSourceOrBack(navigation, {
+              returnToPath,
+              returnToParams,
+              isRouteValid: routeValidator,
+            });
           } else {
             navigation.dispatch(event.data.action);
           }
@@ -1298,7 +1357,11 @@ export default function CreateCocktailScreen() {
       if (event.data.action.type === "GO_BACK") {
         event.preventDefault();
         isHandlingBackRef.current = true;
-        skipDuplicateBack(navigation);
+        returnToSourceOrBack(navigation, {
+          returnToPath,
+          returnToParams,
+          isRouteValid: routeValidator,
+        });
         setTimeout(() => {
           isHandlingBackRef.current = false;
         }, 0);
@@ -1306,11 +1369,15 @@ export default function CreateCocktailScreen() {
     });
 
     return unsubscribe;
-  }, [confirmLeave, hasUnsavedChanges, navigation]);
+  }, [confirmLeave, hasUnsavedChanges, navigation, returnToParams, returnToPath, routeValidator]);
 
   const handleGoBack = useCallback(() => {
-    skipDuplicateBack(navigation);
-  }, [navigation]);
+    returnToSourceOrBack(navigation, {
+      returnToPath,
+      returnToParams,
+      isRouteValid: routeValidator,
+    });
+  }, [navigation, returnToParams, returnToPath, routeValidator]);
 
   const imageSource = useMemo(() => {
     if (!imageUri) {

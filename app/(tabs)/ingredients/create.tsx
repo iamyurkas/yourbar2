@@ -27,7 +27,13 @@ import { TagPill } from '@/components/TagPill';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { useAppColors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
-import { buildReturnToParams, skipDuplicateBack } from '@/libs/navigation';
+import {
+  buildReturnToParams,
+  createInventoryRouteValidator,
+  parseReturnToParams,
+  returnToSourceOrBack,
+  skipDuplicateBack,
+} from '@/libs/navigation';
 import { shouldStorePhoto, storePhoto } from '@/libs/photo-storage';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
@@ -104,29 +110,16 @@ export default function IngredientFormScreen() {
     }
     return undefined;
   }, [legacyReturnToParam, returnToPathParam]);
-  const returnToParams = useMemo(() => {
-    if (!returnToParamsParam) {
-      return undefined;
-    }
-
-    try {
-      const parsed = JSON.parse(returnToParamsParam);
-      if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
-        return undefined;
-      }
-
-      const entries = Object.entries(parsed).filter(([, value]) => typeof value === 'string');
-      return entries.length ? Object.fromEntries(entries) : undefined;
-    } catch (error) {
-      console.warn('Failed to parse return params', error);
-      return undefined;
-    }
-  }, [returnToParamsParam]);
+  const returnToParams = useMemo(
+    () => parseReturnToParams(returnToParamsParam),
+    [returnToParamsParam],
+  );
 
   const navigation = useNavigation();
   const Colors = useAppColors();
   const {
     ingredients,
+    cocktails,
     shoppingIngredientIds,
     availableIngredientIds,
     createIngredient,
@@ -142,6 +135,34 @@ export default function IngredientFormScreen() {
   const defaultIngredientTagId = BUILTIN_INGREDIENT_TAGS.find(
     (tag) => tag.name === 'other',
   )?.id;
+  const ingredientIdSet = useMemo(() => {
+    const ids = new Set<number>();
+    ingredients.forEach((item) => {
+      const candidate = Number(item.id ?? -1);
+      if (Number.isFinite(candidate) && candidate >= 0) {
+        ids.add(Math.trunc(candidate));
+      }
+    });
+    return ids;
+  }, [ingredients]);
+  const cocktailIdSet = useMemo(() => {
+    const ids = new Set<number>();
+    cocktails.forEach((item) => {
+      const candidate = Number(item.id ?? -1);
+      if (Number.isFinite(candidate) && candidate >= 0) {
+        ids.add(Math.trunc(candidate));
+      }
+    });
+    return ids;
+  }, [cocktails]);
+  const routeValidator = useMemo(
+    () =>
+      createInventoryRouteValidator({
+        ingredientIds: ingredientIdSet,
+        cocktailIds: cocktailIdSet,
+      }),
+    [cocktailIdSet, ingredientIdSet],
+  );
 
   const numericIngredientId = useMemo(() => {
     const candidate = ingredient?.id ?? ingredientParam;
@@ -439,7 +460,7 @@ export default function IngredientFormScreen() {
         setHasUnsavedChanges(false);
         isNavigatingAfterSaveRef.current = true;
         if (navigation.canGoBack()) {
-          navigation.goBack();
+          skipDuplicateBack(navigation, { isRouteValid: routeValidator });
           return;
         }
 
@@ -506,12 +527,20 @@ export default function IngredientFormScreen() {
     isNavigatingAfterSaveRef.current = true;
     const targetId = created.id ?? created.name;
     if (!targetId) {
-      skipDuplicateBack(navigation);
+      returnToSourceOrBack(navigation, {
+        returnToPath,
+        returnToParams,
+        isRouteValid: routeValidator,
+      });
       return;
     }
 
     if (returnToPath) {
-      router.navigate({ pathname: returnToPath, params: returnToParams });
+      returnToSourceOrBack(navigation, {
+        returnToPath,
+        returnToParams,
+        isRouteValid: routeValidator,
+      });
       return;
     }
 
@@ -574,7 +603,11 @@ export default function IngredientFormScreen() {
         confirmLeave(() => {
           isHandlingBackRef.current = true;
           if (event.data.action.type === 'GO_BACK') {
-            skipDuplicateBack(navigation);
+            returnToSourceOrBack(navigation, {
+              returnToPath,
+              returnToParams,
+              isRouteValid: routeValidator,
+            });
           } else {
             navigation.dispatch(event.data.action);
           }
@@ -588,7 +621,11 @@ export default function IngredientFormScreen() {
       if (event.data.action.type === 'GO_BACK') {
         event.preventDefault();
         isHandlingBackRef.current = true;
-        skipDuplicateBack(navigation);
+        returnToSourceOrBack(navigation, {
+          returnToPath,
+          returnToParams,
+          isRouteValid: routeValidator,
+        });
         setTimeout(() => {
           isHandlingBackRef.current = false;
         }, 0);
@@ -596,11 +633,22 @@ export default function IngredientFormScreen() {
     });
 
     return unsubscribe;
-  }, [confirmLeave, hasUnsavedChanges, navigation]);
+  }, [
+    confirmLeave,
+    hasUnsavedChanges,
+    navigation,
+    returnToParams,
+    returnToPath,
+    routeValidator,
+  ]);
 
   const handleGoBack = useCallback(() => {
-    skipDuplicateBack(navigation);
-  }, [navigation]);
+    returnToSourceOrBack(navigation, {
+      returnToPath,
+      returnToParams,
+      isRouteValid: routeValidator,
+    });
+  }, [navigation, returnToParams, returnToPath, routeValidator]);
 
   const handleDeletePress = useCallback(() => {
     if (!isEditMode) {
@@ -641,12 +689,35 @@ export default function IngredientFormScreen() {
             }
 
             setHasUnsavedChanges(false);
-            router.replace('/ingredients');
+            const nextIngredientIds = new Set(ingredientIdSet);
+            nextIngredientIds.delete(numericIngredientId);
+            const deleteValidator = createInventoryRouteValidator({
+              ingredientIds: nextIngredientIds,
+              cocktailIds: cocktailIdSet,
+            });
+            returnToSourceOrBack(navigation, {
+              returnToPath,
+              returnToParams,
+              isRouteValid: deleteValidator,
+            });
           },
         },
       ],
     });
-  }, [deleteIngredient, ingredient?.name, isEditMode, numericIngredientId, setHasUnsavedChanges, showDialog]);
+  }, [
+    cocktailIdSet,
+    deleteIngredient,
+    ingredient?.name,
+    ingredientIdSet,
+    isEditMode,
+    navigation,
+    numericIngredientId,
+    returnToParams,
+    returnToPath,
+    routeValidator,
+    setHasUnsavedChanges,
+    showDialog,
+  ]);
 
   const baseIngredient = useMemo(() => {
     if (baseIngredientId == null) {
