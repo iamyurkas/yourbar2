@@ -38,7 +38,6 @@ import {
   navigateToDetailsWithReturnTo,
   parseReturnToParams,
   returnToSourceOrBack,
-  skipDuplicateBack,
 } from "@/libs/navigation";
 import { normalizeSearchText } from "@/libs/search-normalization";
 import { useInventory, type Ingredient } from "@/providers/inventory-provider";
@@ -176,6 +175,15 @@ export default function IngredientDetailsScreen() {
   const showDialog = useCallback((options: DialogOptions) => {
     setDialogOptions(options);
   }, []);
+
+  const handleReturn = useCallback(() => {
+    if (!returnToPath && !navigation.canGoBack()) {
+      router.replace("/ingredients");
+      return;
+    }
+
+    returnToSourceOrBack(navigation, { returnToPath, returnToParams });
+  }, [navigation, returnToParams, returnToPath]);
 
   const baseIngredient = useMemo(() => {
     if (!ingredient?.baseIngredientId) {
@@ -341,8 +349,31 @@ export default function IngredientDetailsScreen() {
       params.ingredientName = ingredient.name;
     }
 
-    router.push({ pathname: "/cocktails/create", params });
+    const returnTargetId = targetId != null ? String(targetId) : undefined;
+    router.push({
+      pathname: "/cocktails/create",
+      params: {
+        ...params,
+        ...buildReturnToParams(
+          "/ingredients/[ingredientId]",
+          returnTargetId ? { ingredientId: returnTargetId } : undefined,
+        ),
+      },
+    });
   }, [ingredient]);
+
+  useEffect(() => {
+    if (ingredient || !ingredientId || isHandlingBackRef.current) {
+      return;
+    }
+
+    isHandlingBackRef.current = true;
+    handleReturn();
+
+    requestAnimationFrame(() => {
+      isHandlingBackRef.current = false;
+    });
+  }, [handleReturn, ingredient, ingredientId]);
 
   const descriptionParagraphs = useMemo(() => {
     const description = ingredient?.description?.trim();
@@ -505,15 +536,6 @@ export default function IngredientDetailsScreen() {
     );
   }, [cocktailEntries.length]);
 
-  const handleReturn = useCallback(() => {
-    if (returnToPath === "/ingredients") {
-      skipDuplicateBack(navigation);
-      return;
-    }
-
-    returnToSourceOrBack(navigation, { returnToPath, returnToParams });
-  }, [navigation, returnToParams, returnToPath]);
-
   useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", (event) => {
       if (isHandlingBackRef.current) {
@@ -537,6 +559,10 @@ export default function IngredientDetailsScreen() {
     return unsubscribe;
   }, [handleReturn, navigation]);
 
+  if (!ingredient) {
+    return null;
+  }
+
   return (
     <SafeAreaView
       style={[styles.safeArea, { backgroundColor: Colors.background }]}
@@ -555,7 +581,7 @@ export default function IngredientDetailsScreen() {
           headerShadowVisible: false,
           headerLeft: () => (
             <Pressable
-              onPress={handleReturn}
+              onPress={() => navigation.goBack()}
               accessibilityRole="button"
               accessibilityLabel="Go back"
               style={styles.headerButton}
@@ -590,8 +616,7 @@ export default function IngredientDetailsScreen() {
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
       >
-        {ingredient ? (
-          <View style={styles.section}>
+        <View style={styles.section}>
             <Text style={[styles.name, { color: Colors.onSurface }]}>
               {ingredient.name}
             </Text>
@@ -991,18 +1016,7 @@ export default function IngredientDetailsScreen() {
               </Text>
             </Pressable>
           </View>
-        ) : (
-          <View style={styles.emptyState}>
-            <Text
-              style={[
-                styles.placeholderText,
-                { color: Colors.onSurfaceVariant },
-              ]}
-            >
-              Ingredient not found
-            </Text>
-          </View>
-        )}
+        </View>
       </ScrollView>
 
       <AppDialog

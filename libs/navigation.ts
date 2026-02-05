@@ -3,6 +3,62 @@ import { router } from 'expo-router';
 
 type RouteParams = Record<string, unknown> | undefined;
 type ReturnToParams = Record<string, string> | undefined;
+type NavigationRoute = { name: string; params?: RouteParams };
+
+const normalizePath = (value?: string) =>
+  typeof value === 'string' ? value.replace(/^\/+/, '') : undefined;
+
+const getRouteParamValue = (route: NavigationRoute, key: string): string | undefined => {
+  const value = route.params?.[key];
+  if (typeof value === 'string') {
+    return value;
+  }
+  if (typeof value === 'number' && Number.isFinite(value)) {
+    return String(value);
+  }
+  return undefined;
+};
+
+export const routeHasParamValue = (
+  route: NavigationRoute,
+  key: string,
+  expected: string,
+): boolean => getRouteParamValue(route, key) === expected;
+
+export const popBackToValidRoute = (
+  navigation: NavigationProp<ParamListBase>,
+  isInvalidRoute: (route: NavigationRoute) => boolean,
+) => {
+  const state = navigation.getState();
+  const currentIndex = state.index ?? 0;
+
+  if (currentIndex <= 0) {
+    navigation.goBack();
+    return;
+  }
+
+  let targetIndex = currentIndex - 1;
+  while (targetIndex >= 0) {
+    const route = state.routes[targetIndex] as NavigationRoute;
+    if (!isInvalidRoute(route)) {
+      break;
+    }
+    targetIndex -= 1;
+  }
+
+  if (targetIndex < 0) {
+    navigation.goBack();
+    return;
+  }
+
+  const popCount = currentIndex - targetIndex;
+  if (popCount > 1) {
+    navigation.dispatch(StackActions.pop(popCount));
+    return;
+  }
+
+  navigation.goBack();
+};
 
 const areParamsEqual = (left?: RouteParams, right?: RouteParams): boolean => {
   if (!left && !right) {
@@ -47,11 +103,21 @@ export const skipDuplicateBack = (navigation: NavigationProp<ParamListBase>) => 
   }
 
   const current = state.routes[currentIndex];
-  const previous = state.routes[currentIndex - 1];
-  const shouldSkip = areRoutesEqual(current, previous);
+  let targetIndex = currentIndex - 1;
 
-  if (shouldSkip && currentIndex >= 2) {
-    navigation.dispatch(StackActions.pop(2));
+  while (targetIndex >= 0 && areRoutesEqual(current, state.routes[targetIndex])) {
+    targetIndex -= 1;
+  }
+
+  if (targetIndex < 0) {
+    navigation.goBack();
+    return;
+  }
+
+  const popCount = currentIndex - targetIndex;
+
+  if (popCount > 1) {
+    navigation.dispatch(StackActions.pop(popCount));
     return;
   }
 
@@ -130,6 +196,47 @@ export const returnToSourceOrBack = (
   },
 ) => {
   if (returnToPath) {
+    const state = navigation.getState();
+    const currentIndex = state.index ?? 0;
+    const normalizedPath = normalizePath(returnToPath);
+
+    if (normalizedPath) {
+      for (let index = currentIndex - 1; index >= 0; index -= 1) {
+        const route = state.routes[index] as NavigationRoute;
+        const routeName = normalizePath(route.name);
+        const routeScreen = normalizePath(getRouteParamValue(route, 'screen'));
+        const hasPathMatch =
+          routeName === normalizedPath ||
+          routeName?.endsWith(`/${normalizedPath}`) ||
+          routeScreen === normalizedPath ||
+          routeScreen?.endsWith(`/${normalizedPath}`);
+
+        if (!hasPathMatch) {
+          continue;
+        }
+
+        if (returnToParams) {
+          const matchesParams = Object.entries(returnToParams).every(([key, value]) => {
+            if (!value) {
+              return true;
+            }
+            return getRouteParamValue(route, key) === value;
+          });
+          if (!matchesParams) {
+            continue;
+          }
+        }
+
+        const popCount = currentIndex - index;
+        if (popCount > 0) {
+          navigation.dispatch(StackActions.pop(popCount));
+        } else {
+          skipDuplicateBack(navigation);
+        }
+        return;
+      }
+    }
+
     router.navigate({ pathname: returnToPath, params: returnToParams });
     return;
   }

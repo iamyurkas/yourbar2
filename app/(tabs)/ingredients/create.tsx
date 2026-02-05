@@ -27,7 +27,13 @@ import { TagPill } from '@/components/TagPill';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { useAppColors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
-import { buildReturnToParams, skipDuplicateBack } from '@/libs/navigation';
+import {
+  buildReturnToParams,
+  popBackToValidRoute,
+  returnToSourceOrBack,
+  routeHasParamValue,
+  skipDuplicateBack,
+} from '@/libs/navigation';
 import { shouldStorePhoto, storePhoto } from '@/libs/photo-storage';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
@@ -510,8 +516,8 @@ export default function IngredientFormScreen() {
       return;
     }
 
-    if (returnToPath) {
-      router.navigate({ pathname: returnToPath, params: returnToParams });
+    if (!isEditMode && returnToPath) {
+      returnToSourceOrBack(navigation, { returnToPath, returnToParams });
       return;
     }
 
@@ -533,6 +539,7 @@ export default function IngredientFormScreen() {
     numericIngredientId,
     returnToParams,
     returnToPath,
+    returnToSourceOrBack,
     selectedTagIds,
     setHasUnsavedChanges,
     showDialog,
@@ -569,37 +576,25 @@ export default function IngredientFormScreen() {
         return;
       }
 
-      if (hasUnsavedChanges) {
-        event.preventDefault();
-        confirmLeave(() => {
-          isHandlingBackRef.current = true;
-          if (event.data.action.type === 'GO_BACK') {
-            skipDuplicateBack(navigation);
-          } else {
-            navigation.dispatch(event.data.action);
-          }
-          setTimeout(() => {
-            isHandlingBackRef.current = false;
-          }, 0);
-        });
-        return;
-      }
-
-      if (event.data.action.type === 'GO_BACK') {
-        event.preventDefault();
+      event.preventDefault();
+      confirmLeave(() => {
         isHandlingBackRef.current = true;
-        skipDuplicateBack(navigation);
+        if (event.data.action.type === 'GO_BACK') {
+          skipDuplicateBack(navigation);
+        } else {
+          navigation.dispatch(event.data.action);
+        }
         setTimeout(() => {
           isHandlingBackRef.current = false;
         }, 0);
-      }
+      });
     });
 
     return unsubscribe;
-  }, [confirmLeave, hasUnsavedChanges, navigation]);
+  }, [confirmLeave, navigation]);
 
   const handleGoBack = useCallback(() => {
-    skipDuplicateBack(navigation);
+    navigation.goBack();
   }, [navigation]);
 
   const handleDeletePress = useCallback(() => {
@@ -641,12 +636,41 @@ export default function IngredientFormScreen() {
             }
 
             setHasUnsavedChanges(false);
-            router.replace('/ingredients');
+            if (returnToPath) {
+              returnToSourceOrBack(navigation, { returnToPath, returnToParams });
+              return;
+            }
+
+            const deletedValue =
+              ingredient?.id != null
+                ? String(ingredient.id)
+                : ingredient?.name
+                  ? String(ingredient.name)
+                  : undefined;
+            if (deletedValue) {
+              popBackToValidRoute(navigation, (route) =>
+                routeHasParamValue(route, 'ingredientId', deletedValue),
+              );
+              return;
+            }
+
+            skipDuplicateBack(navigation);
           },
         },
       ],
     });
-  }, [deleteIngredient, ingredient?.name, isEditMode, numericIngredientId, setHasUnsavedChanges, showDialog]);
+  }, [
+    deleteIngredient,
+    ingredient?.id,
+    ingredient?.name,
+    isEditMode,
+    navigation,
+    numericIngredientId,
+    returnToParams,
+    returnToPath,
+    setHasUnsavedChanges,
+    showDialog,
+  ]);
 
   const baseIngredient = useMemo(() => {
     if (baseIngredientId == null) {

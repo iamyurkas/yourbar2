@@ -37,7 +37,6 @@ import {
   navigateToDetailsWithReturnTo,
   parseReturnToParams,
   returnToSourceOrBack,
-  skipDuplicateBack,
 } from "@/libs/navigation";
 import { normalizeSearchText } from "@/libs/search-normalization";
 import { useInventory, type Cocktail } from "@/providers/inventory-provider";
@@ -372,8 +371,8 @@ export default function CocktailDetailsScreen() {
   }, [useImperialUnits]);
 
   const handleReturn = useCallback(() => {
-    if (returnToPath === "/cocktails") {
-      skipDuplicateBack(navigation);
+    if (!returnToPath && !navigation.canGoBack()) {
+      router.replace("/cocktails");
       return;
     }
 
@@ -402,6 +401,19 @@ export default function CocktailDetailsScreen() {
 
     return unsubscribe;
   }, [handleReturn, navigation]);
+
+  useEffect(() => {
+    if (cocktail || !resolvedParam || isHandlingBackRef.current) {
+      return;
+    }
+
+    isHandlingBackRef.current = true;
+    handleReturn();
+
+    requestAnimationFrame(() => {
+      isHandlingBackRef.current = false;
+    });
+  }, [cocktail, handleReturn, resolvedParam]);
 
   useEffect(() => {
     const keepAwakeTag = "cocktail-details";
@@ -649,6 +661,10 @@ export default function CocktailDetailsScreen() {
     });
   }, [cocktail, returnToParams, returnToPath]);
 
+  if (!cocktail) {
+    return null;
+  }
+
   return (
     <SafeAreaView
       style={[styles.safeArea, { backgroundColor: Colors.background }]}
@@ -667,7 +683,7 @@ export default function CocktailDetailsScreen() {
           headerShadowVisible: false,
           headerLeft: () => (
             <HeaderIconButton
-              onPress={handleReturn}
+              onPress={() => navigation.goBack()}
               accessibilityLabel="Go back"
             >
               <MaterialCommunityIcons
@@ -708,8 +724,7 @@ export default function CocktailDetailsScreen() {
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
       >
-        {cocktail ? (
-          <View style={styles.section}>
+        <View style={styles.section}>
             <Text style={[styles.name, { color: Colors.onSurface }]}>
               {cocktail.name}
             </Text>
@@ -1206,20 +1221,7 @@ export default function CocktailDetailsScreen() {
               </View>
             ) : null}
           </View>
-        ) : (
-          <View style={styles.emptyState}>
-            <MaterialCommunityIcons
-              name="glass-cocktail"
-              size={42}
-              color={Colors.onSurfaceVariant}
-            />
-            <Text
-              style={[styles.emptyText, { color: Colors.onSurfaceVariant }]}
-            >
-              Cocktail not found
-            </Text>
-          </View>
-        )}
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
