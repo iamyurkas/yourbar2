@@ -1,4 +1,4 @@
-import { Tabs } from 'expo-router';
+import { Tabs, usePathname, router } from 'expo-router';
 import { useCallback, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -15,6 +15,8 @@ import { getLastCocktailTab, getLastIngredientTab } from '@/libs/collection-tabs
 import { useUnsavedChanges } from '@/providers/unsaved-changes-provider';
 
 type TabPressHandler = (navigation: { navigate: (...args: never[]) => void }, route: { name: string }) => void;
+
+const EDITING_PATH_PATTERN = /^\/(cocktails\/create|ingredients\/create)(\/|$)/;
 
 const TAB_SCREENS: Array<{
   name: 'cocktails' | 'shaker' | 'ingredients';
@@ -54,6 +56,7 @@ export default function TabLayout() {
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(null);
   const insets = useSafeAreaInsets();
   const Colors = useAppColors();
+  const pathname = usePathname();
   const { hasUnsavedChanges, onSave, setHasUnsavedChanges } = useUnsavedChanges();
 
   const closeDialog = useCallback(() => {
@@ -65,6 +68,22 @@ export default function TabLayout() {
   }, []);
 
   const handleTabPress = useCallback((navigation: any, route: any, defaultHandler: TabPressHandler) => {
+    const isEditingRoute = EDITING_PATH_PATTERN.test(pathname);
+
+    const cleanupAndProceed = () => {
+      if (isEditingRoute) {
+        if (pathname.startsWith('/cocktails')) {
+          router.replace('/cocktails');
+        } else if (pathname.startsWith('/ingredients')) {
+          router.replace('/ingredients');
+        } else if (pathname.startsWith('/shaker')) {
+          router.replace('/shaker');
+        }
+      }
+      setHasUnsavedChanges(false);
+      defaultHandler(navigation, route);
+    };
+
     if (hasUnsavedChanges) {
       showDialog({
         title: 'Leave without saving?',
@@ -84,18 +103,15 @@ export default function TabLayout() {
           {
             label: 'Leave',
             variant: 'destructive',
-            onPress: () => {
-              setHasUnsavedChanges(false);
-              defaultHandler(navigation, route);
-            },
+            onPress: cleanupAndProceed,
           },
         ],
       });
       return;
     }
 
-    defaultHandler(navigation, route);
-  }, [hasUnsavedChanges, onSave, setHasUnsavedChanges, showDialog]);
+    cleanupAndProceed();
+  }, [hasUnsavedChanges, onSave, setHasUnsavedChanges, showDialog, pathname]);
 
   return (
     <>
