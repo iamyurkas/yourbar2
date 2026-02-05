@@ -1,6 +1,7 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { Stack, useLocalSearchParams } from 'expo-router';
+import { useNavigation } from '@react-navigation/native';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   FlatList,
@@ -25,7 +26,7 @@ import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
 import { useAppColors } from '@/constants/theme';
 import { isCocktailReady } from '@/libs/cocktail-availability';
 import { createIngredientLookup } from '@/libs/ingredient-availability';
-import { navigateToDetailsWithReturnTo } from '@/libs/navigation';
+import { getCurrentRouteKey, navigateToDetailsWithReturnTo } from '@/libs/navigation';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Cocktail } from '@/providers/inventory-provider';
 
@@ -85,6 +86,7 @@ export default function ShakerResultsScreen() {
   const [headerLayout, setHeaderLayout] = useState<LayoutRectangle | null>(null);
   const [filterAnchorLayout, setFilterAnchorLayout] = useState<LayoutRectangle | null>(null);
   const listRef = useRef<FlatList<Cocktail>>(null);
+  const navigation = useNavigation();
   const lastScrollOffset = useRef(0);
   const searchStartOffset = useRef<number | null>(null);
   const previousQuery = useRef(query);
@@ -500,6 +502,7 @@ export default function ShakerResultsScreen() {
       const unavailableParam = Array.isArray(params.unavailable)
         ? params.unavailable[0]
         : params.unavailable;
+      const returnToKey = getCurrentRouteKey(navigation);
       navigateToDetailsWithReturnTo({
         pathname: '/cocktails/[cocktailId]',
         params: {
@@ -510,9 +513,10 @@ export default function ShakerResultsScreen() {
           available: availableParam ?? '',
           unavailable: unavailableParam ?? '',
         },
+        returnToKey,
       });
     },
-    [params.available, params.unavailable],
+    [navigation, params.available, params.unavailable],
   );
 
   const renderItem = useCallback(

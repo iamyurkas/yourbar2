@@ -48,8 +48,14 @@ import { GLASSWARE } from "@/constants/glassware";
 import { useAppColors } from "@/constants/theme";
 import {
   buildReturnToParams,
+  getCurrentRouteKey,
+  getPreviousRouteKey,
+  getRouteParam,
+  goBackWithHistory,
+  parseReturnToKey,
   parseReturnToParams,
-  skipDuplicateBack,
+  pruneNavigationHistory,
+  popToRouteKey,
 } from "@/libs/navigation";
 import { shouldStorePhoto, storePhoto } from "@/libs/photo-storage";
 import { normalizeSearchText } from "@/libs/search-normalization";
@@ -117,6 +123,47 @@ function getParamValue(value?: string | string[]): string | undefined {
     return value[0];
   }
   return value;
+}
+
+function resolveCocktailByParam(value: string | undefined, cocktails: Cocktail[]) {
+  if (!value) {
+    return undefined;
+  }
+  const numeric = Number(value);
+  if (Number.isFinite(numeric)) {
+    const byId = cocktails.find(
+      (item) => Number(item.id ?? -1) === Math.trunc(numeric),
+    );
+    if (byId) {
+      return byId;
+    }
+  }
+  const normalized = normalizeSearchText(value);
+  return cocktails.find(
+    (item) => normalizeSearchText(item.name ?? "") === normalized,
+  );
+}
+
+function resolveIngredientByParam(
+  value: string | undefined,
+  ingredients: Ingredient[],
+) {
+  if (!value) {
+    return undefined;
+  }
+  const numeric = Number(value);
+  if (Number.isFinite(numeric)) {
+    const byId = ingredients.find(
+      (item) => Number(item.id ?? -1) === Math.trunc(numeric),
+    );
+    if (byId) {
+      return byId;
+    }
+  }
+  const normalized = normalizeSearchText(value);
+  return ingredients.find(
+    (item) => normalizeSearchText(item.name ?? "") === normalized,
+  );
 }
 
 function createUniqueKey(prefix: string) {
@@ -237,7 +284,8 @@ export default function CreateCocktailScreen() {
     useImperialUnits,
   } = useInventory();
   const params = useLocalSearchParams();
-  const { setHasUnsavedChanges } = useUnsavedChanges();
+  const { setHasUnsavedChanges, registerSaveHandler, setIsEditingScreen } =
+    useUnsavedChanges();
 
   const modeParam = getParamValue(params.mode);
   const isEditMode = modeParam === "edit";
@@ -272,6 +320,10 @@ export default function CreateCocktailScreen() {
   const returnToParams = useMemo(() => {
     return parseReturnToParams(params.returnToParams);
   }, [params.returnToParams]);
+  const returnToKey = useMemo(
+    () => parseReturnToKey(params.returnToKey),
+    [params.returnToKey],
+  );
 
   const [name, setName] = useState("");
   const [glassId, setGlassId] = useState<string | null>("martini");
@@ -344,6 +396,29 @@ export default function CreateCocktailScreen() {
   const isNavigatingAfterSaveRef = useRef(false);
   const scrollRef = useRef<ScrollView | null>(null);
   const isHandlingBackRef = useRef(false);
+
+  const isRouteValid = useCallback(
+    (route: { params?: Record<string, unknown> }) => {
+      const cocktailParam = getRouteParam(route, "cocktailId");
+      if (
+        cocktailParam &&
+        !resolveCocktailByParam(cocktailParam, cocktails)
+      ) {
+        return false;
+      }
+
+      const ingredientParam = getRouteParam(route, "ingredientId");
+      if (
+        ingredientParam &&
+        !resolveIngredientByParam(ingredientParam, inventoryIngredients)
+      ) {
+        return false;
+      }
+
+      return true;
+    },
+    [cocktails, inventoryIngredients],
+  );
 
   const ingredientById = useMemo(() => {
     const map = new Map<number, Ingredient>();
@@ -567,27 +642,9 @@ export default function CreateCocktailScreen() {
 
     let prefillCompleted = false;
 
-    const resolveCocktail = (value?: string) => {
-      if (!value) {
-        return undefined;
-      }
-      const numeric = Number(value);
-      if (Number.isFinite(numeric)) {
-        const byId = cocktails.find(
-          (item) => Number(item.id ?? -1) === Math.trunc(numeric),
-        );
-        if (byId) {
-          return byId;
-        }
-      }
-      const normalized = normalizeSearchText(value);
-      return cocktails.find(
-        (item) => normalizeSearchText(item.name ?? "") === normalized,
-      );
-    };
-
     const baseCocktail =
-      resolveCocktail(cocktailParam) ?? resolveCocktail(cocktailNameParam);
+      resolveCocktailByParam(cocktailParam, cocktails) ??
+      resolveCocktailByParam(cocktailNameParam, cocktails);
     if (baseCocktail) {
       setPrefilledCocktail(baseCocktail);
       setName(baseCocktail.name ?? "");
@@ -899,6 +956,7 @@ export default function CreateCocktailScreen() {
   const handleRequestCreateIngredient = useCallback(
     (suggested: string) => {
       const trimmed = suggested.trim();
+      const returnToKey = getCurrentRouteKey(navigation);
       if (!trimmed) {
         router.push({
           pathname: "/ingredients/create",
@@ -906,6 +964,7 @@ export default function CreateCocktailScreen() {
             mode: "create",
             returnToPath: "/cocktails/create",
             returnToParams: formReturnParams,
+            ...(returnToKey ? { returnToKey } : {}),
           },
         });
         return;
@@ -917,10 +976,11 @@ export default function CreateCocktailScreen() {
           suggestedName: trimmed,
           returnToPath: "/cocktails/create",
           returnToParams: formReturnParams,
+          ...(returnToKey ? { returnToKey } : {}),
         },
       });
     },
-    [formReturnParams],
+    [formReturnParams, navigation],
   );
 
   const handleSelectSubstituteCandidate = useCallback(
@@ -1147,7 +1207,12 @@ export default function CreateCocktailScreen() {
       isNavigatingAfterSaveRef.current = true;
       const targetId = persisted.id ?? persisted.name;
       if (isEditMode && navigation.canGoBack()) {
-        navigation.goBack();
+        goBackWithHistory(navigation, { isRouteValid });
+        return;
+      }
+
+      if (returnToKey) {
+        popToRouteKey(navigation, returnToKey, { isRouteValid });
         return;
       }
 
@@ -1156,7 +1221,7 @@ export default function CreateCocktailScreen() {
           pathname: "/cocktails/[cocktailId]",
           params: {
             cocktailId: String(targetId),
-            ...buildReturnToParams(returnToPath, returnToParams),
+            ...buildReturnToParams(returnToPath, returnToParams, returnToKey),
           },
         });
         return;
@@ -1182,6 +1247,7 @@ export default function CreateCocktailScreen() {
     navigation,
     prefilledCocktail?.id,
     prefilledCocktail?.photoUri,
+    returnToKey,
     returnToParams,
     returnToPath,
     selectedTagIds,
@@ -1189,6 +1255,7 @@ export default function CreateCocktailScreen() {
     showDialog,
     shouldStorePhoto,
     storePhoto,
+    isRouteValid,
   ]);
 
   const handleDeletePress = useCallback(() => {
@@ -1237,7 +1304,33 @@ export default function CreateCocktailScreen() {
             }
 
             setHasUnsavedChanges(false);
-            router.replace("/cocktails");
+            const previousRouteKey = getPreviousRouteKey(navigation);
+            const deletedName = normalizeSearchText(prefilledCocktail?.name ?? "");
+            pruneNavigationHistory(navigation, {
+              preferRouteKey: previousRouteKey,
+              isRouteValid: (route) => {
+                const cocktailParam = getRouteParam(route, "cocktailId");
+                if (cocktailParam) {
+                  const isDeleted =
+                    cocktailParam === String(numericId) ||
+                    (deletedName.length > 0 &&
+                      normalizeSearchText(cocktailParam) === deletedName);
+                  if (isDeleted) {
+                    return false;
+                  }
+                }
+
+                const ingredientParam = getRouteParam(route, "ingredientId");
+                if (
+                  ingredientParam &&
+                  !resolveIngredientByParam(ingredientParam, inventoryIngredients)
+                ) {
+                  return false;
+                }
+
+                return true;
+              },
+            });
           },
         },
       ],
@@ -1245,6 +1338,8 @@ export default function CreateCocktailScreen() {
   }, [
     deleteCocktail,
     isEditMode,
+    inventoryIngredients,
+    navigation,
     prefilledCocktail?.id,
     prefilledCocktail?.name,
     setHasUnsavedChanges,
@@ -1284,7 +1379,7 @@ export default function CreateCocktailScreen() {
         confirmLeave(() => {
           isHandlingBackRef.current = true;
           if (event.data.action.type === "GO_BACK") {
-            skipDuplicateBack(navigation);
+            goBackWithHistory(navigation, { isRouteValid });
           } else {
             navigation.dispatch(event.data.action);
           }
@@ -1298,7 +1393,7 @@ export default function CreateCocktailScreen() {
       if (event.data.action.type === "GO_BACK") {
         event.preventDefault();
         isHandlingBackRef.current = true;
-        skipDuplicateBack(navigation);
+        goBackWithHistory(navigation, { isRouteValid });
         setTimeout(() => {
           isHandlingBackRef.current = false;
         }, 0);
@@ -1306,11 +1401,24 @@ export default function CreateCocktailScreen() {
     });
 
     return unsubscribe;
-  }, [confirmLeave, hasUnsavedChanges, navigation]);
+  }, [confirmLeave, hasUnsavedChanges, isRouteValid, navigation]);
 
   const handleGoBack = useCallback(() => {
-    skipDuplicateBack(navigation);
-  }, [navigation]);
+    goBackWithHistory(navigation, { isRouteValid });
+  }, [isRouteValid, navigation]);
+
+  useEffect(() => {
+    registerSaveHandler(() => {
+      void handleSubmit();
+    });
+
+    return () => registerSaveHandler(null);
+  }, [handleSubmit, registerSaveHandler]);
+
+  useEffect(() => {
+    setIsEditingScreen(true);
+    return () => setIsEditingScreen(false);
+  }, [setIsEditingScreen]);
 
   const imageSource = useMemo(() => {
     if (!imageUri) {

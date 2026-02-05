@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
-import { useScrollToTop } from '@react-navigation/native';
+import { useNavigation, useScrollToTop } from '@react-navigation/native';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -30,7 +30,7 @@ import { useAppColors } from '@/constants/theme';
 import { isCocktailReady } from '@/libs/cocktail-availability';
 import { getLastCocktailTab, setLastCocktailTab, type CocktailTabKey } from '@/libs/collection-tabs';
 import { createIngredientLookup } from '@/libs/ingredient-availability';
-import { navigateToDetailsWithReturnTo } from '@/libs/navigation';
+import { getCurrentRouteKey, navigateToDetailsWithReturnTo } from '@/libs/navigation';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { useOnboardingAnchors } from '@/components/onboarding/OnboardingContext';
 import { buildTagOptions, type TagOption } from '@/libs/tag-options';
@@ -75,6 +75,7 @@ export default function CocktailsScreen() {
   const [headerLayout, setHeaderLayout] = useState<LayoutRectangle | null>(null);
   const [filterAnchorLayout, setFilterAnchorLayout] = useState<LayoutRectangle | null>(null);
   const listRef = useRef<FlatList<unknown>>(null);
+  const navigation = useNavigation();
   const lastScrollOffset = useRef(0);
   const searchStartOffset = useRef<number | null>(null);
   const previousQuery = useRef(query);
@@ -425,26 +426,30 @@ export default function CocktailsScreen() {
         return;
       }
 
+      const returnToKey = getCurrentRouteKey(navigation);
       navigateToDetailsWithReturnTo({
         pathname: '/cocktails/[cocktailId]',
         params: { cocktailId: String(candidateId) },
         returnToPath: '/cocktails',
+        returnToKey,
       });
     },
-    [],
+    [navigation],
   );
 
   const handleSelectIngredient = useCallback(
     (ingredientId: number) => {
       if (ingredientId >= 0) {
+        const returnToKey = getCurrentRouteKey(navigation);
         navigateToDetailsWithReturnTo({
           pathname: '/ingredients/[ingredientId]',
           params: { ingredientId: String(ingredientId) },
           returnToPath: '/cocktails',
+          returnToKey,
         });
       }
     },
-    [],
+    [navigation],
   );
 
   const handleShoppingToggle = useCallback(

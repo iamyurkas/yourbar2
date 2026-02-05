@@ -1,5 +1,5 @@
 import { MaterialIcons } from '@expo/vector-icons';
-import { useScrollToTop } from '@react-navigation/native';
+import { useNavigation, useScrollToTop } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
 import { memo, useCallback, useEffect, useMemo, useRef, useState, useTransition } from 'react';
 import {
@@ -31,7 +31,7 @@ import {
   createIngredientLookup,
   getVisibleIngredientIdsForCocktail,
 } from '@/libs/ingredient-availability';
-import { navigateToDetailsWithReturnTo } from '@/libs/navigation';
+import { getCurrentRouteKey, navigateToDetailsWithReturnTo } from '@/libs/navigation';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { buildTagOptions, type TagOption } from '@/libs/tag-options';
 import { useOnboardingAnchors } from '@/components/onboarding/OnboardingContext';
@@ -88,6 +88,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
   onShoppingToggle,
 }: IngredientListItemProps) {
   const Colors = useAppColors();
+  const navigation = useNavigation();
   const ingredientId = Number(ingredient.id ?? -1);
   const isAvailable = ingredientId >= 0 && availableIngredientIds.has(ingredientId);
   const ingredientTagColors = (ingredient.tags ?? [])
@@ -177,12 +178,14 @@ const IngredientListItem = memo(function IngredientListItemComponent({
       return;
     }
 
+    const returnToKey = getCurrentRouteKey(navigation);
     navigateToDetailsWithReturnTo({
       pathname: '/ingredients/[ingredientId]',
       params: { ingredientId: String(routeParam) },
       returnToPath: '/ingredients',
+      returnToKey,
     });
-  }, [ingredient.id, ingredient.name]);
+  }, [ingredient.id, ingredient.name, navigation]);
 
   const row = (
     <ListRow

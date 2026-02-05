@@ -34,10 +34,13 @@ import {
 } from "@/libs/ingredient-availability";
 import {
   buildReturnToParams,
+  getCurrentRouteKey,
+  getRouteParam,
   navigateToDetailsWithReturnTo,
+  parseReturnToKey,
   parseReturnToParams,
+  pruneNavigationHistory,
   returnToSourceOrBack,
-  skipDuplicateBack,
 } from "@/libs/navigation";
 import { normalizeSearchText } from "@/libs/search-normalization";
 import { useInventory, type Cocktail } from "@/providers/inventory-provider";
@@ -93,6 +96,30 @@ function resolveCocktail(
 
   const normalized = normalizeSearchText(param);
   return cocktails.find(
+    (item) => normalizeSearchText(item.name ?? "") === normalized,
+  );
+}
+
+function resolveIngredientByParam(
+  value: string | undefined,
+  ingredients: { id?: number | string; name?: string | null }[],
+) {
+  if (!value) {
+    return undefined;
+  }
+
+  const numericId = Number(value);
+  if (Number.isFinite(numericId)) {
+    const byId = ingredients.find(
+      (item) => Number(item.id ?? -1) === Math.trunc(numericId),
+    );
+    if (byId) {
+      return byId;
+    }
+  }
+
+  const normalized = normalizeSearchText(value);
+  return ingredients.find(
     (item) => normalizeSearchText(item.name ?? "") === normalized,
   );
 }
@@ -330,6 +357,7 @@ export default function CocktailDetailsScreen() {
     cocktailId?: string;
     returnToPath?: string;
     returnToParams?: string;
+    returnToKey?: string;
   }>();
   const navigation = useNavigation();
   const Colors = useAppColors();
@@ -364,21 +392,50 @@ export default function CocktailDetailsScreen() {
     return parseReturnToParams(params.returnToParams);
   }, [params.returnToParams]);
 
+  const returnToKey = useMemo(
+    () => parseReturnToKey(params.returnToKey),
+    [params.returnToKey],
+  );
+
   const [showImperialUnits, setShowImperialUnits] = useState(useImperialUnits);
   const isHandlingBackRef = useRef(false);
+
+  const isRouteValid = useCallback(
+    (route: { params?: Record<string, unknown> }) => {
+      const cocktailParam = getRouteParam(route, "cocktailId");
+      if (cocktailParam && !resolveCocktail(cocktailParam, cocktails)) {
+        return false;
+      }
+      const ingredientParam = getRouteParam(route, "ingredientId");
+      if (ingredientParam && !resolveIngredientByParam(ingredientParam, ingredients)) {
+        return false;
+      }
+      return true;
+    },
+    [cocktails, ingredients],
+  );
+
+  useEffect(() => {
+    if (!cocktail && cocktailId) {
+      pruneNavigationHistory(navigation, {
+        isRouteValid,
+        preferRouteKey: returnToKey,
+      });
+    }
+  }, [cocktail, cocktailId, isRouteValid, navigation, returnToKey]);
 
   useEffect(() => {
     setShowImperialUnits(useImperialUnits);
   }, [useImperialUnits]);
 
   const handleReturn = useCallback(() => {
-    if (returnToPath === "/cocktails") {
-      skipDuplicateBack(navigation);
-      return;
-    }
-
-    returnToSourceOrBack(navigation, { returnToPath, returnToParams });
-  }, [navigation, returnToParams, returnToPath]);
+    returnToSourceOrBack(navigation, {
+      returnToKey,
+      returnToPath,
+      returnToParams,
+      isRouteValid,
+    });
+  }, [isRouteValid, navigation, returnToKey, returnToParams, returnToPath]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", (event) => {
@@ -1054,6 +1111,7 @@ export default function CocktailDetailsScreen() {
                           : resolvedParam
                             ? String(resolvedParam)
                             : undefined;
+                      const returnToKey = getCurrentRouteKey(navigation);
                       navigateToDetailsWithReturnTo({
                         pathname: "/ingredients/[ingredientId]",
                         params: {
@@ -1065,6 +1123,7 @@ export default function CocktailDetailsScreen() {
                         returnToParams: returnToParam
                           ? { cocktailId: returnToParam }
                           : undefined,
+                        returnToKey,
                       });
                     };
 
