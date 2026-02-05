@@ -658,7 +658,8 @@ export default function IngredientFormScreen() {
             }
 
             setHasUnsavedChanges(false);
-            router.replace('/ingredients');
+            isNavigatingAfterSaveRef.current = true;
+            navigateBackWithHistory(navigation, { returnToPath, returnToParams, isRouteValid });
           },
         },
       ],

@@ -1261,7 +1261,8 @@ export default function CreateCocktailScreen() {
             }
 
             setHasUnsavedChanges(false);
-            router.replace("/cocktails");
+            isNavigatingAfterSaveRef.current = true;
+            navigateBackWithHistory(navigation, { returnToPath, returnToParams, isRouteValid });
           },
         },
       ],
