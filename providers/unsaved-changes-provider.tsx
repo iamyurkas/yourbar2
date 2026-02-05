@@ -1,8 +1,12 @@
-import React, { createContext, useCallback, useContext, useMemo, useState } from 'react';
+import React, { createContext, useCallback, useContext, useMemo, useRef, useState } from 'react';
 
 type UnsavedChangesContextValue = {
   hasUnsavedChanges: boolean;
   setHasUnsavedChanges: (value: boolean) => void;
+  isEditing: boolean;
+  setIsEditing: (value: boolean) => void;
+  registerSaveHandler: (handler?: () => void) => void;
+  requestSave: () => void;
 };
 
 const UnsavedChangesContext = createContext<UnsavedChangesContextValue | null>(null);
@@ -13,17 +17,35 @@ type UnsavedChangesProviderProps = {
 
 export function UnsavedChangesProvider({ children }: UnsavedChangesProviderProps) {
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const saveHandlerRef = useRef<(() => void) | null>(null);
 
   const updateHasUnsavedChanges = useCallback((value: boolean) => {
     setHasUnsavedChanges(value);
+  }, []);
+
+  const updateIsEditing = useCallback((value: boolean) => {
+    setIsEditing(value);
+  }, []);
+
+  const registerSaveHandler = useCallback((handler?: () => void) => {
+    saveHandlerRef.current = handler ?? null;
+  }, []);
+
+  const requestSave = useCallback(() => {
+    saveHandlerRef.current?.();
   }, []);
 
   const value = useMemo(
     () => ({
       hasUnsavedChanges,
       setHasUnsavedChanges: updateHasUnsavedChanges,
+      isEditing,
+      setIsEditing: updateIsEditing,
+      registerSaveHandler,
+      requestSave,
     }),
-    [hasUnsavedChanges, updateHasUnsavedChanges],
+    [hasUnsavedChanges, isEditing, registerSaveHandler, requestSave, updateHasUnsavedChanges, updateIsEditing],
   );
 
   return <UnsavedChangesContext.Provider value={value}>{children}</UnsavedChangesContext.Provider>;

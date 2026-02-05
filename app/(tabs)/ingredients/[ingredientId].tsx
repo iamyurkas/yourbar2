@@ -34,11 +34,12 @@ import {
   getVisibleIngredientIdsForCocktail,
 } from "@/libs/ingredient-availability";
 import {
+  buildInventoryRouteValidator,
   buildReturnToParams,
+  navigateBackWithHistory,
   navigateToDetailsWithReturnTo,
   parseReturnToParams,
   returnToSourceOrBack,
-  skipDuplicateBack,
 } from "@/libs/navigation";
 import { normalizeSearchText } from "@/libs/search-normalization";
 import { useInventory, type Ingredient } from "@/providers/inventory-provider";
@@ -81,6 +82,7 @@ export default function IngredientDetailsScreen() {
   const {
     ingredients,
     cocktails,
+    loading,
     availableIngredientIds,
     toggleIngredientAvailability,
     shoppingIngredientIds,
@@ -111,6 +113,11 @@ export default function IngredientDetailsScreen() {
     [ingredients],
   );
 
+  const routeValidator = useMemo(
+    () => buildInventoryRouteValidator({ ingredients, cocktails }),
+    [cocktails, ingredients],
+  );
+
   const numericIngredientId = useMemo(() => {
     const candidate =
       ingredient?.id ??
@@ -118,6 +125,12 @@ export default function IngredientDetailsScreen() {
     const parsed = Number(candidate);
     return Number.isNaN(parsed) ? undefined : parsed;
   }, [ingredient?.id, ingredientId]);
+
+  useEffect(() => {
+    if (!ingredient && ingredientId && !loading) {
+      navigateBackWithHistory(navigation, { isRouteValid: routeValidator });
+    }
+  }, [ingredient, ingredientId, loading, navigation, routeValidator]);
 
   const [optimisticAvailability, setOptimisticAvailability] = useState<
     boolean | null
@@ -341,7 +354,15 @@ export default function IngredientDetailsScreen() {
       params.ingredientName = ingredient.name;
     }
 
-    router.push({ pathname: "/cocktails/create", params });
+    router.push({
+      pathname: "/cocktails/create",
+      params: {
+        ...params,
+        ...buildReturnToParams("/ingredients/[ingredientId]", {
+          ingredientId: String(targetId),
+        }),
+      },
+    });
   }, [ingredient]);
 
   const descriptionParagraphs = useMemo(() => {
@@ -507,12 +528,16 @@ export default function IngredientDetailsScreen() {
 
   const handleReturn = useCallback(() => {
     if (returnToPath === "/ingredients") {
-      skipDuplicateBack(navigation);
+      navigateBackWithHistory(navigation, { isRouteValid: routeValidator });
       return;
     }
 
-    returnToSourceOrBack(navigation, { returnToPath, returnToParams });
-  }, [navigation, returnToParams, returnToPath]);
+    returnToSourceOrBack(navigation, {
+      returnToPath,
+      returnToParams,
+      isRouteValid: routeValidator,
+    });
+  }, [navigation, returnToParams, returnToPath, routeValidator]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", (event) => {
@@ -536,6 +561,10 @@ export default function IngredientDetailsScreen() {
 
     return unsubscribe;
   }, [handleReturn, navigation]);
+
+  if (!ingredient && ingredientId && !loading) {
+    return null;
+  }
 
   return (
     <SafeAreaView

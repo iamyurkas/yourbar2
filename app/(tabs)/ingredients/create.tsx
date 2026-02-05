@@ -27,7 +27,14 @@ import { TagPill } from '@/components/TagPill';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { useAppColors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
-import { buildReturnToParams, skipDuplicateBack } from '@/libs/navigation';
+import {
+  buildInventoryRouteValidator,
+  buildReturnToParams,
+  isRouteForEntity,
+  navigateBackWithHistory,
+  parseReturnToParams,
+  pruneNavigationHistory,
+} from '@/libs/navigation';
 import { shouldStorePhoto, storePhoto } from '@/libs/photo-storage';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
@@ -104,38 +111,27 @@ export default function IngredientFormScreen() {
     }
     return undefined;
   }, [legacyReturnToParam, returnToPathParam]);
-  const returnToParams = useMemo(() => {
-    if (!returnToParamsParam) {
-      return undefined;
-    }
-
-    try {
-      const parsed = JSON.parse(returnToParamsParam);
-      if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
-        return undefined;
-      }
-
-      const entries = Object.entries(parsed).filter(([, value]) => typeof value === 'string');
-      return entries.length ? Object.fromEntries(entries) : undefined;
-    } catch (error) {
-      console.warn('Failed to parse return params', error);
-      return undefined;
-    }
-  }, [returnToParamsParam]);
+  const returnToParams = useMemo(() => parseReturnToParams(returnToParamsParam), [returnToParamsParam]);
 
   const navigation = useNavigation();
   const Colors = useAppColors();
   const {
+    cocktails,
     ingredients,
     shoppingIngredientIds,
     availableIngredientIds,
+    loading,
     createIngredient,
     updateIngredient,
     deleteIngredient,
     customIngredientTags,
     createCustomIngredientTag,
   } = useInventory();
-  const { setHasUnsavedChanges } = useUnsavedChanges();
+  const {
+    registerSaveHandler,
+    setHasUnsavedChanges,
+    setIsEditing,
+  } = useUnsavedChanges();
   const isNavigatingAfterSaveRef = useRef(false);
 
   const ingredient = useResolvedIngredient(ingredientParam, ingredients);
@@ -148,6 +144,12 @@ export default function IngredientFormScreen() {
     const parsed = Number(candidate);
     return Number.isNaN(parsed) ? undefined : parsed;
   }, [ingredient?.id, ingredientParam]);
+
+  useEffect(() => {
+    if (isEditMode && ingredientParam && !ingredient && !loading) {
+      navigateBackWithHistory(navigation, { isRouteValid: routeValidator });
+    }
+  }, [ingredient, ingredientParam, isEditMode, loading, navigation, routeValidator]);
 
   const [name, setName] = useState(() => (isEditMode ? '' : suggestedNameParam ?? ''));
   const [description, setDescription] = useState('');
@@ -169,6 +171,12 @@ export default function IngredientFormScreen() {
   const didInitializeRef = useRef(false);
   const scrollRef = useRef<ScrollView | null>(null);
   const isHandlingBackRef = useRef(false);
+  const isNavigatingAwayRef = useRef(false);
+
+  const routeValidator = useMemo(
+    () => buildInventoryRouteValidator({ ingredients, cocktails }),
+    [cocktails, ingredients],
+  );
 
   useEffect(() => {
     if (isEditMode) {
@@ -438,8 +446,13 @@ export default function IngredientFormScreen() {
 
         setHasUnsavedChanges(false);
         isNavigatingAfterSaveRef.current = true;
+        if (returnToPath && navigation.canGoBack()) {
+          navigateBackWithHistory(navigation, { isRouteValid: routeValidator });
+          return;
+        }
+
         if (navigation.canGoBack()) {
-          navigation.goBack();
+          navigateBackWithHistory(navigation, { isRouteValid: routeValidator });
           return;
         }
 
@@ -506,11 +519,15 @@ export default function IngredientFormScreen() {
     isNavigatingAfterSaveRef.current = true;
     const targetId = created.id ?? created.name;
     if (!targetId) {
-      skipDuplicateBack(navigation);
+      navigateBackWithHistory(navigation, { isRouteValid: routeValidator });
       return;
     }
 
     if (returnToPath) {
+      if (navigation.canGoBack()) {
+        navigateBackWithHistory(navigation, { isRouteValid: routeValidator });
+        return;
+      }
       router.navigate({ pathname: returnToPath, params: returnToParams });
       return;
     }
@@ -539,6 +556,7 @@ export default function IngredientFormScreen() {
     shouldStorePhoto,
     storePhoto,
     updateIngredient,
+    routeValidator,
   ]);
 
   const confirmLeave = useCallback(
@@ -565,42 +583,35 @@ export default function IngredientFormScreen() {
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('beforeRemove', (event) => {
-      if (isNavigatingAfterSaveRef.current || isHandlingBackRef.current) {
+      if (
+        isNavigatingAfterSaveRef.current ||
+        isHandlingBackRef.current ||
+        isNavigatingAwayRef.current
+      ) {
         return;
       }
 
-      if (hasUnsavedChanges) {
-        event.preventDefault();
-        confirmLeave(() => {
-          isHandlingBackRef.current = true;
-          if (event.data.action.type === 'GO_BACK') {
-            skipDuplicateBack(navigation);
-          } else {
-            navigation.dispatch(event.data.action);
-          }
-          setTimeout(() => {
-            isHandlingBackRef.current = false;
-          }, 0);
-        });
+      if (event.data.action.type !== 'GO_BACK') {
         return;
       }
 
-      if (event.data.action.type === 'GO_BACK') {
-        event.preventDefault();
+      event.preventDefault();
+
+      confirmLeave(() => {
         isHandlingBackRef.current = true;
-        skipDuplicateBack(navigation);
+        navigateBackWithHistory(navigation, { isRouteValid: routeValidator });
         setTimeout(() => {
           isHandlingBackRef.current = false;
         }, 0);
-      }
+      });
     });
 
     return unsubscribe;
-  }, [confirmLeave, hasUnsavedChanges, navigation]);
+  }, [confirmLeave, navigation, routeValidator]);
 
   const handleGoBack = useCallback(() => {
-    skipDuplicateBack(navigation);
-  }, [navigation]);
+    navigateBackWithHistory(navigation, { isRouteValid: routeValidator });
+  }, [navigation, routeValidator]);
 
   const handleDeletePress = useCallback(() => {
     if (!isEditMode) {
@@ -641,12 +652,42 @@ export default function IngredientFormScreen() {
             }
 
             setHasUnsavedChanges(false);
-            router.replace('/ingredients');
+            isNavigatingAwayRef.current = true;
+            pruneNavigationHistory(navigation, (route) =>
+              isRouteForEntity(route, {
+                routeName: 'ingredients/[ingredientId]',
+                paramKey: 'ingredientId',
+                entityId: numericIngredientId,
+              }) ||
+              isRouteForEntity(route, {
+                routeName: 'ingredients/create',
+                paramKey: 'ingredientId',
+                entityId: numericIngredientId,
+              }),
+            );
           },
         },
       ],
     });
-  }, [deleteIngredient, ingredient?.name, isEditMode, numericIngredientId, setHasUnsavedChanges, showDialog]);
+  }, [
+    deleteIngredient,
+    ingredient?.name,
+    isEditMode,
+    navigation,
+    numericIngredientId,
+    setHasUnsavedChanges,
+    showDialog,
+  ]);
+
+  useEffect(() => {
+    setIsEditing(true);
+    registerSaveHandler(handleSubmit);
+
+    return () => {
+      setIsEditing(false);
+      registerSaveHandler();
+    };
+  }, [handleSubmit, registerSaveHandler, setIsEditing]);
 
   const baseIngredient = useMemo(() => {
     if (baseIngredientId == null) {
@@ -857,32 +898,7 @@ export default function IngredientFormScreen() {
   const submitButtonStyle = isEditMode ? styles.submitButtonEdit : styles.submitButtonCreate;
 
   if (isEditMode && !ingredient) {
-    return (
-      <>
-        <Stack.Screen
-          options={{
-            title: 'Edit ingredient',
-            headerTitleAlign: 'center',
-            headerStyle: { backgroundColor: Colors.surface },
-            headerShadowVisible: false,
-            headerTitleStyle: { color: Colors.onSurface, fontSize: 16, fontWeight: '600' },
-            headerLeft: () => (
-              <Pressable
-                onPress={handleGoBack}
-                accessibilityRole="button"
-                accessibilityLabel="Go back"
-                style={styles.headerButton}
-                hitSlop={8}>
-                <MaterialCommunityIcons name="arrow-left" size={22} color={Colors.onSurface} />
-              </Pressable>
-            ),
-          }}
-        />
-        <View style={[styles.container, styles.emptyState, { backgroundColor: Colors.surface }]}>
-          <Text style={[styles.emptyMessage, { color: Colors.onSurfaceVariant }]}>Ingredient not found</Text>
-        </View>
-      </>
-    );
+    return null;
   }
 
   const formContent = (

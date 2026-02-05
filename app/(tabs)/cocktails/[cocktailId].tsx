@@ -33,11 +33,12 @@ import {
   type IngredientResolution,
 } from "@/libs/ingredient-availability";
 import {
+  buildInventoryRouteValidator,
   buildReturnToParams,
+  navigateBackWithHistory,
   navigateToDetailsWithReturnTo,
   parseReturnToParams,
   returnToSourceOrBack,
-  skipDuplicateBack,
 } from "@/libs/navigation";
 import { normalizeSearchText } from "@/libs/search-normalization";
 import { useInventory, type Cocktail } from "@/providers/inventory-provider";
@@ -315,6 +316,10 @@ function formatGlassLabel(glassId?: string | null) {
     return undefined;
   }
 
+  if (!cocktail && cocktailId && !loading) {
+    return null;
+  }
+
   return (
     GLASS_LABELS[glassId] ??
     glassId
@@ -337,6 +342,7 @@ export default function CocktailDetailsScreen() {
   const {
     cocktails,
     ingredients,
+    loading,
     availableIngredientIds,
     shoppingIngredientIds,
     setCocktailRating,
@@ -364,8 +370,19 @@ export default function CocktailDetailsScreen() {
     return parseReturnToParams(params.returnToParams);
   }, [params.returnToParams]);
 
+  const routeValidator = useMemo(
+    () => buildInventoryRouteValidator({ ingredients, cocktails }),
+    [cocktails, ingredients],
+  );
+
   const [showImperialUnits, setShowImperialUnits] = useState(useImperialUnits);
   const isHandlingBackRef = useRef(false);
+
+  useEffect(() => {
+    if (!cocktail && cocktailId && !loading) {
+      navigateBackWithHistory(navigation, { isRouteValid: routeValidator });
+    }
+  }, [cocktail, cocktailId, loading, navigation, routeValidator]);
 
   useEffect(() => {
     setShowImperialUnits(useImperialUnits);
@@ -373,12 +390,16 @@ export default function CocktailDetailsScreen() {
 
   const handleReturn = useCallback(() => {
     if (returnToPath === "/cocktails") {
-      skipDuplicateBack(navigation);
+      navigateBackWithHistory(navigation, { isRouteValid: routeValidator });
       return;
     }
 
-    returnToSourceOrBack(navigation, { returnToPath, returnToParams });
-  }, [navigation, returnToParams, returnToPath]);
+    returnToSourceOrBack(navigation, {
+      returnToPath,
+      returnToParams,
+      isRouteValid: routeValidator,
+    });
+  }, [navigation, returnToParams, returnToPath, routeValidator]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", (event) => {

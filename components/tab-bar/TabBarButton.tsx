@@ -6,8 +6,6 @@ import { HapticTab } from '@/components/haptic-tab';
 import type { DialogOptions } from '@/components/AppDialog';
 import { useUnsavedChanges } from '@/providers/unsaved-changes-provider';
 
-const EDITING_PATH_PATTERN = /^\/(cocktails\/create|ingredients\/create|ingredients\/[^/]+\/edit)(\/|$)/;
-
 type TabBarButtonProps = BottomTabBarButtonProps & {
   onOpenDialog: (options: DialogOptions) => void;
 };
@@ -15,23 +13,32 @@ type TabBarButtonProps = BottomTabBarButtonProps & {
 export function TabBarButton({ onOpenDialog, ...props }: TabBarButtonProps) {
   const pathname = usePathname();
   const router = useRouter();
-  const { hasUnsavedChanges, setHasUnsavedChanges } = useUnsavedChanges();
-  const isEditingRoute = EDITING_PATH_PATTERN.test(pathname);
+  const { hasUnsavedChanges, isEditing, requestSave, setHasUnsavedChanges } = useUnsavedChanges();
 
   const handlePress = useCallback(() => {
+    const rootSegment = pathname.split('/').filter(Boolean)[0];
+    const rootPath = rootSegment ? `/${rootSegment}` : '/';
+
     const proceed = () => {
-      if (isEditingRoute) {
-        if (pathname.startsWith('/cocktails')) {
-          router.replace('/cocktails');
-        } else if (pathname.startsWith('/ingredients')) {
-          router.replace('/ingredients');
-        } else if (pathname.startsWith('/shaker')) {
-          router.replace('/shaker');
-        }
+      if (isEditing) {
+        router.replace(rootPath);
       }
       setHasUnsavedChanges(false);
       props.onPress?.();
     };
+
+    if (isEditing) {
+      onOpenDialog({
+        title: 'Leave without saving?',
+        message: 'Your changes will be lost if you leave this screen.',
+        actions: [
+          { label: 'Save', onPress: requestSave },
+          { label: 'Stay', variant: 'secondary' },
+          { label: 'Leave', variant: 'destructive', onPress: proceed },
+        ],
+      });
+      return;
+    }
 
     if (hasUnsavedChanges) {
       onOpenDialog({
@@ -46,7 +53,16 @@ export function TabBarButton({ onOpenDialog, ...props }: TabBarButtonProps) {
     }
 
     proceed();
-  }, [hasUnsavedChanges, isEditingRoute, onOpenDialog, pathname, props, router, setHasUnsavedChanges]);
+  }, [
+    hasUnsavedChanges,
+    isEditing,
+    onOpenDialog,
+    pathname,
+    props,
+    requestSave,
+    router,
+    setHasUnsavedChanges,
+  ]);
 
   return <HapticTab {...props} onPress={handlePress} />;
 }
