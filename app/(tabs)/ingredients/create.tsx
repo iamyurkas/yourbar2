@@ -667,6 +667,12 @@ export default function IngredientFormScreen() {
                 entityName: ingredient?.name,
               }),
             );
+            if (returnToPath) {
+              router.navigate({ pathname: returnToPath, params: returnToParams });
+              return;
+            }
+
+            navigateBackWithHistory(navigation, { isRouteValid: routeValidator });
           },
         },
       ],
@@ -677,8 +683,11 @@ export default function IngredientFormScreen() {
     isEditMode,
     navigation,
     numericIngredientId,
+    returnToParams,
+    returnToPath,
     setHasUnsavedChanges,
     showDialog,
+    routeValidator,
   ]);
 
   useEffect(() => {

@@ -1298,6 +1298,12 @@ export default function CreateCocktailScreen() {
                 entityName: prefilledCocktail?.name,
               }),
             );
+            if (returnToPath) {
+              router.navigate({ pathname: returnToPath, params: returnToParams });
+              return;
+            }
+
+            navigateBackWithHistory(navigation, { isRouteValid: routeValidator });
           },
         },
       ],
@@ -1308,8 +1314,11 @@ export default function CreateCocktailScreen() {
     prefilledCocktail?.id,
     prefilledCocktail?.name,
     navigation,
+    returnToParams,
+    returnToPath,
     setHasUnsavedChanges,
     showDialog,
+    routeValidator,
   ]);
 
   const confirmLeave = useCallback(
