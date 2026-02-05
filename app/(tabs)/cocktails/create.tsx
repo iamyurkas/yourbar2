@@ -48,8 +48,10 @@ import { GLASSWARE } from "@/constants/glassware";
 import { useAppColors } from "@/constants/theme";
 import {
   buildReturnToParams,
+  doesRouteMatchPath,
+  goBackSkipping,
   parseReturnToParams,
-  skipDuplicateBack,
+  returnToSourceOrBack,
 } from "@/libs/navigation";
 import { shouldStorePhoto, storePhoto } from "@/libs/photo-storage";
 import { normalizeSearchText } from "@/libs/search-normalization";
@@ -344,6 +346,8 @@ export default function CreateCocktailScreen() {
   const isNavigatingAfterSaveRef = useRef(false);
   const scrollRef = useRef<ScrollView | null>(null);
   const isHandlingBackRef = useRef(false);
+  const cocktailRoutePath = "/cocktails/[cocktailId]";
+  const cocktailCreatePath = "/cocktails/create";
 
   const ingredientById = useMemo(() => {
     const map = new Map<number, Ingredient>();
@@ -1147,7 +1151,18 @@ export default function CreateCocktailScreen() {
       isNavigatingAfterSaveRef.current = true;
       const targetId = persisted.id ?? persisted.name;
       if (isEditMode && navigation.canGoBack()) {
-        navigation.goBack();
+        goBackSkipping(navigation, {
+          shouldSkipRoute: (route) => doesRouteMatchPath(route, cocktailCreatePath),
+        });
+        return;
+      }
+
+      if (returnToPath) {
+        returnToSourceOrBack(navigation, {
+          returnToPath,
+          returnToParams,
+          shouldSkipRoute: (route) => doesRouteMatchPath(route, cocktailCreatePath),
+        });
         return;
       }
 
@@ -1237,16 +1252,31 @@ export default function CreateCocktailScreen() {
             }
 
             setHasUnsavedChanges(false);
-            router.replace("/cocktails");
+            isNavigatingAfterSaveRef.current = true;
+            returnToSourceOrBack(navigation, {
+              returnToPath,
+              returnToParams,
+              shouldSkipRoute: (route) =>
+                (numericId != null &&
+                  doesRouteMatchPath(route, cocktailRoutePath, {
+                    cocktailId: String(numericId),
+                  })) ||
+                doesRouteMatchPath(route, cocktailCreatePath),
+            });
           },
         },
       ],
     });
   }, [
+    cocktailCreatePath,
+    cocktailRoutePath,
     deleteCocktail,
     isEditMode,
+    navigation,
     prefilledCocktail?.id,
     prefilledCocktail?.name,
+    returnToParams,
+    returnToPath,
     setHasUnsavedChanges,
     showDialog,
   ]);
@@ -1279,37 +1309,28 @@ export default function CreateCocktailScreen() {
         return;
       }
 
-      if (hasUnsavedChanges) {
-        event.preventDefault();
-        confirmLeave(() => {
-          isHandlingBackRef.current = true;
-          if (event.data.action.type === "GO_BACK") {
-            skipDuplicateBack(navigation);
-          } else {
-            navigation.dispatch(event.data.action);
-          }
-          setTimeout(() => {
-            isHandlingBackRef.current = false;
-          }, 0);
-        });
-        return;
-      }
-
-      if (event.data.action.type === "GO_BACK") {
-        event.preventDefault();
+      event.preventDefault();
+      confirmLeave(() => {
         isHandlingBackRef.current = true;
-        skipDuplicateBack(navigation);
+        if (event.data.action.type === "GO_BACK") {
+          goBackSkipping(navigation, {
+            shouldSkipRoute: (route) =>
+              doesRouteMatchPath(route, cocktailCreatePath),
+          });
+        } else {
+          navigation.dispatch(event.data.action);
+        }
         setTimeout(() => {
           isHandlingBackRef.current = false;
         }, 0);
-      }
+      });
     });
 
     return unsubscribe;
   }, [confirmLeave, hasUnsavedChanges, navigation]);
 
   const handleGoBack = useCallback(() => {
-    skipDuplicateBack(navigation);
+    navigation.goBack();
   }, [navigation]);
 
   const imageSource = useMemo(() => {

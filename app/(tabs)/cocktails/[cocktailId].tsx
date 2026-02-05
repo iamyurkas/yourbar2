@@ -34,10 +34,10 @@ import {
 } from "@/libs/ingredient-availability";
 import {
   buildReturnToParams,
+  doesRouteMatchPath,
   navigateToDetailsWithReturnTo,
   parseReturnToParams,
   returnToSourceOrBack,
-  skipDuplicateBack,
 } from "@/libs/navigation";
 import { normalizeSearchText } from "@/libs/search-normalization";
 import { useInventory, type Cocktail } from "@/providers/inventory-provider";
@@ -365,6 +365,11 @@ export default function CocktailDetailsScreen() {
   }, [params.returnToParams]);
 
   const [showImperialUnits, setShowImperialUnits] = useState(useImperialUnits);
+  const cocktailIdParamValue = useMemo(
+    () => (resolvedParam ? String(resolvedParam) : undefined),
+    [resolvedParam],
+  );
+  const cocktailRoutePath = "/cocktails/[cocktailId]";
   const isHandlingBackRef = useRef(false);
 
   useEffect(() => {
@@ -372,13 +377,56 @@ export default function CocktailDetailsScreen() {
   }, [useImperialUnits]);
 
   const handleReturn = useCallback(() => {
-    if (returnToPath === "/cocktails") {
-      skipDuplicateBack(navigation);
+    const skipInvalidOrDuplicate = (route: {
+      name: string;
+      params?: Record<string, unknown>;
+    }) => {
+      if (doesRouteMatchPath(route, cocktailRoutePath, { cocktailId: cocktailIdParamValue })) {
+        return true;
+      }
+
+      if (cocktailIdParamValue && !cocktail) {
+        return doesRouteMatchPath(route, cocktailRoutePath, {
+          cocktailId: cocktailIdParamValue,
+        });
+      }
+
+      return false;
+    };
+
+    returnToSourceOrBack(navigation, {
+      returnToPath,
+      returnToParams,
+      shouldSkipRoute: skipInvalidOrDuplicate,
+    });
+  }, [
+    cocktail,
+    cocktailIdParamValue,
+    cocktailRoutePath,
+    navigation,
+    returnToParams,
+    returnToPath,
+  ]);
+
+  useEffect(() => {
+    if (cocktail || !cocktailIdParamValue) {
       return;
     }
 
-    returnToSourceOrBack(navigation, { returnToPath, returnToParams });
-  }, [navigation, returnToParams, returnToPath]);
+    returnToSourceOrBack(navigation, {
+      returnToPath,
+      returnToParams,
+      shouldSkipRoute: (route) =>
+        doesRouteMatchPath(route, cocktailRoutePath, { cocktailId: cocktailIdParamValue }),
+    });
+  }, [
+    cocktail,
+    cocktailIdParamValue,
+    cocktailRoutePath,
+    navigation,
+    returnToParams,
+    returnToPath,
+  ]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", (event) => {

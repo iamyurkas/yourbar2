@@ -35,10 +35,10 @@ import {
 } from "@/libs/ingredient-availability";
 import {
   buildReturnToParams,
+  doesRouteMatchPath,
   navigateToDetailsWithReturnTo,
   parseReturnToParams,
   returnToSourceOrBack,
-  skipDuplicateBack,
 } from "@/libs/navigation";
 import { normalizeSearchText } from "@/libs/search-normalization";
 import { useInventory, type Ingredient } from "@/providers/inventory-provider";
@@ -130,6 +130,11 @@ export default function IngredientDetailsScreen() {
   );
   const [, startAvailabilityTransition] = useTransition();
   const [, startShoppingTransition] = useTransition();
+  const ingredientIdParamValue = useMemo(() => {
+    const candidate = Array.isArray(ingredientId) ? ingredientId[0] : ingredientId;
+    return candidate ? String(candidate) : undefined;
+  }, [ingredientId]);
+  const ingredientRoutePath = "/ingredients/[ingredientId]";
   const isHandlingBackRef = useRef(false);
 
   const isAvailable = useMemo(() => {
@@ -333,7 +338,13 @@ export default function IngredientDetailsScreen() {
     }
 
     const targetId = ingredient.id ?? ingredient.name;
-    const params: Record<string, string> = { source: "ingredient" };
+    const params: Record<string, string> = {
+      source: "ingredient",
+      returnToPath: "/ingredients/[ingredientId]",
+      returnToParams: JSON.stringify({
+        ingredientId: String(targetId),
+      }),
+    };
     if (targetId != null) {
       params.ingredientId = String(targetId);
     }
@@ -506,13 +517,56 @@ export default function IngredientDetailsScreen() {
   }, [cocktailEntries.length]);
 
   const handleReturn = useCallback(() => {
-    if (returnToPath === "/ingredients") {
-      skipDuplicateBack(navigation);
+    const skipInvalidOrDuplicate = (route: {
+      name: string;
+      params?: Record<string, unknown>;
+    }) => {
+      if (doesRouteMatchPath(route, ingredientRoutePath, { ingredientId: ingredientIdParamValue })) {
+        return true;
+      }
+
+      if (ingredientIdParamValue && !ingredient) {
+        return doesRouteMatchPath(route, ingredientRoutePath, {
+          ingredientId: ingredientIdParamValue,
+        });
+      }
+
+      return false;
+    };
+
+    returnToSourceOrBack(navigation, {
+      returnToPath,
+      returnToParams,
+      shouldSkipRoute: skipInvalidOrDuplicate,
+    });
+  }, [
+    ingredient,
+    ingredientIdParamValue,
+    ingredientRoutePath,
+    navigation,
+    returnToParams,
+    returnToPath,
+  ]);
+
+  useEffect(() => {
+    if (ingredient || !ingredientIdParamValue) {
       return;
     }
 
-    returnToSourceOrBack(navigation, { returnToPath, returnToParams });
-  }, [navigation, returnToParams, returnToPath]);
+    returnToSourceOrBack(navigation, {
+      returnToPath,
+      returnToParams,
+      shouldSkipRoute: (route) =>
+        doesRouteMatchPath(route, ingredientRoutePath, { ingredientId: ingredientIdParamValue }),
+    });
+  }, [
+    ingredient,
+    ingredientIdParamValue,
+    ingredientRoutePath,
+    navigation,
+    returnToParams,
+    returnToPath,
+  ]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", (event) => {
@@ -680,7 +734,7 @@ export default function IngredientDetailsScreen() {
                   );
                 })}
               </View>
-            ) : null}
+        ) : null}
 
             {descriptionParagraphs.length ? (
               <View style={styles.textBlock}>

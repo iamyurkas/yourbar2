@@ -3,6 +3,8 @@ import { router } from 'expo-router';
 
 type RouteParams = Record<string, unknown> | undefined;
 type ReturnToParams = Record<string, string> | undefined;
+type NavigationRoute = { name: string; params?: RouteParams };
+type SkipRoutePredicate = (route: NavigationRoute) => boolean;
 
 const areParamsEqual = (left?: RouteParams, right?: RouteParams): boolean => {
   if (!left && !right) {
@@ -22,10 +24,7 @@ const areParamsEqual = (left?: RouteParams, right?: RouteParams): boolean => {
   return leftKeys.every((key) => rightKeys.includes(key) && left[key] === right[key]);
 };
 
-const areRoutesEqual = (
-  left?: { name: string; params?: RouteParams },
-  right?: { name: string; params?: RouteParams },
-): boolean => {
+const areRoutesEqual = (left?: NavigationRoute, right?: NavigationRoute): boolean => {
   if (!left || !right) {
     return false;
   }
@@ -37,7 +36,58 @@ const areRoutesEqual = (
   return areParamsEqual(left.params, right.params);
 };
 
-export const skipDuplicateBack = (navigation: NavigationProp<ParamListBase>) => {
+const normalizePathForComparison = (path: string) =>
+  path.replace(/^\/+/, '').replace(/\/+$/, '').replace(/\/index$/, '');
+
+const areParamsSubset = (routeParams?: RouteParams, targetParams?: ReturnToParams): boolean => {
+  if (!targetParams) {
+    return true;
+  }
+
+  if (!routeParams) {
+    return false;
+  }
+
+  return Object.entries(targetParams).every(([key, value]) => routeParams[key] === value);
+};
+
+export const doesRouteMatchPath = (
+  route: NavigationRoute,
+  path: string,
+  params?: ReturnToParams,
+): boolean => {
+  if (!path) {
+    return false;
+  }
+
+  const normalizedRoute = normalizePathForComparison(route.name);
+  const normalizedPath = normalizePathForComparison(path);
+  if (normalizedRoute !== normalizedPath) {
+    return false;
+  }
+
+  return areParamsSubset(route.params, params);
+};
+
+const findMatchingRouteIndex = (
+  routes: NavigationRoute[],
+  currentIndex: number,
+  path: string,
+  params?: ReturnToParams,
+): number | undefined => {
+  for (let index = currentIndex - 1; index >= 0; index -= 1) {
+    if (doesRouteMatchPath(routes[index], path, params)) {
+      return index;
+    }
+  }
+
+  return undefined;
+};
+
+export const goBackSkipping = (
+  navigation: NavigationProp<ParamListBase>,
+  options?: { shouldSkipRoute?: SkipRoutePredicate },
+) => {
   const state = navigation.getState();
   const currentIndex = state.index ?? 0;
 
@@ -47,15 +97,35 @@ export const skipDuplicateBack = (navigation: NavigationProp<ParamListBase>) => 
   }
 
   const current = state.routes[currentIndex];
-  const previous = state.routes[currentIndex - 1];
-  const shouldSkip = areRoutesEqual(current, previous);
+  const shouldSkipRoute = options?.shouldSkipRoute;
 
-  if (shouldSkip && currentIndex >= 2) {
-    navigation.dispatch(StackActions.pop(2));
+  let targetIndex = currentIndex - 1;
+  while (targetIndex >= 0) {
+    const candidate = state.routes[targetIndex];
+    const shouldSkip =
+      areRoutesEqual(current, candidate) || (shouldSkipRoute?.(candidate) ?? false);
+    if (!shouldSkip) {
+      break;
+    }
+    targetIndex -= 1;
+  }
+
+  if (targetIndex < 0) {
+    navigation.dispatch(StackActions.pop(currentIndex));
     return;
   }
 
-  navigation.goBack();
+  const popCount = currentIndex - targetIndex;
+  if (popCount <= 1) {
+    navigation.goBack();
+    return;
+  }
+
+  navigation.dispatch(StackActions.pop(popCount));
+};
+
+export const skipDuplicateBack = (navigation: NavigationProp<ParamListBase>) => {
+  goBackSkipping(navigation);
 };
 
 export const buildReturnToParams = (
@@ -124,15 +194,29 @@ export const returnToSourceOrBack = (
   {
     returnToPath,
     returnToParams,
+    shouldSkipRoute,
   }: {
     returnToPath?: string;
     returnToParams?: ReturnToParams;
+    shouldSkipRoute?: SkipRoutePredicate;
   },
 ) => {
+  const state = navigation.getState();
+  const currentIndex = state.index ?? state.routes.length - 1;
+
   if (returnToPath) {
+    const targetIndex =
+      currentIndex >= 0
+        ? findMatchingRouteIndex(state.routes, currentIndex, returnToPath, returnToParams)
+        : undefined;
+    if (targetIndex != null && targetIndex >= 0 && targetIndex < currentIndex) {
+      navigation.dispatch(StackActions.pop(currentIndex - targetIndex));
+      return;
+    }
+
     router.navigate({ pathname: returnToPath, params: returnToParams });
     return;
   }
 
-  skipDuplicateBack(navigation);
+  goBackSkipping(navigation, { shouldSkipRoute });
 };
