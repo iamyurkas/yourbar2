@@ -46,7 +46,13 @@ const areRoutesEqual = (
   return areParamsEqual(left.params, right.params);
 };
 
-const normalizeRouteName = (value: string) => value.replace(/^\//, '');
+const normalizeRouteName = (value: string) =>
+  value
+    .replace(/^\//, '')
+    .split('/')
+    .filter((segment) => segment.length > 0 && !/^\(.+\)$/.test(segment))
+    .join('/')
+    .replace(/\/index$/, '');
 
 const routeMatchesPath = (
   route: RouteLike,
