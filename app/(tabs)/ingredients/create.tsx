@@ -610,8 +610,8 @@ export default function IngredientFormScreen() {
   }, [confirmLeave, navigation, routeValidator]);
 
   const handleGoBack = useCallback(() => {
-    navigateBackWithHistory(navigation, { isRouteValid: routeValidator });
-  }, [navigation, routeValidator]);
+    navigation.goBack();
+  }, [navigation]);
 
   const handleDeletePress = useCallback(() => {
     if (!isEditMode) {

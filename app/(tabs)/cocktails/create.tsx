@@ -1382,8 +1382,8 @@ export default function CreateCocktailScreen() {
   }, [confirmLeave, navigation, routeValidator]);
 
   const handleGoBack = useCallback(() => {
-    navigateBackWithHistory(navigation, { isRouteValid: routeValidator });
-  }, [navigation, routeValidator]);
+    navigation.goBack();
+  }, [navigation]);
 
   const imageSource = useMemo(() => {
     if (!imageUri) {
