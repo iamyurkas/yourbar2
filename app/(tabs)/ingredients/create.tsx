@@ -524,6 +524,10 @@ export default function IngredientFormScreen() {
     }
 
     if (returnToPath) {
+      if (returnToPath === '/cocktails/create') {
+        router.navigate({ pathname: returnToPath, params: returnToParams });
+        return;
+      }
       if (navigation.canGoBack()) {
         navigateBackWithHistory(navigation, { isRouteValid: routeValidator });
         return;
