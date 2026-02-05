@@ -104,6 +104,7 @@ export default function IngredientFormScreen() {
     }
     return undefined;
   }, [legacyReturnToParam, returnToPathParam]);
+  const shouldReturnToCocktailCreate = returnToPath === '/cocktails/create';
   const returnToParams = useMemo(() => {
     if (!returnToParamsParam) {
       return undefined;
@@ -511,6 +512,10 @@ export default function IngredientFormScreen() {
     }
 
     if (returnToPath) {
+      if (shouldReturnToCocktailCreate && navigation.canGoBack()) {
+        skipDuplicateBack(navigation);
+        return;
+      }
       router.navigate({ pathname: returnToPath, params: returnToParams });
       return;
     }
@@ -533,6 +538,7 @@ export default function IngredientFormScreen() {
     numericIngredientId,
     returnToParams,
     returnToPath,
+    shouldReturnToCocktailCreate,
     selectedTagIds,
     setHasUnsavedChanges,
     showDialog,
@@ -576,7 +582,8 @@ export default function IngredientFormScreen() {
         return;
       }
 
-      if (hasUnsavedChanges) {
+      const shouldConfirmLeave = hasUnsavedChanges || shouldReturnToCocktailCreate;
+      if (shouldConfirmLeave) {
         event.preventDefault();
         confirmLeave(() => {
           isHandlingBackRef.current = true;
@@ -603,7 +610,7 @@ export default function IngredientFormScreen() {
     });
 
     return unsubscribe;
-  }, [confirmLeave, hasUnsavedChanges, navigation]);
+  }, [confirmLeave, hasUnsavedChanges, navigation, shouldReturnToCocktailCreate]);
 
   const handleGoBack = useCallback(() => {
     skipDuplicateBack(navigation);
