@@ -61,7 +61,10 @@ export const areRoutesEqual = (
 };
 
 const normalizeRouteName = (value: string) =>
-  value.replace(/^\(.*?\)\//, '').replace(/^\//, '');
+  value
+    .replace(/^\(.*?\)\//, '')
+    .replace(/^\//, '')
+    .replace(/\/index$/, '');
 
 const doesRouteNameMatch = (routeName: string, expectedName: string) => {
   const normalizedRoute = normalizeRouteName(routeName);
