@@ -1289,11 +1289,13 @@ export default function CreateCocktailScreen() {
                 routeName: "cocktails/[cocktailId]",
                 paramKey: "cocktailId",
                 entityId: numericId,
+                entityName: prefilledCocktail?.name,
               }) ||
               isRouteForEntity(route, {
                 routeName: "cocktails/create",
                 paramKey: "cocktailId",
                 entityId: numericId,
+                entityName: prefilledCocktail?.name,
               }),
             );
           },

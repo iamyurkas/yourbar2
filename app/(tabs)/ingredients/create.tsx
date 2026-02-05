@@ -658,11 +658,13 @@ export default function IngredientFormScreen() {
                 routeName: 'ingredients/[ingredientId]',
                 paramKey: 'ingredientId',
                 entityId: numericIngredientId,
+                entityName: ingredient?.name,
               }) ||
               isRouteForEntity(route, {
                 routeName: 'ingredients/create',
                 paramKey: 'ingredientId',
                 entityId: numericIngredientId,
+                entityName: ingredient?.name,
               }),
             );
           },

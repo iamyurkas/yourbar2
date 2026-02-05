@@ -170,7 +170,13 @@ export const isRouteForEntity = (
     routeName,
     paramKey,
     entityId,
-  }: { routeName: string; paramKey: string; entityId: number | string },
+    entityName,
+  }: {
+    routeName: string;
+    paramKey: string;
+    entityId: number | string;
+    entityName?: string | null;
+  },
 ) => {
   if (!doesRouteNameMatch(route.name, routeName)) {
     return false;
@@ -181,7 +187,15 @@ export const isRouteForEntity = (
     return false;
   }
 
-  return String(paramValue) === String(entityId);
+  if (String(paramValue) === String(entityId)) {
+    return true;
+  }
+
+  if (entityName) {
+    return normalizeSearchText(paramValue) === normalizeSearchText(entityName);
+  }
+
+  return false;
 };
 
 const findBackTargetIndex = (
