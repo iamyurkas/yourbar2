@@ -7,7 +7,6 @@ import {
   useCallback,
   useEffect,
   useMemo,
-  useRef,
   useState,
   useTransition,
 } from "react";
@@ -36,8 +35,7 @@ import {
   buildReturnToParams,
   navigateToDetailsWithReturnTo,
   parseReturnToParams,
-  returnToSourceOrBack,
-  skipDuplicateBack,
+  useNaturalBackHandler,
 } from "@/libs/navigation";
 import { normalizeSearchText } from "@/libs/search-normalization";
 import { useInventory, type Cocktail } from "@/providers/inventory-provider";
@@ -330,6 +328,7 @@ export default function CocktailDetailsScreen() {
     cocktailId?: string;
     returnToPath?: string;
     returnToParams?: string;
+    saved?: string;
   }>();
   const navigation = useNavigation();
   const Colors = useAppColors();
@@ -365,24 +364,19 @@ export default function CocktailDetailsScreen() {
   }, [params.returnToParams]);
 
   const [showImperialUnits, setShowImperialUnits] = useState(useImperialUnits);
-  const isHandlingBackRef = useRef(false);
+  const { performNaturalBack, isHandlingRef } = useNaturalBackHandler();
 
   useEffect(() => {
     setShowImperialUnits(useImperialUnits);
   }, [useImperialUnits]);
 
   const handleReturn = useCallback(() => {
-    if (returnToPath === "/cocktails") {
-      skipDuplicateBack(navigation);
-      return;
-    }
-
-    returnToSourceOrBack(navigation, { returnToPath, returnToParams });
-  }, [navigation, returnToParams, returnToPath]);
+    performNaturalBack({ skipCurrent: params.saved === "true" });
+  }, [performNaturalBack, params.saved]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", (event) => {
-      if (isHandlingBackRef.current) {
+      if (isHandlingRef.current) {
         return;
       }
 
@@ -391,17 +385,11 @@ export default function CocktailDetailsScreen() {
       }
 
       event.preventDefault();
-
-      isHandlingBackRef.current = true;
       handleReturn();
-
-      requestAnimationFrame(() => {
-        isHandlingBackRef.current = false;
-      });
     });
 
     return unsubscribe;
-  }, [handleReturn, navigation]);
+  }, [handleReturn, navigation, isHandlingRef]);
 
   useEffect(() => {
     const keepAwakeTag = "cocktail-details";

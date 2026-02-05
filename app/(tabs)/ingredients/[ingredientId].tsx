@@ -5,7 +5,6 @@ import React, {
   useCallback,
   useEffect,
   useMemo,
-  useRef,
   useState,
   useTransition,
 } from "react";
@@ -37,8 +36,7 @@ import {
   buildReturnToParams,
   navigateToDetailsWithReturnTo,
   parseReturnToParams,
-  returnToSourceOrBack,
-  skipDuplicateBack,
+  useNaturalBackHandler,
 } from "@/libs/navigation";
 import { normalizeSearchText } from "@/libs/search-normalization";
 import { useInventory, type Ingredient } from "@/providers/inventory-provider";
@@ -74,6 +72,7 @@ export default function IngredientDetailsScreen() {
     ingredientId?: string;
     returnToPath?: string;
     returnToParams?: string;
+    saved?: string;
   }>();
   const navigation = useNavigation();
   const Colors = useAppColors();
@@ -130,7 +129,7 @@ export default function IngredientDetailsScreen() {
   );
   const [, startAvailabilityTransition] = useTransition();
   const [, startShoppingTransition] = useTransition();
-  const isHandlingBackRef = useRef(false);
+  const { performNaturalBack, isHandlingRef } = useNaturalBackHandler();
 
   const isAvailable = useMemo(() => {
     if (numericIngredientId == null) {
@@ -506,17 +505,12 @@ export default function IngredientDetailsScreen() {
   }, [cocktailEntries.length]);
 
   const handleReturn = useCallback(() => {
-    if (returnToPath === "/ingredients") {
-      skipDuplicateBack(navigation);
-      return;
-    }
-
-    returnToSourceOrBack(navigation, { returnToPath, returnToParams });
-  }, [navigation, returnToParams, returnToPath]);
+    performNaturalBack({ skipCurrent: params.saved === "true" });
+  }, [performNaturalBack, params.saved]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", (event) => {
-      if (isHandlingBackRef.current) {
+      if (isHandlingRef.current) {
         return;
       }
 
@@ -525,17 +519,11 @@ export default function IngredientDetailsScreen() {
       }
 
       event.preventDefault();
-
-      isHandlingBackRef.current = true;
       handleReturn();
-
-      requestAnimationFrame(() => {
-        isHandlingBackRef.current = false;
-      });
     });
 
     return unsubscribe;
-  }, [handleReturn, navigation]);
+  }, [handleReturn, navigation, isHandlingRef]);
 
   return (
     <SafeAreaView

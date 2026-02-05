@@ -49,7 +49,7 @@ import { useAppColors } from "@/constants/theme";
 import {
   buildReturnToParams,
   parseReturnToParams,
-  skipDuplicateBack,
+  useNaturalBackHandler,
 } from "@/libs/navigation";
 import { shouldStorePhoto, storePhoto } from "@/libs/photo-storage";
 import { normalizeSearchText } from "@/libs/search-normalization";
@@ -237,7 +237,7 @@ export default function CreateCocktailScreen() {
     useImperialUnits,
   } = useInventory();
   const params = useLocalSearchParams();
-  const { setHasUnsavedChanges } = useUnsavedChanges();
+  const { setHasUnsavedChanges, setOnSave } = useUnsavedChanges();
 
   const modeParam = getParamValue(params.mode);
   const isEditMode = modeParam === "edit";
@@ -343,7 +343,7 @@ export default function CreateCocktailScreen() {
   const initializedRef = useRef(false);
   const isNavigatingAfterSaveRef = useRef(false);
   const scrollRef = useRef<ScrollView | null>(null);
-  const isHandlingBackRef = useRef(false);
+  const { performNaturalBack, isHandlingRef } = useNaturalBackHandler();
 
   const ingredientById = useMemo(() => {
     const map = new Map<number, Ingredient>();
@@ -422,6 +422,11 @@ export default function CreateCocktailScreen() {
   }, [hasUnsavedChanges, setHasUnsavedChanges]);
 
   useEffect(() => () => setHasUnsavedChanges(false), [setHasUnsavedChanges]);
+
+  useEffect(() => {
+    setOnSave(handleSubmit);
+    return () => setOnSave(undefined);
+  }, [handleSubmit, setOnSave]);
 
   const getBaseGroupId = useCallback(
     (rawId: number | string | null | undefined) => {
@@ -1145,24 +1150,27 @@ export default function CreateCocktailScreen() {
 
       setHasUnsavedChanges(false);
       isNavigatingAfterSaveRef.current = true;
-      const targetId = persisted.id ?? persisted.name;
-      if (isEditMode && navigation.canGoBack()) {
-        navigation.goBack();
+
+      if (returnToPath) {
+        router.navigate({ pathname: returnToPath, params: returnToParams });
         return;
       }
+
+      const targetId = persisted.id ?? persisted.name;
 
       if (targetId) {
         router.replace({
           pathname: "/cocktails/[cocktailId]",
           params: {
             cocktailId: String(targetId),
+            saved: "true",
             ...buildReturnToParams(returnToPath, returnToParams),
           },
         });
         return;
       }
 
-      router.replace("/cocktails");
+      router.replace("/(tabs)/cocktails");
     } finally {
       setIsSaving(false);
     }
@@ -1189,6 +1197,7 @@ export default function CreateCocktailScreen() {
     showDialog,
     shouldStorePhoto,
     storePhoto,
+    sourceParam,
   ]);
 
   const handleDeletePress = useCallback(() => {
@@ -1237,7 +1246,7 @@ export default function CreateCocktailScreen() {
             }
 
             setHasUnsavedChanges(false);
-            router.replace("/cocktails");
+            performNaturalBack();
           },
         },
       ],
@@ -1249,6 +1258,7 @@ export default function CreateCocktailScreen() {
     prefilledCocktail?.name,
     setHasUnsavedChanges,
     showDialog,
+    performNaturalBack,
   ]);
 
   const confirmLeave = useCallback(
@@ -1275,42 +1285,38 @@ export default function CreateCocktailScreen() {
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", (event) => {
-      if (isNavigatingAfterSaveRef.current || isHandlingBackRef.current) {
+      if (isNavigatingAfterSaveRef.current || isHandlingRef.current) {
         return;
       }
 
       if (hasUnsavedChanges) {
         event.preventDefault();
         confirmLeave(() => {
-          isHandlingBackRef.current = true;
           if (event.data.action.type === "GO_BACK") {
-            skipDuplicateBack(navigation);
+            performNaturalBack();
           } else {
             navigation.dispatch(event.data.action);
           }
-          setTimeout(() => {
-            isHandlingBackRef.current = false;
-          }, 0);
         });
         return;
       }
 
       if (event.data.action.type === "GO_BACK") {
         event.preventDefault();
-        isHandlingBackRef.current = true;
-        skipDuplicateBack(navigation);
-        setTimeout(() => {
-          isHandlingBackRef.current = false;
-        }, 0);
+        performNaturalBack();
       }
     });
 
     return unsubscribe;
-  }, [confirmLeave, hasUnsavedChanges, navigation]);
+  }, [confirmLeave, hasUnsavedChanges, navigation, performNaturalBack, isHandlingRef]);
 
   const handleGoBack = useCallback(() => {
-    skipDuplicateBack(navigation);
-  }, [navigation]);
+    if (hasUnsavedChanges) {
+      confirmLeave(() => performNaturalBack());
+    } else {
+      performNaturalBack();
+    }
+  }, [confirmLeave, hasUnsavedChanges, performNaturalBack]);
 
   const imageSource = useMemo(() => {
     if (!imageUri) {

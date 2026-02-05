@@ -3,6 +3,8 @@ import React, { createContext, useCallback, useContext, useMemo, useState } from
 type UnsavedChangesContextValue = {
   hasUnsavedChanges: boolean;
   setHasUnsavedChanges: (value: boolean) => void;
+  onSave?: () => Promise<boolean | undefined | void>;
+  setOnSave: (callback?: () => Promise<boolean | undefined | void>) => void;
 };
 
 const UnsavedChangesContext = createContext<UnsavedChangesContextValue | null>(null);
@@ -13,6 +15,7 @@ type UnsavedChangesProviderProps = {
 
 export function UnsavedChangesProvider({ children }: UnsavedChangesProviderProps) {
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  const [onSave, setOnSave] = useState<(() => Promise<boolean | undefined | void>) | undefined>();
 
   const updateHasUnsavedChanges = useCallback((value: boolean) => {
     setHasUnsavedChanges(value);
@@ -22,8 +25,10 @@ export function UnsavedChangesProvider({ children }: UnsavedChangesProviderProps
     () => ({
       hasUnsavedChanges,
       setHasUnsavedChanges: updateHasUnsavedChanges,
+      onSave,
+      setOnSave,
     }),
-    [hasUnsavedChanges, updateHasUnsavedChanges],
+    [hasUnsavedChanges, updateHasUnsavedChanges, onSave, setOnSave],
   );
 
   return <UnsavedChangesContext.Provider value={value}>{children}</UnsavedChangesContext.Provider>;

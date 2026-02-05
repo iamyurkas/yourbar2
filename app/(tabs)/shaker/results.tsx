@@ -1,6 +1,6 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
-import { Stack, useLocalSearchParams } from 'expo-router';
+import { Stack, useLocalSearchParams, useNavigation } from 'expo-router';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   FlatList,
@@ -25,7 +25,7 @@ import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
 import { useAppColors } from '@/constants/theme';
 import { isCocktailReady } from '@/libs/cocktail-availability';
 import { createIngredientLookup } from '@/libs/ingredient-availability';
-import { navigateToDetailsWithReturnTo } from '@/libs/navigation';
+import { navigateToDetailsWithReturnTo, useNaturalBackHandler } from '@/libs/navigation';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Cocktail } from '@/providers/inventory-provider';
 
@@ -88,6 +88,8 @@ export default function ShakerResultsScreen() {
   const lastScrollOffset = useRef(0);
   const searchStartOffset = useRef<number | null>(null);
   const previousQuery = useRef(query);
+  const navigation = useNavigation();
+  const { performNaturalBack, isHandlingRef } = useNaturalBackHandler();
 
   const availableIds = useMemo(() => parseListParam(params.available), [params.available]);
   const unavailableIds = useMemo(() => parseListParam(params.unavailable), [params.unavailable]);
@@ -556,6 +558,23 @@ export default function ShakerResultsScreen() {
       Colors,
     ],
   );
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('beforeRemove', (event) => {
+      if (isHandlingRef.current) {
+        return;
+      }
+
+      if (event.data.action.type !== 'GO_BACK') {
+        return;
+      }
+
+      event.preventDefault();
+      performNaturalBack();
+    });
+
+    return unsubscribe;
+  }, [performNaturalBack, navigation, isHandlingRef]);
 
   return (
     <SafeAreaView
