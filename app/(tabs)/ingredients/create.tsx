@@ -595,7 +595,9 @@ export default function IngredientFormScreen() {
         return;
       }
 
-      if (!hasUnsavedChanges) {
+      const shouldConfirmLeave = returnToPath === '/cocktails/create' || hasUnsavedChanges;
+
+      if (!shouldConfirmLeave) {
         event.preventDefault();
         isHandlingBackRef.current = true;
         navigateBackWithHistory(navigation, { isRouteValid: routeValidator });
@@ -617,7 +619,7 @@ export default function IngredientFormScreen() {
     });
 
     return unsubscribe;
-  }, [confirmLeave, hasUnsavedChanges, navigation, routeValidator]);
+  }, [confirmLeave, hasUnsavedChanges, navigation, returnToPath, routeValidator]);
 
   const handleGoBack = useCallback(() => {
     navigation.goBack();
