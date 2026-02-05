@@ -575,6 +575,15 @@ export default function IngredientFormScreen() {
   }, [handleSubmit, setSaveHandler]);
 
   useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      isNavigatingAfterSaveRef.current = false;
+      isHandlingBackRef.current = false;
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
+  useEffect(() => {
     const unsubscribe = navigation.addListener('beforeRemove', (event) => {
       if (isNavigatingAfterSaveRef.current || isHandlingBackRef.current) {
         return;
