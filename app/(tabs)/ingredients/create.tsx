@@ -104,6 +104,7 @@ export default function IngredientFormScreen() {
     }
     return undefined;
   }, [legacyReturnToParam, returnToPathParam]);
+  const isReturningToCocktailForm = returnToPath === '/cocktails/create';
   const returnToParams = useMemo(() => {
     if (!returnToParamsParam) {
       return undefined;
@@ -511,6 +512,11 @@ export default function IngredientFormScreen() {
     }
 
     if (returnToPath) {
+      if (isReturningToCocktailForm && navigation.canGoBack()) {
+        skipDuplicateBack(navigation);
+        return;
+      }
+
       router.navigate({ pathname: returnToPath, params: returnToParams });
       return;
     }
@@ -527,6 +533,7 @@ export default function IngredientFormScreen() {
     imageUri,
     ingredient?.photoUri,
     isEditMode,
+    isReturningToCocktailForm,
     isSaving,
     name,
     navigation,
@@ -563,6 +570,26 @@ export default function IngredientFormScreen() {
     [handleSubmit, setHasUnsavedChanges, showDialog],
   );
 
+  const confirmReturnToCocktail = useCallback(
+    (onLeave: () => void) => {
+      showDialog({
+        title: 'Return to cocktail?',
+        message: 'Your ingredient changes will be discarded if you go back.',
+        actions: [
+          { label: 'Stay', variant: 'secondary' },
+          {
+            label: 'Back',
+            onPress: () => {
+              setHasUnsavedChanges(false);
+              onLeave();
+            },
+          },
+        ],
+      });
+    },
+    [setHasUnsavedChanges, showDialog],
+  );
+
   useEffect(() => {
     setSaveHandler(() => handleSubmit);
     return () => {
@@ -594,6 +621,17 @@ export default function IngredientFormScreen() {
 
       if (event.data.action.type === 'GO_BACK') {
         event.preventDefault();
+        if (isReturningToCocktailForm) {
+          confirmReturnToCocktail(() => {
+            isHandlingBackRef.current = true;
+            skipDuplicateBack(navigation);
+            setTimeout(() => {
+              isHandlingBackRef.current = false;
+            }, 0);
+          });
+          return;
+        }
+
         isHandlingBackRef.current = true;
         skipDuplicateBack(navigation);
         setTimeout(() => {
@@ -603,7 +641,13 @@ export default function IngredientFormScreen() {
     });
 
     return unsubscribe;
-  }, [confirmLeave, hasUnsavedChanges, navigation]);
+  }, [
+    confirmLeave,
+    confirmReturnToCocktail,
+    hasUnsavedChanges,
+    isReturningToCocktailForm,
+    navigation,
+  ]);
 
   const handleGoBack = useCallback(() => {
     skipDuplicateBack(navigation);
