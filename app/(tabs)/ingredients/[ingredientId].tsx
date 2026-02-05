@@ -340,6 +340,14 @@ export default function IngredientDetailsScreen() {
     if (ingredient.name) {
       params.ingredientName = ingredient.name;
     }
+    if (targetId != null) {
+      Object.assign(
+        params,
+        buildReturnToParams("/ingredients/[ingredientId]", {
+          ingredientId: String(targetId),
+        }),
+      );
+    }
 
     router.push({ pathname: "/cocktails/create", params });
   }, [ingredient]);
