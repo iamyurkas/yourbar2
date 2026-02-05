@@ -337,6 +337,7 @@ export default function CocktailDetailsScreen() {
   const {
     cocktails,
     ingredients,
+    loading,
     availableIngredientIds,
     shoppingIngredientIds,
     setCocktailRating,
@@ -366,6 +367,7 @@ export default function CocktailDetailsScreen() {
 
   const [showImperialUnits, setShowImperialUnits] = useState(useImperialUnits);
   const isHandlingBackRef = useRef(false);
+  const shouldNavigateAway = !loading && !cocktail;
 
   useEffect(() => {
     setShowImperialUnits(useImperialUnits);
@@ -379,6 +381,19 @@ export default function CocktailDetailsScreen() {
 
     returnToSourceOrBack(navigation, { returnToPath, returnToParams });
   }, [navigation, returnToParams, returnToPath]);
+
+  useEffect(() => {
+    if (!shouldNavigateAway || isHandlingBackRef.current) {
+      return;
+    }
+
+    isHandlingBackRef.current = true;
+    handleReturn();
+
+    requestAnimationFrame(() => {
+      isHandlingBackRef.current = false;
+    });
+  }, [handleReturn, shouldNavigateAway]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", (event) => {
@@ -402,6 +417,10 @@ export default function CocktailDetailsScreen() {
 
     return unsubscribe;
   }, [handleReturn, navigation]);
+
+  if (shouldNavigateAway) {
+    return null;
+  }
 
   useEffect(() => {
     const keepAwakeTag = "cocktail-details";
