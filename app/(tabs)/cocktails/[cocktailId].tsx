@@ -316,10 +316,6 @@ function formatGlassLabel(glassId?: string | null) {
     return undefined;
   }
 
-  if (!cocktail && cocktailId && !loading) {
-    return null;
-  }
-
   return (
     GLASS_LABELS[glassId] ??
     glassId
