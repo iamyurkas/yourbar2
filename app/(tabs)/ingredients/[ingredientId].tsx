@@ -560,10 +560,6 @@ export default function IngredientDetailsScreen() {
     return unsubscribe;
   }, [handleReturn, navigation]);
 
-  if (shouldNavigateAway) {
-    return null;
-  }
-
   return (
     <SafeAreaView
       style={[styles.safeArea, { backgroundColor: Colors.background }]}
