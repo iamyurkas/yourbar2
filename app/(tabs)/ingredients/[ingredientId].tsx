@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { StackActions, useNavigation } from "@react-navigation/native";
 import { Stack, router, useLocalSearchParams } from "expo-router";
 import React, {
   useCallback,
@@ -43,30 +43,50 @@ import {
 import { normalizeSearchText } from "@/libs/search-normalization";
 import { useInventory, type Ingredient } from "@/providers/inventory-provider";
 
-function useResolvedIngredient(
+function resolveIngredient(
   param: string | undefined,
   ingredients: Ingredient[],
-) {
-  return useMemo(() => {
-    if (!param) {
-      return undefined;
-    }
+): Ingredient | undefined {
+  if (!param) {
+    return undefined;
+  }
 
-    const numericId = Number(param);
-    if (!Number.isNaN(numericId)) {
-      const byId = ingredients.find(
-        (item) => Number(item.id ?? -1) === numericId,
-      );
-      if (byId) {
-        return byId;
-      }
-    }
-
-    const normalized = normalizeSearchText(param);
-    return ingredients.find(
-      (item) => normalizeSearchText(item.name ?? "") === normalized,
+  const numericId = Number(param);
+  if (!Number.isNaN(numericId)) {
+    const byId = ingredients.find(
+      (item) => Number(item.id ?? -1) === numericId,
     );
-  }, [ingredients, param]);
+    if (byId) {
+      return byId;
+    }
+  }
+
+  const normalized = normalizeSearchText(param);
+  return ingredients.find(
+    (item) => normalizeSearchText(item.name ?? "") === normalized,
+  );
+}
+
+function resolveCocktail(
+  param: string | undefined,
+  cocktails: { id?: number | string | null; name?: string | null }[],
+) {
+  if (!param) {
+    return undefined;
+  }
+
+  const numericId = Number(param);
+  if (!Number.isNaN(numericId)) {
+    const byId = cocktails.find((item) => Number(item.id ?? -1) === numericId);
+    if (byId) {
+      return byId;
+    }
+  }
+
+  const normalized = normalizeSearchText(param);
+  return cocktails.find(
+    (item) => normalizeSearchText(item.name ?? "") === normalized,
+  );
 }
 
 export default function IngredientDetailsScreen() {
@@ -91,9 +111,13 @@ export default function IngredientDetailsScreen() {
     allowAllSubstitutes,
   } = useInventory();
 
-  const ingredient = useResolvedIngredient(
-    Array.isArray(ingredientId) ? ingredientId[0] : ingredientId,
-    ingredients,
+  const resolvedIngredientParam = useMemo(
+    () => (Array.isArray(ingredientId) ? ingredientId[0] : ingredientId),
+    [ingredientId],
+  );
+  const ingredient = useMemo(
+    () => resolveIngredient(resolvedIngredientParam, ingredients),
+    [ingredients, resolvedIngredientParam],
   );
 
   const returnToPath = useMemo(() => {
@@ -516,13 +540,128 @@ export default function IngredientDetailsScreen() {
   }, [cocktailEntries.length]);
 
   const handleReturn = useCallback(() => {
-    if (returnToPath === "/ingredients") {
-      skipDuplicateBack(navigation);
+    if (returnToPath) {
+      if (returnToPath === "/ingredients") {
+        const state = navigation.getState();
+        const currentIndex = state.index ?? 0;
+        const routes = state.routes;
+        let targetIndex = currentIndex - 1;
+
+        while (targetIndex >= 0) {
+          const candidate = routes[targetIndex];
+          const name = candidate?.name ?? "";
+          const params = candidate?.params as
+            | { ingredientId?: string | string[]; cocktailId?: string | string[] }
+            | undefined;
+          const isIngredientDetail = name.includes("ingredients/[ingredientId]");
+          const isCocktailDetail = name.includes("cocktails/[cocktailId]");
+
+          if (isIngredientDetail) {
+            const candidateParam = Array.isArray(params?.ingredientId)
+              ? params?.ingredientId?.[0]
+              : params?.ingredientId;
+            if (
+              candidateParam &&
+              resolveIngredient(String(candidateParam), ingredients)
+            ) {
+              break;
+            }
+          } else if (isCocktailDetail) {
+            const candidateParam = Array.isArray(params?.cocktailId)
+              ? params?.cocktailId?.[0]
+              : params?.cocktailId;
+            if (
+              candidateParam &&
+              resolveCocktail(String(candidateParam), cocktails)
+            ) {
+              break;
+            }
+          } else {
+            break;
+          }
+
+          targetIndex -= 1;
+        }
+
+        if (targetIndex < 0) {
+          router.replace("/ingredients");
+          return;
+        }
+
+        const popCount = currentIndex - targetIndex;
+        if (popCount > 1) {
+          navigation.dispatch(StackActions.pop(popCount));
+          return;
+        }
+
+        skipDuplicateBack(navigation);
+        return;
+      }
+
+      returnToSourceOrBack(navigation, { returnToPath, returnToParams });
       return;
     }
 
-    returnToSourceOrBack(navigation, { returnToPath, returnToParams });
-  }, [navigation, returnToParams, returnToPath]);
+    const state = navigation.getState();
+    const currentIndex = state.index ?? 0;
+    const routes = state.routes;
+    let targetIndex = currentIndex - 1;
+
+    while (targetIndex >= 0) {
+      const candidate = routes[targetIndex];
+      const name = candidate?.name ?? "";
+      const params = candidate?.params as
+        | { ingredientId?: string | string[]; cocktailId?: string | string[] }
+        | undefined;
+      const isIngredientDetail = name.includes("ingredients/[ingredientId]");
+      const isCocktailDetail = name.includes("cocktails/[cocktailId]");
+
+      if (isIngredientDetail) {
+        const candidateParam = Array.isArray(params?.ingredientId)
+          ? params?.ingredientId?.[0]
+          : params?.ingredientId;
+        if (
+          candidateParam &&
+          resolveIngredient(String(candidateParam), ingredients)
+        ) {
+          break;
+        }
+      } else if (isCocktailDetail) {
+        const candidateParam = Array.isArray(params?.cocktailId)
+          ? params?.cocktailId?.[0]
+          : params?.cocktailId;
+        if (
+          candidateParam &&
+          resolveCocktail(String(candidateParam), cocktails)
+        ) {
+          break;
+        }
+      } else {
+        break;
+      }
+
+      targetIndex -= 1;
+    }
+
+    if (targetIndex < 0) {
+      router.replace("/ingredients");
+      return;
+    }
+
+    const popCount = currentIndex - targetIndex;
+    if (popCount > 1) {
+      navigation.dispatch(StackActions.pop(popCount));
+      return;
+    }
+
+    skipDuplicateBack(navigation);
+  }, [
+    cocktails,
+    ingredients,
+    navigation,
+    returnToParams,
+    returnToPath,
+  ]);
 
   useEffect(() => {
     if (!shouldNavigateAway || isHandlingBackRef.current) {
