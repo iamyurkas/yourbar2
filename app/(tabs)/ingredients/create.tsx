@@ -135,7 +135,7 @@ export default function IngredientFormScreen() {
     customIngredientTags,
     createCustomIngredientTag,
   } = useInventory();
-  const { setHasUnsavedChanges } = useUnsavedChanges();
+  const { setHasUnsavedChanges, setSaveHandler } = useUnsavedChanges();
   const isNavigatingAfterSaveRef = useRef(false);
 
   const ingredient = useResolvedIngredient(ingredientParam, ingredients);
@@ -562,6 +562,13 @@ export default function IngredientFormScreen() {
     },
     [handleSubmit, setHasUnsavedChanges, showDialog],
   );
+
+  useEffect(() => {
+    setSaveHandler(() => handleSubmit);
+    return () => {
+      setSaveHandler(null);
+    };
+  }, [handleSubmit, setSaveHandler]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('beforeRemove', (event) => {
