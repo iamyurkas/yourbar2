@@ -595,6 +595,16 @@ export default function IngredientFormScreen() {
         return;
       }
 
+      if (!hasUnsavedChanges) {
+        event.preventDefault();
+        isHandlingBackRef.current = true;
+        navigateBackWithHistory(navigation, { isRouteValid: routeValidator });
+        setTimeout(() => {
+          isHandlingBackRef.current = false;
+        }, 0);
+        return;
+      }
+
       event.preventDefault();
 
       confirmLeave(() => {
@@ -607,7 +617,7 @@ export default function IngredientFormScreen() {
     });
 
     return unsubscribe;
-  }, [confirmLeave, navigation, routeValidator]);
+  }, [confirmLeave, hasUnsavedChanges, navigation, routeValidator]);
 
   const handleGoBack = useCallback(() => {
     navigation.goBack();
