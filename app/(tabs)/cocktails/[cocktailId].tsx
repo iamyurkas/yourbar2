@@ -34,10 +34,10 @@ import {
 } from "@/libs/ingredient-availability";
 import {
   buildReturnToParams,
+  createEntityRouteValidator,
   navigateToDetailsWithReturnTo,
   parseReturnToParams,
   returnToSourceOrBack,
-  skipDuplicateBack,
 } from "@/libs/navigation";
 import { normalizeSearchText } from "@/libs/search-normalization";
 import { useInventory, type Cocktail } from "@/providers/inventory-provider";
@@ -364,6 +364,23 @@ export default function CocktailDetailsScreen() {
     return parseReturnToParams(params.returnToParams);
   }, [params.returnToParams]);
 
+  const isRouteValid = useMemo(
+    () =>
+      createEntityRouteValidator([
+        {
+          path: "/cocktails/[cocktailId]",
+          paramKey: "cocktailId",
+          entities: cocktails,
+        },
+        {
+          path: "/ingredients/[ingredientId]",
+          paramKey: "ingredientId",
+          entities: ingredients,
+        },
+      ]),
+    [cocktails, ingredients],
+  );
+
   const [showImperialUnits, setShowImperialUnits] = useState(useImperialUnits);
   const isHandlingBackRef = useRef(false);
 
@@ -372,13 +389,12 @@ export default function CocktailDetailsScreen() {
   }, [useImperialUnits]);
 
   const handleReturn = useCallback(() => {
-    if (returnToPath === "/cocktails") {
-      skipDuplicateBack(navigation);
-      return;
-    }
-
-    returnToSourceOrBack(navigation, { returnToPath, returnToParams });
-  }, [navigation, returnToParams, returnToPath]);
+    returnToSourceOrBack(navigation, {
+      returnToPath,
+      returnToParams,
+      isRouteValid,
+    });
+  }, [isRouteValid, navigation, returnToParams, returnToPath]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", (event) => {
@@ -402,6 +418,33 @@ export default function CocktailDetailsScreen() {
 
     return unsubscribe;
   }, [handleReturn, navigation]);
+
+  useEffect(() => {
+    if (cocktail || !resolvedParam) {
+      return;
+    }
+
+    if (isHandlingBackRef.current) {
+      return;
+    }
+
+    isHandlingBackRef.current = true;
+    returnToSourceOrBack(navigation, {
+      returnToPath,
+      returnToParams,
+      isRouteValid,
+    });
+    requestAnimationFrame(() => {
+      isHandlingBackRef.current = false;
+    });
+  }, [
+    cocktail,
+    isRouteValid,
+    navigation,
+    resolvedParam,
+    returnToParams,
+    returnToPath,
+  ]);
 
   useEffect(() => {
     const keepAwakeTag = "cocktail-details";

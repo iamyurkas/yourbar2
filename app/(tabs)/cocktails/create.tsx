@@ -48,7 +48,9 @@ import { GLASSWARE } from "@/constants/glassware";
 import { useAppColors } from "@/constants/theme";
 import {
   buildReturnToParams,
+  createEntityRouteValidator,
   parseReturnToParams,
+  returnToSourceOrBack,
   skipDuplicateBack,
 } from "@/libs/navigation";
 import { shouldStorePhoto, storePhoto } from "@/libs/photo-storage";
@@ -272,6 +274,22 @@ export default function CreateCocktailScreen() {
   const returnToParams = useMemo(() => {
     return parseReturnToParams(params.returnToParams);
   }, [params.returnToParams]);
+  const isRouteValid = useMemo(
+    () =>
+      createEntityRouteValidator([
+        {
+          path: "/cocktails/[cocktailId]",
+          paramKey: "cocktailId",
+          entities: cocktails,
+        },
+        {
+          path: "/ingredients/[ingredientId]",
+          paramKey: "ingredientId",
+          entities: inventoryIngredients,
+        },
+      ]),
+    [cocktails, inventoryIngredients],
+  );
 
   const [name, setName] = useState("");
   const [glassId, setGlassId] = useState<string | null>("martini");
@@ -1151,6 +1169,15 @@ export default function CreateCocktailScreen() {
         return;
       }
 
+      if (!isEditMode && returnToPath) {
+        returnToSourceOrBack(navigation, {
+          returnToPath,
+          returnToParams,
+          isRouteValid,
+        });
+        return;
+      }
+
       if (targetId) {
         router.replace({
           pathname: "/cocktails/[cocktailId]",
@@ -1175,6 +1202,7 @@ export default function CreateCocktailScreen() {
     imageUri,
     ingredientsState,
     instructions,
+    isRouteValid,
     isSaving,
     isEditMode,
     methodIds,
@@ -1237,7 +1265,11 @@ export default function CreateCocktailScreen() {
             }
 
             setHasUnsavedChanges(false);
-            router.replace("/cocktails");
+            returnToSourceOrBack(navigation, {
+              returnToPath,
+              returnToParams,
+              isRouteValid,
+            });
           },
         },
       ],
@@ -1245,8 +1277,12 @@ export default function CreateCocktailScreen() {
   }, [
     deleteCocktail,
     isEditMode,
+    isRouteValid,
+    navigation,
     prefilledCocktail?.id,
     prefilledCocktail?.name,
+    returnToParams,
+    returnToPath,
     setHasUnsavedChanges,
     showDialog,
   ]);
@@ -1279,12 +1315,28 @@ export default function CreateCocktailScreen() {
         return;
       }
 
+      if (!isEditMode) {
+        event.preventDefault();
+        confirmLeave(() => {
+          isHandlingBackRef.current = true;
+          if (event.data.action.type === "GO_BACK") {
+            skipDuplicateBack(navigation, { isRouteValid });
+          } else {
+            navigation.dispatch(event.data.action);
+          }
+          setTimeout(() => {
+            isHandlingBackRef.current = false;
+          }, 0);
+        });
+        return;
+      }
+
       if (hasUnsavedChanges) {
         event.preventDefault();
         confirmLeave(() => {
           isHandlingBackRef.current = true;
           if (event.data.action.type === "GO_BACK") {
-            skipDuplicateBack(navigation);
+            skipDuplicateBack(navigation, { isRouteValid });
           } else {
             navigation.dispatch(event.data.action);
           }
@@ -1298,7 +1350,7 @@ export default function CreateCocktailScreen() {
       if (event.data.action.type === "GO_BACK") {
         event.preventDefault();
         isHandlingBackRef.current = true;
-        skipDuplicateBack(navigation);
+        skipDuplicateBack(navigation, { isRouteValid });
         setTimeout(() => {
           isHandlingBackRef.current = false;
         }, 0);
@@ -1306,10 +1358,10 @@ export default function CreateCocktailScreen() {
     });
 
     return unsubscribe;
-  }, [confirmLeave, hasUnsavedChanges, navigation]);
+  }, [confirmLeave, hasUnsavedChanges, isEditMode, isRouteValid, navigation]);
 
   const handleGoBack = useCallback(() => {
-    skipDuplicateBack(navigation);
+    navigation.goBack();
   }, [navigation]);
 
   const imageSource = useMemo(() => {

@@ -27,7 +27,12 @@ import { TagPill } from '@/components/TagPill';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { useAppColors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
-import { buildReturnToParams, skipDuplicateBack } from '@/libs/navigation';
+import {
+  buildReturnToParams,
+  createEntityRouteValidator,
+  returnToSourceOrBack,
+  skipDuplicateBack,
+} from '@/libs/navigation';
 import { shouldStorePhoto, storePhoto } from '@/libs/photo-storage';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
@@ -127,6 +132,7 @@ export default function IngredientFormScreen() {
   const Colors = useAppColors();
   const {
     ingredients,
+    cocktails,
     shoppingIngredientIds,
     availableIngredientIds,
     createIngredient,
@@ -139,6 +145,22 @@ export default function IngredientFormScreen() {
   const isNavigatingAfterSaveRef = useRef(false);
 
   const ingredient = useResolvedIngredient(ingredientParam, ingredients);
+  const isRouteValid = useMemo(
+    () =>
+      createEntityRouteValidator([
+        {
+          path: '/ingredients/[ingredientId]',
+          paramKey: 'ingredientId',
+          entities: ingredients,
+        },
+        {
+          path: '/cocktails/[cocktailId]',
+          paramKey: 'cocktailId',
+          entities: cocktails,
+        },
+      ]),
+    [cocktails, ingredients],
+  );
   const defaultIngredientTagId = BUILTIN_INGREDIENT_TAGS.find(
     (tag) => tag.name === 'other',
   )?.id;
@@ -506,12 +528,16 @@ export default function IngredientFormScreen() {
     isNavigatingAfterSaveRef.current = true;
     const targetId = created.id ?? created.name;
     if (!targetId) {
-      skipDuplicateBack(navigation);
+      skipDuplicateBack(navigation, { isRouteValid });
       return;
     }
 
     if (returnToPath) {
-      router.navigate({ pathname: returnToPath, params: returnToParams });
+      returnToSourceOrBack(navigation, {
+        returnToPath,
+        returnToParams,
+        isRouteValid,
+      });
       return;
     }
 
@@ -527,6 +553,7 @@ export default function IngredientFormScreen() {
     imageUri,
     ingredient?.photoUri,
     isEditMode,
+    isRouteValid,
     isSaving,
     name,
     navigation,
@@ -569,12 +596,28 @@ export default function IngredientFormScreen() {
         return;
       }
 
+      if (!isEditMode) {
+        event.preventDefault();
+        confirmLeave(() => {
+          isHandlingBackRef.current = true;
+          if (event.data.action.type === 'GO_BACK') {
+            skipDuplicateBack(navigation, { isRouteValid });
+          } else {
+            navigation.dispatch(event.data.action);
+          }
+          setTimeout(() => {
+            isHandlingBackRef.current = false;
+          }, 0);
+        });
+        return;
+      }
+
       if (hasUnsavedChanges) {
         event.preventDefault();
         confirmLeave(() => {
           isHandlingBackRef.current = true;
           if (event.data.action.type === 'GO_BACK') {
-            skipDuplicateBack(navigation);
+            skipDuplicateBack(navigation, { isRouteValid });
           } else {
             navigation.dispatch(event.data.action);
           }
@@ -588,7 +631,7 @@ export default function IngredientFormScreen() {
       if (event.data.action.type === 'GO_BACK') {
         event.preventDefault();
         isHandlingBackRef.current = true;
-        skipDuplicateBack(navigation);
+        skipDuplicateBack(navigation, { isRouteValid });
         setTimeout(() => {
           isHandlingBackRef.current = false;
         }, 0);
@@ -596,10 +639,10 @@ export default function IngredientFormScreen() {
     });
 
     return unsubscribe;
-  }, [confirmLeave, hasUnsavedChanges, navigation]);
+  }, [confirmLeave, hasUnsavedChanges, isEditMode, isRouteValid, navigation]);
 
   const handleGoBack = useCallback(() => {
-    skipDuplicateBack(navigation);
+    navigation.goBack();
   }, [navigation]);
 
   const handleDeletePress = useCallback(() => {
@@ -641,12 +684,27 @@ export default function IngredientFormScreen() {
             }
 
             setHasUnsavedChanges(false);
-            router.replace('/ingredients');
+            returnToSourceOrBack(navigation, {
+              returnToPath,
+              returnToParams,
+              isRouteValid,
+            });
           },
         },
       ],
     });
-  }, [deleteIngredient, ingredient?.name, isEditMode, numericIngredientId, setHasUnsavedChanges, showDialog]);
+  }, [
+    deleteIngredient,
+    ingredient?.name,
+    isEditMode,
+    isRouteValid,
+    navigation,
+    numericIngredientId,
+    returnToParams,
+    returnToPath,
+    setHasUnsavedChanges,
+    showDialog,
+  ]);
 
   const baseIngredient = useMemo(() => {
     if (baseIngredientId == null) {
