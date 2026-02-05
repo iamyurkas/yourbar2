@@ -660,11 +660,32 @@ export default function IngredientFormScreen() {
 
             setHasUnsavedChanges(false);
             isNavigatingAfterSaveRef.current = true;
-            const isValidAfterDelete = (route: { name: string; params?: Record<string, unknown> }) =>
-              isRouteValid(route) &&
-              !isRouteMatch(route, '/ingredients/[ingredientId]', {
-                ingredientId: String(numericIngredientId),
-              });
+            const deletedId = String(numericIngredientId);
+            const deletedName = ingredient?.name ?? ingredientParam;
+            const isValidAfterDelete = (route: { name: string; params?: Record<string, unknown> }) => {
+              if (!isRouteValid(route)) {
+                return false;
+              }
+
+              if (
+                isRouteMatch(route, '/ingredients/[ingredientId]', {
+                  ingredientId: deletedId,
+                })
+              ) {
+                return false;
+              }
+
+              if (
+                deletedName &&
+                isRouteMatch(route, '/ingredients/[ingredientId]', {
+                  ingredientId: deletedName,
+                })
+              ) {
+                return false;
+              }
+
+              return true;
+            };
             navigateBackWithHistory(navigation, {
               returnToPath,
               returnToParams,
@@ -674,7 +695,15 @@ export default function IngredientFormScreen() {
         },
       ],
     });
-  }, [deleteIngredient, ingredient?.name, isEditMode, numericIngredientId, setHasUnsavedChanges, showDialog]);
+  }, [
+    deleteIngredient,
+    ingredient?.name,
+    ingredientParam,
+    isEditMode,
+    numericIngredientId,
+    setHasUnsavedChanges,
+    showDialog,
+  ]);
 
   const baseIngredient = useMemo(() => {
     if (baseIngredientId == null) {

@@ -1263,11 +1263,32 @@ export default function CreateCocktailScreen() {
 
             setHasUnsavedChanges(false);
             isNavigatingAfterSaveRef.current = true;
-            const isValidAfterDelete = (route: { name: string; params?: Record<string, unknown> }) =>
-              isRouteValid(route) &&
-              !isRouteMatch(route, "/cocktails/[cocktailId]", {
-                cocktailId: String(numericId),
-              });
+            const deletedId = String(numericId);
+            const deletedName = prefilledCocktail?.name ?? cocktailNameParam;
+            const isValidAfterDelete = (route: { name: string; params?: Record<string, unknown> }) => {
+              if (!isRouteValid(route)) {
+                return false;
+              }
+
+              if (
+                isRouteMatch(route, "/cocktails/[cocktailId]", {
+                  cocktailId: deletedId,
+                })
+              ) {
+                return false;
+              }
+
+              if (
+                deletedName &&
+                isRouteMatch(route, "/cocktails/[cocktailId]", {
+                  cocktailId: deletedName,
+                })
+              ) {
+                return false;
+              }
+
+              return true;
+            };
             navigateBackWithHistory(navigation, {
               returnToPath,
               returnToParams,
@@ -1278,6 +1299,7 @@ export default function CreateCocktailScreen() {
       ],
     });
   }, [
+    cocktailNameParam,
     deleteCocktail,
     isEditMode,
     prefilledCocktail?.id,
