@@ -545,6 +545,15 @@ export default function IngredientFormScreen() {
     updateIngredient,
   ]);
 
+  const navigateToReturnTarget = useCallback(() => {
+    if (returnToPath) {
+      router.navigate({ pathname: returnToPath, params: returnToParams });
+      return;
+    }
+
+    skipDuplicateBack(navigation);
+  }, [navigation, returnToParams, returnToPath]);
+
   const confirmLeave = useCallback(
     (onLeave: () => void) => {
       showDialog({
@@ -585,7 +594,7 @@ export default function IngredientFormScreen() {
         confirmLeave(() => {
           isHandlingBackRef.current = true;
           if (event.data.action.type === 'GO_BACK') {
-            skipDuplicateBack(navigation);
+            navigateToReturnTarget();
           } else {
             navigation.dispatch(event.data.action);
           }
@@ -599,7 +608,7 @@ export default function IngredientFormScreen() {
       if (event.data.action.type === 'GO_BACK') {
         event.preventDefault();
         isHandlingBackRef.current = true;
-        skipDuplicateBack(navigation);
+        navigateToReturnTarget();
         setTimeout(() => {
           isHandlingBackRef.current = false;
         }, 0);
@@ -607,11 +616,17 @@ export default function IngredientFormScreen() {
     });
 
     return unsubscribe;
-  }, [confirmLeave, hasUnsavedChanges, navigation, shouldConfirmOnLeave]);
+  }, [
+    confirmLeave,
+    hasUnsavedChanges,
+    navigateToReturnTarget,
+    navigation,
+    shouldConfirmOnLeave,
+  ]);
 
   const handleGoBack = useCallback(() => {
-    skipDuplicateBack(navigation);
-  }, [navigation]);
+    navigateToReturnTarget();
+  }, [navigateToReturnTarget]);
 
   const handleDeletePress = useCallback(() => {
     if (!isEditMode) {
