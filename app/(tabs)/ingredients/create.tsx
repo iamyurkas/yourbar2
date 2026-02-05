@@ -27,7 +27,7 @@ import { TagPill } from '@/components/TagPill';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { useAppColors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
-import { buildReturnToParams, skipDuplicateBack } from '@/libs/navigation';
+import { buildReturnToParams, performNaturalBack } from '@/libs/navigation';
 import { shouldStorePhoto, storePhoto } from '@/libs/photo-storage';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
@@ -135,7 +135,7 @@ export default function IngredientFormScreen() {
     customIngredientTags,
     createCustomIngredientTag,
   } = useInventory();
-  const { setHasUnsavedChanges } = useUnsavedChanges();
+  const { setHasUnsavedChanges, setOnSave } = useUnsavedChanges();
   const isNavigatingAfterSaveRef = useRef(false);
 
   const ingredient = useResolvedIngredient(ingredientParam, ingredients);
@@ -247,7 +247,16 @@ export default function IngredientFormScreen() {
     setHasUnsavedChanges(hasUnsavedChanges);
   }, [hasUnsavedChanges, setHasUnsavedChanges]);
 
-  useEffect(() => () => setHasUnsavedChanges(false), [setHasUnsavedChanges]);
+  useEffect(() => {
+    return () => {
+      setHasUnsavedChanges(false);
+      setOnSave(undefined);
+    };
+  }, [setHasUnsavedChanges, setOnSave]);
+
+  useEffect(() => {
+    setOnSave(handleSubmit);
+  }, [handleSubmit, setOnSave]);
 
   const imageSource = useMemo(() => {
     if (isEditMode) {
@@ -383,7 +392,7 @@ export default function IngredientFormScreen() {
         message: 'Please enter the ingredient name.',
         actions: [{ label: 'OK' }],
       });
-      return;
+      return false;
     }
 
     if (isEditMode) {
@@ -393,7 +402,7 @@ export default function IngredientFormScreen() {
           message: 'Please try again later.',
           actions: [{ label: 'OK' }],
         });
-        return;
+        return false;
       }
 
       setIsSaving(true);
@@ -433,27 +442,30 @@ export default function IngredientFormScreen() {
             message: 'Please try again later.',
             actions: [{ label: 'OK' }],
           });
-          return;
+          return false;
         }
 
         setHasUnsavedChanges(false);
         isNavigatingAfterSaveRef.current = true;
-        if (navigation.canGoBack()) {
-          navigation.goBack();
-          return;
+
+        if (returnToPath) {
+          router.navigate({ pathname: returnToPath, params: returnToParams });
+          return true;
         }
 
         router.replace({
           pathname: '/ingredients/[ingredientId]',
           params: {
             ingredientId: String(numericIngredientId),
-            ...buildReturnToParams(returnToPath, returnToParams),
           },
         });
+        return true;
+      } catch (error) {
+        console.warn('Failed to update ingredient', error);
+        return false;
       } finally {
         setIsSaving(false);
       }
-      return;
     }
 
     setIsSaving(true);
@@ -480,7 +492,7 @@ export default function IngredientFormScreen() {
         message: 'Please try again later.',
         actions: [{ label: 'OK' }],
       });
-      return;
+      return false;
     }
 
     if (shouldProcessPhoto && imageUri && created.id != null) {
@@ -506,19 +518,22 @@ export default function IngredientFormScreen() {
     isNavigatingAfterSaveRef.current = true;
     const targetId = created.id ?? created.name;
     if (!targetId) {
-      skipDuplicateBack(navigation);
-      return;
+      navigation.goBack();
+      return true;
     }
 
     if (returnToPath) {
       router.navigate({ pathname: returnToPath, params: returnToParams });
-      return;
+      return true;
     }
 
     router.replace({
       pathname: '/ingredients/[ingredientId]',
-      params: { ingredientId: String(targetId) },
+      params: {
+        ingredientId: String(targetId),
+      },
     });
+    return true;
   }, [
     availableIngredientTags,
     baseIngredientId,
@@ -574,7 +589,7 @@ export default function IngredientFormScreen() {
         confirmLeave(() => {
           isHandlingBackRef.current = true;
           if (event.data.action.type === 'GO_BACK') {
-            skipDuplicateBack(navigation);
+            performNaturalBack(navigation, { returnToPath, returnToParams });
           } else {
             navigation.dispatch(event.data.action);
           }
@@ -588,7 +603,7 @@ export default function IngredientFormScreen() {
       if (event.data.action.type === 'GO_BACK') {
         event.preventDefault();
         isHandlingBackRef.current = true;
-        skipDuplicateBack(navigation);
+        performNaturalBack(navigation, { returnToPath, returnToParams });
         setTimeout(() => {
           isHandlingBackRef.current = false;
         }, 0);
@@ -596,10 +611,10 @@ export default function IngredientFormScreen() {
     });
 
     return unsubscribe;
-  }, [confirmLeave, hasUnsavedChanges, navigation]);
+  }, [confirmLeave, hasUnsavedChanges, navigation, returnToParams, returnToPath]);
 
   const handleGoBack = useCallback(() => {
-    skipDuplicateBack(navigation);
+    navigation.goBack();
   }, [navigation]);
 
   const handleDeletePress = useCallback(() => {
@@ -641,7 +656,18 @@ export default function IngredientFormScreen() {
             }
 
             setHasUnsavedChanges(false);
-            router.replace('/ingredients');
+            isNavigatingAfterSaveRef.current = true;
+            performNaturalBack(navigation, {
+              isRouteValid: (route) => {
+                if (
+                  route.name === "[ingredientId]" &&
+                  (route.params as any)?.ingredientId === String(numericIngredientId)
+                ) {
+                  return false;
+                }
+                return true;
+              },
+            });
           },
         },
       ],

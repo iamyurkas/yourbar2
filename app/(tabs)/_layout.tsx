@@ -12,6 +12,7 @@ import { TabBarIcon } from '@/components/tab-bar/TabBarIcon';
 import { OnboardingAnchor } from '@/components/onboarding/OnboardingAnchor';
 import { useAppColors } from '@/constants/theme';
 import { getLastCocktailTab, getLastIngredientTab } from '@/libs/collection-tabs';
+import { useUnsavedChanges } from '@/providers/unsaved-changes-provider';
 
 type TabPressHandler = (navigation: { navigate: (...args: never[]) => void }, route: { name: string }) => void;
 
@@ -53,6 +54,7 @@ export default function TabLayout() {
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(null);
   const insets = useSafeAreaInsets();
   const Colors = useAppColors();
+  const { hasUnsavedChanges, onSave, setHasUnsavedChanges } = useUnsavedChanges();
 
   const closeDialog = useCallback(() => {
     setDialogOptions(null);
@@ -61,6 +63,39 @@ export default function TabLayout() {
   const showDialog = useCallback((options: DialogOptions) => {
     setDialogOptions(options);
   }, []);
+
+  const handleTabPress = useCallback((navigation: any, route: any, defaultHandler: TabPressHandler) => {
+    if (hasUnsavedChanges) {
+      showDialog({
+        title: 'Leave without saving?',
+        message: 'Your changes will be lost if you leave this screen.',
+        actions: [
+          {
+            label: 'Save',
+            onPress: async () => {
+              const success = await onSave?.();
+              if (success !== false) {
+                setHasUnsavedChanges(false);
+                defaultHandler(navigation, route);
+              }
+            },
+          },
+          { label: 'Stay', variant: 'secondary' },
+          {
+            label: 'Leave',
+            variant: 'destructive',
+            onPress: () => {
+              setHasUnsavedChanges(false);
+              defaultHandler(navigation, route);
+            },
+          },
+        ],
+      });
+      return;
+    }
+
+    defaultHandler(navigation, route);
+  }, [hasUnsavedChanges, onSave, setHasUnsavedChanges, showDialog]);
 
   return (
     <>
@@ -103,7 +138,7 @@ export default function TabLayout() {
             listeners={({ navigation, route }) => ({
               tabPress: (event) => {
                 event.preventDefault();
-                onTabPress(navigation, route);
+                handleTabPress(navigation, route, onTabPress);
               },
             })}
           />

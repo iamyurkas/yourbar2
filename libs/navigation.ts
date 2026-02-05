@@ -1,8 +1,10 @@
 import { StackActions, type NavigationProp, type ParamListBase } from '@react-navigation/native';
+import { useNavigation } from 'expo-router';
 import { router } from 'expo-router';
+import { useEffect, useRef } from 'react';
 
-type RouteParams = Record<string, unknown> | undefined;
-type ReturnToParams = Record<string, string> | undefined;
+export type RouteParams = Record<string, unknown> | undefined;
+export type ReturnToParams = Record<string, string> | undefined;
 
 const areParamsEqual = (left?: RouteParams, right?: RouteParams): boolean => {
   if (!left && !right) {
@@ -19,7 +21,21 @@ const areParamsEqual = (left?: RouteParams, right?: RouteParams): boolean => {
     return false;
   }
 
-  return leftKeys.every((key) => rightKeys.includes(key) && left[key] === right[key]);
+  return leftKeys.every((key) => {
+    const leftValue = left[key];
+    const rightValue = right[key];
+
+    // Handle returnToParams serialization differences if any
+    if (key === 'returnToParams' && typeof leftValue === 'string' && typeof rightValue === 'string') {
+        try {
+            return JSON.stringify(JSON.parse(leftValue)) === JSON.stringify(JSON.parse(rightValue));
+        } catch {
+            return leftValue === rightValue;
+        }
+    }
+
+    return rightKeys.includes(key) && leftValue === rightValue;
+  });
 };
 
 const areRoutesEqual = (
@@ -119,6 +135,99 @@ export const navigateToDetailsWithReturnTo = ({
   });
 };
 
+export type NaturalBackOptions = {
+  returnToPath?: string;
+  returnToParams?: ReturnToParams;
+  isRouteValid?: (route: { name: string; params?: RouteParams }) => boolean;
+};
+
+export const performNaturalBack = (
+  navigation: NavigationProp<ParamListBase>,
+  options?: NaturalBackOptions,
+) => {
+  const { returnToPath, returnToParams, isRouteValid } = options ?? {};
+
+  if (returnToPath) {
+    router.navigate({ pathname: returnToPath, params: returnToParams });
+    return;
+  }
+
+  const state = navigation.getState();
+  if (!state) {
+    navigation.goBack();
+    return;
+  }
+
+  const routes = state.routes;
+  const currentIndex = state.index ?? routes.length - 1;
+  const currentRoute = routes[currentIndex];
+
+  let targetIndex = currentIndex - 1;
+
+  while (targetIndex >= 0) {
+    const route = routes[targetIndex];
+
+    // Scenario 2: Skip if same as current
+    if (areRoutesEqual(route, currentRoute)) {
+      targetIndex--;
+      continue;
+    }
+
+    // Scenario 3: Skip transient Edit/Create screens
+    // Usually named 'create' in our app
+    if (route.name === 'create') {
+      targetIndex--;
+      continue;
+    }
+
+    // Scenario 1: Skip if invalid (e.g. refers to deleted entity)
+    if (isRouteValid && !isRouteValid(route)) {
+      targetIndex--;
+      continue;
+    }
+
+    // Found a valid target
+    const popCount = currentIndex - targetIndex;
+    if (popCount > 1) {
+      navigation.dispatch(StackActions.pop(popCount));
+    } else {
+      navigation.goBack();
+    }
+    return;
+  }
+
+  // Fallback to normal back if no valid target found in history
+  navigation.goBack();
+};
+
+export function useNaturalBackHandler(options?: NaturalBackOptions) {
+  const navigation = useNavigation();
+  const isHandlingBackRef = useRef(false);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('beforeRemove', (event) => {
+      if (isHandlingBackRef.current) {
+        return;
+      }
+
+      if (event.data.action.type !== 'GO_BACK') {
+        return;
+      }
+
+      event.preventDefault();
+
+      isHandlingBackRef.current = true;
+      performNaturalBack(navigation as NavigationProp<ParamListBase>, options);
+
+      requestAnimationFrame(() => {
+        isHandlingBackRef.current = false;
+      });
+    });
+
+    return unsubscribe;
+  }, [navigation, options]);
+}
+
 export const returnToSourceOrBack = (
   navigation: NavigationProp<ParamListBase>,
   {
@@ -129,10 +238,5 @@ export const returnToSourceOrBack = (
     returnToParams?: ReturnToParams;
   },
 ) => {
-  if (returnToPath) {
-    router.navigate({ pathname: returnToPath, params: returnToParams });
-    return;
-  }
-
-  skipDuplicateBack(navigation);
+  performNaturalBack(navigation, { returnToPath, returnToParams });
 };

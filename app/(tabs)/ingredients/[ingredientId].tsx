@@ -37,36 +37,33 @@ import {
   buildReturnToParams,
   navigateToDetailsWithReturnTo,
   parseReturnToParams,
-  returnToSourceOrBack,
-  skipDuplicateBack,
+  useNaturalBackHandler,
 } from "@/libs/navigation";
 import { normalizeSearchText } from "@/libs/search-normalization";
 import { useInventory, type Ingredient } from "@/providers/inventory-provider";
 
-function useResolvedIngredient(
+function resolveIngredient(
   param: string | undefined,
   ingredients: Ingredient[],
-) {
-  return useMemo(() => {
-    if (!param) {
-      return undefined;
-    }
+): Ingredient | undefined {
+  if (!param) {
+    return undefined;
+  }
 
-    const numericId = Number(param);
-    if (!Number.isNaN(numericId)) {
-      const byId = ingredients.find(
-        (item) => Number(item.id ?? -1) === numericId,
-      );
-      if (byId) {
-        return byId;
-      }
-    }
-
-    const normalized = normalizeSearchText(param);
-    return ingredients.find(
-      (item) => normalizeSearchText(item.name ?? "") === normalized,
+  const numericId = Number(param);
+  if (!Number.isNaN(numericId)) {
+    const byId = ingredients.find(
+      (item) => Number(item.id ?? -1) === numericId,
     );
-  }, [ingredients, param]);
+    if (byId) {
+      return byId;
+    }
+  }
+
+  const normalized = normalizeSearchText(param);
+  return ingredients.find(
+    (item) => normalizeSearchText(item.name ?? "") === normalized,
+  );
 }
 
 export default function IngredientDetailsScreen() {
@@ -90,9 +87,10 @@ export default function IngredientDetailsScreen() {
     allowAllSubstitutes,
   } = useInventory();
 
-  const ingredient = useResolvedIngredient(
-    Array.isArray(ingredientId) ? ingredientId[0] : ingredientId,
-    ingredients,
+  const resolvedIdParam = Array.isArray(ingredientId) ? ingredientId[0] : ingredientId;
+  const ingredient = useMemo(
+    () => resolveIngredient(resolvedIdParam, ingredients),
+    [ingredients, resolvedIdParam],
   );
 
   const returnToPath = useMemo(() => {
@@ -130,7 +128,6 @@ export default function IngredientDetailsScreen() {
   );
   const [, startAvailabilityTransition] = useTransition();
   const [, startShoppingTransition] = useTransition();
-  const isHandlingBackRef = useRef(false);
 
   const isAvailable = useMemo(() => {
     if (numericIngredientId == null) {
@@ -505,37 +502,22 @@ export default function IngredientDetailsScreen() {
     );
   }, [cocktailEntries.length]);
 
-  const handleReturn = useCallback(() => {
-    if (returnToPath === "/ingredients") {
-      skipDuplicateBack(navigation);
-      return;
-    }
-
-    returnToSourceOrBack(navigation, { returnToPath, returnToParams });
-  }, [navigation, returnToParams, returnToPath]);
-
-  useEffect(() => {
-    const unsubscribe = navigation.addListener("beforeRemove", (event) => {
-      if (isHandlingBackRef.current) {
-        return;
+  const isRouteValid = useCallback(
+    (route: { name: string; params?: any }) => {
+      if (route.name === "[ingredientId]") {
+        const idParam = route.params?.ingredientId;
+        return Boolean(resolveIngredient(idParam, ingredients));
       }
+      return true;
+    },
+    [ingredients],
+  );
 
-      if (event.data.action.type !== "GO_BACK") {
-        return;
-      }
-
-      event.preventDefault();
-
-      isHandlingBackRef.current = true;
-      handleReturn();
-
-      requestAnimationFrame(() => {
-        isHandlingBackRef.current = false;
-      });
-    });
-
-    return unsubscribe;
-  }, [handleReturn, navigation]);
+  useNaturalBackHandler({
+    returnToPath: returnToPath === "/ingredients" ? undefined : returnToPath,
+    returnToParams,
+    isRouteValid,
+  });
 
   return (
     <SafeAreaView
@@ -555,7 +537,7 @@ export default function IngredientDetailsScreen() {
           headerShadowVisible: false,
           headerLeft: () => (
             <Pressable
-              onPress={handleReturn}
+              onPress={() => navigation.goBack()}
               accessibilityRole="button"
               accessibilityLabel="Go back"
               style={styles.headerButton}

@@ -36,8 +36,7 @@ import {
   buildReturnToParams,
   navigateToDetailsWithReturnTo,
   parseReturnToParams,
-  returnToSourceOrBack,
-  skipDuplicateBack,
+  useNaturalBackHandler,
 } from "@/libs/navigation";
 import { normalizeSearchText } from "@/libs/search-normalization";
 import { useInventory, type Cocktail } from "@/providers/inventory-provider";
@@ -365,43 +364,27 @@ export default function CocktailDetailsScreen() {
   }, [params.returnToParams]);
 
   const [showImperialUnits, setShowImperialUnits] = useState(useImperialUnits);
-  const isHandlingBackRef = useRef(false);
 
   useEffect(() => {
     setShowImperialUnits(useImperialUnits);
   }, [useImperialUnits]);
 
-  const handleReturn = useCallback(() => {
-    if (returnToPath === "/cocktails") {
-      skipDuplicateBack(navigation);
-      return;
-    }
-
-    returnToSourceOrBack(navigation, { returnToPath, returnToParams });
-  }, [navigation, returnToParams, returnToPath]);
-
-  useEffect(() => {
-    const unsubscribe = navigation.addListener("beforeRemove", (event) => {
-      if (isHandlingBackRef.current) {
-        return;
+  const isRouteValid = useCallback(
+    (route: { name: string; params?: any }) => {
+      if (route.name === "[cocktailId]") {
+        const idParam = route.params?.cocktailId;
+        return Boolean(resolveCocktail(idParam, cocktails));
       }
+      return true;
+    },
+    [cocktails],
+  );
 
-      if (event.data.action.type !== "GO_BACK") {
-        return;
-      }
-
-      event.preventDefault();
-
-      isHandlingBackRef.current = true;
-      handleReturn();
-
-      requestAnimationFrame(() => {
-        isHandlingBackRef.current = false;
-      });
-    });
-
-    return unsubscribe;
-  }, [handleReturn, navigation]);
+  useNaturalBackHandler({
+    returnToPath: returnToPath === "/cocktails" ? undefined : returnToPath,
+    returnToParams,
+    isRouteValid,
+  });
 
   useEffect(() => {
     const keepAwakeTag = "cocktail-details";
@@ -667,7 +650,7 @@ export default function CocktailDetailsScreen() {
           headerShadowVisible: false,
           headerLeft: () => (
             <HeaderIconButton
-              onPress={handleReturn}
+              onPress={() => navigation.goBack()}
               accessibilityLabel="Go back"
             >
               <MaterialCommunityIcons
