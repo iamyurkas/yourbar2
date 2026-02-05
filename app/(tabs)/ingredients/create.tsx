@@ -511,6 +511,10 @@ export default function IngredientFormScreen() {
     }
 
     if (returnToPath) {
+      if (navigation.canGoBack()) {
+        navigation.goBack();
+        return;
+      }
       router.navigate({ pathname: returnToPath, params: returnToParams });
       return;
     }
