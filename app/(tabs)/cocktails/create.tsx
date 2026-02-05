@@ -49,6 +49,7 @@ import { useAppColors } from "@/constants/theme";
 import {
   buildReturnToParams,
   createEntityRouteValidator,
+  isRouteMatch,
   navigateBackWithHistory,
   parseReturnToParams,
   popToRoute,
@@ -1262,7 +1263,16 @@ export default function CreateCocktailScreen() {
 
             setHasUnsavedChanges(false);
             isNavigatingAfterSaveRef.current = true;
-            navigateBackWithHistory(navigation, { returnToPath, returnToParams, isRouteValid });
+            const isValidAfterDelete = (route: { name: string; params?: Record<string, unknown> }) =>
+              isRouteValid(route) &&
+              !isRouteMatch(route, "/cocktails/[cocktailId]", {
+                cocktailId: String(numericId),
+              });
+            navigateBackWithHistory(navigation, {
+              returnToPath,
+              returnToParams,
+              isRouteValid: isValidAfterDelete,
+            });
           },
         },
       ],

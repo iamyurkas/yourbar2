@@ -30,6 +30,7 @@ import { resolveImageSource } from '@/libs/image-source';
 import {
   buildReturnToParams,
   createEntityRouteValidator,
+  isRouteMatch,
   navigateBackWithHistory,
   popToRoute,
 } from '@/libs/navigation';
@@ -659,7 +660,16 @@ export default function IngredientFormScreen() {
 
             setHasUnsavedChanges(false);
             isNavigatingAfterSaveRef.current = true;
-            navigateBackWithHistory(navigation, { returnToPath, returnToParams, isRouteValid });
+            const isValidAfterDelete = (route: { name: string; params?: Record<string, unknown> }) =>
+              isRouteValid(route) &&
+              !isRouteMatch(route, '/ingredients/[ingredientId]', {
+                ingredientId: String(numericIngredientId),
+              });
+            navigateBackWithHistory(navigation, {
+              returnToPath,
+              returnToParams,
+              isRouteValid: isValidAfterDelete,
+            });
           },
         },
       ],
