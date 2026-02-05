@@ -81,6 +81,7 @@ export default function IngredientDetailsScreen() {
   const {
     ingredients,
     cocktails,
+    loading,
     availableIngredientIds,
     toggleIngredientAvailability,
     shoppingIngredientIds,
@@ -131,6 +132,7 @@ export default function IngredientDetailsScreen() {
   const [, startAvailabilityTransition] = useTransition();
   const [, startShoppingTransition] = useTransition();
   const isHandlingBackRef = useRef(false);
+  const shouldNavigateAway = !loading && !ingredient;
 
   const isAvailable = useMemo(() => {
     if (numericIngredientId == null) {
@@ -523,6 +525,19 @@ export default function IngredientDetailsScreen() {
   }, [navigation, returnToParams, returnToPath]);
 
   useEffect(() => {
+    if (!shouldNavigateAway || isHandlingBackRef.current) {
+      return;
+    }
+
+    isHandlingBackRef.current = true;
+    handleReturn();
+
+    requestAnimationFrame(() => {
+      isHandlingBackRef.current = false;
+    });
+  }, [handleReturn, shouldNavigateAway]);
+
+  useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", (event) => {
       if (isHandlingBackRef.current) {
         return;
@@ -544,6 +559,10 @@ export default function IngredientDetailsScreen() {
 
     return unsubscribe;
   }, [handleReturn, navigation]);
+
+  if (shouldNavigateAway) {
+    return null;
+  }
 
   return (
     <SafeAreaView
