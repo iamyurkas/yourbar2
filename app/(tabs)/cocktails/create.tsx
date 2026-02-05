@@ -49,7 +49,7 @@ import { useAppColors } from "@/constants/theme";
 import {
   buildReturnToParams,
   parseReturnToParams,
-  skipDuplicateBack,
+  returnToSourceOrBack,
 } from "@/libs/navigation";
 import { shouldStorePhoto, storePhoto } from "@/libs/photo-storage";
 import { normalizeSearchText } from "@/libs/search-normalization";
@@ -341,9 +341,15 @@ export default function CreateCocktailScreen() {
   };
 
   const initializedRef = useRef(false);
+  const lastIdRef = useRef<string | undefined>(undefined);
+  const lastModeRef = useRef<boolean | undefined>(undefined);
   const isNavigatingAfterSaveRef = useRef(false);
   const scrollRef = useRef<ScrollView | null>(null);
   const isHandlingBackRef = useRef(false);
+
+  useEffect(() => {
+    isNavigatingAfterSaveRef.current = false;
+  }, [cocktailNameParam, cocktailParam, ingredientNameParam, ingredientParam, isEditMode]);
 
   const ingredientById = useMemo(() => {
     const map = new Map<number, Ingredient>();
@@ -561,7 +567,8 @@ export default function CreateCocktailScreen() {
   }, []);
 
   useEffect(() => {
-    if (initializedRef.current) {
+    const currentId = cocktailParam ?? cocktailNameParam ?? ingredientParam ?? ingredientNameParam;
+    if (initializedRef.current && currentId === lastIdRef.current && isEditMode === lastModeRef.current) {
       return;
     }
 
@@ -680,6 +687,8 @@ export default function CreateCocktailScreen() {
     }
 
     initializedRef.current = true;
+    lastIdRef.current = currentId;
+    lastModeRef.current = isEditMode;
     setIsInitialized(true);
   }, [
     cocktails,
@@ -1313,7 +1322,7 @@ export default function CreateCocktailScreen() {
         confirmLeave(() => {
           isHandlingBackRef.current = true;
           if (event.data.action.type === "GO_BACK") {
-            skipDuplicateBack(navigation);
+            returnToSourceOrBack(navigation, { returnToPath, returnToParams });
           } else {
             navigation.dispatch(event.data.action);
           }
@@ -1327,7 +1336,7 @@ export default function CreateCocktailScreen() {
       if (event.data.action.type === "GO_BACK") {
         event.preventDefault();
         isHandlingBackRef.current = true;
-        skipDuplicateBack(navigation);
+        returnToSourceOrBack(navigation, { returnToPath, returnToParams });
         setTimeout(() => {
           isHandlingBackRef.current = false;
         }, 0);
@@ -1335,11 +1344,11 @@ export default function CreateCocktailScreen() {
     });
 
     return unsubscribe;
-  }, [confirmLeave, hasUnsavedChanges, navigation]);
+  }, [confirmLeave, hasUnsavedChanges, navigation, returnToPath, returnToParams]);
 
   const handleGoBack = useCallback(() => {
-    skipDuplicateBack(navigation);
-  }, [navigation]);
+    returnToSourceOrBack(navigation, { returnToPath, returnToParams });
+  }, [navigation, returnToPath, returnToParams]);
 
   const imageSource = useMemo(() => {
     if (!imageUri) {

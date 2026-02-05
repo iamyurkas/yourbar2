@@ -27,7 +27,7 @@ import { TagPill } from '@/components/TagPill';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { useAppColors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
-import { buildReturnToParams, skipDuplicateBack } from '@/libs/navigation';
+import { buildReturnToParams, returnToSourceOrBack, skipDuplicateBack } from '@/libs/navigation';
 import { shouldStorePhoto, storePhoto } from '@/libs/photo-storage';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
@@ -171,8 +171,14 @@ export default function IngredientFormScreen() {
   const [initialSnapshot, setInitialSnapshot] = useState<IngredientFormSnapshot | null>(null);
 
   const didInitializeRef = useRef(false);
+  const lastIdRef = useRef<string | number | null>(null);
+  const lastModeRef = useRef<boolean | undefined>(undefined);
   const scrollRef = useRef<ScrollView | null>(null);
   const isHandlingBackRef = useRef(false);
+
+  useEffect(() => {
+    isNavigatingAfterSaveRef.current = false;
+  }, [ingredientParam, isEditMode, suggestedNameParam]);
 
   useEffect(() => {
     if (isEditMode) {
@@ -193,11 +199,18 @@ export default function IngredientFormScreen() {
   }, [defaultIngredientTagId, isEditMode, suggestedNameParam]);
 
   useEffect(() => {
-    if (!isEditMode || !ingredient || didInitializeRef.current) {
+    if (!isEditMode || !ingredient) {
+      return;
+    }
+
+    const currentId = ingredient.id != null ? Number(ingredient.id) : ingredientParam ?? null;
+    if (didInitializeRef.current && currentId === lastIdRef.current && isEditMode === lastModeRef.current) {
       return;
     }
 
     didInitializeRef.current = true;
+    lastIdRef.current = currentId;
+    lastModeRef.current = isEditMode;
     setName(ingredient.name ?? '');
     setDescription(ingredient.description ?? '');
     setImageUri(ingredient.photoUri ?? null);
@@ -210,7 +223,7 @@ export default function IngredientFormScreen() {
       .filter((id) => Number.isFinite(id) && id >= 0) as number[];
     setSelectedTagIds(initialTagIds);
     setIsInitialized(true);
-  }, [ingredient, isEditMode]);
+  }, [ingredient, ingredientParam, isEditMode]);
 
   const closeDialog = useCallback(() => {
     setDialogOptions(null);
@@ -585,7 +598,7 @@ export default function IngredientFormScreen() {
         confirmLeave(() => {
           isHandlingBackRef.current = true;
           if (event.data.action.type === 'GO_BACK') {
-            skipDuplicateBack(navigation);
+            returnToSourceOrBack(navigation, { returnToPath, returnToParams });
           } else {
             navigation.dispatch(event.data.action);
           }
@@ -599,7 +612,7 @@ export default function IngredientFormScreen() {
       if (event.data.action.type === 'GO_BACK') {
         event.preventDefault();
         isHandlingBackRef.current = true;
-        skipDuplicateBack(navigation);
+        returnToSourceOrBack(navigation, { returnToPath, returnToParams });
         setTimeout(() => {
           isHandlingBackRef.current = false;
         }, 0);
@@ -607,11 +620,11 @@ export default function IngredientFormScreen() {
     });
 
     return unsubscribe;
-  }, [confirmLeave, hasUnsavedChanges, navigation, shouldConfirmOnLeave]);
+  }, [confirmLeave, hasUnsavedChanges, navigation, returnToParams, returnToPath, shouldConfirmOnLeave]);
 
   const handleGoBack = useCallback(() => {
-    skipDuplicateBack(navigation);
-  }, [navigation]);
+    returnToSourceOrBack(navigation, { returnToPath, returnToParams });
+  }, [navigation, returnToParams, returnToPath]);
 
   const handleDeletePress = useCallback(() => {
     if (!isEditMode) {
