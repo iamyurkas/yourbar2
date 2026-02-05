@@ -613,7 +613,7 @@ export default function IngredientFormScreen() {
   }, [confirmLeave, hasUnsavedChanges, navigation, shouldReturnToCocktailCreate]);
 
   const handleGoBack = useCallback(() => {
-    skipDuplicateBack(navigation);
+    navigation.goBack();
   }, [navigation]);
 
   const handleDeletePress = useCallback(() => {
