@@ -1,6 +1,6 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import { useScrollToTop } from '@react-navigation/native';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { memo, useCallback, useEffect, useMemo, useRef, useState, useTransition } from 'react';
 import {
   FlatList,
@@ -56,6 +56,7 @@ const TAB_OPTIONS: SegmentTabOption[] = [
 ];
 
 type IngredientListItemProps = {
+  returnToParams?: Record<string, string>;
   ingredient: Ingredient;
   highlightColor: string;
   isAvailable: boolean;
@@ -79,7 +80,8 @@ const areIngredientPropsEqual = (
   prev.surfaceVariantColor === next.surfaceVariantColor &&
   prev.isOnShoppingList === next.isOnShoppingList &&
   prev.showAvailabilityToggle === next.showAvailabilityToggle &&
-  prev.onShoppingToggle === next.onShoppingToggle;
+  prev.onShoppingToggle === next.onShoppingToggle &&
+  JSON.stringify(prev.returnToParams ?? {}) === JSON.stringify(next.returnToParams ?? {});
 
 const IngredientListItem = memo(function IngredientListItemComponent({
   ingredient,
@@ -91,6 +93,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
   isOnShoppingList,
   showAvailabilityToggle = true,
   onShoppingToggle,
+  returnToParams,
 }: IngredientListItemProps) {
   const Colors = useAppColors();
   const ingredientId = Number(ingredient.id ?? -1);
@@ -185,8 +188,9 @@ const IngredientListItem = memo(function IngredientListItemComponent({
       pathname: '/ingredients/[ingredientId]',
       params: { ingredientId: String(routeParam) },
       returnToPath: '/ingredients',
+      returnToParams,
     });
-  }, [ingredient.id, ingredient.name]);
+  }, [ingredient.id, ingredient.name, returnToParams]);
 
   const row = (
     <ListRow
@@ -221,6 +225,11 @@ const IngredientListItem = memo(function IngredientListItemComponent({
 
 export default function IngredientsScreen() {
   const router = useRouter();
+  const params = useLocalSearchParams<{
+    tab?: string;
+    query?: string;
+    tags?: string;
+  }>();
   const Colors = useAppColors();
   const { onTabChangeRequest } = useOnboardingAnchors();
   const { cocktails, ingredients, availableIngredientIds, shoppingIngredientIds } = useInventoryData();
@@ -277,6 +286,39 @@ export default function IngredientsScreen() {
   useEffect(() => {
     setLastIngredientTab(activeTab);
   }, [activeTab]);
+
+  useEffect(() => {
+    const tabParam = Array.isArray(params.tab) ? params.tab[0] : params.tab;
+    if (tabParam === 'all' || tabParam === 'my' || tabParam === 'shopping') {
+      setActiveTab(tabParam);
+    }
+
+    const queryParam = Array.isArray(params.query) ? params.query[0] : params.query;
+    if (typeof queryParam === 'string') {
+      setQuery(queryParam);
+    }
+
+    const tagsParam = Array.isArray(params.tags) ? params.tags[0] : params.tags;
+    if (typeof tagsParam === 'string') {
+      const nextTags = tagsParam
+        .split(',')
+        .map((key) => key.trim())
+        .filter(Boolean);
+      setSelectedTagKeys(new Set(nextTags));
+      return;
+    }
+
+    setSelectedTagKeys(new Set());
+  }, [params.query, params.tab, params.tags]);
+
+  const returnToParams = useMemo(() => {
+    const tags = [...selectedTagKeys].sort();
+    return {
+      tab: activeTab,
+      ...(query.length > 0 ? { query } : {}),
+      ...(tags.length > 0 ? { tags: tags.join(',') } : {}),
+    };
+  }, [activeTab, query, selectedTagKeys]);
 
   const availableTagOptions = useMemo<TagOption[]>(
     () =>
@@ -608,6 +650,7 @@ export default function IngredientsScreen() {
 
       return (
         <IngredientListItem
+          returnToParams={returnToParams}
           ingredient={item}
           highlightColor={highlightColor}
           isAvailable={isAvailable}
@@ -629,6 +672,7 @@ export default function IngredientsScreen() {
       ingredientCocktailStats,
       Colors,
       shoppingIngredientIds,
+      returnToParams,
     ],
   );
 

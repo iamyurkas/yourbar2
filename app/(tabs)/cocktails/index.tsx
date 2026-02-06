@@ -1,7 +1,7 @@
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { useScrollToTop } from '@react-navigation/native';
 import { Image } from 'expo-image';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   FlatList,
@@ -52,6 +52,12 @@ const TAB_OPTIONS: SegmentTabOption[] = [
 ];
 
 export default function CocktailsScreen() {
+  const params = useLocalSearchParams<{
+    tab?: string;
+    query?: string;
+    tags?: string;
+    methods?: string;
+  }>();
   const { onTabChangeRequest } = useOnboardingAnchors();
   const { cocktails, availableIngredientIds, ingredients, shoppingIngredientIds, getCocktailRating } =
     useInventoryData();
@@ -141,6 +147,50 @@ export default function CocktailsScreen() {
   useEffect(() => {
     setLastCocktailTab(activeTab);
   }, [activeTab]);
+
+  useEffect(() => {
+    const tabParam = Array.isArray(params.tab) ? params.tab[0] : params.tab;
+    if (tabParam === 'all' || tabParam === 'my' || tabParam === 'favorites') {
+      setActiveTab(tabParam);
+    }
+
+    const queryParam = Array.isArray(params.query) ? params.query[0] : params.query;
+    if (typeof queryParam === 'string') {
+      setQuery(queryParam);
+    }
+
+    const tagsParam = Array.isArray(params.tags) ? params.tags[0] : params.tags;
+    if (typeof tagsParam === 'string') {
+      const nextTags = tagsParam.split(',').map((key) => key.trim()).filter(Boolean);
+      setSelectedTagKeys(new Set(nextTags));
+    } else {
+      setSelectedTagKeys(new Set());
+    }
+
+    const methodsParam = Array.isArray(params.methods) ? params.methods[0] : params.methods;
+    if (typeof methodsParam === 'string') {
+      const validIds = new Set(getCocktailMethods().map((method) => method.id));
+      const parsed = methodsParam
+        .split(',')
+        .map((id) => id.trim())
+        .filter((id): id is CocktailMethod['id'] => validIds.has(id as CocktailMethod['id']));
+      setSelectedMethodIds(new Set(parsed));
+      return;
+    }
+
+    setSelectedMethodIds(new Set());
+  }, [params.methods, params.query, params.tab, params.tags]);
+
+  const returnToParams = useMemo(() => {
+    const tags = [...selectedTagKeys].sort();
+    const methods = [...selectedMethodIds].sort();
+    return {
+      tab: activeTab,
+      ...(query.length > 0 ? { query } : {}),
+      ...(tags.length > 0 ? { tags: tags.join(',') } : {}),
+      ...(methods.length > 0 ? { methods: methods.join(',') } : {}),
+    };
+  }, [activeTab, query, selectedMethodIds, selectedTagKeys]);
 
   const handleHeaderLayout = useCallback((event: LayoutChangeEvent) => {
     const nextLayout = event.nativeEvent.layout;
@@ -428,9 +478,10 @@ export default function CocktailsScreen() {
         pathname: '/cocktails/[cocktailId]',
         params: { cocktailId: String(candidateId) },
         returnToPath: '/cocktails',
+        returnToParams,
       });
     },
-    [],
+    [returnToParams],
   );
 
   const handleSelectIngredient = useCallback(
@@ -440,10 +491,11 @@ export default function CocktailsScreen() {
           pathname: '/ingredients/[ingredientId]',
           params: { ingredientId: String(ingredientId) },
           returnToPath: '/cocktails',
+          returnToParams,
         });
       }
     },
-    [],
+    [returnToParams],
   );
 
   const handleShoppingToggle = useCallback(

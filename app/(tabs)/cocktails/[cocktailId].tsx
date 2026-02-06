@@ -374,7 +374,7 @@ export default function CocktailDetailsScreen() {
   }, [useImperialUnits]);
 
   const handleReturn = useCallback(() => {
-    if (returnToPath === "/cocktails") {
+    if (returnToPath === "/cocktails" && !returnToParams) {
       skipDuplicateBack(navigation);
       return;
     }

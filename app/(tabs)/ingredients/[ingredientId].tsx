@@ -525,7 +525,7 @@ export default function IngredientDetailsScreen() {
   }, [cocktailEntries.length]);
 
   const handleReturn = useCallback(() => {
-    if (returnToPath === "/ingredients") {
+    if (returnToPath === "/ingredients" && !returnToParams) {
       skipDuplicateBack(navigation);
       return;
     }
