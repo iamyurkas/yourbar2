@@ -2,7 +2,11 @@ import React, { useEffect, useMemo } from 'react';
 import { Redirect } from 'expo-router';
 
 import { setLastCocktailTab, setLastIngredientTab } from '@/libs/collection-tabs';
-import { useInventory, type StartScreen } from '@/providers/inventory-provider';
+import {
+  useInventoryData,
+  useInventorySettings,
+  type StartScreen,
+} from '@/providers/inventory-provider';
 
 function getHrefForStartScreen(screen: StartScreen): string {
   switch (screen) {
@@ -47,7 +51,8 @@ function syncTabPreference(screen: StartScreen) {
 }
 
 export default function Index() {
-  const { startScreen, loading } = useInventory();
+  const { loading } = useInventoryData();
+  const { startScreen } = useInventorySettings();
 
   useEffect(() => {
     if (!loading) {

@@ -27,7 +27,11 @@ import { isCocktailReady } from '@/libs/cocktail-availability';
 import { createIngredientLookup } from '@/libs/ingredient-availability';
 import { navigateToDetailsWithReturnTo } from '@/libs/navigation';
 import { normalizeSearchText } from '@/libs/search-normalization';
-import { useInventory, type Cocktail } from '@/providers/inventory-provider';
+import {
+  useInventoryData,
+  useInventorySettings,
+  type Cocktail,
+} from '@/providers/inventory-provider';
 
 function parseListParam(param?: string | string[]) {
   if (!param) {
@@ -66,13 +70,8 @@ function resolveCocktailByKey(key: string, cocktails: Cocktail[]) {
 const METHOD_ICON_SIZE = 16;
 
 export default function ShakerResultsScreen() {
-  const {
-    cocktails,
-    availableIngredientIds,
-    ingredients,
-    ignoreGarnish,
-    allowAllSubstitutes,
-  } = useInventory();
+  const { cocktails, availableIngredientIds, ingredients } = useInventoryData();
+  const { ignoreGarnish, allowAllSubstitutes } = useInventorySettings();
   const Colors = useAppColors();
   const params = useLocalSearchParams();
   const [query, setQuery] = useState('');

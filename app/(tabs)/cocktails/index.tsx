@@ -35,7 +35,12 @@ import { normalizeSearchText } from '@/libs/search-normalization';
 import { useOnboardingAnchors } from '@/components/onboarding/OnboardingContext';
 import { buildTagOptions, type TagOption } from '@/libs/tag-options';
 import { useCocktailTabLogic, type MyTabListItem } from '@/libs/use-cocktail-tab-logic';
-import { useInventory, type Cocktail } from '@/providers/inventory-provider';
+import {
+  useInventoryActions,
+  useInventoryData,
+  useInventorySettings,
+  type Cocktail,
+} from '@/providers/inventory-provider';
 import { tagColors } from '@/theme/theme';
 
 type CocktailMethodOption = {
@@ -53,16 +58,10 @@ const TAB_OPTIONS: SegmentTabOption[] = [
 
 export default function CocktailsScreen() {
   const { onTabChangeRequest } = useOnboardingAnchors();
-  const {
-    cocktails,
-    availableIngredientIds,
-    ingredients,
-    ignoreGarnish,
-    allowAllSubstitutes,
-    ratingFilterThreshold,
-    shoppingIngredientIds,
-    toggleIngredientShopping,
-  } = useInventory();
+  const { cocktails, availableIngredientIds, ingredients, shoppingIngredientIds } =
+    useInventoryData();
+  const { ignoreGarnish, allowAllSubstitutes, ratingFilterThreshold } = useInventorySettings();
+  const { toggleIngredientShopping } = useInventoryActions();
   const Colors = useAppColors();
   const [activeTab, setActiveTab] = useState<CocktailTabKey>(() => getLastCocktailTab());
   const [query, setQuery] = useState('');

@@ -40,7 +40,12 @@ import {
   skipDuplicateBack,
 } from "@/libs/navigation";
 import { normalizeSearchText } from "@/libs/search-normalization";
-import { useInventory, type Cocktail } from "@/providers/inventory-provider";
+import {
+  useInventoryActions,
+  useInventoryData,
+  useInventorySettings,
+  type Cocktail,
+} from "@/providers/inventory-provider";
 import { tagColors } from "@/theme/theme";
 
 type RecipeIngredient = NonNullable<Cocktail["ingredients"]>[number];
@@ -340,13 +345,10 @@ export default function CocktailDetailsScreen() {
     loading,
     availableIngredientIds,
     shoppingIngredientIds,
-    setCocktailRating,
-    getCocktailRating,
-    ignoreGarnish,
-    allowAllSubstitutes,
-    useImperialUnits,
-    keepScreenAwake,
-  } = useInventory();
+  } = useInventoryData();
+  const { setCocktailRating, getCocktailRating } = useInventoryActions();
+  const { ignoreGarnish, allowAllSubstitutes, useImperialUnits, keepScreenAwake } =
+    useInventorySettings();
 
   const resolvedParam = Array.isArray(cocktailId) ? cocktailId[0] : cocktailId;
   const cocktail = useMemo(

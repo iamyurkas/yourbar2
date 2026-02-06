@@ -48,74 +48,24 @@ import {
   type StartScreen,
 } from '@/providers/inventory-types';
 
+import {
+  InventoryActionsContext,
+  useInventoryActions,
+  type InventoryActionsContextValue,
+} from './inventory/actions-context';
+import {
+  InventoryDataContext,
+  useInventoryData,
+  type InventoryDataContextValue,
+} from './inventory/data-context';
+import {
+  InventorySettingsContext,
+  useInventorySettings,
+  type InventorySettingsContextValue,
+} from './inventory/settings-context';
+
 const DEFAULT_START_SCREEN: StartScreen = 'cocktails_all';
 const DEFAULT_APP_THEME: AppTheme = 'light';
-
-type InventoryDataContextValue = {
-  cocktails: Cocktail[];
-  ingredients: Ingredient[];
-  customCocktailTags: CocktailTag[];
-  customIngredientTags: IngredientTag[];
-  loading: boolean;
-};
-
-type InventoryStateContextValue = {
-  availableIngredientIds: Set<number>;
-  shoppingIngredientIds: Set<number>;
-  cocktailRatings: Record<string, number>;
-};
-
-type InventorySettingsContextValue = {
-  ignoreGarnish: boolean;
-  allowAllSubstitutes: boolean;
-  useImperialUnits: boolean;
-  keepScreenAwake: boolean;
-  ratingFilterThreshold: number;
-  startScreen: StartScreen;
-  appTheme: AppTheme;
-  onboardingStep: number;
-  onboardingCompleted: boolean;
-};
-
-type InventoryActionsContextValue = {
-  setIngredientAvailability: (id: number, available: boolean) => void;
-  toggleIngredientAvailability: (id: number) => void;
-  toggleIngredientShopping: (id: number) => void;
-  clearBaseIngredient: (id: number) => void;
-  createCocktail: (input: CreateCocktailInput) => Cocktail | undefined;
-  createIngredient: (input: CreateIngredientInput) => Ingredient | undefined;
-  resetInventoryFromBundle: () => Promise<void>;
-  exportInventoryData: () => InventoryExportData | null;
-  exportInventoryPhotoEntries: () => PhotoBackupEntry[] | null;
-  importInventoryData: (data: InventoryExportData) => void;
-  updateIngredient: (id: number, input: CreateIngredientInput) => Ingredient | undefined;
-  updateCocktail: (id: number, input: CreateCocktailInput) => Cocktail | undefined;
-  deleteCocktail: (id: number) => boolean;
-  deleteIngredient: (id: number) => boolean;
-  createCustomCocktailTag: (input: { name: string; color?: string | null }) => CocktailTag | undefined;
-  updateCustomCocktailTag: (id: number, input: { name: string; color?: string | null }) => CocktailTag | undefined;
-  deleteCustomCocktailTag: (id: number) => boolean;
-  createCustomIngredientTag: (input: { name: string; color?: string | null }) => IngredientTag | undefined;
-  updateCustomIngredientTag: (id: number, input: { name: string; color?: string | null }) => IngredientTag | undefined;
-  deleteCustomIngredientTag: (id: number) => boolean;
-  setCocktailRating: (cocktail: Cocktail, rating: number) => void;
-  getCocktailRating: (cocktail: Cocktail) => number;
-  setIgnoreGarnish: (value: boolean) => void;
-  setAllowAllSubstitutes: (value: boolean) => void;
-  setUseImperialUnits: (value: boolean) => void;
-  setKeepScreenAwake: (value: boolean) => void;
-  setRatingFilterThreshold: (value: number) => void;
-  setStartScreen: (value: StartScreen) => void;
-  setAppTheme: (value: AppTheme) => void;
-  setOnboardingStep: (step: number) => void;
-  completeOnboarding: () => void;
-  restartOnboarding: () => void;
-};
-
-type InventoryContextValue = InventoryDataContextValue &
-  InventoryStateContextValue &
-  InventorySettingsContextValue &
-  InventoryActionsContextValue;
 
 type InventoryState = {
   cocktails: Cocktail[];
@@ -516,11 +466,6 @@ function createDeltaSnapshotFromInventory(
     onboardingCompleted: options.onboardingCompleted,
   } satisfies InventoryDeltaSnapshot<CocktailStorageRecord, IngredientStorageRecord>;
 }
-
-const InventoryDataContext = createContext<InventoryDataContextValue | undefined>(undefined);
-const InventoryStateContext = createContext<InventoryStateContextValue | undefined>(undefined);
-const InventorySettingsContext = createContext<InventorySettingsContextValue | undefined>(undefined);
-const InventoryActionsContext = createContext<InventoryActionsContextValue | undefined>(undefined);
 
 type InventoryProviderProps = {
   children: React.ReactNode;
@@ -2195,18 +2140,21 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       ingredients,
       customCocktailTags,
       customIngredientTags,
-      loading,
-    }),
-    [cocktailsWithRatings, ingredients, customCocktailTags, customIngredientTags, loading],
-  );
-
-  const stateValue = useMemo<InventoryStateContextValue>(
-    () => ({
       availableIngredientIds,
       shoppingIngredientIds,
       cocktailRatings,
+      loading,
     }),
-    [availableIngredientIds, shoppingIngredientIds, cocktailRatings],
+    [
+      cocktailsWithRatings,
+      ingredients,
+      customCocktailTags,
+      customIngredientTags,
+      availableIngredientIds,
+      shoppingIngredientIds,
+      cocktailRatings,
+      loading,
+    ],
   );
 
   const settingsValue = useMemo<InventorySettingsContextValue>(
@@ -2307,63 +2255,29 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
 
   return (
     <InventoryDataContext.Provider value={dataValue}>
-      <InventoryStateContext.Provider value={stateValue}>
-        <InventorySettingsContext.Provider value={settingsValue}>
-          <InventoryActionsContext.Provider value={actionsValue}>
-            {children}
-          </InventoryActionsContext.Provider>
-        </InventorySettingsContext.Provider>
-      </InventoryStateContext.Provider>
+      <InventorySettingsContext.Provider value={settingsValue}>
+        <InventoryActionsContext.Provider value={actionsValue}>
+          {children}
+        </InventoryActionsContext.Provider>
+      </InventorySettingsContext.Provider>
     </InventoryDataContext.Provider>
   );
 }
 
-export function useInventoryData() {
-  const context = useContext(InventoryDataContext);
-  if (!context) {
-    throw new Error('useInventoryData must be used within an InventoryProvider');
-  }
-  return context;
-}
-
-export function useInventoryState() {
-  const context = useContext(InventoryStateContext);
-  if (!context) {
-    throw new Error('useInventoryState must be used within an InventoryProvider');
-  }
-  return context;
-}
-
-export function useInventorySettings() {
-  const context = useContext(InventorySettingsContext);
-  if (!context) {
-    throw new Error('useInventorySettings must be used within an InventoryProvider');
-  }
-  return context;
-}
-
-export function useInventoryActions() {
-  const context = useContext(InventoryActionsContext);
-  if (!context) {
-    throw new Error('useInventoryActions must be used within an InventoryProvider');
-  }
-  return context;
-}
+export { useInventoryActions, useInventoryData, useInventorySettings };
 
 export function useInventory() {
   const data = useInventoryData();
-  const state = useInventoryState();
   const settings = useInventorySettings();
   const actions = useInventoryActions();
 
   return useMemo(
     () => ({
       ...data,
-      ...state,
       ...settings,
       ...actions,
     }),
-    [data, state, settings, actions],
+    [data, settings, actions],
   );
 }
 

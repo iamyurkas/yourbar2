@@ -35,7 +35,13 @@ import { navigateToDetailsWithReturnTo } from '@/libs/navigation';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { buildTagOptions, type TagOption } from '@/libs/tag-options';
 import { useOnboardingAnchors } from '@/components/onboarding/OnboardingContext';
-import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
+import {
+  useInventoryActions,
+  useInventoryData,
+  useInventorySettings,
+  type Cocktail,
+  type Ingredient,
+} from '@/providers/inventory-provider';
 import { tagColors } from '@/theme/theme';
 
 type IngredientSection = {
@@ -218,16 +224,10 @@ export default function IngredientsScreen() {
   const router = useRouter();
   const Colors = useAppColors();
   const { onTabChangeRequest } = useOnboardingAnchors();
-  const {
-    cocktails,
-    ingredients,
-    availableIngredientIds,
-    shoppingIngredientIds,
-    toggleIngredientShopping,
-    toggleIngredientAvailability,
-    ignoreGarnish,
-    allowAllSubstitutes,
-  } = useInventory();
+  const { cocktails, ingredients, availableIngredientIds, shoppingIngredientIds } =
+    useInventoryData();
+  const { toggleIngredientShopping, toggleIngredientAvailability } = useInventoryActions();
+  const { ignoreGarnish, allowAllSubstitutes } = useInventorySettings();
   const [activeTab, setActiveTab] = useState<IngredientTabKey>(() => getLastIngredientTab());
   const [query, setQuery] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);

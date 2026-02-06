@@ -41,7 +41,12 @@ import {
   skipDuplicateBack,
 } from "@/libs/navigation";
 import { normalizeSearchText } from "@/libs/search-normalization";
-import { useInventory, type Ingredient } from "@/providers/inventory-provider";
+import {
+  useInventoryActions,
+  useInventoryData,
+  useInventorySettings,
+  type Ingredient,
+} from "@/providers/inventory-provider";
 
 function useResolvedIngredient(
   param: string | undefined,
@@ -78,18 +83,11 @@ export default function IngredientDetailsScreen() {
   const navigation = useNavigation();
   const Colors = useAppColors();
   const { ingredientId } = params;
-  const {
-    ingredients,
-    cocktails,
-    loading,
-    availableIngredientIds,
-    toggleIngredientAvailability,
-    shoppingIngredientIds,
-    toggleIngredientShopping,
-    clearBaseIngredient,
-    ignoreGarnish,
-    allowAllSubstitutes,
-  } = useInventory();
+  const { ingredients, cocktails, loading, availableIngredientIds, shoppingIngredientIds } =
+    useInventoryData();
+  const { toggleIngredientAvailability, toggleIngredientShopping, clearBaseIngredient } =
+    useInventoryActions();
+  const { ignoreGarnish, allowAllSubstitutes } = useInventorySettings();
 
   const ingredient = useResolvedIngredient(
     Array.isArray(ingredientId) ? ingredientId[0] : ingredientId,

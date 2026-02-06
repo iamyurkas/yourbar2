@@ -30,7 +30,12 @@ import {
   getVisibleIngredientIdsForCocktail,
 } from '@/libs/ingredient-availability';
 import { normalizeSearchText } from '@/libs/search-normalization';
-import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
+import {
+  useInventoryData,
+  useInventorySettings,
+  type Cocktail,
+  type Ingredient,
+} from '@/providers/inventory-provider';
 import { tagColors } from '@/theme/theme';
 
 type IngredientTagOption = {
@@ -177,10 +182,8 @@ export default function ShakerScreen() {
     ingredients,
     availableIngredientIds,
     shoppingIngredientIds,
-    ignoreGarnish,
-    allowAllSubstitutes,
-    onboardingStep,
-  } = useInventory();
+  } = useInventoryData();
+  const { ignoreGarnish, allowAllSubstitutes, onboardingStep } = useInventorySettings();
   const [query, setQuery] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [inStockOnly, setInStockOnly] = useState(false);

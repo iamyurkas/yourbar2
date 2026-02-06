@@ -54,7 +54,9 @@ import {
 import { shouldStorePhoto, storePhoto } from "@/libs/photo-storage";
 import { normalizeSearchText } from "@/libs/search-normalization";
 import {
-  useInventory,
+  useInventoryActions,
+  useInventoryData,
+  useInventorySettings,
   type Cocktail,
   type CreateCocktailInput,
   type Ingredient,
@@ -229,13 +231,11 @@ export default function CreateCocktailScreen() {
     cocktails,
     availableIngredientIds,
     shoppingIngredientIds,
-    createCocktail,
-    updateCocktail,
-    deleteCocktail,
     customCocktailTags,
-    createCustomCocktailTag,
-    useImperialUnits,
-  } = useInventory();
+  } = useInventoryData();
+  const { createCocktail, updateCocktail, deleteCocktail, createCustomCocktailTag } =
+    useInventoryActions();
+  const { useImperialUnits } = useInventorySettings();
   const params = useLocalSearchParams();
   const { setHasUnsavedChanges, setSaveHandler } = useUnsavedChanges();
 

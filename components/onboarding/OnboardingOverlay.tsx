@@ -1,5 +1,9 @@
 import { useAppColors } from '@/constants/theme';
-import { useInventory } from '@/providers/inventory-provider';
+import {
+  useInventoryActions,
+  useInventoryData,
+  useInventorySettings,
+} from '@/providers/inventory-provider';
 import { usePathname } from 'expo-router';
 import React, { useMemo } from 'react';
 import {
@@ -72,7 +76,10 @@ const renderFormattedMessage = (message: string) => {
 };
 
 export function OnboardingOverlay() {
-  const { onboardingStep, setOnboardingStep, completeOnboarding, onboardingCompleted, ...inventory } = useInventory();
+  const data = useInventoryData();
+  const { onboardingStep, onboardingCompleted } = useInventorySettings();
+  const { setOnboardingStep, completeOnboarding, ...actions } = useInventoryActions();
+  const inventory = React.useMemo(() => ({ ...data, ...actions }), [data, actions]);
   const { anchors, requestTabChange, triggerAction } = useOnboardingAnchors();
   const Colors = useAppColors();
   const pathname = usePathname();

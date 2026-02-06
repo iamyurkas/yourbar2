@@ -31,7 +31,13 @@ import { TagPill } from "@/components/TagPill";
 import { useAppColors } from "@/constants/theme";
 import { base64ToBytes, createTarArchive } from "@/libs/archive-utils";
 import { buildPhotoBaseName } from "@/libs/photo-utils";
-import { useInventory, type AppTheme, type StartScreen } from "@/providers/inventory-provider";
+import {
+  useInventoryActions,
+  useInventoryData,
+  useInventorySettings,
+  type AppTheme,
+  type StartScreen,
+} from "@/providers/inventory-provider";
 import { type InventoryExportData } from "@/providers/inventory-types";
 import appConfig from "../app.json";
 
@@ -118,35 +124,36 @@ type SideMenuDrawerProps = {
 };
 
 export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
+  const { customCocktailTags, customIngredientTags } = useInventoryData();
   const {
     ignoreGarnish,
-    setIgnoreGarnish,
     allowAllSubstitutes,
-    setAllowAllSubstitutes,
     useImperialUnits,
-    setUseImperialUnits,
     keepScreenAwake,
-    setKeepScreenAwake,
     ratingFilterThreshold,
-    setRatingFilterThreshold,
     startScreen,
-    setStartScreen,
     appTheme,
+  } = useInventorySettings();
+  const {
+    setIgnoreGarnish,
+    setAllowAllSubstitutes,
+    setUseImperialUnits,
+    setKeepScreenAwake,
+    setRatingFilterThreshold,
+    setStartScreen,
     setAppTheme,
     restartOnboarding,
     resetInventoryFromBundle,
     exportInventoryData,
     exportInventoryPhotoEntries,
     importInventoryData,
-    customCocktailTags,
-    customIngredientTags,
     createCustomCocktailTag,
     updateCustomCocktailTag,
     deleteCustomCocktailTag,
     createCustomIngredientTag,
     updateCustomIngredientTag,
     deleteCustomIngredientTag,
-  } = useInventory();
+  } = useInventoryActions();
   const Colors = useAppColors();
   const [isMounted, setIsMounted] = useState(visible);
   const [isRatingModalVisible, setRatingModalVisible] = useState(false);

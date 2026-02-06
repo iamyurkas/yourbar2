@@ -7,7 +7,10 @@ import "react-native-reanimated";
 import { PaperProvider } from "@/libs/react-native-paper";
 import { OnboardingProvider } from "@/components/onboarding/OnboardingContext";
 import { OnboardingOverlay } from "@/components/onboarding/OnboardingOverlay";
-import { InventoryProvider, useInventory } from "@/providers/inventory-provider";
+import {
+  InventoryProvider,
+  useInventorySettings,
+} from "@/providers/inventory-provider";
 import { UnsavedChangesProvider } from "@/providers/unsaved-changes-provider";
 import { getAppTheme } from "@/theme/theme";
 import * as Sentry from '@sentry/react-native';
@@ -31,7 +34,7 @@ export const unstable_settings = {
 };
 
 function ThemeAppWrapper({ children }: { children: React.ReactNode }) {
-  const { appTheme } = useInventory();
+  const { appTheme } = useInventorySettings();
   const systemColorScheme = useColorScheme();
 
   const isDark = appTheme === 'system'

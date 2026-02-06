@@ -30,7 +30,11 @@ import { resolveImageSource } from '@/libs/image-source';
 import { buildReturnToParams, returnToSourceOrBack, skipDuplicateBack } from '@/libs/navigation';
 import { shouldStorePhoto, storePhoto } from '@/libs/photo-storage';
 import { normalizeSearchText } from '@/libs/search-normalization';
-import { useInventory, type Ingredient } from '@/providers/inventory-provider';
+import {
+  useInventoryActions,
+  useInventoryData,
+  type Ingredient,
+} from '@/providers/inventory-provider';
 import { useUnsavedChanges } from '@/providers/unsaved-changes-provider';
 
 type IngredientFormSnapshot = {
@@ -129,16 +133,10 @@ export default function IngredientFormScreen() {
 
   const navigation = useNavigation();
   const Colors = useAppColors();
-  const {
-    ingredients,
-    shoppingIngredientIds,
-    availableIngredientIds,
-    createIngredient,
-    updateIngredient,
-    deleteIngredient,
-    customIngredientTags,
-    createCustomIngredientTag,
-  } = useInventory();
+  const { ingredients, shoppingIngredientIds, availableIngredientIds, customIngredientTags } =
+    useInventoryData();
+  const { createIngredient, updateIngredient, deleteIngredient, createCustomIngredientTag } =
+    useInventoryActions();
   const { setHasUnsavedChanges, setSaveHandler } = useUnsavedChanges();
   const isNavigatingAfterSaveRef = useRef(false);
 

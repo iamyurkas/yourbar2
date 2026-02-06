@@ -14,7 +14,7 @@ import {
 import { ListRow, Thumb } from '@/components/RowParts';
 import { useAppColors } from '@/constants/theme';
 import { normalizeSearchText } from '@/libs/search-normalization';
-import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
+import { useInventoryData, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
 import { tagColors } from '@/theme/theme';
 
 const MIN_AUTOCOMPLETE_LENGTH = 2;
@@ -54,7 +54,8 @@ export function SubstituteModal({
   selectedSubstituteIds,
   selectedSubstituteNames,
 }: SubstituteModalProps) {
-  const { ingredients, availableIngredientIds, shoppingIngredientIds, cocktails } = useInventory();
+  const { ingredients, availableIngredientIds, shoppingIngredientIds, cocktails } =
+    useInventoryData();
   const Colors = useAppColors();
   const [searchValue, setSearchValue] = useState('');
   const inputRef = useRef<TextInput | null>(null);
