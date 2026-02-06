@@ -13,6 +13,7 @@ import {
   areStorageRecordsEqual,
   hydrateInventoryTagsFromCode,
   normalizePhotoUriForBackup,
+  normalizeSearchFields,
   normalizeSynonyms,
   normalizeTagIds,
   toCocktailStorageRecord,
