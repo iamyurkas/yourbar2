@@ -608,6 +608,18 @@ export default function IngredientsScreen() {
 
   const keyExtractor = useCallback((item: Ingredient) => String(item.id ?? item.name), []);
 
+  // Performance tuning: Fixed row height for optimized layout calculation.
+  // Each row has a thumb of 56px + 12px vertical padding on both sides = 80px.
+  // Separator is hairlineWidth, which is negligible for offset calculation.
+  const getItemLayout = useCallback(
+    (_: any, index: number) => ({
+      length: 80,
+      offset: 80 * index,
+      index,
+    }),
+    [],
+  );
+
   const renderItem = useCallback(
     ({ item }: { item: Ingredient }) => {
       const ingredientId = Number(item.id ?? -1);
@@ -752,6 +764,11 @@ export default function IngredientsScreen() {
           keyExtractor={keyExtractor}
           renderItem={renderItem}
           ItemSeparatorComponent={renderSeparator}
+          getItemLayout={getItemLayout}
+          initialNumToRender={12}
+          maxToRenderPerBatch={10}
+          windowSize={11}
+          removeClippedSubviews
           contentContainerStyle={styles.listContent}
           showsVerticalScrollIndicator
           keyboardDismissMode="on-drag"

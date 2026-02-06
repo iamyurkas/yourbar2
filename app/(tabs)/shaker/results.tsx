@@ -167,6 +167,18 @@ export default function ShakerResultsScreen() {
     lastScrollOffset.current = event.nativeEvent.contentOffset.y;
   }, []);
 
+  // Performance tuning: Fixed row height for optimized layout calculation.
+  // Each row has a thumb of 56px + 12px vertical padding on both sides = 80px.
+  // Separator is hairlineWidth, which is negligible for offset calculation.
+  const getItemLayout = useCallback(
+    (_: any, index: number) => ({
+      length: 80,
+      offset: 80 * index,
+      index,
+    }),
+    [],
+  );
+
   const ingredientLookup = useMemo(() => createIngredientLookup(ingredients), [ingredients]);
   const defaultTagColor = Colors.tint;
 
@@ -688,6 +700,11 @@ export default function ShakerResultsScreen() {
           keyExtractor={(item) => String(item.id ?? item.name)}
           renderItem={renderItem}
           ItemSeparatorComponent={renderSeparator}
+          getItemLayout={getItemLayout}
+          initialNumToRender={12}
+          maxToRenderPerBatch={10}
+          windowSize={11}
+          removeClippedSubviews
           contentContainerStyle={styles.listContent}
           ListEmptyComponent={
             <Text style={[styles.emptyLabel, { color: Colors.onSurfaceVariant }]}>

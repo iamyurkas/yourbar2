@@ -905,6 +905,10 @@ export default function ShakerScreen() {
           renderItem={renderIngredient}
           renderSectionHeader={renderSectionHeader}
           stickySectionHeadersEnabled
+          initialNumToRender={12}
+          maxToRenderPerBatch={10}
+          windowSize={11}
+          removeClippedSubviews
           contentContainerStyle={[styles.listContent, { paddingBottom: 140 + bottomInset }]}
           showsVerticalScrollIndicator={false}
           keyboardDismissMode="on-drag"
