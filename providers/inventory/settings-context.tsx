@@ -2,11 +2,7 @@ import { createContext, useContext } from 'react';
 import { type StartScreen, type AppTheme } from '../inventory-types';
 
 export type InventorySettingsContextValue = {
-  ignoreGarnish: boolean;
-  allowAllSubstitutes: boolean;
-  useImperialUnits: boolean;
   keepScreenAwake: boolean;
-  ratingFilterThreshold: number;
   startScreen: StartScreen;
   appTheme: AppTheme;
   onboardingStep: number;

@@ -9,6 +9,11 @@ export type InventoryDataContextValue = {
   availableIngredientIds: Set<number>;
   shoppingIngredientIds: Set<number>;
   cocktailRatings: Record<string, number>;
+  ignoreGarnish: boolean;
+  allowAllSubstitutes: boolean;
+  useImperialUnits: boolean;
+  ratingFilterThreshold: number;
+  getCocktailRating: (cocktail: Cocktail) => number;
   loading: boolean;
 };
 

@@ -38,7 +38,6 @@ import { useCocktailTabLogic, type MyTabListItem } from '@/libs/use-cocktail-tab
 import {
   useInventoryActions,
   useInventoryData,
-  useInventorySettings,
   type Cocktail,
 } from '@/providers/inventory-provider';
 import { tagColors } from '@/theme/theme';
@@ -58,9 +57,17 @@ const TAB_OPTIONS: SegmentTabOption[] = [
 
 export default function CocktailsScreen() {
   const { onTabChangeRequest } = useOnboardingAnchors();
-  const { cocktails, availableIngredientIds, ingredients, shoppingIngredientIds } =
-    useInventoryData();
-  const { ignoreGarnish, allowAllSubstitutes, ratingFilterThreshold } = useInventorySettings();
+  const {
+    cocktails,
+    availableIngredientIds,
+    ingredients,
+    shoppingIngredientIds,
+    cocktailRatings,
+    ignoreGarnish,
+    allowAllSubstitutes,
+    ratingFilterThreshold,
+    getCocktailRating,
+  } = useInventoryData();
   const { toggleIngredientShopping } = useInventoryActions();
   const Colors = useAppColors();
   const [activeTab, setActiveTab] = useState<CocktailTabKey>(() => getLastCocktailTab());
@@ -252,10 +259,10 @@ export default function CocktailsScreen() {
 
   const ratedCocktails = useMemo(() => {
     return cocktails.filter((cocktail) => {
-      const ratingValue = Number((cocktail as { userRating?: number }).userRating ?? 0);
+      const ratingValue = getCocktailRating(cocktail);
       return ratingValue >= ratingFilterThreshold;
     });
-  }, [cocktails, ratingFilterThreshold]);
+  }, [cocktails, ratingFilterThreshold, getCocktailRating]);
 
   const baseTabCocktails = useMemo(() => {
     if (activeTab === 'favorites') {
@@ -393,8 +400,8 @@ export default function CocktailsScreen() {
     }
 
     return [...filteredCocktails].sort((a, b) => {
-      const ratingA = Number((a as { userRating?: number }).userRating ?? 0);
-      const ratingB = Number((b as { userRating?: number }).userRating ?? 0);
+      const ratingA = getCocktailRating(a);
+      const ratingB = getCocktailRating(b);
 
       if (ratingA !== ratingB) {
         return ratingB - ratingA;
@@ -402,7 +409,7 @@ export default function CocktailsScreen() {
 
       return (a.name ?? '').localeCompare(b.name ?? '');
     });
-  }, [activeTab, filteredCocktails]);
+  }, [activeTab, filteredCocktails, getCocktailRating]);
 
   const myTabListData = useCocktailTabLogic({
     activeTab,
@@ -460,6 +467,7 @@ export default function CocktailsScreen() {
       <CocktailListRow
         cocktail={item}
         availableIngredientIds={availableIngredientIds}
+        rating={getCocktailRating(item)}
         ingredientLookup={ingredientLookup}
         ignoreGarnish={ignoreGarnish}
         allowAllSubstitutes={allowAllSubstitutes}
@@ -469,6 +477,7 @@ export default function CocktailsScreen() {
     ),
     [
       availableIngredientIds,
+      getCocktailRating,
       allowAllSubstitutes,
       handleSelectCocktail,
       ignoreGarnish,
@@ -536,6 +545,7 @@ export default function CocktailsScreen() {
         <CocktailListRow
           cocktail={item.cocktail}
           availableIngredientIds={availableIngredientIds}
+          rating={getCocktailRating(item.cocktail)}
           ingredientLookup={ingredientLookup}
           ignoreGarnish={ignoreGarnish}
           allowAllSubstitutes={allowAllSubstitutes}
@@ -547,6 +557,7 @@ export default function CocktailsScreen() {
     [
       allowAllSubstitutes,
       availableIngredientIds,
+      getCocktailRating,
       handleSelectCocktail,
       handleSelectIngredient,
       handleShoppingToggle,
@@ -734,6 +745,7 @@ export default function CocktailsScreen() {
         <FlatList
           ref={listRef}
           data={listData}
+          extraData={cocktailRatings}
           keyExtractor={isMyTab ? myTabKeyExtractor : keyExtractor}
           renderItem={isMyTab ? renderMyItem : renderItem}
           ItemSeparatorComponent={isMyTab ? renderMySeparator : renderSeparator}

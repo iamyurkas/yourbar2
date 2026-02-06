@@ -345,10 +345,13 @@ export default function CocktailDetailsScreen() {
     loading,
     availableIngredientIds,
     shoppingIngredientIds,
+    ignoreGarnish,
+    allowAllSubstitutes,
+    useImperialUnits,
+    getCocktailRating,
   } = useInventoryData();
-  const { setCocktailRating, getCocktailRating } = useInventoryActions();
-  const { ignoreGarnish, allowAllSubstitutes, useImperialUnits, keepScreenAwake } =
-    useInventorySettings();
+  const { setCocktailRating } = useInventoryActions();
+  const { keepScreenAwake } = useInventorySettings();
 
   const resolvedParam = Array.isArray(cocktailId) ? cocktailId[0] : cocktailId;
   const cocktail = useMemo(

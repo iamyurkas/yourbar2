@@ -182,8 +182,10 @@ export default function ShakerScreen() {
     ingredients,
     availableIngredientIds,
     shoppingIngredientIds,
+    ignoreGarnish,
+    allowAllSubstitutes,
   } = useInventoryData();
-  const { ignoreGarnish, allowAllSubstitutes, onboardingStep } = useInventorySettings();
+  const { onboardingStep } = useInventorySettings();
   const [query, setQuery] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [inStockOnly, setInStockOnly] = useState(false);

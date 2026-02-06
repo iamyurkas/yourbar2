@@ -852,37 +852,6 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     [cocktailRatings, resolveCocktailKey],
   );
 
-  const prevBaseCocktails = useRef(new Map<string | number, Cocktail>());
-  const prevRatedCocktails = useRef(new Map<string | number, Cocktail>());
-
-  const cocktailsWithRatings = useMemo(() => {
-    const newRatedMap = new Map<string | number, Cocktail>();
-    const result = cocktails.map((cocktail) => {
-      const id = cocktail.id ?? cocktail.name ?? '';
-      const key = resolveCocktailKey(cocktail);
-      const rating = key ? cocktailRatings[key] : undefined;
-
-      const lastBase = prevBaseCocktails.current.get(id);
-      const lastRated = prevRatedCocktails.current.get(id);
-
-      let finalItem: Cocktail;
-      if (lastBase === cocktail && lastRated && lastRated.userRating === rating) {
-        finalItem = lastRated;
-      } else if (rating === undefined) {
-        finalItem = cocktail;
-      } else {
-        finalItem = { ...cocktail, userRating: rating };
-      }
-
-      newRatedMap.set(id, finalItem);
-      return finalItem;
-    });
-
-    prevBaseCocktails.current = new Map(cocktails.map((c) => [c.id ?? c.name ?? '', c]));
-    prevRatedCocktails.current = newRatedMap;
-    return result;
-  }, [cocktails, cocktailRatings, resolveCocktailKey]);
-
   const setIngredientAvailability = useCallback((id: number, available: boolean) => {
     setAvailableIngredientIds((prev) => {
       const next = new Set(prev);
@@ -2136,45 +2105,47 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
 
   const dataValue = useMemo<InventoryDataContextValue>(
     () => ({
-      cocktails: cocktailsWithRatings,
+      cocktails,
       ingredients,
       customCocktailTags,
       customIngredientTags,
       availableIngredientIds,
       shoppingIngredientIds,
       cocktailRatings,
+      ignoreGarnish,
+      allowAllSubstitutes,
+      useImperialUnits,
+      ratingFilterThreshold,
+      getCocktailRating,
       loading,
     }),
     [
-      cocktailsWithRatings,
+      cocktails,
       ingredients,
       customCocktailTags,
       customIngredientTags,
       availableIngredientIds,
       shoppingIngredientIds,
       cocktailRatings,
+      ignoreGarnish,
+      allowAllSubstitutes,
+      useImperialUnits,
+      ratingFilterThreshold,
+      getCocktailRating,
       loading,
     ],
   );
 
   const settingsValue = useMemo<InventorySettingsContextValue>(
     () => ({
-      ignoreGarnish,
-      allowAllSubstitutes,
-      useImperialUnits,
       keepScreenAwake,
-      ratingFilterThreshold,
       startScreen,
       appTheme,
       onboardingStep,
       onboardingCompleted,
     }),
     [
-      ignoreGarnish,
-      allowAllSubstitutes,
-      useImperialUnits,
       keepScreenAwake,
-      ratingFilterThreshold,
       startScreen,
       appTheme,
       onboardingStep,
@@ -2205,7 +2176,6 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       updateCustomIngredientTag,
       deleteCustomIngredientTag,
       setCocktailRating,
-      getCocktailRating,
       setIgnoreGarnish: handleSetIgnoreGarnish,
       setAllowAllSubstitutes: handleSetAllowAllSubstitutes,
       setUseImperialUnits: handleSetUseImperialUnits,
@@ -2239,7 +2209,6 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       updateCustomIngredientTag,
       deleteCustomIngredientTag,
       setCocktailRating,
-      getCocktailRating,
       handleSetIgnoreGarnish,
       handleSetAllowAllSubstitutes,
       handleSetUseImperialUnits,

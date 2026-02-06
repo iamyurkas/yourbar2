@@ -15,6 +15,7 @@ import { ListRow, Thumb } from './RowParts';
 type CocktailListRowProps = {
   cocktail: Cocktail;
   availableIngredientIds: Set<number>;
+  rating?: number;
   ingredients?: Ingredient[];
   ingredientLookup?: IngredientLookup;
   highlightColor?: string;
@@ -38,6 +39,7 @@ const areCocktailRowPropsEqual = (
   return (
     prev.cocktail === next.cocktail &&
     prev.availableIngredientIds === next.availableIngredientIds &&
+    prev.rating === next.rating &&
     prev.ingredientLookup === next.ingredientLookup &&
     prev.ingredients === next.ingredients &&
     prev.ignoreGarnish === next.ignoreGarnish &&
@@ -53,6 +55,7 @@ const METHOD_ICON_SIZE = 16;
 const CocktailListRowComponent = ({
   cocktail,
   availableIngredientIds,
+  rating = 0,
   ingredients,
   ingredientLookup,
   highlightColor,
@@ -89,8 +92,7 @@ const CocktailListRowComponent = ({
     return ingredientLine || '\u00A0';
   }, [ingredientLine, missingCount, recipeNames.length]);
 
-  const ratingValueRaw = (cocktail as { userRating?: number }).userRating ?? 0;
-  const ratingValue = Math.max(0, Math.min(MAX_RATING, Number(ratingValueRaw) || 0));
+  const ratingValue = Math.max(0, Math.min(MAX_RATING, Number(rating) || 0));
 
   const ratingContent = useMemo(() => {
     if (ratingValue <= 0) {

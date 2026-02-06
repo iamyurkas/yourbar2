@@ -124,16 +124,15 @@ type SideMenuDrawerProps = {
 };
 
 export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
-  const { customCocktailTags, customIngredientTags } = useInventoryData();
   const {
+    customCocktailTags,
+    customIngredientTags,
     ignoreGarnish,
     allowAllSubstitutes,
     useImperialUnits,
-    keepScreenAwake,
     ratingFilterThreshold,
-    startScreen,
-    appTheme,
-  } = useInventorySettings();
+  } = useInventoryData();
+  const { keepScreenAwake, startScreen, appTheme } = useInventorySettings();
   const {
     setIgnoreGarnish,
     setAllowAllSubstitutes,

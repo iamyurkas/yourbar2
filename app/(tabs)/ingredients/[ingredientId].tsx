@@ -44,7 +44,6 @@ import { normalizeSearchText } from "@/libs/search-normalization";
 import {
   useInventoryActions,
   useInventoryData,
-  useInventorySettings,
   type Ingredient,
 } from "@/providers/inventory-provider";
 
@@ -83,11 +82,18 @@ export default function IngredientDetailsScreen() {
   const navigation = useNavigation();
   const Colors = useAppColors();
   const { ingredientId } = params;
-  const { ingredients, cocktails, loading, availableIngredientIds, shoppingIngredientIds } =
-    useInventoryData();
+  const {
+    ingredients,
+    cocktails,
+    loading,
+    availableIngredientIds,
+    shoppingIngredientIds,
+    ignoreGarnish,
+    allowAllSubstitutes,
+    getCocktailRating,
+  } = useInventoryData();
   const { toggleIngredientAvailability, toggleIngredientShopping, clearBaseIngredient } =
     useInventoryActions();
-  const { ignoreGarnish, allowAllSubstitutes } = useInventorySettings();
 
   const ingredient = useResolvedIngredient(
     Array.isArray(ingredientId) ? ingredientId[0] : ingredientId,
@@ -953,6 +959,7 @@ export default function IngredientDetailsScreen() {
                           <CocktailListRow
                             cocktail={cocktail}
                             availableIngredientIds={availableIngredientIds}
+                            rating={getCocktailRating(cocktail)}
                             ingredientLookup={ingredientLookup}
                             ignoreGarnish={ignoreGarnish}
                             allowAllSubstitutes={allowAllSubstitutes}

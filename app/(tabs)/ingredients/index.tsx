@@ -38,7 +38,6 @@ import { useOnboardingAnchors } from '@/components/onboarding/OnboardingContext'
 import {
   useInventoryActions,
   useInventoryData,
-  useInventorySettings,
   type Cocktail,
   type Ingredient,
 } from '@/providers/inventory-provider';
@@ -224,10 +223,15 @@ export default function IngredientsScreen() {
   const router = useRouter();
   const Colors = useAppColors();
   const { onTabChangeRequest } = useOnboardingAnchors();
-  const { cocktails, ingredients, availableIngredientIds, shoppingIngredientIds } =
-    useInventoryData();
+  const {
+    cocktails,
+    ingredients,
+    availableIngredientIds,
+    shoppingIngredientIds,
+    ignoreGarnish,
+    allowAllSubstitutes,
+  } = useInventoryData();
   const { toggleIngredientShopping, toggleIngredientAvailability } = useInventoryActions();
-  const { ignoreGarnish, allowAllSubstitutes } = useInventorySettings();
   const [activeTab, setActiveTab] = useState<IngredientTabKey>(() => getLastIngredientTab());
   const [query, setQuery] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);

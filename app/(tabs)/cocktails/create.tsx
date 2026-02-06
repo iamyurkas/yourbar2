@@ -56,7 +56,6 @@ import { normalizeSearchText } from "@/libs/search-normalization";
 import {
   useInventoryActions,
   useInventoryData,
-  useInventorySettings,
   type Cocktail,
   type CreateCocktailInput,
   type Ingredient,
@@ -232,10 +231,10 @@ export default function CreateCocktailScreen() {
     availableIngredientIds,
     shoppingIngredientIds,
     customCocktailTags,
+    useImperialUnits,
   } = useInventoryData();
   const { createCocktail, updateCocktail, deleteCocktail, createCustomCocktailTag } =
     useInventoryActions();
-  const { useImperialUnits } = useInventorySettings();
   const params = useLocalSearchParams();
   const { setHasUnsavedChanges, setSaveHandler } = useUnsavedChanges();
 

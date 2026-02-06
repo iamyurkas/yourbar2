@@ -29,7 +29,6 @@ import { navigateToDetailsWithReturnTo } from '@/libs/navigation';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import {
   useInventoryData,
-  useInventorySettings,
   type Cocktail,
 } from '@/providers/inventory-provider';
 
@@ -70,8 +69,15 @@ function resolveCocktailByKey(key: string, cocktails: Cocktail[]) {
 const METHOD_ICON_SIZE = 16;
 
 export default function ShakerResultsScreen() {
-  const { cocktails, availableIngredientIds, ingredients } = useInventoryData();
-  const { ignoreGarnish, allowAllSubstitutes } = useInventorySettings();
+  const {
+    cocktails,
+    availableIngredientIds,
+    ingredients,
+    cocktailRatings,
+    ignoreGarnish,
+    allowAllSubstitutes,
+    getCocktailRating,
+  } = useInventoryData();
   const Colors = useAppColors();
   const params = useLocalSearchParams();
   const [query, setQuery] = useState('');
@@ -519,6 +525,7 @@ export default function ShakerResultsScreen() {
       <CocktailListRow
         cocktail={item}
         availableIngredientIds={availableIngredientIds}
+        rating={getCocktailRating(item)}
         ingredientLookup={ingredientLookup}
         ignoreGarnish={ignoreGarnish}
         allowAllSubstitutes={allowAllSubstitutes}
@@ -529,6 +536,7 @@ export default function ShakerResultsScreen() {
     [
       allowAllSubstitutes,
       availableIngredientIds,
+      getCocktailRating,
       handlePressCocktail,
       ignoreGarnish,
       ingredientLookup,
@@ -676,6 +684,7 @@ export default function ShakerResultsScreen() {
         <FlatList
           ref={listRef}
           data={filteredCocktails}
+          extraData={cocktailRatings}
           keyExtractor={(item) => String(item.id ?? item.name)}
           renderItem={renderItem}
           ItemSeparatorComponent={renderSeparator}
