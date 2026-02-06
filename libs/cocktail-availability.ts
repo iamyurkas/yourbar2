@@ -1,6 +1,7 @@
 import type { Cocktail, Ingredient } from '@/providers/inventory-provider';
 import {
   createIngredientLookup,
+  getIngredientUsageInCocktail,
   resolveIngredientAvailability,
   type IngredientAvailabilityOptions,
   type IngredientLookup,
@@ -90,11 +91,6 @@ export function isCocktailReady(
   ingredients?: Ingredient[],
   options?: IngredientAvailabilityOptions,
 ): boolean {
-  return summariseCocktailAvailability(
-    cocktail,
-    availableIngredientIds,
-    ingredientLookup,
-    ingredients,
-    options,
-  ).isReady;
+  const lookup = ingredientLookup ?? createIngredientLookup(ingredients ?? []);
+  return getIngredientUsageInCocktail(cocktail, availableIngredientIds, lookup, options).isReady;
 }

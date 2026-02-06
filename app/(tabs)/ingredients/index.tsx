@@ -25,11 +25,10 @@ import { TagPill } from '@/components/TagPill';
 import type { SegmentTabOption } from '@/components/TopBars';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { useAppColors } from '@/constants/theme';
-import { isCocktailReady } from '@/libs/cocktail-availability';
 import { getLastIngredientTab, setLastIngredientTab, type IngredientTabKey } from '@/libs/collection-tabs';
 import {
   createIngredientLookup,
-  getVisibleIngredientIdsForCocktail,
+  getIngredientUsageInCocktail,
 } from '@/libs/ingredient-availability';
 import { navigateToDetailsWithReturnTo } from '@/libs/navigation';
 import { normalizeSearchText } from '@/libs/search-normalization';
@@ -38,7 +37,6 @@ import { useOnboardingAnchors } from '@/components/onboarding/OnboardingContext'
 import {
   useInventoryActions,
   useInventoryData,
-  type Cocktail,
   type Ingredient,
 } from '@/providers/inventory-provider';
 import { tagColors } from '@/theme/theme';
@@ -386,63 +384,36 @@ export default function IngredientsScreen() {
 
   const ingredientLookup = useMemo(() => createIngredientLookup(ingredients), [ingredients]);
 
-  const resolveCocktailKey = useCallback((cocktail: Cocktail) => {
-    const id = cocktail.id;
-    if (id != null) {
-      return String(id);
-    }
-
-    if (cocktail.name) {
-      return cocktail.name.trim().toLowerCase();
-    }
-
-    return undefined;
-  }, []);
-
+  /**
+   * Performance optimization: Single-pass derived data calculation.
+   *
+   * Instead of separate iterations for readiness and ingredient usage, we perform
+   * a single pass over the cocktail collection. For each cocktail, we determine its
+   * overall makeability and collect all relevant ingredient IDs (including substitutes).
+   *
+   * This reduces complexity from multiple O(Cocktails * Ingredients) passes to a
+   * single optimized pass, eliminating large intermediate Map/Set structures.
+   */
   const derivedCocktailData = useMemo(() => {
-    const visibleCocktailsMap = new Map<number, Set<string>>();
-    const makeableKeys = new Set<string>();
     const totalCounts = new Map<number, number>();
     const makeableCounts = new Map<number, number>();
 
+    const options = { ignoreGarnish, allowAllSubstitutes };
+
     cocktails.forEach((cocktail) => {
-      const key = resolveCocktailKey(cocktail);
-      if (!key) {
-        return;
-      }
+      const { isReady, visibleIngredientIds } = getIngredientUsageInCocktail(
+        cocktail,
+        availableIngredientIds,
+        ingredientLookup,
+        options,
+      );
 
-      const isReady = isCocktailReady(cocktail, availableIngredientIds, ingredientLookup, ingredients, {
-        ignoreGarnish,
-        allowAllSubstitutes,
-      });
-
-      if (isReady) {
-        makeableKeys.add(key);
-      }
-
-      const visibleIds = getVisibleIngredientIdsForCocktail(cocktail, ingredientLookup, {
-        allowAllSubstitutes,
-      });
-
-      visibleIds.forEach((ingredientId) => {
-        let set = visibleCocktailsMap.get(ingredientId);
-        if (!set) {
-          set = new Set<string>();
-          visibleCocktailsMap.set(ingredientId, set);
-        }
-        set.add(key);
-      });
-    });
-
-    visibleCocktailsMap.forEach((cocktailKeys, ingredientId) => {
-      totalCounts.set(ingredientId, cocktailKeys.size);
-      let makeableCount = 0;
-      cocktailKeys.forEach((key) => {
-        if (makeableKeys.has(key)) {
-          makeableCount += 1;
+      visibleIngredientIds.forEach((id) => {
+        totalCounts.set(id, (totalCounts.get(id) ?? 0) + 1);
+        if (isReady) {
+          makeableCounts.set(id, (makeableCounts.get(id) ?? 0) + 1);
         }
       });
-      makeableCounts.set(ingredientId, makeableCount);
     });
 
     return {
@@ -455,21 +426,24 @@ export default function IngredientsScreen() {
     cocktails,
     ignoreGarnish,
     ingredientLookup,
-    ingredients,
-    resolveCocktailKey,
   ]);
 
   const { totalCocktailCounts, makeableCocktailCounts } = derivedCocktailData;
 
   const sections = useMemo<Record<IngredientTabKey, IngredientSection>>(() => {
-    const inStock = ingredients.filter((ingredient) => {
-      const id = Number(ingredient.id ?? -1);
-      return id >= 0 && availableIngredientIds.has(id);
-    });
+    const inStock: Ingredient[] = [];
+    const shoppingList: Ingredient[] = [];
 
-    const shoppingList = ingredients.filter((ingredient) => {
+    ingredients.forEach((ingredient) => {
       const id = Number(ingredient.id ?? -1);
-      return id >= 0 && shoppingIngredientIds.has(id);
+      if (id < 0) return;
+
+      if (availableIngredientIds.has(id)) {
+        inStock.push(ingredient);
+      }
+      if (shoppingIngredientIds.has(id)) {
+        shoppingList.push(ingredient);
+      }
     });
 
     return {

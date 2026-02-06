@@ -151,24 +151,61 @@ export function getVisibleIngredientIdsForCocktail(
   lookup: IngredientLookup,
   options?: IngredientAvailabilityOptions,
 ): Set<number> {
+  return getIngredientUsageInCocktail(cocktail, new Set(), lookup, options).visibleIngredientIds;
+}
+
+export function getIngredientUsageInCocktail(
+  cocktail: Cocktail,
+  availableIngredientIds: Set<number>,
+  lookup: IngredientLookup,
+  options?: IngredientAvailabilityOptions,
+): { isReady: boolean; visibleIngredientIds: Set<number> } {
   const allowAllSubstitutes = options?.allowAllSubstitutes ?? false;
+  const ignoreGarnish = options?.ignoreGarnish ?? true;
   const visibleIngredientIds = new Set<number>();
 
-  (cocktail.ingredients ?? []).forEach((ingredient) => {
+  const recipe = cocktail.ingredients ?? [];
+  let isReady = recipe.length > 0;
+
+  recipe.forEach((ingredient) => {
     const requestedId = normalizeIngredientId(ingredient.ingredientId);
     const allowBase = Boolean(ingredient.allowBaseSubstitution || allowAllSubstitutes);
     const allowBrand = Boolean(ingredient.allowBrandSubstitution || allowAllSubstitutes);
 
-    collectVisibleIngredientIds(requestedId, lookup, allowBase, allowBrand, visibleIngredientIds);
+    const lineCandidateIds = new Set<number>();
+    collectVisibleIngredientIds(
+      requestedId,
+      lookup,
+      allowBase,
+      allowBrand,
+      lineCandidateIds,
+    );
 
     (ingredient.substitutes ?? []).forEach((substitute) => {
       const substituteId = normalizeIngredientId(substitute.ingredientId);
-
-      collectVisibleIngredientIds(substituteId, lookup, allowBase, allowBrand, visibleIngredientIds);
+      collectVisibleIngredientIds(
+        substituteId,
+        lookup,
+        allowBase,
+        allowBrand,
+        lineCandidateIds,
+      );
     });
+
+    let isLineAvailable = false;
+    for (const id of lineCandidateIds) {
+      visibleIngredientIds.add(id);
+      if (availableIngredientIds.has(id)) {
+        isLineAvailable = true;
+      }
+    }
+
+    if (!ingredient.optional && !(ignoreGarnish && ingredient.garnish) && !isLineAvailable) {
+      isReady = false;
+    }
   });
 
-  return visibleIngredientIds;
+  return { isReady, visibleIngredientIds };
 }
 
 export function resolveIngredientAvailability(
