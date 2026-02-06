@@ -249,6 +249,11 @@ export default function IngredientsScreen() {
   const [, startAvailabilityTransition] = useTransition();
   const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
 
+  const availableIdsRef = useRef(availableIngredientIds);
+  useEffect(() => {
+    availableIdsRef.current = availableIngredientIds;
+  }, [availableIngredientIds]);
+
   useScrollToTop(listRef);
 
   useEffect(() => {
@@ -604,8 +609,8 @@ export default function IngredientsScreen() {
         setOptimisticAvailability((previous) => {
           const next = new Map(previous);
           const current = next.has(id)
-            ? next.get(id) ?? availableIngredientIds.has(id)
-            : availableIngredientIds.has(id);
+            ? next.get(id) ?? availableIdsRef.current.has(id)
+            : availableIdsRef.current.has(id);
           next.set(id, !current);
           return next;
         });
@@ -615,7 +620,7 @@ export default function IngredientsScreen() {
         });
       }
     },
-    [availableIngredientIds, startAvailabilityTransition, toggleIngredientAvailability],
+    [startAvailabilityTransition, toggleIngredientAvailability],
   );
 
   const handleShoppingToggle = useCallback(

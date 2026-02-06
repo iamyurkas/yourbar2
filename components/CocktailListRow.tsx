@@ -6,46 +6,34 @@ import { StyleSheet, View } from 'react-native';
 import { resolveGlasswareUriFromId } from '@/assets/image-manifest';
 import { METHOD_ICON_MAP, type CocktailMethodId } from '@/constants/cocktail-methods';
 import { useAppColors } from '@/constants/theme';
-import type { Cocktail, Ingredient } from '@/providers/inventory-provider';
-import { createIngredientLookup, type IngredientLookup } from '@/libs/ingredient-availability';
-import { summariseCocktailAvailability } from '@/libs/cocktail-availability';
+import type { Cocktail } from '@/providers/inventory-provider';
 
 import { ListRow, Thumb } from './RowParts';
 
 type CocktailListRowProps = {
   cocktail: Cocktail;
-  availableIngredientIds: Set<number>;
+  isReady: boolean;
+  subtitle: string;
+  hasBrandedIngredient: boolean;
   rating?: number;
-  ingredients?: Ingredient[];
-  ingredientLookup?: IngredientLookup;
   highlightColor?: string;
-  ignoreGarnish?: boolean;
-  allowAllSubstitutes?: boolean;
   showMethodIcons?: boolean;
-  onPress?: () => void;
+  onPress?: (cocktail: Cocktail) => void;
 };
 
 const areCocktailRowPropsEqual = (
   prev: Readonly<CocktailListRowProps>,
   next: Readonly<CocktailListRowProps>,
 ) => {
-  const hasOnPress = Boolean(prev.onPress);
-  const hasNextOnPress = Boolean(next.onPress);
-  const onPressEqual =
-    prev.onPress === next.onPress ||
-    (!hasOnPress && !hasNextOnPress) ||
-    (hasOnPress && hasNextOnPress && prev.cocktail === next.cocktail);
-
   return (
     prev.cocktail === next.cocktail &&
-    prev.availableIngredientIds === next.availableIngredientIds &&
+    prev.isReady === next.isReady &&
+    prev.subtitle === next.subtitle &&
+    prev.hasBrandedIngredient === next.hasBrandedIngredient &&
     prev.rating === next.rating &&
-    prev.ingredientLookup === next.ingredientLookup &&
-    prev.ingredients === next.ingredients &&
-    prev.ignoreGarnish === next.ignoreGarnish &&
-    prev.allowAllSubstitutes === next.allowAllSubstitutes &&
     prev.highlightColor === next.highlightColor &&
-    onPressEqual
+    prev.showMethodIcons === next.showMethodIcons &&
+    prev.onPress === next.onPress
   );
 };
 
@@ -54,43 +42,17 @@ const METHOD_ICON_SIZE = 16;
 
 const CocktailListRowComponent = ({
   cocktail,
-  availableIngredientIds,
+  isReady,
+  subtitle,
+  hasBrandedIngredient,
   rating = 0,
-  ingredients,
-  ingredientLookup,
   highlightColor,
-  ignoreGarnish = true,
-  allowAllSubstitutes = false,
   showMethodIcons = false,
   onPress,
 }: CocktailListRowProps) => {
   const Colors = useAppColors();
   const effectiveHighlightColor = highlightColor ?? Colors.highlightFaint;
-  const lookup = useMemo(() => {
-    if (ingredientLookup) {
-      return ingredientLookup;
-    }
-
-    return createIngredientLookup(ingredients ?? []);
-  }, [ingredientLookup, ingredients]);
   const glasswareUri = resolveGlasswareUriFromId(cocktail.glassId);
-
-  const { missingCount, recipeNames, isReady, ingredientLine } = useMemo(
-    () =>
-      summariseCocktailAvailability(cocktail, availableIngredientIds, lookup, undefined, {
-        ignoreGarnish,
-        allowAllSubstitutes,
-      }),
-    [availableIngredientIds, cocktail, allowAllSubstitutes, ignoreGarnish, lookup],
-  );
-
-  const subtitle = useMemo(() => {
-    if (missingCount === 0 && recipeNames.length === 0) {
-      return 'All ingredients ready';
-    }
-
-    return ingredientLine || '\u00A0';
-  }, [ingredientLine, missingCount, recipeNames.length]);
 
   const ratingValue = Math.max(0, Math.min(MAX_RATING, Number(rating) || 0));
 
@@ -182,51 +144,6 @@ const CocktailListRowComponent = ({
     );
   }, [methodIds, Colors.onSurfaceVariant, showMethodIcons]);
 
-  const hasBrandedIngredient = useMemo(() => {
-    const recipe = cocktail.ingredients ?? [];
-    if (!recipe.length) {
-      return false;
-    }
-
-    const normalizeIngredientId = (value?: number | string | null) => {
-      if (value == null) {
-        return undefined;
-      }
-
-      const numeric = Number(value);
-      if (!Number.isFinite(numeric) || numeric < 0) {
-        return undefined;
-      }
-
-      return Math.trunc(numeric);
-    };
-
-    for (const ingredient of recipe) {
-      const candidateIds: number[] = [];
-      const ingredientId = normalizeIngredientId(ingredient.ingredientId ?? undefined);
-      if (ingredientId != null) {
-        candidateIds.push(ingredientId);
-      }
-
-      (ingredient.substitutes ?? []).forEach((substitute) => {
-        const substituteId = normalizeIngredientId(
-          substitute.ingredientId ?? undefined,
-        );
-        if (substituteId != null) {
-          candidateIds.push(substituteId);
-        }
-      });
-
-      for (const candidateId of candidateIds) {
-        const record = lookup.ingredientById.get(candidateId);
-        if (record?.baseIngredientId != null) {
-          return true;
-        }
-      }
-    }
-
-    return false;
-  }, [cocktail.ingredients, lookup.ingredientById]);
 
   const brandIndicatorColor = hasBrandedIngredient ? Colors.primary : undefined;
 
@@ -235,11 +152,15 @@ const CocktailListRowComponent = ({
     [cocktail.name, cocktail.photoUri, glasswareUri],
   );
 
+  const handlePress = useCallback(() => {
+    onPress?.(cocktail);
+  }, [onPress, cocktail]);
+
   return (
     <ListRow
       title={cocktail.name}
       subtitle={subtitle}
-      onPress={onPress}
+      onPress={handlePress}
       selected={isReady}
       highlightColor={effectiveHighlightColor}
       tagColors={tagColors}

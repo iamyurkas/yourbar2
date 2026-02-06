@@ -27,7 +27,7 @@ import type { SegmentTabOption } from '@/components/TopBars';
 import { getCocktailMethods, METHOD_ICON_MAP, type CocktailMethod } from '@/constants/cocktail-methods';
 import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
 import { useAppColors } from '@/constants/theme';
-import { isCocktailReady } from '@/libs/cocktail-availability';
+import { isCocktailReady, summariseCocktailAvailability } from '@/libs/cocktail-availability';
 import { getLastCocktailTab, setLastCocktailTab, type CocktailTabKey } from '@/libs/collection-tabs';
 import { createIngredientLookup } from '@/libs/ingredient-availability';
 import { navigateToDetailsWithReturnTo } from '@/libs/navigation';
@@ -117,6 +117,35 @@ export default function CocktailsScreen() {
   }, []);
   const router = useRouter();
   const ingredientLookup = useMemo(() => createIngredientLookup(ingredients), [ingredients]);
+
+  const brandedCocktailMap = useMemo(() => {
+    const map = new Map<string | number, boolean>();
+    const normalizeId = (id: any) => {
+      const n = Number(id);
+      return Number.isFinite(n) && n >= 0 ? Math.trunc(n) : undefined;
+    };
+
+    cocktails.forEach((cocktail) => {
+      const recipe = cocktail.ingredients ?? [];
+      let hasBranded = false;
+      for (const ing of recipe) {
+        const ids = [normalizeId(ing.ingredientId)].filter((id) => id != null) as number[];
+        (ing.substitutes ?? []).forEach((s) => {
+          const sid = normalizeId(s.ingredientId);
+          if (sid != null) ids.push(sid);
+        });
+
+        if (ids.some((id) => ingredientLookup.ingredientById.get(id)?.baseIngredientId != null)) {
+          hasBranded = true;
+          break;
+        }
+      }
+      const key = cocktail.id ?? cocktail.name;
+      if (key) map.set(key, hasBranded);
+    });
+    return map;
+  }, [cocktails, ingredientLookup]);
+
   const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
 
   const availableTagOptions = useMemo<TagOption[]>(
@@ -463,25 +492,43 @@ export default function CocktailsScreen() {
   );
 
   const renderItem = useCallback(
-    ({ item }: { item: Cocktail }) => (
-      <CocktailListRow
-        cocktail={item}
-        availableIngredientIds={availableIngredientIds}
-        rating={getCocktailRating(item)}
-        ingredientLookup={ingredientLookup}
-        ignoreGarnish={ignoreGarnish}
-        allowAllSubstitutes={allowAllSubstitutes}
-        showMethodIcons
-        onPress={() => handleSelectCocktail(item)}
-      />
-    ),
+    ({ item }: { item: Cocktail }) => {
+      const { isReady, ingredientLine, missingCount, recipeNames } = summariseCocktailAvailability(
+        item,
+        availableIngredientIds,
+        ingredientLookup,
+        undefined,
+        { ignoreGarnish, allowAllSubstitutes },
+      );
+
+      const subtitle =
+        missingCount === 0 && recipeNames.length === 0
+          ? 'All ingredients ready'
+          : ingredientLine || '\u00A0';
+
+      const cocktailKey = item.id ?? item.name;
+      const hasBrandedIngredient = cocktailKey ? brandedCocktailMap.get(cocktailKey) ?? false : false;
+
+      return (
+        <CocktailListRow
+          cocktail={item}
+          isReady={isReady}
+          subtitle={subtitle}
+          hasBrandedIngredient={hasBrandedIngredient}
+          rating={getCocktailRating(item)}
+          showMethodIcons
+          onPress={handleSelectCocktail}
+        />
+      );
+    },
     [
       availableIngredientIds,
-      getCocktailRating,
-      allowAllSubstitutes,
-      handleSelectCocktail,
-      ignoreGarnish,
       ingredientLookup,
+      ignoreGarnish,
+      allowAllSubstitutes,
+      brandedCocktailMap,
+      getCocktailRating,
+      handleSelectCocktail,
     ],
   );
 
@@ -541,22 +588,43 @@ export default function CocktailsScreen() {
         );
       }
 
+      const {
+        isReady,
+        ingredientLine,
+        missingCount,
+        recipeNames,
+      } = summariseCocktailAvailability(
+        item.cocktail,
+        availableIngredientIds,
+        ingredientLookup,
+        undefined,
+        { ignoreGarnish, allowAllSubstitutes },
+      );
+
+      const subtitle =
+        missingCount === 0 && recipeNames.length === 0
+          ? 'All ingredients ready'
+          : ingredientLine || '\u00A0';
+
+      const cocktailKey = item.cocktail.id ?? item.cocktail.name;
+      const hasBrandedIngredient = cocktailKey ? brandedCocktailMap.get(cocktailKey) ?? false : false;
+
       return (
         <CocktailListRow
           cocktail={item.cocktail}
-          availableIngredientIds={availableIngredientIds}
+          isReady={isReady}
+          subtitle={subtitle}
+          hasBrandedIngredient={hasBrandedIngredient}
           rating={getCocktailRating(item.cocktail)}
-          ingredientLookup={ingredientLookup}
-          ignoreGarnish={ignoreGarnish}
-          allowAllSubstitutes={allowAllSubstitutes}
           showMethodIcons
-          onPress={() => handleSelectCocktail(item.cocktail)}
+          onPress={handleSelectCocktail}
         />
       );
     },
     [
       allowAllSubstitutes,
       availableIngredientIds,
+      brandedCocktailMap,
       getCocktailRating,
       handleSelectCocktail,
       handleSelectIngredient,
