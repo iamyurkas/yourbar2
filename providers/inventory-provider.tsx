@@ -30,6 +30,11 @@ import {
   toIngredientStorageRecord
 } from '@/libs/inventory-utils';
 import { normalizeSearchText } from '@/libs/search-normalization';
+import { refreshBaseCache } from './inventory/persistence/base-cache';
+import {
+  calculateInventoryDelta,
+  clearDeltaReferenceCache
+} from './inventory/persistence/delta-calculator';
 import {
   type AppTheme,
   type BaseCocktailRecord,
@@ -614,104 +619,11 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     if (!inventoryState) {
       return undefined;
     }
-    const baseData = loadInventoryData();
-    const baseCocktails = new Map<number, CocktailStorageRecord>(
-      baseData.cocktails
-        .map((cocktail) => {
-          const normalized = toCocktailStorageRecord(cocktail);
-          const id = Number(normalized.id ?? -1);
-          if (!Number.isFinite(id) || id < 0) {
-            return undefined;
-          }
-          return [Math.trunc(id), normalized] as const;
-        })
-        .filter((entry): entry is readonly [number, CocktailStorageRecord] => Boolean(entry)),
+
+    return calculateInventoryDelta(
+      inventoryState.cocktails,
+      inventoryState.ingredients
     );
-    const baseIngredients = new Map<number, IngredientStorageRecord>(
-      baseData.ingredients
-        .map((ingredient) => {
-          const normalized = toIngredientStorageRecord(ingredient);
-          const id = Number(normalized.id ?? -1);
-          if (!Number.isFinite(id) || id < 0) {
-            return undefined;
-          }
-          return [Math.trunc(id), normalized] as const;
-        })
-        .filter((entry): entry is readonly [number, IngredientStorageRecord] => Boolean(entry)),
-    );
-
-    const createdCocktails: CocktailStorageRecord[] = [];
-    const updatedCocktails: CocktailStorageRecord[] = [];
-    const currentCocktailIds = new Set<number>();
-
-    inventoryState.cocktails.forEach((cocktail) => {
-      const normalized = toCocktailStorageRecord(cocktail);
-      const id = Number(normalized.id ?? -1);
-      if (!Number.isFinite(id) || id < 0) {
-        return;
-      }
-
-      const normalizedId = Math.trunc(id);
-      currentCocktailIds.add(normalizedId);
-
-      const baseRecord = baseCocktails.get(normalizedId);
-      if (!baseRecord) {
-        createdCocktails.push(normalized);
-        return;
-      }
-
-      if (!areStorageRecordsEqual(normalized, baseRecord)) {
-        updatedCocktails.push(normalized);
-      }
-    });
-
-    const deletedCocktailIds = Array.from(baseCocktails.keys()).filter((id) => !currentCocktailIds.has(id));
-
-    const createdIngredients: IngredientStorageRecord[] = [];
-    const updatedIngredients: IngredientStorageRecord[] = [];
-    const currentIngredientIds = new Set<number>();
-
-    inventoryState.ingredients.forEach((ingredient) => {
-      const normalized = toIngredientStorageRecord(ingredient);
-      const id = Number(normalized.id ?? -1);
-      if (!Number.isFinite(id) || id < 0) {
-        return;
-      }
-
-      const normalizedId = Math.trunc(id);
-      currentIngredientIds.add(normalizedId);
-
-      const baseRecord = baseIngredients.get(normalizedId);
-      if (!baseRecord) {
-        createdIngredients.push(normalized);
-        return;
-      }
-
-      if (!areStorageRecordsEqual(normalized, baseRecord)) {
-        updatedIngredients.push(normalized);
-      }
-    });
-
-    const deletedIngredientIds = Array.from(baseIngredients.keys()).filter((id) => !currentIngredientIds.has(id));
-
-    return {
-      cocktails:
-        createdCocktails.length > 0 || updatedCocktails.length > 0 || deletedCocktailIds.length > 0
-          ? {
-              created: createdCocktails.length > 0 ? createdCocktails : undefined,
-              updated: updatedCocktails.length > 0 ? updatedCocktails : undefined,
-              deletedIds: deletedCocktailIds.length > 0 ? deletedCocktailIds : undefined,
-            }
-          : undefined,
-      ingredients:
-        createdIngredients.length > 0 || updatedIngredients.length > 0 || deletedIngredientIds.length > 0
-          ? {
-              created: createdIngredients.length > 0 ? createdIngredients : undefined,
-              updated: updatedIngredients.length > 0 ? updatedIngredients : undefined,
-              deletedIds: deletedIngredientIds.length > 0 ? deletedIngredientIds : undefined,
-            }
-          : undefined,
-    };
   }, [inventoryState]);
 
   useEffect(() => {
@@ -1145,6 +1057,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     }
 
     const data = reloadInventoryData();
+    refreshBaseCache();
+    clearDeltaReferenceCache();
     setInventoryState((prev) => {
       const baseState = createInventoryStateFromData(data, prev?.imported ?? false);
       if (!prev) {
