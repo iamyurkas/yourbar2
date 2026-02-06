@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { StackActions, useNavigation } from "@react-navigation/native";
 import { Image } from "expo-image";
 import * as ImagePicker from "expo-image-picker";
 import { Stack, router, useLocalSearchParams } from "expo-router";
@@ -1255,10 +1255,23 @@ export default function CreateCocktailScreen() {
             }
 
             setHasUnsavedChanges(false);
+            const state = navigation.getState();
+            const currentIndex = state.index ?? 0;
+            const previousRoute = currentIndex > 0 ? state.routes[currentIndex - 1] : undefined;
+            const previousRouteName =
+              previousRoute && typeof previousRoute.name === 'string' ? previousRoute.name : '';
+            const cameFromDetails = previousRouteName.includes('[cocktailId]');
+
+            if (cameFromDetails && currentIndex >= 2) {
+              navigation.dispatch(StackActions.pop(2));
+              return;
+            }
+
             if (navigation.canGoBack()) {
               navigation.goBack();
               return;
             }
+
             returnToSourceOrBack(navigation, { returnToPath, returnToParams });
           },
         },
