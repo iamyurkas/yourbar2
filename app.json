@@ -17,7 +17,7 @@
 
     "android": {
       "package": "com.yourbarapp.free",
-      "versionCode": 8,
+      "versionCode": 9,
 
       "enableProguardInRelease": true,
       "enableShrinkResourcesInRelease": true,
