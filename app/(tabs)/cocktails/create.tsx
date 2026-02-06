@@ -1358,8 +1358,8 @@ export default function CreateCocktailScreen() {
   ]);
 
   const handleGoBack = useCallback(() => {
-    returnToSourceOrBack(navigation, { returnToPath, returnToParams });
-  }, [navigation, returnToPath, returnToParams]);
+    navigation.goBack();
+  }, [navigation]);
 
   const imageSource = useMemo(() => {
     if (!imageUri) {
