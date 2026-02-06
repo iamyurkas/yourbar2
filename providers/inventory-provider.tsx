@@ -439,8 +439,14 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     onboardingCompleted,
   ]);
 
-  const cocktails = inventoryState?.cocktails ?? [];
-  const ingredients = inventoryState?.ingredients ?? [];
+  const cocktails = useMemo(
+    () => [...(inventoryState?.cocktails ?? [])].sort((a, b) => (a.name ?? '').localeCompare(b.name ?? '')),
+    [inventoryState?.cocktails],
+  );
+  const ingredients = useMemo(
+    () => [...(inventoryState?.ingredients ?? [])].sort((a, b) => (a.name ?? '').localeCompare(b.name ?? '')),
+    [inventoryState?.ingredients],
+  );
 
   const resolveCocktailKey = useCallback((cocktail: Cocktail) => {
     const id = cocktail.id;

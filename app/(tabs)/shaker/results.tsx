@@ -112,7 +112,7 @@ export default function ShakerResultsScreen() {
       items.push(cocktail);
     });
 
-    return items;
+    return items.sort((a, b) => (a.name ?? '').localeCompare(b.name ?? ''));
   }, [availableIds, cocktails]);
 
   const unavailableCocktails = useMemo(() => {
@@ -134,7 +134,7 @@ export default function ShakerResultsScreen() {
       items.push(cocktail);
     });
 
-    return items;
+    return items.sort((a, b) => (a.name ?? '').localeCompare(b.name ?? ''));
   }, [cocktails, unavailableIds]);
 
   const listData = useMemo(
