@@ -695,6 +695,9 @@ export default function ShakerResultsScreen() {
           renderItem={renderItem}
           ItemSeparatorComponent={renderSeparator}
           contentContainerStyle={styles.listContent}
+          initialNumToRender={12}
+          maxToRenderPerBatch={12}
+          windowSize={5}
           ListEmptyComponent={
             <Text style={[styles.emptyLabel, { color: Colors.onSurfaceVariant }]}>
               No matching recipes

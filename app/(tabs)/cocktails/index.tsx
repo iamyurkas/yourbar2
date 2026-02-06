@@ -748,6 +748,9 @@ export default function CocktailsScreen() {
           renderItem={isMyTab ? renderMyItem : renderItem}
           ItemSeparatorComponent={isMyTab ? renderMySeparator : renderSeparator}
           contentContainerStyle={styles.listContent}
+          initialNumToRender={12}
+          maxToRenderPerBatch={12}
+          windowSize={5}
           showsVerticalScrollIndicator
           keyboardDismissMode="on-drag"
           // Ensure first tap triggers row actions while dismissing the keyboard.
