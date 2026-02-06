@@ -27,7 +27,7 @@ import type { SegmentTabOption } from '@/components/TopBars';
 import { getCocktailMethods, METHOD_ICON_MAP, type CocktailMethod } from '@/constants/cocktail-methods';
 import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
 import { useAppColors } from '@/constants/theme';
-import { isCocktailReady } from '@/libs/cocktail-availability';
+import { isCocktailReady, summariseCocktailAvailability } from '@/libs/cocktail-availability';
 import { getLastCocktailTab, setLastCocktailTab, type CocktailTabKey } from '@/libs/collection-tabs';
 import { createIngredientLookup } from '@/libs/ingredient-availability';
 import { navigateToDetailsWithReturnTo } from '@/libs/navigation';
@@ -35,7 +35,7 @@ import { normalizeSearchText } from '@/libs/search-normalization';
 import { useOnboardingAnchors } from '@/components/onboarding/OnboardingContext';
 import { buildTagOptions, type TagOption } from '@/libs/tag-options';
 import { useCocktailTabLogic, type MyTabListItem } from '@/libs/use-cocktail-tab-logic';
-import { useInventory, type Cocktail } from '@/providers/inventory-provider';
+import { useInventoryActions, useInventoryData, useInventorySettings, type Cocktail } from '@/providers/inventory-provider';
 import { tagColors } from '@/theme/theme';
 
 type CocktailMethodOption = {
@@ -53,16 +53,10 @@ const TAB_OPTIONS: SegmentTabOption[] = [
 
 export default function CocktailsScreen() {
   const { onTabChangeRequest } = useOnboardingAnchors();
-  const {
-    cocktails,
-    availableIngredientIds,
-    ingredients,
-    ignoreGarnish,
-    allowAllSubstitutes,
-    ratingFilterThreshold,
-    shoppingIngredientIds,
-    toggleIngredientShopping,
-  } = useInventory();
+  const { cocktails, availableIngredientIds, ingredients, shoppingIngredientIds, getCocktailRating } =
+    useInventoryData();
+  const { ignoreGarnish, allowAllSubstitutes, ratingFilterThreshold } = useInventorySettings();
+  const { toggleIngredientShopping } = useInventoryActions();
   const Colors = useAppColors();
   const [activeTab, setActiveTab] = useState<CocktailTabKey>(() => getLastCocktailTab());
   const [query, setQuery] = useState('');
@@ -253,10 +247,10 @@ export default function CocktailsScreen() {
 
   const ratedCocktails = useMemo(() => {
     return cocktails.filter((cocktail) => {
-      const ratingValue = Number((cocktail as { userRating?: number }).userRating ?? 0);
+      const ratingValue = getCocktailRating(cocktail);
       return ratingValue >= ratingFilterThreshold;
     });
-  }, [cocktails, ratingFilterThreshold]);
+  }, [cocktails, getCocktailRating, ratingFilterThreshold]);
 
   const baseTabCocktails = useMemo(() => {
     if (activeTab === 'favorites') {
@@ -394,8 +388,8 @@ export default function CocktailsScreen() {
     }
 
     return [...filteredCocktails].sort((a, b) => {
-      const ratingA = Number((a as { userRating?: number }).userRating ?? 0);
-      const ratingB = Number((b as { userRating?: number }).userRating ?? 0);
+      const ratingA = getCocktailRating(a);
+      const ratingB = getCocktailRating(b);
 
       if (ratingA !== ratingB) {
         return ratingB - ratingA;
@@ -403,7 +397,7 @@ export default function CocktailsScreen() {
 
       return (a.name ?? '').localeCompare(b.name ?? '');
     });
-  }, [activeTab, filteredCocktails]);
+  }, [activeTab, filteredCocktails, getCocktailRating]);
 
   const myTabListData = useCocktailTabLogic({
     activeTab,
@@ -456,24 +450,37 @@ export default function CocktailsScreen() {
     [toggleIngredientShopping],
   );
 
+  const getAvailabilitySummary = useCallback(
+    (cocktail: Cocktail) =>
+      summariseCocktailAvailability(cocktail, availableIngredientIds, ingredientLookup, undefined, {
+        ignoreGarnish,
+        allowAllSubstitutes,
+      }),
+    [allowAllSubstitutes, availableIngredientIds, ignoreGarnish, ingredientLookup],
+  );
+
   const renderItem = useCallback(
-    ({ item }: { item: Cocktail }) => (
-      <CocktailListRow
-        cocktail={item}
-        availableIngredientIds={availableIngredientIds}
-        ingredientLookup={ingredientLookup}
-        ignoreGarnish={ignoreGarnish}
-        allowAllSubstitutes={allowAllSubstitutes}
-        showMethodIcons
-        onPress={() => handleSelectCocktail(item)}
-      />
-    ),
+    ({ item }: { item: Cocktail }) => {
+      const availability = getAvailabilitySummary(item);
+      return (
+        <CocktailListRow
+          cocktail={item}
+          ingredients={ingredients}
+          showMethodIcons
+          onPress={() => handleSelectCocktail(item)}
+          isReady={availability.isReady}
+          missingCount={availability.missingCount}
+          recipeNamesCount={availability.recipeNames.length}
+          ingredientLine={availability.ingredientLine}
+          ratingValue={getCocktailRating(item)}
+        />
+      );
+    },
     [
-      availableIngredientIds,
-      allowAllSubstitutes,
+      getAvailabilitySummary,
+      getCocktailRating,
       handleSelectCocktail,
-      ignoreGarnish,
-      ingredientLookup,
+      ingredients,
     ],
   );
 
@@ -533,26 +540,28 @@ export default function CocktailsScreen() {
         );
       }
 
+      const availability = getAvailabilitySummary(item.cocktail);
       return (
         <CocktailListRow
           cocktail={item.cocktail}
-          availableIngredientIds={availableIngredientIds}
-          ingredientLookup={ingredientLookup}
-          ignoreGarnish={ignoreGarnish}
-          allowAllSubstitutes={allowAllSubstitutes}
+          ingredients={ingredients}
           showMethodIcons
           onPress={() => handleSelectCocktail(item.cocktail)}
+          isReady={availability.isReady}
+          missingCount={availability.missingCount}
+          recipeNamesCount={availability.recipeNames.length}
+          ingredientLine={availability.ingredientLine}
+          ratingValue={getCocktailRating(item.cocktail)}
         />
       );
     },
     [
-      allowAllSubstitutes,
-      availableIngredientIds,
+      getAvailabilitySummary,
+      getCocktailRating,
       handleSelectCocktail,
       handleSelectIngredient,
       handleShoppingToggle,
-      ignoreGarnish,
-      ingredientLookup,
+      ingredients,
       shoppingIngredientIds,
       Colors,
     ],

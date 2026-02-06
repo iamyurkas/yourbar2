@@ -35,7 +35,13 @@ import { navigateToDetailsWithReturnTo } from '@/libs/navigation';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { buildTagOptions, type TagOption } from '@/libs/tag-options';
 import { useOnboardingAnchors } from '@/components/onboarding/OnboardingContext';
-import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
+import {
+  useInventoryActions,
+  useInventoryData,
+  useInventorySettings,
+  type Cocktail,
+  type Ingredient,
+} from '@/providers/inventory-provider';
 import { tagColors } from '@/theme/theme';
 
 type IngredientSection = {
@@ -53,7 +59,7 @@ const TAB_OPTIONS: SegmentTabOption[] = [
 type IngredientListItemProps = {
   ingredient: Ingredient;
   highlightColor: string;
-  availableIngredientIds: Set<number>;
+  isAvailable: boolean;
   onToggleAvailability: (id: number) => void;
   subtitle?: string;
   surfaceVariantColor?: string;
@@ -68,7 +74,7 @@ const areIngredientPropsEqual = (
 ) =>
   prev.ingredient === next.ingredient &&
   prev.highlightColor === next.highlightColor &&
-  prev.availableIngredientIds === next.availableIngredientIds &&
+  prev.isAvailable === next.isAvailable &&
   prev.onToggleAvailability === next.onToggleAvailability &&
   prev.subtitle === next.subtitle &&
   prev.surfaceVariantColor === next.surfaceVariantColor &&
@@ -79,7 +85,7 @@ const areIngredientPropsEqual = (
 const IngredientListItem = memo(function IngredientListItemComponent({
   ingredient,
   highlightColor,
-  availableIngredientIds,
+  isAvailable,
   onToggleAvailability,
   subtitle,
   surfaceVariantColor,
@@ -89,7 +95,6 @@ const IngredientListItem = memo(function IngredientListItemComponent({
 }: IngredientListItemProps) {
   const Colors = useAppColors();
   const ingredientId = Number(ingredient.id ?? -1);
-  const isAvailable = ingredientId >= 0 && availableIngredientIds.has(ingredientId);
   const ingredientTagColors = (ingredient.tags ?? [])
     .map((tag) => tag?.color ?? tagColors.yellow)
     .filter(Boolean);
@@ -219,16 +224,9 @@ export default function IngredientsScreen() {
   const router = useRouter();
   const Colors = useAppColors();
   const { onTabChangeRequest } = useOnboardingAnchors();
-  const {
-    cocktails,
-    ingredients,
-    availableIngredientIds,
-    shoppingIngredientIds,
-    toggleIngredientShopping,
-    toggleIngredientAvailability,
-    ignoreGarnish,
-    allowAllSubstitutes,
-  } = useInventory();
+  const { cocktails, ingredients, availableIngredientIds, shoppingIngredientIds } = useInventoryData();
+  const { ignoreGarnish, allowAllSubstitutes } = useInventorySettings();
+  const { toggleIngredientShopping, toggleIngredientAvailability } = useInventoryActions();
   const [activeTab, setActiveTab] = useState<IngredientTabKey>(() => getLastIngredientTab());
   const [query, setQuery] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -645,6 +643,7 @@ export default function IngredientsScreen() {
     ({ item }: { item: Ingredient }) => {
       const ingredientId = Number(item.id ?? -1);
       const isOnShoppingList = ingredientId >= 0 && shoppingIngredientIds.has(ingredientId);
+      const isAvailable = ingredientId >= 0 && effectiveAvailableIngredientIds.has(ingredientId);
 
       const isMyTab = activeTab === 'my';
       const countsMap = isMyTab ? makeableCocktailCounts : totalCocktailCounts;
@@ -665,7 +664,7 @@ export default function IngredientsScreen() {
         <IngredientListItem
           ingredient={item}
           highlightColor={highlightColor}
-          availableIngredientIds={effectiveAvailableIngredientIds}
+          isAvailable={isAvailable}
           onToggleAvailability={handleToggle}
           subtitle={subtitleText}
           surfaceVariantColor={Colors.onSurfaceVariant ?? Colors.icon}
