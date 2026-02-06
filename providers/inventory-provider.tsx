@@ -2,8 +2,8 @@ import React, {
   useCallback,
   useEffect,
   useMemo,
+  useReducer,
   useRef,
-  useState,
 } from 'react';
 
 import { loadInventoryData, reloadInventoryData } from '@/libs/inventory-data';
@@ -100,6 +100,7 @@ import {
 } from './inventory/selectors/inventory-selectors';
 
 import { createDeltaSnapshotFromInventory } from './inventory/persistence/snapshot';
+import { inventoryReducer, type FullInventoryState } from './inventory/model/inventory-reducer';
 
 const INVENTORY_SNAPSHOT_VERSION = 2;
 
@@ -141,58 +142,32 @@ type InventoryProviderProps = {
 };
 
 export function InventoryProvider({ children }: InventoryProviderProps) {
-  const [inventoryState, setInventoryState] = useState<InventoryState | undefined>(
-    () => globalThis.__yourbarInventory,
-  );
-  const [loading, setLoading] = useState<boolean>(() => !globalThis.__yourbarInventory);
-  const [availableIngredientIds, setAvailableIngredientIds] = useState<Set<number>>(() =>
-    globalThis.__yourbarInventoryAvailableIngredientIds
+  const initialState: FullInventoryState = {
+    inventoryState: globalThis.__yourbarInventory,
+    loading: !globalThis.__yourbarInventory,
+    availableIngredientIds: globalThis.__yourbarInventoryAvailableIngredientIds
       ? new Set(globalThis.__yourbarInventoryAvailableIngredientIds)
       : new Set(),
-  );
-  const [shoppingIngredientIds, setShoppingIngredientIds] = useState<Set<number>>(() =>
-    globalThis.__yourbarInventoryShoppingIngredientIds
+    shoppingIngredientIds: globalThis.__yourbarInventoryShoppingIngredientIds
       ? new Set(globalThis.__yourbarInventoryShoppingIngredientIds)
       : new Set(),
-  );
-  const [cocktailRatings, setCocktailRatings] = useState<Record<string, number>>(() =>
-    sanitizeCocktailRatings(globalThis.__yourbarInventoryCocktailRatings),
-  );
-  const [ignoreGarnish, setIgnoreGarnish] = useState<boolean>(
-    () => globalThis.__yourbarInventoryIgnoreGarnish ?? true,
-  );
-  const [allowAllSubstitutes, setAllowAllSubstitutes] = useState<boolean>(
-    () => globalThis.__yourbarInventoryAllowAllSubstitutes ?? true,
-  );
-  const [useImperialUnits, setUseImperialUnits] = useState<boolean>(
-    () => globalThis.__yourbarInventoryUseImperialUnits ?? false,
-  );
-  const [keepScreenAwake, setKeepScreenAwake] = useState<boolean>(
-    () => globalThis.__yourbarInventoryKeepScreenAwake ?? true,
-  );
-  const [ratingFilterThreshold, setRatingFilterThreshold] = useState<number>(() =>
-    typeof globalThis.__yourbarInventoryRatingFilterThreshold === 'number'
+    cocktailRatings: sanitizeCocktailRatings(globalThis.__yourbarInventoryCocktailRatings),
+    ignoreGarnish: globalThis.__yourbarInventoryIgnoreGarnish ?? true,
+    allowAllSubstitutes: globalThis.__yourbarInventoryAllowAllSubstitutes ?? true,
+    useImperialUnits: globalThis.__yourbarInventoryUseImperialUnits ?? false,
+    keepScreenAwake: globalThis.__yourbarInventoryKeepScreenAwake ?? true,
+    ratingFilterThreshold: typeof globalThis.__yourbarInventoryRatingFilterThreshold === 'number'
       ? Math.min(5, Math.max(1, Math.round(globalThis.__yourbarInventoryRatingFilterThreshold)))
       : 1,
-  );
-  const [startScreen, setStartScreen] = useState<StartScreen>(
-    () => globalThis.__yourbarInventoryStartScreen ?? DEFAULT_START_SCREEN,
-  );
-  const [appTheme, setAppTheme] = useState<AppTheme>(
-    () => globalThis.__yourbarInventoryAppTheme ?? DEFAULT_APP_THEME,
-  );
-  const [customCocktailTags, setCustomCocktailTags] = useState<CocktailTag[]>(() =>
-    sanitizeCustomTags(globalThis.__yourbarInventoryCustomCocktailTags, DEFAULT_TAG_COLOR),
-  );
-  const [customIngredientTags, setCustomIngredientTags] = useState<IngredientTag[]>(() =>
-    sanitizeCustomTags(globalThis.__yourbarInventoryCustomIngredientTags, DEFAULT_TAG_COLOR),
-  );
-  const [onboardingStep, setOnboardingStep] = useState<number>(
-    () => globalThis.__yourbarInventoryOnboardingStep ?? 0,
-  );
-  const [onboardingCompleted, setOnboardingCompleted] = useState<boolean>(
-    () => globalThis.__yourbarInventoryOnboardingCompleted ?? false,
-  );
+    startScreen: globalThis.__yourbarInventoryStartScreen ?? DEFAULT_START_SCREEN,
+    appTheme: globalThis.__yourbarInventoryAppTheme ?? DEFAULT_APP_THEME,
+    customCocktailTags: sanitizeCustomTags(globalThis.__yourbarInventoryCustomCocktailTags, DEFAULT_TAG_COLOR),
+    customIngredientTags: sanitizeCustomTags(globalThis.__yourbarInventoryCustomIngredientTags, DEFAULT_TAG_COLOR),
+    onboardingStep: globalThis.__yourbarInventoryOnboardingStep ?? 0,
+    onboardingCompleted: globalThis.__yourbarInventoryOnboardingCompleted ?? false,
+  };
+
+  const [state, dispatch] = useReducer(inventoryReducer, initialState);
   const lastPersistedSnapshot = useRef<string | undefined>(undefined);
 
   // Structural optimization: Track precisely which IDs were changed to avoid O(N) delta recalculation
@@ -200,33 +175,40 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   const dirtyIngredientIds = useRef<Set<number>>(new Set());
 
   useEffect(() => {
-    if (inventoryState) {
+    if (state.inventoryState) {
       return;
     }
 
     let cancelled = false;
-    setLoading(true);
+    dispatch({ type: 'SET_LOADING', payload: true });
 
     void (async () => {
       try {
         const stored = await loadInventorySnapshot<CocktailStorageRecord, IngredientStorageRecord>();
         if (stored && (stored.version === INVENTORY_SNAPSHOT_VERSION || stored.version === 1) && !cancelled) {
           const baseData = loadInventoryData();
-          setInventoryState(createInventoryStateFromSnapshot(stored, baseData));
-          setAvailableIngredientIds(createIngredientIdSet(stored.availableIngredientIds));
-          setShoppingIngredientIds(createIngredientIdSet(stored.shoppingIngredientIds));
-          setCocktailRatings(sanitizeCocktailRatings(stored.cocktailRatings));
-          setIgnoreGarnish(stored.ignoreGarnish ?? true);
-          setAllowAllSubstitutes(stored.allowAllSubstitutes ?? true);
-          setUseImperialUnits(stored.useImperialUnits ?? false);
-          setKeepScreenAwake(stored.keepScreenAwake ?? true);
-          setRatingFilterThreshold(Math.min(5, Math.max(1, Math.round(stored.ratingFilterThreshold ?? 1))));
-          setStartScreen(sanitizeStartScreen(stored.startScreen));
-          setAppTheme(sanitizeAppTheme(stored.appTheme));
-          setCustomCocktailTags(sanitizeCustomTags(stored.customCocktailTags, DEFAULT_TAG_COLOR));
-          setCustomIngredientTags(sanitizeCustomTags(stored.customIngredientTags, DEFAULT_TAG_COLOR));
-          setOnboardingStep(0);
-          setOnboardingCompleted(stored.onboardingCompleted ?? false);
+
+          dispatch({
+            type: 'INIT',
+            payload: {
+              inventoryState: createInventoryStateFromSnapshot(stored, baseData),
+              loading: false,
+              availableIngredientIds: createIngredientIdSet(stored.availableIngredientIds),
+              shoppingIngredientIds: createIngredientIdSet(stored.shoppingIngredientIds),
+              cocktailRatings: sanitizeCocktailRatings(stored.cocktailRatings),
+              ignoreGarnish: stored.ignoreGarnish ?? true,
+              allowAllSubstitutes: stored.allowAllSubstitutes ?? true,
+              useImperialUnits: stored.useImperialUnits ?? false,
+              keepScreenAwake: stored.keepScreenAwake ?? true,
+              ratingFilterThreshold: Math.min(5, Math.max(1, Math.round(stored.ratingFilterThreshold ?? 1))),
+              startScreen: sanitizeStartScreen(stored.startScreen),
+              appTheme: sanitizeAppTheme(stored.appTheme),
+              customCocktailTags: sanitizeCustomTags(stored.customCocktailTags, DEFAULT_TAG_COLOR),
+              customIngredientTags: sanitizeCustomTags(stored.customIngredientTags, DEFAULT_TAG_COLOR),
+              onboardingStep: 0,
+              onboardingCompleted: stored.onboardingCompleted ?? false,
+            }
+          });
           return;
         }
       } catch (error) {
@@ -236,25 +218,32 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       try {
         const data = loadInventoryData();
         if (!cancelled) {
-          setInventoryState(createInventoryStateFromData(data, true));
-          setAvailableIngredientIds(new Set());
-          setShoppingIngredientIds(new Set());
-          setCocktailRatings({});
-          setIgnoreGarnish(true);
-          setAllowAllSubstitutes(true);
-          setUseImperialUnits(false);
-          setKeepScreenAwake(true);
-          setStartScreen(DEFAULT_START_SCREEN);
-          setAppTheme(DEFAULT_APP_THEME);
-          setCustomCocktailTags([]);
-          setCustomIngredientTags([]);
-          setOnboardingStep(1);
-          setOnboardingCompleted(false);
+          dispatch({
+            type: 'INIT',
+            payload: {
+              inventoryState: createInventoryStateFromData(data, true),
+              loading: false,
+              availableIngredientIds: new Set(),
+              shoppingIngredientIds: new Set(),
+              cocktailRatings: {},
+              ignoreGarnish: true,
+              allowAllSubstitutes: true,
+              useImperialUnits: false,
+              keepScreenAwake: true,
+              ratingFilterThreshold: 1,
+              startScreen: DEFAULT_START_SCREEN,
+              appTheme: DEFAULT_APP_THEME,
+              customCocktailTags: [],
+              customIngredientTags: [],
+              onboardingStep: 1,
+              onboardingCompleted: false,
+            }
+          });
         }
       } catch (error) {
         console.error('Failed to import bundled inventory', error);
         if (!cancelled) {
-          setLoading(false);
+          dispatch({ type: 'SET_LOADING', payload: false });
         }
       }
     })();
@@ -262,15 +251,15 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     return () => {
       cancelled = true;
     };
-  }, [inventoryState]);
+  }, [state.inventoryState]);
 
   const memoizedDelta = useMemo(() => {
-    if (!inventoryState) {
+    if (!state.inventoryState) {
       return undefined;
     }
     const delta = calculateInventoryDelta(
-      inventoryState.cocktails,
-      inventoryState.ingredients,
+      state.inventoryState.cocktails,
+      state.inventoryState.ingredients,
       dirtyCocktailIds.current,
       dirtyIngredientIds.current
     );
@@ -278,45 +267,48 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     dirtyCocktailIds.current.clear();
     dirtyIngredientIds.current.clear();
     return delta;
-  }, [inventoryState]);
+  }, [state.inventoryState]);
 
   useEffect(() => {
-    if (!inventoryState || !memoizedDelta) {
+    if (!state.inventoryState || !memoizedDelta) {
       return;
     }
 
-    setLoading(false);
-    globalThis.__yourbarInventory = inventoryState;
-    globalThis.__yourbarInventoryAvailableIngredientIds = availableIngredientIds;
-    globalThis.__yourbarInventoryShoppingIngredientIds = shoppingIngredientIds;
-    globalThis.__yourbarInventoryCocktailRatings = cocktailRatings;
-    globalThis.__yourbarInventoryIgnoreGarnish = ignoreGarnish;
-    globalThis.__yourbarInventoryAllowAllSubstitutes = allowAllSubstitutes;
-    globalThis.__yourbarInventoryUseImperialUnits = useImperialUnits;
-    globalThis.__yourbarInventoryKeepScreenAwake = keepScreenAwake;
-    globalThis.__yourbarInventoryRatingFilterThreshold = ratingFilterThreshold;
-    globalThis.__yourbarInventoryStartScreen = startScreen;
-    globalThis.__yourbarInventoryAppTheme = appTheme;
-    globalThis.__yourbarInventoryCustomCocktailTags = customCocktailTags;
-    globalThis.__yourbarInventoryCustomIngredientTags = customIngredientTags;
-    globalThis.__yourbarInventoryOnboardingStep = onboardingStep;
-    globalThis.__yourbarInventoryOnboardingCompleted = onboardingCompleted;
+    if (state.loading) {
+      dispatch({ type: 'SET_LOADING', payload: false });
+    }
 
-    const snapshot = createDeltaSnapshotFromInventory(inventoryState, memoizedDelta, {
-      availableIngredientIds,
-      shoppingIngredientIds,
-      cocktailRatings,
-      ignoreGarnish,
-      allowAllSubstitutes,
-      useImperialUnits,
-      keepScreenAwake,
-      ratingFilterThreshold,
-      startScreen,
-      appTheme,
-      customCocktailTags,
-      customIngredientTags,
-      onboardingStep,
-      onboardingCompleted,
+    globalThis.__yourbarInventory = state.inventoryState;
+    globalThis.__yourbarInventoryAvailableIngredientIds = state.availableIngredientIds;
+    globalThis.__yourbarInventoryShoppingIngredientIds = state.shoppingIngredientIds;
+    globalThis.__yourbarInventoryCocktailRatings = state.cocktailRatings;
+    globalThis.__yourbarInventoryIgnoreGarnish = state.ignoreGarnish;
+    globalThis.__yourbarInventoryAllowAllSubstitutes = state.allowAllSubstitutes;
+    globalThis.__yourbarInventoryUseImperialUnits = state.useImperialUnits;
+    globalThis.__yourbarInventoryKeepScreenAwake = state.keepScreenAwake;
+    globalThis.__yourbarInventoryRatingFilterThreshold = state.ratingFilterThreshold;
+    globalThis.__yourbarInventoryStartScreen = state.startScreen;
+    globalThis.__yourbarInventoryAppTheme = state.appTheme;
+    globalThis.__yourbarInventoryCustomCocktailTags = state.customCocktailTags;
+    globalThis.__yourbarInventoryCustomIngredientTags = state.customIngredientTags;
+    globalThis.__yourbarInventoryOnboardingStep = state.onboardingStep;
+    globalThis.__yourbarInventoryOnboardingCompleted = state.onboardingCompleted;
+
+    const snapshot = createDeltaSnapshotFromInventory(state.inventoryState, memoizedDelta, {
+      availableIngredientIds: state.availableIngredientIds,
+      shoppingIngredientIds: state.shoppingIngredientIds,
+      cocktailRatings: state.cocktailRatings,
+      ignoreGarnish: state.ignoreGarnish,
+      allowAllSubstitutes: state.allowAllSubstitutes,
+      useImperialUnits: state.useImperialUnits,
+      keepScreenAwake: state.keepScreenAwake,
+      ratingFilterThreshold: state.ratingFilterThreshold,
+      startScreen: state.startScreen,
+      appTheme: state.appTheme,
+      customCocktailTags: state.customCocktailTags,
+      customIngredientTags: state.customIngredientTags,
+      onboardingStep: state.onboardingStep,
+      onboardingCompleted: state.onboardingCompleted,
     });
 
     const serialized = JSON.stringify(snapshot);
@@ -330,22 +322,23 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       console.error('Failed to persist inventory snapshot', error);
     });
   }, [
-    inventoryState,
+    state.inventoryState,
     memoizedDelta,
-    availableIngredientIds,
-    shoppingIngredientIds,
-    cocktailRatings,
-    ignoreGarnish,
-    allowAllSubstitutes,
-    useImperialUnits,
-    keepScreenAwake,
-    ratingFilterThreshold,
-    startScreen,
-    appTheme,
-    customCocktailTags,
-    customIngredientTags,
-    onboardingStep,
-    onboardingCompleted,
+    state.availableIngredientIds,
+    state.shoppingIngredientIds,
+    state.cocktailRatings,
+    state.ignoreGarnish,
+    state.allowAllSubstitutes,
+    state.useImperialUnits,
+    state.keepScreenAwake,
+    state.ratingFilterThreshold,
+    state.startScreen,
+    state.appTheme,
+    state.customCocktailTags,
+    state.customIngredientTags,
+    state.onboardingStep,
+    state.onboardingCompleted,
+    state.loading,
   ]);
 
   const resolveCocktailKey = useCallback((cocktail: Cocktail) => {
@@ -355,323 +348,339 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   const setCocktailRating = useCallback((cocktail: Cocktail, rating: number) => {
     const key = resolveCocktailKey(cocktail);
     if (!key) return;
-    setCocktailRatings((prev) => {
-      const normalized = Math.max(0, Math.min(5, Math.round(rating)));
-      if (normalized <= 0) {
-        if (!(key in prev)) return prev;
-        const next = { ...prev };
-        delete next[key];
-        return next;
-      }
-      if (prev[key] === normalized) return prev;
-      return { ...prev, [key]: normalized };
-    });
-  }, [resolveCocktailKey]);
+
+    const normalized = Math.max(0, Math.min(5, Math.round(rating)));
+    const prev = state.cocktailRatings;
+
+    if (normalized <= 0) {
+      if (!(key in prev)) return;
+      const next = { ...prev };
+      delete next[key];
+      dispatch({ type: 'SET_COCKTAIL_RATINGS', payload: next });
+      return;
+    }
+    if (prev[key] === normalized) return;
+    dispatch({ type: 'SET_COCKTAIL_RATINGS', payload: { ...prev, [key]: normalized } });
+  }, [resolveCocktailKey, state.cocktailRatings]);
 
   const getCocktailRating = useCallback((cocktail: Cocktail) => {
     const key = resolveCocktailKey(cocktail);
-    return key ? Math.max(0, Math.min(5, Number(cocktailRatings[key]) || 0)) : 0;
-  }, [cocktailRatings, resolveCocktailKey]);
+    return key ? Math.max(0, Math.min(5, Number(state.cocktailRatings[key]) || 0)) : 0;
+  }, [state.cocktailRatings, resolveCocktailKey]);
 
   const setIngredientAvailability = useCallback((id: number, available: boolean) => {
-    setAvailableIngredientIds((prev) => {
-      const next = new Set(prev);
-      available ? next.add(id) : next.delete(id);
-      return next;
-    });
-  }, []);
+    const next = new Set(state.availableIngredientIds);
+    available ? next.add(id) : next.delete(id);
+    dispatch({ type: 'SET_AVAILABLE_INGREDIENTS', payload: next });
+  }, [state.availableIngredientIds]);
 
   const createCocktail = useCallback((input: CreateCocktailInput) => {
-    let created: Cocktail | undefined;
-    setInventoryState((prev) => {
-      if (!prev) return prev;
-      const result = createCocktailAction(prev, input);
-      if (!result) return prev;
-      created = result.created;
-      if (created.id != null) {
-        dirtyCocktailIds.current.add(Number(created.id));
-      }
-      return result.nextState;
-    });
-    return created;
-  }, []);
+    if (!state.inventoryState) return undefined;
+    const result = createCocktailAction(state.inventoryState, input);
+    if (!result) return undefined;
+
+    if (result.created.id != null) {
+      dirtyCocktailIds.current.add(Number(result.created.id));
+    }
+    dispatch({ type: 'SET_INVENTORY_STATE', payload: result.nextState });
+    return result.created;
+  }, [state.inventoryState]);
 
   const createIngredient = useCallback((input: CreateIngredientInput) => {
-    let created: Ingredient | undefined;
-    setInventoryState((prev) => {
-      if (!prev) return prev;
-      const result = createIngredientAction(prev, input);
-      if (!result) return prev;
-      created = result.created;
-      if (created.id != null) {
-        dirtyIngredientIds.current.add(Number(created.id));
-      }
-      return result.nextState;
-    });
-    if (created?.id != null) {
+    if (!state.inventoryState) return undefined;
+    const result = createIngredientAction(state.inventoryState, input);
+    if (!result) return undefined;
+
+    const created = result.created;
+    if (created.id != null) {
       const id = Number(created.id);
-      setAvailableIngredientIds((p) => new Set(p).add(id));
-      setShoppingIngredientIds((p) => {
-        if (!p.has(id)) return p;
-        const n = new Set(p); n.delete(id); return n;
-      });
+      dirtyIngredientIds.current.add(id);
+
+      const nextAvailable = new Set(state.availableIngredientIds).add(id);
+      dispatch({ type: 'SET_AVAILABLE_INGREDIENTS', payload: nextAvailable });
+
+      if (state.shoppingIngredientIds.has(id)) {
+        const nextShopping = new Set(state.shoppingIngredientIds);
+        nextShopping.delete(id);
+        dispatch({ type: 'SET_SHOPPING_INGREDIENTS', payload: nextShopping });
+      }
     }
+
+    dispatch({ type: 'SET_INVENTORY_STATE', payload: result.nextState });
     return created;
-  }, []);
+  }, [state.inventoryState, state.availableIngredientIds, state.shoppingIngredientIds]);
 
   const resetInventoryFromBundle = useCallback(async () => {
     try { await clearInventorySnapshot(); } catch (e) { console.warn(e); }
     const data = reloadInventoryData();
     refreshBaseCache();
     clearDeltaReferenceCache();
-    setInventoryState((prev) => {
-      const baseState = createInventoryStateFromData(data, prev?.imported ?? false);
-      if (!prev) return baseState;
-      const userCocktails = prev.cocktails.filter((c) => Number(c.id ?? -1) >= USER_CREATED_ID_START);
-      const userIngredients = prev.ingredients.filter((i) => Number(i.id ?? -1) >= USER_CREATED_ID_START);
-      return {
-        ...baseState,
-        cocktails: [...baseState.cocktails, ...userCocktails].sort((a, b) => a.searchNameNormalized.localeCompare(b.searchNameNormalized)),
-        ingredients: [...baseState.ingredients, ...userIngredients].sort((a, b) => a.searchNameNormalized.localeCompare(b.searchNameNormalized)),
-      };
-    });
-  }, []);
 
-  const exportInventoryData = useCallback(() => inventoryState ? getExportInventoryData(inventoryState) : null, [inventoryState]);
-  const exportInventoryPhotoEntries = useCallback(() => inventoryState ? getExportInventoryPhotoEntries(inventoryState) : null, [inventoryState]);
+    const baseState = createInventoryStateFromData(data, state.inventoryState?.imported ?? false);
+    const userCocktails = state.inventoryState?.cocktails.filter((c) => Number(c.id ?? -1) >= USER_CREATED_ID_START) ?? [];
+    const userIngredients = state.inventoryState?.ingredients.filter((i) => Number(i.id ?? -1) >= USER_CREATED_ID_START) ?? [];
+
+    const nextInventoryState = {
+      ...baseState,
+      cocktails: [...baseState.cocktails, ...userCocktails].sort((a, b) => a.searchNameNormalized.localeCompare(b.searchNameNormalized)),
+      ingredients: [...baseState.ingredients, ...userIngredients].sort((a, b) => a.searchNameNormalized.localeCompare(b.searchNameNormalized)),
+    };
+
+    dispatch({ type: 'SET_INVENTORY_STATE', payload: nextInventoryState });
+  }, [state.inventoryState]);
+
+  const exportInventoryData = useCallback(() => state.inventoryState ? getExportInventoryData(state.inventoryState) : null, [state.inventoryState]);
+  const exportInventoryPhotoEntries = useCallback(() => state.inventoryState ? getExportInventoryPhotoEntries(state.inventoryState) : null, [state.inventoryState]);
 
   const importInventoryData = useCallback((data: InventoryExportData) => {
     const hydrated = hydrateInventoryTagsFromCode(data);
     const incomingState = createInventoryStateFromData(hydrated, true);
-    setInventoryState((prev) => {
-      incomingState.cocktails.forEach(c => { if (c.id != null) dirtyCocktailIds.current.add(Number(c.id)); });
-      incomingState.ingredients.forEach(i => { if (i.id != null) dirtyIngredientIds.current.add(Number(i.id)); });
 
-      if (!prev) return incomingState;
-      const merge = <T extends { id?: number | null; searchNameNormalized: string }>(curr: readonly T[], inc: readonly T[]) => {
-        const incMap = new Map(inc.map(i => [Math.trunc(Number(i.id ?? -1)), i]));
-        const merged = curr.map(i => {
-          const id = Math.trunc(Number(i.id ?? -1));
-          if (incMap.has(id)) {
-            return incMap.get(id)!;
-          }
-          return i;
-        });
-        const seen = new Set(curr.map(i => Math.trunc(Number(i.id ?? -1))));
-        inc.forEach(i => { if (!seen.has(Math.trunc(Number(i.id ?? -1)))) merged.push(i); });
-        return merged.sort((a, b) => a.searchNameNormalized.localeCompare(b.searchNameNormalized));
-      };
-      return { ...prev, imported: true, cocktails: merge(prev.cocktails, incomingState.cocktails), ingredients: merge(prev.ingredients, incomingState.ingredients) };
+    incomingState.cocktails.forEach(c => { if (c.id != null) dirtyCocktailIds.current.add(Number(c.id)); });
+    incomingState.ingredients.forEach(i => { if (i.id != null) dirtyIngredientIds.current.add(Number(i.id)); });
+
+    if (!state.inventoryState) {
+      dispatch({ type: 'SET_INVENTORY_STATE', payload: { ...incomingState, imported: true } });
+      return;
+    }
+
+    const merge = <T extends { id?: number | null; searchNameNormalized: string }>(curr: readonly T[], inc: readonly T[]) => {
+      const incMap = new Map(inc.map(i => [Math.trunc(Number(i.id ?? -1)), i]));
+      const merged = curr.map(i => {
+        const id = Math.trunc(Number(i.id ?? -1));
+        return incMap.get(id) ?? i;
+      });
+      const seen = new Set(curr.map(i => Math.trunc(Number(i.id ?? -1))));
+      inc.forEach(i => { if (!seen.has(Math.trunc(Number(i.id ?? -1)))) merged.push(i); });
+      return merged.sort((a, b) => a.searchNameNormalized.localeCompare(b.searchNameNormalized));
+    };
+
+    dispatch({
+      type: 'SET_INVENTORY_STATE',
+      payload: {
+        ...state.inventoryState,
+        imported: true,
+        cocktails: merge(state.inventoryState.cocktails, incomingState.cocktails),
+        ingredients: merge(state.inventoryState.ingredients, incomingState.ingredients)
+      }
     });
-  }, []);
+  }, [state.inventoryState]);
 
   const updateIngredient = useCallback((id: number, input: CreateIngredientInput) => {
-    let updated: Ingredient | undefined;
-    setInventoryState((prev) => {
-      if (!prev) return prev;
-      const result = updateIngredientAction(prev, id, input);
-      if (!result) return prev;
-      updated = result.updated;
-      dirtyIngredientIds.current.add(Number(id));
-      return result.nextState;
-    });
-    return updated;
-  }, []);
+    if (!state.inventoryState) return undefined;
+    const result = updateIngredientAction(state.inventoryState, id, input);
+    if (!result) return undefined;
+
+    dirtyIngredientIds.current.add(Number(id));
+    dispatch({ type: 'SET_INVENTORY_STATE', payload: result.nextState });
+    return result.updated;
+  }, [state.inventoryState]);
 
   const updateCocktail = useCallback((id: number, input: CreateCocktailInput) => {
-    let updated: Cocktail | undefined;
-    setInventoryState((prev) => {
-      if (!prev) return prev;
-      const result = updateCocktailAction(prev, id, input);
-      if (!result) return prev;
-      updated = result.updated;
-      dirtyCocktailIds.current.add(Number(id));
-      return result.nextState;
-    });
-    return updated;
-  }, []);
+    if (!state.inventoryState) return undefined;
+    const result = updateCocktailAction(state.inventoryState, id, input);
+    if (!result) return undefined;
+
+    dirtyCocktailIds.current.add(Number(id));
+    dispatch({ type: 'SET_INVENTORY_STATE', payload: result.nextState });
+    return result.updated;
+  }, [state.inventoryState]);
 
   const deleteIngredient = useCallback((id: number) => {
-    const normalizedId = Number(id);
-    let wasRemoved = false;
-    setInventoryState((prev) => {
-      if (!prev) return prev;
-      const result = deleteIngredientAction(prev, id);
-      wasRemoved = result.wasRemoved;
-      if (wasRemoved) {
-        dirtyIngredientIds.current.add(normalizedId);
-      }
-      return result.nextState;
-    });
-    if (wasRemoved) {
-      setAvailableIngredientIds((p) => { if (!p.has(normalizedId)) return p; const n = new Set(p); n.delete(normalizedId); return n; });
-      setShoppingIngredientIds((p) => { if (!p.has(normalizedId)) return p; const n = new Set(p); n.delete(normalizedId); return n; });
-    }
-    return wasRemoved;
-  }, []);
+    if (!state.inventoryState) return false;
+    const result = deleteIngredientAction(state.inventoryState, id);
+    if (result.wasRemoved) {
+      dirtyIngredientIds.current.add(Number(id));
+      dispatch({ type: 'SET_INVENTORY_STATE', payload: result.nextState });
 
-  const deleteCocktail = useCallback((id: number) => {
-    let deleted: Cocktail | undefined;
-    const normalizedId = Number(id);
-    setInventoryState((prev) => {
-      if (!prev) return prev;
-      const result = deleteCocktailAction(prev, id);
-      if (!result) return prev;
-      deleted = result.deleted;
-      dirtyCocktailIds.current.add(normalizedId);
-      return result.nextState;
-    });
-    if (deleted) {
-      setCocktailRatings((prev) => {
-        const key = resolveCocktailKey(deleted!);
-        if (key && key in prev) { const n = { ...prev }; delete n[key]; return n; }
-        return prev;
-      });
+      const normalizedId = Number(id);
+      if (state.availableIngredientIds.has(normalizedId)) {
+        const next = new Set(state.availableIngredientIds);
+        next.delete(normalizedId);
+        dispatch({ type: 'SET_AVAILABLE_INGREDIENTS', payload: next });
+      }
+      if (state.shoppingIngredientIds.has(normalizedId)) {
+        const next = new Set(state.shoppingIngredientIds);
+        next.delete(normalizedId);
+        dispatch({ type: 'SET_SHOPPING_INGREDIENTS', payload: next });
+      }
       return true;
     }
     return false;
-  }, [resolveCocktailKey]);
+  }, [state.inventoryState, state.availableIngredientIds, state.shoppingIngredientIds]);
 
-  const toggleIngredientAvailability = useCallback((id: number) => setAvailableIngredientIds((p) => { const n = new Set(p); n.has(id) ? n.delete(id) : n.add(id); return n; }), []);
-  const toggleIngredientShopping = useCallback((id: number) => setShoppingIngredientIds((p) => { const n = new Set(p); n.has(id) ? n.delete(id) : n.add(id); return n; }), []);
-  const handleSetIgnoreGarnish = useCallback((v: boolean) => setIgnoreGarnish(v), []);
-  const handleSetAllowAllSubstitutes = useCallback((v: boolean) => setAllowAllSubstitutes(v), []);
-  const handleSetUseImperialUnits = useCallback((v: boolean) => setUseImperialUnits(v), []);
-  const handleSetKeepScreenAwake = useCallback((v: boolean) => setKeepScreenAwake(v), []);
-  const handleSetRatingFilterThreshold = useCallback((v: number) => setRatingFilterThreshold(Math.min(5, Math.max(1, Math.round(v)))), []);
-  const handleSetStartScreen = useCallback((v: StartScreen) => setStartScreen(sanitizeStartScreen(v)), []);
-  const handleSetAppTheme = useCallback((v: AppTheme) => setAppTheme(sanitizeAppTheme(v)), []);
-  const completeOnboarding = useCallback(() => { setOnboardingCompleted(true); setOnboardingStep(0); }, []);
-  const restartOnboarding = useCallback(() => { setOnboardingCompleted(false); setOnboardingStep(1); setStartScreen('ingredients_all'); }, []);
+  const deleteCocktail = useCallback((id: number) => {
+    if (!state.inventoryState) return false;
+    const result = deleteCocktailAction(state.inventoryState, id);
+    if (result) {
+      dirtyCocktailIds.current.add(Number(id));
+      dispatch({ type: 'SET_INVENTORY_STATE', payload: result.nextState });
+
+      const key = resolveCocktailKey(result.deleted);
+      if (key && key in state.cocktailRatings) {
+        const n = { ...state.cocktailRatings };
+        delete n[key];
+        dispatch({ type: 'SET_COCKTAIL_RATINGS', payload: n });
+      }
+      return true;
+    }
+    return false;
+  }, [state.inventoryState, state.cocktailRatings, resolveCocktailKey]);
+
+  const toggleIngredientAvailability = useCallback((id: number) => {
+    const next = new Set(state.availableIngredientIds);
+    next.has(id) ? next.delete(id) : next.add(id);
+    dispatch({ type: 'SET_AVAILABLE_INGREDIENTS', payload: next });
+  }, [state.availableIngredientIds]);
+
+  const toggleIngredientShopping = useCallback((id: number) => {
+    const next = new Set(state.shoppingIngredientIds);
+    next.has(id) ? next.delete(id) : next.add(id);
+    dispatch({ type: 'SET_SHOPPING_INGREDIENTS', payload: next });
+  }, [state.shoppingIngredientIds]);
+
+  const handleSetIgnoreGarnish = useCallback((v: boolean) => dispatch({ type: 'SET_IGNORE_GARNISH', payload: v }), []);
+  const handleSetAllowAllSubstitutes = useCallback((v: boolean) => dispatch({ type: 'SET_ALLOW_ALL_SUBSTITUTES', payload: v }), []);
+  const handleSetUseImperialUnits = useCallback((v: boolean) => dispatch({ type: 'SET_USE_IMPERIAL_UNITS', payload: v }), []);
+  const handleSetKeepScreenAwake = useCallback((v: boolean) => dispatch({ type: 'SET_KEEP_SCREEN_AWAKE', payload: v }), []);
+  const handleSetRatingFilterThreshold = useCallback((v: number) => dispatch({ type: 'SET_RATING_FILTER_THRESHOLD', payload: Math.min(5, Math.max(1, Math.round(v))) }), []);
+  const handleSetStartScreen = useCallback((v: StartScreen) => dispatch({ type: 'SET_START_SCREEN', payload: sanitizeStartScreen(v) }), []);
+  const handleSetAppTheme = useCallback((v: AppTheme) => dispatch({ type: 'SET_APP_THEME', payload: sanitizeAppTheme(v) }), []);
+
+  const completeOnboarding = useCallback(() => {
+    dispatch({ type: 'SET_ONBOARDING_COMPLETED', payload: true });
+    dispatch({ type: 'SET_ONBOARDING_STEP', payload: 0 });
+  }, []);
+
+  const restartOnboarding = useCallback(() => {
+    dispatch({ type: 'SET_ONBOARDING_COMPLETED', payload: false });
+    dispatch({ type: 'SET_ONBOARDING_STEP', payload: 1 });
+    dispatch({ type: 'SET_START_SCREEN', payload: 'ingredients_all' });
+  }, []);
 
   const createCustomCocktailTag = useCallback((input: { name: string; color?: string | null }) => {
-    let created: CocktailTag | undefined;
-    setCustomCocktailTags((prev) => {
-      const tag = { id: getNextCustomTagId(prev, BUILTIN_COCKTAIL_TAG_MAX), name: input.name.trim(), color: input.color?.trim() || DEFAULT_TAG_COLOR };
-      created = tag;
-      return [...prev, tag].sort((a, b) => (a.name ?? '').localeCompare(b.name ?? ''));
-    });
-    return created;
-  }, []);
+    const tag = { id: getNextCustomTagId(state.customCocktailTags, BUILTIN_COCKTAIL_TAG_MAX), name: input.name.trim(), color: input.color?.trim() || DEFAULT_TAG_COLOR };
+    const next = [...state.customCocktailTags, tag].sort((a, b) => (a.name ?? '').localeCompare(b.name ?? ''));
+    dispatch({ type: 'SET_CUSTOM_COCKTAIL_TAGS', payload: next });
+    return tag;
+  }, [state.customCocktailTags]);
 
   const updateCustomCocktailTag = useCallback((id: number, input: { name: string; color?: string | null }) => {
-    let updated: CocktailTag | undefined;
-    setCustomCocktailTags((prev) => {
-      const idx = prev.findIndex((tag) => Number(tag.id ?? -1) === Math.trunc(id));
-      if (idx < 0) return prev;
-      updated = { id: prev[idx].id, name: input.name.trim(), color: input.color?.trim() || DEFAULT_TAG_COLOR };
-      const next = [...prev]; next[idx] = updated; return next.sort((a, b) => (a.name ?? '').localeCompare(b.name ?? ''));
-    });
-    if (updated) {
-      setInventoryState((prev) => {
-        if (!prev) return prev;
-        const result = updateCocktailTagInState(prev, updated!);
-        result.affectedIds.forEach(cid => dirtyCocktailIds.current.add(cid));
-        return result.nextState;
-      });
+    const idx = state.customCocktailTags.findIndex((tag) => Number(tag.id ?? -1) === Math.trunc(id));
+    if (idx < 0) return undefined;
+    const updated = { id: state.customCocktailTags[idx].id, name: input.name.trim(), color: input.color?.trim() || DEFAULT_TAG_COLOR };
+    const nextTags = [...state.customCocktailTags];
+    nextTags[idx] = updated;
+    dispatch({ type: 'SET_CUSTOM_COCKTAIL_TAGS', payload: nextTags.sort((a, b) => (a.name ?? '').localeCompare(b.name ?? '')) });
+
+    if (state.inventoryState) {
+      const result = updateCocktailTagInState(state.inventoryState, updated);
+      result.affectedIds.forEach(cid => dirtyCocktailIds.current.add(cid));
+      dispatch({ type: 'SET_INVENTORY_STATE', payload: result.nextState });
     }
     return updated;
-  }, []);
+  }, [state.customCocktailTags, state.inventoryState]);
 
   const deleteCustomCocktailTag = useCallback((id: number) => {
-    let didRemove = false;
-    setCustomCocktailTags((prev) => {
-      const next = prev.filter((tag) => Number(tag.id ?? -1) !== Math.trunc(id));
-      didRemove = next.length !== prev.length;
-      return next;
-    });
-    if (didRemove) {
-      setInventoryState((prev) => {
-        if (!prev) return prev;
-        const result = deleteCocktailTagFromState(prev, id);
-        result.affectedIds.forEach(cid => dirtyCocktailIds.current.add(cid));
-        return result.nextState;
-      });
+    const nextTags = state.customCocktailTags.filter((tag) => Number(tag.id ?? -1) !== Math.trunc(id));
+    if (nextTags.length === state.customCocktailTags.length) return false;
+
+    dispatch({ type: 'SET_CUSTOM_COCKTAIL_TAGS', payload: nextTags });
+    if (state.inventoryState) {
+      const result = deleteCocktailTagFromState(state.inventoryState, id);
+      result.affectedIds.forEach(cid => dirtyCocktailIds.current.add(cid));
+      dispatch({ type: 'SET_INVENTORY_STATE', payload: result.nextState });
     }
-    return didRemove;
-  }, []);
+    return true;
+  }, [state.customCocktailTags, state.inventoryState]);
 
   const createCustomIngredientTag = useCallback((input: { name: string; color?: string | null }) => {
-    let created: IngredientTag | undefined;
-    setCustomIngredientTags((prev) => {
-      const tag = { id: getNextCustomTagId(prev, BUILTIN_INGREDIENT_TAG_MAX), name: input.name.trim(), color: input.color?.trim() || DEFAULT_TAG_COLOR };
-      created = tag;
-      return [...prev, tag].sort((a, b) => (a.name ?? '').localeCompare(b.name ?? ''));
-    });
-    return created;
-  }, []);
+    const tag = { id: getNextCustomTagId(state.customIngredientTags, BUILTIN_INGREDIENT_TAG_MAX), name: input.name.trim(), color: input.color?.trim() || DEFAULT_TAG_COLOR };
+    const next = [...state.customIngredientTags, tag].sort((a, b) => (a.name ?? '').localeCompare(b.name ?? ''));
+    dispatch({ type: 'SET_CUSTOM_INGREDIENT_TAGS', payload: next });
+    return tag;
+  }, [state.customIngredientTags]);
 
   const updateCustomIngredientTag = useCallback((id: number, input: { name: string; color?: string | null }) => {
-    let updated: IngredientTag | undefined;
-    setCustomIngredientTags((prev) => {
-      const idx = prev.findIndex((tag) => Number(tag.id ?? -1) === Math.trunc(id));
-      if (idx < 0) return prev;
-      updated = { id: prev[idx].id, name: input.name.trim(), color: input.color?.trim() || DEFAULT_TAG_COLOR };
-      const next = [...prev]; next[idx] = updated; return next.sort((a, b) => (a.name ?? '').localeCompare(b.name ?? ''));
-    });
-    if (updated) {
-      setInventoryState((prev) => {
-        if (!prev) return prev;
-        const result = updateIngredientTagInState(prev, updated!);
-        result.affectedIds.forEach(iid => dirtyIngredientIds.current.add(iid));
-        return result.nextState;
-      });
+    const idx = state.customIngredientTags.findIndex((tag) => Number(tag.id ?? -1) === Math.trunc(id));
+    if (idx < 0) return undefined;
+    const updated = { id: state.customIngredientTags[idx].id, name: input.name.trim(), color: input.color?.trim() || DEFAULT_TAG_COLOR };
+    const nextTags = [...state.customIngredientTags];
+    nextTags[idx] = updated;
+    dispatch({ type: 'SET_CUSTOM_INGREDIENT_TAGS', payload: nextTags.sort((a, b) => (a.name ?? '').localeCompare(b.name ?? '')) });
+
+    if (state.inventoryState) {
+      const result = updateIngredientTagInState(state.inventoryState, updated);
+      result.affectedIds.forEach(iid => dirtyIngredientIds.current.add(iid));
+      dispatch({ type: 'SET_INVENTORY_STATE', payload: result.nextState });
     }
     return updated;
-  }, []);
+  }, [state.customIngredientTags, state.inventoryState]);
 
   const deleteCustomIngredientTag = useCallback((id: number) => {
-    let didRemove = false;
-    setCustomIngredientTags((prev) => {
-      const next = prev.filter((tag) => Number(tag.id ?? -1) !== Math.trunc(id));
-      didRemove = next.length !== prev.length;
-      return next;
-    });
-    if (didRemove) {
-      setInventoryState((prev) => {
-        if (!prev) return prev;
-        const result = deleteIngredientTagFromState(prev, id);
-        result.affectedIds.forEach(iid => dirtyIngredientIds.current.add(iid));
-        return result.nextState;
-      });
+    const nextTags = state.customIngredientTags.filter((tag) => Number(tag.id ?? -1) !== Math.trunc(id));
+    if (nextTags.length === state.customIngredientTags.length) return false;
+
+    dispatch({ type: 'SET_CUSTOM_INGREDIENT_TAGS', payload: nextTags });
+    if (state.inventoryState) {
+      const result = deleteIngredientTagFromState(state.inventoryState, id);
+      result.affectedIds.forEach(iid => dirtyIngredientIds.current.add(iid));
+      dispatch({ type: 'SET_INVENTORY_STATE', payload: result.nextState });
     }
-    return didRemove;
-  }, []);
+    return true;
+  }, [state.customIngredientTags, state.inventoryState]);
 
   const clearBaseIngredient = useCallback((id: number) => {
-    setInventoryState((prev) => {
-      if (!prev) return prev;
-      const nextState = clearBaseIngredientAction(prev, id);
-      if (nextState !== prev) {
-        dirtyIngredientIds.current.add(id);
-      }
-      return nextState;
-    });
-  }, []);
+    if (!state.inventoryState) return;
+    const nextState = clearBaseIngredientAction(state.inventoryState, id);
+    if (nextState !== state.inventoryState) {
+      dirtyIngredientIds.current.add(id);
+      dispatch({ type: 'SET_INVENTORY_STATE', payload: nextState });
+    }
+  }, [state.inventoryState]);
 
   const dataValue = useMemo<InventoryDataContextValue>(() => ({
-    cocktails: inventoryState?.cocktails ?? [],
-    ingredients: inventoryState?.ingredients ?? [],
-    customCocktailTags,
-    customIngredientTags,
-    availableIngredientIds,
-    shoppingIngredientIds,
-    cocktailRatings,
-    ignoreGarnish,
-    allowAllSubstitutes,
-    useImperialUnits,
-    ratingFilterThreshold,
+    cocktails: state.inventoryState?.cocktails ?? [],
+    ingredients: state.inventoryState?.ingredients ?? [],
+    customCocktailTags: state.customCocktailTags,
+    customIngredientTags: state.customIngredientTags,
+    availableIngredientIds: state.availableIngredientIds,
+    shoppingIngredientIds: state.shoppingIngredientIds,
+    cocktailRatings: state.cocktailRatings,
+    ignoreGarnish: state.ignoreGarnish,
+    allowAllSubstitutes: state.allowAllSubstitutes,
+    useImperialUnits: state.useImperialUnits,
+    ratingFilterThreshold: state.ratingFilterThreshold,
     getCocktailRating,
-    loading,
-  }), [inventoryState, customCocktailTags, customIngredientTags, availableIngredientIds, shoppingIngredientIds, cocktailRatings, ignoreGarnish, allowAllSubstitutes, useImperialUnits, ratingFilterThreshold, getCocktailRating, loading]);
+    loading: state.loading,
+  }), [
+    state.inventoryState,
+    state.customCocktailTags,
+    state.customIngredientTags,
+    state.availableIngredientIds,
+    state.shoppingIngredientIds,
+    state.cocktailRatings,
+    state.ignoreGarnish,
+    state.allowAllSubstitutes,
+    state.useImperialUnits,
+    state.ratingFilterThreshold,
+    getCocktailRating,
+    state.loading
+  ]);
 
   const settingsValue = useMemo<InventorySettingsContextValue>(() => ({
-    keepScreenAwake,
-    startScreen,
-    appTheme,
-    onboardingStep,
-    onboardingCompleted,
-  }), [keepScreenAwake, startScreen, appTheme, onboardingStep, onboardingCompleted]);
+    keepScreenAwake: state.keepScreenAwake,
+    startScreen: state.startScreen,
+    appTheme: state.appTheme,
+    onboardingStep: state.onboardingStep,
+    onboardingCompleted: state.onboardingCompleted,
+  }), [
+    state.keepScreenAwake,
+    state.startScreen,
+    state.appTheme,
+    state.onboardingStep,
+    state.onboardingCompleted
+  ]);
 
   const actionsValue = useMemo<InventoryActionsContextValue>(() => ({
     setIngredientAvailability, toggleIngredientAvailability, toggleIngredientShopping, clearBaseIngredient,
@@ -682,8 +691,12 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     setCocktailRating, setIgnoreGarnish: handleSetIgnoreGarnish, setAllowAllSubstitutes: handleSetAllowAllSubstitutes,
     setUseImperialUnits: handleSetUseImperialUnits, setKeepScreenAwake: handleSetKeepScreenAwake,
     setRatingFilterThreshold: handleSetRatingFilterThreshold, setStartScreen: handleSetStartScreen,
-    setAppTheme: handleSetAppTheme, setOnboardingStep, completeOnboarding, restartOnboarding,
-  }), [setIngredientAvailability, toggleIngredientAvailability, toggleIngredientShopping, clearBaseIngredient, createCocktail, createIngredient, resetInventoryFromBundle, exportInventoryData, exportInventoryPhotoEntries, importInventoryData, updateCocktail, updateIngredient, deleteCocktail, deleteIngredient, createCustomCocktailTag, updateCustomCocktailTag, deleteCustomCocktailTag, createCustomIngredientTag, updateCustomIngredientTag, deleteCustomIngredientTag, setCocktailRating, handleSetIgnoreGarnish, handleSetAllowAllSubstitutes, handleSetUseImperialUnits, handleSetKeepScreenAwake, handleSetRatingFilterThreshold, handleSetStartScreen, handleSetAppTheme, setOnboardingStep, completeOnboarding, restartOnboarding]);
+    setAppTheme: handleSetAppTheme,
+    setOnboardingStep: (step: number) => dispatch({ type: 'SET_ONBOARDING_STEP', payload: step }),
+    completeOnboarding, restartOnboarding,
+  }), [
+    setIngredientAvailability, toggleIngredientAvailability, toggleIngredientShopping, clearBaseIngredient, createCocktail, createIngredient, resetInventoryFromBundle, exportInventoryData, exportInventoryPhotoEntries, importInventoryData, updateCocktail, updateIngredient, deleteCocktail, deleteIngredient, createCustomCocktailTag, updateCustomCocktailTag, deleteCustomCocktailTag, createCustomIngredientTag, updateCustomIngredientTag, deleteCustomIngredientTag, setCocktailRating, handleSetIgnoreGarnish, handleSetAllowAllSubstitutes, handleSetUseImperialUnits, handleSetKeepScreenAwake, handleSetRatingFilterThreshold, handleSetStartScreen, handleSetAppTheme, completeOnboarding, restartOnboarding
+  ]);
 
   return (
     <InventoryDataContext.Provider value={dataValue}>
