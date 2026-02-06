@@ -1,9 +1,19 @@
 import appJson from "./app.json";
 
+const isDevelopmentProfile = process.env.EAS_BUILD_PROFILE === "development";
+
+const plugins = [...(appJson.expo.plugins ?? [])];
+
+if (isDevelopmentProfile) {
+  plugins.push("expo-dev-client");
+}
+
+plugins.push("@sentry/react-native");
+
 export default {
   ...appJson.expo,
 
-  plugins: [...(appJson.expo.plugins ?? []), "@sentry/react-native"],
+  plugins,
 
   extra: {
     ...appJson.expo.extra,
