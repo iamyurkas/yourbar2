@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
-import { StackActions, useNavigation } from '@react-navigation/native';
+import { StackActions, TabActions, useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -175,6 +175,36 @@ export default function IngredientFormScreen() {
   const lastModeRef = useRef<boolean | undefined>(undefined);
   const scrollRef = useRef<ScrollView | null>(null);
   const isHandlingBackRef = useRef(false);
+
+  const runAfterExit = useCallback((onLeave: () => void) => {
+    isHandlingBackRef.current = true;
+    onLeave();
+    setTimeout(() => {
+      isHandlingBackRef.current = false;
+    }, 0);
+  }, []);
+
+  const shouldBlockExit = useCallback(() => {
+    if (isNavigatingAfterSaveRef.current || isHandlingBackRef.current) {
+      return false;
+    }
+
+    return hasUnsavedChanges || shouldConfirmOnLeave;
+  }, [hasUnsavedChanges, shouldConfirmOnLeave]);
+
+  const requestExit = useCallback(
+    (onLeave: () => void) => {
+      if (!shouldBlockExit()) {
+        runAfterExit(onLeave);
+        return;
+      }
+
+      confirmLeave(() => {
+        runAfterExit(onLeave);
+      });
+    },
+    [confirmLeave, runAfterExit, shouldBlockExit],
+  );
 
   useEffect(() => {
     isNavigatingAfterSaveRef.current = false;
@@ -593,60 +623,60 @@ export default function IngredientFormScreen() {
         return;
       }
 
-      if (hasUnsavedChanges || shouldConfirmOnLeave) {
-        event.preventDefault();
-        confirmLeave(() => {
-          isHandlingBackRef.current = true;
-          if (event.data.action.type === 'GO_BACK') {
-            returnToSourceOrBack(navigation, { returnToPath, returnToParams });
-          } else {
-            navigation.dispatch(event.data.action);
-          }
-          setTimeout(() => {
-            isHandlingBackRef.current = false;
-          }, 0);
-        });
-        return;
-      }
+      event.preventDefault();
+      requestExit(() => {
+        if (event.data.action.type === 'GO_BACK') {
+          returnToSourceOrBack(navigation, { returnToPath, returnToParams });
+          return;
+        }
 
-      if (event.data.action.type === 'GO_BACK') {
-        event.preventDefault();
-        isHandlingBackRef.current = true;
-        returnToSourceOrBack(navigation, { returnToPath, returnToParams });
-        setTimeout(() => {
-          isHandlingBackRef.current = false;
-        }, 0);
-      }
+        navigation.dispatch(event.data.action);
+      });
     });
 
     return unsubscribe;
-  }, [confirmLeave, hasUnsavedChanges, navigation, returnToParams, returnToPath, shouldConfirmOnLeave]);
+  }, [navigation, requestExit, returnToParams, returnToPath]);
+
+  useEffect(() => {
+    const unsubscribers: (() => void)[] = [];
+    let parent = navigation.getParent();
+
+    while (parent) {
+      const currentParent = parent;
+      unsubscribers.push(
+        currentParent.addListener('tabPress', (event) => {
+          if (!navigation.isFocused()) {
+            return;
+          }
+
+          event.preventDefault();
+          const target = event.target;
+          if (!target) {
+            return;
+          }
+
+          requestExit(() => {
+            const targetRoute = currentParent.getState().routes.find((route) => route.key === target);
+            if (!targetRoute) {
+              return;
+            }
+            currentParent.dispatch(TabActions.jumpTo(targetRoute.name));
+          });
+        }),
+      );
+      parent = currentParent.getParent();
+    }
+
+    return () => {
+      unsubscribers.forEach((unsubscribe) => unsubscribe());
+    };
+  }, [navigation, requestExit]);
 
   const handleGoBack = useCallback(() => {
-    if (isNavigatingAfterSaveRef.current || isHandlingBackRef.current) {
-      return;
-    }
-
-    if (hasUnsavedChanges || shouldConfirmOnLeave) {
-      confirmLeave(() => {
-        isHandlingBackRef.current = true;
-        returnToSourceOrBack(navigation, { returnToPath, returnToParams });
-        setTimeout(() => {
-          isHandlingBackRef.current = false;
-        }, 0);
-      });
-      return;
-    }
-
-    returnToSourceOrBack(navigation, { returnToPath, returnToParams });
-  }, [
-    confirmLeave,
-    hasUnsavedChanges,
-    navigation,
-    returnToParams,
-    returnToPath,
-    shouldConfirmOnLeave,
-  ]);
+    requestExit(() => {
+      returnToSourceOrBack(navigation, { returnToPath, returnToParams });
+    });
+  }, [navigation, requestExit, returnToParams, returnToPath]);
 
   const handleDeletePress = useCallback(() => {
     if (!isEditMode) {
