@@ -4,6 +4,51 @@ import { router } from 'expo-router';
 type RouteParams = Record<string, unknown> | undefined;
 type ReturnToParams = Record<string, string> | undefined;
 
+type EntitySnapshot = {
+  cocktailIds: Set<number>;
+  ingredientIds: Set<number>;
+};
+
+const getRouteParamValue = (params: RouteParams, key: string): string | undefined => {
+  const value = params?.[key];
+  if (typeof value === 'string' && value.length > 0) {
+    return value;
+  }
+
+  if (Array.isArray(value) && typeof value[0] === 'string' && value[0].length > 0) {
+    return value[0];
+  }
+
+  return undefined;
+};
+
+const isDeletedEntityRoute = (
+  route: { name: string; params?: RouteParams },
+  entitySnapshot: EntitySnapshot,
+): boolean => {
+  const routeName = route.name.toLowerCase();
+  const mode = getRouteParamValue(route.params, 'mode');
+
+  const cocktailId = Number(getRouteParamValue(route.params, 'cocktailId'));
+  const ingredientId = Number(getRouteParamValue(route.params, 'ingredientId'));
+
+  const isCocktailDetails = routeName.includes('[cocktailid]') && Number.isFinite(cocktailId);
+  const isCocktailEdit = routeName.includes('/create') && mode === 'edit' && Number.isFinite(cocktailId);
+
+  if ((isCocktailDetails || isCocktailEdit) && !entitySnapshot.cocktailIds.has(cocktailId)) {
+    return true;
+  }
+
+  const isIngredientDetails = routeName.includes('[ingredientid]') && Number.isFinite(ingredientId);
+  const isIngredientEdit = routeName.includes('/create') && mode === 'edit' && Number.isFinite(ingredientId);
+
+  if ((isIngredientDetails || isIngredientEdit) && !entitySnapshot.ingredientIds.has(ingredientId)) {
+    return true;
+  }
+
+  return false;
+};
+
 const areParamsEqual = (left?: RouteParams, right?: RouteParams): boolean => {
   if (!left && !right) {
     return true;
@@ -135,4 +180,29 @@ export const returnToSourceOrBack = (
   }
 
   skipDuplicateBack(navigation);
+};
+
+export const popBackToValidRoute = (
+  navigation: NavigationProp<ParamListBase>,
+  entitySnapshot: EntitySnapshot,
+) => {
+  const state = navigation.getState();
+  const currentIndex = state.index ?? 0;
+
+  if (currentIndex <= 0) {
+    navigation.goBack();
+    return;
+  }
+
+  let stepsToPop = 1;
+  while (currentIndex - stepsToPop >= 0) {
+    const previousRoute = state.routes[currentIndex - stepsToPop];
+    if (!isDeletedEntityRoute(previousRoute, entitySnapshot)) {
+      navigation.dispatch(StackActions.pop(stepsToPop));
+      return;
+    }
+    stepsToPop += 1;
+  }
+
+  navigation.dispatch(StackActions.pop(currentIndex));
 };

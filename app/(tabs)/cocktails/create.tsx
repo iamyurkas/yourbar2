@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
-import { StackActions, useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { Image } from "expo-image";
 import * as ImagePicker from "expo-image-picker";
 import { Stack, router, useLocalSearchParams } from "expo-router";
@@ -49,6 +49,7 @@ import { useAppColors } from "@/constants/theme";
 import {
   buildReturnToParams,
   parseReturnToParams,
+  popBackToValidRoute,
   returnToSourceOrBack,
 } from "@/libs/navigation";
 import { shouldStorePhoto, storePhoto } from "@/libs/photo-storage";
@@ -237,6 +238,14 @@ export default function CreateCocktailScreen() {
     useInventoryActions();
   const params = useLocalSearchParams();
   const { setHasUnsavedChanges, setSaveHandler } = useUnsavedChanges();
+
+  const entitySnapshot = useMemo(
+    () => ({
+      cocktailIds: new Set(cocktails.map((item) => Number(item.id ?? -1)).filter((id) => id >= 0)),
+      ingredientIds: new Set(inventoryIngredients.map((item) => Number(item.id ?? -1)).filter((id) => id >= 0)),
+    }),
+    [cocktails, inventoryIngredients],
+  );
 
   const modeParam = getParamValue(params.mode);
   const isEditMode = modeParam === "edit";
@@ -1250,21 +1259,7 @@ export default function CreateCocktailScreen() {
             }
 
             setHasUnsavedChanges(false);
-            const state = navigation.getState();
-            const currentIndex = state.index ?? 0;
-            if (currentIndex >= 2) {
-              navigation.dispatch(StackActions.pop(2));
-              return;
-            }
-            if (returnToPath) {
-              router.navigate({ pathname: returnToPath, params: returnToParams });
-              return;
-            }
-            if (navigation.canGoBack()) {
-              navigation.goBack();
-              return;
-            }
-            router.replace("/cocktails");
+            popBackToValidRoute(navigation, entitySnapshot);
           },
         },
       ],
@@ -1275,8 +1270,7 @@ export default function CreateCocktailScreen() {
     navigation,
     prefilledCocktail?.id,
     prefilledCocktail?.name,
-    returnToParams,
-    returnToPath,
+    entitySnapshot,
     setHasUnsavedChanges,
     showDialog,
   ]);

@@ -37,8 +37,7 @@ import {
   buildReturnToParams,
   navigateToDetailsWithReturnTo,
   parseReturnToParams,
-  returnToSourceOrBack,
-  skipDuplicateBack,
+  popBackToValidRoute,
 } from "@/libs/navigation";
 import { normalizeSearchText } from "@/libs/search-normalization";
 import {
@@ -519,14 +518,17 @@ export default function IngredientDetailsScreen() {
     );
   }, [cocktailEntries.length]);
 
-  const handleReturn = useCallback(() => {
-    if (returnToPath === "/ingredients") {
-      skipDuplicateBack(navigation);
-      return;
-    }
+  const entitySnapshot = useMemo(
+    () => ({
+      cocktailIds: new Set(cocktails.map((item) => Number(item.id ?? -1)).filter((id) => id >= 0)),
+      ingredientIds: new Set(ingredients.map((item) => Number(item.id ?? -1)).filter((id) => id >= 0)),
+    }),
+    [cocktails, ingredients],
+  );
 
-    returnToSourceOrBack(navigation, { returnToPath, returnToParams });
-  }, [navigation, returnToParams, returnToPath]);
+  const handleReturn = useCallback(() => {
+    popBackToValidRoute(navigation, entitySnapshot);
+  }, [entitySnapshot, navigation]);
 
   useEffect(() => {
     if (!shouldNavigateAway || isHandlingBackRef.current) {

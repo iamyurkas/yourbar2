@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
-import { StackActions, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -27,7 +27,7 @@ import { TagPill } from '@/components/TagPill';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { useAppColors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
-import { buildReturnToParams, returnToSourceOrBack, skipDuplicateBack } from '@/libs/navigation';
+import { buildReturnToParams, popBackToValidRoute, returnToSourceOrBack, skipDuplicateBack } from '@/libs/navigation';
 import { shouldStorePhoto, storePhoto } from '@/libs/photo-storage';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import {
@@ -685,21 +685,10 @@ export default function IngredientFormScreen() {
             }
 
             setHasUnsavedChanges(false);
-            const state = navigation.getState();
-            const currentIndex = state.index ?? 0;
-            if (currentIndex >= 2) {
-              navigation.dispatch(StackActions.pop(2));
-              return;
-            }
-            if (returnToPath) {
-              router.navigate({ pathname: returnToPath, params: returnToParams });
-              return;
-            }
-            if (navigation.canGoBack()) {
-              navigation.goBack();
-              return;
-            }
-            router.replace('/ingredients');
+            popBackToValidRoute(navigation, {
+              cocktailIds: new Set(cocktails.map((item) => Number(item.id ?? -1)).filter((id) => id >= 0)),
+              ingredientIds: new Set(ingredients.map((item) => Number(item.id ?? -1)).filter((id) => id >= 0)),
+            });
           },
         },
       ],
@@ -710,8 +699,7 @@ export default function IngredientFormScreen() {
     isEditMode,
     navigation,
     numericIngredientId,
-    returnToParams,
-    returnToPath,
+    ingredients,
     setHasUnsavedChanges,
     showDialog,
   ]);
