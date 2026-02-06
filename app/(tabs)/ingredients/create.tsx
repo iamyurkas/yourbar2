@@ -261,8 +261,8 @@ export default function IngredientFormScreen() {
   }, [buildSnapshot, initialSnapshot]);
 
   useEffect(() => {
-    setHasUnsavedChanges(hasUnsavedChanges);
-  }, [hasUnsavedChanges, setHasUnsavedChanges]);
+    setHasUnsavedChanges(hasUnsavedChanges || shouldConfirmOnLeave);
+  }, [hasUnsavedChanges, setHasUnsavedChanges, shouldConfirmOnLeave]);
 
   useEffect(() => () => setHasUnsavedChanges(false), [setHasUnsavedChanges]);
 
