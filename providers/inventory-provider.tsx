@@ -1233,10 +1233,60 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
 
   const importInventoryData = useCallback((data: InventoryExportData) => {
     const hydrated = hydrateInventoryTagsFromCode(data);
-    setInventoryState(createInventoryStateFromData(hydrated, true));
-    setAvailableIngredientIds(new Set());
-    setShoppingIngredientIds(new Set());
-    setCocktailRatings({});
+    const incomingState = createInventoryStateFromData(hydrated, true);
+
+    const mergeById = <TItem extends { id?: number | null; searchNameNormalized: string }>(
+      currentItems: readonly TItem[],
+      incomingItems: readonly TItem[],
+    ): TItem[] => {
+      const incomingMap = new Map<number, TItem>();
+      incomingItems.forEach((item) => {
+        const id = Number(item.id ?? -1);
+        if (!Number.isFinite(id) || id < 0) {
+          return;
+        }
+        incomingMap.set(Math.trunc(id), item);
+      });
+
+      const merged: TItem[] = [];
+      const seen = new Set<number>();
+
+      currentItems.forEach((item) => {
+        const id = Number(item.id ?? -1);
+        if (!Number.isFinite(id) || id < 0) {
+          merged.push(item);
+          return;
+        }
+
+        const normalizedId = Math.trunc(id);
+        const replacement = incomingMap.get(normalizedId);
+        merged.push(replacement ?? item);
+        seen.add(normalizedId);
+      });
+
+      incomingMap.forEach((item, id) => {
+        if (seen.has(id)) {
+          return;
+        }
+        merged.push(item);
+      });
+
+      merged.sort((a, b) => a.searchNameNormalized.localeCompare(b.searchNameNormalized));
+      return merged;
+    };
+
+    setInventoryState((prev) => {
+      if (!prev) {
+        return incomingState;
+      }
+
+      return {
+        ...prev,
+        imported: true,
+        cocktails: mergeById(prev.cocktails, incomingState.cocktails),
+        ingredients: mergeById(prev.ingredients, incomingState.ingredients),
+      } satisfies InventoryState;
+    });
   }, []);
 
   const updateIngredient = useCallback(
