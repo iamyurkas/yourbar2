@@ -233,6 +233,44 @@ function applyDeltaToInventoryData(
   };
 }
 
+function mergeInventoryCollectionById<TRecord extends { id?: number | null }>(
+  baseItems: readonly TRecord[],
+  incomingItems: readonly TRecord[],
+): TRecord[] {
+  const incomingMap = new Map<number, TRecord>();
+  incomingItems.forEach((record) => {
+    const id = Number(record.id ?? -1);
+    if (!Number.isFinite(id) || id < 0) {
+      return;
+    }
+    incomingMap.set(Math.trunc(id), record);
+  });
+
+  const next: TRecord[] = [];
+  const seen = new Set<number>();
+
+  baseItems.forEach((record) => {
+    const id = Number(record.id ?? -1);
+    if (!Number.isFinite(id) || id < 0) {
+      return;
+    }
+    const normalizedId = Math.trunc(id);
+    const replacement = incomingMap.get(normalizedId);
+    next.push(replacement ?? record);
+    seen.add(normalizedId);
+  });
+
+  incomingMap.forEach((record, id) => {
+    if (seen.has(id)) {
+      return;
+    }
+    next.push(record);
+    seen.add(id);
+  });
+
+  return next;
+}
+
 function createInventoryStateFromSnapshot(
   snapshot: InventorySnapshot<CocktailStorageRecord, IngredientStorageRecord>,
   baseData: InventoryData,
@@ -1233,10 +1271,20 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
 
   const importInventoryData = useCallback((data: InventoryExportData) => {
     const hydrated = hydrateInventoryTagsFromCode(data);
-    setInventoryState(createInventoryStateFromData(hydrated, true));
-    setAvailableIngredientIds(new Set());
-    setShoppingIngredientIds(new Set());
-    setCocktailRatings({});
+    setInventoryState((prev) => {
+      if (!prev) {
+        return createInventoryStateFromData(hydrated, true);
+      }
+
+      const mergedCocktails = mergeInventoryCollectionById(prev.cocktails, hydrated.cocktails);
+      const mergedIngredients = mergeInventoryCollectionById(prev.ingredients, hydrated.ingredients);
+
+      return {
+        cocktails: normalizeSearchFields(mergedCocktails) as Cocktail[],
+        ingredients: normalizeSearchFields(mergedIngredients) as Ingredient[],
+        imported: true,
+      } satisfies InventoryState;
+    });
   }, []);
 
   const updateIngredient = useCallback(
