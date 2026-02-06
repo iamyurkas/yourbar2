@@ -195,6 +195,10 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   );
   const lastPersistedSnapshot = useRef<string | undefined>(undefined);
 
+  // Structural optimization: Track precisely which IDs were changed to avoid O(N) delta recalculation
+  const dirtyCocktailIds = useRef<Set<number>>(new Set());
+  const dirtyIngredientIds = useRef<Set<number>>(new Set());
+
   useEffect(() => {
     if (inventoryState) {
       return;
@@ -264,7 +268,16 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     if (!inventoryState) {
       return undefined;
     }
-    return calculateInventoryDelta(inventoryState.cocktails, inventoryState.ingredients);
+    const delta = calculateInventoryDelta(
+      inventoryState.cocktails,
+      inventoryState.ingredients,
+      dirtyCocktailIds.current,
+      dirtyIngredientIds.current
+    );
+    // Clear dirty sets after they've been processed into the delta
+    dirtyCocktailIds.current.clear();
+    dirtyIngredientIds.current.clear();
+    return delta;
   }, [inventoryState]);
 
   useEffect(() => {
@@ -289,7 +302,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     globalThis.__yourbarInventoryOnboardingStep = onboardingStep;
     globalThis.__yourbarInventoryOnboardingCompleted = onboardingCompleted;
 
-    const snapshot = createDeltaSnapshotFromInventory(inventoryState, {
+    const snapshot = createDeltaSnapshotFromInventory(inventoryState, memoizedDelta, {
       availableIngredientIds,
       shoppingIngredientIds,
       cocktailRatings,
@@ -375,6 +388,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       const result = createCocktailAction(prev, input);
       if (!result) return prev;
       created = result.created;
+      if (created.id != null) {
+        dirtyCocktailIds.current.add(Number(created.id));
+      }
       return result.nextState;
     });
     return created;
@@ -387,6 +403,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       const result = createIngredientAction(prev, input);
       if (!result) return prev;
       created = result.created;
+      if (created.id != null) {
+        dirtyIngredientIds.current.add(Number(created.id));
+      }
       return result.nextState;
     });
     if (created?.id != null) {
@@ -422,12 +441,22 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   const exportInventoryPhotoEntries = useCallback(() => inventoryState ? getExportInventoryPhotoEntries(inventoryState) : null, [inventoryState]);
 
   const importInventoryData = useCallback((data: InventoryExportData) => {
-    const incomingState = createInventoryStateFromData(hydrateInventoryTagsFromCode(data), true);
+    const hydrated = hydrateInventoryTagsFromCode(data);
+    const incomingState = createInventoryStateFromData(hydrated, true);
     setInventoryState((prev) => {
+      incomingState.cocktails.forEach(c => { if (c.id != null) dirtyCocktailIds.current.add(Number(c.id)); });
+      incomingState.ingredients.forEach(i => { if (i.id != null) dirtyIngredientIds.current.add(Number(i.id)); });
+
       if (!prev) return incomingState;
       const merge = <T extends { id?: number | null; searchNameNormalized: string }>(curr: readonly T[], inc: readonly T[]) => {
         const incMap = new Map(inc.map(i => [Math.trunc(Number(i.id ?? -1)), i]));
-        const merged = curr.map(i => incMap.get(Math.trunc(Number(i.id ?? -1))) ?? i);
+        const merged = curr.map(i => {
+          const id = Math.trunc(Number(i.id ?? -1));
+          if (incMap.has(id)) {
+            return incMap.get(id)!;
+          }
+          return i;
+        });
         const seen = new Set(curr.map(i => Math.trunc(Number(i.id ?? -1))));
         inc.forEach(i => { if (!seen.has(Math.trunc(Number(i.id ?? -1)))) merged.push(i); });
         return merged.sort((a, b) => a.searchNameNormalized.localeCompare(b.searchNameNormalized));
@@ -443,6 +472,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       const result = updateIngredientAction(prev, id, input);
       if (!result) return prev;
       updated = result.updated;
+      dirtyIngredientIds.current.add(Number(id));
       return result.nextState;
     });
     return updated;
@@ -455,6 +485,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       const result = updateCocktailAction(prev, id, input);
       if (!result) return prev;
       updated = result.updated;
+      dirtyCocktailIds.current.add(Number(id));
       return result.nextState;
     });
     return updated;
@@ -467,6 +498,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       if (!prev) return prev;
       const result = deleteIngredientAction(prev, id);
       wasRemoved = result.wasRemoved;
+      if (wasRemoved) {
+        dirtyIngredientIds.current.add(normalizedId);
+      }
       return result.nextState;
     });
     if (wasRemoved) {
@@ -478,11 +512,13 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
 
   const deleteCocktail = useCallback((id: number) => {
     let deleted: Cocktail | undefined;
+    const normalizedId = Number(id);
     setInventoryState((prev) => {
       if (!prev) return prev;
       const result = deleteCocktailAction(prev, id);
       if (!result) return prev;
       deleted = result.deleted;
+      dirtyCocktailIds.current.add(normalizedId);
       return result.nextState;
     });
     if (deleted) {
@@ -526,7 +562,14 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       updated = { id: prev[idx].id, name: input.name.trim(), color: input.color?.trim() || DEFAULT_TAG_COLOR };
       const next = [...prev]; next[idx] = updated; return next.sort((a, b) => (a.name ?? '').localeCompare(b.name ?? ''));
     });
-    if (updated) setInventoryState((prev) => prev ? updateCocktailTagInState(prev, updated!) : prev);
+    if (updated) {
+      setInventoryState((prev) => {
+        if (!prev) return prev;
+        const result = updateCocktailTagInState(prev, updated!);
+        result.affectedIds.forEach(cid => dirtyCocktailIds.current.add(cid));
+        return result.nextState;
+      });
+    }
     return updated;
   }, []);
 
@@ -537,7 +580,14 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       didRemove = next.length !== prev.length;
       return next;
     });
-    if (didRemove) setInventoryState((prev) => prev ? deleteCocktailTagFromState(prev, id) : prev);
+    if (didRemove) {
+      setInventoryState((prev) => {
+        if (!prev) return prev;
+        const result = deleteCocktailTagFromState(prev, id);
+        result.affectedIds.forEach(cid => dirtyCocktailIds.current.add(cid));
+        return result.nextState;
+      });
+    }
     return didRemove;
   }, []);
 
@@ -559,7 +609,14 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       updated = { id: prev[idx].id, name: input.name.trim(), color: input.color?.trim() || DEFAULT_TAG_COLOR };
       const next = [...prev]; next[idx] = updated; return next.sort((a, b) => (a.name ?? '').localeCompare(b.name ?? ''));
     });
-    if (updated) setInventoryState((prev) => prev ? updateIngredientTagInState(prev, updated!) : prev);
+    if (updated) {
+      setInventoryState((prev) => {
+        if (!prev) return prev;
+        const result = updateIngredientTagInState(prev, updated!);
+        result.affectedIds.forEach(iid => dirtyIngredientIds.current.add(iid));
+        return result.nextState;
+      });
+    }
     return updated;
   }, []);
 
@@ -570,11 +627,27 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       didRemove = next.length !== prev.length;
       return next;
     });
-    if (didRemove) setInventoryState((prev) => prev ? deleteIngredientTagFromState(prev, id) : prev);
+    if (didRemove) {
+      setInventoryState((prev) => {
+        if (!prev) return prev;
+        const result = deleteIngredientTagFromState(prev, id);
+        result.affectedIds.forEach(iid => dirtyIngredientIds.current.add(iid));
+        return result.nextState;
+      });
+    }
     return didRemove;
   }, []);
 
-  const clearBaseIngredient = useCallback((id: number) => setInventoryState((prev) => prev ? clearBaseIngredientAction(prev, id) : prev), []);
+  const clearBaseIngredient = useCallback((id: number) => {
+    setInventoryState((prev) => {
+      if (!prev) return prev;
+      const nextState = clearBaseIngredientAction(prev, id);
+      if (nextState !== prev) {
+        dirtyIngredientIds.current.add(id);
+      }
+      return nextState;
+    });
+  }, []);
 
   const dataValue = useMemo<InventoryDataContextValue>(() => ({
     cocktails: inventoryState?.cocktails ?? [],

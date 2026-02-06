@@ -23,7 +23,8 @@ export function getNextCustomTagId(tags: readonly { id?: number | null }[], mini
   return maxId + 1;
 }
 
-export function updateCocktailTagInState(state: InventoryState, updated: CocktailTag): InventoryState {
+export function updateCocktailTagInState(state: InventoryState, updated: CocktailTag): { nextState: InventoryState; affectedIds: number[] } {
+  const affectedIds: number[] = [];
   let didChange = false;
   const nextCocktails = state.cocktails.map((cocktail) => {
     if (!cocktail.tags?.length) {
@@ -44,13 +45,18 @@ export function updateCocktailTagInState(state: InventoryState, updated: Cocktai
     }
 
     didChange = true;
+    if (cocktail.id != null) affectedIds.push(Number(cocktail.id));
     return { ...cocktail, tags: nextTags } as Cocktail;
   });
 
-  return didChange ? { ...state, cocktails: nextCocktails } : state;
+  return {
+    nextState: didChange ? { ...state, cocktails: nextCocktails } : state,
+    affectedIds
+  };
 }
 
-export function deleteCocktailTagFromState(state: InventoryState, tagId: number): InventoryState {
+export function deleteCocktailTagFromState(state: InventoryState, tagId: number): { nextState: InventoryState; affectedIds: number[] } {
+  const affectedIds: number[] = [];
   let didChange = false;
   const nextCocktails = state.cocktails.map((cocktail) => {
     if (!cocktail.tags?.length) {
@@ -60,15 +66,20 @@ export function deleteCocktailTagFromState(state: InventoryState, tagId: number)
     const nextTags = cocktail.tags.filter((tag) => Number(tag.id ?? -1) !== Math.trunc(tagId));
     if (nextTags.length !== cocktail.tags.length) {
       didChange = true;
+      if (cocktail.id != null) affectedIds.push(Number(cocktail.id));
       return { ...cocktail, tags: nextTags.length ? nextTags : undefined } as Cocktail;
     }
     return cocktail;
   });
 
-  return didChange ? { ...state, cocktails: nextCocktails } : state;
+  return {
+    nextState: didChange ? { ...state, cocktails: nextCocktails } : state,
+    affectedIds
+  };
 }
 
-export function updateIngredientTagInState(state: InventoryState, updated: IngredientTag): InventoryState {
+export function updateIngredientTagInState(state: InventoryState, updated: IngredientTag): { nextState: InventoryState; affectedIds: number[] } {
+  const affectedIds: number[] = [];
   let didChange = false;
   const nextIngredients = state.ingredients.map((ingredient) => {
     if (!ingredient.tags?.length) {
@@ -89,13 +100,18 @@ export function updateIngredientTagInState(state: InventoryState, updated: Ingre
     }
 
     didChange = true;
+    if (ingredient.id != null) affectedIds.push(Number(ingredient.id));
     return { ...ingredient, tags: nextTags } as Ingredient;
   });
 
-  return didChange ? { ...state, ingredients: nextIngredients } : state;
+  return {
+    nextState: didChange ? { ...state, ingredients: nextIngredients } : state,
+    affectedIds
+  };
 }
 
-export function deleteIngredientTagFromState(state: InventoryState, tagId: number): InventoryState {
+export function deleteIngredientTagFromState(state: InventoryState, tagId: number): { nextState: InventoryState; affectedIds: number[] } {
+  const affectedIds: number[] = [];
   let didChange = false;
   const nextIngredients = state.ingredients.map((ingredient) => {
     if (!ingredient.tags?.length) {
@@ -105,10 +121,14 @@ export function deleteIngredientTagFromState(state: InventoryState, tagId: numbe
     const nextTags = ingredient.tags.filter((tag) => Number(tag.id ?? -1) !== Math.trunc(tagId));
     if (nextTags.length !== ingredient.tags.length) {
       didChange = true;
+      if (ingredient.id != null) affectedIds.push(Number(ingredient.id));
       return { ...ingredient, tags: nextTags.length ? nextTags : undefined } as Ingredient;
     }
     return ingredient;
   });
 
-  return didChange ? { ...state, ingredients: nextIngredients } : state;
+  return {
+    nextState: didChange ? { ...state, ingredients: nextIngredients } : state,
+    affectedIds
+  };
 }
