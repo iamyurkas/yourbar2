@@ -53,7 +53,7 @@ const TAB_OPTIONS: SegmentTabOption[] = [
 type IngredientListItemProps = {
   ingredient: Ingredient;
   highlightColor: string;
-  availableIngredientIds: Set<number>;
+  isAvailable: boolean;
   onToggleAvailability: (id: number) => void;
   subtitle?: string;
   surfaceVariantColor?: string;
@@ -68,7 +68,7 @@ const areIngredientPropsEqual = (
 ) =>
   prev.ingredient === next.ingredient &&
   prev.highlightColor === next.highlightColor &&
-  prev.availableIngredientIds === next.availableIngredientIds &&
+  prev.isAvailable === next.isAvailable &&
   prev.onToggleAvailability === next.onToggleAvailability &&
   prev.subtitle === next.subtitle &&
   prev.surfaceVariantColor === next.surfaceVariantColor &&
@@ -79,7 +79,7 @@ const areIngredientPropsEqual = (
 const IngredientListItem = memo(function IngredientListItemComponent({
   ingredient,
   highlightColor,
-  availableIngredientIds,
+  isAvailable,
   onToggleAvailability,
   subtitle,
   surfaceVariantColor,
@@ -89,7 +89,6 @@ const IngredientListItem = memo(function IngredientListItemComponent({
 }: IngredientListItemProps) {
   const Colors = useAppColors();
   const ingredientId = Number(ingredient.id ?? -1);
-  const isAvailable = ingredientId >= 0 && availableIngredientIds.has(ingredientId);
   const ingredientTagColors = (ingredient.tags ?? [])
     .map((tag) => tag?.color ?? tagColors.yellow)
     .filter(Boolean);
@@ -391,35 +390,11 @@ export default function IngredientsScreen() {
     return undefined;
   }, []);
 
-  const visibleCocktailsByIngredientId = useMemo(() => {
-    const map = new Map<number, Set<string>>();
-
-    cocktails.forEach((cocktail) => {
-      const cocktailKey = resolveCocktailKey(cocktail);
-      if (!cocktailKey) {
-        return;
-      }
-
-      const visibleIds = getVisibleIngredientIdsForCocktail(cocktail, ingredientLookup, {
-        allowAllSubstitutes,
-      });
-
-      visibleIds.forEach((ingredientId) => {
-        let set = map.get(ingredientId);
-        if (!set) {
-          set = new Set<string>();
-          map.set(ingredientId, set);
-        }
-
-        set.add(cocktailKey);
-      });
-    });
-
-    return map;
-  }, [allowAllSubstitutes, cocktails, ingredientLookup, resolveCocktailKey]);
-
-  const makeableCocktailKeys = useMemo(() => {
-    const keys = new Set<string>();
+  const derivedCocktailData = useMemo(() => {
+    const visibleCocktailsMap = new Map<number, Set<string>>();
+    const makeableKeys = new Set<string>();
+    const totalCounts = new Map<number, number>();
+    const makeableCounts = new Map<number, number>();
 
     cocktails.forEach((cocktail) => {
       const key = resolveCocktailKey(cocktail);
@@ -427,15 +402,44 @@ export default function IngredientsScreen() {
         return;
       }
 
-      if (isCocktailReady(cocktail, availableIngredientIds, ingredientLookup, ingredients, {
+      const isReady = isCocktailReady(cocktail, availableIngredientIds, ingredientLookup, ingredients, {
         ignoreGarnish,
         allowAllSubstitutes,
-      })) {
-        keys.add(key);
+      });
+
+      if (isReady) {
+        makeableKeys.add(key);
       }
+
+      const visibleIds = getVisibleIngredientIdsForCocktail(cocktail, ingredientLookup, {
+        allowAllSubstitutes,
+      });
+
+      visibleIds.forEach((ingredientId) => {
+        let set = visibleCocktailsMap.get(ingredientId);
+        if (!set) {
+          set = new Set<string>();
+          visibleCocktailsMap.set(ingredientId, set);
+        }
+        set.add(key);
+      });
     });
 
-    return keys;
+    visibleCocktailsMap.forEach((cocktailKeys, ingredientId) => {
+      totalCounts.set(ingredientId, cocktailKeys.size);
+      let makeableCount = 0;
+      cocktailKeys.forEach((key) => {
+        if (makeableKeys.has(key)) {
+          makeableCount += 1;
+        }
+      });
+      makeableCounts.set(ingredientId, makeableCount);
+    });
+
+    return {
+      totalCocktailCounts: totalCounts,
+      makeableCocktailCounts: makeableCounts,
+    };
   }, [
     allowAllSubstitutes,
     availableIngredientIds,
@@ -446,27 +450,7 @@ export default function IngredientsScreen() {
     resolveCocktailKey,
   ]);
 
-  const totalCocktailCounts = useMemo(() => {
-    const counts = new Map<number, number>();
-    visibleCocktailsByIngredientId.forEach((cocktailKeys, ingredientId) => {
-      counts.set(ingredientId, cocktailKeys.size);
-    });
-    return counts;
-  }, [visibleCocktailsByIngredientId]);
-
-  const makeableCocktailCounts = useMemo(() => {
-    const counts = new Map<number, number>();
-    visibleCocktailsByIngredientId.forEach((cocktailKeys, ingredientId) => {
-      let count = 0;
-      cocktailKeys.forEach((key) => {
-        if (makeableCocktailKeys.has(key)) {
-          count += 1;
-        }
-      });
-      counts.set(ingredientId, count);
-    });
-    return counts;
-  }, [makeableCocktailKeys, visibleCocktailsByIngredientId]);
+  const { totalCocktailCounts, makeableCocktailCounts } = derivedCocktailData;
 
   const sections = useMemo<Record<IngredientTabKey, IngredientSection>>(() => {
     const inStock = ingredients.filter((ingredient) => {
@@ -665,7 +649,7 @@ export default function IngredientsScreen() {
         <IngredientListItem
           ingredient={item}
           highlightColor={highlightColor}
-          availableIngredientIds={effectiveAvailableIngredientIds}
+          isAvailable={ingredientId >= 0 && effectiveAvailableIngredientIds.has(ingredientId)}
           onToggleAvailability={handleToggle}
           subtitle={subtitleText}
           surfaceVariantColor={Colors.onSurfaceVariant ?? Colors.icon}
