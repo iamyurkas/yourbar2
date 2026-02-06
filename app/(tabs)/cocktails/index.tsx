@@ -382,9 +382,14 @@ export default function CocktailsScreen() {
     );
   }, [filteredByTags, normalizedQuery]);
 
+  const sortedCocktails = useMemo(
+    () => [...filteredCocktails].sort((a, b) => (a.name ?? '').localeCompare(b.name ?? '')),
+    [filteredCocktails],
+  );
+
   const sortedFavorites = useMemo(() => {
     if (activeTab !== 'favorites') {
-      return filteredCocktails;
+      return sortedCocktails;
     }
 
     return [...filteredCocktails].sort((a, b) => {
@@ -397,7 +402,7 @@ export default function CocktailsScreen() {
 
       return (a.name ?? '').localeCompare(b.name ?? '');
     });
-  }, [activeTab, filteredCocktails, getCocktailRating]);
+  }, [activeTab, filteredCocktails, getCocktailRating, sortedCocktails]);
 
   const myTabListData = useCocktailTabLogic({
     activeTab,
