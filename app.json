@@ -9,6 +9,8 @@
 
     "userInterfaceStyle": "automatic",
 
+    "jsEngine": "hermes",
+
     "newArchEnabled": true,
 
     "ios": {
@@ -40,7 +42,14 @@
     "plugins": [
       "./plugins/withForceDarkAllowed",
       "expo-router",
-
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "enableSeparateBuildPerCPUArchitecture": true
+          }
+        }
+      ],
       [
         "expo-splash-screen",
         {
