@@ -3,6 +3,14 @@ import { router } from 'expo-router';
 
 type RouteParams = Record<string, unknown> | undefined;
 type ReturnToParams = Record<string, string> | undefined;
+type OriginSnapshot = {
+  path: string;
+  params?: ReturnToParams;
+};
+
+const originHistory = new Map<string, OriginSnapshot>();
+
+const createOriginId = () => `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
 
 const areParamsEqual = (left?: RouteParams, right?: RouteParams): boolean => {
   if (!left && !right) {
@@ -102,33 +110,68 @@ export const parseReturnToParams = (
 export const navigateToDetailsWithReturnTo = ({
   pathname,
   params,
+  navOriginId,
   returnToPath,
   returnToParams,
 }: {
   pathname: string;
   params: Record<string, string>;
+  navOriginId?: string;
   returnToPath?: string;
   returnToParams?: Record<string, string | undefined>;
 }) => {
+  const resolvedOriginId = navOriginId
+    ? navOriginId
+    : returnToPath
+      ? (() => {
+          const originId = createOriginId();
+          const entries = Object.entries(returnToParams ?? {}).filter(
+            ([, value]) => typeof value === 'string' && value.length > 0,
+          ) as Array<[string, string]>;
+          originHistory.set(originId, {
+            path: returnToPath,
+            params: entries.length ? Object.fromEntries(entries) : undefined,
+          });
+          return originId;
+        })()
+      : undefined;
+
   router.push({
     pathname,
     params: {
       ...params,
+      ...(resolvedOriginId ? { navOriginId: resolvedOriginId } : {}),
       ...buildReturnToParams(returnToPath, returnToParams),
     },
   });
 };
 
+export const resolveOriginSnapshot = (navOriginId?: string): OriginSnapshot | undefined => {
+  if (!navOriginId) {
+    return undefined;
+  }
+
+  return originHistory.get(navOriginId);
+};
+
 export const returnToSourceOrBack = (
   navigation: NavigationProp<ParamListBase>,
   {
+    navOriginId,
     returnToPath,
     returnToParams,
   }: {
+    navOriginId?: string;
     returnToPath?: string;
     returnToParams?: ReturnToParams;
   },
 ) => {
+  const originSnapshot = resolveOriginSnapshot(navOriginId);
+  if (originSnapshot) {
+    router.navigate({ pathname: originSnapshot.path, params: originSnapshot.params });
+    return;
+  }
+
   if (returnToPath) {
     router.navigate({ pathname: returnToPath, params: returnToParams });
     return;

@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
-import { StackActions, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -71,6 +71,7 @@ export default function IngredientFormScreen() {
   const params = useLocalSearchParams<{
     suggestedName?: string;
     returnTo?: string;
+    navOriginId?: string;
     returnToPath?: string;
     returnToParams?: string;
     mode?: string;
@@ -122,6 +123,11 @@ export default function IngredientFormScreen() {
       return undefined;
     }
   }, [returnToParamsParam]);
+
+  const navOriginId = useMemo(() => {
+    const value = getParamValue(params.navOriginId);
+    return typeof value === 'string' && value.length > 0 ? value : undefined;
+  }, [params.navOriginId]);
   const shouldConfirmOnLeave = useMemo(
     () => !isEditMode && returnToPath === '/cocktails/create',
     [isEditMode, returnToPath],
@@ -600,7 +606,7 @@ export default function IngredientFormScreen() {
         confirmLeave(() => {
           isHandlingBackRef.current = true;
           if (isBackAction) {
-            returnToSourceOrBack(navigation, { returnToPath, returnToParams });
+            returnToSourceOrBack(navigation, { navOriginId, returnToPath, returnToParams });
           } else {
             navigation.dispatch(event.data.action);
           }
@@ -614,7 +620,7 @@ export default function IngredientFormScreen() {
       if (isBackAction) {
         event.preventDefault();
         isHandlingBackRef.current = true;
-        returnToSourceOrBack(navigation, { returnToPath, returnToParams });
+        returnToSourceOrBack(navigation, { navOriginId, returnToPath, returnToParams });
         setTimeout(() => {
           isHandlingBackRef.current = false;
         }, 0);
@@ -622,7 +628,7 @@ export default function IngredientFormScreen() {
     });
 
     return unsubscribe;
-  }, [confirmLeave, hasUnsavedChanges, navigation, returnToParams, returnToPath, shouldConfirmOnLeave]);
+  }, [confirmLeave, hasUnsavedChanges, navOriginId, navigation, returnToParams, returnToPath, shouldConfirmOnLeave]);
 
   const handleGoBack = useCallback(() => {
     if (isNavigatingAfterSaveRef.current || isHandlingBackRef.current) {
@@ -632,7 +638,7 @@ export default function IngredientFormScreen() {
     if (hasUnsavedChanges || shouldConfirmOnLeave) {
       confirmLeave(() => {
         isHandlingBackRef.current = true;
-        returnToSourceOrBack(navigation, { returnToPath, returnToParams });
+        returnToSourceOrBack(navigation, { navOriginId, returnToPath, returnToParams });
         setTimeout(() => {
           isHandlingBackRef.current = false;
         }, 0);
@@ -640,10 +646,11 @@ export default function IngredientFormScreen() {
       return;
     }
 
-    returnToSourceOrBack(navigation, { returnToPath, returnToParams });
+    returnToSourceOrBack(navigation, { navOriginId, returnToPath, returnToParams });
   }, [
     confirmLeave,
     hasUnsavedChanges,
+    navOriginId,
     navigation,
     returnToParams,
     returnToPath,
@@ -689,21 +696,10 @@ export default function IngredientFormScreen() {
             }
 
             setHasUnsavedChanges(false);
-            const state = navigation.getState();
-            const currentIndex = state.index ?? 0;
-            if (currentIndex >= 2) {
-              navigation.dispatch(StackActions.pop(2));
-              return;
-            }
-            if (returnToPath) {
-              router.navigate({ pathname: returnToPath, params: returnToParams });
-              return;
-            }
-            if (navigation.canGoBack()) {
-              navigation.goBack();
-              return;
-            }
-            router.replace('/ingredients');
+            returnToSourceOrBack(navigation, {
+                        returnToPath,
+              returnToParams,
+            });
           },
         },
       ],

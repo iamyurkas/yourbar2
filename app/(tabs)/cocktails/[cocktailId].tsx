@@ -328,6 +328,7 @@ function formatGlassLabel(glassId?: string | null) {
 export default function CocktailDetailsScreen() {
   const params = useLocalSearchParams<{
     cocktailId?: string;
+    navOriginId?: string;
     returnToPath?: string;
     returnToParams?: string;
   }>();
@@ -365,6 +366,13 @@ export default function CocktailDetailsScreen() {
     return parseReturnToParams(params.returnToParams);
   }, [params.returnToParams]);
 
+  const navOriginId = useMemo(() => {
+    const value = Array.isArray(params.navOriginId)
+      ? params.navOriginId[0]
+      : params.navOriginId;
+    return typeof value === "string" && value.length > 0 ? value : undefined;
+  }, [params.navOriginId]);
+
   const [showImperialUnits, setShowImperialUnits] = useState(useImperialUnits);
   const isHandlingBackRef = useRef(false);
   const shouldNavigateAway = !loading && !cocktail;
@@ -379,8 +387,8 @@ export default function CocktailDetailsScreen() {
       return;
     }
 
-    returnToSourceOrBack(navigation, { returnToPath, returnToParams });
-  }, [navigation, returnToParams, returnToPath]);
+    returnToSourceOrBack(navigation, { navOriginId, returnToPath, returnToParams });
+  }, [navOriginId, navigation, returnToParams, returnToPath]);
 
   useEffect(() => {
     if (!shouldNavigateAway || isHandlingBackRef.current) {
@@ -638,10 +646,11 @@ export default function CocktailDetailsScreen() {
         cocktailName: cocktail.name ?? undefined,
         mode: "edit",
         source: "cocktails",
+        ...(navOriginId ? { navOriginId } : {}),
         ...buildReturnToParams(returnToPath, returnToParams),
       },
     });
-  }, [cocktail, returnToParams, returnToPath]);
+  }, [cocktail, navOriginId, returnToParams, returnToPath]);
 
   const handleCopyPress = useCallback(() => {
     if (!cocktail) {
@@ -659,10 +668,11 @@ export default function CocktailDetailsScreen() {
         cocktailId: String(targetId),
         cocktailName: cocktail.name ?? undefined,
         source: "cocktails",
+        ...(navOriginId ? { navOriginId } : {}),
         ...buildReturnToParams(returnToPath, returnToParams),
       },
     });
-  }, [cocktail, returnToParams, returnToPath]);
+  }, [cocktail, navOriginId, returnToParams, returnToPath]);
 
   if (shouldNavigateAway) {
     return null;
@@ -1078,6 +1088,7 @@ export default function CocktailDetailsScreen() {
                         params: {
                           ingredientId: String(routeParam),
                         },
+                        navOriginId,
                         returnToPath: returnToParam
                           ? "/cocktails/[cocktailId]"
                           : undefined,

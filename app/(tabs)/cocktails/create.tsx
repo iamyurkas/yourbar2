@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
-import { StackActions, useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { Image } from "expo-image";
 import * as ImagePicker from "expo-image-picker";
 import { Stack, router, useLocalSearchParams } from "expo-router";
@@ -272,6 +272,10 @@ export default function CreateCocktailScreen() {
   const returnToParams = useMemo(() => {
     return parseReturnToParams(params.returnToParams);
   }, [params.returnToParams]);
+  const navOriginId = useMemo(() => {
+    const value = getParamValue(params.navOriginId);
+    return typeof value === "string" && value.length > 0 ? value : undefined;
+  }, [params.navOriginId]);
   const shouldConfirmOnLeave = useMemo(
     () => sourceParam === "ingredient",
     [sourceParam],
@@ -1255,21 +1259,11 @@ export default function CreateCocktailScreen() {
             }
 
             setHasUnsavedChanges(false);
-            const state = navigation.getState();
-            const currentIndex = state.index ?? 0;
-            if (currentIndex >= 2) {
-              navigation.dispatch(StackActions.pop(2));
-              return;
-            }
-            if (returnToPath) {
-              router.navigate({ pathname: returnToPath, params: returnToParams });
-              return;
-            }
-            if (navigation.canGoBack()) {
-              navigation.goBack();
-              return;
-            }
-            router.replace("/cocktails");
+            returnToSourceOrBack(navigation, {
+              navOriginId,
+              returnToPath,
+              returnToParams,
+            });
           },
         },
       ],
@@ -1280,6 +1274,7 @@ export default function CreateCocktailScreen() {
     navigation,
     prefilledCocktail?.id,
     prefilledCocktail?.name,
+    navOriginId,
     returnToParams,
     returnToPath,
     setHasUnsavedChanges,
@@ -1326,7 +1321,7 @@ export default function CreateCocktailScreen() {
         confirmLeave(() => {
           isHandlingBackRef.current = true;
           if (event.data.action.type === "GO_BACK") {
-            returnToSourceOrBack(navigation, { returnToPath, returnToParams });
+            returnToSourceOrBack(navigation, { navOriginId, returnToPath, returnToParams });
           } else {
             navigation.dispatch(event.data.action);
           }
@@ -1340,7 +1335,7 @@ export default function CreateCocktailScreen() {
       if (event.data.action.type === "GO_BACK") {
         event.preventDefault();
         isHandlingBackRef.current = true;
-        returnToSourceOrBack(navigation, { returnToPath, returnToParams });
+        returnToSourceOrBack(navigation, { navOriginId, returnToPath, returnToParams });
         setTimeout(() => {
           isHandlingBackRef.current = false;
         }, 0);
@@ -1352,14 +1347,15 @@ export default function CreateCocktailScreen() {
     confirmLeave,
     hasUnsavedChanges,
     navigation,
+    navOriginId,
     returnToPath,
     returnToParams,
     shouldConfirmOnLeave,
   ]);
 
   const handleGoBack = useCallback(() => {
-    navigation.goBack();
-  }, [navigation]);
+    returnToSourceOrBack(navigation, { navOriginId, returnToPath, returnToParams });
+  }, [navOriginId, navigation, returnToParams, returnToPath]);
 
   const imageSource = useMemo(() => {
     if (!imageUri) {

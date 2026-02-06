@@ -1,6 +1,6 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import { useScrollToTop } from '@react-navigation/native';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { memo, useCallback, useEffect, useMemo, useRef, useState, useTransition } from 'react';
 import {
   FlatList,
@@ -55,6 +55,22 @@ const TAB_OPTIONS: SegmentTabOption[] = [
   { key: 'shopping', label: 'Shopping' },
 ];
 
+
+const parseCsvParam = (value?: string | string[]): string[] => {
+  const resolved = Array.isArray(value) ? value[0] : value;
+  if (typeof resolved !== 'string' || resolved.length === 0) {
+    return [];
+  }
+
+  return resolved.split(',').map((item) => item.trim()).filter(Boolean);
+};
+
+const parseScrollParam = (value?: string | string[]): number => {
+  const resolved = Array.isArray(value) ? value[0] : value;
+  const parsed = Number(resolved);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : 0;
+};
+
 type IngredientListItemProps = {
   ingredient: Ingredient;
   highlightColor: string;
@@ -65,6 +81,7 @@ type IngredientListItemProps = {
   isOnShoppingList: boolean;
   showAvailabilityToggle?: boolean;
   onShoppingToggle?: (id: number) => void;
+  returnToParams?: Record<string, string>;
 };
 
 const areIngredientPropsEqual = (
@@ -91,6 +108,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
   isOnShoppingList,
   showAvailabilityToggle = true,
   onShoppingToggle,
+  returnToParams,
 }: IngredientListItemProps) {
   const Colors = useAppColors();
   const ingredientId = Number(ingredient.id ?? -1);
@@ -185,8 +203,9 @@ const IngredientListItem = memo(function IngredientListItemComponent({
       pathname: '/ingredients/[ingredientId]',
       params: { ingredientId: String(routeParam) },
       returnToPath: '/ingredients',
+      returnToParams,
     });
-  }, [ingredient.id, ingredient.name]);
+  }, [ingredient.id, ingredient.name, returnToParams]);
 
   const row = (
     <ListRow
@@ -221,22 +240,39 @@ const IngredientListItem = memo(function IngredientListItemComponent({
 
 export default function IngredientsScreen() {
   const router = useRouter();
+  const screenParams = useLocalSearchParams<{
+    tab?: string;
+    q?: string;
+    tags?: string;
+    scroll?: string;
+  }>();
   const Colors = useAppColors();
   const { onTabChangeRequest } = useOnboardingAnchors();
   const { cocktails, ingredients, availableIngredientIds, shoppingIngredientIds } = useInventoryData();
   const { ignoreGarnish, allowAllSubstitutes } = useInventorySettings();
   const { toggleIngredientShopping, toggleIngredientAvailability } = useInventoryActions();
-  const [activeTab, setActiveTab] = useState<IngredientTabKey>(() => getLastIngredientTab());
-  const [query, setQuery] = useState('');
+  const initialTab = useMemo<IngredientTabKey>(() => {
+    const candidate = Array.isArray(screenParams.tab) ? screenParams.tab[0] : screenParams.tab;
+    return candidate === 'all' || candidate === 'my' || candidate === 'shopping'
+      ? candidate
+      : getLastIngredientTab();
+  }, [screenParams.tab]);
+  const [activeTab, setActiveTab] = useState<IngredientTabKey>(initialTab);
+  const initialQuery = useMemo(() => {
+    const value = Array.isArray(screenParams.q) ? screenParams.q[0] : screenParams.q;
+    return typeof value === 'string' ? value : '';
+  }, [screenParams.q]);
+  const [query, setQuery] = useState(initialQuery);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isFilterMenuVisible, setFilterMenuVisible] = useState(false);
-  const [selectedTagKeys, setSelectedTagKeys] = useState<Set<string>>(() => new Set());
+  const [selectedTagKeys, setSelectedTagKeys] = useState<Set<string>>(() => new Set(parseCsvParam(screenParams.tags)));
   const [headerLayout, setHeaderLayout] = useState<LayoutRectangle | null>(null);
   const [filterAnchorLayout, setFilterAnchorLayout] = useState<LayoutRectangle | null>(null);
   const listRef = useRef<FlatList<unknown>>(null);
   const lastScrollOffset = useRef(0);
   const searchStartOffset = useRef<number | null>(null);
   const previousQuery = useRef(query);
+  const pendingRestoreOffset = useRef(parseScrollParam(screenParams.scroll));
   const [optimisticAvailability, setOptimisticAvailability] = useState<Map<number, boolean>>(
     () => new Map(),
   );
@@ -272,6 +308,19 @@ export default function IngredientsScreen() {
 
   const handleScroll = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
     lastScrollOffset.current = event.nativeEvent.contentOffset.y;
+  }, []);
+
+  useEffect(() => {
+    if (pendingRestoreOffset.current <= 0) {
+      return;
+    }
+
+    const offset = pendingRestoreOffset.current;
+    pendingRestoreOffset.current = 0;
+    requestAnimationFrame(() => {
+      listRef.current?.scrollToOffset({ offset, animated: false });
+      lastScrollOffset.current = offset;
+    });
   }, []);
 
   useEffect(() => {
@@ -606,6 +655,13 @@ export default function IngredientsScreen() {
         }
       }
 
+      const returnToParams = {
+        tab: activeTab,
+        q: query,
+        tags: [...selectedTagKeys].join(','),
+        scroll: String(Math.max(0, Math.round(lastScrollOffset.current))),
+      };
+
       return (
         <IngredientListItem
           ingredient={item}
@@ -617,6 +673,7 @@ export default function IngredientsScreen() {
           isOnShoppingList={isOnShoppingList}
           showAvailabilityToggle={activeTab !== 'shopping'}
           onShoppingToggle={activeTab === 'shopping' ? handleShoppingToggle : undefined}
+          returnToParams={returnToParams}
         />
       );
     },
@@ -629,6 +686,8 @@ export default function IngredientsScreen() {
       ingredientCocktailStats,
       Colors,
       shoppingIngredientIds,
+      query,
+      selectedTagKeys,
     ],
   );
 

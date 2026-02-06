@@ -72,6 +72,7 @@ function useResolvedIngredient(
 export default function IngredientDetailsScreen() {
   const params = useLocalSearchParams<{
     ingredientId?: string;
+    navOriginId?: string;
     returnToPath?: string;
     returnToParams?: string;
   }>();
@@ -107,6 +108,13 @@ export default function IngredientDetailsScreen() {
   const returnToParams = useMemo(() => {
     return parseReturnToParams(params.returnToParams);
   }, [params.returnToParams]);
+
+  const navOriginId = useMemo(() => {
+    const value = Array.isArray(params.navOriginId)
+      ? params.navOriginId[0]
+      : params.navOriginId;
+    return typeof value === "string" && value.length > 0 ? value : undefined;
+  }, [params.navOriginId]);
 
   const ingredientLookup = useMemo(
     () => createIngredientLookup(ingredients),
@@ -332,10 +340,11 @@ export default function IngredientDetailsScreen() {
       params: {
         ingredientId: String(targetId),
         mode: "edit",
+        ...(navOriginId ? { navOriginId } : {}),
         ...buildReturnToParams(returnToPath, returnToParams),
       },
     });
-  }, [ingredient, returnToParams, returnToPath]);
+  }, [ingredient, navOriginId, returnToParams, returnToPath]);
 
   const handleAddCocktail = useCallback(() => {
     if (!ingredient) {
@@ -477,6 +486,7 @@ export default function IngredientDetailsScreen() {
           params: {
             cocktailId: String(cocktailId),
           },
+          navOriginId,
           returnToPath: "/ingredients/[ingredientId]",
           returnToParams: { ingredientId: String(returnIngredientId) },
         });
@@ -488,7 +498,7 @@ export default function IngredientDetailsScreen() {
         params: { cocktailId: String(cocktailId) },
       });
     },
-    [ingredient?.id, ingredient?.name, ingredientId],
+    [ingredient?.id, ingredient?.name, ingredientId, navOriginId],
   );
 
   const handleRemoveBranded = useCallback(
@@ -530,8 +540,8 @@ export default function IngredientDetailsScreen() {
       return;
     }
 
-    returnToSourceOrBack(navigation, { returnToPath, returnToParams });
-  }, [navigation, returnToParams, returnToPath]);
+    returnToSourceOrBack(navigation, { navOriginId, returnToPath, returnToParams });
+  }, [navOriginId, navigation, returnToParams, returnToPath]);
 
   useEffect(() => {
     if (!shouldNavigateAway || isHandlingBackRef.current) {
