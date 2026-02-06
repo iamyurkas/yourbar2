@@ -261,8 +261,8 @@ export default function IngredientFormScreen() {
   }, [buildSnapshot, initialSnapshot]);
 
   useEffect(() => {
-    setHasUnsavedChanges(hasUnsavedChanges);
-  }, [hasUnsavedChanges, setHasUnsavedChanges]);
+    setHasUnsavedChanges(hasUnsavedChanges || shouldConfirmOnLeave);
+  }, [hasUnsavedChanges, setHasUnsavedChanges, shouldConfirmOnLeave]);
 
   useEffect(() => () => setHasUnsavedChanges(false), [setHasUnsavedChanges]);
 
@@ -593,11 +593,13 @@ export default function IngredientFormScreen() {
         return;
       }
 
+      const isBackAction = event.data.action.type === 'GO_BACK' || event.data.action.type === 'POP';
+
       if (hasUnsavedChanges || shouldConfirmOnLeave) {
         event.preventDefault();
         confirmLeave(() => {
           isHandlingBackRef.current = true;
-          if (event.data.action.type === 'GO_BACK') {
+          if (isBackAction) {
             returnToSourceOrBack(navigation, { returnToPath, returnToParams });
           } else {
             navigation.dispatch(event.data.action);
@@ -609,7 +611,7 @@ export default function IngredientFormScreen() {
         return;
       }
 
-      if (event.data.action.type === 'GO_BACK') {
+      if (isBackAction) {
         event.preventDefault();
         isHandlingBackRef.current = true;
         returnToSourceOrBack(navigation, { returnToPath, returnToParams });
