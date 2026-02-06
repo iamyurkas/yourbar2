@@ -1,7 +1,7 @@
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { useScrollToTop } from '@react-navigation/native';
 import { Image } from 'expo-image';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   FlatList,
@@ -52,6 +52,7 @@ const TAB_OPTIONS: SegmentTabOption[] = [
 ];
 
 export default function CocktailsScreen() {
+  const params = useLocalSearchParams<{ navState?: string }>();
   const { onTabChangeRequest } = useOnboardingAnchors();
   const { cocktails, availableIngredientIds, ingredients, shoppingIngredientIds, getCocktailRating } =
     useInventoryData();
@@ -72,8 +73,68 @@ export default function CocktailsScreen() {
   const lastScrollOffset = useRef(0);
   const searchStartOffset = useRef<number | null>(null);
   const previousQuery = useRef(query);
+  const [pendingRestoreOffset, setPendingRestoreOffset] = useState<number | null>(null);
 
   useScrollToTop(listRef);
+
+  useEffect(() => {
+    const rawState = Array.isArray(params.navState) ? params.navState[0] : params.navState;
+    if (!rawState) {
+      return;
+    }
+
+    try {
+      const parsed = JSON.parse(rawState) as {
+        query?: string;
+        tab?: CocktailTabKey;
+        selectedTagKeys?: string[];
+        selectedMethodIds?: CocktailMethod['id'][];
+        scrollOffset?: number;
+      };
+
+      if (typeof parsed.query === 'string') {
+        setQuery(parsed.query);
+      }
+
+      if (parsed.tab === 'all' || parsed.tab === 'my' || parsed.tab === 'favorites') {
+        setActiveTab(parsed.tab);
+      }
+
+      if (Array.isArray(parsed.selectedTagKeys)) {
+        setSelectedTagKeys(new Set(parsed.selectedTagKeys.filter((item) => typeof item === 'string')));
+      }
+
+      if (Array.isArray(parsed.selectedMethodIds)) {
+        const validMethodIds = new Set(getCocktailMethods().map((method) => method.id));
+        setSelectedMethodIds(
+          new Set(
+            parsed.selectedMethodIds.filter(
+              (id): id is CocktailMethod['id'] => typeof id === 'string' && validMethodIds.has(id as CocktailMethod['id']),
+            ),
+          ),
+        );
+      }
+
+      if (typeof parsed.scrollOffset === 'number' && Number.isFinite(parsed.scrollOffset)) {
+        const normalizedOffset = Math.max(0, parsed.scrollOffset);
+        lastScrollOffset.current = normalizedOffset;
+        setPendingRestoreOffset(normalizedOffset);
+      }
+    } catch (error) {
+      console.warn('Unable to parse cocktails navigation state', error);
+    }
+  }, [params.navState]);
+
+  useEffect(() => {
+    if (pendingRestoreOffset == null) {
+      return;
+    }
+
+    requestAnimationFrame(() => {
+      listRef.current?.scrollToOffset({ offset: pendingRestoreOffset, animated: false });
+      setPendingRestoreOffset(null);
+    });
+  }, [pendingRestoreOffset]);
 
   useEffect(() => {
     return onTabChangeRequest((screen, tab) => {
@@ -103,6 +164,17 @@ export default function CocktailsScreen() {
   const handleScroll = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
     lastScrollOffset.current = event.nativeEvent.contentOffset.y;
   }, []);
+  const detailsReturnToParams = useMemo(() => {
+    const navState = JSON.stringify({
+      query,
+      tab: activeTab,
+      selectedTagKeys: Array.from(selectedTagKeys),
+      selectedMethodIds: Array.from(selectedMethodIds),
+      scrollOffset: lastScrollOffset.current,
+    });
+
+    return { navState };
+  }, [activeTab, query, selectedMethodIds, selectedTagKeys]);
   const router = useRouter();
   const ingredientLookup = useMemo(() => createIngredientLookup(ingredients), [ingredients]);
   const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
@@ -428,9 +500,10 @@ export default function CocktailsScreen() {
         pathname: '/cocktails/[cocktailId]',
         params: { cocktailId: String(candidateId) },
         returnToPath: '/cocktails',
+        returnToParams: detailsReturnToParams,
       });
     },
-    [],
+    [detailsReturnToParams],
   );
 
   const handleSelectIngredient = useCallback(
@@ -440,10 +513,11 @@ export default function CocktailsScreen() {
           pathname: '/ingredients/[ingredientId]',
           params: { ingredientId: String(ingredientId) },
           returnToPath: '/cocktails',
+          returnToParams: detailsReturnToParams,
         });
       }
     },
-    [],
+    [detailsReturnToParams],
   );
 
   const handleShoppingToggle = useCallback(

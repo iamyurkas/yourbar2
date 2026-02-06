@@ -1,6 +1,6 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import { useScrollToTop } from '@react-navigation/native';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { memo, useCallback, useEffect, useMemo, useRef, useState, useTransition } from 'react';
 import {
   FlatList,
@@ -65,6 +65,7 @@ type IngredientListItemProps = {
   isOnShoppingList: boolean;
   showAvailabilityToggle?: boolean;
   onShoppingToggle?: (id: number) => void;
+  returnToParams?: Record<string, string | undefined>;
 };
 
 const areIngredientPropsEqual = (
@@ -79,7 +80,8 @@ const areIngredientPropsEqual = (
   prev.surfaceVariantColor === next.surfaceVariantColor &&
   prev.isOnShoppingList === next.isOnShoppingList &&
   prev.showAvailabilityToggle === next.showAvailabilityToggle &&
-  prev.onShoppingToggle === next.onShoppingToggle;
+  prev.onShoppingToggle === next.onShoppingToggle &&
+  prev.returnToParams === next.returnToParams;
 
 const IngredientListItem = memo(function IngredientListItemComponent({
   ingredient,
@@ -91,6 +93,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
   isOnShoppingList,
   showAvailabilityToggle = true,
   onShoppingToggle,
+  returnToParams,
 }: IngredientListItemProps) {
   const Colors = useAppColors();
   const ingredientId = Number(ingredient.id ?? -1);
@@ -185,8 +188,9 @@ const IngredientListItem = memo(function IngredientListItemComponent({
       pathname: '/ingredients/[ingredientId]',
       params: { ingredientId: String(routeParam) },
       returnToPath: '/ingredients',
+      returnToParams,
     });
-  }, [ingredient.id, ingredient.name]);
+  }, [ingredient.id, ingredient.name, returnToParams]);
 
   const row = (
     <ListRow
@@ -220,6 +224,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
 }, areIngredientPropsEqual);
 
 export default function IngredientsScreen() {
+  const params = useLocalSearchParams<{ navState?: string }>();
   const router = useRouter();
   const Colors = useAppColors();
   const { onTabChangeRequest } = useOnboardingAnchors();
@@ -240,10 +245,58 @@ export default function IngredientsScreen() {
   const [optimisticAvailability, setOptimisticAvailability] = useState<Map<number, boolean>>(
     () => new Map(),
   );
+  const [pendingRestoreOffset, setPendingRestoreOffset] = useState<number | null>(null);
   const [, startAvailabilityTransition] = useTransition();
   const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
 
   useScrollToTop(listRef);
+
+  useEffect(() => {
+    const rawState = Array.isArray(params.navState) ? params.navState[0] : params.navState;
+    if (!rawState) {
+      return;
+    }
+
+    try {
+      const parsed = JSON.parse(rawState) as {
+        query?: string;
+        tab?: IngredientTabKey;
+        selectedTagKeys?: string[];
+        scrollOffset?: number;
+      };
+
+      if (typeof parsed.query === 'string') {
+        setQuery(parsed.query);
+      }
+
+      if (parsed.tab === 'all' || parsed.tab === 'my' || parsed.tab === 'shopping') {
+        setActiveTab(parsed.tab);
+      }
+
+      if (Array.isArray(parsed.selectedTagKeys)) {
+        setSelectedTagKeys(new Set(parsed.selectedTagKeys.filter((item) => typeof item === 'string')));
+      }
+
+      if (typeof parsed.scrollOffset === 'number' && Number.isFinite(parsed.scrollOffset)) {
+        const normalizedOffset = Math.max(0, parsed.scrollOffset);
+        lastScrollOffset.current = normalizedOffset;
+        setPendingRestoreOffset(normalizedOffset);
+      }
+    } catch (error) {
+      console.warn('Unable to parse ingredients navigation state', error);
+    }
+  }, [params.navState]);
+
+  useEffect(() => {
+    if (pendingRestoreOffset == null) {
+      return;
+    }
+
+    requestAnimationFrame(() => {
+      listRef.current?.scrollToOffset({ offset: pendingRestoreOffset, animated: false });
+      setPendingRestoreOffset(null);
+    });
+  }, [pendingRestoreOffset]);
 
   useEffect(() => {
     return onTabChangeRequest((screen, tab) => {
@@ -273,6 +326,17 @@ export default function IngredientsScreen() {
   const handleScroll = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
     lastScrollOffset.current = event.nativeEvent.contentOffset.y;
   }, []);
+
+  const detailsReturnToParams = useMemo(() => {
+    const navState = JSON.stringify({
+      query,
+      tab: activeTab,
+      selectedTagKeys: Array.from(selectedTagKeys),
+      scrollOffset: lastScrollOffset.current,
+    });
+
+    return { navState };
+  }, [activeTab, query, selectedTagKeys]);
 
   useEffect(() => {
     setLastIngredientTab(activeTab);
@@ -617,6 +681,7 @@ export default function IngredientsScreen() {
           isOnShoppingList={isOnShoppingList}
           showAvailabilityToggle={activeTab !== 'shopping'}
           onShoppingToggle={activeTab === 'shopping' ? handleShoppingToggle : undefined}
+          returnToParams={detailsReturnToParams}
         />
       );
     },
@@ -627,6 +692,7 @@ export default function IngredientsScreen() {
       handleShoppingToggle,
       highlightColor,
       ingredientCocktailStats,
+      detailsReturnToParams,
       Colors,
       shoppingIngredientIds,
     ],
