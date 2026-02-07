@@ -347,7 +347,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     setDialogOptions({
       title: "Smart shaker filtering",
       message:
-        "Коли опція увімкнена, у групах без вибраних інгредієнтів приховуються ті інгредієнти, які не дадуть жодного результату. У групах, де вже є вибір, інгредієнти не ховаються, щоб зберегти OR-логіку. Вимкніть опцію, щоб повернути стандартну поведінку.",
+        "When enabled, ingredients in groups with no current selection are hidden if they would produce zero results. In groups where you already selected at least one ingredient, items stay visible to preserve OR logic. Turn this off to restore the default shaker behavior.",
       actions: [{ label: "Got it", variant: "primary" }],
     });
   };
@@ -981,9 +981,10 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     style={styles.settingInfoButton}
                   >
                     <MaterialCommunityIcons
-                      name="information"
-                      size={18}
-                      color="#3B82F6"
+                      name="information-outline"
+                      size={16}
+                      color={Colors.primary}
+                      style={{ marginTop: 4 }}
                     />
                   </Pressable>
                 </View>
