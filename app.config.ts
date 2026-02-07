@@ -1,12 +1,18 @@
-import appJson from "./app.json";
+import base from "./app.base.json";
 
-export default {
-  ...appJson.expo,
+type ExpoConfig = Record<string, any>;
 
-  plugins: [...(appJson.expo.plugins ?? []), "@sentry/react-native"],
+export default ({ config }: { config: ExpoConfig }) => ({
+  expo: {
+    ...config,
+    ...base.expo,
 
-  extra: {
-    ...appJson.expo.extra,
-    buildTime: new Date().toISOString(),
+    plugins: base.expo.plugins ?? [],
+
+    extra: {
+      ...(config.extra ?? {}),
+      ...(base.expo.extra ?? {}),
+      buildTime: new Date().toISOString(),
+    },
   },
-};
+});
