@@ -16,6 +16,7 @@ export type InventorySnapshotV1<TCocktail, TIngredient> = {
   allowAllSubstitutes?: boolean;
   useImperialUnits?: boolean;
   keepScreenAwake?: boolean;
+  shakerSmartFilteringEnabled?: boolean;
   ratingFilterThreshold?: number;
   startScreen?: string;
   appTheme?: string;
@@ -45,6 +46,7 @@ export type InventoryDeltaSnapshot<TCocktail, TIngredient> = {
   allowAllSubstitutes?: boolean;
   useImperialUnits?: boolean;
   keepScreenAwake?: boolean;
+  shakerSmartFilteringEnabled?: boolean;
   ratingFilterThreshold?: number;
   startScreen?: string;
   appTheme?: string;

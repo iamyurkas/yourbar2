@@ -7,6 +7,7 @@ export type InventorySettingsContextValue = {
   allowAllSubstitutes: boolean;
   useImperialUnits: boolean;
   keepScreenAwake: boolean;
+  shakerSmartFilteringEnabled: boolean;
   ratingFilterThreshold: number;
   startScreen: StartScreen;
   appTheme: AppTheme;

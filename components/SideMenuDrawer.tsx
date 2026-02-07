@@ -135,6 +135,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     setUseImperialUnits,
     keepScreenAwake,
     setKeepScreenAwake,
+    shakerSmartFilteringEnabled,
+    setShakerSmartFilteringEnabled,
     ratingFilterThreshold,
     setRatingFilterThreshold,
     startScreen,
@@ -335,6 +337,10 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
   const toggleKeepScreenAwake = () => {
     setKeepScreenAwake(!keepScreenAwake);
+  };
+
+  const toggleShakerSmartFiltering = () => {
+    setShakerSmartFilteringEnabled(!shakerSmartFilteringEnabled);
   };
 
   const handleResetInventory = () => {
@@ -918,6 +924,49 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   ]}
                 >
                   Prevent sleep on cocktail view
+                </Text>
+              </View>
+            </Pressable>
+            <Pressable
+              accessibilityRole="checkbox"
+              accessibilityState={{ checked: shakerSmartFilteringEnabled }}
+              onPress={toggleShakerSmartFiltering}
+              style={[styles.settingRow, SURFACE_ROW_STYLE]}
+            >
+              <View
+                style={[
+                  styles.checkbox,
+                  {
+                    borderColor: shakerSmartFilteringEnabled
+                      ? Colors.tint
+                      : Colors.outlineVariant,
+                    backgroundColor: shakerSmartFilteringEnabled
+                      ? Colors.tint
+                      : "transparent",
+                  },
+                ]}
+              >
+                <MaterialCommunityIcons
+                  name="check"
+                  size={16}
+                  color={
+                    shakerSmartFilteringEnabled ? Colors.background : Colors.outlineVariant
+                  }
+                />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text
+                  style={[styles.settingLabel, { color: Colors.onSurface }]}
+                >
+                  Smart shaker filtering
+                </Text>
+                <Text
+                  style={[
+                    styles.settingCaption,
+                    { color: Colors.onSurfaceVariant },
+                  ]}
+                >
+                  Hide ingredients that would produce no results
                 </Text>
               </View>
             </Pressable>
