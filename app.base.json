@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Your Bar (Beta)",
+    "name": "Your Bar (DEV)",
     "slug": "yourbar",
     "version": "0.9.6",
     "orientation": "portrait",
@@ -14,7 +14,7 @@
     },
 
     "android": {
-      "package": "com.yourbarapp.free",
+      "package": "com.yourbarapp.free.dev",
       "versionCode": 10,
 
       "adaptiveIcon": {
