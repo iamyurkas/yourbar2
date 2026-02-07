@@ -55,7 +55,7 @@
           "dark": {
             "image": "./assets/images/splash.png",
             "resizeMode": "contain",
-            "backgroundColor": "#000000"
+            "backgroundColor": "#4DABF7"
           }
         }
       ],
