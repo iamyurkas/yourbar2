@@ -11,6 +11,60 @@ const DEFAULT_AVAILABILITY_OPTIONS: IngredientAvailabilityOptions = {
   allowAllSubstitutes: false,
 };
 
+const DEFAULT_TAG_SORT_ORDER = Number.MAX_SAFE_INTEGER;
+
+type IndexedCocktailIngredient = NonNullable<Cocktail['ingredients']>[number] & {
+  __originalIndex: number;
+};
+
+function getIngredientPrimaryTagOrder(
+  ingredient: NonNullable<Cocktail['ingredients']>[number],
+  lookup: IngredientLookup,
+): number {
+  const ingredientId =
+    typeof ingredient.ingredientId === 'number' && Number.isFinite(ingredient.ingredientId)
+      ? Math.trunc(ingredient.ingredientId)
+      : undefined;
+
+  if (ingredientId == null) {
+    return DEFAULT_TAG_SORT_ORDER;
+  }
+
+  const ingredientRecord = lookup.ingredientById.get(ingredientId);
+  const tagIds = (ingredientRecord?.tags ?? [])
+    .map((tag) => Number(tag?.id))
+    .filter((tagId) => Number.isFinite(tagId) && tagId >= 0)
+    .map((tagId) => Math.trunc(tagId));
+
+  if (!tagIds.length) {
+    return DEFAULT_TAG_SORT_ORDER;
+  }
+
+  return Math.min(...tagIds);
+}
+
+function sortRecipeIngredients(
+  ingredients: NonNullable<Cocktail['ingredients']>,
+  lookup: IngredientLookup,
+): IndexedCocktailIngredient[] {
+  return ingredients
+    .map((ingredient, index) => ({ ...ingredient, __originalIndex: index }))
+    .sort((left, right) => {
+      const garnishDiff = Number(Boolean(left.garnish)) - Number(Boolean(right.garnish));
+      if (garnishDiff !== 0) {
+        return garnishDiff;
+      }
+
+      const leftTagOrder = getIngredientPrimaryTagOrder(left, lookup);
+      const rightTagOrder = getIngredientPrimaryTagOrder(right, lookup);
+      if (leftTagOrder !== rightTagOrder) {
+        return leftTagOrder - rightTagOrder;
+      }
+
+      return left.__originalIndex - right.__originalIndex;
+    });
+}
+
 export type CocktailAvailabilitySummary = {
   missingCount: number;
   missingNames: string[];
@@ -29,8 +83,8 @@ export function summariseCocktailAvailability(
   const resolvedOptions = { ...DEFAULT_AVAILABILITY_OPTIONS, ...options };
   const lookup = ingredientLookup ?? createIngredientLookup(ingredients ?? []);
   const recipe = cocktail.ingredients ?? [];
-  const requiredIngredients = recipe.filter(
-    (item) => !item?.optional && !(resolvedOptions.ignoreGarnish && item?.garnish),
+  const requiredIngredients = sortRecipeIngredients(recipe, lookup).filter(
+    (item) => !item?.optional && !item?.garnish,
   );
 
   const recipeNames = recipe
