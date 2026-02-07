@@ -14,6 +14,7 @@ import {
 import {
   Animated,
   Dimensions,
+  Linking,
   Modal,
   Pressable,
   ScrollView,
@@ -709,6 +710,21 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     });
   };
 
+  const handleReportIssue = async () => {
+    const subject = `Something wrong in your bar (${APP_VERSION}${APP_VERSION_CODE != null ? `, ${APP_VERSION_CODE}` : ""})`;
+    const mailtoUrl = `mailto:your.bar.app@gmail.com?subject=${encodeURIComponent(subject)}`;
+
+    try {
+      await Linking.openURL(mailtoUrl);
+    } catch (error) {
+      console.error("Failed to open email client", error);
+      showDialogMessage(
+        "Unable to open email",
+        "Please send your report to your.bar.app@gmail.com manually.",
+      );
+    }
+  };
+
   useEffect(() => {
     return () => {
       clearTimeoutRef(ratingModalCloseTimeout);
@@ -1254,6 +1270,27 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>
                   Restore bundled cocktails and ingredients
                 </Text>
+              </View>
+            </Pressable>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Report an issue"
+              onPress={handleReportIssue}
+              style={[
+                styles.actionRow,
+                SURFACE_ROW_STYLE,
+              ]}
+            >
+              <View style={[styles.actionIcon, ACTION_ICON_STYLE]}>
+                <MaterialCommunityIcons
+                  name="email-alert-outline"
+                  size={16}
+                  color={Colors.onSurfaceVariant}
+                />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>Found something wrong?</Text>
+                <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>Report a bug</Text>
               </View>
             </Pressable>
             <View style={styles.versionRow}>
