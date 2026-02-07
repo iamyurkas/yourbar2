@@ -882,14 +882,11 @@ export default function CocktailDetailsScreen() {
                           }
                           hitSlop={8}
                         >
-                          <Text
-                            style={[
-                              styles.methodInfoIcon,
-                              { color: Colors.primary },
-                            ]}
-                          >
-                            ⓘ
-                          </Text>
+                          <MaterialCommunityIcons
+                            name="information-outline"
+                            size={16}
+                            color={Colors.primary}
+                          />
                         </Pressable>
                       </View>
                       {isExpanded ? (
@@ -1372,10 +1369,6 @@ const styles = StyleSheet.create({
   },
   methodLabel: {
     fontSize: 14,
-    fontWeight: "600",
-  },
-  methodInfoIcon: {
-    fontSize: 16,
     fontWeight: "600",
   },
   methodDescription: {
