@@ -156,6 +156,45 @@ function resolveCocktailKey(cocktail: Cocktail) {
   return undefined;
 }
 
+function intersectsSets<T>(left?: Set<T>, right?: Set<T>) {
+  if (!left || !right || left.size === 0 || right.size === 0) {
+    return false;
+  }
+
+  const [small, large] = left.size <= right.size ? [left, right] : [right, left];
+  for (const value of small) {
+    if (large.has(value)) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function intersectManySets<T>(sets: Set<T>[]) {
+  if (sets.length === 0) {
+    return new Set<T>();
+  }
+
+  const sorted = [...sets].sort((a, b) => a.size - b.size);
+  const [first, ...rest] = sorted;
+  const result = new Set(first);
+
+  for (const current of rest) {
+    for (const value of result) {
+      if (!current.has(value)) {
+        result.delete(value);
+      }
+    }
+
+    if (result.size === 0) {
+      return result;
+    }
+  }
+
+  return result;
+}
+
 const COLLAPSED_HEADER_PREFIX = '__collapsed_header__';
 
 function makeCollapsedHeaderItem(key: string): Ingredient {
@@ -390,6 +429,22 @@ export default function ShakerScreen() {
       });
   }, [availableTagOptions, defaultTagColor, filteredIngredients]);
 
+  const ingredientGroupKeyById = useMemo(() => {
+    const otherTag = availableTagOptions.find((tag) => tag.name.trim().toLowerCase() === 'other');
+    const map = new Map<number, string>();
+
+    ingredients.forEach((ingredient) => {
+      const ingredientId = Number(ingredient.id ?? -1);
+      if (ingredientId < 0) {
+        return;
+      }
+
+      map.set(ingredientId, getIngredientTagKey(ingredient, otherTag?.key));
+    });
+
+    return map;
+  }, [availableTagOptions, ingredients]);
+
   const onboardingSampleIds = useMemo(() => {
     const picks: number[] = [];
 
@@ -500,6 +555,16 @@ export default function ShakerScreen() {
   }, []);
 
   const ingredientLookup = useMemo(() => createIngredientLookup(ingredients), [ingredients]);
+  const allCocktailKeys = useMemo(() => {
+    const keys = new Set<string>();
+    cocktails.forEach((cocktail) => {
+      const key = resolveCocktailKey(cocktail);
+      if (key) {
+        keys.add(key);
+      }
+    });
+    return keys;
+  }, [cocktails]);
 
   const visibleCocktailsByIngredientId = useMemo(() => {
     const map = new Map<number, Set<string>>();
@@ -582,16 +647,14 @@ export default function ShakerScreen() {
       return new Map<string, Set<number>>();
     }
 
-    const otherTag = availableTagOptions.find((tag) => tag.name.trim().toLowerCase() === 'other');
     const map = new Map<string, Set<number>>();
 
-    ingredients.forEach((ingredient) => {
-      const ingredientId = Number(ingredient.id ?? -1);
-      if (!selectedIngredientIds.has(ingredientId)) {
+    selectedIngredientIds.forEach((ingredientId) => {
+      const key = ingredientGroupKeyById.get(ingredientId);
+      if (!key) {
         return;
       }
 
-      const key = getIngredientTagKey(ingredient, otherTag?.key);
       if (!map.has(key)) {
         map.set(key, new Set());
       }
@@ -599,7 +662,65 @@ export default function ShakerScreen() {
     });
 
     return map;
-  }, [availableTagOptions, ingredients, selectedIngredientIds]);
+  }, [ingredientGroupKeyById, selectedIngredientIds]);
+
+  const selectedByGroup = useMemo(() => {
+    const map = new Map<string, number[]>();
+    selectedGroups.forEach((groupIds, groupKey) => {
+      map.set(groupKey, Array.from(groupIds));
+    });
+    return map;
+  }, [selectedGroups]);
+
+  const unionByGroup = useMemo(() => {
+    const map = new Map<string, Set<string>>();
+
+    selectedByGroup.forEach((ingredientIds, groupKey) => {
+      const union = new Set<string>();
+
+      ingredientIds.forEach((ingredientId) => {
+        const cocktailKeys = visibleCocktailsByIngredientId.get(ingredientId);
+        if (!cocktailKeys) {
+          return;
+        }
+
+        cocktailKeys.forEach((cocktailKey) => {
+          union.add(cocktailKey);
+        });
+      });
+
+      map.set(groupKey, union);
+    });
+
+    return map;
+  }, [selectedByGroup, visibleCocktailsByIngredientId]);
+
+  const candidateCocktailKeys = useMemo(() => {
+    // OR within group: each selected group's ingredients are unioned.
+    // AND across groups: those group unions are intersected to build candidates.
+    if (unionByGroup.size === 0) {
+      return allCocktailKeys;
+    }
+
+    return intersectManySets(Array.from(unionByGroup.values()));
+  }, [allCocktailKeys, unionByGroup]);
+
+  const isIngredientAllowed = useCallback(
+    (ingredientId: number, groupKey: string) => {
+      if (selectedByGroup.size === 0) {
+        return true;
+      }
+
+      // Keep selected groups unfiltered: OR-ing more options in a selected group cannot reduce results.
+      if (selectedByGroup.has(groupKey)) {
+        return true;
+      }
+
+      const ingredientCocktails = visibleCocktailsByIngredientId.get(ingredientId);
+      return intersectsSets(candidateCocktailKeys, ingredientCocktails);
+    },
+    [candidateCocktailKeys, selectedByGroup, visibleCocktailsByIngredientId],
+  );
 
   const matchingCocktailSummary = useMemo(() => {
     const availableKeys: string[] = [];
@@ -667,6 +788,78 @@ export default function ShakerScreen() {
     selectedGroups,
   ]);
 
+  useEffect(() => {
+    if (!__DEV__ || selectedByGroup.size === 0) {
+      return;
+    }
+
+    if (candidateCocktailKeys.size === 0) {
+      console.warn('[Shaker] Selected ingredients produced an empty candidate set.', {
+        selectedByGroup: Array.from(selectedByGroup.entries()),
+      });
+    }
+  }, [candidateCocktailKeys, selectedByGroup]);
+
+  const previousSelectionRef = useRef<Set<number>>(new Set());
+  const previousCandidateRef = useRef<Set<string>>(allCocktailKeys);
+
+  useEffect(() => {
+    if (!__DEV__) {
+      previousSelectionRef.current = new Set(selectedIngredientIds);
+      previousCandidateRef.current = new Set(candidateCocktailKeys);
+      return;
+    }
+
+    const previousSelected = previousSelectionRef.current;
+    const addedIds: number[] = [];
+    const removedIds: number[] = [];
+
+    selectedIngredientIds.forEach((id) => {
+      if (!previousSelected.has(id)) {
+        addedIds.push(id);
+      }
+    });
+
+    previousSelected.forEach((id) => {
+      if (!selectedIngredientIds.has(id)) {
+        removedIds.push(id);
+      }
+    });
+
+    if (removedIds.length === 0 && addedIds.length > 0) {
+      const previousGroups = new Map<string, number>();
+      previousSelected.forEach((ingredientId) => {
+        const groupKey = ingredientGroupKeyById.get(ingredientId);
+        if (!groupKey) {
+          return;
+        }
+        previousGroups.set(groupKey, (previousGroups.get(groupKey) ?? 0) + 1);
+      });
+
+      const addedOnlyInExistingGroups = addedIds.every((ingredientId) => {
+        const groupKey = ingredientGroupKeyById.get(ingredientId);
+        if (!groupKey) {
+          return false;
+        }
+        return previousGroups.has(groupKey);
+      });
+
+      if (
+        addedOnlyInExistingGroups &&
+        candidateCocktailKeys.size < previousCandidateRef.current.size
+      ) {
+        console.warn('[Shaker] Adding ingredient(s) in an already selected group reduced results.', {
+          addedIds,
+          previousCount: previousCandidateRef.current.size,
+          nextCount: candidateCocktailKeys.size,
+        });
+      }
+    }
+
+    previousSelectionRef.current = new Set(selectedIngredientIds);
+    previousCandidateRef.current = new Set(candidateCocktailKeys);
+  }, [allCocktailKeys, candidateCocktailKeys, ingredientGroupKeyById, selectedIngredientIds]);
+
   const handleClearSelection = useCallback(() => {
     setSelectedIngredientIds((previous) => (previous.size === 0 ? previous : new Set()));
   }, []);
@@ -681,13 +874,29 @@ export default function ShakerScreen() {
     });
   }, [matchingCocktailSummary.availableKeys, matchingCocktailSummary.unavailableKeys, router]);
 
+  const filteredIngredientGroups = useMemo(() => {
+    return ingredientGroups
+      .map((group) => {
+        const ingredientsForGroup = group.ingredients.filter((ingredient) => {
+          const ingredientId = Number(ingredient.id ?? -1);
+          return ingredientId >= 0 && isIngredientAllowed(ingredientId, group.key);
+        });
+
+        return {
+          ...group,
+          ingredients: ingredientsForGroup,
+        };
+      })
+      .filter((group) => group.ingredients.length > 0);
+  }, [ingredientGroups, isIngredientAllowed]);
+
   const sections = useMemo<IngredientSection[]>(
     () =>
-      ingredientGroups.map((group) => ({
+      filteredIngredientGroups.map((group) => ({
         ...group,
         data: expandedTagKeys.has(group.key) ? group.ingredients : [makeCollapsedHeaderItem(group.key)],
       })),
-    [expandedTagKeys, ingredientGroups],
+    [expandedTagKeys, filteredIngredientGroups],
   );
 
   const renderHeaderContent = useCallback(
