@@ -711,7 +711,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   };
 
   const handleReportIssue = async () => {
-    const subject = `Something wrong in your bar (${APP_VERSION}${APP_VERSION_CODE != null ? `, ${APP_VERSION_CODE}` : ""})`;
+    const subject = `Something wrong in your bar - ${APP_VERSION}${APP_VERSION_CODE != null ? ` (${APP_VERSION_CODE})` : ""}`;
     const mailtoUrl = `mailto:your.bar.app@gmail.com?subject=${encodeURIComponent(subject)}`;
 
     try {
@@ -1289,7 +1289,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 />
               </View>
               <View style={styles.settingTextContainer}>
-                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>Found something wrong?</Text>
+                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>Something wrong?</Text>
                 <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>Report a bug</Text>
               </View>
             </Pressable>
