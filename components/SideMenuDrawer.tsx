@@ -347,7 +347,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     setDialogOptions({
       title: "Smart shaker filtering",
       message:
-        "When enabled, ingredients in groups with no current selection are hidden if they would produce zero results. In groups where you already selected at least one ingredient, items stay visible to preserve OR logic. Turn this off to restore the default shaker behavior.",
+        "When enabled, ingredients in groups with no current selection are hidden if they would produce zero results.\n\nIn groups where you already selected at least one ingredient, items stay visible to preserve OR logic.\n\nTurn this off to restore the default shaker behavior.",
       actions: [{ label: "Got it", variant: "primary" }],
     });
   };
@@ -994,7 +994,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     { color: Colors.onSurfaceVariant },
                   ]}
                 >
-                  Hide ingredients that would produce no results
+                  Hide non-matching ingredients
                 </Text>
               </View>
             </Pressable>
