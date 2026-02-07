@@ -233,6 +233,10 @@ export function OnboardingOverlay() {
     }
   };
 
+  const handleSkip = () => {
+    completeOnboarding();
+  };
+
   const tooltipTop = adjustedAnchor
     ? (adjustedAnchor.y + adjustedAnchor.height + 20 > screenHeight - 150
       ? adjustedAnchor.y - 120
@@ -283,12 +287,21 @@ export function OnboardingOverlay() {
         </Text>
         {currentStep.buttonLabel && (
           <>
-            <Pressable
-              style={[styles.button, { backgroundColor: Colors.primary }]}
-              onPress={handleNext}
-            >
-              <Text style={[styles.buttonText, { color: Colors.onPrimary }]}>{currentStep.buttonLabel}</Text>
-            </Pressable>
+            <View style={styles.actionsRow}>
+              <Pressable
+                style={[styles.button, { backgroundColor: Colors.primary }]}
+                onPress={handleNext}
+              >
+                <Text style={[styles.buttonText, { color: Colors.onPrimary }]}>{currentStep.buttonLabel}</Text>
+              </Pressable>
+              <Pressable
+                style={styles.skipButton}
+                onPress={handleSkip}
+                hitSlop={8}
+              >
+                <Text style={[styles.skipLink, { color: Colors.onSurfaceVariant }]}>Skip</Text>
+              </Pressable>
+            </View>
             <Text style={[styles.stepCounter, { color: Colors.onSurfaceVariant }]}>
               {currentStepIndex} of {totalCount}
             </Text>
@@ -331,9 +344,24 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 12,
   },
+  actionsRow: {
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
+  },
   buttonText: {
     fontSize: 14,
     fontWeight: '700',
+  },
+  skipButton: {
+    position: 'absolute',
+    right: 0,
+  },
+  skipLink: {
+    fontSize: 14,
+    fontWeight: '600',
+    textDecorationLine: 'underline',
   },
   stepCounter: {
     fontSize: 12,
