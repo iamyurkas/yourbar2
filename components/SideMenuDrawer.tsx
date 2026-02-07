@@ -343,6 +343,15 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     setShakerSmartFilteringEnabled(!shakerSmartFilteringEnabled);
   };
 
+  const handleSmartShakerFilteringInfoPress = () => {
+    setDialogOptions({
+      title: "Smart shaker filtering",
+      message:
+        "Коли опція увімкнена, у групах без вибраних інгредієнтів приховуються ті інгредієнти, які не дадуть жодного результату. У групах, де вже є вибір, інгредієнти не ховаються, щоб зберегти OR-логіку. Вимкніть опцію, щоб повернути стандартну поведінку.",
+      actions: [{ label: "Got it", variant: "primary" }],
+    });
+  };
+
   const handleResetInventory = () => {
     setDialogOptions({
       title: "Restore bundled data",
@@ -955,11 +964,29 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 />
               </View>
               <View style={styles.settingTextContainer}>
-                <Text
-                  style={[styles.settingLabel, { color: Colors.onSurface }]}
-                >
-                  Smart shaker filtering
-                </Text>
+                <View style={styles.settingLabelRow}>
+                  <Text
+                    style={[styles.settingLabel, { color: Colors.onSurface }]}
+                  >
+                    Smart shaker filtering
+                  </Text>
+                  <Pressable
+                    accessibilityRole="button"
+                    accessibilityLabel="Smart shaker filtering info"
+                    hitSlop={8}
+                    onPress={(event) => {
+                      event.stopPropagation();
+                      handleSmartShakerFilteringInfoPress();
+                    }}
+                    style={styles.settingInfoButton}
+                  >
+                    <MaterialCommunityIcons
+                      name="information"
+                      size={18}
+                      color="#3B82F6"
+                    />
+                  </Pressable>
+                </View>
                 <Text
                   style={[
                     styles.settingCaption,
@@ -1865,6 +1892,16 @@ const styles = StyleSheet.create({
   settingTextContainer: {
     flex: 1,
     gap: 4,
+  },
+  settingLabelRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+  },
+  settingInfoButton: {
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 2,
   },
   settingLabel: {
     fontSize: 16,
