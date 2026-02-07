@@ -295,13 +295,14 @@ export function OnboardingOverlay() {
                 <Text style={[styles.buttonText, { color: Colors.onPrimary }]}>{currentStep.buttonLabel}</Text>
               </Pressable>
               <Pressable
+                style={styles.skipButton}
                 onPress={handleSkip}
                 hitSlop={8}
               >
                 <Text style={[styles.skipLink, { color: Colors.onSurfaceVariant }]}>Skip</Text>
               </Pressable>
             </View>
-            <Text style={[styles.stepCounter, { color: Colors.onSurfaceVariant }]}> 
+            <Text style={[styles.stepCounter, { color: Colors.onSurfaceVariant }]}>
               {currentStepIndex} of {totalCount}
             </Text>
           </>
@@ -344,13 +345,18 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   actionsRow: {
-    flexDirection: 'row',
+    width: '100%',
+    justifyContent: 'center',
     alignItems: 'center',
-    gap: 14,
+    position: 'relative',
   },
   buttonText: {
     fontSize: 14,
     fontWeight: '700',
+  },
+  skipButton: {
+    position: 'absolute',
+    right: 0,
   },
   skipLink: {
     fontSize: 14,
