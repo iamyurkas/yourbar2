@@ -135,6 +135,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     setUseImperialUnits,
     keepScreenAwake,
     setKeepScreenAwake,
+    shakerSmartFilteringEnabled,
+    setShakerSmartFilteringEnabled,
     ratingFilterThreshold,
     setRatingFilterThreshold,
     startScreen,
@@ -335,6 +337,19 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
   const toggleKeepScreenAwake = () => {
     setKeepScreenAwake(!keepScreenAwake);
+  };
+
+  const toggleShakerSmartFiltering = () => {
+    setShakerSmartFilteringEnabled(!shakerSmartFilteringEnabled);
+  };
+
+  const handleSmartShakerFilteringInfoPress = () => {
+    setDialogOptions({
+      title: "Smart shaker filtering",
+      message:
+        "When enabled, ingredients in groups with no current selection are hidden if they would produce zero results. In groups where you already selected at least one ingredient, items stay visible to preserve OR logic. Turn this off to restore the default shaker behavior.",
+      actions: [{ label: "Got it", variant: "primary" }],
+    });
   };
 
   const handleResetInventory = () => {
@@ -918,6 +933,68 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   ]}
                 >
                   Prevent sleep on cocktail view
+                </Text>
+              </View>
+            </Pressable>
+            <Pressable
+              accessibilityRole="checkbox"
+              accessibilityState={{ checked: shakerSmartFilteringEnabled }}
+              onPress={toggleShakerSmartFiltering}
+              style={[styles.settingRow, SURFACE_ROW_STYLE]}
+            >
+              <View
+                style={[
+                  styles.checkbox,
+                  {
+                    borderColor: shakerSmartFilteringEnabled
+                      ? Colors.tint
+                      : Colors.outlineVariant,
+                    backgroundColor: shakerSmartFilteringEnabled
+                      ? Colors.tint
+                      : "transparent",
+                  },
+                ]}
+              >
+                <MaterialCommunityIcons
+                  name="check"
+                  size={16}
+                  color={
+                    shakerSmartFilteringEnabled ? Colors.background : Colors.outlineVariant
+                  }
+                />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <View style={styles.settingLabelRow}>
+                  <Text
+                    style={[styles.settingLabel, { color: Colors.onSurface }]}
+                  >
+                    Smart shaker filtering
+                  </Text>
+                  <Pressable
+                    accessibilityRole="button"
+                    accessibilityLabel="Smart shaker filtering info"
+                    hitSlop={8}
+                    onPress={(event) => {
+                      event.stopPropagation();
+                      handleSmartShakerFilteringInfoPress();
+                    }}
+                    style={styles.settingInfoButton}
+                  >
+                    <MaterialCommunityIcons
+                      name="information-outline"
+                      size={16}
+                      color={Colors.primary}
+                      style={{ marginTop: 4 }}
+                    />
+                  </Pressable>
+                </View>
+                <Text
+                  style={[
+                    styles.settingCaption,
+                    { color: Colors.onSurfaceVariant },
+                  ]}
+                >
+                  Hide ingredients that would produce no results
                 </Text>
               </View>
             </Pressable>
@@ -1816,6 +1893,16 @@ const styles = StyleSheet.create({
   settingTextContainer: {
     flex: 1,
     gap: 4,
+  },
+  settingLabelRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+  },
+  settingInfoButton: {
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 2,
   },
   settingLabel: {
     fontSize: 16,

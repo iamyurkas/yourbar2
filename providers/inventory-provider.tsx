@@ -83,6 +83,8 @@ declare global {
   // eslint-disable-next-line no-var
   var __yourbarInventoryKeepScreenAwake: boolean | undefined;
   // eslint-disable-next-line no-var
+  var __yourbarInventoryShakerSmartFilteringEnabled: boolean | undefined;
+  // eslint-disable-next-line no-var
   var __yourbarInventoryRatingFilterThreshold: number | undefined;
   // eslint-disable-next-line no-var
   var __yourbarInventoryStartScreen: StartScreen | undefined;
@@ -218,6 +220,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   const [keepScreenAwake, setKeepScreenAwake] = useState<boolean>(
     () => globalThis.__yourbarInventoryKeepScreenAwake ?? true,
   );
+  const [shakerSmartFilteringEnabled, setShakerSmartFilteringEnabled] = useState<boolean>(
+    () => globalThis.__yourbarInventoryShakerSmartFilteringEnabled ?? false,
+  );
   const [ratingFilterThreshold, setRatingFilterThreshold] = useState<number>(() =>
     typeof globalThis.__yourbarInventoryRatingFilterThreshold === 'number'
       ? Math.min(5, Math.max(1, Math.round(globalThis.__yourbarInventoryRatingFilterThreshold)))
@@ -256,6 +261,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       allowAllSubstitutes: boolean;
       useImperialUnits: boolean;
       keepScreenAwake: boolean;
+      shakerSmartFilteringEnabled: boolean;
       ratingFilterThreshold: number;
       startScreen: StartScreen;
       appTheme: AppTheme;
@@ -272,6 +278,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       setAllowAllSubstitutes(bootstrap.allowAllSubstitutes);
       setUseImperialUnits(bootstrap.useImperialUnits);
       setKeepScreenAwake(bootstrap.keepScreenAwake);
+      setShakerSmartFilteringEnabled(bootstrap.shakerSmartFilteringEnabled);
       setRatingFilterThreshold(bootstrap.ratingFilterThreshold);
       setStartScreen(bootstrap.startScreen);
       setAppTheme(bootstrap.appTheme);
@@ -303,6 +310,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           const nextAllowAllSubstitutes = stored.allowAllSubstitutes ?? true;
           const nextUseImperialUnits = stored.useImperialUnits ?? false;
           const nextKeepScreenAwake = stored.keepScreenAwake ?? true;
+          const nextShakerSmartFilteringEnabled = stored.shakerSmartFilteringEnabled ?? false;
           const nextRatingFilterThreshold = Math.min(
             5,
             Math.max(1, Math.round(stored.ratingFilterThreshold ?? 1)),
@@ -323,6 +331,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             allowAllSubstitutes: nextAllowAllSubstitutes,
             useImperialUnits: nextUseImperialUnits,
             keepScreenAwake: nextKeepScreenAwake,
+            shakerSmartFilteringEnabled: nextShakerSmartFilteringEnabled,
             ratingFilterThreshold: nextRatingFilterThreshold,
             startScreen: nextStartScreen,
             appTheme: nextAppTheme,
@@ -349,6 +358,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             allowAllSubstitutes: true,
             useImperialUnits: false,
             keepScreenAwake: true,
+            shakerSmartFilteringEnabled: false,
             ratingFilterThreshold: 1,
             startScreen: DEFAULT_START_SCREEN,
             appTheme: DEFAULT_APP_THEME,
@@ -385,6 +395,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     globalThis.__yourbarInventoryAllowAllSubstitutes = allowAllSubstitutes;
     globalThis.__yourbarInventoryUseImperialUnits = useImperialUnits;
     globalThis.__yourbarInventoryKeepScreenAwake = keepScreenAwake;
+    globalThis.__yourbarInventoryShakerSmartFilteringEnabled = shakerSmartFilteringEnabled;
     globalThis.__yourbarInventoryRatingFilterThreshold = ratingFilterThreshold;
     globalThis.__yourbarInventoryStartScreen = startScreen;
     globalThis.__yourbarInventoryAppTheme = appTheme;
@@ -401,6 +412,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       allowAllSubstitutes,
       useImperialUnits,
       keepScreenAwake,
+      shakerSmartFilteringEnabled,
       ratingFilterThreshold,
       startScreen,
       appTheme,
@@ -430,6 +442,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     allowAllSubstitutes,
     useImperialUnits,
     keepScreenAwake,
+    shakerSmartFilteringEnabled,
     ratingFilterThreshold,
     startScreen,
     appTheme,
@@ -1417,6 +1430,10 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     setKeepScreenAwake(Boolean(value));
   }, []);
 
+  const handleSetShakerSmartFilteringEnabled = useCallback((value: boolean) => {
+    setShakerSmartFilteringEnabled(Boolean(value));
+  }, []);
+
   const handleSetRatingFilterThreshold = useCallback((value: number) => {
     const normalized = Math.min(5, Math.max(1, Math.round(value)));
     setRatingFilterThreshold(normalized);
@@ -1766,6 +1783,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       allowAllSubstitutes,
       useImperialUnits,
       keepScreenAwake,
+      shakerSmartFilteringEnabled,
       ratingFilterThreshold,
       startScreen,
       appTheme,
@@ -1777,6 +1795,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       allowAllSubstitutes,
       useImperialUnits,
       keepScreenAwake,
+      shakerSmartFilteringEnabled,
       ratingFilterThreshold,
       startScreen,
       appTheme,
@@ -1812,6 +1831,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       setAllowAllSubstitutes: handleSetAllowAllSubstitutes,
       setUseImperialUnits: handleSetUseImperialUnits,
       setKeepScreenAwake: handleSetKeepScreenAwake,
+      setShakerSmartFilteringEnabled: handleSetShakerSmartFilteringEnabled,
       setRatingFilterThreshold: handleSetRatingFilterThreshold,
       setStartScreen: handleSetStartScreen,
       setAppTheme: handleSetAppTheme,
@@ -1845,6 +1865,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       handleSetAllowAllSubstitutes,
       handleSetUseImperialUnits,
       handleSetKeepScreenAwake,
+      handleSetShakerSmartFilteringEnabled,
       handleSetRatingFilterThreshold,
       handleSetStartScreen,
       handleSetAppTheme,
