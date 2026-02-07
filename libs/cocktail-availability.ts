@@ -100,8 +100,10 @@ export function summariseCocktailAvailability(
   const missingNames: string[] = [];
   const resolvedNames: string[] = [];
   let missingCount = 0;
+  let displayMissingCount = 0;
 
   requiredIngredients.forEach((ingredient) => {
+    const shouldIncludeInSecondLine = !ingredient?.garnish;
     const resolution = resolveIngredientAvailability(
       ingredient,
       availableIngredientIds,
@@ -110,13 +112,18 @@ export function summariseCocktailAvailability(
     );
 
     if (resolution.isAvailable) {
-      if (resolution.resolvedName) {
+      if (shouldIncludeInSecondLine && resolution.resolvedName) {
         resolvedNames.push(resolution.resolvedName);
       }
       return;
     }
 
     missingCount += 1;
+    if (!shouldIncludeInSecondLine) {
+      return;
+    }
+
+    displayMissingCount += 1;
     if (resolution.missingName) {
       missingNames.push(resolution.missingName);
     }
@@ -124,10 +131,10 @@ export function summariseCocktailAvailability(
 
   let ingredientLine = '';
 
-  if (missingCount === 0) {
+  if (displayMissingCount === 0) {
     ingredientLine = resolvedNames.join(', ');
-  } else if (missingCount >= 3 || missingNames.length === 0) {
-    ingredientLine = `Missing: ${missingCount} ingredients`;
+  } else if (displayMissingCount >= 3 || missingNames.length === 0) {
+    ingredientLine = `Missing: ${displayMissingCount} ingredients`;
   } else {
     ingredientLine = `Missing: ${missingNames.join(', ')}`;
   }
