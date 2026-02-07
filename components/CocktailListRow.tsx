@@ -7,21 +7,21 @@ import { resolveGlasswareUriFromId } from '@/assets/image-manifest';
 import { METHOD_ICON_MAP, type CocktailMethodId } from '@/constants/cocktail-methods';
 import { useAppColors } from '@/constants/theme';
 import type { Cocktail, Ingredient } from '@/providers/inventory-provider';
-import { createIngredientLookup, type IngredientLookup } from '@/libs/ingredient-availability';
-import { summariseCocktailAvailability } from '@/libs/cocktail-availability';
+import { createIngredientLookup } from '@/libs/ingredient-availability';
 
 import { ListRow, Thumb } from './RowParts';
 
 type CocktailListRowProps = {
   cocktail: Cocktail;
-  availableIngredientIds: Set<number>;
   ingredients?: Ingredient[];
-  ingredientLookup?: IngredientLookup;
   highlightColor?: string;
-  ignoreGarnish?: boolean;
-  allowAllSubstitutes?: boolean;
   showMethodIcons?: boolean;
   onPress?: () => void;
+  isReady: boolean;
+  missingCount: number;
+  recipeNamesCount: number;
+  ingredientLine: string;
+  ratingValue: number;
 };
 
 const areCocktailRowPropsEqual = (
@@ -37,12 +37,13 @@ const areCocktailRowPropsEqual = (
 
   return (
     prev.cocktail === next.cocktail &&
-    prev.availableIngredientIds === next.availableIngredientIds &&
-    prev.ingredientLookup === next.ingredientLookup &&
     prev.ingredients === next.ingredients &&
-    prev.ignoreGarnish === next.ignoreGarnish &&
-    prev.allowAllSubstitutes === next.allowAllSubstitutes &&
     prev.highlightColor === next.highlightColor &&
+    prev.isReady === next.isReady &&
+    prev.missingCount === next.missingCount &&
+    prev.recipeNamesCount === next.recipeNamesCount &&
+    prev.ingredientLine === next.ingredientLine &&
+    prev.ratingValue === next.ratingValue &&
     onPressEqual
   );
 };
@@ -52,52 +53,39 @@ const METHOD_ICON_SIZE = 16;
 
 const CocktailListRowComponent = ({
   cocktail,
-  availableIngredientIds,
   ingredients,
-  ingredientLookup,
   highlightColor,
-  ignoreGarnish = true,
-  allowAllSubstitutes = false,
   showMethodIcons = false,
   onPress,
+  isReady,
+  missingCount,
+  recipeNamesCount,
+  ingredientLine,
+  ratingValue,
 }: CocktailListRowProps) => {
   const Colors = useAppColors();
   const effectiveHighlightColor = highlightColor ?? Colors.highlightFaint;
   const lookup = useMemo(() => {
-    if (ingredientLookup) {
-      return ingredientLookup;
-    }
-
     return createIngredientLookup(ingredients ?? []);
-  }, [ingredientLookup, ingredients]);
+  }, [ingredients]);
   const glasswareUri = resolveGlasswareUriFromId(cocktail.glassId);
 
-  const { missingCount, recipeNames, isReady, ingredientLine } = useMemo(
-    () =>
-      summariseCocktailAvailability(cocktail, availableIngredientIds, lookup, undefined, {
-        ignoreGarnish,
-        allowAllSubstitutes,
-      }),
-    [availableIngredientIds, cocktail, allowAllSubstitutes, ignoreGarnish, lookup],
-  );
-
   const subtitle = useMemo(() => {
-    if (missingCount === 0 && recipeNames.length === 0) {
+    if (missingCount === 0 && recipeNamesCount === 0) {
       return 'All ingredients ready';
     }
 
     return ingredientLine || '\u00A0';
-  }, [ingredientLine, missingCount, recipeNames.length]);
+  }, [ingredientLine, missingCount, recipeNamesCount]);
 
-  const ratingValueRaw = (cocktail as { userRating?: number }).userRating ?? 0;
-  const ratingValue = Math.max(0, Math.min(MAX_RATING, Number(ratingValueRaw) || 0));
+  const normalizedRating = Math.max(0, Math.min(MAX_RATING, Number(ratingValue) || 0));
 
   const ratingContent = useMemo(() => {
-    if (ratingValue <= 0) {
+    if (normalizedRating <= 0) {
       return null;
     }
 
-    const totalStars = Math.max(0, Math.min(MAX_RATING, Math.round(ratingValue)));
+    const totalStars = Math.max(0, Math.min(MAX_RATING, Math.round(normalizedRating)));
 
     return (
       <View
@@ -119,7 +107,7 @@ const CocktailListRowComponent = ({
     Colors.background,
     Colors.outline,
     Colors.tint,
-    ratingValue,
+    normalizedRating,
   ]);
 
   const tagColors = useMemo(

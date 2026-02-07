@@ -272,6 +272,10 @@ export default function CreateCocktailScreen() {
   const returnToParams = useMemo(() => {
     return parseReturnToParams(params.returnToParams);
   }, [params.returnToParams]);
+  const shouldConfirmOnLeave = useMemo(
+    () => sourceParam === "ingredient",
+    [sourceParam],
+  );
 
   const [name, setName] = useState("");
   const [glassId, setGlassId] = useState<string | null>("martini");
@@ -424,8 +428,8 @@ export default function CreateCocktailScreen() {
   }, [buildSnapshot, initialSnapshot]);
 
   useEffect(() => {
-    setHasUnsavedChanges(hasUnsavedChanges);
-  }, [hasUnsavedChanges, setHasUnsavedChanges]);
+    setHasUnsavedChanges(hasUnsavedChanges || shouldConfirmOnLeave);
+  }, [hasUnsavedChanges, setHasUnsavedChanges, shouldConfirmOnLeave]);
 
   useEffect(() => () => setHasUnsavedChanges(false), [setHasUnsavedChanges]);
 
@@ -1317,7 +1321,7 @@ export default function CreateCocktailScreen() {
         return;
       }
 
-      if (hasUnsavedChanges) {
+      if (hasUnsavedChanges || shouldConfirmOnLeave) {
         event.preventDefault();
         confirmLeave(() => {
           isHandlingBackRef.current = true;
@@ -1344,11 +1348,18 @@ export default function CreateCocktailScreen() {
     });
 
     return unsubscribe;
-  }, [confirmLeave, hasUnsavedChanges, navigation, returnToPath, returnToParams]);
+  }, [
+    confirmLeave,
+    hasUnsavedChanges,
+    navigation,
+    returnToPath,
+    returnToParams,
+    shouldConfirmOnLeave,
+  ]);
 
   const handleGoBack = useCallback(() => {
-    returnToSourceOrBack(navigation, { returnToPath, returnToParams });
-  }, [navigation, returnToPath, returnToParams]);
+    navigation.goBack();
+  }, [navigation]);
 
   const imageSource = useMemo(() => {
     if (!imageUri) {

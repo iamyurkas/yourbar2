@@ -6,9 +6,7 @@
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "yourbar",
-
     "userInterfaceStyle": "automatic",
-
     "newArchEnabled": true,
 
     "ios": {
@@ -18,9 +16,6 @@
     "android": {
       "package": "com.yourbarapp.free",
       "versionCode": 9,
-
-      "enableProguardInRelease": true,
-      "enableShrinkResourcesInRelease": true,
 
       "adaptiveIcon": {
         "backgroundColor": "#4DABF7",
@@ -40,6 +35,16 @@
     "plugins": [
       "./plugins/withForceDarkAllowed",
       "expo-router",
+
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "enableProguardInReleaseBuilds": true,
+            "enableShrinkResourcesInReleaseBuilds": true
+          }
+        }
+      ],
 
       [
         "expo-splash-screen",

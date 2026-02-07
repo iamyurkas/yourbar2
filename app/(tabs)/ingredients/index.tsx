@@ -35,7 +35,12 @@ import { navigateToDetailsWithReturnTo } from '@/libs/navigation';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { buildTagOptions, type TagOption } from '@/libs/tag-options';
 import { useOnboardingAnchors } from '@/components/onboarding/OnboardingContext';
-import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
+import {
+  useInventoryActions,
+  useInventoryData,
+  useInventorySettings,
+  type Ingredient,
+} from '@/providers/inventory-provider';
 import { tagColors } from '@/theme/theme';
 
 type IngredientSection = {
@@ -53,7 +58,7 @@ const TAB_OPTIONS: SegmentTabOption[] = [
 type IngredientListItemProps = {
   ingredient: Ingredient;
   highlightColor: string;
-  availableIngredientIds: Set<number>;
+  isAvailable: boolean;
   onToggleAvailability: (id: number) => void;
   subtitle?: string;
   surfaceVariantColor?: string;
@@ -68,7 +73,7 @@ const areIngredientPropsEqual = (
 ) =>
   prev.ingredient === next.ingredient &&
   prev.highlightColor === next.highlightColor &&
-  prev.availableIngredientIds === next.availableIngredientIds &&
+  prev.isAvailable === next.isAvailable &&
   prev.onToggleAvailability === next.onToggleAvailability &&
   prev.subtitle === next.subtitle &&
   prev.surfaceVariantColor === next.surfaceVariantColor &&
@@ -79,7 +84,7 @@ const areIngredientPropsEqual = (
 const IngredientListItem = memo(function IngredientListItemComponent({
   ingredient,
   highlightColor,
-  availableIngredientIds,
+  isAvailable,
   onToggleAvailability,
   subtitle,
   surfaceVariantColor,
@@ -89,7 +94,6 @@ const IngredientListItem = memo(function IngredientListItemComponent({
 }: IngredientListItemProps) {
   const Colors = useAppColors();
   const ingredientId = Number(ingredient.id ?? -1);
-  const isAvailable = ingredientId >= 0 && availableIngredientIds.has(ingredientId);
   const ingredientTagColors = (ingredient.tags ?? [])
     .map((tag) => tag?.color ?? tagColors.yellow)
     .filter(Boolean);
@@ -219,16 +223,9 @@ export default function IngredientsScreen() {
   const router = useRouter();
   const Colors = useAppColors();
   const { onTabChangeRequest } = useOnboardingAnchors();
-  const {
-    cocktails,
-    ingredients,
-    availableIngredientIds,
-    shoppingIngredientIds,
-    toggleIngredientShopping,
-    toggleIngredientAvailability,
-    ignoreGarnish,
-    allowAllSubstitutes,
-  } = useInventory();
+  const { cocktails, ingredients, availableIngredientIds, shoppingIngredientIds } = useInventoryData();
+  const { ignoreGarnish, allowAllSubstitutes } = useInventorySettings();
+  const { toggleIngredientShopping, toggleIngredientAvailability } = useInventoryActions();
   const [activeTab, setActiveTab] = useState<IngredientTabKey>(() => getLastIngredientTab());
   const [query, setQuery] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -378,64 +375,32 @@ export default function IngredientsScreen() {
 
   const ingredientLookup = useMemo(() => createIngredientLookup(ingredients), [ingredients]);
 
-  const resolveCocktailKey = useCallback((cocktail: Cocktail) => {
-    const id = cocktail.id;
-    if (id != null) {
-      return String(id);
-    }
-
-    if (cocktail.name) {
-      return cocktail.name.trim().toLowerCase();
-    }
-
-    return undefined;
-  }, []);
-
-  const visibleCocktailsByIngredientId = useMemo(() => {
-    const map = new Map<number, Set<string>>();
+  const ingredientCocktailStats = useMemo(() => {
+    const totalCounts = new Map<number, number>();
+    const makeableCounts = new Map<number, number>();
 
     cocktails.forEach((cocktail) => {
-      const cocktailKey = resolveCocktailKey(cocktail);
-      if (!cocktailKey) {
+      const visibleIds = getVisibleIngredientIdsForCocktail(cocktail, ingredientLookup, {
+        allowAllSubstitutes,
+      });
+      if (visibleIds.size === 0) {
         return;
       }
 
-      const visibleIds = getVisibleIngredientIdsForCocktail(cocktail, ingredientLookup, {
+      const isMakeable = isCocktailReady(cocktail, availableIngredientIds, ingredientLookup, ingredients, {
+        ignoreGarnish,
         allowAllSubstitutes,
       });
 
       visibleIds.forEach((ingredientId) => {
-        let set = map.get(ingredientId);
-        if (!set) {
-          set = new Set<string>();
-          map.set(ingredientId, set);
+        totalCounts.set(ingredientId, (totalCounts.get(ingredientId) ?? 0) + 1);
+        if (isMakeable) {
+          makeableCounts.set(ingredientId, (makeableCounts.get(ingredientId) ?? 0) + 1);
         }
-
-        set.add(cocktailKey);
       });
     });
 
-    return map;
-  }, [allowAllSubstitutes, cocktails, ingredientLookup, resolveCocktailKey]);
-
-  const makeableCocktailKeys = useMemo(() => {
-    const keys = new Set<string>();
-
-    cocktails.forEach((cocktail) => {
-      const key = resolveCocktailKey(cocktail);
-      if (!key) {
-        return;
-      }
-
-      if (isCocktailReady(cocktail, availableIngredientIds, ingredientLookup, ingredients, {
-        ignoreGarnish,
-        allowAllSubstitutes,
-      })) {
-        keys.add(key);
-      }
-    });
-
-    return keys;
+    return { totalCounts, makeableCounts };
   }, [
     allowAllSubstitutes,
     availableIngredientIds,
@@ -443,30 +408,7 @@ export default function IngredientsScreen() {
     ignoreGarnish,
     ingredientLookup,
     ingredients,
-    resolveCocktailKey,
   ]);
-
-  const totalCocktailCounts = useMemo(() => {
-    const counts = new Map<number, number>();
-    visibleCocktailsByIngredientId.forEach((cocktailKeys, ingredientId) => {
-      counts.set(ingredientId, cocktailKeys.size);
-    });
-    return counts;
-  }, [visibleCocktailsByIngredientId]);
-
-  const makeableCocktailCounts = useMemo(() => {
-    const counts = new Map<number, number>();
-    visibleCocktailsByIngredientId.forEach((cocktailKeys, ingredientId) => {
-      let count = 0;
-      cocktailKeys.forEach((key) => {
-        if (makeableCocktailKeys.has(key)) {
-          count += 1;
-        }
-      });
-      counts.set(ingredientId, count);
-    });
-    return counts;
-  }, [makeableCocktailKeys, visibleCocktailsByIngredientId]);
 
   const sections = useMemo<Record<IngredientTabKey, IngredientSection>>(() => {
     const inStock = ingredients.filter((ingredient) => {
@@ -645,9 +587,12 @@ export default function IngredientsScreen() {
     ({ item }: { item: Ingredient }) => {
       const ingredientId = Number(item.id ?? -1);
       const isOnShoppingList = ingredientId >= 0 && shoppingIngredientIds.has(ingredientId);
+      const isAvailable = ingredientId >= 0 && effectiveAvailableIngredientIds.has(ingredientId);
 
       const isMyTab = activeTab === 'my';
-      const countsMap = isMyTab ? makeableCocktailCounts : totalCocktailCounts;
+      const countsMap = isMyTab
+        ? ingredientCocktailStats.makeableCounts
+        : ingredientCocktailStats.totalCounts;
       const count = ingredientId >= 0 ? countsMap.get(ingredientId) ?? 0 : 0;
 
       let subtitleText: string | undefined;
@@ -665,7 +610,7 @@ export default function IngredientsScreen() {
         <IngredientListItem
           ingredient={item}
           highlightColor={highlightColor}
-          availableIngredientIds={effectiveAvailableIngredientIds}
+          isAvailable={isAvailable}
           onToggleAvailability={handleToggle}
           subtitle={subtitleText}
           surfaceVariantColor={Colors.onSurfaceVariant ?? Colors.icon}
@@ -681,10 +626,9 @@ export default function IngredientsScreen() {
       handleToggle,
       handleShoppingToggle,
       highlightColor,
-      makeableCocktailCounts,
+      ingredientCocktailStats,
       Colors,
       shoppingIngredientIds,
-      totalCocktailCounts,
     ],
   );
 
@@ -786,6 +730,9 @@ export default function IngredientsScreen() {
           renderItem={renderItem}
           ItemSeparatorComponent={renderSeparator}
           contentContainerStyle={styles.listContent}
+          initialNumToRender={16}
+          maxToRenderPerBatch={16}
+          windowSize={7}
           showsVerticalScrollIndicator
           keyboardDismissMode="on-drag"
           // Let the first tap both dismiss the keyboard and activate the row.

@@ -23,7 +23,7 @@ import { TagPill } from '@/components/TagPill';
 import { getCocktailMethods, METHOD_ICON_MAP, type CocktailMethod } from '@/constants/cocktail-methods';
 import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
 import { useAppColors } from '@/constants/theme';
-import { isCocktailReady } from '@/libs/cocktail-availability';
+import { isCocktailReady, summariseCocktailAvailability } from '@/libs/cocktail-availability';
 import { createIngredientLookup } from '@/libs/ingredient-availability';
 import { navigateToDetailsWithReturnTo } from '@/libs/navigation';
 import { normalizeSearchText } from '@/libs/search-normalization';
@@ -72,6 +72,7 @@ export default function ShakerResultsScreen() {
     ingredients,
     ignoreGarnish,
     allowAllSubstitutes,
+    getCocktailRating,
   } = useInventory();
   const Colors = useAppColors();
   const params = useLocalSearchParams();
@@ -111,7 +112,7 @@ export default function ShakerResultsScreen() {
       items.push(cocktail);
     });
 
-    return items;
+    return items.sort((a, b) => (a.name ?? '').localeCompare(b.name ?? ''));
   }, [availableIds, cocktails]);
 
   const unavailableCocktails = useMemo(() => {
@@ -133,7 +134,7 @@ export default function ShakerResultsScreen() {
       items.push(cocktail);
     });
 
-    return items;
+    return items.sort((a, b) => (a.name ?? '').localeCompare(b.name ?? ''));
   }, [cocktails, unavailableIds]);
 
   const listData = useMemo(
@@ -515,24 +516,37 @@ export default function ShakerResultsScreen() {
     [params.available, params.unavailable],
   );
 
+  const getAvailabilitySummary = useCallback(
+    (cocktail: Cocktail) =>
+      summariseCocktailAvailability(cocktail, availableIngredientIds, ingredientLookup, undefined, {
+        ignoreGarnish,
+        allowAllSubstitutes,
+      }),
+    [allowAllSubstitutes, availableIngredientIds, ignoreGarnish, ingredientLookup],
+  );
+
   const renderItem = useCallback(
-    ({ item }: { item: Cocktail }) => (
-      <CocktailListRow
-        cocktail={item}
-        availableIngredientIds={availableIngredientIds}
-        ingredientLookup={ingredientLookup}
-        ignoreGarnish={ignoreGarnish}
-        allowAllSubstitutes={allowAllSubstitutes}
-        showMethodIcons
-        onPress={() => handlePressCocktail(item)}
-      />
-    ),
+    ({ item }: { item: Cocktail }) => {
+      const availability = getAvailabilitySummary(item);
+      return (
+        <CocktailListRow
+          cocktail={item}
+          ingredients={ingredients}
+          showMethodIcons
+          onPress={() => handlePressCocktail(item)}
+          isReady={availability.isReady}
+          missingCount={availability.missingCount}
+          recipeNamesCount={availability.recipeNames.length}
+          ingredientLine={availability.ingredientLine}
+          ratingValue={getCocktailRating(item)}
+        />
+      );
+    },
     [
-      allowAllSubstitutes,
-      availableIngredientIds,
+      getAvailabilitySummary,
+      getCocktailRating,
       handlePressCocktail,
-      ignoreGarnish,
-      ingredientLookup,
+      ingredients,
     ],
   );
 
@@ -681,6 +695,9 @@ export default function ShakerResultsScreen() {
           renderItem={renderItem}
           ItemSeparatorComponent={renderSeparator}
           contentContainerStyle={styles.listContent}
+          initialNumToRender={12}
+          maxToRenderPerBatch={12}
+          windowSize={5}
           ListEmptyComponent={
             <Text style={[styles.emptyLabel, { color: Colors.onSurfaceVariant }]}>
               No matching recipes

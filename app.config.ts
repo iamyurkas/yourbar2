@@ -1,22 +1,18 @@
-import appJson from "./app.json";
+import base from "./app.base.json";
 
-const isDevelopmentProfile = process.env.EAS_BUILD_PROFILE === "development";
+type ExpoConfig = Record<string, any>;
 
-const plugins = [...(appJson.expo.plugins ?? [])];
+export default ({ config }: { config: ExpoConfig }) => ({
+  expo: {
+    ...config,
+    ...base.expo,
 
-if (isDevelopmentProfile) {
-  plugins.push("expo-dev-client");
-}
+    plugins: base.expo.plugins ?? [],
 
-plugins.push("@sentry/react-native");
-
-export default {
-  ...appJson.expo,
-
-  plugins,
-
-  extra: {
-    ...appJson.expo.extra,
-    buildTime: new Date().toISOString(),
+    extra: {
+      ...(config.extra ?? {}),
+      ...(base.expo.extra ?? {}),
+      buildTime: new Date().toISOString(),
+    },
   },
-};
+});

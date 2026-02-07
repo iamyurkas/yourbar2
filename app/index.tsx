@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 import { Redirect } from 'expo-router';
+import { Image, StyleSheet, Text, View } from 'react-native';
 
 import { setLastCocktailTab, setLastIngredientTab } from '@/libs/collection-tabs';
 import { useInventory, type StartScreen } from '@/providers/inventory-provider';
@@ -58,8 +59,32 @@ export default function Index() {
   const targetHref = useMemo(() => getHrefForStartScreen(startScreen), [startScreen]);
 
   if (loading) {
-    return null;
+    return (
+      <View style={styles.loadingScreen}>
+        <Image source={require('@/assets/images/splash.png')} style={styles.splashImage} resizeMode="contain" />
+        <Text style={styles.loadingText}>your rules!</Text>
+      </View>
+    );
   }
 
   return <Redirect href={targetHref} />;
 }
+
+const styles = StyleSheet.create({
+  loadingScreen: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#4DABF7',
+  },
+  splashImage: {
+    width: 180,
+    height: 180,
+  },
+  loadingText: {
+    marginTop: 12,
+    color: '#FFFFFF',
+    fontSize: 22,
+    fontWeight: '700',
+  },
+});

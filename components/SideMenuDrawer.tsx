@@ -33,12 +33,20 @@ import { base64ToBytes, createTarArchive } from "@/libs/archive-utils";
 import { buildPhotoBaseName } from "@/libs/photo-utils";
 import { useInventory, type AppTheme, type StartScreen } from "@/providers/inventory-provider";
 import { type InventoryExportData } from "@/providers/inventory-types";
-import appConfig from "../app.json";
+import Constants from "expo-constants";
 
 const MENU_WIDTH = Math.round(Dimensions.get("window").width * 0.75);
 const ANIMATION_DURATION = 200;
-const APP_VERSION = appConfig.expo.version;
-const APP_VERSION_CODE = appConfig.expo.android?.versionCode;
+const APP_VERSION =
+  Constants.expoConfig?.version ??
+  Constants.manifest2?.extra?.expoClient?.version ??
+  "unknown";
+
+const APP_VERSION_CODE =
+  Constants.expoConfig?.android?.versionCode ??
+  // fallback
+  (Constants.manifest2?.extra as any)?.expoClient?.android?.versionCode ??
+  null;
 
 type StartScreenIcon =
   | {

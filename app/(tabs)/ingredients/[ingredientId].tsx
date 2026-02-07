@@ -27,7 +27,7 @@ import { CocktailListRow } from "@/components/CocktailListRow";
 import { PresenceCheck } from "@/components/RowParts";
 import { TagPill } from "@/components/TagPill";
 import { useAppColors } from "@/constants/theme";
-import { isCocktailReady } from "@/libs/cocktail-availability";
+import { summariseCocktailAvailability } from "@/libs/cocktail-availability";
 import { resolveImageSource } from "@/libs/image-source";
 import {
   createIngredientLookup,
@@ -89,6 +89,7 @@ export default function IngredientDetailsScreen() {
     clearBaseIngredient,
     ignoreGarnish,
     allowAllSubstitutes,
+    getCocktailRating,
   } = useInventory();
 
   const ingredient = useResolvedIngredient(
@@ -240,20 +241,28 @@ export default function IngredientDetailsScreen() {
   const COCKTAIL_PAGE_SIZE = 20;
   const cocktailEntries = useMemo(
     () =>
-      cocktailsWithIngredient.map((cocktail) => ({
-        cocktail,
-        isReady: isCocktailReady(
+      cocktailsWithIngredient.map((cocktail) => {
+        const availability = summariseCocktailAvailability(
           cocktail,
           availableIngredientIds,
           ingredientLookup,
           undefined,
           { ignoreGarnish, allowAllSubstitutes },
-        ),
-      })),
+        );
+        return {
+          cocktail,
+          isReady: availability.isReady,
+          missingCount: availability.missingCount,
+          recipeNamesCount: availability.recipeNames.length,
+          ingredientLine: availability.ingredientLine,
+          ratingValue: getCocktailRating(cocktail),
+        };
+      }),
     [
       allowAllSubstitutes,
       availableIngredientIds,
       cocktailsWithIngredient,
+      getCocktailRating,
       ignoreGarnish,
       ingredientLookup,
     ],
@@ -933,7 +942,7 @@ export default function IngredientDetailsScreen() {
               {cocktailEntries.length ? (
                 <View style={styles.cocktailList}>
                   {visibleCocktailEntries.map(
-                    ({ cocktail, isReady }, index) => {
+                    ({ cocktail, isReady, missingCount, recipeNamesCount, ingredientLine, ratingValue }, index) => {
                       const previousReady =
                         index > 0
                           ? visibleCocktailEntries[index - 1]?.isReady
@@ -954,10 +963,7 @@ export default function IngredientDetailsScreen() {
                           ) : null}
                           <CocktailListRow
                             cocktail={cocktail}
-                            availableIngredientIds={availableIngredientIds}
-                            ingredientLookup={ingredientLookup}
-                            ignoreGarnish={ignoreGarnish}
-                            allowAllSubstitutes={allowAllSubstitutes}
+                            ingredients={ingredients}
                             onPress={() =>
                               handleNavigateToCocktail(
                                 cocktail.id ?? cocktail.name,
@@ -967,6 +973,11 @@ export default function IngredientDetailsScreen() {
                               isReady ? undefined : Colors.highlightFaint
                             }
                             showMethodIcons
+                            isReady={isReady}
+                            missingCount={missingCount}
+                            recipeNamesCount={recipeNamesCount}
+                            ingredientLine={ingredientLine}
+                            ratingValue={ratingValue}
                           />
                         </React.Fragment>
                       );

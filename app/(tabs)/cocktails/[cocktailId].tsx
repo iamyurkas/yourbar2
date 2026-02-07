@@ -418,10 +418,6 @@ export default function CocktailDetailsScreen() {
     return unsubscribe;
   }, [handleReturn, navigation]);
 
-  if (shouldNavigateAway) {
-    return null;
-  }
-
   useEffect(() => {
     const keepAwakeTag = "cocktail-details";
 
@@ -667,6 +663,10 @@ export default function CocktailDetailsScreen() {
       },
     });
   }, [cocktail, returnToParams, returnToPath]);
+
+  if (shouldNavigateAway) {
+    return null;
+  }
 
   return (
     <SafeAreaView
