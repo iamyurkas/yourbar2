@@ -20660,7 +20660,7 @@
       "id": 346,
       "name": "Paloma",
       "description": "Mexico's favorite cocktail, featuring a perfect harmony of tart grapefruit, zesty lime, and premium tequila for a refreshing citrus experience.",
-      "instructions": "1. Fill a highball glass with ice.\n2. Add 50ml of Tequila Blanco, 10ml of Agave Syrup, 10ml of Lime Juice, and 100ml of Grapefruit Soda.\n3. Stir gently to combine.\n4. Garnish with a pinch of salt and a lime wedge.",
+      "instructions": "1. Fill a highball glass with ice.\n2. Add 60ml of Tequila Blanco, 15ml of Agave Syrup, 15ml of Lime Juice, and 120ml of Grapefruit Soda.\n3. Stir gently to combine.\n4. Garnish with a pinch of salt and a lime wedge.",
       "photoUri": "assets/cocktails/346-paloma.jpg",
       "glassId": "highball_glass",
       "methodIds": ["build"],
@@ -20670,14 +20670,14 @@
           "order": 1,
           "ingredientId": 327,
           "name": "Tequila Blanco",
-          "amount": "50",
+          "amount": "60",
           "unitId": 11
         },
         {
           "order": 2,
           "ingredientId": 6,
           "name": "Agave Syrup",
-          "amount": "10",
+          "amount": "15",
           "unitId": 11,
           "optional": true
         },
@@ -20685,14 +20685,14 @@
           "order": 3,
           "ingredientId": 223,
           "name": "Lime Juice",
-          "amount": "10",
+          "amount": "15",
           "unitId": 11
         },
         {
           "order": 4,
           "ingredientId": 177,
           "name": "Grapefruit Soda",
-          "amount": "100",
+          "amount": "120",
           "unitId": 11
         },
         {
