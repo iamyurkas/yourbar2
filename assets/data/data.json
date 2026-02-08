@@ -1191,8 +1191,8 @@
     {
       "id": 21,
       "name": "Amalia",
-      "description": "A light, sparkling rum cocktail designed for effortless sipping. Fresh kiwi, lime and floral elderflower are balanced by white rum and lifted with bubbly mixers over ice, finished with a cooling mint garnish.",
-      "instructions": "1. Cut kiwi fruit in half and use a spoon to scoop flesh from one half into shaker.\n2. In a shaker, muddle fresh kiwi pieces to release juice and aroma.\n3. Add 50ml of White Rum, 15ml of Lime Juice, and 30ml of Elderflower Cordial to the shaker.\n4. Fill the shaker with ice and shake briefly to combine and chill.\n5. Strain into a chilled coupe glass.\n6. Top gently with Ginger Ale.\n7. Give a light stir to integrate the layers without losing bubbles.\n8. Garnish with a fresh Mint Sprig and a thin slice of kiwi.",
+      "description": "A light, sparkling rum cocktail designed for effortless sipping. Fresh kiwi fruit, lime and floral elderflower are balanced by white rum and lifted with bubbly mixers over ice, finished with a cooling mint garnish.",
+      "instructions": "1. Cut kiwi fruit in half and use a spoon to scoop flesh from one half into shaker.\n2. In a shaker, muddle fresh kiwi fruit pieces to release juice and aroma.\n3. Add 50ml of White Rum, 15ml of Lime Juice, and 30ml of Elderflower Cordial to the shaker.\n4. Fill the shaker with ice and shake briefly to combine and chill.\n5. Strain into a chilled coupe glass.\n6. Top gently with Ginger Ale.\n7. Give a light stir to integrate the layers without losing bubbles.\n8. Garnish with a fresh Mint Sprig and a thin slice of kiwi fruit.",
       "photoUri": "assets/cocktails/120-amalia.jpg",
       "glassId": "coupe",
       "methodIds": ["muddle", "shake"],
@@ -1201,7 +1201,7 @@
         {
           "order": 1,
           "ingredientId": 208,
-          "name": "Kiwi",
+          "name": "Kiwi fruit",
           "amount": "1",
           "unitId": 9
         },
@@ -1251,7 +1251,7 @@
         {
           "order": 8,
           "ingredientId": 208,
-          "name": "Kiwi",
+          "name": "Kiwi fruit",
           "amount": "1",
           "unitId": 19,
           "garnish": true
@@ -2158,8 +2158,8 @@
     {
       "id": 37,
       "name": "Aussie Boomerang",
-      "description": "A smooth, creamy shooter combining bright kiwi and melon liqueurs with rich cream. Sweet, fruity, and dessert-like, it’s a playful, easy-drinking shot with a soft tropical finish.",
-      "instructions": "1. Chill a shooter glass in advance for a cleaner, smoother taste.\n2. Pour the Kiwi Liqueur into the glass as the first layer.\n3. Slowly add the Melon Liqueur over the back of a spoon to create a distinct layer.\n4. Gently float the cream on top using a spoon to achieve a clean layered effect.\n5. Serve immediately and drink in one smooth shot.",
+      "description": "A smooth, creamy shooter combining bright kiwi fruit and melon liqueurs with rich cream. Sweet, fruity, and dessert-like, it’s a playful, easy-drinking shot with a soft tropical finish.",
+      "instructions": "1. Chill a shooter glass in advance for a cleaner, smoother taste.\n2. Pour the Kiwi fruit Liqueur into the glass as the first layer.\n3. Slowly add the Melon Liqueur over the back of a spoon to create a distinct layer.\n4. Gently float the cream on top using a spoon to achieve a clean layered effect.\n5. Serve immediately and drink in one smooth shot.",
       "photoUri": "assets/cocktails/136-aussie-boomerang.jpg",
       "glassId": "shooter",
       "methodIds": ["layer"],
@@ -2168,7 +2168,7 @@
         {
           "order": 1,
           "ingredientId": 209,
-          "name": "Kiwi Liqueur",
+          "name": "Kiwi fruit Liqueur",
           "amount": "25",
           "unitId": 11
         },
@@ -27695,8 +27695,8 @@
     {
       "id": 464,
       "name": "Tropical Sangria",
-      "description": "A light and effervescent twist on the classic sangria. This refreshing pitcher drink features crisp white wine and coconut notes, macerated with fresh orange, kiwi, and strawberries for a colorful, shareable summer treat.",
-      "instructions": "1. Fill a pitcher with ice.\n2. Add 8.5 oz of Coconut Liqueur, 13.5 oz of White Wine, 1.5 oz of Simple Syrup, 3.5 oz of Soda Water, 1 half of Orange, 1 Kiwi, and 7 sliced Strawberries.\n3. Stir gently to combine.",
+      "description": "A light and effervescent twist on the classic sangria. This refreshing pitcher drink features crisp white wine and coconut notes, macerated with fresh orange, kiwi fruit, and strawberries for a colorful, shareable summer treat.",
+      "instructions": "1. Fill a pitcher with ice.\n2. Add 8.5 oz of Coconut Liqueur, 13.5 oz of White Wine, 1.5 oz of Simple Syrup, 3.5 oz of Soda Water, 1 half of Orange, 1 Kiwi fruit, and 7 sliced Strawberries.\n3. Stir gently to combine.",
       "photoUri": "assets/cocktails/565-tropical-sangria.jpg",
       "glassId": "pitcher",
       "methodIds": ["build"],
@@ -27746,7 +27746,7 @@
         {
           "order": 6,
           "ingredientId": 208,
-          "name": "Kiwi",
+          "name": "Kiwi fruit",
           "amount": "1",
           "unitId": 1
         },
@@ -31418,15 +31418,15 @@
     },
     {
       "id": 208,
-      "name": "Kiwi",
+      "name": "Kiwi fruit",
       "description": "Bright green fruit with sweet-tart flavor and tiny seeds. Adds tropical freshness when muddled or pureed.",
       "tags": [6],
       "photoUri": "assets/ingredients/310-kiwi.jpg"
     },
     {
       "id": 209,
-      "name": "Kiwi Liqueur",
-      "description": "Kiwi liqueur is a tangy green liqueur around 15–20% ABV. Shake it into a Kiwi Martini or Tropical Daiquiri.",
+      "name": "Kiwi fruit Liqueur",
+      "description": "Kiwi fruit liqueur is a tangy green liqueur around 15–20% ABV. Shake it into a Kiwi fruit Martini or Tropical Daiquiri.",
       "tags": [2],
       "photoUri": "assets/ingredients/311-kiwi-liqueur.jpg"
     },
