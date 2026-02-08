@@ -4144,7 +4144,7 @@
           "order": 5,
           "ingredientId": 193,
           "name": "Ice",
-          "amount": "150",
+          "amount": "120",
           "unitId": 8
         }
       ]
@@ -6619,7 +6619,7 @@
           "order": 10,
           "ingredientId": 193,
           "name": "Ice",
-          "amount": "150",
+          "amount": "120",
           "unitId": 8
         }
       ]
@@ -6686,7 +6686,7 @@
           "order": 7,
           "ingredientId": 193,
           "name": "Ice",
-          "amount": "150",
+          "amount": "120",
           "unitId": 8
         },
         {
@@ -7240,7 +7240,7 @@
       "id": 121,
       "name": "California Root Beer",
       "description": "A fizzy cocktail that mimics the taste of root beer with coffee and vanilla notes.",
-      "instructions": "1. Shake first 3 ingredients with ice.\n2. Strain into an ice-filled glass.\n3. Top with soda.\n4. Garnish with lime wedge.",
+      "instructions": "1. Shake vodka, Galliano, coffee liqueur, and rich simple syrup with ice.\n2. Strain into an ice-filled glass.\n3. Top with soda water.\n4. Garnish with a lime wedge.",
       "photoUri": "assets/cocktails/121-california-root-beer.jpg",
       "glassId": "highball_glass",
       "methodIds": ["shake"],
@@ -7283,13 +7283,20 @@
         },
         {
           "order": 6,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
+        },
+        {
+          "order": 7,
           "ingredientId": 311,
           "name": "Soda Water",
           "amount": "90",
           "unitId": 11
         },
         {
-          "order": 7,
+          "order": 8,
           "ingredientId": 222,
           "name": "Lime",
           "amount": "1",
@@ -7592,7 +7599,7 @@
           "order": 7,
           "ingredientId": 193,
           "name": "Ice",
-          "amount": "150",
+          "amount": "120",
           "unitId": 8,
           "optional": true
         }
@@ -7643,7 +7650,7 @@
       "id": 128,
       "name": "Car Crash",
       "description": "A sweet and fruity long drink.",
-      "instructions": "1. Fill a cocktail shaker with ice. Add amaretto, peach liqueur, orange juice, and lemon juice and simple syrup.\n2. Shake well until chilled and strain into a tall Collins glass filled with fresh ice.\n3. Slowly pour the grenadine over the back of a spoon. It will sink to the bottom, creating a red \"crash\" effect.\n4. Garnish with an orange slice and a maraschino cherry.",
+      "instructions": "1. Fill a cocktail shaker with ice and add amaretto, peach liqueur, Southern Comfort (optional), orange juice, lemon juice, and simple syrup.\n2. Shake well until chilled and strain into a tall Collins glass filled with fresh ice.\n3. Slowly pour the grenadine over the back of a spoon so it sinks to the bottom, creating a red \"crash\" effect.\n4. Garnish with a blood orange slice and a maraschino cherry.",
       "photoUri": "assets/cocktails/128-car-crash.jpg",
       "glassId": "collins_glass",
       "methodIds": ["shake", "layer"],
@@ -7725,6 +7732,13 @@
         },
         {
           "order": 10,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8
+        },
+        {
+          "order": 11,
           "ingredientId": 193,
           "name": "Ice",
           "amount": "120",
@@ -8708,6 +8722,13 @@
         },
         {
           "order": 7,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
+        },
+        {
+          "order": 8,
           "ingredientId": 242,
           "name": "Orange",
           "amount": "1",
@@ -12704,7 +12725,7 @@
           "order": 3,
           "ingredientId": 193,
           "name": "Ice",
-          "amount": "150",
+          "amount": "120",
           "unitId": 8
         },
         {
@@ -12793,7 +12814,7 @@
           "order": 3,
           "ingredientId": 193,
           "name": "Ice",
-          "amount": "150",
+          "amount": "120",
           "unitId": 8
         },
         {
@@ -13344,7 +13365,7 @@
           "order": 4,
           "ingredientId": 193,
           "name": "Ice",
-          "amount": "150",
+          "amount": "120",
           "unitId": 8
         },
         {
@@ -13515,7 +13536,7 @@
           "order": 4,
           "ingredientId": 193,
           "name": "Ice",
-          "amount": "150",
+          "amount": "120",
           "unitId": 8
         },
         {
@@ -13564,7 +13585,7 @@
           "order": 4,
           "ingredientId": 193,
           "name": "Ice",
-          "amount": "150",
+          "amount": "120",
           "unitId": 8
         },
         {
@@ -14080,7 +14101,7 @@
           "order": 3,
           "ingredientId": 193,
           "name": "Ice",
-          "amount": "150",
+          "amount": "120",
           "unitId": 8
         },
         {
@@ -14215,7 +14236,7 @@
           "order": 4,
           "ingredientId": 193,
           "name": "Ice",
-          "amount": "150",
+          "amount": "120",
           "unitId": 8
         },
         {
@@ -14455,7 +14476,7 @@
           "order": 4,
           "ingredientId": 193,
           "name": "Ice",
-          "amount": "150",
+          "amount": "120",
           "unitId": 8
         },
         {
@@ -14702,7 +14723,7 @@
           "order": 3,
           "ingredientId": 193,
           "name": "Ice",
-          "amount": "150",
+          "amount": "120",
           "unitId": 8
         },
         {
@@ -14886,7 +14907,7 @@
           "order": 3,
           "ingredientId": 193,
           "name": "Ice",
-          "amount": "150",
+          "amount": "120",
           "unitId": 8
         },
         {
@@ -15467,7 +15488,7 @@
           "order": 3,
           "ingredientId": 193,
           "name": "Ice",
-          "amount": "150",
+          "amount": "120",
           "unitId": 8
         }
       ]
@@ -16422,7 +16443,7 @@
           "order": 7,
           "ingredientId": 193,
           "name": "Ice",
-          "amount": "120",
+          "amount": "150",
           "unitId": 8
         }
       ]
@@ -18188,7 +18209,7 @@
           "order": 5,
           "ingredientId": 193,
           "name": "Ice",
-          "amount": "120",
+          "amount": "150",
           "unitId": 8
         }
       ]
@@ -19849,7 +19870,7 @@
           "order": 4,
           "ingredientId": 193,
           "name": "Ice",
-          "amount": "150",
+          "amount": "120",
           "unitId": 8
         },
         {
@@ -23270,7 +23291,7 @@
           "order": 7,
           "ingredientId": 193,
           "name": "Ice",
-          "amount": "150",
+          "amount": "120",
           "unitId": 8
         },
         {
@@ -23483,7 +23504,7 @@
           "order": 3,
           "ingredientId": 193,
           "name": "Ice",
-          "amount": "150",
+          "amount": "120",
           "unitId": 8
         },
         {
@@ -23667,7 +23688,7 @@
       "id": 395,
       "name": "Sangrita",
       "description": "A non-alcoholic drink that usually accompanies tequila shots. You drink a shot of Sangrita after taking a shot of tequila. Many variations of the Sangrita recipe exist; the current recipe is not an authentic Mexican version, but the idea is that the drink is popular and easy to make. The recipe here is for a 1L pitcher of Sangrita.",
-      "instructions": "1. Add 600ml of Tomato Juice, 300ml of Orange Juice, 100ml of Lemon Juice, 20ml of Tabasco, 1 teaspoon of Black Pepper, and 1 teaspoon of Salt to a pitcher.\n2. Stir gently to combine.\n3. Garnish with an orange slice and a chili pepper.",
+      "instructions": "1. Fill a pitcher with 300g of ice.\n2. Add 600ml of Tomato Juice, 300ml of Orange Juice, 100ml of Lemon Juice, 20ml of Tabasco, 1 teaspoon of Black Pepper, and 1 teaspoon of Salt.\n3. Stir gently to combine.\n4. Garnish with an orange slice and a chili pepper.",
       "photoUri": "assets/cocktails/395-sangrita.jpg",
       "glassId": "pitcher",
       "methodIds": ["build"],
@@ -25730,7 +25751,7 @@
       "id": 429,
       "name": "Strawberry Margarita",
       "description": "A luscious and bold twist on the classic Margarita, combining the earthy notes of Tequila Blanco with sweet strawberries and the orange accents of Cointreau.",
-      "instructions": "1. Combine the fresh strawberries, tequila blanco, Cointreau, and lime juice in a blender.\n2. Add the ice to the mixture.\n3. Blend until the texture is perfectly smooth and frozen.\n4. Optional: Rim your margarita glasses with salt or sugar if desired.\n5. Pour the blended cocktail into the prepared glasses.\n6. Finish with a strawberry garnish on each glass.",
+      "instructions": "1. Combine 40g of fresh strawberries, 60ml of tequila blanco, 40ml of Cointreau, and 30ml of lime juice in a blender.\n2. Add 50g of ice.\n3. Blend until the texture is perfectly smooth and frozen.\n4. Optional: Rim your margarita glass with salt or sugar if desired.\n5. Pour the blended cocktail into the prepared glass.\n6. Finish with a strawberry garnish.",
       "photoUri": "assets/cocktails/429-strawberry-margarita.jpg",
       "glassId": "margarita_glass",
       "methodIds": ["blend"],
@@ -25740,21 +25761,21 @@
           "order": 1,
           "ingredientId": 317,
           "name": "Strawberry",
-          "amount": "120",
+          "amount": "40",
           "unitId": 8
         },
         {
           "order": 2,
           "ingredientId": 327,
           "name": "Tequila Blanco",
-          "amount": "180",
+          "amount": "60",
           "unitId": 11
         },
         {
           "order": 3,
           "ingredientId": 110,
           "name": "Cointreau",
-          "amount": "120",
+          "amount": "40",
           "unitId": 11,
           "allowBaseSubstitution": true,
           "allowBrandSubstitution": true
@@ -25763,7 +25784,7 @@
           "order": 4,
           "ingredientId": 223,
           "name": "Lime Juice",
-          "amount": "90",
+          "amount": "30",
           "unitId": 11
         },
         {
@@ -25778,7 +25799,7 @@
           "order": 6,
           "ingredientId": 193,
           "name": "Ice",
-          "amount": "150",
+          "amount": "50",
           "unitId": 8
         }
       ]
@@ -26435,7 +26456,7 @@
           "order": 3,
           "ingredientId": 193,
           "name": "Ice",
-          "amount": "150",
+          "amount": "120",
           "unitId": 8
         }
       ]
@@ -26890,7 +26911,7 @@
           "order": 6,
           "ingredientId": 193,
           "name": "Ice",
-          "amount": "120",
+          "amount": "150",
           "unitId": 8
         }
       ]
@@ -27828,7 +27849,7 @@
           "order": 8,
           "ingredientId": 193,
           "name": "Ice",
-          "amount": "150",
+          "amount": "120",
           "unitId": 8
         }
       ]
@@ -28560,7 +28581,7 @@
       "id": 475,
       "name": "Virgin Sangria",
       "description": "A refreshing non-alcoholic take on the classic Sangria. This vibrant mocktail combines deep grape and crisp apple flavors with a splash of citrus, topped with sparkling soda for a light, festive finish.",
-      "instructions": "1. Fill a pitcher with ice.\n2. Add 240ml of Grape Juice, 60ml of Apple Juice, 60ml of Orange Juice, 30ml of Lime Juice, 30ml of Simple Syrup, and 120ml of Soda Water.\n3. Stir gently to combine.\n4. Garnish with a lemon slice, an orange slice, and 2 apple cubes.",
+      "instructions": "1. Fill a pitcher with 300g of ice.\n2. Add 240ml of Grape Juice, 60ml of Apple Juice, 60ml of Orange Juice, 30ml of Lime Juice, 30ml of Simple Syrup, and 120ml of Soda Water.\n3. Stir gently to combine.\n4. Garnish with a lemon slice, an orange slice, and 2 apple cubes.",
       "photoUri": "assets/cocktails/475-virgin-sangria.jpg",
       "glassId": "pitcher",
       "methodIds": ["build"],
@@ -29490,6 +29511,13 @@
         },
         {
           "order": 5,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
+        },
+        {
+          "order": 6,
           "ingredientId": 242,
           "name": "Orange",
           "amount": "1",
