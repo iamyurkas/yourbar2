@@ -8643,11 +8643,11 @@
     {
       "id": 142,
       "name": "Chocolate Negroni",
-      "description": "A decadent twist on the classic Negroni. This version balances the botanical depth of gin and the bittersweet complexity of Punt e Mes and Strucchi Bitter with smooth notes of white cacao and aromatic chocolate bitters.",
-      "instructions": "1. Add ingredients to a shaker with ice. \n2. Shake vigorously for about 15 seconds until well-chilled.\n3. Express the oils from an orange zest over the drink and drop it in as a garnish.",
+      "description": "A rich twist on the classic Negroni, keeping its bittersweet aperitif profile while adding white cacao and chocolate bitters.",
+      "instructions": "1. Fill a mixing glass with ice.\n2. Add 30ml of Gin, 22.5ml of Punt e Mes, 22.5ml of Strucchi Bitter, 7.5ml of Creme de Cacao White, and 3 dashes of Chocolate Bitters.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled rocks glass over fresh ice.\n5. Garnish with an orange zest twist.",
       "photoUri": "assets/cocktails/242-chocolate-negroni.jpg",
       "glassId": "rocks_glass",
-      "methodIds": ["shake"],
+      "methodIds": ["stir"],
       "tags": [5],
       "ingredients": [
         {
@@ -9020,11 +9020,11 @@
     {
       "id": 149,
       "name": "Cornwall Negroni",
-      "description": "A sophisticated, gin-forward riff on the classic Negroni. This version balances the herbal complexity of Punt e Mes and Strucchi Bitter with a bright touch of orange, resulting in a perfectly structured, bittersweet, and aromatic aperitivo.",
-      "instructions": "1. Add ingredients to a shaker with ice. \n2. Shake vigorously for about 15 seconds until well-chilled.\n3. Express the oils from an orange zest over the drink and garnish.",
+      "description": "A gin-forward variation of the classic Negroni, preserving its bittersweet vermouth-and-bitter structure with an extra lift from orange bitters.",
+      "instructions": "1. Fill a mixing glass with ice.\n2. Add 60ml of Gin, 15ml of Punt e Mes, 15ml of Strucchi Bitter, 15ml of Red Vermouth, and 1 dash of Orange Bitters.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled martini glass.\n5. Garnish with an orange zest twist.",
       "photoUri": "assets/cocktails/249-cornwall-negroni.jpg",
       "glassId": "martini",
-      "methodIds": ["shake"],
+      "methodIds": ["stir"],
       "tags": [5],
       "ingredients": [
         {
@@ -11677,13 +11677,6 @@
           "name": "Overproof Rum",
           "amount": "15",
           "unitId": 11
-        },
-        {
-          "order": 4,
-          "ingredientId": 193,
-          "name": "Ice",
-          "amount": "45",
-          "unitId": 8
         }
       ]
     },
@@ -14313,11 +14306,11 @@
     {
       "id": 240,
       "name": "Harvest Negroni",
-      "description": "A robust, autumnal variation of the Negroni. The apple-based Calvados replaces gin, pairing beautifully with the bittersweet notes of Cynar and Punt e Mes for a deep, earthy flavor profile.",
-      "instructions": "1. Add ingredients to a shaker with ice. \n2. Shake vigorously for about 15 seconds until well-chilled.\n3. Strain into a rocks glass over fresh ice.\n4. Garnish with a fresh apple slice.",
+      "description": "An autumnal riff on the classic Negroni, replacing gin with Calvados while keeping the bittersweet aperitif balance.",
+      "instructions": "1. Fill a mixing glass with ice.\n2. Add all ingredients.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a rocks glass over fresh ice.\n5. Garnish with a fresh apple slice.",
       "photoUri": "assets/cocktails/340-harvest-negroni.jpg",
       "glassId": "rocks_glass",
-      "methodIds": ["shake"],
+      "methodIds": ["stir"],
       "tags": [6],
       "ingredients": [
         {
@@ -19771,7 +19764,7 @@
     {
       "id": 332,
       "name": "Negroni Sbagliato",
-      "description": "A twist on the classic Negroni where prosecco replaces gin, yielding a lighter and fruitier drink.",
+      "description": "A sparkling variation of the classic Negroni in which prosecco replaces gin, creating a lighter and more refreshing aperitif.",
       "instructions": "1. Fill a rocks glass with ice.\n2. Add 30ml of Campari and 30ml of Red Vermouth.\n3. Stir gently to chill and combine.\n4. Top with sparkling wine.\n5. Garnish with an orange slice.",
       "photoUri": "assets/cocktails/433-negroni-sbagliato.jpg",
       "glassId": "rocks_glass",
@@ -29424,11 +29417,11 @@
     {
       "id": 490,
       "name": "White Negroni",
-      "description": "A modern floral twist on the traditional Negroni. Substituting sweet vermouth and Campari with Lillet Blanc and Suze, this cocktail offers a unique herbal bitterness and a clear, golden hue.",
-      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 30ml of Gin, 30ml of Suze, and 30ml of Lillet Blanc.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a rock glass.\n5. Garnish with a fresh orange slice or zest.",
+      "description": "A modern variation of the classic Negroni, replacing Campari and sweet vermouth with Suze and Lillet Blanc for a drier herbal bitterness.",
+      "instructions": "1. Fill a mixing glass with ice.\n2. Add 30ml of Gin, 30ml of Suze, and 30ml of Lillet Blanc.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled rocks glass over fresh ice.\n5. Garnish with an orange zest twist.",
       "photoUri": "assets/cocktails/591-white-negroni.jpg",
       "glassId": "rocks_glass",
-      "methodIds": ["shake"],
+      "methodIds": ["stir"],
       "tags": [5],
       "ingredients": [
         {
@@ -30966,7 +30959,7 @@
     {
       "id": 137,
       "name": "Demerara Sugar Syrup",
-      "description": "2:1",
+      "description": "2 parts Demerara sugar to 1 part water.",
       "tags": [4],
       "photoUri": "assets/ingredients/236-demerara-sugar-syrup.jpg"
     },
