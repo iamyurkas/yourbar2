@@ -6052,14 +6052,6 @@
           "amount": "5",
           "unitId": 8,
           "garnish": true
-        },
-        {
-          "order": 10,
-          "ingredientId": 216,
-          "name": "Lemon Juice",
-          "amount": "7.5",
-          "unitId": 11,
-          "garnish": true
         }
       ]
     },
@@ -22570,7 +22562,7 @@
       "id": 377,
       "name": "Roasted Toasted Almond",
       "description": "A stronger variation of the \"Toasted Almond\" with vodka.",
-      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 30ml of vodka, 45ml of Amaretto, 45ml of Coffee Liqueur, and 30ml of Cream.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled rocks glass.",
+      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 30ml of vodka, 30ml of Amaretto, 30ml of Coffee Liqueur, and 30ml of Cream.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled rocks glass.",
       "photoUri": "assets/cocktails/377-roasted-toasted-almond.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["shake"],
