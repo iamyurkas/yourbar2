@@ -20693,7 +20693,7 @@
       "id": 322,
       "name": "Mojito",
       "description": "Cuban highball with rum, lime, mint, sugar, and sparkling soda.",
-      "instructions": "1. Muddle mint leaves and sugar with lime juice in a highball glass.\n2. Add White Rum and fill the glass with crushed ice.\n3. Top with soda water and gently stir.\n4. Garnish with a mint sprig and lime slice.",
+      "instructions": "1. Muddle mint leaves and sugar with lime juice in a highball glass.\n2. Add White Rum and 120g of crushed Ice, then stir briefly.\n3. Top with soda water and gently stir.\n4. Garnish with a mint sprig and lime slice.",
       "photoUri": "assets/cocktails/322-mojito.jpg",
       "glassId": "highball_glass",
       "methodIds": [
@@ -21143,7 +21143,7 @@
       "id": 328,
       "name": "Mulled Wine",
       "description": "Also called \"Glühwein\" in German, this drink is very popular in German-speaking countries and France. Spices can be varied greatly – just use what you like.",
-      "instructions": "1. Heat a bottle or more of red wine in a pan.\n2. Add cinnamon sticks, cloves, sugar, vanilla pods, and anise.\n3. Add lemon wedges, and wait 10 minutes.\n4. Heat until the wine almost boils, and serve in cups.",
+      "instructions": "1. Heat a bottle or more of red wine in a pan.\n2. Add cinnamon sticks, cloves, sugar, vanilla pods, and Anise.\n3. Add lemon wedges, and wait 10 minutes.\n4. Heat until the wine almost boils, and serve in cups.",
       "photoUri": "assets/cocktails/328-mulled-wine.jpg",
       "glassId": "irish_coffee_glass",
       "methodIds": [
@@ -21406,7 +21406,7 @@
       "id": 332,
       "name": "Negroni Sbagliato",
       "description": "A sparkling variation of the classic Negroni in which prosecco replaces gin, creating a lighter and more refreshing aperitif.",
-      "instructions": "1. Fill a rocks glass with ice.\n2. Add 30ml of Campari and 30ml of Red Vermouth.\n3. Stir gently to chill and combine.\n4. Top with Prosecco.\n5. Garnish with an orange slice.",
+      "instructions": "1. Fill a rocks glass with ice.\n2. Add 30ml of Campari and 30ml of Red Vermouth.\n3. Stir gently to chill and combine.\n4. Top with 40ml Prosecco.\n5. Garnish with an orange slice.",
       "photoUri": "assets/cocktails/332-negroni-sbagliato.jpg",
       "glassId": "rocks_glass",
       "methodIds": [
@@ -28732,7 +28732,7 @@
       "id": 445,
       "name": "The Cheshire Cat",
       "description": "A sophisticated, spirit-forward brandy cocktail that balances the herbal notes of rosemary with the deep complexity of Cognac and Scotch. Subtle hints of cherry and cinnamon provide a warm, aromatic finish, making it an ideal choice for slow sipping.",
-      "instructions": "1. Gently muddle the fresh rosemary sprig in the bottom of a mixing glass to release its aromatic oils.\n2. Add the Cognac, Scotch Whisky, Cherry Heering, Punt e Mes, and cinnamon syrup to the mixing glass.\n3. Fill the glass with ice and stir well for about 20-30 seconds until properly chilled and diluted.\n4. Strain the mixture into a rocks glass over a large ice cube or fresh ice.\n5. Express the oils from a lemon peel over the drink and discard the peel or use it as garnish.\n6. Garnish with a fresh rosemary sprig and a cinnamon stick for a fragrant presentation.",
+      "instructions": "1. Gently muddle the fresh rosemary sprig in the bottom of a mixing glass to release its aromatic oils.\n2. Add the Cognac, Scotch Whisky, Cherry Heering, Punt e Mes, and cinnamon syrup to the mixing glass.\n3. Fill the glass with ice and stir well for about 20-30 seconds until properly chilled and diluted.\n4. Strain the mixture into a rocks glass over 120g Ice (a large cube or fresh serving ice).\n5. Express the oils from a lemon peel over the drink and discard the peel or use it as garnish.\n6. Garnish with a fresh rosemary sprig and a cinnamon stick for a fragrant presentation.",
       "photoUri": "assets/cocktails/445-the-cheshire-cat.jpg",
       "glassId": "rocks_glass",
       "methodIds": [
@@ -32288,7 +32288,7 @@
       "id": 496,
       "name": "Zombie",
       "description": "A legendary and potent tiki classic that blends multiple rums, fresh lime, and tropical spice for a complex, sun-soaked experience.",
-      "instructions": "1. Add Jamaican dark rum, Gold Puerto Rican Rum, Demerara rum, fresh lime juice, falernum, Don's Mix, grenadine, Angostura bitters, and Pernod into a blender.\n2. Add 180g of crushed ice.\n3. Blend at high speed for no more than 5 seconds.\n4. Pour the contents into a tall glass or tiki mug and add additional crushed ice to fill if necessary.\n5. Garnish with a mint sprig.",
+      "instructions": "1. Add Jamaican dark rum, 45ml Gold Puerto Rican Rum, Demerara rum, fresh lime juice, falernum, Don's Mix, grenadine, Angostura bitters, and Pernod into a blender.\n2. Add 180g of crushed ice.\n3. Blend at high speed for no more than 5 seconds.\n4. Pour the contents into a tall glass or tiki mug and add additional crushed ice to fill if necessary.\n5. Garnish with a mint sprig.",
       "photoUri": "assets/cocktails/496-zombie.jpg",
       "glassId": "tiki",
       "methodIds": [
