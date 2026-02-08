@@ -29950,7 +29950,7 @@
       "id": 497,
       "name": "Zombie",
       "description": "Potent tiki classic blending multiple rums, citrus, and spice.",
-      "instructions": "Add the Jamaica rum, Puerto Rican gold rum, demerara rum, Pernod, lime juice, Donn’s mix, falernum, grenadine and bitters into a blender, then add 6 ounces of crushed ice.\n\nBlend at high speed for no more than 5 seconds.\n\nPour the contents into a tall glass or Tiki mug and add additional crushed ice to fill, if necessary.\n\nGarnish with a mint sprig.",
+      "instructions": "Add the Jamaica rum, Puerto Rican gold rum, demerara rum, Pernod, lime juice, Donn’s mix, falernum, grenadine and bitters into a blender, then add 180g of crushed ice.\n\nBlend at high speed for no more than 5 seconds.\n\nPour the contents into a tall glass or Tiki mug and add additional crushed ice to fill, if necessary.\n\nGarnish with a mint sprig.",
       "photoUri": "assets/cocktails/598-zombie.jpg",
       "glassId": "tiki",
       "methodIds": ["blend"],
@@ -30036,7 +30036,7 @@
           "order": 10,
           "ingredientId": 193,
           "name": "Ice",
-          "amount": "120",
+          "amount": "180",
           "unitId": 8
         },
         {
