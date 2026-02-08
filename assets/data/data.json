@@ -23087,7 +23087,7 @@
         },
         {
           "order": 3,
-          "ingredientId": 266,
+          "ingredientId": 16,
           "name": "Amontillado Sherry",
           "amount": "30",
           "unitId": 11,
@@ -31881,13 +31881,6 @@
       "description": "Peach schnapps is a light peach spirit about 15–20% ABV. Ideal in a Fuzzy Navel or Woo Woo.",
       "tags": [2],
       "photoUri": "assets/ingredients/366-peach-schnapps.jpg"
-    },
-    {
-      "id": 266,
-      "name": "Amontillado Sherry",
-      "description": "Pedro Ximénez is a sweet Spanish sherry around 15–18% ABV with raisin notes. Try it in a PX Flip or Espresso Martini twist.",
-      "tags": [2],
-      "photoUri": "assets/ingredients/367-pedro-ximenez-sherry.jpg"
     },
     {
       "id": 267,
