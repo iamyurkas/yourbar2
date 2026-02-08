@@ -14363,7 +14363,7 @@
         },
         {
           "order": 2,
-          "ingredientId": 223,
+          "ingredientId": 216,
           "name": "Lemon Juice",
           "amount": "30",
           "unitId": 11
@@ -22695,7 +22695,7 @@
         },
         {
           "order": 2,
-          "ingredientId": 266,
+          "ingredientId": 353,
           "name": "Pedro Ximenez Sherry",
           "amount": "20",
           "unitId": 11
@@ -35608,6 +35608,15 @@
       ],
       "baseIngredientId": 48,
       "photoUri": "assets/ingredients/455-ubrowka.jpg"
+    },
+    {
+      "id": 353,
+      "name": "Pedro Ximenez Sherry",
+      "description": "Pedro Ximénez is a sweet Spanish sherry around 15–18% ABV with raisin notes. Try it in a PX Flip or Espresso Martini twist.",
+      "tags": [
+        2
+      ],
+      "photoUri": "assets/ingredients/367-pedro-ximenez-sherry.jpg"
     }
   ]
 }
