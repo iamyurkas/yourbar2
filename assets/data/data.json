@@ -23,7 +23,12 @@
           "name": "Cognac",
           "amount": "22.5",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 64, "name": "Brandy" }]
+          "substitutes": [
+            {
+              "ingredientId": 64,
+              "name": "Brandy"
+            }
+          ]
         },
         {
           "order": 3,
@@ -116,7 +121,12 @@
           "amount": "1",
           "unitId": 26,
           "garnish": true,
-          "substitutes": [{ "ingredientId": 214, "name": "Lemon" }]
+          "substitutes": [
+            {
+              "ingredientId": 214,
+              "name": "Lemon"
+            }
+          ]
         }
       ]
     },
@@ -194,7 +204,12 @@
           "name": "Cognac",
           "amount": "15",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 64, "name": "Brandy" }]
+          "substitutes": [
+            {
+              "ingredientId": 64,
+              "name": "Brandy"
+            }
+          ]
         }
       ]
     },
@@ -214,7 +229,12 @@
           "name": "Tequila Blanco",
           "amount": "50",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 329, "name": "Tequila Gold" }]
+          "substitutes": [
+            {
+              "ingredientId": 329,
+              "name": "Tequila Gold"
+            }
+          ]
         },
         {
           "order": 2,
@@ -279,8 +299,14 @@
           "amount": "45",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 252, "name": "Palo Cortado" },
-            { "ingredientId": 241, "name": "Oloroso Sherry" }
+            {
+              "ingredientId": 252,
+              "name": "Palo Cortado"
+            },
+            {
+              "ingredientId": 241,
+              "name": "Oloroso Sherry"
+            }
           ]
         },
         {
@@ -330,7 +356,12 @@
           "name": "Amaro Nonino",
           "amount": "30",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 14, "name": "Amaro Montenegro" }]
+          "substitutes": [
+            {
+              "ingredientId": 14,
+              "name": "Amaro Montenegro"
+            }
+          ]
         },
         {
           "order": 2,
@@ -386,7 +417,12 @@
           "name": "Coffee Liqueur",
           "amount": "15",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 107, "name": "Coffee Brandy" }]
+          "substitutes": [
+            {
+              "ingredientId": 107,
+              "name": "Coffee Brandy"
+            }
+          ]
         },
         {
           "order": 3,
@@ -668,7 +704,12 @@
           "name": "Cream",
           "amount": "22.5",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 183, "name": "Half-and-half" }]
+          "substitutes": [
+            {
+              "ingredientId": 183,
+              "name": "Half-and-half"
+            }
+          ]
         },
         {
           "order": 4,
@@ -717,7 +758,12 @@
           "name": "Coffee Liqueur",
           "amount": "15",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 107, "name": "Coffee Brandy" }]
+          "substitutes": [
+            {
+              "ingredientId": 107,
+              "name": "Coffee Brandy"
+            }
+          ]
         },
         {
           "order": 3,
@@ -732,7 +778,12 @@
           "name": "Cream",
           "amount": "22.5",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 183, "name": "Half-and-half" }]
+          "substitutes": [
+            {
+              "ingredientId": 183,
+              "name": "Half-and-half"
+            }
+          ]
         },
         {
           "order": 5,
@@ -792,7 +843,12 @@
           "name": "Triple Sec",
           "amount": "7.5",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 244, "name": "Orange Curaçao" }]
+          "substitutes": [
+            {
+              "ingredientId": 244,
+              "name": "Orange Curaçao"
+            }
+          ]
         },
         {
           "order": 3,
@@ -807,7 +863,12 @@
           "name": "Cream",
           "amount": "22.5",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 183, "name": "Half-and-half" }]
+          "substitutes": [
+            {
+              "ingredientId": 183,
+              "name": "Half-and-half"
+            }
+          ]
         },
         {
           "order": 5,
@@ -872,7 +933,12 @@
           "name": "Cream",
           "amount": "15",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 183, "name": "Half-and-half" }]
+          "substitutes": [
+            {
+              "ingredientId": 183,
+              "name": "Half-and-half"
+            }
+          ]
         },
         {
           "order": 4,
@@ -931,8 +997,14 @@
           "amount": "30",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 263, "name": "Peach Brandy" },
-            { "ingredientId": 264, "name": "Peach Liqueur" }
+            {
+              "ingredientId": 263,
+              "name": "Peach Brandy"
+            },
+            {
+              "ingredientId": 264,
+              "name": "Peach Liqueur"
+            }
           ]
         },
         {
@@ -957,10 +1029,22 @@
           "amount": "5",
           "unitId": 7,
           "substitutes": [
-            { "ingredientId": 84, "name": "Cherry Juice" },
-            { "ingredientId": 83, "name": "Cherry Heering" },
-            { "ingredientId": 82, "name": "Cherry Brandy" },
-            { "ingredientId": 85, "name": "Cherry Liqueur" }
+            {
+              "ingredientId": 84,
+              "name": "Cherry Juice"
+            },
+            {
+              "ingredientId": 83,
+              "name": "Cherry Heering"
+            },
+            {
+              "ingredientId": 82,
+              "name": "Cherry Brandy"
+            },
+            {
+              "ingredientId": 85,
+              "name": "Cherry Liqueur"
+            }
           ]
         }
       ]
@@ -1415,14 +1499,12 @@
           "unitId": 26,
           "optional": true,
           "garnish": true,
-          "substitutes": [{ "ingredientId": 242, "name": "Orange" }]
-        },
-        {
-          "order": 7,
-          "ingredientId": 193,
-          "name": "Ice",
-          "amount": "120",
-          "unitId": 8
+          "substitutes": [
+            {
+              "ingredientId": 242,
+              "name": "Orange"
+            }
+          ]
         }
       ]
     },
@@ -1520,7 +1602,12 @@
           "name": "Tequila Blanco",
           "amount": "15",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 329, "name": "Tequila Gold" }]
+          "substitutes": [
+            {
+              "ingredientId": 329,
+              "name": "Tequila Gold"
+            }
+          ]
         },
         {
           "order": 4,
@@ -1665,8 +1752,14 @@
           "amount": "30",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 91, "name": "Chocolate Liqueur" },
-            { "ingredientId": 120, "name": "Creme de Cacao White" }
+            {
+              "ingredientId": 91,
+              "name": "Chocolate Liqueur"
+            },
+            {
+              "ingredientId": 120,
+              "name": "Creme de Cacao White"
+            }
           ]
         },
         {
@@ -1682,7 +1775,12 @@
           "name": "Cream",
           "amount": "15",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 183, "name": "Half-and-half" }]
+          "substitutes": [
+            {
+              "ingredientId": 183,
+              "name": "Half-and-half"
+            }
+          ]
         },
         {
           "order": 4,
@@ -1724,7 +1822,12 @@
           "name": "Cherry Heering",
           "amount": "15",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 85, "name": "Cherry Liqueur" }]
+          "substitutes": [
+            {
+              "ingredientId": 85,
+              "name": "Cherry Liqueur"
+            }
+          ]
         },
         {
           "order": 4,
@@ -1823,7 +1926,12 @@
           "name": "Triple Sec",
           "amount": "30",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 244, "name": "Orange Curaçao" }]
+          "substitutes": [
+            {
+              "ingredientId": 244,
+              "name": "Orange Curaçao"
+            }
+          ]
         },
         {
           "order": 3,
@@ -1944,8 +2052,14 @@
           "amount": "15",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 24, "name": "Apple Brandy" },
-            { "ingredientId": 27, "name": "Apple Liqueur" }
+            {
+              "ingredientId": 24,
+              "name": "Apple Brandy"
+            },
+            {
+              "ingredientId": 27,
+              "name": "Apple Liqueur"
+            }
           ]
         },
         {
@@ -1955,7 +2069,12 @@
           "amount": "15",
           "unitId": 11,
           "allowBaseSubstitution": true,
-          "substitutes": [{ "ingredientId": 244, "name": "Orange Curaçao" }]
+          "substitutes": [
+            {
+              "ingredientId": 244,
+              "name": "Orange Curaçao"
+            }
+          ]
         },
         {
           "order": 4,
@@ -2020,7 +2139,12 @@
           "name": "Lemon-Lime Soda",
           "amount": "80",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 312, "name": "Soda Water" }]
+          "substitutes": [
+            {
+              "ingredientId": 312,
+              "name": "Soda Water"
+            }
+          ]
         },
         {
           "order": 6,
@@ -2217,7 +2341,12 @@
           "amount": "20",
           "unitId": 11,
           "allowBaseSubstitution": true,
-          "substitutes": [{ "ingredientId": 107, "name": "Coffee Brandy" }]
+          "substitutes": [
+            {
+              "ingredientId": 107,
+              "name": "Coffee Brandy"
+            }
+          ]
         },
         {
           "order": 2,
@@ -2235,8 +2364,14 @@
           "unitId": 11,
           "allowBaseSubstitution": true,
           "substitutes": [
-            { "ingredientId": 334, "name": "Triple Sec" },
-            { "ingredientId": 244, "name": "Orange Curaçao" }
+            {
+              "ingredientId": 334,
+              "name": "Triple Sec"
+            },
+            {
+              "ingredientId": 244,
+              "name": "Orange Curaçao"
+            }
           ]
         }
       ]
@@ -2295,7 +2430,12 @@
           "amount": "20",
           "unitId": 11,
           "allowBaseSubstitution": true,
-          "substitutes": [{ "ingredientId": 107, "name": "Coffee Brandy" }]
+          "substitutes": [
+            {
+              "ingredientId": 107,
+              "name": "Coffee Brandy"
+            }
+          ]
         },
         {
           "order": 2,
@@ -2330,7 +2470,12 @@
           "name": "Brandy",
           "amount": "60",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 109, "name": "Cognac" }]
+          "substitutes": [
+            {
+              "ingredientId": 109,
+              "name": "Cognac"
+            }
+          ]
         },
         {
           "order": 2,
@@ -2364,7 +2509,12 @@
           "name": "Coffee Liqueur",
           "amount": "30",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 107, "name": "Coffee Brandy" }]
+          "substitutes": [
+            {
+              "ingredientId": 107,
+              "name": "Coffee Brandy"
+            }
+          ]
         },
         {
           "order": 2,
@@ -2464,9 +2614,18 @@
           "amount": "30",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 172, "name": "Gran Classico" },
-            { "ingredientId": 308, "name": "Select" },
-            { "ingredientId": 72, "name": "Campari" }
+            {
+              "ingredientId": 172,
+              "name": "Gran Classico"
+            },
+            {
+              "ingredientId": 308,
+              "name": "Select"
+            },
+            {
+              "ingredientId": 72,
+              "name": "Campari"
+            }
           ]
         },
         {
@@ -2524,8 +2683,14 @@
           "amount": "15",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 83, "name": "Cherry Heering" },
-            { "ingredientId": 85, "name": "Cherry Liqueur" }
+            {
+              "ingredientId": 83,
+              "name": "Cherry Heering"
+            },
+            {
+              "ingredientId": 85,
+              "name": "Cherry Liqueur"
+            }
           ]
         },
         {
@@ -2701,7 +2866,12 @@
           "name": "Fino Sherry",
           "amount": "50",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 16, "name": "Amontillado Sherry" }]
+          "substitutes": [
+            {
+              "ingredientId": 16,
+              "name": "Amontillado Sherry"
+            }
+          ]
         },
         {
           "order": 2,
@@ -2758,7 +2928,12 @@
           "name": "Amontillado Sherry",
           "amount": "45",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 252, "name": "Palo Cortado" }]
+          "substitutes": [
+            {
+              "ingredientId": 252,
+              "name": "Palo Cortado"
+            }
+          ]
         },
         {
           "order": 2,
@@ -2828,7 +3003,12 @@
           "name": "Amontillado Sherry",
           "amount": "10",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 241, "name": "Oloroso Sherry" }]
+          "substitutes": [
+            {
+              "ingredientId": 241,
+              "name": "Oloroso Sherry"
+            }
+          ]
         },
         {
           "order": 3,
@@ -2836,7 +3016,12 @@
           "name": "Banana Liqueur",
           "amount": "15",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 118, "name": "Creme de Banane" }]
+          "substitutes": [
+            {
+              "ingredientId": 118,
+              "name": "Creme de Banane"
+            }
+          ]
         },
         {
           "order": 4,
@@ -2909,7 +3094,12 @@
           "name": "Banana Liqueur",
           "amount": "15",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 118, "name": "Creme de Banane" }]
+          "substitutes": [
+            {
+              "ingredientId": 118,
+              "name": "Creme de Banane"
+            }
+          ]
         },
         {
           "order": 4,
@@ -2975,8 +3165,14 @@
           "amount": "45",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 168, "name": "Gold Rum" },
-            { "ingredientId": 315, "name": "Spiced Rum" }
+            {
+              "ingredientId": 168,
+              "name": "Gold Rum"
+            },
+            {
+              "ingredientId": 315,
+              "name": "Spiced Rum"
+            }
           ]
         },
         {
@@ -2985,7 +3181,12 @@
           "name": "Lime Juice",
           "amount": "20",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 216, "name": "Lemon Juice" }]
+          "substitutes": [
+            {
+              "ingredientId": 216,
+              "name": "Lemon Juice"
+            }
+          ]
         },
         {
           "order": 3,
@@ -3007,7 +3208,12 @@
           "name": "Lime",
           "amount": "1",
           "unitId": 19,
-          "substitutes": [{ "ingredientId": 214, "name": "Lemon" }]
+          "substitutes": [
+            {
+              "ingredientId": 214,
+              "name": "Lemon"
+            }
+          ]
         },
         {
           "order": 6,
@@ -3035,9 +3241,18 @@
           "amount": "60",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 168, "name": "Gold Rum" },
-            { "ingredientId": 346, "name": "White Rum" },
-            { "ingredientId": 315, "name": "Spiced Rum" }
+            {
+              "ingredientId": 168,
+              "name": "Gold Rum"
+            },
+            {
+              "ingredientId": 346,
+              "name": "White Rum"
+            },
+            {
+              "ingredientId": 315,
+              "name": "Spiced Rum"
+            }
           ]
         },
         {
@@ -3046,7 +3261,12 @@
           "name": "Banana Liqueur",
           "amount": "30",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 118, "name": "Creme de Banane" }]
+          "substitutes": [
+            {
+              "ingredientId": 118,
+              "name": "Creme de Banane"
+            }
+          ]
         },
         {
           "order": 3,
@@ -3213,7 +3433,12 @@
           "name": "Banana Liqueur",
           "amount": "15",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 118, "name": "Creme de Banane" }]
+          "substitutes": [
+            {
+              "ingredientId": 118,
+              "name": "Creme de Banane"
+            }
+          ]
         },
         {
           "order": 4,
@@ -3283,7 +3508,12 @@
           "name": "Creme de Banane",
           "amount": "50",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 36, "name": "Banana Liqueur" }]
+          "substitutes": [
+            {
+              "ingredientId": 36,
+              "name": "Banana Liqueur"
+            }
+          ]
         },
         {
           "order": 2,
@@ -3292,8 +3522,14 @@
           "amount": "50",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 119, "name": "Creme de Cacao Brown" },
-            { "ingredientId": 91, "name": "Chocolate Liqueur" }
+            {
+              "ingredientId": 119,
+              "name": "Creme de Cacao Brown"
+            },
+            {
+              "ingredientId": 91,
+              "name": "Chocolate Liqueur"
+            }
           ]
         },
         {
@@ -3387,7 +3623,12 @@
           "name": "Gold Rum",
           "amount": "45",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 315, "name": "Spiced Rum" }]
+          "substitutes": [
+            {
+              "ingredientId": 315,
+              "name": "Spiced Rum"
+            }
+          ]
         },
         {
           "order": 2,
@@ -3417,8 +3658,14 @@
           "amount": "45",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 80, "name": "Champagne" },
-            { "ingredientId": 284, "name": "Prosecco" }
+            {
+              "ingredientId": 80,
+              "name": "Champagne"
+            },
+            {
+              "ingredientId": 284,
+              "name": "Prosecco"
+            }
           ]
         },
         {
@@ -3464,7 +3711,12 @@
           "name": "Bourbon",
           "amount": "60",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 343, "name": "Whisky" }]
+          "substitutes": [
+            {
+              "ingredientId": 343,
+              "name": "Whisky"
+            }
+          ]
         },
         {
           "order": 2,
@@ -3729,7 +3981,12 @@
           "amount": "1",
           "unitId": 26,
           "garnish": true,
-          "substitutes": [{ "ingredientId": 242, "name": "Orange" }]
+          "substitutes": [
+            {
+              "ingredientId": 242,
+              "name": "Orange"
+            }
+          ]
         }
       ]
     },
@@ -3770,7 +4027,12 @@
           "name": "Prosecco",
           "amount": "45",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 314, "name": "Sparkling Wine" }]
+          "substitutes": [
+            {
+              "ingredientId": 314,
+              "name": "Sparkling Wine"
+            }
+          ]
         },
         {
           "order": 5,
@@ -3806,8 +4068,14 @@
           "amount": "100",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 284, "name": "Prosecco" },
-            { "ingredientId": 314, "name": "Sparkling Wine" }
+            {
+              "ingredientId": 284,
+              "name": "Prosecco"
+            },
+            {
+              "ingredientId": 314,
+              "name": "Sparkling Wine"
+            }
           ]
         },
         {
@@ -3937,7 +4205,12 @@
           "name": "Cognac",
           "amount": "30",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 64, "name": "Brandy" }]
+          "substitutes": [
+            {
+              "ingredientId": 64,
+              "name": "Brandy"
+            }
+          ]
         },
         {
           "order": 2,
@@ -3946,8 +4219,14 @@
           "amount": "30",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 168, "name": "Gold Rum" },
-            { "ingredientId": 315, "name": "Spiced Rum" }
+            {
+              "ingredientId": 168,
+              "name": "Gold Rum"
+            },
+            {
+              "ingredientId": 315,
+              "name": "Spiced Rum"
+            }
           ]
         },
         {
@@ -3956,7 +4235,12 @@
           "name": "Triple Sec",
           "amount": "30",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 110, "name": "Cointreau" }]
+          "substitutes": [
+            {
+              "ingredientId": 110,
+              "name": "Cointreau"
+            }
+          ]
         },
         {
           "order": 4,
@@ -4049,9 +4333,18 @@
           "amount": "45",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 328, "name": "Tequila Blanco" },
-            { "ingredientId": 168, "name": "Gold Rum" },
-            { "ingredientId": 346, "name": "White Rum" }
+            {
+              "ingredientId": 328,
+              "name": "Tequila Blanco"
+            },
+            {
+              "ingredientId": 168,
+              "name": "Gold Rum"
+            },
+            {
+              "ingredientId": 346,
+              "name": "White Rum"
+            }
           ]
         },
         {
@@ -4138,7 +4431,12 @@
           "name": "Orange Curaçao",
           "amount": "22.5",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 334, "name": "Triple Sec" }]
+          "substitutes": [
+            {
+              "ingredientId": 334,
+              "name": "Triple Sec"
+            }
+          ]
         },
         {
           "order": 3,
@@ -4215,7 +4513,12 @@
           "name": "Coffee Liqueur",
           "amount": "30",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 107, "name": "Coffee Brandy" }]
+          "substitutes": [
+            {
+              "ingredientId": 107,
+              "name": "Coffee Brandy"
+            }
+          ]
         },
         {
           "order": 3,
@@ -4320,7 +4623,10 @@
           "amount": "30",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 305, "name": "Scotch Highland Whiskey" }
+            {
+              "ingredientId": 305,
+              "name": "Scotch Highland Whiskey"
+            }
           ]
         },
         {
@@ -4330,8 +4636,14 @@
           "amount": "30",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 83, "name": "Cherry Heering" },
-            { "ingredientId": 85, "name": "Cherry Liqueur" }
+            {
+              "ingredientId": 83,
+              "name": "Cherry Heering"
+            },
+            {
+              "ingredientId": 85,
+              "name": "Cherry Liqueur"
+            }
           ]
         },
         {
@@ -4672,7 +4984,12 @@
           "name": "Disaronno Velvet",
           "amount": "3",
           "unitId": 7,
-          "substitutes": [{ "ingredientId": 195, "name": "Irish Cream" }]
+          "substitutes": [
+            {
+              "ingredientId": 195,
+              "name": "Irish Cream"
+            }
+          ]
         }
       ]
     },
@@ -4963,7 +5280,12 @@
           "amount": "25",
           "unitId": 11,
           "allowBaseSubstitution": true,
-          "substitutes": [{ "ingredientId": 334, "name": "Triple Sec" }]
+          "substitutes": [
+            {
+              "ingredientId": 334,
+              "name": "Triple Sec"
+            }
+          ]
         },
         {
           "order": 3,
@@ -5023,8 +5345,14 @@
           "amount": "50",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 301, "name": "Rye Whiskey" },
-            { "ingredientId": 63, "name": "Bourbon" }
+            {
+              "ingredientId": 301,
+              "name": "Rye Whiskey"
+            },
+            {
+              "ingredientId": 63,
+              "name": "Bourbon"
+            }
           ]
         },
         {
@@ -5081,7 +5409,12 @@
           "amount": "1",
           "unitId": 14,
           "garnish": true,
-          "substitutes": [{ "ingredientId": 242, "name": "Orange" }]
+          "substitutes": [
+            {
+              "ingredientId": 242,
+              "name": "Orange"
+            }
+          ]
         }
       ]
     },
@@ -5102,8 +5435,14 @@
           "amount": "45",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 168, "name": "Gold Rum" },
-            { "ingredientId": 315, "name": "Spiced Rum" }
+            {
+              "ingredientId": 168,
+              "name": "Gold Rum"
+            },
+            {
+              "ingredientId": 315,
+              "name": "Spiced Rum"
+            }
           ]
         },
         {
@@ -5152,7 +5491,12 @@
           "name": "Cognac",
           "amount": "50",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 64, "name": "Brandy" }]
+          "substitutes": [
+            {
+              "ingredientId": 64,
+              "name": "Brandy"
+            }
+          ]
         },
         {
           "order": 2,
@@ -5204,7 +5548,12 @@
           "name": "Cognac",
           "amount": "50",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 64, "name": "Brandy" }]
+          "substitutes": [
+            {
+              "ingredientId": 64,
+              "name": "Brandy"
+            }
+          ]
         },
         {
           "order": 2,
@@ -5264,9 +5613,18 @@
           "amount": "50",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 346, "name": "White Rum" },
-            { "ingredientId": 315, "name": "Spiced Rum" },
-            { "ingredientId": 134, "name": "Dark Rum" }
+            {
+              "ingredientId": 346,
+              "name": "White Rum"
+            },
+            {
+              "ingredientId": 315,
+              "name": "Spiced Rum"
+            },
+            {
+              "ingredientId": 134,
+              "name": "Dark Rum"
+            }
           ]
         },
         {
@@ -5359,7 +5717,12 @@
           "name": "Bourbon",
           "amount": "45",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 301, "name": "Rye Whisky" }]
+          "substitutes": [
+            {
+              "ingredientId": 301,
+              "name": "Rye Whisky"
+            }
+          ]
         },
         {
           "order": 2,
@@ -5458,8 +5821,14 @@
           "amount": "15",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 53, "name": "Blackberry Brandy" },
-            { "ingredientId": 54, "name": "Blackberry Liqueur" }
+            {
+              "ingredientId": 53,
+              "name": "Blackberry Brandy"
+            },
+            {
+              "ingredientId": 54,
+              "name": "Blackberry Liqueur"
+            }
           ]
         },
         {
@@ -5510,7 +5879,12 @@
           "name": "Cognac",
           "amount": "30",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 64, "name": "Brandy" }]
+          "substitutes": [
+            {
+              "ingredientId": 64,
+              "name": "Brandy"
+            }
+          ]
         },
         {
           "order": 2,
@@ -5518,7 +5892,12 @@
           "name": "Creme de Cacao White",
           "amount": "30",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 91, "name": "Chocolate Liqueur" }]
+          "substitutes": [
+            {
+              "ingredientId": 91,
+              "name": "Chocolate Liqueur"
+            }
+          ]
         },
         {
           "order": 3,
@@ -5560,7 +5939,12 @@
           "name": "Cognac",
           "amount": "45",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 64, "name": "Brandy" }]
+          "substitutes": [
+            {
+              "ingredientId": 64,
+              "name": "Brandy"
+            }
+          ]
         },
         {
           "order": 2,
@@ -5568,7 +5952,12 @@
           "name": "Orange Curaçao",
           "amount": "15",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 334, "name": "Triple Sec" }]
+          "substitutes": [
+            {
+              "ingredientId": 334,
+              "name": "Triple Sec"
+            }
+          ]
         },
         {
           "order": 3,
@@ -5648,7 +6037,12 @@
           "name": "Brandy",
           "amount": "60",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 109, "name": "Cognac" }]
+          "substitutes": [
+            {
+              "ingredientId": 109,
+              "name": "Cognac"
+            }
+          ]
         },
         {
           "order": 2,
@@ -5693,7 +6087,12 @@
           "unitId": 26,
           "optional": true,
           "garnish": true,
-          "substitutes": [{ "ingredientId": 242, "name": "Orange" }]
+          "substitutes": [
+            {
+              "ingredientId": 242,
+              "name": "Orange"
+            }
+          ]
         },
         {
           "order": 8,
@@ -5720,7 +6119,12 @@
           "name": "Brandy",
           "amount": "40",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 109, "name": "Cognac" }]
+          "substitutes": [
+            {
+              "ingredientId": 109,
+              "name": "Cognac"
+            }
+          ]
         },
         {
           "order": 2,
@@ -5792,7 +6196,12 @@
           "name": "Cognac",
           "amount": "45",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 64, "name": "Brandy" }]
+          "substitutes": [
+            {
+              "ingredientId": 64,
+              "name": "Brandy"
+            }
+          ]
         },
         {
           "order": 2,
@@ -5833,7 +6242,12 @@
           "name": "Brandy",
           "amount": "45",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 109, "name": "Cognac" }]
+          "substitutes": [
+            {
+              "ingredientId": 109,
+              "name": "Cognac"
+            }
+          ]
         },
         {
           "order": 2,
@@ -5841,7 +6255,12 @@
           "name": "Coffee Liqueur",
           "amount": "22.5",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 107, "name": "Coffee Brandy" }]
+          "substitutes": [
+            {
+              "ingredientId": 107,
+              "name": "Coffee Brandy"
+            }
+          ]
         },
         {
           "order": 3,
@@ -5876,7 +6295,12 @@
           "amount": "30",
           "unitId": 11,
           "allowBaseSubstitution": true,
-          "substitutes": [{ "ingredientId": 107, "name": "Coffee Brandy" }]
+          "substitutes": [
+            {
+              "ingredientId": 107,
+              "name": "Coffee Brandy"
+            }
+          ]
         },
         {
           "order": 3,
@@ -6054,8 +6478,14 @@
           "amount": "100",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 80, "name": "Champagne" },
-            { "ingredientId": 284, "name": "Prosecco" }
+            {
+              "ingredientId": 80,
+              "name": "Champagne"
+            },
+            {
+              "ingredientId": 284,
+              "name": "Prosecco"
+            }
           ]
         },
         {
@@ -6196,7 +6626,12 @@
           "name": "Tequila Blanco",
           "amount": "30",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 329, "name": "Tequila Gold" }]
+          "substitutes": [
+            {
+              "ingredientId": 329,
+              "name": "Tequila Gold"
+            }
+          ]
         },
         {
           "order": 5,
@@ -6254,11 +6689,26 @@
           "amount": "60",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 168, "name": "Gold Rum" },
-            { "ingredientId": 315, "name": "Spiced Rum" },
-            { "ingredientId": 134, "name": "Dark Rum" },
-            { "ingredientId": 201, "name": "Jamaican Rum" },
-            { "ingredientId": 200, "name": "Jamaican Dark Rum" }
+            {
+              "ingredientId": 168,
+              "name": "Gold Rum"
+            },
+            {
+              "ingredientId": 315,
+              "name": "Spiced Rum"
+            },
+            {
+              "ingredientId": 134,
+              "name": "Dark Rum"
+            },
+            {
+              "ingredientId": 201,
+              "name": "Jamaican Rum"
+            },
+            {
+              "ingredientId": 200,
+              "name": "Jamaican Dark Rum"
+            }
           ]
         },
         {
@@ -6268,7 +6718,10 @@
           "amount": "15",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 137, "name": "Demerara Sugar Syrup" }
+            {
+              "ingredientId": 137,
+              "name": "Demerara Sugar Syrup"
+            }
           ]
         },
         {
@@ -6337,8 +6790,14 @@
           "amount": "90",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 168, "name": "Gold Rum" },
-            { "ingredientId": 315, "name": "Spiced Rum" }
+            {
+              "ingredientId": 168,
+              "name": "Gold Rum"
+            },
+            {
+              "ingredientId": 315,
+              "name": "Spiced Rum"
+            }
           ]
         },
         {
@@ -6347,7 +6806,12 @@
           "name": "Coffee Liqueur",
           "amount": "90",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 107, "name": "Coffee Brandy" }]
+          "substitutes": [
+            {
+              "ingredientId": 107,
+              "name": "Coffee Brandy"
+            }
+          ]
         },
         {
           "order": 3,
@@ -6356,8 +6820,14 @@
           "amount": "90",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 91, "name": "Chocolate Liqueur" },
-            { "ingredientId": 120, "name": "Creme de Cacao White" }
+            {
+              "ingredientId": 91,
+              "name": "Chocolate Liqueur"
+            },
+            {
+              "ingredientId": 120,
+              "name": "Creme de Cacao White"
+            }
           ]
         },
         {
@@ -6407,7 +6877,12 @@
           "name": "Vodka Vanilla",
           "amount": "30",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 338, "name": "Vodka" }]
+          "substitutes": [
+            {
+              "ingredientId": 338,
+              "name": "Vodka"
+            }
+          ]
         },
         {
           "order": 2,
@@ -6416,7 +6891,10 @@
           "amount": "30",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 69, "name": "Butterscotch Schnapps" }
+            {
+              "ingredientId": 69,
+              "name": "Butterscotch Schnapps"
+            }
           ]
         },
         {
@@ -6468,7 +6946,10 @@
           "amount": "15",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 69, "name": "Butterscotch Schnapps" }
+            {
+              "ingredientId": 69,
+              "name": "Butterscotch Schnapps"
+            }
           ]
         },
         {
@@ -6519,7 +7000,10 @@
           "amount": "30",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 69, "name": "Butterscotch Schnapps" }
+            {
+              "ingredientId": 69,
+              "name": "Butterscotch Schnapps"
+            }
           ]
         },
         {
@@ -6651,8 +7135,14 @@
           "amount": "60",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 168, "name": "Gold Rum" },
-            { "ingredientId": 315, "name": "Spiced Rum" }
+            {
+              "ingredientId": 168,
+              "name": "Gold Rum"
+            },
+            {
+              "ingredientId": 315,
+              "name": "Spiced Rum"
+            }
           ]
         },
         {
@@ -6783,8 +7273,14 @@
           "amount": "30",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 168, "name": "Gold Rum" },
-            { "ingredientId": 315, "name": "Spiced Rum" }
+            {
+              "ingredientId": 168,
+              "name": "Gold Rum"
+            },
+            {
+              "ingredientId": 315,
+              "name": "Spiced Rum"
+            }
           ]
         },
         {
@@ -6794,7 +7290,12 @@
           "amount": "30",
           "unitId": 11,
           "allowBaseSubstitution": true,
-          "substitutes": [{ "ingredientId": 107, "name": "Coffee Brandy" }]
+          "substitutes": [
+            {
+              "ingredientId": 107,
+              "name": "Coffee Brandy"
+            }
+          ]
         },
         {
           "order": 3,
@@ -6940,7 +7441,12 @@
           "name": "Cuban Aguardiente",
           "amount": "60",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 346, "name": "White Rum" }]
+          "substitutes": [
+            {
+              "ingredientId": 346,
+              "name": "White Rum"
+            }
+          ]
         },
         {
           "order": 2,
@@ -6955,7 +7461,12 @@
           "name": "Honey Syrup",
           "amount": "45",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 188, "name": "Honey Syrup" }]
+          "substitutes": [
+            {
+              "ingredientId": 188,
+              "name": "Honey Syrup"
+            }
+          ]
         },
         {
           "order": 4,
@@ -7153,7 +7664,12 @@
           "amount": "1",
           "unitId": 19,
           "garnish": true,
-          "substitutes": [{ "ingredientId": 242, "name": "Orange" }]
+          "substitutes": [
+            {
+              "ingredientId": 242,
+              "name": "Orange"
+            }
+          ]
         },
         {
           "order": 9,
@@ -7219,7 +7735,12 @@
           "amount": "1",
           "unitId": 26,
           "garnish": true,
-          "substitutes": [{ "ingredientId": 222, "name": "Lime" }]
+          "substitutes": [
+            {
+              "ingredientId": 222,
+              "name": "Lime"
+            }
+          ]
         }
       ]
     },
@@ -7246,7 +7767,12 @@
           "name": "Coconut Liqueur",
           "amount": "60",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 103, "name": "Coconut Rum" }]
+          "substitutes": [
+            {
+              "ingredientId": 103,
+              "name": "Coconut Rum"
+            }
+          ]
         },
         {
           "order": 3,
@@ -7255,7 +7781,10 @@
           "amount": "30",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 320, "name": "Strawberry Schnapps" }
+            {
+              "ingredientId": 320,
+              "name": "Strawberry Schnapps"
+            }
           ]
         },
         {
@@ -7399,7 +7928,12 @@
           "name": "Pineapple Juice",
           "amount": "75",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 103, "name": "Coconut Rum" }]
+          "substitutes": [
+            {
+              "ingredientId": 103,
+              "name": "Coconut Rum"
+            }
+          ]
         },
         {
           "order": 4,
@@ -7436,7 +7970,12 @@
           "amount": "1",
           "unitId": 27,
           "garnish": true,
-          "substitutes": [{ "ingredientId": 275, "name": "Pineapple" }]
+          "substitutes": [
+            {
+              "ingredientId": 275,
+              "name": "Pineapple"
+            }
+          ]
         },
         {
           "order": 9,
@@ -7540,7 +8079,12 @@
           "name": "Cognac",
           "amount": "10",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 64, "name": "Brandy" }]
+          "substitutes": [
+            {
+              "ingredientId": 64,
+              "name": "Brandy"
+            }
+          ]
         },
         {
           "order": 4,
@@ -7549,8 +8093,14 @@
           "amount": "90",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 284, "name": "Prosecco" },
-            { "ingredientId": 314, "name": "Sparkling Wine" }
+            {
+              "ingredientId": 284,
+              "name": "Prosecco"
+            },
+            {
+              "ingredientId": 314,
+              "name": "Sparkling Wine"
+            }
           ]
         },
         {
@@ -7560,7 +8110,12 @@
           "amount": "3",
           "unitId": 7,
           "optional": true,
-          "substitutes": [{ "ingredientId": 334, "name": "Triple Sec" }]
+          "substitutes": [
+            {
+              "ingredientId": 334,
+              "name": "Triple Sec"
+            }
+          ]
         },
         {
           "order": 6,
@@ -7596,7 +8151,12 @@
           "name": "Cognac",
           "amount": "45",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 64, "name": "Brandy" }]
+          "substitutes": [
+            {
+              "ingredientId": 64,
+              "name": "Brandy"
+            }
+          ]
         },
         {
           "order": 2,
@@ -7777,7 +8337,12 @@
           "name": "Vodka Vanilla",
           "amount": "30",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 159, "name": "Gin" }]
+          "substitutes": [
+            {
+              "ingredientId": 159,
+              "name": "Gin"
+            }
+          ]
         },
         {
           "order": 2,
@@ -7786,8 +8351,14 @@
           "amount": "15",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 82, "name": "Cherry Brandy" },
-            { "ingredientId": 85, "name": "Cherry Liqueur" }
+            {
+              "ingredientId": 82,
+              "name": "Cherry Brandy"
+            },
+            {
+              "ingredientId": 85,
+              "name": "Cherry Liqueur"
+            }
           ]
         },
         {
@@ -7803,7 +8374,12 @@
           "name": "Cream",
           "amount": "30",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 183, "name": "Half-and-half" }]
+          "substitutes": [
+            {
+              "ingredientId": 183,
+              "name": "Half-and-half"
+            }
+          ]
         },
         {
           "order": 5,
@@ -7918,7 +8494,12 @@
           "name": "Coffee Liqueur",
           "amount": "30",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 107, "name": "Coffee Brandy" }]
+          "substitutes": [
+            {
+              "ingredientId": 107,
+              "name": "Coffee Brandy"
+            }
+          ]
         },
         {
           "order": 3,
@@ -8001,7 +8582,12 @@
           "name": "Creme de Cacao Brown",
           "amount": "45",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 91, "name": "Chocolate Liqueur" }]
+          "substitutes": [
+            {
+              "ingredientId": 91,
+              "name": "Chocolate Liqueur"
+            }
+          ]
         },
         {
           "order": 3,
@@ -8017,7 +8603,12 @@
           "amount": "1",
           "unitId": 18,
           "garnish": true,
-          "substitutes": [{ "ingredientId": 98, "name": "Cocoa Powder" }]
+          "substitutes": [
+            {
+              "ingredientId": 98,
+              "name": "Cocoa Powder"
+            }
+          ]
         }
       ]
     },
@@ -8244,7 +8835,12 @@
           "amount": "45",
           "unitId": 11,
           "allowBaseSubstitution": true,
-          "substitutes": [{ "ingredientId": 334, "name": "Triple Sec" }]
+          "substitutes": [
+            {
+              "ingredientId": 334,
+              "name": "Triple Sec"
+            }
+          ]
         },
         {
           "order": 3,
@@ -8423,7 +9019,12 @@
           "name": "Strucchi Bitter",
           "amount": "15",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 72, "name": "Campari" }]
+          "substitutes": [
+            {
+              "ingredientId": 72,
+              "name": "Campari"
+            }
+          ]
         },
         {
           "order": 4,
@@ -8528,8 +9129,14 @@
           "amount": "60",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 63, "name": "Bourbon" },
-            { "ingredientId": 64, "name": "Brandy" }
+            {
+              "ingredientId": 63,
+              "name": "Bourbon"
+            },
+            {
+              "ingredientId": 64,
+              "name": "Brandy"
+            }
           ]
         },
         {
@@ -8649,7 +9256,12 @@
           "amount": "15",
           "unitId": 11,
           "allowBaseSubstitution": true,
-          "substitutes": [{ "ingredientId": 244, "name": "Orange Curaçao" }]
+          "substitutes": [
+            {
+              "ingredientId": 244,
+              "name": "Orange Curaçao"
+            }
+          ]
         },
         {
           "order": 3,
@@ -8698,7 +9310,12 @@
           "name": "Vodka",
           "amount": "30",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 339, "name": "Vodka Citron" }]
+          "substitutes": [
+            {
+              "ingredientId": 339,
+              "name": "Vodka Citron"
+            }
+          ]
         },
         {
           "order": 2,
@@ -8786,7 +9403,12 @@
           "amount": "2",
           "unitId": 15,
           "garnish": true,
-          "substitutes": [{ "ingredientId": 98, "name": "Cocoa Powder" }]
+          "substitutes": [
+            {
+              "ingredientId": 98,
+              "name": "Cocoa Powder"
+            }
+          ]
         }
       ]
     },
@@ -8813,7 +9435,12 @@
           "name": "Strucchi Bitter",
           "amount": "22.5",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 72, "name": "Campari" }]
+          "substitutes": [
+            {
+              "ingredientId": 72,
+              "name": "Campari"
+            }
+          ]
         },
         {
           "order": 3,
@@ -8828,7 +9455,12 @@
           "name": "Cherry Heering",
           "amount": "7.5",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 85, "name": "Cherry Liqueur" }]
+          "substitutes": [
+            {
+              "ingredientId": 85,
+              "name": "Cherry Liqueur"
+            }
+          ]
         },
         {
           "order": 5,
@@ -8836,7 +9468,12 @@
           "name": "Crème de Café",
           "amount": "5",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 108, "name": "Coffee Liqueur" }]
+          "substitutes": [
+            {
+              "ingredientId": 108,
+              "name": "Coffee Liqueur"
+            }
+          ]
         },
         {
           "order": 6,
@@ -8921,9 +9558,18 @@
           "amount": "60",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 168, "name": "Gold Rum" },
-            { "ingredientId": 315, "name": "Spiced Rum" },
-            { "ingredientId": 200, "name": "Jamaican Dark Rum" }
+            {
+              "ingredientId": 168,
+              "name": "Gold Rum"
+            },
+            {
+              "ingredientId": 315,
+              "name": "Spiced Rum"
+            },
+            {
+              "ingredientId": 200,
+              "name": "Jamaican Dark Rum"
+            }
           ]
         },
         {
@@ -9035,7 +9681,12 @@
           "name": "Orange Curaçao",
           "amount": "15",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 334, "name": "Triple Sec" }]
+          "substitutes": [
+            {
+              "ingredientId": 334,
+              "name": "Triple Sec"
+            }
+          ]
         },
         {
           "order": 3,
@@ -9177,7 +9828,12 @@
           "name": "Whiskey",
           "amount": "45",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 63, "name": "Bourbon" }]
+          "substitutes": [
+            {
+              "ingredientId": 63,
+              "name": "Bourbon"
+            }
+          ]
         },
         {
           "order": 2,
@@ -9215,7 +9871,12 @@
           "amount": "1",
           "unitId": 26,
           "garnish": true,
-          "substitutes": [{ "ingredientId": 214, "name": "Lemon" }]
+          "substitutes": [
+            {
+              "ingredientId": 214,
+              "name": "Lemon"
+            }
+          ]
         }
       ]
     },
@@ -9471,7 +10132,12 @@
           "name": "Coconut Liqueur",
           "amount": "60",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 103, "name": "Coconut Rum" }]
+          "substitutes": [
+            {
+              "ingredientId": 103,
+              "name": "Coconut Rum"
+            }
+          ]
         },
         {
           "order": 2,
@@ -9557,13 +10223,6 @@
           "amount": "1",
           "unitId": 19,
           "garnish": true
-        },
-        {
-          "order": 7,
-          "ingredientId": 193,
-          "name": "Ice",
-          "amount": "120",
-          "unitId": 8
         }
       ]
     },
@@ -9590,7 +10249,12 @@
           "name": "Coffee Liqueur",
           "amount": "30",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 107, "name": "Coffee Brandy" }]
+          "substitutes": [
+            {
+              "ingredientId": 107,
+              "name": "Coffee Brandy"
+            }
+          ]
         },
         {
           "order": 3,
@@ -9598,7 +10262,12 @@
           "name": "Banana Liqueur",
           "amount": "30",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 118, "name": "Creme de Banane" }]
+          "substitutes": [
+            {
+              "ingredientId": 118,
+              "name": "Creme de Banane"
+            }
+          ]
         },
         {
           "order": 4,
@@ -9656,7 +10325,12 @@
           "name": "Coffee Liqueur",
           "amount": "45",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 107, "name": "Coffee Brandy" }]
+          "substitutes": [
+            {
+              "ingredientId": 107,
+              "name": "Coffee Brandy"
+            }
+          ]
         },
         {
           "order": 2,
@@ -9767,7 +10441,12 @@
           "name": "Lemon-Lime Soda",
           "amount": "120",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 312, "name": "Soda Water" }]
+          "substitutes": [
+            {
+              "ingredientId": 312,
+              "name": "Soda Water"
+            }
+          ]
         },
         {
           "order": 4,
@@ -9812,8 +10491,14 @@
           "amount": "30",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 168, "name": "Gold Rum" },
-            { "ingredientId": 167, "name": "Gold Puerto Rican Rum" }
+            {
+              "ingredientId": 168,
+              "name": "Gold Rum"
+            },
+            {
+              "ingredientId": 167,
+              "name": "Gold Puerto Rican Rum"
+            }
           ]
         },
         {
@@ -9822,7 +10507,12 @@
           "name": "Cuban Rum",
           "amount": "15",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 346, "name": "White Rum" }]
+          "substitutes": [
+            {
+              "ingredientId": 346,
+              "name": "White Rum"
+            }
+          ]
         },
         {
           "order": 3,
@@ -9886,7 +10576,12 @@
           "amount": "50",
           "unitId": 11,
           "allowBaseSubstitution": true,
-          "substitutes": [{ "ingredientId": 329, "name": "Tequila Gold" }]
+          "substitutes": [
+            {
+              "ingredientId": 329,
+              "name": "Tequila Gold"
+            }
+          ]
         },
         {
           "order": 2,
@@ -9930,7 +10625,12 @@
           "amount": "1",
           "unitId": 19,
           "garnish": true,
-          "substitutes": [{ "ingredientId": 214, "name": "Lemon" }]
+          "substitutes": [
+            {
+              "ingredientId": 214,
+              "name": "Lemon"
+            }
+          ]
         },
         {
           "order": 8,
@@ -10236,7 +10936,12 @@
           "name": "Dry Vermouth",
           "amount": "30",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 221, "name": "Lillet Blanc" }]
+          "substitutes": [
+            {
+              "ingredientId": 221,
+              "name": "Lillet Blanc"
+            }
+          ]
         },
         {
           "order": 3,
@@ -10245,7 +10950,12 @@
           "amount": "15",
           "unitId": 11,
           "allowBaseSubstitution": true,
-          "substitutes": [{ "ingredientId": 334, "name": "Triple Sec" }]
+          "substitutes": [
+            {
+              "ingredientId": 334,
+              "name": "Triple Sec"
+            }
+          ]
         },
         {
           "order": 4,
@@ -10275,7 +10985,7 @@
       "id": 182,
       "name": "Electric Lemonade",
       "description": "There are a few variations and substitutions you can play around with. You could replace lemon-lime soda with club soda or tonic water for a less sweet version. You can also opt for a party punch recipe by scaling the ingredients in this electric lemonade recipe.",
-      "instructions": "1. Combine vodka, blue curacao, lemon juice, and simple syrup in a cocktail shaker along with ice.\n2. Give it a good shake. \n3. Fill a high ball or collins glass with ice, then strain in the cocktail.\n4. Top it off with lemon-lime soda.",
+      "instructions": "1. Combine vodka, blue curacao, lemon juice, and simple syrup in a cocktail shaker along with ice.\n2. Give it a good shake. \n3. Fill a high ball or collins glass with ice, then strain in the cocktail.\n4. Top it off with lemon-lime soda.\n5. Garnish with a lemon wedge.",
       "photoUri": "assets/cocktails/282-electric-lemonade.jpg",
       "glassId": "highball_glass",
       "methodIds": ["shake"],
@@ -10349,7 +11059,12 @@
           "name": "Irish Whiskey",
           "amount": "45",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 343, "name": "Whisky" }]
+          "substitutes": [
+            {
+              "ingredientId": 343,
+              "name": "Whisky"
+            }
+          ]
         },
         {
           "order": 2,
@@ -10598,7 +11313,12 @@
           "amount": "30",
           "unitId": 11,
           "allowBaseSubstitution": true,
-          "substitutes": [{ "ingredientId": 107, "name": "Coffee Brandy" }]
+          "substitutes": [
+            {
+              "ingredientId": 107,
+              "name": "Coffee Brandy"
+            }
+          ]
         },
         {
           "order": 3,
@@ -10661,7 +11381,12 @@
           "name": "Strucchi Bitter",
           "amount": "20",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 72, "name": "Campari" }]
+          "substitutes": [
+            {
+              "ingredientId": 72,
+              "name": "Campari"
+            }
+          ]
         },
         {
           "order": 4,
@@ -11166,7 +11891,12 @@
           "name": "White Rum",
           "amount": "30",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 315, "name": "Spiced Rum" }]
+          "substitutes": [
+            {
+              "ingredientId": 315,
+              "name": "Spiced Rum"
+            }
+          ]
         },
         {
           "order": 2,
@@ -11245,7 +11975,12 @@
           "name": "Benedictine",
           "amount": "7.5",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 350, "name": "Yellow Chartreuse" }]
+          "substitutes": [
+            {
+              "ingredientId": 350,
+              "name": "Yellow Chartreuse"
+            }
+          ]
         },
         {
           "order": 4,
@@ -11303,8 +12038,14 @@
           "amount": "60",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 284, "name": "Prosecco" },
-            { "ingredientId": 314, "name": "Sparkling Wine" }
+            {
+              "ingredientId": 284,
+              "name": "Prosecco"
+            },
+            {
+              "ingredientId": 314,
+              "name": "Sparkling Wine"
+            }
           ]
         },
         {
@@ -11341,7 +12082,12 @@
           "name": "Cognac",
           "amount": "45",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 64, "name": "Brandy" }]
+          "substitutes": [
+            {
+              "ingredientId": 64,
+              "name": "Brandy"
+            }
+          ]
         },
         {
           "order": 2,
@@ -11389,7 +12135,12 @@
           "name": "Cognac",
           "amount": "60",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 64, "name": "Brandy" }]
+          "substitutes": [
+            {
+              "ingredientId": 64,
+              "name": "Brandy"
+            }
+          ]
         },
         {
           "order": 4,
@@ -11397,7 +12148,12 @@
           "name": "Benedictine",
           "amount": "10",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 350, "name": "Yellow Chartreuse" }]
+          "substitutes": [
+            {
+              "ingredientId": 350,
+              "name": "Yellow Chartreuse"
+            }
+          ]
         },
         {
           "order": 5,
@@ -11719,7 +12475,12 @@
           "name": "Aged Rum",
           "amount": "60",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 346, "name": "White Rum" }]
+          "substitutes": [
+            {
+              "ingredientId": 346,
+              "name": "White Rum"
+            }
+          ]
         },
         {
           "order": 2,
@@ -11727,7 +12488,12 @@
           "name": "Lime Juice",
           "amount": "22.5",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 216, "name": "Lemon Juice" }]
+          "substitutes": [
+            {
+              "ingredientId": 216,
+              "name": "Lemon Juice"
+            }
+          ]
         },
         {
           "order": 3,
@@ -11919,7 +12685,12 @@
           "name": "Whipped Cream",
           "amount": "10",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 117, "name": "Cream" }]
+          "substitutes": [
+            {
+              "ingredientId": 117,
+              "name": "Cream"
+            }
+          ]
         }
       ]
     },
@@ -11987,7 +12758,12 @@
           "name": "Cognac",
           "amount": "30",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 64, "name": "Brandy" }]
+          "substitutes": [
+            {
+              "ingredientId": 64,
+              "name": "Brandy"
+            }
+          ]
         },
         {
           "order": 3,
@@ -12058,7 +12834,12 @@
           "name": "Orange Curaçao",
           "amount": "15",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 334, "name": "Triple Sec" }]
+          "substitutes": [
+            {
+              "ingredientId": 334,
+              "name": "Triple Sec"
+            }
+          ]
         },
         {
           "order": 3,
@@ -12299,7 +13080,12 @@
           "name": "Gin",
           "amount": "60",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 238, "name": "Old Tom Gin" }]
+          "substitutes": [
+            {
+              "ingredientId": 238,
+              "name": "Old Tom Gin"
+            }
+          ]
         },
         {
           "order": 2,
@@ -12598,7 +13384,12 @@
           "name": "Peach Schnapps",
           "amount": "15",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 313, "name": "Southern Comfort" }]
+          "substitutes": [
+            {
+              "ingredientId": 313,
+              "name": "Southern Comfort"
+            }
+          ]
         },
         {
           "order": 3,
@@ -12891,7 +13682,12 @@
           "amount": "30",
           "unitId": 11,
           "allowBaseSubstitution": true,
-          "substitutes": [{ "ingredientId": 334, "name": "Triple Sec" }]
+          "substitutes": [
+            {
+              "ingredientId": 334,
+              "name": "Triple Sec"
+            }
+          ]
         },
         {
           "order": 3,
@@ -13155,7 +13951,12 @@
           "name": "Absinthe",
           "amount": "10",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 206, "name": "Kina Lillet" }]
+          "substitutes": [
+            {
+              "ingredientId": 206,
+              "name": "Kina Lillet"
+            }
+          ]
         },
         {
           "order": 4,
@@ -13190,7 +13991,12 @@
           "name": "Gin",
           "amount": "50",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 338, "name": "Vodka" }]
+          "substitutes": [
+            {
+              "ingredientId": 338,
+              "name": "Vodka"
+            }
+          ]
         },
         {
           "order": 2,
@@ -13240,8 +14046,14 @@
           "amount": "20",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 53, "name": "Blackberry Brandy" },
-            { "ingredientId": 54, "name": "Blackberry Liqueur" }
+            {
+              "ingredientId": 53,
+              "name": "Blackberry Brandy"
+            },
+            {
+              "ingredientId": 54,
+              "name": "Blackberry Liqueur"
+            }
           ]
         },
         {
@@ -13417,7 +14229,12 @@
           "name": "Brandy",
           "amount": "15",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 109, "name": "Cognac" }]
+          "substitutes": [
+            {
+              "ingredientId": 109,
+              "name": "Cognac"
+            }
+          ]
         },
         {
           "order": 2,
@@ -13494,7 +14311,12 @@
           "name": "Strucchi Bitter",
           "amount": "15",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 72, "name": "Campari" }]
+          "substitutes": [
+            {
+              "ingredientId": 72,
+              "name": "Campari"
+            }
+          ]
         },
         {
           "order": 5,
@@ -13592,7 +14414,12 @@
           "name": "Cognac",
           "amount": "45",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 64, "name": "Brandy" }]
+          "substitutes": [
+            {
+              "ingredientId": 64,
+              "name": "Brandy"
+            }
+          ]
         },
         {
           "order": 2,
@@ -13600,7 +14427,12 @@
           "name": "Creme de Cacao Brown",
           "amount": "15",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 91, "name": "Chocolate Liqueur" }]
+          "substitutes": [
+            {
+              "ingredientId": 91,
+              "name": "Chocolate Liqueur"
+            }
+          ]
         },
         {
           "order": 3,
@@ -13615,7 +14447,12 @@
           "name": "Cream",
           "amount": "22.5",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 183, "name": "Half-and-half" }]
+          "substitutes": [
+            {
+              "ingredientId": 183,
+              "name": "Half-and-half"
+            }
+          ]
         },
         {
           "order": 5,
@@ -13763,7 +14600,12 @@
           "name": "Scotch Whisky",
           "amount": "60",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 343, "name": "Whiskey" }]
+          "substitutes": [
+            {
+              "ingredientId": 343,
+              "name": "Whiskey"
+            }
+          ]
         },
         {
           "order": 2,
@@ -13771,7 +14613,12 @@
           "name": "Soda Water",
           "amount": "120",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 161, "name": "Ginger Ale" }]
+          "substitutes": [
+            {
+              "ingredientId": 161,
+              "name": "Ginger Ale"
+            }
+          ]
         },
         {
           "order": 3,
@@ -13896,7 +14743,12 @@
           "name": "Lemon Bitters",
           "amount": "2",
           "unitId": 6,
-          "substitutes": [{ "ingredientId": 243, "name": "Orange Bitters" }]
+          "substitutes": [
+            {
+              "ingredientId": 243,
+              "name": "Orange Bitters"
+            }
+          ]
         },
         {
           "order": 8,
@@ -13931,7 +14783,12 @@
           "name": "Tequila Blanco",
           "amount": "50",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 329, "name": "Tequila Gold" }]
+          "substitutes": [
+            {
+              "ingredientId": 329,
+              "name": "Tequila Gold"
+            }
+          ]
         },
         {
           "order": 2,
@@ -13973,7 +14830,12 @@
           "name": "Cognac",
           "amount": "45",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 64, "name": "Brandy" }]
+          "substitutes": [
+            {
+              "ingredientId": 64,
+              "name": "Brandy"
+            }
+          ]
         },
         {
           "order": 2,
@@ -14052,8 +14914,14 @@
           "amount": "50",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 168, "name": "Gold Rum" },
-            { "ingredientId": 315, "name": "Spiced Rum" }
+            {
+              "ingredientId": 168,
+              "name": "Gold Rum"
+            },
+            {
+              "ingredientId": 315,
+              "name": "Spiced Rum"
+            }
           ]
         },
         {
@@ -14120,7 +14988,12 @@
           "name": "Boiling Water",
           "amount": "100",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 51, "name": "Black Tea" }]
+          "substitutes": [
+            {
+              "ingredientId": 51,
+              "name": "Black Tea"
+            }
+          ]
         },
         {
           "order": 5,
@@ -14523,7 +15396,12 @@
           "name": "Gin",
           "amount": "60",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 338, "name": "Vodka" }]
+          "substitutes": [
+            {
+              "ingredientId": 338,
+              "name": "Vodka"
+            }
+          ]
         },
         {
           "order": 2,
@@ -14594,7 +15472,12 @@
           "name": "Cognac",
           "amount": "45",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 64, "name": "Brandy" }]
+          "substitutes": [
+            {
+              "ingredientId": 64,
+              "name": "Brandy"
+            }
+          ]
         },
         {
           "order": 3,
@@ -14602,7 +15485,12 @@
           "name": "Cream",
           "amount": "15",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 183, "name": "Half-and-half" }]
+          "substitutes": [
+            {
+              "ingredientId": 183,
+              "name": "Half-and-half"
+            }
+          ]
         },
         {
           "order": 4,
@@ -14637,7 +15525,12 @@
           "name": "Irish Whiskey",
           "amount": "60",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 343, "name": "Whisky" }]
+          "substitutes": [
+            {
+              "ingredientId": 343,
+              "name": "Whisky"
+            }
+          ]
         },
         {
           "order": 2,
@@ -14744,7 +15637,12 @@
           "name": "Irish Whiskey",
           "amount": "45",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 343, "name": "Whisky" }]
+          "substitutes": [
+            {
+              "ingredientId": 343,
+              "name": "Whisky"
+            }
+          ]
         },
         {
           "order": 2,
@@ -15068,7 +15966,12 @@
           "name": "Plum Brandy",
           "amount": "240",
           "unitId": 8,
-          "substitutes": [{ "ingredientId": 291, "name": "Red Wine" }]
+          "substitutes": [
+            {
+              "ingredientId": 291,
+              "name": "Red Wine"
+            }
+          ]
         },
         {
           "order": 3,
@@ -15111,7 +16014,12 @@
           "name": "Honey",
           "amount": "15",
           "unitId": 8,
-          "substitutes": [{ "ingredientId": 323, "name": "Sugar" }]
+          "substitutes": [
+            {
+              "ingredientId": 323,
+              "name": "Sugar"
+            }
+          ]
         },
         {
           "order": 9,
@@ -15172,7 +16080,12 @@
           "name": "Cointreau",
           "amount": "45",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 334, "name": "Triple Sec" }]
+          "substitutes": [
+            {
+              "ingredientId": 334,
+              "name": "Triple Sec"
+            }
+          ]
         },
         {
           "order": 3,
@@ -15362,10 +16275,22 @@
           "amount": "60",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 97568, "name": "Tequila" },
-            { "ingredientId": 328, "name": "Tequila Blanco" },
-            { "ingredientId": 329, "name": "Tequila Gold" },
-            { "ingredientId": 330, "name": "Tequila Reposado" }
+            {
+              "ingredientId": 97568,
+              "name": "Tequila"
+            },
+            {
+              "ingredientId": 328,
+              "name": "Tequila Blanco"
+            },
+            {
+              "ingredientId": 329,
+              "name": "Tequila Gold"
+            },
+            {
+              "ingredientId": 330,
+              "name": "Tequila Reposado"
+            }
           ]
         },
         {
@@ -15487,7 +16412,12 @@
           "name": "Blackstrap Rum",
           "amount": "45",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 134, "name": "Dark Rum" }]
+          "substitutes": [
+            {
+              "ingredientId": 134,
+              "name": "Dark Rum"
+            }
+          ]
         },
         {
           "order": 2,
@@ -15697,8 +16627,14 @@
           "amount": "90",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 284, "name": "Prosecco" },
-            { "ingredientId": 314, "name": "Sparkling Wine" }
+            {
+              "ingredientId": 284,
+              "name": "Prosecco"
+            },
+            {
+              "ingredientId": 314,
+              "name": "Sparkling Wine"
+            }
           ]
         },
         {
@@ -15707,7 +16643,12 @@
           "name": "Creme de Cassis",
           "amount": "10",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 287, "name": "Raspberry Liqueur" }]
+          "substitutes": [
+            {
+              "ingredientId": 287,
+              "name": "Raspberry Liqueur"
+            }
+          ]
         }
       ]
     },
@@ -16107,7 +17048,10 @@
           "amount": "5",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 137, "name": "Demerara Sugar Syrup" }
+            {
+              "ingredientId": 137,
+              "name": "Demerara Sugar Syrup"
+            }
           ]
         },
         {
@@ -16213,7 +17157,12 @@
           "name": "Fino Sherry",
           "amount": "15",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 16, "name": "Amontillado Sherry" }]
+          "substitutes": [
+            {
+              "ingredientId": 16,
+              "name": "Amontillado Sherry"
+            }
+          ]
         },
         {
           "order": 3,
@@ -16333,7 +17282,7 @@
       "id": 292,
       "name": "Long Island Iced Tea",
       "description": "Five-spirit sour lengthened with cola.",
-      "instructions": "1. Fill a mixing glass with ice.\n2. Add 15ml of Vodka, 15ml of Tequila Blanco, 15ml of White Rum, 15ml of Gin, 15ml of Cointreau, 25ml of Lemon Juice, 30ml of Simple Syrup, and 1 splash of Coca-Cola.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled highball glass.\n5. Garnish with a lemon slice.",
+      "instructions": "1. Fill a mixing glass with ice.\n2. Add 15ml of Vodka, 15ml of Tequila Blanco, 15ml of White Rum, 15ml of Gin, 15ml of Cointreau, 25ml of Lemon Juice, and 30ml of Simple Syrup.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled highball glass filled with fresh ice.\n5. Top with a splash of Coca-Cola.\n6. Garnish with a lemon slice.",
       "photoUri": "assets/cocktails/393-long-island-iced-tea.jpg",
       "glassId": "highball_glass",
       "methodIds": ["stir"],
@@ -16352,7 +17301,12 @@
           "name": "Tequila Blanco",
           "amount": "15",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 329, "name": "Tequila Gold" }]
+          "substitutes": [
+            {
+              "ingredientId": 329,
+              "name": "Tequila Gold"
+            }
+          ]
         },
         {
           "order": 3,
@@ -16374,7 +17328,12 @@
           "name": "Cointreau",
           "amount": "15",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 334, "name": "Triple Sec" }]
+          "substitutes": [
+            {
+              "ingredientId": 334,
+              "name": "Triple Sec"
+            }
+          ]
         },
         {
           "order": 6,
@@ -16542,7 +17501,12 @@
           "name": "Cognac",
           "amount": "40",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 64, "name": "Brandy" }]
+          "substitutes": [
+            {
+              "ingredientId": 64,
+              "name": "Brandy"
+            }
+          ]
         },
         {
           "order": 2,
@@ -16550,7 +17514,12 @@
           "name": "Strucchi Bitter",
           "amount": "20",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 72, "name": "Campari" }]
+          "substitutes": [
+            {
+              "ingredientId": 72,
+              "name": "Campari"
+            }
+          ]
         },
         {
           "order": 3,
@@ -16918,7 +17887,12 @@
           "name": "Whiskey",
           "amount": "50",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 301, "name": "Rye Whisky" }]
+          "substitutes": [
+            {
+              "ingredientId": 301,
+              "name": "Rye Whisky"
+            }
+          ]
         },
         {
           "order": 2,
@@ -16967,7 +17941,12 @@
           "name": "Whiskey",
           "amount": "50",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 301, "name": "Rye Whisky" }]
+          "substitutes": [
+            {
+              "ingredientId": 301,
+              "name": "Rye Whisky"
+            }
+          ]
         },
         {
           "order": 2,
@@ -17031,7 +18010,12 @@
           "name": "Tequila Blanco",
           "amount": "50",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 97568, "name": "Tequila" }]
+          "substitutes": [
+            {
+              "ingredientId": 97568,
+              "name": "Tequila"
+            }
+          ]
         },
         {
           "order": 2,
@@ -17103,7 +18087,12 @@
           "name": "Irish Whiskey",
           "amount": "45",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 343, "name": "Whisky" }]
+          "substitutes": [
+            {
+              "ingredientId": 343,
+              "name": "Whisky"
+            }
+          ]
         },
         {
           "order": 3,
@@ -17423,7 +18412,12 @@
           "name": "Coconut Liqueur",
           "amount": "60",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 103, "name": "Coconut Rum" }]
+          "substitutes": [
+            {
+              "ingredientId": 103,
+              "name": "Coconut Rum"
+            }
+          ]
         },
         {
           "order": 2,
@@ -17762,7 +18756,12 @@
           "amount": "1",
           "unitId": 14,
           "garnish": true,
-          "substitutes": [{ "ingredientId": 222, "name": "Lime" }]
+          "substitutes": [
+            {
+              "ingredientId": 222,
+              "name": "Lime"
+            }
+          ]
         },
         {
           "order": 8,
@@ -18100,7 +19099,12 @@
           "name": "Sugar",
           "amount": "2",
           "unitId": 24,
-          "substitutes": [{ "ingredientId": 294, "name": "Rich Simple Syrup" }]
+          "substitutes": [
+            {
+              "ingredientId": 294,
+              "name": "Rich Simple Syrup"
+            }
+          ]
         },
         {
           "order": 3,
@@ -18536,7 +19540,12 @@
           "amount": "1",
           "unitId": 1,
           "optional": true,
-          "substitutes": [{ "ingredientId": 336, "name": "Vanilla Extract" }]
+          "substitutes": [
+            {
+              "ingredientId": 336,
+              "name": "Vanilla Extract"
+            }
+          ]
         },
         {
           "order": 6,
@@ -18752,7 +19761,12 @@
           "name": "Prosecco",
           "amount": "40",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 314, "name": "Sparkling Wine" }]
+          "substitutes": [
+            {
+              "ingredientId": 314,
+              "name": "Sparkling Wine"
+            }
+          ]
         },
         {
           "order": 4,
@@ -18849,8 +19863,14 @@
           "amount": "60",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 301, "name": "Rye Whisky" },
-            { "ingredientId": 343, "name": "Whisky" }
+            {
+              "ingredientId": 301,
+              "name": "Rye Whisky"
+            },
+            {
+              "ingredientId": 343,
+              "name": "Whisky"
+            }
           ]
         },
         {
@@ -18997,7 +20017,10 @@
           "amount": "30",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 69, "name": "Butterscotch Schnapps" }
+            {
+              "ingredientId": 69,
+              "name": "Butterscotch Schnapps"
+            }
           ]
         },
         {
@@ -19047,7 +20070,12 @@
           "name": "Aged Rum",
           "amount": "45",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 134, "name": "Dark Rum" }]
+          "substitutes": [
+            {
+              "ingredientId": 134,
+              "name": "Dark Rum"
+            }
+          ]
         },
         {
           "order": 3,
@@ -19076,7 +20104,12 @@
           "name": "Champagne",
           "amount": "60",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 284, "name": "Prosecco" }]
+          "substitutes": [
+            {
+              "ingredientId": 284,
+              "name": "Prosecco"
+            }
+          ]
         },
         {
           "order": 7,
@@ -19112,8 +20145,14 @@
           "amount": "1",
           "unitId": 4,
           "substitutes": [
-            { "ingredientId": 65, "name": "Brown Sugar" },
-            { "ingredientId": 136, "name": "Demerara Sugar" }
+            {
+              "ingredientId": 65,
+              "name": "Brown Sugar"
+            },
+            {
+              "ingredientId": 136,
+              "name": "Demerara Sugar"
+            }
           ]
         },
         {
@@ -19137,8 +20176,14 @@
           "amount": "45",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 301, "name": "Rye Whisky" },
-            { "ingredientId": 343, "name": "Whisky" }
+            {
+              "ingredientId": 301,
+              "name": "Rye Whisky"
+            },
+            {
+              "ingredientId": 343,
+              "name": "Whisky"
+            }
           ]
         },
         {
@@ -19359,7 +20404,12 @@
           "name": "Coconut Liqueur",
           "amount": "22.5",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 103, "name": "Coconut Rum" }]
+          "substitutes": [
+            {
+              "ingredientId": 103,
+              "name": "Coconut Rum"
+            }
+          ]
         },
         {
           "order": 4,
@@ -19602,7 +20652,12 @@
           "name": "Cognac",
           "amount": "30",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 64, "name": "Brandy" }]
+          "substitutes": [
+            {
+              "ingredientId": 64,
+              "name": "Brandy"
+            }
+          ]
         },
         {
           "order": 2,
@@ -19749,7 +20804,12 @@
           "amount": "1",
           "unitId": 19,
           "garnish": true,
-          "substitutes": [{ "ingredientId": 242, "name": "Orange" }]
+          "substitutes": [
+            {
+              "ingredientId": 242,
+              "name": "Orange"
+            }
+          ]
         }
       ]
     },
@@ -19769,7 +20829,12 @@
           "name": "Tequila Añejo",
           "amount": "1.5",
           "unitId": 12,
-          "substitutes": [{ "ingredientId": 330, "name": "Tequila Reposado" }]
+          "substitutes": [
+            {
+              "ingredientId": 330,
+              "name": "Tequila Reposado"
+            }
+          ]
         },
         {
           "order": 2,
@@ -20216,9 +21281,18 @@
           "amount": "60",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 103, "name": "Coconut Rum" },
-            { "ingredientId": 168, "name": "Gold Rum" },
-            { "ingredientId": 315, "name": "Spiced Rum" }
+            {
+              "ingredientId": 103,
+              "name": "Coconut Rum"
+            },
+            {
+              "ingredientId": 168,
+              "name": "Gold Rum"
+            },
+            {
+              "ingredientId": 315,
+              "name": "Spiced Rum"
+            }
           ]
         },
         {
@@ -20473,7 +21547,12 @@
           "name": "Jamaican Rum",
           "amount": "60",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 134, "name": "Dark Rum" }]
+          "substitutes": [
+            {
+              "ingredientId": 134,
+              "name": "Dark Rum"
+            }
+          ]
         },
         {
           "order": 2,
@@ -20558,7 +21637,12 @@
           "name": "Cognac",
           "amount": "22.5",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 64, "name": "Brandy" }]
+          "substitutes": [
+            {
+              "ingredientId": 64,
+              "name": "Brandy"
+            }
+          ]
         },
         {
           "order": 2,
@@ -20641,7 +21725,12 @@
           "name": "Champagne",
           "amount": "60",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 284, "name": "Prosecco" }]
+          "substitutes": [
+            {
+              "ingredientId": 284,
+              "name": "Prosecco"
+            }
+          ]
         },
         {
           "order": 7,
@@ -20676,7 +21765,12 @@
           "name": "Cognac",
           "amount": "15",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 64, "name": "Brandy" }]
+          "substitutes": [
+            {
+              "ingredientId": 64,
+              "name": "Brandy"
+            }
+          ]
         },
         {
           "order": 2,
@@ -20725,7 +21819,12 @@
           "name": "Cognac",
           "amount": "40",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 64, "name": "Brandy" }]
+          "substitutes": [
+            {
+              "ingredientId": 64,
+              "name": "Brandy"
+            }
+          ]
         },
         {
           "order": 2,
@@ -20851,7 +21950,12 @@
           "name": "Coconut Liqueur",
           "amount": "15",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 103, "name": "Coconut Rum" }]
+          "substitutes": [
+            {
+              "ingredientId": 103,
+              "name": "Coconut Rum"
+            }
+          ]
         },
         {
           "order": 3,
@@ -20963,7 +22067,12 @@
           "amount": "1",
           "unitId": 19,
           "garnish": true,
-          "substitutes": [{ "ingredientId": 214, "name": "Lemon" }]
+          "substitutes": [
+            {
+              "ingredientId": 214,
+              "name": "Lemon"
+            }
+          ]
         },
         {
           "order": 12,
@@ -21108,7 +22217,12 @@
           "name": "Cherry Brandy",
           "amount": "30",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 85, "name": "Cherry Liqueur" }]
+          "substitutes": [
+            {
+              "ingredientId": 85,
+              "name": "Cherry Liqueur"
+            }
+          ]
         },
         {
           "order": 3,
@@ -21142,7 +22256,12 @@
           "name": "Peach Schnapps",
           "amount": "45",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 263, "name": "Peach Brandy" }]
+          "substitutes": [
+            {
+              "ingredientId": 263,
+              "name": "Peach Brandy"
+            }
+          ]
         },
         {
           "order": 3,
@@ -21200,8 +22319,14 @@
           "amount": "10",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 83, "name": "Cherry Heering" },
-            { "ingredientId": 85, "name": "Cherry Liqueur" }
+            {
+              "ingredientId": 83,
+              "name": "Cherry Heering"
+            },
+            {
+              "ingredientId": 85,
+              "name": "Cherry Liqueur"
+            }
           ]
         },
         {
@@ -21244,7 +22369,12 @@
           "name": "Cognac",
           "amount": "45",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 64, "name": "Brandy" }]
+          "substitutes": [
+            {
+              "ingredientId": 64,
+              "name": "Brandy"
+            }
+          ]
         },
         {
           "order": 2,
@@ -21368,7 +22498,12 @@
           "name": "Cream",
           "amount": "30",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 235, "name": "Milk" }]
+          "substitutes": [
+            {
+              "ingredientId": 235,
+              "name": "Milk"
+            }
+          ]
         },
         {
           "order": 5,
@@ -21443,7 +22578,12 @@
           "name": "Coconut Liqueur",
           "amount": "60",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 103, "name": "Coconut Rum" }]
+          "substitutes": [
+            {
+              "ingredientId": 103,
+              "name": "Coconut Rum"
+            }
+          ]
         },
         {
           "order": 2,
@@ -21494,7 +22634,12 @@
           "name": "Cognac",
           "amount": "45",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 64, "name": "Brandy" }]
+          "substitutes": [
+            {
+              "ingredientId": 64,
+              "name": "Brandy"
+            }
+          ]
         },
         {
           "order": 2,
@@ -21531,8 +22676,14 @@
           "amount": "45",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 80, "name": "Champagne" },
-            { "ingredientId": 314, "name": "Sparkling Wine" }
+            {
+              "ingredientId": 80,
+              "name": "Champagne"
+            },
+            {
+              "ingredientId": 314,
+              "name": "Sparkling Wine"
+            }
           ]
         },
         {
@@ -21576,8 +22727,14 @@
           "amount": "3",
           "unitId": 6,
           "substitutes": [
-            { "ingredientId": 84, "name": "Cherry Juice" },
-            { "ingredientId": 288, "name": "Raspberry Syrup" }
+            {
+              "ingredientId": 84,
+              "name": "Cherry Juice"
+            },
+            {
+              "ingredientId": 288,
+              "name": "Raspberry Syrup"
+            }
           ]
         },
         {
@@ -21613,7 +22770,12 @@
           "name": "Prosecco",
           "amount": "120",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 314, "name": "Sparkling Wine" }]
+          "substitutes": [
+            {
+              "ingredientId": 314,
+              "name": "Sparkling Wine"
+            }
+          ]
         },
         {
           "order": 2,
@@ -21646,7 +22808,7 @@
       "instructions": "1. Purée or muddle 50g of fresh strawberries until smooth.\n2. Pour the strawberry purée into a chilled champagne flute.\n3. Gently pour 100ml of chilled Prosecco into the glass.\n4. Stir very slowly with a bar spoon to lift the purée and blend.\n5. Garnish with a fresh strawberry on the rim.",
       "photoUri": "assets/cocktails/484-rossini.jpg",
       "glassId": "champagne_flute",
-      "methodIds": ["muddle", "blend", "build", "stir"],
+      "methodIds": ["muddle", "build"],
       "tags": [1, 7],
       "ingredients": [
         {
@@ -21663,8 +22825,14 @@
           "amount": "100",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 80, "name": "Champagne" },
-            { "ingredientId": 314, "name": "Sparkling Wine" }
+            {
+              "ingredientId": 80,
+              "name": "Champagne"
+            },
+            {
+              "ingredientId": 314,
+              "name": "Sparkling Wine"
+            }
           ]
         },
         {
@@ -21738,11 +22906,26 @@
           "amount": "60",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 56, "name": "Blackstrap Rum" },
-            { "ingredientId": 168, "name": "Gold Rum" },
-            { "ingredientId": 315, "name": "Spiced Rum" },
-            { "ingredientId": 134, "name": "Dark Rum" },
-            { "ingredientId": 135, "name": "Demerara Rum" }
+            {
+              "ingredientId": 56,
+              "name": "Blackstrap Rum"
+            },
+            {
+              "ingredientId": 168,
+              "name": "Gold Rum"
+            },
+            {
+              "ingredientId": 315,
+              "name": "Spiced Rum"
+            },
+            {
+              "ingredientId": 134,
+              "name": "Dark Rum"
+            },
+            {
+              "ingredientId": 135,
+              "name": "Demerara Rum"
+            }
           ]
         },
         {
@@ -21800,7 +22983,12 @@
           "name": "Ginger Ale",
           "amount": "120",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 162, "name": "Ginger Beer" }]
+          "substitutes": [
+            {
+              "ingredientId": 162,
+              "name": "Ginger Beer"
+            }
+          ]
         },
         {
           "order": 3,
@@ -21836,8 +23024,14 @@
           "amount": "30",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 168, "name": "Gold Rum" },
-            { "ingredientId": 346, "name": "White Rum" }
+            {
+              "ingredientId": 168,
+              "name": "Gold Rum"
+            },
+            {
+              "ingredientId": 346,
+              "name": "White Rum"
+            }
           ]
         },
         {
@@ -21846,7 +23040,12 @@
           "name": "Amontillado Sherry",
           "amount": "30",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 241, "name": "Oloroso Sherry" }]
+          "substitutes": [
+            {
+              "ingredientId": 241,
+              "name": "Oloroso Sherry"
+            }
+          ]
         },
         {
           "order": 3,
@@ -21926,8 +23125,14 @@
           "amount": "1",
           "unitId": 4,
           "substitutes": [
-            { "ingredientId": 323, "name": "Sugar" },
-            { "ingredientId": 65, "name": "Brown Sugar" }
+            {
+              "ingredientId": 323,
+              "name": "Sugar"
+            },
+            {
+              "ingredientId": 65,
+              "name": "Brown Sugar"
+            }
           ]
         },
         {
@@ -21959,8 +23164,14 @@
           "amount": "45",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 168, "name": "Gold Rum" },
-            { "ingredientId": 315, "name": "Spiced Rum" }
+            {
+              "ingredientId": 168,
+              "name": "Gold Rum"
+            },
+            {
+              "ingredientId": 315,
+              "name": "Spiced Rum"
+            }
           ]
         },
         {
@@ -21994,7 +23205,12 @@
           "amount": "1",
           "unitId": 14,
           "garnish": true,
-          "substitutes": [{ "ingredientId": 214, "name": "Lemon" }]
+          "substitutes": [
+            {
+              "ingredientId": 214,
+              "name": "Lemon"
+            }
+          ]
         }
       ]
     },
@@ -22015,9 +23231,18 @@
           "amount": "50",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 168, "name": "Gold Rum" },
-            { "ingredientId": 315, "name": "Spiced Rum" },
-            { "ingredientId": 134, "name": "Dark Rum" }
+            {
+              "ingredientId": 168,
+              "name": "Gold Rum"
+            },
+            {
+              "ingredientId": 315,
+              "name": "Spiced Rum"
+            },
+            {
+              "ingredientId": 134,
+              "name": "Dark Rum"
+            }
           ]
         },
         {
@@ -22156,7 +23381,12 @@
           "name": "Gin",
           "amount": "45",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 338, "name": "Vodka" }]
+          "substitutes": [
+            {
+              "ingredientId": 338,
+              "name": "Vodka"
+            }
+          ]
         },
         {
           "order": 2,
@@ -22220,7 +23450,12 @@
           "name": "Banana Liqueur",
           "amount": "15",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 118, "name": "Creme de Banane" }]
+          "substitutes": [
+            {
+              "ingredientId": 118,
+              "name": "Creme de Banane"
+            }
+          ]
         },
         {
           "order": 4,
@@ -22304,7 +23539,12 @@
           "name": "Brandy",
           "amount": "50",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 109, "name": "Cognac" }]
+          "substitutes": [
+            {
+              "ingredientId": 109,
+              "name": "Cognac"
+            }
+          ]
         },
         {
           "order": 5,
@@ -22407,7 +23647,12 @@
           "unitId": 19,
           "optional": true,
           "garnish": true,
-          "substitutes": [{ "ingredientId": 222, "name": "Lime" }]
+          "substitutes": [
+            {
+              "ingredientId": 222,
+              "name": "Lime"
+            }
+          ]
         },
         {
           "order": 9,
@@ -22477,8 +23722,14 @@
           "amount": "50",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 301, "name": "Rye Whisky" },
-            { "ingredientId": 64, "name": "Brandy" }
+            {
+              "ingredientId": 301,
+              "name": "Rye Whisky"
+            },
+            {
+              "ingredientId": 64,
+              "name": "Brandy"
+            }
           ]
         },
         {
@@ -22777,7 +24028,7 @@
       "id": 403,
       "name": "Seventh Son",
       "description": "A sophisticated and aromatic spirit-forward drink that balances the richness of Cognac with floral rose and deep cherry notes, finished with a crisp lager top.",
-      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 45ml of Cognac, 15ml of Cherry Heering, 15ml of Rose Syrup, and 60ml of Pilsner Lager.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled Champagne flute glass.",
+      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 45ml of Cognac, 15ml of Cherry Heering, and 15ml of Rose Syrup.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled Champagne flute glass.\n5. Top with 60ml of Pilsner Lager.",
       "photoUri": "assets/cocktails/504-seventh-son.jpg",
       "glassId": "champagne_flute",
       "methodIds": ["shake"],
@@ -22789,7 +24040,12 @@
           "name": "Cognac",
           "amount": "45",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 64, "name": "Brandy" }]
+          "substitutes": [
+            {
+              "ingredientId": 64,
+              "name": "Brandy"
+            }
+          ]
         },
         {
           "order": 2,
@@ -22798,7 +24054,12 @@
           "amount": "15",
           "unitId": 11,
           "allowBaseSubstitution": true,
-          "substitutes": [{ "ingredientId": 82, "name": "Cherry Brandy" }]
+          "substitutes": [
+            {
+              "ingredientId": 82,
+              "name": "Cherry Brandy"
+            }
+          ]
         },
         {
           "order": 3,
@@ -22919,7 +24180,12 @@
           "unitId": 11,
           "allowBaseSubstitution": true,
           "allowBrandSubstitution": true,
-          "substitutes": [{ "ingredientId": 12, "name": "Amaretto" }]
+          "substitutes": [
+            {
+              "ingredientId": 12,
+              "name": "Amaretto"
+            }
+          ]
         },
         {
           "order": 5,
@@ -22962,8 +24228,14 @@
           "unitId": 11,
           "allowBaseSubstitution": true,
           "substitutes": [
-            { "ingredientId": 155, "name": "Fino Sherry" },
-            { "ingredientId": 252, "name": "Palo Cortado" }
+            {
+              "ingredientId": 155,
+              "name": "Fino Sherry"
+            },
+            {
+              "ingredientId": 252,
+              "name": "Palo Cortado"
+            }
           ]
         },
         {
@@ -23071,7 +24343,12 @@
           "name": "Cognac",
           "amount": "50",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 64, "name": "Brandy" }]
+          "substitutes": [
+            {
+              "ingredientId": 64,
+              "name": "Brandy"
+            }
+          ]
         },
         {
           "order": 2,
@@ -23079,7 +24356,12 @@
           "name": "Triple Sec",
           "amount": "20",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 110, "name": "Cointreau" }]
+          "substitutes": [
+            {
+              "ingredientId": 110,
+              "name": "Cointreau"
+            }
+          ]
         },
         {
           "order": 3,
@@ -23258,7 +24540,12 @@
           "name": "Strucchi Bitter",
           "amount": "5",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 72, "name": "Campari" }]
+          "substitutes": [
+            {
+              "ingredientId": 72,
+              "name": "Campari"
+            }
+          ]
         },
         {
           "order": 6,
@@ -23293,8 +24580,14 @@
           "amount": "15",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 82, "name": "Cherry Brandy" },
-            { "ingredientId": 85, "name": "Cherry Liqueur" }
+            {
+              "ingredientId": 82,
+              "name": "Cherry Brandy"
+            },
+            {
+              "ingredientId": 85,
+              "name": "Cherry Liqueur"
+            }
           ]
         },
         {
@@ -23508,8 +24801,14 @@
           "amount": "240",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 182, "name": "Guinness" },
-            { "ingredientId": 8, "name": "Ale" }
+            {
+              "ingredientId": 182,
+              "name": "Guinness"
+            },
+            {
+              "ingredientId": 8,
+              "name": "Ale"
+            }
           ]
         },
         {
@@ -23519,7 +24818,10 @@
           "amount": "1",
           "unitId": 6,
           "substitutes": [
-            { "ingredientId": 55, "name": "Blackcurrant Cordial" }
+            {
+              "ingredientId": 55,
+              "name": "Blackcurrant Cordial"
+            }
           ]
         }
       ]
@@ -23699,9 +25001,18 @@
           "amount": "15",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 28, "name": "Apple Schnapps" },
-            { "ingredientId": 29, "name": "Applejack" },
-            { "ingredientId": 27, "name": "Apple Liqueur" }
+            {
+              "ingredientId": 28,
+              "name": "Apple Schnapps"
+            },
+            {
+              "ingredientId": 29,
+              "name": "Applejack"
+            },
+            {
+              "ingredientId": 27,
+              "name": "Apple Liqueur"
+            }
           ]
         },
         {
@@ -23766,9 +25077,18 @@
           "amount": "60",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 168, "name": "Gold Rum" },
-            { "ingredientId": 167, "name": "Gold Puerto Rican Rum" },
-            { "ingredientId": 166, "name": "Gold Jamaican Rum" }
+            {
+              "ingredientId": 168,
+              "name": "Gold Rum"
+            },
+            {
+              "ingredientId": 167,
+              "name": "Gold Puerto Rican Rum"
+            },
+            {
+              "ingredientId": 166,
+              "name": "Gold Jamaican Rum"
+            }
           ]
         },
         {
@@ -23847,7 +25167,12 @@
           "name": "Elderflower Cordial",
           "amount": "15",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 317, "name": "St. Germain" }]
+          "substitutes": [
+            {
+              "ingredientId": 317,
+              "name": "St. Germain"
+            }
+          ]
         },
         {
           "order": 3,
@@ -23905,8 +25230,14 @@
           "amount": "90",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 80, "name": "Champagne" },
-            { "ingredientId": 314, "name": "Sparkling Wine" }
+            {
+              "ingredientId": 80,
+              "name": "Champagne"
+            },
+            {
+              "ingredientId": 314,
+              "name": "Sparkling Wine"
+            }
           ]
         },
         {
@@ -23916,8 +25247,14 @@
           "amount": "60",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 22, "name": "Aperol" },
-            { "ingredientId": 72, "name": "Campari" }
+            {
+              "ingredientId": 22,
+              "name": "Aperol"
+            },
+            {
+              "ingredientId": 72,
+              "name": "Campari"
+            }
           ]
         },
         {
@@ -24044,7 +25381,12 @@
           "name": "Cognac",
           "amount": "50",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 64, "name": "Brandy" }]
+          "substitutes": [
+            {
+              "ingredientId": 64,
+              "name": "Brandy"
+            }
+          ]
         },
         {
           "order": 2,
@@ -24086,12 +25428,30 @@
           "amount": "60",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 63, "name": "Bourbon" },
-            { "ingredientId": 64, "name": "Brandy" },
-            { "ingredientId": 168, "name": "Gold Rum" },
-            { "ingredientId": 346, "name": "White Rum" },
-            { "ingredientId": 315, "name": "Spiced Rum" },
-            { "ingredientId": 134, "name": "Dark Rum" }
+            {
+              "ingredientId": 63,
+              "name": "Bourbon"
+            },
+            {
+              "ingredientId": 64,
+              "name": "Brandy"
+            },
+            {
+              "ingredientId": 168,
+              "name": "Gold Rum"
+            },
+            {
+              "ingredientId": 346,
+              "name": "White Rum"
+            },
+            {
+              "ingredientId": 315,
+              "name": "Spiced Rum"
+            },
+            {
+              "ingredientId": 134,
+              "name": "Dark Rum"
+            }
           ]
         },
         {
@@ -24150,7 +25510,10 @@
           "amount": "20",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 320, "name": "Strawberry Schnapps" }
+            {
+              "ingredientId": 320,
+              "name": "Strawberry Schnapps"
+            }
           ]
         },
         {
@@ -24226,7 +25589,10 @@
           "amount": "30",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 320, "name": "Strawberry Schnapps" }
+            {
+              "ingredientId": 320,
+              "name": "Strawberry Schnapps"
+            }
           ]
         },
         {
@@ -24465,7 +25831,12 @@
           "name": "Cognac",
           "amount": "30",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 64, "name": "Brandy" }]
+          "substitutes": [
+            {
+              "ingredientId": 64,
+              "name": "Brandy"
+            }
+          ]
         },
         {
           "order": 2,
@@ -24921,7 +26292,12 @@
           "name": "Tequila Blanco",
           "amount": "50",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 329, "name": "Tequila Gold" }]
+          "substitutes": [
+            {
+              "ingredientId": 329,
+              "name": "Tequila Gold"
+            }
+          ]
         },
         {
           "order": 2,
@@ -25003,7 +26379,12 @@
           "name": "Tequila Blanco",
           "amount": "45",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 329, "name": "Tequila Gold" }]
+          "substitutes": [
+            {
+              "ingredientId": 329,
+              "name": "Tequila Gold"
+            }
+          ]
         },
         {
           "order": 2,
@@ -25067,7 +26448,12 @@
           "name": "Tequila Blanco",
           "amount": "15",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 329, "name": "Tequila Gold" }]
+          "substitutes": [
+            {
+              "ingredientId": 329,
+              "name": "Tequila Gold"
+            }
+          ]
         },
         {
           "order": 2,
@@ -25155,7 +26541,12 @@
           "name": "Cognac",
           "amount": "45",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 64, "name": "Brandy" }]
+          "substitutes": [
+            {
+              "ingredientId": 64,
+              "name": "Brandy"
+            }
+          ]
         },
         {
           "order": 3,
@@ -25171,8 +26562,14 @@
           "amount": "15",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 82, "name": "Cherry Brandy" },
-            { "ingredientId": 85, "name": "Cherry Liqueur" }
+            {
+              "ingredientId": 82,
+              "name": "Cherry Brandy"
+            },
+            {
+              "ingredientId": 85,
+              "name": "Cherry Liqueur"
+            }
           ]
         },
         {
@@ -25327,7 +26724,12 @@
           "name": "Strucchi Bitter",
           "amount": "12.5",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 72, "name": "Campari" }]
+          "substitutes": [
+            {
+              "ingredientId": 72,
+              "name": "Campari"
+            }
+          ]
         },
         {
           "order": 5,
@@ -25535,7 +26937,12 @@
           "name": "Cognac",
           "amount": "60",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 64, "name": "Brandy" }]
+          "substitutes": [
+            {
+              "ingredientId": 64,
+              "name": "Brandy"
+            }
+          ]
         },
         {
           "order": 2,
@@ -25646,7 +27053,12 @@
           "name": "Irish Whiskey",
           "amount": "50",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 343, "name": "Whiskey" }]
+          "substitutes": [
+            {
+              "ingredientId": 343,
+              "name": "Whiskey"
+            }
+          ]
         },
         {
           "order": 2,
@@ -25716,7 +27128,12 @@
           "name": "Cream",
           "amount": "30",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 235, "name": "Milk" }]
+          "substitutes": [
+            {
+              "ingredientId": 235,
+              "name": "Milk"
+            }
+          ]
         },
         {
           "order": 4,
@@ -25751,8 +27168,14 @@
           "amount": "10",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 82, "name": "Cherry Brandy" },
-            { "ingredientId": 85, "name": "Cherry Liqueur" }
+            {
+              "ingredientId": 82,
+              "name": "Cherry Brandy"
+            },
+            {
+              "ingredientId": 85,
+              "name": "Cherry Liqueur"
+            }
           ]
         },
         {
@@ -25782,7 +27205,12 @@
           "name": "Strucchi Bitter",
           "amount": "2.5",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 72, "name": "Campari" }]
+          "substitutes": [
+            {
+              "ingredientId": 72,
+              "name": "Campari"
+            }
+          ]
         },
         {
           "order": 7,
@@ -25833,7 +27261,12 @@
           "name": "Cognac",
           "amount": "30",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 64, "name": "Brandy" }]
+          "substitutes": [
+            {
+              "ingredientId": 64,
+              "name": "Brandy"
+            }
+          ]
         },
         {
           "order": 4,
@@ -25940,8 +27373,14 @@
           "amount": "60",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 97568, "name": "Tequila" },
-            { "ingredientId": 329, "name": "Tequila Gold" }
+            {
+              "ingredientId": 97568,
+              "name": "Tequila"
+            },
+            {
+              "ingredientId": 329,
+              "name": "Tequila Gold"
+            }
           ]
         },
         {
@@ -26133,7 +27572,12 @@
           "name": "Whiskey Cream",
           "amount": "15",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 195, "name": "Irish Cream" }]
+          "substitutes": [
+            {
+              "ingredientId": 195,
+              "name": "Irish Cream"
+            }
+          ]
         },
         {
           "order": 4,
@@ -26189,7 +27633,12 @@
           "name": "Coconut Liqueur",
           "amount": "5",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 103, "name": "Coconut Rum" }]
+          "substitutes": [
+            {
+              "ingredientId": 103,
+              "name": "Coconut Rum"
+            }
+          ]
         },
         {
           "order": 3,
@@ -26247,7 +27696,7 @@
       "id": 464,
       "name": "Tropical Sangria",
       "description": "A light and effervescent twist on the classic sangria. This refreshing pitcher drink features crisp white wine and coconut notes, macerated with fresh orange, kiwi, and strawberries for a colorful, shareable summer treat.",
-      "instructions": "1. Fill a pitcher with ice.\n2. Add 8.5 oz of Coconut Liqueur, 13.5ml of White Wine, 1.5 oz of Simple Syrup, 3.5 oz of Soda Water, 1 half of Orange, 1 Kiwi, and 7 sliced Strawberries.\n3. Stir gently to combine.",
+      "instructions": "1. Fill a pitcher with ice.\n2. Add 8.5 oz of Coconut Liqueur, 13.5 oz of White Wine, 1.5 oz of Simple Syrup, 3.5 oz of Soda Water, 1 half of Orange, 1 Kiwi, and 7 sliced Strawberries.\n3. Stir gently to combine.",
       "photoUri": "assets/cocktails/565-tropical-sangria.jpg",
       "glassId": "pitcher",
       "methodIds": ["build"],
@@ -26259,14 +27708,19 @@
           "name": "Coconut Liqueur",
           "amount": "8.5",
           "unitId": 12,
-          "substitutes": [{ "ingredientId": 103, "name": "Coconut Rum" }]
+          "substitutes": [
+            {
+              "ingredientId": 103,
+              "name": "Coconut Rum"
+            }
+          ]
         },
         {
           "order": 2,
           "ingredientId": 347,
           "name": "White Wine",
           "amount": "13.5",
-          "unitId": 11
+          "unitId": 12
         },
         {
           "order": 3,
@@ -26398,7 +27852,12 @@
           "name": "Gold Rum",
           "amount": "37.5",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 315, "name": "Spiced Rum" }]
+          "substitutes": [
+            {
+              "ingredientId": 315,
+              "name": "Spiced Rum"
+            }
+          ]
         },
         {
           "order": 2,
@@ -26406,7 +27865,12 @@
           "name": "Coconut Liqueur",
           "amount": "22.5",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 103, "name": "Coconut Rum" }]
+          "substitutes": [
+            {
+              "ingredientId": 103,
+              "name": "Coconut Rum"
+            }
+          ]
         },
         {
           "order": 3,
@@ -26756,7 +28220,12 @@
           "name": "Cognac",
           "amount": "30",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 64, "name": "Brandy" }]
+          "substitutes": [
+            {
+              "ingredientId": 64,
+              "name": "Brandy"
+            }
+          ]
         },
         {
           "order": 3,
@@ -27121,7 +28590,12 @@
           "name": "Coconut Liqueur",
           "amount": "2",
           "unitId": 12,
-          "substitutes": [{ "ingredientId": 103, "name": "Coconut Rum" }]
+          "substitutes": [
+            {
+              "ingredientId": 103,
+              "name": "Coconut Rum"
+            }
+          ]
         },
         {
           "order": 2,
@@ -27379,8 +28853,14 @@
           "amount": "30",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 28, "name": "Apple Schnapps" },
-            { "ingredientId": 29, "name": "Applejack" }
+            {
+              "ingredientId": 28,
+              "name": "Apple Schnapps"
+            },
+            {
+              "ingredientId": 29,
+              "name": "Applejack"
+            }
           ]
         },
         {
@@ -27535,7 +29015,12 @@
           "name": "Brandy",
           "amount": "10",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 109, "name": "Cognac" }]
+          "substitutes": [
+            {
+              "ingredientId": 109,
+              "name": "Cognac"
+            }
+          ]
         },
         {
           "order": 9,
@@ -27669,13 +29154,34 @@
           "amount": "60",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 306, "name": "Scotch Whisky" },
-            { "ingredientId": 301, "name": "Rye Whiskey" },
-            { "ingredientId": 196, "name": "Irish Whiskey" },
-            { "ingredientId": 197, "name": "Islay Scotch Whisky" },
-            { "ingredientId": 343, "name": "Whiskey" },
-            { "ingredientId": 202, "name": "Japanese Whisky" },
-            { "ingredientId": 305, "name": "Scotch Highland Whisky" }
+            {
+              "ingredientId": 306,
+              "name": "Scotch Whisky"
+            },
+            {
+              "ingredientId": 301,
+              "name": "Rye Whiskey"
+            },
+            {
+              "ingredientId": 196,
+              "name": "Irish Whiskey"
+            },
+            {
+              "ingredientId": 197,
+              "name": "Islay Scotch Whisky"
+            },
+            {
+              "ingredientId": 343,
+              "name": "Whiskey"
+            },
+            {
+              "ingredientId": 202,
+              "name": "Japanese Whisky"
+            },
+            {
+              "ingredientId": 305,
+              "name": "Scotch Highland Whisky"
+            }
           ]
         },
         {
@@ -27714,7 +29220,12 @@
           "amount": "1",
           "unitId": 19,
           "garnish": true,
-          "substitutes": [{ "ingredientId": 214, "name": "Lemon" }]
+          "substitutes": [
+            {
+              "ingredientId": 214,
+              "name": "Lemon"
+            }
+          ]
         },
         {
           "order": 7,
@@ -27936,7 +29447,12 @@
           "name": "Coconut Liqueur",
           "amount": "30",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 103, "name": "Coconut Rum" }]
+          "substitutes": [
+            {
+              "ingredientId": 103,
+              "name": "Coconut Rum"
+            }
+          ]
         },
         {
           "order": 2,
@@ -28065,8 +29581,14 @@
           "amount": "60",
           "unitId": 11,
           "substitutes": [
-            { "ingredientId": 168, "name": "Gold Rum" },
-            { "ingredientId": 315, "name": "Spiced Rum" }
+            {
+              "ingredientId": 168,
+              "name": "Gold Rum"
+            },
+            {
+              "ingredientId": 315,
+              "name": "Spiced Rum"
+            }
           ]
         },
         {
@@ -28174,7 +29696,12 @@
           "amount": "1",
           "unitId": 26,
           "garnish": true,
-          "substitutes": [{ "ingredientId": 242, "name": "Orange" }]
+          "substitutes": [
+            {
+              "ingredientId": 242,
+              "name": "Orange"
+            }
+          ]
         }
       ]
     },
@@ -28289,7 +29816,12 @@
           "name": "Jamaican Dark Rum",
           "amount": "45",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 134, "name": "Dark Rum" }]
+          "substitutes": [
+            {
+              "ingredientId": 134,
+              "name": "Dark Rum"
+            }
+          ]
         },
         {
           "order": 2,
@@ -28297,7 +29829,12 @@
           "name": "Gold Puerto Rican Rum",
           "amount": "45",
           "unitId": 11,
-          "substitutes": [{ "ingredientId": 168, "name": "Gold Rum" }]
+          "substitutes": [
+            {
+              "ingredientId": 168,
+              "name": "Gold Rum"
+            }
+          ]
         },
         {
           "order": 3,
