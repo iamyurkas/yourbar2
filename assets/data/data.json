@@ -499,7 +499,7 @@
       "id": 10,
       "name": "Agavoni",
       "description": "A bold, spirit-forward agave spirit drink built around Tequila Blanco, Red Vermouth, Campari—bitter-leaning, aromatic, and best served well chilled. Garnished with orange.",
-      "instructions": "1. Fill a mixing glass with ice.\n2. Add 30ml of Tequila Blanco, 30ml of Red Vermouth, and 30ml of Campari.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled rocks glass.\n5. Garnish with an orange slice.",
+      "instructions": "1. Fill a mixing glass with ice.\n2. Add 30ml of Tequila Blanco, 30ml of Red Vermouth, and 30ml of Campari.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled rocks glass filled with fresh ice.\n5. Garnish with an orange slice.",
       "photoUri": "assets/cocktails/109-agavoni.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["stir"],
@@ -1191,8 +1191,8 @@
     {
       "id": 21,
       "name": "Amalia",
-      "description": "A light, sparkling rum cocktail designed for effortless sipping. Fresh kiwi and floral elderflower are balanced by white rum and lifted with bubbly mixers over ice, finished with a cooling mint garnish.",
-      "instructions": "1. Cut kiwi fruit in half and use a spoon to scoop flesh from one half into shaker.\n2. In a shaker, muddle fresh kiwi pieces to release juice and aroma.\n3. Add 50ml of White Rum and Elderflower Cordial to the shaker.\n4. Fill the shaker with ice and shake briefly to combine and chill.\n5. Strain into a chilled coupe glass.\n6. Top gently with Ginger Ale.\n7. Give a light stir to integrate the layers without losing bubbles.\n8. Garnish with a fresh Mint Sprig and a thin slice of kiwi.",
+      "description": "A light, sparkling rum cocktail designed for effortless sipping. Fresh kiwi, lime and floral elderflower are balanced by white rum and lifted with bubbly mixers over ice, finished with a cooling mint garnish.",
+      "instructions": "1. Cut kiwi fruit in half and use a spoon to scoop flesh from one half into shaker.\n2. In a shaker, muddle fresh kiwi pieces to release juice and aroma.\n3. Add 50ml of White Rum, 15ml of Lime Juice, and 30ml of Elderflower Cordial to the shaker.\n4. Fill the shaker with ice and shake briefly to combine and chill.\n5. Strain into a chilled coupe glass.\n6. Top gently with Ginger Ale.\n7. Give a light stir to integrate the layers without losing bubbles.\n8. Garnish with a fresh Mint Sprig and a thin slice of kiwi.",
       "photoUri": "assets/cocktails/120-amalia.jpg",
       "glassId": "coupe",
       "methodIds": ["muddle", "shake"],
@@ -1401,8 +1401,8 @@
     {
       "id": 24,
       "name": "Ambassador",
-      "description": "A bright and approachable tequila sour that blends smooth Blanco tequila with fresh orange and lemon juices, lightly sweetened with simple syrup. The result is a crisp, citrus-forward cocktail with a gentle agave backbone and a refreshing, sunny character. Garnished with orange.",
-      "instructions": "1. Fill a Collins glass with ice.\n2. Add 30ml of Tequila Blanco, 50ml of Orange Juice, and 15ml of Simple Syrup.\n3. Stir gently to combine.\n4. Garnish with an orange slice.",
+      "description": "A bright and approachable tequila long drink that blends smooth Blanco tequila with fresh orange juice, lightly sweetened with simple syrup. The result is a crisp, citrus-forward cocktail with a gentle agave backbone and a refreshing, sunny character. Garnished with orange.",
+      "instructions": "1. Fill a Collins glass with ice.\n2. Add 45ml of Tequila Blanco, 90ml of Orange Juice, and 5ml of Simple Syrup.\n3. Stir gently to combine.\n4. Garnish with an orange slice.",
       "photoUri": "assets/cocktails/123-ambassador.jpg",
       "glassId": "collins_glass",
       "methodIds": ["build"],
@@ -1412,21 +1412,21 @@
           "order": 1,
           "ingredientId": 328,
           "name": "Tequila Blanco",
-          "amount": "30",
+          "amount": "45",
           "unitId": 11
         },
         {
           "order": 2,
-          "ingredientId": 246,
-          "name": "Orange Juice",
-          "amount": "50",
+          "ingredientId": 310,
+          "name": "Simple Syrup",
+          "amount": "5",
           "unitId": 11
         },
         {
           "order": 3,
-          "ingredientId": 310,
-          "name": "Simple Syrup",
-          "amount": "15",
+          "ingredientId": 246,
+          "name": "Orange Juice",
+          "amount": "90",
           "unitId": 11
         },
         {
@@ -1449,7 +1449,7 @@
     {
       "id": 25,
       "name": "American Trilogy",
-      "description": "A bold yet balanced whiskey sour-style cocktail combining applejack, rye whiskey, and demerara sugar syrup, brightened with fresh lemon juice. It offers a crisp apple note, spicy rye backbone, and rich caramel sweetness, finished with refreshing citrus.",
+      "description": "A bold yet balanced whiskey-forward cocktail combining applejack, rye whiskey, and demerara sugar syrup. It offers a crisp apple note, spicy rye backbone, and rich caramel sweetness, finished with an expressive citrus garnish.",
       "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 30ml of Applejack, 30ml of Rye Whiskey, 10ml of Demerara Sugar Syrup and 2 dashes of Orange Bitters.\n3. Shake for 15 seconds until well chilled.\n4. Strain into a chilled rocks glass over an ice cube.\n5. Garnish with a lemon twist.",
       "photoUri": "assets/cocktails/124-american-trilogy.jpg",
       "glassId": "rocks_glass",
@@ -1982,7 +1982,7 @@
       "id": 34,
       "name": "Apple Sunrise",
       "description": "A layered, spirit-forward brandy cocktail built around Calvados and Creme de Cassis, softened by fresh apple juice. Deeply aromatic, gently sweet, and visually striking, it balances orchard fruit, dark berries, and subtle oak warmth.",
-      "instructions": "1. Fill a mixing glass with ice.\n2. Add 15ml of Lemon Juice, 15ml of Creme de Cassis, 50ml of Calvados, and 100ml of Orange Juice.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled Collins glass.\n5. Garnish with an apple wedge and a lemon peel.",
+      "instructions": "1. Fill a mixing glass with ice.\n2. Add 100ml of Apple Juice, 15ml of Lemon Juice, 15ml of Creme de Cassis, and 50ml of Calvados.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled Collins glass.\n5. Garnish with an apple wedge and a lemon peel.",
       "photoUri": "assets/cocktails/133-apple-sunrise.jpg",
       "glassId": "collins_glass",
       "methodIds": ["stir", "layer"],
@@ -1990,30 +1990,30 @@
       "ingredients": [
         {
           "order": 1,
+          "ingredientId": 26,
+          "name": "Apple Juice",
+          "amount": "100",
+          "unitId": 11
+        },
+        {
+          "order": 2,
           "ingredientId": 216,
           "name": "Lemon Juice",
           "amount": "15",
           "unitId": 11
         },
         {
-          "order": 2,
+          "order": 3,
           "ingredientId": 122,
           "name": "Creme de Cassis",
           "amount": "15",
           "unitId": 11
         },
         {
-          "order": 3,
+          "order": 4,
           "ingredientId": 71,
           "name": "Calvados",
           "amount": "50",
-          "unitId": 11
-        },
-        {
-          "order": 4,
-          "ingredientId": 246,
-          "name": "Orange Juice",
-          "amount": "100",
           "unitId": 11
         },
         {
@@ -2840,7 +2840,7 @@
     {
       "id": 49,
       "name": "Bali Trader",
-      "description": "A lush, tropical vodka cocktail combining the sweetness of green banana liqueur with juicy pineapple and bright citrus. Light, fruity, and refreshing, it evokes warm beach evenings and exotic island markets. Finished with a fresh banana garnish for extra aroma and visual appeal.",
+      "description": "The Bali Trader is a vibrant, exotic cocktail characterized by its tropical fusion of banana and pineapple flavours.",
       "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 50ml of Vodka, 25ml of Banana Liqueur Green, and 25ml of Pineapple Juice.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled martini glass.\n5. Garnish with a banana slice.",
       "photoUri": "assets/cocktails/148-bali-trader.jpg",
       "glassId": "martini",
@@ -3102,8 +3102,8 @@
     {
       "id": 53,
       "name": "Banana Colada",
-      "description": "A creamy tropical cocktail combining white rum, coconut syrup, and banana liqueur, balanced with fresh citrus for a smooth, sweet, and beach-style flavour profile.",
-      "instructions": "1. Fill a blender with ice.\n2. Add white rum, banana liqueur, coconut syrup, and fresh pineapple or orange juice.\n3. Add a squeeze of fresh lime juice to balance the sweetness.\n4. Blend until smooth and slightly frothy.\n5. Strain or pour into a chilled hurricane glass filled with fresh ice.\n6. Garnish with a banana slice, pineapple wedge, or a cherry and serve immediately.",
+      "description": "A creamy tropical cocktail combining white rum, coconut syrup, and banana liqueur for a smooth, sweet, and beach-style flavour profile.",
+      "instructions": "1. Fill a blender with ice.\n2. Add white rum, banana liqueur, coconut syrup, and fresh pineapple juice.\n3. Blend until smooth and slightly frothy.\n4. Pour into a chilled hurricane glass filled with fresh ice.\n5. Garnish with a banana slice, pineapple wedge, or a cherry and serve immediately.",
       "photoUri": "assets/cocktails/152-banana-colada.jpg",
       "glassId": "hurricane_glass",
       "methodIds": ["blend"],
@@ -3856,7 +3856,7 @@
     {
       "id": 64,
       "name": "Bay Breeze",
-      "description": "A spirit-forward vodka cocktail showcasing Vodka, Cranberry Juice, Pineapple Juice—deep, aromatic, and meant to be savored. Garnished with lime juice.",
+      "description": "A refreshing vodka cocktail showcasing Vodka, Cranberry Juice, and Pineapple Juice—vibrant, fruity, and easy to savor. Garnished with a pineapple wedge and cherries.",
       "instructions": "1. Fill a highball glass with ice.\n2. Add 60ml of Vodka, 60ml of Pineapple Juice, and 90ml of Cranberry Juice.\n3. Stir gently to combine.\n4. Garnish with a pineapple wedge and 3 maraschino cherries.",
       "photoUri": "assets/cocktails/163-bay-breeze.jpg",
       "glassId": "highball_glass",
@@ -24203,65 +24203,10 @@
       ]
     },
     {
-      "id": 405,
-      "name": "Sex With an Alligator (long)",
-      "description": "An eye-catching layered cocktail that features a sweet melon and pineapple base with heavy herbal and almond accents settled at the top and bottom.",
-      "instructions": "1. Fill a cocktail shaker with ice cubes.\n2. Add the Midori melon liqueur and pineapple juice to the shaker.\n3. Shake vigorously until well-chilled.\n4. Strain the mixture into a chilled cocktail (martini) glass.\n5. Carefully pour the amaretto down the side of the glass so it sinks to the bottom.\n6. Finish by slowly layering the Jägermeister on the very top using the back of a spoon.",
-      "photoUri": "assets/cocktails/506-sex-with-an-alligator-long.jpg",
-      "glassId": "martini",
-      "methodIds": ["shake", "layer"],
-      "tags": [6, 8],
-      "ingredients": [
-        {
-          "order": 1,
-          "ingredientId": 234,
-          "name": "Midori Melon Liqueur",
-          "amount": "30",
-          "unitId": 11,
-          "allowBaseSubstitution": true,
-          "allowBrandSubstitution": true
-        },
-        {
-          "order": 2,
-          "ingredientId": 276,
-          "name": "Pineapple Juice",
-          "amount": "120",
-          "unitId": 11
-        },
-        {
-          "order": 3,
-          "ingredientId": 193,
-          "name": "Ice",
-          "amount": "150",
-          "unitId": 8
-        },
-        {
-          "order": 4,
-          "ingredientId": 12,
-          "name": "Amaretto",
-          "amount": "30",
-          "unitId": 11,
-          "substitutes": [
-            {
-              "ingredientId": 77,
-              "name": "Chambord Raspberry Liqueur"
-            }
-          ]
-        },
-        {
-          "order": 5,
-          "ingredientId": 199,
-          "name": "Jägermeister",
-          "amount": "30",
-          "unitId": 11
-        }
-      ]
-    },
-    {
       "id": 406,
       "name": "Sex With an Alligator (shot)",
-      "description": "An eye-catching layered cocktail that features a sweet melon and pineapple base with heavy herbal and almond accents settled at the top and bottom.",
-      "instructions": "For two shots:\n1. Fill a cocktail shaker with ice cubes.\n2. Add the Midori melon liqueur and pineapple juice to the shaker.\n3. Shake vigorously until well-chilled.\n4. Strain the mixture into a chilled cocktail (martini) glass.\n5. Carefully pour the Chambord down the side of the glass so it sinks to the bottom.\n6. Finish by slowly layering the Jägermeister on the very top using the back of a spoon.",
+      "description": "An eye-catching layered shooter that features a sweet melon and pineapple base with herbal and raspberry accents, served in a shooter glass.",
+      "instructions": "For two shots:\n1. Fill a cocktail shaker with ice cubes.\n2. Add the Midori melon liqueur and pineapple juice to the shaker.\n3. Shake vigorously until well-chilled.\n4. Strain the mixture into two chilled shooter glasses.\n5. Carefully pour the Chambord down the side of each glass so it sinks to the bottom.\n6. Finish by slowly layering the Jägermeister on the very top using the back of a spoon.",
       "photoUri": "assets/cocktails/507-sex-with-an-alligator-shot.jpg",
       "glassId": "shooter",
       "methodIds": ["shake", "layer"],
@@ -29573,7 +29518,7 @@
     {
       "id": 491,
       "name": "Wizard of Oz",
-      "description": "An enchanting tropical drink that combines coconut and melon liqueurs with a double punch of citrus juices for a refreshing, emerald-hued escape.",
+      "description": "An enchanting tropical drink that combines coconut and melon liqueurs with a vibrant blend of orange and pineapple juices for a refreshing, emerald-hued escape.",
       "instructions": "1. Fill a Collins glass with ice.\n2. Add 30ml of Coconut Liqueur, 30ml of Melon Liqueur, 90ml of Orange Juice, and 90ml of Pineapple Juice.\n3. Stir gently to combine.\n4. Garnish with an orange wedge and a lime slice.",
       "photoUri": "assets/cocktails/592-wizard-of-oz.jpg",
       "glassId": "collins_glass",
@@ -29847,8 +29792,8 @@
     {
       "id": 495,
       "name": "Yellow Bird",
-      "description": "An IBA official all-day cocktail combining white rum, Galliano, triple sec and lime.",
-      "instructions": "1. Fill a shaker with ice cubes.\n2. Add 30ml of White Rum, 15ml of Galliano, 15ml of Triple Sec, and 15ml of Lime Juice.\n3. Shake and strain into a chilled cocktail glass.",
+      "description": "An IBA official all-day cocktail combining white rum, Galliano, triple sec and lime, served in a highball glass.",
+      "instructions": "1. Fill a shaker with ice cubes.\n2. Add 30ml of White Rum, 15ml of Galliano, 15ml of Triple Sec, and 15ml of Lime Juice.\n3. Shake and strain into a chilled highball glass.",
       "photoUri": "assets/cocktails/596-yellow-bird.jpg",
       "glassId": "highball_glass",
       "methodIds": ["shake"],
@@ -29942,8 +29887,8 @@
     {
       "id": 497,
       "name": "Zombie",
-      "description": "Potent tiki classic blending multiple rums, citrus, and spice.",
-      "instructions": "Add the Jamaica rum, Puerto Rican gold rum, demerara rum, Pernod, lime juice, Donn’s mix, falernum, grenadine and bitters into a blender, then add 180g of crushed ice.\n\nBlend at high speed for no more than 5 seconds.\n\nPour the contents into a tall glass or tiki mug and add additional crushed ice to fill, if necessary.\n\nGarnish with a mint sprig.",
+      "description": "A legendary and potent tiki classic that blends multiple rums, fresh lime, and tropical spice for a complex, sun-soaked experience.",
+      "instructions": "1. Add Jamaican dark rum, Puerto Rican gold rum, Demerara rum, fresh lime juice, falernum, Donn's mix, grenadine, Angostura bitters, and Pernod into a blender.\n2. Add 180g of crushed ice.\n3. Blend at high speed for no more than 5 seconds.\n4. Pour the contents into a tall glass or tiki mug and add additional crushed ice to fill if necessary.\n5. Garnish with a mint sprig.",
       "photoUri": "assets/cocktails/598-zombie.jpg",
       "glassId": "tiki",
       "methodIds": ["blend"],
@@ -30007,7 +29952,7 @@
           "order": 7,
           "ingredientId": 181,
           "name": "Grenadine",
-          "amount": "5",
+          "amount": "1",
           "unitId": 24
         },
         {
@@ -30021,8 +29966,8 @@
           "order": 9,
           "ingredientId": 270,
           "name": "Pernod",
-          "amount": "1",
-          "unitId": 24,
+          "amount": "6",
+          "unitId": 7,
           "allowBaseSubstitution": true
         },
         {
