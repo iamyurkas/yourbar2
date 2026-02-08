@@ -308,7 +308,7 @@
           "substitutes": [
             {
               "ingredientId": 252,
-              "name": "Palo Cortado"
+              "name": "Palo Cortado Sherry"
             },
             {
               "ingredientId": 241,
@@ -2945,7 +2945,7 @@
           "substitutes": [
             {
               "ingredientId": 252,
-              "name": "Palo Cortado"
+              "name": "Palo Cortado Sherry"
             }
           ]
         },
@@ -3728,7 +3728,7 @@
           "substitutes": [
             {
               "ingredientId": 343,
-              "name": "Whisky"
+              "name": "Whiskey"
             }
           ]
         },
@@ -4639,7 +4639,7 @@
           "substitutes": [
             {
               "ingredientId": 305,
-              "name": "Scotch Highland Whiskey"
+              "name": "Scotch Highland Whisky"
             }
           ]
         },
@@ -5741,7 +5741,7 @@
           "substitutes": [
             {
               "ingredientId": 301,
-              "name": "Rye Whisky"
+              "name": "Rye Whiskey"
             }
           ]
         },
@@ -11098,7 +11098,7 @@
           "substitutes": [
             {
               "ingredientId": 343,
-              "name": "Whisky"
+              "name": "Whiskey"
             }
           ]
         },
@@ -15564,7 +15564,7 @@
           "substitutes": [
             {
               "ingredientId": 343,
-              "name": "Whisky"
+              "name": "Whiskey"
             }
           ]
         },
@@ -15676,7 +15676,7 @@
           "substitutes": [
             {
               "ingredientId": 343,
-              "name": "Whisky"
+              "name": "Whiskey"
             }
           ]
         },
@@ -16311,10 +16311,6 @@
           "amount": "60",
           "unitId": 11,
           "substitutes": [
-            {
-              "ingredientId": 97568,
-              "name": "Tequila"
-            },
             {
               "ingredientId": 328,
               "name": "Tequila Blanco"
@@ -17919,7 +17915,7 @@
           "substitutes": [
             {
               "ingredientId": 301,
-              "name": "Rye Whisky"
+              "name": "Rye Whiskey"
             }
           ]
         },
@@ -17973,7 +17969,7 @@
           "substitutes": [
             {
               "ingredientId": 301,
-              "name": "Rye Whisky"
+              "name": "Rye Whiskey"
             }
           ]
         },
@@ -18040,10 +18036,6 @@
           "amount": "50",
           "unitId": 11,
           "substitutes": [
-            {
-              "ingredientId": 97568,
-              "name": "Tequila"
-            }
           ]
         },
         {
@@ -18119,7 +18111,7 @@
           "substitutes": [
             {
               "ingredientId": 343,
-              "name": "Whisky"
+              "name": "Whiskey"
             }
           ]
         },
@@ -19902,11 +19894,11 @@
           "substitutes": [
             {
               "ingredientId": 301,
-              "name": "Rye Whisky"
+              "name": "Rye Whiskey"
             },
             {
               "ingredientId": 343,
-              "name": "Whisky"
+              "name": "Whiskey"
             }
           ]
         },
@@ -20215,11 +20207,11 @@
           "substitutes": [
             {
               "ingredientId": 301,
-              "name": "Rye Whisky"
+              "name": "Rye Whiskey"
             },
             {
               "ingredientId": 343,
-              "name": "Whisky"
+              "name": "Whiskey"
             }
           ]
         },
@@ -23768,7 +23760,7 @@
           "substitutes": [
             {
               "ingredientId": 301,
-              "name": "Rye Whisky"
+              "name": "Rye Whiskey"
             },
             {
               "ingredientId": 64,
@@ -24278,7 +24270,7 @@
             },
             {
               "ingredientId": 252,
-              "name": "Palo Cortado"
+              "name": "Palo Cortado Sherry"
             }
           ]
         },
@@ -27411,10 +27403,6 @@
           "amount": "60",
           "unitId": 11,
           "substitutes": [
-            {
-              "ingredientId": 97568,
-              "name": "Tequila"
-            },
             {
               "ingredientId": 329,
               "name": "Tequila Gold"
