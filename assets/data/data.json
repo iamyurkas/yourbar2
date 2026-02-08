@@ -307,6 +307,13 @@
           "name": "Ice",
           "amount": "150",
           "unitId": 8
+        },
+        {
+          "order": 8,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
         }
       ]
     },
@@ -655,13 +662,6 @@
         },
         {
           "order": 6,
-          "ingredientId": 193,
-          "name": "Ice",
-          "amount": "120",
-          "unitId": 8
-        },
-        {
-          "order": 7,
           "ingredientId": 242,
           "name": "Orange",
           "amount": "1",
@@ -669,12 +669,26 @@
           "garnish": true
         },
         {
-          "order": 8,
+          "order": 7,
           "ingredientId": 81,
           "name": "Cherry",
           "amount": "1",
           "unitId": 1,
           "garnish": true
+        },
+        {
+          "order": 8,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8
+        },
+        {
+          "order": 9,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
         }
       ]
     },
@@ -1607,13 +1621,6 @@
         },
         {
           "order": 5,
-          "ingredientId": 193,
-          "name": "Ice",
-          "amount": "150",
-          "unitId": 8
-        },
-        {
-          "order": 6,
           "ingredientId": 214,
           "name": "Lemon",
           "amount": "1",
@@ -1626,6 +1633,20 @@
               "name": "Orange"
             }
           ]
+        },
+        {
+          "order": 6,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8
+        },
+        {
+          "order": 7,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
         }
       ]
     },
@@ -1672,7 +1693,7 @@
           "unitId": 20
         },
         {
-          "order": 5,
+          "order": 4,
           "ingredientId": 242,
           "name": "Orange",
           "amount": "1",
@@ -1680,7 +1701,7 @@
           "garnish": true
         },
         {
-          "order": 6,
+          "order": 5,
           "ingredientId": 214,
           "name": "Lemon",
           "amount": "1",
@@ -1688,7 +1709,7 @@
           "garnish": true
         },
         {
-          "order": 7,
+          "order": 6,
           "ingredientId": 193,
           "name": "Ice",
           "amount": "120",
@@ -3994,7 +4015,7 @@
       "id": 62,
       "name": "Basil Julep",
       "description": "A bold, spirit-forward twist on the classic julep, where fresh basil replaces mint to bring deep herbal notes and a slightly peppery aroma. Rich Bourbon forms the backbone, creating a smooth yet powerful cocktail that is both refreshing and complex. Garnished with fragrant basil for an elegant, aromatic finish.",
-      "instructions": "1. Add fresh basil leaves and simple syrup to a rocks glass or mixing glass.\n2. Gently muddle the basil to release its essential oils and aroma without shredding the leaves.\n3. Pour in the Bourbon and fill the glass with crushed ice.\n4. Stir gently until the drink is well chilled and slightly diluted.\n5. Top with more crushed ice to form a small dome.\n6. Garnish with a fresh basil sprig and serve immediately.",
+      "instructions": "1. Add fresh basil leaves and simple syrup to a rocks glass.\n2. Gently muddle the basil to release its essential oils and aroma without shredding the leaves.\n3. Pour in the Bourbon and fill the glass with crushed ice.\n4. Stir gently until the drink is well chilled and slightly diluted.\n5. Top with more crushed ice to form a small dome.\n6. Garnish with a fresh basil sprig and serve immediately.",
       "photoUri": "assets/cocktails/161-basil-julep.jpg",
       "glassId": "rocks_glass",
       "methodIds": [
@@ -5118,13 +5139,6 @@
         },
         {
           "order": 8,
-          "ingredientId": 193,
-          "name": "Ice",
-          "amount": "150",
-          "unitId": 8
-        },
-        {
-          "order": 9,
           "ingredientId": 75,
           "name": "Celery",
           "amount": "1",
@@ -5132,12 +5146,26 @@
           "garnish": true
         },
         {
-          "order": 10,
+          "order": 9,
           "ingredientId": 214,
           "name": "Lemon",
           "amount": "1",
           "unitId": 27,
           "garnish": true
+        },
+        {
+          "order": 10,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8
+        },
+        {
+          "order": 11,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
         }
       ]
     },
@@ -6204,18 +6232,25 @@
         },
         {
           "order": 4,
+          "ingredientId": 242,
+          "name": "Orange",
+          "amount": "1",
+          "unitId": 26,
+          "garnish": true
+        },
+        {
+          "order": 5,
           "ingredientId": 193,
           "name": "Ice",
           "amount": "150",
           "unitId": 8
         },
         {
-          "order": 5,
-          "ingredientId": 242,
-          "name": "Orange",
-          "amount": "1",
-          "unitId": 26,
-          "garnish": true
+          "order": 6,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
         }
       ]
     },
@@ -6828,7 +6863,7 @@
       "id": 106,
       "name": "BRB",
       "description": "A spirit-forward whiskey cocktail showcasing Bourbon, Root Beer—deep, aromatic, and meant to be savored.",
-      "instructions": "1. Fill a highball glass with ice.\n2. Add 2 oz of Bourbon and 6 oz of Root Beer.\n3. Stir gently to combine.",
+      "instructions": "1. Fill a highball glass with ice.\n2. Add 60ml of Bourbon and 180ml of Root Beer.\n3. Stir gently to combine.",
       "photoUri": "assets/cocktails/205-brb.jpg",
       "glassId": "highball_glass",
       "methodIds": [
@@ -11095,14 +11130,14 @@
           "unitId": 1
         },
         {
-          "order": 7,
+          "order": 6,
           "ingredientId": 193,
           "name": "Ice",
           "amount": "150",
           "unitId": 8
         },
         {
-          "order": 8,
+          "order": 7,
           "ingredientId": 92,
           "name": "Chocolate Syrup",
           "amount": "5",
@@ -11111,7 +11146,7 @@
           "garnish": true
         },
         {
-          "order": 9,
+          "order": 8,
           "ingredientId": 35,
           "name": "Banana",
           "amount": "1",
@@ -11755,17 +11790,24 @@
         },
         {
           "order": 5,
+          "ingredientId": 222,
+          "name": "Lime",
+          "amount": "1",
+          "unitId": 19
+        },
+        {
+          "order": 6,
           "ingredientId": 193,
           "name": "Ice",
           "amount": "150",
           "unitId": 8
         },
         {
-          "order": 6,
-          "ingredientId": 222,
-          "name": "Lime",
-          "amount": "1",
-          "unitId": 19
+          "order": 7,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
         }
       ]
     },
@@ -16270,13 +16312,6 @@
         },
         {
           "order": 7,
-          "ingredientId": 193,
-          "name": "Ice",
-          "amount": "150",
-          "unitId": 8
-        },
-        {
-          "order": 8,
           "ingredientId": 242,
           "name": "Orange",
           "amount": "1",
@@ -16284,12 +16319,26 @@
           "garnish": true
         },
         {
-          "order": 9,
+          "order": 8,
           "ingredientId": 81,
           "name": "Cherry",
           "amount": "1",
           "unitId": 1,
           "garnish": true
+        },
+        {
+          "order": 9,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8
+        },
+        {
+          "order": 10,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
         }
       ]
     },
@@ -20312,7 +20361,7 @@
           "unitId": 11
         },
         {
-          "order": 4,
+          "order": 3,
           "ingredientId": 242,
           "name": "Orange",
           "amount": "1",
@@ -20320,7 +20369,7 @@
           "garnish": true
         },
         {
-          "order": 5,
+          "order": 4,
           "ingredientId": 193,
           "name": "Ice",
           "amount": "120",
@@ -21258,11 +21307,11 @@
       "id": 331,
       "name": "Negroni",
       "description": "Classic Italian aperitif of gin, bitters, and sweet vermouth.",
-      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 30ml of Gin, 30ml of Campari, and 30ml of Red Vermouth.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled rocks glass over fresh ice.\n5. Garnish with an orange twist.",
+      "instructions": "1. Fill a mixing glass with ice.\n2. Add 30ml of Gin, 30ml of Campari, and 30ml of Red Vermouth.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled rocks glass over fresh ice.\n5. Garnish with an orange twist.",
       "photoUri": "assets/cocktails/432-negroni.jpg",
       "glassId": "rocks_glass",
       "methodIds": [
-        "shake"
+        "stir"
       ],
       "tags": [
         1,
@@ -21292,18 +21341,25 @@
         },
         {
           "order": 4,
-          "ingredientId": 193,
-          "name": "Ice",
-          "amount": "120",
-          "unitId": 8
-        },
-        {
-          "order": 5,
           "ingredientId": 242,
           "name": "Orange",
           "amount": "0.5",
           "unitId": 19,
           "garnish": true
+        },
+        {
+          "order": 5,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8
+        },
+        {
+          "order": 6,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
         }
       ]
     },
@@ -22491,11 +22547,11 @@
       "id": 350,
       "name": "Papaya Smash",
       "description": "A bright agave spirit sour balancing Papaya, Agave Syrup, Añejo Tequila with fresh citrus and a touch of sweetness for a crisp, refreshing sip. Garnished with papaya.",
-      "instructions": "1. Fill a rocks glass with ice.\n2. Add 1.5 oz of Tequila Añejo, 0.5 oz of Aperol, 1 slice of Papaya, 0.75 oz of Agave Syrup, 0.75 oz of Lime Juice, and 0.5 oz of Orange Juice.\n3. Stir gently to combine.\n4. Garnish with a papaya wedge.",
+      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 45ml of Tequila Añejo, 15ml of Aperol, 1 slice of Papaya, 22.5ml of Agave Syrup, 22.5ml of Lime Juice, and 15ml of Orange Juice.\n3. Shake well for about 15 seconds until chilled.\n4. Strain into a rocks glass over fresh ice.\n5. Garnish with a papaya wedge.",
       "photoUri": "assets/cocktails/451-papaya-smash.jpg",
       "glassId": "rocks_glass",
       "methodIds": [
-        "build"
+        "shake"
       ],
       "tags": [
         3,
@@ -22504,17 +22560,10 @@
       "ingredients": [
         {
           "order": 1,
-          "ingredientId": 193,
-          "name": "Ice",
-          "amount": "150",
-          "unitId": 8
-        },
-        {
-          "order": 2,
           "ingredientId": 327,
           "name": "Tequila Añejo",
-          "amount": "1.5",
-          "unitId": 12,
+          "amount": "45",
+          "unitId": 11,
           "substitutes": [
             {
               "ingredientId": 330,
@@ -22523,54 +22572,61 @@
           ]
         },
         {
-          "order": 3,
+          "order": 2,
           "ingredientId": 22,
           "name": "Aperol",
-          "amount": "0.5",
-          "unitId": 12
+          "amount": "15",
+          "unitId": 11
         },
         {
-          "order": 4,
+          "order": 3,
           "ingredientId": 253,
           "name": "Papaya",
           "amount": "1",
           "unitId": 19
         },
         {
-          "order": 5,
+          "order": 4,
           "ingredientId": 6,
           "name": "Agave Syrup",
-          "amount": "0.75",
-          "unitId": 12
+          "amount": "22.5",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 223,
+          "name": "Lime Juice",
+          "amount": "22.5",
+          "unitId": 11
         },
         {
           "order": 6,
-          "ingredientId": 223,
-          "name": "Lime Juice",
-          "amount": "0.75",
-          "unitId": 12
+          "ingredientId": 246,
+          "name": "Orange Juice",
+          "amount": "15",
+          "unitId": 11
         },
         {
           "order": 7,
-          "ingredientId": 246,
-          "name": "Orange Juice",
-          "amount": "0.5",
-          "unitId": 12
-        },
-        {
-          "order": 8,
-          "ingredientId": 193,
-          "name": "Ice",
-          "amount": "120",
-          "unitId": 8
-        },
-        {
-          "order": 9,
           "ingredientId": 253,
           "name": "Papaya",
           "amount": "1",
           "unitId": 27,
           "garnish": true
+        },
+        {
+          "order": 8,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8
+        },
+        {
+          "order": 9,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
         }
       ]
     },
@@ -28504,13 +28560,6 @@
       "ingredients": [
         {
           "order": 1,
-          "ingredientId": 193,
-          "name": "Ice",
-          "amount": "150",
-          "unitId": 8
-        },
-        {
-          "order": 2,
           "ingredientId": 328,
           "name": "Tequila Blanco",
           "amount": "45",
@@ -28523,28 +28572,28 @@
           ]
         },
         {
-          "order": 3,
+          "order": 2,
           "ingredientId": 246,
           "name": "Orange Juice",
           "amount": "90",
           "unitId": 11
         },
         {
-          "order": 4,
+          "order": 3,
           "ingredientId": 181,
           "name": "Grenadine",
           "amount": "15",
           "unitId": 11
         },
         {
-          "order": 5,
+          "order": 4,
           "ingredientId": 193,
           "name": "Ice",
           "amount": "120",
           "unitId": 8
         },
         {
-          "order": 6,
+          "order": 5,
           "ingredientId": 242,
           "name": "Orange",
           "amount": "1",
@@ -28552,7 +28601,7 @@
           "garnish": true
         },
         {
-          "order": 7,
+          "order": 6,
           "ingredientId": 81,
           "name": "Cherry",
           "amount": "1",
@@ -31879,41 +31928,34 @@
       "ingredients": [
         {
           "order": 1,
-          "ingredientId": 193,
-          "name": "Ice",
-          "amount": "150",
-          "unitId": 8
-        },
-        {
-          "order": 2,
           "ingredientId": 338,
           "name": "Vodka",
           "amount": "60",
           "unitId": 11
         },
         {
-          "order": 3,
+          "order": 2,
           "ingredientId": 265,
           "name": "Peach Schnapps",
           "amount": "30",
           "unitId": 11
         },
         {
-          "order": 4,
+          "order": 3,
           "ingredientId": 116,
           "name": "Cranberry Juice",
           "amount": "120",
           "unitId": 11
         },
         {
-          "order": 5,
+          "order": 4,
           "ingredientId": 193,
           "name": "Ice",
           "amount": "120",
           "unitId": 8
         },
         {
-          "order": 6,
+          "order": 5,
           "ingredientId": 222,
           "name": "Lime",
           "amount": "1",
@@ -31921,7 +31963,7 @@
           "garnish": true
         },
         {
-          "order": 7,
+          "order": 6,
           "ingredientId": 81,
           "name": "Cherry",
           "amount": "1",
@@ -32129,6 +32171,13 @@
           "ingredientId": 193,
           "name": "Ice",
           "amount": "150",
+          "unitId": 8
+        },
+        {
+          "order": 6,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "120",
           "unitId": 8
         }
       ]
