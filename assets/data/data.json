@@ -3240,7 +3240,7 @@
       "id": 52,
       "name": "Banana Calling",
       "description": "A bright and aromatic gin sour balancing botanical gin, dry sherry and ripe banana liqueur with fresh citrus and a subtle touch of sweetness for a crisp yet tropical sip.",
-      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 50ml of Gin, 10ml of Dry Sherry, 15ml of Banana Liqueur, 20ml of Lemon Juice, and 10ml of Simple Syrup.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled coupe glass.\n5. Garnish with a slice of banana or a lemon twist.",
+      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 50ml of Gin, 10ml of Amontillado Sherry, 15ml of Banana Liqueur, 20ml of Lemon Juice, and 10ml of Simple Syrup.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled coupe glass.\n5. Garnish with a slice of banana or a lemon twist.",
       "photoUri": "assets/cocktails/151-banana-calling.jpg",
       "glassId": "coupe",
       "methodIds": [
@@ -3265,8 +3265,8 @@
           "unitId": 11,
           "substitutes": [
             {
-              "ingredientId": 241,
-              "name": "Oloroso Sherry"
+              "ingredientId": 155,
+              "name": "Fino Sherry"
             }
           ]
         },
@@ -10163,7 +10163,7 @@
       "id": 156,
       "name": "Crimson King",
       "description": "A sophisticated, spirit-forward whiskey cocktail that balances the spicy bite of Rye with the complex bitterness of Strucchi and the herbal depth of Punt e Mes. Hints of cherry and coffee add a mysterious, dark richness to this bold drink.",
-      "instructions": "1. Fill a mixing glass with ice.\n2. Add 30ml of Rye Whisky, 22.5ml of Strucchi Bitter, 15ml of Punt e Mes, 7.5ml of Cherry Heering, and 5ml of Crème de Café.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled rocks glass.\n5. Garnish with a maraschino cherry.",
+      "instructions": "1. Fill a mixing glass with ice.\n2. Add 30ml of Rye Whiskey, 22.5ml of Strucchi Bitter, 15ml of Punt e Mes, 7.5ml of Cherry Heering, and 5ml of Crème de Café.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled rocks glass.\n5. Garnish with a maraschino cherry.",
       "photoUri": "assets/cocktails/256-crimson-king.jpg",
       "glassId": "rocks_glass",
       "methodIds": [
@@ -11918,7 +11918,7 @@
       "id": 183,
       "name": "Emerald Banana",
       "description": "A sophisticated and vibrant cocktail that balances the smooth warmth of Irish Whiskey with the exotic, tropical notes of green banana liqueur. Amaro Montenegro adds a complex botanical depth, resulting in a spirit-forward drink that is both aromatic and slightly bitter. Perfect for those who enjoy a modern twist on classic whiskey serves.",
-      "instructions": "1. Fill a mixing glass with ice.\n2. Add 45ml of Irish Whisky, 20ml of Pisang Ambon, and 20ml of Amaro Montenegro.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled coupe glass.\n5. Garnish with a mint sprig.",
+      "instructions": "1. Fill a mixing glass with ice.\n2. Add 45ml of Irish Whiskey, 20ml of Pisang Ambon, and 20ml of Amaro Montenegro.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled coupe glass.\n5. Garnish with a mint sprig.",
       "photoUri": "assets/cocktails/283-emerald-banana.jpg",
       "glassId": "coupe",
       "methodIds": [
@@ -13994,7 +13994,7 @@
       "id": 216,
       "name": "Gimlet",
       "description": "A classic gin-based cocktail with a long history.",
-      "instructions": "1. Fill a mixing glass with ice.\n2. Add 60ml of Gin, 15ml of Lime, and 15ml of Simple Syrup.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled cocktail glass.\n5. Garnish with a lime wedge.",
+      "instructions": "1. Fill a mixing glass with ice.\n2. Add 60ml of Gin, 15ml of Lime Juice, and 15ml of Simple Syrup.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled cocktail glass.\n5. Garnish with a lime wedge.",
       "photoUri": "assets/cocktails/316-gimlet.jpg",
       "glassId": "martini",
       "methodIds": [
@@ -16496,7 +16496,7 @@
       "id": 255,
       "name": "Improved Scotch Sling",
       "description": "Scotch-based take on the Improved Whisky Cocktail with honey and maraschino.",
-      "instructions": "1. Fill a mixing glass with ice.\n2. Add 60ml of Islay Scotch Whiskey, 22.5ml of Red Vermouth, 30ml of Lemon, 1 teaspoon of Honey Syrup, 1 teaspoon of Water, 1 teaspoon of Maraschino Liqueur, and 2 dashes of Angostura Bitters.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled rocks glass.\n5. Garnish with a lemon twist.",
+      "instructions": "1. Fill a mixing glass with ice.\n2. Add 60ml of Islay Scotch Whisky, 22.5ml of Red Vermouth, 30ml of Lemon Juice, 1 teaspoon of Honey Syrup, 1 teaspoon of Water, 1 teaspoon of Luxardo Maraschino, and 2 dashes of Angostura Bitters.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled rocks glass.\n5. Garnish with a lemon twist.",
       "photoUri": "assets/cocktails/355-improved-scotch-sling.jpg",
       "glassId": "rocks_glass",
       "methodIds": [
@@ -23943,7 +23943,7 @@
       "id": 371,
       "name": "Red Hook",
       "description": "A sophisticated, spirit-forward riff on the Manhattan. This Brooklyn-inspired cocktail balances the spicy kick of rye whiskey with the bittersweet complexity of Punt e Mes and a touch of nutty maraschino.",
-      "instructions": "1. Fill a mixing glass with ice.\n2. Add 50ml of Rye Whisky, 15ml of Punt e Mes, and 10ml of Maraschino Liqueur.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled Nick & Nora glass.\n5. Garnish with 2 maraschino cherries.",
+      "instructions": "1. Fill a mixing glass with ice.\n2. Add 50ml of Rye Whiskey, 15ml of Punt e Mes, and 10ml of Luxardo Maraschino.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled Nick & Nora glass.\n5. Garnish with 2 maraschino cherries.",
       "photoUri": "assets/cocktails/472-red-hook.jpg",
       "glassId": "nick_and_nora",
       "methodIds": [
@@ -25580,7 +25580,7 @@
       "id": 396,
       "name": "Santorini",
       "description": "A sophisticated, spirit-forward cocktail that captures the essence of the Mediterranean. It balances the herbal depth of Red Vermouth with the smoky notes of Scotch, finished with a distinct aromatic touch of Ouzo.",
-      "instructions": "1. Fill a mixing glass with ice.\n2. Add 60ml of Red Vermouth, 30ml of Scotch Whiskey, and 7.5ml of Ouzo.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled rocks glass.",
+      "instructions": "1. Fill a mixing glass with ice.\n2. Add 60ml of Red Vermouth, 30ml of Scotch Whisky, and 7.5ml of Ouzo.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled rocks glass.",
       "photoUri": "assets/cocktails/497-santorini.jpg",
       "glassId": "rocks_glass",
       "methodIds": [
@@ -26373,7 +26373,7 @@
       "id": 410,
       "name": "Silver Bay",
       "description": "A sophisticated and warming whiskey cocktail that balances the smoky depth of Islay Scotch with the nutty sweetness of chestnut and honey, finished with a hint of spice.",
-      "instructions": "1. Combine the Islay Scotch Whiskey, lemon juice, chestnut liqueur, and honey syrup in a heat-resistant glass or mug.\n2. Add the whiskey-barrel aged bitters.\n3. Pour in the boiling water and stir gently to combine all ingredients.\n4. Grate fresh nutmeg over the top for aroma.\n5. Serve warm in a cocktail glass or toddy mug.",
+      "instructions": "1. Combine the Islay Scotch Whisky, lemon juice, chestnut liqueur, and honey syrup in a heat-resistant glass or mug.\n2. Add the whiskey-barrel aged bitters.\n3. Pour in the boiling water and stir gently to combine all ingredients.\n4. Grate fresh nutmeg over the top for aroma.\n5. Serve warm in a cocktail glass or toddy mug.",
       "photoUri": "assets/cocktails/511-silver-bay.jpg",
       "glassId": "nick_and_nora",
       "methodIds": [
@@ -28673,7 +28673,7 @@
       "id": 446,
       "name": "The Cheshire Cat",
       "description": "A sophisticated, spirit-forward brandy cocktail that balances the herbal notes of rosemary with the deep complexity of Cognac and Scotch. Subtle hints of cherry and cinnamon provide a warm, aromatic finish, making it an ideal choice for slow sipping.",
-      "instructions": "1. Gently muddle the fresh rosemary sprig in the bottom of a mixing glass to release its aromatic oils.\n2. Add the Cognac, Scotch Whiskey, Cherry Heering, Punt e Mes, and cinnamon syrup to the mixing glass.\n3. Fill the glass with ice and stir well for about 20-30 seconds until properly chilled and diluted.\n4. Strain the mixture into a rocks glass over a large ice cube or fresh ice.\n5. Express the oils from a lemon peel over the drink and discard the peel or use it as garnish.\n6. Garnish with a fresh rosemary sprig and a cinnamon stick for a fragrant presentation.",
+      "instructions": "1. Gently muddle the fresh rosemary sprig in the bottom of a mixing glass to release its aromatic oils.\n2. Add the Cognac, Scotch Whisky, Cherry Heering, Punt e Mes, and cinnamon syrup to the mixing glass.\n3. Fill the glass with ice and stir well for about 20-30 seconds until properly chilled and diluted.\n4. Strain the mixture into a rocks glass over a large ice cube or fresh ice.\n5. Express the oils from a lemon peel over the drink and discard the peel or use it as garnish.\n6. Garnish with a fresh rosemary sprig and a cinnamon stick for a fragrant presentation.",
       "photoUri": "assets/cocktails/547-the-cheshire-cat.jpg",
       "glassId": "rocks_glass",
       "methodIds": [
@@ -28852,7 +28852,7 @@
       "id": 448,
       "name": "The Ridgwell",
       "description": "A bold and layered whiskey cocktail that bridges the gap between a Manhattan and a Bramble. The combination of Bourbon and Rye provides a sturdy base, while the bittersweet notes of Punt e Mes and Strucchi Bitter are softened by a touch of blackberry liqueur.",
-      "instructions": "1. Combine the Bourbon, Rye Whisky, Punt e Mes, Strucchi Bitter (or Campari), and Creme de Mure in a tin with ice.\n2. Add the dashes of Angostura and Orange bitters.\n3. Throw 5-6 times.\n4. Strain the drink into a chilled coupe glass.\n5. Garnish with a fresh blackberry dropped into the glass or on a cocktail pick.",
+      "instructions": "1. Combine the Bourbon, Rye Whiskey, Punt e Mes, Strucchi Bitter (or Campari), and Creme de Mure in a tin with ice.\n2. Add the dashes of Angostura and Orange bitters.\n3. Throw 5-6 times.\n4. Strain the drink into a chilled coupe glass.\n5. Garnish with a fresh blackberry dropped into the glass or on a cocktail pick.",
       "photoUri": "assets/cocktails/549-the-ridgwell.jpg",
       "glassId": "coupe",
       "methodIds": [
