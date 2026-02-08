@@ -853,7 +853,6 @@ export const cocktailImages: Record<string, number> = {
   'assets/cocktails/497-zombie-brain-tumor.jpg': require('./cocktails/497-zombie-brain-tumor.jpg'),
   'assets/cocktails/5-acapulco.jpg': require('./cocktails/5-acapulco.jpg'),
   'assets/cocktails/50-bamboo-classic.jpg': require('./cocktails/50-bamboo-classic.jpg'),
-  'assets/cocktails/506-sex-with-an-alligator-long.jpg': require('./cocktails/506-sex-with-an-alligator-long.jpg'),
   'assets/cocktails/51-bamboo-modern.jpg': require('./cocktails/51-bamboo-modern.jpg'),
   'assets/cocktails/52-banana-calling.jpg': require('./cocktails/52-banana-calling.jpg'),
   'assets/cocktails/53-banana-colada.jpg': require('./cocktails/53-banana-colada.jpg'),
