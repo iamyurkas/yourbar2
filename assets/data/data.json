@@ -4929,7 +4929,7 @@
     {
       "id": 81,
       "name": "Blue Hawaii Mocktail",
-      "description": "A tropical liqueur cocktail with Pineapple Juice, Blue Curaçao Syrup, layered with citrus and sweetness for a lush, beachy vibe. Garnished with cherry.",
+      "description": "A tropical mocktail with Pineapple Juice, Blue Curaçao Syrup, layered with citrus and sweetness for a lush, beachy vibe. Garnished with cherry.",
       "instructions": "1. Blend ingredients with crushed ice.\n2. Pour into glass.\n3. Serve with straws.",
       "photoUri": "assets/cocktails/180-blue-hawaii-mocktail.jpg",
       "glassId": "hurricane_glass",
@@ -7254,7 +7254,7 @@
       "id": 121,
       "name": "California Root Beer",
       "description": "A fizzy cocktail that mimics the taste of root beer with coffee and vanilla notes.",
-      "instructions": "1. Shale first 3 ingredients with ice.\n2. Strain into an ice-filled glass.\n3. Top with soda.\n4. Garnish with lime wedge..",
+      "instructions": "1. Shake first 3 ingredients with ice.\n2. Strain into an ice-filled glass.\n3. Top with soda.\n4. Garnish with lime wedge.",
       "photoUri": "assets/cocktails/220-california-root-beer.jpg",
       "glassId": "highball_glass",
       "methodIds": ["shake"],
@@ -7956,7 +7956,7 @@
     },
     {
       "id": 132,
-      "name": "Carribbean Breeze",
+      "name": "Caribbean Breeze",
       "description": "A tropical cocktail with Light Rum, Banana Liqueur and Pineapple Juice, layered with citrus and sweetness for a lush, beachy vibe.",
       "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 37.5ml of White Rum, 15ml of Banana Liqueur, 75ml of Pineapple Juice, 10ml of Cranberry Juice, 60ml of Grapefruit Juice, and 15ml of Lime Juice.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled Highball glass.\n5. Garnish with a wedge of Grapefruit",
       "photoUri": "assets/cocktails/231-carribbean-breeze.jpg",
@@ -10292,8 +10292,8 @@
     {
       "id": 170,
       "name": "Dirty Banana",
-      "description": "A rich, creamy rum drink featuring White Rum, Coffee Liqueur, Banana Liqueur—dessert-like, smooth, and indulgent. Garnished with banana.",
-      "instructions": "1. Blend all ingredients with crushed ice.\n2. Pour into a chilled glass optinaly garnished with chocolate syrup.\n3. Garnish with a banana slice on the rim",
+      "description": "A rich, creamy rum drink featuring Aged Rum, Coffee Liqueur, Banana Liqueur—dessert-like, smooth, and indulgent. Garnished with banana.",
+      "instructions": "1. Blend all ingredients with crushed ice.\n2. Pour into a chilled glass optionally garnished with chocolate syrup.\n3. Garnish with a banana slice on the rim",
       "photoUri": "assets/cocktails/270-dirty-banana.jpg",
       "glassId": "hurricane_glass",
       "methodIds": ["blend"],
@@ -24641,7 +24641,7 @@
         {
           "order": 1,
           "ingredientId": 74,
-          "name": "Cardamon",
+          "name": "Cardamom",
           "amount": "2",
           "unitId": 1
         },
@@ -30625,7 +30625,7 @@
     },
     {
       "id": 74,
-      "name": "Cardamon",
+      "name": "Cardamom",
       "description": "Fragrant cardamom pods bring citrusy, eucalyptus spice to syrups and infusions.",
       "tags": [8],
       "photoUri": "assets/ingredients/173-cardamon.jpg"
