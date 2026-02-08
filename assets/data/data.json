@@ -5197,7 +5197,7 @@
     {
       "id": 86,
       "name": "Blue Lagoon Mocktail",
-      "description": "A bright liqueur sour balancing Lemonade, Blue Curaçao Syrup with fresh citrus and a touch of sweetness for a crisp, refreshing sip. Garnished with pineapple.",
+      "description": "A bright mocktail balancing Lemonade and Blue Curaçao Syrup with fresh citrus and a touch of sweetness for a crisp, refreshing sip. Garnished with lemon and cherry.",
       "instructions": "1. Fill a Hurricane glass with ice.\n2. Add 30ml of Orange Juice, 30ml of Blue Curaçao Syrup, and 120ml of Lemonade.\n3. Stir gently to combine.\n4. Garnish with a lemon slice and a cherry.",
       "photoUri": "assets/cocktails/185-blue-lagoon-mocktail.jpg",
       "glassId": "hurricane_glass",
@@ -12484,7 +12484,7 @@
       "id": 207,
       "name": "Frost Bite",
       "description": "This cocktail features a striking blue color from blue curaçao layered with creamy sweetness.",
-      "instructions": "1. In a cocktail shaker, pour the tequila, blue curaçao, crème de cacao, and cream. Fill with ice.\n2.Shake well.\n3. Shake the cocktail shaker.\n4.Garnish with a cherry.",
+      "instructions": "1. In a cocktail shaker, pour the tequila, blue curaçao, crème de cacao, and cream. Fill with ice.\n2. Shake well until chilled.\n3. Strain into a rocks glass over fresh ice.\n4. Garnish with a cherry.",
       "photoUri": "assets/cocktails/307-frost-bite.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["shake"],
@@ -28724,7 +28724,7 @@
       "id": 477,
       "name": "Virginia",
       "description": "A smooth and tropical delight that brings the beach to your glass. The creamy notes of coconut liqueur blend perfectly with the tartness of cranberry and lime for a balanced, exotic escape.",
-      "instructions": "1. Fill a Highball glass with ice.\n2. Add 2 oz of Coconut Liqueur, 5 oz of Cranberry Juice, and 0.75 oz of Lime Juice.\n3. Stir gently to combine.\n4. Garnish with a lime juice wedge.",
+      "instructions": "1. Fill a Highball glass with ice.\n2. Add 2 oz of Coconut Liqueur, 5 oz of Cranberry Juice, and 0.75 oz of Lime Juice.\n3. Stir gently to combine.\n4. Garnish with a lime wedge.",
       "photoUri": "assets/cocktails/578-virginia.jpg",
       "glassId": "highball_glass",
       "methodIds": ["build"],
@@ -28759,8 +28759,8 @@
         },
         {
           "order": 4,
-          "ingredientId": 223,
-          "name": "Lime Juice",
+          "ingredientId": 222,
+          "name": "Lime",
           "amount": "1",
           "unitId": 27,
           "garnish": true
