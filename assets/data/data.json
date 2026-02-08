@@ -382,8 +382,8 @@
     {
       "id": 7,
       "name": "Adriatique",
-      "description": "A complex liqueur cocktail where Amaro Nonino, Aperol meets citrus—bittersweet, zesty, and nicely structured. Garnished with orange.",
-      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 30ml of Amaro Nonino, 15ml of Aperol, and 30ml of Orange Juice.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled martini glass.\n5. Garnish with a twist of orange",
+      "description": "A complex liqueur cocktail where Amaro Nonino and Aperol meet citrus—bittersweet, zesty, and nicely structured. Garnished with orange.",
+      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 30ml of Amaro Nonino, 15ml of Aperol, and 30ml of Orange Juice.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled martini glass.\n5. Garnish with a twist of orange.",
       "photoUri": "assets/cocktails/7-adriatique.jpg",
       "glassId": "martini",
       "methodIds": [
@@ -26197,7 +26197,7 @@
       "id": 405,
       "name": "Sex With an Alligator",
       "description": "An eye-catching layered shooter that features a sweet melon and pineapple base with herbal and raspberry accents, served in a shooter glass.",
-      "instructions": "For two shots:\n1. Fill a cocktail shaker with ice cubes.\n2. Add the Midori melon liqueur and pineapple juice to the shaker.\n3. Shake vigorously until well-chilled.\n4. Strain the mixture into two chilled shooter glasses.\n5. Carefully pour the Chambord down the side of each glass so it sinks to the bottom.\n6. Finish by slowly layering the Jägermeister on the very top using the back of a spoon.",
+      "instructions": "For two shots:\n1. Add the Midori melon liqueur and pineapple juice to a cocktail shaker.\n2. Shake vigorously until well-chilled.\n3. Strain the mixture into two chilled shooter glasses.\n4. Carefully pour the Chambord down the side of each glass so it sinks to the bottom.\n5. Finish by slowly layering the Jägermeister on the very top using the back of a spoon.",
       "photoUri": "assets/cocktails/405-sex-with-an-alligator-shot.jpg",
       "glassId": "shooter",
       "methodIds": [
@@ -26227,13 +26227,6 @@
         },
         {
           "order": 3,
-          "ingredientId": 193,
-          "name": "Ice",
-          "amount": "150",
-          "unitId": 8
-        },
-        {
-          "order": 4,
           "ingredientId": 77,
           "name": "Chambord",
           "amount": "30",
@@ -26248,7 +26241,7 @@
           ]
         },
         {
-          "order": 5,
+          "order": 4,
           "ingredientId": 199,
           "name": "Jägermeister",
           "amount": "30",
