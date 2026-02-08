@@ -2159,7 +2159,7 @@
       "id": 37,
       "name": "Aussie Boomerang",
       "description": "A smooth, creamy shooter combining bright kiwi fruit and melon liqueurs with rich cream. Sweet, fruity, and dessert-like, it’s a playful, easy-drinking shot with a soft tropical finish.",
-      "instructions": "1. Chill a shooter glass in advance for a cleaner, smoother taste.\n2. Pour the Kiwi Liqueur into the glass as the first layer.\n3. Slowly add the Melon Liqueur over the back of a spoon to create a distinct layer.\n4. Gently float the cream on top using a spoon to achieve a clean layered effect.\n5. Serve immediately and drink in one smooth shot.",
+      "instructions": "1. Chill a shooter glass in advance for a cleaner, smoother taste.\n2. Pour the Kiwi fruit Liqueur into the glass as the first layer.\n3. Slowly add the Melon Liqueur over the back of a spoon to create a distinct layer.\n4. Gently float the cream on top using a spoon to achieve a clean layered effect.\n5. Serve immediately and drink in one smooth shot.",
       "photoUri": "assets/cocktails/136-aussie-boomerang.jpg",
       "glassId": "shooter",
       "methodIds": ["layer"],
@@ -2168,7 +2168,7 @@
         {
           "order": 1,
           "ingredientId": 209,
-          "name": "Kiwi Liqueur",
+          "name": "Kiwi fruit Liqueur",
           "amount": "25",
           "unitId": 11
         },
@@ -3611,7 +3611,7 @@
       "id": 61,
       "name": "Barracuda",
       "description": "An IBA official sparkling cocktail.",
-      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 45ml of Gold Rum, 15ml of Galliano, 60ml of Pineapple Juice, and 1 dash of Lime Juice.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled coupe glass.\n5. Top with 45ml of Sparkling Wine.\n6. Garnish with a wedge of Pineapple and a Maraschino Cherry.",
+      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 45ml of Gold Rum, 15ml of Galliano, 60ml of Pineapple Juice, and 15ml of Lime Juice.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled coupe glass.\n5. Top with 45ml of Sparkling Wine.\n6. Garnish with a wedge of Pineapple and a Maraschino Cherry.",
       "photoUri": "assets/cocktails/160-barracuda.jpg",
       "glassId": "coupe",
       "methodIds": ["shake"],
@@ -3648,8 +3648,8 @@
           "order": 4,
           "ingredientId": 223,
           "name": "Lime Juice",
-          "amount": "1",
-          "unitId": 6
+          "amount": "15",
+          "unitId": 11
         },
         {
           "order": 5,
@@ -3994,7 +3994,7 @@
       "id": 67,
       "name": "Bee's Nice",
       "description": "A long, sparkling wine drink built for easy sipping, pairing Everclear, Honey Syrup, Prosecco with bubbly mixers over ice. Garnished with lemon.",
-      "instructions": "1. Fill a martini glass with ice.\n2. Add 30ml of Everclear, 30ml of Lemon Juice, 30ml of Honey Syrup, and 45ml of Prosecco.\n3. Stir gently to combine.\n4. Garnish with a lemon twist.",
+      "instructions": "1. Fill a mixing glass with ice.\n2. Add 30ml of Everclear, 30ml of Lemon Juice, 30ml of Honey Syrup, and 45ml of Prosecco.\n3. Stir gently to combine.\n4. Strain into a chilled martini glass.\n5. Garnish with a lemon twist.",
       "photoUri": "assets/cocktails/166-bee-s-nice.jpg",
       "glassId": "martini",
       "methodIds": ["build"],
@@ -10416,7 +10416,7 @@
       "name": "Dirty Shirley",
       "description": "A long, sparkling vodka drink built for easy sipping, pairing Vodka, Grenadine, Lime with bubbly mixers over ice. Garnished with maraschino cherry.",
       "instructions": "1. Fill a Collins glass with ice.\n2. Add 60ml of Vodka, 30ml of Grenadine, and 120ml of Lemon-Lime Soda.\n3. Stir gently to combine.\n4. Garnish with a maraschino cherry and a lime wedge.",
-      "photoUri": "assets/cocktails/273-dirty-shyrly.jpg",
+      "photoUri": "assets/cocktails/273-dirty-shirley.jpg",
       "glassId": "collins_glass",
       "methodIds": ["build"],
       "tags": [6],
@@ -21679,7 +21679,7 @@
       "id": 364,
       "name": "Porn Star Martini",
       "description": "An exotic and visually stunning modern classic, featuring vibrant passion fruit flavors and served with a celebratory sidecar of sparkling wine.",
-      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 50ml of Vodka Vanilla, 20ml of Passion Fruit Liqueur, 15ml of Passion Fruit Syrup, 15ml of Lime Juice, and 10ml of Vanilla Syrup.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled martini glass.\n5. Top with 60ml of Champagne.\n6. Garnish with a half of Passion Fruit.",
+      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 50ml of Vodka Vanilla, 20ml of Passion Fruit Liqueur, 15ml of Passion Fruit Syrup, 15ml of Lime Juice, and 10ml of Vanilla Syrup.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled martini glass.\n5. Serve with 60ml of Champagne on the side.\n6. Garnish with a half of Passion Fruit.",
       "photoUri": "assets/cocktails/465-porn-star-martini.jpg",
       "glassId": "martini",
       "methodIds": ["shake"],
@@ -25819,7 +25819,7 @@
     {
       "id": 433,
       "name": "Suffering Bastard",
-      "description": "A refreshing and historic highball that combines the punch of gin and brandy with the zesty kick of lime and the spicy effervescence of ginger beer.",
+      "description": "A refreshing and historic highball that combines the punch of gin and brandy with the zesty kick of lemon and the spicy effervescence of ginger beer.",
       "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 30ml of Cognac, 30ml of Gin, 15ml of Lemon Juice, and 2 dashes of Angostura Bitters.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled tiki glass.\n5. Top with 90ml of Ginger Beer.\n6. Garnish with a mint sprig and an orange slice.",
       "photoUri": "assets/cocktails/534-suffering-bastard.jpg",
       "glassId": "tiki",
@@ -26624,7 +26624,7 @@
       "id": 447,
       "name": "The Haole",
       "description": "A bright and tropical highball that captures the essence of a summer afternoon. This refreshing blend features white rum and bianco vermouth accented by sweet pineapple and zesty lemon, topped with sparkling ginger ale for a spicy, effervescent kick.",
-      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 45ml of White Rum, 10ml of Bianco Vermouth, 15ml of Pineapple Syrup, 20ml of Lemon Juice, 90ml of Ginger Ale, and 1 wedge of Pineapple.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled Collins glass.",
+      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 45ml of White Rum, 10ml of Bianco Vermouth, 15ml of Pineapple Syrup and 20ml of Lemon Juice.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Fill a chilled Collins glass with ice and strain the cocktail into the glass.\n5. Top with 90ml of Ginger Ale and stir gently to combine.\n6. Garnish with a pineapple wedge.",
       "photoUri": "assets/cocktails/548-the-haole.jpg",
       "glassId": "collins_glass",
       "methodIds": ["shake"],
@@ -26667,17 +26667,18 @@
         },
         {
           "order": 6,
-          "ingredientId": 275,
-          "name": "Pineapple",
-          "amount": "1",
-          "unitId": 27
-        },
-        {
-          "order": 7,
           "ingredientId": 193,
           "name": "Ice",
           "amount": "150",
           "unitId": 8
+        },
+        {
+          "order": 7,
+          "ingredientId": 275,
+          "name": "Pineapple",
+          "amount": "1",
+          "unitId": 27,
+          "garnish": true
         },
         {
           "order": 8,
@@ -30419,7 +30420,7 @@
       "name": "Butterfinger candy bar",
       "description": "Butterfinger is a candy bar manufactured by the Ferrara Candy Company, a subsidiary of Ferrero. The bar consists of a layered crispy peanut butter core covered in chocolate.",
       "tags": [10],
-      "photoUri": "assets/ingredients/166-butterginger-candy-bar.jpg"
+      "photoUri": "assets/ingredients/166-butterfinger-candy-bar.jpg"
     },
     {
       "id": 68,
@@ -31426,7 +31427,7 @@
     },
     {
       "id": 209,
-      "name": "Kiwi Liqueur",
+      "name": "Kiwi fruit Liqueur",
       "description": "Kiwi fruit liqueur is a tangy green liqueur around 15–20% ABV. Shake it into a Kiwi fruit Martini or Tropical Daiquiri.",
       "tags": [2],
       "photoUri": "assets/ingredients/311-kiwi-liqueur.jpg"
