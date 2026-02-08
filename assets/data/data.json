@@ -177,7 +177,7 @@
       "id": 4,
       "name": "ABC",
       "description": "The abbreviation stands for amaretto, Baileys and cognac.",
-      "instructions": "1. Pour 15ml of amaretto into a shooter glass.\n2. Carefully pour 15ml of Baileys on top of the amaretto.\n3. Helping yourself with a teaspoon, pour 15ml of cognac on top of the Baileys.",
+      "instructions": "1. Pour 15ml of amaretto into a shooter glass.\n2. Carefully pour 15ml of Baileys on top of the amaretto.\n3. Using a teaspoon, pour 15ml of cognac on top of the Baileys.",
       "photoUri": "assets/cocktails/103-abc.jpg",
       "glassId": "shooter",
       "methodIds": ["layer"],
@@ -7019,7 +7019,7 @@
           "order": 3,
           "ingredientId": 205,
           "name": "Kahlua",
-          "amount": "18",
+          "amount": "15",
           "unitId": 11,
           "allowBaseSubstitution": true
         },
@@ -13375,8 +13375,8 @@
         },
         {
           "order": 2,
-          "ingredientId": 214,
-          "name": "Lemon",
+          "ingredientId": 223,
+          "name": "Lemon Juice",
           "amount": "30",
           "unitId": 11
         },
@@ -19233,7 +19233,7 @@
       "id": 323,
       "name": "Mojito Pomegranate",
       "description": "A pomegranate variation of Mojito.",
-      "instructions": "1. Muddle 4 sprigs of mint and 2 teaspoons of sugar in a highball glass.\n2. Add 30ml of lime juice and muddle mint sprigs.\n3. Fill the glass with crushed ice.\n4. Pour 45ml of white rum and 60ml of pomegranate juice, and top with 90ml of soda water.\n5. Garnish with a sprig of mint leaves.",
+      "instructions": "1. Muddle 4 sprigs of mint and 2 teaspoons of sugar in a highball glass.\n2. Add 30ml of lime juice and stir gently.\n3. Fill the glass with crushed ice.\n4. Pour 45ml of white rum and 60ml of pomegranate juice, and top with 90ml of soda water.\n5. Garnish with a sprig of mint leaves.",
       "photoUri": "assets/cocktails/424-mojito-pomegranate.jpg",
       "glassId": "highball_glass",
       "methodIds": ["muddle", "build"],
