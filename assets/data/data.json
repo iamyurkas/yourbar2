@@ -1289,8 +1289,8 @@
     {
       "id": 21,
       "name": "Amalia",
-      "description": "A light, sparkling rum cocktail designed for effortless sipping. Fresh kiwi, lime and floral elderflower are balanced by white rum and lifted with bubbly mixers over ice, finished with a cooling mint garnish.",
-      "instructions": "1. Cut kiwi fruit in half and use a spoon to scoop flesh from one half into shaker.\n2. In a shaker, muddle fresh kiwi pieces to release juice and aroma.\n3. Add 50ml of White Rum, 15ml of Lime Juice, and 30ml of Elderflower Cordial to the shaker.\n4. Fill the shaker with ice and shake briefly to combine and chill.\n5. Strain into a chilled coupe glass.\n6. Top gently with Ginger Ale.\n7. Give a light stir to integrate the layers without losing bubbles.\n8. Garnish with a fresh Mint Sprig and a thin slice of kiwi.",
+      "description": "A light, sparkling rum cocktail designed for effortless sipping. Fresh kiwi fruit, lime and floral elderflower are balanced by white rum and lifted with bubbly mixers over ice, finished with a cooling mint garnish.",
+      "instructions": "1. Cut kiwi fruit in half and use a spoon to scoop flesh from one half into shaker.\n2. In a shaker, muddle fresh kiwi fruit pieces to release juice and aroma.\n3. Add 50ml of White Rum, 15ml of Lime Juice, and 30ml of Elderflower Cordial to the shaker.\n4. Fill the shaker with ice and shake briefly to combine and chill.\n5. Strain into a chilled coupe glass.\n6. Top gently with Ginger Ale.\n7. Give a light stir to integrate the layers without losing bubbles.\n8. Garnish with a fresh Mint Sprig and a thin slice of kiwi fruit.",
       "photoUri": "assets/cocktails/120-amalia.jpg",
       "glassId": "coupe",
       "methodIds": [
@@ -1304,7 +1304,7 @@
         {
           "order": 1,
           "ingredientId": 208,
-          "name": "Kiwi",
+          "name": "Kiwi fruit",
           "amount": "1",
           "unitId": 9
         },
@@ -1354,7 +1354,7 @@
         {
           "order": 8,
           "ingredientId": 208,
-          "name": "Kiwi",
+          "name": "Kiwi fruit",
           "amount": "1",
           "unitId": 19,
           "garnish": true
@@ -2341,7 +2341,7 @@
     {
       "id": 37,
       "name": "Aussie Boomerang",
-      "description": "A smooth, creamy shooter combining bright kiwi and melon liqueurs with rich cream. Sweet, fruity, and dessert-like, it’s a playful, easy-drinking shot with a soft tropical finish.",
+      "description": "A smooth, creamy shooter combining bright kiwi fruit and melon liqueurs with rich cream. Sweet, fruity, and dessert-like, it’s a playful, easy-drinking shot with a soft tropical finish.",
       "instructions": "1. Chill a shooter glass in advance for a cleaner, smoother taste.\n2. Pour the Kiwi Liqueur into the glass as the first layer.\n3. Slowly add the Melon Liqueur over the back of a spoon to create a distinct layer.\n4. Gently float the cream on top using a spoon to achieve a clean layered effect.\n5. Serve immediately and drink in one smooth shot.",
       "photoUri": "assets/cocktails/136-aussie-boomerang.jpg",
       "glassId": "shooter",
@@ -11852,7 +11852,7 @@
       "id": 182,
       "name": "Electric Lemonade",
       "description": "There are a few variations and substitutions you can play around with. You could replace lemon-lime soda with club soda or tonic water for a less sweet version. You can also opt for a party punch recipe by scaling the ingredients in this electric lemonade recipe.",
-      "instructions": "1. Combine vodka, blue curacao, lemon juice, and simple syrup in a cocktail shaker along with ice.\n2. Give it a good shake. \n3. Fill a high ball or collins glass with ice, then strain in the cocktail.\n4. Top it off with lemon-lime soda.\n5. Garnish with a lemon wedge.",
+      "instructions": "1. Combine vodka, blue curacao, lemon juice, and simple syrup in a cocktail shaker along with ice.\n2. Give it a good shake. \n3. Fill a high ball or collins glass with ice, then strain in the cocktail.\n4. Top it off with lemon-lime soda.\n5. Stir gently to combine.\n6. Garnish with a lemon wedge.",
       "photoUri": "assets/cocktails/282-electric-lemonade.jpg",
       "glassId": "highball_glass",
       "methodIds": [
@@ -18679,11 +18679,11 @@
       "id": 292,
       "name": "Long Island Iced Tea",
       "description": "Five-spirit sour lengthened with cola.",
-      "instructions": "1. Fill a mixing glass with ice.\n2. Add 15ml of Vodka, 15ml of Tequila Blanco, 15ml of White Rum, 15ml of Gin, 15ml of Cointreau, 25ml of Lemon Juice, and 30ml of Simple Syrup.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled highball glass filled with fresh ice.\n5. Top with a splash of Coca-Cola.\n6. Garnish with a lemon slice.",
+      "instructions": "1. Fill a highball glass with ice.\n2. Add 15ml of Vodka, 15ml of Tequila Blanco, 15ml of White Rum, 15ml of Gin, 15ml of Cointreau, 25ml of Lemon Juice, and 30ml of Simple Syrup.\n3. Stir gently to combine.\n4. Top with a splash of Coca-Cola.\n5. Garnish with a lemon slice.",
       "photoUri": "assets/cocktails/393-long-island-iced-tea.jpg",
       "glassId": "highball_glass",
       "methodIds": [
-        "stir"
+        "build"
       ],
       "tags": [
         1,
@@ -18763,13 +18763,6 @@
         },
         {
           "order": 9,
-          "ingredientId": 193,
-          "name": "Ice",
-          "amount": "150",
-          "unitId": 8
-        },
-        {
-          "order": 10,
           "ingredientId": 214,
           "name": "Lemon",
           "amount": "1",
@@ -18777,7 +18770,7 @@
           "garnish": true
         },
         {
-          "order": 11,
+          "order": 10,
           "ingredientId": 193,
           "name": "Ice",
           "amount": "120",
@@ -21552,9 +21545,9 @@
       "id": 335,
       "name": "Nutty Irishman",
       "description": "A smooth, creamy classic that highlights the harmonious blend of hazelnut and Irish cream. Perfect for fans of dessert-style cocktails, it offers a rich texture and a comforting nutty finish that can be customized with coffee or whiskey.",
-      "instructions": "1. Fill a cocktail shaker with ice cubes.\n2. Add 30ml of Frangelico, 30ml of Baileys, and 30ml of cream to the shaker.\n3. Shake vigorously for about 10-15 seconds until well-chilled.\n4. Strain the mixture into a chilled irish coffee glass.\n5. Optionally, top with a layer of loose whipped cream.\n6. Garnish with a sprinkle of freshly grated nutmeg.",
+      "instructions": "1. Fill a cocktail shaker with ice cubes.\n2. Add 30ml of Frangelico, 30ml of Baileys, and 30ml of cream to the shaker.\n3. Shake vigorously for about 10-15 seconds until well-chilled.\n4. Strain the mixture into a chilled rocks glass filled with fresh ice.\n5. Optionally, top with a layer of loose whipped cream.\n6. Garnish with a sprinkle of freshly grated nutmeg.",
       "photoUri": "assets/cocktails/436-nutty-irishman.jpg",
-      "glassId": "irish_coffee_glass",
+      "glassId": "rocks_glass",
       "methodIds": [
         "shake"
       ],
@@ -21606,6 +21599,13 @@
           "amount": "2",
           "unitId": 15,
           "garnish": true
+        },
+        {
+          "order": 7,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
         }
       ]
     },
@@ -29935,8 +29935,8 @@
     {
       "id": 464,
       "name": "Tropical Sangria",
-      "description": "A light and effervescent twist on the classic sangria. This refreshing pitcher drink features crisp white wine and coconut notes, macerated with fresh orange, kiwi, and strawberries for a colorful, shareable summer treat.",
-      "instructions": "1. Fill a pitcher with ice.\n2. Add 8.5 oz of Coconut Liqueur, 13.5 oz of White Wine, 1.5 oz of Simple Syrup, 3.5 oz of Soda Water, 1 half of Orange, 1 Kiwi, and 7 sliced Strawberries.\n3. Stir gently to combine.",
+      "description": "A light and effervescent twist on the classic sangria. This refreshing pitcher drink features crisp white wine and coconut notes, macerated with fresh orange, kiwi fruit, and strawberries for a colorful, shareable summer treat.",
+      "instructions": "1. Fill a pitcher with ice.\n2. Add 8.5 oz of Coconut Liqueur, 25 oz of White Wine, 1.5 oz of Simple Syrup, 3.5 oz of Soda Water, 1 half of Orange, 1 Kiwi fruit, and 7 sliced Strawberries.\n3. Stir gently to combine.",
       "photoUri": "assets/cocktails/565-tropical-sangria.jpg",
       "glassId": "pitcher",
       "methodIds": [
@@ -29963,7 +29963,7 @@
           "order": 2,
           "ingredientId": 347,
           "name": "White Wine",
-          "amount": "13.5",
+          "amount": "25",
           "unitId": 12
         },
         {
@@ -29990,7 +29990,7 @@
         {
           "order": 6,
           "ingredientId": 208,
-          "name": "Kiwi",
+          "name": "Kiwi fruit",
           "amount": "1",
           "unitId": 1
         },
@@ -34270,7 +34270,7 @@
     },
     {
       "id": 208,
-      "name": "Kiwi",
+      "name": "Kiwi fruit",
       "description": "Bright green fruit with sweet-tart flavor and tiny seeds. Adds tropical freshness when muddled or pureed.",
       "tags": [
         6
@@ -34280,7 +34280,7 @@
     {
       "id": 209,
       "name": "Kiwi Liqueur",
-      "description": "Kiwi liqueur is a tangy green liqueur around 15–20% ABV. Shake it into a Kiwi Martini or Tropical Daiquiri.",
+      "description": "Kiwi fruit liqueur is a tangy green liqueur around 15–20% ABV. Shake it into a Kiwi fruit Martini or Tropical Daiquiri.",
       "tags": [
         2
       ],
