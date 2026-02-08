@@ -231,7 +231,7 @@
           "unitId": 11,
           "substitutes": [
             {
-              "ingredientId": 329,
+              "ingredientId": 328,
               "name": "Tequila Gold"
             }
           ]
@@ -604,6 +604,20 @@
         },
         {
           "order": 6,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8
+        },
+        {
+          "order": 7,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
+        },
+        {
+          "order": 8,
           "ingredientId": 242,
           "name": "Orange",
           "amount": "1",
@@ -611,26 +625,12 @@
           "garnish": true
         },
         {
-          "order": 7,
-          "ingredientId": 193,
-          "name": "Ice",
-          "amount": "150",
-          "unitId": 8
-        },
-        {
-          "order": 8,
+          "order": 9,
           "ingredientId": 81,
           "name": "Cherry",
           "amount": "1",
           "unitId": 1,
           "garnish": true
-        },
-        {
-          "order": 9,
-          "ingredientId": 193,
-          "name": "Ice",
-          "amount": "120",
-          "unitId": 8
         }
       ]
     },
@@ -1618,7 +1618,7 @@
           "unitId": 11,
           "substitutes": [
             {
-              "ingredientId": 329,
+              "ingredientId": 328,
               "name": "Tequila Gold"
             }
           ]
@@ -8731,7 +8731,8 @@
           "ingredientId": 242,
           "name": "Orange",
           "amount": "1",
-          "unitId": 19
+          "unitId": 19,
+          "garnish": true
         }
       ]
     },
@@ -9485,7 +9486,7 @@
       "id": 156,
       "name": "Crimson King",
       "description": "A sophisticated, spirit-forward whiskey cocktail that balances the spicy bite of Rye with the complex bitterness of Strucchi and the herbal depth of Punt e Mes. Hints of cherry and coffee add a mysterious, dark richness to this bold drink.",
-      "instructions": "1. Fill a mixing glass with ice.\n2. Add 30ml of Rye Whiskey, 22.5ml of Strucchi Bitter, 15ml of Punt e Mes, 7.5ml of Cherry Heering, and 5ml of Crème de Café.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled rocks glass.\n5. Garnish with a maraschino cherry.",
+      "instructions": "1. Fill a mixing glass with ice.\n2. Add 30ml of Rye Whiskey, 22.5ml of Strucchi Bitter, 15ml of Punt e Mes, 7.5ml of Cherry Heering, and 5ml of Creme de Cafe.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled rocks glass.\n5. Garnish with a maraschino cherry.",
       "photoUri": "assets/cocktails/156-crimson-king.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["stir"],
@@ -9534,7 +9535,7 @@
         {
           "order": 5,
           "ingredientId": 121,
-          "name": "Crème de Café",
+          "name": "Creme de Cafe",
           "amount": "5",
           "unitId": 11,
           "substitutes": [
@@ -11826,13 +11827,6 @@
           "name": "Tabasco",
           "amount": "1",
           "unitId": 6
-        },
-        {
-          "order": 4,
-          "ingredientId": 193,
-          "name": "Ice",
-          "amount": "45",
-          "unitId": 8
         }
       ]
     },
@@ -14773,13 +14767,6 @@
           "name": "Grenadine",
           "amount": "1",
           "unitId": 6
-        },
-        {
-          "order": 5,
-          "ingredientId": 193,
-          "name": "Ice",
-          "amount": "45",
-          "unitId": 8
         }
       ]
     },
@@ -16381,15 +16368,15 @@
           "unitId": 11,
           "substitutes": [
             {
-              "ingredientId": 328,
+              "ingredientId": 327,
               "name": "Tequila Blanco"
             },
             {
-              "ingredientId": 329,
+              "ingredientId": 328,
               "name": "Tequila Gold"
             },
             {
-              "ingredientId": 330,
+              "ingredientId": 329,
               "name": "Tequila Reposado"
             }
           ]
@@ -20428,7 +20415,7 @@
       "id": 342,
       "name": "Ouzi",
       "description": "A bright vodka sour balancing Vodka, Ouzo, Rich Simple Syrup with fresh citrus and a touch of sweetness for a crisp, refreshing sip.",
-      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 22.5ml of Vodka, 15ml of Ouzo, 7.5ml of Rich Simple Syrup, and 7.5ml of Lemon Juice.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled shooter glass.",
+      "instructions": "For 3 servings:\n1. Fill a cocktail shaker with ice.\n2. Add 67.5ml of Vodka, 45ml of Ouzo, 22.5ml of Rich Simple Syrup, and 22.5ml of Lemon Juice.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into 3 chilled shooter glasses.",
       "photoUri": "assets/cocktails/342-ouzi.jpg",
       "glassId": "shooter",
       "methodIds": ["shake"],
@@ -20438,35 +20425,35 @@
           "order": 1,
           "ingredientId": 337,
           "name": "Vodka",
-          "amount": "22.5",
+          "amount": "67.5",
           "unitId": 11
         },
         {
           "order": 2,
           "ingredientId": 250,
           "name": "Ouzo",
-          "amount": "15",
+          "amount": "45",
           "unitId": 11
         },
         {
           "order": 3,
           "ingredientId": 293,
           "name": "Rich Simple Syrup",
-          "amount": "7.5",
+          "amount": "22.5",
           "unitId": 11
         },
         {
           "order": 4,
           "ingredientId": 216,
           "name": "Lemon Juice",
-          "amount": "7.5",
+          "amount": "22.5",
           "unitId": 11
         },
         {
           "order": 5,
           "ingredientId": 193,
           "name": "Ice",
-          "amount": "45",
+          "amount": "150",
           "unitId": 8
         }
       ]
@@ -25736,7 +25723,7 @@
       "id": 429,
       "name": "Strawberry Margarita",
       "description": "A luscious and bold twist on the classic Margarita, combining the earthy notes of Tequila Blanco with sweet strawberries and the orange accents of Cointreau.",
-      "instructions": "1. Combine 40g of fresh strawberries, 60ml of tequila blanco, 40ml of Cointreau, and 30ml of lime juice in a blender.\n2. Add 50g of ice.\n3. Blend until the texture is perfectly smooth and frozen.\n4. Optional: Rim your margarita glass with salt or sugar if desired.\n5. Pour the blended cocktail into the prepared glass.\n6. Finish with a strawberry garnish.",
+      "instructions": "1. Combine 40g of fresh strawberries, 60ml of tequila blanco, 40ml of Cointreau, and 30ml of lime juice in a blender.\n2. Add 150g of ice.\n3. Blend until the texture is perfectly smooth and frozen.\n4. Optional: Rim your margarita glass with salt or sugar if desired.\n5. Pour the blended cocktail into the prepared glass.\n6. Finish with a strawberry garnish.",
       "photoUri": "assets/cocktails/429-strawberry-margarita.jpg",
       "glassId": "margarita_glass",
       "methodIds": ["blend"],
@@ -25784,7 +25771,7 @@
           "order": 6,
           "ingredientId": 193,
           "name": "Ice",
-          "amount": "50",
+          "amount": "150",
           "unitId": 8
         }
       ]
@@ -30894,7 +30881,7 @@
     },
     {
       "id": 121,
-      "name": "Crème de Café",
+      "name": "Creme de Cafe",
       "description": "Coffee-flavored liqueur with a smooth, sweet roast profile. Use it for White Lebowski, espresso cocktails, or dessert drinks.",
       "tags": [2],
       "photoUri": "assets/ingredients/121-cr-me-de-caf.jpg"
@@ -32185,7 +32172,7 @@
       "id": 302,
       "name": "Sambuca",
       "description": "Sambuca (Italian pronunciation: [samˈbuːka]) is an Italian anise-flavoured, usually colourless, liqueur. Its most common variety is often referred to as white sambuca to differentiate it from other varieties that are deep blue in colour (black sambuca) or bright red (red sambuca). Like other anise-flavoured liqueurs, the ouzo effect is sometimes observed when combined with water.",
-      "tags": [0, 1],
+      "tags": [2],
       "photoUri": "assets/ingredients/302-sambuca.jpg"
     },
     {
