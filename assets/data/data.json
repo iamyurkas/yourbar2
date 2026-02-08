@@ -18920,9 +18920,9 @@
       "id": 335,
       "name": "Nutty Irishman",
       "description": "A smooth, creamy classic that highlights the harmonious blend of hazelnut and Irish cream. Perfect for fans of dessert-style cocktails, it offers a rich texture and a comforting nutty finish that can be customized with coffee or whiskey.",
-      "instructions": "1. Fill a cocktail shaker with ice cubes.\n2. Add 30ml of Frangelico, 30ml of Baileys, and 30ml of cream to the shaker.\n3. Shake vigorously for about 10-15 seconds until well-chilled.\n4. Strain the mixture into a chilled cocktail glass.\n5. Optionally, top with a layer of loose whipped cream.\n6. Garnish with a sprinkle of freshly grated nutmeg.",
+      "instructions": "1. Fill a cocktail shaker with ice cubes.\n2. Add 30ml of Frangelico, 30ml of Baileys, and 30ml of cream to the shaker.\n3. Shake vigorously for about 10-15 seconds until well-chilled.\n4. Strain the mixture into a chilled irish coffee glass.\n5. Optionally, top with a layer of loose whipped cream.\n6. Garnish with a sprinkle of freshly grated nutmeg.",
       "photoUri": "assets/cocktails/436-nutty-irishman.jpg",
-      "glassId": "cocktail",
+      "glassId": "irish_coffee_glass",
       "methodIds": ["shake"],
       "tags": [6],
       "ingredients": [
