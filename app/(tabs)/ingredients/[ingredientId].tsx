@@ -727,10 +727,6 @@ export default function IngredientDetailsScreen() {
                 )}
                 <View style={styles.statusControls}>
                   <View style={styles.statusControlItem}>
-                    <PresenceCheck
-                      checked={effectiveIsAvailable}
-                      onToggle={handleToggleAvailability}
-                    />
                     <Text
                       style={[
                         styles.statusControlLabel,
@@ -739,8 +735,20 @@ export default function IngredientDetailsScreen() {
                     >
                       I have it
                     </Text>
+                    <PresenceCheck
+                      checked={effectiveIsAvailable}
+                      onToggle={handleToggleAvailability}
+                    />
                   </View>
                   <View style={styles.statusControlItem}>
+                    <Text
+                      style={[
+                        styles.statusControlLabel,
+                        { color: Colors.onSurfaceVariant },
+                      ]}
+                    >
+                      To shopping list
+                    </Text>
                     <Pressable
                       onPress={handleToggleShopping}
                       accessibilityRole="button"
@@ -766,14 +774,6 @@ export default function IngredientDetailsScreen() {
                         }
                       />
                     </Pressable>
-                    <Text
-                      style={[
-                        styles.statusControlLabel,
-                        { color: Colors.onSurfaceVariant },
-                      ]}
-                    >
-                      To shopping list
-                    </Text>
                   </View>
                 </View>
               </View>
@@ -1204,8 +1204,9 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   statusControlItem: {
+    flexDirection: "row",
     alignItems: "center",
-    gap: 4,
+    gap: 8,
   },
   amazonLinkGroup: {
     flexDirection: "row",
