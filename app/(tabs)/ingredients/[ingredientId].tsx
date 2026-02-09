@@ -22,6 +22,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { FormattedText } from "@/components/FormattedText";
 import { AppDialog, type DialogOptions } from "@/components/AppDialog";
 import { AppImage } from "@/components/AppImage";
 import { CocktailListRow } from "@/components/CocktailListRow";
@@ -799,7 +800,7 @@ export default function IngredientDetailsScreen() {
                 <View style={styles.instructionsList}>
                   {isDescriptionExpanded
                     ? descriptionParagraphs.map((paragraph, index) => (
-                      <Text
+                      <FormattedText
                         key={`description-${index}`}
                         style={[
                           styles.instructionsText,
@@ -807,10 +808,10 @@ export default function IngredientDetailsScreen() {
                         ]}
                       >
                         {paragraph}
-                      </Text>
+                      </FormattedText>
                     ))
                     : descriptionParagraphs.slice(0, 1).map((paragraph, index) => (
-                      <Text
+                      <FormattedText
                         key={`description-${index}`}
                         style={[
                           styles.instructionsText,
@@ -824,7 +825,7 @@ export default function IngredientDetailsScreen() {
                         onTextLayout={handleDescriptionLayout}
                       >
                         {paragraph}
-                      </Text>
+                      </FormattedText>
                     ))}
                 </View>
                 {shouldTruncateDescription ? (
