@@ -739,34 +739,36 @@ export default function IngredientDetailsScreen() {
                     </View>
                   </View>
                   <View style={styles.statusControlRow}>
-                    <Text
-                      style={[styles.statusControlLabel, { color: Colors.onSurfaceVariant }]}
-                    >
-                      {effectiveIsOnShoppingList
-                        ? "Remove from shopping list"
-                        : "Add to shopping list"}
-                    </Text>
-                    <Pressable
-                      onPress={handleToggleShopping}
-                      accessibilityRole="button"
-                      accessibilityLabel={
-                        effectiveIsOnShoppingList
-                          ? "Remove ingredient from shopping list"
-                          : "Add ingredient to shopping list"
-                      }
-                      hitSlop={8}
-                      style={styles.statusIconButton}
-                    >
-                      <MaterialIcons
-                        name={
+                    <View style={styles.shoppingControl}>
+                      <Text
+                        style={[styles.statusControlLabel, { color: Colors.onSurfaceVariant }]}
+                      >
+                        {effectiveIsOnShoppingList
+                          ? "Remove from shopping list"
+                          : "Add to shopping list"}
+                      </Text>
+                      <Pressable
+                        onPress={handleToggleShopping}
+                        accessibilityRole="button"
+                        accessibilityLabel={
                           effectiveIsOnShoppingList
-                            ? "shopping-cart"
-                            : "add-shopping-cart"
+                            ? "Remove ingredient from shopping list"
+                            : "Add ingredient to shopping list"
                         }
-                        size={24}
-                        color={Colors.tint}
-                      />
-                    </Pressable>
+                        hitSlop={8}
+                        style={styles.statusIconButton}
+                      >
+                        <MaterialIcons
+                          name={
+                            effectiveIsOnShoppingList
+                              ? "shopping-cart"
+                              : "add-shopping-cart"
+                          }
+                          size={24}
+                          color={Colors.tint}
+                        />
+                      </Pressable>
+                    </View>
                   </View>
 
                 </View>
@@ -1200,6 +1202,11 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   availabilityControl: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+  },
+  shoppingControl: {
     flexDirection: "row",
     alignItems: "center",
     gap: 12,
