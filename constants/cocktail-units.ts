@@ -13,7 +13,7 @@ export const MEASURE_UNITS = [
   { id: 5, singular: "cup", plural: "cups" },
   { id: 6, singular: "dash", plural: "dashes" },
   { id: 7, singular: "drop", plural: "drops" },
-  { id: 8, singular: "gr", plural: "gr" },
+  { id: 8, singular: "g", plural: "g" },
   { id: 9, singular: "half", plural: "halves" },
   { id: 10, singular: "leaf", plural: "leaves" },
   { id: 11, singular: "ml", plural: "ml" },
