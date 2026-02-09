@@ -30,6 +30,7 @@ import { AppDialog, type DialogOptions } from "@/components/AppDialog";
 import { TagEditorModal } from "@/components/TagEditorModal";
 import { TagPill } from "@/components/TagPill";
 import { useAppColors } from "@/constants/theme";
+import { AMAZON_STORES, AMAZON_STORE_KEYS, type AmazonStoreOverride } from "@/libs/amazon-stores";
 import { base64ToBytes, createTarArchive } from "@/libs/archive-utils";
 import { buildPhotoBaseName } from "@/libs/photo-utils";
 import { useInventory, type AppTheme, type StartScreen } from "@/providers/inventory-provider";
@@ -144,6 +145,10 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     setStartScreen,
     appTheme,
     setAppTheme,
+    amazonStoreOverride,
+    detectedAmazonStore,
+    effectiveAmazonStore,
+    setAmazonStoreOverride,
     restartOnboarding,
     resetInventoryFromBundle,
     exportInventoryData,
@@ -170,7 +175,11 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     typeof setTimeout
   > | null>(null);
   const [isThemeModalVisible, setThemeModalVisible] = useState(false);
+  const [isAmazonStoreModalVisible, setAmazonStoreModalVisible] = useState(false);
   const themeModalCloseTimeout = useRef<ReturnType<typeof setTimeout> | null>(
+    null,
+  );
+  const amazonStoreModalCloseTimeout = useRef<ReturnType<typeof setTimeout> | null>(
     null,
   );
   const [isTagManagerVisible, setTagManagerVisible] = useState(false);
@@ -257,6 +266,15 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     () => THEME_OPTIONS.find((option) => option.key === appTheme),
     [appTheme],
   );
+
+
+  const selectedAmazonStoreLabel = useMemo(() => {
+    if (!effectiveAmazonStore) {
+      return 'Disabled';
+    }
+
+    return AMAZON_STORES[effectiveAmazonStore].label;
+  }, [effectiveAmazonStore]);
 
   const renderStartScreenIcon = (
     option: StartScreenOption,
@@ -412,6 +430,20 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   const handleSelectTheme = (value: AppTheme) => {
     setAppTheme(value);
     scheduleModalClose(themeModalCloseTimeout, setThemeModalVisible);
+  };
+
+  const handleAmazonStorePress = () => {
+    setAmazonStoreModalVisible(true);
+  };
+
+  const handleCloseAmazonStoreModal = () => {
+    clearTimeoutRef(amazonStoreModalCloseTimeout);
+    setAmazonStoreModalVisible(false);
+  };
+
+  const handleSelectAmazonStore = (value: AmazonStoreOverride | null) => {
+    setAmazonStoreOverride(value);
+    scheduleModalClose(amazonStoreModalCloseTimeout, setAmazonStoreModalVisible);
   };
 
   const handleOpenTagManager = () => {
@@ -730,6 +762,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       clearTimeoutRef(ratingModalCloseTimeout);
       clearTimeoutRef(startScreenModalCloseTimeout);
       clearTimeoutRef(themeModalCloseTimeout);
+      clearTimeoutRef(amazonStoreModalCloseTimeout);
     };
   }, []);
 
@@ -1130,6 +1163,40 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   Create or update your tags
                 </Text>
               </View>
+            </Pressable>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Set Amazon store"
+              onPress={handleAmazonStorePress}
+              style={[styles.settingRow, SURFACE_ROW_STYLE]}
+            >
+              <View style={[styles.checkbox, SURFACE_ICON_STYLE]}>
+                <MaterialCommunityIcons
+                  name="shopping"
+                  size={16}
+                  color={Colors.tint}
+                />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text
+                  style={[styles.settingLabel, { color: Colors.onSurface }]}
+                >
+                  Amazon store
+                </Text>
+                <Text
+                  style={[
+                    styles.settingCaption,
+                    { color: Colors.onSurfaceVariant },
+                  ]}
+                >
+                  Current: {selectedAmazonStoreLabel}
+                </Text>
+              </View>
+              <MaterialCommunityIcons
+                name="chevron-right"
+                size={20}
+                color={Colors.onSurfaceVariant}
+              />
             </Pressable>
             <Pressable
               accessibilityRole="button"
@@ -1754,6 +1821,214 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
           </Pressable>
         </Pressable>
       </Modal>
+
+      <Modal
+        transparent
+        visible={isAmazonStoreModalVisible}
+        animationType="fade"
+        onRequestClose={handleCloseAmazonStoreModal}
+      >
+        <Pressable
+          style={styles.modalOverlay}
+          onPress={handleCloseAmazonStoreModal}
+          accessibilityRole="button"
+        >
+          <Pressable
+            style={[
+              styles.modalCard,
+              MODAL_CARD_STYLE,
+            ]}
+            accessibilityLabel="Amazon store"
+            onPress={() => { }}
+          >
+            <View style={styles.modalHeader}>
+              <Text
+                style={[
+                  styles.modalTitle,
+                  { color: Colors.onSurface, flex: 1 },
+                ]}
+              >
+                Amazon store
+              </Text>
+              <Pressable
+                onPress={handleCloseAmazonStoreModal}
+                accessibilityRole="button"
+                accessibilityLabel="Close"
+              >
+                <MaterialCommunityIcons
+                  name="close"
+                  size={22}
+                  color={Colors.onSurfaceVariant}
+                />
+              </Pressable>
+            </View>
+            <Text
+              style={[
+                styles.settingCaption,
+                { color: Colors.onSurfaceVariant },
+              ]}
+            >
+              Override automatic detection to choose your preferred Amazon store.
+            </Text>
+            <ScrollView
+              style={styles.startScreenModalScroll}
+              contentContainerStyle={styles.startScreenOptionList}
+              showsVerticalScrollIndicator={false}
+              keyboardShouldPersistTaps="handled"
+            >
+              <Pressable
+                key="amazon-store-auto"
+                accessibilityRole="button"
+                accessibilityState={{ selected: amazonStoreOverride == null }}
+                accessibilityLabel="Use automatic Amazon store detection"
+                onPress={() => handleSelectAmazonStore(null)}
+                style={({ pressed }) => [
+                  styles.startScreenOption,
+                  {
+                    borderColor: amazonStoreOverride == null
+                      ? Colors.tint
+                      : Colors.outlineVariant,
+                    backgroundColor: amazonStoreOverride == null
+                      ? Colors.highlightFaint
+                      : Colors.surfaceBright,
+                  },
+                  pressed ? { opacity: 0.85 } : null,
+                ]}
+              >
+                <View style={styles.startScreenTextContainer}>
+                  <Text
+                    style={[
+                      styles.settingLabel,
+                      { color: Colors.onSurface },
+                    ]}
+                  >
+                    Automatic
+                  </Text>
+                  <Text
+                    style={[
+                      styles.settingCaption,
+                      { color: Colors.onSurfaceVariant },
+                    ]}
+                  >
+                    Detected: {detectedAmazonStore ? AMAZON_STORES[detectedAmazonStore].label : 'Unknown'}
+                  </Text>
+                </View>
+                <MaterialCommunityIcons
+                  name={
+                    amazonStoreOverride == null
+                      ? "check-circle"
+                      : "checkbox-blank-circle-outline"
+                  }
+                  size={20}
+                  color={amazonStoreOverride == null ? Colors.tint : Colors.onSurfaceVariant}
+                />
+              </Pressable>
+              {AMAZON_STORE_KEYS.map((storeKey) => {
+                const isSelected = amazonStoreOverride === storeKey;
+                const option = AMAZON_STORES[storeKey];
+
+                return (
+                  <Pressable
+                    key={`amazon-store-${storeKey}`}
+                    accessibilityRole="button"
+                    accessibilityState={{ selected: isSelected }}
+                    accessibilityLabel={`Set Amazon store to ${option.label}`}
+                    onPress={() => handleSelectAmazonStore(storeKey)}
+                    style={({ pressed }) => [
+                      styles.startScreenOption,
+                      {
+                        borderColor: isSelected
+                          ? Colors.tint
+                          : Colors.outlineVariant,
+                        backgroundColor: isSelected
+                          ? Colors.highlightFaint
+                          : Colors.surfaceBright,
+                      },
+                      pressed ? { opacity: 0.85 } : null,
+                    ]}
+                  >
+                    <View style={styles.startScreenTextContainer}>
+                      <Text
+                        style={[
+                          styles.settingLabel,
+                          { color: Colors.onSurface },
+                        ]}
+                      >
+                        {option.label}
+                      </Text>
+                      <Text
+                        style={[
+                          styles.settingCaption,
+                          { color: Colors.onSurfaceVariant },
+                        ]}
+                      >
+                        {option.countryName}
+                      </Text>
+                    </View>
+                    <MaterialCommunityIcons
+                      name={
+                        isSelected
+                          ? "check-circle"
+                          : "checkbox-blank-circle-outline"
+                      }
+                      size={20}
+                      color={isSelected ? Colors.tint : Colors.onSurfaceVariant}
+                    />
+                  </Pressable>
+                );
+              })}
+              <Pressable
+                key="amazon-store-disabled"
+                accessibilityRole="button"
+                accessibilityState={{ selected: amazonStoreOverride === 'DISABLED' }}
+                accessibilityLabel="Disable Amazon link"
+                onPress={() => handleSelectAmazonStore('DISABLED')}
+                style={({ pressed }) => [
+                  styles.startScreenOption,
+                  {
+                    borderColor: amazonStoreOverride === 'DISABLED'
+                      ? Colors.tint
+                      : Colors.outlineVariant,
+                    backgroundColor: amazonStoreOverride === 'DISABLED'
+                      ? Colors.highlightFaint
+                      : Colors.surfaceBright,
+                  },
+                  pressed ? { opacity: 0.85 } : null,
+                ]}
+              >
+                <View style={styles.startScreenTextContainer}>
+                  <Text
+                    style={[
+                      styles.settingLabel,
+                      { color: Colors.onSurface },
+                    ]}
+                  >
+                    Disabled
+                  </Text>
+                  <Text
+                    style={[
+                      styles.settingCaption,
+                      { color: Colors.onSurfaceVariant },
+                    ]}
+                  >
+                    Hide Buy on Amazon link
+                  </Text>
+                </View>
+                <MaterialCommunityIcons
+                  name={
+                    amazonStoreOverride === 'DISABLED'
+                      ? "check-circle"
+                      : "checkbox-blank-circle-outline"
+                  }
+                  size={20}
+                  color={amazonStoreOverride === 'DISABLED' ? Colors.tint : Colors.onSurfaceVariant}
+                />
+              </Pressable>
+            </ScrollView>
+          </Pressable>
+        </Pressable>
+      </Modal>
+
       <Modal
         transparent
         visible={isThemeModalVisible}

@@ -1,5 +1,6 @@
 import { loadInventoryData, type InventoryData } from '@/libs/inventory-data';
 import { type InventoryDeltaSnapshot } from '@/libs/inventory-storage';
+import type { AmazonStoreOverride } from '@/libs/amazon-stores';
 import {
   areStorageRecordsEqual,
   toCocktailStorageRecord,
@@ -152,6 +153,7 @@ export type InventorySnapshotOptions = {
   ratingFilterThreshold: number;
   startScreen: StartScreen;
   appTheme: AppTheme;
+  amazonStoreOverride: AmazonStoreOverride | null;
   customCocktailTags: CocktailTag[];
   customIngredientTags: IngredientTag[];
   onboardingStep: number;
@@ -215,6 +217,7 @@ export function buildInventorySnapshot(
     ratingFilterThreshold: options.ratingFilterThreshold,
     startScreen: options.startScreen,
     appTheme: options.appTheme,
+    amazonStoreOverride: options.amazonStoreOverride,
     onboardingStep: options.onboardingStep,
     onboardingCompleted: options.onboardingCompleted,
   } satisfies InventoryDeltaSnapshot<CocktailStorageRecord, IngredientStorageRecord>;

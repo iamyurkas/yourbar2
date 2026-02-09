@@ -10,6 +10,7 @@ import React, {
   useTransition,
 } from "react";
 import {
+  Linking,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -27,6 +28,8 @@ import { CocktailListRow } from "@/components/CocktailListRow";
 import { PresenceCheck } from "@/components/RowParts";
 import { TagPill } from "@/components/TagPill";
 import { useAppColors } from "@/constants/theme";
+import { AMAZON_STORES } from "@/libs/amazon-stores";
+import { buildAmazonIngredientUrl } from "@/libs/amazon-links";
 import { summariseCocktailAvailability } from "@/libs/cocktail-availability";
 import { resolveImageSource } from "@/libs/image-source";
 import {
@@ -90,6 +93,7 @@ export default function IngredientDetailsScreen() {
     ignoreGarnish,
     allowAllSubstitutes,
     getCocktailRating,
+    effectiveAmazonStore,
   } = useInventory();
 
   const ingredient = useResolvedIngredient(
@@ -316,6 +320,34 @@ export default function IngredientDetailsScreen() {
     startShoppingTransition,
     toggleIngredientShopping,
   ]);
+
+  const amazonLinkLabel = useMemo(() => {
+    if (!effectiveAmazonStore) {
+      return null;
+    }
+
+    return `Buy on ${AMAZON_STORES[effectiveAmazonStore].label}`;
+  }, [effectiveAmazonStore]);
+
+  const handleAmazonAffiliateInfoPress = useCallback(() => {
+    showDialog({
+      title: "Affiliate disclosure",
+      message: "Amazon links in this app are affiliate links. If you make a purchase, we may earn a commission at no extra cost to you.",
+      actions: [{ label: "Got it", variant: "primary" }],
+    });
+  }, [showDialog]);
+
+  const handleBuyOnAmazon = useCallback(() => {
+    const ingredientName = ingredient?.name?.trim();
+    if (!effectiveAmazonStore || !ingredientName) {
+      return;
+    }
+
+    const url = buildAmazonIngredientUrl(effectiveAmazonStore, ingredientName);
+    void Linking.openURL(url).catch((error) => {
+      console.error('Failed to open Amazon link', error);
+    });
+  }, [effectiveAmazonStore, ingredient?.name]);
 
   const handleEditPress = useCallback(() => {
     if (!ingredient) {
@@ -663,35 +695,67 @@ export default function IngredientDetailsScreen() {
               </View>
 
               <View style={styles.statusRow}>
-                <Pressable
-                  onPress={handleToggleShopping}
-                  accessibilityRole="button"
-                  accessibilityLabel={
-                    effectiveIsOnShoppingList
-                      ? "Remove ingredient from shopping list"
-                      : "Add ingredient to shopping list"
-                  }
-                  hitSlop={8}
-                  style={styles.statusIconButton}
-                >
-                  <MaterialIcons
-                    name={
+                {amazonLinkLabel ? (
+                  <View style={styles.amazonLinkGroup}>
+                    <Pressable
+                      onPress={handleBuyOnAmazon}
+                      accessibilityRole="link"
+                      accessibilityLabel={amazonLinkLabel}
+                      hitSlop={8}
+                      style={styles.amazonLinkButton}
+                    >
+                      <Text style={[styles.amazonLinkText, { color: Colors.tint }]}>
+                        {amazonLinkLabel}
+                      </Text>
+                    </Pressable>
+                    <Pressable
+                      onPress={handleAmazonAffiliateInfoPress}
+                      accessibilityRole="button"
+                      accessibilityLabel="Amazon affiliate information"
+                      hitSlop={8}
+                      style={styles.amazonInfoButton}
+                    >
+                      <MaterialCommunityIcons
+                        name="information-outline"
+                        size={18}
+                        color={Colors.onSurfaceVariant}
+                      />
+                    </Pressable>
+                  </View>
+                ) : (
+                  <View style={styles.amazonLinkPlaceholder} />
+                )}
+                <View style={styles.statusControls}>
+                  <Pressable
+                    onPress={handleToggleShopping}
+                    accessibilityRole="button"
+                    accessibilityLabel={
                       effectiveIsOnShoppingList
-                        ? "shopping-cart"
-                        : "add-shopping-cart"
+                        ? "Remove ingredient from shopping list"
+                        : "Add ingredient to shopping list"
                     }
-                    size={24}
-                    color={
-                      effectiveIsOnShoppingList
-                        ? Colors.tint
-                        : Colors.onSurfaceVariant
-                    }
+                    hitSlop={8}
+                    style={styles.statusIconButton}
+                  >
+                    <MaterialIcons
+                      name={
+                        effectiveIsOnShoppingList
+                          ? "shopping-cart"
+                          : "add-shopping-cart"
+                      }
+                      size={24}
+                      color={
+                        effectiveIsOnShoppingList
+                          ? Colors.tint
+                          : Colors.onSurfaceVariant
+                      }
+                    />
+                  </Pressable>
+                  <PresenceCheck
+                    checked={effectiveIsAvailable}
+                    onToggle={handleToggleAvailability}
                   />
-                </Pressable>
-                <PresenceCheck
-                  checked={effectiveIsAvailable}
-                  onToggle={handleToggleAvailability}
-                />
+                </View>
               </View>
             </View>
 
@@ -1111,8 +1175,33 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "stretch",
     width: "100%",
-    justifyContent: "flex-end",
+    justifyContent: "space-between",
     gap: 16,
+  },
+  statusControls: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 16,
+  },
+  amazonLinkGroup: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    alignSelf: "flex-start",
+  },
+  amazonLinkButton: {
+    alignSelf: "flex-start",
+  },
+  amazonInfoButton: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  amazonLinkText: {
+    fontSize: 14,
+    fontWeight: "600",
+  },
+  amazonLinkPlaceholder: {
+    flex: 1,
   },
   statusIconButton: {
     width: 24,
