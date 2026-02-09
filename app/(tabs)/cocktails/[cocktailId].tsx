@@ -14,6 +14,7 @@ import {
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { FormattedText } from "@/components/FormattedText";
 import { resolveGlasswareUriFromId } from "@/assets/image-manifest";
 import { AppImage } from "@/components/AppImage";
 import { HeaderIconButton } from "@/components/HeaderIconButton";
@@ -933,7 +934,7 @@ export default function CocktailDetailsScreen() {
                 <View style={styles.instructionsList}>
                   {isDescriptionExpanded
                     ? descriptionParagraphs.map((paragraph, index) => (
-                        <Text
+                        <FormattedText
                           key={`description-${index}`}
                           style={[
                             styles.instructionsText,
@@ -941,10 +942,10 @@ export default function CocktailDetailsScreen() {
                           ]}
                         >
                           {paragraph}
-                        </Text>
+                        </FormattedText>
                       ))
                     : descriptionParagraphs.slice(0, 1).map((paragraph, index) => (
-                        <Text
+                        <FormattedText
                           key={`description-${index}`}
                           style={[
                             styles.instructionsText,
@@ -958,7 +959,7 @@ export default function CocktailDetailsScreen() {
                           onTextLayout={handleDescriptionLayout}
                         >
                           {paragraph}
-                        </Text>
+                        </FormattedText>
                       ))}
                 </View>
                 {shouldTruncateDescription ? (
@@ -988,7 +989,7 @@ export default function CocktailDetailsScreen() {
                 </Text>
                 <View style={styles.instructionsList}>
                   {instructionsParagraphs.map((paragraph, index) => (
-                    <Text
+                    <FormattedText
                       key={`instruction-${index}`}
                       style={[
                         styles.instructionsText,
@@ -996,7 +997,7 @@ export default function CocktailDetailsScreen() {
                       ]}
                     >
                       {paragraph}
-                    </Text>
+                    </FormattedText>
                   ))}
                 </View>
               </View>
