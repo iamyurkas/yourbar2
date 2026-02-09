@@ -22,14 +22,14 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { AppImage } from "@/components/AppImage";
 import { AppDialog, type DialogOptions } from "@/components/AppDialog";
+import { AppImage } from "@/components/AppImage";
 import { CocktailListRow } from "@/components/CocktailListRow";
 import { PresenceCheck } from "@/components/RowParts";
 import { TagPill } from "@/components/TagPill";
 import { useAppColors } from "@/constants/theme";
-import { AMAZON_STORES } from "@/libs/amazon-stores";
 import { buildAmazonIngredientUrl } from "@/libs/amazon-links";
+import { AMAZON_STORES } from "@/libs/amazon-stores";
 import { summariseCocktailAvailability } from "@/libs/cocktail-availability";
 import { resolveImageSource } from "@/libs/image-source";
 import {
@@ -332,7 +332,7 @@ export default function IngredientDetailsScreen() {
   const handleAmazonAffiliateInfoPress = useCallback(() => {
     showDialog({
       title: "Affiliate disclosure",
-      message: "Amazon links in this app are affiliate links. If you make a purchase, we may earn a commission at no extra cost to you.",
+      message: "Some Amazon links in this app are affiliate links. If you buy something, we may earn a small commission at no extra cost to you.\n\nThis helps support the development of the app.\nThank you for your support!",
       actions: [{ label: "Got it", variant: "primary" }],
     });
   }, [showDialog]);
@@ -787,33 +787,33 @@ export default function IngredientDetailsScreen() {
                 <View style={styles.instructionsList}>
                   {isDescriptionExpanded
                     ? descriptionParagraphs.map((paragraph, index) => (
-                        <Text
-                          key={`description-${index}`}
-                          style={[
-                            styles.instructionsText,
-                            { color: Colors.onSurface },
-                          ]}
-                        >
-                          {paragraph}
-                        </Text>
-                      ))
+                      <Text
+                        key={`description-${index}`}
+                        style={[
+                          styles.instructionsText,
+                          { color: Colors.onSurface },
+                        ]}
+                      >
+                        {paragraph}
+                      </Text>
+                    ))
                     : descriptionParagraphs.slice(0, 1).map((paragraph, index) => (
-                        <Text
-                          key={`description-${index}`}
-                          style={[
-                            styles.instructionsText,
-                            { color: Colors.onSurfaceVariant },
-                          ]}
-                          numberOfLines={
-                            shouldTruncateDescription
-                              ? DESCRIPTION_PREVIEW_LINES
-                              : undefined
-                          }
-                          onTextLayout={handleDescriptionLayout}
-                        >
-                          {paragraph}
-                        </Text>
-                      ))}
+                      <Text
+                        key={`description-${index}`}
+                        style={[
+                          styles.instructionsText,
+                          { color: Colors.onSurfaceVariant },
+                        ]}
+                        numberOfLines={
+                          shouldTruncateDescription
+                            ? DESCRIPTION_PREVIEW_LINES
+                            : undefined
+                        }
+                        onTextLayout={handleDescriptionLayout}
+                      >
+                        {paragraph}
+                      </Text>
+                    ))}
                 </View>
                 {shouldTruncateDescription ? (
                   <Pressable
