@@ -7,6 +7,23 @@ export default ({ config }: { config: ExpoConfig }) => ({
     ...config,
     ...base.expo,
 
+    ios: {
+      ...(config.ios ?? {}),
+      ...(base.expo.ios ?? {}),
+      bundleIdentifier: "com.yourbarapp.free",
+
+      infoPlist: {
+        ...((config.ios ?? {}).infoPlist ?? {}),
+        ...((base.expo.ios ?? {}).infoPlist ?? {}),
+        ITSAppUsesNonExemptEncryption: false,
+      },
+    },
+
+    android: {
+      ...(config.android ?? {}),
+      ...(base.expo.android ?? {}),
+    },
+
     plugins: base.expo.plugins ?? [],
 
     extra: {

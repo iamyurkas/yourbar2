@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "Your Bar (DEV)",
+    "name": "Your Bar (Beta)",
     "slug": "yourbar",
-    "version": "0.9.7",
+    "version": "0.9.8",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "yourbar",
@@ -14,8 +14,8 @@
     },
 
     "android": {
-      "package": "com.yourbarapp.free.dev",
-      "versionCode": 11,
+      "package": "com.yourbarapp.free",
+      "versionCode": 12,
 
       "adaptiveIcon": {
         "backgroundColor": "#4DABF7",
@@ -45,7 +45,6 @@
           }
         }
       ],
-
       [
         "expo-splash-screen",
         {
@@ -59,7 +58,6 @@
           }
         }
       ],
-
       [
         "@sentry/react-native/expo",
         {
