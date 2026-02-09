@@ -695,66 +695,76 @@ export default function IngredientDetailsScreen() {
               </View>
 
               <View style={styles.statusRow}>
-                {amazonLinkLabel ? (
-                  <View style={styles.amazonLinkGroup}>
-                    <Pressable
-                      onPress={handleBuyOnAmazon}
-                      accessibilityRole="link"
-                      accessibilityLabel={amazonLinkLabel}
-                      hitSlop={8}
-                      style={styles.amazonLinkButton}
+                <View style={styles.statusControls}>
+                  <View style={styles.statusControlRow}>
+                    <Text
+                      style={[styles.statusControlLabel, { color: Colors.onSurfaceVariant }]}
                     >
-                      <Text style={[styles.amazonLinkText, { color: Colors.tint }]}>
-                        {amazonLinkLabel}
-                      </Text>
-                    </Pressable>
+                      I have it
+                    </Text>
+                    <PresenceCheck
+                      checked={effectiveIsAvailable}
+                      onToggle={handleToggleAvailability}
+                      color={Colors.tint}
+                    />
+                  </View>
+                  <View style={styles.statusControlRow}>
+                    <Text
+                      style={[styles.statusControlLabel, { color: Colors.onSurfaceVariant }]}
+                    >
+                      To shopping list
+                    </Text>
                     <Pressable
-                      onPress={handleAmazonAffiliateInfoPress}
+                      onPress={handleToggleShopping}
                       accessibilityRole="button"
-                      accessibilityLabel="Amazon affiliate information"
+                      accessibilityLabel={
+                        effectiveIsOnShoppingList
+                          ? "Remove ingredient from shopping list"
+                          : "Add ingredient to shopping list"
+                      }
                       hitSlop={8}
-                      style={styles.amazonInfoButton}
+                      style={styles.statusIconButton}
                     >
-                      <MaterialCommunityIcons
-                        name="information-outline"
-                        size={18}
-                        color={Colors.onSurfaceVariant}
+                      <MaterialIcons
+                        name={
+                          effectiveIsOnShoppingList
+                            ? "shopping-cart"
+                            : "add-shopping-cart"
+                        }
+                        size={24}
+                        color={Colors.tint}
                       />
                     </Pressable>
                   </View>
-                ) : (
-                  <View style={styles.amazonLinkPlaceholder} />
-                )}
-                <View style={styles.statusControls}>
-                  <Pressable
-                    onPress={handleToggleShopping}
-                    accessibilityRole="button"
-                    accessibilityLabel={
-                      effectiveIsOnShoppingList
-                        ? "Remove ingredient from shopping list"
-                        : "Add ingredient to shopping list"
-                    }
-                    hitSlop={8}
-                    style={styles.statusIconButton}
-                  >
-                    <MaterialIcons
-                      name={
-                        effectiveIsOnShoppingList
-                          ? "shopping-cart"
-                          : "add-shopping-cart"
-                      }
-                      size={24}
-                      color={
-                        effectiveIsOnShoppingList
-                          ? Colors.tint
-                          : Colors.onSurfaceVariant
-                      }
-                    />
-                  </Pressable>
-                  <PresenceCheck
-                    checked={effectiveIsAvailable}
-                    onToggle={handleToggleAvailability}
-                  />
+
+                  {amazonLinkLabel ? (
+                    <View style={styles.amazonLinkGroup}>
+                      <Pressable
+                        onPress={handleBuyOnAmazon}
+                        accessibilityRole="link"
+                        accessibilityLabel={amazonLinkLabel}
+                        hitSlop={8}
+                        style={styles.amazonLinkButton}
+                      >
+                        <Text style={[styles.amazonLinkText, { color: Colors.tint }]}>
+                          {amazonLinkLabel}
+                        </Text>
+                      </Pressable>
+                      <Pressable
+                        onPress={handleAmazonAffiliateInfoPress}
+                        accessibilityRole="button"
+                        accessibilityLabel="Amazon affiliate information"
+                        hitSlop={8}
+                        style={styles.amazonInfoButton}
+                      >
+                        <MaterialCommunityIcons
+                          name="information-outline"
+                          size={18}
+                          color={Colors.onSurfaceVariant}
+                        />
+                      </Pressable>
+                    </View>
+                  ) : null}
                 </View>
               </View>
             </View>
@@ -1171,26 +1181,33 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   statusRow: {
-    flexDirection: "row",
-    alignItems: "center",
     alignSelf: "stretch",
     width: "100%",
-    justifyContent: "space-between",
-    gap: 16,
   },
   statusControls: {
+    alignSelf: "stretch",
+    alignItems: "flex-end",
+    gap: 10,
+  },
+  statusControlRow: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 16,
+    justifyContent: "flex-end",
+    gap: 12,
+  },
+  statusControlLabel: {
+    fontSize: 14,
+    fontWeight: "500",
   },
   amazonLinkGroup: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "flex-end",
     gap: 6,
-    alignSelf: "flex-start",
+    alignSelf: "stretch",
   },
   amazonLinkButton: {
-    alignSelf: "flex-start",
+    alignSelf: "center",
   },
   amazonInfoButton: {
     alignItems: "center",
@@ -1199,9 +1216,6 @@ const styles = StyleSheet.create({
   amazonLinkText: {
     fontSize: 14,
     fontWeight: "600",
-  },
-  amazonLinkPlaceholder: {
-    flex: 1,
   },
   statusIconButton: {
     width: 24,
