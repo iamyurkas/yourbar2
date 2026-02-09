@@ -1,6 +1,7 @@
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { StackActions, useNavigation } from "@react-navigation/native";
 import { Image } from "expo-image";
+import * as Haptics from "expo-haptics";
 import * as ImagePicker from "expo-image-picker";
 import { Stack, router, useLocalSearchParams } from "expo-router";
 import React, {
@@ -1155,6 +1156,10 @@ export default function CreateCocktailScreen() {
           }
         }
       }
+
+  if (Platform.OS === "ios") {
+    void Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+  }
 
       setHasUnsavedChanges(false);
       isNavigatingAfterSaveRef.current = true;

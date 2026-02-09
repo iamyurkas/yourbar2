@@ -464,6 +464,15 @@ export default function CocktailsScreen() {
     [allowAllSubstitutes, availableIngredientIds, ignoreGarnish, ingredientLookup],
   );
 
+  const getItemLayout = useCallback(
+    (_: unknown, index: number) => ({
+      length: 80,
+      offset: 80 * index,
+      index,
+    }),
+    [],
+  );
+
   const renderItem = useCallback(
     ({ item }: { item: Cocktail }) => {
       const availability = getAvailabilitySummary(item);
@@ -751,6 +760,7 @@ export default function CocktailsScreen() {
           data={listData}
           keyExtractor={isMyTab ? myTabKeyExtractor : keyExtractor}
           renderItem={isMyTab ? renderMyItem : renderItem}
+          getItemLayout={getItemLayout}
           ItemSeparatorComponent={isMyTab ? renderMySeparator : renderSeparator}
           contentContainerStyle={styles.listContent}
           initialNumToRender={12}

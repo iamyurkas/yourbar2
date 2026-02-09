@@ -1,6 +1,10 @@
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { useHeaderHeight } from "@react-navigation/elements";
 import { Image } from "expo-image";
+import { BlurView } from "expo-blur";
+import { SymbolView } from "expo-symbols";
+import * as Haptics from "expo-haptics";
 import { activateKeepAwakeAsync, deactivateKeepAwake } from "expo-keep-awake";
 import { router, Stack, useLocalSearchParams } from "expo-router";
 import {
@@ -512,6 +516,9 @@ export default function CocktailDetailsScreen() {
       }
 
       const nextRating = displayedRating === value ? 0 : value;
+      if (Platform.OS === "ios") {
+        void Haptics.selectionAsync();
+      }
       setOptimisticRating(nextRating);
 
       startRatingTransition(() => {
@@ -587,6 +594,7 @@ export default function CocktailDetailsScreen() {
 
   const glassSource = useMemo(() => resolveImageSource(glassUri), [glassUri]);
 
+  const headerHeight = useHeaderHeight();
   const displayedImageSource = photoSource ?? glassSource;
   const glassLabel = useMemo(
     () => formatGlassLabel(cocktail?.glassId),
@@ -679,6 +687,16 @@ export default function CocktailDetailsScreen() {
           title: "Cocktail details",
           headerTitleAlign: "center",
           headerStyle: { backgroundColor: Colors.surface },
+          headerTransparent: Platform.OS === "ios",
+          headerBackground: () => (
+            Platform.OS === "ios" ? (
+              <BlurView
+                intensity={80}
+                style={StyleSheet.absoluteFill}
+                tint={Colors.surface === "#F3F3F3" ? "light" : "dark"}
+              />
+            ) : undefined
+          ),
           headerTitleStyle: {
             color: Colors.onSurface,
             fontSize: 16,
@@ -690,11 +708,20 @@ export default function CocktailDetailsScreen() {
               onPress={handleReturn}
               accessibilityLabel="Go back"
             >
-              <MaterialCommunityIcons
-                name="arrow-left"
-                size={22}
-                color={Colors.onSurface}
-              />
+              {Platform.OS === "ios" ? (
+                <SymbolView
+                  name="chevron.left"
+                  size={20}
+                  tintColor={Colors.onSurface}
+                  fallback={<MaterialCommunityIcons name="arrow-left" size={22} color={Colors.onSurface} />}
+                />
+              ) : (
+                <MaterialCommunityIcons
+                  name="arrow-left"
+                  size={22}
+                  color={Colors.onSurface}
+                />
+              )}
             </HeaderIconButton>
           ),
           headerRight: () => (
@@ -703,21 +730,39 @@ export default function CocktailDetailsScreen() {
                 onPress={handleCopyPress}
                 accessibilityLabel="Copy cocktail"
               >
-                <MaterialCommunityIcons
-                  name="content-copy"
-                  size={20}
-                  color={Colors.onSurface}
-                />
+                {Platform.OS === "ios" ? (
+                  <SymbolView
+                    name="doc.on.doc"
+                    size={18}
+                    tintColor={Colors.onSurface}
+                    fallback={<MaterialCommunityIcons name="content-copy" size={20} color={Colors.onSurface} />}
+                  />
+                ) : (
+                  <MaterialCommunityIcons
+                    name="content-copy"
+                    size={20}
+                    color={Colors.onSurface}
+                  />
+                )}
               </HeaderIconButton>
               <HeaderIconButton
                 onPress={handleEditPress}
                 accessibilityLabel="Edit cocktail"
               >
-                <MaterialCommunityIcons
-                  name="pencil-outline"
-                  size={20}
-                  color={Colors.onSurface}
-                />
+                {Platform.OS === "ios" ? (
+                  <SymbolView
+                    name="pencil"
+                    size={18}
+                    tintColor={Colors.onSurface}
+                    fallback={<MaterialCommunityIcons name="pencil-outline" size={20} color={Colors.onSurface} />}
+                  />
+                ) : (
+                  <MaterialCommunityIcons
+                    name="pencil-outline"
+                    size={20}
+                    color={Colors.onSurface}
+                  />
+                )}
               </HeaderIconButton>
             </View>
           ),
@@ -725,7 +770,11 @@ export default function CocktailDetailsScreen() {
       />
 
       <ScrollView
-        contentContainerStyle={styles.content}
+        contentContainerStyle={[
+          styles.content,
+          Platform.OS === "ios" && { paddingTop: headerHeight + 16 },
+          Platform.OS !== "ios" && { paddingTop: 32 },
+        ]}
         showsVerticalScrollIndicator={false}
       >
         {cocktail ? (
@@ -1253,7 +1302,7 @@ const styles = StyleSheet.create({
   },
   content: {
     paddingHorizontal: 24,
-    paddingVertical: 32,
+    paddingBottom: 32,
   },
   section: {
     gap: 24,

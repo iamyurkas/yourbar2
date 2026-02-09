@@ -1,5 +1,8 @@
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { useHeaderHeight } from "@react-navigation/elements";
+import { BlurView } from "expo-blur";
+import { SymbolView } from "expo-symbols";
 import { Stack, router, useLocalSearchParams } from "expo-router";
 import React, {
   useCallback,
@@ -285,6 +288,7 @@ export default function IngredientDetailsScreen() {
   );
 
   const hasMoreCocktails = visibleCocktailCount < cocktailEntries.length;
+  const headerHeight = useHeaderHeight();
 
   const handleToggleAvailability = useCallback(() => {
     if (numericIngredientId != null) {
@@ -616,6 +620,16 @@ export default function IngredientDetailsScreen() {
           title: "Ingredient details",
           headerTitleAlign: "center",
           headerStyle: { backgroundColor: Colors.surface },
+          headerTransparent: Platform.OS === "ios",
+          headerBackground: () => (
+            Platform.OS === "ios" ? (
+              <BlurView
+                intensity={80}
+                style={StyleSheet.absoluteFill}
+                tint={Colors.surface === "#F3F3F3" ? "light" : "dark"}
+              />
+            ) : undefined
+          ),
           headerTitleStyle: {
             color: Colors.onSurface,
             fontSize: 16,
@@ -630,11 +644,20 @@ export default function IngredientDetailsScreen() {
               style={styles.headerButton}
               hitSlop={8}
             >
-              <MaterialCommunityIcons
-                name="arrow-left"
-                size={22}
-                color={Colors.onSurface}
-              />
+              {Platform.OS === "ios" ? (
+                <SymbolView
+                  name="chevron.left"
+                  size={20}
+                  tintColor={Colors.onSurface}
+                  fallback={<MaterialCommunityIcons name="arrow-left" size={22} color={Colors.onSurface} />}
+                />
+              ) : (
+                <MaterialCommunityIcons
+                  name="arrow-left"
+                  size={22}
+                  color={Colors.onSurface}
+                />
+              )}
             </Pressable>
           ),
           headerRight: () => (
@@ -645,18 +668,31 @@ export default function IngredientDetailsScreen() {
               style={styles.headerButton}
               hitSlop={8}
             >
-              <MaterialCommunityIcons
-                name="pencil-outline"
-                size={20}
-                color={Colors.onSurface}
-              />
+              {Platform.OS === "ios" ? (
+                <SymbolView
+                  name="pencil"
+                  size={18}
+                  tintColor={Colors.onSurface}
+                  fallback={<MaterialCommunityIcons name="pencil-outline" size={20} color={Colors.onSurface} />}
+                />
+              ) : (
+                <MaterialCommunityIcons
+                  name="pencil-outline"
+                  size={20}
+                  color={Colors.onSurface}
+                />
+              )}
             </Pressable>
           ),
         }}
       />
 
       <ScrollView
-        contentContainerStyle={styles.content}
+        contentContainerStyle={[
+          styles.content,
+          Platform.OS === "ios" && { paddingTop: headerHeight + 16 },
+          Platform.OS !== "ios" && { paddingTop: 32 },
+        ]}
         showsVerticalScrollIndicator={false}
       >
         {ingredient ? (
@@ -1145,7 +1181,7 @@ const styles = StyleSheet.create({
   },
   content: {
     paddingHorizontal: 24,
-    paddingVertical: 32,
+    paddingBottom: 32,
   },
   section: {
     gap: 24,

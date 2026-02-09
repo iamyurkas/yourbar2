@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
     gap: 16,
-    minHeight: 76,
+    height: 80,
     width: '100%',
     position: 'relative',
   },

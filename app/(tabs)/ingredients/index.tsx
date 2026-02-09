@@ -1,9 +1,11 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import { useScrollToTop } from '@react-navigation/native';
+import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
 import { memo, useCallback, useEffect, useMemo, useRef, useState, useTransition } from 'react';
 import {
   FlatList,
+  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -555,6 +557,10 @@ export default function IngredientsScreen() {
   const handleToggle = useCallback(
     (id: number) => {
       if (id >= 0) {
+        if (Platform.OS === 'ios') {
+          void Haptics.selectionAsync();
+        }
+
         setOptimisticAvailability((previous) => {
           const next = new Map(previous);
           const current = next.has(id)
@@ -575,6 +581,10 @@ export default function IngredientsScreen() {
   const handleShoppingToggle = useCallback(
     (id: number) => {
       if (id >= 0) {
+        if (Platform.OS === 'ios') {
+          void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        }
+
         toggleIngredientShopping(id);
       }
     },
@@ -582,6 +592,15 @@ export default function IngredientsScreen() {
   );
 
   const keyExtractor = useCallback((item: Ingredient) => String(item.id ?? item.name), []);
+
+  const getItemLayout = useCallback(
+    (_: unknown, index: number) => ({
+      length: 80,
+      offset: 80 * index,
+      index,
+    }),
+    [],
+  );
 
   const renderItem = useCallback(
     ({ item }: { item: Ingredient }) => {
@@ -728,6 +747,7 @@ export default function IngredientsScreen() {
           data={filteredIngredients}
           keyExtractor={keyExtractor}
           renderItem={renderItem}
+          getItemLayout={getItemLayout}
           ItemSeparatorComponent={renderSeparator}
           contentContainerStyle={styles.listContent}
           initialNumToRender={16}

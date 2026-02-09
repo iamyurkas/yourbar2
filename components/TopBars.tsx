@@ -1,6 +1,8 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { SymbolView } from 'expo-symbols';
 import React from 'react';
 import {
+  Platform,
   Pressable,
   StyleSheet,
   Text,
@@ -70,10 +72,29 @@ export function SearchTopBar({
         accessibilityLabel="Open navigation"
         onPress={onMenuPress}
         style={styles.iconButton}>
-        <MaterialCommunityIcons name="menu" size={24} color={Colors.onSurface} />
+        {Platform.OS === 'ios' ? (
+          <SymbolView
+            name="line.3.horizontal"
+            size={20}
+            tintColor={Colors.onSurface}
+            fallback={<MaterialCommunityIcons name="menu" size={24} color={Colors.onSurface} />}
+          />
+        ) : (
+          <MaterialCommunityIcons name="menu" size={24} color={Colors.onSurface} />
+        )}
       </Pressable>
       <View style={[styles.searchContainer, { backgroundColor: Colors.surface, borderColor: Colors.background }]}>
-        <MaterialCommunityIcons name="magnify" size={20} color={Colors.onSurface} style={styles.searchIcon} />
+        {Platform.OS === 'ios' ? (
+          <SymbolView
+            name="magnifyingglass"
+            size={18}
+            tintColor={Colors.onSurface}
+            style={styles.searchIcon}
+            fallback={<MaterialCommunityIcons name="magnify" size={20} color={Colors.onSurface} style={styles.searchIcon} />}
+          />
+        ) : (
+          <MaterialCommunityIcons name="magnify" size={20} color={Colors.onSurface} style={styles.searchIcon} />
+        )}
         <TextInput
           value={value}
           onChangeText={onChangeText}
@@ -89,7 +110,16 @@ export function SearchTopBar({
             accessibilityLabel="Clear search query"
             onPress={() => onChangeText('')}
             style={styles.clearButton}>
-            <MaterialCommunityIcons name="close" size={18} color={Colors.onSurface} />
+            {Platform.OS === 'ios' ? (
+              <SymbolView
+                name="xmark.circle.fill"
+                size={16}
+                tintColor={Colors.onSurfaceVariant}
+                fallback={<MaterialCommunityIcons name="close" size={18} color={Colors.onSurface} />}
+              />
+            ) : (
+              <MaterialCommunityIcons name="close" size={18} color={Colors.onSurface} />
+            )}
           </Pressable>
         ) : null}
       </View>
@@ -105,11 +135,24 @@ export function SearchTopBar({
             ? { backgroundColor: `${Colors.tint}1A` }
             : null,
         ]}>
-        <MaterialCommunityIcons
-          name="filter-variant"
-          size={24}
-          color={filterActive ? Colors.tint : Colors.icon}
-        />
+        {Platform.OS === 'ios' ? (
+          <SymbolView
+            name={filterActive ? "line.3.horizontal.decrease.circle.fill" : "line.3.horizontal.decrease.circle"}
+            size={22}
+            tintColor={filterActive ? Colors.tint : Colors.icon}
+            fallback={<MaterialCommunityIcons
+              name="filter-variant"
+              size={24}
+              color={filterActive ? Colors.tint : Colors.icon}
+            />}
+          />
+        ) : (
+          <MaterialCommunityIcons
+            name="filter-variant"
+            size={24}
+            color={filterActive ? Colors.tint : Colors.icon}
+          />
+        )}
       </Pressable>
     </View>
   );

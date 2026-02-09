@@ -1,6 +1,7 @@
 import { useAppColors } from '@/constants/theme';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { SymbolView } from 'expo-symbols';
+import { Platform, Pressable, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type FabAddProps = {
@@ -25,7 +26,16 @@ export function FabAdd({ label = 'Add', onPress }: FabAddProps) {
         <View
           style={[styles.fab, { backgroundColor: Colors.primaryContainer },]}
         >
-          <MaterialCommunityIcons name="plus" size={26} color={Colors.primary} />
+          {Platform.OS === 'ios' ? (
+            <SymbolView
+              name="plus"
+              size={24}
+              tintColor={Colors.primary}
+              fallback={<MaterialCommunityIcons name="plus" size={26} color={Colors.primary} />}
+            />
+          ) : (
+            <MaterialCommunityIcons name="plus" size={26} color={Colors.primary} />
+          )}
         </View>
       </Pressable>
     </View>

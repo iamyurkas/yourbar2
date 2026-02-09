@@ -1,6 +1,7 @@
+import { BlurView } from 'expo-blur';
 import { Tabs } from 'expo-router';
 import { useCallback, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import CocktailIcon from '@/assets/images/cocktails.svg';
@@ -81,10 +82,18 @@ export default function TabLayout() {
             alignItems: 'center',
           },
           tabBarBackground: () => (
-            <View style={styles.tabBarBackground}>
-              <View style={[styles.tabBarSurface, { backgroundColor: Colors.surface }]} />
-              <View style={[styles.tabBarInset, { height: insets.bottom, backgroundColor: Colors.surface }]} />
-            </View>
+            Platform.OS === 'ios' ? (
+              <BlurView
+                intensity={80}
+                style={StyleSheet.absoluteFill}
+                tint={Colors.surface === '#F3F3F3' ? 'light' : 'dark'}
+              />
+            ) : (
+              <View style={styles.tabBarBackground}>
+                <View style={[styles.tabBarSurface, { backgroundColor: Colors.surface }]} />
+                <View style={[styles.tabBarInset, { height: insets.bottom, backgroundColor: Colors.surface }]} />
+              </View>
+            )
           ),
         }}>
         {TAB_SCREENS.map(({ name, title, icon, onTabPress }) => (
