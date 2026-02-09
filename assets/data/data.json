@@ -25218,7 +25218,7 @@
       "id": 421,
       "name": "Spicy Fifty",
       "description": "An elegant yet bold vanilla vodka sour that perfectly balances the floral notes of elderflower with the sharp heat of fresh red chili.",
-      "instructions": "1. Place a slice of red chili pepper in the bottom of a cocktail shaker and muddle gently to release the heat.\n2. Add the vanilla vodka, elderflower cordial, lime juice, and honey syrup.\n3. Fill the shaker with ice and shake hard until well-chilled.\n4. Fine strain the mixture into a chilled cocktail glass to remove chili seeds and pulp.\n5. Garnish with a fresh red chili slice.",
+      "instructions": "1. Place a slice of red chili pepper in the bottom of a cocktail shaker and muddle gently to release the heat.\n2. Add the vanilla vodka, elderflower cordial, lemon juice, and honey syrup.\n3. Fill the shaker with ice and shake hard until well-chilled.\n4. Fine strain the mixture into a chilled cocktail glass to remove chili seeds and pulp.\n5. Garnish with a fresh red chili slice.",
       "photoUri": "assets/cocktails/421-spicy-fifty.jpg",
       "glassId": "coupe",
       "methodIds": ["muddle", "shake"],
