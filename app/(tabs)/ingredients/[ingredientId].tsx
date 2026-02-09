@@ -713,8 +713,8 @@ export default function IngredientDetailsScreen() {
                       style={[styles.statusControlLabel, { color: Colors.onSurfaceVariant }]}
                     >
                       {effectiveIsOnShoppingList
-                        ? "remove from shopping cart"
-                        : "To shopping list"}
+                        ? "Remove from shopping list"
+                        : "Add to shopping list"}
                     </Text>
                     <Pressable
                       onPress={handleToggleShopping}
@@ -761,7 +761,7 @@ export default function IngredientDetailsScreen() {
                       >
                         <MaterialCommunityIcons
                           name="information-outline"
-                          size={20}
+                          size={22}
                           color={Colors.onSurfaceVariant}
                         />
                       </Pressable>
