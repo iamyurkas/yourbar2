@@ -4,6 +4,7 @@ import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { TAG_COLORS } from '@/constants/tag-colors';
 import { loadInventoryData, reloadInventoryData } from '@/libs/inventory-data';
+import { AMAZON_STORES, detectAmazonStoreFromLocale, getEffectiveAmazonStore, type AmazonStoreKey } from '@/libs/amazon-stores';
 import {
   clearInventorySnapshot,
   loadInventorySnapshot,
@@ -91,6 +92,8 @@ declare global {
   // eslint-disable-next-line no-var
   var __yourbarInventoryAppTheme: AppTheme | undefined;
   // eslint-disable-next-line no-var
+  var __yourbarInventoryAmazonStoreOverride: AmazonStoreKey | null | undefined;
+  // eslint-disable-next-line no-var
   var __yourbarInventoryCustomCocktailTags: CocktailTag[] | undefined;
   // eslint-disable-next-line no-var
   var __yourbarInventoryCustomIngredientTags: IngredientTag[] | undefined;
@@ -137,6 +140,16 @@ function sanitizeAppTheme(value?: string | null): AppTheme {
     default:
       return DEFAULT_APP_THEME;
   }
+}
+
+
+function sanitizeAmazonStoreOverride(value?: string | null): AmazonStoreKey | null {
+  if (!value) {
+    return null;
+  }
+
+  const normalized = value.toUpperCase();
+  return normalized in AMAZON_STORES ? (normalized as AmazonStoreKey) : null;
 }
 
 const DEFAULT_TAG_COLOR = TAG_COLORS[0];
@@ -234,6 +247,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   const [appTheme, setAppTheme] = useState<AppTheme>(
     () => globalThis.__yourbarInventoryAppTheme ?? DEFAULT_APP_THEME,
   );
+  const [amazonStoreOverride, setAmazonStoreOverride] = useState<AmazonStoreKey | null>(
+    () => sanitizeAmazonStoreOverride(globalThis.__yourbarInventoryAmazonStoreOverride),
+  );
   const [customCocktailTags, setCustomCocktailTags] = useState<CocktailTag[]>(() =>
     sanitizeCustomTags(globalThis.__yourbarInventoryCustomCocktailTags, DEFAULT_TAG_COLOR),
   );
@@ -245,6 +261,11 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   );
   const [onboardingCompleted, setOnboardingCompleted] = useState<boolean>(
     () => globalThis.__yourbarInventoryOnboardingCompleted ?? false,
+  );
+  const detectedAmazonStore = useMemo(() => detectAmazonStoreFromLocale(), []);
+  const effectiveAmazonStore = useMemo(
+    () => getEffectiveAmazonStore(amazonStoreOverride, detectedAmazonStore),
+    [amazonStoreOverride, detectedAmazonStore],
   );
   const lastPersistedSnapshot = useRef<string | undefined>(undefined);
   const inventoryDelta = useMemo(
@@ -265,6 +286,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       ratingFilterThreshold: number;
       startScreen: StartScreen;
       appTheme: AppTheme;
+      amazonStoreOverride: AmazonStoreKey | null;
       customCocktailTags: CocktailTag[];
       customIngredientTags: IngredientTag[];
       onboardingStep: number;
@@ -282,6 +304,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       setRatingFilterThreshold(bootstrap.ratingFilterThreshold);
       setStartScreen(bootstrap.startScreen);
       setAppTheme(bootstrap.appTheme);
+      setAmazonStoreOverride(bootstrap.amazonStoreOverride);
       setCustomCocktailTags(bootstrap.customCocktailTags);
       setCustomIngredientTags(bootstrap.customIngredientTags);
       setOnboardingStep(bootstrap.onboardingStep);
@@ -317,6 +340,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           );
           const nextStartScreen = sanitizeStartScreen(stored.startScreen);
           const nextAppTheme = sanitizeAppTheme(stored.appTheme);
+          const nextAmazonStoreOverride = sanitizeAmazonStoreOverride(stored.amazonStoreOverride);
           const nextCustomCocktailTags = sanitizeCustomTags(stored.customCocktailTags, DEFAULT_TAG_COLOR);
           const nextCustomIngredientTags = sanitizeCustomTags(stored.customIngredientTags, DEFAULT_TAG_COLOR);
           const nextOnboardingStep = 0;
@@ -335,6 +359,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             ratingFilterThreshold: nextRatingFilterThreshold,
             startScreen: nextStartScreen,
             appTheme: nextAppTheme,
+            amazonStoreOverride: nextAmazonStoreOverride,
             customCocktailTags: nextCustomCocktailTags,
             customIngredientTags: nextCustomIngredientTags,
             onboardingStep: nextOnboardingStep,
@@ -362,6 +387,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             ratingFilterThreshold: 1,
             startScreen: DEFAULT_START_SCREEN,
             appTheme: DEFAULT_APP_THEME,
+            amazonStoreOverride: null,
             customCocktailTags: [],
             customIngredientTags: [],
             onboardingStep: 1,
@@ -399,6 +425,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     globalThis.__yourbarInventoryRatingFilterThreshold = ratingFilterThreshold;
     globalThis.__yourbarInventoryStartScreen = startScreen;
     globalThis.__yourbarInventoryAppTheme = appTheme;
+    globalThis.__yourbarInventoryAmazonStoreOverride = amazonStoreOverride;
     globalThis.__yourbarInventoryCustomCocktailTags = customCocktailTags;
     globalThis.__yourbarInventoryCustomIngredientTags = customIngredientTags;
     globalThis.__yourbarInventoryOnboardingStep = onboardingStep;
@@ -416,6 +443,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       ratingFilterThreshold,
       startScreen,
       appTheme,
+      amazonStoreOverride,
       customCocktailTags,
       customIngredientTags,
       onboardingStep,
@@ -446,6 +474,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     ratingFilterThreshold,
     startScreen,
     appTheme,
+    amazonStoreOverride,
     customCocktailTags,
     customIngredientTags,
     onboardingStep,
@@ -1447,6 +1476,10 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     setAppTheme(sanitizeAppTheme(value));
   }, []);
 
+  const handleSetAmazonStoreOverride = useCallback((value: AmazonStoreKey | null) => {
+    setAmazonStoreOverride(value == null ? null : sanitizeAmazonStoreOverride(value));
+  }, []);
+
   const completeOnboarding = useCallback(() => {
     setOnboardingCompleted(true);
     setOnboardingStep(0);
@@ -1787,6 +1820,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       ratingFilterThreshold,
       startScreen,
       appTheme,
+      amazonStoreOverride,
+      detectedAmazonStore,
+      effectiveAmazonStore,
       onboardingStep,
       onboardingCompleted,
     }),
@@ -1799,6 +1835,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       ratingFilterThreshold,
       startScreen,
       appTheme,
+      amazonStoreOverride,
+      detectedAmazonStore,
+      effectiveAmazonStore,
       onboardingStep,
       onboardingCompleted,
     ],
@@ -1835,6 +1874,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       setRatingFilterThreshold: handleSetRatingFilterThreshold,
       setStartScreen: handleSetStartScreen,
       setAppTheme: handleSetAppTheme,
+      setAmazonStoreOverride: handleSetAmazonStoreOverride,
       setOnboardingStep,
       completeOnboarding,
       restartOnboarding,
@@ -1869,6 +1909,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       handleSetRatingFilterThreshold,
       handleSetStartScreen,
       handleSetAppTheme,
+      handleSetAmazonStoreOverride,
       setOnboardingStep,
       completeOnboarding,
       restartOnboarding,

@@ -1,5 +1,6 @@
 import { createContext, useContext } from 'react';
 
+import type { AmazonStoreKey } from '@/libs/amazon-stores';
 import type { AppTheme, StartScreen } from '@/providers/inventory-types';
 
 export type InventorySettingsContextValue = {
@@ -11,6 +12,9 @@ export type InventorySettingsContextValue = {
   ratingFilterThreshold: number;
   startScreen: StartScreen;
   appTheme: AppTheme;
+  amazonStoreOverride: AmazonStoreKey | null;
+  detectedAmazonStore: AmazonStoreKey | null;
+  effectiveAmazonStore: AmazonStoreKey | null;
   onboardingStep: number;
   onboardingCompleted: boolean;
 };

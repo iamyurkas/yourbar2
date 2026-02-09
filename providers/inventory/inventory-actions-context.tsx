@@ -1,5 +1,6 @@
 import { createContext, useContext } from 'react';
 
+import type { AmazonStoreKey } from '@/libs/amazon-stores';
 import type {
   Cocktail,
   CocktailTag,
@@ -43,6 +44,7 @@ export type InventoryActionsContextValue = {
   setRatingFilterThreshold: (value: number) => void;
   setStartScreen: (value: StartScreen) => void;
   setAppTheme: (value: AppTheme) => void;
+  setAmazonStoreOverride: (value: AmazonStoreKey | null) => void;
   setOnboardingStep: (step: number) => void;
   completeOnboarding: () => void;
   restartOnboarding: () => void;
