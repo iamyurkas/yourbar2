@@ -1962,7 +1962,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                           { color: Colors.onSurfaceVariant },
                         ]}
                       >
-                        {storeKey}
+                        {option.countryName}
                       </Text>
                     </View>
                     <MaterialCommunityIcons
