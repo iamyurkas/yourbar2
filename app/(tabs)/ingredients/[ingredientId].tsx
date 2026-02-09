@@ -321,8 +321,6 @@ export default function IngredientDetailsScreen() {
     toggleIngredientShopping,
   ]);
 
-
-
   const amazonLinkLabel = useMemo(() => {
     if (!effectiveAmazonStore) {
       return null;
@@ -330,6 +328,14 @@ export default function IngredientDetailsScreen() {
 
     return `Buy on ${AMAZON_STORES[effectiveAmazonStore].label}`;
   }, [effectiveAmazonStore]);
+
+  const handleAmazonAffiliateInfoPress = useCallback(() => {
+    showDialog({
+      title: "Affiliate disclosure",
+      message: "Amazon links in this app are affiliate links. If you make a purchase, we may earn a commission at no extra cost to you.",
+      actions: [{ label: "Got it", variant: "primary" }],
+    });
+  }, [showDialog]);
 
   const handleBuyOnAmazon = useCallback(() => {
     const ingredientName = ingredient?.name?.trim();
@@ -690,17 +696,32 @@ export default function IngredientDetailsScreen() {
 
               <View style={styles.statusRow}>
                 {amazonLinkLabel ? (
-                  <Pressable
-                    onPress={handleBuyOnAmazon}
-                    accessibilityRole="link"
-                    accessibilityLabel={amazonLinkLabel}
-                    hitSlop={8}
-                    style={styles.amazonLinkButton}
-                  >
-                    <Text style={[styles.amazonLinkText, { color: Colors.tint }]}>
-                      {amazonLinkLabel}
-                    </Text>
-                  </Pressable>
+                  <View style={styles.amazonLinkGroup}>
+                    <Pressable
+                      onPress={handleBuyOnAmazon}
+                      accessibilityRole="link"
+                      accessibilityLabel={amazonLinkLabel}
+                      hitSlop={8}
+                      style={styles.amazonLinkButton}
+                    >
+                      <Text style={[styles.amazonLinkText, { color: Colors.tint }]}>
+                        {amazonLinkLabel}
+                      </Text>
+                    </Pressable>
+                    <Pressable
+                      onPress={handleAmazonAffiliateInfoPress}
+                      accessibilityRole="button"
+                      accessibilityLabel="Amazon affiliate information"
+                      hitSlop={8}
+                      style={styles.amazonInfoButton}
+                    >
+                      <MaterialCommunityIcons
+                        name="information-outline"
+                        size={18}
+                        color={Colors.onSurfaceVariant}
+                      />
+                    </Pressable>
+                  </View>
                 ) : (
                   <View style={styles.amazonLinkPlaceholder} />
                 )}
@@ -1162,8 +1183,18 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 16,
   },
+  amazonLinkGroup: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    alignSelf: "flex-start",
+  },
   amazonLinkButton: {
     alignSelf: "flex-start",
+  },
+  amazonInfoButton: {
+    alignItems: "center",
+    justifyContent: "center",
   },
   amazonLinkText: {
     fontSize: 14,
