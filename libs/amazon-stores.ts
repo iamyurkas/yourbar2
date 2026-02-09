@@ -1,3 +1,5 @@
+export type AmazonStoreOverride = AmazonStoreKey | 'DISABLED';
+
 export type AmazonStoreKey =
   | 'US'
   | 'UK'
@@ -93,9 +95,13 @@ export function detectAmazonStoreFromLocale(): AmazonStoreKey | null {
 }
 
 export function getEffectiveAmazonStore(
-  amazonStoreOverride: AmazonStoreKey | null,
+  amazonStoreOverride: AmazonStoreOverride | null,
   detectedAmazonStore: AmazonStoreKey | null,
 ): AmazonStoreKey | null {
+  if (amazonStoreOverride === 'DISABLED') {
+    return null;
+  }
+
   if (amazonStoreOverride) {
     return amazonStoreOverride;
   }

@@ -30,7 +30,7 @@ import { AppDialog, type DialogOptions } from "@/components/AppDialog";
 import { TagEditorModal } from "@/components/TagEditorModal";
 import { TagPill } from "@/components/TagPill";
 import { useAppColors } from "@/constants/theme";
-import { AMAZON_STORES, AMAZON_STORE_KEYS, type AmazonStoreKey } from "@/libs/amazon-stores";
+import { AMAZON_STORES, AMAZON_STORE_KEYS, type AmazonStoreOverride } from "@/libs/amazon-stores";
 import { base64ToBytes, createTarArchive } from "@/libs/archive-utils";
 import { buildPhotoBaseName } from "@/libs/photo-utils";
 import { useInventory, type AppTheme, type StartScreen } from "@/providers/inventory-provider";
@@ -441,7 +441,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     setAmazonStoreModalVisible(false);
   };
 
-  const handleSelectAmazonStore = (value: AmazonStoreKey | null) => {
+  const handleSelectAmazonStore = (value: AmazonStoreOverride | null) => {
     setAmazonStoreOverride(value);
     scheduleModalClose(amazonStoreModalCloseTimeout, setAmazonStoreModalVisible);
   };
@@ -986,40 +986,6 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               </View>
             </Pressable>
             <Pressable
-              accessibilityRole="button"
-              accessibilityLabel="Set Amazon store"
-              onPress={handleAmazonStorePress}
-              style={[styles.settingRow, SURFACE_ROW_STYLE]}
-            >
-              <View style={[styles.checkbox, SURFACE_ICON_STYLE]}>
-                <MaterialCommunityIcons
-                  name="shopping"
-                  size={16}
-                  color={Colors.tint}
-                />
-              </View>
-              <View style={styles.settingTextContainer}>
-                <Text
-                  style={[styles.settingLabel, { color: Colors.onSurface }]}
-                >
-                  Amazon store
-                </Text>
-                <Text
-                  style={[
-                    styles.settingCaption,
-                    { color: Colors.onSurfaceVariant },
-                  ]}
-                >
-                  Current: {selectedAmazonStoreLabel}
-                </Text>
-              </View>
-              <MaterialCommunityIcons
-                name="chevron-right"
-                size={20}
-                color={Colors.onSurfaceVariant}
-              />
-            </Pressable>
-            <Pressable
               accessibilityRole="checkbox"
               accessibilityState={{ checked: shakerSmartFilteringEnabled }}
               onPress={toggleShakerSmartFiltering}
@@ -1197,6 +1163,40 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   Create or update your tags
                 </Text>
               </View>
+            </Pressable>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Set Amazon store"
+              onPress={handleAmazonStorePress}
+              style={[styles.settingRow, SURFACE_ROW_STYLE]}
+            >
+              <View style={[styles.checkbox, SURFACE_ICON_STYLE]}>
+                <MaterialCommunityIcons
+                  name="shopping"
+                  size={16}
+                  color={Colors.tint}
+                />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text
+                  style={[styles.settingLabel, { color: Colors.onSurface }]}
+                >
+                  Amazon store
+                </Text>
+                <Text
+                  style={[
+                    styles.settingCaption,
+                    { color: Colors.onSurfaceVariant },
+                  ]}
+                >
+                  Current: {selectedAmazonStoreLabel}
+                </Text>
+              </View>
+              <MaterialCommunityIcons
+                name="chevron-right"
+                size={20}
+                color={Colors.onSurfaceVariant}
+              />
             </Pressable>
             <Pressable
               accessibilityRole="button"
@@ -1977,6 +1977,53 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   </Pressable>
                 );
               })}
+              <Pressable
+                key="amazon-store-disabled"
+                accessibilityRole="button"
+                accessibilityState={{ selected: amazonStoreOverride === 'DISABLED' }}
+                accessibilityLabel="Disable Amazon link"
+                onPress={() => handleSelectAmazonStore('DISABLED')}
+                style={({ pressed }) => [
+                  styles.startScreenOption,
+                  {
+                    borderColor: amazonStoreOverride === 'DISABLED'
+                      ? Colors.tint
+                      : Colors.outlineVariant,
+                    backgroundColor: amazonStoreOverride === 'DISABLED'
+                      ? Colors.highlightFaint
+                      : Colors.surfaceBright,
+                  },
+                  pressed ? { opacity: 0.85 } : null,
+                ]}
+              >
+                <View style={styles.startScreenTextContainer}>
+                  <Text
+                    style={[
+                      styles.settingLabel,
+                      { color: Colors.onSurface },
+                    ]}
+                  >
+                    Disabled
+                  </Text>
+                  <Text
+                    style={[
+                      styles.settingCaption,
+                      { color: Colors.onSurfaceVariant },
+                    ]}
+                  >
+                    Hide Buy on Amazon link
+                  </Text>
+                </View>
+                <MaterialCommunityIcons
+                  name={
+                    amazonStoreOverride === 'DISABLED'
+                      ? "check-circle"
+                      : "checkbox-blank-circle-outline"
+                  }
+                  size={20}
+                  color={amazonStoreOverride === 'DISABLED' ? Colors.tint : Colors.onSurfaceVariant}
+                />
+              </Pressable>
             </ScrollView>
           </Pressable>
         </Pressable>

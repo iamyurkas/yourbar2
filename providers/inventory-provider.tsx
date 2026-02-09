@@ -4,7 +4,7 @@ import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { TAG_COLORS } from '@/constants/tag-colors';
 import { loadInventoryData, reloadInventoryData } from '@/libs/inventory-data';
-import { AMAZON_STORES, detectAmazonStoreFromLocale, getEffectiveAmazonStore, type AmazonStoreKey } from '@/libs/amazon-stores';
+import { AMAZON_STORES, detectAmazonStoreFromLocale, getEffectiveAmazonStore, type AmazonStoreKey, type AmazonStoreOverride } from '@/libs/amazon-stores';
 import {
   clearInventorySnapshot,
   loadInventorySnapshot,
@@ -92,7 +92,7 @@ declare global {
   // eslint-disable-next-line no-var
   var __yourbarInventoryAppTheme: AppTheme | undefined;
   // eslint-disable-next-line no-var
-  var __yourbarInventoryAmazonStoreOverride: AmazonStoreKey | null | undefined;
+  var __yourbarInventoryAmazonStoreOverride: AmazonStoreOverride | null | undefined;
   // eslint-disable-next-line no-var
   var __yourbarInventoryCustomCocktailTags: CocktailTag[] | undefined;
   // eslint-disable-next-line no-var
@@ -143,12 +143,16 @@ function sanitizeAppTheme(value?: string | null): AppTheme {
 }
 
 
-function sanitizeAmazonStoreOverride(value?: string | null): AmazonStoreKey | null {
+function sanitizeAmazonStoreOverride(value?: string | null): AmazonStoreOverride | null {
   if (!value) {
     return null;
   }
 
   const normalized = value.toUpperCase();
+  if (normalized === 'DISABLED') {
+    return 'DISABLED';
+  }
+
   return normalized in AMAZON_STORES ? (normalized as AmazonStoreKey) : null;
 }
 
@@ -247,7 +251,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   const [appTheme, setAppTheme] = useState<AppTheme>(
     () => globalThis.__yourbarInventoryAppTheme ?? DEFAULT_APP_THEME,
   );
-  const [amazonStoreOverride, setAmazonStoreOverride] = useState<AmazonStoreKey | null>(
+  const [amazonStoreOverride, setAmazonStoreOverride] = useState<AmazonStoreOverride | null>(
     () => sanitizeAmazonStoreOverride(globalThis.__yourbarInventoryAmazonStoreOverride),
   );
   const [customCocktailTags, setCustomCocktailTags] = useState<CocktailTag[]>(() =>
@@ -286,7 +290,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       ratingFilterThreshold: number;
       startScreen: StartScreen;
       appTheme: AppTheme;
-      amazonStoreOverride: AmazonStoreKey | null;
+      amazonStoreOverride: AmazonStoreOverride | null;
       customCocktailTags: CocktailTag[];
       customIngredientTags: IngredientTag[];
       onboardingStep: number;
@@ -1476,7 +1480,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     setAppTheme(sanitizeAppTheme(value));
   }, []);
 
-  const handleSetAmazonStoreOverride = useCallback((value: AmazonStoreKey | null) => {
+  const handleSetAmazonStoreOverride = useCallback((value: AmazonStoreOverride | null) => {
     setAmazonStoreOverride(value == null ? null : sanitizeAmazonStoreOverride(value));
   }, []);
 
