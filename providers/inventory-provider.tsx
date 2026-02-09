@@ -45,6 +45,7 @@ import {
   useInventorySettings,
 } from '@/providers/inventory/inventory-settings-context';
 import {
+  type AmazonStorePreference,
   type AppTheme,
   type BaseCocktailRecord,
   type Cocktail,
@@ -64,6 +65,7 @@ import {
 
 const DEFAULT_START_SCREEN: StartScreen = 'cocktails_all';
 const DEFAULT_APP_THEME: AppTheme = 'light';
+const DEFAULT_AMAZON_STORE_PREFERENCE: AmazonStorePreference = 'auto';
 
 declare global {
   // eslint-disable-next-line no-var
@@ -98,6 +100,8 @@ declare global {
   var __yourbarInventoryOnboardingStep: number | undefined;
   // eslint-disable-next-line no-var
   var __yourbarInventoryOnboardingCompleted: boolean | undefined;
+  // eslint-disable-next-line no-var
+  var __yourbarInventoryAmazonStorePreference: AmazonStorePreference | undefined;
 }
 
 function createIngredientIdSet(values?: readonly number[] | null): Set<number> {
@@ -136,6 +140,18 @@ function sanitizeAppTheme(value?: string | null): AppTheme {
       return value;
     default:
       return DEFAULT_APP_THEME;
+  }
+}
+
+function sanitizeAmazonStorePreference(value?: string | null): AmazonStorePreference {
+  switch (value) {
+    case 'auto':
+    case 'us':
+    case 'uk':
+    case 'off':
+      return value;
+    default:
+      return DEFAULT_AMAZON_STORE_PREFERENCE;
   }
 }
 
@@ -246,6 +262,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   const [onboardingCompleted, setOnboardingCompleted] = useState<boolean>(
     () => globalThis.__yourbarInventoryOnboardingCompleted ?? false,
   );
+  const [amazonStorePreference, setAmazonStorePreference] = useState<AmazonStorePreference>(
+    () => globalThis.__yourbarInventoryAmazonStorePreference ?? DEFAULT_AMAZON_STORE_PREFERENCE,
+  );
   const lastPersistedSnapshot = useRef<string | undefined>(undefined);
   const inventoryDelta = useMemo(
     () => (inventoryState ? buildInventoryDelta(inventoryState, baseMaps) : null),
@@ -269,6 +288,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       customIngredientTags: IngredientTag[];
       onboardingStep: number;
       onboardingCompleted: boolean;
+      amazonStorePreference: AmazonStorePreference;
     }) => {
       setInventoryState(bootstrap.inventoryState);
       setAvailableIngredientIds(bootstrap.availableIngredientIds);
@@ -286,6 +306,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       setCustomIngredientTags(bootstrap.customIngredientTags);
       setOnboardingStep(bootstrap.onboardingStep);
       setOnboardingCompleted(bootstrap.onboardingCompleted);
+      setAmazonStorePreference(bootstrap.amazonStorePreference);
     },
     [],
   );
@@ -321,6 +342,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           const nextCustomIngredientTags = sanitizeCustomTags(stored.customIngredientTags, DEFAULT_TAG_COLOR);
           const nextOnboardingStep = 0;
           const nextOnboardingCompleted = stored.onboardingCompleted ?? false;
+          const nextAmazonStorePreference = sanitizeAmazonStorePreference(stored.amazonStorePreference);
 
           applyInventoryBootstrap({
             inventoryState: nextInventoryState,
@@ -339,6 +361,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             customIngredientTags: nextCustomIngredientTags,
             onboardingStep: nextOnboardingStep,
             onboardingCompleted: nextOnboardingCompleted,
+            amazonStorePreference: nextAmazonStorePreference,
           });
           return;
         }
@@ -366,6 +389,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             customIngredientTags: [],
             onboardingStep: 1,
             onboardingCompleted: false,
+            amazonStorePreference: DEFAULT_AMAZON_STORE_PREFERENCE,
           });
         }
       } catch (error) {
@@ -403,6 +427,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     globalThis.__yourbarInventoryCustomIngredientTags = customIngredientTags;
     globalThis.__yourbarInventoryOnboardingStep = onboardingStep;
     globalThis.__yourbarInventoryOnboardingCompleted = onboardingCompleted;
+    globalThis.__yourbarInventoryAmazonStorePreference = amazonStorePreference;
 
     const snapshot = buildInventorySnapshot(inventoryDelta, {
       availableIngredientIds,
@@ -420,6 +445,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       customIngredientTags,
       onboardingStep,
       onboardingCompleted,
+      amazonStorePreference,
     });
     const serialized = JSON.stringify(snapshot);
 
@@ -450,6 +476,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     customIngredientTags,
     onboardingStep,
     onboardingCompleted,
+    amazonStorePreference,
   ]);
 
   const cocktails = useMemo(
@@ -1447,6 +1474,10 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     setAppTheme(sanitizeAppTheme(value));
   }, []);
 
+  const handleSetAmazonStorePreference = useCallback((value: AmazonStorePreference) => {
+    setAmazonStorePreference(sanitizeAmazonStorePreference(value));
+  }, []);
+
   const completeOnboarding = useCallback(() => {
     setOnboardingCompleted(true);
     setOnboardingStep(0);
@@ -1789,6 +1820,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       appTheme,
       onboardingStep,
       onboardingCompleted,
+      amazonStorePreference,
     }),
     [
       ignoreGarnish,
@@ -1801,6 +1833,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       appTheme,
       onboardingStep,
       onboardingCompleted,
+      amazonStorePreference,
     ],
   );
 
@@ -1836,6 +1869,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       setStartScreen: handleSetStartScreen,
       setAppTheme: handleSetAppTheme,
       setOnboardingStep,
+      setAmazonStorePreference: handleSetAmazonStorePreference,
       completeOnboarding,
       restartOnboarding,
     }),
@@ -1870,6 +1904,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       handleSetStartScreen,
       handleSetAppTheme,
       setOnboardingStep,
+      handleSetAmazonStorePreference,
       completeOnboarding,
       restartOnboarding,
     ],
@@ -1896,4 +1931,4 @@ export function useInventory() {
 
 export { useInventoryActions, useInventoryData, useInventorySettings };
 
-export type { AppTheme, Cocktail, CreateCocktailInput, CreateIngredientInput, Ingredient, StartScreen };
+export type { AmazonStorePreference, AppTheme, Cocktail, CreateCocktailInput, CreateIngredientInput, Ingredient, StartScreen };

@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react';
 
-import type { AppTheme, StartScreen } from '@/providers/inventory-types';
+import type { AmazonStorePreference, AppTheme, StartScreen } from '@/providers/inventory-types';
 
 export type InventorySettingsContextValue = {
   ignoreGarnish: boolean;
@@ -13,6 +13,7 @@ export type InventorySettingsContextValue = {
   appTheme: AppTheme;
   onboardingStep: number;
   onboardingCompleted: boolean;
+  amazonStorePreference: AmazonStorePreference;
 };
 
 export const InventorySettingsContext = createContext<InventorySettingsContextValue | undefined>(undefined);

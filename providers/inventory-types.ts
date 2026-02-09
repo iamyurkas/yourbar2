@@ -42,6 +42,7 @@ export type StartScreen =
   | 'ingredients_shopping';
 
 export type AppTheme = 'light' | 'dark' | 'system';
+export type AmazonStorePreference = 'auto' | 'us' | 'uk' | 'off';
 
 export type IngredientTag = NonNullable<IngredientRecord['tags']>[number];
 

@@ -22,6 +22,7 @@ export type InventorySnapshotV1<TCocktail, TIngredient> = {
   appTheme?: string;
   onboardingStep?: number;
   onboardingCompleted?: boolean;
+  amazonStorePreference?: string;
 };
 
 export type InventoryDeltaSnapshot<TCocktail, TIngredient> = {
@@ -52,6 +53,7 @@ export type InventoryDeltaSnapshot<TCocktail, TIngredient> = {
   appTheme?: string;
   onboardingStep?: number;
   onboardingCompleted?: boolean;
+  amazonStorePreference?: string;
 };
 
 export type InventorySnapshot<TCocktail, TIngredient> =

@@ -10,6 +10,7 @@ import type {
   InventoryExportData,
   PhotoBackupEntry,
   StartScreen,
+  AmazonStorePreference,
   AppTheme,
 } from '@/providers/inventory-types';
 
@@ -44,6 +45,7 @@ export type InventoryActionsContextValue = {
   setStartScreen: (value: StartScreen) => void;
   setAppTheme: (value: AppTheme) => void;
   setOnboardingStep: (step: number) => void;
+  setAmazonStorePreference: (value: AmazonStorePreference) => void;
   completeOnboarding: () => void;
   restartOnboarding: () => void;
 };

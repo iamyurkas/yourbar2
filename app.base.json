@@ -8,34 +8,27 @@
     "scheme": "yourbar",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
-
     "ios": {
       "supportsTablet": true
     },
-
     "android": {
       "package": "com.yourbarapp.free.dev",
       "versionCode": 10,
-
       "adaptiveIcon": {
         "backgroundColor": "#4DABF7",
         "foregroundImage": "./assets/images/icon.png",
         "monochromeImage": "./assets/images/icon-mono.png"
       },
-
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false
     },
-
     "web": {
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
-
     "plugins": [
       "./plugins/withForceDarkAllowed",
       "expo-router",
-
       [
         "expo-build-properties",
         {
@@ -45,7 +38,6 @@
           }
         }
       ],
-
       [
         "expo-splash-screen",
         {
@@ -59,7 +51,6 @@
           }
         }
       ],
-
       [
         "@sentry/react-native/expo",
         {
@@ -69,17 +60,17 @@
         }
       ]
     ],
-
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
     },
-
     "extra": {
       "router": {},
       "eas": {
         "projectId": "88734f8d-dde2-4143-a6b3-e0e161dbb06e"
-      }
+      },
+      "amazonAffiliateTagUS": "",
+      "amazonAffiliateTagUK": ""
     }
   }
 }

@@ -6,6 +6,7 @@ import {
   toIngredientStorageRecord,
 } from '@/libs/inventory-utils';
 import type {
+  AmazonStorePreference,
   AppTheme,
   CocktailStorageRecord,
   CocktailTag,
@@ -156,6 +157,7 @@ export type InventorySnapshotOptions = {
   customIngredientTags: IngredientTag[];
   onboardingStep: number;
   onboardingCompleted: boolean;
+  amazonStorePreference: AmazonStorePreference;
 };
 
 export function toSortedArray(values: Iterable<number>): number[] {
@@ -217,5 +219,6 @@ export function buildInventorySnapshot(
     appTheme: options.appTheme,
     onboardingStep: options.onboardingStep,
     onboardingCompleted: options.onboardingCompleted,
+    amazonStorePreference: options.amazonStorePreference,
   } satisfies InventoryDeltaSnapshot<CocktailStorageRecord, IngredientStorageRecord>;
 }

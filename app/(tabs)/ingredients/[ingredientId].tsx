@@ -10,6 +10,7 @@ import React, {
   useTransition,
 } from "react";
 import {
+  Linking,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -41,6 +42,13 @@ import {
   skipDuplicateBack,
 } from "@/libs/navigation";
 import { normalizeSearchText } from "@/libs/search-normalization";
+import {
+  buildAmazonSearchUrl,
+  getAffiliateTagForStore,
+  getAmazonDomainLabel,
+  getDefaultAmazonStore,
+  resolveEffectiveAmazonStore,
+} from "@/libs/amazon";
 import { useInventory, type Ingredient } from "@/providers/inventory-provider";
 
 function useResolvedIngredient(
@@ -90,6 +98,7 @@ export default function IngredientDetailsScreen() {
     ignoreGarnish,
     allowAllSubstitutes,
     getCocktailRating,
+    amazonStorePreference,
   } = useInventory();
 
   const ingredient = useResolvedIngredient(
@@ -151,6 +160,16 @@ export default function IngredientDetailsScreen() {
 
   const effectiveIsAvailable = optimisticAvailability ?? isAvailable;
   const effectiveIsOnShoppingList = optimisticShopping ?? isOnShoppingList;
+
+  const defaultAmazonStore = useMemo(() => getDefaultAmazonStore(), []);
+  const effectiveAmazonStore = useMemo(
+    () => resolveEffectiveAmazonStore(amazonStorePreference, defaultAmazonStore),
+    [amazonStorePreference, defaultAmazonStore],
+  );
+  const ingredientDisplayName = (ingredient as { displayName?: string } | undefined)?.displayName;
+  const ingredientSearchQuery = (ingredientDisplayName ?? ingredient?.name ?? "").trim();
+  const shouldShowAmazonLink = Boolean(effectiveAmazonStore && ingredientSearchQuery.length > 0);
+
 
   useEffect(() => {
     setOptimisticAvailability((previous) => {
@@ -316,6 +335,20 @@ export default function IngredientDetailsScreen() {
     startShoppingTransition,
     toggleIngredientShopping,
   ]);
+
+  const handleOpenAmazon = useCallback(() => {
+    if (!effectiveAmazonStore || !ingredientSearchQuery) {
+      return;
+    }
+
+    const url = buildAmazonSearchUrl(
+      effectiveAmazonStore,
+      ingredientSearchQuery,
+      getAffiliateTagForStore(effectiveAmazonStore),
+    );
+
+    void Linking.openURL(url);
+  }, [effectiveAmazonStore, ingredientSearchQuery]);
 
   const handleEditPress = useCallback(() => {
     if (!ingredient) {
@@ -663,35 +696,55 @@ export default function IngredientDetailsScreen() {
               </View>
 
               <View style={styles.statusRow}>
-                <Pressable
-                  onPress={handleToggleShopping}
-                  accessibilityRole="button"
-                  accessibilityLabel={
-                    effectiveIsOnShoppingList
-                      ? "Remove ingredient from shopping list"
-                      : "Add ingredient to shopping list"
-                  }
-                  hitSlop={8}
-                  style={styles.statusIconButton}
-                >
-                  <MaterialIcons
-                    name={
+                <View style={styles.statusRowLeft}>
+                  <Pressable
+                    onPress={handleToggleShopping}
+                    accessibilityRole="button"
+                    accessibilityLabel={
                       effectiveIsOnShoppingList
-                        ? "shopping-cart"
-                        : "add-shopping-cart"
+                        ? "Remove ingredient from shopping list"
+                        : "Add ingredient to shopping list"
                     }
-                    size={24}
-                    color={
-                      effectiveIsOnShoppingList
-                        ? Colors.tint
-                        : Colors.onSurfaceVariant
-                    }
+                    hitSlop={8}
+                    style={styles.statusIconButton}
+                  >
+                    <MaterialIcons
+                      name={
+                        effectiveIsOnShoppingList
+                          ? "shopping-cart"
+                          : "add-shopping-cart"
+                      }
+                      size={24}
+                      color={
+                        effectiveIsOnShoppingList
+                          ? Colors.tint
+                          : Colors.onSurfaceVariant
+                      }
+                    />
+                  </Pressable>
+                  <PresenceCheck
+                    checked={effectiveIsAvailable}
+                    onToggle={handleToggleAvailability}
                   />
-                </Pressable>
-                <PresenceCheck
-                  checked={effectiveIsAvailable}
-                  onToggle={handleToggleAvailability}
-                />
+                </View>
+                {shouldShowAmazonLink && effectiveAmazonStore ? (
+                  <Pressable
+                    accessibilityRole="link"
+                    onPress={handleOpenAmazon}
+                    style={styles.amazonLinkButton}
+                  >
+                    <Text
+                      style={[
+                        styles.amazonLinkText,
+                        { color: Colors.primary },
+                      ]}
+                      numberOfLines={1}
+                      ellipsizeMode="tail"
+                    >
+                      Buy on {getAmazonDomainLabel(effectiveAmazonStore)}
+                    </Text>
+                  </Pressable>
+                ) : null}
               </View>
             </View>
 
@@ -1111,8 +1164,22 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "stretch",
     width: "100%",
-    justifyContent: "flex-end",
+    gap: 12,
+  },
+  statusRowLeft: {
+    flexDirection: "row",
+    alignItems: "center",
     gap: 16,
+  },
+  amazonLinkButton: {
+    marginLeft: "auto",
+    maxWidth: "58%",
+  },
+  amazonLinkText: {
+    fontSize: 14,
+    fontWeight: "600",
+    textDecorationLine: "underline",
+    textAlign: "right",
   },
   statusIconButton: {
     width: 24,

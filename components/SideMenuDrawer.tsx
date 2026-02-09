@@ -32,7 +32,12 @@ import { TagPill } from "@/components/TagPill";
 import { useAppColors } from "@/constants/theme";
 import { base64ToBytes, createTarArchive } from "@/libs/archive-utils";
 import { buildPhotoBaseName } from "@/libs/photo-utils";
-import { useInventory, type AppTheme, type StartScreen } from "@/providers/inventory-provider";
+import {
+  useInventory,
+  type AmazonStorePreference,
+  type AppTheme,
+  type StartScreen,
+} from "@/providers/inventory-provider";
 import { type InventoryExportData } from "@/providers/inventory-types";
 import Constants from "expo-constants";
 
@@ -115,6 +120,35 @@ type ThemeOption = {
   icon: ComponentProps<typeof MaterialCommunityIcons>["name"];
 };
 
+type AmazonStoreOption = {
+  key: AmazonStorePreference;
+  label: string;
+  description: string;
+};
+
+const AMAZON_STORE_OPTIONS: AmazonStoreOption[] = [
+  {
+    key: "auto",
+    label: "Auto",
+    description: "Show only when US store is confidently detected",
+  },
+  {
+    key: "us",
+    label: "United States (Amazon.com)",
+    description: "Always show Amazon.com buy links",
+  },
+  {
+    key: "uk",
+    label: "United Kingdom (Amazon.co.uk)",
+    description: "Always show Amazon.co.uk buy links",
+  },
+  {
+    key: "off",
+    label: "Off",
+    description: "Never show buy links",
+  },
+];
+
 const THEME_OPTIONS: ThemeOption[] = [
   { key: "light", label: "Light", icon: "white-balance-sunny" },
   { key: "dark", label: "Dark", icon: "moon-waning-crescent" },
@@ -144,6 +178,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     setStartScreen,
     appTheme,
     setAppTheme,
+    amazonStorePreference,
+    setAmazonStorePreference,
     restartOnboarding,
     resetInventoryFromBundle,
     exportInventoryData,
@@ -170,7 +206,11 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     typeof setTimeout
   > | null>(null);
   const [isThemeModalVisible, setThemeModalVisible] = useState(false);
+  const [isAmazonStoreModalVisible, setAmazonStoreModalVisible] = useState(false);
   const themeModalCloseTimeout = useRef<ReturnType<typeof setTimeout> | null>(
+    null,
+  );
+  const amazonStoreModalCloseTimeout = useRef<ReturnType<typeof setTimeout> | null>(
     null,
   );
   const [isTagManagerVisible, setTagManagerVisible] = useState(false);
@@ -256,6 +296,11 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   const selectedThemeOption = useMemo(
     () => THEME_OPTIONS.find((option) => option.key === appTheme),
     [appTheme],
+  );
+
+  const selectedAmazonStoreOption = useMemo(
+    () => AMAZON_STORE_OPTIONS.find((option) => option.key === amazonStorePreference),
+    [amazonStorePreference],
   );
 
   const renderStartScreenIcon = (
@@ -412,6 +457,20 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   const handleSelectTheme = (value: AppTheme) => {
     setAppTheme(value);
     scheduleModalClose(themeModalCloseTimeout, setThemeModalVisible);
+  };
+
+  const handleAmazonStorePress = () => {
+    setAmazonStoreModalVisible(true);
+  };
+
+  const handleCloseAmazonStoreModal = () => {
+    clearTimeoutRef(amazonStoreModalCloseTimeout);
+    setAmazonStoreModalVisible(false);
+  };
+
+  const handleSelectAmazonStore = (value: AmazonStorePreference) => {
+    setAmazonStorePreference(value);
+    scheduleModalClose(amazonStoreModalCloseTimeout, setAmazonStoreModalVisible);
   };
 
   const handleOpenTagManager = () => {
@@ -730,6 +789,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       clearTimeoutRef(ratingModalCloseTimeout);
       clearTimeoutRef(startScreenModalCloseTimeout);
       clearTimeoutRef(themeModalCloseTimeout);
+      clearTimeoutRef(amazonStoreModalCloseTimeout);
     };
   }, []);
 
@@ -1040,6 +1100,35 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   ]}
                 >
                   Open {selectedStartScreenOption?.label ?? "All cocktails"}
+                </Text>
+              </View>
+            </Pressable>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Set Amazon store"
+              onPress={handleAmazonStorePress}
+              style={[styles.settingRow, SURFACE_ROW_STYLE]}
+            >
+              <View style={[styles.checkbox, SURFACE_ICON_STYLE]}>
+                <MaterialCommunityIcons
+                  name="cart-outline"
+                  size={16}
+                  color={Colors.tint}
+                />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text
+                  style={[styles.settingLabel, { color: Colors.onSurface }]}
+                >
+                  Amazon Store
+                </Text>
+                <Text
+                  style={[
+                    styles.settingCaption,
+                    { color: Colors.onSurfaceVariant },
+                  ]}
+                >
+                  {selectedAmazonStoreOption?.label ?? "Auto"}
                 </Text>
               </View>
             </Pressable>
@@ -1720,6 +1809,116 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     >
                       {renderStartScreenIcon(option, isSelected)}
                     </View>
+                    <View style={styles.startScreenTextContainer}>
+                      <Text
+                        style={[
+                          styles.settingLabel,
+                          { color: Colors.onSurface },
+                        ]}
+                      >
+                        {option.label}
+                      </Text>
+                      <Text
+                        style={[
+                          styles.settingCaption,
+                          { color: Colors.onSurfaceVariant },
+                        ]}
+                      >
+                        {option.description}
+                      </Text>
+                    </View>
+                    <MaterialCommunityIcons
+                      name={
+                        isSelected
+                          ? "check-circle"
+                          : "checkbox-blank-circle-outline"
+                      }
+                      size={20}
+                      color={isSelected ? Colors.tint : Colors.onSurfaceVariant}
+                    />
+                  </Pressable>
+                );
+              })}
+            </ScrollView>
+          </Pressable>
+        </Pressable>
+      </Modal>
+      <Modal
+        transparent
+        visible={isAmazonStoreModalVisible}
+        animationType="fade"
+        onRequestClose={handleCloseAmazonStoreModal}
+      >
+        <Pressable
+          style={styles.modalOverlay}
+          onPress={handleCloseAmazonStoreModal}
+          accessibilityRole="button"
+        >
+          <Pressable
+            style={[
+              styles.modalCard,
+              MODAL_CARD_STYLE,
+            ]}
+            accessibilityLabel="Amazon Store"
+            onPress={() => { }}
+          >
+            <View style={styles.modalHeader}>
+              <Text
+                style={[
+                  styles.modalTitle,
+                  { color: Colors.onSurface, flex: 1 },
+                ]}
+              >
+                Amazon Store
+              </Text>
+              <Pressable
+                onPress={handleCloseAmazonStoreModal}
+                accessibilityRole="button"
+                accessibilityLabel="Close"
+              >
+                <MaterialCommunityIcons
+                  name="close"
+                  size={22}
+                  color={Colors.onSurfaceVariant}
+                />
+              </Pressable>
+            </View>
+            <Text
+              style={[
+                styles.settingCaption,
+                { color: Colors.onSurfaceVariant },
+              ]}
+            >
+              Choose where ingredient buy links should open
+            </Text>
+            <ScrollView
+              style={styles.startScreenModalScroll}
+              contentContainerStyle={styles.startScreenOptionList}
+              showsVerticalScrollIndicator={false}
+              keyboardShouldPersistTaps="handled"
+            >
+              {AMAZON_STORE_OPTIONS.map((option) => {
+                const isSelected = amazonStorePreference === option.key;
+                return (
+                  <Pressable
+                    key={`amazon-store-${option.key}`}
+                    accessibilityRole="button"
+                    accessibilityState={{ selected: isSelected }}
+                    accessibilityLabel={`Use ${option.label}`}
+                    onPress={() => handleSelectAmazonStore(option.key)}
+                    style={({ pressed }) => [
+                      styles.startScreenOption,
+                      {
+                        borderColor: isSelected
+                          ? Colors.tint
+                          : Colors.outlineVariant,
+                        backgroundColor: isSelected
+                          ? Colors.highlightFaint
+                          : Colors.surfaceBright,
+                      },
+                      pressed ? { opacity: 0.85 } : null,
+                    ]}
+                  >
                     <View style={styles.startScreenTextContainer}>
                       <Text
                         style={[
