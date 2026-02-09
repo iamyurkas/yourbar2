@@ -100,7 +100,7 @@ export function getEffectiveAmazonStore(
     return amazonStoreOverride;
   }
 
-  return detectedAmazonStore === 'US' ? 'US' : null;
+  return detectedAmazonStore;
 }
 
 export const AMAZON_STORE_KEYS = Object.keys(AMAZON_STORES) as AmazonStoreKey[];
