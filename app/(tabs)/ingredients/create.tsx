@@ -1099,7 +1099,7 @@ export default function IngredientFormScreen() {
           ]}
           placeholderTextColor={`${Colors.onSurfaceVariant}99`}
           multiline
-          numberOfLines={4}
+          numberOfLines={8}
           textAlignVertical="top"
           onFocus={(event) => scrollFieldIntoView(event.nativeEvent.target)}
         />
