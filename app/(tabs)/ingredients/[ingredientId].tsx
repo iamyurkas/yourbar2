@@ -761,8 +761,9 @@ export default function IngredientDetailsScreen() {
                       >
                         <MaterialCommunityIcons
                           name="information-outline"
-                          size={22}
+                          size={24}
                           color={Colors.onSurfaceVariant}
+                          style={styles.amazonInfoIcon}
                         />
                       </Pressable>
                     </View>
@@ -1212,8 +1213,14 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   amazonInfoButton: {
+    width: 24,
+    height: 24,
     alignItems: "center",
     justifyContent: "center",
+  },
+  amazonInfoIcon: {
+    lineHeight: 24,
+    marginRight: -2,
   },
   amazonLinkText: {
     fontSize: 14,
