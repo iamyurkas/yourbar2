@@ -62,13 +62,21 @@ export function TagDot({ color = tagColors.default }: TagDotProps) {
 type PresenceCheckProps = {
   checked: boolean;
   onToggle?: () => void;
+  checkedColor?: string;
+  uncheckedColor?: string;
 };
 
-export function PresenceCheck({ checked, onToggle }: PresenceCheckProps) {
+export function PresenceCheck({
+  checked,
+  onToggle,
+  checkedColor,
+  uncheckedColor,
+}: PresenceCheckProps) {
   const Colors = useAppColors();
-  const idleColor = Colors.outlineVariant;
-  const borderColor = checked ? Colors.tint : idleColor;
-  const backgroundColor = checked ? Colors.tint : 'transparent';
+  const activeColor = checkedColor ?? Colors.tint;
+  const idleColor = uncheckedColor ?? Colors.outlineVariant;
+  const borderColor = checked ? activeColor : idleColor;
+  const backgroundColor = checked ? activeColor : 'transparent';
   const iconColor = checked ? Colors.background : idleColor;
 
   return (
