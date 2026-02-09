@@ -697,16 +697,46 @@ export default function IngredientDetailsScreen() {
               <View style={styles.statusRow}>
                 <View style={styles.statusControls}>
                   <View style={styles.statusControlRow}>
-                    <Text
-                      style={[styles.statusControlLabel, { color: Colors.onSurfaceVariant }]}
-                    >
-                      I have it
-                    </Text>
-                    <PresenceCheck
-                      checked={effectiveIsAvailable}
-                      onToggle={handleToggleAvailability}
-                      color={Colors.tint}
-                    />
+                    {amazonLinkLabel ? (
+                      <View style={styles.amazonInlineLinkGroup}>
+                        <Pressable
+                          onPress={handleBuyOnAmazon}
+                          accessibilityRole="link"
+                          accessibilityLabel={amazonLinkLabel}
+                          hitSlop={8}
+                          style={styles.amazonLinkButton}
+                        >
+                          <Text style={[styles.amazonLinkText, { color: Colors.tint }]}>
+                            {amazonLinkLabel}
+                          </Text>
+                        </Pressable>
+                        <Pressable
+                          onPress={handleAmazonAffiliateInfoPress}
+                          accessibilityRole="button"
+                          accessibilityLabel="Amazon affiliate information"
+                          hitSlop={8}
+                          style={styles.amazonInfoButton}
+                        >
+                          <MaterialCommunityIcons
+                            name="information-outline"
+                            size={22}
+                            color={Colors.onSurfaceVariant}
+                          />
+                        </Pressable>
+                      </View>
+                    ) : null}
+                    <View style={styles.availabilityControl}>
+                      <Text
+                        style={[styles.statusControlLabel, { color: Colors.onSurfaceVariant }]}
+                      >
+                        I have it
+                      </Text>
+                      <PresenceCheck
+                        checked={effectiveIsAvailable}
+                        onToggle={handleToggleAvailability}
+                        color={Colors.tint}
+                      />
+                    </View>
                   </View>
                   <View style={styles.statusControlRow}>
                     <Text
@@ -739,34 +769,6 @@ export default function IngredientDetailsScreen() {
                     </Pressable>
                   </View>
 
-                  {amazonLinkLabel ? (
-                    <View style={styles.amazonLinkGroup}>
-                      <Pressable
-                        onPress={handleBuyOnAmazon}
-                        accessibilityRole="link"
-                        accessibilityLabel={amazonLinkLabel}
-                        hitSlop={8}
-                        style={styles.amazonLinkButton}
-                      >
-                        <Text style={[styles.amazonLinkText, { color: Colors.tint }]}>
-                          {amazonLinkLabel}
-                        </Text>
-                      </Pressable>
-                      <Pressable
-                        onPress={handleAmazonAffiliateInfoPress}
-                        accessibilityRole="button"
-                        accessibilityLabel="Amazon affiliate information"
-                        hitSlop={8}
-                        style={styles.amazonInfoButton}
-                      >
-                        <MaterialCommunityIcons
-                          name="information-outline"
-                          size={22}
-                          color={Colors.onSurfaceVariant}
-                        />
-                      </Pressable>
-                    </View>
-                  ) : null}
                 </View>
               </View>
             </View>
@@ -1188,25 +1190,29 @@ const styles = StyleSheet.create({
   },
   statusControls: {
     alignSelf: "stretch",
-    alignItems: "flex-end",
+    alignItems: "stretch",
     gap: 10,
   },
   statusControlRow: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "flex-end",
+    justifyContent: "space-between",
+    gap: 12,
+  },
+  availabilityControl: {
+    flexDirection: "row",
+    alignItems: "center",
     gap: 12,
   },
   statusControlLabel: {
     fontSize: 14,
     fontWeight: "500",
   },
-  amazonLinkGroup: {
+  amazonInlineLinkGroup: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "flex-end",
+    justifyContent: "flex-start",
     gap: 6,
-    alignSelf: "stretch",
   },
   amazonLinkButton: {
     alignSelf: "center",
