@@ -1200,12 +1200,14 @@ const styles = StyleSheet.create({
   },
   statusControls: {
     flexDirection: "column",
-    alignItems: "center",
+    alignItems: "flex-end",
     gap: 8,
   },
   statusControlItem: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "space-between",
+    width: 160,
     gap: 8,
   },
   amazonLinkGroup: {
