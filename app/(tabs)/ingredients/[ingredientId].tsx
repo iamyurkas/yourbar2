@@ -726,35 +726,55 @@ export default function IngredientDetailsScreen() {
                   <View style={styles.amazonLinkPlaceholder} />
                 )}
                 <View style={styles.statusControls}>
-                  <Pressable
-                    onPress={handleToggleShopping}
-                    accessibilityRole="button"
-                    accessibilityLabel={
-                      effectiveIsOnShoppingList
-                        ? "Remove ingredient from shopping list"
-                        : "Add ingredient to shopping list"
-                    }
-                    hitSlop={8}
-                    style={styles.statusIconButton}
-                  >
-                    <MaterialIcons
-                      name={
-                        effectiveIsOnShoppingList
-                          ? "shopping-cart"
-                          : "add-shopping-cart"
-                      }
-                      size={24}
-                      color={
-                        effectiveIsOnShoppingList
-                          ? Colors.tint
-                          : Colors.onSurfaceVariant
-                      }
+                  <View style={styles.statusControlItem}>
+                    <PresenceCheck
+                      checked={effectiveIsAvailable}
+                      onToggle={handleToggleAvailability}
                     />
-                  </Pressable>
-                  <PresenceCheck
-                    checked={effectiveIsAvailable}
-                    onToggle={handleToggleAvailability}
-                  />
+                    <Text
+                      style={[
+                        styles.statusControlLabel,
+                        { color: Colors.onSurfaceVariant },
+                      ]}
+                    >
+                      I have it
+                    </Text>
+                  </View>
+                  <View style={styles.statusControlItem}>
+                    <Pressable
+                      onPress={handleToggleShopping}
+                      accessibilityRole="button"
+                      accessibilityLabel={
+                        effectiveIsOnShoppingList
+                          ? "Remove ingredient from shopping list"
+                          : "Add ingredient to shopping list"
+                      }
+                      hitSlop={8}
+                      style={styles.statusIconButton}
+                    >
+                      <MaterialIcons
+                        name={
+                          effectiveIsOnShoppingList
+                            ? "shopping-cart"
+                            : "add-shopping-cart"
+                        }
+                        size={24}
+                        color={
+                          effectiveIsOnShoppingList
+                            ? Colors.tint
+                            : Colors.onSurfaceVariant
+                        }
+                      />
+                    </Pressable>
+                    <Text
+                      style={[
+                        styles.statusControlLabel,
+                        { color: Colors.onSurfaceVariant },
+                      ]}
+                    >
+                      To shopping list
+                    </Text>
+                  </View>
                 </View>
               </View>
             </View>
@@ -1179,9 +1199,13 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   statusControls: {
-    flexDirection: "row",
+    flexDirection: "column",
     alignItems: "center",
-    gap: 16,
+    gap: 8,
+  },
+  statusControlItem: {
+    alignItems: "center",
+    gap: 4,
   },
   amazonLinkGroup: {
     flexDirection: "row",
@@ -1208,6 +1232,10 @@ const styles = StyleSheet.create({
     height: 24,
     alignItems: "center",
     justifyContent: "center",
+  },
+  statusControlLabel: {
+    fontSize: 12,
+    fontWeight: "500",
   },
   cocktailList: {
     marginHorizontal: -24,
