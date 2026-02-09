@@ -7649,7 +7649,7 @@
       "id": 128,
       "name": "Car Crash",
       "description": "A sweet and fruity long drink.",
-      "instructions": "1. Fill a cocktail shaker with ice and add amaretto, peach liqueur, Southern Comfort (optional), orange juice, lemon juice, and simple syrup.\n2. Shake well until chilled and strain into a tall Collins glass filled with fresh ice.\n3. Slowly pour the grenadine over the back of a spoon so it sinks to the bottom, creating a red \"crash\" effect.\n4. Garnish with a blood orange slice and a maraschino cherry.",
+      "instructions": "1. Fill a cocktail shaker with ice and add amaretto, peach liqueur, Southern Comfort (optional), orange juice, lemon juice, and simple syrup.\n2. Shake well until chilled and strain into a tall Collins glass filled with fresh ice.\n3. Slowly pour 30ml of grenadine over the back of a spoon so it sinks to the bottom, creating a red \"crash\" effect.\n4. Garnish with a blood orange slice and a maraschino cherry.",
       "photoUri": "assets/cocktails/128-car-crash.jpg",
       "glassId": "collins_glass",
       "methodIds": ["shake", "layer"],
@@ -7709,8 +7709,8 @@
           "order": 8,
           "ingredientId": 181,
           "name": "Grenadine",
-          "amount": "1",
-          "unitId": 12
+          "amount": "30",
+          "unitId": 11
         },
         {
           "order": 9,
@@ -17776,7 +17776,7 @@
       "id": 298,
       "name": "Mai Tai",
       "description": "Rum-forward tiki classic with orange curaçao, lime, and orgeat.",
-      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 30ml of White Rum, 30ml of Dark Rum, 15ml of Orange Curaçao, 15ml of Almond (Orgeat) Syrup, 30ml of Lime Juice, and 7.5ml of Simple Syrup.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled highball glass.\n5. Garnish with a sprig of Mint and a slice of Lime",
+      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add 30ml of White Rum, 30ml of Dark Rum, 15ml of Orange Curaçao, 15ml of Almond (Orgeat) Syrup, 30ml of Lime Juice, and 7.5ml of Simple Syrup.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a highball glass filled with fresh ice.\n5. Garnish with a sprig of Mint and a slice of Lime",
       "photoUri": "assets/cocktails/298-mai-tai.jpg",
       "glassId": "highball_glass",
       "methodIds": ["shake"],
@@ -28645,7 +28645,7 @@
       "id": 476,
       "name": "Virginia",
       "description": "A smooth and tropical delight that brings the beach to your glass. The creamy notes of coconut liqueur blend perfectly with the tartness of cranberry and lime for a balanced, exotic escape.",
-      "instructions": "1. Fill a highball glass with ice.\n2. Add 2 oz of Coconut Liqueur, 5 oz of Cranberry Juice, and 0.75 oz of Lime Juice.\n3. Stir gently to combine.\n4. Garnish with a lime wedge.",
+      "instructions": "1. Fill a highball glass with ice.\n2. Add 60ml of Coconut Liqueur, 150ml of Cranberry Juice, and 22.5ml of Lime Juice.\n3. Stir gently to combine.\n4. Garnish with a lime wedge.",
       "photoUri": "assets/cocktails/476-virginia.jpg",
       "glassId": "highball_glass",
       "methodIds": ["build"],
@@ -28662,8 +28662,8 @@
           "order": 2,
           "ingredientId": 101,
           "name": "Coconut Liqueur",
-          "amount": "2",
-          "unitId": 12,
+          "amount": "60",
+          "unitId": 11,
           "substitutes": [
             {
               "ingredientId": 103,
@@ -28675,15 +28675,15 @@
           "order": 3,
           "ingredientId": 116,
           "name": "Cranberry Juice",
-          "amount": "5",
-          "unitId": 12
+          "amount": "150",
+          "unitId": 11
         },
         {
           "order": 4,
           "ingredientId": 223,
           "name": "Lime Juice",
-          "amount": "0.75",
-          "unitId": 12
+          "amount": "22.5",
+          "unitId": 11
         },
         {
           "order": 5,
@@ -29965,8 +29965,8 @@
           "order": 8,
           "ingredientId": 181,
           "name": "Grenadine",
-          "amount": "1",
-          "unitId": 24
+          "amount": "30",
+          "unitId": 11
         },
         {
           "order": 9,
@@ -31435,7 +31435,7 @@
     {
       "id": 198,
       "name": "Jack Daniels",
-      "description": "Jack Daniel's is a brand of Tennessee whiskey and the top selling American whiskey in the world. It is produced in Lynchburg, Tennessee, by the Jack Daniel Distillery, which has been owned by the Brown-Forman Corporation since 1956. Despite being the location of a major operational distillery, Jack Daniel's home county of Moore is a dry county, so the product is not available for purchase at stores or restaurants within the county.",
+      "description": "Jack Daniel's is a famous brand of Tennessee whiskey known for its smooth, charcoal-mellowed character. Produced in Lynchburg, Tennessee, it is a versatile spirit enjoyed neat, on the rocks, or as a base for many popular cocktails like the Jack and Coke.",
       "tags": [0, 1],
       "baseIngredientId": 342,
       "photoUri": "assets/ingredients/198-jack-daniels.jpg"
@@ -31710,7 +31710,7 @@
     {
       "id": 236,
       "name": "Mint",
-      "description": "Lamiaceae (/ˌleɪmiˈeɪsiˌaɪ/ or /ˌleɪmiˈeɪsiiː/) or Labiatae is a family of flowering plants commonly known as the mint or deadnettle family.",
+      "description": "Mint is a fragrant herb that provides a cool, refreshing flavor and aromatic lift to countless cocktails, most notably the Mojito and Mint Julep.",
       "tags": [7],
       "photoUri": "assets/ingredients/236-mint.jpg"
     },
@@ -32508,7 +32508,7 @@
     {
       "id": 348,
       "name": "Worcestershire Sauce",
-      "description": "Worcestershire sauce (/ˈwʊstərʃər/ (About this sound listen)), (Merriam-Webster: \\ˈwu̇s-tə(r)-ˌshir-, -shər- also -ˌshī(-ə)r-\\ ), frequently shortened to Worcester sauce (/ˈwʊstər/)[citation needed], is a fermented liquid condiment of complex mixture originally created by the Worcester chemists John Wheeley Lea and William Henry Perrins, who went on to form the company Lea & Perrins. The ingredients are allowed to mature for 18 months before being blended and bottled in Worcester, where the exact recipe is kept a secret.",
+      "description": "Worcestershire sauce is a fermented liquid condiment originally created by chemists John Wheeley Lea and William Henry Perrins in Worcester, England. It features a complex, savory flavor profile and is a staple in many classic cocktails, most notably the Bloody Mary.",
       "tags": [8],
       "photoUri": "assets/ingredients/348-worcestershire-sauce.jpg"
     },
