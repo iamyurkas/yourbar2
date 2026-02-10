@@ -13,6 +13,7 @@ import React, {
 import {
   FlatList,
   KeyboardAvoidingView,
+  LayoutAnimation,
   Modal,
   Platform,
   Pressable,
@@ -66,6 +67,13 @@ const DEFAULT_METRIC_UNIT_ID = 11;
 const DEFAULT_IMPERIAL_UNIT_ID = 12;
 const MIN_AUTOCOMPLETE_LENGTH = 2;
 const MAX_SUGGESTIONS = 8;
+
+if (
+  Platform.OS === "android" &&
+  typeof UIManager.setLayoutAnimationEnabledExperimental === "function"
+) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
 
 type EditableSubstitute = {
   key: string;
@@ -803,6 +811,7 @@ export default function CreateCocktailScreen() {
 
   const handleMoveIngredient = useCallback(
     (key: string, direction: "up" | "down") => {
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
       setIngredientsState((prev) => {
         const currentIndex = prev.findIndex((item) => item.key === key);
         if (currentIndex < 0) {
