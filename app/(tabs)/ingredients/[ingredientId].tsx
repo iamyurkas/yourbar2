@@ -11,6 +11,7 @@ import React, {
 } from "react";
 import {
   Linking,
+  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -22,10 +23,11 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { FormattedText } from "@/components/FormattedText";
 import { AppDialog, type DialogOptions } from "@/components/AppDialog";
 import { AppImage } from "@/components/AppImage";
 import { CocktailListRow } from "@/components/CocktailListRow";
+import { FormattedText } from "@/components/FormattedText";
+import { HeaderIconButton } from "@/components/HeaderIconButton";
 import { PresenceCheck } from "@/components/RowParts";
 import { TagPill } from "@/components/TagPill";
 import { useAppColors } from "@/constants/theme";
@@ -618,39 +620,33 @@ export default function IngredientDetailsScreen() {
           headerStyle: { backgroundColor: Colors.surface },
           headerTitleStyle: {
             color: Colors.onSurface,
-            fontSize: 16,
+            fontSize: 17,
             fontWeight: "600",
           },
           headerShadowVisible: false,
           headerLeft: () => (
-            <Pressable
+            <HeaderIconButton
               onPress={handleReturn}
-              accessibilityRole="button"
               accessibilityLabel="Go back"
-              style={styles.headerButton}
-              hitSlop={8}
             >
               <MaterialCommunityIcons
-                name="arrow-left"
-                size={22}
+                name={Platform.OS === "ios" ? "chevron-left" : "arrow-left"}
+                size={Platform.OS === "ios" ? 26 : 22}
                 color={Colors.onSurface}
               />
-            </Pressable>
+            </HeaderIconButton>
           ),
           headerRight: () => (
-            <Pressable
+            <HeaderIconButton
               onPress={handleEditPress}
-              accessibilityRole="button"
               accessibilityLabel="Edit ingredient"
-              style={styles.headerButton}
-              hitSlop={8}
             >
               <MaterialCommunityIcons
                 name="pencil-outline"
                 size={20}
                 color={Colors.onSurface}
               />
-            </Pressable>
+            </HeaderIconButton>
           ),
         }}
       />
@@ -1135,13 +1131,6 @@ export default function IngredientDetailsScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-  },
-  headerButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 12,
-    alignItems: "center",
-    justifyContent: "center",
   },
   content: {
     paddingHorizontal: 24,

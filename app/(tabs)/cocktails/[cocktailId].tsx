@@ -11,12 +11,12 @@ import {
   useState,
   useTransition,
 } from "react";
-import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Platform, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { FormattedText } from "@/components/FormattedText";
 import { resolveGlasswareUriFromId } from "@/assets/image-manifest";
 import { AppImage } from "@/components/AppImage";
+import { FormattedText } from "@/components/FormattedText";
 import { HeaderIconButton } from "@/components/HeaderIconButton";
 import { ListRow, Thumb } from "@/components/RowParts";
 import { TagPill } from "@/components/TagPill";
@@ -282,9 +282,9 @@ function buildMissingSubstituteLines(
     })),
     ...(isBrandedIngredient
       ? resolution.substitutes.base.map((option) => ({
-          option,
-          source: "base" as const,
-        }))
+        option,
+        source: "base" as const,
+      }))
       : []),
   ];
 
@@ -681,7 +681,7 @@ export default function CocktailDetailsScreen() {
           headerStyle: { backgroundColor: Colors.surface },
           headerTitleStyle: {
             color: Colors.onSurface,
-            fontSize: 16,
+            fontSize: 17,
             fontWeight: "600",
           },
           headerShadowVisible: false,
@@ -691,8 +691,8 @@ export default function CocktailDetailsScreen() {
               accessibilityLabel="Go back"
             >
               <MaterialCommunityIcons
-                name="arrow-left"
-                size={22}
+                name={Platform.OS === "ios" ? "chevron-left" : "arrow-left"}
+                size={Platform.OS === "ios" ? 26 : 22}
                 color={Colors.onSurface}
               />
             </HeaderIconButton>
@@ -934,33 +934,33 @@ export default function CocktailDetailsScreen() {
                 <View style={styles.instructionsList}>
                   {isDescriptionExpanded
                     ? descriptionParagraphs.map((paragraph, index) => (
-                        <FormattedText
-                          key={`description-${index}`}
-                          style={[
-                            styles.instructionsText,
-                            { color: Colors.onSurface },
-                          ]}
-                        >
-                          {paragraph}
-                        </FormattedText>
-                      ))
+                      <FormattedText
+                        key={`description-${index}`}
+                        style={[
+                          styles.instructionsText,
+                          { color: Colors.onSurface },
+                        ]}
+                      >
+                        {paragraph}
+                      </FormattedText>
+                    ))
                     : descriptionParagraphs.slice(0, 1).map((paragraph, index) => (
-                        <FormattedText
-                          key={`description-${index}`}
-                          style={[
-                            styles.instructionsText,
-                            { color: Colors.onSurfaceVariant },
-                          ]}
-                          numberOfLines={
-                            shouldTruncateDescription
-                              ? DESCRIPTION_PREVIEW_LINES
-                              : undefined
-                          }
-                          onTextLayout={handleDescriptionLayout}
-                        >
-                          {paragraph}
-                        </FormattedText>
-                      ))}
+                      <FormattedText
+                        key={`description-${index}`}
+                        style={[
+                          styles.instructionsText,
+                          { color: Colors.onSurfaceVariant },
+                        ]}
+                        numberOfLines={
+                          shouldTruncateDescription
+                            ? DESCRIPTION_PREVIEW_LINES
+                            : undefined
+                        }
+                        onTextLayout={handleDescriptionLayout}
+                      >
+                        {paragraph}
+                      </FormattedText>
+                    ))}
                 </View>
                 {shouldTruncateDescription ? (
                   <Pressable
@@ -1050,7 +1050,7 @@ export default function CocktailDetailsScreen() {
                       .filter(Boolean);
                     const brandIndicatorColor =
                       resolvedIngredient?.baseIngredientId != null ||
-                      catalogEntry?.baseIngredientId != null
+                        catalogEntry?.baseIngredientId != null
                         ? Colors.primary
                         : undefined;
                     const isOnShoppingList =

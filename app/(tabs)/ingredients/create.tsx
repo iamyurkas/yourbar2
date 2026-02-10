@@ -21,6 +21,7 @@ import {
 
 import { AppDialog, type DialogOptions } from '@/components/AppDialog';
 import { AppImage } from '@/components/AppImage';
+import { HeaderIconButton } from '@/components/HeaderIconButton';
 import { ListRow, Thumb } from '@/components/RowParts';
 import { TagEditorModal } from '@/components/TagEditorModal';
 import { TagPill } from '@/components/TagPill';
@@ -937,16 +938,21 @@ export default function IngredientFormScreen() {
             headerTitleAlign: 'center',
             headerStyle: { backgroundColor: Colors.surface },
             headerShadowVisible: false,
-            headerTitleStyle: { color: Colors.onSurface, fontSize: 16, fontWeight: '600' },
+            headerTitleStyle: {
+              color: Colors.onSurface,
+              fontSize: 17,
+              fontWeight: "600",
+            },
             headerLeft: () => (
-              <Pressable
+              <HeaderIconButton
                 onPress={handleGoBack}
-                accessibilityRole="button"
-                accessibilityLabel="Go back"
-                style={styles.headerButton}
-                hitSlop={8}>
-                <MaterialCommunityIcons name="arrow-left" size={22} color={Colors.onSurface} />
-              </Pressable>
+                accessibilityLabel="Go back">
+                <MaterialCommunityIcons
+                  name={Platform.OS === 'ios' ? 'chevron-left' : 'arrow-left'}
+                  size={Platform.OS === 'ios' ? 26 : 22}
+                  color={Colors.onSurface}
+                />
+              </HeaderIconButton>
             ),
           }}
         />
@@ -1124,27 +1130,25 @@ export default function IngredientFormScreen() {
           headerTitleAlign: 'center',
           headerStyle: { backgroundColor: Colors.surface },
           headerShadowVisible: false,
-          headerTitleStyle: { color: Colors.onSurface, fontSize: 16, fontWeight: '600' },
+          headerTitleStyle: { color: Colors.onSurface, fontSize: Platform.OS === 'ios' ? 17 : 16, fontWeight: '600' },
           headerLeft: () => (
-            <Pressable
+            <HeaderIconButton
               onPress={handleGoBack}
-              accessibilityRole="button"
-              accessibilityLabel="Go back"
-              style={styles.headerButton}
-              hitSlop={8}>
-              <MaterialCommunityIcons name="arrow-left" size={22} color={Colors.onSurface} />
-            </Pressable>
+              accessibilityLabel="Go back">
+              <MaterialCommunityIcons
+                name={Platform.OS === 'ios' ? 'chevron-left' : 'arrow-left'}
+                size={Platform.OS === 'ios' ? 26 : 22}
+                color={Colors.onSurface}
+              />
+            </HeaderIconButton>
           ),
           headerRight: () =>
             isEditMode ? (
-              <Pressable
+              <HeaderIconButton
                 onPress={handleDeletePress}
-                accessibilityRole="button"
-                accessibilityLabel="Delete ingredient"
-                style={styles.headerButton}
-                hitSlop={8}>
+                accessibilityLabel="Delete ingredient">
                 <MaterialIcons name="delete-outline" size={22} color={Colors.onSurface} />
-              </Pressable>
+              </HeaderIconButton>
             ) : null,
         }}
       />
@@ -1241,13 +1245,6 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-  },
-  headerButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   contentCreate: {
     padding: 16,
