@@ -30027,6 +30027,396 @@
           "unitId": 11
         }
       ]
+    },
+    {
+      "id": 498,
+      "name": "After Midnight",
+      "description": "A bittersweet, orange and maraschino-influenced riff on a Rob Roy.",
+      "instructions": "1. Stir all ingredients with ice.\n2. Strain into an ice-filled glass.\n3. Express orange zest twist over the cocktail and use as a garnish.",
+      "photoUri": "assets/cocktails/498-after-midnight.jpg",
+      "glassId": "rocks_glass",
+      "methodIds": ["stir"],
+      "tags": [5],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 305,
+          "name": "Scotch Whisky",
+          "amount": "60",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 284,
+          "name": "Punt e Mes",
+          "amount": "22.5",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 244,
+          "name": "Orange Curaçao",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 226,
+          "name": "Luxardo Maraschino",
+          "amount": "7.5",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 353,
+          "name": "Vanilla Bitters",
+          "amount": "6",
+          "unitId": 6
+        },
+        {
+          "order": 7,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
+        },
+        {
+          "order": 8,
+          "ingredientId": 242,
+          "name": "Orange",
+          "amount": "1",
+          "unitId": 26
+        }
+      ]
+    },
+    {
+      "id": 499,
+      "name": "After Midnight Martini",
+      "description": "A late-night alternative to an Espresso Martini.",
+      "instructions": "1. Shake all ingredients with ice and strain back into the shaker.\n2. Dry shake (without ice) to emulsify.\n3. Fine strain into chilled glass.\n4. Garnish with 3 coffee beans floated in a petal formation in the centre of the cocktail's foamy head.",
+      "photoUri": "assets/cocktails/499-after-midnight-martini.jpg",
+      "glassId": "martini",
+      "methodIds": ["shake"],
+      "tags": [6],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8
+        },
+        {
+          "order": 2,
+          "ingredientId": 337,
+          "name": "Vodka",
+          "amount": "22.5",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 108,
+          "name": "Coffee Liqueur",
+          "amount": "22.5",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 289,
+          "name": "Red Vermouth",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 352,
+          "name": "Pedro Ximenez Sherry",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 147,
+          "name": "Egg White",
+          "amount": "1",
+          "unitId": 1
+        },
+        {
+          "order": 7,
+          "ingredientId": 106,
+          "name": "Coffee Beans",
+          "amount": "3",
+          "unitId": 1,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 500,
+      "name": "Brown Derby",
+      "description": "A classic 1930s Hollywood staple, the Brown Derby is a bright, refreshing cocktail that balances the warmth of **bourbon** with the tartness of **grapefruit juice** and the floral sweetness of **maple syrup** or **honey**.",
+      "instructions": "1. Shake vigorously for about 15 seconds, then fine-strain into a chilled coupe or Nick & Nora glass.\n2. Express the oils from a grapefruit twist over the top and drop it in.",
+      "photoUri": "assets/cocktails/500-brown-derby.jpg",
+      "glassId": "coupe",
+      "methodIds": ["shake"],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8
+        },
+        {
+          "order": 2,
+          "ingredientId": 63,
+          "name": "Bourbon",
+          "amount": "45",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 176,
+          "name": "Grapefruit Juice",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 230,
+          "name": "Maple syrup",
+          "amount": "15",
+          "unitId": 11,
+          "substitutes": [
+            {
+              "ingredientId": 188,
+              "name": "Honey Syrup"
+            }
+          ]
+        },
+        {
+          "order": 5,
+          "ingredientId": 214,
+          "name": "Lemon",
+          "amount": "1",
+          "unitId": 26,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 501,
+      "name": "Fancy Free",
+      "description": "Aromatised, tamed **bourbon** with complex maraschino notes. Basically, a Whiskey Old Fashioned with **maraschino liqueur** in place of **sugar syrup**. Surprisingly dry, helped by generous dashes of **orange** and **aromatic bitters**.",
+      "photoUri": "assets/cocktails/501-fancy-free.jpg",
+      "glassId": "rocks_glass",
+      "methodIds": ["stir"],
+      "tags": [5],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8
+        },
+        {
+          "order": 2,
+          "ingredientId": 63,
+          "name": "Bourbon",
+          "amount": "60",
+          "unitId": 11,
+          "substitutes": [
+            {
+              "ingredientId": 300,
+              "name": "Rye Whiskey"
+            },
+            {
+              "ingredientId": 342,
+              "name": "Whiskey"
+            }
+          ]
+        },
+        {
+          "order": 3,
+          "ingredientId": 226,
+          "name": "Luxardo Maraschino",
+          "amount": "12.5",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 18,
+          "name": "Angostura Bitters",
+          "amount": "3",
+          "unitId": 6
+        },
+        {
+          "order": 5,
+          "ingredientId": 243,
+          "name": "Orange Bitters",
+          "amount": "2",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
+        },
+        {
+          "order": 7,
+          "ingredientId": 242,
+          "name": "Orange",
+          "amount": "1",
+          "unitId": 14,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 502,
+      "name": "Irish Maid",
+      "description": "The Irish Maid is a refreshing, floral \"modern classic\" cocktail that serves as the **Irish whiskey** variation of the Kentucky Maid (originally created by Sam Ross). It is defined by its crisp combination of muddled **cucumber**, **elderflower**, and **lemon**.",
+      "instructions": "1. Muddle 2 **cucumber slices** in a cocktail shaker.\n2. Fill a shaker with **ice**.\n2. Add 60ml of **Irish whiskey**, 15 ml of **elderflower liqueur**, 20ml of **lemon juice**, and 10ml of **rich simple syrup** to the shaker.\n3. Shake vigorously for 10–15 seconds until well-chilled.\n4. Fine-strain (to catch cucumber pulp) into a rocks glass filled with fresh ice.\n5. Garnish with a thin **cucumber slice**.",
+      "photoUri": "assets/cocktails/502-irish-maid.jpg",
+      "glassId": "rocks_glass",
+      "methodIds": ["muddle", "shake"],
+      "tags": [6],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 131,
+          "name": "Cucumber",
+          "amount": "2",
+          "unitId": 19
+        },
+        {
+          "order": 2,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8
+        },
+        {
+          "order": 3,
+          "ingredientId": 196,
+          "name": "Irish Whiskey",
+          "amount": "60",
+          "unitId": 11,
+          "substitutes": [
+            {
+              "ingredientId": 342,
+              "name": "Whiskey"
+            }
+          ]
+        },
+        {
+          "order": 4,
+          "ingredientId": 316,
+          "name": "St. Germain",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 216,
+          "name": "Lemon Juice",
+          "amount": "20",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 293,
+          "name": "Rich Simple Syrup",
+          "amount": "10",
+          "unitId": 11
+        },
+        {
+          "order": 7,
+          "ingredientId": 131,
+          "name": "Cucumber",
+          "amount": "1",
+          "unitId": 19,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 503,
+      "name": "Kentucky Maid",
+      "description": "The Kentucky Maid is a refreshing, floral \"modern classic\" cocktail. It is defined by its crisp combination of muddled **cucumber**, **mint**, **elderflower**, and **lemon**.",
+      "instructions": "1. Muddle 2 **cucumber slices** and 6 **mint leaves** in a cocktail shaker.\n2. Fill a shaker with **ice**.\n2. Add 60ml of **bourbon**, 30ml of **lemon juice**, and 20ml of **rich simple syrup** to the shaker.\n3. Shake vigorously for 10–15 seconds until well-chilled.\n4. Fine-strain (to catch cucumber pulp) into a rocks glass filled with fresh ice.\n5. Garnish with a thin **cucumber slice**.",
+      "photoUri": "assets/cocktails/503-kentucky-maid.jpg",
+      "glassId": "rocks_glass",
+      "methodIds": ["muddle", "shake"],
+      "tags": [5, 6],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 131,
+          "name": "Cucumber",
+          "amount": "2",
+          "unitId": 19
+        },
+        {
+          "order": 2,
+          "ingredientId": 236,
+          "name": "Mint",
+          "amount": "6",
+          "unitId": 10
+        },
+        {
+          "order": 3,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8
+        },
+        {
+          "order": 4,
+          "ingredientId": 63,
+          "name": "Bourbon",
+          "amount": "60",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 216,
+          "name": "Lemon Juice",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 293,
+          "name": "Rich Simple Syrup",
+          "amount": "20",
+          "unitId": 11
+        },
+        {
+          "order": 7,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
+        },
+        {
+          "order": 8,
+          "ingredientId": 131,
+          "name": "Cucumber",
+          "amount": "1",
+          "unitId": 19,
+          "garnish": true
+        }
+      ]
     }
   ],
   "ingredients": [
@@ -32541,6 +32931,13 @@
       "description": "Pedro Ximénez is a sweet Spanish sherry around 15–18% ABV with raisin notes. Try it in a px flip or espresso Martini twist.",
       "tags": [2],
       "photoUri": "assets/ingredients/352-pedro-ximenez-sherry.jpg"
+    },
+    {
+      "id": 353,
+      "name": "Vanilla Bitters",
+      "description": "Vanilla bitters are concentrated botanical infusions used as \"liquid spice\" to add depth, warmth, and a creamy edge to cocktails. They are particularly effective in balancing the sweetness of dessert-style drinks and complementing the oaky or caramel notes in spirits like bourbon and aged rum.",
+      "tags": [10],
+      "photoUri": "assets/ingredients/353-vanilla-bitters.jpg"
     }
   ]
 }
