@@ -685,8 +685,9 @@ export default function CocktailDetailsScreen() {
       <Stack.Screen
         options={{
           title: "Cocktail details",
-          headerTitleAlign: "center",
+          headerTitleAlign: Platform.OS === "ios" ? "center" : "left",
           headerStyle: { backgroundColor: Colors.surface },
+          headerTintColor: Platform.OS === "ios" ? Colors.tint : Colors.onSurface,
           headerTransparent: Platform.OS === "ios",
           headerBackground: () => (
             Platform.OS === "ios" ? (
@@ -699,7 +700,7 @@ export default function CocktailDetailsScreen() {
           ),
           headerTitleStyle: {
             color: Colors.onSurface,
-            fontSize: 16,
+            fontSize: Platform.OS === "ios" ? 17 : 16,
             fontWeight: "600",
           },
           headerShadowVisible: false,
@@ -712,7 +713,7 @@ export default function CocktailDetailsScreen() {
                 <SymbolView
                   name="chevron.left"
                   size={20}
-                  tintColor={Colors.onSurface}
+                  tintColor={Colors.tint}
                   fallback={<MaterialCommunityIcons name="arrow-left" size={22} color={Colors.onSurface} />}
                 />
               ) : (
@@ -734,7 +735,7 @@ export default function CocktailDetailsScreen() {
                   <SymbolView
                     name="doc.on.doc"
                     size={18}
-                    tintColor={Colors.onSurface}
+                    tintColor={Colors.tint}
                     fallback={<MaterialCommunityIcons name="content-copy" size={20} color={Colors.onSurface} />}
                   />
                 ) : (
@@ -753,7 +754,7 @@ export default function CocktailDetailsScreen() {
                   <SymbolView
                     name="pencil"
                     size={18}
-                    tintColor={Colors.onSurface}
+                    tintColor={Colors.tint}
                     fallback={<MaterialCommunityIcons name="pencil-outline" size={20} color={Colors.onSurface} />}
                   />
                 ) : (

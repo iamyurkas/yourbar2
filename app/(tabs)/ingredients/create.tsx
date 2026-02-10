@@ -1,6 +1,7 @@
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { StackActions, useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
+import { SymbolView } from 'expo-symbols';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
@@ -934,10 +935,11 @@ export default function IngredientFormScreen() {
         <Stack.Screen
           options={{
             title: 'Edit ingredient',
-            headerTitleAlign: 'center',
+            headerTitleAlign: Platform.OS === 'ios' ? 'center' : 'left',
             headerStyle: { backgroundColor: Colors.surface },
+            headerTintColor: Platform.OS === 'ios' ? Colors.tint : Colors.onSurface,
             headerShadowVisible: false,
-            headerTitleStyle: { color: Colors.onSurface, fontSize: 16, fontWeight: '600' },
+            headerTitleStyle: { color: Colors.onSurface, fontSize: Platform.OS === 'ios' ? 17 : 16, fontWeight: '600' },
             headerLeft: () => (
               <Pressable
                 onPress={handleGoBack}
@@ -945,7 +947,16 @@ export default function IngredientFormScreen() {
                 accessibilityLabel="Go back"
                 style={styles.headerButton}
                 hitSlop={8}>
+                {Platform.OS === 'ios' ? (
+                <SymbolView
+                  name="chevron.left"
+                  size={20}
+                  tintColor={Colors.tint}
+                  fallback={<MaterialCommunityIcons name="arrow-left" size={22} color={Colors.onSurface} />}
+                />
+              ) : (
                 <MaterialCommunityIcons name="arrow-left" size={22} color={Colors.onSurface} />
+              )}
               </Pressable>
             ),
           }}
@@ -1121,10 +1132,11 @@ export default function IngredientFormScreen() {
       <Stack.Screen
         options={{
           title: isEditMode ? 'Edit ingredient' : 'Add ingredient',
-          headerTitleAlign: 'center',
+          headerTitleAlign: Platform.OS === 'ios' ? 'center' : 'left',
           headerStyle: { backgroundColor: Colors.surface },
+          headerTintColor: Platform.OS === "ios" ? Colors.tint : Colors.onSurface,
           headerShadowVisible: false,
-          headerTitleStyle: { color: Colors.onSurface, fontSize: 16, fontWeight: '600' },
+          headerTitleStyle: { color: Colors.onSurface, fontSize: Platform.OS === 'ios' ? 17 : 16, fontWeight: '600' },
           headerLeft: () => (
             <Pressable
               onPress={handleGoBack}
@@ -1132,7 +1144,16 @@ export default function IngredientFormScreen() {
               accessibilityLabel="Go back"
               style={styles.headerButton}
               hitSlop={8}>
-              <MaterialCommunityIcons name="arrow-left" size={22} color={Colors.onSurface} />
+              {Platform.OS === 'ios' ? (
+                <SymbolView
+                  name="chevron.left"
+                  size={20}
+                  tintColor={Colors.tint}
+                  fallback={<MaterialCommunityIcons name="arrow-left" size={22} color={Colors.onSurface} />}
+                />
+              ) : (
+                <MaterialCommunityIcons name="arrow-left" size={22} color={Colors.onSurface} />
+              )}
             </Pressable>
           ),
           headerRight: () =>
@@ -1143,7 +1164,16 @@ export default function IngredientFormScreen() {
                 accessibilityLabel="Delete ingredient"
                 style={styles.headerButton}
                 hitSlop={8}>
-                <MaterialIcons name="delete-outline" size={22} color={Colors.onSurface} />
+                {Platform.OS === 'ios' ? (
+                  <SymbolView
+                    name="trash"
+                    size={18}
+                    tintColor={Colors.tint}
+                    fallback={<MaterialIcons name="delete-outline" size={22} color={Colors.onSurface} />}
+                  />
+                ) : (
+                  <MaterialIcons name="delete-outline" size={22} color={Colors.onSurface} />
+                )}
               </Pressable>
             ) : null,
         }}

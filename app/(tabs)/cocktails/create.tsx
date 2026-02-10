@@ -3,6 +3,7 @@ import { StackActions, useNavigation } from "@react-navigation/native";
 import { Image } from "expo-image";
 import * as Haptics from "expo-haptics";
 import * as ImagePicker from "expo-image-picker";
+import { SymbolView } from "expo-symbols";
 import { Stack, router, useLocalSearchParams } from "expo-router";
 import React, {
   useCallback,
@@ -1431,12 +1432,13 @@ export default function CreateCocktailScreen() {
       <Stack.Screen
         options={{
           title: isEditMode ? "Edit cocktail" : "Add cocktail",
-          headerTitleAlign: "center",
+          headerTitleAlign: Platform.OS === "ios" ? "center" : "left",
           headerStyle: { backgroundColor: Colors.surface },
+          headerTintColor: Platform.OS === "ios" ? Colors.tint : Colors.onSurface,
           headerShadowVisible: false,
           headerTitleStyle: {
             color: Colors.onSurface,
-            fontSize: 16,
+            fontSize: Platform.OS === "ios" ? 17 : 16,
             fontWeight: "600",
           },
           headerLeft: () => (
@@ -1444,11 +1446,20 @@ export default function CreateCocktailScreen() {
               onPress={handleGoBack}
               accessibilityLabel="Go back"
             >
-              <MaterialCommunityIcons
-                name="arrow-left"
-                size={22}
-                color={Colors.onSurface}
-              />
+              {Platform.OS === "ios" ? (
+                <SymbolView
+                  name="chevron.left"
+                  size={20}
+                  tintColor={Colors.tint}
+                  fallback={<MaterialCommunityIcons name="arrow-left" size={22} color={Colors.onSurface} />}
+                />
+              ) : (
+                <MaterialCommunityIcons
+                  name="arrow-left"
+                  size={22}
+                  color={Colors.onSurface}
+                />
+              )}
             </HeaderIconButton>
           ),
           headerRight: () => {
@@ -1458,11 +1469,20 @@ export default function CreateCocktailScreen() {
                   onPress={handleDeletePress}
                   accessibilityLabel="Delete cocktail"
                 >
-                  <MaterialIcons
-                    name="delete-outline"
-                    size={20}
-                    color={Colors.onSurface}
-                  />
+                  {Platform.OS === "ios" ? (
+                    <SymbolView
+                      name="trash"
+                      size={18}
+                      tintColor={Colors.tint}
+                      fallback={<MaterialIcons name="delete-outline" size={20} color={Colors.onSurface} />}
+                    />
+                  ) : (
+                    <MaterialIcons
+                      name="delete-outline"
+                      size={20}
+                      color={Colors.onSurface}
+                    />
+                  )}
                 </HeaderIconButton>
               );
             }
@@ -1491,11 +1511,20 @@ export default function CreateCocktailScreen() {
                 }
                 accessibilityLabel="Edit cocktail"
               >
-                <MaterialCommunityIcons
-                  name="pencil-outline"
-                  size={20}
-                  color={Colors.onSurface}
-                />
+                {Platform.OS === "ios" ? (
+                  <SymbolView
+                    name="pencil"
+                    size={18}
+                    tintColor={Colors.tint}
+                    fallback={<MaterialCommunityIcons name="pencil-outline" size={20} color={Colors.onSurface} />}
+                  />
+                ) : (
+                  <MaterialCommunityIcons
+                    name="pencil-outline"
+                    size={20}
+                    color={Colors.onSurface}
+                  />
+                )}
               </HeaderIconButton>
             );
           },
