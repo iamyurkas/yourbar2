@@ -3,6 +3,7 @@ import { useInventory } from '@/providers/inventory-provider';
 import { usePathname } from 'expo-router';
 import React, { useMemo } from 'react';
 import {
+  Platform,
   Pressable,
   StyleSheet,
   Text,
@@ -10,6 +11,7 @@ import {
   View,
 } from 'react-native';
 import Svg, { Defs, Mask, Rect } from 'react-native-svg';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useOnboardingAnchors } from './OnboardingContext';
 
 type StepDef = {
@@ -76,7 +78,8 @@ export function OnboardingOverlay() {
   const { anchors, requestTabChange, triggerAction } = useOnboardingAnchors();
   const Colors = useAppColors();
   const pathname = usePathname();
-  const { height: screenHeight } = useWindowDimensions();
+  const { width: screenWidth, height: screenHeight } = useWindowDimensions();
+  const insets = useSafeAreaInsets();
   const [overlayOffset, setOverlayOffset] = React.useState({ x: 0, y: 0 });
   const overlayRef = React.useRef<View>(null);
 
@@ -206,6 +209,7 @@ export function OnboardingOverlay() {
   const isTabPrompt = ['tab-ingredients', 'tab-cocktails', 'tab-shaker'].includes(
     currentStep.anchorName ?? ''
   );
+  const hasActionButton = Boolean(currentStep.buttonLabel);
   const highlightPaddingX = 14;
   const highlightPaddingY = 4;
   const highlightRadius = 8;
@@ -237,11 +241,25 @@ export function OnboardingOverlay() {
     completeOnboarding();
   };
 
-  const tooltipTop = adjustedAnchor
+  const tooltipWidth = Math.min(screenWidth - 40, 520);
+  const tooltipLeft = (screenWidth - tooltipWidth) / 2;
+  const defaultTop = screenHeight / 2 - 100;
+  const minTop = insets.top + 16;
+  const maxTop = screenHeight - insets.bottom - 220;
+
+  const anchorDrivenTop = adjustedAnchor
     ? (adjustedAnchor.y + adjustedAnchor.height + 20 > screenHeight - 150
       ? adjustedAnchor.y - 120
-      : adjustedAnchor.y + adjustedAnchor.height + 10) - (isTabPrompt ? 20 : 0)
-    : screenHeight / 2 - 100;
+      : adjustedAnchor.y + adjustedAnchor.height + 10)
+    : defaultTop;
+
+  // For tab-prompt steps on iOS, keep the tooltip away from the bottom tab bar
+  // so it doesn't steal taps from the highlighted tab targets.
+  const preferredTop = isTabPrompt && Platform.OS === 'ios'
+    ? minTop + 56
+    : anchorDrivenTop - (isTabPrompt ? 20 : 0);
+
+  const tooltipTop = Math.min(Math.max(preferredTop, minTop), maxTop);
 
   return (
     <View
@@ -281,7 +299,19 @@ export function OnboardingOverlay() {
         />
       </Svg>
 
-      <View style={[styles.tooltip, { top: tooltipTop, backgroundColor: Colors.surface, borderColor: Colors.outline }]}>
+      <View
+        style={[
+          styles.tooltip,
+          {
+            top: tooltipTop,
+            left: tooltipLeft,
+            width: tooltipWidth,
+            backgroundColor: Colors.surface,
+            borderColor: Colors.outline,
+          },
+        ]}
+        pointerEvents={hasActionButton ? 'auto' : 'none'}
+      >
         <Text style={[styles.message, { color: Colors.onSurface }]}>
           {renderFormattedMessage(currentStep.message)}
         </Text>
@@ -315,8 +345,6 @@ export function OnboardingOverlay() {
 const styles = StyleSheet.create({
   tooltip: {
     position: 'absolute',
-    left: 20,
-    right: 20,
     padding: 20,
     borderRadius: 12,
     borderWidth: 1,
