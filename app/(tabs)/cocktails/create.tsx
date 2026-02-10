@@ -24,6 +24,7 @@ import {
   View,
   findNodeHandle,
 } from "react-native";
+import Animated, { LinearTransition } from "react-native-reanimated";
 
 import { resolveAssetFromCatalog } from "@/assets/image-manifest";
 import { AppDialog, type DialogOptions } from "@/components/AppDialog";
@@ -66,6 +67,7 @@ const DEFAULT_METRIC_UNIT_ID = 11;
 const DEFAULT_IMPERIAL_UNIT_ID = 12;
 const MIN_AUTOCOMPLETE_LENGTH = 2;
 const MAX_SUGGESTIONS = 8;
+const INGREDIENT_REORDER_TRANSITION = LinearTransition.duration(180);
 
 type EditableSubstitute = {
   key: string;
@@ -2433,7 +2435,8 @@ function EditableIngredientRow({
   }, []);
 
   return (
-    <View
+    <Animated.View
+      layout={INGREDIENT_REORDER_TRANSITION}
       style={[
         styles.ingredientCard,
         { borderColor: Colors.outlineVariant, backgroundColor: Colors.surface },
@@ -2798,7 +2801,7 @@ function EditableIngredientRow({
           </View>
         ) : null}
       </View>
-    </View>
+    </Animated.View>
   );
 }
 
