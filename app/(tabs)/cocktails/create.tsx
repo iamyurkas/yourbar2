@@ -2439,6 +2439,7 @@ function EditableIngredientRow({
       layout={INGREDIENT_REORDER_TRANSITION}
       style={[
         styles.ingredientCard,
+        showSuggestions && styles.ingredientCardActive,
         { borderColor: Colors.outlineVariant, backgroundColor: Colors.surface },
       ]}
     >
@@ -3034,6 +3035,7 @@ const styles = StyleSheet.create({
     marginTop: 6,
   },
   addIngredientButton: {
+    zIndex: 1,
     flexDirection: "row",
     alignItems: "center",
     gap: 6,
@@ -3057,6 +3059,10 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 14,
     gap: 12,
+  },
+  ingredientCardActive: {
+    zIndex: 20,
+    elevation: 20,
   },
   ingredientHeaderSimple: {
     flexDirection: "row",
