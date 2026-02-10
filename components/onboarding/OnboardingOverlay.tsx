@@ -3,7 +3,6 @@ import { useInventory } from '@/providers/inventory-provider';
 import { usePathname } from 'expo-router';
 import React, { useMemo } from 'react';
 import {
-  Platform,
   Pressable,
   StyleSheet,
   Text,
@@ -243,30 +242,34 @@ export function OnboardingOverlay() {
 
   const tooltipWidth = Math.min(screenWidth - 40, 520);
   const tooltipLeft = (screenWidth - tooltipWidth) / 2;
-  const defaultTop = screenHeight / 2 - 100;
+  const estimatedTooltipHeight = hasActionButton ? 200 : 110;
+  const defaultTop = screenHeight / 2 - estimatedTooltipHeight / 2;
   const minTop = insets.top + 16;
-  const maxTop = screenHeight - insets.bottom - 220;
+  const maxTop = screenHeight - insets.bottom - estimatedTooltipHeight - 16;
 
   const anchorDrivenTop = adjustedAnchor
-    ? (adjustedAnchor.y + adjustedAnchor.height + 20 > screenHeight - 150
-      ? adjustedAnchor.y - 120
-      : adjustedAnchor.y + adjustedAnchor.height + 10)
+    ? (() => {
+      const aboveTop = adjustedAnchor.y - estimatedTooltipHeight - 12;
+      const belowTop = adjustedAnchor.y + adjustedAnchor.height + 12;
+      const isAnchorInLowerHalf = adjustedAnchor.y > screenHeight / 2;
+
+      // Keep tab prompts above the tab bar anchor by default to preserve touch targets.
+      if (isTabPrompt || isAnchorInLowerHalf) {
+        return aboveTop;
+      }
+
+      return belowTop;
+    })()
     : defaultTop;
 
-  // For tab-prompt steps on iOS, keep the tooltip away from the bottom tab bar
-  // so it doesn't steal taps from the highlighted tab targets.
-  const preferredTop = isTabPrompt && Platform.OS === 'ios'
-    ? minTop + 56
-    : anchorDrivenTop - (isTabPrompt ? 20 : 0);
-
-  const tooltipTop = Math.min(Math.max(preferredTop, minTop), maxTop);
+  const tooltipTop = Math.min(Math.max(anchorDrivenTop, minTop), maxTop);
 
   return (
     <View
       ref={overlayRef}
       onLayout={handleLayout}
       style={StyleSheet.absoluteFill}
-      pointerEvents="box-none"
+      pointerEvents={hasActionButton ? 'box-none' : 'none'}
       collapsable={false}
     >
       <Svg
