@@ -68,11 +68,23 @@ const DEFAULT_IMPERIAL_UNIT_ID = 12;
 const MIN_AUTOCOMPLETE_LENGTH = 2;
 const MAX_SUGGESTIONS = 8;
 
+const isFabricEnabled = Boolean(
+  (globalThis as { nativeFabricUIManager?: unknown }).nativeFabricUIManager,
+);
+
 if (
   Platform.OS === "android" &&
-  typeof UIManager.setLayoutAnimationEnabledExperimental === "function"
+  !isFabricEnabled &&
+  typeof LayoutAnimation.configureNext === "function"
 ) {
-  UIManager.setLayoutAnimationEnabledExperimental(true);
+  // Required only on the old architecture; New Architecture ignores this API and logs a warning.
+  const setLayoutAnimationEnabledExperimental = (
+    UIManager as typeof UIManager & {
+      setLayoutAnimationEnabledExperimental?: (enabled: boolean) => void;
+    }
+  ).setLayoutAnimationEnabledExperimental;
+
+  setLayoutAnimationEnabledExperimental?.(true);
 }
 
 type EditableSubstitute = {
