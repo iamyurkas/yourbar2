@@ -699,9 +699,11 @@ export default function CocktailDetailsScreen() {
           ),
           headerTitleStyle: {
             color: Colors.onSurface,
-            fontSize: 16,
+            fontSize: Platform.OS === "ios" ? 17 : 16,
             fontWeight: "600",
           },
+          headerLeftContainerStyle: Platform.OS === "ios" ? styles.headerSideContainerIos : undefined,
+          headerRightContainerStyle: Platform.OS === "ios" ? styles.headerSideContainerIos : undefined,
           headerShadowVisible: false,
           headerLeft: () => (
             <HeaderIconButton
@@ -1299,6 +1301,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
+  },
+  headerSideContainerIos: {
+    paddingHorizontal: 12,
   },
   content: {
     paddingHorizontal: 24,
