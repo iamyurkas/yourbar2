@@ -884,6 +884,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     }
 
     const baseCocktails = baseMaps.baseCocktails;
+    const baseIngredients = baseMaps.baseIngredients;
 
     const cocktails = inventoryState.cocktails.reduce<InventoryExportData['cocktails']>((acc, cocktail) => {
       const record = toCocktailStorageRecord(cocktail);
@@ -908,10 +909,18 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       });
       return acc;
     }, []);
-    const ingredients = inventoryState.ingredients.map((ingredient) => {
+    const ingredients = inventoryState.ingredients.reduce<InventoryExportData['ingredients']>((acc, ingredient) => {
       const record = toIngredientStorageRecord(ingredient);
+      const id = Number(record.id ?? -1);
+      const normalizedId = Number.isFinite(id) && id >= 0 ? Math.trunc(id) : undefined;
+      const baseRecord = normalizedId != null ? baseIngredients.get(normalizedId) : undefined;
+
+      if (baseRecord && areStorageRecordsEqual(record, baseRecord)) {
+        return acc;
+      }
+
       const tags = normalizeTagIds(ingredient.tags);
-      return {
+      acc.push({
         ...record,
         tags,
         photoUri: normalizePhotoUriForBackup({
@@ -920,8 +929,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           id: record.id,
           name: record.name,
         }),
-      };
-    });
+      });
+      return acc;
+    }, []);
 
     return {
       cocktails,
@@ -935,6 +945,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     }
 
     const baseCocktails = baseMaps.baseCocktails;
+    const baseIngredients = baseMaps.baseIngredients;
 
     return [
       ...inventoryState.cocktails.reduce<PhotoBackupEntry[]>((acc, cocktail) => {
@@ -955,12 +966,24 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         });
         return acc;
       }, []),
-      ...inventoryState.ingredients.map((ingredient) => ({
-        type: 'ingredients' as const,
-        id: ingredient.id ?? '',
-        name: ingredient.name ?? 'ingredient',
-        uri: ingredient.photoUri ?? undefined,
-      })),
+      ...inventoryState.ingredients.reduce<PhotoBackupEntry[]>((acc, ingredient) => {
+        const record = toIngredientStorageRecord(ingredient);
+        const id = Number(record.id ?? -1);
+        const normalizedId = Number.isFinite(id) && id >= 0 ? Math.trunc(id) : undefined;
+        const baseRecord = normalizedId != null ? baseIngredients.get(normalizedId) : undefined;
+
+        if (baseRecord && areStorageRecordsEqual(record, baseRecord)) {
+          return acc;
+        }
+
+        acc.push({
+          type: 'ingredients' as const,
+          id: ingredient.id ?? '',
+          name: ingredient.name ?? 'ingredient',
+          uri: ingredient.photoUri ?? undefined,
+        });
+        return acc;
+      }, []),
     ];
   }, [baseMaps, inventoryState]);
 
