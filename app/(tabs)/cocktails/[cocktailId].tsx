@@ -709,16 +709,18 @@ export default function CocktailDetailsScreen() {
                   color={Colors.onSurface}
                 />
               </HeaderIconButton>
-              <HeaderIconButton
-                onPress={handleEditPress}
-                accessibilityLabel="Edit cocktail"
-              >
-                <MaterialCommunityIcons
-                  name="pencil-outline"
-                  size={20}
-                  color={Colors.onSurface}
-                />
-              </HeaderIconButton>
+              <View style={styles.headerActionWithSpacing}>
+                <HeaderIconButton
+                  onPress={handleEditPress}
+                  accessibilityLabel="Edit cocktail"
+                >
+                  <MaterialCommunityIcons
+                    name="pencil-outline"
+                    size={20}
+                    color={Colors.onSurface}
+                  />
+                </HeaderIconButton>
+              </View>
             </View>
           ),
         }}
@@ -1250,6 +1252,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
+  },
+  headerActionWithSpacing: {
+    marginLeft: 12,
   },
   content: {
     paddingHorizontal: 24,
