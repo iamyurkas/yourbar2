@@ -702,6 +702,7 @@ export default function CocktailDetailsScreen() {
               <HeaderIconButton
                 onPress={handleCopyPress}
                 accessibilityLabel="Copy cocktail"
+                style={styles.headerActionButton}
               >
                 <MaterialCommunityIcons
                   name="content-copy"
@@ -709,18 +710,17 @@ export default function CocktailDetailsScreen() {
                   color={Colors.onSurface}
                 />
               </HeaderIconButton>
-              <View style={styles.headerActionWithSpacing}>
-                <HeaderIconButton
-                  onPress={handleEditPress}
-                  accessibilityLabel="Edit cocktail"
-                >
-                  <MaterialCommunityIcons
-                    name="pencil-outline"
-                    size={20}
-                    color={Colors.onSurface}
-                  />
-                </HeaderIconButton>
-              </View>
+              <HeaderIconButton
+                onPress={handleEditPress}
+                accessibilityLabel="Edit cocktail"
+                style={styles.headerActionButton}
+              >
+                <MaterialCommunityIcons
+                  name="pencil-outline"
+                  size={20}
+                  color={Colors.onSurface}
+                />
+              </HeaderIconButton>
             </View>
           ),
         }}
@@ -1251,10 +1251,10 @@ const styles = StyleSheet.create({
   headerActions: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 8,
+    marginRight: -4,
   },
-  headerActionWithSpacing: {
-    marginLeft: 12,
+  headerActionButton: {
+    marginLeft: 8,
   },
   content: {
     paddingHorizontal: 24,
