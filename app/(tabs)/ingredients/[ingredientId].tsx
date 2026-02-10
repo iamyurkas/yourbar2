@@ -23,10 +23,10 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { FormattedText } from "@/components/FormattedText";
 import { AppDialog, type DialogOptions } from "@/components/AppDialog";
 import { AppImage } from "@/components/AppImage";
 import { CocktailListRow } from "@/components/CocktailListRow";
+import { FormattedText } from "@/components/FormattedText";
 import { HeaderIconButton } from "@/components/HeaderIconButton";
 import { PresenceCheck } from "@/components/RowParts";
 import { TagPill } from "@/components/TagPill";
@@ -620,7 +620,7 @@ export default function IngredientDetailsScreen() {
           headerStyle: { backgroundColor: Colors.surface },
           headerTitleStyle: {
             color: Colors.onSurface,
-            fontSize: Platform.OS === "ios" ? 17 : 16,
+            fontSize: 17,
             fontWeight: "600",
           },
           headerShadowVisible: false,

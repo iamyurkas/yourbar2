@@ -1431,7 +1431,7 @@ export default function CreateCocktailScreen() {
           headerShadowVisible: false,
           headerTitleStyle: {
             color: Colors.onSurface,
-            fontSize: Platform.OS === "ios" ? 17 : 16,
+            fontSize: 17,
             fontWeight: "600",
           },
           headerLeft: () => (

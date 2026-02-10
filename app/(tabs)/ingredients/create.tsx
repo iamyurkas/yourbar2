@@ -938,7 +938,11 @@ export default function IngredientFormScreen() {
             headerTitleAlign: 'center',
             headerStyle: { backgroundColor: Colors.surface },
             headerShadowVisible: false,
-            headerTitleStyle: { color: Colors.onSurface, fontSize: Platform.OS === 'ios' ? 17 : 16, fontWeight: '600' },
+            headerTitleStyle: {
+              color: Colors.onSurface,
+              fontSize: 17,
+              fontWeight: "600",
+            },
             headerLeft: () => (
               <HeaderIconButton
                 onPress={handleGoBack}
