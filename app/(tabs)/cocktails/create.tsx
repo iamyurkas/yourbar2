@@ -1431,7 +1431,7 @@ export default function CreateCocktailScreen() {
           headerShadowVisible: false,
           headerTitleStyle: {
             color: Colors.onSurface,
-            fontSize: 16,
+            fontSize: Platform.OS === "ios" ? 17 : 16,
             fontWeight: "600",
           },
           headerLeft: () => (
@@ -1440,8 +1440,8 @@ export default function CreateCocktailScreen() {
               accessibilityLabel="Go back"
             >
               <MaterialCommunityIcons
-                name="arrow-left"
-                size={22}
+                name={Platform.OS === "ios" ? "chevron-left" : "arrow-left"}
+                size={Platform.OS === "ios" ? 26 : 22}
                 color={Colors.onSurface}
               />
             </HeaderIconButton>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pressable, StyleSheet } from 'react-native';
+import { Platform, Pressable, StyleSheet } from 'react-native';
 
 type HeaderIconButtonProps = {
   onPress: () => void;
@@ -13,7 +13,7 @@ export function HeaderIconButton({ onPress, accessibilityLabel, children }: Head
       onPress={onPress}
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel}
-      style={styles.button}
+      style={({ pressed }) => [styles.button, Platform.OS === 'ios' ? styles.buttonIos : styles.buttonAndroid, pressed && styles.pressed]}
       hitSlop={8}>
       {children}
     </Pressable>
@@ -22,11 +22,21 @@ export function HeaderIconButton({ onPress, accessibilityLabel, children }: Head
 
 const styles = StyleSheet.create({
   button: {
-    paddingHorizontal: 4,
-    height: 40,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 20,
     backgroundColor: 'transparent',
+  },
+  buttonAndroid: {
+    paddingHorizontal: 4,
+    height: 40,
+    borderRadius: 20,
+  },
+  buttonIos: {
+    height: 32,
+    minWidth: 32,
+    paddingHorizontal: 2,
+  },
+  pressed: {
+    opacity: 0.55,
   },
 });

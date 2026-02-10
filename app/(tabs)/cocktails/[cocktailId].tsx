@@ -11,7 +11,7 @@ import {
   useState,
   useTransition,
 } from "react";
-import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Platform, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { FormattedText } from "@/components/FormattedText";
@@ -681,7 +681,7 @@ export default function CocktailDetailsScreen() {
           headerStyle: { backgroundColor: Colors.surface },
           headerTitleStyle: {
             color: Colors.onSurface,
-            fontSize: 16,
+            fontSize: Platform.OS === "ios" ? 17 : 16,
             fontWeight: "600",
           },
           headerShadowVisible: false,
@@ -691,8 +691,8 @@ export default function CocktailDetailsScreen() {
               accessibilityLabel="Go back"
             >
               <MaterialCommunityIcons
-                name="arrow-left"
-                size={22}
+                name={Platform.OS === "ios" ? "chevron-left" : "arrow-left"}
+                size={Platform.OS === "ios" ? 26 : 22}
                 color={Colors.onSurface}
               />
             </HeaderIconButton>
