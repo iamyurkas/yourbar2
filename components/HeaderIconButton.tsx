@@ -1,13 +1,14 @@
 import React from 'react';
-import { Platform, Pressable, StyleSheet } from 'react-native';
+import { Platform, Pressable, StyleProp, StyleSheet, ViewStyle } from 'react-native';
 
 type HeaderIconButtonProps = {
   onPress: () => void;
   accessibilityLabel: string;
   children: React.ReactNode;
+  style?: StyleProp<ViewStyle>;
 };
 
-export function HeaderIconButton({ onPress, accessibilityLabel, children }: HeaderIconButtonProps) {
+export function HeaderIconButton({ onPress, accessibilityLabel, children, style }: HeaderIconButtonProps) {
   return (
     <Pressable
       onPress={onPress}
@@ -17,6 +18,7 @@ export function HeaderIconButton({ onPress, accessibilityLabel, children }: Head
         styles.button,
         Platform.OS === 'ios' ? styles.buttonIos : styles.buttonAndroid,
         Platform.OS !== 'ios' && pressed && styles.pressed,
+        style,
       ]}
       hitSlop={8}>
       {children}
