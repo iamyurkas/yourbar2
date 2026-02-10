@@ -3044,6 +3044,7 @@ const styles = StyleSheet.create({
     minHeight: 52,
     width: "50%",
     alignSelf: "flex-start",
+    zIndex: 1,
   },
   addIngredientLabel: {
     fontSize: 14,
@@ -3051,6 +3052,7 @@ const styles = StyleSheet.create({
   },
   ingredientsList: {
     gap: 16,
+    zIndex: 2,
   },
   ingredientCard: {
     borderWidth: StyleSheet.hairlineWidth,
@@ -3237,6 +3239,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     minHeight: 56,
+    zIndex: 1,
   },
   submitLabel: {
     fontSize: 16,
