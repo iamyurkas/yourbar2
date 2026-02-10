@@ -14,6 +14,7 @@ import React, {
 } from "react";
 import {
   Linking,
+  Platform,
   Pressable,
   ScrollView,
   StyleSheet,

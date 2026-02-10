@@ -200,20 +200,44 @@ export function OnboardingOverlay() {
     currentStep.onEnter(inventory, requestTabChange);
   }, [onboardingStep, onboardingCompleted, currentStep, inventory, requestTabChange]);
 
-  if (onboardingCompleted || !onboardingStep || onboardingStep <= 0 || !currentStep) return null;
+  const anchor = useMemo(() => {
+    if (!currentStep?.anchorName) return null;
+    return anchors[currentStep.anchorName] || null;
+  }, [currentStep?.anchorName, anchors]);
 
-  const anchor = currentStep.anchorName ? anchors[currentStep.anchorName] : null;
-  const isTabPrompt = ['tab-ingredients', 'tab-cocktails', 'tab-shaker'].includes(
-    currentStep.anchorName ?? ''
-  );
+  const isTabPrompt = useMemo(() =>
+    ['tab-ingredients', 'tab-cocktails', 'tab-shaker'].includes(
+      currentStep?.anchorName ?? ''
+    ), [currentStep?.anchorName]);
+
   const highlightPaddingX = 14;
   const highlightPaddingY = 4;
   const highlightRadius = 8;
-  const adjustedAnchor = anchor ? {
+
+  const adjustedAnchor = useMemo(() => anchor ? {
     ...anchor,
     x: anchor.x - overlayOffset.x,
     y: anchor.y - overlayOffset.y,
-  } : null;
+  } : null, [anchor, overlayOffset.x, overlayOffset.y]);
+
+  const tooltipStyle = useMemo(() => {
+    if (!adjustedAnchor) {
+      return { top: screenHeight / 2 - 100 };
+    }
+
+    const isAbove = adjustedAnchor.y + adjustedAnchor.height + 20 > screenHeight - 150;
+    const tabOffset = isTabPrompt ? 20 : 0;
+
+    if (isAbove) {
+      return {
+        bottom: (screenHeight - adjustedAnchor.y) + 10 + tabOffset,
+      };
+    }
+
+    return {
+      top: adjustedAnchor.y + adjustedAnchor.height + 10 - tabOffset,
+    };
+  }, [adjustedAnchor, screenHeight, isTabPrompt]);
 
   const handleNext = () => {
     if (currentStep?.onNext) {
@@ -237,11 +261,7 @@ export function OnboardingOverlay() {
     completeOnboarding();
   };
 
-  const tooltipTop = adjustedAnchor
-    ? (adjustedAnchor.y + adjustedAnchor.height + 20 > screenHeight - 150
-      ? adjustedAnchor.y - 120
-      : adjustedAnchor.y + adjustedAnchor.height + 10) - (isTabPrompt ? 20 : 0)
-    : screenHeight / 2 - 100;
+  if (onboardingCompleted || !onboardingStep || onboardingStep <= 0 || !currentStep) return null;
 
   return (
     <View
@@ -250,6 +270,8 @@ export function OnboardingOverlay() {
       style={StyleSheet.absoluteFill}
       pointerEvents="box-none"
       collapsable={false}
+      accessibilityViewIsModal
+      importantForAccessibility="yes"
     >
       <Svg
         height="100%"
@@ -281,42 +303,125 @@ export function OnboardingOverlay() {
         />
       </Svg>
 
-      <View style={[styles.tooltip, { top: tooltipTop, backgroundColor: Colors.surface, borderColor: Colors.outline }]}>
-        <Text style={[styles.message, { color: Colors.onSurface }]}>
-          {renderFormattedMessage(currentStep.message)}
-        </Text>
-        {currentStep.buttonLabel && (
-          <>
-            <View style={styles.actionsRow}>
-              <Pressable
-                style={[styles.button, { backgroundColor: Colors.primary }]}
-                onPress={handleNext}
+      {/* Dimmed background parts that block touches to anything except the hole and tooltip */}
+      {adjustedAnchor ? (
+        <>
+          {/* Top */}
+          <View
+            style={[
+              styles.dimmer,
+              {
+                top: 0,
+                left: 0,
+                right: 0,
+                height: Math.max(0, adjustedAnchor.y - highlightPaddingY),
+              },
+            ]}
+          />
+          {/* Bottom */}
+          <View
+            style={[
+              styles.dimmer,
+              {
+                top: adjustedAnchor.y + adjustedAnchor.height + highlightPaddingY,
+                left: 0,
+                right: 0,
+                bottom: 0,
+              },
+            ]}
+          />
+          {/* Left */}
+          <View
+            style={[
+              styles.dimmer,
+              {
+                top: Math.max(0, adjustedAnchor.y - highlightPaddingY),
+                left: 0,
+                width: Math.max(0, adjustedAnchor.x - highlightPaddingX),
+                height: adjustedAnchor.height + highlightPaddingY * 2,
+              },
+            ]}
+          />
+          {/* Right */}
+          <View
+            style={[
+              styles.dimmer,
+              {
+                top: Math.max(0, adjustedAnchor.y - highlightPaddingY),
+                left: adjustedAnchor.x + adjustedAnchor.width + highlightPaddingX,
+                right: 0,
+                height: adjustedAnchor.height + highlightPaddingY * 2,
+              },
+            ]}
+          />
+        </>
+      ) : (
+        <Pressable
+          style={[styles.dimmer, StyleSheet.absoluteFill]}
+          onPress={() => { }} // Block all touches when no anchor
+        />
+      )}
+
+      <View
+        pointerEvents="box-none"
+        style={[styles.tooltipContainer, tooltipStyle]}
+      >
+        <View
+          style={[styles.tooltip, { backgroundColor: Colors.surface, borderColor: Colors.outline }]}
+          accessibilityRole="alert"
+        >
+          <Text style={[styles.message, { color: Colors.onSurface }]}>
+            {renderFormattedMessage(currentStep.message)}
+          </Text>
+          {currentStep.buttonLabel && (
+            <>
+              <View style={styles.actionsRow}>
+                <Pressable
+                  style={[styles.button, { backgroundColor: Colors.primary }]}
+                  onPress={handleNext}
+                  accessibilityRole="button"
+                  accessibilityLabel={currentStep.buttonLabel}
+                >
+                  <Text style={[styles.buttonText, { color: Colors.onPrimary }]}>{currentStep.buttonLabel}</Text>
+                </Pressable>
+                <Pressable
+                  style={styles.skipButton}
+                  onPress={handleSkip}
+                  hitSlop={8}
+                  accessibilityRole="button"
+                  accessibilityLabel="Skip onboarding"
+                >
+                  <Text style={[styles.skipLink, { color: Colors.onSurfaceVariant }]}>Skip</Text>
+                </Pressable>
+              </View>
+              <Text
+                style={[styles.stepCounter, { color: Colors.onSurfaceVariant }]}
+                accessibilityLabel={`Step ${currentStepIndex} of ${totalCount}`}
               >
-                <Text style={[styles.buttonText, { color: Colors.onPrimary }]}>{currentStep.buttonLabel}</Text>
-              </Pressable>
-              <Pressable
-                style={styles.skipButton}
-                onPress={handleSkip}
-                hitSlop={8}
-              >
-                <Text style={[styles.skipLink, { color: Colors.onSurfaceVariant }]}>Skip</Text>
-              </Pressable>
-            </View>
-            <Text style={[styles.stepCounter, { color: Colors.onSurfaceVariant }]}>
-              {currentStepIndex} of {totalCount}
-            </Text>
-          </>
-        )}
+                {currentStepIndex} of {totalCount}
+              </Text>
+            </>
+          )}
+        </View>
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  tooltip: {
+  dimmer: {
+    position: 'absolute',
+    backgroundColor: 'transparent', // Visuals handled by SVG
+  },
+  tooltipContainer: {
     position: 'absolute',
     left: 20,
     right: 20,
+    alignItems: 'center',
+  },
+  tooltip: {
+    width: '100%',
+    maxWidth: 500,
     padding: 20,
     borderRadius: 12,
     borderWidth: 1,
