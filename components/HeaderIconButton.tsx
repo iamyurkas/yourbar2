@@ -13,7 +13,11 @@ export function HeaderIconButton({ onPress, accessibilityLabel, children }: Head
       onPress={onPress}
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel}
-      style={({ pressed }) => [styles.button, Platform.OS === 'ios' ? styles.buttonIos : styles.buttonAndroid, pressed && styles.pressed]}
+      style={({ pressed }) => [
+        styles.button,
+        Platform.OS === 'ios' ? styles.buttonIos : styles.buttonAndroid,
+        Platform.OS !== 'ios' && pressed && styles.pressed,
+      ]}
       hitSlop={8}>
       {children}
     </Pressable>
