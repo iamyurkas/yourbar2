@@ -3357,7 +3357,7 @@ const styles = StyleSheet.create({
   methodModalList: {
     flexGrow: 1,
     paddingVertical: 8,
-    gap: 12,
+    gap: 4,
   },
   unitOption: {
     borderWidth: StyleSheet.hairlineWidth,
