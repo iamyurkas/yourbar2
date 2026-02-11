@@ -2301,6 +2301,7 @@ function EditableIngredientRow({
   }, [inventoryIngredients, normalizedName]);
 
   const showAddButton = normalizedName.length > 0 && !hasExactMatch;
+  const isSuggestionDropdownVisible = showSuggestions && suggestions.length > 0;
 
   const renderSubtitle = useCallback(
     (baseGroupId: number | undefined) => {
@@ -2439,6 +2440,7 @@ function EditableIngredientRow({
       layout={INGREDIENT_REORDER_TRANSITION}
       style={[
         styles.ingredientCard,
+        isSuggestionDropdownVisible && styles.ingredientCardRaised,
         { borderColor: Colors.outlineVariant, backgroundColor: Colors.surface },
       ]}
     >
@@ -2572,7 +2574,7 @@ function EditableIngredientRow({
         ) : null}
       </View>
 
-      {showSuggestions && suggestions.length ? (
+      {isSuggestionDropdownVisible ? (
         <View
           style={[
             styles.suggestionList,
@@ -3055,10 +3057,15 @@ const styles = StyleSheet.create({
     zIndex: 2,
   },
   ingredientCard: {
+    position: "relative",
     borderWidth: StyleSheet.hairlineWidth,
     borderRadius: 12,
     padding: 14,
     gap: 12,
+  },
+  ingredientCardRaised: {
+    zIndex: 30,
+    elevation: 30,
   },
   ingredientHeaderSimple: {
     flexDirection: "row",
