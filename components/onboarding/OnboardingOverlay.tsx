@@ -1,6 +1,6 @@
 import { useAppColors } from '@/constants/theme';
 import { useInventory } from '@/providers/inventory-provider';
-import { usePathname } from 'expo-router';
+import { usePathname, useRouter } from 'expo-router';
 import React, { useMemo } from 'react';
 import {
   Pressable,
@@ -22,6 +22,7 @@ type StepDef = {
     inventory: any,
     requestTabChange: (screen: 'ingredients' | 'cocktails', tab: string) => void,
     triggerAnchorAction: (name: string) => void,
+    navigateTo: (route: '/ingredients' | '/cocktails' | '/shaker') => void,
   ) => void;
   onEnter?: (inventory: any, requestTabChange: (screen: 'ingredients' | 'cocktails', tab: string) => void) => void;
 };
@@ -74,6 +75,7 @@ const renderFormattedMessage = (message: string) => {
 export function OnboardingOverlay() {
   const { onboardingStep, setOnboardingStep, completeOnboarding, onboardingCompleted, ...inventory } = useInventory();
   const { anchors, requestTabChange, triggerAction } = useOnboardingAnchors();
+  const router = useRouter();
   const Colors = useAppColors();
   const pathname = usePathname();
   const { height: screenHeight } = useWindowDimensions();
@@ -98,7 +100,11 @@ export function OnboardingOverlay() {
       id: 2,
       message: 'Tap **Ingredients** to start adding what you have.',
       anchorName: 'tab-ingredients',
+      buttonLabel: 'Next',
       autoNext: (_, path) => path.startsWith('/ingredients'),
+      onNext: (_, __, ___, navigateTo) => {
+        navigateTo('/ingredients');
+      },
       onEnter: (inv) => {
         const availableIds = inv.availableIngredientIds as Set<number> | undefined;
         const idsToSeed = [193, 159, 343, 111, 310, 333, 214, 222];
@@ -137,7 +143,11 @@ export function OnboardingOverlay() {
       id: 5,
       message: 'Now let’s check the cocktails.\nOpen the **Cocktails** screen.',
       anchorName: 'tab-cocktails',
+      buttonLabel: 'Next',
       autoNext: (_, path) => path.startsWith('/cocktails'),
+      onNext: (_, __, ___, navigateTo) => {
+        navigateTo('/cocktails');
+      },
     },
     {
       id: 6,
@@ -152,7 +162,11 @@ export function OnboardingOverlay() {
       id: 7,
       message: 'Meet the **Shaker**.\nIt helps you find cocktails based on selected ingredients.',
       anchorName: 'tab-shaker',
+      buttonLabel: 'Next',
       autoNext: (_, path) => path.startsWith('/shaker'),
+      onNext: (_, __, ___, navigateTo) => {
+        navigateTo('/shaker');
+      },
     },
     {
       id: 8,
@@ -216,8 +230,12 @@ export function OnboardingOverlay() {
   } : null;
 
   const handleNext = () => {
+    const navigateTo = (route: '/ingredients' | '/cocktails' | '/shaker') => {
+      router.navigate(route);
+    };
+
     if (currentStep?.onNext) {
-      currentStep.onNext(inventory, requestTabChange, triggerAction);
+      currentStep.onNext(inventory, requestTabChange, triggerAction, navigateTo);
     }
 
     if (onboardingStep >= steps[steps.length - 1].id) {
