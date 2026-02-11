@@ -248,15 +248,16 @@ export function OnboardingOverlay() {
       ref={overlayRef}
       onLayout={handleLayout}
       style={StyleSheet.absoluteFill}
-      pointerEvents="box-none"
+      pointerEvents={currentStep?.buttonLabel ? 'box-none' : 'none'}
       collapsable={false}
     >
-      <Svg
-        height="100%"
-        width="100%"
-        style={StyleSheet.absoluteFill}
-        pointerEvents="none"
-      >
+      <View style={StyleSheet.absoluteFill} pointerEvents="none">
+        <Svg
+          height="100%"
+          width="100%"
+          style={StyleSheet.absoluteFill}
+          pointerEvents="none"
+        >
         <Defs>
           <Mask id="mask">
             <Rect height="100%" width="100%" fill="white" />
@@ -272,14 +273,15 @@ export function OnboardingOverlay() {
             )}
           </Mask>
         </Defs>
-        <Rect
-          height="100%"
-          width="100%"
-          fill="rgba(0,0,0,0.7)"
-          mask="url(#mask)"
-          pointerEvents="none"
-        />
-      </Svg>
+          <Rect
+            height="100%"
+            width="100%"
+            fill="rgba(0,0,0,0.7)"
+            mask="url(#mask)"
+            pointerEvents="none"
+          />
+        </Svg>
+      </View>
 
       <View style={[styles.tooltip, { top: tooltipTop, backgroundColor: Colors.surface, borderColor: Colors.outline }]}>
         <Text style={[styles.message, { color: Colors.onSurface }]}>
