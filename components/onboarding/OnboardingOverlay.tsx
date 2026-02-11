@@ -248,38 +248,43 @@ export function OnboardingOverlay() {
       ref={overlayRef}
       onLayout={handleLayout}
       style={StyleSheet.absoluteFill}
-      pointerEvents="box-none"
+      pointerEvents={currentStep.buttonLabel ? "box-none" : "none"}
       collapsable={false}
     >
-      <Svg
-        height="100%"
-        width="100%"
+      <View
         style={StyleSheet.absoluteFill}
         pointerEvents="none"
       >
-        <Defs>
-          <Mask id="mask">
-            <Rect height="100%" width="100%" fill="white" />
-            {adjustedAnchor && (
-              <Rect
-                x={adjustedAnchor.x - highlightPaddingX}
-                y={adjustedAnchor.y - highlightPaddingY}
-                width={adjustedAnchor.width + highlightPaddingX * 2}
-                height={adjustedAnchor.height + highlightPaddingY * 2}
-                rx={highlightRadius}
-                fill="black"
-              />
-            )}
-          </Mask>
-        </Defs>
-        <Rect
+        <Svg
           height="100%"
           width="100%"
-          fill="rgba(0,0,0,0.7)"
-          mask="url(#mask)"
+          style={StyleSheet.absoluteFill}
           pointerEvents="none"
-        />
-      </Svg>
+        >
+          <Defs>
+            <Mask id="mask">
+              <Rect height="100%" width="100%" fill="white" />
+              {adjustedAnchor && (
+                <Rect
+                  x={adjustedAnchor.x - highlightPaddingX}
+                  y={adjustedAnchor.y - highlightPaddingY}
+                  width={adjustedAnchor.width + highlightPaddingX * 2}
+                  height={adjustedAnchor.height + highlightPaddingY * 2}
+                  rx={highlightRadius}
+                  fill="black"
+                />
+              )}
+            </Mask>
+          </Defs>
+          <Rect
+            height="100%"
+            width="100%"
+            fill="rgba(0,0,0,0.7)"
+            mask="url(#mask)"
+            pointerEvents="none"
+          />
+        </Svg>
+      </View>
 
       <View style={[styles.tooltip, { top: tooltipTop, backgroundColor: Colors.surface, borderColor: Colors.outline }]}>
         <Text style={[styles.message, { color: Colors.onSurface }]}>
