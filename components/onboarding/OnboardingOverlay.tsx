@@ -299,42 +299,50 @@ export function OnboardingOverlay() {
         />
       </Svg>
 
-      <View style={[styles.tooltip, { top: tooltipTop, backgroundColor: Colors.surface, borderColor: Colors.outline }]}>
-        <Text style={[styles.message, { color: Colors.onSurface }]}>
-          {renderFormattedMessage(currentStep.message)}
-        </Text>
-        {currentStep.buttonLabel && (
-          <>
-            <View style={styles.actionsRow}>
-              <Pressable
-                style={[styles.button, { backgroundColor: Colors.primary }]}
-                onPress={handleNext}
-              >
-                <Text style={[styles.buttonText, { color: Colors.onPrimary }]}>{currentStep.buttonLabel}</Text>
-              </Pressable>
-              <Pressable
-                style={styles.skipButton}
-                onPress={handleSkip}
-                hitSlop={8}
-              >
-                <Text style={[styles.skipLink, { color: Colors.onSurfaceVariant }]}>Skip</Text>
-              </Pressable>
-            </View>
-            <Text style={[styles.stepCounter, { color: Colors.onSurfaceVariant }]}>
-              {currentStepIndex} of {totalCount}
-            </Text>
-          </>
-        )}
+      <View style={[styles.tooltipContainer, { top: tooltipTop }]}>
+        <View style={[styles.tooltip, { backgroundColor: Colors.surface, borderColor: Colors.outline }]}>
+          <Text style={[styles.message, { color: Colors.onSurface }]}>
+            {renderFormattedMessage(currentStep.message)}
+          </Text>
+          {currentStep.buttonLabel && (
+            <>
+              <View style={styles.actionsRow}>
+                <Pressable
+                  style={[styles.button, { backgroundColor: Colors.primary }]}
+                  onPress={handleNext}
+                >
+                  <Text style={[styles.buttonText, { color: Colors.onPrimary }]}>{currentStep.buttonLabel}</Text>
+                </Pressable>
+                <Pressable
+                  style={styles.skipButton}
+                  onPress={handleSkip}
+                  hitSlop={8}
+                >
+                  <Text style={[styles.skipLink, { color: Colors.onSurfaceVariant }]}>Skip</Text>
+                </Pressable>
+              </View>
+              <Text style={[styles.stepCounter, { color: Colors.onSurfaceVariant }]}>
+                {currentStepIndex} of {totalCount}
+              </Text>
+            </>
+          )}
+        </View>
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  tooltip: {
+  tooltipContainer: {
     position: 'absolute',
-    left: 20,
-    right: 20,
+    left: 0,
+    right: 0,
+    alignItems: 'center',
+    paddingHorizontal: 20,
+  },
+  tooltip: {
+    width: '100%',
+    maxWidth: 500,
     padding: 20,
     borderRadius: 12,
     borderWidth: 1,
