@@ -72,8 +72,8 @@
       "id": 2,
       "name": "20th Century",
       "synonyms": ["Twentieth Century"],
-      "description": "The 20th Century cocktail is a classic cocktail that was first created in 1937 by a British bartender C.A. Tuck and named in honor of the celebrated 20th Century limited train which ran between New York City and Chicago. It's a sophisticated and elegant drink that combines London dry **gin**, **Lillet Blanc** (a French aperitif wine), **lime juice**, and **creme de cacao white**.",
-      "instructions": "1. Fill a cocktail shaker with **ice**.\n2. Add 30ml of **gin**, 20ml of **Lillet Blanc**, 20ml of **creme de cacao white**, and 10ml of **lime juice**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled coupe glass.\n5. Express an **orange** zest twist over the cocktail and use it as garnish.",
+      "description": "The 20th Century cocktail is a classic cocktail that was first created in 1937 by a British bartender C.A. Tuck and named in honor of the celebrated 20th Century limited train which ran between New York City and Chicago. It's a sophisticated and elegant drink that combines London dry **gin**, **Lillet Blanc** (a French aperitif wine), **lime juice**, and **Crème de Cacao White**.",
+      "instructions": "1. Fill a cocktail shaker with **ice**.\n2. Add 30ml of **gin**, 20ml of **Lillet Blanc**, 20ml of **Crème de Cacao White**, and 10ml of **lime juice**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled coupe glass.\n5. Express an **orange** zest twist over the cocktail and use it as garnish.",
       "photoUri": "assets/cocktails/2-20th-century-cocktail.jpg",
       "glassId": "coupe",
       "methodIds": ["shake"],
@@ -103,7 +103,7 @@
         {
           "order": 4,
           "ingredientId": 120,
-          "name": "Creme de Cacao White",
+          "name": "Crème de Cacao White",
           "amount": "20",
           "unitId": 11
         },
@@ -434,7 +434,7 @@
         {
           "order": 3,
           "ingredientId": 119,
-          "name": "Creme de Cacao Brown",
+          "name": "Crème de Cacao Brown",
           "amount": "15",
           "unitId": 11
         },
@@ -489,7 +489,7 @@
         {
           "order": 2,
           "ingredientId": 123,
-          "name": "Creme de Menthe Green",
+          "name": "Crème de Menthe Green",
           "amount": "20",
           "unitId": 11
         },
@@ -692,7 +692,7 @@
       "id": 13,
       "name": "Alexander",
       "description": "A classic, rich, and velvety cocktail combining **gin**, white crème de cacao, and **cream**. The alexander is smooth, lightly sweet, and dessert-like, with subtle **chocolate** notes balanced by botanical **gin** and a luxurious, silky texture.",
-      "instructions": "1. Pour 45ml of **gin**, 22.5ml of **creme de cacao white**, 22.5ml of **cream**, and an **egg white** into a shaker.\n2. Dry shake (without **ice**) vigorously for about 15 seconds to emulsify the **egg**.\n3. Add **ice** and shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled coupe glass.\n5. Garnish with a pinch of **nutmeg**.",
+      "instructions": "1. Pour 45ml of **gin**, 22.5ml of **Crème de Cacao White**, 22.5ml of **cream**, and an **egg white** into a shaker.\n2. Dry shake (without **ice**) vigorously for about 15 seconds to emulsify the **egg**.\n3. Add **ice** and shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled coupe glass.\n5. Garnish with a pinch of **nutmeg**.",
       "photoUri": "assets/cocktails/13-alexander.jpg",
       "glassId": "coupe",
       "methodIds": ["shake"],
@@ -715,7 +715,7 @@
         {
           "order": 3,
           "ingredientId": 120,
-          "name": "Creme de Cacao White",
+          "name": "Crème de Cacao White",
           "amount": "22.5",
           "unitId": 11
         },
@@ -753,7 +753,7 @@
       "id": 14,
       "name": "Alexander the Great",
       "description": "A luxurious, dessert-style cocktail that blends smooth **vodka** with rich **coffee liqueur** and white crème de cacao, finished with fresh **cream** for a silky, indulgent texture and gentle **chocolate**-coffee sweetness.",
-      "instructions": "1. Pour 45ml of **vodka**, 15ml of **coffee liqueur**, 15ml of **creme de cacao white**, 22.5ml of **cream** and an **egg white** into a shaker.\n2. Dry shake (without **ice**) vigorously for about 15 seconds to emulsify the **egg**.\n3. Add **ice** and shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled coupe glass.\n5. Garnish with a pinch of **cocoa powder** and/or a pinch of **chocolate**.",
+      "instructions": "1. Pour 45ml of **vodka**, 15ml of **coffee liqueur**, 15ml of **Crème de Cacao White**, 22.5ml of **cream** and an **egg white** into a shaker.\n2. Dry shake (without **ice**) vigorously for about 15 seconds to emulsify the **egg**.\n3. Add **ice** and shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled coupe glass.\n5. Garnish with a pinch of **cocoa powder** and/or a pinch of **chocolate**.",
       "photoUri": "assets/cocktails/14-alexander-the-great.jpg",
       "glassId": "coupe",
       "methodIds": ["shake"],
@@ -789,7 +789,7 @@
         {
           "order": 4,
           "ingredientId": 120,
-          "name": "Creme de Cacao White",
+          "name": "Crème de Cacao White",
           "amount": "15",
           "unitId": 11
         },
@@ -921,7 +921,7 @@
       "id": 16,
       "name": "Alexander's Sister",
       "description": "A classic creamy **gin** cocktail with bright green crème de menthe and smooth **cream**, creating a dessert-like balance of herbal freshness and silky sweetness. Elegant, refreshing, and indulgent, often served as an after-dinner drink and garnished with fresh **mint** or grated **nutmeg**.",
-      "instructions": "1. Pour 45ml of **gin**, 15ml of **creme de menthe green**, 15ml of **cream**, 5ml of **rich simple syrup**, and an **egg white** into a shaker.\n2. Dry shake (without **ice**) vigorously for about 15 seconds to emulsify the **egg**.\n3. Add **ice** and shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled Martini glass.\n5. Garnish with a **mint** leaf and a pinch of **nutmeg**.",
+      "instructions": "1. Pour 45ml of **gin**, 15ml of **Crème de Menthe Green**, 15ml of **cream**, 5ml of **rich simple syrup**, and an **egg white** into a shaker.\n2. Dry shake (without **ice**) vigorously for about 15 seconds to emulsify the **egg**.\n3. Add **ice** and shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled Martini glass.\n5. Garnish with a **mint** leaf and a pinch of **nutmeg**.",
       "photoUri": "assets/cocktails/16-alexander-s-sister.jpg",
       "glassId": "martini",
       "methodIds": ["shake"],
@@ -944,7 +944,7 @@
         {
           "order": 3,
           "ingredientId": 123,
-          "name": "Creme de Menthe Green",
+          "name": "Crème de Menthe Green",
           "amount": "15",
           "unitId": 11
         },
@@ -1118,7 +1118,7 @@
         {
           "order": 2,
           "ingredientId": 120,
-          "name": "Creme de Cacao White",
+          "name": "Crème de Cacao White",
           "amount": "15",
           "unitId": 11
         },
@@ -1151,7 +1151,7 @@
       "id": 20,
       "name": "Amado",
       "description": "A rich and silky rum-based cocktail with delicate floral sweetness from **rose syrup** and a velvety texture from **egg white**. Elegant, dessert-like, and indulgently smooth.",
-      "instructions": "1. Pour 60ml of **white rum**, 20ml of **lime juice**, 15ml of **rose syrup**, and an **egg white** into a shaker.\n2. Dry shake (without **ice**) vigorously for about 15 seconds to emulsify the **egg**.\n3. Add **ice** and shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled coupe glass.\n5. Garnish with a drop of angostura bitter.",
+      "instructions": "1. Pour 60ml of **white rum**, 20ml of **lime juice**, 15ml of **rose syrup**, and an **egg white** into a shaker.\n2. Dry shake (without **ice**) vigorously for about 15 seconds to emulsify the **egg**.\n3. Add **ice** and shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled coupe glass.\n5. Garnish with a drop of Angostura bitter.",
       "photoUri": "assets/cocktails/20-amado.jpg",
       "glassId": "coupe",
       "methodIds": ["shake"],
@@ -1752,8 +1752,8 @@
     {
       "id": 30,
       "name": "Angel's Tit",
-      "description": "A classic creamy layered shooter made with **creme de cacao brown**, maraschino liqueur, and fresh **cream**. Sweet, silky, and dessert-like, with a visual contrast of dark **chocolate** and white **cream**, traditionally garnished with a **cherry** on top.",
-      "instructions": "1. Chill a shooter glass to help keep the layers well defined.\n2. Carefully pour the **creme de cacao brown** into the bottom of the glass.\n3. Slowly layer the maraschino liqueur over the back of a spoon so it sits above the cacao.\n4. Gently float the **cream** on top, again using the back of a spoon to create a clean white layer.\n5. Garnish with a **maraschino cherry** placed in the center of the **cream** layer.\n6. Serve immediately and drink in one shot.",
+      "description": "A classic creamy layered shooter made with **Crème de Cacao Brown**, maraschino liqueur, and fresh **cream**. Sweet, silky, and dessert-like, with a visual contrast of dark **chocolate** and white **cream**, traditionally garnished with a **cherry** on top.",
+      "instructions": "1. Chill a shooter glass to help keep the layers well defined.\n2. Carefully pour the **Crème de Cacao Brown** into the bottom of the glass.\n3. Slowly layer the maraschino liqueur over the back of a spoon so it sits above the cacao.\n4. Gently float the **cream** on top, again using the back of a spoon to create a clean white layer.\n5. Garnish with a **maraschino cherry** placed in the center of the **cream** layer.\n6. Serve immediately and drink in one shot.",
       "photoUri": "assets/cocktails/30-angel-s-tit.jpg",
       "glassId": "shooter",
       "methodIds": ["layer"],
@@ -1762,7 +1762,7 @@
         {
           "order": 1,
           "ingredientId": 119,
-          "name": "Creme de Cacao Brown",
+          "name": "Crème de Cacao Brown",
           "amount": "30",
           "unitId": 11,
           "substitutes": [
@@ -1772,7 +1772,7 @@
             },
             {
               "ingredientId": 120,
-              "name": "Creme de Cacao White"
+              "name": "Crème de Cacao White"
             }
           ]
         },
@@ -1974,8 +1974,8 @@
     {
       "id": 34,
       "name": "Apple Sunrise",
-      "description": "A layered, spirit-forward **brandy** cocktail built around **Calvados** and **creme de cassis**, softened by fresh **apple juice**. Deeply aromatic, gently sweet, and visually striking, it balances orchard fruit, dark **berries**, and subtle oak warmth.",
-      "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 100ml of **apple juice**, 15ml of **lemon juice**, 15ml of **creme de cassis**, and 50ml of **Calvados**.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled collins glass.\n5. Garnish with an **apple** wedge and a **lemon** peel.",
+      "description": "A layered, spirit-forward **brandy** cocktail built around **Calvados** and **Crème de Cassis**, softened by fresh **apple juice**. Deeply aromatic, gently sweet, and visually striking, it balances orchard fruit, dark **berries**, and subtle oak warmth.",
+      "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 100ml of **apple juice**, 15ml of **lemon juice**, 15ml of **Crème de Cassis**, and 50ml of **Calvados**.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled collins glass.\n5. Garnish with an **apple** wedge and a **lemon** peel.",
       "photoUri": "assets/cocktails/34-apple-sunrise.jpg",
       "glassId": "collins_glass",
       "methodIds": ["stir", "layer"],
@@ -2005,7 +2005,7 @@
         {
           "order": 4,
           "ingredientId": 122,
-          "name": "Creme de Cassis",
+          "name": "Crème de Cassis",
           "amount": "15",
           "unitId": 11
         },
@@ -2276,7 +2276,7 @@
       "id": 39,
       "name": "Aviation",
       "description": "A floral **gin** sour with maraschino and **lemon**, tinted by crème de violette.",
-      "instructions": "1. Fill a cocktail shaker with **ice**.\n2. Add 45ml of **gin**, 15ml of **Luxardo Maraschino**, 15ml of **lemon juice**, and 1 bar spoon of **creme de violette**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled Martini glass.\n5. Garnish with a **maraschino cherry** and a twist of **lemon**.",
+      "instructions": "1. Fill a cocktail shaker with **ice**.\n2. Add 45ml of **gin**, 15ml of **Luxardo Maraschino**, 15ml of **lemon juice**, and 1 bar spoon of **Crème de Violette**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled Martini glass.\n5. Garnish with a **maraschino cherry** and a twist of **lemon**.",
       "photoUri": "assets/cocktails/39-aviation.jpg",
       "glassId": "martini",
       "methodIds": ["shake"],
@@ -2313,7 +2313,7 @@
         {
           "order": 5,
           "ingredientId": 126,
-          "name": "Creme de Violette",
+          "name": "Crème de Violette",
           "amount": "1",
           "unitId": 2,
           "optional": true
@@ -3040,7 +3040,7 @@
           "substitutes": [
             {
               "ingredientId": 118,
-              "name": "Creme de Banane"
+              "name": "Crème de Banane"
             }
           ]
         },
@@ -3118,7 +3118,7 @@
           "substitutes": [
             {
               "ingredientId": 118,
-              "name": "Creme de Banane"
+              "name": "Crème de Banane"
             }
           ]
         },
@@ -3292,7 +3292,7 @@
           "substitutes": [
             {
               "ingredientId": 118,
-              "name": "Creme de Banane"
+              "name": "Crème de Banane"
             }
           ]
         },
@@ -3471,7 +3471,7 @@
           "substitutes": [
             {
               "ingredientId": 118,
-              "name": "Creme de Banane"
+              "name": "Crème de Banane"
             }
           ]
         },
@@ -3517,7 +3517,7 @@
       "id": 59,
       "name": "Banshee",
       "description": "This mild, sweet and creamy shot is named after a female spirit in Irish and Celtic folklore, who foretells the death of a family member of the person who hears her wailing screams. This recipe is for 3 shots.",
-      "instructions": "For 3 shots:\n1. Fill a cocktail shaker with **ice**.\n2. Add 50ml of **creme de banane**, 50ml of **creme de cacao white**, and 50ml of **cream**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into 3 chilled shooter glasses.",
+      "instructions": "For 3 shots:\n1. Fill a cocktail shaker with **ice**.\n2. Add 50ml of **Crème de Banane**, 50ml of **Crème de Cacao White**, and 50ml of **cream**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into 3 chilled shooter glasses.",
       "photoUri": "assets/cocktails/59-banshee.jpg",
       "glassId": "shooter",
       "methodIds": ["shake"],
@@ -3533,7 +3533,7 @@
         {
           "order": 2,
           "ingredientId": 118,
-          "name": "Creme de Banane",
+          "name": "Crème de Banane",
           "amount": "50",
           "unitId": 11,
           "substitutes": [
@@ -3546,13 +3546,13 @@
         {
           "order": 3,
           "ingredientId": 120,
-          "name": "Creme de Cacao White",
+          "name": "Crème de Cacao White",
           "amount": "50",
           "unitId": 11,
           "substitutes": [
             {
               "ingredientId": 119,
-              "name": "Creme de Cacao Brown"
+              "name": "Crème de Cacao Brown"
             },
             {
               "ingredientId": 91,
@@ -3573,7 +3573,7 @@
       "id": 60,
       "name": "Barbara",
       "description": "A smooth, dessert-style cocktail combining **vodka**, white crème de cacao, and **milk**. Sweet, creamy, and softly chocolatey, barbara is an indulgent after-dinner drink with a gentle kick.",
-      "instructions": "1. Fill a cocktail shaker with **ice**.\n2. Add 45ml of **vodka**, 22.5ml of **creme de cacao white**, and 45ml of **milk**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled coupe glass.\n5. Garnish with a pinch of **cocoa powder** and a pinch of **chocolate**.",
+      "instructions": "1. Fill a cocktail shaker with **ice**.\n2. Add 45ml of **vodka**, 22.5ml of **Crème de Cacao White**, and 45ml of **milk**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled coupe glass.\n5. Garnish with a pinch of **cocoa powder** and a pinch of **chocolate**.",
       "photoUri": "assets/cocktails/60-barbara.jpg",
       "glassId": "coupe",
       "methodIds": ["shake"],
@@ -3596,7 +3596,7 @@
         {
           "order": 3,
           "ingredientId": 120,
-          "name": "Creme de Cacao White",
+          "name": "Crème de Cacao White",
           "amount": "22.5",
           "unitId": 11,
           "allowBaseSubstitution": true
@@ -4432,8 +4432,8 @@
     {
       "id": 74,
       "name": "Bitter in Brazil",
-      "description": "A tropical rum cocktail with **Cachaça**, **orange curaçao**, **Punt e Mes**, layered with citrus and sweetness for a lush, beachy vibe.",
-      "instructions": "1. Fill a cocktail shaker with **ice**.\n2. Add 45ml of **Cachaça**, 22.5ml of **orange curaçao**, 22.5ml of **Punt e Mes**, 5ml of **rich simple syrup**, 0.5 bar spoons of **Fernet Branca**, 15ml of **water**, and 1 twist of **orange**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled rocks glass filled with fresh **ice**.",
+      "description": "A tropical rum cocktail with **Cachaça**, **Orange Curaçao**, **Punt e Mes**, layered with citrus and sweetness for a lush, beachy vibe.",
+      "instructions": "1. Fill a cocktail shaker with **ice**.\n2. Add 45ml of **Cachaça**, 22.5ml of **Orange Curaçao**, 22.5ml of **Punt e Mes**, 5ml of **rich simple syrup**, 0.5 bar spoons of **Fernet Branca**, 15ml of **water**, and 1 twist of **orange**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled rocks glass filled with fresh **ice**.",
       "photoUri": "assets/cocktails/74-bitter-in-brazil.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["shake"],
@@ -4554,7 +4554,7 @@
       "id": 76,
       "name": "Blackberry Fig Smash",
       "description": "A bright agave spirit sour balancing **Tequila blanco**, **agave syrup**, **blackberry** with fresh citrus and a touch of sweetness for a crisp, refreshing sip. Garnished with figs.",
-      "instructions": "1. Fill a cocktail shaker with **ice**.\n2. Add 60ml of **Tequila blanco**, 30ml of **lime juice**, 30ml of **agave syrup**, 8 blackberries, and 1 **fig**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled rocks glass.\n5. Garnish with half a **fig** and 5 g of **salt**.",
+      "instructions": "1. Fill a cocktail shaker with **ice**.\n2. Add 60ml of **Tequila blanco**, 30ml of **lime juice**, 30ml of **agave syrup**, 8 **blackberries**, and 1 **fig**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled rocks glass.\n5. Garnish with half a **fig** and 5g of **salt**.",
       "photoUri": "assets/cocktails/76-blackberry-fig-smash.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["shake"],
@@ -5836,7 +5836,7 @@
       "id": 98,
       "name": "Bramble",
       "description": "A modern **gin** sour swirled with **blackberry liqueur**.",
-      "instructions": "1. Fill a cocktail shaker with **ice**.\n2. Add 50ml of **gin**, 25ml of **lemon juice**, and 15ml of **creme de mure**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled rocks glass.\n5. Garnish with a slice of **lemon** and 2 blackberries.",
+      "instructions": "1. Fill a cocktail shaker with **ice**.\n2. Add 50ml of **gin**, 25ml of **lemon juice**, and 15ml of **Crème de Mure**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled rocks glass.\n5. Garnish with a slice of **lemon** and 2 blackberries.",
       "photoUri": "assets/cocktails/98-bramble.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["shake"],
@@ -5866,7 +5866,7 @@
         {
           "order": 4,
           "ingredientId": 125,
-          "name": "Creme de Mure",
+          "name": "Crème de Mure",
           "amount": "15",
           "unitId": 11,
           "substitutes": [
@@ -5909,7 +5909,7 @@
       "id": 99,
       "name": "Brandy Alexander",
       "description": "A creamy blend of **Cognac** and **chocolate liqueur**.",
-      "instructions": "1. Fill a cocktail shaker with **ice**.\n2. Add 30ml of **Cognac** or **brandy**, 30ml of **creme de cacao white** and 30ml of **cream**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled coupe glass.\n5. Garnish with a pinch of **nutmeg**.",
+      "instructions": "1. Fill a cocktail shaker with **ice**.\n2. Add 30ml of **Cognac** or **brandy**, 30ml of **Crème de Cacao White** and 30ml of **cream**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled coupe glass.\n5. Garnish with a pinch of **nutmeg**.",
       "photoUri": "assets/cocktails/99-brandy-alexander.jpg",
       "glassId": "coupe",
       "methodIds": ["shake"],
@@ -5938,7 +5938,7 @@
         {
           "order": 3,
           "ingredientId": 120,
-          "name": "Creme de Cacao White",
+          "name": "Crème de Cacao White",
           "amount": "30",
           "unitId": 11,
           "substitutes": [
@@ -5969,7 +5969,7 @@
       "id": 100,
       "name": "Brandy Crusta",
       "description": "A citrusy **brandy** cocktail with curaçao, maraschino, and **bitters** served in a **sugar**-crusted glass.",
-      "instructions": "1. Fill a cocktail shaker with **ice**.\n2. Add 45ml of **Cognac**, 7.5ml of **Luxardo Maraschino**, 15ml of **orange curaçao**, 15ml of **lemon juice**, 15ml of **simple syrup**, and 2 dashes of **Angostura Bitters**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled coupe glass rimmed with **lemon juice** and caster **sugar**.\n5. Garnish with a twist of **lemon** and 5 g of **sugar**.",
+      "instructions": "1. Fill a cocktail shaker with **ice**.\n2. Add 45ml of **Cognac**, 7.5ml of **Luxardo Maraschino**, 15ml of **Orange Curaçao**, 15ml of **lemon juice**, 15ml of **simple syrup**, and 2 dashes of **Angostura Bitters**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled coupe glass rimmed with **lemon juice** and caster **sugar**.\n5. Garnish with a twist of **lemon** and 5 g of **sugar**.",
       "photoUri": "assets/cocktails/100-brandy-crusta.jpg",
       "glassId": "coupe",
       "methodIds": ["shake"],
@@ -6059,7 +6059,7 @@
       "id": 101,
       "name": "Brandy Daisy",
       "description": "A classic cocktail that dates back to the 19th Century.",
-      "instructions": "1. Fill a cocktail shaker with **ice**.\n2. Add 60ml of **brandy**, 3 dashes of **white rum**, 3 dashes of **orange curaçao**, 3 dashes of **simple syrup**, and 15ml of **lemon juice**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled coupe glass.\n5. Top with soda. \n6. Garnish with a **lemon** twist.",
+      "instructions": "1. Fill a cocktail shaker with **ice**.\n2. Add 60ml of **brandy**, 3 dashes of **white rum**, 3 dashes of **Orange Curaçao**, 3 dashes of **simple syrup**, and 15ml of **lemon juice**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled coupe glass.\n5. Top with soda. \n6. Garnish with a **lemon** twist.",
       "photoUri": "assets/cocktails/101-brandy-daisy.jpg",
       "glassId": "coupe",
       "methodIds": ["shake"],
@@ -6857,7 +6857,7 @@
         {
           "order": 4,
           "ingredientId": 119,
-          "name": "Creme de Cacao Brown",
+          "name": "Crème de Cacao Brown",
           "amount": "90",
           "unitId": 11,
           "substitutes": [
@@ -6867,7 +6867,7 @@
             },
             {
               "ingredientId": 120,
-              "name": "Creme de Cacao White"
+              "name": "Crème de Cacao White"
             }
           ]
         },
@@ -8379,8 +8379,8 @@
     {
       "id": 138,
       "name": "Cherry Alexander",
-      "description": "A rich, creamy **vodka** drink featuring **vodka vanilla**, **Cherry Heering**, **creme de cacao white**—dessert-like, smooth, and indulgent. Garnished with **maraschino cherry**.",
-      "instructions": "1. Pour 30ml of **vodka vanilla**, 15ml of **Cherry Heering**, 15ml of **creme de cacao white**, 30ml of **cream**, and an of **egg white** into a shaker.\n2. Dry shake (without **ice**) vigorously for about 15 seconds to emulsify the **egg**.\n3. Add **ice** and shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled coupe glass.\n5. Garnish with a **maraschino cherry** and a pinch of **nutmeg**.",
+      "description": "A rich, creamy **vodka** drink featuring **vodka vanilla**, **Cherry Heering**, **Crème de Cacao White**—dessert-like, smooth, and indulgent. Garnished with **maraschino cherry**.",
+      "instructions": "1. Pour 30ml of **vodka vanilla**, 15ml of **Cherry Heering**, 15ml of **Crème de Cacao White**, 30ml of **cream**, and an of **egg white** into a shaker.\n2. Dry shake (without **ice**) vigorously for about 15 seconds to emulsify the **egg**.\n3. Add **ice** and shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled coupe glass.\n5. Garnish with a **maraschino cherry** and a pinch of **nutmeg**.",
       "photoUri": "assets/cocktails/138-cherry-alexander.jpg",
       "glassId": "coupe",
       "methodIds": ["shake"],
@@ -8426,7 +8426,7 @@
         {
           "order": 4,
           "ingredientId": 120,
-          "name": "Creme de Cacao White",
+          "name": "Crème de Cacao White",
           "amount": "15",
           "unitId": 11
         },
@@ -8530,7 +8530,7 @@
       "id": 140,
       "name": "Chocolate Espresso Martini",
       "description": "A spirit-forward **vodka** cocktail showcasing **vodka**, **coffee liqueur**, **espresso**—deep, aromatic, and meant to be savored. Garnished with **chocolate syrup**.",
-      "instructions": "1. Dip the rim of a Martini glass into **chocolate syrup**, then into **cocoa powder** or **chocolate** shavings.\n2. Swirl **chocolate syrup** around the inside of the glass and place it in the freezer for 5-10 minutes.\n3. Fill a cocktail shaker with **ice**.\n4. Add 45ml of **vodka**, 30ml of **coffee liqueur**, 45ml of **espresso**, and 30ml of **creme de cacao white**.\n5. Shake vigorously for about 15 seconds until well chilled.\n6. Strain into the chilled Martini glass.\n7. Garnish with 3 **coffee beans**.",
+      "instructions": "1. Dip the rim of a Martini glass into **chocolate syrup**, then into **cocoa powder** or **chocolate** shavings.\n2. Swirl **chocolate syrup** around the inside of the glass and place it in the freezer for 5-10 minutes.\n3. Fill a cocktail shaker with **ice**.\n4. Add 45ml of **vodka**, 30ml of **coffee liqueur**, 45ml of **espresso**, and 30ml of **Crème de Cacao White**.\n5. Shake vigorously for about 15 seconds until well chilled.\n6. Strain into the chilled Martini glass.\n7. Garnish with 3 **coffee beans**.",
       "photoUri": "assets/cocktails/140-chocolate-espresso-martini.jpg",
       "glassId": "martini",
       "methodIds": ["shake"],
@@ -8573,7 +8573,7 @@
         {
           "order": 5,
           "ingredientId": 120,
-          "name": "Creme de Cacao White",
+          "name": "Crème de Cacao White",
           "amount": "30",
           "unitId": 11,
           "optional": true
@@ -8618,7 +8618,7 @@
       "id": 141,
       "name": "Chocolate Martini",
       "description": "An indulgent and velvety dessert cocktail that combines premium **vodka** with the deep, rich notes of **chocolate** for a luxurious treat.",
-      "instructions": "1. Dip the rim of a Martini glass into **chocolate syrup**, then into **cocoa powder** or **chocolate** shavings.\n2. Swirl **chocolate syrup** around the inside of the glass and place it in the freezer for 5-10 minutes.\n3. Fill a cocktail shaker with **ice**.\n4. Add 45ml of **vodka** and 45ml of **creme de cacao brown**.\n5. Shake vigorously for about 15 seconds until well chilled.\n6. Strain into a chilled Martini glass.\n7. Garnish with a shaving of **chocolate**.",
+      "instructions": "1. Dip the rim of a Martini glass into **chocolate syrup**, then into **cocoa powder** or **chocolate** shavings.\n2. Swirl **chocolate syrup** around the inside of the glass and place it in the freezer for 5-10 minutes.\n3. Fill a cocktail shaker with **ice**.\n4. Add 45ml of **vodka** and 45ml of **Crème de Cacao Brown**.\n5. Shake vigorously for about 15 seconds until well chilled.\n6. Strain into a chilled Martini glass.\n7. Garnish with a shaving of **chocolate**.",
       "photoUri": "assets/cocktails/141-chocolate-martini.jpg",
       "glassId": "martini",
       "methodIds": ["shake"],
@@ -8641,7 +8641,7 @@
         {
           "order": 3,
           "ingredientId": 119,
-          "name": "Creme de Cacao Brown",
+          "name": "Crème de Cacao Brown",
           "amount": "45",
           "unitId": 11,
           "substitutes": [
@@ -8671,7 +8671,7 @@
       "id": 142,
       "name": "Chocolate Negroni",
       "description": "A rich twist on the classic Negroni, keeping its bittersweet aperitif profile while adding white cacao and **chocolate bitters**.",
-      "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 30ml of **gin**, 22.5ml of **Punt e Mes**, 22.5ml of **strucchi bitter**, 7.5ml of **creme de cacao white**, and 3 dashes of **chocolate bitters**.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled rocks glass over fresh **ice**.\n5. Garnish with an **orange** zest twist.",
+      "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 30ml of **gin**, 22.5ml of **Punt e Mes**, 22.5ml of **strucchi bitter**, 7.5ml of **Crème de Cacao White**, and 3 dashes of **chocolate bitters**.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled rocks glass over fresh **ice**.\n5. Garnish with an **orange** zest twist.",
       "photoUri": "assets/cocktails/142-chocolate-negroni.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["stir"],
@@ -8708,7 +8708,7 @@
         {
           "order": 5,
           "ingredientId": 120,
-          "name": "Creme de Cacao White",
+          "name": "Crème de Cacao White",
           "amount": "7.5",
           "unitId": 11
         },
@@ -9486,7 +9486,7 @@
       "id": 156,
       "name": "Crimson King",
       "description": "A sophisticated, spirit-forward **whiskey** cocktail that balances the spicy bite of rye with the complex bitterness of strucchi and the herbal depth of **Punt e Mes**. Hints of **cherry** and coffee add a mysterious, dark richness to this bold drink.",
-      "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 30ml of **rye whiskey**, 22.5ml of **strucchi bitter**, 15ml of **Punt e Mes**, 7.5ml of **Cherry Heering**, and 5ml of **creme de cafe**.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled rocks glass.\n5. Garnish with a **maraschino cherry**.",
+      "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 30ml of **rye whiskey**, 22.5ml of **strucchi bitter**, 15ml of **Punt e Mes**, 7.5ml of **Cherry Heering**, and 5ml of **Crème de Café**.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled rocks glass.\n5. Garnish with a **maraschino cherry**.",
       "photoUri": "assets/cocktails/156-crimson-king.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["stir"],
@@ -9542,7 +9542,7 @@
         {
           "order": 6,
           "ingredientId": 121,
-          "name": "Creme de Cafe",
+          "name": "Crème de Cafe",
           "amount": "5",
           "unitId": 11,
           "substitutes": [
@@ -9731,8 +9731,8 @@
     {
       "id": 160,
       "name": "Damn the Bloody Weather",
-      "description": "A tropical **gin** cocktail with **gin**, **orange curaçao**, **red vermouth**, layered with citrus and sweetness for a lush, beachy vibe. Garnished with **blood orange**.",
-      "instructions": "1. Fill a cocktail shaker with **ice**.\n2. Add 30ml of **gin**, 15ml of **orange curaçao**, 30ml of **red vermouth**, 45ml of **blood orange** juice, and 1 dash of **orange bitters**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled coupe glass.\n5. Garnish with a slice of **blood orange**.",
+      "description": "A tropical **gin** cocktail with **gin**, **Orange Curaçao**, **red vermouth**, layered with citrus and sweetness for a lush, beachy vibe. Garnished with **blood orange**.",
+      "instructions": "1. Fill a cocktail shaker with **ice**.\n2. Add 30ml of **gin**, 15ml of **Orange Curaçao**, 30ml of **red vermouth**, 45ml of **blood orange** juice, and 1 dash of **orange bitters**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled coupe glass.\n5. Garnish with a slice of **blood orange**.",
       "photoUri": "assets/cocktails/160-damn-the-bloody-weather.jpg",
       "glassId": "coupe",
       "methodIds": ["shake"],
@@ -10342,7 +10342,7 @@
           "substitutes": [
             {
               "ingredientId": 118,
-              "name": "Creme de Banane"
+              "name": "Crème de Banane"
             }
           ]
         },
@@ -10383,7 +10383,7 @@
       "id": 171,
       "name": "Dirty Girl Scout",
       "description": "A sweet and moderate cocktail.",
-      "instructions": "For 3 servings:\n1. Fill a cocktail shaker with **ice**.\n2. Add 45ml of **coffee liqueur**, 45ml of **Baileys**, and 45ml of **creme de menthe white**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into 3 shooters.\n5. Garnish every glass with a pinch of **chocolate**.",
+      "instructions": "For 3 servings:\n1. Fill a cocktail shaker with **ice**.\n2. Add 45ml of **coffee liqueur**, 45ml of **Baileys**, and 45ml of **Crème de Menthe White**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into 3 shooters.\n5. Garnish every glass with a pinch of **chocolate**.",
       "photoUri": "assets/cocktails/171-dirty-girl-scout.jpg",
       "glassId": "shooter",
       "methodIds": ["shake"],
@@ -10419,7 +10419,7 @@
         {
           "order": 4,
           "ingredientId": 124,
-          "name": "Creme de Menthe White",
+          "name": "Crème de Menthe White",
           "amount": "45",
           "unitId": 11
         },
@@ -10933,7 +10933,7 @@
       "id": 180,
       "name": "El Diablo",
       "description": "A classic highball that perfectly balances the earthy notes of Tequila with the tart sweetness of blackcurrant liqueur and the spicy kick of **ginger beer**. It is a refreshing, vibrant, and slightly mysterious drink with a beautiful deep hue.",
-      "instructions": "1. Fill a cocktail shaker with **ice** cubes.\n2. Add the Tequila, **creme de cassis**, and fresh **lime juice** to the shaker.\n3. Shake well until the mixture is chilled.\n4. Strain the mixture into a collins glass filled with fresh **ice**.\n5. Top up with **ginger beer** and stir gently to combine.\n6. Garnish with a **lime** wedge or wheel.",
+      "instructions": "1. Fill a cocktail shaker with **ice** cubes.\n2. Add the Tequila, **Crème de Cassis**, and fresh **lime juice** to the shaker.\n3. Shake well until the mixture is chilled.\n4. Strain the mixture into a collins glass filled with fresh **ice**.\n5. Top up with **ginger beer** and stir gently to combine.\n6. Garnish with a **lime** wedge or wheel.",
       "photoUri": "assets/cocktails/180-el-diablo.jpg",
       "glassId": "collins_glass",
       "methodIds": ["shake"],
@@ -10956,7 +10956,7 @@
         {
           "order": 3,
           "ingredientId": 122,
-          "name": "Creme de Cassis",
+          "name": "Crème de Cassis",
           "amount": "15",
           "unitId": 11
         },
@@ -10994,8 +10994,8 @@
     {
       "id": 181,
       "name": "El Presidente",
-      "description": "A sophisticated and sleek cuban classic that balances the crispness of **white rum** with the herbal notes of **dry vermouth** and the bright citrus of **orange curaçao**. Often called the 'aristocrat of cocktails,' it offers a smooth, ruby-tinted elegance perfect for slow sipping.",
-      "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 45ml of **white rum**, 30ml of **dry vermouth**, 15ml of **orange curaçao**, and 10ml of **grenadine**.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled cocktail glass.\n5. Garnish with an **orange** twist.",
+      "description": "A sophisticated and sleek cuban classic that balances the crispness of **white rum** with the herbal notes of **dry vermouth** and the bright citrus of **Orange Curaçao**. Often called the 'aristocrat of cocktails,' it offers a smooth, ruby-tinted elegance perfect for slow sipping.",
+      "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 45ml of **white rum**, 30ml of **dry vermouth**, 15ml of **Orange Curaçao**, and 10ml of **grenadine**.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled cocktail glass.\n5. Garnish with an **orange** twist.",
       "photoUri": "assets/cocktails/181-el-presidente.jpg",
       "glassId": "coupe",
       "methodIds": ["stir"],
@@ -12515,7 +12515,7 @@
         {
           "order": 4,
           "ingredientId": 120,
-          "name": "Creme de Cacao White",
+          "name": "Crème de Cacao White",
           "amount": "15",
           "unitId": 11
         },
@@ -12900,7 +12900,7 @@
       "id": 214,
       "name": "Genever Fruit cup",
       "description": "A refreshing and bubbly long drink that showcases the malty notes of **oude genever** paired with citrusy curaçao and herbal **red vermouth**. Topped with **ginger ale** and **cola**, it's a botanical, fruit-forward sparkler perfect for social sipping.",
-      "instructions": "1. Add 25ml of **oude genever**, 15ml of **orange curaçao**, 25ml of **red vermouth**, 2 dashes of **Angostura Bitters**, 50ml of **ginger ale**, and 50ml of **cola** to a collins glass.\n2. Stir gently to combine.\n3. Garnish with an **orange** slice, a **lemon** slice, 4 **strawberry** slices, a **mint** sprig, and a **borage** sprig.",
+      "instructions": "1. Add 25ml of **oude genever**, 15ml of **Orange Curaçao**, 25ml of **red vermouth**, 2 dashes of **Angostura Bitters**, 50ml of **ginger ale**, and 50ml of **cola** to a collins glass.\n2. Stir gently to combine.\n3. Garnish with an **orange** slice, a **lemon** slice, 4 **strawberry** slices, a **mint** sprig, and a **borage** sprig.",
       "photoUri": "assets/cocktails/214-genever-fruit-cup.jpg",
       "glassId": "collins_glass",
       "methodIds": ["build"],
@@ -13666,7 +13666,7 @@
         {
           "order": 3,
           "ingredientId": 120,
-          "name": "Creme de Cacao White",
+          "name": "Crème de Cacao White",
           "amount": "20",
           "unitId": 11
         },
@@ -13833,14 +13833,14 @@
         {
           "order": 2,
           "ingredientId": 120,
-          "name": "Creme de Cacao White",
+          "name": "Crème de Cacao White",
           "amount": "20",
           "unitId": 11
         },
         {
           "order": 3,
           "ingredientId": 123,
-          "name": "Creme de Menthe Green",
+          "name": "Crème de Menthe Green",
           "amount": "20",
           "unitId": 11
         },
@@ -13954,7 +13954,7 @@
       "id": 233,
       "name": "Green Tea",
       "description": "A sophisticated and aromatic **vodka** cocktail that blends the herbal notes of bison grass **vodka** with the tropical sweetness of **Pisang Ambon** and a subtle cooling hint of white **mint**. Despite its name, it contains no tea, but offers a complex, spirit-forward profile complemented by crisp **apple juice**.",
-      "instructions": "1. Add the bison grass **vodka**, **Pisang Ambon**, **creme de menthe white**, and **apple juice** into a mixing glass or shaker.\n2. Fill the shaker with 150g of **ice**.\n3. Shake well for about 10-15 seconds.\n4. Strain into the chilled cocktail glass.\n5. Garnish with a fresh **banana** slice or peel to enhance the tropical aroma.",
+      "instructions": "1. Add the bison grass **vodka**, **Pisang Ambon**, **Crème de Menthe White**, and **apple juice** into a mixing glass or shaker.\n2. Fill the shaker with 150g of **ice**.\n3. Shake well for about 10-15 seconds.\n4. Strain into the chilled cocktail glass.\n5. Garnish with a fresh **banana** slice or peel to enhance the tropical aroma.",
       "photoUri": "assets/cocktails/233-green-tea.jpg",
       "glassId": "martini",
       "methodIds": ["shake"],
@@ -13984,7 +13984,7 @@
         {
           "order": 4,
           "ingredientId": 124,
-          "name": "Creme de Menthe White",
+          "name": "Crème de Menthe White",
           "amount": "5",
           "unitId": 11
         },
@@ -14110,8 +14110,8 @@
     {
       "id": 236,
       "name": "H.S.L. Special",
-      "description": "A bright liqueur-based sour that masterfully balances the herbal complexity of **Amaro Montenegro** with the deep berry notes of **creme de mure**. The addition of fresh **lime** and a hint of **absinthe** creates a refreshing, multi-layered profile with a crisp finish.",
-      "instructions": "1. Combine **Amaro Montenegro**, **creme de mure**, **lime juice**, **rich simple syrup**, and a dash of **absinthe** in a cocktail shaker.\n2. Fill the shaker with plenty of **ice** and shake vigorously.\n3. Strain into a rock glass over fresh **ice** cube.\n4. Garnish with a fresh **blackberry** or a **lime** wheel.",
+      "description": "A bright liqueur-based sour that masterfully balances the herbal complexity of **Amaro Montenegro** with the deep berry notes of **Crème de Mure**. The addition of fresh **lime** and a hint of **absinthe** creates a refreshing, multi-layered profile with a crisp finish.",
+      "instructions": "1. Combine **Amaro Montenegro**, **Crème de Mure**, **lime juice**, **rich simple syrup**, and a dash of **absinthe** in a cocktail shaker.\n2. Fill the shaker with plenty of **ice** and shake vigorously.\n3. Strain into a rock glass over fresh **ice** cube.\n4. Garnish with a fresh **blackberry** or a **lime** wheel.",
       "photoUri": "assets/cocktails/236-h-s-l-special.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["shake"],
@@ -14134,7 +14134,7 @@
         {
           "order": 3,
           "ingredientId": 125,
-          "name": "Creme de Mure",
+          "name": "Crème de Mure",
           "amount": "20",
           "unitId": 11,
           "substitutes": [
@@ -14494,7 +14494,7 @@
       "id": 242,
       "name": "Hazelnut Alexander",
       "description": "A nutty twist on the classic **brandy** alexander. This cocktail blends the deep notes of **Cognac** with rich **chocolate** and toasted hazelnut, rounded out by silky **cream** for a luxurious, dessert-like finish.",
-      "instructions": "1. Add the **Cognac**, creme de cacao, **hazelnut liqueur**, and **cream** into a cocktail shaker.\n2. Fill the shaker with plenty of **ice** and shake vigorously.\n3. Strain into the chilled coupe.\n4. Add a dash of **Angostura Bitters** on top if desired.\n5. Garnish by grating fresh **chocolate** over the surface.",
+      "instructions": "1. Add the **Cognac**, **Crème de Cacao**, **hazelnut liqueur**, and **cream** into a cocktail shaker.\n2. Fill the shaker with plenty of **ice** and shake vigorously.\n3. Strain into the chilled coupe.\n4. Add a dash of **Angostura Bitters** on top if desired.\n5. Garnish by grating fresh **chocolate** over the surface.",
       "photoUri": "assets/cocktails/242-hazelnut-alexander.jpg",
       "glassId": "coupe",
       "methodIds": ["shake"],
@@ -14523,7 +14523,7 @@
         {
           "order": 3,
           "ingredientId": 119,
-          "name": "Creme de Cacao Brown",
+          "name": "Crème de Cacao Brown",
           "amount": "15",
           "unitId": 11,
           "substitutes": [
@@ -14606,7 +14606,7 @@
         {
           "order": 4,
           "ingredientId": 120,
-          "name": "Creme de Cacao White",
+          "name": "Crème de Cacao White",
           "amount": "15",
           "unitId": 11
         },
@@ -15667,7 +15667,7 @@
         {
           "order": 1,
           "ingredientId": 123,
-          "name": "Creme de Menthe Green",
+          "name": "Crème de Menthe Green",
           "amount": "20",
           "unitId": 11
         },
@@ -16260,7 +16260,7 @@
         {
           "order": 1,
           "ingredientId": 120,
-          "name": "Creme de Cacao White",
+          "name": "Crème de Cacao White",
           "amount": "15",
           "unitId": 11
         },
@@ -16676,7 +16676,7 @@
       "id": 280,
       "name": "Kir",
       "description": "A classic French aperitif that elegantly combines the crispness of dry **white wine** with the sweet, dark fruit notes of blackcurrant liqueur.",
-      "instructions": "1. Add 10ml of **creme de cassis** and 90ml of **white wine** to a wine glass.\n2. Stir gently to combine.",
+      "instructions": "1. Add 10ml of **Crème de Cassis** and 90ml of **white wine** to a wine glass.\n2. Stir gently to combine.",
       "photoUri": "assets/cocktails/280-kir.jpg",
       "glassId": "wine_glass",
       "methodIds": ["build"],
@@ -16685,7 +16685,7 @@
         {
           "order": 1,
           "ingredientId": 122,
-          "name": "Creme de Cassis",
+          "name": "Crème de Cassis",
           "amount": "10",
           "unitId": 11
         },
@@ -16702,7 +16702,7 @@
       "id": 281,
       "name": "Kir Royal",
       "description": "An upscale, effervescent version of the classic kir, replacing still wine with **Champagne** for a celebratory and luxurious experience.",
-      "instructions": "1. Add 90ml of **Champagne** and 10ml of **creme de cassis** to a **Champagne** flute.\n2. Stir gently to combine.",
+      "instructions": "1. Add 90ml of **Champagne** and 10ml of **Crème de Cassis** to a **Champagne** flute.\n2. Stir gently to combine.",
       "photoUri": "assets/cocktails/281-kir-royal.jpg",
       "glassId": "champagne_flute",
       "methodIds": ["build"],
@@ -16711,7 +16711,7 @@
         {
           "order": 1,
           "ingredientId": 122,
-          "name": "Creme de Cassis",
+          "name": "Crème de Cassis",
           "amount": "10",
           "unitId": 11,
           "substitutes": [
@@ -17775,8 +17775,8 @@
     {
       "id": 298,
       "name": "Mai Tai",
-      "description": "Rum-forward tiki classic with **orange curaçao**, **lime**, and orgeat.",
-      "instructions": "1. Fill a cocktail shaker with **ice**.\n2. Add 30ml of **white rum**, 30ml of **dark rum**, 15ml of **orange curaçao**, 15ml of almond(orgeat) syrup, 30ml of **lime juice**, and 7.5ml of **simple syrup**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a highball glass filled with fresh **ice**.\n5. Garnish with a sprig of **mint** and a slice of **lime**.",
+      "description": "Rum-forward tiki classic with **Orange Curaçao**, **lime**, and orgeat.",
+      "instructions": "1. Fill a cocktail shaker with **ice**.\n2. Add 30ml of **white rum**, 30ml of **dark rum**, 15ml of **Orange Curaçao**, 15ml of almond(orgeat) syrup, 30ml of **lime juice**, and 7.5ml of **simple syrup**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a highball glass filled with fresh **ice**.\n5. Garnish with a sprig of **mint** and a slice of **lime**.",
       "photoUri": "assets/cocktails/298-mai-tai.jpg",
       "glassId": "highball_glass",
       "methodIds": ["shake"],
@@ -20724,7 +20724,7 @@
       "id": 347,
       "name": "Panama",
       "description": "A creamy and elegant dessert cocktail, this variation of the **brandy** alexander uses white crème de cacao for a lighter, more refined look.",
-      "instructions": "1. Fill a cocktail shaker with **ice**.\n2. Add 30ml of **Cognac**, 30ml of **creme de cacao white**, and 30ml of **cream**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled Martini glass.\n5. Garnish with a pinch of **nutmeg**.",
+      "instructions": "1. Fill a cocktail shaker with **ice**.\n2. Add 30ml of **Cognac**, 30ml of **Crème de Cacao White**, and 30ml of **cream**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled Martini glass.\n5. Garnish with a pinch of **nutmeg**.",
       "photoUri": "assets/cocktails/347-panama.jpg",
       "glassId": "martini",
       "methodIds": ["shake"],
@@ -20753,7 +20753,7 @@
         {
           "order": 3,
           "ingredientId": 120,
-          "name": "Creme de Cacao White",
+          "name": "Crème de Cacao White",
           "amount": "30",
           "unitId": 11
         },
@@ -23544,7 +23544,7 @@
           "substitutes": [
             {
               "ingredientId": 118,
-              "name": "Creme de Banane"
+              "name": "Crème de Banane"
             }
           ]
         },
@@ -24858,7 +24858,7 @@
       "id": 415,
       "name": "Snakebite",
       "description": "A classic British pub mix that blends the crispness of **apple cider** with the body of **lager**, finished with a sweet touch of blackcurrant.",
-      "instructions": "1. Add 240ml of **apple cider**, 240ml of **beer**, and 1 dash of **creme de cassis** to a pub glass.\n2. Stir gently to combine.",
+      "instructions": "1. Add 240ml of **apple cider**, 240ml of **beer**, and 1 dash of **Crème de Cassis** to a pub glass.\n2. Stir gently to combine.",
       "photoUri": "assets/cocktails/415-snakebite.jpg",
       "glassId": "pub_glass",
       "methodIds": ["build"],
@@ -24891,7 +24891,7 @@
         {
           "order": 3,
           "ingredientId": 122,
-          "name": "Creme de Cassis",
+          "name": "Crème de Cassis",
           "amount": "1",
           "unitId": 6,
           "substitutes": [
@@ -25438,8 +25438,8 @@
     {
       "id": 425,
       "name": "Stinger",
-      "description": "**Brandy** and crème de menthe served straight up.",
-      "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 50ml of **Cognac**, 20ml of **creme de menthe white**, and 2 **mint**.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled Martini glass.",
+      "description": "**Brandy** and Crème de Menthe served straight up.",
+      "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 50ml of **Cognac**, 20ml of **Crème de Menthe White**, and 2 **mint**.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled Martini glass.",
       "photoUri": "assets/cocktails/425-stinger.jpg",
       "glassId": "martini",
       "methodIds": ["stir"],
@@ -25468,7 +25468,7 @@
         {
           "order": 3,
           "ingredientId": 124,
-          "name": "Creme de Menthe White",
+          "name": "Crème de Menthe White",
           "amount": "20",
           "unitId": 11
         },
@@ -26762,7 +26762,7 @@
       "id": 447,
       "name": "The Ridgwell",
       "description": "A bold and layered **whiskey** cocktail that bridges the gap between a Manhattan and a bramble. The combination of **bourbon** and rye provides a sturdy base, while the bittersweet notes of **Punt e Mes** and **strucchi bitter** are softened by a touch of **blackberry liqueur**.",
-      "instructions": "1. Combine the **bourbon**, **rye whiskey**, **Punt e Mes**, **strucchi bitter**(or **Campari**), and **creme de mure** in a tin with **ice**.\n2. Add the dashes of angostura and **orange bitters**.\n3. Throw 5-6 times.\n4. Strain the drink into a chilled coupe glass.\n5. Garnish with a fresh **blackberry** dropped into the glass or on a cocktail pick.",
+      "instructions": "1. Combine the **bourbon**, **rye whiskey**, **Punt e Mes**, **strucchi bitter**(or **Campari**), and **Crème de Mure** in a tin with **ice**.\n2. Add the dashes of Angostura and **orange bitters**.\n3. Throw 5-6 times.\n4. Strain the drink into a chilled coupe glass.\n5. Garnish with a fresh **blackberry** dropped into the glass or on a cocktail pick.",
       "photoUri": "assets/cocktails/447-the-ridgwell.jpg",
       "glassId": "coupe",
       "methodIds": ["throw"],
@@ -26812,7 +26812,7 @@
         {
           "order": 6,
           "ingredientId": 125,
-          "name": "Creme de Mure",
+          "name": "Crème de Mure",
           "amount": "5",
           "unitId": 11
         },
@@ -28350,7 +28350,7 @@
       "id": 471,
       "name": "Vilno",
       "description": "Despite its name, this layered shot is very mild and sweet.",
-      "instructions": "1. Pour 15ml of **grenadine** into a shooter glass.\n2. Carefully layer 15ml of **creme de menthe green** over the back of a spoon.\n3. Gently float 15ml of **Irish cream** on top to finish the layered shot.",
+      "instructions": "1. Pour 15ml of **grenadine** into a shooter glass.\n2. Carefully layer 15ml of **Crème de Menthe Green** over the back of a spoon.\n3. Gently float 15ml of **Irish cream** on top to finish the layered shot.",
       "photoUri": "assets/cocktails/471-vilnius.jpg",
       "glassId": "shooter",
       "methodIds": ["layer"],
@@ -28366,7 +28366,7 @@
         {
           "order": 2,
           "ingredientId": 123,
-          "name": "Creme de Menthe Green",
+          "name": "Crème de Menthe Green",
           "amount": "15",
           "unitId": 11,
           "allowBaseSubstitution": true,
@@ -29997,7 +29997,7 @@
       "id": 497,
       "name": "Zombie Brain Tumor",
       "description": "This one looks really gross, but you'll like it.",
-      "instructions": "1. Pour 20ml of **creme de menthe green** into a shooter glass.\n2. Slowly layer 20ml of **Baileys**(**Irish cream** liqueur) so it forms a brain-like shape.\n3. Add 5ml of **grenadine**, one drop at a time to create a bleeding effect.",
+      "instructions": "1. Pour 20ml of **Crème de Menthe Green** into a shooter glass.\n2. Slowly layer 20ml of **Baileys**(**Irish cream** liqueur) so it forms a brain-like shape.\n3. Add 5ml of **grenadine**, one drop at a time to create a bleeding effect.",
       "photoUri": "assets/cocktails/497-zombie-brain-tumor.jpg",
       "glassId": "shooter",
       "methodIds": ["layer"],
@@ -30006,7 +30006,7 @@
         {
           "order": 1,
           "ingredientId": 123,
-          "name": "Creme de Menthe Green",
+          "name": "Crème de Menthe Green",
           "amount": "20",
           "unitId": 11
         },
@@ -31208,7 +31208,7 @@
     {
       "id": 110,
       "name": "Cointreau",
-      "description": "Cointreau is an orange-flavoured triple sec liqueur produced in saint-barthélemy-d'anjou, france. It is consumed as an apéritif and digestif, and is a component of several well-known cocktails. It was originally called curaçao blanco triple sec.",
+      "description": "Cointreau is an orange-flavoured triple sec liqueur produced in Saint-Barthélemy-d'Anjou, France. It is consumed as an apéritif and digestif, and is a component of several well-known cocktails. It was originally called curaçao blanco triple sec.",
       "tags": [1],
       "baseIngredientId": 333,
       "photoUri": "assets/ingredients/110-cointreau.jpg"
@@ -31265,64 +31265,64 @@
     },
     {
       "id": 118,
-      "name": "Creme de Banane",
-      "description": "Crème de banane is a banana liqueur about 20% ABV. Use it in a Banana Daiquiri or Yellow Bird.",
+      "name": "Crème de Banane",
+      "description": "Crème de Banane is a banana liqueur about 20% ABV. Use it in a Banana Daiquiri or Yellow Bird.",
       "tags": [2],
       "photoUri": "assets/ingredients/118-creme-de-banane.jpg"
     },
     {
       "id": 119,
-      "name": "Creme de Cacao Brown",
-      "description": "Dark crème de cacao is a chocolate liqueur around 20–25% ABV. Mix it in a brandy alexander or grasshopper.",
+      "name": "Crème de Cacao Brown",
+      "description": "Dark Crème de Cacao is a chocolate liqueur around 20–25% ABV. Mix it in a brandy alexander or grasshopper.",
       "tags": [2],
       "photoUri": "assets/ingredients/119-creme-de-cacao-brown.jpg"
     },
     {
       "id": 120,
-      "name": "Creme de Cacao White",
-      "description": "White crème de cacao is a clear cocoa liqueur around 20–25% ABV. Ideal in a grasshopper or alexander.",
+      "name": "Crème de Cacao White",
+      "description": "White Crème de Cacao is a clear cocoa liqueur around 20–25% ABV. Ideal in a grasshopper or alexander.",
       "tags": [2],
       "photoUri": "assets/ingredients/120-creme-de-cacao-white.jpg"
     },
     {
       "id": 121,
-      "name": "Creme de Cafe",
+      "name": "Crème de Cafe",
       "description": "Coffee-flavored liqueur with a smooth, sweet roast profile. Use it for white lebowski, espresso cocktails, or dessert drinks.",
       "tags": [2],
       "photoUri": "assets/ingredients/121-cr-me-de-caf.jpg"
     },
     {
       "id": 122,
-      "name": "Creme de Cassis",
-      "description": "Crème de cassis is a blackcurrant liqueur from france, 15–20% ABV. Key for a kir or el diablo.",
+      "name": "Crème de Cassis",
+      "description": "Crème de Cassis is a blackcurrant liqueur from france, 15–20% ABV. Key for a kir or el diablo.",
       "tags": [2],
       "photoUri": "assets/ingredients/122-creme-de-cassis.jpg"
     },
     {
       "id": 123,
-      "name": "Creme de Menthe Green",
-      "description": "Green crème de menthe is a mint liqueur about 25% ABV. Use it in a Grasshopper or Stinger.",
+      "name": "Crème de Menthe Green",
+      "description": "Green Crème de Menthe is a mint liqueur about 25% ABV. Use it in a Grasshopper or Stinger.",
       "tags": [2],
       "photoUri": "assets/ingredients/123-creme-de-menthe-green.jpg"
     },
     {
       "id": 124,
-      "name": "Creme de Menthe White",
-      "description": "White crème de menthe is a clear mint liqueur about 25% ABV. Try it in a Stinger or Grasshopper.",
+      "name": "Crème de Menthe White",
+      "description": "White Crème de Menthe is a clear mint liqueur about 25% ABV. Try it in a Stinger or Grasshopper.",
       "tags": [2],
       "photoUri": "assets/ingredients/124-creme-de-menthe-white.jpg"
     },
     {
       "id": 125,
-      "name": "Creme de Mure",
-      "description": "Crème de mûre is a blackberry liqueur around 20% ABV. Ideal for a bramble or mûre royale.",
+      "name": "Crème de Mure",
+      "description": "Crème de Mûre is a blackberry liqueur around 20% ABV. Ideal for a bramble or mûre royale.",
       "tags": [2],
       "photoUri": "assets/ingredients/125-creme-de-mure.jpg"
     },
     {
       "id": 126,
-      "name": "Creme de Violette",
-      "description": "Crème de violette is a floral violet liqueur at 16–20% ABV. Classic in an Aviation or blue moon.",
+      "name": "Crème de Violette",
+      "description": "Crème de Violette is a floral violet liqueur at 16–20% ABV. Classic in an Aviation or blue moon.",
       "tags": [2],
       "photoUri": "assets/ingredients/126-creme-de-violette.jpg"
     },
@@ -32164,7 +32164,7 @@
     {
       "id": 244,
       "name": "Orange Curaçao",
-      "description": "Orange curaçao is an orange liqueur at 20–40% ABV with bittersweet citrus. Essential in a Mai Tai or Sidecar.",
+      "description": "Orange Curaçao is an orange liqueur at 20–40% ABV with bittersweet citrus. Essential in a Mai Tai or Sidecar.",
       "tags": [2],
       "photoUri": "assets/ingredients/244-orange-cura-ao.jpg"
     },
