@@ -239,7 +239,7 @@ export function OnboardingOverlay() {
 
   const tooltipTop = adjustedAnchor
     ? (adjustedAnchor.y + adjustedAnchor.height + 20 > screenHeight - 150
-      ? adjustedAnchor.y - 120
+      ? adjustedAnchor.y - 190
       : adjustedAnchor.y + adjustedAnchor.height + 10) - (isTabPrompt ? 20 : 0)
     : screenHeight / 2 - 100;
 
