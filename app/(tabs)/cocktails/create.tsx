@@ -2439,6 +2439,7 @@ function EditableIngredientRow({
       layout={INGREDIENT_REORDER_TRANSITION}
       style={[
         styles.ingredientCard,
+        { zIndex: Math.max(totalCount - index, 1) },
         { borderColor: Colors.outlineVariant, backgroundColor: Colors.surface },
       ]}
     >
