@@ -13,13 +13,13 @@ import {
 } from "react";
 import {
   Animated,
-  Dimensions,
   Linking,
   Modal,
   Pressable,
   ScrollView,
   StyleSheet,
   Text,
+  useWindowDimensions,
   View,
 } from "react-native";
 
@@ -37,7 +37,6 @@ import { useInventory, type AppTheme, type StartScreen } from "@/providers/inven
 import { type InventoryExportData } from "@/providers/inventory-types";
 import Constants from "expo-constants";
 
-const MENU_WIDTH = Math.round(Dimensions.get("window").width * 0.75);
 const ANIMATION_DURATION = 200;
 const APP_VERSION =
   Constants.expoConfig?.version ??
@@ -128,6 +127,8 @@ type SideMenuDrawerProps = {
 };
 
 export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
+  const { width: windowWidth } = useWindowDimensions();
+  const menuWidth = useMemo(() => Math.round(windowWidth * 0.75), [windowWidth]);
   const {
     ignoreGarnish,
     setIgnoreGarnish,
@@ -201,7 +202,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   const [isExporting, setIsExporting] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
   const [isBackingUpPhotos, setIsBackingUpPhotos] = useState(false);
-  const translateX = useRef(new Animated.Value(-MENU_WIDTH)).current;
+  const translateX = useRef(new Animated.Value(0)).current;
   const backdropOpacity = useRef(new Animated.Value(0)).current;
 
   const SURFACE_ROW_STYLE = useMemo(() => ({
@@ -248,14 +249,20 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     () => [
       styles.drawer,
       {
-        width: MENU_WIDTH,
+        width: menuWidth,
         backgroundColor: Colors.surface,
         shadowColor: Colors.shadow,
         borderColor: Colors.outline,
       },
     ],
-    [Colors.outline, Colors.shadow, Colors.surface],
+    [Colors.outline, Colors.shadow, Colors.surface, menuWidth],
   );
+
+  useEffect(() => {
+    if (!visible) {
+      translateX.setValue(-menuWidth);
+    }
+  }, [menuWidth, translateX, visible]);
 
   const selectedStartScreenOption = useMemo(
     () => START_SCREEN_OPTIONS.find((option) => option.key === startScreen),
@@ -325,7 +332,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     } else {
       Animated.parallel([
         Animated.timing(translateX, {
-          toValue: -MENU_WIDTH,
+          toValue: -menuWidth,
           duration: ANIMATION_DURATION,
           useNativeDriver: true,
         }),
@@ -340,7 +347,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
         }
       });
     }
-  }, [backdropOpacity, translateX, visible]);
+  }, [backdropOpacity, menuWidth, translateX, visible]);
 
   const toggleIgnoreGarnish = () => {
     setIgnoreGarnish(!ignoreGarnish);
