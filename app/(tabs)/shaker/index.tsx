@@ -297,7 +297,7 @@ export default function ShakerScreen() {
       }
     });
 
-    const otherTag = BUILTIN_INGREDIENT_TAGS.find((tag) => tag.name === 'other');
+    const otherTag = BUILTIN_INGREDIENT_TAGS.find((tag) => tag.name.trim().toLowerCase() === 'other');
     const otherKey = normalizeTagKey(otherTag) ?? 'other';
     if (!map.has(otherKey)) {
       map.set(otherKey, {

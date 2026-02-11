@@ -315,7 +315,7 @@ export default function CreateCocktailScreen() {
     ? DEFAULT_IMPERIAL_UNIT_ID
     : DEFAULT_METRIC_UNIT_ID;
   const defaultCocktailTagId = BUILTIN_COCKTAIL_TAGS.find(
-    (tag) => tag.name === "custom",
+    (tag) => tag.name.trim().toLowerCase() === "custom",
   )?.id;
 
   const renderMethodIcon = (methodId: CocktailMethodId, iconColor: string) => {

@@ -145,7 +145,7 @@ export default function IngredientFormScreen() {
 
   const ingredient = useResolvedIngredient(ingredientParam, ingredients);
   const defaultIngredientTagId = BUILTIN_INGREDIENT_TAGS.find(
-    (tag) => tag.name === 'other',
+    (tag) => tag.name.trim().toLowerCase() === 'other',
   )?.id;
 
   const numericIngredientId = useMemo(() => {
