@@ -132,10 +132,37 @@ export function SubstituteModal({
     return map;
   }, [cocktails, getBaseGroupId]);
 
-  const excludedBaseGroupId = useMemo(
-    () => (excludedIngredientId != null ? getBaseGroupId(excludedIngredientId) : undefined),
-    [excludedIngredientId, getBaseGroupId],
-  );
+  const excludedIngredientNumericId = useMemo(() => {
+    if (excludedIngredientId == null) {
+      return undefined;
+    }
+
+    const id = Number(excludedIngredientId);
+    if (!Number.isFinite(id) || id < 0) {
+      return undefined;
+    }
+
+    return Math.trunc(id);
+  }, [excludedIngredientId]);
+
+  const excludedBaseIngredientId = useMemo(() => {
+    if (excludedIngredientNumericId == null) {
+      return undefined;
+    }
+
+    const ingredientRecord = ingredientById.get(excludedIngredientNumericId);
+    const baseId = ingredientRecord?.baseIngredientId;
+    if (baseId == null) {
+      return undefined;
+    }
+
+    const numericBaseId = Number(baseId);
+    if (!Number.isFinite(numericBaseId) || numericBaseId < 0) {
+      return undefined;
+    }
+
+    return Math.trunc(numericBaseId);
+  }, [excludedIngredientNumericId, ingredientById]);
 
   const candidateIngredients = useMemo(() => {
     const normalized = normalizeSearchText(searchValue);
@@ -145,12 +172,17 @@ export function SubstituteModal({
 
     return filtered
       .filter((item) => {
-        const baseGroupId = getBaseGroupId(item.id);
-        if (excludedBaseGroupId != null && baseGroupId === excludedBaseGroupId) {
+        const candidateId = Number(item.id ?? -1);
+        const normalizedCandidateId = Number.isFinite(candidateId) && candidateId >= 0 ? Math.trunc(candidateId) : undefined;
+
+        if (normalizedCandidateId != null && normalizedCandidateId === excludedIngredientNumericId) {
           return false;
         }
 
-        const candidateId = Number(item.id ?? -1);
+        if (excludedBaseIngredientId != null && normalizedCandidateId === excludedBaseIngredientId) {
+          return false;
+        }
+
         if (candidateId >= 0 && selectedSubstituteIds?.has(candidateId)) {
           return false;
         }
@@ -164,8 +196,8 @@ export function SubstituteModal({
       })
       .slice(0, MAX_SUGGESTIONS);
   }, [
-    excludedBaseGroupId,
-    getBaseGroupId,
+    excludedBaseIngredientId,
+    excludedIngredientNumericId,
     ingredients,
     searchValue,
     selectedSubstituteIds,
