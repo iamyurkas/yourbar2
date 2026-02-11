@@ -14,8 +14,8 @@ export const FormattedText: React.FC<FormattedTextProps> = ({
     return <Text style={style} {...props}>{children}</Text>;
   }
 
-  // Split by **bold** parts
-  const parts = children.split(/(\*\*.*?\*\*)/g);
+  // Split by **bold** and *italic* parts.
+  const parts = children.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/g);
 
   return (
     <Text style={style} {...props}>
@@ -28,6 +28,16 @@ export const FormattedText: React.FC<FormattedTextProps> = ({
             </Text>
           );
         }
+
+        if (part.startsWith("*") && part.endsWith("*")) {
+          const content = part.substring(1, part.length - 1);
+          return (
+            <Text key={index} style={styles.italic}>
+              {content}
+            </Text>
+          );
+        }
+
         return part;
       })}
     </Text>
@@ -37,5 +47,8 @@ export const FormattedText: React.FC<FormattedTextProps> = ({
 const styles = StyleSheet.create({
   bold: {
     fontWeight: "700",
+  },
+  italic: {
+    fontStyle: "italic",
   },
 });
