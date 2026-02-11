@@ -242,6 +242,7 @@ export function OnboardingOverlay() {
       ? adjustedAnchor.y - 120
       : adjustedAnchor.y + adjustedAnchor.height + 10) - (isTabPrompt ? 20 : 0)
     : screenHeight / 2 - 100;
+  const isTooltipInteractive = Boolean(currentStep.buttonLabel);
 
   return (
     <View
@@ -281,7 +282,10 @@ export function OnboardingOverlay() {
         />
       </Svg>
 
-      <View style={[styles.tooltip, { top: tooltipTop, backgroundColor: Colors.surface, borderColor: Colors.outline }]}>
+      <View
+        pointerEvents={isTooltipInteractive ? 'auto' : 'none'}
+        style={[styles.tooltip, { top: tooltipTop, backgroundColor: Colors.surface, borderColor: Colors.outline }]}
+      >
         <Text style={[styles.message, { color: Colors.onSurface }]}>
           {renderFormattedMessage(currentStep.message)}
         </Text>
