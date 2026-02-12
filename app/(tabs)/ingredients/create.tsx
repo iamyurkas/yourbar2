@@ -1113,7 +1113,13 @@ export default function IngredientFormScreen() {
 
       <Pressable
         accessibilityRole="button"
-        style={[submitButtonStyle, { backgroundColor: Colors.tint, opacity: isSaving ? 0.6 : 1 }]}
+        style={({ pressed }) => [
+          submitButtonStyle,
+          {
+            backgroundColor: Colors.tint,
+            opacity: isSaving ? 0.6 : pressed ? 0.8 : 1,
+          },
+        ]}
         onPress={handleSubmit}
         disabled={isSaving || isPickingImage}>
         <Text style={[styles.submitLabel, { color: Colors.onPrimary }]}>Save</Text>
