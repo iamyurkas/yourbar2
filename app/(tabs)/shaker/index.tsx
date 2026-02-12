@@ -1046,7 +1046,10 @@ export default function ShakerScreen() {
           keyExtractor={(item) => String(item.id ?? item.name)}
           renderItem={renderIngredient}
           renderSectionHeader={renderSectionHeader}
-          stickySectionHeadersEnabled
+          // NOTE: Fabric + sticky headers can get into a ref update loop when section content
+          // is dynamically swapped during onboarding restarts (collapsed header row <-> section
+          // header). Keep sticky headers disabled to avoid the maximum update depth crash.
+          stickySectionHeadersEnabled={false}
           contentContainerStyle={[styles.listContent, { paddingBottom: 140 + bottomInset }]}
           showsVerticalScrollIndicator={false}
           keyboardDismissMode="on-drag"
