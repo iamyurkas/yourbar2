@@ -10,16 +10,17 @@ import {
   StyleSheet,
   Text,
   View,
-  type NativeScrollEvent,
-  type NativeSyntheticEvent,
   type LayoutChangeEvent,
   type LayoutRectangle,
+  type NativeScrollEvent,
+  type NativeSyntheticEvent,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { CocktailListRow } from '@/components/CocktailListRow';
 import { CollectionHeader } from '@/components/CollectionHeader';
 import { FabAdd } from '@/components/FabAdd';
+import { useOnboardingAnchors } from '@/components/onboarding/OnboardingContext';
 import { ListRow, Thumb } from '@/components/RowParts';
 import { SideMenuDrawer } from '@/components/SideMenuDrawer';
 import { TagPill } from '@/components/TagPill';
@@ -32,7 +33,6 @@ import { getLastCocktailTab, setLastCocktailTab, type CocktailTabKey } from '@/l
 import { createIngredientLookup } from '@/libs/ingredient-availability';
 import { navigateToDetailsWithReturnTo } from '@/libs/navigation';
 import { normalizeSearchText } from '@/libs/search-normalization';
-import { useOnboardingAnchors } from '@/components/onboarding/OnboardingContext';
 import { buildTagOptions, type TagOption } from '@/libs/tag-options';
 import { useCocktailTabLogic, type MyTabListItem } from '@/libs/use-cocktail-tab-logic';
 import { useInventoryActions, useInventoryData, useInventorySettings, type Cocktail } from '@/providers/inventory-provider';
@@ -506,9 +506,8 @@ export default function CocktailsScreen() {
         const accessibilityLabel = isOnShoppingList
           ? 'Remove ingredient from shopping list'
           : 'Add ingredient to shopping list';
-        const subtitleLabel = `Make ${item.cocktailCount} ${
-          item.cocktailCount === 1 ? 'cocktail' : 'cocktails'
-        }`;
+        const subtitleLabel = `Make ${item.cocktailCount} ${item.cocktailCount === 1 ? 'cocktail' : 'cocktails'
+          }`;
         const thumbnail = <Thumb label={item.name} uri={item.photoUri ?? undefined} />;
         const brandIndicatorColor = item.isBranded ? Colors.primary : undefined;
 
@@ -576,9 +575,9 @@ export default function CocktailsScreen() {
     ({ leadingItem }: { leadingItem?: Cocktail | null }) => {
       const isReady = leadingItem
         ? isCocktailReady(leadingItem, availableIngredientIds, ingredientLookup, undefined, {
-            ignoreGarnish,
-            allowAllSubstitutes,
-          })
+          ignoreGarnish,
+          allowAllSubstitutes,
+        })
         : false;
       const backgroundColor = isReady ? Colors.outline : Colors.outlineVariant;
 
@@ -612,15 +611,36 @@ export default function CocktailsScreen() {
   const isMyTab = activeTab === 'my';
   const listData = isMyTab ? myTabListData?.items ?? [] : sortedFavorites;
   const emptyMessage = useMemo(() => {
-      switch (activeTab) {
-        case 'my':
-          return 'Mark ingredients you have to see available cocktails here.';
-        case 'favorites':
-          return 'Rate cocktails and/or adjust the rating threshold in the menu.';
-        default:
-          return 'No cocktails yet';
-      }
-    }, [activeTab]);
+    switch (activeTab) {
+      case 'my':
+        return 'Mark ingredients you have to see available cocktails here.';
+      case 'favorites':
+        return 'Rate cocktails and/or adjust the rating threshold in the menu.';
+      default:
+        return 'No cocktails yet';
+    }
+  }, [activeTab]);
+  const helpContent = useMemo(() => {
+    switch (activeTab) {
+      case 'my':
+        return {
+          title: 'My cocktails',
+          text: 'This screen shows cocktails you can make with your current ingredients.\n\nUse search to find your recipes quickly, and use filters to narrow the list by tags or method.',
+        };
+      case 'favorites':
+        return {
+          title: 'Favorites cocktails',
+          text: 'This screen shows cocktails you ranked.\n\nUse search and filters to find what you want faster.',
+        };
+      case 'all':
+      default:
+        return {
+          title: 'All cocktails',
+          text: 'This screen shows the full cocktail collection.\n\nUse search, switch tabs, and apply filters by method or tags.',
+        };
+    }
+  }, [activeTab]);
+
   const filterMenuTop = useMemo(() => {
     if (headerLayout && filterAnchorLayout) {
       return headerLayout.y + filterAnchorLayout.y + filterAnchorLayout.height + 6;
@@ -652,6 +672,8 @@ export default function CocktailsScreen() {
             filterActive={isFilterActive}
             filterExpanded={isFilterMenuVisible}
             onFilterLayout={handleFilterLayout}
+            helpTitle={helpContent.title}
+            helpText={helpContent.text}
           />
         </View>
         {isFilterMenuVisible ? (
