@@ -1236,7 +1236,7 @@ export default function IngredientFormScreen() {
       <AppDialog
         visible={isHelpVisible}
         title="Adding ingredient"
-        message="Use this screen to create a new ingredient card.\n\nAdd a name, optional photo, tags, base ingredient, and notes, then tap Save."
+        message="Use this screen to create a new ingredient card.\n\nAdd a name, optional photo, tags, base ingredient, and notes, then tap Save."
         actions={[{ label: 'Got it', variant: 'secondary' }]}
         onRequestClose={() => setIsHelpVisible(false)}
       />

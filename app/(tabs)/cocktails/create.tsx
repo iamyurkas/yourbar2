@@ -2198,7 +2198,7 @@ export default function CreateCocktailScreen() {
       <AppDialog
         visible={isHelpVisible}
         title="Adding cocktail"
-        message="Use this screen to build a cocktail recipe.\n\nFill in name, photo, tags, ingredients, method, and instructions, then tap Save."
+        message="Use this screen to build a new cocktail recipe.\n\nFill in name, photo, tags, ingredients, method, and instructions, then tap Save."
         actions={[{ label: "Got it", variant: "secondary" }]}
         onRequestClose={() => setIsHelpVisible(false)}
       />
