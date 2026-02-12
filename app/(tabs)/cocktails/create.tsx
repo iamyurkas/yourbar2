@@ -584,6 +584,16 @@ export default function CreateCocktailScreen() {
       return;
     }
 
+    setPrefilledCocktail(undefined);
+    setName("");
+    setGlassId("martini");
+    setMethodIds([]);
+    setDescription("");
+    setInstructions("");
+    setImageUri(null);
+    setSelectedTagIds([]);
+    setInitialSnapshot(null);
+
     let prefillCompleted = false;
 
     const resolveCocktail = (value?: string) => {
