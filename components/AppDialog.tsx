@@ -43,11 +43,17 @@ export function AppDialog({ visible, title, message, actions, onRequestClose }: 
           borderColor: Colors.error,
           textColor: Colors.onError,
         } as const;
-      default:
+      case 'primary':
         return {
           backgroundColor: Colors.tint,
           borderColor: Colors.tint,
           textColor: Colors.onPrimary,
+        } as const;
+      default:
+        return {
+          backgroundColor: Colors.surfaceVariant,
+          borderColor: Colors.outlineVariant,
+          textColor: Colors.onSurface,
         } as const;
     }
   };
@@ -101,7 +107,7 @@ const styles = StyleSheet.create({
   },
   card: {
     width: '100%',
-    maxWidth: 420,
+    maxWidth: 520,
     borderRadius: 12,
     paddingVertical: 22,
     paddingHorizontal: 20,
