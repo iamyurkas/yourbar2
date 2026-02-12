@@ -126,12 +126,24 @@ export function OnboardingOverlay() {
     },
     {
       id: 3,
-      message: 'Here’s the full ingredients list.\nWe’ve already marked a few common basics for you.',
+      message: 'Switch to the **All** tab to view the full ingredients list.',
       anchorName: 'ingredients-tab-all',
       buttonLabel: 'Next',
+      onNext: (_, requestTab) => {
+        requestTab('ingredients', 'all');
+      },
     },
     {
       id: 4,
+      message: 'We recommend starting by marking ingredients you already have available.',
+      anchorName: 'ingredients-tab-all',
+      buttonLabel: 'Next',
+      onEnter: (_, requestTab) => {
+        requestTab('ingredients', 'all');
+      },
+    },
+    {
+      id: 5,
       message: '**My ingredients** shows what you have.\nYou’ll also see in how many available cocktails use each ingredient.',
       anchorName: 'ingredients-tab-my',
       buttonLabel: 'Next',
@@ -140,7 +152,7 @@ export function OnboardingOverlay() {
       },
     },
     {
-      id: 5,
+      id: 6,
       message: 'Now let’s check the cocktails.\nOpen the **Cocktails** screen.',
       anchorName: 'tab-cocktails',
       buttonLabel: 'Next',
@@ -150,7 +162,7 @@ export function OnboardingOverlay() {
       },
     },
     {
-      id: 6,
+      id: 7,
       message: 'At the top of **My cocktails** you’ll see cocktails you can make now.\n\nBelow are cocktails missing just one ingredient.',
       buttonLabel: 'Next',
       anchorName: 'cocktails-tab-my',
@@ -159,7 +171,7 @@ export function OnboardingOverlay() {
       },
     },
     {
-      id: 7,
+      id: 8,
       message: 'Meet the **Shaker**.\nIt helps you find cocktails based on selected ingredients.',
       anchorName: 'tab-shaker',
       buttonLabel: 'Next',
@@ -169,12 +181,12 @@ export function OnboardingOverlay() {
       },
     },
     {
-      id: 8,
+      id: 9,
       message: '**Shaker logic**\nIngredients from the same category can replace each other (*OR*).\nIngredients from different categories are required together (*AND*).\n\n**Example**\n(Gin *OR* Whiskey) AND (Cola *OR* Tonic) AND (Lemon *OR* Lime).',
       buttonLabel: 'Next',
     },
     {
-      id: 9,
+      id: 10,
       message: 'Use this toggle to show only ingredients you have.',
       anchorName: 'shaker-availability-toggle',
       buttonLabel: 'Next',
@@ -183,7 +195,7 @@ export function OnboardingOverlay() {
       },
     },
     {
-      id: 10,
+      id: 11,
       message: 'Tap a few ingredients, then hit **Show** to see matching cocktails.\n\nCheers!',
       buttonLabel: 'Finish',
     },
