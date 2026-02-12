@@ -308,6 +308,7 @@ export default function CreateCocktailScreen() {
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(
     null,
   );
+  const [isHelpVisible, setIsHelpVisible] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
   const [initialSnapshot, setInitialSnapshot] =
     useState<CocktailFormSnapshot | null>(null);
@@ -1481,36 +1482,43 @@ export default function CreateCocktailScreen() {
               );
             }
 
-            if (!prefilledCocktail) {
-              return null;
-            }
-
-            const targetId = prefilledCocktail.id ?? prefilledCocktail.name;
-            if (!targetId) {
-              return null;
-            }
+            const targetId = prefilledCocktail?.id ?? prefilledCocktail?.name;
 
             return (
-              <HeaderIconButton
-                onPress={() =>
-                  router.replace({
-                    pathname: "/cocktails/create",
-                    params: {
-                      cocktailId: String(targetId),
-                      cocktailName: prefilledCocktail.name ?? undefined,
-                      mode: "edit",
-                      source: sourceParam ?? undefined,
-                    },
-                  })
-                }
-                accessibilityLabel="Edit cocktail"
-              >
-                <MaterialCommunityIcons
-                  name="pencil-outline"
-                  size={20}
-                  color={Colors.onSurface}
-                />
-              </HeaderIconButton>
+              <View style={styles.headerActions}>
+                <HeaderIconButton
+                  onPress={() => setIsHelpVisible(true)}
+                  accessibilityLabel="Open screen help"
+                >
+                  <MaterialCommunityIcons
+                    name="help-circle-outline"
+                    size={20}
+                    color={Colors.onSurface}
+                  />
+                </HeaderIconButton>
+                {targetId ? (
+                  <HeaderIconButton
+                    onPress={() =>
+                      router.replace({
+                        pathname: "/cocktails/create",
+                        params: {
+                          cocktailId: String(targetId),
+                          cocktailName: prefilledCocktail?.name ?? undefined,
+                          mode: "edit",
+                          source: sourceParam ?? undefined,
+                        },
+                      })
+                    }
+                    accessibilityLabel="Edit cocktail"
+                  >
+                    <MaterialCommunityIcons
+                      name="pencil-outline"
+                      size={20}
+                      color={Colors.onSurface}
+                    />
+                  </HeaderIconButton>
+                ) : null}
+              </View>
             );
           },
         }}
@@ -2185,6 +2193,14 @@ export default function CreateCocktailScreen() {
         excludedIngredientId={substituteModalIngredient?.ingredientId}
         selectedSubstituteIds={substituteModalSelectionIds}
         selectedSubstituteNames={substituteModalSelectionNames}
+      />
+
+      <AppDialog
+        visible={isHelpVisible}
+        title="Adding cocktail"
+        message="Use this screen to build a cocktail recipe.\n\nFill in name, photo, tags, ingredients, method, and instructions, then tap Save."
+        actions={[{ label: "Got it", variant: "secondary" }]}
+        onRequestClose={() => setIsHelpVisible(false)}
       />
 
       <AppDialog
@@ -2878,6 +2894,11 @@ function ToggleChip({ label, active, onToggle, onInfo }: ToggleChipProps) {
 const styles = StyleSheet.create({
   flex: {
     flex: 1,
+  },
+  headerActions: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
   },
   content: {
     padding: 16,
