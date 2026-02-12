@@ -818,6 +818,12 @@ export default function ShakerScreen() {
     selectedByGroup,
   ]);
 
+  const helpMessage = useMemo(() => {
+    const currentQuery = query.trim().length > 0 ? query : '(empty)';
+
+    return `This screen helps you select ingredients and understand what you can mix right now.\n\nUse search to find ingredients quickly, tap ingredients to mark them to use, and open shaker results for matching cocktails.\n\nCurrent search:\n${currentQuery}`;
+  }, [query]);
+
   const handleClearSelection = useCallback(() => {
     setSelectedIngredientIds((previous) => (previous.size === 0 ? previous : new Set()));
   }, []);
@@ -1140,7 +1146,7 @@ export default function ShakerScreen() {
         <AppDialog
           visible={isHelpVisible}
           title="Shaker"
-          message="This screen helps you select ingredients and understand what you can mix right now.\n\nUse search to find ingredients quickly, tap ingredients to mark them to use, and open shaker results for matching cocktails."
+          message={helpMessage}
           actions={[{ label: 'Got it', variant: 'secondary' }]}
           onRequestClose={() => setIsHelpVisible(false)}
         />
