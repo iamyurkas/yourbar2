@@ -506,14 +506,15 @@ export default function CocktailsScreen() {
         const accessibilityLabel = isOnShoppingList
           ? 'Remove ingredient from shopping list'
           : 'Add ingredient to shopping list';
-        const subtitleLabel = `Make ${item.cocktailCount} ${item.cocktailCount === 1 ? 'cocktail' : 'cocktails'
+        const titleLabel = `Buy ${item.name}`;
+        const subtitleLabel = `To make ${item.cocktailCount} more ${item.cocktailCount === 1 ? 'cocktail' : 'cocktails'
           }`;
         const thumbnail = <Thumb label={item.name} uri={item.photoUri ?? undefined} />;
         const brandIndicatorColor = item.isBranded ? Colors.primary : undefined;
 
         return (
           <ListRow
-            title={item.name}
+            title={titleLabel}
             subtitle={subtitleLabel}
             selected
             highlightColor={Colors.highlightSubtle}
