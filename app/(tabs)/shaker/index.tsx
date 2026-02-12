@@ -818,6 +818,49 @@ export default function ShakerScreen() {
     selectedByGroup,
   ]);
 
+  const helpMessage = useMemo(() => {
+    const baseMessage =
+      'This screen helps you select ingredients and understand what you can mix right now.\n\nUse search to find ingredients quickly, tap ingredients to mark them to use, and open shaker results for matching cocktails.';
+
+    if (selectedByGroup.size === 0) {
+      return baseMessage;
+    }
+
+    const ingredientById = new Map<number, Ingredient>();
+    ingredients.forEach((ingredient) => {
+      const ingredientId = Number(ingredient.id ?? -1);
+      if (ingredientId >= 0) {
+        ingredientById.set(ingredientId, ingredient);
+      }
+    });
+
+    const sortedGroups = Array.from(selectedByGroup.entries()).sort(([groupKeyA], [groupKeyB]) =>
+      groupKeyA.localeCompare(groupKeyB),
+    );
+
+    const selectionExpression = sortedGroups
+      .map(([, ingredientIds]) => {
+        const names = Array.from(ingredientIds)
+          .map((ingredientId) => ingredientById.get(ingredientId)?.name?.trim())
+          .filter((name): name is string => Boolean(name))
+          .sort((nameA, nameB) => nameA.localeCompare(nameB));
+
+        if (names.length === 0) {
+          return null;
+        }
+
+        return `(${names.join(' OR ')})`;
+      })
+      .filter((groupExpression): groupExpression is string => Boolean(groupExpression))
+      .join(' AND ');
+
+    if (!selectionExpression) {
+      return baseMessage;
+    }
+
+    return `${baseMessage}\n\nCurrent select:\n${selectionExpression}`;
+  }, [ingredients, selectedByGroup]);
+
   const handleClearSelection = useCallback(() => {
     setSelectedIngredientIds((previous) => (previous.size === 0 ? previous : new Set()));
   }, []);
@@ -1140,7 +1183,7 @@ export default function ShakerScreen() {
         <AppDialog
           visible={isHelpVisible}
           title="Shaker"
-          message="This screen helps you select ingredients and understand what you can mix right now.\n\nUse search to find ingredients quickly, tap ingredients to mark them to use, and open shaker results for matching cocktails."
+          message={helpMessage}
           actions={[{ label: 'Got it', variant: 'secondary' }]}
           onRequestClose={() => setIsHelpVisible(false)}
         />
