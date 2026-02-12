@@ -643,6 +643,27 @@ export default function IngredientsScreen() {
     [effectiveAvailableIngredientIds, Colors],
   );
 
+  const helpContent = useMemo(() => {
+    switch (activeTab) {
+      case 'my':
+        return {
+          title: 'My ingredients',
+          text: 'This screen focuses on ingredients you actively use. Search by name, open ingredient details, and use tag filters to quickly organize your personal collection.',
+        };
+      case 'shopping':
+        return {
+          title: 'Shopping list',
+          text: 'This screen helps you manage ingredients to buy. Use search to find items, tap the shopping control to mark purchases, and open an ingredient for detailed information.',
+        };
+      case 'all':
+      default:
+        return {
+          title: 'All ingredients',
+          text: 'This screen displays all ingredients in your bar. Use search, switch tabs, and filter by tags. Tap an ingredient to update its availability or open the details screen.',
+        };
+    }
+  }, [activeTab]);
+
   return (
     <SafeAreaView
       style={[styles.safeArea, { backgroundColor: Colors.background }]}
@@ -662,7 +683,8 @@ export default function IngredientsScreen() {
             filterActive={isFilterActive}
             filterExpanded={isFilterMenuVisible}
             onFilterLayout={handleFilterLayout}
-            helpText="Екран інгредієнтів: переглядайте наявні та відсутні інгредієнти, користуйтесь пошуком, вкладками та фільтрами за тегами. Тап по інгредієнту змінює його стан, а деталі відкриваються з елемента списку."
+            helpTitle={helpContent.title}
+            helpText={helpContent.text}
           />
         </View>
         {isFilterMenuVisible ? (

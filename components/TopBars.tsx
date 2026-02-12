@@ -1,7 +1,6 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import React from 'react';
+import React, { useState } from 'react';
 import {
-  Alert,
   Pressable,
   StyleSheet,
   Text,
@@ -12,8 +11,9 @@ import {
   type TextInputSubmitEditingEventData,
 } from 'react-native';
 
-import { useAppColors } from '@/constants/theme';
+import { AppDialog } from '@/components/AppDialog';
 import { OnboardingAnchor } from '@/components/onboarding/OnboardingAnchor';
+import { useAppColors } from '@/constants/theme';
 
 type SearchTopBarProps = {
   value: string;
@@ -51,83 +51,89 @@ export function SearchTopBar({
   filterActive = false,
   filterExpanded = false,
   onFilterLayout,
-  helpTitle = 'Допомога',
+  helpTitle = 'Help',
   helpText,
 }: SearchTopBarProps) {
   const Colors = useAppColors();
+  const [isHelpVisible, setIsHelpVisible] = useState(false);
 
   const handleSubmit = (event: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
     onSubmit?.(event.nativeEvent.text);
   };
 
   return (
-    <View
-      style={[
-        styles.topBar,
-        {
-          backgroundColor: Colors.background,
-          borderBottomColor: Colors.outline,
-          borderBottomWidth: StyleSheet.hairlineWidth,
-        },
-      ]}>
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel="Open navigation"
-        onPress={onMenuPress}
-        style={styles.iconButton}>
-        <MaterialCommunityIcons name="menu" size={24} color={Colors.onSurface} />
-      </Pressable>
-      <View style={[styles.searchContainer, { backgroundColor: Colors.surface, borderColor: Colors.background }]}> 
-        <MaterialCommunityIcons name="magnify" size={20} color={Colors.onSurface} style={styles.searchIcon} />
-        <TextInput
-          value={value}
-          onChangeText={onChangeText}
-          placeholder={placeholder}
-          placeholderTextColor={`${Colors.onSurfaceVariant}99`}
-          returnKeyType="search"
-          onSubmitEditing={handleSubmit}
-          style={[styles.searchInput, { color: Colors.text, fontWeight: '400' }]}
-        />
-        {value ? (
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel="Clear search query"
-            onPress={() => onChangeText('')}
-            style={styles.clearButton}>
-            <MaterialCommunityIcons name="close" size={18} color={Colors.onSurface} />
-          </Pressable>
-        ) : null}
-      </View>
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel="Open screen help"
-        onPress={() => {
-          if (helpText) {
-            Alert.alert(helpTitle, helpText);
-          }
-        }}
-        style={styles.iconButton}>
-        <MaterialCommunityIcons name="help-circle-outline" size={24} color={Colors.icon} />
-      </Pressable>
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel="Filter items"
-        accessibilityState={filterExpanded ? { expanded: true } : undefined}
-        onPress={onFilterPress}
-        onLayout={(event) => onFilterLayout?.(event.nativeEvent.layout)}
+    <>
+      <View
         style={[
-          styles.iconButton,
-          filterActive
-            ? { backgroundColor: `${Colors.tint}1A` }
-            : null,
+          styles.topBar,
+          {
+            backgroundColor: Colors.background,
+            borderBottomColor: Colors.outline,
+            borderBottomWidth: StyleSheet.hairlineWidth,
+          },
         ]}>
-        <MaterialCommunityIcons
-          name="filter-variant"
-          size={24}
-          color={filterActive ? Colors.tint : Colors.icon}
-        />
-      </Pressable>
-    </View>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Open navigation"
+          onPress={onMenuPress}
+          style={styles.iconButton}>
+          <MaterialCommunityIcons name="menu" size={24} color={Colors.onSurface} />
+        </Pressable>
+        <View style={[styles.searchContainer, { backgroundColor: Colors.surface, borderColor: Colors.background }]}> 
+          <MaterialCommunityIcons name="magnify" size={20} color={Colors.onSurface} style={styles.searchIcon} />
+          <TextInput
+            value={value}
+            onChangeText={onChangeText}
+            placeholder={placeholder}
+            placeholderTextColor={`${Colors.onSurfaceVariant}99`}
+            returnKeyType="search"
+            onSubmitEditing={handleSubmit}
+            style={[styles.searchInput, { color: Colors.text, fontWeight: '400' }]}
+          />
+          {value ? (
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Clear search query"
+              onPress={() => onChangeText('')}
+              style={styles.clearButton}>
+              <MaterialCommunityIcons name="close" size={18} color={Colors.onSurface} />
+            </Pressable>
+          ) : null}
+        </View>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Open screen help"
+          onPress={() => setIsHelpVisible(true)}
+          style={styles.iconButton}>
+          <MaterialCommunityIcons name="help-circle-outline" size={24} color={Colors.icon} />
+        </Pressable>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Filter items"
+          accessibilityState={filterExpanded ? { expanded: true } : undefined}
+          onPress={onFilterPress}
+          onLayout={(event) => onFilterLayout?.(event.nativeEvent.layout)}
+          style={[
+            styles.iconButton,
+            filterActive
+              ? { backgroundColor: `${Colors.tint}1A` }
+              : null,
+          ]}>
+          <MaterialCommunityIcons
+            name="filter-variant"
+            size={24}
+            color={filterActive ? Colors.tint : Colors.icon}
+          />
+        </Pressable>
+      </View>
+      <AppDialog
+        visible={isHelpVisible}
+        title={helpTitle}
+        message={helpText}
+        actions={[{ label: 'Got it', variant: 'secondary' }]}
+        onRequestClose={() => setIsHelpVisible(false)}
+      />
+    </>
   );
 }
 
@@ -135,7 +141,7 @@ export function SegmentTabs({ options, value, onChange, anchorPrefix }: SegmentT
   const Colors = useAppColors();
 
   return (
-    <View style={[styles.tabs, { backgroundColor: Colors.surface }]}>
+    <View style={[styles.tabs, { backgroundColor: Colors.surface }]}> 
       {options.map((option) => {
         const focused = option.key === value;
         const content = (

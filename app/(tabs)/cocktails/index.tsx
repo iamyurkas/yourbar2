@@ -621,6 +621,27 @@ export default function CocktailsScreen() {
           return 'No cocktails yet';
       }
     }, [activeTab]);
+  const helpContent = useMemo(() => {
+    switch (activeTab) {
+      case 'my':
+        return {
+          title: 'My cocktails',
+          text: 'This screen shows cocktails you created. Use search to find your recipes quickly, open any cocktail to edit details, and use filters to narrow the list by tags or method.',
+        };
+      case 'favorites':
+        return {
+          title: 'Favorites cocktails',
+          text: 'This screen contains cocktails marked as favorites. Use search and filters to find what you want faster, then open a cocktail to view the recipe and preparation steps.',
+        };
+      case 'all':
+      default:
+        return {
+          title: 'All cocktails',
+          text: 'This screen shows the full cocktail collection. Use search, switch tabs, and apply filters by method or tags. Tap a cocktail to open details or use the add button to create a new one.',
+        };
+    }
+  }, [activeTab]);
+
   const filterMenuTop = useMemo(() => {
     if (headerLayout && filterAnchorLayout) {
       return headerLayout.y + filterAnchorLayout.y + filterAnchorLayout.height + 6;
@@ -652,7 +673,8 @@ export default function CocktailsScreen() {
             filterActive={isFilterActive}
             filterExpanded={isFilterMenuVisible}
             onFilterLayout={handleFilterLayout}
-            helpText="Екран коктейлів: переглядайте колекцію, шукайте за назвою, перемикайте вкладки та застосовуйте фільтри за методом і тегами. Натисніть на коктейль, щоб відкрити деталі, або додайте новий через кнопку внизу."
+            helpTitle={helpContent.title}
+            helpText={helpContent.text}
           />
         </View>
         {isFilterMenuVisible ? (

@@ -2,7 +2,6 @@ import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { useScrollToTop } from '@react-navigation/native';
 import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
-  Alert,
   Pressable,
   SectionList,
   StyleSheet,
@@ -20,6 +19,7 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useRouter } from 'expo-router';
 
 import { ListRow, PresenceCheck, Thumb } from '@/components/RowParts';
+import { AppDialog } from '@/components/AppDialog';
 import { OnboardingAnchor } from '@/components/onboarding/OnboardingAnchor';
 import { useOnboardingAnchors } from '@/components/onboarding/OnboardingContext';
 import { SideMenuDrawer } from '@/components/SideMenuDrawer';
@@ -187,6 +187,7 @@ export default function ShakerScreen() {
   const [query, setQuery] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [inStockOnly, setInStockOnly] = useState(false);
+  const [isHelpVisible, setIsHelpVisible] = useState(false);
   const [expandedTagKeys, setExpandedTagKeys] = useState<Set<string>>(() => new Set());
   const [selectedIngredientIds, setSelectedIngredientIds] = useState<Set<number>>(() => new Set());
   const listRef = useRef<SectionList<Ingredient, IngredientSection>>(null);
@@ -1040,12 +1041,7 @@ export default function ShakerScreen() {
           <Pressable
             accessibilityRole="button"
             accessibilityLabel="Open screen help"
-            onPress={() =>
-              Alert.alert(
-                'Допомога',
-                'Екран шейкера: обирайте інгредієнти, щоб побачити скільки коктейлів можна приготувати. Використовуйте пошук, перемикач наявності та переходьте до результатів для списку рецептів.',
-              )
-            }
+            onPress={() => setIsHelpVisible(true)}
             style={styles.iconButton}
           >
             <MaterialCommunityIcons name="help-circle-outline" size={24} color={Colors.icon} />
@@ -1141,6 +1137,13 @@ export default function ShakerScreen() {
           </OnboardingAnchor>
         </View>
         <SideMenuDrawer visible={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
+        <AppDialog
+          visible={isHelpVisible}
+          title="Shaker"
+          message="This screen helps you select ingredients and understand what you can mix right now. Use search to find ingredients quickly, toggle availability mode, and open shaker results for matching cocktails."
+          actions={[{ label: 'Got it', variant: 'secondary' }]}
+          onRequestClose={() => setIsHelpVisible(false)}
+        />
       </View>
     </SafeAreaView>
   );
