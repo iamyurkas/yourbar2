@@ -167,6 +167,7 @@ export default function IngredientFormScreen() {
   const [baseSearch, setBaseSearch] = useState('');
   const [permissionStatus, requestPermission] = ImagePicker.useMediaLibraryPermissions();
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(null);
+  const [isHelpVisible, setIsHelpVisible] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isInitialized, setIsInitialized] = useState(!isEditMode);
   const [initialSnapshot, setInitialSnapshot] = useState<IngredientFormSnapshot | null>(null);
@@ -1155,7 +1156,13 @@ export default function IngredientFormScreen() {
                 accessibilityLabel="Delete ingredient">
                 <MaterialIcons name="delete-outline" size={22} color={Colors.onSurface} />
               </HeaderIconButton>
-            ) : null,
+            ) : (
+              <HeaderIconButton
+                onPress={() => setIsHelpVisible(true)}
+                accessibilityLabel="Open screen help">
+                <MaterialCommunityIcons name="help-circle-outline" size={22} color={Colors.onSurface} />
+              </HeaderIconButton>
+            ),
         }}
       />
       {isEditMode ? (
@@ -1225,6 +1232,14 @@ export default function IngredientFormScreen() {
           </Pressable>
         </Pressable>
       </Modal>
+
+      <AppDialog
+        visible={isHelpVisible}
+        title="Adding ingredient"
+        message="Use this screen to create a new ingredient card.\n\nAdd a name, optional photo, tags, base ingredient, and notes, then tap Save."
+        actions={[{ label: 'Got it', variant: 'secondary' }]}
+        onRequestClose={() => setIsHelpVisible(false)}
+      />
 
       <AppDialog
         visible={dialogOptions != null}
