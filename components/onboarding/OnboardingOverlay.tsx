@@ -184,12 +184,12 @@ export function OnboardingOverlay() {
     },
     {
       id: 10,
-      message: 'Tap a few ingredients, then hit **Show** to see matching cocktails.\n\nCheers!',
+      message: 'Tap a few ingredients, then hit **Show** to see matching cocktails.',
       buttonLabel: 'Next',
     },
     {
       id: 11,
-      message: 'Recommended: start by marking ingredients you already have in **All ingredients**.',
+      message: 'Start by marking ingredients you already have in **All ingredients**.\n\nCheers!',
       anchorName: 'ingredients-tab-all',
       buttonLabel: 'Finish',
       onEnter: (_, requestTab) => {
