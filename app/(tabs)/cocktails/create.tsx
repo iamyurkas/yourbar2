@@ -248,6 +248,7 @@ export default function CreateCocktailScreen() {
   const ingredientNameParam = getParamValue(params.ingredientName);
   const cocktailParam = getParamValue(params.cocktailId);
   const cocktailNameParam = getParamValue(params.cocktailName);
+  const openInstanceIdParam = getParamValue(params.openInstanceId);
   const formReturnParams = useMemo(() => {
     const payload = {
       mode: modeParam,
@@ -355,7 +356,7 @@ export default function CreateCocktailScreen() {
 
   useEffect(() => {
     isNavigatingAfterSaveRef.current = false;
-  }, [cocktailNameParam, cocktailParam, ingredientNameParam, ingredientParam, isEditMode]);
+  }, [cocktailNameParam, cocktailParam, ingredientNameParam, ingredientParam, isEditMode, openInstanceIdParam]);
 
   const ingredientById = useMemo(() => {
     const map = new Map<number, Ingredient>();
@@ -573,7 +574,12 @@ export default function CreateCocktailScreen() {
   }, []);
 
   useEffect(() => {
-    const currentId = cocktailParam ?? cocktailNameParam ?? ingredientParam ?? ingredientNameParam;
+    const currentId =
+      openInstanceIdParam ??
+      cocktailParam ??
+      cocktailNameParam ??
+      ingredientParam ??
+      ingredientNameParam;
     if (initializedRef.current && currentId === lastIdRef.current && isEditMode === lastModeRef.current) {
       return;
     }
@@ -705,6 +711,7 @@ export default function CreateCocktailScreen() {
     ingredientParam,
     inventoryIngredients,
     isEditMode,
+    openInstanceIdParam,
     defaultCocktailTagId,
   ]);
 

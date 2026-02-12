@@ -380,6 +380,7 @@ export default function IngredientDetailsScreen() {
 
     const targetId = ingredient.id ?? ingredient.name;
     const params: Record<string, string> = { source: "ingredient" };
+    params.openInstanceId = String(Date.now());
     if (targetId != null) {
       params.ingredientId = String(targetId);
     }
