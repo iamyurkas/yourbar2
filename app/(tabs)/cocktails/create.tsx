@@ -1444,7 +1444,7 @@ export default function CreateCocktailScreen() {
     <>
       <Stack.Screen
         options={{
-          title: isEditMode ? "Edit cocktail" : "Add cocktail",
+          title: isEditMode ? "Edit cocktail" : "Add new cocktail",
           headerTitleAlign: "center",
           headerStyle: { backgroundColor: Colors.surface },
           headerShadowVisible: false,

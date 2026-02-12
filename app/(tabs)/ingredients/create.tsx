@@ -1132,7 +1132,7 @@ export default function IngredientFormScreen() {
     <>
       <Stack.Screen
         options={{
-          title: isEditMode ? 'Edit ingredient' : 'Add ingredient',
+          title: isEditMode ? 'Edit ingredient' : 'Add new ingredient',
           headerTitleAlign: 'center',
           headerStyle: { backgroundColor: Colors.surface },
           headerShadowVisible: false,

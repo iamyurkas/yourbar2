@@ -495,7 +495,7 @@ export default function CocktailsScreen() {
         return (
           <View style={styles.moreIngredientsWrapper}>
             <Text style={[styles.moreIngredientsLabel, { color: Colors.onSurfaceVariant }]}>
-              More ingredients needed
+              One more ingredient for more cocktails
             </Text>
           </View>
         );
