@@ -3,8 +3,8 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { TAG_COLORS } from '@/constants/tag-colors';
-import { loadInventoryData, reloadInventoryData } from '@/libs/inventory-data';
 import { AMAZON_STORES, detectAmazonStoreFromLocale, getEffectiveAmazonStore, type AmazonStoreKey, type AmazonStoreOverride } from '@/libs/amazon-stores';
+import { loadInventoryData, reloadInventoryData } from '@/libs/inventory-data';
 import {
   clearInventorySnapshot,
   loadInventorySnapshot,
@@ -22,30 +22,6 @@ import {
 } from '@/libs/inventory-utils';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import {
-  buildInventoryDelta,
-  buildInventorySnapshot,
-  createInventoryBaseMaps,
-  INVENTORY_SNAPSHOT_VERSION,
-  sanitizeCocktailRatings,
-} from '@/providers/inventory/persistence/inventory-snapshot';
-import {
-  createInventoryStateFromData,
-  createInventoryStateFromSnapshot,
-  type InventoryState,
-} from '@/providers/inventory/model/inventory-state';
-import {
-  InventoryActionsContext,
-  useInventoryActions,
-} from '@/providers/inventory/inventory-actions-context';
-import {
-  InventoryDataContext,
-  useInventoryData,
-} from '@/providers/inventory/inventory-data-context';
-import {
-  InventorySettingsContext,
-  useInventorySettings,
-} from '@/providers/inventory/inventory-settings-context';
-import {
   type AppTheme,
   type BaseCocktailRecord,
   type Cocktail,
@@ -62,6 +38,30 @@ import {
   type PhotoBackupEntry,
   type StartScreen,
 } from '@/providers/inventory-types';
+import {
+  InventoryActionsContext,
+  useInventoryActions,
+} from '@/providers/inventory/inventory-actions-context';
+import {
+  InventoryDataContext,
+  useInventoryData,
+} from '@/providers/inventory/inventory-data-context';
+import {
+  InventorySettingsContext,
+  useInventorySettings,
+} from '@/providers/inventory/inventory-settings-context';
+import {
+  createInventoryStateFromData,
+  createInventoryStateFromSnapshot,
+  type InventoryState,
+} from '@/providers/inventory/model/inventory-state';
+import {
+  buildInventoryDelta,
+  buildInventorySnapshot,
+  createInventoryBaseMaps,
+  INVENTORY_SNAPSHOT_VERSION,
+  sanitizeCocktailRatings,
+} from '@/providers/inventory/persistence/inventory-snapshot';
 
 const DEFAULT_START_SCREEN: StartScreen = 'cocktails_all';
 const DEFAULT_APP_THEME: AppTheme = 'light';
@@ -883,8 +883,18 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       return null;
     }
 
+    const baseCocktails = baseMaps.baseCocktails;
+    const baseIngredients = baseMaps.baseIngredients;
+
     const cocktails = inventoryState.cocktails.reduce<InventoryExportData['cocktails']>((acc, cocktail) => {
       const record = toCocktailStorageRecord(cocktail);
+      const id = Number(record.id ?? -1);
+      const normalizedId = Number.isFinite(id) && id >= 0 ? Math.trunc(id) : undefined;
+      const baseRecord = normalizedId != null ? baseCocktails.get(normalizedId) : undefined;
+
+      if (baseRecord && areStorageRecordsEqual(record, baseRecord)) {
+        return acc;
+      }
 
       const tags = normalizeTagIds(cocktail.tags);
       acc.push({
@@ -901,6 +911,13 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     }, []);
     const ingredients = inventoryState.ingredients.reduce<InventoryExportData['ingredients']>((acc, ingredient) => {
       const record = toIngredientStorageRecord(ingredient);
+      const id = Number(record.id ?? -1);
+      const normalizedId = Number.isFinite(id) && id >= 0 ? Math.trunc(id) : undefined;
+      const baseRecord = normalizedId != null ? baseIngredients.get(normalizedId) : undefined;
+
+      if (baseRecord && areStorageRecordsEqual(record, baseRecord)) {
+        return acc;
+      }
 
       const tags = normalizeTagIds(ingredient.tags);
       acc.push({
@@ -920,15 +937,27 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       cocktails,
       ingredients,
     };
-  }, [inventoryState]);
+  }, [baseMaps, inventoryState]);
 
   const exportInventoryPhotoEntries = useCallback((): PhotoBackupEntry[] | null => {
     if (!inventoryState) {
       return null;
     }
 
+    const baseCocktails = baseMaps.baseCocktails;
+    const baseIngredients = baseMaps.baseIngredients;
+
     return [
       ...inventoryState.cocktails.reduce<PhotoBackupEntry[]>((acc, cocktail) => {
+        const record = toCocktailStorageRecord(cocktail);
+        const id = Number(record.id ?? -1);
+        const normalizedId = Number.isFinite(id) && id >= 0 ? Math.trunc(id) : undefined;
+        const baseRecord = normalizedId != null ? baseCocktails.get(normalizedId) : undefined;
+
+        if (baseRecord && areStorageRecordsEqual(record, baseRecord)) {
+          return acc;
+        }
+
         acc.push({
           type: 'cocktails' as const,
           id: cocktail.id ?? '',
@@ -938,6 +967,15 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         return acc;
       }, []),
       ...inventoryState.ingredients.reduce<PhotoBackupEntry[]>((acc, ingredient) => {
+        const record = toIngredientStorageRecord(ingredient);
+        const id = Number(record.id ?? -1);
+        const normalizedId = Number.isFinite(id) && id >= 0 ? Math.trunc(id) : undefined;
+        const baseRecord = normalizedId != null ? baseIngredients.get(normalizedId) : undefined;
+
+        if (baseRecord && areStorageRecordsEqual(record, baseRecord)) {
+          return acc;
+        }
+
         acc.push({
           type: 'ingredients' as const,
           id: ingredient.id ?? '',
@@ -947,7 +985,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         return acc;
       }, []),
     ];
-  }, [inventoryState]);
+  }, [baseMaps, inventoryState]);
 
   const importInventoryData = useCallback((data: InventoryExportData) => {
     const hydrated = hydrateInventoryTagsFromCode(data);
@@ -1927,3 +1965,4 @@ export function useInventory() {
 export { useInventoryActions, useInventoryData, useInventorySettings };
 
 export type { AppTheme, Cocktail, CreateCocktailInput, CreateIngredientInput, Ingredient, StartScreen };
+
