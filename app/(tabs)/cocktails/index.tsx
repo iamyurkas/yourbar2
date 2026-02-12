@@ -833,6 +833,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 80,
     fontSize: 14,
+    paddingHorizontal: 20,
   },
   filterMenuBackdrop: {
     position: 'absolute',
