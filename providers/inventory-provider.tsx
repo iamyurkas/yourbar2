@@ -4,7 +4,7 @@ import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { TAG_COLORS } from '@/constants/tag-colors';
 import { loadInventoryData, reloadInventoryData } from '@/libs/inventory-data';
-import { AMAZON_STORES, detectAmazonStoreFromLocale, getEffectiveAmazonStore, type AmazonStoreKey, type AmazonStoreOverride } from '@/libs/amazon-stores';
+import { AMAZON_STORES, detectAmazonStoreFromPlatformStore, getEffectiveAmazonStore, type AmazonStoreKey, type AmazonStoreOverride } from '@/libs/amazon-stores';
 import {
   clearInventorySnapshot,
   loadInventorySnapshot,
@@ -266,7 +266,27 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   const [onboardingCompleted, setOnboardingCompleted] = useState<boolean>(
     () => globalThis.__yourbarInventoryOnboardingCompleted ?? false,
   );
-  const detectedAmazonStore = useMemo(() => detectAmazonStoreFromLocale(), []);
+  const [detectedAmazonStore, setDetectedAmazonStore] = useState<AmazonStoreKey | null>(
+    () => null,
+  );
+
+  useEffect(() => {
+    let mounted = true;
+
+    const loadDetectedStore = async () => {
+      const detected = await detectAmazonStoreFromPlatformStore();
+      if (mounted) {
+        setDetectedAmazonStore(detected);
+      }
+    };
+
+    loadDetectedStore();
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
   const effectiveAmazonStore = useMemo(
     () => getEffectiveAmazonStore(amazonStoreOverride, detectedAmazonStore),
     [amazonStoreOverride, detectedAmazonStore],

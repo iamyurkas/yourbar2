@@ -1,3 +1,5 @@
+import { NativeModules, Platform } from 'react-native';
+
 export type AmazonStoreOverride = AmazonStoreKey | 'DISABLED';
 
 export type AmazonStoreKey =
@@ -92,6 +94,50 @@ export function detectAmazonStoreFromLocale(): AmazonStoreKey | null {
   }
 
   return COUNTRY_TO_AMAZON_STORE[countryCode];
+}
+
+function mapCountryCodeToAmazonStore(countryCode: string | null | undefined): AmazonStoreKey | null {
+  if (!countryCode) {
+    return null;
+  }
+
+  const normalized = countryCode.trim().toUpperCase();
+  if (normalized.length !== 2 || !(normalized in COUNTRY_TO_AMAZON_STORE)) {
+    return null;
+  }
+
+  return COUNTRY_TO_AMAZON_STORE[normalized];
+}
+
+type NativeStoreRegionModule = {
+  getStoreCountryCode?: () => Promise<string | null>;
+};
+
+async function detectStoreCountryFromNativeModule(): Promise<string | null> {
+  const nativeModuleName = Platform.OS === 'ios' ? 'AppStoreRegion' : 'PlayStoreRegion';
+  const module = NativeModules[nativeModuleName] as NativeStoreRegionModule | undefined;
+
+  if (!module?.getStoreCountryCode) {
+    return null;
+  }
+
+  try {
+    const result = await module.getStoreCountryCode();
+    return typeof result === 'string' ? result : null;
+  } catch {
+    return null;
+  }
+}
+
+export async function detectAmazonStoreFromPlatformStore(): Promise<AmazonStoreKey | null> {
+  const storeCountry = await detectStoreCountryFromNativeModule();
+  const detectedFromStore = mapCountryCodeToAmazonStore(storeCountry);
+
+  if (detectedFromStore) {
+    return detectedFromStore;
+  }
+
+  return detectAmazonStoreFromLocale();
 }
 
 export function getEffectiveAmazonStore(
