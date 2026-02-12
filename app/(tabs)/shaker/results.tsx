@@ -1,7 +1,7 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { Stack, useLocalSearchParams } from 'expo-router';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   FlatList,
   Pressable,
@@ -9,10 +9,10 @@ import {
   StyleSheet,
   Text,
   View,
-  type NativeScrollEvent,
-  type NativeSyntheticEvent,
   type LayoutChangeEvent,
   type LayoutRectangle,
+  type NativeScrollEvent,
+  type NativeSyntheticEvent,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -554,9 +554,9 @@ export default function ShakerResultsScreen() {
     ({ leadingItem }: { leadingItem?: Cocktail | null }) => {
       const isReady = leadingItem
         ? isCocktailReady(leadingItem, availableIngredientIds, ingredientLookup, undefined, {
-            ignoreGarnish,
-            allowAllSubstitutes,
-          })
+          ignoreGarnish,
+          allowAllSubstitutes,
+        })
         : false;
       const backgroundColor = isReady ? Colors.outline : Colors.outlineVariant;
 
@@ -593,7 +593,7 @@ export default function ShakerResultsScreen() {
             filterExpanded={isFilterMenuVisible}
             onFilterLayout={handleFilterLayout}
             helpTitle="Shaker results"
-            helpText="This screen shows cocktails you can make with selected ingredients. Use search and filters to narrow results, then open any cocktail to view recipe details and preparation steps."
+            helpText="This screen shows cocktails you can make with selected ingredients.\n\nUse search and filters to narrow results, then open any cocktail to view recipe details and preparation steps."
           />
         </View>
         {isFilterMenuVisible ? (

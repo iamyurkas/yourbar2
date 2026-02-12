@@ -9,17 +9,18 @@ import {
   StyleSheet,
   Text,
   View,
-  type NativeScrollEvent,
-  type NativeSyntheticEvent,
   type LayoutChangeEvent,
   type LayoutRectangle,
+  type NativeScrollEvent,
+  type NativeSyntheticEvent,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { CollectionHeader } from '@/components/CollectionHeader';
 import { FabAdd } from '@/components/FabAdd';
-import { ListRow, PresenceCheck, Thumb } from '@/components/RowParts';
 import { OnboardingAnchor } from '@/components/onboarding/OnboardingAnchor';
+import { useOnboardingAnchors } from '@/components/onboarding/OnboardingContext';
+import { ListRow, PresenceCheck, Thumb } from '@/components/RowParts';
 import { SideMenuDrawer } from '@/components/SideMenuDrawer';
 import { TagPill } from '@/components/TagPill';
 import type { SegmentTabOption } from '@/components/TopBars';
@@ -34,7 +35,6 @@ import {
 import { navigateToDetailsWithReturnTo } from '@/libs/navigation';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { buildTagOptions, type TagOption } from '@/libs/tag-options';
-import { useOnboardingAnchors } from '@/components/onboarding/OnboardingContext';
 import {
   useInventoryActions,
   useInventoryData,
@@ -648,18 +648,18 @@ export default function IngredientsScreen() {
       case 'my':
         return {
           title: 'My ingredients',
-          text: 'This screen focuses on ingredients you actively use. Search by name, open ingredient details, and use tag filters to quickly organize your personal collection.',
+          text: 'This screen shows ingredients you have.\n\nSearch by name, and use tag filters to quickly organize your personal collection.',
         };
       case 'shopping':
         return {
           title: 'Shopping list',
-          text: 'This screen helps you manage ingredients to buy. Use search to find items, tap the shopping control to mark purchases, and open an ingredient for detailed information.',
+          text: 'This screen helps you manage ingredients to buy.\n\nUse search to find items, tap the shopping control to remove them from the list.',
         };
       case 'all':
       default:
         return {
           title: 'All ingredients',
-          text: 'This screen displays all ingredients in your bar. Use search, switch tabs, and filter by tags. Tap an ingredient to update its availability or open the details screen.',
+          text: 'This screen displays all ingredients in your bar.\n\nUse search, switch tabs, and filter by tags. Tap a checkbox to mark availability.',
         };
     }
   }, [activeTab]);

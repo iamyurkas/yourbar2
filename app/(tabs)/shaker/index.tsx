@@ -1,6 +1,7 @@
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { useScrollToTop } from '@react-navigation/native';
-import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useRouter } from 'expo-router';
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Pressable,
   SectionList,
@@ -16,12 +17,11 @@ import {
   type TextStyle,
 } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
 
-import { ListRow, PresenceCheck, Thumb } from '@/components/RowParts';
 import { AppDialog } from '@/components/AppDialog';
 import { OnboardingAnchor } from '@/components/onboarding/OnboardingAnchor';
 import { useOnboardingAnchors } from '@/components/onboarding/OnboardingContext';
+import { ListRow, PresenceCheck, Thumb } from '@/components/RowParts';
 import { SideMenuDrawer } from '@/components/SideMenuDrawer';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { useAppColors } from '@/constants/theme';
@@ -955,8 +955,8 @@ export default function ShakerScreen() {
         makeableCount > 0
           ? `Make ${makeableCount} ${label}`
           : totalCount > 0
-          ? `${totalCount} ${recipeLabel}`
-          : undefined;
+            ? `${totalCount} ${recipeLabel}`
+            : undefined;
 
       return (
         <View>
@@ -1140,7 +1140,7 @@ export default function ShakerScreen() {
         <AppDialog
           visible={isHelpVisible}
           title="Shaker"
-          message="This screen helps you select ingredients and understand what you can mix right now. Use search to find ingredients quickly, toggle availability mode, and open shaker results for matching cocktails."
+          message="This screen helps you select ingredients and understand what you can mix right now.\n\nUse search to find ingredients quickly, tap ingredients to mark them to use, and open shaker results for matching cocktails."
           actions={[{ label: 'Got it', variant: 'secondary' }]}
           onRequestClose={() => setIsHelpVisible(false)}
         />
