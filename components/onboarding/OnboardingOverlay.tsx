@@ -184,10 +184,20 @@ export function OnboardingOverlay() {
     },
     {
       id: 10,
-      message: 'Tap a few ingredients, then hit **Show** to see matching cocktails.\n\nCheers!',
-      buttonLabel: 'Finish',
+      message: 'Tap a few ingredients, then hit **Show** to see matching cocktails.',
+      buttonLabel: 'Next',
     },
-  ], []);
+    {
+      id: 11,
+      message: 'Start by marking ingredients you already have in **All ingredients**.\n\nCheers!',
+      anchorName: 'ingredients-tab-all',
+      buttonLabel: 'Finish',
+      onEnter: (_, requestTab) => {
+        router.navigate('/ingredients');
+        requestTab('ingredients', 'all');
+      },
+    },
+  ], [router]);
 
   const currentStep = steps.find(s => s.id === onboardingStep);
 
