@@ -130,7 +130,29 @@ export const returnToSourceOrBack = (
   },
 ) => {
   if (returnToPath) {
-    router.navigate({ pathname: returnToPath, params: returnToParams });
+    const currentState = navigation.getState();
+    const currentIndex = currentState.index ?? 0;
+    const currentRoute = currentState.routes[currentIndex];
+    const currentName = typeof currentRoute?.name === 'string' ? currentRoute.name : '';
+    const normalizedTargetPath = returnToPath.replace(/^\//, '');
+
+    const targetLooksLikeCurrentRoute =
+      normalizedTargetPath.length > 0 &&
+      (currentName === normalizedTargetPath || currentName.endsWith(`/${normalizedTargetPath}`));
+
+    if (targetLooksLikeCurrentRoute && areParamsEqual(currentRoute?.params, returnToParams)) {
+      skipDuplicateBack(navigation);
+      return;
+    }
+
+    router.navigate({
+      pathname: returnToPath,
+      params: {
+        ...(returnToParams ?? {}),
+        returnToPath: undefined,
+        returnToParams: undefined,
+      },
+    });
     return;
   }
 
