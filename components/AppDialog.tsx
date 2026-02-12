@@ -23,6 +23,7 @@ type AppDialogProps = DialogOptions & {
 
 export function AppDialog({ visible, title, message, actions, onRequestClose }: AppDialogProps) {
   const Colors = useAppColors();
+  const normalizedMessage = message?.replace(/\\n/g, '\n');
 
   if (!visible) {
     return null;
@@ -62,7 +63,9 @@ export function AppDialog({ visible, title, message, actions, onRequestClose }: 
           style={[styles.card, { backgroundColor: Colors.surface }]}
           onPress={(event) => event.stopPropagation()}>
           <Text style={[styles.title, { color: Colors.onSurface }]}>{title}</Text>
-          {message ? <Text style={[styles.message, { color: Colors.onSurfaceVariant }]}>{message}</Text> : null}
+          {normalizedMessage ? (
+            <Text style={[styles.message, { color: Colors.onSurfaceVariant }]}>{normalizedMessage}</Text>
+          ) : null}
           <View style={styles.actions}>
             {actions.map((action, index) => {
               const { backgroundColor, borderColor, textColor } = getActionColors(action.variant);
