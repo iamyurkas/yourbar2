@@ -662,6 +662,7 @@ export default function IngredientsScreen() {
             filterActive={isFilterActive}
             filterExpanded={isFilterMenuVisible}
             onFilterLayout={handleFilterLayout}
+            helpText="Екран інгредієнтів: переглядайте наявні та відсутні інгредієнти, користуйтесь пошуком, вкладками та фільтрами за тегами. Тап по інгредієнту змінює його стан, а деталі відкриваються з елемента списку."
           />
         </View>
         {isFilterMenuVisible ? (

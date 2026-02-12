@@ -1,6 +1,7 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import React from 'react';
 import {
+  Alert,
   Pressable,
   StyleSheet,
   Text,
@@ -24,6 +25,8 @@ type SearchTopBarProps = {
   filterActive?: boolean;
   filterExpanded?: boolean;
   onFilterLayout?: (layout: LayoutRectangle) => void;
+  helpTitle?: string;
+  helpText?: string;
 };
 
 export type SegmentTabOption = {
@@ -48,6 +51,8 @@ export function SearchTopBar({
   filterActive = false,
   filterExpanded = false,
   onFilterLayout,
+  helpTitle = 'Допомога',
+  helpText,
 }: SearchTopBarProps) {
   const Colors = useAppColors();
 
@@ -72,7 +77,7 @@ export function SearchTopBar({
         style={styles.iconButton}>
         <MaterialCommunityIcons name="menu" size={24} color={Colors.onSurface} />
       </Pressable>
-      <View style={[styles.searchContainer, { backgroundColor: Colors.surface, borderColor: Colors.background }]}>
+      <View style={[styles.searchContainer, { backgroundColor: Colors.surface, borderColor: Colors.background }]}> 
         <MaterialCommunityIcons name="magnify" size={20} color={Colors.onSurface} style={styles.searchIcon} />
         <TextInput
           value={value}
@@ -93,6 +98,17 @@ export function SearchTopBar({
           </Pressable>
         ) : null}
       </View>
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel="Open screen help"
+        onPress={() => {
+          if (helpText) {
+            Alert.alert(helpTitle, helpText);
+          }
+        }}
+        style={styles.iconButton}>
+        <MaterialCommunityIcons name="help-circle-outline" size={24} color={Colors.icon} />
+      </Pressable>
       <Pressable
         accessibilityRole="button"
         accessibilityLabel="Filter items"

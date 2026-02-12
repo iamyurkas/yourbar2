@@ -2,6 +2,7 @@ import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { useScrollToTop } from '@react-navigation/native';
 import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
+  Alert,
   Pressable,
   SectionList,
   StyleSheet,
@@ -1036,6 +1037,19 @@ export default function ShakerScreen() {
               </Pressable>
             ) : null}
           </View>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="Open screen help"
+            onPress={() =>
+              Alert.alert(
+                'Допомога',
+                'Екран шейкера: обирайте інгредієнти, щоб побачити скільки коктейлів можна приготувати. Використовуйте пошук, перемикач наявності та переходьте до результатів для списку рецептів.',
+              )
+            }
+            style={styles.iconButton}
+          >
+            <MaterialCommunityIcons name="help-circle-outline" size={24} color={Colors.icon} />
+          </Pressable>
           <View style={styles.iconButton}>
             <OnboardingAnchor name="shaker-availability-toggle">
               <PresenceCheck checked={inStockOnly} onToggle={() => setInStockOnly((previous) => !previous)} />

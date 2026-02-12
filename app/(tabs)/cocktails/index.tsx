@@ -652,6 +652,7 @@ export default function CocktailsScreen() {
             filterActive={isFilterActive}
             filterExpanded={isFilterMenuVisible}
             onFilterLayout={handleFilterLayout}
+            helpText="Екран коктейлів: переглядайте колекцію, шукайте за назвою, перемикайте вкладки та застосовуйте фільтри за методом і тегами. Натисніть на коктейль, щоб відкрити деталі, або додайте новий через кнопку внизу."
           />
         </View>
         {isFilterMenuVisible ? (

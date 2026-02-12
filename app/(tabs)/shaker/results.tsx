@@ -592,6 +592,7 @@ export default function ShakerResultsScreen() {
             filterActive={isFilterActive}
             filterExpanded={isFilterMenuVisible}
             onFilterLayout={handleFilterLayout}
+            helpText="Екран результатів шейкера: переглядайте коктейлі, які можна приготувати, шукайте за назвою та фільтруйте список. Відкрийте картку коктейлю, щоб побачити рецепт і кроки приготування."
           />
         </View>
         {isFilterMenuVisible ? (
