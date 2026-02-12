@@ -116,10 +116,10 @@ export function OnboardingOverlay() {
 
         inv.setIngredientAvailability(193, true); // Ice
         inv.setIngredientAvailability(159, true); // Gin
-        inv.setIngredientAvailability(343, true); // Whiskey
+        inv.setIngredientAvailability(342, true); // Whiskey
         inv.setIngredientAvailability(111, true); // Cola
-        inv.setIngredientAvailability(310, true); // Symple Syrup
-        inv.setIngredientAvailability(333, true); // Tonic
+        inv.setIngredientAvailability(309, true); // Simple Syrup
+        inv.setIngredientAvailability(332, true); // Tonic
         inv.setIngredientAvailability(214, true); // Lemon
         inv.setIngredientAvailability(222, true); // Lime
       },
