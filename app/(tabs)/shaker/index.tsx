@@ -181,6 +181,7 @@ export default function ShakerScreen() {
     allowAllSubstitutes,
     shakerSmartFilteringEnabled,
     onboardingStep,
+    onboardingCompleted,
   } = useInventory();
   const [query, setQuery] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -199,6 +200,7 @@ export default function ShakerScreen() {
   const insets = useSafeAreaInsets();
   const bottomInset = Math.min(insets.bottom, 8);
   const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
+  const isOnboardingActive = !onboardingCompleted && onboardingStep > 0;
 
   useScrollToTop(listRef);
 
@@ -1046,7 +1048,10 @@ export default function ShakerScreen() {
           keyExtractor={(item) => String(item.id ?? item.name)}
           renderItem={renderIngredient}
           renderSectionHeader={renderSectionHeader}
-          stickySectionHeadersEnabled
+          // NOTE: Fabric + sticky headers can get into a ref update loop when section content
+          // is dynamically swapped during onboarding restarts (collapsed header row <-> section
+          // header). Disable stickiness only while onboarding is active.
+          stickySectionHeadersEnabled={!isOnboardingActive}
           contentContainerStyle={[styles.listContent, { paddingBottom: 140 + bottomInset }]}
           showsVerticalScrollIndicator={false}
           keyboardDismissMode="on-drag"
