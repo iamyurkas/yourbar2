@@ -78,7 +78,7 @@ export function OnboardingOverlay() {
   const router = useRouter();
   const Colors = useAppColors();
   const pathname = usePathname();
-  const { height: screenHeight } = useWindowDimensions();
+  const { height: screenHeight, width: screenWidth } = useWindowDimensions();
   const [overlayOffset, setOverlayOffset] = React.useState({ x: 0, y: 0 });
   const overlayRef = React.useRef<View>(null);
 
@@ -204,6 +204,7 @@ export function OnboardingOverlay() {
   const countableSteps = useMemo(() => steps.filter(s => !!s.buttonLabel), [steps]);
   const totalCount = countableSteps.length;
   const currentStepIndex = countableSteps.findIndex(s => s.id === onboardingStep) + 1;
+  const isLastStep = currentStepIndex === totalCount;
 
   // Auto-advance logic
   React.useEffect(() => {
@@ -309,7 +310,17 @@ export function OnboardingOverlay() {
         />
       </Svg>
 
-      <View style={[styles.tooltip, { top: tooltipTop, backgroundColor: Colors.surface, borderColor: Colors.outline }]}>
+      <View
+        style={[
+          styles.tooltip,
+          {
+            top: tooltipTop,
+            width: Math.min(screenWidth - 40, 520),
+            backgroundColor: Colors.surface,
+            borderColor: Colors.outline,
+          },
+        ]}
+      >
         <Text style={[styles.message, { color: Colors.onSurface }]}>
           {renderFormattedMessage(currentStep.message)}
         </Text>
@@ -322,13 +333,15 @@ export function OnboardingOverlay() {
               >
                 <Text style={[styles.buttonText, { color: Colors.onPrimary }]}>{currentStep.buttonLabel}</Text>
               </Pressable>
-              <Pressable
-                style={styles.skipButton}
-                onPress={handleSkip}
-                hitSlop={8}
-              >
-                <Text style={[styles.skipLink, { color: Colors.onSurfaceVariant }]}>Skip</Text>
-              </Pressable>
+              {!isLastStep && (
+                <Pressable
+                  style={styles.skipButton}
+                  onPress={handleSkip}
+                  hitSlop={8}
+                >
+                  <Text style={[styles.skipLink, { color: Colors.onSurfaceVariant }]}>Skip</Text>
+                </Pressable>
+              )}
             </View>
             <Text style={[styles.stepCounter, { color: Colors.onSurfaceVariant }]}>
               {currentStepIndex} of {totalCount}
@@ -343,8 +356,7 @@ export function OnboardingOverlay() {
 const styles = StyleSheet.create({
   tooltip: {
     position: 'absolute',
-    left: 20,
-    right: 20,
+    alignSelf: 'center',
     padding: 20,
     borderRadius: 12,
     borderWidth: 1,
