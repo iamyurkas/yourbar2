@@ -30305,7 +30305,7 @@
       "id": 499,
       "name": "After Midnight Martini",
       "description": "A late-night alternative to an Espresso Martini.",
-      "instructions": "1. Add 22.5ml of **vodka**, 22.5ml of **coffee liqueur**, 15ml of **Pedro Ximenez sherry**, and an **egg white** into a shaker.\n2. Shake with **ice** and strain back into the shaker.\n3. Dry shake (without **ice**) to emulsify the **egg**.\n4. Fine strain into a chilled glass.\n5. Garnish with 3 **coffee beans** floated in the centre.",
+      "instructions": "1. Add 22.5ml of **vodka**, 22.5ml of **coffee liqueur**, 22.5ml of **red vermouth**, 15ml of **Pedro Ximenez sherry**, and an **egg white** into a shaker.\n2. Shake with **ice** and strain back into the shaker.\n3. Dry shake (without **ice**) to emulsify the **egg**.\n4. Fine strain into a chilled glass.\n5. Garnish with 3 **coffee beans** floated in the centre.",
       "photoUri": "assets/cocktails/499-after-midnight-martini.jpg",
       "glassId": "martini",
       "methodIds": ["shake"],
@@ -30336,6 +30336,7 @@
           "order": 4,
           "ingredientId": 289,
           "name": "Red Vermouth",
+          "amount": "25.5",
           "unitId": 11
         },
         {
@@ -31439,6 +31440,7 @@
       "instructions": "1. Pour Guinness into a champagne flute about halfway.\n2. Top off the glass with Prosecco or Champagne.",
       "photoUri": "assets/cocktails/530-black-velvet.jpg",
       "glassId": "champagne_flute",
+      "methodIds": ["build"],
       "tags": [6],
       "ingredients": [
         {
