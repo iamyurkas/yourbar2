@@ -128,6 +128,38 @@ export default function IngredientDetailsScreen() {
     return Number.isNaN(parsed) ? undefined : parsed;
   }, [ingredient?.id, ingredientId]);
 
+  const canonicalIngredientId = useMemo(() => {
+    const aliasOf = Number(ingredient?.aliasOfIngredientId ?? -1);
+    if (Number.isFinite(aliasOf) && aliasOf >= 0) {
+      return Math.trunc(aliasOf);
+    }
+
+    return numericIngredientId;
+  }, [ingredient?.aliasOfIngredientId, numericIngredientId]);
+
+  const aliasIngredientIds = useMemo(() => {
+    if (canonicalIngredientId == null) {
+      return [] as number[];
+    }
+
+    return ingredients
+      .filter((item) => {
+        const itemAliasOf = Number(item.aliasOfIngredientId ?? -1);
+        return Number.isFinite(itemAliasOf) && itemAliasOf >= 0 && Math.trunc(itemAliasOf) === canonicalIngredientId;
+      })
+      .map((item) => Number(item.id ?? -1))
+      .filter((id) => Number.isFinite(id) && id >= 0)
+      .map((id) => Math.trunc(id));
+  }, [canonicalIngredientId, ingredients]);
+
+  const relatedIngredientIds = useMemo(() => {
+    if (canonicalIngredientId == null) {
+      return [] as number[];
+    }
+
+    return Array.from(new Set([canonicalIngredientId, ...aliasIngredientIds]));
+  }, [aliasIngredientIds, canonicalIngredientId]);
+
   const [optimisticAvailability, setOptimisticAvailability] = useState<
     boolean | null
   >(null);
@@ -143,18 +175,18 @@ export default function IngredientDetailsScreen() {
   const shouldNavigateAway = !loading && !ingredient;
 
   const isAvailable = useMemo(() => {
-    if (numericIngredientId == null) {
+    if (relatedIngredientIds.length === 0) {
       return false;
     }
-    return availableIngredientIds.has(numericIngredientId);
-  }, [availableIngredientIds, numericIngredientId]);
+    return relatedIngredientIds.some((id) => availableIngredientIds.has(id));
+  }, [availableIngredientIds, relatedIngredientIds]);
 
   const isOnShoppingList = useMemo(() => {
-    if (numericIngredientId == null) {
+    if (relatedIngredientIds.length === 0) {
       return false;
     }
-    return shoppingIngredientIds.has(numericIngredientId);
-  }, [numericIngredientId, shoppingIngredientIds]);
+    return relatedIngredientIds.some((id) => shoppingIngredientIds.has(id));
+  }, [relatedIngredientIds, shoppingIngredientIds]);
 
   const effectiveIsAvailable = optimisticAvailability ?? isAvailable;
   const effectiveIsOnShoppingList = optimisticShopping ?? isOnShoppingList;

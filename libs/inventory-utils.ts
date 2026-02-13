@@ -78,6 +78,77 @@ export function normalizeSearchFields<
   });
 }
 
+export function normalizeIngredientSearchFields<
+  T extends {
+    id?: number | null;
+    name?: string | null;
+    searchName?: string | null;
+    searchTokens?: string[] | null;
+    synonyms?: string[] | null;
+    aliasOfIngredientId?: number | null;
+  },
+>(items: readonly T[] = []): (T & NormalizedSearchFields)[] {
+  const byId = new Map<number, T>();
+  items.forEach((item) => {
+    const id = Number(item.id ?? -1);
+    if (Number.isFinite(id) && id >= 0) {
+      byId.set(Math.trunc(id), item);
+    }
+  });
+
+  const canonicalIdById = new Map<number, number>();
+  byId.forEach((item, id) => {
+    const aliasOfValue = Number(item.aliasOfIngredientId ?? -1);
+    const aliasOfId = Number.isFinite(aliasOfValue) && aliasOfValue >= 0 ? Math.trunc(aliasOfValue) : undefined;
+    if (aliasOfId != null && byId.has(aliasOfId) && aliasOfId !== id) {
+      canonicalIdById.set(id, aliasOfId);
+      return;
+    }
+    canonicalIdById.set(id, id);
+  });
+
+  const groupIdsByCanonicalId = new Map<number, Set<number>>();
+  canonicalIdById.forEach((canonicalId, id) => {
+    const group = groupIdsByCanonicalId.get(canonicalId) ?? new Set<number>();
+    group.add(canonicalId);
+    group.add(id);
+    groupIdsByCanonicalId.set(canonicalId, group);
+  });
+
+  return items.map((item) => {
+    const { searchName: _searchName, searchTokens: _searchTokens, ...rest } = item;
+    const id = Number(item.id ?? -1);
+    const normalizedId = Number.isFinite(id) && id >= 0 ? Math.trunc(id) : undefined;
+    const canonicalId = normalizedId != null ? canonicalIdById.get(normalizedId) ?? normalizedId : undefined;
+    const relatedIds = canonicalId != null ? groupIdsByCanonicalId.get(canonicalId) : undefined;
+
+    const ownSynonyms = Array.isArray(item.synonyms) ? item.synonyms : [];
+    const relatedNames = Array.from(relatedIds ?? []).flatMap((relatedId) => {
+      const related = byId.get(relatedId);
+      if (!related) {
+        return [];
+      }
+      const relatedSynonyms = Array.isArray(related.synonyms) ? related.synonyms : [];
+      return [related.name ?? '', ...relatedSynonyms];
+    });
+
+    const normalizedNames = [item.name ?? '', ...ownSynonyms, ...relatedNames]
+      .map((name) => normalizeSearchText(name ?? ''))
+      .filter(Boolean);
+
+    const searchNameNormalized = normalizedNames.join(' ');
+    const searchTokensNormalized = Array.from(
+      new Set(normalizedNames.flatMap((name) => name.split(/\s+/).filter(Boolean))),
+    );
+
+    return {
+      ...rest,
+      searchNameNormalized,
+      searchTokensNormalized,
+    } as T & NormalizedSearchFields;
+  });
+}
+
 export function normalizeTagList<TTag extends { id?: number | null; name?: string | null; color?: string | null }>(
   tags: readonly TTag[] | null | undefined,
 ): Array<{ id: number; name: string; color?: string | null }> | undefined {
@@ -223,12 +294,17 @@ export function toCocktailStorageRecord(cocktail: Cocktail | BaseCocktailRecord)
 
 export function toIngredientStorageRecord(ingredient: Ingredient | IngredientRecord): IngredientStorageRecord {
   const normalizedTags = normalizeTagList(ingredient.tags);
+  const synonyms = normalizeSynonyms(ingredient.synonyms);
+  const aliasOfValue = Number(ingredient.aliasOfIngredientId ?? -1);
+  const aliasOfIngredientId = Number.isFinite(aliasOfValue) && aliasOfValue >= 0 ? Math.trunc(aliasOfValue) : undefined;
 
   return {
     id: ingredient.id,
     name: ingredient.name,
+    synonyms,
     description: ingredient.description ?? undefined,
     tags: normalizedTags && normalizedTags.length > 0 ? normalizedTags : undefined,
+    aliasOfIngredientId,
     baseIngredientId: ingredient.baseIngredientId ?? undefined,
     photoUri: ingredient.photoUri ?? undefined,
   } satisfies IngredientStorageRecord;

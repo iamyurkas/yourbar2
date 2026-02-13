@@ -4,7 +4,14 @@ import { type InventoryData } from '@/libs/inventory-data';
 export type BaseCocktailRecord = InventoryData['cocktails'][number];
 type CocktailIngredientRecord = NonNullable<BaseCocktailRecord['ingredients']>[number];
 type CocktailSubstituteRecord = NonNullable<CocktailIngredientRecord['substitutes']>[number];
+export type BaseIngredientRecord = InventoryData['ingredients'][number];
 export type CocktailTag = NonNullable<BaseCocktailRecord['tags']>[number];
+export type IngredientRecord = Omit<BaseIngredientRecord, 'searchName' | 'searchTokens'> & {
+  searchName?: string | null;
+  searchTokens?: string[] | null;
+  synonyms?: string[] | null;
+  aliasOfIngredientId?: number | null;
+};
 export type CocktailSubstitute = CocktailSubstituteRecord & { brand?: boolean };
 export type CocktailIngredient = Omit<CocktailIngredientRecord, 'substitutes'> & {
   allowBaseSubstitution?: boolean;
@@ -78,8 +85,10 @@ export type CreateCocktailInput = {
 
 export type CreateIngredientInput = {
   name: string;
+  synonyms?: string[] | null;
   description?: string | null;
   photoUri?: string | null;
+  aliasOfIngredientId?: number | null;
   baseIngredientId?: number | null;
   tags?: IngredientTag[] | null;
 };
