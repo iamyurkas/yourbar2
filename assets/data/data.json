@@ -19690,7 +19690,7 @@
     {
       "id": 328,
       "name": "Mulled Wine",
-      "description": "Also called \"glühwein\" in german, this drink is very popular in german-speaking countries and france. Spices can be varied greatly – just use what you like.",
+      "description": "Also called \"glühwein\" in German, this drink is very popular in German-speaking countries and France. Spices can be varied greatly – just use what you like.",
       "instructions": "1. Heat a bottle or more of **red wine** in a pan.\n2. Add **cinnamon sticks**, **cloves**, **sugar**, **vanilla** pods, and **anise**.\n3. Add **lemon** wedges, and wait10 minutes.\n4. Heat until the wine almost boils, and serve in cups.",
       "photoUri": "assets/cocktails/328-mulled-wine.jpg",
       "glassId": "irish_coffee_glass",
@@ -25659,7 +25659,7 @@
     {
       "id": 426,
       "name": "Stone Fence",
-      "description": "A historic american colonial classic that combines the robust warmth of **rye whiskey** with the crisp, refreshing profile of **apple cider**. This version is enhanced with a dash of aromatic **bitters** and a fresh **mint** garnish for a complex, spirit-forward experience.",
+      "description": "A historic American colonial classic that combines the robust warmth of **rye whiskey** with the crisp, refreshing profile of **apple cider**. This version is enhanced with a dash of aromatic **bitters** and a fresh **mint** garnish for a complex, spirit-forward experience.",
       "instructions": "1. Fill a pub glass with **ice**.\n2. Add 60ml of **rye whiskey**, 440ml of **apple cider**, and 1 dash of **Angostura Bitters**.\n3. Stir gently to combine.\n4. Garnish with a **mint** sprig.",
       "photoUri": "assets/cocktails/426-stone-fence.jpg",
       "glassId": "pub_glass",
@@ -34475,7 +34475,7 @@
     {
       "id": 77,
       "name": "Chambord",
-      "description": "Chambord is a black raspberry liqueur from france by brown‑forman, 16.5% ABV. Great in a French Martini or Kir Royale.",
+      "description": "Chambord is a black raspberry liqueur from France by brown‑forman, 16.5% ABV. Great in a French Martini or Kir Royale.",
       "tags": [2],
       "baseIngredientId": 286,
       "photoUri": "assets/ingredients/77-chambord.jpg"
@@ -35363,7 +35363,7 @@
     {
       "id": 202,
       "name": "Japanese Whisky",
-      "description": "Whisky distilled in japan using techniques inspired by Scotch, typically around 43% ABV. Balanced malt and grain blends with refined oak influence. Elegant choice for highballs and sipping.",
+      "description": "Whisky distilled in Japan using techniques inspired by Scotch, typically around 43% ABV. Balanced malt and grain blends with refined oak influence. Elegant choice for highballs and sipping.",
       "tags": [0, 1],
       "photoUri": "assets/ingredients/202-japanese-whisky.jpg"
     },
@@ -36107,7 +36107,7 @@
     {
       "id": 306,
       "name": "Seagram's 7 Crown",
-      "description": "Seagram's Seven Crown, also called Seagram's seven, or simply Seven Crown, is an american blended whiskey produced by Diageo under the Seagram's name.",
+      "description": "Seagram's Seven Crown, also called Seagram's seven, or simply Seven Crown, is an American blended whiskey produced by Diageo under the Seagram's name.",
       "tags": [0, 1],
       "baseIngredientId": 342,
       "photoUri": "assets/ingredients/306-seagram-s-7-crown.jpg"
