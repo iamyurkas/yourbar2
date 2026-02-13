@@ -158,6 +158,20 @@ export default function IngredientDetailsScreen() {
 
   const effectiveIsAvailable = optimisticAvailability ?? isAvailable;
   const effectiveIsOnShoppingList = optimisticShopping ?? isOnShoppingList;
+  const effectiveAvailableIngredientIds = useMemo(() => {
+    const nextIds = new Set(availableIngredientIds);
+    if (numericIngredientId == null) {
+      return nextIds;
+    }
+
+    if (effectiveIsAvailable) {
+      nextIds.add(numericIngredientId);
+    } else {
+      nextIds.delete(numericIngredientId);
+    }
+
+    return nextIds;
+  }, [availableIngredientIds, effectiveIsAvailable, numericIngredientId]);
 
   useEffect(() => {
     setOptimisticAvailability((previous) => {
@@ -251,28 +265,48 @@ export default function IngredientDetailsScreen() {
       cocktailsWithIngredient.map((cocktail) => {
         const availability = summariseCocktailAvailability(
           cocktail,
-          availableIngredientIds,
+          effectiveAvailableIngredientIds,
           ingredientLookup,
           undefined,
           { ignoreGarnish, allowAllSubstitutes },
         );
+        const availabilityWithIngredient = summariseCocktailAvailability(
+          cocktail,
+          numericIngredientId == null
+            ? effectiveAvailableIngredientIds
+            : new Set([
+              ...effectiveAvailableIngredientIds,
+              numericIngredientId,
+            ]),
+          ingredientLookup,
+          undefined,
+          { ignoreGarnish, allowAllSubstitutes },
+        );
+
         return {
           cocktail,
           isReady: availability.isReady,
           missingCount: availability.missingCount,
           recipeNamesCount: availability.recipeNames.length,
           ingredientLine: availability.ingredientLine,
+          canMakeWithIngredient:
+            !availability.isReady && availabilityWithIngredient.isReady,
           ratingValue: getCocktailRating(cocktail),
         };
       }),
     [
       allowAllSubstitutes,
-      availableIngredientIds,
       cocktailsWithIngredient,
+      effectiveAvailableIngredientIds,
       getCocktailRating,
       ignoreGarnish,
       ingredientLookup,
+      numericIngredientId,
     ],
+  );
+  const canMakeMoreCocktailsCount = useMemo(
+    () => cocktailEntries.filter((entry) => entry.canMakeWithIngredient).length,
+    [cocktailEntries],
   );
   const [visibleCocktailCount, setVisibleCocktailCount] =
     useState(COCKTAIL_PAGE_SIZE);
@@ -739,31 +773,43 @@ export default function IngredientDetailsScreen() {
 
                   {amazonLinkLabel ? (
                     <View style={styles.amazonLinkGroup}>
-                      <Pressable
-                        onPress={handleBuyOnAmazon}
-                        accessibilityRole="link"
-                        accessibilityLabel={amazonLinkLabel}
-                        hitSlop={8}
-                        style={styles.amazonLinkButton}
-                      >
-                        <Text style={[styles.amazonLinkText, { color: Colors.tint }]}>
-                          {amazonLinkLabel}
+                      <View style={styles.amazonLinkRow}>
+                        <Pressable
+                          onPress={handleBuyOnAmazon}
+                          accessibilityRole="link"
+                          accessibilityLabel={amazonLinkLabel}
+                          hitSlop={8}
+                          style={styles.amazonLinkButton}
+                        >
+                          <Text style={[styles.amazonLinkText, { color: Colors.tint }]}>
+                            {amazonLinkLabel}
+                          </Text>
+                        </Pressable>
+                        <Pressable
+                          onPress={handleAmazonAffiliateInfoPress}
+                          accessibilityRole="button"
+                          accessibilityLabel="Amazon affiliate information"
+                          hitSlop={8}
+                          style={styles.amazonInfoButton}
+                        >
+                          <MaterialCommunityIcons
+                            name="information-outline"
+                            size={24}
+                            color={Colors.onSurfaceVariant}
+                            style={styles.amazonInfoIcon}
+                          />
+                        </Pressable>
+                      </View>
+                      {!effectiveIsAvailable && canMakeMoreCocktailsCount > 0 ? (
+                        <Text
+                          style={[
+                            styles.amazonAvailabilityHint,
+                            { color: Colors.onSurfaceVariant },
+                          ]}
+                        >
+                          {`to make ${canMakeMoreCocktailsCount} more cocktails`}
                         </Text>
-                      </Pressable>
-                      <Pressable
-                        onPress={handleAmazonAffiliateInfoPress}
-                        accessibilityRole="button"
-                        accessibilityLabel="Amazon affiliate information"
-                        hitSlop={8}
-                        style={styles.amazonInfoButton}
-                      >
-                        <MaterialCommunityIcons
-                          name="information-outline"
-                          size={24}
-                          color={Colors.onSurfaceVariant}
-                          style={styles.amazonInfoIcon}
-                        />
-                      </Pressable>
+                      ) : null}
                     </View>
                   ) : null}
                 </View>
@@ -1017,7 +1063,7 @@ export default function IngredientDetailsScreen() {
               {cocktailEntries.length ? (
                 <View style={styles.cocktailList}>
                   {visibleCocktailEntries.map(
-                    ({ cocktail, isReady, missingCount, recipeNamesCount, ingredientLine, ratingValue }, index) => {
+                    ({ cocktail, isReady, missingCount, recipeNamesCount, ingredientLine, ratingValue, canMakeWithIngredient }, index) => {
                       const previousReady =
                         index > 0
                           ? visibleCocktailEntries[index - 1]?.isReady
@@ -1045,7 +1091,11 @@ export default function IngredientDetailsScreen() {
                               )
                             }
                             highlightColor={
-                              isReady ? undefined : Colors.highlightFaint
+                              canMakeWithIngredient
+                                ? Colors.highlightSubtle
+                                : isReady
+                                  ? undefined
+                                  : Colors.highlightFaint
                             }
                             showMethodIcons
                             isReady={isReady}
@@ -1194,11 +1244,19 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   amazonLinkGroup: {
+    alignItems: "flex-end",
+    gap: 2,
+    alignSelf: "stretch",
+  },
+  amazonLinkRow: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-end",
     gap: 6,
-    alignSelf: "stretch",
+  },
+  amazonAvailabilityHint: {
+    fontSize: 13,
+    fontWeight: "500",
   },
   amazonLinkButton: {
     alignSelf: "center",
