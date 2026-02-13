@@ -38,7 +38,7 @@ export function TabBarButton({ onOpenDialog, ...props }: TabBarButtonProps) {
         title: 'Leave without saving?',
         message: 'Your changes will be lost if you leave this screen.',
         actions: [
-          { label: 'Save', onPress: saveHandler ?? undefined },
+          { label: 'Save', variant: 'primary', onPress: saveHandler ?? undefined },
           { label: 'Stay', variant: 'secondary' },
           { label: 'Leave', variant: 'destructive', onPress: proceed },
         ],

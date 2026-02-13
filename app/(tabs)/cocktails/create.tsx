@@ -1312,7 +1312,7 @@ export default function CreateCocktailScreen() {
         title: "Leave without saving?",
         message: "Your changes will be lost if you leave this screen.",
         actions: [
-          { label: "Save", onPress: handleSubmit },
+          { label: "Save", variant: "primary", onPress: handleSubmit },
           { label: "Stay", variant: "secondary" },
           {
             label: "Leave",
