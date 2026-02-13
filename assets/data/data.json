@@ -1611,7 +1611,7 @@
     {
       "id": 27,
       "name": "AMF",
-      "description": "Amf (adios motherf***er) is a famously potent long drink that combines several white spirits with citrus and **cola**. Despite its bright, almost innocent look, it delivers a powerful punch and is known as a party classic in bars and clubs.",
+      "description": "AMF (adios, motherf***er) is a potent long drink combining multiple white spirits with citrus. Despite its bright appearance, it is strong and is typically served over plenty of **ice**.",
       "instructions": "1. Fill a highball glass with **ice**.\n2. Add 15ml of **vodka**, 15ml of **white rum**, 15ml of **Tequila blanco**, 15ml of **gin**, 15ml of **Blue Curaçao**, 15ml of **lemon juice**, 15ml of **simple syrup**, and 60ml of **lemon-lime soda**.\n3. Stir gently to combine.\n4. Garnish with a **lemon** slice.",
       "photoUri": "assets/cocktails/27-amf.jpg",
       "glassId": "highball_glass",
@@ -8805,7 +8805,7 @@
     {
       "id": 143,
       "name": "Chocolate-Covered Cherry",
-      "description": "A party favourite that uses the different weights of the liqueurs to create visible layers.",
+      "description": "A layered shooter that uses different liqueur densities to create distinct, visible layers.",
       "instructions": "1. Pour the **grenadine** into the glass first.\n2. Gently pour the **coffee liqueur** over the back of a bar spoon to keep it separate.\n3. Finish by layering the **Irish cream** on top using the same spoon technique.",
       "photoUri": "assets/cocktails/143-chocolate-covered-cherry.jpg",
       "glassId": "shooter",
@@ -12692,7 +12692,7 @@
     {
       "id": 209,
       "name": "Frozen Strawberry Daiquiri",
-      "description": "A vibrant, frozen-style party punch that blends a generous amount of fresh strawberries with zesty citrus and light rum. Ideal for sharing with friends on a warm day.",
+      "description": "A frozen-style cocktail for sharing, blending fresh strawberries, citrus, and light rum into a balanced, fruit-forward drink.",
       "instructions": "1. Place the frozen strawberries and **sugar** into a high-speed blender.\n2. Pour in the **white rum**, **lemon juice**, and **lime juice**.\n3. Add the **ice** to the blender container.\n4. Blend on high speed until the mixture reaches a smooth, slushy consistency.\n5. Pour the punch into a chilled glasses.\n6. Garnish each glass with a fresh **strawberry**.",
       "photoUri": "assets/cocktails/209-frozen-strawberry-daiquiri.jpg",
       "glassId": "martini",
@@ -18538,7 +18538,7 @@
     {
       "id": 309,
       "name": "Melon Ball",
-      "description": "A vibrant and fruity highball that is incredibly easy to drink. The electric green color and sweet melon flavor make it a perfect summer party cocktail.",
+      "description": "A vibrant, fruit-forward highball with sweet melon notes and a refreshing finish.",
       "instructions": "1. Fill a highball glass with **ice**.\n2. Add 30ml of **vodka**, 60ml of **Midori Melon Liqueur**, and 90ml of **orange juice**.\n3. Stir gently to combine.\n4. Garnish with an **orange** slice and a scoop of **honeydew melon**.",
       "photoUri": "assets/cocktails/309-melon-ball.jpg",
       "glassId": "highball_glass",
@@ -22463,7 +22463,7 @@
     {
       "id": 373,
       "name": "Redheaded Slut",
-      "description": "A popular and vibrant party shooter. This mix of herbal **Jägermeister**, sweet **peach schnapps**, and tart **cranberry juice** creates a surprisingly balanced and fruity shot.",
+      "description": "A layered shooter combining herbal **Jägermeister**, sweet **peach schnapps**, and tart **cranberry juice** for a balanced flavor profile.",
       "instructions": "1. Fill a cocktail shaker with **ice**.\n2. Add 45ml of **Jägermeister**, 45ml of **peach schnapps**, and 60ml of **cranberry juice**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled shooter glass.\n5. Garnish with 3 strawberries.",
       "photoUri": "assets/cocktails/373-redheaded-slut.jpg",
       "glassId": "shooter",
@@ -26588,7 +26588,7 @@
     {
       "id": 441,
       "name": "Tequila Slammer",
-      "description": "An energetic party shooter known for its explosive carbonation and ritualistic serving style, mixing Tequila with **lemon-lime soda**.",
+      "description": "A high-energy drink that combines Tequila and **lemon-lime soda**, traditionally served with a quick slam to activate carbonation.",
       "instructions": "1. Fill a rocks glass with **ice**.\n2. Add 50ml of **Tequila blanco** and 50ml of **7-Up**.\n3. Stir gently to combine.",
       "photoUri": "assets/cocktails/441-tequila-slammer.jpg",
       "glassId": "rocks_glass",
@@ -27190,7 +27190,7 @@
     {
       "id": 450,
       "name": "Tiger's Milk",
-      "description": "This is a rich, old-school cocktail often compared to eggnog or a boozy milkshake.",
+      "description": "A rich, creamy dessert cocktail often compared to eggnog or a milkshake-style serve.",
       "instructions": "1. Pour 60ml of **Cognac**, 22.5ml of **milk**, 22.5ml of **heavy cream**, 7.5ml of **rich simple syrup**, 2 drops of **vanilla extract**, 1 pinch of **cinnamon**, and an **egg white**.\n2. Dry shake (without **ice**) vigorously for about 15 seconds to emulsify the **egg**.\n3. Add **ice** and shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled rocks glass.\n5. Garnish with a pinch of **nutmeg**.",
       "photoUri": "assets/cocktails/450-tiger-s-milk.jpg",
       "glassId": "rocks_glass",
@@ -29225,7 +29225,7 @@
     {
       "id": 483,
       "name": "Weng Weng",
-      "description": "A potent filipino party drink combining many spirits with juices and **grenadine**.",
+      "description": "A strong Filipino long drink that combines multiple spirits with fruit juices and **grenadine**.",
       "instructions": "1. Fill a collins glass with **ice**.\n2. Add 10ml of **vodka**, 10ml of **gin**, 10ml of **white rum**, 10ml of **Scotch Whisky**, 10ml of **bourbon**, 10ml of **Tequila blanco**, 10ml of **triple sec**, 10ml of **brandy**, 10ml of **coconut rum**, 20ml of **orange juice**, 20ml of **pineapple juice**, 1 dash of **grenadine**, and 1 **cherry**.\n3. Stir gently to combine.\n4. Garnish with an **orange** slice.",
       "photoUri": "assets/cocktails/483-weng-weng.jpg",
       "glassId": "collins_glass",
@@ -29782,7 +29782,7 @@
     {
       "id": 491,
       "name": "Woo Woo",
-      "description": "A vibrant and fruity party favorite that blends **vodka** and **peach schnapps** with crisp **cranberry juice** for a smooth, easy-drinking experience.",
+      "description": "A fruity cocktail combining **vodka**, **peach schnapps**, and **cranberry juice** for a smooth, approachable profile.",
       "instructions": "1. Fill a highball glass with **ice**.\n2. Add 60ml of **vodka**, 30ml of **peach schnapps**, and 120ml of **cranberry juice**.\n3. Stir gently to combine.\n4. Garnish with a **lime** wedge and a **cherry**.",
       "photoUri": "assets/cocktails/491-woo-woo.jpg",
       "glassId": "highball_glass",
@@ -30634,7 +30634,7 @@
     {
       "id": 523,
       "name": "Adult Chocolate Milk",
-      "description": "This is that chocolate milk but in boozy, adult form.",
+      "description": "A dessert-style cocktail that blends chocolate liqueur, cream liqueur, milk, and cream into a chilled, silky serve.",
       "instructions": "1. In a cocktail shaker, add ice, Godiva dark chocolate liqueur, Baileys, whole milk, heavy cream, and chocolate syrup.\n2. Shake well to chill and froth.\n3. Double strain into a rocks glass over fresh ice.",
       "photoUri": "assets/cocktails/523-adult-chocolate-milk.jpg",
       "glassId": "highball_glass",
@@ -31202,8 +31202,8 @@
     {
       "id": 514,
       "name": "Berry Spritz",
-      "description": "Why not pour yourself a lush berry spritz? Enjoy on a summer evening whilst watching the sunset.",
-      "instructions": "1. Muddle 40g of **berries** with 20g of **lime juice** in a rocks glass.\n2. Add 120g of **ice** and pour in the **Prosecco**.\n3. Top with **soda water**, stir and serve.",
+      "description": "A refreshing berry spritz with bright fruit notes, sparkling wine, and a light soda finish.",
+      "instructions": "1. Muddle 40g of **berries** with 20ml of **lime juice** in a rocks glass.\n2. Add 120g of **ice** and pour in the **Prosecco**.\n3. Top with **soda water**, stir, and serve.",
       "photoUri": "assets/cocktails/514-berry-spritz.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["muddle", "build"],
@@ -32685,7 +32685,7 @@
     {
       "id": 515,
       "name": "Mixed Berry Sangria",
-      "description": "Sangria is one of those things that you hardly need a recipe for – or even a particularly good red wine!",
+      "description": "A fruit-forward sangria made with red wine, berries, citrus, and a touch of brandy.",
       "instructions": "1. Muddle berries and an orange with sugar.\n2. Add the red wine, brandy, and orange juice and steep.\n3. Pour into glasses filled with ice and extra fruit.",
       "photoUri": "assets/cocktails/515-mixed-berry-sangria.jpg",
       "glassId": "pitcher",
@@ -33636,7 +33636,7 @@
     {
       "id": 554,
       "name": "St‑Germain Spritz",
-      "description": "Savour the moment with our most iconic cocktail, the St‑Germain Spritz. Light and refreshing tasting, this simple recipe promises to add a dash of decadence to any occasion.",
+      "description": "A light, refreshing spritz combining **St‑Germain**, sparkling wine, and soda water with a floral profile.",
       "instructions": "1. Pour **St‑Germain** over ice into your glass.\n2. Top with **Prosecco** and **sparkling water**.\n3. Give the drink a good stir.\n4. Gently twist a **lemon peel** on top of your drink.",
       "photoUri": "assets/cocktails/554-st-germain-spritz.jpg",
       "glassId": "wine_glass",
