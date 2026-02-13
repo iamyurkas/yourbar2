@@ -2,27 +2,28 @@
   "expo": {
     "name": "Your Bar (Beta)",
     "slug": "yourbar",
-    "version": "0.9.84",
+    "version": "0.9.86",
     "orientation": "portrait",
+
     "icon": "./assets/images/icon.png",
+
     "scheme": "yourbar",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
 
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "icon": "./assets/images/ios-icon.png"
     },
 
     "android": {
-      "package": "com.yourbarapp.free.dev",
-      "versionCode": 12,
-
+      "package": "com.yourbarapp.free",
+      "versionCode": 15,
       "adaptiveIcon": {
         "backgroundColor": "#4DABF7",
         "foregroundImage": "./assets/images/icon.png",
         "monochromeImage": "./assets/images/icon-mono.png"
       },
-
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false
     },
