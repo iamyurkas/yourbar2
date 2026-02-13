@@ -71,7 +71,9 @@
     {
       "id": 2,
       "name": "20th Century",
-      "synonyms": ["Twentieth Century"],
+      "synonyms": [
+        "Twentieth Century"
+      ],
       "description": "The 20th Century cocktail is a classic cocktail that was first created in 1937 by a British bartender C.A. Tuck and named in honor of the celebrated 20th Century limited train which ran between New York City and Chicago. It's a sophisticated and elegant drink that combines London dry **gin**, **Lillet Blanc** (a French aperitif wine), **lime juice**, and **Crème de Cacao White**.",
       "instructions": "1. Fill a cocktail shaker with **ice**.\n2. Add 30ml of **gin**, 20ml of **Lillet Blanc**, 20ml of **Crème de Cacao White**, and 10ml of **lime juice**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled coupe glass.\n5. Express an **orange** zest twist over the cocktail and use it as garnish.",
       "photoUri": "assets/cocktails/2-20th-century-cocktail.jpg",
@@ -133,7 +135,9 @@
     {
       "id": 3,
       "name": "7 & 7",
-      "synonyms": ["Seven and Seven"],
+      "synonyms": [
+        "Seven and Seven"
+      ],
       "description": "This cocktail is similar to the Cuba Libre and may refer to any drink consisting of **whiskey** mixed with a **lemon** soft drink. It was originally made with **Seagram's 7 Crown whiskey**, but any **whiskey** can be used.",
       "instructions": "1. Fill a collins glass with **ice**.\n2. Add 50ml of **whiskey** and 150ml of **7-Up**.\n3. Stir gently to combine.\n4. Garnish with a **lemon** wedge.",
       "photoUri": "assets/cocktails/3-7-7.jpg",
@@ -1554,7 +1558,11 @@
     {
       "id": 26,
       "name": "Americano",
-      "synonyms": ["Mi To", "Mi-To", "Milano Torino"],
+      "synonyms": [
+        "Mi To",
+        "Mi-To",
+        "Milano Torino"
+      ],
       "description": "Bitter **Campari** and sweet vermouth lengthened with fizzy soda.",
       "instructions": "1. Fill a rocks glass with **ice**.\n2. Add 30ml of **Campari**, 30ml of **red vermouth**, and top with **soda water**.\n3. Stir gently to combine.\n4. Garnish with an **orange** slice and a **lemon** twist.",
       "photoUri": "assets/cocktails/26-americano.jpg",
@@ -1892,7 +1900,9 @@
     {
       "id": 32,
       "name": "Aperol Spritz",
-      "synonyms": ["Spritz Veneziano"],
+      "synonyms": [
+        "Spritz Veneziano"
+      ],
       "description": "Bittersweet aperitif of **Prosecco**, **Aperol**, and soda.",
       "instructions": "1. Fill a wine glass with **ice**.\n2. Add 90ml of **Prosecco**, 60ml of **Aperol**, and 30ml of **soda water**.\n3. Stir gently to combine.\n4. Garnish with an **orange** wedge.",
       "photoUri": "assets/cocktails/32-aperol-spritz.jpg",
@@ -2204,7 +2214,7 @@
         {
           "order": 1,
           "ingredientId": 209,
-          "name": "Kiwi fruit Liqueur",
+          "name": "Kiwi Fruit Liqueur",
           "amount": "25",
           "unitId": 11
         },
@@ -4559,7 +4569,9 @@
     {
       "id": 75,
       "name": "Black Lebowski",
-      "synonyms": ["Black Russian"],
+      "synonyms": [
+        "Black Russian"
+      ],
       "description": "Simple and spirit-forward blend of **vodka** and **coffee liqueur**.",
       "instructions": "1. Fill a rocks glass with **ice**.\n2. Add 60ml of **vodka** and 30ml of **coffee liqueur**.\n3. Stir gently to combine.",
       "photoUri": "assets/cocktails/75-black-lebowski.jpg",
@@ -6015,7 +6027,7 @@
       "id": 100,
       "name": "Brandy Crusta",
       "description": "A citrusy **brandy** cocktail with curaçao, maraschino, and **bitters** served in a **sugar**-crusted glass.",
-      "instructions": "1. Fill a cocktail shaker with **ice**.\n2. Add 45ml of **Cognac**, 7.5ml of **Luxardo Maraschino**, 15ml of **Orange Curaçao**, 15ml of **lemon juice**, 15ml of **simple syrup**, and 2 dashes of **Angostura Bitters**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled coupe glass rimmed with **lemon juice** and caster **sugar**.\n5. Garnish with a twist of **lemon** and 5 g of **sugar**.",
+      "instructions": "1. Fill a cocktail shaker with **ice**.\n2. Add 45ml of **Cognac**, 7.5ml of **Luxardo Maraschino**, 15ml of **Orange Curaçao**, 15ml of **lemon juice**, 15ml of **simple syrup**, and 2 dashes of **Angostura Bitters**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled coupe glass rimmed with **lemon juice** and caster **sugar**.\n5. Garnish with a twist of **lemon** and 5g of **sugar**.",
       "photoUri": "assets/cocktails/100-brandy-crusta.jpg",
       "glassId": "coupe",
       "methodIds": ["shake"],
@@ -9112,7 +9124,7 @@
         {
           "order": 6,
           "ingredientId": 214,
-          "name": "Lemon",
+          "name": "Lemon Juice",
           "amount": "1",
           "unitId": 6
         },
@@ -9627,7 +9639,7 @@
           "ingredientId": 231,
           "name": "Maraschino Cherry",
           "amount": "1",
-          "unitId": 11,
+          "unitId": 1,
           "garnish": true
         }
       ]
@@ -9635,7 +9647,10 @@
     {
       "id": 157,
       "name": "Cuba Libre",
-      "synonyms": ["Rum and Coke", "Rum & Coke"],
+      "synonyms": [
+        "Rum and Coke",
+        "Rum & Coke"
+      ],
       "description": "A simple mix of rum, **cola**, and **lime** for a refreshing long drink.",
       "instructions": "1. Fill a highball glass with **ice**.\n2. Add 50ml of **white rum**, 10ml of **lime juice**, and 120ml of **cola**.\n3. Stir gently to combine.\n4. Garnish with a **lime** wedge.",
       "photoUri": "assets/cocktails/157-cuba-libre.jpg",
@@ -9845,7 +9860,7 @@
         {
           "order": 5,
           "ingredientId": 57,
-          "name": "Blood Orange",
+          "name": "Blood Orange Juice",
           "amount": "45",
           "unitId": 11
         },
@@ -11446,7 +11461,9 @@
     {
       "id": 188,
       "name": "Espresso Martini",
-      "synonyms": ["Vodka Espresso"],
+      "synonyms": [
+        "Vodka Espresso"
+      ],
       "description": "A smooth **vodka** Martini energized with **espresso** and **coffee liqueur**.",
       "instructions": "1. Fill a cocktail shaker with **ice**.\n2. Add 50ml of **vodka**, 30ml of **Kahlua**, 30ml of **espresso**, and 10ml of **simple syrup**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled Martini glass.\n5. Garnish with 3 **coffee beans**.",
       "photoUri": "assets/cocktails/188-espresso-martini.jpg",
@@ -12141,8 +12158,8 @@
           "order": 5,
           "ingredientId": 231,
           "name": "Maraschino Cherry",
-          "amount": "7.5",
-          "unitId": 11,
+          "amount": "1",
+          "unitId": 1,
           "garnish": true
         }
       ]
@@ -12150,7 +12167,10 @@
     {
       "id": 201,
       "name": "French 75",
-      "synonyms": ["French Seventy-Five", "Soixante-Quinze"],
+      "synonyms": [
+        "French Seventy-Five",
+        "Soixante-Quinze"
+      ],
       "description": "Crisp **gin** and **lemon** topped with sparkling **Champagne**.",
       "instructions": "1. Fill a cocktail shaker with **ice**.\n2. Add 30ml of **gin**, 15ml of **lemon juice**, and 15ml of **simple syrup**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled **Champagne** flute glass.\n5. Top with 60ml of **Champagne**.\n6. Garnish with a twist of **lemon**.",
       "photoUri": "assets/cocktails/201-french-75.jpg",
@@ -12618,7 +12638,7 @@
       "id": 208,
       "name": "Frozen Daiquiri",
       "description": "A variation of the popular Daiquiri cocktail.",
-      "instructions": "1. Add **aged rum**, **lime juice**, **rich simple syrup**, and **Luxardo Maraschino** to a blender and blend briefly without **ice** on a slow setting.\n2. Add about 150 g of crushed **ice** and blend again until smooth.\n3. Pour into a chilled glass.\n4. Garnish with a **lime** wedge on the rim, skewered with a **maraschino cherry**.\n5. Serve with a straw.",
+      "instructions": "1. Add **aged rum**, **lime juice**, **rich simple syrup**, and **Luxardo Maraschino** to a blender and blend briefly without **ice** on a slow setting.\n2. Add about 150g of crushed **ice** and blend again until smooth.\n3. Pour into a chilled glass.\n4. Garnish with a **lime** wedge on the rim, skewered with a **maraschino cherry**.\n5. Serve with a straw.",
       "photoUri": "assets/cocktails/208-frozen-daiquiri.jpg",
       "glassId": "coupe",
       "methodIds": ["blend"],
@@ -13225,7 +13245,9 @@
     {
       "id": 218,
       "name": "Gin & Tonic",
-      "synonyms": ["G&T"],
+      "synonyms": [
+        "G&T"
+      ],
       "description": "A timeless and refreshing highball cocktail that perfectly balances the botanical notes of **gin** with the crisp bitterness of **tonic** **water**. This effervescent drink is elevated by a bright citrus aroma, making it a sophisticated yet simple choice for any occasion.",
       "instructions": "1. Add 60ml of **gin** and 120ml of **tonic** to a highball glass.\n2. Stir gently to combine.\n3. Garnish with a **lime** wedge.",
       "photoUri": "assets/cocktails/218-gin-tonic.jpg",
@@ -16524,7 +16546,7 @@
     {
       "id": 276,
       "name": "Jolly Rancher",
-      "description": "Named after the popular american candy brand.",
+      "description": "Named after the popular American candy brand.",
       "instructions": "1. Fill a cocktail shaker with **ice**.\n2. Add 30ml of **vodka**, 30ml of **Midori Melon Liqueur**, and 90ml of **cranberry juice**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled highball glass.\n5. Garnish with an **orange** slice.",
       "photoUri": "assets/cocktails/276-jolly-rancher.jpg",
       "glassId": "highball_glass",
@@ -18981,7 +19003,12 @@
     {
       "id": 316,
       "name": "Milano-Torino",
-      "synonyms": ["Mi To", "Mi-To", "Milano Torino", "Americano"],
+      "synonyms": [
+        "Mi To",
+        "Mi-To",
+        "Milano Torino",
+        "Americano"
+      ],
       "description": "Also known as \"Mi-To,\" this cocktail was created around 1860 in a cafe in Milan, Italy. It is named after the ingredients: **Campari** is from Milan, and sweet vermouth is from Turin. With the addition of soda, this drink turns into the \"Americano\" cocktail, and with **gin**, it turns into the \"Negroni.\"",
       "instructions": "1. Fill a rocks glass with **ice**.\n2. Add 30ml of **Campari** and 30ml of **red vermouth**.\n3. Stir gently to combine.\n4. Garnish with an **orange** twist.",
       "photoUri": "assets/cocktails/316-milano-torino.jpg",
@@ -22415,7 +22442,9 @@
     {
       "id": 372,
       "name": "Red Lebowski",
-      "synonyms": ["Red Russian"],
+      "synonyms": [
+        "Red Russian"
+      ],
       "description": "A bold and minimalist two-ingredient drink. The neutral profile of **vodka** allows the deep, sweet, and tart notes of **cherry brandy** to take center stage for a smooth, dessert-like finish.",
       "instructions": "1. Fill a rocks glass with **ice**.\n2. Add 30ml of **vodka** and 30ml of **cherry brandy**.\n3. Stir gently to combine.",
       "photoUri": "assets/cocktails/372-red-lebowski.jpg",
@@ -22918,7 +22947,7 @@
           "ingredientId": 231,
           "name": "Maraschino Cherry",
           "amount": "1",
-          "unitId": 11,
+          "unitId": 1,
           "garnish": true
         }
       ]
@@ -23458,7 +23487,7 @@
     {
       "id": 389,
       "name": "Rum Rickey",
-      "description": ".\"Rickey\" is a family of drinks made with some base liquor, **lime juice** and sparkling **water**. One of the most popular is the \"**gin** rickey\", which is made with **gin**.",
+      "description": "\"Rickey\" is a family of drinks made with some base liquor, **lime juice** and sparkling **water**. One of the most popular is the \"**gin** rickey\", which is made with **gin**.",
       "instructions": "1. Fill a collins glass with **ice**.\n2. Add 50ml of **white rum**, 30ml of **lime juice**, and 120ml of **soda water**.\n3. Stir gently to combine.\n4. Garnish with 2 **lime** slices.",
       "photoUri": "assets/cocktails/389-rum-rickey.jpg",
       "glassId": "collins_glass",
@@ -23949,7 +23978,7 @@
     {
       "id": 397,
       "name": "Sazerac",
-      "description": "The quintessential new orleans classic. A complex and aromatic masterpiece featuring the spicy kick of rye or **Cognac**, sweetened slightly and brightened by the unique **anise** aroma of an **absinthe** rinse.",
+      "description": "The quintessential New Orleans classic. A complex and aromatic masterpiece featuring the spicy kick of rye or **Cognac**, sweetened slightly and brightened by the unique **anise** aroma of an **absinthe** rinse.",
       "instructions": "1. Rinse a chilled rocks glass with **absinthe**, swirling to coat the sides, and discard the excess.\n2. In a separate mixing glass, muddle the **sugar** cube with **Peychaud's Bitters** until dissolved.\n3. Add the **Cognac**(or **rye whiskey**) and fill the mixing glass with **ice**.\n4. Stir well until the drink is properly chilled.\n5. Strain the mixture into the prepared **absinthe**-rinsed glass without **ice**.\n6. Express the oils of a **lemon** twist over the drink and garnish.",
       "photoUri": "assets/cocktails/397-sazerac.jpg",
       "glassId": "rocks_glass",
@@ -24171,7 +24200,9 @@
     {
       "id": 401,
       "name": "Screwdriver",
-      "synonyms": ["Vodka Orange"],
+      "synonyms": [
+        "Vodka Orange"
+      ],
       "description": "A world-famous, refreshing highball that perfectly marries the neutrality of **vodka** with the bright acidity of **orange juice**. Simple, classic, and an official IBA favorite.",
       "instructions": "1. Fill a highball glass with **ice**.\n2. Add 50ml of **vodka** and 100ml of **orange juice**.\n3. Stir gently to combine.\n4. Garnish with an **orange** slice.",
       "photoUri": "assets/cocktails/401-screwdriver.jpg",
@@ -25456,7 +25487,9 @@
     {
       "id": 422,
       "name": "Spritz Veneziano",
-      "synonyms": ["Aperol Spritz"],
+      "synonyms": [
+        "Aperol Spritz"
+      ],
       "description": "An IBA official sparkling cocktail. **Prosecco** is recommended for the **sparkling wine**.",
       "instructions": "1. Fill a wine glass with **ice**.\n2. Add 90ml of **Prosecco**, 60ml of **Select**, and 30ml of **soda water**.\n3. Stir gently to combine.\n4. Garnish with an **orange** slice.",
       "photoUri": "assets/cocktails/422-spritz-veneziano.jpg",
@@ -25659,7 +25692,7 @@
     {
       "id": 426,
       "name": "Stone Fence",
-      "description": "A historic american colonial classic that combines the robust warmth of **rye whiskey** with the crisp, refreshing profile of **apple cider**. This version is enhanced with a dash of aromatic **bitters** and a fresh **mint** garnish for a complex, spirit-forward experience.",
+      "description": "A historic American colonial classic that combines the robust warmth of **rye whiskey** with the crisp, refreshing profile of **apple cider**. This version is enhanced with a dash of aromatic **bitters** and a fresh **mint** garnish for a complex, spirit-forward experience.",
       "instructions": "1. Fill a pub glass with **ice**.\n2. Add 60ml of **rye whiskey**, 440ml of **apple cider**, and 1 dash of **Angostura Bitters**.\n3. Stir gently to combine.\n4. Garnish with a **mint** sprig.",
       "photoUri": "assets/cocktails/426-stone-fence.jpg",
       "glassId": "pub_glass",
@@ -26370,7 +26403,7 @@
     {
       "id": 437,
       "name": "Szarlotka",
-      "description": "A simple polish cocktail pairing **Żubrówka** with **apple juice** and **cinnamon**.",
+      "description": "A simple Polish cocktail pairing **Żubrówka** with **apple juice** and **cinnamon**.",
       "instructions": "1. Fill a rocks glass with **ice**.\n2. Add 60ml of **Żubrówka**, 120ml of **apple juice**, and 1 pinch of **cinnamon**.\n3. Stir gently to combine.\n4. Garnish with a **cinnamon** stick and an **apple** wedge.",
       "photoUri": "assets/cocktails/437-szarlotka.jpg",
       "glassId": "rocks_glass",
@@ -27085,7 +27118,7 @@
           "ingredientId": 141,
           "name": "Dried Apricot",
           "amount": "1",
-          "unitId": 11,
+          "unitId": 1,
           "garnish": true
         }
       ]
@@ -27567,7 +27600,9 @@
     {
       "id": 456,
       "name": "Tom Collins",
-      "synonyms": ["Gin Collins"],
+      "synonyms": [
+        "Gin Collins"
+      ],
       "description": "A timeless IBA classic, this refreshing highball perfectly balances the sweetness of **old tom gin** with crisp citrus and sparkling **water**.",
       "instructions": "1. Fill a collins glass with **ice**.\n2. Add 45ml of **old tom gin**, 30ml of **lemon juice**, 15ml of **simple syrup**, and 60ml of **soda water**.\n3. Stir gently to combine.\n4. Garnish with a **maraschino cherry** and a **lemon** slice.",
       "photoUri": "assets/cocktails/456-tom-collins.jpg",
@@ -28899,7 +28934,9 @@
     {
       "id": 477,
       "name": "Vodka Buck",
-      "synonyms": ["Moscow Mule"],
+      "synonyms": [
+        "Moscow Mule"
+      ],
       "description": "**Vodka** and **ginger beer** built over **ice** with a bright **lime** kick.",
       "instructions": "1. Add 45ml of **vodka**, 10ml of **lime juice**, and 120ml of **ginger beer** to a copper mug.\n2. Stir gently to combine.\n3. Garnish with a **lime** wedge.",
       "photoUri": "assets/cocktails/477-moscow-mule.jpg",
@@ -29411,7 +29448,9 @@
     {
       "id": 485,
       "name": "Whiskey Sour",
-      "synonyms": ["Whisky Sour"],
+      "synonyms": [
+        "Whisky Sour"
+      ],
       "description": "Classic **bourbon** sour optionally enriched with **egg white**.",
       "instructions": "1. Pour 60ml of **bourbon**, 30ml of **lemon juice**, 15ml of **rich simple syrup**, and an **egg white**.\n2. Dry shake (without **ice**) vigorously for about 15 seconds to emulsify the **egg**.\n3. Add **ice** and shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled rocks glass over an **ice** cube.\n5. Garnish with an **orange** slice a **maraschino cherry**, and 3 drops of **Angostura Bitters**.",
       "photoUri": "assets/cocktails/485-whiskey-sour.jpg",
@@ -29617,7 +29656,9 @@
     {
       "id": 488,
       "name": "White Lebowski",
-      "synonyms": ["White Russian"],
+      "synonyms": [
+        "White Russian"
+      ],
       "description": "A rich, creamy classic cocktail that perfectly balances the kick of **vodka** with the sweetness of **coffee liqueur**, topped with a velvety layer of fresh **cream**.",
       "instructions": "1. Fill a rocks glass with **ice** cubes.\n2. Pour the **vodka** and **coffee liqueur** over the **ice**.\n3. Gently pour the **cream** on top so it swirls into the dark liquid.\n4. Stir lightly if desired, or serve layered for a striking visual effect.",
       "photoUri": "assets/cocktails/488-white-lebowski.jpg",
@@ -30099,7 +30140,7 @@
       "id": 496,
       "name": "Zombie",
       "description": "A legendary and potent tiki classic that blends multiple rums, fresh **lime**, and tropical spice for a complex, sun-soaked experience.",
-      "instructions": "1. Add **jamaican dark rum**, 45ml **gold puerto rican rum**, **demerara rum**, fresh **lime juice**, **falernum**, **don's mix**, **grenadine**, **Angostura Bitters**, and **Pernod** into a blender.\n2. Add 180g of crushed **ice**.\n3. Blend at high speed for no more than 5 seconds.\n4. Pour the contents into a tall glass or tiki mug and add additional crushed **ice** to fill if necessary.\n5. Garnish with a **mint** sprig.",
+      "instructions": "1. Add **Jamaican dark rum**, 45ml **gold Puerto Rican rum**, **demerara rum**, fresh **lime juice**, **falernum**, **don's mix**, **grenadine**, **Angostura Bitters**, and **Pernod** into a blender.\n2. Add 180g of crushed **ice**.\n3. Blend at high speed for no more than 5 seconds.\n4. Pour the contents into a tall glass or tiki mug and add additional crushed **ice** to fill if necessary.\n5. Garnish with a **mint** sprig.",
       "photoUri": "assets/cocktails/496-zombie.jpg",
       "glassId": "tiki",
       "methodIds": ["blend"],
@@ -30709,7 +30750,7 @@
     {
       "id": 537,
       "name": "Alligator",
-      "description": "Alligator is a popular green cocktail that prominently features kiwi liqueur or fresh kiwi to achieve its signature swamp-like hue and tropical flavour profile.",
+      "description": "Alligator is a popular green cocktail that prominently features kiwi fruit liqueur or fresh kiwi fruit to achieve its signature swamp-like hue and tropical flavour profile.",
       "instructions": "1. Fill a shaker with **ice** cubes.\n2. Add 45ml of **gin**.\n3. Add 30ml of **lemon juice**.\n4. Add 22.5ml of **kiwi fruit liqueur**.\n5. Shake vigorously for 15-20 seconds.\n6. Strain into a martini glass.\n7. Garnish with a **kiwi fruit** slice.",
       "photoUri": "assets/cocktails/537-alligator.jpg",
       "glassId": "martini",
@@ -30733,7 +30774,7 @@
         {
           "order": 3,
           "ingredientId": 214,
-          "name": "Lemon",
+          "name": "Lemon Juice",
           "amount": "30",
           "unitId": 11
         },
@@ -30758,7 +30799,7 @@
     {
       "id": 539,
       "name": "Amalfi Spritz",
-      "description": "A refreshing, delicately bittersweet and sweet 'n' sour, more interesting take on a **Limoncello Spritz**",
+      "description": "A refreshing, delicately bittersweet and sweet 'n' sour, more interesting take on a **Limoncello Spritz**.",
       "instructions": "1. Pour ingredients into a chilled glass.\n2. Fill the glass with ice.\n3. Garnish with lemon slices.",
       "photoUri": "assets/cocktails/539-amalfi-spritz.jpg",
       "glassId": "wine_glass",
@@ -30821,7 +30862,7 @@
           "ingredientId": 193,
           "name": "Ice",
           "amount": "120",
-          "unitId": 11
+          "unitId": 8
         },
         {
           "order": 7,
@@ -30901,7 +30942,7 @@
       "id": 509,
       "name": "Apple Jack",
       "description": "Sweet and sour with rich apple flavours and a brandy backbone.",
-      "instructions": "1. Shake all ingredients with ice.\n2. Fine strain into a chilled glass",
+      "instructions": "1. Shake all ingredients with ice.\n2. Fine strain into a chilled glass.",
       "photoUri": "assets/cocktails/509-apple-jack.jpg",
       "glassId": "coupe",
       "methodIds": ["shake"],
@@ -31021,7 +31062,7 @@
           "ingredientId": 193,
           "name": "Ice",
           "amount": "150",
-          "unitId": 11
+          "unitId": 8
         },
         {
           "order": 2,
@@ -31074,7 +31115,7 @@
           "ingredientId": 193,
           "name": "Ice",
           "amount": "150",
-          "unitId": 11
+          "unitId": 8
         },
         {
           "order": 2,
@@ -31320,7 +31361,7 @@
           "ingredientId": 193,
           "name": "Ice",
           "amount": "150",
-          "unitId": 11
+          "unitId": 8
         },
         {
           "order": 3,
@@ -31377,7 +31418,7 @@
           "ingredientId": 193,
           "name": "Ice",
           "amount": "150",
-          "unitId": 11
+          "unitId": 8
         },
         {
           "order": 2,
@@ -31547,7 +31588,7 @@
           "ingredientId": 193,
           "name": "Ice",
           "amount": "150",
-          "unitId": 11
+          "unitId": 8
         },
         {
           "order": 2,
@@ -31641,27 +31682,34 @@
       "ingredients": [
         {
           "order": 1,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8
+        },
+        {
+          "order": 2,
           "ingredientId": 159,
           "name": "Gin",
           "amount": "60",
           "unitId": 11
         },
         {
-          "order": 2,
+          "order": 3,
           "ingredientId": 126,
           "name": "Crème de Violette",
           "amount": "15",
           "unitId": 11
         },
         {
-          "order": 3,
+          "order": 4,
           "ingredientId": 216,
           "name": "Lemon Juice",
           "amount": "15",
           "unitId": 11
         },
         {
-          "order": 4,
+          "order": 5,
           "ingredientId": 214,
           "name": "Lemon",
           "amount": "1",
@@ -31801,48 +31849,62 @@
       "ingredients": [
         {
           "order": 1,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8
+        },
+        {
+          "order": 2,
           "ingredientId": 81,
           "name": "Cherry",
           "amount": "6",
           "unitId": 1
         },
         {
-          "order": 2,
+          "order": 3,
           "ingredientId": 63,
           "name": "Bourbon",
           "amount": "60",
           "unitId": 11
         },
         {
-          "order": 3,
+          "order": 4,
           "ingredientId": 85,
           "name": "Cherry Liqueur",
           "amount": "22.5",
           "unitId": 11
         },
         {
-          "order": 4,
+          "order": 5,
           "ingredientId": 309,
           "name": "Simple Syrup",
           "amount": "7.5",
           "unitId": 11
         },
         {
-          "order": 5,
+          "order": 6,
           "ingredientId": 243,
           "name": "Orange Bitters",
           "amount": "1",
           "unitId": 6
         },
         {
-          "order": 6,
+          "order": 7,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
+        },
+        {
+          "order": 8,
           "ingredientId": 311,
           "name": "Soda Water",
           "amount": "60",
           "unitId": 11
         },
         {
-          "order": 7,
+          "order": 9,
           "ingredientId": 81,
           "name": "Cherry",
           "amount": "2",
@@ -32293,8 +32355,8 @@
     {
       "id": 536,
       "name": "Kiwi Fruit Margarita",
-      "description": "Kiwi Fruit Margarita is a refreshing, tropical twist on the classic cocktail that can be prepared either blended (frozen) or shaken (on the rocks). It typically features fresh, ripe kiwis, tequila, lime juice, and a sweetener like agave or simple syrup.",
-      "instructions": "1. If you prefer a salted glass: Rub the rim of an old-fashioned glass (or whatever glass you prefer) with the edge of a lime slice.  Swirl the rim through a small pile of salt. Set aside.\n2. Slice a kiwi wheel for garnish and cut the rest of the kiwi into pieces. Set aside garnish & place kiwi pieces in the cocktail shaker and muddle.\n3. Add **ice**, **tequila**, **orange liqueur**, **lime juice**, and **agave syrup** to the shaker with the muddled kiwi. Shake until nicely chilled.\n4. Pour everything (cocktail & ice) into the prepared glass.\n5. Garnish with the prepared kiwi fruit slice.",
+      "description": "kiwi fruit Margarita is a refreshing, tropical twist on the classic cocktail that can be prepared either blended (frozen) or shaken (on the rocks). It typically features fresh, ripe kiwis, tequila, lime juice, and a sweetener like agave or simple syrup.",
+      "instructions": "1. If you prefer a salted glass: Rub the rim of an old-fashioned glass (or whatever glass you prefer) with the edge of a lime slice.  Swirl the rim through a small pile of salt. Set aside.\n2. Slice a kiwi fruit wheel for garnish and cut the rest of the kiwi fruit into pieces. Set aside garnish & place kiwi fruit pieces in the cocktail shaker and muddle.\n3. Add **ice**, **tequila**, **orange liqueur**, **lime juice**, and **agave syrup** to the shaker with the muddled kiwi fruit. Shake until nicely chilled.\n4. Pour everything (cocktail & ice) into the prepared glass.\n5. Garnish with the prepared kiwi fruit slice.",
       "photoUri": "assets/cocktails/536-kiwi-fruit-margarita.jpg",
       "glassId": "margarita_glass",
       "methodIds": ["muddle", "shake", "blend"],
@@ -32677,48 +32739,55 @@
       "ingredients": [
         {
           "order": 1,
-          "ingredientId": 322,
-          "name": "Sugar",
-          "amount": "45",
-          "unitId": 11
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
         },
         {
           "order": 2,
+          "ingredientId": 322,
+          "name": "Sugar",
+          "amount": "45",
+          "unitId": 8
+        },
+        {
+          "order": 3,
           "ingredientId": 44,
           "name": "Berries",
           "amount": "300",
           "unitId": 8
         },
         {
-          "order": 3,
+          "order": 4,
           "ingredientId": 242,
           "name": "Orange",
           "amount": "1",
           "unitId": 1
         },
         {
-          "order": 4,
+          "order": 5,
           "ingredientId": 290,
           "name": "Red Wine",
           "amount": "750",
           "unitId": 11
         },
         {
-          "order": 5,
+          "order": 6,
           "ingredientId": 64,
           "name": "Brandy",
           "amount": "90",
           "unitId": 11
         },
         {
-          "order": 6,
+          "order": 7,
           "ingredientId": 246,
           "name": "Orange Juice",
           "amount": "180",
           "unitId": 11
         },
         {
-          "order": 7,
+          "order": 8,
           "ingredientId": 311,
           "name": "Soda Water",
           "amount": "180",
@@ -32726,11 +32795,11 @@
           "optional": true
         },
         {
-          "order": 8,
+          "order": 9,
           "ingredientId": 44,
           "name": "Berries",
           "amount": "10",
-          "unitId": 11,
+          "unitId": 1,
           "optional": true,
           "garnish": true
         }
@@ -32836,7 +32905,7 @@
           "ingredientId": 193,
           "name": "Ice",
           "amount": "150",
-          "unitId": 11
+          "unitId": 8
         },
         {
           "order": 2,
@@ -33001,7 +33070,7 @@
       "id": 549,
       "name": "Pastis Whisky Sour",
       "description": "Pastis adds a pleasing hint of anise and liquorice to a classic Scotch Whisky Sour.",
-      "instructions": "1. Dry shake all ingredients without ice.\n2. Add ice and shake for 15-20 seconds.\n3. Fine strain into an ice-filled glass.\n4. Garnish with a skewered lemon slice wheel and a maraschino cherry",
+      "instructions": "1. Dry shake all ingredients without ice.\n2. Add ice and shake for 15-20 seconds.\n3. Fine strain into an ice-filled glass.\n4. Garnish with a skewered lemon slice wheel and a maraschino cherry.",
       "photoUri": "assets/cocktails/549-pastis-whisky-sour.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["shake"],
@@ -33089,55 +33158,62 @@
       "ingredients": [
         {
           "order": 1,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
+        },
+        {
+          "order": 2,
           "ingredientId": 273,
           "name": "Pimm's No. 1",
           "amount": "45",
           "unitId": 11
         },
         {
-          "order": 2,
+          "order": 3,
           "ingredientId": 242,
           "name": "Orange",
           "amount": "1",
           "unitId": 19
         },
         {
-          "order": 3,
+          "order": 4,
           "ingredientId": 214,
           "name": "Lemon",
           "amount": "1",
           "unitId": 19
         },
         {
-          "order": 4,
+          "order": 5,
           "ingredientId": 131,
           "name": "Cucumber",
           "amount": "1",
           "unitId": 19
         },
         {
-          "order": 5,
+          "order": 6,
           "ingredientId": 317,
           "name": "Strawberry",
           "amount": "2",
           "unitId": 9
         },
         {
-          "order": 6,
+          "order": 7,
           "ingredientId": 219,
           "name": "Lemonade",
           "amount": "60",
           "unitId": 11
         },
         {
-          "order": 7,
+          "order": 8,
           "ingredientId": 161,
           "name": "Ginger Ale",
           "amount": "75",
           "unitId": 11
         },
         {
-          "order": 8,
+          "order": 9,
           "ingredientId": 236,
           "name": "Mint",
           "amount": "1",
@@ -33161,7 +33237,7 @@
           "ingredientId": 193,
           "name": "Ice",
           "amount": "120",
-          "unitId": 11
+          "unitId": 8
         },
         {
           "order": 2,
@@ -33289,7 +33365,7 @@
           "ingredientId": 193,
           "name": "Ice",
           "amount": "150",
-          "unitId": 11
+          "unitId": 8
         },
         {
           "order": 3,
@@ -33354,7 +33430,7 @@
     {
       "id": 548,
       "name": "Rhum Marianito",
-      "instructions": "1. Stir all ingredients with ice.\n2. Strain into an ice-filled glass (preferably over a large cube or chunk of block ice).\n3. Express orange zest twist over the cocktail and use as a garnish, along with olives",
+      "instructions": "1. Stir all ingredients with ice.\n2. Strain into an ice-filled glass (preferably over a large cube or chunk of block ice).\n3. Express orange zest twist over the cocktail and use as a garnish, along with olives.",
       "photoUri": "assets/cocktails/548-rhum-marianito.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["stir"],
@@ -33689,7 +33765,7 @@
           "ingredientId": 317,
           "name": "Strawberry",
           "amount": "5",
-          "unitId": 11
+          "unitId": 1
         },
         {
           "order": 2,
@@ -33877,7 +33953,7 @@
           "ingredientId": 193,
           "name": "Ice",
           "amount": "150",
-          "unitId": 11
+          "unitId": 8
         },
         {
           "order": 2,
@@ -33913,7 +33989,7 @@
     {
       "id": 1,
       "name": "7-Up",
-      "description": "7 Up (stylised as 7up outside of the US) is a brand of lemon-lime flavoured, non-caffeinated soft drink.",
+      "description": "Lemon-lime soda, USA, 0% ABV. Sweet and carbonated with bright citrus notes. Standard mixer for **Seven & Seven** or **Shirley Temple**.",
       "tags": [3],
       "baseIngredientId": 218,
       "photoUri": "assets/ingredients/1-7-up.jpg"
@@ -34994,7 +35070,7 @@
     {
       "id": 153,
       "name": "Fernet Branca",
-      "description": "Fernet is a type of Italian amaro with an ABV of 39–45%. It is intensely bitter and herbal, with notes of mint, myrrh, and saffron. Often taken as a shot or used sparingly in cocktails for depth.",
+      "description": "Amari, Italy, 39–45% ABV. Intensely bitter and herbal with notes of mint and saffron. Essential for a **Hanky Panky** or **Toronto**.",
       "tags": [1],
       "photoUri": "assets/ingredients/153-fernet-branca.jpg"
     },
@@ -35059,7 +35135,7 @@
     {
       "id": 162,
       "name": "Ginger Beer",
-      "description": "Ginger beer is a sweetened and carbonated, usually non-alcoholic beverage, a type of soft drink. Historically it was a type of beer brewed by the natural fermentation of prepared ginger spice, yeast and sugar.",
+      "description": "Soft drink, Worldwide, 0% ABV. Spicy, carbonated ginger beverage. Essential for a **Moscow Mule** or **Dark 'n' Stormy**.",
       "tags": [3],
       "photoUri": "assets/ingredients/162-ginger-beer.jpg"
     },
@@ -35167,7 +35243,7 @@
     {
       "id": 177,
       "name": "Grapefruit Soda",
-      "description": "Pink grapefruit soda is a sweet and tart, sparkling citrus drink. It pairs beautifully with **Tequila** in a **Paloma**. Adds both flavour and fizz.",
+      "description": "Pink grapefruit soda is a sweet and tart, sparkling citrus drink. It pairs beautifully with **tequila** in a **Paloma**. Adds both flavour and fizz.",
       "tags": [3],
       "photoUri": "assets/ingredients/177-grapefruit-soda.jpg"
     },
@@ -35315,7 +35391,7 @@
     {
       "id": 198,
       "name": "Jack Daniels",
-      "description": "Jack Daniel's is a famous brand of Tennessee whiskey known for its smooth, charcoal-mellowed character. It is a versatile spirit enjoyed neat, on the rocks, or as a base for many popular cocktails like the **Jack & Coke**",
+      "description": "Tennessee whiskey, USA, 40% ABV. Charcoal-mellowed for a smooth, sweet profile with vanilla and toasted oak notes. Famous base for **Jack & Coke**.",
       "tags": [0, 1],
       "baseIngredientId": 342,
       "photoUri": "assets/ingredients/198-jack-daniels.jpg"
@@ -35344,7 +35420,7 @@
     {
       "id": 202,
       "name": "Japanese Whisky",
-      "description": "Whisky distilled in japan using techniques inspired by Scotch, typically around 43% ABV. Balanced malt and grain blends with refined oak influence. Elegant choice for highballs and sipping.",
+      "description": "Whisky, Japan, 40–50% ABV. Renowned for its balance, purity, and often delicate smoky or floral notes. Inspired by Scotch traditions but with a distinct Japanese character.",
       "tags": [0, 1],
       "photoUri": "assets/ingredients/202-japanese-whisky.jpg"
     },
@@ -35396,7 +35472,7 @@
     {
       "id": 209,
       "name": "Kiwi Fruit Liqueur",
-      "description": "Kiwi fruit liqueur is a tangy green liqueur around 15–20% ABV. Shake it into a **Kiwi Fruit Martini** or **Alligator**.",
+      "description": "kiwi fruit liqueur is a tangy green liqueur around 15–20% ABV. Shake it into a **kiwi fruit Martini** or **Alligator**.",
       "tags": [2],
       "photoUri": "assets/ingredients/209-kiwi-liqueur.jpg"
     },
@@ -36081,14 +36157,14 @@
     {
       "id": 305,
       "name": "Scotch Whisky",
-      "description": "Whisky made in scotland and aged at least three years in oak at 40% ABV or higher. Styles span light and floral to heavily peated. Classic base for highballs and stirred drinks.",
+      "description": "Whisky made in Scotland and aged at least three years in oak at 40% ABV or higher. Styles span light and floral to heavily peated. Classic base for highballs and stirred drinks.",
       "tags": [0, 1],
       "photoUri": "assets/ingredients/305-scotch-whisky.jpg"
     },
     {
       "id": 306,
       "name": "Seagram's 7 Crown",
-      "description": "Seagram's Seven Crown, also called Seagram's seven, or simply Seven Crown, is an american blended whiskey produced by Diageo under the Seagram's name.",
+      "description": "Blended whiskey, USA, 40% ABV. Smooth, honeyed character from a blend of grain spirits and whiskey. Classic base for **Seven & Seven**.",
       "tags": [0, 1],
       "baseIngredientId": 342,
       "photoUri": "assets/ingredients/306-seagram-s-7-crown.jpg"
@@ -36131,7 +36207,7 @@
     {
       "id": 312,
       "name": "Southern Comfort",
-      "description": "American liqueur of neutral spirit blended with fruit, spice, and whiskey flavor, about 35% ABV. Created in new orleans in 1874. Easy-drinking base for punches and southern-style cocktails.",
+      "description": "American liqueur of neutral spirit blended with fruit, spice, and whiskey flavor, about 35% ABV. Created in New Orleans in 1874. Easy-drinking base for punches and southern-style cocktails.",
       "tags": [1],
       "photoUri": "assets/ingredients/312-southern-comfort.jpg"
     },
@@ -36252,7 +36328,7 @@
     {
       "id": 329,
       "name": "Tequila Reposado",
-      "description": "Tequila reposado, meaning \"rested,\" is a type of Tequila aged in oak barrels for a minimum of two months to a maximum of one year, bridging the gap between unaged blanco and aged añejo. This ageing process imparts a golden hue and a smoother, more complex flavour with notes of wood, vanilla, or fruit, making it versatile for sipping neat, on the rocks, or in cocktails like Margaritas.",
+      "description": "Tequila, Mexico, 40% ABV. Aged in oak for 2–12 months for a smoother, complex profile with vanilla and spice notes. Excellent in a premium **Margarita**.",
       "tags": [0, 1],
       "photoUri": "assets/ingredients/329-tequila-reposado.jpg"
     },
@@ -36344,7 +36420,7 @@
     {
       "id": 342,
       "name": "Whiskey",
-      "description": "Whisky or whiskey is a type of distilled alcoholic beverage made from fermented grain mash. Various grains (which may be malted) are used for different varieties, including barley, corn (maize), rye, and wheat. Whisky is typically aged in wooden casks, generally made of charred white oak.",
+      "description": "Spirit, Worldwide, 40–60% ABV. Distilled from fermented grain mash and typically aged in wood. Diverse styles include **Scotch**, **Bourbon**, and **Rye**.",
       "tags": [0, 1],
       "photoUri": "assets/ingredients/342-whiskey.jpg"
     },
@@ -36381,7 +36457,7 @@
     {
       "id": 347,
       "name": "Wild Turkey",
-      "description": "Wild Turkey is a brand of Kentucky straight bourbon whiskey distilled and bottled by the Austin Nichols division of Campari group. The distillery is located near Lawrenceburg, Kentucky, United States.",
+      "description": "Bourbon, USA, 40.5–50.5% ABV. Robust Kentucky straight bourbon with high rye content and spicy character. Bold choice for an **Old Fashioned**.",
       "tags": [0, 1],
       "baseIngredientId": 63,
       "photoUri": "assets/ingredients/347-wild-turkey.jpg"
@@ -36396,7 +36472,7 @@
     {
       "id": 349,
       "name": "Yellow Chartreuse",
-      "description": "Milder 40% ABV sibling to green Chartreuse made by carthusian monks with 130 herbs. Honeyed, saffron-tinged herbal sweetness. Excellent in cocktails needing softer herbal notes.",
+      "description": "Milder 40% ABV sibling to green Chartreuse made by Carthusian monks with 130 herbs. Honeyed, saffron-tinged herbal sweetness. Excellent in cocktails needing softer herbal notes.",
       "tags": [1],
       "photoUri": "assets/ingredients/349-yellow-chartreuse.jpg"
     },
@@ -36411,7 +36487,7 @@
     {
       "id": 351,
       "name": "Żubrówka",
-      "description": "Żubrówka is a polish bison grass vodka with 37–40% ABV. It has a unique herbal, vanilla-like aroma.",
+      "description": "Żubrówka is a Polish bison grass vodka with 37–40% ABV. It has a unique herbal, vanilla-like aroma.",
       "tags": [0, 1],
       "baseIngredientId": 48,
       "photoUri": "assets/ingredients/351-ubrowka.jpg"
@@ -36433,7 +36509,7 @@
     {
       "id": 354,
       "name": "Amaro Averna",
-      "description": "Amaro Averna is an Italian herbal liqueur with an alcohol content of 29% ABV (58 proof). This Sicilian bitter-sweet digestif. Ideal for **Black Manhattan**.",
+      "description": "Amari, Italy, 29% ABV. Bittersweet Sicilian digestif with notes of caramel, herbs, and citrus. Essential for a **Black Manhattan**.",
       "tags": [2],
       "baseIngredientId": 13,
       "photoUri": "assets/ingredients/354-amaro-averna.jpg"
@@ -36441,14 +36517,14 @@
     {
       "id": 355,
       "name": "Blueberry",
-      "description": "Blueberries are an incredibly versatile cocktail ingredient, prized for their deep purple hue and balanced sweet-tart profile. They pair exceptionally well with gin, vodka, tequila, and bourbon.",
+      "description": "Berry, Worldwide, 0% ABV. Sweet-tart fruit with deep purple color. Excellent muddled in **gin** or **vodka** cocktails.",
       "tags": [6],
       "photoUri": "assets/ingredients/355-blueberry.jpg"
     },
     {
       "id": 356,
       "name": "Carpano Antica Formula Vermouth",
-      "description": "A rosso/sweet vermouth on steroids with plentiful dried fruit and vanilla tobacco.",
+      "description": "Sweet vermouth, Italy, 16.5% ABV. Rich and complex with notes of dried fruit and vanilla. Essential for a premium **Negroni** or **Manhattan**.",
       "tags": [2],
       "baseIngredientId": 289,
       "photoUri": "assets/ingredients/356-carpano-antica-formula-vermouth.jpg"
