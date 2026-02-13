@@ -81,6 +81,7 @@ export function OnboardingOverlay() {
   const { height: screenHeight, width: screenWidth } = useWindowDimensions();
   const [overlayOffset, setOverlayOffset] = React.useState({ x: 0, y: 0 });
   const overlayRef = React.useRef<View>(null);
+  const lastEnteredStepRef = React.useRef<number | null>(null);
 
   const handleLayout = () => {
     overlayRef.current?.measureInWindow((x, y) => {
@@ -107,7 +108,7 @@ export function OnboardingOverlay() {
       },
       onEnter: (inv) => {
         const availableIds = inv.availableIngredientIds as Set<number> | undefined;
-        const idsToSeed = [193, 159, 343, 111, 310, 333, 214, 222];
+        const idsToSeed = [193, 159, 342, 111, 309, 332, 214, 222];
         const hasAll =
           availableIds && idsToSeed.every((id) => availableIds.has(id));
         if (hasAll) {
@@ -222,6 +223,9 @@ export function OnboardingOverlay() {
   // Handle onEnter actions
   React.useEffect(() => {
     if (onboardingCompleted || !currentStep?.onEnter) return;
+    if (lastEnteredStepRef.current === onboardingStep) return;
+
+    lastEnteredStepRef.current = onboardingStep;
     currentStep.onEnter(inventory, requestTabChange);
   }, [onboardingStep, onboardingCompleted, currentStep, inventory, requestTabChange]);
 
