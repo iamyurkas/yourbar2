@@ -1064,6 +1064,7 @@ export default function IngredientDetailsScreen() {
                 <View style={styles.cocktailList}>
                   {visibleCocktailEntries.map(
                     ({ cocktail, isReady, missingCount, recipeNamesCount, ingredientLine, ratingValue, canMakeWithIngredient }, index) => {
+                      const shouldHighlightRow = isReady || canMakeWithIngredient;
                       const previousReady =
                         index > 0
                           ? visibleCocktailEntries[index - 1]?.isReady
@@ -1098,7 +1099,7 @@ export default function IngredientDetailsScreen() {
                                   : Colors.highlightFaint
                             }
                             showMethodIcons
-                            isReady={isReady}
+                            isReady={shouldHighlightRow}
                             missingCount={missingCount}
                             recipeNamesCount={recipeNamesCount}
                             ingredientLine={ingredientLine}
