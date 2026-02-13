@@ -133,7 +133,7 @@ export function OnboardingOverlay() {
     },
     {
       id: 4,
-      message: '**My ingredients** shows what you have.\nYou’ll also see in how many available cocktails use each ingredient.',
+      message: '**My ingredients** shows what you have.\nYou’ll also see how many available cocktails use each ingredient.',
       anchorName: 'ingredients-tab-my',
       buttonLabel: 'Next',
       onEnter: (_, requestTab) => {
