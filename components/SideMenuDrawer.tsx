@@ -367,7 +367,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       title: "Smart shaker filtering",
       message:
         "When enabled, ingredients in groups with no current selection are hidden if they would produce zero results.\n\nIn groups where you already selected at least one ingredient, items stay visible to preserve OR logic.\n\nTurn this off to restore the default shaker behavior.",
-      actions: [{ label: "Got it", variant: "primary" }],
+      actions: [{ label: "Got it", variant: "secondary" }],
     });
   };
 
@@ -1030,10 +1030,9 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     style={styles.settingInfoButton}
                   >
                     <MaterialCommunityIcons
-                      name="information-outline"
+                      name="help-circle-outline"
                       size={16}
                       color={Colors.primary}
-                      style={{ marginTop: 4 }}
                     />
                   </Pressable>
                 </View>
