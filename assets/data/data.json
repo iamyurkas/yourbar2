@@ -12968,7 +12968,7 @@
     },
     {
       "id": 214,
-      "name": "Genever Fruit cup",
+      "name": "Genever Fruit Cup",
       "description": "A refreshing and bubbly long drink that showcases the malty notes of **oude genever** paired with citrusy curaçao and herbal **red vermouth**. Topped with **ginger ale** and **cola**, it's a botanical, fruit-forward sparkler perfect for social sipping.",
       "instructions": "1. Add 25ml of **oude genever**, 15ml of **Orange Curaçao**, 25ml of **red vermouth**, 2 dashes of **Angostura Bitters**, 50ml of **ginger ale**, and 50ml of **cola** to a collins glass.\n2. Stir gently to combine.\n3. Garnish with an **orange** slice, a **lemon** slice, 4 **strawberry** slices, a **mint** sprig, and a **borage** sprig.",
       "photoUri": "assets/cocktails/214-genever-fruit-cup.jpg",
@@ -31368,7 +31368,7 @@
       "id": 505,
       "name": "Black Manhattan",
       "description": "Black Manhattan is a modern, riff on the classic cocktail created by bartender Todd Smith in 2005. It substitutes the traditional sweet vermouth with Amaro Averna, creating a darker, more complex, and herbal flavour profile.",
-      "instructions": "1. Add **bourbon**, amaro, and both types of bitters into a mixing glass filled with ice.\n2. Stir gently with a long-handled bar spoon for 20–30 seconds.\n3. Strain the cocktail into a coupe or Nick & Nora glass.\n4. Drop a brandied cherry into the bottom of the glass or place it on a cocktail pick.",
+      "instructions": "1. Add **Rye Whiskey**, amaro, and both types of bitters into a mixing glass filled with ice.\n2. Stir gently with a long-handled bar spoon for 20–30 seconds.\n3. Strain the cocktail into a coupe or Nick & Nora glass.\n4. Drop a brandied cherry into the bottom of the glass or place it on a cocktail pick.",
       "photoUri": "assets/cocktails/505-black-manhattan.jpg",
       "glassId": "coupe",
       "methodIds": ["stir"],
