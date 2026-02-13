@@ -36,22 +36,11 @@ import { useUnsavedChanges } from '@/providers/unsaved-changes-provider';
 
 type IngredientFormSnapshot = {
   name: string;
-  synonymsText: string;
   description: string;
   imageUri: string | null;
-  isFullAlias: boolean;
   baseIngredientId: number | null;
   selectedTagIds: number[];
 };
-
-function parseSynonymsInput(value: string): string[] | undefined {
-  const values = value
-    .split(/[\n,]/)
-    .map((item) => item.trim())
-    .filter(Boolean);
-
-  return values.length > 0 ? values : undefined;
-}
 
 function getParamValue(value?: string | string[]): string | undefined {
   if (Array.isArray(value)) {
@@ -166,7 +155,6 @@ export default function IngredientFormScreen() {
   }, [ingredient?.id, ingredientParam]);
 
   const [name, setName] = useState(() => (isEditMode ? '' : suggestedNameParam ?? ''));
-  const [synonymsText, setSynonymsText] = useState('');
   const [description, setDescription] = useState('');
   const [imageUri, setImageUri] = useState<string | null>(null);
   const [isPickingImage, setIsPickingImage] = useState(false);
@@ -175,7 +163,6 @@ export default function IngredientFormScreen() {
   );
   const [isTagModalVisible, setTagModalVisible] = useState(false);
   const [baseIngredientId, setBaseIngredientId] = useState<number | null>(null);
-  const [isFullAlias, setIsFullAlias] = useState(false);
   const [isBaseModalVisible, setIsBaseModalVisible] = useState(false);
   const [baseSearch, setBaseSearch] = useState('');
   const [permissionStatus, requestPermission] = ImagePicker.useMediaLibraryPermissions();
@@ -201,12 +188,10 @@ export default function IngredientFormScreen() {
     }
 
     setName(suggestedNameParam ?? '');
-    setSynonymsText('');
     setDescription('');
     setImageUri(null);
     setSelectedTagIds(defaultIngredientTagId == null ? [] : [defaultIngredientTagId]);
     setBaseIngredientId(null);
-    setIsFullAlias(false);
     setBaseSearch('');
     setTagModalVisible(false);
     setIsBaseModalVisible(false);
@@ -229,16 +214,10 @@ export default function IngredientFormScreen() {
     lastIdRef.current = currentId;
     lastModeRef.current = isEditMode;
     setName(ingredient.name ?? '');
-    setSynonymsText((ingredient.synonyms ?? []).join(', '));
     setDescription(ingredient.description ?? '');
     setImageUri(ingredient.photoUri ?? null);
     setBaseIngredientId(
       ingredient.baseIngredientId != null ? Number(ingredient.baseIngredientId) : null,
-    );
-    setIsFullAlias(
-      ingredient.aliasOfIngredientId != null &&
-      ingredient.baseIngredientId != null &&
-      Number(ingredient.aliasOfIngredientId) === Number(ingredient.baseIngredientId),
     );
 
     const initialTagIds = (ingredient.tags ?? [])
@@ -260,14 +239,12 @@ export default function IngredientFormScreen() {
     const normalizedTags = [...selectedTagIds].sort((a, b) => a - b);
     return {
       name,
-      synonymsText,
       description,
       imageUri,
-      isFullAlias,
       baseIngredientId,
       selectedTagIds: normalizedTags,
     };
-  }, [baseIngredientId, description, imageUri, isFullAlias, name, selectedTagIds, synonymsText]);
+  }, [baseIngredientId, description, imageUri, name, selectedTagIds]);
 
   useEffect(() => {
     if (!isInitialized || initialSnapshot) {
@@ -449,10 +426,8 @@ export default function IngredientFormScreen() {
         const shouldProcessPhoto = shouldStorePhoto(imageUri) && photoHasChanged;
         const submission = {
           name: trimmedName,
-          synonyms: parseSynonymsInput(synonymsText),
           description: descriptionValue || undefined,
           photoUri: shouldProcessPhoto ? undefined : imageUri ?? undefined,
-          aliasOfIngredientId: isFullAlias ? baseIngredientId : undefined,
           baseIngredientId,
           tags: selectedTags,
         };
@@ -509,10 +484,8 @@ export default function IngredientFormScreen() {
     const shouldProcessPhoto = shouldStorePhoto(imageUri);
     const submission = {
       name: trimmedName,
-      synonyms: parseSynonymsInput(synonymsText),
       description: descriptionValue || undefined,
       photoUri: shouldProcessPhoto ? undefined : imageUri ?? undefined,
-      aliasOfIngredientId: isFullAlias ? baseIngredientId : undefined,
       baseIngredientId,
       tags: selectedTags,
     };
@@ -577,13 +550,11 @@ export default function IngredientFormScreen() {
     name,
     navigation,
     numericIngredientId,
-    isFullAlias,
     returnToParams,
     returnToPath,
     selectedTagIds,
     setHasUnsavedChanges,
     showDialog,
-    synonymsText,
     shouldStorePhoto,
     storePhoto,
     updateIngredient,
@@ -1013,24 +984,6 @@ export default function IngredientFormScreen() {
         />
       </View>
 
-      <View style={sectionStyle}>
-        <Text style={[styles.label, { color: Colors.onSurface }]}>Aliases / synonyms</Text>
-        <TextInput
-          value={synonymsText}
-          onChangeText={setSynonymsText}
-          placeholder="Advocaat, Eierlikör"
-          placeholderTextColor={`${Colors.onSurfaceVariant}99`}
-          style={[
-            styles.input,
-            {
-              borderColor: Colors.outline,
-              color: Colors.text,
-              backgroundColor: Colors.surface,
-            },
-          ]}
-        />
-      </View>
-
       <View style={styles.photoTileWrapper}>
         <Pressable
           accessibilityRole="button"
@@ -1137,20 +1090,6 @@ export default function IngredientFormScreen() {
               <Text style={[styles.basePlaceholderText, { color: Colors.onSurfaceVariant }]}>None</Text>
             </View>
           )}
-        </Pressable>
-        <Pressable
-          accessibilityRole="button"
-          onPress={() => setIsFullAlias((prev) => !prev)}
-          style={({ pressed }) => [
-            styles.aliasToggle,
-            { borderColor: Colors.outlineVariant, opacity: pressed ? 0.7 : 1 },
-          ]}>
-          <Text style={[styles.aliasToggleLabel, { color: Colors.onSurface }]}>Treat as full alias of base</Text>
-          <MaterialCommunityIcons
-            name={isFullAlias ? 'check-circle' : 'checkbox-blank-circle-outline'}
-            size={20}
-            color={isFullAlias ? Colors.primary : Colors.onSurfaceVariant}
-          />
         </Pressable>
       </View>
 
@@ -1524,21 +1463,6 @@ const styles = StyleSheet.create({
   unlinkButton: {
     padding: 6,
     borderRadius: 12,
-  },
-  aliasToggle: {
-    marginTop: 10,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderRadius: 10,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: 12,
-  },
-  aliasToggleLabel: {
-    fontSize: 14,
-    fontWeight: '500',
   },
   modalOverlay: {
     flex: 1,

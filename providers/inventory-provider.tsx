@@ -14,7 +14,6 @@ import {
   areStorageRecordsEqual,
   hydrateInventoryTagsFromCode,
   normalizePhotoUriForBackup,
-  normalizeIngredientSearchFields,
   normalizeSearchFields,
   normalizeSynonyms,
   normalizeTagIds,
@@ -200,50 +199,6 @@ function getNextCustomTagId(tags: readonly { id?: number | null }[], minimum: nu
   }, minimum);
 
   return maxId + 1;
-}
-
-
-function createAliasGroupIds(ingredients: readonly Ingredient[], id: number): number[] {
-  const targetId = Number(id);
-  if (!Number.isFinite(targetId) || targetId < 0) {
-    return [];
-  }
-
-  const normalizedTargetId = Math.trunc(targetId);
-  const byId = new Map<number, Ingredient>();
-  ingredients.forEach((ingredient) => {
-    const ingredientId = Number(ingredient.id ?? -1);
-    if (!Number.isFinite(ingredientId) || ingredientId < 0) {
-      return;
-    }
-
-    byId.set(Math.trunc(ingredientId), ingredient);
-  });
-
-  const source = byId.get(normalizedTargetId);
-  const sourceAliasOf = Number(source?.aliasOfIngredientId ?? -1);
-  const canonicalId =
-    Number.isFinite(sourceAliasOf) && sourceAliasOf >= 0 && byId.has(Math.trunc(sourceAliasOf))
-      ? Math.trunc(sourceAliasOf)
-      : normalizedTargetId;
-
-  const group = new Set<number>([canonicalId]);
-  byId.forEach((ingredient, ingredientId) => {
-    if (ingredientId === canonicalId) {
-      return;
-    }
-
-    const aliasOf = Number(ingredient.aliasOfIngredientId ?? -1);
-    if (!Number.isFinite(aliasOf) || aliasOf < 0) {
-      return;
-    }
-
-    if (Math.trunc(aliasOf) === canonicalId) {
-      group.add(ingredientId);
-    }
-  });
-
-  return Array.from(group);
 }
 
 type InventoryProviderProps = {
@@ -808,15 +763,6 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             ? Math.trunc(normalizedBaseId)
             : undefined;
 
-        const synonyms = normalizeSynonyms(input.synonyms);
-
-        const aliasOfValue =
-          input.aliasOfIngredientId != null ? Number(input.aliasOfIngredientId) : undefined;
-        const aliasOfIngredientId =
-          aliasOfValue != null && Number.isFinite(aliasOfValue) && aliasOfValue >= 0
-            ? Math.trunc(aliasOfValue)
-            : undefined;
-
         const description = input.description?.trim() || undefined;
         const photoUri = input.photoUri?.trim() || undefined;
 
@@ -840,30 +786,20 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         const candidateRecord = {
           id: nextId,
           name: trimmedName,
-          synonyms,
           description,
           tags,
-          aliasOfIngredientId,
           baseIngredientId,
           photoUri,
         };
 
-        const normalizedIngredients = normalizeIngredientSearchFields([
-          ...prev.ingredients,
-          candidateRecord,
-        ]) as Ingredient[];
-        if (normalizedIngredients.length === 0) {
+        const [normalized] = normalizeSearchFields([candidateRecord]);
+        if (!normalized) {
           return prev;
         }
 
-        const createdCandidate = normalizedIngredients.find((item) => Number(item.id ?? -1) === nextId);
-        if (!createdCandidate) {
-          return prev;
-        }
+        created = normalized as Ingredient;
 
-        created = createdCandidate;
-
-        const nextIngredients = [...normalizedIngredients].sort((a, b) =>
+        const nextIngredients = [...prev.ingredients, created].sort((a, b) =>
           a.searchNameNormalized.localeCompare(b.searchNameNormalized),
         );
 
@@ -1143,15 +1079,6 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             ? Math.trunc(normalizedBaseId)
             : undefined;
 
-        const synonyms = normalizeSynonyms(input.synonyms);
-
-        const aliasOfValue =
-          input.aliasOfIngredientId != null ? Number(input.aliasOfIngredientId) : undefined;
-        const aliasOfIngredientId =
-          aliasOfValue != null && Number.isFinite(aliasOfValue) && aliasOfValue >= 0
-            ? Math.trunc(aliasOfValue)
-            : undefined;
-
         const description = input.description?.trim() || undefined;
         const photoUri = input.photoUri?.trim() || undefined;
 
@@ -1177,32 +1104,22 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           ...previous,
           id: previous.id,
           name: trimmedName,
-          synonyms,
           description,
           tags,
-          aliasOfIngredientId,
           baseIngredientId,
           photoUri,
         };
 
-        const nextIngredientsRaw = [...prev.ingredients];
-        nextIngredientsRaw[ingredientIndex] = candidateRecord;
-
-        const normalizedIngredients = normalizeIngredientSearchFields(nextIngredientsRaw) as Ingredient[];
-        if (normalizedIngredients.length === 0) {
+        const [normalized] = normalizeSearchFields([candidateRecord]);
+        if (!normalized) {
           return prev;
         }
 
-        const updatedCandidate = normalizedIngredients.find(
-          (item) => Number(item.id ?? -1) === Math.trunc(normalizedId),
-        );
-        if (!updatedCandidate) {
-          return prev;
-        }
+        updated = normalized as Ingredient;
 
-        updated = updatedCandidate;
-
-        const nextIngredients = [...normalizedIngredients].sort((a, b) =>
+        const nextIngredients = [...prev.ingredients];
+        nextIngredients[ingredientIndex] = updated;
+        nextIngredients.sort((a, b) =>
           a.searchNameNormalized.localeCompare(b.searchNameNormalized),
         );
 
@@ -1530,48 +1447,28 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   );
 
   const toggleIngredientAvailability = useCallback((id: number) => {
-    const groupIds = createAliasGroupIds(ingredients, id);
-    if (groupIds.length === 0) {
-      return;
-    }
-
     setAvailableIngredientIds((prev) => {
       const next = new Set(prev);
-      const shouldEnable = groupIds.some((candidateId) => !next.has(candidateId));
-
-      groupIds.forEach((candidateId) => {
-        if (shouldEnable) {
-          next.add(candidateId);
-        } else {
-          next.delete(candidateId);
-        }
-      });
-
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
       return next;
     });
-  }, [ingredients]);
+  }, []);
 
   const toggleIngredientShopping = useCallback((id: number) => {
-    const groupIds = createAliasGroupIds(ingredients, id);
-    if (groupIds.length === 0) {
-      return;
-    }
-
     setShoppingIngredientIds((prev) => {
       const next = new Set(prev);
-      const shouldEnable = groupIds.some((candidateId) => !next.has(candidateId));
-
-      groupIds.forEach((candidateId) => {
-        if (shouldEnable) {
-          next.add(candidateId);
-        } else {
-          next.delete(candidateId);
-        }
-      });
-
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
       return next;
     });
-  }, [ingredients]);
+  }, []);
 
   const handleSetIgnoreGarnish = useCallback((value: boolean) => {
     setIgnoreGarnish(Boolean(value));
