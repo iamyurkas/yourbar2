@@ -653,13 +653,13 @@ export default function IngredientsScreen() {
       case 'shopping':
         return {
           title: 'Shopping list',
-          text: 'This screen helps you manage ingredients to buy.\n\nUse search to find items, tap the shopping control to remove them from the list.',
+          text: 'This screen helps you manage ingredients to buy.\n\nUse search to find items, and tap the shopping control to remove them from the list.',
         };
       case 'all':
       default:
         return {
           title: 'All ingredients',
-          text: 'This screen displays all ingredients in your bar.\n\nUse search, switch tabs, and filter by tags. Tap a checkbox to mark availability.',
+          text: 'This screen displays all ingredients in the app.\n\nUse search, switch tabs, and filter by tags.\n\nTap a checkbox to mark availability.',
         };
     }
   }, [activeTab]);

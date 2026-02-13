@@ -1252,8 +1252,8 @@ export default function CreateCocktailScreen() {
 
     const trimmedName = prefilledCocktail?.name?.trim();
     const message = trimmedName
-      ? `Are you sure you want to delete ${trimmedName}? This action cannot be undone.`
-      : "Are you sure you want to delete this cocktail? This action cannot be undone.";
+      ? `Are you sure you want to delete\n${trimmedName}?\n\nThis action cannot be undone.`
+      : "Are you sure you want to delete this cocktail?\n\nThis action cannot be undone.";
 
     showDialog({
       title: "Delete cocktail",
