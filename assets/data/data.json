@@ -30760,7 +30760,7 @@
       "id": 539,
       "name": "Amalfi Spritz",
       "description": "A refreshing, delicately bittersweet, sweet-and-sour, and more interesting take on a **Limoncello Spritz**.",
-      "instructions": "1. Pour ingredients into a chilled glass.\n2. Fill the glass with ice.\n3. Garnish with lemon slices.",
+      "instructions": "1. Pour ingredients into a chilled glass.\n2. Fill the glass with ice.\n3. Garnish with **lemon** slices.",
       "photoUri": "assets/cocktails/539-amalfi-spritz.jpg",
       "glassId": "wine_glass",
       "methodIds": ["build"],
@@ -31142,7 +31142,7 @@
       "id": 544,
       "name": "Bay Ridge",
       "description": "Created in 2014 by Tom Macy at the iconic Clover Club in Brooklyn, this is a spirit-forward, complex riff on the Manhattan. It is noted for its use of prune brandy, which adds a deep, stone-fruit sweetness that balances the spicy rye.",
-      "instructions": "1. Add 50ml of **rye whiskey**, 15ml of **dry vermouth**, 15ml of **Benedictine**, 7.5ml of **plum brandy**, 2 dashes of **Angostura bitters**, and 2 dashes of **orange bitters** to a mixing glass with 150g of **ice**.\n2. Stir until well chilled.\n3. Fine strain into chilled glass.\n4. Express orange zest twist over the cocktail and use as a garnish.",
+      "instructions": "1. Add 50ml of **rye whiskey**, 15ml of **dry vermouth**, 15ml of **Benedictine**, 7.5ml of **plum brandy**, 2 dashes of **Angostura bitters**, and 2 dashes of **orange bitters** to a mixing glass with 150g of **ice**.\n2. Stir until well chilled.\n3. Fine strain into chilled glass.\n4. Express **orange** zest twist over the cocktail and use as a garnish.",
       "photoUri": "assets/cocktails/544-bay-ridge.jpg",
       "glassId": "nick_and_nora",
       "methodIds": ["stir"],
@@ -31304,7 +31304,7 @@
     {
       "id": 527,
       "name": "Bitter Giuseppe",
-      "instructions": "1. Squeeze the oils from a **lemon** zest into a stirring glass and drop the zest in.\n2. Add other ingredients and stir with ice.\n3. Strain into an ice-filled glass.\n4. Express a lemon zest over a cocktail and use it as a garnish.",
+      "instructions": "1. Squeeze the oils from a **lemon** zest into a stirring glass and drop the zest in.\n2. Add other ingredients and stir with ice.\n3. Strain into an ice-filled glass.\n4. Express a **lemon** zest over a cocktail and use it as a garnish.",
       "photoUri": "assets/cocktails/527-bitter-giuseppe.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["stir"],
@@ -32025,7 +32025,7 @@
       "id": 538,
       "name": "Gennaro's Sidecar",
       "description": "Gennaro's Sidecar is an Italian-inspired twist on the classic **Sidecar** cocktail, created by chef Gennaro Contaldo (mentor to Jamie Oliver). The signature addition of **limoncello** adds a sweeter, vibrant citrus layer to the traditional **Cognac** and **triple sec** base.",
-      "instructions": "1. Fill a shaker with about 150g of **ice**.\n2. Add 30ml of **Cognac**, 22.5ml of **triple sec**, 15ml of **limoncello**, 15ml of **lemon juice**, and 10ml of **water**.\n3. Shake well until chilled.\n4. Fine strain into chilled glass.\n5. Express orange zest twist over the cocktail and use as a garnish.",
+      "instructions": "1. Fill a shaker with about 150g of **ice**.\n2. Add 30ml of **Cognac**, 22.5ml of **triple sec**, 15ml of **limoncello**, 15ml of **lemon juice**, and 10ml of **water**.\n3. Shake well until chilled.\n4. Fine strain into chilled glass.\n5. Express **orange** zest twist over the cocktail and use as a garnish.",
       "photoUri": "assets/cocktails/538-gennaro-s-sidecar.jpg",
       "glassId": "coupe",
       "methodIds": ["shake"],
@@ -32148,7 +32148,7 @@
         {
           "order": 6,
           "ingredientId": 19,
-          "name": "Anis",
+          "name": "Anisseed Liqueur",
           "amount": "5",
           "unitId": 11
         },
@@ -32479,8 +32479,8 @@
     {
       "id": 540,
       "name": "Limoncello Spritz",
-      "description": "Zesty, almost creamy, lemon enlivened with fizz.",
-      "instructions": "1. Fill a glass with about 120g of **ice**.\n2. Pour in 45ml of **limoncello**, 30ml of **prosecco**, and 15ml of **soda water**.\n3. Briefly stir.\n4. Garnish with an orange slice.",
+      "description": "Zesty, almost creamy, **lemon** enlivened with fizz.",
+      "instructions": "1. Fill a glass with about 120g of **ice**.\n2. Pour in 45ml of **limoncello**, 30ml of **prosecco**, and 15ml of **soda water**.\n3. Briefly stir.\n4. Garnish with an **orange** slice.",
       "photoUri": "assets/cocktails/540-limoncello-spritz.jpg",
       "glassId": "wine_glass",
       "methodIds": ["build"],
@@ -32687,8 +32687,8 @@
     {
       "id": 515,
       "name": "Mixed Berry Sangria",
-      "description": "A fruit-forward sangria made with red wine, berries, citrus, and a touch of **brandy**.",
-      "instructions": "1. Muddle berries and an orange with sugar.\n2. Add the **red wine**, **brandy**, and **orange juice** and steep.\n3. Pour into glasses filled with ice and extra fruit.",
+      "description": "A fruit-forward sangria made with **red wine**, **berries**, **orange**, and a touch of **brandy**.",
+      "instructions": "1. Muddle **berries** and an **orange** with sugar.\n2. Add the **red wine**, **brandy**, and **orange juice** and steep.\n3. Pour into glasses filled with ice and extra fruit.",
       "photoUri": "assets/cocktails/515-mixed-berry-sangria.jpg",
       "glassId": "pitcher",
       "methodIds": ["muddle", "stir"],
@@ -32883,7 +32883,7 @@
         {
           "order": 4,
           "ingredientId": 19,
-          "name": "Anis",
+          "name": "Anisseed Liqueur",
           "amount": "15",
           "unitId": 11
         },
@@ -33168,7 +33168,7 @@
       "id": 552,
       "name": "Porto Tonico",
       "description": "The Porto Tonico is Portugal’s version of the gin and tonic. This light, refreshing cocktail is made with just white port and tonic water. It’s the perfect easy-sipping drink for warm days, casual get-togethers, or whenever you want something chic and unexpected.",
-      "instructions": "1. Fill a glass with about 120g of **ice**.\n2. Pour in 45ml of **white port wine** and 90ml of **tonic**.\n3. Briefly stir.\n4. Garnish with an orange slice and mint sprig.",
+      "instructions": "1. Fill a glass with about 120g of **ice**.\n2. Pour in 45ml of **white port wine** and 90ml of **tonic**.\n3. Briefly stir.\n4. Garnish with an **orange** slice and **mint** sprig.",
       "photoUri": "assets/cocktails/552-porto-tonico.jpg",
       "glassId": "wine_glass",
       "methodIds": ["build"],
@@ -33288,7 +33288,7 @@
     {
       "id": 547,
       "name": "Raspberry Collins",
-      "description": "A popular modern-day adaptation of the classic collins with a whopping amount of lemon juice, yet it is far from being overly sour.",
+      "description": "A popular modern-day adaptation of the classic collins with a whopping amount of **lemon juice**, yet it is far from being overly sour.",
       "instructions": "1. Muddle 10 **raspberries** in the base of the shaker.\n2. Add 60ml of **gin**, 15ml of **raspberry liqueur**, 45ml of **lemon juice**, 15ml of **rich simple syrup**, and 2 dashes of **orange bitters**.\n3. Add **ice** and shake for about 15 seconds until well chilled.\n4. Strain into a glass filled with **ice**.\n5. Top with 30ml of **soda water** and stir briefly.\n6. Garnish with a skewered **lemon** wheel and a **raspberry**.",
       "photoUri": "assets/cocktails/547-raspberry-collins.jpg",
       "glassId": "collins_glass",
@@ -33372,7 +33372,7 @@
     {
       "id": 548,
       "name": "Rhum Marianito",
-      "instructions": "1. Add 75ml of **red vermouth**, 15ml of **Rhum Martinique Agricole**, 15ml of **orange curaçao**, 2 dashes of **Angostura bitters**, and 1 pinch of **salt** to a mixing glass with 150g of **ice**.\n2. Stir until well chilled.\n3. Strain into an ice-filled glass (preferably over a large cube or chunk of block ice).\n4. Express an orange zest twist over the cocktail and use it as garnish, alongside 2 olives.",
+      "instructions": "1. Add 75ml of **red vermouth**, 15ml of **Rhum Martinique Agricole**, 15ml of **orange curaçao**, 2 dashes of **Angostura bitters**, and 1 pinch of **salt** to a mixing glass with 150g of **ice**.\n2. Stir until well chilled.\n3. Strain into an ice-filled glass (preferably over a large cube or chunk of block ice).\n4. Express an **orange** zest twist over the cocktail and use it as garnish, alongside 2 olives.",
       "photoUri": "assets/cocktails/548-rhum-marianito.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["stir"],
@@ -33519,7 +33519,7 @@
       "id": 504,
       "name": "Shandy",
       "description": "**Shandy** is a light and refreshing beer cocktail traditionally made by mixing equal parts beer and a non-alcoholic beverage. Popular as a thirst-quencher in the UK and Europe, it is prized for its low alcohol content and crisp citrus profile.",
-      "instructions": "1. Fill a glass halfway with **beer**. Tip the glass at a 45-degree angle to control the foam.\n2. Fill the rest of the glass with your **lemonade** or **lemon-lime** soda.\n3. Stir very gently (once) to combine without losing the carbonation.\n4. Garnish with a lemon slice.",
+      "instructions": "1. Fill a glass halfway with **beer**. Tip the glass at a 45-degree angle to control the foam.\n2. Fill the rest of the glass with your **lemonade** or **lemon-lime** soda.\n3. Stir very gently (once) to combine without losing the carbonation.\n4. Garnish with a **lemon** slice.",
       "photoUri": "assets/cocktails/504-shandy.jpg",
       "glassId": "pub_glass",
       "methodIds": ["build"],
@@ -34006,7 +34006,7 @@
     {
       "id": 11,
       "name": "Almond (Orgeat) Syrup",
-      "description": "Almond syrup, aka **orgeat**, is a sweet, nutty syrup made from almonds, sugar, and orange flower water. It adds a creamy, aromatic quality to tropical and **Tiki** cocktails.\nInstructions:\n1. Toast & grind: preheat oven to 200°c. Toast almonds for 3–4 minutes until fragrant. Let cool, then pulse in a food processor until coarsely ground.\n2. Make syrup: combine sugar and water in a saucepan over medium heat. Stir until dissolved, bring to a boil for 3 minutes, then add the ground almonds.\n3. Steep: lower the heat and simmer for 3 minutes. Remove from heat, cover, and let infuse for 3 to 12 hours at room temperature.\n4. Strain: pour through several layers of cheesecloth or a nut milk bag, squeezing hard to extract all almond oils and liquid.\n5. Finish: stir in orange flower water. Transfer to a clean bottle.",
+      "description": "Almond syrup, aka *orgeat*, is a sweet, nutty syrup made from **almonds**, **sugar**, and **orange flower water**. It adds a creamy, aromatic quality to tropical and **Tiki** cocktails.\nInstructions:\n1. **Toast & grind:** preheat oven to 200°c. Toast **almonds** for 3–4 minutes until fragrant. Let cool, then pulse in a food processor until coarsely ground.\n2. **Make syrup:** combine **sugar** and **water** in a saucepan over medium heat. Stir until dissolved, bring to a boil for 3 minutes, then add the ground almonds.\n3. **Steep:** lower the heat and simmer for 3 minutes. Remove from heat, cover, and let infuse for 3 to 12 hours at room temperature.\n4. **Strain:** pour through several layers of cheesecloth or a nut milk bag, squeezing hard to extract all almond oils and liquid.\n5. **Finish:** stir in **orange flower water**. Transfer to a clean bottle.",
       "tags": [4],
       "photoUri": "assets/ingredients/11-almond-orgeat-syrup.jpg"
     },
