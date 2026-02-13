@@ -16344,7 +16344,7 @@
     {
       "id": 273,
       "name": "Jellyfish",
-      "description": "A jellyfish shooter is a layered drink that uses differing liquid densities to create the visual of a jellyfish \"swimming\" in the glass. There are two popular versions: the traditional creamy version and the vibrant \"blue jellyfish.\"",
+      "description": "A jellyfish shooter is a layered drink that uses differing liquid densities to create the visual of a jellyfish \"swimming\" in the glass. There are two popular versions: the traditional creamy version and the vibrant \"blue jellyfish\".",
       "instructions": "1. Pour 15ml of crème de cacao white into a shooter glass.\n2. Gently add 15ml of **amaretto** on top.\n3. Gently pour 15ml of **Baileys** on top of the **amaretto**.\n4. Add a few drops of **grenadine**.",
       "photoUri": "assets/cocktails/273-jellyfish.jpg",
       "glassId": "shooter",
@@ -22306,6 +22306,7 @@
       "id": 370,
       "name": "Rattlesnake",
       "description": "A strong **whiskey**-based cocktail from the 1930 .\"the savoy cocktail book.\" the comment for the drink says \"so called because it will either cure rattlesnake bite, or kill rattlesnake, and, moreover, make you see double.\"",
+      "description": "A strong **whiskey**-based cocktail from the 1930s, first documented in **The Savoy Cocktail Book**. The original note says it is \"so called because it will either cure rattlesnake bite, or kill rattlesnake, and, moreover, make you see double.\"",
       "instructions": "1. Pour 60ml of **rye whiskey**, 1 dash of **absinthe**, 2 teaspoons of **lemon juice**, 2 teaspoons of **simple syrup**, and an **egg white** into a shaker.\n2. Dry shake (without **ice**) vigorously for about 15 seconds to emulsify the **egg white**.\n3. Add **ice** and shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled coupe glass.\n5. Garnish with a twist of **lemon**.",
       "photoUri": "assets/cocktails/370-rattlesnake.jpg",
       "glassId": "coupe",
@@ -22744,7 +22745,7 @@
     {
       "id": 378,
       "name": "Rob Roy",
-      "description": "The drink is a variation of the *Manhattan* cocktail with **Scotch Whisky**. It is named for the Scottish folk hero Robert Roy MacGregor, the \"Scottish Robin Hood.\" this cocktail first appeared in New York around 1890.",
+      "description": "The drink is a variation of the **Manhattan** cocktail with **Scotch Whisky**. It is named for the Scottish folk hero Robert Roy MacGregor, the \"Scottish Robin Hood.\" this cocktail first appeared in New York around 1890.",
       "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 60ml of **Scotch Whisky**, 30ml of **red vermouth**, and 3 dashes of **Angostura Bitters**.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled nick & nora glass.\n5. Garnish with a **maraschino cherry**.",
       "photoUri": "assets/cocktails/378-rob-roy.jpg",
       "glassId": "nick_and_nora",
@@ -29903,7 +29904,7 @@
           "ingredientId": 193,
           "name": "Ice",
           "amount": "1",
-          "unitId": 4
+          "unitId": 8
         },
         {
           "order": 8,
@@ -30758,7 +30759,7 @@
     {
       "id": 539,
       "name": "Amalfi Spritz",
-      "description": "A refreshing, delicately bittersweet and sweet 'n' sour, more interesting take on a **Limoncello Spritz**",
+      "description": "A refreshing, delicately bittersweet, sweet-and-sour, and more interesting take on a **Limoncello Spritz**.",
       "instructions": "1. Pour ingredients into a chilled glass.\n2. Fill the glass with ice.\n3. Garnish with lemon slices.",
       "photoUri": "assets/cocktails/539-amalfi-spritz.jpg",
       "glassId": "wine_glass",
@@ -30821,7 +30822,7 @@
           "ingredientId": 193,
           "name": "Ice",
           "amount": "120",
-          "unitId": 11
+          "unitId": 8
         },
         {
           "order": 7,
@@ -31021,7 +31022,7 @@
           "ingredientId": 193,
           "name": "Ice",
           "amount": "150",
-          "unitId": 11
+          "unitId": 8
         },
         {
           "order": 2,
@@ -31057,7 +31058,8 @@
           "amount": "10",
           "unitId": 11
         }
-      ]
+      ],
+      "description": "A fruity, lightly sparkling shooter that blends **whiskey**, **apple schnapps**, and **cranberry juice** for a sweet-tart finish."
     },
     {
       "id": 513,
@@ -31074,7 +31076,7 @@
           "ingredientId": 193,
           "name": "Ice",
           "amount": "150",
-          "unitId": 11
+          "unitId": 8
         },
         {
           "order": 2,
@@ -31320,7 +31322,7 @@
           "ingredientId": 193,
           "name": "Ice",
           "amount": "150",
-          "unitId": 11
+          "unitId": 8
         },
         {
           "order": 3,
@@ -31360,7 +31362,8 @@
           "unitId": 26,
           "garnish": true
         }
-      ]
+      ],
+      "description": "A bittersweet, aperitif-style sipper built on **Cynar** and vermouth, lifted by citrus oils and a touch of saline complexity."
     },
     {
       "id": 505,
@@ -31377,7 +31380,7 @@
           "ingredientId": 193,
           "name": "Ice",
           "amount": "150",
-          "unitId": 11
+          "unitId": 8
         },
         {
           "order": 2,
@@ -31531,7 +31534,8 @@
           "unitId": 1,
           "garnish": true
         }
-      ]
+      ],
+      "description": "A bright berry-forward Martini variation with **vodka**, **blackberry liqueur**, and citrus, shaken and served chilled."
     },
     {
       "id": 511,
@@ -31547,7 +31551,7 @@
           "ingredientId": 193,
           "name": "Ice",
           "amount": "150",
-          "unitId": 11
+          "unitId": 8
         },
         {
           "order": 2,
@@ -31627,7 +31631,8 @@
           "unitId": 1,
           "garnish": true
         }
-      ]
+      ],
+      "description": "A savory, Bloody Mary-style highball that combines **vodka**, **tomato juice**, and beef bouillon with spice and umami depth."
     },
     {
       "id": 525,
@@ -31673,7 +31678,7 @@
     {
       "id": 517,
       "name": "Blueberry Martini",
-      "instructions": "1. Muddle blueberries and **Bluberry Schnapps** (or **simple syrup**) in the bottom of a cocktail shaker.\n2. Add the **gin** (or **vodka**), **lemon juice**, and a handful of **ice** to the shaker.\n3. Shake vigorously for 10–15 seconds.\n4. Double strain into a chilled martini glass.\n5. Garnish with 1 or 2 fresh **blueberries**.",
+      "instructions": "1. Muddle blueberries and **Blueberry Schnapps** (or **simple syrup**) in the bottom of a cocktail shaker.\n2. Add the **gin** (or **vodka**), **lemon juice**, and a handful of **ice** to the shaker.\n3. Shake vigorously for 10–15 seconds.\n4. Double strain into a chilled martini glass.\n5. Garnish with 1 or 2 fresh **blueberries**.",
       "photoUri": "assets/cocktails/517-blueberry-martini.jpg",
       "glassId": "martini",
       "methodIds": ["muddle", "shake"],
@@ -31734,7 +31739,8 @@
           "unitId": 1,
           "garnish": true
         }
-      ]
+      ],
+      "description": "A fresh, fruit-driven Martini with muddled blueberries, **gin** (or **vodka**), and citrus for a crisp aromatic profile."
     },
     {
       "id": 518,
@@ -31849,7 +31855,8 @@
           "unitId": 1,
           "garnish": true
         }
-      ]
+      ],
+      "description": "A juicy whiskey smash with muddled cherries, **bourbon**, and a splash of soda for a refreshing long sip."
     },
     {
       "id": 546,
@@ -31921,7 +31928,7 @@
     {
       "id": 526,
       "name": "Cynar Spritz",
-      "instructions": "1. In a wine glass full of ice combine 90ml of **Prosecco** and 60ml of *Cynar*.\n2. Add 30ml of **soda water**.\n3. Garnish with a **grapefruit** slice.",
+      "instructions": "1. In a wine glass full of ice combine 90 ml of **Prosecco** and 60 ml of **Cynar**.\n2. Add 30 ml of **soda water**.\n3. Garnish with a **grapefruit** slice.",
       "photoUri": "assets/cocktails/526-cynar-spritz.jpg",
       "glassId": "wine_glass",
       "methodIds": ["build"],
@@ -31957,12 +31964,20 @@
         },
         {
           "order": 5,
-          "ingredientId": 242,
-          "name": "Orange",
+          "ingredientId": 155,
+          "name": "Grapefruit",
           "amount": "1",
-          "unitId": 19
+          "unitId": 19,
+          "substitutes": [
+            {
+              "ingredientId": 242,
+              "name": "Orange"
+            }
+          ],
+          "garnish": true
         }
-      ]
+      ],
+      "description": "A bittersweet spritz combining **Cynar**, **Prosecco**, and **soda water**, finished with a bright grapefruit garnish."
     },
     {
       "id": 528,
@@ -32002,7 +32017,8 @@
           "amount": "120",
           "unitId": 11
         }
-      ]
+      ],
+      "description": "A creamy coffee cocktail featuring advocaat, cream, and espresso, shaken until silky and served cold."
     },
     {
       "id": 538,
@@ -32456,7 +32472,8 @@
           "amount": "1",
           "unitId": 19
         }
-      ]
+      ],
+      "description": "A tropical-fruit Martini with muddled kiwi, citrus, and a clean **vodka** base."
     },
     {
       "id": 540,
@@ -32836,7 +32853,7 @@
           "ingredientId": 193,
           "name": "Ice",
           "amount": "150",
-          "unitId": 11
+          "unitId": 8
         },
         {
           "order": 2,
@@ -33161,7 +33178,7 @@
           "ingredientId": 193,
           "name": "Ice",
           "amount": "120",
-          "unitId": 11
+          "unitId": 8
         },
         {
           "order": 2,
@@ -33289,7 +33306,7 @@
           "ingredientId": 193,
           "name": "Ice",
           "amount": "150",
-          "unitId": 11
+          "unitId": 8
         },
         {
           "order": 3,
@@ -33427,7 +33444,8 @@
           "amount": "2",
           "unitId": 1
         }
-      ]
+      ],
+      "description": "An aromatic, spirit-forward riff on the Marianito style, pairing vermouth and rhum agricole with citrus and olive garnish."
     },
     {
       "id": 551,
@@ -33877,7 +33895,7 @@
           "ingredientId": 193,
           "name": "Ice",
           "amount": "150",
-          "unitId": 11
+          "unitId": 8
         },
         {
           "order": 2,
@@ -33913,7 +33931,7 @@
     {
       "id": 1,
       "name": "7-Up",
-      "description": "7 Up (stylised as 7up outside of the US) is a brand of lemon-lime flavoured, non-caffeinated soft drink.",
+      "description": "Lemon-lime carbonated soft drink. Sweet citrus profile with bright acidity and light bubbles. Typical ABV: 0%. Used to lengthen drinks and add sweetness and fizz in highballs. Examples: **Whiskey Highball** variations, **Vodka 7-Up**.",
       "tags": [3],
       "baseIngredientId": 218,
       "photoUri": "assets/ingredients/1-7-up.jpg"
@@ -35315,7 +35333,7 @@
     {
       "id": 198,
       "name": "Jack Daniels",
-      "description": "Jack Daniel's is a famous brand of Tennessee whiskey known for its smooth, charcoal-mellowed character. It is a versatile spirit enjoyed neat, on the rocks, or as a base for many popular cocktails like the **Jack & Coke**",
+      "description": "Tennessee whiskey brand. Smooth, slightly sweet profile with vanilla, caramel, and toasted oak notes. Typical ABV: 40%. Used as a base spirit in simple mixed drinks and whiskey-forward cocktails. Examples: **Jack & Coke**, **Lynchburg Lemonade**.",
       "tags": [0, 1],
       "baseIngredientId": 342,
       "photoUri": "assets/ingredients/198-jack-daniels.jpg"
@@ -35323,7 +35341,7 @@
     {
       "id": 199,
       "name": "Jägermeister",
-      "description": "Jägermeister is a German herbal liqueur, 35% ABV. Enjoy it in a **Jägerbomb** or **Surfer on Acid**.",
+      "description": "German herbal liqueur made from botanicals and spices. Sweet-bitter profile with herbal, citrus, and warming spice notes. Typical ABV: 35%. Used for herbal depth in shooters and modern mixed drinks. Examples: **Jägerbomb**, **Surfer on Acid**.",
       "tags": [2],
       "photoUri": "assets/ingredients/199-j-germeister.jpg"
     },
