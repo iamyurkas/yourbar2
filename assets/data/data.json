@@ -1074,7 +1074,7 @@
     {
       "id": 18,
       "name": "Alien Brain Tumor",
-      "description": "This one looks really gross, but you'll like it.",
+      "description": "A visually striking layered shooter with sweet citrus notes, creamy texture, and a pomegranate finish.",
       "instructions": "1. Pour 20ml of **blue curaçao** into a shooter glass.\n2. Slowly layer 20ml of **Baileys**(**Irish cream** liqueur) so it forms a brain-like shape.\n3. Add 5ml of **grenadine**, one drop at a time to create a bleeding effect.",
       "photoUri": "assets/cocktails/18-alien-brain-tumor.jpg",
       "glassId": "shooter",
@@ -2415,7 +2415,7 @@
     {
       "id": 41,
       "name": "B-54",
-      "description": "A popular variation of the b-52 shooter.",
+      "description": "A B-52 variation with **coffee liqueur**, **amaretto**, and **Irish cream** in a smooth layered profile.",
       "instructions": "1. Pour 20ml of **Kahlua** into a shooter glass.\n2. Carefully layer 20ml of **amaretto** on top using the back of a spoon.\n3. Gently layer 20ml of **Baileys** on top to finish.",
       "photoUri": "assets/cocktails/41-b-54.jpg",
       "glassId": "shooter",
@@ -2452,7 +2452,7 @@
     {
       "id": 42,
       "name": "B-55",
-      "description": "A popular variation of the b-52 shooter.",
+      "description": "A bolder B-52 variation that finishes with **absinthe** for an herbal, high-proof top layer.",
       "instructions": "1. Pour 20ml of **Kahlua** or another **coffee liqueur** into a shooter glass.\n2. Pour 20ml of **Baileys** on top of the **Kahlua**.\n3. Very carefully pour 15ml of **absinthe** on top of the **Baileys**.",
       "photoUri": "assets/cocktails/42-b-55.jpg",
       "glassId": "shooter",
@@ -6105,7 +6105,7 @@
       "id": 101,
       "name": "Brandy Daisy",
       "description": "A classic cocktail that dates back to the 19th Century.",
-      "instructions": "1. Fill a cocktail shaker with **ice**.\n2. Add 60ml of **brandy**, 3 dashes of **white rum**, 3 dashes of **orange curaçao**, 3 dashes of **simple syrup**, and 15ml of **lemon juice**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled coupe glass.\n5. Top with soda. \n6. Garnish with a **lemon** twist.",
+      "instructions": "1. Fill a cocktail shaker with **ice**.\n2. Add 60ml of **brandy**, 3 dashes of **white rum**, 3 dashes of **orange curaçao**, 3 dashes of **simple syrup**, and 15ml of **lemon juice**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled coupe glass.\n5. Top with soda.\n6. Garnish with a **lemon** twist.",
       "photoUri": "assets/cocktails/101-brandy-daisy.jpg",
       "glassId": "coupe",
       "methodIds": ["shake"],
@@ -6954,7 +6954,7 @@
     {
       "id": 114,
       "name": "Butterfinger",
-      "description": "A butterfinger cocktail or shot is a dessert-inspired drink designed to mimic the nutty, buttery flavors of the classic candy bar. Most variations rely on a blend of butterscotch and creamy liqueurs.",
+      "description": "A dessert-style cocktail inspired by **Butterfinger candy**, combining butterscotch sweetness with creamy richness.",
       "instructions": "1. Fill a cocktail shaker with **ice**.\n2. Add 30ml of **vodka vanilla**, 30ml of **butterscotch liqueur**, 30ml of **Baileys**, and 30ml of **Kahlua**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled rocks glass over fresh **ice**.\n5. Garnish with a **cherry**.",
       "photoUri": "assets/cocktails/114-butterfinger.jpg",
       "glassId": "rocks_glass",
@@ -7029,7 +7029,7 @@
     {
       "id": 115,
       "name": "Butterfinger Shot",
-      "description": "A butterfinger cocktail or shot is a dessert-inspired drink designed to mimic the nutty, buttery flavors of the classic candy bar. Most variations rely on a blend of butterscotch and creamy liqueurs.",
+      "description": "A compact dessert shot inspired by **Butterfinger candy**, delivering buttery sweetness and creamy texture in one sip.",
       "instructions": "1. Prepare the glass: roll half of the rim of a shot glass in heated **chocolate syrup**, then roll the same half in crushed butterfinger candy.\n2. Layer the Kahlúa: pour 15ml of Kahlúa into the shot glass.\n3. Add **butterscotch liqueur**: layer 15ml of **butterscotch liqueur** on top of the Kahlúa.\n4. Layer **Baileys**: place a cocktail spoon(bowl side up) against the inside of the glass and slowly pour 15ml of **Baileys** over the back of the spoon to form a layer.\n5. Add more crushed butterfinger candy.",
       "photoUri": "assets/cocktails/115-butterfinger-shot.jpg",
       "glassId": "shooter",
@@ -8111,7 +8111,7 @@
       "id": 133,
       "name": "Casino",
       "description": "A classic **gin** sour with maraschino and **orange bitters**.",
-      "instructions": "1. Fill a cocktail shaker with **ice**.\n2. Add 40ml of **old tom gin**, 10ml of **Luxardo maraschino**, 10ml of **lemon juice**, and 2 dashes of **orange bitters**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled martini glass.\n5. Garnish with a twist of **lemon** and a **maraschino cherry**.",
+      "instructions": "1. Fill a cocktail shaker with **ice**.\n2. Add 40ml of **Old Tom gin**, 10ml of **Luxardo maraschino**, 10ml of **lemon juice**, and 2 dashes of **orange bitters**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled martini glass.\n5. Garnish with a twist of **lemon** and a **maraschino cherry**.",
       "photoUri": "assets/cocktails/133-casino.jpg",
       "glassId": "martini",
       "methodIds": ["shake"],
@@ -11133,7 +11133,7 @@
       "id": 182,
       "name": "Electric Lemonade",
       "description": "There are a few variations and substitutions you can play around with. You could replace **lemon-lime soda** with club soda or **tonic** **water** for a less sweet version. You can also opt for a party punch recipe by scaling the ingredients in this electric **lemonade** recipe.",
-      "instructions": "1. Combine **vodka**, blue curacao, **lemon juice**, and **simple syrup** in a cocktail shaker along with **ice**.\n2. Give it a good shake. \n3. Fill a high ball or collins glass with **ice**, then strain in the cocktail.\n4. Top it off with **lemon-lime soda**.\n5. Stir gently to combine.\n6. Garnish with a **lemon** wedge.",
+      "instructions": "1. Combine **vodka**, blue curacao, **lemon juice**, and **simple syrup** in a cocktail shaker along with **ice**.\n2. Give it a good shake.\n3. Fill a high ball or collins glass with **ice**, then strain in the cocktail.\n4. Top it off with **lemon-lime soda**.\n5. Stir gently to combine.\n6. Garnish with a **lemon** wedge.",
       "photoUri": "assets/cocktails/182-electric-lemonade.jpg",
       "glassId": "highball_glass",
       "methodIds": ["shake"],
@@ -11257,8 +11257,8 @@
     {
       "id": 184,
       "name": "Emerson",
-      "description": "A bright **gin** sour balancing **old tom gin**, **red vermouth**, maraschino liqueur with fresh citrus and a touch of sweetness for a crisp, refreshing sip.",
-      "instructions": "1. Fill a cocktail shaker with **ice**.\n2. Add 45ml of **old tom gin**, 30ml of **red vermouth**, 15ml of **lime juice**, and 10ml of **Luxardo maraschino**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled coupe glass.\n5. Garnish with a **maraschino cherry**.",
+      "description": "A bright **gin** sour balancing **Old Tom gin**, **red vermouth**, maraschino liqueur with fresh citrus and a touch of sweetness for a crisp, refreshing sip.",
+      "instructions": "1. Fill a cocktail shaker with **ice**.\n2. Add 45ml of **Old Tom gin**, 30ml of **red vermouth**, 15ml of **lime juice**, and 10ml of **Luxardo maraschino**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled coupe glass.\n5. Garnish with a **maraschino cherry**.",
       "photoUri": "assets/cocktails/184-emerson.jpg",
       "glassId": "coupe",
       "methodIds": ["shake"],
@@ -15908,7 +15908,7 @@
       "id": 264,
       "name": "Islander",
       "description": "A sophisticated, spirit-forward cocktail for those who appreciate complex herbal notes. This drink blends the botanical richness of **red vermouth** with the smoky depth of **Scotch whisky**, finished with a subtle hint of **anise**.",
-      "instructions": "1. Add ingredients to a shaker with **ice**. \n2. Shake vigorously for about 15 seconds until well-chilled.\n3. Fine strain the liquid into the chilled coupe glass.\n4. Express the oils from a **lemon** peel over the drink and use it as a garnish.",
+      "instructions": "1. Add ingredients to a shaker with **ice**.\n2. Shake vigorously for about 15 seconds until well-chilled.\n3. Fine strain the liquid into the chilled coupe glass.\n4. Express the oils from a **lemon** peel over the drink and use it as a garnish.",
       "photoUri": "assets/cocktails/264-islander.jpg",
       "glassId": "coupe",
       "methodIds": ["shake"],
@@ -19097,7 +19097,7 @@
     {
       "id": 319,
       "name": "Mini Snowball",
-      "description": "A festive and nostalgic favourite in the UK, this 'winter warmer' is sweet, fizzy, and pleasantly creamy.",
+      "description": "A light, festive snowball serve with creamy **advocaat**, citrus brightness, and fizzy lift.",
       "instructions": "1. Fill a shooter with **ice**.\n2. Add 60ml of **egg liqueur**, 15ml of **lime juice**, and 60ml of **lemonade**.\n3. Stir gently to combine.\n4. Garnish with a **cherry**.",
       "photoUri": "assets/cocktails/319-mini-snowball.jpg",
       "glassId": "shooter",
@@ -19559,7 +19559,7 @@
     {
       "id": 326,
       "name": "Mudslide (frozen)",
-      "description": "A rich, creamy, and indulgent cocktail. This decadent mix of **vodka**, **coffee liqueur**, **Irish cream** and **heavy cream**.",
+      "description": "A rich, creamy, and indulgent frozen-style **Mudslide** made with **vodka**, **coffee liqueur**, **Irish cream**, and **ice cream**.",
       "instructions": "1. Fill a hurricane glass with **ice**.\n2. Add 30ml of **vodka**, 30ml of **coffee liqueur**, 30ml of **Irish cream**, and 2 scoops of **ice cream**.\n3. Stir gently to combine.\n4. Garnish with 5 **chocolate syrup** ml and 2 shavings of **chocolate**.",
       "photoUri": "assets/cocktails/326-mudslide-frozen.jpg",
       "glassId": "hurricane_glass",
@@ -19624,7 +19624,7 @@
     {
       "id": 327,
       "name": "Mudslide (shaken)",
-      "description": "A rich, creamy, and indulgent cocktail. This decadent mix of **vodka**, **coffee liqueur**, **Irish cream** and **heavy cream**.",
+      "description": "A rich, creamy, and indulgent shaken **Mudslide** made with **vodka**, **coffee liqueur**, **Irish cream**, and **heavy cream**.",
       "instructions": "1. Fill a cocktail shaker with **ice**.\n2. Add 30ml of **vodka**, 30ml of **coffee liqueur**, 30ml of **Irish cream**, and 45ml of **heavy cream**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled coupe glass.\n5. Garnish with 5ml of **chocolate syrup** and 2 shavings of **chocolate**.",
       "photoUri": "assets/cocktails/327-mudslide-shaken.jpg",
       "glassId": "coupe",
@@ -20510,7 +20510,7 @@
       "id": 341,
       "name": "Orgasm (shot)",
       "description": "This orgasm shot is a layered delight with **coffee liqueur**, **Irish cream**, and **amaretto**.",
-      "instructions": "1. Pour **coffee liqueur** into the base of a shot glass.\n2. Layer on **amaretto**\n3. Top with a layer of **Irish cream**.",
+      "instructions": "1. Pour **coffee liqueur** into the base of a shot glass.\n2. Layer on **amaretto**.\n3. Top with a layer of **Irish cream**.",
       "photoUri": "assets/cocktails/341-orgasm-shot.jpg",
       "glassId": "shooter",
       "methodIds": ["layer"],
@@ -24132,7 +24132,7 @@
       "id": 400,
       "name": "Screaming Orgasm",
       "description": "This screaming orgasm shot is a layered delight with **vodka**, **coffee liqueur**, **Irish cream**, and **amaretto**.",
-      "instructions": "1. Pour **coffee liqueur** into the base of a shot glass.\n2. Layer on **amaretto**\n3. Carefully add a layer of **Irish cream**.\n4. Top with a layer of **vodka**.",
+      "instructions": "1. Pour **coffee liqueur** into the base of a shot glass.\n2. Layer on **amaretto**.\n3. Carefully add a layer of **Irish cream**.\n4. Top with a layer of **vodka**.",
       "photoUri": "assets/cocktails/400-screaming-orgasm.jpg",
       "glassId": "shooter",
       "methodIds": ["layer"],
@@ -24916,7 +24916,7 @@
       "id": 413,
       "name": "Slippery Nipple",
       "description": "A very smooth and beautiful shot.",
-      "instructions": "1. If you use **grenadine** syrup, pour it on the bottom layer. \n2. Pour 20ml of **sambuca** into a shooter glass.\n3. Carefully pour 20ml of **Baileys** on top of the **sambuca**.",
+      "instructions": "1. If you use **grenadine** syrup, pour it on the bottom layer.\n2. Pour 20ml of **sambuca** into a shooter glass.\n3. Carefully pour 20ml of **Baileys** on top of the **sambuca**.",
       "photoUri": "assets/cocktails/413-slippery-nipple.jpg",
       "glassId": "shooter",
       "methodIds": ["layer"],
@@ -25117,7 +25117,7 @@
     {
       "id": 417,
       "name": "Snowball",
-      "description": "A festive and nostalgic favourite in the UK, this 'winter warmer' is sweet, fizzy, and pleasantly creamy.",
+      "description": "A classic UK festive serve: advocaat and lemonade with a creamy texture and gentle citrus sweetness.",
       "instructions": "1. Fill a collins glass with **ice**.\n2. Add 60ml of **egg liqueur**, 15ml of **lime juice**, and 60ml of **lemonade**.\n3. Stir gently to combine.\n4. Garnish with a **cherry**.",
       "photoUri": "assets/cocktails/417-snowball.jpg",
       "glassId": "collins_glass",
@@ -25529,7 +25529,7 @@
     {
       "id": 423,
       "name": "Squashed Frog",
-      "description": "Despite its name, this layered shot is very mild and sweet.",
+      "description": "A playful layered shot with sweet fruit notes and a smooth, creamy middle layer.",
       "instructions": "1. Pour 5ml of **grenadine** into a shooter glass.\n2. Carefully add 30ml of **melon liqueur**.\n3. Add 15ml of **egg liqueur** on top using a bar spoon.",
       "photoUri": "assets/cocktails/423-squashed-frog.jpg",
       "glassId": "shooter",
@@ -27419,8 +27419,8 @@
     {
       "id": 454,
       "name": "Tom & Cherry",
-      "description": "A sophisticated and vibrant twist on a **gin** sour, featuring the botanical richness of **old tom gin** paired with deep **cherry** notes and a hint of bitter complexity.",
-      "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 30ml of **old tom gin**, 10ml of **Сherry Heering**, 10ml of **Luxardo maraschino**, 10ml of **cherry juice**, 5ml of **grapefruit juice**, and 2.5ml of **strucchi bitter**.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled nick & nora glass.\n5. Garnish with a **maraschino cherry**.",
+      "description": "A sophisticated and vibrant twist on a **gin** sour, featuring the botanical richness of **Old Tom gin** paired with deep **cherry** notes and a hint of bitter complexity.",
+      "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 30ml of **Old Tom gin**, 10ml of **Сherry Heering**, 10ml of **Luxardo maraschino**, 10ml of **cherry juice**, 5ml of **grapefruit juice**, and 2.5ml of **strucchi bitter**.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled nick & nora glass.\n5. Garnish with a **maraschino cherry**.",
       "photoUri": "assets/cocktails/454-tom-cherry.jpg",
       "glassId": "nick_and_nora",
       "methodIds": ["stir"],
@@ -27568,8 +27568,8 @@
       "id": 456,
       "name": "Tom Collins",
       "synonyms": ["Gin Collins"],
-      "description": "A timeless IBA classic, this refreshing highball perfectly balances the sweetness of **old tom gin** with crisp citrus and sparkling **water**.",
-      "instructions": "1. Fill a collins glass with **ice**.\n2. Add 45ml of **old tom gin**, 30ml of **lemon juice**, 15ml of **simple syrup**, and 60ml of **soda water**.\n3. Stir gently to combine.\n4. Garnish with a **maraschino cherry** and a **lemon** slice.",
+      "description": "A timeless IBA classic, this refreshing highball perfectly balances the sweetness of **Old Tom gin** with crisp citrus and sparkling **water**.",
+      "instructions": "1. Fill a collins glass with **ice**.\n2. Add 45ml of **Old Tom gin**, 30ml of **lemon juice**, 15ml of **simple syrup**, and 60ml of **soda water**.\n3. Stir gently to combine.\n4. Garnish with a **maraschino cherry** and a **lemon** slice.",
       "photoUri": "assets/cocktails/456-tom-collins.jpg",
       "glassId": "collins_glass",
       "methodIds": ["build"],
@@ -27813,7 +27813,7 @@
     {
       "id": 461,
       "name": "Tropical Bananarama",
-      "description": "A bananarama cocktail is a tropical, fruit-forward drink that typically features **banana liqueur** or purée as its primary flavour. Because it is a modern creation, recipes vary significantly depending on the desired profile.",
+      "description": "A tropical banana-forward cocktail with creamy coconut and bright citrus accents.",
       "instructions": "1. Add **vodka**, **coffee liqueur**, **whiskey cream**, **cream**, half a fresh **banana**, and **ice** to a blender.\n2. Blend until silky smooth.\n3. Pour into a hurricane glass.\n4. Garnish with a fresh **banana** slice.",
       "photoUri": "assets/cocktails/461-tropical-bananarama.jpg",
       "glassId": "hurricane_glass",
@@ -28038,7 +28038,7 @@
       "id": 464,
       "name": "Tuxedo",
       "description": "A sophisticated and complex dry **gin** martini variation from the late 19th Century. The addition of maraschino liqueur and a hint of **absinthe** creates a herbal, slightly sweet profile that is both elegant and timeless.",
-      "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 30ml of **old tom gin**, 30ml of **dry vermouth**, 0.5 teaspoons of **Luxardo maraschino**, a drop of **absinthe**, and 3 dashes of **orange bitters**.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled martini glass.\n5. Garnish with a **maraschino cherry** and a **lemon** twist.",
+      "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 30ml of **Old Tom gin**, 30ml of **dry vermouth**, 0.5 teaspoons of **Luxardo maraschino**, a drop of **absinthe**, and 3 dashes of **orange bitters**.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled martini glass.\n5. Garnish with a **maraschino cherry** and a **lemon** twist.",
       "photoUri": "assets/cocktails/464-tuxedo.jpg",
       "glassId": "martini",
       "methodIds": ["stir"],
@@ -28550,7 +28550,7 @@
     {
       "id": 471,
       "name": "Vilno",
-      "description": "Despite its name, this layered shot is very mild and sweet.",
+      "description": "A sweet layered shooter with bright fruit notes and a soft creamy texture.",
       "instructions": "1. Pour 15ml of **grenadine** into a shooter glass.\n2. Carefully layer 15ml of **Crème de Menthe Green** over the back of a spoon.\n3. Gently float 15ml of **Irish cream** on top to finish the layered shot.",
       "photoUri": "assets/cocktails/471-vilnius.jpg",
       "glassId": "shooter",
@@ -28585,7 +28585,7 @@
     {
       "id": 472,
       "name": "Virgin Bananarama",
-      "description": "A bananarama cocktail is a tropical, fruit-forward drink that typically features **banana liqueur** or purée as its primary flavour. Because it is a modern creation, recipes vary significantly depending on the desired profile.",
+      "description": "A non-alcoholic banana-forward tropical drink with creamy coconut and bright citrus accents.",
       "instructions": "1. Combine all ingredients in a blender with **ice** and blend until smooth.",
       "photoUri": "assets/cocktails/472-virgin-bananarama.jpg",
       "glassId": "hurricane_glass",
@@ -30201,7 +30201,7 @@
     {
       "id": 497,
       "name": "Zombie Brain Tumor",
-      "description": "This one looks really gross, but you'll like it.",
+      "description": "A dramatic layered shooter with minty sweetness, creamy body, and a vivid grenadine accent.",
       "instructions": "1. Pour 20ml of **Crème de Menthe Green** into a shooter glass.\n2. Slowly layer 20ml of **Baileys**(**Irish cream** liqueur) so it forms a brain-like shape.\n3. Add 5ml of **grenadine**, one drop at a time to create a bleeding effect.",
       "photoUri": "assets/cocktails/497-zombie-brain-tumor.jpg",
       "glassId": "shooter",
@@ -30902,7 +30902,7 @@
       "id": 509,
       "name": "Apple Jack",
       "description": "Sweet and sour with rich apple flavours and a brandy backbone.",
-      "instructions": "1. Shake all ingredients with ice.\n2. Fine strain into a chilled glass",
+      "instructions": "1. Shake all ingredients with ice.\n2. Fine strain into a chilled glass.",
       "photoUri": "assets/cocktails/509-apple-jack.jpg",
       "glassId": "coupe",
       "methodIds": ["shake"],
@@ -30963,7 +30963,7 @@
       "id": 510,
       "name": "Apple Pie (shot)",
       "description": "Nuts, apple, cinnamon and cream.",
-      "instructions": "1. Shake **apple schnapps** and **Hazelnut liqueur** with ice.\n2. Strain into chilled shooter glasses.\n3. Float with cream on the drink. \n4. Dust with cinnamon.",
+      "instructions": "1. Shake **apple schnapps** and **Hazelnut liqueur** with ice.\n2. Strain into chilled shooter glasses.\n3. Float with cream on the drink.\n4. Dust with cinnamon.",
       "photoUri": "assets/cocktails/510-apple-pie-shot.jpg",
       "glassId": "shooter",
       "methodIds": ["shake"],
@@ -31011,7 +31011,7 @@
     {
       "id": 512,
       "name": "Apple Shot",
-      "instructions": "1. Stir **whiskey**, **apple schnapps** and **cranberry juice** with ice.\n2. Strain into a chilled shooter glass. \n3. Top with soda.",
+      "instructions": "1. Stir **whiskey**, **apple schnapps** and **cranberry juice** with ice.\n2. Strain into a chilled shooter glass.\n3. Top with soda.",
       "photoUri": "assets/cocktails/512-apple-shot.jpg",
       "glassId": "shooter",
       "methodIds": ["stir"],
@@ -31258,7 +31258,7 @@
       "id": 556,
       "name": "Bishop",
       "description": "A flavoursome and warming variation on mulled wine.",
-      "instructions": "1. Muddle cloves in the base of the shaker.\n2. Add boiling water and other ingredients. \n3. Fine strain into a glass.",
+      "instructions": "1. Muddle cloves in the base of the shaker.\n2. Add boiling water and other ingredients.\n3. Fine strain into a glass.",
       "photoUri": "assets/cocktails/556-bishop.jpg",
       "glassId": "irish_coffee_glass",
       "methodIds": ["heat", "build"],
@@ -31741,12 +31741,12 @@
           "garnish": true
         }
       ],
-      "description": "A fresh, fruit-driven martini with muddled blueberries, **gin** (or **vodka**), and citrus for a crisp aromatic profile."
+      "description": "A fresh, fruit-driven martini with muddled **blueberries**, **gin** (or **vodka**), and citrus for a crisp aromatic profile."
     },
     {
       "id": 518,
       "name": "Brandy Manhattan",
-      "description": "Spirit-forward mix of rye whisky, sweet vermouth, and **bitters**.",
+      "description": "Spirit-forward mix of **brandy**, **sweet vermouth**, and bitters.",
       "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 60ml of **brandy**, 30ml of **red vermouth**, and 2 dashes of **Angostura bitters**.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled martini glass.\n5. Garnish with a **maraschino cherry**.",
       "photoUri": "assets/cocktails/300-manhattan.jpg",
       "glassId": "martini",
@@ -32166,7 +32166,7 @@
       "id": 532,
       "name": "Hpnotiq Breeze",
       "description": "The Hpnotiq Breeze (also known as the Hypnotic Breeze) is a tropical cocktail featuring Hpnotiq, a sky-blue French liqueur made from **vodka**, **Cognac**, and tropical fruit juices. The drink is known for its vibrant blue hue and refreshing, sweet-tart profile that blends passionfruit, mango, and citrus flavours.",
-      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add the Hpnotiq, rum, lime juice, and simple syrup.\n3. Shake vigorously for 10–15 seconds until well-chilled.\n4. Strain into a hurricane or martini glass filled with fresh ice.\n5. To make the \"Tie-Dye\" effect slowly pour the pineapple juice into the centre. This creates a temporary tie-dye visual effect before it blends. \n6. Garnish with a maraschino cherry, and a lime wheel.",
+      "instructions": "1. Fill a cocktail shaker with ice.\n2. Add the Hpnotiq, rum, lime juice, and simple syrup.\n3. Shake vigorously for 10–15 seconds until well-chilled.\n4. Strain into a hurricane or martini glass filled with fresh ice.\n5. To make the \"Tie-Dye\" effect slowly pour the pineapple juice into the centre. This creates a temporary tie-dye visual effect before it blends.\n6. Garnish with a maraschino cherry, and a lime wheel.",
       "photoUri": "assets/cocktails/532-hpnotiq-breeze.jpg",
       "glassId": "hurricane_glass",
       "methodIds": ["shake"],
@@ -32311,7 +32311,7 @@
       "id": 536,
       "name": "Kiwi Fruit Margarita",
       "description": "This is a refreshing, tropical twist on the classic cocktail that can be prepared either blended (frozen) or shaken (on the rocks). It typically features fresh, ripe kiwis, **Tequila**, **lime juice**, and a sweetener like **agave** or **simple syrup**.",
-      "instructions": "1. If you prefer a salted glass: Rub the rim of an old-fashioned glass (or whatever glass you prefer) with the edge of a lime slice.  Swirl the rim through a small pile of salt. Set aside.\n2. Slice a kiwi wheel for garnish and cut the rest of the kiwi into pieces. Set aside garnish & place kiwi pieces in the cocktail shaker and muddle.\n3. Add **ice**, **Tequila**, **orange liqueur**, **lime juice**, and **agave syrup** to the shaker with the muddled kiwi. Shake until nicely chilled.\n4. Pour everything (cocktail & ice) into the prepared glass.\n5. Garnish with the prepared kiwi fruit slice.",
+      "instructions": "1. If you prefer a salted glass: Rub the rim of an old-fashioned glass (or whatever glass you prefer) with the edge of a lime slice. Swirl the rim through a small pile of salt. Set aside.\n2. Slice a kiwi wheel for garnish and cut the rest of the kiwi into pieces. Set aside garnish & place kiwi pieces in the cocktail shaker and muddle.\n3. Add **ice**, **Tequila**, **orange liqueur**, **lime juice**, and **agave syrup** to the shaker with the muddled kiwi. Shake until nicely chilled.\n4. Pour everything (cocktail & ice) into the prepared glass.\n5. Garnish with the prepared kiwi fruit slice.",
       "photoUri": "assets/cocktails/536-kiwi-fruit-margarita.jpg",
       "glassId": "margarita_glass",
       "methodIds": ["muddle", "shake", "blend"],
@@ -32407,7 +32407,7 @@
     {
       "id": 535,
       "name": "Kiwi Fruit Martini",
-      "instructions": "1. Cut a **kiwi fruit** in half and cut a slice to put aside for garnish. Scoop out the flesh from both halves into the base of the shaker. \n2. Muddle kiwi fruit in a shaker. \n3. Add other ingredients and shake with ice.\n4. Fine strain into chilled glass.\n5. Garnish with the kiwi fruit slice.",
+      "instructions": "1. Cut a **kiwi fruit** in half and cut a slice to put aside for garnish. Scoop out the flesh from both halves into the base of the shaker.\n2. Muddle kiwi fruit in a shaker.\n3. Add other ingredients and shake with ice.\n4. Fine strain into chilled glass.\n5. Garnish with the kiwi fruit slice.",
       "photoUri": "assets/cocktails/535-kiwi-fruit-martini.jpg",
       "glassId": "martini",
       "methodIds": ["muddle", "shake"],
@@ -32533,8 +32533,8 @@
     {
       "id": 550,
       "name": "Mauresque",
-      "description": "Long, refreshing aniseed, liquorice and almond.",
-      "instructions": "1. Pour **absinthe** and **almond syrup** into a glass. \n2.  Ideally, serve with iced water separately in a small jug so the customer can dilute to their own taste.\n3. Lastly, add ice to fill the glass.",
+      "description": "A long, refreshing highball with anise, liquorice, and almond notes.",
+      "instructions": "1. Pour **absinthe** and **almond syrup** into a glass.\n2. Ideally, serve with iced water separately in a small jug so the customer can dilute to their own taste.\n3. Lastly, add ice to fill the glass.",
       "photoUri": "assets/cocktails/550-mauresque.jpg",
       "glassId": "highball_glass",
       "methodIds": ["build"],
@@ -32579,7 +32579,7 @@
     {
       "id": 519,
       "name": "Metropolitan",
-      "description": "Spirit-forward mix of rye whisky, sweet vermouth, and **bitters**.",
+      "description": "A Manhattan-style classic with rye whiskey, sweet vermouth, and aromatic bitters.",
       "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 60ml of **rye whiskey**, 30ml of **red vermouth**, and 2 dashes of **Angostura bitters**.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled martini glass.\n5. Garnish with a **maraschino cherry**.",
       "photoUri": "assets/cocktails/300-manhattan.jpg",
       "glassId": "martini",
@@ -32633,7 +32633,7 @@
     {
       "id": 520,
       "name": "Metropolitan",
-      "description": "Spirit-forward mix of rye whisky, sweet vermouth, and **bitters**.",
+      "description": "A spirit-forward Manhattan variation emphasizing rye spice, sweet vermouth depth, and bitters.",
       "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 60ml of **rye whiskey**, 30ml of **red vermouth**, and 2 dashes of **Angostura bitters**.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled martini glass.\n5. Garnish with a **maraschino cherry**.",
       "photoUri": "assets/cocktails/300-manhattan.jpg",
       "glassId": "martini",
@@ -32687,8 +32687,8 @@
     {
       "id": 515,
       "name": "Mixed Berry Sangria",
-      "description": "A fruit-forward sangria made with red wine, berries, citrus, and a touch of brandy.",
-      "instructions": "1. Muddle berries and an orange with sugar.\n2. Add the red wine, brandy, and orange juice and steep.\n3. Pour into glasses filled with ice and extra fruit.",
+      "description": "A fruit-forward sangria made with red wine, berries, citrus, and a touch of **brandy**.",
+      "instructions": "1. Muddle berries and an orange with sugar.\n2. Add the **red wine**, **brandy**, and **orange juice** and steep.\n3. Pour into glasses filled with ice and extra fruit.",
       "photoUri": "assets/cocktails/515-mixed-berry-sangria.jpg",
       "glassId": "pitcher",
       "methodIds": ["muddle", "stir"],
@@ -32842,7 +32842,7 @@
     {
       "id": 508,
       "name": "Northern Light",
-      "description": "Wonderfully refreshing: apple and anise served up on a grassy vodka base. Similar to the **Szarlotka** cocktail.",
+      "description": "Wonderfully refreshing: apple and anise served up on a grassy **vodka** base. Similar to the **Szarlotka** cocktail.",
       "instructions": "1. Shake all ingredients with ice.\n2. Fine stain into chilled glass.\n3. Garnish with a star anise floated on the surface.",
       "photoUri": "assets/cocktails/508-northern-light.jpg",
       "glassId": "coupe",
@@ -32977,7 +32977,7 @@
       "id": 529,
       "name": "Nutty Martini",
       "description": "Martini variation with **Frangelico** (**hazelnut liqueur**) and **simple syrup**.",
-      "instructions": "1. In a cocktail shaker filled with ice, pour the vodka, hazelnut liqueur, and simple syrup.\n2. Shake well.\n3. Strain into a chilled cocktail glass.",
+      "instructions": "1. In a cocktail shaker filled with ice, pour the **vodka**, **hazelnut liqueur**, and **simple syrup**.\n2. Shake well.\n3. Strain into a chilled cocktail glass.",
       "photoUri": "assets/cocktails/529-nutty-martini.jpg",
       "glassId": "martini",
       "methodIds": ["shake"],
@@ -33372,7 +33372,7 @@
     {
       "id": 548,
       "name": "Rhum Marianito",
-      "instructions": "1. Stir all ingredients with ice.\n2. Strain into an ice-filled glass (preferably over a large cube or chunk of block ice).\n3. Express orange zest twist over the cocktail and use as a garnish, along with olives",
+      "instructions": "1. Stir all ingredients with ice.\n2. Strain into an ice-filled glass (preferably over a large cube or chunk of block ice).\n3. Express an orange zest twist over the cocktail and use it as garnish, alongside olives.",
       "photoUri": "assets/cocktails/548-rhum-marianito.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["stir"],
@@ -33452,7 +33452,7 @@
       "id": 551,
       "name": "Ruby Manhattan",
       "description": "Rye whiskey with a touch of apricot and grape fruitiness served short, dry and strong. A delicious nightcap.",
-      "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 45ml of **rye**, 30ml of **ruby port**,  7.5ml of **apricot brandy**, and 2 dashes of **Creole bitters**.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled martini glass.\n5. Garnish with a **maraschino cherry**.",
+      "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 45ml of **rye**, 30ml of **ruby port**, 7.5ml of **apricot brandy**, and 2 dashes of **Creole bitters**.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled martini glass.\n5. Garnish with a **maraschino cherry**.",
       "photoUri": "assets/cocktails/353-pedro-manhattan.jpg",
       "glassId": "martini",
       "methodIds": ["stir"],
@@ -33696,8 +33696,8 @@
     {
       "id": 555,
       "name": "Strawberry Martini",
-      "description": "Rich strawberries fortified with vodka and a hint of pepper spice.",
-      "instructions": "1. Muddle strawberries in the base of the shaker.\n2. Add other ingredients.\n3. Shake with ice.\n4. Fine strain into a chilled martini glass.",
+      "description": "Rich strawberries fortified with **vodka** and a hint of pepper spice.",
+      "instructions": "1. Muddle 5 **strawberries** in the base of the shaker.\n2. Add other ingredients.\n3. Shake with ice.\n4. Fine strain into a chilled martini glass.",
       "photoUri": "assets/cocktails/555-strawberry-martini.jpg",
       "glassId": "martini",
       "methodIds": ["muddle", "shake"],
@@ -33885,7 +33885,7 @@
       "id": 534,
       "name": "Surfer on Acid (shot)",
       "description": "The Surfer on Acid is a popular 1990s cocktail known for its simple equal-parts recipe and unusual combination of herbal and tropical flavours. Created by Los Angeles bartender Eric Tecosky, it is versatile enough to be served as a refreshing long drink or a quick party shot.",
-      "instructions": "For 3 shots:\n1. Into a shaker with **ice** pour 45ml of **coconut rum** and 45ml of **pineapple juice**.\n2. Shake vigorously for about 15-20 seconds. \n3. Pour into shooter glasses. \n4. Carefully layer each drink with 15ml of **Jägermeister**.",
+      "instructions": "For 3 shots:\n1. Into a shaker with **ice** pour 45ml of **coconut rum** and 45ml of **pineapple juice**.\n2. Shake vigorously for about 15-20 seconds.\n3. Pour into shooter glasses.\n4. Carefully layer each drink with 15ml of **Jägermeister**.",
       "photoUri": "assets/cocktails/534-surfer-on-acid-shot.jpg",
       "glassId": "shooter",
       "methodIds": ["shake", "layer"],
@@ -33947,7 +33947,7 @@
     {
       "id": 3,
       "name": "Absolut Citron",
-      "description": "Citrus-flavoured vodka from Absolut in Åhus, Sweden, about 40% ABV. A bright lemon character elevates **Cosmopolitans** and other citrus cocktails.",
+      "description": "Citrus-flavoured **vodka** from Absolut in Åhus, Sweden, about 40% ABV. A bright lemon character elevates **Cosmopolitans** and other citrus cocktails.",
       "tags": [0, 1],
       "baseIngredientId": 338,
       "photoUri": "assets/ingredients/3-absolut-citron.jpg"
@@ -33955,7 +33955,7 @@
     {
       "id": 4,
       "name": "Absolut Vodka",
-      "description": "Swedish winter wheat vodka from Åhus with about 40% ABV. Known for a clean, neutral profile and consistent quality. Popular base for countless cocktails worldwide.",
+      "description": "Swedish winter wheat **vodka** from Åhus with about 40% ABV. Known for a clean, neutral profile and consistent quality. Popular base for countless cocktails worldwide.",
       "tags": [0, 1],
       "baseIngredientId": 337,
       "photoUri": "assets/ingredients/4-absolut-vodka.jpg"
@@ -34201,7 +34201,7 @@
     {
       "id": 38,
       "name": "Basil",
-      "description": "Basil is a fragrant herb with a sweet, slightly peppery flavor. It adds a fresh and aromatic note to both alcoholic and non-alcoholic cocktails. Common in summer drinks, it pairs especially well with gin, vodka, and citrus juices.",
+      "description": "Basil is a fragrant herb with a sweet, slightly peppery flavor. It adds a fresh and aromatic note to both alcoholic and non-alcoholic cocktails. Common in summer drinks, it pairs especially well with **gin**, **vodka**, and citrus juices.",
       "tags": [7],
       "photoUri": "assets/ingredients/38-basil.jpg"
     },
@@ -34272,7 +34272,7 @@
     {
       "id": 48,
       "name": "Bison Grass Vodka",
-      "description": "Polish bison grass vodka (Żubrówka) around 37½–40% ABV flavored with aromatic sweet grass. Offers vanilla, almond, and herb notes. Great with apple juice or in refreshing highballs.",
+      "description": "Polish bison grass **vodka** (Żubrówka) around 37½–40% ABV flavored with aromatic sweet grass. Offers vanilla, almond, and herb notes. Great with apple juice or in refreshing highballs.",
       "tags": [0, 1],
       "photoUri": "assets/ingredients/48-bizon-grass-vodka.jpg"
     },
@@ -34483,7 +34483,7 @@
     {
       "id": 78,
       "name": "Chamomile Cordial",
-      "description": "Chamomile cordial is a sweet, floral syrup made from chamomile flowers. It has a soothing aroma and mild honey-like taste, making it a calming addition to cocktails. Pairs well with gin, vodka, and citrus juices.",
+      "description": "Chamomile cordial is a sweet, floral syrup made from chamomile flowers. It has a soothing aroma and mild honey-like taste, making it a calming addition to cocktails. Pairs well with **gin**, **vodka**, and citrus juices.",
       "tags": [4],
       "photoUri": "assets/ingredients/78-chamomile-cordial.jpg"
     },
@@ -35020,7 +35020,7 @@
     {
       "id": 154,
       "name": "Fig",
-      "description": "Fig adds a rich, gently sweet flavor with notes of honey, dried fruit, and a hint of earthiness. In cocktails, it brings warmth and depth, pairing beautifully with whiskey, rum, brandy, and herbal liqueurs. Perfect for autumnal, dessert, or slow-sipping drinks.",
+      "description": "Fig adds a rich, gently sweet flavor with notes of honey, dried fruit, and a hint of earthiness. In cocktails, it brings warmth and depth, pairing beautifully with **whiskey**, **rum**, **brandy**, and herbal liqueurs. Perfect for autumnal, dessert, or slow-sipping drinks.",
       "tags": [6],
       "photoUri": "assets/ingredients/154-fig.jpg"
     },
@@ -35057,7 +35057,7 @@
     {
       "id": 159,
       "name": "Gin",
-      "description": "Juniper-forward distilled spirit flavored with botanicals, typically 40–47% ABV. Offers piney, citrus, and spice notes depending on style. Foundation for **Martinis**, gin and tonics, and many classics.",
+      "description": "Juniper-forward distilled spirit flavored with botanicals, typically 40–47% ABV. Offers piney, citrus, and spice notes depending on style. Foundation for **Martinis**, **Gin and Tonics**, and many classics.",
       "tags": [0, 1],
       "photoUri": "assets/ingredients/159-gin.jpg"
     },
@@ -35473,7 +35473,7 @@
     {
       "id": 217,
       "name": "Lemon Tonic",
-      "description": "Lemon tonic water combines quinine bitterness with bright lemon. Adds citrus zip and carbonation to gin or vodka drinks. Use when you want more zest than standard tonic.",
+      "description": "Lemon tonic water combines quinine bitterness with bright lemon. Adds citrus zip and carbonation to **gin** or **vodka** drinks. Use when you want more zest than standard **tonic**.",
       "tags": [3],
       "photoUri": "assets/ingredients/217-lemon-tonic.jpg"
     },
@@ -36028,14 +36028,14 @@
     {
       "id": 295,
       "name": "Rose Syrup",
-      "description": "Rose syrup is floral and sweet, capturing fragrant rose petals. A few drops add aromatic lift to gin, vodka, or nonalcoholic spritzes. Use lightly to avoid overpowering other flavors.",
+      "description": "Rose syrup is floral and sweet, capturing fragrant rose petals. A few drops add aromatic lift to **gin**, **vodka**, or nonalcoholic spritzes. Use lightly to avoid overpowering other flavors.",
       "tags": [4],
       "photoUri": "assets/ingredients/295-rose-syrup.jpg"
     },
     {
       "id": 296,
       "name": "Rosemary",
-      "description": "Rosemary is a woody mediterranean herb with piney, resinous aroma. It adds savory depth to gin, whiskey, and citrus cocktails whether infused or used as a garnish. Smack the sprig before serving to release its oils without overwhelming the drink.",
+      "description": "Rosemary is a woody mediterranean herb with piney, resinous aroma. It adds savory depth to **gin**, **whiskey**, and citrus cocktails whether infused or used as a garnish. Smack the sprig before serving to release its oils without overwhelming the drink.",
       "tags": [7],
       "photoUri": "assets/ingredients/296-rosemary.jpg"
     },
@@ -36335,14 +36335,14 @@
     {
       "id": 338,
       "name": "Vodka Citron",
-      "description": "Lemon-flavoured vodka is typically bottled around 40% ABV. Bright citrus aroma and a clean finish. Ideal for **Cosmopolitans**, **Spritzes**, and other refreshing drinks.",
+      "description": "Lemon-flavoured **vodka** is typically bottled around 40% ABV. Bright citrus aroma and a clean finish. Ideal for **Cosmopolitans**, **Spritzes**, and other refreshing drinks.",
       "tags": [0, 1],
       "photoUri": "assets/ingredients/338-vodka-citron.jpg"
     },
     {
       "id": 339,
       "name": "Vodka Vanilla",
-      "description": "Vanilla-flavored vodka around 35–40% ABV. Adds smooth sweetness and vanilla bean aroma. Great in dessert cocktails or with cola and cream sodas.",
+      "description": "Vanilla-flavored **vodka** around 35–40% ABV. Adds smooth sweetness and vanilla bean aroma. Great in dessert cocktails or with cola and cream sodas.",
       "tags": [0, 1],
       "photoUri": "assets/ingredients/339-vodka-vanilla.jpg"
     },
@@ -36430,7 +36430,7 @@
     {
       "id": 351,
       "name": "Żubrówka",
-      "description": "Żubrówka is a polish bison grass vodka with 37–40% ABV. It has a unique herbal, vanilla-like aroma.",
+      "description": "Żubrówka is a polish bison grass **vodka** with 37–40% ABV. It has a unique herbal, vanilla-like aroma.",
       "tags": [0, 1],
       "baseIngredientId": 48,
       "photoUri": "assets/ingredients/351-ubrowka.jpg"
