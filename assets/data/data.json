@@ -12043,7 +12043,7 @@
         {
           "order": 2,
           "ingredientId": 282,
-          "name": "White Port Wine",
+          "name": "White Port",
           "amount": "30",
           "unitId": 11
         },
@@ -17471,7 +17471,7 @@
         {
           "order": 2,
           "ingredientId": 282,
-          "name": "White Port Wine",
+          "name": "White Port",
           "amount": "30",
           "unitId": 11
         },
@@ -18474,7 +18474,7 @@
         {
           "order": 2,
           "ingredientId": 282,
-          "name": "White Port Wine",
+          "name": "White Port",
           "amount": "30",
           "unitId": 11
         },
@@ -33430,7 +33430,7 @@
       "name": "Porto Tonico",
       "synonyms": ["Port and Tonic"],
       "description": "The Porto Tonico is Portugal’s version of the gin and tonic. This light, refreshing cocktail is made with just white port and tonic water. It’s the perfect easy-sipping drink for warm days, casual get-togethers, or whenever you want something chic and unexpected.",
-      "instructions": "1. Fill a glass with about 120g of **ice**.\n2. Pour in 45ml of **white port wine** and 90ml of **tonic**.\n3. Briefly stir.\n4. Garnish with an **orange** slice and **mint** sprig.",
+      "instructions": "1. Fill a glass with about 120g of **ice**.\n2. Pour in 45ml of **White Port** and 90ml of **tonic**.\n3. Briefly stir.\n4. Garnish with an **orange** slice and **mint** sprig.",
       "photoUri": "assets/cocktails/552-porto-tonico.jpg",
       "glassId": "wine_glass",
       "methodIds": ["build"],
@@ -33446,7 +33446,7 @@
         {
           "order": 2,
           "ingredientId": 282,
-          "name": "White Port Wine",
+          "name": "White Port",
           "amount": "45",
           "unitId": 11,
           "substitutes": [
@@ -34197,7 +34197,7 @@
       "id": 1,
       "name": "7-Up",
       "description": "Lemon-lime carbonated soft drink. Sweet citrus profile with bright acidity and light bubbles. Typical ABV: 0%. Used to lengthen drinks and add sweetness and fizz in highballs like **Whiskey Highball** variations or **Vodka 7-Up**.",
-      "tags": [3],
+      "tags": [6],
       "baseIngredientId": 218,
       "photoUri": "assets/ingredients/1-7-up.jpg"
     },
@@ -34205,14 +34205,14 @@
       "id": 2,
       "name": "Absinthe",
       "description": "Absinthe is an anise-forward spirit distilled with wormwood and other botanicals, typically 45–74% ABV. It is traditionally diluted with water to unlock its louche haze. Nicknamed the green fairy and linked to 19th-Century artists.",
-      "tags": [1],
+      "tags": [0],
       "photoUri": "assets/ingredients/2-absinthe.jpg"
     },
     {
       "id": 3,
       "name": "Absolut Citron",
       "description": "Citrus-flavoured **vodka** from Absolut in Åhus, Sweden, about 40% ABV. A bright lemon character elevates **Cosmopolitans** and other citrus cocktails.",
-      "tags": [0, 1],
+      "tags": [0],
       "baseIngredientId": 338,
       "photoUri": "assets/ingredients/3-absolut-citron.jpg"
     },
@@ -34220,7 +34220,7 @@
       "id": 4,
       "name": "Absolut Vodka",
       "description": "Swedish winter wheat **vodka** from Åhus with about 40% ABV. Known for a clean, neutral profile and consistent quality. Popular base for countless cocktails worldwide.",
-      "tags": [0, 1],
+      "tags": [0],
       "baseIngredientId": 337,
       "photoUri": "assets/ingredients/4-absolut-vodka.jpg"
     },
@@ -34228,7 +34228,7 @@
       "id": 5,
       "name": "Advocaat",
       "description": "Advocaat is a rich Dutch egg liqueur with sweet custard notes and 14–20% ABV. Try it in a **Snowball** or **Bombardino**.",
-      "tags": [2],
+      "tags": [1],
       "baseIngredientId": 146,
       "photoUri": "assets/ingredients/5-advocaat.jpg"
     },
@@ -34236,21 +34236,21 @@
       "id": 6,
       "name": "Agave Syrup",
       "description": "Agave syrup is a honey-like sweetener made from blue agave and related plants. It has a mellow caramel sweetness and dissolves quickly in cold drinks. Common in **Margaritas** and other **Tequila** cocktails.",
-      "tags": [4],
+      "tags": [5],
       "photoUri": "assets/ingredients/6-agave-syrup.jpg"
     },
     {
       "id": 7,
       "name": "Aged Rum",
       "description": "Rum aged in oak for deeper caramel and spice notes, typically around 40% ABV. Made from molasses or sugarcane juice. Smooth sipper that also suits **Old Fashioned**-style drinks.",
-      "tags": [0, 1],
+      "tags": [0],
       "photoUri": "assets/ingredients/7-aged-rum.jpg"
     },
     {
       "id": 8,
       "name": "Ale",
       "description": "Ale is a malty, fruity beer around 4–6% ABV. Enjoy it in a Shandy or Snakebite.",
-      "tags": [2],
+      "tags": [3],
       "photoUri": "assets/ingredients/8-ale.jpg"
     },
     {
@@ -34264,35 +34264,35 @@
       "id": 10,
       "name": "Allspice Dram",
       "description": "Allspice-flavoured liqueur around 22% ABV, is used in **Tiki** cocktails.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/10-allspice-dram.jpg"
     },
     {
       "id": 11,
       "name": "Almond (Orgeat) Syrup",
       "description": "Almond syrup, aka *orgeat*, is a sweet, nutty syrup made from **almonds**, **sugar**, and **orange flower water**. It adds a creamy, aromatic quality to tropical and **Tiki** cocktails.\nInstructions:\n1. **Toast & grind:** preheat oven to 200°c. Toast **almonds** for 3–4 minutes until fragrant. Let cool, then pulse in a food processor until coarsely ground.\n2. **Make syrup:** combine **sugar** and **water** in a saucepan over medium heat. Stir until dissolved, bring to a boil for 3 minutes, then add the ground almonds.\n3. **Steep:** lower the heat and simmer for 3 minutes. Remove from heat, cover, and let infuse for 3 to 12 hours at room temperature.\n4. **Strain:** pour through several layers of cheesecloth or a nut milk bag, squeezing hard to extract all almond oils and liquid.\n5. **Finish:** stir in **orange flower water**. Transfer to a clean bottle.",
-      "tags": [4],
+      "tags": [5],
       "photoUri": "assets/ingredients/11-almond-orgeat-syrup.jpg"
     },
     {
       "id": 12,
       "name": "Amaretto",
       "description": "Amaretto is an Italian almond liqueur at 21–28% ABV with a sweet, nutty flavour. Use it in **Godfather**.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/12-amaretto.jpg"
     },
     {
       "id": 13,
       "name": "Amaro",
       "description": "Amaro is a bitter-sweet Italian herbal liqueur produced by infusing alcohol with a blend of botanicals, including herbs, roots, spices, and citrus peels, then sweetening it and aging the mixture.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/13-amaro.jpg"
     },
     {
       "id": 14,
       "name": "Amaro Montenegro",
       "description": "Amaro Montenegro is a herbal Italian amaro from Bologna, 23% ABV. Mix it in a **Monte & Tonic** or **Paper Plane**.",
-      "tags": [2],
+      "tags": [1],
       "baseIngredientId": 13,
       "photoUri": "assets/ingredients/14-amaro-montenegro.jpg"
     },
@@ -34308,7 +34308,7 @@
       "id": 16,
       "name": "Amontillado Sherry",
       "description": "Nutty, amber sherry that begins as Fino before aging oxidatively, around 16–18% ABV. Dry with savory, toasted notes. Adds depth to cobblers and stirred cocktails.",
-      "tags": [1],
+      "tags": [2],
       "photoUri": "assets/ingredients/16-amontillado-sherry.jpg"
     },
     {
@@ -34322,7 +34322,7 @@
       "id": 18,
       "name": "Angostura Bitters",
       "description": "Concentrated Trinidad bitters at 44.7% ABV made with gentian, herbs, and spices. Famous oversized label and closely guarded recipe. A few dashes add spice and bitterness to classics like the **Old Fashioned** or **Manhattan**.",
-      "tags": [10],
+      "tags": [4],
       "baseIngredientId": 47,
       "photoUri": "assets/ingredients/18-angostura-bitters.jpg"
     },
@@ -34330,7 +34330,7 @@
       "id": 19,
       "name": "Aniseed Liqueur",
       "description": "Aniseed is a sweet anise-flavoured liqueur, typically 20–40% ABV. Try it in a **Greta Garbo** or **Northern Light**.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/19-anis.jpg"
     },
     {
@@ -34344,21 +34344,21 @@
       "id": 21,
       "name": "Anisette",
       "description": "Sweet anise-flavored liqueur around 25% ABV. Clear and aromatic with licorice character. Served chilled, with coffee, or in pastis-style mixes.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/21-anisette.jpg"
     },
     {
       "id": 22,
       "name": "Aperol",
       "description": "Aperol is a bright orange aperitif from the Campari group, 11% ABV, with bitter citrus and rhubarb notes. Perfect for an **Aperol Spritz** or **Paper Plane**.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/22-aperol.jpg"
     },
     {
       "id": 23,
       "name": "Apple",
       "description": "Crisp, sweet-tart fruit used for juices, garnishes, and infusions. Adds fresh orchard aroma to cocktails.",
-      "tags": [6],
+      "tags": [7],
       "photoUri": "assets/ingredients/23-apple.jpg"
     },
     {
@@ -34372,28 +34372,28 @@
       "id": 25,
       "name": "Apple Cider",
       "description": "Apple cider is a crisp fermented apple drink at 4–6% ABV. Enjoy it in a **Snakebite** or **Stone Fence**.",
-      "tags": [2],
+      "tags": [3],
       "photoUri": "assets/ingredients/25-apple-cider.jpg"
     },
     {
       "id": 26,
       "name": "Apple Juice",
       "description": "Sweet pressed apple juice with crisp acidity. Adds gentle fruitiness to punches and highballs. Works with rum, bourbon, and cider-inspired cocktails.",
-      "tags": [5],
+      "tags": [7],
       "photoUri": "assets/ingredients/26-apple-juice.jpg"
     },
     {
       "id": 27,
       "name": "Apple Liqueur",
       "description": "Apple liqueur is a sweet apple spirit around 15–30% ABV. Shake it into **Appletini** or **apple Jack** cocktails.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/27-apple-liqueur.jpg"
     },
     {
       "id": 28,
       "name": "Apple Schnapps",
       "description": "Apple schnapps is a tart apple spirit with roughly 15–25% ABV. Use it in an **apple Pie shot** or **Appletini** cocktail.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/28-apple-schnapps.jpg"
     },
     {
@@ -34414,14 +34414,14 @@
       "id": 31,
       "name": "Apricot Nectar",
       "description": "Sweet, thick apricot juice blend that brings mellow stone-fruit flavour. Great for Tiki drinks, spritzes, and punches.",
-      "tags": [5],
+      "tags": [7],
       "photoUri": "assets/ingredients/31-apricot-nectar.jpg"
     },
     {
       "id": 32,
       "name": "Ardbeg",
       "description": "Islay single malt scotch is famed for intense peat smoke and maritime notes, typically around 46% ABV. Distilled on Islay’s south coast. Bold choice for **Penicillin** variations or neat sipping.",
-      "tags": [0, 1],
+      "tags": [0],
       "baseIngredientId": 197,
       "photoUri": "assets/ingredients/32-ardbeg.jpg"
     },
@@ -34429,7 +34429,7 @@
       "id": 33,
       "name": "Bacardi 151 Proof Rum",
       "description": "Very high-proof rum at 75½% ABV once made by bacardi. Powerful caramel and molasses notes suited to punches or flaming drinks. Handle carefully and dilute in cocktails.",
-      "tags": [0, 1],
+      "tags": [0],
       "baseIngredientId": 251,
       "photoUri": "assets/ingredients/33-bacardi-151-proof-rum.jpg"
     },
@@ -34437,7 +34437,7 @@
       "id": 34,
       "name": "Baileys",
       "description": "Baileys Irish cream is a creamy liqueur by Diageo, 17% ABV, with chocolate and whiskey notes. Serve in a **Mudslide** or **B-52**.",
-      "tags": [2],
+      "tags": [1],
       "baseIngredientId": 195,
       "photoUri": "assets/ingredients/34-baileys.jpg"
     },
@@ -34445,21 +34445,21 @@
       "id": 35,
       "name": "Banana",
       "description": "Soft, sweet fruit with creamy texture used for smoothies and tiki garnishes. Works well in frozen cocktails or batched punches.",
-      "tags": [6],
+      "tags": [7],
       "photoUri": "assets/ingredients/35-banana.jpg"
     },
     {
       "id": 36,
       "name": "Banana Liqueur",
       "description": "Banana liqueur is a sweet banana spirit about 20–25% ABV. Mix it in a **Banana Daiquiri** or **Dirty Banana**.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/36-banana-liqueur.jpg"
     },
     {
       "id": 37,
       "name": "Banana Liqueur Green",
       "description": "Vivid green banana liqueur with sweet tropical aroma around 20–25% ABV. Adds colour and ripe banana notes to Tiki drinks and dessert cocktails.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/37-banana-liqueur-green.jpg"
     },
     {
@@ -34480,14 +34480,14 @@
       "id": 40,
       "name": "Beef Bouillon",
       "description": "Beef bouillon is a savoury broth made by simmering beef with vegetables and seasonings. In cocktails, it is primarily used in savoury drinks like the **Bloody Bull**, adding depth and umami richness.",
-      "tags": [10],
+      "tags": [8],
       "photoUri": "assets/ingredients/40-beef-bouillon.jpg"
     },
     {
       "id": 41,
       "name": "Beer",
       "description": "Beer is a carbonated malt beverage around 4–6% ABV with malty, hoppy notes. Pour it into a **Michelada** or **Shandy**.",
-      "tags": [2],
+      "tags": [3],
       "photoUri": "assets/ingredients/41-beer.jpg"
     },
     {
@@ -34501,7 +34501,7 @@
       "id": 43,
       "name": "Berentzen Apfelkorn",
       "description": "Berentzen Apfelkorn is a German apple schnapps by Berentzen Group, 18% ABV. Enjoy it in an **apple Shot** or **apple Strudel** cocktail.",
-      "tags": [2],
+      "tags": [1],
       "baseIngredientId": 28,
       "photoUri": "assets/ingredients/43-berentzen-apfelkorn.jpg"
     },
@@ -34509,7 +34509,7 @@
       "id": 44,
       "name": "Berries",
       "description": "Mixed berries that deliver bright acidity and deep colour. Perfect for dousing into **Spritzes** and **Sangria**.",
-      "tags": [6],
+      "tags": [7],
       "photoUri": "assets/ingredients/44-berries.jpg"
     },
     {
@@ -34523,21 +34523,21 @@
       "id": 46,
       "name": "Bittermens Boston Bittahs",
       "description": "Citrus-forward bitters with grapefruit and hop notes. Brightens gin, rum, or **Tequila** cocktails with gentle bitterness. Use a dash or two to add sparkle without heavy spice.",
-      "tags": [10],
+      "tags": [4],
       "photoUri": "assets/ingredients/46-bittermens-boston-bittahs.jpg"
     },
     {
       "id": 47,
       "name": "Bitters",
       "description": "Aromatic bitters are alcohol-based flavour concentrates infused with herbs and spices. Just a few dashes add bitterness, spice, and balance to cocktails. Keep them on the rail for **Old Fashioneds**, **Manhattans**, and sours.",
-      "tags": [10],
+      "tags": [4],
       "photoUri": "assets/ingredients/47-bitters.jpg"
     },
     {
       "id": 48,
       "name": "Bison Grass Vodka",
       "description": "Polish bison grass **vodka** (Żubrówka) around 37½–40% ABV flavored with aromatic sweet grass. Offers vanilla, almond, and herb notes. Great with apple juice or in refreshing highballs.",
-      "tags": [0, 1],
+      "tags": [0],
       "photoUri": "assets/ingredients/48-bizon-grass-vodka.jpg"
     },
     {
@@ -34558,14 +34558,14 @@
       "id": 51,
       "name": "Black Tea",
       "description": "Black tea is a strong, full-bodied tea with a rich, tannic flavor. It can be used as a base for tea cocktails or as an infused mixer with spirits. Its bold taste pairs well with whiskey, rum, and fruit liqueurs.",
-      "tags": [3],
+      "tags": [6],
       "photoUri": "assets/ingredients/51-black-tea.jpg"
     },
     {
       "id": 52,
       "name": "Blackberry",
       "description": "Juicy dark berry with sweet-tart flavor. Ideal for muddling into brambles or simmering into berry syrups.",
-      "tags": [6],
+      "tags": [7],
       "photoUri": "assets/ingredients/52-blackberry.jpg"
     },
     {
@@ -34579,140 +34579,140 @@
       "id": 54,
       "name": "Blackberry Liqueur",
       "description": "Blackberry liqueur offers rich berry sweetness at about 18–20% ABV. Use it in a **Bramble** or **Blackberry Martini**.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/54-blackberry-liqueur.jpg"
     },
     {
       "id": 55,
       "name": "Blackcurrant Cordial",
       "description": "Sweet blackcurrant syrup with deep berry color and tangy sweetness. Dilute with soda or water for a refreshing base. Great for spritzes, punches, or zero-proof cocktails.",
-      "tags": [3],
+      "tags": [5],
       "photoUri": "assets/ingredients/55-blackcurrant-cordial.jpg"
     },
     {
       "id": 56,
       "name": "Blackstrap Rum",
       "description": "Blackstrap rum is an intensely dark, full-bodied spirit characterised by a heavy molasses flavour profile. Unlike most rums that aim for smoothness or \"funk,\" blackstrap is often thick, syrupy, and contains bittersweet notes of coffee, liquorice, and burnt sugar.",
-      "tags": [0, 1],
+      "tags": [0],
       "photoUri": "assets/ingredients/56-blackstrap-rum.jpg"
     },
     {
       "id": 57,
       "name": "Blood Orange",
       "description": "Deep red-fleshed orange with berry-like citrus flavor. Anthocyanin pigments give it a vivid hue that develops in cool nights. Great for adding color to sours and spritzes.",
-      "tags": [6],
+      "tags": [7],
       "photoUri": "assets/ingredients/57-blood-orange.jpg"
     },
     {
       "id": 58,
       "name": "Blue Curaçao",
       "description": "Blue curaçao is a blue-dyed orange liqueur, 20–25% ABV, with bitter citrus flavour. Star of the **Blue Lagoon** and **Blue Hawaii**.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/58-blue-cura-ao.jpg"
     },
     {
       "id": 59,
       "name": "Blue Curaçao Syrup",
       "description": "Blue curaçao syrup delivers sweet orange flavor with a vivid blue hue. It mimics the taste of curaçao liqueur without alcohol. Great for colorful tropical cocktails and lemonades.",
-      "tags": [4],
+      "tags": [5],
       "photoUri": "assets/ingredients/59-blue-cura-ao-syrup.jpg"
     },
     {
       "id": 60,
       "name": "Blueberry Schnapps",
       "description": "Blueberry schnapps is a fruity schnapps around 15–25% ABV. Try it in a **berry Kamikaze** or **Blueberry Martini**.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/60-blueberry-schnapps.jpg"
     },
     {
       "id": 61,
       "name": "Boiling Water",
       "description": "Freshly boiled water used to dilute or build hot drinks. Essential for toddies, teas, and grogs. Use just off the boil to avoid scalding spirits or citrus.",
-      "tags": [10],
+      "tags": [8],
       "photoUri": "assets/ingredients/61-boiling-water.jpg"
     },
     {
       "id": 62,
       "name": "Borage",
       "description": "Borage has a crisp, cucumber-like flavor that brings refreshing aroma to spritzes and highballs. The star-shaped blue flowers make striking garnishes for **gin** or **Tequila** drinks. Muddle gently or float the blossoms to keep their delicate look.",
-      "tags": [7],
+      "tags": [8],
       "photoUri": "assets/ingredients/62-borage.jpg"
     },
     {
       "id": 63,
       "name": "Bourbon",
       "description": "American whiskey made primarily from corn and aged in new charred oak, usually 40–50% ABV. Offers caramel, vanilla, and baking spice notes. Staple for **Old Fashioneds**, **Manhattans**, and many classics.",
-      "tags": [0, 1],
+      "tags": [0],
       "photoUri": "assets/ingredients/63-bourbon.jpg"
     },
     {
       "id": 64,
       "name": "Brandy",
       "description": "Distilled wine spirit aged in oak, commonly 36–60% ABV. Smooth notes of dried fruit, vanilla, and oak. Versatile for sipping neat or mixing in **sidecars** and **punches**.",
-      "tags": [0, 1],
+      "tags": [0],
       "photoUri": "assets/ingredients/64-brandy.jpg"
     },
     {
       "id": 65,
       "name": "Brown Sugar",
       "description": "Brown sugar is fine, moist cane sugar with molasses added back for color and flavor. It dissolves quickly and brings caramel notes to syrups and hot drinks. Light and dark varieties offer different molasses intensity.",
-      "tags": [10],
+      "tags": [8],
       "photoUri": "assets/ingredients/65-brown-sugar.jpg"
     },
     {
       "id": 66,
       "name": "Butter",
       "description": "Butter is churned dairy fat that adds richness and a silky mouthfeel. A small knob can soften boozy edges or balance spices in warm cocktails.",
-      "tags": [9],
+      "tags": [8],
       "photoUri": "assets/ingredients/66-butter.jpg"
     },
     {
       "id": 67,
       "name": "Butterfinger candy bar",
       "description": "Butterfinger is a candy bar manufactured by the ferrara candy company, a subsidiary of ferrero. The bar consists of a layered crispy peanut butter core covered in chocolate.",
-      "tags": [10],
+      "tags": [8],
       "photoUri": "assets/ingredients/67-butterfinger-candy-bar.jpg"
     },
     {
       "id": 68,
       "name": "Butterscotch Liqueur",
       "description": "Butterscotch liqueur is a sweet caramel spirit about 15% ABV. Works in a butterball or caramel appletini.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/68-butterscotch-liqueur.jpg"
     },
     {
       "id": 69,
       "name": "Butterscotch Schnapps",
       "description": "Butterscotch schnapps is a toffee-flavoured schnapps around 15–20% ABV. Ideal for a **Buttery Nipple** or **Oatmeal Cookie shot**.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/69-butterscotch-schnapps.jpg"
     },
     {
       "id": 70,
       "name": "Cachaça",
       "description": "Cachaça (Portuguese pronunciation: [kaˈʃasɐ]) is a distilled spirit made from fermented sugarcane juice. Also known as aguardente, pinga, caninha and other names, it is the most popular distilled alcoholic beverage in Brazil. Outside Brazil, cachaça is used almost exclusively as an ingredient in tropical drinks, with the **Caipirinha** being the most famous cocktail.",
-      "tags": [0, 1],
+      "tags": [0],
       "photoUri": "assets/ingredients/70-cacha-a.jpg"
     },
     {
       "id": 71,
       "name": "Calvados",
       "description": "Calvados is an apple brandy from the Normandy region of France, with an ABV typically between 40% and 45%. It has a complex flavour profile combining baked apple, spice, and oak notes. Calvados is often enjoyed neat or used in cocktails that highlight its rich fruit character.",
-      "tags": [1],
+      "tags": [0],
       "photoUri": "assets/ingredients/71-calvados.jpg"
     },
     {
       "id": 72,
       "name": "Campari",
       "description": "Campari is a bitter orange aperitif by Campari group, roughly 20–28% ABV. Essential in a **Negroni** or **Americano**.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/72-campari.jpg"
     },
     {
       "id": 73,
       "name": "Caramel Syrup",
       "description": "Caramel syrup is a sweet, rich liquid made by caramelizing sugar and mixing it with water. It adds a toasty, buttery sweetness to cocktails, coffee drinks, and desserts. Perfect for enhancing creamy and dessert-style cocktails.",
-      "tags": [4],
+      "tags": [5],
       "photoUri": "assets/ingredients/73-caramel-syrup.jpg"
     },
     {
@@ -34740,7 +34740,7 @@
       "id": 77,
       "name": "Chambord",
       "description": "Chambord is a black raspberry liqueur from France by brown‑forman, 16.5% ABV. Great in a French martini or Kir Royale.",
-      "tags": [2],
+      "tags": [1],
       "baseIngredientId": 286,
       "photoUri": "assets/ingredients/77-chambord.jpg"
     },
@@ -34748,14 +34748,14 @@
       "id": 78,
       "name": "Chamomile Cordial",
       "description": "Chamomile cordial is a sweet, floral syrup made from chamomile flowers. It has a soothing aroma and mild honey-like taste, making it a calming addition to cocktails. Pairs well with **gin**, **vodka**, and citrus juices.",
-      "tags": [4],
+      "tags": [5],
       "photoUri": "assets/ingredients/78-chamomile-cordial.jpg"
     },
     {
       "id": 79,
       "name": "Chamomile flowers",
       "description": "Chamomile flowers come from daisy-like plants and are primarily used for making calming herbal teas, in cooking, and in cosmetics due to their apple-like aroma.",
-      "tags": [7],
+      "tags": [8],
       "photoUri": "assets/ingredients/79-chamomile-flowers.jpg"
     },
     {
@@ -34769,7 +34769,7 @@
       "id": 81,
       "name": "Cherry",
       "description": "Sweet or tart red stone fruit often used as a garnish or muddled ingredient. Adds a pop of color and gentle sweetness.",
-      "tags": [6],
+      "tags": [7],
       "photoUri": "assets/ingredients/81-cherry.jpg"
     },
     {
@@ -34783,7 +34783,7 @@
       "id": 83,
       "name": "Cherry Heering",
       "description": "Cherry Heering is a Danish cherry liqueur by Heering, 24% ABV. Use it in a **Singapore Sling** or **Blood & Sand**.",
-      "tags": [2],
+      "tags": [1],
       "baseIngredientId": 85,
       "photoUri": "assets/ingredients/83-cherry-heering.jpg"
     },
@@ -34791,28 +34791,28 @@
       "id": 84,
       "name": "Cherry Juice",
       "description": "Tart, ruby-colored juice with rich cherry flavor. Ideal for sours, spritzes, or topping soda cocktails. Balances whiskey and rum drinks.",
-      "tags": [5],
+      "tags": [7],
       "photoUri": "assets/ingredients/84-cherry-juice.jpg"
     },
     {
       "id": 85,
       "name": "Cherry Liqueur",
       "description": "Cherry liqueur is a sweet-tart cherry spirit about 20% ABV. Mix it in a **Singapore Sling** or **cherry Smash**.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/85-cherry-liqueur.jpg"
     },
     {
       "id": 86,
       "name": "Chestnut Liqueur",
       "description": "Chestnut liqueur is nutty and sweet with 15–20% ABV. Try it in **Silver Bay** or **Apicius** cocktail.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/86-chestnut-liqueur.jpg"
     },
     {
       "id": 87,
       "name": "Chili Pepper",
       "description": "Fresh chilli pepper adds bright heat to cocktails.",
-      "tags": [8],
+      "tags": [7],
       "photoUri": "assets/ingredients/87-chili-pepper.jpg"
     },
     {
@@ -34826,28 +34826,28 @@
       "id": 89,
       "name": "Chocolate",
       "description": "Rich cocoa-based ingredient used for desserts and cocktails. Shavings or chunks add aroma and slight bitterness. Perfect for garnishing creamy or coffee drinks.",
-      "tags": [10],
+      "tags": [8],
       "photoUri": "assets/ingredients/89-chocolate.jpg"
     },
     {
       "id": 90,
       "name": "Chocolate Bitters",
       "description": "Chocolate bitters are aromatic bitters with cocoa and spice flavours, typically around 40–45% ABV. They add depth to **whiskey**, **rum**, and **Tequila** cocktails. A small dash can transform a dessert cocktail or **Old Fashioned**.",
-      "tags": [10],
+      "tags": [4],
       "photoUri": "assets/ingredients/90-chocolate-bitters.jpg"
     },
     {
       "id": 91,
       "name": "Chocolate Liqueur",
       "description": "Chocolate liqueur is a cocoa-flavoured spirit roughly 15–20% ABV. Serve it in a **Сhocolate Martini** or **Mudslide**.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/91-chocolate-liqueur.jpg"
     },
     {
       "id": 92,
       "name": "Chocolate Syrup",
       "description": "Chocolate syrup is a rich cocoa sweetener used for dessert drinks. It adds chocolate aroma and body to milkshakes or creamy cocktails. Drizzle inside glasses for garnish.",
-      "tags": [4],
+      "tags": [5],
       "photoUri": "assets/ingredients/92-chocolate-syrup.jpg"
     },
     {
@@ -34868,7 +34868,7 @@
       "id": 95,
       "name": "Cinnamon Syrup",
       "description": "Cinnamon syrup combines sugar with warming cinnamon spice. It brings cozy baking notes to tiki drinks, punches, or coffee cocktails. Keep refrigerated for best flavor.",
-      "tags": [4],
+      "tags": [5],
       "photoUri": "assets/ingredients/95-cinnamon-syrup.jpg"
     },
     {
@@ -34882,7 +34882,7 @@
       "id": 97,
       "name": "Coca-Cola",
       "description": "Coca-Cola is a caramelized cola soda created in the late 19th Century. Its blend of caffeine, sweetness, and spice makes it a versatile mixer with rum or whiskey. Bottlers worldwide sell it in cans, bottles, and fountain formats.",
-      "tags": [3],
+      "tags": [6],
       "baseIngredientId": 111,
       "photoUri": "assets/ingredients/97-coca-cola.jpg"
     },
@@ -34890,84 +34890,84 @@
       "id": 98,
       "name": "Cocoa Powder",
       "description": "Unsweetened cocoa powder delivers intense chocolate flavor. Dust over drinks or mix into syrups for a bittersweet note. Bloom in warm liquid to avoid clumping.",
-      "tags": [10],
+      "tags": [8],
       "photoUri": "assets/ingredients/98-cocoa-powder.jpg"
     },
     {
       "id": 99,
       "name": "Coconut Cream",
       "description": "Coconut cream is a thick, rich product made from coconut flesh. It lends a smooth texture and tropical sweetness to cocktails like the piña colada. Perfect for creamy, dessert-like tropical drinks.",
-      "tags": [9],
+      "tags": [8],
       "photoUri": "assets/ingredients/99-coconut-cream.jpg"
     },
     {
       "id": 100,
       "name": "Coconut Flakes",
       "description": "Dried coconut shreds with sweet, tropical aroma. Toast them for deeper flavor before using as a garnish. Can be infused into syrups or milk for Tiki-style drinks.",
-      "tags": [10],
+      "tags": [8],
       "photoUri": "assets/ingredients/100-coconut-flakes.jpg"
     },
     {
       "id": 101,
       "name": "Coconut Liqueur",
       "description": "Coconut liqueur is a tropical sweet spirit around 15–21% ABV. Blend it into a **Bahama Mama** or **Rafaello**.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/101-coconut-liqueur.jpg"
     },
     {
       "id": 102,
       "name": "Coconut Milk",
       "description": "Coconut milk is pressed from coconut flesh, giving a creamy texture with mild sweetness. It adds body and tropical flavor to blended drinks and punches.",
-      "tags": [9],
+      "tags": [8],
       "photoUri": "assets/ingredients/102-coconut-milk.jpg"
     },
     {
       "id": 103,
       "name": "Coconut Rum",
       "description": "Coconut rum infuses rum with coconut at about 21% ABV. Best in a piña colada or painkiller.",
-      "tags": [0, 2],
+      "tags": [1],
       "photoUri": "assets/ingredients/103-coconut-rum.jpg"
     },
     {
       "id": 104,
       "name": "Coconut Syrup",
       "description": "Coconut syrup delivers sweet, creamy coconut flavour in a pourable form. Use it to mimic coconut cream without the heaviness. Perfect for Coladas, Spritzers, or coffee drinks.\nInstructions: \n· 400g of white sugar,\n· 400ml of unsweetened full-fat coconut milk,\n· a pinch of salt.\nIn a medium saucepan, combine sugar, coconut milk, and salt. Stir over heat until sugar is completely dissolved.",
-      "tags": [4],
+      "tags": [5],
       "photoUri": "assets/ingredients/104-coconut-syrup.jpg"
     },
     {
       "id": 105,
       "name": "Coconut Water",
       "description": "Light, naturally sweet water from young coconuts. Adds subtle coconut flavor and electrolytes to low-ABV or nonalcoholic drinks. Refreshing mixer with **rum**, **Tequila**, or tropical fruit.",
-      "tags": [10],
+      "tags": [8],
       "photoUri": "assets/ingredients/105-coconut-water.jpg"
     },
     {
       "id": 106,
       "name": "Coffee Beans",
       "description": "Coffee beans are used to infuse spirits or garnish coffee-flavored cocktails. They release aroma without adding sweetness. A single bean is often floated on drinks for decoration.",
-      "tags": [10],
+      "tags": [8],
       "photoUri": "assets/ingredients/106-coffee-beans.jpg"
     },
     {
       "id": 107,
       "name": "Coffee Brandy",
       "description": "Coffee brandy combines roasted coffee and brandy, roughly 20–30% ABV. Enjoy in a **Alexander the Great** or **Brandy Separator**.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/107-coffee-brandy.jpg"
     },
     {
       "id": 108,
       "name": "Coffee Liqueur",
       "description": "Coffee liqueur is a sweet coffee spirit at 20–30% ABV. Perfect for a **White Lebowski** or **Espresso Martini**.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/108-coffee-liqueur.jpg"
     },
     {
       "id": 109,
       "name": "Cognac",
       "description": "French grape brandy from the Cognac region, double-distilled and aged in oak at 40% ABV. Shows dried fruit, vanilla, and floral notes. Premium choice for sipping or cocktails like the **Sidecar**.",
-      "tags": [0, 1],
+      "tags": [0],
       "photoUri": "assets/ingredients/109-cognac.jpg"
     },
     {
@@ -34982,14 +34982,14 @@
       "id": 111,
       "name": "Cola",
       "description": "Cola is a sweet, carbonated beverage with caramel, vanilla, and spice notes. It pairs well with rum, whiskey, and other dark spirits. Adds sweetness, color, and effervescence to cocktails.",
-      "tags": [3],
+      "tags": [6],
       "photoUri": "assets/ingredients/111-cola.jpg"
     },
     {
       "id": 112,
       "name": "Condensed Milk",
       "description": "Condensed milk is cow's milk reduced with sugar into a thick, shelf-stable syrup. It sweetens and enriches coffee cocktails, dessert drinks, and vietnamese-inspired mixes.",
-      "tags": [9],
+      "tags": [8],
       "photoUri": "assets/ingredients/112-condensed-milk.jpg"
     },
     {
@@ -35003,14 +35003,14 @@
       "id": 114,
       "name": "Corn Syrup",
       "description": "Corn syrup is a neutral, viscous sweetener made from corn starch. It keeps sauces smooth and prevents crystallization in syrups. Bartenders sometimes use it for stable homemade sodas or garnishes.",
-      "tags": [4],
+      "tags": [5],
       "photoUri": "assets/ingredients/114-corn-syrup.jpg"
     },
     {
       "id": 115,
       "name": "Corona",
       "description": "Corona is a pale lager from Mexico, 4.5% ABV. Serve it in **Michelada** or **Corona Sunrise**.",
-      "tags": [2],
+      "tags": [3],
       "baseIngredientId": 212,
       "photoUri": "assets/ingredients/115-corona.jpg"
     },
@@ -35018,91 +35018,91 @@
       "id": 116,
       "name": "Cranberry Juice",
       "description": "Cranberry juice is a tart, ruby drink often sweetened for cocktails. It adds acidity and colour to drinks like the **Cosmopolitan** and **Cape Cod**.",
-      "tags": [5],
+      "tags": [7],
       "photoUri": "assets/ingredients/116-cranberry-juice.jpg"
     },
     {
       "id": 117,
       "name": "Cream",
       "description": "Cream is the high-fat layer skimmed from milk. It lends body and mellow sweetness to shaken drinks, flips, and dessert cocktails.",
-      "tags": [9],
+      "tags": [8],
       "photoUri": "assets/ingredients/117-cream.jpg"
     },
     {
       "id": 118,
       "name": "Crème de Banane",
       "description": "Crème de Banane is a banana liqueur about 20% ABV. Use it in a **Banana Daiquiri** or **Bananarama**.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/118-creme-de-banane.jpg"
     },
     {
       "id": 119,
       "name": "Crème de Cacao Brown",
       "description": "Dark Crème de Cacao is a chocolate liqueur around 20–25% ABV. Mix it in a **Brandy Alexander** or **Chocolate Martini**.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/119-creme-de-cacao-brown.jpg"
     },
     {
       "id": 120,
       "name": "Crème de Cacao White",
       "description": "White Crème de Cacao is a clear cocoa liqueur around 20–25% ABV. Ideal in a **Grasshopper** or **Alexander**.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/120-creme-de-cacao-white.jpg"
     },
     {
       "id": 121,
       "name": "Crème de Cafe",
       "description": "Coffee-flavoured liqueur with a smooth, sweet roast profile. Use it for **White Lebowski**, **espresso** cocktails, or dessert drinks.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/121-cr-me-de-caf.jpg"
     },
     {
       "id": 122,
       "name": "Crème de Cassis",
       "description": "Crème de Cassis is a blackcurrant liqueur from France, 15–20% ABV. Key for a **Kir** or **El Diablo**.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/122-creme-de-cassis.jpg"
     },
     {
       "id": 123,
       "name": "Crème de Menthe Green",
       "description": "Green Crème de Menthe is a mint liqueur about 25% ABV. Use it in a **Grasshopper** or **Alexander's Sister**.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/123-creme-de-menthe-green.jpg"
     },
     {
       "id": 124,
       "name": "Crème de Menthe White",
       "description": "White Crème de Menthe is a clear mint liqueur about 25% ABV. Try it in a **Stinger** or **Green Tea** cocktail.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/124-creme-de-menthe-white.jpg"
     },
     {
       "id": 125,
       "name": "Crème de Mure",
       "description": "Crème de Mûre is a blackberry liqueur around 20% ABV. Ideal for a **Bramble** and **Mûre Royale**.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/125-creme-de-mure.jpg"
     },
     {
       "id": 126,
       "name": "Crème de Violette",
       "description": "Crème de Violette is a floral violet liqueur at 16–20% ABV. Classic in an **Aviation** or **Blue Moon**.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/126-creme-de-violette.jpg"
     },
     {
       "id": 127,
       "name": "Creole Bitters",
       "description": "Spice-driven bitters with baking spice, anise, and pepper notes. Great for **rum** and **rye** cocktails needing warmth and depth. Use sparingly to avoid overpowering citrus.",
-      "tags": [10],
+      "tags": [4],
       "photoUri": "assets/ingredients/127-creole-bitters.jpg"
     },
     {
       "id": 128,
       "name": "Crown Royal",
       "description": "Crown Royal, originally known as Seagram's Crown Royal, is a blended Canadian whisky.",
-      "tags": [0, 1],
+      "tags": [0],
       "baseIngredientId": 342,
       "photoUri": "assets/ingredients/128-crown-royal.jpg"
     },
@@ -35117,70 +35117,70 @@
       "id": 130,
       "name": "Cuban Rum",
       "description": "Cuban rum is defined by a specific \"Spanish-style\" production method that results in a profile typically lighter, drier, and crisper than its caribbean neighbours.",
-      "tags": [0, 1],
+      "tags": [0],
       "photoUri": "assets/ingredients/130-cuban-rum.jpg"
     },
     {
       "id": 131,
       "name": "Cucumber",
       "description": "Cool, crisp fruit with refreshing vegetal notes. Excellent for muddling into gin cocktails and light spritzes.",
-      "tags": [6],
+      "tags": [7],
       "photoUri": "assets/ingredients/131-cucumber.jpg"
     },
     {
       "id": 132,
       "name": "Cynar",
       "description": "Cynar is an artichoke-based Italian amaro by the Campari group, 16.5% ABV. Mix it in a **Cynar Spritz** or **Bitter Giuseppe**.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/132-cynar.jpg"
     },
     {
       "id": 133,
       "name": "Daiquiri Bitters",
       "description": "Bitters designed to complement rum and lime drinks. Adds bright spice and subtle tropical bitterness without masking acidity. A dash sharpens daiquiris or other light rum cocktails.",
-      "tags": [10],
+      "tags": [4],
       "photoUri": "assets/ingredients/133-daiquiri-bitters.jpg"
     },
     {
       "id": 134,
       "name": "Dark Rum",
       "description": "Dark rum aged longer or with added molasses for deep caramel color, typically 40–50% ABV. Flavors of brown sugar, spice, and vanilla. Great in Tiki drinks and punches.",
-      "tags": [0, 1],
+      "tags": [0],
       "photoUri": "assets/ingredients/134-dark-rum.jpg"
     },
     {
       "id": 135,
       "name": "Demerara Rum",
       "description": "Rum made from demerara sugar, often from guyana, around 40–50% ABV. Rich molasses, smoke, and toffee notes. Adds depth to Tiki cocktails and stirred rum drinks.",
-      "tags": [0, 1],
+      "tags": [0],
       "photoUri": "assets/ingredients/135-demerara-rum.jpg"
     },
     {
       "id": 136,
       "name": "Demerara Sugar",
       "description": "Demerara sugar has large, crunchy crystals with natural molasses. It brings toffee-like sweetness and texture to syrups and muddled drinks. Less processed than standard brown sugar, so flavors stay mellow.",
-      "tags": [10],
+      "tags": [8],
       "photoUri": "assets/ingredients/136-demerara-sugar.jpg"
     },
     {
       "id": 137,
       "name": "Demerara Sugar Syrup",
       "description": "2 Parts demerara sugar to 1 part water.\nInstructions: \n1. Add the 2 parts of sugar and 1 part water to a small saucepan.\n2. Place over medium-low heat. Stir gently and continuously until the sugar crystals are completely dissolved.",
-      "tags": [4],
+      "tags": [5],
       "photoUri": "assets/ingredients/137-demerara-sugar-syrup.jpg"
     },
     {
       "id": 138,
       "name": "Disaronno Velvet",
       "description": "Disaronno Velvet is a smooth, all-white cream liqueur that blends the classic almond flavour of the original disaronno with creamy, velvety notes of chocolate and vanilla.\nDisaronno Velvet has an alcohol by volume (ABV) of 17% and is designed to be enjoyed primarily over ice.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/138-disaronno-velvet.jpg"
     },
     {
       "id": 139,
       "name": "Don's Mix",
       "description": "Don's Mix — the legendary secret ingredient in Tiki classics like the **Zombie** — is actually quite simple once you break it down into two parts: **cinnamon syrup** and **white grapefruit juice**.\nInstructions:\n**Make the cinnamon syrup**\nThe \"secret\" to the mix is a basic simple syrup infused with cinnamon. \nIngredients: 240g of sugar, 240ml of water, and 3 cinnamon sticks.\n1. Crush the cinnamon sticks (using a rolling pin or mallet) into smaller pieces to release more flavour.\n2. Combine the sugar, water, and crushed cinnamon in a saucepan.\n3. Bring the mixture to a boil, stirring until the sugar is fully dissolved.\n4. Reduce the heat and simmer for about 2 minutes.\n5. Remove from heat, cover the pan, and let it sit for at least 2 hours.\n6. Pour the syrup through a fine-mesh strainer or cheesecloth into a jar. \n**Blend the Final Mix**\nCombine 2 parts white grapefruit juice with 1 part cinnamon syrup.",
-      "tags": [4],
+      "tags": [5],
       "photoUri": "assets/ingredients/139-don-s-mix.jpg"
     },
     {
@@ -35194,7 +35194,7 @@
       "id": 141,
       "name": "Dried Apricot",
       "description": "Chewy, concentrated apricot with honeyed sweetness. Great for infusions, garnishes, or simmering into syrup.",
-      "tags": [6],
+      "tags": [7],
       "photoUri": "assets/ingredients/141-dried-apricot.jpg"
     },
     {
@@ -35208,56 +35208,56 @@
       "id": 143,
       "name": "Dubonnet",
       "description": "Dubonnet is a sweet aperitif by Pernod Ricard, about 14.8% ABV, with spiced wine notes. Serve in a **Dubonnet cocktail**.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/143-dubonnet.jpg"
     },
     {
       "id": 144,
       "name": "Earl Grey Tea",
       "description": "Black tea scented with bergamot citrus. Steeped leaves make aromatic syrups or tea bases for spritzes and toddies. Slight bitterness pairs well with **gin** or **whisky**.",
-      "tags": [10],
+      "tags": [8],
       "photoUri": "assets/ingredients/144-earl-grey-tea.jpg"
     },
     {
       "id": 145,
       "name": "Egg",
       "description": "Whole egg adds richness and foam to flips and nogs. Shake hard to fully emulsify. Use fresh eggs and follow safe-handling guidelines.",
-      "tags": [10],
+      "tags": [8],
       "photoUri": "assets/ingredients/145-egg.jpg"
     },
     {
       "id": 146,
       "name": "Egg Liqueur",
       "description": "Egg liqueur is a creamy egg-based spirit at 14–20% ABV. Sip it in a **Snowball** or **Dutch Coffee**.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/146-egg-liqueur.jpg"
     },
     {
       "id": 147,
       "name": "Egg White",
       "description": "Egg white creates silky texture and a stable foam in sours and fizzes. Dry shake first to build structure, then add ice to chill. Always use fresh eggs or pasteurized cartons.",
-      "tags": [10],
+      "tags": [8],
       "photoUri": "assets/ingredients/147-egg-white.jpg"
     },
     {
       "id": 148,
       "name": "Egg Yolk",
       "description": "Egg yolk delivers custardy body to flips and eggnog-style drinks. Combine with sugar and spice for dessert-like cocktails. Use immediately and keep chilled for safety.",
-      "tags": [10],
+      "tags": [8],
       "photoUri": "assets/ingredients/148-egg-yolk.jpg"
     },
     {
       "id": 149,
       "name": "Elderflower Cordial",
       "description": "Elderflower cordial is a soft drink made largely from a refined sugar and water solution and uses the flowers of the european elderberry.",
-      "tags": [3],
+      "tags": [5],
       "photoUri": "assets/ingredients/149-elderflower-cordial.jpg"
     },
     {
       "id": 150,
       "name": "Espresso",
       "description": "Concentrated coffee shot with rich crema and intense bitterness. Adds depth to coffee cocktails like an **Espresso Martini**. Use freshly pulled espresso for the best foam and aroma.",
-      "tags": [3],
+      "tags": [6],
       "photoUri": "assets/ingredients/150-espresso.jpg"
     },
     {
@@ -35271,7 +35271,7 @@
       "id": 152,
       "name": "Falernum",
       "description": "Falernum is a Caribbean syrup flavoured with almond, ginger, lime, and baking spices. It can be alcoholic or not but is always thick and lightly spiced. Use it to bring tropical warmth to Tiki recipes.",
-      "tags": [4],
+      "tags": [5],
       "photoUri": "assets/ingredients/152-falernum.jpg"
     },
     {
@@ -35285,7 +35285,7 @@
       "id": 154,
       "name": "Fig",
       "description": "Fig adds a rich, gently sweet flavor with notes of honey, dried fruit, and a hint of earthiness. In cocktails, it brings warmth and depth, pairing beautifully with **whiskey**, **rum**, **brandy**, and herbal liqueurs. Perfect for autumnal, dessert, or slow-sipping drinks.",
-      "tags": [6],
+      "tags": [7],
       "photoUri": "assets/ingredients/154-fig.jpg"
     },
     {
@@ -35299,7 +35299,7 @@
       "id": 156,
       "name": "Frangelico",
       "description": "Frangelico is an Italian hazelnut liqueur by Gruppo Campari, 20% ABV. Works in a **Nutty Martini** or a **Chocolate Cake Shot**.",
-      "tags": [2],
+      "tags": [1],
       "baseIngredientId": 184,
       "photoUri": "assets/ingredients/156-frangelico.jpg"
     },
@@ -35307,7 +35307,7 @@
       "id": 157,
       "name": "Fresca",
       "description": "Fresca is a grapefruit-flavored diet soda with a crisp, dry finish. Zero sugar keeps cocktails lighter while adding bubbles. Mix with **Tequila**, **gin**, or **vodka** for bright spritzes.",
-      "tags": [3],
+      "tags": [6],
       "baseIngredientId": 177,
       "photoUri": "assets/ingredients/157-fresca.jpg"
     },
@@ -35322,14 +35322,14 @@
       "id": 159,
       "name": "Gin",
       "description": "Juniper-forward distilled spirit flavored with botanicals, typically 40–47% ABV. Offers piney, citrus, and spice notes depending on style. Foundation for **Martinis**, **Gin and Tonics**, and many classics.",
-      "tags": [0, 1],
+      "tags": [0],
       "photoUri": "assets/ingredients/159-gin.jpg"
     },
     {
       "id": 160,
       "name": "Ginger",
       "description": "Spicy, aromatic root used fresh or ground for syrups, mules, and punches.",
-      "tags": [8],
+      "tags": [7],
       "photoUri": "assets/ingredients/160-ginger.jpg"
     },
     {
@@ -35350,21 +35350,21 @@
       "id": 163,
       "name": "Ginger Candy",
       "description": "Sweet, spicy candied ginger pieces. Chop for garnish or muddle to add heat and aroma. Syrup from the jar can sweeten highballs or teas.",
-      "tags": [10],
+      "tags": [8],
       "photoUri": "assets/ingredients/163-ginger-candy.jpg"
     },
     {
       "id": 164,
       "name": "Ginger Syrup",
       "description": "Ginger syrup packs spicy, fresh ginger heat balanced with sweetness. It mixes easily into highballs, sours, and zero-proof drinks. Adds a zesty kick without muddying fresh ginger.\nInstructions: \n· 360g of white sugar,\n· 240ml of water,\n· 240g of fresh ginger\n1. Peel the ginger and slice it into small pieces. Set aside. \n2. In a medium saucepan, combine sugar and water. \n3. Stir over heat until sugar is completely dissolved. \n4. Add sliced ginger and simmer for 3-5 minutes. Remove from heat. \n5. Seal and steep in the refrigerator for up to 24 hours. \n6. Strain syrup with a fine mesh strainer once steeping is complete.",
-      "tags": [4],
+      "tags": [5],
       "photoUri": "assets/ingredients/164-ginger-syrup.jpg"
     },
     {
       "id": 165,
       "name": "Godiva Liqueur",
       "description": "Godiva liqueur is a Belgian chocolate spirit with about 15% ABV. Enjoy it in a **Chocolate Martini** or **Mocha Mudslide**.",
-      "tags": [2],
+      "tags": [1],
       "baseIngredientId": 91,
       "photoUri": "assets/ingredients/165-godiva-liqueur.jpg"
     },
@@ -35372,21 +35372,21 @@
       "id": 166,
       "name": "Gold Jamaican Rum",
       "description": "The primary difference for gold Jamaican rum lies in its aging process, which gives it a richer, more complex flavor profile than white rum, while being less bold and aged than dark rum. Jamaican Rums in general are known for their distinct \"funky\" character due to a unique high-ester fermentation process.",
-      "tags": [0, 1],
+      "tags": [0],
       "photoUri": "assets/ingredients/166-gold-jamaican-rum.jpg"
     },
     {
       "id": 167,
       "name": "Gold Puerto Rican Rum",
       "description": "Lightly aged gold rum from puerto rico, around 40% ABV. Soft vanilla and caramel notes with a smooth finish. Reliable mixing rum for tropical cocktails.",
-      "tags": [0, 1],
+      "tags": [0],
       "photoUri": "assets/ingredients/167-gold-puerto-rican-rum.jpg"
     },
     {
       "id": 168,
       "name": "Gold Rum",
       "description": "Gold rum and spiced rum are distinct types of rum, differing primarily in their production and flavour profiles.\n\nGold rum features a smooth, rich flavour with notes of caramel, vanilla, and spice, often with hints of oak.\nAged in oak barrels, with the ageing process contributing to both colour and flavour.",
-      "tags": [0, 1],
+      "tags": [0],
       "photoUri": "assets/ingredients/168-gold-rum.jpg"
     },
     {
@@ -35400,14 +35400,14 @@
       "id": 170,
       "name": "Gomme Syrup",
       "description": "Gomme syrup is a drink sweetener commonly used instead of simple syrup in many classic cocktail recipes. While some people may refer to simple syrup as gum syrup, true gum syrup contains an emulsifier known as gum arabic, a natural gum made from the sap of two types of acacia tree.",
-      "tags": [4],
+      "tags": [5],
       "photoUri": "assets/ingredients/170-gomme-syrup.jpg"
     },
     {
       "id": 171,
       "name": "Goslings Rum",
       "description": "Bermudian rum is best known for black seal, about 40–48% ABV. Dark, rich molasses character with a hint of spice. Classic choice for a **Dark 'n Stormy** or **Tiki** drinks.",
-      "tags": [0, 1],
+      "tags": [0],
       "baseIngredientId": 134,
       "photoUri": "assets/ingredients/171-goslings-rum.jpg"
     },
@@ -35415,7 +35415,7 @@
       "id": 172,
       "name": "Gran Classico",
       "description": "Gran Classico is a Swiss bitter aperitivo by Tempus Fugit, 28% ABV. Try it in a **Negroni** or **Spritz**.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/172-gran-classico.jpg"
     },
     {
@@ -35430,42 +35430,42 @@
       "id": 174,
       "name": "Grape Juice",
       "description": "Sweet purple grape juice with jammy notes. Useful for spritzes, **Sangria** bases, or nonalcoholic mixes. Pairs with **vodka**, **gin**, or **sparkling wine**.",
-      "tags": [5],
+      "tags": [7],
       "photoUri": "assets/ingredients/174-grape-juice.jpg"
     },
     {
       "id": 175,
       "name": "Grapefruit",
       "description": "Grapefruit adds a tangy, slightly bitter citrus flavour to cocktails. It can be juiced, sliced, or used as a garnish. Works well in **palomas**, **greyhounds**, and **gin** drinks.",
-      "tags": [6],
+      "tags": [7],
       "photoUri": "assets/ingredients/175-grapefruit.jpg"
     },
     {
       "id": 176,
       "name": "Grapefruit Juice",
       "description": "Bitter-sweet citrus juice with bright aroma. Great for **palomas**, **greyhounds**, and other highballs. Adds refreshing bitterness to balance sweet liqueurs.",
-      "tags": [5],
+      "tags": [7],
       "photoUri": "assets/ingredients/176-grapefruit-juice.jpg"
     },
     {
       "id": 177,
       "name": "Grapefruit Soda",
       "description": "Pink grapefruit soda is a sweet and tart, sparkling citrus drink. It pairs beautifully with **Tequila** in a **Paloma**. Adds both flavour and fizz.",
-      "tags": [3],
+      "tags": [6],
       "photoUri": "assets/ingredients/177-grapefruit-soda.jpg"
     },
     {
       "id": 178,
       "name": "Grapes",
       "description": "Juicy berries ranging from sweet to tart depending on the variety. Use for muddling, juicing, or fresh garnishes.",
-      "tags": [6],
+      "tags": [7],
       "photoUri": "assets/ingredients/178-grapes.jpg"
     },
     {
       "id": 179,
       "name": "Grappa",
       "description": "Grappa is an Italian pomace brandy with an ABV of 35–60%. It has a strong, dry, and sometimes floral profile. Traditionally sipped neat after meals.",
-      "tags": [1],
+      "tags": [0],
       "photoUri": "assets/ingredients/179-grappa.jpg"
     },
     {
@@ -35479,42 +35479,42 @@
       "id": 181,
       "name": "Grenadine",
       "description": "Grenadine is a deep-red, nonalcoholic syrup with tart-sweet pomegranate flavour. It colours cocktails pink or crimson while adding fruity brightness. Quality versions lean on real pomegranate instead of artificial cherry.",
-      "tags": [4],
+      "tags": [5],
       "photoUri": "assets/ingredients/181-grenadine.jpg"
     },
     {
       "id": 182,
       "name": "Guinness",
       "description": "Guinness is an Irish stout, 4.2% ABV, with creamy roasted notes. Pour it in a **Black Velvet** or **Irish Slammer**.",
-      "tags": [2],
+      "tags": [3],
       "photoUri": "assets/ingredients/182-guinness.jpg"
     },
     {
       "id": 183,
       "name": "Half-and-half",
       "description": "Half and half is an equal-parts blend of milk and cream typically used in coffee. It carries about 12.5% butterfat with a light, silky texture. Use it when you want more richness than milk without the weight of heavy cream.",
-      "tags": [9],
+      "tags": [8],
       "photoUri": "assets/ingredients/183-half-and-half.jpg"
     },
     {
       "id": 184,
       "name": "Hazelnut Liqueur",
       "description": "Hazelnut liqueur is sweet and nutty, around 20% ABV. Use it in a **Nutty Lebowski** or **Hazelnut Martini**.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/184-hazelnut-liqueur.jpg"
     },
     {
       "id": 185,
       "name": "Heavy Cream",
       "description": "Heavy cream is a high-butterfat dairy product separated from milk. Its richness softens strong spirits and adds velvety texture to flips or dessert cocktails. It can also be whipped for topping boozy drinks.",
-      "tags": [9],
+      "tags": [8],
       "photoUri": "assets/ingredients/185-heavy-cream.jpg"
     },
     {
       "id": 186,
       "name": "Hennessy XO",
       "description": "Hennessy is a world-famous **Cognac** brand with an ABV of 40%. It offers rich notes of fruit, vanilla, and oak from barrel aging. Enjoyed neat, on the rocks, or in classic cocktails.",
-      "tags": [0, 1],
+      "tags": [0],
       "baseIngredientId": 109,
       "photoUri": "assets/ingredients/186-hennessy-xo.jpg"
     },
@@ -35522,28 +35522,28 @@
       "id": 187,
       "name": "Honey",
       "description": "Natural sweetener with floral notes that vary by bloom. Thicken it into a 1:1 honey syrup for easier mixing. Balances citrus and whiskey cocktails beautifully.",
-      "tags": [10],
+      "tags": [8],
       "photoUri": "assets/ingredients/187-honey.jpg"
     },
     {
       "id": 188,
       "name": "Honey Syrup",
       "description": "Usually, in cocktails, a honey syrup is used with 3 parts of honey and 1 part of water.\nInstructions:\n1. Add 3 parts of honey and 1 part of water to a small saucepan.\n2. Set over low to medium-low heat.\n3. Whisk or stir until the honey is fully dissolved in the water (usually 1–2 minutes).\n3. Let it cool to room temperature. 4. Pour into an airtight glass jar or squeeze bottle and refrigerate.",
-      "tags": [4],
+      "tags": [5],
       "photoUri": "assets/ingredients/188-honey-syrup.jpg"
     },
     {
       "id": 189,
       "name": "Honeydew Melon",
       "description": "The honeydew melon is a sweet, juicy, and refreshing fruit, known for its pale green flesh and smooth, creamy-yellow rind when ripe.",
-      "tags": [6],
+      "tags": [7],
       "photoUri": "assets/ingredients/189-honeydew-melon.jpg"
     },
     {
       "id": 190,
       "name": "Hot Chocolate (Cacao)",
       "description": "Hot chocolate (cacao) is a sweetened cocoa beverage blended with milk or cream. It brings chocolate flavor and warmth to winter cocktails. Spike it with liqueurs or spirits for cozy serves.",
-      "tags": [9],
+      "tags": [8],
       "photoUri": "assets/ingredients/190-hot-chocolate-cacao.jpg"
     },
     {
@@ -35557,49 +35557,49 @@
       "id": 192,
       "name": "Hpnotiq",
       "description": "Hpnotiq is a blue tropical liqueur, 17% ABV, with passion fruit and citrus. Mix it in an **Incredible Hulk** or **Hpnotiq Breeze**.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/192-hpnotiq.jpg"
     },
     {
       "id": 193,
       "name": "Ice",
       "description": "Frozen water that chills and dilutes cocktails. Use large cubes for slower melt or crushed ice for tiki drinks. Clear, fresh ice keeps flavors clean.",
-      "tags": [10],
+      "tags": [8],
       "photoUri": "assets/ingredients/193-ice.jpg"
     },
     {
       "id": 194,
       "name": "Ice Cream",
       "description": "Ice cream adds richness, sweetness, and creaminess to cocktails. It blends with spirits to create indulgent dessert drinks. Popular in spiked milkshakes and floats.",
-      "tags": [9],
+      "tags": [8],
       "photoUri": "assets/ingredients/194-ice-cream.jpg"
     },
     {
       "id": 195,
       "name": "Irish Cream",
       "description": "Irish cream is a creamy whiskey liqueur around 15–20% ABV. Great in an **Irish Slammer** or **Mudslide**.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/195-irish-cream.jpg"
     },
     {
       "id": 196,
       "name": "Irish Whiskey",
       "description": "Irish whiskey is typically triple-distilled and aged at least three years, giving a smooth, light profile around 40% ABV. Shows malt sweetness with gentle fruit. Great for **Irish Coffee** or easy sipping.",
-      "tags": [0, 1],
+      "tags": [0],
       "photoUri": "assets/ingredients/196-irish-whiskey.jpg"
     },
     {
       "id": 197,
       "name": "Islay Scotch Whisky",
       "description": "Scotch whisky from the island of Islay known for peat smoke, sea spray, and iodine notes. Generally 40–46% ABV with a bold, coastal character. Sipped neat or used to add smoke to cocktails.",
-      "tags": [0, 1],
+      "tags": [0],
       "photoUri": "assets/ingredients/197-islay-scotch-whisky.jpg"
     },
     {
       "id": 198,
       "name": "Jack Daniels",
       "description": "Tennessee whiskey brand. Smooth, slightly sweet profile with vanilla, caramel, and toasted oak notes. Typical ABV: 40%. Used as a base spirit in simple mixed drinks and whiskey-forward cocktails. Examples: **Jack & Coke**, **Lynchburg Lemonade**.",
-      "tags": [0, 1],
+      "tags": [0],
       "baseIngredientId": 342,
       "photoUri": "assets/ingredients/198-jack-daniels.jpg"
     },
@@ -35607,35 +35607,35 @@
       "id": 199,
       "name": "Jägermeister",
       "description": "German herbal liqueur made from botanicals and spices. Sweet-bitter profile with herbal, citrus, and warming spice notes. Typical ABV: 35%. Used for herbal depth in shooters and modern mixed drinks. Examples: **Jägerbomb**, **Surfer on Acid**.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/199-j-germeister.jpg"
     },
     {
       "id": 200,
       "name": "Jamaican Dark Rum",
       "description": "Pot-still heavy Jamaican rum with deep molasses and estery funk, usually around 40–50% ABV. Dark colour from ageing and caramel. Adds bass notes to Tiki drinks and punches.",
-      "tags": [0, 1],
+      "tags": [0],
       "photoUri": "assets/ingredients/200-jamaican-dark-rum.jpg"
     },
     {
       "id": 201,
       "name": "Jamaican Rum",
       "description": "Robust Jamaican rum is often pot-distilled, around 40–50% ABV. Expect ripe banana, molasses, and tropical spice aromas. Great in **Mai Tais** and rum punches.",
-      "tags": [0, 1],
+      "tags": [0],
       "photoUri": "assets/ingredients/201-jamaican-rum.jpg"
     },
     {
       "id": 202,
       "name": "Japanese Whisky",
       "description": "Whisky distilled in Japan using techniques inspired by Scotch, typically around 43% ABV. Balanced malt and grain blends with refined oak influence. Elegant choice for highballs and sipping.",
-      "tags": [0, 1],
+      "tags": [0],
       "photoUri": "assets/ingredients/202-japanese-whisky.jpg"
     },
     {
       "id": 203,
       "name": "Jim Beam",
       "description": "Kentucky straight bourbon around 40% ABV from the beam family distillery. Offers sweet corn, vanilla, and oak notes. Versatile for mixing or casual sipping.",
-      "tags": [0, 1],
+      "tags": [0],
       "baseIngredientId": 63,
       "photoUri": "assets/ingredients/203-jim-beam.jpg"
     },
@@ -35643,7 +35643,7 @@
       "id": 204,
       "name": "Johnnie Walker",
       "description": "Global blended Scotch whisky brand commonly bottled at 40% ABV. Layered malt and grain flavors with gentle smoke depending on the label. Popular in highballs and spirit-forward cocktails.",
-      "tags": [0, 1],
+      "tags": [0],
       "baseIngredientId": 305,
       "photoUri": "assets/ingredients/204-johnnie-walker.jpg"
     },
@@ -35651,7 +35651,7 @@
       "id": 205,
       "name": "Kahlua",
       "description": "Kahlúa is a Mexican coffee liqueur by Pernod Ricard, 20% ABV. Perfect in a **White Lebowski** or **Espresso Martini**.",
-      "tags": [2],
+      "tags": [1],
       "baseIngredientId": 108,
       "photoUri": "assets/ingredients/205-kahlua.jpg"
     },
@@ -35659,7 +35659,7 @@
       "id": 206,
       "name": "Kina Lillet",
       "description": "Kina Lillet was the original bitter, quinine-infused French aperitif (1887-1986) famously used in James Bond's **Vesper Martini** in Casino Royale, but it was reformulated without quinine in 1986, becoming the sweeter, less bitter Lillet Blanc we know today, with Cocchi Americano or kina l'avion often suggested as substitutes for the authentic bitter taste.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/206-kina-lillet.jpg"
     },
     {
@@ -35673,14 +35673,14 @@
       "id": 208,
       "name": "Kiwi Fruit",
       "description": "Bright green fruit with sweet-tart flavor and tiny seeds. Adds tropical freshness when muddled or pureed.",
-      "tags": [6],
+      "tags": [7],
       "photoUri": "assets/ingredients/208-kiwi.jpg"
     },
     {
       "id": 209,
       "name": "Kiwi Fruit Liqueur",
       "description": "Kiwi fruit liqueur is a tangy green liqueur around 15–20% ABV. Shake it into a **Kiwi Fruit Martini** or **Alligator**.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/209-kiwi-liqueur.jpg"
     },
     {
@@ -35694,7 +35694,7 @@
       "id": 211,
       "name": "Lagavulin 16 years",
       "description": "Islay single malt aged 16 years around 43% ABV. Delivers peat smoke, dried fruit, and maritime richness. Best sipped neat or in bold whisky cocktails.",
-      "tags": [0, 1],
+      "tags": [0],
       "baseIngredientId": 197,
       "photoUri": "assets/ingredients/211-lagavulin-16-years.jpg"
     },
@@ -35702,14 +35702,14 @@
       "id": 212,
       "name": "Lager",
       "description": "Lager is a crisp bottom-fermented beer around 4–5% ABV. Use it in a **Shandy** or **Michelada**.",
-      "tags": [2],
+      "tags": [3],
       "photoUri": "assets/ingredients/212-lager.jpg"
     },
     {
       "id": 213,
       "name": "Laphroaig",
       "description": "Iconic Islay single malt known for medicinal peat smoke and seaweed notes, about 40–48% ABV. Oak aging adds vanilla sweetness beneath the smoke. Divisive but distinctive in cocktails or neat.",
-      "tags": [0, 1],
+      "tags": [0],
       "baseIngredientId": 197,
       "photoUri": "assets/ingredients/213-laphroaig.jpg"
     },
@@ -35717,42 +35717,42 @@
       "id": 214,
       "name": "Lemon",
       "description": "Bright, acidic citrus used for juice, zest, and garnish. High in citric acid, it sharpens sours and punches. Essential for classics from the **Lemon Drop** to the **Whiskey Sour**.",
-      "tags": [5, 6],
+      "tags": [7],
       "photoUri": "assets/ingredients/214-lemon.jpg"
     },
     {
       "id": 215,
       "name": "Lemon Bitters",
       "description": "Citrus bitters focused on bright lemon peel and spice. Ideal for lifting **gin**, **vodka**, or **whiskey** drinks with zesty bitterness. A couple dashes freshen **Spritzes** or **Collins** variations.",
-      "tags": [10],
+      "tags": [4],
       "photoUri": "assets/ingredients/215-lemon-bitters.jpg"
     },
     {
       "id": 216,
       "name": "Lemon Juice",
       "description": "Fresh lemon juice with sharp acidity. Essential for sours and lemonades. Brightens spirits from **gin** to **whiskey**.",
-      "tags": [5],
+      "tags": [7],
       "photoUri": "assets/ingredients/216-lemon-juice.jpg"
     },
     {
       "id": 217,
       "name": "Lemon Tonic",
       "description": "Lemon tonic water combines quinine bitterness with bright lemon. Adds citrus zip and carbonation to **gin** or **vodka** drinks. Use when you want more zest than standard **tonic**.",
-      "tags": [3],
+      "tags": [6],
       "photoUri": "assets/ingredients/217-lemon-tonic.jpg"
     },
     {
       "id": 218,
       "name": "Lemon-Lime Soda",
       "description": "Classic lemon-lime soda with gentle citrus sweetness and plenty of fizz. Balances tart spirits or liqueurs while keeping drinks light. Ideal for highballs and party punches.",
-      "tags": [3],
+      "tags": [6],
       "photoUri": "assets/ingredients/218-lemon-lime-soda.jpg"
     },
     {
       "id": 219,
       "name": "Lemonade",
       "description": "Lemonade is a sweetened lemon beverage served either still or carbonated. Cloudy styles mix lemon juice, water, and sugar, while clear versions resemble fizzy lemon soda. Variations include pink lemonade or hard lemonade for boozy spins.",
-      "tags": [3],
+      "tags": [6],
       "photoUri": "assets/ingredients/219-lemonade.jpg"
     },
     {
@@ -35766,56 +35766,56 @@
       "id": 221,
       "name": "Lillet Blanc",
       "description": "Lillet Blanc is a French aperitif wine, 17% ABV, with citrus and floral notes. Key in a **Vesper** or a **Corpse Reviver no. 2**.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/221-lillet-blanc.jpg"
     },
     {
       "id": 222,
       "name": "Lime",
       "description": "Zesty green citrus with sharp, aromatic juice. Common in mojitos, margaritas, and highballs. Provides acidity and freshness when muddled or juiced.",
-      "tags": [5, 6],
+      "tags": [7],
       "photoUri": "assets/ingredients/222-lime.jpg"
     },
     {
       "id": 223,
       "name": "Lime Juice",
       "description": "Fresh lime juice that delivers tangy citrus oils. Classic in margaritas, daiquiris, and mojitos. Provides crisp acidity to balance sweetness.",
-      "tags": [5],
+      "tags": [7],
       "photoUri": "assets/ingredients/223-lime-juice.jpg"
     },
     {
       "id": 224,
       "name": "Limoncello",
       "description": "Limoncello is a zesty Italian lemon liqueur at 25–30% ABV. Serve it in a **Gennaro's Sidecar** or **Amalfi Spritz**.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/224-limoncello.jpg"
     },
     {
       "id": 225,
       "name": "Liquorice",
       "description": "Sweet, earthy root flavor used in candies and herbal liqueurs. A small amount adds depth to syrups and bitters. Pair with anise or citrus to keep it lively.",
-      "tags": [10],
+      "tags": [8],
       "photoUri": "assets/ingredients/225-liquorice.jpg"
     },
     {
       "id": 226,
       "name": "Luxardo Maraschino",
       "description": "Maraschino liqueur is a clear cherry spirit around 24% ABV. Classic in an **Aviation** or **Last Word**.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/226-luxardo-maraschino.jpg"
     },
     {
       "id": 227,
       "name": "Lychee",
       "description": "Fragrant tropical fruit with floral, lychee-perfume sweetness. Lovely in Spritzes, Lychee Martinis, and Tiki riffs.",
-      "tags": [6],
+      "tags": [7],
       "photoUri": "assets/ingredients/227-lychee.jpg"
     },
     {
       "id": 228,
       "name": "Malibu Rum",
       "description": "Malibu is a coconut-flavoured rum liqueur by Pernod Ricard, 21% ABV. Great in a **Piña Colada** and **Bahama Mama**.",
-      "tags": [0, 2],
+      "tags": [0],
       "baseIngredientId": 103,
       "photoUri": "assets/ingredients/228-malibu-rum.jpg"
     },
@@ -35823,21 +35823,21 @@
       "id": 229,
       "name": "Mango",
       "description": "Lush, sweet tropical fruit with silky texture. Blends smoothly into Daiquiris, Smoothies, and spicy Margaritas.",
-      "tags": [6],
+      "tags": [7],
       "photoUri": "assets/ingredients/229-mango.jpg"
     },
     {
       "id": 230,
       "name": "Maple syrup",
       "description": "Maple syrup is a natural sweetener made from reduced maple sap. Its caramelized, woody notes pair well with whiskey and coffee cocktails. Use sparingly since it is richer than simple syrup.",
-      "tags": [4],
+      "tags": [5],
       "photoUri": "assets/ingredients/230-maple-syrup.jpg"
     },
     {
       "id": 231,
       "name": "Maraschino Cherry",
       "description": "Sweet preserved cherry commonly used as a garnish. Brings candy-like fruit notes to sours and **Old Fashioned** riffs.\n\nRecipe:\n**Ingredients:**\n· 500g fresh **cherries** (pitted), \n· 250ml **Luxardo maraschino** liqueur,\n· 150g of **sugar**, \n· 100ml of **water**, \n· 1 squeeze of **lemon**.\n**Process:**\n1. Simmer syrup: combine sugar, water, and lemon juice in a saucepan. Bring to a simmer until sugar dissolves.\n2. Add liqueur: stir in the liqueur and simmer for 3 minutes to take the edge off the alcohol.\n3. Heat cherries: add pitted cherries and simmer for another 2–3 minutes until slightly tender but still firm.\n4. Cool & store: pour into a glass jar, ensuring cherries are submerged. Cool to room temperature before refrigerating.",
-      "tags": [6],
+      "tags": [7],
       "baseIngredientId": 81,
       "photoUri": "assets/ingredients/231-maraschino-cherry.jpg"
     },
@@ -35845,21 +35845,21 @@
       "id": 232,
       "name": "Melon Liqueur",
       "description": "Melon liqueur is a sweet melon spirit about 20% ABV. Mix it in a **Japanese Slipper** or **Melon Ball**.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/232-melon-liqueur.jpg"
     },
     {
       "id": 233,
       "name": "Mezcal",
       "description": "Smoky agave spirit from Mexico is produced by roasting agave hearts before distillation. Typically 40–55% ABV with earthy, roasted notes. Adds rustic smoke to **Margarita** riffs or neat pours.",
-      "tags": [0, 1],
+      "tags": [0],
       "photoUri": "assets/ingredients/233-mezcal.jpg"
     },
     {
       "id": 234,
       "name": "Midori Melon Liqueur",
       "description": "Midori is a neon-green Japanese melon liqueur by suntory, 20% ABV. Use it in a **Midori Sour** or **Japanese Slipper**.",
-      "tags": [2],
+      "tags": [1],
       "baseIngredientId": 232,
       "photoUri": "assets/ingredients/234-midori-melon-liqueur.jpg"
     },
@@ -35867,7 +35867,7 @@
       "id": 235,
       "name": "Milk",
       "description": "Milk is a nutrient-rich dairy liquid produced by mammals. Its mild sweetness and proteins add body, foam, and balance to shaken drinks or coffee cocktails. Choose whole milk for creaminess or lower-fat milk for a lighter sip.",
-      "tags": [9],
+      "tags": [8],
       "photoUri": "assets/ingredients/235-milk.jpg"
     },
     {
@@ -35888,21 +35888,21 @@
       "id": 238,
       "name": "Old Tom Gin",
       "description": "Old Tom gin is a sweeter style of gin with 40–45% ABV. It has a softer juniper profile and slight sweetness. Ideal for classic cocktails like the **Tom Collins**.",
-      "tags": [0, 1],
+      "tags": [0],
       "photoUri": "assets/ingredients/238-old-tom-gin.jpg"
     },
     {
       "id": 239,
       "name": "Olive",
       "description": "Briny, savory fruit used to garnish Martinis and savory cocktails. Adds a salty contrast to crisp spirits.",
-      "tags": [6],
+      "tags": [7],
       "photoUri": "assets/ingredients/239-olive.jpg"
     },
     {
       "id": 240,
       "name": "Olive Brine",
       "description": "Olive brine — or olive juice — is simply a mixture of salt, vinegar and water but as olives marinate, the liquid takes on a fantastically rich and delicious olive flavor. That salty goodness is a pungent boost that will deepen the flavor profile in your cooking.",
-      "tags": [5],
+      "tags": [7],
       "photoUri": "assets/ingredients/240-olive-brine.jpg"
     },
     {
@@ -35916,49 +35916,49 @@
       "id": 242,
       "name": "Orange",
       "description": "Oranges are versatile in cocktails, offering fresh juice, aromatic oils from peels (twists), or visual appeal through dehydrated slices. Popular in drinks like **Margaritas**, **Old Fashioneds**, and **Mimosas**, they add a sweet, bright, or bitter citrus note.",
-      "tags": [6],
+      "tags": [7],
       "photoUri": "assets/ingredients/242-orange.jpg"
     },
     {
       "id": 243,
       "name": "Orange Bitters",
       "description": "Orange bitters are aromatic bitters flavored with orange peel and spices. Use a dash or two to add bright citrus and gentle bitterness to stirred cocktails.",
-      "tags": [10],
+      "tags": [4],
       "photoUri": "assets/ingredients/243-orange-bitters.jpg"
     },
     {
       "id": 244,
       "name": "Orange Curaçao",
       "description": "Orange curaçao is an orange liqueur at 20–40% ABV with bittersweet citrus. Essential in a **Mai Tai** or **Sidecar**.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/244-orange-cura-ao.jpg"
     },
     {
       "id": 245,
       "name": "Orange Flower Water",
       "description": "Fragrant distillate from orange blossoms. Just a few drops perfume drinks like the ramos gin fizz. Overuse can dominate, so measure carefully.",
-      "tags": [10],
+      "tags": [8],
       "photoUri": "assets/ingredients/245-orange-flower-water.jpg"
     },
     {
       "id": 246,
       "name": "Orange Juice",
       "description": "Sweet, sunny citrus juice with gentle acidity. Popular in brunch cocktails like the mimosa or screwdriver. Adds body and brightness to tropical mixes.",
-      "tags": [5],
+      "tags": [7],
       "photoUri": "assets/ingredients/246-orange-juice.jpg"
     },
     {
       "id": 247,
       "name": "Orange Liqueur",
       "description": "Orange liqueur adds citrus sweetness at roughly 20–40% ABV. Try it in a **Margarita** or **Cosmopolitan**.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/247-orange-liqueur.jpg"
     },
     {
       "id": 248,
       "name": "Orange Marmalade",
       "description": "Orange marmalade is a sweet citrus preserve that adds a bittersweet flavor.",
-      "tags": [10],
+      "tags": [8],
       "photoUri": "assets/ingredients/248-orange-marmalade.jpg"
     },
     {
@@ -35979,7 +35979,7 @@
       "id": 251,
       "name": "Overproof Rum",
       "description": "Overproof rum has an ABV of 57% or higher, offering intense flavor and strength. It is used for floats, flaming drinks, and tiki cocktails. Best handled with care.",
-      "tags": [0, 1],
+      "tags": [0],
       "photoUri": "assets/ingredients/251-overproof-rum.jpg"
     },
     {
@@ -35993,49 +35993,49 @@
       "id": 253,
       "name": "Papaya",
       "description": "Mild, sweet tropical fruit with buttery texture. Mash or blend it into tiki drinks and tropical highballs.",
-      "tags": [6],
+      "tags": [7],
       "photoUri": "assets/ingredients/253-papaya.jpg"
     },
     {
       "id": 254,
       "name": "Papaya Juice",
       "description": "Papaya juice is sweet, tropical, and slightly musky. It pairs well with **rum**, **Tequila**, and tropical liqueurs. Adds smooth texture to exotic cocktails.",
-      "tags": [5],
+      "tags": [7],
       "photoUri": "assets/ingredients/254-papaya-juice.jpg"
     },
     {
       "id": 255,
       "name": "Passion Fruit",
       "description": "Passion fruit has a tangy, aromatic tropical flavor. The pulp can be scooped directly into cocktails. Popular in tiki drinks and modern fruity creations.",
-      "tags": [6],
+      "tags": [7],
       "photoUri": "assets/ingredients/255-passion-fruit.jpg"
     },
     {
       "id": 256,
-      "name": "Passion fruit juice",
+      "name": "Passion Fruit Juice",
       "description": "Tangy tropical juice with floral aroma. Brings sweet-tart punch to tiki drinks and sours. Pairs especially well with **rum**, **Tequila**, and **sparkling wine**.",
-      "tags": [5],
+      "tags": [7],
       "photoUri": "assets/ingredients/256-passion-fruit-juice.jpg"
     },
     {
       "id": 257,
       "name": "Passion Fruit Liqueur",
       "description": "Passion fruit liqueur is a sweet tropical spirit with 15–20% ABV. It has exotic, tangy fruit notes. Works in fruity **Martinis** and **Tiki** blends.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/257-passion-fruit-liqueur.jpg"
     },
     {
       "id": 258,
       "name": "Passion Fruit Syrup",
       "description": "Passion fruit syrup delivers tropical tartness with a perfumed aroma. It brightens tiki cocktails like the hurricane or Jamaican classics. Also works in **Spritzes** or sodas when you want sharp fruit acidity.",
-      "tags": [4],
+      "tags": [5],
       "photoUri": "assets/ingredients/258-passion-fruit-syrup.jpg"
     },
     {
       "id": 259,
       "name": "Passoa",
       "description": "Passoã is a passion fruit liqueur from France, 14.9–17% ABV. Use it in a **Pornstar Martini** or **Hurricane**.",
-      "tags": [2],
+      "tags": [1],
       "baseIngredientId": 257,
       "photoUri": "assets/ingredients/259-passoa.jpg"
     },
@@ -36050,14 +36050,14 @@
       "id": 261,
       "name": "Peach",
       "description": "Peaches bring soft, juicy sweetness to cocktails. They can be muddled, juiced, or pureed. Perfect in **Bellinis** and **Sangrias**.",
-      "tags": [6],
+      "tags": [7],
       "photoUri": "assets/ingredients/261-peach.jpg"
     },
     {
       "id": 262,
       "name": "Peach Bitters",
       "description": "A bitters is traditionally an alcoholic preparation flavoured with botanical matter such that the end result is characterised by a bitter, sour, or bittersweet flavour. Numerous longstanding brands of bitters were originally developed as patent medicines, but are now sold as digestifs and cocktail flavourings.",
-      "tags": [10],
+      "tags": [4],
       "photoUri": "assets/ingredients/262-peach-bitters.jpg"
     },
     {
@@ -36071,35 +36071,35 @@
       "id": 264,
       "name": "Peach Liqueur",
       "description": "Peach liqueur is a sweet stone-fruit spirit around 20% ABV. Delicious in a **Bellini** or **Sex on the Beach**.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/264-peach-liqueur.jpg"
     },
     {
       "id": 265,
       "name": "Peach Schnapps",
       "description": "Peach schnapps is a light peach spirit about 15–20% ABV. Ideal in a **Fuzzy Navel** or **Woo Woo**.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/265-peach-schnapps.jpg"
     },
     {
       "id": 266,
       "name": "Peppermint Candy",
       "description": "Sweet peppermint candies that add cool mint flavor. Crush or melt into syrups for dessert cocktails and hot drinks. Use as a garnish for festive presentations.",
-      "tags": [10],
+      "tags": [8],
       "photoUri": "assets/ingredients/266-peppermint-candy.jpg"
     },
     {
       "id": 267,
       "name": "Peppermint Schnapps",
       "description": "Peppermint schnapps is a minty spirit at 15–30% ABV. Serve in an Alpine Avenger** or hot chocolate.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/267-peppermint-schnapps.jpg"
     },
     {
       "id": 268,
       "name": "Pepsi Cola",
       "description": "Pepsi is a caramel-forward cola with vanilla and citrus notes. It adds sweetness, color, and bubbles to rum or whiskey mixes. Slightly softer than coke for smoother highballs.",
-      "tags": [3],
+      "tags": [6],
       "baseIngredientId": 111,
       "photoUri": "assets/ingredients/268-pepsi-cola.jpg"
     },
@@ -36115,21 +36115,21 @@
       "id": 270,
       "name": "Peychaud's Bitters",
       "description": "Peychaud’s bitters have 35–45% ABV and a floral, anise-like aroma. Essential in the Sazerac cocktail. Adds depth and complexity to many drinks.",
-      "tags": [10],
+      "tags": [4],
       "photoUri": "assets/ingredients/270-peychaud-s-bitters.jpg"
     },
     {
       "id": 271,
       "name": "Physalis",
       "description": "Tangy golden berry with papery husk and citrusy sweetness. Works well as a garnish or muddled into sours.",
-      "tags": [6],
+      "tags": [7],
       "photoUri": "assets/ingredients/271-physalis.jpg"
     },
     {
       "id": 272,
       "name": "Pilsner Lager",
       "description": "Crisp, golden lager with gentle hops and a clean finish around 4–5% ABV. Light enough for **Shandies** or beer-based highballs.",
-      "tags": [2],
+      "tags": [3],
       "baseIngredientId": 212,
       "photoUri": "assets/ingredients/272-pilsner-lager.jpg"
     },
@@ -36137,42 +36137,42 @@
       "id": 273,
       "name": "Pimm's No. 1",
       "description": "Pimm's No. 1 is a gin-based fruit cup, 25% ABV. Classic in a **Pimm's Cup** or summer cup.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/273-pimm-s-no-1.jpg"
     },
     {
       "id": 274,
       "name": "Pineapple",
       "description": "Pineapple is a versatile cocktail ingredient, offering a sweet-tart, tropical flavour that pairs perfectly with **rum**, **Tequila**, and **gin** to create classic drinks like the **Piña Colada** and **Jungle Bird**.",
-      "tags": [6],
+      "tags": [7],
       "photoUri": "assets/ingredients/274-pineapple.jpg"
     },
     {
       "id": 275,
       "name": "Pineapple Juice",
       "description": "Sweet, tropical pineapple juice with natural froth. Key for piña coladas, painkillers, and tiki punches. Provides body, acidity, and aroma when shaken.",
-      "tags": [5],
+      "tags": [7],
       "photoUri": "assets/ingredients/275-pineapple-juice.jpg"
     },
     {
       "id": 276,
       "name": "Pineapple Syrup",
       "description": "Pineapple syrup is a kind of simple syrup that takes advantage of pineapple's texturizing effect to produce a sweet-and-sour, musky syrup that is not only a classic tiki ingredient, but also has uses in many early 20th Century cocktails.",
-      "tags": [4],
+      "tags": [5],
       "photoUri": "assets/ingredients/276-pineapple-syrup.jpg"
     },
     {
       "id": 277,
       "name": "Pink Lemonade",
       "description": "Pink lemonade is a lemon-based soft drink tinted with red fruit. It offers sweet-tart citrus with a hint of berry. Great for **Spritzes**, **Slushies**, or colourful punches.",
-      "tags": [3],
+      "tags": [6],
       "photoUri": "assets/ingredients/277-pink-lemonade.jpg"
     },
     {
       "id": 278,
       "name": "Pisang Ambon",
       "description": "Pisang Ambon is a Dutch green banana liqueur, 21% ABV. Great in Indonesian-style cocktails or a **Green Tea** cocktail.",
-      "tags": [2],
+      "tags": [1],
       "baseIngredientId": 37,
       "photoUri": "assets/ingredients/278-pisang-ambon.jpg"
     },
@@ -36180,7 +36180,7 @@
       "id": 279,
       "name": "Pisco",
       "description": "Pisco is a colourless or yellowish-to-amber colored brandy produced in the winemaking regions of Peru and Chile. Made by distilling fermented grape juice into a high-proof spirit.",
-      "tags": [0, 1],
+      "tags": [0],
       "photoUri": "assets/ingredients/279-pisco.jpg"
     },
     {
@@ -36194,12 +36194,12 @@
       "id": 281,
       "name": "Pomegranate Juice",
       "description": "Pomegranate juice is made from the fruit of the pomegranate. It is used in cooking both as a fresh juice and as a concentrated syrup.",
-      "tags": [5],
+      "tags": [7],
       "photoUri": "assets/ingredients/281-pomegranate-juice.jpg"
     },
     {
       "id": 282,
-      "name": "White Port Wine",
+      "name": "White Port",
       "description": "Port is a fortified Portuguese wine at 19–22% ABV with rich sweetness. Use it in a **Lisbon Martini ** or **Maria McClaire**.",
       "tags": [2],
       "photoUri": "assets/ingredients/282-white-port-wine.jpg"
@@ -36215,35 +36215,35 @@
       "id": 284,
       "name": "Punt e Mes",
       "description": "Punt e Mes is a bitter Italian vermouth, 16% ABV. Mix it in a **Negroni** or **Manhattan** variation.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/284-punt-e-mes.jpg"
     },
     {
       "id": 285,
       "name": "Raspberry",
       "description": "Raspberries are sweet-tart berries with bright color and aroma. Used fresh, muddled, or as puree. Great in Champagne cocktails and with gin.",
-      "tags": [6],
+      "tags": [7],
       "photoUri": "assets/ingredients/285-raspberry.jpg"
     },
     {
       "id": 286,
       "name": "Raspberry Liqueur",
       "description": "Raspberry liqueur is sweet-tart at about 20% ABV. Shake it into a **French Martini** or **Raspberry Collins**.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/286-raspberry-liqueur.jpg"
     },
     {
       "id": 287,
       "name": "Raspberry Syrup",
       "description": "Raspberry syrup offers vivid berry sweetness with gentle tartness. It provides the signature flavor in clover club and other gin drinks. Swirl into sodas or desserts for color and aroma.",
-      "tags": [4],
+      "tags": [5],
       "photoUri": "assets/ingredients/287-raspberry-syrup.jpg"
     },
     {
       "id": 288,
       "name": "Red Bull",
       "description": "Red Bull is a caffeinated energy drink that adds sweetness and carbonation.",
-      "tags": [3],
+      "tags": [6],
       "photoUri": "assets/ingredients/288-red-bull.jpg"
     },
     {
@@ -36279,7 +36279,7 @@
       "id": 293,
       "name": "Rich Simple Syrup",
       "description": "Rich sugar syrup, or rich simple syrup, is sugar dissolved in water 2:1. It blends easily into cocktails and is a bar staple.",
-      "tags": [4],
+      "tags": [5],
       "photoUri": "assets/ingredients/293-rich-simple-syrup.jpg"
     },
     {
@@ -36293,21 +36293,21 @@
       "id": 295,
       "name": "Rose Syrup",
       "description": "Rose syrup is floral and sweet, capturing fragrant rose petals. A few drops add aromatic lift to **gin**, **vodka**, or nonalcoholic spritzes. Use lightly to avoid overpowering other flavors.",
-      "tags": [4],
+      "tags": [5],
       "photoUri": "assets/ingredients/295-rose-syrup.jpg"
     },
     {
       "id": 296,
       "name": "Rosemary",
       "description": "Rosemary is a woody mediterranean herb with piney, resinous aroma. It adds savory depth to **gin**, **whiskey**, and citrus cocktails whether infused or used as a garnish. Smack the sprig before serving to release its oils without overwhelming the drink.",
-      "tags": [7],
+      "tags": [8],
       "photoUri": "assets/ingredients/296-rosemary.jpg"
     },
     {
       "id": 297,
       "name": "Rosemary Syrup",
       "description": "A sugar syrup made with rosemary.",
-      "tags": [4],
+      "tags": [5],
       "photoUri": "assets/ingredients/297-rosemary-syrup.jpg"
     },
     {
@@ -36321,7 +36321,7 @@
       "id": 299,
       "name": "Rumple Minze",
       "description": "German peppermint schnapps bottled at 50% ABV. Intensely sweet and cooling. Served ice-cold or mixed into minty cocktails and shots.",
-      "tags": [1],
+      "tags": [0],
       "baseIngredientId": 267,
       "photoUri": "assets/ingredients/299-rumple-minze.jpg"
     },
@@ -36329,7 +36329,7 @@
       "id": 300,
       "name": "Rye Whiskey",
       "description": "Whiskey with a rye-heavy mash bill, generally 40–50% ABV. Spicier and drier than bourbon with a peppery finish. Essential for **Manhattans**, **Sazeracs**, and other classics.",
-      "tags": [0, 1],
+      "tags": [0],
       "photoUri": "assets/ingredients/300-rye-whiskey.jpg"
     },
     {
@@ -36343,7 +36343,7 @@
       "id": 302,
       "name": "Sambuca",
       "description": "Sambuca is an Italian anise-flavoured, usually colourless, liqueur. Its most common variety is often referred to as white sambuca to differentiate it from other varieties that are deep blue in colour (black sambuca) or bright red (red sambuca). Like other anise-flavoured liqueurs, the Ouzo effect is sometimes observed when combined with water.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/302-sambuca.jpg"
     },
     {
@@ -36358,21 +36358,21 @@
       "id": 304,
       "name": "Scotch Highland Whisky",
       "description": "Single malt Scotch from the highlands region, typically 40–46% ABV. Flavors range from honeyed malt to gentle smoke. Versatile for sipping or cocktails.",
-      "tags": [0, 1],
+      "tags": [0],
       "photoUri": "assets/ingredients/304-scotch-highland-whisky.jpg"
     },
     {
       "id": 305,
       "name": "Scotch Whisky",
       "description": "Whisky made in scotland and aged at least three years in oak at 40% ABV or higher. Styles span light and floral to heavily peated. Classic base for highballs and stirred drinks.",
-      "tags": [0, 1],
+      "tags": [0],
       "photoUri": "assets/ingredients/305-scotch-whisky.jpg"
     },
     {
       "id": 306,
       "name": "Seagram's 7 Crown",
       "description": "Seagram's Seven Crown, also called Seagram's seven, or simply Seven Crown, is an American blended whiskey produced by Diageo under the Seagram's name.",
-      "tags": [0, 1],
+      "tags": [0],
       "baseIngredientId": 342,
       "photoUri": "assets/ingredients/306-seagram-s-7-crown.jpg"
     },
@@ -36380,35 +36380,35 @@
       "id": 307,
       "name": "Select",
       "description": "Aperitivo Select is a classic, bittersweet Italian aperitif, known as the essential ingredient for the original **Venetian Spritz**, featuring complex notes from 30 botanicals. It has an alcohol by volume (ABV) of 17.5%.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/307-select.jpg"
     },
     {
       "id": 308,
       "name": "Silver Onion",
       "description": "Pearl onions are sometimes used as savory cocktail garnishes. The gibson cocktail famously uses pickled onions. Adds a sharp, tangy bite.",
-      "tags": [10],
+      "tags": [8],
       "photoUri": "assets/ingredients/308-silver-onion.jpg"
     },
     {
       "id": 309,
       "name": "Simple Syrup",
       "description": "Sugar syrup, or simple syrup, is sugar dissolved in water 1:1. It blends easily into cocktails and is a bar staple.",
-      "tags": [4],
+      "tags": [5],
       "photoUri": "assets/ingredients/309-simple-syrup.jpg"
     },
     {
       "id": 310,
       "name": "Sloe Gin",
       "description": "Sloe gin is a tart sloe berry liqueur at 15–30% ABV. Classic in a **Sloe Gin Fizz** or **Charlie Chaplin**.",
-      "tags": [0, 2],
+      "tags": [0],
       "photoUri": "assets/ingredients/310-sloe-gin.jpg"
     },
     {
       "id": 311,
       "name": "Soda Water",
       "description": "Carbonated water that lightens and lengthens cocktails. Adds effervescence without extra sugar. Serve well-chilled for the best bubbles.",
-      "tags": [3],
+      "tags": [6],
       "photoUri": "assets/ingredients/311-soda-water.jpg"
     },
     {
@@ -36429,14 +36429,14 @@
       "id": 314,
       "name": "Spiced Rum",
       "description": "Rum infused with spices like vanilla, cinnamon, and clove, typically 35–40% ABV. Sweet and aromatic with amber color. Great in Tiki drinks, and warm punches.",
-      "tags": [0, 1],
+      "tags": [0],
       "photoUri": "assets/ingredients/314-spiced-rum.jpg"
     },
     {
       "id": 315,
       "name": "Sprite",
       "description": "Sprite is a caffeine-free lemon-lime soda with bright citrus fizz. Provides sweetness and effervescence without heavy flavours. Reliable mixer for **vodka**, **gin**, or **whiskey** highballs.",
-      "tags": [3],
+      "tags": [6],
       "baseIngredientId": 218,
       "photoUri": "assets/ingredients/315-sprite.jpg"
     },
@@ -36444,56 +36444,56 @@
       "id": 316,
       "name": "St-Germain",
       "description": "St-Germain is a French elderflower liqueur, 20% ABV. Use it in a **St-Germain Spritz** or **Elderflower Collins**.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/316-st-germain.jpg"
     },
     {
       "id": 317,
       "name": "Strawberry",
       "description": "The garden strawberry is a widely grown hybrid species of the genus fragaria, collectively known as the strawberries. It is cultivated worldwide for its fruit. The fruit is widely appreciated for its characteristic aroma, bright red color, juicy texture, and sweetness.",
-      "tags": [6],
+      "tags": [7],
       "photoUri": "assets/ingredients/317-strawberry.jpg"
     },
     {
       "id": 318,
       "name": "Strawberry Liqueur",
       "description": "Strawberry liqueur is sweet and fruity around 20% ABV. Try it in a **Strawberry Daiquiri**.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/318-strawberry-liqueur.jpg"
     },
     {
       "id": 319,
       "name": "Strawberry Schnapps",
       "description": "Strawberry schnapps is a sugary strawberry spirit about 15–20% ABV. Great in a **Strawberry Martini** or **Red Lebowski**.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/319-strawberry-schnapps.jpg"
     },
     {
       "id": 320,
       "name": "Strawberry Syrup",
       "description": "Strawberry syrup is a sweet, fruity liquid that enhances cocktails with berry flavor. Ideal for summer drinks and lemonades.",
-      "tags": [4],
+      "tags": [5],
       "photoUri": "assets/ingredients/320-strawberry-syrup.jpg"
     },
     {
       "id": 321,
       "name": "Strucchi Bitter",
       "description": "Campari-style liqueur with a rich, persistent 27% ABV profile. Made from herbs, roots, and citrus peels that bring rhubarb, gentian, and cinchona notes. Finishes long with hints of aloe and germander.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/321-strucchi-bitter.jpg"
     },
     {
       "id": 322,
       "name": "Sugar",
       "description": "Sugar is the generic name for sweet-tasting, soluble carbohydrates, many of which are used in food.",
-      "tags": [10],
+      "tags": [8],
       "photoUri": "assets/ingredients/322-sugar.jpg"
     },
     {
       "id": 323,
       "name": "Suze",
       "description": "Suze is a French gentian aperitif 20% ABV, with bitter herbal notes. Mix it in a **White Negroni** or **Suze & Tonic**.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/323-suze.jpg"
     },
     {
@@ -36515,35 +36515,35 @@
       "id": 326,
       "name": "Tequila Añejo",
       "description": "Tequila aged 1–3 years in oak, about 40% ABV. Smooth agave spirit with vanilla, caramel, and spice notes. Sip neat or use in spirit-forward cocktails.",
-      "tags": [0, 1],
+      "tags": [0],
       "photoUri": "assets/ingredients/326-tequila-a-ejo.jpg"
     },
     {
       "id": 327,
       "name": "Tequila Blanco",
       "description": "Tequila blanco is an unaged Mexican agave spirit with 38–40% ABV. It has fresh, grassy, and peppery notes.",
-      "tags": [0, 1],
+      "tags": [0],
       "photoUri": "assets/ingredients/327-tequila-blanco.jpg"
     },
     {
       "id": 328,
       "name": "Tequila Gold",
       "description": "Tequila gold is a blended or lightly aged **Tequila** with 38–40% ABV. It has a smoother, slightly caramel flavor.",
-      "tags": [0, 1],
+      "tags": [0],
       "photoUri": "assets/ingredients/328-tequila-gold.jpg"
     },
     {
       "id": 329,
       "name": "Tequila Reposado",
       "description": "Tequila reposado, meaning \"rested,\" is a type of **Tequila** aged in oak barrels for a minimum of two months to a maximum of one year, bridging the gap between unaged blanco and aged añejo. This ageing process imparts a golden hue and a smoother, more complex flavour with notes of wood, vanilla, or fruit, making it versatile for sipping neat, on the rocks, or in cocktails like Margaritas.",
-      "tags": [0, 1],
+      "tags": [0],
       "photoUri": "assets/ingredients/329-tequila-reposado.jpg"
     },
     {
       "id": 330,
       "name": "Tia Maria",
       "description": "Coffee liqueur from Jamaica made with rum, coffee beans, and vanilla, around 20% ABV. Smooth and sweet with rich espresso notes. Used in **Espresso Martinis** and dessert cocktails.",
-      "tags": [2],
+      "tags": [1],
       "baseIngredientId": 108,
       "photoUri": "assets/ingredients/330-tia-maria.jpg"
     },
@@ -36551,21 +36551,21 @@
       "id": 331,
       "name": "Tomato Juice",
       "description": "Tomato juice is a juice made from tomatoes, usually used as a beverage, either plain or in cocktails such as a **Bloody Mary** or **Michelada**.",
-      "tags": [5],
+      "tags": [7],
       "photoUri": "assets/ingredients/331-tomato-juice.jpg"
     },
     {
       "id": 332,
       "name": "Tonic",
       "description": "Tonic water (or Indian tonic water) is a carbonated soft drink in which quinine is dissolved. Originally used as a prophylactic against malaria, tonic water usually now has a significantly lower quinine content and is consumed for its distinctive bitter flavour. It is often used in mixed drinks, particularly in gin and tonic.",
-      "tags": [3],
+      "tags": [6],
       "photoUri": "assets/ingredients/332-tonic.jpg"
     },
     {
       "id": 333,
       "name": "Triple Sec",
       "description": "Triple sec is a clear orange liqueur at 20–40% ABV with bright citrus. Essential in a **Margarita** or **Sidecar**.",
-      "tags": [2],
+      "tags": [1],
       "photoUri": "assets/ingredients/333-triple-sec.jpg"
     },
     {
@@ -36586,56 +36586,56 @@
       "id": 336,
       "name": "Vanilla Syrup",
       "description": "Vanilla syrup infuses simple syrup with warm vanilla bean flavor. It softens sharp spirits and rounds out coffee or espresso cocktails. Drizzle in whipped cream drinks or soda floats.",
-      "tags": [4],
+      "tags": [5],
       "photoUri": "assets/ingredients/336-vanilla-syrup.jpg"
     },
     {
       "id": 337,
       "name": "Vodka",
       "description": "Neutral spirit distilled from grains or potatoes and filtered for a clean taste, usually around 40% ABV. Clear and versatile for mixing. Backbone of **Martinis**, **Bloody Marys**, and countless cocktails.",
-      "tags": [0, 1],
+      "tags": [0],
       "photoUri": "assets/ingredients/337-vodka.jpg"
     },
     {
       "id": 338,
       "name": "Vodka Citron",
       "description": "Lemon-flavoured **vodka** is typically bottled around 40% ABV. Bright citrus aroma and a clean finish. Ideal for **Cosmopolitans**, **Spritzes**, and other refreshing drinks.",
-      "tags": [0, 1],
+      "tags": [0],
       "photoUri": "assets/ingredients/338-vodka-citron.jpg"
     },
     {
       "id": 339,
       "name": "Vodka Vanilla",
       "description": "Vanilla-flavored **vodka** around 35–40% ABV. Adds smooth sweetness and vanilla bean aroma. Great in dessert cocktails or with cola and cream sodas.",
-      "tags": [0, 1],
+      "tags": [0],
       "photoUri": "assets/ingredients/339-vodka-vanilla.jpg"
     },
     {
       "id": 340,
       "name": "Water",
       "description": "Water is a neutral, odorless liquid used for dilution and ice. Balance cocktails by adding water through shaking, stirring, or dilution. Fresh, clean water keeps flavors bright.",
-      "tags": [10],
+      "tags": [8],
       "photoUri": "assets/ingredients/340-water.jpg"
     },
     {
       "id": 341,
       "name": "Whipped Cream",
       "description": "Whipped cream is cream beaten until light and fluffy, often sweetened and flavored with vanilla. It doubles in volume as air is incorporated, creating a soft foam. Use it as a rich topping for coffee cocktails, hot drinks, and dessert serves.",
-      "tags": [9],
+      "tags": [8],
       "photoUri": "assets/ingredients/341-whipped-cream.jpg"
     },
     {
       "id": 342,
       "name": "Whiskey",
       "description": "Whisky or whiskey is a type of distilled alcoholic beverage made from fermented grain mash. Various grains (which may be malted) are used for different varieties, including barley, corn (maize), rye, and wheat. Whisky is typically aged in wooden casks, generally made of charred white oak.",
-      "tags": [0, 1],
+      "tags": [0],
       "photoUri": "assets/ingredients/342-whiskey.jpg"
     },
     {
       "id": 343,
       "name": "Whiskey Cream",
       "description": "Whiskey cream is a creamy liqueur blending whiskey with dairy and sweetness. It brings a smooth, dessert-like richness to cocktails and after-dinner drinks.",
-      "tags": [2],
+      "tags": [1],
       "baseIngredientId": 195,
       "photoUri": "assets/ingredients/343-whiskey-cream.jpg"
     },
@@ -36643,15 +36643,14 @@
       "id": 344,
       "name": "Whiskey-Barrel Aged Bitters",
       "description": "Bitters aged in whiskey barrels for vanilla and oak notes. Adds depth to **Old Fashioneds** and **Whiskey Sours** with minimal effort. Use sparingly to avoid overpowering lighter spirits.",
-      "tags": [10],
-      "baseIngredientId": 47,
+      "tags": [4],
       "photoUri": "assets/ingredients/344-whiskey-barrel-aged-bitters.jpg"
     },
     {
       "id": 345,
       "name": "White Rum",
       "description": "Light rum with subtle sweetness, often filtered clear after ageing, around 40% ABV. Clean flavour for mixing without heavy molasses. Standard choice for **Daiquiris** and **Mojitos**.",
-      "tags": [0, 1],
+      "tags": [0],
       "photoUri": "assets/ingredients/345-white-rum.jpg"
     },
     {
@@ -36665,7 +36664,7 @@
       "id": 347,
       "name": "Wild Turkey",
       "description": "Wild Turkey is a brand of Kentucky straight bourbon whiskey distilled and bottled by the Austin Nichols division of Campari group. The distillery is located near Lawrenceburg, Kentucky, United States.",
-      "tags": [0, 1],
+      "tags": [0],
       "baseIngredientId": 63,
       "photoUri": "assets/ingredients/347-wild-turkey.jpg"
     },
@@ -36687,7 +36686,7 @@
       "id": 350,
       "name": "Yukon Jack",
       "description": "Yukon Jack is a liqueur advertised as the \"black sheep of Canadian liquors\". It is a 100 proof (in USA) or 80 proof (in Canada) drink, made from Canadian whisky and honey. The taste is sweeter than straight whisky and bourbon, due to the honey that is added.",
-      "tags": [0, 1],
+      "tags": [0],
       "baseIngredientId": 63,
       "photoUri": "assets/ingredients/350-yukon-jack.jpg"
     },
@@ -36695,7 +36694,7 @@
       "id": 351,
       "name": "Żubrówka",
       "description": "Żubrówka is a polish bison grass **vodka** with 37–40% ABV. It has a unique herbal, vanilla-like aroma.",
-      "tags": [0, 1],
+      "tags": [0],
       "baseIngredientId": 48,
       "photoUri": "assets/ingredients/351-ubrowka.jpg"
     },
@@ -36710,14 +36709,14 @@
       "id": 353,
       "name": "Vanilla Bitters",
       "description": "Vanilla bitters are concentrated botanical infusions used as \"liquid spice\" to add depth, warmth, and a creamy edge to cocktails. They are particularly effective in balancing the sweetness of dessert-style drinks and complementing the oaky or caramel notes in spirits like bourbon and aged rum.",
-      "tags": [10],
+      "tags": [4],
       "photoUri": "assets/ingredients/353-vanilla-bitters.jpg"
     },
     {
       "id": 354,
       "name": "Amaro Averna",
       "description": "Amaro Averna is an Italian herbal liqueur with an alcohol content of 29% ABV (58 proof). This Sicilian bitter-sweet digestif. Ideal for **Black Manhattan**.",
-      "tags": [2],
+      "tags": [1],
       "baseIngredientId": 13,
       "photoUri": "assets/ingredients/354-amaro-averna.jpg"
     },
@@ -36725,7 +36724,7 @@
       "id": 355,
       "name": "Blueberry",
       "description": "Blueberries are an incredibly versatile cocktail ingredient, prized for their deep purple hue and balanced sweet-tart profile. They pair exceptionally well with **gin**, **vodka**, **Tequila**, and **bourbon**.",
-      "tags": [6],
+      "tags": [7],
       "photoUri": "assets/ingredients/355-blueberry.jpg"
     },
     {
@@ -36740,7 +36739,7 @@
       "id": 357,
       "name": "Walnut",
       "description": "Walnut is a versatile cocktail ingredient that adds earthy, woody, and bittersweet notes to drinks.",
-      "tags": [7],
+      "tags": [8],
       "photoUri": "assets/ingredients/357-walnut.jpg"
     }
   ]

@@ -131,6 +131,47 @@ function sanitizeStartScreen(value?: string | null): StartScreen {
   }
 }
 
+const BUILTIN_COCKTAIL_TAGS_BY_ID = new Map(BUILTIN_COCKTAIL_TAGS.map((tag) => [tag.id, tag]));
+const BUILTIN_INGREDIENT_TAGS_BY_ID = new Map(BUILTIN_INGREDIENT_TAGS.map((tag) => [tag.id, tag]));
+
+function rehydrateBuiltInTags(state: InventoryState): InventoryState {
+  const withHydratedCocktailTags = state.cocktails.map((cocktail) => ({
+    ...cocktail,
+    tags: cocktail.tags?.map((tag) => {
+      const builtinTag = BUILTIN_COCKTAIL_TAGS_BY_ID.get(Number(tag.id ?? -1));
+      return builtinTag
+        ? {
+            ...tag,
+            id: builtinTag.id,
+            name: builtinTag.name,
+            color: builtinTag.color,
+          }
+        : tag;
+    }),
+  }));
+
+  const withHydratedIngredientTags = state.ingredients.map((ingredient) => ({
+    ...ingredient,
+    tags: ingredient.tags?.map((tag) => {
+      const builtinTag = BUILTIN_INGREDIENT_TAGS_BY_ID.get(Number(tag.id ?? -1));
+      return builtinTag
+        ? {
+            ...tag,
+            id: builtinTag.id,
+            name: builtinTag.name,
+            color: builtinTag.color,
+          }
+        : tag;
+    }),
+  }));
+
+  return {
+    ...state,
+    cocktails: withHydratedCocktailTags,
+    ingredients: withHydratedIngredientTags,
+  };
+}
+
 function sanitizeAppTheme(value?: string | null): AppTheme {
   switch (value) {
     case 'light':
@@ -329,7 +370,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       try {
         const stored = await loadInventorySnapshot<CocktailStorageRecord, IngredientStorageRecord>();
         if (stored && (stored.version === INVENTORY_SNAPSHOT_VERSION || stored.version === 1) && !cancelled) {
-          const nextInventoryState = createInventoryStateFromSnapshot(stored, baseInventoryData);
+          const nextInventoryState = rehydrateBuiltInTags(createInventoryStateFromSnapshot(stored, baseInventoryData));
           const nextAvailableIds = createIngredientIdSet(stored.availableIngredientIds);
           const nextShoppingIds = createIngredientIdSet(stored.shoppingIngredientIds);
           const nextRatings = sanitizeCocktailRatings(stored.cocktailRatings);
@@ -1965,4 +2006,3 @@ export function useInventory() {
 export { useInventoryActions, useInventoryData, useInventorySettings };
 
 export type { AppTheme, Cocktail, CreateCocktailInput, CreateIngredientInput, Ingredient, StartScreen };
-
