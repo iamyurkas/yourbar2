@@ -34190,6 +34190,530 @@
           "unitId": 11
         }
       ]
+    },
+    {
+      "id": 556,
+      "name": "Virgin Mojito",
+      "description": "A refreshing non-alcoholic twist on the classic Mojito with mint, lime, and sparkling soda.",
+      "instructions": "1. Add mint leaves and sugar syrup to a highball glass and gently muddle.\n2. Add lime juice and fill the glass with ice.\n3. Top with soda water and stir gently.\n4. Garnish with a mint sprig and a lime wedge.",
+      "photoUri": "assets/cocktails/556-virgin-mojito.jpg",
+      "glassId": "highball_glass",
+      "methodIds": ["muddle"],
+      "tags": [10],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 236,
+          "name": "Mint",
+          "amount": "10",
+          "unitId": 10
+        },
+        {
+          "order": 2,
+          "ingredientId": 137,
+          "name": "Demerara Sugar Syrup",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 223,
+          "name": "Lime Juice",
+          "amount": "20",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
+        },
+        {
+          "order": 5,
+          "ingredientId": 311,
+          "name": "Soda Water",
+          "amount": "120",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 236,
+          "name": "Mint",
+          "amount": "1",
+          "unitId": 21,
+          "garnish": true
+        },
+        {
+          "order": 7,
+          "ingredientId": 222,
+          "name": "Lime",
+          "amount": "1",
+          "unitId": 27,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 557,
+      "name": "Arnold Palmer",
+      "description": "A classic zero-proof mix of chilled black tea and lemonade, light and easy to drink.",
+      "instructions": "1. Fill a highball glass with ice.\n2. Add black tea and lemonade in equal parts.\n3. Stir gently to combine.\n4. Garnish with a lemon wedge.",
+      "photoUri": "assets/cocktails/557-arnold-palmer.jpg",
+      "glassId": "highball_glass",
+      "methodIds": ["build"],
+      "tags": [10],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
+        },
+        {
+          "order": 2,
+          "ingredientId": 51,
+          "name": "Black Tea",
+          "amount": "100",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 219,
+          "name": "Lemonade",
+          "amount": "100",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 214,
+          "name": "Lemon",
+          "amount": "1",
+          "unitId": 27,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 558,
+      "name": "Cinderella",
+      "description": "A fruity and citrus-forward non-alcoholic cocktail balanced with a touch of grenadine and soda.",
+      "instructions": "1. Fill a shaker with ice.\n2. Add orange juice, pineapple juice, lemon juice, and grenadine.\n3. Shake until chilled and strain into a collins glass filled with ice.\n4. Top with soda water and stir gently.\n5. Garnish with an orange slice.",
+      "photoUri": "assets/cocktails/558-cinderella.jpg",
+      "glassId": "collins_glass",
+      "methodIds": ["shake"],
+      "tags": [10],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
+        },
+        {
+          "order": 2,
+          "ingredientId": 246,
+          "name": "Orange Juice",
+          "amount": "60",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 275,
+          "name": "Pineapple Juice",
+          "amount": "60",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 216,
+          "name": "Lemon Juice",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 181,
+          "name": "Grenadine",
+          "amount": "10",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 311,
+          "name": "Soda Water",
+          "amount": "50",
+          "unitId": 11
+        },
+        {
+          "order": 7,
+          "ingredientId": 242,
+          "name": "Orange",
+          "amount": "1",
+          "unitId": 19,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 559,
+      "name": "Ipanema",
+      "description": "A Brazilian-inspired non-alcoholic long drink with muddled lime, sugar, and ginger ale.",
+      "instructions": "1. Add lime wedges and sugar to a rocks glass.\n2. Gently muddle to release the lime oils and juice.\n3. Fill the glass with crushed ice.\n4. Top with ginger ale and stir briefly.",
+      "photoUri": "assets/cocktails/559-ipanema.jpg",
+      "glassId": "rocks_glass",
+      "methodIds": ["muddle"],
+      "tags": [10],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 222,
+          "name": "Lime",
+          "amount": "0.5",
+          "unitId": 9
+        },
+        {
+          "order": 2,
+          "ingredientId": 322,
+          "name": "Sugar",
+          "amount": "2",
+          "unitId": 24
+        },
+        {
+          "order": 3,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
+        },
+        {
+          "order": 4,
+          "ingredientId": 161,
+          "name": "Ginger Ale",
+          "amount": "120",
+          "unitId": 11
+        }
+      ]
+    },
+    {
+      "id": 560,
+      "name": "St. Clements",
+      "synonyms": ["Clementine Cooler"],
+      "description": "A brisk citrus cooler built from orange and lemon juice, finished with sparkling soda.",
+      "instructions": "1. Fill a shaker with ice.\n2. Add orange juice, lemon juice, and sugar syrup.\n3. Shake and strain into a highball glass with fresh ice.\n4. Top with soda water and stir gently.\n5. Garnish with an orange wedge.",
+      "photoUri": "assets/cocktails/560-st-clements.jpg",
+      "glassId": "highball_glass",
+      "methodIds": ["shake"],
+      "tags": [10],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
+        },
+        {
+          "order": 2,
+          "ingredientId": 246,
+          "name": "Orange Juice",
+          "amount": "80",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 216,
+          "name": "Lemon Juice",
+          "amount": "40",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 137,
+          "name": "Demerara Sugar Syrup",
+          "amount": "10",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 311,
+          "name": "Soda Water",
+          "amount": "60",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 242,
+          "name": "Orange",
+          "amount": "1",
+          "unitId": 27,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 561,
+      "name": "Lime Rickey (Non-Alcoholic)",
+      "description": "A tart and sparkling lime refresher with no alcohol and a clean finish.",
+      "instructions": "1. Fill a highball glass with ice.\n2. Add lime juice and sugar syrup.\n3. Top with soda water and stir well.\n4. Garnish with a lime wedge.",
+      "photoUri": "assets/cocktails/561-lime-rickey-non-alcoholic.jpg",
+      "glassId": "highball_glass",
+      "methodIds": ["build"],
+      "tags": [10],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
+        },
+        {
+          "order": 2,
+          "ingredientId": 223,
+          "name": "Lime Juice",
+          "amount": "25",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 137,
+          "name": "Demerara Sugar Syrup",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 311,
+          "name": "Soda Water",
+          "amount": "150",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 222,
+          "name": "Lime",
+          "amount": "1",
+          "unitId": 27,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 562,
+      "name": "Pussyfoot",
+      "description": "A classic prohibition-era fruit mocktail combining citrus and tropical juices with grenadine.",
+      "instructions": "1. Fill a shaker with ice.\n2. Add orange juice, grapefruit juice, pineapple juice, and grenadine.\n3. Shake until well chilled and strain into a hurricane glass over fresh ice.\n4. Garnish with an orange slice.",
+      "photoUri": "assets/cocktails/562-pussyfoot.jpg",
+      "glassId": "hurricane_glass",
+      "methodIds": ["shake"],
+      "tags": [10],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
+        },
+        {
+          "order": 2,
+          "ingredientId": 246,
+          "name": "Orange Juice",
+          "amount": "60",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 176,
+          "name": "Grapefruit Juice",
+          "amount": "60",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 275,
+          "name": "Pineapple Juice",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 181,
+          "name": "Grenadine",
+          "amount": "10",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 242,
+          "name": "Orange",
+          "amount": "1",
+          "unitId": 19,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 563,
+      "name": "Virgin Piña Colada",
+      "description": "A creamy tropical favorite with pineapple and coconut, blended to a smooth frozen texture.",
+      "instructions": "1. Add pineapple juice, coconut cream, lime juice, and ice to a blender.\n2. Blend until smooth and frosty.\n3. Pour into a hurricane glass.\n4. Garnish with a pineapple wedge.",
+      "photoUri": "assets/cocktails/563-virgin-pina-colada.jpg",
+      "glassId": "hurricane_glass",
+      "methodIds": ["blend"],
+      "tags": [10],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 275,
+          "name": "Pineapple Juice",
+          "amount": "90",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 99,
+          "name": "Coconut Cream",
+          "amount": "60",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 223,
+          "name": "Lime Juice",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "160",
+          "unitId": 8
+        },
+        {
+          "order": 5,
+          "ingredientId": 278,
+          "name": "Pineapple",
+          "amount": "1",
+          "unitId": 27,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 564,
+      "name": "Italian Cream Soda",
+      "description": "A sweet and fizzy dessert-style mocktail with flavored syrup, soda, and cream.",
+      "instructions": "1. Fill a highball glass with ice.\n2. Add grenadine and soda water, then stir.\n3. Float cream on top and give one gentle stir for a marbled effect.\n4. Garnish with a maraschino cherry.",
+      "photoUri": "assets/cocktails/564-italian-cream-soda.jpg",
+      "glassId": "highball_glass",
+      "methodIds": ["build"],
+      "tags": [10],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
+        },
+        {
+          "order": 2,
+          "ingredientId": 181,
+          "name": "Grenadine",
+          "amount": "25",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 311,
+          "name": "Soda Water",
+          "amount": "120",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 117,
+          "name": "Cream",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 231,
+          "name": "Maraschino Cherry",
+          "amount": "1",
+          "unitId": 1,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 565,
+      "name": "Cucumber Cooler",
+      "synonyms": ["Cucumber Highball"],
+      "description": "A crisp and cooling non-alcoholic highball made with cucumber, citrus, and apple juice.",
+      "instructions": "1. Muddle cucumber slices with sugar syrup in a shaker.\n2. Add lime juice, apple juice, and ice.\n3. Shake and strain into a collins glass filled with fresh ice.\n4. Top with soda water and stir gently.\n5. Garnish with a cucumber slice.",
+      "photoUri": "assets/cocktails/565-cucumber-cooler.jpg",
+      "glassId": "collins_glass",
+      "methodIds": ["muddle"],
+      "tags": [10],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 131,
+          "name": "Cucumber",
+          "amount": "4",
+          "unitId": 19
+        },
+        {
+          "order": 2,
+          "ingredientId": 137,
+          "name": "Demerara Sugar Syrup",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 223,
+          "name": "Lime Juice",
+          "amount": "20",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 26,
+          "name": "Apple Juice",
+          "amount": "80",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
+        },
+        {
+          "order": 6,
+          "ingredientId": 311,
+          "name": "Soda Water",
+          "amount": "40",
+          "unitId": 11
+        },
+        {
+          "order": 7,
+          "ingredientId": 131,
+          "name": "Cucumber",
+          "amount": "1",
+          "unitId": 19,
+          "garnish": true
+        }
+      ]
     }
   ],
   "ingredients": [
