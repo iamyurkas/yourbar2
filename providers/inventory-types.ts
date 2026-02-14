@@ -2,6 +2,7 @@ import { type CocktailMethodId } from '@/constants/cocktail-methods';
 import { type InventoryData } from '@/libs/inventory-data';
 
 export type BaseCocktailRecord = InventoryData['cocktails'][number];
+export type IngredientRecord = InventoryData['ingredients'][number];
 type CocktailIngredientRecord = NonNullable<BaseCocktailRecord['ingredients']>[number];
 type CocktailSubstituteRecord = NonNullable<CocktailIngredientRecord['substitutes']>[number];
 export type CocktailTag = NonNullable<BaseCocktailRecord['tags']>[number];
@@ -78,6 +79,7 @@ export type CreateCocktailInput = {
 
 export type CreateIngredientInput = {
   name: string;
+  synonyms?: string[] | null;
   description?: string | null;
   photoUri?: string | null;
   baseIngredientId?: number | null;

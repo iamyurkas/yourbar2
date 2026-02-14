@@ -764,6 +764,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             : undefined;
 
         const description = input.description?.trim() || undefined;
+        const synonyms = normalizeSynonyms(input.synonyms);
         const photoUri = input.photoUri?.trim() || undefined;
 
         const tagMap = new Map<number, IngredientTag>();
@@ -787,6 +788,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           id: nextId,
           name: trimmedName,
           description,
+          synonyms,
           tags,
           baseIngredientId,
           photoUri,
@@ -1080,6 +1082,11 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             : undefined;
 
         const description = input.description?.trim() || undefined;
+        const previous = prev.ingredients[ingredientIndex];
+        const synonyms =
+          input.synonyms !== undefined
+            ? normalizeSynonyms(input.synonyms)
+            : previous.synonyms ?? undefined;
         const photoUri = input.photoUri?.trim() || undefined;
 
         const tagMap = new Map<number, IngredientTag>();
@@ -1099,12 +1106,12 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         });
         const tags = tagMap.size > 0 ? Array.from(tagMap.values()) : undefined;
 
-        const previous = prev.ingredients[ingredientIndex];
         const candidateRecord = {
           ...previous,
           id: previous.id,
           name: trimmedName,
           description,
+          synonyms,
           tags,
           baseIngredientId,
           photoUri,
