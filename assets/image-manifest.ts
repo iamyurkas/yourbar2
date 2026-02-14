@@ -362,11 +362,11 @@ export const ingredientImages: Record<string, number> = {
 
 export const glasswareImages: Record<string, number> = {
   "assets/glassware/bowl.jpg": require("./glassware/bowl.jpg"),
-  "assets/glassware/champagne.jpg": require("./glassware/champagne.jpg"),
   "assets/glassware/collins.jpg": require("./glassware/collins.jpg"),
   "assets/glassware/copper.jpg": require("./glassware/copper.jpg"),
   "assets/glassware/coupe.jpg": require("./glassware/coupe.jpg"),
   "assets/glassware/cup.jpg": require("./glassware/cup.jpg"),
+  "assets/glassware/flute.jpg": require("./glassware/flute.jpg"),
   "assets/glassware/goblet.jpg": require("./glassware/goblet.jpg"),
   "assets/glassware/highball.jpg": require("./glassware/highball.jpg"),
   "assets/glassware/hurricane.jpg": require("./glassware/hurricane.jpg"),
@@ -385,7 +385,7 @@ export const glasswareImages: Record<string, number> = {
 
 export const glasswareUriById: Record<string, string> = {
   bowl: "assets/glassware/bowl.jpg",
-  champagne_flute: "assets/glassware/champagne.jpg",
+  flute: "assets/glassware/flute.jpg",
   martini: "assets/glassware/martini.jpg",
   collins_glass: "assets/glassware/collins.jpg",
   copper_mug: "assets/glassware/copper.jpg",
@@ -880,6 +880,7 @@ export const cocktailImages: Record<string, number> = {
   "assets/cocktails/516-blackberry-martini.jpg": require("./cocktails/516-blackberry-martini.jpg"),
   "assets/cocktails/517-blueberry-martini.jpg": require("./cocktails/517-blueberry-martini.jpg"),
   "assets/cocktails/52-banana-calling.jpg": require("./cocktails/52-banana-calling.jpg"),
+  "assets/cocktails/520-bishop.jpg": require("./cocktails/520-bishop.jpg"),
   "assets/cocktails/521-cherry-smash.jpg": require("./cocktails/521-cherry-smash.jpg"),
   "assets/cocktails/522-apicius.jpg": require("./cocktails/522-apicius.jpg"),
   "assets/cocktails/523-adult-chocolate-milk.jpg": require("./cocktails/523-adult-chocolate-milk.jpg"),
@@ -917,7 +918,6 @@ export const cocktailImages: Record<string, number> = {
   "assets/cocktails/553-sloe-gin-fizz.jpg": require("./cocktails/553-sloe-gin-fizz.jpg"),
   "assets/cocktails/554-st-germain-spritz.jpg": require("./cocktails/554-st-germain-spritz.jpg"),
   "assets/cocktails/555-strawberry-martini.jpg": require("./cocktails/555-strawberry-martini.jpg"),
-  "assets/cocktails/520-bishop.jpg": require("./cocktails/520-bishop.jpg"),
   "assets/cocktails/56-banana-fantasy.jpg": require("./cocktails/56-banana-fantasy.jpg"),
   "assets/cocktails/57-banana-flash.jpg": require("./cocktails/57-banana-flash.jpg"),
   "assets/cocktails/58-bananarama.jpg": require("./cocktails/58-bananarama.jpg"),

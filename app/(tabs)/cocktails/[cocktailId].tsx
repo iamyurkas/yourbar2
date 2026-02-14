@@ -53,7 +53,7 @@ const UNIT_CONVERSION_RATIO = 30;
 
 const GLASS_LABELS: Record<string, string> = {
   bowl: "Punch bowl",
-  champagne_flute: "Champagne flute",
+  flute: "Flute",
   martini: "Martini glass",
   collins_glass: "Collins glass",
   copper_mug: "Copper mug",

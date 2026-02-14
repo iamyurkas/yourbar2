@@ -10,7 +10,7 @@ const imageExtensions = new Set([".jpg", ".jpeg", ".png", ".webp"]);
 
 const glasswareIdMap = [
   ["bowl", "bowl.jpg"],
-  ["champagne_flute", "champagne.jpg"],
+  ["flute", "flute.jpg"],
   ["martini", "martini.jpg"],
   ["collins_glass", "collins.jpg"],
   ["copper_mug", "copper.jpg"],
@@ -84,7 +84,7 @@ const renderImageMap = (constName, subdir, files) =>
   [
     `export const ${constName}Images: Record<string, number> = {`,
     ...files.map(
-      (file) => `  'assets/${subdir}/${file}': require('./${subdir}/${file}'),`,
+      (file) => `  "assets/${subdir}/${file}": require("./${subdir}/${file}"),`,
     ),
     "};",
     "",
@@ -94,7 +94,7 @@ const renderGlasswareUriById = () =>
   [
     "export const glasswareUriById: Record<string, string> = {",
     ...glasswareIdMap.map(
-      ([id, filename]) => `  ${id}: 'assets/glassware/${filename}',`,
+      ([id, filename]) => `  ${id}: "assets/glassware/${filename}",`,
     ),
     "};",
     "",

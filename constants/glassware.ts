@@ -9,9 +9,9 @@ export type GlasswareOption = {
 export const GLASSWARE: GlasswareOption[] = [
   { id: "bowl", name: "Bowl", imageUri: glasswareUriById.bowl },
   {
-    id: "champagne_flute",
-    name: "Champagne Flute",
-    imageUri: glasswareUriById.champagne_flute,
+    id: "flute",
+    name: "Flute",
+    imageUri: glasswareUriById.flute,
   },
   {
     id: "martini",
