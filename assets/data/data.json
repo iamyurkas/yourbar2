@@ -34851,7 +34851,7 @@
       "id": 568,
       "name": "Ginger Peach Fizz",
       "description": "A juicy non-alcoholic fizz combining ripe **peach** puree with zesty **lemon juice** and **ginger ale**.",
-      "instructions": "1. In a highball glass, muddle 3-4 **peaches** with 15ml of **lemon juice**.\n2. Fill the glass with **ice**.\n3. Add 120ml of **ginger ale**.\n4. Stir gently.",
+      "instructions": "1. In a highball glass, muddle a half of a **peach** with 15ml of **lemon juice**.\n2. Fill the glass with **ice**.\n3. Add 120ml of **ginger ale**.\n4. Stir gently.",
       "photoUri": "assets/cocktails/568-ginger-peach-fizz.jpg",
       "glassId": "highball_glass",
       "methodIds": ["muddle", "build"],
@@ -34861,8 +34861,8 @@
           "order": 1,
           "ingredientId": 261,
           "name": "Peach",
-          "amount": "4",
-          "unitId": 1
+          "amount": "1",
+          "unitId": 9
         },
         {
           "order": 2,
@@ -35316,10 +35316,10 @@
       "id": 577,
       "name": "Safe Sex on the Beach",
       "description": "A fruity zero-proof beach-style cooler with **orange juice**, **cranberry juice**, **peach**, and a touch of **grenadine**.",
-      "instructions": "1. Fill a shaker with **ice**.\n2. Add 60ml of **orange juice**, 60ml of **cranberry juice**, 45ml of **peach**, and 15ml of **grenadine**.\n3. Shake until chilled and strain into a Collins glass with fresh **ice**.\n4. Garnish with an **orange** wedge and a **cherry**.",
+      "instructions": "1. In a highball glass, muddle a half of a **peach** with 15ml of **grenadine**.\n2. Fill a shaker with **ice**.\n3. Add 60ml of **orange juice**, 60ml of **cranberry juice**.\n4. Shake until chilled and strain into a Collins glass with fresh **ice**.\n5. Garnish with an **orange** wedge and a **cherry**.",
       "photoUri": "assets/cocktails/577-safe-sex-on-the-beach.jpg",
       "glassId": "collins_glass",
-      "methodIds": ["shake"],
+      "methodIds": ["muddle", "shake"],
       "tags": [10],
       "ingredients": [
         {
@@ -35347,8 +35347,8 @@
           "order": 4,
           "ingredientId": 261,
           "name": "Peach",
-          "amount": "45",
-          "unitId": 11
+          "amount": "1",
+          "unitId": 9
         },
         {
           "order": 5,
