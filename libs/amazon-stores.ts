@@ -1,4 +1,13 @@
+import Constants from 'expo-constants';
+import { Platform } from 'react-native';
+
 export type AmazonStoreOverride = AmazonStoreKey | 'DISABLED';
+type AmazonStoreConfig = {
+  domain: string;
+  label: string;
+  countryName: string;
+  affiliateTag: string;
+};
 
 export type AmazonStoreKey =
   | 'US'
@@ -22,10 +31,7 @@ export type AmazonStoreKey =
   | 'MX'
   | 'SG';
 
-export const AMAZON_STORES: Record<
-  AmazonStoreKey,
-  { domain: string; label: string; countryName: string; affiliateTag: string }
-> = {
+export const AMAZON_STORES: Record<AmazonStoreKey, AmazonStoreConfig> = {
   US: { domain: 'amazon.com', label: 'Amazon.com', countryName: 'United States', affiliateTag: '' },
   UK: { domain: 'amazon.co.uk', label: 'Amazon.co.uk', countryName: 'United Kingdom', affiliateTag: '' },
   DE: { domain: 'amazon.de', label: 'Amazon.de', countryName: 'Germany', affiliateTag: '' },
@@ -84,14 +90,53 @@ function getLocaleCountryCode(): string | null {
   return maybeRegion.toUpperCase();
 }
 
-export function detectAmazonStoreFromLocale(): AmazonStoreKey | null {
-  const countryCode = getLocaleCountryCode();
+function normalizeCountryCode(value: unknown): string | null {
+  if (typeof value !== 'string') {
+    return null;
+  }
 
+  const normalized = value.trim().toUpperCase();
+  return normalized.length === 2 ? normalized : null;
+}
+
+function getStorefrontCountryCode(): string | null {
+  const runtimeExtra = (Constants.expoConfig?.extra ?? null) as
+    | {
+        iosAppStoreCountryCode?: unknown;
+        androidPlayStoreCountryCode?: unknown;
+      }
+    | null;
+
+  if (Platform.OS === 'ios') {
+    return normalizeCountryCode(runtimeExtra?.iosAppStoreCountryCode);
+  }
+
+  if (Platform.OS === 'android') {
+    return normalizeCountryCode(runtimeExtra?.androidPlayStoreCountryCode);
+  }
+
+  return null;
+}
+
+function mapCountryToAmazonStore(countryCode: string | null): AmazonStoreKey | null {
   if (!countryCode || !(countryCode in COUNTRY_TO_AMAZON_STORE)) {
     return null;
   }
 
   return COUNTRY_TO_AMAZON_STORE[countryCode];
+}
+
+export function detectAmazonStoreFromLocale(): AmazonStoreKey | null {
+  return mapCountryToAmazonStore(getLocaleCountryCode());
+}
+
+export function detectAmazonStoreFromStoreOrLocale(): AmazonStoreKey | null {
+  const storefrontStore = mapCountryToAmazonStore(getStorefrontCountryCode());
+  if (storefrontStore) {
+    return storefrontStore;
+  }
+
+  return detectAmazonStoreFromLocale();
 }
 
 export function getEffectiveAmazonStore(
