@@ -29,6 +29,8 @@ export default ({ config }: { config: ExpoConfig }) => ({
     extra: {
       ...(config.extra ?? {}),
       ...(base.expo.extra ?? {}),
+      iosAppStoreCountryCode: process.env.EXPO_PUBLIC_IOS_APP_STORE_COUNTRY_CODE ?? null,
+      androidPlayStoreCountryCode: process.env.EXPO_PUBLIC_ANDROID_PLAY_STORE_COUNTRY_CODE ?? null,
       buildTime: new Date().toISOString(),
     },
   },
