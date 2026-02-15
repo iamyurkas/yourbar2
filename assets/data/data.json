@@ -13860,7 +13860,7 @@
       "name": "Golden Cadillac",
       "synonyms": ["Galliano and Crème de Cacao Cocktail"],
       "description": "The golden cadillac is a sweet, creamy, retro dessert cocktail. Created in 1952 at poor red's in el dorado, california, it became popular in the 1960s for its rich, **vanilla**-forward flavor, similar to a **brandy** alexander but with **Galliano**.",
-      "instructions": "1. Fill a shaker with **ice** cubes.\n2. Add 20ml of **Galliano**, 20ml of crème de cacao white and 20ml of **cream**.\n3. Shake well and strain into a cocktail glass.",
+      "instructions": "1. Fill a shaker with **ice** cubes.\n2. Add 20ml of **Galliano**, 20ml of crème de cacao white and 20ml of **cream**.\n3. Shake well and strain into a cocktail glass.\n4. Garnish with grated **chocolate** and **nutmeg**.",
       "photoUri": "assets/cocktails/227-golden-cadillac.jpg",
       "glassId": "coupe",
       "methodIds": ["shake"],
@@ -19882,9 +19882,9 @@
     {
       "id": 328,
       "name": "Mulled Wine",
-      "synonyms": ["Glühwein"],
+      "synonyms": ["Glühwein", "Glintwein"],
       "description": "Also called \"glühwein\" in German, this drink is very popular in German-speaking countries and France. Spices can be varied greatly – just use what you like.",
-      "instructions": "1. Heat a bottle or more of **red wine** in a pan.\n2. Add **cinnamon sticks**, **cloves**, **sugar**, **vanilla** pods, and **anise**.\n3. Add **lemon** wedges, and wait10 minutes.\n4. Heat until the wine almost boils, and serve in cups.",
+      "instructions": "1. Heat a bottle or more of **red wine** in a pan.\n2. Add **cinnamon sticks**, **cloves**, **sugar**, **vanilla** pods, and **anise**.\n3. Add **lemon** wedges, and wait10 minutes.\n4. Heat until the wine almost boils, and serve in cups.\n5. Garnish each cup with a **cinnamon stick**.",
       "photoUri": "assets/cocktails/328-mulled-wine.jpg",
       "glassId": "irish_coffee_glass",
       "methodIds": ["heat", "build"],
@@ -31563,7 +31563,7 @@
       "id": 514,
       "name": "Berry Spritz",
       "description": "A refreshing berry spritz with bright fruit notes, sparkling wine, and a light soda finish.",
-      "instructions": "1. Muddle 40g of **berries** with 20ml of **lime juice** in a rocks glass.\n2. Add 120g of **ice** and pour in the **prosecco**.\n3. Top with **soda water**, stir, and serve.",
+      "instructions": "1. Muddle 40g of **berries** with 20ml of **lime juice** in a rocks glass.\n2. Add 120g of **ice** and pour in the **prosecco**.\n3. Top with **soda water** and stir gently.\n4. Garnish with a **lime** wedge, then serve.",
       "photoUri": "assets/cocktails/514-berry-spritz.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["muddle", "build"],
@@ -32274,7 +32274,7 @@
       "id": 526,
       "name": "Cynar Spritz",
       "description": "A bittersweet spritz combining **Cynar**, **prosecco**, and **soda water**, finished with a bright grapefruit garnish.",
-      "instructions": "1. In a wine glass full of ice combine 90 ml of **prosecco** and 60 ml of **Cynar**.\n2. Add 30 ml of **soda water**.\n3. Garnish with a **grapefruit** slice.",
+      "instructions": "1. In a wine glass full of ice combine 90ml of **prosecco** and 60ml of **Cynar**.\n2. Add 30ml of **soda water**.\n3. Garnish with a **grapefruit** slice.",
       "photoUri": "assets/cocktails/526-cynar-spritz.jpg",
       "glassId": "wine_glass",
       "methodIds": ["build"],
@@ -32474,8 +32474,7 @@
           "ingredientId": 309,
           "name": "Simple Syrup",
           "amount": "1",
-          "unitId": 24,
-          "garnish": true
+          "unitId": 2
         }
       ]
     },
@@ -33308,7 +33307,7 @@
       "id": 543,
       "name": "Summer Cup",
       "description": "A great cocktail that pairs fabulous ingredients with the mood and the moment.",
-      "instructions": "1. Fill a large glass with 150g of **ice**.\n2. Add 4 halves of **strawberry**, an **orange** slice, a **lemon** slice, and 4 **mint** leaves.\n3. Pour in 30ml of **gin** and 30ml of **Pimm's No. 1**.\n4. Top with 180ml of **lemonade** and stir gently.",
+      "instructions": "1. Fill a large glass with 150g of **ice**.\n2. Add 4 halves of **strawberry**, an **orange** slice, a **lemon** slice, and 4 **mint** leaves.\n3. Pour in 30ml of **gin** and 30ml of **Pimm's No. 1**.\n4. Top with 180ml of **lemonade** and stir gently.\n5. Garnish with extra **mint** leaves.",
       "photoUri": "assets/cocktails/543-summer-cup.jpg",
       "glassId": "collins_glass",
       "methodIds": ["build"],
@@ -35442,7 +35441,7 @@
       "id": 580,
       "name": "Passion Fruit Fizz",
       "description": "A tropical non-alcoholic fizz with tangy **passion fruit juice**, fresh **lime juice**, and sparkling **soda water**.",
-      "instructions": "1. Fill a shaker with 120g of **ice**.\n2. Add 60ml of **passion fruit juice**, 20ml of **lime juice**, and 15ml of **simple syrup**.\n3. Shake and strain into a highball glass over fresh **ice**.\n4. Top with 90ml of **soda water**.",
+      "instructions": "1. Fill a shaker with 120g of **ice**.\n2. Add 60ml of **passion fruit juice**, 20ml of **lime juice**, and 15ml of **simple syrup**.\n3. Shake and strain into a highball glass over fresh **ice**.\n4. Top with 90ml of **soda water**.\n5. Garnish with **passion fruit** and **mint**.",
       "photoUri": "assets/cocktails/580-passion-fruit-fizz.jpg",
       "glassId": "collins_glass",
       "methodIds": ["shake"],
@@ -35767,7 +35766,7 @@
       "id": 586,
       "name": "Cherry Bomb #2",
       "description": "A spirit-forward tequila riff with layered cherry and bitter-chocolate accents balanced by **Acqua Bianca** liqueur.",
-      "instructions": "1. Stir all ingredients with **ice**.\n2. Strain into an ice-filled glass (preferably over a large cube).",
+      "instructions": "1. Stir all ingredients with **ice**.\n2. Strain into an ice-filled glass (preferably over a large cube).\n3. Garnish with a **cherry** and an **olive**.",
       "photoUri": "assets/cocktails/586-cherry-bomb-2.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["stir"],
@@ -38751,12 +38750,6 @@
       "description": "An aromatic herb with earthy, savory notes that pairs well with citrus and berries in mocktails.",
       "tags": [7],
       "photoUri": "assets/ingredients/363-sage.jpg"
-    },
-    {
-      "id": 364,
-      "name": "Rosolio Bergamotto",
-      "description": "Rosolio Bergamotto is an aromatic Italian citrus liqueur with floral bergamot notes and gentle sweetness.",
-      "tags": [1]
     }
   ]
 }
