@@ -1219,7 +1219,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 <Text
                   style={[styles.settingLabel, { color: Colors.onSurface }]}
                 >
-                  {isExporting ? "Exporting data..." : "Export data"}
+                  {isExporting ? "Exporting data..." : "Backup data"}
                 </Text>
                 <Text
                   style={[
@@ -1227,7 +1227,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     { color: Colors.onSurfaceVariant },
                   ]}
                 >
-                  Backup data to a file
+                  Export data to a file
                 </Text>
               </View>
             </Pressable>
@@ -1287,7 +1287,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 <Text
                   style={[styles.settingLabel, { color: Colors.onSurface }]}
                 >
-                  {isBackingUpPhotos ? "Exporting photos..." : "Export photos"}
+                  {isBackingUpPhotos ? "Exporting photos..." : "Backup photos"}
                 </Text>
                 <Text
                   style={[
@@ -1295,7 +1295,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     { color: Colors.onSurfaceVariant },
                   ]}
                 >
-                  Save photos as an archive
+                  Export photos as an archive
                 </Text>
               </View>
             </Pressable>
