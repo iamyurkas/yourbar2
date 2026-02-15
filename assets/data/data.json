@@ -31985,7 +31985,7 @@
       "id": 521,
       "name": "Cherry Smash",
       "description": "A juicy whiskey smash with muddled cherries, **bourbon**, and a splash of soda for a refreshing long sip.",
-      "instructions": "1. Muddle 6 pitted **cherries** in a cocktail shaker.\n2. Add 60ml of **bourbon**, 22.5ml of **cherry liqueur**, 7.5ml of **simple syrup**, and a dash of **orange bitters**.\n3. Fill the shaker with 150g of **ice** and shake hard for 10–15 seconds until well chilled.\n4. Pour the shaken mix (including the muddled **cherries**) into a rocks glass over fresh **ice**.\n5. Top with 60ml of **soda water**.\n6. Garnish with 2 whole **cherries**.",
+      "instructions": "1. Muddle 6 pitted **cherries** in a cocktail shaker.\n2. Add 60ml of **bourbon**, 22.5ml of **cherry liqueur**, 7.5ml of **simple syrup**, and a dash of **orange bitters**.\n3. Fill the shaker with 150g of **ice** and shake hard for 10–15 seconds until well chilled.\n4. Strain into a chilled rocks glass filled with fresh **ice** (preferably over a large cube).\n5. Top with 60ml of **soda water**.\n6. Garnish with 2 whole **cherries**.",
       "photoUri": "assets/cocktails/521-cherry-smash.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["muddle", "shake"],
