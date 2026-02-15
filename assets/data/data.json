@@ -31309,6 +31309,7 @@
     {
       "id": 512,
       "name": "Apple Shot",
+      "description": "A fruity, lightly sparkling shooter that blends **whiskey**, **apple schnapps**, and **cranberry juice** for a sweet-tart finish.",
       "instructions": "1. Add 150g of **ice**, 20ml of **whiskey**, 15ml of **apple schnapps**, and 20ml of **cranberry juice** to a mixing glass.\n2. Stir until chilled.\n3. Strain into a chilled shooter glass.\n4. Top with 10ml of **soda water**.",
       "photoUri": "assets/cocktails/512-apple-shot.jpg",
       "glassId": "shooter",
@@ -31356,8 +31357,7 @@
           "amount": "10",
           "unitId": 11
         }
-      ],
-      "description": "A fruity, lightly sparkling shooter that blends **whiskey**, **apple schnapps**, and **cranberry juice** for a sweet-tart finish."
+      ]
     },
     {
       "id": 513,
@@ -31557,6 +31557,7 @@
     {
       "id": 527,
       "name": "Bitter Giuseppe",
+      "description": "A bittersweet, aperitif-style sipper built on **Cynar** and vermouth, lifted by citrus oils and a touch of saline complexity.",
       "instructions": "1. Squeeze the oils from a **lemon** zest into a mixing glass and drop the zest in.\n2. Add 60ml of **Cynar**, 30ml of **Carpano Antica Formula Vermouth**, 7.5ml of **lemon juice**, and 3 dashes of **orange bitters**.\n3. Fill the glass with about 150g of **ice** and stir for about 20 seconds until well chilled.\n4. Strain into a rocks glass over fresh **ice**.\n5. Express a fresh **lemon** zest over the cocktail and use it as garnish.",
       "photoUri": "assets/cocktails/527-bitter-giuseppe.jpg",
       "glassId": "rocks_glass",
@@ -31615,8 +31616,7 @@
           "unitId": 26,
           "garnish": true
         }
-      ],
-      "description": "A bittersweet, aperitif-style sipper built on **Cynar** and vermouth, lifted by citrus oils and a touch of saline complexity."
+      ]
     },
     {
       "id": 505,
@@ -31796,6 +31796,7 @@
       "id": 511,
       "name": "Bloody Bull",
       "synonyms": ["Beefy Bloody Mary"],
+      "description": "A savory, Bloody Mary-style highball that combines **vodka**, **tomato juice**, and beef bouillon with spice and umami depth.",
       "instructions": "1. Fill a shaker tin with **ice**.\n2. Add 50ml of **vodka**, 50ml of **beef bouillon**, 50ml of **tomato juice**, 5ml of **rich simple syrup**, a dash of **lemon juice**, 3 dashes of **Worcestershire sauce**, a pinch of **celery salt**, a pinch of **black pepper**, and 2 pinches of **salt**.\n3. Add plenty of **ice** to the tin with the ingredients.\n4. Hold a second empty tin below and slightly to the side of the first tin.\n5. Pour the cocktail in a long, controlled stream from the first tin into the second tin to aerate and chill it.\n6. Pour the liquid back into the first tin in the same way.\n7. Repeat the back-and-forth throw 5 times.\n8. Strain into a highball glass filled with **ice**.\n9. Garnish with an **olive**.",
       "photoUri": "assets/cocktails/511-bloody-bull.jpg",
       "glassId": "highball_glass",
@@ -31887,8 +31888,7 @@
           "unitId": 1,
           "garnish": true
         }
-      ],
-      "description": "A savory, Bloody Mary-style highball that combines **vodka**, **tomato juice**, and beef bouillon with spice and umami depth."
+      ]
     },
     {
       "id": 525,
@@ -31936,6 +31936,7 @@
       "id": 517,
       "name": "Blueberry Martini",
       "synonyms": ["Brambly Martini"],
+      "description": "A fresh, fruit-driven martini with muddled **blueberries**, **gin** (or **vodka**), and citrus for a crisp aromatic profile.",
       "instructions": "1. Muddle blueberries and **Blueberry schnapps** (or **simple syrup**) in the bottom of a cocktail shaker.\n2. Add the **gin** (or **vodka**), **lemon juice**, and a handful of **ice** to the shaker.\n3. Shake vigorously for 10–15 seconds.\n4. Double strain into a chilled martini glass.\n5. Garnish with 1 or 2 fresh **blueberries**.",
       "photoUri": "assets/cocktails/517-blueberry-martini.jpg",
       "glassId": "martini",
@@ -31997,8 +31998,7 @@
           "unitId": 1,
           "garnish": true
         }
-      ],
-      "description": "A fresh, fruit-driven martini with muddled **blueberries**, **gin** (or **vodka**), and citrus for a crisp aromatic profile."
+      ]
     },
     {
       "id": 518,
@@ -32057,6 +32057,7 @@
     {
       "id": 521,
       "name": "Cherry Smash",
+      "description": "A juicy whiskey smash with muddled cherries, **bourbon**, and a splash of soda for a refreshing long sip.",
       "instructions": "1. Muddle 6 pitted **cherries** in a cocktail shaker.\n2. Add 60ml of **bourbon**, 22.5ml of **cherry liqueur**, 7.5ml of **simple syrup**, and a dash of **orange bitters**.\n3. Fill the shaker with 150g of **ice** and shake hard for 10–15 seconds until well chilled.\n4. Pour the shaken mix (including the muddled **cherries**) into a rocks glass over fresh **ice**.\n5. Top with 60ml of **soda water**.\n6. Garnish with 2 whole **cherries**.",
       "photoUri": "assets/cocktails/521-cherry-smash.jpg",
       "glassId": "rocks_glass",
@@ -32113,8 +32114,7 @@
           "unitId": 1,
           "garnish": true
         }
-      ],
-      "description": "A juicy whiskey smash with muddled cherries, **bourbon**, and a splash of soda for a refreshing long sip."
+      ]
     },
     {
       "id": 546,
@@ -32186,6 +32186,7 @@
     {
       "id": 526,
       "name": "Cynar Spritz",
+      "description": "A bittersweet spritz combining **Cynar**, **prosecco**, and **soda water**, finished with a bright grapefruit garnish.",
       "instructions": "1. In a wine glass full of ice combine 90 ml of **prosecco** and 60 ml of **Cynar**.\n2. Add 30 ml of **soda water**.\n3. Garnish with a **grapefruit** slice.",
       "photoUri": "assets/cocktails/526-cynar-spritz.jpg",
       "glassId": "wine_glass",
@@ -32226,16 +32227,15 @@
           "name": "Grapefruit",
           "amount": "1",
           "unitId": 19,
+          "garnish": true,
           "substitutes": [
             {
               "ingredientId": 242,
               "name": "Orange"
             }
-          ],
-          "garnish": true
+          ]
         }
-      ],
-      "description": "A bittersweet spritz combining **Cynar**, **prosecco**, and **soda water**, finished with a bright grapefruit garnish."
+      ]
     },
     {
       "id": 528,
@@ -32669,6 +32669,7 @@
     {
       "id": 535,
       "name": "Kiwi Fruit Martini",
+      "description": "A tropical-fruit Martini with muddled kiwi, citrus, and a clean **vodka** base.",
       "instructions": "1. Cut a **kiwi fruit** in half and cut an additional slice for garnish. Scoop the flesh from both halves into the base of a shaker.\n2. Muddle the kiwi flesh thoroughly.\n3. Add 60ml of **vodka**, 15ml of **Strucchi Bitter**, and 5ml of **kiwi fruit liqueur**.\n4. Fill the shaker with about 150g of **ice** and shake vigorously for about 15 seconds until well chilled.\n5. Fine strain into a chilled martini glass.\n6. Garnish with the kiwi slice.",
       "photoUri": "assets/cocktails/535-kiwi-fruit-martini.jpg",
       "glassId": "martini",
@@ -32735,8 +32736,7 @@
           "amount": "1",
           "unitId": 19
         }
-      ],
-      "description": "A tropical-fruit Martini with muddled kiwi, citrus, and a clean **vodka** base."
+      ]
     },
     {
       "id": 540,
@@ -32949,6 +32949,7 @@
       "photoUri": "assets/cocktails/515-mixed-berry-sangria.jpg",
       "glassId": "pitcher",
       "methodIds": ["muddle", "stir"],
+      "tags": [6, 7, 8],
       "ingredients": [
         {
           "order": 1,
@@ -34198,7 +34199,7 @@
       "instructions": "1. Add mint leaves and sugar syrup to a highball glass and gently muddle.\n2. Add lime juice and fill the glass with ice.\n3. Top with soda water and stir gently.\n4. Garnish with a mint sprig and a lime wedge.",
       "photoUri": "assets/cocktails/556-virgin-mojito.jpg",
       "glassId": "highball_glass",
-      "methodIds": ["muddle"],
+      "methodIds": ["muddle", "build"],
       "tags": [10],
       "ingredients": [
         {
@@ -34363,18 +34364,18 @@
       "name": "Ipanema",
       "synonyms": ["Brazilian Lemonade", "Virgin Caipirinha"],
       "description": "A Brazilian-inspired non-alcoholic long drink with muddled lime, sugar, and ginger ale.",
-      "instructions": "1. Add lime wedges and sugar to a rocks glass.\n2. Gently muddle to release the lime oils and juice.\n3. Fill the glass with crushed ice.\n4. Top with ginger ale and stir briefly.",
+      "instructions": "1. Add **lime** wedges and **sugar** to a rocks glass.\n2. Gently muddle to release the lime oils and juice.\n3. Fill the glass with crushed **ice**.\n4. Top with **ginger ale** and stir briefly.",
       "photoUri": "assets/cocktails/559-ipanema.jpg",
       "glassId": "rocks_glass",
-      "methodIds": ["muddle"],
+      "methodIds": ["muddle", "build"],
       "tags": [10],
       "ingredients": [
         {
           "order": 1,
           "ingredientId": 222,
           "name": "Lime",
-          "amount": "0.5",
-          "unitId": 9
+          "amount": "2",
+          "unitId": 16
         },
         {
           "order": 2,
@@ -34402,9 +34403,8 @@
     {
       "id": 560,
       "name": "St. Clements",
-      "synonyms": ["Clementine Cooler"],
       "description": "A brisk citrus cooler built from orange and lemon juice, finished with sparkling soda.",
-      "instructions": "1. Fill a shaker with ice.\n2. Add orange juice, lemon juice, and sugar syrup.\n3. Shake and strain into a highball glass with fresh ice.\n4. Top with soda water and stir gently.\n5. Garnish with an orange wedge.",
+      "instructions": "1. Fill a shaker with **ice**.\n2. Add **orange juice**, **lemon juice**, and **simple syrup**.\n3. Shake and strain into a highball glass with fresh **ice**.\n4. Top with **soda water** and stir gently.\n5. Garnish with an **orange** wedge.",
       "photoUri": "assets/cocktails/560-st-clements.jpg",
       "glassId": "highball_glass",
       "methodIds": ["shake"],
@@ -34414,28 +34414,28 @@
           "order": 1,
           "ingredientId": 193,
           "name": "Ice",
-          "amount": "120",
+          "amount": "150",
           "unitId": 8
         },
         {
           "order": 2,
           "ingredientId": 246,
           "name": "Orange Juice",
-          "amount": "80",
+          "amount": "75",
           "unitId": 11
         },
         {
           "order": 3,
           "ingredientId": 216,
           "name": "Lemon Juice",
-          "amount": "40",
+          "amount": "45",
           "unitId": 11
         },
         {
           "order": 4,
           "ingredientId": 137,
           "name": "Demerara Sugar Syrup",
-          "amount": "10",
+          "amount": "15",
           "unitId": 11
         },
         {
@@ -34447,6 +34447,13 @@
         },
         {
           "order": 6,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
+        },
+        {
+          "order": 7,
           "ingredientId": 242,
           "name": "Orange",
           "amount": "1",
@@ -34460,7 +34467,7 @@
       "name": "Lime Rickey (Non-Alcoholic)",
       "synonyms": ["Virgin Lime Rickey"],
       "description": "A tart and sparkling lime refresher with no alcohol and a clean finish.",
-      "instructions": "1. Fill a highball glass with ice.\n2. Add lime juice and sugar syrup.\n3. Top with soda water and stir well.\n4. Garnish with a lime wedge.",
+      "instructions": "1. Fill a highball glass with **ice**.\n2. Add **lime juice** and **Demerara sugar syrup**.\n3. Top with **soda water** and stir well.\n4. Garnish with a **lime wedge*.",
       "photoUri": "assets/cocktails/561-lime-rickey-non-alcoholic.jpg",
       "glassId": "highball_glass",
       "methodIds": ["build"],
@@ -34477,15 +34484,21 @@
           "order": 2,
           "ingredientId": 223,
           "name": "Lime Juice",
-          "amount": "25",
+          "amount": "30",
           "unitId": 11
         },
         {
           "order": 3,
           "ingredientId": 137,
           "name": "Demerara Sugar Syrup",
-          "amount": "15",
-          "unitId": 11
+          "amount": "30",
+          "unitId": 11,
+          "substitutes": [
+            {
+              "ingredientId": 293,
+              "name": "Rich Simple Syrup"
+            }
+          ]
         },
         {
           "order": 4,
@@ -34508,7 +34521,7 @@
       "id": 562,
       "name": "Pussyfoot",
       "description": "A classic prohibition-era fruit mocktail combining citrus and tropical juices with grenadine.",
-      "instructions": "1. Fill a shaker with ice.\n2. Add orange juice, grapefruit juice, pineapple juice, and grenadine.\n3. Shake until well chilled and strain into a hurricane glass over fresh ice.\n4. Garnish with an orange slice.",
+      "instructions": "1. Fill a shaker with **ice**.\n2. Add **orange juice**, **grapefruit juice**, **pineapple juice**, and **grenadine**.\n3. Shake until well chilled and strain into a hurricane glass over fresh **ice**.\n4. Garnish with an **orange** slice.",
       "photoUri": "assets/cocktails/562-pussyfoot.jpg",
       "glassId": "hurricane_glass",
       "methodIds": ["shake"],
@@ -34518,7 +34531,7 @@
           "order": 1,
           "ingredientId": 193,
           "name": "Ice",
-          "amount": "120",
+          "amount": "150",
           "unitId": 8
         },
         {
@@ -34551,6 +34564,13 @@
         },
         {
           "order": 6,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
+        },
+        {
+          "order": 7,
           "ingredientId": 242,
           "name": "Orange",
           "amount": "1",
@@ -34563,8 +34583,8 @@
       "id": 563,
       "name": "Virgin Piña Colada",
       "description": "A creamy tropical favorite with pineapple and coconut, blended to a smooth frozen texture.",
-      "instructions": "1. Add pineapple juice, coconut cream, lime juice, and ice to a blender.\n2. Blend until smooth and frosty.\n3. Pour into a hurricane glass.\n4. Garnish with a pineapple wedge.",
-      "photoUri": "assets/cocktails/563-virgin-pina-colada.jpg",
+      "instructions": "1. Add **pineapple juice**, **coconut cream**, **lime juice**, and **ice** to a blender.\n2. Blend until smooth and frosty.\n3. Pour into a hurricane glass.\n4. Garnish with a **pineapple** wedge.",
+      "photoUri": "assets/cocktails/563-virgin-pi-a-colada.jpg",
       "glassId": "hurricane_glass",
       "methodIds": ["blend"],
       "tags": [10],
@@ -34594,12 +34614,12 @@
           "order": 4,
           "ingredientId": 193,
           "name": "Ice",
-          "amount": "160",
+          "amount": "120",
           "unitId": 8
         },
         {
           "order": 5,
-          "ingredientId": 278,
+          "ingredientId": 274,
           "name": "Pineapple",
           "amount": "1",
           "unitId": 27,
@@ -34611,7 +34631,7 @@
       "id": 564,
       "name": "Italian Cream Soda",
       "description": "A sweet and fizzy dessert-style mocktail with flavored syrup, soda, and cream.",
-      "instructions": "1. Fill a highball glass with ice.\n2. Add grenadine and soda water, then stir.\n3. Float cream on top and give one gentle stir for a marbled effect.\n4. Garnish with a maraschino cherry.",
+      "instructions": "1. Fill a highball glass with **ice**.\n2. Add **grenadine** and **soda water**, then stir.\n3. Float **cream** on top and give one gentle stir for a marbled effect.\n4. Garnish with **whipped cream** and a **strawberry**.",
       "photoUri": "assets/cocktails/564-italian-cream-soda.jpg",
       "glassId": "highball_glass",
       "methodIds": ["build"],
@@ -34647,8 +34667,16 @@
         },
         {
           "order": 5,
-          "ingredientId": 231,
-          "name": "Maraschino Cherry",
+          "ingredientId": 341,
+          "name": "Whipped Cream",
+          "amount": "10",
+          "unitId": 11,
+          "garnish": true
+        },
+        {
+          "order": 6,
+          "ingredientId": 317,
+          "name": "Strawberry",
           "amount": "1",
           "unitId": 1,
           "garnish": true
@@ -34658,12 +34686,11 @@
     {
       "id": 565,
       "name": "Cucumber Cooler",
-      "synonyms": ["Cucumber Highball"],
       "description": "A crisp and cooling non-alcoholic highball made with cucumber, citrus, and apple juice.",
-      "instructions": "1. Muddle cucumber slices with sugar syrup in a shaker.\n2. Add lime juice, apple juice, and ice.\n3. Shake and strain into a collins glass filled with fresh ice.\n4. Top with soda water and stir gently.\n5. Garnish with a cucumber slice.",
+      "instructions": "1. Muddle **cucumber slices** with **sugar syrup** in a shaker.\n2. Add **lime juice**, **apple juice**, and **ice**.\n3. Shake and strain into a Collins glass filled with fresh **ice**.\n4. Top with **soda water** and stir gently.\n5. Garnish with a **cucumber** slice.",
       "photoUri": "assets/cocktails/565-cucumber-cooler.jpg",
       "glassId": "collins_glass",
-      "methodIds": ["muddle"],
+      "methodIds": ["muddle", "build"],
       "tags": [10],
       "ingredients": [
         {
@@ -34682,30 +34709,30 @@
         },
         {
           "order": 3,
-          "ingredientId": 223,
-          "name": "Lime Juice",
-          "amount": "20",
-          "unitId": 11
-        },
-        {
-          "order": 4,
-          "ingredientId": 26,
-          "name": "Apple Juice",
-          "amount": "80",
-          "unitId": 11
-        },
-        {
-          "order": 5,
           "ingredientId": 193,
           "name": "Ice",
           "amount": "120",
           "unitId": 8
         },
         {
+          "order": 4,
+          "ingredientId": 223,
+          "name": "Lime Juice",
+          "amount": "20",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 26,
+          "name": "Apple Juice",
+          "amount": "90",
+          "unitId": 11
+        },
+        {
           "order": 6,
           "ingredientId": 311,
           "name": "Soda Water",
-          "amount": "40",
+          "amount": "60",
           "unitId": 11
         },
         {
@@ -34722,9 +34749,9 @@
       "id": 566,
       "name": "Seedlip Spritz",
       "description": "A crisp non-alcoholic spritz with citrus lift and gentle botanical notes from **Seedlip** and **tonic**.",
-      "instructions": "1. Fill a highball glass with **ice**.\n2. Add 50ml of **Seedlip** and 10ml of **lemon juice**.\n3. Top with 120ml of **tonic** and stir briefly.\n4. Garnish with a **lemon** wedge.",
+      "instructions": "1. Fill a highball glass with **ice**.\n2. Add 60ml of **Seedlip** and 10ml of **lemon juice**.\n3. Top with 120ml of **tonic** and stir briefly.\n4. Garnish with an **orange** slice.",
       "photoUri": "assets/cocktails/566-seedlip-spritz.jpg",
-      "glassId": "highball_glass",
+      "glassId": "wine_glass",
       "methodIds": ["build"],
       "tags": [10],
       "ingredients": [
@@ -34739,7 +34766,7 @@
           "order": 2,
           "ingredientId": 358,
           "name": "Seedlip",
-          "amount": "50",
+          "amount": "60",
           "unitId": 11
         },
         {
@@ -34770,7 +34797,7 @@
       "id": 567,
       "name": "Cucumber Basil Cooler",
       "description": "A garden-fresh alcohol-free cooler built on **cucumber**, **basil**, and bright **lime juice**.",
-      "instructions": "1. Add **cucumber** slices and **basil** to a shaker and muddle gently.\n2. Add 20ml of **lime juice**, 15ml of **simple syrup**, and **ice**.\n3. Shake briefly and strain into a collins glass over fresh ice.\n4. Top with 100ml of **soda water** and stir gently.",
+      "instructions": "1. Add **cucumber** slices and **basil** to a shaker and muddle gently.\n2. Add 20ml of **lime juice**, 15ml of **simple syrup**, and **ice**.\n3. Shake briefly and strain into a Collins glass over fresh ice.\n4. Top with 120ml of **soda water** and stir gently.",
       "photoUri": "assets/cocktails/567-cucumber-basil-cooler.jpg",
       "glassId": "collins_glass",
       "methodIds": ["muddle", "shake"],
@@ -34792,30 +34819,30 @@
         },
         {
           "order": 3,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
+        },
+        {
+          "order": 4,
           "ingredientId": 223,
           "name": "Lime Juice",
           "amount": "20",
           "unitId": 11
         },
         {
-          "order": 4,
+          "order": 5,
           "ingredientId": 309,
           "name": "Simple Syrup",
           "amount": "15",
           "unitId": 11
         },
         {
-          "order": 5,
-          "ingredientId": 193,
-          "name": "Ice",
-          "amount": "140",
-          "unitId": 8
-        },
-        {
           "order": 6,
           "ingredientId": 311,
           "name": "Soda Water",
-          "amount": "100",
+          "amount": "120",
           "unitId": 11
         }
       ]
@@ -34832,24 +34859,24 @@
       "ingredients": [
         {
           "order": 1,
-          "ingredientId": 193,
-          "name": "Ice",
-          "amount": "120",
-          "unitId": 8
+          "ingredientId": 261,
+          "name": "Peach",
+          "amount": "4",
+          "unitId": 1
         },
         {
           "order": 2,
-          "ingredientId": 261,
-          "name": "Peach",
-          "amount": "60",
-          "unitId": 11
-        },
-        {
-          "order": 3,
           "ingredientId": 216,
           "name": "Lemon Juice",
           "amount": "15",
           "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
         },
         {
           "order": 4,
@@ -34857,6 +34884,14 @@
           "name": "Ginger Ale",
           "amount": "120",
           "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 261,
+          "name": "Peach",
+          "amount": "2",
+          "unitId": 27,
+          "garnish": true
         }
       ]
     },
@@ -34902,7 +34937,7 @@
           "order": 5,
           "ingredientId": 193,
           "name": "Ice",
-          "amount": "130",
+          "amount": "120",
           "unitId": 8
         },
         {
@@ -34918,7 +34953,7 @@
       "id": 570,
       "name": "Lavender Lemon Fizz",
       "description": "A fragrant alcohol-free fizz with floral **lavender syrup**, fresh **lemon juice**, and chilled soda.",
-      "instructions": "1. Fill a collins glass with **ice**.\n2. Add 25ml of **lavender syrup** and 25ml of **lemon juice**.\n3. Top with 100ml of **soda water** and stir gently.",
+      "instructions": "1. Fill a Collins glass with **ice**.\n2. Add 30ml of **lavender syrup** and 30ml of **lemon juice**.\n3. Top with 30ml of **soda water** and stir gently.\n4. Garnish with a **lemon** slice.",
       "photoUri": "assets/cocktails/570-lavender-lemon-fizz.jpg",
       "glassId": "collins_glass",
       "methodIds": ["build"],
@@ -34935,22 +34970,30 @@
           "order": 2,
           "ingredientId": 361,
           "name": "Lavender Syrup",
-          "amount": "25",
+          "amount": "30",
           "unitId": 11
         },
         {
           "order": 3,
           "ingredientId": 216,
           "name": "Lemon Juice",
-          "amount": "25",
+          "amount": "30",
           "unitId": 11
         },
         {
           "order": 4,
           "ingredientId": 311,
           "name": "Soda Water",
-          "amount": "100",
+          "amount": "90",
           "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 214,
+          "name": "Lemon",
+          "amount": "1",
+          "unitId": 19,
+          "garnish": true
         }
       ]
     },
@@ -34958,39 +35001,54 @@
       "id": 571,
       "name": "Pineapple Coconut Cooler",
       "description": "A creamy tropical mocktail blending **pineapple juice**, **coconut milk**, and fresh **lime juice**.",
-      "instructions": "1. Add 80ml of **pineapple juice**, 40ml of **coconut milk**, and 10ml of **lime juice** to a shaker with **ice**.\n2. Shake until chilled.\n3. Strain into a highball glass over fresh ice.",
+      "instructions": "1. Add 90ml of **pineapple juice**, 45ml of **coconut milk**, and 15ml of **lime juice** to a shaker with **ice**.\n2. Shake until chilled.\n3. Strain into a Collins glass over fresh **ice**.\n4. Garnish with a pineapple wedge.",
       "photoUri": "assets/cocktails/571-pineapple-coconut-cooler.jpg",
-      "glassId": "highball_glass",
+      "glassId": "collins_glass",
       "methodIds": ["shake"],
       "tags": [10],
       "ingredients": [
         {
           "order": 1,
-          "ingredientId": 275,
-          "name": "Pineapple Juice",
-          "amount": "80",
-          "unitId": 11
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8
         },
         {
           "order": 2,
-          "ingredientId": 102,
-          "name": "Coconut Milk",
-          "amount": "40",
+          "ingredientId": 275,
+          "name": "Pineapple Juice",
+          "amount": "90",
           "unitId": 11
         },
         {
           "order": 3,
-          "ingredientId": 223,
-          "name": "Lime Juice",
-          "amount": "10",
+          "ingredientId": 102,
+          "name": "Coconut Milk",
+          "amount": "45",
           "unitId": 11
         },
         {
           "order": 4,
+          "ingredientId": 223,
+          "name": "Lime Juice",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 5,
           "ingredientId": 193,
           "name": "Ice",
-          "amount": "140",
-          "unitId": 8
+          "amount": "120",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 274,
+          "name": "Pineapple",
+          "amount": "1",
+          "unitId": 27,
+          "garnish": true
         }
       ]
     },
@@ -34998,7 +35056,7 @@
       "id": 572,
       "name": "Orange Rosemary Tonic",
       "description": "A bright non-alcoholic highball of **orange juice**, **tonic**, and aromatic **rosemary**.",
-      "instructions": "1. Fill a highball glass with **ice**.\n2. Add 80ml of **orange juice** and 10ml of **lemon juice**.\n3. Top with 100ml of **tonic** and stir gently.\n4. Garnish with a **rosemary** sprig.",
+      "instructions": "1. Fill a highball glass with **ice**.\n2. Add 90ml of **orange juice** and 30ml of **lemon juice**.\n3. Top with 120ml of **tonic** and stir gently.\n4. Garnish with a **rosemary** sprig.",
       "photoUri": "assets/cocktails/572-orange-rosemary-tonic.jpg",
       "glassId": "highball_glass",
       "methodIds": ["build"],
@@ -35015,21 +35073,21 @@
           "order": 2,
           "ingredientId": 246,
           "name": "Orange Juice",
-          "amount": "80",
+          "amount": "90",
           "unitId": 11
         },
         {
           "order": 3,
           "ingredientId": 216,
           "name": "Lemon Juice",
-          "amount": "10",
+          "amount": "30",
           "unitId": 11
         },
         {
           "order": 4,
           "ingredientId": 332,
           "name": "Tonic",
-          "amount": "100",
+          "amount": "120",
           "unitId": 11
         },
         {
@@ -35046,9 +35104,9 @@
       "id": 573,
       "name": "Watermelon Mint Sparkler",
       "description": "A refreshing sparkling mocktail with juicy **watermelon juice**, cool **mint**, and zesty **lime**.",
-      "instructions": "1. Add **mint** and 15ml of **lime juice** to a glass and gently muddle.\n2. Fill with **ice** and add 100ml of **watermelon juice**.\n3. Top with 80ml of **soda water** and stir gently.",
+      "instructions": "1. Add **mint** and 15ml of **lime juice** to a glass and gently muddle.\n2. Fill with **ice** and add 90ml of **watermelon juice**.\n3. Top with 90ml of **soda water** and stir gently.",
       "photoUri": "assets/cocktails/573-watermelon-mint-sparkler.jpg",
-      "glassId": "collins_glass",
+      "glassId": "highball_glass",
       "methodIds": ["muddle", "build"],
       "tags": [10],
       "ingredients": [
@@ -35070,21 +35128,21 @@
           "order": 3,
           "ingredientId": 193,
           "name": "Ice",
-          "amount": "130",
+          "amount": "120",
           "unitId": 8
         },
         {
           "order": 4,
           "ingredientId": 362,
           "name": "Watermelon Juice",
-          "amount": "100",
+          "amount": "90",
           "unitId": 11
         },
         {
           "order": 5,
           "ingredientId": 311,
           "name": "Soda Water",
-          "amount": "80",
+          "amount": "90",
           "unitId": 11
         }
       ]
@@ -35110,7 +35168,7 @@
           "order": 2,
           "ingredientId": 26,
           "name": "Apple Juice",
-          "amount": "80",
+          "amount": "90",
           "unitId": 11
         },
         {
@@ -35124,8 +35182,24 @@
           "order": 4,
           "ingredientId": 162,
           "name": "Ginger Beer",
-          "amount": "100",
+          "amount": "90",
           "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 44,
+          "name": "Berries",
+          "amount": "4",
+          "unitId": 1,
+          "garnish": true
+        },
+        {
+          "order": 6,
+          "ingredientId": 222,
+          "name": "Lime",
+          "amount": "1",
+          "unitId": 27,
+          "garnish": true
         }
       ]
     },
@@ -35171,7 +35245,7 @@
           "order": 5,
           "ingredientId": 193,
           "name": "Ice",
-          "amount": "130",
+          "amount": "120",
           "unitId": 8
         },
         {
@@ -35187,10 +35261,10 @@
       "id": 576,
       "name": "Nojito",
       "description": "A refreshing alcohol-free take on the Mojito with **mint**, **lime juice**, **simple syrup**, and **soda water**.",
-      "instructions": "1. Add **mint** leaves and 15ml of **simple syrup** to a highball glass.\n2. Gently muddle to release aroma.\n3. Add 25ml of **lime juice** and fill with **ice**.\n4. Top with 120ml of **soda water** and stir lightly.\n5. Garnish with a **mint** sprig.",
+      "instructions": "1. Add **mint** leaves and 15ml of **rich simple syrup** to a highball glass.\n2. Gently muddle to release aroma.\n3. Add 30ml of **lime juice** and fill with **ice**.\n4. Top with 120ml of **soda water** and stir lightly.\n5. Garnish with a **mint** sprig.",
       "photoUri": "assets/cocktails/576-nojito.jpg",
-      "glassId": "highball_glass",
-      "methodIds": ["muddle"],
+      "glassId": "collins_glass",
+      "methodIds": ["muddle", "build"],
       "tags": [10],
       "ingredients": [
         {
@@ -35202,8 +35276,8 @@
         },
         {
           "order": 2,
-          "ingredientId": 309,
-          "name": "Simple Syrup",
+          "ingredientId": 293,
+          "name": "Rich Simple Syrup",
           "amount": "15",
           "unitId": 11
         },
@@ -35211,14 +35285,14 @@
           "order": 3,
           "ingredientId": 223,
           "name": "Lime Juice",
-          "amount": "25",
+          "amount": "30",
           "unitId": 11
         },
         {
           "order": 4,
           "ingredientId": 193,
           "name": "Ice",
-          "amount": "130",
+          "amount": "120",
           "unitId": 8
         },
         {
@@ -35242,7 +35316,7 @@
       "id": 577,
       "name": "Safe Sex on the Beach",
       "description": "A fruity zero-proof beach-style cooler with **orange juice**, **cranberry juice**, **peach**, and a touch of **grenadine**.",
-      "instructions": "1. Fill a shaker with **ice**.\n2. Add 60ml of **orange juice**, 60ml of **cranberry juice**, 40ml of **peach**, and 10ml of **grenadine**.\n3. Shake until chilled and strain into a collins glass with fresh **ice**.\n4. Garnish with an **orange** wedge.",
+      "instructions": "1. Fill a shaker with **ice**.\n2. Add 60ml of **orange juice**, 60ml of **cranberry juice**, 45ml of **peach**, and 15ml of **grenadine**.\n3. Shake until chilled and strain into a Collins glass with fresh **ice**.\n4. Garnish with an **orange** wedge and a **cherry**.",
       "photoUri": "assets/cocktails/577-safe-sex-on-the-beach.jpg",
       "glassId": "collins_glass",
       "methodIds": ["shake"],
@@ -35252,7 +35326,7 @@
           "order": 1,
           "ingredientId": 193,
           "name": "Ice",
-          "amount": "130",
+          "amount": "150",
           "unitId": 8
         },
         {
@@ -35273,22 +35347,37 @@
           "order": 4,
           "ingredientId": 261,
           "name": "Peach",
-          "amount": "40",
+          "amount": "45",
           "unitId": 11
         },
         {
           "order": 5,
           "ingredientId": 181,
           "name": "Grenadine",
-          "amount": "10",
+          "amount": "15",
           "unitId": 11
         },
         {
           "order": 6,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
+        },
+        {
+          "order": 7,
           "ingredientId": 242,
           "name": "Orange",
           "amount": "1",
-          "unitId": 27,
+          "unitId": 19,
+          "garnish": true
+        },
+        {
+          "order": 8,
+          "ingredientId": 81,
+          "name": "Cherry",
+          "amount": "1",
+          "unitId": 1,
           "garnish": true
         }
       ]
@@ -35296,9 +35385,8 @@
     {
       "id": 578,
       "name": "Faux 75",
-      "synonyms": ["French 75 Mocktail"],
       "description": "A sparkling alcohol-free serve inspired by the French 75, combining **Seedlip**, **lemon juice**, and **soda water**.",
-      "instructions": "1. Fill a shaker with **ice**.\n2. Add 50ml of **Seedlip**, 20ml of **lemon juice**, and 15ml of **simple syrup**.\n3. Shake briefly and strain into a chilled champagne flute.\n4. Top with 80ml of **soda water**.\n5. Garnish with a **lemon** twist.",
+      "instructions": "1. Fill a shaker with **ice**.\n2. Add 45ml of **Seedlip**, 15ml of **lemon juice**, and 15ml of **simple syrup**.\n3. Shake briefly and strain into a chilled champagne flute.\n4. Top with 75ml of **soda water**.\n5. Garnish with a **lemon** peel.",
       "photoUri": "assets/cocktails/578-faux-75.jpg",
       "glassId": "champagne_flute",
       "methodIds": ["shake"],
@@ -35308,21 +35396,21 @@
           "order": 1,
           "ingredientId": 193,
           "name": "Ice",
-          "amount": "120",
+          "amount": "150",
           "unitId": 8
         },
         {
           "order": 2,
           "ingredientId": 358,
           "name": "Seedlip",
-          "amount": "50",
+          "amount": "45",
           "unitId": 11
         },
         {
           "order": 3,
           "ingredientId": 216,
           "name": "Lemon Juice",
-          "amount": "20",
+          "amount": "15",
           "unitId": 11
         },
         {
@@ -35336,7 +35424,7 @@
           "order": 5,
           "ingredientId": 311,
           "name": "Soda Water",
-          "amount": "80",
+          "amount": "75",
           "unitId": 11
         },
         {
@@ -35344,7 +35432,7 @@
           "ingredientId": 214,
           "name": "Lemon",
           "amount": "1",
-          "unitId": 26,
+          "unitId": 14,
           "garnish": true
         }
       ]
@@ -35353,7 +35441,7 @@
       "id": 579,
       "name": "Berry Smash Fizz",
       "description": "A bright berry-forward mocktail with muddled **raspberry**, **blueberry**, **lemon juice**, and **soda water**.",
-      "instructions": "1. Add **raspberry**, **blueberry**, and 15ml of **simple syrup** to a shaker and muddle.\n2. Add 20ml of **lemon juice** and **ice**.\n3. Shake well and double strain into a highball glass with fresh **ice**.\n4. Top with 100ml of **soda water** and stir gently.",
+      "instructions": "1. Add **raspberry**, **blueberry**, and 15ml of **simple syrup** to a shaker and muddle.\n2. Add 20ml of **lemon juice** and **ice**.\n3. Shake well and double strain into a highball glass with fresh **ice**.\n4. Top with 120ml of **soda water** and stir gently.",
       "photoUri": "assets/cocktails/579-berry-smash-fizz.jpg",
       "glassId": "highball_glass",
       "methodIds": ["muddle", "shake"],
@@ -35398,7 +35486,7 @@
           "order": 6,
           "ingredientId": 311,
           "name": "Soda Water",
-          "amount": "100",
+          "amount": "120",
           "unitId": 11
         }
       ]
@@ -35407,7 +35495,7 @@
       "id": 580,
       "name": "Passion Fruit Fizz",
       "description": "A tropical non-alcoholic fizz with tangy **passion fruit juice**, fresh **lime juice**, and sparkling **soda water**.",
-      "instructions": "1. Fill a shaker with **ice**.\n2. Add 60ml of **passion fruit juice**, 20ml of **lime juice**, and 15ml of **simple syrup**.\n3. Shake and strain into a collins glass over fresh **ice**.\n4. Top with 90ml of **soda water** and stir gently.",
+      "instructions": "1. Fill a shaker with **ice**.\n2. Add 60ml of **passion fruit juice**, 20ml of **lime juice**, and 15ml of **simple syrup**.\n3. Shake and strain into a Collins glass over fresh **ice**.\n4. Top with 90ml of **soda water** and stir gently.\n5. Garnish with half of a **passion fruit** and a **mint** sprig.",
       "photoUri": "assets/cocktails/580-passion-fruit-fizz.jpg",
       "glassId": "collins_glass",
       "methodIds": ["shake"],
@@ -35417,7 +35505,7 @@
           "order": 1,
           "ingredientId": 193,
           "name": "Ice",
-          "amount": "130",
+          "amount": "120",
           "unitId": 8
         },
         {
@@ -35447,6 +35535,22 @@
           "name": "Soda Water",
           "amount": "90",
           "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 255,
+          "name": "Passion Fruit",
+          "amount": "1",
+          "unitId": 9,
+          "garnish": true
+        },
+        {
+          "order": 7,
+          "ingredientId": 236,
+          "name": "Mint",
+          "amount": "1",
+          "unitId": 21,
+          "garnish": true
         }
       ]
     },
@@ -35500,7 +35604,7 @@
           "ingredientId": 214,
           "name": "Lemon",
           "amount": "1",
-          "unitId": 27,
+          "unitId": 19,
           "garnish": true
         }
       ]
@@ -35509,7 +35613,7 @@
       "id": 582,
       "name": "Hibiscus Cooler",
       "description": "A ruby-red non-alcoholic cooler with floral **hibiscus syrup**, bright **lime juice**, and crisp **soda water**.",
-      "instructions": "1. Fill a highball glass with **ice**.\n2. Add 40ml of **hibiscus syrup** and 25ml of **lime juice**.\n3. Top with 100ml of **soda water** and stir to combine.\n4. Garnish with an **orange** slice.",
+      "instructions": "1. Fill a highball glass with **ice**.\n2. Add 40ml of **hibiscus syrup** and 25ml of **lime juice**.\n3. Top with 100ml of **soda water** and stir to combine.\n4. Garnish with a **lime** slice.",
       "photoUri": "assets/cocktails/582-hibiscus-cooler.jpg",
       "glassId": "highball_glass",
       "methodIds": ["build"],
@@ -35545,23 +35649,24 @@
         },
         {
           "order": 5,
-          "ingredientId": 242,
-          "name": "Orange",
+          "ingredientId": 222,
+          "name": "Lime",
           "amount": "1",
-          "unitId": 27,
+          "unitId": 19,
           "garnish": true
         }
       ]
     },
     {
       "id": 583,
-      "name": "Lavender Lemonade Spritz",
-      "description": "A floral lemonade-style mocktail made with **lavender syrup**, **lemon juice**, and sparkling **soda water**.",
-      "instructions": "1. Fill a collins glass with **ice**.\n2. Add 20ml of **lavender syrup** and 30ml of **lemon juice**.\n3. Top with 100ml of **soda water** and stir gently.\n4. Garnish with a **lemon** wheel.",
-      "photoUri": "assets/cocktails/583-lavender-lemonade-spritz.jpg",
-      "glassId": "collins_glass",
+      "name": "Espresso Tonic Zero",
+      "synonyms": ["Coffee Tonic Zero"],
+      "description": "A crisp zero-proof highball layering chilled **espresso** over bubbly **tonic** with a bright **orange** twist.",
+      "instructions": "1. Fill a highball glass with **ice**.\n2. Add 120ml of **tonic** and 5ml of **simple syrup** (optional).\n3. Gently pour 30ml of chilled **espresso** over the top to create a layered look.\n4. Garnish with an **orange** twist.",
+      "photoUri": "assets/cocktails/583-espresso-tonic-zero.jpg",
+      "glassId": "highball_glass",
       "methodIds": ["build"],
-      "tags": [10],
+      "tags": [8, 10],
       "ingredients": [
         {
           "order": 1,
@@ -35572,31 +35677,31 @@
         },
         {
           "order": 2,
-          "ingredientId": 361,
-          "name": "Lavender Syrup",
-          "amount": "20",
+          "ingredientId": 332,
+          "name": "Tonic",
+          "amount": "120",
           "unitId": 11
         },
         {
           "order": 3,
-          "ingredientId": 216,
-          "name": "Lemon Juice",
-          "amount": "30",
+          "ingredientId": 309,
+          "name": "Simple Syrup",
+          "amount": "5",
           "unitId": 11
         },
         {
           "order": 4,
-          "ingredientId": 311,
-          "name": "Soda Water",
-          "amount": "100",
+          "ingredientId": 150,
+          "name": "Espresso",
+          "amount": "30",
           "unitId": 11
         },
         {
           "order": 5,
-          "ingredientId": 214,
-          "name": "Lemon",
+          "ingredientId": 242,
+          "name": "Orange",
           "amount": "1",
-          "unitId": 27,
+          "unitId": 26,
           "garnish": true
         }
       ]
@@ -35655,7 +35760,7 @@
       "description": "A summer-style non-alcoholic cooler with fresh **watermelon juice**, aromatic **sage**, and lively **soda water**.",
       "instructions": "1. Gently press **sage** leaves in a shaker.\n2. Add 90ml of **watermelon juice**, 20ml of **lime juice**, 10ml of **simple syrup**, and **ice**.\n3. Shake quickly and strain into a highball glass over fresh **ice**.\n4. Top with 60ml of **soda water** and garnish with a **sage** leaf.",
       "photoUri": "assets/cocktails/585-watermelon-sage-cooler.jpg",
-      "glassId": "highball_glass",
+      "glassId": "collins_glass",
       "methodIds": ["muddle", "shake"],
       "tags": [10],
       "ingredients": [
@@ -35691,7 +35796,7 @@
           "order": 5,
           "ingredientId": 193,
           "name": "Ice",
-          "amount": "130",
+          "amount": "120",
           "unitId": 8
         },
         {
@@ -38266,7 +38371,7 @@
       "id": 358,
       "name": "Seedlip",
       "description": "A non-alcoholic distilled spirit alternative with layered botanical notes, designed for zero-proof cocktails.",
-      "tags": [9],
+      "tags": [6],
       "photoUri": "assets/ingredients/358-seedlip.jpg"
     },
     {
