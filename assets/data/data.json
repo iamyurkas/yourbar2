@@ -19884,7 +19884,7 @@
       "name": "Mulled Wine",
       "synonyms": ["Glühwein", "Glintwein"],
       "description": "Also called \"glühwein\" in German, this drink is very popular in German-speaking countries and France. Spices can be varied greatly – just use what you like.",
-      "instructions": "1. Heat a bottle or more of **red wine** in a pan.\n2. Add **cinnamon sticks**, **cloves**, **sugar**, **vanilla** pods, and **anise**.\n3. Add **lemon** wedges, and wait10 minutes.\n4. Heat until the wine almost boils, and serve in cups.\n5. Garnish each cup with a **cinnamon stick**.",
+      "instructions": "1. Heat a bottle or more of **red wine** in a pan.\n2. Add **cinnamon sticks**, **cloves**, **sugar**, **vanilla** pods, **anise**.and **lemon** wedges.\n3. Heat until the wine almost boils, and serve in cups.\n4. Garnish each cup with a **cinnamon stick**.",
       "photoUri": "assets/cocktails/328-mulled-wine.jpg",
       "glassId": "irish_coffee_glass",
       "methodIds": ["heat", "build"],
