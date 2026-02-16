@@ -28,7 +28,7 @@ export const GLASSWARE: GlasswareOption[] = [
     name: "Copper mug",
     imageUri: glasswareUriById.copper_mug,
   },
-  { id: "coupe", name: "Coupe", imageUri: glasswareUriById.coupe },
+  { id: "coupe", name: "Coupe glass", imageUri: glasswareUriById.coupe },
   { id: "cup", name: "Cup", imageUri: glasswareUriById.cup },
   { id: "goblet", name: "Goblet", imageUri: glasswareUriById.goblet },
   {
@@ -53,7 +53,7 @@ export const GLASSWARE: GlasswareOption[] = [
   },
   {
     id: "nick_and_nora",
-    name: "Nick and Nora",
+    name: "Nick & Nora",
     imageUri: glasswareUriById.nick_and_nora,
   },
   { id: "pitcher", name: "Pitcher", imageUri: glasswareUriById.pitcher },
@@ -65,7 +65,11 @@ export const GLASSWARE: GlasswareOption[] = [
   },
   { id: "shooter", name: "Shooter", imageUri: glasswareUriById.shooter },
   { id: "snifter", name: "Snifter", imageUri: glasswareUriById.snifter },
-  { id: "tiki_glass", name: "Tiki glass", imageUri: glasswareUriById.tiki_glass },
+  {
+    id: "tiki_glass",
+    name: "Tiki glass",
+    imageUri: glasswareUriById.tiki_glass,
+  },
   {
     id: "wine_glass",
     name: "Wine glass",
