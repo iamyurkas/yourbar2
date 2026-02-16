@@ -15864,7 +15864,7 @@
       "name": "Irish Coffee",
       "synonyms": ["Hot Irish Coffee"],
       "description": "Warm blend of **Irish whiskey**, hot coffee, and **cream**.",
-      "instructions": "1. Add **brown sugar** to a heatproof glass.\n2. Pour in hot **espresso**.\n3. Stir gently to combine.\n4. Add Irish whisky.\n5. Stir gently to combine.\n6. Float lightly **whipped cream** on top.",
+      "instructions": "1. Put 2 tablesoons of **brown sugar** to a heatproof glass.\n2. Pour in hot 120ml of **espresso**.\n3. Stir gently to combine.\n4. Add 60ml of **Irish whisky**.\n5. Stir gently to combine.\n6. Float lightly 50ml of **whipped cream** on top.",
       "photoUri": "assets/cocktails/259-irish-coffee.jpg",
       "glassId": "toddy_glass",
       "methodIds": ["heat", "build", "layer"],
