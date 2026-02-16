@@ -1093,6 +1093,11 @@ export default function IngredientFormScreen() {
     );
   }, []);
 
+  const isBrandedIngredient = isEditMode && baseIngredientId != null;
+  const isStyledIngredient = isEditMode && styleIngredientId != null;
+  const isBaseSelectorDisabled = isStyledIngredient;
+  const isStyleSelectorDisabled = isBrandedIngredient;
+
   const contentStyle = isEditMode ? styles.contentEdit : styles.contentCreate;
   const sectionStyle = isEditMode ? styles.sectionEdit : styles.sectionCreate;
   const hintStyle = isEditMode ? styles.hintEdit : styles.hintCreate;
@@ -1224,11 +1229,22 @@ export default function IngredientFormScreen() {
 
       <View style={sectionStyle}>
         <Text style={[styles.label, { color: Colors.onSurface }]}>Base ingredient</Text>
+        {isBaseSelectorDisabled ? (
+          <Text style={[hintStyle, { color: Colors.onSurfaceVariant }]}>
+            Styled ingredients cannot be branded. Remove style link to enable base ingredient selection.
+          </Text>
+        ) : null}
         <Pressable
           accessibilityRole="button"
           accessibilityLabel={baseIngredient ? 'Change base ingredient' : 'Select base ingredient'}
-          onPress={handleOpenBaseModal}
-          style={[styles.baseSelector, { borderColor: Colors.outlineVariant, backgroundColor: Colors.surface }]}>
+          accessibilityState={isBaseSelectorDisabled ? { disabled: true } : undefined}
+          disabled={isBaseSelectorDisabled}
+          onPress={isBaseSelectorDisabled ? undefined : handleOpenBaseModal}
+          style={[
+            styles.baseSelector,
+            isBaseSelectorDisabled ? styles.baseSelectorDisabled : null,
+            { borderColor: Colors.outlineVariant, backgroundColor: Colors.surface },
+          ]}>
           {baseIngredient ? (
             <>
               <View style={styles.baseInfo}>
@@ -1265,11 +1281,22 @@ export default function IngredientFormScreen() {
       <View style={sectionStyle}>
         <Text style={[styles.label, { color: Colors.onSurface }]}>Style ingredient</Text>
         <Text style={[hintStyle, { color: Colors.onSurfaceVariant }]}>Only base ingredients that are not branded and not already styled can be selected as styles.</Text>
+        {isStyleSelectorDisabled ? (
+          <Text style={[hintStyle, { color: Colors.onSurfaceVariant }]}>
+            Branded ingredients cannot be styled. Remove base ingredient link to enable style selection.
+          </Text>
+        ) : null}
         <Pressable
           accessibilityRole="button"
           accessibilityLabel={styleIngredient ? 'Change style ingredient' : 'Select style ingredient'}
-          onPress={handleOpenStyleModal}
-          style={[styles.baseSelector, { borderColor: Colors.outlineVariant, backgroundColor: Colors.surface }]}>
+          accessibilityState={isStyleSelectorDisabled ? { disabled: true } : undefined}
+          disabled={isStyleSelectorDisabled}
+          onPress={isStyleSelectorDisabled ? undefined : handleOpenStyleModal}
+          style={[
+            styles.baseSelector,
+            isStyleSelectorDisabled ? styles.baseSelectorDisabled : null,
+            { borderColor: Colors.outlineVariant, backgroundColor: Colors.surface },
+          ]}>
           {styleIngredient ? (
             <>
               <View style={styles.baseInfo}>
@@ -1687,6 +1714,9 @@ const styles = StyleSheet.create({
     paddingVertical: Platform.select({ ios: 14, default: 12 }),
     borderWidth: StyleSheet.hairlineWidth,
     borderRadius: 12,
+  },
+  baseSelectorDisabled: {
+    opacity: 0.5,
   },
   baseInfo: {
     flexDirection: 'row',
