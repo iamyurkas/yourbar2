@@ -39,6 +39,7 @@ type IngredientFormSnapshot = {
   description: string;
   imageUri: string | null;
   baseIngredientId: number | null;
+  styleIngredientId: number | null;
   selectedTagIds: number[];
 };
 
@@ -163,8 +164,11 @@ export default function IngredientFormScreen() {
   );
   const [isTagModalVisible, setTagModalVisible] = useState(false);
   const [baseIngredientId, setBaseIngredientId] = useState<number | null>(null);
+  const [styleIngredientId, setStyleIngredientId] = useState<number | null>(null);
   const [isBaseModalVisible, setIsBaseModalVisible] = useState(false);
   const [baseSearch, setBaseSearch] = useState('');
+  const [isStyleModalVisible, setIsStyleModalVisible] = useState(false);
+  const [styleSearch, setStyleSearch] = useState('');
   const [permissionStatus, requestPermission] = ImagePicker.useMediaLibraryPermissions();
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(null);
   const [isHelpVisible, setIsHelpVisible] = useState(false);
@@ -192,7 +196,9 @@ export default function IngredientFormScreen() {
     setImageUri(null);
     setSelectedTagIds(defaultIngredientTagId == null ? [] : [defaultIngredientTagId]);
     setBaseIngredientId(null);
+    setStyleIngredientId(null);
     setBaseSearch('');
+    setStyleSearch('');
     setTagModalVisible(false);
     setIsBaseModalVisible(false);
     setInitialSnapshot(null);
@@ -219,6 +225,9 @@ export default function IngredientFormScreen() {
     setBaseIngredientId(
       ingredient.baseIngredientId != null ? Number(ingredient.baseIngredientId) : null,
     );
+    setStyleIngredientId(
+      ingredient.styleIngredientId != null ? Number(ingredient.styleIngredientId) : null,
+    );
 
     const initialTagIds = (ingredient.tags ?? [])
       .map((tag) => Number(tag.id ?? -1))
@@ -242,9 +251,10 @@ export default function IngredientFormScreen() {
       description,
       imageUri,
       baseIngredientId,
+      styleIngredientId,
       selectedTagIds: normalizedTags,
     };
-  }, [baseIngredientId, description, imageUri, name, selectedTagIds]);
+  }, [baseIngredientId, description, imageUri, name, selectedTagIds, styleIngredientId]);
 
   useEffect(() => {
     if (!isInitialized || initialSnapshot) {
@@ -429,6 +439,7 @@ export default function IngredientFormScreen() {
           description: descriptionValue || undefined,
           photoUri: shouldProcessPhoto ? undefined : imageUri ?? undefined,
           baseIngredientId,
+          styleIngredientId,
           tags: selectedTags,
         };
 
@@ -487,6 +498,7 @@ export default function IngredientFormScreen() {
       description: descriptionValue || undefined,
       photoUri: shouldProcessPhoto ? undefined : imageUri ?? undefined,
       baseIngredientId,
+      styleIngredientId,
       tags: selectedTags,
     };
 
@@ -541,6 +553,7 @@ export default function IngredientFormScreen() {
   }, [
     availableIngredientTags,
     baseIngredientId,
+    styleIngredientId,
     createIngredient,
     description,
     imageUri,
@@ -740,6 +753,36 @@ export default function IngredientFormScreen() {
     [baseIngredient?.photoUri],
   );
 
+
+  const styleIngredient = useMemo(() => {
+    if (styleIngredientId == null) {
+      return undefined;
+    }
+
+    const targetId = Number(styleIngredientId);
+    if (!Number.isFinite(targetId) || targetId < 0) {
+      return undefined;
+    }
+
+    return ingredients.find((item) => Number(item.id ?? -1) === targetId);
+  }, [ingredients, styleIngredientId]);
+
+  const styleIngredientPhotoSource = useMemo(
+    () => resolveImageSource(styleIngredient?.photoUri),
+    [styleIngredient?.photoUri],
+  );
+
+  const handleOpenStyleModal = useCallback(() => {
+    setStyleSearch(styleIngredient?.name ?? '');
+    setIsStyleModalVisible(true);
+  }, [styleIngredient?.name]);
+
+  const handleClearStyleIngredient = useCallback((event?: GestureResponderEvent) => {
+    event?.stopPropagation?.();
+    setStyleIngredientId(null);
+    setStyleSearch('');
+  }, []);
+
   const handleOpenBaseModal = useCallback(() => {
     setBaseSearch(baseIngredient?.name ?? '');
     setIsBaseModalVisible(true);
@@ -799,9 +842,13 @@ export default function IngredientFormScreen() {
         return true;
       }
 
+      if (styleIngredientId != null && itemId === styleIngredientId) {
+        return false;
+      }
+
       return item.baseIngredientId == null;
     });
-  }, [baseIngredientId, ingredients, isEditMode, numericIngredientId]);
+  }, [baseIngredientId, ingredients, isEditMode, numericIngredientId, styleIngredientId]);
 
   const filteredBaseIngredients = useMemo(() => {
     if (!normalizedBaseQuery) {
@@ -832,6 +879,7 @@ export default function IngredientFormScreen() {
       }
 
       setBaseIngredientId(candidateId);
+      setStyleIngredientId(null);
       setBaseSearch('');
       setIsBaseModalVisible(false);
     },
@@ -876,6 +924,112 @@ export default function IngredientFormScreen() {
     ],
   );
 
+
+
+  const normalizedStyleQuery = useMemo(() => normalizeSearchText(styleSearch), [styleSearch]);
+
+  const styleIngredientOptions = useMemo(() => {
+    const currentId = numericIngredientId;
+    return ingredients.filter((item) => {
+      const itemId = Number(item.id ?? -1);
+      if (!Number.isFinite(itemId) || itemId < 0) {
+        return false;
+      }
+
+      if (currentId != null && itemId === currentId) {
+        return false;
+      }
+
+      if (styleIngredientId != null && itemId === styleIngredientId) {
+        return true;
+      }
+
+      if (baseIngredientId != null && itemId === baseIngredientId) {
+        return false;
+      }
+
+      return item.baseIngredientId == null;
+    });
+  }, [baseIngredientId, ingredients, numericIngredientId, styleIngredientId]);
+
+  const filteredStyleIngredients = useMemo(() => {
+    if (!normalizedStyleQuery) {
+      return styleIngredientOptions;
+    }
+
+    return styleIngredientOptions.filter((candidate) => {
+      const nameNormalized = candidate.searchNameNormalized ?? normalizeSearchText(candidate.name ?? '');
+      if (nameNormalized.startsWith(normalizedStyleQuery)) {
+        return true;
+      }
+
+      return (candidate.searchTokensNormalized ?? []).some((token) => token.startsWith(normalizedStyleQuery));
+    });
+  }, [normalizedStyleQuery, styleIngredientOptions]);
+
+  const handleSelectStyleIngredient = useCallback((candidate: Ingredient) => {
+    const candidateId = Number(candidate.id ?? -1);
+    if (!Number.isFinite(candidateId) || candidateId < 0) {
+      return;
+    }
+
+    setStyleIngredientId(candidateId);
+    setBaseIngredientId(null);
+    setStyleSearch('');
+    setIsStyleModalVisible(false);
+  }, []);
+
+  const handleCloseStyleModal = useCallback(() => {
+    const normalized = normalizeSearchText(styleSearch);
+    if (normalized) {
+      const match = styleIngredientOptions.find((item) =>
+        item.name ? normalizeSearchText(item.name) === normalized : false,
+      );
+
+      if (match?.id != null) {
+        const targetId = Number(match.id);
+        if (Number.isFinite(targetId) && targetId >= 0) {
+          setStyleIngredientId(targetId);
+          setBaseIngredientId(null);
+        }
+      }
+    }
+
+    setIsStyleModalVisible(false);
+    setStyleSearch('');
+  }, [styleIngredientOptions, styleSearch]);
+
+  const renderStyleIngredient = useCallback(
+    ({ item }: { item: Ingredient }) => {
+      const id = Number(item.id ?? -1);
+      const isSelected = Number.isFinite(id) && id >= 0 && id === styleIngredientId;
+      const tagColor = item.tags?.[0]?.color;
+      const isOnShoppingList = Number.isFinite(id) && id >= 0 && shoppingIngredientIds.has(id);
+      const isAvailable = Number.isFinite(id) && id >= 0 && availableIngredientIds.has(id);
+
+      const control = isOnShoppingList ? (
+        <View style={styles.baseShoppingIndicator}>
+          <MaterialIcons name="shopping-cart" size={20} color={Colors.tint} />
+        </View>
+      ) : undefined;
+
+      return (
+        <ListRow
+          title={item.name ?? ''}
+          onPress={() => handleSelectStyleIngredient(item)}
+          selected={isAvailable}
+          highlightColor={Colors.highlightFaint}
+          thumbnail={<Thumb label={item.name ?? undefined} uri={item.photoUri} />}
+          tagColor={tagColor}
+          accessibilityRole="button"
+          accessibilityState={isSelected ? { selected: true } : undefined}
+          control={control}
+          metaAlignment="flex-start"
+        />
+      );
+    },
+    [Colors, availableIngredientIds, handleSelectStyleIngredient, shoppingIngredientIds, styleIngredientId],
+  );
   const baseModalKeyExtractor = useCallback((item: Ingredient) => {
     if (item.id != null) {
       return String(item.id);
@@ -885,6 +1039,7 @@ export default function IngredientFormScreen() {
   }, []);
 
   const baseSearchInputRef = useRef<TextInput | null>(null);
+  const styleSearchInputRef = useRef<TextInput | null>(null);
 
   useEffect(() => {
     if (!isBaseModalVisible) {
@@ -899,6 +1054,20 @@ export default function IngredientFormScreen() {
       clearTimeout(timeout);
     };
   }, [isBaseModalVisible]);
+
+  useEffect(() => {
+    if (!isStyleModalVisible) {
+      return;
+    }
+
+    const timeout = setTimeout(() => {
+      styleSearchInputRef.current?.focus();
+    }, Platform.OS === 'android' ? 50 : 0);
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [isStyleModalVisible]);
 
   const scrollFieldIntoView = useCallback((target?: number | null) => {
     if (target == null) {
@@ -1093,6 +1262,47 @@ export default function IngredientFormScreen() {
         </Pressable>
       </View>
 
+      <View style={sectionStyle}>
+        <Text style={[styles.label, { color: Colors.onSurface }]}>Style ingredient</Text>
+        <Text style={[hintStyle, { color: Colors.onSurfaceVariant }]}>Only base (non-branded) ingredients can be selected as styles.</Text>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={styleIngredient ? 'Change style ingredient' : 'Select style ingredient'}
+          onPress={handleOpenStyleModal}
+          style={[styles.baseSelector, { borderColor: Colors.outlineVariant, backgroundColor: Colors.surface }]}>
+          {styleIngredient ? (
+            <>
+              <View style={styles.baseInfo}>
+                <View style={[styles.baseThumb, { backgroundColor: Colors.background }]}>
+                  {styleIngredientPhotoSource ? (
+                    <AppImage source={styleIngredientPhotoSource} style={styles.baseImage} contentFit="contain" />
+                  ) : (
+                    <View style={[styles.basePlaceholder, { backgroundColor: Colors.onSurfaceVariant }]}>
+                      <MaterialCommunityIcons name="image-off" size={20} color={Colors.onSurfaceVariant} />
+                    </View>
+                  )}
+                </View>
+                <Text style={[styles.baseName, { color: Colors.onSurface }]} numberOfLines={2}>
+                  {styleIngredient.name}
+                </Text>
+              </View>
+              <Pressable
+                onPress={handleClearStyleIngredient}
+                accessibilityRole="button"
+                accessibilityLabel="Remove style ingredient"
+                hitSlop={8}
+                style={styles.unlinkButton}>
+                <MaterialCommunityIcons name="link-off" size={20} color={Colors.error} />
+              </Pressable>
+            </>
+          ) : (
+            <View style={styles.basePlaceholderRow}>
+              <Text style={[styles.basePlaceholderText, { color: Colors.onSurfaceVariant }]}>None</Text>
+            </View>
+          )}
+        </Pressable>
+      </View>
+
       <View style={[sectionStyle, styles.descriptionSection]}>
         <Text style={[styles.label, { color: Colors.onSurface }]}>Description</Text>
         <TextInput
@@ -1233,10 +1443,69 @@ export default function IngredientFormScreen() {
         </Pressable>
       </Modal>
 
+
+
+      <Modal
+        visible={isStyleModalVisible}
+        transparent
+        animationType="fade"
+        onRequestClose={handleCloseStyleModal}>
+        <Pressable style={styles.modalOverlay} onPress={handleCloseStyleModal} accessibilityRole="button">
+          <Pressable
+            onPress={(event) => event.stopPropagation?.()}
+            style={[
+              styles.modalCard,
+              {
+                backgroundColor: Colors.surface,
+                borderColor: Colors.outline,
+                shadowColor: Colors.shadow,
+              },
+            ]}
+            accessibilityRole="menu">
+            <View style={styles.modalHeader}>
+              <Text style={[styles.modalTitle, { color: Colors.onSurface }]}>Select style ingredient</Text>
+              <Pressable onPress={handleCloseStyleModal} accessibilityRole="button" accessibilityLabel="Close">
+                <MaterialCommunityIcons name="close" size={22} color={Colors.onSurfaceVariant} />
+              </Pressable>
+            </View>
+            <TextInput
+              ref={styleSearchInputRef}
+              value={styleSearch}
+              onChangeText={setStyleSearch}
+              placeholder="Search ingredients"
+              placeholderTextColor={`${Colors.onSurfaceVariant}99`}
+              style={[
+                styles.modalSearchInput,
+                { borderColor: Colors.outlineVariant, color: Colors.text, backgroundColor: Colors.surfaceBright },
+              ]}
+              autoFocus
+              keyboardAppearance="light"
+            />
+            <FlatList
+              data={filteredStyleIngredients}
+              keyExtractor={baseModalKeyExtractor}
+              renderItem={renderStyleIngredient}
+              keyboardShouldPersistTaps="handled"
+              style={styles.modalList}
+              ItemSeparatorComponent={({ leadingItem }) => {
+                const ingredientId = Number((leadingItem as Ingredient | null)?.id ?? -1);
+                const isAvailable = ingredientId >= 0 && availableIngredientIds.has(ingredientId);
+                const backgroundColor = isAvailable ? Colors.outline : Colors.outlineVariant;
+                return <View style={[styles.modalSeparator, { backgroundColor }]} />;
+              }}
+              contentContainerStyle={styles.modalListContent}
+              ListEmptyComponent={() => (
+                <Text style={[styles.modalEmptyText, { color: Colors.onSurfaceVariant }]}>No ingredients found</Text>
+              )}
+            />
+          </Pressable>
+        </Pressable>
+      </Modal>
+
       <AppDialog
         visible={isHelpVisible}
         title="Adding ingredient"
-        message="Use this screen to create a new ingredient card.\n\nAdd a name, optional photo, tags, base ingredient, and notes, then tap Save."
+        message="Use this screen to create a new ingredient card.\n\nAdd a name, optional photo, tags, base ingredient or style ingredient, and notes, then tap Save."
         actions={[{ label: 'Got it', variant: 'secondary' }]}
         onRequestClose={() => setIsHelpVisible(false)}
       />

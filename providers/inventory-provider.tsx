@@ -648,6 +648,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             const garnish = ingredient.garnish ? true : undefined;
             const allowBase = ingredient.allowBaseSubstitution ? true : undefined;
             const allowBrand = ingredient.allowBrandSubstitution ? true : undefined;
+            const allowStyle = ingredient.allowStyleSubstitution ? true : undefined;
 
             const substituteInputs = ingredient.substitutes ?? [];
             const substitutes: CocktailSubstitute[] = [];
@@ -694,6 +695,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
               garnish,
               allowBaseSubstitution: allowBase,
               allowBrandSubstitution: allowBrand,
+              allowStyleSubstitution: allowStyle,
               substitutes: substitutes.length > 0 ? substitutes : undefined,
             } satisfies CocktailIngredient;
           })
@@ -803,6 +805,25 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           normalizedBaseId != null && Number.isFinite(normalizedBaseId) && normalizedBaseId >= 0
             ? Math.trunc(normalizedBaseId)
             : undefined;
+        const normalizedStyleId =
+          input.styleIngredientId != null ? Number(input.styleIngredientId) : undefined;
+        const styleIngredientId =
+          normalizedStyleId != null && Number.isFinite(normalizedStyleId) && normalizedStyleId >= 0
+            ? Math.trunc(normalizedStyleId)
+            : undefined;
+
+        const hasBaseLink = baseIngredientId != null;
+        const hasStyleLink = styleIngredientId != null;
+        if (hasBaseLink && hasStyleLink) {
+          return prev;
+        }
+
+        if (hasStyleLink) {
+          const styleRecord = prev.ingredients.find((item) => Number(item.id ?? -1) === styleIngredientId);
+          if (!styleRecord || styleRecord.baseIngredientId != null) {
+            return prev;
+          }
+        }
 
         const description = input.description?.trim() || undefined;
         const photoUri = input.photoUri?.trim() || undefined;
@@ -830,6 +851,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           description,
           tags,
           baseIngredientId,
+          styleIngredientId,
           photoUri,
         };
 
@@ -1119,6 +1141,25 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           normalizedBaseId != null && Number.isFinite(normalizedBaseId) && normalizedBaseId >= 0
             ? Math.trunc(normalizedBaseId)
             : undefined;
+        const normalizedStyleId =
+          input.styleIngredientId != null ? Number(input.styleIngredientId) : undefined;
+        const styleIngredientId =
+          normalizedStyleId != null && Number.isFinite(normalizedStyleId) && normalizedStyleId >= 0
+            ? Math.trunc(normalizedStyleId)
+            : undefined;
+
+        const hasBaseLink = baseIngredientId != null;
+        const hasStyleLink = styleIngredientId != null;
+        if (hasBaseLink && hasStyleLink) {
+          return prev;
+        }
+
+        if (hasStyleLink) {
+          const styleRecord = prev.ingredients.find((item) => Number(item.id ?? -1) === styleIngredientId);
+          if (!styleRecord || styleRecord.baseIngredientId != null || Number(styleRecord.id ?? -1) === normalizedId) {
+            return prev;
+          }
+        }
 
         const description = input.description?.trim() || undefined;
         const photoUri = input.photoUri?.trim() || undefined;
@@ -1148,6 +1189,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           description,
           tags,
           baseIngredientId,
+          styleIngredientId,
           photoUri,
         };
 
@@ -1269,6 +1311,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             garnish,
             allowBaseSubstitution: allowBase,
             allowBrandSubstitution: allowBrand,
+            allowStyleSubstitution: allowStyle,
             substitutes: substitutes.length > 0 ? substitutes : undefined,
           } satisfies CocktailIngredient;
         })
@@ -1367,11 +1410,13 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         }
 
         if (
-          ingredient.baseIngredientId != null &&
-          Number(ingredient.baseIngredientId) === normalizedId
+          (ingredient.baseIngredientId != null &&
+            Number(ingredient.baseIngredientId) === normalizedId) ||
+          (ingredient.styleIngredientId != null &&
+            Number(ingredient.styleIngredientId) === normalizedId)
         ) {
           didUpdateDependents = true;
-          acc.push({ ...ingredient, baseIngredientId: undefined } satisfies Ingredient);
+          acc.push({ ...ingredient, baseIngredientId: undefined, styleIngredientId: undefined } satisfies Ingredient);
           return acc;
         }
 
@@ -1835,9 +1880,12 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
 
       let didChange = false;
       const nextIngredients = prev.ingredients.map((ingredient) => {
-        if (Number(ingredient.id ?? -1) === id && ingredient.baseIngredientId != null) {
+        if (
+          Number(ingredient.id ?? -1) === id &&
+          (ingredient.baseIngredientId != null || ingredient.styleIngredientId != null)
+        ) {
           didChange = true;
-          return { ...ingredient, baseIngredientId: undefined } satisfies Ingredient;
+          return { ...ingredient, baseIngredientId: undefined, styleIngredientId: undefined } satisfies Ingredient;
         }
         return ingredient;
       });
