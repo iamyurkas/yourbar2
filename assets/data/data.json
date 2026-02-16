@@ -7362,7 +7362,7 @@
       "id": 121,
       "name": "California Root Beer",
       "description": "A fizzy cocktail that mimics the taste of **root beer** with coffee and **vanilla** notes.",
-      "instructions": "1. Fill a shaker with **ice**.\n2. Add **vodka**, **Galliano**, **coffee liqueur**, and **rich simple syrup**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into an **ice**-filled glass.\n5. Top with **soda water**.\n6. Garnish with a **lime** wedge.",
+      "instructions": "1. Fill a shaker with **ice**.\n2. Add 40ml of **vodka**, 15ml of **Galliano**, 10ml of **coffee liqueur**, and 5ml of **rich simple syrup**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into an **ice**-filled glass.\n5. Top with **soda water**.\n6. Garnish with a **lime** wedge.",
       "photoUri": "assets/cocktails/121-california-root-beer.jpg",
       "glassId": "highball_glass",
       "methodIds": ["shake"],
@@ -9523,7 +9523,7 @@
       "name": "Creamsicle",
       "synonyms": ["Orange Creamsicle"],
       "description": "A luscious and velvety cocktail that perfectly captures the nostalgic flavor of an **orange** creamsicle. It balances the bright, citrusy notes of **vodka** and grand mariner with the rich, smooth texture of fresh **cream**.",
-      "instructions": "1. Fill a shaker with **ice**.\n2. Pour **vodka**, **Grand Marnier**, **cream**, and **rich simple syrup**(if desired) into the cocktail shaker.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled cocktail glass.\n5. Garnish with a fresh **orange** slice or zest.",
+      "instructions": "1. Fill a shaker with **ice**.\n2. Pour 30ml of **vodka**, 30ml of **Grand Marnier**, 30ml of **heavy cream**, and 7.5ml of **rich simple syrup** (if desired) into the cocktail shaker.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled cocktail glass.\n5. Garnish with a fresh **orange** slice or zest.",
       "photoUri": "assets/cocktails/154-creamsicle.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["shake"],
@@ -12743,7 +12743,7 @@
       "name": "Frozen Daiquiri",
       "synonyms": ["Frozen Rum Daiquiri", "Blended Daiquiri"],
       "description": "A variation of the popular daiquiri cocktail.",
-      "instructions": "1. Add **aged rum**, **lime juice**, **rich simple syrup**, and **Luxardo maraschino** to a blender and blend briefly without **ice** on a slow setting.\n2. Add about 150 g of crushed **ice** and blend again until smooth.\n3. Pour into a chilled glass.\n4. Garnish with a **lime** wedge on the rim, skewered with a **maraschino cherry**.\n5. Serve with a straw.",
+      "instructions": "1. Add 60ml of **aged rum**, 22.5ml of **lime juice**, 22.5ml of **rich simple syrup**, and 7.5ml of **Luxardo maraschino** to a blender and blend briefly without **ice** on a slow setting.\n2. Add about 150 g of crushed **ice** and blend again until smooth.\n3. Pour into a chilled glass.\n4. Garnish with a **lime** wedge on the rim, skewered with a **maraschino cherry**.\n5. Serve with a straw.",
       "photoUri": "assets/cocktails/208-frozen-daiquiri.jpg",
       "glassId": "coupe",
       "methodIds": ["blend"],
@@ -31667,6 +31667,13 @@
         },
         {
           "order": 7,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
+        },
+        {
+          "order": 8,
           "ingredientId": 311,
           "name": "Soda Water",
           "amount": "180",
@@ -31674,7 +31681,7 @@
           "optional": true
         },
         {
-          "order": 8,
+          "order": 9,
           "ingredientId": 44,
           "name": "Berries",
           "amount": "10",
@@ -32035,6 +32042,13 @@
         },
         {
           "order": 7,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
+        },
+        {
+          "order": 8,
           "ingredientId": 81,
           "name": "Cherry",
           "amount": "2",
@@ -33295,6 +33309,13 @@
         },
         {
           "order": 8,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
+        },
+        {
+          "order": 9,
           "ingredientId": 236,
           "name": "Mint",
           "amount": "1",
