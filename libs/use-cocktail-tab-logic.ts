@@ -97,21 +97,10 @@ export function useCocktailTabLogic({
           });
         }
 
-        if (allowStyle) {
-          ingredientLookup.stylesByBaseId.get(ingredientId)?.forEach((styleId) => {
-            const styleName = resolveNameFromId(styleId);
-            if (styleName) {
-              map.set(styleId, styleName);
-            }
-          });
-
-          if (styleBaseId != null) {
-            ingredientLookup.stylesByBaseId.get(styleBaseId)?.forEach((styleId) => {
-              const styleName = resolveNameFromId(styleId);
-              if (styleName) {
-                map.set(styleId, styleName);
-              }
-            });
+        if (allowStyle && styleBaseId != null) {
+          const styleBaseName = resolveNameFromId(styleBaseId);
+          if (styleBaseName) {
+            map.set(styleBaseId, styleBaseName);
           }
         }
         return;
@@ -133,14 +122,6 @@ export function useCocktailTabLogic({
         });
       }
 
-      if (allowStyle && styleBaseId != null) {
-        ingredientLookup.stylesByBaseId.get(styleBaseId)?.forEach((styleId) => {
-          const styleName = resolveNameFromId(styleId);
-          if (styleName) {
-            map.set(styleId, styleName);
-          }
-        });
-      }
     };
 
     const groups = new Map<
