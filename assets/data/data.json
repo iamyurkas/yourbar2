@@ -8464,7 +8464,7 @@
       "name": "Chartreuse Swizzle",
       "synonyms": ["Green Swizzle"],
       "description": "A tropical swizzle of **green Chartreuse**, **pineapple**, **lime**, and **falernum**, finished with **mint** and **nutmeg**.",
-      "instructions": "1. Add 45ml of **green Chartreuse**, 30ml of **pineapple juice**, 22.5ml of **lime juice**, and 15ml of **falernum** to a tiki glass over **ice**.\n2. Stir gently to combine.\n3. Garnish with 3 **mint** leaves and a pinch of **nutmeg**.",
+      "instructions": "1. Add 45ml of **green Chartreuse**, 30ml of **pineapple juice**, 22.5ml of **lime juice**, and 15ml of **falernum** to a Tiki glass over **ice**.\n2. Stir gently to combine.\n3. Garnish with 3 **mint** leaves and a pinch of **nutmeg**.",
       "photoUri": "assets/cocktails/137-chartreuse-swizzle.jpg",
       "glassId": "tiki_glass",
       "methodIds": ["build"],
@@ -10726,8 +10726,8 @@
       "id": 174,
       "name": "Don's Special Daiquiri",
       "synonyms": ["Passion Fruit Daiquiri"],
-      "description": "A tiki-style daiquiri with **grapefruit** and **honey** notes.",
-      "instructions": "1. Fill a shaker with **ice**.\n2. Add 30ml of **gold Jamaican rum**, 15ml of **Cuban rum**, 15ml of **passion fruit syrup**, 15ml of **lime juice**, and 15ml of **honey syrup**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled tiki glass.\n5. Garnish with a half of **passion fruit**.",
+      "description": "A Tiki-style daiquiri with **grapefruit** and **honey** notes.",
+      "instructions": "1. Fill a shaker with **ice**.\n2. Add 30ml of **gold Jamaican rum**, 15ml of **Cuban rum**, 15ml of **passion fruit syrup**, 15ml of **lime juice**, and 15ml of **honey syrup**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled Tiki glass.\n5. Garnish with a half of **passion fruit**.",
       "photoUri": "assets/cocktails/174-don-s-special-daiquiri.jpg",
       "glassId": "tiki_glass",
       "methodIds": ["shake"],
@@ -15439,8 +15439,8 @@
     {
       "id": 253,
       "name": "IBA Tiki",
-      "description": "Fruity tiki blend of rums, juices, and exotic syrups.",
-      "instructions": "1. Fill a shaker with **ice**.\n2. Add 30ml of **white rum**, 30ml of **dark rum**, 15ml of **amaretto**, 5ml of **Frangelico**, 5ml of **Luxardo maraschino**, 15ml of **passion fruit syrup**, 90ml of **pineapple juice**, 30ml of **lime juice**, 2 dashes of **Angostura bitters**, and a slice of **ginger**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled tiki glass.\n5. Garnish with a wedge of **pineapple** and a **mint**.",
+      "description": "Fruity Tiki blend of rums, juices, and exotic syrups.",
+      "instructions": "1. Fill a shaker with **ice**.\n2. Add 30ml of **white rum**, 30ml of **dark rum**, 15ml of **amaretto**, 5ml of **Frangelico**, 5ml of **Luxardo maraschino**, 15ml of **passion fruit syrup**, 90ml of **pineapple juice**, 30ml of **lime juice**, 2 dashes of **Angostura bitters**, and a slice of **ginger**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled Tiki glass.\n5. Garnish with a wedge of **pineapple** and a **mint**.",
       "photoUri": "assets/cocktails/253-iba-tiki.jpg",
       "glassId": "tiki_glass",
       "methodIds": ["shake"],
@@ -18075,7 +18075,7 @@
       "id": 298,
       "name": "Mai Tai",
       "synonyms": ["Trader Vic's Mai Tai"],
-      "description": "Rum-forward tiki classic with **orange curaçao**, **lime**, and orgeat.",
+      "description": "Rum-forward Tiki classic with **orange curaçao**, **lime**, and orgeat.",
       "instructions": "1. Fill a shaker with **ice**.\n2. Add 30ml of **white rum**, 30ml of **dark rum**, 15ml of **orange curaçao**, 15ml of almond(orgeat) syrup, 30ml of **lime juice**, and 7.5ml of **simple syrup**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a highball glass filled with fresh **ice**.\n5. Garnish with a sprig of **mint** and a slice of **lime**.",
       "photoUri": "assets/cocktails/298-mai-tai.jpg",
       "glassId": "highball_glass",
@@ -19407,7 +19407,7 @@
     {
       "id": 321,
       "name": "Missionary's Downfall",
-      "description": "Blended tiki mix of rum, **peach liqueur**, **pineapple**, **mint**, and **honey**.",
+      "description": "Blended Tiki mix of rum, **peach liqueur**, **pineapple**, **mint**, and **honey**.",
       "instructions": "1. Add **white rum**, **peach brandy**, **lime juice**, **honey syrup**, **pineapple** pieces, **mint** leaves, and **ice** to a blender.\n2. Blend until smooth.\n3. Pour into a highball glass.\n4. Garnish with a **mint** sprig.",
       "photoUri": "assets/cocktails/321-missionary-s-downfall.jpg",
       "glassId": "highball_glass",
@@ -26325,7 +26325,7 @@
       "name": "Suffering Bastard",
       "synonyms": ["Suffering Bar Steward", "Suffering Barista"],
       "description": "A refreshing and historic highball that combines the punch of **gin** and **brandy** with the zesty kick of **lime** and the spicy effervescence of **ginger beer**.",
-      "instructions": "1. Fill a shaker with **ice**.\n2. Add 30ml of **Cognac**, 30ml of **gin**, 15ml of **lime juice**, and 2 dashes of **Angostura bitters**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Fill a chilled tiki glass with fresh **ice** and strain the cocktail into it.\n5. Top with 90ml of **ginger beer**.\n6. Garnish with a **mint** sprig and an **orange** slice.",
+      "instructions": "1. Fill a shaker with **ice**.\n2. Add 30ml of **Cognac**, 30ml of **gin**, 15ml of **lime juice**, and 2 dashes of **Angostura bitters**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Fill a chilled Tiki glass with fresh **ice** and strain the cocktail into it.\n5. Top with 90ml of **ginger beer**.\n6. Garnish with a **mint** sprig and an **orange** slice.",
       "photoUri": "assets/cocktails/432-suffering-bastard.jpg",
       "glassId": "tiki_glass",
       "methodIds": ["shake"],
@@ -27352,8 +27352,8 @@
     {
       "id": 449,
       "name": "Three Dots and a Dash",
-      "description": "A classic tiki masterpiece created by Don the Beachcomber during WWII. Its name represents the morse code for 'Victory' (V), featuring a complex blend of rums and exotic spices.",
-      "instructions": "1. Fill a shaker with **ice**.\n2. Add 45ml of **Rhum Martinique Agricole**, 15ml of **aged rum**, 7.5ml of **falernum**, 7.5ml of **allspice dram**, 15ml of **lemon juice**, 15ml of **orange juice**, 15ml of **honey syrup**, 2 dashes of **Angostura bitters**, and a slice of **pineapple**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled tiki glass.\n5. Garnish with 3 maraschino cherries.",
+      "description": "A classic Tiki masterpiece created by Don the Beachcomber during WWII. Its name represents the morse code for 'Victory' (V), featuring a complex blend of rums and exotic spices.",
+      "instructions": "1. Fill a shaker with **ice**.\n2. Add 45ml of **Rhum Martinique Agricole**, 15ml of **aged rum**, 7.5ml of **falernum**, 7.5ml of **allspice dram**, 15ml of **lemon juice**, 15ml of **orange juice**, 15ml of **honey syrup**, 2 dashes of **Angostura bitters**, and a slice of **pineapple**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled Tiki glass.\n5. Garnish with 3 maraschino cherries.",
       "photoUri": "assets/cocktails/449-three-dots-and-a-dash.jpg",
       "glassId": "tiki_glass",
       "methodIds": ["shake"],
@@ -30383,8 +30383,8 @@
       "id": 496,
       "name": "Zombie",
       "synonyms": ["Three Dots and a Dash"],
-      "description": "A legendary and potent tiki classic that blends multiple rums, fresh **lime**, and tropical spice for a complex, sun-soaked experience.",
-      "instructions": "1. Add **Jamaican dark rum**, 45ml **gold Puerto Rican rum**, **demerara rum**, fresh **lime juice**, **falernum**, **don's mix**, **grenadine**, **Angostura bitters**, and **Pernod** into a blender.\n2. Add 180g of crushed **ice**.\n3. Blend at high speed for no more than 5 seconds.\n4. Pour the contents into a tall glass or tiki glass and add additional crushed **ice** to fill if necessary.\n5. Garnish with a **mint** sprig.",
+      "description": "A legendary and potent Tiki classic that blends multiple rums, fresh **lime**, and tropical spice for a complex, sun-soaked experience.",
+      "instructions": "1. Add **Jamaican dark rum**, 45ml **gold Puerto Rican rum**, **demerara rum**, fresh **lime juice**, **falernum**, **don's mix**, **grenadine**, **Angostura bitters**, and **Pernod** into a blender.\n2. Add 180g of crushed **ice**.\n3. Blend at high speed for no more than 5 seconds.\n4. Pour the contents into a tall glass or Tiki glass and add additional crushed **ice** to fill if necessary.\n5. Garnish with a **mint** sprig.",
       "photoUri": "assets/cocktails/496-zombie.jpg",
       "glassId": "tiki_glass",
       "methodIds": ["blend"],
@@ -36447,7 +36447,7 @@
     {
       "id": 35,
       "name": "Banana",
-      "description": "Soft, sweet fruit with creamy texture used for smoothies and tiki garnishes. Works well in frozen cocktails or batched punches.",
+      "description": "Soft, sweet fruit with creamy texture used for smoothies and Tiki garnishes. Works well in frozen cocktails or batched punches.",
       "tags": [7],
       "photoUri": "assets/ingredients/35-banana.jpg"
     },
@@ -36870,7 +36870,7 @@
     {
       "id": 95,
       "name": "Cinnamon Syrup",
-      "description": "Cinnamon syrup combines sugar with warming cinnamon spice. It brings cozy baking notes to tiki drinks, punches, or coffee cocktails. Keep refrigerated for best flavor.",
+      "description": "Cinnamon syrup combines sugar with warming cinnamon spice. It brings cozy baking notes to Tiki drinks, punches, or coffee cocktails. Keep refrigerated for best flavor.",
       "tags": [5],
       "photoUri": "assets/ingredients/95-cinnamon-syrup.jpg"
     },
@@ -37566,7 +37566,7 @@
     {
       "id": 193,
       "name": "Ice",
-      "description": "Frozen water that chills and dilutes cocktails. Use large cubes for slower melt or crushed ice for tiki drinks. Clear, fresh ice keeps flavors clean.",
+      "description": "Frozen water that chills and dilutes cocktails. Use large cubes for slower melt or crushed ice for Tiki drinks. Clear, fresh ice keeps flavors clean.",
       "tags": [8],
       "photoUri": "assets/ingredients/193-ice.jpg"
     },
@@ -37883,7 +37883,7 @@
     {
       "id": 237,
       "name": "Nutmeg",
-      "description": "Warm aromatic spice often grated over punches, eggnogs, and tiki drinks.",
+      "description": "Warm aromatic spice often grated over punches, eggnogs, and Tiki drinks.",
       "tags": [8],
       "photoUri": "assets/ingredients/237-nutmeg.jpg"
     },
@@ -37981,7 +37981,7 @@
     {
       "id": 251,
       "name": "Overproof Rum",
-      "description": "Overproof rum has an ABV of 57% or higher, offering intense flavor and strength. It is used for floats, flaming drinks, and tiki cocktails. Best handled with care.",
+      "description": "Overproof rum has an ABV of 57% or higher, offering intense flavor and strength. It is used for floats, flaming drinks, and Tiki cocktails. Best handled with care.",
       "tags": [0],
       "photoUri": "assets/ingredients/251-overproof-rum.jpg"
     },
@@ -37995,7 +37995,7 @@
     {
       "id": 253,
       "name": "Papaya",
-      "description": "Mild, sweet tropical fruit with buttery texture. Mash or blend it into tiki drinks and tropical highballs.",
+      "description": "Mild, sweet tropical fruit with buttery texture. Mash or blend it into Tiki drinks and tropical highballs.",
       "tags": [7],
       "photoUri": "assets/ingredients/253-papaya.jpg"
     },
@@ -38009,14 +38009,14 @@
     {
       "id": 255,
       "name": "Passion Fruit",
-      "description": "Passion fruit has a tangy, aromatic tropical flavor. The pulp can be scooped directly into cocktails. Popular in tiki drinks and modern fruity creations.",
+      "description": "Passion fruit has a tangy, aromatic tropical flavor. The pulp can be scooped directly into cocktails. Popular in Tiki drinks and modern fruity creations.",
       "tags": [7],
       "photoUri": "assets/ingredients/255-passion-fruit.jpg"
     },
     {
       "id": 256,
       "name": "Passion Fruit Juice",
-      "description": "Tangy tropical juice with floral aroma. Brings sweet-tart punch to tiki drinks and sours. Pairs especially well with **rum**, **Tequila**, and **sparkling wine**.",
+      "description": "Tangy tropical juice with floral aroma. Brings sweet-tart punch to Tiki drinks and sours. Pairs especially well with **rum**, **Tequila**, and **sparkling wine**.",
       "tags": [7],
       "photoUri": "assets/ingredients/256-passion-fruit-juice.jpg"
     },
@@ -38030,7 +38030,7 @@
     {
       "id": 258,
       "name": "Passion Fruit Syrup",
-      "description": "Passion fruit syrup delivers tropical tartness with a perfumed aroma. It brightens tiki cocktails like the hurricane or Jamaican classics. Also works in **Spritzes** or sodas when you want sharp fruit acidity.",
+      "description": "Passion fruit syrup delivers tropical tartness with a perfumed aroma. It brightens Tiki cocktails like the hurricane or Jamaican classics. Also works in **Spritzes** or sodas when you want sharp fruit acidity.",
       "tags": [5],
       "photoUri": "assets/ingredients/258-passion-fruit-syrup.jpg"
     },
@@ -38153,14 +38153,14 @@
     {
       "id": 275,
       "name": "Pineapple Juice",
-      "description": "Sweet, tropical pineapple juice with natural froth. Key for **Piña Coladas**, **Painkillers**, and tiki punches. Provides body, acidity, and aroma when shaken.",
+      "description": "Sweet, tropical pineapple juice with natural froth. Key for **Piña Coladas**, **Painkillers**, and Tiki punches. Provides body, acidity, and aroma when shaken.",
       "tags": [7],
       "photoUri": "assets/ingredients/275-pineapple-juice.jpg"
     },
     {
       "id": 276,
       "name": "Pineapple Syrup",
-      "description": "Pineapple syrup is a kind of simple syrup that takes advantage of pineapple's texturizing effect to produce a sweet-and-sour, musky syrup that is not only a classic tiki ingredient, but also has uses in many early 20th Century cocktails.",
+      "description": "Pineapple syrup is a kind of simple syrup that takes advantage of pineapple's texturizing effect to produce a sweet-and-sour, musky syrup that is not only a classic Tiki ingredient, but also has uses in many early 20th Century cocktails.",
       "tags": [5],
       "photoUri": "assets/ingredients/276-pineapple-syrup.jpg"
     },
