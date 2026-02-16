@@ -7005,6 +7005,14 @@
         },
         {
           "order": 7,
+          "ingredientId": 237,
+          "name": "Nutmeg",
+          "amount": "1",
+          "unitId": 15,
+          "garnish": true
+        },
+        {
+          "order": 8,
           "ingredientId": 231,
           "name": "Maraschino Cherry",
           "amount": "3",
@@ -15962,7 +15970,7 @@
       "id": 262,
       "name": "Irish Pie Toddy",
       "description": "A delightful twist on the **whiskey** sour that evokes the flavors of a homemade **apple** pie. The warmth of **Irish whiskey** pairs perfectly with sweet **vanilla** and crisp **apple juice**, balanced by a sharp citrus finish.",
-      "instructions": "1. Pour the **whiskey**, **apple juice**, **vanilla syrup**, and **lemon juice** into a small saucepan or **milk** pitcher.\n2. Stir gently to combine.\n3. Pour into a warm glass.\n4. Squeeze the **orange** zest over the top of the glass to release oils, then drop the peel in.\n5. Add the **cinnamon** stick and **apple** slice.",
+      "instructions": "1. Pour the **whiskey**, **apple juice**, **vanilla syrup**, and **lemon juice** into a small saucepan.\n2. Stir gently to combine.\n3. Pour into a warm glass.\n4. Squeeze the **orange** zest over the top of the glass to release oils, then drop the peel in.\n5. Add the **cinnamon** stick and **apple** slice.",
       "photoUri": "assets/cocktails/262-irish-pie-tobby.jpg",
       "glassId": "irish_coffee_glass",
       "methodIds": ["heat", "build"],
