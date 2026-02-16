@@ -10760,7 +10760,7 @@
         {
           "order": 3,
           "ingredientId": 130,
-          "name": "Cuban Rum",
+          "name": "White Cuban Rum",
           "amount": "15",
           "unitId": 11,
           "substitutes": [
@@ -14043,7 +14043,7 @@
       "id": 230,
       "name": "Grasshopper",
       "synonyms": ["Crème de Menthe and Crème de Cacao Cocktail"],
-      "description": "Creamy after-dinner mix of **mint** and **chocolate** liqueurs.",
+      "description": "Creamy after-dinner mix of **mint** and **chocolate liqueurs**.",
       "instructions": "1. Fill a shaker with **ice**.\n2. Add 20ml of **Crème de Cacao white**, 20ml of **Crème de Menthe Green**, and 20ml of **cream**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled cocktail glass.",
       "photoUri": "assets/cocktails/230-grasshopper.jpg",
       "glassId": "martini",
@@ -18344,7 +18344,7 @@
           "substitutes": [
             {
               "ingredientId": 130,
-              "name": "Cuban Rum"
+              "name": "White Cuban Rum"
             }
           ]
         },
@@ -20666,7 +20666,7 @@
     {
       "id": 340,
       "name": "Orgasm",
-      "description": "A popular, indulgent dessert cocktail known for its sweet, creamy profile. This version features a potent mix of **orange** liqueurs and **Irish cream** served over **ice**.",
+      "description": "A popular, indulgent dessert cocktail known for its sweet, creamy profile. This version features a potent mix of **orange liqueurs** and **Irish cream** served over **ice**.",
       "instructions": "1. Fill a rocks glass with **ice**.\n2. Add 30ml of **Cointreau**, 30ml of **Baileys**, and 20ml of **Grand Marnier**.\n3. Stir gently to combine.\n4. Garnish with a **maraschino cherry**.",
       "photoUri": "assets/cocktails/340-orgasm.jpg",
       "glassId": "rocks_glass",
@@ -33567,7 +33567,7 @@
         {
           "order": 2,
           "ingredientId": 130,
-          "name": "Cuban Rum",
+          "name": "White Cuban Rum",
           "amount": "45",
           "unitId": 11,
           "substitutes": [
@@ -36348,6 +36348,7 @@
       "name": "Anisette",
       "description": "Sweet anise-flavored liqueur around 25% ABV. Clear and aromatic with licorice character. Served chilled, with coffee, or in pastis-style mixes.",
       "tags": [1],
+      "styleIngredientId": 19,
       "photoUri": "assets/ingredients/21-anisette.jpg"
     },
     {
@@ -36369,6 +36370,7 @@
       "name": "Apple Brandy",
       "description": "Fruit brandy distilled from apples, typically 40–50% ABV. Offers baked-apple and spice notes from barrel ageing. Great in **Jack Rose**-style cocktails.",
       "tags": [1],
+      "styleIngredientId": 27,
       "photoUri": "assets/ingredients/24-apple-brandy.jpg"
     },
     {
@@ -36397,6 +36399,7 @@
       "name": "Apple Schnapps",
       "description": "Apple schnapps is a tart apple spirit with roughly 15–25% ABV. Use it in an **apple Pie shot** or **Appletini** cocktail.",
       "tags": [1],
+      "styleIngredientId": 27,
       "photoUri": "assets/ingredients/28-apple-schnapps.jpg"
     },
     {
@@ -36404,6 +36407,7 @@
       "name": "Applejack",
       "description": "American apple spirit is often blended with neutral grain, usually 40–50% ABV. Brings baked-apple flavour with subtle oak. Classic choice for **Jack Rose** and **Old Fashioned** riffs.",
       "tags": [1],
+      "styleIngredientId": 27,
       "photoUri": "assets/ingredients/29-applejack.jpg"
     },
     {
@@ -36463,6 +36467,7 @@
       "name": "Banana Liqueur Green",
       "description": "Vivid green banana liqueur with sweet tropical aroma around 20–25% ABV. Adds colour and ripe banana notes to Tiki drinks and dessert cocktails.",
       "tags": [1],
+      "styleIngredientId": 36,
       "photoUri": "assets/ingredients/37-banana-liqueur-green.jpg"
     },
     {
@@ -36576,6 +36581,7 @@
       "name": "Blackberry Brandy",
       "description": "Brandy or liqueur flavored with blackberries, typically 30–40% ABV. Sweet, jammy berry notes with a warming finish. Works in sours, cobblers, and dessert drinks.",
       "tags": [1],
+      "styleIngredientId": 54,
       "photoUri": "assets/ingredients/53-blackberry-brandy.jpg"
     },
     {
@@ -36597,6 +36603,7 @@
       "name": "Blackstrap Rum",
       "description": "Blackstrap rum is an intensely dark, full-bodied spirit characterised by a heavy molasses flavour profile. Unlike most rums that aim for smoothness or \"funk,\" blackstrap is often thick, syrupy, and contains bittersweet notes of coffee, liquorice, and burnt sugar.",
       "tags": [0],
+      "styleIngredientId": 134,
       "photoUri": "assets/ingredients/56-blackstrap-rum.jpg"
     },
     {
@@ -36660,6 +36667,7 @@
       "name": "Brown Sugar",
       "description": "Brown sugar is fine, moist cane sugar with molasses added back for color and flavor. It dissolves quickly and brings caramel notes to syrups and hot drinks. Light and dark varieties offer different molasses intensity.",
       "tags": [8],
+      "styleIngredientId": 322,
       "photoUri": "assets/ingredients/65-brown-sugar.jpg"
     },
     {
@@ -36688,6 +36696,7 @@
       "name": "Butterscotch Schnapps",
       "description": "Butterscotch schnapps is a toffee-flavoured schnapps around 15–20% ABV. Ideal for a **Buttery Nipple** or **Oatmeal Cookie shot**.",
       "tags": [1],
+      "styleIngredientId": 68,
       "photoUri": "assets/ingredients/69-butterscotch-schnapps.jpg"
     },
     {
@@ -36702,6 +36711,7 @@
       "name": "Calvados",
       "description": "Calvados is an apple brandy from the Normandy region of France, with an ABV typically between 40% and 45%. It has a complex flavour profile combining baked apple, spice, and oak notes. Calvados is often enjoyed neat or used in cocktails that highlight its rich fruit character.",
       "tags": [0],
+      "styleIngredientId": 27,
       "photoUri": "assets/ingredients/71-calvados.jpg"
     },
     {
@@ -36766,7 +36776,8 @@
       "name": "Champagne",
       "description": "Champagne is a French sparkling wine around 12% ABV with crisp bubbles. Pour it in **Mimosa** or **French 75**.",
       "tags": [2],
-      "photoUri": "assets/ingredients/80-flute.jpg"
+      "styleIngredientId": 313,
+      "photoUri": "assets/ingredients/80-champagne.jpg"
     },
     {
       "id": 81,
@@ -36780,6 +36791,7 @@
       "name": "Cherry Brandy",
       "description": "Cherry-based brandy or liqueur with deep red fruit character, around 30–40% ABV. Can be dry kirsch-style or sweetened. Adds cherry richness to classics like the **Singapore Sling**.",
       "tags": [1],
+      "styleIngredientId": 85,
       "photoUri": "assets/ingredients/82-cherry-brandy.jpg"
     },
     {
@@ -36929,6 +36941,7 @@
       "name": "Coconut Rum",
       "description": "Coconut rum infuses rum with coconut at about 21% ABV. Best in a **Piña Colada** or **Painkiller**.",
       "tags": [1],
+      "styleIngredientId": 101,
       "photoUri": "assets/ingredients/103-coconut-rum.jpg"
     },
     {
@@ -36957,6 +36970,7 @@
       "name": "Coffee Brandy",
       "description": "Coffee brandy combines roasted coffee and brandy, roughly 20–30% ABV. Enjoy in a **Alexander the Great** or **Brandy Separator**.",
       "tags": [1],
+      "styleIngredientId": 108,
       "photoUri": "assets/ingredients/107-coffee-brandy.jpg"
     },
     {
@@ -36971,6 +36985,7 @@
       "name": "Cognac",
       "description": "French grape brandy from the Cognac region, double-distilled and aged in oak at 40% ABV. Shows dried fruit, vanilla, and floral notes. Premium choice for sipping or cocktails like the **Sidecar**.",
       "tags": [0],
+      "styleIngredientId": 64,
       "photoUri": "assets/ingredients/109-cognac.jpg"
     },
     {
@@ -37036,6 +37051,7 @@
       "name": "Crème de Banane",
       "description": "Crème de Banane is a banana liqueur about 20% ABV. Use it in a **Banana Daiquiri** or **Bananarama**.",
       "tags": [1],
+      "styleIngredientId": 36,
       "photoUri": "assets/ingredients/118-creme-de-banane.jpg"
     },
     {
@@ -37043,6 +37059,7 @@
       "name": "Crème de Cacao Brown",
       "description": "Dark Crème de Cacao is a chocolate liqueur around 20–25% ABV. Mix it in a **Brandy Alexander** or **Chocolate Martini**.",
       "tags": [1],
+      "styleIngredientId": 91,
       "photoUri": "assets/ingredients/119-creme-de-cacao-brown.jpg"
     },
     {
@@ -37057,6 +37074,7 @@
       "name": "Crème de Cafe",
       "description": "Coffee-flavoured liqueur with a smooth, sweet roast profile. Use it for **White Lebowski**, **espresso** cocktails, or dessert drinks.",
       "tags": [1],
+      "styleIngredientId": 108,
       "photoUri": "assets/ingredients/121-cr-me-de-caf.jpg"
     },
     {
@@ -37064,6 +37082,7 @@
       "name": "Crème de Cassis",
       "description": "Crème de Cassis is a blackcurrant liqueur from France, 15–20% ABV. Key for a **Kir** or **El Diablo**.",
       "tags": [1],
+      "styleIngredientId": 54,
       "photoUri": "assets/ingredients/122-creme-de-cassis.jpg"
     },
     {
@@ -37085,6 +37104,7 @@
       "name": "Crème de Mure",
       "description": "Crème de Mûre is a blackberry liqueur around 20% ABV. Ideal for a **Bramble** and **Mûre Royale**.",
       "tags": [1],
+      "styleIngredientId": 54,
       "photoUri": "assets/ingredients/125-creme-de-mure.jpg"
     },
     {
@@ -37118,10 +37138,11 @@
     },
     {
       "id": 130,
-      "name": "Cuban Rum",
+      "name": "White Cuban Rum",
       "description": "Cuban rum is defined by a specific \"Spanish-style\" production method that results in a profile typically lighter, drier, and crisper than its caribbean neighbours.",
       "tags": [0],
-      "photoUri": "assets/ingredients/130-cuban-rum.jpg"
+      "styleIngredientId": 345,
+      "photoUri": "assets/ingredients/130-white-cuban-rum.jpg"
     },
     {
       "id": 131,
@@ -37156,6 +37177,7 @@
       "name": "Demerara Rum",
       "description": "Rum made from demerara sugar, often from guyana, around 40–50% ABV. Rich molasses, smoke, and toffee notes. Adds depth to Tiki cocktails and stirred rum drinks.",
       "tags": [0],
+      "styleIngredientId": 134,
       "photoUri": "assets/ingredients/135-demerara-rum.jpg"
     },
     {
@@ -37163,6 +37185,7 @@
       "name": "Demerara Sugar",
       "description": "Demerara sugar has large, crunchy crystals with natural molasses. It brings toffee-like sweetness and texture to syrups and muddled drinks. Less processed than standard brown sugar, so flavors stay mellow.",
       "tags": [8],
+      "styleIngredientId": 322,
       "photoUri": "assets/ingredients/136-demerara-sugar.jpg"
     },
     {
@@ -37170,6 +37193,7 @@
       "name": "Demerara Sugar Syrup",
       "description": "2 Parts demerara sugar to 1 part water.\nInstructions: \n1. Add the 2 parts of sugar and 1 part water to a small saucepan.\n2. Place over medium-low heat. Stir gently and continuously until the sugar crystals are completely dissolved.",
       "tags": [5],
+      "styleIngredientId": 293,
       "photoUri": "assets/ingredients/137-demerara-sugar-syrup.jpg"
     },
     {
@@ -37376,6 +37400,7 @@
       "name": "Gold Jamaican Rum",
       "description": "The primary difference for gold Jamaican rum lies in its aging process, which gives it a richer, more complex flavor profile than white rum, while being less bold and aged than dark rum. Jamaican Rums in general are known for their distinct \"funky\" character due to a unique high-ester fermentation process.",
       "tags": [0],
+      "styleIngredientId": 168,
       "photoUri": "assets/ingredients/166-gold-jamaican-rum.jpg"
     },
     {
@@ -37383,6 +37408,7 @@
       "name": "Gold Puerto Rican Rum",
       "description": "Lightly aged gold rum from puerto rico, around 40% ABV. Soft vanilla and caramel notes with a smooth finish. Reliable mixing rum for tropical cocktails.",
       "tags": [0],
+      "styleIngredientId": 168,
       "photoUri": "assets/ingredients/167-gold-puerto-rican-rum.jpg"
     },
     {
@@ -37589,6 +37615,7 @@
       "name": "Irish Whiskey",
       "description": "Irish whiskey is typically triple-distilled and aged at least three years, giving a smooth, light profile around 40% ABV. Shows malt sweetness with gentle fruit. Great for **Irish Coffee** or easy sipping.",
       "tags": [0],
+      "styleIngredientId": 342,
       "photoUri": "assets/ingredients/196-irish-whiskey.jpg"
     },
     {
@@ -37618,6 +37645,7 @@
       "name": "Jamaican Dark Rum",
       "description": "Pot-still heavy Jamaican rum with deep molasses and estery funk, usually around 40–50% ABV. Dark colour from ageing and caramel. Adds bass notes to Tiki drinks and punches.",
       "tags": [0],
+      "styleIngredientId": 134,
       "photoUri": "assets/ingredients/200-jamaican-dark-rum.jpg"
     },
     {
@@ -37625,6 +37653,7 @@
       "name": "Jamaican Rum",
       "description": "Robust Jamaican rum is often pot-distilled, around 40–50% ABV. Expect ripe banana, molasses, and tropical spice aromas. Great in **Mai Tais** and rum punches.",
       "tags": [0],
+      "styleIngredientId": 345,
       "photoUri": "assets/ingredients/201-jamaican-rum.jpg"
     },
     {
@@ -37632,6 +37661,7 @@
       "name": "Japanese Whisky",
       "description": "Whisky distilled in Japan using techniques inspired by Scotch, typically around 43% ABV. Balanced malt and grain blends with refined oak influence. Elegant choice for highballs and sipping.",
       "tags": [0],
+      "styleIngredientId": 342,
       "photoUri": "assets/ingredients/202-japanese-whisky.jpg"
     },
     {
@@ -37670,6 +37700,7 @@
       "name": "Kirsch",
       "description": "Kirsch, or kirschwasser, is a clear cherry brandy with 37–43% ABV. It is dry and aromatic, made from distilled cherries. Used in cocktails, desserts, and fondue recipes.",
       "tags": [1],
+      "styleIngredientId": 85,
       "photoUri": "assets/ingredients/207-kirsch.jpg"
     },
     {
@@ -37934,6 +37965,7 @@
       "name": "Orange Curaçao",
       "description": "Orange curaçao is an orange liqueur at 20–40% ABV with bittersweet citrus. Essential in a **Mai Tai** or **Sidecar**.",
       "tags": [1],
+      "styleIngredientId": 247,
       "photoUri": "assets/ingredients/244-orange-cura-ao.jpg"
     },
     {
@@ -38068,6 +38100,7 @@
       "name": "Peach Brandy",
       "description": "Peach-based brandy or liqueur with ripe stone-fruit sweetness, typically 30–40% ABV. Sometimes aged for gentle oak warmth. Tasty in punches and cobblers.",
       "tags": [1],
+      "styleIngredientId": 264,
       "photoUri": "assets/ingredients/263-peach-brandy.jpg"
     },
     {
@@ -38082,6 +38115,7 @@
       "name": "Peach Schnapps",
       "description": "Peach schnapps is a light peach spirit about 15–20% ABV. Ideal in a **Fuzzy Navel** or **Woo Woo**.",
       "tags": [1],
+      "styleIngredientId": 264,
       "photoUri": "assets/ingredients/265-peach-schnapps.jpg"
     },
     {
@@ -38212,6 +38246,7 @@
       "name": "Prosecco",
       "description": "Prosecco is an Italian sparkling wine around 11% ABV with light fruity notes. Perfect for **Bellini** or **Spritz**.",
       "tags": [2],
+      "styleIngredientId": 313,
       "photoUri": "assets/ingredients/283-prosecco.jpg"
     },
     {
@@ -38362,6 +38397,7 @@
       "name": "Scotch Highland Whisky",
       "description": "Single malt Scotch from the highlands region, typically 40–46% ABV. Flavors range from honeyed malt to gentle smoke. Versatile for sipping or cocktails.",
       "tags": [0],
+      "styleIngredientId": 305,
       "photoUri": "assets/ingredients/304-scotch-highland-whisky.jpg"
     },
     {
@@ -38369,6 +38405,7 @@
       "name": "Scotch Whisky",
       "description": "Whisky made in scotland and aged at least three years in oak at 40% ABV or higher. Styles span light and floral to heavily peated. Classic base for highballs and stirred drinks.",
       "tags": [0],
+      "styleIngredientId": 342,
       "photoUri": "assets/ingredients/305-scotch-whisky.jpg"
     },
     {
@@ -38469,6 +38506,7 @@
       "name": "Strawberry Schnapps",
       "description": "Strawberry schnapps is a sugary strawberry spirit about 15–20% ABV. Great in a **Strawberry Martini** or **Red Lebowski**.",
       "tags": [1],
+      "styleIngredientId": 318,
       "photoUri": "assets/ingredients/319-strawberry-schnapps.jpg"
     },
     {
