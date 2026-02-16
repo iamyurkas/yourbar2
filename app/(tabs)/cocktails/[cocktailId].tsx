@@ -25,6 +25,7 @@ import {
   METHOD_ICON_MAP,
 } from "@/constants/cocktail-methods";
 import { COCKTAIL_UNIT_DICTIONARY } from "@/constants/cocktail-units";
+import { GLASSWARE_NAME_BY_ID } from "@/constants/glassware";
 import { useAppColors } from "@/constants/theme";
 import { resolveImageSource } from "@/libs/image-source";
 import {
@@ -50,29 +51,6 @@ const METRIC_UNIT_ID = 11;
 const IMPERIAL_UNIT_ID = 12;
 const GRAM_UNIT_ID = 8;
 const UNIT_CONVERSION_RATIO = 30;
-
-const GLASS_LABELS: Record<string, string> = {
-  bowl: "Punch bowl",
-  flute_glass: "Flute glass",
-  martini: "Martini glass",
-  collins_glass: "Collins glass",
-  copper_mug: "Copper mug",
-  coupe: "Coupe glass",
-  cup: "Cup",
-  goblet: "Goblet",
-  highball_glass: "Highball glass",
-  hurricane_glass: "Hurricane glass",
-  toddy_glass: "Toddy glass",
-  margarita_glass: "Margarita glass",
-  nick_and_nora: "Nick & Nora glass",
-  pitcher: "Pitcher",
-  pub_glass: "Pub glass",
-  rocks_glass: "Rocks glass",
-  shooter: "Shooter glass",
-  snifter: "Snifter",
-  tiki_glass: "Tiki glass",
-  wine_glass: "Wine glass",
-};
 
 const MAX_RATING = 5;
 
@@ -316,14 +294,7 @@ function formatGlassLabel(glassId?: string | null) {
     return undefined;
   }
 
-  return (
-    GLASS_LABELS[glassId] ??
-    glassId
-      .split(/[_\s]+/)
-      .filter(Boolean)
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ")
-  );
+  return GLASSWARE_NAME_BY_ID[glassId as keyof typeof GLASSWARE_NAME_BY_ID] ?? glassId;
 }
 
 export default function CocktailDetailsScreen() {
