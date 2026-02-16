@@ -65,6 +65,38 @@ export function useCocktailTabLogic({
       return (record?.name ?? fallback ?? '').trim();
     };
 
+
+    const collectStylesAndBrandsForBase = (
+      baseId: number,
+      allowBrandForBase: boolean,
+      map: Map<number, string>,
+      skipId?: number,
+    ) => {
+      const styleIds = ingredientLookup.stylesByBaseId.get(baseId) ?? [];
+
+      styleIds.forEach((styleId) => {
+        if (styleId !== skipId) {
+          const styleName = resolveNameFromId(styleId);
+          if (styleName) {
+            map.set(styleId, styleName);
+          }
+        }
+
+        if (allowBrandForBase) {
+          ingredientLookup.brandsByBaseId.get(styleId)?.forEach((brandId) => {
+            if (brandId === skipId) {
+              return;
+            }
+
+            const brandName = resolveNameFromId(brandId);
+            if (brandName) {
+              map.set(brandId, brandName);
+            }
+          });
+        }
+      });
+    };
+
     const collectIngredientOptions = (
       ingredientId: number | undefined,
       fallbackName: string | undefined,
@@ -116,12 +148,7 @@ export function useCocktailTabLogic({
               }
             });
           } else {
-            ingredientLookup.stylesByBaseId.get(ingredientId)?.forEach((styleId) => {
-              const styleName = resolveNameFromId(styleId);
-              if (styleName) {
-                map.set(styleId, styleName);
-              }
-            });
+            collectStylesAndBrandsForBase(ingredientId, allowBrandedForBase, map, ingredientId);
           }
         }
         return;
@@ -143,22 +170,26 @@ export function useCocktailTabLogic({
         });
       }
 
-      if (allowStyle && styleBaseId != null) {
-        const styleBaseName = resolveNameFromId(styleBaseId);
-        if (styleBaseName) {
-          map.set(styleBaseId, styleBaseName);
+      if (allowStyle) {
+        if (styleBaseId != null) {
+          const styleBaseName = resolveNameFromId(styleBaseId);
+          if (styleBaseName) {
+            map.set(styleBaseId, styleBaseName);
+          }
+
+          ingredientLookup.stylesByBaseId.get(styleBaseId)?.forEach((styleId) => {
+            if (styleId === ingredientId) {
+              return;
+            }
+
+            const styleName = resolveNameFromId(styleId);
+            if (styleName) {
+              map.set(styleId, styleName);
+            }
+          });
         }
 
-        ingredientLookup.stylesByBaseId.get(styleBaseId)?.forEach((styleId) => {
-          if (styleId === ingredientId) {
-            return;
-          }
-
-          const styleName = resolveNameFromId(styleId);
-          if (styleName) {
-            map.set(styleId, styleName);
-          }
-        });
+        collectStylesAndBrandsForBase(baseId, allowBrandedForBase, map, ingredientId);
       }
 
     };
