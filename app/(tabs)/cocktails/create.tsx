@@ -2811,14 +2811,14 @@ function EditableIngredientRow({
       {isStyledIngredient ? (
         <View style={styles.toggleRow}>
           <ToggleChip
-            label="Allow other styles"
+            label="Allow style base substitute"
             active={ingredient.allowStyleSubstitution}
             onToggle={handleToggleAllowStyle}
             onInfo={() =>
               onOpenDialog({
-                title: "Allow other styles",
+                title: "Allow style base substitute",
                 message:
-                  "If the specified style isn't available, the cocktail will be shown as available with other styles of the same base ingredient.",
+                  "If the specified styled ingredient isn't available, the cocktail will be shown as available with its style base ingredient.",
                 actions: [{ label: "OK" }],
               })
             }

@@ -148,12 +148,11 @@ function collectVisibleIngredientIds(
     if (allowBrandedForBase) {
       lookup.brandsByBaseId.get(ingredientId)?.forEach((id) => accumulator.add(id));
     }
-    if (allowStyle) {
-      lookup.stylesByBaseId.get(ingredientId)?.forEach((id) => accumulator.add(id));
-      if (styleBaseId != null) {
-        lookup.stylesByBaseId.get(styleBaseId)?.forEach((id) => accumulator.add(id));
-      }
+
+    if (allowStyle && styleBaseId != null) {
+      accumulator.add(styleBaseId);
     }
+
     return;
   }
 
@@ -239,13 +238,11 @@ export function resolveIngredientAvailability(
 
   const styleSubstituteSet = new Set<number>();
 
-  if (allowStyle && requestedId != null) {
-    const styleSourceId = normalizeIngredientId(requestedIngredient?.styleIngredientId) ?? requestedId;
-    lookup.stylesByBaseId.get(styleSourceId)?.forEach((id) => {
-      if (id !== requestedId) {
-        styleSubstituteSet.add(id);
-      }
-    });
+  if (allowStyle) {
+    const styleBaseId = normalizeIngredientId(requestedIngredient?.styleIngredientId);
+    if (styleBaseId != null) {
+      styleSubstituteSet.add(styleBaseId);
+    }
   }
 
   const brandedSubstituteIds = Array.from(brandedSubstituteSet);
@@ -269,7 +266,12 @@ export function resolveIngredientAvailability(
 
     const record = lookup.ingredientById.get(candidateId);
     const candidateBaseId = normalizeIngredientId(record?.baseIngredientId);
+    const candidateStyleBaseId = normalizeIngredientId(record?.styleIngredientId);
     const allowBrandedCandidate = allowBrand || candidateBaseId == null;
+
+    if (allowStyle && candidateStyleBaseId != null) {
+      addCandidate(candidateStyleBaseId);
+    }
 
     if (candidateBaseId == null) {
       if (allowBrandedCandidate) {
