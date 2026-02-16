@@ -5611,7 +5611,7 @@
       "id": 92,
       "name": "Bombardino",
       "description": "A rich, creamy **brandy** drink featuring **Cognac**, **Advocaat**, **whipped cream**—dessert-like, smooth, and indulgent.",
-      "instructions": "1. Warm 100ml of **egg liqueur (Advocaat)** in a small saucepan over low heat until hot but not boiling.\n2. Add 50ml of **Cognac** (or **brandy**) and stir gently to combine.\n3. Pour into a pre-warmed heat-resistant glass or mug.\n4. Top with 100ml of **whipped cream**.\n5. Garnish with 1 pinch of **cinnamon** (optional: add 1 pinch of **cocoa powder**).",
+      "instructions": "1. Warm 120ml of **egg liqueur (Advocaat)** in a small saucepan over low heat until hot but not boiling.\n2. Add 60ml of **Cognac** (or **brandy**) and stir gently to combine.\n3. Pour into a pre-warmed heat-resistant glass or mug.\n4. Top with 60ml of **whipped cream**.\n5. Garnish with 1 pinch of **cinnamon** (optional: add 1 pinch of **cocoa powder**).",
       "photoUri": "assets/cocktails/92-bombardino.jpg",
       "glassId": "toddy_glass",
       "methodIds": ["heat", "build"],
@@ -5619,9 +5619,16 @@
       "ingredients": [
         {
           "order": 1,
+          "ingredientId": 146,
+          "name": "Egg Liqueur (Advocaat)",
+          "amount": "120",
+          "unitId": 11
+        },
+        {
+          "order": 2,
           "ingredientId": 109,
           "name": "Cognac",
-          "amount": "50",
+          "amount": "60",
           "unitId": 11,
           "substitutes": [
             {
@@ -5631,17 +5638,10 @@
           ]
         },
         {
-          "order": 2,
-          "ingredientId": 146,
-          "name": "Egg Liqueur (Advocaat)",
-          "amount": "100",
-          "unitId": 11
-        },
-        {
           "order": 3,
           "ingredientId": 341,
           "name": "Whipped Cream",
-          "amount": "100",
+          "amount": "60",
           "unitId": 11
         },
         {
@@ -5676,9 +5676,23 @@
       "ingredients": [
         {
           "order": 1,
+          "ingredientId": 146,
+          "name": "Egg Liqueur (Advocaat)",
+          "amount": "60",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 150,
+          "name": "Espresso",
+          "amount": "60",
+          "unitId": 11
+        },
+        {
+          "order": 3,
           "ingredientId": 109,
           "name": "Cognac",
-          "amount": "50",
+          "amount": "60",
           "unitId": 11,
           "substitutes": [
             {
@@ -5688,24 +5702,10 @@
           ]
         },
         {
-          "order": 2,
-          "ingredientId": 146,
-          "name": "Egg Liqueur (Advocaat)",
-          "amount": "50",
-          "unitId": 11
-        },
-        {
-          "order": 3,
-          "ingredientId": 150,
-          "name": "Espresso",
-          "amount": "50",
-          "unitId": 11
-        },
-        {
           "order": 4,
           "ingredientId": 341,
           "name": "Whipped Cream",
-          "amount": "100",
+          "amount": "60",
           "unitId": 11
         },
         {
@@ -5740,9 +5740,16 @@
       "ingredients": [
         {
           "order": 1,
+          "ingredientId": 146,
+          "name": "Egg Liqueur (Advocaat)",
+          "amount": "120",
+          "unitId": 11
+        },
+        {
+          "order": 2,
           "ingredientId": 168,
           "name": "Gold Rum",
-          "amount": "50",
+          "amount": "60",
           "unitId": 11,
           "substitutes": [
             {
@@ -5760,17 +5767,10 @@
           ]
         },
         {
-          "order": 2,
-          "ingredientId": 146,
-          "name": "Egg Liqueur (Advocaat)",
-          "amount": "100",
-          "unitId": 11
-        },
-        {
           "order": 3,
           "ingredientId": 341,
           "name": "Whipped Cream",
-          "amount": "100",
+          "amount": "60",
           "unitId": 11
         },
         {
@@ -5805,23 +5805,23 @@
       "ingredients": [
         {
           "order": 1,
-          "ingredientId": 342,
-          "name": "Whiskey",
-          "amount": "50",
+          "ingredientId": 146,
+          "name": "Egg Liqueur (Advocaat)",
+          "amount": "120",
           "unitId": 11
         },
         {
           "order": 2,
-          "ingredientId": 146,
-          "name": "Egg Liqueur (Advocaat)",
-          "amount": "100",
+          "ingredientId": 342,
+          "name": "Whiskey",
+          "amount": "60",
           "unitId": 11
         },
         {
           "order": 3,
           "ingredientId": 341,
           "name": "Whipped Cream",
-          "amount": "100",
+          "amount": "60",
           "unitId": 11
         },
         {
