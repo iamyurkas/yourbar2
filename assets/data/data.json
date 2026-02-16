@@ -4145,7 +4145,7 @@
       "description": "Italian **sparkling wine** mixed with **peach** purée for a light, fruity spritz.",
       "instructions": "1. Peel and pit fresh white peaches, then blend or mash until smooth.\n2. Strain through a fine-mesh sieve to remove pulp if desired.\n3. Pour 60ml of the **peach purée** into a chilled flute glass.\n4. Slowly top with 120ml of chilled **prosecco**.\n5. Stir very gently to combine without losing carbonation.\n6. Garnish with a fresh peach slice to the rim.",
       "photoUri": "assets/cocktails/68-bellini.jpg",
-      "glassId": "champagne_flute",
+      "glassId": "flute_glass",
       "methodIds": ["blend", "muddle", "build"],
       "tags": [1, 6],
       "ingredients": [
@@ -6616,7 +6616,7 @@
       "description": "A long drink of **orange juice** topped with **sparkling wine**.",
       "instructions": "1. Pour 100ml of **sparkling wine** and 50ml of **orange juice** into a flute glass.\n2. Stir very gently to combine without losing carbonation.\n3. Express the oils from an **orange** peel over the drink and use it as a garnish.",
       "photoUri": "assets/cocktails/109-buck-s-fizz.jpg",
-      "glassId": "champagne_flute",
+      "glassId": "flute_glass",
       "methodIds": ["build"],
       "tags": [7, 8],
       "ingredients": [
@@ -8256,7 +8256,7 @@
       "description": "A celebratory sparkling cocktail with a **bitters**-soaked **sugar** cube and a splash of **Cognac**.",
       "instructions": "1. Add a cube of **sugar**, 2 dashes of **Angostura bitters**, 10ml of **Cognac**, 90ml of **Champagne**, and 3 drops of **Grand Marnier** to a flute glass.\n2. Stir very gently to combine without losing carbonation.\n3. Garnish with an **orange** slice and a **maraschino cherry**.",
       "photoUri": "assets/cocktails/134-champagne-cocktail.jpg",
-      "glassId": "champagne_flute",
+      "glassId": "flute_glass",
       "methodIds": ["build"],
       "tags": [1, 5, 6],
       "ingredients": [
@@ -10230,7 +10230,7 @@
       "description": "A spirit-forward wine cocktail showcasing **absinthe**, **sparkling wine**—deep, aromatic, and meant to be savored.",
       "instructions": "1. Add 30ml of **absinthe**, 10ml of **simple syrup**, and 100ml of **sparkling wine** to a flute glass.\n2. Stir very gently to combine without losing carbonation.\n3. Express the oils from a **lemon** peel over the drink and use it as a garnish.",
       "photoUri": "assets/cocktails/165-death-in-the-afternoon.jpg",
-      "glassId": "champagne_flute",
+      "glassId": "flute_glass",
       "methodIds": ["build"],
       "tags": [6],
       "ingredients": [
@@ -12282,7 +12282,7 @@
       "description": "Crisp **gin** and **lemon** topped with sparkling **Champagne**.",
       "instructions": "1. Fill a shaker with **ice**.\n2. Add 30ml of **gin**, 15ml of **lemon juice**, and 15ml of **simple syrup**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled flute glass.\n5. Top with 60ml of **Champagne**.\n6. Express the oils from a **lemon** peel over the drink and use it as a garnish.",
       "photoUri": "assets/cocktails/201-french-75.jpg",
-      "glassId": "champagne_flute",
+      "glassId": "flute_glass",
       "methodIds": ["shake"],
       "tags": [1, 5, 6],
       "ingredients": [
@@ -16986,7 +16986,7 @@
       "description": "An upscale, effervescent version of the classic kir, replacing still wine with **Champagne** for a celebratory and luxurious experience.",
       "instructions": "1. Add 90ml of **Champagne** and 10ml of **Crème de Cassis** to a flute glass.\n2. Stir very gently to combine without losing carbonation.",
       "photoUri": "assets/cocktails/281-kir-royal.jpg",
-      "glassId": "champagne_flute",
+      "glassId": "flute_glass",
       "methodIds": ["build"],
       "tags": [1, 6],
       "ingredients": [
@@ -19230,7 +19230,7 @@
       "description": "Brunch favorite combining **sparkling wine** and fresh **orange juice**.",
       "instructions": "1. Add 75ml of **orange juice** and 75ml of **Champagne** to a flute glass.\n2. Stir very gently to combine without losing carbonation.\n3. Express the oils from an **orange** peel over the drink and use it as a garnish.",
       "photoUri": "assets/cocktails/317-mimosa.jpg",
-      "glassId": "champagne_flute",
+      "glassId": "flute_glass",
       "methodIds": ["build"],
       "tags": [1, 2],
       "ingredients": [
@@ -19693,7 +19693,7 @@
       "description": "An elegant and sparkling **pisco**-based drink that offers a sophisticated blend of tropical **pineapple** and tart **grapefruit**, finished with the effervescence of **prosecco**.",
       "instructions": "1. Fill a shaker with **ice**.\n2. Add 25ml of **pisco**, 15ml of **pineapple syrup**, 15ml of **grapefruit juice**, 5ml of **lime juice**, and 2 dashes of **creole bitters**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled flute glass.\n5. Top with 50ml of **prosecco**.\n6. Garnish with a wedge of **pineapple**.",
       "photoUri": "assets/cocktails/325-mrs-daisy-robinson.jpg",
-      "glassId": "champagne_flute",
+      "glassId": "flute_glass",
       "methodIds": ["shake"],
       "tags": [6],
       "ingredients": [
@@ -23258,7 +23258,7 @@
       "description": "A sophisticated Italian classic and variation of the Bellini, featuring vibrant **strawberry** purée topped with crisp, chilled **prosecco**.",
       "instructions": "1. Purée or muddle 50g of fresh strawberries until smooth.\n2. Pour the **strawberry** purée into a chilled flute glass.\n3. Gently pour 100ml of chilled **prosecco** into the glass.\n4. Stir very gently to combine without losing carbonation.\n5. Garnish with a fresh **strawberry** on the rim.",
       "photoUri": "assets/cocktails/383-rossini.jpg",
-      "glassId": "champagne_flute",
+      "glassId": "flute_glass",
       "methodIds": ["muddle", "build"],
       "tags": [1, 7],
       "ingredients": [
@@ -24505,7 +24505,7 @@
       "description": "A sophisticated and aromatic spirit-forward drink that balances the richness of **Cognac** with floral rose and deep **cherry** notes, finished with a crisp **lager** top.",
       "instructions": "1. Fill a shaker with **ice**.\n2. Add 45ml of **Cognac**, 15ml of **Cherry Heering**, and 15ml of **rose syrup**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled flute glass.\n5. Top with 60ml of **pilsner lager**.",
       "photoUri": "assets/cocktails/403-seventh-son.jpg",
-      "glassId": "champagne_flute",
+      "glassId": "flute_glass",
       "methodIds": ["shake"],
       "tags": [6],
       "ingredients": [
@@ -27535,7 +27535,7 @@
       "description": "A venetian classic, this cocktail is a vibrant variation of the Bellini. It pairs the crisp bubbles of **prosecco** with the tart, ruby-red essence of fresh **pomegranate juice**.",
       "instructions": "1. Pour the **pomegranate juice** and **simple syrup** into the glass first.\n2. Stir very gently to combine without losing carbonation.\n3. Slowly pour the chilled **prosecco** over the juice.",
       "photoUri": "assets/cocktails/451-tintoretto.jpg",
-      "glassId": "champagne_flute",
+      "glassId": "flute_glass",
       "methodIds": ["build"],
       "tags": [1, 7],
       "ingredients": [
@@ -32212,7 +32212,7 @@
       "description": "A simple, elegant drink made by adding a splash of **blackberry liqueur** to a glass of chilled **Champagne** or **sparkling wine**.",
       "instructions": "1. Pour a teaspoon of **Crème de Mure** into a chilled Champagne glass.\n2. Top with 120ml of chilled **Champagne**.\n3. Garnish with a fresh **blackberry**.",
       "photoUri": "assets/cocktails/524-mure-royale.jpg",
-      "glassId": "champagne_flute",
+      "glassId": "flute_glass",
       "methodIds": ["build"],
       "tags": [6],
       "ingredients": [
@@ -32513,7 +32513,7 @@
       "description": "Full-bodied stout and delicate dry sparkling wine are an unlikely combination but this classic has stood the test of time. Some may wish to add a barspoon of sugar syrup.",
       "instructions": "1. Pour 75ml of **Guinness** into a chilled flute glass.\n2. Slowly top with 75ml of **prosecco**.\n3. Optionally add a bar spoon of **simple syrup** for a slightly sweeter serve.",
       "photoUri": "assets/cocktails/530-black-velvet.jpg",
-      "glassId": "champagne_flute",
+      "glassId": "flute_glass",
       "methodIds": ["build"],
       "tags": [6],
       "ingredients": [
@@ -35370,7 +35370,7 @@
       "description": "A sparkling alcohol-free serve inspired by the French 75, built with a non-alcoholic spirit, **lemon juice**, **simple syrup**, and **soda water**. **Seedlip** is one suitable option for the spirit component.",
       "instructions": "1. Fill a shaker with **ice**.\n2. Add 45ml of a non-alcoholic spirit (for example, **Seedlip**), 15ml of **lemon juice**, and 15ml of **simple syrup**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled flute.\n5. Top with 75ml of **soda water**.\n6. Express the oils from a **lemon** peel over the drink and use it as a garnish.",
       "photoUri": "assets/cocktails/578-faux-75.jpg",
-      "glassId": "champagne_flute",
+      "glassId": "flute_glass",
       "methodIds": ["shake"],
       "tags": [10],
       "ingredients": [
@@ -36766,7 +36766,7 @@
       "name": "Champagne",
       "description": "Champagne is a French sparkling wine around 12% ABV with crisp bubbles. Pour it in **Mimosa** or **French 75**.",
       "tags": [2],
-      "photoUri": "assets/ingredients/80-champagne.jpg"
+      "photoUri": "assets/ingredients/80-flute.jpg"
     },
     {
       "id": 81,
