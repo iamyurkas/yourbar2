@@ -8,29 +8,6 @@ const dataPath = path.join(assetsDir, "data", "data.json");
 
 const imageExtensions = new Set([".jpg", ".jpeg", ".png", ".webp"]);
 
-const glasswareIdMap = [
-  ["bowl", "bowl.jpg"],
-  ["flute_glass", "flute.jpg"],
-  ["martini", "martini.jpg"],
-  ["collins_glass", "collins.jpg"],
-  ["copper_mug", "copper.jpg"],
-  ["coupe", "coupe.jpg"],
-  ["cup", "cup.jpg"],
-  ["goblet", "goblet.jpg"],
-  ["highball_glass", "highball.jpg"],
-  ["hurricane_glass", "hurricane.jpg"],
-  ["toddy_glass", "toddy.jpg"],
-  ["margarita_glass", "margarita.jpg"],
-  ["nick_and_nora", "nick.jpg"],
-  ["pitcher", "pitcher.jpg"],
-  ["pub_glass", "pub.jpg"],
-  ["rocks_glass", "rocks.jpg"],
-  ["shooter", "shooter.jpg"],
-  ["snifter", "snifter.jpg"],
-  ["tiki_glass", "tiki.jpg"],
-  ["wine_glass", "wine.jpg"],
-];
-
 const listImages = (subdir) => {
   const dirPath = path.join(assetsDir, subdir);
   return fs
@@ -90,11 +67,12 @@ const renderImageMap = (constName, subdir, files) =>
     "",
   ].join("\n");
 
-const renderGlasswareUriById = () =>
+const renderGlasswareUriById = (files) =>
   [
     "export const glasswareUriById: Record<string, string> = {",
-    ...glasswareIdMap.map(
-      ([id, filename]) => `  ${id}: 'assets/glassware/${filename}',`,
+    ...files.map(
+      (file) =>
+        `  '${path.basename(file, path.extname(file))}': 'assets/glassware/${file}',`,
     ),
     "};",
     "",
@@ -113,7 +91,7 @@ const contents = [
   "/* eslint-disable @typescript-eslint/no-var-requires */",
   renderImageMap("ingredient", "ingredients", ingredientFiles),
   renderImageMap("glassware", "glassware", glasswareFiles),
-  renderGlasswareUriById(),
+  renderGlasswareUriById(glasswareFiles),
   "export function resolveGlasswareUriFromId(glassId?: string | null) {",
   "  if (!glassId) {",
   "    return undefined;",

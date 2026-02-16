@@ -8,7 +8,7 @@ export type GlasswareOption = {
   imageUri: string;
 };
 
-const GLASSWARE_DEFINITIONS: Array<Pick<GlasswareOption, "id" | "name">> = [
+const GLASSWARE_DEFINITIONS: readonly Pick<GlasswareOption, "id" | "name">[] = [
   { id: "bowl", name: "Bowl" },
   { id: "flute_glass", name: "Flute glass" },
   { id: "martini", name: "Martini glass" },
@@ -30,6 +30,15 @@ const GLASSWARE_DEFINITIONS: Array<Pick<GlasswareOption, "id" | "name">> = [
   { id: "tiki_glass", name: "Tiki glass" },
   { id: "wine_glass", name: "Wine glass" },
 ];
+
+
+export const GLASSWARE_NAME_BY_ID: Record<GlasswareId, string> = GLASSWARE_DEFINITIONS.reduce(
+  (acc, { id, name }) => {
+    acc[id] = name;
+    return acc;
+  },
+  {} as Record<GlasswareId, string>,
+);
 
 export const GLASSWARE: GlasswareOption[] = GLASSWARE_DEFINITIONS.map(
   ({ id, name }) => ({
