@@ -165,7 +165,7 @@ function collectVisibleIngredientIds(
   }
 
   if (allowStyle && styleBaseId != null) {
-    lookup.stylesByBaseId.get(styleBaseId)?.forEach((id) => accumulator.add(id));
+    accumulator.add(styleBaseId);
   }
 }
 
