@@ -2556,7 +2556,7 @@
       "id": 44,
       "name": "Baby Guinness",
       "description": "This layered shooter was named for its appearance — it looks like a tiny glass of stout. The **Baileys** can also be whipped and spooned on top, for a frothy presentation.",
-      "instructions": "1. Pour 30ml of **coffee liqueur** into a shooter glass.\n2. Carefully pour 15ml of **Irish cream** liqueur on top.",
+      "instructions": "1. Pour 30ml of **coffee liqueur** into a shooter glass.\n2. Carefully pour 15ml of **Baileys** liqueur on top.",
       "photoUri": "assets/cocktails/44-baby-guinness.jpg",
       "glassId": "shooter",
       "methodIds": ["layer"],
@@ -4840,7 +4840,7 @@
           "order": 6,
           "ingredientId": 324,
           "name": "Tabasco",
-          "amount": "1",
+          "amount": "2",
           "unitId": 6,
           "optional": true
         },
@@ -12801,7 +12801,7 @@
           "order": 5,
           "ingredientId": 226,
           "name": "Luxardo Maraschino",
-          "amount": "5",
+          "amount": "7.5",
           "unitId": 11
         },
         {
@@ -17458,8 +17458,8 @@
       "id": 289,
       "name": "Lisbon Martini",
       "synonyms": ["Port Martini", "Portuguese Martini"],
-      "description": "A refined european twist on the classic **Martini**. The rich, fruity notes of **port** wine blend seamlessly with the crispness of **gin** and the delicate floral sweetness of **st. Germain** elderflower liqueur, finished with a citrusy dash of **bitters**.",
-      "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 30ml of **port**, 60ml of **gin**, 15ml of **st. Germain**, and a dash of **Bittermens Boston Bittahs**.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled martini glass.\n5. Garnish with a **lemon** peel and a **chamomile flowers**.",
+      "description": "A refined european twist on the classic **Martini**. The rich, fruity notes of **port** wine blend seamlessly with the crispness of **gin** and the delicate floral sweetness of **St-Germain** elderflower liqueur, finished with a citrusy dash of **bitters**.",
+      "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 30ml of **port**, 60ml of **gin**, 15ml of **St-Germain**, and a dash of **Bittermens Boston Bittahs**.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled martini glass.\n5. Garnish with a **lemon** peel and a **chamomile flowers**.",
       "photoUri": "assets/cocktails/289-lisbon-martini.jpg",
       "glassId": "martini",
       "methodIds": ["stir"],
@@ -17489,7 +17489,7 @@
         {
           "order": 4,
           "ingredientId": 316,
-          "name": "St. Germain",
+          "name": "St-Germain",
           "amount": "15",
           "unitId": 11
         },
@@ -22866,8 +22866,8 @@
       "id": 376,
       "name": "Right Word",
       "synonyms": ["Floral Last Word"],
-      "description": "A floral riff on the Last Word with **gin**, **st. Germain** and **Lillet Blanc**.",
-      "instructions": "1. Fill a shaker with **ice**.\n2. Add 30ml of **gin**, 30ml of **st. Germain**, 30ml of **Lillet Blanc**, and 30ml of **lime juice**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled coupe glass.",
+      "description": "A floral riff on the Last Word with **gin**, **St-Germain** and **Lillet Blanc**.",
+      "instructions": "1. Fill a shaker with **ice**.\n2. Add 30ml of **gin**, 30ml of **St-Germain**, 30ml of **Lillet Blanc**, and 30ml of **lime juice**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled coupe glass.",
       "photoUri": "assets/cocktails/376-right-word.jpg",
       "glassId": "coupe",
       "methodIds": ["shake"],
@@ -22890,7 +22890,7 @@
         {
           "order": 3,
           "ingredientId": 316,
-          "name": "St. Germain",
+          "name": "St-Germain",
           "amount": "30",
           "unitId": 11
         },
@@ -25670,7 +25670,7 @@
           "substitutes": [
             {
               "ingredientId": 316,
-              "name": "St. Germain"
+              "name": "St-Germain"
             }
           ]
         },
@@ -26978,8 +26978,8 @@
     {
       "id": 444,
       "name": "That's My Word",
-      "description": "A floral riff on the Last Word with **gin**, **st. Germain** and **yellow Chartreuse**.",
-      "instructions": "1. Fill a shaker with **ice**.\n2. Add 30ml of **gin**, 30ml of **st. Germain**, 30ml of **yellow Chartreuse**, and 7.5ml of **lime juice**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled nick & nora glass.",
+      "description": "A floral riff on the Last Word with **gin**, **St-Germain** and **yellow Chartreuse**.",
+      "instructions": "1. Fill a shaker with **ice**.\n2. Add 30ml of **gin**, 30ml of **St-Germain**, 30ml of **yellow Chartreuse**, and 7.5ml of **lime juice**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled nick & nora glass.",
       "photoUri": "assets/cocktails/444-that-s-my-word.jpg",
       "glassId": "nick_and_nora",
       "methodIds": ["shake"],
@@ -27002,7 +27002,7 @@
         {
           "order": 3,
           "ingredientId": 316,
-          "name": "St. Germain",
+          "name": "St-Germain",
           "amount": "30",
           "unitId": 11
         },
@@ -30782,7 +30782,7 @@
       "name": "Irish Maid",
       "synonyms": ["Irish Muddler"],
       "description": "The Irish Maid is a refreshing, floral \"modern classic\" cocktail that serves as the **Irish whiskey** variation of the Kentucky Maid (originally created by Sam Ross). It is defined by its crisp combination of muddled **cucumber**, **elderflower**, and **lemon**.",
-      "instructions": "1. Muddle 2 **cucumber slices** in a cocktail shaker.\n2. Fill a shaker with **ice**.\n3. Add 60ml of **Irish whiskey**, 15ml of **elderflower liqueur**, 20ml of **lemon juice**, and 10ml of **rich simple syrup** to the shaker.\n4. Shake vigorously for about 15 seconds until well chilled.\n5. Fine strain into a chilled rocks glass filled with fresh **ice** (preferably over a large cube).\n6. Garnish with a thin **cucumber slice**.",
+      "instructions": "1. Muddle 2 **cucumber slices** in a cocktail shaker.\n2. Fill a shaker with **ice**.\n3. Add 60ml of **Irish whiskey**, 15ml of **St-Germain**, 20ml of **lemon juice**, and 10ml of **rich simple syrup** to the shaker.\n4. Shake vigorously for about 15 seconds until well chilled.\n5. Fine strain into a chilled rocks glass filled with fresh **ice** (preferably over a large cube).\n6. Garnish with a thin **cucumber slice**.",
       "photoUri": "assets/cocktails/502-irish-maid.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["muddle", "shake"],
@@ -30818,7 +30818,7 @@
         {
           "order": 4,
           "ingredientId": 316,
-          "name": "St. Germain",
+          "name": "St-Germain",
           "amount": "15",
           "unitId": 11
         },
@@ -34102,8 +34102,8 @@
     },
     {
       "id": 554,
-      "name": "St‑Germain Spritz",
-      "description": "A light, refreshing spritz combining **St‑Germain**, sparkling wine, and soda water with a floral profile.",
+      "name": "St-Germain Spritz",
+      "description": "A light, refreshing spritz combining **St-Germain**, sparkling wine, and soda water with a floral profile.",
       "instructions": "1. Fill a wine glass with **ice**.\n2. Add 40ml of **St-Germain**, 60ml of **prosecco**, and 60ml of **soda water**.\n3. Stir very gently to combine without losing carbonation.\n4. Express the oils from a **lemon** peel over the drink and use it as a garnish.",
       "photoUri": "assets/cocktails/554-st-germain-spritz.jpg",
       "glassId": "wine_glass",
@@ -35075,7 +35075,7 @@
           "ingredientId": 193,
           "name": "Ice",
           "amount": "120",
-          "unitId": 11
+          "unitId": 8
         },
         {
           "order": 6,
@@ -35243,7 +35243,7 @@
       "id": 575,
       "name": "Cranberry Sage Spritz",
       "description": "A tart and herbaceous non-alcoholic spritz of **cranberry juice**, **hibiscus syrup**, and **sage**.",
-      "instructions": "1. Gently press **sage** leaves in a shaker.\n2. Add 70ml of **cranberry juice**, 15ml of **lemon juice**, 10ml of **hibiscus syrup**, and **ice**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a wine glass over fresh **ice**.\n5. Top with 100ml of **soda water** and garnish with a **sage** leaf.",
+      "instructions": "1. Gently press **sage** leaves in a shaker.\n2. Add 70ml of **cranberry juice**, 15ml of **lemon juice**, 10ml of **hibiscus syrup**, and **ice**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a wine glass over fresh **ice**.\n5. Top with 90ml of **soda water** and garnish with a **sage** leaf.",
       "photoUri": "assets/cocktails/575-cranberry-sage-spritz.jpg",
       "glassId": "collins_glass",
       "methodIds": ["muddle", "shake"],
@@ -35368,7 +35368,7 @@
       "name": "Faux 75",
       "synonyms": ["Virgin French 75"],
       "description": "A sparkling alcohol-free serve inspired by the French 75, built with a non-alcoholic spirit, **lemon juice**, **simple syrup**, and **soda water**. **Seedlip** is one suitable option for the spirit component.",
-      "instructions": "1. Fill a shaker with **ice**.\n2. Add 45ml of a non-alcoholic spirit (for example, **Seedlip**), 15ml of **lemon juice**, and 10ml of **simple syrup**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled flute.\n5. Top with 90ml of **soda water**.\n6. Express the oils from a **lemon** peel over the drink and use it as a garnish.",
+      "instructions": "1. Fill a shaker with **ice**.\n2. Add 45ml of a non-alcoholic spirit (for example, **Seedlip**), 15ml of **lemon juice**, and 15ml of **simple syrup**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled flute.\n5. Top with 75ml of **soda water**.\n6. Express the oils from a **lemon** peel over the drink and use it as a garnish.",
       "photoUri": "assets/cocktails/578-faux-75.jpg",
       "glassId": "champagne_flute",
       "methodIds": ["shake"],
@@ -35423,7 +35423,7 @@
       "id": 579,
       "name": "Berry Smash Fizz",
       "description": "A bright berry-forward mocktail with muddled **raspberry**, **blueberry**, **lemon juice**, and **soda water**.",
-      "instructions": "1. Add 6 **raspberry**, 6 **blueberry**, and 15ml of **simple syrup** to a shaker and muddle.\n2. Add 20ml of **lemon juice** and 130g of **ice**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled rocks glass filled with fresh **ice** (preferably over a large cube).\n5. Top with 90ml of **soda water**.",
+      "instructions": "1. Add 6 **raspberry**, 6 **blueberry**, and 15ml of **simple syrup** to a shaker and muddle.\n2. Add 20ml of **lemon juice** and 130g of **ice**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled rocks glass filled with fresh **ice** (preferably over a large cube).\n5. Top with 120ml of **soda water**.",
       "photoUri": "assets/cocktails/579-berry-smash-fizz.jpg",
       "glassId": "highball_glass",
       "methodIds": ["muddle", "shake"],
@@ -35740,7 +35740,7 @@
       "id": 585,
       "name": "Watermelon Sage Cooler",
       "description": "A summer-style non-alcoholic cooler with fresh **watermelon juice**, aromatic **sage**, and lively **soda water**.",
-      "instructions": "1. Gently press **sage** leaves in a shaker.\n2. Add 90ml of **watermelon juice**, 20ml of **lime juice**, 10ml of **simple syrup**, and **ice**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a highball glass over fresh **ice**.\n5. Top with 90ml of **soda water** and stir gently.\n6. Garnish with a **sage** leaf.",
+      "instructions": "1. Gently press **sage** leaves in a shaker.\n2. Add 90ml of **watermelon juice**, 20ml of **lime juice**, 10ml of **simple syrup**, and **ice**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a highball glass over fresh **ice**.\n5. Top with 60ml of **soda water** and stir gently.\n6. Garnish with a **sage** leaf.",
       "photoUri": "assets/cocktails/585-watermelon-sage-cooler.jpg",
       "glassId": "collins_glass",
       "methodIds": ["muddle", "shake"],
