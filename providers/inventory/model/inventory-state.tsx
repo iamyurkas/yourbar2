@@ -141,9 +141,37 @@ export function createInventoryStateFromSnapshot(
     return createInventoryStateFromData(mergedData, Boolean(snapshot.imported));
   }
 
+  const resolvedBaseData = baseData ?? loadInventoryData();
+  const baseIngredientsById = new Map<number, IngredientStorageRecord>();
+  resolvedBaseData.ingredients.forEach((ingredient) => {
+    const id = Number(ingredient.id ?? -1);
+    if (!Number.isFinite(id) || id < 0) {
+      return;
+    }
+
+    baseIngredientsById.set(Math.trunc(id), ingredient as IngredientStorageRecord);
+  });
+
+  const mergedLegacyIngredients = snapshot.ingredients.map((ingredient) => {
+    const id = Number(ingredient.id ?? -1);
+    if (!Number.isFinite(id) || id < 0) {
+      return ingredient;
+    }
+
+    const baseIngredient = baseIngredientsById.get(Math.trunc(id));
+    if (!baseIngredient) {
+      return ingredient;
+    }
+
+    return {
+      ...ingredient,
+      styleIngredientId: ingredient.styleIngredientId ?? baseIngredient.styleIngredientId,
+    } satisfies IngredientStorageRecord;
+  });
+
   return {
     cocktails: normalizeSearchFields(snapshot.cocktails) as Cocktail[],
-    ingredients: normalizeSearchFields(snapshot.ingredients) as Ingredient[],
+    ingredients: normalizeSearchFields(mergedLegacyIngredients) as Ingredient[],
     imported: Boolean(snapshot.imported),
   } satisfies InventoryState;
 }
