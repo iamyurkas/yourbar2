@@ -143,13 +143,14 @@ function collectVisibleIngredientIds(
   const baseId = normalizeIngredientId(record?.baseIngredientId);
   const styleBaseId = normalizeIngredientId(record?.styleIngredientId);
   const allowBrandedForBase = allowBrand || baseId == null;
+  const allowStyledForBase = allowStyle || baseId == null;
 
   if (baseId == null) {
     if (allowBrandedForBase) {
       lookup.brandsByBaseId.get(ingredientId)?.forEach((id) => accumulator.add(id));
     }
 
-    if (allowStyle) {
+    if (allowStyledForBase) {
       if (styleBaseId != null) {
         accumulator.add(styleBaseId);
         lookup.stylesByBaseId.get(styleBaseId)?.forEach((id) => {
@@ -230,6 +231,7 @@ export function resolveIngredientAvailability(
   const allowBrand = ingredient.allowBrandSubstitution || allowAllSubstitutes;
   const allowStyle = ingredient.allowStyleSubstitution || allowAllSubstitutes;
   const allowBrandedForBase = allowBrand || baseId == null;
+  const allowStyledForBase = allowStyle || baseId == null;
 
   const baseSubstituteIds = allowBase && baseId != null ? [baseId] : [];
   const brandedSubstituteSet = new Set<number>();
@@ -252,7 +254,7 @@ export function resolveIngredientAvailability(
 
   const styleSubstituteSet = new Set<number>();
 
-  if (allowStyle && requestedId != null) {
+  if (allowStyledForBase && requestedId != null) {
     const styleBaseId = normalizeIngredientId(requestedIngredient?.styleIngredientId);
     if (styleBaseId != null) {
       styleSubstituteSet.add(styleBaseId);
@@ -293,8 +295,9 @@ export function resolveIngredientAvailability(
     const candidateBaseId = normalizeIngredientId(record?.baseIngredientId);
     const candidateStyleBaseId = normalizeIngredientId(record?.styleIngredientId);
     const allowBrandedCandidate = allowBrand || candidateBaseId == null;
+    const allowStyledCandidate = allowStyle || candidateBaseId == null;
 
-    if (allowStyle && candidateStyleBaseId != null) {
+    if (allowStyledCandidate && candidateStyleBaseId != null) {
       addCandidate(candidateStyleBaseId);
       lookup.stylesByBaseId.get(candidateStyleBaseId)?.forEach((id) => {
         if (id !== candidateId) {
