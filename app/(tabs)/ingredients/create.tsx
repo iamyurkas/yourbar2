@@ -948,7 +948,7 @@ export default function IngredientFormScreen() {
         return false;
       }
 
-      return item.baseIngredientId == null;
+      return item.baseIngredientId == null && item.styleIngredientId == null;
     });
   }, [baseIngredientId, ingredients, numericIngredientId, styleIngredientId]);
 
@@ -1264,7 +1264,7 @@ export default function IngredientFormScreen() {
 
       <View style={sectionStyle}>
         <Text style={[styles.label, { color: Colors.onSurface }]}>Style ingredient</Text>
-        <Text style={[hintStyle, { color: Colors.onSurfaceVariant }]}>Only base (non-branded) ingredients can be selected as styles.</Text>
+        <Text style={[hintStyle, { color: Colors.onSurfaceVariant }]}>Only base ingredients that are not branded and not already styled can be selected as styles.</Text>
         <Pressable
           accessibilityRole="button"
           accessibilityLabel={styleIngredient ? 'Change style ingredient' : 'Select style ingredient'}
@@ -1505,7 +1505,7 @@ export default function IngredientFormScreen() {
       <AppDialog
         visible={isHelpVisible}
         title="Adding ingredient"
-        message="Use this screen to create a new ingredient card.\n\nAdd a name, optional photo, tags, base ingredient or style ingredient, and notes, then tap Save."
+        message="Use this screen to create a new ingredient card.\n\nAdd a name, optional photo, tags, base ingredient or style ingredient, and notes, then tap Save.\n\nA style ingredient can only link to a base ingredient that is neither branded nor styled."
         actions={[{ label: 'Got it', variant: 'secondary' }]}
         onRequestClose={() => setIsHelpVisible(false)}
       />

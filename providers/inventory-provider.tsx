@@ -820,7 +820,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
 
         if (hasStyleLink) {
           const styleRecord = prev.ingredients.find((item) => Number(item.id ?? -1) === styleIngredientId);
-          if (!styleRecord || styleRecord.baseIngredientId != null) {
+          if (!styleRecord || styleRecord.baseIngredientId != null || styleRecord.styleIngredientId != null) {
             return prev;
           }
         }
@@ -1156,7 +1156,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
 
         if (hasStyleLink) {
           const styleRecord = prev.ingredients.find((item) => Number(item.id ?? -1) === styleIngredientId);
-          if (!styleRecord || styleRecord.baseIngredientId != null || Number(styleRecord.id ?? -1) === normalizedId) {
+          if (!styleRecord || styleRecord.baseIngredientId != null || styleRecord.styleIngredientId != null || Number(styleRecord.id ?? -1) === normalizedId) {
             return prev;
           }
         }
