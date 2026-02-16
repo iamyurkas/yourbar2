@@ -75,6 +75,11 @@ function useResolvedIngredient(
   }, [ingredients, param]);
 }
 
+function buildFallbackText(value?: string) {
+  const trimmed = value?.trim();
+  return trimmed ? trimmed.slice(0, 2).toUpperCase() : undefined;
+}
+
 export default function IngredientDetailsScreen() {
   const params = useLocalSearchParams<{
     ingredientId?: string;
@@ -1039,7 +1044,18 @@ export default function IngredientDetailsScreen() {
                             styles.baseIngredientPlaceholder,
                             { backgroundColor: Colors.surfaceBright },
                           ]}
-                        ></View>
+                        >
+                          {buildFallbackText(styleIngredient.name) ? (
+                            <Text
+                              style={[
+                                styles.thumbFallback,
+                                { color: Colors.onSurfaceVariant },
+                              ]}
+                            >
+                              {buildFallbackText(styleIngredient.name)}
+                            </Text>
+                          ) : null}
+                        </View>
                       )}
                     </View>
                     <Text
@@ -1112,7 +1128,18 @@ export default function IngredientDetailsScreen() {
                             styles.baseIngredientPlaceholder,
                             { backgroundColor: Colors.surfaceBright },
                           ]}
-                        ></View>
+                        >
+                          {buildFallbackText(baseIngredient.name) ? (
+                            <Text
+                              style={[
+                                styles.thumbFallback,
+                                { color: Colors.onSurfaceVariant },
+                              ]}
+                            >
+                              {buildFallbackText(baseIngredient.name)}
+                            </Text>
+                          ) : null}
+                        </View>
                       )}
                     </View>
                     <Text
@@ -1163,6 +1190,7 @@ export default function IngredientDetailsScreen() {
                     const styledPhotoSource = resolveImageSource(
                       styled.photoUri,
                     );
+                    const styledFallbackText = buildFallbackText(styled.name);
 
                     return (
                       <Pressable
@@ -1197,11 +1225,11 @@ export default function IngredientDetailsScreen() {
                                   { backgroundColor: Colors.surfaceBright },
                                 ]}
                               >
-                                <MaterialCommunityIcons
-                                  name="image-off"
-                                  size={20}
-                                  color={Colors.onSurfaceVariant}
-                                />
+                                {styledFallbackText ? (
+                                  <Text style={[styles.thumbFallback, { color: Colors.onSurfaceVariant }]}>
+                                    {styledFallbackText}
+                                  </Text>
+                                ) : null}
                               </View>
                             )}
                           </View>
@@ -1255,6 +1283,7 @@ export default function IngredientDetailsScreen() {
                     const brandedPhotoSource = resolveImageSource(
                       branded.photoUri,
                     );
+                    const brandedFallbackText = buildFallbackText(branded.name);
 
                     return (
                       <Pressable
@@ -1289,11 +1318,11 @@ export default function IngredientDetailsScreen() {
                                   { backgroundColor: Colors.surfaceBright },
                                 ]}
                               >
-                                <MaterialCommunityIcons
-                                  name="image-off"
-                                  size={20}
-                                  color={Colors.onSurfaceVariant}
-                                />
+                                {brandedFallbackText ? (
+                                  <Text style={[styles.thumbFallback, { color: Colors.onSurfaceVariant }]}>
+                                    {brandedFallbackText}
+                                  </Text>
+                                ) : null}
                               </View>
                             )}
                           </View>
@@ -1637,6 +1666,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 8,
+  },
+  thumbFallback: {
+    fontSize: 16,
+    fontWeight: "700",
+    letterSpacing: 0.3,
   },
   baseIngredientName: {
     fontSize: 16,
