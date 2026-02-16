@@ -62,7 +62,7 @@ const GLASS_LABELS: Record<string, string> = {
   goblet: "Goblet",
   highball_glass: "Highball glass",
   hurricane_glass: "Hurricane glass",
-  irish_coffee_glass: "Irish coffee glass",
+  toddy_glass: "Toddy glass",
   margarita_glass: "Margarita glass",
   nick_and_nora: "Nick & Nora glass",
   pitcher: "Pitcher",

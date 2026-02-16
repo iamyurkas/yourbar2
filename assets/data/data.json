@@ -1118,9 +1118,9 @@
       "name": "Alpine Avenger",
       "synonyms": ["Peppermint Hot Chocolate"],
       "description": "A rich, creamy dessert cocktail combining the cool freshness of **peppermint schnapps** with the smooth sweetness of white crème de cacao and **milk**. Velvety, chocolatey, and refreshing at the same time, it tastes like a liquid **mint** **chocolate** dessert served warm or chilled.",
-      "instructions": "1. Add 30ml of **peppermint schnapps** and 15ml of **Crème de Cacao white** into a heat-resistant glass or Irish coffee glass.\n2. Heat 240ml of **milk** gently until hot but not boiling.\n3. Pour the hot **milk** into the glass.\n4. Stir gently to combine.\n5. Garnish with about 5g of grated **chocolate** or a light dusting of **cocoa powder**.\n6. Serve immediately while warm and enjoy.",
+      "instructions": "1. Add 30ml of **peppermint schnapps** and 15ml of **Crème de Cacao white** into a heat-resistant glass or Toddy glass.\n2. Heat 240ml of **milk** gently until hot but not boiling.\n3. Pour the hot **milk** into the glass.\n4. Stir gently to combine.\n5. Garnish with about 5g of grated **chocolate** or a light dusting of **cocoa powder**.\n6. Serve immediately while warm and enjoy.",
       "photoUri": "assets/cocktails/19-alpine-avenger.jpg",
-      "glassId": "irish_coffee_glass",
+      "glassId": "toddy_glass",
       "methodIds": ["heat", "build"],
       "tags": [6],
       "ingredients": [
@@ -5391,9 +5391,9 @@
       "id": 88,
       "name": "Blueberry Tea",
       "description": "A spirit-forward spirit cocktail showcasing **amaretto**, **Grand Marnier**, **black tea**—deep, aromatic, and meant to be savored. Garnished with **lemon**.",
-      "instructions": "1. Select and pre-heat an Irish coffee glass.\n2. Pour 25ml of **amaretto**, 25ml of **Grand Marnier**, and 150ml of hot **black tea** into the pre-warmed glass.\n3. Stir gently to combine.\n4. Express **lemon** zest twist over the cocktail and discard.\n5. Garnish with 1 **cinnamon** stick.",
+      "instructions": "1. Select and pre-heat a Toddy glass.\n2. Pour 25ml of **amaretto**, 25ml of **Grand Marnier**, and 150ml of hot **black tea** into the pre-warmed glass.\n3. Stir gently to combine.\n4. Express **lemon** zest twist over the cocktail and discard.\n5. Garnish with 1 **cinnamon** stick.",
       "photoUri": "assets/cocktails/88-blueberry-tea.jpg",
-      "glassId": "irish_coffee_glass",
+      "glassId": "toddy_glass",
       "methodIds": ["heat", "build"],
       "tags": [7],
       "ingredients": [
@@ -5613,7 +5613,7 @@
       "description": "A rich, creamy **brandy** drink featuring **Cognac**, **Advocaat**, **whipped cream**—dessert-like, smooth, and indulgent.",
       "instructions": "1. Heat the liqueur: gently heat the **egg liqueur** in a small saucepan over medium-low heat. Do not let it boil, as this may cause the eggs to curdle.\n2. Add **brandy**: once hot, add the **brandy**. Some recipes suggest heating the **brandy** with the liqueur, while others recommend adding it directly to the serving glass before pouring in the hot liqueur.\n3. Stir gently to combine.\n4. Garnish: pour into a heat-resistant glass or mug. Top with a generous dollop of **whipped cream** and a sprinkle of **cinnamon** or cocoa.",
       "photoUri": "assets/cocktails/92-bombardino.jpg",
-      "glassId": "irish_coffee_glass",
+      "glassId": "toddy_glass",
       "methodIds": ["heat", "build"],
       "tags": [6],
       "ingredients": [
@@ -5670,7 +5670,7 @@
       "description": "A rich, creamy **brandy** drink featuring **Cognac**, **Advocaat**, **espresso**—dessert-like, smooth, and indulgent.",
       "instructions": "1. Warm the **Advocaat** and **espresso** together in a small saucepan over low heat until hot but not boiling.\n2. Add the **Cognac** to a heat-safe cup.\n3. Pour the hot **Advocaat**-**espresso** mixture over the **Cognac**.\n4. Stir gently to combine.\n5. Top with **whipped cream**.\n6. Finish with a dusting of **cinnamon** and optional **cocoa powder**, then serve immediately.",
       "photoUri": "assets/cocktails/93-bombardino-calimero.jpg",
-      "glassId": "irish_coffee_glass",
+      "glassId": "toddy_glass",
       "methodIds": ["heat", "build"],
       "tags": [6],
       "ingredients": [
@@ -5734,7 +5734,7 @@
       "description": "A rich, creamy rum drink featuring **gold rum**, **Advocaat**, **whipped cream**—dessert-like, smooth, and indulgent.",
       "instructions": "1. Heat the liqueur: pour the **egg liqueur** into a small saucepan. Heat it over medium-low heat until hot but not boiling (boiling may cause the **egg** base to curdle).\n2. Combine: in a heat-safe glass or small mug, add the rum.\n3. Pour the hot **egg liqueur** over the rum.\n4. Stir gently to combine.\n5. Garnish: top with a generous dollop of **whipped cream**.\n6. Finish: sprinkle **cocoa powder** or **cinnamon** on top and serve immediately while hot.",
       "photoUri": "assets/cocktails/94-bombardino-pirata.jpg",
-      "glassId": "irish_coffee_glass",
+      "glassId": "toddy_glass",
       "methodIds": ["heat", "build"],
       "tags": [6],
       "ingredients": [
@@ -5799,7 +5799,7 @@
       "description": "A rich, creamy **whiskey** drink featuring **whiskey**, **Advocaat**, and **whipped cream**—dessert-like, smooth, and indulgent.",
       "instructions": "1. Warm the **Advocaat** in a small saucepan over low heat until hot but not boiling.\n2. Add 50ml of **whiskey** to a heat-safe cup.\n3. Pour the hot **Advocaat** over the **whiskey**.\n4. Stir gently to combine.\n5. Top with 100ml of **whipped cream**.\n6. Finish with a pinch of **cinnamon** and serve immediately.",
       "photoUri": "assets/cocktails/95-bombardino-scozzese.jpg",
-      "glassId": "irish_coffee_glass",
+      "glassId": "toddy_glass",
       "methodIds": ["heat", "build"],
       "tags": [6],
       "ingredients": [
@@ -15202,9 +15202,9 @@
       "id": 250,
       "name": "Hot Buttered Rum",
       "description": "A traditional hot winter drink. Some recipes suggest using warm cider instead of **water**. The **sugar** in the recipe can be substituted with **honey**.",
-      "instructions": "1. Add 2 teaspoons of **butter**, a teaspoon of **sugar**, a dash of **cinnamon**, a dash of **nutmeg**, 50ml of **dark rum**, and 100ml of **water** to an Irish coffee glass.\n2. Stir gently to combine.\n3. Garnish with a **lemon** slice and a **cinnamon** stick.",
+      "instructions": "1. Add 2 teaspoons of **butter**, a teaspoon of **sugar**, a dash of **cinnamon**, a dash of **nutmeg**, 50ml of **dark rum**, and 100ml of **water** to a Toddy glass.\n2. Stir gently to combine.\n3. Garnish with a **lemon** slice and a **cinnamon** stick.",
       "photoUri": "assets/cocktails/250-hot-buttered-rum.jpg",
-      "glassId": "irish_coffee_glass",
+      "glassId": "toddy_glass",
       "methodIds": ["heat", "build"],
       "tags": [7],
       "ingredients": [
@@ -15285,9 +15285,9 @@
       "name": "Hot Toddy",
       "synonyms": ["Whiskey Toddy"],
       "description": "A warming mix of **whiskey**, **honey**, **lemon** and hot **water**.",
-      "instructions": "1. Add a teaspoon of **honey**, 45ml of **whiskey**, a quarter of a **lemon**, and 100ml of **boiling water** to an Irish coffee glass.\n2. Stir gently to combine.\n3. Garnish with a **lemon** peel and 2 **cloves**.",
+      "instructions": "1. Add a teaspoon of **honey**, 45ml of **whiskey**, a quarter of a **lemon**, and 100ml of **boiling water** to a Toddy glass.\n2. Stir gently to combine.\n3. Garnish with a **lemon** peel and 2 **cloves**.",
       "photoUri": "assets/cocktails/251-hot-toddy.jpg",
-      "glassId": "irish_coffee_glass",
+      "glassId": "toddy_glass",
       "methodIds": ["heat", "build"],
       "tags": [6, 8],
       "ingredients": [
@@ -15866,7 +15866,7 @@
       "description": "Warm blend of **Irish whiskey**, hot coffee, and **cream**.",
       "instructions": "1. Add **brown sugar** to a heatproof glass.\n2. Pour in hot **espresso**.\n3. Stir gently to combine.\n4. Add Irish whisky.\n5. Stir gently to combine.\n6. Float lightly **whipped cream** on top.",
       "photoUri": "assets/cocktails/259-irish-coffee.jpg",
-      "glassId": "irish_coffee_glass",
+      "glassId": "toddy_glass",
       "methodIds": ["heat", "build", "layer"],
       "tags": [1, 5],
       "ingredients": [
@@ -15972,7 +15972,7 @@
       "description": "A delightful twist on the **whiskey** sour that evokes the flavors of a homemade **apple** pie. The warmth of **Irish whiskey** pairs perfectly with sweet **vanilla** and crisp **apple juice**, balanced by a sharp citrus finish.",
       "instructions": "1. Pour the **whiskey**, **apple juice**, **vanilla syrup**, and **lemon juice** into a small saucepan.\n2. Stir gently to combine.\n3. Pour into a warm glass.\n4. Squeeze the **orange** zest over the top of the glass to release oils, then drop the peel in.\n5. Add the **cinnamon** stick and **apple** slice.",
       "photoUri": "assets/cocktails/262-irish-pie-tobby.jpg",
-      "glassId": "irish_coffee_glass",
+      "glassId": "toddy_glass",
       "methodIds": ["heat", "build"],
       "tags": [6],
       "ingredients": [
@@ -19894,7 +19894,7 @@
       "description": "Also called \"glühwein\" in German, this drink is very popular in German-speaking countries and France. Spices can be varied greatly – just use what you like.",
       "instructions": "1. Heat a bottle or more of **red wine** in a pan.\n2. Add **cinnamon sticks**, **cloves**, **sugar**, **vanilla** pods, **anise** and **lemon** wedges.\n3. Heat until the wine almost boils, and serve in cups.\n4. Garnish each cup with a **cinnamon stick**.",
       "photoUri": "assets/cocktails/328-mulled-wine.jpg",
-      "glassId": "irish_coffee_glass",
+      "glassId": "toddy_glass",
       "methodIds": ["heat", "build"],
       "tags": [6],
       "ingredients": [
@@ -23749,9 +23749,9 @@
       "id": 390,
       "name": "Rumplesnuggler",
       "description": "A comforting and decadent winter warmer that combines the rich sweetness of hot **chocolate** with creamy **Baileys** and a sharp, refreshing peppermint kick from **Rumple Minze**.",
-      "instructions": "1. Prepare your hot **chocolate** in a separate container and ensure it is steaming hot.\n2. Pour the **Baileys** **Irish cream** and **Rumple Minze** **peppermint schnapps** into an Irish coffee glass.\n3. Fill the remainder of the glass with the hot **chocolate**.\n4. Stir gently to combine.\n5. Top with a generous dollop of **whipped cream**.",
+      "instructions": "1. Prepare your hot **chocolate** in a separate container and ensure it is steaming hot.\n2. Pour the **Baileys** **Irish cream** and **Rumple Minze** **peppermint schnapps** into a Toddy glass.\n3. Fill the remainder of the glass with the hot **chocolate**.\n4. Stir gently to combine.\n5. Top with a generous dollop of **whipped cream**.",
       "photoUri": "assets/cocktails/390-rumplesnuggler.jpg",
-      "glassId": "irish_coffee_glass",
+      "glassId": "toddy_glass",
       "methodIds": ["heat", "build"],
       "tags": [6],
       "ingredients": [
@@ -27770,9 +27770,9 @@
       "id": 455,
       "name": "Tom & Jerry",
       "description": "A legendary warm holiday punch that serves as a creamy, spiced embrace during the winter season.",
-      "instructions": "1. Separate the **egg white** from the yolk and beat them in separate bowls until the whites are stiff and yolks are creamy.\n2. Gently fold the **egg white** into the yolk in an Irish coffee glass.\n3. Add 30ml of **dark rum**, 30ml of **Cognac**, and 15ml of **simple syrup**, to the **egg** mixture.\n4. Fill the rest of the glass with hot **milk**.\n5. Stir gently to combine.\n6. Garnish with a generous dusting of freshly grated **nutmeg**.",
+      "instructions": "1. Separate the **egg white** from the yolk and beat them in separate bowls until the whites are stiff and yolks are creamy.\n2. Gently fold the **egg white** into the yolk in a Toddy glass.\n3. Add 30ml of **dark rum**, 30ml of **Cognac**, and 15ml of **simple syrup**, to the **egg** mixture.\n4. Fill the rest of the glass with hot **milk**.\n5. Stir gently to combine.\n6. Garnish with a generous dusting of freshly grated **nutmeg**.",
       "photoUri": "assets/cocktails/455-tom-jerry.jpg",
-      "glassId": "irish_coffee_glass",
+      "glassId": "toddy_glass",
       "methodIds": ["heat", "build"],
       "tags": [6, 8],
       "ingredients": [
@@ -31955,7 +31955,7 @@
       "description": "A flavoursome and warming variation on mulled wine.",
       "instructions": "1. Muddle 7 **cloves** in the base of a shaker.\n2. Add 15ml of **honey syrup**, 90ml of **boiling water**, 75ml of **tawny port**, and 30ml of **orange juice**.\n3. Shake briefly to combine and chill slightly.\n4. Fine strain into a heatproof glass and serve warm.",
       "photoUri": "assets/cocktails/520-bishop.jpg",
-      "glassId": "irish_coffee_glass",
+      "glassId": "toddy_glass",
       "methodIds": ["heat", "build"],
       "tags": [6],
       "ingredients": [

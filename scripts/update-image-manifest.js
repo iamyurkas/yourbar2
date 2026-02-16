@@ -19,7 +19,7 @@ const glasswareIdMap = [
   ["goblet", "goblet.jpg"],
   ["highball_glass", "highball.jpg"],
   ["hurricane_glass", "hurricane.jpg"],
-  ["irish_coffee_glass", "irish.jpg"],
+  ["toddy_glass", "toddy.jpg"],
   ["margarita_glass", "margarita.jpg"],
   ["nick_and_nora", "nick.jpg"],
   ["pitcher", "pitcher.jpg"],

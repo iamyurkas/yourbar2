@@ -376,7 +376,6 @@ export const glasswareImages: Record<string, number> = {
   'assets/glassware/goblet.jpg': require('./glassware/goblet.jpg'),
   'assets/glassware/highball.jpg': require('./glassware/highball.jpg'),
   'assets/glassware/hurricane.jpg': require('./glassware/hurricane.jpg'),
-  'assets/glassware/irish.jpg': require('./glassware/irish.jpg'),
   'assets/glassware/margarita.jpg': require('./glassware/margarita.jpg'),
   'assets/glassware/martini.jpg': require('./glassware/martini.jpg'),
   'assets/glassware/nick.jpg': require('./glassware/nick.jpg'),
@@ -386,6 +385,7 @@ export const glasswareImages: Record<string, number> = {
   'assets/glassware/shooter.jpg': require('./glassware/shooter.jpg'),
   'assets/glassware/snifter.jpg': require('./glassware/snifter.jpg'),
   'assets/glassware/tiki.jpg': require('./glassware/tiki.jpg'),
+  'assets/glassware/toddy.jpg': require('./glassware/toddy.jpg'),
   'assets/glassware/wine.jpg': require('./glassware/wine.jpg'),
 };
 
@@ -400,7 +400,7 @@ export const glasswareUriById: Record<string, string> = {
   goblet: 'assets/glassware/goblet.jpg',
   highball_glass: 'assets/glassware/highball.jpg',
   hurricane_glass: 'assets/glassware/hurricane.jpg',
-  irish_coffee_glass: 'assets/glassware/irish.jpg',
+  toddy_glass: 'assets/glassware/toddy.jpg',
   margarita_glass: 'assets/glassware/margarita.jpg',
   nick_and_nora: 'assets/glassware/nick.jpg',
   pitcher: 'assets/glassware/pitcher.jpg',

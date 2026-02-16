@@ -42,9 +42,9 @@ export const GLASSWARE: GlasswareOption[] = [
     imageUri: glasswareUriById.hurricane_glass,
   },
   {
-    id: "irish_coffee_glass",
-    name: "Irish Coffee glass",
-    imageUri: glasswareUriById.irish_coffee_glass,
+    id: "toddy_glass",
+    name: "Toddy glass",
+    imageUri: glasswareUriById.toddy_glass,
   },
   {
     id: "margarita_glass",
