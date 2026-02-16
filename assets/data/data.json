@@ -5610,8 +5610,8 @@
     {
       "id": 92,
       "name": "Bombardino",
-      "description": "A rich, creamy **brandy** drink featuring **Cognac**, **Advocaat**, **whipped cream**—dessert-like, smooth, and indulgent.",
-      "instructions": "1. Heat the liqueur: gently heat the **egg liqueur** in a small saucepan over medium-low heat. Do not let it boil, as this may cause the eggs to curdle.\n2. Add **brandy**: once hot, add the **brandy**. Some recipes suggest heating the **brandy** with the liqueur, while others recommend adding it directly to the serving glass before pouring in the hot liqueur.\n3. Stir gently to combine.\n4. Garnish: pour into a heat-resistant glass or mug. Top with a generous dollop of **whipped cream** and a sprinkle of **cinnamon** or cocoa.",
+      "description": "A rich, creamy **brandy** drink featuring **Cognac**, **advocaat**, **whipped cream**—dessert-like, smooth, and indulgent.",
+      "instructions": "1. Warm 120ml of **egg liqueur (advocaat)** in a small saucepan over low heat until hot but not boiling.\n2. Add 60ml of **Cognac** (or **brandy**) and stir gently to combine.\n3. Pour into a pre-warmed heat-resistant glass or mug.\n4. Top with 60ml of **whipped cream**.\n5. Garnish with 1 pinch of **cinnamon** (optional: add 1 pinch of **cocoa powder**).",
       "photoUri": "assets/cocktails/92-bombardino.jpg",
       "glassId": "toddy_glass",
       "methodIds": ["heat", "build"],
@@ -5619,9 +5619,16 @@
       "ingredients": [
         {
           "order": 1,
+          "ingredientId": 146,
+          "name": "Egg Liqueur (Advocaat)",
+          "amount": "120",
+          "unitId": 11
+        },
+        {
+          "order": 2,
           "ingredientId": 109,
           "name": "Cognac",
-          "amount": "50",
+          "amount": "60",
           "unitId": 11,
           "substitutes": [
             {
@@ -5631,17 +5638,10 @@
           ]
         },
         {
-          "order": 2,
-          "ingredientId": 146,
-          "name": "Egg Liqueur (Advocaat)",
-          "amount": "100",
-          "unitId": 11
-        },
-        {
           "order": 3,
           "ingredientId": 341,
           "name": "Whipped Cream",
-          "amount": "100",
+          "amount": "60",
           "unitId": 11
         },
         {
@@ -5667,8 +5667,8 @@
       "id": 93,
       "name": "Bombardino Calimero",
       "synonyms": ["Bombardino Espresso"],
-      "description": "A rich, creamy **brandy** drink featuring **Cognac**, **Advocaat**, **espresso**—dessert-like, smooth, and indulgent.",
-      "instructions": "1. Warm the **Advocaat** and **espresso** together in a small saucepan over low heat until hot but not boiling.\n2. Add the **Cognac** to a heat-safe cup.\n3. Pour the hot **Advocaat**-**espresso** mixture over the **Cognac**.\n4. Stir gently to combine.\n5. Top with **whipped cream**.\n6. Finish with a dusting of **cinnamon** and optional **cocoa powder**, then serve immediately.",
+      "description": "A rich, creamy **brandy** drink featuring **Cognac**, **advocaat**, **espresso**—dessert-like, smooth, and indulgent.",
+      "instructions": "1. Warm the **egg liqueur (advocaat)** and **espresso** together in a small saucepan over low heat until hot but not boiling.\n2. Add the **Cognac** to a heat-safe cup.\n3. Pour the hot **egg liqueur (advocaat)**-**espresso** mixture over the **Cognac**.\n4. Stir gently to combine.\n5. Top with **whipped cream**.\n6. Finish with a dusting of **cinnamon** and optional **cocoa powder**, then serve immediately.",
       "photoUri": "assets/cocktails/93-bombardino-calimero.jpg",
       "glassId": "toddy_glass",
       "methodIds": ["heat", "build"],
@@ -5676,9 +5676,23 @@
       "ingredients": [
         {
           "order": 1,
+          "ingredientId": 146,
+          "name": "Egg Liqueur (Advocaat)",
+          "amount": "60",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 150,
+          "name": "Espresso",
+          "amount": "60",
+          "unitId": 11
+        },
+        {
+          "order": 3,
           "ingredientId": 109,
           "name": "Cognac",
-          "amount": "50",
+          "amount": "60",
           "unitId": 11,
           "substitutes": [
             {
@@ -5688,24 +5702,10 @@
           ]
         },
         {
-          "order": 2,
-          "ingredientId": 146,
-          "name": "Egg Liqueur (Advocaat)",
-          "amount": "50",
-          "unitId": 11
-        },
-        {
-          "order": 3,
-          "ingredientId": 150,
-          "name": "Espresso",
-          "amount": "50",
-          "unitId": 11
-        },
-        {
           "order": 4,
           "ingredientId": 341,
           "name": "Whipped Cream",
-          "amount": "100",
+          "amount": "60",
           "unitId": 11
         },
         {
@@ -5731,7 +5731,7 @@
       "id": 94,
       "name": "Bombardino Pirata",
       "synonyms": ["Bombardino Rum"],
-      "description": "A rich, creamy rum drink featuring **gold rum**, **Advocaat**, **whipped cream**—dessert-like, smooth, and indulgent.",
+      "description": "A rich, creamy rum drink featuring **gold rum**, **advocaat**, **whipped cream**—dessert-like, smooth, and indulgent.",
       "instructions": "1. Heat the liqueur: pour the **egg liqueur** into a small saucepan. Heat it over medium-low heat until hot but not boiling (boiling may cause the **egg** base to curdle).\n2. Combine: in a heat-safe glass or small mug, add the rum.\n3. Pour the hot **egg liqueur** over the rum.\n4. Stir gently to combine.\n5. Garnish: top with a generous dollop of **whipped cream**.\n6. Finish: sprinkle **cocoa powder** or **cinnamon** on top and serve immediately while hot.",
       "photoUri": "assets/cocktails/94-bombardino-pirata.jpg",
       "glassId": "toddy_glass",
@@ -5740,9 +5740,16 @@
       "ingredients": [
         {
           "order": 1,
+          "ingredientId": 146,
+          "name": "Egg Liqueur (Advocaat)",
+          "amount": "120",
+          "unitId": 11
+        },
+        {
+          "order": 2,
           "ingredientId": 168,
           "name": "Gold Rum",
-          "amount": "50",
+          "amount": "60",
           "unitId": 11,
           "substitutes": [
             {
@@ -5760,17 +5767,10 @@
           ]
         },
         {
-          "order": 2,
-          "ingredientId": 146,
-          "name": "Egg Liqueur (Advocaat)",
-          "amount": "100",
-          "unitId": 11
-        },
-        {
           "order": 3,
           "ingredientId": 341,
           "name": "Whipped Cream",
-          "amount": "100",
+          "amount": "60",
           "unitId": 11
         },
         {
@@ -5796,8 +5796,8 @@
       "id": 95,
       "name": "Bombardino Scozzese",
       "synonyms": ["Bombardino Scotch"],
-      "description": "A rich, creamy **whiskey** drink featuring **whiskey**, **Advocaat**, and **whipped cream**—dessert-like, smooth, and indulgent.",
-      "instructions": "1. Warm the **Advocaat** in a small saucepan over low heat until hot but not boiling.\n2. Add 50ml of **whiskey** to a heat-safe cup.\n3. Pour the hot **Advocaat** over the **whiskey**.\n4. Stir gently to combine.\n5. Top with 100ml of **whipped cream**.\n6. Finish with a pinch of **cinnamon** and serve immediately.",
+      "description": "A rich, creamy **whiskey** drink featuring **whiskey**, **advocaat**, and **whipped cream**—dessert-like, smooth, and indulgent.",
+      "instructions": "1. Warm the **egg liqueur (advocaat)** in a small saucepan over low heat until hot but not boiling.\n2. Add 50ml of **whiskey** to a heat-safe cup.\n3. Pour the hot **egg liqueur (advocaat)** over the **whiskey**.\n4. Stir gently to combine.\n5. Top with 100ml of **whipped cream**.\n6. Finish with a pinch of **cinnamon** and serve immediately.",
       "photoUri": "assets/cocktails/95-bombardino-scozzese.jpg",
       "glassId": "toddy_glass",
       "methodIds": ["heat", "build"],
@@ -5805,23 +5805,23 @@
       "ingredients": [
         {
           "order": 1,
-          "ingredientId": 342,
-          "name": "Whiskey",
-          "amount": "50",
+          "ingredientId": 146,
+          "name": "Egg Liqueur (Advocaat)",
+          "amount": "120",
           "unitId": 11
         },
         {
           "order": 2,
-          "ingredientId": 146,
-          "name": "Egg Liqueur (Advocaat)",
-          "amount": "100",
+          "ingredientId": 342,
+          "name": "Whiskey",
+          "amount": "60",
           "unitId": 11
         },
         {
           "order": 3,
           "ingredientId": 341,
           "name": "Whipped Cream",
-          "amount": "100",
+          "amount": "60",
           "unitId": 11
         },
         {
@@ -11929,7 +11929,7 @@
       "name": "Flaming Volcano",
       "synonyms": ["Volcano Bowl"],
       "description": "Flaming volcano is a large tropical group cocktail typically made with rum, **brandy**, **pineapple juice**, **orange juice**, and orgeat syrup.\nA flaming volcano is usually served to a group of two or more people with a set of very long straws to facilitate convenient group sipping from a comfortable distance and for safety.",
-      "instructions": "1. Get some crushed **ice** into a bowl.\n2. Add 30ml of **white rum**, 30ml of **brandy** and 30ml of **dark rum**.\n3. Add 60ml of **orange juice**, 60ml of **pineapple juice**, 30ml of **lemon juice** and 60ml of almond syrup.\n4. Blend well and pour into a volcano bowl.",
+      "instructions": "1. Add 150g of crushed **ice** to a blender.\n2. Add 30ml of **white rum**, 30ml of **brandy**, and 30ml of **dark rum**.\n3. Add 60ml of **orange juice**, 60ml of **pineapple juice**, 30ml of **lemon juice**, and 60ml of **almond (orgeat) syrup**.\n4. Blend until smooth.\n5. Pour into a chilled volcano bowl.",
       "photoUri": "assets/cocktails/195-flaming-volcano.jpg",
       "glassId": "bowl",
       "methodIds": ["blend"],
@@ -12094,7 +12094,7 @@
       "id": 198,
       "name": "Fluffy Duck Classic",
       "description": "Light, creamy and easy drinking. **Gin** prevents this particular duck from being too fluffy.",
-      "instructions": "1. Fill a shaker with **ice**.\n2. Add 30ml of **gin**, 30ml of **Advocaat**, 20ml of **orange liqueur**, and 20ml of **orange juice**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a tall glass filled with fresh **ice**.\n5. Top with 30ml of chilled **soda water** and stir gently.\n6. Garnish with an **orange** slice.",
+      "instructions": "1. Fill a shaker with **ice**.\n2. Add 30ml of **gin**, 30ml of **egg liqueur (advocaat)**, 20ml of **orange liqueur**, and 20ml of **orange juice**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a tall glass filled with fresh **ice**.\n5. Top with 30ml of chilled **soda water** and stir gently.\n6. Garnish with an **orange** slice.",
       "photoUri": "assets/cocktails/198-fluffy-duck-classic.jpg",
       "glassId": "collins_glass",
       "methodIds": ["shake"],
@@ -12155,7 +12155,7 @@
       "id": 199,
       "name": "Fluffy Duck Modern",
       "description": "A stronger version of the cocktail. If you want something smoother, check out the 'fluffy duck 2'.",
-      "instructions": "1. Fill a shaker with **ice**.\n2. Add 30ml of **white rum**, 30ml of **Advocaat**, 30ml of **triple sec**, and 30ml of **cream**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into an **ice**-filled glass.\n5. Top with 30ml of cold **lemonade**.\n6. Garnish with a **strawberry**.",
+      "instructions": "1. Fill a shaker with **ice**.\n2. Add 30ml of **white rum**, 30ml of **egg liqueur (advocaat)**, 30ml of **triple sec**, and 30ml of **cream**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into an **ice**-filled glass.\n5. Top with 30ml of cold **lemonade**.\n6. Garnish with a **strawberry**.",
       "photoUri": "assets/cocktails/199-fluffy-duck-modern.jpg",
       "glassId": "martini",
       "methodIds": ["shake"],
@@ -25360,8 +25360,8 @@
       "id": 417,
       "name": "Snowball",
       "synonyms": ["Snow Ball"],
-      "description": "A classic UK festive serve: advocaat and lemonade with a creamy texture and gentle citrus sweetness.",
-      "instructions": "1. Fill a Collins glass halfway with **ice**.\n2. Add 60ml of **egg liqueur**, 15ml of **lime juice**, and 60ml of **lemonade**.\n3. Stir gently to combine.\n4. Garnish with a **cherry**.",
+      "description": "A classic UK festive serve: **egg liqueur (advocaat)** and **lemonade** with a creamy texture and gentle citrus sweetness.",
+      "instructions": "1. Fill a Collins glass halfway with **ice**.\n2. Add 60ml of **egg liqueur (advocaat)**, 15ml of **lime juice**, and 60ml of **lemonade**.\n3. Stir gently to combine.\n4. Garnish with a **cherry**.",
       "photoUri": "assets/cocktails/417-snowball.jpg",
       "glassId": "collins_glass",
       "methodIds": ["build"],
@@ -32428,8 +32428,8 @@
       "id": 528,
       "name": "Dutch Coffee",
       "synonyms": ["Advocaat Coffee"],
-      "description": "A creamy coffee cocktail featuring **Advocaat**, **cream**, and **espresso**, shaken until silky and served cold.",
-      "instructions": "1. Fill a shaker with **ice**.\n2. Add 60ml of **Advocaat**, 30ml of **cream**, and 120ml of **espresso**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a cup and serve immediately.",
+      "description": "A creamy coffee cocktail featuring **egg liqueur (advocaat)**, **cream**, and **espresso**, shaken until silky and served cold.",
+      "instructions": "1. Fill a shaker with **ice**.\n2. Add 60ml of **egg liqueur (advocaat)**, 30ml of **cream**, and 120ml of **espresso**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a cup and serve immediately.",
       "photoUri": "assets/cocktails/528-dutch-coffee.jpg",
       "glassId": "cup",
       "methodIds": ["shake"],
