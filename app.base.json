@@ -38,6 +38,12 @@
       "expo-router",
       "expo-localization",
       [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow Your Bar to access your photos so you can attach images to cocktails and ingredients."
+        }
+      ],
+      [
         "expo-build-properties",
         {
           "android": {
