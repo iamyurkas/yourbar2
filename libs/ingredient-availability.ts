@@ -125,6 +125,31 @@ function normalizeIngredientId(value?: number | string | null): number | undefin
   return Math.trunc(numeric);
 }
 
+
+function collectStylesAndBrandsForBase(
+  baseId: number,
+  lookup: IngredientLookup,
+  allowBrand: boolean,
+  accumulator: Set<number>,
+  skipId?: number,
+) {
+  const styleIds = lookup.stylesByBaseId.get(baseId) ?? [];
+
+  styleIds.forEach((styleId) => {
+    if (styleId !== skipId) {
+      accumulator.add(styleId);
+    }
+
+    if (allowBrand) {
+      lookup.brandsByBaseId.get(styleId)?.forEach((brandId) => {
+        if (brandId !== skipId) {
+          accumulator.add(brandId);
+        }
+      });
+    }
+  });
+}
+
 function collectVisibleIngredientIds(
   ingredientId: number | undefined,
   lookup: IngredientLookup,
@@ -159,7 +184,7 @@ function collectVisibleIngredientIds(
           }
         });
       } else {
-        lookup.stylesByBaseId.get(ingredientId)?.forEach((id) => accumulator.add(id));
+        collectStylesAndBrandsForBase(ingredientId, lookup, allowBrandedForBase, accumulator, ingredientId);
       }
     }
 
@@ -174,13 +199,17 @@ function collectVisibleIngredientIds(
     lookup.brandsByBaseId.get(baseId)?.forEach((id) => accumulator.add(id));
   }
 
-  if (allowStyle && styleBaseId != null) {
-    accumulator.add(styleBaseId);
-    lookup.stylesByBaseId.get(styleBaseId)?.forEach((id) => {
-      if (id !== ingredientId) {
-        accumulator.add(id);
-      }
-    });
+  if (allowStyle) {
+    if (styleBaseId != null) {
+      accumulator.add(styleBaseId);
+      lookup.stylesByBaseId.get(styleBaseId)?.forEach((id) => {
+        if (id !== ingredientId) {
+          accumulator.add(id);
+        }
+      });
+    }
+
+    collectStylesAndBrandsForBase(baseId, lookup, allowBrandedForBase, accumulator, ingredientId);
   }
 }
 
@@ -264,11 +293,7 @@ export function resolveIngredientAvailability(
         }
       });
     } else {
-      lookup.stylesByBaseId.get(requestedId)?.forEach((id) => {
-        if (id !== requestedId) {
-          styleSubstituteSet.add(id);
-        }
-      });
+      collectStylesAndBrandsForBase(requestedId, lookup, allowBrandedForBase, styleSubstituteSet, requestedId);
     }
   }
 
@@ -297,13 +322,17 @@ export function resolveIngredientAvailability(
     const allowBrandedCandidate = allowBrand || candidateBaseId == null;
     const allowStyledCandidate = allowStyle || candidateBaseId == null;
 
-    if (allowStyledCandidate && candidateStyleBaseId != null) {
-      addCandidate(candidateStyleBaseId);
-      lookup.stylesByBaseId.get(candidateStyleBaseId)?.forEach((id) => {
-        if (id !== candidateId) {
-          addCandidate(id);
-        }
-      });
+    if (allowStyledCandidate) {
+      if (candidateStyleBaseId != null) {
+        addCandidate(candidateStyleBaseId);
+        lookup.stylesByBaseId.get(candidateStyleBaseId)?.forEach((id) => {
+          if (id !== candidateId) {
+            addCandidate(id);
+          }
+        });
+      } else {
+        collectStylesAndBrandsForBase(candidateId, lookup, allowBrandedCandidate, declaredSubstituteIds, candidateId);
+      }
     }
 
     if (candidateBaseId == null) {
@@ -319,6 +348,10 @@ export function resolveIngredientAvailability(
 
     if (allowBrandedCandidate) {
       lookup.brandsByBaseId.get(candidateBaseId)?.forEach((id) => addCandidate(id));
+    }
+
+    if (allowStyle) {
+      collectStylesAndBrandsForBase(candidateBaseId, lookup, allowBrandedCandidate, declaredSubstituteIds, candidateId);
     }
   };
 
