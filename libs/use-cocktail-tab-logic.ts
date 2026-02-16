@@ -97,10 +97,30 @@ export function useCocktailTabLogic({
           });
         }
 
-        if (allowStyle && styleBaseId != null) {
-          const styleBaseName = resolveNameFromId(styleBaseId);
-          if (styleBaseName) {
-            map.set(styleBaseId, styleBaseName);
+        if (allowStyle) {
+          if (styleBaseId != null) {
+            const styleBaseName = resolveNameFromId(styleBaseId);
+            if (styleBaseName) {
+              map.set(styleBaseId, styleBaseName);
+            }
+
+            ingredientLookup.stylesByBaseId.get(styleBaseId)?.forEach((styleId) => {
+              if (styleId === ingredientId) {
+                return;
+              }
+
+              const styleName = resolveNameFromId(styleId);
+              if (styleName) {
+                map.set(styleId, styleName);
+              }
+            });
+          } else {
+            ingredientLookup.stylesByBaseId.get(ingredientId)?.forEach((styleId) => {
+              const styleName = resolveNameFromId(styleId);
+              if (styleName) {
+                map.set(styleId, styleName);
+              }
+            });
           }
         }
         return;
