@@ -17,7 +17,7 @@
     },
 
     "android": {
-      "package": "com.yourbarapp.free",
+      "package": "com.yourbarapp.free.dev",
       "versionCode": 16,
       "adaptiveIcon": {
         "backgroundColor": "#4DABF7",

@@ -12280,7 +12280,7 @@
       "name": "French 75",
       "synonyms": ["French Seventy-Five", "Soixante-Quinze"],
       "description": "Crisp **gin** and **lemon** topped with sparkling **Champagne**.",
-      "instructions": "1. Fill a shaker with **ice**.\n2. Add 30ml of **gin**, 15ml of **lemon juice**, and 15ml of **simple syrup**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled flute glass glass.\n5. Top with 60ml of **Champagne**.\n6. Express the oils from a **lemon** peel over the drink and use it as a garnish.",
+      "instructions": "1. Fill a shaker with **ice**.\n2. Add 30ml of **gin**, 15ml of **lemon juice**, and 15ml of **simple syrup**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled flute glass.\n5. Top with 60ml of **Champagne**.\n6. Express the oils from a **lemon** peel over the drink and use it as a garnish.",
       "photoUri": "assets/cocktails/201-french-75.jpg",
       "glassId": "champagne_flute",
       "methodIds": ["shake"],
@@ -19691,7 +19691,7 @@
       "id": 325,
       "name": "Mrs Daisy Robinson",
       "description": "An elegant and sparkling **pisco**-based drink that offers a sophisticated blend of tropical **pineapple** and tart **grapefruit**, finished with the effervescence of **prosecco**.",
-      "instructions": "1. Fill a shaker with **ice**.\n2. Add 25ml of **pisco**, 15ml of **pineapple syrup**, 15ml of **grapefruit juice**, 5ml of **lime juice**, and 2 dashes of **creole bitters**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled flute glass glass.\n5. Top with 50ml of **prosecco**.\n6. Garnish with a wedge of **pineapple**.",
+      "instructions": "1. Fill a shaker with **ice**.\n2. Add 25ml of **pisco**, 15ml of **pineapple syrup**, 15ml of **grapefruit juice**, 5ml of **lime juice**, and 2 dashes of **creole bitters**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled flute glass.\n5. Top with 50ml of **prosecco**.\n6. Garnish with a wedge of **pineapple**.",
       "photoUri": "assets/cocktails/325-mrs-daisy-robinson.jpg",
       "glassId": "champagne_flute",
       "methodIds": ["shake"],
@@ -24503,7 +24503,7 @@
       "name": "Seventh Son",
       "synonyms": ["7th Son"],
       "description": "A sophisticated and aromatic spirit-forward drink that balances the richness of **Cognac** with floral rose and deep **cherry** notes, finished with a crisp **lager** top.",
-      "instructions": "1. Fill a shaker with **ice**.\n2. Add 45ml of **Cognac**, 15ml of **Cherry Heering**, and 15ml of **rose syrup**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled flute glass glass.\n5. Top with 60ml of **pilsner lager**.",
+      "instructions": "1. Fill a shaker with **ice**.\n2. Add 45ml of **Cognac**, 15ml of **Cherry Heering**, and 15ml of **rose syrup**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled flute glass.\n5. Top with 60ml of **pilsner lager**.",
       "photoUri": "assets/cocktails/403-seventh-son.jpg",
       "glassId": "champagne_flute",
       "methodIds": ["shake"],
@@ -31625,7 +31625,7 @@
       "id": 515,
       "name": "Mixed Berry Sangria",
       "description": "A fruit-forward sangria made with **red wine**, **berries**, **orange**, and a touch of **brandy**.",
-      "instructions": "1. In a large pitcher, muddle 300g of **berries**, an **orange** (sliced), and 45ml of **sugar**.\n2. Add 750ml of **red wine**, 90ml of **brandy**, and 180ml of **orange juice**.\n3. Add 180ml of **soda water** if you want a lighter style.\n4. Stir gently for about 20 seconds until well chilled.\n5. Chill.\n6. Serve over ice and garnish with extra **berries**.",
+      "instructions": "1. In a large pitcher, muddle 300g of **berries**, an **orange** (sliced), and 45ml of **sugar**.\n2. Add 750ml of **red wine**, 90ml of **brandy**, 180ml of **orange juice**, and 300g of **ice**.\n3. Add 180ml of **soda water** if you want a lighter style.\n4. Stir gently for about 20 seconds until well chilled.\n5. Chill.\n6. Serve over ice and garnish with extra **berries**.",
       "photoUri": "assets/cocktails/515-mixed-berry-sangria.jpg",
       "glassId": "pitcher",
       "methodIds": ["muddle", "stir"],
@@ -31677,7 +31677,7 @@
           "order": 7,
           "ingredientId": 193,
           "name": "Ice",
-          "amount": "120",
+          "amount": "300",
           "unitId": 8
         },
         {
@@ -32263,27 +32263,34 @@
       "ingredients": [
         {
           "order": 1,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8
+        },
+        {
+          "order": 2,
           "ingredientId": 159,
           "name": "Gin",
           "amount": "60",
           "unitId": 11
         },
         {
-          "order": 2,
+          "order": 3,
           "ingredientId": 126,
           "name": "Crème de Violette",
           "amount": "15",
           "unitId": 11
         },
         {
-          "order": 3,
+          "order": 4,
           "ingredientId": 216,
           "name": "Lemon Juice",
           "amount": "15",
           "unitId": 11
         },
         {
-          "order": 4,
+          "order": 5,
           "ingredientId": 214,
           "name": "Lemon",
           "amount": "1",
