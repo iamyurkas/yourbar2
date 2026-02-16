@@ -1004,6 +1004,79 @@ export default function IngredientDetailsScreen() {
               </View>
             ) : null}
 
+            {styleIngredient ? (
+              <View style={styles.textBlock}>
+                <Text
+                  style={[styles.sectionTitle, { color: Colors.onSurface }]}
+                >
+                  Style ingredient
+                </Text>
+                <Pressable
+                  onPress={handleNavigateToStyle}
+                  accessibilityRole="button"
+                  accessibilityLabel="View style ingredient"
+                  style={[
+                    styles.baseIngredientRow,
+                    {
+                      borderColor: Colors.outlineVariant,
+                      backgroundColor: isStyleIngredientAvailable
+                        ? Colors.highlightFaint
+                        : Colors.surfaceBright,
+                    },
+                  ]}
+                >
+                  <View style={styles.baseIngredientInfo}>
+                    <View style={[styles.baseIngredientThumb, { backgroundColor: Colors.surfaceBright }]}>
+                      {styleIngredientPhotoSource ? (
+                        <AppImage
+                          source={styleIngredientPhotoSource}
+                          style={styles.baseIngredientImage}
+                          contentFit="contain"
+                        />
+                      ) : (
+                        <View
+                          style={[
+                            styles.baseIngredientPlaceholder,
+                            { backgroundColor: Colors.surfaceBright },
+                          ]}
+                        ></View>
+                      )}
+                    </View>
+                    <Text
+                      style={[
+                        styles.baseIngredientName,
+                        { color: Colors.onSurface },
+                      ]}
+                      numberOfLines={2}
+                    >
+                      {styleIngredient.name}
+                    </Text>
+                  </View>
+                  <View style={styles.baseIngredientActions}>
+                    <Pressable
+                      onPress={handleRemoveStyle}
+                      style={styles.unlinkButton}
+                      accessibilityRole="button"
+                      accessibilityLabel="Remove style ingredient"
+                      hitSlop={8}
+                    >
+                      <MaterialCommunityIcons
+                        name="link-off"
+                        size={20}
+                        color={Colors.error}
+                      />
+                    </Pressable>
+                    <MaterialIcons
+                      name="chevron-right"
+                      size={20}
+                      color={Colors.onSurfaceVariant}
+                    />
+                  </View>
+                </Pressable>
+              </View>
+            ) : null}
+
+
             {baseIngredient ? (
               <View style={styles.textBlock}>
                 <Text
@@ -1078,77 +1151,97 @@ export default function IngredientDetailsScreen() {
 
 
 
-            {styleIngredient ? (
+            {styledIngredients.length ? (
               <View style={styles.textBlock}>
                 <Text
                   style={[styles.sectionTitle, { color: Colors.onSurface }]}
                 >
-                  Style ingredient
+                  Styled ingredients
                 </Text>
-                <Pressable
-                  onPress={handleNavigateToStyle}
-                  accessibilityRole="button"
-                  accessibilityLabel="View style ingredient"
-                  style={[
-                    styles.baseIngredientRow,
-                    {
-                      borderColor: Colors.outlineVariant,
-                      backgroundColor: isStyleIngredientAvailable
-                        ? Colors.highlightFaint
-                        : Colors.surfaceBright,
-                    },
-                  ]}
-                >
-                  <View style={styles.baseIngredientInfo}>
-                    <View style={[styles.baseIngredientThumb, { backgroundColor: Colors.surfaceBright }]}>
-                      {styleIngredientPhotoSource ? (
-                        <AppImage
-                          source={styleIngredientPhotoSource}
-                          style={styles.baseIngredientImage}
-                          contentFit="contain"
-                        />
-                      ) : (
-                        <View
-                          style={[
-                            styles.baseIngredientPlaceholder,
-                            { backgroundColor: Colors.surfaceBright },
-                          ]}
-                        ></View>
-                      )}
-                    </View>
-                    <Text
-                      style={[
-                        styles.baseIngredientName,
-                        { color: Colors.onSurface },
-                      ]}
-                      numberOfLines={2}
-                    >
-                      {styleIngredient.name}
-                    </Text>
-                  </View>
-                  <View style={styles.baseIngredientActions}>
-                    <Pressable
-                      onPress={handleRemoveStyle}
-                      style={styles.unlinkButton}
-                      accessibilityRole="button"
-                      accessibilityLabel="Remove style ingredient"
-                      hitSlop={8}
-                    >
-                      <MaterialCommunityIcons
-                        name="link-off"
-                        size={20}
-                        color={Colors.error}
-                      />
-                    </Pressable>
-                    <MaterialIcons
-                      name="chevron-right"
-                      size={20}
-                      color={Colors.onSurfaceVariant}
-                    />
-                  </View>
-                </Pressable>
+                <View style={styles.brandedList}>
+                  {styledIngredients.map((styled) => {
+                    const styledPhotoSource = resolveImageSource(
+                      styled.photoUri,
+                    );
+
+                    return (
+                      <Pressable
+                        key={styled.id ?? styled.name}
+                        onPress={() => handleNavigateToIngredient(styled.id)}
+                        accessibilityRole="button"
+                        accessibilityLabel={`View ${styled.name}`}
+                        style={[
+                          styles.baseIngredientRow,
+                          {
+                            borderColor: Colors.outlineVariant,
+                            backgroundColor: availableIngredientIds.has(
+                              Number(styled.id ?? -1),
+                            )
+                              ? Colors.highlightFaint
+                              : Colors.surfaceBright,
+                          },
+                        ]}
+                      >
+                        <View style={styles.baseIngredientInfo}>
+                          <View style={[styles.baseIngredientThumb, { backgroundColor: Colors.surfaceBright }]}>
+                            {styledPhotoSource ? (
+                              <AppImage
+                                source={styledPhotoSource}
+                                style={styles.baseIngredientImage}
+                                contentFit="contain"
+                              />
+                            ) : (
+                              <View
+                                style={[
+                                  styles.baseIngredientPlaceholder,
+                                  { backgroundColor: Colors.surfaceBright },
+                                ]}
+                              >
+                                <MaterialCommunityIcons
+                                  name="image-off"
+                                  size={20}
+                                  color={Colors.onSurfaceVariant}
+                                />
+                              </View>
+                            )}
+                          </View>
+                          <Text
+                            style={[
+                              styles.baseIngredientName,
+                              { color: Colors.onSurface },
+                            ]}
+                            numberOfLines={2}
+                          >
+                            {styled.name}
+                          </Text>
+                        </View>
+                        <View style={styles.baseIngredientActions}>
+                          <Pressable
+                            onPress={handleRemoveStyled(styled)}
+                            style={styles.unlinkButton}
+                            accessibilityRole="button"
+                            accessibilityLabel={`Remove ${styled.name} link`}
+                            hitSlop={8}
+                          >
+                            <MaterialCommunityIcons
+                              name="link-off"
+                              size={20}
+                              color={Colors.error}
+                            />
+                          </Pressable>
+                          <MaterialIcons
+                            name="chevron-right"
+                            size={20}
+                            color={Colors.onSurfaceVariant}
+                          />
+                        </View>
+                      </Pressable>
+                    );
+                  })}
+                </View>
               </View>
             ) : null}
+
 
             {brandedIngredients.length ? (
               <View style={styles.textBlock}>
@@ -1220,97 +1313,6 @@ export default function IngredientDetailsScreen() {
                             style={styles.unlinkButton}
                             accessibilityRole="button"
                             accessibilityLabel={`Remove ${branded.name} link`}
-                            hitSlop={8}
-                          >
-                            <MaterialCommunityIcons
-                              name="link-off"
-                              size={20}
-                              color={Colors.error}
-                            />
-                          </Pressable>
-                          <MaterialIcons
-                            name="chevron-right"
-                            size={20}
-                            color={Colors.onSurfaceVariant}
-                          />
-                        </View>
-                      </Pressable>
-                    );
-                  })}
-                </View>
-              </View>
-            ) : null}
-
-            {styledIngredients.length ? (
-              <View style={styles.textBlock}>
-                <Text
-                  style={[styles.sectionTitle, { color: Colors.onSurface }]}
-                >
-                  Styled ingredients
-                </Text>
-                <View style={styles.brandedList}>
-                  {styledIngredients.map((styled) => {
-                    const styledPhotoSource = resolveImageSource(
-                      styled.photoUri,
-                    );
-
-                    return (
-                      <Pressable
-                        key={styled.id ?? styled.name}
-                        onPress={() => handleNavigateToIngredient(styled.id)}
-                        accessibilityRole="button"
-                        accessibilityLabel={`View ${styled.name}`}
-                        style={[
-                          styles.baseIngredientRow,
-                          {
-                            borderColor: Colors.outlineVariant,
-                            backgroundColor: availableIngredientIds.has(
-                              Number(styled.id ?? -1),
-                            )
-                              ? Colors.highlightFaint
-                              : Colors.surfaceBright,
-                          },
-                        ]}
-                      >
-                        <View style={styles.baseIngredientInfo}>
-                          <View style={[styles.baseIngredientThumb, { backgroundColor: Colors.surfaceBright }]}>
-                            {styledPhotoSource ? (
-                              <AppImage
-                                source={styledPhotoSource}
-                                style={styles.baseIngredientImage}
-                                contentFit="contain"
-                              />
-                            ) : (
-                              <View
-                                style={[
-                                  styles.baseIngredientPlaceholder,
-                                  { backgroundColor: Colors.surfaceBright },
-                                ]}
-                              >
-                                <MaterialCommunityIcons
-                                  name="image-off"
-                                  size={20}
-                                  color={Colors.onSurfaceVariant}
-                                />
-                              </View>
-                            )}
-                          </View>
-                          <Text
-                            style={[
-                              styles.baseIngredientName,
-                              { color: Colors.onSurface },
-                            ]}
-                            numberOfLines={2}
-                          >
-                            {styled.name}
-                          </Text>
-                        </View>
-                        <View style={styles.baseIngredientActions}>
-                          <Pressable
-                            onPress={handleRemoveStyled(styled)}
-                            style={styles.unlinkButton}
-                            accessibilityRole="button"
-                            accessibilityLabel={`Remove ${styled.name} link`}
                             hitSlop={8}
                           >
                             <MaterialCommunityIcons

@@ -1228,57 +1228,6 @@ export default function IngredientFormScreen() {
       </View>
 
       <View style={sectionStyle}>
-        <Text style={[styles.label, { color: Colors.onSurface }]}>Base ingredient</Text>
-        {isBaseSelectorDisabled ? (
-          <Text style={[hintStyle, { color: Colors.onSurfaceVariant }]}>
-            Styled ingredients cannot be branded. Remove style link to enable base ingredient selection.
-          </Text>
-        ) : null}
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={baseIngredient ? 'Change base ingredient' : 'Select base ingredient'}
-          accessibilityState={isBaseSelectorDisabled ? { disabled: true } : undefined}
-          disabled={isBaseSelectorDisabled}
-          onPress={isBaseSelectorDisabled ? undefined : handleOpenBaseModal}
-          style={[
-            styles.baseSelector,
-            isBaseSelectorDisabled ? styles.baseSelectorDisabled : null,
-            { borderColor: Colors.outlineVariant, backgroundColor: Colors.surface },
-          ]}>
-          {baseIngredient ? (
-            <>
-              <View style={styles.baseInfo}>
-                <View style={[styles.baseThumb, { backgroundColor: Colors.background }]}>
-                  {baseIngredientPhotoSource ? (
-                    <AppImage source={baseIngredientPhotoSource} style={styles.baseImage} contentFit="contain" />
-                  ) : (
-                    <View style={[styles.basePlaceholder, { backgroundColor: Colors.onSurfaceVariant }]}>
-                      <MaterialCommunityIcons name="image-off" size={20} color={Colors.onSurfaceVariant} />
-                    </View>
-                  )}
-                </View>
-                <Text style={[styles.baseName, { color: Colors.onSurface }]} numberOfLines={2}>
-                  {baseIngredient.name}
-                </Text>
-              </View>
-              <Pressable
-                onPress={handleClearBaseIngredient}
-                accessibilityRole="button"
-                accessibilityLabel="Remove base ingredient"
-                hitSlop={8}
-                style={styles.unlinkButton}>
-                <MaterialCommunityIcons name="link-off" size={20} color={Colors.error} />
-              </Pressable>
-            </>
-          ) : (
-            <View style={styles.basePlaceholderRow}>
-              <Text style={[styles.basePlaceholderText, { color: Colors.onSurfaceVariant }]}>None</Text>
-            </View>
-          )}
-        </Pressable>
-      </View>
-
-      <View style={sectionStyle}>
         <Text style={[styles.label, { color: Colors.onSurface }]}>Style ingredient</Text>
         <Text style={[hintStyle, { color: Colors.onSurfaceVariant }]}>Only base ingredients that are not branded and not already styled can be selected as styles.</Text>
         {isStyleSelectorDisabled ? (
@@ -1317,6 +1266,58 @@ export default function IngredientFormScreen() {
                 onPress={handleClearStyleIngredient}
                 accessibilityRole="button"
                 accessibilityLabel="Remove style ingredient"
+                hitSlop={8}
+                style={styles.unlinkButton}>
+                <MaterialCommunityIcons name="link-off" size={20} color={Colors.error} />
+              </Pressable>
+            </>
+          ) : (
+            <View style={styles.basePlaceholderRow}>
+              <Text style={[styles.basePlaceholderText, { color: Colors.onSurfaceVariant }]}>None</Text>
+            </View>
+          )}
+        </Pressable>
+      </View>
+
+
+      <View style={sectionStyle}>
+        <Text style={[styles.label, { color: Colors.onSurface }]}>Base ingredient</Text>
+        {isBaseSelectorDisabled ? (
+          <Text style={[hintStyle, { color: Colors.onSurfaceVariant }]}>
+            Styled ingredients cannot be branded. Remove style link to enable base ingredient selection.
+          </Text>
+        ) : null}
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={baseIngredient ? 'Change base ingredient' : 'Select base ingredient'}
+          accessibilityState={isBaseSelectorDisabled ? { disabled: true } : undefined}
+          disabled={isBaseSelectorDisabled}
+          onPress={isBaseSelectorDisabled ? undefined : handleOpenBaseModal}
+          style={[
+            styles.baseSelector,
+            isBaseSelectorDisabled ? styles.baseSelectorDisabled : null,
+            { borderColor: Colors.outlineVariant, backgroundColor: Colors.surface },
+          ]}>
+          {baseIngredient ? (
+            <>
+              <View style={styles.baseInfo}>
+                <View style={[styles.baseThumb, { backgroundColor: Colors.background }]}>
+                  {baseIngredientPhotoSource ? (
+                    <AppImage source={baseIngredientPhotoSource} style={styles.baseImage} contentFit="contain" />
+                  ) : (
+                    <View style={[styles.basePlaceholder, { backgroundColor: Colors.onSurfaceVariant }]}>
+                      <MaterialCommunityIcons name="image-off" size={20} color={Colors.onSurfaceVariant} />
+                    </View>
+                  )}
+                </View>
+                <Text style={[styles.baseName, { color: Colors.onSurface }]} numberOfLines={2}>
+                  {baseIngredient.name}
+                </Text>
+              </View>
+              <Pressable
+                onPress={handleClearBaseIngredient}
+                accessibilityRole="button"
+                accessibilityLabel="Remove base ingredient"
                 hitSlop={8}
                 style={styles.unlinkButton}>
                 <MaterialCommunityIcons name="link-off" size={20} color={Colors.error} />

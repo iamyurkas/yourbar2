@@ -2306,7 +2306,27 @@ function EditableIngredientRow({
   }, [ingredientRecord?.baseIngredientId]);
 
   const isBrandedIngredient = baseIngredientId != null;
-  
+
+  const baseIngredientRecord = useMemo(() => {
+    if (baseIngredientId == null) {
+      return undefined;
+    }
+
+    return inventoryIngredients.find(
+      (candidate) => Number(candidate.id ?? -1) === baseIngredientId,
+    );
+  }, [baseIngredientId, inventoryIngredients]);
+
+  const baseIngredientStyleId = useMemo(() => {
+    const candidate = baseIngredientRecord?.styleIngredientId;
+    if (candidate == null) {
+      return undefined;
+    }
+
+    const parsed = Number(candidate);
+    return Number.isFinite(parsed) && parsed >= 0 ? Math.trunc(parsed) : undefined;
+  }, [baseIngredientRecord?.styleIngredientId]);
+
   const styleIngredientId = useMemo(() => {
     const candidate = ingredientRecord?.styleIngredientId;
     if (candidate == null) {
@@ -2320,6 +2340,7 @@ function EditableIngredientRow({
   }, [ingredientRecord?.styleIngredientId]);
 
   const isStyledIngredient = styleIngredientId != null;
+  const shouldShowStyleSubstitution = isStyledIngredient || baseIngredientStyleId != null;
 
   const suggestions = useMemo(() => {
     if (normalizedName.length < MIN_AUTOCOMPLETE_LENGTH) {
@@ -2808,7 +2829,7 @@ function EditableIngredientRow({
 
 
 
-      {isStyledIngredient ? (
+      {shouldShowStyleSubstitution ? (
         <View style={styles.toggleRow}>
           <ToggleChip
             label="Allow style substitutes"
