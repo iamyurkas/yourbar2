@@ -214,6 +214,19 @@ export default function IngredientDetailsScreen() {
     return ingredients.find((item) => Number(item.id ?? -1) === baseId);
   }, [ingredient?.baseIngredientId, ingredients]);
 
+  const styleIngredient = useMemo(() => {
+    if (!ingredient?.styleIngredientId) {
+      return undefined;
+    }
+
+    const styleId = Number(ingredient.styleIngredientId);
+    if (Number.isNaN(styleId)) {
+      return undefined;
+    }
+
+    return ingredients.find((item) => Number(item.id ?? -1) === styleId);
+  }, [ingredient?.styleIngredientId, ingredients]);
+
   const isBaseIngredientAvailable = useMemo(() => {
     if (!baseIngredient?.id) {
       return false;
@@ -227,6 +240,19 @@ export default function IngredientDetailsScreen() {
     return availableIngredientIds.has(baseId);
   }, [availableIngredientIds, baseIngredient?.id]);
 
+  const isStyleIngredientAvailable = useMemo(() => {
+    if (!styleIngredient?.id) {
+      return false;
+    }
+
+    const styleId = Number(styleIngredient.id);
+    if (Number.isNaN(styleId)) {
+      return false;
+    }
+
+    return availableIngredientIds.has(styleId);
+  }, [availableIngredientIds, styleIngredient?.id]);
+
   const brandedIngredients = useMemo(() => {
     if (numericIngredientId == null) {
       return [];
@@ -237,9 +263,24 @@ export default function IngredientDetailsScreen() {
     );
   }, [ingredients, numericIngredientId]);
 
+  const styledIngredients = useMemo(() => {
+    if (numericIngredientId == null) {
+      return [];
+    }
+
+    return ingredients.filter(
+      (item) => Number(item.styleIngredientId ?? -1) === numericIngredientId,
+    );
+  }, [ingredients, numericIngredientId]);
+
   const baseIngredientPhotoSource = useMemo(
     () => resolveImageSource(baseIngredient?.photoUri),
     [baseIngredient?.photoUri],
+  );
+
+  const styleIngredientPhotoSource = useMemo(
+    () => resolveImageSource(styleIngredient?.photoUri),
+    [styleIngredient?.photoUri],
   );
 
   const cocktailsWithIngredient = useMemo(() => {
@@ -519,6 +560,48 @@ export default function IngredientDetailsScreen() {
     });
   }, [baseIngredient?.id]);
 
+
+  const handleRemoveStyle = useCallback(
+    (event?: GestureResponderEvent) => {
+      event?.stopPropagation();
+
+      if (
+        !ingredient ||
+        numericIngredientId == null ||
+        !ingredient.styleIngredientId
+      ) {
+        return;
+      }
+
+      showDialog({
+        title: "Remove style ingredient",
+        message: `Are you sure you want to unlink ${ingredient.name} from its style ingredient?`,
+        actions: [
+          { label: "Cancel", variant: "secondary" },
+          {
+            label: "Remove",
+            variant: "destructive",
+            onPress: () => {
+              clearBaseIngredient(numericIngredientId);
+            },
+          },
+        ],
+      });
+    },
+    [clearBaseIngredient, ingredient, numericIngredientId, showDialog],
+  );
+
+  const handleNavigateToStyle = useCallback(() => {
+    if (!styleIngredient?.id) {
+      return;
+    }
+
+    router.push({
+      pathname: "/ingredients/[ingredientId]",
+      params: { ingredientId: String(styleIngredient.id) },
+    });
+  }, [styleIngredient?.id]);
+
   const handleNavigateToIngredient = useCallback(
     (id: number | string | undefined) => {
       if (id == null) {
@@ -580,6 +663,34 @@ export default function IngredientDetailsScreen() {
             variant: "destructive",
             onPress: () => {
               clearBaseIngredient(brandedId);
+            },
+          },
+        ],
+      });
+    },
+    [clearBaseIngredient, ingredient?.name, showDialog],
+  );
+
+
+  const handleRemoveStyled = useCallback(
+    (styledIngredient: Ingredient) => (event?: GestureResponderEvent) => {
+      event?.stopPropagation();
+
+      const styledId = Number(styledIngredient.id ?? -1);
+      if (Number.isNaN(styledId)) {
+        return;
+      }
+
+      showDialog({
+        title: "Remove styled ingredient",
+        message: `Unlink ${styledIngredient.name} from ${ingredient?.name}?`,
+        actions: [
+          { label: "Cancel", variant: "secondary" },
+          {
+            label: "Remove",
+            variant: "destructive",
+            onPress: () => {
+              clearBaseIngredient(styledId);
             },
           },
         ],
@@ -965,6 +1076,80 @@ export default function IngredientDetailsScreen() {
               </View>
             ) : null}
 
+
+
+            {styleIngredient ? (
+              <View style={styles.textBlock}>
+                <Text
+                  style={[styles.sectionTitle, { color: Colors.onSurface }]}
+                >
+                  Style ingredient
+                </Text>
+                <Pressable
+                  onPress={handleNavigateToStyle}
+                  accessibilityRole="button"
+                  accessibilityLabel="View style ingredient"
+                  style={[
+                    styles.baseIngredientRow,
+                    {
+                      borderColor: Colors.outlineVariant,
+                      backgroundColor: isStyleIngredientAvailable
+                        ? Colors.highlightFaint
+                        : Colors.surfaceBright,
+                    },
+                  ]}
+                >
+                  <View style={styles.baseIngredientInfo}>
+                    <View style={[styles.baseIngredientThumb, { backgroundColor: Colors.surfaceBright }]}>
+                      {styleIngredientPhotoSource ? (
+                        <AppImage
+                          source={styleIngredientPhotoSource}
+                          style={styles.baseIngredientImage}
+                          contentFit="contain"
+                        />
+                      ) : (
+                        <View
+                          style={[
+                            styles.baseIngredientPlaceholder,
+                            { backgroundColor: Colors.surfaceBright },
+                          ]}
+                        ></View>
+                      )}
+                    </View>
+                    <Text
+                      style={[
+                        styles.baseIngredientName,
+                        { color: Colors.onSurface },
+                      ]}
+                      numberOfLines={2}
+                    >
+                      {styleIngredient.name}
+                    </Text>
+                  </View>
+                  <View style={styles.baseIngredientActions}>
+                    <Pressable
+                      onPress={handleRemoveStyle}
+                      style={styles.unlinkButton}
+                      accessibilityRole="button"
+                      accessibilityLabel="Remove style ingredient"
+                      hitSlop={8}
+                    >
+                      <MaterialCommunityIcons
+                        name="link-off"
+                        size={20}
+                        color={Colors.error}
+                      />
+                    </Pressable>
+                    <MaterialIcons
+                      name="chevron-right"
+                      size={20}
+                      color={Colors.onSurfaceVariant}
+                    />
+                  </View>
+                </Pressable>
+              </View>
+            ) : null}
+
             {brandedIngredients.length ? (
               <View style={styles.textBlock}>
                 <Text
@@ -1035,6 +1220,97 @@ export default function IngredientDetailsScreen() {
                             style={styles.unlinkButton}
                             accessibilityRole="button"
                             accessibilityLabel={`Remove ${branded.name} link`}
+                            hitSlop={8}
+                          >
+                            <MaterialCommunityIcons
+                              name="link-off"
+                              size={20}
+                              color={Colors.error}
+                            />
+                          </Pressable>
+                          <MaterialIcons
+                            name="chevron-right"
+                            size={20}
+                            color={Colors.onSurfaceVariant}
+                          />
+                        </View>
+                      </Pressable>
+                    );
+                  })}
+                </View>
+              </View>
+            ) : null}
+
+            {styledIngredients.length ? (
+              <View style={styles.textBlock}>
+                <Text
+                  style={[styles.sectionTitle, { color: Colors.onSurface }]}
+                >
+                  Styled ingredients
+                </Text>
+                <View style={styles.brandedList}>
+                  {styledIngredients.map((styled) => {
+                    const styledPhotoSource = resolveImageSource(
+                      styled.photoUri,
+                    );
+
+                    return (
+                      <Pressable
+                        key={styled.id ?? styled.name}
+                        onPress={() => handleNavigateToIngredient(styled.id)}
+                        accessibilityRole="button"
+                        accessibilityLabel={`View ${styled.name}`}
+                        style={[
+                          styles.baseIngredientRow,
+                          {
+                            borderColor: Colors.outlineVariant,
+                            backgroundColor: availableIngredientIds.has(
+                              Number(styled.id ?? -1),
+                            )
+                              ? Colors.highlightFaint
+                              : Colors.surfaceBright,
+                          },
+                        ]}
+                      >
+                        <View style={styles.baseIngredientInfo}>
+                          <View style={[styles.baseIngredientThumb, { backgroundColor: Colors.surfaceBright }]}>
+                            {styledPhotoSource ? (
+                              <AppImage
+                                source={styledPhotoSource}
+                                style={styles.baseIngredientImage}
+                                contentFit="contain"
+                              />
+                            ) : (
+                              <View
+                                style={[
+                                  styles.baseIngredientPlaceholder,
+                                  { backgroundColor: Colors.surfaceBright },
+                                ]}
+                              >
+                                <MaterialCommunityIcons
+                                  name="image-off"
+                                  size={20}
+                                  color={Colors.onSurfaceVariant}
+                                />
+                              </View>
+                            )}
+                          </View>
+                          <Text
+                            style={[
+                              styles.baseIngredientName,
+                              { color: Colors.onSurface },
+                            ]}
+                            numberOfLines={2}
+                          >
+                            {styled.name}
+                          </Text>
+                        </View>
+                        <View style={styles.baseIngredientActions}>
+                          <Pressable
+                            onPress={handleRemoveStyled(styled)}
+                            style={styles.unlinkButton}
+                            accessibilityRole="button"
+                            accessibilityLabel={`Remove ${styled.name} link`}
                             hitSlop={8}
                           >
                             <MaterialCommunityIcons
