@@ -10,7 +10,7 @@ const imageExtensions = new Set([".jpg", ".jpeg", ".png", ".webp"]);
 
 const glasswareIdMap = [
   ["bowl", "bowl.jpg"],
-  ["champagne_flute", "champagne.jpg"],
+  ["flute_glass", "flute.jpg"],
   ["martini", "martini.jpg"],
   ["collins_glass", "collins.jpg"],
   ["copper_mug", "copper.jpg"],

@@ -368,11 +368,11 @@ export const ingredientImages: Record<string, number> = {
 
 export const glasswareImages: Record<string, number> = {
   'assets/glassware/bowl.jpg': require('./glassware/bowl.jpg'),
-  'assets/glassware/champagne.jpg': require('./glassware/champagne.jpg'),
   'assets/glassware/collins.jpg': require('./glassware/collins.jpg'),
   'assets/glassware/copper.jpg': require('./glassware/copper.jpg'),
   'assets/glassware/coupe.jpg': require('./glassware/coupe.jpg'),
   'assets/glassware/cup.jpg': require('./glassware/cup.jpg'),
+  'assets/glassware/flute.jpg': require('./glassware/flute.jpg'),
   'assets/glassware/goblet.jpg': require('./glassware/goblet.jpg'),
   'assets/glassware/highball.jpg': require('./glassware/highball.jpg'),
   'assets/glassware/hurricane.jpg': require('./glassware/hurricane.jpg'),
@@ -391,7 +391,7 @@ export const glasswareImages: Record<string, number> = {
 
 export const glasswareUriById: Record<string, string> = {
   bowl: 'assets/glassware/bowl.jpg',
-  champagne_flute: 'assets/glassware/champagne.jpg',
+  flute_glass: 'assets/glassware/flute.jpg',
   martini: 'assets/glassware/martini.jpg',
   collins_glass: 'assets/glassware/collins.jpg',
   copper_mug: 'assets/glassware/copper.jpg',
