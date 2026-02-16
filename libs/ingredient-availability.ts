@@ -292,6 +292,8 @@ export function resolveIngredientAvailability(
           styleSubstituteSet.add(id);
         }
       });
+    } else if (baseId != null) {
+      collectStylesAndBrandsForBase(baseId, lookup, allowBrandedForBase, styleSubstituteSet, requestedId);
     } else {
       collectStylesAndBrandsForBase(requestedId, lookup, allowBrandedForBase, styleSubstituteSet, requestedId);
     }
