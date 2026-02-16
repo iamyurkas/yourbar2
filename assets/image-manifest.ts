@@ -408,7 +408,7 @@ export const glasswareUriById: Record<string, string> = {
   rocks_glass: 'assets/glassware/rocks.jpg',
   shooter: 'assets/glassware/shooter.jpg',
   snifter: 'assets/glassware/snifter.jpg',
-  tiki: 'assets/glassware/tiki.jpg',
+  tiki_glass: 'assets/glassware/tiki.jpg',
   wine_glass: 'assets/glassware/wine.jpg',
 };
 

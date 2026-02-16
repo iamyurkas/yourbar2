@@ -8466,7 +8466,7 @@
       "description": "A tropical swizzle of **green Chartreuse**, **pineapple**, **lime**, and **falernum**, finished with **mint** and **nutmeg**.",
       "instructions": "1. Add 45ml of **green Chartreuse**, 30ml of **pineapple juice**, 22.5ml of **lime juice**, and 15ml of **falernum** to a tiki glass over **ice**.\n2. Stir gently to combine.\n3. Garnish with 3 **mint** leaves and a pinch of **nutmeg**.",
       "photoUri": "assets/cocktails/137-chartreuse-swizzle.jpg",
-      "glassId": "tiki",
+      "glassId": "tiki_glass",
       "methodIds": ["build"],
       "tags": [1, 4, 6],
       "ingredients": [
@@ -10729,7 +10729,7 @@
       "description": "A tiki-style daiquiri with **grapefruit** and **honey** notes.",
       "instructions": "1. Fill a shaker with **ice**.\n2. Add 30ml of **gold Jamaican rum**, 15ml of **Cuban rum**, 15ml of **passion fruit syrup**, 15ml of **lime juice**, and 15ml of **honey syrup**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled tiki glass.\n5. Garnish with a half of **passion fruit**.",
       "photoUri": "assets/cocktails/174-don-s-special-daiquiri.jpg",
-      "glassId": "tiki",
+      "glassId": "tiki_glass",
       "methodIds": ["shake"],
       "tags": [1, 4],
       "ingredients": [
@@ -15442,7 +15442,7 @@
       "description": "Fruity tiki blend of rums, juices, and exotic syrups.",
       "instructions": "1. Fill a shaker with **ice**.\n2. Add 30ml of **white rum**, 30ml of **dark rum**, 15ml of **amaretto**, 5ml of **Frangelico**, 5ml of **Luxardo maraschino**, 15ml of **passion fruit syrup**, 90ml of **pineapple juice**, 30ml of **lime juice**, 2 dashes of **Angostura bitters**, and a slice of **ginger**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled tiki glass.\n5. Garnish with a wedge of **pineapple** and a **mint**.",
       "photoUri": "assets/cocktails/253-iba-tiki.jpg",
-      "glassId": "tiki",
+      "glassId": "tiki_glass",
       "methodIds": ["shake"],
       "tags": [1, 4],
       "ingredients": [
@@ -26327,7 +26327,7 @@
       "description": "A refreshing and historic highball that combines the punch of **gin** and **brandy** with the zesty kick of **lime** and the spicy effervescence of **ginger beer**.",
       "instructions": "1. Fill a shaker with **ice**.\n2. Add 30ml of **Cognac**, 30ml of **gin**, 15ml of **lime juice**, and 2 dashes of **Angostura bitters**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Fill a chilled tiki glass with fresh **ice** and strain the cocktail into it.\n5. Top with 90ml of **ginger beer**.\n6. Garnish with a **mint** sprig and an **orange** slice.",
       "photoUri": "assets/cocktails/432-suffering-bastard.jpg",
-      "glassId": "tiki",
+      "glassId": "tiki_glass",
       "methodIds": ["shake"],
       "tags": [1, 4],
       "ingredients": [
@@ -27355,7 +27355,7 @@
       "description": "A classic tiki masterpiece created by Don the Beachcomber during WWII. Its name represents the morse code for 'Victory' (V), featuring a complex blend of rums and exotic spices.",
       "instructions": "1. Fill a shaker with **ice**.\n2. Add 45ml of **Rhum Martinique Agricole**, 15ml of **aged rum**, 7.5ml of **falernum**, 7.5ml of **allspice dram**, 15ml of **lemon juice**, 15ml of **orange juice**, 15ml of **honey syrup**, 2 dashes of **Angostura bitters**, and a slice of **pineapple**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled tiki glass.\n5. Garnish with 3 maraschino cherries.",
       "photoUri": "assets/cocktails/449-three-dots-and-a-dash.jpg",
-      "glassId": "tiki",
+      "glassId": "tiki_glass",
       "methodIds": ["shake"],
       "tags": [1, 4],
       "ingredients": [
@@ -30384,9 +30384,9 @@
       "name": "Zombie",
       "synonyms": ["Three Dots and a Dash"],
       "description": "A legendary and potent tiki classic that blends multiple rums, fresh **lime**, and tropical spice for a complex, sun-soaked experience.",
-      "instructions": "1. Add **Jamaican dark rum**, 45ml **gold Puerto Rican rum**, **demerara rum**, fresh **lime juice**, **falernum**, **don's mix**, **grenadine**, **Angostura bitters**, and **Pernod** into a blender.\n2. Add 180g of crushed **ice**.\n3. Blend at high speed for no more than 5 seconds.\n4. Pour the contents into a tall glass or tiki mug and add additional crushed **ice** to fill if necessary.\n5. Garnish with a **mint** sprig.",
+      "instructions": "1. Add **Jamaican dark rum**, 45ml **gold Puerto Rican rum**, **demerara rum**, fresh **lime juice**, **falernum**, **don's mix**, **grenadine**, **Angostura bitters**, and **Pernod** into a blender.\n2. Add 180g of crushed **ice**.\n3. Blend at high speed for no more than 5 seconds.\n4. Pour the contents into a tall glass or tiki glass and add additional crushed **ice** to fill if necessary.\n5. Garnish with a **mint** sprig.",
       "photoUri": "assets/cocktails/496-zombie.jpg",
-      "glassId": "tiki",
+      "glassId": "tiki_glass",
       "methodIds": ["blend"],
       "tags": [1, 4],
       "ingredients": [
