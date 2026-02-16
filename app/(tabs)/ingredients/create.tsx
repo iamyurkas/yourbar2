@@ -772,6 +772,16 @@ export default function IngredientFormScreen() {
     [styleIngredient?.photoUri],
   );
 
+  const styleFallbackText = useMemo(() => {
+    const trimmed = styleIngredient?.name.trim();
+    return trimmed ? trimmed.slice(0, 2).toUpperCase() : undefined;
+  }, [styleIngredient?.name]);
+
+  const baseFallbackText = useMemo(() => {
+    const trimmed = baseIngredient?.name.trim();
+    return trimmed ? trimmed.slice(0, 2).toUpperCase() : undefined;
+  }, [baseIngredient?.name]);
+
   const handleOpenStyleModal = useCallback(() => {
     setStyleSearch(styleIngredient?.name ?? '');
     setIsStyleModalVisible(true);
@@ -1253,8 +1263,10 @@ export default function IngredientFormScreen() {
                   {styleIngredientPhotoSource ? (
                     <AppImage source={styleIngredientPhotoSource} style={styles.baseImage} contentFit="contain" />
                   ) : (
-                    <View style={[styles.basePlaceholder, { backgroundColor: Colors.onSurfaceVariant }]}>
-                      <MaterialCommunityIcons name="image-off" size={20} color={Colors.onSurfaceVariant} />
+                    <View style={[styles.basePlaceholder, { backgroundColor: Colors.surfaceBright }]}>
+                      {styleFallbackText ? (
+                        <Text style={[styles.thumbFallback, { color: Colors.onSurfaceVariant }]}>{styleFallbackText}</Text>
+                      ) : null}
                     </View>
                   )}
                 </View>
@@ -1305,8 +1317,10 @@ export default function IngredientFormScreen() {
                   {baseIngredientPhotoSource ? (
                     <AppImage source={baseIngredientPhotoSource} style={styles.baseImage} contentFit="contain" />
                   ) : (
-                    <View style={[styles.basePlaceholder, { backgroundColor: Colors.onSurfaceVariant }]}>
-                      <MaterialCommunityIcons name="image-off" size={20} color={Colors.onSurfaceVariant} />
+                    <View style={[styles.basePlaceholder, { backgroundColor: Colors.surfaceBright }]}>
+                      {baseFallbackText ? (
+                        <Text style={[styles.thumbFallback, { color: Colors.onSurfaceVariant }]}>{baseFallbackText}</Text>
+                      ) : null}
                     </View>
                   )}
                 </View>
@@ -1740,6 +1754,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 8,
+  },
+  thumbFallback: {
+    fontSize: 16,
+    fontWeight: '700',
+    letterSpacing: 0.3,
   },
   baseName: {
     fontSize: 16,
