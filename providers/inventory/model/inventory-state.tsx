@@ -123,27 +123,12 @@ function applyDeltaToInventoryData(
   };
 }
 
-export function createInventoryStateFromData(data: InventoryData, imported: boolean): InventoryState {
-  return {
-    cocktails: normalizeSearchFields(data.cocktails) as Cocktail[],
-    ingredients: normalizeSearchFields(data.ingredients) as Ingredient[],
-    imported,
-  } satisfies InventoryState;
-}
-
-export function createInventoryStateFromSnapshot(
-  snapshot: InventorySnapshot<CocktailStorageRecord, IngredientStorageRecord>,
-  baseData?: InventoryData,
-): InventoryState {
-  if ('delta' in snapshot) {
-    const resolvedBaseData = baseData ?? loadInventoryData();
-    const mergedData = applyDeltaToInventoryData(resolvedBaseData, snapshot.delta);
-    return createInventoryStateFromData(mergedData, Boolean(snapshot.imported));
-  }
-
-  const resolvedBaseData = baseData ?? loadInventoryData();
+function backfillMissingIngredientStyleIds(
+  ingredients: readonly IngredientStorageRecord[],
+  baseData: InventoryData,
+): IngredientStorageRecord[] {
   const baseIngredientsById = new Map<number, IngredientStorageRecord>();
-  resolvedBaseData.ingredients.forEach((ingredient) => {
+  baseData.ingredients.forEach((ingredient) => {
     const id = Number(ingredient.id ?? -1);
     if (!Number.isFinite(id) || id < 0) {
       return;
@@ -152,7 +137,7 @@ export function createInventoryStateFromSnapshot(
     baseIngredientsById.set(Math.trunc(id), ingredient as IngredientStorageRecord);
   });
 
-  const mergedLegacyIngredients = snapshot.ingredients.map((ingredient) => {
+  return ingredients.map((ingredient) => {
     const id = Number(ingredient.id ?? -1);
     if (!Number.isFinite(id) || id < 0) {
       return ingredient;
@@ -168,6 +153,41 @@ export function createInventoryStateFromSnapshot(
       styleIngredientId: ingredient.styleIngredientId ?? baseIngredient.styleIngredientId,
     } satisfies IngredientStorageRecord;
   });
+}
+
+
+export function createInventoryStateFromData(data: InventoryData, imported: boolean): InventoryState {
+  return {
+    cocktails: normalizeSearchFields(data.cocktails) as Cocktail[],
+    ingredients: normalizeSearchFields(data.ingredients) as Ingredient[],
+    imported,
+  } satisfies InventoryState;
+}
+
+export function createInventoryStateFromSnapshot(
+  snapshot: InventorySnapshot<CocktailStorageRecord, IngredientStorageRecord>,
+  baseData?: InventoryData,
+): InventoryState {
+  const resolvedBaseData = baseData ?? loadInventoryData();
+
+  if ('delta' in snapshot) {
+    const mergedData = applyDeltaToInventoryData(resolvedBaseData, snapshot.delta);
+    return createInventoryStateFromData(
+      {
+        ...mergedData,
+        ingredients: backfillMissingIngredientStyleIds(
+          mergedData.ingredients as IngredientStorageRecord[],
+          resolvedBaseData,
+        ),
+      },
+      Boolean(snapshot.imported),
+    );
+  }
+
+  const mergedLegacyIngredients = backfillMissingIngredientStyleIds(
+    snapshot.ingredients,
+    resolvedBaseData,
+  );
 
   return {
     cocktails: normalizeSearchFields(snapshot.cocktails) as Cocktail[],
