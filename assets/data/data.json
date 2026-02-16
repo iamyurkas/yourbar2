@@ -8495,7 +8495,7 @@
           "order": 4,
           "ingredientId": 223,
           "name": "Lime Juice",
-          "amount": "25.5",
+          "amount": "22.5",
           "unitId": 11
         },
         {
@@ -18942,7 +18942,7 @@
       "name": "Michelada",
       "synonyms": ["Chelada"],
       "description": "Legend has it that the michelada was invented in the Mexican City san luis potosí, either by general don augusto michel in the 1920s or by a bar regular named michel esper in the 1970s. Many variations exist, with the amount of **lime juice**, sauces and juice can be varied according to taste.",
-      "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 355ml of **beer**, 30ml of **tomato juice**, 30ml of **lime juice**, 2 dashes of **Tabasco**, and 2 dashes of **worcestershire sauce**.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled highball glass.\n5. Garnish with a pinch of **salt**, a pinch of **chili powder**, and a **lime** wedge.",
+      "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 360ml of **beer**, 30ml of **tomato juice**, 30ml of **lime juice**, 2 dashes of **Tabasco**, and 2 dashes of **worcestershire sauce**.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled highball glass.\n5. Garnish with a pinch of **salt**, a pinch of **chili powder**, and a **lime** wedge.",
       "photoUri": "assets/cocktails/313-michelada.jpg",
       "glassId": "highball_glass",
       "methodIds": ["stir"],
@@ -32964,8 +32964,8 @@
         },
         {
           "order": 3,
-          "ingredientId": 214,
-          "name": "Lemon",
+          "ingredientId": 216,
+          "name": "Lemon Juice",
           "amount": "30",
           "unitId": 11
         },
