@@ -65,7 +65,7 @@ export const GLASSWARE: GlasswareOption[] = [
   },
   { id: "shooter", name: "Shooter", imageUri: glasswareUriById.shooter },
   { id: "snifter", name: "Snifter", imageUri: glasswareUriById.snifter },
-  { id: "tiki", name: "Tiki", imageUri: glasswareUriById.tiki },
+  { id: "tiki_glass", name: "Tiki glass", imageUri: glasswareUriById.tiki_glass },
   {
     id: "wine_glass",
     name: "Wine glass",

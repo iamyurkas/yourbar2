@@ -70,7 +70,7 @@ const GLASS_LABELS: Record<string, string> = {
   rocks_glass: "Rocks glass",
   shooter: "Shooter glass",
   snifter: "Snifter",
-  tiki: "Tiki mug",
+  tiki_glass: "Tiki glass",
   wine_glass: "Wine glass",
 };
 

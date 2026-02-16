@@ -27,7 +27,7 @@ const glasswareIdMap = [
   ["rocks_glass", "rocks.jpg"],
   ["shooter", "shooter.jpg"],
   ["snifter", "snifter.jpg"],
-  ["tiki", "tiki.jpg"],
+  ["tiki_glass", "tiki.jpg"],
   ["wine_glass", "wine.jpg"],
 ];
 
