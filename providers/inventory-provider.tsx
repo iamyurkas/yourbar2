@@ -1266,6 +1266,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           const garnish = ingredient.garnish ? true : undefined;
           const allowBase = ingredient.allowBaseSubstitution ? true : undefined;
           const allowBrand = ingredient.allowBrandSubstitution ? true : undefined;
+          const allowStyle = ingredient.allowStyleSubstitution ? true : undefined;
 
           const substituteInputs = ingredient.substitutes ?? [];
           const substitutes: CocktailSubstitute[] = [];
