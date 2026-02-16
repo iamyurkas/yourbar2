@@ -149,8 +149,17 @@ function collectVisibleIngredientIds(
       lookup.brandsByBaseId.get(ingredientId)?.forEach((id) => accumulator.add(id));
     }
 
-    if (allowStyle && styleBaseId != null) {
-      accumulator.add(styleBaseId);
+    if (allowStyle) {
+      if (styleBaseId != null) {
+        accumulator.add(styleBaseId);
+        lookup.stylesByBaseId.get(styleBaseId)?.forEach((id) => {
+          if (id !== ingredientId) {
+            accumulator.add(id);
+          }
+        });
+      } else {
+        lookup.stylesByBaseId.get(ingredientId)?.forEach((id) => accumulator.add(id));
+      }
     }
 
     return;
@@ -166,6 +175,11 @@ function collectVisibleIngredientIds(
 
   if (allowStyle && styleBaseId != null) {
     accumulator.add(styleBaseId);
+    lookup.stylesByBaseId.get(styleBaseId)?.forEach((id) => {
+      if (id !== ingredientId) {
+        accumulator.add(id);
+      }
+    });
   }
 }
 
@@ -238,10 +252,21 @@ export function resolveIngredientAvailability(
 
   const styleSubstituteSet = new Set<number>();
 
-  if (allowStyle) {
+  if (allowStyle && requestedId != null) {
     const styleBaseId = normalizeIngredientId(requestedIngredient?.styleIngredientId);
     if (styleBaseId != null) {
       styleSubstituteSet.add(styleBaseId);
+      lookup.stylesByBaseId.get(styleBaseId)?.forEach((id) => {
+        if (id !== requestedId) {
+          styleSubstituteSet.add(id);
+        }
+      });
+    } else {
+      lookup.stylesByBaseId.get(requestedId)?.forEach((id) => {
+        if (id !== requestedId) {
+          styleSubstituteSet.add(id);
+        }
+      });
     }
   }
 
@@ -271,6 +296,11 @@ export function resolveIngredientAvailability(
 
     if (allowStyle && candidateStyleBaseId != null) {
       addCandidate(candidateStyleBaseId);
+      lookup.stylesByBaseId.get(candidateStyleBaseId)?.forEach((id) => {
+        if (id !== candidateId) {
+          addCandidate(id);
+        }
+      });
     }
 
     if (candidateBaseId == null) {
