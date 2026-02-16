@@ -1786,8 +1786,10 @@ const styles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
-    padding: 24,
+    justifyContent: 'flex-start',
+    paddingTop: Platform.select({ ios: 72, default: 48 }),
+    paddingHorizontal: 24,
+    paddingBottom: 24,
     backgroundColor: 'rgba(0,0,0,0.4)',
   },
   modalCard: {
