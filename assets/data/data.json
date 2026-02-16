@@ -11527,7 +11527,7 @@
       "name": "Eskimo Slugger",
       "synonyms": ["Peppermint Patty"],
       "description": "A potent and refreshing dessert cocktail that strikes a perfect balance between the creamy sweetness of **Irish cream**, the purity of **vodka**, and the intense peppermint chill of **Rumple Minze**.",
-      "instructions": "1. Fill a shaker with **ice**.\n2. Add **Irish cream**, **vodka**, and **peppermint liqueur**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a rocks glass.",
+      "instructions": "1. Fill a shaker with **ice**.\n2. Add **Irish cream**, **vodka**, and **peppermint liqueur**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a martini glass.",
       "photoUri": "assets/cocktails/187-eskimo-slugger.jpg",
       "glassId": "martini",
       "methodIds": ["shake"],
@@ -12830,7 +12830,7 @@
         "Frozen Strawberry Rum Cocktail"
       ],
       "description": "A frozen-style cocktail for sharing, blending fresh strawberries, citrus, and light rum into a balanced, fruit-forward drink.",
-      "instructions": "1. Place the frozen strawberries and **sugar** into a high-speed blender.\n2. Pour in the **white rum**, **lemon juice**, and **lime juice**.\n3. Add the **ice** to the blender container.\n4. Blend on high speed until the mixture reaches a smooth, slushy consistency.\n5. Pour the punch into a chilled glasses.\n6. Garnish each glass with a fresh **strawberry**.",
+      "instructions": "1. Place the frozen strawberries and **sugar** into a high-speed blender.\n2. Pour in the **white rum**, **lemon juice**, and **lime juice**.\n3. Add the **ice** to the blender container.\n4. Blend on high speed until the mixture reaches a smooth, slushy consistency.\n5. Pour the punch into chilled glasses.\n6. Garnish each glass with a fresh **strawberry**.",
       "photoUri": "assets/cocktails/209-frozen-strawberry-daiquiri.jpg",
       "glassId": "martini",
       "methodIds": ["blend"],
