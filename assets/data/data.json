@@ -5072,7 +5072,7 @@
       "id": 82,
       "name": "Blue Jellyfish",
       "description": "A blue jellyfish is a visually striking, layered cocktail or shot designed to mimic the appearance of a jellyfish floating in the Ocean. Its signature look comes from adding droplets of **cream** to layered spirits, which then \"curdle\" slightly or sink to form white tendrils that resemble jellyfish tentacles.",
-      "instructions": "1. Pour 15ml of **blue curaçao** into a shooter glass.\n2. Slowly layer 15ml of **vodka** and 15ml of **sambuca** on top.\n3. Add 3ml of **Disaronno Velvet** (or **Irish cream**) a drop at a time for the jellyfish effect.",
+      "instructions": "1. Pour 15ml of **blue curaçao** into a shooter glass.\n2. Slowly layer 15ml of **vodka** and 15ml of **sambuca** on top.\n3. Add 3 drops of **Disaronno Velvet** (or **Irish cream**) a drop at a time for the jellyfish effect.",
       "photoUri": "assets/cocktails/82-blue-jellyfish.jpg",
       "glassId": "shooter",
       "methodIds": ["layer"],
@@ -10269,14 +10269,12 @@
     },
     {
       "id": 166,
-      "name": "Delta Sunset",
-      "synonyms": ["Orange Liqueur Lemon Stir"],
-      "description": "Delta sunset is a glorious, quite strong cocktail. Best served with farinaceous starchy dishes.",
-      "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 30ml of **Cointreau**, 30ml of **orange liqueur**, and 30ml of **lemon juice**.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled martini glass.",
-      "photoUri": "assets/cocktails/166-delta-sunset.jpg",
-      "glassId": "martini",
+      "name": "Monte Carlo",
+      "description": "An Old Fashioned-style variation with **rye whiskey** and **Benedictine**.",
+      "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 60ml of **rye Whiskey**, 7.5ml of **Benedictine**, and 2 dashes of **Angostura bitters**.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a rocks glass over fresh ice.",
+      "glassId": "rocks_glass",
       "methodIds": ["stir"],
-      "tags": [2, 5],
+      "tags": [3],
       "ingredients": [
         {
           "order": 1,
@@ -10287,25 +10285,31 @@
         },
         {
           "order": 2,
-          "ingredientId": 110,
-          "name": "Cointreau",
-          "amount": "30",
-          "unitId": 11,
-          "allowBaseSubstitution": true
+          "ingredientId": 300,
+          "name": "Rye Whiskey",
+          "amount": "60",
+          "unitId": 11
         },
         {
           "order": 3,
-          "ingredientId": 247,
-          "name": "Orange Liqueur",
-          "amount": "30",
+          "ingredientId": 42,
+          "name": "Benedictine",
+          "amount": "7.5",
           "unitId": 11
         },
         {
           "order": 4,
-          "ingredientId": 216,
-          "name": "Lemon Juice",
-          "amount": "30",
-          "unitId": 11
+          "ingredientId": 18,
+          "name": "Angostura Bitters",
+          "amount": "2",
+          "unitId": 6
+        },
+        {
+          "order": 1,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
         }
       ]
     },
@@ -10727,7 +10731,7 @@
       "name": "Don's Special Daiquiri",
       "synonyms": ["Passion Fruit Daiquiri"],
       "description": "A Tiki-style daiquiri with **grapefruit** and **honey** notes.",
-      "instructions": "1. Fill a shaker with **ice**.\n2. Add 30ml of **gold Jamaican rum**, 15ml of **Cuban rum**, 15ml of **passion fruit syrup**, 15ml of **lime juice**, and 15ml of **honey syrup**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled Tiki glass.\n5. Garnish with a half of **passion fruit**.",
+      "instructions": "1. Fill a shaker with **ice**.\n2. Add 30ml of **gold Jamaican rum**, 15ml of **Cuban rum**, 15ml of **passion fruit syrup**, 15ml of **lime juice**, and 15ml of **honey syrup**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled Tiki glass over fresh **ice**.\n5. Garnish with a half of **passion fruit**.",
       "photoUri": "assets/cocktails/174-don-s-special-daiquiri.jpg",
       "glassId": "tiki_glass",
       "methodIds": ["shake"],
@@ -10800,6 +10804,13 @@
         },
         {
           "order": 8,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
+        },
+        {
+          "order": 9,
           "ingredientId": 255,
           "name": "Passion Fruit",
           "amount": "1",
@@ -11179,7 +11190,7 @@
       "id": 181,
       "name": "El Presidente",
       "description": "A sophisticated and sleek Cuban classic that balances the crispness of **white rum** with the herbal notes of **dry vermouth** and the bright citrus of **orange curaçao**. Often called the 'aristocrat of cocktails,' it offers a smooth, ruby-tinted elegance perfect for slow sipping.",
-      "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 45ml of **white rum**, 30ml of **dry vermouth**, 15ml of **orange curaçao**, and 10ml of **grenadine**.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled cocktail glass.\n5. Express the oils from an **orange** peel over the drink and use it as a garnish.",
+      "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 45ml of **white rum**, 30ml of **dry vermouth**, 15ml of **orange curaçao**, and 10ml of **grenadine**.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled coupe glass.\n5. Express the oils from an **orange** peel over the drink and use it as a garnish.",
       "photoUri": "assets/cocktails/181-el-presidente.jpg",
       "glassId": "coupe",
       "methodIds": ["stir"],
@@ -11248,7 +11259,7 @@
       "name": "Electric Lemonade",
       "synonyms": ["Blue Lagoon with Lemonade"],
       "description": "There are a few variations and substitutions you can play around with. You could replace **lemon-lime soda** with club soda or **tonic** **water** for a less sweet version. You can also opt for a party punch recipe by scaling the ingredients in this electric **lemonade** recipe.",
-      "instructions": "1. Fill a shaker with **ice**.\n2. Add **vodka**, blue curacao, **lemon juice**, and **simple syrup**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Fill a high ball or collins glass, then strain in the cocktail.\n5. Top it off with **lemon-lime soda**.\n6. Stir gently to combine.\n7. Garnish with a **lemon** wedge.",
+      "instructions": "1. Fill a shaker with **ice**.\n2. Add **vodka**, blue curacao, **lemon juice**, and **simple syrup**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Straint into a highball glass over fresh **ice**.\n5. Top it off with **lemon-lime soda**.\n6. Stir gently to combine.\n7. Garnish with a **lemon** wedge.",
       "photoUri": "assets/cocktails/182-electric-lemonade.jpg",
       "glassId": "highball_glass",
       "methodIds": ["shake"],
@@ -11527,7 +11538,7 @@
       "name": "Eskimo Slugger",
       "synonyms": ["Peppermint Patty"],
       "description": "A potent and refreshing dessert cocktail that strikes a perfect balance between the creamy sweetness of **Irish cream**, the purity of **vodka**, and the intense peppermint chill of **Rumple Minze**.",
-      "instructions": "1. Fill a shaker with **ice**.\n2. Add **Irish cream**, **vodka**, and **peppermint liqueur**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a martini glass.",
+      "instructions": "1. Fill a shaker with **ice**.\n2. Add **Irish cream**, **vodka**, and **peppermint liqueur**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled martini glass.",
       "photoUri": "assets/cocktails/187-eskimo-slugger.jpg",
       "glassId": "martini",
       "methodIds": ["shake"],
@@ -11631,7 +11642,7 @@
       "name": "Fergroni",
       "synonyms": ["Negroni with Punt e Mes and Strucchi Bitter"],
       "description": "A sophisticated, spirit-forward twist on the classic Negroni. This cocktail elegantly balances the botanical notes of **gin** with the dark, bittersweet complexity of **Punt e Mes** and the herbal depth of **strucchi bitter**, resulting in a rich and aromatic sipping experience.",
-      "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 50ml of **gin**, 30ml of **Punt e Mes**, 20ml of **strucchi bitter**, and a **lemon** peel.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled rocks glass.",
+      "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 50ml of **gin**, 30ml of **Punt e Mes**, 20ml of **strucchi bitter**, and a **lemon** peel.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled rocks glass over fresh **ice** (preferably large ice cubes).\n5. Garnish with a **lemon** twist.",
       "photoUri": "assets/cocktails/189-fergroni.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["stir"],
@@ -11676,7 +11687,8 @@
           "ingredientId": 214,
           "name": "Lemon",
           "amount": "1",
-          "unitId": 14
+          "unitId": 14,
+          "garnish": true
         }
       ]
     },
@@ -23072,7 +23084,7 @@
       "id": 380,
       "name": "Rome is Burning",
       "description": "A sophisticated and bold sparkling cocktail that balances the depth of **Cognac** and bitter vermouth with a touch of pomegranate and effervescent **prosecco**.",
-      "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 45ml of **Cognac**, 22.5ml of **Punt e Mes**, 5ml of **grenadine**, 3ml of **creole bitters**, and 45ml of **prosecco**.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled coupe glass.\n5. Garnish with a **maraschino cherry**.",
+      "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 45ml of **Cognac**, 22.5ml of **Punt e Mes**, 5ml of **grenadine**, 3 dashes of **creole bitters**, and 45ml of **prosecco**.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled coupe glass.\n5. Garnish with a **maraschino cherry**.",
       "photoUri": "assets/cocktails/380-rome-is-burning.jpg",
       "glassId": "coupe",
       "methodIds": ["stir"],
@@ -23117,7 +23129,7 @@
           "ingredientId": 127,
           "name": "Creole Bitters",
           "amount": "3",
-          "unitId": 11
+          "unitId": 6
         },
         {
           "order": 6,
@@ -36192,6 +36204,314 @@
           "amount": "1",
           "unitId": 26,
           "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 594,
+      "name": "Toronto",
+      "description": "A **whiskey**-forward stirred cocktail with herbal bitterness and subtle sweetness.",
+      "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 60ml of **rye whiskey**, 7.5ml of **Fernet Branca**, 7.5ml of **simple syrup**, and 2 dashes of **Angostura bitters**.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled coupe glass.",
+      "glassId": "coupe",
+      "methodIds": ["stir"],
+      "tags": [3],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8
+        },
+        {
+          "order": 2,
+          "ingredientId": 300,
+          "name": "Rye Whiskey",
+          "amount": "60",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 153,
+          "name": "Fernet Branca",
+          "amount": "7.5",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 309,
+          "name": "Simple Syrup",
+          "amount": "7.5",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 18,
+          "name": "Angostura Bitters",
+          "amount": "2",
+          "unitId": 6
+        }
+      ]
+    },
+    {
+      "id": 595,
+      "name": "Left Hand",
+      "description": "A rich, bittersweet bourbon cocktail inspired by the **Negroni** structure.",
+      "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 45ml of **bourbon**, 22.5ml of **Campari**, 22.5ml of **red vermouth**, and 2 dashes of **chocolate bitters**.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled coupe glass.",
+      "glassId": "coupe",
+      "methodIds": ["stir"],
+      "tags": [3],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8
+        },
+        {
+          "order": 2,
+          "ingredientId": 63,
+          "name": "Bourbon",
+          "amount": "45",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 72,
+          "name": "Campari",
+          "amount": "22.5",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 289,
+          "name": "Red Vermouth",
+          "amount": "22.5",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 90,
+          "name": "Chocolate Bitters",
+          "amount": "2",
+          "unitId": 6
+        }
+      ]
+    },
+    {
+      "id": 596,
+      "name": "Preakness",
+      "description": "A spirit-forward **rye**/**bourbon**-era style drink with herbal complexity.",
+      "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 45ml of **bourbon**, 22.5ml of **Benedictine**, 22.5ml of **red vermouth**, and 2 dashes of **Angostura bitters**.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled coupe glass.",
+      "glassId": "coupe",
+      "methodIds": ["stir"],
+      "tags": [3],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8
+        },
+        {
+          "order": 2,
+          "ingredientId": 63,
+          "name": "Bourbon",
+          "amount": "45",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 42,
+          "name": "Benedictine",
+          "amount": "22.5",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 289,
+          "name": "Red Vermouth",
+          "amount": "22.5",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 18,
+          "name": "Angostura Bitters",
+          "amount": "2",
+          "unitId": 6
+        }
+      ]
+    },
+    {
+      "id": 597,
+      "name": "Mexican Firing Squad",
+      "description": "A **tequila sour** with **grenadine** and **bitters**, bright and balanced.",
+      "instructions": "1. Fill a shaker with **ice**.\n2. Add 60ml of **Tequila blanco**, 22.5ml of **lime juice**, 15ml of **grenadine**, and 2 dashes of **Angostura bitters**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a rocks glass over fresh **ice** (preferably over a large cube).",
+      "glassId": "rocks_glass",
+      "methodIds": ["shake"],
+      "tags": [5],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8
+        },
+        {
+          "order": 2,
+          "ingredientId": 327,
+          "name": "Tequila Blanco",
+          "amount": "60",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 223,
+          "name": "Lime Juice",
+          "amount": "22.5",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 181,
+          "name": "Grenadine",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 18,
+          "name": "Angostura Bitters",
+          "amount": "2",
+          "unitId": 6
+        }
+      ]
+    },
+    {
+      "id": 598,
+      "name": "Chrysanthemum",
+      "description": "A delicate aromatic aperitif with vermouth, Benedictine, and a touch of absinthe.",
+      "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 30ml of **dry vermouth**, 10ml of **Benedictine**, and a drop of **Absinthe**.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled coupe glass.",
+      "glassId": "coupe",
+      "methodIds": ["stir"],
+      "tags": [3],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8
+        },
+        {
+          "order": 2,
+          "ingredientId": 142,
+          "name": "Dry Vermouth",
+          "amount": "60",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 42,
+          "name": "Benedictine",
+          "amount": "10",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 2,
+          "name": "Absinthe",
+          "amount": "1",
+          "unitId": 6
+        }
+      ]
+    },
+    {
+      "id": 599,
+      "name": "Revolver",
+      "description": "A modern bourbon cocktail accented by **coffee liqueur** and **orange bitters**.",
+      "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 60ml of **bourbon**, 15ml of **coffee liqueur**, and 2 dashes of **orange bitters**.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled coupe glass.",
+      "glassId": "coupe",
+      "methodIds": ["stir"],
+      "tags": [3],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8
+        },
+        {
+          "order": 2,
+          "ingredientId": 63,
+          "name": "Bourbon",
+          "amount": "60",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 108,
+          "name": "Coffee Liqueur",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 243,
+          "name": "Orange Bitters",
+          "amount": "2",
+          "unitId": 6
+        }
+      ]
+    },
+    {
+      "id": 600,
+      "name": "Briar Patch",
+      "description": "A fruity **bourbon sour** riff with **blackberry** depth and **citrus** brightness.",
+      "instructions": "1. Fill a shaker with **ice**.\n2. Add 60ml of **bourbon**, 22.5ml of **lemon juice**, 15ml of **simple syrup**, and 15ml of **blackberry liqueur**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a rocks glass over fresh **ice** (preferably over a large cube).",
+      "glassId": "rocks_glass",
+      "methodIds": ["shake"],
+      "tags": [5],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8
+        },
+        {
+          "order": 2,
+          "ingredientId": 63,
+          "name": "Bourbon",
+          "amount": "60",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 216,
+          "name": "Lemon Juice",
+          "amount": "22.5",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 309,
+          "name": "Simple Syrup",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 54,
+          "name": "Blackberry Liqueur",
+          "amount": "15",
+          "unitId": 11
         }
       ]
     }
