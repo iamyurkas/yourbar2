@@ -257,6 +257,7 @@ export default function CreateCocktailScreen() {
       ingredientName: ingredientNameParam,
       cocktailId: cocktailParam,
       cocktailName: cocktailNameParam,
+      openInstanceId: openInstanceIdParam,
     };
     const json = JSON.stringify(payload);
     return json === "{}" ? undefined : json;
@@ -266,6 +267,7 @@ export default function CreateCocktailScreen() {
     ingredientNameParam,
     ingredientParam,
     modeParam,
+    openInstanceIdParam,
     sourceParam,
   ]);
   const returnToPath = useMemo(() => {
