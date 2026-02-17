@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
-import { StackActions, useFocusEffect, useNavigation } from "@react-navigation/native";
+import { StackActions, type NavigationAction, useFocusEffect, useNavigation } from "@react-navigation/native";
 import { Image } from "expo-image";
 import * as ImagePicker from "expo-image-picker";
 import { Stack, router, useLocalSearchParams } from "expo-router";
@@ -50,7 +50,7 @@ import { useAppColors } from "@/constants/theme";
 import {
   buildReturnToParams,
   parseReturnToParams,
-  returnToSourceOrBack,
+  skipDuplicateBack,
 } from "@/libs/navigation";
 import { shouldStorePhoto, storePhoto } from "@/libs/photo-storage";
 import { normalizeSearchText } from "@/libs/search-normalization";
@@ -239,7 +239,7 @@ export default function CreateCocktailScreen() {
     useImperialUnits,
   } = useInventory();
   const params = useLocalSearchParams();
-  const { setHasUnsavedChanges, setSaveHandler } = useUnsavedChanges();
+  const { setHasUnsavedChanges, setRequireLeaveConfirmation, setSaveHandler } = useUnsavedChanges();
 
   const modeParam = getParamValue(params.mode);
   const isEditMode = modeParam === "edit";
@@ -435,6 +435,13 @@ export default function CreateCocktailScreen() {
     setHasUnsavedChanges(hasUnsavedChanges || shouldConfirmOnLeave);
   }, [hasUnsavedChanges, setHasUnsavedChanges, shouldConfirmOnLeave]);
 
+  useEffect(() => {
+    setRequireLeaveConfirmation(shouldConfirmOnLeave);
+    return () => {
+      setRequireLeaveConfirmation(false);
+    };
+  }, [setRequireLeaveConfirmation, shouldConfirmOnLeave]);
+
   useFocusEffect(
     useCallback(() => {
       setHasUnsavedChanges(hasUnsavedChanges || shouldConfirmOnLeave);
@@ -444,7 +451,10 @@ export default function CreateCocktailScreen() {
     }, [hasUnsavedChanges, setHasUnsavedChanges, shouldConfirmOnLeave]),
   );
 
-  useEffect(() => () => setHasUnsavedChanges(false), [setHasUnsavedChanges]);
+  useEffect(() => () => {
+    setHasUnsavedChanges(false);
+    setRequireLeaveConfirmation(false);
+  }, [setHasUnsavedChanges, setRequireLeaveConfirmation]);
 
   const getBaseGroupId = useCallback(
     (rawId: number | string | null | undefined) => {
@@ -1188,13 +1198,8 @@ export default function CreateCocktailScreen() {
       setHasUnsavedChanges(false);
       isNavigatingAfterSaveRef.current = true;
       const targetId = persisted.id ?? persisted.name;
-      if (isEditMode && navigation.canGoBack()) {
-        navigation.goBack();
-        return;
-      }
-
       if (returnToPath) {
-        router.navigate({ pathname: returnToPath, params: returnToParams });
+        router.replace({ pathname: returnToPath, params: returnToParams });
         return;
       }
 
@@ -1345,6 +1350,32 @@ export default function CreateCocktailScreen() {
   }, [handleSubmit, setSaveHandler]);
 
   useEffect(() => {
+    const isBackAction = (action: NavigationAction) =>
+      action.type === "GO_BACK" || action.type === "POP";
+
+    const leaveBack = () => {
+      if (returnToPath) {
+        router.replace({ pathname: returnToPath, params: returnToParams });
+        return;
+      }
+
+      skipDuplicateBack(navigation);
+    };
+
+    const leaveScreen = (action?: NavigationAction) => {
+      if (isBackAction(action ?? { type: "GO_BACK" })) {
+        leaveBack();
+        return;
+      }
+
+      if (returnToPath) {
+        router.replace({ pathname: returnToPath, params: returnToParams });
+        return;
+      }
+
+      router.replace("/cocktails");
+    };
+
     const unsubscribe = navigation.addListener("beforeRemove", (event) => {
       if (isNavigatingAfterSaveRef.current || isHandlingBackRef.current) {
         return;
@@ -1354,11 +1385,7 @@ export default function CreateCocktailScreen() {
         event.preventDefault();
         confirmLeave(() => {
           isHandlingBackRef.current = true;
-          if (event.data.action.type === "GO_BACK") {
-            returnToSourceOrBack(navigation, { returnToPath, returnToParams });
-          } else {
-            navigation.dispatch(event.data.action);
-          }
+          leaveScreen(event.data.action);
           setTimeout(() => {
             isHandlingBackRef.current = false;
           }, 0);
@@ -1366,10 +1393,10 @@ export default function CreateCocktailScreen() {
         return;
       }
 
-      if (event.data.action.type === "GO_BACK") {
+      if (isBackAction(event.data.action)) {
         event.preventDefault();
         isHandlingBackRef.current = true;
-        returnToSourceOrBack(navigation, { returnToPath, returnToParams });
+        leaveScreen(event.data.action);
         setTimeout(() => {
           isHandlingBackRef.current = false;
         }, 0);

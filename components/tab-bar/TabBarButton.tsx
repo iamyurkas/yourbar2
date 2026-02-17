@@ -10,14 +10,21 @@ type TabBarButtonProps = BottomTabBarButtonProps & {
 };
 
 export function TabBarButton({ onOpenDialog, ...props }: TabBarButtonProps) {
-  const { hasUnsavedChanges, saveHandler, setHasUnsavedChanges } = useUnsavedChanges();
+  const {
+    hasUnsavedChanges,
+    requireLeaveConfirmation,
+    saveHandler,
+    setHasUnsavedChanges,
+    setRequireLeaveConfirmation,
+  } = useUnsavedChanges();
   const handlePress = useCallback(() => {
     const proceed = () => {
       setHasUnsavedChanges(false);
+      setRequireLeaveConfirmation(false);
       props.onPress?.();
     };
 
-    if (hasUnsavedChanges) {
+    if (hasUnsavedChanges || requireLeaveConfirmation) {
       onOpenDialog({
         title: 'Leave without saving?',
         message: 'Your changes will be lost if you leave this screen.',
@@ -35,8 +42,10 @@ export function TabBarButton({ onOpenDialog, ...props }: TabBarButtonProps) {
     hasUnsavedChanges,
     onOpenDialog,
     props,
+    requireLeaveConfirmation,
     saveHandler,
     setHasUnsavedChanges,
+    setRequireLeaveConfirmation,
   ]);
 
   return <HapticTab {...props} onPress={handlePress} />;
