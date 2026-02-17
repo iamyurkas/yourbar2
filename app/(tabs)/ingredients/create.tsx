@@ -140,7 +140,7 @@ export default function IngredientFormScreen() {
     customIngredientTags,
     createCustomIngredientTag,
   } = useInventory();
-  const { setHasUnsavedChanges, setSaveHandler } = useUnsavedChanges();
+  const { setHasUnsavedChanges, setRequireLeaveConfirmation, setSaveHandler } = useUnsavedChanges();
   const isNavigatingAfterSaveRef = useRef(false);
 
   const ingredient = useResolvedIngredient(ingredientParam, ingredients);
@@ -266,7 +266,17 @@ export default function IngredientFormScreen() {
     setHasUnsavedChanges(hasUnsavedChanges || shouldConfirmOnLeave);
   }, [hasUnsavedChanges, setHasUnsavedChanges, shouldConfirmOnLeave]);
 
-  useEffect(() => () => setHasUnsavedChanges(false), [setHasUnsavedChanges]);
+  useEffect(() => {
+    setRequireLeaveConfirmation(shouldConfirmOnLeave);
+    return () => {
+      setRequireLeaveConfirmation(false);
+    };
+  }, [setRequireLeaveConfirmation, shouldConfirmOnLeave]);
+
+  useEffect(() => () => {
+    setHasUnsavedChanges(false);
+    setRequireLeaveConfirmation(false);
+  }, [setHasUnsavedChanges, setRequireLeaveConfirmation]);
 
   const imageSource = useMemo(() => {
     if (isEditMode) {

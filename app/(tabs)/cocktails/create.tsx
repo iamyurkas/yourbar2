@@ -239,7 +239,7 @@ export default function CreateCocktailScreen() {
     useImperialUnits,
   } = useInventory();
   const params = useLocalSearchParams();
-  const { setHasUnsavedChanges, setSaveHandler } = useUnsavedChanges();
+  const { setHasUnsavedChanges, setRequireLeaveConfirmation, setSaveHandler } = useUnsavedChanges();
 
   const modeParam = getParamValue(params.mode);
   const isEditMode = modeParam === "edit";
@@ -435,6 +435,13 @@ export default function CreateCocktailScreen() {
     setHasUnsavedChanges(hasUnsavedChanges || shouldConfirmOnLeave);
   }, [hasUnsavedChanges, setHasUnsavedChanges, shouldConfirmOnLeave]);
 
+  useEffect(() => {
+    setRequireLeaveConfirmation(shouldConfirmOnLeave);
+    return () => {
+      setRequireLeaveConfirmation(false);
+    };
+  }, [setRequireLeaveConfirmation, shouldConfirmOnLeave]);
+
   useFocusEffect(
     useCallback(() => {
       setHasUnsavedChanges(hasUnsavedChanges || shouldConfirmOnLeave);
@@ -444,7 +451,10 @@ export default function CreateCocktailScreen() {
     }, [hasUnsavedChanges, setHasUnsavedChanges, shouldConfirmOnLeave]),
   );
 
-  useEffect(() => () => setHasUnsavedChanges(false), [setHasUnsavedChanges]);
+  useEffect(() => () => {
+    setHasUnsavedChanges(false);
+    setRequireLeaveConfirmation(false);
+  }, [setHasUnsavedChanges, setRequireLeaveConfirmation]);
 
   const getBaseGroupId = useCallback(
     (rawId: number | string | null | undefined) => {
