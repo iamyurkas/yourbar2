@@ -51,6 +51,7 @@ import {
   buildReturnToParams,
   parseReturnToParams,
   returnToSourceOrBack,
+  skipDuplicateBack,
 } from "@/libs/navigation";
 import { shouldStorePhoto, storePhoto } from "@/libs/photo-storage";
 import { normalizeSearchText } from "@/libs/search-normalization";
@@ -1189,12 +1190,12 @@ export default function CreateCocktailScreen() {
       isNavigatingAfterSaveRef.current = true;
       const targetId = persisted.id ?? persisted.name;
       if (isEditMode && navigation.canGoBack()) {
-        navigation.goBack();
+        skipDuplicateBack(navigation);
         return;
       }
 
       if (returnToPath) {
-        router.navigate({ pathname: returnToPath, params: returnToParams });
+        router.replace({ pathname: returnToPath, params: returnToParams });
         return;
       }
 
@@ -1291,7 +1292,7 @@ export default function CreateCocktailScreen() {
               return;
             }
             if (returnToPath) {
-              router.navigate({ pathname: returnToPath, params: returnToParams });
+              router.replace({ pathname: returnToPath, params: returnToParams });
               return;
             }
             if (navigation.canGoBack()) {
@@ -1350,12 +1351,19 @@ export default function CreateCocktailScreen() {
         return;
       }
 
+      const isBackAction =
+        event.data.action.type === "GO_BACK" || event.data.action.type === "POP";
+
       if (hasUnsavedChanges || shouldConfirmOnLeave) {
         event.preventDefault();
         confirmLeave(() => {
           isHandlingBackRef.current = true;
-          if (event.data.action.type === "GO_BACK") {
-            returnToSourceOrBack(navigation, { returnToPath, returnToParams });
+          if (isBackAction) {
+            returnToSourceOrBack(navigation, {
+              returnToPath,
+              returnToParams,
+              replaceIfReturnToPath: true,
+            });
           } else {
             navigation.dispatch(event.data.action);
           }
@@ -1366,10 +1374,14 @@ export default function CreateCocktailScreen() {
         return;
       }
 
-      if (event.data.action.type === "GO_BACK") {
+      if (isBackAction) {
         event.preventDefault();
         isHandlingBackRef.current = true;
-        returnToSourceOrBack(navigation, { returnToPath, returnToParams });
+        returnToSourceOrBack(navigation, {
+          returnToPath,
+          returnToParams,
+          replaceIfReturnToPath: true,
+        });
         setTimeout(() => {
           isHandlingBackRef.current = false;
         }, 0);
@@ -1387,7 +1399,7 @@ export default function CreateCocktailScreen() {
   ]);
 
   const handleGoBack = useCallback(() => {
-    navigation.goBack();
+    skipDuplicateBack(navigation);
   }, [navigation]);
 
   const imageSource = useMemo(() => {

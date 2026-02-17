@@ -124,8 +124,8 @@ export default function IngredientFormScreen() {
     }
   }, [returnToParamsParam]);
   const shouldConfirmOnLeave = useMemo(
-    () => !isEditMode && returnToPath === '/cocktails/create',
-    [isEditMode, returnToPath],
+    () => returnToPath === '/cocktails/create',
+    [returnToPath],
   );
 
   const navigation = useNavigation();
@@ -530,7 +530,7 @@ export default function IngredientFormScreen() {
     }
 
     if (returnToPath) {
-      router.navigate({ pathname: returnToPath, params: returnToParams });
+      router.replace({ pathname: returnToPath, params: returnToParams });
       return;
     }
 
@@ -602,7 +602,11 @@ export default function IngredientFormScreen() {
         confirmLeave(() => {
           isHandlingBackRef.current = true;
           if (isBackAction) {
-            returnToSourceOrBack(navigation, { returnToPath, returnToParams });
+            returnToSourceOrBack(navigation, {
+              returnToPath,
+              returnToParams,
+              replaceIfReturnToPath: true,
+            });
           } else {
             navigation.dispatch(event.data.action);
           }
@@ -616,7 +620,11 @@ export default function IngredientFormScreen() {
       if (isBackAction) {
         event.preventDefault();
         isHandlingBackRef.current = true;
-        returnToSourceOrBack(navigation, { returnToPath, returnToParams });
+        returnToSourceOrBack(navigation, {
+          returnToPath,
+          returnToParams,
+          replaceIfReturnToPath: true,
+        });
         setTimeout(() => {
           isHandlingBackRef.current = false;
         }, 0);
@@ -634,7 +642,11 @@ export default function IngredientFormScreen() {
     if (hasUnsavedChanges || shouldConfirmOnLeave) {
       confirmLeave(() => {
         isHandlingBackRef.current = true;
-        returnToSourceOrBack(navigation, { returnToPath, returnToParams });
+        returnToSourceOrBack(navigation, {
+          returnToPath,
+          returnToParams,
+          replaceIfReturnToPath: true,
+        });
         setTimeout(() => {
           isHandlingBackRef.current = false;
         }, 0);
@@ -642,7 +654,11 @@ export default function IngredientFormScreen() {
       return;
     }
 
-    returnToSourceOrBack(navigation, { returnToPath, returnToParams });
+    returnToSourceOrBack(navigation, {
+      returnToPath,
+      returnToParams,
+      replaceIfReturnToPath: true,
+    });
   }, [
     confirmLeave,
     hasUnsavedChanges,
@@ -698,7 +714,7 @@ export default function IngredientFormScreen() {
               return;
             }
             if (returnToPath) {
-              router.navigate({ pathname: returnToPath, params: returnToParams });
+              router.replace({ pathname: returnToPath, params: returnToParams });
               return;
             }
             if (navigation.canGoBack()) {

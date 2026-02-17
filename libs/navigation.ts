@@ -124,13 +124,19 @@ export const returnToSourceOrBack = (
   {
     returnToPath,
     returnToParams,
+    replaceIfReturnToPath,
   }: {
     returnToPath?: string;
     returnToParams?: ReturnToParams;
+    replaceIfReturnToPath?: boolean;
   },
 ) => {
   if (returnToPath) {
-    router.navigate({ pathname: returnToPath, params: returnToParams });
+    if (replaceIfReturnToPath) {
+      router.replace({ pathname: returnToPath, params: returnToParams });
+    } else {
+      router.navigate({ pathname: returnToPath, params: returnToParams });
+    }
     return;
   }
 
