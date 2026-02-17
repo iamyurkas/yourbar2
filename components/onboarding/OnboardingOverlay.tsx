@@ -80,8 +80,15 @@ export function OnboardingOverlay() {
   const pathname = usePathname();
   const { height: screenHeight, width: screenWidth } = useWindowDimensions();
   const [overlayOffset, setOverlayOffset] = React.useState({ x: 0, y: 0 });
+  const [isDismissing, setIsDismissing] = React.useState(false);
   const overlayRef = React.useRef<View>(null);
   const lastEnteredStepRef = React.useRef<number | null>(null);
+
+  React.useEffect(() => {
+    if (!onboardingCompleted && onboardingStep > 0) {
+      setIsDismissing(false);
+    }
+  }, [onboardingCompleted, onboardingStep]);
 
   const handleLayout = () => {
     overlayRef.current?.measureInWindow((x, y) => {
@@ -229,7 +236,7 @@ export function OnboardingOverlay() {
     currentStep.onEnter(inventory, requestTabChange);
   }, [onboardingStep, onboardingCompleted, currentStep, inventory, requestTabChange]);
 
-  if (onboardingCompleted || !onboardingStep || onboardingStep <= 0 || !currentStep) return null;
+  if (isDismissing || onboardingCompleted || !onboardingStep || onboardingStep <= 0 || !currentStep) return null;
 
   const anchor = currentStep.anchorName ? anchors[currentStep.anchorName] : null;
   const isTabPrompt = ['tab-ingredients', 'tab-cocktails', 'tab-shaker'].includes(
@@ -254,6 +261,7 @@ export function OnboardingOverlay() {
     }
 
     if (onboardingStep >= steps[steps.length - 1].id) {
+      setIsDismissing(true);
       completeOnboarding();
     } else {
       // Find the next step in the array (skipping gaps if any)
@@ -261,12 +269,14 @@ export function OnboardingOverlay() {
       if (currentIndex >= 0 && currentIndex < steps.length - 1) {
         setOnboardingStep(steps[currentIndex + 1].id);
       } else {
+        setIsDismissing(true);
         completeOnboarding();
       }
     }
   };
 
   const handleSkip = () => {
+    setIsDismissing(true);
     completeOnboarding();
   };
 
