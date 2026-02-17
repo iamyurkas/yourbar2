@@ -598,6 +598,11 @@ export default function IngredientFormScreen() {
     const isBackAction = (action: NavigationAction) => action.type === 'GO_BACK' || action.type === 'POP';
 
     const leaveBack = () => {
+      if (returnToPath === '/cocktails/create' && navigation.canGoBack()) {
+        skipDuplicateBack(navigation);
+        return;
+      }
+
       if (returnToPath) {
         router.replace({ pathname: returnToPath, params: returnToParams });
         return;
