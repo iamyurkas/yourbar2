@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
-import { StackActions, useNavigation } from '@react-navigation/native';
+import { StackActions, type NavigationAction, useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -28,7 +28,7 @@ import { TagPill } from '@/components/TagPill';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { useAppColors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
-import { buildReturnToParams, returnToSourceOrBack, skipDuplicateBack } from '@/libs/navigation';
+import { buildReturnToParams, skipDuplicateBack } from '@/libs/navigation';
 import { shouldStorePhoto, storePhoto } from '@/libs/photo-storage';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
@@ -140,7 +140,7 @@ export default function IngredientFormScreen() {
     customIngredientTags,
     createCustomIngredientTag,
   } = useInventory();
-  const { setHasUnsavedChanges, setSaveHandler } = useUnsavedChanges();
+  const { setHasUnsavedChanges, setRequireLeaveConfirmation, setSaveHandler } = useUnsavedChanges();
   const isNavigatingAfterSaveRef = useRef(false);
 
   const ingredient = useResolvedIngredient(ingredientParam, ingredients);
@@ -266,7 +266,17 @@ export default function IngredientFormScreen() {
     setHasUnsavedChanges(hasUnsavedChanges || shouldConfirmOnLeave);
   }, [hasUnsavedChanges, setHasUnsavedChanges, shouldConfirmOnLeave]);
 
-  useEffect(() => () => setHasUnsavedChanges(false), [setHasUnsavedChanges]);
+  useEffect(() => {
+    setRequireLeaveConfirmation(shouldConfirmOnLeave);
+    return () => {
+      setRequireLeaveConfirmation(false);
+    };
+  }, [setRequireLeaveConfirmation, shouldConfirmOnLeave]);
+
+  useEffect(() => () => {
+    setHasUnsavedChanges(false);
+    setRequireLeaveConfirmation(false);
+  }, [setHasUnsavedChanges, setRequireLeaveConfirmation]);
 
   const imageSource = useMemo(() => {
     if (isEditMode) {
@@ -457,11 +467,6 @@ export default function IngredientFormScreen() {
 
         setHasUnsavedChanges(false);
         isNavigatingAfterSaveRef.current = true;
-        if (navigation.canGoBack()) {
-          navigation.goBack();
-          return;
-        }
-
         router.replace({
           pathname: '/ingredients/[ingredientId]',
           params: {
@@ -530,7 +535,7 @@ export default function IngredientFormScreen() {
     }
 
     if (returnToPath) {
-      router.navigate({ pathname: returnToPath, params: returnToParams });
+      router.replace({ pathname: returnToPath, params: returnToParams });
       return;
     }
 
@@ -590,22 +595,42 @@ export default function IngredientFormScreen() {
   }, [handleSubmit, setSaveHandler]);
 
   useEffect(() => {
+    const isBackAction = (action: NavigationAction) => action.type === 'GO_BACK' || action.type === 'POP';
+
+    const leaveBack = () => {
+      if (returnToPath) {
+        router.replace({ pathname: returnToPath, params: returnToParams });
+        return;
+      }
+
+      skipDuplicateBack(navigation);
+    };
+
+    const leaveScreen = (action?: NavigationAction) => {
+      if (isBackAction(action ?? { type: 'GO_BACK' })) {
+        leaveBack();
+        return;
+      }
+
+      if (returnToPath) {
+        router.replace({ pathname: returnToPath, params: returnToParams });
+        return;
+      }
+
+      router.replace('/ingredients');
+    };
+
     const unsubscribe = navigation.addListener('beforeRemove', (event) => {
       if (isNavigatingAfterSaveRef.current || isHandlingBackRef.current) {
         return;
       }
-
-      const isBackAction = event.data.action.type === 'GO_BACK' || event.data.action.type === 'POP';
+      const backAction = isBackAction(event.data.action);
 
       if (hasUnsavedChanges || shouldConfirmOnLeave) {
         event.preventDefault();
         confirmLeave(() => {
           isHandlingBackRef.current = true;
-          if (isBackAction) {
-            returnToSourceOrBack(navigation, { returnToPath, returnToParams });
-          } else {
-            navigation.dispatch(event.data.action);
-          }
+          leaveScreen(event.data.action);
           setTimeout(() => {
             isHandlingBackRef.current = false;
           }, 0);
@@ -613,10 +638,10 @@ export default function IngredientFormScreen() {
         return;
       }
 
-      if (isBackAction) {
+      if (backAction) {
         event.preventDefault();
         isHandlingBackRef.current = true;
-        returnToSourceOrBack(navigation, { returnToPath, returnToParams });
+        leaveScreen(event.data.action);
         setTimeout(() => {
           isHandlingBackRef.current = false;
         }, 0);
@@ -627,30 +652,8 @@ export default function IngredientFormScreen() {
   }, [confirmLeave, hasUnsavedChanges, navigation, returnToParams, returnToPath, shouldConfirmOnLeave]);
 
   const handleGoBack = useCallback(() => {
-    if (isNavigatingAfterSaveRef.current || isHandlingBackRef.current) {
-      return;
-    }
-
-    if (hasUnsavedChanges || shouldConfirmOnLeave) {
-      confirmLeave(() => {
-        isHandlingBackRef.current = true;
-        returnToSourceOrBack(navigation, { returnToPath, returnToParams });
-        setTimeout(() => {
-          isHandlingBackRef.current = false;
-        }, 0);
-      });
-      return;
-    }
-
-    returnToSourceOrBack(navigation, { returnToPath, returnToParams });
-  }, [
-    confirmLeave,
-    hasUnsavedChanges,
-    navigation,
-    returnToParams,
-    returnToPath,
-    shouldConfirmOnLeave,
-  ]);
+    navigation.goBack();
+  }, [navigation]);
 
   const handleDeletePress = useCallback(() => {
     if (!isEditMode) {
