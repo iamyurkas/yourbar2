@@ -599,7 +599,7 @@ export default function IngredientFormScreen() {
 
     const leaveBack = () => {
       if (returnToPath === '/cocktails/create' && navigation.canGoBack()) {
-        skipDuplicateBack(navigation);
+        navigation.goBack();
         return;
       }
 
