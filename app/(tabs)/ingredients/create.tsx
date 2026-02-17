@@ -28,7 +28,7 @@ import { TagPill } from '@/components/TagPill';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { useAppColors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
-import { buildReturnToParams, returnToSourceOrBack, skipDuplicateBack } from '@/libs/navigation';
+import { buildReturnToParams, skipDuplicateBack } from '@/libs/navigation';
 import { shouldStorePhoto, storePhoto } from '@/libs/photo-storage';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
@@ -587,9 +587,18 @@ export default function IngredientFormScreen() {
   useEffect(() => {
     const isBackAction = (action: NavigationAction) => action.type === 'GO_BACK' || action.type === 'POP';
 
+    const leaveBack = () => {
+      if (returnToPath) {
+        router.replace({ pathname: returnToPath, params: returnToParams });
+        return;
+      }
+
+      skipDuplicateBack(navigation);
+    };
+
     const leaveScreen = (action?: NavigationAction) => {
       if (isBackAction(action ?? { type: 'GO_BACK' })) {
-        returnToSourceOrBack(navigation, { returnToPath, returnToParams });
+        leaveBack();
         return;
       }
 
@@ -643,7 +652,7 @@ export default function IngredientFormScreen() {
         if (returnToPath) {
           router.replace({ pathname: returnToPath, params: returnToParams });
         } else {
-          returnToSourceOrBack(navigation, { returnToPath, returnToParams });
+          skipDuplicateBack(navigation);
         }
         setTimeout(() => {
           isHandlingBackRef.current = false;
@@ -652,7 +661,12 @@ export default function IngredientFormScreen() {
       return;
     }
 
-    returnToSourceOrBack(navigation, { returnToPath, returnToParams });
+    if (returnToPath) {
+      router.replace({ pathname: returnToPath, params: returnToParams });
+      return;
+    }
+
+    skipDuplicateBack(navigation);
   }, [
     confirmLeave,
     hasUnsavedChanges,

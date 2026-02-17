@@ -50,7 +50,7 @@ import { useAppColors } from "@/constants/theme";
 import {
   buildReturnToParams,
   parseReturnToParams,
-  returnToSourceOrBack,
+  skipDuplicateBack,
 } from "@/libs/navigation";
 import { shouldStorePhoto, storePhoto } from "@/libs/photo-storage";
 import { normalizeSearchText } from "@/libs/search-normalization";
@@ -1343,9 +1343,18 @@ export default function CreateCocktailScreen() {
     const isBackAction = (action: NavigationAction) =>
       action.type === "GO_BACK" || action.type === "POP";
 
+    const leaveBack = () => {
+      if (returnToPath) {
+        router.replace({ pathname: returnToPath, params: returnToParams });
+        return;
+      }
+
+      skipDuplicateBack(navigation);
+    };
+
     const leaveScreen = (action?: NavigationAction) => {
       if (isBackAction(action ?? { type: "GO_BACK" })) {
-        returnToSourceOrBack(navigation, { returnToPath, returnToParams });
+        leaveBack();
         return;
       }
 
@@ -1405,7 +1414,7 @@ export default function CreateCocktailScreen() {
         if (returnToPath) {
           router.replace({ pathname: returnToPath, params: returnToParams });
         } else {
-          returnToSourceOrBack(navigation, { returnToPath, returnToParams });
+          skipDuplicateBack(navigation);
         }
         setTimeout(() => {
           isHandlingBackRef.current = false;
@@ -1419,7 +1428,7 @@ export default function CreateCocktailScreen() {
       return;
     }
 
-    returnToSourceOrBack(navigation, { returnToPath, returnToParams });
+    skipDuplicateBack(navigation);
   }, [
     confirmLeave,
     hasUnsavedChanges,
