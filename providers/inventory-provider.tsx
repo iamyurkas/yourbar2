@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { TAG_COLORS } from '@/constants/tag-colors';
-import { AMAZON_STORES, detectAmazonStoreFromStoreOrLocale, getEffectiveAmazonStore, type AmazonStoreKey, type AmazonStoreOverride } from '@/libs/amazon-stores';
+import { AMAZON_STORES, detectAmazonStoreFromStoreOrLocale, detectUsStorefrontOrLocale, getEffectiveAmazonStore, type AmazonStoreKey, type AmazonStoreOverride } from '@/libs/amazon-stores';
 import { loadInventoryData, reloadInventoryData } from '@/libs/inventory-data';
 import {
   clearInventorySnapshot,
@@ -272,8 +272,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   const [allowAllSubstitutes, setAllowAllSubstitutes] = useState<boolean>(
     () => globalThis.__yourbarInventoryAllowAllSubstitutes ?? true,
   );
+  const shouldDefaultToImperialUnits = useMemo(() => detectUsStorefrontOrLocale(), []);
   const [useImperialUnits, setUseImperialUnits] = useState<boolean>(
-    () => globalThis.__yourbarInventoryUseImperialUnits ?? false,
+    () => (globalThis.__yourbarInventoryUseImperialUnits ?? false) || shouldDefaultToImperialUnits,
   );
   const [keepScreenAwake, setKeepScreenAwake] = useState<boolean>(
     () => globalThis.__yourbarInventoryKeepScreenAwake ?? true,
@@ -376,7 +377,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           const nextRatings = sanitizeCocktailRatings(stored.cocktailRatings);
           const nextIgnoreGarnish = stored.ignoreGarnish ?? true;
           const nextAllowAllSubstitutes = stored.allowAllSubstitutes ?? true;
-          const nextUseImperialUnits = stored.useImperialUnits ?? false;
+          const nextUseImperialUnits = (stored.useImperialUnits ?? false) || shouldDefaultToImperialUnits;
           const nextKeepScreenAwake = stored.keepScreenAwake ?? true;
           const nextShakerSmartFilteringEnabled = stored.shakerSmartFilteringEnabled ?? false;
           const nextRatingFilterThreshold = Math.min(
@@ -426,7 +427,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             ratingsByCocktailId: {},
             ignoreGarnish: true,
             allowAllSubstitutes: true,
-            useImperialUnits: false,
+            useImperialUnits: shouldDefaultToImperialUnits,
             keepScreenAwake: true,
             shakerSmartFilteringEnabled: false,
             ratingFilterThreshold: 1,
@@ -450,7 +451,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     return () => {
       cancelled = true;
     };
-  }, [applyInventoryBootstrap, baseInventoryData, inventoryState]);
+  }, [applyInventoryBootstrap, baseInventoryData, inventoryState, shouldDefaultToImperialUnits]);
 
   useEffect(() => {
     if (!inventoryState || !inventoryDelta) {
