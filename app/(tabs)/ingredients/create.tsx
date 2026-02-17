@@ -530,7 +530,7 @@ export default function IngredientFormScreen() {
     }
 
     if (returnToPath) {
-      router.navigate({ pathname: returnToPath, params: returnToParams });
+      router.replace({ pathname: returnToPath, params: returnToParams });
       return;
     }
 
@@ -597,29 +597,35 @@ export default function IngredientFormScreen() {
 
       const isBackAction = event.data.action.type === 'GO_BACK' || event.data.action.type === 'POP';
 
-      if (hasUnsavedChanges || shouldConfirmOnLeave) {
-        event.preventDefault();
-        confirmLeave(() => {
-          isHandlingBackRef.current = true;
-          if (isBackAction) {
-            returnToSourceOrBack(navigation, { returnToPath, returnToParams });
+      const leaveWithAction = () => {
+        isHandlingBackRef.current = true;
+        if (isBackAction) {
+          returnToSourceOrBack(navigation, { returnToPath, returnToParams });
+        } else {
+          if (navigation.canGoBack()) {
+            navigation.dispatch(StackActions.pop(1));
+          }
+          const parentNavigation = navigation.getParent();
+          if (parentNavigation) {
+            parentNavigation.dispatch(event.data.action);
           } else {
             navigation.dispatch(event.data.action);
           }
-          setTimeout(() => {
-            isHandlingBackRef.current = false;
-          }, 0);
-        });
+        }
+        setTimeout(() => {
+          isHandlingBackRef.current = false;
+        }, 0);
+      };
+
+      if (hasUnsavedChanges || shouldConfirmOnLeave) {
+        event.preventDefault();
+        confirmLeave(leaveWithAction);
         return;
       }
 
       if (isBackAction) {
         event.preventDefault();
-        isHandlingBackRef.current = true;
-        returnToSourceOrBack(navigation, { returnToPath, returnToParams });
-        setTimeout(() => {
-          isHandlingBackRef.current = false;
-        }, 0);
+        leaveWithAction();
       }
     });
 
@@ -698,7 +704,7 @@ export default function IngredientFormScreen() {
               return;
             }
             if (returnToPath) {
-              router.navigate({ pathname: returnToPath, params: returnToParams });
+              router.replace({ pathname: returnToPath, params: returnToParams });
               return;
             }
             if (navigation.canGoBack()) {

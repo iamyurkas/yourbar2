@@ -1194,7 +1194,7 @@ export default function CreateCocktailScreen() {
       }
 
       if (returnToPath) {
-        router.navigate({ pathname: returnToPath, params: returnToParams });
+        router.replace({ pathname: returnToPath, params: returnToParams });
         return;
       }
 
@@ -1350,29 +1350,37 @@ export default function CreateCocktailScreen() {
         return;
       }
 
-      if (hasUnsavedChanges || shouldConfirmOnLeave) {
-        event.preventDefault();
-        confirmLeave(() => {
-          isHandlingBackRef.current = true;
-          if (event.data.action.type === "GO_BACK") {
-            returnToSourceOrBack(navigation, { returnToPath, returnToParams });
+      const isBackAction = event.data.action.type === "GO_BACK" || event.data.action.type === "POP";
+
+      const leaveWithAction = () => {
+        isHandlingBackRef.current = true;
+        if (isBackAction) {
+          returnToSourceOrBack(navigation, { returnToPath, returnToParams });
+        } else {
+          if (navigation.canGoBack()) {
+            navigation.dispatch(StackActions.pop(1));
+          }
+          const parentNavigation = navigation.getParent();
+          if (parentNavigation) {
+            parentNavigation.dispatch(event.data.action);
           } else {
             navigation.dispatch(event.data.action);
           }
-          setTimeout(() => {
-            isHandlingBackRef.current = false;
-          }, 0);
-        });
-        return;
-      }
-
-      if (event.data.action.type === "GO_BACK") {
-        event.preventDefault();
-        isHandlingBackRef.current = true;
-        returnToSourceOrBack(navigation, { returnToPath, returnToParams });
+        }
         setTimeout(() => {
           isHandlingBackRef.current = false;
         }, 0);
+      };
+
+      if (hasUnsavedChanges || shouldConfirmOnLeave) {
+        event.preventDefault();
+        confirmLeave(leaveWithAction);
+        return;
+      }
+
+      if (isBackAction) {
+        event.preventDefault();
+        leaveWithAction();
       }
     });
 
