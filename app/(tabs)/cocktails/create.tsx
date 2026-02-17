@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
-import { StackActions, useFocusEffect, useNavigation } from "@react-navigation/native";
+import { StackActions, type NavigationAction, useFocusEffect, useNavigation } from "@react-navigation/native";
 import { Image } from "expo-image";
 import * as ImagePicker from "expo-image-picker";
 import { Stack, router, useLocalSearchParams } from "expo-router";
@@ -1188,13 +1188,8 @@ export default function CreateCocktailScreen() {
       setHasUnsavedChanges(false);
       isNavigatingAfterSaveRef.current = true;
       const targetId = persisted.id ?? persisted.name;
-      if (isEditMode && navigation.canGoBack()) {
-        navigation.goBack();
-        return;
-      }
-
       if (returnToPath) {
-        router.navigate({ pathname: returnToPath, params: returnToParams });
+        router.replace({ pathname: returnToPath, params: returnToParams });
         return;
       }
 
@@ -1345,6 +1340,23 @@ export default function CreateCocktailScreen() {
   }, [handleSubmit, setSaveHandler]);
 
   useEffect(() => {
+    const isBackAction = (action: NavigationAction) =>
+      action.type === "GO_BACK" || action.type === "POP";
+
+    const leaveScreen = (action?: NavigationAction) => {
+      if (isBackAction(action ?? { type: "GO_BACK" })) {
+        returnToSourceOrBack(navigation, { returnToPath, returnToParams });
+        return;
+      }
+
+      if (returnToPath) {
+        router.replace({ pathname: returnToPath, params: returnToParams });
+        return;
+      }
+
+      router.replace("/cocktails");
+    };
+
     const unsubscribe = navigation.addListener("beforeRemove", (event) => {
       if (isNavigatingAfterSaveRef.current || isHandlingBackRef.current) {
         return;
@@ -1354,11 +1366,7 @@ export default function CreateCocktailScreen() {
         event.preventDefault();
         confirmLeave(() => {
           isHandlingBackRef.current = true;
-          if (event.data.action.type === "GO_BACK") {
-            returnToSourceOrBack(navigation, { returnToPath, returnToParams });
-          } else {
-            navigation.dispatch(event.data.action);
-          }
+          leaveScreen(event.data.action);
           setTimeout(() => {
             isHandlingBackRef.current = false;
           }, 0);
@@ -1366,10 +1374,10 @@ export default function CreateCocktailScreen() {
         return;
       }
 
-      if (event.data.action.type === "GO_BACK") {
+      if (isBackAction(event.data.action)) {
         event.preventDefault();
         isHandlingBackRef.current = true;
-        returnToSourceOrBack(navigation, { returnToPath, returnToParams });
+        leaveScreen(event.data.action);
         setTimeout(() => {
           isHandlingBackRef.current = false;
         }, 0);
@@ -1387,8 +1395,39 @@ export default function CreateCocktailScreen() {
   ]);
 
   const handleGoBack = useCallback(() => {
-    navigation.goBack();
-  }, [navigation]);
+    if (isNavigatingAfterSaveRef.current || isHandlingBackRef.current) {
+      return;
+    }
+
+    if (hasUnsavedChanges || shouldConfirmOnLeave) {
+      confirmLeave(() => {
+        isHandlingBackRef.current = true;
+        if (returnToPath) {
+          router.replace({ pathname: returnToPath, params: returnToParams });
+        } else {
+          returnToSourceOrBack(navigation, { returnToPath, returnToParams });
+        }
+        setTimeout(() => {
+          isHandlingBackRef.current = false;
+        }, 0);
+      });
+      return;
+    }
+
+    if (returnToPath) {
+      router.replace({ pathname: returnToPath, params: returnToParams });
+      return;
+    }
+
+    returnToSourceOrBack(navigation, { returnToPath, returnToParams });
+  }, [
+    confirmLeave,
+    hasUnsavedChanges,
+    navigation,
+    returnToPath,
+    returnToParams,
+    shouldConfirmOnLeave,
+  ]);
 
   const imageSource = useMemo(() => {
     if (!imageUri) {

@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
-import { StackActions, useNavigation } from '@react-navigation/native';
+import { StackActions, type NavigationAction, useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -457,11 +457,6 @@ export default function IngredientFormScreen() {
 
         setHasUnsavedChanges(false);
         isNavigatingAfterSaveRef.current = true;
-        if (navigation.canGoBack()) {
-          navigation.goBack();
-          return;
-        }
-
         router.replace({
           pathname: '/ingredients/[ingredientId]',
           params: {
@@ -530,7 +525,7 @@ export default function IngredientFormScreen() {
     }
 
     if (returnToPath) {
-      router.navigate({ pathname: returnToPath, params: returnToParams });
+      router.replace({ pathname: returnToPath, params: returnToParams });
       return;
     }
 
@@ -590,22 +585,33 @@ export default function IngredientFormScreen() {
   }, [handleSubmit, setSaveHandler]);
 
   useEffect(() => {
+    const isBackAction = (action: NavigationAction) => action.type === 'GO_BACK' || action.type === 'POP';
+
+    const leaveScreen = (action?: NavigationAction) => {
+      if (isBackAction(action ?? { type: 'GO_BACK' })) {
+        returnToSourceOrBack(navigation, { returnToPath, returnToParams });
+        return;
+      }
+
+      if (returnToPath) {
+        router.replace({ pathname: returnToPath, params: returnToParams });
+        return;
+      }
+
+      router.replace('/ingredients');
+    };
+
     const unsubscribe = navigation.addListener('beforeRemove', (event) => {
       if (isNavigatingAfterSaveRef.current || isHandlingBackRef.current) {
         return;
       }
-
-      const isBackAction = event.data.action.type === 'GO_BACK' || event.data.action.type === 'POP';
+      const backAction = isBackAction(event.data.action);
 
       if (hasUnsavedChanges || shouldConfirmOnLeave) {
         event.preventDefault();
         confirmLeave(() => {
           isHandlingBackRef.current = true;
-          if (isBackAction) {
-            returnToSourceOrBack(navigation, { returnToPath, returnToParams });
-          } else {
-            navigation.dispatch(event.data.action);
-          }
+          leaveScreen(event.data.action);
           setTimeout(() => {
             isHandlingBackRef.current = false;
           }, 0);
@@ -613,10 +619,10 @@ export default function IngredientFormScreen() {
         return;
       }
 
-      if (isBackAction) {
+      if (backAction) {
         event.preventDefault();
         isHandlingBackRef.current = true;
-        returnToSourceOrBack(navigation, { returnToPath, returnToParams });
+        leaveScreen(event.data.action);
         setTimeout(() => {
           isHandlingBackRef.current = false;
         }, 0);
@@ -634,7 +640,11 @@ export default function IngredientFormScreen() {
     if (hasUnsavedChanges || shouldConfirmOnLeave) {
       confirmLeave(() => {
         isHandlingBackRef.current = true;
-        returnToSourceOrBack(navigation, { returnToPath, returnToParams });
+        if (returnToPath) {
+          router.replace({ pathname: returnToPath, params: returnToParams });
+        } else {
+          returnToSourceOrBack(navigation, { returnToPath, returnToParams });
+        }
         setTimeout(() => {
           isHandlingBackRef.current = false;
         }, 0);
