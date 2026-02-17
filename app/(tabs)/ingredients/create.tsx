@@ -123,10 +123,18 @@ export default function IngredientFormScreen() {
       return undefined;
     }
   }, [returnToParamsParam]);
-  const shouldConfirmOnLeave = useMemo(
-    () => !isEditMode && returnToPath === '/cocktails/create',
-    [isEditMode, returnToPath],
-  );
+  const isOpenedFromCocktailForm = useMemo(() => {
+    if (isEditMode) {
+      return false;
+    }
+
+    // Ingredient create screen can be opened from cocktail create/edit via
+    // "+Add" and must always show the 3-option leave dialog, even without
+    // local form changes.
+    return returnToPath === '/cocktails/create';
+  }, [isEditMode, returnToPath]);
+
+  const shouldConfirmOnLeave = isOpenedFromCocktailForm;
 
   const navigation = useNavigation();
   const Colors = useAppColors();
