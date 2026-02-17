@@ -54,10 +54,35 @@ export const AMAZON_STORES: Record<AmazonStoreKey, AmazonStoreConfig> = {
   SG: { domain: 'amazon.sg', label: 'Amazon.sg', countryName: 'Singapore', affiliateTag: '' },
 };
 
-const COUNTRY_TO_AMAZON_STORE: Record<string, AmazonStoreKey> = {
+const STOREFRONT_COUNTRY_TO_AMAZON_STORE: Record<string, AmazonStoreKey> = {
   US: 'US',
   GB: 'UK',
   DE: 'DE',
+  DK: 'DE',
+  FR: 'FR',
+  IT: 'IT',
+  ES: 'ES',
+  NL: 'NL',
+  SE: 'SE',
+  PL: 'PL',
+  BE: 'BE',
+  TR: 'TR',
+  AE: 'AE',
+  SA: 'SA',
+  IN: 'IN',
+  JP: 'JP',
+  CA: 'CA',
+  AU: 'AU',
+  BR: 'BR',
+  MX: 'MX',
+  SG: 'SG',
+};
+
+const LOCALE_COUNTRY_TO_AMAZON_STORE: Record<string, AmazonStoreKey> = {
+  US: 'US',
+  GB: 'UK',
+  DE: 'DE',
+  DK: 'DE',
   FR: 'FR',
   IT: 'IT',
   ES: 'ES',
@@ -118,20 +143,23 @@ function getStorefrontCountryCode(): string | null {
   return null;
 }
 
-function mapCountryToAmazonStore(countryCode: string | null): AmazonStoreKey | null {
-  if (!countryCode || !(countryCode in COUNTRY_TO_AMAZON_STORE)) {
+function mapCountryToAmazonStore(
+  countryCode: string | null,
+  countryToStoreMap: Record<string, AmazonStoreKey>,
+): AmazonStoreKey | null {
+  if (!countryCode || !(countryCode in countryToStoreMap)) {
     return null;
   }
 
-  return COUNTRY_TO_AMAZON_STORE[countryCode];
+  return countryToStoreMap[countryCode];
 }
 
 export function detectAmazonStoreFromLocale(): AmazonStoreKey | null {
-  return mapCountryToAmazonStore(getLocaleCountryCode());
+  return mapCountryToAmazonStore(getLocaleCountryCode(), LOCALE_COUNTRY_TO_AMAZON_STORE);
 }
 
 export function detectAmazonStoreFromStoreOrLocale(): AmazonStoreKey | null {
-  const storefrontStore = mapCountryToAmazonStore(getStorefrontCountryCode());
+  const storefrontStore = mapCountryToAmazonStore(getStorefrontCountryCode(), STOREFRONT_COUNTRY_TO_AMAZON_STORE);
   if (storefrontStore) {
     return storefrontStore;
   }
@@ -160,7 +188,7 @@ export function getEffectiveAmazonStore(
     return amazonStoreOverride;
   }
 
-  return detectedAmazonStore;
+  return detectedAmazonStore ?? 'US';
 }
 
 export const AMAZON_STORE_KEYS = Object.keys(AMAZON_STORES) as AmazonStoreKey[];
