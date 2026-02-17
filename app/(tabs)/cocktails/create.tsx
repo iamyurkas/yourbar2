@@ -50,7 +50,6 @@ import { useAppColors } from "@/constants/theme";
 import {
   buildReturnToParams,
   parseReturnToParams,
-  returnToSourceOrBack,
 } from "@/libs/navigation";
 import { shouldStorePhoto, storePhoto } from "@/libs/photo-storage";
 import { normalizeSearchText } from "@/libs/search-normalization";
@@ -1007,6 +1006,41 @@ export default function CreateCocktailScreen() {
     [handleUpdateSubstitutes, substituteTarget],
   );
 
+  const navigateAwayFromForm = useCallback(() => {
+    if (returnToPath) {
+      router.replace({ pathname: returnToPath, params: returnToParams });
+      return;
+    }
+
+    if (isEditMode) {
+      const targetId =
+        prefilledCocktail?.id ??
+        prefilledCocktail?.name ??
+        cocktailParam ??
+        cocktailNameParam;
+      if (targetId) {
+        router.replace({
+          pathname: "/cocktails/[cocktailId]",
+          params: {
+            cocktailId: String(targetId),
+            ...buildReturnToParams(returnToPath, returnToParams),
+          },
+        });
+        return;
+      }
+    }
+
+    router.replace("/cocktails");
+  }, [
+    cocktailNameParam,
+    cocktailParam,
+    isEditMode,
+    prefilledCocktail?.id,
+    prefilledCocktail?.name,
+    returnToParams,
+    returnToPath,
+  ]);
+
   const handleSubmit = useCallback(async () => {
     if (isSaving) {
       return;
@@ -1188,13 +1222,13 @@ export default function CreateCocktailScreen() {
       setHasUnsavedChanges(false);
       isNavigatingAfterSaveRef.current = true;
       const targetId = persisted.id ?? persisted.name;
-      if (isEditMode && navigation.canGoBack()) {
-        navigation.goBack();
+      if (isEditMode) {
+        navigateAwayFromForm();
         return;
       }
 
       if (returnToPath) {
-        router.navigate({ pathname: returnToPath, params: returnToParams });
+        router.replace({ pathname: returnToPath, params: returnToParams });
         return;
       }
 
@@ -1227,6 +1261,7 @@ export default function CreateCocktailScreen() {
     methodIds,
     name,
     navigation,
+    navigateAwayFromForm,
     prefilledCocktail?.id,
     prefilledCocktail?.photoUri,
     returnToParams,
@@ -1290,15 +1325,7 @@ export default function CreateCocktailScreen() {
               navigation.dispatch(StackActions.pop(2));
               return;
             }
-            if (returnToPath) {
-              router.navigate({ pathname: returnToPath, params: returnToParams });
-              return;
-            }
-            if (navigation.canGoBack()) {
-              navigation.goBack();
-              return;
-            }
-            router.replace("/cocktails");
+            navigateAwayFromForm();
           },
         },
       ],
@@ -1307,10 +1334,9 @@ export default function CreateCocktailScreen() {
     deleteCocktail,
     isEditMode,
     navigation,
+    navigateAwayFromForm,
     prefilledCocktail?.id,
     prefilledCocktail?.name,
-    returnToParams,
-    returnToPath,
     setHasUnsavedChanges,
     showDialog,
   ]);
@@ -1355,7 +1381,7 @@ export default function CreateCocktailScreen() {
         confirmLeave(() => {
           isHandlingBackRef.current = true;
           if (event.data.action.type === "GO_BACK") {
-            returnToSourceOrBack(navigation, { returnToPath, returnToParams });
+            navigateAwayFromForm();
           } else {
             navigation.dispatch(event.data.action);
           }
@@ -1369,7 +1395,7 @@ export default function CreateCocktailScreen() {
       if (event.data.action.type === "GO_BACK") {
         event.preventDefault();
         isHandlingBackRef.current = true;
-        returnToSourceOrBack(navigation, { returnToPath, returnToParams });
+        navigateAwayFromForm();
         setTimeout(() => {
           isHandlingBackRef.current = false;
         }, 0);
@@ -1381,14 +1407,15 @@ export default function CreateCocktailScreen() {
     confirmLeave,
     hasUnsavedChanges,
     navigation,
+    navigateAwayFromForm,
     returnToPath,
     returnToParams,
     shouldConfirmOnLeave,
   ]);
 
   const handleGoBack = useCallback(() => {
-    navigation.goBack();
-  }, [navigation]);
+    navigateAwayFromForm();
+  }, [navigateAwayFromForm]);
 
   const imageSource = useMemo(() => {
     if (!imageUri) {

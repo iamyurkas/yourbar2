@@ -28,7 +28,7 @@ import { TagPill } from '@/components/TagPill';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { useAppColors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
-import { buildReturnToParams, returnToSourceOrBack, skipDuplicateBack } from '@/libs/navigation';
+import { buildReturnToParams } from '@/libs/navigation';
 import { shouldStorePhoto, storePhoto } from '@/libs/photo-storage';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
@@ -390,6 +390,34 @@ export default function IngredientFormScreen() {
     }
   }, [ensureMediaPermission, isPickingImage, showDialog]);
 
+  const navigateAwayFromForm = useCallback(() => {
+    if (returnToPath) {
+      router.replace({ pathname: returnToPath, params: returnToParams });
+      return;
+    }
+
+    const targetId = numericIngredientId ?? ingredient?.id ?? ingredient?.name;
+    if (isEditMode && targetId != null) {
+      router.replace({
+        pathname: '/ingredients/[ingredientId]',
+        params: {
+          ingredientId: String(targetId),
+          ...buildReturnToParams(returnToPath, returnToParams),
+        },
+      });
+      return;
+    }
+
+    router.replace('/ingredients');
+  }, [
+    ingredient?.id,
+    ingredient?.name,
+    isEditMode,
+    numericIngredientId,
+    returnToParams,
+    returnToPath,
+  ]);
+
   const handleSubmit = useCallback(async () => {
     if (isSaving) {
       return;
@@ -457,18 +485,7 @@ export default function IngredientFormScreen() {
 
         setHasUnsavedChanges(false);
         isNavigatingAfterSaveRef.current = true;
-        if (navigation.canGoBack()) {
-          navigation.goBack();
-          return;
-        }
-
-        router.replace({
-          pathname: '/ingredients/[ingredientId]',
-          params: {
-            ingredientId: String(numericIngredientId),
-            ...buildReturnToParams(returnToPath, returnToParams),
-          },
-        });
+        navigateAwayFromForm();
       } finally {
         setIsSaving(false);
       }
@@ -525,12 +542,12 @@ export default function IngredientFormScreen() {
     isNavigatingAfterSaveRef.current = true;
     const targetId = created.id ?? created.name;
     if (!targetId) {
-      skipDuplicateBack(navigation);
+      navigateAwayFromForm();
       return;
     }
 
     if (returnToPath) {
-      router.navigate({ pathname: returnToPath, params: returnToParams });
+      router.replace({ pathname: returnToPath, params: returnToParams });
       return;
     }
 
@@ -549,6 +566,7 @@ export default function IngredientFormScreen() {
     isSaving,
     name,
     navigation,
+    navigateAwayFromForm,
     numericIngredientId,
     returnToParams,
     returnToPath,
@@ -602,7 +620,7 @@ export default function IngredientFormScreen() {
         confirmLeave(() => {
           isHandlingBackRef.current = true;
           if (isBackAction) {
-            returnToSourceOrBack(navigation, { returnToPath, returnToParams });
+            navigateAwayFromForm();
           } else {
             navigation.dispatch(event.data.action);
           }
@@ -616,7 +634,7 @@ export default function IngredientFormScreen() {
       if (isBackAction) {
         event.preventDefault();
         isHandlingBackRef.current = true;
-        returnToSourceOrBack(navigation, { returnToPath, returnToParams });
+        navigateAwayFromForm();
         setTimeout(() => {
           isHandlingBackRef.current = false;
         }, 0);
@@ -624,7 +642,7 @@ export default function IngredientFormScreen() {
     });
 
     return unsubscribe;
-  }, [confirmLeave, hasUnsavedChanges, navigation, returnToParams, returnToPath, shouldConfirmOnLeave]);
+  }, [confirmLeave, hasUnsavedChanges, navigateAwayFromForm, navigation, shouldConfirmOnLeave]);
 
   const handleGoBack = useCallback(() => {
     if (isNavigatingAfterSaveRef.current || isHandlingBackRef.current) {
@@ -634,7 +652,7 @@ export default function IngredientFormScreen() {
     if (hasUnsavedChanges || shouldConfirmOnLeave) {
       confirmLeave(() => {
         isHandlingBackRef.current = true;
-        returnToSourceOrBack(navigation, { returnToPath, returnToParams });
+        navigateAwayFromForm();
         setTimeout(() => {
           isHandlingBackRef.current = false;
         }, 0);
@@ -642,13 +660,11 @@ export default function IngredientFormScreen() {
       return;
     }
 
-    returnToSourceOrBack(navigation, { returnToPath, returnToParams });
+    navigateAwayFromForm();
   }, [
     confirmLeave,
     hasUnsavedChanges,
-    navigation,
-    returnToParams,
-    returnToPath,
+    navigateAwayFromForm,
     shouldConfirmOnLeave,
   ]);
 
@@ -697,15 +713,7 @@ export default function IngredientFormScreen() {
               navigation.dispatch(StackActions.pop(2));
               return;
             }
-            if (returnToPath) {
-              router.navigate({ pathname: returnToPath, params: returnToParams });
-              return;
-            }
-            if (navigation.canGoBack()) {
-              navigation.goBack();
-              return;
-            }
-            router.replace('/ingredients');
+            navigateAwayFromForm();
           },
         },
       ],
@@ -714,10 +722,9 @@ export default function IngredientFormScreen() {
     deleteIngredient,
     ingredient?.name,
     isEditMode,
+    navigateAwayFromForm,
     navigation,
     numericIngredientId,
-    returnToParams,
-    returnToPath,
     setHasUnsavedChanges,
     showDialog,
   ]);
