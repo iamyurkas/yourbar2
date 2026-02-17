@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
-import { StackActions, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -28,7 +28,7 @@ import { TagPill } from '@/components/TagPill';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { useAppColors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
-import { buildReturnToParams, returnToSourceOrBack, skipDuplicateBack } from '@/libs/navigation';
+import { buildReturnToParams } from '@/libs/navigation';
 import { shouldStorePhoto, storePhoto } from '@/libs/photo-storage';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
@@ -177,6 +177,56 @@ export default function IngredientFormScreen() {
   const lastModeRef = useRef<boolean | undefined>(undefined);
   const scrollRef = useRef<ScrollView | null>(null);
   const isHandlingBackRef = useRef(false);
+
+  const handleLeaveCreateIngredient = useCallback(() => {
+    setHasUnsavedChanges(false);
+    isHandlingBackRef.current = true;
+    router.replace({ pathname: '/cocktails/create', params: returnToParams });
+    setTimeout(() => {
+      isHandlingBackRef.current = false;
+    }, 0);
+  }, [returnToParams, setHasUnsavedChanges]);
+
+  const handleLeaveIngredientForm = useCallback(() => {
+    if (shouldConfirmOnLeave) {
+      handleLeaveCreateIngredient();
+      return;
+    }
+
+    setHasUnsavedChanges(false);
+    isHandlingBackRef.current = true;
+    if (returnToPath) {
+      router.replace({ pathname: returnToPath, params: returnToParams });
+      setTimeout(() => {
+        isHandlingBackRef.current = false;
+      }, 0);
+      return;
+    }
+
+    if (isEditMode && numericIngredientId != null) {
+      router.replace({
+        pathname: '/ingredients/[ingredientId]',
+        params: { ingredientId: String(numericIngredientId) },
+      });
+      setTimeout(() => {
+        isHandlingBackRef.current = false;
+      }, 0);
+      return;
+    }
+
+    router.replace('/ingredients');
+    setTimeout(() => {
+      isHandlingBackRef.current = false;
+    }, 0);
+  }, [
+    handleLeaveCreateIngredient,
+    isEditMode,
+    numericIngredientId,
+    returnToParams,
+    returnToPath,
+    setHasUnsavedChanges,
+    shouldConfirmOnLeave,
+  ]);
 
   useEffect(() => {
     isNavigatingAfterSaveRef.current = false;
@@ -457,8 +507,8 @@ export default function IngredientFormScreen() {
 
         setHasUnsavedChanges(false);
         isNavigatingAfterSaveRef.current = true;
-        if (navigation.canGoBack()) {
-          navigation.goBack();
+        if (returnToPath) {
+          router.replace({ pathname: returnToPath, params: returnToParams });
           return;
         }
 
@@ -524,13 +574,13 @@ export default function IngredientFormScreen() {
     setHasUnsavedChanges(false);
     isNavigatingAfterSaveRef.current = true;
     const targetId = created.id ?? created.name;
-    if (!targetId) {
-      skipDuplicateBack(navigation);
+    if (returnToPath) {
+      router.replace({ pathname: returnToPath, params: returnToParams });
       return;
     }
 
-    if (returnToPath) {
-      router.navigate({ pathname: returnToPath, params: returnToParams });
+    if (!targetId) {
+      router.replace('/ingredients');
       return;
     }
 
@@ -548,15 +598,12 @@ export default function IngredientFormScreen() {
     isEditMode,
     isSaving,
     name,
-    navigation,
     numericIngredientId,
     returnToParams,
     returnToPath,
     selectedTagIds,
     setHasUnsavedChanges,
     showDialog,
-    shouldStorePhoto,
-    storePhoto,
     updateIngredient,
   ]);
 
@@ -566,16 +613,16 @@ export default function IngredientFormScreen() {
         title: 'Leave without saving?',
         message: 'Your changes will be lost if you leave this screen.',
         actions: [
-          { label: 'Save', variant: 'primary', onPress: handleSubmit },
-          { label: 'Stay', variant: 'secondary' },
+          { label: 'Save and return', variant: 'primary', onPress: handleSubmit },
           {
-            label: 'Leave',
+            label: 'Leave without saving',
             variant: 'destructive',
             onPress: () => {
               setHasUnsavedChanges(false);
               onLeave();
             },
           },
+          { label: 'Cancel', variant: 'secondary' },
         ],
       });
     },
@@ -599,32 +646,18 @@ export default function IngredientFormScreen() {
 
       if (hasUnsavedChanges || shouldConfirmOnLeave) {
         event.preventDefault();
-        confirmLeave(() => {
-          isHandlingBackRef.current = true;
-          if (isBackAction) {
-            returnToSourceOrBack(navigation, { returnToPath, returnToParams });
-          } else {
-            navigation.dispatch(event.data.action);
-          }
-          setTimeout(() => {
-            isHandlingBackRef.current = false;
-          }, 0);
-        });
+        confirmLeave(handleLeaveIngredientForm);
         return;
       }
 
       if (isBackAction) {
         event.preventDefault();
-        isHandlingBackRef.current = true;
-        returnToSourceOrBack(navigation, { returnToPath, returnToParams });
-        setTimeout(() => {
-          isHandlingBackRef.current = false;
-        }, 0);
+        handleLeaveIngredientForm();
       }
     });
 
     return unsubscribe;
-  }, [confirmLeave, hasUnsavedChanges, navigation, returnToParams, returnToPath, shouldConfirmOnLeave]);
+  }, [confirmLeave, handleLeaveIngredientForm, hasUnsavedChanges, navigation, shouldConfirmOnLeave]);
 
   const handleGoBack = useCallback(() => {
     if (isNavigatingAfterSaveRef.current || isHandlingBackRef.current) {
@@ -633,22 +666,16 @@ export default function IngredientFormScreen() {
 
     if (hasUnsavedChanges || shouldConfirmOnLeave) {
       confirmLeave(() => {
-        isHandlingBackRef.current = true;
-        returnToSourceOrBack(navigation, { returnToPath, returnToParams });
-        setTimeout(() => {
-          isHandlingBackRef.current = false;
-        }, 0);
+        handleLeaveIngredientForm();
       });
       return;
     }
 
-    returnToSourceOrBack(navigation, { returnToPath, returnToParams });
+    handleLeaveIngredientForm();
   }, [
     confirmLeave,
+    handleLeaveIngredientForm,
     hasUnsavedChanges,
-    navigation,
-    returnToParams,
-    returnToPath,
     shouldConfirmOnLeave,
   ]);
 
@@ -691,20 +718,19 @@ export default function IngredientFormScreen() {
             }
 
             setHasUnsavedChanges(false);
-            const state = navigation.getState();
-            const currentIndex = state.index ?? 0;
-            if (currentIndex >= 2) {
-              navigation.dispatch(StackActions.pop(2));
-              return;
-            }
             if (returnToPath) {
-              router.navigate({ pathname: returnToPath, params: returnToParams });
+              router.replace({ pathname: returnToPath, params: returnToParams });
               return;
             }
-            if (navigation.canGoBack()) {
-              navigation.goBack();
+
+            if (numericIngredientId != null) {
+              router.replace({
+                pathname: '/ingredients/[ingredientId]',
+                params: { ingredientId: String(numericIngredientId) },
+              });
               return;
             }
+
             router.replace('/ingredients');
           },
         },
@@ -714,7 +740,6 @@ export default function IngredientFormScreen() {
     deleteIngredient,
     ingredient?.name,
     isEditMode,
-    navigation,
     numericIngredientId,
     returnToParams,
     returnToPath,

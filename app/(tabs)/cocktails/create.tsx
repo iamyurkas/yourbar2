@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
-import { StackActions, useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { Image } from "expo-image";
 import * as ImagePicker from "expo-image-picker";
 import { Stack, router, useLocalSearchParams } from "expo-router";
@@ -50,7 +50,6 @@ import { useAppColors } from "@/constants/theme";
 import {
   buildReturnToParams,
   parseReturnToParams,
-  returnToSourceOrBack,
 } from "@/libs/navigation";
 import { shouldStorePhoto, storePhoto } from "@/libs/photo-storage";
 import { normalizeSearchText } from "@/libs/search-normalization";
@@ -354,6 +353,35 @@ export default function CreateCocktailScreen() {
   const isNavigatingAfterSaveRef = useRef(false);
   const scrollRef = useRef<ScrollView | null>(null);
   const isHandlingBackRef = useRef(false);
+
+  const handleLeaveCocktailForm = useCallback(() => {
+    setHasUnsavedChanges(false);
+    isHandlingBackRef.current = true;
+
+    if (returnToPath) {
+      router.replace({ pathname: returnToPath, params: returnToParams });
+      setTimeout(() => {
+        isHandlingBackRef.current = false;
+      }, 0);
+      return;
+    }
+
+    if (isEditMode && prefilledCocktail?.id != null) {
+      router.replace({
+        pathname: "/cocktails/[cocktailId]",
+        params: { cocktailId: String(prefilledCocktail.id) },
+      });
+      setTimeout(() => {
+        isHandlingBackRef.current = false;
+      }, 0);
+      return;
+    }
+
+    router.replace("/cocktails");
+    setTimeout(() => {
+      isHandlingBackRef.current = false;
+    }, 0);
+  }, [isEditMode, prefilledCocktail?.id, returnToParams, returnToPath, setHasUnsavedChanges]);
 
   useEffect(() => {
     isNavigatingAfterSaveRef.current = false;
@@ -1179,13 +1207,8 @@ export default function CreateCocktailScreen() {
       setHasUnsavedChanges(false);
       isNavigatingAfterSaveRef.current = true;
       const targetId = persisted.id ?? persisted.name;
-      if (isEditMode && navigation.canGoBack()) {
-        navigation.goBack();
-        return;
-      }
-
       if (returnToPath) {
-        router.navigate({ pathname: returnToPath, params: returnToParams });
+        router.replace({ pathname: returnToPath, params: returnToParams });
         return;
       }
 
@@ -1217,7 +1240,6 @@ export default function CreateCocktailScreen() {
     isEditMode,
     methodIds,
     name,
-    navigation,
     prefilledCocktail?.id,
     prefilledCocktail?.photoUri,
     returnToParams,
@@ -1225,8 +1247,6 @@ export default function CreateCocktailScreen() {
     selectedTagIds,
     setHasUnsavedChanges,
     showDialog,
-    shouldStorePhoto,
-    storePhoto,
   ]);
 
   const handleDeletePress = useCallback(() => {
@@ -1275,20 +1295,19 @@ export default function CreateCocktailScreen() {
             }
 
             setHasUnsavedChanges(false);
-            const state = navigation.getState();
-            const currentIndex = state.index ?? 0;
-            if (currentIndex >= 2) {
-              navigation.dispatch(StackActions.pop(2));
-              return;
-            }
             if (returnToPath) {
-              router.navigate({ pathname: returnToPath, params: returnToParams });
+              router.replace({ pathname: returnToPath, params: returnToParams });
               return;
             }
-            if (navigation.canGoBack()) {
-              navigation.goBack();
+
+            if (numericId != null) {
+              router.replace({
+                pathname: "/cocktails/[cocktailId]",
+                params: { cocktailId: String(numericId) },
+              });
               return;
             }
+
             router.replace("/cocktails");
           },
         },
@@ -1297,7 +1316,6 @@ export default function CreateCocktailScreen() {
   }, [
     deleteCocktail,
     isEditMode,
-    navigation,
     prefilledCocktail?.id,
     prefilledCocktail?.name,
     returnToParams,
@@ -1313,7 +1331,7 @@ export default function CreateCocktailScreen() {
         message: "Your changes will be lost if you leave this screen.",
         actions: [
           { label: "Save", variant: "primary", onPress: handleSubmit },
-          { label: "Stay", variant: "secondary" },
+          { label: "Cancel", variant: "secondary" },
           {
             label: "Leave",
             variant: "destructive",
@@ -1344,42 +1362,42 @@ export default function CreateCocktailScreen() {
       if (hasUnsavedChanges || shouldConfirmOnLeave) {
         event.preventDefault();
         confirmLeave(() => {
-          isHandlingBackRef.current = true;
-          if (event.data.action.type === "GO_BACK") {
-            returnToSourceOrBack(navigation, { returnToPath, returnToParams });
-          } else {
-            navigation.dispatch(event.data.action);
-          }
-          setTimeout(() => {
-            isHandlingBackRef.current = false;
-          }, 0);
+          handleLeaveCocktailForm();
         });
         return;
       }
 
-      if (event.data.action.type === "GO_BACK") {
+      const isBackAction = event.data.action.type === "GO_BACK" || event.data.action.type === "POP";
+
+      if (isBackAction) {
         event.preventDefault();
-        isHandlingBackRef.current = true;
-        returnToSourceOrBack(navigation, { returnToPath, returnToParams });
-        setTimeout(() => {
-          isHandlingBackRef.current = false;
-        }, 0);
+        handleLeaveCocktailForm();
       }
     });
 
     return unsubscribe;
   }, [
     confirmLeave,
+    handleLeaveCocktailForm,
     hasUnsavedChanges,
     navigation,
-    returnToPath,
-    returnToParams,
     shouldConfirmOnLeave,
   ]);
 
   const handleGoBack = useCallback(() => {
-    navigation.goBack();
-  }, [navigation]);
+    if (isNavigatingAfterSaveRef.current || isHandlingBackRef.current) {
+      return;
+    }
+
+    if (hasUnsavedChanges || shouldConfirmOnLeave) {
+      confirmLeave(() => {
+        handleLeaveCocktailForm();
+      });
+      return;
+    }
+
+    handleLeaveCocktailForm();
+  }, [confirmLeave, handleLeaveCocktailForm, hasUnsavedChanges, shouldConfirmOnLeave]);
 
   const imageSource = useMemo(() => {
     if (!imageUri) {
