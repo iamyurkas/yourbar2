@@ -121,6 +121,21 @@ function getParamValue(value?: string | string[]): string | undefined {
   return value;
 }
 
+function getTabPathFromAction(
+  action: { type?: string; payload?: { name?: string } } | undefined,
+) {
+  const tabName = action?.payload?.name;
+  if (action?.type !== "JUMP_TO" && action?.type !== "NAVIGATE") {
+    return undefined;
+  }
+
+  if (tabName === "cocktails" || tabName === "ingredients" || tabName === "shaker") {
+    return `/${tabName}`;
+  }
+
+  return undefined;
+}
+
 function createUniqueKey(prefix: string) {
   return `${prefix}-${Math.random().toString(36).slice(2)}-${Date.now()}`;
 }
@@ -1194,7 +1209,7 @@ export default function CreateCocktailScreen() {
       }
 
       if (returnToPath) {
-        router.navigate({ pathname: returnToPath, params: returnToParams });
+        router.replace({ pathname: returnToPath, params: returnToParams });
         return;
       }
 
@@ -1291,7 +1306,7 @@ export default function CreateCocktailScreen() {
               return;
             }
             if (returnToPath) {
-              router.navigate({ pathname: returnToPath, params: returnToParams });
+              router.replace({ pathname: returnToPath, params: returnToParams });
               return;
             }
             if (navigation.canGoBack()) {
@@ -1350,15 +1365,28 @@ export default function CreateCocktailScreen() {
         return;
       }
 
+      const isBackAction =
+        event.data.action.type === "GO_BACK" || event.data.action.type === "POP";
+      const tabPath = getTabPathFromAction(event.data.action);
+      const leaveByAction = () => {
+        if (isBackAction) {
+          returnToSourceOrBack(navigation, { returnToPath, returnToParams });
+          return;
+        }
+
+        if (tabPath) {
+          router.replace(tabPath);
+          return;
+        }
+
+        navigation.dispatch(event.data.action);
+      };
+
       if (hasUnsavedChanges || shouldConfirmOnLeave) {
         event.preventDefault();
         confirmLeave(() => {
           isHandlingBackRef.current = true;
-          if (event.data.action.type === "GO_BACK") {
-            returnToSourceOrBack(navigation, { returnToPath, returnToParams });
-          } else {
-            navigation.dispatch(event.data.action);
-          }
+          leaveByAction();
           setTimeout(() => {
             isHandlingBackRef.current = false;
           }, 0);
@@ -1366,10 +1394,10 @@ export default function CreateCocktailScreen() {
         return;
       }
 
-      if (event.data.action.type === "GO_BACK") {
+      if (isBackAction || tabPath) {
         event.preventDefault();
         isHandlingBackRef.current = true;
-        returnToSourceOrBack(navigation, { returnToPath, returnToParams });
+        leaveByAction();
         setTimeout(() => {
           isHandlingBackRef.current = false;
         }, 0);
