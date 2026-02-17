@@ -10269,20 +10269,11 @@
     },
     {
       "id": 166,
-<<<<<<< Updated upstream
-      "name": "Delta Sunset",
-      "synonyms": ["Orange Liqueur Lemon Stir"],
-      "description": "Delta sunset is a glorious, quite strong cocktail. Best served with farinaceous starchy dishes.",
-      "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 30ml of **Cointreau**, 30ml of **orange liqueur**, and 30ml of **lemon juice**.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled martini glass.",
-      "photoUri": "assets/cocktails/166-delta-sunset.jpg",
-      "glassId": "martini",
-=======
       "name": "Monte Carlo",
       "description": "An Old Fashioned-style variation with **rye whiskey** and **Benedictine**.",
       "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 60 ml of **rye Whiskey**, 7.5 ml of **Benedictine**, and 2 dashes of **Angostura bitters**.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a rocks glass over fresh ice.",
       "photoUri": "assets/cocktails/166-monte-carlo.jpg",
       "glassId": "rocks_glass",
->>>>>>> Stashed changes
       "methodIds": ["stir"],
       "tags": [2, 5],
       "ingredients": [
@@ -10295,53 +10286,24 @@
         },
         {
           "order": 2,
-<<<<<<< Updated upstream
-          "ingredientId": 110,
-          "name": "Cointreau",
-          "amount": "30",
-          "unitId": 11,
-          "allowBaseSubstitution": true
-        },
-        {
-          "order": 3,
-          "ingredientId": 247,
-          "name": "Orange Liqueur",
-          "amount": "30",
-          "unitId": 11
-        },
-        {
-          "order": 4,
-          "ingredientId": 216,
-          "name": "Lemon Juice",
-          "amount": "30",
-          "unitId": 11
-=======
-          "ingredientId": 193,
-          "name": "Ice",
-          "amount": "120",
-          "unitId": 8
-        },
-        {
-          "order": 3,
           "ingredientId": 300,
           "name": "Rye Whiskey",
           "amount": "60",
           "unitId": 11
         },
         {
-          "order": 4,
+          "order": 3,
           "ingredientId": 42,
           "name": "Benedictine",
           "amount": "7.5",
           "unitId": 11
         },
         {
-          "order": 5,
+          "order": 4,
           "ingredientId": 18,
           "name": "Angostura Bitters",
           "amount": "2",
           "unitId": 6
->>>>>>> Stashed changes
         }
       ]
     },
@@ -36230,8 +36192,6 @@
           "garnish": true
         }
       ]
-<<<<<<< Updated upstream
-=======
     },
     {
       "id": 594,
@@ -36555,7 +36515,6 @@
           "unitId": 11
         }
       ]
->>>>>>> Stashed changes
     }
   ],
   "ingredients": [
