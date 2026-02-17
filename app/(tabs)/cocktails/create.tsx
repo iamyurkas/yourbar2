@@ -1414,39 +1414,8 @@ export default function CreateCocktailScreen() {
   ]);
 
   const handleGoBack = useCallback(() => {
-    if (isNavigatingAfterSaveRef.current || isHandlingBackRef.current) {
-      return;
-    }
-
-    if (hasUnsavedChanges || shouldConfirmOnLeave) {
-      confirmLeave(() => {
-        isHandlingBackRef.current = true;
-        if (returnToPath) {
-          router.replace({ pathname: returnToPath, params: returnToParams });
-        } else {
-          skipDuplicateBack(navigation);
-        }
-        setTimeout(() => {
-          isHandlingBackRef.current = false;
-        }, 0);
-      });
-      return;
-    }
-
-    if (returnToPath) {
-      router.replace({ pathname: returnToPath, params: returnToParams });
-      return;
-    }
-
-    skipDuplicateBack(navigation);
-  }, [
-    confirmLeave,
-    hasUnsavedChanges,
-    navigation,
-    returnToPath,
-    returnToParams,
-    shouldConfirmOnLeave,
-  ]);
+    navigation.goBack();
+  }, [navigation]);
 
   const imageSource = useMemo(() => {
     if (!imageUri) {

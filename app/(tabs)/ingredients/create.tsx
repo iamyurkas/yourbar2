@@ -652,39 +652,8 @@ export default function IngredientFormScreen() {
   }, [confirmLeave, hasUnsavedChanges, navigation, returnToParams, returnToPath, shouldConfirmOnLeave]);
 
   const handleGoBack = useCallback(() => {
-    if (isNavigatingAfterSaveRef.current || isHandlingBackRef.current) {
-      return;
-    }
-
-    if (hasUnsavedChanges || shouldConfirmOnLeave) {
-      confirmLeave(() => {
-        isHandlingBackRef.current = true;
-        if (returnToPath) {
-          router.replace({ pathname: returnToPath, params: returnToParams });
-        } else {
-          skipDuplicateBack(navigation);
-        }
-        setTimeout(() => {
-          isHandlingBackRef.current = false;
-        }, 0);
-      });
-      return;
-    }
-
-    if (returnToPath) {
-      router.replace({ pathname: returnToPath, params: returnToParams });
-      return;
-    }
-
-    skipDuplicateBack(navigation);
-  }, [
-    confirmLeave,
-    hasUnsavedChanges,
-    navigation,
-    returnToParams,
-    returnToPath,
-    shouldConfirmOnLeave,
-  ]);
+    navigation.goBack();
+  }, [navigation]);
 
   const handleDeletePress = useCallback(() => {
     if (!isEditMode) {
