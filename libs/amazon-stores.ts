@@ -139,6 +139,15 @@ export function detectAmazonStoreFromStoreOrLocale(): AmazonStoreKey | null {
   return detectAmazonStoreFromLocale();
 }
 
+export function detectUsStorefrontOrLocale(): boolean {
+  const storefrontCountryCode = getStorefrontCountryCode();
+  if (storefrontCountryCode) {
+    return storefrontCountryCode === 'US';
+  }
+
+  return getLocaleCountryCode() === 'US';
+}
+
 export function getEffectiveAmazonStore(
   amazonStoreOverride: AmazonStoreOverride | null,
   detectedAmazonStore: AmazonStoreKey | null,
