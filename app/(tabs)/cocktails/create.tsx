@@ -1194,7 +1194,7 @@ export default function CreateCocktailScreen() {
       }
 
       if (returnToPath) {
-        router.navigate({ pathname: returnToPath, params: returnToParams });
+        router.replace({ pathname: returnToPath, params: returnToParams });
         return;
       }
 
@@ -1291,7 +1291,7 @@ export default function CreateCocktailScreen() {
               return;
             }
             if (returnToPath) {
-              router.navigate({ pathname: returnToPath, params: returnToParams });
+              router.replace({ pathname: returnToPath, params: returnToParams });
               return;
             }
             if (navigation.canGoBack()) {

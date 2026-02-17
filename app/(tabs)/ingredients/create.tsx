@@ -530,7 +530,7 @@ export default function IngredientFormScreen() {
     }
 
     if (returnToPath) {
-      router.navigate({ pathname: returnToPath, params: returnToParams });
+      router.replace({ pathname: returnToPath, params: returnToParams });
       return;
     }
 
@@ -698,7 +698,7 @@ export default function IngredientFormScreen() {
               return;
             }
             if (returnToPath) {
-              router.navigate({ pathname: returnToPath, params: returnToParams });
+              router.replace({ pathname: returnToPath, params: returnToParams });
               return;
             }
             if (navigation.canGoBack()) {
