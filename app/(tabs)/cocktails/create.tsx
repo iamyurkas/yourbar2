@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
-import { StackActions, useNavigation } from "@react-navigation/native";
+import { StackActions, useFocusEffect, useNavigation } from "@react-navigation/native";
 import { Image } from "expo-image";
 import * as ImagePicker from "expo-image-picker";
 import { Stack, router, useLocalSearchParams } from "expo-router";
@@ -434,6 +434,15 @@ export default function CreateCocktailScreen() {
   useEffect(() => {
     setHasUnsavedChanges(hasUnsavedChanges || shouldConfirmOnLeave);
   }, [hasUnsavedChanges, setHasUnsavedChanges, shouldConfirmOnLeave]);
+
+  useFocusEffect(
+    useCallback(() => {
+      setHasUnsavedChanges(hasUnsavedChanges || shouldConfirmOnLeave);
+      return () => {
+        setHasUnsavedChanges(false);
+      };
+    }, [hasUnsavedChanges, setHasUnsavedChanges, shouldConfirmOnLeave]),
+  );
 
   useEffect(() => () => setHasUnsavedChanges(false), [setHasUnsavedChanges]);
 
