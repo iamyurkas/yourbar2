@@ -22,10 +22,14 @@ export function OnboardingAnchor({ name, children, active = true, ...props }: On
         }
       });
     };
-    trigger();
-    // Re-measure after a short delay to ensure layout is settled
-    const timer = setTimeout(trigger, 100);
-    return () => clearTimeout(timer);
+
+    // Initial measure can be stale on iOS right after screen/tab switches.
+    // Retry a few times to capture the final settled position.
+    const timeouts = [0, 100, 350].map((delay) => setTimeout(trigger, delay));
+
+    return () => {
+      timeouts.forEach((timeoutId) => clearTimeout(timeoutId));
+    };
   }, [active, name, registerAnchor]);
 
   useEffect(() => {
