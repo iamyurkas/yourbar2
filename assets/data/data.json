@@ -10286,20 +10286,27 @@
         },
         {
           "order": 2,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
+        },
+        {
+          "order": 3,
           "ingredientId": 300,
           "name": "Rye Whiskey",
           "amount": "60",
           "unitId": 11
         },
         {
-          "order": 3,
+          "order": 4,
           "ingredientId": 42,
           "name": "Benedictine",
           "amount": "7.5",
           "unitId": 11
         },
         {
-          "order": 4,
+          "order": 5,
           "ingredientId": 18,
           "name": "Angostura Bitters",
           "amount": "2",
