@@ -1320,6 +1320,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: 1,
     minHeight: 56,
+    minWidth: 250,
   },
   itemActionLabel: {
     fontSize: 14,

@@ -3023,6 +3023,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: 1,
     minHeight: 56,
+    minWidth: 250,
     justifyContent: "center",
   },
   inlineActionLabel: {
@@ -3407,6 +3408,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     minHeight: 56,
+    minWidth: 250,
     zIndex: 1,
   },
   submitLabel: {
