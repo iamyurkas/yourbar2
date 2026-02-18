@@ -36,7 +36,7 @@ export const ingredientImages: Record<string, number> = {
   'assets/ingredients/128-crown-royal.jpg': require('./ingredients/128-crown-royal.jpg'),
   'assets/ingredients/129-cuban-aguardiente.jpg': require('./ingredients/129-cuban-aguardiente.jpg'),
   'assets/ingredients/13-amaro.jpg': require('./ingredients/13-amaro.jpg'),
-  'assets/ingredients/130-cuban-rum.jpg': require('./ingredients/130-cuban-rum.jpg'),
+  'assets/ingredients/130-white-cuban-rum.jpg': require('./ingredients/130-white-cuban-rum.jpg'),
   'assets/ingredients/131-cucumber.jpg': require('./ingredients/131-cucumber.jpg'),
   'assets/ingredients/132-cynar.jpg': require('./ingredients/132-cynar.jpg'),
   'assets/ingredients/133-daiquiri-bitters.jpg': require('./ingredients/133-daiquiri-bitters.jpg'),
