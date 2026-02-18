@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
-import { StackActions, type NavigationAction, useFocusEffect, useNavigation } from '@react-navigation/native';
+import { StackActions, useFocusEffect, useNavigation, type NavigationAction } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -1454,33 +1454,33 @@ export default function IngredientFormScreen() {
         />
       </View>
 
-      <Pressable
-        accessibilityRole="button"
-        style={({ pressed }) => [
-          submitButtonStyle,
-          {
-            backgroundColor: Colors.tint,
-            opacity: isSaving ? 0.6 : pressed ? 0.8 : 1,
-          },
-        ]}
-        onPress={handleSubmit}
-        disabled={isSaving || isPickingImage}>
-        <Text style={[styles.submitLabel, { color: Colors.onPrimary }]}>Save</Text>
-      </Pressable>
-
-      {isEditMode ? (
-        <View style={styles.inlineActions}>
-          <Pressable
-            accessibilityRole="button"
-            onPress={handleDeletePress}
-            style={[styles.inlineActionButton, { borderColor: Colors.error, backgroundColor: Colors.surfaceBright }]}
-            accessibilityLabel="Delete ingredient">
-            <MaterialIcons name="delete-outline" size={18} color={Colors.error} />
-            <Text style={[styles.inlineActionLabel, { color: Colors.error }]}>Delete ingredient</Text>
-          </Pressable>
-        </View>
-      ) : null}
-
+      <View style={styles.buttonsContainer}>
+        <Pressable
+          accessibilityRole="button"
+          style={({ pressed }) => [
+            submitButtonStyle,
+            {
+              backgroundColor: Colors.tint,
+              opacity: isSaving ? 0.6 : pressed ? 0.8 : 1,
+            },
+          ]}
+          onPress={handleSubmit}
+          disabled={isSaving || isPickingImage}>
+          <Text style={[styles.submitLabel, { color: Colors.onPrimary }]}>Save ingredient</Text>
+        </Pressable>
+        {isEditMode ? (
+          <View style={styles.inlineActions}>
+            <Pressable
+              accessibilityRole="button"
+              onPress={handleDeletePress}
+              style={[styles.inlineActionButton, { borderColor: Colors.error, backgroundColor: Colors.surfaceBright }]}
+              accessibilityLabel="Delete ingredient">
+              <MaterialIcons name="delete-outline" size={18} color={Colors.error} />
+              <Text style={[styles.inlineActionLabel, { color: Colors.error }]}>Delete ingredient</Text>
+            </Pressable>
+          </View>
+        ) : null}
+      </View>
       <View style={styles.bottomSpacer} />
     </ScrollView>
   );
@@ -1677,11 +1677,11 @@ const styles = StyleSheet.create({
   },
   contentCreate: {
     padding: 16,
-    gap: 20,
+    gap: 16,
   },
   contentEdit: {
     padding: 24,
-    gap: 24,
+    gap: 16,
   },
   sectionCreate: {
     gap: 10,
@@ -1821,6 +1821,10 @@ const styles = StyleSheet.create({
   submitLabel: {
     fontSize: 16,
     fontWeight: '600',
+  },
+  buttonsContainer: {
+    marginTop: 8,
+    gap: 16,
   },
   inlineActions: {
     alignItems: 'center',

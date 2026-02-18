@@ -1288,10 +1288,10 @@ const styles = StyleSheet.create({
   },
   content: {
     paddingHorizontal: 24,
-    paddingVertical: 32,
+    paddingVertical: 16,
   },
   section: {
-    gap: 24,
+    gap: 16,
   },
   name: {
     fontSize: 20,
@@ -1306,7 +1306,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    gap: 12,
+    marginVertical: 12,
+    gap: 24,
     flexWrap: "wrap",
   },
   itemActionButton: {
