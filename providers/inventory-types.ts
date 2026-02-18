@@ -2,13 +2,18 @@ import { type CocktailMethodId } from '@/constants/cocktail-methods';
 import { type InventoryData } from '@/libs/inventory-data';
 
 export type BaseCocktailRecord = InventoryData['cocktails'][number];
+export type BaseIngredientRecord = InventoryData['ingredients'][number];
 type CocktailIngredientRecord = NonNullable<BaseCocktailRecord['ingredients']>[number];
 type CocktailSubstituteRecord = NonNullable<CocktailIngredientRecord['substitutes']>[number];
+type IngredientRecord = BaseIngredientRecord & {
+  styleIngredientId?: number | null;
+};
 export type CocktailTag = NonNullable<BaseCocktailRecord['tags']>[number];
 export type CocktailSubstitute = CocktailSubstituteRecord & { brand?: boolean };
 export type CocktailIngredient = Omit<CocktailIngredientRecord, 'substitutes'> & {
   allowBaseSubstitution?: boolean;
   allowBrandSubstitution?: boolean;
+  allowStyleSubstitution?: boolean;
   substitutes?: CocktailSubstitute[];
 };
 type CocktailRecord = Omit<BaseCocktailRecord, 'ingredients' | 'searchName' | 'searchTokens'> & {
@@ -60,6 +65,7 @@ export type CreateCocktailIngredientInput = {
   garnish?: boolean | null;
   allowBaseSubstitution?: boolean | null;
   allowBrandSubstitution?: boolean | null;
+  allowStyleSubstitution?: boolean | null;
   substitutes?: CreateCocktailSubstituteInput[] | null;
   order?: number | null;
 };
@@ -81,6 +87,7 @@ export type CreateIngredientInput = {
   description?: string | null;
   photoUri?: string | null;
   baseIngredientId?: number | null;
+  styleIngredientId?: number | null;
   tags?: IngredientTag[] | null;
 };
 

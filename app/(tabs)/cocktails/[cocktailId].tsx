@@ -252,6 +252,7 @@ function buildMissingSubstituteLines(
   const requestedIngredient =
     ingredientId != null ? lookup.ingredientById.get(ingredientId) : undefined;
   const isBrandedIngredient = requestedIngredient?.baseIngredientId != null;
+  const isStyledIngredient = requestedIngredient?.styleIngredientId != null;
 
   const orderedSubstitutes = [
     ...resolution.substitutes.declared.map((option) => ({
@@ -262,6 +263,18 @@ function buildMissingSubstituteLines(
       ? resolution.substitutes.base.map((option) => ({
         option,
         source: "base" as const,
+      }))
+      : []),
+    ...(!isBrandedIngredient && !isStyledIngredient
+      ? resolution.substitutes.branded.map((option) => ({
+        option,
+        source: "branded" as const,
+      }))
+      : []),
+    ...(!isBrandedIngredient
+      ? resolution.substitutes.styled.map((option) => ({
+        option,
+        source: "styled" as const,
       }))
       : []),
   ];
@@ -282,7 +295,11 @@ function buildMissingSubstituteLines(
     }
 
     seen.add(key);
-    const prefix = source === "base" && isBrandedIngredient ? "or any" : "or";
+    const prefix =
+      (source === "base" && isBrandedIngredient) ||
+      source === "branded"
+        ? "or any"
+        : "or";
     lines.push(`${prefix} ${name}`);
   });
 
