@@ -1039,10 +1039,13 @@ export default function CocktailDetailsScreen() {
                       .map((tag) => tag?.color ?? tagColors.yellow)
                       .filter(Boolean);
                     const brandIndicatorColor =
-                      resolvedIngredient?.baseIngredientId != null ||
-                        catalogEntry?.baseIngredientId != null
-                        ? Colors.primary
-                        : undefined;
+                      resolvedIngredient?.styleIngredientId != null ||
+                        catalogEntry?.styleIngredientId != null
+                        ? Colors.styledIngredient
+                        : resolvedIngredient?.baseIngredientId != null ||
+                            catalogEntry?.baseIngredientId != null
+                          ? Colors.primary
+                          : undefined;
                     const isOnShoppingList =
                       ingredientId >= 0 &&
                       shoppingIngredientIds.has(ingredientId);

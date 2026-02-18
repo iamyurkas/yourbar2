@@ -72,7 +72,11 @@ const IngredientRow = memo(function IngredientRow({
   const ingredientTagColors = (ingredient.tags ?? [])
     .map((tag) => tag?.color ?? tagColors.yellow)
     .filter(Boolean);
-  const brandIndicatorColor = ingredient.baseIngredientId != null ? Colors.primary : undefined;
+  const brandIndicatorColor = ingredient.styleIngredientId != null
+    ? Colors.styledIngredient
+    : ingredient.baseIngredientId != null
+      ? Colors.primary
+      : undefined;
 
   const handlePress = useCallback(() => {
     if (ingredientId >= 0) {

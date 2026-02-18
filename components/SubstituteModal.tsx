@@ -269,7 +269,11 @@ export function SubstituteModal({
       const isOnShoppingList = candidateId >= 0 && shoppingIngredientIds.has(candidateId);
       const tagColor = item.tags?.[0]?.color ?? tagColors.yellow;
       const subtitle = renderSubtitle(baseGroupId);
-      const brandIndicatorColor = item.baseIngredientId != null ? Colors.primary : undefined;
+      const brandIndicatorColor = item.styleIngredientId != null
+        ? Colors.styledIngredient
+        : item.baseIngredientId != null
+          ? Colors.primary
+          : undefined;
 
       return (
         <ListRow

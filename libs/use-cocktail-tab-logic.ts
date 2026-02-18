@@ -14,6 +14,7 @@ export type MyTabListItem =
       tagColor?: string;
       cocktailCount: number;
       isBranded: boolean;
+      isStyled: boolean;
     };
 
 type IngredientOption = {
@@ -291,6 +292,7 @@ export function useCocktailTabLogic({
           photoUri: ingredientRecord?.photoUri ?? null,
           tagColor: ingredientRecord?.tags?.[0]?.color ?? defaultTagColor,
           isBranded: ingredientRecord?.baseIngredientId != null,
+          isStyled: ingredientRecord?.styleIngredientId != null,
           cocktails: [],
           keys: new Set<string>(),
         };
@@ -311,6 +313,7 @@ export function useCocktailTabLogic({
         photoUri: group.photoUri,
         tagColor: group.tagColor,
         isBranded: group.isBranded,
+        isStyled: group.isStyled,
         cocktails: group.cocktails.sort((a, b) =>
           (a.name ?? '').localeCompare(b.name ?? ''),
         ),
@@ -343,6 +346,7 @@ export function useCocktailTabLogic({
           tagColor: group.tagColor,
           cocktailCount: group.cocktails.length,
           isBranded: group.isBranded,
+          isStyled: group.isStyled,
         });
         group.cocktails.forEach((cocktail) => {
           items.push({
