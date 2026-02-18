@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
-import { StackActions, type NavigationAction, useNavigation } from '@react-navigation/native';
+import { StackActions, type NavigationAction, useNavigation, useFocusEffect } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -262,21 +262,16 @@ export default function IngredientFormScreen() {
     return JSON.stringify(buildSnapshot()) !== JSON.stringify(initialSnapshot);
   }, [buildSnapshot, initialSnapshot]);
 
-  useEffect(() => {
-    setHasUnsavedChanges(hasUnsavedChanges || shouldConfirmOnLeave);
-  }, [hasUnsavedChanges, setHasUnsavedChanges, shouldConfirmOnLeave]);
-
-  useEffect(() => {
-    setRequireLeaveConfirmation(shouldConfirmOnLeave);
-    return () => {
-      setRequireLeaveConfirmation(false);
-    };
-  }, [setRequireLeaveConfirmation, shouldConfirmOnLeave]);
-
-  useEffect(() => () => {
-    setHasUnsavedChanges(false);
-    setRequireLeaveConfirmation(false);
-  }, [setHasUnsavedChanges, setRequireLeaveConfirmation]);
+  useFocusEffect(
+    useCallback(() => {
+      setHasUnsavedChanges(hasUnsavedChanges || shouldConfirmOnLeave);
+      setRequireLeaveConfirmation(shouldConfirmOnLeave);
+      return () => {
+        setHasUnsavedChanges(false);
+        setRequireLeaveConfirmation(false);
+      };
+    }, [hasUnsavedChanges, setHasUnsavedChanges, setRequireLeaveConfirmation, shouldConfirmOnLeave]),
+  );
 
   const imageSource = useMemo(() => {
     if (isEditMode) {
