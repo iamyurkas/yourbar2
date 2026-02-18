@@ -116,6 +116,48 @@ export function summariseCocktailAvailability(
 
   requiredIngredients.forEach((ingredient) => {
     const shouldIncludeInSecondLine = !ingredient?.garnish;
+
+    const requestedIngredientId =
+      typeof ingredient.ingredientId === 'number' && Number.isFinite(ingredient.ingredientId)
+        ? Math.trunc(ingredient.ingredientId)
+        : undefined;
+    const requestedIngredientRecord =
+      requestedIngredientId != null ? lookup.ingredientById.get(requestedIngredientId) : undefined;
+
+    if (requestedIngredientId != null && !availableIngredientIds.has(requestedIngredientId)) {
+      const requestedBrandBaseId =
+        requestedIngredientRecord?.baseIngredientId != null && Number.isFinite(Number(requestedIngredientRecord.baseIngredientId))
+          ? Math.trunc(Number(requestedIngredientRecord.baseIngredientId))
+          : undefined;
+
+      if (requestedBrandBaseId != null) {
+        if (availableIngredientIds.has(requestedBrandBaseId)) {
+          hasBrandFallback = true;
+        } else {
+          const siblingBrands = lookup.brandsByBaseId.get(requestedBrandBaseId) ?? [];
+          if (siblingBrands.some((id) => id !== requestedIngredientId && availableIngredientIds.has(id))) {
+            hasBrandFallback = true;
+          }
+        }
+      }
+
+      const requestedStyleBaseId =
+        requestedIngredientRecord?.styleIngredientId != null && Number.isFinite(Number(requestedIngredientRecord.styleIngredientId))
+          ? Math.trunc(Number(requestedIngredientRecord.styleIngredientId))
+          : undefined;
+
+      if (requestedStyleBaseId != null) {
+        if (availableIngredientIds.has(requestedStyleBaseId)) {
+          hasStyleFallback = true;
+        } else {
+          const siblingStyles = lookup.stylesByBaseId.get(requestedStyleBaseId) ?? [];
+          if (siblingStyles.some((id) => id !== requestedIngredientId && availableIngredientIds.has(id))) {
+            hasStyleFallback = true;
+          }
+        }
+      }
+    }
+
     const resolution = resolveIngredientAvailability(
       ingredient,
       availableIngredientIds,
@@ -131,45 +173,6 @@ export function summariseCocktailAvailability(
     }
 
     missingCount += 1;
-
-    const missingIngredientId =
-      typeof ingredient.ingredientId === 'number' && Number.isFinite(ingredient.ingredientId)
-        ? Math.trunc(ingredient.ingredientId)
-        : undefined;
-    const missingIngredientRecord =
-      missingIngredientId != null ? lookup.ingredientById.get(missingIngredientId) : undefined;
-
-    const missingBrandBaseId =
-      missingIngredientRecord?.baseIngredientId != null && Number.isFinite(Number(missingIngredientRecord.baseIngredientId))
-        ? Math.trunc(Number(missingIngredientRecord.baseIngredientId))
-        : undefined;
-
-    if (missingBrandBaseId != null) {
-      if (availableIngredientIds.has(missingBrandBaseId)) {
-        hasBrandFallback = true;
-      } else {
-        const siblingBrands = lookup.brandsByBaseId.get(missingBrandBaseId) ?? [];
-        if (siblingBrands.some((id) => id !== missingIngredientId && availableIngredientIds.has(id))) {
-          hasBrandFallback = true;
-        }
-      }
-    }
-
-    const missingStyleBaseId =
-      missingIngredientRecord?.styleIngredientId != null && Number.isFinite(Number(missingIngredientRecord.styleIngredientId))
-        ? Math.trunc(Number(missingIngredientRecord.styleIngredientId))
-        : undefined;
-
-    if (missingStyleBaseId != null) {
-      if (availableIngredientIds.has(missingStyleBaseId)) {
-        hasStyleFallback = true;
-      } else {
-        const siblingStyles = lookup.stylesByBaseId.get(missingStyleBaseId) ?? [];
-        if (siblingStyles.some((id) => id !== missingIngredientId && availableIngredientIds.has(id))) {
-          hasStyleFallback = true;
-        }
-      }
-    }
 
     if (!shouldIncludeInSecondLine) {
       return;
