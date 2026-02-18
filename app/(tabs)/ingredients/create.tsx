@@ -1467,6 +1467,20 @@ export default function IngredientFormScreen() {
         disabled={isSaving || isPickingImage}>
         <Text style={[styles.submitLabel, { color: Colors.onPrimary }]}>Save</Text>
       </Pressable>
+
+      {isEditMode ? (
+        <View style={styles.inlineActions}>
+          <Pressable
+            accessibilityRole="button"
+            onPress={handleDeletePress}
+            style={[styles.inlineActionButton, { borderColor: Colors.outlineVariant }]}
+            accessibilityLabel="Delete ingredient">
+            <MaterialIcons name="delete-outline" size={18} color={Colors.onSurface} />
+            <Text style={[styles.inlineActionLabel, { color: Colors.onSurface }]}>Delete ingredient</Text>
+          </Pressable>
+        </View>
+      ) : null}
+
       <View style={styles.bottomSpacer} />
     </ScrollView>
   );
@@ -1491,20 +1505,13 @@ export default function IngredientFormScreen() {
               />
             </HeaderIconButton>
           ),
-          headerRight: () =>
-            isEditMode ? (
-              <HeaderIconButton
-                onPress={handleDeletePress}
-                accessibilityLabel="Delete ingredient">
-                <MaterialIcons name="delete-outline" size={22} color={Colors.onSurface} />
-              </HeaderIconButton>
-            ) : (
-              <HeaderIconButton
-                onPress={() => setIsHelpVisible(true)}
-                accessibilityLabel="Open screen help">
-                <MaterialCommunityIcons name="help-circle-outline" size={22} color={Colors.onSurface} />
-              </HeaderIconButton>
-            ),
+          headerRight: () => (
+            <HeaderIconButton
+              onPress={() => setIsHelpVisible(true)}
+              accessibilityLabel="Open screen help">
+              <MaterialCommunityIcons name="help-circle-outline" size={22} color={Colors.onSurface} />
+            </HeaderIconButton>
+          ),
         }}
       />
       {isEditMode ? (
@@ -1808,6 +1815,23 @@ const styles = StyleSheet.create({
   },
   submitLabel: {
     fontSize: 16,
+    fontWeight: '600',
+  },
+  inlineActions: {
+    alignItems: 'center',
+    marginTop: 8,
+  },
+  inlineActionButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: 10,
+    borderWidth: 1,
+  },
+  inlineActionLabel: {
+    fontSize: 14,
     fontWeight: '600',
   },
   baseSelector: {

@@ -15,6 +15,7 @@ import { Platform, Pressable, ScrollView, StyleSheet, Text, View } from "react-n
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { resolveGlasswareUriFromId } from "@/assets/image-manifest";
+import { AppDialog } from "@/components/AppDialog";
 import { AppImage } from "@/components/AppImage";
 import { FormattedText } from "@/components/FormattedText";
 import { HeaderIconButton } from "@/components/HeaderIconButton";
@@ -597,6 +598,7 @@ export default function CocktailDetailsScreen() {
   }, [cocktail]);
 
   const [expandedMethodIds, setExpandedMethodIds] = useState<string[]>([]);
+  const [isHelpVisible, setIsHelpVisible] = useState(false);
 
   const handleToggleUnits = useCallback(() => {
     setShowImperialUnits((current) => !current);
@@ -686,30 +688,16 @@ export default function CocktailDetailsScreen() {
             </HeaderIconButton>
           ),
           headerRight: () => (
-            <View style={styles.headerActions}>
-              <HeaderIconButton
-                onPress={handleCopyPress}
-                accessibilityLabel="Copy cocktail"
-                style={styles.headerActionButton}
-              >
-                <MaterialCommunityIcons
-                  name="content-copy"
-                  size={20}
-                  color={Colors.onSurface}
-                />
-              </HeaderIconButton>
-              <HeaderIconButton
-                onPress={handleEditPress}
-                accessibilityLabel="Edit cocktail"
-                style={styles.headerActionButton}
-              >
-                <MaterialCommunityIcons
-                  name="pencil-outline"
-                  size={20}
-                  color={Colors.onSurface}
-                />
-              </HeaderIconButton>
-            </View>
+            <HeaderIconButton
+              onPress={() => setIsHelpVisible(true)}
+              accessibilityLabel="Open screen help"
+            >
+              <MaterialCommunityIcons
+                name="help-circle-outline"
+                size={20}
+                color={Colors.onSurface}
+              />
+            </HeaderIconButton>
           ),
         }}
       />
@@ -822,6 +810,35 @@ export default function CocktailDetailsScreen() {
                   </Text>
                 </View>
               ) : null}
+
+              <View style={styles.itemActions}>
+                <Pressable
+                  onPress={handleCopyPress}
+                  accessibilityRole="button"
+                  accessibilityLabel="Copy cocktail"
+                  style={[styles.itemActionButton, { borderColor: Colors.outlineVariant }]}
+                >
+                  <MaterialCommunityIcons
+                    name="content-copy"
+                    size={18}
+                    color={Colors.onSurface}
+                  />
+                  <Text style={[styles.itemActionLabel, { color: Colors.onSurface }]}>Copy cocktail</Text>
+                </Pressable>
+                <Pressable
+                  onPress={handleEditPress}
+                  accessibilityRole="button"
+                  accessibilityLabel="Edit cocktail"
+                  style={[styles.itemActionButton, { borderColor: Colors.outlineVariant }]}
+                >
+                  <MaterialCommunityIcons
+                    name="pencil-outline"
+                    size={18}
+                    color={Colors.onSurface}
+                  />
+                  <Text style={[styles.itemActionLabel, { color: Colors.onSurface }]}>Edit cocktail</Text>
+                </Pressable>
+              </View>
             </View>
 
             {methodDetails.length ? (
@@ -1245,6 +1262,14 @@ export default function CocktailDetailsScreen() {
           </View>
         )}
       </ScrollView>
+
+      <AppDialog
+        visible={isHelpVisible}
+        title="Cocktail details"
+        message="This screen shows cocktail details, ingredients, and instructions.\n\nUse the buttons under the cocktail to copy or edit it."
+        actions={[{ label: "Got it", variant: "secondary" }]}
+        onRequestClose={() => setIsHelpVisible(false)}
+      />
     </SafeAreaView>
   );
 }
@@ -1252,14 +1277,6 @@ export default function CocktailDetailsScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-  },
-  headerActions: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginRight: -4,
-  },
-  headerActionButton: {
-    marginLeft: 8,
   },
   content: {
     paddingHorizontal: 24,
@@ -1276,6 +1293,26 @@ const styles = StyleSheet.create({
   mediaSection: {
     gap: 16,
     alignItems: "center",
+  },
+  itemActions: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 12,
+    flexWrap: "wrap",
+  },
+  itemActionButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: 10,
+    borderWidth: 1,
+  },
+  itemActionLabel: {
+    fontSize: 14,
+    fontWeight: "600",
   },
   photoWrapper: {
     alignItems: "center",
