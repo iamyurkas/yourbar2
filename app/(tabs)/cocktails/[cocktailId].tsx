@@ -1266,7 +1266,7 @@ export default function CocktailDetailsScreen() {
       <AppDialog
         visible={isHelpVisible}
         title="Cocktail details"
-        message="This screen shows cocktail details, ingredients, and instructions.\n\nUse the buttons under the cocktail to copy or edit it.\n\nIngredient ribbons: left ribbon marks ingredient type (yellow = brand ingredient, blue = style ingredient). Right ribbon marks related base variants (yellow = has branded variants, blue = has style variants)."
+        message="This screen shows cocktail details, ingredients, and instructions.\n\nUse the buttons under the cocktail to copy or edit it.\n\n**Ingredient ribbons**\nLeft ribbon marks ingredient type:\nblue = brand ingredient,\nyellow = style ingredient.\n\nRight ribbon marks base variants:\nblue = has branded variants,\nyellow = has style variants."
         actions={[{ label: "Got it", variant: "secondary" }]}
         onRequestClose={() => setIsHelpVisible(false)}
       />
