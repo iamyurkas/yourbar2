@@ -538,6 +538,7 @@ export default function ShakerResultsScreen() {
           missingCount={availability.missingCount}
           recipeNamesCount={availability.recipeNames.length}
           ingredientLine={availability.ingredientLine}
+          hasStyledSubstitution={availability.hasStyledSubstitution}
           ratingValue={getCocktailRating(item)}
         />
       );

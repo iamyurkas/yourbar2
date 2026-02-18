@@ -71,6 +71,7 @@ export type CocktailAvailabilitySummary = {
   recipeNames: string[];
   isReady: boolean;
   ingredientLine: string;
+  hasStyledSubstitution: boolean;
 };
 
 export function summariseCocktailAvailability(
@@ -94,13 +95,21 @@ export function summariseCocktailAvailability(
     .filter(Boolean);
 
   if (requiredIngredients.length === 0) {
-    return { missingCount: 0, missingNames: [], recipeNames, isReady: false, ingredientLine: '' };
+    return {
+      missingCount: 0,
+      missingNames: [],
+      recipeNames,
+      isReady: false,
+      ingredientLine: '',
+      hasStyledSubstitution: false,
+    };
   }
 
   const missingNames: string[] = [];
   const resolvedNames: string[] = [];
   let missingCount = 0;
   let displayMissingCount = 0;
+  let hasStyledSubstitution = false;
 
   requiredIngredients.forEach((ingredient) => {
     const shouldIncludeInSecondLine = !ingredient?.garnish;
@@ -112,6 +121,10 @@ export function summariseCocktailAvailability(
     );
 
     if (resolution.isAvailable) {
+      if (resolution.resolvedFromType === 'style') {
+        hasStyledSubstitution = true;
+      }
+
       if (shouldIncludeInSecondLine && resolution.resolvedName) {
         resolvedNames.push(resolution.resolvedName);
       }
@@ -141,7 +154,14 @@ export function summariseCocktailAvailability(
 
   const isReady = missingCount === 0 && requiredIngredients.length > 0;
 
-  return { missingCount, missingNames, recipeNames, isReady, ingredientLine };
+  return {
+    missingCount,
+    missingNames,
+    recipeNames,
+    isReady,
+    ingredientLine,
+    hasStyledSubstitution,
+  };
 }
 
 export function isCocktailReady(

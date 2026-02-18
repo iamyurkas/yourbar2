@@ -28,6 +28,7 @@ export type IngredientResolution = {
   resolvedName: string;
   resolvedIngredient?: Ingredient;
   substituteFor?: string;
+  resolvedFromType?: 'requested' | 'base' | 'brand' | 'style' | 'declared';
   isAvailable: boolean;
   isConsideredAvailable: boolean;
   missingName?: string;
@@ -380,6 +381,7 @@ export function resolveIngredientAvailability(
   let resolvedId: number | undefined;
   let resolvedName = requestedName;
   let substituteFor: string | undefined;
+  let resolvedFromType: IngredientResolution['resolvedFromType'];
   let isAvailable = false;
   let resolvedIngredient: Ingredient | undefined;
 
@@ -389,6 +391,7 @@ export function resolveIngredientAvailability(
     resolvedId = requestedId;
     resolvedName = requestedCandidateName;
     resolvedIngredient = requestedIngredient;
+    resolvedFromType = 'requested';
     isAvailable = true;
   } else {
     const substitutionOrder = [
@@ -407,6 +410,7 @@ export function resolveIngredientAvailability(
       resolvedName = resolveNameFromId(candidate.id, requestedCandidateName);
       resolvedIngredient = lookup.ingredientById.get(candidate.id);
       substituteFor = requestedCandidateName;
+      resolvedFromType = candidate.type;
       isAvailable = true;
       break;
     }
@@ -449,6 +453,7 @@ export function resolveIngredientAvailability(
     resolvedName,
     resolvedIngredient,
     substituteFor,
+    resolvedFromType,
     isAvailable,
     isConsideredAvailable,
     missingName,
