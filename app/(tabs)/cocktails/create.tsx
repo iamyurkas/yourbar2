@@ -321,6 +321,7 @@ export default function CreateCocktailScreen() {
   const [initialSnapshot, setInitialSnapshot] =
     useState<CocktailFormSnapshot | null>(null);
   const [isTagModalVisible, setTagModalVisible] = useState(false);
+  const prefilledTargetId = prefilledCocktail?.id ?? prefilledCocktail?.name;
   const defaultUnitId = useImperialUnits
     ? DEFAULT_IMPERIAL_UNIT_ID
     : DEFAULT_METRIC_UNIT_ID;
@@ -1514,61 +1515,18 @@ export default function CreateCocktailScreen() {
               />
             </HeaderIconButton>
           ),
-          headerRight: () => {
-            if (isEditMode) {
-              return (
-                <HeaderIconButton
-                  onPress={handleDeletePress}
-                  accessibilityLabel="Delete cocktail"
-                >
-                  <MaterialIcons
-                    name="delete-outline"
-                    size={20}
-                    color={Colors.onSurface}
-                  />
-                </HeaderIconButton>
-              );
-            }
-
-            const targetId = prefilledCocktail?.id ?? prefilledCocktail?.name;
-
-            return (
-              <View style={styles.headerActions}>
-                <HeaderIconButton
-                  onPress={() => setIsHelpVisible(true)}
-                  accessibilityLabel="Open screen help"
-                >
-                  <MaterialCommunityIcons
-                    name="help-circle-outline"
-                    size={20}
-                    color={Colors.onSurface}
-                  />
-                </HeaderIconButton>
-                {targetId ? (
-                  <HeaderIconButton
-                    onPress={() =>
-                      router.replace({
-                        pathname: "/cocktails/create",
-                        params: {
-                          cocktailId: String(targetId),
-                          cocktailName: prefilledCocktail?.name ?? undefined,
-                          mode: "edit",
-                          source: sourceParam ?? undefined,
-                        },
-                      })
-                    }
-                    accessibilityLabel="Edit cocktail"
-                  >
-                    <MaterialCommunityIcons
-                      name="pencil-outline"
-                      size={20}
-                      color={Colors.onSurface}
-                    />
-                  </HeaderIconButton>
-                ) : null}
-              </View>
-            );
-          },
+          headerRight: () => (
+            <HeaderIconButton
+              onPress={() => setIsHelpVisible(true)}
+              accessibilityLabel="Open screen help"
+            >
+              <MaterialCommunityIcons
+                name="help-circle-outline"
+                size={20}
+                color={Colors.onSurface}
+              />
+            </HeaderIconButton>
+          ),
         }}
       />
 
@@ -1901,10 +1859,56 @@ export default function CreateCocktailScreen() {
             accessibilityRole="button"
             accessibilityLabel="Save cocktail"
           >
-            <Text style={[styles.submitLabel, { color: Colors.onPrimary }]}>
+            <Text style={[styles.submitLabel, { color: Colors.onPrimary }]}> 
               Save
             </Text>
           </Pressable>
+
+          {isEditMode || prefilledTargetId ? (
+            <View style={styles.inlineActions}>
+              {prefilledTargetId && !isEditMode ? (
+                <Pressable
+                  onPress={() =>
+                    router.replace({
+                      pathname: "/cocktails/create",
+                      params: {
+                        cocktailId: String(prefilledTargetId),
+                        cocktailName: prefilledCocktail?.name ?? undefined,
+                        mode: "edit",
+                        source: sourceParam ?? undefined,
+                      },
+                    })
+                  }
+                  style={[styles.inlineActionButton, { borderColor: Colors.outlineVariant }]}
+                  accessibilityRole="button"
+                  accessibilityLabel="Edit cocktail"
+                >
+                  <MaterialCommunityIcons
+                    name="pencil-outline"
+                    size={18}
+                    color={Colors.onSurface}
+                  />
+                  <Text style={[styles.inlineActionLabel, { color: Colors.onSurface }]}>Edit cocktail</Text>
+                </Pressable>
+              ) : null}
+              {isEditMode ? (
+                <Pressable
+                  onPress={handleDeletePress}
+                  style={[styles.inlineActionButton, { borderColor: Colors.outlineVariant }]}
+                  accessibilityRole="button"
+                  accessibilityLabel="Delete cocktail"
+                >
+                  <MaterialIcons
+                    name="delete-outline"
+                    size={18}
+                    color={Colors.onSurface}
+                  />
+                  <Text style={[styles.inlineActionLabel, { color: Colors.onSurface }]}>Delete cocktail</Text>
+                </Pressable>
+              ) : null}
+            </View>
+          ) : null}
+
           <View style={styles.bottomSpacer} />
         </ScrollView>
       </KeyboardAvoidingView>
@@ -3005,10 +3009,25 @@ const styles = StyleSheet.create({
   flex: {
     flex: 1,
   },
-  headerActions: {
+  inlineActions: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    flexWrap: "wrap",
+    gap: 10,
+  },
+  inlineActionButton: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 4,
+    gap: 8,
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: 10,
+    borderWidth: 1,
+  },
+  inlineActionLabel: {
+    fontSize: 14,
+    fontWeight: "600",
   },
   content: {
     padding: 16,

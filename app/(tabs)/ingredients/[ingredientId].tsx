@@ -142,6 +142,7 @@ export default function IngredientDetailsScreen() {
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(
     null,
   );
+  const [isHelpVisible, setIsHelpVisible] = useState(false);
   const [, startAvailabilityTransition] = useTransition();
   const [, startShoppingTransition] = useTransition();
   const isHandlingBackRef = useRef(false);
@@ -807,11 +808,11 @@ export default function IngredientDetailsScreen() {
           ),
           headerRight: () => (
             <HeaderIconButton
-              onPress={handleEditPress}
-              accessibilityLabel="Edit ingredient"
+              onPress={() => setIsHelpVisible(true)}
+              accessibilityLabel="Open screen help"
             >
               <MaterialCommunityIcons
-                name="pencil-outline"
+                name="help-circle-outline"
                 size={20}
                 color={Colors.onSurface}
               />
@@ -861,6 +862,22 @@ export default function IngredientDetailsScreen() {
               </View>
 
               <View style={styles.statusRow}>
+                <View style={styles.itemActions}>
+                  <Pressable
+                    onPress={handleEditPress}
+                    accessibilityRole="button"
+                    accessibilityLabel="Edit ingredient"
+                    style={[styles.itemActionButton, { borderColor: Colors.outlineVariant }]}
+                  >
+                    <MaterialCommunityIcons
+                      name="pencil-outline"
+                      size={18}
+                      color={Colors.onSurface}
+                    />
+                    <Text style={[styles.itemActionLabel, { color: Colors.onSurface }]}>Edit ingredient</Text>
+                  </Pressable>
+                </View>
+
                 <View style={styles.statusControls}>
                   <View style={styles.statusControlRow}>
                     <Text
@@ -1513,6 +1530,14 @@ export default function IngredientDetailsScreen() {
       </ScrollView>
 
       <AppDialog
+        visible={isHelpVisible}
+        title="Ingredient details"
+        message="This screen shows ingredient details, links, and related cocktails.\n\nUse the button under the ingredient to edit it.\n\n**Cocktail ribbons**\nLeft ribbon shows what's inside:\nblue = has brand ingredients,\nyellow = has style ingredients.\n\nRight ribbon shows fallback:\nblue = brand fallback exists,\nyellow = style fallback exists."
+        actions={[{ label: "Got it", variant: "secondary" }]}
+        onRequestClose={() => setIsHelpVisible(false)}
+      />
+
+      <AppDialog
         visible={dialogOptions != null}
         title={dialogOptions?.title ?? ""}
         message={dialogOptions?.message}
@@ -1542,6 +1567,23 @@ const styles = StyleSheet.create({
   mediaSection: {
     gap: 16,
     alignItems: "center",
+  },
+  itemActions: {
+    width: "100%",
+    alignItems: "center",
+  },
+  itemActionButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: 10,
+    borderWidth: 1,
+  },
+  itemActionLabel: {
+    fontSize: 14,
+    fontWeight: "600",
   },
   photoWrapper: {
     width: 150,
