@@ -1680,8 +1680,8 @@ const styles = StyleSheet.create({
     gap: 20,
   },
   contentEdit: {
-    padding: 24,
-    gap: 24,
+    padding: 16,
+    gap: 20,
   },
   sectionCreate: {
     gap: 10,
