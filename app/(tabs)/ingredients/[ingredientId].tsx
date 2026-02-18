@@ -1554,10 +1554,10 @@ const styles = StyleSheet.create({
   },
   content: {
     paddingHorizontal: 24,
-    paddingVertical: 32,
+    paddingVertical: 24,
   },
   section: {
-    gap: 24,
+    gap: 20,
   },
   name: {
     fontSize: 20,
@@ -1677,7 +1677,7 @@ const styles = StyleSheet.create({
   },
   showMoreButton: {
     alignSelf: "center",
-    marginTop: 12,
+    marginTop: 8,
     height: 56,
     minWidth: 250,
     alignItems: "center",
@@ -1792,7 +1792,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
   },
   addButton: {
-    marginTop: 12,
+    marginTop: 8,
     alignSelf: "center",
     height: 56,
     minWidth: 250,
