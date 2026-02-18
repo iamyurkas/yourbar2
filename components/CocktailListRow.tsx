@@ -22,6 +22,7 @@ type CocktailListRowProps = {
   recipeNamesCount: number;
   ingredientLine: string;
   ratingValue: number;
+  hasStyledSubstitution?: boolean;
 };
 
 const areCocktailRowPropsEqual = (
@@ -44,6 +45,7 @@ const areCocktailRowPropsEqual = (
     prev.recipeNamesCount === next.recipeNamesCount &&
     prev.ingredientLine === next.ingredientLine &&
     prev.ratingValue === next.ratingValue &&
+    prev.hasStyledSubstitution === next.hasStyledSubstitution &&
     onPressEqual
   );
 };
@@ -62,6 +64,7 @@ const CocktailListRowComponent = ({
   recipeNamesCount,
   ingredientLine,
   ratingValue,
+  hasStyledSubstitution = false,
 }: CocktailListRowProps) => {
   const Colors = useAppColors();
   const effectiveHighlightColor = highlightColor ?? Colors.highlightFaint;
@@ -235,6 +238,7 @@ const CocktailListRowComponent = ({
       metaFooter={methodIconContent}
       accessibilityRole={onPress ? 'button' : undefined}
       metaAlignment="center"
+      rightIndicatorColor={hasStyledSubstitution ? Colors.styledIngredient : undefined}
     />
   );
 };

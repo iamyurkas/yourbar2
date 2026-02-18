@@ -477,6 +477,7 @@ export default function CocktailsScreen() {
           missingCount={availability.missingCount}
           recipeNamesCount={availability.recipeNames.length}
           ingredientLine={availability.ingredientLine}
+          hasStyledSubstitution={availability.hasStyledSubstitution}
           ratingValue={getCocktailRating(item)}
         />
       );
@@ -560,6 +561,7 @@ export default function CocktailsScreen() {
           missingCount={availability.missingCount}
           recipeNamesCount={availability.recipeNames.length}
           ingredientLine={availability.ingredientLine}
+          hasStyledSubstitution={availability.hasStyledSubstitution}
           ratingValue={getCocktailRating(item.cocktail)}
         />
       );
