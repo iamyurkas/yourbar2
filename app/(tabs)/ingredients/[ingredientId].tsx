@@ -1575,9 +1575,11 @@ const styles = StyleSheet.create({
   itemActionButton: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
     gap: 8,
     paddingHorizontal: 14,
-    paddingVertical: 8,
+    height: 56,
+    minWidth: 250,
     borderRadius: 10,
     borderWidth: 1,
   },
@@ -1676,8 +1678,11 @@ const styles = StyleSheet.create({
   showMoreButton: {
     alignSelf: "center",
     marginTop: 12,
+    height: 56,
+    minWidth: 250,
+    alignItems: "center",
+    justifyContent: "center",
     paddingHorizontal: 20,
-    paddingVertical: 10,
     borderRadius: 12,
     borderWidth: 1,
   },
@@ -1789,8 +1794,11 @@ const styles = StyleSheet.create({
   addButton: {
     marginTop: 12,
     alignSelf: "center",
+    height: 56,
+    minWidth: 250,
+    alignItems: "center",
+    justifyContent: "center",
     paddingHorizontal: 20,
-    paddingVertical: 12,
     borderRadius: 12,
   },
   addButtonLabel: {

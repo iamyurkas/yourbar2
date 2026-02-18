@@ -945,9 +945,16 @@ export default function CocktailDetailsScreen() {
                   <Pressable
                     onPress={toggleDescription}
                     accessibilityRole="button"
+                    style={[
+                      styles.showMoreButton,
+                      {
+                        borderColor: Colors.tint,
+                        backgroundColor: Colors.background,
+                      },
+                    ]}
                   >
                     <Text
-                      style={[styles.toggleDescription, { color: Colors.tint }]}
+                      style={[styles.showMoreLabel, { color: Colors.tint }]}
                     >
                       {isDescriptionExpanded ? "Show less" : "Show more"}
                     </Text>
@@ -1305,9 +1312,11 @@ const styles = StyleSheet.create({
   itemActionButton: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
     gap: 8,
     paddingHorizontal: 14,
-    paddingVertical: 8,
+    height: 56,
+    minWidth: 250,
     borderRadius: 10,
     borderWidth: 1,
   },
@@ -1439,9 +1448,20 @@ const styles = StyleSheet.create({
   instructionsList: {
     gap: 8,
   },
-  toggleDescription: {
+  showMoreButton: {
+    marginTop: 12,
+    alignSelf: "center",
+    height: 56,
+    minWidth: 250,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 12,
+    borderWidth: 1,
+    paddingHorizontal: 20,
+  },
+  showMoreLabel: {
     fontSize: 14,
-    fontWeight: "500",
+    fontWeight: "600",
   },
   ingredientsList: {
     marginHorizontal: -24,
