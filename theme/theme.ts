@@ -45,6 +45,7 @@ export const lightPalette = {
 
   highlightFaint: "#DDEEFF",
   highlightSubtle: "#fff4dd",
+  styledIngredient: "#EAB308",
   overlayOnPrimary: "#FFFFFF55",
 
   secondary: "#625B71",
@@ -99,6 +100,7 @@ export const darkPalette = {
 
   highlightFaint: "#1E2936",
   highlightSubtle: "#412f00",
+  styledIngredient: "#FACC15",
   overlayOnPrimary: "#00000055",
 
   secondary: "#B0BEC5",
@@ -189,6 +191,7 @@ function createTheme(
       backdrop: p.backdrop,
       highlightFaint: p.highlightFaint,
       highlightSubtle: p.highlightSubtle,
+      styledIngredient: p.styledIngredient,
       overlayOnPrimary: p.overlayOnPrimary,
       danger: p.danger,
       success: p.success,

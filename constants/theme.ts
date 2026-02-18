@@ -17,6 +17,7 @@ export function useAppColors() {
     disabled: theme.colors.disabled ?? lightPalette.disabled,
     placeholder: theme.colors.placeholder ?? lightPalette.placeholder,
     success: theme.colors.success ?? lightPalette.success,
+    styledIngredient: theme.colors.styledIngredient ?? lightPalette.styledIngredient,
   };
 }
 
@@ -34,6 +35,7 @@ export const Colors = {
   disabled: lightPalette.disabled,
   placeholder: lightPalette.placeholder,
   success: lightPalette.success,
+  styledIngredient: lightPalette.styledIngredient,
 } as const;
 
 export const Fonts = Platform.select({
