@@ -3033,7 +3033,7 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: 16,
-    gap: 20,
+    gap: 16,
     paddingBottom: 120,
   },
   section: {
