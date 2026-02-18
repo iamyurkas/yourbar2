@@ -447,10 +447,12 @@ export default function CreateCocktailScreen() {
   useFocusEffect(
     useCallback(() => {
       setHasUnsavedChanges(hasUnsavedChanges || shouldConfirmOnLeave);
+      setRequireLeaveConfirmation(shouldConfirmOnLeave);
       return () => {
         setHasUnsavedChanges(false);
+        setRequireLeaveConfirmation(false);
       };
-    }, [hasUnsavedChanges, setHasUnsavedChanges, shouldConfirmOnLeave]),
+    }, [hasUnsavedChanges, setHasUnsavedChanges, setRequireLeaveConfirmation, shouldConfirmOnLeave]),
   );
 
   useEffect(() => () => {
