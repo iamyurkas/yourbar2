@@ -1095,16 +1095,7 @@ export default function CocktailDetailsScreen() {
 
                     const subtitleLines: string[] = [];
 
-                    const isBaseToBrandSubstitution =
-                      Boolean(resolution.substituteFor) &&
-                      ingredientId >= 0 &&
-                      resolvedIngredient?.baseIngredientId != null &&
-                      resolvedIngredient.baseIngredientId === ingredientId;
-
-                    if (
-                      resolution.substituteFor &&
-                      !isBaseToBrandSubstitution
-                    ) {
+                    if (resolution.substituteFor) {
                       subtitleLines.push(
                         `Substitute for ${resolution.substituteFor}`,
                       );
