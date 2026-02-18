@@ -1879,31 +1879,31 @@ export default function CreateCocktailScreen() {
                       },
                     })
                   }
-                  style={[styles.inlineActionButton, { borderColor: Colors.outlineVariant }]}
+                  style={[styles.inlineActionButton, { borderColor: Colors.primary, backgroundColor: Colors.surface }]}
                   accessibilityRole="button"
                   accessibilityLabel="Edit cocktail"
                 >
                   <MaterialCommunityIcons
                     name="pencil-outline"
                     size={18}
-                    color={Colors.onSurface}
+                    color={Colors.primary}
                   />
-                  <Text style={[styles.inlineActionLabel, { color: Colors.onSurface }]}>Edit cocktail</Text>
+                  <Text style={[styles.inlineActionLabel, { color: Colors.primary }]}>Edit cocktail</Text>
                 </Pressable>
               ) : null}
               {isEditMode ? (
                 <Pressable
                   onPress={handleDeletePress}
-                  style={[styles.inlineActionButton, { borderColor: Colors.outlineVariant }]}
+                  style={[styles.inlineActionButton, { borderColor: Colors.danger, backgroundColor: Colors.surface }]}
                   accessibilityRole="button"
                   accessibilityLabel="Delete cocktail"
                 >
                   <MaterialIcons
                     name="delete-outline"
                     size={18}
-                    color={Colors.onSurface}
+                    color={Colors.danger}
                   />
-                  <Text style={[styles.inlineActionLabel, { color: Colors.onSurface }]}>Delete cocktail</Text>
+                  <Text style={[styles.inlineActionLabel, { color: Colors.danger }]}>Delete cocktail</Text>
                 </Pressable>
               ) : null}
             </View>
@@ -3010,10 +3010,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   inlineActions: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    flexWrap: "wrap",
+    flexDirection: "column",
+    alignItems: "stretch",
     gap: 10,
   },
   inlineActionButton: {
@@ -3021,9 +3019,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 8,
     paddingHorizontal: 14,
-    paddingVertical: 8,
-    borderRadius: 10,
+    paddingVertical: 16,
+    borderRadius: 12,
     borderWidth: 1,
+    minHeight: 56,
+    justifyContent: "center",
   },
   inlineActionLabel: {
     fontSize: 14,

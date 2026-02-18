@@ -811,34 +811,6 @@ export default function CocktailDetailsScreen() {
                 </View>
               ) : null}
 
-              <View style={styles.itemActions}>
-                <Pressable
-                  onPress={handleCopyPress}
-                  accessibilityRole="button"
-                  accessibilityLabel="Copy cocktail"
-                  style={[styles.itemActionButton, { borderColor: Colors.outlineVariant }]}
-                >
-                  <MaterialCommunityIcons
-                    name="content-copy"
-                    size={18}
-                    color={Colors.onSurface}
-                  />
-                  <Text style={[styles.itemActionLabel, { color: Colors.onSurface }]}>Copy cocktail</Text>
-                </Pressable>
-                <Pressable
-                  onPress={handleEditPress}
-                  accessibilityRole="button"
-                  accessibilityLabel="Edit cocktail"
-                  style={[styles.itemActionButton, { borderColor: Colors.outlineVariant }]}
-                >
-                  <MaterialCommunityIcons
-                    name="pencil-outline"
-                    size={18}
-                    color={Colors.onSurface}
-                  />
-                  <Text style={[styles.itemActionLabel, { color: Colors.onSurface }]}>Edit cocktail</Text>
-                </Pressable>
-              </View>
             </View>
 
             {methodDetails.length ? (
@@ -1246,6 +1218,47 @@ export default function CocktailDetailsScreen() {
                 </View>
               </View>
             ) : null}
+
+            <View style={styles.itemActions}>
+              <Pressable
+                onPress={handleCopyPress}
+                accessibilityRole="button"
+                accessibilityLabel="Copy cocktail"
+                style={[
+                  styles.itemActionButton,
+                  {
+                    borderColor: Colors.primary,
+                    backgroundColor: Colors.surface,
+                  },
+                ]}
+              >
+                <MaterialCommunityIcons
+                  name="content-copy"
+                  size={18}
+                  color={Colors.primary}
+                />
+                <Text style={[styles.itemActionLabel, { color: Colors.primary }]}>Copy cocktail</Text>
+              </Pressable>
+              <Pressable
+                onPress={handleEditPress}
+                accessibilityRole="button"
+                accessibilityLabel="Edit cocktail"
+                style={[
+                  styles.itemActionButton,
+                  {
+                    borderColor: Colors.primary,
+                    backgroundColor: Colors.surface,
+                  },
+                ]}
+              >
+                <MaterialCommunityIcons
+                  name="pencil-outline"
+                  size={18}
+                  color={Colors.primary}
+                />
+                <Text style={[styles.itemActionLabel, { color: Colors.primary }]}>Edit cocktail</Text>
+              </Pressable>
+            </View>
           </View>
         ) : (
           <View style={styles.emptyState}>
@@ -1295,20 +1308,18 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   itemActions: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 12,
-    flexWrap: "wrap",
+    gap: 10,
+    width: "100%",
   },
   itemActionButton: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
     gap: 8,
-    paddingHorizontal: 14,
-    paddingVertical: 8,
-    borderRadius: 10,
+    paddingVertical: 16,
+    borderRadius: 12,
     borderWidth: 1,
+    minHeight: 56,
   },
   itemActionLabel: {
     fontSize: 14,

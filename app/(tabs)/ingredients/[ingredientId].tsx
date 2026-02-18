@@ -862,22 +862,6 @@ export default function IngredientDetailsScreen() {
               </View>
 
               <View style={styles.statusRow}>
-                <View style={styles.itemActions}>
-                  <Pressable
-                    onPress={handleEditPress}
-                    accessibilityRole="button"
-                    accessibilityLabel="Edit ingredient"
-                    style={[styles.itemActionButton, { borderColor: Colors.outlineVariant }]}
-                  >
-                    <MaterialCommunityIcons
-                      name="pencil-outline"
-                      size={18}
-                      color={Colors.onSurface}
-                    />
-                    <Text style={[styles.itemActionLabel, { color: Colors.onSurface }]}>Edit ingredient</Text>
-                  </Pressable>
-                </View>
-
                 <View style={styles.statusControls}>
                   <View style={styles.statusControlRow}>
                     <Text
@@ -1514,6 +1498,28 @@ export default function IngredientDetailsScreen() {
                 + Add cocktail
               </Text>
             </Pressable>
+
+            <View style={styles.itemActions}>
+              <Pressable
+                onPress={handleEditPress}
+                accessibilityRole="button"
+                accessibilityLabel="Edit ingredient"
+                style={[
+                  styles.itemActionButton,
+                  {
+                    borderColor: Colors.primary,
+                    backgroundColor: Colors.surface,
+                  },
+                ]}
+              >
+                <MaterialCommunityIcons
+                  name="pencil-outline"
+                  size={18}
+                  color={Colors.primary}
+                />
+                <Text style={[styles.itemActionLabel, { color: Colors.primary }]}>Edit ingredient</Text>
+              </Pressable>
+            </View>
           </View>
         ) : (
           <View style={styles.emptyState}>
@@ -1570,16 +1576,18 @@ const styles = StyleSheet.create({
   },
   itemActions: {
     width: "100%",
-    alignItems: "center",
+    alignItems: "stretch",
   },
   itemActionButton: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
     gap: 8,
     paddingHorizontal: 14,
-    paddingVertical: 8,
-    borderRadius: 10,
+    paddingVertical: 16,
+    borderRadius: 12,
     borderWidth: 1,
+    minHeight: 56,
   },
   itemActionLabel: {
     fontSize: 14,

@@ -1473,10 +1473,10 @@ export default function IngredientFormScreen() {
           <Pressable
             accessibilityRole="button"
             onPress={handleDeletePress}
-            style={[styles.inlineActionButton, { borderColor: Colors.outlineVariant }]}
+            style={[styles.inlineActionButton, { borderColor: Colors.danger, backgroundColor: Colors.surface }]}
             accessibilityLabel="Delete ingredient">
-            <MaterialIcons name="delete-outline" size={18} color={Colors.onSurface} />
-            <Text style={[styles.inlineActionLabel, { color: Colors.onSurface }]}>Delete ingredient</Text>
+            <MaterialIcons name="delete-outline" size={18} color={Colors.danger} />
+            <Text style={[styles.inlineActionLabel, { color: Colors.danger }]}>Delete ingredient</Text>
           </Pressable>
         </View>
       ) : null}
@@ -1818,7 +1818,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   inlineActions: {
-    alignItems: 'center',
+    alignItems: 'stretch',
     marginTop: 8,
   },
   inlineActionButton: {
@@ -1826,9 +1826,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 8,
     paddingHorizontal: 14,
-    paddingVertical: 8,
-    borderRadius: 10,
+    paddingVertical: 16,
+    borderRadius: 12,
     borderWidth: 1,
+    minHeight: 56,
+    justifyContent: 'center',
   },
   inlineActionLabel: {
     fontSize: 14,
