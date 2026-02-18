@@ -3,6 +3,8 @@ import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { useAppColors } from '@/constants/theme';
 
+import { FormattedText } from './FormattedText';
+
 export type DialogAction = {
   label: string;
   onPress?: () => void;
@@ -70,7 +72,9 @@ export function AppDialog({ visible, title, message, actions, onRequestClose }: 
           onPress={(event) => event.stopPropagation()}>
           <Text style={[styles.title, { color: Colors.onSurface }]}>{title}</Text>
           {normalizedMessage ? (
-            <Text style={[styles.message, { color: Colors.onSurfaceVariant }]}>{normalizedMessage}</Text>
+            <FormattedText style={[styles.message, { color: Colors.onSurfaceVariant }]}>
+              {normalizedMessage}
+            </FormattedText>
           ) : null}
           <View style={styles.actions}>
             {actions.map((action, index) => {
