@@ -76,6 +76,7 @@ export default function IngredientFormScreen() {
     returnToParams?: string;
     mode?: string;
     ingredientId?: string;
+    confirmOnLeave?: string;
   }>();
   const modeParam = getParamValue(params.mode);
   const isEditMode = modeParam === 'edit';
@@ -123,9 +124,13 @@ export default function IngredientFormScreen() {
       return undefined;
     }
   }, [returnToParamsParam]);
+  const confirmOnLeaveParam = useMemo(() => {
+    const value = getParamValue(params.confirmOnLeave);
+    return value === 'true';
+  }, [params.confirmOnLeave]);
   const shouldConfirmOnLeave = useMemo(
-    () => !isEditMode && returnToPath === '/cocktails/create',
-    [isEditMode, returnToPath],
+    () => !isEditMode && confirmOnLeaveParam,
+    [confirmOnLeaveParam, isEditMode],
   );
 
   const navigation = useNavigation();
