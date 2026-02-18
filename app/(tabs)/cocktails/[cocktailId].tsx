@@ -297,7 +297,7 @@ function buildMissingSubstituteLines(
     seen.add(key);
     const prefix =
       (source === "base" && isBrandedIngredient) ||
-      source === "branded"
+        source === "branded"
         ? "or any"
         : "or";
     lines.push(`${prefix} ${name}`);
@@ -1043,7 +1043,7 @@ export default function CocktailDetailsScreen() {
                         catalogEntry?.styleIngredientId != null
                         ? Colors.styledIngredient
                         : resolvedIngredient?.baseIngredientId != null ||
-                            catalogEntry?.baseIngredientId != null
+                          catalogEntry?.baseIngredientId != null
                           ? Colors.primary
                           : undefined;
                     const isStyleBaseIngredient =
@@ -1094,19 +1094,17 @@ export default function CocktailDetailsScreen() {
                     };
 
                     const subtitleLines: string[] = [];
-
                     const isBaseToBrandSubstitution =
                       Boolean(resolution.substituteFor) &&
                       ingredientId >= 0 &&
                       resolvedIngredient?.baseIngredientId != null &&
                       resolvedIngredient.baseIngredientId === ingredientId;
 
-                    if (
-                      resolution.substituteFor &&
-                      !isBaseToBrandSubstitution
-                    ) {
+                    if (resolution.substituteFor) {
                       subtitleLines.push(
-                        `Substitute for ${resolution.substituteFor}`,
+                        isBaseToBrandSubstitution
+                          ? `or any ${resolution.substituteFor}`
+                          : `Substitute for ${resolution.substituteFor}`,
                       );
                     }
 
