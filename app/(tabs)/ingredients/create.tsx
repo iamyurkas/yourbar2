@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
-import { StackActions, type NavigationAction, useNavigation } from '@react-navigation/native';
+import { StackActions, type NavigationAction, useFocusEffect, useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -268,10 +268,19 @@ export default function IngredientFormScreen() {
 
   useEffect(() => {
     setRequireLeaveConfirmation(shouldConfirmOnLeave);
-    return () => {
-      setRequireLeaveConfirmation(false);
-    };
   }, [setRequireLeaveConfirmation, shouldConfirmOnLeave]);
+
+  useFocusEffect(
+    useCallback(() => {
+      setHasUnsavedChanges(hasUnsavedChanges || shouldConfirmOnLeave);
+      setRequireLeaveConfirmation(shouldConfirmOnLeave);
+
+      return () => {
+        setHasUnsavedChanges(false);
+        setRequireLeaveConfirmation(false);
+      };
+    }, [hasUnsavedChanges, shouldConfirmOnLeave, setHasUnsavedChanges, setRequireLeaveConfirmation]),
+  );
 
   useEffect(() => () => {
     setHasUnsavedChanges(false);
