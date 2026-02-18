@@ -510,7 +510,11 @@ export default function CocktailsScreen() {
         const subtitleLabel = `To make ${item.cocktailCount} more ${item.cocktailCount === 1 ? 'cocktail' : 'cocktails'
           }`;
         const thumbnail = <Thumb label={item.name} uri={item.photoUri ?? undefined} />;
-        const brandIndicatorColor = item.isBranded ? Colors.primary : undefined;
+        const brandIndicatorColor = item.isStyled
+          ? Colors.styledIngredient
+          : item.isBranded
+            ? Colors.primary
+            : undefined;
 
         return (
           <ListRow

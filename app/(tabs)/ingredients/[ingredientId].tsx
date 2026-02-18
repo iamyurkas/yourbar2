@@ -1210,6 +1210,7 @@ export default function IngredientDetailsScreen() {
                           },
                         ]}
                       >
+                        <View style={[styles.leftIndicator, { backgroundColor: Colors.styledIngredient }]} />
                         <View style={styles.baseIngredientInfo}>
                           <View style={[styles.baseIngredientThumb, { backgroundColor: Colors.surfaceBright }]}>
                             {styledPhotoSource ? (
@@ -1644,6 +1645,15 @@ const styles = StyleSheet.create({
     padding: 12,
     borderWidth: StyleSheet.hairlineWidth,
     borderRadius: 12,
+    position: "relative",
+    overflow: "hidden",
+  },
+  leftIndicator: {
+    position: "absolute",
+    left: 0,
+    top: 0,
+    bottom: 0,
+    width: 4,
   },
   baseIngredientInfo: {
     flexDirection: "row",
