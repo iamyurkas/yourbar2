@@ -54,6 +54,7 @@ type IngredientRowProps = {
   isAvailable: boolean;
   isOnShoppingList: boolean;
   isStyleBaseIngredient: boolean;
+  isBrandBaseIngredient: boolean;
   subtitle?: string;
   subtitleStyle?: StyleProp<TextStyle>;
   onToggle: (id: number) => void;
@@ -65,6 +66,7 @@ const IngredientRow = memo(function IngredientRow({
   isAvailable,
   isOnShoppingList,
   isStyleBaseIngredient,
+  isBrandBaseIngredient,
   subtitle,
   subtitleStyle,
   onToggle,
@@ -79,7 +81,11 @@ const IngredientRow = memo(function IngredientRow({
     : ingredient.baseIngredientId != null
       ? Colors.primary
       : undefined;
-  const rightIndicatorColor = isStyleBaseIngredient ? Colors.styledIngredient : undefined;
+  const rightIndicatorColor = isBrandBaseIngredient
+    ? Colors.primary
+    : isStyleBaseIngredient
+      ? Colors.styledIngredient
+      : undefined;
 
   const handlePress = useCallback(() => {
     if (ingredientId >= 0) {
@@ -351,6 +357,14 @@ export default function ShakerScreen() {
         .map(([baseId]) => baseId),
     );
   }, [ingredientLookup.stylesByBaseId]);
+
+  const brandedBaseIngredientIds = useMemo(() => {
+    return new Set(
+      Array.from(ingredientLookup.brandsByBaseId.entries())
+        .filter(([, brandIds]) => brandIds.length > 0)
+        .map(([baseId]) => baseId),
+    );
+  }, [ingredientLookup.brandsByBaseId]);
 
   const visibleCocktailsByIngredientId = useMemo(() => {
     const map = new Map<number, Set<string>>();
@@ -1005,6 +1019,7 @@ export default function ShakerScreen() {
       const isSelected = ingredientId >= 0 && selectedIngredientIds.has(ingredientId);
       const isOnShoppingList = ingredientId >= 0 && shoppingIngredientIds.has(ingredientId);
       const isStyleBaseIngredient = ingredientId >= 0 && styleBaseIngredientIds.has(ingredientId);
+      const isBrandBaseIngredient = ingredientId >= 0 && brandedBaseIngredientIds.has(ingredientId);
       const separatorColor = isAvailable ? Colors.outline : Colors.outlineVariant;
       const makeableCount = ingredientId >= 0 ? makeableCocktailCounts.get(ingredientId) ?? 0 : 0;
       const totalCount = ingredientId >= 0 ? totalCocktailCounts.get(ingredientId) ?? 0 : 0;
@@ -1025,6 +1040,7 @@ export default function ShakerScreen() {
             isSelected={isSelected}
             isOnShoppingList={isOnShoppingList}
             isStyleBaseIngredient={isStyleBaseIngredient}
+            isBrandBaseIngredient={isBrandBaseIngredient}
             subtitle={subtitleText}
             subtitleStyle={{ color: Colors.onSurfaceVariant }}
             onToggle={handleToggleIngredient}
@@ -1044,6 +1060,7 @@ export default function ShakerScreen() {
       selectedIngredientIds,
       shoppingIngredientIds,
       styleBaseIngredientIds,
+      brandedBaseIngredientIds,
       totalCocktailCounts,
     ],
   );
