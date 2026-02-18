@@ -3019,9 +3019,11 @@ const styles = StyleSheet.create({
   inlineActionButton: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
     gap: 8,
     paddingHorizontal: 14,
-    paddingVertical: 8,
+    height: 56,
+    minWidth: 250,
     borderRadius: 10,
     borderWidth: 1,
   },
@@ -3403,10 +3405,12 @@ const styles = StyleSheet.create({
   },
   submitButton: {
     borderRadius: 12,
-    paddingVertical: 16,
+    height: 56,
+    minWidth: 250,
     alignItems: "center",
     justifyContent: "center",
-    minHeight: 56,
+    alignSelf: "center",
+    paddingHorizontal: 20,
     zIndex: 1,
   },
   submitLabel: {
