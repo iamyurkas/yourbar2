@@ -1097,7 +1097,9 @@ export default function CocktailDetailsScreen() {
 
                     if (resolution.substituteFor) {
                       subtitleLines.push(
-                        `Substitute for ${resolution.substituteFor}`,
+                        isBaseToBrandSubstitution
+                          ? `or any ${resolution.substituteFor}`
+                          : `Substitute for ${resolution.substituteFor}`,
                       );
                     }
 
