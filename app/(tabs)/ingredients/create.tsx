@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
-import { StackActions, type NavigationAction, useNavigation } from '@react-navigation/native';
+import { StackActions, type NavigationAction, useFocusEffect, useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -76,6 +76,7 @@ export default function IngredientFormScreen() {
     returnToParams?: string;
     mode?: string;
     ingredientId?: string;
+    confirmOnLeave?: string;
   }>();
   const modeParam = getParamValue(params.mode);
   const isEditMode = modeParam === 'edit';
@@ -123,9 +124,10 @@ export default function IngredientFormScreen() {
       return undefined;
     }
   }, [returnToParamsParam]);
+  const confirmOnLeaveParam = useMemo(() => getParamValue(params.confirmOnLeave) === 'true', [params.confirmOnLeave]);
   const shouldConfirmOnLeave = useMemo(
-    () => !isEditMode && returnToPath === '/cocktails/create',
-    [isEditMode, returnToPath],
+    () => confirmOnLeaveParam || (!isEditMode && returnToPath === '/cocktails/create'),
+    [confirmOnLeaveParam, isEditMode, returnToPath],
   );
 
   const navigation = useNavigation();
@@ -262,21 +264,16 @@ export default function IngredientFormScreen() {
     return JSON.stringify(buildSnapshot()) !== JSON.stringify(initialSnapshot);
   }, [buildSnapshot, initialSnapshot]);
 
-  useEffect(() => {
-    setHasUnsavedChanges(hasUnsavedChanges || shouldConfirmOnLeave);
-  }, [hasUnsavedChanges, setHasUnsavedChanges, shouldConfirmOnLeave]);
-
-  useEffect(() => {
-    setRequireLeaveConfirmation(shouldConfirmOnLeave);
-    return () => {
-      setRequireLeaveConfirmation(false);
-    };
-  }, [setRequireLeaveConfirmation, shouldConfirmOnLeave]);
-
-  useEffect(() => () => {
-    setHasUnsavedChanges(false);
-    setRequireLeaveConfirmation(false);
-  }, [setHasUnsavedChanges, setRequireLeaveConfirmation]);
+  useFocusEffect(
+    useCallback(() => {
+      setHasUnsavedChanges(hasUnsavedChanges || shouldConfirmOnLeave);
+      setRequireLeaveConfirmation(shouldConfirmOnLeave);
+      return () => {
+        setHasUnsavedChanges(false);
+        setRequireLeaveConfirmation(false);
+      };
+    }, [hasUnsavedChanges, setHasUnsavedChanges, setRequireLeaveConfirmation, shouldConfirmOnLeave]),
+  );
 
   const imageSource = useMemo(() => {
     if (isEditMode) {
