@@ -433,30 +433,16 @@ export default function CreateCocktailScreen() {
     return JSON.stringify(buildSnapshot()) !== JSON.stringify(initialSnapshot);
   }, [buildSnapshot, initialSnapshot]);
 
-  useEffect(() => {
-    setHasUnsavedChanges(hasUnsavedChanges || shouldConfirmOnLeave);
-  }, [hasUnsavedChanges, setHasUnsavedChanges, shouldConfirmOnLeave]);
-
-  useEffect(() => {
-    setRequireLeaveConfirmation(shouldConfirmOnLeave);
-    return () => {
-      setRequireLeaveConfirmation(false);
-    };
-  }, [setRequireLeaveConfirmation, shouldConfirmOnLeave]);
-
   useFocusEffect(
     useCallback(() => {
       setHasUnsavedChanges(hasUnsavedChanges || shouldConfirmOnLeave);
+      setRequireLeaveConfirmation(shouldConfirmOnLeave);
       return () => {
         setHasUnsavedChanges(false);
+        setRequireLeaveConfirmation(false);
       };
-    }, [hasUnsavedChanges, setHasUnsavedChanges, shouldConfirmOnLeave]),
+    }, [hasUnsavedChanges, setHasUnsavedChanges, setRequireLeaveConfirmation, shouldConfirmOnLeave]),
   );
-
-  useEffect(() => () => {
-    setHasUnsavedChanges(false);
-    setRequireLeaveConfirmation(false);
-  }, [setHasUnsavedChanges, setRequireLeaveConfirmation]);
 
   const getBaseGroupId = useCallback(
     (rawId: number | string | null | undefined) => {
@@ -958,6 +944,7 @@ export default function CreateCocktailScreen() {
           pathname: "/ingredients/create",
           params: {
             mode: "create",
+            confirmOnLeave: "true",
             returnToPath: "/cocktails/create",
             returnToParams: formReturnParams,
           },
@@ -968,6 +955,7 @@ export default function CreateCocktailScreen() {
         pathname: "/ingredients/create",
         params: {
           mode: "create",
+          confirmOnLeave: "true",
           suggestedName: trimmed,
           returnToPath: "/cocktails/create",
           returnToParams: formReturnParams,
