@@ -126,7 +126,7 @@ export default function IngredientFormScreen() {
   }, [returnToParamsParam]);
   const fromCocktailAddIngredientParam = useMemo(() => {
     const value = getParamValue(params.fromCocktailAddIngredient);
-    return value === '1' || value === 'true';
+    return value === 'true';
   }, [params.fromCocktailAddIngredient]);
   const shouldConfirmOnLeave = useMemo(
     () =>
