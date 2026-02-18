@@ -2719,7 +2719,7 @@ function EditableIngredientRow({
             const subtitle = renderSubtitle(baseGroupId);
             const brandIndicatorColor =
               candidate.styleIngredientId != null
-                ? Colors.success
+                ? Colors.styledIngredient
                 : candidate.baseIngredientId != null
                   ? Colors.primary
                   : undefined;

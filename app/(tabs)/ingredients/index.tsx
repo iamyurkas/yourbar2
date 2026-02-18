@@ -118,7 +118,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
   );
 
   const brandIndicatorColor = ingredient.styleIngredientId != null
-    ? Colors.success
+    ? Colors.styledIngredient
     : ingredient.baseIngredientId != null
       ? Colors.primary
       : undefined;
