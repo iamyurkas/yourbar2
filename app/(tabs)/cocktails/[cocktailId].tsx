@@ -1101,12 +1101,11 @@ export default function CocktailDetailsScreen() {
                       resolvedIngredient?.baseIngredientId != null &&
                       resolvedIngredient.baseIngredientId === ingredientId;
 
-                    if (
-                      resolution.substituteFor &&
-                      !isBaseToBrandSubstitution
-                    ) {
+                    if (resolution.substituteFor) {
                       subtitleLines.push(
-                        `Substitute for ${resolution.substituteFor}`,
+                        isBaseToBrandSubstitution
+                          ? `or any ${resolution.substituteFor}`
+                          : `Substitute for ${resolution.substituteFor}`,
                       );
                     }
 
