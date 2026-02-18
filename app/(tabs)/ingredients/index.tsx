@@ -60,6 +60,7 @@ type IngredientListItemProps = {
   highlightColor: string;
   isAvailable: boolean;
   hasStyledVariants: boolean;
+  hasBrandedVariants: boolean;
   onToggleAvailability: (id: number) => void;
   subtitle?: string;
   surfaceVariantColor?: string;
@@ -76,6 +77,7 @@ const areIngredientPropsEqual = (
   prev.highlightColor === next.highlightColor &&
   prev.isAvailable === next.isAvailable &&
   prev.hasStyledVariants === next.hasStyledVariants &&
+  prev.hasBrandedVariants === next.hasBrandedVariants &&
   prev.onToggleAvailability === next.onToggleAvailability &&
   prev.subtitle === next.subtitle &&
   prev.surfaceVariantColor === next.surfaceVariantColor &&
@@ -88,6 +90,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
   highlightColor,
   isAvailable,
   hasStyledVariants,
+  hasBrandedVariants,
   onToggleAvailability,
   subtitle,
   surfaceVariantColor,
@@ -125,7 +128,11 @@ const IngredientListItem = memo(function IngredientListItemComponent({
     : ingredient.baseIngredientId != null
       ? Colors.primary
       : undefined;
-  const rightIndicatorColor = hasStyledVariants ? Colors.styledIngredient : undefined;
+  const rightIndicatorColor = hasBrandedVariants
+    ? Colors.primary
+    : hasStyledVariants
+      ? Colors.styledIngredient
+      : undefined;
 
   const shoppingControl = useMemo(() => {
     const shoppingLabel = onShoppingToggle ? 'Remove from shopping list' : 'On shopping list';
@@ -390,6 +397,13 @@ export default function IngredientsScreen() {
         .map(([baseId]) => baseId),
     );
   }, [ingredientLookup.stylesByBaseId]);
+  const brandedBaseIngredientIds = useMemo(() => {
+    return new Set(
+      Array.from(ingredientLookup.brandsByBaseId.entries())
+        .filter(([, brandIds]) => brandIds.length > 0)
+        .map(([baseId]) => baseId),
+    );
+  }, [ingredientLookup.brandsByBaseId]);
 
   const ingredientCocktailStats = useMemo(() => {
     const totalCounts = new Map<number, number>();
@@ -628,6 +642,7 @@ export default function IngredientsScreen() {
           highlightColor={highlightColor}
           isAvailable={isAvailable}
           hasStyledVariants={ingredientId >= 0 && styleBaseIngredientIds.has(ingredientId)}
+          hasBrandedVariants={ingredientId >= 0 && brandedBaseIngredientIds.has(ingredientId)}
           onToggleAvailability={handleToggle}
           subtitle={subtitleText}
           surfaceVariantColor={Colors.onSurfaceVariant ?? Colors.icon}
@@ -647,6 +662,7 @@ export default function IngredientsScreen() {
       Colors,
       shoppingIngredientIds,
       styleBaseIngredientIds,
+      brandedBaseIngredientIds,
     ],
   );
 

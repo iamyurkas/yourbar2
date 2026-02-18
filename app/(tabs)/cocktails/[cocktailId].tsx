@@ -1051,7 +1051,16 @@ export default function CocktailDetailsScreen() {
                         (ingredientLookup.stylesByBaseId.get(resolvedId)?.length ?? 0) > 0) ||
                       (ingredientId >= 0 &&
                         (ingredientLookup.stylesByBaseId.get(ingredientId)?.length ?? 0) > 0);
-                    const rightIndicatorColor = isStyleBaseIngredient ? Colors.styledIngredient : undefined;
+                    const isBrandBaseIngredient =
+                      (resolvedId != null &&
+                        (ingredientLookup.brandsByBaseId.get(resolvedId)?.length ?? 0) > 0) ||
+                      (ingredientId >= 0 &&
+                        (ingredientLookup.brandsByBaseId.get(ingredientId)?.length ?? 0) > 0);
+                    const rightIndicatorColor = isBrandBaseIngredient
+                      ? Colors.primary
+                      : isStyleBaseIngredient
+                        ? Colors.styledIngredient
+                        : undefined;
                     const isOnShoppingList =
                       ingredientId >= 0 &&
                       shoppingIngredientIds.has(ingredientId);

@@ -932,6 +932,22 @@ export default function IngredientFormScreen() {
     [isEditMode, numericIngredientId],
   );
 
+  const styledBaseIngredientIds = useMemo(() => {
+    return new Set(
+      ingredients
+        .filter((item) => Number(item.styleIngredientId ?? -1) >= 0)
+        .map((item) => Number(item.styleIngredientId)),
+    );
+  }, [ingredients]);
+
+  const brandedBaseIngredientIds = useMemo(() => {
+    return new Set(
+      ingredients
+        .filter((item) => Number(item.baseIngredientId ?? -1) >= 0)
+        .map((item) => Number(item.baseIngredientId)),
+    );
+  }, [ingredients]);
+
   const renderBaseIngredient = useCallback(
     ({ item }: { item: Ingredient }) => {
       const id = Number(item.id ?? -1);
@@ -944,6 +960,13 @@ export default function IngredientFormScreen() {
         : item.baseIngredientId != null
           ? Colors.primary
           : undefined;
+      const rightIndicatorColor = Number.isFinite(id) && id >= 0
+        ? brandedBaseIngredientIds.has(id)
+          ? Colors.primary
+          : styledBaseIngredientIds.has(id)
+            ? Colors.styledIngredient
+            : undefined
+        : undefined;
 
       const control = isOnShoppingList ? (
         <View style={styles.baseShoppingIndicator}>
@@ -964,6 +987,7 @@ export default function IngredientFormScreen() {
           control={control}
           metaAlignment="flex-start"
           brandIndicatorColor={brandIndicatorColor}
+          rightIndicatorColor={rightIndicatorColor}
         />
       );
     },
@@ -973,6 +997,8 @@ export default function IngredientFormScreen() {
       handleSelectBaseIngredient,
       Colors,
       shoppingIngredientIds,
+      brandedBaseIngredientIds,
+      styledBaseIngredientIds,
     ],
   );
 
@@ -1063,6 +1089,13 @@ export default function IngredientFormScreen() {
         : item.baseIngredientId != null
           ? Colors.primary
           : undefined;
+      const rightIndicatorColor = Number.isFinite(id) && id >= 0
+        ? brandedBaseIngredientIds.has(id)
+          ? Colors.primary
+          : styledBaseIngredientIds.has(id)
+            ? Colors.styledIngredient
+            : undefined
+        : undefined;
 
       const control = isOnShoppingList ? (
         <View style={styles.baseShoppingIndicator}>
@@ -1083,10 +1116,19 @@ export default function IngredientFormScreen() {
           control={control}
           metaAlignment="flex-start"
           brandIndicatorColor={brandIndicatorColor}
+          rightIndicatorColor={rightIndicatorColor}
         />
       );
     },
-    [Colors, availableIngredientIds, handleSelectStyleIngredient, shoppingIngredientIds, styleIngredientId],
+    [
+      Colors,
+      availableIngredientIds,
+      handleSelectStyleIngredient,
+      shoppingIngredientIds,
+      styleIngredientId,
+      brandedBaseIngredientIds,
+      styledBaseIngredientIds,
+    ],
   );
   const baseModalKeyExtractor = useCallback((item: Ingredient) => {
     if (item.id != null) {

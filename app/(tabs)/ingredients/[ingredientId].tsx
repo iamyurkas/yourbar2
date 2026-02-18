@@ -286,6 +286,14 @@ export default function IngredientDetailsScreen() {
     );
   }, [ingredients]);
 
+  const brandedBaseIngredientIds = useMemo(() => {
+    return new Set(
+      ingredients
+        .filter((item) => Number(item.baseIngredientId ?? -1) >= 0)
+        .map((item) => Number(item.baseIngredientId)),
+    );
+  }, [ingredients]);
+
   const baseIngredientPhotoSource = useMemo(
     () => resolveImageSource(baseIngredient?.photoUri),
     [baseIngredient?.photoUri],
@@ -1038,7 +1046,9 @@ export default function IngredientDetailsScreen() {
                     },
                   ]}
                 >
-                  {baseIngredient?.id != null && styleBaseIngredientIds.has(Number(baseIngredient.id)) ? (
+                  {styleIngredient?.id != null && brandedBaseIngredientIds.has(Number(styleIngredient.id)) ? (
+                    <View style={[styles.rightIndicator, { backgroundColor: Colors.primary }]} />
+                  ) : styleIngredient?.id != null && styleBaseIngredientIds.has(Number(styleIngredient.id)) ? (
                     <View style={[styles.rightIndicator, { backgroundColor: Colors.styledIngredient }]} />
                   ) : null}
                   <View style={styles.baseIngredientInfo}>
@@ -1222,7 +1232,9 @@ export default function IngredientDetailsScreen() {
                         ]}
                       >
                         <View style={[styles.leftIndicator, { backgroundColor: Colors.styledIngredient }]} />
-                        {styled.id != null && styleBaseIngredientIds.has(Number(styled.id)) ? (
+                        {styled.id != null && brandedBaseIngredientIds.has(Number(styled.id)) ? (
+                          <View style={[styles.rightIndicator, { backgroundColor: Colors.primary }]} />
+                        ) : styled.id != null && styleBaseIngredientIds.has(Number(styled.id)) ? (
                           <View style={[styles.rightIndicator, { backgroundColor: Colors.styledIngredient }]} />
                         ) : null}
                         <View style={styles.baseIngredientInfo}>
@@ -1318,7 +1330,9 @@ export default function IngredientDetailsScreen() {
                           },
                         ]}
                       >
-                        {branded.id != null && styleBaseIngredientIds.has(Number(branded.id)) ? (
+                        {branded.id != null && brandedBaseIngredientIds.has(Number(branded.id)) ? (
+                          <View style={[styles.rightIndicator, { backgroundColor: Colors.primary }]} />
+                        ) : branded.id != null && styleBaseIngredientIds.has(Number(branded.id)) ? (
                           <View style={[styles.rightIndicator, { backgroundColor: Colors.styledIngredient }]} />
                         ) : null}
                         <View style={styles.baseIngredientInfo}>
