@@ -59,6 +59,7 @@ type IngredientListItemProps = {
   ingredient: Ingredient;
   highlightColor: string;
   isAvailable: boolean;
+  hasStyledVariants: boolean;
   onToggleAvailability: (id: number) => void;
   subtitle?: string;
   surfaceVariantColor?: string;
@@ -74,6 +75,7 @@ const areIngredientPropsEqual = (
   prev.ingredient === next.ingredient &&
   prev.highlightColor === next.highlightColor &&
   prev.isAvailable === next.isAvailable &&
+  prev.hasStyledVariants === next.hasStyledVariants &&
   prev.onToggleAvailability === next.onToggleAvailability &&
   prev.subtitle === next.subtitle &&
   prev.surfaceVariantColor === next.surfaceVariantColor &&
@@ -85,6 +87,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
   ingredient,
   highlightColor,
   isAvailable,
+  hasStyledVariants,
   onToggleAvailability,
   subtitle,
   surfaceVariantColor,
@@ -122,6 +125,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
     : ingredient.baseIngredientId != null
       ? Colors.primary
       : undefined;
+  const rightIndicatorColor = hasStyledVariants ? Colors.styledIngredient : undefined;
 
   const shoppingControl = useMemo(() => {
     const shoppingLabel = onShoppingToggle ? 'Remove from shopping list' : 'On shopping list';
@@ -207,6 +211,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
       control={control}
       metaFooter={onShoppingToggle ? undefined : shoppingControl}
       brandIndicatorColor={brandIndicatorColor}
+      rightIndicatorColor={rightIndicatorColor}
       metaAlignment="center"
     />
   );
@@ -378,6 +383,13 @@ export default function IngredientsScreen() {
   }, []);
 
   const ingredientLookup = useMemo(() => createIngredientLookup(ingredients), [ingredients]);
+  const styleBaseIngredientIds = useMemo(() => {
+    return new Set(
+      Array.from(ingredientLookup.stylesByBaseId.entries())
+        .filter(([, styleIds]) => styleIds.length > 0)
+        .map(([baseId]) => baseId),
+    );
+  }, [ingredientLookup.stylesByBaseId]);
 
   const ingredientCocktailStats = useMemo(() => {
     const totalCounts = new Map<number, number>();
@@ -615,6 +627,7 @@ export default function IngredientsScreen() {
           ingredient={item}
           highlightColor={highlightColor}
           isAvailable={isAvailable}
+          hasStyledVariants={ingredientId >= 0 && styleBaseIngredientIds.has(ingredientId)}
           onToggleAvailability={handleToggle}
           subtitle={subtitleText}
           surfaceVariantColor={Colors.onSurfaceVariant ?? Colors.icon}
@@ -633,6 +646,7 @@ export default function IngredientsScreen() {
       ingredientCocktailStats,
       Colors,
       shoppingIngredientIds,
+      styleBaseIngredientIds,
     ],
   );
 
