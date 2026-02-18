@@ -71,6 +71,8 @@ export type CocktailAvailabilitySummary = {
   recipeNames: string[];
   isReady: boolean;
   ingredientLine: string;
+  hasBrandFallback: boolean;
+  hasStyleFallback: boolean;
 };
 
 export function summariseCocktailAvailability(
@@ -94,13 +96,23 @@ export function summariseCocktailAvailability(
     .filter(Boolean);
 
   if (requiredIngredients.length === 0) {
-    return { missingCount: 0, missingNames: [], recipeNames, isReady: false, ingredientLine: '' };
+    return {
+      missingCount: 0,
+      missingNames: [],
+      recipeNames,
+      isReady: false,
+      ingredientLine: '',
+      hasBrandFallback: false,
+      hasStyleFallback: false,
+    };
   }
 
   const missingNames: string[] = [];
   const resolvedNames: string[] = [];
   let missingCount = 0;
   let displayMissingCount = 0;
+  let hasBrandFallback = false;
+  let hasStyleFallback = false;
 
   requiredIngredients.forEach((ingredient) => {
     const shouldIncludeInSecondLine = !ingredient?.garnish;
@@ -119,6 +131,46 @@ export function summariseCocktailAvailability(
     }
 
     missingCount += 1;
+
+    const missingIngredientId =
+      typeof ingredient.ingredientId === 'number' && Number.isFinite(ingredient.ingredientId)
+        ? Math.trunc(ingredient.ingredientId)
+        : undefined;
+    const missingIngredientRecord =
+      missingIngredientId != null ? lookup.ingredientById.get(missingIngredientId) : undefined;
+
+    const missingBrandBaseId =
+      missingIngredientRecord?.baseIngredientId != null && Number.isFinite(Number(missingIngredientRecord.baseIngredientId))
+        ? Math.trunc(Number(missingIngredientRecord.baseIngredientId))
+        : undefined;
+
+    if (missingBrandBaseId != null) {
+      if (availableIngredientIds.has(missingBrandBaseId)) {
+        hasBrandFallback = true;
+      } else {
+        const siblingBrands = lookup.brandsByBaseId.get(missingBrandBaseId) ?? [];
+        if (siblingBrands.some((id) => id !== missingIngredientId && availableIngredientIds.has(id))) {
+          hasBrandFallback = true;
+        }
+      }
+    }
+
+    const missingStyleBaseId =
+      missingIngredientRecord?.styleIngredientId != null && Number.isFinite(Number(missingIngredientRecord.styleIngredientId))
+        ? Math.trunc(Number(missingIngredientRecord.styleIngredientId))
+        : undefined;
+
+    if (missingStyleBaseId != null) {
+      if (availableIngredientIds.has(missingStyleBaseId)) {
+        hasStyleFallback = true;
+      } else {
+        const siblingStyles = lookup.stylesByBaseId.get(missingStyleBaseId) ?? [];
+        if (siblingStyles.some((id) => id !== missingIngredientId && availableIngredientIds.has(id))) {
+          hasStyleFallback = true;
+        }
+      }
+    }
+
     if (!shouldIncludeInSecondLine) {
       return;
     }
@@ -141,7 +193,15 @@ export function summariseCocktailAvailability(
 
   const isReady = missingCount === 0 && requiredIngredients.length > 0;
 
-  return { missingCount, missingNames, recipeNames, isReady, ingredientLine };
+  return {
+    missingCount,
+    missingNames,
+    recipeNames,
+    isReady,
+    ingredientLine,
+    hasBrandFallback,
+    hasStyleFallback,
+  };
 }
 
 export function isCocktailReady(

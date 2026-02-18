@@ -351,6 +351,8 @@ export default function IngredientDetailsScreen() {
           missingCount: availability.missingCount,
           recipeNamesCount: availability.recipeNames.length,
           ingredientLine: availability.ingredientLine,
+          hasBrandFallback: availability.hasBrandFallback,
+          hasStyleFallback: availability.hasStyleFallback,
           canMakeWithIngredient:
             !availability.isReady && availabilityWithIngredient.isReady,
           ratingValue: getCocktailRating(cocktail),
@@ -1402,7 +1404,7 @@ export default function IngredientDetailsScreen() {
               {cocktailEntries.length ? (
                 <View style={styles.cocktailList}>
                   {visibleCocktailEntries.map(
-                    ({ cocktail, isReady, missingCount, recipeNamesCount, ingredientLine, ratingValue, canMakeWithIngredient }, index) => {
+                    ({ cocktail, isReady, missingCount, recipeNamesCount, ingredientLine, ratingValue, hasBrandFallback, hasStyleFallback, canMakeWithIngredient }, index) => {
                       const shouldHighlightRow = isReady || canMakeWithIngredient;
                       const previousReady =
                         index > 0
@@ -1443,6 +1445,8 @@ export default function IngredientDetailsScreen() {
                             recipeNamesCount={recipeNamesCount}
                             ingredientLine={ingredientLine}
                             ratingValue={ratingValue}
+                            hasBrandFallback={hasBrandFallback}
+                            hasStyleFallback={hasStyleFallback}
                           />
                         </React.Fragment>
                       );
