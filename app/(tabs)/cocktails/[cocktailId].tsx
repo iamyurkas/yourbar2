@@ -1046,6 +1046,12 @@ export default function CocktailDetailsScreen() {
                             catalogEntry?.baseIngredientId != null
                           ? Colors.primary
                           : undefined;
+                    const isStyleBaseIngredient =
+                      (resolvedId != null &&
+                        (ingredientLookup.stylesByBaseId.get(resolvedId)?.length ?? 0) > 0) ||
+                      (ingredientId >= 0 &&
+                        (ingredientLookup.stylesByBaseId.get(ingredientId)?.length ?? 0) > 0);
+                    const rightIndicatorColor = isStyleBaseIngredient ? Colors.styledIngredient : undefined;
                     const isOnShoppingList =
                       ingredientId >= 0 &&
                       shoppingIngredientIds.has(ingredientId);
@@ -1201,6 +1207,7 @@ export default function CocktailDetailsScreen() {
                           highlightColor={ingredientHighlightColor}
                           tagColors={ingredientTagColors}
                           brandIndicatorColor={brandIndicatorColor}
+                          rightIndicatorColor={rightIndicatorColor}
                           accessibilityRole="button"
                           accessibilityState={
                             resolution.isAvailable

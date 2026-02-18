@@ -278,6 +278,14 @@ export default function IngredientDetailsScreen() {
     );
   }, [ingredients, numericIngredientId]);
 
+  const styleBaseIngredientIds = useMemo(() => {
+    return new Set(
+      ingredients
+        .filter((item) => Number(item.styleIngredientId ?? -1) >= 0)
+        .map((item) => Number(item.styleIngredientId)),
+    );
+  }, [ingredients]);
+
   const baseIngredientPhotoSource = useMemo(
     () => resolveImageSource(baseIngredient?.photoUri),
     [baseIngredient?.photoUri],
@@ -1030,6 +1038,9 @@ export default function IngredientDetailsScreen() {
                     },
                   ]}
                 >
+                  {baseIngredient?.id != null && styleBaseIngredientIds.has(Number(baseIngredient.id)) ? (
+                    <View style={[styles.rightIndicator, { backgroundColor: Colors.styledIngredient }]} />
+                  ) : null}
                   <View style={styles.baseIngredientInfo}>
                     <View style={[styles.baseIngredientThumb, { backgroundColor: Colors.surfaceBright }]}>
                       {styleIngredientPhotoSource ? (
@@ -1211,6 +1222,9 @@ export default function IngredientDetailsScreen() {
                         ]}
                       >
                         <View style={[styles.leftIndicator, { backgroundColor: Colors.styledIngredient }]} />
+                        {styled.id != null && styleBaseIngredientIds.has(Number(styled.id)) ? (
+                          <View style={[styles.rightIndicator, { backgroundColor: Colors.styledIngredient }]} />
+                        ) : null}
                         <View style={styles.baseIngredientInfo}>
                           <View style={[styles.baseIngredientThumb, { backgroundColor: Colors.surfaceBright }]}>
                             {styledPhotoSource ? (
@@ -1304,6 +1318,9 @@ export default function IngredientDetailsScreen() {
                           },
                         ]}
                       >
+                        {branded.id != null && styleBaseIngredientIds.has(Number(branded.id)) ? (
+                          <View style={[styles.rightIndicator, { backgroundColor: Colors.styledIngredient }]} />
+                        ) : null}
                         <View style={styles.baseIngredientInfo}>
                           <View style={[styles.baseIngredientThumb, { backgroundColor: Colors.surfaceBright }]}>
                             {brandedPhotoSource ? (
@@ -1651,6 +1668,13 @@ const styles = StyleSheet.create({
   leftIndicator: {
     position: "absolute",
     left: 0,
+    top: 0,
+    bottom: 0,
+    width: 4,
+  },
+  rightIndicator: {
+    position: "absolute",
+    right: 0,
     top: 0,
     bottom: 0,
     width: 4,

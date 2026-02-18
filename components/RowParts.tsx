@@ -125,6 +125,7 @@ type ListRowProps = {
   subtitleStyle?: StyleProp<TextStyle>;
   metaAlignment?: 'flex-start' | 'center' | 'space-between';
   brandIndicatorColor?: string;
+  rightIndicatorColor?: string;
 };
 
 export function ListRow({
@@ -145,6 +146,7 @@ export function ListRow({
   subtitleStyle,
   metaAlignment = 'space-between',
   brandIndicatorColor,
+  rightIndicatorColor,
 }: ListRowProps) {
   const Colors = useAppColors();
   const backgroundColor = selected ? highlightColor ?? `${Colors.tint}1F` : Colors.background;
@@ -155,7 +157,9 @@ export function ListRow({
       ? styles.metaContentStart
       : styles.metaContentSpaceBetween;
   const showBrandIndicator = brandIndicatorColor != null;
+  const showRightIndicator = rightIndicatorColor != null;
   const indicatorColor = brandIndicatorColor ?? Colors.primary;
+  const resolvedRightIndicatorColor = rightIndicatorColor ?? Colors.styledIngredient;
   const resolvedTagColors = tagColors?.filter(Boolean) ?? (tagColor ? [tagColor] : []);
 
   return (
@@ -167,6 +171,12 @@ export function ListRow({
     >
       {showBrandIndicator ? (
         <View pointerEvents="none" style={[styles.brandIndicator, { backgroundColor: indicatorColor }]} />
+      ) : null}
+      {showRightIndicator ? (
+        <View
+          pointerEvents="none"
+          style={[styles.rightIndicator, { backgroundColor: resolvedRightIndicatorColor }]}
+        />
       ) : null}
       <View style={[styles.thumbSlot, { backgroundColor: Colors.surfaceBright }]}>{thumbnail}</View>
       <View style={styles.textColumn}>
@@ -220,6 +230,13 @@ const styles = StyleSheet.create({
   brandIndicator: {
     position: 'absolute',
     left: 0,
+    top: 0,
+    bottom: 0,
+    width: 4,
+  },
+  rightIndicator: {
+    position: 'absolute',
+    right: 0,
     top: 0,
     bottom: 0,
     width: 4,
