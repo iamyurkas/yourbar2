@@ -1676,15 +1676,15 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   contentCreate: {
-    padding: 16,
-    gap: 20,
+    padding: 24,
+    gap: 24,
   },
   contentEdit: {
     padding: 24,
     gap: 24,
   },
   sectionCreate: {
-    gap: 10,
+    gap: 8,
   },
   sectionEdit: {
     gap: 8,
@@ -1798,7 +1798,7 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   bottomSpacer: {
-    height: 250,
+    height: 220,
   },
   submitButtonCreate: {
     borderRadius: 12,

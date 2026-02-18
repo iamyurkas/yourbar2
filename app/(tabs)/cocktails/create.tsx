@@ -3032,8 +3032,8 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   content: {
-    padding: 16,
-    gap: 20,
+    padding: 24,
+    gap: 24,
     paddingBottom: 120,
   },
   section: {

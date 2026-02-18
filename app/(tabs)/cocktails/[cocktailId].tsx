@@ -1288,10 +1288,10 @@ const styles = StyleSheet.create({
   },
   content: {
     paddingHorizontal: 24,
-    paddingVertical: 32,
+    paddingVertical: 24,
   },
   section: {
-    gap: 24,
+    gap: 20,
   },
   name: {
     fontSize: 20,
@@ -1449,7 +1449,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   showMoreButton: {
-    marginTop: 12,
+    marginTop: 8,
     alignSelf: "center",
     height: 56,
     minWidth: 250,
