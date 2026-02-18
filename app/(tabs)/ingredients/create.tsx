@@ -1473,10 +1473,10 @@ export default function IngredientFormScreen() {
           <Pressable
             accessibilityRole="button"
             onPress={handleDeletePress}
-            style={[styles.inlineActionButton, { borderColor: Colors.outlineVariant }]}
+            style={[styles.inlineActionButton, { borderColor: Colors.error, backgroundColor: Colors.surfaceBright }]}
             accessibilityLabel="Delete ingredient">
-            <MaterialIcons name="delete-outline" size={18} color={Colors.onSurface} />
-            <Text style={[styles.inlineActionLabel, { color: Colors.onSurface }]}>Delete ingredient</Text>
+            <MaterialIcons name="delete-outline" size={18} color={Colors.error} />
+            <Text style={[styles.inlineActionLabel, { color: Colors.error }]}>Delete ingredient</Text>
           </Pressable>
         </View>
       ) : null}
