@@ -958,6 +958,7 @@ export default function CreateCocktailScreen() {
           pathname: "/ingredients/create",
           params: {
             mode: "create",
+            fromCocktailAddIngredient: "true",
             returnToPath: "/cocktails/create",
             returnToParams: formReturnParams,
           },
@@ -969,6 +970,7 @@ export default function CreateCocktailScreen() {
         params: {
           mode: "create",
           suggestedName: trimmed,
+          fromCocktailAddIngredient: "true",
           returnToPath: "/cocktails/create",
           returnToParams: formReturnParams,
         },

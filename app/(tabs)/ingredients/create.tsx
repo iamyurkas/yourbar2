@@ -1,9 +1,10 @@
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
-import { StackActions, type NavigationAction, useNavigation } from '@react-navigation/native';
+import { StackActions, type NavigationAction, useFocusEffect, useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
+  BackHandler,
   FlatList,
   KeyboardAvoidingView,
   Modal,
@@ -76,6 +77,7 @@ export default function IngredientFormScreen() {
     returnToParams?: string;
     mode?: string;
     ingredientId?: string;
+    fromCocktailAddIngredient?: string;
   }>();
   const modeParam = getParamValue(params.mode);
   const isEditMode = modeParam === 'edit';
@@ -123,9 +125,15 @@ export default function IngredientFormScreen() {
       return undefined;
     }
   }, [returnToParamsParam]);
+  const fromCocktailAddIngredientParam = useMemo(() => {
+    const value = getParamValue(params.fromCocktailAddIngredient);
+    return value === 'true';
+  }, [params.fromCocktailAddIngredient]);
   const shouldConfirmOnLeave = useMemo(
-    () => !isEditMode && returnToPath === '/cocktails/create',
-    [isEditMode, returnToPath],
+    () =>
+      !isEditMode &&
+      (fromCocktailAddIngredientParam || returnToPath === '/cocktails/create'),
+    [fromCocktailAddIngredientParam, isEditMode, returnToPath],
   );
 
   const navigation = useNavigation();
@@ -594,21 +602,20 @@ export default function IngredientFormScreen() {
     };
   }, [handleSubmit, setSaveHandler]);
 
-  useEffect(() => {
-    const isBackAction = (action: NavigationAction) => action.type === 'GO_BACK' || action.type === 'POP';
+  const isBackAction = useCallback(
+    (action?: NavigationAction) => (action?.type ?? 'GO_BACK') === 'GO_BACK' || action?.type === 'POP',
+    [],
+  );
 
-    const leaveBack = () => {
-      if (returnToPath) {
-        router.replace({ pathname: returnToPath, params: returnToParams });
-        return;
-      }
+  const leaveScreen = useCallback(
+    (action?: NavigationAction) => {
+      if (isBackAction(action)) {
+        if (returnToPath) {
+          router.replace({ pathname: returnToPath, params: returnToParams });
+          return;
+        }
 
-      skipDuplicateBack(navigation);
-    };
-
-    const leaveScreen = (action?: NavigationAction) => {
-      if (isBackAction(action ?? { type: 'GO_BACK' })) {
-        leaveBack();
+        skipDuplicateBack(navigation);
         return;
       }
 
@@ -618,19 +625,20 @@ export default function IngredientFormScreen() {
       }
 
       router.replace('/ingredients');
-    };
+    },
+    [isBackAction, navigation, returnToParams, returnToPath],
+  );
 
-    const unsubscribe = navigation.addListener('beforeRemove', (event) => {
+  const handleLeaveAction = useCallback(
+    (action?: NavigationAction) => {
       if (isNavigatingAfterSaveRef.current || isHandlingBackRef.current) {
         return;
       }
-      const backAction = isBackAction(event.data.action);
 
       if (hasUnsavedChanges || shouldConfirmOnLeave) {
-        event.preventDefault();
         confirmLeave(() => {
           isHandlingBackRef.current = true;
-          leaveScreen(event.data.action);
+          leaveScreen(action);
           setTimeout(() => {
             isHandlingBackRef.current = false;
           }, 0);
@@ -638,22 +646,47 @@ export default function IngredientFormScreen() {
         return;
       }
 
-      if (backAction) {
+      isHandlingBackRef.current = true;
+      leaveScreen(action);
+      setTimeout(() => {
+        isHandlingBackRef.current = false;
+      }, 0);
+    },
+    [confirmLeave, hasUnsavedChanges, leaveScreen, shouldConfirmOnLeave],
+  );
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('beforeRemove', (event) => {
+      if (isNavigatingAfterSaveRef.current || isHandlingBackRef.current) {
+        return;
+      }
+
+      const backAction = isBackAction(event.data.action);
+      if (hasUnsavedChanges || shouldConfirmOnLeave || backAction) {
         event.preventDefault();
-        isHandlingBackRef.current = true;
-        leaveScreen(event.data.action);
-        setTimeout(() => {
-          isHandlingBackRef.current = false;
-        }, 0);
+        handleLeaveAction(event.data.action);
       }
     });
 
     return unsubscribe;
-  }, [confirmLeave, hasUnsavedChanges, navigation, returnToParams, returnToPath, shouldConfirmOnLeave]);
+  }, [handleLeaveAction, hasUnsavedChanges, isBackAction, navigation, shouldConfirmOnLeave]);
+
+  useFocusEffect(
+    useCallback(() => {
+      const subscription = BackHandler.addEventListener('hardwareBackPress', () => {
+        handleLeaveAction({ type: 'GO_BACK' });
+        return true;
+      });
+
+      return () => {
+        subscription.remove();
+      };
+    }, [handleLeaveAction]),
+  );
 
   const handleGoBack = useCallback(() => {
-    navigation.goBack();
-  }, [navigation]);
+    handleLeaveAction({ type: 'GO_BACK' });
+  }, [handleLeaveAction]);
 
   const handleDeletePress = useCallback(() => {
     if (!isEditMode) {
