@@ -1879,31 +1879,31 @@ export default function CreateCocktailScreen() {
                       },
                     })
                   }
-                  style={[styles.inlineActionButton, { borderColor: Colors.outlineVariant }]}
+                  style={[styles.inlineActionButton, { borderColor: Colors.primary, backgroundColor: Colors.surfaceBright }]}
                   accessibilityRole="button"
                   accessibilityLabel="Edit cocktail"
                 >
                   <MaterialCommunityIcons
                     name="pencil-outline"
                     size={18}
-                    color={Colors.onSurface}
+                    color={Colors.primary}
                   />
-                  <Text style={[styles.inlineActionLabel, { color: Colors.onSurface }]}>Edit cocktail</Text>
+                  <Text style={[styles.inlineActionLabel, { color: Colors.primary }]}>Edit cocktail</Text>
                 </Pressable>
               ) : null}
               {isEditMode ? (
                 <Pressable
                   onPress={handleDeletePress}
-                  style={[styles.inlineActionButton, { borderColor: Colors.outlineVariant }]}
+                  style={[styles.inlineActionButton, { borderColor: Colors.error, backgroundColor: Colors.surfaceBright }]}
                   accessibilityRole="button"
                   accessibilityLabel="Delete cocktail"
                 >
                   <MaterialIcons
                     name="delete-outline"
                     size={18}
-                    color={Colors.onSurface}
+                    color={Colors.error}
                   />
-                  <Text style={[styles.inlineActionLabel, { color: Colors.onSurface }]}>Delete cocktail</Text>
+                  <Text style={[styles.inlineActionLabel, { color: Colors.error }]}>Delete cocktail</Text>
                 </Pressable>
               ) : null}
             </View>
