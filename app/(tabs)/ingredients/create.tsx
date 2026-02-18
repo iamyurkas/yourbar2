@@ -76,6 +76,7 @@ export default function IngredientFormScreen() {
     returnToParams?: string;
     mode?: string;
     ingredientId?: string;
+    fromCocktailAddIngredient?: string;
   }>();
   const modeParam = getParamValue(params.mode);
   const isEditMode = modeParam === 'edit';
@@ -123,9 +124,15 @@ export default function IngredientFormScreen() {
       return undefined;
     }
   }, [returnToParamsParam]);
+  const fromCocktailAddIngredientParam = useMemo(() => {
+    const value = getParamValue(params.fromCocktailAddIngredient);
+    return value === '1' || value === 'true';
+  }, [params.fromCocktailAddIngredient]);
   const shouldConfirmOnLeave = useMemo(
-    () => !isEditMode && returnToPath === '/cocktails/create',
-    [isEditMode, returnToPath],
+    () =>
+      !isEditMode &&
+      (fromCocktailAddIngredientParam || returnToPath === '/cocktails/create'),
+    [fromCocktailAddIngredientParam, isEditMode, returnToPath],
   );
 
   const navigation = useNavigation();
