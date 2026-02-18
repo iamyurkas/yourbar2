@@ -35299,6 +35299,52 @@
       ]
     },
     {
+      "id": 576,
+      "name": "The Conference",
+      "description": "A spirit-forward blend of **whiskey**, **Cognac**, and **calvados** with **aromatic bitters**.",
+      "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 30 ml of **bourbon**, 30 ml of **Cognac**, 30 ml of **calvados**, and 2 dashes of **aromatic bitters**.\n3. Stir gently to combine.\n4. Strain into a chilled coupe glass.",
+      "glassId": "coupe",
+      "methodIds": ["stir"],
+      "tags": [2, 3],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 193,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8
+        },
+        {
+          "order": 2,
+          "ingredientId": 63,
+          "name": "Bourbon",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 109,
+          "name": "Cognac",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 71,
+          "name": "Calvados",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 18,
+          "name": "Angostura Bitters",
+          "amount": "2",
+          "unitId": 6
+        }
+      ]
+    },
+    {
       "id": 577,
       "name": "Safe Sex on the Beach",
       "description": "A fruity zero-proof beach-style cooler with **orange juice**, **cranberry juice**, **peach**, and a touch of **grenadine**.",
