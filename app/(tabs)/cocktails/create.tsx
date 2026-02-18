@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
-import { StackActions, type NavigationAction, useFocusEffect, useNavigation } from "@react-navigation/native";
+import { StackActions, useFocusEffect, useNavigation, type NavigationAction } from "@react-navigation/native";
 import { Image } from "expo-image";
 import * as ImagePicker from "expo-image-picker";
 import { Stack, router, useLocalSearchParams } from "expo-router";
@@ -1845,70 +1845,70 @@ export default function CreateCocktailScreen() {
               </Text>
             </Pressable>
           </View>
+          <View style={styles.buttonsContainer}>
+            <Pressable
+              onPress={handleSubmit}
+              disabled={isSaveDisabled}
+              style={[
+                styles.submitButton,
+                {
+                  backgroundColor: Colors.tint,
+                  opacity: isSaveDisabled ? 0.6 : 1,
+                },
+              ]}
+              accessibilityRole="button"
+              accessibilityLabel="Save cocktail"
+            >
+              <Text style={[styles.submitLabel, { color: Colors.onPrimary }]}>
+                Save cocktail
+              </Text>
+            </Pressable>
 
-          <Pressable
-            onPress={handleSubmit}
-            disabled={isSaveDisabled}
-            style={[
-              styles.submitButton,
-              {
-                backgroundColor: Colors.tint,
-                opacity: isSaveDisabled ? 0.6 : 1,
-              },
-            ]}
-            accessibilityRole="button"
-            accessibilityLabel="Save cocktail"
-          >
-            <Text style={[styles.submitLabel, { color: Colors.onPrimary }]}> 
-              Save
-            </Text>
-          </Pressable>
-
-          {isEditMode || prefilledTargetId ? (
-            <View style={styles.inlineActions}>
-              {prefilledTargetId && !isEditMode ? (
-                <Pressable
-                  onPress={() =>
-                    router.replace({
-                      pathname: "/cocktails/create",
-                      params: {
-                        cocktailId: String(prefilledTargetId),
-                        cocktailName: prefilledCocktail?.name ?? undefined,
-                        mode: "edit",
-                        source: sourceParam ?? undefined,
-                      },
-                    })
-                  }
-                  style={[styles.inlineActionButton, { borderColor: Colors.primary, backgroundColor: Colors.surfaceBright }]}
-                  accessibilityRole="button"
-                  accessibilityLabel="Edit cocktail"
-                >
-                  <MaterialCommunityIcons
-                    name="pencil-outline"
-                    size={18}
-                    color={Colors.primary}
-                  />
-                  <Text style={[styles.inlineActionLabel, { color: Colors.primary }]}>Edit cocktail</Text>
-                </Pressable>
-              ) : null}
-              {isEditMode ? (
-                <Pressable
-                  onPress={handleDeletePress}
-                  style={[styles.inlineActionButton, { borderColor: Colors.error, backgroundColor: Colors.surfaceBright }]}
-                  accessibilityRole="button"
-                  accessibilityLabel="Delete cocktail"
-                >
-                  <MaterialIcons
-                    name="delete-outline"
-                    size={18}
-                    color={Colors.error}
-                  />
-                  <Text style={[styles.inlineActionLabel, { color: Colors.error }]}>Delete cocktail</Text>
-                </Pressable>
-              ) : null}
-            </View>
-          ) : null}
-
+            {isEditMode || prefilledTargetId ? (
+              <View style={styles.inlineActions}>
+                {prefilledTargetId && !isEditMode ? (
+                  <Pressable
+                    onPress={() =>
+                      router.replace({
+                        pathname: "/cocktails/create",
+                        params: {
+                          cocktailId: String(prefilledTargetId),
+                          cocktailName: prefilledCocktail?.name ?? undefined,
+                          mode: "edit",
+                          source: sourceParam ?? undefined,
+                        },
+                      })
+                    }
+                    style={[styles.inlineActionButton, { borderColor: Colors.primary, backgroundColor: Colors.surfaceBright }]}
+                    accessibilityRole="button"
+                    accessibilityLabel="Edit cocktail"
+                  >
+                    <MaterialCommunityIcons
+                      name="pencil-outline"
+                      size={18}
+                      color={Colors.primary}
+                    />
+                    <Text style={[styles.inlineActionLabel, { color: Colors.primary }]}>Edit cocktail</Text>
+                  </Pressable>
+                ) : null}
+                {isEditMode ? (
+                  <Pressable
+                    onPress={handleDeletePress}
+                    style={[styles.inlineActionButton, { borderColor: Colors.error, backgroundColor: Colors.surfaceBright }]}
+                    accessibilityRole="button"
+                    accessibilityLabel="Delete cocktail"
+                  >
+                    <MaterialIcons
+                      name="delete-outline"
+                      size={18}
+                      color={Colors.error}
+                    />
+                    <Text style={[styles.inlineActionLabel, { color: Colors.error }]}>Delete cocktail</Text>
+                  </Pressable>
+                ) : null}
+              </View>
+            ) : null}
+          </View>
           <View style={styles.bottomSpacer} />
         </ScrollView>
       </KeyboardAvoidingView>
@@ -3037,7 +3037,7 @@ const styles = StyleSheet.create({
     paddingBottom: 120,
   },
   section: {
-    gap: 10,
+    gap: 16,
   },
   sectionHeader: {
     flexDirection: "row",
@@ -3402,6 +3402,10 @@ const styles = StyleSheet.create({
   },
   substituteHint: {
     fontSize: 14,
+  },
+  buttonsContainer: {
+    marginTop: 8,
+    gap: 24,
   },
   submitButton: {
     borderRadius: 12,

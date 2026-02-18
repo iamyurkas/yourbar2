@@ -1485,34 +1485,35 @@ export default function IngredientDetailsScreen() {
                 </Text>
               )}
             </View>
-
-            <Pressable
-              style={[styles.addButton, { backgroundColor: Colors.tint }]}
-              onPress={handleAddCocktail}
-              accessibilityRole="button"
-              accessibilityLabel="Add cocktail"
-            >
-              <Text
-                style={[styles.addButtonLabel, { color: Colors.onPrimary }]}
-              >
-                + Add cocktail
-              </Text>
-            </Pressable>
-
-            <View style={styles.itemActions}>
+            <View style={styles.buttonsContainer}>
               <Pressable
-                onPress={handleEditPress}
+                style={[styles.addButton, { backgroundColor: Colors.tint }]}
+                onPress={handleAddCocktail}
                 accessibilityRole="button"
-                accessibilityLabel="Edit ingredient"
-                style={[styles.itemActionButton, { borderColor: Colors.primary, backgroundColor: Colors.surfaceBright }]}
+                accessibilityLabel="Add cocktail"
               >
-                <MaterialCommunityIcons
-                  name="pencil-outline"
-                  size={18}
-                  color={Colors.primary}
-                />
-                <Text style={[styles.itemActionLabel, { color: Colors.primary }]}>Edit ingredient</Text>
+                <Text
+                  style={[styles.addButtonLabel, { color: Colors.onPrimary }]}
+                >
+                  + Add cocktail
+                </Text>
               </Pressable>
+
+              <View style={styles.itemActions}>
+                <Pressable
+                  onPress={handleEditPress}
+                  accessibilityRole="button"
+                  accessibilityLabel="Edit ingredient"
+                  style={[styles.itemActionButton, { borderColor: Colors.primary, backgroundColor: Colors.surfaceBright }]}
+                >
+                  <MaterialCommunityIcons
+                    name="pencil-outline"
+                    size={18}
+                    color={Colors.primary}
+                  />
+                  <Text style={[styles.itemActionLabel, { color: Colors.primary }]}>Edit ingredient</Text>
+                </Pressable>
+              </View>
             </View>
           </View>
         ) : (
@@ -1677,7 +1678,7 @@ const styles = StyleSheet.create({
   },
   showMoreButton: {
     alignSelf: "center",
-    marginTop: 12,
+    marginTop: 24,
     height: 56,
     minWidth: 250,
     alignItems: "center",
@@ -1790,6 +1791,10 @@ const styles = StyleSheet.create({
   cocktailBlock: {
     marginHorizontal: -24,
     paddingHorizontal: 24,
+  },
+  buttonsContainer: {
+    marginTop: -4,
+    gap: 24,
   },
   addButton: {
     marginTop: 12,
