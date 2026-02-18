@@ -1532,7 +1532,7 @@ export default function IngredientDetailsScreen() {
       <AppDialog
         visible={isHelpVisible}
         title="Ingredient details"
-        message="This screen shows ingredient details, links, and related cocktails.\n\nUse the button under the ingredient to edit it."
+        message="This screen shows ingredient details, links, and related cocktails.\n\nUse the button under the ingredient to edit it.\n\nCocktail ribbons: left ribbon shows what the cocktail includes (yellow = has branded ingredients, blue = has style ingredients). Right ribbon shows fallback availability (yellow = brand fallback exists, blue = style fallback exists)."
         actions={[{ label: "Got it", variant: "secondary" }]}
         onRequestClose={() => setIsHelpVisible(false)}
       />
