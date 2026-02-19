@@ -539,6 +539,8 @@ export default function ShakerResultsScreen() {
           recipeNamesCount={availability.recipeNames.length}
           ingredientLine={availability.ingredientLine}
           ratingValue={getCocktailRating(item)}
+          hasBrandFallback={availability.hasBrandFallback}
+          hasStyleFallback={availability.hasStyleFallback}
         />
       );
     },

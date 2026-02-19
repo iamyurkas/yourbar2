@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { type Cocktail, type Ingredient } from '@/providers/inventory-provider';
+import { type Cocktail } from '@/providers/inventory-provider';
 import { type IngredientLookup } from '@/libs/ingredient-availability';
 
 export type MyTabListItem =
@@ -14,6 +14,7 @@ export type MyTabListItem =
       tagColor?: string;
       cocktailCount: number;
       isBranded: boolean;
+      isStyled: boolean;
     };
 
 type IngredientOption = {
@@ -65,11 +66,44 @@ export function useCocktailTabLogic({
       return (record?.name ?? fallback ?? '').trim();
     };
 
+
+    const collectStylesAndBrandsForBase = (
+      baseId: number,
+      allowBrandForBase: boolean,
+      map: Map<number, string>,
+      skipId?: number,
+    ) => {
+      const styleIds = ingredientLookup.stylesByBaseId.get(baseId) ?? [];
+
+      styleIds.forEach((styleId) => {
+        if (styleId !== skipId) {
+          const styleName = resolveNameFromId(styleId);
+          if (styleName) {
+            map.set(styleId, styleName);
+          }
+        }
+
+        if (allowBrandForBase) {
+          ingredientLookup.brandsByBaseId.get(styleId)?.forEach((brandId) => {
+            if (brandId === skipId) {
+              return;
+            }
+
+            const brandName = resolveNameFromId(brandId);
+            if (brandName) {
+              map.set(brandId, brandName);
+            }
+          });
+        }
+      });
+    };
+
     const collectIngredientOptions = (
       ingredientId: number | undefined,
       fallbackName: string | undefined,
       allowBase: boolean,
       allowBrand: boolean,
+      allowStyle: boolean,
       map: Map<number, string>,
     ) => {
       if (ingredientId == null) {
@@ -83,7 +117,9 @@ export function useCocktailTabLogic({
 
       const record = ingredientLookup.ingredientById.get(ingredientId);
       const baseId = normalizeIngredientId(record?.baseIngredientId);
+      const styleBaseId = normalizeIngredientId(record?.styleIngredientId);
       const allowBrandedForBase = allowBrand || baseId == null;
+      const allowStyledForBase = allowStyle || baseId == null;
 
       if (baseId == null) {
         if (allowBrandedForBase) {
@@ -93,6 +129,28 @@ export function useCocktailTabLogic({
               map.set(brandId, brandName);
             }
           });
+        }
+
+        if (allowStyledForBase) {
+          if (styleBaseId != null) {
+            const styleBaseName = resolveNameFromId(styleBaseId);
+            if (styleBaseName) {
+              map.set(styleBaseId, styleBaseName);
+            }
+
+            ingredientLookup.stylesByBaseId.get(styleBaseId)?.forEach((styleId) => {
+              if (styleId === ingredientId) {
+                return;
+              }
+
+              const styleName = resolveNameFromId(styleId);
+              if (styleName) {
+                map.set(styleId, styleName);
+              }
+            });
+          } else {
+            collectStylesAndBrandsForBase(ingredientId, allowBrandedForBase, map, ingredientId);
+          }
         }
         return;
       }
@@ -112,6 +170,29 @@ export function useCocktailTabLogic({
           }
         });
       }
+
+      if (allowStyle) {
+        if (styleBaseId != null) {
+          const styleBaseName = resolveNameFromId(styleBaseId);
+          if (styleBaseName) {
+            map.set(styleBaseId, styleBaseName);
+          }
+
+          ingredientLookup.stylesByBaseId.get(styleBaseId)?.forEach((styleId) => {
+            if (styleId === ingredientId) {
+              return;
+            }
+
+            const styleName = resolveNameFromId(styleId);
+            if (styleName) {
+              map.set(styleId, styleName);
+            }
+          });
+        }
+
+        collectStylesAndBrandsForBase(baseId, allowBrandedForBase, map, ingredientId);
+      }
+
     };
 
     const groups = new Map<
@@ -143,6 +224,7 @@ export function useCocktailTabLogic({
       requiredIngredients.forEach((ingredient) => {
         const allowBase = Boolean(ingredient.allowBaseSubstitution || allowAllSubstitutes);
         const allowBrand = Boolean(ingredient.allowBrandSubstitution || allowAllSubstitutes);
+        const allowStyle = Boolean(ingredient.allowStyleSubstitution || allowAllSubstitutes);
         const candidateMap = new Map<number, string>();
         const requestedId = normalizeIngredientId(ingredient.ingredientId);
         const requestedName = resolveNameFromId(requestedId, ingredient.name ?? undefined);
@@ -152,6 +234,7 @@ export function useCocktailTabLogic({
           requestedName,
           allowBase,
           allowBrand,
+          allowStyle,
           candidateMap,
         );
 
@@ -163,6 +246,7 @@ export function useCocktailTabLogic({
             substituteName,
             allowBase,
             allowBrand,
+            allowStyle,
             candidateMap,
           );
         });
@@ -208,6 +292,7 @@ export function useCocktailTabLogic({
           photoUri: ingredientRecord?.photoUri ?? null,
           tagColor: ingredientRecord?.tags?.[0]?.color ?? defaultTagColor,
           isBranded: ingredientRecord?.baseIngredientId != null,
+          isStyled: ingredientRecord?.styleIngredientId != null,
           cocktails: [],
           keys: new Set<string>(),
         };
@@ -228,6 +313,7 @@ export function useCocktailTabLogic({
         photoUri: group.photoUri,
         tagColor: group.tagColor,
         isBranded: group.isBranded,
+        isStyled: group.isStyled,
         cocktails: group.cocktails.sort((a, b) =>
           (a.name ?? '').localeCompare(b.name ?? ''),
         ),
@@ -260,6 +346,7 @@ export function useCocktailTabLogic({
           tagColor: group.tagColor,
           cocktailCount: group.cocktails.length,
           isBranded: group.isBranded,
+          isStyled: group.isStyled,
         });
         group.cocktails.forEach((cocktail) => {
           items.push({

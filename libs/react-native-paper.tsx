@@ -44,6 +44,7 @@ export type PaperTheme = {
     readonly backdrop: string;
     readonly highlightFaint?: string;
     readonly highlightSubtle?: string;
+    readonly styledIngredient?: string;
     readonly overlayOnPrimary?: string;
     readonly danger?: string;
     readonly success?: string;

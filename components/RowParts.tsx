@@ -125,6 +125,9 @@ type ListRowProps = {
   subtitleStyle?: StyleProp<TextStyle>;
   metaAlignment?: 'flex-start' | 'center' | 'space-between';
   brandIndicatorColor?: string;
+  rightIndicatorColor?: string;
+  brandIndicatorBottomColor?: string;
+  rightIndicatorBottomColor?: string;
 };
 
 export function ListRow({
@@ -145,6 +148,9 @@ export function ListRow({
   subtitleStyle,
   metaAlignment = 'space-between',
   brandIndicatorColor,
+  rightIndicatorColor,
+  brandIndicatorBottomColor,
+  rightIndicatorBottomColor,
 }: ListRowProps) {
   const Colors = useAppColors();
   const backgroundColor = selected ? highlightColor ?? `${Colors.tint}1F` : Colors.background;
@@ -155,7 +161,11 @@ export function ListRow({
       ? styles.metaContentStart
       : styles.metaContentSpaceBetween;
   const showBrandIndicator = brandIndicatorColor != null;
+  const showRightIndicator = rightIndicatorColor != null;
   const indicatorColor = brandIndicatorColor ?? Colors.primary;
+  const resolvedRightIndicatorColor = rightIndicatorColor ?? Colors.styledIngredient;
+  const hasSplitLeftIndicator = showBrandIndicator && brandIndicatorBottomColor != null;
+  const hasSplitRightIndicator = showRightIndicator && rightIndicatorBottomColor != null;
   const resolvedTagColors = tagColors?.filter(Boolean) ?? (tagColor ? [tagColor] : []);
 
   return (
@@ -166,7 +176,42 @@ export function ListRow({
       style={[styles.row, { backgroundColor }]}
     >
       {showBrandIndicator ? (
-        <View pointerEvents="none" style={[styles.brandIndicator, { backgroundColor: indicatorColor }]} />
+        <View pointerEvents="none" style={styles.brandIndicator}>
+          <View
+            style={[
+              styles.indicatorHalf,
+              { backgroundColor: indicatorColor },
+              !hasSplitLeftIndicator ? styles.indicatorFull : null,
+            ]}
+          />
+          {hasSplitLeftIndicator ? (
+            <View
+              style={[
+                styles.indicatorHalf,
+                { backgroundColor: brandIndicatorBottomColor },
+              ]}
+            />
+          ) : null}
+        </View>
+      ) : null}
+      {showRightIndicator ? (
+        <View pointerEvents="none" style={styles.rightIndicator}>
+          <View
+            style={[
+              styles.indicatorHalf,
+              { backgroundColor: resolvedRightIndicatorColor },
+              !hasSplitRightIndicator ? styles.indicatorFull : null,
+            ]}
+          />
+          {hasSplitRightIndicator ? (
+            <View
+              style={[
+                styles.indicatorHalf,
+                { backgroundColor: rightIndicatorBottomColor },
+              ]}
+            />
+          ) : null}
+        </View>
       ) : null}
       <View style={[styles.thumbSlot, { backgroundColor: Colors.surfaceBright }]}>{thumbnail}</View>
       <View style={styles.textColumn}>
@@ -223,6 +268,22 @@ const styles = StyleSheet.create({
     top: 0,
     bottom: 0,
     width: 4,
+    overflow: 'hidden',
+  },
+  rightIndicator: {
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    bottom: 0,
+    width: 4,
+    overflow: 'hidden',
+  },
+  indicatorHalf: {
+    flex: 1,
+    width: '100%',
+  },
+  indicatorFull: {
+    flex: 1,
   },
   thumbSlot: {
     width: THUMB_SIZE,

@@ -123,6 +123,39 @@ function applyDeltaToInventoryData(
   };
 }
 
+function backfillMissingIngredientStyleIds(
+  ingredients: readonly IngredientStorageRecord[],
+  baseData: InventoryData,
+): IngredientStorageRecord[] {
+  const baseIngredientsById = new Map<number, IngredientStorageRecord>();
+  baseData.ingredients.forEach((ingredient) => {
+    const id = Number(ingredient.id ?? -1);
+    if (!Number.isFinite(id) || id < 0) {
+      return;
+    }
+
+    baseIngredientsById.set(Math.trunc(id), ingredient as IngredientStorageRecord);
+  });
+
+  return ingredients.map((ingredient) => {
+    const id = Number(ingredient.id ?? -1);
+    if (!Number.isFinite(id) || id < 0) {
+      return ingredient;
+    }
+
+    const baseIngredient = baseIngredientsById.get(Math.trunc(id));
+    if (!baseIngredient) {
+      return ingredient;
+    }
+
+    return {
+      ...ingredient,
+      styleIngredientId: ingredient.styleIngredientId ?? baseIngredient.styleIngredientId,
+    } satisfies IngredientStorageRecord;
+  });
+}
+
+
 export function createInventoryStateFromData(data: InventoryData, imported: boolean): InventoryState {
   return {
     cocktails: normalizeSearchFields(data.cocktails) as Cocktail[],
@@ -135,15 +168,30 @@ export function createInventoryStateFromSnapshot(
   snapshot: InventorySnapshot<CocktailStorageRecord, IngredientStorageRecord>,
   baseData?: InventoryData,
 ): InventoryState {
+  const resolvedBaseData = baseData ?? loadInventoryData();
+
   if ('delta' in snapshot) {
-    const resolvedBaseData = baseData ?? loadInventoryData();
     const mergedData = applyDeltaToInventoryData(resolvedBaseData, snapshot.delta);
-    return createInventoryStateFromData(mergedData, Boolean(snapshot.imported));
+    return createInventoryStateFromData(
+      {
+        ...mergedData,
+        ingredients: backfillMissingIngredientStyleIds(
+          mergedData.ingredients as IngredientStorageRecord[],
+          resolvedBaseData,
+        ),
+      },
+      Boolean(snapshot.imported),
+    );
   }
+
+  const mergedLegacyIngredients = backfillMissingIngredientStyleIds(
+    snapshot.ingredients,
+    resolvedBaseData,
+  );
 
   return {
     cocktails: normalizeSearchFields(snapshot.cocktails) as Cocktail[],
-    ingredients: normalizeSearchFields(snapshot.ingredients) as Ingredient[],
+    ingredients: normalizeSearchFields(mergedLegacyIngredients) as Ingredient[],
     imported: Boolean(snapshot.imported),
   } satisfies InventoryState;
 }

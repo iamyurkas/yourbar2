@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
-import { StackActions, type NavigationAction, useFocusEffect, useNavigation } from "@react-navigation/native";
+import { StackActions, useFocusEffect, useNavigation, type NavigationAction } from "@react-navigation/native";
 import { Image } from "expo-image";
 import * as ImagePicker from "expo-image-picker";
 import { Stack, router, useLocalSearchParams } from "expo-router";
@@ -86,6 +86,7 @@ type EditableIngredient = {
   garnish: boolean;
   allowBaseSubstitution: boolean;
   allowBrandSubstitution: boolean;
+  allowStyleSubstitution: boolean;
   substitutes: EditableSubstitute[];
 };
 
@@ -106,6 +107,7 @@ type CocktailFormSnapshot = {
     garnish: boolean;
     allowBaseSubstitution: boolean;
     allowBrandSubstitution: boolean;
+    allowStyleSubstitution: boolean;
     substitutes: Array<{
       ingredientId?: number;
       name: string;
@@ -166,6 +168,7 @@ function createEditableIngredient(
     garnish: initial?.garnish ?? false,
     allowBaseSubstitution: initial?.allowBaseSubstitution ?? false,
     allowBrandSubstitution: initial?.allowBrandSubstitution ?? false,
+    allowStyleSubstitution: initial?.allowStyleSubstitution ?? false,
     substitutes: initial?.substitutes ?? [],
   } satisfies EditableIngredient;
 }
@@ -218,6 +221,9 @@ function mapRecipeIngredientToEditable(
     ),
     allowBrandSubstitution: Boolean(
       (recipe as { allowBrandSubstitution?: boolean }).allowBrandSubstitution,
+    ),
+    allowStyleSubstitution: Boolean(
+      (recipe as { allowStyleSubstitution?: boolean }).allowStyleSubstitution,
     ),
     substitutes,
   } satisfies EditableIngredient;
@@ -315,6 +321,7 @@ export default function CreateCocktailScreen() {
   const [initialSnapshot, setInitialSnapshot] =
     useState<CocktailFormSnapshot | null>(null);
   const [isTagModalVisible, setTagModalVisible] = useState(false);
+  const prefilledTargetId = prefilledCocktail?.id ?? prefilledCocktail?.name;
   const defaultUnitId = useImperialUnits
     ? DEFAULT_IMPERIAL_UNIT_ID
     : DEFAULT_METRIC_UNIT_ID;
@@ -399,6 +406,7 @@ export default function CreateCocktailScreen() {
         garnish: item.garnish,
         allowBaseSubstitution: item.allowBaseSubstitution,
         allowBrandSubstitution: item.allowBrandSubstitution,
+        allowStyleSubstitution: item.allowStyleSubstitution,
         substitutes: item.substitutes.map((substitute) => ({
           ingredientId: substitute.ingredientId,
           name: substitute.name,
@@ -1104,6 +1112,7 @@ export default function CreateCocktailScreen() {
           garnish: item.garnish,
           allowBaseSubstitution: item.allowBaseSubstitution,
           allowBrandSubstitution: item.allowBrandSubstitution,
+          allowStyleSubstitution: item.allowStyleSubstitution,
           substitutes,
           order: index + 1,
         } satisfies CreateCocktailInput["ingredients"][number];
@@ -1506,61 +1515,18 @@ export default function CreateCocktailScreen() {
               />
             </HeaderIconButton>
           ),
-          headerRight: () => {
-            if (isEditMode) {
-              return (
-                <HeaderIconButton
-                  onPress={handleDeletePress}
-                  accessibilityLabel="Delete cocktail"
-                >
-                  <MaterialIcons
-                    name="delete-outline"
-                    size={20}
-                    color={Colors.onSurface}
-                  />
-                </HeaderIconButton>
-              );
-            }
-
-            const targetId = prefilledCocktail?.id ?? prefilledCocktail?.name;
-
-            return (
-              <View style={styles.headerActions}>
-                <HeaderIconButton
-                  onPress={() => setIsHelpVisible(true)}
-                  accessibilityLabel="Open screen help"
-                >
-                  <MaterialCommunityIcons
-                    name="help-circle-outline"
-                    size={20}
-                    color={Colors.onSurface}
-                  />
-                </HeaderIconButton>
-                {targetId ? (
-                  <HeaderIconButton
-                    onPress={() =>
-                      router.replace({
-                        pathname: "/cocktails/create",
-                        params: {
-                          cocktailId: String(targetId),
-                          cocktailName: prefilledCocktail?.name ?? undefined,
-                          mode: "edit",
-                          source: sourceParam ?? undefined,
-                        },
-                      })
-                    }
-                    accessibilityLabel="Edit cocktail"
-                  >
-                    <MaterialCommunityIcons
-                      name="pencil-outline"
-                      size={20}
-                      color={Colors.onSurface}
-                    />
-                  </HeaderIconButton>
-                ) : null}
-              </View>
-            );
-          },
+          headerRight: () => (
+            <HeaderIconButton
+              onPress={() => setIsHelpVisible(true)}
+              accessibilityLabel="Open screen help"
+            >
+              <MaterialCommunityIcons
+                name="help-circle-outline"
+                size={20}
+                color={Colors.onSurface}
+              />
+            </HeaderIconButton>
+          ),
         }}
       />
 
@@ -1879,24 +1845,70 @@ export default function CreateCocktailScreen() {
               </Text>
             </Pressable>
           </View>
+          <View style={styles.buttonsContainer}>
+            <Pressable
+              onPress={handleSubmit}
+              disabled={isSaveDisabled}
+              style={[
+                styles.submitButton,
+                {
+                  backgroundColor: Colors.tint,
+                  opacity: isSaveDisabled ? 0.6 : 1,
+                },
+              ]}
+              accessibilityRole="button"
+              accessibilityLabel="Save cocktail"
+            >
+              <Text style={[styles.submitLabel, { color: Colors.onPrimary }]}>
+                Save cocktail
+              </Text>
+            </Pressable>
 
-          <Pressable
-            onPress={handleSubmit}
-            disabled={isSaveDisabled}
-            style={[
-              styles.submitButton,
-              {
-                backgroundColor: Colors.tint,
-                opacity: isSaveDisabled ? 0.6 : 1,
-              },
-            ]}
-            accessibilityRole="button"
-            accessibilityLabel="Save cocktail"
-          >
-            <Text style={[styles.submitLabel, { color: Colors.onPrimary }]}>
-              Save
-            </Text>
-          </Pressable>
+            {isEditMode || prefilledTargetId ? (
+              <View style={styles.inlineActions}>
+                {prefilledTargetId && !isEditMode ? (
+                  <Pressable
+                    onPress={() =>
+                      router.replace({
+                        pathname: "/cocktails/create",
+                        params: {
+                          cocktailId: String(prefilledTargetId),
+                          cocktailName: prefilledCocktail?.name ?? undefined,
+                          mode: "edit",
+                          source: sourceParam ?? undefined,
+                        },
+                      })
+                    }
+                    style={[styles.inlineActionButton, { borderColor: Colors.primary, backgroundColor: Colors.surfaceBright }]}
+                    accessibilityRole="button"
+                    accessibilityLabel="Edit cocktail"
+                  >
+                    <MaterialCommunityIcons
+                      name="pencil-outline"
+                      size={18}
+                      color={Colors.primary}
+                    />
+                    <Text style={[styles.inlineActionLabel, { color: Colors.primary }]}>Edit cocktail</Text>
+                  </Pressable>
+                ) : null}
+                {isEditMode ? (
+                  <Pressable
+                    onPress={handleDeletePress}
+                    style={[styles.inlineActionButton, { borderColor: Colors.error, backgroundColor: Colors.surfaceBright }]}
+                    accessibilityRole="button"
+                    accessibilityLabel="Delete cocktail"
+                  >
+                    <MaterialIcons
+                      name="delete-outline"
+                      size={18}
+                      color={Colors.error}
+                    />
+                    <Text style={[styles.inlineActionLabel, { color: Colors.error }]}>Delete cocktail</Text>
+                  </Pressable>
+                ) : null}
+              </View>
+            ) : null}
+          </View>
           <View style={styles.bottomSpacer} />
         </ScrollView>
       </KeyboardAvoidingView>
@@ -2339,6 +2351,41 @@ function EditableIngredientRow({
 
   const isBrandedIngredient = baseIngredientId != null;
 
+  const baseIngredientRecord = useMemo(() => {
+    if (baseIngredientId == null) {
+      return undefined;
+    }
+
+    return inventoryIngredients.find(
+      (candidate) => Number(candidate.id ?? -1) === baseIngredientId,
+    );
+  }, [baseIngredientId, inventoryIngredients]);
+
+  const baseIngredientStyleId = useMemo(() => {
+    const candidate = baseIngredientRecord?.styleIngredientId;
+    if (candidate == null) {
+      return undefined;
+    }
+
+    const parsed = Number(candidate);
+    return Number.isFinite(parsed) && parsed >= 0 ? Math.trunc(parsed) : undefined;
+  }, [baseIngredientRecord?.styleIngredientId]);
+
+  const styleIngredientId = useMemo(() => {
+    const candidate = ingredientRecord?.styleIngredientId;
+    if (candidate == null) {
+      return undefined;
+    }
+
+    const parsed = Number(candidate);
+    return Number.isFinite(parsed) && parsed >= 0
+      ? Math.trunc(parsed)
+      : undefined;
+  }, [ingredientRecord?.styleIngredientId]);
+
+  const isStyledIngredient = styleIngredientId != null;
+  const shouldShowStyleSubstitution = isStyledIngredient || baseIngredientStyleId != null;
+
   const suggestions = useMemo(() => {
     if (normalizedName.length < MIN_AUTOCOMPLETE_LENGTH) {
       return [];
@@ -2478,6 +2525,12 @@ function EditableIngredientRow({
       allowBrandSubstitution: !ingredient.allowBrandSubstitution,
     });
   }, [ingredient.allowBrandSubstitution, ingredient.key, onChange]);
+
+  const handleToggleAllowStyle = useCallback(() => {
+    onChange(ingredient.key, {
+      allowStyleSubstitution: !ingredient.allowStyleSubstitution,
+    });
+  }, [ingredient.allowStyleSubstitution, ingredient.key, onChange]);
 
   const usePluralUnits = useMemo(
     () => shouldUsePluralUnits(ingredient.amount),
@@ -2669,7 +2722,11 @@ function EditableIngredientRow({
               .map((tag) => tag?.color ?? tagColors.yellow);
             const subtitle = renderSubtitle(baseGroupId);
             const brandIndicatorColor =
-              candidate.baseIngredientId != null ? Colors.primary : undefined;
+              candidate.styleIngredientId != null
+                ? Colors.styledIngredient
+                : candidate.baseIngredientId != null
+                  ? Colors.primary
+                  : undefined;
             const isLast = index === suggestions.length - 1;
             const separatorColor = isAvailable
               ? Colors.outline
@@ -2783,6 +2840,24 @@ function EditableIngredientRow({
         />
       </View>
 
+      {shouldShowStyleSubstitution ? (
+        <View style={styles.toggleRow}>
+          <ToggleChip
+            label="Allow style substitutes"
+            active={ingredient.allowStyleSubstitution}
+            onToggle={handleToggleAllowStyle}
+            onInfo={() =>
+              onOpenDialog({
+                title: "Allow style substitutes",
+                message:
+                  "If the specified styled ingredient isn't available, the cocktail will be shown as available with its style base ingredient or other styles of the same base.",
+                actions: [{ label: "OK" }],
+              })
+            }
+          />
+        </View>
+      ) : null}
+
       {isBrandedIngredient ? (
         <View style={styles.toggleRow}>
           <ToggleChip
@@ -2813,7 +2888,6 @@ function EditableIngredientRow({
           />
         </View>
       ) : null}
-
       <View style={styles.substitutesSection}>
         <Pressable
           onPress={() => onRequestAddSubstitute(ingredient.key)}
@@ -2935,18 +3009,35 @@ const styles = StyleSheet.create({
   flex: {
     flex: 1,
   },
-  headerActions: {
+  inlineActions: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    flexWrap: "wrap",
+    gap: 10,
+  },
+  inlineActionButton: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 4,
+    justifyContent: "center",
+    gap: 8,
+    paddingHorizontal: 14,
+    height: 56,
+    minWidth: 250,
+    borderRadius: 10,
+    borderWidth: 1,
+  },
+  inlineActionLabel: {
+    fontSize: 14,
+    fontWeight: "600",
   },
   content: {
     padding: 16,
-    gap: 20,
+    gap: 16,
     paddingBottom: 120,
   },
   section: {
-    gap: 10,
+    gap: 16,
   },
   sectionHeader: {
     flexDirection: "row",
@@ -3312,12 +3403,18 @@ const styles = StyleSheet.create({
   substituteHint: {
     fontSize: 14,
   },
+  buttonsContainer: {
+    marginTop: 8,
+    gap: 24,
+  },
   submitButton: {
     borderRadius: 12,
-    paddingVertical: 16,
+    height: 56,
+    minWidth: 250,
     alignItems: "center",
     justifyContent: "center",
-    minHeight: 56,
+    alignSelf: "center",
+    paddingHorizontal: 20,
     zIndex: 1,
   },
   submitLabel: {

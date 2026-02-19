@@ -38943,6 +38943,7 @@
       "name": "Triple Sec",
       "description": "Triple sec is a clear orange liqueur at 20–40% ABV with bright citrus. Essential in a **Margarita** or **Sidecar**.",
       "tags": [1],
+      "styleIngredientId": 247,
       "photoUri": "assets/ingredients/333-triple-sec.jpg"
     },
     {

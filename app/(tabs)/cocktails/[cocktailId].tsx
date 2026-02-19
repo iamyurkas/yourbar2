@@ -15,6 +15,7 @@ import { Platform, Pressable, ScrollView, StyleSheet, Text, View } from "react-n
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { resolveGlasswareUriFromId } from "@/assets/image-manifest";
+import { AppDialog } from "@/components/AppDialog";
 import { AppImage } from "@/components/AppImage";
 import { FormattedText } from "@/components/FormattedText";
 import { HeaderIconButton } from "@/components/HeaderIconButton";
@@ -252,6 +253,7 @@ function buildMissingSubstituteLines(
   const requestedIngredient =
     ingredientId != null ? lookup.ingredientById.get(ingredientId) : undefined;
   const isBrandedIngredient = requestedIngredient?.baseIngredientId != null;
+  const isStyledIngredient = requestedIngredient?.styleIngredientId != null;
 
   const orderedSubstitutes = [
     ...resolution.substitutes.declared.map((option) => ({
@@ -262,6 +264,18 @@ function buildMissingSubstituteLines(
       ? resolution.substitutes.base.map((option) => ({
         option,
         source: "base" as const,
+      }))
+      : []),
+    ...(!isBrandedIngredient && !isStyledIngredient
+      ? resolution.substitutes.branded.map((option) => ({
+        option,
+        source: "branded" as const,
+      }))
+      : []),
+    ...(!isBrandedIngredient
+      ? resolution.substitutes.styled.map((option) => ({
+        option,
+        source: "styled" as const,
       }))
       : []),
   ];
@@ -282,7 +296,11 @@ function buildMissingSubstituteLines(
     }
 
     seen.add(key);
-    const prefix = source === "base" && isBrandedIngredient ? "or any" : "or";
+    const prefix =
+      (source === "base" && isBrandedIngredient) ||
+        source === "branded"
+        ? "or any"
+        : "or";
     lines.push(`${prefix} ${name}`);
   });
 
@@ -580,6 +598,7 @@ export default function CocktailDetailsScreen() {
   }, [cocktail]);
 
   const [expandedMethodIds, setExpandedMethodIds] = useState<string[]>([]);
+  const [isHelpVisible, setIsHelpVisible] = useState(false);
 
   const handleToggleUnits = useCallback(() => {
     setShowImperialUnits((current) => !current);
@@ -669,30 +688,16 @@ export default function CocktailDetailsScreen() {
             </HeaderIconButton>
           ),
           headerRight: () => (
-            <View style={styles.headerActions}>
-              <HeaderIconButton
-                onPress={handleCopyPress}
-                accessibilityLabel="Copy cocktail"
-                style={styles.headerActionButton}
-              >
-                <MaterialCommunityIcons
-                  name="content-copy"
-                  size={20}
-                  color={Colors.onSurface}
-                />
-              </HeaderIconButton>
-              <HeaderIconButton
-                onPress={handleEditPress}
-                accessibilityLabel="Edit cocktail"
-                style={styles.headerActionButton}
-              >
-                <MaterialCommunityIcons
-                  name="pencil-outline"
-                  size={20}
-                  color={Colors.onSurface}
-                />
-              </HeaderIconButton>
-            </View>
+            <HeaderIconButton
+              onPress={() => setIsHelpVisible(true)}
+              accessibilityLabel="Open screen help"
+            >
+              <MaterialCommunityIcons
+                name="help-circle-outline"
+                size={20}
+                color={Colors.onSurface}
+              />
+            </HeaderIconButton>
           ),
         }}
       />
@@ -805,6 +810,7 @@ export default function CocktailDetailsScreen() {
                   </Text>
                 </View>
               ) : null}
+
             </View>
 
             {methodDetails.length ? (
@@ -939,9 +945,16 @@ export default function CocktailDetailsScreen() {
                   <Pressable
                     onPress={toggleDescription}
                     accessibilityRole="button"
+                    style={[
+                      styles.showMoreButton,
+                      {
+                        borderColor: Colors.tint,
+                        backgroundColor: Colors.background,
+                      },
+                    ]}
                   >
                     <Text
-                      style={[styles.toggleDescription, { color: Colors.tint }]}
+                      style={[styles.showMoreLabel, { color: Colors.tint }]}
                     >
                       {isDescriptionExpanded ? "Show less" : "Show more"}
                     </Text>
@@ -1022,9 +1035,27 @@ export default function CocktailDetailsScreen() {
                       .map((tag) => tag?.color ?? tagColors.yellow)
                       .filter(Boolean);
                     const brandIndicatorColor =
-                      resolvedIngredient?.baseIngredientId != null ||
-                        catalogEntry?.baseIngredientId != null
-                        ? Colors.primary
+                      resolvedIngredient?.styleIngredientId != null ||
+                        catalogEntry?.styleIngredientId != null
+                        ? Colors.styledIngredient
+                        : resolvedIngredient?.baseIngredientId != null ||
+                          catalogEntry?.baseIngredientId != null
+                          ? Colors.primary
+                          : undefined;
+                    const isStyleBaseIngredient =
+                      (resolvedId != null &&
+                        (ingredientLookup.stylesByBaseId.get(resolvedId)?.length ?? 0) > 0) ||
+                      (ingredientId >= 0 &&
+                        (ingredientLookup.stylesByBaseId.get(ingredientId)?.length ?? 0) > 0);
+                    const isBrandBaseIngredient =
+                      (resolvedId != null &&
+                        (ingredientLookup.brandsByBaseId.get(resolvedId)?.length ?? 0) > 0) ||
+                      (ingredientId >= 0 &&
+                        (ingredientLookup.brandsByBaseId.get(ingredientId)?.length ?? 0) > 0);
+                    const rightIndicatorColor = isBrandBaseIngredient
+                      ? Colors.primary
+                      : isStyleBaseIngredient
+                        ? Colors.styledIngredient
                         : undefined;
                     const isOnShoppingList =
                       ingredientId >= 0 &&
@@ -1059,19 +1090,17 @@ export default function CocktailDetailsScreen() {
                     };
 
                     const subtitleLines: string[] = [];
-
                     const isBaseToBrandSubstitution =
                       Boolean(resolution.substituteFor) &&
                       ingredientId >= 0 &&
                       resolvedIngredient?.baseIngredientId != null &&
                       resolvedIngredient.baseIngredientId === ingredientId;
 
-                    if (
-                      resolution.substituteFor &&
-                      !isBaseToBrandSubstitution
-                    ) {
+                    if (resolution.substituteFor) {
                       subtitleLines.push(
-                        `Substitute for ${resolution.substituteFor}`,
+                        isBaseToBrandSubstitution
+                          ? `or any ${resolution.substituteFor}`
+                          : `Substitute for ${resolution.substituteFor}`,
                       );
                     }
 
@@ -1181,6 +1210,7 @@ export default function CocktailDetailsScreen() {
                           highlightColor={ingredientHighlightColor}
                           tagColors={ingredientTagColors}
                           brandIndicatorColor={brandIndicatorColor}
+                          rightIndicatorColor={rightIndicatorColor}
                           accessibilityRole="button"
                           accessibilityState={
                             resolution.isAvailable
@@ -1192,6 +1222,35 @@ export default function CocktailDetailsScreen() {
                       </View>
                     );
                   })}
+                </View>
+
+                <View style={styles.itemActions}>
+                  <Pressable
+                    onPress={handleCopyPress}
+                    accessibilityRole="button"
+                    accessibilityLabel="Copy cocktail"
+                    style={[styles.itemActionButton, { borderColor: Colors.primary, backgroundColor: Colors.surfaceBright }]}
+                  >
+                    <MaterialCommunityIcons
+                      name="content-copy"
+                      size={18}
+                      color={Colors.primary}
+                    />
+                    <Text style={[styles.itemActionLabel, { color: Colors.primary }]}>Copy cocktail</Text>
+                  </Pressable>
+                  <Pressable
+                    onPress={handleEditPress}
+                    accessibilityRole="button"
+                    accessibilityLabel="Edit cocktail"
+                    style={[styles.itemActionButton, { borderColor: Colors.primary, backgroundColor: Colors.surfaceBright }]}
+                  >
+                    <MaterialCommunityIcons
+                      name="pencil-outline"
+                      size={18}
+                      color={Colors.primary}
+                    />
+                    <Text style={[styles.itemActionLabel, { color: Colors.primary }]}>Edit cocktail</Text>
+                  </Pressable>
                 </View>
               </View>
             ) : null}
@@ -1211,6 +1270,14 @@ export default function CocktailDetailsScreen() {
           </View>
         )}
       </ScrollView>
+
+      <AppDialog
+        visible={isHelpVisible}
+        title="Cocktail details"
+        message="This screen shows cocktail details, ingredients, and instructions.\n\nUse the buttons under the cocktail to copy or edit it.\n\n**Ingredient ribbons**\nLeft ribbon marks ingredient type:\nblue = brand ingredient,\nyellow = style ingredient.\n\nRight ribbon marks base variants:\nblue = has branded variants,\nyellow = has style variants."
+        actions={[{ label: "Got it", variant: "secondary" }]}
+        onRequestClose={() => setIsHelpVisible(false)}
+      />
     </SafeAreaView>
   );
 }
@@ -1219,20 +1286,12 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
   },
-  headerActions: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginRight: -4,
-  },
-  headerActionButton: {
-    marginLeft: 8,
-  },
   content: {
     paddingHorizontal: 24,
-    paddingVertical: 32,
+    paddingVertical: 16,
   },
   section: {
-    gap: 24,
+    gap: 16,
   },
   name: {
     fontSize: 20,
@@ -1242,6 +1301,29 @@ const styles = StyleSheet.create({
   mediaSection: {
     gap: 16,
     alignItems: "center",
+  },
+  itemActions: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    marginVertical: 12,
+    gap: 24,
+    flexWrap: "wrap",
+  },
+  itemActionButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+    paddingHorizontal: 14,
+    height: 56,
+    minWidth: 250,
+    borderRadius: 10,
+    borderWidth: 1,
+  },
+  itemActionLabel: {
+    fontSize: 14,
+    fontWeight: "600",
   },
   photoWrapper: {
     alignItems: "center",
@@ -1367,9 +1449,20 @@ const styles = StyleSheet.create({
   instructionsList: {
     gap: 8,
   },
-  toggleDescription: {
+  showMoreButton: {
+    marginTop: 12,
+    alignSelf: "center",
+    height: 56,
+    minWidth: 250,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 12,
+    borderWidth: 1,
+    paddingHorizontal: 20,
+  },
+  showMoreLabel: {
     fontSize: 14,
-    fontWeight: "500",
+    fontWeight: "600",
   },
   ingredientsList: {
     marginHorizontal: -24,

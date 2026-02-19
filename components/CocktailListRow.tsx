@@ -22,6 +22,8 @@ type CocktailListRowProps = {
   recipeNamesCount: number;
   ingredientLine: string;
   ratingValue: number;
+  hasBrandFallback?: boolean;
+  hasStyleFallback?: boolean;
 };
 
 const areCocktailRowPropsEqual = (
@@ -44,6 +46,8 @@ const areCocktailRowPropsEqual = (
     prev.recipeNamesCount === next.recipeNamesCount &&
     prev.ingredientLine === next.ingredientLine &&
     prev.ratingValue === next.ratingValue &&
+    prev.hasBrandFallback === next.hasBrandFallback &&
+    prev.hasStyleFallback === next.hasStyleFallback &&
     onPressEqual
   );
 };
@@ -62,6 +66,8 @@ const CocktailListRowComponent = ({
   recipeNamesCount,
   ingredientLine,
   ratingValue,
+  hasBrandFallback = false,
+  hasStyleFallback = false,
 }: CocktailListRowProps) => {
   const Colors = useAppColors();
   const effectiveHighlightColor = highlightColor ?? Colors.highlightFaint;
@@ -168,10 +174,10 @@ const CocktailListRowComponent = ({
     );
   }, [methodIds, Colors.onSurfaceVariant, showMethodIcons]);
 
-  const hasBrandedIngredient = useMemo(() => {
+  const { hasBrandedIngredient, hasStyledIngredient } = useMemo(() => {
     const recipe = cocktail.ingredients ?? [];
     if (!recipe.length) {
-      return false;
+      return { hasBrandedIngredient: false, hasStyledIngredient: false };
     }
 
     const normalizeIngredientId = (value?: number | string | null) => {
@@ -186,6 +192,9 @@ const CocktailListRowComponent = ({
 
       return Math.trunc(numeric);
     };
+
+    let hasBranded = false;
+    let hasStyled = false;
 
     for (const ingredient of recipe) {
       const candidateIds: number[] = [];
@@ -206,15 +215,27 @@ const CocktailListRowComponent = ({
       for (const candidateId of candidateIds) {
         const record = lookup.ingredientById.get(candidateId);
         if (record?.baseIngredientId != null) {
-          return true;
+          hasBranded = true;
+        }
+
+        if (record?.styleIngredientId != null) {
+          hasStyled = true;
+        }
+
+        if (hasBranded && hasStyled) {
+          break;
         }
       }
     }
 
-    return false;
+    return { hasBrandedIngredient: hasBranded, hasStyledIngredient: hasStyled };
   }, [cocktail.ingredients, lookup.ingredientById]);
 
-  const brandIndicatorColor = hasBrandedIngredient ? Colors.primary : undefined;
+  const brandIndicatorColor = hasBrandedIngredient ? Colors.primary : hasStyledIngredient ? Colors.styledIngredient : undefined;
+  const brandIndicatorBottomColor = hasBrandedIngredient && hasStyledIngredient ? Colors.styledIngredient : undefined;
+
+  const rightIndicatorColor = hasBrandFallback ? Colors.primary : hasStyleFallback ? Colors.styledIngredient : undefined;
+  const rightIndicatorBottomColor = hasBrandFallback && hasStyleFallback ? Colors.styledIngredient : undefined;
 
   const thumbnail = useMemo(
     () => <Thumb label={cocktail.name} uri={cocktail.photoUri} fallbackUri={glasswareUri} />,
@@ -232,6 +253,9 @@ const CocktailListRowComponent = ({
       control={ratingContent}
       thumbnail={thumbnail}
       brandIndicatorColor={brandIndicatorColor}
+      brandIndicatorBottomColor={brandIndicatorBottomColor}
+      rightIndicatorColor={rightIndicatorColor}
+      rightIndicatorBottomColor={rightIndicatorBottomColor}
       metaFooter={methodIconContent}
       accessibilityRole={onPress ? 'button' : undefined}
       metaAlignment="center"
