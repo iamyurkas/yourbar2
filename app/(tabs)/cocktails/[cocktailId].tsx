@@ -915,6 +915,9 @@ export default function CocktailDetailsScreen() {
                           styles.instructionsText,
                           { color: Colors.onSurface },
                         ]}
+                        onPress={
+                          shouldTruncateDescription ? toggleDescription : undefined
+                        }
                       >
                         {paragraph}
                       </FormattedText>
@@ -931,6 +934,9 @@ export default function CocktailDetailsScreen() {
                             ? DESCRIPTION_PREVIEW_LINES
                             : undefined
                         }
+                        onPress={
+                          shouldTruncateDescription ? toggleDescription : undefined
+                        }
                         onTextLayout={handleDescriptionLayout}
                       >
                         {paragraph}
@@ -941,13 +947,15 @@ export default function CocktailDetailsScreen() {
                   <Pressable
                     onPress={toggleDescription}
                     accessibilityRole="button"
+                    accessibilityLabel={
+                      isDescriptionExpanded
+                        ? "Show less description"
+                        : "Show full description"
+                    }
                     style={[
                       styles.showMoreButton,
-                      {
-                        borderColor: Colors.tint,
-                        backgroundColor: Colors.background,
-                      },
                     ]}
+                    hitSlop={8}
                   >
                     <Text
                       style={[styles.showMoreLabel, { color: Colors.tint }]}
@@ -1450,15 +1458,8 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   showMoreButton: {
-    marginTop: 12,
-    alignSelf: "center",
-    height: 56,
-    minWidth: 250,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 12,
-    borderWidth: 1,
-    paddingHorizontal: 20,
+    marginTop: 4,
+    alignSelf: "flex-start",
   },
   showMoreLabel: {
     fontSize: 14,

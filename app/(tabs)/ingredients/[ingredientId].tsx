@@ -985,6 +985,11 @@ export default function IngredientDetailsScreen() {
                           styles.instructionsText,
                           { color: Colors.onSurface },
                         ]}
+                        onPress={
+                          shouldTruncateDescription
+                            ? handleToggleDescription
+                            : undefined
+                        }
                       >
                         {paragraph}
                       </FormattedText>
@@ -999,6 +1004,11 @@ export default function IngredientDetailsScreen() {
                         numberOfLines={
                           shouldTruncateDescription
                             ? DESCRIPTION_PREVIEW_LINES
+                            : undefined
+                        }
+                        onPress={
+                          shouldTruncateDescription
+                            ? handleToggleDescription
                             : undefined
                         }
                         onTextLayout={handleDescriptionLayout}
@@ -1017,6 +1027,7 @@ export default function IngredientDetailsScreen() {
                         : "Show full description"
                     }
                     hitSlop={8}
+                    style={styles.toggleDescriptionButton}
                   >
                     <Text
                       style={[styles.toggleDescription, { color: Colors.tint }]}
@@ -1717,6 +1728,10 @@ const styles = StyleSheet.create({
   },
   instructionsList: {
     gap: 8,
+  },
+  toggleDescriptionButton: {
+    alignSelf: "flex-start",
+    marginTop: 4,
   },
   toggleDescription: {
     fontSize: 14,
