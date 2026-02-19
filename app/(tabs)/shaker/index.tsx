@@ -628,31 +628,20 @@ export default function ShakerScreen() {
   }, [availableTagOptions, defaultTagColor, effectiveFilteredIngredients]);
 
   const onboardingSampleIds = useMemo(() => {
-    const picks: number[] = [];
+    const preferredIds = [161, 352, 114, 339, 219, 227]; // Gin, Whiskey, Cola, Tonic, Lemon, Lime
+    const existingIngredientIds = new Set(
+      ingredients
+        .map((ingredient) => Number(ingredient.id ?? -1))
+        .filter((id) => id >= 0),
+    );
 
-    ingredients.forEach((ingredient) => {
-      if (picks.length >= 3) {
-        return;
-      }
-      const ingredientId = Number(ingredient.id ?? -1);
-      if (ingredientId >= 0 && availableIngredientIds.has(ingredientId)) {
-        picks.push(ingredientId);
-      }
-    });
+    const picks = preferredIds.filter((id) => existingIngredientIds.has(id));
 
-    if (picks.length < 2) {
-      ingredients.forEach((ingredient) => {
-        if (picks.length >= 3) {
-          return;
-        }
-        const ingredientId = Number(ingredient.id ?? -1);
-        if (ingredientId >= 0 && !picks.includes(ingredientId)) {
-          picks.push(ingredientId);
-        }
-      });
+    if (picks.length > 0) {
+      return picks;
     }
 
-    return picks;
+    return preferredIds.filter((id) => availableIngredientIds.has(id));
   }, [availableIngredientIds, ingredients]);
 
   useEffect(() => {
