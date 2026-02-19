@@ -36155,6 +36155,14 @@
           "name": "Heavy Cream",
           "amount": "30",
           "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 89,
+          "name": "Chocolate",
+          "amount": "5",
+          "unitId": 4,
+          "garnish": true
         }
       ]
     },
