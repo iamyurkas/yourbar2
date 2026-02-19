@@ -133,6 +133,9 @@ const IngredientListItem = memo(function IngredientListItemComponent({
     : hasStyledVariants
       ? Colors.styledIngredient
       : undefined;
+  const rightIndicatorBottomColor = hasBrandedVariants && hasStyledVariants
+    ? Colors.styledIngredient
+    : undefined;
 
   const shoppingControl = useMemo(() => {
     const shoppingLabel = onShoppingToggle ? 'Remove from shopping list' : 'On shopping list';
@@ -219,6 +222,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
       metaFooter={onShoppingToggle ? undefined : shoppingControl}
       brandIndicatorColor={brandIndicatorColor}
       rightIndicatorColor={rightIndicatorColor}
+      rightIndicatorBottomColor={rightIndicatorBottomColor}
       metaAlignment="center"
     />
   );

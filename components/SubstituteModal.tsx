@@ -132,6 +132,22 @@ export function SubstituteModal({
     return map;
   }, [cocktails, getBaseGroupId]);
 
+  const styleBaseIngredientIds = useMemo(() => {
+    return new Set(
+      ingredients
+        .filter((item) => Number(item.styleIngredientId ?? -1) >= 0)
+        .map((item) => Number(item.styleIngredientId)),
+    );
+  }, [ingredients]);
+
+  const brandedBaseIngredientIds = useMemo(() => {
+    return new Set(
+      ingredients
+        .filter((item) => Number(item.baseIngredientId ?? -1) >= 0)
+        .map((item) => Number(item.baseIngredientId)),
+    );
+  }, [ingredients]);
+
   const excludedIngredientNumericId = useMemo(() => {
     if (excludedIngredientId == null) {
       return undefined;
@@ -274,6 +290,16 @@ export function SubstituteModal({
         : item.baseIngredientId != null
           ? Colors.primary
           : undefined;
+      const rightIndicatorColor = candidateId >= 0
+        ? brandedBaseIngredientIds.has(candidateId)
+          ? Colors.primary
+          : styleBaseIngredientIds.has(candidateId)
+            ? Colors.styledIngredient
+            : undefined
+        : undefined;
+      const rightIndicatorBottomColor = candidateId >= 0 && brandedBaseIngredientIds.has(candidateId) && styleBaseIngredientIds.has(candidateId)
+        ? Colors.styledIngredient
+        : undefined;
 
       return (
         <ListRow
@@ -285,6 +311,8 @@ export function SubstituteModal({
           tagColor={tagColor}
           thumbnail={<Thumb label={item.name ?? undefined} uri={item.photoUri} />}
           brandIndicatorColor={brandIndicatorColor}
+          rightIndicatorColor={rightIndicatorColor}
+          rightIndicatorBottomColor={rightIndicatorBottomColor}
           control={null}
           metaFooter={
             isOnShoppingList ? (
@@ -310,6 +338,8 @@ export function SubstituteModal({
       onSelect,
       renderSubtitle,
       shoppingIngredientIds,
+      brandedBaseIngredientIds,
+      styleBaseIngredientIds,
       Colors,
     ],
   );

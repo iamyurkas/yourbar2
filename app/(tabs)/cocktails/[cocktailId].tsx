@@ -1057,6 +1057,9 @@ export default function CocktailDetailsScreen() {
                       : isStyleBaseIngredient
                         ? Colors.styledIngredient
                         : undefined;
+                    const rightIndicatorBottomColor = isBrandBaseIngredient && isStyleBaseIngredient
+                      ? Colors.styledIngredient
+                      : undefined;
                     const isOnShoppingList =
                       ingredientId >= 0 &&
                       shoppingIngredientIds.has(ingredientId);
@@ -1211,6 +1214,7 @@ export default function CocktailDetailsScreen() {
                           tagColors={ingredientTagColors}
                           brandIndicatorColor={brandIndicatorColor}
                           rightIndicatorColor={rightIndicatorColor}
+                          rightIndicatorBottomColor={rightIndicatorBottomColor}
                           accessibilityRole="button"
                           accessibilityState={
                             resolution.isAvailable

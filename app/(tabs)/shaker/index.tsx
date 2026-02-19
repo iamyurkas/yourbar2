@@ -86,6 +86,9 @@ const IngredientRow = memo(function IngredientRow({
     : isStyleBaseIngredient
       ? Colors.styledIngredient
       : undefined;
+  const rightIndicatorBottomColor = isBrandBaseIngredient && isStyleBaseIngredient
+    ? Colors.styledIngredient
+    : undefined;
 
   const handlePress = useCallback(() => {
     if (ingredientId >= 0) {
@@ -136,6 +139,7 @@ const IngredientRow = memo(function IngredientRow({
       accessibilityState={isSelected ? { selected: true } : undefined}
       brandIndicatorColor={brandIndicatorColor}
       rightIndicatorColor={rightIndicatorColor}
+      rightIndicatorBottomColor={rightIndicatorBottomColor}
       metaAlignment="center"
       control={selectionControl}
       metaFooter={shoppingControl}

@@ -967,6 +967,9 @@ export default function IngredientFormScreen() {
             ? Colors.styledIngredient
             : undefined
         : undefined;
+      const rightIndicatorBottomColor = Number.isFinite(id) && id >= 0 && brandedBaseIngredientIds.has(id) && styledBaseIngredientIds.has(id)
+        ? Colors.styledIngredient
+        : undefined;
 
       const control = isOnShoppingList ? (
         <View style={styles.baseShoppingIndicator}>
@@ -988,6 +991,7 @@ export default function IngredientFormScreen() {
           metaAlignment="flex-start"
           brandIndicatorColor={brandIndicatorColor}
           rightIndicatorColor={rightIndicatorColor}
+          rightIndicatorBottomColor={rightIndicatorBottomColor}
         />
       );
     },
@@ -1096,6 +1100,9 @@ export default function IngredientFormScreen() {
             ? Colors.styledIngredient
             : undefined
         : undefined;
+      const rightIndicatorBottomColor = Number.isFinite(id) && id >= 0 && brandedBaseIngredientIds.has(id) && styledBaseIngredientIds.has(id)
+        ? Colors.styledIngredient
+        : undefined;
 
       const control = isOnShoppingList ? (
         <View style={styles.baseShoppingIndicator}>
@@ -1117,6 +1124,7 @@ export default function IngredientFormScreen() {
           metaAlignment="flex-start"
           brandIndicatorColor={brandIndicatorColor}
           rightIndicatorColor={rightIndicatorColor}
+          rightIndicatorBottomColor={rightIndicatorBottomColor}
         />
       );
     },
