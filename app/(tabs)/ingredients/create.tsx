@@ -1207,8 +1207,17 @@ export default function IngredientFormScreen() {
     isEditMode && numericIngredientId != null && brandedBaseIngredientIds.has(numericIngredientId);
   const hasStyledVariants =
     isEditMode && numericIngredientId != null && styledBaseIngredientIds.has(numericIngredientId);
-  const isBaseSelectorDisabled = isStyledIngredient || hasBrandedVariants;
-  const isStyleSelectorDisabled = isBrandedIngredient || hasStyledVariants;
+
+  const baseDisableReason = hasBrandedVariants
+    ? 'This ingredient is a base for branded ingredients, so it cannot be branded itself.'
+    : isStyledIngredient
+      ? 'Styled ingredients cannot be branded. Remove style link to enable base ingredient selection.'
+      : null;
+  const styleDisableReason = hasStyledVariants
+    ? 'This ingredient is a base for styled ingredients, so it cannot be styled itself.'
+    : isBrandedIngredient
+      ? 'Branded ingredients cannot be styled. Remove base ingredient link to enable style selection.'
+      : null;
 
   const contentStyle = isEditMode ? styles.contentEdit : styles.contentCreate;
   const sectionStyle = isEditMode ? styles.sectionEdit : styles.sectionCreate;
@@ -1342,23 +1351,18 @@ export default function IngredientFormScreen() {
       <View style={sectionStyle}>
         <Text style={[styles.label, { color: Colors.onSurface }]}>Base ingredient</Text>
         <Text style={[hintStyle, { color: Colors.onSurfaceVariant }]}>Only ingredients that are not already styled can be selected as base ingredients.</Text>
-        {hasBrandedVariants ? (
-          <Text style={[hintStyle, { color: Colors.onSurfaceVariant }]}>This ingredient is a base for branded ingredients, so it cannot be branded itself.</Text>
-        ) : null}
-        {isBaseSelectorDisabled ? (
-          <Text style={[hintStyle, { color: Colors.onSurfaceVariant }]}>
-            Styled ingredients cannot be branded. Remove style link to enable base ingredient selection.
-          </Text>
+        {baseDisableReason ? (
+          <Text style={[hintStyle, { color: Colors.onSurfaceVariant }]}>{baseDisableReason}</Text>
         ) : null}
         <Pressable
           accessibilityRole="button"
           accessibilityLabel={baseIngredient ? 'Change base ingredient' : 'Select base ingredient'}
-          accessibilityState={isBaseSelectorDisabled ? { disabled: true } : undefined}
-          disabled={isBaseSelectorDisabled}
-          onPress={isBaseSelectorDisabled ? undefined : handleOpenBaseModal}
+          accessibilityState={baseDisableReason ? { disabled: true } : undefined}
+          disabled={baseDisableReason != null}
+          onPress={baseDisableReason ? undefined : handleOpenBaseModal}
           style={[
             styles.baseSelector,
-            isBaseSelectorDisabled ? styles.baseSelectorDisabled : null,
+            baseDisableReason ? styles.baseSelectorDisabled : null,
             { borderColor: Colors.outlineVariant, backgroundColor: Colors.surface },
           ]}>
           {baseIngredient ? (
@@ -1380,11 +1384,11 @@ export default function IngredientFormScreen() {
                 </Text>
               </View>
               <Pressable
-                onPress={isBaseSelectorDisabled ? undefined : handleClearBaseIngredient}
+                onPress={baseDisableReason ? undefined : handleClearBaseIngredient}
                 accessibilityRole="button"
                 accessibilityLabel="Remove base ingredient"
-                accessibilityState={isBaseSelectorDisabled ? { disabled: true } : undefined}
-                disabled={isBaseSelectorDisabled}
+                accessibilityState={baseDisableReason ? { disabled: true } : undefined}
+                disabled={baseDisableReason != null}
                 hitSlop={8}
                 style={styles.unlinkButton}>
                 <MaterialCommunityIcons name="link-off" size={20} color={Colors.error} />
@@ -1401,23 +1405,18 @@ export default function IngredientFormScreen() {
       <View style={sectionStyle}>
         <Text style={[styles.label, { color: Colors.onSurface }]}>Style ingredient</Text>
         <Text style={[hintStyle, { color: Colors.onSurfaceVariant }]}>Only base ingredients that are not branded and not already styled can be selected as styles.</Text>
-        {hasStyledVariants ? (
-          <Text style={[hintStyle, { color: Colors.onSurfaceVariant }]}>This ingredient is a base for styled ingredients, so it cannot be styled itself.</Text>
-        ) : null}
-        {isStyleSelectorDisabled ? (
-          <Text style={[hintStyle, { color: Colors.onSurfaceVariant }]}>
-            Branded ingredients cannot be styled. Remove base ingredient link to enable style selection.
-          </Text>
+        {styleDisableReason ? (
+          <Text style={[hintStyle, { color: Colors.onSurfaceVariant }]}>{styleDisableReason}</Text>
         ) : null}
         <Pressable
           accessibilityRole="button"
           accessibilityLabel={styleIngredient ? 'Change style ingredient' : 'Select style ingredient'}
-          accessibilityState={isStyleSelectorDisabled ? { disabled: true } : undefined}
-          disabled={isStyleSelectorDisabled}
-          onPress={isStyleSelectorDisabled ? undefined : handleOpenStyleModal}
+          accessibilityState={styleDisableReason ? { disabled: true } : undefined}
+          disabled={styleDisableReason != null}
+          onPress={styleDisableReason ? undefined : handleOpenStyleModal}
           style={[
             styles.baseSelector,
-            isStyleSelectorDisabled ? styles.baseSelectorDisabled : null,
+            styleDisableReason ? styles.baseSelectorDisabled : null,
             { borderColor: Colors.outlineVariant, backgroundColor: Colors.surface },
           ]}>
           {styleIngredient ? (
@@ -1439,11 +1438,11 @@ export default function IngredientFormScreen() {
                 </Text>
               </View>
               <Pressable
-                onPress={isStyleSelectorDisabled ? undefined : handleClearStyleIngredient}
+                onPress={styleDisableReason ? undefined : handleClearStyleIngredient}
                 accessibilityRole="button"
                 accessibilityLabel="Remove style ingredient"
-                accessibilityState={isStyleSelectorDisabled ? { disabled: true } : undefined}
-                disabled={isStyleSelectorDisabled}
+                accessibilityState={styleDisableReason ? { disabled: true } : undefined}
+                disabled={styleDisableReason != null}
                 hitSlop={8}
                 style={styles.unlinkButton}>
                 <MaterialCommunityIcons name="link-off" size={20} color={Colors.error} />
