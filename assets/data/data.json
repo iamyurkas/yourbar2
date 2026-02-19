@@ -5001,7 +5001,7 @@
       "id": 82,
       "name": "Bensonhurst",
       "description": "A Brooklyn-family **whiskey** cocktail with herbal depth from **Cynar** and **maraschino**.",
-      "instructions": "1. Fill a mixing glass with **ice**.\n2.Add 45 ml of **rye whiskey**, 30 ml of **dry vermouth**, 15 ml of **Cynar**, and 5 ml of **Luxardo maraschino**.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled coupe glass.",
+      "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 45 ml of **rye whiskey**, 30 ml of **dry vermouth**, 15 ml of **Cynar**, and 5 ml of **Luxardo maraschino**.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled coupe glass.",
       "photoUri": "assets/cocktails/82-bensonhurst.jpg",
       "glassId": "coupe",
       "methodIds": ["stir"],
