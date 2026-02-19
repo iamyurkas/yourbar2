@@ -44,12 +44,6 @@ const APP_VERSION =
   Constants.manifest2?.extra?.expoClient?.version ??
   "unknown";
 
-const APP_VERSION_CODE =
-  Constants.expoConfig?.android?.versionCode ??
-  // fallback
-  (Constants.manifest2?.extra as any)?.expoClient?.android?.versionCode ??
-  null;
-
 type StartScreenIcon =
   | {
     type: "icon";
@@ -743,7 +737,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   };
 
   const handleReportIssue = async () => {
-    const subject = `Something wrong in your bar - ${APP_VERSION}${APP_VERSION_CODE != null ? ` (${APP_VERSION_CODE})` : ""}`;
+    const subject = `Something wrong in your bar - ${APP_VERSION}`;
     const mailtoUrl = `mailto:your.bar.app@gmail.com?subject=${encodeURIComponent(subject)}`;
 
     try {
@@ -1364,7 +1358,6 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 style={[styles.versionText, { color: Colors.onSurfaceVariant }]}
               >
                 Version {APP_VERSION}
-                {APP_VERSION_CODE != null ? ` (${APP_VERSION_CODE})` : ""}
               </Text>
             </View>
           </ScrollView>
