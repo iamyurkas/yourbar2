@@ -987,35 +987,35 @@ export default function IngredientDetailsScreen() {
                   hitSlop={8}
                 >
                   <View style={styles.instructionsList}>
-                  {isDescriptionExpanded
-                    ? descriptionParagraphs.map((paragraph, index) => (
-                      <FormattedText
-                        key={`description-${index}`}
-                        style={[
-                          styles.instructionsText,
-                          { color: Colors.onSurface },
-                        ]}
-                      >
-                        {paragraph}
-                      </FormattedText>
-                    ))
-                    : descriptionParagraphs.slice(0, 1).map((paragraph, index) => (
-                      <FormattedText
-                        key={`description-${index}`}
-                        style={[
-                          styles.instructionsText,
-                          { color: Colors.onSurfaceVariant },
-                        ]}
-                        numberOfLines={
-                          shouldTruncateDescription
-                            ? DESCRIPTION_PREVIEW_LINES
-                            : undefined
-                        }
-                        onTextLayout={handleDescriptionLayout}
-                      >
-                        {paragraph}
-                      </FormattedText>
-                    ))}
+                    {isDescriptionExpanded
+                      ? descriptionParagraphs.map((paragraph, index) => (
+                        <FormattedText
+                          key={`description-${index}`}
+                          style={[
+                            styles.instructionsText,
+                            { color: Colors.onSurface },
+                          ]}
+                        >
+                          {paragraph}
+                        </FormattedText>
+                      ))
+                      : descriptionParagraphs.slice(0, 1).map((paragraph, index) => (
+                        <FormattedText
+                          key={`description-${index}`}
+                          style={[
+                            styles.instructionsText,
+                            { color: Colors.onSurfaceVariant },
+                          ]}
+                          numberOfLines={
+                            shouldTruncateDescription
+                              ? DESCRIPTION_PREVIEW_LINES
+                              : undefined
+                          }
+                          onTextLayout={handleDescriptionLayout}
+                        >
+                          {paragraph}
+                        </FormattedText>
+                      ))}
                   </View>
                 </Pressable>
                 {shouldTruncateDescription ? (
@@ -1482,7 +1482,7 @@ export default function IngredientDetailsScreen() {
                       <Text
                         style={[styles.showMoreLabel, { color: Colors.tint }]}
                       >
-                        Show more
+                        Show more cocktails
                       </Text>
                     </Pressable>
                   ) : null}
@@ -1708,6 +1708,7 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
     fontSize: 14,
     fontWeight: "500",
+    marginTop: -10,
   },
   placeholderText: {
     fontSize: 14,
