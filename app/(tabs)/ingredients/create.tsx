@@ -717,7 +717,7 @@ export default function IngredientFormScreen() {
 
     const trimmedName = ingredient?.name?.trim();
     const message = trimmedName
-      ? `Are you sure you want to delete ${trimmedName}?\n\nThis action cannot be undone.`
+      ? `Are you sure you want to delete\n${trimmedName}?\n\nThis action cannot be undone.`
       : 'Are you sure you want to delete this ingredient?\n\nThis action cannot be undone.';
 
     showDialog({
