@@ -1211,7 +1211,7 @@ export default function CreateCocktailScreen() {
       setHasUnsavedChanges(false);
       isNavigatingAfterSaveRef.current = true;
       const targetId = persisted.id ?? persisted.name;
-      if (returnToPath) {
+      if (!isEditMode && returnToPath) {
         router.replace({ pathname: returnToPath, params: returnToParams });
         return;
       }
