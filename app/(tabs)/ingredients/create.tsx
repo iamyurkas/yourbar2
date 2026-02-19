@@ -1203,8 +1203,12 @@ export default function IngredientFormScreen() {
 
   const isBrandedIngredient = isEditMode && baseIngredientId != null;
   const isStyledIngredient = isEditMode && styleIngredientId != null;
-  const isBaseSelectorDisabled = isStyledIngredient;
-  const isStyleSelectorDisabled = isBrandedIngredient;
+  const hasBrandedVariants =
+    isEditMode && numericIngredientId != null && brandedBaseIngredientIds.has(numericIngredientId);
+  const hasStyledVariants =
+    isEditMode && numericIngredientId != null && styledBaseIngredientIds.has(numericIngredientId);
+  const isBaseSelectorDisabled = isStyledIngredient || hasBrandedVariants;
+  const isStyleSelectorDisabled = isBrandedIngredient || hasStyledVariants;
 
   const contentStyle = isEditMode ? styles.contentEdit : styles.contentCreate;
   const sectionStyle = isEditMode ? styles.sectionEdit : styles.sectionCreate;
@@ -1338,6 +1342,9 @@ export default function IngredientFormScreen() {
       <View style={sectionStyle}>
         <Text style={[styles.label, { color: Colors.onSurface }]}>Base ingredient</Text>
         <Text style={[hintStyle, { color: Colors.onSurfaceVariant }]}>Only ingredients that are not already styled can be selected as base ingredients.</Text>
+        {hasBrandedVariants ? (
+          <Text style={[hintStyle, { color: Colors.onSurfaceVariant }]}>This ingredient is a base for branded ingredients, so it cannot be branded itself.</Text>
+        ) : null}
         {isBaseSelectorDisabled ? (
           <Text style={[hintStyle, { color: Colors.onSurfaceVariant }]}>
             Styled ingredients cannot be branded. Remove style link to enable base ingredient selection.
@@ -1373,9 +1380,11 @@ export default function IngredientFormScreen() {
                 </Text>
               </View>
               <Pressable
-                onPress={handleClearBaseIngredient}
+                onPress={isBaseSelectorDisabled ? undefined : handleClearBaseIngredient}
                 accessibilityRole="button"
                 accessibilityLabel="Remove base ingredient"
+                accessibilityState={isBaseSelectorDisabled ? { disabled: true } : undefined}
+                disabled={isBaseSelectorDisabled}
                 hitSlop={8}
                 style={styles.unlinkButton}>
                 <MaterialCommunityIcons name="link-off" size={20} color={Colors.error} />
@@ -1392,6 +1401,9 @@ export default function IngredientFormScreen() {
       <View style={sectionStyle}>
         <Text style={[styles.label, { color: Colors.onSurface }]}>Style ingredient</Text>
         <Text style={[hintStyle, { color: Colors.onSurfaceVariant }]}>Only base ingredients that are not branded and not already styled can be selected as styles.</Text>
+        {hasStyledVariants ? (
+          <Text style={[hintStyle, { color: Colors.onSurfaceVariant }]}>This ingredient is a base for styled ingredients, so it cannot be styled itself.</Text>
+        ) : null}
         {isStyleSelectorDisabled ? (
           <Text style={[hintStyle, { color: Colors.onSurfaceVariant }]}>
             Branded ingredients cannot be styled. Remove base ingredient link to enable style selection.
@@ -1427,9 +1439,11 @@ export default function IngredientFormScreen() {
                 </Text>
               </View>
               <Pressable
-                onPress={handleClearStyleIngredient}
+                onPress={isStyleSelectorDisabled ? undefined : handleClearStyleIngredient}
                 accessibilityRole="button"
                 accessibilityLabel="Remove style ingredient"
+                accessibilityState={isStyleSelectorDisabled ? { disabled: true } : undefined}
+                disabled={isStyleSelectorDisabled}
                 hitSlop={8}
                 style={styles.unlinkButton}>
                 <MaterialCommunityIcons name="link-off" size={20} color={Colors.error} />
