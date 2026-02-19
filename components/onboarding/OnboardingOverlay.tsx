@@ -115,21 +115,21 @@ export function OnboardingOverlay() {
       },
       onEnter: (inv) => {
         const availableIds = inv.availableIngredientIds as Set<number> | undefined;
-        const idsToSeed = [193, 159, 342, 111, 309, 332, 214, 222];
+        const idsToSeed = [196, 161, 352, 114, 316, 339, 219, 227];
         const hasAll =
           availableIds && idsToSeed.every((id) => availableIds.has(id));
         if (hasAll) {
           return;
         }
 
-        inv.setIngredientAvailability(193, true); // Ice
-        inv.setIngredientAvailability(159, true); // Gin
-        inv.setIngredientAvailability(342, true); // Whiskey
-        inv.setIngredientAvailability(111, true); // Cola
-        inv.setIngredientAvailability(309, true); // Simple Syrup
-        inv.setIngredientAvailability(332, true); // Tonic
-        inv.setIngredientAvailability(214, true); // Lemon
-        inv.setIngredientAvailability(222, true); // Lime
+        inv.setIngredientAvailability(196, true); // Ice
+        inv.setIngredientAvailability(161, true); // Gin
+        inv.setIngredientAvailability(352, true); // Whiskey
+        inv.setIngredientAvailability(114, true); // Cola
+        inv.setIngredientAvailability(316, true); // Simple Syrup
+        inv.setIngredientAvailability(339, true); // Tonic
+        inv.setIngredientAvailability(219, true); // Lemon
+        inv.setIngredientAvailability(227, true); // Lime
       },
     },
     {
