@@ -976,55 +976,64 @@ export default function IngredientDetailsScreen() {
 
             {descriptionParagraphs.length ? (
               <View style={styles.textBlock}>
-                <View style={styles.instructionsList}>
-                  {isDescriptionExpanded
-                    ? descriptionParagraphs.map((paragraph, index) => (
-                      <FormattedText
-                        key={`description-${index}`}
-                        style={[
-                          styles.instructionsText,
-                          { color: Colors.onSurface },
-                        ]}
-                      >
-                        {paragraph}
-                      </FormattedText>
-                    ))
-                    : descriptionParagraphs.slice(0, 1).map((paragraph, index) => (
-                      <FormattedText
-                        key={`description-${index}`}
-                        style={[
-                          styles.instructionsText,
-                          { color: Colors.onSurfaceVariant },
-                        ]}
-                        numberOfLines={
-                          shouldTruncateDescription
-                            ? DESCRIPTION_PREVIEW_LINES
-                            : undefined
-                        }
-                        onTextLayout={handleDescriptionLayout}
-                      >
-                        {paragraph}
-                      </FormattedText>
-                    ))}
-                </View>
-                {shouldTruncateDescription ? (
-                  <Pressable
-                    onPress={handleToggleDescription}
-                    accessibilityRole="button"
-                    accessibilityLabel={
-                      isDescriptionExpanded
-                        ? "Show less description"
-                        : "Show full description"
-                    }
-                    hitSlop={8}
+                <Pressable
+                  onPress={handleToggleDescription}
+                  accessibilityRole="button"
+                  accessibilityLabel={
+                    isDescriptionExpanded
+                      ? "Show less description"
+                      : "Show full description"
+                  }
+                  hitSlop={8}
+                >
+                  <View style={styles.instructionsList}>
+                    {isDescriptionExpanded
+                      ? descriptionParagraphs.map((paragraph, index) => (
+                        <FormattedText
+                          key={`description-${index}`}
+                          style={[
+                            styles.instructionsText,
+                            { color: Colors.onSurface },
+                          ]}
+                        >
+                          {paragraph}
+                        </FormattedText>
+                      ))
+                      : descriptionParagraphs.slice(0, 1).map((paragraph, index) => (
+                        <FormattedText
+                          key={`description-${index}`}
+                          style={[
+                            styles.instructionsText,
+                            { color: Colors.onSurfaceVariant },
+                          ]}
+                          numberOfLines={
+                            shouldTruncateDescription
+                              ? DESCRIPTION_PREVIEW_LINES
+                              : undefined
+                          }
+                          onTextLayout={handleDescriptionLayout}
+                        >
+                          {paragraph}
+                        </FormattedText>
+                      ))}
+                  </View>
+                </Pressable>
+                <Pressable
+                  onPress={handleToggleDescription}
+                  accessibilityRole="button"
+                  accessibilityLabel={
+                    isDescriptionExpanded
+                      ? "Show less description"
+                      : "Show full description"
+                  }
+                  hitSlop={8}
+                >
+                  <Text
+                    style={[styles.toggleDescription, { color: Colors.tint }]}
                   >
-                    <Text
-                      style={[styles.toggleDescription, { color: Colors.tint }]}
-                    >
-                      {isDescriptionExpanded ? "Show less" : "Show more"}
-                    </Text>
-                  </Pressable>
-                ) : null}
+                    {isDescriptionExpanded ? "Show less" : "Show more"}
+                  </Text>
+                </Pressable>
               </View>
             ) : null}
 
