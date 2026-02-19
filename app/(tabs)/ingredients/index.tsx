@@ -227,7 +227,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
     />
   );
 
-  const onboardingIds = [111, 193, 315];
+  const onboardingIds = [196, 161, 352, 114, 316, 339, 219, 227];
   if (onboardingIds.includes(ingredientId)) {
     return (
       <OnboardingAnchor name={`ingredient-${ingredientId}`}>
