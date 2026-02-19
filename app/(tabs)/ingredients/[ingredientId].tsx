@@ -1138,6 +1138,7 @@ export default function IngredientDetailsScreen() {
                     },
                   ]}
                 >
+                  <View style={[styles.rightIndicator, { backgroundColor: Colors.primary }]} />
                   <View style={styles.baseIngredientInfo}>
                     <View style={[styles.baseIngredientThumb, { backgroundColor: Colors.surfaceBright }]}>
                       {baseIngredientPhotoSource ? (
@@ -1333,6 +1334,7 @@ export default function IngredientDetailsScreen() {
                           },
                         ]}
                       >
+                        <View style={[styles.leftIndicator, { backgroundColor: Colors.primary }]} />
                         {branded.id != null && brandedBaseIngredientIds.has(Number(branded.id)) ? (
                           <View style={[styles.rightIndicator, { backgroundColor: Colors.primary }]} />
                         ) : branded.id != null && styleBaseIngredientIds.has(Number(branded.id)) ? (
