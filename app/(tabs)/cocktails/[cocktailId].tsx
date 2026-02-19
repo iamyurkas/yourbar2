@@ -906,51 +906,61 @@ export default function CocktailDetailsScreen() {
 
             {descriptionParagraphs.length ? (
               <View style={styles.textBlock}>
-                <View style={styles.instructionsList}>
-                  {isDescriptionExpanded
-                    ? descriptionParagraphs.map((paragraph, index) => (
-                      <FormattedText
-                        key={`description-${index}`}
-                        style={[
-                          styles.instructionsText,
-                          { color: Colors.onSurface },
-                        ]}
-                      >
-                        {paragraph}
-                      </FormattedText>
-                    ))
-                    : descriptionParagraphs.slice(0, 1).map((paragraph, index) => (
-                      <FormattedText
-                        key={`description-${index}`}
-                        style={[
-                          styles.instructionsText,
-                          { color: Colors.onSurfaceVariant },
-                        ]}
-                        numberOfLines={
-                          shouldTruncateDescription
-                            ? DESCRIPTION_PREVIEW_LINES
-                            : undefined
-                        }
-                        onTextLayout={handleDescriptionLayout}
-                      >
-                        {paragraph}
-                      </FormattedText>
-                    ))}
-                </View>
+                <Pressable
+                  onPress={toggleDescription}
+                  accessibilityRole="button"
+                  accessibilityLabel={
+                    isDescriptionExpanded
+                      ? "Show less description"
+                      : "Show full description"
+                  }
+                  hitSlop={8}
+                >
+                  <View style={styles.instructionsList}>
+                    {isDescriptionExpanded
+                      ? descriptionParagraphs.map((paragraph, index) => (
+                        <FormattedText
+                          key={`description-${index}`}
+                          style={[
+                            styles.instructionsText,
+                            { color: Colors.onSurface },
+                          ]}
+                        >
+                          {paragraph}
+                        </FormattedText>
+                      ))
+                      : descriptionParagraphs.slice(0, 1).map((paragraph, index) => (
+                        <FormattedText
+                          key={`description-${index}`}
+                          style={[
+                            styles.instructionsText,
+                            { color: Colors.onSurfaceVariant },
+                          ]}
+                          numberOfLines={
+                            shouldTruncateDescription
+                              ? DESCRIPTION_PREVIEW_LINES
+                              : undefined
+                          }
+                          onTextLayout={handleDescriptionLayout}
+                        >
+                          {paragraph}
+                        </FormattedText>
+                      ))}
+                  </View>
+                </Pressable>
                 {shouldTruncateDescription ? (
                   <Pressable
                     onPress={toggleDescription}
                     accessibilityRole="button"
-                    style={[
-                      styles.showMoreButton,
-                      {
-                        borderColor: Colors.tint,
-                        backgroundColor: Colors.background,
-                      },
-                    ]}
+                    accessibilityLabel={
+                      isDescriptionExpanded
+                        ? "Show less description"
+                        : "Show full description"
+                    }
+                    hitSlop={8}
                   >
                     <Text
-                      style={[styles.showMoreLabel, { color: Colors.tint }]}
+                      style={[styles.descriptionToggleText, { color: Colors.tint }]}
                     >
                       {isDescriptionExpanded ? "Show less" : "Show more"}
                     </Text>
@@ -1449,20 +1459,11 @@ const styles = StyleSheet.create({
   instructionsList: {
     gap: 8,
   },
-  showMoreButton: {
-    marginTop: 12,
-    alignSelf: "center",
-    height: 56,
-    minWidth: 250,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 12,
-    borderWidth: 1,
-    paddingHorizontal: 20,
-  },
-  showMoreLabel: {
+  descriptionToggleText: {
+    alignSelf: "flex-start",
     fontSize: 14,
-    fontWeight: "600",
+    fontWeight: "500",
+    marginTop: -10,
   },
   ingredientsList: {
     marginHorizontal: -24,
