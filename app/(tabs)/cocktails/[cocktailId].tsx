@@ -906,7 +906,17 @@ export default function CocktailDetailsScreen() {
 
             {descriptionParagraphs.length ? (
               <View style={styles.textBlock}>
-                <View style={styles.instructionsList}>
+                <Pressable
+                  onPress={toggleDescription}
+                  accessibilityRole="button"
+                  accessibilityLabel={
+                    isDescriptionExpanded
+                      ? "Show less description"
+                      : "Show full description"
+                  }
+                  hitSlop={8}
+                >
+                  <View style={styles.instructionsList}>
                   {isDescriptionExpanded
                     ? descriptionParagraphs.map((paragraph, index) => (
                       <FormattedText
@@ -936,26 +946,24 @@ export default function CocktailDetailsScreen() {
                         {paragraph}
                       </FormattedText>
                     ))}
-                </View>
-                {shouldTruncateDescription ? (
-                  <Pressable
-                    onPress={toggleDescription}
-                    accessibilityRole="button"
-                    style={[
-                      styles.showMoreButton,
-                      {
-                        borderColor: Colors.tint,
-                        backgroundColor: Colors.background,
-                      },
-                    ]}
+                  </View>
+                </Pressable>
+                <Pressable
+                  onPress={toggleDescription}
+                  accessibilityRole="button"
+                  accessibilityLabel={
+                    isDescriptionExpanded
+                      ? "Show less description"
+                      : "Show full description"
+                  }
+                  hitSlop={8}
+                >
+                  <Text
+                    style={[styles.toggleDescription, { color: Colors.tint }]}
                   >
-                    <Text
-                      style={[styles.showMoreLabel, { color: Colors.tint }]}
-                    >
-                      {isDescriptionExpanded ? "Show less" : "Show more"}
-                    </Text>
-                  </Pressable>
-                ) : null}
+                    {isDescriptionExpanded ? "Show less" : "Show more"}
+                  </Text>
+                </Pressable>
               </View>
             ) : null}
 
@@ -1449,20 +1457,9 @@ const styles = StyleSheet.create({
   instructionsList: {
     gap: 8,
   },
-  showMoreButton: {
-    marginTop: 12,
-    alignSelf: "center",
-    height: 56,
-    minWidth: 250,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 12,
-    borderWidth: 1,
-    paddingHorizontal: 20,
-  },
-  showMoreLabel: {
+  toggleDescription: {
     fontSize: 14,
-    fontWeight: "600",
+    fontWeight: "500",
   },
   ingredientsList: {
     marginHorizontal: -24,
