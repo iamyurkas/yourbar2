@@ -3,7 +3,6 @@ import type { Cocktail, Ingredient } from '@/providers/inventory-provider';
 export type IngredientLookup = {
   ingredientById: Map<number, Ingredient>;
   brandsByBaseId: Map<number, number[]>;
-  stylesByBaseId: Map<number, number[]>;
 };
 
 export type IngredientAvailabilityOptions = {
@@ -14,7 +13,6 @@ export type IngredientAvailabilityOptions = {
 export type IngredientSubstituteLists = {
   base: SubstituteOption[];
   branded: SubstituteOption[];
-  styled: SubstituteOption[];
   declared: SubstituteOption[];
 };
 
@@ -37,7 +35,6 @@ export type IngredientResolution = {
 export function createIngredientLookup(ingredients: Ingredient[]): IngredientLookup {
   const ingredientById = new Map<number, Ingredient>();
   const brandsByBaseId = new Map<number, number[]>();
-  const stylesByBaseId = new Map<number, number[]>();
 
   ingredients.forEach((item) => {
     const idValue = Number(item.id ?? -1);
@@ -52,24 +49,16 @@ export function createIngredientLookup(ingredients: Ingredient[]): IngredientLoo
     const baseId =
       baseValue != null && Number.isFinite(baseValue) && baseValue >= 0 ? Math.trunc(baseValue) : undefined;
 
-    if (baseId != null) {
-      const brandedList = brandsByBaseId.get(baseId) ?? [];
-      brandedList.push(ingredientId);
-      brandsByBaseId.set(baseId, brandedList);
+    if (baseId == null) {
+      return;
     }
 
-    const styleValue = item.styleIngredientId != null ? Number(item.styleIngredientId) : undefined;
-    const styleId =
-      styleValue != null && Number.isFinite(styleValue) && styleValue >= 0 ? Math.trunc(styleValue) : undefined;
-
-    if (styleId != null) {
-      const styledList = stylesByBaseId.get(styleId) ?? [];
-      styledList.push(ingredientId);
-      stylesByBaseId.set(styleId, styledList);
-    }
+    const brandedList = brandsByBaseId.get(baseId) ?? [];
+    brandedList.push(ingredientId);
+    brandsByBaseId.set(baseId, brandedList);
   });
 
-  return { ingredientById, brandsByBaseId, stylesByBaseId } satisfies IngredientLookup;
+  return { ingredientById, brandsByBaseId } satisfies IngredientLookup;
 }
 
 export function isRecipeIngredientAvailable(
@@ -82,7 +71,6 @@ export function isRecipeIngredientAvailable(
   const allowAllSubstitutes = options?.allowAllSubstitutes ?? false;
   const allowBase = ingredient.allowBaseSubstitution || allowAllSubstitutes;
   const allowBrand = ingredient.allowBrandSubstitution || allowAllSubstitutes;
-  const allowStyle = ingredient.allowStyleSubstitution || allowAllSubstitutes;
 
   if (!ingredient || ingredient.optional || (ignoreGarnish && ingredient.garnish)) {
     return true;
@@ -93,13 +81,13 @@ export function isRecipeIngredientAvailable(
   const id = typeof ingredient.ingredientId === 'number' ? ingredient.ingredientId : undefined;
 
   if (id != null) {
-    collectVisibleIngredientIds(id, lookup, allowBase, allowBrand, allowStyle, candidateIds);
+    collectVisibleIngredientIds(id, lookup, allowBase, allowBrand, candidateIds);
   }
 
   (ingredient.substitutes ?? []).forEach((substitute) => {
     const substituteId = typeof substitute.ingredientId === 'number' ? substitute.ingredientId : undefined;
     if (substituteId != null) {
-      collectVisibleIngredientIds(substituteId, lookup, allowBase, allowBrand, allowStyle, candidateIds);
+      collectVisibleIngredientIds(substituteId, lookup, allowBase, allowBrand, candidateIds);
     }
   });
 
@@ -130,7 +118,6 @@ function collectVisibleIngredientIds(
   lookup: IngredientLookup,
   allowBase: boolean,
   allowBrand: boolean,
-  allowStyle: boolean,
   accumulator: Set<number>,
 ) {
   if (ingredientId == null) {
@@ -141,27 +128,12 @@ function collectVisibleIngredientIds(
 
   const record = lookup.ingredientById.get(ingredientId);
   const baseId = normalizeIngredientId(record?.baseIngredientId);
-  const styleBaseId = normalizeIngredientId(record?.styleIngredientId);
   const allowBrandedForBase = allowBrand || baseId == null;
 
   if (baseId == null) {
     if (allowBrandedForBase) {
       lookup.brandsByBaseId.get(ingredientId)?.forEach((id) => accumulator.add(id));
     }
-
-    if (allowStyle) {
-      if (styleBaseId != null) {
-        accumulator.add(styleBaseId);
-        lookup.stylesByBaseId.get(styleBaseId)?.forEach((id) => {
-          if (id !== ingredientId) {
-            accumulator.add(id);
-          }
-        });
-      } else {
-        lookup.stylesByBaseId.get(ingredientId)?.forEach((id) => accumulator.add(id));
-      }
-    }
-
     return;
   }
 
@@ -171,15 +143,6 @@ function collectVisibleIngredientIds(
 
   if (allowBrandedForBase) {
     lookup.brandsByBaseId.get(baseId)?.forEach((id) => accumulator.add(id));
-  }
-
-  if (allowStyle && styleBaseId != null) {
-    accumulator.add(styleBaseId);
-    lookup.stylesByBaseId.get(styleBaseId)?.forEach((id) => {
-      if (id !== ingredientId) {
-        accumulator.add(id);
-      }
-    });
   }
 }
 
@@ -195,14 +158,13 @@ export function getVisibleIngredientIdsForCocktail(
     const requestedId = normalizeIngredientId(ingredient.ingredientId);
     const allowBase = Boolean(ingredient.allowBaseSubstitution || allowAllSubstitutes);
     const allowBrand = Boolean(ingredient.allowBrandSubstitution || allowAllSubstitutes);
-    const allowStyle = Boolean(ingredient.allowStyleSubstitution || allowAllSubstitutes);
 
-    collectVisibleIngredientIds(requestedId, lookup, allowBase, allowBrand, allowStyle, visibleIngredientIds);
+    collectVisibleIngredientIds(requestedId, lookup, allowBase, allowBrand, visibleIngredientIds);
 
     (ingredient.substitutes ?? []).forEach((substitute) => {
       const substituteId = normalizeIngredientId(substitute.ingredientId);
 
-      collectVisibleIngredientIds(substituteId, lookup, allowBase, allowBrand, allowStyle, visibleIngredientIds);
+      collectVisibleIngredientIds(substituteId, lookup, allowBase, allowBrand, visibleIngredientIds);
     });
   });
 
@@ -228,7 +190,6 @@ export function resolveIngredientAvailability(
 
   const allowBase = ingredient.allowBaseSubstitution || allowAllSubstitutes;
   const allowBrand = ingredient.allowBrandSubstitution || allowAllSubstitutes;
-  const allowStyle = ingredient.allowStyleSubstitution || allowAllSubstitutes;
   const allowBrandedForBase = allowBrand || baseId == null;
 
   const baseSubstituteIds = allowBase && baseId != null ? [baseId] : [];
@@ -250,28 +211,7 @@ export function resolveIngredientAvailability(
     });
   }
 
-  const styleSubstituteSet = new Set<number>();
-
-  if (allowStyle && requestedId != null) {
-    const styleBaseId = normalizeIngredientId(requestedIngredient?.styleIngredientId);
-    if (styleBaseId != null) {
-      styleSubstituteSet.add(styleBaseId);
-      lookup.stylesByBaseId.get(styleBaseId)?.forEach((id) => {
-        if (id !== requestedId) {
-          styleSubstituteSet.add(id);
-        }
-      });
-    } else {
-      lookup.stylesByBaseId.get(requestedId)?.forEach((id) => {
-        if (id !== requestedId) {
-          styleSubstituteSet.add(id);
-        }
-      });
-    }
-  }
-
   const brandedSubstituteIds = Array.from(brandedSubstituteSet);
-  const styledSubstituteIds = Array.from(styleSubstituteSet);
   const declaredSubstituteIds = new Set<number>();
 
   const expandCandidateIds = (candidateId?: number) => {
@@ -291,17 +231,7 @@ export function resolveIngredientAvailability(
 
     const record = lookup.ingredientById.get(candidateId);
     const candidateBaseId = normalizeIngredientId(record?.baseIngredientId);
-    const candidateStyleBaseId = normalizeIngredientId(record?.styleIngredientId);
     const allowBrandedCandidate = allowBrand || candidateBaseId == null;
-
-    if (allowStyle && candidateStyleBaseId != null) {
-      addCandidate(candidateStyleBaseId);
-      lookup.stylesByBaseId.get(candidateStyleBaseId)?.forEach((id) => {
-        if (id !== candidateId) {
-          addCandidate(id);
-        }
-      });
-    }
 
     if (candidateBaseId == null) {
       if (allowBrandedCandidate) {
@@ -356,7 +286,6 @@ export function resolveIngredientAvailability(
     const substitutionOrder = [
       ...baseSubstituteIds.map((id) => ({ id, type: 'base' as const })),
       ...brandedSubstituteIds.map((id) => ({ id, type: 'brand' as const })),
-      ...styledSubstituteIds.map((id) => ({ id, type: 'style' as const })),
       ...Array.from(declaredSubstituteIds).map((id) => ({ id, type: 'declared' as const })),
     ];
 
@@ -380,7 +309,6 @@ export function resolveIngredientAvailability(
 
   const baseSubstitutes = baseSubstituteIds.map((id) => resolveSubstituteOption(id, requestedCandidateName));
   const brandedSubstitutes = brandedSubstituteIds.map((id) => resolveSubstituteOption(id));
-  const styledSubstitutes = styledSubstituteIds.map((id) => resolveSubstituteOption(id));
   const declaredSubstitutes = (ingredient.substitutes ?? []).map((substitute) =>
     resolveSubstituteOption(
       typeof substitute.ingredientId === 'number' ? substitute.ingredientId : undefined,
@@ -391,17 +319,15 @@ export function resolveIngredientAvailability(
   let substitutes: IngredientSubstituteLists = {
     base: baseSubstitutes,
     branded: brandedSubstitutes,
-    styled: styledSubstitutes,
     declared: declaredSubstitutes,
   };
 
   if (resolvedId != null && substituteFor == null) {
-    substitutes = { base: [], branded: [], styled: [], declared: [] };
+    substitutes = { base: [], branded: [], declared: [] };
   } else if (resolvedId != null) {
     substitutes = {
       base: baseSubstitutes.filter((option) => option.id !== resolvedId),
       branded: brandedSubstitutes.filter((option) => option.id !== resolvedId),
-      styled: styledSubstitutes.filter((option) => option.id !== resolvedId),
       declared: declaredSubstitutes.filter((option) => option.id !== resolvedId),
     };
   }

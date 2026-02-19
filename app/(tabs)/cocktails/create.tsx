@@ -86,7 +86,6 @@ type EditableIngredient = {
   garnish: boolean;
   allowBaseSubstitution: boolean;
   allowBrandSubstitution: boolean;
-  allowStyleSubstitution: boolean;
   substitutes: EditableSubstitute[];
 };
 
@@ -107,7 +106,6 @@ type CocktailFormSnapshot = {
     garnish: boolean;
     allowBaseSubstitution: boolean;
     allowBrandSubstitution: boolean;
-    allowStyleSubstitution: boolean;
     substitutes: Array<{
       ingredientId?: number;
       name: string;
@@ -168,7 +166,6 @@ function createEditableIngredient(
     garnish: initial?.garnish ?? false,
     allowBaseSubstitution: initial?.allowBaseSubstitution ?? false,
     allowBrandSubstitution: initial?.allowBrandSubstitution ?? false,
-    allowStyleSubstitution: initial?.allowStyleSubstitution ?? false,
     substitutes: initial?.substitutes ?? [],
   } satisfies EditableIngredient;
 }
@@ -221,9 +218,6 @@ function mapRecipeIngredientToEditable(
     ),
     allowBrandSubstitution: Boolean(
       (recipe as { allowBrandSubstitution?: boolean }).allowBrandSubstitution,
-    ),
-    allowStyleSubstitution: Boolean(
-      (recipe as { allowStyleSubstitution?: boolean }).allowStyleSubstitution,
     ),
     substitutes,
   } satisfies EditableIngredient;
@@ -405,7 +399,6 @@ export default function CreateCocktailScreen() {
         garnish: item.garnish,
         allowBaseSubstitution: item.allowBaseSubstitution,
         allowBrandSubstitution: item.allowBrandSubstitution,
-        allowStyleSubstitution: item.allowStyleSubstitution,
         substitutes: item.substitutes.map((substitute) => ({
           ingredientId: substitute.ingredientId,
           name: substitute.name,
@@ -1111,7 +1104,6 @@ export default function CreateCocktailScreen() {
           garnish: item.garnish,
           allowBaseSubstitution: item.allowBaseSubstitution,
           allowBrandSubstitution: item.allowBrandSubstitution,
-          allowStyleSubstitution: item.allowStyleSubstitution,
           substitutes,
           order: index + 1,
         } satisfies CreateCocktailInput["ingredients"][number];
@@ -2346,20 +2338,6 @@ function EditableIngredientRow({
   }, [ingredientRecord?.baseIngredientId]);
 
   const isBrandedIngredient = baseIngredientId != null;
-  
-  const styleIngredientId = useMemo(() => {
-    const candidate = ingredientRecord?.styleIngredientId;
-    if (candidate == null) {
-      return undefined;
-    }
-
-    const parsed = Number(candidate);
-    return Number.isFinite(parsed) && parsed >= 0
-      ? Math.trunc(parsed)
-      : undefined;
-  }, [ingredientRecord?.styleIngredientId]);
-
-  const isStyledIngredient = styleIngredientId != null;
 
   const suggestions = useMemo(() => {
     if (normalizedName.length < MIN_AUTOCOMPLETE_LENGTH) {
@@ -2500,12 +2478,6 @@ function EditableIngredientRow({
       allowBrandSubstitution: !ingredient.allowBrandSubstitution,
     });
   }, [ingredient.allowBrandSubstitution, ingredient.key, onChange]);
-
-  const handleToggleAllowStyle = useCallback(() => {
-    onChange(ingredient.key, {
-      allowStyleSubstitution: !ingredient.allowStyleSubstitution,
-    });
-  }, [ingredient.allowStyleSubstitution, ingredient.key, onChange]);
 
   const usePluralUnits = useMemo(
     () => shouldUsePluralUnits(ingredient.amount),
@@ -2697,11 +2669,7 @@ function EditableIngredientRow({
               .map((tag) => tag?.color ?? tagColors.yellow);
             const subtitle = renderSubtitle(baseGroupId);
             const brandIndicatorColor =
-              candidate.styleIngredientId != null
-                ? Colors.success
-                : candidate.baseIngredientId != null
-                  ? Colors.primary
-                  : undefined;
+              candidate.baseIngredientId != null ? Colors.primary : undefined;
             const isLast = index === suggestions.length - 1;
             const separatorColor = isAvailable
               ? Colors.outline
@@ -2846,25 +2814,6 @@ function EditableIngredientRow({
         </View>
       ) : null}
 
-
-
-      {isStyledIngredient ? (
-        <View style={styles.toggleRow}>
-          <ToggleChip
-            label="Allow style substitutes"
-            active={ingredient.allowStyleSubstitution}
-            onToggle={handleToggleAllowStyle}
-            onInfo={() =>
-              onOpenDialog({
-                title: "Allow style substitutes",
-                message:
-                  "If the specified styled ingredient isn't available, the cocktail will be shown as available with its style base ingredient or other styles of the same base.",
-                actions: [{ label: "OK" }],
-              })
-            }
-          />
-        </View>
-      ) : null}
       <View style={styles.substitutesSection}>
         <Pressable
           onPress={() => onRequestAddSubstitute(ingredient.key)}

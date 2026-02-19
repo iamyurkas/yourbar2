@@ -117,11 +117,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
     [ingredient.name, ingredient.photoUri],
   );
 
-  const brandIndicatorColor = ingredient.styleIngredientId != null
-    ? Colors.success
-    : ingredient.baseIngredientId != null
-      ? Colors.primary
-      : undefined;
+  const brandIndicatorColor = ingredient.baseIngredientId != null ? Colors.primary : undefined;
 
   const shoppingControl = useMemo(() => {
     const shoppingLabel = onShoppingToggle ? 'Remove from shopping list' : 'On shopping list';

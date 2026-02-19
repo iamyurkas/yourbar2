@@ -192,7 +192,6 @@ export function normalizeCocktailIngredients(
       garnish: ingredient.garnish ? true : undefined,
       allowBaseSubstitution: ingredient.allowBaseSubstitution ? true : undefined,
       allowBrandSubstitution: ingredient.allowBrandSubstitution ? true : undefined,
-      allowStyleSubstitution: ingredient.allowStyleSubstitution ? true : undefined,
       substitutes: normalizeSubstitutes(ingredient.substitutes),
     }))
     .filter((ingredient) => ingredient.name)
@@ -231,7 +230,6 @@ export function toIngredientStorageRecord(ingredient: Ingredient | IngredientRec
     description: ingredient.description ?? undefined,
     tags: normalizedTags && normalizedTags.length > 0 ? normalizedTags : undefined,
     baseIngredientId: ingredient.baseIngredientId ?? undefined,
-    styleIngredientId: ingredient.styleIngredientId ?? undefined,
     photoUri: ingredient.photoUri ?? undefined,
   } satisfies IngredientStorageRecord;
 }
