@@ -976,7 +976,17 @@ export default function IngredientDetailsScreen() {
 
             {descriptionParagraphs.length ? (
               <View style={styles.textBlock}>
-                <View style={styles.instructionsList}>
+                <Pressable
+                  onPress={handleToggleDescription}
+                  accessibilityRole="button"
+                  accessibilityLabel={
+                    isDescriptionExpanded
+                      ? "Show less description"
+                      : "Show full description"
+                  }
+                  hitSlop={8}
+                >
+                  <View style={styles.instructionsList}>
                   {isDescriptionExpanded
                     ? descriptionParagraphs.map((paragraph, index) => (
                       <FormattedText
@@ -1006,7 +1016,8 @@ export default function IngredientDetailsScreen() {
                         {paragraph}
                       </FormattedText>
                     ))}
-                </View>
+                  </View>
+                </Pressable>
                 {shouldTruncateDescription ? (
                   <Pressable
                     onPress={handleToggleDescription}
@@ -1019,7 +1030,7 @@ export default function IngredientDetailsScreen() {
                     hitSlop={8}
                   >
                     <Text
-                      style={[styles.toggleDescription, { color: Colors.tint }]}
+                      style={[styles.descriptionToggleText, { color: Colors.tint }]}
                     >
                       {isDescriptionExpanded ? "Show less" : "Show more"}
                     </Text>
@@ -1693,6 +1704,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "600",
   },
+  descriptionToggleText: {
+    alignSelf: "flex-start",
+    fontSize: 14,
+    fontWeight: "500",
+  },
   placeholderText: {
     fontSize: 14,
     textAlign: "center",
@@ -1717,10 +1733,6 @@ const styles = StyleSheet.create({
   },
   instructionsList: {
     gap: 8,
-  },
-  toggleDescription: {
-    fontSize: 14,
-    fontWeight: "500",
   },
   baseIngredientRow: {
     flexDirection: "row",
