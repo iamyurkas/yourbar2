@@ -296,11 +296,7 @@ function buildMissingSubstituteLines(
     }
 
     seen.add(key);
-    const prefix =
-      (source === "base" && isBrandedIngredient) ||
-        source === "branded"
-        ? "or any"
-        : "or";
+    const prefix = source === "base" && isBrandedIngredient ? "or any" : "or";
     lines.push(`${prefix} ${name}`);
   });
 
