@@ -28,6 +28,14 @@
       "predictiveBackGestureEnabled": false
     },
 
+    "androidStatusBar": {
+      "backgroundColor": "transparent"
+    },
+
+    "androidNavigationBar": {
+      "backgroundColor": "transparent"
+    },
+
     "web": {
       "output": "static",
       "favicon": "./assets/images/favicon.png"
