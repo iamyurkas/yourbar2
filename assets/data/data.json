@@ -34557,36 +34557,39 @@
     },
     {
       "id": 568,
-      "name": "Vilno",
-      "synonyms": ["Vilnius"],
-      "description": "A sweet layered shooter with bright fruit notes and a soft creamy texture.",
-      "instructions": "1. Pour 15 ml of **grenadine** into a shooter glass.\n2. Carefully layer 15 ml of **Crème de Menthe Green** over the back of a spoon.\n3. Gently float 15 ml of **Irish cream** on top to finish the layered shot.",
-      "photoUri": "assets/cocktails/568-vilnius.jpg",
+      "name": "Washington Apple Shot",
+      "description": "A fruity whiskey shot with apple schnapps and cranberry juice.",
+      "instructions": "For 3 shots:\n1. Fill a shaker with **ice**.\n2. Add 45 ml of **whiskey**, 45 ml of **apple schnapps**, and 45 ml of **cranberry juice**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into 3 shooter glasses.",
       "glassId": "shooter",
-      "methodIds": ["layer"],
-      "tags": [6, 9],
+      "methodIds": ["shake"],
+      "tags": [5, 6, 9],
       "ingredients": [
         {
           "order": 1,
-          "ingredientId": 183,
-          "name": "Grenadine",
-          "amount": "15",
-          "unitId": 11
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8
         },
         {
           "order": 2,
-          "ingredientId": 128,
-          "name": "Crème de Menthe Green",
-          "amount": "15",
-          "unitId": 11,
-          "allowBaseSubstitution": true,
-          "allowBrandSubstitution": true
+          "ingredientId": 352,
+          "name": "Whiskey",
+          "amount": "45",
+          "unitId": 11
         },
         {
           "order": 3,
-          "ingredientId": 198,
-          "name": "Irish Cream",
-          "amount": "15",
+          "ingredientId": 29,
+          "name": "Apple Schnapps",
+          "amount": "45",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 119,
+          "name": "Cranberry Juice",
+          "amount": "45",
           "unitId": 11
         }
       ]
