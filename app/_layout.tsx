@@ -56,7 +56,7 @@ function ThemeAppWrapper({ children }: { children: React.ReactNode }) {
     <PaperProvider theme={paperTheme}>
       <ThemeProvider value={navigationTheme}>
         {children}
-        <StatusBar style={isDark ? "light" : "dark"} />
+        <StatusBar style="auto" />
       </ThemeProvider>
     </PaperProvider>
   );
