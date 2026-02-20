@@ -3138,13 +3138,7 @@
           "ingredientId": 66,
           "name": "Brandy",
           "amount": "60",
-          "unitId": 11,
-          "substitutes": [
-            {
-              "ingredientId": 112,
-              "name": "Cognac"
-            }
-          ]
+          "unitId": 11
         },
         {
           "order": 3,
@@ -5322,13 +5316,7 @@
           "ingredientId": 112,
           "name": "Cognac",
           "amount": "30",
-          "unitId": 11,
-          "substitutes": [
-            {
-              "ingredientId": 66,
-              "name": "Brandy"
-            }
-          ]
+          "unitId": 11
         },
         {
           "order": 3,
@@ -7540,13 +7528,7 @@
           "ingredientId": 112,
           "name": "Cognac",
           "amount": "30",
-          "unitId": 11,
-          "substitutes": [
-            {
-              "ingredientId": 66,
-              "name": "Brandy"
-            }
-          ]
+          "unitId": 11
         },
         {
           "order": 3,
@@ -7691,13 +7673,7 @@
           "ingredientId": 66,
           "name": "Brandy",
           "amount": "60",
-          "unitId": 11,
-          "substitutes": [
-            {
-              "ingredientId": 112,
-              "name": "Cognac"
-            }
-          ]
+          "unitId": 11
         },
         {
           "order": 3,
@@ -7851,13 +7827,7 @@
           "ingredientId": 66,
           "name": "Brandy",
           "amount": "60",
-          "unitId": 11,
-          "substitutes": [
-            {
-              "ingredientId": 112,
-              "name": "Cognac"
-            }
-          ]
+          "unitId": 11
         },
         {
           "order": 3,
@@ -15659,13 +15629,7 @@
           "ingredientId": 112,
           "name": "Cognac",
           "amount": "30",
-          "unitId": 11,
-          "substitutes": [
-            {
-              "ingredientId": 66,
-              "name": "Brandy"
-            }
-          ]
+          "unitId": 11
         },
         {
           "order": 4,
@@ -15841,13 +15805,7 @@
           "ingredientId": 112,
           "name": "Cognac",
           "amount": "30",
-          "unitId": 11,
-          "substitutes": [
-            {
-              "ingredientId": 66,
-              "name": "Brandy"
-            }
-          ]
+          "unitId": 11
         },
         {
           "order": 3,
@@ -25331,13 +25289,7 @@
           "ingredientId": 112,
           "name": "Cognac",
           "amount": "30",
-          "unitId": 11,
-          "substitutes": [
-            {
-              "ingredientId": 66,
-              "name": "Brandy"
-            }
-          ]
+          "unitId": 11
         },
         {
           "order": 3,
@@ -31773,13 +31725,7 @@
           "ingredientId": 112,
           "name": "Cognac",
           "amount": "30",
-          "unitId": 11,
-          "substitutes": [
-            {
-              "ingredientId": 66,
-              "name": "Brandy"
-            }
-          ]
+          "unitId": 11
         },
         {
           "order": 3,
@@ -33440,13 +33386,7 @@
           "ingredientId": 112,
           "name": "Cognac",
           "amount": "30",
-          "unitId": 11,
-          "substitutes": [
-            {
-              "ingredientId": 66,
-              "name": "Brandy"
-            }
-          ]
+          "unitId": 11
         },
         {
           "order": 4,
@@ -34502,13 +34442,7 @@
           "ingredientId": 112,
           "name": "Cognac",
           "amount": "30",
-          "unitId": 11,
-          "substitutes": [
-            {
-              "ingredientId": 66,
-              "name": "Brandy"
-            }
-          ]
+          "unitId": 11
         },
         {
           "order": 4,
