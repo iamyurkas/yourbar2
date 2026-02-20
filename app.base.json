@@ -3,7 +3,7 @@
     "name": "Your Bar",
     "slug": "yourbar",
     "version": "1.0.0",
-    "orientation": "portrait",
+    "orientation": "default",
     "icon": "./assets/images/icon.png",
     "scheme": "yourbar",
     "userInterfaceStyle": "automatic",
@@ -15,6 +15,7 @@
     "android": {
       "package": "com.yourbarapp.free",
       "versionCode": 19,
+      "resizableActivity": true,
       "adaptiveIcon": {
         "backgroundColor": "#4DABF7",
         "foregroundImage": "./assets/images/icon.png",
@@ -29,6 +30,7 @@
     },
     "plugins": [
       "./plugins/withForceDarkAllowed",
+      "./plugins/withOrientationRestrictionsRemoved",
       "expo-router",
       "expo-localization",
       [
