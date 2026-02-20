@@ -4,18 +4,14 @@
     "slug": "yourbar",
     "version": "1.0.0",
     "orientation": "portrait",
-
     "icon": "./assets/images/icon.png",
-
     "scheme": "yourbar",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
-
     "ios": {
       "supportsTablet": true,
       "icon": "./assets/images/ios-icon.png"
     },
-
     "android": {
       "package": "com.yourbarapp.free",
       "versionCode": 19,
@@ -24,15 +20,13 @@
         "foregroundImage": "./assets/images/icon.png",
         "monochromeImage": "./assets/images/icon-mono.png"
       },
-      "edgeToEdgeEnabled": true,
+      "edgeToEdgeEnabled": false,
       "predictiveBackGestureEnabled": false
     },
-
     "web": {
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
-
     "plugins": [
       "./plugins/withForceDarkAllowed",
       "expo-router",
@@ -74,12 +68,10 @@
         }
       ]
     ],
-
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
     },
-
     "extra": {
       "router": {},
       "eas": {
