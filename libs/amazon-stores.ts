@@ -33,11 +33,11 @@ export type AmazonStoreKey =
 
 export const AMAZON_STORES: Record<AmazonStoreKey, AmazonStoreConfig> = {
   US: { domain: 'amazon.com', label: 'Amazon.com', countryName: 'United States', affiliateTag: '' },
-  UK: { domain: 'amazon.co.uk', label: 'Amazon.co.uk', countryName: 'United Kingdom', affiliateTag: '' },
-  DE: { domain: 'amazon.de', label: 'Amazon.de', countryName: 'Germany', affiliateTag: '' },
-  FR: { domain: 'amazon.fr', label: 'Amazon.fr', countryName: 'France', affiliateTag: '' },
-  IT: { domain: 'amazon.it', label: 'Amazon.it', countryName: 'Italy', affiliateTag: '' },
-  ES: { domain: 'amazon.es', label: 'Amazon.es', countryName: 'Spain', affiliateTag: '' },
+  UK: { domain: 'amazon.co.uk', label: 'Amazon.co.uk', countryName: 'United Kingdom', affiliateTag: 'yourbarfree04-21' },
+  DE: { domain: 'amazon.de', label: 'Amazon.de', countryName: 'Germany', affiliateTag: 'yourbarfree05-21' },
+  FR: { domain: 'amazon.fr', label: 'Amazon.fr', countryName: 'France', affiliateTag: 'yourbarfree0b-21' },
+  IT: { domain: 'amazon.it', label: 'Amazon.it', countryName: 'Italy', affiliateTag: 'yourbarfree02-21' },
+  ES: { domain: 'amazon.es', label: 'Amazon.es', countryName: 'Spain', affiliateTag: 'yourbarfree0c-21' },
   NL: { domain: 'amazon.nl', label: 'Amazon.nl', countryName: 'Netherlands', affiliateTag: '' },
   SE: { domain: 'amazon.se', label: 'Amazon.se', countryName: 'Sweden', affiliateTag: '' },
   PL: { domain: 'amazon.pl', label: 'Amazon.pl', countryName: 'Poland', affiliateTag: '' },
