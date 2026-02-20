@@ -30,12 +30,7 @@
           "name": "Cognac",
           "amount": "22.5",
           "unitId": 11,
-          "substitutes": [
-            {
-              "ingredientId": 66,
-              "name": "Brandy"
-            }
-          ]
+          "allowStyleSubstitution": true
         },
         {
           "order": 4,
@@ -199,7 +194,8 @@
           "name": "Baileys",
           "amount": "15",
           "unitId": 11,
-          "allowBaseSubstitution": true
+          "allowBaseSubstitution": true,
+          "allowBrandSubstitution": true
         },
         {
           "order": 3,
@@ -207,12 +203,7 @@
           "name": "Cognac",
           "amount": "15",
           "unitId": 11,
-          "substitutes": [
-            {
-              "ingredientId": 66,
-              "name": "Brandy"
-            }
-          ]
+          "allowStyleSubstitution": true
         }
       ]
     },
@@ -296,7 +287,7 @@
       "id": 6,
       "name": "Adonis",
       "description": "A classic cocktail created in 1884 and named after the first broadway musical to run for more than 500 performances. the ratio of sherry and vermouth may be varied to make the cocktail sweeter or drier accordingly.",
-      "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 45 ml of **Amontillado sherry**, 45 ml of **red vermouth**, and 2 dashes of **orange bitters**.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled cocktail glass.\n5. Garnish with **orange** zest.",
+      "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 45 ml of **Amontillado sherry**, 45 ml of **red vermouth**, and 2 dashes of **orange bitters**.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled cocktail glass.\n5. Express the oils from an **orange** peel over the drink and use it as a garnish.",
       "photoUri": "assets/cocktails/6-adonis.jpg",
       "glassId": "coupe",
       "methodIds": ["stir"],
@@ -409,7 +400,7 @@
       "name": "Adult Chocolate Milk",
       "synonyms": ["Chocolate Milkshake"],
       "description": "A dessert-style cocktail that blends chocolate liqueur, cream liqueur, milk, and cream into a chilled, silky serve.",
-      "instructions": "1. Fill a shaker with **ice**.\n2. Add 45 ml of Godiva dark chocolate liqueur, 15 ml of **Baileys**, 60 ml of whole **milk**, 15 ml of heavy **cream**, and 15 ml of **chocolate syrup**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Double strain into a chilled rocks glass filled with fresh **ice** (preferably over a large cube).\n5. Garnish with 2 pinches of grated **chocolate**.",
+      "instructions": "1. Fill a shaker with **ice**.\n2. Add 45 ml of Godiva dark chocolate liqueur, 15 ml of **Baileys**, 60 ml of whole **milk**, 15 ml of heavy **cream**, and 15 ml of **chocolate syrup**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Double strain into a chilled rocks glass filled with fresh **ice** (preferably over a large cube).\n5. Garnish with 2 shavings of grated **chocolate**.",
       "photoUri": "assets/cocktails/8-adult-chocolate-milk.jpg",
       "glassId": "highball_glass",
       "methodIds": ["shake"],
@@ -552,7 +543,7 @@
       "id": 10,
       "name": "After Eight",
       "description": "Inspired by the classic **mint** **chocolate** thin, the after eight cocktail is a rich, indulgent dessert drink that can be served as a sophisticated martini or a fun layered shot.",
-      "instructions": "1. Pour the **coffee liqueur** into the bottom of a shot glass.\n2. Carefully float the crème de menthe over the back of a spoon to create a distinct layer.\n3. Slowly layer the **Irish cream** on top using the same spoon technique.",
+      "instructions": "1. Pour 15 ml of **coffee liqueur** into the bottom of a shot glass.\n2. Carefully float 15 ml of **green crème de menthe** over the back of a spoon to create a distinct layer.\n3. Slowly layer 15 ml of **Irish cream** on top using the same spoon technique.",
       "photoUri": "assets/cocktails/10-after-eight.jpg",
       "glassId": "shooter",
       "methodIds": ["layer"],
@@ -562,21 +553,21 @@
           "order": 1,
           "ingredientId": 111,
           "name": "Coffee Liqueur",
-          "amount": "20",
+          "amount": "15",
           "unitId": 11
         },
         {
           "order": 2,
           "ingredientId": 128,
           "name": "Crème de Menthe Green",
-          "amount": "20",
+          "amount": "15",
           "unitId": 11
         },
         {
           "order": 3,
           "ingredientId": 198,
           "name": "Irish Cream",
-          "amount": "20",
+          "amount": "15",
           "unitId": 11
         }
       ]
@@ -617,7 +608,8 @@
           "ingredientId": 249,
           "name": "Orange Curaçao",
           "amount": "15",
-          "unitId": 11
+          "unitId": 11,
+          "allowStyleSubstitution": true
         },
         {
           "order": 5,
@@ -654,7 +646,7 @@
       "name": "After Midnight Martini",
       "synonyms": ["Espresso Rob Roy"],
       "description": "A late-night alternative to an Espresso Martini.",
-      "instructions": "1. Pour 22.5 ml of **vodka**, 22.5 ml of **coffee liqueur**, 22.5 ml of **red vermouth**, 15 ml of **Pedro Ximenez sherry**, and an **egg white** into a shaker.\n2. Dry shake (without **ice**) vigorously for about 15 seconds to emulsify the **egg**.\n3. Add about 150 g of **ice**.\n4. Shake vigorously for about 15 seconds until well chilled.\n5. Fine strain into a chilled glass.\n6. Garnish with 3 **coffee beans** floated in the centre.",
+      "instructions": "1. Pour 22.5 ml of **vodka**, 22.5 ml of **coffee liqueur**, 22.5 ml of **red vermouth**, 15 ml of **Pedro Ximenez sherry**, and an **egg white** into a shaker.\n2. Dry shake (without **ice**) vigorously for about 15 seconds to emulsify the **egg**.\n3. Add about 150 g of **ice**.\n4. Shake vigorously for about 15 seconds until well chilled.\n5. Fine strain into a chilled glass.\n6. Garnish with 3 **coffee beans** floated in the centre.",
       "photoUri": "assets/cocktails/12-after-midnight-martini.jpg",
       "glassId": "martini",
       "methodIds": ["shake"],
@@ -855,7 +847,7 @@
       "id": 15,
       "name": "Alabama Slammer (shot)",
       "description": "A classic southern party shot made with **amaretto**, **Southern Comfort**, and **sloe gin**, balanced with **orange juice**. Sweet, fruity, and deceptively strong.",
-      "instructions": "For 3 shots:\n1. Fill a shaker with **ice**.\n2. Add 45 ml of **Southern Comfort**, 45 ml of **amaretto**, 45 ml of **sloe gin**, 22.5 ml of **orange juice**, and 22.5 ml of **lemon juice**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into 3 chilled shooter glasses.",
+      "instructions": "For 3 shots:\n1. Fill a shaker with **ice**.\n2. Add 30 ml of **Southern Comfort**, 30 ml of **amaretto**, 30 ml of **sloe gin**, 15 ml of **orange juice**, and 15 ml of **lemon juice**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into 3 chilled shooter glasses.",
       "photoUri": "assets/cocktails/15-alabama-slammer-shot.jpg",
       "glassId": "shooter",
       "methodIds": ["shake"],
@@ -872,35 +864,35 @@
           "order": 2,
           "ingredientId": 12,
           "name": "Amaretto",
-          "amount": "45",
+          "amount": "30",
           "unitId": 11
         },
         {
           "order": 3,
           "ingredientId": 319,
           "name": "Southern Comfort",
-          "amount": "45",
+          "amount": "30",
           "unitId": 11
         },
         {
           "order": 4,
           "ingredientId": 317,
           "name": "Sloe Gin",
-          "amount": "45",
+          "amount": "30",
           "unitId": 11
         },
         {
           "order": 5,
           "ingredientId": 251,
           "name": "Orange Juice",
-          "amount": "22.5",
+          "amount": "15",
           "unitId": 11
         },
         {
           "order": 6,
           "ingredientId": 221,
           "name": "Lemon Juice",
-          "amount": "22.5",
+          "amount": "15",
           "unitId": 11
         }
       ]
@@ -1219,7 +1211,7 @@
       "name": "Alien Brain Haemorrhage",
       "synonyms": ["Alien Brain Tumor"],
       "description": "A visually striking layered shooter that looks like a floating brain in liquid. Sweet **peach schnapps** forms the base, creamy **Baileys** curdles into brain-like shapes, and a splash of **blue curaçao** or **grenadine** adds an eerie, bloody effect. Smooth, sweet, and slightly citrusy.",
-      "instructions": "1. Pour **peach schnapps** into a chilled shooter glass as the base.\n2. Slowly drip **Baileys** into the schnapps using a spoon or the back of a straw so it curdles and forms a brain-like shape.\n3. Gently add a few drops of **blue curaçao** and **grenadine** on top to create a bleeding effect.\n4. Serve immediately and drink in one shot.",
+      "instructions": "1. Pour 30 ml of **peach schnapps** into a chilled shooter glass as the base.\n2. Slowly drip 10 ml of **Baileys** into the schnapps using a spoon or the back of a straw so it curdles and forms a brain-like shape.\n3. Gently add a few drops of **blue curaçao** and **grenadine** on top to create a bleeding effect.\n4. Serve immediately and drink in one shot.",
       "photoUri": "assets/cocktails/20-alien-brain-haemorrhage.jpg",
       "glassId": "shooter",
       "methodIds": ["layer"],
@@ -1235,10 +1227,6 @@
             {
               "ingredientId": 268,
               "name": "Peach Brandy"
-            },
-            {
-              "ingredientId": 269,
-              "name": "Peach Liqueur"
             }
           ]
         },
@@ -1246,7 +1234,7 @@
           "order": 2,
           "ingredientId": 35,
           "name": "Baileys",
-          "amount": "15",
+          "amount": "10",
           "unitId": 11,
           "allowBaseSubstitution": true
         },
@@ -1255,7 +1243,13 @@
           "ingredientId": 59,
           "name": "Blue Curaçao",
           "amount": "5",
-          "unitId": 7
+          "unitId": 7,
+          "substitutes": [
+            {
+              "ingredientId": 60,
+              "name": "Blue Curaçao Syrup"
+            }
+          ]
         },
         {
           "order": 4,
@@ -1267,10 +1261,6 @@
             {
               "ingredientId": 87,
               "name": "Cherry Juice"
-            },
-            {
-              "ingredientId": 86,
-              "name": "Cherry Heering"
             },
             {
               "ingredientId": 85,
@@ -2050,7 +2040,7 @@
       "id": 33,
       "name": "Anaconda",
       "description": "A strong two-spirit shooter combining **Jack Daniels** and **Sambuca**, shaken ice-cold and served in chilled shot glasses.",
-      "instructions": "1. Fill a shaker with **ice**.\n2. Add 75 ml of **Jack Daniels** and 75 ml of **Sambuca**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into 3 chilled shooter glasses.",
+      "instructions": "For 3 shots:\n1. Fill a shaker with **ice**.\n2. Add 60 ml of **Jack Daniels** and 60 ml of **Sambuca**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into 3 chilled shooter glasses.",
       "photoUri": "assets/cocktails/33-anaconda.jpg",
       "glassId": "shooter",
       "methodIds": ["shake"],
@@ -2067,7 +2057,7 @@
           "order": 2,
           "ingredientId": 201,
           "name": "Jack Daniels",
-          "amount": "75",
+          "amount": "60",
           "unitId": 11,
           "allowBaseSubstitution": true
         },
@@ -2075,7 +2065,7 @@
           "order": 3,
           "ingredientId": 308,
           "name": "Sambuca",
-          "amount": "75",
+          "amount": "60",
           "unitId": 11
         }
       ]
@@ -2126,7 +2116,7 @@
       "name": "Angel's Tit",
       "synonyms": ["Chocolate Cake Shooter"],
       "description": "A classic creamy layered shooter made with **Crème de Cacao brown**, maraschino liqueur, and fresh **cream**. Sweet, silky, and dessert-like, with a visual contrast of dark **chocolate** and white **cream**, traditionally garnished with a **cherry** on top.",
-      "instructions": "1. Chill a shooter glass to help keep the layers well defined.\n2. Carefully pour the **Crème de Cacao brown** into the bottom of the glass.\n3. Slowly layer the maraschino liqueur over the back of a spoon so it sits above the cacao.\n4. Gently float the **cream** on top, again using the back of a spoon to create a clean white layer.\n5. Garnish with a **maraschino cherry** placed in the center of the **cream** layer.\n6. Serve immediately and drink in one shot.",
+      "instructions": "1. Chill a shooter glass to help keep the layers well defined.\n2. Carefully pour 20 ml of **Crème de Cacao brown** into the bottom of the glass.\n3. Slowly layer 10 ml of **Luxardo maraschino** liqueur over the back of a spoon so it sits above the cacao.\n4. Gently float 10 ml of **cream** on top, again using the back of a spoon to create a clean white layer.\n5. Garnish with a **cherry** placed in the center of the **cream** layer.\n6. Serve immediately and drink in one shot.",
       "photoUri": "assets/cocktails/35-angel-s-tit.jpg",
       "glassId": "shooter",
       "methodIds": ["layer"],
@@ -2136,13 +2126,10 @@
           "order": 1,
           "ingredientId": 124,
           "name": "Crème de Cacao Brown",
-          "amount": "30",
+          "amount": "20",
           "unitId": 11,
+          "allowStyleSubstitution": true,
           "substitutes": [
-            {
-              "ingredientId": 94,
-              "name": "Chocolate Liqueur"
-            },
             {
               "ingredientId": 125,
               "name": "Crème de Cacao White"
@@ -2153,14 +2140,14 @@
           "order": 2,
           "ingredientId": 231,
           "name": "Luxardo Maraschino",
-          "amount": "15",
+          "amount": "10",
           "unitId": 11
         },
         {
           "order": 3,
           "ingredientId": 120,
           "name": "Cream",
-          "amount": "15",
+          "amount": "10",
           "unitId": 11,
           "substitutes": [
             {
@@ -2171,8 +2158,8 @@
         },
         {
           "order": 4,
-          "ingredientId": 236,
-          "name": "Maraschino Cherry",
+          "ingredientId": 84,
+          "name": "Cherry",
           "amount": "1",
           "unitId": 1,
           "garnish": true
@@ -2531,7 +2518,7 @@
       "id": 42,
       "name": "Apple Pie (shot)",
       "description": "Nuts, apple, cinnamon and cream.",
-      "instructions": "1. Fill a shaker with **ice**.\n2. Add 90 ml of **apple schnapps** and 45 ml of **Hazelnut liqueur**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into chilled shooter glasses.\n5. Float 15 ml of **cream** on top.\n6. Dust with 3 pinches of **cinnamon**.",
+      "instructions": "For 3 shots:\n1. Fill a shaker with **ice**.\n2. Add 75 ml of **apple schnapps** and 45 ml of **hazelnut liqueur**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into 3 chilled shooter glasses.\n5. Float 5 ml of **cream** on top of every glass\n6. Dust every glass with a pinch of **cinnamon**.",
       "photoUri": "assets/cocktails/42-apple-pie-shot.jpg",
       "glassId": "shooter",
       "methodIds": ["shake"],
@@ -2548,8 +2535,9 @@
           "order": 2,
           "ingredientId": 29,
           "name": "Apple Schnapps",
-          "amount": "90",
-          "unitId": 11
+          "amount": "75",
+          "unitId": 11,
+          "allowStyleSubstitution": true
         },
         {
           "order": 3,
@@ -2563,7 +2551,13 @@
           "ingredientId": 120,
           "name": "Cream",
           "amount": "15",
-          "unitId": 11
+          "unitId": 11,
+          "substitutes": [
+            {
+              "ingredientId": 185,
+              "name": "Half-and-half"
+            }
+          ]
         },
         {
           "order": 5,
@@ -2955,7 +2949,7 @@
       "name": "Aussie Boomerang",
       "synonyms": ["Kiwi Melon Shooter"],
       "description": "A smooth, creamy shooter combining bright **kiwi fruit** and melon liqueurs with rich **cream**. Sweet, fruity, and dessert-like, it’s a playful, easy-drinking shot with a soft tropical finish.",
-      "instructions": "1. Chill a shooter glass in advance for a cleaner, smoother taste.\n2. Pour the **kiwi fruit liqueur** into the glass as the first layer.\n3. Slowly add the **melon liqueur** over the back of a spoon to create a distinct layer.\n4. Gently float the **cream** on top using a spoon to achieve a clean layered effect.\n5. Serve immediately and drink in one smooth shot.",
+      "instructions": "1. Chill a shooter glass in advance for a cleaner, smoother taste.\n2. Pour 15 ml of **kiwi fruit liqueur** into the glass as the first layer.\n3. Slowly add 15 ml of **melon liqueur** over the back of a spoon to create a distinct layer.\n4. Gently float 15 ml of **cream** on top using a spoon to achieve a clean layered effect.\n5. Serve immediately and drink in one smooth shot.",
       "photoUri": "assets/cocktails/49-aussie-boomerang.jpg",
       "glassId": "shooter",
       "methodIds": ["layer"],
@@ -2965,21 +2959,21 @@
           "order": 1,
           "ingredientId": 212,
           "name": "Kiwi fruit Liqueur",
-          "amount": "25",
+          "amount": "15",
           "unitId": 11
         },
         {
           "order": 2,
           "ingredientId": 237,
           "name": "Melon Liqueur",
-          "amount": "25",
+          "amount": "15",
           "unitId": 11
         },
         {
           "order": 3,
           "ingredientId": 120,
           "name": "Cream",
-          "amount": "10",
+          "amount": "15",
           "unitId": 11
         }
       ]
@@ -3165,7 +3159,7 @@
       "id": 53,
       "name": "B-52",
       "description": "The name of this IBA official cocktail refers to the us b-52 stratofortress long-range bomber.",
-      "instructions": "1. Pour 20 ml of **Kahlua** into a shooter glass.\n2. Very carefully pour **Baileys** on top of the **Kahlua**, followed by **Grand Marnier**.\n3. Serve flamed, and drink flamed using a long straw.",
+      "instructions": "1. Pour 15 ml of **Kahlua** into a shooter glass.\n2. Very carefully pour 15 ml of **Baileys** on top of the **Kahlua**, followed by 15 ml of **Grand Marnier**.\n3. Serve flamed, and drink flamed using a long straw.",
       "photoUri": "assets/cocktails/53-b-52.jpg",
       "glassId": "shooter",
       "methodIds": ["layer"],
@@ -3175,9 +3169,10 @@
           "order": 1,
           "ingredientId": 208,
           "name": "Kahlua",
-          "amount": "20",
+          "amount": "15",
           "unitId": 11,
           "allowBaseSubstitution": true,
+          "allowBrandSubstitution": true,
           "substitutes": [
             {
               "ingredientId": 110,
@@ -3189,15 +3184,16 @@
           "order": 2,
           "ingredientId": 35,
           "name": "Baileys",
-          "amount": "20",
+          "amount": "15",
           "unitId": 11,
-          "allowBaseSubstitution": true
+          "allowBaseSubstitution": true,
+          "allowBrandSubstitution": true
         },
         {
           "order": 3,
           "ingredientId": 175,
           "name": "Grand Marnier",
-          "amount": "20",
+          "amount": "15",
           "unitId": 11,
           "allowBaseSubstitution": true,
           "substitutes": [
@@ -3218,7 +3214,7 @@
       "name": "B-54",
       "synonyms": ["B-52 with Amaretto"],
       "description": "A B-52 variation with **coffee liqueur**, **amaretto**, and **Irish cream** in a smooth layered profile.",
-      "instructions": "1. Pour 20 ml of **Kahlua** into a shooter glass.\n2. Carefully layer 20 ml of **amaretto** on top using the back of a spoon.\n3. Gently layer 20 ml of **Baileys** on top to finish.",
+      "instructions": "1. Pour 15 ml of **Kahlua** into a shooter glass.\n2. Carefully layer 15 ml of **amaretto** on top using the back of a spoon.\n3. Gently layer 15 ml of **Baileys** on top to finish.",
       "photoUri": "assets/cocktails/54-b-54.jpg",
       "glassId": "shooter",
       "methodIds": ["layer"],
@@ -3228,7 +3224,7 @@
           "order": 1,
           "ingredientId": 208,
           "name": "Kahlua",
-          "amount": "20",
+          "amount": "15",
           "unitId": 11,
           "allowBaseSubstitution": true,
           "allowBrandSubstitution": true
@@ -3237,14 +3233,14 @@
           "order": 2,
           "ingredientId": 12,
           "name": "Amaretto",
-          "amount": "20",
+          "amount": "15",
           "unitId": 11
         },
         {
           "order": 3,
           "ingredientId": 35,
           "name": "Baileys",
-          "amount": "20",
+          "amount": "15",
           "unitId": 11,
           "allowBaseSubstitution": true,
           "allowBrandSubstitution": true
@@ -3256,7 +3252,7 @@
       "name": "B-55",
       "synonyms": ["B-52 with Absinthe"],
       "description": "A bolder B-52 variation that finishes with **absinthe** for an herbal, high-proof top layer.",
-      "instructions": "1. Pour 20 ml of **Kahlua** or another **coffee liqueur** into a shooter glass.\n2. Pour 20 ml of **Baileys** on top of the **Kahlua**.\n3. Very carefully pour 15 ml of **absinthe** on top of the **Baileys**.",
+      "instructions": "1. Pour 15 ml of **Kahlua** or another **coffee liqueur** into a shooter glass.\n2. Pour 15 ml of **Baileys** on top of the **Kahlua**.\n3. Very carefully pour 15 ml of **absinthe** on top of the **Baileys**.",
       "photoUri": "assets/cocktails/55-b-55.jpg",
       "glassId": "shooter",
       "methodIds": ["layer"],
@@ -3266,9 +3262,10 @@
           "order": 1,
           "ingredientId": 208,
           "name": "Kahlua",
-          "amount": "20",
+          "amount": "15",
           "unitId": 11,
           "allowBaseSubstitution": true,
+          "allowBrandSubstitution": true,
           "substitutes": [
             {
               "ingredientId": 110,
@@ -3280,9 +3277,10 @@
           "order": 2,
           "ingredientId": 35,
           "name": "Baileys",
-          "amount": "20",
+          "amount": "15",
           "unitId": 11,
-          "allowBaseSubstitution": true
+          "allowBaseSubstitution": true,
+          "allowBrandSubstitution": true
         },
         {
           "order": 3,
@@ -4317,7 +4315,7 @@
       "id": 71,
       "name": "Banshee",
       "description": "This mild, sweet and creamy shot is named after a female spirit in Irish and Celtic folklore, who foretells the death of a family member of the person who hears her wailing screams. This recipe is for 3 shots.",
-      "instructions": "For 3 shots:\n1. Fill a shaker with **ice**.\n2. Add 50 ml of **Crème de Banane**, 50 ml of **Crème de Cacao white**, and 50 ml of **cream**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into 3 chilled shooter glasses.",
+      "instructions": "For 3 shots:\n1. Fill a shaker with **ice**.\n2. Add 45 ml of **Crème de Banane**, 45 ml of **Crème de Cacao white**, and 45 ml of **cream**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into 3 chilled shooter glasses.",
       "photoUri": "assets/cocktails/71-banshee.jpg",
       "glassId": "shooter",
       "methodIds": ["shake"],
@@ -4334,29 +4332,20 @@
           "order": 2,
           "ingredientId": 123,
           "name": "Crème de Banane",
-          "amount": "50",
+          "amount": "45",
           "unitId": 11,
-          "substitutes": [
-            {
-              "ingredientId": 37,
-              "name": "Banana Liqueur"
-            }
-          ]
+          "allowStyleSubstitution": true
         },
         {
           "order": 3,
           "ingredientId": 125,
           "name": "Crème de Cacao White",
-          "amount": "50",
+          "amount": "45",
           "unitId": 11,
           "substitutes": [
             {
               "ingredientId": 124,
               "name": "Crème de Cacao Brown"
-            },
-            {
-              "ingredientId": 94,
-              "name": "Chocolate Liqueur"
             }
           ]
         },
@@ -4364,7 +4353,7 @@
           "order": 4,
           "ingredientId": 120,
           "name": "Cream",
-          "amount": "50",
+          "amount": "45",
           "unitId": 11
         }
       ]
@@ -6319,7 +6308,7 @@
           "order": 3,
           "ingredientId": 351,
           "name": "Whipped Cream",
-          "amount": "20",
+          "amount": "10",
           "unitId": 11,
           "optional": true
         }
@@ -6523,7 +6512,7 @@
       "id": 106,
       "name": "Blue Kamikaze",
       "description": "The shot variation of the IBA official kamikaze cocktail. the recipe here is for 3 shots. Blue kamikaze can also be made as a long drink.",
-      "instructions": "For 3 shots:\n1. Fill a shaker with **ice**.\n2. Add 50 ml of **vodka**, 50 ml of **blue curaçao**, and 50 ml of **lime juice**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into 3 chilled shooter glasses.",
+      "instructions": "For 3 shots:\n1. Fill a shaker with **ice**.\n2. Add 45 ml of **vodka**, 45 ml of **blue curaçao**, and 45 ml of **lime juice**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into 3 chilled shooter glasses.",
       "photoUri": "assets/cocktails/106-blue-kamikaze.jpg",
       "glassId": "shooter",
       "methodIds": ["shake"],
@@ -6540,21 +6529,21 @@
           "order": 2,
           "ingredientId": 345,
           "name": "Vodka",
-          "amount": "50",
+          "amount": "45",
           "unitId": 11
         },
         {
           "order": 3,
           "ingredientId": 59,
           "name": "Blue Curaçao",
-          "amount": "50",
+          "amount": "45",
           "unitId": 11
         },
         {
           "order": 4,
           "ingredientId": 228,
           "name": "Lime Juice",
-          "amount": "50",
+          "amount": "45",
           "unitId": 11
         }
       ]
@@ -6970,7 +6959,7 @@
       "name": "BMW",
       "synonyms": ["Baileys Malibu Whiskey"],
       "description": "The name is an acronym for **Baileys**, **Malibu rum**, and **whiskey**.",
-      "instructions": "For 3 shots:\n1. Fill a shaker with **ice**.\n2. Add 50 ml of **Baileys**, 50 ml of **Malibu rum**, and 50 ml of **whiskey**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into 3 chilled shooter glasses.",
+      "instructions": "For 3 shots:\n1. Fill a shaker with **ice**.\n2. Add 45 ml of **Baileys**, 45 ml of **Malibu rum**, and 45 ml of **whiskey**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into 3 chilled shooter glasses.",
       "photoUri": "assets/cocktails/114-bmw.jpg",
       "glassId": "shooter",
       "methodIds": ["shake"],
@@ -6989,7 +6978,8 @@
           "name": "Baileys",
           "amount": "50",
           "unitId": 11,
-          "allowBaseSubstitution": true
+          "allowBaseSubstitution": true,
+          "allowBrandSubstitution": true
         },
         {
           "order": 3,
@@ -6997,7 +6987,9 @@
           "name": "Malibu Rum",
           "amount": "50",
           "unitId": 11,
-          "allowBaseSubstitution": true
+          "allowBaseSubstitution": true,
+          "allowBrandSubstitution": true,
+          "allowStyleSubstitution": true
         },
         {
           "order": 4,
@@ -10561,7 +10553,7 @@
           "ingredientId": 95,
           "name": "Chocolate Syrup",
           "amount": "20",
-          "unitId": 8,
+          "unitId": 11,
           "optional": true,
           "garnish": true
         },
@@ -11174,10 +11166,18 @@
         },
         {
           "order": 4,
-          "ingredientId": 88,
-          "name": "Cherry Liqueur",
+          "ingredientId": 86,
+          "name": "Cherry Heering",
           "amount": "30",
-          "unitId": 11
+          "unitId": 11,
+          "allowBaseSubstitution": true,
+          "allowBrandSubstitution": true,
+          "substitutes": [
+            {
+              "ingredientId": 85,
+              "name": "Cherry Brandy"
+            }
+          ]
         },
         {
           "order": 5,
@@ -11188,17 +11188,24 @@
         },
         {
           "order": 6,
-          "ingredientId": 219,
-          "name": "Lemon",
+          "ingredientId": 316,
+          "name": "Simple Syrup",
           "amount": "1",
           "unitId": 6
         },
         {
           "order": 7,
-          "ingredientId": 316,
-          "name": "Simple Syrup",
+          "ingredientId": 221,
+          "name": "Lemon Juice",
           "amount": "1",
           "unitId": 6
+        },
+        {
+          "order": 8,
+          "ingredientId": 236,
+          "name": "Maraschino Cherry",
+          "unitId": 11,
+          "garnish": true
         }
       ]
     },
@@ -13934,7 +13941,7 @@
           "order": 2,
           "ingredientId": 345,
           "name": "Vodka",
-          "amount": "50",
+          "amount": "60",
           "unitId": 11
         },
         {
@@ -13962,7 +13969,7 @@
           "order": 5,
           "ingredientId": 316,
           "name": "Simple Syrup",
-          "amount": "10",
+          "amount": "15",
           "unitId": 11
         },
         {
@@ -14310,7 +14317,7 @@
       "name": "Fireball",
       "synonyms": ["Spicy Rum Shooter"],
       "description": "A fiery party shooter that blends **white rum**, **Goldschläger**, and a dash of **Tabasco** for a spicy-sweet kick.",
-      "instructions": "1. Fill a shaker with **ice**.\n2. Pour 75 ml of **white rum**, 75 ml of **Goldschläger**, and 3 dashes of **Tabasco**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into 3 chilled shooter glasses.",
+      "instructions": "For 3 shots:\n1. Fill a shaker with **ice**.\n2. Pour 60 ml of **white rum**, 60 ml of **Goldschläger**, and 3 dashes of **Tabasco**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into 3 chilled shooter glasses.",
       "photoUri": "assets/cocktails/234-fireball.jpg",
       "glassId": "shooter",
       "methodIds": ["shake"],
@@ -14327,14 +14334,14 @@
           "order": 2,
           "ingredientId": 357,
           "name": "White Rum",
-          "amount": "75",
+          "amount": "60",
           "unitId": 11
         },
         {
           "order": 3,
           "ingredientId": 171,
           "name": "Goldschläger",
-          "amount": "75",
+          "amount": "60",
           "unitId": 11
         },
         {
@@ -14342,7 +14349,8 @@
           "ingredientId": 331,
           "name": "Tabasco",
           "amount": "3",
-          "unitId": 6
+          "unitId": 6,
+          "allowBaseSubstitution": true
         }
       ]
     },
@@ -14426,7 +14434,7 @@
       "photoUri": "assets/cocktails/236-flaming-dr-pepper.jpg",
       "glassId": "pub_glass",
       "methodIds": ["build"],
-      "tags": [5, 9],
+      "tags": [6, 8, 9],
       "ingredients": [
         {
           "order": 1,
@@ -16447,7 +16455,7 @@
       "photoUri": "assets/cocktails/269-gladiator.jpg",
       "glassId": "pub_glass",
       "methodIds": ["build"],
-      "tags": [6, 7, 9],
+      "tags": [6, 7, 8, 9],
       "ingredients": [
         {
           "order": 1,
@@ -16920,7 +16928,7 @@
       "id": 278,
       "name": "Green Mexican",
       "description": "The \"green Mexican\" is a vibrant, sweet-and-sour layered shot. It features a distinct three-tier appearance when prepared correctly.",
-      "instructions": "1. Bottom layer: pour the green **banana liqueur** into a shot glass first.\n2. Middle layer: carefully pour the **lemon juice** over the back of a bar spoon to layer it on top of the liqueur.\n3. Top layer: gently layer the **Tequila blanco** as the final top tier using the same bar spoon method.",
+      "instructions": "1. Pour 15 ml of **green banana liqueur** into a shot glass first.\n2. Carefully pour 15 ml of **lemon juice** over the back of a bar spoon to layer it on top of the liqueur.\n3. Gently layer 15 ml of **Tequila blanco** as the final top tier using the same bar spoon method.",
       "photoUri": "assets/cocktails/278-green-mexican.jpg",
       "glassId": "shooter",
       "methodIds": ["layer"],
@@ -16930,7 +16938,7 @@
           "order": 1,
           "ingredientId": 38,
           "name": "Banana Liqueur Green",
-          "amount": "20",
+          "amount": "15",
           "unitId": 11,
           "allowBaseSubstitution": true
         },
@@ -17854,7 +17862,7 @@
       "name": "Hiroshima",
       "synonyms": ["Sambuca, Baileys and Absinthe Layered Shooter"],
       "description": "A rich, creamy spirit drink featuring **sambuca**, **Baileys**, **absinthe**—dessert-like, smooth, and indulgent.",
-      "instructions": "1. Pour 20 ml of **sambuca** into a shooter glass.\n2. Carefully pour 15 ml of **Baileys** and 15 ml of **absinthe**.\n3. Add several **grenadine** drops using a straw.",
+      "instructions": "1. Pour 20 ml of **sambuca** into a shooter glass.\n2. Carefully pour 15 ml of **Baileys** and 10 ml of **absinthe**.\n3. Add a few **grenadine** drops using a straw.",
       "photoUri": "assets/cocktails/294-hiroshima.jpg",
       "glassId": "shooter",
       "methodIds": ["layer"],
@@ -17878,15 +17886,15 @@
           "order": 3,
           "ingredientId": 2,
           "name": "Absinthe",
-          "amount": "15",
+          "amount": "10",
           "unitId": 11
         },
         {
           "order": 4,
           "ingredientId": 183,
           "name": "Grenadine",
-          "amount": "1",
-          "unitId": 6
+          "amount": "3",
+          "unitId": 7
         }
       ]
     },
@@ -18952,7 +18960,7 @@
       "id": 311,
       "name": "Irish Flag",
       "description": "Layered shot showing the green, white and **orange** of the Irish flag.",
-      "instructions": "1. Pour 20 ml of green crème de menthe into a shooter.\n2. Carefully layer 15 ml of **Baileys** and 15 ml of **Grand Marnier** on top.",
+      "instructions": "1. Pour 15 ml of **green crème de menthe** into a shooter.\n2. Carefully layer 15 ml of **Baileys** and 15 ml of **Grand Marnier** on top.",
       "photoUri": "assets/cocktails/311-irish-flag.jpg",
       "glassId": "shooter",
       "methodIds": ["layer"],
@@ -18962,7 +18970,7 @@
           "order": 1,
           "ingredientId": 128,
           "name": "Crème de Menthe Green",
-          "amount": "20",
+          "amount": "15",
           "unitId": 11
         },
         {
@@ -18986,7 +18994,7 @@
       "name": "Irish Frog",
       "synonyms": ["Midori and Baileys Layered Shot"],
       "description": "Simple layered shot with **melon liqueur** and **Irish cream**.",
-      "instructions": "1. Pour 25 ml of Midori into a shooter.\n2. Carefully add 25 ml of **Baileys** on top of the Midori.",
+      "instructions": "1. Pour 25 ml of **Midori melon liqueur** into a shooter glass.\n2. Carefully add 20 ml of **Baileys** on top of the Midori.",
       "photoUri": "assets/cocktails/312-irish-frog.jpg",
       "glassId": "shooter",
       "methodIds": ["layer"],
@@ -18997,14 +19005,18 @@
           "ingredientId": 239,
           "name": "Midori Melon Liqueur",
           "amount": "25",
-          "unitId": 11
+          "unitId": 11,
+          "allowBaseSubstitution": true,
+          "allowBrandSubstitution": true
         },
         {
           "order": 2,
           "ingredientId": 35,
           "name": "Baileys",
-          "amount": "25",
-          "unitId": 11
+          "amount": "20",
+          "unitId": 11,
+          "allowBaseSubstitution": true,
+          "allowBrandSubstitution": true
         }
       ]
     },
@@ -19554,7 +19566,7 @@
       "id": 322,
       "name": "Jam Roly Poly",
       "description": "A rich, sweet **gin** drink featuring a **raspberry** taste.",
-      "instructions": "1. Pour 45 ml of **raspberry liqueur** into a shooter glass.\n2. Carefully pour 15 ml of **egg liqueur** on top of the liqueur.",
+      "instructions": "1. Pour 30 ml of **raspberry liqueur** into a shooter glass.\n2. Carefully pour 15 ml of **egg liqueur** on top of the liqueur.",
       "photoUri": "assets/cocktails/322-jam-roly-poly.jpg",
       "glassId": "shooter",
       "methodIds": ["layer"],
@@ -19564,7 +19576,7 @@
           "order": 1,
           "ingredientId": 291,
           "name": "Raspberry Liqueur",
-          "amount": "45",
+          "amount": "30",
           "unitId": 11
         },
         {
@@ -19683,7 +19695,7 @@
       "id": 325,
       "name": "Jellyfish",
       "description": "A jellyfish shooter is a layered drink that uses differing liquid densities to create the visual of a jellyfish \"swimming\" in the glass. There are two popular versions: the traditional creamy version and the vibrant \"blue jellyfish\".",
-      "instructions": "1. Pour 15 ml of crème de cacao white into a shooter glass.\n2. Gently add 15 ml of **amaretto** on top.\n3. Gently pour 15 ml of **Baileys** on top of the **amaretto**.\n4. Add a few drops of **grenadine**.",
+      "instructions": "1. Pour 15 ml of crème de cacao white into a shooter glass.\n2. Gently add 15 ml of **amaretto** on top.\n3. Gently pour 15 ml of **Baileys** on top of the amaretto.\n4. Add a few drops of **grenadine**.",
       "photoUri": "assets/cocktails/325-jellyfish.jpg",
       "glassId": "shooter",
       "methodIds": ["layer"],
@@ -20081,7 +20093,7 @@
       "photoUri": "assets/cocktails/331-j-gerbomb.jpg",
       "glassId": "highball_glass",
       "methodIds": ["build"],
-      "tags": [6, 9],
+      "tags": [6, 8, 9],
       "ingredients": [
         {
           "order": 1,
@@ -20103,7 +20115,7 @@
       "id": 332,
       "name": "Kamikaze",
       "description": "This popular cocktail is a variation of the original kamikaze shooter.",
-      "instructions": "1. Fill a shaker with **ice**.\n2. Add 30 ml of **vodka**, 30 ml of **triple sec**, and 15 ml of **lime juice**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled shooter glass.\n5. Garnish with a wedge of **lime**.",
+      "instructions": "For 3 shots:\n1. Fill a shaker with **ice**.\n2. Add 60 ml of **vodka**, 60 ml of **triple sec**, and 15 ml of **lime juice**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into 3 chilled shooter glasses.\n5. Garnish every shot with a small **lime** wedge.",
       "photoUri": "assets/cocktails/332-kamikaze.jpg",
       "glassId": "shooter",
       "methodIds": ["shake"],
@@ -20120,14 +20132,14 @@
           "order": 2,
           "ingredientId": 345,
           "name": "Vodka",
-          "amount": "30",
+          "amount": "60",
           "unitId": 11
         },
         {
           "order": 3,
           "ingredientId": 340,
           "name": "Triple Sec",
-          "amount": "30",
+          "amount": "60",
           "unitId": 11
         },
         {
@@ -23124,17 +23136,17 @@
       "id": 383,
       "name": "Mini Snowball",
       "description": "A light, festive snowball serve with creamy **advocaat**, citrus brightness, and fizzy lift.",
-      "instructions": "1. Fill a shooter with **ice**.\n2. Add 60 ml of **egg liqueur**, 15 ml of **lime juice**, and 60 ml of **lemonade**.\n3. Stir gently to combine.\n4. Garnish with a **cherry**.",
+      "instructions": "For 3 shots:\n1. Fill a shaker with **ice**.\n2. Add 60 ml of **advocaat**, 45 ml of **vodka**, and 15 ml of **lime juice**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into 3 chilled shooter glasses.",
       "photoUri": "assets/cocktails/383-mini-snowball.jpg",
       "glassId": "shooter",
-      "methodIds": ["build"],
+      "methodIds": ["shake"],
       "tags": [5, 9],
       "ingredients": [
         {
           "order": 1,
           "ingredientId": 196,
           "name": "Ice",
-          "amount": "120",
+          "amount": "150",
           "unitId": 8
         },
         {
@@ -23146,26 +23158,18 @@
         },
         {
           "order": 3,
+          "ingredientId": 345,
+          "name": "Vodka",
+          "amount": "60",
+          "unitId": 11
+        },
+        {
+          "order": 4,
           "ingredientId": 228,
           "name": "Lime Juice",
           "amount": "15",
           "unitId": 11,
           "optional": true
-        },
-        {
-          "order": 4,
-          "ingredientId": 224,
-          "name": "Lemonade",
-          "amount": "60",
-          "unitId": 11
-        },
-        {
-          "order": 5,
-          "ingredientId": 84,
-          "name": "Cherry",
-          "amount": "1",
-          "unitId": 1,
-          "garnish": true
         }
       ]
     },
@@ -24623,7 +24627,7 @@
       "id": 407,
       "name": "Oatmeal Cookie",
       "description": "This sweet and nostalgic shooter tastes remarkably like its namesake dessert. the combination of **cinnamon**, butterscotch, and **Irish cream** creates a flavor profile of baked goods, with an optional touch of **Jägermeister** adding a complex herbal depth.",
-      "instructions": "1. Fill a shaker with **ice**.\n2. Add 30 ml of **Goldschläger**, 30 ml of **butterscotch liqueur**, 30 ml of **Baileys**, and 30 ml of **Jägermeister** (if using).\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled shooter glass.",
+      "instructions": "For 3 shots:\n1. Fill a shaker with **ice**.\n2. Add 45 ml of **Goldschläger**, 45 ml of **butterscotch liqueur**, and 45 ml of **Baileys**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into 3 chilled shooter glasses.",
       "photoUri": "assets/cocktails/407-oatmeal-cookie.jpg",
       "glassId": "shooter",
       "methodIds": ["shake"],
@@ -24640,36 +24644,24 @@
           "order": 2,
           "ingredientId": 171,
           "name": "Goldschläger",
-          "amount": "30",
+          "amount": "45",
           "unitId": 11
         },
         {
           "order": 3,
           "ingredientId": 70,
           "name": "Butterscotch Liqueur",
-          "amount": "30",
-          "unitId": 11,
-          "substitutes": [
-            {
-              "ingredientId": 71,
-              "name": "Butterscotch Schnapps"
-            }
-          ]
+          "amount": "45",
+          "unitId": 11
         },
         {
           "order": 4,
           "ingredientId": 35,
           "name": "Baileys",
-          "amount": "30",
-          "unitId": 11
-        },
-        {
-          "order": 5,
-          "ingredientId": 207,
-          "name": "Jägermeister",
-          "amount": "30",
+          "amount": "45",
           "unitId": 11,
-          "optional": true
+          "allowBaseSubstitution": true,
+          "allowBrandSubstitution": true
         }
       ]
     },
@@ -24975,7 +24967,7 @@
       "id": 413,
       "name": "Orgasm (shot)",
       "description": "This orgasm shot is a layered delight with **coffee liqueur**, **Irish cream**, and **amaretto**.",
-      "instructions": "1. Pour **coffee liqueur** into the base of a shot glass.\n2. Layer on **amaretto**.\n3. Top with a layer of **Irish cream**.",
+      "instructions": "1. Pour 15 ml of **coffee liqueur** into the base of a shot glass.\n2. Layer on 15 ml of **Irish cream**\n3. Top with 15 ml of **amaretto**.",
       "photoUri": "assets/cocktails/413-orgasm-shot.jpg",
       "glassId": "shooter",
       "methodIds": ["layer"],
@@ -25008,7 +25000,7 @@
       "id": 414,
       "name": "Ouzi",
       "description": "A bright **vodka** sour balancing **vodka**, **Ouzo**, **rich simple syrup** with fresh citrus and a touch of sweetness for a crisp, refreshing sip.",
-      "instructions": "For 3 shots:\n1. Fill a shaker with **ice**.\n2. Add 67.5 ml of **vodka**, 45 ml of **Ouzo**, 22.5 ml of **rich simple syrup**, and 22.5 ml of **lemon juice**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into 3 chilled shooter glasses.",
+      "instructions": "For 3 shots:\n1. Fill a shaker with **ice**.\n2. Add 60 ml of **vodka**, 45 ml of **Ouzo**, 20 ml of **rich simple syrup**, and 15 ml of **lemon juice**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into 3 chilled shooter glasses.",
       "photoUri": "assets/cocktails/414-ouzi.jpg",
       "glassId": "shooter",
       "methodIds": ["shake"],
@@ -25025,7 +25017,7 @@
           "order": 2,
           "ingredientId": 345,
           "name": "Vodka",
-          "amount": "67.5",
+          "amount": "60",
           "unitId": 11
         },
         {
@@ -25039,14 +25031,14 @@
           "order": 4,
           "ingredientId": 298,
           "name": "Rich Simple Syrup",
-          "amount": "22.5",
+          "amount": "15",
           "unitId": 11
         },
         {
           "order": 5,
           "ingredientId": 221,
           "name": "Lemon Juice",
-          "amount": "22.5",
+          "amount": "15",
           "unitId": 11
         }
       ]
@@ -27471,8 +27463,8 @@
       "id": 453,
       "name": "Redheaded Slut",
       "synonyms": ["Red Head Whore"],
-      "description": "A layered shooter combining herbal **Jägermeister**, sweet **peach schnapps**, and tart **cranberry juice** for a balanced flavor profile.",
-      "instructions": "1. Fill a shaker with **ice**.\n2. Add 45 ml of **Jägermeister**, 45 ml of **peach schnapps**, and 60 ml of **cranberry juice**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled shooter glass.\n5. Garnish with 3 strawberries.",
+      "description": "A shooter combining herbal **Jägermeister**, sweet **peach schnapps**, and tart **cranberry juice** for a balanced flavour profile.",
+      "instructions": "For 3 shots:\n1. Fill a shaker with **ice**.\n2. Add 45 ml of **Jägermeister**, 45 ml of **peach schnapps**, and 45 ml of **cranberry juice**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into 3 chilled shooter glasses.\n5. Garnish every shot with a strawberry.",
       "photoUri": "assets/cocktails/453-redheaded-slut.jpg",
       "glassId": "shooter",
       "methodIds": ["shake"],
@@ -29448,7 +29440,7 @@
       "name": "Screaming Orgasm",
       "synonyms": ["S.O.", "SO"],
       "description": "This screaming orgasm shot is a layered delight with **vodka**, **coffee liqueur**, **Irish cream**, and **amaretto**.",
-      "instructions": "1. Pour **coffee liqueur** into the base of a shot glass.\n2. Layer on **amaretto**.\n3. Carefully add a layer of **Irish cream**.\n4. Top with a layer of **vodka**.",
+      "instructions": "1. Pour 10 ml of **coffee liqueur** into the base of a shot glass.\n2. Layer on 15 ml of **amaretto**.\n3. Carefully add 15 ml of **Irish cream**.\n4. Top with 10 ml of **vodka**.",
       "photoUri": "assets/cocktails/485-screaming-orgasm.jpg",
       "glassId": "shooter",
       "methodIds": ["layer"],
@@ -29456,16 +29448,16 @@
       "ingredients": [
         {
           "order": 1,
-          "ingredientId": 345,
-          "name": "Vodka",
-          "amount": "15",
+          "ingredientId": 111,
+          "name": "Coffee Liqueur",
+          "amount": "10",
           "unitId": 11
         },
         {
           "order": 2,
-          "ingredientId": 111,
-          "name": "Coffee Liqueur",
-          "amount": "15",
+          "ingredientId": 12,
+          "name": "Amaretto",
+          "amount": "10",
           "unitId": 11
         },
         {
@@ -29477,9 +29469,9 @@
         },
         {
           "order": 4,
-          "ingredientId": 12,
-          "name": "Amaretto",
-          "amount": "15",
+          "ingredientId": 345,
+          "name": "Vodka",
+          "amount": "10",
           "unitId": 11
         }
       ]
@@ -29762,7 +29754,7 @@
       "name": "Sex With an Alligator",
       "synonyms": ["S.W.A.", "SWA"],
       "description": "An eye-catching layered shooter that features a sweet melon and **pineapple** base with herbal and **raspberry** accents, served in a shooter glass.",
-      "instructions": "For 3 shots:\n1. Fill a shaker with **ice**.\n2. Add 45 ml of **Midori Melon liqueur** and 45 ml of **pineapple juice**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into 3 chilled shooter glasses.\n5. Carefully pour 15 ml of **Chambord** into each glass so it sinks to the bottom.\n6. Slowly layer 15 ml of **Jägermeister** on top of each shot using the back of a spoon.",
+      "instructions": "For 3 shots:\n1. Fill a shaker with **ice**.\n2. Add 45 ml of **Midori Melon liqueur** and 45 ml of **pineapple juice**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into 3 chilled shooter glasses.\n5. Carefully pour 7.5 ml (1/4 oz) of **Chambord** into each glass so it sinks to the bottom.\n6. Slowly layer 7.5 ml (1/4 oz) of **Jägermeister** on top of each shot using the back of a spoon.",
       "photoUri": "assets/cocktails/491-sex-with-an-alligator-shot.jpg",
       "glassId": "shooter",
       "methodIds": ["shake", "layer"],
@@ -29788,7 +29780,7 @@
           "order": 3,
           "ingredientId": 80,
           "name": "Chambord",
-          "amount": "45",
+          "amount": "22.5",
           "unitId": 11,
           "allowBaseSubstitution": true,
           "allowBrandSubstitution": true,
@@ -29803,7 +29795,7 @@
           "order": 4,
           "ingredientId": 207,
           "name": "Jägermeister",
-          "amount": "45",
+          "amount": "22.5",
           "unitId": 11
         }
       ]
@@ -31028,7 +31020,7 @@
       "id": 511,
       "name": "Squashed Frog",
       "description": "A playful layered shot with sweet fruit notes and a smooth, creamy middle layer.",
-      "instructions": "1. Pour 5 ml of **grenadine** into a shooter glass.\n2. Carefully add 30 ml of **melon liqueur**.\n3. Add 15 ml of **egg liqueur** on top using a bar spoon.",
+      "instructions": "1. Pour 5 ml of **grenadine** into a shooter glass.\n2. Carefully add 20 ml of **egg liqueur**.\n3. Add 15 ml of **melon liqueur** on top using a bar spoon.",
       "photoUri": "assets/cocktails/511-squashed-frog.jpg",
       "glassId": "shooter",
       "methodIds": ["layer"],
@@ -31043,19 +31035,19 @@
         },
         {
           "order": 2,
-          "ingredientId": 239,
-          "name": "Midori Melon Liqueur",
-          "amount": "30",
-          "unitId": 11,
-          "allowBaseSubstitution": true,
-          "allowBrandSubstitution": true
+          "ingredientId": 148,
+          "name": "Egg Liqueur (Advocaat)",
+          "amount": "20",
+          "unitId": 11
         },
         {
           "order": 3,
-          "ingredientId": 148,
-          "name": "Egg Liqueur (Advocaat)",
-          "amount": "15",
-          "unitId": 11
+          "ingredientId": 239,
+          "name": "Midori Melon Liqueur",
+          "amount": "20",
+          "unitId": 11,
+          "allowBaseSubstitution": true,
+          "allowBrandSubstitution": true
         }
       ]
     },
@@ -32547,7 +32539,7 @@
       "name": "Tequila Sunrise (shot)",
       "synonyms": ["Tequila Sunset (shot)"],
       "description": "Tequila and **orange** shot layered with **grenadine**.",
-      "instructions": "1. Pour 20 ml of **orange juice** into a shooter glass.\n2. Pour 15 ml of **grenadine**.\n3. Very carefully pour 15 ml of **Tequila blanco** on the top.",
+      "instructions": "1. Pour 20 ml of **orange juice** into a shooter glass.\n2. Pour 10 ml of **grenadine**.\n3. Very carefully pour 15 ml of **Tequila blanco** on the top.",
       "photoUri": "assets/cocktails/537-tequila-sunrise-shot.jpg",
       "glassId": "shooter",
       "methodIds": ["layer"],
@@ -32577,7 +32569,7 @@
           "order": 3,
           "ingredientId": 183,
           "name": "Grenadine",
-          "amount": "15",
+          "amount": "10",
           "unitId": 11
         }
       ]
@@ -33698,7 +33690,7 @@
       "id": 555,
       "name": "Triffle",
       "description": "A layered shooter that balances sweet **grenadine** with creamy **egg liqueur** and **whipped cream**. Rich, dessert-like, and served as a quick indulgent sip.",
-      "instructions": "1. Pour 10 ml of **grenadine** into a shooter glass.\n2. Carefully pour 45 ml of **egg liqueur** on the top.\n3. Pour **whipped cream** on the top.",
+      "instructions": "1. Pour 10 ml of **grenadine** into a shooter glass.\n2. Carefully pour 30 ml of **egg liqueur** on the top.\n3. Pour **whipped cream** on the top.",
       "photoUri": "assets/cocktails/555-triffle.jpg",
       "glassId": "shooter",
       "methodIds": ["layer"],
@@ -33715,7 +33707,7 @@
           "order": 2,
           "ingredientId": 148,
           "name": "Egg Liqueur (Advocaat)",
-          "amount": "45",
+          "amount": "30",
           "unitId": 11
         },
         {
@@ -35299,7 +35291,7 @@
       "name": "Water Moccasin",
       "synonyms": ["Snakebite Shooter"],
       "description": "Named after the venomous snake, this shooter blends **peach schnapps** with **rye whiskey** and citrus.",
-      "instructions": "1. Fill a shaker with **ice**.\n2. Add 30 ml of **rye whiskey**, 30 ml of **peach schnapps**, 15 ml of **triple sec**, 7.5 ml of **lemon juice**, and 7.5 ml of **simple syrup**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled shooter glass.\n5. Garnish with a wedge of **lemon**.",
+      "instructions": "For 3 shots:\n1. Fill a shaker with **ice**.\n2. Add 30 ml of **rye whiskey**, 30 ml of **peach schnapps**, 15 ml of **triple sec**, 7.5 ml of **lemon juice**, 7.5 ml of **lime juice**, and 7.5 ml of **simple syrup**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into 3 chilled shooter glasses.\n5. Garnish every shot with a small **lemon** wedge.",
       "photoUri": "assets/cocktails/581-water-moccasin.jpg",
       "glassId": "shooter",
       "methodIds": ["shake"],
@@ -35342,13 +35334,20 @@
         },
         {
           "order": 6,
+          "ingredientId": 228,
+          "name": "Lime Juice",
+          "amount": "7.5",
+          "unitId": 11
+        },
+        {
+          "order": 7,
           "ingredientId": 316,
           "name": "Simple Syrup",
           "amount": "7.5",
           "unitId": 11
         },
         {
-          "order": 7,
+          "order": 8,
           "ingredientId": 219,
           "name": "Lemon",
           "amount": "1",
@@ -37719,6 +37718,7 @@
       "name": "Demerara Sugar",
       "description": "Demerara sugar has large, crunchy crystals with natural molasses. It brings toffee-like sweetness and texture to syrups and muddled drinks. Less processed than standard brown sugar, so flavors stay mellow.",
       "tags": [8],
+      "styleIngredientId": 329,
       "photoUri": "assets/ingredients/138-demerara-sugar.jpg"
     },
     {
@@ -37726,6 +37726,7 @@
       "name": "Demerara Sugar Syrup",
       "description": "2 Parts demerara sugar to 1 part water.\nInstructions: \n1. Add the 2 parts of sugar and 1 part water to a small saucepan.\n2. Place over medium-low heat. Stir gently and continuously until the sugar crystals are completely dissolved.",
       "tags": [5],
+      "styleIngredientId": 298,
       "photoUri": "assets/ingredients/139-demerara-sugar-syrup.jpg"
     },
     {
@@ -37915,7 +37916,7 @@
     {
       "id": 166,
       "name": "Ginger Syrup",
-      "description": "Ginger syrup packs spicy, fresh ginger heat balanced with sweetness. It mixes easily into highballs, sours, and zero-proof drinks. Adds a zesty kick without muddying fresh ginger.\nInstructions: \n· 360 g of white sugar,\n· 240 ml of water,\n· 240 g of fresh ginger\n1. Peel the ginger and slice it into small pieces. Set aside. \n2. In a medium saucepan, combine sugar and water. \n3. Stir over heat until sugar is completely dissolved. \n4. Add sliced ginger and simmer for 3-5 minutes. Remove from heat. \n5. Seal and steep in the refrigerator for up to 24 hours. \n6. Strain syrup with a fine mesh strainer once steeping is complete.",
+      "description": "Ginger syrup packs spicy, fresh ginger heat balanced with sweetness. It mixes easily into highballs, sours, and zero-proof drinks. Adds a zesty kick without muddying fresh ginger.\n**Instructions:**\n· 360g of white sugar,\n· 240 ml of water,\n· 240g of fresh ginger\n1. Peel the ginger and slice it into small pieces. Set aside. \n2. In a medium saucepan, combine sugar and water. \n3. Stir over heat until sugar is completely dissolved. \n4. Add sliced ginger and simmer for 3-5 minutes. Remove from heat. \n5. Seal and steep in the refrigerator for up to 24 hours. \n6. Strain syrup with a fine mesh strainer once steeping is complete.",
       "tags": [5],
       "photoUri": "assets/ingredients/166-ginger-syrup.jpg"
     },
