@@ -2518,7 +2518,7 @@
       "id": 42,
       "name": "Apple Pie (shot)",
       "description": "Nuts, apple, cinnamon and cream.",
-      "instructions": "For 3 shots:\n1. Fill a shaker with **ice**.\n2. Add 75 ml of **apple schnapps** and 45 ml of **hazelnut liqueur**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into 3 chilled shooter glasses.\n5. Float 5 ml of **cream** on top of every glass\n6. Dust every glass with a pinch of **cinnamon**.",
+      "instructions": "For 3 shots:\n1. Fill a shaker with **ice**.\n2. Add 75 ml of **apple schnapps** and 45 ml of **hazelnut liqueur**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into 3 chilled shooter glasses.\n5. Float 5 ml of **cream** on top of every glass.\n6. Dust every glass with a pinch of **cinnamon**.",
       "photoUri": "assets/cocktails/42-apple-pie-shot.jpg",
       "glassId": "shooter",
       "methodIds": ["shake"],
