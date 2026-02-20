@@ -150,6 +150,34 @@ function collectStylesAndBrandsForBase(
   });
 }
 
+function collectStyleVariants(
+  styleBaseId: number,
+  lookup: IngredientLookup,
+  allowBrand: boolean,
+  accumulator: Set<number>,
+  skipId?: number,
+) {
+  if (styleBaseId !== skipId) {
+    accumulator.add(styleBaseId);
+  }
+
+  lookup.stylesByBaseId.get(styleBaseId)?.forEach((id) => {
+    if (id === skipId) {
+      return;
+    }
+
+    accumulator.add(id);
+
+    if (allowBrand) {
+      lookup.brandsByBaseId.get(id)?.forEach((brandId) => {
+        if (brandId !== skipId) {
+          accumulator.add(brandId);
+        }
+      });
+    }
+  });
+}
+
 function collectVisibleIngredientIds(
   ingredientId: number | undefined,
   lookup: IngredientLookup,
@@ -177,12 +205,7 @@ function collectVisibleIngredientIds(
 
     if (allowStyledForBase) {
       if (styleBaseId != null) {
-        accumulator.add(styleBaseId);
-        lookup.stylesByBaseId.get(styleBaseId)?.forEach((id) => {
-          if (id !== ingredientId) {
-            accumulator.add(id);
-          }
-        });
+        collectStyleVariants(styleBaseId, lookup, allowBrandedForBase, accumulator, ingredientId);
       } else {
         collectStylesAndBrandsForBase(ingredientId, lookup, allowBrandedForBase, accumulator, ingredientId);
       }
@@ -201,12 +224,7 @@ function collectVisibleIngredientIds(
 
   if (allowStyle) {
     if (styleBaseId != null) {
-      accumulator.add(styleBaseId);
-      lookup.stylesByBaseId.get(styleBaseId)?.forEach((id) => {
-        if (id !== ingredientId) {
-          accumulator.add(id);
-        }
-      });
+      collectStyleVariants(styleBaseId, lookup, allowBrandedForBase, accumulator, ingredientId);
     }
 
     collectStylesAndBrandsForBase(baseId, lookup, allowBrandedForBase, accumulator, ingredientId);
@@ -286,12 +304,7 @@ export function resolveIngredientAvailability(
   if (allowStyledForBase && requestedId != null) {
     const styleBaseId = normalizeIngredientId(requestedIngredient?.styleIngredientId);
     if (styleBaseId != null) {
-      styleSubstituteSet.add(styleBaseId);
-      lookup.stylesByBaseId.get(styleBaseId)?.forEach((id) => {
-        if (id !== requestedId) {
-          styleSubstituteSet.add(id);
-        }
-      });
+      collectStyleVariants(styleBaseId, lookup, allowBrandedForBase, styleSubstituteSet, requestedId);
     } else if (baseId != null) {
       collectStylesAndBrandsForBase(baseId, lookup, allowBrandedForBase, styleSubstituteSet, requestedId);
     } else {
@@ -326,12 +339,7 @@ export function resolveIngredientAvailability(
 
     if (allowStyledCandidate) {
       if (candidateStyleBaseId != null) {
-        addCandidate(candidateStyleBaseId);
-        lookup.stylesByBaseId.get(candidateStyleBaseId)?.forEach((id) => {
-          if (id !== candidateId) {
-            addCandidate(id);
-          }
-        });
+        collectStyleVariants(candidateStyleBaseId, lookup, allowBrandedCandidate, declaredSubstituteIds, candidateId);
       } else {
         collectStylesAndBrandsForBase(candidateId, lookup, allowBrandedCandidate, declaredSubstituteIds, candidateId);
       }
