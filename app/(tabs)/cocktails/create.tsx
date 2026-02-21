@@ -313,6 +313,8 @@ export default function CreateCocktailScreen() {
   const [isSaving, setIsSaving] = useState(false);
   const [permissionStatus, requestPermission] =
     ImagePicker.useMediaLibraryPermissions();
+  const [cameraPermissionStatus, requestCameraPermission] =
+    ImagePicker.useCameraPermissions();
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(
     null,
   );
@@ -755,34 +757,51 @@ export default function CreateCocktailScreen() {
     defaultCocktailTagId,
   ]);
 
-  const ensureMediaPermission = useCallback(async () => {
-    if (permissionStatus?.granted) {
-      return true;
+  const ensureImagePickerPermissions = useCallback(async () => {
+    let hasMediaPermission = permissionStatus?.granted ?? false;
+    if (!hasMediaPermission) {
+      const { status, granted, canAskAgain } = await requestPermission();
+      hasMediaPermission = granted || status === ImagePicker.PermissionStatus.GRANTED;
+      if (!hasMediaPermission && !canAskAgain) {
+        showDialog({
+          title: "Media access required",
+          message:
+            "Enable photo library permissions in system settings to add a cocktail photo.",
+          actions: [{ label: "OK" }],
+        });
+        return false;
+      }
     }
 
-    const { status, granted, canAskAgain } = await requestPermission();
-    if (granted || status === ImagePicker.PermissionStatus.GRANTED) {
-      return true;
+    let hasCameraPermission = cameraPermissionStatus?.granted ?? false;
+    if (!hasCameraPermission) {
+      const { status, granted, canAskAgain } = await requestCameraPermission();
+      hasCameraPermission = granted || status === ImagePicker.PermissionStatus.GRANTED;
+      if (!hasCameraPermission && !canAskAgain) {
+        showDialog({
+          title: "Camera access required",
+          message:
+            "Enable camera permissions in system settings to take a photo from the image picker.",
+          actions: [{ label: "OK" }],
+        });
+      }
     }
 
-    if (!canAskAgain) {
-      showDialog({
-        title: "Media access required",
-        message:
-          "Enable photo library permissions in system settings to add a cocktail photo.",
-        actions: [{ label: "OK" }],
-      });
-    }
-
-    return false;
-  }, [permissionStatus?.granted, requestPermission, showDialog]);
+    return hasMediaPermission;
+  }, [
+    cameraPermissionStatus?.granted,
+    permissionStatus?.granted,
+    requestCameraPermission,
+    requestPermission,
+    showDialog,
+  ]);
 
   const handlePickImage = useCallback(async () => {
     if (isPickingImage) {
       return;
     }
 
-    const hasPermission = await ensureMediaPermission();
+    const hasPermission = await ensureImagePickerPermissions();
     if (!hasPermission) {
       return;
     }
@@ -812,7 +831,7 @@ export default function CreateCocktailScreen() {
     } finally {
       setIsPickingImage(false);
     }
-  }, [ensureMediaPermission, isPickingImage, showDialog]);
+  }, [ensureImagePickerPermissions, isPickingImage, showDialog]);
 
   const handleRemovePhoto = useCallback(() => {
     setImageUri(null);
@@ -1635,7 +1654,7 @@ export default function CreateCocktailScreen() {
                           { color: `${Colors.onSurfaceVariant}99` },
                         ]}
                       >
-                        Tap to select image
+                        Tap to select or take a photo
                       </Text>
                     </View>
                   )}

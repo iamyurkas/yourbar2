@@ -178,6 +178,7 @@ export default function IngredientFormScreen() {
   const [isStyleModalVisible, setIsStyleModalVisible] = useState(false);
   const [styleSearch, setStyleSearch] = useState('');
   const [permissionStatus, requestPermission] = ImagePicker.useMediaLibraryPermissions();
+  const [cameraPermissionStatus, requestCameraPermission] = ImagePicker.useCameraPermissions();
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(null);
   const [isHelpVisible, setIsHelpVisible] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -360,33 +361,49 @@ export default function IngredientFormScreen() {
     [createCustomIngredientTag],
   );
 
-  const ensureMediaPermission = useCallback(async () => {
-    if (permissionStatus?.granted) {
-      return true;
+  const ensureImagePickerPermissions = useCallback(async () => {
+    let hasMediaPermission = permissionStatus?.granted ?? false;
+    if (!hasMediaPermission) {
+      const { status, granted, canAskAgain } = await requestPermission();
+      hasMediaPermission = granted || status === ImagePicker.PermissionStatus.GRANTED;
+      if (!hasMediaPermission && !canAskAgain) {
+        showDialog({
+          title: 'Media library access',
+          message: 'Enable photo library permissions in system settings to add an ingredient image.',
+          actions: [{ label: 'OK' }],
+        });
+        return false;
+      }
     }
 
-    const { status, granted, canAskAgain } = await requestPermission();
-    if (granted || status === ImagePicker.PermissionStatus.GRANTED) {
-      return true;
+    let hasCameraPermission = cameraPermissionStatus?.granted ?? false;
+    if (!hasCameraPermission) {
+      const { status, granted, canAskAgain } = await requestCameraPermission();
+      hasCameraPermission = granted || status === ImagePicker.PermissionStatus.GRANTED;
+      if (!hasCameraPermission && !canAskAgain) {
+        showDialog({
+          title: 'Camera access required',
+          message: 'Enable camera permissions in system settings to take a photo from the image picker.',
+          actions: [{ label: 'OK' }],
+        });
+      }
     }
 
-    if (!canAskAgain) {
-      showDialog({
-        title: 'Media library access',
-        message: 'Enable photo library permissions in system settings to add an ingredient image.',
-        actions: [{ label: 'OK' }],
-      });
-    }
-
-    return false;
-  }, [permissionStatus?.granted, requestPermission, showDialog]);
+    return hasMediaPermission;
+  }, [
+    cameraPermissionStatus?.granted,
+    permissionStatus?.granted,
+    requestCameraPermission,
+    requestPermission,
+    showDialog,
+  ]);
 
   const handlePickImage = useCallback(async () => {
     if (isPickingImage) {
       return;
     }
 
-    const hasPermission = await ensureMediaPermission();
+    const hasPermission = await ensureImagePickerPermissions();
     if (!hasPermission) {
       return;
     }
@@ -416,7 +433,7 @@ export default function IngredientFormScreen() {
     } finally {
       setIsPickingImage(false);
     }
-  }, [ensureMediaPermission, isPickingImage, showDialog]);
+  }, [ensureImagePickerPermissions, isPickingImage, showDialog]);
 
   const handleSubmit = useCallback(async () => {
     if (isSaving) {
@@ -1295,7 +1312,7 @@ export default function IngredientFormScreen() {
           ) : (
             <View style={styles.placeholderContent}>
               <MaterialCommunityIcons name="image-plus" size={28} color={`${Colors.onSurfaceVariant}99`} />
-              <Text style={[styles.placeholderHint, { color: `${Colors.onSurfaceVariant}99` }]}>Tap to add a photo</Text>
+              <Text style={[styles.placeholderHint, { color: `${Colors.onSurfaceVariant}99` }]}>Tap to select or take a photo</Text>
             </View>
           )}
           {imageSource ? (
