@@ -177,7 +177,8 @@ export default function IngredientFormScreen() {
   const [baseSearch, setBaseSearch] = useState('');
   const [isStyleModalVisible, setIsStyleModalVisible] = useState(false);
   const [styleSearch, setStyleSearch] = useState('');
-  const [permissionStatus, requestPermission] = ImagePicker.useMediaLibraryPermissions();
+  const [mediaPermissionStatus, requestMediaPermission] = ImagePicker.useMediaLibraryPermissions();
+  const [cameraPermissionStatus, requestCameraPermission] = ImagePicker.useCameraPermissions();
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(null);
   const [isHelpVisible, setIsHelpVisible] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -361,11 +362,11 @@ export default function IngredientFormScreen() {
   );
 
   const ensureMediaPermission = useCallback(async () => {
-    if (permissionStatus?.granted) {
+    if (mediaPermissionStatus?.granted) {
       return true;
     }
 
-    const { status, granted, canAskAgain } = await requestPermission();
+    const { status, granted, canAskAgain } = await requestMediaPermission();
     if (granted || status === ImagePicker.PermissionStatus.GRANTED) {
       return true;
     }
@@ -379,44 +380,142 @@ export default function IngredientFormScreen() {
     }
 
     return false;
-  }, [permissionStatus?.granted, requestPermission, showDialog]);
+  }, [mediaPermissionStatus?.granted, requestMediaPermission, showDialog]);
+
+  const ensureCameraAccess = useCallback(async () => {
+    if (cameraPermissionStatus?.granted) {
+      return true;
+    }
+
+    const { status, granted, canAskAgain } = await requestCameraPermission();
+    if (granted || status === ImagePicker.PermissionStatus.GRANTED) {
+      return true;
+    }
+
+    if (!canAskAgain) {
+      showDialog({
+        title: 'Camera access required',
+        message: 'Enable camera permissions in system settings to take an ingredient photo.',
+        actions: [{ label: 'OK' }],
+      });
+    }
+
+    return false;
+  }, [cameraPermissionStatus?.granted, requestCameraPermission, showDialog]);
+
+  const pickImageFromLibrary = useCallback(async () => {
+    const hasPermission = await ensureMediaPermission();
+    if (!hasPermission) {
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ['images'],
+      allowsEditing: true,
+      quality: 1,
+      exif: false,
+    });
+
+    if (!result.canceled && result.assets?.length) {
+      const asset = result.assets[0];
+      if (asset?.uri) {
+        setImageUri(asset.uri);
+      }
+    }
+  }, [ensureMediaPermission]);
+
+  const captureImageWithCamera = useCallback(async () => {
+    const hasPermission = await ensureCameraAccess();
+    if (!hasPermission) {
+      return;
+    }
+
+    const result = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+      quality: 1,
+      exif: false,
+    });
+
+    if (!result.canceled && result.assets?.length) {
+      const asset = result.assets[0];
+      if (asset?.uri) {
+        setImageUri(asset.uri);
+      }
+    }
+  }, [ensureCameraAccess]);
 
   const handlePickImage = useCallback(async () => {
     if (isPickingImage) {
       return;
     }
 
-    const hasPermission = await ensureMediaPermission();
-    if (!hasPermission) {
+    if (Platform.OS === 'web') {
+      try {
+        setIsPickingImage(true);
+        await pickImageFromLibrary();
+      } catch (error) {
+        console.warn('Failed to pick image', error);
+        showDialog({
+          title: 'Could not pick image',
+          message: 'Please try again later.',
+          actions: [{ label: 'OK' }],
+        });
+      } finally {
+        setIsPickingImage(false);
+      }
+
       return;
     }
 
-    try {
-      setIsPickingImage(true);
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ['images'],
-        allowsEditing: true,
-        quality: 1,
-        exif: false,
-      });
-
-      if (!result.canceled && result.assets?.length) {
-        const asset = result.assets[0];
-        if (asset?.uri) {
-          setImageUri(asset.uri);
-        }
-      }
-    } catch (error) {
-      console.warn('Failed to pick image', error);
-      showDialog({
-        title: 'Could not pick image',
-        message: 'Please try again later.',
-        actions: [{ label: 'OK' }],
-      });
-    } finally {
-      setIsPickingImage(false);
-    }
-  }, [ensureMediaPermission, isPickingImage, showDialog]);
+    showDialog({
+      title: 'Add photo',
+      message: 'Choose how you want to add an ingredient photo.',
+      actions: [
+        {
+          label: 'Take photo',
+          onPress: () => {
+            void (async () => {
+              try {
+                setIsPickingImage(true);
+                await captureImageWithCamera();
+              } catch (error) {
+                console.warn('Failed to capture image', error);
+                showDialog({
+                  title: 'Could not take photo',
+                  message: 'Please try again later.',
+                  actions: [{ label: 'OK' }],
+                });
+              } finally {
+                setIsPickingImage(false);
+              }
+            })();
+          },
+        },
+        {
+          label: 'Choose from library',
+          onPress: () => {
+            void (async () => {
+              try {
+                setIsPickingImage(true);
+                await pickImageFromLibrary();
+              } catch (error) {
+                console.warn('Failed to pick image', error);
+                showDialog({
+                  title: 'Could not pick image',
+                  message: 'Please try again later.',
+                  actions: [{ label: 'OK' }],
+                });
+              } finally {
+                setIsPickingImage(false);
+              }
+            })();
+          },
+          variant: 'secondary',
+        },
+        { label: 'Cancel', variant: 'secondary' },
+      ],
+    });
+  }, [captureImageWithCamera, isPickingImage, pickImageFromLibrary, showDialog]);
 
   const handleSubmit = useCallback(async () => {
     if (isSaving) {
