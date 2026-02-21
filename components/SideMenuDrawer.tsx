@@ -193,10 +193,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(
     null,
   );
-  const [isExporting, setIsExporting] = useState(false);
-  const [isImporting, setIsImporting] = useState(false);
-  const [isBackingUpPhotos, setIsBackingUpPhotos] = useState(false);
-  const [isImportingPhotos, setIsImportingPhotos] = useState(false);
+  const [isBackingUpData, setIsBackingUpData] = useState(false);
+  const [isRestoringData, setIsRestoringData] = useState(false);
   const translateX = useRef(new Animated.Value(-MENU_WIDTH)).current;
   const backdropOpacity = useRef(new Animated.Value(0)).current;
 
@@ -522,8 +520,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     return Array.isArray(record.cocktails) && Array.isArray(record.ingredients);
   };
 
-  const handleExportInventory = async () => {
-    if (isExporting) {
+  const handleBackupData = async () => {
+    if (isBackingUpData) {
       return;
     }
 
@@ -536,7 +534,16 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       return;
     }
 
-    setIsExporting(true);
+    const photoEntries = exportInventoryPhotoEntries();
+    if (!photoEntries) {
+      showDialogMessage(
+        "Backup unavailable",
+        "Load your inventory before backing up data.",
+      );
+      return;
+    }
+
+    setIsBackingUpData(true);
 
     try {
       const sharingAvailable = await Sharing.isAvailableAsync();
@@ -555,75 +562,16 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
         return;
       }
 
-      const timestamp = new Date().toISOString().slice(0, 10);
-      const filename = `yourbar-data-${timestamp}.json`;
-      const fileUri = `${directory.replace(/\/?$/, "/")}${filename}`;
+      const files: { path: string; contents: Uint8Array }[] = [];
       const payload = JSON.stringify(data, null, 2);
-
-      await FileSystem.writeAsStringAsync(fileUri, payload, {
-        encoding: FileSystem.EncodingType.UTF8,
+      const encoder = new TextEncoder();
+      files.push({
+        path: "inventory.json",
+        contents: encoder.encode(payload),
       });
-
-      await Sharing.shareAsync(fileUri, {
-        mimeType: "application/json",
-        dialogTitle: "Export cocktails & ingredients",
-        UTI: "public.json",
-      });
-    } catch (error) {
-      console.error("Failed to export inventory data", error);
-      showDialogMessage("Export failed", "Please try again.");
-    } finally {
-      setIsExporting(false);
-    }
-  };
-
-
-  const handleBackupPhotos = async () => {
-    if (isBackingUpPhotos) {
-      return;
-    }
-
-    const photoEntries = exportInventoryPhotoEntries();
-    if (!photoEntries) {
-      showDialogMessage(
-        "Backup unavailable",
-        "Load your inventory before backing up photos.",
-      );
-      return;
-    }
-
-    setIsBackingUpPhotos(true);
-
-    try {
-      const sharingAvailable = await Sharing.isAvailableAsync();
-      if (!sharingAvailable) {
-        showDialogMessage(
-          "Sharing unavailable",
-          "Sharing is not available on this device.",
-        );
-        return;
-      }
-
-      const directory =
-        FileSystem.cacheDirectory ?? FileSystem.documentDirectory;
-      if (!directory) {
-        showDialogMessage("Backup failed", "Unable to access device storage.");
-        return;
-      }
 
       const entries = photoEntries.filter((entry) => entry.uri);
-
-      if (entries.length === 0) {
-        showDialogMessage(
-          "No photos to backup",
-          "Add photos to cocktails or ingredients first.",
-        );
-        return;
-      }
-
-      const files: Array<{ path: string; contents: Uint8Array }> = [];
       const nameCounts = new Map<string, number>();
-      let addedCount = 0;
 
       for (const entry of entries) {
         const uri = entry.uri;
@@ -648,95 +596,36 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
           encoding: FileSystem.EncodingType.Base64,
         });
         const contents = base64ToBytes(contentsBase64);
-
-        const archivePath = `${entry.type}/${fileName}`;
-        files.push({ path: archivePath, contents });
-        addedCount += 1;
-      }
-
-      if (addedCount === 0) {
-        showDialogMessage(
-          "Backup failed",
-          "Unable to find any stored photo files.",
-        );
-        return;
+        files.push({ path: `${entry.type}/${fileName}`, contents });
       }
 
       const timestamp = new Date().toISOString().slice(0, 10);
-      const filename = `yourbar-photos-${timestamp}.tar`;
+      const filename = `yourbar-backup-${timestamp}.tar`;
       const fileUri = `${directory.replace(/\/?$/, "/")}${filename}`;
       const archiveBase64 = createTarArchive(files);
-
       await FileSystem.writeAsStringAsync(fileUri, archiveBase64, {
         encoding: FileSystem.EncodingType.Base64,
       });
 
       await Sharing.shareAsync(fileUri, {
         mimeType: "application/x-tar",
-        dialogTitle: "Backup cocktail & ingredient photos",
+        dialogTitle: "Back up data",
         UTI: "public.tar-archive",
       });
     } catch (error) {
-      console.error("Failed to backup photos", error);
+      console.error("Failed to back up data", error);
       showDialogMessage("Backup failed", "Please try again.");
     } finally {
-      setIsBackingUpPhotos(false);
+      setIsBackingUpData(false);
     }
   };
 
-  const handleImportInventory = async () => {
-    if (isImporting) {
+  const handleRestoreData = async () => {
+    if (isRestoringData) {
       return;
     }
 
-    setIsImporting(true);
-
-    try {
-      const result = await DocumentPicker.getDocumentAsync({
-        type: "application/json",
-        copyToCacheDirectory: true,
-      });
-
-      if (result.canceled) {
-        return;
-      }
-
-      const asset = result.assets?.[0];
-      if (!asset?.uri) {
-        showDialogMessage("Import failed", "Unable to read the selected file.");
-        return;
-      }
-
-      const contents = await FileSystem.readAsStringAsync(asset.uri);
-      const parsed = JSON.parse(contents) as unknown;
-
-      if (!isValidInventoryData(parsed)) {
-        showDialogMessage(
-          "Invalid file",
-          "The selected file does not match the expected data format.",
-        );
-        return;
-      }
-
-      importInventoryData(parsed);
-      onClose();
-    } catch (error) {
-      console.error("Failed to import inventory data", error);
-      showDialogMessage(
-        "Import failed",
-        "Please try again with a valid JSON file.",
-      );
-    } finally {
-      setIsImporting(false);
-    }
-  };
-
-  const handleImportPhotos = async () => {
-    if (isImportingPhotos) {
-      return;
-    }
-
-    setIsImportingPhotos(true);
+    setIsRestoringData(true);
 
     try {
       const result = await DocumentPicker.getDocumentAsync({
@@ -765,6 +654,25 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
         return;
       }
 
+      const inventoryFile = archivedFiles.find((file) => file.path === "inventory.json")
+        ?? archivedFiles.find((file) => file.path.toLowerCase().endsWith(".json"));
+      if (!inventoryFile) {
+        showDialogMessage("Import failed", "The backup archive is missing inventory data.");
+        return;
+      }
+
+      const decoder = new TextDecoder();
+      const parsed = JSON.parse(decoder.decode(inventoryFile.contents)) as unknown;
+      if (!isValidInventoryData(parsed)) {
+        showDialogMessage(
+          "Import failed",
+          "The backup archive contains invalid inventory data.",
+        );
+        return;
+      }
+
+      importInventoryData(parsed);
+
       const directory = FileSystem.documentDirectory ?? FileSystem.cacheDirectory;
       if (!directory) {
         showDialogMessage("Import failed", "Unable to access device storage.");
@@ -777,6 +685,10 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       await FileSystem.makeDirectoryAsync(photosDir, { intermediates: true });
 
       for (const file of archivedFiles) {
+        if (file.path === inventoryFile.path) {
+          continue;
+        }
+
         const parsedPath = parsePhotoEntryFromArchivePath(file.path);
         if (!parsedPath || file.contents.length === 0) {
           continue;
@@ -795,24 +707,16 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
         });
       }
 
-      const importedCount = importInventoryPhotos(importedPhotoEntries);
-      if (importedCount === 0) {
-        showDialogMessage(
-          "Import complete",
-          "No matching cocktail or ingredient photos were found in the archive.",
-        );
-        return;
-      }
-
+      importInventoryPhotos(importedPhotoEntries);
       onClose();
     } catch (error) {
-      console.error("Failed to import photo archive", error);
+      console.error("Failed to restore backup archive", error);
       showDialogMessage(
         "Import failed",
-        "Please try again with a valid TAR archive.",
+        "Please try again with a valid backup archive.",
       );
     } finally {
-      setIsImportingPhotos(false);
+      setIsRestoringData(false);
     }
   };
 
@@ -1315,142 +1219,6 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
             </Pressable>
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel="Export cocktails and ingredients"
-              onPress={handleExportInventory}
-              disabled={isExporting || isImporting || isImportingPhotos}
-              style={({ pressed }) => [
-                styles.actionRow,
-                SURFACE_ROW_STYLE,
-                pressed || isExporting ? { opacity: 0.8 } : null,
-              ]}
-            >
-              <View style={[styles.actionIcon, ACTION_ICON_STYLE]}>
-                <MaterialCommunityIcons
-                  name="file-export-outline"
-                  size={16}
-                  color={Colors.onSurfaceVariant}
-                />
-              </View>
-              <View style={styles.settingTextContainer}>
-                <Text
-                  style={[styles.settingLabel, { color: Colors.onSurface }]}
-                >
-                  {isExporting ? "Exporting data..." : "Backup data"}
-                </Text>
-                <Text
-                  style={[
-                    styles.settingCaption,
-                    { color: Colors.onSurfaceVariant },
-                  ]}
-                >
-                  Export data to a file
-                </Text>
-              </View>
-            </Pressable>
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel="Import cocktails and ingredients"
-              onPress={handleImportInventory}
-              disabled={isExporting || isImporting || isBackingUpPhotos || isImportingPhotos}
-              style={({ pressed }) => [
-                styles.actionRow,
-                SURFACE_ROW_STYLE,
-                pressed || isImporting ? { opacity: 0.8 } : null,
-              ]}
-            >
-              <View style={[styles.actionIcon, ACTION_ICON_STYLE]}>
-                <MaterialCommunityIcons
-                  name="file-import-outline"
-                  size={16}
-                  color={Colors.onSurfaceVariant}
-                />
-              </View>
-              <View style={styles.settingTextContainer}>
-                <Text
-                  style={[styles.settingLabel, { color: Colors.onSurface }]}
-                >
-                  {isImporting ? "Importing data..." : "Import data"}
-                </Text>
-                <Text
-                  style={[
-                    styles.settingCaption,
-                    { color: Colors.onSurfaceVariant },
-                  ]}
-                >
-                  Load backup from a file
-                </Text>
-              </View>
-            </Pressable>
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel="Backup cocktail and ingredient photos"
-              onPress={handleBackupPhotos}
-              disabled={isExporting || isImporting || isBackingUpPhotos || isImportingPhotos}
-              style={({ pressed }) => [
-                styles.actionRow,
-                SURFACE_ROW_STYLE,
-                pressed || isBackingUpPhotos ? { opacity: 0.8 } : null,
-              ]}
-            >
-              <View style={[styles.actionIcon, ACTION_ICON_STYLE]}>
-                <MaterialCommunityIcons
-                  name="image-multiple"
-                  size={16}
-                  color={Colors.onSurfaceVariant}
-                />
-              </View>
-              <View style={styles.settingTextContainer}>
-                <Text
-                  style={[styles.settingLabel, { color: Colors.onSurface }]}
-                >
-                  {isBackingUpPhotos ? "Exporting photos..." : "Backup photos"}
-                </Text>
-                <Text
-                  style={[
-                    styles.settingCaption,
-                    { color: Colors.onSurfaceVariant },
-                  ]}
-                >
-                  Export photos as an archive
-                </Text>
-              </View>
-            </Pressable>
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel="Import cocktail and ingredient photos"
-              onPress={handleImportPhotos}
-              disabled={isExporting || isImporting || isBackingUpPhotos || isImportingPhotos}
-              style={({ pressed }) => [
-                styles.actionRow,
-                SURFACE_ROW_STYLE,
-                pressed || isImportingPhotos ? { opacity: 0.8 } : null,
-              ]}
-            >
-              <View style={[styles.actionIcon, ACTION_ICON_STYLE]}>
-                <MaterialCommunityIcons
-                  name="image-sync-outline"
-                  size={16}
-                  color={Colors.onSurfaceVariant}
-                />
-              </View>
-              <View style={styles.settingTextContainer}>
-                <Text
-                  style={[styles.settingLabel, { color: Colors.onSurface }]}
-                >
-                  {isImportingPhotos ? "Importing photos..." : "Import photos"}
-                </Text>
-                <Text
-                  style={[
-                    styles.settingCaption,
-                    { color: Colors.onSurfaceVariant },
-                  ]}
-                >
-                  Restore photos from an archive
-                </Text>
-              </View>
-            </Pressable>
-            <Pressable
-              accessibilityRole="button"
               accessibilityLabel="Restart onboarding"
               onPress={() => {
                 restartOnboarding();
@@ -1472,6 +1240,75 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
             </Pressable>
             <Pressable
               accessibilityRole="button"
+              accessibilityLabel="Back up data"
+              onPress={handleBackupData}
+              disabled={isBackingUpData || isRestoringData}
+              style={({ pressed }) => [
+                styles.actionRow,
+                SURFACE_ROW_STYLE,
+                pressed || isBackingUpData ? { opacity: 0.8 } : null,
+              ]}
+            >
+              <View style={[styles.actionIcon, ACTION_ICON_STYLE]}>
+                <MaterialCommunityIcons
+                  name="content-save-outline"
+                  size={16}
+                  color={Colors.onSurfaceVariant}
+                />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text
+                  style={[styles.settingLabel, { color: Colors.onSurface }]}
+                >
+                  {isBackingUpData ? "Backing up data..." : "Back up data"}
+                </Text>
+                <Text
+                  style={[
+                    styles.settingCaption,
+                    { color: Colors.onSurfaceVariant },
+                  ]}
+                >
+                  Export cocktails, ingredients, and photos as one archive
+                </Text>
+              </View>
+            </Pressable>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Restore data"
+              onPress={handleRestoreData}
+              disabled={isBackingUpData || isRestoringData}
+              style={({ pressed }) => [
+                styles.actionRow,
+                SURFACE_ROW_STYLE,
+                pressed || isRestoringData ? { opacity: 0.8 } : null,
+              ]}
+            >
+              <View style={[styles.actionIcon, ACTION_ICON_STYLE]}>
+                <MaterialCommunityIcons
+                  name="restore"
+                  size={16}
+                  color={Colors.onSurfaceVariant}
+                />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text
+                  style={[styles.settingLabel, { color: Colors.onSurface }]}
+                >
+                  {isRestoringData ? "Restoring data..." : "Restore data"}
+                </Text>
+                <Text
+                  style={[
+                    styles.settingCaption,
+                    { color: Colors.onSurfaceVariant },
+                  ]}
+                >
+                  Import cocktails, ingredients, and photos from archive
+                </Text>
+              </View>
+            </Pressable>
+
+            <Pressable
+              accessibilityRole="button"
               accessibilityLabel="Reload bundled inventory"
               onPress={handleResetInventory}
               style={[
@@ -1484,7 +1321,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               <View style={styles.settingTextContainer}>
                 <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>Restore bundled data</Text>
                 <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>
-                  Restore bundled cocktails and ingredients
+                  Built-in changes will be lost,
+                  your own content is safe
                 </Text>
               </View>
             </Pressable>
@@ -1506,7 +1344,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               </View>
               <View style={styles.settingTextContainer}>
                 <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>Something wrong?</Text>
-                <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>Report a bug</Text>
+                <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>Report a bug, share an idea</Text>
               </View>
             </Pressable>
             <View style={styles.versionRow}>
