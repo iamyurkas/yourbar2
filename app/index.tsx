@@ -3,6 +3,7 @@ import { Redirect } from 'expo-router';
 import { Image, StyleSheet, Text, View } from 'react-native';
 
 import { setLastCocktailTab, setLastIngredientTab } from '@/libs/collection-tabs';
+import { useTheme } from '@/libs/react-native-paper';
 import { useInventory, type StartScreen } from '@/providers/inventory-provider';
 
 function getHrefForStartScreen(screen: StartScreen): string {
@@ -49,6 +50,7 @@ function syncTabPreference(screen: StartScreen) {
 
 export default function Index() {
   const { startScreen, loading } = useInventory();
+  const { colors } = useTheme();
 
   useEffect(() => {
     if (!loading) {
@@ -57,12 +59,16 @@ export default function Index() {
   }, [loading, startScreen]);
 
   const targetHref = useMemo(() => getHrefForStartScreen(startScreen), [startScreen]);
+  const loadingStyles = useMemo(
+    () => getLoadingStyles(colors.primary, colors.onPrimary),
+    [colors.onPrimary, colors.primary],
+  );
 
   if (loading) {
     return (
-      <View style={styles.loadingScreen}>
+      <View style={loadingStyles.loadingScreen}>
         <Image source={require('@/assets/images/splash.png')} style={styles.splashImage} resizeMode="contain" />
-        <Text style={styles.loadingText}>your rules!</Text>
+        <Text style={loadingStyles.loadingText}>your rules!</Text>
       </View>
     );
   }
@@ -70,21 +76,26 @@ export default function Index() {
   return <Redirect href={targetHref} />;
 }
 
+function getLoadingStyles(backgroundColor: string, color: string) {
+  return StyleSheet.create({
+    loadingScreen: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor,
+    },
+    loadingText: {
+      marginTop: 12,
+      color,
+      fontSize: 22,
+      fontWeight: '700',
+    },
+  });
+}
+
 const styles = StyleSheet.create({
-  loadingScreen: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#4DABF7',
-  },
   splashImage: {
     width: 180,
     height: 180,
-  },
-  loadingText: {
-    marginTop: 12,
-    color: '#FFFFFF',
-    fontSize: 22,
-    fontWeight: '700',
   },
 });
