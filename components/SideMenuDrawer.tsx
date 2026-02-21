@@ -2022,6 +2022,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               disabled={isBackingUpData || isRestoringData}
               style={({ pressed }) => [
                 styles.actionRow,
+                styles.backupRestoreModalActionRow,
                 {
                   borderColor: Colors.outlineVariant,
                   backgroundColor: Colors.surface,
@@ -2059,6 +2060,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               disabled={isBackingUpData || isRestoringData}
               style={({ pressed }) => [
                 styles.actionRow,
+                styles.backupRestoreModalActionRow,
                 {
                   borderColor: Colors.outlineVariant,
                   backgroundColor: Colors.surface,
@@ -2095,6 +2097,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               onPress={handleResetInventoryFromModal}
               style={({ pressed }) => [
                 styles.actionRow,
+                styles.backupRestoreModalActionRow,
                 {
                   borderColor: Colors.outlineVariant,
                   backgroundColor: Colors.surface,
@@ -2270,6 +2273,9 @@ const styles = StyleSheet.create({
     paddingRight: 10,
     borderRadius: 12,
     borderWidth: StyleSheet.hairlineWidth,
+  },
+  backupRestoreModalActionRow: {
+    paddingLeft: 4,
   },
   checkbox: {
     width: 22,
