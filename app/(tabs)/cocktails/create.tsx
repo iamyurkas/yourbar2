@@ -31,6 +31,7 @@ import { AppDialog, type DialogOptions } from "@/components/AppDialog";
 import { AppImage } from "@/components/AppImage";
 import { HeaderIconButton } from "@/components/HeaderIconButton";
 import { ListRow, Thumb } from "@/components/RowParts";
+import { PhotoSourceModal } from "@/components/PhotoSourceModal";
 import { SubstituteModal } from "@/components/SubstituteModal";
 import { TagEditorModal } from "@/components/TagEditorModal";
 import { TagPill } from "@/components/TagPill";
@@ -311,8 +312,10 @@ export default function CreateCocktailScreen() {
   const [unitPickerTarget, setUnitPickerTarget] = useState<string | null>(null);
   const [substituteTarget, setSubstituteTarget] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
-  const [permissionStatus, requestPermission] =
+  const [mediaPermissionStatus, requestMediaPermission] =
     ImagePicker.useMediaLibraryPermissions();
+  const [cameraPermissionStatus, requestCameraPermission] =
+    ImagePicker.useCameraPermissions();
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(
     null,
   );
@@ -321,6 +324,7 @@ export default function CreateCocktailScreen() {
   const [initialSnapshot, setInitialSnapshot] =
     useState<CocktailFormSnapshot | null>(null);
   const [isTagModalVisible, setTagModalVisible] = useState(false);
+  const [isPhotoSourceModalVisible, setPhotoSourceModalVisible] = useState(false);
   const prefilledTargetId = prefilledCocktail?.id ?? prefilledCocktail?.name;
   const defaultUnitId = useImperialUnits
     ? DEFAULT_IMPERIAL_UNIT_ID
@@ -756,11 +760,11 @@ export default function CreateCocktailScreen() {
   ]);
 
   const ensureMediaPermission = useCallback(async () => {
-    if (permissionStatus?.granted) {
+    if (mediaPermissionStatus?.granted) {
       return true;
     }
 
-    const { status, granted, canAskAgain } = await requestPermission();
+    const { status, granted, canAskAgain } = await requestMediaPermission();
     if (granted || status === ImagePicker.PermissionStatus.GRANTED) {
       return true;
     }
@@ -775,44 +779,134 @@ export default function CreateCocktailScreen() {
     }
 
     return false;
-  }, [permissionStatus?.granted, requestPermission, showDialog]);
+  }, [mediaPermissionStatus?.granted, requestMediaPermission, showDialog]);
+
+  const ensureCameraAccess = useCallback(async () => {
+    if (cameraPermissionStatus?.granted) {
+      return true;
+    }
+
+    const { status, granted, canAskAgain } = await requestCameraPermission();
+    if (granted || status === ImagePicker.PermissionStatus.GRANTED) {
+      return true;
+    }
+
+    if (!canAskAgain) {
+      showDialog({
+        title: "Camera access required",
+        message:
+          "Enable camera permissions in system settings to take a cocktail photo.",
+        actions: [{ label: "OK" }],
+      });
+    }
+
+    return false;
+  }, [cameraPermissionStatus?.granted, requestCameraPermission, showDialog]);
+
+  const pickImageFromLibrary = useCallback(async () => {
+    const hasPermission = await ensureMediaPermission();
+    if (!hasPermission) {
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ["images"],
+      allowsEditing: true,
+      quality: 1,
+      exif: false,
+    });
+
+    if (!result.canceled && result.assets?.length) {
+      const asset = result.assets[0];
+      if (asset?.uri) {
+        setImageUri(asset.uri);
+      }
+    }
+  }, [ensureMediaPermission]);
+
+  const captureImageWithCamera = useCallback(async () => {
+    const hasPermission = await ensureCameraAccess();
+    if (!hasPermission) {
+      return;
+    }
+
+    const result = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+      quality: 1,
+      exif: false,
+    });
+
+    if (!result.canceled && result.assets?.length) {
+      const asset = result.assets[0];
+      if (asset?.uri) {
+        setImageUri(asset.uri);
+      }
+    }
+  }, [ensureCameraAccess]);
 
   const handlePickImage = useCallback(async () => {
     if (isPickingImage) {
       return;
     }
 
-    const hasPermission = await ensureMediaPermission();
-    if (!hasPermission) {
+    if (Platform.OS === "web") {
+      try {
+        setIsPickingImage(true);
+        await pickImageFromLibrary();
+      } catch (error) {
+        console.warn("Failed to pick image", error);
+        showDialog({
+          title: "Could not pick image",
+          message: "Please try again later.",
+          actions: [{ label: "OK" }],
+        });
+      } finally {
+        setIsPickingImage(false);
+      }
+
       return;
     }
 
-    try {
-      setIsPickingImage(true);
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ["images"],
-        allowsEditing: true,
-        quality: 1,
-        exif: false,
-      });
+    setPhotoSourceModalVisible(true);
+  }, [isPickingImage, pickImageFromLibrary, showDialog]);
 
-      if (!result.canceled && result.assets?.length) {
-        const asset = result.assets[0];
-        if (asset?.uri) {
-          setImageUri(asset.uri);
-        }
+  const handleTakePhoto = useCallback(() => {
+    setPhotoSourceModalVisible(false);
+    void (async () => {
+      try {
+        setIsPickingImage(true);
+        await captureImageWithCamera();
+      } catch (error) {
+        console.warn("Failed to capture image", error);
+        showDialog({
+          title: "Could not take photo",
+          message: "Please try again later.",
+          actions: [{ label: "OK" }],
+        });
+      } finally {
+        setIsPickingImage(false);
       }
-    } catch (error) {
-      console.warn("Failed to pick image", error);
-      showDialog({
-        title: "Could not pick image",
-        message: "Please try again later.",
-        actions: [{ label: "OK" }],
-      });
-    } finally {
-      setIsPickingImage(false);
-    }
-  }, [ensureMediaPermission, isPickingImage, showDialog]);
+    })();
+  }, [captureImageWithCamera, showDialog]);
+
+  const handleChoosePhotoFromLibrary = useCallback(() => {
+    setPhotoSourceModalVisible(false);
+    void (async () => {
+      try {
+        setIsPickingImage(true);
+        await pickImageFromLibrary();
+      } catch (error) {
+        console.warn("Failed to pick image", error);
+        showDialog({
+          title: "Could not pick image",
+          message: "Please try again later.",
+          actions: [{ label: "OK" }],
+        });
+      } finally {
+        setIsPickingImage(false);
+      }
+    })();
+  }, [pickImageFromLibrary, showDialog]);
 
   const handleRemovePhoto = useCallback(() => {
     setImageUri(null);
@@ -2253,6 +2347,14 @@ export default function CreateCocktailScreen() {
         message="Use this screen to build a new cocktail recipe.\n\nFill in name, photo, tags, ingredients, method, and instructions, then tap Save."
         actions={[{ label: "Got it", variant: "secondary" }]}
         onRequestClose={() => setIsHelpVisible(false)}
+      />
+
+      <PhotoSourceModal
+        visible={isPhotoSourceModalVisible}
+        title="Add photo"
+        onClose={() => setPhotoSourceModalVisible(false)}
+        onTakePhoto={handleTakePhoto}
+        onChooseFromLibrary={handleChoosePhotoFromLibrary}
       />
 
       <AppDialog
