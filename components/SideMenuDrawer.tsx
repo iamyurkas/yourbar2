@@ -31,10 +31,10 @@ import { TagEditorModal } from "@/components/TagEditorModal";
 import { TagPill } from "@/components/TagPill";
 import { useAppColors } from "@/constants/theme";
 import { AMAZON_STORES, AMAZON_STORE_KEYS, type AmazonStoreOverride } from "@/libs/amazon-stores";
-import { base64ToBytes, createTarArchive } from "@/libs/archive-utils";
+import { base64ToBytes, bytesToBase64, createTarArchive, parseTarArchive } from "@/libs/archive-utils";
 import { buildPhotoBaseName } from "@/libs/photo-utils";
 import { useInventory, type AppTheme, type StartScreen } from "@/providers/inventory-provider";
-import { type InventoryExportData } from "@/providers/inventory-types";
+import { type ImportedPhotoEntry, type InventoryExportData } from "@/providers/inventory-types";
 import Constants from "expo-constants";
 
 const MENU_WIDTH = Math.round(Dimensions.get("window").width * 0.75);
@@ -148,6 +148,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     exportInventoryData,
     exportInventoryPhotoEntries,
     importInventoryData,
+    importInventoryPhotos,
     customCocktailTags,
     customIngredientTags,
     createCustomCocktailTag,
@@ -474,6 +475,41 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     });
   };
 
+
+  const parsePhotoEntryFromArchivePath = (path: string): {
+    type: ImportedPhotoEntry['type'];
+    id: number;
+    extension: string;
+  } | null => {
+    const normalizedPath = path.trim().replace(/^\/+/, "");
+    const [category, filename] = normalizedPath.split("/");
+    if (!category || !filename) {
+      return null;
+    }
+
+    if (category !== "cocktails" && category !== "ingredients") {
+      return null;
+    }
+
+    const extensionMatch = filename.match(/\.([a-zA-Z0-9]+)$/);
+    const extension = extensionMatch?.[1]?.toLowerCase() ?? "jpg";
+    const idMatch = filename.match(/^(\d+)-/);
+    if (!idMatch) {
+      return null;
+    }
+
+    const id = Number(idMatch[1]);
+    if (!Number.isFinite(id) || id < 0) {
+      return null;
+    }
+
+    return {
+      type: category,
+      id: Math.trunc(id),
+      extension,
+    };
+  };
+
   const isValidInventoryData = (
     candidate: unknown,
   ): candidate is InventoryExportData => {
@@ -656,7 +692,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
     try {
       const result = await DocumentPicker.getDocumentAsync({
-        type: "application/json",
+        type: ["application/json", "application/x-tar", "public.tar-archive"],
         copyToCacheDirectory: true,
       });
 
@@ -667,6 +703,68 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       const asset = result.assets?.[0];
       if (!asset?.uri) {
         showDialogMessage("Import failed", "Unable to read the selected file.");
+        return;
+      }
+
+      const assetName = asset.name?.toLowerCase() ?? "";
+      const assetMimeType = asset.mimeType?.toLowerCase() ?? "";
+      const isTarArchive =
+        assetName.endsWith(".tar") || assetMimeType.includes("tar");
+
+      if (isTarArchive) {
+        const archiveBase64 = await FileSystem.readAsStringAsync(asset.uri, {
+          encoding: FileSystem.EncodingType.Base64,
+        });
+        const archiveBytes = base64ToBytes(archiveBase64);
+        const archivedFiles = parseTarArchive(archiveBytes);
+
+        if (archivedFiles.length === 0) {
+          showDialogMessage("Import failed", "The selected archive is empty.");
+          return;
+        }
+
+        const directory = FileSystem.documentDirectory ?? FileSystem.cacheDirectory;
+        if (!directory) {
+          showDialogMessage("Import failed", "Unable to access device storage.");
+          return;
+        }
+
+        const importedPhotoEntries: ImportedPhotoEntry[] = [];
+        const timestamp = Date.now();
+
+        for (const file of archivedFiles) {
+          const parsedPath = parsePhotoEntryFromArchivePath(file.path);
+          if (!parsedPath || file.contents.length === 0) {
+            continue;
+          }
+
+          const outputFileName = `${parsedPath.type}-${parsedPath.id}-${timestamp}.${parsedPath.extension}`;
+          const destinationUri = `${directory.replace(/\/?$/, "/")}imported-photos/${outputFileName}`;
+
+          await FileSystem.makeDirectoryAsync(`${directory.replace(/\/?$/, "/")}imported-photos/`, {
+            intermediates: true,
+          });
+          await FileSystem.writeAsStringAsync(destinationUri, bytesToBase64(file.contents), {
+            encoding: FileSystem.EncodingType.Base64,
+          });
+
+          importedPhotoEntries.push({
+            type: parsedPath.type,
+            id: parsedPath.id,
+            photoUri: destinationUri,
+          });
+        }
+
+        const importedCount = importInventoryPhotos(importedPhotoEntries);
+        if (importedCount === 0) {
+          showDialogMessage(
+            "Import complete",
+            "No matching cocktail or ingredient photos were found in the archive.",
+          );
+          return;
+        }
+
+        onClose();
         return;
       }
 
@@ -687,7 +785,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       console.error("Failed to import inventory data", error);
       showDialogMessage(
         "Import failed",
-        "Please try again with a valid JSON file.",
+        "Please try again with a valid JSON or TAR file.",
       );
     } finally {
       setIsImporting(false);
