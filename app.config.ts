@@ -20,6 +20,8 @@ export default ({ config }: { config: ExpoConfig }) => ({
           "Your Bar uses your photo library so you can attach custom photos to cocktails and ingredients.",
         NSPhotoLibraryAddUsageDescription:
           "Your Bar can save exported bar data to files you choose.",
+        NSCameraUsageDescription:
+          "Your Bar uses your camera so you can quickly take photos for cocktails and ingredients.",
       },
     },
 
