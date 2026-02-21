@@ -1,6 +1,7 @@
 import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { Stack } from "expo-router";
-import { useColorScheme, View } from "react-native";
+import { Appearance, useColorScheme, View } from "react-native";
+import { useEffect } from "react";
 import "react-native-reanimated";
 
 import { PaperProvider } from "@/libs/react-native-paper";
@@ -39,6 +40,10 @@ function ThemeAppWrapper({ children }: { children: React.ReactNode }) {
 
   const paperTheme = getAppTheme(isDark);
   const { colors } = paperTheme;
+
+  useEffect(() => {
+    Appearance.setColorScheme(appTheme === "system" ? null : isDark ? "dark" : "light");
+  }, [appTheme, isDark]);
 
   const navigationTheme = ({
     ...DefaultTheme,
