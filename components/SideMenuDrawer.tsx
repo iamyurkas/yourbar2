@@ -1219,6 +1219,27 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
             </Pressable>
             <Pressable
               accessibilityRole="button"
+              accessibilityLabel="Restart onboarding"
+              onPress={() => {
+                restartOnboarding();
+                onClose();
+              }}
+              style={[
+                styles.actionRow,
+                SURFACE_ROW_STYLE,
+              ]}>
+              <View style={[styles.actionIcon, ACTION_ICON_STYLE]}>
+                <MaterialCommunityIcons name="help-circle-outline" size={16} color={Colors.onSurfaceVariant} />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>Restart onboarding</Text>
+                <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>
+                  Show the guided tour again
+                </Text>
+              </View>
+            </Pressable>
+            <Pressable
+              accessibilityRole="button"
               accessibilityLabel="Back up data"
               onPress={handleBackupData}
               disabled={isBackingUpData || isRestoringData}
@@ -1239,7 +1260,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 <Text
                   style={[styles.settingLabel, { color: Colors.onSurface }]}
                 >
-                  {isBackingUpData ? "Backing up data..." : "Back up Data"}
+                  {isBackingUpData ? "Backing up data..." : "Back up data"}
                 </Text>
                 <Text
                   style={[
@@ -1247,7 +1268,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     { color: Colors.onSurfaceVariant },
                   ]}
                 >
-                  Export data and photos as one archive
+                  Export cocktails, ingredients, and photos as one archive
                 </Text>
               </View>
             </Pressable>
@@ -1273,7 +1294,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 <Text
                   style={[styles.settingLabel, { color: Colors.onSurface }]}
                 >
-                  {isRestoringData ? "Restoring data..." : "Restore Data"}
+                  {isRestoringData ? "Restoring data..." : "Restore data"}
                 </Text>
                 <Text
                   style={[
@@ -1281,31 +1302,11 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     { color: Colors.onSurfaceVariant },
                   ]}
                 >
-                  Import data and photos from archive
+                  Import cocktails, ingredients, and photos from archive
                 </Text>
               </View>
             </Pressable>
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel="Restart onboarding"
-              onPress={() => {
-                restartOnboarding();
-                onClose();
-              }}
-              style={[
-                styles.actionRow,
-                SURFACE_ROW_STYLE,
-              ]}>
-              <View style={[styles.actionIcon, ACTION_ICON_STYLE]}>
-                <MaterialCommunityIcons name="help-circle-outline" size={16} color={Colors.onSurfaceVariant} />
-              </View>
-              <View style={styles.settingTextContainer}>
-                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>Restart onboarding</Text>
-                <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>
-                  Show the guided tour again
-                </Text>
-              </View>
-            </Pressable>
+
             <Pressable
               accessibilityRole="button"
               accessibilityLabel="Reload bundled inventory"
@@ -1320,7 +1321,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               <View style={styles.settingTextContainer}>
                 <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>Restore bundled data</Text>
                 <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>
-                  Restore bundled cocktails and ingredients
+                  Built-in changes will be lost,
+                  your own content is safe
                 </Text>
               </View>
             </Pressable>
@@ -1342,7 +1344,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               </View>
               <View style={styles.settingTextContainer}>
                 <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>Something wrong?</Text>
-                <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>Report a bug</Text>
+                <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>Report a bug, share an idea</Text>
               </View>
             </Pressable>
             <View style={styles.versionRow}>
