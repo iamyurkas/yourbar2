@@ -436,8 +436,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             amazonStoreOverride: null,
             customCocktailTags: [],
             customIngredientTags: [],
-            onboardingStep: 1,
-            onboardingCompleted: false,
+            onboardingStep: 0,
+            onboardingCompleted: true,
           });
         }
       } catch (error) {
