@@ -2275,7 +2275,7 @@ const styles = StyleSheet.create({
     borderWidth: StyleSheet.hairlineWidth,
   },
   backupRestoreModalActionRow: {
-    paddingLeft: 4,
+    paddingLeft: 8,
   },
   checkbox: {
     width: 22,
