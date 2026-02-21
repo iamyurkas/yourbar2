@@ -169,12 +169,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   const startScreenModalCloseTimeout = useRef<ReturnType<
     typeof setTimeout
   > | null>(null);
-  const [isThemeModalVisible, setThemeModalVisible] = useState(false);
   const [isAmazonStoreModalVisible, setAmazonStoreModalVisible] = useState(false);
   const [isBackupRestoreModalVisible, setBackupRestoreModalVisible] = useState(false);
-  const themeModalCloseTimeout = useRef<ReturnType<typeof setTimeout> | null>(
-    null,
-  );
   const amazonStoreModalCloseTimeout = useRef<ReturnType<typeof setTimeout> | null>(
     null,
   );
@@ -413,18 +409,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     scheduleModalClose(startScreenModalCloseTimeout, setStartScreenModalVisible);
   };
 
-  const handleThemePress = () => {
-    setThemeModalVisible(true);
-  };
-
-  const handleCloseThemeModal = () => {
-    clearTimeoutRef(themeModalCloseTimeout);
-    setThemeModalVisible(false);
-  };
-
   const handleSelectTheme = (value: AppTheme) => {
     setAppTheme(value);
-    scheduleModalClose(themeModalCloseTimeout, setThemeModalVisible);
   };
 
   const handleAmazonStorePress = () => {
@@ -805,7 +791,6 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     return () => {
       clearTimeoutRef(ratingModalCloseTimeout);
       clearTimeoutRef(startScreenModalCloseTimeout);
-      clearTimeoutRef(themeModalCloseTimeout);
       clearTimeoutRef(amazonStoreModalCloseTimeout);
     };
   }, []);
@@ -1119,12 +1104,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 </Text>
               </View>
             </Pressable>
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel="Set app theme"
-              onPress={handleThemePress}
-              style={[styles.settingRow, SURFACE_ROW_STYLE]}
-            >
+            <View style={[styles.settingRow, SURFACE_ROW_STYLE]}>
               <View style={[styles.checkbox, SURFACE_ICON_STYLE]}>
                 <MaterialCommunityIcons
                   name={selectedThemeOption?.icon ?? "theme-light-dark"}
@@ -1146,8 +1126,46 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 >
                   Current: {selectedThemeOption?.label ?? "System"}
                 </Text>
+                <View style={styles.themeSwitchRow}>
+                  {THEME_OPTIONS.map((option) => {
+                    const isSelected = appTheme === option.key;
+                    return (
+                      <Pressable
+                        key={`settings-theme-option-${option.key}`}
+                        accessibilityRole="button"
+                        accessibilityState={{ selected: isSelected }}
+                        accessibilityLabel={`Set ${option.label} theme`}
+                        onPress={() => handleSelectTheme(option.key)}
+                        style={({ pressed }) => [
+                          styles.themeSwitchOption,
+                          {
+                            borderColor: isSelected ? Colors.tint : Colors.outlineVariant,
+                            backgroundColor: isSelected ? Colors.tint : Colors.surfaceBright,
+                          },
+                          pressed ? { opacity: 0.85 } : null,
+                        ]}
+                      >
+                        <MaterialCommunityIcons
+                          name={option.icon}
+                          size={16}
+                          color={isSelected ? Colors.background : Colors.onSurfaceVariant}
+                        />
+                        <Text
+                          style={[
+                            styles.themeSwitchLabel,
+                            {
+                              color: isSelected ? Colors.background : Colors.onSurface,
+                            },
+                          ]}
+                        >
+                          {option.label}
+                        </Text>
+                      </Pressable>
+                    );
+                  })}
+                </View>
               </View>
-            </Pressable>
+            </View>
             <Pressable
               accessibilityRole="button"
               accessibilityLabel="Set favorites rating filter"
@@ -2116,103 +2134,6 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
           </Pressable>
         </Pressable>
       </Modal>
-      <Modal
-        transparent
-        visible={isThemeModalVisible}
-        animationType="fade"
-        onRequestClose={handleCloseThemeModal}
-      >
-        <Pressable
-          style={styles.modalOverlay}
-          onPress={handleCloseThemeModal}
-          accessibilityRole="button"
-        >
-          <Pressable
-            style={[
-              styles.modalCard,
-              MODAL_CARD_STYLE,
-            ]}
-            accessibilityLabel="App theme"
-            onPress={() => { }}
-          >
-            <View style={styles.modalHeader}>
-              <Text
-                style={[
-                  styles.modalTitle,
-                  { color: Colors.onSurface, flex: 1 },
-                ]}
-              >
-                App theme
-              </Text>
-              <Pressable
-                onPress={handleCloseThemeModal}
-                accessibilityRole="button"
-                accessibilityLabel="Close"
-              >
-                <MaterialCommunityIcons
-                  name="close"
-                  size={22}
-                  color={Colors.onSurfaceVariant}
-                />
-              </Pressable>
-            </View>
-            <Text
-              style={[
-                styles.settingCaption,
-                { color: Colors.onSurfaceVariant },
-              ]}
-            >
-              Choose your preferred appearance
-            </Text>
-            <View style={styles.themeOptionRow}>
-              {THEME_OPTIONS.map((option) => {
-                const isSelected = appTheme === option.key;
-                return (
-                  <Pressable
-                    key={`theme-option-${option.key}`}
-                    accessibilityRole="button"
-                    accessibilityState={{ selected: isSelected }}
-                    accessibilityLabel={`Set ${option.label} theme`}
-                    onPress={() => handleSelectTheme(option.key)}
-                    style={({ pressed }) => [
-                      styles.themeOption,
-                      {
-                        borderColor: isSelected
-                          ? Colors.tint
-                          : Colors.outlineVariant,
-                        backgroundColor: isSelected
-                          ? Colors.tint
-                          : Colors.surfaceBright,
-                      },
-                      pressed ? { opacity: 0.85 } : null,
-                    ]}
-                  >
-                    <MaterialCommunityIcons
-                      name={option.icon}
-                      size={24}
-                      color={
-                        isSelected ? Colors.background : Colors.onSurfaceVariant
-                      }
-                    />
-                    <Text
-                      style={[
-                        styles.themeOptionLabel,
-                        {
-                          color: isSelected
-                            ? Colors.background
-                            : Colors.onSurface,
-                        },
-                      ]}
-                    >
-                      {option.label}
-                    </Text>
-                  </Pressable>
-                );
-              })}
-            </View>
-          </Pressable>
-        </Pressable>
-      </Modal>
     </Modal>
   );
 }
@@ -2442,22 +2363,23 @@ const styles = StyleSheet.create({
   ratingOptionLabel: {
     fontWeight: "700",
   },
-  themeOptionRow: {
+  themeSwitchRow: {
     flexDirection: "row",
-    justifyContent: "space-between",
     gap: 8,
-    marginTop: 8,
+    marginTop: 10,
   },
-  themeOption: {
+  themeSwitchOption: {
     flex: 1,
+    flexDirection: "row",
     alignItems: "center",
-    paddingVertical: 16,
-    borderRadius: 12,
+    justifyContent: "center",
+    paddingVertical: 8,
+    borderRadius: 10,
     borderWidth: StyleSheet.hairlineWidth,
-    gap: 8,
+    gap: 6,
   },
-  themeOptionLabel: {
-    fontSize: 13,
+  themeSwitchLabel: {
+    fontSize: 12,
     fontWeight: "700",
   },
 });
