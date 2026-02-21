@@ -34483,6 +34483,7 @@
       "name": "Washington Apple Shot",
       "description": "A fruity whiskey shot with apple schnapps and cranberry juice.",
       "instructions": "For 3 shots:\n1. Fill a shaker with **ice**.\n2. Add 45 ml of **whiskey**, 45 ml of **apple schnapps**, and 45 ml of **cranberry juice**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into 3 shooter glasses.",
+      "photoUri": "assets/cocktails/568-washington-apple-shot.jpg",
       "glassId": "shooter",
       "methodIds": ["shake"],
       "tags": [5, 6, 9],
