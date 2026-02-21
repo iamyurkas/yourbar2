@@ -178,6 +178,7 @@ export default function IngredientFormScreen() {
   const [isStyleModalVisible, setIsStyleModalVisible] = useState(false);
   const [styleSearch, setStyleSearch] = useState('');
   const [permissionStatus, requestPermission] = ImagePicker.useMediaLibraryPermissions();
+  const [cameraPermissionStatus, requestCameraPermission] = ImagePicker.useCameraPermissions();
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(null);
   const [isHelpVisible, setIsHelpVisible] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -417,6 +418,85 @@ export default function IngredientFormScreen() {
       setIsPickingImage(false);
     }
   }, [ensureMediaPermission, isPickingImage, showDialog]);
+
+  const ensureCameraPermission = useCallback(async () => {
+    if (cameraPermissionStatus?.granted) {
+      return true;
+    }
+
+    const { status, granted, canAskAgain } = await requestCameraPermission();
+    if (granted || status === ImagePicker.PermissionStatus.GRANTED) {
+      return true;
+    }
+
+    if (!canAskAgain) {
+      showDialog({
+        title: 'Camera access required',
+        message: 'Enable camera permissions in system settings to take an ingredient photo.',
+        actions: [{ label: 'OK' }],
+      });
+    }
+
+    return false;
+  }, [cameraPermissionStatus?.granted, requestCameraPermission, showDialog]);
+
+  const handleTakePhoto = useCallback(async () => {
+    if (isPickingImage) {
+      return;
+    }
+
+    const hasPermission = await ensureCameraPermission();
+    if (!hasPermission) {
+      return;
+    }
+
+    try {
+      setIsPickingImage(true);
+      const result = await ImagePicker.launchCameraAsync({
+        allowsEditing: true,
+        quality: 1,
+        exif: false,
+      });
+
+      if (!result.canceled && result.assets?.length) {
+        const asset = result.assets[0];
+        if (asset?.uri) {
+          setImageUri(asset.uri);
+        }
+      }
+    } catch (error) {
+      console.warn('Failed to capture image', error);
+      showDialog({
+        title: 'Could not take photo',
+        message: 'Please try again later.',
+        actions: [{ label: 'OK' }],
+      });
+    } finally {
+      setIsPickingImage(false);
+    }
+  }, [ensureCameraPermission, isPickingImage, showDialog]);
+
+  const handleSelectImageSource = useCallback(() => {
+    showDialog({
+      title: 'Add photo',
+      message: 'Choose how you want to add an ingredient photo.',
+      actions: [
+        {
+          label: 'Take photo',
+          onPress: () => {
+            void handleTakePhoto();
+          },
+        },
+        {
+          label: 'Choose from gallery',
+          onPress: () => {
+            void handlePickImage();
+          },
+        },
+        { label: 'Cancel', variant: 'secondary' },
+      ],
+    });
+  }, [handlePickImage, handleTakePhoto, showDialog]);
 
   const handleSubmit = useCallback(async () => {
     if (isSaving) {
@@ -1288,7 +1368,7 @@ export default function IngredientFormScreen() {
             { borderColor: Colors.outlineVariant },
             !imageSource && { backgroundColor: Colors.surface },
           ]}
-          onPress={handlePickImage}
+          onPress={handleSelectImageSource}
           android_ripple={{ color: `${Colors.surface}33` }}>
           {imageSource ? (
             <AppImage source={imageSource} style={[styles.image, { backgroundColor: Colors.background }]} contentFit="contain" />
