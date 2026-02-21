@@ -171,6 +171,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   > | null>(null);
   const [isThemeModalVisible, setThemeModalVisible] = useState(false);
   const [isAmazonStoreModalVisible, setAmazonStoreModalVisible] = useState(false);
+  const [isBackupRestoreModalVisible, setBackupRestoreModalVisible] = useState(false);
   const themeModalCloseTimeout = useRef<ReturnType<typeof setTimeout> | null>(
     null,
   );
@@ -430,6 +431,10 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     setAmazonStoreModalVisible(true);
   };
 
+  const handleBackupRestorePress = () => {
+    setBackupRestoreModalVisible(true);
+  };
+
   const handleCloseAmazonStoreModal = () => {
     clearTimeoutRef(amazonStoreModalCloseTimeout);
     setAmazonStoreModalVisible(false);
@@ -438,6 +443,25 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   const handleSelectAmazonStore = (value: AmazonStoreOverride | null) => {
     setAmazonStoreOverride(value);
     scheduleModalClose(amazonStoreModalCloseTimeout, setAmazonStoreModalVisible);
+  };
+
+  const handleCloseBackupRestoreModal = () => {
+    setBackupRestoreModalVisible(false);
+  };
+
+  const handleBackupDataFromModal = () => {
+    handleCloseBackupRestoreModal();
+    void handleBackupData();
+  };
+
+  const handleRestoreDataFromModal = () => {
+    handleCloseBackupRestoreModal();
+    void handleRestoreData();
+  };
+
+  const handleResetInventoryFromModal = () => {
+    handleCloseBackupRestoreModal();
+    handleResetInventory();
   };
 
   const handleOpenTagManager = () => {
@@ -1240,91 +1264,27 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
             </Pressable>
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel="Back up data"
-              onPress={handleBackupData}
-              disabled={isBackingUpData || isRestoringData}
+              accessibilityLabel="Back up and restore"
+              onPress={handleBackupRestorePress}
               style={({ pressed }) => [
                 styles.actionRow,
                 SURFACE_ROW_STYLE,
-                pressed || isBackingUpData ? { opacity: 0.8 } : null,
-              ]}
-            >
-              <View style={[styles.actionIcon, ACTION_ICON_STYLE]}>
-                <MaterialCommunityIcons
-                  name="content-save-outline"
-                  size={16}
-                  color={Colors.onSurfaceVariant}
-                />
-              </View>
-              <View style={styles.settingTextContainer}>
-                <Text
-                  style={[styles.settingLabel, { color: Colors.onSurface }]}
-                >
-                  {isBackingUpData ? "Backing up data..." : "Back up data"}
-                </Text>
-                <Text
-                  style={[
-                    styles.settingCaption,
-                    { color: Colors.onSurfaceVariant },
-                  ]}
-                >
-                  Export cocktails, ingredients, and photos as one archive
-                </Text>
-              </View>
-            </Pressable>
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel="Restore data"
-              onPress={handleRestoreData}
-              disabled={isBackingUpData || isRestoringData}
-              style={({ pressed }) => [
-                styles.actionRow,
-                SURFACE_ROW_STYLE,
-                pressed || isRestoringData ? { opacity: 0.8 } : null,
-              ]}
-            >
-              <View style={[styles.actionIcon, ACTION_ICON_STYLE]}>
-                <MaterialCommunityIcons
-                  name="restore"
-                  size={16}
-                  color={Colors.onSurfaceVariant}
-                />
-              </View>
-              <View style={styles.settingTextContainer}>
-                <Text
-                  style={[styles.settingLabel, { color: Colors.onSurface }]}
-                >
-                  {isRestoringData ? "Restoring data..." : "Restore data"}
-                </Text>
-                <Text
-                  style={[
-                    styles.settingCaption,
-                    { color: Colors.onSurfaceVariant },
-                  ]}
-                >
-                  Import cocktails, ingredients, and photos from archive
-                </Text>
-              </View>
-            </Pressable>
-
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel="Reload bundled inventory"
-              onPress={handleResetInventory}
-              style={[
-                styles.actionRow,
-                SURFACE_ROW_STYLE,
+                pressed ? { opacity: 0.8 } : null,
               ]}>
               <View style={[styles.actionIcon, ACTION_ICON_STYLE]}>
-                <MaterialCommunityIcons name="refresh" size={16} color={Colors.onSurfaceVariant} />
+                <MaterialCommunityIcons name="backup-restore" size={16} color={Colors.onSurfaceVariant} />
               </View>
               <View style={styles.settingTextContainer}>
-                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>Restore bundled data</Text>
+                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>Back up &amp; Restore</Text>
                 <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>
-                  Built-in changes will be lost,
-                  your own content is safe
+                  Export your data or restore from backup
                 </Text>
               </View>
+              <MaterialCommunityIcons
+                name="chevron-right"
+                size={20}
+                color={Colors.onSurfaceVariant}
+              />
             </Pressable>
             <Pressable
               accessibilityRole="button"
@@ -2015,6 +1975,144 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
         </Pressable>
       </Modal>
 
+      <Modal
+        transparent
+        visible={isBackupRestoreModalVisible}
+        animationType="fade"
+        onRequestClose={handleCloseBackupRestoreModal}
+      >
+        <Pressable
+          style={styles.modalOverlay}
+          onPress={handleCloseBackupRestoreModal}
+          accessibilityRole="button"
+        >
+          <Pressable
+            style={[
+              styles.modalCard,
+              MODAL_CARD_STYLE,
+            ]}
+            accessibilityLabel="Back up and restore"
+            onPress={() => { }}
+          >
+            <View style={styles.modalHeader}>
+              <Text
+                style={[
+                  styles.modalTitle,
+                  { color: Colors.onSurface, flex: 1 },
+                ]}
+              >
+                Back up &amp; Restore
+              </Text>
+              <Pressable
+                onPress={handleCloseBackupRestoreModal}
+                accessibilityRole="button"
+                accessibilityLabel="Close"
+              >
+                <MaterialCommunityIcons
+                  name="close"
+                  size={22}
+                  color={Colors.onSurfaceVariant}
+                />
+              </Pressable>
+            </View>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Back up data"
+              onPress={handleBackupDataFromModal}
+              disabled={isBackingUpData || isRestoringData}
+              style={({ pressed }) => [
+                styles.actionRow,
+                {
+                  borderColor: Colors.outlineVariant,
+                  backgroundColor: Colors.surface,
+                },
+                pressed || isBackingUpData ? { opacity: 0.8 } : null,
+              ]}
+            >
+              <View style={[styles.actionIcon, ACTION_ICON_STYLE]}>
+                <MaterialCommunityIcons
+                  name="content-save-outline"
+                  size={16}
+                  color={Colors.onSurfaceVariant}
+                />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text
+                  style={[styles.settingLabel, { color: Colors.onSurface }]}
+                >
+                  {isBackingUpData ? "Backing up data..." : "Back up data"}
+                </Text>
+                <Text
+                  style={[
+                    styles.settingCaption,
+                    { color: Colors.onSurfaceVariant },
+                  ]}
+                >
+                  Export cocktails, ingredients, and photos as one archive
+                </Text>
+              </View>
+            </Pressable>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Restore data"
+              onPress={handleRestoreDataFromModal}
+              disabled={isBackingUpData || isRestoringData}
+              style={({ pressed }) => [
+                styles.actionRow,
+                {
+                  borderColor: Colors.outlineVariant,
+                  backgroundColor: Colors.surface,
+                },
+                pressed || isRestoringData ? { opacity: 0.8 } : null,
+              ]}
+            >
+              <View style={[styles.actionIcon, ACTION_ICON_STYLE]}>
+                <MaterialCommunityIcons
+                  name="restore"
+                  size={16}
+                  color={Colors.onSurfaceVariant}
+                />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text
+                  style={[styles.settingLabel, { color: Colors.onSurface }]}
+                >
+                  {isRestoringData ? "Restoring data..." : "Restore data"}
+                </Text>
+                <Text
+                  style={[
+                    styles.settingCaption,
+                    { color: Colors.onSurfaceVariant },
+                  ]}
+                >
+                  Import cocktails, ingredients, and photos from archive
+                </Text>
+              </View>
+            </Pressable>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Reload bundled inventory"
+              onPress={handleResetInventoryFromModal}
+              style={({ pressed }) => [
+                styles.actionRow,
+                {
+                  borderColor: Colors.outlineVariant,
+                  backgroundColor: Colors.surface,
+                },
+                pressed ? { opacity: 0.8 } : null,
+              ]}
+            >
+              <View style={[styles.actionIcon, ACTION_ICON_STYLE]}>
+                <MaterialCommunityIcons name="refresh" size={16} color={Colors.onSurfaceVariant} />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>Restore bundled data</Text>
+                <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>Built-in changes will be lost, your own content is safe</Text>
+              </View>
+            </Pressable>
+          </Pressable>
+        </Pressable>
+      </Modal>
       <Modal
         transparent
         visible={isThemeModalVisible}
