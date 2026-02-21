@@ -905,12 +905,6 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   );
 
   const resetInventoryFromBundle = useCallback(async () => {
-    try {
-      await clearInventorySnapshot();
-    } catch (error) {
-      console.warn('Failed to clear inventory snapshot', error);
-    }
-
     const data = reloadInventoryData();
     setInventoryState((prev) => {
       const baseState = createInventoryStateFromData(data, prev?.imported ?? false);
