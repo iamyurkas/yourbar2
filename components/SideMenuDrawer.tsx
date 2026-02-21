@@ -31,10 +31,10 @@ import { TagEditorModal } from "@/components/TagEditorModal";
 import { TagPill } from "@/components/TagPill";
 import { useAppColors } from "@/constants/theme";
 import { AMAZON_STORES, AMAZON_STORE_KEYS, type AmazonStoreOverride } from "@/libs/amazon-stores";
-import { base64ToBytes, createTarArchive } from "@/libs/archive-utils";
+import { base64ToBytes, bytesToBase64, createTarArchive, parseTarArchive } from "@/libs/archive-utils";
 import { buildPhotoBaseName } from "@/libs/photo-utils";
 import { useInventory, type AppTheme, type StartScreen } from "@/providers/inventory-provider";
-import { type InventoryExportData } from "@/providers/inventory-types";
+import { type ImportedPhotoEntry, type InventoryExportData } from "@/providers/inventory-types";
 import Constants from "expo-constants";
 
 const MENU_WIDTH = Math.round(Dimensions.get("window").width * 0.75);
@@ -148,6 +148,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     exportInventoryData,
     exportInventoryPhotoEntries,
     importInventoryData,
+    importInventoryPhotos,
     customCocktailTags,
     customIngredientTags,
     createCustomCocktailTag,
@@ -195,6 +196,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   const [isExporting, setIsExporting] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
   const [isBackingUpPhotos, setIsBackingUpPhotos] = useState(false);
+  const [isImportingPhotos, setIsImportingPhotos] = useState(false);
   const translateX = useRef(new Animated.Value(-MENU_WIDTH)).current;
   const backdropOpacity = useRef(new Animated.Value(0)).current;
 
@@ -474,6 +476,41 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     });
   };
 
+
+  const parsePhotoEntryFromArchivePath = (path: string): {
+    type: ImportedPhotoEntry['type'];
+    id: number;
+    extension: string;
+  } | null => {
+    const normalizedPath = path.trim().replace(/^\/+/, "");
+    const [category, filename] = normalizedPath.split("/");
+    if (!category || !filename) {
+      return null;
+    }
+
+    if (category !== "cocktails" && category !== "ingredients") {
+      return null;
+    }
+
+    const extensionMatch = filename.match(/\.([a-zA-Z0-9]+)$/);
+    const extension = extensionMatch?.[1]?.toLowerCase() ?? "jpg";
+    const idMatch = filename.match(/^(\d+)-/);
+    if (!idMatch) {
+      return null;
+    }
+
+    const id = Number(idMatch[1]);
+    if (!Number.isFinite(id) || id < 0) {
+      return null;
+    }
+
+    return {
+      type: category,
+      id: Math.trunc(id),
+      extension,
+    };
+  };
+
   const isValidInventoryData = (
     candidate: unknown,
   ): candidate is InventoryExportData => {
@@ -691,6 +728,91 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       );
     } finally {
       setIsImporting(false);
+    }
+  };
+
+  const handleImportPhotos = async () => {
+    if (isImportingPhotos) {
+      return;
+    }
+
+    setIsImportingPhotos(true);
+
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        type: ["application/x-tar", "public.tar-archive"],
+        copyToCacheDirectory: true,
+      });
+
+      if (result.canceled) {
+        return;
+      }
+
+      const asset = result.assets?.[0];
+      if (!asset?.uri) {
+        showDialogMessage("Import failed", "Unable to read the selected archive.");
+        return;
+      }
+
+      const archiveBase64 = await FileSystem.readAsStringAsync(asset.uri, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
+      const archiveBytes = base64ToBytes(archiveBase64);
+      const archivedFiles = parseTarArchive(archiveBytes);
+
+      if (archivedFiles.length === 0) {
+        showDialogMessage("Import failed", "The selected archive is empty.");
+        return;
+      }
+
+      const directory = FileSystem.documentDirectory ?? FileSystem.cacheDirectory;
+      if (!directory) {
+        showDialogMessage("Import failed", "Unable to access device storage.");
+        return;
+      }
+
+      const importedPhotoEntries: ImportedPhotoEntry[] = [];
+      const timestamp = Date.now();
+      const photosDir = `${directory.replace(/\/?$/, "/")}imported-photos/`;
+      await FileSystem.makeDirectoryAsync(photosDir, { intermediates: true });
+
+      for (const file of archivedFiles) {
+        const parsedPath = parsePhotoEntryFromArchivePath(file.path);
+        if (!parsedPath || file.contents.length === 0) {
+          continue;
+        }
+
+        const outputFileName = `${parsedPath.type}-${parsedPath.id}-${timestamp}.${parsedPath.extension}`;
+        const destinationUri = `${photosDir}${outputFileName}`;
+        await FileSystem.writeAsStringAsync(destinationUri, bytesToBase64(file.contents), {
+          encoding: FileSystem.EncodingType.Base64,
+        });
+
+        importedPhotoEntries.push({
+          type: parsedPath.type,
+          id: parsedPath.id,
+          photoUri: destinationUri,
+        });
+      }
+
+      const importedCount = importInventoryPhotos(importedPhotoEntries);
+      if (importedCount === 0) {
+        showDialogMessage(
+          "Import complete",
+          "No matching cocktail or ingredient photos were found in the archive.",
+        );
+        return;
+      }
+
+      onClose();
+    } catch (error) {
+      console.error("Failed to import photo archive", error);
+      showDialogMessage(
+        "Import failed",
+        "Please try again with a valid TAR archive.",
+      );
+    } finally {
+      setIsImportingPhotos(false);
     }
   };
 
@@ -1195,7 +1317,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               accessibilityRole="button"
               accessibilityLabel="Export cocktails and ingredients"
               onPress={handleExportInventory}
-              disabled={isExporting || isImporting}
+              disabled={isExporting || isImporting || isImportingPhotos}
               style={({ pressed }) => [
                 styles.actionRow,
                 SURFACE_ROW_STYLE,
@@ -1229,7 +1351,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               accessibilityRole="button"
               accessibilityLabel="Import cocktails and ingredients"
               onPress={handleImportInventory}
-              disabled={isExporting || isImporting}
+              disabled={isExporting || isImporting || isBackingUpPhotos || isImportingPhotos}
               style={({ pressed }) => [
                 styles.actionRow,
                 SURFACE_ROW_STYLE,
@@ -1263,7 +1385,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               accessibilityRole="button"
               accessibilityLabel="Backup cocktail and ingredient photos"
               onPress={handleBackupPhotos}
-              disabled={isExporting || isImporting || isBackingUpPhotos}
+              disabled={isExporting || isImporting || isBackingUpPhotos || isImportingPhotos}
               style={({ pressed }) => [
                 styles.actionRow,
                 SURFACE_ROW_STYLE,
@@ -1290,6 +1412,40 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   ]}
                 >
                   Export photos as an archive
+                </Text>
+              </View>
+            </Pressable>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Import cocktail and ingredient photos"
+              onPress={handleImportPhotos}
+              disabled={isExporting || isImporting || isBackingUpPhotos || isImportingPhotos}
+              style={({ pressed }) => [
+                styles.actionRow,
+                SURFACE_ROW_STYLE,
+                pressed || isImportingPhotos ? { opacity: 0.8 } : null,
+              ]}
+            >
+              <View style={[styles.actionIcon, ACTION_ICON_STYLE]}>
+                <MaterialCommunityIcons
+                  name="image-sync-outline"
+                  size={16}
+                  color={Colors.onSurfaceVariant}
+                />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text
+                  style={[styles.settingLabel, { color: Colors.onSurface }]}
+                >
+                  {isImportingPhotos ? "Importing photos..." : "Import photos"}
+                </Text>
+                <Text
+                  style={[
+                    styles.settingCaption,
+                    { color: Colors.onSurfaceVariant },
+                  ]}
+                >
+                  Restore photos from an archive
                 </Text>
               </View>
             </Pressable>

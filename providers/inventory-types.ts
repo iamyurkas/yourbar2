@@ -30,6 +30,13 @@ export type PhotoBackupEntry = {
   uri?: string | null;
 };
 
+
+export type ImportedPhotoEntry = {
+  type: 'cocktails' | 'ingredients';
+  id: number;
+  photoUri: string;
+};
+
 type NormalizedSearchFields = {
   searchNameNormalized: string;
   searchTokensNormalized: string[];

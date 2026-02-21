@@ -10,6 +10,7 @@ import type {
   IngredientTag,
   InventoryExportData,
   PhotoBackupEntry,
+  ImportedPhotoEntry,
   StartScreen,
   AppTheme,
 } from '@/providers/inventory-types';
@@ -25,6 +26,7 @@ export type InventoryActionsContextValue = {
   exportInventoryData: () => InventoryExportData | null;
   exportInventoryPhotoEntries: () => PhotoBackupEntry[] | null;
   importInventoryData: (data: InventoryExportData) => void;
+  importInventoryPhotos: (entries: ImportedPhotoEntry[]) => number;
   updateIngredient: (id: number, input: CreateIngredientInput) => Ingredient | undefined;
   updateCocktail: (id: number, input: CreateCocktailInput) => Cocktail | undefined;
   deleteCocktail: (id: number) => boolean;

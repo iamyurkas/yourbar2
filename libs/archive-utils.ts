@@ -117,3 +117,46 @@ export const createTarArchive = (files: Array<{ path: string; contents: Uint8Arr
 
   return bytesToBase64(archive);
 };
+
+const parseTarSize = (value: string) => {
+  const normalized = value.replace(/\0/g, '').trim();
+  if (!normalized) {
+    return 0;
+  }
+
+  const parsed = Number.parseInt(normalized, 8);
+  return Number.isFinite(parsed) && parsed >= 0 ? parsed : 0;
+};
+
+const readTarString = (buffer: Uint8Array, offset: number, length: number) => {
+  const raw = String.fromCharCode(...buffer.slice(offset, offset + length));
+  return raw.replace(/\0.*$/, '').trim();
+};
+
+export const parseTarArchive = (contents: Uint8Array) => {
+  const files: Array<{ path: string; contents: Uint8Array }> = [];
+  let offset = 0;
+
+  while (offset + 512 <= contents.length) {
+    const header = contents.slice(offset, offset + 512);
+    const isEmptyHeader = header.every((byte) => byte === 0);
+    if (isEmptyHeader) {
+      break;
+    }
+
+    const path = readTarString(header, 0, 100);
+    const sizeRaw = readTarString(header, 124, 12);
+    const size = parseTarSize(sizeRaw);
+    offset += 512;
+
+    const fileContents = contents.slice(offset, offset + size);
+    if (path) {
+      files.push({ path, contents: fileContents });
+    }
+
+    const dataBlockSize = Math.ceil(size / 512) * 512;
+    offset += dataBlockSize;
+  }
+
+  return files;
+};

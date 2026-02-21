@@ -36,6 +36,7 @@ import {
   type IngredientTag,
   type InventoryExportData,
   type PhotoBackupEntry,
+  type ImportedPhotoEntry,
   type StartScreen,
 } from '@/providers/inventory-types';
 import {
@@ -1109,6 +1110,84 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     });
   }, []);
 
+  const importInventoryPhotos = useCallback((entries: ImportedPhotoEntry[]) => {
+    let importedCount = 0;
+
+    setInventoryState((prev) => {
+      if (!prev || entries.length === 0) {
+        return prev;
+      }
+
+      const cocktailPhotoById = new Map<number, string>();
+      const ingredientPhotoById = new Map<number, string>();
+
+      entries.forEach((entry) => {
+        const id = Number(entry.id ?? -1);
+        if (!Number.isFinite(id) || id < 0 || !entry.photoUri?.trim()) {
+          return;
+        }
+
+        const normalizedId = Math.trunc(id);
+        const uri = entry.photoUri.trim();
+        if (entry.type === 'cocktails') {
+          cocktailPhotoById.set(normalizedId, uri);
+        } else {
+          ingredientPhotoById.set(normalizedId, uri);
+        }
+      });
+
+      if (cocktailPhotoById.size === 0 && ingredientPhotoById.size === 0) {
+        return prev;
+      }
+
+      const cocktails = prev.cocktails.map((cocktail) => {
+        const id = Number(cocktail.id ?? -1);
+        if (!Number.isFinite(id) || id < 0) {
+          return cocktail;
+        }
+
+        const importedUri = cocktailPhotoById.get(Math.trunc(id));
+        if (!importedUri || importedUri === cocktail.photoUri) {
+          return cocktail;
+        }
+
+        importedCount += 1;
+        return {
+          ...cocktail,
+          photoUri: importedUri,
+        } satisfies Cocktail;
+      });
+
+      const ingredients = prev.ingredients.map((ingredient) => {
+        const id = Number(ingredient.id ?? -1);
+        if (!Number.isFinite(id) || id < 0) {
+          return ingredient;
+        }
+
+        const importedUri = ingredientPhotoById.get(Math.trunc(id));
+        if (!importedUri || importedUri === ingredient.photoUri) {
+          return ingredient;
+        }
+
+        importedCount += 1;
+        return {
+          ...ingredient,
+          photoUri: importedUri,
+        } satisfies Ingredient;
+      });
+
+      return {
+        ...prev,
+        imported: true,
+        cocktails,
+        ingredients,
+      } satisfies InventoryState;
+    });
+
+    return importedCount;
+  }, []);
+
+
   const updateIngredient = useCallback(
     (id: number, input: CreateIngredientInput) => {
       let updated: Ingredient | undefined;
@@ -1973,6 +2052,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       exportInventoryData,
       exportInventoryPhotoEntries,
       importInventoryData,
+      importInventoryPhotos,
       updateCocktail,
       updateIngredient,
       deleteCocktail,
@@ -2008,6 +2088,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       exportInventoryData,
       exportInventoryPhotoEntries,
       importInventoryData,
+      importInventoryPhotos,
       updateCocktail,
       updateIngredient,
       deleteCocktail,
