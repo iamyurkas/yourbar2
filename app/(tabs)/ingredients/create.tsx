@@ -1,6 +1,5 @@
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { StackActions, useFocusEffect, useNavigation, type NavigationAction } from '@react-navigation/native';
-import * as ImagePicker from 'expo-image-picker';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
@@ -26,6 +25,7 @@ import { HeaderIconButton } from '@/components/HeaderIconButton';
 import { ListRow, Thumb } from '@/components/RowParts';
 import { TagEditorModal } from '@/components/TagEditorModal';
 import { TagPill } from '@/components/TagPill';
+import { PhotoPickerSheet, type PhotoPickerResult } from '@/components/PhotoPickerSheet';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { useAppColors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
@@ -166,7 +166,7 @@ export default function IngredientFormScreen() {
   const [name, setName] = useState(() => (isEditMode ? '' : suggestedNameParam ?? ''));
   const [description, setDescription] = useState('');
   const [imageUri, setImageUri] = useState<string | null>(null);
-  const [isPickingImage, setIsPickingImage] = useState(false);
+  const [isPhotoPickerVisible, setIsPhotoPickerVisible] = useState(false);
   const [selectedTagIds, setSelectedTagIds] = useState<number[]>(
     isEditMode || defaultIngredientTagId == null ? [] : [defaultIngredientTagId],
   );
@@ -177,7 +177,6 @@ export default function IngredientFormScreen() {
   const [baseSearch, setBaseSearch] = useState('');
   const [isStyleModalVisible, setIsStyleModalVisible] = useState(false);
   const [styleSearch, setStyleSearch] = useState('');
-  const [permissionStatus, requestPermission] = ImagePicker.useMediaLibraryPermissions();
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(null);
   const [isHelpVisible, setIsHelpVisible] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -360,63 +359,15 @@ export default function IngredientFormScreen() {
     [createCustomIngredientTag],
   );
 
-  const ensureMediaPermission = useCallback(async () => {
-    if (permissionStatus?.granted) {
-      return true;
+  const handleOpenPhotoPicker = useCallback(() => {
+    setIsPhotoPickerVisible(true);
+  }, []);
+
+  const handlePhotoSelect = useCallback((photo: PhotoPickerResult) => {
+    if (photo.uri) {
+      setImageUri(photo.uri);
     }
-
-    const { status, granted, canAskAgain } = await requestPermission();
-    if (granted || status === ImagePicker.PermissionStatus.GRANTED) {
-      return true;
-    }
-
-    if (!canAskAgain) {
-      showDialog({
-        title: 'Media library access',
-        message: 'Enable photo library permissions in system settings to add an ingredient image.',
-        actions: [{ label: 'OK' }],
-      });
-    }
-
-    return false;
-  }, [permissionStatus?.granted, requestPermission, showDialog]);
-
-  const handlePickImage = useCallback(async () => {
-    if (isPickingImage) {
-      return;
-    }
-
-    const hasPermission = await ensureMediaPermission();
-    if (!hasPermission) {
-      return;
-    }
-
-    try {
-      setIsPickingImage(true);
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ['images'],
-        allowsEditing: true,
-        quality: 1,
-        exif: false,
-      });
-
-      if (!result.canceled && result.assets?.length) {
-        const asset = result.assets[0];
-        if (asset?.uri) {
-          setImageUri(asset.uri);
-        }
-      }
-    } catch (error) {
-      console.warn('Failed to pick image', error);
-      showDialog({
-        title: 'Could not pick image',
-        message: 'Please try again later.',
-        actions: [{ label: 'OK' }],
-      });
-    } finally {
-      setIsPickingImage(false);
-    }
-  }, [ensureMediaPermission, isPickingImage, showDialog]);
+  }, []);
 
   const handleSubmit = useCallback(async () => {
     if (isSaving) {
@@ -1288,10 +1239,10 @@ export default function IngredientFormScreen() {
             { borderColor: Colors.outlineVariant },
             !imageSource && { backgroundColor: Colors.surface },
           ]}
-          onPress={handlePickImage}
+          onPress={handleOpenPhotoPicker}
           android_ripple={{ color: `${Colors.surface}33` }}>
           {imageSource ? (
-            <AppImage source={imageSource} style={[styles.image, { backgroundColor: Colors.background }]} contentFit="contain" />
+            <AppImage source={imageSource} style={[styles.image, { backgroundColor: Colors.background }]} contentFit="cover" />
           ) : (
             <View style={styles.placeholderContent}>
               <MaterialCommunityIcons name="image-plus" size={28} color={`${Colors.onSurfaceVariant}99`} />
@@ -1489,7 +1440,7 @@ export default function IngredientFormScreen() {
             },
           ]}
           onPress={handleSubmit}
-          disabled={isSaving || isPickingImage}>
+          disabled={isSaving}>
           <Text style={[styles.submitLabel, { color: Colors.onPrimary }]}>Save ingredient</Text>
         </Pressable>
         {isEditMode ? (
@@ -1679,6 +1630,12 @@ export default function IngredientFormScreen() {
         message={dialogOptions?.message}
         actions={dialogOptions?.actions ?? []}
         onRequestClose={closeDialog}
+      />
+
+      <PhotoPickerSheet
+        visible={isPhotoPickerVisible}
+        onDismiss={() => setIsPhotoPickerVisible(false)}
+        onSelect={handlePhotoSelect}
       />
 
       <TagEditorModal

@@ -1,7 +1,6 @@
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { StackActions, useFocusEffect, useNavigation, type NavigationAction } from "@react-navigation/native";
 import { Image } from "expo-image";
-import * as ImagePicker from "expo-image-picker";
 import { Stack, router, useLocalSearchParams } from "expo-router";
 import React, {
   useCallback,
@@ -34,6 +33,7 @@ import { ListRow, Thumb } from "@/components/RowParts";
 import { SubstituteModal } from "@/components/SubstituteModal";
 import { TagEditorModal } from "@/components/TagEditorModal";
 import { TagPill } from "@/components/TagPill";
+import { PhotoPickerSheet, type PhotoPickerResult } from "@/components/PhotoPickerSheet";
 import {
   METHOD_ICON_MAP,
   getCocktailMethodById,
@@ -294,7 +294,7 @@ export default function CreateCocktailScreen() {
   const [methodIds, setMethodIds] = useState<CocktailMethodId[]>([]);
   const [isMethodModalVisible, setIsMethodModalVisible] = useState(false);
   const [imageUri, setImageUri] = useState<string | null>(null);
-  const [isPickingImage, setIsPickingImage] = useState(false);
+  const [isPhotoPickerVisible, setIsPhotoPickerVisible] = useState(false);
   const [description, setDescription] = useState("");
   const [instructions, setInstructions] = useState("");
   const [selectedTagIds, setSelectedTagIds] = useState<number[]>([]);
@@ -311,8 +311,6 @@ export default function CreateCocktailScreen() {
   const [unitPickerTarget, setUnitPickerTarget] = useState<string | null>(null);
   const [substituteTarget, setSubstituteTarget] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
-  const [permissionStatus, requestPermission] =
-    ImagePicker.useMediaLibraryPermissions();
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(
     null,
   );
@@ -755,70 +753,21 @@ export default function CreateCocktailScreen() {
     defaultCocktailTagId,
   ]);
 
-  const ensureMediaPermission = useCallback(async () => {
-    if (permissionStatus?.granted) {
-      return true;
+  const handleOpenPhotoPicker = useCallback(() => {
+    setIsPhotoPickerVisible(true);
+  }, []);
+
+  const handlePhotoSelect = useCallback((photo: PhotoPickerResult) => {
+    if (photo.uri) {
+      setImageUri(photo.uri);
     }
-
-    const { status, granted, canAskAgain } = await requestPermission();
-    if (granted || status === ImagePicker.PermissionStatus.GRANTED) {
-      return true;
-    }
-
-    if (!canAskAgain) {
-      showDialog({
-        title: "Media access required",
-        message:
-          "Enable photo library permissions in system settings to add a cocktail photo.",
-        actions: [{ label: "OK" }],
-      });
-    }
-
-    return false;
-  }, [permissionStatus?.granted, requestPermission, showDialog]);
-
-  const handlePickImage = useCallback(async () => {
-    if (isPickingImage) {
-      return;
-    }
-
-    const hasPermission = await ensureMediaPermission();
-    if (!hasPermission) {
-      return;
-    }
-
-    try {
-      setIsPickingImage(true);
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ["images"],
-        allowsEditing: true,
-        quality: 1,
-        exif: false,
-      });
-
-      if (!result.canceled && result.assets?.length) {
-        const asset = result.assets[0];
-        if (asset?.uri) {
-          setImageUri(asset.uri);
-        }
-      }
-    } catch (error) {
-      console.warn("Failed to pick image", error);
-      showDialog({
-        title: "Could not pick image",
-        message: "Please try again later.",
-        actions: [{ label: "OK" }],
-      });
-    } finally {
-      setIsPickingImage(false);
-    }
-  }, [ensureMediaPermission, isPickingImage, showDialog]);
+  }, []);
 
   const handleRemovePhoto = useCallback(() => {
     setImageUri(null);
   }, []);
 
-  const isSaveDisabled = isSaving || isPickingImage;
+  const isSaveDisabled = isSaving;
 
   const handleToggleTag = useCallback((tagId: number) => {
     setSelectedTagIds((prev) => {
@@ -1613,14 +1562,14 @@ export default function CreateCocktailScreen() {
                     { borderColor: Colors.outlineVariant, backgroundColor: Colors.background },
                     !imageSource && { backgroundColor: Colors.surface },
                   ]}
-                  onPress={handlePickImage}
+                  onPress={handleOpenPhotoPicker}
                   android_ripple={{ color: `${Colors.surface}33` }}
                 >
                   {imageSource ? (
                     <AppImage
                       source={imageSource}
                       style={[styles.photoPreview, { backgroundColor: Colors.background }]}
-                      contentFit="contain"
+                      contentFit="cover"
                     />
                   ) : (
                     <View style={styles.photoPlaceholderContent}>
@@ -2237,6 +2186,11 @@ export default function CreateCocktailScreen() {
         </Pressable>
       </Modal>
 
+      <PhotoPickerSheet
+        visible={isPhotoPickerVisible}
+        onDismiss={() => setIsPhotoPickerVisible(false)}
+        onSelect={handlePhotoSelect}
+      />
       <SubstituteModal
         visible={substituteTarget != null}
         onClose={handleCloseSubstituteModal}
