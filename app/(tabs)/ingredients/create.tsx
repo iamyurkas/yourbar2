@@ -24,6 +24,7 @@ import { AppDialog, type DialogOptions } from '@/components/AppDialog';
 import { AppImage } from '@/components/AppImage';
 import { HeaderIconButton } from '@/components/HeaderIconButton';
 import { ListRow, Thumb } from '@/components/RowParts';
+import { PhotoSourceModal } from '@/components/PhotoSourceModal';
 import { TagEditorModal } from '@/components/TagEditorModal';
 import { TagPill } from '@/components/TagPill';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
@@ -183,6 +184,7 @@ export default function IngredientFormScreen() {
   const [isHelpVisible, setIsHelpVisible] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isInitialized, setIsInitialized] = useState(!isEditMode);
+  const [isPhotoSourceModalVisible, setPhotoSourceModalVisible] = useState(false);
   const [initialSnapshot, setInitialSnapshot] = useState<IngredientFormSnapshot | null>(null);
 
   const didInitializeRef = useRef(false);
@@ -467,55 +469,46 @@ export default function IngredientFormScreen() {
       return;
     }
 
-    showDialog({
-      title: 'Add photo',
-      message: 'Choose how you want to add an ingredient photo.',
-      actions: [
-        {
-          label: 'Take photo',
-          onPress: () => {
-            void (async () => {
-              try {
-                setIsPickingImage(true);
-                await captureImageWithCamera();
-              } catch (error) {
-                console.warn('Failed to capture image', error);
-                showDialog({
-                  title: 'Could not take photo',
-                  message: 'Please try again later.',
-                  actions: [{ label: 'OK' }],
-                });
-              } finally {
-                setIsPickingImage(false);
-              }
-            })();
-          },
-        },
-        {
-          label: 'Choose from library',
-          onPress: () => {
-            void (async () => {
-              try {
-                setIsPickingImage(true);
-                await pickImageFromLibrary();
-              } catch (error) {
-                console.warn('Failed to pick image', error);
-                showDialog({
-                  title: 'Could not pick image',
-                  message: 'Please try again later.',
-                  actions: [{ label: 'OK' }],
-                });
-              } finally {
-                setIsPickingImage(false);
-              }
-            })();
-          },
-          variant: 'secondary',
-        },
-        { label: 'Cancel', variant: 'secondary' },
-      ],
-    });
-  }, [captureImageWithCamera, isPickingImage, pickImageFromLibrary, showDialog]);
+    setPhotoSourceModalVisible(true);
+  }, [isPickingImage, pickImageFromLibrary, showDialog]);
+
+  const handleTakePhoto = useCallback(() => {
+    setPhotoSourceModalVisible(false);
+    void (async () => {
+      try {
+        setIsPickingImage(true);
+        await captureImageWithCamera();
+      } catch (error) {
+        console.warn('Failed to capture image', error);
+        showDialog({
+          title: 'Could not take photo',
+          message: 'Please try again later.',
+          actions: [{ label: 'OK' }],
+        });
+      } finally {
+        setIsPickingImage(false);
+      }
+    })();
+  }, [captureImageWithCamera, showDialog]);
+
+  const handleChoosePhotoFromLibrary = useCallback(() => {
+    setPhotoSourceModalVisible(false);
+    void (async () => {
+      try {
+        setIsPickingImage(true);
+        await pickImageFromLibrary();
+      } catch (error) {
+        console.warn('Failed to pick image', error);
+        showDialog({
+          title: 'Could not pick image',
+          message: 'Please try again later.',
+          actions: [{ label: 'OK' }],
+        });
+      } finally {
+        setIsPickingImage(false);
+      }
+    })();
+  }, [pickImageFromLibrary, showDialog]);
 
   const handleSubmit = useCallback(async () => {
     if (isSaving) {
@@ -1770,6 +1763,14 @@ export default function IngredientFormScreen() {
         message="Use this screen to create a new ingredient card.\n\nAdd a name, optional photo, tags, base ingredient or style ingredient, and notes, then tap Save.\n\nA style ingredient can only link to a base ingredient that is neither branded nor styled."
         actions={[{ label: 'Got it', variant: 'secondary' }]}
         onRequestClose={() => setIsHelpVisible(false)}
+      />
+
+      <PhotoSourceModal
+        visible={isPhotoSourceModalVisible}
+        title='Add photo'
+        onClose={() => setPhotoSourceModalVisible(false)}
+        onTakePhoto={handleTakePhoto}
+        onChooseFromLibrary={handleChoosePhotoFromLibrary}
       />
 
       <AppDialog

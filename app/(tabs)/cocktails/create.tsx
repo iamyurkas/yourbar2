@@ -31,6 +31,7 @@ import { AppDialog, type DialogOptions } from "@/components/AppDialog";
 import { AppImage } from "@/components/AppImage";
 import { HeaderIconButton } from "@/components/HeaderIconButton";
 import { ListRow, Thumb } from "@/components/RowParts";
+import { PhotoSourceModal } from "@/components/PhotoSourceModal";
 import { SubstituteModal } from "@/components/SubstituteModal";
 import { TagEditorModal } from "@/components/TagEditorModal";
 import { TagPill } from "@/components/TagPill";
@@ -323,6 +324,7 @@ export default function CreateCocktailScreen() {
   const [initialSnapshot, setInitialSnapshot] =
     useState<CocktailFormSnapshot | null>(null);
   const [isTagModalVisible, setTagModalVisible] = useState(false);
+  const [isPhotoSourceModalVisible, setPhotoSourceModalVisible] = useState(false);
   const prefilledTargetId = prefilledCocktail?.id ?? prefilledCocktail?.name;
   const defaultUnitId = useImperialUnits
     ? DEFAULT_IMPERIAL_UNIT_ID
@@ -865,55 +867,46 @@ export default function CreateCocktailScreen() {
       return;
     }
 
-    showDialog({
-      title: "Add photo",
-      message: "Choose how you want to add a cocktail photo.",
-      actions: [
-        {
-          label: "Take photo",
-          onPress: () => {
-            void (async () => {
-              try {
-                setIsPickingImage(true);
-                await captureImageWithCamera();
-              } catch (error) {
-                console.warn("Failed to capture image", error);
-                showDialog({
-                  title: "Could not take photo",
-                  message: "Please try again later.",
-                  actions: [{ label: "OK" }],
-                });
-              } finally {
-                setIsPickingImage(false);
-              }
-            })();
-          },
-        },
-        {
-          label: "Choose from library",
-          onPress: () => {
-            void (async () => {
-              try {
-                setIsPickingImage(true);
-                await pickImageFromLibrary();
-              } catch (error) {
-                console.warn("Failed to pick image", error);
-                showDialog({
-                  title: "Could not pick image",
-                  message: "Please try again later.",
-                  actions: [{ label: "OK" }],
-                });
-              } finally {
-                setIsPickingImage(false);
-              }
-            })();
-          },
-          variant: "secondary",
-        },
-        { label: "Cancel", variant: "secondary" },
-      ],
-    });
-  }, [captureImageWithCamera, isPickingImage, pickImageFromLibrary, showDialog]);
+    setPhotoSourceModalVisible(true);
+  }, [isPickingImage, pickImageFromLibrary, showDialog]);
+
+  const handleTakePhoto = useCallback(() => {
+    setPhotoSourceModalVisible(false);
+    void (async () => {
+      try {
+        setIsPickingImage(true);
+        await captureImageWithCamera();
+      } catch (error) {
+        console.warn("Failed to capture image", error);
+        showDialog({
+          title: "Could not take photo",
+          message: "Please try again later.",
+          actions: [{ label: "OK" }],
+        });
+      } finally {
+        setIsPickingImage(false);
+      }
+    })();
+  }, [captureImageWithCamera, showDialog]);
+
+  const handleChoosePhotoFromLibrary = useCallback(() => {
+    setPhotoSourceModalVisible(false);
+    void (async () => {
+      try {
+        setIsPickingImage(true);
+        await pickImageFromLibrary();
+      } catch (error) {
+        console.warn("Failed to pick image", error);
+        showDialog({
+          title: "Could not pick image",
+          message: "Please try again later.",
+          actions: [{ label: "OK" }],
+        });
+      } finally {
+        setIsPickingImage(false);
+      }
+    })();
+  }, [pickImageFromLibrary, showDialog]);
 
   const handleRemovePhoto = useCallback(() => {
     setImageUri(null);
@@ -2354,6 +2347,14 @@ export default function CreateCocktailScreen() {
         message="Use this screen to build a new cocktail recipe.\n\nFill in name, photo, tags, ingredients, method, and instructions, then tap Save."
         actions={[{ label: "Got it", variant: "secondary" }]}
         onRequestClose={() => setIsHelpVisible(false)}
+      />
+
+      <PhotoSourceModal
+        visible={isPhotoSourceModalVisible}
+        title="Add photo"
+        onClose={() => setPhotoSourceModalVisible(false)}
+        onTakePhoto={handleTakePhoto}
+        onChooseFromLibrary={handleChoosePhotoFromLibrary}
       />
 
       <AppDialog
