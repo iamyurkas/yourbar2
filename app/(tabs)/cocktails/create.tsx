@@ -313,6 +313,8 @@ export default function CreateCocktailScreen() {
   const [isSaving, setIsSaving] = useState(false);
   const [permissionStatus, requestPermission] =
     ImagePicker.useMediaLibraryPermissions();
+  const [cameraPermissionStatus, requestCameraPermission] =
+    ImagePicker.useCameraPermissions();
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(
     null,
   );
@@ -813,6 +815,86 @@ export default function CreateCocktailScreen() {
       setIsPickingImage(false);
     }
   }, [ensureMediaPermission, isPickingImage, showDialog]);
+
+  const ensureCameraPermission = useCallback(async () => {
+    if (cameraPermissionStatus?.granted) {
+      return true;
+    }
+
+    const { status, granted, canAskAgain } = await requestCameraPermission();
+    if (granted || status === ImagePicker.PermissionStatus.GRANTED) {
+      return true;
+    }
+
+    if (!canAskAgain) {
+      showDialog({
+        title: "Camera access required",
+        message:
+          "Enable camera permissions in system settings to take a cocktail photo.",
+        actions: [{ label: "OK" }],
+      });
+    }
+
+    return false;
+  }, [cameraPermissionStatus?.granted, requestCameraPermission, showDialog]);
+
+  const handleTakePhoto = useCallback(async () => {
+    if (isPickingImage) {
+      return;
+    }
+
+    const hasPermission = await ensureCameraPermission();
+    if (!hasPermission) {
+      return;
+    }
+
+    try {
+      setIsPickingImage(true);
+      const result = await ImagePicker.launchCameraAsync({
+        allowsEditing: true,
+        quality: 1,
+        exif: false,
+      });
+
+      if (!result.canceled && result.assets?.length) {
+        const asset = result.assets[0];
+        if (asset?.uri) {
+          setImageUri(asset.uri);
+        }
+      }
+    } catch (error) {
+      console.warn("Failed to capture image", error);
+      showDialog({
+        title: "Could not take photo",
+        message: "Please try again later.",
+        actions: [{ label: "OK" }],
+      });
+    } finally {
+      setIsPickingImage(false);
+    }
+  }, [ensureCameraPermission, isPickingImage, showDialog]);
+
+  const handleSelectImageSource = useCallback(() => {
+    showDialog({
+      title: "Add photo",
+      message: "Choose how you want to add a cocktail photo.",
+      actions: [
+        {
+          label: "Take photo",
+          onPress: () => {
+            void handleTakePhoto();
+          },
+        },
+        {
+          label: "Choose from gallery",
+          onPress: () => {
+            void handlePickImage();
+          },
+        },
+        { label: "Cancel", variant: "secondary" },
+      ],
+    });
+  }, [handlePickImage, handleTakePhoto, showDialog]);
 
   const handleRemovePhoto = useCallback(() => {
     setImageUri(null);
@@ -1613,7 +1695,7 @@ export default function CreateCocktailScreen() {
                     { borderColor: Colors.outlineVariant, backgroundColor: Colors.background },
                     !imageSource && { backgroundColor: Colors.surface },
                   ]}
-                  onPress={handlePickImage}
+                  onPress={handleSelectImageSource}
                   android_ripple={{ color: `${Colors.surface}33` }}
                 >
                   {imageSource ? (
