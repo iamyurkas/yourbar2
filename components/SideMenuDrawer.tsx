@@ -360,7 +360,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     setDialogOptions({
       title: "Restore bundled data",
       message:
-        "This will restore the bundled cocktails and ingredients. Your custom cocktails and ingredients will stay the same.",
+        "This will restore the bundled cocktails and ingredients.\nYour custom cocktails and ingredients will stay the same.",
       actions: [
         { label: "Cancel", variant: "secondary" },
         {
