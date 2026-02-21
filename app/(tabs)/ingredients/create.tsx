@@ -1040,12 +1040,15 @@ export default function IngredientFormScreen() {
         : item.baseIngredientId != null
           ? Colors.primary
           : undefined;
-      const rightIndicatorColor = Number.isFinite(id) && id >= 0
-        ? brandedBaseIngredientIds.has(id)
-          ? Colors.primary
-          : styledBaseIngredientIds.has(id)
-            ? Colors.styledIngredient
-            : undefined
+      const hasBrandedVariants = Number.isFinite(id) && id >= 0 && brandedBaseIngredientIds.has(id);
+      const hasStyledVariants = Number.isFinite(id) && id >= 0 && styledBaseIngredientIds.has(id);
+      const rightIndicatorColor = hasBrandedVariants
+        ? Colors.primary
+        : hasStyledVariants
+          ? Colors.styledIngredient
+          : undefined;
+      const rightIndicatorBottomColor = hasBrandedVariants && hasStyledVariants
+        ? Colors.styledIngredient
         : undefined;
       const rightIndicatorBottomColor = Number.isFinite(id) && id >= 0 && brandedBaseIngredientIds.has(id) && styledBaseIngredientIds.has(id)
         ? Colors.styledIngredient
@@ -1173,12 +1176,15 @@ export default function IngredientFormScreen() {
         : item.baseIngredientId != null
           ? Colors.primary
           : undefined;
-      const rightIndicatorColor = Number.isFinite(id) && id >= 0
-        ? brandedBaseIngredientIds.has(id)
-          ? Colors.primary
-          : styledBaseIngredientIds.has(id)
-            ? Colors.styledIngredient
-            : undefined
+      const hasBrandedVariants = Number.isFinite(id) && id >= 0 && brandedBaseIngredientIds.has(id);
+      const hasStyledVariants = Number.isFinite(id) && id >= 0 && styledBaseIngredientIds.has(id);
+      const rightIndicatorColor = hasBrandedVariants
+        ? Colors.primary
+        : hasStyledVariants
+          ? Colors.styledIngredient
+          : undefined;
+      const rightIndicatorBottomColor = hasBrandedVariants && hasStyledVariants
+        ? Colors.styledIngredient
         : undefined;
       const rightIndicatorBottomColor = Number.isFinite(id) && id >= 0 && brandedBaseIngredientIds.has(id) && styledBaseIngredientIds.has(id)
         ? Colors.styledIngredient
