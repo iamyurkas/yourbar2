@@ -202,6 +202,7 @@ export function buildInventorySnapshot(
 
   return {
     ...base,
+    updatedAt: Date.now(),
     customCocktailTags: options.customCocktailTags,
     customIngredientTags: options.customIngredientTags,
     availableIngredientIds:

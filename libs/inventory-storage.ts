@@ -6,6 +6,7 @@ let hasLoggedCacheDirectoryWarning = false;
 
 export type InventorySnapshotV1<TCocktail, TIngredient> = {
   version: 1;
+  updatedAt?: number;
   cocktails: TCocktail[];
   ingredients: TIngredient[];
   imported?: boolean;
@@ -27,6 +28,7 @@ export type InventorySnapshotV1<TCocktail, TIngredient> = {
 
 export type InventoryDeltaSnapshot<TCocktail, TIngredient> = {
   version: 2;
+  updatedAt?: number;
   delta: {
     cocktails?: {
       created?: TCocktail[];
@@ -52,6 +54,8 @@ export type InventoryDeltaSnapshot<TCocktail, TIngredient> = {
   startScreen?: string;
   appTheme?: string;
   amazonStoreOverride?: string | null;
+  customCocktailTags?: Array<{ id?: number | null; name?: string | null; color?: string | null }>;
+  customIngredientTags?: Array<{ id?: number | null; name?: string | null; color?: string | null }>;
   onboardingStep?: number;
   onboardingCompleted?: boolean;
 };

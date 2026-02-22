@@ -144,6 +144,9 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     effectiveAmazonStore,
     setAmazonStoreOverride,
     restartOnboarding,
+    googleDriveSyncEnabled,
+    connectGoogleDriveSync,
+    disconnectGoogleDrive,
     resetInventoryFromBundle,
     exportInventoryData,
     exportInventoryPhotoEntries,
@@ -192,6 +195,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   );
   const [isBackingUpData, setIsBackingUpData] = useState(false);
   const [isRestoringData, setIsRestoringData] = useState(false);
+  const [isGoogleSyncBusy, setIsGoogleSyncBusy] = useState(false);
   const translateX = useRef(new Animated.Value(-MENU_WIDTH)).current;
   const backdropOpacity = useRef(new Animated.Value(0)).current;
 
@@ -721,6 +725,31 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       );
     } finally {
       setIsRestoringData(false);
+    }
+  };
+
+
+  const handleToggleGoogleDriveSync = async () => {
+    if (isGoogleSyncBusy) {
+      return;
+    }
+
+    setIsGoogleSyncBusy(true);
+    try {
+      if (googleDriveSyncEnabled) {
+        await disconnectGoogleDrive();
+        showDialogMessage("Google Drive sync", "Sync disabled for this device.");
+      } else {
+        const connected = await connectGoogleDriveSync();
+        if (connected) {
+          showDialogMessage("Google Drive sync", "Sync enabled. Data will be synchronized on next launch and after local updates.");
+        }
+      }
+    } catch (error) {
+      console.error("Failed to toggle Google Drive sync", error);
+      showDialogMessage("Google Drive sync", "Unable to update sync settings. Please try again.");
+    } finally {
+      setIsGoogleSyncBusy(false);
     }
   };
 
@@ -1279,6 +1308,29 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 size={20}
                 color={Colors.onSurfaceVariant}
               />
+            </Pressable>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Google Drive sync"
+              onPress={handleToggleGoogleDriveSync}
+              style={({ pressed }) => [
+                styles.actionRow,
+                SURFACE_ROW_STYLE,
+                pressed || isGoogleSyncBusy ? { opacity: 0.8 } : null,
+              ]}>
+              <View style={[styles.actionIcon, ACTION_ICON_STYLE]}>
+                <MaterialCommunityIcons
+                  name="google-drive"
+                  size={16}
+                  color={Colors.onSurfaceVariant}
+                />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>Google Drive sync</Text>
+                <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>
+                  {googleDriveSyncEnabled ? "Enabled • latest data wins" : "Disabled • connect to sync across devices"}
+                </Text>
+              </View>
             </Pressable>
             <Pressable
               accessibilityRole="button"

@@ -6,6 +6,13 @@ import { TAG_COLORS } from '@/constants/tag-colors';
 import { AMAZON_STORES, detectAmazonStoreFromStoreOrLocale, detectUsStorefrontOrLocale, getEffectiveAmazonStore, type AmazonStoreKey, type AmazonStoreOverride } from '@/libs/amazon-stores';
 import { loadInventoryData, reloadInventoryData } from '@/libs/inventory-data';
 import {
+  disconnectGoogleDriveSync,
+  hasGoogleDriveSyncSession,
+  pushSnapshotToGoogleDrive,
+  signInToGoogleDrive,
+  syncSnapshotWithGoogleDrive,
+} from '@/libs/google-drive-sync';
+import {
   clearInventorySnapshot,
   loadInventorySnapshot,
   persistInventorySnapshot,
@@ -130,6 +137,53 @@ function sanitizeStartScreen(value?: string | null): StartScreen {
     default:
       return DEFAULT_START_SCREEN;
   }
+}
+
+type InventoryBootstrap = {
+  inventoryState: InventoryState;
+  availableIngredientIds: Set<number>;
+  shoppingIngredientIds: Set<number>;
+  ratingsByCocktailId: Record<string, number>;
+  ignoreGarnish: boolean;
+  allowAllSubstitutes: boolean;
+  useImperialUnits: boolean;
+  keepScreenAwake: boolean;
+  shakerSmartFilteringEnabled: boolean;
+  ratingFilterThreshold: number;
+  startScreen: StartScreen;
+  appTheme: AppTheme;
+  amazonStoreOverride: AmazonStoreOverride | null;
+  customCocktailTags: CocktailTag[];
+  customIngredientTags: IngredientTag[];
+  onboardingStep: number;
+  onboardingCompleted: boolean;
+};
+
+function createBootstrapFromSnapshot(
+  stored: import('@/libs/inventory-storage').InventorySnapshot<CocktailStorageRecord, IngredientStorageRecord>,
+  baseInventoryData: ReturnType<typeof loadInventoryData>,
+  shouldDefaultToImperialUnits: boolean,
+): InventoryBootstrap {
+  const nextInventoryState = rehydrateBuiltInTags(createInventoryStateFromSnapshot(stored, baseInventoryData));
+  return {
+    inventoryState: nextInventoryState,
+    availableIngredientIds: createIngredientIdSet(stored.availableIngredientIds),
+    shoppingIngredientIds: createIngredientIdSet(stored.shoppingIngredientIds),
+    ratingsByCocktailId: sanitizeCocktailRatings(stored.cocktailRatings),
+    ignoreGarnish: stored.ignoreGarnish ?? true,
+    allowAllSubstitutes: stored.allowAllSubstitutes ?? true,
+    useImperialUnits: (stored.useImperialUnits ?? false) || shouldDefaultToImperialUnits,
+    keepScreenAwake: stored.keepScreenAwake ?? true,
+    shakerSmartFilteringEnabled: stored.shakerSmartFilteringEnabled ?? false,
+    ratingFilterThreshold: Math.min(5, Math.max(1, Math.round(stored.ratingFilterThreshold ?? 1))),
+    startScreen: sanitizeStartScreen(stored.startScreen),
+    appTheme: sanitizeAppTheme(stored.appTheme),
+    amazonStoreOverride: sanitizeAmazonStoreOverride(stored.amazonStoreOverride),
+    customCocktailTags: sanitizeCustomTags(stored.customCocktailTags, DEFAULT_TAG_COLOR),
+    customIngredientTags: sanitizeCustomTags(stored.customIngredientTags, DEFAULT_TAG_COLOR),
+    onboardingStep: 0,
+    onboardingCompleted: stored.onboardingCompleted ?? false,
+  };
 }
 
 const BUILTIN_COCKTAIL_TAGS_BY_ID = new Map(BUILTIN_COCKTAIL_TAGS.map((tag) => [tag.id, tag]));
@@ -309,6 +363,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   const [onboardingCompleted, setOnboardingCompleted] = useState<boolean>(
     () => globalThis.__yourbarInventoryOnboardingCompleted ?? false,
   );
+  const [googleDriveSyncEnabled, setGoogleDriveSyncEnabled] = useState<boolean>(false);
   const detectedAmazonStore = useMemo(() => detectAmazonStoreFromStoreOrLocale(), []);
   const effectiveAmazonStore = useMemo(
     () => getEffectiveAmazonStore(amazonStoreOverride, detectedAmazonStore),
@@ -320,25 +375,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     [inventoryState, baseMaps],
   );
   const applyInventoryBootstrap = useCallback(
-    (bootstrap: {
-      inventoryState: InventoryState;
-      availableIngredientIds: Set<number>;
-      shoppingIngredientIds: Set<number>;
-      ratingsByCocktailId: Record<string, number>;
-      ignoreGarnish: boolean;
-      allowAllSubstitutes: boolean;
-      useImperialUnits: boolean;
-      keepScreenAwake: boolean;
-      shakerSmartFilteringEnabled: boolean;
-      ratingFilterThreshold: number;
-      startScreen: StartScreen;
-      appTheme: AppTheme;
-      amazonStoreOverride: AmazonStoreOverride | null;
-      customCocktailTags: CocktailTag[];
-      customIngredientTags: IngredientTag[];
-      onboardingStep: number;
-      onboardingCompleted: boolean;
-    }) => {
+    (bootstrap: InventoryBootstrap) => {
       setInventoryState(bootstrap.inventoryState);
       setAvailableIngredientIds(bootstrap.availableIngredientIds);
       setShoppingIngredientIds(bootstrap.shoppingIngredientIds);
@@ -371,47 +408,22 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     void (async () => {
       try {
         const stored = await loadInventorySnapshot<CocktailStorageRecord, IngredientStorageRecord>();
-        if (stored && (stored.version === INVENTORY_SNAPSHOT_VERSION || stored.version === 1) && !cancelled) {
-          const nextInventoryState = rehydrateBuiltInTags(createInventoryStateFromSnapshot(stored, baseInventoryData));
-          const nextAvailableIds = createIngredientIdSet(stored.availableIngredientIds);
-          const nextShoppingIds = createIngredientIdSet(stored.shoppingIngredientIds);
-          const nextRatings = sanitizeCocktailRatings(stored.cocktailRatings);
-          const nextIgnoreGarnish = stored.ignoreGarnish ?? true;
-          const nextAllowAllSubstitutes = stored.allowAllSubstitutes ?? true;
-          const nextUseImperialUnits = (stored.useImperialUnits ?? false) || shouldDefaultToImperialUnits;
-          const nextKeepScreenAwake = stored.keepScreenAwake ?? true;
-          const nextShakerSmartFilteringEnabled = stored.shakerSmartFilteringEnabled ?? false;
-          const nextRatingFilterThreshold = Math.min(
-            5,
-            Math.max(1, Math.round(stored.ratingFilterThreshold ?? 1)),
-          );
-          const nextStartScreen = sanitizeStartScreen(stored.startScreen);
-          const nextAppTheme = sanitizeAppTheme(stored.appTheme);
-          const nextAmazonStoreOverride = sanitizeAmazonStoreOverride(stored.amazonStoreOverride);
-          const nextCustomCocktailTags = sanitizeCustomTags(stored.customCocktailTags, DEFAULT_TAG_COLOR);
-          const nextCustomIngredientTags = sanitizeCustomTags(stored.customIngredientTags, DEFAULT_TAG_COLOR);
-          const nextOnboardingStep = 0;
-          const nextOnboardingCompleted = stored.onboardingCompleted ?? false;
+        const hasSession = await hasGoogleDriveSyncSession();
+        if (!cancelled) {
+          setGoogleDriveSyncEnabled(hasSession);
+        }
 
-          applyInventoryBootstrap({
-            inventoryState: nextInventoryState,
-            availableIngredientIds: nextAvailableIds,
-            shoppingIngredientIds: nextShoppingIds,
-            ratingsByCocktailId: nextRatings,
-            ignoreGarnish: nextIgnoreGarnish,
-            allowAllSubstitutes: nextAllowAllSubstitutes,
-            useImperialUnits: nextUseImperialUnits,
-            keepScreenAwake: nextKeepScreenAwake,
-            shakerSmartFilteringEnabled: nextShakerSmartFilteringEnabled,
-            ratingFilterThreshold: nextRatingFilterThreshold,
-            startScreen: nextStartScreen,
-            appTheme: nextAppTheme,
-            amazonStoreOverride: nextAmazonStoreOverride,
-            customCocktailTags: nextCustomCocktailTags,
-            customIngredientTags: nextCustomIngredientTags,
-            onboardingStep: nextOnboardingStep,
-            onboardingCompleted: nextOnboardingCompleted,
-          });
+        if (stored && (stored.version === INVENTORY_SNAPSHOT_VERSION || stored.version === 1) && !cancelled) {
+          const synced = hasSession
+            ? await syncSnapshotWithGoogleDrive<CocktailStorageRecord, IngredientStorageRecord>(stored)
+            : { mergedSnapshot: stored, changed: false };
+          const resolved = synced.mergedSnapshot ?? stored;
+
+          if (synced.changed) {
+            await persistInventorySnapshot(resolved);
+          }
+
+          applyInventoryBootstrap(createBootstrapFromSnapshot(resolved, baseInventoryData, shouldDefaultToImperialUnits));
           return;
         }
       } catch (error) {
@@ -507,6 +519,12 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     void persistInventorySnapshot(snapshot).catch((error) => {
       console.error('Failed to persist inventory snapshot', error);
     });
+
+    if (googleDriveSyncEnabled) {
+      void pushSnapshotToGoogleDrive(snapshot).catch((error) => {
+        console.error('Failed to sync snapshot to Google Drive', error);
+      });
+    }
   }, [
     inventoryState,
     inventoryDelta,
@@ -526,6 +544,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     customIngredientTags,
     onboardingStep,
     onboardingCompleted,
+    googleDriveSyncEnabled,
   ]);
 
   const cocktails = useMemo(
@@ -1976,6 +1995,21 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     });
   }, []);
 
+  const connectGoogleDriveSync = useCallback(async () => {
+    const signedIn = await signInToGoogleDrive();
+    if (!signedIn) {
+      return false;
+    }
+
+    setGoogleDriveSyncEnabled(true);
+    return true;
+  }, []);
+
+  const disconnectGoogleDrive = useCallback(async () => {
+    await disconnectGoogleDriveSync();
+    setGoogleDriveSyncEnabled(false);
+  }, []);
+
   const dataValue = useMemo(
     () => ({
       cocktails,
@@ -2016,6 +2050,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       effectiveAmazonStore,
       onboardingStep,
       onboardingCompleted,
+      googleDriveSyncEnabled,
     }),
     [
       ignoreGarnish,
@@ -2031,6 +2066,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       effectiveAmazonStore,
       onboardingStep,
       onboardingCompleted,
+      googleDriveSyncEnabled,
     ],
   );
 
@@ -2070,6 +2106,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       setOnboardingStep,
       completeOnboarding,
       restartOnboarding,
+      connectGoogleDriveSync,
+      disconnectGoogleDrive,
     }),
     [
       setIngredientAvailability,
@@ -2106,6 +2144,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       setOnboardingStep,
       completeOnboarding,
       restartOnboarding,
+      connectGoogleDriveSync,
+      disconnectGoogleDrive,
     ],
   );
 

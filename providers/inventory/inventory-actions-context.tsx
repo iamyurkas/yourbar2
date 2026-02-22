@@ -50,6 +50,8 @@ export type InventoryActionsContextValue = {
   setOnboardingStep: (step: number) => void;
   completeOnboarding: () => void;
   restartOnboarding: () => void;
+  connectGoogleDriveSync: () => Promise<boolean>;
+  disconnectGoogleDrive: () => Promise<void>;
 };
 
 export const InventoryActionsContext = createContext<InventoryActionsContextValue | undefined>(undefined);
