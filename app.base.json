@@ -2,7 +2,7 @@
   "expo": {
     "name": "Your Bar",
     "slug": "yourbar",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "yourbar",
@@ -14,7 +14,7 @@
     },
     "android": {
       "package": "com.yourbarapp.free",
-      "versionCode": 19,
+      "versionCode": 20,
       "adaptiveIcon": {
         "backgroundColor": "#4DABF7",
         "foregroundImage": "./assets/images/icon.png",
