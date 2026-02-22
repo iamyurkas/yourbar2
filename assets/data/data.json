@@ -30904,6 +30904,23 @@
         },
         {
           "order": 2,
+          "ingredientId": 288,
+          "name": "Prosecco",
+          "amount": "90",
+          "unitId": 11,
+          "substitutes": [
+            {
+              "ingredientId": 83,
+              "name": "Champagne"
+            },
+            {
+              "ingredientId": 320,
+              "name": "Sparkling Wine"
+            }
+          ]
+        },
+        {
+          "order": 3,
           "ingredientId": 314,
           "name": "Select",
           "amount": "60",
@@ -30920,23 +30937,6 @@
             {
               "ingredientId": 174,
               "name": "Gran Classico"
-            }
-          ]
-        },
-        {
-          "order": 3,
-          "ingredientId": 288,
-          "name": "Prosecco",
-          "amount": "90",
-          "unitId": 11,
-          "substitutes": [
-            {
-              "ingredientId": 83,
-              "name": "Champagne"
-            },
-            {
-              "ingredientId": 320,
-              "name": "Sparkling Wine"
             }
           ]
         },
@@ -32103,10 +32103,10 @@
       "id": 530,
       "name": "Symphony",
       "description": "A custom mix of **gin**, maraschino liqueur, **green Chartreuse** and a smoky **Laphroaig** float.",
-      "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 30 ml of **gin**, 20 ml of **Luxardo maraschino**, 10 ml of **green Chartreuse**, and 20 ml of **lemon juice**.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled Nick & Nora glass.\n5. Float 5 ml of **Laphroaig** on top.",
+      "instructions": "1. Fill a shaker with **ice**.\n2. Add 30 ml of **gin**, 20 ml of **Luxardo maraschino**, 10 ml of **green Chartreuse**, and 20 ml of **lemon juice**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled Nick & Nora glass.\n5. Float 5 ml of **Laphroaig** on top.",
       "photoUri": "assets/cocktails/530-symphony.jpg",
       "glassId": "nick_and_nora",
-      "methodIds": ["stir", "layer"],
+      "methodIds": ["shake", "layer"],
       "tags": [5],
       "ingredients": [
         {
