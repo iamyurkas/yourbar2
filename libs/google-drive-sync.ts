@@ -96,10 +96,14 @@ export async function hasGoogleDriveSyncSession(): Promise<boolean> {
   return Boolean(state?.accessToken && state.expiresAt > Date.now());
 }
 
-export async function signInToGoogleDrive(): Promise<boolean> {
+export type GoogleDriveSignInResult =
+  | { ok: true }
+  | { ok: false; reason: 'missing_client_id' | 'cancelled' | 'missing_access_token' };
+
+export async function signInToGoogleDrive(): Promise<GoogleDriveSignInResult> {
   const clientId = getGoogleClientId();
   if (!clientId) {
-    throw new Error('Missing EXPO_PUBLIC_GOOGLE_DRIVE_CLIENT_ID');
+    return { ok: false, reason: 'missing_client_id' };
   }
 
   const redirectUri = AuthSession.makeRedirectUri({ scheme: 'yourbar' });
@@ -113,7 +117,7 @@ export async function signInToGoogleDrive(): Promise<boolean> {
 
   const result = await WebBrowser.openAuthSessionAsync(authUrl, redirectUri);
   if (result.type !== 'success' || !result.url) {
-    return false;
+    return { ok: false, reason: 'cancelled' };
   }
 
   const fragment = result.url.split('#')[1] ?? '';
@@ -122,7 +126,7 @@ export async function signInToGoogleDrive(): Promise<boolean> {
   const expiresIn = Number(params.get('expires_in') ?? '3600');
 
   if (!accessToken) {
-    return false;
+    return { ok: false, reason: 'missing_access_token' };
   }
 
   await saveSyncState({
@@ -130,7 +134,7 @@ export async function signInToGoogleDrive(): Promise<boolean> {
     expiresAt: Date.now() + Math.max(60, expiresIn) * 1000,
   });
 
-  return true;
+  return { ok: true };
 }
 
 async function authorizedFetch(url: string, init: RequestInit = {}): Promise<Response> {

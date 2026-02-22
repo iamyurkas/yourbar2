@@ -50,7 +50,7 @@ export type InventoryActionsContextValue = {
   setOnboardingStep: (step: number) => void;
   completeOnboarding: () => void;
   restartOnboarding: () => void;
-  connectGoogleDriveSync: () => Promise<boolean>;
+  connectGoogleDriveSync: () => Promise<{ ok: boolean; reason?: 'missing_client_id' | 'cancelled' | 'missing_access_token' }>;
   disconnectGoogleDrive: () => Promise<void>;
 };
 

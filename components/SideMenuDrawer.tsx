@@ -740,9 +740,14 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
         await disconnectGoogleDrive();
         showDialogMessage("Google Drive sync", "Sync disabled for this device.");
       } else {
-        const connected = await connectGoogleDriveSync();
-        if (connected) {
+        const result = await connectGoogleDriveSync();
+        if (result.ok) {
           showDialogMessage("Google Drive sync", "Sync enabled. Data will be synchronized on next launch and after local updates.");
+        } else if (result.reason === "missing_client_id") {
+          showDialogMessage(
+            "Google Drive sync",
+            "Google Drive sync is not configured in this build. Please set EXPO_PUBLIC_GOOGLE_DRIVE_CLIENT_ID and rebuild the app.",
+          );
         }
       }
     } catch (error) {

@@ -1996,13 +1996,13 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   }, []);
 
   const connectGoogleDriveSync = useCallback(async () => {
-    const signedIn = await signInToGoogleDrive();
-    if (!signedIn) {
-      return false;
+    const signInResult = await signInToGoogleDrive();
+    if (!signInResult.ok) {
+      return { ok: false, reason: signInResult.reason };
     }
 
     setGoogleDriveSyncEnabled(true);
-    return true;
+    return { ok: true };
   }, []);
 
   const disconnectGoogleDrive = useCallback(async () => {
