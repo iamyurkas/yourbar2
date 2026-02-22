@@ -47,14 +47,6 @@ function sortRecipeIngredients(
   ingredients: NonNullable<Cocktail['ingredients']>,
   lookup: IngredientLookup,
 ): IndexedCocktailIngredient[] {
-  const normalizeOrderValue = (value?: number | null) => {
-    if (typeof value !== 'number' || !Number.isFinite(value)) {
-      return undefined;
-    }
-
-    return Math.trunc(value);
-  };
-
   return ingredients
     .map((ingredient, index) => ({ ...ingredient, __originalIndex: index }))
     .sort((left, right) => {
@@ -69,10 +61,8 @@ function sortRecipeIngredients(
         return leftTagOrder - rightTagOrder;
       }
 
-      const leftIngredientOrder = normalizeOrderValue(left.order);
-      const rightIngredientOrder = normalizeOrderValue(right.order);
-      if (leftIngredientOrder != null && rightIngredientOrder != null && leftIngredientOrder !== rightIngredientOrder) {
-        return leftIngredientOrder - rightIngredientOrder;
+      if (left.order !== right.order) {
+        return left.order - right.order;
       }
 
       return left.__originalIndex - right.__originalIndex;

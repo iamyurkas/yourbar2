@@ -427,7 +427,7 @@ export default function CocktailDetailsScreen() {
 
   const sortedIngredients = useMemo(() => {
     const recipe = cocktail?.ingredients ?? [];
-    return [...recipe].sort((a, b) => (a?.order ?? 0) - (b?.order ?? 0));
+    return [...recipe].sort((a, b) => a.order - b.order);
   }, [cocktail?.ingredients]);
 
   const resolvedIngredients = useMemo(

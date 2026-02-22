@@ -673,7 +673,7 @@ export default function CreateCocktailScreen() {
       setSelectedTagIds(mappedTags);
 
       const recipe = [...(baseCocktail.ingredients ?? [])].sort(
-        (a, b) => (a?.order ?? 0) - (b?.order ?? 0),
+        (a, b) => a.order - b.order,
       );
       if (recipe.length) {
         setIngredientsState(

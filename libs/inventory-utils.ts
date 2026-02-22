@@ -183,7 +183,7 @@ export function normalizeCocktailIngredients(
 
   return ingredients
     .map((ingredient) => ({
-      order: ingredient.order != null ? Math.trunc(Number(ingredient.order)) : undefined,
+      order: Math.trunc(Number(ingredient.order)),
       ingredientId: ingredient.ingredientId != null ? Math.trunc(Number(ingredient.ingredientId)) : undefined,
       name: ingredient.name,
       amount: ingredient.amount ?? undefined,
@@ -197,7 +197,7 @@ export function normalizeCocktailIngredients(
     }))
     .filter((ingredient) => ingredient.name)
     .sort((a, b) => {
-      const orderDelta = (a.order ?? 0) - (b.order ?? 0);
+      const orderDelta = a.order - b.order;
       return orderDelta !== 0 ? orderDelta : a.name.localeCompare(b.name);
     });
 }
