@@ -15,6 +15,7 @@ const DEFAULT_TAG_SORT_ORDER = Number.MAX_SAFE_INTEGER;
 
 type IndexedCocktailIngredient = NonNullable<Cocktail['ingredients']>[number] & {
   __originalIndex: number;
+  __orderValue: number;
 };
 
 function getIngredientPrimaryTagOrder(
@@ -48,7 +49,14 @@ function sortRecipeIngredients(
   lookup: IngredientLookup,
 ): IndexedCocktailIngredient[] {
   return ingredients
-    .map((ingredient, index) => ({ ...ingredient, __originalIndex: index }))
+    .map((ingredient, index) => ({
+      ...ingredient,
+      __originalIndex: index,
+      __orderValue:
+        typeof ingredient.order === 'number' && Number.isFinite(ingredient.order)
+          ? Math.trunc(ingredient.order)
+          : Number.MAX_SAFE_INTEGER,
+    }))
     .sort((left, right) => {
       const garnishDiff = Number(Boolean(left.garnish)) - Number(Boolean(right.garnish));
       if (garnishDiff !== 0) {
@@ -59,6 +67,11 @@ function sortRecipeIngredients(
       const rightTagOrder = getIngredientPrimaryTagOrder(right, lookup);
       if (leftTagOrder !== rightTagOrder) {
         return leftTagOrder - rightTagOrder;
+      }
+
+      const orderDiff = left.__orderValue - right.__orderValue;
+      if (orderDiff !== 0) {
+        return orderDiff;
       }
 
       return left.__originalIndex - right.__originalIndex;
@@ -109,6 +122,7 @@ export function summariseCocktailAvailability(
 
   const missingNames: string[] = [];
   const resolvedNames: string[] = [];
+  const seenSecondLineNames = new Set<string>();
   let missingCount = 0;
   let displayMissingCount = 0;
   let hasBrandFallback = false;
@@ -167,7 +181,11 @@ export function summariseCocktailAvailability(
 
     if (resolution.isAvailable) {
       if (shouldIncludeInSecondLine && resolution.resolvedName) {
-        resolvedNames.push(resolution.resolvedName);
+        const normalizedResolvedName = resolution.resolvedName.trim().toLowerCase();
+        if (!seenSecondLineNames.has(normalizedResolvedName)) {
+          seenSecondLineNames.add(normalizedResolvedName);
+          resolvedNames.push(resolution.resolvedName);
+        }
       }
       return;
     }
@@ -180,7 +198,11 @@ export function summariseCocktailAvailability(
 
     displayMissingCount += 1;
     if (resolution.missingName) {
-      missingNames.push(resolution.missingName);
+      const normalizedMissingName = resolution.missingName.trim().toLowerCase();
+      if (!seenSecondLineNames.has(normalizedMissingName)) {
+        seenSecondLineNames.add(normalizedMissingName);
+        missingNames.push(resolution.missingName);
+      }
     }
   });
 
