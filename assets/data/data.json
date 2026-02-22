@@ -32696,7 +32696,8 @@
       "name": "The Conference",
       "description": "A spirit-forward blend of **whiskey**, **cognac**, and **calvados** with **aromatic bitters**.",
       "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 30 ml of **bourbon**, 30 ml of **cognac**, 30 ml of **calvados**, and 2 dashes of **aromatic bitters**.\n3. Stir gently to combine.\n4. Strain into a chilled coupe glass.",
-      "glassId": "coupe",
+      "photoUri": "assets/cocktails/540-the-conference.jpg",
+      "glassId": "rocks_glass",
       "methodIds": ["stir"],
       "tags": [2, 3],
       "ingredients": [
