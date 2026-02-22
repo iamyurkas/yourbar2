@@ -12,6 +12,18 @@ const DEFAULT_AVAILABILITY_OPTIONS: IngredientAvailabilityOptions = {
 };
 
 const DEFAULT_TAG_SORT_ORDER = Number.MAX_SAFE_INTEGER;
+const DEFAULT_RECIPE_ORDER = Number.MAX_SAFE_INTEGER;
+
+function getIngredientRecipeOrder(
+  ingredient: NonNullable<Cocktail['ingredients']>[number],
+): number {
+  const order = Number(ingredient.order);
+  if (!Number.isFinite(order)) {
+    return DEFAULT_RECIPE_ORDER;
+  }
+
+  return Math.trunc(order);
+}
 
 type IndexedCocktailIngredient = NonNullable<Cocktail['ingredients']>[number] & {
   __originalIndex: number;
@@ -52,10 +64,7 @@ function sortRecipeIngredients(
     .map((ingredient, index) => ({
       ...ingredient,
       __originalIndex: index,
-      __orderValue:
-        typeof ingredient.order === 'number' && Number.isFinite(ingredient.order)
-          ? Math.trunc(ingredient.order)
-          : Number.MAX_SAFE_INTEGER,
+      __orderValue: getIngredientRecipeOrder(ingredient),
     }))
     .sort((left, right) => {
       const garnishDiff = Number(Boolean(left.garnish)) - Number(Boolean(right.garnish));
