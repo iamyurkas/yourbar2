@@ -109,6 +109,7 @@ export function summariseCocktailAvailability(
 
   const missingNames: string[] = [];
   const resolvedNames: string[] = [];
+  const seenSecondLineNames = new Set<string>();
   let missingCount = 0;
   let displayMissingCount = 0;
   let hasBrandFallback = false;
@@ -167,7 +168,11 @@ export function summariseCocktailAvailability(
 
     if (resolution.isAvailable) {
       if (shouldIncludeInSecondLine && resolution.resolvedName) {
-        resolvedNames.push(resolution.resolvedName);
+        const normalizedResolvedName = resolution.resolvedName.trim().toLowerCase();
+        if (!seenSecondLineNames.has(normalizedResolvedName)) {
+          seenSecondLineNames.add(normalizedResolvedName);
+          resolvedNames.push(resolution.resolvedName);
+        }
       }
       return;
     }
@@ -180,7 +185,11 @@ export function summariseCocktailAvailability(
 
     displayMissingCount += 1;
     if (resolution.missingName) {
-      missingNames.push(resolution.missingName);
+      const normalizedMissingName = resolution.missingName.trim().toLowerCase();
+      if (!seenSecondLineNames.has(normalizedMissingName)) {
+        seenSecondLineNames.add(normalizedMissingName);
+        missingNames.push(resolution.missingName);
+      }
     }
   });
 
