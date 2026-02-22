@@ -74,7 +74,7 @@ export type CreateCocktailIngredientInput = {
   allowBrandSubstitution?: boolean | null;
   allowStyleSubstitution?: boolean | null;
   substitutes?: CreateCocktailSubstituteInput[] | null;
-  order?: number | null;
+  order: number;
 };
 
 export type CreateCocktailInput = {

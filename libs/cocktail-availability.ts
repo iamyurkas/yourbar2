@@ -61,6 +61,10 @@ function sortRecipeIngredients(
         return leftTagOrder - rightTagOrder;
       }
 
+      if (left.order !== right.order) {
+        return left.order - right.order;
+      }
+
       return left.__originalIndex - right.__originalIndex;
     });
 }
