@@ -86,6 +86,16 @@ export function summariseCocktailAvailability(
   ingredients?: Ingredient[],
   options?: IngredientAvailabilityOptions,
 ): CocktailAvailabilitySummary {
+  const addUniqueName = (target: string[], name?: string) => {
+    if (!name) {
+      return;
+    }
+
+    if (!target.includes(name)) {
+      target.push(name);
+    }
+  };
+
   const resolvedOptions = { ...DEFAULT_AVAILABILITY_OPTIONS, ...options };
   const lookup = ingredientLookup ?? createIngredientLookup(ingredients ?? []);
   const recipe = cocktail.ingredients ?? [];
@@ -171,7 +181,7 @@ export function summariseCocktailAvailability(
 
     if (resolution.isAvailable) {
       if (shouldIncludeInSecondLine && resolution.resolvedName) {
-        resolvedNames.push(resolution.resolvedName);
+        addUniqueName(resolvedNames, resolution.resolvedName);
       }
       return;
     }
@@ -184,7 +194,7 @@ export function summariseCocktailAvailability(
 
     displayMissingCount += 1;
     if (resolution.missingName) {
-      missingNames.push(resolution.missingName);
+      addUniqueName(missingNames, resolution.missingName);
     }
   });
 
