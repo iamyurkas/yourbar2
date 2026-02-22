@@ -7330,16 +7330,10 @@
         },
         {
           "order": 2,
-          "ingredientId": 352,
-          "name": "Whiskey",
+          "ingredientId": 311,
+          "name": "Scotch Whisky",
           "amount": "60",
-          "unitId": 11,
-          "substitutes": [
-            {
-              "ingredientId": 311,
-              "name": "Scotch Whisky"
-            }
-          ]
+          "unitId": 11
         },
         {
           "order": 3,
