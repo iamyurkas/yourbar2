@@ -17,6 +17,7 @@ export type InventorySettingsContextValue = {
   effectiveAmazonStore: AmazonStoreKey | null;
   onboardingStep: number;
   onboardingCompleted: boolean;
+  googleDriveSyncEnabled: boolean;
 };
 
 export const InventorySettingsContext = createContext<InventorySettingsContextValue | undefined>(undefined);
