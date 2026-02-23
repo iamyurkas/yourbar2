@@ -353,10 +353,9 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
   const handleSmartShakerFilteringInfoPress = () => {
     setDialogOptions({
-      title: "Smart shaker filtering",
-      message:
-        "When enabled, ingredients in groups with no current selection are hidden if they would produce zero results.\n\nIn groups where you already selected at least one ingredient, items stay visible to preserve OR logic.\n\nTurn this off to restore the default shaker behavior.",
-      actions: [{ label: "Got it", variant: "secondary" }],
+      title: t("sideMenu.smartShakerFilteringInfoTitle"),
+      message: t("sideMenu.smartShakerFilteringInfoMessage"),
+      actions: [{ label: t("common.gotIt"), variant: "secondary" }],
     });
   };
 

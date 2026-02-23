@@ -99,6 +99,9 @@ export const ukUATranslations: TranslationDictionary = {
   "sideMenu.smartShakerFiltering": "Розумний шейкер",
   "sideMenu.smartShakerFilteringInfo":
     "Інформація про розумну фільтрацію шейкера",
+  "sideMenu.smartShakerFilteringInfoTitle": "Розумна фільтрація шейкера",
+  "sideMenu.smartShakerFilteringInfoMessage":
+    "Якщо увімкнено, інгредієнти в групах без поточного вибору приховуються, якщо вони не дають жодного результату.\n\nУ групах, де ви вже обрали хоча б один інгредієнт, елементи залишаються видимими, щоб зберегти логіку АБО.\n\nВимкніть це, щоб повернути стандартну поведінку шейкера.",
   "sideMenu.smartShakerFilteringCaption": "Приховувати зайві інгредієнти",
   "sideMenu.startingScreen": "Початковий екран",
   "sideMenu.startingScreenOpen": "Відкривати {{screen}}",

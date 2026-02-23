@@ -79,6 +79,8 @@ export const enGBTranslations: TranslationDictionary = {
   'sideMenu.keepScreenAwakeCaption': 'Prevent sleep on cocktail view',
   'sideMenu.smartShakerFiltering': 'Smart shaker filtering',
   'sideMenu.smartShakerFilteringInfo': 'Smart shaker filtering info',
+  'sideMenu.smartShakerFilteringInfoTitle': 'Smart shaker filtering',
+  'sideMenu.smartShakerFilteringInfoMessage': 'When enabled, ingredients in groups with no current selection are hidden if they would produce zero results.\n\nIn groups where you already selected at least one ingredient, items stay visible to preserve OR logic.\n\nTurn this off to restore the default shaker behavior.',
   'sideMenu.smartShakerFilteringCaption': 'Hide non-matching ingredients',
   'sideMenu.startingScreen': 'Starting screen',
   'sideMenu.startingScreenOpen': 'Open {{screen}}',
