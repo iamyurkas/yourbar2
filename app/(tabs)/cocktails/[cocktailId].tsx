@@ -43,6 +43,7 @@ import {
   skipDuplicateBack,
 } from "@/libs/navigation";
 import { normalizeSearchText } from "@/libs/search-normalization";
+import { useI18n } from "@/libs/i18n/use-i18n";
 import { useInventory, type Cocktail } from "@/providers/inventory-provider";
 import { tagColors } from "@/theme/theme";
 
@@ -319,6 +320,7 @@ export default function CocktailDetailsScreen() {
   }>();
   const navigation = useNavigation();
   const Colors = useAppColors();
+  const { t } = useI18n();
   const { cocktailId } = params;
   const {
     cocktails,
@@ -662,7 +664,7 @@ export default function CocktailDetailsScreen() {
     >
       <Stack.Screen
         options={{
-          title: "Cocktail details",
+          title: t("cocktailDetails.helpTitle"),
           headerTitleAlign: "center",
           headerStyle: { backgroundColor: Colors.surface },
           headerTitleStyle: {
@@ -674,7 +676,7 @@ export default function CocktailDetailsScreen() {
           headerLeft: () => (
             <HeaderIconButton
               onPress={handleReturn}
-              accessibilityLabel="Go back"
+              accessibilityLabel={t("common.goBack")}
             >
               <MaterialCommunityIcons
                 name={Platform.OS === "ios" ? "chevron-left" : "arrow-left"}
@@ -686,7 +688,7 @@ export default function CocktailDetailsScreen() {
           headerRight: () => (
             <HeaderIconButton
               onPress={() => setIsHelpVisible(true)}
-              accessibilityLabel="Open screen help"
+              accessibilityLabel={t("common.openScreenHelp")}
             >
               <MaterialCommunityIcons
                 name="help-circle-outline"
@@ -753,7 +755,7 @@ export default function CocktailDetailsScreen() {
                       accessibilityRole="button"
                       accessibilityLabel={
                         displayedRating === starValue
-                          ? "Clear rating"
+                          ? t("cocktailDetails.clearRating")
                           : `Set rating to ${starValue}`
                       }
                       style={styles.ratingStar}
@@ -780,13 +782,13 @@ export default function CocktailDetailsScreen() {
                 ]}
                 accessibilityRole="button"
                 accessibilityLabel={
-                  showImperialUnits ? "Show in metric" : "Show in imperial"
+                  showImperialUnits ? t("cocktailDetails.showMetric") : t("cocktailDetails.showImperial")
                 }
               >
                 <Text
                   style={[styles.toggleUnitsLabel, { color: Colors.primary }]}
                 >
-                  {showImperialUnits ? "Show in metric" : "Show in imperial"}
+                  {showImperialUnits ? t("cocktailDetails.showMetric") : t("cocktailDetails.showImperial")}
                 </Text>
               </Pressable>
 
@@ -911,8 +913,8 @@ export default function CocktailDetailsScreen() {
                   accessibilityRole="button"
                   accessibilityLabel={
                     isDescriptionExpanded
-                      ? "Show less description"
-                      : "Show full description"
+                      ? t("common.showLessDescription")
+                      : t("common.showFullDescription")
                   }
                   hitSlop={8}
                 >
@@ -954,15 +956,15 @@ export default function CocktailDetailsScreen() {
                     accessibilityRole="button"
                     accessibilityLabel={
                       isDescriptionExpanded
-                        ? "Show less description"
-                        : "Show full description"
+                        ? t("common.showLessDescription")
+                        : t("common.showFullDescription")
                     }
                     hitSlop={8}
                   >
                     <Text
                       style={[styles.descriptionToggleText, { color: Colors.tint }]}
                     >
-                      {isDescriptionExpanded ? "Show less" : "Show more"}
+                      {isDescriptionExpanded ? t("common.showLess") : t("common.showMore")}
                     </Text>
                   </Pressable>
                 ) : null}
@@ -1208,7 +1210,7 @@ export default function CocktailDetailsScreen() {
                                 color={Colors.tint}
                                 style={styles.shoppingIcon}
                                 accessibilityRole="image"
-                                accessibilityLabel="On shopping list"
+                                accessibilityLabel={t("ingredients.onShoppingList")}
                               />
                             ) : (
                               <View style={styles.shoppingIconPlaceholder} />
@@ -1238,7 +1240,7 @@ export default function CocktailDetailsScreen() {
                   <Pressable
                     onPress={handleCopyPress}
                     accessibilityRole="button"
-                    accessibilityLabel="Copy cocktail"
+                    accessibilityLabel={t("cocktailDetails.copyCocktail")}
                     style={[styles.itemActionButton, { borderColor: Colors.primary, backgroundColor: Colors.surfaceBright }]}
                   >
                     <MaterialCommunityIcons
@@ -1246,12 +1248,12 @@ export default function CocktailDetailsScreen() {
                       size={18}
                       color={Colors.primary}
                     />
-                    <Text style={[styles.itemActionLabel, { color: Colors.primary }]}>Copy cocktail</Text>
+                    <Text style={[styles.itemActionLabel, { color: Colors.primary }]}>{t("cocktailDetails.copyCocktail")}</Text>
                   </Pressable>
                   <Pressable
                     onPress={handleEditPress}
                     accessibilityRole="button"
-                    accessibilityLabel="Edit cocktail"
+                    accessibilityLabel={t("cocktailDetails.editCocktail")}
                     style={[styles.itemActionButton, { borderColor: Colors.primary, backgroundColor: Colors.surfaceBright }]}
                   >
                     <MaterialCommunityIcons
@@ -1259,7 +1261,7 @@ export default function CocktailDetailsScreen() {
                       size={18}
                       color={Colors.primary}
                     />
-                    <Text style={[styles.itemActionLabel, { color: Colors.primary }]}>Edit cocktail</Text>
+                    <Text style={[styles.itemActionLabel, { color: Colors.primary }]}>{t("cocktailDetails.editCocktail")}</Text>
                   </Pressable>
                 </View>
               </View>
@@ -1283,9 +1285,9 @@ export default function CocktailDetailsScreen() {
 
       <AppDialog
         visible={isHelpVisible}
-        title="Cocktail details"
+        title={t("cocktailDetails.helpTitle")}
         message="This screen shows cocktail details, ingredients, and instructions.\n\nUse the buttons under the cocktail to copy or edit it.\n\n**Ingredient ribbons**\nLeft ribbon marks ingredient type:\nblue = brand ingredient,\nyellow = style ingredient.\n\nRight ribbon marks base variants:\nblue = has branded variants,\nyellow = has style variants."
-        actions={[{ label: "Got it", variant: "secondary" }]}
+        actions={[{ label: t("common.gotIt"), variant: "secondary" }]}
         onRequestClose={() => setIsHelpVisible(false)}
       />
     </SafeAreaView>

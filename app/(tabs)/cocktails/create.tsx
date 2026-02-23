@@ -47,6 +47,7 @@ import {
 } from "@/constants/cocktail-units";
 import { GLASSWARE } from "@/constants/glassware";
 import { useAppColors } from "@/constants/theme";
+import { useI18n } from "@/libs/i18n/use-i18n";
 import {
   buildReturnToParams,
   parseReturnToParams,
@@ -232,6 +233,7 @@ function mapRecipeIngredientToEditable(
 export default function CreateCocktailScreen() {
   const navigation = useNavigation();
   const Colors = useAppColors();
+  const { t } = useI18n();
   const {
     ingredients: inventoryIngredients,
     cocktails,
@@ -532,7 +534,7 @@ export default function CreateCocktailScreen() {
   }, [cocktails, getBaseGroupId]);
 
   const placeholderLabel = useMemo(
-    () => (imageUri ? "Change photo" : "Add photo"),
+    () => (imageUri ? t("cocktailForm.changePhoto") : t("cocktailForm.addPhotoTitle")),
     [imageUri],
   );
 
@@ -769,10 +771,10 @@ export default function CreateCocktailScreen() {
 
     if (!canAskAgain) {
       showDialog({
-        title: "Media access required",
+        title: t("cocktailForm.mediaAccessRequiredTitle"),
         message:
-          "Enable photo library permissions in system settings to add a cocktail photo.",
-        actions: [{ label: "OK" }],
+          t("cocktailForm.mediaAccessRequiredMessage"),
+        actions: [{ label: t("common.ok") }],
       });
     }
 
@@ -807,9 +809,9 @@ export default function CreateCocktailScreen() {
     } catch (error) {
       console.warn("Failed to pick image", error);
       showDialog({
-        title: "Could not pick image",
-        message: "Please try again later.",
-        actions: [{ label: "OK" }],
+        title: t("cocktailForm.couldNotPickImageTitle"),
+        message: t("common.tryAgainLater"),
+        actions: [{ label: t("common.ok") }],
       });
     } finally {
       setIsPickingImage(false);
@@ -828,10 +830,10 @@ export default function CreateCocktailScreen() {
 
     if (!canAskAgain) {
       showDialog({
-        title: "Camera access required",
+        title: t("cocktailForm.cameraAccessRequiredTitle"),
         message:
-          "Enable camera permissions in system settings to take a cocktail photo.",
-        actions: [{ label: "OK" }],
+          t("cocktailForm.cameraAccessRequiredMessage"),
+        actions: [{ label: t("common.ok") }],
       });
     }
 
@@ -865,9 +867,9 @@ export default function CreateCocktailScreen() {
     } catch (error) {
       console.warn("Failed to capture image", error);
       showDialog({
-        title: "Could not take photo",
-        message: "Please try again later.",
-        actions: [{ label: "OK" }],
+        title: t("cocktailForm.couldNotTakePhotoTitle"),
+        message: t("common.tryAgainLater"),
+        actions: [{ label: t("common.ok") }],
       });
     } finally {
       setIsPickingImage(false);
@@ -876,22 +878,22 @@ export default function CreateCocktailScreen() {
 
   const handleSelectImageSource = useCallback(() => {
     showDialog({
-      title: "Add photo",
-      message: "Choose how you want to add a cocktail photo.",
+      title: t("cocktailForm.addPhotoTitle"),
+      message: t("cocktailForm.addPhotoMessage"),
       actions: [
         {
-          label: "Take photo",
+          label: t("cocktailForm.takePhoto"),
           onPress: () => {
             void handleTakePhoto();
           },
         },
         {
-          label: "Choose from gallery",
+          label: t("cocktailForm.chooseFromGallery"),
           onPress: () => {
             void handlePickImage();
           },
         },
-        { label: "Cancel", variant: "secondary" },
+        { label: t("common.cancel"), variant: "secondary" },
       ],
     });
   }, [handlePickImage, handleTakePhoto, showDialog]);
@@ -1119,9 +1121,9 @@ export default function CreateCocktailScreen() {
     const trimmedName = name.trim();
     if (!trimmedName) {
       showDialog({
-        title: "Name is required",
-        message: "Please enter the cocktail name.",
-        actions: [{ label: "OK" }],
+        title: t("cocktailForm.nameRequiredTitle"),
+        message: t("cocktailForm.nameRequiredMessage"),
+        actions: [{ label: t("common.ok") }],
       });
       return;
     }
@@ -1205,9 +1207,9 @@ export default function CreateCocktailScreen() {
 
     if (!sanitizedIngredients.length) {
       showDialog({
-        title: "Recipe required",
-        message: "Add at least one ingredient to the cocktail.",
-        actions: [{ label: "OK" }],
+        title: t("cocktailForm.recipeRequiredTitle"),
+        message: t("cocktailForm.recipeRequiredMessage"),
+        actions: [{ label: t("common.ok") }],
       });
       return;
     }
@@ -1259,9 +1261,9 @@ export default function CreateCocktailScreen() {
 
       if (!persisted) {
         showDialog({
-          title: "Could not save cocktail",
-          message: "Please try again later.",
-          actions: [{ label: "OK" }],
+          title: t("cocktailForm.couldNotSaveTitle"),
+          message: t("common.tryAgainLater"),
+          actions: [{ label: t("common.ok") }],
         });
         return;
       }
@@ -1352,9 +1354,9 @@ export default function CreateCocktailScreen() {
 
     if (numericId == null) {
       showDialog({
-        title: "Cocktail not found",
-        message: "Please try again later.",
-        actions: [{ label: "OK" }],
+        title: t("cocktailForm.cocktailNotFoundTitle"),
+        message: t("common.tryAgainLater"),
+        actions: [{ label: t("common.ok") }],
       });
       return;
     }
@@ -1362,23 +1364,23 @@ export default function CreateCocktailScreen() {
     const trimmedName = prefilledCocktail?.name?.trim();
     const message = trimmedName
       ? `Are you sure you want to delete\n${trimmedName}?\n\nThis action cannot be undone.`
-      : "Are you sure you want to delete this cocktail?\n\nThis action cannot be undone.";
+      : t("cocktailForm.deleteCocktailConfirm");
 
     showDialog({
-      title: "Delete cocktail",
+      title: t("cocktailForm.deleteCocktailTitle"),
       message,
       actions: [
-        { label: "Cancel", variant: "secondary" },
+        { label: t("common.cancel"), variant: "secondary" },
         {
-          label: "Delete",
+          label: t("common.delete"),
           variant: "destructive",
           onPress: () => {
             const wasDeleted = deleteCocktail(numericId);
             if (!wasDeleted) {
               showDialog({
-                title: "Could not delete cocktail",
-                message: "Please try again later.",
-                actions: [{ label: "OK" }],
+                title: t("cocktailForm.couldNotDeleteTitle"),
+                message: t("common.tryAgainLater"),
+                actions: [{ label: t("common.ok") }],
               });
               return;
             }
@@ -1418,13 +1420,13 @@ export default function CreateCocktailScreen() {
   const confirmLeave = useCallback(
     (onLeave: () => void) => {
       showDialog({
-        title: "Leave without saving?",
-        message: "Your changes will be lost if you leave this screen.",
+        title: t("common.leaveWithoutSavingTitle"),
+        message: t("common.leaveWithoutSavingMessage"),
         actions: [
-          { label: "Save", variant: "primary", onPress: handleSubmit },
-          { label: "Stay", variant: "secondary" },
+          { label: t("common.save"), variant: "primary", onPress: handleSubmit },
+          { label: t("common.stay"), variant: "secondary" },
           {
-            label: "Leave",
+            label: t("common.leave"),
             variant: "destructive",
             onPress: () => {
               setHasUnsavedChanges(false);
@@ -1576,7 +1578,7 @@ export default function CreateCocktailScreen() {
     <>
       <Stack.Screen
         options={{
-          title: isEditMode ? "Edit cocktail" : "Add new cocktail",
+          title: isEditMode ? t("cocktailForm.editTitle") : t("cocktailForm.addTitle"),
           headerTitleAlign: "center",
           headerStyle: { backgroundColor: Colors.surface },
           headerShadowVisible: false,
@@ -1588,7 +1590,7 @@ export default function CreateCocktailScreen() {
           headerLeft: () => (
             <HeaderIconButton
               onPress={handleGoBack}
-              accessibilityLabel="Go back"
+              accessibilityLabel={t("common.goBack")}
             >
               <MaterialCommunityIcons
                 name={Platform.OS === "ios" ? "chevron-left" : "arrow-left"}
@@ -1600,7 +1602,7 @@ export default function CreateCocktailScreen() {
           headerRight: () => (
             <HeaderIconButton
               onPress={() => setIsHelpVisible(true)}
-              accessibilityLabel="Open screen help"
+              accessibilityLabel={t("common.openScreenHelp")}
             >
               <MaterialCommunityIcons
                 name="help-circle-outline"
@@ -1630,7 +1632,7 @@ export default function CreateCocktailScreen() {
             <TextInput
               value={name}
               onChangeText={setName}
-              placeholder="e.g., Margarita"
+              placeholder={t("cocktailForm.placeholderName")}
               style={[
                 styles.input,
                 {
@@ -1657,7 +1659,7 @@ export default function CreateCocktailScreen() {
               <Pressable
                 style={styles.glassTile}
                 accessibilityRole="button"
-                accessibilityLabel="Select glassware"
+                accessibilityLabel={t("cocktailForm.selectGlassware")}
                 onPress={() => setIsGlassModalVisible(true)}
               >
                 {glassImageSource ? (
@@ -1736,7 +1738,7 @@ export default function CreateCocktailScreen() {
                     hitSlop={8}
                     style={styles.removePhotoButton}
                     accessibilityRole="button"
-                    accessibilityLabel="Remove photo"
+                    accessibilityLabel={t("common.removePhoto")}
                   >
                     <MaterialCommunityIcons
                       name="trash-can-outline"
@@ -1762,7 +1764,7 @@ export default function CreateCocktailScreen() {
                 },
               ]}
               accessibilityRole="button"
-              accessibilityLabel="Select method"
+              accessibilityLabel={t("cocktailForm.selectMethod")}
               onPress={() => setIsMethodModalVisible(true)}
             >
               <View style={styles.methodPickerContent}>
@@ -1775,7 +1777,7 @@ export default function CreateCocktailScreen() {
                 >
                   {selectedMethods.length
                     ? selectedMethods.map((method) => method.label).join(", ")
-                    : "Not specified"}
+                    : t("cocktailForm.notSpecified")}
                 </Text>
               </View>
               <MaterialCommunityIcons
@@ -1793,7 +1795,7 @@ export default function CreateCocktailScreen() {
               </Text>
               <Pressable
                 accessibilityRole="button"
-                accessibilityLabel="Create tag"
+                accessibilityLabel={t("common.createTag")}
                 onPress={handleOpenTagModal}
                 style={[
                   styles.tagAddButton,
@@ -1836,7 +1838,7 @@ export default function CreateCocktailScreen() {
             <TextInput
               value={description}
               onChangeText={setDescription}
-              placeholder="Optional description"
+              placeholder={t("cocktailForm.placeholderDescription")}
               placeholderTextColor={`${Colors.onSurfaceVariant}99`}
               style={[
                 styles.input,
@@ -1860,7 +1862,7 @@ export default function CreateCocktailScreen() {
             <TextInput
               value={instructions}
               onChangeText={setInstructions}
-              placeholder="1. Grab some ice..."
+              placeholder={t("cocktailForm.placeholderInstructions")}
               placeholderTextColor={`${Colors.onSurfaceVariant}99`}
               style={[
                 styles.input,
@@ -1915,7 +1917,7 @@ export default function CreateCocktailScreen() {
                 },
               ]}
               accessibilityRole="button"
-              accessibilityLabel="Add ingredient"
+              accessibilityLabel={t("cocktailForm.addIngredient")}
             >
               <MaterialCommunityIcons
                 name="plus"
@@ -1939,7 +1941,7 @@ export default function CreateCocktailScreen() {
                 },
               ]}
               accessibilityRole="button"
-              accessibilityLabel="Save cocktail"
+              accessibilityLabel={t("cocktailForm.saveCocktail")}
             >
               <Text style={[styles.submitLabel, { color: Colors.onPrimary }]}>
                 Save cocktail
@@ -1963,14 +1965,14 @@ export default function CreateCocktailScreen() {
                     }
                     style={[styles.inlineActionButton, { borderColor: Colors.primary, backgroundColor: Colors.surfaceBright }]}
                     accessibilityRole="button"
-                    accessibilityLabel="Edit cocktail"
+                    accessibilityLabel={t("cocktailForm.editCocktail")}
                   >
                     <MaterialCommunityIcons
                       name="pencil-outline"
                       size={18}
                       color={Colors.primary}
                     />
-                    <Text style={[styles.inlineActionLabel, { color: Colors.primary }]}>Edit cocktail</Text>
+                    <Text style={[styles.inlineActionLabel, { color: Colors.primary }]}>{t("cocktailForm.editCocktail")}</Text>
                   </Pressable>
                 ) : null}
                 {isEditMode ? (
@@ -1978,14 +1980,14 @@ export default function CreateCocktailScreen() {
                     onPress={handleDeletePress}
                     style={[styles.inlineActionButton, { borderColor: Colors.error, backgroundColor: Colors.surfaceBright }]}
                     accessibilityRole="button"
-                    accessibilityLabel="Delete cocktail"
+                    accessibilityLabel={t("cocktailForm.deleteCocktail")}
                   >
                     <MaterialIcons
                       name="delete-outline"
                       size={18}
                       color={Colors.error}
                     />
-                    <Text style={[styles.inlineActionLabel, { color: Colors.error }]}>Delete cocktail</Text>
+                    <Text style={[styles.inlineActionLabel, { color: Colors.error }]}>{t("cocktailForm.deleteCocktail")}</Text>
                   </Pressable>
                 ) : null}
               </View>
@@ -2005,7 +2007,7 @@ export default function CreateCocktailScreen() {
           style={styles.modalOverlay}
           onPress={() => setIsGlassModalVisible(false)}
           accessibilityRole="button"
-          accessibilityLabel="Close"
+          accessibilityLabel={t("common.close")}
         >
           <Pressable
             onPress={(event) => event.stopPropagation?.()}
@@ -2026,7 +2028,7 @@ export default function CreateCocktailScreen() {
               <Pressable
                 onPress={() => setIsGlassModalVisible(false)}
                 accessibilityRole="button"
-                accessibilityLabel="Close"
+                accessibilityLabel={t("common.close")}
               >
                 <MaterialCommunityIcons
                   name="close"
@@ -2127,7 +2129,7 @@ export default function CreateCocktailScreen() {
               <Pressable
                 onPress={handleCloseUnitPicker}
                 accessibilityRole="button"
-                accessibilityLabel="Close"
+                accessibilityLabel={t("common.close")}
               >
                 <MaterialCommunityIcons
                   name="close"
@@ -2169,7 +2171,7 @@ export default function CreateCocktailScreen() {
                     accessibilityLabel={
                       displayLabel.trim()
                         ? `Select ${displayLabel.trim()}`
-                        : "Select empty unit"
+                        : t("cocktailForm.selectEmptyUnit")
                     }
                   >
                     <Text
@@ -2217,7 +2219,7 @@ export default function CreateCocktailScreen() {
               <Pressable
                 onPress={() => setIsMethodModalVisible(false)}
                 accessibilityRole="button"
-                accessibilityLabel="Close"
+                accessibilityLabel={t("common.close")}
               >
                 <MaterialCommunityIcons
                   name="close"
@@ -2248,7 +2250,7 @@ export default function CreateCocktailScreen() {
                   },
                 ]}
                 accessibilityRole="button"
-                accessibilityLabel="Clear methods"
+                accessibilityLabel={t("cocktailForm.clearMethods")}
               >
                 <Text
                   style={[
@@ -2331,9 +2333,9 @@ export default function CreateCocktailScreen() {
 
       <AppDialog
         visible={isHelpVisible}
-        title="Adding cocktail"
+        title={t("cocktailForm.helpTitle")}
         message="Use this screen to build a new cocktail recipe.\n\nFill in name, photo, tags, ingredients, method, and instructions, then tap Save."
-        actions={[{ label: "Got it", variant: "secondary" }]}
+        actions={[{ label: t("common.gotIt"), variant: "secondary" }]}
         onRequestClose={() => setIsHelpVisible(false)}
       />
 
@@ -2347,7 +2349,7 @@ export default function CreateCocktailScreen() {
 
       <TagEditorModal
         visible={isTagModalVisible}
-        title="New tag"
+        title={t("tagEditor.newTag")}
         confirmLabel="Create"
         onClose={handleCloseTagModal}
         onSave={handleCreateTag}
@@ -2621,7 +2623,7 @@ function EditableIngredientRow({
 
   const unitLabel = useMemo(() => {
     if (ingredient.unitId == null) {
-      return "No unit";
+      return t("cocktailForm.noUnit");
     }
     const entry = COCKTAIL_UNIT_DICTIONARY[ingredient.unitId];
     if (!entry) {
@@ -2668,7 +2670,7 @@ function EditableIngredientRow({
               disabled={!canMoveUp}
               hitSlop={8}
               accessibilityRole="button"
-              accessibilityLabel="Move ingredient up"
+              accessibilityLabel={t("cocktailForm.moveIngredientUp")}
               style={[
                 styles.reorderButton,
                 { borderColor: Colors.outlineVariant, backgroundColor: Colors.surface },
@@ -2690,7 +2692,7 @@ function EditableIngredientRow({
               disabled={!canMoveDown}
               hitSlop={8}
               accessibilityRole="button"
-              accessibilityLabel="Move ingredient down"
+              accessibilityLabel={t("cocktailForm.moveIngredientDown")}
               style={[
                 styles.reorderButton,
                 { borderColor: Colors.outlineVariant, backgroundColor: Colors.surface },
@@ -2713,7 +2715,7 @@ function EditableIngredientRow({
           onPress={() => onRemove(ingredient.key)}
           hitSlop={8}
           accessibilityRole="button"
-          accessibilityLabel="Remove ingredient"
+          accessibilityLabel={t("cocktailForm.removeIngredient")}
           style={!canReorder && styles.hiddenControl}
           pointerEvents={canReorder ? "auto" : "none"}
         >
@@ -2738,7 +2740,7 @@ function EditableIngredientRow({
               );
             }
           }}
-          placeholder="Ingredient name"
+          placeholder={t("cocktailForm.placeholderIngredientName")}
           placeholderTextColor={`${Colors.onSurfaceVariant}99`}
           style={[
             styles.input,
@@ -2769,7 +2771,7 @@ function EditableIngredientRow({
               { backgroundColor: Colors.background },
             ]}
             accessibilityRole="button"
-            accessibilityLabel="Create new ingredient"
+            accessibilityLabel={t("cocktailForm.createNewIngredient")}
             hitSlop={8}
           >
             <Text
@@ -2839,7 +2841,7 @@ function EditableIngredientRow({
                         color={Colors.tint}
                         style={styles.shoppingIcon}
                         accessibilityRole="image"
-                        accessibilityLabel="On shopping list"
+                        accessibilityLabel={t("ingredients.onShoppingList")}
                       />
                     ) : (
                       <View style={styles.shoppingIconPlaceholder} />
@@ -2866,12 +2868,12 @@ function EditableIngredientRow({
       <View style={styles.rowInputs}>
         <View style={styles.amountColumn}>
           <Text style={[styles.inputLabel, { color: Colors.onSurfaceVariant }]}>
-            Amount
+            {t("cocktailForm.amount")}
           </Text>
           <TextInput
             value={ingredient.amount}
             onChangeText={(text) => onChange(ingredient.key, { amount: text })}
-            placeholder="e.g., 45"
+            placeholder={t("cocktailForm.placeholderAmount")}
             placeholderTextColor={`${Colors.onSurfaceVariant}99`}
             keyboardType="decimal-pad"
             style={[
@@ -2883,7 +2885,7 @@ function EditableIngredientRow({
         </View>
         <View style={styles.unitColumn}>
           <Text style={[styles.inputLabel, { color: Colors.onSurfaceVariant }]}>
-            Unit
+            {t("cocktailForm.unit")}
           </Text>
           <Pressable
             onPress={() => onRequestUnitPicker(ingredient.key)}
@@ -2895,7 +2897,7 @@ function EditableIngredientRow({
               },
             ]}
             accessibilityRole="button"
-            accessibilityLabel="Select unit"
+            accessibilityLabel={t("cocktailForm.selectUnit")}
           >
             <Text style={[styles.unitLabel, { color: Colors.onSurface }]}>
               {unitLabel}
@@ -2911,12 +2913,12 @@ function EditableIngredientRow({
 
       <View style={styles.toggleRow}>
         <ToggleChip
-          label="Garnish"
+          label={t("cocktailForm.garnish")}
           active={ingredient.garnish}
           onToggle={handleToggleGarnish}
         />
         <ToggleChip
-          label="Optional"
+          label={t("cocktailForm.optional")}
           active={ingredient.optional}
           onToggle={handleToggleOptional}
         />
@@ -2925,28 +2927,28 @@ function EditableIngredientRow({
       {isBrandedIngredient ? (
         <View style={styles.toggleRow}>
           <ToggleChip
-            label="Allow base substitute"
+            label={t("cocktailForm.allowBaseSubstitute")}
             active={ingredient.allowBaseSubstitution}
             onToggle={handleToggleAllowBase}
             onInfo={() =>
               onOpenDialog({
-                title: "Allow base substitute",
+                title: t("cocktailForm.allowBaseSubstituteTitle"),
                 message:
-                  "If the specified ingredient isn't available, the cocktail will be shown as available with its base ingredient.",
-                actions: [{ label: "OK" }],
+                  t("cocktailForm.allowBaseSubstituteMessage"),
+                actions: [{ label: t("common.ok") }],
               })
             }
           />
           <ToggleChip
-            label="Allow branded substitute"
+            label={t("cocktailForm.allowBrandedSubstitute")}
             active={ingredient.allowBrandSubstitution}
             onToggle={handleToggleAllowBrand}
             onInfo={() =>
               onOpenDialog({
-                title: "Allow branded substitute",
+                title: t("cocktailForm.allowBrandedSubstituteTitle"),
                 message:
-                  "If the specified ingredient isn't available, the cocktail will be shown as available with branded ingredients of the base.",
-                actions: [{ label: "OK" }],
+                  t("cocktailForm.allowBrandedSubstituteMessage"),
+                actions: [{ label: t("common.ok") }],
               })
             }
           />
@@ -2956,15 +2958,15 @@ function EditableIngredientRow({
       {shouldShowStyleSubstitution ? (
         <View style={styles.toggleRow}>
           <ToggleChip
-            label="Allow style substitutes"
+            label={t("cocktailForm.allowStyleSubstitutes")}
             active={ingredient.allowStyleSubstitution}
             onToggle={handleToggleAllowStyle}
             onInfo={() =>
               onOpenDialog({
-                title: "Allow style substitutes",
+                title: t("cocktailForm.allowStyleSubstitutesTitle"),
                 message:
-                  "If the specified styled ingredient isn't available, the cocktail will be shown as available with its style base ingredient or other styles of the same base.",
-                actions: [{ label: "OK" }],
+                  t("cocktailForm.allowStyleSubstitutesMessage"),
+                actions: [{ label: t("common.ok") }],
               })
             }
           />
@@ -2982,11 +2984,11 @@ function EditableIngredientRow({
             },
           ]}
           accessibilityRole="button"
-          accessibilityLabel="Add substitute"
+          accessibilityLabel={t("cocktailForm.addSubstitute")}
         >
           <MaterialCommunityIcons name="plus" size={16} color={Colors.tint} />
           <Text style={[styles.addSubstituteLabel, { color: Colors.tint }]}>
-            Add substitute
+            {t("cocktailForm.addSubstitute")}
           </Text>
         </Pressable>
         {ingredient.substitutes.length ? (
@@ -3011,7 +3013,7 @@ function EditableIngredientRow({
                   numberOfLines={1}
                 >
                   {substitute.name}
-                  {substitute.isBrand ? " • brand" : ""}
+                  {substitute.isBrand ? t("cocktailForm.brandSuffix") : ""}
                 </Text>
                 <Pressable
                   onPress={() =>
