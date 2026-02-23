@@ -27,6 +27,7 @@ import { isCocktailReady, summariseCocktailAvailability } from '@/libs/cocktail-
 import { createIngredientLookup } from '@/libs/ingredient-availability';
 import { navigateToDetailsWithReturnTo } from '@/libs/navigation';
 import { normalizeSearchText } from '@/libs/search-normalization';
+import { useI18n } from '@/libs/i18n/use-i18n';
 import { useInventory, type Cocktail } from '@/providers/inventory-provider';
 
 function parseListParam(param?: string | string[]) {
@@ -75,6 +76,7 @@ export default function ShakerResultsScreen() {
     getCocktailRating,
   } = useInventory();
   const Colors = useAppColors();
+  const { t } = useI18n();
   const params = useLocalSearchParams();
   const [query, setQuery] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -191,7 +193,7 @@ export default function ShakerResultsScreen() {
         if (!map.has(key)) {
           map.set(key, {
             key,
-            name: tag.name ?? 'Unnamed tag',
+            name: tag.name ?? t('tags.unnamed'),
             color: tag.color ?? defaultTagColor,
           });
         }
@@ -220,7 +222,7 @@ export default function ShakerResultsScreen() {
 
       return normalizedNameA.localeCompare(normalizedNameB);
     });
-  }, [defaultTagColor, listData]);
+  }, [defaultTagColor, listData, t]);
 
   const availableMethodOptions = useMemo(() => {
     const methodOrder = getCocktailMethods();
@@ -588,21 +590,21 @@ export default function ShakerResultsScreen() {
           <CollectionHeader
             searchValue={query}
             onSearchChange={setQuery}
-            placeholder="Search"
+            placeholder={t("common.search")}
             onMenuPress={() => setIsMenuOpen(true)}
             onFilterPress={handleFilterPress}
             filterActive={isFilterActive}
             filterExpanded={isFilterMenuVisible}
             onFilterLayout={handleFilterLayout}
-            helpTitle="Shaker results"
-            helpText="This screen shows cocktails you can make with selected ingredients.\n\nUse search and filters to narrow results, then open any cocktail to view recipe details and preparation steps."
+            helpTitle={t("shakerResults.helpTitle")}
+            helpText={t("shakerResults.helpText")}
           />
         </View>
         {isFilterMenuVisible ? (
           <>
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel="Close tag filters"
+              accessibilityLabel={t("common.closeTagFilters")}
               onPress={handleCloseFilterMenu}
               style={styles.filterMenuBackdrop}
             />
@@ -642,14 +644,14 @@ export default function ShakerResultsScreen() {
                       })
                     ) : (
                       <Text style={[styles.filterMenuEmpty, { color: Colors.onSurfaceVariant }]}>
-                        No methods available
+                        {t("common.noMethodsAvailable")}
                       </Text>
                     )}
                   </View>
                   <View style={styles.filterSeparator}>
                     <View style={[styles.filterSeparatorLine, { backgroundColor: Colors.outline }]} />
                     <Text style={[styles.filterSeparatorLabel, { color: Colors.onSurfaceVariant }]}>
-                      AND
+                      {t("common.and")}
                     </Text>
                     <View style={[styles.filterSeparatorLine, { backgroundColor: Colors.outline }]} />
                   </View>
@@ -672,7 +674,7 @@ export default function ShakerResultsScreen() {
                       })
                     ) : (
                       <Text style={[styles.filterMenuEmpty, { color: Colors.onSurfaceVariant }]}>
-                        No tags available
+                        {t("common.noTagsAvailable")}
                       </Text>
                     )}
                   </View>
@@ -680,11 +682,11 @@ export default function ShakerResultsScreen() {
                 {selectedTagKeys.size > 0 || selectedMethodIds.size > 0 ? (
                   <Pressable
                     accessibilityRole="button"
-                    accessibilityLabel="Clear selected filters"
+                    accessibilityLabel={t("shakerResults.clearSelectedFilters")}
                     onPress={handleClearFilters}
                     style={styles.filterMenuClearButton}>
                     <Text style={[styles.filterMenuClearLabel, { color: Colors.tint }]}>
-                      Clear filters
+                      {t("common.clearFilters")}
                     </Text>
                   </Pressable>
                 ) : null}
@@ -704,7 +706,7 @@ export default function ShakerResultsScreen() {
           windowSize={5}
           ListEmptyComponent={
             <Text style={[styles.emptyLabel, { color: Colors.onSurfaceVariant }]}>
-              No matching recipes
+              {t("shakerResults.emptyMatchingRecipes")}
             </Text>
           }
           showsVerticalScrollIndicator={false}

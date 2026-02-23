@@ -5,6 +5,7 @@ import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 
 import { TAG_COLORS } from '@/constants/tag-colors';
 import { useAppColors } from '@/constants/theme';
+import { useI18n } from '@/libs/i18n/use-i18n';
 
 type TagEditorModalProps = {
   visible: boolean;
@@ -26,6 +27,7 @@ export function TagEditorModal({
   onSave,
 }: TagEditorModalProps) {
   const Colors = useAppColors();
+  const { t } = useI18n();
   const [name, setName] = useState(initialName ?? '');
   const [hue, setHue] = useState(210);
   const [lightness, setLightness] = useState(0.5);
@@ -135,22 +137,22 @@ export function TagEditorModal({
         >
           <View style={styles.header}>
             <Text style={[styles.title, { color: Colors.onSurface }]}>{title}</Text>
-            <Pressable onPress={onClose} accessibilityRole="button" accessibilityLabel="Close">
+            <Pressable onPress={onClose} accessibilityRole="button" accessibilityLabel={t("common.close")}>
               <MaterialCommunityIcons name="close" size={22} color={Colors.onSurfaceVariant} />
             </Pressable>
           </View>
-          <Text style={[styles.label, { color: Colors.onSurfaceVariant }]}>Tag name</Text>
+          <Text style={[styles.label, { color: Colors.onSurfaceVariant }]}>{t("tagEditor.tagName")}</Text>
           <TextInput
             value={name}
             onChangeText={setName}
-            placeholder="New tag"
+            placeholder={t("tagEditor.newTag")}
             placeholderTextColor={`${Colors.onSurfaceVariant}99`}
             style={[
               styles.input,
               { borderColor: Colors.outlineVariant, color: Colors.text, backgroundColor: Colors.surface },
             ]}
           />
-          <Text style={[styles.label, { color: Colors.onSurfaceVariant }]}>Color</Text>
+          <Text style={[styles.label, { color: Colors.onSurfaceVariant }]}>{t("tagEditor.color")}</Text>
           <View style={styles.colorPreviewRow}>
             <View style={[styles.colorPreview, { backgroundColor: selectedColor, borderColor: Colors.outlineVariant }]} />
             <Text style={[styles.colorValue, { color: Colors.onSurfaceVariant }]}>{selectedColor}</Text>

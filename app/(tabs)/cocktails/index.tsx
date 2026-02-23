@@ -500,7 +500,7 @@ export default function CocktailsScreen() {
         return (
           <View style={styles.moreIngredientsWrapper}>
             <Text style={[styles.moreIngredientsLabel, { color: Colors.onSurfaceVariant }]}>
-              One more ingredient for more cocktails
+              {t("cocktails.oneMoreIngredientForMore")}
             </Text>
           </View>
         );
@@ -509,11 +509,10 @@ export default function CocktailsScreen() {
       if (item.type === 'ingredient-header') {
         const isOnShoppingList = shoppingIngredientIds.has(item.ingredientId);
         const accessibilityLabel = isOnShoppingList
-          ? 'Remove ingredient from shopping list'
-          : 'Add ingredient to shopping list';
-        const titleLabel = `Buy ${item.name}`;
-        const subtitleLabel = `To make ${item.cocktailCount} more ${item.cocktailCount === 1 ? 'cocktail' : 'cocktails'
-          }`;
+          ? t('cocktails.removeIngredientFromShopping')
+          : t('cocktails.addIngredientToShopping');
+        const titleLabel = t("cocktails.buyNamed", { name: item.name });
+        const subtitleLabel = t("cocktails.toMakeMore", { count: item.cocktailCount });
         const thumbnail = <Thumb label={item.name} uri={item.photoUri ?? undefined} />;
         const brandIndicatorColor = item.isStyled
           ? Colors.styledIngredient
@@ -580,6 +579,7 @@ export default function CocktailsScreen() {
       ingredients,
       shoppingIngredientIds,
       Colors,
+      t,
     ],
   );
 
@@ -770,7 +770,7 @@ export default function CocktailsScreen() {
                 {selectedTagKeys.size > 0 || selectedMethodIds.size > 0 ? (
                   <Pressable
                     accessibilityRole="button"
-                    accessibilityLabel="Clear selected filters"
+                    accessibilityLabel={t("cocktails.clearSelectedFilters")}
                     onPress={handleClearFilters}
                     style={styles.filterMenuClearButton}>
                     <Text style={[styles.filterMenuClearLabel, { color: Colors.tint }]}>{t("common.clearFilters")}</Text>
@@ -804,7 +804,7 @@ export default function CocktailsScreen() {
         />
       </View>
       <FabAdd
-        label="Add cocktail"
+        label={t("cocktails.addCocktail")}
         onPress={() =>
           router.push({ pathname: '/cocktails/create', params: { source: 'cocktails' } })
         }

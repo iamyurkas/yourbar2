@@ -14,6 +14,7 @@ import {
 import { AppImage } from './AppImage';
 import { useAppColors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
+import { useI18n } from '@/libs/i18n/use-i18n';
 import { tagColors } from '@/theme/theme';
 
 const THUMB_SIZE = 56;
@@ -92,13 +93,14 @@ type FavoriteStarProps = {
 
 export function FavoriteStar({ active, onToggle }: FavoriteStarProps) {
   const Colors = useAppColors();
+  const { t } = useI18n();
   const icon = active ? 'star' : 'star-outline';
   const color = active ? Colors.secondary : Colors.onSurfaceVariant;
 
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel={active ? 'Remove from favorites' : 'Add to favorites'}
+      accessibilityLabel={active ? t("rowParts.removeFromFavorites") : t("rowParts.addToFavorites")}
       onPress={onToggle}
       style={styles.starButton}
       hitSlop={8}>

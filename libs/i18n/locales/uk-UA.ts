@@ -369,6 +369,43 @@ export const ukUATranslations: TranslationDictionary = {
     "Оберіть кілька інгредієнтів, потім натисніть **Показати**, щоби побачити відповідні коктейлі.",
   "onboarding.step11.message":
     "Почніть із позначення інгредієнтів, які ви вже маєте, у вкладці **Усі інгредієнти**.\n\nБудьмо!",
+
+  "ingredients.emptyShopping": "У вашому списку покупок\nпоки немає інгредієнтів.",
+  "ingredients.emptyList": "У списку немає інгредієнтів",
+  "ingredients.makeCount": "Зробити {{count}} коктейлів",
+  "ingredients.recipeCount": "{{count}} рецептів",
+  "ingredients.helpAllFullText": "Цей екран показує всі інгредієнти в застосунку.\n\nВикористовуйте пошук, перемикайте вкладки та фільтруйте за тегами.\n\nТоркніться прапорця, щоб позначити наявність.",
+  "ingredients.clearSelectedTagFilters": "Очистити вибрані фільтри тегів",
+  "ingredients.addIngredient": "Додати інгредієнт",
+
+  "cocktails.oneMoreIngredientForMore": "Ще один інгредієнт для більшої кількості коктейлів",
+  "cocktails.removeIngredientFromShopping": "Видалити інгредієнт зі списку покупок",
+  "cocktails.addIngredientToShopping": "Додати інгредієнт до списку покупок",
+  "cocktails.buyNamed": "Купити {{name}}",
+  "cocktails.toMakeMore": "Щоб зробити ще {{count}} коктейлів",
+  "cocktails.clearSelectedFilters": "Очистити вибрані фільтри",
+  "cocktails.addCocktail": "Додати коктейль",
+
+  "shakerResults.helpTitle": "Результати шейкера",
+  "shakerResults.helpText": "Цей екран показує коктейлі, які можна зробити з вибраних інгредієнтів.\n\nВикористовуйте пошук і фільтри, щоб звузити результати, а потім відкрийте будь-який коктейль, щоб переглянути деталі рецепта та кроки приготування.",
+  "shakerResults.clearSelectedFilters": "Очистити вибрані фільтри",
+  "shakerResults.emptyMatchingRecipes": "Немає відповідних рецептів",
+
+  "rowParts.removeFromFavorites": "Видалити з обраного",
+  "rowParts.addToFavorites": "Додати до обраного",
+  "cocktailListRow.allIngredientsReady": "Усі інгредієнти готові",
+
+  "tabBar.leaveWithoutSavingTitle": "Вийти без збереження?",
+  "tabBar.leaveWithoutSavingMessage": "Ваші зміни буде втрачено, якщо ви залишите цей екран.",
+
+  "substituteModal.forNamed": "Для {{name}}",
+  "substituteModal.searchIngredients": "Пошук інгредієнтів",
+
+  "tagEditor.tagName": "Назва тега",
+  "tagEditor.newTag": "Новий тег",
+  "tagEditor.color": "Колір",
+
+  "tags.unnamed": "Тег без назви",
   "tabs.cocktails": "Коктейлі",
   "tabs.shaker": "Шейкер",
   "tabs.ingredients": "Інгредієнти",
