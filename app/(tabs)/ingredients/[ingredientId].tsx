@@ -428,14 +428,14 @@ export default function IngredientDetailsScreen() {
       return null;
     }
 
-    return `Buy on ${AMAZON_STORES[effectiveAmazonStore].label}`;
+    return `Купити на ${AMAZON_STORES[effectiveAmazonStore].label}`;
   }, [effectiveAmazonStore]);
 
   const handleAmazonAffiliateInfoPress = useCallback(() => {
     showDialog({
-      title: "Affiliate disclosure",
-      message: "Some Amazon links in this app are affiliate links. If you buy something, we may earn a small commission at no extra cost to you.\n\nThis helps support the development of the app.\nThank you for your support!",
-      actions: [{ label: "Got it", variant: "primary" }],
+      title: "Партнерське застереження",
+      message: "Деякі посилання Amazon у цьому застосунку є партнерськими. Якщо ви щось купите, ми можемо отримати невелику комісію без додаткових витрат для вас.\n\nЦе допомагає підтримувати розробку застосунку.\nДякуємо за підтримку!",
+      actions: [{ label: "Зрозуміло", variant: "primary" }],
     });
   }, [showDialog]);
 
@@ -556,12 +556,12 @@ export default function IngredientDetailsScreen() {
       }
 
       showDialog({
-        title: "Remove base ingredient",
-        message: `Are you sure you want to unlink ${ingredient.name} from its base ingredient?`,
+        title: "Видалити базовий інгредієнт",
+        message: `Ви впевнені, що хочете відв’язати ${ingredient.name} від базового інгредієнта?`,
         actions: [
-          { label: "Cancel", variant: "secondary" },
+          { label: "Скасувати", variant: "secondary" },
           {
-            label: "Remove",
+            label: "Видалити",
             variant: "destructive",
             onPress: () => {
               clearBaseIngredient(numericIngredientId);
@@ -598,12 +598,12 @@ export default function IngredientDetailsScreen() {
       }
 
       showDialog({
-        title: "Remove style ingredient",
-        message: `Are you sure you want to unlink ${ingredient.name} from its style ingredient?`,
+        title: "Видалити стильовий інгредієнт",
+        message: `Ви впевнені, що хочете відв’язати ${ingredient.name} від стильового інгредієнта?`,
         actions: [
-          { label: "Cancel", variant: "secondary" },
+          { label: "Скасувати", variant: "secondary" },
           {
-            label: "Remove",
+            label: "Видалити",
             variant: "destructive",
             onPress: () => {
               clearBaseIngredient(numericIngredientId);
@@ -678,12 +678,12 @@ export default function IngredientDetailsScreen() {
       }
 
       showDialog({
-        title: "Remove branded ingredient",
-        message: `Unlink ${brandedIngredient.name} from ${ingredient?.name}?`,
+        title: "Видалити брендовий інгредієнт",
+        message: `Відв’язати ${brandedIngredient.name} від ${ingredient?.name}?`,
         actions: [
-          { label: "Cancel", variant: "secondary" },
+          { label: "Скасувати", variant: "secondary" },
           {
-            label: "Remove",
+            label: "Видалити",
             variant: "destructive",
             onPress: () => {
               clearBaseIngredient(brandedId);
@@ -706,12 +706,12 @@ export default function IngredientDetailsScreen() {
       }
 
       showDialog({
-        title: "Remove styled ingredient",
-        message: `Unlink ${styledIngredient.name} from ${ingredient?.name}?`,
+        title: "Видалити стилізований інгредієнт",
+        message: `Відв’язати ${styledIngredient.name} від ${ingredient?.name}?`,
         actions: [
-          { label: "Cancel", variant: "secondary" },
+          { label: "Скасувати", variant: "secondary" },
           {
-            label: "Remove",
+            label: "Видалити",
             variant: "destructive",
             onPress: () => {
               clearBaseIngredient(styledId);
@@ -785,7 +785,7 @@ export default function IngredientDetailsScreen() {
     >
       <Stack.Screen
         options={{
-          title: "Ingredient details",
+          title: "Деталі інгредієнта",
           headerTitleAlign: "center",
           headerStyle: { backgroundColor: Colors.surface },
           headerTitleStyle: {
@@ -797,7 +797,7 @@ export default function IngredientDetailsScreen() {
           headerLeft: () => (
             <HeaderIconButton
               onPress={handleReturn}
-              accessibilityLabel="Go back"
+              accessibilityLabel="Назад"
             >
               <MaterialCommunityIcons
                 name={Platform.OS === "ios" ? "chevron-left" : "arrow-left"}
@@ -809,7 +809,7 @@ export default function IngredientDetailsScreen() {
           headerRight: () => (
             <HeaderIconButton
               onPress={() => setIsHelpVisible(true)}
-              accessibilityLabel="Open screen help"
+              accessibilityLabel="Відкрити довідку екрана"
             >
               <MaterialCommunityIcons
                 name="help-circle-outline"
@@ -880,16 +880,16 @@ export default function IngredientDetailsScreen() {
                       style={[styles.statusControlLabel, { color: Colors.onSurfaceVariant }]}
                     >
                       {effectiveIsOnShoppingList
-                        ? "Remove from shopping list"
-                        : "Add to shopping list"}
+                        ? "Прибрати зі списку покупок"
+                        : "Додати до списку покупок"}
                     </Text>
                     <Pressable
                       onPress={handleToggleShopping}
                       accessibilityRole="button"
                       accessibilityLabel={
                         effectiveIsOnShoppingList
-                          ? "Remove ingredient from shopping list"
-                          : "Add ingredient to shopping list"
+                          ? "Прибрати інгредієнт зі списку покупок"
+                          : "Додати інгредієнт до списку покупок"
                       }
                       hitSlop={8}
                       style={styles.statusIconButton}
@@ -923,7 +923,7 @@ export default function IngredientDetailsScreen() {
                         <Pressable
                           onPress={handleAmazonAffiliateInfoPress}
                           accessibilityRole="button"
-                          accessibilityLabel="Amazon affiliate information"
+                          accessibilityLabel="Інформація про партнерство Amazon"
                           hitSlop={8}
                           style={styles.amazonInfoButton}
                         >
@@ -942,7 +942,7 @@ export default function IngredientDetailsScreen() {
                             { color: Colors.onSurfaceVariant },
                           ]}
                         >
-                          {`to make ${canMakeMoreCocktailsCount} more cocktails`}
+                          {`щоб зробити ще ${canMakeMoreCocktailsCount} коктейлів`}
                         </Text>
                       ) : null}
                     </View>
@@ -967,7 +967,7 @@ export default function IngredientDetailsScreen() {
                       label={tag.name ?? ""}
                       color={tag.color ?? Colors.tint}
                       selected
-                      accessibilityLabel={tag.name ?? "Tag"}
+                      accessibilityLabel={tag.name ?? "Тег"}
                     />
                   );
                 })}
@@ -981,8 +981,8 @@ export default function IngredientDetailsScreen() {
                   accessibilityRole="button"
                   accessibilityLabel={
                     isDescriptionExpanded
-                      ? "Show less description"
-                      : "Show full description"
+                      ? "Згорнути опис"
+                      : "Показати повний опис"
                   }
                   hitSlop={8}
                 >
@@ -1024,15 +1024,15 @@ export default function IngredientDetailsScreen() {
                     accessibilityRole="button"
                     accessibilityLabel={
                       isDescriptionExpanded
-                        ? "Show less description"
-                        : "Show full description"
+                        ? "Згорнути опис"
+                        : "Показати повний опис"
                     }
                     hitSlop={8}
                   >
                     <Text
                       style={[styles.descriptionToggleText, { color: Colors.tint }]}
                     >
-                      {isDescriptionExpanded ? "Show less" : "Show more"}
+                      {isDescriptionExpanded ? "Згорнути" : "Показати більше"}
                     </Text>
                   </Pressable>
                 ) : null}
@@ -1049,7 +1049,7 @@ export default function IngredientDetailsScreen() {
                 <Pressable
                   onPress={handleNavigateToStyle}
                   accessibilityRole="button"
-                  accessibilityLabel="View style ingredient"
+                  accessibilityLabel="Переглянути стильовий інгредієнт"
                   style={[
                     styles.baseIngredientRow,
                     {
@@ -1108,7 +1108,7 @@ export default function IngredientDetailsScreen() {
                       onPress={handleRemoveStyle}
                       style={styles.unlinkButton}
                       accessibilityRole="button"
-                      accessibilityLabel="Remove style ingredient"
+                      accessibilityLabel="Видалити стильовий інгредієнт"
                       hitSlop={8}
                     >
                       <MaterialCommunityIcons
@@ -1138,7 +1138,7 @@ export default function IngredientDetailsScreen() {
                 <Pressable
                   onPress={handleNavigateToBase}
                   accessibilityRole="button"
-                  accessibilityLabel="View base ingredient"
+                  accessibilityLabel="Переглянути базовий інгредієнт"
                   style={[
                     styles.baseIngredientRow,
                     {
@@ -1193,7 +1193,7 @@ export default function IngredientDetailsScreen() {
                       onPress={handleRemoveBase}
                       style={styles.unlinkButton}
                       accessibilityRole="button"
-                      accessibilityLabel="Remove base ingredient"
+                      accessibilityLabel="Видалити базовий інгредієнт"
                       hitSlop={8}
                     >
                       <MaterialCommunityIcons
@@ -1233,7 +1233,7 @@ export default function IngredientDetailsScreen() {
                         key={styled.id ?? styled.name}
                         onPress={() => handleNavigateToIngredient(styled.id)}
                         accessibilityRole="button"
-                        accessibilityLabel={`View ${styled.name}`}
+                        accessibilityLabel={`Переглянути ${styled.name}`}
                         style={[
                           styles.baseIngredientRow,
                           {
@@ -1290,7 +1290,7 @@ export default function IngredientDetailsScreen() {
                             onPress={handleRemoveStyled(styled)}
                             style={styles.unlinkButton}
                             accessibilityRole="button"
-                            accessibilityLabel={`Remove ${styled.name} link`}
+                            accessibilityLabel={`Видалити зв’язок ${styled.name}`}
                             hitSlop={8}
                           >
                             <MaterialCommunityIcons
@@ -1332,7 +1332,7 @@ export default function IngredientDetailsScreen() {
                         key={branded.id ?? branded.name}
                         onPress={() => handleNavigateToIngredient(branded.id)}
                         accessibilityRole="button"
-                        accessibilityLabel={`View ${branded.name}`}
+                        accessibilityLabel={`Переглянути ${branded.name}`}
                         style={[
                           styles.baseIngredientRow,
                           {
@@ -1389,7 +1389,7 @@ export default function IngredientDetailsScreen() {
                             onPress={handleRemoveBranded(branded)}
                             style={styles.unlinkButton}
                             accessibilityRole="button"
-                            accessibilityLabel={`Remove ${branded.name} link`}
+                            accessibilityLabel={`Видалити зв’язок ${branded.name}`}
                             hitSlop={8}
                           >
                             <MaterialCommunityIcons
@@ -1477,7 +1477,7 @@ export default function IngredientDetailsScreen() {
                       ]}
                       onPress={handleShowMoreCocktails}
                       accessibilityRole="button"
-                      accessibilityLabel="Show more cocktails"
+                      accessibilityLabel="Показати більше коктейлів"
                     >
                       <Text
                         style={[styles.showMoreLabel, { color: Colors.tint }]}
@@ -1503,7 +1503,7 @@ export default function IngredientDetailsScreen() {
                 style={[styles.addButton, { backgroundColor: Colors.tint }]}
                 onPress={handleAddCocktail}
                 accessibilityRole="button"
-                accessibilityLabel="Add cocktail"
+                accessibilityLabel="Додати коктейль"
               >
                 <Text
                   style={[styles.addButtonLabel, { color: Colors.onPrimary }]}
@@ -1516,7 +1516,7 @@ export default function IngredientDetailsScreen() {
                 <Pressable
                   onPress={handleEditPress}
                   accessibilityRole="button"
-                  accessibilityLabel="Edit ingredient"
+                  accessibilityLabel="Редагувати інгредієнт"
                   style={[styles.itemActionButton, { borderColor: Colors.primary, backgroundColor: Colors.surfaceBright }]}
                 >
                   <MaterialCommunityIcons
@@ -1545,9 +1545,9 @@ export default function IngredientDetailsScreen() {
 
       <AppDialog
         visible={isHelpVisible}
-        title="Ingredient details"
-        message="This screen shows ingredient details, links, and related cocktails.\n\nUse the button under the ingredient to edit it.\n\n**Cocktail ribbons**\nLeft ribbon shows what's inside:\nblue = has brand ingredients,\nyellow = has style ingredients.\n\nRight ribbon shows fallback:\nblue = brand fallback exists,\nyellow = style fallback exists."
-        actions={[{ label: "Got it", variant: "secondary" }]}
+        title="Деталі інгредієнта"
+        message="Цей екран показує деталі інгредієнта, пов’язані посилання та коктейлі.\n\nВикористовуйте кнопку під інгредієнтом, щоб редагувати його.\n\n**Стрічки коктейлів**\nЛіва стрічка показує склад:\nсиня = містить брендові інгредієнти,\nжовта = містить стильові інгредієнти.\n\nПрава стрічка показує резерв:\nсиня = є брендовий резерв,\nжовта = є стильовий резерв."
+        actions={[{ label: "Зрозуміло", variant: "secondary" }]}
         onRequestClose={() => setIsHelpVisible(false)}
       />
 

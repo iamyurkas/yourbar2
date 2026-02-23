@@ -314,7 +314,7 @@ export default function IngredientFormScreen() {
       return 'Change image';
     }
 
-    return 'Add image';
+    return 'Додати зображення';
   }, [imageSource]);
 
   const toggleTag = useCallback((tagId: number) => {
@@ -411,7 +411,7 @@ export default function IngredientFormScreen() {
       console.warn('Failed to pick image', error);
       showDialog({
         title: 'Could not pick image',
-        message: 'Please try again later.',
+        message: 'Спробуйте пізніше.',
         actions: [{ label: 'OK' }],
       });
     } finally {
@@ -468,7 +468,7 @@ export default function IngredientFormScreen() {
       console.warn('Failed to capture image', error);
       showDialog({
         title: 'Could not take photo',
-        message: 'Please try again later.',
+        message: 'Спробуйте пізніше.',
         actions: [{ label: 'OK' }],
       });
     } finally {
@@ -478,22 +478,22 @@ export default function IngredientFormScreen() {
 
   const handleSelectImageSource = useCallback(() => {
     showDialog({
-      title: 'Add photo',
-      message: 'Choose how you want to add an ingredient photo.',
+      title: 'Додати фото',
+      message: 'Оберіть, як додати фото інгредієнта.',
       actions: [
         {
-          label: 'Take photo',
+          label: 'Зробити фото',
           onPress: () => {
             void handleTakePhoto();
           },
         },
         {
-          label: 'Choose from gallery',
+          label: 'Вибрати з галереї',
           onPress: () => {
             void handlePickImage();
           },
         },
-        { label: 'Cancel', variant: 'secondary' },
+        { label: 'Скасувати', variant: 'secondary' },
       ],
     });
   }, [handlePickImage, handleTakePhoto, showDialog]);
@@ -506,8 +506,8 @@ export default function IngredientFormScreen() {
     const trimmedName = name.trim();
     if (!trimmedName) {
       showDialog({
-        title: 'Name is required',
-        message: 'Please enter the ingredient name.',
+        title: 'Потрібна назва',
+        message: 'Введіть назву інгредієнта.',
         actions: [{ label: 'OK' }],
       });
       return;
@@ -516,8 +516,8 @@ export default function IngredientFormScreen() {
     if (isEditMode) {
       if (numericIngredientId == null) {
         showDialog({
-          title: 'Ingredient not found',
-          message: 'Please try again later.',
+          title: 'Інгредієнт не знайдено',
+          message: 'Спробуйте пізніше.',
           actions: [{ label: 'OK' }],
         });
         return;
@@ -557,8 +557,8 @@ export default function IngredientFormScreen() {
 
         if (!updated) {
           showDialog({
-            title: 'Could not save ingredient',
-            message: 'Please try again later.',
+            title: 'Не вдалося зберегти інгредієнт',
+            message: 'Спробуйте пізніше.',
             actions: [{ label: 'OK' }],
           });
           return;
@@ -600,8 +600,8 @@ export default function IngredientFormScreen() {
     if (!created) {
       setIsSaving(false);
       showDialog({
-        title: 'Could not save ingredient',
-        message: 'Please try again later.',
+        title: 'Не вдалося зберегти інгредієнт',
+        message: 'Спробуйте пізніше.',
         actions: [{ label: 'OK' }],
       });
       return;
@@ -669,13 +669,13 @@ export default function IngredientFormScreen() {
   const confirmLeave = useCallback(
     (onLeave: () => void) => {
       showDialog({
-        title: 'Leave without saving?',
-        message: 'Your changes will be lost if you leave this screen.',
+        title: 'Вийти без збереження?',
+        message: 'Якщо вийти з цього екрана, зміни буде втрачено.',
         actions: [
-          { label: 'Save', variant: 'primary', onPress: handleSubmit },
-          { label: 'Stay', variant: 'secondary' },
+          { label: 'Зберегти', variant: 'primary', onPress: handleSubmit },
+          { label: 'Залишитися', variant: 'secondary' },
           {
-            label: 'Leave',
+            label: 'Вийти',
             variant: 'destructive',
             onPress: () => {
               setHasUnsavedChanges(false);
@@ -788,8 +788,8 @@ export default function IngredientFormScreen() {
 
     if (numericIngredientId == null) {
       showDialog({
-        title: 'Ingredient not found',
-        message: 'Please try again later.',
+        title: 'Інгредієнт не знайдено',
+        message: 'Спробуйте пізніше.',
         actions: [{ label: 'OK' }],
       });
       return;
@@ -804,7 +804,7 @@ export default function IngredientFormScreen() {
       title: 'Delete ingredient',
       message,
       actions: [
-        { label: 'Cancel', variant: 'secondary' },
+        { label: 'Скасувати', variant: 'secondary' },
         {
           label: 'Delete',
           variant: 'destructive',
@@ -813,7 +813,7 @@ export default function IngredientFormScreen() {
             if (!wasDeleted) {
               showDialog({
                 title: 'Could not delete ingredient',
-                message: 'Please try again later.',
+                message: 'Спробуйте пізніше.',
                 actions: [{ label: 'OK' }],
               });
               return;
@@ -1289,14 +1289,14 @@ export default function IngredientFormScreen() {
     isEditMode && numericIngredientId != null && styledBaseIngredientIds.has(numericIngredientId);
 
   const baseDisableReason = hasBrandedVariants
-    ? 'This ingredient is a base for branded ingredients, so it cannot be branded itself.'
+    ? 'Цей інгредієнт є базою для брендових інгредієнтів, тому сам не може бути брендовим.'
     : isStyledIngredient
-      ? 'Styled ingredients cannot be branded. Remove style link to enable base ingredient selection.'
+      ? 'Стильові інгредієнти не можуть бути брендовими. Видаліть стильовий зв’язок, щоб вибрати базовий інгредієнт.'
       : null;
   const styleDisableReason = hasStyledVariants
-    ? 'This ingredient is a base for styled ingredients, so it cannot be styled itself.'
+    ? 'Цей інгредієнт є базою для стильових інгредієнтів, тому сам не може бути стильовим.'
     : isBrandedIngredient
-      ? 'Branded ingredients cannot be styled. Remove base ingredient link to enable style selection.'
+      ? 'Брендові інгредієнти не можуть бути стильовими. Видаліть зв’язок із базовим інгредієнтом, щоб вибрати стильовий.'
       : null;
 
   const contentStyle = isEditMode ? styles.contentEdit : styles.contentCreate;
@@ -1310,7 +1310,7 @@ export default function IngredientFormScreen() {
       <>
         <Stack.Screen
           options={{
-            title: 'Edit ingredient',
+            title: 'Редагувати інгредієнт',
             headerTitleAlign: 'center',
             headerStyle: { backgroundColor: Colors.surface },
             headerShadowVisible: false,
@@ -1322,7 +1322,7 @@ export default function IngredientFormScreen() {
             headerLeft: () => (
               <HeaderIconButton
                 onPress={handleGoBack}
-                accessibilityLabel="Go back">
+                accessibilityLabel="Назад">
                 <MaterialCommunityIcons
                   name={Platform.OS === 'ios' ? 'chevron-left' : 'arrow-left'}
                   size={Platform.OS === 'ios' ? 26 : 22}
@@ -1333,7 +1333,7 @@ export default function IngredientFormScreen() {
           }}
         />
         <View style={[styles.container, styles.emptyState, { backgroundColor: Colors.surface }]}>
-          <Text style={[styles.emptyMessage, { color: Colors.onSurfaceVariant }]}>Ingredient not found</Text>
+          <Text style={[styles.emptyMessage, { color: Colors.onSurfaceVariant }]}>Інгредієнт не знайдено</Text>
         </View>
       </>
     );
@@ -1346,11 +1346,11 @@ export default function IngredientFormScreen() {
       style={[styles.container, { backgroundColor: Colors.background }]}
       keyboardShouldPersistTaps="handled">
       <View style={sectionStyle}>
-        <Text style={[styles.label, { color: Colors.onSurface }]}>Name</Text>
+        <Text style={[styles.label, { color: Colors.onSurface }]}>Назва</Text>
         <TextInput
           value={name}
           onChangeText={setName}
-          placeholder="e.g., Ginger syrup"
+          placeholder="напр., Імбирний сироп"
           style={[
             styles.input,
             { borderColor: Colors.outlineVariant, color: Colors.text, backgroundColor: Colors.surface },
@@ -1375,7 +1375,7 @@ export default function IngredientFormScreen() {
           ) : (
             <View style={styles.placeholderContent}>
               <MaterialCommunityIcons name="image-plus" size={28} color={`${Colors.onSurfaceVariant}99`} />
-              <Text style={[styles.placeholderHint, { color: `${Colors.onSurfaceVariant}99` }]}>Tap to add a photo</Text>
+              <Text style={[styles.placeholderHint, { color: `${Colors.onSurfaceVariant}99` }]}>Натисніть, щоб додати фото</Text>
             </View>
           )}
           {imageSource ? (
@@ -1393,7 +1393,7 @@ export default function IngredientFormScreen() {
             hitSlop={8}
             style={[styles.removePhotoButton, { backgroundColor: Colors.surface }]}
             accessibilityRole="button"
-            accessibilityLabel="Remove photo">
+            accessibilityLabel="Видалити фото">
             <MaterialCommunityIcons name="trash-can-outline" size={18} color={Colors.error} />
           </Pressable>
         ) : null}
@@ -1401,10 +1401,10 @@ export default function IngredientFormScreen() {
 
       <View style={sectionStyle}>
         <View style={styles.tagHeader}>
-          <Text style={[styles.label, { color: Colors.onSurface }]}>Tags</Text>
+          <Text style={[styles.label, { color: Colors.onSurface }]}>Теги</Text>
           <Pressable
             accessibilityRole="button"
-            accessibilityLabel="Create tag"
+            accessibilityLabel="Створити тег"
             onPress={handleOpenTagModal}
             style={[styles.tagAddButton, { borderColor: Colors.outlineVariant }]}>
             <MaterialCommunityIcons name="plus" size={16} color={Colors.tint} />
@@ -1436,7 +1436,7 @@ export default function IngredientFormScreen() {
         ) : null}
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel={baseIngredient ? 'Change base ingredient' : 'Select base ingredient'}
+          accessibilityLabel={baseIngredient ? 'Change base ingredient' : 'Виберіть базовий інгредієнт'}
           accessibilityState={baseDisableReason ? { disabled: true } : undefined}
           disabled={baseDisableReason != null}
           onPress={baseDisableReason ? undefined : handleOpenBaseModal}
@@ -1490,7 +1490,7 @@ export default function IngredientFormScreen() {
         ) : null}
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel={styleIngredient ? 'Change style ingredient' : 'Select style ingredient'}
+          accessibilityLabel={styleIngredient ? 'Change style ingredient' : 'Виберіть стильовий інгредієнт'}
           accessibilityState={styleDisableReason ? { disabled: true } : undefined}
           disabled={styleDisableReason != null}
           onPress={styleDisableReason ? undefined : handleOpenStyleModal}
@@ -1593,7 +1593,7 @@ export default function IngredientFormScreen() {
     <>
       <Stack.Screen
         options={{
-          title: isEditMode ? 'Edit ingredient' : 'Add new ingredient',
+          title: isEditMode ? 'Редагувати інгредієнт' : 'Додати новий інгредієнт',
           headerTitleAlign: 'center',
           headerStyle: { backgroundColor: Colors.surface },
           headerShadowVisible: false,
@@ -1601,7 +1601,7 @@ export default function IngredientFormScreen() {
           headerLeft: () => (
             <HeaderIconButton
               onPress={handleGoBack}
-              accessibilityLabel="Go back">
+              accessibilityLabel="Назад">
               <MaterialCommunityIcons
                 name={Platform.OS === 'ios' ? 'chevron-left' : 'arrow-left'}
                 size={Platform.OS === 'ios' ? 26 : 22}
@@ -1612,7 +1612,7 @@ export default function IngredientFormScreen() {
           headerRight: () => (
             <HeaderIconButton
               onPress={() => setIsHelpVisible(true)}
-              accessibilityLabel="Open screen help">
+              accessibilityLabel="Відкрити довідку екрана">
               <MaterialCommunityIcons name="help-circle-outline" size={22} color={Colors.onSurface} />
             </HeaderIconButton>
           ),
@@ -1647,8 +1647,8 @@ export default function IngredientFormScreen() {
             ]}
             accessibilityRole="menu">
             <View style={styles.modalHeader}>
-              <Text style={[styles.modalTitle, { color: Colors.onSurface }]}>Select base ingredient</Text>
-              <Pressable onPress={handleCloseBaseModal} accessibilityRole="button" accessibilityLabel="Close">
+              <Text style={[styles.modalTitle, { color: Colors.onSurface }]}>Виберіть базовий інгредієнт</Text>
+              <Pressable onPress={handleCloseBaseModal} accessibilityRole="button" accessibilityLabel="Закрити">
                 <MaterialCommunityIcons name="close" size={22} color={Colors.onSurfaceVariant} />
               </Pressable>
             </View>
@@ -1656,7 +1656,7 @@ export default function IngredientFormScreen() {
               ref={baseSearchInputRef}
               value={baseSearch}
               onChangeText={setBaseSearch}
-              placeholder="Search ingredients"
+              placeholder="Пошук інгредієнтів"
               placeholderTextColor={`${Colors.onSurfaceVariant}99`}
               style={[
                 styles.modalSearchInput,
@@ -1679,7 +1679,7 @@ export default function IngredientFormScreen() {
               }}
               contentContainerStyle={styles.modalListContent}
               ListEmptyComponent={() => (
-                <Text style={[styles.modalEmptyText, { color: Colors.onSurfaceVariant }]}>No ingredients found</Text>
+                <Text style={[styles.modalEmptyText, { color: Colors.onSurfaceVariant }]}>Інгредієнтів не знайдено</Text>
               )}
             />
           </Pressable>
@@ -1706,8 +1706,8 @@ export default function IngredientFormScreen() {
             ]}
             accessibilityRole="menu">
             <View style={styles.modalHeader}>
-              <Text style={[styles.modalTitle, { color: Colors.onSurface }]}>Select style ingredient</Text>
-              <Pressable onPress={handleCloseStyleModal} accessibilityRole="button" accessibilityLabel="Close">
+              <Text style={[styles.modalTitle, { color: Colors.onSurface }]}>Виберіть стильовий інгредієнт</Text>
+              <Pressable onPress={handleCloseStyleModal} accessibilityRole="button" accessibilityLabel="Закрити">
                 <MaterialCommunityIcons name="close" size={22} color={Colors.onSurfaceVariant} />
               </Pressable>
             </View>
@@ -1715,7 +1715,7 @@ export default function IngredientFormScreen() {
               ref={styleSearchInputRef}
               value={styleSearch}
               onChangeText={setStyleSearch}
-              placeholder="Search ingredients"
+              placeholder="Пошук інгредієнтів"
               placeholderTextColor={`${Colors.onSurfaceVariant}99`}
               style={[
                 styles.modalSearchInput,
@@ -1738,7 +1738,7 @@ export default function IngredientFormScreen() {
               }}
               contentContainerStyle={styles.modalListContent}
               ListEmptyComponent={() => (
-                <Text style={[styles.modalEmptyText, { color: Colors.onSurfaceVariant }]}>No ingredients found</Text>
+                <Text style={[styles.modalEmptyText, { color: Colors.onSurfaceVariant }]}>Інгредієнтів не знайдено</Text>
               )}
             />
           </Pressable>
@@ -1747,9 +1747,9 @@ export default function IngredientFormScreen() {
 
       <AppDialog
         visible={isHelpVisible}
-        title="Adding ingredient"
-        message="Use this screen to create a new ingredient card.\n\nAdd a name, optional photo, tags, base ingredient or style ingredient, and notes, then tap Save.\n\nA style ingredient can only link to a base ingredient that is neither branded nor styled."
-        actions={[{ label: 'Got it', variant: 'secondary' }]}
+        title="Додавання інгредієнта"
+        message="Використовуйте цей екран, щоб створити нову картку інгредієнта.\n\nДодайте назву, необов’язкове фото, теги, базовий або стильовий інгредієнт та нотатки, а потім натисніть «Зберегти».\n\nСтильовий інгредієнт можна пов’язати лише з базовим інгредієнтом, який не є ані брендовим, ані стильовим."
+        actions={[{ label: 'Зрозуміло', variant: 'secondary' }]}
         onRequestClose={() => setIsHelpVisible(false)}
       />
 
@@ -1763,8 +1763,8 @@ export default function IngredientFormScreen() {
 
       <TagEditorModal
         visible={isTagModalVisible}
-        title="New tag"
-        confirmLabel="Create"
+        title="Новий тег"
+        confirmLabel="Створити"
         onClose={handleCloseTagModal}
         onSave={handleCreateTag}
       />

@@ -207,7 +207,7 @@ function formatIngredientQuantity(
   }
 
   if (!displayAmount && !unitText) {
-    return "As needed";
+    return "За потреби";
   }
 
   if (!displayAmount && unitText) {
@@ -227,11 +227,11 @@ function getIngredientQualifier(
   const qualifiers: string[] = [];
 
   if (ingredient.garnish) {
-    qualifiers.push("garnish");
+    qualifiers.push("прикраса");
   }
 
   if (ingredient.optional) {
-    qualifiers.push("optional");
+    qualifiers.push("необов’язково");
   }
 
   return qualifiers.join(", ") || undefined;
@@ -296,7 +296,7 @@ function buildMissingSubstituteLines(
     }
 
     seen.add(key);
-    const prefix = source === "base" && isBrandedIngredient ? "or any" : "or";
+    const prefix = source === "base" && isBrandedIngredient ? "або будь-який" : "або";
     lines.push(`${prefix} ${name}`);
   });
 
@@ -662,7 +662,7 @@ export default function CocktailDetailsScreen() {
     >
       <Stack.Screen
         options={{
-          title: "Cocktail details",
+          title: "Деталі коктейлю",
           headerTitleAlign: "center",
           headerStyle: { backgroundColor: Colors.surface },
           headerTitleStyle: {
@@ -674,7 +674,7 @@ export default function CocktailDetailsScreen() {
           headerLeft: () => (
             <HeaderIconButton
               onPress={handleReturn}
-              accessibilityLabel="Go back"
+              accessibilityLabel="Назад"
             >
               <MaterialCommunityIcons
                 name={Platform.OS === "ios" ? "chevron-left" : "arrow-left"}
@@ -686,7 +686,7 @@ export default function CocktailDetailsScreen() {
           headerRight: () => (
             <HeaderIconButton
               onPress={() => setIsHelpVisible(true)}
-              accessibilityLabel="Open screen help"
+              accessibilityLabel="Відкрити довідку екрана"
             >
               <MaterialCommunityIcons
                 name="help-circle-outline"
@@ -753,8 +753,8 @@ export default function CocktailDetailsScreen() {
                       accessibilityRole="button"
                       accessibilityLabel={
                         displayedRating === starValue
-                          ? "Clear rating"
-                          : `Set rating to ${starValue}`
+                          ? "Скинути рейтинг"
+                          : `Встановити рейтинг ${starValue}`
                       }
                       style={styles.ratingStar}
                       hitSlop={8}
@@ -780,13 +780,13 @@ export default function CocktailDetailsScreen() {
                 ]}
                 accessibilityRole="button"
                 accessibilityLabel={
-                  showImperialUnits ? "Show in metric" : "Show in imperial"
+                  showImperialUnits ? "Показати в метричній" : "Показати в імперській"
                 }
               >
                 <Text
                   style={[styles.toggleUnitsLabel, { color: Colors.primary }]}
                 >
-                  {showImperialUnits ? "Show in metric" : "Show in imperial"}
+                  {showImperialUnits ? "Показати в метричній" : "Показати в імперській"}
                 </Text>
               </Pressable>
 
@@ -853,8 +853,8 @@ export default function CocktailDetailsScreen() {
                           accessibilityRole="button"
                           accessibilityLabel={
                             isExpanded
-                              ? `Hide ${method.label} description`
-                              : `Show ${method.label} description`
+                              ? `Сховати опис ${method.label}`
+                              : `Показати опис ${method.label}`
                           }
                           hitSlop={8}
                         >
@@ -894,10 +894,10 @@ export default function CocktailDetailsScreen() {
                   return (
                     <TagPill
                       key={tagKey}
-                      label={tag.name ?? "Tag"}
+                      label={tag.name ?? "Тег"}
                       color={tag.color ?? Colors.tint}
                       selected
-                      accessibilityLabel={tag.name ?? "Tag"}
+                      accessibilityLabel={tag.name ?? "Тег"}
                     />
                   );
                 })}
@@ -911,8 +911,8 @@ export default function CocktailDetailsScreen() {
                   accessibilityRole="button"
                   accessibilityLabel={
                     isDescriptionExpanded
-                      ? "Show less description"
-                      : "Show full description"
+                      ? "Згорнути опис"
+                      : "Показати повний опис"
                   }
                   hitSlop={8}
                 >
@@ -954,15 +954,15 @@ export default function CocktailDetailsScreen() {
                     accessibilityRole="button"
                     accessibilityLabel={
                       isDescriptionExpanded
-                        ? "Show less description"
-                        : "Show full description"
+                        ? "Згорнути опис"
+                        : "Показати повний опис"
                     }
                     hitSlop={8}
                   >
                     <Text
                       style={[styles.descriptionToggleText, { color: Colors.tint }]}
                     >
-                      {isDescriptionExpanded ? "Show less" : "Show more"}
+                      {isDescriptionExpanded ? "Згорнути" : "Показати більше"}
                     </Text>
                   </Pressable>
                 ) : null}
@@ -1108,8 +1108,8 @@ export default function CocktailDetailsScreen() {
                     if (resolution.substituteFor) {
                       subtitleLines.push(
                         isBaseToBrandSubstitution
-                          ? `or any ${resolution.substituteFor}`
-                          : `Substitute for ${resolution.substituteFor}`,
+                          ? `або будь-який ${resolution.substituteFor}`
+                          : `Заміна для ${resolution.substituteFor}`,
                       );
                     }
 
@@ -1208,7 +1208,7 @@ export default function CocktailDetailsScreen() {
                                 color={Colors.tint}
                                 style={styles.shoppingIcon}
                                 accessibilityRole="image"
-                                accessibilityLabel="On shopping list"
+                                accessibilityLabel="У списку покупок"
                               />
                             ) : (
                               <View style={styles.shoppingIconPlaceholder} />
@@ -1238,7 +1238,7 @@ export default function CocktailDetailsScreen() {
                   <Pressable
                     onPress={handleCopyPress}
                     accessibilityRole="button"
-                    accessibilityLabel="Copy cocktail"
+                    accessibilityLabel="Скопіювати коктейль"
                     style={[styles.itemActionButton, { borderColor: Colors.primary, backgroundColor: Colors.surfaceBright }]}
                   >
                     <MaterialCommunityIcons
@@ -1246,12 +1246,12 @@ export default function CocktailDetailsScreen() {
                       size={18}
                       color={Colors.primary}
                     />
-                    <Text style={[styles.itemActionLabel, { color: Colors.primary }]}>Copy cocktail</Text>
+                    <Text style={[styles.itemActionLabel, { color: Colors.primary }]}>Скопіювати коктейль</Text>
                   </Pressable>
                   <Pressable
                     onPress={handleEditPress}
                     accessibilityRole="button"
-                    accessibilityLabel="Edit cocktail"
+                    accessibilityLabel="Редагувати коктейль"
                     style={[styles.itemActionButton, { borderColor: Colors.primary, backgroundColor: Colors.surfaceBright }]}
                   >
                     <MaterialCommunityIcons
@@ -1259,7 +1259,7 @@ export default function CocktailDetailsScreen() {
                       size={18}
                       color={Colors.primary}
                     />
-                    <Text style={[styles.itemActionLabel, { color: Colors.primary }]}>Edit cocktail</Text>
+                    <Text style={[styles.itemActionLabel, { color: Colors.primary }]}>Редагувати коктейль</Text>
                   </Pressable>
                 </View>
               </View>
@@ -1283,9 +1283,9 @@ export default function CocktailDetailsScreen() {
 
       <AppDialog
         visible={isHelpVisible}
-        title="Cocktail details"
-        message="This screen shows cocktail details, ingredients, and instructions.\n\nUse the buttons under the cocktail to copy or edit it.\n\n**Ingredient ribbons**\nLeft ribbon marks ingredient type:\nblue = brand ingredient,\nyellow = style ingredient.\n\nRight ribbon marks base variants:\nblue = has branded variants,\nyellow = has style variants."
-        actions={[{ label: "Got it", variant: "secondary" }]}
+        title="Деталі коктейлю"
+        message="Цей екран показує деталі коктейлю, інгредієнти та інструкції.\n\nВикористовуйте кнопки під коктейлем, щоб скопіювати або відредагувати його.\n\n**Стрічки інгредієнтів**\nЛіва стрічка позначає тип інгредієнта:\nсиня = брендовий інгредієнт,\nжовта = стильовий інгредієнт.\n\nПрава стрічка позначає базові варіанти:\nсиня = є брендові варіанти,\nжовта = є стильові варіанти."
+        actions={[{ label: "Зрозуміло", variant: "secondary" }]}
         onRequestClose={() => setIsHelpVisible(false)}
       />
     </SafeAreaView>

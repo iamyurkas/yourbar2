@@ -532,7 +532,7 @@ export default function CreateCocktailScreen() {
   }, [cocktails, getBaseGroupId]);
 
   const placeholderLabel = useMemo(
-    () => (imageUri ? "Change photo" : "Add photo"),
+    () => (imageUri ? "Змінити фото" : "Додати фото"),
     [imageUri],
   );
 
@@ -769,9 +769,9 @@ export default function CreateCocktailScreen() {
 
     if (!canAskAgain) {
       showDialog({
-        title: "Media access required",
+        title: "Потрібен доступ до медіа",
         message:
-          "Enable photo library permissions in system settings to add a cocktail photo.",
+          "Надайте доступ до фототеки в налаштуваннях системи, щоб додати фото коктейлю.",
         actions: [{ label: "OK" }],
       });
     }
@@ -807,8 +807,8 @@ export default function CreateCocktailScreen() {
     } catch (error) {
       console.warn("Failed to pick image", error);
       showDialog({
-        title: "Could not pick image",
-        message: "Please try again later.",
+        title: "Не вдалося вибрати зображення",
+        message: "Спробуйте пізніше.",
         actions: [{ label: "OK" }],
       });
     } finally {
@@ -828,9 +828,9 @@ export default function CreateCocktailScreen() {
 
     if (!canAskAgain) {
       showDialog({
-        title: "Camera access required",
+        title: "Потрібен доступ до камери",
         message:
-          "Enable camera permissions in system settings to take a cocktail photo.",
+          "Надайте доступ до камери в налаштуваннях системи, щоб зробити фото коктейлю.",
         actions: [{ label: "OK" }],
       });
     }
@@ -865,8 +865,8 @@ export default function CreateCocktailScreen() {
     } catch (error) {
       console.warn("Failed to capture image", error);
       showDialog({
-        title: "Could not take photo",
-        message: "Please try again later.",
+        title: "Не вдалося зробити фото",
+        message: "Спробуйте пізніше.",
         actions: [{ label: "OK" }],
       });
     } finally {
@@ -876,22 +876,22 @@ export default function CreateCocktailScreen() {
 
   const handleSelectImageSource = useCallback(() => {
     showDialog({
-      title: "Add photo",
-      message: "Choose how you want to add a cocktail photo.",
+      title: "Додати фото",
+      message: "Оберіть, як додати фото коктейлю.",
       actions: [
         {
-          label: "Take photo",
+          label: "Зробити фото",
           onPress: () => {
             void handleTakePhoto();
           },
         },
         {
-          label: "Choose from gallery",
+          label: "Вибрати з галереї",
           onPress: () => {
             void handlePickImage();
           },
         },
-        { label: "Cancel", variant: "secondary" },
+        { label: "Скасувати", variant: "secondary" },
       ],
     });
   }, [handlePickImage, handleTakePhoto, showDialog]);
@@ -1119,8 +1119,8 @@ export default function CreateCocktailScreen() {
     const trimmedName = name.trim();
     if (!trimmedName) {
       showDialog({
-        title: "Name is required",
-        message: "Please enter the cocktail name.",
+        title: "Потрібна назва",
+        message: "Введіть назву коктейлю.",
         actions: [{ label: "OK" }],
       });
       return;
@@ -1205,8 +1205,8 @@ export default function CreateCocktailScreen() {
 
     if (!sanitizedIngredients.length) {
       showDialog({
-        title: "Recipe required",
-        message: "Add at least one ingredient to the cocktail.",
+        title: "Потрібен рецепт",
+        message: "Додайте принаймні один інгредієнт до коктейлю.",
         actions: [{ label: "OK" }],
       });
       return;
@@ -1259,8 +1259,8 @@ export default function CreateCocktailScreen() {
 
       if (!persisted) {
         showDialog({
-          title: "Could not save cocktail",
-          message: "Please try again later.",
+          title: "Не вдалося зберегти коктейль",
+          message: "Спробуйте пізніше.",
           actions: [{ label: "OK" }],
         });
         return;
@@ -1352,8 +1352,8 @@ export default function CreateCocktailScreen() {
 
     if (numericId == null) {
       showDialog({
-        title: "Cocktail not found",
-        message: "Please try again later.",
+        title: "Коктейль не знайдено",
+        message: "Спробуйте пізніше.",
         actions: [{ label: "OK" }],
       });
       return;
@@ -1362,22 +1362,22 @@ export default function CreateCocktailScreen() {
     const trimmedName = prefilledCocktail?.name?.trim();
     const message = trimmedName
       ? `Are you sure you want to delete\n${trimmedName}?\n\nThis action cannot be undone.`
-      : "Are you sure you want to delete this cocktail?\n\nThis action cannot be undone.";
+      : "Ви впевнені, що хочете видалити цей коктейль?\n\nЦю дію неможливо скасувати.";
 
     showDialog({
-      title: "Delete cocktail",
+      title: "Видалити коктейль",
       message,
       actions: [
-        { label: "Cancel", variant: "secondary" },
+        { label: "Скасувати", variant: "secondary" },
         {
-          label: "Delete",
+          label: "Видалити",
           variant: "destructive",
           onPress: () => {
             const wasDeleted = deleteCocktail(numericId);
             if (!wasDeleted) {
               showDialog({
-                title: "Could not delete cocktail",
-                message: "Please try again later.",
+                title: "Не вдалося видалити коктейль",
+                message: "Спробуйте пізніше.",
                 actions: [{ label: "OK" }],
               });
               return;
@@ -1418,13 +1418,13 @@ export default function CreateCocktailScreen() {
   const confirmLeave = useCallback(
     (onLeave: () => void) => {
       showDialog({
-        title: "Leave without saving?",
-        message: "Your changes will be lost if you leave this screen.",
+        title: "Вийти без збереження?",
+        message: "Якщо вийти з цього екрана, зміни буде втрачено.",
         actions: [
-          { label: "Save", variant: "primary", onPress: handleSubmit },
-          { label: "Stay", variant: "secondary" },
+          { label: "Зберегти", variant: "primary", onPress: handleSubmit },
+          { label: "Залишитися", variant: "secondary" },
           {
-            label: "Leave",
+            label: "Вийти",
             variant: "destructive",
             onPress: () => {
               setHasUnsavedChanges(false);
@@ -1576,7 +1576,7 @@ export default function CreateCocktailScreen() {
     <>
       <Stack.Screen
         options={{
-          title: isEditMode ? "Edit cocktail" : "Add new cocktail",
+          title: isEditMode ? "Редагувати коктейль" : "Додати новий коктейль",
           headerTitleAlign: "center",
           headerStyle: { backgroundColor: Colors.surface },
           headerShadowVisible: false,
@@ -1588,7 +1588,7 @@ export default function CreateCocktailScreen() {
           headerLeft: () => (
             <HeaderIconButton
               onPress={handleGoBack}
-              accessibilityLabel="Go back"
+              accessibilityLabel="Назад"
             >
               <MaterialCommunityIcons
                 name={Platform.OS === "ios" ? "chevron-left" : "arrow-left"}
@@ -1600,7 +1600,7 @@ export default function CreateCocktailScreen() {
           headerRight: () => (
             <HeaderIconButton
               onPress={() => setIsHelpVisible(true)}
-              accessibilityLabel="Open screen help"
+              accessibilityLabel="Відкрити довідку екрана"
             >
               <MaterialCommunityIcons
                 name="help-circle-outline"
@@ -1624,13 +1624,11 @@ export default function CreateCocktailScreen() {
           keyboardShouldPersistTaps="handled"
         >
           <View style={styles.section}>
-            <Text style={[styles.label, { color: Colors.onSurface }]}>
-              Name
-            </Text>
+            <Text style={[styles.label, { color: Colors.onSurface }]}>Назва</Text>
             <TextInput
               value={name}
               onChangeText={setName}
-              placeholder="e.g., Margarita"
+              placeholder="напр., Маргарита"
               style={[
                 styles.input,
                 {
@@ -1651,13 +1649,11 @@ export default function CreateCocktailScreen() {
                 { backgroundColor: Colors.background },
               ]}
             >
-              <Text style={[styles.cardLabel, { color: Colors.onSurface }]}>
-                Glass
-              </Text>
+              <Text style={[styles.cardLabel, { color: Colors.onSurface }]}>Склянка</Text>
               <Pressable
                 style={styles.glassTile}
                 accessibilityRole="button"
-                accessibilityLabel="Select glassware"
+                accessibilityLabel="Вибрати посуд"
                 onPress={() => setIsGlassModalVisible(true)}
               >
                 {glassImageSource ? (
@@ -1683,9 +1679,7 @@ export default function CreateCocktailScreen() {
                 { backgroundColor: Colors.background },
               ]}
             >
-              <Text style={[styles.cardLabel, { color: Colors.onSurface }]}>
-                Photo
-              </Text>
+              <Text style={[styles.cardLabel, { color: Colors.onSurface }]}>Фото</Text>
               <View style={styles.photoTileWrapper}>
                 <Pressable
                   accessibilityRole="button"
@@ -1736,7 +1730,7 @@ export default function CreateCocktailScreen() {
                     hitSlop={8}
                     style={styles.removePhotoButton}
                     accessibilityRole="button"
-                    accessibilityLabel="Remove photo"
+                    accessibilityLabel="Видалити фото"
                   >
                     <MaterialCommunityIcons
                       name="trash-can-outline"
@@ -1762,7 +1756,7 @@ export default function CreateCocktailScreen() {
                 },
               ]}
               accessibilityRole="button"
-              accessibilityLabel="Select method"
+              accessibilityLabel="Вибрати метод"
               onPress={() => setIsMethodModalVisible(true)}
             >
               <View style={styles.methodPickerContent}>
@@ -1775,7 +1769,7 @@ export default function CreateCocktailScreen() {
                 >
                   {selectedMethods.length
                     ? selectedMethods.map((method) => method.label).join(", ")
-                    : "Not specified"}
+                    : "Не вказано"}
                 </Text>
               </View>
               <MaterialCommunityIcons
@@ -1793,7 +1787,7 @@ export default function CreateCocktailScreen() {
               </Text>
               <Pressable
                 accessibilityRole="button"
-                accessibilityLabel="Create tag"
+                accessibilityLabel="Створити тег"
                 onPress={handleOpenTagModal}
                 style={[
                   styles.tagAddButton,
@@ -1836,7 +1830,7 @@ export default function CreateCocktailScreen() {
             <TextInput
               value={description}
               onChangeText={setDescription}
-              placeholder="Optional description"
+              placeholder="Необов’язковий опис"
               placeholderTextColor={`${Colors.onSurfaceVariant}99`}
               style={[
                 styles.input,
@@ -1915,7 +1909,7 @@ export default function CreateCocktailScreen() {
                 },
               ]}
               accessibilityRole="button"
-              accessibilityLabel="Add ingredient"
+              accessibilityLabel="Додати інгредієнт"
             >
               <MaterialCommunityIcons
                 name="plus"
@@ -1939,7 +1933,7 @@ export default function CreateCocktailScreen() {
                 },
               ]}
               accessibilityRole="button"
-              accessibilityLabel="Save cocktail"
+              accessibilityLabel="Зберегти коктейль"
             >
               <Text style={[styles.submitLabel, { color: Colors.onPrimary }]}>
                 Save cocktail
@@ -1963,7 +1957,7 @@ export default function CreateCocktailScreen() {
                     }
                     style={[styles.inlineActionButton, { borderColor: Colors.primary, backgroundColor: Colors.surfaceBright }]}
                     accessibilityRole="button"
-                    accessibilityLabel="Edit cocktail"
+                    accessibilityLabel="Редагувати коктейль"
                   >
                     <MaterialCommunityIcons
                       name="pencil-outline"
@@ -1978,7 +1972,7 @@ export default function CreateCocktailScreen() {
                     onPress={handleDeletePress}
                     style={[styles.inlineActionButton, { borderColor: Colors.error, backgroundColor: Colors.surfaceBright }]}
                     accessibilityRole="button"
-                    accessibilityLabel="Delete cocktail"
+                    accessibilityLabel="Видалити коктейль"
                   >
                     <MaterialIcons
                       name="delete-outline"
@@ -2005,7 +1999,7 @@ export default function CreateCocktailScreen() {
           style={styles.modalOverlay}
           onPress={() => setIsGlassModalVisible(false)}
           accessibilityRole="button"
-          accessibilityLabel="Close"
+          accessibilityLabel="Закрити"
         >
           <Pressable
             onPress={(event) => event.stopPropagation?.()}
@@ -2026,7 +2020,7 @@ export default function CreateCocktailScreen() {
               <Pressable
                 onPress={() => setIsGlassModalVisible(false)}
                 accessibilityRole="button"
-                accessibilityLabel="Close"
+                accessibilityLabel="Закрити"
               >
                 <MaterialCommunityIcons
                   name="close"
@@ -2127,7 +2121,7 @@ export default function CreateCocktailScreen() {
               <Pressable
                 onPress={handleCloseUnitPicker}
                 accessibilityRole="button"
-                accessibilityLabel="Close"
+                accessibilityLabel="Закрити"
               >
                 <MaterialCommunityIcons
                   name="close"
@@ -2169,7 +2163,7 @@ export default function CreateCocktailScreen() {
                     accessibilityLabel={
                       displayLabel.trim()
                         ? `Select ${displayLabel.trim()}`
-                        : "Select empty unit"
+                        : "Вибрати порожню одиницю"
                     }
                   >
                     <Text
@@ -2217,7 +2211,7 @@ export default function CreateCocktailScreen() {
               <Pressable
                 onPress={() => setIsMethodModalVisible(false)}
                 accessibilityRole="button"
-                accessibilityLabel="Close"
+                accessibilityLabel="Закрити"
               >
                 <MaterialCommunityIcons
                   name="close"
@@ -2248,7 +2242,7 @@ export default function CreateCocktailScreen() {
                   },
                 ]}
                 accessibilityRole="button"
-                accessibilityLabel="Clear methods"
+                accessibilityLabel="Очистити методи"
               >
                 <Text
                   style={[
@@ -2256,7 +2250,7 @@ export default function CreateCocktailScreen() {
                     { color: Colors.onSurface },
                   ]}
                 >
-                  Not specified
+                  Не вказано
                 </Text>
                 <Text
                   style={[
@@ -2264,7 +2258,7 @@ export default function CreateCocktailScreen() {
                     { color: Colors.onSurfaceVariant },
                   ]}
                 >
-                  Clear all selected methods.
+                  Очистити всі вибрані методи.
                 </Text>
               </Pressable>
               {getCocktailMethods().map((method) => {
@@ -2288,7 +2282,7 @@ export default function CreateCocktailScreen() {
                       },
                     ]}
                     accessibilityRole="button"
-                    accessibilityLabel={`Select ${method.label}`}
+                    accessibilityLabel={`Вибрати ${method.label}`}
                   >
                     <View style={styles.methodOptionHeader}>
                       <View style={styles.methodOptionTitleRow}>
@@ -2331,9 +2325,9 @@ export default function CreateCocktailScreen() {
 
       <AppDialog
         visible={isHelpVisible}
-        title="Adding cocktail"
-        message="Use this screen to build a new cocktail recipe.\n\nFill in name, photo, tags, ingredients, method, and instructions, then tap Save."
-        actions={[{ label: "Got it", variant: "secondary" }]}
+        title="Додавання коктейлю"
+        message="Використовуйте цей екран, щоб створити новий рецепт коктейлю.\n\nЗаповніть назву, фото, теги, інгредієнти, метод і інструкції, а потім натисніть «Зберегти»."
+        actions={[{ label: "Зрозуміло", variant: "secondary" }]}
         onRequestClose={() => setIsHelpVisible(false)}
       />
 
@@ -2347,8 +2341,8 @@ export default function CreateCocktailScreen() {
 
       <TagEditorModal
         visible={isTagModalVisible}
-        title="New tag"
-        confirmLabel="Create"
+        title="Новий тег"
+        confirmLabel="Створити"
         onClose={handleCloseTagModal}
         onSave={handleCreateTag}
       />
@@ -2515,7 +2509,7 @@ function EditableIngredientRow({
         return undefined;
       }
 
-      const label = count === 1 ? "recipe" : "recipes";
+      const label = count === 1 ? "рецепт" : "рецепти";
       return `${count} ${label}`;
     },
     [cocktailsByBaseGroup],
@@ -2621,7 +2615,7 @@ function EditableIngredientRow({
 
   const unitLabel = useMemo(() => {
     if (ingredient.unitId == null) {
-      return "No unit";
+      return "Без одиниці";
     }
     const entry = COCKTAIL_UNIT_DICTIONARY[ingredient.unitId];
     if (!entry) {
@@ -2668,7 +2662,7 @@ function EditableIngredientRow({
               disabled={!canMoveUp}
               hitSlop={8}
               accessibilityRole="button"
-              accessibilityLabel="Move ingredient up"
+              accessibilityLabel="Перемістити інгредієнт вгору"
               style={[
                 styles.reorderButton,
                 { borderColor: Colors.outlineVariant, backgroundColor: Colors.surface },
@@ -2690,7 +2684,7 @@ function EditableIngredientRow({
               disabled={!canMoveDown}
               hitSlop={8}
               accessibilityRole="button"
-              accessibilityLabel="Move ingredient down"
+              accessibilityLabel="Перемістити інгредієнт вниз"
               style={[
                 styles.reorderButton,
                 { borderColor: Colors.outlineVariant, backgroundColor: Colors.surface },
@@ -2713,7 +2707,7 @@ function EditableIngredientRow({
           onPress={() => onRemove(ingredient.key)}
           hitSlop={8}
           accessibilityRole="button"
-          accessibilityLabel="Remove ingredient"
+          accessibilityLabel="Видалити інгредієнт"
           style={!canReorder && styles.hiddenControl}
           pointerEvents={canReorder ? "auto" : "none"}
         >
@@ -2738,7 +2732,7 @@ function EditableIngredientRow({
               );
             }
           }}
-          placeholder="Ingredient name"
+          placeholder="Назва інгредієнта"
           placeholderTextColor={`${Colors.onSurfaceVariant}99`}
           style={[
             styles.input,
@@ -2769,7 +2763,7 @@ function EditableIngredientRow({
               { backgroundColor: Colors.background },
             ]}
             accessibilityRole="button"
-            accessibilityLabel="Create new ingredient"
+            accessibilityLabel="Створити новий інгредієнт"
             hitSlop={8}
           >
             <Text
@@ -2839,7 +2833,7 @@ function EditableIngredientRow({
                         color={Colors.tint}
                         style={styles.shoppingIcon}
                         accessibilityRole="image"
-                        accessibilityLabel="On shopping list"
+                        accessibilityLabel="У списку покупок"
                       />
                     ) : (
                       <View style={styles.shoppingIconPlaceholder} />
@@ -2871,7 +2865,7 @@ function EditableIngredientRow({
           <TextInput
             value={ingredient.amount}
             onChangeText={(text) => onChange(ingredient.key, { amount: text })}
-            placeholder="e.g., 45"
+            placeholder="напр., 45"
             placeholderTextColor={`${Colors.onSurfaceVariant}99`}
             keyboardType="decimal-pad"
             style={[
@@ -2895,7 +2889,7 @@ function EditableIngredientRow({
               },
             ]}
             accessibilityRole="button"
-            accessibilityLabel="Select unit"
+            accessibilityLabel="Вибрати одиницю"
           >
             <Text style={[styles.unitLabel, { color: Colors.onSurface }]}>
               {unitLabel}
@@ -2911,12 +2905,12 @@ function EditableIngredientRow({
 
       <View style={styles.toggleRow}>
         <ToggleChip
-          label="Garnish"
+          label="Прикраса"
           active={ingredient.garnish}
           onToggle={handleToggleGarnish}
         />
         <ToggleChip
-          label="Optional"
+          label="Необов’язково"
           active={ingredient.optional}
           onToggle={handleToggleOptional}
         />
@@ -2925,27 +2919,27 @@ function EditableIngredientRow({
       {isBrandedIngredient ? (
         <View style={styles.toggleRow}>
           <ToggleChip
-            label="Allow base substitute"
+            label="Дозволити базову заміну"
             active={ingredient.allowBaseSubstitution}
             onToggle={handleToggleAllowBase}
             onInfo={() =>
               onOpenDialog({
-                title: "Allow base substitute",
+                title: "Дозволити базову заміну",
                 message:
-                  "If the specified ingredient isn't available, the cocktail will be shown as available with its base ingredient.",
+                  "Якщо вказаний інгредієнт недоступний, коктейль вважатиметься доступним із його базовим інгредієнтом.",
                 actions: [{ label: "OK" }],
               })
             }
           />
           <ToggleChip
-            label="Allow branded substitute"
+            label="Дозволити брендову заміну"
             active={ingredient.allowBrandSubstitution}
             onToggle={handleToggleAllowBrand}
             onInfo={() =>
               onOpenDialog({
-                title: "Allow branded substitute",
+                title: "Дозволити брендову заміну",
                 message:
-                  "If the specified ingredient isn't available, the cocktail will be shown as available with branded ingredients of the base.",
+                  "Якщо вказаний інгредієнт недоступний, коктейль вважатиметься доступним із брендовими інгредієнтами цієї бази.",
                 actions: [{ label: "OK" }],
               })
             }
@@ -2956,14 +2950,14 @@ function EditableIngredientRow({
       {shouldShowStyleSubstitution ? (
         <View style={styles.toggleRow}>
           <ToggleChip
-            label="Allow style substitutes"
+            label="Дозволити стильові заміни"
             active={ingredient.allowStyleSubstitution}
             onToggle={handleToggleAllowStyle}
             onInfo={() =>
               onOpenDialog({
-                title: "Allow style substitutes",
+                title: "Дозволити стильові заміни",
                 message:
-                  "If the specified styled ingredient isn't available, the cocktail will be shown as available with its style base ingredient or other styles of the same base.",
+                  "Якщо вказаний стильовий інгредієнт недоступний, коктейль вважатиметься доступним із його стильовою базою або іншими стилями тієї самої бази.",
                 actions: [{ label: "OK" }],
               })
             }
@@ -2982,7 +2976,7 @@ function EditableIngredientRow({
             },
           ]}
           accessibilityRole="button"
-          accessibilityLabel="Add substitute"
+          accessibilityLabel="Додати заміну"
         >
           <MaterialCommunityIcons name="plus" size={16} color={Colors.tint} />
           <Text style={[styles.addSubstituteLabel, { color: Colors.tint }]}>
