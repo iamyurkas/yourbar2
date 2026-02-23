@@ -234,7 +234,8 @@ export const ukUATranslations: TranslationDictionary = {
   "ingredientDetails.editIngredient": "Редагувати інгредієнт",
   "ingredientDetails.iHaveIt": "Я це маю",
   "ingredientDetails.buyOn": "купити на {{store}}",
-  "ingredientDetails.toMakeMoreCocktails": "щоб зробити ще {{count}} коктейлів.",
+  "ingredientDetails.toMakeOneMoreCocktail": "щоб зробити ще {{count}} коктейль",
+  "ingredientDetails.toMakeMoreCocktails": "щоб зробити ще {{count}} коктейлів",
   "ingredientDetails.addCocktailButton": "+ Додати коктейль",
   "shaker.helpBase":
     "Цей екран допомагає вибирати інгредієнти та розуміти, що можна змішати вже зараз.\n\nВикористовуйте пошук, торкайтеся інгредієнтів для вибору і відкривайте результати шейкера.",

@@ -944,7 +944,9 @@ export default function IngredientDetailsScreen() {
                             { color: Colors.onSurfaceVariant },
                           ]}
                         >
-                          {t("ingredientDetails.toMakeMoreCocktails", { count: canMakeMoreCocktailsCount })}
+                          {canMakeMoreCocktailsCount === 1
+                            ? t("ingredientDetails.toMakeOneMoreCocktail", { count: canMakeMoreCocktailsCount })
+                            : t("ingredientDetails.toMakeMoreCocktails", { count: canMakeMoreCocktailsCount })}
                         </Text>
                       ) : null}
                     </View>

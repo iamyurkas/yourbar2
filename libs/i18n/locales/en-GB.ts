@@ -227,6 +227,7 @@ export const enGBTranslations: TranslationDictionary = {
   'ingredientDetails.editIngredient': 'Edit ingredient',
   'ingredientDetails.iHaveIt': 'I have it',
   'ingredientDetails.buyOn': 'Buy on {{store}}',
+  'ingredientDetails.toMakeOneMoreCocktail': 'to make {{count}} more cocktail',
   'ingredientDetails.toMakeMoreCocktails': 'to make {{count}} more cocktails',
   'ingredientDetails.addCocktailButton': '+ Add cocktail',
   'shaker.helpBase': 'This screen helps you select ingredients and understand what you can mix right now.\n\nUse search to find ingredients quickly, tap ingredients to mark them to use, and open shaker results for matching cocktails.',
