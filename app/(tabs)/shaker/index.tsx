@@ -31,6 +31,7 @@ import {
   getVisibleIngredientIdsForCocktail,
 } from '@/libs/ingredient-availability';
 import { normalizeSearchText } from '@/libs/search-normalization';
+import { getPluralCategory } from '@/libs/i18n/plural';
 import { useI18n } from '@/libs/i18n/use-i18n';
 import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
 import { tagColors } from '@/theme/theme';
@@ -192,7 +193,7 @@ function isCollapsedHeaderItem(item: Ingredient) {
 export default function ShakerScreen() {
   const router = useRouter();
   const Colors = useAppColors();
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const {
     cocktails,
     ingredients,
@@ -313,20 +314,25 @@ export default function ShakerScreen() {
       }
 
       if (!map.has(key)) {
+        const isBuiltin = tag?.id != null && tag.id < 10;
+        const translatedName = isBuiltin ? t(`ingredientTag.${tag.id}`) : tag?.name;
+        const finalName = (isBuiltin && translatedName !== `ingredientTag.${tag.id}`) ? translatedName : (tag?.name ?? t('tags.unnamed'));
+
         map.set(key, {
           key,
-          name: tag?.name ?? t('tags.unnamed'),
+          name: finalName,
           color: tag?.color ?? defaultTagColor,
         });
       }
     });
 
-    const otherTag = BUILTIN_INGREDIENT_TAGS.find((tag) => tag.name.trim().toLowerCase() === 'other');
+    const otherTag = BUILTIN_INGREDIENT_TAGS.find((tag) => tag.id === 9 || tag.name.trim().toLowerCase() === 'other');
     const otherKey = normalizeTagKey(otherTag) ?? 'other';
     if (!map.has(otherKey)) {
+      const translatedName = t(`ingredientTag.9`);
       map.set(otherKey, {
         key: otherKey,
-        name: otherTag?.name ?? 'Other',
+        name: translatedName !== `ingredientTag.9` ? translatedName : (otherTag?.name ?? 'Other'),
         color: otherTag?.color ?? defaultTagColor,
       });
     }
@@ -589,9 +595,13 @@ export default function ShakerScreen() {
         color: defaultTagColor,
       };
 
+      const isBuiltin = tag?.id != null && tag.id < 10;
+      const translatedName = isBuiltin ? t(`ingredientTag.${tag.id}`) : tag?.name;
+      const finalName = (isBuiltin && translatedName !== `ingredientTag.${tag.id}`) ? translatedName : (tag?.name ?? fallbackTag.name);
+
       groups.set(key, {
         key,
-        name: tag?.name ?? fallbackTag.name,
+        name: finalName,
         color: tag?.color ?? fallbackTag.color,
         ingredients: [ingredient],
       });
@@ -924,7 +934,7 @@ export default function ShakerScreen() {
         <View style={[styles.groupCard, { backgroundColor: Colors.background }]}>
           <Pressable
             accessibilityRole="button"
-            accessibilityLabel={`${section.name} ingredients`}
+            accessibilityLabel={t("shaker.ingredientsInGroupA11y", { name: section.name })}
             accessibilityState={{ expanded: isExpanded }}
             onStartShouldSetResponderCapture={() => true}
             onResponderTerminationRequest={() => false}
@@ -1017,14 +1027,15 @@ export default function ShakerScreen() {
       const separatorColor = isAvailable ? Colors.outline : Colors.outlineVariant;
       const makeableCount = ingredientId >= 0 ? makeableCocktailCounts.get(ingredientId) ?? 0 : 0;
       const totalCount = ingredientId >= 0 ? totalCocktailCounts.get(ingredientId) ?? 0 : 0;
-      const label = makeableCount === 1 ? 'cocktail' : 'cocktails';
-      const recipeLabel = totalCount === 1 ? 'recipe' : 'recipes';
-      const subtitleText =
-        makeableCount > 0
-          ? `Make ${makeableCount} ${label}`
-          : totalCount > 0
-            ? `${totalCount} ${recipeLabel}`
-            : undefined;
+
+      let subtitleText: string | undefined;
+      if (makeableCount > 0) {
+        const pluralCategory = getPluralCategory(locale, makeableCount);
+        subtitleText = t(`shaker.makeCount.${pluralCategory}`, { count: makeableCount });
+      } else if (totalCount > 0) {
+        const pluralCategory = getPluralCategory(locale, totalCount);
+        subtitleText = t(`shaker.recipeCount.${pluralCategory}`, { count: totalCount });
+      }
 
       return (
         <View>

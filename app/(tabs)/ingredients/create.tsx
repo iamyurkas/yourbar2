@@ -156,7 +156,7 @@ export default function IngredientFormScreen() {
 
   const ingredient = useResolvedIngredient(ingredientParam, ingredients);
   const defaultIngredientTagId = BUILTIN_INGREDIENT_TAGS.find(
-    (tag) => tag.name.trim().toLowerCase() === 'other',
+    (tag) => tag.id === 9 || tag.name.trim().toLowerCase() === 'other',
   )?.id;
 
   const numericIngredientId = useMemo(() => {
@@ -1417,18 +1417,24 @@ export default function IngredientFormScreen() {
         </View>
         <Text style={[hintStyle, { color: Colors.onSurfaceVariant }]}>{t('ingredientForm.selectTags')}</Text>
         <View style={tagListStyle}>
-          {tagSelection.map((tag) => (
-            <TagPill
-              key={tag.id}
-              label={tag.name}
-              color={tag.color}
+          {tagSelection.map((tag) => {
+            const isBuiltin = tag.id < 10;
+            const translatedName = isBuiltin ? t(`ingredientTag.${tag.id}`) : tag.name;
+            const finalName = (isBuiltin && translatedName !== `ingredientTag.${tag.id}`) ? translatedName : tag.name;
+
+            return (
+              <TagPill
+                key={tag.id}
+                label={finalName}
+                color={tag.color}
               selected={tag.selected}
               onPress={() => toggleTag(tag.id)}
-              accessibilityRole="checkbox"
-              accessibilityState={{ checked: tag.selected }}
-              androidRippleColor={`${Colors.surface}33`}
-            />
-          ))}
+                accessibilityRole="checkbox"
+                accessibilityState={{ checked: tag.selected }}
+                androidRippleColor={`${Colors.surface}33`}
+              />
+            );
+          })}
         </View>
       </View>
 

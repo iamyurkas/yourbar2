@@ -47,6 +47,7 @@ import {
 } from "@/constants/cocktail-units";
 import { GLASSWARE } from "@/constants/glassware";
 import { useAppColors } from "@/constants/theme";
+import { getPluralCategory } from "@/libs/i18n/plural";
 import { useI18n } from "@/libs/i18n/use-i18n";
 import {
   buildReturnToParams,
@@ -233,7 +234,7 @@ function mapRecipeIngredientToEditable(
 export default function CreateCocktailScreen() {
   const navigation = useNavigation();
   const Colors = useAppColors();
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const {
     ingredients: inventoryIngredients,
     cocktails,
@@ -330,7 +331,7 @@ export default function CreateCocktailScreen() {
     ? DEFAULT_IMPERIAL_UNIT_ID
     : DEFAULT_METRIC_UNIT_ID;
   const defaultCocktailTagId = BUILTIN_COCKTAIL_TAGS.find(
-    (tag) => tag.name.trim().toLowerCase() === "custom",
+    (tag) => tag.id === 11 || tag.name.trim().toLowerCase() === "custom",
   )?.id;
 
   const renderMethodIcon = (methodId: CocktailMethodId, iconColor: string) => {
@@ -1818,18 +1819,24 @@ export default function CreateCocktailScreen() {
               {t("cocktailForm.selectTags")}
             </Text>
             <View style={styles.tagList}>
-              {tagSelection.map((tag) => (
-                <TagPill
-                  key={tag.id}
-                  label={tag.name}
-                  color={tag.color}
+              {tagSelection.map((tag) => {
+                const isBuiltin = BUILTIN_COCKTAIL_TAGS.some(bt => bt.id === tag.id);
+                const translatedName = isBuiltin ? t(`cocktailTag.${tag.id}`) : tag.name;
+                const finalName = (isBuiltin && translatedName !== `cocktailTag.${tag.id}`) ? translatedName : tag.name;
+
+                return (
+                  <TagPill
+                    key={tag.id}
+                    label={finalName}
+                    color={tag.color}
                   selected={tag.selected}
                   onPress={() => handleToggleTag(tag.id)}
                   accessibilityRole="checkbox"
                   accessibilityState={{ checked: tag.selected }}
                   androidRippleColor={`${Colors.surface}33`}
                 />
-              ))}
+                );
+              })}
             </View>
           </View>
 
@@ -2065,7 +2072,7 @@ export default function CreateCocktailScreen() {
                       },
                     ]}
                     accessibilityRole="button"
-                    accessibilityLabel={t("cocktailForm.selectNamed", { name: item.name })}
+                    accessibilityLabel={t("cocktailForm.selectNamed", { name: t(`glassware.${item.id}`) })}
                   >
                     {asset ? (
                       <AppImage
@@ -2087,7 +2094,7 @@ export default function CreateCocktailScreen() {
                       ]}
                       numberOfLines={2}
                     >
-                      {item.name}
+                      {t(`glassware.${item.id}`)}
                     </Text>
                   </Pressable>
                 );
@@ -2147,11 +2154,16 @@ export default function CreateCocktailScreen() {
               keyboardShouldPersistTaps="handled"
             >
               {COCKTAIL_UNIT_OPTIONS.map((option) => {
-                const optionLabel = usePluralUnitsInPicker
-                  ? (COCKTAIL_UNIT_DICTIONARY[option.id]?.plural ??
-                    option.label)
-                  : option.label;
-                const displayLabel = optionLabel || " ";
+                const category = usePluralUnitsInPicker ? getPluralCategory(locale, 2) : "one";
+                let displayLabel = t(`unit.${option.id}.${category}`);
+                if (displayLabel === `unit.${option.id}.${category}`) {
+                  displayLabel = t(`unit.${option.id}.${usePluralUnitsInPicker ? "plural" : "singular"}`);
+                }
+
+                if (displayLabel === `unit.${option.id}.${usePluralUnitsInPicker ? "plural" : "singular"}`) {
+                  displayLabel = option.label || " ";
+                }
+
                 const isSelected =
                   option.id === targetUnitPickerIngredient?.unitId;
                 return (
@@ -2401,7 +2413,7 @@ function EditableIngredientRow({
   index,
   totalCount,
 }: EditableIngredientRowProps) {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const [isFocused, setIsFocused] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const hideSuggestionsTimeout = useRef<NodeJS.Timeout | null>(null);
@@ -2627,15 +2639,21 @@ function EditableIngredientRow({
     if (ingredient.unitId == null) {
       return t("cocktailForm.noUnit");
     }
-    const entry = COCKTAIL_UNIT_DICTIONARY[ingredient.unitId];
-    if (!entry) {
-      return "";
+
+    const category = usePluralUnits ? getPluralCategory(locale, 2) : "one";
+    let label = t(`unit.${ingredient.unitId}.${category}`);
+
+    if (label === `unit.${ingredient.unitId}.${category}`) {
+      label = t(`unit.${ingredient.unitId}.${usePluralUnits ? "plural" : "singular"}`);
     }
-    const label = usePluralUnits
-      ? (entry.plural ?? entry.singular)
-      : entry.singular;
+
+    if (label === `unit.${ingredient.unitId}.${usePluralUnits ? "plural" : "singular"}`) {
+      const entry = COCKTAIL_UNIT_DICTIONARY[ingredient.unitId];
+      label = usePluralUnits ? (entry?.plural ?? entry?.singular ?? "") : (entry?.singular ?? "");
+    }
+
     return label || "";
-  }, [ingredient.unitId, t, usePluralUnits]);
+  }, [ingredient.unitId, t, usePluralUnits, locale]);
 
   useEffect(() => {
     return () => {

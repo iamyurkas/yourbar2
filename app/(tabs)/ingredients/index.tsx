@@ -133,8 +133,10 @@ const IngredientListItem = memo(function IngredientListItemComponent({
     ? Colors.styledIngredient
     : undefined;
 
+  const { t } = useI18n();
+
   const shoppingControl = useMemo(() => {
-    const shoppingLabel = onShoppingToggle ? 'Remove from shopping list' : 'On shopping list';
+    const shoppingLabel = onShoppingToggle ? t('ingredients.removeFromShoppingList') : t('ingredients.onShoppingList');
     const isShoppingTab = Boolean(onShoppingToggle);
     const shoppingIconName = isShoppingTab ? 'remove-shopping-cart' : 'shopping-cart';
     const shoppingIconColor = isShoppingTab ? Colors.error : Colors.tint;
@@ -460,11 +462,11 @@ export default function IngredientsScreen() {
     });
 
     return {
-      all: { key: 'all', label: 'All', data: ingredients },
-      my: { key: 'my', label: 'My', data: inStock },
+      all: { key: 'all', label: t('common.tabAll'), data: ingredients },
+      my: { key: 'my', label: t('common.tabMy'), data: inStock },
       shopping: {
         key: 'shopping',
-        label: 'Shopping',
+        label: t('common.tabShopping'),
         data: shoppingList,
       },
     };
@@ -757,10 +759,14 @@ export default function IngredientsScreen() {
                   <View style={styles.filterTagList}>
                     {availableTagOptions.map((tag) => {
                       const selected = selectedTagKeys.has(tag.key);
+                      const isBuiltin = !isNaN(Number(tag.key)) && Number(tag.key) < 10;
+                      const translatedName = isBuiltin ? t(`ingredientTag.${tag.key}`) : tag.name;
+                      const finalName = (isBuiltin && translatedName !== `ingredientTag.${tag.key}`) ? translatedName : tag.name;
+
                       return (
                         <TagPill
                           key={tag.key}
-                          label={tag.name}
+                          label={finalName}
                           color={tag.color}
                           selected={selected}
                           onPress={() => handleTagFilterToggle(tag.key)}

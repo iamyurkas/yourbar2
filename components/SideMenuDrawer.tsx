@@ -784,7 +784,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   };
 
   const handleReportIssue = async () => {
-    const subject = `Something wrong in your bar - ${APP_VERSION}`;
+    const subject = `${t("sideMenu.reportIssueSubject")} - ${APP_VERSION}`;
     const mailtoUrl = `mailto:your.bar.app@gmail.com?subject=${encodeURIComponent(subject)}`;
 
     try {
@@ -862,7 +862,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                       key={`header-theme-option-${option.key}`}
                       accessibilityRole="button"
                       accessibilityState={{ selected: isSelected }}
-                      accessibilityLabel={`Set ${t(option.labelKey)} theme`}
+                      accessibilityLabel={t("sideMenu.setThemeA11y", { theme: t(option.labelKey) })}
                       onPress={() => handleSelectTheme(option.key)}
                       style={({ pressed }) => [
                         styles.themeToggleOption,
@@ -1780,7 +1780,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                           { color: Colors.onSurface },
                         ]}
                       >
-                        {option.label}
+                        {t(option.labelKey)}
                       </Text>
                       <Text
                         style={[
@@ -1952,7 +1952,9 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                           { color: Colors.onSurfaceVariant },
                         ]}
                       >
-                        {option.countryName}
+                        {t(`amazon.country.${storeKey}`) !== `amazon.country.${storeKey}`
+                          ? t(`amazon.country.${storeKey}`)
+                          : option.countryName}
                       </Text>
                     </View>
                     <MaterialCommunityIcons

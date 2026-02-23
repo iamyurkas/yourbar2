@@ -39,6 +39,7 @@ import {
   createIngredientLookup,
   getVisibleIngredientIdsForCocktail,
 } from "@/libs/ingredient-availability";
+import { getPluralCategory } from "@/libs/i18n/plural";
 import {
   buildReturnToParams,
   navigateToDetailsWithReturnTo,
@@ -79,26 +80,6 @@ function useResolvedIngredient(
 function buildFallbackText(value?: string) {
   const trimmed = value?.trim();
   return trimmed ? trimmed.slice(0, 2).toUpperCase() : undefined;
-}
-
-function getUkrainianCocktailWordForm(count: number) {
-  const absolute = Math.abs(count);
-  const lastTwoDigits = absolute % 100;
-  const lastDigit = absolute % 10;
-
-  if (lastTwoDigits >= 11 && lastTwoDigits <= 14) {
-    return "many";
-  }
-
-  if (lastDigit === 1) {
-    return "one";
-  }
-
-  if (lastDigit >= 2 && lastDigit <= 4) {
-    return "few";
-  }
-
-  return "many";
 }
 
 export default function IngredientDetailsScreen() {
@@ -354,6 +335,8 @@ export default function IngredientDetailsScreen() {
           ingredientLookup,
           undefined,
           { ignoreGarnish, allowAllSubstitutes },
+          t,
+          locale,
         );
         const availabilityWithIngredient = summariseCocktailAvailability(
           cocktail,
@@ -366,6 +349,8 @@ export default function IngredientDetailsScreen() {
           ingredientLookup,
           undefined,
           { ignoreGarnish, allowAllSubstitutes },
+          t,
+          locale,
         );
 
         return {
@@ -979,9 +964,7 @@ export default function IngredientDetailsScreen() {
                           ]}
                         >
                           {t(
-                            locale === "uk-UA"
-                              ? `ingredientDetails.toMakeMoreCocktails.${getUkrainianCocktailWordForm(canMakeMoreCocktailsCount)}`
-                              : "ingredientDetails.toMakeMoreCocktails.other",
+                            `ingredientDetails.toMakeMoreCocktails.${getPluralCategory(locale, canMakeMoreCocktailsCount)}`,
                             {
                               count: canMakeMoreCocktailsCount,
                             },
@@ -1004,13 +987,17 @@ export default function IngredientDetailsScreen() {
                         ? `tag-${tag.name}`
                         : `tag-${index}`;
 
+                  const isBuiltin = tag.id != null && tag.id < 10;
+                  const translatedName = isBuiltin ? t(`ingredientTag.${tag.id}`) : tag.name;
+                  const finalName = (isBuiltin && translatedName !== `ingredientTag.${tag.id}`) ? translatedName : (tag.name ?? "");
+
                   return (
                     <TagPill
                       key={tagKey}
-                      label={tag.name ?? ""}
+                      label={finalName}
                       color={tag.color ?? Colors.tint}
                       selected
-                      accessibilityLabel={tag.name ?? t("ingredientDetails.tag")}
+                      accessibilityLabel={finalName || t("ingredientDetails.tag")}
                     />
                   );
                 })}
