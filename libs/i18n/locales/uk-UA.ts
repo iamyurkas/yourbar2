@@ -239,7 +239,7 @@ export const ukUATranslations: TranslationDictionary = {
   "cocktailDetails.optional": "опційно",
   "cocktailDetails.or": "або {{name}}",
   "cocktailDetails.orAny": "або будь-який {{name}}",
-  "cocktailDetails.substituteFor": "Замість {{name}}",
+  "cocktailDetails.substituteFor": "Заміняє {{name}}",
   "cocktailDetails.onShoppingList": "У списку покупок",
   "cocktailDetails.copyCocktail": "Копіювати коктейль",
   "cocktailDetails.editCocktail": "Редагувати коктейль",
@@ -252,19 +252,19 @@ export const ukUATranslations: TranslationDictionary = {
     "Збийте в блендері з крижаною крихтою ддя замороженої текстури.",
   "cocktailMethod.muddle.label": "Розминати",
   "cocktailMethod.muddle.description":
-    "Розімніть фрукти, ягоди або трави, щоби вивільнити сік.",
+    "Розімніть фрукти, ягоди або трави, щоби вивільнити сік. Розітріть цукор з невеликою кількістю рідини.",
   "cocktailMethod.heat.label": "Нагрівати",
   "cocktailMethod.heat.description":
-    "Підігрійте інгредієнти, щоби поєднати смаки.",
+    "Підігрійте інгредієнти, щоби поєднати смаки. Не давайте кипіти, якщо в рецепті прямо не вказано протилежне.",
   "cocktailMethod.shake.label": "Збовтувати",
   "cocktailMethod.shake.description":
-    "Струсіть у шейкері з льодом. Найкраще для цитрусових, сиропів, вершків чи білка — для аерації та охолодження.",
+    "Енергійно струсіть у шейкері з льодом. Найкраще для цитрусових, сиропів, вершків чи білка.",
   "cocktailMethod.stir.label": "Змішувати",
   "cocktailMethod.stir.description":
     "Зміщайте барною ложкою в окремому, наповненомому льодом, глеку. Найкраще для трав'яних міксерів.",
   "cocktailMethod.throw.label": "Переливати",
   "cocktailMethod.throw.description":
-    "Переливайте між ємностями шейкера з відстані для аерації без помутніння.",
+    "Переливайте інгредієнти між ємностями шейкера з відстані для аерації без помутніння.",
   "cocktailMethod.build.label": "Наливати",
   "cocktailMethod.build.description":
     "Наливайте інгредієнти безпосередньо в келих подачі.",
