@@ -66,7 +66,7 @@ export function AppDialog({ visible, title, message, actions, onRequestClose }: 
         style={[styles.overlay, { backgroundColor: Colors.backdrop }]}
         onPress={onRequestClose}
         accessibilityRole="button"
-        accessibilityLabel="Close dialog">
+        accessibilityLabel={t("appDialog.closeDialog")}>
         <Pressable
           style={[styles.card, { backgroundColor: Colors.surface }]}
           onPress={(event) => event.stopPropagation()}>

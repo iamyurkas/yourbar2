@@ -1974,7 +1974,7 @@ export default function CreateCocktailScreen() {
                       size={18}
                       color={Colors.primary}
                     />
-                    <Text style={[styles.inlineActionLabel, { color: Colors.primary }]}>Edit cocktail</Text>
+                    <Text style={[styles.inlineActionLabel, { color: Colors.primary }]}>{t("cocktailForm.editCocktail")}</Text>
                   </Pressable>
                 ) : null}
                 {isEditMode ? (
@@ -1989,7 +1989,7 @@ export default function CreateCocktailScreen() {
                       size={18}
                       color={Colors.error}
                     />
-                    <Text style={[styles.inlineActionLabel, { color: Colors.error }]}>Delete cocktail</Text>
+                    <Text style={[styles.inlineActionLabel, { color: Colors.error }]}>{t("cocktailForm.deleteCocktail")}</Text>
                   </Pressable>
                 ) : null}
               </View>

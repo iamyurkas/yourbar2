@@ -158,7 +158,7 @@ export function TagEditorModal({
             <Text style={[styles.colorValue, { color: Colors.onSurfaceVariant }]}>{selectedColor}</Text>
           </View>
           <ColorSlider
-            label="Hue"
+            label={t("tagEditor.hue")}
             value={hue / 360}
             onChange={(next) => setHue(Math.round(next * 360))}
             gradientStops={[
@@ -172,7 +172,7 @@ export function TagEditorModal({
             ]}
           />
           <ColorSlider
-            label="Tone"
+            label={t("tagEditor.tone")}
             value={lightness}
             onChange={setLightness}
             gradientStops={[
