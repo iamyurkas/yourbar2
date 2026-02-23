@@ -34,6 +34,7 @@ import { createIngredientLookup } from '@/libs/ingredient-availability';
 import { navigateToDetailsWithReturnTo } from '@/libs/navigation';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { buildTagOptions, type TagOption } from '@/libs/tag-options';
+import { useI18n } from '@/libs/i18n/use-i18n';
 import { useCocktailTabLogic, type MyTabListItem } from '@/libs/use-cocktail-tab-logic';
 import { useInventoryActions, useInventoryData, useInventorySettings, type Cocktail } from '@/providers/inventory-provider';
 import { tagColors } from '@/theme/theme';
@@ -45,12 +46,6 @@ type CocktailMethodOption = {
 
 const METHOD_ICON_SIZE = 16;
 
-const TAB_OPTIONS: SegmentTabOption[] = [
-  { key: 'all', label: 'All' },
-  { key: 'my', label: 'My' },
-  { key: 'favorites', label: 'Favorites' },
-];
-
 export default function CocktailsScreen() {
   const { onTabChangeRequest } = useOnboardingAnchors();
   const { cocktails, availableIngredientIds, ingredients, shoppingIngredientIds, getCocktailRating } =
@@ -58,7 +53,15 @@ export default function CocktailsScreen() {
   const { ignoreGarnish, allowAllSubstitutes, ratingFilterThreshold } = useInventorySettings();
   const { toggleIngredientShopping } = useInventoryActions();
   const Colors = useAppColors();
+  const { t } = useI18n();
   const [activeTab, setActiveTab] = useState<CocktailTabKey>(() => getLastCocktailTab());
+
+  const tabOptions = useMemo<SegmentTabOption[]>(() => [
+    { key: 'all', label: t('common.tabAll') },
+    { key: 'my', label: t('common.tabMy') },
+    { key: 'favorites', label: t('common.tabFavorites') },
+  ], [t]);
+
   const [query, setQuery] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isFilterMenuVisible, setFilterMenuVisible] = useState(false);
@@ -140,7 +143,7 @@ export default function CocktailsScreen() {
 
   useEffect(() => {
     setLastCocktailTab(activeTab);
-  }, [activeTab]);
+  }, [activeTab, t]);
 
   const handleHeaderLayout = useCallback((event: LayoutChangeEvent) => {
     const nextLayout = event.nativeEvent.layout;
@@ -622,33 +625,33 @@ export default function CocktailsScreen() {
   const emptyMessage = useMemo(() => {
     switch (activeTab) {
       case 'my':
-        return 'Mark ingredients you have to see available cocktails here.';
+        return t('cocktails.emptyMy');
       case 'favorites':
-        return 'Rate cocktails and/or adjust the rating threshold in the menu.';
+        return t('cocktails.emptyFavorites');
       default:
-        return 'No cocktails yet';
+        return t('cocktails.emptyAll');
     }
-  }, [activeTab]);
+  }, [activeTab, t]);
   const helpContent = useMemo(() => {
     switch (activeTab) {
       case 'my':
         return {
-          title: 'My cocktails',
-          text: 'This screen shows cocktails you can make with your current ingredients.\n\nUse search to find your recipes quickly, and use filters to narrow the list by tags or method.',
+          title: t('cocktails.helpMyTitle'),
+          text: t('cocktails.helpMyText'),
         };
       case 'favorites':
         return {
-          title: 'Favorites cocktails',
-          text: 'This screen shows cocktails you ranked.\n\nUse search and filters to find what you want faster.',
+          title: t('cocktails.helpFavoritesTitle'),
+          text: t('cocktails.helpFavoritesText'),
         };
       case 'all':
       default:
         return {
-          title: 'All cocktails',
-          text: 'This screen shows the full cocktail collection.\n\nUse search, switch tabs, and apply filters by method or tags.',
+          title: t('cocktails.helpAllTitle'),
+          text: t('cocktails.helpAllText'),
         };
     }
-  }, [activeTab]);
+  }, [activeTab, t]);
 
   const filterMenuTop = useMemo(() => {
     if (headerLayout && filterAnchorLayout) {
@@ -671,9 +674,9 @@ export default function CocktailsScreen() {
           <CollectionHeader
             searchValue={query}
             onSearchChange={setQuery}
-            placeholder="Search"
+            placeholder={t('common.search')}
             onMenuPress={() => setIsMenuOpen(true)}
-            tabs={TAB_OPTIONS}
+            tabs={tabOptions}
             activeTab={activeTab}
             onTabChange={setActiveTab}
             anchorPrefix="cocktails-tab"
@@ -689,7 +692,7 @@ export default function CocktailsScreen() {
           <>
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel="Close tag filters"
+              accessibilityLabel={t('common.closeTagFilters')}
               onPress={handleCloseFilterMenu}
               style={styles.filterMenuBackdrop}
             />
@@ -729,14 +732,14 @@ export default function CocktailsScreen() {
                       })
                     ) : (
                       <Text style={[styles.filterMenuEmpty, { color: Colors.onSurfaceVariant }]}>
-                        No methods available
+                        {t("common.noMethodsAvailable")}
                       </Text>
                     )}
                   </View>
                   <View style={styles.filterSeparator}>
                     <View style={[styles.filterSeparatorLine, { backgroundColor: Colors.outline }]} />
                     <Text style={[styles.filterSeparatorLabel, { color: Colors.onSurfaceVariant }]}>
-                      AND
+                      {t("common.and")}
                     </Text>
                     <View style={[styles.filterSeparatorLine, { backgroundColor: Colors.outline }]} />
                   </View>
@@ -759,7 +762,7 @@ export default function CocktailsScreen() {
                       })
                     ) : (
                       <Text style={[styles.filterMenuEmpty, { color: Colors.onSurfaceVariant }]}>
-                        No tags available
+                        {t("common.noTagsAvailable")}
                       </Text>
                     )}
                   </View>
@@ -770,7 +773,7 @@ export default function CocktailsScreen() {
                     accessibilityLabel="Clear selected filters"
                     onPress={handleClearFilters}
                     style={styles.filterMenuClearButton}>
-                    <Text style={[styles.filterMenuClearLabel, { color: Colors.tint }]}>Clear filters</Text>
+                    <Text style={[styles.filterMenuClearLabel, { color: Colors.tint }]}>{t("common.clearFilters")}</Text>
                   </Pressable>
                 ) : null}
               </ScrollView>

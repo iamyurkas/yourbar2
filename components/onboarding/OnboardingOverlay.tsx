@@ -11,13 +11,14 @@ import {
 } from 'react-native';
 import Svg, { Defs, Mask, Rect } from 'react-native-svg';
 import { useOnboardingAnchors } from './OnboardingContext';
+import { useI18n } from '@/libs/i18n/use-i18n';
 
 type StepDef = {
   id: number;
-  message: string;
+  messageKey: string;
   anchorName?: string;
   autoNext?: (inventory: any, pathname: string) => boolean;
-  buttonLabel?: string;
+  buttonLabelKey?: string;
   onNext?: (
     inventory: any,
     requestTabChange: (screen: 'ingredients' | 'cocktails', tab: string) => void,
@@ -77,6 +78,7 @@ export function OnboardingOverlay() {
   const { anchors, requestTabChange, triggerAction } = useOnboardingAnchors();
   const router = useRouter();
   const Colors = useAppColors();
+  const { t } = useI18n();
   const pathname = usePathname();
   const { height: screenHeight, width: screenWidth } = useWindowDimensions();
   const [overlayOffset, setOverlayOffset] = React.useState({ x: 0, y: 0 });
@@ -101,14 +103,14 @@ export function OnboardingOverlay() {
   const steps = useMemo<StepDef[]>(() => [
     {
       id: 1,
-      message: '**Welcome!**\nLet’s set up your bar by adding a few ingredients.',
-      buttonLabel: 'Start',
+      messageKey: 'onboarding.step1.message',
+      buttonLabelKey: 'onboarding.start',
     },
     {
       id: 2,
-      message: 'Tap **Ingredients** to start adding what you have.',
+      messageKey: 'Tap **Ingredients** to start adding what you have.',
       anchorName: 'tab-ingredients',
-      buttonLabel: 'Next',
+      buttonLabelKey: 'onboarding.next',
       autoNext: (_, path) => path.startsWith('/ingredients'),
       onNext: (_, __, ___, navigateTo) => {
         navigateTo('/ingredients');
@@ -134,24 +136,24 @@ export function OnboardingOverlay() {
     },
     {
       id: 3,
-      message: 'Here’s the full ingredients list.\nWe’ve already marked a few common basics for you.',
+      messageKey: 'onboarding.step3.message',
       anchorName: 'ingredients-tab-all',
-      buttonLabel: 'Next',
+      buttonLabelKey: 'onboarding.next',
     },
     {
       id: 4,
-      message: '**My ingredients** shows what you have.\nYou’ll also see how many available cocktails use each ingredient.',
+      messageKey: 'onboarding.step4.message',
       anchorName: 'ingredients-tab-my',
-      buttonLabel: 'Next',
+      buttonLabelKey: 'onboarding.next',
       onEnter: (_, requestTab) => {
         requestTab('ingredients', 'my');
       },
     },
     {
       id: 5,
-      message: 'Now let’s check the cocktails.\nOpen the **Cocktails** screen.',
+      messageKey: 'onboarding.step5.message',
       anchorName: 'tab-cocktails',
-      buttonLabel: 'Next',
+      buttonLabelKey: 'onboarding.next',
       autoNext: (_, path) => path.startsWith('/cocktails'),
       onNext: (_, __, ___, navigateTo) => {
         navigateTo('/cocktails');
@@ -159,8 +161,8 @@ export function OnboardingOverlay() {
     },
     {
       id: 6,
-      message: 'At the top of **My cocktails** you’ll see cocktails you can make now.\n\nBelow are cocktails missing just one ingredient.',
-      buttonLabel: 'Next',
+      messageKey: 'onboarding.step6.message',
+      buttonLabelKey: 'onboarding.next',
       anchorName: 'cocktails-tab-my',
       onEnter: (_, requestTab) => {
         requestTab('cocktails', 'my');
@@ -168,9 +170,9 @@ export function OnboardingOverlay() {
     },
     {
       id: 7,
-      message: 'Meet the **Shaker**.\nIt helps you find cocktails based on selected ingredients.',
+      messageKey: 'onboarding.step7.message',
       anchorName: 'tab-shaker',
-      buttonLabel: 'Next',
+      buttonLabelKey: 'onboarding.next',
       autoNext: (_, path) => path.startsWith('/shaker'),
       onNext: (_, __, ___, navigateTo) => {
         navigateTo('/shaker');
@@ -178,28 +180,28 @@ export function OnboardingOverlay() {
     },
     {
       id: 8,
-      message: '**Shaker logic**\nIngredients from the same category can replace each other (*OR*).\nIngredients from different categories are required together (*AND*).\n\n**Example**\n(Gin *OR* Whiskey) *AND* (Cola *OR* Tonic) *AND* (Lemon *OR* Lime).',
-      buttonLabel: 'Next',
+      messageKey: 'onboarding.step8.message',
+      buttonLabelKey: 'onboarding.next',
     },
     {
       id: 9,
-      message: 'Use this toggle to show only ingredients you have.',
+      messageKey: 'onboarding.step9.message',
       anchorName: 'shaker-availability-toggle',
-      buttonLabel: 'Next',
+      buttonLabelKey: 'onboarding.next',
       onNext: (_, __, triggerAnchorAction) => {
         triggerAnchorAction('shaker-availability-toggle');
       },
     },
     {
       id: 10,
-      message: 'Tap a few ingredients, then hit **Show** to see matching cocktails.',
-      buttonLabel: 'Next',
+      messageKey: 'onboarding.step10.message',
+      buttonLabelKey: 'onboarding.next',
     },
     {
       id: 11,
-      message: 'Start by marking ingredients you already have in **All ingredients**.\n\nCheers!',
+      messageKey: 'onboarding.step11.message',
       anchorName: 'ingredients-tab-all',
-      buttonLabel: 'Finish',
+      buttonLabelKey: 'onboarding.finish',
       onEnter: (_, requestTab) => {
         router.navigate('/ingredients');
         requestTab('ingredients', 'all');
@@ -209,7 +211,7 @@ export function OnboardingOverlay() {
 
   const currentStep = steps.find(s => s.id === onboardingStep);
 
-  const countableSteps = useMemo(() => steps.filter(s => !!s.buttonLabel), [steps]);
+  const countableSteps = useMemo(() => steps.filter(s => !!s.buttonLabelKey), [steps]);
   const totalCount = countableSteps.length;
   const currentStepIndex = countableSteps.findIndex(s => s.id === onboardingStep) + 1;
   const isLastStep = currentStepIndex === totalCount;
@@ -336,16 +338,16 @@ export function OnboardingOverlay() {
         ]}
       >
         <Text style={[styles.message, { color: Colors.onSurface }]}>
-          {renderFormattedMessage(currentStep.message)}
+          {renderFormattedMessage(t(currentStep.messageKey))}
         </Text>
-        {currentStep.buttonLabel && (
+        {currentStep.buttonLabelKey && (
           <>
             <View style={styles.actionsRow}>
               <Pressable
                 style={[styles.button, { backgroundColor: Colors.primary }]}
                 onPress={handleNext}
               >
-                <Text style={[styles.buttonText, { color: Colors.onPrimary }]}>{currentStep.buttonLabel}</Text>
+                <Text style={[styles.buttonText, { color: Colors.onPrimary }]}>{t(currentStep.buttonLabelKey)}</Text>
               </Pressable>
               {!isLastStep && (
                 <Pressable
@@ -353,12 +355,12 @@ export function OnboardingOverlay() {
                   onPress={handleSkip}
                   hitSlop={8}
                 >
-                  <Text style={[styles.skipLink, { color: Colors.onSurfaceVariant }]}>Skip</Text>
+                  <Text style={[styles.skipLink, { color: Colors.onSurfaceVariant }]}>{t('onboarding.skip')}</Text>
                 </Pressable>
               )}
             </View>
             <Text style={[styles.stepCounter, { color: Colors.onSurfaceVariant }]}>
-              {currentStepIndex} of {totalCount}
+              {t('onboarding.stepCounter', { current: currentStepIndex, total: totalCount })}
             </Text>
           </>
         )}
