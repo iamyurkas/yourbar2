@@ -270,7 +270,7 @@ export const ukUATranslations: TranslationDictionary = {
   "cocktailMethod.build.label": "Наливати",
   "cocktailMethod.build.description":
     "Наливайте інгредієнти безпосередньо в келих подачі.",
-  "cocktailMethod.layer.label": "Шарами",
+  "cocktailMethod.layer.label": "Нашаровувати",
   "cocktailMethod.layer.description":
     "Наливайте інгредієнти шарами за допомогою барної ложки для візуального ефекту.",
 
