@@ -44,6 +44,15 @@ import {
 } from '@/providers/inventory-provider';
 import { tagColors } from '@/theme/theme';
 
+function getPluralCategory(locale: string, count: number) {
+  const category = new Intl.PluralRules(locale).select(count);
+  if (category === 'one' || category === 'few' || category === 'many') {
+    return category;
+  }
+
+  return 'other';
+}
+
 type IngredientSection = {
   key: string;
   label: string;
@@ -237,7 +246,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
 export default function IngredientsScreen() {
   const router = useRouter();
   const Colors = useAppColors();
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const { onTabChangeRequest } = useOnboardingAnchors();
   const { cocktails, ingredients, availableIngredientIds, shoppingIngredientIds } = useInventoryData();
   const { ignoreGarnish, allowAllSubstitutes } = useInventorySettings();
@@ -634,10 +643,11 @@ export default function IngredientsScreen() {
 
       let subtitleText: string | undefined;
       if (count > 0) {
+        const pluralCategory = getPluralCategory(locale, count);
         if (isMyTab) {
-          subtitleText = t('ingredients.makeCount', { count });
+          subtitleText = t(`ingredients.makeCount.${pluralCategory}`, { count });
         } else {
-          subtitleText = t('ingredients.recipeCount', { count });
+          subtitleText = t(`ingredients.recipeCount.${pluralCategory}`, { count });
         }
       }
 
@@ -668,6 +678,7 @@ export default function IngredientsScreen() {
       shoppingIngredientIds,
       styleBaseIngredientIds,
       brandedBaseIngredientIds,
+      locale,
       t,
     ],
   );

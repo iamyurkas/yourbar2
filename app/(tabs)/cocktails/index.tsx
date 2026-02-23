@@ -39,6 +39,15 @@ import { useCocktailTabLogic, type MyTabListItem } from '@/libs/use-cocktail-tab
 import { useInventoryActions, useInventoryData, useInventorySettings, type Cocktail } from '@/providers/inventory-provider';
 import { tagColors } from '@/theme/theme';
 
+function getPluralCategory(locale: string, count: number) {
+  const category = new Intl.PluralRules(locale).select(count);
+  if (category === 'one' || category === 'few' || category === 'many') {
+    return category;
+  }
+
+  return 'other';
+}
+
 type CocktailMethodOption = {
   id: CocktailMethod['id'];
   label: string;
@@ -53,7 +62,7 @@ export default function CocktailsScreen() {
   const { ignoreGarnish, allowAllSubstitutes, ratingFilterThreshold } = useInventorySettings();
   const { toggleIngredientShopping } = useInventoryActions();
   const Colors = useAppColors();
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const [activeTab, setActiveTab] = useState<CocktailTabKey>(() => getLastCocktailTab());
 
   const tabOptions = useMemo<SegmentTabOption[]>(() => [
@@ -512,7 +521,8 @@ export default function CocktailsScreen() {
           ? t('cocktails.removeIngredientFromShopping')
           : t('cocktails.addIngredientToShopping');
         const titleLabel = t("cocktails.buyNamed", { name: item.name });
-        const subtitleLabel = t("cocktails.toMakeMore", { count: item.cocktailCount });
+        const pluralCategory = getPluralCategory(locale, item.cocktailCount);
+        const subtitleLabel = t(`cocktails.toMakeMore.${pluralCategory}`, { count: item.cocktailCount });
         const thumbnail = <Thumb label={item.name} uri={item.photoUri ?? undefined} />;
         const brandIndicatorColor = item.isStyled
           ? Colors.styledIngredient
@@ -579,6 +589,7 @@ export default function CocktailsScreen() {
       ingredients,
       shoppingIngredientIds,
       Colors,
+      locale,
       t,
     ],
   );
