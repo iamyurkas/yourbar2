@@ -187,8 +187,12 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     typeof setTimeout
   > | null>(null);
   const [isAmazonStoreModalVisible, setAmazonStoreModalVisible] = useState(false);
+  const [isLanguageModalVisible, setLanguageModalVisible] = useState(false);
   const [isBackupRestoreModalVisible, setBackupRestoreModalVisible] = useState(false);
   const amazonStoreModalCloseTimeout = useRef<ReturnType<typeof setTimeout> | null>(
+    null,
+  );
+  const languageModalCloseTimeout = useRef<ReturnType<typeof setTimeout> | null>(
     null,
   );
   const [isTagManagerVisible, setTagManagerVisible] = useState(false);
@@ -277,6 +281,11 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
     return AMAZON_STORES[effectiveAmazonStore].label;
   }, [effectiveAmazonStore]);
+
+  const selectedLanguageLabel = useMemo(() => {
+    const selected = SUPPORTED_UI_LOCALES.find((option) => option.key === locale);
+    return selected ? t(selected.labelKey) : t('sideMenu.language.enGB');
+  }, [locale, t]);
 
   const renderStartScreenIcon = (
     option: StartScreenOption,
@@ -426,6 +435,10 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     setAmazonStoreModalVisible(true);
   };
 
+  const handleLanguagePress = () => {
+    setLanguageModalVisible(true);
+  };
+
   const handleBackupRestorePress = () => {
     setBackupRestoreModalVisible(true);
   };
@@ -435,9 +448,19 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     setAmazonStoreModalVisible(false);
   };
 
+  const handleCloseLanguageModal = () => {
+    clearTimeoutRef(languageModalCloseTimeout);
+    setLanguageModalVisible(false);
+  };
+
   const handleSelectAmazonStore = (value: AmazonStoreOverride | null) => {
     setAmazonStoreOverride(value);
     scheduleModalClose(amazonStoreModalCloseTimeout, setAmazonStoreModalVisible);
+  };
+
+  const handleSelectLanguage = (value: typeof locale) => {
+    setLocale(value);
+    scheduleModalClose(languageModalCloseTimeout, setLanguageModalVisible);
   };
 
   const handleCloseBackupRestoreModal = () => {
@@ -801,6 +824,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       clearTimeoutRef(ratingModalCloseTimeout);
       clearTimeoutRef(startScreenModalCloseTimeout);
       clearTimeoutRef(amazonStoreModalCloseTimeout);
+      clearTimeoutRef(languageModalCloseTimeout);
     };
   }, []);
 
@@ -893,37 +917,27 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
             showsVerticalScrollIndicator={false}
             keyboardShouldPersistTaps="handled"
           >
-            <View style={[styles.settingRow, SURFACE_ROW_STYLE]}>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={t("sideMenu.language.title")}
+              onPress={handleLanguagePress}
+              style={[styles.settingRow, SURFACE_ROW_STYLE]}
+            >
               <View style={[styles.checkbox, SURFACE_ICON_STYLE]}>
                 <MaterialCommunityIcons name="translate" size={16} color={Colors.tint} />
               </View>
               <View style={styles.settingTextContainer}>
                 <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>{t('sideMenu.language.title')}</Text>
-                <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>{t('sideMenu.language.caption')}</Text>
+                <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>
+                  {t('sideMenu.language.current', { language: selectedLanguageLabel })}
+                </Text>
               </View>
-            </View>
-            <View style={styles.localeSelectorRow}>
-              {SUPPORTED_UI_LOCALES.map((option) => {
-                const isSelected = locale === option.key;
-                return (
-                  <Pressable
-                    key={`locale-${option.key}`}
-                    accessibilityRole="button"
-                    accessibilityState={{ selected: isSelected }}
-                    onPress={() => setLocale(option.key)}
-                    style={({ pressed }) => [
-                      styles.localePill,
-                      {
-                        borderColor: isSelected ? Colors.tint : Colors.outline,
-                        backgroundColor: isSelected ? `${Colors.tint}22` : Colors.surface,
-                      },
-                      pressed ? { opacity: 0.8 } : null,
-                    ]}>
-                    <Text style={[styles.localePillText, { color: Colors.onSurface }]}>{t(option.labelKey)}</Text>
-                  </Pressable>
-                );
-              })}
-            </View>
+              <MaterialCommunityIcons
+                name="chevron-right"
+                size={20}
+                color={Colors.onSurfaceVariant}
+              />
+            </Pressable>
             <Pressable
               accessibilityRole="checkbox"
               accessibilityState={{ checked: ignoreGarnish }}
@@ -1810,6 +1824,101 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
       <Modal
         transparent
+        visible={isLanguageModalVisible}
+        animationType="fade"
+        onRequestClose={handleCloseLanguageModal}
+      >
+        <Pressable
+          style={styles.modalOverlay}
+          onPress={handleCloseLanguageModal}
+        >
+          <Pressable
+            style={[styles.modalCard, MODAL_CARD_STYLE]}
+            onPress={(event) => event.stopPropagation()}
+            accessibilityLabel={t('sideMenu.language.modalTitle')}
+          >
+            <View style={styles.modalHeader}>
+              <Text style={[styles.modalTitle, { color: Colors.onSurface }]}>
+                {t('sideMenu.language.modalTitle')}
+              </Text>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={t('common.close')}
+                onPress={handleCloseLanguageModal}
+                style={styles.iconButton}
+              >
+                <MaterialCommunityIcons
+                  name="close"
+                  size={22}
+                  color={Colors.onSurfaceVariant}
+                />
+              </Pressable>
+            </View>
+            <Text
+              style={[
+                styles.settingCaption,
+                { color: Colors.onSurfaceVariant },
+              ]}
+            >
+              {t('sideMenu.language.modalDescription')}
+            </Text>
+            <ScrollView
+              style={styles.startScreenModalScroll}
+              contentContainerStyle={styles.startScreenOptionList}
+              showsVerticalScrollIndicator={false}
+              keyboardShouldPersistTaps="handled"
+            >
+              {SUPPORTED_UI_LOCALES.map((option) => {
+                const isSelected = locale === option.key;
+                return (
+                  <Pressable
+                    key={`language-${option.key}`}
+                    accessibilityRole="button"
+                    accessibilityState={{ selected: isSelected }}
+                    accessibilityLabel={t(option.labelKey)}
+                    onPress={() => handleSelectLanguage(option.key)}
+                    style={({ pressed }) => [
+                      styles.startScreenOption,
+                      {
+                        borderColor: isSelected
+                          ? Colors.tint
+                          : Colors.outlineVariant,
+                        backgroundColor: isSelected
+                          ? Colors.highlightFaint
+                          : Colors.surfaceBright,
+                      },
+                      pressed ? { opacity: 0.85 } : null,
+                    ]}
+                  >
+                    <View style={styles.startScreenTextContainer}>
+                      <Text
+                        style={[
+                          styles.settingLabel,
+                          { color: Colors.onSurface },
+                        ]}
+                      >
+                        {t(option.labelKey)}
+                      </Text>
+                    </View>
+                    <MaterialCommunityIcons
+                      name={
+                        isSelected
+                          ? "check-circle"
+                          : "checkbox-blank-circle-outline"
+                      }
+                      size={20}
+                      color={isSelected ? Colors.tint : Colors.onSurfaceVariant}
+                    />
+                  </Pressable>
+                );
+              })}
+            </ScrollView>
+          </Pressable>
+        </Pressable>
+      </Modal>
+
+      <Modal
+        transparent
         visible={isAmazonStoreModalVisible}
         animationType="fade"
         onRequestClose={handleCloseAmazonStoreModal}
@@ -2276,24 +2385,6 @@ const styles = StyleSheet.create({
   },
   settingCaption: {
     fontSize: 12,
-  },
-  localeSelectorRow: {
-    flexDirection: "row",
-    gap: 8,
-    marginTop: -4,
-    marginBottom: 8,
-  },
-  localePill: {
-    flex: 1,
-    borderWidth: 1,
-    borderRadius: 10,
-    paddingVertical: 8,
-    paddingHorizontal: 10,
-  },
-  localePillText: {
-    fontSize: 13,
-    fontWeight: "600",
-    textAlign: "center",
   },
   modalOverlay: {
     flex: 1,
