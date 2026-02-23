@@ -1750,8 +1750,8 @@ export default function IngredientFormScreen() {
       <AppDialog
         visible={isHelpVisible}
         title={t("ingredientForm.helpTitle")}
-        message="Use this screen to create a new ingredient card.\n\nAdd a name, optional photo, tags, base ingredient or style ingredient, and notes, then tap Save.\n\nA style ingredient can only link to a base ingredient that is neither branded nor styled."
-        actions={[{ label: 'Got it', variant: 'secondary' }]}
+        message={t("ingredientForm.helpMessage")}
+        actions={[{ label: t("common.gotIt"), variant: "secondary" }]}
         onRequestClose={() => setIsHelpVisible(false)}
       />
 
@@ -1766,7 +1766,7 @@ export default function IngredientFormScreen() {
       <TagEditorModal
         visible={isTagModalVisible}
         title={t("tagEditor.newTag")}
-        confirmLabel="Create"
+        confirmLabel={t("common.create")}
         onClose={handleCloseTagModal}
         onSave={handleCreateTag}
       />

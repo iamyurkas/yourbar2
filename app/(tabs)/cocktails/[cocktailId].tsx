@@ -1277,7 +1277,7 @@ export default function CocktailDetailsScreen() {
             <Text
               style={[styles.emptyText, { color: Colors.onSurfaceVariant }]}
             >
-              Cocktail not found
+              {t("cocktailForm.cocktailNotFoundTitle")}
             </Text>
           </View>
         )}
@@ -1286,7 +1286,7 @@ export default function CocktailDetailsScreen() {
       <AppDialog
         visible={isHelpVisible}
         title={t("cocktailDetails.helpTitle")}
-        message="This screen shows cocktail details, ingredients, and instructions.\n\nUse the buttons under the cocktail to copy or edit it.\n\n**Ingredient ribbons**\nLeft ribbon marks ingredient type:\nblue = brand ingredient,\nyellow = style ingredient.\n\nRight ribbon marks base variants:\nblue = has branded variants,\nyellow = has style variants."
+        message={t("cocktailDetails.helpMessage")}
         actions={[{ label: t("common.gotIt"), variant: "secondary" }]}
         onRequestClose={() => setIsHelpVisible(false)}
       />

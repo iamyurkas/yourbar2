@@ -2334,7 +2334,7 @@ export default function CreateCocktailScreen() {
       <AppDialog
         visible={isHelpVisible}
         title={t("cocktailForm.helpTitle")}
-        message="Use this screen to build a new cocktail recipe.\n\nFill in name, photo, tags, ingredients, method, and instructions, then tap Save."
+        message={t("cocktailForm.helpMessage")}
         actions={[{ label: t("common.gotIt"), variant: "secondary" }]}
         onRequestClose={() => setIsHelpVisible(false)}
       />
@@ -2350,7 +2350,7 @@ export default function CreateCocktailScreen() {
       <TagEditorModal
         visible={isTagModalVisible}
         title={t("tagEditor.newTag")}
-        confirmLabel="Create"
+        confirmLabel={t("common.create")}
         onClose={handleCloseTagModal}
         onSave={handleCreateTag}
       />
