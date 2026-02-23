@@ -89,7 +89,7 @@ export const ukUATranslations: TranslationDictionary = {
 
   "sideMenu.settingsTitle": "Налаштування",
   "sideMenu.ignoreGarnish": "Ігнорувати прикраси",
-  "sideMenu.ignoreGarnishCaption": "Усі прикраси — необовʼязкові",
+  "sideMenu.ignoreGarnishCaption": "Усі прикраси є необовʼязковими",
   "sideMenu.allowAllSubstitutes": "Дозволити всі заміни",
   "sideMenu.allowAllSubstitutesCaption": "Завжди пропонувати заміни",
   "sideMenu.useImperial": "Імперська система",
@@ -115,7 +115,7 @@ export const ukUATranslations: TranslationDictionary = {
   "sideMenu.language": "Мова",
   "sideMenu.languageCurrent": "{{name}}",
   "sideMenu.reportIssueTitle": "Щось не так?",
-  "sideMenu.reportIssueCaption": "Повідомити про баг або поділитися ідеєю",
+  "sideMenu.reportIssueCaption": "Напишіть про баг або ідею",
   "sideMenu.backupRestore": "Резерв і віднова",
   "sideMenu.backupRestoreCaption":
     "Зберегти дані в архів або відновити з копії",
