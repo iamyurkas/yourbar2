@@ -26,7 +26,7 @@ import {
   METHOD_ICON_MAP,
 } from "@/constants/cocktail-methods";
 import { COCKTAIL_UNIT_DICTIONARY } from "@/constants/cocktail-units";
-import { GLASSWARE_NAME_BY_ID } from "@/constants/glassware";
+import { GLASSWARE_NAME_BY_ID, resolveGlasswareId } from "@/constants/glassware";
 import { useAppColors } from "@/constants/theme";
 import { resolveImageSource } from "@/libs/image-source";
 import {
@@ -579,11 +579,17 @@ export default function CocktailDetailsScreen() {
 
   const displayedImageSource = photoSource ?? glassSource;
   const glassLabel = useMemo(() => {
-    if (!cocktail?.glassId) {
+    const resolvedGlassId = resolveGlasswareId(cocktail?.glassId);
+    if (!resolvedGlassId) {
       return undefined;
     }
-    const translated = t(`glassware.${cocktail.glassId}`);
-    return translated !== `glassware.${cocktail.glassId}` ? translated : cocktail.glassId;
+    const translationKey = `glassware.${resolvedGlassId}`;
+    const translated = t(translationKey);
+    if (translated !== translationKey) {
+      return translated;
+    }
+
+    return GLASSWARE_NAME_BY_ID[resolvedGlassId];
   }, [cocktail?.glassId, t]);
 
   const methodDetails = useMemo(() => {
