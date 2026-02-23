@@ -114,7 +114,7 @@ const IngredientRow = memo(function IngredientRow({
         color={Colors.tint}
         style={styles.shoppingIcon}
         accessibilityRole="image"
-        accessibilityLabel="On shopping list"
+        accessibilityLabel={t("common.tabShopping")}
       />
     );
   }, [isOnShoppingList, Colors]);
@@ -315,7 +315,7 @@ export default function ShakerScreen() {
       if (!map.has(key)) {
         map.set(key, {
           key,
-          name: tag?.name ?? 'Unnamed tag',
+          name: tag?.name ?? t('tags.unnamed'),
           color: tag?.color ?? defaultTagColor,
         });
       }
@@ -353,7 +353,7 @@ export default function ShakerScreen() {
 
       return normalizedNameA.localeCompare(normalizedNameB);
     });
-  }, [defaultTagColor, ingredients]);
+  }, [defaultTagColor, ingredients, t]);
 
   const ingredientLookup = useMemo(() => createIngredientLookup(ingredients), [ingredients]);
   const styleBaseIngredientIds = useMemo(() => {

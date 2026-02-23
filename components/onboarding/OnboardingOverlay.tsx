@@ -108,7 +108,7 @@ export function OnboardingOverlay() {
     },
     {
       id: 2,
-      messageKey: 'Tap **Ingredients** to start adding what you have.',
+      messageKey: 'onboarding.step2.message',
       anchorName: 'tab-ingredients',
       buttonLabelKey: 'onboarding.next',
       autoNext: (_, path) => path.startsWith('/ingredients'),

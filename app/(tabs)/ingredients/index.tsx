@@ -33,6 +33,7 @@ import {
   getVisibleIngredientIdsForCocktail,
 } from '@/libs/ingredient-availability';
 import { navigateToDetailsWithReturnTo } from '@/libs/navigation';
+import { getPluralCategory } from '@/libs/i18n/plural';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { buildTagOptions, type TagOption } from '@/libs/tag-options';
 import { useI18n } from '@/libs/i18n/use-i18n';
@@ -237,7 +238,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
 export default function IngredientsScreen() {
   const router = useRouter();
   const Colors = useAppColors();
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const { onTabChangeRequest } = useOnboardingAnchors();
   const { cocktails, ingredients, availableIngredientIds, shoppingIngredientIds } = useInventoryData();
   const { ignoreGarnish, allowAllSubstitutes } = useInventorySettings();
@@ -532,9 +533,9 @@ export default function IngredientsScreen() {
       case 'my':
         return t('ingredients.emptyMy');
       case 'shopping':
-        return 'There are no ingredients in your\nshopping list yet.';
+        return t('ingredients.emptyShopping');
       default:
-        return 'No ingredients in the list';
+        return t('ingredients.emptyList');
     }
   }, [activeTab, t]);
   const filterMenuTop = useMemo(() => {
@@ -634,12 +635,11 @@ export default function IngredientsScreen() {
 
       let subtitleText: string | undefined;
       if (count > 0) {
+        const pluralCategory = getPluralCategory(locale, count);
         if (isMyTab) {
-          const label = count === 1 ? 'cocktail' : 'cocktails';
-          subtitleText = `Make ${count} ${label}`;
+          subtitleText = t(`ingredients.makeCount.${pluralCategory}`, { count });
         } else {
-          const label = count === 1 ? 'recipe' : 'recipes';
-          subtitleText = `${count} ${label}`;
+          subtitleText = t(`ingredients.recipeCount.${pluralCategory}`, { count });
         }
       }
 
@@ -670,6 +670,8 @@ export default function IngredientsScreen() {
       shoppingIngredientIds,
       styleBaseIngredientIds,
       brandedBaseIngredientIds,
+      locale,
+      t,
     ],
   );
 
@@ -694,13 +696,13 @@ export default function IngredientsScreen() {
       case 'shopping':
         return {
           title: t('ingredients.helpShoppingTitle'),
-          text: 'This screen helps you manage ingredients to buy.\n\nUse search to find items, and tap the shopping control to remove them from the list.',
+          text: t('ingredients.helpShoppingText'),
         };
       case 'all':
       default:
         return {
           title: t('ingredients.helpAllTitle'),
-          text: 'This screen displays all ingredients in the app.\n\nUse search, switch tabs, and filter by tags.\n\nTap a checkbox to mark availability.',
+          text: t('ingredients.helpAllFullText'),
         };
     }
   }, [activeTab, t]);
@@ -777,7 +779,7 @@ export default function IngredientsScreen() {
                 {selectedTagKeys.size > 0 ? (
                   <Pressable
                     accessibilityRole="button"
-                    accessibilityLabel="Clear selected tag filters"
+                    accessibilityLabel={t('ingredients.clearSelectedTagFilters')}
                     onPress={handleClearTagFilters}
                     style={styles.filterMenuClearButton}>
                     <Text style={[styles.filterMenuClearLabel, { color: Colors.tint }]}>{t("common.clearFilters")}</Text>
@@ -808,7 +810,7 @@ export default function IngredientsScreen() {
           }
         />
       </View>
-      <FabAdd label="Add ingredient" onPress={() => router.push('/ingredients/create')} />
+      <FabAdd label={t('ingredients.addIngredient')} onPress={() => router.push('/ingredients/create')} />
       <SideMenuDrawer visible={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
     </SafeAreaView>
   );

@@ -32,6 +32,7 @@ import { isCocktailReady, summariseCocktailAvailability } from '@/libs/cocktail-
 import { getLastCocktailTab, setLastCocktailTab, type CocktailTabKey } from '@/libs/collection-tabs';
 import { createIngredientLookup } from '@/libs/ingredient-availability';
 import { navigateToDetailsWithReturnTo } from '@/libs/navigation';
+import { getPluralCategory } from '@/libs/i18n/plural';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { buildTagOptions, type TagOption } from '@/libs/tag-options';
 import { useI18n } from '@/libs/i18n/use-i18n';
@@ -53,7 +54,7 @@ export default function CocktailsScreen() {
   const { ignoreGarnish, allowAllSubstitutes, ratingFilterThreshold } = useInventorySettings();
   const { toggleIngredientShopping } = useInventoryActions();
   const Colors = useAppColors();
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const [activeTab, setActiveTab] = useState<CocktailTabKey>(() => getLastCocktailTab());
 
   const tabOptions = useMemo<SegmentTabOption[]>(() => [
@@ -500,7 +501,7 @@ export default function CocktailsScreen() {
         return (
           <View style={styles.moreIngredientsWrapper}>
             <Text style={[styles.moreIngredientsLabel, { color: Colors.onSurfaceVariant }]}>
-              One more ingredient for more cocktails
+              {t("cocktails.oneMoreIngredientForMore")}
             </Text>
           </View>
         );
@@ -509,11 +510,11 @@ export default function CocktailsScreen() {
       if (item.type === 'ingredient-header') {
         const isOnShoppingList = shoppingIngredientIds.has(item.ingredientId);
         const accessibilityLabel = isOnShoppingList
-          ? 'Remove ingredient from shopping list'
-          : 'Add ingredient to shopping list';
-        const titleLabel = `Buy ${item.name}`;
-        const subtitleLabel = `To make ${item.cocktailCount} more ${item.cocktailCount === 1 ? 'cocktail' : 'cocktails'
-          }`;
+          ? t('cocktails.removeIngredientFromShopping')
+          : t('cocktails.addIngredientToShopping');
+        const titleLabel = t("cocktails.buyNamed", { name: item.name });
+        const pluralCategory = getPluralCategory(locale, item.cocktailCount);
+        const subtitleLabel = t(`cocktails.toMakeMore.${pluralCategory}`, { count: item.cocktailCount });
         const thumbnail = <Thumb label={item.name} uri={item.photoUri ?? undefined} />;
         const brandIndicatorColor = item.isStyled
           ? Colors.styledIngredient
@@ -580,6 +581,8 @@ export default function CocktailsScreen() {
       ingredients,
       shoppingIngredientIds,
       Colors,
+      locale,
+      t,
     ],
   );
 
@@ -770,7 +773,7 @@ export default function CocktailsScreen() {
                 {selectedTagKeys.size > 0 || selectedMethodIds.size > 0 ? (
                   <Pressable
                     accessibilityRole="button"
-                    accessibilityLabel="Clear selected filters"
+                    accessibilityLabel={t("cocktails.clearSelectedFilters")}
                     onPress={handleClearFilters}
                     style={styles.filterMenuClearButton}>
                     <Text style={[styles.filterMenuClearLabel, { color: Colors.tint }]}>{t("common.clearFilters")}</Text>
@@ -804,7 +807,7 @@ export default function CocktailsScreen() {
         />
       </View>
       <FabAdd
-        label="Add cocktail"
+        label={t("cocktails.addCocktail")}
         onPress={() =>
           router.push({ pathname: '/cocktails/create', params: { source: 'cocktails' } })
         }

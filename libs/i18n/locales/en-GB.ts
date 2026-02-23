@@ -358,6 +358,52 @@ export const enGBTranslations: TranslationDictionary = {
     "Tap a few ingredients, then hit **Show** to see matching cocktails.",
   "onboarding.step11.message":
     "Start by marking ingredients you already have in **All ingredients**.\n\nCheers!",
+
+  "ingredients.emptyShopping": "There are no ingredients in your\nshopping list yet.",
+  "ingredients.emptyList": "No ingredients in the list",
+  "ingredients.makeCount.one": "Make {{count}} cocktail",
+  "ingredients.makeCount.few": "Make {{count}} cocktails",
+  "ingredients.makeCount.many": "Make {{count}} cocktails",
+  "ingredients.makeCount.other": "Make {{count}} cocktails",
+  "ingredients.recipeCount.one": "{{count}} recipe",
+  "ingredients.recipeCount.few": "{{count}} recipes",
+  "ingredients.recipeCount.many": "{{count}} recipes",
+  "ingredients.recipeCount.other": "{{count}} recipes",
+  "ingredients.helpAllFullText": "This screen displays all ingredients in the app.\n\nUse search, switch tabs, and filter by tags.\n\nTap a checkbox to mark availability.",
+  "ingredients.clearSelectedTagFilters": "Clear selected tag filters",
+  "ingredients.addIngredient": "Add ingredient",
+
+  "cocktails.oneMoreIngredientForMore": "One more ingredient for more cocktails",
+  "cocktails.removeIngredientFromShopping": "Remove ingredient from shopping list",
+  "cocktails.addIngredientToShopping": "Add ingredient to shopping list",
+  "cocktails.buyNamed": "Buy {{name}}",
+  "cocktails.toMakeMore.one": "To make {{count}} more cocktail",
+  "cocktails.toMakeMore.few": "To make {{count}} more cocktails",
+  "cocktails.toMakeMore.many": "To make {{count}} more cocktails",
+  "cocktails.toMakeMore.other": "To make {{count}} more cocktails",
+  "cocktails.clearSelectedFilters": "Clear selected filters",
+  "cocktails.addCocktail": "Add cocktail",
+
+  "shakerResults.helpTitle": "Shaker results",
+  "shakerResults.helpText": "This screen shows cocktails you can make with selected ingredients.\n\nUse search and filters to narrow results, then open any cocktail to view recipe details and preparation steps.",
+  "shakerResults.clearSelectedFilters": "Clear selected filters",
+  "shakerResults.emptyMatchingRecipes": "No matching recipes",
+
+  "rowParts.removeFromFavorites": "Remove from favorites",
+  "rowParts.addToFavorites": "Add to favorites",
+  "cocktailListRow.allIngredientsReady": "All ingredients ready",
+
+  "tabBar.leaveWithoutSavingTitle": "Leave without saving?",
+  "tabBar.leaveWithoutSavingMessage": "Your changes will be lost if you leave this screen.",
+
+  "substituteModal.forNamed": "For {{name}}",
+  "substituteModal.searchIngredients": "Search ingredients",
+
+  "tagEditor.tagName": "Tag name",
+  "tagEditor.newTag": "New tag",
+  "tagEditor.color": "Color",
+
+  "tags.unnamed": "Unnamed tag",
   "tabs.cocktails": "Cocktails",
   "tabs.shaker": "Shaker",
   "tabs.ingredients": "Ingredients",
