@@ -8,6 +8,13 @@ export const ukUATranslations: TranslationDictionary = {
   "common.filterItems": "Фільтрувати",
   "common.help": "Допомога",
   "common.gotIt": "Зрозуміло",
+  "common.ok": "Гаразд",
+  "common.tryAgainLater": "Спробуйте ще раз пізніше.",
+  "common.save": "Зберегти",
+  "common.delete": "Видалити",
+  "common.cancel": "Скасувати",
+  "common.create": "Створити",
+  "common.close": "Закрити",
   "common.closeTagFilters": "Закрити фільтри тегів",
   "common.noMethodsAvailable": "Немає доступних методів",
   "common.noTagsAvailable": "Немає доступних тегів",
@@ -47,6 +54,78 @@ export const ukUATranslations: TranslationDictionary = {
   "ingredients.helpShoppingTitle": "Список покупок",
   "ingredients.helpShoppingText":
     "Цей екран показує інгредієнти, які ви хочете купити.\n\nПісля покупки позначте їх як наявні.",
+
+  "ingredientForm.changeImage": "Змінити фото",
+  "ingredientForm.addImage": "Додати фото",
+  "ingredientForm.mediaLibraryAccessTitle": "Доступ до медіатеки",
+  "ingredientForm.mediaLibraryAccessMessage":
+    "Увімкніть доступ до фото в системних налаштуваннях, щоб додати зображення інгредієнта.",
+  "ingredientForm.couldNotPickImage": "Не вдалося вибрати фото",
+  "ingredientForm.cameraAccessRequired": "Потрібен доступ до камери",
+  "ingredientForm.cameraAccessRequiredMessage":
+    "Увімкніть доступ до камери в системних налаштуваннях, щоб зробити фото інгредієнта.",
+  "ingredientForm.couldNotTakePhoto": "Не вдалося зробити фото",
+  "ingredientForm.addPhotoTitle": "Додати фото",
+  "ingredientForm.addPhotoMessage":
+    "Оберіть, як ви хочете додати фото інгредієнта.",
+  "ingredientForm.takePhoto": "Зробити фото",
+  "ingredientForm.chooseFromGallery": "Вибрати з галереї",
+  "ingredientForm.nameRequiredTitle": "Потрібно вказати назву",
+  "ingredientForm.nameRequiredMessage": "Будь ласка, введіть назву інгредієнта.",
+  "ingredientForm.ingredientNotFound": "Інгредієнт не знайдено",
+  "ingredientForm.couldNotSave": "Не вдалося зберегти інгредієнт",
+  "ingredientForm.leaveWithoutSavingTitle": "Вийти без збереження?",
+  "ingredientForm.leaveWithoutSavingMessage":
+    "Ваші зміни буде втрачено, якщо ви залишите цей екран.",
+  "ingredientForm.stay": "Залишитися",
+  "ingredientForm.leave": "Вийти",
+  "ingredientForm.deleteConfirmNamed":
+    "Ви впевнені, що хочете видалити\n{{name}}?\n\nЦю дію неможливо скасувати.",
+  "ingredientForm.deleteConfirmUnnamed":
+    "Ви впевнені, що хочете видалити цей інгредієнт?\n\nЦю дію неможливо скасувати.",
+  "ingredientForm.deleteTitle": "Видалити інгредієнт",
+  "ingredientForm.couldNotDelete": "Не вдалося видалити інгредієнт",
+  "ingredientForm.baseDisableBrandedVariants":
+    "Цей інгредієнт є базовим для брендованих інгредієнтів, тому сам не може бути брендованим.",
+  "ingredientForm.baseDisableStyledIngredient":
+    "Стильові інгредієнти не можуть бути брендованими. Видаліть стильовий зв’язок, щоб увімкнути вибір базового інгредієнта.",
+  "ingredientForm.styleDisableStyledVariants":
+    "Цей інгредієнт є базовим для стильових інгредієнтів, тому сам не може бути стильовим.",
+  "ingredientForm.styleDisableBrandedIngredient":
+    "Брендовані інгредієнти не можуть бути стильовими. Видаліть зв’язок із базовим інгредієнтом, щоб увімкнути вибір стильового.",
+  "ingredientForm.editTitle": "Редагувати інгредієнт",
+  "ingredientForm.addTitle": "Додати новий інгредієнт",
+  "ingredientForm.goBack": "Назад",
+  "ingredientForm.name": "Назва",
+  "ingredientForm.namePlaceholder": "наприклад, Імбирний сироп",
+  "ingredientForm.removePhoto": "Видалити фото",
+  "ingredientForm.tags": "Теги",
+  "ingredientForm.createTag": "Створити тег",
+  "ingredientForm.selectTags": "Виберіть один або кілька тегів",
+  "ingredientForm.baseIngredient": "Базовий інгредієнт",
+  "ingredientForm.baseHint":
+    "Як базові можна вибирати лише інгредієнти, які ще не є стильовими.",
+  "ingredientForm.changeBaseIngredient": "Змінити базовий інгредієнт",
+  "ingredientForm.selectBaseIngredient": "Оберіть базовий інгредієнт",
+  "ingredientForm.removeBaseIngredient": "Видалити базовий інгредієнт",
+  "ingredientForm.none": "Немає",
+  "ingredientForm.styleIngredient": "Стильовий інгредієнт",
+  "ingredientForm.styleHint":
+    "Стильовими можна обирати лише базові інгредієнти, які не є брендованими і ще не є стильовими.",
+  "ingredientForm.changeStyleIngredient": "Змінити стильовий інгредієнт",
+  "ingredientForm.selectStyleIngredient": "Оберіть стильовий інгредієнт",
+  "ingredientForm.removeStyleIngredient": "Видалити стильовий інгредієнт",
+  "ingredientForm.description": "Опис",
+  "ingredientForm.descriptionPlaceholder":
+    "Додайте нотатки щодо смаку або використання",
+  "ingredientForm.saveIngredient": "Зберегти інгредієнт",
+  "ingredientForm.deleteIngredient": "Видалити інгредієнт",
+  "ingredientForm.searchIngredients": "Пошук інгредієнтів",
+  "ingredientForm.noIngredientsFound": "Інгредієнтів не знайдено",
+  "ingredientForm.helpTitle": "Додавання інгредієнта",
+  "ingredientForm.helpMessage":
+    "На цьому екрані ви можете створити нову картку інгредієнта.\n\nДодайте назву, необов’язкове фото, теги, базовий або стильовий інгредієнт і нотатки, а потім натисніть «Зберегти».\n\nСтильовий інгредієнт можна пов’язати лише з базовим інгредієнтом, який не є ані брендованим, ані стильовим.",
+  "ingredientForm.newTag": "Новий тег",
 
   "ingredientDetails.title": "Деталі інгредієнта",
   "ingredientDetails.goBack": "Назад",
