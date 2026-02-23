@@ -133,8 +133,8 @@ export const ukUATranslations: TranslationDictionary = {
   "cocktailDetails.noPhoto": "Немає фото",
   "cocktailDetails.clearRating": "Скинути рейтинг",
   "cocktailDetails.setRatingTo": "Встановити рейтинг {{value}}",
-  "cocktailDetails.showInMetric": "Показати в метричних",
-  "cocktailDetails.showInImperial": "Показати в імперських",
+  "cocktailDetails.showInMetric": "Метрична система",
+  "cocktailDetails.showInImperial": "Імперська система",
   "cocktailDetails.hideMethodDescription": "Сховати опис {{method}}",
   "cocktailDetails.showMethodDescription": "Показати опис {{method}}",
   "cocktailDetails.tag": "Тег",
@@ -145,11 +145,11 @@ export const ukUATranslations: TranslationDictionary = {
   "cocktailDetails.instructions": "Інструкція",
   "cocktailDetails.ingredients": "Інгредієнти",
   "cocktailDetails.asNeeded": "За потреби",
-  "cocktailDetails.garnish": "гарніш",
+  "cocktailDetails.garnish": "декор",
   "cocktailDetails.optional": "опційно",
   "cocktailDetails.or": "або {{name}}",
   "cocktailDetails.orAny": "або будь-який {{name}}",
-  "cocktailDetails.substituteFor": "Заміна для {{name}}",
+  "cocktailDetails.substituteFor": "Замість {{name}}",
   "cocktailDetails.onShoppingList": "У списку покупок",
   "cocktailDetails.copyCocktail": "Копіювати коктейль",
   "cocktailDetails.editCocktail": "Редагувати коктейль",
@@ -157,22 +157,30 @@ export const ukUATranslations: TranslationDictionary = {
   "cocktailDetails.helpMessage":
     "Цей екран показує деталі коктейлю, інгредієнти та інструкцію.\n\nВикористовуйте кнопки під коктейлем, щоб скопіювати або редагувати його.\n\n**Стрічки інгредієнтів**\nЛіва стрічка показує тип інгредієнта:\nсиня = брендовий інгредієнт,\nжовта = стильовий інгредієнт.\n\nПрава стрічка показує варіанти бази:\nсиня = є брендові варіанти,\nжовта = є стильові варіанти.",
 
-  "cocktailMethod.blend.label": "Бленд",
-  "cocktailMethod.blend.description": "Збийте з крижаною крихтою до замороженої текстури.",
-  "cocktailMethod.muddle.label": "Мадл",
-  "cocktailMethod.muddle.description": "Розімніть фрукти, ягоди або трави, щоб вивільнити олії та сік.",
-  "cocktailMethod.heat.label": "Нагрів",
-  "cocktailMethod.heat.description": "Легко підігрійте інгредієнти, щоб поєднати смаки без кипіння.",
-  "cocktailMethod.shake.label": "Шейк",
-  "cocktailMethod.shake.description": "Струсіть з льодом. Найкраще для цитрусу, сиропу, вершків чи білка — для аерації та охолодження.",
-  "cocktailMethod.stir.label": "Стер",
-  "cocktailMethod.stir.description": "Розмішуйте барною ложкою в келиху для змішування, наповненому льодом. Найкраще для трав'яних міксерів.",
-  "cocktailMethod.throw.label": "Троу",
-  "cocktailMethod.throw.description": "Переливайте між тінами з відстані для аерації без помутніння.",
-  "cocktailMethod.build.label": "Білд",
-  "cocktailMethod.build.description": "Наливайте інгредієнти безпосередньо в келих подачі.",
-  "cocktailMethod.layer.label": "Леєр",
-  "cocktailMethod.layer.description": "Викладайте інгредієнти шарами за допомогою барної ложки для візуального ефекту.",
+  "cocktailMethod.blend.label": "Збивати",
+  "cocktailMethod.blend.description":
+    "Збийте в блендері з крижаною крихтою ддя замороженої текстури.",
+  "cocktailMethod.muddle.label": "Розминати",
+  "cocktailMethod.muddle.description":
+    "Розімніть фрукти, ягоди або трави, щоби вивільнити сік.",
+  "cocktailMethod.heat.label": "Нагрівати",
+  "cocktailMethod.heat.description":
+    "Підігрійте інгредієнти, щоби поєднати смаки.",
+  "cocktailMethod.shake.label": "Збовтувати",
+  "cocktailMethod.shake.description":
+    "Струсіть у шейкері з льодом. Найкраще для цитрусових, сиропів, вершків чи білка — для аерації та охолодження.",
+  "cocktailMethod.stir.label": "Змішувати",
+  "cocktailMethod.stir.description":
+    "Зміщайте барною ложкою в окремому, наповненомому льодом, глеку. Найкраще для трав'яних міксерів.",
+  "cocktailMethod.throw.label": "Переливати",
+  "cocktailMethod.throw.description":
+    "Переливайте між ємностями шейкера з відстані для аерації без помутніння.",
+  "cocktailMethod.build.label": "Наливати",
+  "cocktailMethod.build.description":
+    "Наливайте інгредієнти безпосередньо в келих подачі.",
+  "cocktailMethod.layer.label": "Шарами",
+  "cocktailMethod.layer.description":
+    "Наливайте інгредієнти шарами за допомогою барної ложки для візуального ефекту.",
 
   "ingredientDetails.title": "Деталі інгредієнта",
   "ingredientDetails.goBack": "Назад",
