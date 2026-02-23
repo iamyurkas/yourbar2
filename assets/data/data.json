@@ -9700,27 +9700,20 @@
       "ingredients": [
         {
           "order": 1,
-          "ingredientId": 196,
-          "name": "Ice",
-          "amount": "150",
-          "unitId": 8
-        },
-        {
-          "order": 2,
-          "ingredientId": 196,
-          "name": "Ice",
-          "amount": "120",
-          "unitId": 8
-        },
-        {
-          "order": 3,
           "ingredientId": 232,
           "name": "Lychee",
           "amount": "3",
           "unitId": 1
         },
         {
-          "order": 4,
+          "order": 2,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8
+        },
+        {
+          "order": 3,
           "ingredientId": 104,
           "name": "Coconut Liqueur",
           "amount": "60",
@@ -9733,7 +9726,7 @@
           ]
         },
         {
-          "order": 5,
+          "order": 4,
           "ingredientId": 325,
           "name": "Strawberry Liqueur",
           "amount": "30",
@@ -9746,11 +9739,18 @@
           ]
         },
         {
-          "order": 6,
+          "order": 5,
           "ingredientId": 281,
           "name": "Pineapple Juice",
           "amount": "90",
           "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
         },
         {
           "order": 7,
