@@ -324,7 +324,7 @@ export function SubstituteModal({
                 color={Colors.tint}
                 style={styles.shoppingIcon}
                 accessibilityRole="image"
-                accessibilityLabel="On shopping list"
+                accessibilityLabel={t("cocktailForm.onShoppingList")}
               />
             ) : (
               <View style={styles.shoppingIconPlaceholder} />
@@ -343,6 +343,7 @@ export function SubstituteModal({
       brandedBaseIngredientIds,
       styleBaseIngredientIds,
       Colors,
+      t,
     ],
   );
 
@@ -378,7 +379,7 @@ export function SubstituteModal({
           accessibilityRole="menu">
           <View style={styles.modalHeader}>
             <View style={styles.modalTitleRow}>
-              <Text style={[styles.modalTitle, { color: Colors.onSurface, flex: 1 }]}>Add substitute</Text>
+              <Text style={[styles.modalTitle, { color: Colors.onSurface, flex: 1 }]}>{t("cocktailForm.addSubstitute")}</Text>
               <Pressable onPress={onClose} accessibilityRole="button" accessibilityLabel={t("common.close")}>
                 <MaterialCommunityIcons name="close" size={22} color={Colors.onSurfaceVariant} />
               </Pressable>
@@ -411,7 +412,7 @@ export function SubstituteModal({
             keyboardShouldPersistTaps="handled"
             contentContainerStyle={styles.modalListContent}
             ListEmptyComponent={
-              <Text style={[styles.modalEmptyText, { color: Colors.onSurfaceVariant }]}>No ingredients found</Text>
+              <Text style={[styles.modalEmptyText, { color: Colors.onSurfaceVariant }]}>{t("ingredientForm.noIngredientsFound")}</Text>
             }
           />
         </Pressable>
