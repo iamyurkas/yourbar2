@@ -350,15 +350,15 @@ export const ukUATranslations: TranslationDictionary = {
   "onboarding.step1.message":
     "**Вітаємо!**\nДавайте налаштуємо ваш бар, додавши кілька інгредієнтів.",
   "onboarding.step2.message":
-    "Натисніть **Інгредієнти**, щоби почати додавати те, що ви маєте.",
+    "Натисніть **Інгредієнти**, щоби почати додавати, що ви маєте.",
   "onboarding.step3.message":
     "Це повний список інгредієнтів.\nМи вже позначили для вас кілька базових.",
   "onboarding.step4.message":
-    "**Мої інгредієнти** показує те, що ви маєте.\nТакож тут видно, скільки доступних коктейлів використовують інгредієнт.",
+    "**Мої інгредієнти** показує, що ви маєте в наявності.\n\nТакож тут видно, скільки доступних коктейлів використовують інгредієнт.",
   "onboarding.step5.message":
     "Тепер подивімося на коктейлі.\nВідкрийте екран **Коктейлі**.",
   "onboarding.step6.message":
-    "Угорі вкладки **Мої коктейлі** ви побачите коктейлі, які можна зробити зараз.\n\nНижче — коктейлі, де бракує лише одного інгредієнта.",
+    "Угорі вкладки **Мої коктейлі** ви побачите коктейлі, які вже можна зробити зараз.\n\nНижче — коктейлі, де бракує лише одного інгредієнта.",
   "onboarding.step7.message":
     "Знайомтесь: **Шейкер**.\nВін допомагає знаходити коктейлі за вибраними інгредієнтами.",
   "onboarding.step8.message":
@@ -368,9 +368,10 @@ export const ukUATranslations: TranslationDictionary = {
   "onboarding.step10.message":
     "Оберіть кілька інгредієнтів, потім натисніть **Показати**, щоби побачити відповідні коктейлі.",
   "onboarding.step11.message":
-    "Почніть із позначення інгредієнтів, які ви вже маєте, у вкладці **Усі інгредієнти**.\n\nБудьмо!",
+    "Радимо почати з позначення інгредієнтів, які ви вже маєте, у вкладці **Усі інгредієнти**.\n\nБудьмо!",
 
-  "ingredients.emptyShopping": "У вашому списку покупок\nпоки немає інгредієнтів.",
+  "ingredients.emptyShopping":
+    "У вашому списку покупок\nпоки немає інгредієнтів.",
   "ingredients.emptyList": "У списку немає інгредієнтів",
   "ingredients.makeCount.one": "Зробити {{count}} коктейль",
   "ingredients.makeCount.few": "Зробити {{count}} коктейлі",
@@ -380,12 +381,15 @@ export const ukUATranslations: TranslationDictionary = {
   "ingredients.recipeCount.few": "{{count}} рецепта",
   "ingredients.recipeCount.many": "{{count}} рецептів",
   "ingredients.recipeCount.other": "{{count}} рецептів",
-  "ingredients.helpAllFullText": "Цей екран показує всі інгредієнти в застосунку.\n\nВикористовуйте пошук, перемикайте вкладки та фільтруйте за тегами.\n\nТоркніться прапорця, щоб позначити наявність.",
+  "ingredients.helpAllFullText":
+    "Цей екран показує всі інгредієнти в застосунку.\n\nВикористовуйте пошук, перемикайте вкладки та фільтруйте за тегами.\n\nТоркніться прапорця, щоб позначити наявність.",
   "ingredients.clearSelectedTagFilters": "Очистити вибрані фільтри тегів",
   "ingredients.addIngredient": "Додати інгредієнт",
 
-  "cocktails.oneMoreIngredientForMore": "Ще один інгредієнт для більшої кількості коктейлів",
-  "cocktails.removeIngredientFromShopping": "Видалити інгредієнт зі списку покупок",
+  "cocktails.oneMoreIngredientForMore":
+    "Ще один інгредієнт для більшої кількості коктейлів",
+  "cocktails.removeIngredientFromShopping":
+    "Видалити інгредієнт зі списку покупок",
   "cocktails.addIngredientToShopping": "Додати інгредієнт до списку покупок",
   "cocktails.buyNamed": "Купити {{name}}",
   "cocktails.toMakeMore.one": "Щоб зробити ще {{count}} коктейль",
@@ -396,7 +400,8 @@ export const ukUATranslations: TranslationDictionary = {
   "cocktails.addCocktail": "Додати коктейль",
 
   "shakerResults.helpTitle": "Результати шейкера",
-  "shakerResults.helpText": "Цей екран показує коктейлі, які можна зробити з вибраних інгредієнтів.\n\nВикористовуйте пошук і фільтри, щоб звузити результати, а потім відкрийте будь-який коктейль, щоб переглянути деталі рецепта та кроки приготування.",
+  "shakerResults.helpText":
+    "Цей екран показує коктейлі, які можна зробити з вибраних інгредієнтів.\n\nВикористовуйте пошук і фільтри, щоб звузити результати, а потім відкрийте будь-який коктейль, щоб переглянути деталі рецепта та кроки приготування.",
   "shakerResults.clearSelectedFilters": "Очистити вибрані фільтри",
   "shakerResults.emptyMatchingRecipes": "Немає відповідних рецептів",
 
@@ -405,7 +410,8 @@ export const ukUATranslations: TranslationDictionary = {
   "cocktailListRow.allIngredientsReady": "Усі інгредієнти готові",
 
   "tabBar.leaveWithoutSavingTitle": "Вийти без збереження?",
-  "tabBar.leaveWithoutSavingMessage": "Ваші зміни буде втрачено, якщо ви залишите цей екран.",
+  "tabBar.leaveWithoutSavingMessage":
+    "Ваші зміни буде втрачено, якщо ви залишите цей екран.",
 
   "substituteModal.forNamed": "Для {{name}}",
   "substituteModal.searchIngredients": "Пошук інгредієнтів",
