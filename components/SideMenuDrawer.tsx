@@ -844,7 +844,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
           >
             <View style={styles.headerRow}>
               <Text style={[styles.title, { color: Colors.onSurface }]}>
-                Settings
+                {t("sideMenu.settingsTitle")}
               </Text>
               <View
                 style={[
@@ -928,7 +928,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 <Text
                   style={[styles.settingLabel, { color: Colors.onSurface }]}
                 >
-                  Ignore garnish
+                  {t("sideMenu.ignoreGarnish")}
                 </Text>
                 <Text
                   style={[
@@ -936,7 +936,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     { color: Colors.onSurfaceVariant },
                   ]}
                 >
-                  All garnishes are optional
+                  {t("sideMenu.ignoreGarnishCaption")}
                 </Text>
               </View>
             </Pressable>
@@ -973,7 +973,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 <Text
                   style={[styles.settingLabel, { color: Colors.onSurface }]}
                 >
-                  Allow all substitutes
+                  {t("sideMenu.allowAllSubstitutes")}
                 </Text>
                 <Text
                   style={[
@@ -981,7 +981,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     { color: Colors.onSurfaceVariant },
                   ]}
                 >
-                  Always use substitutes
+                  {t("sideMenu.allowAllSubstitutesCaption")}
                 </Text>
               </View>
             </Pressable>
@@ -1016,7 +1016,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 <Text
                   style={[styles.settingLabel, { color: Colors.onSurface }]}
                 >
-                  Show in imperial
+                  {t("sideMenu.useImperial")}
                 </Text>
                 <Text
                   style={[
@@ -1024,7 +1024,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     { color: Colors.onSurfaceVariant },
                   ]}
                 >
-                  Use oz instead of ml and grams
+                  {t("sideMenu.useImperialCaption")}
                 </Text>
               </View>
             </Pressable>
@@ -1059,7 +1059,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 <Text
                   style={[styles.settingLabel, { color: Colors.onSurface }]}
                 >
-                  Keep screen awake
+                  {t("sideMenu.keepScreenAwake")}
                 </Text>
                 <Text
                   style={[
@@ -1067,7 +1067,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     { color: Colors.onSurfaceVariant },
                   ]}
                 >
-                  Prevent sleep on cocktail view
+                  {t("sideMenu.keepScreenAwakeCaption")}
                 </Text>
               </View>
             </Pressable>
@@ -1103,11 +1103,11 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   <Text
                     style={[styles.settingLabel, { color: Colors.onSurface }]}
                   >
-                    Smart shaker filtering
+                    {t("sideMenu.smartShakerFiltering")}
                   </Text>
                   <Pressable
                     accessibilityRole="button"
-                    accessibilityLabel="Smart shaker filtering info"
+                    accessibilityLabel={t("sideMenu.smartShakerFilteringInfo")}
                     hitSlop={8}
                     onPress={(event) => {
                       event.stopPropagation();
@@ -1128,13 +1128,13 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     { color: Colors.onSurfaceVariant },
                   ]}
                 >
-                  Hide non-matching ingredients
+                  {t("sideMenu.smartShakerFilteringCaption")}
                 </Text>
               </View>
             </Pressable>
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel="Set starting screen"
+              accessibilityLabel={t("sideMenu.startingScreen")}
               onPress={handleStartScreenPress}
               style={[styles.settingRow, SURFACE_ROW_STYLE]}
             >
@@ -1149,7 +1149,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 <Text
                   style={[styles.settingLabel, { color: Colors.onSurface }]}
                 >
-                  Starting screen
+                  {t("sideMenu.startingScreen")}
                 </Text>
                 <Text
                   style={[
@@ -1157,13 +1157,13 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     { color: Colors.onSurfaceVariant },
                   ]}
                 >
-                  Open {selectedStartScreenOption?.label ?? "All cocktails"}
+                  {t("sideMenu.startingScreenOpen", { screen: selectedStartScreenOption ? t(selectedStartScreenOption.labelKey) : t("startScreen.cocktails_all.label") })}
                 </Text>
               </View>
             </Pressable>
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel="Set favorites rating filter"
+              accessibilityLabel={t("sideMenu.favoritesRatingFilter")}
               onPress={handleRatingThresholdPress}
               style={[styles.settingRow, SURFACE_ROW_STYLE]}
             >
@@ -1178,7 +1178,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 <Text
                   style={[styles.settingLabel, { color: Colors.onSurface }]}
                 >
-                  Favorites rating filter
+                  {t("sideMenu.favoritesRatingFilter")}
                 </Text>
                 <Text
                   style={[
@@ -1186,14 +1186,14 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     { color: Colors.onSurfaceVariant },
                   ]}
                 >
-                  Showing {ratingFilterThreshold}+ stars cocktails
+                  {t("sideMenu.favoritesRatingFilterCaption", { rating: ratingFilterThreshold })}
                 </Text>
               </View>
             </Pressable>
 
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel="Manage custom tags"
+              accessibilityLabel={t("sideMenu.manageTags")}
               onPress={handleOpenTagManager}
               style={[styles.settingRow, SURFACE_ROW_STYLE]}
             >
@@ -1208,7 +1208,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 <Text
                   style={[styles.settingLabel, { color: Colors.onSurface }]}
                 >
-                  Manage tags
+                  {t("sideMenu.manageTags")}
                 </Text>
                 <Text
                   style={[
@@ -1216,7 +1216,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     { color: Colors.onSurfaceVariant },
                   ]}
                 >
-                  Create or update your tags
+                  {t("sideMenu.manageTagsCaption")}
                 </Text>
               </View>
             </Pressable>
@@ -1273,7 +1273,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     { color: Colors.onSurfaceVariant },
                   ]}
                 >
-                  {t("sideMenu.languageCurrent", { flag: currentLanguage.flag, name: currentLanguage.nativeName })}
+                  {t("sideMenu.languageCurrent", { name: currentLanguage.nativeName })}
                 </Text>
               </View>
               <MaterialCommunityIcons
@@ -1352,7 +1352,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               <Text
                 style={[styles.versionText, { color: Colors.onSurfaceVariant }]}
               >
-                Version {APP_VERSION}
+                {t("sideMenu.version", { version: APP_VERSION })}
               </Text>
             </View>
           </ScrollView>
@@ -2078,9 +2078,6 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     <View style={styles.startScreenTextContainer}>
                       <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>
                         {option.nativeName}
-                      </Text>
-                      <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>
-                        {option.name}
                       </Text>
                     </View>
                     <MaterialCommunityIcons
