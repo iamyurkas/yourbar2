@@ -1504,7 +1504,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   <Text
                     style={[styles.settingLabel, { color: Colors.onSurface }]}
                   >
-                    Cocktail tags
+                    {t("sideMenu.cocktailTags")}
                   </Text>
                   <Pressable
                     accessibilityRole="button"
@@ -1520,7 +1520,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                       color={Colors.tint}
                     />
                     <Text style={[styles.tagAddLabel, { color: Colors.tint }]}>
-                      Add
+                      {t("common.create")}
                     </Text>
                   </Pressable>
                 </View>
@@ -1531,7 +1531,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                       { color: Colors.onSurfaceVariant },
                     ]}
                   >
-                    No custom cocktail tags yet.
+                    {t("sideMenu.noCustomCocktailTags")}
                   </Text>
                 ) : (
                   <View style={styles.tagRows}>
@@ -1547,7 +1547,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                         <View style={styles.tagActions}>
                           <Pressable
                             accessibilityRole="button"
-                            accessibilityLabel={`Edit ${tag.name ?? "tag"}`}
+                            accessibilityLabel={t("sideMenu.editNamedTagA11y", { name: tag.name ?? t("sideMenu.tagFallbackName") })}
                             onPress={() =>
                               handleOpenTagEditor("cocktail", {
                                 id: Number(tag.id),
@@ -1564,11 +1564,11 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                           </Pressable>
                           <Pressable
                             accessibilityRole="button"
-                            accessibilityLabel={`Delete ${tag.name ?? "tag"}`}
+                            accessibilityLabel={t("sideMenu.deleteNamedTagA11y", { name: tag.name ?? t("sideMenu.tagFallbackName") })}
                             onPress={() =>
                               handleDeleteTag("cocktail", {
                                 id: Number(tag.id),
-                                name: tag.name ?? "Tag",
+                                name: tag.name ?? t("sideMenu.tagFallbackName"),
                               })
                             }
                           >
@@ -1589,7 +1589,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   <Text
                     style={[styles.settingLabel, { color: Colors.onSurface }]}
                   >
-                    Ingredient tags
+                    {t("sideMenu.ingredientTags")}
                   </Text>
                   <Pressable
                     accessibilityRole="button"
@@ -1605,7 +1605,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                       color={Colors.tint}
                     />
                     <Text style={[styles.tagAddLabel, { color: Colors.tint }]}>
-                      Add
+                      {t("common.create")}
                     </Text>
                   </Pressable>
                 </View>
@@ -1616,7 +1616,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                       { color: Colors.onSurfaceVariant },
                     ]}
                   >
-                    No custom ingredient tags yet.
+                    {t("sideMenu.noCustomIngredientTags")}
                   </Text>
                 ) : (
                   <View style={styles.tagRows}>
@@ -1632,7 +1632,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                         <View style={styles.tagActions}>
                           <Pressable
                             accessibilityRole="button"
-                            accessibilityLabel={`Edit ${tag.name ?? "tag"}`}
+                            accessibilityLabel={t("sideMenu.editNamedTagA11y", { name: tag.name ?? t("sideMenu.tagFallbackName") })}
                             onPress={() =>
                               handleOpenTagEditor("ingredient", {
                                 id: Number(tag.id),
@@ -1649,11 +1649,11 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                           </Pressable>
                           <Pressable
                             accessibilityRole="button"
-                            accessibilityLabel={`Delete ${tag.name ?? "tag"}`}
+                            accessibilityLabel={t("sideMenu.deleteNamedTagA11y", { name: tag.name ?? t("sideMenu.tagFallbackName") })}
                             onPress={() =>
                               handleDeleteTag("ingredient", {
                                 id: Number(tag.id),
-                                name: tag.name ?? "Tag",
+                                name: tag.name ?? t("sideMenu.tagFallbackName"),
                               })
                             }
                           >
@@ -1735,7 +1735,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 { color: Colors.onSurfaceVariant },
               ]}
             >
-              Select where the app opens
+              {t("sideMenu.startScreenModalDescription")}
             </Text>
             <ScrollView
               style={styles.startScreenModalScroll}
@@ -1750,7 +1750,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     key={`start-screen-${option.key}`}
                     accessibilityRole="button"
                     accessibilityState={{ selected: isSelected }}
-                    accessibilityLabel={`Open ${option.label} first`}
+                    accessibilityLabel={t("sideMenu.startScreenOptionA11y", { screen: t(option.labelKey) })}
                     onPress={() => handleSelectStartScreen(option.key)}
                     style={({ pressed }) => [
                       styles.startScreenOption,
@@ -1854,7 +1854,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 { color: Colors.onSurfaceVariant },
               ]}
             >
-              Override automatic detection to choose your preferred Amazon store.
+              {t("sideMenu.amazonStoreModalDescription")}
             </Text>
             <ScrollView
               style={styles.startScreenModalScroll}
@@ -1888,7 +1888,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                       { color: Colors.onSurface },
                     ]}
                   >
-                    Automatic
+                    {t("sideMenu.amazonStoreAutomatic")}
                   </Text>
                   <Text
                     style={[
@@ -1896,7 +1896,11 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                       { color: Colors.onSurfaceVariant },
                     ]}
                   >
-                    Detected: {detectedAmazonStore ? AMAZON_STORES[detectedAmazonStore].label : 'Unknown'}
+                    {t("sideMenu.amazonStoreDetected", {
+                      store: detectedAmazonStore
+                        ? AMAZON_STORES[detectedAmazonStore].label
+                        : t("sideMenu.amazonStoreUnknown"),
+                    })}
                   </Text>
                 </View>
                 <MaterialCommunityIcons
@@ -1918,7 +1922,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     key={`amazon-store-${storeKey}`}
                     accessibilityRole="button"
                     accessibilityState={{ selected: isSelected }}
-                    accessibilityLabel={`Set Amazon store to ${option.label}`}
+                    accessibilityLabel={t("sideMenu.amazonStoreSetToA11y", { store: option.label })}
                     onPress={() => handleSelectAmazonStore(storeKey)}
                     style={({ pressed }) => [
                       styles.startScreenOption,
@@ -1989,7 +1993,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                       { color: Colors.onSurface },
                     ]}
                   >
-                    Disabled
+                    {t("sideMenu.amazonStoreDisabled")}
                   </Text>
                   <Text
                     style={[
@@ -1997,7 +2001,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                       { color: Colors.onSurfaceVariant },
                     ]}
                   >
-                    Hide Buy on Amazon link
+                    {t("sideMenu.amazonStoreHideLink")}
                   </Text>
                 </View>
                 <MaterialCommunityIcons
