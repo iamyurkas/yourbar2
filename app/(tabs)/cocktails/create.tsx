@@ -47,13 +47,13 @@ import {
 } from "@/constants/cocktail-units";
 import { GLASSWARE } from "@/constants/glassware";
 import { useAppColors } from "@/constants/theme";
+import { useI18n } from "@/libs/i18n/use-i18n";
 import {
   buildReturnToParams,
   parseReturnToParams,
   skipDuplicateBack,
 } from "@/libs/navigation";
 import { shouldStorePhoto, storePhoto } from "@/libs/photo-storage";
-import { useI18n } from "@/libs/i18n/use-i18n";
 import { normalizeSearchText } from "@/libs/search-normalization";
 import {
   useInventory,
@@ -3298,7 +3298,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: StyleSheet.hairlineWidth,
     minHeight: 52,
-    width: "50%",
+    minWidth: 175,
     alignSelf: "flex-start",
     zIndex: 1,
   },
@@ -3461,7 +3461,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 8,
     minHeight: 52,
-    width: "50%",
+    minWidth: 160,
     alignSelf: "flex-start",
   },
   addSubstituteLabel: {
