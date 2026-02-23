@@ -2403,6 +2403,7 @@ function EditableIngredientRow({
   const [showSuggestions, setShowSuggestions] = useState(false);
   const hideSuggestionsTimeout = useRef<NodeJS.Timeout | null>(null);
   const Colors = useAppColors();
+  const { t } = useI18n();
 
   const normalizedName = normalizeSearchText(ingredient.name);
 
