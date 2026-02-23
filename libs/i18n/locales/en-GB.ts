@@ -1,0 +1,46 @@
+import type { TranslationDictionary } from '@/libs/i18n/types';
+
+export const enGBTranslations: TranslationDictionary = {
+  'tabs.cocktails': 'Cocktails',
+  'tabs.shaker': 'Shaker',
+  'tabs.ingredients': 'Ingredients',
+
+  'settings.disabled': 'Disabled',
+  'sideMenu.closeMenu': 'Close menu',
+  'sideMenu.amazonStore': 'Amazon store',
+  'sideMenu.amazonStoreCurrent': 'Current: {{label}}',
+  'sideMenu.language': 'Language',
+  'sideMenu.languageCurrent': '{{flag}} {{name}}',
+  'sideMenu.reportIssueTitle': 'Something wrong?',
+  'sideMenu.reportIssueCaption': 'Report a bug, share an idea',
+  'sideMenu.backupRestore': 'Back up & Restore',
+  'sideMenu.backupRestoreCaption': 'Save your data, restore from a backup',
+  'sideMenu.restartOnboarding': 'Restart onboarding',
+  'sideMenu.restartOnboardingCaption': 'Show the guided tutorial again',
+
+  'language.en-GB': 'English',
+  'language.uk-UA': 'Українська',
+  'languageModal.title': 'Language',
+  'languageModal.description': 'Choose the app language. Changes apply immediately.',
+  'languageModal.close': 'Close',
+  'languageModal.selectLanguage': 'Set language to {{name}}',
+
+  'startScreen.cocktails_all.label': 'All cocktails',
+  'startScreen.cocktails_all.description': 'Browse every recipe',
+  'startScreen.cocktails_my.label': 'My cocktails',
+  'startScreen.cocktails_my.description': 'See your creations first',
+  'startScreen.cocktails_favorites.label': 'Favorite cocktails',
+  'startScreen.cocktails_favorites.description': 'Jump into saved cocktails',
+  'startScreen.shaker.label': 'Shaker',
+  'startScreen.shaker.description': 'Mix based on your inventory',
+  'startScreen.ingredients_all.label': 'All ingredients',
+  'startScreen.ingredients_all.description': 'Manage every ingredient',
+  'startScreen.ingredients_my.label': 'My ingredients',
+  'startScreen.ingredients_my.description': 'Start with what you own',
+  'startScreen.ingredients_shopping.label': 'Shopping list',
+  'startScreen.ingredients_shopping.description': 'Head to your shopping items',
+
+  'theme.light': 'Light',
+  'theme.dark': 'Dark',
+  'theme.system': 'System',
+};

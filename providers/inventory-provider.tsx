@@ -4,9 +4,9 @@ import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { TAG_COLORS } from '@/constants/tag-colors';
 import { AMAZON_STORES, detectAmazonStoreFromStoreOrLocale, detectUsStorefrontOrLocale, getEffectiveAmazonStore, type AmazonStoreKey, type AmazonStoreOverride } from '@/libs/amazon-stores';
+import { DEFAULT_LOCALE, isSupportedLocale } from '@/libs/i18n';
 import { loadInventoryData, reloadInventoryData } from '@/libs/inventory-data';
 import {
-  clearInventorySnapshot,
   loadInventorySnapshot,
   persistInventorySnapshot,
 } from '@/libs/inventory-storage';
@@ -22,6 +22,7 @@ import {
 } from '@/libs/inventory-utils';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import {
+  type AppLocale,
   type AppTheme,
   type BaseCocktailRecord,
   type Cocktail,
@@ -66,6 +67,7 @@ import {
 
 const DEFAULT_START_SCREEN: StartScreen = 'cocktails_all';
 const DEFAULT_APP_THEME: AppTheme = 'light';
+const DEFAULT_APP_LOCALE: AppLocale = DEFAULT_LOCALE;
 
 declare global {
   // eslint-disable-next-line no-var
@@ -92,6 +94,8 @@ declare global {
   var __yourbarInventoryStartScreen: StartScreen | undefined;
   // eslint-disable-next-line no-var
   var __yourbarInventoryAppTheme: AppTheme | undefined;
+  // eslint-disable-next-line no-var
+  var __yourbarInventoryAppLocale: AppLocale | undefined;
   // eslint-disable-next-line no-var
   var __yourbarInventoryAmazonStoreOverride: AmazonStoreOverride | null | undefined;
   // eslint-disable-next-line no-var
@@ -184,6 +188,11 @@ function sanitizeAppTheme(value?: string | null): AppTheme {
   }
 }
 
+
+
+function sanitizeAppLocale(value?: string | null): AppLocale {
+  return isSupportedLocale(value) ? value : DEFAULT_APP_LOCALE;
+}
 
 function sanitizeAmazonStoreOverride(value?: string | null): AmazonStoreOverride | null {
   if (!value) {
@@ -297,6 +306,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   const [amazonStoreOverride, setAmazonStoreOverride] = useState<AmazonStoreOverride | null>(
     () => sanitizeAmazonStoreOverride(globalThis.__yourbarInventoryAmazonStoreOverride),
   );
+  const [appLocale, setAppLocale] = useState<AppLocale>(
+    () => sanitizeAppLocale(globalThis.__yourbarInventoryAppLocale),
+  );
   const [customCocktailTags, setCustomCocktailTags] = useState<CocktailTag[]>(() =>
     sanitizeCustomTags(globalThis.__yourbarInventoryCustomCocktailTags, DEFAULT_TAG_COLOR),
   );
@@ -333,6 +345,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       ratingFilterThreshold: number;
       startScreen: StartScreen;
       appTheme: AppTheme;
+      appLocale: AppLocale;
       amazonStoreOverride: AmazonStoreOverride | null;
       customCocktailTags: CocktailTag[];
       customIngredientTags: IngredientTag[];
@@ -351,6 +364,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       setRatingFilterThreshold(bootstrap.ratingFilterThreshold);
       setStartScreen(bootstrap.startScreen);
       setAppTheme(bootstrap.appTheme);
+      setAppLocale(bootstrap.appLocale);
       setAmazonStoreOverride(bootstrap.amazonStoreOverride);
       setCustomCocktailTags(bootstrap.customCocktailTags);
       setCustomIngredientTags(bootstrap.customIngredientTags);
@@ -388,6 +402,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           const nextStartScreen = sanitizeStartScreen(stored.startScreen);
           const nextAppTheme = sanitizeAppTheme(stored.appTheme);
           const nextAmazonStoreOverride = sanitizeAmazonStoreOverride(stored.amazonStoreOverride);
+          const nextAppLocale = sanitizeAppLocale(stored.appLocale);
           const nextCustomCocktailTags = sanitizeCustomTags(stored.customCocktailTags, DEFAULT_TAG_COLOR);
           const nextCustomIngredientTags = sanitizeCustomTags(stored.customIngredientTags, DEFAULT_TAG_COLOR);
           const nextOnboardingStep = 0;
@@ -406,6 +421,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             ratingFilterThreshold: nextRatingFilterThreshold,
             startScreen: nextStartScreen,
             appTheme: nextAppTheme,
+            appLocale: nextAppLocale,
             amazonStoreOverride: nextAmazonStoreOverride,
             customCocktailTags: nextCustomCocktailTags,
             customIngredientTags: nextCustomIngredientTags,
@@ -434,6 +450,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             ratingFilterThreshold: 1,
             startScreen: DEFAULT_START_SCREEN,
             appTheme: DEFAULT_APP_THEME,
+            appLocale: DEFAULT_APP_LOCALE,
             amazonStoreOverride: null,
             customCocktailTags: [],
             customIngredientTags: [],
@@ -472,6 +489,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     globalThis.__yourbarInventoryRatingFilterThreshold = ratingFilterThreshold;
     globalThis.__yourbarInventoryStartScreen = startScreen;
     globalThis.__yourbarInventoryAppTheme = appTheme;
+    globalThis.__yourbarInventoryAppLocale = appLocale;
     globalThis.__yourbarInventoryAmazonStoreOverride = amazonStoreOverride;
     globalThis.__yourbarInventoryCustomCocktailTags = customCocktailTags;
     globalThis.__yourbarInventoryCustomIngredientTags = customIngredientTags;
@@ -490,6 +508,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       ratingFilterThreshold,
       startScreen,
       appTheme,
+      appLocale,
       amazonStoreOverride,
       customCocktailTags,
       customIngredientTags,
@@ -521,6 +540,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     ratingFilterThreshold,
     startScreen,
     appTheme,
+    appLocale,
     amazonStoreOverride,
     customCocktailTags,
     customIngredientTags,
@@ -2011,6 +2031,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       ratingFilterThreshold,
       startScreen,
       appTheme,
+      appLocale,
       amazonStoreOverride,
       detectedAmazonStore,
       effectiveAmazonStore,
@@ -2026,6 +2047,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       ratingFilterThreshold,
       startScreen,
       appTheme,
+      appLocale,
       amazonStoreOverride,
       detectedAmazonStore,
       effectiveAmazonStore,
@@ -2066,6 +2088,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       setRatingFilterThreshold: handleSetRatingFilterThreshold,
       setStartScreen: handleSetStartScreen,
       setAppTheme: handleSetAppTheme,
+      setAppLocale,
       setAmazonStoreOverride: handleSetAmazonStoreOverride,
       setOnboardingStep,
       completeOnboarding,
@@ -2102,6 +2125,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       handleSetRatingFilterThreshold,
       handleSetStartScreen,
       handleSetAppTheme,
+      setAppLocale,
       handleSetAmazonStoreOverride,
       setOnboardingStep,
       completeOnboarding,

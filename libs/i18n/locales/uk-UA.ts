@@ -1,0 +1,46 @@
+import type { TranslationDictionary } from '@/libs/i18n/types';
+
+export const ukUATranslations: TranslationDictionary = {
+  'tabs.cocktails': 'Коктейлі',
+  'tabs.shaker': 'Шейкер',
+  'tabs.ingredients': 'Інгредієнти',
+
+  'settings.disabled': 'Вимкнено',
+  'sideMenu.closeMenu': 'Закрити меню',
+  'sideMenu.amazonStore': 'Магазин Amazon',
+  'sideMenu.amazonStoreCurrent': 'Поточний: {{label}}',
+  'sideMenu.language': 'Мова',
+  'sideMenu.languageCurrent': '{{flag}} {{name}}',
+  'sideMenu.reportIssueTitle': 'Щось не так?',
+  'sideMenu.reportIssueCaption': 'Повідомити про баг або поділитися ідеєю',
+  'sideMenu.backupRestore': 'Резервна копія та відновлення',
+  'sideMenu.backupRestoreCaption': 'Зберегти дані або відновити з копії',
+  'sideMenu.restartOnboarding': 'Перезапустити онбординг',
+  'sideMenu.restartOnboardingCaption': 'Показати навчання ще раз',
+
+  'language.en-GB': 'English',
+  'language.uk-UA': 'Українська',
+  'languageModal.title': 'Мова',
+  'languageModal.description': 'Оберіть мову застосунку. Зміни застосовуються одразу.',
+  'languageModal.close': 'Закрити',
+  'languageModal.selectLanguage': 'Встановити мову: {{name}}',
+
+  'startScreen.cocktails_all.label': 'Усі коктейлі',
+  'startScreen.cocktails_all.description': 'Переглянути всі рецепти',
+  'startScreen.cocktails_my.label': 'Мої коктейлі',
+  'startScreen.cocktails_my.description': 'Спочатку ваші створені',
+  'startScreen.cocktails_favorites.label': 'Улюблені коктейлі',
+  'startScreen.cocktails_favorites.description': 'Швидкий доступ до збережених',
+  'startScreen.shaker.label': 'Шейкер',
+  'startScreen.shaker.description': 'Змішування за вашим баром',
+  'startScreen.ingredients_all.label': 'Усі інгредієнти',
+  'startScreen.ingredients_all.description': 'Керувати всіма інгредієнтами',
+  'startScreen.ingredients_my.label': 'Мої інгредієнти',
+  'startScreen.ingredients_my.description': 'Почніть з того, що у вас є',
+  'startScreen.ingredients_shopping.label': 'Список покупок',
+  'startScreen.ingredients_shopping.description': 'Перейти до покупок',
+
+  'theme.light': 'Світла',
+  'theme.dark': 'Темна',
+  'theme.system': 'Системна',
+};
