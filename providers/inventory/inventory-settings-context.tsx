@@ -1,7 +1,7 @@
 import { createContext, useContext } from 'react';
 
 import type { AmazonStoreKey, AmazonStoreOverride } from '@/libs/amazon-stores';
-import type { AppTheme, StartScreen } from '@/providers/inventory-types';
+import type { AppTheme, StartScreen, UiLocale } from '@/providers/inventory-types';
 
 export type InventorySettingsContextValue = {
   ignoreGarnish: boolean;
@@ -12,6 +12,7 @@ export type InventorySettingsContextValue = {
   ratingFilterThreshold: number;
   startScreen: StartScreen;
   appTheme: AppTheme;
+  uiLocale: UiLocale;
   amazonStoreOverride: AmazonStoreOverride | null;
   detectedAmazonStore: AmazonStoreKey | null;
   effectiveAmazonStore: AmazonStoreKey | null;

@@ -13,6 +13,7 @@ import type {
   IngredientStorageRecord,
   IngredientTag,
   StartScreen,
+  UiLocale,
 } from '@/providers/inventory-types';
 import type { InventoryState } from '@/providers/inventory/model/inventory-state';
 
@@ -153,6 +154,7 @@ export type InventorySnapshotOptions = {
   ratingFilterThreshold: number;
   startScreen: StartScreen;
   appTheme: AppTheme;
+  uiLocale: UiLocale;
   amazonStoreOverride: AmazonStoreOverride | null;
   customCocktailTags: CocktailTag[];
   customIngredientTags: IngredientTag[];
@@ -217,6 +219,7 @@ export function buildInventorySnapshot(
     ratingFilterThreshold: options.ratingFilterThreshold,
     startScreen: options.startScreen,
     appTheme: options.appTheme,
+    uiLocale: options.uiLocale,
     amazonStoreOverride: options.amazonStoreOverride,
     onboardingStep: options.onboardingStep,
     onboardingCompleted: options.onboardingCompleted,

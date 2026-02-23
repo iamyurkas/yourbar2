@@ -12,18 +12,19 @@ import { TabBarIcon } from '@/components/tab-bar/TabBarIcon';
 import { OnboardingAnchor } from '@/components/onboarding/OnboardingAnchor';
 import { useAppColors } from '@/constants/theme';
 import { getLastCocktailTab, getLastIngredientTab } from '@/libs/collection-tabs';
+import { useUiLocale } from '@/providers/ui-locale-provider';
 
 type TabPressHandler = (navigation: { navigate: (...args: never[]) => void }, route: { name: string }) => void;
 
 const TAB_SCREENS: Array<{
   name: 'cocktails' | 'shaker' | 'ingredients';
-  title: string;
+  titleKey: 'tabs.cocktails' | 'tabs.shaker' | 'tabs.ingredients';
   icon: typeof CocktailIcon;
   onTabPress: TabPressHandler;
 }> = [
     {
       name: 'cocktails',
-      title: 'Cocktails',
+      titleKey: 'tabs.cocktails',
       icon: CocktailIcon,
       onTabPress: (navigation, route) => {
         getLastCocktailTab();
@@ -32,7 +33,7 @@ const TAB_SCREENS: Array<{
     },
     {
       name: 'shaker',
-      title: 'Shaker',
+      titleKey: 'tabs.shaker',
       icon: ShakerIcon,
       onTabPress: (navigation, route) => {
         navigation.navigate(route.name as never, { screen: 'index' } as never);
@@ -40,7 +41,7 @@ const TAB_SCREENS: Array<{
     },
     {
       name: 'ingredients',
-      title: 'Ingredients',
+      titleKey: 'tabs.ingredients',
       icon: LemonIcon,
       onTabPress: (navigation, route) => {
         getLastIngredientTab();
@@ -53,6 +54,7 @@ export default function TabLayout() {
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(null);
   const insets = useSafeAreaInsets();
   const Colors = useAppColors();
+  const { t } = useUiLocale();
 
   const closeDialog = useCallback(() => {
     setDialogOptions(null);
@@ -87,12 +89,12 @@ export default function TabLayout() {
             </View>
           ),
         }}>
-        {TAB_SCREENS.map(({ name, title, icon, onTabPress }) => (
+        {TAB_SCREENS.map(({ name, titleKey, icon, onTabPress }) => (
           <Tabs.Screen
             key={name}
             name={name}
             options={{
-              title,
+              title: t(titleKey),
               tabBarButton: (props) => (
                 <OnboardingAnchor name={`tab-${name}`} style={styles.tabAnchor}>
                   <TabBarButton {...props} onOpenDialog={showDialog} />

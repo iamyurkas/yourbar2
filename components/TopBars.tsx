@@ -14,6 +14,7 @@ import {
 import { AppDialog } from '@/components/AppDialog';
 import { OnboardingAnchor } from '@/components/onboarding/OnboardingAnchor';
 import { useAppColors } from '@/constants/theme';
+import { useUiLocale } from '@/providers/ui-locale-provider';
 
 type SearchTopBarProps = {
   value: string;
@@ -44,18 +45,21 @@ type SegmentTabsProps = {
 export function SearchTopBar({
   value,
   onChangeText,
-  placeholder = 'Search',
+  placeholder,
   onSubmit,
   onMenuPress,
   onFilterPress,
   filterActive = false,
   filterExpanded = false,
   onFilterLayout,
-  helpTitle = 'Help',
+  helpTitle,
   helpText,
 }: SearchTopBarProps) {
   const Colors = useAppColors();
+  const { t } = useUiLocale();
   const [isHelpVisible, setIsHelpVisible] = useState(false);
+  const effectivePlaceholder = placeholder ?? t('topBar.searchPlaceholder');
+  const effectiveHelpTitle = helpTitle ?? t('topBar.openHelp');
 
   const handleSubmit = (event: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
     onSubmit?.(event.nativeEvent.text);
@@ -74,7 +78,7 @@ export function SearchTopBar({
         ]}>
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel="Open navigation"
+          accessibilityLabel={t('topBar.openNavigation')}
           onPress={onMenuPress}
           style={styles.iconButton}>
           <MaterialCommunityIcons name="menu" size={24} color={Colors.onSurface} />
@@ -84,7 +88,7 @@ export function SearchTopBar({
           <TextInput
             value={value}
             onChangeText={onChangeText}
-            placeholder={placeholder}
+            placeholder={effectivePlaceholder}
             placeholderTextColor={`${Colors.onSurfaceVariant}99`}
             returnKeyType="search"
             onSubmitEditing={handleSubmit}
@@ -93,7 +97,7 @@ export function SearchTopBar({
           {value ? (
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel="Clear search query"
+              accessibilityLabel={t('topBar.clearSearch')}
               onPress={() => onChangeText('')}
               style={styles.clearButton}>
               <MaterialCommunityIcons name="close" size={18} color={Colors.onSurface} />
@@ -102,14 +106,14 @@ export function SearchTopBar({
         </View>
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel="Open screen help"
+          accessibilityLabel={t('topBar.openHelp')}
           onPress={() => setIsHelpVisible(true)}
           style={styles.iconButton}>
           <MaterialCommunityIcons name="help-circle-outline" size={24} color={Colors.icon} />
         </Pressable>
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel="Filter items"
+          accessibilityLabel={t('topBar.filterItems')}
           accessibilityState={filterExpanded ? { expanded: true } : undefined}
           onPress={onFilterPress}
           onLayout={(event) => onFilterLayout?.(event.nativeEvent.layout)}
@@ -128,9 +132,9 @@ export function SearchTopBar({
       </View>
       <AppDialog
         visible={isHelpVisible}
-        title={helpTitle}
+        title={effectiveHelpTitle}
         message={helpText}
-        actions={[{ label: 'Got it', variant: 'secondary' }]}
+        actions={[{ label: t('dialog.gotIt'), variant: 'secondary' }]}
         onRequestClose={() => setIsHelpVisible(false)}
       />
     </>

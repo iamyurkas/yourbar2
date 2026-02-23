@@ -9,6 +9,7 @@ import { OnboardingProvider } from "@/components/onboarding/OnboardingContext";
 import { OnboardingOverlay } from "@/components/onboarding/OnboardingOverlay";
 import { InventoryProvider, useInventory } from "@/providers/inventory-provider";
 import { UnsavedChangesProvider } from "@/providers/unsaved-changes-provider";
+import { UiLocaleProvider } from "@/providers/ui-locale-provider";
 import { getAppTheme } from "@/theme/theme";
 import * as Sentry from '@sentry/react-native';
 
@@ -71,12 +72,14 @@ export default Sentry.wrap(function RootLayout() {
       <UnsavedChangesProvider>
         <InventoryProvider>
           <OnboardingProvider>
+            <UiLocaleProvider>
             <ThemeAppWrapper>
               <Stack>
                 <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
               </Stack>
               <OnboardingOverlay />
             </ThemeAppWrapper>
+            </UiLocaleProvider>
           </OnboardingProvider>
         </InventoryProvider>
       </UnsavedChangesProvider>

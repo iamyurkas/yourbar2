@@ -13,6 +13,7 @@ import type {
   ImportedPhotoEntry,
   StartScreen,
   AppTheme,
+  UiLocale,
 } from '@/providers/inventory-types';
 
 export type InventoryActionsContextValue = {
@@ -46,6 +47,7 @@ export type InventoryActionsContextValue = {
   setRatingFilterThreshold: (value: number) => void;
   setStartScreen: (value: StartScreen) => void;
   setAppTheme: (value: AppTheme) => void;
+  setUiLocale: (value: UiLocale) => void;
   setAmazonStoreOverride: (value: AmazonStoreOverride | null) => void;
   setOnboardingStep: (step: number) => void;
   completeOnboarding: () => void;
