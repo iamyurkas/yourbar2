@@ -2518,7 +2518,7 @@ function EditableIngredientRow({
         return undefined;
       }
 
-      const label = count === 1 ? "recipe" : "recipes";
+      const label = count === 1 ? t("cocktailForm.recipeSingular") : t("cocktailForm.recipePlural");
       return `${count} ${label}`;
     },
     [cocktailsByBaseGroup],

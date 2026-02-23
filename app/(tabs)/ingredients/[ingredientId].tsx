@@ -944,9 +944,24 @@ export default function IngredientDetailsScreen() {
                             { color: Colors.onSurfaceVariant },
                           ]}
                         >
-                          {canMakeMoreCocktailsCount === 1
-                            ? t("ingredientDetails.toMakeOneMoreCocktail", { count: canMakeMoreCocktailsCount })
-                            : t("ingredientDetails.toMakeMoreCocktails", { count: canMakeMoreCocktailsCount })}
+                          {(() => {
+                            const count = canMakeMoreCocktailsCount;
+                            const mod10 = count % 10;
+                            const mod100 = count % 100;
+
+                            const isOne = mod10 === 1 && mod100 !== 11;
+                            const isFew = mod10 >= 2 && mod10 <= 4 && !(mod100 >= 12 && mod100 <= 14);
+
+                            if (isOne) {
+                              return t("ingredientDetails.toMakeOneMoreCocktail", { count });
+                            }
+
+                            if (isFew) {
+                              return t("ingredientDetails.toMakeFewMoreCocktails", { count });
+                            }
+
+                            return t("ingredientDetails.toMakeMoreCocktails", { count });
+                          })()}
                         </Text>
                       ) : null}
                     </View>

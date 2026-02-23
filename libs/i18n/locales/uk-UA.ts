@@ -169,6 +169,8 @@ export const ukUATranslations: TranslationDictionary = {
   "cocktailForm.nameRequiredMessage": "Введіть назву коктейлю.",
   "cocktailForm.recipeRequiredTitle": "Потрібен рецепт",
   "cocktailForm.recipeRequiredMessage": "Додайте щонайменше один інгредієнт до коктейлю.",
+  "cocktailForm.recipeSingular": "рецепт",
+  "cocktailForm.recipePlural": "рецепти",
   "cocktailForm.couldNotSaveTitle": "Не вдалося зберегти коктейль",
   "cocktailForm.cocktailNotFoundTitle": "Коктейль не знайдено",
   "cocktailForm.deleteCocktailTitle": "Видалити коктейль",
@@ -235,6 +237,7 @@ export const ukUATranslations: TranslationDictionary = {
   "ingredientDetails.iHaveIt": "Я це маю",
   "ingredientDetails.buyOn": "купити на {{store}}",
   "ingredientDetails.toMakeOneMoreCocktail": "щоб зробити ще {{count}} коктейль",
+  "ingredientDetails.toMakeFewMoreCocktails": "щоб зробити ще {{count}} коктейлі",
   "ingredientDetails.toMakeMoreCocktails": "щоб зробити ще {{count}} коктейлів",
   "ingredientDetails.addCocktailButton": "+ Додати коктейль",
   "shaker.helpBase":
