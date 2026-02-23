@@ -35,6 +35,7 @@ import {
   type IngredientLookup,
   type IngredientResolution,
 } from "@/libs/ingredient-availability";
+import { getPluralCategory } from "@/libs/i18n/plural";
 import { useI18n } from "@/libs/i18n/use-i18n";
 import {
   buildReturnToParams,
@@ -168,6 +169,8 @@ function formatIngredientQuantity(
   ingredient: RecipeIngredient,
   useImperialUnits: boolean,
   asNeededLabel: string,
+  t: (key: string, params?: Record<string, string | number>) => string,
+  locale: string,
 ): string {
   const amountRaw = ingredient.amount ?? "";
   const amount = amountRaw.trim();
@@ -197,27 +200,28 @@ function formatIngredientQuantity(
     }
   }
 
-  const unitDetails =
-    displayUnitId != null ? COCKTAIL_UNIT_DICTIONARY[displayUnitId] : undefined;
-
   let unitText = "";
-  if (unitDetails) {
-    const isSingular = numericAmount == null || numericAmount === 1;
-    unitText = isSingular
-      ? unitDetails.singular
-      : (unitDetails.plural ?? unitDetails.singular);
+  if (displayUnitId != null) {
+    const category = getPluralCategory(locale, numericAmount ?? 1);
+    unitText = t(`unit.${displayUnitId}.${category}`);
+
+    if (unitText === `unit.${displayUnitId}.${category}`) {
+      // Fallback to singular/plural keys if category key is missing
+      const isSingular = numericAmount == null || numericAmount === 1;
+      unitText = t(`unit.${displayUnitId}.${isSingular ? "singular" : "plural"}`);
+    }
   }
 
-  if (!displayAmount && !unitText) {
+  if (!displayAmount && (!unitText || !unitText.trim())) {
     return asNeededLabel;
   }
 
   if (!displayAmount && unitText) {
-    return unitText;
+    return unitText.trim();
   }
 
-  if (unitText) {
-    return `${displayAmount} ${unitText}`;
+  if (unitText && unitText.trim()) {
+    return `${displayAmount} ${unitText.trim()}`;
   }
 
   return displayAmount;
@@ -311,14 +315,6 @@ function buildMissingSubstituteLines(
   return lines;
 }
 
-function formatGlassLabel(glassId?: string | null) {
-  if (!glassId) {
-    return undefined;
-  }
-
-  return GLASSWARE_NAME_BY_ID[glassId as keyof typeof GLASSWARE_NAME_BY_ID] ?? glassId;
-}
-
 export default function CocktailDetailsScreen() {
   const params = useLocalSearchParams<{
     cocktailId?: string;
@@ -326,7 +322,7 @@ export default function CocktailDetailsScreen() {
     returnToParams?: string;
   }>();
   const navigation = useNavigation();
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const Colors = useAppColors();
   const { cocktailId } = params;
   const {
@@ -582,10 +578,14 @@ export default function CocktailDetailsScreen() {
   const glassSource = useMemo(() => resolveImageSource(glassUri), [glassUri]);
 
   const displayedImageSource = photoSource ?? glassSource;
-  const glassLabel = useMemo(
-    () => formatGlassLabel(cocktail?.glassId),
-    [cocktail?.glassId],
-  );
+  const glassLabel = useMemo(() => {
+    if (!cocktail?.glassId) {
+      return undefined;
+    }
+    const translated = t(`glassware.${cocktail.glassId}`);
+    return translated !== `glassware.${cocktail.glassId}` ? translated : cocktail.glassId;
+  }, [cocktail?.glassId, t]);
+
   const methodDetails = useMemo(() => {
     if (!cocktail) {
       return [];
@@ -908,13 +908,16 @@ export default function CocktailDetailsScreen() {
                         ? `tag-${tag.name}`
                         : `tag-${index}`;
 
+                  const tagName = tag.id != null ? t(`cocktailTag.${tag.id}`) : tag.name;
+                  const finalName = (tagName && tagName !== `cocktailTag.${tag.id}`) ? tagName : (tag.name ?? t("cocktailDetails.tag"));
+
                   return (
                     <TagPill
                       key={tagKey}
-                      label={tag.name ?? t("cocktailDetails.tag")}
+                      label={finalName}
                       color={tag.color ?? Colors.tint}
                       selected
-                      accessibilityLabel={tag.name ?? t("cocktailDetails.tag")}
+                      accessibilityLabel={finalName}
                     />
                   );
                 })}
@@ -1027,6 +1030,8 @@ export default function CocktailDetailsScreen() {
                       ingredient,
                       showImperialUnits,
                       t("cocktailDetails.asNeeded"),
+                      t,
+                      locale,
                     );
                     const qualifier = getIngredientQualifier(
                       ingredient,

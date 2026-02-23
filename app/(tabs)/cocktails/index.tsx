@@ -461,11 +461,19 @@ export default function CocktailsScreen() {
 
   const getAvailabilitySummary = useCallback(
     (cocktail: Cocktail) =>
-      summariseCocktailAvailability(cocktail, availableIngredientIds, ingredientLookup, undefined, {
-        ignoreGarnish,
-        allowAllSubstitutes,
-      }),
-    [allowAllSubstitutes, availableIngredientIds, ignoreGarnish, ingredientLookup],
+      summariseCocktailAvailability(
+        cocktail,
+        availableIngredientIds,
+        ingredientLookup,
+        undefined,
+        {
+          ignoreGarnish,
+          allowAllSubstitutes,
+        },
+        t,
+        locale,
+      ),
+    [allowAllSubstitutes, availableIngredientIds, ignoreGarnish, ingredientLookup, t, locale],
   );
 
   const renderItem = useCallback(
@@ -722,7 +730,7 @@ export default function CocktailsScreen() {
                         return (
                           <TagPill
                             key={method.id}
-                            label={method.label}
+                            label={t(`cocktailMethod.${method.id}.label`)}
                             color={Colors.tint}
                             selected={selected}
                             icon={renderMethodIcon(method.id, selected)}
@@ -750,10 +758,14 @@ export default function CocktailsScreen() {
                     {availableTagOptions.length > 0 ? (
                       availableTagOptions.map((tag) => {
                         const selected = selectedTagKeys.has(tag.key);
+                        const isBuiltin = !isNaN(Number(tag.key)) && Number(tag.key) >= 1 && Number(tag.key) <= 11;
+                        const translatedName = isBuiltin ? t(`cocktailTag.${tag.key}`) : tag.name;
+                        const finalName = (isBuiltin && translatedName !== `cocktailTag.${tag.key}`) ? translatedName : tag.name;
+
                         return (
                           <TagPill
                             key={tag.key}
-                            label={tag.name}
+                            label={finalName}
                             color={tag.color}
                             selected={selected}
                             onPress={() => handleTagFilterToggle(tag.key)}
