@@ -41,6 +41,8 @@ npm run web
 ## Useful Scripts
 
 - `npm run lint` – run Expo linting.
+- `npm run check:catalog-overlay` – validate catalog localization overlay keys and print missing/extra reports.
+- `npm run check:catalog-overlay:strict` – same check, exits with error if required keys are missing.
 - `npm run update:image-manifest` – rebuild the image manifest used by the app.
 - `npm run prune:image-manifest` – remove unused image entries from the manifest.
 - `npm run reset-project` – reset starter assets and regenerate a clean Expo Router app tree.
@@ -56,6 +58,27 @@ npm run web
 ## Data & Storage
 
 Inventory, settings, and ratings are stored locally in an on-device snapshot. You can export or import inventory data through the app to back up and restore your bar setup.
+
+## Catalog localization overlay
+
+`assets/data/data.json` remains the source of truth for cocktails and ingredients. Localized catalog text is layered via overlay files in `libs/i18n/locales/catalog/`.
+
+Supported overlay keys:
+
+- `cocktail.<id>.name`
+- `cocktail.<id>.description`
+- `cocktail.<id>.instructions`
+- `ingredient.<id>.name`
+- `ingredient.<id>.description`
+- Optional per-recipe override: `cocktail.<id>.ingredient.<order>.name`
+
+Fallback behavior:
+
+1. Locale overlay value.
+2. Default (`en-GB`) overlay value.
+3. Base value from `assets/data/data.json`.
+
+This preserves recipe safety when linked ingredient records are missing because recipe rows still have snapshot names in base data.
 
 ## Privacy
 

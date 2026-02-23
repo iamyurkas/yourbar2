@@ -5,6 +5,7 @@ import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { TAG_COLORS } from '@/constants/tag-colors';
 import { AMAZON_STORES, detectAmazonStoreFromStoreOrLocale, detectUsStorefrontOrLocale, getEffectiveAmazonStore, type AmazonStoreKey, type AmazonStoreOverride } from '@/libs/amazon-stores';
 import { DEFAULT_LOCALE, isSupportedLocale } from '@/libs/i18n';
+import { localizeCocktails, localizeIngredients } from '@/libs/i18n/catalog-overlay';
 import { loadInventoryData, reloadInventoryData } from '@/libs/inventory-data';
 import {
   loadInventorySnapshot,
@@ -556,6 +557,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     () => [...(inventoryState?.ingredients ?? [])].sort((a, b) => (a.name ?? '').localeCompare(b.name ?? '')),
     [inventoryState?.ingredients],
   );
+  const localizedCocktails = useMemo(() => localizeCocktails(cocktails, appLocale), [appLocale, cocktails]);
+  const localizedIngredients = useMemo(() => localizeIngredients(ingredients, appLocale), [appLocale, ingredients]);
 
   const resolveCocktailKey = useCallback((cocktail: Cocktail) => {
     const id = cocktail.id;
@@ -1998,8 +2001,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
 
   const dataValue = useMemo(
     () => ({
-      cocktails,
-      ingredients,
+      cocktails: localizedCocktails,
+      ingredients: localizedIngredients,
       loading,
       availableIngredientIds,
       shoppingIngredientIds,
@@ -2009,8 +2012,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       getCocktailRating,
     }),
     [
-      cocktails,
-      ingredients,
+      localizedCocktails,
+      localizedIngredients,
       loading,
       availableIngredientIds,
       shoppingIngredientIds,
