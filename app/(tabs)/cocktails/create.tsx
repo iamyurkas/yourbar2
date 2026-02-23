@@ -2779,7 +2779,7 @@ function EditableIngredientRow({
             <Text
               style={[styles.ingredientNameCreateLabel, { color: Colors.tint }]}
             >
-              + Add
+              {`+ ${t("common.create")}`}
             </Text>
           </Pressable>
         ) : null}
@@ -2870,7 +2870,7 @@ function EditableIngredientRow({
       <View style={styles.rowInputs}>
         <View style={styles.amountColumn}>
           <Text style={[styles.inputLabel, { color: Colors.onSurfaceVariant }]}>
-            Amount
+            {t("cocktailForm.amount")}
           </Text>
           <TextInput
             value={ingredient.amount}
@@ -2887,7 +2887,7 @@ function EditableIngredientRow({
         </View>
         <View style={styles.unitColumn}>
           <Text style={[styles.inputLabel, { color: Colors.onSurfaceVariant }]}>
-            Unit
+            {t("cocktailForm.unit")}
           </Text>
           <Pressable
             onPress={() => onRequestUnitPicker(ingredient.key)}
