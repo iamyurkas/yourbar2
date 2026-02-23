@@ -39,21 +39,21 @@ export function getCatalogFieldTranslation(
 export function getRecipeIngredientNameTranslation(
   locale: SupportedLocale,
   cocktailId: number | string | null | undefined,
-  order: number | string | null | undefined,
+  ingredientId: number | string | null | undefined,
   fallback?: string | null,
 ): string | undefined {
   const normalizedCocktailId = Number(cocktailId ?? -1);
-  const normalizedOrder = Number(order ?? -1);
+  const normalizedIngredientId = Number(ingredientId ?? -1);
   if (
     !Number.isFinite(normalizedCocktailId) ||
     normalizedCocktailId < 0 ||
-    !Number.isFinite(normalizedOrder) ||
-    normalizedOrder < 0
+    !Number.isFinite(normalizedIngredientId) ||
+    normalizedIngredientId < 0
   ) {
     return fallback?.trim() || undefined;
   }
 
-  const key = `cocktail.${Math.trunc(normalizedCocktailId)}.ingredient.${Math.trunc(normalizedOrder)}.name`;
+  const key = `cocktail.${Math.trunc(normalizedCocktailId)}.ingredient.${Math.trunc(normalizedIngredientId)}.name`;
   return getCatalogOverlayValue(locale, key)?.trim() || fallback?.trim() || undefined;
 }
 
@@ -99,7 +99,7 @@ export function localizeCocktail(cocktail: Cocktail, locale: SupportedLocale): C
     const localizedIngredientName = getRecipeIngredientNameTranslation(
       locale,
       cocktail.id,
-      ingredient.order,
+      ingredient.ingredientId,
       ingredient.name,
     );
 
