@@ -1035,6 +1035,45 @@ export default function CreateCocktailScreen() {
     [targetUnitPickerIngredient?.amount],
   );
 
+  const sortedUnitOptions = useMemo(() => {
+    const category = usePluralUnitsInPicker ? getPluralCategory(locale, 2) : "one";
+    const form = usePluralUnitsInPicker ? "plural" : "singular";
+    const collator = new Intl.Collator(locale, {
+      usage: "sort",
+      sensitivity: "base",
+      numeric: true,
+    });
+
+    const mappedOptions = COCKTAIL_UNIT_OPTIONS.map((option) => {
+      let displayLabel = t(`unit.${option.id}.${category}`);
+      if (displayLabel === `unit.${option.id}.${category}`) {
+        displayLabel = t(`unit.${option.id}.${form}`);
+      }
+
+      if (displayLabel === `unit.${option.id}.${form}`) {
+        displayLabel = option.label || " ";
+      }
+
+      return {
+        ...option,
+        displayLabel,
+      };
+    });
+
+    const emptyUnitOption = mappedOptions.find((option) => !option.displayLabel.trim());
+    const namedUnitOptions = mappedOptions
+      .filter((option) => option !== emptyUnitOption)
+      .sort((a, b) => {
+        const labelDiff = collator.compare(a.displayLabel.trim(), b.displayLabel.trim());
+        if (labelDiff !== 0) {
+          return labelDiff;
+        }
+        return a.id - b.id;
+      });
+
+    return emptyUnitOption ? [emptyUnitOption, ...namedUnitOptions] : namedUnitOptions;
+  }, [locale, t, usePluralUnitsInPicker]);
+
   const handleOpenSubstituteModal = useCallback((key: string) => {
     setSubstituteTarget(key);
   }, []);
@@ -2153,17 +2192,7 @@ export default function CreateCocktailScreen() {
               showsVerticalScrollIndicator={false}
               keyboardShouldPersistTaps="handled"
             >
-              {COCKTAIL_UNIT_OPTIONS.map((option) => {
-                const category = usePluralUnitsInPicker ? getPluralCategory(locale, 2) : "one";
-                let displayLabel = t(`unit.${option.id}.${category}`);
-                if (displayLabel === `unit.${option.id}.${category}`) {
-                  displayLabel = t(`unit.${option.id}.${usePluralUnitsInPicker ? "plural" : "singular"}`);
-                }
-
-                if (displayLabel === `unit.${option.id}.${usePluralUnitsInPicker ? "plural" : "singular"}`) {
-                  displayLabel = option.label || " ";
-                }
-
+              {sortedUnitOptions.map((option) => {
                 const isSelected =
                   option.id === targetUnitPickerIngredient?.unitId;
                 return (
@@ -2183,15 +2212,15 @@ export default function CreateCocktailScreen() {
                     ]}
                     accessibilityRole="button"
                     accessibilityLabel={
-                      displayLabel.trim()
-                        ? t("cocktailForm.selectNamed", { name: displayLabel.trim() })
+                      option.displayLabel.trim()
+                        ? t("cocktailForm.selectNamed", { name: option.displayLabel.trim() })
                         : t("cocktailForm.selectEmptyUnit")
                     }
                   >
                     <Text
                       style={[styles.unitLabel, { color: Colors.onSurface }]}
                     >
-                      {displayLabel}
+                      {option.displayLabel}
                     </Text>
                   </Pressable>
                 );
