@@ -430,7 +430,7 @@ export default function IngredientDetailsScreen() {
       return null;
     }
 
-    return `Buy on ${AMAZON_STORES[effectiveAmazonStore].label}`;
+    return t("ingredientDetails.buyOn", { store: AMAZON_STORES[effectiveAmazonStore].label });
   }, [effectiveAmazonStore]);
 
   const handleAmazonAffiliateInfoPress = useCallback(() => {
@@ -869,7 +869,7 @@ export default function IngredientDetailsScreen() {
                     <Text
                       style={[styles.statusControlLabel, { color: Colors.onSurfaceVariant }]}
                     >
-                      I have it
+                      {t("ingredientDetails.iHaveIt")}
                     </Text>
                     <PresenceCheck
                       checked={effectiveIsAvailable}
@@ -944,7 +944,7 @@ export default function IngredientDetailsScreen() {
                             { color: Colors.onSurfaceVariant },
                           ]}
                         >
-                          {`to make ${canMakeMoreCocktailsCount} more cocktails`}
+                          {t("ingredientDetails.toMakeMoreCocktails", { count: canMakeMoreCocktailsCount })}
                         </Text>
                       ) : null}
                     </View>
@@ -1510,7 +1510,7 @@ export default function IngredientDetailsScreen() {
                 <Text
                   style={[styles.addButtonLabel, { color: Colors.onPrimary }]}
                 >
-                  + Add cocktail
+                  {t("ingredientDetails.addCocktailButton")}
                 </Text>
               </Pressable>
 

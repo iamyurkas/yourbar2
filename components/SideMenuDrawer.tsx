@@ -1996,7 +1996,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                       { color: Colors.onSurfaceVariant },
                     ]}
                   >
-                    Hide Buy on Amazon link
+                    {t("sideMenu.hideBuyOnAmazonLink")}
                   </Text>
                 </View>
                 <MaterialCommunityIcons

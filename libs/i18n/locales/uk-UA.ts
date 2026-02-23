@@ -73,6 +73,7 @@ export const ukUATranslations: TranslationDictionary = {
   "sideMenu.deleteTagAccessibility": "Видалити {{name}}",
   "sideMenu.amazonStoreAuto": "Використовувати автоматичне визначення магазину Amazon",
   "sideMenu.amazonStoreDisable": "Вимкнути посилання Amazon",
+  "sideMenu.hideBuyOnAmazonLink": "Приховати лінк Купити на Amazon",
   "sideMenu.backupData": "Створити резервну копію",
   "sideMenu.backingUpData": "Створюємо резервну копію...",
   "sideMenu.backupDataCaption": "Експортувати коктейлі, інгредієнти та фото в один архів",
@@ -214,6 +215,8 @@ export const ukUATranslations: TranslationDictionary = {
   "ingredientForm.removeStyleIngredient": "Прибрати стильовий інгредієнт",
   "ingredientForm.deleteIngredient": "Видалити інгредієнт",
   "ingredientForm.searchIngredients": "Пошук інгредієнтів",
+  "ingredientForm.addTitle": "Додати новий інгредієнт",
+  "ingredientForm.editTitle": "Редагувати інгредієнт",
 
   "ingredientDetails.affiliateDisclosureTitle": "Партнерське розкриття",
   "ingredientDetails.affiliateDisclosureMessage": "Деякі посилання Amazon у цьому застосунку є партнерськими. Якщо ви щось купите, ми можемо отримати невелику комісію без додаткових витрат для вас.\n\nЦе допомагає підтримувати розвиток застосунку.\nДякуємо за підтримку!",
@@ -229,6 +232,10 @@ export const ukUATranslations: TranslationDictionary = {
   "ingredientDetails.showMoreCocktails": "Показати більше коктейлів",
   "ingredientDetails.addCocktail": "Додати коктейль",
   "ingredientDetails.editIngredient": "Редагувати інгредієнт",
+  "ingredientDetails.iHaveIt": "Я це маю",
+  "ingredientDetails.buyOn": "купити на {{store}}",
+  "ingredientDetails.toMakeMoreCocktails": "щоб зробити ще {{count}} коктейлів.",
+  "ingredientDetails.addCocktailButton": "+ Додати коктейль",
   "shaker.helpBase":
     "Цей екран допомагає вибирати інгредієнти та розуміти, що можна змішати вже зараз.\n\nВикористовуйте пошук, торкайтеся інгредієнтів для вибору і відкривайте результати шейкера.",
   "shaker.currentSelection": "Поточний вибір",
