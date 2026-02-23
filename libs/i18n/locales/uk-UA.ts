@@ -63,7 +63,10 @@ export const ukUATranslations: TranslationDictionary = {
   "ingredientDetails.affiliateDisclosureTitle": "Партнерське застереження",
   "ingredientDetails.affiliateDisclosureMessage":
     "Деякі посилання Amazon у цьому застосунку є партнерськими. Якщо ви щось купите, ми можемо отримати невелику комісію без додаткової вартості для вас.\n\nЦе допомагає підтримувати розвиток застосунку.\nДякуємо за підтримку!",
-  "ingredientDetails.toMakeMoreCocktails": "щоб зробити ще {{count}} коктейлів",
+  "ingredientDetails.toMakeMoreCocktails.one": "щоб зробити ще {{count}} коктейль",
+  "ingredientDetails.toMakeMoreCocktails.few": "щоб зробити ще {{count}} коктейлі",
+  "ingredientDetails.toMakeMoreCocktails.many": "щоб зробити ще {{count}} коктейлів",
+  "ingredientDetails.toMakeMoreCocktails.other": "щоб зробити ще {{count}} коктейлів",
   "ingredientDetails.tag": "Тег",
   "ingredientDetails.showLessDescription": "Згорнути опис",
   "ingredientDetails.showFullDescription": "Показати повний опис",
@@ -72,9 +75,9 @@ export const ukUATranslations: TranslationDictionary = {
   "ingredientDetails.styleIngredient": "Стильовий інгредієнт",
   "ingredientDetails.viewStyleIngredient": "Переглянути стильовий інгредієнт",
   "ingredientDetails.removeStyleIngredient": "Відвʼязати стильовий інгредієнт",
-  "ingredientDetails.baseIngredient": "Базовий інгредієнт",
-  "ingredientDetails.viewBaseIngredient": "Переглянути базовий інгредієнт",
-  "ingredientDetails.removeBaseIngredient": "Відвʼязати базовий інгредієнт",
+  "ingredientDetails.baseIngredient": "Основний інгредієнт",
+  "ingredientDetails.viewBaseIngredient": "Переглянути основний інгредієнт",
+  "ingredientDetails.removeBaseIngredient": "Відвʼязати основний інгредієнт",
   "ingredientDetails.styledIngredients": "Стильові інгредієнти",
   "ingredientDetails.brandedIngredients": "Брендові інгредієнти",
   "ingredientDetails.viewIngredient": "Переглянути {{name}}",
@@ -87,9 +90,9 @@ export const ukUATranslations: TranslationDictionary = {
   "ingredientDetails.notFound": "Інгредієнт не знайдено",
   "ingredientDetails.helpMessage":
     "Цей екран показує деталі інгредієнта, посилання та повʼязані коктейлі.\n\nВикористовуйте кнопку під інгредієнтом, щоб його редагувати.\n\n**Стрічки коктейлів**\nЛіва стрічка показує склад:\nсиня = є брендові інгредієнти,\nжовта = є стильові інгредієнти.\n\nПрава стрічка показує підстановки:\nсиня = є брендова підстановка,\nжовта = є стильова підстановка.",
-  "ingredientDetails.removeBaseTitle": "Відвʼязати базовий інгредієнт",
+  "ingredientDetails.removeBaseTitle": "Відвʼязати основний інгредієнт",
   "ingredientDetails.removeBaseMessage":
-    "Ви впевнені, що хочете відвʼязати {{name}} від базового інгредієнта?",
+    "Ви впевнені, що хочете відвʼязати {{name}} від основного інгредієнта?",
   "ingredientDetails.removeStyleTitle": "Відвʼязати стильовий інгредієнт",
   "ingredientDetails.removeStyleMessage":
     "Ви впевнені, що хочете відвʼязати {{name}} від стильового інгредієнта?",

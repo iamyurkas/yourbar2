@@ -81,6 +81,26 @@ function buildFallbackText(value?: string) {
   return trimmed ? trimmed.slice(0, 2).toUpperCase() : undefined;
 }
 
+function getUkrainianCocktailWordForm(count: number) {
+  const absolute = Math.abs(count);
+  const lastTwoDigits = absolute % 100;
+  const lastDigit = absolute % 10;
+
+  if (lastTwoDigits >= 11 && lastTwoDigits <= 14) {
+    return "many";
+  }
+
+  if (lastDigit === 1) {
+    return "one";
+  }
+
+  if (lastDigit >= 2 && lastDigit <= 4) {
+    return "few";
+  }
+
+  return "many";
+}
+
 export default function IngredientDetailsScreen() {
   const params = useLocalSearchParams<{
     ingredientId?: string;
@@ -89,7 +109,7 @@ export default function IngredientDetailsScreen() {
   }>();
   const navigation = useNavigation();
   const Colors = useAppColors();
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const { ingredientId } = params;
   const {
     ingredients,
@@ -958,9 +978,14 @@ export default function IngredientDetailsScreen() {
                             { color: Colors.onSurfaceVariant },
                           ]}
                         >
-                          {t("ingredientDetails.toMakeMoreCocktails", {
-                            count: canMakeMoreCocktailsCount,
-                          })}
+                          {t(
+                            locale === "uk-UA"
+                              ? `ingredientDetails.toMakeMoreCocktails.${getUkrainianCocktailWordForm(canMakeMoreCocktailsCount)}`
+                              : "ingredientDetails.toMakeMoreCocktails.other",
+                            {
+                              count: canMakeMoreCocktailsCount,
+                            },
+                          )}
                         </Text>
                       ) : null}
                     </View>
