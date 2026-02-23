@@ -29,7 +29,7 @@ export const ukUATranslations: TranslationDictionary = {
   "common.tabShopping": "Покупки",
 
   "cocktails.emptyMy":
-    "Позначте наявні інгредієнти, щоб бачити доступні коктейлі.",
+    "Позначте наявні інгредієнти, щоби бачити доступні коктейлі.",
   "cocktails.emptyFavorites":
     "Оцініть коктейлі та/або змініть поріг рейтингу в меню.",
   "cocktails.emptyAll": "Ще немає коктейлів",
@@ -43,11 +43,11 @@ export const ukUATranslations: TranslationDictionary = {
   "cocktails.helpAllText":
     "Цей екран показує всю колекцію коктейлів.\n\nВикористовуйте пошук, перемикайте вкладки та застосовуйте фільтри.",
 
-  "ingredients.emptyMy": "Позначте наявні інгредієнти, щоб бачити їх тут.",
+  "ingredients.emptyMy": "Позначте наявні інгредієнти, щоби бачити їх тут.",
   "ingredients.emptyAll": "Ще немає інгредієнтів",
   "ingredients.helpMyTitle": "Мої інгредієнти",
   "ingredients.helpMyText":
-    "Цей екран показує інгредієнти, які у вас є.\n\nШукайте за назвою і використовуйте фільтри за тегами.",
+    "Цей екран показує інгредієнти, які ви маєте.\n\nШукайте за назвою і використовуйте фільтри за тегами.",
   "ingredients.helpAllTitle": "Усі інгредієнти",
   "ingredients.helpAllText":
     "Цей екран показує повний список інгредієнтів.\n\nВикористовуйте пошук і теги, щоб швидко знайти потрібне.",
@@ -71,7 +71,8 @@ export const ukUATranslations: TranslationDictionary = {
   "ingredientForm.takePhoto": "Зробити фото",
   "ingredientForm.chooseFromGallery": "Вибрати з галереї",
   "ingredientForm.nameRequiredTitle": "Потрібно вказати назву",
-  "ingredientForm.nameRequiredMessage": "Будь ласка, введіть назву інгредієнта.",
+  "ingredientForm.nameRequiredMessage":
+    "Будь ласка, введіть назву інгредієнта.",
   "ingredientForm.ingredientNotFound": "Інгредієнт не знайдено",
   "ingredientForm.couldNotSave": "Не вдалося зберегти інгредієнт",
   "ingredientForm.leaveWithoutSavingTitle": "Вийти без збереження?",
@@ -86,34 +87,34 @@ export const ukUATranslations: TranslationDictionary = {
   "ingredientForm.deleteTitle": "Видалити інгредієнт",
   "ingredientForm.couldNotDelete": "Не вдалося видалити інгредієнт",
   "ingredientForm.baseDisableBrandedVariants":
-    "Цей інгредієнт є базовим для брендованих інгредієнтів, тому сам не може бути брендованим.",
+    "Цей інгредієнт є базовим для брендових інгредієнтів, тому сам не може бути брендовим.",
   "ingredientForm.baseDisableStyledIngredient":
-    "Стильові інгредієнти не можуть бути брендованими. Видаліть стильовий зв’язок, щоб увімкнути вибір базового інгредієнта.",
+    "Стильові інгредієнти не можуть бути брендовими. Видаліть стильовий зв’язок, щоб увімкнути вибір базового інгредієнта.",
   "ingredientForm.styleDisableStyledVariants":
     "Цей інгредієнт є базовим для стильових інгредієнтів, тому сам не може бути стильовим.",
   "ingredientForm.styleDisableBrandedIngredient":
-    "Брендовані інгредієнти не можуть бути стильовими. Видаліть зв’язок із базовим інгредієнтом, щоб увімкнути вибір стильового.",
+    "Брендові інгредієнти не можуть бути стильовими. Видаліть зв’язок із базовим інгредієнтом, щоб увімкнути вибір стильового.",
   "ingredientForm.editTitle": "Редагувати інгредієнт",
   "ingredientForm.addTitle": "Додати новий інгредієнт",
   "ingredientForm.goBack": "Назад",
   "ingredientForm.name": "Назва",
-  "ingredientForm.namePlaceholder": "наприклад, Імбирний сироп",
+  "ingredientForm.namePlaceholder": "Наприклад: Імбирний сироп",
   "ingredientForm.removePhoto": "Видалити фото",
   "ingredientForm.tags": "Теги",
   "ingredientForm.createTag": "Створити тег",
   "ingredientForm.selectTags": "Виберіть один або кілька тегів",
   "ingredientForm.baseIngredient": "Базовий інгредієнт",
   "ingredientForm.baseHint":
-    "Як базові можна вибирати лише інгредієнти, які ще не є стильовими.",
+    "Як базові можна вибирати лише інгредієнти, які ще не є брендовими.",
   "ingredientForm.changeBaseIngredient": "Змінити базовий інгредієнт",
-  "ingredientForm.selectBaseIngredient": "Оберіть базовий інгредієнт",
+  "ingredientForm.selectBaseIngredient": "Базовий інгредієнт",
   "ingredientForm.removeBaseIngredient": "Видалити базовий інгредієнт",
   "ingredientForm.none": "Немає",
   "ingredientForm.styleIngredient": "Стильовий інгредієнт",
   "ingredientForm.styleHint":
-    "Стильовими можна обирати лише базові інгредієнти, які не є брендованими і ще не є стильовими.",
+    "Стильовими можна обирати лише базові інгредієнти, які не є брендовими і ще не є стильовими.",
   "ingredientForm.changeStyleIngredient": "Змінити стильовий інгредієнт",
-  "ingredientForm.selectStyleIngredient": "Оберіть стильовий інгредієнт",
+  "ingredientForm.selectStyleIngredient": "Cтильовий інгредієнт",
   "ingredientForm.removeStyleIngredient": "Видалити стильовий інгредієнт",
   "ingredientForm.description": "Опис",
   "ingredientForm.descriptionPlaceholder":
@@ -124,13 +125,13 @@ export const ukUATranslations: TranslationDictionary = {
   "ingredientForm.noIngredientsFound": "Інгредієнтів не знайдено",
   "ingredientForm.helpTitle": "Додавання інгредієнта",
   "ingredientForm.helpMessage":
-    "На цьому екрані ви можете створити нову картку інгредієнта.\n\nДодайте назву, необов’язкове фото, теги, базовий або стильовий інгредієнт і нотатки, а потім натисніть «Зберегти».\n\nСтильовий інгредієнт можна пов’язати лише з базовим інгредієнтом, який не є ані брендованим, ані стильовим.",
+    "На цьому екрані ви можете створити нову картку інгредієнта.\n\nДодайте назву, необов’язкове фото, теги, базовий або стильовий інгредієнт і нотатки, а потім натисніть «Зберегти».\n\nСтильовий інгредієнт можна пов’язати лише з базовим інгредієнтом, який не є ані брендовим, ані стильовим.",
   "ingredientForm.newTag": "Новий тег",
 
   "ingredientDetails.title": "Деталі інгредієнта",
   "ingredientDetails.goBack": "Назад",
   "ingredientDetails.noPhoto": "Немає фото",
-  "ingredientDetails.iHaveIt": "У мене є",
+  "ingredientDetails.iHaveIt": "Маю",
   "ingredientDetails.removeFromShoppingList": "Прибрати зі списку покупок",
   "ingredientDetails.addToShoppingList": "Додати до списку покупок",
   "ingredientDetails.removeIngredientFromShoppingList":
@@ -138,14 +139,19 @@ export const ukUATranslations: TranslationDictionary = {
   "ingredientDetails.addIngredientToShoppingList":
     "Додати інгредієнт до списку покупок",
   "ingredientDetails.buyOnAmazon": "Купити на {{store}}",
-  "ingredientDetails.amazonAffiliateInformation": "Інформація про партнерські посилання Amazon",
+  "ingredientDetails.amazonAffiliateInformation":
+    "Інформація про партнерські посилання Amazon",
   "ingredientDetails.affiliateDisclosureTitle": "Партнерське застереження",
   "ingredientDetails.affiliateDisclosureMessage":
     "Деякі посилання Amazon у цьому застосунку є партнерськими. Якщо ви щось купите, ми можемо отримати невелику комісію без додаткової вартості для вас.\n\nЦе допомагає підтримувати розвиток застосунку.\nДякуємо за підтримку!",
-  "ingredientDetails.toMakeMoreCocktails.one": "щоб зробити ще {{count}} коктейль",
-  "ingredientDetails.toMakeMoreCocktails.few": "щоб зробити ще {{count}} коктейлі",
-  "ingredientDetails.toMakeMoreCocktails.many": "щоб зробити ще {{count}} коктейлів",
-  "ingredientDetails.toMakeMoreCocktails.other": "щоб зробити ще {{count}} коктейлів",
+  "ingredientDetails.toMakeMoreCocktails.one":
+    "щоб зробити ще {{count}} коктейль",
+  "ingredientDetails.toMakeMoreCocktails.few":
+    "щоб зробити ще {{count}} коктейлі",
+  "ingredientDetails.toMakeMoreCocktails.many":
+    "щоб зробити ще {{count}} коктейлів",
+  "ingredientDetails.toMakeMoreCocktails.other":
+    "щоб зробити ще {{count}} коктейлів",
   "ingredientDetails.tag": "Тег",
   "ingredientDetails.showLessDescription": "Згорнути опис",
   "ingredientDetails.showFullDescription": "Показати повний опис",
@@ -168,7 +174,7 @@ export const ukUATranslations: TranslationDictionary = {
   "ingredientDetails.editIngredient": "Редагувати інгредієнт",
   "ingredientDetails.notFound": "Інгредієнт не знайдено",
   "ingredientDetails.helpMessage":
-    "Цей екран показує деталі інгредієнта, посилання та повʼязані коктейлі.\n\nВикористовуйте кнопку під інгредієнтом, щоб його редагувати.\n\n**Стрічки коктейлів**\nЛіва стрічка показує склад:\nсиня = є брендові інгредієнти,\nжовта = є стильові інгредієнти.\n\nПрава стрічка показує підстановки:\nсиня = є брендова підстановка,\nжовта = є стильова підстановка.",
+    "Цей екран показує деталі інгредієнта, посилання та повʼязані коктейлі.\n\nВикористовуйте кнопку під інгредієнтом, щоб його редагувати.\n\n**Стрічки коктейлів**\nЛіва стрічка показує склад:\nсиня = є брендові інгредієнти,\nжовта = є стильові інгредієнти.\n\nПрава стрічка показує підстановки:\nсиня = є брендова заміна,\nжовта = є стильова замінка.",
   "ingredientDetails.removeBaseTitle": "Відвʼязати базовий інгредієнт",
   "ingredientDetails.removeBaseMessage":
     "Ви впевнені, що хочете відвʼязати {{name}} від базового інгредієнта?",
@@ -176,9 +182,11 @@ export const ukUATranslations: TranslationDictionary = {
   "ingredientDetails.removeStyleMessage":
     "Ви впевнені, що хочете відвʼязати {{name}} від основного інгредієнта?",
   "ingredientDetails.removeBrandedTitle": "Відвʼязати брендовий інгредієнт",
-  "ingredientDetails.removeBrandedMessage": "Відвʼязати {{source}} від {{target}}?",
+  "ingredientDetails.removeBrandedMessage":
+    "Відвʼязати {{source}} від {{target}}?",
   "ingredientDetails.removeStyledTitle": "Відвʼязати стильовий інгредієнт",
-  "ingredientDetails.removeStyledMessage": "Відвʼязати {{source}} від {{target}}?",
+  "ingredientDetails.removeStyledMessage":
+    "Відвʼязати {{source}} від {{target}}?",
   "ingredientDetails.cancel": "Скасувати",
   "ingredientDetails.remove": "Видалити",
 
@@ -198,11 +206,11 @@ export const ukUATranslations: TranslationDictionary = {
   "onboarding.step1.message":
     "**Вітаємо!**\nДавайте налаштуємо ваш бар, додавши кілька інгредієнтів.",
   "onboarding.step2.message":
-    "Натисніть **Інгредієнти**, щоб почати додавати те, що у вас є.",
+    "Натисніть **Інгредієнти**, щоби почати додавати те, що ви маєте.",
   "onboarding.step3.message":
     "Це повний список інгредієнтів.\nМи вже позначили для вас кілька базових.",
   "onboarding.step4.message":
-    "**Мої інгредієнти** показує те, що у вас є.\nТакож тут видно, скільки доступних коктейлів використовують інгредієнт.",
+    "**Мої інгредієнти** показує те, що ви маєте.\nТакож тут видно, скільки доступних коктейлів використовують інгредієнт.",
   "onboarding.step5.message":
     "Тепер подивімося на коктейлі.\nВідкрийте екран **Коктейлі**.",
   "onboarding.step6.message":
@@ -212,18 +220,18 @@ export const ukUATranslations: TranslationDictionary = {
   "onboarding.step8.message":
     "**Логіка шейкера**\nІнгредієнти з однієї категорії можуть замінювати один одного (*АБО*).\nІнгредієнти з різних категорій потрібні разом (*ТА*).\n\n**Приклад**\n(Джин *АБО* Віскі) *ТА* (Кола *АБО* Тонік) *ТА* (Лимон *АБО* Лайм).",
   "onboarding.step9.message":
-    "Використовуйте цей перемикач, щоб показувати тільки наявні інгредієнти.",
+    "Використовуйте цей перемикач, щоби показувати тільки наявні інгредієнти.",
   "onboarding.step10.message":
-    "Оберіть кілька інгредієнтів, потім натисніть **Показати**, щоб побачити відповідні коктейлі.",
+    "Оберіть кілька інгредієнтів, потім натисніть **Показати**, щоби побачити відповідні коктейлі.",
   "onboarding.step11.message":
-    "Почніть із позначення інгредієнтів, які вже є у вас, у вкладці **Усі інгредієнти**.\n\nБудьмо!",
+    "Почніть із позначення інгредієнтів, які ви вже маєте, у вкладці **Усі інгредієнти**.\n\nБудьмо!",
   "tabs.cocktails": "Коктейлі",
   "tabs.shaker": "Шейкер",
   "tabs.ingredients": "Інгредієнти",
 
   "sideMenu.settingsTitle": "Налаштування",
-  "sideMenu.ignoreGarnish": "Ігнорувати прикраси",
-  "sideMenu.ignoreGarnishCaption": "Усі прикраси є необовʼязковими",
+  "sideMenu.ignoreGarnish": "Ігнорувати декор",
+  "sideMenu.ignoreGarnishCaption": "Весь декор є необовʼязковими",
   "sideMenu.allowAllSubstitutes": "Дозволити всі заміни",
   "sideMenu.allowAllSubstitutesCaption": "Завжди пропонувати заміни",
   "sideMenu.useImperial": "Імперська система",
@@ -235,7 +243,7 @@ export const ukUATranslations: TranslationDictionary = {
     "Інформація про розумну фільтрацію шейкера",
   "sideMenu.smartShakerFilteringInfoTitle": "Розумна фільтрація шейкера",
   "sideMenu.smartShakerFilteringInfoMessage":
-    "Якщо увімкнено, інгредієнти в групах без поточного вибору приховуються, якщо вони не дають жодного результату.\n\nУ групах, де ви вже обрали хоча б один інгредієнт, елементи залишаються видимими, щоб зберегти логіку АБО.\n\nВимкніть це, щоб повернути стандартну поведінку шейкера.",
+    "Якщо увімкнено, інгредієнти в групах без поточного вибору приховуються, якщо вони не дають жодного результату.\n\nУ групах, де ви вже обрали хоча б один інгредієнт, елементи залишаються видимими, щоб зберегти логіку АБО.\n\nВимкніть це, щоби повернути стандартну поведінку шейкера.",
   "sideMenu.smartShakerFilteringCaption": "Приховувати зайві інгредієнти",
   "sideMenu.startingScreen": "Початковий екран",
   "sideMenu.startingScreenOpen": "Відкривати {{screen}}",
@@ -270,15 +278,15 @@ export const ukUATranslations: TranslationDictionary = {
   "startScreen.cocktails_all.label": "Усі коктейлі",
   "startScreen.cocktails_all.description": "Переглянути всі рецепти",
   "startScreen.cocktails_my.label": "Мої коктейлі",
-  "startScreen.cocktails_my.description": "Спочатку ваші створені",
+  "startScreen.cocktails_my.description": "Спочатку ваші доступні",
   "startScreen.cocktails_favorites.label": "Улюблені коктейлі",
   "startScreen.cocktails_favorites.description": "Швидкий доступ до збережених",
   "startScreen.shaker.label": "Шейкер",
-  "startScreen.shaker.description": "Змішування за вашим баром",
+  "startScreen.shaker.description": "Змішування",
   "startScreen.ingredients_all.label": "Усі інгредієнти",
   "startScreen.ingredients_all.description": "Керувати всіма інгредієнтами",
   "startScreen.ingredients_my.label": "Мої інгредієнти",
-  "startScreen.ingredients_my.description": "Почніть з того, що у вас є",
+  "startScreen.ingredients_my.description": "Почніть з того, що ви маєте",
   "startScreen.ingredients_shopping.label": "Список покупок",
   "startScreen.ingredients_shopping.description": "Перейти до покупок",
 
