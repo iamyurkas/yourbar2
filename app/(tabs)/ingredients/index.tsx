@@ -33,6 +33,7 @@ import {
   getVisibleIngredientIdsForCocktail,
 } from '@/libs/ingredient-availability';
 import { navigateToDetailsWithReturnTo } from '@/libs/navigation';
+import { getPluralCategory } from '@/libs/i18n/plural';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { buildTagOptions, type TagOption } from '@/libs/tag-options';
 import { useI18n } from '@/libs/i18n/use-i18n';
@@ -43,15 +44,6 @@ import {
   type Ingredient,
 } from '@/providers/inventory-provider';
 import { tagColors } from '@/theme/theme';
-
-function getPluralCategory(locale: string, count: number) {
-  const category = new Intl.PluralRules(locale).select(count);
-  if (category === 'one' || category === 'few' || category === 'many') {
-    return category;
-  }
-
-  return 'other';
-}
 
 type IngredientSection = {
   key: string;
