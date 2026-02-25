@@ -537,6 +537,7 @@ export const ukUATranslations: TranslationDictionary = {
     "Імпортувати коктейлі, інгредієнти та фото з архіву",
   "sideMenu.reloadBundledInventory": "Перезавантажити вбудований інвентар",
   "language.en-GB": "English",
+  "language.en-US": "English (US)",
   "language.uk-UA": "Українська",
   "languageModal.title": "Мова",
   "languageModal.description":

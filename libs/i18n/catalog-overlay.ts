@@ -4,6 +4,7 @@ import { normalizeSearchText } from '@/libs/search-normalization';
 import type { Cocktail, Ingredient } from '@/providers/inventory-types';
 
 import enGBCatalogOverlay from '@/libs/i18n/locales/catalog/en-GB.json';
+import enUSCatalogOverlay from '@/libs/i18n/locales/catalog/en-US.json';
 import ukUACatalogOverlay from '@/libs/i18n/locales/catalog/uk-UA.json';
 
 type CatalogOverlayDictionary = Record<string, string>;
@@ -32,6 +33,7 @@ type BundledIngredient = {
 
 const CATALOG_OVERLAYS: Record<SupportedLocale, CatalogOverlayDictionary> = {
   'en-GB': enGBCatalogOverlay,
+  'en-US': enUSCatalogOverlay,
   'uk-UA': ukUACatalogOverlay,
 };
 
