@@ -2087,6 +2087,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
             >
               {languageOptions.map((option) => {
                 const isSelected = locale === option.code;
+                const localizedLanguageName = t(`language.${option.code}`);
                 return (
                   <Pressable
                     key={`language-${option.code}`}
@@ -2107,6 +2108,9 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     <View style={styles.startScreenTextContainer}>
                       <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>
                         {option.nativeName}
+                      </Text>
+                      <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>
+                        {localizedLanguageName}
                       </Text>
                     </View>
                     <MaterialCommunityIcons
