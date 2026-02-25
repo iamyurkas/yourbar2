@@ -35,6 +35,7 @@ import {
 import { navigateToDetailsWithReturnTo } from '@/libs/navigation';
 import { getPluralCategory } from '@/libs/i18n/plural';
 import { normalizeSearchText } from '@/libs/search-normalization';
+import { compareOptionalGlobalAlphabet } from '@/libs/global-sort';
 import { buildTagOptions, type TagOption } from '@/libs/tag-options';
 import { useI18n } from '@/libs/i18n/use-i18n';
 import {
@@ -528,6 +529,11 @@ export default function IngredientsScreen() {
     );
   }, [filteredByTags, normalizedQuery]);
 
+  const sortedIngredients = useMemo(
+    () => [...filteredIngredients].sort((a, b) => compareOptionalGlobalAlphabet(a.name, b.name)),
+    [filteredIngredients],
+  );
+
   const highlightColor = Colors.highlightFaint;
   const isFilterActive = selectedTagKeys.size > 0;
   const emptyMessage = useMemo(() => {
@@ -797,7 +803,7 @@ export default function IngredientsScreen() {
         ) : null}
         <FlatList
           ref={listRef}
-          data={filteredIngredients}
+          data={sortedIngredients}
           keyExtractor={keyExtractor}
           renderItem={renderItem}
           ItemSeparatorComponent={renderSeparator}
