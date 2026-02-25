@@ -75,6 +75,7 @@ const IngredientRow = memo(function IngredientRow({
   onToggle,
 }: IngredientRowProps) {
   const Colors = useAppColors();
+  const { t } = useI18n();
   const ingredientId = Number(ingredient.id ?? -1);
   const ingredientTagColors = (ingredient.tags ?? [])
     .map((tag) => tag?.color ?? tagColors.yellow)
@@ -119,7 +120,7 @@ const IngredientRow = memo(function IngredientRow({
         accessibilityLabel={t("common.tabShopping")}
       />
     );
-  }, [isOnShoppingList, Colors]);
+  }, [isOnShoppingList, Colors, t]);
   const selectionControl = useMemo(() => {
     if (!isSelected) {
       return null;
