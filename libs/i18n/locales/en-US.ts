@@ -1,6 +1,6 @@
 import type { TranslationDictionary } from "@/libs/i18n/types";
 
-export const enGBTranslations: TranslationDictionary = {
+export const enUSTranslations: TranslationDictionary = {
   "common.search": "Search",
   "common.openNavigation": "Open navigation",
   "common.clearSearch": "Clear search query",
@@ -26,7 +26,7 @@ export const enGBTranslations: TranslationDictionary = {
   "common.show": "Show",
   "common.tabAll": "All",
   "common.tabMy": "My",
-  "common.tabFavorites": "Favourites",
+  "common.tabFavorites": "Favorites",
   "common.tabShopping": "Shopping",
 
   "cocktails.emptyMy":
@@ -37,7 +37,7 @@ export const enGBTranslations: TranslationDictionary = {
   "cocktails.helpMyTitle": "My cocktails",
   "cocktails.helpMyText":
     "This screen shows cocktails you can make with your current ingredients.\n\nUse search to find your recipes quickly, and use filters to narrow the list by tags or method.",
-  "cocktails.helpFavoritesTitle": "Favourite cocktails",
+  "cocktails.helpFavoritesTitle": "Favorite cocktails",
   "cocktails.helpFavoritesText":
     "This screen shows cocktails you ranked.\n\nUse search and filters to find what you want faster.",
   "cocktails.helpAllTitle": "All cocktails",
@@ -48,7 +48,7 @@ export const enGBTranslations: TranslationDictionary = {
   "ingredients.emptyAll": "No ingredients yet",
   "ingredients.helpMyTitle": "My ingredients",
   "ingredients.helpMyText":
-    "This screen shows ingredients you have.\n\nSearch by name, and use tag filters to quickly organise your personal collection.",
+    "This screen shows ingredients you have.\n\nSearch by name, and use tag filters to quickly organize your personal collection.",
   "ingredients.helpAllTitle": "All ingredients",
   "ingredients.helpAllText":
     "This screen shows the full ingredients list.\n\nUse search and tags to quickly find what you need.",
@@ -391,8 +391,8 @@ export const enGBTranslations: TranslationDictionary = {
   "shakerResults.clearSelectedFilters": "Clear selected filters",
   "shakerResults.emptyMatchingRecipes": "No matching recipes",
 
-  "rowParts.removeFromFavorites": "Remove from favourites",
-  "rowParts.addToFavorites": "Add to favourites",
+  "rowParts.removeFromFavorites": "Remove from favorites",
+  "rowParts.addToFavorites": "Add to favorites",
   "cocktailListRow.allIngredientsReady": "All ingredients ready",
 
   "tabBar.leaveWithoutSavingTitle": "Leave without saving?",
@@ -403,7 +403,7 @@ export const enGBTranslations: TranslationDictionary = {
 
   "tagEditor.tagName": "Tag name",
   "tagEditor.newTag": "New tag",
-  "tagEditor.color": "Colour",
+  "tagEditor.color": "Color",
 
   "tags.unnamed": "Unnamed tag",
   "tabs.cocktails": "Cocktails",
@@ -423,11 +423,11 @@ export const enGBTranslations: TranslationDictionary = {
   "sideMenu.smartShakerFilteringInfo": "Smart shaker filtering info",
   "sideMenu.smartShakerFilteringInfoTitle": "Smart shaker filtering",
   "sideMenu.smartShakerFilteringInfoMessage":
-    "When enabled, ingredients in groups with no current selection are hidden if they would produce zero results.\n\nIn groups where you already selected at least one ingredient, items stay visible to preserve OR logic.\n\nTurn this off to restore the default shaker behaviour.",
+    "When enabled, ingredients in groups with no current selection are hidden if they would produce zero results.\n\nIn groups where you already selected at least one ingredient, items stay visible to preserve OR logic.\n\nTurn this off to restore the default shaker behavior.",
   "sideMenu.smartShakerFilteringCaption": "Hide non-matching ingredients",
   "sideMenu.startingScreen": "Starting screen",
   "sideMenu.startingScreenOpen": "Open {{screen}}",
-  "sideMenu.favoritesRatingFilter": "Favourites rating filter",
+  "sideMenu.favoritesRatingFilter": "Favorites rating filter",
   "sideMenu.favoritesRatingFilterCaption":
     "Showing {{rating}}+ stars cocktails",
   "sideMenu.manageTags": "Manage tags",
@@ -463,7 +463,7 @@ export const enGBTranslations: TranslationDictionary = {
   "sideMenu.restartOnboardingCaption": "Show the guided tutorial again",
 
   "app.loadingTagline": "your rules!",
-  "appDialog.closeDialog": "Close dialogue",
+  "appDialog.closeDialog": "Close dialog",
   "tagEditor.hue": "Hue",
   "tagEditor.tone": "Tone",
   "tagEditor.editTag": "Edit tag",
@@ -491,7 +491,7 @@ export const enGBTranslations: TranslationDictionary = {
   "sideMenu.deleteTagMessage": "Remove \"{{name}}\"?",
   "sideMenu.emailUnavailableTitle": "Unable to open email",
   "sideMenu.emailUnavailableMessage": "Please send your report to your.bar.app@gmail.com manually.",
-  "sideMenu.favoritesRatingModalDescription": "Choose the minimum rating to show on Favourites",
+  "sideMenu.favoritesRatingModalDescription": "Choose the minimum rating to show on Favorites",
   "sideMenu.favoritesRatingOption": "Show {{value}} stars and up",
   "sideMenu.useAutomaticAmazonStoreDetection": "Use automatic Amazon store detection",
   "sideMenu.disableAmazonLink": "Disable Amazon link",
@@ -515,7 +515,7 @@ export const enGBTranslations: TranslationDictionary = {
   "startScreen.cocktails_all.description": "Browse every recipe",
   "startScreen.cocktails_my.label": "My cocktails",
   "startScreen.cocktails_my.description": "See your creations first",
-  "startScreen.cocktails_favorites.label": "Favourite cocktails",
+  "startScreen.cocktails_favorites.label": "Favorite cocktails",
   "startScreen.cocktails_favorites.description": "Jump into saved cocktails",
   "startScreen.shaker.label": "Shaker",
   "startScreen.shaker.description": "Mix based on your inventory",
