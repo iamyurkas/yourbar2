@@ -140,13 +140,15 @@ export const enUSTranslations: TranslationDictionary = {
   "cocktailForm.cameraAccessRequiredMessage":
     "Enable camera permissions in system settings to take a cocktail photo.",
   "cocktailForm.couldNotTakePhoto": "Could not take photo",
-  "cocktailForm.addPhotoMessage": "Choose how you want to add a cocktail photo.",
+  "cocktailForm.addPhotoMessage":
+    "Choose how you want to add a cocktail photo.",
   "cocktailForm.takePhoto": "Take photo",
   "cocktailForm.chooseFromGallery": "Choose from gallery",
   "cocktailForm.nameRequired": "Name is required",
   "cocktailForm.nameRequiredMessage": "Please enter the cocktail name.",
   "cocktailForm.recipeRequired": "Recipe required",
-  "cocktailForm.recipeRequiredMessage": "Add at least one ingredient to the cocktail.",
+  "cocktailForm.recipeRequiredMessage":
+    "Add at least one ingredient to the cocktail.",
   "cocktailForm.couldNotSave": "Could not save cocktail",
   "cocktailForm.cocktailNotFound": "Cocktail not found",
   "cocktailForm.deleteConfirmNamed":
@@ -248,21 +250,29 @@ export const enUSTranslations: TranslationDictionary = {
     "This screen shows cocktail details, ingredients, and instructions.\n\nUse the buttons under the cocktail to copy or edit it.\n\n**Ingredient ribbons**\nLeft ribbon marks ingredient type:\nblue = brand ingredient,\nyellow = style ingredient.\n\nRight ribbon marks base variants:\nblue = has branded variants,\nyellow = has style variants.",
 
   "cocktailMethod.blend.label": "Blend",
-  "cocktailMethod.blend.description": "Blend with crushed ice into a frozen texture.",
+  "cocktailMethod.blend.description":
+    "Blend with crushed ice into a frozen texture.",
   "cocktailMethod.muddle.label": "Muddle",
-  "cocktailMethod.muddle.description": "Press fruit, berries, or herbs to release oils and juice.",
+  "cocktailMethod.muddle.description":
+    "Press fruit, berries, or herbs to release oils and juice.",
   "cocktailMethod.heat.label": "Heat",
-  "cocktailMethod.heat.description": "Warm ingredients gently to blend flavours without boiling.",
+  "cocktailMethod.heat.description":
+    "Warm ingredients gently to blend flavours without boiling.",
   "cocktailMethod.shake.label": "Shake",
-  "cocktailMethod.shake.description": "Shake with ice. Best for citrus, syrup, cream, or egg white to aerate and chill.",
+  "cocktailMethod.shake.description":
+    "Shake with ice. Best for citrus, syrup, cream, or egg white to aerate and chill.",
   "cocktailMethod.stir.label": "Stir",
-  "cocktailMethod.stir.description": "Stir with a bar spoon in a mixing glass full of ice. Best for herbal mixers.",
+  "cocktailMethod.stir.description":
+    "Stir with a bar spoon in a mixing glass full of ice. Best for herbal mixers.",
   "cocktailMethod.throw.label": "Throw",
-  "cocktailMethod.throw.description": "Pour between tins from a distance to aerate without cloudiness.",
+  "cocktailMethod.throw.description":
+    "Pour between tins from a distance to aerate without cloudiness.",
   "cocktailMethod.build.label": "Build",
-  "cocktailMethod.build.description": "Pour ingredients directly into the serving glass.",
+  "cocktailMethod.build.description":
+    "Pour ingredients directly into the serving glass.",
   "cocktailMethod.layer.label": "Layer",
-  "cocktailMethod.layer.description": "Float ingredients in layers using a bar spoon for visual effect.",
+  "cocktailMethod.layer.description":
+    "Float ingredients in layers using a bar spoon for visual effect.",
 
   "ingredientDetails.title": "Ingredient details",
   "ingredientDetails.goBack": "Go back",
@@ -361,7 +371,8 @@ export const enUSTranslations: TranslationDictionary = {
   "onboarding.step11.message":
     "Start by marking ingredients you already have in **All ingredients**.\n\nCheers!",
 
-  "ingredients.emptyShopping": "There are no ingredients in your\nshopping list yet.",
+  "ingredients.emptyShopping":
+    "There are no ingredients in your\nshopping list yet.",
   "ingredients.emptyList": "No ingredients in the list",
   "ingredients.makeCount.one": "Make {{count}} cocktail",
   "ingredients.makeCount.few": "Make {{count}} cocktails",
@@ -371,12 +382,15 @@ export const enUSTranslations: TranslationDictionary = {
   "ingredients.recipeCount.few": "{{count}} recipes",
   "ingredients.recipeCount.many": "{{count}} recipes",
   "ingredients.recipeCount.other": "{{count}} recipes",
-  "ingredients.helpAllFullText": "This screen displays all ingredients in the app.\n\nUse search, switch tabs, and filter by tags.\n\nTap a checkbox to mark availability.",
+  "ingredients.helpAllFullText":
+    "This screen displays all ingredients in the app.\n\nUse search, switch tabs, and filter by tags.\n\nTap a checkbox to mark availability.",
   "ingredients.clearSelectedTagFilters": "Clear selected tag filters",
   "ingredients.addIngredient": "Add ingredient",
 
-  "cocktails.oneMoreIngredientForMore": "One more ingredient for more cocktails",
-  "cocktails.removeIngredientFromShopping": "Remove ingredient from shopping list",
+  "cocktails.oneMoreIngredientForMore":
+    "One more ingredient for more cocktails",
+  "cocktails.removeIngredientFromShopping":
+    "Remove ingredient from shopping list",
   "cocktails.addIngredientToShopping": "Add ingredient to shopping list",
   "cocktails.buyNamed": "Buy {{name}}",
   "cocktails.toMakeMore.one": "To make {{count}} more cocktail",
@@ -387,7 +401,8 @@ export const enUSTranslations: TranslationDictionary = {
   "cocktails.addCocktail": "Add cocktail",
 
   "shakerResults.helpTitle": "Shaker results",
-  "shakerResults.helpText": "This screen shows cocktails you can make with selected ingredients.\n\nUse search and filters to narrow results, then open any cocktail to view recipe details and preparation steps.",
+  "shakerResults.helpText":
+    "This screen shows cocktails you can make with selected ingredients.\n\nUse search and filters to narrow results, then open any cocktail to view recipe details and preparation steps.",
   "shakerResults.clearSelectedFilters": "Clear selected filters",
   "shakerResults.emptyMatchingRecipes": "No matching recipes",
 
@@ -396,7 +411,8 @@ export const enUSTranslations: TranslationDictionary = {
   "cocktailListRow.allIngredientsReady": "All ingredients ready",
 
   "tabBar.leaveWithoutSavingTitle": "Leave without saving?",
-  "tabBar.leaveWithoutSavingMessage": "Your changes will be lost if you leave this screen.",
+  "tabBar.leaveWithoutSavingMessage":
+    "Your changes will be lost if you leave this screen.",
 
   "substituteModal.forNamed": "For {{name}}",
   "substituteModal.searchIngredients": "Search ingredients",
@@ -441,7 +457,8 @@ export const enUSTranslations: TranslationDictionary = {
   "sideMenu.tagFallbackName": "tag",
   "sideMenu.startScreenModalDescription": "Select where the app opens",
   "sideMenu.startScreenOptionA11y": "Open {{screen}} first",
-  "sideMenu.amazonStoreModalDescription": "Override automatic detection to choose your preferred Amazon store.",
+  "sideMenu.amazonStoreModalDescription":
+    "Override automatic detection to choose your preferred Amazon store.",
   "sideMenu.amazonStoreAutomatic": "Automatic",
   "sideMenu.amazonStoreDetected": "Detected: {{store}}",
   "sideMenu.amazonStoreUnknown": "Unknown",
@@ -470,40 +487,52 @@ export const enUSTranslations: TranslationDictionary = {
 
   "sideMenu.restore": "Restore",
   "sideMenu.restoreBundledData": "Restore bundled data",
-  "sideMenu.restoreBundledDataDescription": "Built-in changes will be lost, your own content is safe",
-  "sideMenu.restoreBundledDataConfirmMessage": "This will restore the bundled cocktails and ingredients.\nYour custom cocktails and ingredients will stay the same.",
+  "sideMenu.restoreBundledDataDescription":
+    "Built-in changes will be lost, your own content is safe",
+  "sideMenu.restoreBundledDataConfirmMessage":
+    "This will restore the bundled cocktails and ingredients.\nYour custom cocktails and ingredients will stay the same.",
   "sideMenu.exportUnavailableTitle": "Export unavailable",
   "sideMenu.exportUnavailableMessage": "Load your inventory before exporting.",
   "sideMenu.backupUnavailableTitle": "Backup unavailable",
-  "sideMenu.backupUnavailableMessage": "Load your inventory before backing up data.",
+  "sideMenu.backupUnavailableMessage":
+    "Load your inventory before backing up data.",
   "sideMenu.sharingUnavailableTitle": "Sharing unavailable",
-  "sideMenu.sharingUnavailableMessage": "Sharing is not available on this device.",
+  "sideMenu.sharingUnavailableMessage":
+    "Sharing is not available on this device.",
   "sideMenu.exportFailedTitle": "Export failed",
   "sideMenu.backupFailedTitle": "Backup failed",
   "sideMenu.importFailedTitle": "Import failed",
   "sideMenu.deviceStorageUnavailable": "Unable to access device storage.",
   "sideMenu.importReadArchiveFailed": "Unable to read the selected archive.",
   "sideMenu.importArchiveEmpty": "The selected archive is empty.",
-  "sideMenu.importMissingInventory": "The backup archive is missing inventory data.",
-  "sideMenu.importInvalidInventory": "The backup archive contains invalid inventory data.",
-  "sideMenu.importRetryWithValidArchive": "Please try again with a valid backup archive.",
+  "sideMenu.importMissingInventory":
+    "The backup archive is missing inventory data.",
+  "sideMenu.importInvalidInventory":
+    "The backup archive contains invalid inventory data.",
+  "sideMenu.importRetryWithValidArchive":
+    "Please try again with a valid backup archive.",
   "sideMenu.deleteTagTitle": "Delete tag",
-  "sideMenu.deleteTagMessage": "Remove \"{{name}}\"?",
+  "sideMenu.deleteTagMessage": 'Remove "{{name}}"?',
   "sideMenu.emailUnavailableTitle": "Unable to open email",
-  "sideMenu.emailUnavailableMessage": "Please send your report to your.bar.app@gmail.com manually.",
-  "sideMenu.favoritesRatingModalDescription": "Choose the minimum rating to show on Favorites",
+  "sideMenu.emailUnavailableMessage":
+    "Please send your report to your.bar.app@gmail.com manually.",
+  "sideMenu.favoritesRatingModalDescription":
+    "Choose the minimum rating to show on Favorites",
   "sideMenu.favoritesRatingOption": "Show {{value}} stars and up",
-  "sideMenu.useAutomaticAmazonStoreDetection": "Use automatic Amazon store detection",
+  "sideMenu.useAutomaticAmazonStoreDetection":
+    "Use automatic Amazon store detection",
   "sideMenu.disableAmazonLink": "Disable Amazon link",
   "sideMenu.backupData": "Back up data",
   "sideMenu.backingUpData": "Backing up data...",
-  "sideMenu.backupDataDescription": "Export cocktails, ingredients, and photos as one archive",
+  "sideMenu.backupDataDescription":
+    "Export cocktails, ingredients, and photos as one archive",
   "sideMenu.restoreData": "Restore data",
   "sideMenu.restoringData": "Restoring data...",
-  "sideMenu.restoreDataDescription": "Import cocktails, ingredients, and photos from archive",
+  "sideMenu.restoreDataDescription":
+    "Import cocktails, ingredients, and photos from archive",
   "sideMenu.reloadBundledInventory": "Reload bundled inventory",
-  "language.en-GB": "English",
-  "language.en-US": "English (US)",
+  "language.en-GB": "English (UK)",
+  "language.en-US": "English",
   "language.uk-UA": "Ukrainian",
   "languageModal.title": "Language",
   "languageModal.description":
