@@ -7,6 +7,7 @@ import {
   toIngredientStorageRecord,
 } from '@/libs/inventory-utils';
 import type {
+  AppLocale,
   AppTheme,
   CocktailStorageRecord,
   CocktailTag,
@@ -153,6 +154,7 @@ export type InventorySnapshotOptions = {
   ratingFilterThreshold: number;
   startScreen: StartScreen;
   appTheme: AppTheme;
+  appLocale: AppLocale;
   amazonStoreOverride: AmazonStoreOverride | null;
   customCocktailTags: CocktailTag[];
   customIngredientTags: IngredientTag[];
@@ -217,6 +219,7 @@ export function buildInventorySnapshot(
     ratingFilterThreshold: options.ratingFilterThreshold,
     startScreen: options.startScreen,
     appTheme: options.appTheme,
+    appLocale: options.appLocale,
     amazonStoreOverride: options.amazonStoreOverride,
     onboardingStep: options.onboardingStep,
     onboardingCompleted: options.onboardingCompleted,

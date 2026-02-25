@@ -33,8 +33,10 @@ import {
   getVisibleIngredientIdsForCocktail,
 } from '@/libs/ingredient-availability';
 import { navigateToDetailsWithReturnTo } from '@/libs/navigation';
+import { getPluralCategory } from '@/libs/i18n/plural';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { buildTagOptions, type TagOption } from '@/libs/tag-options';
+import { useI18n } from '@/libs/i18n/use-i18n';
 import {
   useInventoryActions,
   useInventoryData,
@@ -48,12 +50,6 @@ type IngredientSection = {
   label: string;
   data: Ingredient[];
 };
-
-const TAB_OPTIONS: SegmentTabOption[] = [
-  { key: 'all', label: 'All' },
-  { key: 'my', label: 'My' },
-  { key: 'shopping', label: 'Shopping' },
-];
 
 type IngredientListItemProps = {
   ingredient: Ingredient;
@@ -137,8 +133,10 @@ const IngredientListItem = memo(function IngredientListItemComponent({
     ? Colors.styledIngredient
     : undefined;
 
+  const { t } = useI18n();
+
   const shoppingControl = useMemo(() => {
-    const shoppingLabel = onShoppingToggle ? 'Remove from shopping list' : 'On shopping list';
+    const shoppingLabel = onShoppingToggle ? t('ingredients.removeFromShoppingList') : t('ingredients.onShoppingList');
     const isShoppingTab = Boolean(onShoppingToggle);
     const shoppingIconName = isShoppingTab ? 'remove-shopping-cart' : 'shopping-cart';
     const shoppingIconColor = isShoppingTab ? Colors.error : Colors.tint;
@@ -242,11 +240,19 @@ const IngredientListItem = memo(function IngredientListItemComponent({
 export default function IngredientsScreen() {
   const router = useRouter();
   const Colors = useAppColors();
+  const { t, locale } = useI18n();
   const { onTabChangeRequest } = useOnboardingAnchors();
   const { cocktails, ingredients, availableIngredientIds, shoppingIngredientIds } = useInventoryData();
   const { ignoreGarnish, allowAllSubstitutes } = useInventorySettings();
   const { toggleIngredientShopping, toggleIngredientAvailability } = useInventoryActions();
   const [activeTab, setActiveTab] = useState<IngredientTabKey>(() => getLastIngredientTab());
+
+  const tabOptions = useMemo<SegmentTabOption[]>(() => [
+    { key: 'all', label: t('common.tabAll') },
+    { key: 'my', label: t('common.tabMy') },
+    { key: 'shopping', label: t('common.tabShopping') },
+  ], [t]);
+
   const [query, setQuery] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isFilterMenuVisible, setFilterMenuVisible] = useState(false);
@@ -296,7 +302,7 @@ export default function IngredientsScreen() {
 
   useEffect(() => {
     setLastIngredientTab(activeTab);
-  }, [activeTab]);
+  }, [activeTab, t]);
 
   const availableTagOptions = useMemo<TagOption[]>(
     () =>
@@ -456,11 +462,11 @@ export default function IngredientsScreen() {
     });
 
     return {
-      all: { key: 'all', label: 'All', data: ingredients },
-      my: { key: 'my', label: 'My', data: inStock },
+      all: { key: 'all', label: t('common.tabAll'), data: ingredients },
+      my: { key: 'my', label: t('common.tabMy'), data: inStock },
       shopping: {
         key: 'shopping',
-        label: 'Shopping',
+        label: t('common.tabShopping'),
         data: shoppingList,
       },
     };
@@ -527,13 +533,13 @@ export default function IngredientsScreen() {
   const emptyMessage = useMemo(() => {
     switch (activeTab) {
       case 'my':
-        return 'Mark ingredients you have to see them here.';
+        return t('ingredients.emptyMy');
       case 'shopping':
-        return 'There are no ingredients in your\nshopping list yet.';
+        return t('ingredients.emptyShopping');
       default:
-        return 'No ingredients in the list';
+        return t('ingredients.emptyList');
     }
-  }, [activeTab]);
+  }, [activeTab, t]);
   const filterMenuTop = useMemo(() => {
     if (headerLayout && filterAnchorLayout) {
       return headerLayout.y + filterAnchorLayout.y + filterAnchorLayout.height + 6;
@@ -631,12 +637,11 @@ export default function IngredientsScreen() {
 
       let subtitleText: string | undefined;
       if (count > 0) {
+        const pluralCategory = getPluralCategory(locale, count);
         if (isMyTab) {
-          const label = count === 1 ? 'cocktail' : 'cocktails';
-          subtitleText = `Make ${count} ${label}`;
+          subtitleText = t(`ingredients.makeCount.${pluralCategory}`, { count });
         } else {
-          const label = count === 1 ? 'recipe' : 'recipes';
-          subtitleText = `${count} ${label}`;
+          subtitleText = t(`ingredients.recipeCount.${pluralCategory}`, { count });
         }
       }
 
@@ -667,6 +672,8 @@ export default function IngredientsScreen() {
       shoppingIngredientIds,
       styleBaseIngredientIds,
       brandedBaseIngredientIds,
+      locale,
+      t,
     ],
   );
 
@@ -685,22 +692,22 @@ export default function IngredientsScreen() {
     switch (activeTab) {
       case 'my':
         return {
-          title: 'My ingredients',
-          text: 'This screen shows ingredients you have.\n\nSearch by name, and use tag filters to quickly organize your personal collection.',
+          title: t('ingredients.helpMyTitle'),
+          text: t('ingredients.helpMyText'),
         };
       case 'shopping':
         return {
-          title: 'Shopping list',
-          text: 'This screen helps you manage ingredients to buy.\n\nUse search to find items, and tap the shopping control to remove them from the list.',
+          title: t('ingredients.helpShoppingTitle'),
+          text: t('ingredients.helpShoppingText'),
         };
       case 'all':
       default:
         return {
-          title: 'All ingredients',
-          text: 'This screen displays all ingredients in the app.\n\nUse search, switch tabs, and filter by tags.\n\nTap a checkbox to mark availability.',
+          title: t('ingredients.helpAllTitle'),
+          text: t('ingredients.helpAllFullText'),
         };
     }
-  }, [activeTab]);
+  }, [activeTab, t]);
 
   return (
     <SafeAreaView
@@ -711,9 +718,9 @@ export default function IngredientsScreen() {
           <CollectionHeader
             searchValue={query}
             onSearchChange={setQuery}
-            placeholder="Search"
+            placeholder={t('common.search')}
             onMenuPress={() => setIsMenuOpen(true)}
-            tabs={TAB_OPTIONS}
+            tabs={tabOptions}
             activeTab={activeTab}
             onTabChange={setActiveTab}
             anchorPrefix="ingredients-tab"
@@ -729,7 +736,7 @@ export default function IngredientsScreen() {
           <>
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel="Close tag filters"
+              accessibilityLabel={t('common.closeTagFilters')}
               onPress={handleCloseFilterMenu}
               style={styles.filterMenuBackdrop}
             />
@@ -752,10 +759,14 @@ export default function IngredientsScreen() {
                   <View style={styles.filterTagList}>
                     {availableTagOptions.map((tag) => {
                       const selected = selectedTagKeys.has(tag.key);
+                      const isBuiltin = !isNaN(Number(tag.key)) && Number(tag.key) < 10;
+                      const translatedName = isBuiltin ? t(`ingredientTag.${tag.key}`) : tag.name;
+                      const finalName = (isBuiltin && translatedName !== `ingredientTag.${tag.key}`) ? translatedName : tag.name;
+
                       return (
                         <TagPill
                           key={tag.key}
-                          label={tag.name}
+                          label={finalName}
                           color={tag.color}
                           selected={selected}
                           onPress={() => handleTagFilterToggle(tag.key)}
@@ -768,16 +779,16 @@ export default function IngredientsScreen() {
                   </View>
                 ) : (
                   <Text style={[styles.filterMenuEmpty, { color: Colors.onSurfaceVariant }]}>
-                    No tags available
+                    {t("common.noTagsAvailable")}
                   </Text>
                 )}
                 {selectedTagKeys.size > 0 ? (
                   <Pressable
                     accessibilityRole="button"
-                    accessibilityLabel="Clear selected tag filters"
+                    accessibilityLabel={t('ingredients.clearSelectedTagFilters')}
                     onPress={handleClearTagFilters}
                     style={styles.filterMenuClearButton}>
-                    <Text style={[styles.filterMenuClearLabel, { color: Colors.tint }]}>Clear filters</Text>
+                    <Text style={[styles.filterMenuClearLabel, { color: Colors.tint }]}>{t("common.clearFilters")}</Text>
                   </Pressable>
                 ) : null}
               </ScrollView>
@@ -805,7 +816,7 @@ export default function IngredientsScreen() {
           }
         />
       </View>
-      <FabAdd label="Add ingredient" onPress={() => router.push('/ingredients/create')} />
+      <FabAdd label={t('ingredients.addIngredient')} onPress={() => router.push('/ingredients/create')} />
       <SideMenuDrawer visible={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
     </SafeAreaView>
   );

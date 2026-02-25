@@ -31,6 +31,8 @@ import {
   getVisibleIngredientIdsForCocktail,
 } from '@/libs/ingredient-availability';
 import { normalizeSearchText } from '@/libs/search-normalization';
+import { getPluralCategory } from '@/libs/i18n/plural';
+import { useI18n } from '@/libs/i18n/use-i18n';
 import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
 import { tagColors } from '@/theme/theme';
 
@@ -113,7 +115,7 @@ const IngredientRow = memo(function IngredientRow({
         color={Colors.tint}
         style={styles.shoppingIcon}
         accessibilityRole="image"
-        accessibilityLabel="On shopping list"
+        accessibilityLabel={t("common.tabShopping")}
       />
     );
   }, [isOnShoppingList, Colors]);
@@ -191,6 +193,7 @@ function isCollapsedHeaderItem(item: Ingredient) {
 export default function ShakerScreen() {
   const router = useRouter();
   const Colors = useAppColors();
+  const { t, locale } = useI18n();
   const {
     cocktails,
     ingredients,
@@ -311,20 +314,25 @@ export default function ShakerScreen() {
       }
 
       if (!map.has(key)) {
+        const isBuiltin = tag?.id != null && tag.id < 10;
+        const translatedName = isBuiltin ? t(`ingredientTag.${tag.id}`) : tag?.name;
+        const finalName = (isBuiltin && translatedName !== `ingredientTag.${tag.id}`) ? translatedName : (tag?.name ?? t('tags.unnamed'));
+
         map.set(key, {
           key,
-          name: tag?.name ?? 'Unnamed tag',
+          name: finalName,
           color: tag?.color ?? defaultTagColor,
         });
       }
     });
 
-    const otherTag = BUILTIN_INGREDIENT_TAGS.find((tag) => tag.name.trim().toLowerCase() === 'other');
+    const otherTag = BUILTIN_INGREDIENT_TAGS.find((tag) => tag.id === 9 || tag.name.trim().toLowerCase() === 'other');
     const otherKey = normalizeTagKey(otherTag) ?? 'other';
     if (!map.has(otherKey)) {
+      const translatedName = t(`ingredientTag.9`);
       map.set(otherKey, {
         key: otherKey,
-        name: otherTag?.name ?? 'Other',
+        name: translatedName !== `ingredientTag.9` ? translatedName : (otherTag?.name ?? 'Other'),
         color: otherTag?.color ?? defaultTagColor,
       });
     }
@@ -351,7 +359,7 @@ export default function ShakerScreen() {
 
       return normalizedNameA.localeCompare(normalizedNameB);
     });
-  }, [defaultTagColor, ingredients]);
+  }, [defaultTagColor, ingredients, t]);
 
   const ingredientLookup = useMemo(() => createIngredientLookup(ingredients), [ingredients]);
   const styleBaseIngredientIds = useMemo(() => {
@@ -587,9 +595,13 @@ export default function ShakerScreen() {
         color: defaultTagColor,
       };
 
+      const isBuiltin = tag?.id != null && tag.id < 10;
+      const translatedName = isBuiltin ? t(`ingredientTag.${tag.id}`) : tag?.name;
+      const finalName = (isBuiltin && translatedName !== `ingredientTag.${tag.id}`) ? translatedName : (tag?.name ?? fallbackTag.name);
+
       groups.set(key, {
         key,
-        name: tag?.name ?? fallbackTag.name,
+        name: finalName,
         color: tag?.color ?? fallbackTag.color,
         ingredients: [ingredient],
       });
@@ -841,8 +853,7 @@ export default function ShakerScreen() {
   ]);
 
   const helpMessage = useMemo(() => {
-    const baseMessage =
-      'This screen helps you select ingredients and understand what you can mix right now.\n\nUse search to find ingredients quickly, tap ingredients to mark them to use, and open shaker results for matching cocktails.';
+    const baseMessage = t('shaker.helpBase');
 
     if (selectedByGroup.size === 0) {
       return baseMessage;
@@ -871,17 +882,17 @@ export default function ShakerScreen() {
           return null;
         }
 
-        return `(${names.join(' OR ')})`;
+        return `(${names.join(` ${t('common.or')} `)})`;
       })
       .filter((groupExpression): groupExpression is string => Boolean(groupExpression))
-      .join(' AND ');
+      .join(` ${t('common.and')} `);
 
     if (!selectionExpression) {
       return baseMessage;
     }
 
-    return `${baseMessage}\n\nCurrent select:\n${selectionExpression}`;
-  }, [ingredients, selectedByGroup]);
+    return `${baseMessage}\n\n${t('shaker.currentSelection')}:\n${selectionExpression}`;
+  }, [ingredients, selectedByGroup, t]);
 
   const handleClearSelection = useCallback(() => {
     setSelectedIngredientIds((previous) => (previous.size === 0 ? previous : new Set()));
@@ -923,7 +934,7 @@ export default function ShakerScreen() {
         <View style={[styles.groupCard, { backgroundColor: Colors.background }]}>
           <Pressable
             accessibilityRole="button"
-            accessibilityLabel={`${section.name} ingredients`}
+            accessibilityLabel={t("shaker.ingredientsInGroupA11y", { name: section.name })}
             accessibilityState={{ expanded: isExpanded }}
             onStartShouldSetResponderCapture={() => true}
             onResponderTerminationRequest={() => false}
@@ -1016,14 +1027,15 @@ export default function ShakerScreen() {
       const separatorColor = isAvailable ? Colors.outline : Colors.outlineVariant;
       const makeableCount = ingredientId >= 0 ? makeableCocktailCounts.get(ingredientId) ?? 0 : 0;
       const totalCount = ingredientId >= 0 ? totalCocktailCounts.get(ingredientId) ?? 0 : 0;
-      const label = makeableCount === 1 ? 'cocktail' : 'cocktails';
-      const recipeLabel = totalCount === 1 ? 'recipe' : 'recipes';
-      const subtitleText =
-        makeableCount > 0
-          ? `Make ${makeableCount} ${label}`
-          : totalCount > 0
-            ? `${totalCount} ${recipeLabel}`
-            : undefined;
+
+      let subtitleText: string | undefined;
+      if (makeableCount > 0) {
+        const pluralCategory = getPluralCategory(locale, makeableCount);
+        subtitleText = t(`shaker.makeCount.${pluralCategory}`, { count: makeableCount });
+      } else if (totalCount > 0) {
+        const pluralCategory = getPluralCategory(locale, totalCount);
+        subtitleText = t(`shaker.recipeCount.${pluralCategory}`, { count: totalCount });
+      }
 
       return (
         <View>
@@ -1072,7 +1084,7 @@ export default function ShakerScreen() {
         >
           <Pressable
             accessibilityRole="button"
-            accessibilityLabel="Open navigation"
+            accessibilityLabel={t('common.openNavigation')}
             onPress={() => setIsMenuOpen(true)}
             style={styles.iconButton}
           >
@@ -1093,7 +1105,7 @@ export default function ShakerScreen() {
             <TextInput
               value={query}
               onChangeText={setQuery}
-              placeholder="Search"
+              placeholder={t('common.search')}
               placeholderTextColor={`${Colors.onSurfaceVariant}99`}
               returnKeyType="search"
               style={[styles.searchInput, { color: Colors.text, fontWeight: '400' }]}
@@ -1101,7 +1113,7 @@ export default function ShakerScreen() {
             {query ? (
               <Pressable
                 accessibilityRole="button"
-                accessibilityLabel="Clear search query"
+                accessibilityLabel={t('common.clearSearch')}
                 onPress={() => setQuery('')}
                 style={styles.clearButton}
               >
@@ -1111,7 +1123,7 @@ export default function ShakerScreen() {
           </View>
           <Pressable
             accessibilityRole="button"
-            accessibilityLabel="Open screen help"
+            accessibilityLabel={t('common.openScreenHelp')}
             onPress={() => setIsHelpVisible(true)}
             style={styles.iconButton}
           >
@@ -1153,26 +1165,26 @@ export default function ShakerScreen() {
         >
           <Pressable
             accessibilityRole="button"
-            accessibilityLabel="Clear selected ingredients"
+            accessibilityLabel={t('shaker.clearSelectedIngredients')}
             onPress={handleClearSelection}
             style={({ pressed }) => [styles.clearButtonBase, { borderColor: Colors.danger }, pressed ? styles.clearButtonPressed : null]}
           >
-            <Text style={[styles.clearButtonLabel, { color: Colors.error }]}>Clear</Text>
+            <Text style={[styles.clearButtonLabel, { color: Colors.error }]}>{t("common.clear")}</Text>
           </Pressable>
           <View style={styles.countsColumn}>
             <Text style={[styles.countsPrimary, { color: Colors.onSurface }]}
             >
-              Cocktails: {matchingCocktailSummary.availableCount}
+              {t("shaker.cocktailsCount", { count: matchingCocktailSummary.availableCount })}
             </Text>
             <Text style={[styles.countsSecondary, { color: Colors.onSurfaceVariant }]}
             >
-              (recipes: {matchingCocktailSummary.recipeCount})
+              {t("shaker.recipesCount", { count: matchingCocktailSummary.recipeCount })}
             </Text>
           </View>
           <OnboardingAnchor name="shaker-show-results">
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel="Show matching recipes"
+              accessibilityLabel={t('shaker.showMatchingRecipes')}
               accessibilityState={{
                 disabled: matchingCocktailSummary.recipeCount === 0 || selectedIngredientIds.size === 0,
               }}
@@ -1202,7 +1214,7 @@ export default function ShakerScreen() {
                   },
                 ]}
               >
-                Show
+                {t("common.show")}
               </Text>
             </Pressable>
           </OnboardingAnchor>
@@ -1210,9 +1222,9 @@ export default function ShakerScreen() {
         <SideMenuDrawer visible={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
         <AppDialog
           visible={isHelpVisible}
-          title="Shaker"
+          title={t("tabs.shaker")}
           message={helpMessage}
-          actions={[{ label: 'Got it', variant: 'secondary' }]}
+          actions={[{ label: t('common.gotIt'), variant: 'secondary' }]}
           onRequestClose={() => setIsHelpVisible(false)}
         />
       </View>
