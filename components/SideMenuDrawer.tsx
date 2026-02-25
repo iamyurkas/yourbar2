@@ -541,6 +541,31 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     return Array.isArray(record.cocktails) && Array.isArray(record.ingredients);
   };
 
+  const resolveInventoryFileFromArchive = (
+    files: { path: string; contents: Uint8Array }[],
+  ) => {
+    const normalizedLocale = locale.toLowerCase();
+    const preferredPaths = [
+      `inventory.${locale}.json`,
+      `inventory.${normalizedLocale}.json`,
+      "inventory.json",
+    ];
+
+    for (const preferredPath of preferredPaths) {
+      const matched = files.find(
+        (file) => file.path.toLowerCase() === preferredPath.toLowerCase(),
+      );
+      if (matched) {
+        return matched;
+      }
+    }
+
+    return (
+      files.find((file) => /^inventory\.[^.]+\.json$/i.test(file.path)) ??
+      files.find((file) => file.path.toLowerCase().endsWith(".json"))
+    );
+  };
+
   const handleBackupData = async () => {
     if (isBackingUpData) {
       return;
@@ -587,7 +612,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       const payload = JSON.stringify(data, null, 2);
       const encoder = new TextEncoder();
       files.push({
-        path: "inventory.json",
+        path: `inventory.${locale}.json`,
         contents: encoder.encode(payload),
       });
 
@@ -675,8 +700,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
         return;
       }
 
-      const inventoryFile = archivedFiles.find((file) => file.path === "inventory.json")
-        ?? archivedFiles.find((file) => file.path.toLowerCase().endsWith(".json"));
+      const inventoryFile = resolveInventoryFileFromArchive(archivedFiles);
       if (!inventoryFile) {
         showDialogMessage(t("sideMenu.importFailedTitle"), t("sideMenu.importMissingInventory"));
         return;
