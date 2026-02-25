@@ -503,9 +503,8 @@ export const enGBTranslations: TranslationDictionary = {
   "sideMenu.restoreDataDescription": "Import cocktails, ingredients, and photos from archive",
   "sideMenu.reloadBundledInventory": "Reload bundled inventory",
   "language.en-GB": "English",
-  "language.en-US": "English (US)",
+  "language.en-US": "Spanish (LatAm)",
   "language.uk-UA": "Ukrainian",
-  "language.es-ES": "Spanish",
   "languageModal.title": "Language",
   "languageModal.description":
     "Choose the app language. Changes apply immediately.",

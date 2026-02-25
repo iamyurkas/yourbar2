@@ -531,15 +531,14 @@ export const enUSTranslations: TranslationDictionary = {
   "sideMenu.restoreDataDescription":
     "Import cocktails, ingredients, and photos from archive",
   "sideMenu.reloadBundledInventory": "Reload bundled inventory",
-  "language.en-GB": "English (UK)",
-  "language.en-US": "English",
-  "language.uk-UA": "Ukrainian",
-  "language.es-ES": "Spanish",
-  "languageModal.title": "Language",
+  "language.en-GB": "Inglés",
+  "language.en-US": "Español (Latinoamérica)",
+  "language.uk-UA": "Ucraniano",
+  "languageModal.title": "Idioma",
   "languageModal.description":
-    "Choose the app language. Changes apply immediately.",
-  "languageModal.close": "Close",
-  "languageModal.selectLanguage": "Set language to {{name}}",
+    "Elige el idioma de la aplicación. Los cambios se aplican inmediatamente.",
+  "languageModal.close": "Cerrar",
+  "languageModal.selectLanguage": "Establecer idioma: {{name}}",
 
   "startScreen.cocktails_all.label": "All cocktails",
   "startScreen.cocktails_all.description": "Browse every recipe",

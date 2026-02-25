@@ -427,7 +427,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     setLanguageModalVisible(false);
   };
 
-  const handleSelectLanguage = (value: "en-GB" | "en-US" | "uk-UA" | "es-ES") => {
+  const handleSelectLanguage = (value: "en-GB" | "en-US" | "uk-UA") => {
     setLocale(value);
     scheduleModalClose(languageModalCloseTimeout, setLanguageModalVisible);
   };
