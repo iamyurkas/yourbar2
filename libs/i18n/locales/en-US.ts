@@ -504,7 +504,7 @@ export const enUSTranslations: TranslationDictionary = {
   "sideMenu.reloadBundledInventory": "Reload bundled inventory",
   "language.en-GB": "English",
   "language.en-US": "English (US)",
-  "language.uk-UA": "Українська",
+  "language.uk-UA": "Ukrainian",
   "languageModal.title": "Language",
   "languageModal.description":
     "Choose the app language. Changes apply immediately.",
