@@ -1,49 +1,46 @@
 const CYRILLIC_TO_SORT_TOKEN: Record<string, string> = {
-  А: 'A',
-  Б: 'B',
-  В: 'V',
-  Г: 'H',
-  Ґ: 'G',
-  Д: 'D',
-  Е: 'E',
-  Є: 'EZ',
-  Ж: 'ZH',
-  З: 'Z',
-  И: 'Y',
-  І: 'I',
-  Ї: 'IZ',
-  Й: 'YZ',
-  К: 'K',
-  Л: 'L',
-  М: 'M',
-  Н: 'N',
-  О: 'O',
-  П: 'P',
-  Р: 'R',
-  С: 'S',
-  Т: 'T',
-  У: 'U',
-  Ф: 'F',
-  Х: 'XH',
-  Ц: 'XC',
-  Ч: 'XCH',
-  Ш: 'XSH',
-  Щ: 'XSHCH',
-  Ь: 'XZ',
-  Ю: 'YYU',
-  Я: 'YYA',
+  А: "A",
+  Б: "BA",
+  В: "BBA",
+  Г: "BBH",
+  Ґ: "BG",
+  Д: "DA",
+  Е: "EA",
+  Є: "ED",
+  Ж: "EZH",
+  З: "EZZ",
+  И: "EZZY",
+  І: "IA",
+  Ї: "IY",
+  Й: "IZ",
+  К: "K",
+  Л: "L",
+  М: "M",
+  Н: "N",
+  О: "O",
+  П: "P",
+  Р: "R",
+  С: "S",
+  Т: "T",
+  У: "UA",
+  Ф: "UF",
+  Х: "XHA",
+  Ц: "XHCA",
+  Ч: "XHCH",
+  Ш: "XSHA",
+  Щ: "XSHCH",
+  Ь: "XZ",
+  Ю: "YZU",
+  Я: "YZYA",
 };
 
 function normalizeLatinChar(char: string): string {
-  return char
-    .normalize('NFD')
-    .replace(/\p{M}/gu, '')
-    .toUpperCase();
+  return char.normalize("NFD").replace(/\p{M}/gu, "").toUpperCase();
 }
 
 function toGlobalSortKey(value: string): string {
-  const upper = value.normalize('NFKC').toUpperCase();
-  let key = '';
+  const upper = value.normalize("NFKC").toUpperCase();
+  let key = "";
 
   for (const char of upper) {
     const mapped = CYRILLIC_TO_SORT_TOKEN[char];
@@ -69,8 +66,8 @@ export function compareGlobalAlphabet(left: string, right: string): number {
     return 1;
   }
 
-  const normalizedLeft = left.normalize('NFKC').toUpperCase();
-  const normalizedRight = right.normalize('NFKC').toUpperCase();
+  const normalizedLeft = left.normalize("NFKC").toUpperCase();
+  const normalizedRight = right.normalize("NFKC").toUpperCase();
 
   if (normalizedLeft < normalizedRight) {
     return -1;
@@ -93,5 +90,5 @@ export function compareOptionalGlobalAlphabet(
   left?: string | null,
   right?: string | null,
 ): number {
-  return compareGlobalAlphabet(left ?? '', right ?? '');
+  return compareGlobalAlphabet(left ?? "", right ?? "");
 }
