@@ -31,6 +31,7 @@ import {
   getVisibleIngredientIdsForCocktail,
 } from '@/libs/ingredient-availability';
 import { normalizeSearchText } from '@/libs/search-normalization';
+import { compareGlobalAlphabet } from '@/libs/global-sort';
 import { getPluralCategory } from '@/libs/i18n/plural';
 import { useI18n } from '@/libs/i18n/use-i18n';
 import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
@@ -357,7 +358,7 @@ export default function ShakerScreen() {
         }
       }
 
-      return normalizedNameA.localeCompare(normalizedNameB);
+      return compareGlobalAlphabet(normalizedNameA, normalizedNameB);
     });
   }, [defaultTagColor, ingredients, t]);
 
@@ -615,7 +616,7 @@ export default function ShakerScreen() {
     return Array.from(groups.values())
       .map((group) => ({
         ...group,
-        ingredients: group.ingredients.sort((a, b) => a.name.localeCompare(b.name)),
+        ingredients: group.ingredients.sort((a, b) => compareGlobalAlphabet(a.name, b.name)),
       }))
       .sort((a, b) => {
         const orderA = orderMap.get(a.key);
@@ -635,7 +636,7 @@ export default function ShakerScreen() {
           }
         }
 
-        return a.name.localeCompare(b.name);
+        return compareGlobalAlphabet(a.name, b.name);
       });
   }, [availableTagOptions, defaultTagColor, effectiveFilteredIngredients]);
 
@@ -868,7 +869,7 @@ export default function ShakerScreen() {
     });
 
     const sortedGroups = Array.from(selectedByGroup.entries()).sort(([groupKeyA], [groupKeyB]) =>
-      groupKeyA.localeCompare(groupKeyB),
+      compareGlobalAlphabet(groupKeyA, groupKeyB),
     );
 
     const selectionExpression = sortedGroups
@@ -876,7 +877,7 @@ export default function ShakerScreen() {
         const names = Array.from(ingredientIds)
           .map((ingredientId) => ingredientById.get(ingredientId)?.name?.trim())
           .filter((name): name is string => Boolean(name))
-          .sort((nameA, nameB) => nameA.localeCompare(nameB));
+          .sort((nameA, nameB) => compareGlobalAlphabet(nameA, nameB));
 
         if (names.length === 0) {
           return null;

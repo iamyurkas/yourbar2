@@ -49,6 +49,7 @@ import { GLASSWARE } from "@/constants/glassware";
 import { useAppColors } from "@/constants/theme";
 import { getPluralCategory } from "@/libs/i18n/plural";
 import { useI18n } from "@/libs/i18n/use-i18n";
+import { compareGlobalAlphabet, compareOptionalGlobalAlphabet } from "@/libs/global-sort";
 import {
   buildReturnToParams,
   parseReturnToParams,
@@ -550,7 +551,7 @@ export default function CreateCocktailScreen() {
 
   const availableCocktailTags = useMemo(() => {
     const sortedCustom = [...customCocktailTags].sort((a, b) =>
-      (a.name ?? "").localeCompare(b.name ?? ""),
+      compareOptionalGlobalAlphabet(a.name, b.name),
     );
     return [...BUILTIN_COCKTAIL_TAGS, ...sortedCustom];
   }, [customCocktailTags]);
@@ -1038,12 +1039,6 @@ export default function CreateCocktailScreen() {
   const sortedUnitOptions = useMemo(() => {
     const category = usePluralUnitsInPicker ? getPluralCategory(locale, 2) : "one";
     const form = usePluralUnitsInPicker ? "plural" : "singular";
-    const collator = new Intl.Collator(locale, {
-      usage: "sort",
-      sensitivity: "base",
-      numeric: true,
-    });
-
     const mappedOptions = COCKTAIL_UNIT_OPTIONS.map((option) => {
       let displayLabel = t(`unit.${option.id}.${category}`);
       if (displayLabel === `unit.${option.id}.${category}`) {
@@ -1064,7 +1059,7 @@ export default function CreateCocktailScreen() {
     const namedUnitOptions = mappedOptions
       .filter((option) => option !== emptyUnitOption)
       .sort((a, b) => {
-        const labelDiff = collator.compare(a.displayLabel.trim(), b.displayLabel.trim());
+        const labelDiff = compareGlobalAlphabet(a.displayLabel.trim(), b.displayLabel.trim());
         if (labelDiff !== 0) {
           return labelDiff;
         }

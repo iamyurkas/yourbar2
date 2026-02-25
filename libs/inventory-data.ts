@@ -1,6 +1,7 @@
 import bundledData from '@/assets/data/data.json';
 import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
+import { compareGlobalAlphabet } from '@/libs/global-sort';
 
 export type InventoryData = typeof bundledData;
 
@@ -65,7 +66,7 @@ function hydrateTagList(
     resolved.set(id, { id, name, color });
   });
 
-  const list = Array.from(resolved.values()).sort((a, b) => a.id - b.id || a.name.localeCompare(b.name));
+  const list = Array.from(resolved.values()).sort((a, b) => a.id - b.id || compareGlobalAlphabet(a.name, b.name));
   return list.length > 0 ? list : undefined;
 }
 

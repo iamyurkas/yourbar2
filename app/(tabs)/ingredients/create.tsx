@@ -29,6 +29,7 @@ import { TagPill } from '@/components/TagPill';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { useAppColors } from '@/constants/theme';
 import { useI18n } from '@/libs/i18n/use-i18n';
+import { compareOptionalGlobalAlphabet } from '@/libs/global-sort';
 import { resolveImageSource } from '@/libs/image-source';
 import { buildReturnToParams, skipDuplicateBack } from '@/libs/navigation';
 import { shouldStorePhoto, storePhoto } from '@/libs/photo-storage';
@@ -331,7 +332,7 @@ export default function IngredientFormScreen() {
 
   const availableIngredientTags = useMemo(() => {
     const sortedCustom = [...customIngredientTags].sort((a, b) =>
-      (a.name ?? '').localeCompare(b.name ?? ''),
+      compareOptionalGlobalAlphabet(a.name, b.name),
     );
     return [...BUILTIN_INGREDIENT_TAGS, ...sortedCustom];
   }, [customIngredientTags]);

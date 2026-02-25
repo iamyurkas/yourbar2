@@ -22,6 +22,7 @@ import {
   toIngredientStorageRecord,
 } from '@/libs/inventory-utils';
 import { normalizeSearchText } from '@/libs/search-normalization';
+import { compareGlobalAlphabet, compareOptionalGlobalAlphabet } from '@/libs/global-sort';
 import {
   type AppLocale,
   type AppTheme,
@@ -238,7 +239,7 @@ function sanitizeCustomTags<TTag extends { id?: number | null; name?: string | n
     map.set(rawId, { id: Math.trunc(rawId), name, color });
   });
 
-  return Array.from(map.values()).sort((a, b) => a.name.localeCompare(b.name));
+  return Array.from(map.values()).sort((a, b) => compareGlobalAlphabet(a.name, b.name));
 }
 
 function getNextCustomTagId(tags: readonly { id?: number | null }[], minimum: number): number {
@@ -550,11 +551,11 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   ]);
 
   const cocktails = useMemo(
-    () => [...(inventoryState?.cocktails ?? [])].sort((a, b) => (a.name ?? '').localeCompare(b.name ?? '')),
+    () => [...(inventoryState?.cocktails ?? [])].sort((a, b) => compareOptionalGlobalAlphabet(a.name, b.name)),
     [inventoryState?.cocktails],
   );
   const ingredients = useMemo(
-    () => [...(inventoryState?.ingredients ?? [])].sort((a, b) => (a.name ?? '').localeCompare(b.name ?? '')),
+    () => [...(inventoryState?.ingredients ?? [])].sort((a, b) => compareOptionalGlobalAlphabet(a.name, b.name)),
     [inventoryState?.ingredients],
   );
   const localizedCocktails = useMemo(() => localizeCocktails(cocktails, appLocale), [appLocale, cocktails]);
@@ -786,7 +787,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         created = normalized as Cocktail;
 
         const nextCocktails = [...prev.cocktails, created].sort((a, b) =>
-          a.searchNameNormalized.localeCompare(b.searchNameNormalized),
+          compareGlobalAlphabet(a.searchNameNormalized, b.searchNameNormalized),
         );
 
         return {
@@ -888,7 +889,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         created = normalized as Ingredient;
 
         const nextIngredients = [...prev.ingredients, created].sort((a, b) =>
-          a.searchNameNormalized.localeCompare(b.searchNameNormalized),
+          compareGlobalAlphabet(a.searchNameNormalized, b.searchNameNormalized),
         );
 
         return {
@@ -945,10 +946,10 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       });
 
       const cocktails = [...baseState.cocktails, ...userCocktails].sort((a, b) =>
-        a.searchNameNormalized.localeCompare(b.searchNameNormalized),
+        compareGlobalAlphabet(a.searchNameNormalized, b.searchNameNormalized),
       );
       const ingredients = [...baseState.ingredients, ...userIngredients].sort((a, b) =>
-        a.searchNameNormalized.localeCompare(b.searchNameNormalized),
+        compareGlobalAlphabet(a.searchNameNormalized, b.searchNameNormalized),
       );
 
       return {
@@ -1109,7 +1110,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         merged.push(item);
       });
 
-      merged.sort((a, b) => a.searchNameNormalized.localeCompare(b.searchNameNormalized));
+      merged.sort((a, b) => compareGlobalAlphabet(a.searchNameNormalized, b.searchNameNormalized));
       return merged;
     };
 
@@ -1300,7 +1301,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         const nextIngredients = [...prev.ingredients];
         nextIngredients[ingredientIndex] = updated;
         nextIngredients.sort((a, b) =>
-          a.searchNameNormalized.localeCompare(b.searchNameNormalized),
+          compareGlobalAlphabet(a.searchNameNormalized, b.searchNameNormalized),
         );
 
         return {
@@ -1473,7 +1474,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       nextCocktails.splice(existingIndex, 1, updated);
 
       const sortedCocktails = nextCocktails.sort((a, b) =>
-        a.searchNameNormalized.localeCompare(b.searchNameNormalized),
+        compareGlobalAlphabet(a.searchNameNormalized, b.searchNameNormalized),
       );
 
       return {
@@ -1528,7 +1529,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
 
       if (didUpdateDependents) {
         nextIngredients.sort((a, b) =>
-          a.searchNameNormalized.localeCompare(b.searchNameNormalized),
+          compareGlobalAlphabet(a.searchNameNormalized, b.searchNameNormalized),
         );
       }
 
@@ -1714,7 +1715,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     setCustomCocktailTags((prev) => {
       const nextId = getNextCustomTagId(prev, BUILTIN_COCKTAIL_TAG_MAX);
       created = { id: nextId, name: trimmedName, color };
-      return [...prev, created].sort((a, b) => (a.name ?? '').localeCompare(b.name ?? ''));
+      return [...prev, created].sort((a, b) => compareOptionalGlobalAlphabet(a.name, b.name));
     });
 
     return created;
@@ -1744,7 +1745,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         updated = { id: prev[index].id, name: trimmedName, color };
         const next = [...prev];
         next[index] = updated;
-        next.sort((a, b) => (a.name ?? '').localeCompare(b.name ?? ''));
+        next.sort((a, b) => compareOptionalGlobalAlphabet(a.name, b.name));
         return next;
       });
 
@@ -1848,7 +1849,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     setCustomIngredientTags((prev) => {
       const nextId = getNextCustomTagId(prev, BUILTIN_INGREDIENT_TAG_MAX);
       created = { id: nextId, name: trimmedName, color };
-      return [...prev, created].sort((a, b) => (a.name ?? '').localeCompare(b.name ?? ''));
+      return [...prev, created].sort((a, b) => compareOptionalGlobalAlphabet(a.name, b.name));
     });
 
     return created;
@@ -1878,7 +1879,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         updated = { id: prev[index].id, name: trimmedName, color };
         const next = [...prev];
         next[index] = updated;
-        next.sort((a, b) => (a.name ?? '').localeCompare(b.name ?? ''));
+        next.sort((a, b) => compareOptionalGlobalAlphabet(a.name, b.name));
         return next;
       });
 
