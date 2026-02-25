@@ -6098,7 +6098,7 @@
       "id": 100,
       "name": "Bloody Bull",
       "synonyms": ["Beefy Bloody Mary"],
-      "description": "A savory, Bloody Mary-style highball that combines **vodka**, **tomato juice**, and beef bouillon with spice and umami depth.",
+      "description": "A savoury, Bloody Mary-style highball that combines **vodka**, **tomato juice**, and beef bouillon with spice and umami depth.",
       "instructions": "1. Fill a shaker tin with **ice**.\n2. Add 50 ml of **vodka**, 50 ml of **beef bouillon**, 50 ml of **tomato juice**, 5 ml of **rich simple syrup**, a dash of **lemon juice**, 3 dashes of **Worcestershire sauce**, a pinch of **celery salt**, a pinch of **black pepper**, and 2 pinches of **salt**.\n3. Add plenty of **ice** to the tin with the ingredients.\n4. Hold a second empty tin below and slightly to the side of the first tin.\n5. Pour the cocktail in a long, controlled stream from the first tin into the second tin to aerate and chill it.\n6. Pour the liquid back into the first tin in the same way.\n7. Repeat the back-and-forth throw 5 times.\n8. Strain into a highball glass filled with **ice**.\n9. Garnish with an **olive**.",
       "photoUri": "assets/cocktails/100-bloody-bull.jpg",
       "glassId": "highball_glass",
@@ -6195,7 +6195,7 @@
     {
       "id": 101,
       "name": "Bloody Mary",
-      "description": "A savory **vodka** cocktail with **tomato juice**, spices, and a peppery bite.",
+      "description": "A savoury **vodka** cocktail with **tomato juice**, spices, and a peppery bite.",
       "instructions": "1. In a mixing tin, add 45 ml of **vodka**, 90 ml of **tomato juice**, 15 ml of **lemon juice**, 2 dashes of **worcestershire sauce**, 2 dashes of **Tabasco**, a pinch of **celery salt**, and a pinch of **black pepper**.\n2. Add plenty of **ice** to the tin with the ingredients.\n3. Hold the second empty tin below and slightly to the side of the first one.\n4. Pour the cocktail in a long, controlled stream from the first tin into the second tin.\nLet the liquid fall through the air— this aerates the drink and chills it gently.\n5. Pour the liquid back into the first tin in the same way.\n6. Repeat this back-and-forth “throw” 5 times.\nThe goal is to chill and lightly dilute the drink without over-diluting or bruising it.\n7. Strain into a highball glass.\n8. Garnish with a **celery** stalk and a **lemon** wedge.",
       "photoUri": "assets/cocktails/101-bloody-mary.jpg",
       "glassId": "highball_glass",
@@ -29116,7 +29116,7 @@
     {
       "id": 480,
       "name": "Sangrita",
-      "description": "A savory, spicy non-alcoholic tomato-citrus drink that works both as a standalone refresher and as a bold mixer. This version is an easy-to-make 1L pitcher.",
+      "description": "A savoury, spicy non-alcoholic tomato-citrus drink that works both as a standalone refresher and as a bold mixer. This version is an easy-to-make 1L pitcher.",
       "instructions": "1. Fill a pitcher with 300 g of **ice**.\n2. Add 600 ml of **tomato juice**, 300 ml of **orange juice**, 100 ml of **lemon juice**, 20 ml of **Tabasco**, 1 teaspoon of **black pepper**, and a teaspoon of **salt**.\n3. Stir gently to combine.\n4. Garnish with an **orange** slice and a **chili pepper**.",
       "photoUri": "assets/cocktails/480-sangrita.jpg",
       "glassId": "pitcher",
@@ -34174,7 +34174,7 @@
     {
       "id": 563,
       "name": "Vampiro",
-      "description": "A vibrant and spicy Mexican-style cocktail. It is a savory blend of **tequila** and fruit juices, enhanced with **honey**, onion, and chili for a complex, bold kick.",
+      "description": "A vibrant and spicy Mexican-style cocktail. It is a savoury blend of **tequila** and fruit juices, enhanced with **honey**, onion, and chili for a complex, bold kick.",
       "instructions": "1. Fill a shaker with **ice**.\n2. Add 50 ml of **tequila reposado**, 70 ml of **tomato juice**, 30 ml of **orange juice**, 7.5 ml of **lime juice**, a teaspoon of **honey**, 0.5 peels of **silver onion**, 3 slices of red **chili pepper**, 3 drops of **worcestershire sauce**, and a pinch of **salt**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled highball glass.\n5. Garnish with a wedge of **lime** and a slice of red **chili pepper**.",
       "photoUri": "assets/cocktails/563-vampiro.jpg",
       "glassId": "highball_glass",
@@ -36787,7 +36787,7 @@
     {
       "id": 13,
       "name": "Amaro",
-      "description": "Amaro is a bitter-sweet Italian herbal liqueur produced by infusing alcohol with a blend of botanicals, including herbs, roots, spices, and citrus peels, then sweetening it and aging the mixture.",
+      "description": "Amaro is a bitter-sweet Italian herbal liqueur produced by infusing alcohol with a blend of botanicals, including herbs, roots, spices, and citrus peels, then sweetening it and ageing the mixture.",
       "tags": [1],
       "photoUri": "assets/ingredients/13-amaro.jpg"
     },
@@ -36818,7 +36818,7 @@
     {
       "id": 17,
       "name": "Amontillado Sherry",
-      "description": "Nutty, amber sherry that begins as Fino before aging oxidatively, around 16–18% ABV. Dry with savory, toasted notes. Adds depth to cobblers and stirred cocktails.",
+      "description": "Nutty, amber sherry that begins as Fino before ageing oxidatively, around 16–18% ABV. Dry with savoury, toasted notes. Adds depth to cobblers and stirred cocktails.",
       "tags": [2],
       "photoUri": "assets/ingredients/17-amontillado-sherry.jpg"
     },
@@ -37258,14 +37258,14 @@
     {
       "id": 78,
       "name": "Celery",
-      "description": "Celery provides a fresh, crisp, and slightly peppery flavour to cocktails. It is commonly used as a garnish for Bloody Marys and other savory drinks. Celery juice or muddled stalks can also add a refreshing vegetal note.",
+      "description": "Celery provides a fresh, crisp, and slightly peppery flavour to cocktails. It is commonly used as a garnish for Bloody Marys and other savoury drinks. Celery juice or muddled stalks can also add a refreshing vegetal note.",
       "tags": [7],
       "photoUri": "assets/ingredients/78-celery.jpg"
     },
     {
       "id": 79,
       "name": "Celery Salt",
-      "description": "Seasoned salt with celery seed that adds savory lift to Bloody Marys and micheladas.",
+      "description": "Seasoned salt with celery seed that adds savoury lift to Bloody Marys and micheladas.",
       "tags": [8],
       "photoUri": "assets/ingredients/79-celery-salt.jpg"
     },
@@ -37352,7 +37352,7 @@
     {
       "id": 91,
       "name": "Chili Powder",
-      "description": "Chili powder provides a warm, smoky heat that enhances savory and adventurous cocktails. It is often used as a glass rim seasoning or mixed into syrups. Works well in **tequila** and **mezcal**-based drinks.",
+      "description": "Chili powder provides a warm, smoky heat that enhances savoury and adventurous cocktails. It is often used as a glass rim seasoning or mixed into syrups. Works well in **tequila** and **mezcal**-based drinks.",
       "tags": [8],
       "photoUri": "assets/ingredients/91-chili-powder.jpg"
     },
@@ -37415,7 +37415,7 @@
     {
       "id": 100,
       "name": "Coca-Cola",
-      "description": "Coca-Cola is a caramelized cola soda created in the late 19th Century. Its blend of caffeine, sweetness, and spice makes it a versatile mixer with rum or whiskey. Bottlers worldwide sell it in cans, bottles, and fountain formats.",
+      "description": "Coca-Cola is a caramelised cola soda created in the late 19th Century. Its blend of caffeine, sweetness, and spice makes it a versatile mixer with rum or whiskey. Bottlers worldwide sell it in cans, bottles, and fountain formats.",
       "tags": [6],
       "baseIngredientId": 114,
       "photoUri": "assets/ingredients/100-coca-cola.jpg"
@@ -37906,7 +37906,7 @@
     {
       "id": 168,
       "name": "Gold Jamaican Rum",
-      "description": "The primary difference for gold Jamaican rum lies in its aging process, which gives it a richer, more complex flavour profile than white rum, while being less bold and aged than dark rum. Jamaican Rums in general are known for their distinct \"funky\" character due to a unique high-ester fermentation process.",
+      "description": "The primary difference for gold Jamaican rum lies in its ageing process, which gives it a richer, more complex flavour profile than white rum, while being less bold and aged than dark rum. Jamaican Rums in general are known for their distinct \"funky\" character due to a unique high-ester fermentation process.",
       "tags": [0],
       "styleIngredientId": 170,
       "photoUri": "assets/ingredients/168-gold-jamaican-rum.jpg"
@@ -38050,7 +38050,7 @@
     {
       "id": 188,
       "name": "Hennessy XO",
-      "description": "Hennessy is a world-famous **cognac** brand with an ABV of 40%. It offers rich notes of fruit, vanilla, and oak from barrel aging. Enjoyed neat, on the rocks, or in classic cocktails.",
+      "description": "Hennessy is a world-famous **cognac** brand with an ABV of 40%. It offers rich notes of fruit, vanilla, and oak from barrel ageing. Enjoyed neat, on the rocks, or in classic cocktails.",
       "tags": [0],
       "baseIngredientId": 112,
       "photoUri": "assets/ingredients/188-hennessy-xo.jpg"
@@ -38266,7 +38266,7 @@
     {
       "id": 217,
       "name": "Laphroaig",
-      "description": "Iconic Islay single malt known for medicinal peat smoke and seaweed notes, about 40–48% ABV. Oak aging adds vanilla sweetness beneath the smoke. Divisive but distinctive in cocktails or neat.",
+      "description": "Iconic Islay single malt known for medicinal peat smoke and seaweed notes, about 40–48% ABV. Oak ageing adds vanilla sweetness beneath the smoke. Divisive but distinctive in cocktails or neat.",
       "tags": [0],
       "baseIngredientId": 200,
       "photoUri": "assets/ingredients/217-laphroaig.jpg"
@@ -38394,7 +38394,7 @@
     {
       "id": 235,
       "name": "Maple syrup",
-      "description": "Maple syrup is a natural sweetener made from reduced maple sap. Its caramelized, woody notes pair well with whiskey and coffee cocktails. Use sparingly since it is richer than simple syrup.",
+      "description": "Maple syrup is a natural sweetener made from reduced maple sap. Its caramelised, woody notes pair well with whiskey and coffee cocktails. Use sparingly since it is richer than simple syrup.",
       "tags": [5],
       "photoUri": "assets/ingredients/235-maple-syrup.jpg"
     },
@@ -38459,7 +38459,7 @@
     {
       "id": 244,
       "name": "Olive",
-      "description": "Briny, savory fruit used to garnish Martinis and savory cocktails. Adds a salty contrast to crisp spirits.",
+      "description": "Briny, savoury fruit used to garnish Martinis and savoury cocktails. Adds a salty contrast to crisp spirits.",
       "tags": [7],
       "photoUri": "assets/ingredients/244-olive.jpg"
     },
@@ -38867,7 +38867,7 @@
     {
       "id": 301,
       "name": "Rosemary",
-      "description": "Rosemary is a woody mediterranean herb with piney, resinous aroma. It adds savory depth to **gin**, **whiskey**, and citrus cocktails whether infused or used as a garnish. Smack the sprig before serving to release its oils without overwhelming the drink.",
+      "description": "Rosemary is a woody mediterranean herb with piney, resinous aroma. It adds savoury depth to **gin**, **whiskey**, and citrus cocktails whether infused or used as a garnish. Smack the sprig before serving to release its oils without overwhelming the drink.",
       "tags": [8],
       "photoUri": "assets/ingredients/301-rosemary.jpg"
     },
@@ -38903,7 +38903,7 @@
     {
       "id": 306,
       "name": "Sage",
-      "description": "An aromatic herb with earthy, savory notes that pairs well with citrus and berries in mocktails.",
+      "description": "An aromatic herb with earthy, savoury notes that pairs well with citrus and berries in mocktails.",
       "tags": [7],
       "photoUri": "assets/ingredients/306-sage.jpg"
     },
@@ -38969,7 +38969,7 @@
     {
       "id": 315,
       "name": "Silver Onion",
-      "description": "Pearl onions are sometimes used as savory cocktail garnishes. The **Gibson** cocktail famously uses pickled onions. Adds a sharp, tangy bite.",
+      "description": "Pearl onions are sometimes used as savoury cocktail garnishes. The **Gibson** cocktail famously uses pickled onions. Adds a sharp, tangy bite.",
       "tags": [8],
       "photoUri": "assets/ingredients/315-silver-onion.jpg"
     },
