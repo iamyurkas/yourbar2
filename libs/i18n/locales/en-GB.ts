@@ -37,7 +37,7 @@ export const enGBTranslations: TranslationDictionary = {
   "cocktails.helpMyTitle": "My cocktails",
   "cocktails.helpMyText":
     "This screen shows cocktails you can make with your current ingredients.\n\nUse search to find your recipes quickly, and use filters to narrow the list by tags or method.",
-  "cocktails.helpFavoritesTitle": "Favourites cocktails",
+  "cocktails.helpFavoritesTitle": "Favourite cocktails",
   "cocktails.helpFavoritesText":
     "This screen shows cocktails you ranked.\n\nUse search and filters to find what you want faster.",
   "cocktails.helpAllTitle": "All cocktails",
@@ -463,7 +463,7 @@ export const enGBTranslations: TranslationDictionary = {
   "sideMenu.restartOnboardingCaption": "Show the guided tutorial again",
 
   "app.loadingTagline": "your rules!",
-  "appDialog.closeDialog": "Close dialog",
+  "appDialog.closeDialog": "Close dialogue",
   "tagEditor.hue": "Hue",
   "tagEditor.tone": "Tone",
   "tagEditor.editTag": "Edit tag",
