@@ -1048,7 +1048,7 @@
       "id": 18,
       "name": "Alexander's Big Brother",
       "synonyms": ["Blue Alexander"],
-      "description": "A decadent, creamy **gin**-based cocktail combining **gin**, **triple sec**, and **blue curaçao**. Silky, dessert-like, and indulgent, with a subtle citrus brightness and a striking color. Garnished with **physalis** for a lightly tart contrast.",
+      "description": "A decadent, creamy **gin**-based cocktail combining **gin**, **triple sec**, and **blue curaçao**. Silky, dessert-like, and indulgent, with a subtle citrus brightness and a striking colour. Garnished with **physalis** for a lightly tart contrast.",
       "instructions": "1. Pour 45 ml of **gin**, 7.5 ml of **triple sec**, 22.5 ml of **blue curaçao**, 22.5 ml of **cream**, 5 ml of **rich simple syrup**, and an **egg white** into a shaker.\n2. Dry shake (without **ice**) vigorously for about 15 seconds to emulsify the **egg**.\n3. Add about 150 g of **ice**.\n4. Shake vigorously for about 15 seconds until well chilled.\n5. Strain into a chilled coupe glass.\n6. Garnish with a **physalis**.",
       "photoUri": "assets/cocktails/18-alexander-s-big-brother.jpg",
       "glassId": "coupe",
@@ -2116,7 +2116,7 @@
       "name": "Angel's Tit",
       "synonyms": ["Chocolate Cake Shooter"],
       "description": "A classic creamy layered shooter made with **crème de cacao brown**, maraschino liqueur, and fresh **cream**. Sweet, silky, and dessert-like, with a visual contrast of dark **chocolate** and white **cream**, traditionally garnished with a **cherry** on top.",
-      "instructions": "1. Chill a shooter glass to help keep the layers well defined.\n2. Carefully pour 20 ml of **crème de cacao brown** into the bottom of the glass.\n3. Slowly layer 10 ml of **Luxardo maraschino** liqueur over the back of a spoon so it sits above the cacao.\n4. Gently float 10 ml of **cream** on top, again using the back of a spoon to create a clean white layer.\n5. Garnish with a **cherry** placed in the center of the **cream** layer.\n6. Serve immediately and drink in one shot.",
+      "instructions": "1. Chill a shooter glass to help keep the layers well defined.\n2. Carefully pour 20 ml of **crème de cacao brown** into the bottom of the glass.\n3. Slowly layer 10 ml of **Luxardo maraschino** liqueur over the back of a spoon so it sits above the cacao.\n4. Gently float 10 ml of **cream** on top, again using the back of a spoon to create a clean white layer.\n5. Garnish with a **cherry** placed in the centre of the **cream** layer.\n6. Serve immediately and drink in one shot.",
       "photoUri": "assets/cocktails/35-angel-s-tit.jpg",
       "glassId": "shooter",
       "methodIds": ["layer"],
@@ -3567,7 +3567,7 @@
     {
       "id": 60,
       "name": "Bali Rum Trader",
-      "description": "A lush, tropical rum cocktail inspired by southeast asian flavors. **White rum** forms a clean, crisp base, while **Pisang Ambon** brings sweet **banana** depth and **pineapple juice** adds bright acidity. the result is a smooth, aromatic drink that balances fruitiness with gentle strength, finished with a playful **banana** garnish.",
+      "description": "A lush, tropical rum cocktail inspired by southeast asian flavours. **White rum** forms a clean, crisp base, while **Pisang Ambon** brings sweet **banana** depth and **pineapple juice** adds bright acidity. the result is a smooth, aromatic drink that balances fruitiness with gentle strength, finished with a playful **banana** garnish.",
       "instructions": "1. Fill a shaker with **ice**.\n2. Add 50 ml of **white rum**, 25 ml of **Pisang Ambon**, and 25 ml of **pineapple juice**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled coupe glass.\n5. Garnish with a slice of **banana**.",
       "photoUri": "assets/cocktails/60-bali-rum-trader.jpg",
       "glassId": "coupe",
@@ -8591,7 +8591,7 @@
       "id": 141,
       "name": "Bushwacker",
       "synonyms": ["Bushwacker Milkshake"],
-      "description": "A delicious, creamy long cocktail that is very similar to the **Piña Colada**. the recipe here is for 3 cocktails. a blender should be big enough to fit at least a liter of the mixture.",
+      "description": "A delicious, creamy long cocktail that is very similar to the **Piña Colada**. the recipe here is for 3 cocktails. a blender should be big enough to fit at least a litre of the mixture.",
       "instructions": "For 3 cocktails:\n1. Add 90 ml of **dark rum**, 90 ml of **coffee liqueur**, 90 ml of **crème de cacao**, 180 ml of **cream** of coconut, 180 ml of **milk**, and 150 g of **ice** to a blender.\n2. Blend on high until smooth, frothy, and milkshake-like (typically 10–25 seconds).\n3. Pour into chilled shot glasses or a chilled hurricane glass.\n4. Top with a sprinkle of freshly grated **nutmeg** and 3 **maraschino cherries**.",
       "photoUri": "assets/cocktails/141-bushwacker.jpg",
       "glassId": "hurricane_glass",
@@ -11004,7 +11004,7 @@
       "id": 179,
       "name": "Cold Blooded",
       "synonyms": ["Rosemary Cranberry Sour"],
-      "description": "A sophisticated herbal twist on a fruit sour, blending the rich **orange** notes of **Grand Marnier** with tart cranberry and fresh **lemon**. Infused with aromatic **rosemary**, this cocktail offers a crisp, vibrant, and perfectly balanced flavor profile that is both refreshing and complex.",
+      "description": "A sophisticated herbal twist on a fruit sour, blending the rich **orange** notes of **Grand Marnier** with tart cranberry and fresh **lemon**. Infused with aromatic **rosemary**, this cocktail offers a crisp, vibrant, and perfectly balanced flavour profile that is both refreshing and complex.",
       "instructions": "1. Place the first **rosemary** sprig and **lemon juice** into a cocktail shaker and muddle gently to release the aromatic oils.\n2. Add **Grand Marnier**, **cranberry juice**, and **rich simple syrup** to the shaker.\n3. Fill the shaker with **ice**.\n4. Shake vigorously for about 15 seconds until well chilled.\n5. Double strain into a chilled rocks glass filled with fresh **ice** (preferably over a large cube).\n6. Garnish with the remaining fresh sprig of **rosemary** and serve immediately.",
       "photoUri": "assets/cocktails/179-cold-blooded.jpg",
       "glassId": "rocks_glass",
@@ -11574,7 +11574,7 @@
       "id": 188,
       "name": "Creamsicle",
       "synonyms": ["Orange Creamsicle"],
-      "description": "A luscious and velvety cocktail that perfectly captures the nostalgic flavor of an **orange** creamsicle. It balances the bright, citrusy notes of **vodka** and grand mariner with the rich, smooth texture of fresh **cream**.",
+      "description": "A luscious and velvety cocktail that perfectly captures the nostalgic flavour of an **orange** creamsicle. It balances the bright, citrusy notes of **vodka** and grand mariner with the rich, smooth texture of fresh **cream**.",
       "instructions": "1. Fill a shaker with **ice**.\n2. Pour 30 ml of **vodka**, 30 ml of **Grand Marnier**, 30 ml of **heavy cream**, and 7.5 ml of **rich simple syrup** (if desired) into the cocktail shaker.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled cocktail glass.\n5. Garnish with a fresh **orange** slice or zest.",
       "photoUri": "assets/cocktails/188-creamsicle.jpg",
       "glassId": "rocks_glass",
@@ -13267,7 +13267,7 @@
       "id": 215,
       "name": "Dubonnet Cocktail",
       "synonyms": ["Dubonnet and Gin"],
-      "description": "A sophisticated and spirit-forward classic cocktail that perfectly balances the herbal complexity of **gin** with the rich, wine-based aromatics of **dubonnet** rouge. Historically known as a favorite of the British royal family, it offers a deep, velvet texture and a refined botanical finish.",
+      "description": "A sophisticated and spirit-forward classic cocktail that perfectly balances the herbal complexity of **gin** with the rich, wine-based aromatics of **dubonnet** rouge. Historically known as a favourite of the British royal family, it offers a deep, velvet texture and a refined botanical finish.",
       "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 30 ml of **gin** and 60 ml of **dubonnet**.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled martini glass.\n5. Garnish with a **lemon** wedge.",
       "photoUri": "assets/cocktails/215-dubonnet-cocktail.jpg",
       "glassId": "martini",
@@ -14216,7 +14216,7 @@
       "id": 232,
       "name": "Fernandito",
       "synonyms": ["Fernet and Cola"],
-      "description": "Argentina's favorite mix of fernet and **cola** over **ice**.",
+      "description": "Argentina's favourite mix of fernet and **cola** over **ice**.",
       "instructions": "1. Fill a highball glass halfway with **ice**.\n2. Add 60 ml of **Fernet Branca** and 120 ml of **cola**.\n3. Stir very gently to combine without losing carbonation.\n4. Garnish with a **lemon** wedge.",
       "photoUri": "assets/cocktails/232-fernandito.jpg",
       "glassId": "highball_glass",
@@ -15281,7 +15281,7 @@
       "id": 250,
       "name": "Frost Bite",
       "synonyms": ["Blue Curacao and Tequila Cocktail"],
-      "description": "This cocktail features a striking blue color from **blue curaçao** layered with creamy sweetness.",
+      "description": "This cocktail features a striking blue colour from **blue curaçao** layered with creamy sweetness.",
       "instructions": "1. Fill a shaker with **ice**.\n2. Add 45 ml of **tequila blanco**, 30 ml of **blue curaçao**, 15 ml of **crème de cacao white**, and 15 ml of **cream**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled rocks glass filled with fresh **ice** (preferably over a large cube).\n5. Garnish with 2 **maraschino cherries**.",
       "photoUri": "assets/cocktails/250-frost-bite.jpg",
       "glassId": "rocks_glass",
@@ -16633,7 +16633,7 @@
       "id": 273,
       "name": "Golden Cadillac",
       "synonyms": ["Galliano and Crème de Cacao Cocktail"],
-      "description": "The golden cadillac is a sweet, creamy, retro dessert cocktail. Created in 1952 at poor red's in el dorado, california, it became popular in the 1960s for its rich, **vanilla**-forward flavor, similar to a **brandy** alexander but with **Galliano**.",
+      "description": "The golden cadillac is a sweet, creamy, retro dessert cocktail. Created in 1952 at poor red's in el dorado, california, it became popular in the 1960s for its rich, **vanilla**-forward flavour, similar to a **brandy** alexander but with **Galliano**.",
       "instructions": "1. Fill a shaker with **ice**.\n2. Add 20 ml of **Galliano**, 20 ml of crème de cacao white and 20 ml of **cream**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a cocktail glass.\n5. Garnish with grated **chocolate** and **nutmeg**.",
       "photoUri": "assets/cocktails/273-golden-cadillac.jpg",
       "glassId": "coupe",
@@ -16850,7 +16850,7 @@
       "id": 277,
       "name": "Greek Tragedy",
       "synonyms": ["Ouzo, Red Vermouth and Raspberry Cocktail"],
-      "description": "A sophisticated and vibrant wine-based sour that masterfully balances the herbal notes of **Ouzo** with the botanical depth of **red vermouth**. the addition of **raspberry liqueur** provides a lush fruity undertone, while fresh **lime juice** ensures a crisp, refreshing finish. Elegant and complex, it is a perfect modern twist on mediterranean flavors.",
+      "description": "A sophisticated and vibrant wine-based sour that masterfully balances the herbal notes of **Ouzo** with the botanical depth of **red vermouth**. the addition of **raspberry liqueur** provides a lush fruity undertone, while fresh **lime juice** ensures a crisp, refreshing finish. Elegant and complex, it is a perfect modern twist on mediterranean flavours.",
       "instructions": "1. Fill a shaker with **ice**.\n2. Add 30 ml of **Ouzo**, 30 ml of **red vermouth**, 30 ml of **raspberry liqueur**, and 20 ml of **lime juice**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Double-strain into a chilled glass.\n5. Garnish with a **cherry** and a **lime** twist.",
       "photoUri": "assets/cocktails/277-greek-tragedy.jpg",
       "glassId": "coupe",
@@ -18231,7 +18231,7 @@
       "name": "Hpnotiq Breeze",
       "synonyms": ["Hypnotic Breeze"],
       "description": "The Hpnotiq Breeze (also known as the Hypnotic Breeze) is a tropical cocktail featuring Hpnotiq, a sky-blue French liqueur made from **vodka**, **cognac**, and tropical fruit juices. the drink is known for its vibrant blue hue and refreshing, sweet-tart profile that blends passionfruit, mango, and citrus flavours.",
-      "instructions": "1. Fill a shaker with **ice**.\n2. Add 75 ml of **Hpnotiq**, 30 ml of **white rum**, 15 ml of **lime juice**, and 15 ml of **simple syrup**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a hurricane or martini glass filled with fresh **ice**.\n5. Slowly pour 15 ml of **pineapple juice** into the center to create the temporary tie-dye effect.\n6. Garnish with a **maraschino cherry** and a **lime** wheel.",
+      "instructions": "1. Fill a shaker with **ice**.\n2. Add 75 ml of **Hpnotiq**, 30 ml of **white rum**, 15 ml of **lime juice**, and 15 ml of **simple syrup**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a hurricane or martini glass filled with fresh **ice**.\n5. Slowly pour 15 ml of **pineapple juice** into the centre to create the temporary tie-dye effect.\n6. Garnish with a **maraschino cherry** and a **lime** wheel.",
       "photoUri": "assets/cocktails/300-hpnotiq-breeze.jpg",
       "glassId": "hurricane_glass",
       "methodIds": ["shake"],
@@ -19091,7 +19091,7 @@
     {
       "id": 314,
       "name": "Irish Pie Toddy",
-      "description": "A delightful twist on the **whiskey** sour that evokes the flavors of a homemade **apple** pie. the warmth of **Irish whiskey** pairs perfectly with sweet **vanilla** and crisp **apple juice**, balanced by a sharp citrus finish.",
+      "description": "A delightful twist on the **whiskey** sour that evokes the flavours of a homemade **apple** pie. the warmth of **Irish whiskey** pairs perfectly with sweet **vanilla** and crisp **apple juice**, balanced by a sharp citrus finish.",
       "instructions": "1. Pour the **whiskey**, **apple juice**, **vanilla syrup**, and **lemon juice** into a small saucepan.\n2. Stir gently to combine.\n3. Pour into a warm glass.\n4. Squeeze the **orange** zest over the top of the glass to release oils, then drop the peel in.\n5. Add the **cinnamon** stick and **apple** slice.",
       "photoUri": "assets/cocktails/314-irish-pie-tobby.jpg",
       "glassId": "toddy_glass",
@@ -20005,7 +20005,7 @@
       "id": 330,
       "name": "Jungle Bird",
       "synonyms": ["Campari Pineapple Cocktail"],
-      "description": "Tiki favorite blending **dark rum**, **Campari**, and **pineapple**.",
+      "description": "Tiki favourite blending **dark rum**, **Campari**, and **pineapple**.",
       "instructions": "1. Fill a shaker with **ice**.\n2. Add 45 ml of **blackstrap rum**, 20 ml of **Campari**, 45 ml of **pineapple juice**, 15 ml of **lime juice**, and 15 ml of **demerara sugar syrup**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled rocks glass.\n5. Garnish with a wedge of **pineapple**.",
       "photoUri": "assets/cocktails/330-jungle-bird.jpg",
       "glassId": "rocks_glass",
@@ -20761,7 +20761,7 @@
       "id": 343,
       "name": "Lava Flow",
       "description": "A lava flow is a visually striking hawaiian cocktail that combines a **strawberry daiquiri**-style base with a creamy **Piña Colada** top. the signature \"lava\" effect occurs when the denser **cream** mixture is poured over the **strawberry** base, causing the red puree to swirl upward along the sides of the glass.",
-      "instructions": "1. Add 30 ml of **white rum**, 30 ml of **Malibu rum**, and 60 g of **strawberry** to a blender. Blend until smooth and syrupy.\n2. Pour the **strawberry** mixture into a tall hurricane or highball glass.\n3. Add a **banana**, 60 ml of **pineapple juice**, 60 ml of **cream** of coconut, and 150 g of **ice** to the blender. Blend until smooth and frothy.\n4. Slowly pour the white mixture into the center of the glass over the **strawberry** base to create a layered effect.\n5. Garnish with a **pineapple** wedge and serve.",
+      "instructions": "1. Add 30 ml of **white rum**, 30 ml of **Malibu rum**, and 60 g of **strawberry** to a blender. Blend until smooth and syrupy.\n2. Pour the **strawberry** mixture into a tall hurricane or highball glass.\n3. Add a **banana**, 60 ml of **pineapple juice**, 60 ml of **cream** of coconut, and 150 g of **ice** to the blender. Blend until smooth and frothy.\n4. Slowly pour the white mixture into the centre of the glass over the **strawberry** base to create a layered effect.\n5. Garnish with a **pineapple** wedge and serve.",
       "photoUri": "assets/cocktails/343-lava-flow.jpg",
       "glassId": "hurricane_glass",
       "methodIds": ["blend"],
@@ -22924,7 +22924,7 @@
     {
       "id": 379,
       "name": "Midori Sour",
-      "description": "The Midori sour is a sweet and slightly sour cocktail with a delicious melon flavor.",
+      "description": "The Midori sour is a sweet and slightly sour cocktail with a delicious melon flavour.",
       "instructions": "1. Fill a shaker with **ice**.\n2. Add 60 ml of **Midori Melon liqueur**, 30 ml of **vodka**, 15 ml of **lemon juice**, and 15 ml of **lime juice**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled rocks glass.\n5. Top with 15 ml of **soda water**.\n6. Garnish with a peel of **lemon** and a **cherry**.",
       "photoUri": "assets/cocktails/379-midori-sour.jpg",
       "glassId": "rocks_glass",
@@ -23052,7 +23052,7 @@
       "id": 381,
       "name": "Mimosa",
       "synonyms": ["Buck's Fizz"],
-      "description": "Brunch favorite combining **sparkling wine** and fresh **orange juice**.",
+      "description": "Brunch favourite combining **sparkling wine** and fresh **orange juice**.",
       "instructions": "1. Add 75 ml of **orange juice** and 75 ml of **champagne** to a flute glass.\n2. Stir very gently to combine without losing carbonation.\n3. Express oils from an **orange** peel over the drink and use it as a garnish.",
       "photoUri": "assets/cocktails/381-mimosa.jpg",
       "glassId": "flute_glass",
@@ -24618,7 +24618,7 @@
     {
       "id": 407,
       "name": "Oatmeal Cookie",
-      "description": "This sweet and nostalgic shooter tastes remarkably like its namesake dessert. the combination of **cinnamon**, butterscotch, and **Irish cream** creates a flavor profile of baked goods, with an optional touch of **Jägermeister** adding a complex herbal depth.",
+      "description": "This sweet and nostalgic shooter tastes remarkably like its namesake dessert. the combination of **cinnamon**, butterscotch, and **Irish cream** creates a flavour profile of baked goods, with an optional touch of **Jägermeister** adding a complex herbal depth.",
       "instructions": "For 3 shots:\n1. Fill a shaker with **ice**.\n2. Add 45 ml of **Goldschläger**, 45 ml of **butterscotch liqueur**, and 45 ml of **Baileys**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into 3 chilled shooter glasses.",
       "photoUri": "assets/cocktails/407-oatmeal-cookie.jpg",
       "glassId": "shooter",
@@ -25239,7 +25239,7 @@
     {
       "id": 418,
       "name": "Paloma",
-      "description": "Mexico's favorite cocktail, featuring a perfect harmony of tart **grapefruit**, zesty **lime**, and premium **tequila** for a refreshing citrus experience.",
+      "description": "Mexico's favourite cocktail, featuring a perfect harmony of tart **grapefruit**, zesty **lime**, and premium **tequila** for a refreshing citrus experience.",
       "instructions": "1. If you prefer a salted rim, rub the edge of a highball glass with a **lime** wedge and dip it in **salt**.\n2. Fill the glass halfway with **ice**.\n3. Add 60 ml of **tequila blanco**, 15 ml of **agave syrup**, 15 ml of **lime juice**, and 120 ml of **grapefruit soda**.\n4. Stir very gently to combine without losing carbonation.\n5. Garnish with the **lime** wedge.",
       "photoUri": "assets/cocktails/418-paloma.jpg",
       "glassId": "highball_glass",
@@ -25353,7 +25353,7 @@
       "id": 420,
       "name": "Pantera Rosa",
       "synonyms": ["Pink Panther"],
-      "description": "The pantera rosa — meaning pink panther — was named for its vibrant pink color.",
+      "description": "The pantera rosa — meaning pink panther — was named for its vibrant pink colour.",
       "instructions": "1. Fill a shaker with **ice**.\n2. Add 45 ml of **gin**, 15 ml of **limoncello**, 30 ml of **lemon juice**, 15 ml of **rich simple syrup** and 2 raspberries.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled cocktail glass.\n5. Garnish with a float of fresh **mint**.",
       "photoUri": "assets/cocktails/420-pantera-rosa.jpg",
       "glassId": "martini",
@@ -26624,7 +26624,7 @@
     {
       "id": 440,
       "name": "Porn Star Martini",
-      "description": "An exotic and visually stunning modern classic, featuring vibrant **passion fruit** flavors and served with a celebratory Sidecar of **sparkling wine**.",
+      "description": "An exotic and visually stunning modern classic, featuring vibrant **passion fruit** flavours and served with a celebratory Sidecar of **sparkling wine**.",
       "instructions": "1. Fill a shaker with **ice**.\n2. Add 50 ml of **vodka vanilla**, 20 ml of **passion fruit liqueur**, 15 ml of **passion fruit syrup**, 15 ml of **lime juice**, and 10 ml of **vanilla syrup**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled martini glass.\n5. Serve with 60 ml of **champagne** on the side.\n6. Garnish with a half of **passion fruit**.",
       "photoUri": "assets/cocktails/440-porn-star-martini.jpg",
       "glassId": "martini",
@@ -26986,7 +26986,7 @@
     {
       "id": 446,
       "name": "Rabo de Galo",
-      "description": "A classic brazilian staple that translates to 'tail of the rooster'. This drink is a complex, bittersweet harmony of **cachaça** and herbal **amaro**, offering a deep and punchy flavor profile that is both rustic and refined.",
+      "description": "A classic brazilian staple that translates to 'tail of the rooster'. This drink is a complex, bittersweet harmony of **cachaça** and herbal **amaro**, offering a deep and punchy flavour profile that is both rustic and refined.",
       "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 60 ml of **cachaça**, 20 ml of **red vermouth**, 15 ml of **Cynar**, and 2 dashes of **Angostura bitters**.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled rocks glass filled with fresh **ice** (preferably over a large cube).\n5. Express oils from an **orange** peel over the drink and use it as a garnish.",
       "photoUri": "assets/cocktails/446-rabo-de-galo.jpg",
       "glassId": "rocks_glass",
@@ -27401,7 +27401,7 @@
       "id": 452,
       "name": "Red Lebowski",
       "synonyms": ["Red Russian"],
-      "description": "A bold and minimalist two-ingredient drink. the neutral profile of **vodka** allows the deep, sweet, and tart notes of **cherry brandy** to take center stage for a smooth, dessert-like finish.",
+      "description": "A bold and minimalist two-ingredient drink. the neutral profile of **vodka** allows the deep, sweet, and tart notes of **cherry brandy** to take centre stage for a smooth, dessert-like finish.",
       "instructions": "1. Fill a rocks glass with **ice**.\n2. Add 30 ml of **vodka** and 30 ml of **cherry brandy**.\n3. Stir gently to combine.",
       "photoUri": "assets/cocktails/452-red-lebowski.jpg",
       "glassId": "rocks_glass",
@@ -29304,7 +29304,7 @@
     {
       "id": 483,
       "name": "Scarlett O'Hara",
-      "description": "A vibrant and refreshing long drink named after the iconic southern belle. It combines the unique stone-fruit flavors of **Southern Comfort** with tart cranberry and **lime** for a perfectly balanced sip.",
+      "description": "A vibrant and refreshing long drink named after the iconic southern belle. It combines the unique stone-fruit flavours of **Southern Comfort** with tart cranberry and **lime** for a perfectly balanced sip.",
       "instructions": "1. Fill a shaker with **ice**.\n2. Add 45 ml of **Southern Comfort**, 45 ml of **cranberry juice**, and 15 ml of **lime juice**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled martini glass.\n5. Garnish with a wedge of **lime**.",
       "photoUri": "assets/cocktails/483-scarlett-o-hara.jpg",
       "glassId": "martini",
@@ -29456,7 +29456,7 @@
       "id": 486,
       "name": "Screwdriver",
       "synonyms": ["Vodka Orange"],
-      "description": "A world-famous, refreshing highball that perfectly marries the neutrality of **vodka** with the bright acidity of **orange juice**. Simple, classic, and an official IBA favorite.",
+      "description": "A world-famous, refreshing highball that perfectly marries the neutrality of **vodka** with the bright acidity of **orange juice**. Simple, classic, and an official IBA favourite.",
       "instructions": "1. Fill a highball glass halfway with **ice**.\n2. Add 50 ml of **vodka** and 100 ml of **orange juice**.\n3. Stir gently to combine.\n4. Garnish with an **orange** slice.",
       "photoUri": "assets/cocktails/486-screwdriver.jpg",
       "glassId": "highball_glass",
@@ -30412,7 +30412,7 @@
     {
       "id": 502,
       "name": "Smoky Whiskey Sour",
-      "description": "A variation of the classic \"whisky sour\" created by Simon Difford for people who like the distinct smoky flavor of Scotch Islay whisky.",
+      "description": "A variation of the classic \"whisky sour\" created by Simon Difford for people who like the distinct smoky flavour of Scotch Islay whisky.",
       "instructions": "1. Pour 30 ml of **Scotch whisky**, 30 ml of **Islay Scotch whisky**, 30 ml of **lemon juice**, 20 ml of **maple syrup**, a dash of **Angostura bitters**, and an **egg white** into a shaker.\n2. Dry shake (without **ice**) vigorously for about 15 seconds to emulsify the **egg**.\n3. Add about 150 g of **ice**.\n4. Shake vigorously for about 15 seconds until well chilled.\n5. Strain into a chilled rocks glass filled with fresh **ice** (preferably over a large cube).\n6. Garnish with a **lemon** peel.",
       "photoUri": "assets/cocktails/502-smoky-whiskey-sour.jpg",
       "glassId": "rocks_glass",
@@ -31324,7 +31324,7 @@
       "id": 517,
       "name": "Strawberry Colada",
       "synonyms": ["Strawberry Piña Colada"],
-      "description": "A vibrant and fruity twist on the traditional **Piña Colada**. This tropical delight blends **white rum** and creamy coconut with the sweet, tart flavor of fresh strawberries, creating a lush pink cocktail perfect for summer sipping.",
+      "description": "A vibrant and fruity twist on the traditional **Piña Colada**. This tropical delight blends **white rum** and creamy coconut with the sweet, tart flavour of fresh strawberries, creating a lush pink cocktail perfect for summer sipping.",
       "instructions": "1. Fill a blender with 150 g of **ice** cubes or crushed **ice**.\n2. Add 30 ml of **white rum** and 20 ml of **strawberry liqueur**.\n3. Add 50 g of fresh strawberries (or **strawberry** puree), 30 ml of **coconut cream**, and 90 ml of **pineapple juice**.\n4. Blend on high speed until the mixture reaches a smooth, slushy consistency.\n5. Pour the contents into a hurricane or chilled goblet glass.\n6. Garnish with a **strawberry**.\n7. Optionally, top with a dollop of **whipped cream** for extra decadence.",
       "photoUri": "assets/cocktails/517-strawberry-colada.jpg",
       "glassId": "hurricane_glass",
@@ -32061,7 +32061,7 @@
       "id": 529,
       "name": "Swimming Pool",
       "synonyms": ["Blue Hawaiian"],
-      "description": "A tropical cocktail with **vodka**, rum, coconut and **pineapple** flavors.",
+      "description": "A tropical cocktail with **vodka**, rum, coconut and **pineapple** flavours.",
       "instructions": "1. Fill a shaker with **ice**.\n2. Add 30 ml of **vodka**, 60 ml of **white rum**, 15 ml of **cream**, 30 ml of **coconut milk**, 60 ml of **pineapple juice**, and 15 ml of **blue curaçao**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled hurricane glass.\n5. Garnish with a slice of **pineapple**.",
       "photoUri": "assets/cocktails/529-swimming-pool.jpg",
       "glassId": "hurricane_glass",
@@ -34805,7 +34805,7 @@
     {
       "id": 573,
       "name": "Virgin Piña Colada",
-      "description": "A creamy tropical favorite with pineapple and coconut, blended to a smooth frozen texture.",
+      "description": "A creamy tropical favourite with pineapple and coconut, blended to a smooth frozen texture.",
       "instructions": "1. Add 90 ml of **pineapple juice**, 60 ml of **coconut cream**, 15 ml of **lime juice**, and **ice** to a blender.\n2. Blend until smooth and frosty.\n3. Pour into a hurricane glass.\n4. Garnish with a **pineapple** wedge.",
       "photoUri": "assets/cocktails/573-virgin-pi-a-colada.jpg",
       "glassId": "hurricane_glass",
@@ -34853,7 +34853,7 @@
     {
       "id": 574,
       "name": "Virgin Sangria",
-      "description": "A refreshing non-alcoholic take on the classic Sangria. This vibrant mocktail combines deep grape and crisp **apple** flavors with a splash of citrus, topped with sparkling soda for a light, festive finish.",
+      "description": "A refreshing non-alcoholic take on the classic Sangria. This vibrant mocktail combines deep grape and crisp **apple** flavours with a splash of citrus, topped with sparkling soda for a light, festive finish.",
       "instructions": "1. Fill a pitcher with 300 g of **ice**.\n2. Add 240 ml of **grape juice**, 60 ml of **apple juice**, 60 ml of **orange juice**, 30 ml of **lime juice**, 30 ml of **simple syrup**, and 120 ml of **soda water**.\n3. Stir very gently to combine without losing carbonation.\n4. Garnish with a **lemon** slice, an **orange** slice, and 2 **apple** cubes.",
       "photoUri": "assets/cocktails/574-virgin-sangria.jpg",
       "glassId": "pitcher",
@@ -35196,7 +35196,7 @@
       "id": 580,
       "name": "Washington Apple",
       "synonyms": ["Apple Martini"],
-      "description": "Combining whisky, sour **apple schnapps**, and **cranberry juice**, this cocktail delivers a lovely balance of flavors that are both sweet and tart.",
+      "description": "Combining whisky, sour **apple schnapps**, and **cranberry juice**, this cocktail delivers a lovely balance of flavours that are both sweet and tart.",
       "instructions": "1. Fill a shaker with **ice**.\n2. Add 30 ml of **whiskey**, 30 ml of **apple schnapps**, and 30 ml of **cranberry juice**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled coupe glass.\n5. Garnish with a slice of **apple**.",
       "photoUri": "assets/cocktails/580-washington-apple.jpg",
       "glassId": "coupe",
@@ -36978,7 +36978,7 @@
     {
       "id": 39,
       "name": "Basil",
-      "description": "Basil is a fragrant herb with a sweet, slightly peppery flavor. It adds a fresh and aromatic note to both alcoholic and non-alcoholic cocktails. Common in summer drinks, it pairs especially well with **gin**, **vodka**, and citrus juices.",
+      "description": "Basil is a fragrant herb with a sweet, slightly peppery flavour. It adds a fresh and aromatic note to both alcoholic and non-alcoholic cocktails. Common in summer drinks, it pairs especially well with **gin**, **vodka**, and citrus juices.",
       "tags": [7],
       "photoUri": "assets/ingredients/39-basil.jpg"
     },
@@ -37070,14 +37070,14 @@
     {
       "id": 52,
       "name": "Black Tea",
-      "description": "Black tea is a strong, full-bodied tea with a rich, tannic flavor. It can be used as a base for tea cocktails or as an infused mixer with spirits. Its bold taste pairs well with whiskey, rum, and fruit liqueurs.",
+      "description": "Black tea is a strong, full-bodied tea with a rich, tannic flavour. It can be used as a base for tea cocktails or as an infused mixer with spirits. Its bold taste pairs well with whiskey, rum, and fruit liqueurs.",
       "tags": [6],
       "photoUri": "assets/ingredients/52-black-tea.jpg"
     },
     {
       "id": 53,
       "name": "Blackberry",
-      "description": "Juicy dark berry with sweet-tart flavor. Ideal for muddling into brambles or simmering into berry syrups.",
+      "description": "Juicy dark berry with sweet-tart flavour. Ideal for muddling into brambles or simmering into berry syrups.",
       "tags": [7],
       "photoUri": "assets/ingredients/53-blackberry.jpg"
     },
@@ -37098,7 +37098,7 @@
     {
       "id": 56,
       "name": "Blackcurrant Cordial",
-      "description": "Sweet blackcurrant syrup with deep berry color and tangy sweetness. Dilute with soda or water for a refreshing base. Great for spritzes, punches, or zero-proof cocktails.",
+      "description": "Sweet blackcurrant syrup with deep berry colour and tangy sweetness. Dilute with soda or water for a refreshing base. Great for spritzes, punches, or zero-proof cocktails.",
       "tags": [5],
       "photoUri": "assets/ingredients/56-blackcurrant-cordial.jpg"
     },
@@ -37113,7 +37113,7 @@
     {
       "id": 58,
       "name": "Blood Orange",
-      "description": "Deep red-fleshed orange with berry-like citrus flavor. Anthocyanin pigments give it a vivid hue that develops in cool nights. Great for adding color to sours and spritzes.",
+      "description": "Deep red-fleshed orange with berry-like citrus flavour. Anthocyanin pigments give it a vivid hue that develops in cool nights. Great for adding colour to sours and spritzes.",
       "tags": [7],
       "styleIngredientId": 247,
       "photoUri": "assets/ingredients/58-blood-orange.jpg"
@@ -37128,7 +37128,7 @@
     {
       "id": 60,
       "name": "Blue Curaçao Syrup",
-      "description": "Blue curaçao syrup delivers sweet orange flavor with a vivid blue hue. It mimics the taste of curaçao liqueur without alcohol. Great for colorful tropical cocktails and lemonades.",
+      "description": "Blue curaçao syrup delivers sweet orange flavour with a vivid blue hue. It mimics the taste of curaçao liqueur without alcohol. Great for colorful tropical cocktails and lemonades.",
       "tags": [5],
       "photoUri": "assets/ingredients/60-blue-cura-ao-syrup.jpg"
     },
@@ -37156,7 +37156,7 @@
     {
       "id": 64,
       "name": "Borage",
-      "description": "Borage has a crisp, cucumber-like flavor that brings refreshing aroma to spritzes and highballs. the star-shaped blue flowers make striking garnishes for **gin** or **tequila** drinks. Muddle gently or float the blossoms to keep their delicate look.",
+      "description": "Borage has a crisp, cucumber-like flavour that brings refreshing aroma to spritzes and highballs. the star-shaped blue flowers make striking garnishes for **gin** or **tequila** drinks. Muddle gently or float the blossoms to keep their delicate look.",
       "tags": [8],
       "photoUri": "assets/ingredients/64-borage.jpg"
     },
@@ -37177,7 +37177,7 @@
     {
       "id": 67,
       "name": "Brown Sugar",
-      "description": "Brown sugar is fine, moist cane sugar with molasses added back for color and flavor. It dissolves quickly and brings caramel notes to syrups and hot drinks. Light and dark varieties offer different molasses intensity.",
+      "description": "Brown sugar is fine, moist cane sugar with molasses added back for colour and flavour. It dissolves quickly and brings caramel notes to syrups and hot drinks. Light and dark varieties offer different molasses intensity.",
       "tags": [8],
       "styleIngredientId": 329,
       "photoUri": "assets/ingredients/67-brown-sugar.jpg"
@@ -37258,7 +37258,7 @@
     {
       "id": 78,
       "name": "Celery",
-      "description": "Celery provides a fresh, crisp, and slightly peppery flavor to cocktails. It is commonly used as a garnish for Bloody Marys and other savory drinks. Celery juice or muddled stalks can also add a refreshing vegetal note.",
+      "description": "Celery provides a fresh, crisp, and slightly peppery flavour to cocktails. It is commonly used as a garnish for Bloody Marys and other savory drinks. Celery juice or muddled stalks can also add a refreshing vegetal note.",
       "tags": [7],
       "photoUri": "assets/ingredients/78-celery.jpg"
     },
@@ -37302,7 +37302,7 @@
     {
       "id": 84,
       "name": "Cherry",
-      "description": "Sweet or tart red stone fruit often used as a garnish or muddled ingredient. Adds a pop of color and gentle sweetness.",
+      "description": "Sweet or tart red stone fruit often used as a garnish or muddled ingredient. Adds a pop of colour and gentle sweetness.",
       "tags": [7],
       "photoUri": "assets/ingredients/84-cherry.jpg"
     },
@@ -37324,7 +37324,7 @@
     {
       "id": 87,
       "name": "Cherry Juice",
-      "description": "Tart, ruby-colored juice with rich cherry flavor. Ideal for sours, spritzes, or topping soda cocktails. Balances whiskey and rum drinks.",
+      "description": "Tart, ruby-colored juice with rich cherry flavour. Ideal for sours, spritzes, or topping soda cocktails. Balances whiskey and rum drinks.",
       "tags": [7],
       "photoUri": "assets/ingredients/87-cherry-juice.jpg"
     },
@@ -37394,14 +37394,14 @@
     {
       "id": 97,
       "name": "Cinnamon Sticks",
-      "description": "Cinnamon sticks provide a warm, sweet spice when infused or used as a garnish. They release flavor gradually, making them ideal for hot cocktails. They also serve as decorative stirrers in seasonal drinks.",
+      "description": "Cinnamon sticks provide a warm, sweet spice when infused or used as a garnish. They release flavour gradually, making them ideal for hot cocktails. They also serve as decorative stirrers in seasonal drinks.",
       "tags": [8],
       "photoUri": "assets/ingredients/97-cinnamon-sticks.jpg"
     },
     {
       "id": 98,
       "name": "Cinnamon Syrup",
-      "description": "Cinnamon syrup combines sugar with warming cinnamon spice. It brings cozy baking notes to Tiki drinks, punches, or coffee cocktails. Keep refrigerated for best flavor.",
+      "description": "Cinnamon syrup combines sugar with warming cinnamon spice. It brings cosy baking notes to Tiki drinks, punches, or coffee cocktails. Keep refrigerated for best flavour.",
       "tags": [5],
       "photoUri": "assets/ingredients/98-cinnamon-syrup.jpg"
     },
@@ -37423,7 +37423,7 @@
     {
       "id": 101,
       "name": "Cocoa Powder",
-      "description": "Unsweetened cocoa powder delivers intense chocolate flavor. Dust over drinks or mix into syrups for a bittersweet note. Bloom in warm liquid to avoid clumping.",
+      "description": "Unsweetened cocoa powder delivers intense chocolate flavour. Dust over drinks or mix into syrups for a bittersweet note. Bloom in warm liquid to avoid clumping.",
       "tags": [8],
       "photoUri": "assets/ingredients/101-cocoa-powder.jpg"
     },
@@ -37437,7 +37437,7 @@
     {
       "id": 103,
       "name": "Coconut Flakes",
-      "description": "Dried coconut shreds with sweet, tropical aroma. Toast them for deeper flavor before using as a garnish. Can be infused into syrups or milk for Tiki-style drinks.",
+      "description": "Dried coconut shreds with sweet, tropical aroma. Toast them for deeper flavour before using as a garnish. Can be infused into syrups or milk for Tiki-style drinks.",
       "tags": [8],
       "photoUri": "assets/ingredients/103-coconut-flakes.jpg"
     },
@@ -37451,7 +37451,7 @@
     {
       "id": 105,
       "name": "Coconut Milk",
-      "description": "Coconut milk is pressed from coconut flesh, giving a creamy texture with mild sweetness. It adds body and tropical flavor to blended drinks and punches.",
+      "description": "Coconut milk is pressed from coconut flesh, giving a creamy texture with mild sweetness. It adds body and tropical flavour to blended drinks and punches.",
       "tags": [8],
       "photoUri": "assets/ingredients/105-coconut-milk.jpg"
     },
@@ -37473,7 +37473,7 @@
     {
       "id": 108,
       "name": "Coconut Water",
-      "description": "Light, naturally sweet water from young coconuts. Adds subtle coconut flavor and electrolytes to low-ABV or nonalcoholic drinks. Refreshing mixer with **rum**, **tequila**, or tropical fruit.",
+      "description": "Light, naturally sweet water from young coconuts. Adds subtle coconut flavour and electrolytes to low-ABV or nonalcoholic drinks. Refreshing mixer with **rum**, **tequila**, or tropical fruit.",
       "tags": [8],
       "photoUri": "assets/ingredients/108-coconut-water.jpg"
     },
@@ -37517,7 +37517,7 @@
     {
       "id": 114,
       "name": "Cola",
-      "description": "Cola is a sweet, carbonated beverage with caramel, vanilla, and spice notes. It pairs well with rum, whiskey, and other dark spirits. Adds sweetness, color, and effervescence to cocktails.",
+      "description": "Cola is a sweet, carbonated beverage with caramel, vanilla, and spice notes. It pairs well with rum, whiskey, and other dark spirits. Adds sweetness, colour, and effervescence to cocktails.",
       "tags": [6],
       "photoUri": "assets/ingredients/114-cola.jpg"
     },
@@ -37676,7 +37676,7 @@
     {
       "id": 136,
       "name": "Dark Rum",
-      "description": "Dark rum aged longer or with added molasses for deep caramel color, typically 40–50% ABV. Flavors of brown sugar, spice, and vanilla. Great in Tiki drinks and punches.",
+      "description": "Dark rum aged longer or with added molasses for deep caramel colour, typically 40–50% ABV. flavours of brown sugar, spice, and vanilla. Great in Tiki drinks and punches.",
       "tags": [0],
       "photoUri": "assets/ingredients/136-dark-rum.jpg"
     },
@@ -37691,7 +37691,7 @@
     {
       "id": 138,
       "name": "Demerara Sugar",
-      "description": "Demerara sugar has large, crunchy crystals with natural molasses. It brings toffee-like sweetness and texture to syrups and muddled drinks. Less processed than standard brown sugar, so flavors stay mellow.",
+      "description": "Demerara sugar has large, crunchy crystals with natural molasses. It brings toffee-like sweetness and texture to syrups and muddled drinks. Less processed than standard brown sugar, so flavours stay mellow.",
       "tags": [8],
       "styleIngredientId": 329,
       "photoUri": "assets/ingredients/138-demerara-sugar.jpg"
@@ -37819,7 +37819,7 @@
     {
       "id": 156,
       "name": "Fig",
-      "description": "Fig adds a rich, gently sweet flavor with notes of honey, dried fruit, and a hint of earthiness. In cocktails, it brings warmth and depth, pairing beautifully with **whiskey**, **rum**, **brandy**, and herbal liqueurs. Perfect for autumnal, dessert, or slow-sipping drinks.",
+      "description": "Fig adds a rich, gently sweet flavour with notes of honey, dried fruit, and a hint of earthiness. In cocktails, it brings warmth and depth, pairing beautifully with **whiskey**, **rum**, **brandy**, and herbal liqueurs. Perfect for autumnal, dessert, or slow-sipping drinks.",
       "tags": [7],
       "photoUri": "assets/ingredients/156-fig.jpg"
     },
@@ -37906,7 +37906,7 @@
     {
       "id": 168,
       "name": "Gold Jamaican Rum",
-      "description": "The primary difference for gold Jamaican rum lies in its aging process, which gives it a richer, more complex flavor profile than white rum, while being less bold and aged than dark rum. Jamaican Rums in general are known for their distinct \"funky\" character due to a unique high-ester fermentation process.",
+      "description": "The primary difference for gold Jamaican rum lies in its aging process, which gives it a richer, more complex flavour profile than white rum, while being less bold and aged than dark rum. Jamaican Rums in general are known for their distinct \"funky\" character due to a unique high-ester fermentation process.",
       "tags": [0],
       "styleIngredientId": 170,
       "photoUri": "assets/ingredients/168-gold-jamaican-rum.jpg"
@@ -38058,7 +38058,7 @@
     {
       "id": 189,
       "name": "Hibiscus Syrup",
-      "description": "A ruby-red syrup with tart floral flavor that brings color and brightness to alcohol-free cocktails.",
+      "description": "A ruby-red syrup with tart floral flavour that brings colour and brightness to alcohol-free cocktails.",
       "tags": [5],
       "photoUri": "assets/ingredients/189-hibiscus-syrup.jpg"
     },
@@ -38086,7 +38086,7 @@
     {
       "id": 193,
       "name": "Hot Chocolate (Cacao)",
-      "description": "Hot chocolate (cacao) is a sweetened cocoa beverage blended with milk or cream. It brings chocolate flavor and warmth to winter cocktails. Spike it with liqueurs or spirits for cozy serves.",
+      "description": "Hot chocolate (cacao) is a sweetened cocoa beverage blended with milk or cream. It brings chocolate flavour and warmth to winter cocktails. Spike it with liqueurs or spirits for cosy serves.",
       "tags": [8],
       "photoUri": "assets/ingredients/193-hot-chocolate-cacao.jpg"
     },
@@ -38107,7 +38107,7 @@
     {
       "id": 196,
       "name": "Ice",
-      "description": "Frozen water that chills and dilutes cocktails. Use large cubes for slower melt or crushed ice for Tiki drinks. Clear, fresh ice keeps flavors clean.",
+      "description": "Frozen water that chills and dilutes cocktails. Use large cubes for slower melt or crushed ice for Tiki drinks. Clear, fresh ice keeps flavours clean.",
       "tags": [8],
       "photoUri": "assets/ingredients/196-ice.jpg"
     },
@@ -38184,7 +38184,7 @@
     {
       "id": 206,
       "name": "Johnnie Walker",
-      "description": "Global blended Scotch whisky brand commonly bottled at 40% ABV. Layered malt and grain flavors with gentle smoke depending on the label. Popular in highballs and spirit-forward cocktails.",
+      "description": "Global blended Scotch whisky brand commonly bottled at 40% ABV. Layered malt and grain flavours with gentle smoke depending on the label. Popular in highballs and spirit-forward cocktails.",
       "tags": [0],
       "baseIngredientId": 311,
       "photoUri": "assets/ingredients/206-johnnie-walker.jpg"
@@ -38222,7 +38222,7 @@
     {
       "id": 211,
       "name": "Kiwi Fruit",
-      "description": "Bright green fruit with sweet-tart flavor and tiny seeds. Adds tropical freshness when muddled or pureed.",
+      "description": "Bright green fruit with sweet-tart flavour and tiny seeds. Adds tropical freshness when muddled or pureed.",
       "tags": [7],
       "photoUri": "assets/ingredients/211-kiwi.jpg"
     },
@@ -38358,7 +38358,7 @@
     {
       "id": 230,
       "name": "Liquorice",
-      "description": "Sweet, earthy root flavor used in candies and herbal liqueurs. a small amount adds depth to syrups and bitters. Pair with anise or citrus to keep it lively.",
+      "description": "Sweet, earthy root flavour used in candies and herbal liqueurs. a small amount adds depth to syrups and bitters. Pair with anise or citrus to keep it lively.",
       "tags": [8],
       "photoUri": "assets/ingredients/230-liquorice.jpg"
     },
@@ -38466,7 +38466,7 @@
     {
       "id": 245,
       "name": "Olive Brine",
-      "description": "Olive brine — or olive juice — is simply a mixture of salt, vinegar and water but as olives marinate, the liquid takes on a fantastically rich and delicious olive flavor. That salty goodness is a pungent boost that will deepen the flavor profile in your cooking.",
+      "description": "Olive brine — or olive juice — is simply a mixture of salt, vinegar and water but as olives marinate, the liquid takes on a fantastically rich and delicious olive flavour. That salty goodness is a pungent boost that will deepen the flavour profile in your cooking.",
       "tags": [7],
       "photoUri": "assets/ingredients/245-olive-brine.jpg"
     },
@@ -38523,7 +38523,7 @@
     {
       "id": 253,
       "name": "Orange Marmalade",
-      "description": "Orange marmalade is a sweet citrus preserve that adds a bittersweet flavor.",
+      "description": "Orange marmalade is a sweet citrus preserve that adds a bittersweet flavour.",
       "tags": [8],
       "photoUri": "assets/ingredients/253-orange-marmalade.jpg"
     },
@@ -38544,7 +38544,7 @@
     {
       "id": 256,
       "name": "Overproof Rum",
-      "description": "Overproof rum has an ABV of 57% or higher, offering intense flavor and strength. It is used for floats, flaming drinks, and Tiki cocktails. Best handled with care.",
+      "description": "Overproof rum has an ABV of 57% or higher, offering intense flavour and strength. It is used for floats, flaming drinks, and Tiki cocktails. Best handled with care.",
       "tags": [0],
       "photoUri": "assets/ingredients/256-overproof-rum.jpg"
     },
@@ -38572,7 +38572,7 @@
     {
       "id": 260,
       "name": "Passion Fruit",
-      "description": "Passion fruit has a tangy, aromatic tropical flavor. the pulp can be scooped directly into cocktails. Popular in Tiki drinks and modern fruity creations.",
+      "description": "Passion fruit has a tangy, aromatic tropical flavour. the pulp can be scooped directly into cocktails. Popular in Tiki drinks and modern fruity creations.",
       "tags": [7],
       "photoUri": "assets/ingredients/260-passion-fruit.jpg"
     },
@@ -38658,7 +38658,7 @@
     {
       "id": 272,
       "name": "Peppermint Candy",
-      "description": "Sweet peppermint candies that add cool mint flavor. Crush or melt into syrups for dessert cocktails and hot drinks. Use as a garnish for festive presentations.",
+      "description": "Sweet peppermint candies that add cool mint flavour. Crush or melt into syrups for dessert cocktails and hot drinks. Use as a garnish for festive presentations.",
       "tags": [8],
       "photoUri": "assets/ingredients/272-peppermint-candy.jpg"
     },
@@ -38672,7 +38672,7 @@
     {
       "id": 274,
       "name": "Pepsi Cola",
-      "description": "Pepsi is a caramel-forward cola with vanilla and citrus notes. It adds sweetness, color, and bubbles to rum or whiskey mixes. Slightly softer than coke for smoother highballs.",
+      "description": "Pepsi is a caramel-forward cola with vanilla and citrus notes. It adds sweetness, colour, and bubbles to rum or whiskey mixes. Slightly softer than coke for smoother highballs.",
       "tags": [6],
       "baseIngredientId": 114,
       "photoUri": "assets/ingredients/274-pepsi-cola.jpg"
@@ -38789,7 +38789,7 @@
     {
       "id": 290,
       "name": "Raspberry",
-      "description": "Raspberries are sweet-tart berries with bright color and aroma. Used fresh, muddled, or as puree. Great in **champagne** cocktails and with **gin**.",
+      "description": "Raspberries are sweet-tart berries with bright colour and aroma. Used fresh, muddled, or as puree. Great in **champagne** cocktails and with **gin**.",
       "tags": [7],
       "photoUri": "assets/ingredients/290-raspberry.jpg"
     },
@@ -38803,7 +38803,7 @@
     {
       "id": 292,
       "name": "Raspberry Syrup",
-      "description": "Raspberry syrup offers vivid berry sweetness with gentle tartness. It provides the signature flavor in clover club and other gin drinks. Swirl into sodas or desserts for color and aroma.",
+      "description": "Raspberry syrup offers vivid berry sweetness with gentle tartness. It provides the signature flavour in clover club and other gin drinks. Swirl into sodas or desserts for colour and aroma.",
       "tags": [5],
       "photoUri": "assets/ingredients/292-raspberry-syrup.jpg"
     },
@@ -38860,7 +38860,7 @@
     {
       "id": 300,
       "name": "Rose Syrup",
-      "description": "Rose syrup is floral and sweet, capturing fragrant rose petals. a few drops add aromatic lift to **gin**, **vodka**, or nonalcoholic spritzes. Use lightly to avoid overpowering other flavors.",
+      "description": "Rose syrup is floral and sweet, capturing fragrant rose petals. a few drops add aromatic lift to **gin**, **vodka**, or nonalcoholic spritzes. Use lightly to avoid overpowering other flavours.",
       "tags": [5],
       "photoUri": "assets/ingredients/300-rose-syrup.jpg"
     },
@@ -38932,7 +38932,7 @@
     {
       "id": 310,
       "name": "Scotch Highland Whisky",
-      "description": "Single malt Scotch from the highlands region, typically 40–46% ABV. Flavors range from honeyed malt to gentle smoke. Versatile for sipping or cocktails.",
+      "description": "Single malt Scotch from the highlands region, typically 40–46% ABV. flavours range from honeyed malt to gentle smoke. Versatile for sipping or cocktails.",
       "tags": [0],
       "styleIngredientId": 311,
       "photoUri": "assets/ingredients/310-scotch-highland-whisky.jpg"
@@ -38997,7 +38997,7 @@
     {
       "id": 319,
       "name": "Southern Comfort",
-      "description": "American liqueur of neutral spirit blended with fruit, spice, and whiskey flavor, about 35% ABV. Created in new orleans in 1874. Easy-drinking base for punches and southern-style cocktails.",
+      "description": "American liqueur of neutral spirit blended with fruit, spice, and whiskey flavour, about 35% ABV. Created in new orleans in 1874. Easy-drinking base for punches and southern-style cocktails.",
       "tags": [1],
       "photoUri": "assets/ingredients/319-southern-comfort.jpg"
     },
@@ -39011,7 +39011,7 @@
     {
       "id": 321,
       "name": "Spiced Rum",
-      "description": "Rum infused with spices like vanilla, cinnamon, and clove, typically 35–40% ABV. Sweet and aromatic with amber color. Great in Tiki drinks, and warm punches.",
+      "description": "Rum infused with spices like vanilla, cinnamon, and clove, typically 35–40% ABV. Sweet and aromatic with amber colour. Great in Tiki drinks, and warm punches.",
       "tags": [0],
       "photoUri": "assets/ingredients/321-spiced-rum.jpg"
     },
@@ -39033,7 +39033,7 @@
     {
       "id": 324,
       "name": "Strawberry",
-      "description": "The garden strawberry is a widely grown hybrid species of the genus fragaria, collectively known as the strawberries. It is cultivated worldwide for its fruit. the fruit is widely appreciated for its characteristic aroma, bright red color, juicy texture, and sweetness.",
+      "description": "The garden strawberry is a widely grown hybrid species of the genus fragaria, collectively known as the strawberries. It is cultivated worldwide for its fruit. the fruit is widely appreciated for its characteristic aroma, bright red colour, juicy texture, and sweetness.",
       "tags": [7],
       "photoUri": "assets/ingredients/324-strawberry.jpg"
     },
@@ -39055,7 +39055,7 @@
     {
       "id": 327,
       "name": "Strawberry Syrup",
-      "description": "Strawberry syrup is a sweet, fruity liquid that enhances cocktails with berry flavor. Ideal for summer drinks and lemonades.",
+      "description": "Strawberry syrup is a sweet, fruity liquid that enhances cocktails with berry flavour. Ideal for summer drinks and lemonades.",
       "tags": [5],
       "photoUri": "assets/ingredients/327-strawberry-syrup.jpg"
     },
@@ -39112,7 +39112,7 @@
     {
       "id": 335,
       "name": "Tequila Gold",
-      "description": "Tequila gold is a blended or lightly aged **tequila** with 38–40% ABV. It has a smoother, slightly caramel flavor.",
+      "description": "Tequila gold is a blended or lightly aged **tequila** with 38–40% ABV. It has a smoother, slightly caramel flavour.",
       "tags": [0],
       "photoUri": "assets/ingredients/335-tequila-gold.jpg"
     },
@@ -39177,7 +39177,7 @@
     {
       "id": 344,
       "name": "Vanilla Syrup",
-      "description": "Vanilla syrup infuses simple syrup with warm vanilla bean flavor. It softens sharp spirits and rounds out coffee or espresso cocktails. Drizzle in whipped cream drinks or soda floats.",
+      "description": "Vanilla syrup infuses simple syrup with warm vanilla bean flavour. It softens sharp spirits and rounds out coffee or espresso cocktails. Drizzle in whipped cream drinks or soda floats.",
       "tags": [5],
       "photoUri": "assets/ingredients/344-vanilla-syrup.jpg"
     },
@@ -39212,7 +39212,7 @@
     {
       "id": 349,
       "name": "Water",
-      "description": "Water is a neutral, odorless liquid used for dilution and ice. Balance cocktails by adding water through shaking, stirring, or dilution. Fresh, clean water keeps flavors bright.",
+      "description": "Water is a neutral, odorless liquid used for dilution and ice. Balance cocktails by adding water through shaking, stirring, or dilution. Fresh, clean water keeps flavours bright.",
       "tags": [8],
       "photoUri": "assets/ingredients/349-water.jpg"
     },
