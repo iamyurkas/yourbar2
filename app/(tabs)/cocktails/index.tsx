@@ -35,6 +35,7 @@ import { navigateToDetailsWithReturnTo } from '@/libs/navigation';
 import { getPluralCategory } from '@/libs/i18n/plural';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { buildTagOptions, type TagOption } from '@/libs/tag-options';
+import { compareOptionalGlobalAlphabet } from '@/libs/global-sort';
 import { useI18n } from '@/libs/i18n/use-i18n';
 import { useCocktailTabLogic, type MyTabListItem } from '@/libs/use-cocktail-tab-logic';
 import { useInventoryActions, useInventoryData, useInventorySettings, type Cocktail } from '@/providers/inventory-provider';
@@ -387,7 +388,7 @@ export default function CocktailsScreen() {
   }, [filteredByTags, normalizedQuery]);
 
   const sortedCocktails = useMemo(
-    () => [...filteredCocktails].sort((a, b) => (a.name ?? '').localeCompare(b.name ?? '')),
+    () => [...filteredCocktails].sort((a, b) => compareOptionalGlobalAlphabet(a.name, b.name)),
     [filteredCocktails],
   );
 
@@ -404,7 +405,7 @@ export default function CocktailsScreen() {
         return ratingB - ratingA;
       }
 
-      return (a.name ?? '').localeCompare(b.name ?? '');
+      return compareOptionalGlobalAlphabet(a.name, b.name);
     });
   }, [activeTab, filteredCocktails, getCocktailRating, sortedCocktails]);
 

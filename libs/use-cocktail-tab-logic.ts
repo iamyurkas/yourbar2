@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { type Cocktail } from '@/providers/inventory-provider';
 import { type IngredientLookup } from '@/libs/ingredient-availability';
+import { compareGlobalAlphabet, compareOptionalGlobalAlphabet } from '@/libs/global-sort';
 
 export type MyTabListItem =
   | { type: 'cocktail'; key: string; cocktail: Cocktail }
@@ -315,14 +316,14 @@ export function useCocktailTabLogic({
         isBranded: group.isBranded,
         isStyled: group.isStyled,
         cocktails: group.cocktails.sort((a, b) =>
-          (a.name ?? '').localeCompare(b.name ?? ''),
+          compareOptionalGlobalAlphabet(a.name, b.name),
         ),
       }))
       .sort((a, b) => {
         if (a.cocktails.length !== b.cocktails.length) {
           return b.cocktails.length - a.cocktails.length;
         }
-        return a.name.localeCompare(b.name);
+        return compareGlobalAlphabet(a.name, b.name);
       });
 
     const items: MyTabListItem[] = [];

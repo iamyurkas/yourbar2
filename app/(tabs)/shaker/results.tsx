@@ -27,6 +27,7 @@ import { isCocktailReady, summariseCocktailAvailability } from '@/libs/cocktail-
 import { createIngredientLookup } from '@/libs/ingredient-availability';
 import { navigateToDetailsWithReturnTo } from '@/libs/navigation';
 import { normalizeSearchText } from '@/libs/search-normalization';
+import { compareGlobalAlphabet, compareOptionalGlobalAlphabet } from '@/libs/global-sort';
 import { useI18n } from '@/libs/i18n/use-i18n';
 import { useInventory, type Cocktail } from '@/providers/inventory-provider';
 
@@ -114,7 +115,7 @@ export default function ShakerResultsScreen() {
       items.push(cocktail);
     });
 
-    return items.sort((a, b) => (a.name ?? '').localeCompare(b.name ?? ''));
+    return items.sort((a, b) => compareOptionalGlobalAlphabet(a.name, b.name));
   }, [availableIds, cocktails]);
 
   const unavailableCocktails = useMemo(() => {
@@ -136,7 +137,7 @@ export default function ShakerResultsScreen() {
       items.push(cocktail);
     });
 
-    return items.sort((a, b) => (a.name ?? '').localeCompare(b.name ?? ''));
+    return items.sort((a, b) => compareOptionalGlobalAlphabet(a.name, b.name));
   }, [cocktails, unavailableIds]);
 
   const listData = useMemo(
@@ -220,7 +221,7 @@ export default function ShakerResultsScreen() {
         }
       }
 
-      return normalizedNameA.localeCompare(normalizedNameB);
+      return compareGlobalAlphabet(normalizedNameA, normalizedNameB);
     });
   }, [defaultTagColor, listData, t]);
 
