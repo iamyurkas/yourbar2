@@ -10946,7 +10946,7 @@
       "id": 178,
       "name": "Clover Club",
       "synonyms": ["Raspberry Gin Sour"],
-      "description": "A pre-prohibition **gin** sour colored with **raspberry syrup** and bound with **egg white**.",
+      "description": "A pre-prohibition **gin** sour coloured with **raspberry syrup** and bound with **egg white**.",
       "instructions": "1. Pour 45 ml of **gin**, 15 ml of **raspberry syrup**, 15 ml of **lemon juice**, and an **egg white** into a shaker.\n2. Dry shake (without **ice**) vigorously for about 15 seconds to emulsify the **egg**.\n3. Add about 150 g of **ice**.\n4. Shake vigorously for about 15 seconds until well chilled.\n5. Strain into a chilled martini glass.\n6. Garnish with a **strawberry**.",
       "photoUri": "assets/cocktails/178-clover-club.jpg",
       "glassId": "martini",
@@ -19250,7 +19250,7 @@
     {
       "id": 317,
       "name": "Italian Cream Soda",
-      "description": "A sweet and fizzy dessert-style mocktail with flavored syrup, soda, and cream.",
+      "description": "A sweet and fizzy dessert-style mocktail with flavoured syrup, soda, and cream.",
       "instructions": "1. Fill a highball glass halfway with **ice**.\n2. Add 25 ml of **grenadine** and 120 ml of **soda water**.\n3. Stir very gently to combine without losing carbonation.\n4. Float 30 ml of **cream** on top.\n5. Stir very gently to combine without losing carbonation.\n6. Garnish with **whipped cream** and a **strawberry**.",
       "photoUri": "assets/cocktails/317-italian-cream-soda.jpg",
       "glassId": "highball_glass",
@@ -21150,7 +21150,7 @@
       "id": 350,
       "name": "Liquorice",
       "synonyms": ["Liquorice Martini", "Anise Martini"],
-      "description": "A sophisticated, spirit-forward cocktail that highlights the botanical notes of **gin** balanced by the deep, **anise**-flavored complexity of **black sambuca**. This drink is smooth, aromatic, and perfect for those who enjoy bold, herbal profiles.",
+      "description": "A sophisticated, spirit-forward cocktail that highlights the botanical notes of **gin** balanced by the deep, **anise**-flavoured complexity of **black sambuca**. This drink is smooth, aromatic, and perfect for those who enjoy bold, herbal profiles.",
       "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 60 ml of **gin**, 7.5 ml of **black sambuca**, 5 ml of **rich simple syrup**, and a stalk of **liquorice**.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled martini glass.",
       "photoUri": "assets/cocktails/350-liquorice.jpg",
       "glassId": "martini",
@@ -24456,7 +24456,7 @@
     {
       "id": 404,
       "name": "Nutty Irishman",
-      "description": "A smooth, creamy classic that highlights the harmonious blend of hazelnut and **Irish cream**. Perfect for fans of dessert-style cocktails, it offers a rich texture and a comforting nutty finish that can be customized with coffee or **whiskey**.",
+      "description": "A smooth, creamy classic that highlights the harmonious blend of hazelnut and **Irish cream**. Perfect for fans of dessert-style cocktails, it offers a rich texture and a comforting nutty finish that can be customised with coffee or **whiskey**.",
       "instructions": "1. Fill a shaker with **ice**.\n2. Add 30 ml of **Frangelico**, 30 ml of **Baileys**, and 30 ml of **cream** to the shaker.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled rocks glass filled with fresh **ice** (preferably over a large cube).\n5. Optionally, top with a layer of loose **whipped cream**.\n6. Garnish with a sprinkle of freshly grated **nutmeg**.",
       "photoUri": "assets/cocktails/404-nutty-irishman.jpg",
       "glassId": "rocks_glass",
@@ -24827,7 +24827,7 @@
       "id": 410,
       "name": "Opal Café",
       "synonyms": ["Opal Coffee"],
-      "description": "A velvety layered shooter that combines the bold, **anise**-flavored depth of **black sambuca** with rich **espresso** and a silky **cream** float.",
+      "description": "A velvety layered shooter that combines the bold, **anise**-flavoured depth of **black sambuca** with rich **espresso** and a silky **cream** float.",
       "instructions": "1. Pour the **black sambuca** into a chilled shooter glass.\n2. Gently layer the **espresso** over the **sambuca** using the back of a bar spoon.\n3. Carefully float the **cream** on top as the final layer.\n4. Serve immediately to maintain the distinct layers.",
       "photoUri": "assets/cocktails/410-opal-caf.jpg",
       "glassId": "shooter",
@@ -33933,7 +33933,7 @@
     {
       "id": 560,
       "name": "Tropical Sangria",
-      "description": "A light and effervescent twist on the classic Sangria. This refreshing pitcher drink features crisp **white wine** and coconut notes, macerated with fresh **orange**, **kiwi fruit**, and strawberries for a colorful, shareable summer treat.",
+      "description": "A light and effervescent twist on the classic Sangria. This refreshing pitcher drink features crisp **white wine** and coconut notes, macerated with fresh **orange**, **kiwi fruit**, and strawberries for a colourful, shareable summer treat.",
       "instructions": "1. Fill a pitcher with **ice**.\n2. Add 240 ml of **coconut liqueur**, 750 ml of **white wine**, 45 ml of **simple syrup**, 120 ml of **soda water**, a half of **orange**, a **kiwi fruit**, and 7 sliced strawberries.\n3. Stir very gently to combine without losing carbonation.",
       "photoUri": "assets/cocktails/560-tropical-sangria.jpg",
       "glassId": "pitcher",
@@ -36854,7 +36854,7 @@
     {
       "id": 22,
       "name": "Anisette",
-      "description": "Sweet anise-flavored liqueur around 25% ABV. Clear and aromatic with licorice character. Served chilled, with coffee, or in pastis-style mixes.",
+      "description": "Sweet anise-flavoured liqueur around 25% ABV. Clear and aromatic with liquorice character. Served chilled, with coffee, or in pastis-style mixes.",
       "tags": [1],
       "photoUri": "assets/ingredients/22-anisette.jpg"
     },
@@ -37035,7 +37035,7 @@
     {
       "id": 47,
       "name": "Bison Grass Vodka",
-      "description": "Polish bison grass **vodka** (Żubrówka) around 37½–40% ABV flavored with aromatic sweet grass. Offers vanilla, almond, and herb notes. Great with apple juice or in refreshing highballs.",
+      "description": "Polish bison grass **vodka** (Żubrówka) around 37½–40% ABV flavoured with aromatic sweet grass. Offers vanilla, almond, and herb notes. Great with apple juice or in refreshing highballs.",
       "tags": [0],
       "photoUri": "assets/ingredients/47-bizon-grass-vodka.jpg"
     },
@@ -37063,7 +37063,7 @@
     {
       "id": 51,
       "name": "Black Sambuca",
-      "description": "Dark anise liqueur with added licorice and spice, around 38% ABV. Richer and slightly bitter compared to white sambuca. Served as shots, with coffee, or flaming in cocktails.",
+      "description": "Dark anise liqueur with added liquorice and spice, around 38% ABV. Richer and slightly bitter compared to white sambuca. Served as shots, with coffee, or flaming in cocktails.",
       "tags": [1],
       "photoUri": "assets/ingredients/51-black-sambuca.jpg"
     },
@@ -37084,7 +37084,7 @@
     {
       "id": 54,
       "name": "Blackberry Brandy",
-      "description": "Brandy or liqueur flavored with blackberries, typically 30–40% ABV. Sweet, jammy berry notes with a warming finish. Works in sours, cobblers, and dessert drinks.",
+      "description": "Brandy or liqueur flavoured with blackberries, typically 30–40% ABV. Sweet, jammy berry notes with a warming finish. Works in sours, cobblers, and dessert drinks.",
       "tags": [1],
       "photoUri": "assets/ingredients/54-blackberry-brandy.jpg"
     },
@@ -37128,7 +37128,7 @@
     {
       "id": 60,
       "name": "Blue Curaçao Syrup",
-      "description": "Blue curaçao syrup delivers sweet orange flavour with a vivid blue hue. It mimics the taste of curaçao liqueur without alcohol. Great for colorful tropical cocktails and lemonades.",
+      "description": "Blue curaçao syrup delivers sweet orange flavour with a vivid blue hue. It mimics the taste of curaçao liqueur without alcohol. Great for colourful tropical cocktails and lemonades.",
       "tags": [5],
       "photoUri": "assets/ingredients/60-blue-cura-ao-syrup.jpg"
     },
@@ -37324,7 +37324,7 @@
     {
       "id": 87,
       "name": "Cherry Juice",
-      "description": "Tart, ruby-colored juice with rich cherry flavour. Ideal for sours, spritzes, or topping soda cocktails. Balances whiskey and rum drinks.",
+      "description": "Tart, ruby-coloured juice with rich cherry flavour. Ideal for sours, spritzes, or topping soda cocktails. Balances whiskey and rum drinks.",
       "tags": [7],
       "photoUri": "assets/ingredients/87-cherry-juice.jpg"
     },
@@ -37480,7 +37480,7 @@
     {
       "id": 109,
       "name": "Coffee Beans",
-      "description": "Coffee beans are used to infuse spirits or garnish coffee-flavored cocktails. They release aroma without adding sweetness. a single bean is often floated on drinks for decoration.",
+      "description": "Coffee beans are used to infuse spirits or garnish coffee-flavoured cocktails. They release aroma without adding sweetness. a single bean is often floated on drinks for decoration.",
       "tags": [8],
       "photoUri": "assets/ingredients/109-coffee-beans.jpg"
     },
@@ -37798,7 +37798,7 @@
     {
       "id": 153,
       "name": "Everclear",
-      "description": "Neutral grain spirit sold at very high proofs up to 95% ABV. Odorless and colorless, used for infusions and punches. Must be heavily diluted before drinking.",
+      "description": "Neutral grain spirit sold at very high proofs up to 95% ABV. Odourless and colourless, used for infusions and punches. Must be heavily diluted before drinking.",
       "tags": [1],
       "photoUri": "assets/ingredients/153-everclear.jpg"
     },
@@ -37841,7 +37841,7 @@
     {
       "id": 159,
       "name": "Fresca",
-      "description": "Fresca is a grapefruit-flavored diet soda with a crisp, dry finish. Zero sugar keeps cocktails lighter while adding bubbles. Mix with **tequila**, **gin**, or **vodka** for bright spritzes.",
+      "description": "Fresca is a grapefruit-flavoured diet soda with a crisp, dry finish. Zero sugar keeps cocktails lighter while adding bubbles. Mix with **tequila**, **gin**, or **vodka** for bright spritzes.",
       "tags": [6],
       "baseIngredientId": 179,
       "photoUri": "assets/ingredients/159-fresca.jpg"
@@ -37856,7 +37856,7 @@
     {
       "id": 161,
       "name": "Gin",
-      "description": "Juniper-forward distilled spirit flavored with botanicals, typically 40–47% ABV. Offers piney, citrus, and spice notes depending on style. Foundation for **Martinis**, **Gin and Tonics**, and many classics.",
+      "description": "Juniper-forward distilled spirit flavoured with botanicals, typically 40–47% ABV. Offers piney, citrus, and spice notes depending on style. Foundation for **Martinis**, **Gin and Tonics**, and many classics.",
       "tags": [0],
       "photoUri": "assets/ingredients/161-gin.jpg"
     },
@@ -38487,7 +38487,7 @@
     {
       "id": 248,
       "name": "Orange Bitters",
-      "description": "Orange bitters are aromatic bitters flavored with orange peel and spices. Use a dash or two to add bright citrus and gentle bitterness to stirred cocktails.",
+      "description": "Orange bitters are aromatic bitters flavoured with orange peel and spices. Use a dash or two to add bright citrus and gentle bitterness to stirred cocktails.",
       "tags": [4],
       "photoUri": "assets/ingredients/248-orange-bitters.jpg"
     },
@@ -38608,7 +38608,7 @@
     {
       "id": 265,
       "name": "Pastis",
-      "description": "French anise liqueur that turns cloudy with water, about 40–45% ABV. Flavored with licorice and herbs. Commonly served diluted as an aperitif or used in cocktails.",
+      "description": "French anise liqueur that turns cloudy with water, about 40–45% ABV. Flavoured with liquorice and herbs. Commonly served diluted as an aperitif or used in cocktails.",
       "tags": [1],
       "photoUri": "assets/ingredients/265-pastis.jpg"
     },
@@ -38680,7 +38680,7 @@
     {
       "id": 275,
       "name": "Pernod",
-      "description": "French anise spirit similar to pastis at about 40% ABV. Offers licorice, herbs, and light sweetness. Used in absinthe-style serves and as a cocktail rinse.",
+      "description": "French anise spirit similar to pastis at about 40% ABV. Offers liquorice, herbs, and light sweetness. Used in absinthe-style serves and as a cocktail rinse.",
       "tags": [1],
       "baseIngredientId": 21,
       "photoUri": "assets/ingredients/275-pernod.jpg"
@@ -38753,7 +38753,7 @@
     {
       "id": 285,
       "name": "Pisco",
-      "description": "Pisco is a colourless or yellowish-to-amber colored brandy produced in the winemaking regions of Peru and Chile. Made by distilling fermented grape juice into a high-proof spirit.",
+      "description": "Pisco is a colourless or yellowish-to-amber coloured brandy produced in the winemaking regions of Peru and Chile. Made by distilling fermented grape juice into a high-proof spirit.",
       "tags": [0],
       "photoUri": "assets/ingredients/285-pisco.jpg"
     },
@@ -39170,7 +39170,7 @@
     {
       "id": 343,
       "name": "Vanilla Extract",
-      "description": "Concentrated vanilla flavoring; a few drops round out creamy or dessert-style cocktails.",
+      "description": "Concentrated vanilla flavouring; a few drops round out creamy or dessert-style cocktails.",
       "tags": [8],
       "photoUri": "assets/ingredients/343-vanilla-extract.jpg"
     },
@@ -39198,7 +39198,7 @@
     {
       "id": 347,
       "name": "Vodka Vanilla",
-      "description": "Vanilla-flavored **vodka** around 35–40% ABV. Adds smooth sweetness and vanilla bean aroma. Great in dessert cocktails or with cola and cream sodas.",
+      "description": "Vanilla-flavoured **vodka** around 35–40% ABV. Adds smooth sweetness and vanilla bean aroma. Great in dessert cocktails or with cola and cream sodas.",
       "tags": [0],
       "photoUri": "assets/ingredients/347-vodka-vanilla.jpg"
     },
@@ -39212,7 +39212,7 @@
     {
       "id": 349,
       "name": "Water",
-      "description": "Water is a neutral, odorless liquid used for dilution and ice. Balance cocktails by adding water through shaking, stirring, or dilution. Fresh, clean water keeps flavours bright.",
+      "description": "Water is a neutral, odourless liquid used for dilution and ice. Balance cocktails by adding water through shaking, stirring, or dilution. Fresh, clean water keeps flavours bright.",
       "tags": [8],
       "photoUri": "assets/ingredients/349-water.jpg"
     },
@@ -39226,7 +39226,7 @@
     {
       "id": 351,
       "name": "Whipped Cream",
-      "description": "Whipped cream is cream beaten until light and fluffy, often sweetened and flavored with vanilla. It doubles in volume as air is incorporated, creating a soft foam. Use it as a rich topping for coffee cocktails, hot drinks, and dessert serves.",
+      "description": "Whipped cream is cream beaten until light and fluffy, often sweetened and flavoured with vanilla. It doubles in volume as air is incorporated, creating a soft foam. Use it as a rich topping for coffee cocktails, hot drinks, and dessert serves.",
       "tags": [8],
       "photoUri": "assets/ingredients/351-whipped-cream.jpg"
     },
