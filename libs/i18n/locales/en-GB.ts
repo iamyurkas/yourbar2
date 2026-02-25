@@ -48,7 +48,7 @@ export const enGBTranslations: TranslationDictionary = {
   "ingredients.emptyAll": "No ingredients yet",
   "ingredients.helpMyTitle": "My ingredients",
   "ingredients.helpMyText":
-    "This screen shows ingredients you have.\n\nSearch by name, and use tag filters to quickly organize your personal collection.",
+    "This screen shows ingredients you have.\n\nSearch by name, and use tag filters to quickly organise your personal collection.",
   "ingredients.helpAllTitle": "All ingredients",
   "ingredients.helpAllText":
     "This screen shows the full ingredients list.\n\nUse search and tags to quickly find what you need.",
@@ -252,7 +252,7 @@ export const enGBTranslations: TranslationDictionary = {
   "cocktailMethod.muddle.label": "Muddle",
   "cocktailMethod.muddle.description": "Press fruit, berries, or herbs to release oils and juice.",
   "cocktailMethod.heat.label": "Heat",
-  "cocktailMethod.heat.description": "Warm ingredients gently to blend flavors without boiling.",
+  "cocktailMethod.heat.description": "Warm ingredients gently to blend flavours without boiling.",
   "cocktailMethod.shake.label": "Shake",
   "cocktailMethod.shake.description": "Shake with ice. Best for citrus, syrup, cream, or egg white to aerate and chill.",
   "cocktailMethod.stir.label": "Stir",
@@ -391,8 +391,8 @@ export const enGBTranslations: TranslationDictionary = {
   "shakerResults.clearSelectedFilters": "Clear selected filters",
   "shakerResults.emptyMatchingRecipes": "No matching recipes",
 
-  "rowParts.removeFromFavorites": "Remove from favorites",
-  "rowParts.addToFavorites": "Add to favorites",
+  "rowParts.removeFromFavorites": "Remove from favourites",
+  "rowParts.addToFavorites": "Add to favourites",
   "cocktailListRow.allIngredientsReady": "All ingredients ready",
 
   "tabBar.leaveWithoutSavingTitle": "Leave without saving?",
@@ -403,7 +403,7 @@ export const enGBTranslations: TranslationDictionary = {
 
   "tagEditor.tagName": "Tag name",
   "tagEditor.newTag": "New tag",
-  "tagEditor.color": "Color",
+  "tagEditor.color": "Colour",
 
   "tags.unnamed": "Unnamed tag",
   "tabs.cocktails": "Cocktails",
@@ -423,7 +423,7 @@ export const enGBTranslations: TranslationDictionary = {
   "sideMenu.smartShakerFilteringInfo": "Smart shaker filtering info",
   "sideMenu.smartShakerFilteringInfoTitle": "Smart shaker filtering",
   "sideMenu.smartShakerFilteringInfoMessage":
-    "When enabled, ingredients in groups with no current selection are hidden if they would produce zero results.\n\nIn groups where you already selected at least one ingredient, items stay visible to preserve OR logic.\n\nTurn this off to restore the default shaker behavior.",
+    "When enabled, ingredients in groups with no current selection are hidden if they would produce zero results.\n\nIn groups where you already selected at least one ingredient, items stay visible to preserve OR logic.\n\nTurn this off to restore the default shaker behaviour.",
   "sideMenu.smartShakerFilteringCaption": "Hide non-matching ingredients",
   "sideMenu.startingScreen": "Starting screen",
   "sideMenu.startingScreenOpen": "Open {{screen}}",
@@ -491,7 +491,7 @@ export const enGBTranslations: TranslationDictionary = {
   "sideMenu.deleteTagMessage": "Remove \"{{name}}\"?",
   "sideMenu.emailUnavailableTitle": "Unable to open email",
   "sideMenu.emailUnavailableMessage": "Please send your report to your.bar.app@gmail.com manually.",
-  "sideMenu.favoritesRatingModalDescription": "Choose the minimum rating to show on Favorites",
+  "sideMenu.favoritesRatingModalDescription": "Choose the minimum rating to show on Favourites",
   "sideMenu.favoritesRatingOption": "Show {{value}} stars and up",
   "sideMenu.useAutomaticAmazonStoreDetection": "Use automatic Amazon store detection",
   "sideMenu.disableAmazonLink": "Disable Amazon link",
