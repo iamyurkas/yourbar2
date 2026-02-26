@@ -3391,8 +3391,8 @@
       "id": 58,
       "name": "Bad Word",
       "synonyms": ["Gin Aperol Sour", "Gin Chartreuse Sour"],
-      "description": "A bold and layered **gin** cocktail where London dry **gin**, **green Chartreuse** and **Aperol** collide with fresh citrus. Herbal, bitter and bright at the same time, it’s a complex, structured drink with a long, slightly medicinal finish, lifted by **orange** oils.",
-      "instructions": "1. Fill a shaker with **ice**.\n2. Add 30 ml of **gin**, 30 ml of **green Chartreuse**, 30 ml of **Aperol** or **Gran Classico**, and 30 ml of **lime juice**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled coupe glass.\n5. Express oils from an **orange** peel over the drink and use it as a garnish.",
+      "description": "A bold and layered **gin** cocktail where London dry **gin**, **green Chartreuse** and **Aperol** collide with fresh citrus. Herbal, bitter and bright at the same time, it’s a complex, structured drink with a long, slightly medicinal finish.",
+      "instructions": "1. Fill a shaker with **ice**.\n2. Add 30 ml of **gin**, 30 ml of **green Chartreuse**, 30 ml of **Aperol** or **Gran Classico**, and 30 ml of **lime juice**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled coupe glass.",
       "photoUri": "assets/cocktails/58-bad-word.jpg",
       "glassId": "coupe",
       "methodIds": ["shake"],
@@ -3446,14 +3446,6 @@
           "name": "Lime Juice",
           "amount": "30",
           "unitId": 11
-        },
-        {
-          "order": 6,
-          "ingredientId": 247,
-          "name": "Orange",
-          "amount": "1",
-          "unitId": 26,
-          "garnish": true
         }
       ]
     },
