@@ -93,6 +93,7 @@ export type CreateCocktailInput = {
 export type CreateIngredientInput = {
   name: string;
   description?: string | null;
+  synonyms?: string[] | null;
   photoUri?: string | null;
   baseIngredientId?: number | null;
   styleIngredientId?: number | null;

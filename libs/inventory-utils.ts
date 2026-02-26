@@ -230,6 +230,7 @@ export function toIngredientStorageRecord(ingredient: Ingredient | IngredientRec
     id: ingredient.id,
     name: ingredient.name,
     description: ingredient.description ?? undefined,
+    synonyms: ingredient.synonyms ?? undefined,
     tags: normalizedTags && normalizedTags.length > 0 ? normalizedTags : undefined,
     baseIngredientId: ingredient.baseIngredientId ?? undefined,
     styleIngredientId: ingredient.styleIngredientId ?? undefined,
