@@ -261,7 +261,7 @@ export const ukUATranslations: TranslationDictionary = {
   "cocktailMethod.shake.label": "Збовтувати",
   "cocktailMethod.shake.description":
     "Енергійно струсіть у шейкері з льодом. Найкраще для цитрусових, сиропів, вершків чи білка.",
-  "cocktailMethod.stir.label": "Змішувати",
+  "cocktailMethod.stir.label": "Перемішувати",
   "cocktailMethod.stir.description":
     "Зміщайте барною ложкою в окремому, наповненомому льодом, глеку. Найкраще для трав'яних міксерів.",
   "cocktailMethod.throw.label": "Переливати",
@@ -601,10 +601,10 @@ export const ukUATranslations: TranslationDictionary = {
   "unit.5.few": "чашки",
   "unit.5.many": "чашок",
   "unit.5.other": "чашок",
-  "unit.6.one": "плеск",
-  "unit.6.few": "плески",
-  "unit.6.many": "плесків",
-  "unit.6.other": "плесків",
+  "unit.6.one": "деш",
+  "unit.6.few": "деші",
+  "unit.6.many": "дешів",
+  "unit.6.other": "дешів",
   "unit.7.one": "крапля",
   "unit.7.few": "краплі",
   "unit.7.many": "крапель",
