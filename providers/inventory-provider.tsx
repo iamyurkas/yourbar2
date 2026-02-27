@@ -1040,6 +1040,38 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         ingredients,
       } satisfies InventoryState;
     });
+
+    setTranslationOverrides((prev) => {
+      const next: InventoryTranslationOverrides = {};
+
+      (Object.entries(prev) as Array<[SupportedLocale, InventoryLocaleTranslationOverrides | undefined]>).forEach(([locale, localeOverrides]) => {
+        if (!localeOverrides) {
+          return;
+        }
+
+        const preservedCocktails = Object.entries(localeOverrides.cocktails ?? {}).reduce<NonNullable<InventoryLocaleTranslationOverrides['cocktails']>>((acc, [id, value]) => {
+          const numericId = Number(id);
+          if (Number.isFinite(numericId) && numericId >= USER_CREATED_ID_START) {
+            acc[id] = value;
+          }
+          return acc;
+        }, {});
+
+        const hasCocktails = Object.keys(preservedCocktails).length > 0;
+        const hasIngredients = Boolean(localeOverrides.ingredients && Object.keys(localeOverrides.ingredients).length > 0);
+
+        if (!hasCocktails && !hasIngredients) {
+          return;
+        }
+
+        next[locale] = {
+          ...(hasCocktails ? { cocktails: preservedCocktails } : {}),
+          ...(hasIngredients ? { ingredients: localeOverrides.ingredients } : {}),
+        };
+      });
+
+      return next;
+    });
   }, []);
 
   const exportInventoryData = useCallback((): InventoryExportFile[] | null => {
