@@ -39,6 +39,7 @@ import {
   createIngredientLookup,
   getVisibleIngredientIdsForCocktail,
 } from "@/libs/ingredient-availability";
+import { getPluralCategory } from "@/libs/i18n/plural";
 import {
   buildReturnToParams,
   navigateToDetailsWithReturnTo,
@@ -47,6 +48,7 @@ import {
   skipDuplicateBack,
 } from "@/libs/navigation";
 import { normalizeSearchText } from "@/libs/search-normalization";
+import { useI18n } from "@/libs/i18n/use-i18n";
 import { useInventory, type Ingredient } from "@/providers/inventory-provider";
 
 function useResolvedIngredient(
@@ -88,6 +90,7 @@ export default function IngredientDetailsScreen() {
   }>();
   const navigation = useNavigation();
   const Colors = useAppColors();
+  const { t, locale } = useI18n();
   const { ingredientId } = params;
   const {
     ingredients,
@@ -332,6 +335,8 @@ export default function IngredientDetailsScreen() {
           ingredientLookup,
           undefined,
           { ignoreGarnish, allowAllSubstitutes },
+          t,
+          locale,
         );
         const availabilityWithIngredient = summariseCocktailAvailability(
           cocktail,
@@ -344,6 +349,8 @@ export default function IngredientDetailsScreen() {
           ingredientLookup,
           undefined,
           { ignoreGarnish, allowAllSubstitutes },
+          t,
+          locale,
         );
 
         return {
@@ -428,16 +435,18 @@ export default function IngredientDetailsScreen() {
       return null;
     }
 
-    return `Buy on ${AMAZON_STORES[effectiveAmazonStore].label}`;
-  }, [effectiveAmazonStore]);
+    return t("ingredientDetails.buyOnAmazon", {
+      store: AMAZON_STORES[effectiveAmazonStore].label,
+    });
+  }, [effectiveAmazonStore, t]);
 
   const handleAmazonAffiliateInfoPress = useCallback(() => {
     showDialog({
-      title: "Affiliate disclosure",
-      message: "Some Amazon links in this app are affiliate links. If you buy something, we may earn a small commission at no extra cost to you.\n\nThis helps support the development of the app.\nThank you for your support!",
-      actions: [{ label: "Got it", variant: "primary" }],
+      title: t("ingredientDetails.affiliateDisclosureTitle"),
+      message: t("ingredientDetails.affiliateDisclosureMessage"),
+      actions: [{ label: t("common.gotIt"), variant: "primary" }],
     });
-  }, [showDialog]);
+  }, [showDialog, t]);
 
   const handleBuyOnAmazon = useCallback(() => {
     const ingredientName = ingredient?.name?.trim();
@@ -556,12 +565,14 @@ export default function IngredientDetailsScreen() {
       }
 
       showDialog({
-        title: "Remove base ingredient",
-        message: `Are you sure you want to unlink ${ingredient.name} from its base ingredient?`,
+        title: t("ingredientDetails.removeBaseTitle"),
+        message: t("ingredientDetails.removeBaseMessage", {
+          name: ingredient.name ?? "",
+        }),
         actions: [
-          { label: "Cancel", variant: "secondary" },
+          { label: t("ingredientDetails.cancel"), variant: "secondary" },
           {
-            label: "Remove",
+            label: t("ingredientDetails.remove"),
             variant: "destructive",
             onPress: () => {
               clearBaseIngredient(numericIngredientId);
@@ -570,7 +581,7 @@ export default function IngredientDetailsScreen() {
         ],
       });
     },
-    [clearBaseIngredient, ingredient, numericIngredientId, showDialog],
+    [clearBaseIngredient, ingredient, numericIngredientId, showDialog, t],
   );
 
   const handleNavigateToBase = useCallback(() => {
@@ -598,12 +609,14 @@ export default function IngredientDetailsScreen() {
       }
 
       showDialog({
-        title: "Remove style ingredient",
-        message: `Are you sure you want to unlink ${ingredient.name} from its style ingredient?`,
+        title: t("ingredientDetails.removeStyleTitle"),
+        message: t("ingredientDetails.removeStyleMessage", {
+          name: ingredient.name ?? "",
+        }),
         actions: [
-          { label: "Cancel", variant: "secondary" },
+          { label: t("ingredientDetails.cancel"), variant: "secondary" },
           {
-            label: "Remove",
+            label: t("ingredientDetails.remove"),
             variant: "destructive",
             onPress: () => {
               clearBaseIngredient(numericIngredientId);
@@ -612,7 +625,7 @@ export default function IngredientDetailsScreen() {
         ],
       });
     },
-    [clearBaseIngredient, ingredient, numericIngredientId, showDialog],
+    [clearBaseIngredient, ingredient, numericIngredientId, showDialog, t],
   );
 
   const handleNavigateToStyle = useCallback(() => {
@@ -678,12 +691,15 @@ export default function IngredientDetailsScreen() {
       }
 
       showDialog({
-        title: "Remove branded ingredient",
-        message: `Unlink ${brandedIngredient.name} from ${ingredient?.name}?`,
+        title: t("ingredientDetails.removeBrandedTitle"),
+        message: t("ingredientDetails.removeBrandedMessage", {
+          source: brandedIngredient.name ?? "",
+          target: ingredient?.name ?? "",
+        }),
         actions: [
-          { label: "Cancel", variant: "secondary" },
+          { label: t("ingredientDetails.cancel"), variant: "secondary" },
           {
-            label: "Remove",
+            label: t("ingredientDetails.remove"),
             variant: "destructive",
             onPress: () => {
               clearBaseIngredient(brandedId);
@@ -692,7 +708,7 @@ export default function IngredientDetailsScreen() {
         ],
       });
     },
-    [clearBaseIngredient, ingredient?.name, showDialog],
+    [clearBaseIngredient, ingredient?.name, showDialog, t],
   );
 
 
@@ -706,12 +722,15 @@ export default function IngredientDetailsScreen() {
       }
 
       showDialog({
-        title: "Remove styled ingredient",
-        message: `Unlink ${styledIngredient.name} from ${ingredient?.name}?`,
+        title: t("ingredientDetails.removeStyledTitle"),
+        message: t("ingredientDetails.removeStyledMessage", {
+          source: styledIngredient.name ?? "",
+          target: ingredient?.name ?? "",
+        }),
         actions: [
-          { label: "Cancel", variant: "secondary" },
+          { label: t("ingredientDetails.cancel"), variant: "secondary" },
           {
-            label: "Remove",
+            label: t("ingredientDetails.remove"),
             variant: "destructive",
             onPress: () => {
               clearBaseIngredient(styledId);
@@ -720,7 +739,7 @@ export default function IngredientDetailsScreen() {
         ],
       });
     },
-    [clearBaseIngredient, ingredient?.name, showDialog],
+    [clearBaseIngredient, ingredient?.name, showDialog, t],
   );
 
   const handleShowMoreCocktails = useCallback(() => {
@@ -785,7 +804,7 @@ export default function IngredientDetailsScreen() {
     >
       <Stack.Screen
         options={{
-          title: "Ingredient details",
+          title: t("ingredientDetails.title"),
           headerTitleAlign: "center",
           headerStyle: { backgroundColor: Colors.surface },
           headerTitleStyle: {
@@ -797,7 +816,7 @@ export default function IngredientDetailsScreen() {
           headerLeft: () => (
             <HeaderIconButton
               onPress={handleReturn}
-              accessibilityLabel="Go back"
+              accessibilityLabel={t("ingredientDetails.goBack")}
             >
               <MaterialCommunityIcons
                 name={Platform.OS === "ios" ? "chevron-left" : "arrow-left"}
@@ -809,7 +828,7 @@ export default function IngredientDetailsScreen() {
           headerRight: () => (
             <HeaderIconButton
               onPress={() => setIsHelpVisible(true)}
-              accessibilityLabel="Open screen help"
+              accessibilityLabel={t("common.openScreenHelp")}
             >
               <MaterialCommunityIcons
                 name="help-circle-outline"
@@ -855,7 +874,7 @@ export default function IngredientDetailsScreen() {
                         { color: Colors.onSurfaceVariant },
                       ]}
                     >
-                      No photo
+                      {t("ingredientDetails.noPhoto")}
                     </Text>
                   </View>
                 )}
@@ -867,7 +886,7 @@ export default function IngredientDetailsScreen() {
                     <Text
                       style={[styles.statusControlLabel, { color: Colors.onSurfaceVariant }]}
                     >
-                      I have it
+                      {t("ingredientDetails.iHaveIt")}
                     </Text>
                     <PresenceCheck
                       checked={effectiveIsAvailable}
@@ -880,16 +899,16 @@ export default function IngredientDetailsScreen() {
                       style={[styles.statusControlLabel, { color: Colors.onSurfaceVariant }]}
                     >
                       {effectiveIsOnShoppingList
-                        ? "Remove from shopping list"
-                        : "Add to shopping list"}
+                        ? t("ingredientDetails.removeFromShoppingList")
+                        : t("ingredientDetails.addToShoppingList")}
                     </Text>
                     <Pressable
                       onPress={handleToggleShopping}
                       accessibilityRole="button"
                       accessibilityLabel={
                         effectiveIsOnShoppingList
-                          ? "Remove ingredient from shopping list"
-                          : "Add ingredient to shopping list"
+                          ? t("ingredientDetails.removeIngredientFromShoppingList")
+                          : t("ingredientDetails.addIngredientToShoppingList")
                       }
                       hitSlop={8}
                       style={styles.statusIconButton}
@@ -923,7 +942,9 @@ export default function IngredientDetailsScreen() {
                         <Pressable
                           onPress={handleAmazonAffiliateInfoPress}
                           accessibilityRole="button"
-                          accessibilityLabel="Amazon affiliate information"
+                          accessibilityLabel={t(
+                            "ingredientDetails.amazonAffiliateInformation",
+                          )}
                           hitSlop={8}
                           style={styles.amazonInfoButton}
                         >
@@ -942,7 +963,12 @@ export default function IngredientDetailsScreen() {
                             { color: Colors.onSurfaceVariant },
                           ]}
                         >
-                          {`to make ${canMakeMoreCocktailsCount} more cocktails`}
+                          {t(
+                            `ingredientDetails.toMakeMoreCocktails.${getPluralCategory(locale, canMakeMoreCocktailsCount)}`,
+                            {
+                              count: canMakeMoreCocktailsCount,
+                            },
+                          )}
                         </Text>
                       ) : null}
                     </View>
@@ -961,13 +987,17 @@ export default function IngredientDetailsScreen() {
                         ? `tag-${tag.name}`
                         : `tag-${index}`;
 
+                  const isBuiltin = tag.id != null && tag.id < 10;
+                  const translatedName = isBuiltin ? t(`ingredientTag.${tag.id}`) : tag.name;
+                  const finalName = (isBuiltin && translatedName !== `ingredientTag.${tag.id}`) ? translatedName : (tag.name ?? "");
+
                   return (
                     <TagPill
                       key={tagKey}
-                      label={tag.name ?? ""}
+                      label={finalName}
                       color={tag.color ?? Colors.tint}
                       selected
-                      accessibilityLabel={tag.name ?? "Tag"}
+                      accessibilityLabel={finalName || t("ingredientDetails.tag")}
                     />
                   );
                 })}
@@ -981,8 +1011,8 @@ export default function IngredientDetailsScreen() {
                   accessibilityRole="button"
                   accessibilityLabel={
                     isDescriptionExpanded
-                      ? "Show less description"
-                      : "Show full description"
+                      ? t("ingredientDetails.showLessDescription")
+                      : t("ingredientDetails.showFullDescription")
                   }
                   hitSlop={8}
                 >
@@ -1024,15 +1054,17 @@ export default function IngredientDetailsScreen() {
                     accessibilityRole="button"
                     accessibilityLabel={
                       isDescriptionExpanded
-                        ? "Show less description"
-                        : "Show full description"
+                        ? t("ingredientDetails.showLessDescription")
+                        : t("ingredientDetails.showFullDescription")
                     }
                     hitSlop={8}
                   >
                     <Text
                       style={[styles.descriptionToggleText, { color: Colors.tint }]}
                     >
-                      {isDescriptionExpanded ? "Show less" : "Show more"}
+                      {isDescriptionExpanded
+                        ? t("ingredientDetails.showLess")
+                        : t("ingredientDetails.showMore")}
                     </Text>
                   </Pressable>
                 ) : null}
@@ -1044,12 +1076,12 @@ export default function IngredientDetailsScreen() {
                 <Text
                   style={[styles.sectionTitle, { color: Colors.onSurface }]}
                 >
-                  Style ingredient
+                  {t("ingredientDetails.styleIngredient")}
                 </Text>
                 <Pressable
                   onPress={handleNavigateToStyle}
                   accessibilityRole="button"
-                  accessibilityLabel="View style ingredient"
+                  accessibilityLabel={t("ingredientDetails.viewStyleIngredient")}
                   style={[
                     styles.baseIngredientRow,
                     {
@@ -1108,7 +1140,7 @@ export default function IngredientDetailsScreen() {
                       onPress={handleRemoveStyle}
                       style={styles.unlinkButton}
                       accessibilityRole="button"
-                      accessibilityLabel="Remove style ingredient"
+                      accessibilityLabel={t("ingredientDetails.removeStyleIngredient")}
                       hitSlop={8}
                     >
                       <MaterialCommunityIcons
@@ -1133,12 +1165,12 @@ export default function IngredientDetailsScreen() {
                 <Text
                   style={[styles.sectionTitle, { color: Colors.onSurface }]}
                 >
-                  Base ingredient
+                  {t("ingredientDetails.baseIngredient")}
                 </Text>
                 <Pressable
                   onPress={handleNavigateToBase}
                   accessibilityRole="button"
-                  accessibilityLabel="View base ingredient"
+                  accessibilityLabel={t("ingredientDetails.viewBaseIngredient")}
                   style={[
                     styles.baseIngredientRow,
                     {
@@ -1193,7 +1225,7 @@ export default function IngredientDetailsScreen() {
                       onPress={handleRemoveBase}
                       style={styles.unlinkButton}
                       accessibilityRole="button"
-                      accessibilityLabel="Remove base ingredient"
+                      accessibilityLabel={t("ingredientDetails.removeBaseIngredient")}
                       hitSlop={8}
                     >
                       <MaterialCommunityIcons
@@ -1219,7 +1251,7 @@ export default function IngredientDetailsScreen() {
                 <Text
                   style={[styles.sectionTitle, { color: Colors.onSurface }]}
                 >
-                  Styled ingredients
+                  {t("ingredientDetails.styledIngredients")}
                 </Text>
                 <View style={styles.brandedList}>
                   {styledIngredients.map((styled) => {
@@ -1233,7 +1265,9 @@ export default function IngredientDetailsScreen() {
                         key={styled.id ?? styled.name}
                         onPress={() => handleNavigateToIngredient(styled.id)}
                         accessibilityRole="button"
-                        accessibilityLabel={`View ${styled.name}`}
+                        accessibilityLabel={t("ingredientDetails.viewIngredient", {
+                          name: styled.name ?? "",
+                        })}
                         style={[
                           styles.baseIngredientRow,
                           {
@@ -1290,7 +1324,10 @@ export default function IngredientDetailsScreen() {
                             onPress={handleRemoveStyled(styled)}
                             style={styles.unlinkButton}
                             accessibilityRole="button"
-                            accessibilityLabel={`Remove ${styled.name} link`}
+                            accessibilityLabel={t(
+                              "ingredientDetails.removeIngredientLink",
+                              { name: styled.name ?? "" },
+                            )}
                             hitSlop={8}
                           >
                             <MaterialCommunityIcons
@@ -1318,7 +1355,7 @@ export default function IngredientDetailsScreen() {
                 <Text
                   style={[styles.sectionTitle, { color: Colors.onSurface }]}
                 >
-                  Branded ingredients
+                  {t("ingredientDetails.brandedIngredients")}
                 </Text>
                 <View style={styles.brandedList}>
                   {brandedIngredients.map((branded) => {
@@ -1332,7 +1369,9 @@ export default function IngredientDetailsScreen() {
                         key={branded.id ?? branded.name}
                         onPress={() => handleNavigateToIngredient(branded.id)}
                         accessibilityRole="button"
-                        accessibilityLabel={`View ${branded.name}`}
+                        accessibilityLabel={t("ingredientDetails.viewIngredient", {
+                          name: branded.name ?? "",
+                        })}
                         style={[
                           styles.baseIngredientRow,
                           {
@@ -1389,7 +1428,10 @@ export default function IngredientDetailsScreen() {
                             onPress={handleRemoveBranded(branded)}
                             style={styles.unlinkButton}
                             accessibilityRole="button"
-                            accessibilityLabel={`Remove ${branded.name} link`}
+                            accessibilityLabel={t(
+                              "ingredientDetails.removeIngredientLink",
+                              { name: branded.name ?? "" },
+                            )}
                             hitSlop={8}
                           >
                             <MaterialCommunityIcons
@@ -1413,7 +1455,7 @@ export default function IngredientDetailsScreen() {
 
             <View style={[styles.textBlock, styles.cocktailBlock]}>
               <Text style={[styles.sectionTitle, { color: Colors.onSurface }]}>
-                Cocktails
+                {t("ingredientDetails.cocktails")}
               </Text>
               {cocktailEntries.length ? (
                 <View style={styles.cocktailList}>
@@ -1477,12 +1519,12 @@ export default function IngredientDetailsScreen() {
                       ]}
                       onPress={handleShowMoreCocktails}
                       accessibilityRole="button"
-                      accessibilityLabel="Show more cocktails"
+                      accessibilityLabel={t("ingredientDetails.showMoreCocktails")}
                     >
                       <Text
                         style={[styles.showMoreLabel, { color: Colors.tint }]}
                       >
-                        Show more cocktails
+                        {t("ingredientDetails.showMoreCocktails")}
                       </Text>
                     </Pressable>
                   ) : null}
@@ -1494,7 +1536,7 @@ export default function IngredientDetailsScreen() {
                     { color: Colors.onSurfaceVariant },
                   ]}
                 >
-                  No cocktails yet
+                  {t("ingredientDetails.noCocktailsYet")}
                 </Text>
               )}
             </View>
@@ -1503,12 +1545,12 @@ export default function IngredientDetailsScreen() {
                 style={[styles.addButton, { backgroundColor: Colors.tint }]}
                 onPress={handleAddCocktail}
                 accessibilityRole="button"
-                accessibilityLabel="Add cocktail"
+                accessibilityLabel={t("ingredientDetails.addCocktail")}
               >
                 <Text
                   style={[styles.addButtonLabel, { color: Colors.onPrimary }]}
                 >
-                  + Add cocktail
+                  {`+ ${t("ingredientDetails.addCocktail")}`}
                 </Text>
               </Pressable>
 
@@ -1516,7 +1558,7 @@ export default function IngredientDetailsScreen() {
                 <Pressable
                   onPress={handleEditPress}
                   accessibilityRole="button"
-                  accessibilityLabel="Edit ingredient"
+                  accessibilityLabel={t("ingredientDetails.editIngredient")}
                   style={[styles.itemActionButton, { borderColor: Colors.primary, backgroundColor: Colors.surfaceBright }]}
                 >
                   <MaterialCommunityIcons
@@ -1524,7 +1566,9 @@ export default function IngredientDetailsScreen() {
                     size={18}
                     color={Colors.primary}
                   />
-                  <Text style={[styles.itemActionLabel, { color: Colors.primary }]}>Edit ingredient</Text>
+                  <Text style={[styles.itemActionLabel, { color: Colors.primary }]}>
+                    {t("ingredientDetails.editIngredient")}
+                  </Text>
                 </Pressable>
               </View>
             </View>
@@ -1537,7 +1581,7 @@ export default function IngredientDetailsScreen() {
                 { color: Colors.onSurfaceVariant },
               ]}
             >
-              Ingredient not found
+              {t("ingredientDetails.notFound")}
             </Text>
           </View>
         )}
@@ -1545,9 +1589,9 @@ export default function IngredientDetailsScreen() {
 
       <AppDialog
         visible={isHelpVisible}
-        title="Ingredient details"
-        message="This screen shows ingredient details, links, and related cocktails.\n\nUse the button under the ingredient to edit it.\n\n**Cocktail ribbons**\nLeft ribbon shows what's inside:\nblue = has brand ingredients,\nyellow = has style ingredients.\n\nRight ribbon shows fallback:\nblue = brand fallback exists,\nyellow = style fallback exists."
-        actions={[{ label: "Got it", variant: "secondary" }]}
+        title={t("ingredientDetails.title")}
+        message={t("ingredientDetails.helpMessage")}
+        actions={[{ label: t("common.gotIt"), variant: "secondary" }]}
         onRequestClose={() => setIsHelpVisible(false)}
       />
 

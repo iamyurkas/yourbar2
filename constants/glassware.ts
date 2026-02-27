@@ -47,3 +47,21 @@ export const GLASSWARE: GlasswareOption[] = GLASSWARE_DEFINITIONS.map(
     imageUri: glasswareUriById[id],
   }),
 );
+
+const GLASSWARE_ID_SET = new Set<string>(GLASSWARE.map((item) => item.id));
+const GLASSWARE_ID_BY_NAME = new Map<string, GlasswareId>(
+  GLASSWARE.map((item) => [item.name.toLowerCase(), item.id]),
+);
+
+export function resolveGlasswareId(value?: string | null): GlasswareId | undefined {
+  const normalized = value?.trim();
+  if (!normalized) {
+    return undefined;
+  }
+
+  if (GLASSWARE_ID_SET.has(normalized)) {
+    return normalized as GlasswareId;
+  }
+
+  return GLASSWARE_ID_BY_NAME.get(normalized.toLowerCase());
+}

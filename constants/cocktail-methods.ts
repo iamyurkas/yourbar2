@@ -35,7 +35,7 @@ export const COCKTAIL_METHODS: CocktailMethod[] = [
     id: "heat",
     label: "Heat",
     title: "Heat",
-    description: "Warm ingredients gently to blend flavors without boiling.",
+    description: "Warm ingredients gently to blend flavours without boiling.",
   },
   {
     id: "shake",

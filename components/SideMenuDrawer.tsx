@@ -33,11 +33,12 @@ import { useAppColors } from "@/constants/theme";
 import { AMAZON_STORES, AMAZON_STORE_KEYS, type AmazonStoreOverride } from "@/libs/amazon-stores";
 import { base64ToBytes, bytesToBase64, createTarArchive, parseTarArchive } from "@/libs/archive-utils";
 import { buildPhotoBaseName } from "@/libs/photo-utils";
+import { useI18n } from "@/libs/i18n/use-i18n";
 import { useInventory, type AppTheme, type StartScreen } from "@/providers/inventory-provider";
 import { type ImportedPhotoEntry, type InventoryExportData } from "@/providers/inventory-types";
 import Constants from "expo-constants";
 
-const MENU_WIDTH = Math.round(Dimensions.get("window").width * 0.75);
+const MENU_WIDTH = Math.round(Dimensions.get("window").width * 0.8);
 const ANIMATION_DURATION = 200;
 const APP_VERSION =
   Constants.expoConfig?.version ??
@@ -54,66 +55,66 @@ type StartScreenIcon =
 
 type StartScreenOption = {
   key: StartScreen;
-  label: string;
-  description: string;
+  labelKey: string;
+  descriptionKey: string;
   icon: StartScreenIcon;
 };
 
 const START_SCREEN_OPTIONS: StartScreenOption[] = [
   {
     key: "cocktails_all",
-    label: "All cocktails",
-    description: "Browse every recipe",
+    labelKey: "startScreen.cocktails_all.label",
+    descriptionKey: "startScreen.cocktails_all.description",
     icon: { type: "asset", source: CocktailIcon },
   },
   {
     key: "cocktails_my",
-    label: "My cocktails",
-    description: "See your creations first",
+    labelKey: "startScreen.cocktails_my.label",
+    descriptionKey: "startScreen.cocktails_my.description",
     icon: { type: "icon", name: "cup-water" },
   },
   {
     key: "cocktails_favorites",
-    label: "Favorite cocktails",
-    description: "Jump into saved cocktails",
+    labelKey: "startScreen.cocktails_favorites.label",
+    descriptionKey: "startScreen.cocktails_favorites.description",
     icon: { type: "icon", name: "star" },
   },
   {
     key: "shaker",
-    label: "Shaker",
-    description: "Mix based on your inventory",
+    labelKey: "startScreen.shaker.label",
+    descriptionKey: "startScreen.shaker.description",
     icon: { type: "asset", source: ShakerIcon },
   },
   {
     key: "ingredients_all",
-    label: "All ingredients",
-    description: "Manage every ingredient",
+    labelKey: "startScreen.ingredients_all.label",
+    descriptionKey: "startScreen.ingredients_all.description",
     icon: { type: "asset", source: IngredientsIcon },
   },
   {
     key: "ingredients_my",
-    label: "My ingredients",
-    description: "Start with what you own",
+    labelKey: "startScreen.ingredients_my.label",
+    descriptionKey: "startScreen.ingredients_my.description",
     icon: { type: "icon", name: "check-circle" },
   },
   {
     key: "ingredients_shopping",
-    label: "Shopping list",
-    description: "Head to your shopping items",
+    labelKey: "startScreen.ingredients_shopping.label",
+    descriptionKey: "startScreen.ingredients_shopping.description",
     icon: { type: "materialIcon", name: "shopping-cart" },
   },
 ];
 
 type ThemeOption = {
   key: AppTheme;
-  label: string;
+  labelKey: string;
   icon: ComponentProps<typeof MaterialCommunityIcons>["name"];
 };
 
 const THEME_OPTIONS: ThemeOption[] = [
-  { key: "light", label: "Light", icon: "white-balance-sunny" },
-  { key: "dark", label: "Dark", icon: "moon-waning-crescent" },
-  { key: "system", label: "System", icon: "cellphone-settings" },
+  { key: "light", labelKey: "theme.light", icon: "white-balance-sunny" },
+  { key: "dark", labelKey: "theme.dark", icon: "moon-waning-crescent" },
+  { key: "system", labelKey: "theme.system", icon: "cellphone-settings" },
 ];
 
 type SideMenuDrawerProps = {
@@ -159,6 +160,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     deleteCustomIngredientTag,
   } = useInventory();
   const Colors = useAppColors();
+  const { t, locale, setLocale, languageOptions, currentLanguage } = useI18n();
   const [isMounted, setIsMounted] = useState(visible);
   const [isRatingModalVisible, setRatingModalVisible] = useState(false);
   const ratingModalCloseTimeout = useRef<ReturnType<typeof setTimeout> | null>(
@@ -170,10 +172,12 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     typeof setTimeout
   > | null>(null);
   const [isAmazonStoreModalVisible, setAmazonStoreModalVisible] = useState(false);
+  const [isLanguageModalVisible, setLanguageModalVisible] = useState(false);
   const [isBackupRestoreModalVisible, setBackupRestoreModalVisible] = useState(false);
   const amazonStoreModalCloseTimeout = useRef<ReturnType<typeof setTimeout> | null>(
     null,
   );
+  const languageModalCloseTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [isTagManagerVisible, setTagManagerVisible] = useState(false);
   const [isTagEditorVisible, setTagEditorVisible] = useState(false);
   const [tagEditorMode, setTagEditorMode] = useState<"create" | "edit">(
@@ -255,11 +259,11 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
   const selectedAmazonStoreLabel = useMemo(() => {
     if (!effectiveAmazonStore) {
-      return 'Disabled';
+      return t('settings.disabled');
     }
 
     return AMAZON_STORES[effectiveAmazonStore].label;
-  }, [effectiveAmazonStore]);
+  }, [effectiveAmazonStore, t]);
 
   const renderStartScreenIcon = (
     option: StartScreenOption,
@@ -349,22 +353,21 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
   const handleSmartShakerFilteringInfoPress = () => {
     setDialogOptions({
-      title: "Smart shaker filtering",
-      message:
-        "When enabled, ingredients in groups with no current selection are hidden if they would produce zero results.\n\nIn groups where you already selected at least one ingredient, items stay visible to preserve OR logic.\n\nTurn this off to restore the default shaker behavior.",
-      actions: [{ label: "Got it", variant: "secondary" }],
+      title: t("sideMenu.smartShakerFilteringInfoTitle"),
+      message: t("sideMenu.smartShakerFilteringInfoMessage"),
+      actions: [{ label: t("common.gotIt"), variant: "secondary" }],
     });
   };
 
   const handleResetInventory = () => {
     setDialogOptions({
-      title: "Restore bundled data",
+      title: t("sideMenu.restoreBundledData"),
       message:
-        "This will restore the bundled cocktails and ingredients.\nYour custom cocktails and ingredients will stay the same.",
+        t("sideMenu.restoreBundledDataConfirmMessage"),
       actions: [
-        { label: "Cancel", variant: "secondary" },
+        { label: t("common.cancel"), variant: "secondary" },
         {
-          label: "Restore",
+          label: t("sideMenu.restore"),
           variant: "destructive",
           onPress: async () => {
             await resetInventoryFromBundle();
@@ -413,6 +416,20 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
   const handleBackupRestorePress = () => {
     setBackupRestoreModalVisible(true);
+  };
+
+  const handleLanguagePress = () => {
+    setLanguageModalVisible(true);
+  };
+
+  const handleCloseLanguageModal = () => {
+    clearTimeoutRef(languageModalCloseTimeout);
+    setLanguageModalVisible(false);
+  };
+
+  const handleSelectLanguage = (value: "en-GB" | "en-US" | "uk-UA") => {
+    setLocale(value);
+    scheduleModalClose(languageModalCloseTimeout, setLanguageModalVisible);
   };
 
   const handleCloseAmazonStoreModal = () => {
@@ -474,7 +491,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     setDialogOptions({
       title,
       message,
-      actions: [{ label: "OK" }],
+      actions: [{ label: t("common.ok") }],
     });
   };
 
@@ -524,6 +541,31 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     return Array.isArray(record.cocktails) && Array.isArray(record.ingredients);
   };
 
+  const resolveInventoryFileFromArchive = (
+    files: { path: string; contents: Uint8Array }[],
+  ) => {
+    const normalizedLocale = locale.toLowerCase();
+    const preferredPaths = [
+      `inventory.${locale}.json`,
+      `inventory.${normalizedLocale}.json`,
+      "inventory.json",
+    ];
+
+    for (const preferredPath of preferredPaths) {
+      const matched = files.find(
+        (file) => file.path.toLowerCase() === preferredPath.toLowerCase(),
+      );
+      if (matched) {
+        return matched;
+      }
+    }
+
+    return (
+      files.find((file) => /^inventory\.[^.]+\.json$/i.test(file.path)) ??
+      files.find((file) => file.path.toLowerCase().endsWith(".json"))
+    );
+  };
+
   const handleBackupData = async () => {
     if (isBackingUpData) {
       return;
@@ -532,8 +574,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     const data = exportInventoryData();
     if (!data) {
       showDialogMessage(
-        "Export unavailable",
-        "Load your inventory before exporting.",
+        t("sideMenu.exportUnavailableTitle"),
+        t("sideMenu.exportUnavailableMessage"),
       );
       return;
     }
@@ -541,8 +583,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     const photoEntries = exportInventoryPhotoEntries();
     if (!photoEntries) {
       showDialogMessage(
-        "Backup unavailable",
-        "Load your inventory before backing up data.",
+        t("sideMenu.backupUnavailableTitle"),
+        t("sideMenu.backupUnavailableMessage"),
       );
       return;
     }
@@ -553,8 +595,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       const sharingAvailable = await Sharing.isAvailableAsync();
       if (!sharingAvailable) {
         showDialogMessage(
-          "Sharing unavailable",
-          "Sharing is not available on this device.",
+          t("sideMenu.sharingUnavailableTitle"),
+          t("sideMenu.sharingUnavailableMessage"),
         );
         return;
       }
@@ -562,7 +604,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       const directory =
         FileSystem.cacheDirectory ?? FileSystem.documentDirectory;
       if (!directory) {
-        showDialogMessage("Export failed", "Unable to access device storage.");
+        showDialogMessage(t("sideMenu.exportFailedTitle"), t("sideMenu.deviceStorageUnavailable"));
         return;
       }
 
@@ -570,7 +612,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       const payload = JSON.stringify(data, null, 2);
       const encoder = new TextEncoder();
       files.push({
-        path: "inventory.json",
+        path: `inventory.${locale}.json`,
         contents: encoder.encode(payload),
       });
 
@@ -613,12 +655,12 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
       await Sharing.shareAsync(fileUri, {
         mimeType: "application/x-tar",
-        dialogTitle: "Back up data",
+        dialogTitle: t("sideMenu.backupData"),
         UTI: "public.tar-archive",
       });
     } catch (error) {
       console.error("Failed to back up data", error);
-      showDialogMessage("Backup failed", "Please try again.");
+      showDialogMessage(t("sideMenu.backupFailedTitle"), t("common.tryAgainLater"));
     } finally {
       setIsBackingUpData(false);
     }
@@ -643,7 +685,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
       const asset = result.assets?.[0];
       if (!asset?.uri) {
-        showDialogMessage("Import failed", "Unable to read the selected archive.");
+        showDialogMessage(t("sideMenu.importFailedTitle"), t("sideMenu.importReadArchiveFailed"));
         return;
       }
 
@@ -654,14 +696,13 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       const archivedFiles = parseTarArchive(archiveBytes);
 
       if (archivedFiles.length === 0) {
-        showDialogMessage("Import failed", "The selected archive is empty.");
+        showDialogMessage(t("sideMenu.importFailedTitle"), t("sideMenu.importArchiveEmpty"));
         return;
       }
 
-      const inventoryFile = archivedFiles.find((file) => file.path === "inventory.json")
-        ?? archivedFiles.find((file) => file.path.toLowerCase().endsWith(".json"));
+      const inventoryFile = resolveInventoryFileFromArchive(archivedFiles);
       if (!inventoryFile) {
-        showDialogMessage("Import failed", "The backup archive is missing inventory data.");
+        showDialogMessage(t("sideMenu.importFailedTitle"), t("sideMenu.importMissingInventory"));
         return;
       }
 
@@ -669,8 +710,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       const parsed = JSON.parse(decoder.decode(inventoryFile.contents)) as unknown;
       if (!isValidInventoryData(parsed)) {
         showDialogMessage(
-          "Import failed",
-          "The backup archive contains invalid inventory data.",
+          t("sideMenu.importFailedTitle"),
+          t("sideMenu.importInvalidInventory"),
         );
         return;
       }
@@ -679,7 +720,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
       const directory = FileSystem.documentDirectory ?? FileSystem.cacheDirectory;
       if (!directory) {
-        showDialogMessage("Import failed", "Unable to access device storage.");
+        showDialogMessage(t("sideMenu.importFailedTitle"), t("sideMenu.deviceStorageUnavailable"));
         return;
       }
 
@@ -716,8 +757,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     } catch (error) {
       console.error("Failed to restore backup archive", error);
       showDialogMessage(
-        "Import failed",
-        "Please try again with a valid backup archive.",
+        t("sideMenu.importFailedTitle"),
+        t("sideMenu.importRetryWithValidArchive"),
       );
     } finally {
       setIsRestoringData(false);
@@ -747,12 +788,12 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     tag: { id: number; name: string },
   ) => {
     setDialogOptions({
-      title: "Delete tag",
-      message: `Remove "${tag.name}"?`,
+      title: t("sideMenu.deleteTagTitle"),
+      message: t("sideMenu.deleteTagMessage", { name: tag.name }),
       actions: [
-        { label: "Cancel", variant: "secondary" },
+        { label: t("common.cancel"), variant: "secondary" },
         {
-          label: "Delete",
+          label: t("common.delete"),
           variant: "destructive",
           onPress: () => {
             if (type === "cocktail") {
@@ -767,7 +808,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   };
 
   const handleReportIssue = async () => {
-    const subject = `Something wrong in your bar - ${APP_VERSION}`;
+    const subject = `${t("sideMenu.reportIssueSubject")} - ${APP_VERSION}`;
     const mailtoUrl = `mailto:your.bar.app@gmail.com?subject=${encodeURIComponent(subject)}`;
 
     try {
@@ -775,8 +816,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     } catch (error) {
       console.error("Failed to open email client", error);
       showDialogMessage(
-        "Unable to open email",
-        "Please send your report to your.bar.app@gmail.com manually.",
+        t("sideMenu.emailUnavailableTitle"),
+        t("sideMenu.emailUnavailableMessage"),
       );
     }
   };
@@ -786,6 +827,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       clearTimeoutRef(ratingModalCloseTimeout);
       clearTimeoutRef(startScreenModalCloseTimeout);
       clearTimeoutRef(amazonStoreModalCloseTimeout);
+      clearTimeoutRef(languageModalCloseTimeout);
     };
   }, []);
 
@@ -804,7 +846,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       <View style={styles.container}>
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel="Close menu"
+          accessibilityLabel={t("sideMenu.closeMenu")}
           onPress={onClose}
           style={styles.backdropArea}
         >
@@ -825,7 +867,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
           >
             <View style={styles.headerRow}>
               <Text style={[styles.title, { color: Colors.onSurface }]}>
-                Settings
+                {t("sideMenu.settingsTitle")}
               </Text>
               <View
                 style={[
@@ -844,7 +886,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                       key={`header-theme-option-${option.key}`}
                       accessibilityRole="button"
                       accessibilityState={{ selected: isSelected }}
-                      accessibilityLabel={`Set ${option.label} theme`}
+                      accessibilityLabel={t("sideMenu.setThemeA11y", { theme: t(option.labelKey) })}
                       onPress={() => handleSelectTheme(option.key)}
                       style={({ pressed }) => [
                         styles.themeToggleOption,
@@ -909,7 +951,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 <Text
                   style={[styles.settingLabel, { color: Colors.onSurface }]}
                 >
-                  Ignore garnish
+                  {t("sideMenu.ignoreGarnish")}
                 </Text>
                 <Text
                   style={[
@@ -917,7 +959,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     { color: Colors.onSurfaceVariant },
                   ]}
                 >
-                  All garnishes are optional
+                  {t("sideMenu.ignoreGarnishCaption")}
                 </Text>
               </View>
             </Pressable>
@@ -954,7 +996,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 <Text
                   style={[styles.settingLabel, { color: Colors.onSurface }]}
                 >
-                  Allow all substitutes
+                  {t("sideMenu.allowAllSubstitutes")}
                 </Text>
                 <Text
                   style={[
@@ -962,7 +1004,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     { color: Colors.onSurfaceVariant },
                   ]}
                 >
-                  Always use substitutes
+                  {t("sideMenu.allowAllSubstitutesCaption")}
                 </Text>
               </View>
             </Pressable>
@@ -997,7 +1039,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 <Text
                   style={[styles.settingLabel, { color: Colors.onSurface }]}
                 >
-                  Show in imperial
+                  {t("sideMenu.useImperial")}
                 </Text>
                 <Text
                   style={[
@@ -1005,7 +1047,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     { color: Colors.onSurfaceVariant },
                   ]}
                 >
-                  Use oz instead of ml and grams
+                  {t("sideMenu.useImperialCaption")}
                 </Text>
               </View>
             </Pressable>
@@ -1040,7 +1082,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 <Text
                   style={[styles.settingLabel, { color: Colors.onSurface }]}
                 >
-                  Keep screen awake
+                  {t("sideMenu.keepScreenAwake")}
                 </Text>
                 <Text
                   style={[
@@ -1048,7 +1090,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     { color: Colors.onSurfaceVariant },
                   ]}
                 >
-                  Prevent sleep on cocktail view
+                  {t("sideMenu.keepScreenAwakeCaption")}
                 </Text>
               </View>
             </Pressable>
@@ -1084,11 +1126,11 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   <Text
                     style={[styles.settingLabel, { color: Colors.onSurface }]}
                   >
-                    Smart shaker filtering
+                    {t("sideMenu.smartShakerFiltering")}
                   </Text>
                   <Pressable
                     accessibilityRole="button"
-                    accessibilityLabel="Smart shaker filtering info"
+                    accessibilityLabel={t("sideMenu.smartShakerFilteringInfo")}
                     hitSlop={8}
                     onPress={(event) => {
                       event.stopPropagation();
@@ -1109,13 +1151,13 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     { color: Colors.onSurfaceVariant },
                   ]}
                 >
-                  Hide non-matching ingredients
+                  {t("sideMenu.smartShakerFilteringCaption")}
                 </Text>
               </View>
             </Pressable>
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel="Set starting screen"
+              accessibilityLabel={t("sideMenu.startingScreen")}
               onPress={handleStartScreenPress}
               style={[styles.settingRow, SURFACE_ROW_STYLE]}
             >
@@ -1130,7 +1172,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 <Text
                   style={[styles.settingLabel, { color: Colors.onSurface }]}
                 >
-                  Starting screen
+                  {t("sideMenu.startingScreen")}
                 </Text>
                 <Text
                   style={[
@@ -1138,13 +1180,13 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     { color: Colors.onSurfaceVariant },
                   ]}
                 >
-                  Open {selectedStartScreenOption?.label ?? "All cocktails"}
+                  {t("sideMenu.startingScreenOpen", { screen: selectedStartScreenOption ? t(selectedStartScreenOption.labelKey) : t("startScreen.cocktails_all.label") })}
                 </Text>
               </View>
             </Pressable>
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel="Set favorites rating filter"
+              accessibilityLabel={t("sideMenu.favoritesRatingFilter")}
               onPress={handleRatingThresholdPress}
               style={[styles.settingRow, SURFACE_ROW_STYLE]}
             >
@@ -1159,7 +1201,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 <Text
                   style={[styles.settingLabel, { color: Colors.onSurface }]}
                 >
-                  Favorites rating filter
+                  {t("sideMenu.favoritesRatingFilter")}
                 </Text>
                 <Text
                   style={[
@@ -1167,14 +1209,14 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     { color: Colors.onSurfaceVariant },
                   ]}
                 >
-                  Showing {ratingFilterThreshold}+ stars cocktails
+                  {t("sideMenu.favoritesRatingFilterCaption", { rating: ratingFilterThreshold })}
                 </Text>
               </View>
             </Pressable>
 
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel="Manage custom tags"
+              accessibilityLabel={t("sideMenu.manageTags")}
               onPress={handleOpenTagManager}
               style={[styles.settingRow, SURFACE_ROW_STYLE]}
             >
@@ -1189,7 +1231,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 <Text
                   style={[styles.settingLabel, { color: Colors.onSurface }]}
                 >
-                  Manage tags
+                  {t("sideMenu.manageTags")}
                 </Text>
                 <Text
                   style={[
@@ -1197,13 +1239,13 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     { color: Colors.onSurfaceVariant },
                   ]}
                 >
-                  Create or update your tags
+                  {t("sideMenu.manageTagsCaption")}
                 </Text>
               </View>
             </Pressable>
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel="Set Amazon store"
+              accessibilityLabel={t("sideMenu.amazonStore")}
               onPress={handleAmazonStorePress}
               style={[styles.settingRow, SURFACE_ROW_STYLE]}
             >
@@ -1218,7 +1260,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 <Text
                   style={[styles.settingLabel, { color: Colors.onSurface }]}
                 >
-                  Amazon store
+                  {t("sideMenu.amazonStore")}
                 </Text>
                 <Text
                   style={[
@@ -1226,7 +1268,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     { color: Colors.onSurfaceVariant },
                   ]}
                 >
-                  Current: {selectedAmazonStoreLabel}
+                  {t("sideMenu.amazonStoreCurrent", { label: selectedAmazonStoreLabel })}
                 </Text>
               </View>
               <MaterialCommunityIcons
@@ -1237,7 +1279,35 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
             </Pressable>
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel="Restart onboarding"
+              accessibilityLabel={t("sideMenu.language")}
+              onPress={handleLanguagePress}
+              style={[styles.settingRow, SURFACE_ROW_STYLE]}
+            >
+              <Text style={styles.languageFlagIcon}>{currentLanguage.flag}</Text>
+              <View style={styles.settingTextContainer}>
+                <Text
+                  style={[styles.settingLabel, { color: Colors.onSurface }]}
+                >
+                  {t("sideMenu.language")}
+                </Text>
+                <Text
+                  style={[
+                    styles.settingCaption,
+                    { color: Colors.onSurfaceVariant },
+                  ]}
+                >
+                  {t("sideMenu.languageCurrent", { name: currentLanguage.nativeName })}
+                </Text>
+              </View>
+              <MaterialCommunityIcons
+                name="chevron-right"
+                size={20}
+                color={Colors.onSurfaceVariant}
+              />
+            </Pressable>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={t("sideMenu.restartOnboarding")}
               onPress={() => {
                 restartOnboarding();
                 onClose();
@@ -1250,15 +1320,15 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 <MaterialCommunityIcons name="help-circle-outline" size={16} color={Colors.onSurfaceVariant} />
               </View>
               <View style={styles.settingTextContainer}>
-                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>Restart onboarding</Text>
+                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>{t("sideMenu.restartOnboarding")}</Text>
                 <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>
-                  Show the guided tour again
+                  {t("sideMenu.restartOnboardingCaption")}
                 </Text>
               </View>
             </Pressable>
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel="Back up and restore"
+              accessibilityLabel={t("sideMenu.backupRestore")}
               onPress={handleBackupRestorePress}
               style={({ pressed }) => [
                 styles.actionRow,
@@ -1269,9 +1339,9 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 <MaterialCommunityIcons name="backup-restore" size={16} color={Colors.onSurfaceVariant} />
               </View>
               <View style={styles.settingTextContainer}>
-                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>Back up &amp; Restore</Text>
+                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>{t("sideMenu.backupRestore")}</Text>
                 <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>
-                  Export your data or restore from backup
+                  {t("sideMenu.backupRestoreCaption")}
                 </Text>
               </View>
               <MaterialCommunityIcons
@@ -1282,7 +1352,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
             </Pressable>
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel="Report an issue"
+              accessibilityLabel={t("sideMenu.reportIssueTitle")}
               onPress={handleReportIssue}
               style={[
                 styles.actionRow,
@@ -1297,15 +1367,15 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 />
               </View>
               <View style={styles.settingTextContainer}>
-                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>Something wrong?</Text>
-                <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>Report a bug, share an idea</Text>
+                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>{t("sideMenu.reportIssueTitle")}</Text>
+                <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>{t("sideMenu.reportIssueCaption")}</Text>
               </View>
             </Pressable>
             <View style={styles.versionRow}>
               <Text
                 style={[styles.versionText, { color: Colors.onSurfaceVariant }]}
               >
-                Version {APP_VERSION}
+                {t("sideMenu.version", { version: APP_VERSION })}
               </Text>
             </View>
           </ScrollView>
@@ -1327,7 +1397,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               styles.modalCard,
               MODAL_CARD_STYLE,
             ]}
-            accessibilityLabel="Favorites rating"
+            accessibilityLabel={t("sideMenu.favoritesRatingFilter")}
             onPress={() => { }}
           >
             <View style={styles.modalHeader}>
@@ -1337,12 +1407,12 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   { color: Colors.onSurface, flex: 1 },
                 ]}
               >
-                Favorites rating
+                {t("sideMenu.favoritesRatingFilter")}
               </Text>
               <Pressable
                 onPress={handleCloseRatingModal}
                 accessibilityRole="button"
-                accessibilityLabel="Close"
+                accessibilityLabel={t("common.close")}
               >
                 <MaterialCommunityIcons
                   name="close"
@@ -1357,7 +1427,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 { color: Colors.onSurfaceVariant },
               ]}
             >
-              Choose the minimum rating to show on Favorites
+              {t("sideMenu.favoritesRatingModalDescription")}
             </Text>
             <View style={styles.ratingOptionRow}>
               {[1, 2, 3, 4, 5].map((value) => {
@@ -1367,7 +1437,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     key={`rating-threshold-${value}`}
                     accessibilityRole="button"
                     accessibilityState={{ selected: isSelected }}
-                    accessibilityLabel={`Show ${value} star${value === 1 ? "" : "s"} and up`}
+                    accessibilityLabel={t("sideMenu.favoritesRatingOption", { value })}
                     onPress={() => handleSelectRatingThreshold(value)}
                     style={({ pressed }) => [
                       styles.ratingOption,
@@ -1424,7 +1494,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               styles.modalCard,
               MODAL_CARD_STYLE,
             ]}
-            accessibilityLabel="Manage tags"
+            accessibilityLabel={t("sideMenu.manageTags")}
             onPress={() => { }}
           >
             <View style={styles.modalHeader}>
@@ -1434,12 +1504,12 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   { color: Colors.onSurface, flex: 1 },
                 ]}
               >
-                Manage tags
+                {t("sideMenu.manageTags")}
               </Text>
               <Pressable
                 onPress={handleCloseTagManager}
                 accessibilityRole="button"
-                accessibilityLabel="Close"
+                accessibilityLabel={t("common.close")}
               >
                 <MaterialCommunityIcons
                   name="close"
@@ -1458,7 +1528,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   <Text
                     style={[styles.settingLabel, { color: Colors.onSurface }]}
                   >
-                    Cocktail tags
+                    {t("sideMenu.cocktailTags")}
                   </Text>
                   <Pressable
                     accessibilityRole="button"
@@ -1474,7 +1544,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                       color={Colors.tint}
                     />
                     <Text style={[styles.tagAddLabel, { color: Colors.tint }]}>
-                      Add
+                      {t("common.create")}
                     </Text>
                   </Pressable>
                 </View>
@@ -1485,7 +1555,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                       { color: Colors.onSurfaceVariant },
                     ]}
                   >
-                    No custom cocktail tags yet.
+                    {t("sideMenu.noCustomCocktailTags")}
                   </Text>
                 ) : (
                   <View style={styles.tagRows}>
@@ -1501,7 +1571,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                         <View style={styles.tagActions}>
                           <Pressable
                             accessibilityRole="button"
-                            accessibilityLabel={`Edit ${tag.name ?? "tag"}`}
+                            accessibilityLabel={t("sideMenu.editNamedTagA11y", { name: tag.name ?? t("sideMenu.tagFallbackName") })}
                             onPress={() =>
                               handleOpenTagEditor("cocktail", {
                                 id: Number(tag.id),
@@ -1518,11 +1588,11 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                           </Pressable>
                           <Pressable
                             accessibilityRole="button"
-                            accessibilityLabel={`Delete ${tag.name ?? "tag"}`}
+                            accessibilityLabel={t("sideMenu.deleteNamedTagA11y", { name: tag.name ?? t("sideMenu.tagFallbackName") })}
                             onPress={() =>
                               handleDeleteTag("cocktail", {
                                 id: Number(tag.id),
-                                name: tag.name ?? "Tag",
+                                name: tag.name ?? t("sideMenu.tagFallbackName"),
                               })
                             }
                           >
@@ -1543,7 +1613,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   <Text
                     style={[styles.settingLabel, { color: Colors.onSurface }]}
                   >
-                    Ingredient tags
+                    {t("sideMenu.ingredientTags")}
                   </Text>
                   <Pressable
                     accessibilityRole="button"
@@ -1559,7 +1629,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                       color={Colors.tint}
                     />
                     <Text style={[styles.tagAddLabel, { color: Colors.tint }]}>
-                      Add
+                      {t("common.create")}
                     </Text>
                   </Pressable>
                 </View>
@@ -1570,7 +1640,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                       { color: Colors.onSurfaceVariant },
                     ]}
                   >
-                    No custom ingredient tags yet.
+                    {t("sideMenu.noCustomIngredientTags")}
                   </Text>
                 ) : (
                   <View style={styles.tagRows}>
@@ -1586,7 +1656,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                         <View style={styles.tagActions}>
                           <Pressable
                             accessibilityRole="button"
-                            accessibilityLabel={`Edit ${tag.name ?? "tag"}`}
+                            accessibilityLabel={t("sideMenu.editNamedTagA11y", { name: tag.name ?? t("sideMenu.tagFallbackName") })}
                             onPress={() =>
                               handleOpenTagEditor("ingredient", {
                                 id: Number(tag.id),
@@ -1603,11 +1673,11 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                           </Pressable>
                           <Pressable
                             accessibilityRole="button"
-                            accessibilityLabel={`Delete ${tag.name ?? "tag"}`}
+                            accessibilityLabel={t("sideMenu.deleteNamedTagA11y", { name: tag.name ?? t("sideMenu.tagFallbackName") })}
                             onPress={() =>
                               handleDeleteTag("ingredient", {
                                 id: Number(tag.id),
-                                name: tag.name ?? "Tag",
+                                name: tag.name ?? t("sideMenu.tagFallbackName"),
                               })
                             }
                           >
@@ -1629,8 +1699,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       </Modal>
       <TagEditorModal
         visible={isTagEditorVisible}
-        title={tagEditorMode === "create" ? "New tag" : "Edit tag"}
-        confirmLabel={tagEditorMode === "create" ? "Create" : "Save"}
+        title={tagEditorMode === "create" ? t("tagEditor.newTag") : t("tagEditor.editTag")}
+        confirmLabel={tagEditorMode === "create" ? t("common.create") : t("common.save")}
         initialName={tagEditorTarget?.name}
         initialColor={tagEditorTarget?.color}
         onClose={handleCloseTagEditor}
@@ -1659,7 +1729,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               styles.modalCard,
               MODAL_CARD_STYLE,
             ]}
-            accessibilityLabel="Starting screen"
+            accessibilityLabel={t("sideMenu.startingScreen")}
             onPress={() => { }}
           >
             <View style={styles.modalHeader}>
@@ -1669,12 +1739,12 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   { color: Colors.onSurface, flex: 1 },
                 ]}
               >
-                Starting screen
+                {t("sideMenu.startingScreen")}
               </Text>
               <Pressable
                 onPress={handleCloseStartScreenModal}
                 accessibilityRole="button"
-                accessibilityLabel="Close"
+                accessibilityLabel={t("common.close")}
               >
                 <MaterialCommunityIcons
                   name="close"
@@ -1689,7 +1759,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 { color: Colors.onSurfaceVariant },
               ]}
             >
-              Select where the app opens
+              {t("sideMenu.startScreenModalDescription")}
             </Text>
             <ScrollView
               style={styles.startScreenModalScroll}
@@ -1704,7 +1774,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     key={`start-screen-${option.key}`}
                     accessibilityRole="button"
                     accessibilityState={{ selected: isSelected }}
-                    accessibilityLabel={`Open ${option.label} first`}
+                    accessibilityLabel={t("sideMenu.startScreenOptionA11y", { screen: t(option.labelKey) })}
                     onPress={() => handleSelectStartScreen(option.key)}
                     style={({ pressed }) => [
                       styles.startScreenOption,
@@ -1734,7 +1804,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                           { color: Colors.onSurface },
                         ]}
                       >
-                        {option.label}
+                        {t(option.labelKey)}
                       </Text>
                       <Text
                         style={[
@@ -1742,7 +1812,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                           { color: Colors.onSurfaceVariant },
                         ]}
                       >
-                        {option.description}
+                        {t(option.descriptionKey)}
                       </Text>
                     </View>
                     <MaterialCommunityIcons
@@ -1778,7 +1848,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               styles.modalCard,
               MODAL_CARD_STYLE,
             ]}
-            accessibilityLabel="Amazon store"
+            accessibilityLabel={t("sideMenu.amazonStore")}
             onPress={() => { }}
           >
             <View style={styles.modalHeader}>
@@ -1788,12 +1858,12 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   { color: Colors.onSurface, flex: 1 },
                 ]}
               >
-                Amazon store
+                {t("sideMenu.amazonStore")}
               </Text>
               <Pressable
                 onPress={handleCloseAmazonStoreModal}
                 accessibilityRole="button"
-                accessibilityLabel="Close"
+                accessibilityLabel={t("common.close")}
               >
                 <MaterialCommunityIcons
                   name="close"
@@ -1808,7 +1878,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 { color: Colors.onSurfaceVariant },
               ]}
             >
-              Override automatic detection to choose your preferred Amazon store.
+              {t("sideMenu.amazonStoreModalDescription")}
             </Text>
             <ScrollView
               style={styles.startScreenModalScroll}
@@ -1820,7 +1890,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 key="amazon-store-auto"
                 accessibilityRole="button"
                 accessibilityState={{ selected: amazonStoreOverride == null }}
-                accessibilityLabel="Use automatic Amazon store detection"
+                accessibilityLabel={t("sideMenu.useAutomaticAmazonStoreDetection")}
                 onPress={() => handleSelectAmazonStore(null)}
                 style={({ pressed }) => [
                   styles.startScreenOption,
@@ -1842,7 +1912,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                       { color: Colors.onSurface },
                     ]}
                   >
-                    Automatic
+                    {t("sideMenu.amazonStoreAutomatic")}
                   </Text>
                   <Text
                     style={[
@@ -1850,7 +1920,11 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                       { color: Colors.onSurfaceVariant },
                     ]}
                   >
-                    Detected: {detectedAmazonStore ? AMAZON_STORES[detectedAmazonStore].label : 'Unknown'}
+                    {t("sideMenu.amazonStoreDetected", {
+                      store: detectedAmazonStore
+                        ? AMAZON_STORES[detectedAmazonStore].label
+                        : t("sideMenu.amazonStoreUnknown"),
+                    })}
                   </Text>
                 </View>
                 <MaterialCommunityIcons
@@ -1872,7 +1946,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     key={`amazon-store-${storeKey}`}
                     accessibilityRole="button"
                     accessibilityState={{ selected: isSelected }}
-                    accessibilityLabel={`Set Amazon store to ${option.label}`}
+                    accessibilityLabel={t("sideMenu.amazonStoreSetToA11y", { store: option.label })}
                     onPress={() => handleSelectAmazonStore(storeKey)}
                     style={({ pressed }) => [
                       styles.startScreenOption,
@@ -1902,7 +1976,9 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                           { color: Colors.onSurfaceVariant },
                         ]}
                       >
-                        {option.countryName}
+                        {t(`amazon.country.${storeKey}`) !== `amazon.country.${storeKey}`
+                          ? t(`amazon.country.${storeKey}`)
+                          : option.countryName}
                       </Text>
                     </View>
                     <MaterialCommunityIcons
@@ -1921,7 +1997,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 key="amazon-store-disabled"
                 accessibilityRole="button"
                 accessibilityState={{ selected: amazonStoreOverride === 'DISABLED' }}
-                accessibilityLabel="Disable Amazon link"
+                accessibilityLabel={t("sideMenu.disableAmazonLink")}
                 onPress={() => handleSelectAmazonStore('DISABLED')}
                 style={({ pressed }) => [
                   styles.startScreenOption,
@@ -1943,7 +2019,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                       { color: Colors.onSurface },
                     ]}
                   >
-                    Disabled
+                    {t("sideMenu.amazonStoreDisabled")}
                   </Text>
                   <Text
                     style={[
@@ -1951,7 +2027,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                       { color: Colors.onSurfaceVariant },
                     ]}
                   >
-                    Hide Buy on Amazon link
+                    {t("sideMenu.amazonStoreHideLink")}
                   </Text>
                 </View>
                 <MaterialCommunityIcons
@@ -1964,6 +2040,87 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   color={amazonStoreOverride === 'DISABLED' ? Colors.tint : Colors.onSurfaceVariant}
                 />
               </Pressable>
+            </ScrollView>
+          </Pressable>
+        </Pressable>
+      </Modal>
+
+      <Modal
+        transparent
+        visible={isLanguageModalVisible}
+        animationType="fade"
+        onRequestClose={handleCloseLanguageModal}
+      >
+        <Pressable
+          style={styles.modalOverlay}
+          onPress={handleCloseLanguageModal}
+          accessibilityRole="button"
+        >
+          <Pressable
+            style={[
+              styles.modalCard,
+              MODAL_CARD_STYLE,
+            ]}
+            accessibilityLabel={t("languageModal.title")}
+            onPress={() => { }}
+          >
+            <View style={styles.modalHeader}>
+              <Text style={[styles.modalTitle, { color: Colors.onSurface, flex: 1 }]}> 
+                {t("languageModal.title")}
+              </Text>
+              <Pressable
+                onPress={handleCloseLanguageModal}
+                accessibilityRole="button"
+                accessibilityLabel={t("languageModal.close")}
+              >
+                <MaterialCommunityIcons name="close" size={22} color={Colors.onSurfaceVariant} />
+              </Pressable>
+            </View>
+            <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>
+              {t("languageModal.description")}
+            </Text>
+            <ScrollView
+              style={styles.startScreenModalScroll}
+              contentContainerStyle={styles.startScreenOptionList}
+              showsVerticalScrollIndicator={false}
+              keyboardShouldPersistTaps="handled"
+            >
+              {languageOptions.map((option) => {
+                const isSelected = locale === option.code;
+                const localizedLanguageName = t(`language.${option.code}`);
+                return (
+                  <Pressable
+                    key={`language-${option.code}`}
+                    accessibilityRole="button"
+                    accessibilityState={{ selected: isSelected }}
+                    accessibilityLabel={t("languageModal.selectLanguage", { name: option.nativeName })}
+                    onPress={() => handleSelectLanguage(option.code)}
+                    style={({ pressed }) => [
+                      styles.startScreenOption,
+                      {
+                        borderColor: isSelected ? Colors.tint : Colors.outlineVariant,
+                        backgroundColor: isSelected ? Colors.highlightFaint : Colors.surfaceBright,
+                      },
+                      pressed ? { opacity: 0.85 } : null,
+                    ]}
+                  >
+                    <Text style={styles.languageFlagIcon}>{option.flag}</Text>
+                    <View style={styles.startScreenTextContainer}>
+                      <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>
+                        {option.nativeName}
+                      </Text>
+                      <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>
+                        {localizedLanguageName}
+                      </Text>
+                    </View>
+                    <MaterialCommunityIcons
+                      name={isSelected ? 'check-circle' : 'checkbox-blank-circle-outline'}
+                      size={20}
+                      color={isSelected ? Colors.tint : Colors.onSurfaceVariant}
+                    />
+                  </Pressable>
+                );
+              })}
             </ScrollView>
           </Pressable>
         </Pressable>
@@ -1985,7 +2142,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               styles.modalCard,
               MODAL_CARD_STYLE,
             ]}
-            accessibilityLabel="Back up and restore"
+            accessibilityLabel={t("sideMenu.backupRestore")}
             onPress={() => { }}
           >
             <View style={styles.modalHeader}>
@@ -1995,12 +2152,12 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   { color: Colors.onSurface, flex: 1 },
                 ]}
               >
-                Back up &amp; Restore
+                {t("sideMenu.backupRestore")}
               </Text>
               <Pressable
                 onPress={handleCloseBackupRestoreModal}
                 accessibilityRole="button"
-                accessibilityLabel="Close"
+                accessibilityLabel={t("common.close")}
               >
                 <MaterialCommunityIcons
                   name="close"
@@ -2011,7 +2168,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
             </View>
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel="Back up data"
+              accessibilityLabel={t("sideMenu.backupData")}
               onPress={handleBackupDataFromModal}
               disabled={isBackingUpData || isRestoringData}
               style={({ pressed }) => [
@@ -2035,7 +2192,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 <Text
                   style={[styles.settingLabel, { color: Colors.onSurface }]}
                 >
-                  {isBackingUpData ? "Backing up data..." : "Back up data"}
+                  {isBackingUpData ? t("sideMenu.backingUpData") : t("sideMenu.backupData")}
                 </Text>
                 <Text
                   style={[
@@ -2043,13 +2200,13 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     { color: Colors.onSurfaceVariant },
                   ]}
                 >
-                  Export cocktails, ingredients, and photos as one archive
+                  {t("sideMenu.backupDataDescription")}
                 </Text>
               </View>
             </Pressable>
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel="Restore data"
+              accessibilityLabel={t("sideMenu.restoreData")}
               onPress={handleRestoreDataFromModal}
               disabled={isBackingUpData || isRestoringData}
               style={({ pressed }) => [
@@ -2073,7 +2230,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 <Text
                   style={[styles.settingLabel, { color: Colors.onSurface }]}
                 >
-                  {isRestoringData ? "Restoring data..." : "Restore data"}
+                  {isRestoringData ? t("sideMenu.restoringData") : t("sideMenu.restoreData")}
                 </Text>
                 <Text
                   style={[
@@ -2081,13 +2238,13 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     { color: Colors.onSurfaceVariant },
                   ]}
                 >
-                  Import cocktails, ingredients, and photos from archive
+                  {t("sideMenu.restoreDataDescription")}
                 </Text>
               </View>
             </Pressable>
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel="Reload bundled inventory"
+              accessibilityLabel={t("sideMenu.reloadBundledInventory")}
               onPress={handleResetInventoryFromModal}
               style={({ pressed }) => [
                 styles.actionRow,
@@ -2103,8 +2260,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 <MaterialCommunityIcons name="refresh" size={16} color={Colors.onSurfaceVariant} />
               </View>
               <View style={styles.settingTextContainer}>
-                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>Restore bundled data</Text>
-                <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>Built-in changes will be lost, your own content is safe</Text>
+                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>{t("sideMenu.restoreBundledData")}</Text>
+                <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>{t("sideMenu.restoreBundledDataDescription")}</Text>
               </View>
             </Pressable>
           </Pressable>
@@ -2230,6 +2387,11 @@ const styles = StyleSheet.create({
   },
   settingCaption: {
     fontSize: 12,
+  },
+  languageFlagIcon: {
+    fontSize: 18,
+    lineHeight: 20,
+    marginRight: 2,
   },
   modalOverlay: {
     flex: 1,

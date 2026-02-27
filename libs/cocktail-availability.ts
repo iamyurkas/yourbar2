@@ -5,6 +5,7 @@ import {
   type IngredientAvailabilityOptions,
   type IngredientLookup,
 } from '@/libs/ingredient-availability';
+import { getPluralCategory } from '@/libs/i18n/plural';
 
 const DEFAULT_AVAILABILITY_OPTIONS: IngredientAvailabilityOptions = {
   ignoreGarnish: true,
@@ -85,6 +86,8 @@ export function summariseCocktailAvailability(
   ingredientLookup?: IngredientLookup,
   ingredients?: Ingredient[],
   options?: IngredientAvailabilityOptions,
+  t?: (key: string, params?: Record<string, string | number>) => string,
+  locale?: string,
 ): CocktailAvailabilitySummary {
   const addUniqueName = (target: string[], name?: string) => {
     if (!name) {
@@ -202,10 +205,20 @@ export function summariseCocktailAvailability(
 
   if (displayMissingCount === 0) {
     ingredientLine = resolvedNames.join(', ');
-  } else if (displayMissingCount >= 3 || missingNames.length === 0) {
-    ingredientLine = `Missing: ${displayMissingCount} ingredients`;
+  } else if (t && locale) {
+    if (displayMissingCount >= 3 || missingNames.length === 0) {
+      const category = getPluralCategory(locale, displayMissingCount);
+      ingredientLine = t(`cocktails.missingCount.${category}`, { count: displayMissingCount });
+    } else {
+      ingredientLine = t(`cocktails.missingNames`, { names: missingNames.join(', ') });
+    }
   } else {
-    ingredientLine = `Missing: ${missingNames.join(', ')}`;
+    // Fallback if translation function is not provided
+    if (displayMissingCount >= 3 || missingNames.length === 0) {
+      ingredientLine = `Missing: ${displayMissingCount} ingredients`;
+    } else {
+      ingredientLine = `Missing: ${missingNames.join(', ')}`;
+    }
   }
 
   const isReady = missingCount === 0 && requiredIngredients.length > 0;

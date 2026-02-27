@@ -4,9 +4,10 @@ import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { TAG_COLORS } from '@/constants/tag-colors';
 import { AMAZON_STORES, detectAmazonStoreFromStoreOrLocale, detectUsStorefrontOrLocale, getEffectiveAmazonStore, type AmazonStoreKey, type AmazonStoreOverride } from '@/libs/amazon-stores';
+import { DEFAULT_LOCALE, isSupportedLocale } from '@/libs/i18n';
+import { localizeCocktails, localizeIngredients } from '@/libs/i18n/catalog-overlay';
 import { loadInventoryData, reloadInventoryData } from '@/libs/inventory-data';
 import {
-  clearInventorySnapshot,
   loadInventorySnapshot,
   persistInventorySnapshot,
 } from '@/libs/inventory-storage';
@@ -21,7 +22,9 @@ import {
   toIngredientStorageRecord,
 } from '@/libs/inventory-utils';
 import { normalizeSearchText } from '@/libs/search-normalization';
+import { compareGlobalAlphabet, compareOptionalGlobalAlphabet } from '@/libs/global-sort';
 import {
+  type AppLocale,
   type AppTheme,
   type BaseCocktailRecord,
   type Cocktail,
@@ -66,6 +69,7 @@ import {
 
 const DEFAULT_START_SCREEN: StartScreen = 'cocktails_all';
 const DEFAULT_APP_THEME: AppTheme = 'light';
+const DEFAULT_APP_LOCALE: AppLocale = DEFAULT_LOCALE;
 
 declare global {
   // eslint-disable-next-line no-var
@@ -92,6 +96,8 @@ declare global {
   var __yourbarInventoryStartScreen: StartScreen | undefined;
   // eslint-disable-next-line no-var
   var __yourbarInventoryAppTheme: AppTheme | undefined;
+  // eslint-disable-next-line no-var
+  var __yourbarInventoryAppLocale: AppLocale | undefined;
   // eslint-disable-next-line no-var
   var __yourbarInventoryAmazonStoreOverride: AmazonStoreOverride | null | undefined;
   // eslint-disable-next-line no-var
@@ -185,6 +191,11 @@ function sanitizeAppTheme(value?: string | null): AppTheme {
 }
 
 
+
+function sanitizeAppLocale(value?: string | null): AppLocale {
+  return isSupportedLocale(value) ? value : DEFAULT_APP_LOCALE;
+}
+
 function sanitizeAmazonStoreOverride(value?: string | null): AmazonStoreOverride | null {
   if (!value) {
     return null;
@@ -228,7 +239,7 @@ function sanitizeCustomTags<TTag extends { id?: number | null; name?: string | n
     map.set(rawId, { id: Math.trunc(rawId), name, color });
   });
 
-  return Array.from(map.values()).sort((a, b) => a.name.localeCompare(b.name));
+  return Array.from(map.values()).sort((a, b) => compareGlobalAlphabet(a.name, b.name));
 }
 
 function getNextCustomTagId(tags: readonly { id?: number | null }[], minimum: number): number {
@@ -297,6 +308,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   const [amazonStoreOverride, setAmazonStoreOverride] = useState<AmazonStoreOverride | null>(
     () => sanitizeAmazonStoreOverride(globalThis.__yourbarInventoryAmazonStoreOverride),
   );
+  const [appLocale, setAppLocale] = useState<AppLocale>(
+    () => sanitizeAppLocale(globalThis.__yourbarInventoryAppLocale),
+  );
   const [customCocktailTags, setCustomCocktailTags] = useState<CocktailTag[]>(() =>
     sanitizeCustomTags(globalThis.__yourbarInventoryCustomCocktailTags, DEFAULT_TAG_COLOR),
   );
@@ -333,6 +347,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       ratingFilterThreshold: number;
       startScreen: StartScreen;
       appTheme: AppTheme;
+      appLocale: AppLocale;
       amazonStoreOverride: AmazonStoreOverride | null;
       customCocktailTags: CocktailTag[];
       customIngredientTags: IngredientTag[];
@@ -351,6 +366,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       setRatingFilterThreshold(bootstrap.ratingFilterThreshold);
       setStartScreen(bootstrap.startScreen);
       setAppTheme(bootstrap.appTheme);
+      setAppLocale(bootstrap.appLocale);
       setAmazonStoreOverride(bootstrap.amazonStoreOverride);
       setCustomCocktailTags(bootstrap.customCocktailTags);
       setCustomIngredientTags(bootstrap.customIngredientTags);
@@ -388,6 +404,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           const nextStartScreen = sanitizeStartScreen(stored.startScreen);
           const nextAppTheme = sanitizeAppTheme(stored.appTheme);
           const nextAmazonStoreOverride = sanitizeAmazonStoreOverride(stored.amazonStoreOverride);
+          const nextAppLocale = sanitizeAppLocale(stored.appLocale);
           const nextCustomCocktailTags = sanitizeCustomTags(stored.customCocktailTags, DEFAULT_TAG_COLOR);
           const nextCustomIngredientTags = sanitizeCustomTags(stored.customIngredientTags, DEFAULT_TAG_COLOR);
           const nextOnboardingStep = 0;
@@ -406,6 +423,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             ratingFilterThreshold: nextRatingFilterThreshold,
             startScreen: nextStartScreen,
             appTheme: nextAppTheme,
+            appLocale: nextAppLocale,
             amazonStoreOverride: nextAmazonStoreOverride,
             customCocktailTags: nextCustomCocktailTags,
             customIngredientTags: nextCustomIngredientTags,
@@ -434,6 +452,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             ratingFilterThreshold: 1,
             startScreen: DEFAULT_START_SCREEN,
             appTheme: DEFAULT_APP_THEME,
+            appLocale: DEFAULT_APP_LOCALE,
             amazonStoreOverride: null,
             customCocktailTags: [],
             customIngredientTags: [],
@@ -472,6 +491,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     globalThis.__yourbarInventoryRatingFilterThreshold = ratingFilterThreshold;
     globalThis.__yourbarInventoryStartScreen = startScreen;
     globalThis.__yourbarInventoryAppTheme = appTheme;
+    globalThis.__yourbarInventoryAppLocale = appLocale;
     globalThis.__yourbarInventoryAmazonStoreOverride = amazonStoreOverride;
     globalThis.__yourbarInventoryCustomCocktailTags = customCocktailTags;
     globalThis.__yourbarInventoryCustomIngredientTags = customIngredientTags;
@@ -490,6 +510,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       ratingFilterThreshold,
       startScreen,
       appTheme,
+      appLocale,
       amazonStoreOverride,
       customCocktailTags,
       customIngredientTags,
@@ -521,6 +542,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     ratingFilterThreshold,
     startScreen,
     appTheme,
+    appLocale,
     amazonStoreOverride,
     customCocktailTags,
     customIngredientTags,
@@ -529,13 +551,15 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   ]);
 
   const cocktails = useMemo(
-    () => [...(inventoryState?.cocktails ?? [])].sort((a, b) => (a.name ?? '').localeCompare(b.name ?? '')),
+    () => [...(inventoryState?.cocktails ?? [])].sort((a, b) => compareOptionalGlobalAlphabet(a.name, b.name)),
     [inventoryState?.cocktails],
   );
   const ingredients = useMemo(
-    () => [...(inventoryState?.ingredients ?? [])].sort((a, b) => (a.name ?? '').localeCompare(b.name ?? '')),
+    () => [...(inventoryState?.ingredients ?? [])].sort((a, b) => compareOptionalGlobalAlphabet(a.name, b.name)),
     [inventoryState?.ingredients],
   );
+  const localizedCocktails = useMemo(() => localizeCocktails(cocktails, appLocale), [appLocale, cocktails]);
+  const localizedIngredients = useMemo(() => localizeIngredients(ingredients, appLocale), [appLocale, ingredients]);
 
   const resolveCocktailKey = useCallback((cocktail: Cocktail) => {
     const id = cocktail.id;
@@ -763,7 +787,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         created = normalized as Cocktail;
 
         const nextCocktails = [...prev.cocktails, created].sort((a, b) =>
-          a.searchNameNormalized.localeCompare(b.searchNameNormalized),
+          compareGlobalAlphabet(a.searchNameNormalized, b.searchNameNormalized),
         );
 
         return {
@@ -865,7 +889,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         created = normalized as Ingredient;
 
         const nextIngredients = [...prev.ingredients, created].sort((a, b) =>
-          a.searchNameNormalized.localeCompare(b.searchNameNormalized),
+          compareGlobalAlphabet(a.searchNameNormalized, b.searchNameNormalized),
         );
 
         return {
@@ -922,10 +946,10 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       });
 
       const cocktails = [...baseState.cocktails, ...userCocktails].sort((a, b) =>
-        a.searchNameNormalized.localeCompare(b.searchNameNormalized),
+        compareGlobalAlphabet(a.searchNameNormalized, b.searchNameNormalized),
       );
       const ingredients = [...baseState.ingredients, ...userIngredients].sort((a, b) =>
-        a.searchNameNormalized.localeCompare(b.searchNameNormalized),
+        compareGlobalAlphabet(a.searchNameNormalized, b.searchNameNormalized),
       );
 
       return {
@@ -1086,7 +1110,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         merged.push(item);
       });
 
-      merged.sort((a, b) => a.searchNameNormalized.localeCompare(b.searchNameNormalized));
+      merged.sort((a, b) => compareGlobalAlphabet(a.searchNameNormalized, b.searchNameNormalized));
       return merged;
     };
 
@@ -1277,7 +1301,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         const nextIngredients = [...prev.ingredients];
         nextIngredients[ingredientIndex] = updated;
         nextIngredients.sort((a, b) =>
-          a.searchNameNormalized.localeCompare(b.searchNameNormalized),
+          compareGlobalAlphabet(a.searchNameNormalized, b.searchNameNormalized),
         );
 
         return {
@@ -1450,7 +1474,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       nextCocktails.splice(existingIndex, 1, updated);
 
       const sortedCocktails = nextCocktails.sort((a, b) =>
-        a.searchNameNormalized.localeCompare(b.searchNameNormalized),
+        compareGlobalAlphabet(a.searchNameNormalized, b.searchNameNormalized),
       );
 
       return {
@@ -1505,7 +1529,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
 
       if (didUpdateDependents) {
         nextIngredients.sort((a, b) =>
-          a.searchNameNormalized.localeCompare(b.searchNameNormalized),
+          compareGlobalAlphabet(a.searchNameNormalized, b.searchNameNormalized),
         );
       }
 
@@ -1691,7 +1715,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     setCustomCocktailTags((prev) => {
       const nextId = getNextCustomTagId(prev, BUILTIN_COCKTAIL_TAG_MAX);
       created = { id: nextId, name: trimmedName, color };
-      return [...prev, created].sort((a, b) => (a.name ?? '').localeCompare(b.name ?? ''));
+      return [...prev, created].sort((a, b) => compareOptionalGlobalAlphabet(a.name, b.name));
     });
 
     return created;
@@ -1721,7 +1745,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         updated = { id: prev[index].id, name: trimmedName, color };
         const next = [...prev];
         next[index] = updated;
-        next.sort((a, b) => (a.name ?? '').localeCompare(b.name ?? ''));
+        next.sort((a, b) => compareOptionalGlobalAlphabet(a.name, b.name));
         return next;
       });
 
@@ -1825,7 +1849,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     setCustomIngredientTags((prev) => {
       const nextId = getNextCustomTagId(prev, BUILTIN_INGREDIENT_TAG_MAX);
       created = { id: nextId, name: trimmedName, color };
-      return [...prev, created].sort((a, b) => (a.name ?? '').localeCompare(b.name ?? ''));
+      return [...prev, created].sort((a, b) => compareOptionalGlobalAlphabet(a.name, b.name));
     });
 
     return created;
@@ -1855,7 +1879,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         updated = { id: prev[index].id, name: trimmedName, color };
         const next = [...prev];
         next[index] = updated;
-        next.sort((a, b) => (a.name ?? '').localeCompare(b.name ?? ''));
+        next.sort((a, b) => compareOptionalGlobalAlphabet(a.name, b.name));
         return next;
       });
 
@@ -1978,8 +2002,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
 
   const dataValue = useMemo(
     () => ({
-      cocktails,
-      ingredients,
+      cocktails: localizedCocktails,
+      ingredients: localizedIngredients,
       loading,
       availableIngredientIds,
       shoppingIngredientIds,
@@ -1989,8 +2013,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       getCocktailRating,
     }),
     [
-      cocktails,
-      ingredients,
+      localizedCocktails,
+      localizedIngredients,
       loading,
       availableIngredientIds,
       shoppingIngredientIds,
@@ -2011,6 +2035,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       ratingFilterThreshold,
       startScreen,
       appTheme,
+      appLocale,
       amazonStoreOverride,
       detectedAmazonStore,
       effectiveAmazonStore,
@@ -2026,6 +2051,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       ratingFilterThreshold,
       startScreen,
       appTheme,
+      appLocale,
       amazonStoreOverride,
       detectedAmazonStore,
       effectiveAmazonStore,
@@ -2066,6 +2092,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       setRatingFilterThreshold: handleSetRatingFilterThreshold,
       setStartScreen: handleSetStartScreen,
       setAppTheme: handleSetAppTheme,
+      setAppLocale,
       setAmazonStoreOverride: handleSetAmazonStoreOverride,
       setOnboardingStep,
       completeOnboarding,
@@ -2102,6 +2129,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       handleSetRatingFilterThreshold,
       handleSetStartScreen,
       handleSetAppTheme,
+      setAppLocale,
       handleSetAmazonStoreOverride,
       setOnboardingStep,
       completeOnboarding,

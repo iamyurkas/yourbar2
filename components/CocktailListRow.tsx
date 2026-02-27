@@ -8,6 +8,7 @@ import { METHOD_ICON_MAP, type CocktailMethodId } from '@/constants/cocktail-met
 import { useAppColors } from '@/constants/theme';
 import type { Cocktail, Ingredient } from '@/providers/inventory-provider';
 import { createIngredientLookup } from '@/libs/ingredient-availability';
+import { useI18n } from '@/libs/i18n/use-i18n';
 
 import { ListRow, Thumb } from './RowParts';
 
@@ -70,6 +71,7 @@ const CocktailListRowComponent = ({
   hasStyleFallback = false,
 }: CocktailListRowProps) => {
   const Colors = useAppColors();
+  const { t } = useI18n();
   const effectiveHighlightColor = highlightColor ?? Colors.highlightFaint;
   const lookup = useMemo(() => {
     return createIngredientLookup(ingredients ?? []);
@@ -78,11 +80,11 @@ const CocktailListRowComponent = ({
 
   const subtitle = useMemo(() => {
     if (missingCount === 0 && recipeNamesCount === 0) {
-      return 'All ingredients ready';
+      return t("cocktailListRow.allIngredientsReady");
     }
 
     return ingredientLine || '\u00A0';
-  }, [ingredientLine, missingCount, recipeNamesCount]);
+  }, [ingredientLine, missingCount, recipeNamesCount, t]);
 
   const normalizedRating = Math.max(0, Math.min(MAX_RATING, Number(ratingValue) || 0));
 

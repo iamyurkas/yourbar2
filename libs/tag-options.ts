@@ -1,3 +1,5 @@
+import { compareGlobalAlphabet } from '@/libs/global-sort';
+
 export type TagOption = {
   key: string;
   name: string;
@@ -69,6 +71,6 @@ export function buildTagOptions<TItem, TTag extends TagLike>(
       }
     }
 
-    return normalizedNameA.localeCompare(normalizedNameB);
+    return compareGlobalAlphabet(normalizedNameA, normalizedNameB);
   });
 }

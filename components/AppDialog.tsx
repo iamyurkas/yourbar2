@@ -2,6 +2,7 @@ import React from 'react';
 import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { useAppColors } from '@/constants/theme';
+import { useI18n } from '@/libs/i18n/use-i18n';
 
 import { FormattedText } from './FormattedText';
 
@@ -25,6 +26,7 @@ type AppDialogProps = DialogOptions & {
 
 export function AppDialog({ visible, title, message, actions, onRequestClose }: AppDialogProps) {
   const Colors = useAppColors();
+  const { t } = useI18n();
   const normalizedMessage = message?.replace(/\\n/g, '\n');
 
   if (!visible) {
@@ -66,7 +68,7 @@ export function AppDialog({ visible, title, message, actions, onRequestClose }: 
         style={[styles.overlay, { backgroundColor: Colors.backdrop }]}
         onPress={onRequestClose}
         accessibilityRole="button"
-        accessibilityLabel="Close dialog">
+        accessibilityLabel={t("appDialog.closeDialog")}>
         <Pressable
           style={[styles.card, { backgroundColor: Colors.surface }]}
           onPress={(event) => event.stopPropagation()}>

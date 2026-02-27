@@ -12,6 +12,7 @@ import type {
   PhotoBackupEntry,
   ImportedPhotoEntry,
   StartScreen,
+  AppLocale,
   AppTheme,
 } from '@/providers/inventory-types';
 
@@ -46,6 +47,7 @@ export type InventoryActionsContextValue = {
   setRatingFilterThreshold: (value: number) => void;
   setStartScreen: (value: StartScreen) => void;
   setAppTheme: (value: AppTheme) => void;
+  setAppLocale: (value: AppLocale) => void;
   setAmazonStoreOverride: (value: AmazonStoreOverride | null) => void;
   setOnboardingStep: (step: number) => void;
   completeOnboarding: () => void;

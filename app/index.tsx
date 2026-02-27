@@ -3,6 +3,7 @@ import { Redirect } from 'expo-router';
 import { Image, StyleSheet, Text, View } from 'react-native';
 
 import { setLastCocktailTab, setLastIngredientTab } from '@/libs/collection-tabs';
+import { useI18n } from '@/libs/i18n/use-i18n';
 import { useInventory, type StartScreen } from '@/providers/inventory-provider';
 
 function getHrefForStartScreen(screen: StartScreen): string {
@@ -49,6 +50,7 @@ function syncTabPreference(screen: StartScreen) {
 
 export default function Index() {
   const { startScreen, loading } = useInventory();
+  const { t } = useI18n();
 
   useEffect(() => {
     if (!loading) {
@@ -62,7 +64,7 @@ export default function Index() {
     return (
       <View style={styles.loadingScreen}>
         <Image source={require('@/assets/images/splash.png')} style={styles.splashImage} resizeMode="contain" />
-        <Text style={styles.loadingText}>your rules!</Text>
+        <Text style={styles.loadingText}>{t("app.loadingTagline")}</Text>
       </View>
     );
   }

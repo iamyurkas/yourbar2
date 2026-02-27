@@ -2,6 +2,7 @@ import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { buildPhotoBaseName } from '@/libs/photo-utils';
 import { normalizeSearchText } from '@/libs/search-normalization';
+import { compareGlobalAlphabet } from '@/libs/global-sort';
 import {
   type Cocktail,
   type CocktailIngredient,
@@ -97,7 +98,7 @@ export function normalizeTagList<TTag extends { id?: number | null; name?: strin
       name: tag.name,
       color: tag.color,
     }))
-    .sort((a, b) => a.id - b.id || a.name.localeCompare(b.name));
+    .sort((a, b) => a.id - b.id || compareGlobalAlphabet(a.name, b.name));
 }
 
 export function normalizeTagIds<TTag extends { id?: number | null }>(
@@ -142,7 +143,7 @@ export function hydrateTagsFromCode(
     }
   });
 
-  const list = Array.from(resolved.values()).sort((a, b) => a.id - b.id || a.name.localeCompare(b.name));
+  const list = Array.from(resolved.values()).sort((a, b) => a.id - b.id || compareGlobalAlphabet(a.name, b.name));
   return list.length > 0 ? list : undefined;
 }
 
@@ -198,7 +199,7 @@ export function normalizeCocktailIngredients(
     .filter((ingredient) => ingredient.name)
     .sort((a, b) => {
       const orderDelta = a.order - b.order;
-      return orderDelta !== 0 ? orderDelta : a.name.localeCompare(b.name);
+      return orderDelta !== 0 ? orderDelta : compareGlobalAlphabet(a.name, b.name);
     });
 }
 
