@@ -104,6 +104,14 @@ export default function TabLayout() {
             }}
             listeners={({ navigation, route }) => ({
               tabPress: (event) => {
+                const state = navigation.getState();
+                const activeRoute = state.routes[state.index];
+                const isFocused = activeRoute?.key === route.key;
+
+                if (!isFocused) {
+                  return;
+                }
+
                 event.preventDefault();
                 onTabPress(navigation, route);
               },
