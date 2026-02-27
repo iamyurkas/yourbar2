@@ -1,5 +1,5 @@
 import { loadInventoryData, type InventoryData } from '@/libs/inventory-data';
-import { type InventoryDeltaSnapshot } from '@/libs/inventory-storage';
+import { type InventoryDeltaSnapshot, type InventoryDeltaSnapshotV3 } from '@/libs/inventory-storage';
 import type { AmazonStoreOverride } from '@/libs/amazon-stores';
 import {
   areStorageRecordsEqual,
@@ -13,6 +13,7 @@ import type {
   CocktailTag,
   IngredientStorageRecord,
   IngredientTag,
+  InventoryTranslationOverrides,
   StartScreen,
 } from '@/providers/inventory-types';
 import type { InventoryState } from '@/providers/inventory/model/inventory-state';
@@ -24,11 +25,11 @@ export type InventoryBaseMaps = {
 };
 
 export type InventoryDeltaBase = Pick<
-  InventoryDeltaSnapshot<CocktailStorageRecord, IngredientStorageRecord>,
+  InventoryDeltaSnapshotV3<CocktailStorageRecord, IngredientStorageRecord>,
   'version' | 'delta' | 'imported'
 >;
 
-export const INVENTORY_SNAPSHOT_VERSION = 2;
+export const INVENTORY_SNAPSHOT_VERSION = 3;
 
 export function createInventoryBaseMaps(data?: InventoryData): InventoryBaseMaps {
   const baseData = data ?? loadInventoryData();
@@ -160,6 +161,7 @@ export type InventorySnapshotOptions = {
   customIngredientTags: IngredientTag[];
   onboardingStep: number;
   onboardingCompleted: boolean;
+  translationOverrides: InventoryTranslationOverrides;
 };
 
 export function toSortedArray(values: Iterable<number>): number[] {
@@ -199,7 +201,7 @@ export function sanitizeCocktailRatings(
 export function buildInventorySnapshot(
   base: InventoryDeltaBase,
   options: InventorySnapshotOptions,
-): InventoryDeltaSnapshot<CocktailStorageRecord, IngredientStorageRecord> {
+): InventoryDeltaSnapshotV3<CocktailStorageRecord, IngredientStorageRecord> {
   const sanitizedRatings = sanitizeCocktailRatings(options.ratingsByCocktailId);
 
   return {
@@ -223,5 +225,6 @@ export function buildInventorySnapshot(
     amazonStoreOverride: options.amazonStoreOverride,
     onboardingStep: options.onboardingStep,
     onboardingCompleted: options.onboardingCompleted,
-  } satisfies InventoryDeltaSnapshot<CocktailStorageRecord, IngredientStorageRecord>;
+    translationOverrides: options.translationOverrides,
+  } satisfies InventoryDeltaSnapshotV3<CocktailStorageRecord, IngredientStorageRecord>;
 }

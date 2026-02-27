@@ -35,7 +35,7 @@ import { base64ToBytes, bytesToBase64, createTarArchive, parseTarArchive } from 
 import { buildPhotoBaseName } from "@/libs/photo-utils";
 import { useI18n } from "@/libs/i18n/use-i18n";
 import { useInventory, type AppTheme, type StartScreen } from "@/providers/inventory-provider";
-import { type ImportedPhotoEntry, type InventoryExportData } from "@/providers/inventory-types";
+import { type ImportedPhotoEntry, type InventoryExportData, type InventoryExportFile } from "@/providers/inventory-types";
 import Constants from "expo-constants";
 
 const MENU_WIDTH = Math.round(Dimensions.get("window").width * 0.8);
@@ -530,9 +530,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     };
   };
 
-  const isValidInventoryData = (
-    candidate: unknown,
-  ): candidate is InventoryExportData => {
+  const isValidInventoryData = (candidate: unknown): candidate is InventoryExportData => {
     if (!candidate || typeof candidate !== "object") {
       return false;
     }
@@ -541,29 +539,13 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     return Array.isArray(record.cocktails) && Array.isArray(record.ingredients);
   };
 
-  const resolveInventoryFileFromArchive = (
-    files: { path: string; contents: Uint8Array }[],
-  ) => {
-    const normalizedLocale = locale.toLowerCase();
-    const preferredPaths = [
-      `inventory.${locale}.json`,
-      `inventory.${normalizedLocale}.json`,
-      "inventory.json",
-    ];
-
-    for (const preferredPath of preferredPaths) {
-      const matched = files.find(
-        (file) => file.path.toLowerCase() === preferredPath.toLowerCase(),
-      );
-      if (matched) {
-        return matched;
-      }
+  const isInventoryExportFile = (candidate: unknown): candidate is InventoryExportFile => {
+    if (!candidate || typeof candidate !== "object") {
+      return false;
     }
 
-    return (
-      files.find((file) => /^inventory\.[^.]+\.json$/i.test(file.path)) ??
-      files.find((file) => file.path.toLowerCase().endsWith(".json"))
-    );
+    const record = candidate as { kind?: unknown; schemaVersion?: unknown };
+    return (record.kind === "base" || record.kind === "translations") && typeof record.schemaVersion === "number";
   };
 
   const handleBackupData = async () => {
@@ -609,11 +591,13 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       }
 
       const files: { path: string; contents: Uint8Array }[] = [];
-      const payload = JSON.stringify(data, null, 2);
       const encoder = new TextEncoder();
-      files.push({
-        path: `inventory.${locale}.json`,
-        contents: encoder.encode(payload),
+      data.forEach((file) => {
+        const path = file.kind === 'base' ? 'base.json' : `translations.${file.locale}.json`;
+        files.push({
+          path,
+          contents: encoder.encode(JSON.stringify(file, null, 2)),
+        });
       });
 
       const entries = photoEntries.filter((entry) => entry.uri);
@@ -700,23 +684,30 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
         return;
       }
 
-      const inventoryFile = resolveInventoryFileFromArchive(archivedFiles);
-      if (!inventoryFile) {
+      const decoder = new TextDecoder();
+      const importFiles: InventoryExportFile[] = [];
+      let hasLegacyBase = false;
+      let legacyBase: InventoryExportData | null = null;
+      for (const archived of archivedFiles) {
+        if (!archived.path.toLowerCase().endsWith('.json')) {
+          continue;
+        }
+
+        const parsed = JSON.parse(decoder.decode(archived.contents)) as unknown;
+        if (isInventoryExportFile(parsed)) {
+          importFiles.push(parsed);
+        } else if (isValidInventoryData(parsed) && !hasLegacyBase) {
+          hasLegacyBase = true;
+          legacyBase = parsed;
+        }
+      }
+
+      if (importFiles.length === 0 && !legacyBase) {
         showDialogMessage(t("sideMenu.importFailedTitle"), t("sideMenu.importMissingInventory"));
         return;
       }
 
-      const decoder = new TextDecoder();
-      const parsed = JSON.parse(decoder.decode(inventoryFile.contents)) as unknown;
-      if (!isValidInventoryData(parsed)) {
-        showDialogMessage(
-          t("sideMenu.importFailedTitle"),
-          t("sideMenu.importInvalidInventory"),
-        );
-        return;
-      }
-
-      importInventoryData(parsed);
+      importInventoryData(importFiles.length > 0 ? importFiles : (legacyBase as InventoryExportData));
 
       const directory = FileSystem.documentDirectory ?? FileSystem.cacheDirectory;
       if (!directory) {
@@ -730,7 +721,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       await FileSystem.makeDirectoryAsync(photosDir, { intermediates: true });
 
       for (const file of archivedFiles) {
-        if (file.path === inventoryFile.path) {
+        if (file.path.toLowerCase().endsWith('.json')) {
           continue;
         }
 
