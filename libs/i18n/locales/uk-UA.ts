@@ -261,9 +261,9 @@ export const ukUATranslations: TranslationDictionary = {
   "cocktailMethod.shake.label": "Збовтувати",
   "cocktailMethod.shake.description":
     "Енергійно струсіть у шейкері з льодом. Найкраще для цитрусових, сиропів, вершків чи білка.",
-  "cocktailMethod.stir.label": "Змішувати",
+  "cocktailMethod.stir.label": "Перемішувати",
   "cocktailMethod.stir.description":
-    "Зміщайте барною ложкою в окремому, наповненомому льодом, глеку. Найкраще для трав'яних міксерів.",
+    "Перемішайте барною ложкою в окремому, наповненомому льодом, келиху. Найкраще для трав'яних міксерів.",
   "cocktailMethod.throw.label": "Переливати",
   "cocktailMethod.throw.description":
     "Переливайте інгредієнти між ємностями шейкера з відстані для аерації без помутніння.",
