@@ -5,7 +5,12 @@ import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { TAG_COLORS } from '@/constants/tag-colors';
 import { AMAZON_STORES, detectAmazonStoreFromStoreOrLocale, detectUsStorefrontOrLocale, getEffectiveAmazonStore, type AmazonStoreKey, type AmazonStoreOverride } from '@/libs/amazon-stores';
 import { DEFAULT_LOCALE, isSupportedLocale } from '@/libs/i18n';
-import { getCatalogTranslationDiff, localizeCocktails, localizeIngredients } from '@/libs/i18n/catalog-overlay';
+import {
+  getCatalogTranslationDiff,
+  localizeCocktails,
+  localizeIngredients,
+  type RuntimeCatalogOverlay,
+} from '@/libs/i18n/catalog-overlay';
 import { loadInventoryData, reloadInventoryData } from '@/libs/inventory-data';
 import {
   loadInventorySnapshot,
@@ -110,6 +115,10 @@ declare global {
   var __yourbarInventoryOnboardingStep: number | undefined;
   // eslint-disable-next-line no-var
   var __yourbarInventoryOnboardingCompleted: boolean | undefined;
+  // eslint-disable-next-line no-var
+  var __yourbarInventoryCatalogTranslationsByLocale:
+    | Partial<Record<AppLocale, RuntimeCatalogOverlay>>
+    | undefined;
 }
 
 function createIngredientIdSet(values?: readonly number[] | null): Set<number> {
@@ -198,6 +207,54 @@ function sanitizeAppLocale(value?: string | null): AppLocale {
   return isSupportedLocale(value) ? value : DEFAULT_APP_LOCALE;
 }
 
+
+function sanitizeRuntimeCatalogOverlay(value: unknown): RuntimeCatalogOverlay | undefined {
+  if (!value || typeof value !== 'object') {
+    return undefined;
+  }
+
+  const entries = Object.entries(value as Record<string, unknown>).reduce<Record<string, string>>(
+    (acc, [key, raw]) => {
+      const normalizedKey = key.trim();
+      const normalizedValue = typeof raw === 'string' ? raw.trim() : '';
+      if (!normalizedKey || !normalizedValue) {
+        return acc;
+      }
+
+      acc[normalizedKey] = normalizedValue;
+      return acc;
+    },
+    {},
+  );
+
+  return Object.keys(entries).length > 0 ? entries : undefined;
+}
+
+function sanitizeCatalogTranslationsByLocale(
+  value: unknown,
+): Partial<Record<AppLocale, RuntimeCatalogOverlay>> {
+  if (!value || typeof value !== 'object') {
+    return {};
+  }
+
+  const output: Partial<Record<AppLocale, RuntimeCatalogOverlay>> = {};
+
+  Object.entries(value as Record<string, unknown>).forEach(([locale, entries]) => {
+    if (!isSupportedLocale(locale)) {
+      return;
+    }
+
+    const sanitized = sanitizeRuntimeCatalogOverlay(entries);
+    if (!sanitized) {
+      return;
+    }
+
+    output[locale] = sanitized;
+  });
+
+  return output;
+}
+
 function sanitizeAmazonStoreOverride(value?: string | null): AmazonStoreOverride | null {
   if (!value) {
     return null;
@@ -215,6 +272,37 @@ const DEFAULT_TAG_COLOR = TAG_COLORS[0];
 const BUILTIN_COCKTAIL_TAG_MAX = BUILTIN_COCKTAIL_TAGS.reduce((max, tag) => Math.max(max, tag.id), 0);
 const BUILTIN_INGREDIENT_TAG_MAX = BUILTIN_INGREDIENT_TAGS.reduce((max, tag) => Math.max(max, tag.id), 0);
 const USER_CREATED_ID_START = 10000;
+
+
+function stripIngredientTextFields(record: IngredientStorageRecord): Omit<IngredientStorageRecord, 'name' | 'description'> {
+  const { name: _name, description: _description, ...rest } = record;
+  return rest;
+}
+
+function stripCocktailTextFields(record: CocktailStorageRecord): Omit<CocktailStorageRecord, 'name' | 'description' | 'instructions' | 'synonyms'> {
+  const {
+    name: _name,
+    description: _description,
+    instructions: _instructions,
+    synonyms: _synonyms,
+    ingredients,
+    ...rest
+  } = record;
+
+  return {
+    ...rest,
+    ingredients: ingredients?.map((ingredient) => {
+      const { name: _ingredientName, substitutes, ...ingredientRest } = ingredient;
+      return {
+        ...ingredientRest,
+        substitutes: substitutes?.map((substitute) => {
+          const { name: _substituteName, ...substituteRest } = substitute;
+          return substituteRest;
+        }),
+      };
+    }),
+  };
+}
 
 function sanitizeCustomTags<TTag extends { id?: number | null; name?: string | null; color?: string | null }>(
   tags: readonly TTag[] | null | undefined,
@@ -325,6 +413,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   const [onboardingCompleted, setOnboardingCompleted] = useState<boolean>(
     () => globalThis.__yourbarInventoryOnboardingCompleted ?? false,
   );
+  const [catalogTranslationsByLocale, setCatalogTranslationsByLocale] = useState<
+    Partial<Record<AppLocale, RuntimeCatalogOverlay>>
+  >(() => sanitizeCatalogTranslationsByLocale(globalThis.__yourbarInventoryCatalogTranslationsByLocale));
   const detectedAmazonStore = useMemo(() => detectAmazonStoreFromStoreOrLocale(), []);
   const effectiveAmazonStore = useMemo(
     () => getEffectiveAmazonStore(amazonStoreOverride, detectedAmazonStore),
@@ -355,6 +446,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       customIngredientTags: IngredientTag[];
       onboardingStep: number;
       onboardingCompleted: boolean;
+      catalogTranslationsByLocale: Partial<Record<AppLocale, RuntimeCatalogOverlay>>;
     }) => {
       setInventoryState(bootstrap.inventoryState);
       setAvailableIngredientIds(bootstrap.availableIngredientIds);
@@ -374,6 +466,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       setCustomIngredientTags(bootstrap.customIngredientTags);
       setOnboardingStep(bootstrap.onboardingStep);
       setOnboardingCompleted(bootstrap.onboardingCompleted);
+      setCatalogTranslationsByLocale(bootstrap.catalogTranslationsByLocale);
     },
     [],
   );
@@ -411,6 +504,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           const nextCustomIngredientTags = sanitizeCustomTags(stored.customIngredientTags, DEFAULT_TAG_COLOR);
           const nextOnboardingStep = 0;
           const nextOnboardingCompleted = stored.onboardingCompleted ?? false;
+          const nextCatalogTranslationsByLocale = sanitizeCatalogTranslationsByLocale(stored.catalogTranslationsByLocale);
 
           applyInventoryBootstrap({
             inventoryState: nextInventoryState,
@@ -431,6 +525,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             customIngredientTags: nextCustomIngredientTags,
             onboardingStep: nextOnboardingStep,
             onboardingCompleted: nextOnboardingCompleted,
+            catalogTranslationsByLocale: nextCatalogTranslationsByLocale,
           });
           return;
         }
@@ -460,6 +555,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             customIngredientTags: [],
             onboardingStep: 1,
             onboardingCompleted: false,
+            catalogTranslationsByLocale: {},
           });
         }
       } catch (error) {
@@ -499,6 +595,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     globalThis.__yourbarInventoryCustomIngredientTags = customIngredientTags;
     globalThis.__yourbarInventoryOnboardingStep = onboardingStep;
     globalThis.__yourbarInventoryOnboardingCompleted = onboardingCompleted;
+    globalThis.__yourbarInventoryCatalogTranslationsByLocale = catalogTranslationsByLocale;
 
     const snapshot = buildInventorySnapshot(inventoryDelta, {
       availableIngredientIds,
@@ -518,6 +615,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       customIngredientTags,
       onboardingStep,
       onboardingCompleted,
+      catalogTranslationsByLocale,
     });
     const serialized = JSON.stringify(snapshot);
 
@@ -550,6 +648,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     customIngredientTags,
     onboardingStep,
     onboardingCompleted,
+    catalogTranslationsByLocale,
   ]);
 
   const cocktails = useMemo(
@@ -560,8 +659,14 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     () => [...(inventoryState?.ingredients ?? [])].sort((a, b) => compareOptionalGlobalAlphabet(a.name, b.name)),
     [inventoryState?.ingredients],
   );
-  const localizedCocktails = useMemo(() => localizeCocktails(cocktails, appLocale), [appLocale, cocktails]);
-  const localizedIngredients = useMemo(() => localizeIngredients(ingredients, appLocale), [appLocale, ingredients]);
+  const localizedCocktails = useMemo(
+    () => localizeCocktails(cocktails, appLocale, catalogTranslationsByLocale[appLocale]),
+    [appLocale, cocktails, catalogTranslationsByLocale],
+  );
+  const localizedIngredients = useMemo(
+    () => localizeIngredients(ingredients, appLocale, catalogTranslationsByLocale[appLocale]),
+    [appLocale, catalogTranslationsByLocale, ingredients],
+  );
 
   const resolveCocktailKey = useCallback((cocktail: Cocktail) => {
     const id = cocktail.id;
@@ -1024,13 +1129,38 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     } satisfies InventoryExportData;
 
     const translations: InventoryTranslationExportData[] = [];
+
+    Object.entries(catalogTranslationsByLocale).forEach(([locale, localeEntries]) => {
+      if (!isSupportedLocale(locale) || locale === DEFAULT_LOCALE) {
+        return;
+      }
+
+      const sanitized = sanitizeRuntimeCatalogOverlay(localeEntries);
+      if (!sanitized) {
+        return;
+      }
+
+      translations.push({
+        locale,
+        entries: sanitized,
+      });
+    });
+
     if (appLocale !== DEFAULT_LOCALE) {
-      const entries = getCatalogTranslationDiff(appLocale, inventoryState.cocktails, inventoryState.ingredients);
-      if (Object.keys(entries).length > 0) {
-        translations.push({
-          locale: appLocale,
-          entries,
-        });
+      const diffEntries = getCatalogTranslationDiff(appLocale, inventoryState.cocktails, inventoryState.ingredients);
+      if (Object.keys(diffEntries).length > 0) {
+        const existingTranslation = translations.find((item) => item.locale === appLocale);
+        if (existingTranslation) {
+          existingTranslation.entries = {
+            ...diffEntries,
+            ...existingTranslation.entries,
+          };
+        } else {
+          translations.push({
+            locale: appLocale,
+            entries: diffEntries,
+          });
+        }
       }
     }
 
@@ -1038,7 +1168,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       structure,
       translations: translations.length > 0 ? translations : undefined,
     } satisfies InventoryExportBundle;
-  }, [appLocale, baseMaps, inventoryState]);
+  }, [appLocale, baseMaps, catalogTranslationsByLocale, inventoryState]);
 
   const exportInventoryPhotoEntries = useCallback((): PhotoBackupEntry[] | null => {
     if (!inventoryState) {
@@ -1090,138 +1220,34 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
 
   const applyCatalogTranslationsToCurrentState = useCallback(
     (translations: readonly InventoryTranslationExportData[] | undefined) => {
-      const translation = translations?.find((item) => item.locale === appLocale);
-      if (!translation || !translation.entries || Object.keys(translation.entries).length === 0) {
+      if (!translations || translations.length === 0) {
         return;
       }
 
-      setInventoryState((prev) => {
-        if (!prev) {
-          return prev;
-        }
+      setCatalogTranslationsByLocale((prev) => {
+        const next: Partial<Record<AppLocale, RuntimeCatalogOverlay>> = { ...prev };
 
-        const cocktailTextById = new Map<number, Partial<Pick<Cocktail, 'name' | 'description' | 'instructions' | 'synonyms'>>>();
-        const cocktailIngredientNameByCocktailId = new Map<number, Map<number, string>>();
-        const ingredientTextById = new Map<number, Partial<Pick<Ingredient, 'name' | 'description' | 'synonyms'>>>();
-
-        const parseSynonyms = (raw: string): string[] => raw
-          .replaceAll(';', ',')
-          .split('\n')
-          .flatMap((line) => line.split(','))
-          .map((item) => item.trim())
-          .filter(Boolean);
-
-        Object.entries(translation.entries).forEach(([key, rawValue]) => {
-          const value = rawValue?.trim();
-          if (!value) {
+        translations.forEach((item) => {
+          if (!isSupportedLocale(item.locale)) {
             return;
           }
 
-          const cocktailIngredientMatch = key.match(/^cocktail\.(\d+)\.ingredient\.(\d+)\.name$/);
-          if (cocktailIngredientMatch) {
-            const cocktailId = Number(cocktailIngredientMatch[1]);
-            const ingredientId = Number(cocktailIngredientMatch[2]);
-            if (!Number.isFinite(cocktailId) || !Number.isFinite(ingredientId)) {
-              return;
-            }
-            const normalizedCocktailId = Math.trunc(cocktailId);
-            const normalizedIngredientId = Math.trunc(ingredientId);
-            const byIngredient = cocktailIngredientNameByCocktailId.get(normalizedCocktailId) ?? new Map<number, string>();
-            byIngredient.set(normalizedIngredientId, value);
-            cocktailIngredientNameByCocktailId.set(normalizedCocktailId, byIngredient);
+          const sanitized = sanitizeRuntimeCatalogOverlay(item.entries);
+          if (!sanitized) {
             return;
           }
 
-          const cocktailFieldMatch = key.match(/^cocktail\.(\d+)\.(name|description|instructions|synonyms)$/);
-          if (cocktailFieldMatch) {
-            const cocktailId = Number(cocktailFieldMatch[1]);
-            if (!Number.isFinite(cocktailId)) {
-              return;
-            }
-            const normalizedId = Math.trunc(cocktailId);
-            const field = cocktailFieldMatch[2] as 'name' | 'description' | 'instructions' | 'synonyms';
-            const existing = cocktailTextById.get(normalizedId) ?? {};
-            cocktailTextById.set(normalizedId, {
-              ...existing,
-              [field]: field === 'synonyms' ? parseSynonyms(value) : value,
-            });
-            return;
-          }
-
-          const ingredientFieldMatch = key.match(/^ingredient\.(\d+)\.(name|description|synonyms)$/);
-          if (ingredientFieldMatch) {
-            const ingredientId = Number(ingredientFieldMatch[1]);
-            if (!Number.isFinite(ingredientId)) {
-              return;
-            }
-            const normalizedId = Math.trunc(ingredientId);
-            const field = ingredientFieldMatch[2] as 'name' | 'description' | 'synonyms';
-            const existing = ingredientTextById.get(normalizedId) ?? {};
-            ingredientTextById.set(normalizedId, {
-              ...existing,
-              [field]: field === 'synonyms' ? parseSynonyms(value) : value,
-            });
-          }
+          next[item.locale] = {
+            ...(next[item.locale] ?? {}),
+            ...sanitized,
+          };
         });
 
-        const cocktails = prev.cocktails.map((cocktail) => {
-          const id = Number(cocktail.id ?? -1);
-          if (!Number.isFinite(id) || id < 0) {
-            return cocktail;
-          }
-
-          const textPatch = cocktailTextById.get(Math.trunc(id));
-          const ingredientPatch = cocktailIngredientNameByCocktailId.get(Math.trunc(id));
-
-          if (!textPatch && !ingredientPatch) {
-            return cocktail;
-          }
-
-          const nextIngredients = ingredientPatch
-            ? (cocktail.ingredients ?? []).map((item) => {
-                const ingredientId = Number(item.ingredientId ?? -1);
-                if (!Number.isFinite(ingredientId) || ingredientId < 0) {
-                  return item;
-                }
-
-                const name = ingredientPatch.get(Math.trunc(ingredientId));
-                return name && name !== item.name ? { ...item, name } : item;
-              })
-            : cocktail.ingredients;
-
-          return normalizeSearchFields([
-            {
-              ...cocktail,
-              ...textPatch,
-              ingredients: nextIngredients,
-            },
-          ])[0] as Cocktail;
-        });
-
-        const ingredients = prev.ingredients.map((ingredient) => {
-          const id = Number(ingredient.id ?? -1);
-          if (!Number.isFinite(id) || id < 0) {
-            return ingredient;
-          }
-
-          const textPatch = ingredientTextById.get(Math.trunc(id));
-          if (!textPatch) {
-            return ingredient;
-          }
-
-          return normalizeSearchFields([{ ...ingredient, ...textPatch }])[0] as Ingredient;
-        });
-
-        return {
-          ...prev,
-          cocktails,
-          ingredients,
-        } satisfies InventoryState;
+        return next;
       });
     },
-    [appLocale],
+    [],
   );
-
 
 
   const importInventoryData = useCallback((data: InventoryExportData) => {
@@ -1368,6 +1394,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   const updateIngredient = useCallback(
     (id: number, input: CreateIngredientInput) => {
       let updated: Ingredient | undefined;
+      let translationPatch: Record<string, string | undefined> | undefined;
 
       setInventoryState((prev) => {
         if (!prev) {
@@ -1450,6 +1477,34 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           photoUri,
         };
 
+        if (appLocale !== DEFAULT_LOCALE && normalizedId < USER_CREATED_ID_START) {
+          const previousStructure = stripIngredientTextFields(toIngredientStorageRecord(previous));
+          const candidateStructure = stripIngredientTextFields(
+            toIngredientStorageRecord({
+              ...candidateRecord,
+              name: previous.name,
+              description: previous.description,
+            }),
+          );
+
+          if (areStorageRecordsEqual(candidateStructure, previousStructure)) {
+            translationPatch = {
+              [`ingredient.${Math.trunc(normalizedId)}.name`]: trimmedName,
+              [`ingredient.${Math.trunc(normalizedId)}.description`]: description,
+            };
+
+            const [localizedPreview] = normalizeSearchFields([
+              {
+                ...previous,
+                name: trimmedName,
+                description,
+              },
+            ]);
+            updated = (localizedPreview as Ingredient | undefined) ?? previous;
+            return prev;
+          }
+        }
+
         const [normalized] = normalizeSearchFields([candidateRecord]);
         if (!normalized) {
           return prev;
@@ -1469,13 +1524,38 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         } satisfies InventoryState;
       });
 
+      if (translationPatch) {
+        setCatalogTranslationsByLocale((prev) => {
+          const current = { ...(prev[appLocale] ?? {}) };
+
+          Object.entries(translationPatch ?? {}).forEach(([key, value]) => {
+            const normalizedValue = value?.trim();
+            if (!normalizedValue) {
+              delete current[key];
+              return;
+            }
+            current[key] = normalizedValue;
+          });
+
+          const next = { ...prev };
+          if (Object.keys(current).length > 0) {
+            next[appLocale] = current;
+          } else {
+            delete next[appLocale];
+          }
+
+          return next;
+        });
+      }
+
       return updated;
     },
-    [],
+    [appLocale],
   );
 
   const updateCocktail = useCallback((id: number, input: CreateCocktailInput) => {
     let updated: Cocktail | undefined;
+    let translationPatch: Record<string, string | undefined> | undefined;
 
     setInventoryState((prev) => {
       if (!prev) {
@@ -1622,6 +1702,58 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         })),
       } satisfies BaseCocktailRecord;
 
+      if (appLocale !== DEFAULT_LOCALE && targetId < USER_CREATED_ID_START) {
+        const previousStructure = stripCocktailTextFields(toCocktailStorageRecord(existing));
+        const candidateStructure = stripCocktailTextFields(
+          toCocktailStorageRecord({
+            ...candidateRecord,
+            name: existing.name,
+            description: existing.description,
+            instructions: existing.instructions,
+            synonyms: existing.synonyms,
+            ingredients: (candidateRecord.ingredients ?? []).map((ingredient, index) => ({
+              ...ingredient,
+              name: (existing.ingredients ?? [])[index]?.name ?? ingredient.name,
+            })),
+          }),
+        );
+
+        if (areStorageRecordsEqual(candidateStructure, previousStructure)) {
+          const normalizedTargetId = Math.trunc(targetId);
+          const nextPatch: Record<string, string | undefined> = {
+            [`cocktail.${normalizedTargetId}.name`]: trimmedName,
+            [`cocktail.${normalizedTargetId}.description`]: description,
+            [`cocktail.${normalizedTargetId}.instructions`]: instructions,
+            [`cocktail.${normalizedTargetId}.synonyms`]: synonyms?.join(', '),
+          };
+
+          sanitizedIngredients.forEach((ingredient) => {
+            const ingredientId = Number(ingredient.ingredientId ?? -1);
+            if (!Number.isFinite(ingredientId) || ingredientId < 0) {
+              return;
+            }
+            nextPatch[
+              `cocktail.${normalizedTargetId}.ingredient.${Math.trunc(ingredientId)}.name`
+            ] = ingredient.name?.trim() || undefined;
+          });
+
+          translationPatch = nextPatch;
+
+          const [localizedPreview] = normalizeSearchFields([
+            {
+              ...existing,
+              name: trimmedName,
+              description,
+              instructions,
+              synonyms,
+              ingredients: sanitizedIngredients,
+            },
+          ]);
+          updated = (localizedPreview as Cocktail | undefined) ?? existing;
+          return prev;
+        }
+      }
+
       const [normalized] = normalizeSearchFields([candidateRecord]);
       if (!normalized) {
         return prev;
@@ -1642,8 +1774,32 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       } satisfies InventoryState;
     });
 
+    if (translationPatch) {
+      setCatalogTranslationsByLocale((prev) => {
+        const current = { ...(prev[appLocale] ?? {}) };
+
+        Object.entries(translationPatch ?? {}).forEach(([key, value]) => {
+          const normalizedValue = value?.trim();
+          if (!normalizedValue) {
+            delete current[key];
+            return;
+          }
+          current[key] = normalizedValue;
+        });
+
+        const next = { ...prev };
+        if (Object.keys(current).length > 0) {
+          next[appLocale] = current;
+        } else {
+          delete next[appLocale];
+        }
+
+        return next;
+      });
+    }
+
     return updated;
-  }, []);
+  }, [appLocale]);
 
   const deleteIngredient = useCallback((id: number) => {
     const normalizedId = Number(id);

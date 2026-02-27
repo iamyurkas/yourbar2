@@ -160,6 +160,7 @@ export type InventorySnapshotOptions = {
   customIngredientTags: IngredientTag[];
   onboardingStep: number;
   onboardingCompleted: boolean;
+  catalogTranslationsByLocale: Record<string, Record<string, string>>;
 };
 
 export function toSortedArray(values: Iterable<number>): number[] {
@@ -223,5 +224,9 @@ export function buildInventorySnapshot(
     amazonStoreOverride: options.amazonStoreOverride,
     onboardingStep: options.onboardingStep,
     onboardingCompleted: options.onboardingCompleted,
+    catalogTranslationsByLocale:
+      Object.keys(options.catalogTranslationsByLocale).length > 0
+        ? options.catalogTranslationsByLocale
+        : undefined,
   } satisfies InventoryDeltaSnapshot<CocktailStorageRecord, IngredientStorageRecord>;
 }

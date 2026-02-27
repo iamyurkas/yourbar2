@@ -9,6 +9,7 @@ import esESCatalogOverlay from '@/libs/i18n/locales/catalog/es-ES.json';
 import ukUACatalogOverlay from '@/libs/i18n/locales/catalog/uk-UA.json';
 
 type CatalogOverlayDictionary = Record<string, string>;
+export type RuntimeCatalogOverlay = Record<string, string>;
 
 type CatalogEntity = 'cocktail' | 'ingredient';
 type CatalogField = 'name' | 'description' | 'instructions' | 'synonyms';
@@ -110,6 +111,15 @@ function shouldApplyLocalizedSynonyms(current?: readonly string[] | null, bundle
 
 function getCatalogOverlayValue(locale: SupportedLocale, key: string): string | undefined {
   return CATALOG_OVERLAYS[locale][key] ?? CATALOG_OVERLAYS[DEFAULT_LOCALE][key];
+}
+
+
+function getCatalogOverlayEntry(
+  locale: SupportedLocale,
+  key: string,
+  runtimeOverlay?: RuntimeCatalogOverlay,
+): string | undefined {
+  return runtimeOverlay?.[key] ?? getCatalogOverlayValue(locale, key);
 }
 
 
@@ -286,6 +296,7 @@ export function getCatalogFieldTranslation(
   id: number | string | null | undefined,
   field: CatalogField,
   fallback?: string | null,
+  runtimeOverlay?: RuntimeCatalogOverlay,
 ): string | undefined {
   const numericId = Number(id ?? -1);
   if (!Number.isFinite(numericId) || numericId < 0) {
@@ -293,7 +304,7 @@ export function getCatalogFieldTranslation(
   }
 
   const key = `${entity}.${Math.trunc(numericId)}.${field}`;
-  return getCatalogOverlayValue(locale, key)?.trim() || fallback?.trim() || undefined;
+  return getCatalogOverlayEntry(locale, key, runtimeOverlay)?.trim() || fallback?.trim() || undefined;
 }
 
 export function getRecipeIngredientNameTranslation(
@@ -301,6 +312,7 @@ export function getRecipeIngredientNameTranslation(
   cocktailId: number | string | null | undefined,
   ingredientId: number | string | null | undefined,
   fallback?: string | null,
+  runtimeOverlay?: RuntimeCatalogOverlay,
 ): string | undefined {
   const normalizedCocktailId = Number(cocktailId ?? -1);
   const normalizedIngredientId = Number(ingredientId ?? -1);
@@ -314,10 +326,14 @@ export function getRecipeIngredientNameTranslation(
   }
 
   const key = `cocktail.${Math.trunc(normalizedCocktailId)}.ingredient.${Math.trunc(normalizedIngredientId)}.name`;
-  return getCatalogOverlayValue(locale, key)?.trim() || fallback?.trim() || undefined;
+  return getCatalogOverlayEntry(locale, key, runtimeOverlay)?.trim() || fallback?.trim() || undefined;
 }
 
-export function localizeIngredient(ingredient: Ingredient, locale: SupportedLocale): Ingredient {
+export function localizeIngredient(
+  ingredient: Ingredient,
+  locale: SupportedLocale,
+  runtimeOverlay?: RuntimeCatalogOverlay,
+): Ingredient {
   const fallbackSynonyms =
     'synonyms' in ingredient && Array.isArray(ingredient.synonyms)
       ? ingredient.synonyms.filter((item): item is string => typeof item === 'string')
@@ -334,7 +350,7 @@ export function localizeIngredient(ingredient: Ingredient, locale: SupportedLoca
   const useLocalizedSynonyms = shouldApplyLocalizedSynonyms(fallbackSynonyms, bundledIngredient?.synonyms);
 
   const localizedName = useLocalizedName
-    ? getCatalogFieldTranslation(locale, 'ingredient', ingredient.id, 'name', ingredient.name)
+    ? getCatalogFieldTranslation(locale, 'ingredient', ingredient.id, 'name', ingredient.name, runtimeOverlay)
     : ingredient.name;
   const localizedDescription = useLocalizedDescription
     ? getCatalogFieldTranslation(
@@ -343,11 +359,12 @@ export function localizeIngredient(ingredient: Ingredient, locale: SupportedLoca
         ingredient.id,
         'description',
         ingredient.description,
+        runtimeOverlay,
       )
     : ingredient.description;
   const localizedSynonyms = useLocalizedSynonyms
     ? getLocalizedSynonyms(
-        getCatalogFieldTranslation(locale, 'ingredient', ingredient.id, 'synonyms'),
+        getCatalogFieldTranslation(locale, 'ingredient', ingredient.id, 'synonyms', undefined, runtimeOverlay),
         fallbackSynonyms,
       )
     : getLocalizedSynonyms(undefined, fallbackSynonyms);
@@ -372,7 +389,11 @@ export function localizeIngredient(ingredient: Ingredient, locale: SupportedLoca
   };
 }
 
-export function localizeCocktail(cocktail: Cocktail, locale: SupportedLocale): Cocktail {
+export function localizeCocktail(
+  cocktail: Cocktail,
+  locale: SupportedLocale,
+  runtimeOverlay?: RuntimeCatalogOverlay,
+): Cocktail {
   const fallbackSynonyms = Array.isArray(cocktail.synonyms)
     ? cocktail.synonyms.filter((item): item is string => typeof item === 'string')
     : undefined;
@@ -389,7 +410,7 @@ export function localizeCocktail(cocktail: Cocktail, locale: SupportedLocale): C
   const useLocalizedSynonyms = shouldApplyLocalizedSynonyms(fallbackSynonyms, bundledCocktail?.synonyms);
 
   const localizedName = useLocalizedName
-    ? getCatalogFieldTranslation(locale, 'cocktail', cocktail.id, 'name', cocktail.name)
+    ? getCatalogFieldTranslation(locale, 'cocktail', cocktail.id, 'name', cocktail.name, runtimeOverlay)
     : cocktail.name;
   const localizedDescription = useLocalizedDescription
     ? getCatalogFieldTranslation(
@@ -398,6 +419,7 @@ export function localizeCocktail(cocktail: Cocktail, locale: SupportedLocale): C
         cocktail.id,
         'description',
         cocktail.description,
+        runtimeOverlay,
       )
     : cocktail.description;
   const localizedInstructions = useLocalizedInstructions
@@ -407,11 +429,12 @@ export function localizeCocktail(cocktail: Cocktail, locale: SupportedLocale): C
         cocktail.id,
         'instructions',
         cocktail.instructions,
+        runtimeOverlay,
       )
     : cocktail.instructions;
   const localizedSynonyms = useLocalizedSynonyms
     ? getLocalizedSynonyms(
-        getCatalogFieldTranslation(locale, 'cocktail', cocktail.id, 'synonyms'),
+        getCatalogFieldTranslation(locale, 'cocktail', cocktail.id, 'synonyms', undefined, runtimeOverlay),
         fallbackSynonyms,
       )
     : getLocalizedSynonyms(undefined, fallbackSynonyms);
@@ -441,6 +464,7 @@ export function localizeCocktail(cocktail: Cocktail, locale: SupportedLocale): C
           cocktail.id,
           ingredient.ingredientId,
           ingredient.name,
+          runtimeOverlay,
         )
       : ingredient.name;
 
@@ -509,10 +533,18 @@ function areArraysEqual(values: readonly string[] = [], other: readonly string[]
   return values.every((value, index) => value === other[index]);
 }
 
-export function localizeIngredients(ingredients: Ingredient[], locale: SupportedLocale): Ingredient[] {
-  return ingredients.map((ingredient) => localizeIngredient(ingredient, locale));
+export function localizeIngredients(
+  ingredients: Ingredient[],
+  locale: SupportedLocale,
+  runtimeOverlay?: RuntimeCatalogOverlay,
+): Ingredient[] {
+  return ingredients.map((ingredient) => localizeIngredient(ingredient, locale, runtimeOverlay));
 }
 
-export function localizeCocktails(cocktails: Cocktail[], locale: SupportedLocale): Cocktail[] {
-  return cocktails.map((cocktail) => localizeCocktail(cocktail, locale));
+export function localizeCocktails(
+  cocktails: Cocktail[],
+  locale: SupportedLocale,
+  runtimeOverlay?: RuntimeCatalogOverlay,
+): Cocktail[] {
+  return cocktails.map((cocktail) => localizeCocktail(cocktail, locale, runtimeOverlay));
 }
