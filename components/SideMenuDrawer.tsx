@@ -38,7 +38,11 @@ import { useInventory, type AppTheme, type StartScreen } from "@/providers/inven
 import { type ImportedPhotoEntry, type InventoryExportData, type InventoryExportFile } from "@/providers/inventory-types";
 import Constants from "expo-constants";
 
-const MENU_WIDTH = Math.round(Dimensions.get("window").width * 0.8);
+const MAX_MENU_WIDTH = 500;
+const MENU_WIDTH = Math.min(
+  Math.round(Dimensions.get("window").width * 0.8),
+  MAX_MENU_WIDTH,
+);
 const ANIMATION_DURATION = 200;
 const APP_VERSION =
   Constants.expoConfig?.version ??
