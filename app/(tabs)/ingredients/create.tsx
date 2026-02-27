@@ -2020,7 +2020,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'flex-end',
     paddingRight: 2,
-    paddingBottom: 4,
+    paddingBottom: 8,
   },
   unlinkButton: {
     padding: 6,
