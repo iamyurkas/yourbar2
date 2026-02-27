@@ -130,7 +130,7 @@ export const returnToSourceOrBack = (
   },
 ) => {
   if (returnToPath) {
-    router.navigate({ pathname: returnToPath, params: returnToParams });
+    router.replace({ pathname: returnToPath, params: returnToParams });
     return;
   }
 
