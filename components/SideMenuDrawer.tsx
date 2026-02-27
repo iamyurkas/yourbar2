@@ -22,6 +22,7 @@ import {
   Text,
   View,
 } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import CocktailIcon from "@/assets/images/cocktails.svg";
 import IngredientsIcon from "@/assets/images/ingredients.svg";
@@ -164,6 +165,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     deleteCustomIngredientTag,
   } = useInventory();
   const Colors = useAppColors();
+  const insets = useSafeAreaInsets();
   const { t, locale, setLocale, languageOptions, currentLanguage } = useI18n();
   const [isMounted, setIsMounted] = useState(visible);
   const [isRatingModalVisible, setRatingModalVisible] = useState(false);
@@ -857,7 +859,10 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
           <View
             style={[
               styles.headerContainer,
-              { backgroundColor: Colors.surface },
+              {
+                backgroundColor: Colors.surface,
+                paddingTop: Math.max(insets.top, 16) + 16,
+              },
             ]}
           >
             <View style={styles.headerRow}>
@@ -2300,7 +2305,6 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     paddingHorizontal: 24,
-    paddingTop: 40,
     paddingBottom: 8,
   },
   headerRow: {

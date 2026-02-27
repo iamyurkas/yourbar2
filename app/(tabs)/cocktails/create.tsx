@@ -25,6 +25,7 @@ import {
   findNodeHandle,
 } from "react-native";
 import Animated, { LinearTransition } from "react-native-reanimated";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { resolveAssetFromCatalog } from "@/assets/image-manifest";
 import { AppDialog, type DialogOptions } from "@/components/AppDialog";
@@ -235,6 +236,7 @@ function mapRecipeIngredientToEditable(
 export default function CreateCocktailScreen() {
   const navigation = useNavigation();
   const Colors = useAppColors();
+  const insets = useSafeAreaInsets();
   const { t, locale } = useI18n();
   const {
     ingredients: inventoryIngredients,
@@ -2047,7 +2049,13 @@ export default function CreateCocktailScreen() {
         onRequestClose={() => setIsGlassModalVisible(false)}
       >
         <Pressable
-          style={styles.modalOverlay}
+          style={[
+            styles.modalOverlay,
+            {
+              paddingTop: Math.max(insets.top, 16),
+              paddingBottom: Math.max(insets.bottom, 16),
+            },
+          ]}
           onPress={() => setIsGlassModalVisible(false)}
           accessibilityRole="button"
           accessibilityLabel={t("common.close")}
@@ -2147,7 +2155,13 @@ export default function CreateCocktailScreen() {
         onRequestClose={handleCloseUnitPicker}
       >
         <Pressable
-          style={styles.unitModalOverlay}
+          style={[
+            styles.unitModalOverlay,
+            {
+              paddingTop: Math.max(insets.top, 16),
+              paddingBottom: Math.max(insets.bottom, 16),
+            },
+          ]}
           onPress={handleCloseUnitPicker}
           accessibilityRole="button"
         >
@@ -2232,7 +2246,13 @@ export default function CreateCocktailScreen() {
         onRequestClose={() => setIsMethodModalVisible(false)}
       >
         <Pressable
-          style={styles.unitModalOverlay}
+          style={[
+            styles.unitModalOverlay,
+            {
+              paddingTop: Math.max(insets.top, 16),
+              paddingBottom: Math.max(insets.bottom, 16),
+            },
+          ]}
           onPress={() => setIsMethodModalVisible(false)}
           accessibilityRole="button"
         >
@@ -3556,7 +3576,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    padding: 24,
+    paddingHorizontal: 24,
     backgroundColor: "rgba(0,0,0,0.4)",
   },
   modalCard: {
@@ -3583,7 +3603,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    padding: 24,
+    paddingHorizontal: 24,
     backgroundColor: "rgba(0,0,0,0.4)",
   },
   unitModalCard: {

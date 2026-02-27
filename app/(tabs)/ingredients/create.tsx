@@ -19,6 +19,7 @@ import {
   findNodeHandle,
   type GestureResponderEvent,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AppDialog, type DialogOptions } from '@/components/AppDialog';
 import { AppImage } from '@/components/AppImage';
@@ -141,6 +142,7 @@ export default function IngredientFormScreen() {
 
   const navigation = useNavigation();
   const Colors = useAppColors();
+  const insets = useSafeAreaInsets();
   const { t } = useI18n();
   const {
     ingredients,
@@ -1645,7 +1647,16 @@ export default function IngredientFormScreen() {
         transparent
         animationType="fade"
         onRequestClose={handleCloseBaseModal}>
-        <Pressable style={styles.modalOverlay} onPress={handleCloseBaseModal} accessibilityRole="button">
+        <Pressable
+          style={[
+            styles.modalOverlay,
+            {
+              paddingTop: Math.max(insets.top, 12) + 36,
+              paddingBottom: Math.max(insets.bottom, 12),
+            },
+          ]}
+          onPress={handleCloseBaseModal}
+          accessibilityRole="button">
           <Pressable
             onPress={(event) => event.stopPropagation?.()}
             style={[
@@ -1704,7 +1715,16 @@ export default function IngredientFormScreen() {
         transparent
         animationType="fade"
         onRequestClose={handleCloseStyleModal}>
-        <Pressable style={styles.modalOverlay} onPress={handleCloseStyleModal} accessibilityRole="button">
+        <Pressable
+          style={[
+            styles.modalOverlay,
+            {
+              paddingTop: Math.max(insets.top, 12) + 36,
+              paddingBottom: Math.max(insets.bottom, 12),
+            },
+          ]}
+          onPress={handleCloseStyleModal}
+          accessibilityRole="button">
           <Pressable
             onPress={(event) => event.stopPropagation?.()}
             style={[
@@ -2028,9 +2048,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
-    paddingTop: Platform.select({ ios: 72, default: 48 }),
     paddingHorizontal: 24,
-    paddingBottom: 24,
     backgroundColor: 'rgba(0,0,0,0.4)',
   },
   modalCard: {
