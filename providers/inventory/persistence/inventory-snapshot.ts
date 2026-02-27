@@ -13,6 +13,7 @@ import type {
   CocktailTag,
   IngredientStorageRecord,
   IngredientTag,
+  InventoryCatalogOverlays,
   StartScreen,
 } from '@/providers/inventory-types';
 import type { InventoryState } from '@/providers/inventory/model/inventory-state';
@@ -158,6 +159,7 @@ export type InventorySnapshotOptions = {
   amazonStoreOverride: AmazonStoreOverride | null;
   customCocktailTags: CocktailTag[];
   customIngredientTags: IngredientTag[];
+  catalogOverlays: InventoryCatalogOverlays;
   onboardingStep: number;
   onboardingCompleted: boolean;
 };
@@ -206,6 +208,7 @@ export function buildInventorySnapshot(
     ...base,
     customCocktailTags: options.customCocktailTags,
     customIngredientTags: options.customIngredientTags,
+    catalogOverlays: options.catalogOverlays,
     availableIngredientIds:
       options.availableIngredientIds.size > 0 ? toSortedArray(options.availableIngredientIds) : undefined,
     shoppingIngredientIds:

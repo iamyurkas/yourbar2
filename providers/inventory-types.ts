@@ -102,7 +102,13 @@ export type CreateIngredientInput = {
 export type CocktailStorageRecord = Omit<CocktailRecord, 'searchName' | 'searchTokens'>;
 export type IngredientStorageRecord = Omit<IngredientRecord, 'searchName' | 'searchTokens'>;
 
+
+export type InventoryCatalogOverlayLocale = 'en-GB' | 'en-US' | 'es-ES' | 'uk-UA';
+
+export type InventoryCatalogOverlays = Partial<Record<InventoryCatalogOverlayLocale, Record<string, string>>>;
+
 export type InventoryExportData = {
   cocktails: Array<Omit<CocktailStorageRecord, 'tags'> & { tags?: number[] | null }>;
   ingredients: Array<Omit<IngredientStorageRecord, 'tags'> & { tags?: number[] | null }>;
+  catalogOverlays?: InventoryCatalogOverlays;
 };

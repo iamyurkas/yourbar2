@@ -541,29 +541,28 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     return Array.isArray(record.cocktails) && Array.isArray(record.ingredients);
   };
 
-  const resolveInventoryFileFromArchive = (
+  const resolveInventoryFilesFromArchive = (
     files: { path: string; contents: Uint8Array }[],
   ) => {
     const normalizedLocale = locale.toLowerCase();
     const preferredPaths = [
       `inventory.${locale}.json`,
       `inventory.${normalizedLocale}.json`,
-      "inventory.json",
+      'inventory.json',
     ];
 
-    for (const preferredPath of preferredPaths) {
-      const matched = files.find(
-        (file) => file.path.toLowerCase() === preferredPath.toLowerCase(),
-      );
-      if (matched) {
-        return matched;
-      }
+    const inventoryFiles = files.filter((file) => /^inventory(\.[^.]+)?\.json$/i.test(file.path));
+    if (inventoryFiles.length === 0) {
+      const fallback = files.filter((file) => file.path.toLowerCase().endsWith('.json'));
+      return fallback;
     }
 
-    return (
-      files.find((file) => /^inventory\.[^.]+\.json$/i.test(file.path)) ??
-      files.find((file) => file.path.toLowerCase().endsWith(".json"))
-    );
+    const priority = (path: string) => {
+      const index = preferredPaths.findIndex((value) => value.toLowerCase() === path.toLowerCase());
+      return index === -1 ? Number.MAX_SAFE_INTEGER : index;
+    };
+
+    return [...inventoryFiles].sort((a, b) => priority(a.path) - priority(b.path) || a.path.localeCompare(b.path));
   };
 
   const handleBackupData = async () => {
@@ -609,11 +608,24 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       }
 
       const files: { path: string; contents: Uint8Array }[] = [];
-      const payload = JSON.stringify(data, null, 2);
       const encoder = new TextEncoder();
+      const { catalogOverlays, ...structuralPayload } = data;
       files.push({
-        path: `inventory.${locale}.json`,
-        contents: encoder.encode(payload),
+        path: 'inventory.json',
+        contents: encoder.encode(JSON.stringify(structuralPayload, null, 2)),
+      });
+
+      Object.entries(catalogOverlays ?? {}).forEach(([overlayLocale, overlayValues]) => {
+        if (!overlayValues || Object.keys(overlayValues).length === 0) {
+          return;
+        }
+
+        files.push({
+          path: `inventory.${overlayLocale}.json`,
+          contents: encoder.encode(
+            JSON.stringify({ cocktails: [], ingredients: [], catalogOverlays: { [overlayLocale]: overlayValues } }, null, 2),
+          ),
+        });
       });
 
       const entries = photoEntries.filter((entry) => entry.uri);
@@ -700,23 +712,32 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
         return;
       }
 
-      const inventoryFile = resolveInventoryFileFromArchive(archivedFiles);
-      if (!inventoryFile) {
+      const inventoryFiles = resolveInventoryFilesFromArchive(archivedFiles);
+      if (inventoryFiles.length === 0) {
         showDialogMessage(t("sideMenu.importFailedTitle"), t("sideMenu.importMissingInventory"));
         return;
       }
 
       const decoder = new TextDecoder();
-      const parsed = JSON.parse(decoder.decode(inventoryFile.contents)) as unknown;
-      if (!isValidInventoryData(parsed)) {
+      let importedAnyInventory = false;
+
+      for (const inventoryFile of inventoryFiles) {
+        const parsed = JSON.parse(decoder.decode(inventoryFile.contents)) as unknown;
+        if (!isValidInventoryData(parsed)) {
+          continue;
+        }
+
+        importInventoryData(parsed);
+        importedAnyInventory = true;
+      }
+
+      if (!importedAnyInventory) {
         showDialogMessage(
           t("sideMenu.importFailedTitle"),
           t("sideMenu.importInvalidInventory"),
         );
         return;
       }
-
-      importInventoryData(parsed);
 
       const directory = FileSystem.documentDirectory ?? FileSystem.cacheDirectory;
       if (!directory) {
@@ -730,7 +751,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       await FileSystem.makeDirectoryAsync(photosDir, { intermediates: true });
 
       for (const file of archivedFiles) {
-        if (file.path === inventoryFile.path) {
+        if (inventoryFiles.some((inventoryFile) => inventoryFile.path === file.path)) {
           continue;
         }
 

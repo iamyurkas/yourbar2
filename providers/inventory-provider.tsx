@@ -37,6 +37,8 @@ import {
   type Ingredient,
   type IngredientStorageRecord,
   type IngredientTag,
+  type InventoryCatalogOverlays,
+  type InventoryCatalogOverlayLocale,
   type InventoryExportData,
   type PhotoBackupEntry,
   type ImportedPhotoEntry,
@@ -108,6 +110,8 @@ declare global {
   var __yourbarInventoryOnboardingStep: number | undefined;
   // eslint-disable-next-line no-var
   var __yourbarInventoryOnboardingCompleted: boolean | undefined;
+  // eslint-disable-next-line no-var
+  var __yourbarInventoryCatalogOverlays: InventoryCatalogOverlays | undefined;
 }
 
 function createIngredientIdSet(values?: readonly number[] | null): Set<number> {
@@ -194,6 +198,143 @@ function sanitizeAppTheme(value?: string | null): AppTheme {
 
 function sanitizeAppLocale(value?: string | null): AppLocale {
   return isSupportedLocale(value) ? value : DEFAULT_APP_LOCALE;
+}
+
+
+const CATALOG_OVERLAY_LOCALES: InventoryCatalogOverlayLocale[] = ['en-GB', 'en-US', 'es-ES', 'uk-UA'];
+
+function normalizeCatalogOverlays(
+  overlays?: Partial<Record<string, Record<string, string>>> | null,
+): InventoryCatalogOverlays {
+  const normalized: InventoryCatalogOverlays = {};
+
+  if (!overlays || typeof overlays !== 'object') {
+    return normalized;
+  }
+
+  CATALOG_OVERLAY_LOCALES.forEach((locale) => {
+    const candidate = overlays[locale];
+    if (!candidate || typeof candidate !== 'object') {
+      return;
+    }
+
+    const entries = Object.entries(candidate).reduce<Record<string, string>>((acc, [key, value]) => {
+      const normalizedKey = key.trim();
+      const normalizedValue = typeof value === 'string' ? value.trim() : '';
+      if (!normalizedKey || !normalizedValue) {
+        return acc;
+      }
+      acc[normalizedKey] = normalizedValue;
+      return acc;
+    }, {});
+
+    if (Object.keys(entries).length > 0) {
+      normalized[locale] = entries;
+    }
+  });
+
+  return normalized;
+}
+
+function mergeCatalogOverlays(
+  current: InventoryCatalogOverlays,
+  incoming: InventoryCatalogOverlays,
+): InventoryCatalogOverlays {
+  const merged: InventoryCatalogOverlays = { ...current };
+
+  CATALOG_OVERLAY_LOCALES.forEach((locale) => {
+    const currentEntries = current[locale] ?? {};
+    const incomingEntries = incoming[locale] ?? {};
+    const nextEntries = { ...currentEntries, ...incomingEntries };
+    if (Object.keys(nextEntries).length > 0) {
+      merged[locale] = nextEntries;
+    }
+  });
+
+  return normalizeCatalogOverlays(merged);
+}
+
+function sanitizeCatalogOverlayText(value?: string | null): string | undefined {
+  const normalized = value?.trim();
+  return normalized ? normalized : undefined;
+}
+
+function toCatalogOverlaySynonyms(values?: readonly string[] | null): string | undefined {
+  if (!Array.isArray(values) || values.length === 0) {
+    return undefined;
+  }
+
+  const normalized = values
+    .map((value) => value?.trim())
+    .filter((value): value is string => Boolean(value));
+
+  if (normalized.length === 0) {
+    return undefined;
+  }
+
+  return Array.from(new Set(normalized)).join(', ');
+}
+
+function getCatalogOverlayMapForLocale(
+  overlays: InventoryCatalogOverlays,
+  locale: InventoryCatalogOverlayLocale,
+): Record<string, string> {
+  return overlays[locale] ?? {};
+}
+
+function setCatalogOverlayValue(
+  overlays: InventoryCatalogOverlays,
+  locale: InventoryCatalogOverlayLocale,
+  key: string,
+  value?: string | null,
+): InventoryCatalogOverlays {
+  const current = getCatalogOverlayMapForLocale(overlays, locale);
+  const next = { ...current };
+  const normalizedValue = sanitizeCatalogOverlayText(value);
+
+  if (normalizedValue) {
+    next[key] = normalizedValue;
+  } else {
+    delete next[key];
+  }
+
+  const updated: InventoryCatalogOverlays = { ...overlays };
+  if (Object.keys(next).length > 0) {
+    updated[locale] = next;
+  } else {
+    delete updated[locale];
+  }
+
+  return normalizeCatalogOverlays(updated);
+}
+
+function shouldStoreCatalogOverlay(
+  localizedValue?: string | null,
+  baseValue?: string | null,
+): boolean {
+  return sanitizeCatalogOverlayText(localizedValue) !== sanitizeCatalogOverlayText(baseValue);
+}
+
+function getCatalogOverlayLocaleFromAppLocale(locale: AppLocale): InventoryCatalogOverlayLocale {
+  return locale;
+}
+
+function applyLocalizedIngredientToBase(
+  ingredient: Ingredient,
+  locale: InventoryCatalogOverlayLocale,
+  overlays: InventoryCatalogOverlays,
+): Ingredient {
+  const overlayMap = overlays[locale];
+  return localizeIngredients([ingredient], locale, overlayMap)[0] ?? ingredient;
+}
+
+function applyLocalizedCocktailToBase(
+  cocktail: Cocktail,
+  locale: InventoryCatalogOverlayLocale,
+  overlays: InventoryCatalogOverlays,
+): Cocktail {
+  const overlayMap = overlays[locale];
+  return localizeCocktails([cocktail], locale, overlayMap)[0] ?? cocktail;
 }
 
 function sanitizeAmazonStoreOverride(value?: string | null): AmazonStoreOverride | null {
@@ -317,6 +458,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   const [customIngredientTags, setCustomIngredientTags] = useState<IngredientTag[]>(() =>
     sanitizeCustomTags(globalThis.__yourbarInventoryCustomIngredientTags, DEFAULT_TAG_COLOR),
   );
+  const [catalogOverlays, setCatalogOverlays] = useState<InventoryCatalogOverlays>(() =>
+    normalizeCatalogOverlays(globalThis.__yourbarInventoryCatalogOverlays),
+  );
   const [onboardingStep, setOnboardingStep] = useState<number>(
     () => globalThis.__yourbarInventoryOnboardingStep ?? 0,
   );
@@ -351,6 +495,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       amazonStoreOverride: AmazonStoreOverride | null;
       customCocktailTags: CocktailTag[];
       customIngredientTags: IngredientTag[];
+      catalogOverlays: InventoryCatalogOverlays;
       onboardingStep: number;
       onboardingCompleted: boolean;
     }) => {
@@ -370,6 +515,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       setAmazonStoreOverride(bootstrap.amazonStoreOverride);
       setCustomCocktailTags(bootstrap.customCocktailTags);
       setCustomIngredientTags(bootstrap.customIngredientTags);
+      setCatalogOverlays(bootstrap.catalogOverlays);
       setOnboardingStep(bootstrap.onboardingStep);
       setOnboardingCompleted(bootstrap.onboardingCompleted);
     },
@@ -407,6 +553,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           const nextAppLocale = sanitizeAppLocale(stored.appLocale);
           const nextCustomCocktailTags = sanitizeCustomTags(stored.customCocktailTags, DEFAULT_TAG_COLOR);
           const nextCustomIngredientTags = sanitizeCustomTags(stored.customIngredientTags, DEFAULT_TAG_COLOR);
+          const nextCatalogOverlays = normalizeCatalogOverlays(stored.catalogOverlays);
           const nextOnboardingStep = 0;
           const nextOnboardingCompleted = stored.onboardingCompleted ?? false;
 
@@ -427,6 +574,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             amazonStoreOverride: nextAmazonStoreOverride,
             customCocktailTags: nextCustomCocktailTags,
             customIngredientTags: nextCustomIngredientTags,
+            catalogOverlays: nextCatalogOverlays,
             onboardingStep: nextOnboardingStep,
             onboardingCompleted: nextOnboardingCompleted,
           });
@@ -456,6 +604,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             amazonStoreOverride: null,
             customCocktailTags: [],
             customIngredientTags: [],
+            catalogOverlays: {},
             onboardingStep: 1,
             onboardingCompleted: false,
           });
@@ -495,6 +644,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     globalThis.__yourbarInventoryAmazonStoreOverride = amazonStoreOverride;
     globalThis.__yourbarInventoryCustomCocktailTags = customCocktailTags;
     globalThis.__yourbarInventoryCustomIngredientTags = customIngredientTags;
+    globalThis.__yourbarInventoryCatalogOverlays = catalogOverlays;
     globalThis.__yourbarInventoryOnboardingStep = onboardingStep;
     globalThis.__yourbarInventoryOnboardingCompleted = onboardingCompleted;
 
@@ -514,6 +664,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       amazonStoreOverride,
       customCocktailTags,
       customIngredientTags,
+      catalogOverlays,
       onboardingStep,
       onboardingCompleted,
     });
@@ -546,6 +697,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     amazonStoreOverride,
     customCocktailTags,
     customIngredientTags,
+    catalogOverlays,
     onboardingStep,
     onboardingCompleted,
   ]);
@@ -558,8 +710,22 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     () => [...(inventoryState?.ingredients ?? [])].sort((a, b) => compareOptionalGlobalAlphabet(a.name, b.name)),
     [inventoryState?.ingredients],
   );
-  const localizedCocktails = useMemo(() => localizeCocktails(cocktails, appLocale), [appLocale, cocktails]);
-  const localizedIngredients = useMemo(() => localizeIngredients(ingredients, appLocale), [appLocale, ingredients]);
+  const appCatalogOverlayLocale = useMemo(
+    () => getCatalogOverlayLocaleFromAppLocale(appLocale),
+    [appLocale],
+  );
+  const activeCatalogOverlay = useMemo(
+    () => catalogOverlays[appCatalogOverlayLocale],
+    [appCatalogOverlayLocale, catalogOverlays],
+  );
+  const localizedCocktails = useMemo(
+    () => localizeCocktails(cocktails, appLocale, activeCatalogOverlay),
+    [activeCatalogOverlay, appLocale, cocktails],
+  );
+  const localizedIngredients = useMemo(
+    () => localizeIngredients(ingredients, appLocale, activeCatalogOverlay),
+    [activeCatalogOverlay, appLocale, ingredients],
+  );
 
   const resolveCocktailKey = useCallback((cocktail: Cocktail) => {
     const id = cocktail.id;
@@ -637,7 +803,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     (input: CreateCocktailInput) => {
       let created: Cocktail | undefined;
 
-      setInventoryState((prev) => {
+      setCatalogOverlays((prev) => mergeCatalogOverlays(prev, incomingCatalogOverlays));
+
+    setInventoryState((prev) => {
         if (!prev) {
           return prev;
         }
@@ -1016,11 +1184,15 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       return acc;
     }, []);
 
+    const normalizedOverlays = normalizeCatalogOverlays(catalogOverlays);
+
     return {
       cocktails,
       ingredients,
+      catalogOverlays:
+        Object.keys(normalizedOverlays).length > 0 ? normalizedOverlays : undefined,
     };
-  }, [baseMaps, inventoryState]);
+  }, [baseMaps, catalogOverlays, inventoryState]);
 
   const exportInventoryPhotoEntries = useCallback((): PhotoBackupEntry[] | null => {
     if (!inventoryState) {
@@ -1073,6 +1245,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   const importInventoryData = useCallback((data: InventoryExportData) => {
     const hydrated = hydrateInventoryTagsFromCode(data);
     const incomingState = createInventoryStateFromData(hydrated, true);
+    const incomingCatalogOverlays = normalizeCatalogOverlays(data.catalogOverlays);
 
     const mergeById = <TItem extends { id?: number | null; searchNameNormalized: string }>(
       currentItems: readonly TItem[],
@@ -1113,6 +1286,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       merged.sort((a, b) => compareGlobalAlphabet(a.searchNameNormalized, b.searchNameNormalized));
       return merged;
     };
+
+    setCatalogOverlays((prev) => mergeCatalogOverlays(prev, incomingCatalogOverlays));
 
     setInventoryState((prev) => {
       if (!prev) {
@@ -1209,6 +1384,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   const updateIngredient = useCallback(
     (id: number, input: CreateIngredientInput) => {
       let updated: Ingredient | undefined;
+      let nextCatalogOverlays = catalogOverlays;
+      const locale = getCatalogOverlayLocaleFromAppLocale(appLocale);
 
       setInventoryState((prev) => {
         if (!prev) {
@@ -1280,6 +1457,39 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         const tags = tagMap.size > 0 ? Array.from(tagMap.values()) : undefined;
 
         const previous = prev.ingredients[ingredientIndex];
+        const structureChanged =
+          sanitizeCatalogOverlayText(previous.photoUri) !== sanitizeCatalogOverlayText(photoUri) ||
+          (previous.baseIngredientId ?? undefined) !== baseIngredientId ||
+          (previous.styleIngredientId ?? undefined) !== styleIngredientId ||
+          JSON.stringify(normalizeTagIds(previous.tags)) !== JSON.stringify(normalizeTagIds(tags));
+
+        const ingredientId = Number(previous.id ?? -1);
+        const isBundledIngredient = Number.isFinite(ingredientId) && ingredientId >= 0 && ingredientId < USER_CREATED_ID_START;
+        const shouldStoreInOverlay = isBundledIngredient && locale !== DEFAULT_LOCALE && !structureChanged;
+
+        if (shouldStoreInOverlay) {
+          nextCatalogOverlays = setCatalogOverlayValue(
+            nextCatalogOverlays,
+            locale,
+            `ingredient.${Math.trunc(ingredientId)}.name`,
+            shouldStoreCatalogOverlay(trimmedName, previous.name) ? trimmedName : undefined,
+          );
+          nextCatalogOverlays = setCatalogOverlayValue(
+            nextCatalogOverlays,
+            locale,
+            `ingredient.${Math.trunc(ingredientId)}.description`,
+            shouldStoreCatalogOverlay(description, previous.description) ? description : undefined,
+          );
+
+          updated = {
+            ...previous,
+            searchNameNormalized: previous.searchNameNormalized,
+            searchTokensNormalized: previous.searchTokensNormalized,
+          } as Ingredient;
+
+          return prev;
+        }
+
         const candidateRecord = {
           ...previous,
           id: previous.id,
@@ -1310,13 +1520,23 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         } satisfies InventoryState;
       });
 
+      if (nextCatalogOverlays !== catalogOverlays) {
+        setCatalogOverlays(nextCatalogOverlays);
+        const current = inventoryState?.ingredients.find((item) => Number(item.id ?? -1) === Number(id));
+        if (current) {
+          updated = applyLocalizedIngredientToBase(current, locale, nextCatalogOverlays);
+        }
+      }
+
       return updated;
     },
-    [],
+    [appLocale, catalogOverlays, inventoryState?.ingredients],
   );
 
   const updateCocktail = useCallback((id: number, input: CreateCocktailInput) => {
     let updated: Cocktail | undefined;
+    let nextCatalogOverlays = catalogOverlays;
+    const locale = getCatalogOverlayLocaleFromAppLocale(appLocale);
 
     setInventoryState((prev) => {
       if (!prev) {
@@ -1446,6 +1666,67 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       });
       const tags = tagMap.size > 0 ? Array.from(tagMap.values()) : undefined;
 
+      const structureChanged =
+        sanitizeCatalogOverlayText(existing.photoUri) !== sanitizeCatalogOverlayText(photoUri) ||
+        sanitizeCatalogOverlayText(existing.glassId) !== sanitizeCatalogOverlayText(glassId) ||
+        JSON.stringify(existing.methodIds ?? []) !== JSON.stringify(methodIds ?? []) ||
+        JSON.stringify(normalizeTagIds(existing.tags)) !== JSON.stringify(normalizeTagIds(tags)) ||
+        JSON.stringify((existing.ingredients ?? []).map(({ name, ...rest }) => rest)) !==
+          JSON.stringify(sanitizedIngredients.map(({ name, ...rest }) => rest));
+
+      const cocktailId = Number(existing.id ?? -1);
+      const isBundledCocktail = Number.isFinite(cocktailId) && cocktailId >= 0 && cocktailId < USER_CREATED_ID_START;
+      const shouldStoreInOverlay = isBundledCocktail && locale !== DEFAULT_LOCALE && !structureChanged;
+
+      if (shouldStoreInOverlay) {
+        nextCatalogOverlays = setCatalogOverlayValue(
+          nextCatalogOverlays,
+          locale,
+          `cocktail.${Math.trunc(cocktailId)}.name`,
+          shouldStoreCatalogOverlay(trimmedName, existing.name) ? trimmedName : undefined,
+        );
+        nextCatalogOverlays = setCatalogOverlayValue(
+          nextCatalogOverlays,
+          locale,
+          `cocktail.${Math.trunc(cocktailId)}.description`,
+          shouldStoreCatalogOverlay(description, existing.description) ? description : undefined,
+        );
+        nextCatalogOverlays = setCatalogOverlayValue(
+          nextCatalogOverlays,
+          locale,
+          `cocktail.${Math.trunc(cocktailId)}.instructions`,
+          shouldStoreCatalogOverlay(instructions, existing.instructions) ? instructions : undefined,
+        );
+        nextCatalogOverlays = setCatalogOverlayValue(
+          nextCatalogOverlays,
+          locale,
+          `cocktail.${Math.trunc(cocktailId)}.synonyms`,
+          shouldStoreCatalogOverlay(toCatalogOverlaySynonyms(synonyms), toCatalogOverlaySynonyms(existing.synonyms))
+            ? toCatalogOverlaySynonyms(synonyms)
+            : undefined,
+        );
+
+        sanitizedIngredients.forEach((ingredient) => {
+          const ingredientId = Number(ingredient.ingredientId ?? -1);
+          if (!Number.isFinite(ingredientId) || ingredientId < 0) {
+            return;
+          }
+
+          const existingIngredient = (existing.ingredients ?? []).find(
+            (item) => Number(item.ingredientId ?? -1) === ingredientId,
+          );
+          nextCatalogOverlays = setCatalogOverlayValue(
+            nextCatalogOverlays,
+            locale,
+            `cocktail.${Math.trunc(cocktailId)}.ingredient.${Math.trunc(ingredientId)}.name`,
+            shouldStoreCatalogOverlay(ingredient.name, existingIngredient?.name) ? ingredient.name : undefined,
+          );
+        });
+
+        updated = existing;
+        return prev;
+      }
+
       const candidateRecord = {
         ...existing,
         id: existing.id,
@@ -1483,8 +1764,16 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       } satisfies InventoryState;
     });
 
+    if (nextCatalogOverlays !== catalogOverlays) {
+      setCatalogOverlays(nextCatalogOverlays);
+      const current = inventoryState?.cocktails.find((item) => Number(item.id ?? -1) === Number(id));
+      if (current) {
+        updated = applyLocalizedCocktailToBase(current, locale, nextCatalogOverlays);
+      }
+    }
+
     return updated;
-  }, []);
+  }, [appLocale, catalogOverlays, inventoryState?.cocktails]);
 
   const deleteIngredient = useCallback((id: number) => {
     const normalizedId = Number(id);

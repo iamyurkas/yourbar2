@@ -24,6 +24,7 @@ export type InventorySnapshotV1<TCocktail, TIngredient> = {
   amazonStoreOverride?: string | null;
   onboardingStep?: number;
   onboardingCompleted?: boolean;
+  catalogOverlays?: Partial<Record<string, Record<string, string>>>;
 };
 
 export type InventoryDeltaSnapshot<TCocktail, TIngredient> = {
@@ -56,6 +57,7 @@ export type InventoryDeltaSnapshot<TCocktail, TIngredient> = {
   amazonStoreOverride?: string | null;
   onboardingStep?: number;
   onboardingCompleted?: boolean;
+  catalogOverlays?: Partial<Record<string, Record<string, string>>>;
 };
 
 export type InventorySnapshot<TCocktail, TIngredient> =
