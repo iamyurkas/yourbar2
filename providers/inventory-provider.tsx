@@ -5,7 +5,8 @@ import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { TAG_COLORS } from '@/constants/tag-colors';
 import { AMAZON_STORES, detectAmazonStoreFromStoreOrLocale, detectUsStorefrontOrLocale, getEffectiveAmazonStore, type AmazonStoreKey, type AmazonStoreOverride } from '@/libs/amazon-stores';
 import { DEFAULT_LOCALE, isSupportedLocale } from '@/libs/i18n';
-import { localizeCocktails, localizeIngredients } from '@/libs/i18n/catalog-overlay';
+import { buildCatalogOverlayFromStorageRecords } from '@/libs/i18n/catalog-user-translations';
+import { localizeCocktails, localizeIngredients, replaceRuntimeCatalogOverlay } from '@/libs/i18n/catalog-overlay';
 import { loadInventoryData, reloadInventoryData } from '@/libs/inventory-data';
 import {
   loadInventorySnapshot,
@@ -38,6 +39,8 @@ import {
   type IngredientStorageRecord,
   type IngredientTag,
   type InventoryExportData,
+  type InventoryTranslationExportData,
+  type LocalizedCatalogDictionary,
   type PhotoBackupEntry,
   type ImportedPhotoEntry,
   type StartScreen,
@@ -108,6 +111,8 @@ declare global {
   var __yourbarInventoryOnboardingStep: number | undefined;
   // eslint-disable-next-line no-var
   var __yourbarInventoryOnboardingCompleted: boolean | undefined;
+  // eslint-disable-next-line no-var
+  var __yourbarInventoryTranslations: InventoryTranslationExportData[] | undefined;
 }
 
 function createIngredientIdSet(values?: readonly number[] | null): Set<number> {
@@ -194,6 +199,20 @@ function sanitizeAppTheme(value?: string | null): AppTheme {
 
 function sanitizeAppLocale(value?: string | null): AppLocale {
   return isSupportedLocale(value) ? value : DEFAULT_APP_LOCALE;
+}
+
+function mergeCatalogOverlays(
+  current: LocalizedCatalogDictionary,
+  incoming?: LocalizedCatalogDictionary,
+): LocalizedCatalogDictionary {
+  if (!incoming || Object.keys(incoming).length === 0) {
+    return current;
+  }
+
+  return {
+    ...current,
+    ...incoming,
+  };
 }
 
 function sanitizeAmazonStoreOverride(value?: string | null): AmazonStoreOverride | null {
@@ -311,6 +330,14 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   const [appLocale, setAppLocale] = useState<AppLocale>(
     () => sanitizeAppLocale(globalThis.__yourbarInventoryAppLocale),
   );
+  const [translationsByLocale, setTranslationsByLocale] = useState<Partial<Record<AppLocale, LocalizedCatalogDictionary>>>(() => {
+    const initial: Partial<Record<AppLocale, LocalizedCatalogDictionary>> = {};
+    (globalThis.__yourbarInventoryTranslations ?? []).forEach((entry) => {
+      const locale = sanitizeAppLocale(entry.locale);
+      initial[locale] = mergeCatalogOverlays(initial[locale] ?? {}, entry.catalogOverlay);
+    });
+    return initial;
+  });
   const [customCocktailTags, setCustomCocktailTags] = useState<CocktailTag[]>(() =>
     sanitizeCustomTags(globalThis.__yourbarInventoryCustomCocktailTags, DEFAULT_TAG_COLOR),
   );
@@ -410,6 +437,16 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           const nextOnboardingStep = 0;
           const nextOnboardingCompleted = stored.onboardingCompleted ?? false;
 
+          const nextTranslationsByLocale: Partial<Record<AppLocale, LocalizedCatalogDictionary>> = {};
+          (stored.translations ?? []).forEach((entry) => {
+            const locale = sanitizeAppLocale(entry.locale);
+            nextTranslationsByLocale[locale] = mergeCatalogOverlays(
+              nextTranslationsByLocale[locale] ?? {},
+              entry.catalogOverlay,
+            );
+          });
+          setTranslationsByLocale(nextTranslationsByLocale);
+
           applyInventoryBootstrap({
             inventoryState: nextInventoryState,
             availableIngredientIds: nextAvailableIds,
@@ -459,6 +496,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             onboardingStep: 1,
             onboardingCompleted: false,
           });
+          setTranslationsByLocale({});
         }
       } catch (error) {
         console.error('Failed to import bundled inventory', error);
@@ -497,6 +535,10 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     globalThis.__yourbarInventoryCustomIngredientTags = customIngredientTags;
     globalThis.__yourbarInventoryOnboardingStep = onboardingStep;
     globalThis.__yourbarInventoryOnboardingCompleted = onboardingCompleted;
+    globalThis.__yourbarInventoryTranslations = Object.entries(translationsByLocale).map(([locale, catalogOverlay]) => ({
+      locale,
+      catalogOverlay: { ...catalogOverlay },
+    }));
 
     const snapshot = buildInventorySnapshot(inventoryDelta, {
       availableIngredientIds,
@@ -516,6 +558,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       customIngredientTags,
       onboardingStep,
       onboardingCompleted,
+      translations: globalThis.__yourbarInventoryTranslations,
     });
     const serialized = JSON.stringify(snapshot);
 
@@ -548,7 +591,18 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     customIngredientTags,
     onboardingStep,
     onboardingCompleted,
+    translationsByLocale,
   ]);
+
+  useEffect(() => {
+    (Object.entries(translationsByLocale) as Array<[AppLocale, LocalizedCatalogDictionary | undefined]>).forEach(([locale, overlay]) => {
+      if (!overlay) {
+        return;
+      }
+
+      replaceRuntimeCatalogOverlay(locale, overlay);
+    });
+  }, [translationsByLocale]);
 
   const cocktails = useMemo(
     () => [...(inventoryState?.cocktails ?? [])].sort((a, b) => compareOptionalGlobalAlphabet(a.name, b.name)),
@@ -968,6 +1022,41 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
 
     const baseCocktails = baseMaps.baseCocktails;
     const baseIngredients = baseMaps.baseIngredients;
+    const isLocalizedExport = appLocale !== DEFAULT_LOCALE;
+
+    const normalizeCocktailForStructureDiff = (record: CocktailStorageRecord, baseRecord?: CocktailStorageRecord): CocktailStorageRecord => {
+      if (!isLocalizedExport || !baseRecord) {
+        return record;
+      }
+
+      return {
+        ...record,
+        name: baseRecord.name,
+        description: baseRecord.description,
+        instructions: baseRecord.instructions,
+        synonyms: baseRecord.synonyms,
+        ingredients: (record.ingredients ?? []).map((ingredient) => {
+          const baseIngredient = (baseRecord.ingredients ?? []).find((candidate) => Number(candidate.ingredientId ?? -1) === Number(ingredient.ingredientId ?? -1));
+          return {
+            ...ingredient,
+            name: baseIngredient?.name ?? ingredient.name,
+          };
+        }),
+      };
+    };
+
+    const normalizeIngredientForStructureDiff = (record: IngredientStorageRecord, baseRecord?: IngredientStorageRecord): IngredientStorageRecord => {
+      if (!isLocalizedExport || !baseRecord) {
+        return record;
+      }
+
+      return {
+        ...record,
+        name: baseRecord.name,
+        description: baseRecord.description,
+        synonyms: baseRecord.synonyms,
+      };
+    };
 
     const cocktails = inventoryState.cocktails.reduce<InventoryExportData['cocktails']>((acc, cocktail) => {
       const record = toCocktailStorageRecord(cocktail);
@@ -975,7 +1064,10 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       const normalizedId = Number.isFinite(id) && id >= 0 ? Math.trunc(id) : undefined;
       const baseRecord = normalizedId != null ? baseCocktails.get(normalizedId) : undefined;
 
-      if (baseRecord && areStorageRecordsEqual(record, baseRecord)) {
+      const structureRecord = normalizeCocktailForStructureDiff(record, baseRecord);
+      const structureBaseRecord = normalizeCocktailForStructureDiff(baseRecord ?? record, baseRecord);
+
+      if (baseRecord && areStorageRecordsEqual(structureRecord, structureBaseRecord)) {
         return acc;
       }
 
@@ -998,7 +1090,10 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       const normalizedId = Number.isFinite(id) && id >= 0 ? Math.trunc(id) : undefined;
       const baseRecord = normalizedId != null ? baseIngredients.get(normalizedId) : undefined;
 
-      if (baseRecord && areStorageRecordsEqual(record, baseRecord)) {
+      const structureRecord = normalizeIngredientForStructureDiff(record, baseRecord);
+      const structureBaseRecord = normalizeIngredientForStructureDiff(baseRecord ?? record, baseRecord);
+
+      if (baseRecord && areStorageRecordsEqual(structureRecord, structureBaseRecord)) {
         return acc;
       }
 
@@ -1016,11 +1111,28 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       return acc;
     }, []);
 
+    const translations: InventoryTranslationExportData[] = [];
+    if (isLocalizedExport) {
+      const catalogOverlay = buildCatalogOverlayFromStorageRecords({
+        locale: appLocale,
+        cocktails: inventoryState.cocktails.map((cocktail) => toCocktailStorageRecord(cocktail)),
+        ingredients: inventoryState.ingredients.map((ingredient) => toIngredientStorageRecord(ingredient)),
+      });
+      const mergedOverlay = mergeCatalogOverlays(translationsByLocale[appLocale] ?? {}, catalogOverlay);
+      if (Object.keys(mergedOverlay).length > 0) {
+        translations.push({
+          locale: appLocale,
+          catalogOverlay: mergedOverlay,
+        });
+      }
+    }
+
     return {
       cocktails,
       ingredients,
+      translations: translations.length > 0 ? translations : undefined,
     };
-  }, [baseMaps, inventoryState]);
+  }, [appLocale, baseMaps, inventoryState, translationsByLocale]);
 
   const exportInventoryPhotoEntries = useCallback((): PhotoBackupEntry[] | null => {
     if (!inventoryState) {
@@ -1073,6 +1185,18 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   const importInventoryData = useCallback((data: InventoryExportData) => {
     const hydrated = hydrateInventoryTagsFromCode(data);
     const incomingState = createInventoryStateFromData(hydrated, true);
+
+    if (Array.isArray(data.translations) && data.translations.length > 0) {
+      setTranslationsByLocale((prev) => {
+        const next = { ...prev };
+        data.translations?.forEach((entry) => {
+          const locale = sanitizeAppLocale(entry.locale);
+          next[locale] = mergeCatalogOverlays(next[locale] ?? {}, entry.catalogOverlay);
+          replaceRuntimeCatalogOverlay(locale, next[locale] ?? {});
+        });
+        return next;
+      });
+    }
 
     const mergeById = <TItem extends { id?: number | null; searchNameNormalized: string }>(
       currentItems: readonly TItem[],
@@ -1280,7 +1404,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         const tags = tagMap.size > 0 ? Array.from(tagMap.values()) : undefined;
 
         const previous = prev.ingredients[ingredientIndex];
-        const candidateRecord = {
+        let candidateRecord = {
           ...previous,
           id: previous.id,
           name: trimmedName,
@@ -1290,6 +1414,28 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           styleIngredientId,
           photoUri,
         };
+
+        const baseRecord = baseMaps.baseIngredients.get(Math.trunc(normalizedId));
+        if (appLocale !== DEFAULT_LOCALE && baseRecord) {
+          const overlay = buildCatalogOverlayFromStorageRecords({
+            locale: appLocale,
+            cocktails: [],
+            ingredients: [candidateRecord],
+          });
+
+          if (Object.keys(overlay).length > 0) {
+            setTranslationsByLocale((current) => ({
+              ...current,
+              [appLocale]: mergeCatalogOverlays(current[appLocale] ?? {}, overlay),
+            }));
+          }
+
+          candidateRecord = {
+            ...candidateRecord,
+            name: baseRecord.name,
+            description: baseRecord.description,
+          };
+        }
 
         const [normalized] = normalizeSearchFields([candidateRecord]);
         if (!normalized) {
@@ -1312,7 +1458,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
 
       return updated;
     },
-    [],
+    [appLocale, baseMaps.baseIngredients],
   );
 
   const updateCocktail = useCallback((id: number, input: CreateCocktailInput) => {
@@ -1446,7 +1592,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       });
       const tags = tagMap.size > 0 ? Array.from(tagMap.values()) : undefined;
 
-      const candidateRecord = {
+      let candidateRecord = {
         ...existing,
         id: existing.id,
         name: trimmedName,
@@ -1462,6 +1608,40 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           order: index + 1,
         })),
       } satisfies BaseCocktailRecord;
+
+      const baseRecord = baseMaps.baseCocktails.get(Math.trunc(targetId));
+      if (appLocale !== DEFAULT_LOCALE && baseRecord) {
+        const overlay = buildCatalogOverlayFromStorageRecords({
+          locale: appLocale,
+          cocktails: [candidateRecord],
+          ingredients: [],
+        });
+
+        if (Object.keys(overlay).length > 0) {
+          setTranslationsByLocale((current) => ({
+            ...current,
+            [appLocale]: mergeCatalogOverlays(current[appLocale] ?? {}, overlay),
+          }));
+        }
+
+        candidateRecord = {
+          ...candidateRecord,
+          name: baseRecord.name,
+          description: baseRecord.description,
+          instructions: baseRecord.instructions,
+          synonyms: baseRecord.synonyms,
+          ingredients: (candidateRecord.ingredients ?? []).map((ingredient) => {
+            const baseIngredient = (baseRecord.ingredients ?? []).find(
+              (item) => Number(item.ingredientId ?? -1) === Number(ingredient.ingredientId ?? -1),
+            );
+
+            return {
+              ...ingredient,
+              name: baseIngredient?.name ?? ingredient.name,
+            };
+          }),
+        } satisfies BaseCocktailRecord;
+      }
 
       const [normalized] = normalizeSearchFields([candidateRecord]);
       if (!normalized) {
@@ -1484,7 +1664,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     });
 
     return updated;
-  }, []);
+  }, [appLocale, baseMaps.baseCocktails]);
 
   const deleteIngredient = useCallback((id: number) => {
     const normalizedId = Number(id);

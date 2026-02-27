@@ -14,6 +14,7 @@ import type {
   IngredientStorageRecord,
   IngredientTag,
   StartScreen,
+  type InventoryTranslationExportData,
 } from '@/providers/inventory-types';
 import type { InventoryState } from '@/providers/inventory/model/inventory-state';
 
@@ -160,6 +161,7 @@ export type InventorySnapshotOptions = {
   customIngredientTags: IngredientTag[];
   onboardingStep: number;
   onboardingCompleted: boolean;
+  translations?: InventoryTranslationExportData[];
 };
 
 export function toSortedArray(values: Iterable<number>): number[] {
@@ -206,6 +208,7 @@ export function buildInventorySnapshot(
     ...base,
     customCocktailTags: options.customCocktailTags,
     customIngredientTags: options.customIngredientTags,
+    translations: options.translations,
     availableIngredientIds:
       options.availableIngredientIds.size > 0 ? toSortedArray(options.availableIngredientIds) : undefined,
     shoppingIngredientIds:

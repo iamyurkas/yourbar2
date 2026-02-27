@@ -1,3 +1,4 @@
+import type { InventoryTranslationExportData } from '@/providers/inventory-types';
 import * as FileSystem from 'expo-file-system/legacy';
 
 const STORAGE_FILENAME = 'inventory-state.json';
@@ -9,6 +10,7 @@ export type InventorySnapshotV1<TCocktail, TIngredient> = {
   cocktails: TCocktail[];
   ingredients: TIngredient[];
   imported?: boolean;
+  translations?: InventoryTranslationExportData[];
   availableIngredientIds?: number[];
   shoppingIngredientIds?: number[];
   cocktailRatings?: Record<string, number>;
@@ -41,6 +43,7 @@ export type InventoryDeltaSnapshot<TCocktail, TIngredient> = {
     };
   };
   imported?: boolean;
+  translations?: InventoryTranslationExportData[];
   availableIngredientIds?: number[];
   shoppingIngredientIds?: number[];
   cocktailRatings?: Record<string, number>;

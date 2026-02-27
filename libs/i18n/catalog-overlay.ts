@@ -39,6 +39,8 @@ const CATALOG_OVERLAYS: Record<SupportedLocale, CatalogOverlayDictionary> = {
   'uk-UA': ukUACatalogOverlay,
 };
 
+const runtimeCatalogOverlays: Partial<Record<SupportedLocale, CatalogOverlayDictionary>> = {};
+
 const DEFAULT_LOCALE: SupportedLocale = 'en-GB';
 
 const BUNDLED_COCKTAILS_BY_ID = new Map<number, BundledCocktail>();
@@ -96,7 +98,15 @@ function shouldApplyLocalizedSynonyms(current?: readonly string[] | null, bundle
 }
 
 function getCatalogOverlayValue(locale: SupportedLocale, key: string): string | undefined {
-  return CATALOG_OVERLAYS[locale][key] ?? CATALOG_OVERLAYS[DEFAULT_LOCALE][key];
+  return runtimeCatalogOverlays[locale]?.[key] ?? CATALOG_OVERLAYS[locale][key] ?? CATALOG_OVERLAYS[DEFAULT_LOCALE][key];
+}
+
+export function replaceRuntimeCatalogOverlay(locale: SupportedLocale, overlay: CatalogOverlayDictionary): void {
+  runtimeCatalogOverlays[locale] = { ...overlay };
+}
+
+export function getRuntimeCatalogOverlay(locale: SupportedLocale): CatalogOverlayDictionary {
+  return { ...(runtimeCatalogOverlays[locale] ?? {}) };
 }
 
 export function getCatalogFieldTranslation(

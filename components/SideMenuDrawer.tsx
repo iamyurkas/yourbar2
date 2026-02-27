@@ -541,7 +541,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     return Array.isArray(record.cocktails) && Array.isArray(record.ingredients);
   };
 
-  const resolveInventoryFileFromArchive = (
+  const resolveInventoryFilesFromArchive = (
     files: { path: string; contents: Uint8Array }[],
   ) => {
     const normalizedLocale = locale.toLowerCase();
@@ -551,19 +551,39 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       "inventory.json",
     ];
 
-    for (const preferredPath of preferredPaths) {
-      const matched = files.find(
-        (file) => file.path.toLowerCase() === preferredPath.toLowerCase(),
-      );
-      if (matched) {
-        return matched;
-      }
-    }
+    const result: { path: string; contents: Uint8Array }[] = [];
+    const seen = new Set<string>();
 
-    return (
-      files.find((file) => /^inventory\.[^.]+\.json$/i.test(file.path)) ??
-      files.find((file) => file.path.toLowerCase().endsWith(".json"))
-    );
+    const pushIfFound = (path: string) => {
+      const matched = files.find((file) => file.path.toLowerCase() === path.toLowerCase());
+      if (!matched) {
+        return;
+      }
+
+      const key = matched.path.toLowerCase();
+      if (seen.has(key)) {
+        return;
+      }
+
+      seen.add(key);
+      result.push(matched);
+    };
+
+    preferredPaths.forEach(pushIfFound);
+
+    files
+      .filter((file) => /^inventory\.[^.]+\.json$/i.test(file.path) || file.path.toLowerCase() === 'inventory.json')
+      .forEach((file) => {
+        const key = file.path.toLowerCase();
+        if (seen.has(key)) {
+          return;
+        }
+
+        seen.add(key);
+        result.push(file);
+      });
+
+    return result;
   };
 
   const handleBackupData = async () => {
@@ -609,12 +629,36 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       }
 
       const files: { path: string; contents: Uint8Array }[] = [];
-      const payload = JSON.stringify(data, null, 2);
       const encoder = new TextEncoder();
+
+      const structurePayload = JSON.stringify(
+        {
+          cocktails: data.cocktails,
+          ingredients: data.ingredients,
+        } satisfies InventoryExportData,
+        null,
+        2,
+      );
       files.push({
-        path: `inventory.${locale}.json`,
-        contents: encoder.encode(payload),
+        path: "inventory.json",
+        contents: encoder.encode(structurePayload),
       });
+
+      if (data.translations && data.translations.length > 0) {
+        const translationsPayload = JSON.stringify(
+          {
+            cocktails: [],
+            ingredients: [],
+            translations: data.translations,
+          } satisfies InventoryExportData,
+          null,
+          2,
+        );
+        files.push({
+          path: `inventory.${locale}.json`,
+          contents: encoder.encode(translationsPayload),
+        });
+      }
 
       const entries = photoEntries.filter((entry) => entry.uri);
       const nameCounts = new Map<string, number>();
@@ -700,23 +744,32 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
         return;
       }
 
-      const inventoryFile = resolveInventoryFileFromArchive(archivedFiles);
-      if (!inventoryFile) {
+      const inventoryFiles = resolveInventoryFilesFromArchive(archivedFiles);
+      if (inventoryFiles.length === 0) {
         showDialogMessage(t("sideMenu.importFailedTitle"), t("sideMenu.importMissingInventory"));
         return;
       }
 
       const decoder = new TextDecoder();
-      const parsed = JSON.parse(decoder.decode(inventoryFile.contents)) as unknown;
-      if (!isValidInventoryData(parsed)) {
+      let importedInventoryCount = 0;
+
+      for (const inventoryFile of inventoryFiles) {
+        const parsed = JSON.parse(decoder.decode(inventoryFile.contents)) as unknown;
+        if (!isValidInventoryData(parsed)) {
+          continue;
+        }
+
+        importInventoryData(parsed);
+        importedInventoryCount += 1;
+      }
+
+      if (importedInventoryCount === 0) {
         showDialogMessage(
           t("sideMenu.importFailedTitle"),
           t("sideMenu.importInvalidInventory"),
         );
         return;
       }
-
-      importInventoryData(parsed);
 
       const directory = FileSystem.documentDirectory ?? FileSystem.cacheDirectory;
       if (!directory) {
@@ -729,8 +782,9 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       const photosDir = `${directory.replace(/\/?$/, "/")}imported-photos/`;
       await FileSystem.makeDirectoryAsync(photosDir, { intermediates: true });
 
+      const inventoryFilePaths = new Set(inventoryFiles.map((file) => file.path));
       for (const file of archivedFiles) {
-        if (file.path === inventoryFile.path) {
+        if (inventoryFilePaths.has(file.path)) {
           continue;
         }
 
