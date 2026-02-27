@@ -29,8 +29,8 @@ import { TagEditorModal } from '@/components/TagEditorModal';
 import { TagPill } from '@/components/TagPill';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { useAppColors } from '@/constants/theme';
-import { useI18n } from '@/libs/i18n/use-i18n';
 import { compareOptionalGlobalAlphabet } from '@/libs/global-sort';
+import { useI18n } from '@/libs/i18n/use-i18n';
 import { resolveImageSource } from '@/libs/image-source';
 import { buildReturnToParams, skipDuplicateBack } from '@/libs/navigation';
 import { shouldStorePhoto, storePhoto } from '@/libs/photo-storage';
@@ -1430,8 +1430,8 @@ export default function IngredientFormScreen() {
                 key={tag.id}
                 label={finalName}
                 color={tag.color}
-              selected={tag.selected}
-              onPress={() => toggleTag(tag.id)}
+                selected={tag.selected}
+                onPress={() => toggleTag(tag.id)}
                 accessibilityRole="checkbox"
                 accessibilityState={{ checked: tag.selected }}
                 androidRippleColor={`${Colors.surface}33`}
@@ -2036,9 +2036,10 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   baseShoppingIndicator: {
-    minHeight: 56,
+    minHeight: 42,
     justifyContent: 'flex-end',
     alignItems: 'flex-end',
+    marginRight: -4,
   },
   unlinkButton: {
     padding: 6,
