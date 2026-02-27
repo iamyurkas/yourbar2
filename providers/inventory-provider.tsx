@@ -5,7 +5,15 @@ import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { TAG_COLORS } from '@/constants/tag-colors';
 import { AMAZON_STORES, detectAmazonStoreFromStoreOrLocale, detectUsStorefrontOrLocale, getEffectiveAmazonStore, type AmazonStoreKey, type AmazonStoreOverride } from '@/libs/amazon-stores';
 import { DEFAULT_LOCALE, isSupportedLocale } from '@/libs/i18n';
-import { localizeCocktails, localizeIngredients } from '@/libs/i18n/catalog-overlay';
+import {
+  CATALOG_DEFAULT_LOCALE,
+  getBundledCatalogField,
+  getBundledRecipeIngredientName,
+  getCatalogFieldTranslation,
+  getRecipeIngredientNameTranslation,
+  localizeCocktails,
+  localizeIngredients,
+} from '@/libs/i18n/catalog-overlay';
 import { loadInventoryData, reloadInventoryData } from '@/libs/inventory-data';
 import {
   loadInventorySnapshot,
@@ -38,6 +46,7 @@ import {
   type IngredientStorageRecord,
   type IngredientTag,
   type InventoryExportData,
+  type InventoryTranslationExportData,
   type PhotoBackupEntry,
   type ImportedPhotoEntry,
   type StartScreen,
@@ -980,8 +989,72 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       }
 
       const tags = normalizeTagIds(cocktail.tags);
+      const exportRecord = { ...record };
+
+      if (normalizedId != null && getBundledCatalogField('cocktail', normalizedId, 'name')) {
+        exportRecord.name = getCatalogFieldTranslation(
+          CATALOG_DEFAULT_LOCALE,
+          'cocktail',
+          normalizedId,
+          'name',
+          getBundledCatalogField('cocktail', normalizedId, 'name'),
+        );
+        exportRecord.description = getCatalogFieldTranslation(
+          CATALOG_DEFAULT_LOCALE,
+          'cocktail',
+          normalizedId,
+          'description',
+          getBundledCatalogField('cocktail', normalizedId, 'description'),
+        );
+        exportRecord.instructions = getCatalogFieldTranslation(
+          CATALOG_DEFAULT_LOCALE,
+          'cocktail',
+          normalizedId,
+          'instructions',
+          getBundledCatalogField('cocktail', normalizedId, 'instructions'),
+        );
+        exportRecord.synonyms = normalizeSynonyms(
+          (getCatalogFieldTranslation(
+            CATALOG_DEFAULT_LOCALE,
+            'cocktail',
+            normalizedId,
+            'synonyms',
+            getBundledCatalogField('cocktail', normalizedId, 'synonyms'),
+          ) ?? '')
+            .split(/[,;\n]/)
+            .map((value) => value.trim())
+            .filter(Boolean),
+        );
+
+        exportRecord.ingredients = exportRecord.ingredients?.map((item) => {
+          const ingredientId = Number(item.ingredientId ?? -1);
+          if (!Number.isFinite(ingredientId) || ingredientId < 0) {
+            return item;
+          }
+
+          const bundledIngredientName = getBundledRecipeIngredientName(normalizedId, Math.trunc(ingredientId));
+          if (!bundledIngredientName) {
+            return item;
+          }
+
+          return {
+            ...item,
+            name: getRecipeIngredientNameTranslation(
+              CATALOG_DEFAULT_LOCALE,
+              normalizedId,
+              Math.trunc(ingredientId),
+              bundledIngredientName,
+            ) ?? item.name,
+          };
+        });
+      }
+
+      if (baseRecord && areStorageRecordsEqual(exportRecord, baseRecord)) {
+        return acc;
+      }
+
       acc.push({
-        ...record,
+        ...exportRecord,
         tags,
         photoUri: normalizePhotoUriForBackup({
           uri: record.photoUri,
@@ -1003,8 +1076,43 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       }
 
       const tags = normalizeTagIds(ingredient.tags);
+      const exportRecord = { ...record };
+
+      if (normalizedId != null && getBundledCatalogField('ingredient', normalizedId, 'name')) {
+        exportRecord.name = getCatalogFieldTranslation(
+          CATALOG_DEFAULT_LOCALE,
+          'ingredient',
+          normalizedId,
+          'name',
+          getBundledCatalogField('ingredient', normalizedId, 'name'),
+        );
+        exportRecord.description = getCatalogFieldTranslation(
+          CATALOG_DEFAULT_LOCALE,
+          'ingredient',
+          normalizedId,
+          'description',
+          getBundledCatalogField('ingredient', normalizedId, 'description'),
+        );
+        exportRecord.synonyms = normalizeSynonyms(
+          (getCatalogFieldTranslation(
+            CATALOG_DEFAULT_LOCALE,
+            'ingredient',
+            normalizedId,
+            'synonyms',
+            getBundledCatalogField('ingredient', normalizedId, 'synonyms'),
+          ) ?? '')
+            .split(/[,;\n]/)
+            .map((value) => value.trim())
+            .filter(Boolean),
+        );
+      }
+
+      if (baseRecord && areStorageRecordsEqual(exportRecord, baseRecord)) {
+        return acc;
+      }
+
       acc.push({
-        ...record,
+        ...exportRecord,
         tags,
         photoUri: normalizePhotoUriForBackup({
           uri: record.photoUri,
@@ -1021,6 +1129,184 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       ingredients,
     };
   }, [baseMaps, inventoryState]);
+
+  const exportInventoryTranslationData = useCallback((): InventoryTranslationExportData | null => {
+    if (!inventoryState) {
+      return null;
+    }
+
+    const locale = appLocale;
+    const cocktails = inventoryState.cocktails.reduce<InventoryTranslationExportData['cocktails']>((acc, cocktail) => {
+      const id = Number(cocktail.id ?? -1);
+      if (!Number.isFinite(id) || id < 0) {
+        return acc;
+      }
+
+      const normalizedId = Math.trunc(id);
+      const bundledName = getBundledCatalogField('cocktail', normalizedId, 'name');
+      if (!bundledName) {
+        return acc;
+      }
+
+      const entry: InventoryTranslationExportData['cocktails'][number] = { id: normalizedId };
+
+      const localizedNameBase = getCatalogFieldTranslation(locale, 'cocktail', normalizedId, 'name', bundledName);
+      const localizedDescriptionBase = getCatalogFieldTranslation(
+        locale,
+        'cocktail',
+        normalizedId,
+        'description',
+        getBundledCatalogField('cocktail', normalizedId, 'description'),
+      );
+      const localizedInstructionsBase = getCatalogFieldTranslation(
+        locale,
+        'cocktail',
+        normalizedId,
+        'instructions',
+        getBundledCatalogField('cocktail', normalizedId, 'instructions'),
+      );
+
+      const localizedSynonymsBase = (getCatalogFieldTranslation(
+        locale,
+        'cocktail',
+        normalizedId,
+        'synonyms',
+        getBundledCatalogField('cocktail', normalizedId, 'synonyms'),
+      ) ?? '')
+        .split(/[,;\n]/)
+        .map((value) => value.trim())
+        .filter(Boolean);
+
+      const currentSynonyms = (cocktail.synonyms ?? []).map((value) => value.trim()).filter(Boolean);
+
+      if ((cocktail.name ?? '').trim() && (cocktail.name ?? '').trim() !== (localizedNameBase ?? '').trim()) {
+        entry.name = cocktail.name?.trim();
+      }
+      if ((cocktail.description ?? '').trim() !== (localizedDescriptionBase ?? '').trim()) {
+        entry.description = cocktail.description?.trim() || '';
+      }
+      if ((cocktail.instructions ?? '').trim() !== (localizedInstructionsBase ?? '').trim()) {
+        entry.instructions = cocktail.instructions?.trim() || '';
+      }
+      if (
+        currentSynonyms.length !== localizedSynonymsBase.length ||
+        currentSynonyms.some((value, index) => value !== localizedSynonymsBase[index])
+      ) {
+        entry.synonyms = currentSynonyms;
+      }
+
+      const translatedIngredients = (cocktail.ingredients ?? []).reduce<NonNullable<InventoryTranslationExportData['cocktails'][number]['ingredients']>>((ingredientAcc, ingredient) => {
+        const ingredientId = Number(ingredient.ingredientId ?? -1);
+        if (!Number.isFinite(ingredientId) || ingredientId < 0) {
+          return ingredientAcc;
+        }
+
+        const normalizedIngredientId = Math.trunc(ingredientId);
+        const bundledIngredientName = getBundledRecipeIngredientName(normalizedId, normalizedIngredientId);
+        if (!bundledIngredientName) {
+          return ingredientAcc;
+        }
+
+        const localizedBase = getRecipeIngredientNameTranslation(
+          locale,
+          normalizedId,
+          normalizedIngredientId,
+          bundledIngredientName,
+        );
+        const currentName = ingredient.name?.trim();
+        if (!currentName || currentName === (localizedBase ?? '').trim()) {
+          return ingredientAcc;
+        }
+
+        ingredientAcc.push({
+          ingredientId: normalizedIngredientId,
+          name: currentName,
+        });
+        return ingredientAcc;
+      }, []);
+
+      if (translatedIngredients.length > 0) {
+        entry.ingredients = translatedIngredients;
+      }
+
+      if (
+        entry.name == null &&
+        entry.description == null &&
+        entry.instructions == null &&
+        entry.synonyms == null &&
+        entry.ingredients == null
+      ) {
+        return acc;
+      }
+
+      acc.push(entry);
+      return acc;
+    }, []);
+
+    const ingredients = inventoryState.ingredients.reduce<InventoryTranslationExportData['ingredients']>((acc, ingredient) => {
+      const id = Number(ingredient.id ?? -1);
+      if (!Number.isFinite(id) || id < 0) {
+        return acc;
+      }
+
+      const normalizedId = Math.trunc(id);
+      const bundledName = getBundledCatalogField('ingredient', normalizedId, 'name');
+      if (!bundledName) {
+        return acc;
+      }
+
+      const entry: InventoryTranslationExportData['ingredients'][number] = { id: normalizedId };
+      const localizedNameBase = getCatalogFieldTranslation(locale, 'ingredient', normalizedId, 'name', bundledName);
+      const localizedDescriptionBase = getCatalogFieldTranslation(
+        locale,
+        'ingredient',
+        normalizedId,
+        'description',
+        getBundledCatalogField('ingredient', normalizedId, 'description'),
+      );
+      const localizedSynonymsBase = (getCatalogFieldTranslation(
+        locale,
+        'ingredient',
+        normalizedId,
+        'synonyms',
+        getBundledCatalogField('ingredient', normalizedId, 'synonyms'),
+      ) ?? '')
+        .split(/[,;\n]/)
+        .map((value) => value.trim())
+        .filter(Boolean);
+
+      const currentSynonyms = (ingredient.synonyms ?? []).map((value) => value.trim()).filter(Boolean);
+      if ((ingredient.name ?? '').trim() && (ingredient.name ?? '').trim() !== (localizedNameBase ?? '').trim()) {
+        entry.name = ingredient.name?.trim();
+      }
+      if ((ingredient.description ?? '').trim() !== (localizedDescriptionBase ?? '').trim()) {
+        entry.description = ingredient.description?.trim() || '';
+      }
+      if (
+        currentSynonyms.length !== localizedSynonymsBase.length ||
+        currentSynonyms.some((value, index) => value !== localizedSynonymsBase[index])
+      ) {
+        entry.synonyms = currentSynonyms;
+      }
+
+      if (entry.name == null && entry.description == null && entry.synonyms == null) {
+        return acc;
+      }
+
+      acc.push(entry);
+      return acc;
+    }, []);
+
+    if (cocktails.length === 0 && ingredients.length === 0) {
+      return null;
+    }
+
+    return {
+      locale,
+      cocktails,
+      ingredients,
+    };
+  }, [appLocale, inventoryState]);
 
   const exportInventoryPhotoEntries = useCallback((): PhotoBackupEntry[] | null => {
     if (!inventoryState) {
@@ -1124,6 +1410,102 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         imported: true,
         cocktails: mergeById(prev.cocktails, incomingState.cocktails),
         ingredients: mergeById(prev.ingredients, incomingState.ingredients),
+      } satisfies InventoryState;
+    });
+  }, []);
+
+  const importInventoryTranslationData = useCallback((data: InventoryTranslationExportData) => {
+    setInventoryState((prev) => {
+      if (!prev) {
+        return prev;
+      }
+
+      const cocktailTranslations = new Map<number, InventoryTranslationExportData['cocktails'][number]>();
+      data.cocktails.forEach((item) => {
+        const id = Number(item.id ?? -1);
+        if (!Number.isFinite(id) || id < 0) {
+          return;
+        }
+        cocktailTranslations.set(Math.trunc(id), item);
+      });
+
+      const ingredientTranslations = new Map<number, InventoryTranslationExportData['ingredients'][number]>();
+      data.ingredients.forEach((item) => {
+        const id = Number(item.id ?? -1);
+        if (!Number.isFinite(id) || id < 0) {
+          return;
+        }
+        ingredientTranslations.set(Math.trunc(id), item);
+      });
+
+      const nextCocktails = normalizeSearchFields(prev.cocktails.map((cocktail) => {
+        const id = Number(cocktail.id ?? -1);
+        if (!Number.isFinite(id) || id < 0) {
+          return cocktail;
+        }
+
+        const translation = cocktailTranslations.get(Math.trunc(id));
+        if (!translation) {
+          return cocktail;
+        }
+
+        const ingredientNameById = new Map<number, string>();
+        (translation.ingredients ?? []).forEach((entry) => {
+          const ingredientId = Number(entry.ingredientId ?? -1);
+          const name = entry.name?.trim();
+          if (!Number.isFinite(ingredientId) || ingredientId < 0 || !name) {
+            return;
+          }
+          ingredientNameById.set(Math.trunc(ingredientId), name);
+        });
+
+        return {
+          ...cocktail,
+          name: translation.name?.trim() ?? cocktail.name,
+          description: translation.description != null ? translation.description.trim() || undefined : cocktail.description,
+          instructions: translation.instructions != null ? translation.instructions.trim() || undefined : cocktail.instructions,
+          synonyms: translation.synonyms != null ? normalizeSynonyms(translation.synonyms) : cocktail.synonyms,
+          ingredients: cocktail.ingredients?.map((ingredient) => {
+            const ingredientId = Number(ingredient.ingredientId ?? -1);
+            if (!Number.isFinite(ingredientId) || ingredientId < 0) {
+              return ingredient;
+            }
+            const translatedName = ingredientNameById.get(Math.trunc(ingredientId));
+            if (!translatedName) {
+              return ingredient;
+            }
+            return {
+              ...ingredient,
+              name: translatedName,
+            };
+          }),
+        };
+      })) as Cocktail[];
+
+      const nextIngredients = normalizeSearchFields(prev.ingredients.map((ingredient) => {
+        const id = Number(ingredient.id ?? -1);
+        if (!Number.isFinite(id) || id < 0) {
+          return ingredient;
+        }
+
+        const translation = ingredientTranslations.get(Math.trunc(id));
+        if (!translation) {
+          return ingredient;
+        }
+
+        return {
+          ...ingredient,
+          name: translation.name?.trim() ?? ingredient.name,
+          description: translation.description != null ? translation.description.trim() || undefined : ingredient.description,
+          synonyms: translation.synonyms != null ? normalizeSynonyms(translation.synonyms) : ingredient.synonyms,
+        };
+      })) as Ingredient[];
+
+      return {
+        ...prev,
+        imported: true,
+        cocktails: nextCocktails,
+        ingredients: nextIngredients,
       } satisfies InventoryState;
     });
   }, []);
@@ -2070,8 +2452,10 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       createIngredient,
       resetInventoryFromBundle,
       exportInventoryData,
+      exportInventoryTranslationData,
       exportInventoryPhotoEntries,
       importInventoryData,
+      importInventoryTranslationData,
       importInventoryPhotos,
       updateCocktail,
       updateIngredient,
@@ -2107,8 +2491,10 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       createIngredient,
       resetInventoryFromBundle,
       exportInventoryData,
+      exportInventoryTranslationData,
       exportInventoryPhotoEntries,
       importInventoryData,
+      importInventoryTranslationData,
       importInventoryPhotos,
       updateCocktail,
       updateIngredient,

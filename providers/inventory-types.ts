@@ -106,3 +106,24 @@ export type InventoryExportData = {
   cocktails: Array<Omit<CocktailStorageRecord, 'tags'> & { tags?: number[] | null }>;
   ingredients: Array<Omit<IngredientStorageRecord, 'tags'> & { tags?: number[] | null }>;
 };
+
+export type InventoryTranslationExportData = {
+  locale: AppLocale;
+  cocktails: Array<{
+    id: number;
+    name?: string;
+    description?: string;
+    instructions?: string;
+    synonyms?: string[];
+    ingredients?: Array<{
+      ingredientId?: number;
+      name: string;
+    }>;
+  }>;
+  ingredients: Array<{
+    id: number;
+    name?: string;
+    description?: string;
+    synonyms?: string[];
+  }>;
+};

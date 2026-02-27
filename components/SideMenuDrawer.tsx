@@ -35,7 +35,11 @@ import { base64ToBytes, bytesToBase64, createTarArchive, parseTarArchive } from 
 import { buildPhotoBaseName } from "@/libs/photo-utils";
 import { useI18n } from "@/libs/i18n/use-i18n";
 import { useInventory, type AppTheme, type StartScreen } from "@/providers/inventory-provider";
-import { type ImportedPhotoEntry, type InventoryExportData } from "@/providers/inventory-types";
+import {
+  type ImportedPhotoEntry,
+  type InventoryExportData,
+  type InventoryTranslationExportData,
+} from "@/providers/inventory-types";
 import Constants from "expo-constants";
 
 const MENU_WIDTH = Math.round(Dimensions.get("window").width * 0.8);
@@ -147,8 +151,10 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     restartOnboarding,
     resetInventoryFromBundle,
     exportInventoryData,
+    exportInventoryTranslationData,
     exportInventoryPhotoEntries,
     importInventoryData,
+    importInventoryTranslationData,
     importInventoryPhotos,
     customCocktailTags,
     customIngredientTags,
@@ -541,6 +547,22 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     return Array.isArray(record.cocktails) && Array.isArray(record.ingredients);
   };
 
+
+  const isValidInventoryTranslationData = (
+    candidate: unknown,
+  ): candidate is InventoryTranslationExportData => {
+    if (!candidate || typeof candidate !== "object") {
+      return false;
+    }
+
+    const record = candidate as { locale?: unknown; cocktails?: unknown; ingredients?: unknown };
+    return (
+      typeof record.locale === "string" &&
+      Array.isArray(record.cocktails) &&
+      Array.isArray(record.ingredients)
+    );
+  };
+
   const resolveInventoryFileFromArchive = (
     files: { path: string; contents: Uint8Array }[],
   ) => {
@@ -572,6 +594,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     }
 
     const data = exportInventoryData();
+    const translationData = exportInventoryTranslationData();
     if (!data) {
       showDialogMessage(
         t("sideMenu.exportUnavailableTitle"),
@@ -615,6 +638,13 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
         path: `inventory.${locale}.json`,
         contents: encoder.encode(payload),
       });
+
+      if (translationData) {
+        files.push({
+          path: `inventory-translations.${translationData.locale}.json`,
+          contents: encoder.encode(JSON.stringify(translationData, null, 2)),
+        });
+      }
 
       const entries = photoEntries.filter((entry) => entry.uri);
       const nameCounts = new Map<string, number>();
@@ -700,23 +730,38 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
         return;
       }
 
-      const inventoryFile = resolveInventoryFileFromArchive(archivedFiles);
-      if (!inventoryFile) {
+      const decoder = new TextDecoder();
+      const parsedJsonFiles = archivedFiles
+        .filter((file) => file.path.toLowerCase().endsWith(".json"))
+        .map((file) => {
+          try {
+            return { file, parsed: JSON.parse(decoder.decode(file.contents)) as unknown };
+          } catch {
+            return { file, parsed: undefined };
+          }
+        });
+
+      const inventoryCandidates = parsedJsonFiles.filter((item) => isValidInventoryData(item.parsed));
+      const inventoryFile = resolveInventoryFileFromArchive(inventoryCandidates.map((item) => item.file));
+      const parsedInventory = inventoryCandidates.find((item) => item.file.path === inventoryFile?.path)?.parsed;
+
+      if (!inventoryFile || !parsedInventory || !isValidInventoryData(parsedInventory)) {
         showDialogMessage(t("sideMenu.importFailedTitle"), t("sideMenu.importMissingInventory"));
         return;
       }
 
-      const decoder = new TextDecoder();
-      const parsed = JSON.parse(decoder.decode(inventoryFile.contents)) as unknown;
-      if (!isValidInventoryData(parsed)) {
-        showDialogMessage(
-          t("sideMenu.importFailedTitle"),
-          t("sideMenu.importInvalidInventory"),
-        );
-        return;
-      }
+      importInventoryData(parsedInventory);
 
-      importInventoryData(parsed);
+      const translationCandidates = parsedJsonFiles
+        .filter((item) => isValidInventoryTranslationData(item.parsed))
+        .map((item) => item.parsed);
+      if (translationCandidates.length > 0) {
+        const matchedTranslation =
+          translationCandidates.find((item) => item.locale === locale) ?? translationCandidates[0];
+        if (matchedTranslation) {
+          importInventoryTranslationData(matchedTranslation);
+        }
+      }
 
       const directory = FileSystem.documentDirectory ?? FileSystem.cacheDirectory;
       if (!directory) {

@@ -41,6 +41,8 @@ const CATALOG_OVERLAYS: Record<SupportedLocale, CatalogOverlayDictionary> = {
 
 const DEFAULT_LOCALE: SupportedLocale = 'en-GB';
 
+export const CATALOG_DEFAULT_LOCALE: SupportedLocale = DEFAULT_LOCALE;
+
 const BUNDLED_COCKTAILS_BY_ID = new Map<number, BundledCocktail>();
 const BUNDLED_INGREDIENTS_BY_ID = new Map<number, BundledIngredient>();
 
@@ -134,6 +136,75 @@ export function getRecipeIngredientNameTranslation(
 
   const key = `cocktail.${Math.trunc(normalizedCocktailId)}.ingredient.${Math.trunc(normalizedIngredientId)}.name`;
   return getCatalogOverlayValue(locale, key)?.trim() || fallback?.trim() || undefined;
+}
+
+
+export function getBundledCatalogField(
+  entity: CatalogEntity,
+  id: number | string | null | undefined,
+  field: CatalogField,
+): string | undefined {
+  const numericId = Number(id ?? -1);
+  if (!Number.isFinite(numericId) || numericId < 0) {
+    return undefined;
+  }
+
+  const normalizedId = Math.trunc(numericId);
+
+  if (entity === 'cocktail') {
+    const cocktail = BUNDLED_COCKTAILS_BY_ID.get(normalizedId);
+    if (!cocktail) {
+      return undefined;
+    }
+
+    if (field === 'synonyms') {
+      return normalizeSynonymList(cocktail.synonyms).join(', ');
+    }
+
+    return cocktail[field]?.trim() || undefined;
+  }
+
+  const ingredient = BUNDLED_INGREDIENTS_BY_ID.get(normalizedId);
+  if (!ingredient) {
+    return undefined;
+  }
+
+  if (field === 'instructions') {
+    return undefined;
+  }
+
+  if (field === 'synonyms') {
+    return normalizeSynonymList(ingredient.synonyms).join(', ');
+  }
+
+  return ingredient[field]?.trim() || undefined;
+}
+
+export function getBundledRecipeIngredientName(
+  cocktailId: number | string | null | undefined,
+  ingredientId: number | string | null | undefined,
+): string | undefined {
+  const normalizedCocktailId = Number(cocktailId ?? -1);
+  const normalizedIngredientId = Number(ingredientId ?? -1);
+  if (
+    !Number.isFinite(normalizedCocktailId) ||
+    normalizedCocktailId < 0 ||
+    !Number.isFinite(normalizedIngredientId) ||
+    normalizedIngredientId < 0
+  ) {
+    return undefined;
+  }
+
+  const cocktail = BUNDLED_COCKTAILS_BY_ID.get(Math.trunc(normalizedCocktailId));
+  if (!cocktail) {
+    return undefined;
+  }
+
+  const match = (cocktail.ingredients ?? []).find(
+    (ingredient) => Number(ingredient.ingredientId ?? -1) === Math.trunc(normalizedIngredientId),
+  );
+
+  return match?.name?.trim() || undefined;
 }
 
 export function localizeIngredient(ingredient: Ingredient, locale: SupportedLocale): Ingredient {
