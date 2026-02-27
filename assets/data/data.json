@@ -29235,7 +29235,7 @@
     {
       "id": 482,
       "name": "Sazerac",
-      "description": "The quintessential new orleans classic. a complex and aromatic masterpiece featuring the spicy kick of rye or **cognac**, sweetened slightly and brightened by the unique **anise** aroma of an **absinthe** rinse.",
+      "description": "The quintessential New Orleans classic. a complex and aromatic masterpiece featuring the spicy kick of rye or **cognac**, sweetened slightly and brightened by the unique **anise** aroma of an **absinthe** rinse.",
       "instructions": "1. Rinse a chilled rocks glass with **absinthe**, swirling to coat the sides, and discard the excess.\n2. In a separate mixing glass, muddle a **sugar** cube with **Peychaud's bitters** until dissolved.\n3. Add 20 ml of **cognac** (or **rye whiskey**) and fill the mixing glass with **ice**.\n4. Stir gently for about 20 seconds until well chilled.\n5. Strain into the prepared **absinthe**-rinsed glass without **ice**.\n6. Express oils from a **lemon** peel over the drink and use it as a garnish.",
       "photoUri": "assets/cocktails/482-sazerac.jpg",
       "glassId": "rocks_glass",
@@ -34433,7 +34433,7 @@
       "id": 567,
       "name": "Vieux Carré",
       "synonyms": ["Old Square"],
-      "description": "New orleans classic combining rye, **cognac**, vermouth, and **Benedictine**.",
+      "description": "New Orleans classic combining **rye**, **cognac**, **vermouth**, and **Benedictine**.",
       "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 30 ml of **rye whiskey**, 30 ml of **cognac**, 30 ml of **red vermouth**, a bar spoon of **Benedictine**, 2 dashes of **Peychaud's bitters**, and 2 dashes of **Angostura bitters**.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled rocks glass filled with fresh **ice** (preferably over a large cube).\n5. Express oils from a **lemon** peel over the drink and use it as a garnish.",
       "photoUri": "assets/cocktails/567-vieux-carr.jpg",
       "glassId": "rocks_glass",
@@ -38989,7 +38989,7 @@
     {
       "id": 319,
       "name": "Southern Comfort",
-      "description": "American liqueur of neutral spirit blended with fruit, spice, and whiskey flavour, about 35% ABV. Created in new orleans in 1874. Easy-drinking base for punches and southern-style cocktails.",
+      "description": "American liqueur of neutral spirit blended with fruit, spice, and whiskey flavour, about 35% ABV. Created in New Orleans in 1874. Easy-drinking base for punches and southern-style cocktails.",
       "tags": [1],
       "photoUri": "assets/ingredients/319-southern-comfort.jpg"
     },
