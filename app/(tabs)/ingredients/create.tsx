@@ -2016,9 +2016,9 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   baseShoppingIndicator: {
-    minHeight: 56,
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
     alignItems: 'flex-end',
+    paddingRight: 2,
   },
   unlinkButton: {
     padding: 6,
