@@ -41,6 +41,8 @@ export type InventoryDeltaSnapshot<TCocktail, TIngredient> = {
     };
   };
   imported?: boolean;
+  customCocktailTags?: Array<{ id: number; name: string; color: string }>;
+  customIngredientTags?: Array<{ id: number; name: string; color: string }>;
   availableIngredientIds?: number[];
   shoppingIngredientIds?: number[];
   cocktailRatings?: Record<string, number>;
@@ -58,9 +60,46 @@ export type InventoryDeltaSnapshot<TCocktail, TIngredient> = {
   onboardingCompleted?: boolean;
 };
 
+
+export type InventoryDeltaSnapshotV3<TCocktail, TIngredient> = {
+  version: 3;
+  delta: {
+    cocktails?: {
+      created?: TCocktail[];
+      updated?: TCocktail[];
+      deletedIds?: number[];
+    };
+    ingredients?: {
+      created?: TIngredient[];
+      updated?: TIngredient[];
+      deletedIds?: number[];
+    };
+  };
+  imported?: boolean;
+  customCocktailTags?: Array<{ id: number; name: string; color: string }>;
+  customIngredientTags?: Array<{ id: number; name: string; color: string }>;
+  availableIngredientIds?: number[];
+  shoppingIngredientIds?: number[];
+  cocktailRatings?: Record<string, number>;
+  ignoreGarnish?: boolean;
+  allowAllSubstitutes?: boolean;
+  useImperialUnits?: boolean;
+  keepScreenAwake?: boolean;
+  shakerSmartFilteringEnabled?: boolean;
+  ratingFilterThreshold?: number;
+  startScreen?: string;
+  appTheme?: string;
+  appLocale?: string;
+  amazonStoreOverride?: string | null;
+  onboardingStep?: number;
+  onboardingCompleted?: boolean;
+  translationOverrides?: unknown;
+};
+
 export type InventorySnapshot<TCocktail, TIngredient> =
   | InventorySnapshotV1<TCocktail, TIngredient>
-  | InventoryDeltaSnapshot<TCocktail, TIngredient>;
+  | InventoryDeltaSnapshot<TCocktail, TIngredient>
+  | InventoryDeltaSnapshotV3<TCocktail, TIngredient>;
 
 function joinDirectoryPath(directory: string | null | undefined, filename: string): string | undefined {
   if (!directory) {

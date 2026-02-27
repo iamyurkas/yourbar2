@@ -5,6 +5,7 @@ import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { TAG_COLORS } from '@/constants/tag-colors';
 import { AMAZON_STORES, detectAmazonStoreFromStoreOrLocale, detectUsStorefrontOrLocale, getEffectiveAmazonStore, type AmazonStoreKey, type AmazonStoreOverride } from '@/libs/amazon-stores';
 import { DEFAULT_LOCALE, isSupportedLocale } from '@/libs/i18n';
+import type { SupportedLocale } from '@/libs/i18n/types';
 import { localizeCocktails, localizeIngredients } from '@/libs/i18n/catalog-overlay';
 import { loadInventoryData, reloadInventoryData } from '@/libs/inventory-data';
 import {
@@ -37,7 +38,12 @@ import {
   type Ingredient,
   type IngredientStorageRecord,
   type IngredientTag,
+  type InventoryBaseExportFile,
   type InventoryExportData,
+  type InventoryExportFile,
+  type InventoryLocaleTranslationOverrides,
+  type InventoryTranslationOverrides,
+  type InventoryTranslationsExportFile,
   type PhotoBackupEntry,
   type ImportedPhotoEntry,
   type StartScreen,
@@ -242,6 +248,35 @@ function sanitizeCustomTags<TTag extends { id?: number | null; name?: string | n
   return Array.from(map.values()).sort((a, b) => compareGlobalAlphabet(a.name, b.name));
 }
 
+
+function sanitizeTranslationOverrides(value: unknown): InventoryTranslationOverrides {
+  if (!value || typeof value !== 'object') {
+    return {};
+  }
+
+  const result: InventoryTranslationOverrides = {};
+  (Object.entries(value as Record<string, unknown>)).forEach(([locale, localeValue]) => {
+    if (!isSupportedLocale(locale) || !localeValue || typeof localeValue !== 'object') {
+      return;
+    }
+
+    const localeRecord = localeValue as Record<string, unknown>;
+    const cocktails = localeRecord.cocktails;
+    const ingredients = localeRecord.ingredients;
+    const nextLocale: InventoryLocaleTranslationOverrides = {};
+    if (cocktails && typeof cocktails === 'object') {
+      nextLocale.cocktails = cocktails as Record<string, any>;
+    }
+    if (ingredients && typeof ingredients === 'object') {
+      nextLocale.ingredients = ingredients as Record<string, any>;
+    }
+
+    result[locale] = nextLocale;
+  });
+
+  return result;
+}
+
 function getNextCustomTagId(tags: readonly { id?: number | null }[], minimum: number): number {
   const maxId = tags.reduce((max, tag) => {
     const id = Number(tag.id ?? -1);
@@ -311,6 +346,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   const [appLocale, setAppLocale] = useState<AppLocale>(
     () => sanitizeAppLocale(globalThis.__yourbarInventoryAppLocale),
   );
+  const [translationOverrides, setTranslationOverrides] = useState<InventoryTranslationOverrides>({});
   const [customCocktailTags, setCustomCocktailTags] = useState<CocktailTag[]>(() =>
     sanitizeCustomTags(globalThis.__yourbarInventoryCustomCocktailTags, DEFAULT_TAG_COLOR),
   );
@@ -348,6 +384,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       startScreen: StartScreen;
       appTheme: AppTheme;
       appLocale: AppLocale;
+      translationOverrides: InventoryTranslationOverrides;
       amazonStoreOverride: AmazonStoreOverride | null;
       customCocktailTags: CocktailTag[];
       customIngredientTags: IngredientTag[];
@@ -367,6 +404,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       setStartScreen(bootstrap.startScreen);
       setAppTheme(bootstrap.appTheme);
       setAppLocale(bootstrap.appLocale);
+      setTranslationOverrides(bootstrap.translationOverrides);
       setAmazonStoreOverride(bootstrap.amazonStoreOverride);
       setCustomCocktailTags(bootstrap.customCocktailTags);
       setCustomIngredientTags(bootstrap.customIngredientTags);
@@ -387,7 +425,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     void (async () => {
       try {
         const stored = await loadInventorySnapshot<CocktailStorageRecord, IngredientStorageRecord>();
-        if (stored && (stored.version === INVENTORY_SNAPSHOT_VERSION || stored.version === 1) && !cancelled) {
+        if (stored && (stored.version === INVENTORY_SNAPSHOT_VERSION || stored.version === 2 || stored.version === 1) && !cancelled) {
           const nextInventoryState = rehydrateBuiltInTags(createInventoryStateFromSnapshot(stored, baseInventoryData));
           const nextAvailableIds = createIngredientIdSet(stored.availableIngredientIds);
           const nextShoppingIds = createIngredientIdSet(stored.shoppingIngredientIds);
@@ -409,6 +447,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           const nextCustomIngredientTags = sanitizeCustomTags(stored.customIngredientTags, DEFAULT_TAG_COLOR);
           const nextOnboardingStep = 0;
           const nextOnboardingCompleted = stored.onboardingCompleted ?? false;
+          const nextTranslationOverrides = sanitizeTranslationOverrides((stored as { translationOverrides?: unknown }).translationOverrides);
 
           applyInventoryBootstrap({
             inventoryState: nextInventoryState,
@@ -424,6 +463,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             startScreen: nextStartScreen,
             appTheme: nextAppTheme,
             appLocale: nextAppLocale,
+            translationOverrides: nextTranslationOverrides,
             amazonStoreOverride: nextAmazonStoreOverride,
             customCocktailTags: nextCustomCocktailTags,
             customIngredientTags: nextCustomIngredientTags,
@@ -453,6 +493,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             startScreen: DEFAULT_START_SCREEN,
             appTheme: DEFAULT_APP_THEME,
             appLocale: DEFAULT_APP_LOCALE,
+            translationOverrides: {},
             amazonStoreOverride: null,
             customCocktailTags: [],
             customIngredientTags: [],
@@ -511,6 +552,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       startScreen,
       appTheme,
       appLocale,
+      translationOverrides,
       amazonStoreOverride,
       customCocktailTags,
       customIngredientTags,
@@ -543,6 +585,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     startScreen,
     appTheme,
     appLocale,
+    translationOverrides,
     amazonStoreOverride,
     customCocktailTags,
     customIngredientTags,
@@ -558,8 +601,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     () => [...(inventoryState?.ingredients ?? [])].sort((a, b) => compareOptionalGlobalAlphabet(a.name, b.name)),
     [inventoryState?.ingredients],
   );
-  const localizedCocktails = useMemo(() => localizeCocktails(cocktails, appLocale), [appLocale, cocktails]);
-  const localizedIngredients = useMemo(() => localizeIngredients(ingredients, appLocale), [appLocale, ingredients]);
+  const localizedCocktails = useMemo(() => localizeCocktails(cocktails, appLocale, translationOverrides), [appLocale, cocktails, translationOverrides]);
+  const localizedIngredients = useMemo(() => localizeIngredients(ingredients, appLocale, translationOverrides), [appLocale, ingredients, translationOverrides]);
 
   const resolveCocktailKey = useCallback((cocktail: Cocktail) => {
     const id = cocktail.id;
@@ -796,9 +839,29 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         } satisfies InventoryState;
       });
 
+      if (created?.id != null) {
+        const key = String(created.id);
+        setTranslationOverrides((prev) => ({
+          ...prev,
+          [appLocale]: {
+            ...(prev[appLocale] ?? {}),
+            cocktails: {
+              ...((prev[appLocale]?.cocktails as Record<string, any> | undefined) ?? {}),
+              [key]: {
+                ...(prev[appLocale]?.cocktails?.[key] ?? {}),
+                name: input.name?.trim() || created.name || '',
+                ...(input.description?.trim() ? { description: input.description.trim() } : {}),
+                ...(input.instructions?.trim() ? { instructions: input.instructions.trim() } : {}),
+                ...(((normalizeSynonyms(input.synonyms) ?? []).length > 0) ? { synonyms: normalizeSynonyms(input.synonyms) } : {}),
+              },
+            },
+          },
+        }));
+      }
+
       return created;
     },
-    [],
+    [appLocale],
   );
 
   const createIngredient = useCallback(
@@ -923,9 +986,27 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         }
       }
 
+      if (created?.id != null) {
+        const key = String(created.id);
+        setTranslationOverrides((prev) => ({
+          ...prev,
+          [appLocale]: {
+            ...(prev[appLocale] ?? {}),
+            ingredients: {
+              ...((prev[appLocale]?.ingredients as Record<string, any> | undefined) ?? {}),
+              [key]: {
+                ...(prev[appLocale]?.ingredients?.[key] ?? {}),
+                name: input.name?.trim() || created.name || '',
+                ...(input.description?.trim() ? { description: input.description.trim() } : {}),
+              },
+            },
+          },
+        }));
+      }
+
       return created;
     },
-    [],
+    [appLocale],
   );
 
   const resetInventoryFromBundle = useCallback(async () => {
@@ -959,9 +1040,41 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         ingredients,
       } satisfies InventoryState;
     });
+
+    setTranslationOverrides((prev) => {
+      const next: InventoryTranslationOverrides = {};
+
+      (Object.entries(prev) as Array<[SupportedLocale, InventoryLocaleTranslationOverrides | undefined]>).forEach(([locale, localeOverrides]) => {
+        if (!localeOverrides) {
+          return;
+        }
+
+        const preservedCocktails = Object.entries(localeOverrides.cocktails ?? {}).reduce<NonNullable<InventoryLocaleTranslationOverrides['cocktails']>>((acc, [id, value]) => {
+          const numericId = Number(id);
+          if (Number.isFinite(numericId) && numericId >= USER_CREATED_ID_START) {
+            acc[id] = value;
+          }
+          return acc;
+        }, {});
+
+        const hasCocktails = Object.keys(preservedCocktails).length > 0;
+        const hasIngredients = Boolean(localeOverrides.ingredients && Object.keys(localeOverrides.ingredients).length > 0);
+
+        if (!hasCocktails && !hasIngredients) {
+          return;
+        }
+
+        next[locale] = {
+          ...(hasCocktails ? { cocktails: preservedCocktails } : {}),
+          ...(hasIngredients ? { ingredients: localeOverrides.ingredients } : {}),
+        };
+      });
+
+      return next;
+    });
   }, []);
 
-  const exportInventoryData = useCallback((): InventoryExportData | null => {
+  const exportInventoryData = useCallback((): InventoryExportFile[] | null => {
     if (!inventoryState) {
       return null;
     }
@@ -1016,11 +1129,37 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       return acc;
     }, []);
 
-    return {
-      cocktails,
-      ingredients,
-    };
-  }, [baseMaps, inventoryState]);
+    const files: InventoryExportFile[] = [{
+      schemaVersion: 1,
+      kind: 'base',
+      data: { cocktails, ingredients },
+    } satisfies InventoryBaseExportFile];
+
+    (Object.entries(translationOverrides) as Array<[SupportedLocale, InventoryLocaleTranslationOverrides | undefined]>).forEach(([locale, localeData]) => {
+      if (!localeData) {
+        return;
+      }
+
+      const hasCocktails = Boolean(localeData.cocktails && Object.keys(localeData.cocktails).length > 0);
+      const hasIngredients = Boolean(localeData.ingredients && Object.keys(localeData.ingredients).length > 0);
+      if (!hasCocktails && !hasIngredients) {
+        return;
+      }
+
+      files.push({
+        schemaVersion: 1,
+        kind: 'translations',
+        locale,
+        data: {
+          ...(hasCocktails ? { cocktails: localeData.cocktails } : {}),
+          ...(hasIngredients ? { ingredients: localeData.ingredients } : {}),
+        },
+      } satisfies InventoryTranslationsExportFile);
+    });
+
+    files.sort((a, b) => (a.kind === 'base' ? -1 : a.kind.localeCompare(b.kind)));
+    return files;
+  }, [baseMaps, inventoryState, translationOverrides]);
 
   const exportInventoryPhotoEntries = useCallback((): PhotoBackupEntry[] | null => {
     if (!inventoryState) {
@@ -1070,9 +1209,19 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     ];
   }, [baseMaps, inventoryState]);
 
-  const importInventoryData = useCallback((data: InventoryExportData) => {
-    const hydrated = hydrateInventoryTagsFromCode(data);
-    const incomingState = createInventoryStateFromData(hydrated, true);
+  const importInventoryData = useCallback((input: InventoryExportData | InventoryExportFile | InventoryExportFile[]) => {
+    const files = Array.isArray(input)
+      ? input
+      : (input && typeof input === 'object' && 'kind' in input
+        ? [input as InventoryExportFile]
+        : [{ schemaVersion: 1, kind: 'base', data: input as InventoryExportData } satisfies InventoryBaseExportFile]);
+
+    const baseFile = files.find((file) => file.kind === 'base') as InventoryBaseExportFile | undefined;
+    const translationFiles = files.filter((file): file is InventoryTranslationsExportFile => file.kind === 'translations');
+
+    const incomingState = baseFile
+      ? createInventoryStateFromData(hydrateInventoryTagsFromCode(baseFile.data), true)
+      : undefined;
 
     const mergeById = <TItem extends { id?: number | null; searchNameNormalized: string }>(
       currentItems: readonly TItem[],
@@ -1114,18 +1263,42 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       return merged;
     };
 
-    setInventoryState((prev) => {
-      if (!prev) {
-        return incomingState;
-      }
+    if (incomingState) {
+      setInventoryState((prev) => {
+        if (!prev) {
+          return incomingState;
+        }
 
-      return {
-        ...prev,
-        imported: true,
-        cocktails: mergeById(prev.cocktails, incomingState.cocktails),
-        ingredients: mergeById(prev.ingredients, incomingState.ingredients),
-      } satisfies InventoryState;
-    });
+        return {
+          ...prev,
+          imported: true,
+          cocktails: mergeById(prev.cocktails, incomingState.cocktails),
+          ingredients: mergeById(prev.ingredients, incomingState.ingredients),
+        } satisfies InventoryState;
+      });
+    }
+
+    if (translationFiles.length > 0) {
+      setTranslationOverrides((prev) => {
+        const next: InventoryTranslationOverrides = { ...prev };
+        translationFiles.forEach((file) => {
+          const locale = file.locale;
+          const prevLocale = next[locale] ?? {};
+          next[locale] = {
+            ...prevLocale,
+            cocktails: {
+              ...(prevLocale.cocktails ?? {}),
+              ...(file.data.cocktails ?? {}),
+            },
+            ingredients: {
+              ...(prevLocale.ingredients ?? {}),
+              ...(file.data.ingredients ?? {}),
+            },
+          };
+        });
+        return next;
+      });
+    }
   }, []);
 
   const importInventoryPhotos = useCallback((entries: ImportedPhotoEntry[]) => {
@@ -1283,8 +1456,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         const candidateRecord = {
           ...previous,
           id: previous.id,
-          name: trimmedName,
-          description,
+          name: previous.name,
+          description: previous.description,
           tags,
           baseIngredientId,
           styleIngredientId,
@@ -1310,9 +1483,29 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         } satisfies InventoryState;
       });
 
+      if (updated?.id != null) {
+        const key = String(updated.id);
+        const nextName = input.name?.trim();
+        const nextDescription = input.description?.trim();
+        setTranslationOverrides((prev) => ({
+          ...prev,
+          [appLocale]: {
+            ...(prev[appLocale] ?? {}),
+            ingredients: {
+              ...((prev[appLocale]?.ingredients as Record<string, any> | undefined) ?? {}),
+              [key]: {
+                ...(prev[appLocale]?.ingredients?.[key] ?? {}),
+                ...(nextName ? { name: nextName } : {}),
+                ...(nextDescription ? { description: nextDescription } : {}),
+              },
+            },
+          },
+        }));
+      }
+
       return updated;
     },
-    [],
+    [appLocale],
   );
 
   const updateCocktail = useCallback((id: number, input: CreateCocktailInput) => {
@@ -1449,10 +1642,10 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       const candidateRecord = {
         ...existing,
         id: existing.id,
-        name: trimmedName,
-        description,
-        instructions,
-        synonyms,
+        name: existing.name,
+        description: existing.description,
+        instructions: existing.instructions,
+        synonyms: existing.synonyms,
         photoUri,
         glassId,
         methodIds: methodIds && methodIds.length > 0 ? methodIds : undefined,
@@ -1483,8 +1676,32 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       } satisfies InventoryState;
     });
 
+    if (updated?.id != null) {
+      const key = String(updated.id);
+      const nextName = input.name?.trim();
+      const nextDescription = input.description?.trim();
+      const nextInstructions = input.instructions?.trim();
+      const nextSynonyms = normalizeSynonyms(input.synonyms);
+      setTranslationOverrides((prev) => ({
+        ...prev,
+        [appLocale]: {
+          ...(prev[appLocale] ?? {}),
+          cocktails: {
+            ...((prev[appLocale]?.cocktails as Record<string, any> | undefined) ?? {}),
+            [key]: {
+              ...(prev[appLocale]?.cocktails?.[key] ?? {}),
+              ...(nextName ? { name: nextName } : {}),
+              ...(nextDescription ? { description: nextDescription } : {}),
+              ...(nextInstructions ? { instructions: nextInstructions } : {}),
+              ...(((nextSynonyms ?? []).length > 0) ? { synonyms: nextSynonyms } : {}),
+            },
+          },
+        },
+      }));
+    }
+
     return updated;
-  }, []);
+  }, [appLocale]);
 
   const deleteIngredient = useCallback((id: number) => {
     const normalizedId = Number(id);
@@ -2036,6 +2253,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       startScreen,
       appTheme,
       appLocale,
+      translationOverrides,
       amazonStoreOverride,
       detectedAmazonStore,
       effectiveAmazonStore,
@@ -2052,6 +2270,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       startScreen,
       appTheme,
       appLocale,
+      translationOverrides,
       amazonStoreOverride,
       detectedAmazonStore,
       effectiveAmazonStore,
