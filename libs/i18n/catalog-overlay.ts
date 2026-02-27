@@ -12,6 +12,19 @@ type CatalogOverlayDictionary = Record<string, string>;
 
 type CatalogEntity = 'cocktail' | 'ingredient';
 type CatalogField = 'name' | 'description' | 'instructions' | 'synonyms';
+type IngredientCatalogField = Exclude<CatalogField, 'instructions'>;
+
+const LOCALIZABLE_COCKTAIL_FIELDS: readonly CatalogField[] = [
+  'name',
+  'description',
+  'instructions',
+  'synonyms',
+];
+const LOCALIZABLE_INGREDIENT_FIELDS: readonly IngredientCatalogField[] = [
+  'name',
+  'description',
+  'synonyms',
+];
 
 type BundledCocktail = {
   id?: number | null;
@@ -99,6 +112,174 @@ function getCatalogOverlayValue(locale: SupportedLocale, key: string): string | 
   return CATALOG_OVERLAYS[locale][key] ?? CATALOG_OVERLAYS[DEFAULT_LOCALE][key];
 }
 
+
+
+export function getCatalogOverlay(locale: SupportedLocale): CatalogOverlayDictionary {
+  return CATALOG_OVERLAYS[locale] ?? CATALOG_OVERLAYS[DEFAULT_LOCALE];
+}
+
+export function getCatalogDefaultTextEntry(
+  entity: CatalogEntity,
+  id: number | string | null | undefined,
+  field: CatalogField,
+): string | undefined {
+  const numericId = Number(id ?? -1);
+  if (!Number.isFinite(numericId) || numericId < 0) {
+    return undefined;
+  }
+
+  const normalizedId = Math.trunc(numericId);
+
+  if (entity === 'cocktail') {
+    const cocktail = BUNDLED_COCKTAILS_BY_ID.get(normalizedId);
+    if (!cocktail) {
+      return undefined;
+    }
+
+    if (field === 'synonyms') {
+      const synonyms = normalizeSynonymList(cocktail.synonyms);
+      return synonyms.length > 0 ? synonyms.join(', ') : undefined;
+    }
+
+    return normalizeOptionalText(cocktail[field]);
+  }
+
+  const ingredient = BUNDLED_INGREDIENTS_BY_ID.get(normalizedId);
+  if (!ingredient) {
+    return undefined;
+  }
+
+  if (field === 'instructions') {
+    return undefined;
+  }
+
+  if (field === 'synonyms') {
+    const synonyms = normalizeSynonymList(ingredient.synonyms);
+    return synonyms.length > 0 ? synonyms.join(', ') : undefined;
+  }
+
+  return normalizeOptionalText(ingredient[field]);
+}
+
+export function getCatalogDefaultRecipeIngredientName(
+  cocktailId: number | string | null | undefined,
+  ingredientId: number | string | null | undefined,
+): string | undefined {
+  const normalizedCocktailId = Number(cocktailId ?? -1);
+  const normalizedIngredientId = Number(ingredientId ?? -1);
+
+  if (
+    !Number.isFinite(normalizedCocktailId) ||
+    normalizedCocktailId < 0 ||
+    !Number.isFinite(normalizedIngredientId) ||
+    normalizedIngredientId < 0
+  ) {
+    return undefined;
+  }
+
+  const cocktail = BUNDLED_COCKTAILS_BY_ID.get(Math.trunc(normalizedCocktailId));
+  if (!cocktail?.ingredients?.length) {
+    return undefined;
+  }
+
+  const targetIngredientId = Math.trunc(normalizedIngredientId);
+  const match = cocktail.ingredients.find((item) => Number(item.ingredientId ?? -1) === targetIngredientId);
+  return normalizeOptionalText(match?.name);
+}
+
+export function getCatalogTranslationDiff(
+  locale: SupportedLocale,
+  cocktails: readonly Cocktail[],
+  ingredients: readonly Ingredient[],
+): Record<string, string> {
+  const overlay = getCatalogOverlay(locale);
+  const fallbackOverlay = getCatalogOverlay(DEFAULT_LOCALE);
+  const entries: Record<string, string> = {};
+
+  const readOverlayValue = (key: string) => overlay[key] ?? fallbackOverlay[key];
+
+  cocktails.forEach((cocktail) => {
+    const cocktailId = Number(cocktail.id ?? -1);
+    if (!Number.isFinite(cocktailId) || cocktailId < 0) {
+      return;
+    }
+
+    const normalizedId = Math.trunc(cocktailId);
+
+    LOCALIZABLE_COCKTAIL_FIELDS.forEach((field) => {
+      const defaultValue = getCatalogDefaultTextEntry('cocktail', normalizedId, field);
+      const currentValue =
+        field === 'synonyms'
+          ? normalizeSynonymList(cocktail.synonyms).join(', ') || undefined
+          : normalizeOptionalText(cocktail[field]);
+
+      if (currentValue == null || currentValue === defaultValue) {
+        return;
+      }
+
+      const key = `cocktail.${normalizedId}.${field}`;
+      const overlayValue = readOverlayValue(key)?.trim();
+      if (overlayValue === currentValue) {
+        return;
+      }
+
+      entries[key] = currentValue;
+    });
+
+    (cocktail.ingredients ?? []).forEach((ingredient) => {
+      const ingredientId = Number(ingredient.ingredientId ?? -1);
+      if (!Number.isFinite(ingredientId) || ingredientId < 0) {
+        return;
+      }
+
+      const key = `cocktail.${normalizedId}.ingredient.${Math.trunc(ingredientId)}.name`;
+      const currentValue = normalizeOptionalText(ingredient.name);
+      const defaultValue = getCatalogDefaultRecipeIngredientName(normalizedId, ingredientId);
+
+      if (currentValue == null || currentValue === defaultValue) {
+        return;
+      }
+
+      const overlayValue = readOverlayValue(key)?.trim();
+      if (overlayValue === currentValue) {
+        return;
+      }
+
+      entries[key] = currentValue;
+    });
+  });
+
+  ingredients.forEach((ingredient) => {
+    const ingredientId = Number(ingredient.id ?? -1);
+    if (!Number.isFinite(ingredientId) || ingredientId < 0) {
+      return;
+    }
+
+    const normalizedId = Math.trunc(ingredientId);
+
+    LOCALIZABLE_INGREDIENT_FIELDS.forEach((field) => {
+      const defaultValue = getCatalogDefaultTextEntry('ingredient', normalizedId, field);
+      const currentValue =
+        field === 'synonyms'
+          ? normalizeSynonymList(ingredient.synonyms).join(', ') || undefined
+          : normalizeOptionalText(ingredient[field]);
+
+      if (currentValue == null || currentValue === defaultValue) {
+        return;
+      }
+
+      const key = `ingredient.${normalizedId}.${field}`;
+      const overlayValue = readOverlayValue(key)?.trim();
+      if (overlayValue === currentValue) {
+        return;
+      }
+
+      entries[key] = currentValue;
+    });
+  });
+
+  return entries;
+}
 export function getCatalogFieldTranslation(
   locale: SupportedLocale,
   entity: CatalogEntity,

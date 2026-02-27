@@ -35,7 +35,12 @@ import { base64ToBytes, bytesToBase64, createTarArchive, parseTarArchive } from 
 import { buildPhotoBaseName } from "@/libs/photo-utils";
 import { useI18n } from "@/libs/i18n/use-i18n";
 import { useInventory, type AppTheme, type StartScreen } from "@/providers/inventory-provider";
-import { type ImportedPhotoEntry, type InventoryExportData } from "@/providers/inventory-types";
+import {
+  type ImportedPhotoEntry,
+  type InventoryExportBundle,
+  type InventoryExportData,
+  type InventoryTranslationExportData,
+} from "@/providers/inventory-types";
 import Constants from "expo-constants";
 
 const MENU_WIDTH = Math.round(Dimensions.get("window").width * 0.8);
@@ -148,7 +153,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     resetInventoryFromBundle,
     exportInventoryData,
     exportInventoryPhotoEntries,
-    importInventoryData,
+    importInventoryBundle,
     importInventoryPhotos,
     customCocktailTags,
     customIngredientTags,
@@ -541,29 +546,33 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     return Array.isArray(record.cocktails) && Array.isArray(record.ingredients);
   };
 
-  const resolveInventoryFileFromArchive = (
-    files: { path: string; contents: Uint8Array }[],
-  ) => {
-    const normalizedLocale = locale.toLowerCase();
-    const preferredPaths = [
-      `inventory.${locale}.json`,
-      `inventory.${normalizedLocale}.json`,
-      "inventory.json",
-    ];
-
-    for (const preferredPath of preferredPaths) {
-      const matched = files.find(
-        (file) => file.path.toLowerCase() === preferredPath.toLowerCase(),
-      );
-      if (matched) {
-        return matched;
-      }
+  const isValidTranslationData = (
+    candidate: unknown,
+  ): candidate is InventoryTranslationExportData => {
+    if (!candidate || typeof candidate !== "object") {
+      return false;
     }
 
-    return (
-      files.find((file) => /^inventory\.[^.]+\.json$/i.test(file.path)) ??
-      files.find((file) => file.path.toLowerCase().endsWith(".json"))
+    const record = candidate as { locale?: unknown; entries?: unknown };
+    return typeof record.locale === "string" && !!record.entries && typeof record.entries === "object";
+  };
+
+  const resolveInventoryFilesFromArchive = (
+    files: { path: string; contents: Uint8Array }[],
+  ): { structure?: { path: string; contents: Uint8Array }; translations: { path: string; contents: Uint8Array }[] } => {
+    const structure =
+      files.find((file) => file.path.toLowerCase() === "inventory.structure.json") ??
+      files.find((file) => file.path.toLowerCase() === "inventory.json") ??
+      files.find((file) => /^inventory\.[^.]+\.json$/i.test(file.path));
+
+    const translations = files.filter((file) =>
+      /^inventory\.[A-Za-z]{2}(?:-[A-Za-z]{2})?\.json$/i.test(file.path),
     );
+
+    return {
+      structure,
+      translations,
+    };
   };
 
   const handleBackupData = async () => {
@@ -609,11 +618,23 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       }
 
       const files: { path: string; contents: Uint8Array }[] = [];
-      const payload = JSON.stringify(data, null, 2);
       const encoder = new TextEncoder();
+      const structurePayload = JSON.stringify(data.structure, null, 2);
       files.push({
-        path: `inventory.${locale}.json`,
-        contents: encoder.encode(payload),
+        path: "inventory.structure.json",
+        contents: encoder.encode(structurePayload),
+      });
+
+      (data.translations ?? []).forEach((translation) => {
+        const normalizedLocale = translation.locale.trim();
+        if (!normalizedLocale || !translation.entries || Object.keys(translation.entries).length === 0) {
+          return;
+        }
+
+        files.push({
+          path: `inventory.${normalizedLocale}.json`,
+          contents: encoder.encode(JSON.stringify(translation, null, 2)),
+        });
       });
 
       const entries = photoEntries.filter((entry) => entry.uri);
@@ -700,15 +721,16 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
         return;
       }
 
-      const inventoryFile = resolveInventoryFileFromArchive(archivedFiles);
+      const { structure: inventoryFile, translations: translationFiles } =
+        resolveInventoryFilesFromArchive(archivedFiles);
       if (!inventoryFile) {
         showDialogMessage(t("sideMenu.importFailedTitle"), t("sideMenu.importMissingInventory"));
         return;
       }
 
       const decoder = new TextDecoder();
-      const parsed = JSON.parse(decoder.decode(inventoryFile.contents)) as unknown;
-      if (!isValidInventoryData(parsed)) {
+      const parsedStructure = JSON.parse(decoder.decode(inventoryFile.contents)) as unknown;
+      if (!isValidInventoryData(parsedStructure)) {
         showDialogMessage(
           t("sideMenu.importFailedTitle"),
           t("sideMenu.importInvalidInventory"),
@@ -716,7 +738,22 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
         return;
       }
 
-      importInventoryData(parsed);
+      const translations: InventoryTranslationExportData[] = [];
+      for (const translationFile of translationFiles) {
+        try {
+          const parsedTranslation = JSON.parse(decoder.decode(translationFile.contents)) as unknown;
+          if (isValidTranslationData(parsedTranslation)) {
+            translations.push(parsedTranslation);
+          }
+        } catch {
+          // Ignore malformed translation files and continue import for valid files.
+        }
+      }
+
+      importInventoryBundle({
+        structure: parsedStructure,
+        translations: translations.length > 0 ? translations : undefined,
+      } satisfies InventoryExportBundle);
 
       const directory = FileSystem.documentDirectory ?? FileSystem.cacheDirectory;
       if (!directory) {

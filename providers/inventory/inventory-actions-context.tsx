@@ -9,6 +9,7 @@ import type {
   Ingredient,
   IngredientTag,
   InventoryExportData,
+  InventoryExportBundle,
   PhotoBackupEntry,
   ImportedPhotoEntry,
   StartScreen,
@@ -24,9 +25,10 @@ export type InventoryActionsContextValue = {
   createCocktail: (input: CreateCocktailInput) => Cocktail | undefined;
   createIngredient: (input: CreateIngredientInput) => Ingredient | undefined;
   resetInventoryFromBundle: () => Promise<void>;
-  exportInventoryData: () => InventoryExportData | null;
+  exportInventoryData: () => InventoryExportBundle | null;
   exportInventoryPhotoEntries: () => PhotoBackupEntry[] | null;
   importInventoryData: (data: InventoryExportData) => void;
+  importInventoryBundle: (bundle: InventoryExportBundle) => void;
   importInventoryPhotos: (entries: ImportedPhotoEntry[]) => number;
   updateIngredient: (id: number, input: CreateIngredientInput) => Ingredient | undefined;
   updateCocktail: (id: number, input: CreateCocktailInput) => Cocktail | undefined;

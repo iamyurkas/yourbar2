@@ -5,7 +5,7 @@ import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { TAG_COLORS } from '@/constants/tag-colors';
 import { AMAZON_STORES, detectAmazonStoreFromStoreOrLocale, detectUsStorefrontOrLocale, getEffectiveAmazonStore, type AmazonStoreKey, type AmazonStoreOverride } from '@/libs/amazon-stores';
 import { DEFAULT_LOCALE, isSupportedLocale } from '@/libs/i18n';
-import { localizeCocktails, localizeIngredients } from '@/libs/i18n/catalog-overlay';
+import { getCatalogTranslationDiff, localizeCocktails, localizeIngredients } from '@/libs/i18n/catalog-overlay';
 import { loadInventoryData, reloadInventoryData } from '@/libs/inventory-data';
 import {
   loadInventorySnapshot,
@@ -37,7 +37,9 @@ import {
   type Ingredient,
   type IngredientStorageRecord,
   type IngredientTag,
+  type InventoryExportBundle,
   type InventoryExportData,
+  type InventoryTranslationExportData,
   type PhotoBackupEntry,
   type ImportedPhotoEntry,
   type StartScreen,
@@ -961,7 +963,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     });
   }, []);
 
-  const exportInventoryData = useCallback((): InventoryExportData | null => {
+  const exportInventoryData = useCallback((): InventoryExportBundle | null => {
     if (!inventoryState) {
       return null;
     }
@@ -1016,11 +1018,27 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       return acc;
     }, []);
 
-    return {
+    const structure = {
       cocktails,
       ingredients,
-    };
-  }, [baseMaps, inventoryState]);
+    } satisfies InventoryExportData;
+
+    const translations: InventoryTranslationExportData[] = [];
+    if (appLocale !== DEFAULT_LOCALE) {
+      const entries = getCatalogTranslationDiff(appLocale, inventoryState.cocktails, inventoryState.ingredients);
+      if (Object.keys(entries).length > 0) {
+        translations.push({
+          locale: appLocale,
+          entries,
+        });
+      }
+    }
+
+    return {
+      structure,
+      translations: translations.length > 0 ? translations : undefined,
+    } satisfies InventoryExportBundle;
+  }, [appLocale, baseMaps, inventoryState]);
 
   const exportInventoryPhotoEntries = useCallback((): PhotoBackupEntry[] | null => {
     if (!inventoryState) {
@@ -1069,6 +1087,142 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       }, []),
     ];
   }, [baseMaps, inventoryState]);
+
+  const applyCatalogTranslationsToCurrentState = useCallback(
+    (translations: readonly InventoryTranslationExportData[] | undefined) => {
+      const translation = translations?.find((item) => item.locale === appLocale);
+      if (!translation || !translation.entries || Object.keys(translation.entries).length === 0) {
+        return;
+      }
+
+      setInventoryState((prev) => {
+        if (!prev) {
+          return prev;
+        }
+
+        const cocktailTextById = new Map<number, Partial<Pick<Cocktail, 'name' | 'description' | 'instructions' | 'synonyms'>>>();
+        const cocktailIngredientNameByCocktailId = new Map<number, Map<number, string>>();
+        const ingredientTextById = new Map<number, Partial<Pick<Ingredient, 'name' | 'description' | 'synonyms'>>>();
+
+        const parseSynonyms = (raw: string): string[] => raw
+          .replaceAll(';', ',')
+          .split('\n')
+          .flatMap((line) => line.split(','))
+          .map((item) => item.trim())
+          .filter(Boolean);
+
+        Object.entries(translation.entries).forEach(([key, rawValue]) => {
+          const value = rawValue?.trim();
+          if (!value) {
+            return;
+          }
+
+          const cocktailIngredientMatch = key.match(/^cocktail\.(\d+)\.ingredient\.(\d+)\.name$/);
+          if (cocktailIngredientMatch) {
+            const cocktailId = Number(cocktailIngredientMatch[1]);
+            const ingredientId = Number(cocktailIngredientMatch[2]);
+            if (!Number.isFinite(cocktailId) || !Number.isFinite(ingredientId)) {
+              return;
+            }
+            const normalizedCocktailId = Math.trunc(cocktailId);
+            const normalizedIngredientId = Math.trunc(ingredientId);
+            const byIngredient = cocktailIngredientNameByCocktailId.get(normalizedCocktailId) ?? new Map<number, string>();
+            byIngredient.set(normalizedIngredientId, value);
+            cocktailIngredientNameByCocktailId.set(normalizedCocktailId, byIngredient);
+            return;
+          }
+
+          const cocktailFieldMatch = key.match(/^cocktail\.(\d+)\.(name|description|instructions|synonyms)$/);
+          if (cocktailFieldMatch) {
+            const cocktailId = Number(cocktailFieldMatch[1]);
+            if (!Number.isFinite(cocktailId)) {
+              return;
+            }
+            const normalizedId = Math.trunc(cocktailId);
+            const field = cocktailFieldMatch[2] as 'name' | 'description' | 'instructions' | 'synonyms';
+            const existing = cocktailTextById.get(normalizedId) ?? {};
+            cocktailTextById.set(normalizedId, {
+              ...existing,
+              [field]: field === 'synonyms' ? parseSynonyms(value) : value,
+            });
+            return;
+          }
+
+          const ingredientFieldMatch = key.match(/^ingredient\.(\d+)\.(name|description|synonyms)$/);
+          if (ingredientFieldMatch) {
+            const ingredientId = Number(ingredientFieldMatch[1]);
+            if (!Number.isFinite(ingredientId)) {
+              return;
+            }
+            const normalizedId = Math.trunc(ingredientId);
+            const field = ingredientFieldMatch[2] as 'name' | 'description' | 'synonyms';
+            const existing = ingredientTextById.get(normalizedId) ?? {};
+            ingredientTextById.set(normalizedId, {
+              ...existing,
+              [field]: field === 'synonyms' ? parseSynonyms(value) : value,
+            });
+          }
+        });
+
+        const cocktails = prev.cocktails.map((cocktail) => {
+          const id = Number(cocktail.id ?? -1);
+          if (!Number.isFinite(id) || id < 0) {
+            return cocktail;
+          }
+
+          const textPatch = cocktailTextById.get(Math.trunc(id));
+          const ingredientPatch = cocktailIngredientNameByCocktailId.get(Math.trunc(id));
+
+          if (!textPatch && !ingredientPatch) {
+            return cocktail;
+          }
+
+          const nextIngredients = ingredientPatch
+            ? (cocktail.ingredients ?? []).map((item) => {
+                const ingredientId = Number(item.ingredientId ?? -1);
+                if (!Number.isFinite(ingredientId) || ingredientId < 0) {
+                  return item;
+                }
+
+                const name = ingredientPatch.get(Math.trunc(ingredientId));
+                return name && name !== item.name ? { ...item, name } : item;
+              })
+            : cocktail.ingredients;
+
+          return normalizeSearchFields([
+            {
+              ...cocktail,
+              ...textPatch,
+              ingredients: nextIngredients,
+            },
+          ])[0] as Cocktail;
+        });
+
+        const ingredients = prev.ingredients.map((ingredient) => {
+          const id = Number(ingredient.id ?? -1);
+          if (!Number.isFinite(id) || id < 0) {
+            return ingredient;
+          }
+
+          const textPatch = ingredientTextById.get(Math.trunc(id));
+          if (!textPatch) {
+            return ingredient;
+          }
+
+          return normalizeSearchFields([{ ...ingredient, ...textPatch }])[0] as Ingredient;
+        });
+
+        return {
+          ...prev,
+          cocktails,
+          ingredients,
+        } satisfies InventoryState;
+      });
+    },
+    [appLocale],
+  );
+
+
 
   const importInventoryData = useCallback((data: InventoryExportData) => {
     const hydrated = hydrateInventoryTagsFromCode(data);
@@ -1127,6 +1281,11 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       } satisfies InventoryState;
     });
   }, []);
+
+  const importInventoryBundle = useCallback((bundle: InventoryExportBundle) => {
+    importInventoryData(bundle.structure);
+    applyCatalogTranslationsToCurrentState(bundle.translations);
+  }, [applyCatalogTranslationsToCurrentState, importInventoryData]);
 
   const importInventoryPhotos = useCallback((entries: ImportedPhotoEntry[]) => {
     let importedCount = 0;
@@ -2072,6 +2231,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       exportInventoryData,
       exportInventoryPhotoEntries,
       importInventoryData,
+      importInventoryBundle,
       importInventoryPhotos,
       updateCocktail,
       updateIngredient,
@@ -2109,6 +2269,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       exportInventoryData,
       exportInventoryPhotoEntries,
       importInventoryData,
+      importInventoryBundle,
       importInventoryPhotos,
       updateCocktail,
       updateIngredient,
