@@ -32,11 +32,11 @@ export const ukUATranslations: TranslationDictionary = {
   "cocktails.emptyMy":
     "Позначте наявні інгредієнти, щоби бачити доступні коктейлі.",
   "cocktails.emptyFavorites":
-    "Оцініть коктейлі та/або змініть поріг рейтингу в меню.",
+    "Оцініть коктейлі чи змініть поріг рейтингу в меню.",
   "cocktails.emptyAll": "Ще немає коктейлів",
   "cocktails.helpMyTitle": "Мої коктейлі",
   "cocktails.helpMyText":
-    "Цей екран показує коктейлі, які можна приготувати з ваших поточних інгредієнтів.\n\nВикористовуйте пошук і фільтри за тегами або методом.",
+    "Цей екран показує коктейлі, які можна приготувати з ваших поточних інгредієнтів.\n\nВикористовуйте пошук і фільтри за тегами чи методом.",
   "cocktails.helpFavoritesTitle": "Обрані коктейлі",
   "cocktails.helpFavoritesText":
     "Цей екран показує коктейлі, які ви оцінили.\n\nВикористовуйте пошук і фільтри, щоб швидше знайти потрібне.",
@@ -103,7 +103,7 @@ export const ukUATranslations: TranslationDictionary = {
   "ingredientForm.removePhoto": "Видалити фото",
   "ingredientForm.tags": "Теги",
   "ingredientForm.createTag": "Створити тег",
-  "ingredientForm.selectTags": "Виберіть один або кілька тегів",
+  "ingredientForm.selectTags": "Виберіть один чи кілька тегів",
   "ingredientForm.baseIngredient": "Базовий інгредієнт",
   "ingredientForm.baseHint":
     "Як базові можна вибирати лише інгредієнти, які ще не є брендовими.",
@@ -119,14 +119,14 @@ export const ukUATranslations: TranslationDictionary = {
   "ingredientForm.removeStyleIngredient": "Видалити стильовий інгредієнт",
   "ingredientForm.description": "Опис",
   "ingredientForm.descriptionPlaceholder":
-    "Додайте нотатки щодо смаку або використання",
+    "Додайте нотатки щодо смаку чи використання",
   "ingredientForm.saveIngredient": "Зберегти інгредієнт",
   "ingredientForm.deleteIngredient": "Видалити інгредієнт",
   "ingredientForm.searchIngredients": "Пошук інгредієнтів",
   "ingredientForm.noIngredientsFound": "Інгредієнтів не знайдено",
   "ingredientForm.helpTitle": "Додавання інгредієнта",
   "ingredientForm.helpMessage":
-    "На цьому екрані ви можете створити нову картку інгредієнта.\n\nДодайте назву, необов’язкове фото, теги, базовий або стильовий інгредієнт і нотатки, а потім натисніть «Зберегти».\n\nСтильовий інгредієнт можна пов’язати лише з базовим інгредієнтом, який не є ані брендовим, ані стильовим.",
+    "На цьому екрані ви можете створити нову картку інгредієнта.\n\nДодайте назву, необов’язкове фото, теги, базовий чи стильовий інгредієнт і нотатки, а потім натисніть «Зберегти».\n\nСтильовий інгредієнт можна пов’язати лише з базовим інгредієнтом, який не є ані брендовим, ані стильовим.",
   "ingredientForm.newTag": "Новий тег",
 
   "cocktailForm.editTitle": "Редагувати коктейль",
@@ -174,7 +174,7 @@ export const ukUATranslations: TranslationDictionary = {
   "cocktailForm.notSpecified": "Не вказано",
   "cocktailForm.tags": "Теги",
   "cocktailForm.createTag": "Створити тег",
-  "cocktailForm.selectTags": "Оберіть один або кілька тегів",
+  "cocktailForm.selectTags": "Оберіть один чи кілька тегів",
   "cocktailForm.description": "Опис",
   "cocktailForm.optionalDescription": "Необов'язковий опис",
   "cocktailForm.instructions": "Інструкція",
@@ -216,7 +216,7 @@ export const ukUATranslations: TranslationDictionary = {
     "Якщо вказаного інгредієнта немає, коктейль буде показано як доступний з брендовими інгредієнтами цієї бази.",
   "cocktailForm.allowStyleSubstitutes": "Дозволити стильові заміни",
   "cocktailForm.allowStyleSubstitutesMessage":
-    "Якщо вказаного стильового інгредієнта немає, коктейль буде показано як доступний із його стильовою базою або іншими стилями цієї бази.",
+    "Якщо вказаного стильового інгредієнта немає, коктейль буде показано як доступний із його стильовою базою чи іншими стилями цієї бази.",
   "cocktailForm.addSubstitute": "Додати заміну",
   "cocktailForm.brand": "бренд",
   "cocktailForm.removeNamed": "Видалити {{name}}",
@@ -239,8 +239,8 @@ export const ukUATranslations: TranslationDictionary = {
   "cocktailDetails.asNeeded": "За потреби",
   "cocktailDetails.garnish": "декор",
   "cocktailDetails.optional": "опційно",
-  "cocktailDetails.or": "або {{name}}",
-  "cocktailDetails.orAny": "або будь-який {{name}}",
+  "cocktailDetails.or": "чи {{name}}",
+  "cocktailDetails.orAny": "чи будь-який {{name}}",
   "cocktailDetails.substituteFor": "Заміняє {{name}}",
   "cocktailDetails.onShoppingList": "У списку покупок",
   "cocktailDetails.copyCocktail": "Копіювати коктейль",
@@ -254,16 +254,16 @@ export const ukUATranslations: TranslationDictionary = {
     "Збийте в блендері з крижаною крихтою ддя замороженої текстури.",
   "cocktailMethod.muddle.label": "Розминати",
   "cocktailMethod.muddle.description":
-    "Розімніть фрукти, ягоди або трави, щоби вивільнити сік. Розітріть цукор з невеликою кількістю рідини.",
+    "Розімніть фрукти, ягоди чи трави, щоби вивільнити сік. Розітріть цукор з невеликою кількістю рідини.",
   "cocktailMethod.heat.label": "Нагрівати",
   "cocktailMethod.heat.description":
     "Підігрійте інгредієнти, щоби поєднати смаки. Не давайте кипіти, якщо в рецепті прямо не вказано протилежне.",
   "cocktailMethod.shake.label": "Збовтувати",
   "cocktailMethod.shake.description":
-    "Енергійно струсіть у шейкері з льодом. Найкраще для цитрусових, сиропів, вершків чи білка.",
+    "Енергійно збовтайте у шейкері з льодом. Найкраще для цитрусових, сиропів, вершків чи білка.",
   "cocktailMethod.stir.label": "Перемішувати",
   "cocktailMethod.stir.description":
-    "Зміщайте барною ложкою в окремому, наповненомому льодом, глеку. Найкраще для трав'яних міксерів.",
+    "Перемішайте барною ложкою в окремому, наповненомому льодом, келиху. Найкраще для трав'яних міксерів.",
   "cocktailMethod.throw.label": "Переливати",
   "cocktailMethod.throw.description":
     "Переливайте інгредієнти між ємностями шейкера з відстані для аерації без помутніння.",
@@ -476,10 +476,9 @@ export const ukUATranslations: TranslationDictionary = {
   "sideMenu.language": "Мова",
   "sideMenu.languageCurrent": "{{name}}",
   "sideMenu.reportIssueTitle": "Щось не так?",
-  "sideMenu.reportIssueCaption": "Напишіть про баг або ідею",
+  "sideMenu.reportIssueCaption": "Напишіть про баг чи ідею",
   "sideMenu.backupRestore": "Резерв і віднова",
-  "sideMenu.backupRestoreCaption":
-    "Зберегти дані в архів або відновити з копії",
+  "sideMenu.backupRestoreCaption": "Зберегти дані в архів чи відновити з копії",
   "sideMenu.restartOnboarding": "Повторити знайомство",
   "sideMenu.restartOnboardingCaption": "Показати навчання ще раз",
 
