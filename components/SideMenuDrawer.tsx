@@ -1223,6 +1223,11 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   {t("sideMenu.startingScreenOpen", { screen: selectedStartScreenOption ? t(selectedStartScreenOption.labelKey) : t("startScreen.cocktails_all.label") })}
                 </Text>
               </View>
+              <MaterialCommunityIcons
+                name="chevron-right"
+                size={20}
+                color={Colors.onSurfaceVariant}
+              />
             </Pressable>
             <Pressable
               accessibilityRole="button"
@@ -1252,6 +1257,11 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   {t("sideMenu.favoritesRatingFilterCaption", { rating: ratingFilterThreshold })}
                 </Text>
               </View>
+              <MaterialCommunityIcons
+                name="chevron-right"
+                size={20}
+                color={Colors.onSurfaceVariant}
+              />
             </Pressable>
 
             <Pressable
@@ -1282,6 +1292,11 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   {t("sideMenu.manageTagsCaption")}
                 </Text>
               </View>
+              <MaterialCommunityIcons
+                name="chevron-right"
+                size={20}
+                color={Colors.onSurfaceVariant}
+              />
             </Pressable>
             <Pressable
               accessibilityRole="button"
