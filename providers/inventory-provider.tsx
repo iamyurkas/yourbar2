@@ -841,6 +841,16 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
 
       if (created?.id != null) {
         const key = String(created.id);
+        const nextName = input.name?.trim() || created.name || '';
+        const nextDescription = input.description?.trim();
+        const nextInstructions = input.instructions?.trim();
+        const nextSynonyms = normalizeSynonyms(input.synonyms);
+        const patch: CocktailTranslationOverride = {
+          name: nextName,
+          ...(nextDescription ? { description: nextDescription } : {}),
+          ...(nextInstructions ? { instructions: nextInstructions } : {}),
+          ...(((nextSynonyms ?? []).length > 0) ? { synonyms: nextSynonyms } : {}),
+        };
         setTranslationOverrides((prev) => ({
           ...prev,
           [appLocale]: {
@@ -849,10 +859,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
               ...((prev[appLocale]?.cocktails as Record<string, any> | undefined) ?? {}),
               [key]: {
                 ...(prev[appLocale]?.cocktails?.[key] ?? {}),
-                name: input.name?.trim() || created.name || '',
-                ...(input.description?.trim() ? { description: input.description.trim() } : {}),
-                ...(input.instructions?.trim() ? { instructions: input.instructions.trim() } : {}),
-                ...(((normalizeSynonyms(input.synonyms) ?? []).length > 0) ? { synonyms: normalizeSynonyms(input.synonyms) } : {}),
+                ...patch,
               },
             },
           },
@@ -990,6 +997,12 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
 
       if (created?.id != null) {
         const key = String(created.id);
+        const nextName = input.name?.trim() || created.name || '';
+        const nextDescription = input.description?.trim();
+        const patch: IngredientTranslationOverride = {
+          name: nextName,
+          ...(nextDescription ? { description: nextDescription } : {}),
+        };
         setTranslationOverrides((prev) => ({
           ...prev,
           [appLocale]: {
@@ -998,8 +1011,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
               ...((prev[appLocale]?.ingredients as Record<string, any> | undefined) ?? {}),
               [key]: {
                 ...(prev[appLocale]?.ingredients?.[key] ?? {}),
-                name: input.name?.trim() || created.name || '',
-                ...(input.description?.trim() ? { description: input.description.trim() } : {}),
+                ...patch,
               },
             },
           },
@@ -1493,6 +1505,10 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         const key = String(updated.id);
         const nextName = input.name?.trim();
         const nextDescription = input.description?.trim();
+        const patch: IngredientTranslationOverride = {
+          ...(nextName ? { name: nextName } : {}),
+          ...(nextDescription ? { description: nextDescription } : {}),
+        };
         setTranslationOverrides((prev) => ({
           ...prev,
           [appLocale]: {
@@ -1501,8 +1517,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
               ...((prev[appLocale]?.ingredients as Record<string, any> | undefined) ?? {}),
               [key]: {
                 ...(prev[appLocale]?.ingredients?.[key] ?? {}),
-                ...(nextName ? { name: nextName } : {}),
-                ...(nextDescription ? { description: nextDescription } : {}),
+                ...patch,
               },
             },
           },
@@ -1688,6 +1703,12 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       const nextDescription = input.description?.trim();
       const nextInstructions = input.instructions?.trim();
       const nextSynonyms = normalizeSynonyms(input.synonyms);
+      const patch: CocktailTranslationOverride = {
+        ...(nextName ? { name: nextName } : {}),
+        ...(nextDescription ? { description: nextDescription } : {}),
+        ...(nextInstructions ? { instructions: nextInstructions } : {}),
+        ...(((nextSynonyms ?? []).length > 0) ? { synonyms: nextSynonyms } : {}),
+      };
       setTranslationOverrides((prev) => ({
         ...prev,
         [appLocale]: {
@@ -1696,10 +1717,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             ...((prev[appLocale]?.cocktails as Record<string, any> | undefined) ?? {}),
             [key]: {
               ...(prev[appLocale]?.cocktails?.[key] ?? {}),
-              ...(nextName ? { name: nextName } : {}),
-              ...(nextDescription ? { description: nextDescription } : {}),
-              ...(nextInstructions ? { instructions: nextInstructions } : {}),
-              ...(((nextSynonyms ?? []).length > 0) ? { synonyms: nextSynonyms } : {}),
+              ...patch,
             },
           },
         },
