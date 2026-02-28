@@ -1755,6 +1755,7 @@ export default function CreateCocktailScreen() {
                       <Text
                         style={[
                           styles.cardHint,
+                          styles.photoPlaceholderHint,
                           { color: `${Colors.onSurfaceVariant}99` },
                         ]}
                       >
@@ -3264,6 +3265,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     gap: 6,
+  },
+  photoPlaceholderHint: {
+    textAlign: "center",
+    paddingHorizontal: 12,
   },
   photoPreview: {
     width: "100%",
