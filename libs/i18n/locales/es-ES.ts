@@ -2,9 +2,9 @@ import type { TranslationDictionary } from "@/libs/i18n/types";
 
 export const esESTranslations: TranslationDictionary = {
   "common.search": "Buscar",
-  "common.openNavigation": "Abrir navegación",
+  "common.openNavigation": "Abrir menú",
   "common.clearSearch": "Borrar búsqueda",
-  "common.openScreenHelp": "Abrir ayuda de pantalla",
+  "common.openScreenHelp": "Abrir ayuda",
   "common.goBack": "Volver",
   "common.filterItems": "Filtrar elementos",
   "common.help": "Ayuda",
@@ -28,33 +28,44 @@ export const esESTranslations: TranslationDictionary = {
   "common.tabMy": "Mis",
   "common.tabFavorites": "Favoritos",
   "common.tabShopping": "Compras",
-  "cocktails.emptyMy": "Marca los ingredientes que tienes para ver aquí los cócteles disponibles.",
-  "cocktails.emptyFavorites": "Valora cócteles y/o ajusta el umbral de valoración en el menú.",
+  "cocktails.emptyMy":
+    "Marca los ingredientes que tienes para ver aquí los cócteles disponibles.",
+  "cocktails.emptyFavorites":
+    "Valora cócteles y/o ajusta el umbral de valoración en el menú.",
   "cocktails.emptyAll": "Aún no hay cócteles",
   "cocktails.helpMyTitle": "Mis cócteles",
-  "cocktails.helpMyText": "Esta pantalla muestra los cócteles que puedes preparar con tus ingredientes actuales.\n\nUsa la búsqueda para encontrar tus recetas rápidamente y utiliza filtros para acotar la lista por etiquetas o método.",
+  "cocktails.helpMyText":
+    "Esta pantalla muestra los cócteles que puedes preparar con tus ingredientes actuales.\n\nUsa la búsqueda para encontrar tus recetas rápidamente y utiliza filtros para acotar la lista por etiquetas o método.",
   "cocktails.helpFavoritesTitle": "Cócteles favoritos",
-  "cocktails.helpFavoritesText": "Esta pantalla muestra los cócteles que has valorado.\n\nUsa la búsqueda y los filtros para encontrar lo que quieres más rápido.",
+  "cocktails.helpFavoritesText":
+    "Esta pantalla muestra los cócteles que has valorado.\n\nUsa la búsqueda y los filtros para encontrar lo que quieres más rápido.",
   "cocktails.helpAllTitle": "Todos los cócteles",
-  "cocktails.helpAllText": "Esta pantalla muestra la colección completa de cócteles.\n\nUsa la búsqueda, cambia de pestaña y aplica filtros por método o etiquetas.",
+  "cocktails.helpAllText":
+    "Esta pantalla muestra la colección completa de cócteles.\n\nUsa la búsqueda, cambia de pestaña y aplica filtros por método o etiquetas.",
   "ingredients.emptyMy": "Marca los ingredientes que tienes para verlos aquí.",
   "ingredients.emptyAll": "Aún no hay ingredientes",
   "ingredients.helpMyTitle": "Mis ingredientes",
-  "ingredients.helpMyText": "Esta pantalla muestra los ingredientes que tienes.\n\nBusca por nombre y usa filtros de etiquetas para organizar rápidamente tu colección personal.",
+  "ingredients.helpMyText":
+    "Esta pantalla muestra los ingredientes que tienes.\n\nBusca por nombre y usa filtros de etiquetas para organizar rápidamente tu colección personal.",
   "ingredients.helpAllTitle": "Todos los ingredientes",
-  "ingredients.helpAllText": "Esta pantalla muestra la lista completa de ingredientes.\n\nUsa la búsqueda y las etiquetas para encontrar rápidamente lo que necesitas.",
+  "ingredients.helpAllText":
+    "Esta pantalla muestra la lista completa de ingredientes.\n\nUsa la búsqueda y las etiquetas para encontrar rápidamente lo que necesitas.",
   "ingredients.helpShoppingTitle": "Lista de la compra",
-  "ingredients.helpShoppingText": "Esta pantalla muestra los ingredientes que quieres comprar.\n\nMarca los ingredientes como disponibles después de comprarlos para moverlos a Mis ingredientes.",
+  "ingredients.helpShoppingText":
+    "Esta pantalla muestra los ingredientes que quieres comprar.\n\nMarca los ingredientes como disponibles después de comprarlos para moverlos a Mis ingredientes.",
   "ingredientForm.changeImage": "Cambiar imagen",
   "ingredientForm.addImage": "Toca para añadir foto",
   "ingredientForm.mediaLibraryAccessTitle": "Acceso a la fototeca",
-  "ingredientForm.mediaLibraryAccessMessage": "Activa los permisos de la fototeca en los ajustes del sistema para añadir una imagen del ingrediente.",
+  "ingredientForm.mediaLibraryAccessMessage":
+    "Activa los permisos de la fototeca en los ajustes del sistema para añadir una imagen del ingrediente.",
   "ingredientForm.couldNotPickImage": "No se pudo seleccionar la imagen",
   "ingredientForm.cameraAccessRequired": "Se requiere acceso a la cámara",
-  "ingredientForm.cameraAccessRequiredMessage": "Activa los permisos de la cámara en los ajustes del sistema para tomar una foto del ingrediente.",
+  "ingredientForm.cameraAccessRequiredMessage":
+    "Activa los permisos de la cámara en los ajustes del sistema para tomar una foto del ingrediente.",
   "ingredientForm.couldNotTakePhoto": "No se pudo tomar la foto",
   "ingredientForm.addPhotoTitle": "Toca para añadir foto",
-  "ingredientForm.addPhotoMessage": "Elige cómo quieres añadir una foto del ingrediente.",
+  "ingredientForm.addPhotoMessage":
+    "Elige cómo quieres añadir una foto del ingrediente.",
   "ingredientForm.takePhoto": "Tomar foto",
   "ingredientForm.chooseFromGallery": "Elegir de la galería",
   "ingredientForm.nameRequiredTitle": "El nombre es obligatorio",
@@ -62,17 +73,24 @@ export const esESTranslations: TranslationDictionary = {
   "ingredientForm.ingredientNotFound": "Ingrediente no encontrado",
   "ingredientForm.couldNotSave": "No se pudo guardar el ingrediente",
   "ingredientForm.leaveWithoutSavingTitle": "¿Salir sin guardar?",
-  "ingredientForm.leaveWithoutSavingMessage": "Tus cambios se perderán si sales de esta pantalla.",
+  "ingredientForm.leaveWithoutSavingMessage":
+    "Tus cambios se perderán si sales de esta pantalla.",
   "ingredientForm.stay": "Quedarme",
   "ingredientForm.leave": "Salir",
-  "ingredientForm.deleteConfirmNamed": "¿Seguro que quieres eliminar\\n{{name}}?\\n\\nEsta acción no se puede deshacer.",
-  "ingredientForm.deleteConfirmUnnamed": "¿Seguro que quieres eliminar este ingrediente?\\n\\nEsta acción no se puede deshacer.",
+  "ingredientForm.deleteConfirmNamed":
+    "¿Seguro que quieres eliminar\n{{name}}?\n\nEsta acción no se puede deshacer.",
+  "ingredientForm.deleteConfirmUnnamed":
+    "¿Seguro que quieres eliminar este ingrediente?\n\nEsta acción no se puede deshacer.",
   "ingredientForm.deleteTitle": "Eliminar ingrediente",
   "ingredientForm.couldNotDelete": "No se pudo eliminar el ingrediente",
-  "ingredientForm.baseDisableBrandedVariants": "Este ingrediente es base para ingredientes de marca, así que no puede ser de marca por sí mismo.",
-  "ingredientForm.baseDisableStyledIngredient": "Los ingredientes de estilo no pueden ser de marca. Quita el vínculo de estilo para habilitar la selección del ingrediente base.",
-  "ingredientForm.styleDisableStyledVariants": "Este ingrediente es base para ingredientes de estilo, así que no puede tener estilo por sí mismo.",
-  "ingredientForm.styleDisableBrandedIngredient": "Los ingredientes de marca no pueden tener estilo. Quita el vínculo de ingrediente base para habilitar la selección de estilo.",
+  "ingredientForm.baseDisableBrandedVariants":
+    "Este ingrediente es base para ingredientes de marca, así que no puede ser de marca por sí mismo.",
+  "ingredientForm.baseDisableStyledIngredient":
+    "Los ingredientes de estilo no pueden ser de marca. Quita el vínculo de estilo para habilitar la selección del ingrediente base.",
+  "ingredientForm.styleDisableStyledVariants":
+    "Este ingrediente es base para ingredientes de estilo, así que no puede tener estilo por sí mismo.",
+  "ingredientForm.styleDisableBrandedIngredient":
+    "Los ingredientes de marca no pueden tener estilo. Quita el vínculo de ingrediente base para habilitar la selección de estilo.",
   "ingredientForm.editTitle": "Editar ingrediente",
   "ingredientForm.addTitle": "Añadir nuevo ingrediente",
   "ingredientForm.goBack": "Volver",
@@ -83,56 +101,67 @@ export const esESTranslations: TranslationDictionary = {
   "ingredientForm.createTag": "Crear etiqueta",
   "ingredientForm.selectTags": "Selecciona una o más etiquetas",
   "ingredientForm.baseIngredient": "Ingrediente base",
-  "ingredientForm.baseHint": "Solo los ingredientes que no son ya de marca pueden seleccionarse como ingredientes base.",
+  "ingredientForm.baseHint":
+    "Solo los ingredientes que no son ya de marca pueden seleccionarse como ingredientes base.",
   "ingredientForm.changeBaseIngredient": "Cambiar ingrediente base",
   "ingredientForm.selectBaseIngredient": "Seleccionar ingrediente base",
   "ingredientForm.removeBaseIngredient": "Quitar ingrediente base",
   "ingredientForm.none": "Ninguno",
   "ingredientForm.styleIngredient": "Ingrediente de estilo",
-  "ingredientForm.styleHint": "Solo los ingredientes base que no son de marca y no tienen ya estilo pueden seleccionarse como estilos.",
+  "ingredientForm.styleHint":
+    "Solo los ingredientes base que no son de marca y no tienen ya estilo pueden seleccionarse como estilos.",
   "ingredientForm.changeStyleIngredient": "Cambiar ingrediente de estilo",
   "ingredientForm.selectStyleIngredient": "Seleccionar ingrediente de estilo",
   "ingredientForm.removeStyleIngredient": "Quitar ingrediente de estilo",
   "ingredientForm.description": "Descripción",
-  "ingredientForm.descriptionPlaceholder": "Añade notas de cata o sugerencias de uso",
+  "ingredientForm.descriptionPlaceholder":
+    "Añade notas de cata o sugerencias de uso",
   "ingredientForm.saveIngredient": "Guardar ingrediente",
   "ingredientForm.deleteIngredient": "Eliminar ingrediente",
   "ingredientForm.searchIngredients": "Buscar ingredientes",
   "ingredientForm.noIngredientsFound": "No se encontraron ingredientes",
   "ingredientForm.helpTitle": "Añadiendo ingrediente",
-  "ingredientForm.helpMessage": "Usa esta pantalla para crear una nueva ficha de ingrediente.\\n\\nAñade nombre, foto opcional, etiquetas, ingrediente base o de estilo y notas, y luego pulsa Guardar.\\n\\nUn ingrediente de estilo solo puede vincularse a un ingrediente base que no sea ni de marca ni de estilo.",
+  "ingredientForm.helpMessage":
+    "Usa esta pantalla para crear una nueva ficha de ingrediente.\n\nAñade nombre, foto opcional, etiquetas, ingrediente base o de estilo y notas, y luego pulsa Guardar.\n\nUn ingrediente de estilo solo puede vincularse a un ingrediente base que no sea ni de marca ni de estilo.",
   "ingredientForm.newTag": "Nueva etiqueta",
   "cocktailForm.editTitle": "Editar cóctel",
   "cocktailForm.addTitle": "Añadir nuevo cóctel",
   "cocktailForm.changePhoto": "Cambiar foto",
   "cocktailForm.addPhoto": "Añadir foto",
   "cocktailForm.mediaAccessRequired": "Se requiere acceso multimedia",
-  "cocktailForm.mediaAccessRequiredMessage": "Activa los permisos de la fototeca en los ajustes del sistema para añadir una foto del cóctel.",
+  "cocktailForm.mediaAccessRequiredMessage":
+    "Activa los permisos de la fototeca en los ajustes del sistema para añadir una foto del cóctel.",
   "cocktailForm.couldNotPickImage": "No se pudo seleccionar la imagen",
   "cocktailForm.cameraAccessRequired": "Se requiere acceso a la cámara",
-  "cocktailForm.cameraAccessRequiredMessage": "Activa los permisos de la cámara en los ajustes del sistema para tomar una foto del cóctel.",
+  "cocktailForm.cameraAccessRequiredMessage":
+    "Activa los permisos de la cámara en los ajustes del sistema para tomar una foto del cóctel.",
   "cocktailForm.couldNotTakePhoto": "No se pudo tomar la foto",
-  "cocktailForm.addPhotoMessage": "Elige cómo quieres añadir una foto del cóctel.",
+  "cocktailForm.addPhotoMessage":
+    "Elige cómo quieres añadir una foto del cóctel.",
   "cocktailForm.takePhoto": "Tomar foto",
   "cocktailForm.chooseFromGallery": "Elegir de la galería",
   "cocktailForm.nameRequired": "El nombre es obligatorio",
   "cocktailForm.nameRequiredMessage": "Introduce el nombre del cóctel.",
   "cocktailForm.recipeRequired": "Receta obligatoria",
-  "cocktailForm.recipeRequiredMessage": "Añade al menos un ingrediente al cóctel.",
+  "cocktailForm.recipeRequiredMessage":
+    "Añade al menos un ingrediente al cóctel.",
   "cocktailForm.couldNotSave": "No se pudo guardar el cóctel",
   "cocktailForm.cocktailNotFound": "Cóctel no encontrado",
-  "cocktailForm.deleteConfirmNamed": "¿Seguro que quieres eliminar\\n{{name}}?\\n\\nEsta acción no se puede deshacer.",
-  "cocktailForm.deleteConfirmUnnamed": "¿Seguro que quieres eliminar este cóctel?\\n\\nEsta acción no se puede deshacer.",
+  "cocktailForm.deleteConfirmNamed":
+    "¿Seguro que quieres eliminar\n{{name}}?\n\nEsta acción no se puede deshacer.",
+  "cocktailForm.deleteConfirmUnnamed":
+    "¿Seguro que quieres eliminar este cóctel?\n\nEsta acción no se puede deshacer.",
   "cocktailForm.deleteCocktail": "Eliminar cóctel",
   "cocktailForm.couldNotDelete": "No se pudo eliminar el cóctel",
   "cocktailForm.leaveWithoutSaving": "¿Salir sin guardar?",
-  "cocktailForm.leaveWithoutSavingMessage": "Tus cambios se perderán si sales de esta pantalla.",
+  "cocktailForm.leaveWithoutSavingMessage":
+    "Tus cambios se perderán si sales de esta pantalla.",
   "cocktailForm.stay": "Quedarme",
   "cocktailForm.leave": "Salir",
   "cocktailForm.name": "Nombre",
   "cocktailForm.namePlaceholder": "p. ej., Margarita",
   "cocktailForm.glass": "Vaso",
-  "cocktailForm.selectGlassware": "Seleccionar cristalería",
+  "cocktailForm.selectGlassware": "Seleccionar vaso",
   "cocktailForm.photo": "Foto",
   "cocktailForm.tapToSelectImage": "Toca para seleccionar imagen",
   "cocktailForm.removePhoto": "Quitar foto",
@@ -156,9 +185,11 @@ export const esESTranslations: TranslationDictionary = {
   "cocktailForm.selectNamed": "Seleccionar {{name}}",
   "cocktailForm.selectEmptyUnit": "Seleccionar unidad vacía",
   "cocktailForm.clearMethods": "Borrar métodos",
-  "cocktailForm.clearMethodsDescription": "Borra todos los métodos seleccionados.",
+  "cocktailForm.clearMethodsDescription":
+    "Borra todos los métodos seleccionados.",
   "cocktailForm.helpTitle": "Añadiendo cóctel",
-  "cocktailForm.helpMessage": "Usa esta pantalla para crear una nueva receta de cóctel.\\n\\nRellena nombre, foto, etiquetas, ingredientes, método e instrucciones, y luego pulsa Guardar.",
+  "cocktailForm.helpMessage":
+    "Usa esta pantalla para crear una nueva receta de cóctel.\n\nRellena nombre, foto, etiquetas, ingredientes, método e instrucciones, y luego pulsa Guardar.",
   "cocktailForm.newTag": "Nueva etiqueta",
   "cocktailForm.recipesCount": "{{count}} recetas",
   "cocktailForm.noUnit": "Sin unidad",
@@ -175,11 +206,14 @@ export const esESTranslations: TranslationDictionary = {
   "cocktailForm.garnish": "Decoración",
   "cocktailForm.optional": "Opcional",
   "cocktailForm.allowBaseSubstitute": "Permitir sustituto base",
-  "cocktailForm.allowBaseSubstituteMessage": "Si el ingrediente especificado no está disponible, el cóctel se mostrará como disponible con su ingrediente base.",
+  "cocktailForm.allowBaseSubstituteMessage":
+    "Si el ingrediente especificado no está disponible, el cóctel se mostrará como disponible con su ingrediente base.",
   "cocktailForm.allowBrandedSubstitute": "Permitir sustituto de marca",
-  "cocktailForm.allowBrandedSubstituteMessage": "Si el ingrediente especificado no está disponible, el cóctel se mostrará como disponible con ingredientes de marca de la base.",
+  "cocktailForm.allowBrandedSubstituteMessage":
+    "Si el ingrediente especificado no está disponible, el cóctel se mostrará como disponible con ingredientes de marca de la base.",
   "cocktailForm.allowStyleSubstitutes": "Permitir sustitutos de estilo",
-  "cocktailForm.allowStyleSubstitutesMessage": "Si el ingrediente de estilo especificado no está disponible, el cóctel se mostrará como disponible con su ingrediente base de estilo u otros estilos de la misma base.",
+  "cocktailForm.allowStyleSubstitutesMessage":
+    "Si el ingrediente de estilo especificado no está disponible, el cóctel se mostrará como disponible con su ingrediente base de estilo u otros estilos de la misma base.",
   "cocktailForm.addSubstitute": "Añadir sustituto",
   "cocktailForm.brand": "Marca",
   "cocktailForm.removeNamed": "Quitar {{name}}",
@@ -198,7 +232,7 @@ export const esESTranslations: TranslationDictionary = {
   "cocktailDetails.showMore": "Mostrar más",
   "cocktailDetails.instructions": "Instrucciones",
   "cocktailDetails.ingredients": "Ingredientes",
-  "cocktailDetails.asNeeded": "Según sea necesario",
+  "cocktailDetails.asNeeded": "Al gusto",
   "cocktailDetails.garnish": "Decoración",
   "cocktailDetails.optional": "Opcional",
   "cocktailDetails.or": "o {{name}}",
@@ -208,39 +242,56 @@ export const esESTranslations: TranslationDictionary = {
   "cocktailDetails.copyCocktail": "Copiar cóctel",
   "cocktailDetails.editCocktail": "Editar cóctel",
   "cocktailDetails.notFound": "Cóctel no encontrado",
-  "cocktailDetails.helpMessage": "Esta pantalla muestra los detalles del cóctel, ingredientes e instrucciones.\\n\\nUsa los botones bajo el cóctel para copiarlo o editarlo.\\n\\n**Cintas de ingredientes**\\nLa cinta izquierda indica el tipo de ingrediente:\\nazul = ingrediente de marca,\\namarillo = ingrediente de estilo.\\n\\nLa cinta derecha indica variantes de base:\\nazul = tiene variantes de marca,\\namarillo = tiene variantes de estilo.",
-  "cocktailMethod.blend.label": "Batir",
-  "cocktailMethod.blend.description": "Bate con hielo picado hasta obtener una textura helada.",
+  "cocktailDetails.helpMessage":
+    "Esta pantalla muestra los detalles del cóctel, ingredientes e instrucciones.\n\nUsa los botones bajo el cóctel para copiarlo o editarlo.\n\n**Cintas de ingredientes**\nLa cinta izquierda indica el tipo de ingrediente:\nazul = ingrediente de marca,\namarillo = ingrediente de estilo.\n\nLa cinta derecha indica variantes de base:\nazul = tiene variantes de marca,\namarillo = tiene variantes de estilo.",
+  "cocktailMethod.blend.label": "Triturar",
+  "cocktailMethod.blend.description":
+    "Bate con hielo picado hasta obtener una textura helada.",
   "cocktailMethod.muddle.label": "Majar",
-  "cocktailMethod.muddle.description": "Machaca fruta, bayas o hierbas para extraer aceites y jugo.",
+  "cocktailMethod.muddle.description":
+    "Machaca fruta, bayas o hierbas para extraer aceites y jugo.",
   "cocktailMethod.heat.label": "Calentar",
-  "cocktailMethod.heat.description": "Calienta los ingredientes suavemente para mezclar los sabores sin hervir.",
+  "cocktailMethod.heat.description":
+    "Calienta los ingredientes suavemente para mezclar los sabores sin hervir.",
   "cocktailMethod.shake.label": "Agitar",
-  "cocktailMethod.shake.description": "Agita con hielo. Ideal para cítricos, siropes, crema o clara de huevo para airear y enfriar.",
+  "cocktailMethod.shake.description":
+    "Agita con hielo. Ideal para cítricos, siropes, crema o clara de huevo para airear y enfriar.",
   "cocktailMethod.stir.label": "Remover",
-  "cocktailMethod.stir.description": "Remueve con cuchara de bar en un vaso mezclador lleno de hielo. Ideal para mezclas herbales.",
-  "cocktailMethod.throw.label": "Lanzar",
-  "cocktailMethod.throw.description": "Vierte entre cocteleras desde cierta altura para airear sin enturbiar.",
+  "cocktailMethod.stir.description":
+    "Remueve con cuchara de bar en un vaso mezclador lleno de hielo. Ideal para mezclas herbales.",
+  "cocktailMethod.throw.label": "Trasvasar",
+  "cocktailMethod.throw.description":
+    "Vierte entre cocteleras desde cierta altura para airear sin enturbiar.",
   "cocktailMethod.build.label": "Montar",
-  "cocktailMethod.build.description": "Vierte los ingredientes directamente en el vaso de servicio.",
+  "cocktailMethod.build.description":
+    "Vierte los ingredientes directamente en el vaso de servicio.",
   "cocktailMethod.layer.label": "Estratificar",
-  "cocktailMethod.layer.description": "Vierte los ingredientes en capas con una cuchara de bar para lograr un efecto visual.",
+  "cocktailMethod.layer.description":
+    "Vierte los ingredientes en capas con una cuchara de bar para lograr un efecto visual.",
   "ingredientDetails.title": "Detalles del ingrediente",
   "ingredientDetails.goBack": "Volver",
   "ingredientDetails.noPhoto": "Sin foto",
   "ingredientDetails.iHaveIt": "Lo tengo",
   "ingredientDetails.removeFromShoppingList": "Quitar de la lista de la compra",
   "ingredientDetails.addToShoppingList": "Añadir a la lista de la compra",
-  "ingredientDetails.removeIngredientFromShoppingList": "Quitar ingrediente de la lista de la compra",
-  "ingredientDetails.addIngredientToShoppingList": "Añadir ingrediente a la lista de la compra",
+  "ingredientDetails.removeIngredientFromShoppingList":
+    "Quitar ingrediente de la lista de la compra",
+  "ingredientDetails.addIngredientToShoppingList":
+    "Añadir ingrediente a la lista de la compra",
   "ingredientDetails.buyOnAmazon": "Comprar en {{store}}",
-  "ingredientDetails.amazonAffiliateInformation": "Información de afiliación de Amazon",
+  "ingredientDetails.amazonAffiliateInformation":
+    "Información de afiliación de Amazon",
   "ingredientDetails.affiliateDisclosureTitle": "Divulgación de afiliación",
-  "ingredientDetails.affiliateDisclosureMessage": "Algunos enlaces de Amazon en esta app son enlaces de afiliado. Si compras algo, podemos recibir una pequeña comisión sin coste adicional para ti.\\n\\nEsto ayuda a apoyar el desarrollo de la app.\\n¡Gracias por tu apoyo!",
-  "ingredientDetails.toMakeMoreCocktails.one": "para preparar {{count}} cóctel más",
-  "ingredientDetails.toMakeMoreCocktails.few": "para preparar {{count}} cócteles más",
-  "ingredientDetails.toMakeMoreCocktails.many": "para preparar {{count}} cócteles más",
-  "ingredientDetails.toMakeMoreCocktails.other": "para preparar {{count}} cócteles más",
+  "ingredientDetails.affiliateDisclosureMessage":
+    "Algunos enlaces de Amazon en esta app son enlaces de afiliado. Si compras algo, podemos recibir una pequeña comisión sin coste adicional para ti.\n\nEsto ayuda a apoyar el desarrollo de la app.\n¡Gracias por tu apoyo!",
+  "ingredientDetails.toMakeMoreCocktails.one":
+    "para preparar {{count}} cóctel más",
+  "ingredientDetails.toMakeMoreCocktails.few":
+    "para preparar {{count}} cócteles más",
+  "ingredientDetails.toMakeMoreCocktails.many":
+    "para preparar {{count}} cócteles más",
+  "ingredientDetails.toMakeMoreCocktails.other":
+    "para preparar {{count}} cócteles más",
   "ingredientDetails.tag": "Etiqueta",
   "ingredientDetails.showLessDescription": "Mostrar menos descripción",
   "ingredientDetails.showFullDescription": "Mostrar descripción completa",
@@ -262,18 +313,24 @@ export const esESTranslations: TranslationDictionary = {
   "ingredientDetails.addCocktail": "Añadir cóctel",
   "ingredientDetails.editIngredient": "Editar ingrediente",
   "ingredientDetails.notFound": "Ingrediente no encontrado",
-  "ingredientDetails.helpMessage": "Esta pantalla muestra detalles del ingrediente, enlaces y cócteles relacionados.\\n\\nUsa el botón bajo el ingrediente para editarlo.\\n\\n**Cintas de cócteles**\\nLa cinta izquierda muestra lo que contiene:\\nazul = tiene ingredientes de marca,\\namarillo = tiene ingredientes de estilo.\\n\\nLa cinta derecha muestra alternativas:\\nazul = hay alternativa de marca,\\namarillo = hay alternativa de estilo.",
+  "ingredientDetails.helpMessage":
+    "Esta pantalla muestra detalles del ingrediente, enlaces y cócteles relacionados.\n\nUsa el botón bajo el ingrediente para editarlo.\n\n**Cintas de cócteles**\nLa cinta izquierda muestra lo que contiene:\nazul = tiene ingredientes de marca,\namarillo = tiene ingredientes de estilo.\n\nLa cinta derecha muestra alternativas:\nazul = hay alternativa de marca,\namarillo = hay alternativa de estilo.",
   "ingredientDetails.removeBaseTitle": "Quitar ingrediente base",
-  "ingredientDetails.removeBaseMessage": "¿Seguro que quieres desvincular {{name}} de su ingrediente base?",
+  "ingredientDetails.removeBaseMessage":
+    "¿Seguro que quieres desvincular {{name}} de su ingrediente base?",
   "ingredientDetails.removeStyleTitle": "Quitar ingrediente de estilo",
-  "ingredientDetails.removeStyleMessage": "¿Seguro que quieres desvincular {{name}} de su ingrediente de estilo?",
-  "ingredientDetails.removeBrandedTitle": "Quitar branded ingrediente",
-  "ingredientDetails.removeBrandedMessage": "Unlink {{source}} de {{target}}?",
-  "ingredientDetails.removeStyledTitle": "Quitar styled ingrediente",
-  "ingredientDetails.removeStyledMessage": "Unlink {{source}} de {{target}}?",
+  "ingredientDetails.removeStyleMessage":
+    "¿Seguro que quieres desvincular {{name}} de su ingrediente de estilo?",
+  "ingredientDetails.removeBrandedTitle": "Quitar ingrediente de marca",
+  "ingredientDetails.removeBrandedMessage":
+    "¿Desvincular {{source}} de {{target}}?",
+  "ingredientDetails.removeStyledTitle": "Quitar ingrediente de estilo",
+  "ingredientDetails.removeStyledMessage":
+    "¿Desvincular {{source}} de {{target}}?",
   "ingredientDetails.cancel": "Cancelar",
   "ingredientDetails.remove": "Quitar",
-  "shaker.helpBase": "Esta pantalla te ayuda a seleccionar ingredientes y entender qué puedes mezclar ahora mismo.\\n\\nUsa la búsqueda para encontrar ingredientes rápidamente, toca ingredientes para marcarlos como en uso y abre los resultados del shaker para ver cócteles compatibles.",
+  "shaker.helpBase":
+    "Esta pantalla te ayuda a seleccionar ingredientes y entender qué puedes mezclar ahora mismo.\n\nUsa la búsqueda para encontrar ingredientes rápidamente, toca ingredientes para marcarlos como en uso y abre los resultados de la coctelera para ver cócteles compatibles.",
   "shaker.currentSelection": "Selección actual",
   "shaker.clearSelectedIngredients": "Borrar ingredientes seleccionados",
   "shaker.cocktailsCount": "Cócteles: {{count}}",
@@ -284,18 +341,30 @@ export const esESTranslations: TranslationDictionary = {
   "onboarding.finish": "Finalizar",
   "onboarding.skip": "Omitir",
   "onboarding.stepCounter": "{{current}} de {{total}}",
-  "onboarding.step1.message": "**¡Bienvenido!**\\nVamos a configurar tu bar añadiendo algunos ingredientes.",
-  "onboarding.step2.message": "Toca **Ingredientes** para empezar a añadir lo que tienes.",
-  "onboarding.step3.message": "Aquí tienes la lista completa de ingredientes.\\nYa hemos marcado algunos básicos habituales para ti.",
-  "onboarding.step4.message": "**Mis ingredientes** muestra lo que tienes.\\nTambién verás cuántos cócteles disponibles usan cada ingrediente.",
-  "onboarding.step5.message": "Ahora vamos a revisar los cócteles.\\nAbre la pantalla de **Cócteles**.",
-  "onboarding.step6.message": "En la parte superior de **Mis cócteles** verás los cócteles que puedes preparar ahora.\\n\\nDebajo aparecen cócteles a los que les falta solo un ingrediente.",
-  "onboarding.step7.message": "Conoce el **Shaker**.\\nTe ayuda a encontrar cócteles según los ingredientes seleccionados.",
-  "onboarding.step8.message": "**Lógica del shaker**\\nLos ingredientes de la misma categoría pueden sustituirse entre sí (*O*).\\nLos ingredientes de categorías distintas son obligatorios juntos (*Y*).\\n\\n**Ejemplo**\\n(Gin *O* Whiskey) *Y* (Cola *O* Tónica) *Y* (Limón *O* Lima).",
-  "onboarding.step9.message": "Usa este interruptor para mostrar solo los ingredientes que tienes.",
-  "onboarding.step10.message": "Toca algunos ingredientes y luego pulsa **Mostrar** para ver los cócteles coincidentes.",
-  "onboarding.step11.message": "Empieza marcando los ingredientes que ya tienes en **Todos los ingredientes**.\n\n¡Salud!",
-  "ingredients.emptyShopping": "Aún no hay ingredientes en tu\\nlista de la compra.",
+  "onboarding.step1.message":
+    "**¡Bienvenido!**\nVamos a configurar tu bar añadiendo algunos ingredientes.",
+  "onboarding.step2.message":
+    "Toca **Ingredientes** para empezar a añadir lo que tienes.",
+  "onboarding.step3.message":
+    "Aquí tienes la lista completa de ingredientes.\nYa hemos marcado algunos básicos habituales para ti.",
+  "onboarding.step4.message":
+    "**Mis ingredientes** muestra lo que tienes.\nTambién verás cuántos cócteles disponibles usan cada ingrediente.",
+  "onboarding.step5.message":
+    "Ahora vamos a revisar los cócteles.\nAbre la pantalla de **Cócteles**.",
+  "onboarding.step6.message":
+    "En la parte superior de **Mis cócteles** verás los cócteles que puedes preparar ahora.\n\nDebajo aparecen cócteles a los que les falta solo un ingrediente.",
+  "onboarding.step7.message":
+    "Conoce la **Coctelera**.\nTe ayuda a encontrar cócteles según los ingredientes seleccionados.",
+  "onboarding.step8.message":
+    "**Lógica de la coctelera**\nLos ingredientes de la misma categoría pueden sustituirse entre sí (*o*).\nLos ingredientes de categorías distintas son obligatorios juntos (*y*).\n\n**Ejemplo**\n(Gin *o* Whiskey) *y* (Cola *o* Tónica) *y* (Limón *o* Lima).",
+  "onboarding.step9.message":
+    "Usa este interruptor para mostrar solo los ingredientes que tienes.",
+  "onboarding.step10.message":
+    "Toca algunos ingredientes y luego pulsa **Mostrar** para ver los cócteles coincidentes.",
+  "onboarding.step11.message":
+    "Empieza marcando los ingredientes que ya tienes en **Todos los ingredientes**.\n\n¡Salud!",
+  "ingredients.emptyShopping":
+    "Aún no hay ingredientes en tu\nlista de la compra.",
   "ingredients.emptyList": "No hay ingredientes en la lista",
   "ingredients.makeCount.one": "Preparar {{count}} cóctel",
   "ingredients.makeCount.few": "Preparar {{count}} cócteles",
@@ -305,12 +374,16 @@ export const esESTranslations: TranslationDictionary = {
   "ingredients.recipeCount.few": "{{count}} recetas",
   "ingredients.recipeCount.many": "{{count}} recetas",
   "ingredients.recipeCount.other": "{{count}} recetas",
-  "ingredients.helpAllFullText": "Esta pantalla muestra todos los ingredientes de la app.\\n\\nUsa la búsqueda, cambia de pestaña y filtra por etiquetas.\\n\\nToca una casilla para marcar disponibilidad.",
-  "ingredients.clearSelectedTagFilters": "Borrar filtros de etiquetas seleccionados",
+  "ingredients.helpAllFullText":
+    "Esta pantalla muestra todos los ingredientes de la app.\n\nUsa la búsqueda, cambia de pestaña y filtra por etiquetas.\n\nToca una casilla para marcar disponibilidad.",
+  "ingredients.clearSelectedTagFilters":
+    "Borrar filtros de etiquetas seleccionados",
   "ingredients.addIngredient": "Añadir ingrediente",
   "cocktails.oneMoreIngredientForMore": "Un ingrediente más para más cócteles",
-  "cocktails.removeIngredientFromShopping": "Quitar ingrediente de la lista de la compra",
-  "cocktails.addIngredientToShopping": "Añadir ingrediente a la lista de la compra",
+  "cocktails.removeIngredientFromShopping":
+    "Quitar ingrediente de la lista de la compra",
+  "cocktails.addIngredientToShopping":
+    "Añadir ingrediente a la lista de la compra",
   "cocktails.buyNamed": "Comprar {{name}}",
   "cocktails.toMakeMore.one": "para preparar {{count}} cóctel más",
   "cocktails.toMakeMore.few": "para preparar {{count}} cócteles más",
@@ -318,21 +391,23 @@ export const esESTranslations: TranslationDictionary = {
   "cocktails.toMakeMore.other": "para preparar {{count}} cócteles más",
   "cocktails.clearSelectedFilters": "Borrar filtros seleccionados",
   "cocktails.addCocktail": "Añadir cóctel",
-  "shakerResults.helpTitle": "Resultados del shaker",
-  "shakerResults.helpText": "Esta pantalla muestra los cócteles que puedes preparar con los ingredientes seleccionados.\\n\\nUsa la búsqueda y los filtros para acotar resultados; luego abre cualquier cóctel para ver detalles de la receta y pasos de preparación.",
+  "shakerResults.helpTitle": "Resultados de la coctelera",
+  "shakerResults.helpText":
+    "Esta pantalla muestra los cócteles que puedes preparar con los ingredientes seleccionados.\n\nUsa la búsqueda y los filtros para acotar resultados; luego abre cualquier cóctel para ver detalles de la receta y pasos de preparación.",
   "shakerResults.clearSelectedFilters": "Borrar filtros seleccionados",
   "shakerResults.emptyMatchingRecipes": "No hay recetas coincidentes",
   "rowParts.removeFromFavorites": "Quitar de favoritos",
   "rowParts.addToFavorites": "Añadir a favoritos",
   "cocktailListRow.allIngredientsReady": "Todos los ingredientes listos",
   "tabBar.leaveWithoutSavingTitle": "¿Salir sin guardar?",
-  "tabBar.leaveWithoutSavingMessage": "Tus cambios se perderán si sales de esta pantalla.",
+  "tabBar.leaveWithoutSavingMessage":
+    "Tus cambios se perderán si sales de esta pantalla.",
   "substituteModal.forNamed": "de {{name}}",
   "substituteModal.searchIngredients": "Buscar ingredientes",
-  "tagEditor.tagName": "Etiqueta name",
+  "tagEditor.tagName": "Nombre de la etiqueta",
   "tagEditor.newTag": "Nueva etiqueta",
   "tagEditor.color": "Color",
-  "tags.unnamed": "Unnamed etiqueta",
+  "tags.unnamed": "Etiqueta sin nombre",
   "tabs.cocktails": "Cócteles",
   "tabs.shaker": "Coctelera",
   "tabs.ingredients": "Ingredientes",
@@ -344,34 +419,43 @@ export const esESTranslations: TranslationDictionary = {
   "sideMenu.useImperial": "Mostrar en imperial",
   "sideMenu.useImperialCaption": "Usar oz en lugar de ml y gramos",
   "sideMenu.keepScreenAwake": "Mantener la pantalla activa",
-  "sideMenu.keepScreenAwakeCaption": "Evitar que la pantalla se apague al ver un cóctel",
-  "sideMenu.smartShakerFiltering": "Filtrado inteligente del shaker",
-  "sideMenu.smartShakerFilteringInfo": "Información del filtrado inteligente del shaker",
-  "sideMenu.smartShakerFilteringInfoTitle": "Filtrado inteligente del shaker",
-  "sideMenu.smartShakerFilteringInfoMessage": "Cuando está activado, los ingredientes de grupos sin selección actual se ocultan si no producirían resultados.\\n\\nEn grupos donde ya has seleccionado al menos un ingrediente, los elementos permanecen visibles para mantener la lógica O.\\n\\nDesactívalo para restaurar el comportamiento predeterminado del shaker.",
-  "sideMenu.smartShakerFilteringCaption": "Ocultar ingredientes no coincidentes",
+  "sideMenu.keepScreenAwakeCaption":
+    "Evitar que la pantalla se apague al ver un cóctel",
+  "sideMenu.smartShakerFiltering": "Filtrado inteligente de la coctelera",
+  "sideMenu.smartShakerFilteringInfo":
+    "Información del filtrado inteligente de la coctelera",
+  "sideMenu.smartShakerFilteringInfoTitle":
+    "Filtrado inteligente de la coctelera",
+  "sideMenu.smartShakerFilteringInfoMessage":
+    "Cuando está activado, los ingredientes de grupos sin selección actual se ocultan si no producirían resultados.\n\nEn grupos donde ya has seleccionado al menos un ingrediente, los elementos permanecen visibles para mantener la lógica *o*.\n\nDesactívalo para restaurar el comportamiento predeterminado de la coctelera.",
+  "sideMenu.smartShakerFilteringCaption":
+    "Ocultar ingredientes no coincidentes",
   "sideMenu.startingScreen": "Pantalla inicial",
   "sideMenu.startingScreenOpen": "Abrir {{screen}}",
   "sideMenu.favoritesRatingFilter": "Filtro de valoración de favoritos",
-  "sideMenu.favoritesRatingFilterCaption": "Mostrando cócteles con {{rating}}★ o más",
+  "sideMenu.favoritesRatingFilterCaption":
+    "Mostrando cócteles con {{rating}}★ o más",
   "sideMenu.manageTags": "Gestionar etiquetas",
   "sideMenu.manageTagsCaption": "Crea o actualiza tus etiquetas",
   "sideMenu.cocktailTags": "Etiquetas de cóctel",
   "sideMenu.ingredientTags": "Etiquetas de ingrediente",
-  "sideMenu.noCustomCocktailTags": "Aún no hay etiquetas de cóctel personalizadas.",
-  "sideMenu.noCustomIngredientTags": "Aún no hay etiquetas de ingrediente personalizadas.",
+  "sideMenu.noCustomCocktailTags":
+    "Aún no hay etiquetas de cóctel personalizadas.",
+  "sideMenu.noCustomIngredientTags":
+    "Aún no hay etiquetas de ingrediente personalizadas.",
   "sideMenu.editNamedTagA11y": "Editar {{name}}",
   "sideMenu.deleteNamedTagA11y": "{{name}}",
   "sideMenu.tagFallbackName": "etiqueta",
   "sideMenu.startScreenModalDescription": "Elige dónde se abre la app",
   "sideMenu.startScreenOptionA11y": "Abrir primero {{screen}}",
-  "sideMenu.amazonStoreModalDescription": "Anula la detección automática para elegir tu tienda de Amazon preferida.",
+  "sideMenu.amazonStoreModalDescription":
+    "Anula la detección automática para elegir tu tienda de Amazon preferida.",
   "sideMenu.amazonStoreAutomatic": "Automático",
   "sideMenu.amazonStoreDetected": "Detectado: {{store}}",
   "sideMenu.amazonStoreUnknown": "Desconocido",
   "sideMenu.amazonStoreSetToA11y": "Configurar tienda de Amazon en {{store}}",
   "sideMenu.amazonStoreDisabled": "Desactivado",
-  "sideMenu.amazonStoreHideLink": "Ocultar Comprar en Amazon enlace",
+  "sideMenu.amazonStoreHideLink": "Ocultar enlace «Comprar en Amazon»",
   "sideMenu.version": "Versión {{version}}",
   "settings.disabled": "Desactivado",
   "sideMenu.closeMenu": "Cerrar menú",
@@ -379,59 +463,75 @@ export const esESTranslations: TranslationDictionary = {
   "sideMenu.amazonStoreCurrent": "Actual: {{label}}",
   "sideMenu.language": "Idioma",
   "sideMenu.languageCurrent": "{{name}}",
-  "sideMenu.reportIssueTitle": "Algo mal?",
-  "sideMenu.reportIssueCaption": "Informa de un error o comparte una idea",
+  "sideMenu.reportIssueTitle": "¿Algo va mal?",
+  "sideMenu.reportIssueCaption": "Informar de un error o sugerir una idea",
   "sideMenu.rateAppTitle": "¿Te gusta Your Bar?",
   "sideMenu.rateAppCaption": "¡Califica Your Bar!",
-  "sideMenu.backupRestore": "Copia y restauración",
-  "sideMenu.backupRestoreCaption": "Guarda tus datos y restaura desde una copia de seguridad",
-  "sideMenu.restartOnboarding": "Reiniciar onboarding",
+  "sideMenu.backupRestore": "Copia de seguridad y restauración",
+  "sideMenu.backupRestoreCaption":
+    "Guardar y restaurar desde una copia de seguridad",
+  "sideMenu.restartOnboarding": "Reiniciar tutorial",
   "sideMenu.restartOnboardingCaption": "Mostrar de nuevo el tutorial guiado",
-  "app.loadingTagline": "¡tus reglas!",
+  "app.loadingTagline": "¡Tus reglas!",
   "appDialog.closeDialog": "Cerrar diálogo",
   "tagEditor.hue": "Tono",
   "tagEditor.tone": "Saturación",
   "tagEditor.editTag": "Editar etiqueta",
   "sideMenu.restore": "Restaurar",
   "sideMenu.restoreBundledData": "Restaurar datos incluidos",
-  "sideMenu.restoreBundledDataDescription": "Se perderán los cambios incluidos, pero tu contenido propio estará a salvo",
-  "sideMenu.restoreBundledDataConfirmMessage": "Esto restaurará los cócteles e ingredientes incluidos.\\nTus cócteles e ingredientes personalizados se mantendrán igual.",
-  "sideMenu.exportUnavailableTitle": "Exportar no disponible",
+  "sideMenu.restoreBundledDataDescription":
+    "Se perderán los cambios incluidos, pero tu contenido propio estará a salvo",
+  "sideMenu.restoreBundledDataConfirmMessage":
+    "Esto restaurará los cócteles e ingredientes incluidos.\nTus cócteles e ingredientes personalizados se mantendrán igual.",
+  "sideMenu.exportUnavailableTitle": "Exportación no disponible",
   "sideMenu.exportUnavailableMessage": "Carga tu inventario antes de exportar.",
   "sideMenu.backupUnavailableTitle": "Copia de seguridad no disponible",
-  "sideMenu.backupUnavailableMessage": "Carga tu inventario antes de hacer la copia de seguridad.",
+  "sideMenu.backupUnavailableMessage":
+    "Carga tu inventario antes de hacer la copia de seguridad.",
   "sideMenu.sharingUnavailableTitle": "Compartir no disponible",
-  "sideMenu.sharingUnavailableMessage": "Compartir no está disponible en este dispositivo.",
+  "sideMenu.sharingUnavailableMessage":
+    "Compartir no está disponible en este dispositivo.",
   "sideMenu.exportFailedTitle": "Error al exportar",
-  "sideMenu.backupFailedTitle": "Error al hacer copia",
+  "sideMenu.backupFailedTitle": "Error al hacer la copia",
   "sideMenu.importFailedTitle": "Error al importar",
-  "sideMenu.deviceStorageUnavailable": "No se puede acceder al almacenamiento del dispositivo.",
-  "sideMenu.importReadArchiveFailed": "No se puede leer el archivo seleccionado.",
+  "sideMenu.deviceStorageUnavailable":
+    "No se puede acceder al almacenamiento del dispositivo.",
+  "sideMenu.importReadArchiveFailed":
+    "No se puede leer el archivo seleccionado.",
   "sideMenu.importArchiveEmpty": "El archivo seleccionado está vacío.",
-  "sideMenu.importMissingInventory": "Al archivo de copia de seguridad le faltan datos de inventario.",
-  "sideMenu.importInvalidInventory": "El archivo de copia de seguridad contiene datos de inventario no válidos.",
-  "sideMenu.importRetryWithValidArchive": "Vuelve a intentarlo con un archivo de copia de seguridad válido.",
+  "sideMenu.importMissingInventory":
+    "Al archivo de copia de seguridad le faltan datos de inventario.",
+  "sideMenu.importInvalidInventory":
+    "El archivo de copia de seguridad contiene datos de inventario no válidos.",
+  "sideMenu.importRetryWithValidArchive":
+    "Vuelve a intentarlo con un archivo de copia de seguridad válido.",
   "sideMenu.deleteTagTitle": "Eliminar etiqueta",
-  "sideMenu.deleteTagMessage": "¿Eliminar \"{{name}}\"?",
+  "sideMenu.deleteTagMessage": '¿Eliminar "{{name}}"?',
   "sideMenu.emailUnavailableTitle": "No se puede abrir el correo",
-  "sideMenu.emailUnavailableMessage": "Envía tu informe manualmente a your.bar.app@gmail.com.",
-  "sideMenu.favoritesRatingModalDescription": "Elige la valoración mínima que mostrar en Favoritos",
+  "sideMenu.emailUnavailableMessage":
+    "Envía tu informe manualmente a your.bar.app@gmail.com.",
+  "sideMenu.favoritesRatingModalDescription":
+    "Elige la valoración mínima que mostrar en Favoritos",
   "sideMenu.favoritesRatingOption": "Mostrar {{value}} estrellas o más",
-  "sideMenu.useAutomaticAmazonStoreDetection": "Usar detección automática de tienda de Amazon",
+  "sideMenu.useAutomaticAmazonStoreDetection":
+    "Usar detección automática de tienda de Amazon",
   "sideMenu.disableAmazonLink": "Desactivar enlace de Amazon",
   "sideMenu.backupData": "Hacer copia de seguridad",
   "sideMenu.backingUpData": "Haciendo copia de seguridad...",
-  "sideMenu.backupDataDescription": "Exportar cócteles, ingredientes y fotos en un único archivo",
+  "sideMenu.backupDataDescription":
+    "Exportar cócteles, ingredientes y fotos en un único archivo",
   "sideMenu.restoreData": "Restaurar datos",
   "sideMenu.restoringData": "Restaurando datos...",
-  "sideMenu.restoreDataDescription": "Importar cócteles, ingredientes y fotos desde un archivo",
+  "sideMenu.restoreDataDescription":
+    "Importar cócteles, ingredientes y fotos desde un archivo",
   "sideMenu.reloadBundledInventory": "Recargar inventario preinstalado",
   "language.en-GB": "Inglés",
   "language.en-US": "Inglés (EE. UU.)",
   "language.uk-UA": "Ucraniano",
   "language.es-ES": "Español (España)",
   "languageModal.title": "Idioma",
-  "languageModal.description": "Elige el idioma de la aplicación. Los cambios se aplican inmediatamente.",
+  "languageModal.description":
+    "Elige el idioma de la aplicación. Los cambios se aplican inmediatamente.",
   "languageModal.close": "Cerrar",
   "languageModal.selectLanguage": "Cambiar idioma a {{name}}",
   "startScreen.cocktails_all.label": "Todos los cócteles",
@@ -439,7 +539,8 @@ export const esESTranslations: TranslationDictionary = {
   "startScreen.cocktails_my.label": "Mis cócteles",
   "startScreen.cocktails_my.description": "Ve primero tus creaciones",
   "startScreen.cocktails_favorites.label": "Cócteles favoritos",
-  "startScreen.cocktails_favorites.description": "Accede a tus cócteles guardados",
+  "startScreen.cocktails_favorites.description":
+    "Accede a tus cócteles guardados",
   "startScreen.shaker.label": "Coctelera",
   "startScreen.shaker.description": "Mezcla según tu inventario",
   "startScreen.ingredients_all.label": "Todos los ingredientes",
@@ -447,7 +548,8 @@ export const esESTranslations: TranslationDictionary = {
   "startScreen.ingredients_my.label": "Mis ingredientes",
   "startScreen.ingredients_my.description": "Empieza con lo que tienes",
   "startScreen.ingredients_shopping.label": "Lista de la compra",
-  "startScreen.ingredients_shopping.description": "Ve a tus artículos de compra",
+  "startScreen.ingredients_shopping.description":
+    "Ve a tus artículos de compra",
   "theme.light": "Claro",
   "theme.dark": "Oscuro",
   "theme.system": "Sistema",
@@ -566,5 +668,5 @@ export const esESTranslations: TranslationDictionary = {
   "amazon.country.IT": "Italia",
   "amazon.country.ES": "España",
   "amazon.country.CA": "Canadá",
-  "amazon.country.JP": "Japón"
+  "amazon.country.JP": "Japón",
 };
