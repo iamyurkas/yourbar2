@@ -434,8 +434,7 @@ export const esESTranslations: TranslationDictionary = {
   "sideMenu.startingScreen": "Pantalla inicial",
   "sideMenu.startingScreenOpen": "Abrir {{screen}}",
   "sideMenu.favoritesRatingFilter": "Filtro de favoritos",
-  "sideMenu.favoritesRatingFilterCaption":
-    "Mostrando cócteles con {{rating}}★ o más",
+  "sideMenu.favoritesRatingFilterCaption": "Cócteles con {{rating}}★ o más",
   "sideMenu.manageTags": "Gestionar etiquetas",
   "sideMenu.manageTagsCaption": "Crea o actualiza tus etiquetas",
   "sideMenu.cocktailTags": "Etiquetas de cóctel",

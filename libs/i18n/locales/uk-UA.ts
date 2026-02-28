@@ -449,7 +449,7 @@ export const ukUATranslations: TranslationDictionary = {
   "sideMenu.favoritesRatingFilterCaption":
     "Показано коктейлі з {{rating}}+ зірками",
   "sideMenu.manageTags": "Керування тегами",
-  "sideMenu.manageTagsCaption": "Створюйте й редагуйте теги",
+  "sideMenu.manageTagsCaption": "Створюйте, редагуйте та видаляйте теги",
   "sideMenu.cocktailTags": "Теги коктейлів",
   "sideMenu.ingredientTags": "Теги інгредієнтів",
   "sideMenu.noCustomCocktailTags": "Ще немає власних тегів коктейлів.",
