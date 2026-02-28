@@ -398,7 +398,7 @@ export const esESTranslations: TranslationDictionary = {
   "shakerResults.emptyMatchingRecipes": "No hay recetas coincidentes",
   "rowParts.removeFromFavorites": "Quitar de favoritos",
   "rowParts.addToFavorites": "Añadir a favoritos",
-  "cocktailListRow.allIngredientsReady": "Todos los ingredientes listos",
+  "cocktailListRow.allIngredientsReady": "Todos los ingredientes están listos",
   "tabBar.leaveWithoutSavingTitle": "¿Salir sin guardar?",
   "tabBar.leaveWithoutSavingMessage":
     "Tus cambios se perderán si sales de esta pantalla.",
@@ -414,14 +414,15 @@ export const esESTranslations: TranslationDictionary = {
   "sideMenu.settingsTitle": "Ajustes",
   "sideMenu.ignoreGarnish": "Ignorar decoración",
   "sideMenu.ignoreGarnishCaption": "Todas las decoraciones son opcionales",
-  "sideMenu.allowAllSubstitutes": "Permitir todos los sustitutos",
-  "sideMenu.allowAllSubstitutesCaption": "Usar siempre sustitutos",
+  "sideMenu.allowAllSubstitutes": "Permitir sustitutos",
+  "sideMenu.allowAllSubstitutesCaption":
+    "Aplicar sustitutos a todos los cócteles",
   "sideMenu.useImperial": "Mostrar en imperial",
   "sideMenu.useImperialCaption": "Usar oz en lugar de ml y gramos",
-  "sideMenu.keepScreenAwake": "Mantener la pantalla activa",
+  "sideMenu.keepScreenAwake": "Mantener pantalla activa",
   "sideMenu.keepScreenAwakeCaption":
     "Evitar que la pantalla se apague al ver un cóctel",
-  "sideMenu.smartShakerFiltering": "Filtrado inteligente de la coctelera",
+  "sideMenu.smartShakerFiltering": "Filtrado inteligente",
   "sideMenu.smartShakerFilteringInfo":
     "Información del filtrado inteligente de la coctelera",
   "sideMenu.smartShakerFilteringInfoTitle":
@@ -429,10 +430,10 @@ export const esESTranslations: TranslationDictionary = {
   "sideMenu.smartShakerFilteringInfoMessage":
     "Cuando está activado, los ingredientes de grupos sin selección actual se ocultan si no producirían resultados.\n\nEn grupos donde ya has seleccionado al menos un ingrediente, los elementos permanecen visibles para mantener la lógica *o*.\n\nDesactívalo para restaurar el comportamiento predeterminado de la coctelera.",
   "sideMenu.smartShakerFilteringCaption":
-    "Ocultar ingredientes no coincidentes",
+    "Ocultar ingredientes no coincidentes en la coctelera",
   "sideMenu.startingScreen": "Pantalla inicial",
   "sideMenu.startingScreenOpen": "Abrir {{screen}}",
-  "sideMenu.favoritesRatingFilter": "Filtro de valoración de favoritos",
+  "sideMenu.favoritesRatingFilter": "Filtro de favoritos",
   "sideMenu.favoritesRatingFilterCaption":
     "Mostrando cócteles con {{rating}}★ o más",
   "sideMenu.manageTags": "Gestionar etiquetas",
