@@ -115,7 +115,7 @@ export const ukUATranslations: TranslationDictionary = {
   "ingredientForm.styleHint":
     "Стильовими можна обирати лише базові інгредієнти, які не є брендовими і ще не є стильовими.",
   "ingredientForm.changeStyleIngredient": "Змінити стильовий інгредієнт",
-  "ingredientForm.selectStyleIngredient": "Cтильовий інгредієнт",
+  "ingredientForm.selectStyleIngredient": "Стильовий інгредієнт",
   "ingredientForm.removeStyleIngredient": "Видалити стильовий інгредієнт",
   "ingredientForm.description": "Опис",
   "ingredientForm.descriptionPlaceholder":
@@ -176,7 +176,7 @@ export const ukUATranslations: TranslationDictionary = {
   "cocktailForm.createTag": "Створити тег",
   "cocktailForm.selectTags": "Оберіть один чи кілька тегів",
   "cocktailForm.description": "Опис",
-  "cocktailForm.optionalDescription": "Необов'язковий опис",
+  "cocktailForm.optionalDescription": "Необов’язковий опис",
   "cocktailForm.instructions": "Інструкція",
   "cocktailForm.instructionsPlaceholder": "1. Візьміть трохи льоду...",
   "cocktailForm.ingredients": "Інгредієнти",
@@ -205,7 +205,7 @@ export const ukUATranslations: TranslationDictionary = {
   "cocktailForm.onShoppingList": "У списку покупок",
   "cocktailForm.amount": "Кількість",
   "cocktailForm.unit": "Одиниця",
-  "cocktailForm.amountPlaceholder": "напр: 45",
+  "cocktailForm.amountPlaceholder": "напр.: 45",
   "cocktailForm.garnish": "Декор",
   "cocktailForm.optional": "Опційно",
   "cocktailForm.allowBaseSubstitute": "Дозволити базову заміну",
@@ -251,7 +251,7 @@ export const ukUATranslations: TranslationDictionary = {
 
   "cocktailMethod.blend.label": "Збивати",
   "cocktailMethod.blend.description":
-    "Збийте в блендері з крижаною крихтою ддя замороженої текстури.",
+    "Збийте в блендері з крижаною крихтою для замороженої текстури.",
   "cocktailMethod.muddle.label": "Розминати",
   "cocktailMethod.muddle.description":
     "Розімніть фрукти, ягоди чи трави, щоби вивільнити сік. Розітріть цукор з невеликою кількістю рідини.",
@@ -263,7 +263,7 @@ export const ukUATranslations: TranslationDictionary = {
     "Енергійно збовтайте у шейкері з льодом. Найкраще для цитрусових, сиропів, вершків чи білка.",
   "cocktailMethod.stir.label": "Перемішувати",
   "cocktailMethod.stir.description":
-    "Перемішайте барною ложкою в окремому, наповненомому льодом, келиху. Найкраще для трав'яних міксерів.",
+    "Перемішайте барною ложкою в окремому, наповненомому льодом, келиху. Найкраще для трав’яних міксерів.",
   "cocktailMethod.throw.label": "Переливати",
   "cocktailMethod.throw.description":
     "Переливайте інгредієнти між ємностями шейкера з відстані для аерації без помутніння.",
@@ -705,7 +705,7 @@ export const ukUATranslations: TranslationDictionary = {
   "cocktailTag.4": "Тікі",
   "cocktailTag.5": "Міцний",
   "cocktailTag.6": "Легкий",
-  "cocktailTag.7": "М'який",
+  "cocktailTag.7": "М’який",
   "cocktailTag.8": "Лонг",
   "cocktailTag.9": "Шот",
   "cocktailTag.10": "Безалкогольний",
