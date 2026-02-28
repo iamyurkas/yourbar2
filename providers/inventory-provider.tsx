@@ -4,7 +4,7 @@ import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { TAG_COLORS } from '@/constants/tag-colors';
 import { AMAZON_STORES, detectAmazonStoreFromStoreOrLocale, detectUsStorefrontOrLocale, getEffectiveAmazonStore, type AmazonStoreKey, type AmazonStoreOverride } from '@/libs/amazon-stores';
-import { DEFAULT_LOCALE, isSupportedLocale } from '@/libs/i18n';
+import { DEFAULT_LOCALE, isSupportedLocale, LANGUAGE_OPTIONS } from '@/libs/i18n';
 import type { SupportedLocale } from '@/libs/i18n/types';
 import { localizeCocktails, localizeIngredients } from '@/libs/i18n/catalog-overlay';
 import { loadInventoryData, reloadInventoryData } from '@/libs/inventory-data';
@@ -76,6 +76,7 @@ import {
 const DEFAULT_START_SCREEN: StartScreen = 'cocktails_all';
 const DEFAULT_APP_THEME: AppTheme = 'light';
 const DEFAULT_APP_LOCALE: AppLocale = DEFAULT_LOCALE;
+const SUPPORTED_LOCALES = LANGUAGE_OPTIONS.map((option) => option.code);
 
 declare global {
   // eslint-disable-next-line no-var
@@ -275,6 +276,60 @@ function sanitizeTranslationOverrides(value: unknown): InventoryTranslationOverr
   });
 
   return result;
+}
+
+function upsertCocktailOverrideForAllLocales(
+  previous: InventoryTranslationOverrides,
+  key: string,
+  patch: CocktailTranslationOverride,
+): InventoryTranslationOverrides {
+  const next = { ...previous };
+
+  SUPPORTED_LOCALES.forEach((locale) => {
+    const localeData = next[locale] ?? {};
+    const cocktails = localeData.cocktails ?? {};
+    const cocktail = cocktails[key] ?? {};
+
+    next[locale] = {
+      ...localeData,
+      cocktails: {
+        ...cocktails,
+        [key]: {
+          ...cocktail,
+          ...patch,
+        },
+      },
+    };
+  });
+
+  return next;
+}
+
+function upsertIngredientOverrideForAllLocales(
+  previous: InventoryTranslationOverrides,
+  key: string,
+  patch: IngredientTranslationOverride,
+): InventoryTranslationOverrides {
+  const next = { ...previous };
+
+  SUPPORTED_LOCALES.forEach((locale) => {
+    const localeData = next[locale] ?? {};
+    const ingredients = localeData.ingredients ?? {};
+    const ingredient = ingredients[key] ?? {};
+
+    next[locale] = {
+      ...localeData,
+      ingredients: {
+        ...ingredients,
+        [key]: {
+          ...ingredient,
+          ...patch,
+        },
+      },
+    };
+  });
+
+  return next;
 }
 
 function getNextCustomTagId(tags: readonly { id?: number | null }[], minimum: number): number {
@@ -841,27 +896,22 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
 
       if (created?.id != null) {
         const key = String(created.id);
-        setTranslationOverrides((prev) => ({
-          ...prev,
-          [appLocale]: {
-            ...(prev[appLocale] ?? {}),
-            cocktails: {
-              ...((prev[appLocale]?.cocktails as Record<string, any> | undefined) ?? {}),
-              [key]: {
-                ...(prev[appLocale]?.cocktails?.[key] ?? {}),
-                name: input.name?.trim() || created.name || '',
-                ...(input.description?.trim() ? { description: input.description.trim() } : {}),
-                ...(input.instructions?.trim() ? { instructions: input.instructions.trim() } : {}),
-                ...(((normalizeSynonyms(input.synonyms) ?? []).length > 0) ? { synonyms: normalizeSynonyms(input.synonyms) } : {}),
-              },
-            },
-          },
-        }));
+        const nextName = input.name?.trim() || created.name || '';
+        const nextDescription = input.description?.trim();
+        const nextInstructions = input.instructions?.trim();
+        const nextSynonyms = normalizeSynonyms(input.synonyms);
+        const patch: CocktailTranslationOverride = {
+          name: nextName,
+          ...(nextDescription ? { description: nextDescription } : {}),
+          ...(nextInstructions ? { instructions: nextInstructions } : {}),
+          ...(((nextSynonyms ?? []).length > 0) ? { synonyms: nextSynonyms } : {}),
+        };
+        setTranslationOverrides((prev) => upsertCocktailOverrideForAllLocales(prev, key, patch));
       }
 
       return created;
     },
-    [appLocale],
+    [],
   );
 
   const createIngredient = useCallback(
@@ -990,25 +1040,18 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
 
       if (created?.id != null) {
         const key = String(created.id);
-        setTranslationOverrides((prev) => ({
-          ...prev,
-          [appLocale]: {
-            ...(prev[appLocale] ?? {}),
-            ingredients: {
-              ...((prev[appLocale]?.ingredients as Record<string, any> | undefined) ?? {}),
-              [key]: {
-                ...(prev[appLocale]?.ingredients?.[key] ?? {}),
-                name: input.name?.trim() || created.name || '',
-                ...(input.description?.trim() ? { description: input.description.trim() } : {}),
-              },
-            },
-          },
-        }));
+        const nextName = input.name?.trim() || created.name || '';
+        const nextDescription = input.description?.trim();
+        const patch: IngredientTranslationOverride = {
+          name: nextName,
+          ...(nextDescription ? { description: nextDescription } : {}),
+        };
+        setTranslationOverrides((prev) => upsertIngredientOverrideForAllLocales(prev, key, patch));
       }
 
       return created;
     },
-    [appLocale],
+    [],
   );
 
   const resetInventoryFromBundle = useCallback(async () => {
@@ -1493,25 +1536,16 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         const key = String(updated.id);
         const nextName = input.name?.trim();
         const nextDescription = input.description?.trim();
-        setTranslationOverrides((prev) => ({
-          ...prev,
-          [appLocale]: {
-            ...(prev[appLocale] ?? {}),
-            ingredients: {
-              ...((prev[appLocale]?.ingredients as Record<string, any> | undefined) ?? {}),
-              [key]: {
-                ...(prev[appLocale]?.ingredients?.[key] ?? {}),
-                ...(nextName ? { name: nextName } : {}),
-                ...(nextDescription ? { description: nextDescription } : {}),
-              },
-            },
-          },
-        }));
+        const patch: IngredientTranslationOverride = {
+          ...(nextName ? { name: nextName } : {}),
+          ...(nextDescription ? { description: nextDescription } : {}),
+        };
+        setTranslationOverrides((prev) => upsertIngredientOverrideForAllLocales(prev, key, patch));
       }
 
       return updated;
     },
-    [appLocale],
+    [],
   );
 
   const updateCocktail = useCallback((id: number, input: CreateCocktailInput) => {
@@ -1688,26 +1722,17 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       const nextDescription = input.description?.trim();
       const nextInstructions = input.instructions?.trim();
       const nextSynonyms = normalizeSynonyms(input.synonyms);
-      setTranslationOverrides((prev) => ({
-        ...prev,
-        [appLocale]: {
-          ...(prev[appLocale] ?? {}),
-          cocktails: {
-            ...((prev[appLocale]?.cocktails as Record<string, any> | undefined) ?? {}),
-            [key]: {
-              ...(prev[appLocale]?.cocktails?.[key] ?? {}),
-              ...(nextName ? { name: nextName } : {}),
-              ...(nextDescription ? { description: nextDescription } : {}),
-              ...(nextInstructions ? { instructions: nextInstructions } : {}),
-              ...(((nextSynonyms ?? []).length > 0) ? { synonyms: nextSynonyms } : {}),
-            },
-          },
-        },
-      }));
+      const patch: CocktailTranslationOverride = {
+        ...(nextName ? { name: nextName } : {}),
+        ...(nextDescription ? { description: nextDescription } : {}),
+        ...(nextInstructions ? { instructions: nextInstructions } : {}),
+        ...(((nextSynonyms ?? []).length > 0) ? { synonyms: nextSynonyms } : {}),
+      };
+      setTranslationOverrides((prev) => upsertCocktailOverrideForAllLocales(prev, key, patch));
     }
 
     return updated;
-  }, [appLocale]);
+  }, []);
 
   const deleteIngredient = useCallback((id: number) => {
     const normalizedId = Number(id);
