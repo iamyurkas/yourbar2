@@ -381,6 +381,8 @@ export const esESTranslations: TranslationDictionary = {
   "sideMenu.languageCurrent": "{{name}}",
   "sideMenu.reportIssueTitle": "Algo mal?",
   "sideMenu.reportIssueCaption": "Informa de un error o comparte una idea",
+  "sideMenu.rateAppTitle": "¿Te gusta Your Bar?",
+  "sideMenu.rateAppCaption": "¡Califica Your Bar!",
   "sideMenu.backupRestore": "Copia y restauración",
   "sideMenu.backupRestoreCaption": "Guarda tus datos y restaura desde una copia de seguridad",
   "sideMenu.restartOnboarding": "Reiniciar onboarding",
