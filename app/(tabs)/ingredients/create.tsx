@@ -19,6 +19,7 @@ import {
   findNodeHandle,
   type GestureResponderEvent,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AppDialog, type DialogOptions } from '@/components/AppDialog';
 import { AppImage } from '@/components/AppImage';
@@ -28,8 +29,8 @@ import { TagEditorModal } from '@/components/TagEditorModal';
 import { TagPill } from '@/components/TagPill';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { useAppColors } from '@/constants/theme';
-import { useI18n } from '@/libs/i18n/use-i18n';
 import { compareOptionalGlobalAlphabet } from '@/libs/global-sort';
+import { useI18n } from '@/libs/i18n/use-i18n';
 import { resolveImageSource } from '@/libs/image-source';
 import { buildReturnToParams, skipDuplicateBack } from '@/libs/navigation';
 import { shouldStorePhoto, storePhoto } from '@/libs/photo-storage';
@@ -141,6 +142,7 @@ export default function IngredientFormScreen() {
 
   const navigation = useNavigation();
   const Colors = useAppColors();
+  const insets = useSafeAreaInsets();
   const { t } = useI18n();
   const {
     ingredients,
@@ -1428,8 +1430,8 @@ export default function IngredientFormScreen() {
                 key={tag.id}
                 label={finalName}
                 color={tag.color}
-              selected={tag.selected}
-              onPress={() => toggleTag(tag.id)}
+                selected={tag.selected}
+                onPress={() => toggleTag(tag.id)}
                 accessibilityRole="checkbox"
                 accessibilityState={{ checked: tag.selected }}
                 androidRippleColor={`${Colors.surface}33`}
@@ -1645,7 +1647,16 @@ export default function IngredientFormScreen() {
         transparent
         animationType="fade"
         onRequestClose={handleCloseBaseModal}>
-        <Pressable style={styles.modalOverlay} onPress={handleCloseBaseModal} accessibilityRole="button">
+        <Pressable
+          style={[
+            styles.modalOverlay,
+            {
+              paddingTop: Math.max(insets.top, 12) + 36,
+              paddingBottom: Math.max(insets.bottom, 12),
+            },
+          ]}
+          onPress={handleCloseBaseModal}
+          accessibilityRole="button">
           <Pressable
             onPress={(event) => event.stopPropagation?.()}
             style={[
@@ -1704,7 +1715,16 @@ export default function IngredientFormScreen() {
         transparent
         animationType="fade"
         onRequestClose={handleCloseStyleModal}>
-        <Pressable style={styles.modalOverlay} onPress={handleCloseStyleModal} accessibilityRole="button">
+        <Pressable
+          style={[
+            styles.modalOverlay,
+            {
+              paddingTop: Math.max(insets.top, 12) + 36,
+              paddingBottom: Math.max(insets.bottom, 12),
+            },
+          ]}
+          onPress={handleCloseStyleModal}
+          accessibilityRole="button">
           <Pressable
             onPress={(event) => event.stopPropagation?.()}
             style={[
@@ -2016,9 +2036,10 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   baseShoppingIndicator: {
-    minHeight: 56,
+    minHeight: 42,
     justifyContent: 'flex-end',
     alignItems: 'flex-end',
+    marginRight: -4,
   },
   unlinkButton: {
     padding: 6,
@@ -2028,9 +2049,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
-    paddingTop: Platform.select({ ios: 72, default: 48 }),
     paddingHorizontal: 24,
-    paddingBottom: 24,
     backgroundColor: 'rgba(0,0,0,0.4)',
   },
   modalCard: {

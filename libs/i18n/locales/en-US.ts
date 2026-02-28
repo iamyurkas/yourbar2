@@ -534,6 +534,7 @@ export const enUSTranslations: TranslationDictionary = {
   "language.en-GB": "English (UK)",
   "language.en-US": "English",
   "language.uk-UA": "Ukrainian",
+  "language.es-ES": "Spanish",
   "languageModal.title": "Language",
   "languageModal.description":
     "Choose the app language. Changes apply immediately.",

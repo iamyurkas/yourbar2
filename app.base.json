@@ -14,13 +14,12 @@
     },
     "android": {
       "package": "com.yourbarapp.free",
-      "versionCode": 21,
+      "versionCode": 22,
       "adaptiveIcon": {
         "backgroundColor": "#4DABF7",
         "foregroundImage": "./assets/images/icon.png",
         "monochromeImage": "./assets/images/icon-mono.png"
       },
-      "edgeToEdgeEnabled": false,
       "predictiveBackGestureEnabled": false
     },
     "web": {

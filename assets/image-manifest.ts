@@ -910,6 +910,7 @@ export const cocktailImages: Record<string, number> = {
   'assets/cocktails/538-that-s-my-word.jpg': require('./cocktails/538-that-s-my-word.jpg'),
   'assets/cocktails/539-the-cheshire-cat.jpg': require('./cocktails/539-the-cheshire-cat.jpg'),
   'assets/cocktails/54-b-54.jpg': require('./cocktails/54-b-54.jpg'),
+  'assets/cocktails/540-the-conference.jpg': require('./cocktails/540-the-conference.jpg'),
   'assets/cocktails/541-the-haole.jpg': require('./cocktails/541-the-haole.jpg'),
   'assets/cocktails/542-the-ridgwell.jpg': require('./cocktails/542-the-ridgwell.jpg'),
   'assets/cocktails/543-the-slope.jpg': require('./cocktails/543-the-slope.jpg'),

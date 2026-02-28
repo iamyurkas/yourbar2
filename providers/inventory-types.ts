@@ -1,5 +1,6 @@
 import { type CocktailMethodId } from '@/constants/cocktail-methods';
 import { type InventoryData } from '@/libs/inventory-data';
+import type { SupportedLocale } from '@/libs/i18n/types';
 
 export type BaseCocktailRecord = InventoryData['cocktails'][number];
 export type BaseIngredientRecord = InventoryData['ingredients'][number];
@@ -54,7 +55,7 @@ export type StartScreen =
   | 'ingredients_shopping';
 
 export type AppTheme = 'light' | 'dark' | 'system';
-export type AppLocale = 'en-GB' | 'en-US' | 'uk-UA';
+export type AppLocale = 'en-GB' | 'en-US' | 'es-ES' | 'uk-UA';
 
 export type IngredientTag = NonNullable<IngredientRecord['tags']>[number];
 
@@ -107,3 +108,37 @@ export type InventoryExportData = {
   cocktails: Array<Omit<CocktailStorageRecord, 'tags'> & { tags?: number[] | null }>;
   ingredients: Array<Omit<IngredientStorageRecord, 'tags'> & { tags?: number[] | null }>;
 };
+
+export type CocktailTranslationOverride = {
+  name?: string;
+  description?: string;
+  instructions?: string;
+  synonyms?: string[];
+};
+
+export type IngredientTranslationOverride = {
+  name?: string;
+  description?: string;
+};
+
+export type InventoryLocaleTranslationOverrides = {
+  cocktails?: Record<string, CocktailTranslationOverride>;
+  ingredients?: Record<string, IngredientTranslationOverride>;
+};
+
+export type InventoryTranslationOverrides = Partial<Record<SupportedLocale, InventoryLocaleTranslationOverrides>>;
+
+export type InventoryBaseExportFile = {
+  schemaVersion: 1;
+  kind: 'base';
+  data: InventoryExportData;
+};
+
+export type InventoryTranslationsExportFile = {
+  schemaVersion: 1;
+  kind: 'translations';
+  locale: SupportedLocale;
+  data: InventoryLocaleTranslationOverrides;
+};
+
+export type InventoryExportFile = InventoryBaseExportFile | InventoryTranslationsExportFile;
