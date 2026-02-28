@@ -477,6 +477,8 @@ export const ukUATranslations: TranslationDictionary = {
   "sideMenu.languageCurrent": "{{name}}",
   "sideMenu.reportIssueTitle": "Щось не так?",
   "sideMenu.reportIssueCaption": "Напишіть про баг чи ідею",
+  "sideMenu.rateAppTitle": "Подобається Your Bar?",
+  "sideMenu.rateAppCaption": "Оцініть Your Bar!",
   "sideMenu.backupRestore": "Резерв і віднова",
   "sideMenu.backupRestoreCaption": "Зберегти дані в архів чи відновити з копії",
   "sideMenu.restartOnboarding": "Повторити знайомство",

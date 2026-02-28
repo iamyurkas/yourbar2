@@ -16,6 +16,7 @@ import {
   Dimensions,
   Linking,
   Modal,
+  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -819,6 +820,45 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     }
   };
 
+  const handleRateApp = async () => {
+    const iosAppStoreId = Constants.expoConfig?.extra?.iosAppStoreId;
+    const androidPackageName =
+      Constants.expoConfig?.android?.package ?? Constants.manifest2?.extra?.expoClient?.android?.package;
+
+    const rateUrl = Platform.select({
+      ios: iosAppStoreId
+        ? `itms-apps://itunes.apple.com/app/viewContentsUserReviews/id${iosAppStoreId}?action=write-review`
+        : null,
+      android: androidPackageName ? `market://details?id=${androidPackageName}` : null,
+      default: null,
+    });
+
+    if (!rateUrl) {
+      showDialogMessage(t("common.error"), t("common.tryAgainLater"));
+      return;
+    }
+
+    try {
+      const canOpen = await Linking.canOpenURL(rateUrl);
+      if (canOpen) {
+        await Linking.openURL(rateUrl);
+        return;
+      }
+
+      if (Platform.OS === "android" && androidPackageName) {
+        await Linking.openURL(
+          `https://play.google.com/store/apps/details?id=${androidPackageName}`,
+        );
+        return;
+      }
+
+      showDialogMessage(t("common.error"), t("common.tryAgainLater"));
+    } catch (error) {
+      console.error("Failed to open app rating", error);
+      showDialogMessage(t("common.error"), t("common.tryAgainLater"));
+    }
+  };
+
   useEffect(() => {
     return () => {
       clearTimeoutRef(ratingModalCloseTimeout);
@@ -1349,6 +1389,27 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 size={20}
                 color={Colors.onSurfaceVariant}
               />
+            </Pressable>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={t("sideMenu.rateAppTitle")}
+              onPress={handleRateApp}
+              style={[
+                styles.actionRow,
+                SURFACE_ROW_STYLE,
+              ]}
+            >
+              <View style={[styles.actionIcon, ACTION_ICON_STYLE]}>
+                <MaterialCommunityIcons
+                  name="star-circle-outline"
+                  size={16}
+                  color={Colors.onSurfaceVariant}
+                />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>{t("sideMenu.rateAppTitle")}</Text>
+                <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>{t("sideMenu.rateAppCaption")}</Text>
+              </View>
             </Pressable>
             <Pressable
               accessibilityRole="button"

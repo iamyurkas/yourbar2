@@ -457,6 +457,8 @@ export const enGBTranslations: TranslationDictionary = {
   "sideMenu.languageCurrent": "{{name}}",
   "sideMenu.reportIssueTitle": "Something wrong?",
   "sideMenu.reportIssueCaption": "Report a bug, share an idea",
+  "sideMenu.rateAppTitle": "Like Your Bar?",
+  "sideMenu.rateAppCaption": "Rate Your Bar!",
   "sideMenu.backupRestore": "Back up & Restore",
   "sideMenu.backupRestoreCaption": "Save your data, restore from a backup",
   "sideMenu.restartOnboarding": "Restart onboarding",
