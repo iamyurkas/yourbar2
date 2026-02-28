@@ -915,6 +915,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         }
 
         const description = input.description?.trim() || undefined;
+        const synonyms = normalizeSynonyms(input.synonyms);
         const photoUri = input.photoUri?.trim() || undefined;
 
         const tagMap = new Map<number, IngredientTag>();
@@ -938,6 +939,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           id: nextId,
           name: trimmedName,
           description,
+          synonyms,
           tags,
           baseIngredientId,
           styleIngredientId,
@@ -1433,6 +1435,10 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         }
 
         const description = input.description?.trim() || undefined;
+        const synonyms =
+          input.synonyms !== undefined
+            ? normalizeSynonyms(input.synonyms)
+            : prev.ingredients[ingredientIndex]?.synonyms ?? undefined;
         const photoUri = input.photoUri?.trim() || undefined;
 
         const tagMap = new Map<number, IngredientTag>();
