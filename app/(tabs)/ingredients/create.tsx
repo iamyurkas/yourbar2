@@ -573,6 +573,12 @@ export default function IngredientFormScreen() {
         isNavigatingAfterSaveRef.current = true;
 
         if (returnToPath) {
+          if (navigation.canGoBack()) {
+            skipDuplicateBack(navigation);
+            router.navigate({ pathname: returnToPath as never, params: returnToParams as never });
+            return;
+          }
+
           router.replace({ pathname: returnToPath as never, params: returnToParams as never });
           return;
         }
@@ -650,6 +656,12 @@ export default function IngredientFormScreen() {
     }
 
     if (returnToPath) {
+      if (navigation.canGoBack()) {
+        skipDuplicateBack(navigation);
+        router.navigate({ pathname: returnToPath as never, params: returnToParams as never });
+        return;
+      }
+
       router.replace({ pathname: returnToPath as never, params: returnToParams as never });
       return;
     }
@@ -718,6 +730,12 @@ export default function IngredientFormScreen() {
     (action?: NavigationAction) => {
       if (isBackAction(action)) {
         if (returnToPath) {
+          if (navigation.canGoBack()) {
+            skipDuplicateBack(navigation);
+            router.navigate({ pathname: returnToPath as never, params: returnToParams as never });
+            return;
+          }
+
           router.replace({ pathname: returnToPath as never, params: returnToParams as never });
           return;
         }
