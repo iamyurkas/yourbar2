@@ -33,7 +33,7 @@ type CocktailSubstituteRecord = NonNullable<
   NonNullable<CocktailIngredientRecord['substitutes']>[number]
 >;
 
-type IngredientRecord = Omit<BaseIngredientRecord, 'tags'> & {
+export type IngredientRecord = Omit<BaseIngredientRecord, 'tags'> & {
   tags?: IngredientTag[] | null;
   synonyms?: string[] | null;
   styleIngredientId?: number | null;
