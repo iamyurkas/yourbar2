@@ -3,28 +3,93 @@ import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { compareGlobalAlphabet } from '@/libs/global-sort';
 
-export type InventoryData = typeof bundledData;
+type RawTag =
+  | {
+      id?: number | null;
+      name?: string | null;
+      color?: string | null;
+    }
+  | number
+  | string
+  | null
+  | undefined;
+
+type RawCocktail = {
+  id: number;
+  name: string;
+  description?: string;
+  instructions?: string;
+  photoUri?: string;
+  glassId?: string;
+  methodIds?: string[];
+  methodId?: string | null;
+  tags?: RawTag[];
+  ingredients?: Array<{
+    order: number;
+    ingredientId?: number;
+    name?: string;
+    amount?: string;
+    unitId?: number;
+    optional?: boolean;
+    garnish?: boolean;
+    allowBaseSubstitution?: boolean;
+    allowBrandSubstitution?: boolean;
+    allowStyleSubstitution?: boolean;
+    substitutes?: Array<{
+      ingredientId?: number;
+      name?: string;
+      brand?: boolean;
+    }>;
+  }>;
+  synonyms?: string[];
+  searchName?: string;
+  searchTokens?: string[];
+};
+
+type RawIngredient = {
+  id: number;
+  name: string;
+  description?: string;
+  photoUri?: string;
+  baseIngredientId?: number;
+  styleIngredientId?: number;
+  tags?: RawTag[];
+  synonyms?: string[];
+  searchName?: string;
+  searchTokens?: string[];
+};
+
+type RawInventoryData = {
+  cocktails: RawCocktail[];
+  ingredients: RawIngredient[];
+  [key: string]: unknown;
+};
+
+type HydratedTag = {
+  id: number;
+  name: string;
+  color: string;
+};
+
+export type InventoryData = Omit<RawInventoryData, 'cocktails' | 'ingredients'> & {
+  cocktails: Array<Omit<RawCocktail, 'tags'> & { tags?: HydratedTag[] }>;
+  ingredients: Array<Omit<RawIngredient, 'tags'> & { tags?: HydratedTag[] }>;
+};
 
 let cachedInventoryData: InventoryData | undefined;
-
-type TagLike = {
-  id?: number | null;
-  name?: string | null;
-  color?: string | null;
-};
 
 const BUILTIN_COCKTAIL_TAGS_BY_ID = new Map(BUILTIN_COCKTAIL_TAGS.map((tag) => [tag.id, tag]));
 const BUILTIN_INGREDIENT_TAGS_BY_ID = new Map(BUILTIN_INGREDIENT_TAGS.map((tag) => [tag.id, tag]));
 
 function hydrateTagList(
-  tags: readonly (TagLike | number | string | null | undefined)[] | null | undefined,
+  tags: readonly RawTag[] | null | undefined,
   lookup: Map<number, { id: number; name: string; color: string }>,
-): Array<{ id: number; name: string; color: string }> | undefined {
+): HydratedTag[] | undefined {
   if (!tags || tags.length === 0) {
     return undefined;
   }
 
-  const resolved = new Map<number, { id: number; name: string; color: string }>();
+  const resolved = new Map<number, HydratedTag>();
 
   tags.forEach((tag) => {
     if (tag == null) {
@@ -43,13 +108,8 @@ function hydrateTagList(
       return;
     }
 
-    if (typeof tag !== 'object') {
-      return;
-    }
-
     const rawId = Number(tag.id ?? -1);
-    const normalizedId =
-      Number.isFinite(rawId) && rawId >= 0 ? Math.trunc(rawId) : undefined;
+    const normalizedId = Number.isFinite(rawId) && rawId >= 0 ? Math.trunc(rawId) : undefined;
     const builtinMatch = normalizedId != null ? lookup.get(normalizedId) : undefined;
     const name = tag.name?.trim() || builtinMatch?.name;
     const color = tag.color?.trim() || builtinMatch?.color;
@@ -66,11 +126,13 @@ function hydrateTagList(
     resolved.set(id, { id, name, color });
   });
 
-  const list = Array.from(resolved.values()).sort((a, b) => a.id - b.id || compareGlobalAlphabet(a.name, b.name));
+  const list = Array.from(resolved.values()).sort(
+    (a, b) => a.id - b.id || compareGlobalAlphabet(a.name, b.name),
+  );
   return list.length > 0 ? list : undefined;
 }
 
-function hydrateInventoryTagsFromCode(data: InventoryData): InventoryData {
+function hydrateInventoryTagsFromCode(data: RawInventoryData): InventoryData {
   return {
     ...data,
     cocktails: data.cocktails.map((cocktail) => ({
@@ -84,11 +146,28 @@ function hydrateInventoryTagsFromCode(data: InventoryData): InventoryData {
   };
 }
 
-function normalizeInventoryData(data: unknown): InventoryData {
-  if (data && typeof data === 'object' && 'default' in data) {
-    return (data as { default?: InventoryData }).default ?? (data as InventoryData);
+function isRawInventoryData(value: unknown): value is RawInventoryData {
+  if (!value || typeof value !== 'object') {
+    return false;
   }
-  return data as InventoryData;
+
+  const candidate = value as Partial<RawInventoryData>;
+  return Array.isArray(candidate.cocktails) && Array.isArray(candidate.ingredients);
+}
+
+function normalizeInventoryData(data: unknown): RawInventoryData {
+  if (isRawInventoryData(data)) {
+    return data;
+  }
+
+  if (data && typeof data === 'object' && 'default' in data) {
+    const maybeDefault = (data as { default?: unknown }).default;
+    if (isRawInventoryData(maybeDefault)) {
+      return maybeDefault;
+    }
+  }
+
+  return bundledData as unknown as RawInventoryData;
 }
 
 export function loadInventoryData(): InventoryData {
@@ -103,6 +182,8 @@ export function loadInventoryData(): InventoryData {
 }
 
 export function reloadInventoryData(): InventoryData {
-  cachedInventoryData = hydrateInventoryTagsFromCode(normalizeInventoryData(require('@/assets/data/data.json')));
+  cachedInventoryData = hydrateInventoryTagsFromCode(
+    normalizeInventoryData(require('@/assets/data/data.json')),
+  );
   return cachedInventoryData;
 }

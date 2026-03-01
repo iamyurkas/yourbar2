@@ -11,7 +11,15 @@ import {
   useState,
   useTransition,
 } from "react";
-import { Platform, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  Platform,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  type TextLayoutEvent,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { resolveGlasswareUriFromId } from "@/assets/image-manifest";
@@ -24,6 +32,7 @@ import { TagPill } from "@/components/TagPill";
 import {
   getCocktailMethodById,
   METHOD_ICON_MAP,
+  type CocktailMethodId,
 } from "@/constants/cocktail-methods";
 import { GLASSWARE_NAME_BY_ID, resolveGlasswareId } from "@/constants/glassware";
 import { useAppColors } from "@/constants/theme";
@@ -48,6 +57,7 @@ import { useInventory, type Cocktail } from "@/providers/inventory-provider";
 import { tagColors } from "@/theme/theme";
 
 type RecipeIngredient = NonNullable<Cocktail["ingredients"]>[number];
+type CocktailTag = NonNullable<Cocktail["tags"]>[number];
 
 const METRIC_UNIT_ID = 11;
 const IMPERIAL_UNIT_ID = 12;
@@ -233,11 +243,11 @@ function getIngredientQualifier(
 ): string | undefined {
   const qualifiers: string[] = [];
 
-  if (ingredient.garnish) {
+  if ((ingredient as { garnish?: boolean | null }).garnish) {
     qualifiers.push(garnishLabel);
   }
 
-  if (ingredient.optional) {
+  if ((ingredient as { optional?: boolean | null }).optional) {
     qualifiers.push(optionalLabel);
   }
 
@@ -540,7 +550,7 @@ export default function CocktailDetailsScreen() {
     useState(false);
 
   const handleDescriptionLayout = useCallback(
-    (event: { nativeEvent: { lines: { length: number }[] } }) => {
+    (event: TextLayoutEvent) => {
       if (shouldTruncateDescription) {
         return;
       }
@@ -591,7 +601,7 @@ export default function CocktailDetailsScreen() {
     return GLASSWARE_NAME_BY_ID[resolvedGlassId];
   }, [cocktail?.glassId, t]);
 
-  const methodDetails = useMemo(() => {
+  const methodDetails = useMemo((): { id: CocktailMethodId }[] => {
     if (!cocktail) {
       return [];
     }
@@ -604,7 +614,10 @@ export default function CocktailDetailsScreen() {
         : legacyMethodId
           ? [legacyMethodId]
           : [];
-    return nextMethodIds.map((id) => getCocktailMethodById(id)).filter(Boolean);
+    return nextMethodIds.flatMap((id) => {
+      const method = getCocktailMethodById(id);
+      return method ? [method] : [];
+    });
   }, [cocktail]);
 
   const [expandedMethodIds, setExpandedMethodIds] = useState<string[]>([]);
@@ -905,7 +918,25 @@ export default function CocktailDetailsScreen() {
 
             {cocktail.tags && cocktail.tags.length ? (
               <View style={styles.tagList}>
-                {cocktail.tags.map((tag, index) => {
+                {(cocktail.tags as unknown[]).map((rawTag, index) => {
+                  if (typeof rawTag === "number") {
+                    const fallbackName = t(`cocktailTag.${rawTag}`);
+                    const finalName =
+                      fallbackName !== `cocktailTag.${rawTag}`
+                        ? fallbackName
+                        : t("cocktailDetails.tag");
+                    return (
+                      <TagPill
+                        key={`tag-${rawTag}-${index}`}
+                        label={finalName}
+                        color={Colors.tint}
+                        selected
+                        accessibilityLabel={finalName}
+                      />
+                    );
+                  }
+
+                  const tag = (rawTag ?? {}) as Partial<CocktailTag>;
                   const tagKey =
                     tag.id != null
                       ? `tag-${tag.id}`
@@ -914,7 +945,10 @@ export default function CocktailDetailsScreen() {
                         : `tag-${index}`;
 
                   const tagName = tag.id != null ? t(`cocktailTag.${tag.id}`) : tag.name;
-                  const finalName = (tagName && tagName !== `cocktailTag.${tag.id}`) ? tagName : (tag.name ?? t("cocktailDetails.tag"));
+                  const finalName =
+                    tagName && tag.id != null && tagName !== `cocktailTag.${tag.id}`
+                      ? tagName
+                      : (tag.name ?? t("cocktailDetails.tag"));
 
                   return (
                     <TagPill

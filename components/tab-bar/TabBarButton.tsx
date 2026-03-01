@@ -10,6 +10,8 @@ type TabBarButtonProps = BottomTabBarButtonProps & {
   onOpenDialog: (options: DialogOptions) => void;
 };
 
+type TabBarPressEvent = Parameters<NonNullable<BottomTabBarButtonProps['onPress']>>[0];
+
 export function TabBarButton({ onOpenDialog, ...props }: TabBarButtonProps) {
   const { t } = useI18n();
   const {
@@ -19,11 +21,11 @@ export function TabBarButton({ onOpenDialog, ...props }: TabBarButtonProps) {
     setHasUnsavedChanges,
     setRequireLeaveConfirmation,
   } = useUnsavedChanges();
-  const handlePress = useCallback(() => {
+  const handlePress = useCallback((event: TabBarPressEvent) => {
     const proceed = () => {
       setHasUnsavedChanges(false);
       setRequireLeaveConfirmation(false);
-      props.onPress?.();
+      props.onPress?.(event);
     };
 
     if (hasUnsavedChanges || requireLeaveConfirmation) {

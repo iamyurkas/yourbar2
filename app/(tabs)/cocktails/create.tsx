@@ -531,7 +531,7 @@ export default function CreateCocktailScreen() {
         }
 
         set.add(cocktailKey);
-      });
+      })
     });
 
     return map;
@@ -547,7 +547,10 @@ export default function CreateCocktailScreen() {
     [glassId],
   );
   const selectedMethods = useMemo(
-    () => methodIds.map((id) => getCocktailMethodById(id)).filter(Boolean),
+    () => methodIds.flatMap((id) => {
+      const method = getCocktailMethodById(id);
+      return method ? [method] : [];
+    }),
     [methodIds],
   );
 
@@ -1165,11 +1168,11 @@ export default function CreateCocktailScreen() {
       return;
     }
 
-    const sanitizedIngredients = ingredientsState
-      .map((item, index) => {
+    const sanitizedIngredients: CreateCocktailInput["ingredients"] = ingredientsState
+      .flatMap((item, index) => {
         const ingredientName = item.name.trim();
         if (!ingredientName) {
-          return undefined;
+          return [];
         }
 
         const normalizedIngredientId =
@@ -1190,41 +1193,31 @@ export default function CreateCocktailScreen() {
             ? Math.trunc(normalizedUnitId)
             : undefined;
 
-        const substitutes = item.substitutes
-          .map((substitute) => {
-            const substituteName = substitute.name.trim();
-            if (!substituteName) {
-              return undefined;
-            }
+        const substitutes: CreateCocktailInput["ingredients"][number]["substitutes"] = item.substitutes.flatMap((substitute) => {
+          const substituteName = substitute.name.trim();
+          if (!substituteName) {
+            return [];
+          }
 
-            const rawIngredientLink =
-              substitute.ingredientId != null
-                ? Number(substitute.ingredientId)
-                : undefined;
-            const substituteIngredientId =
-              rawIngredientLink != null &&
-                Number.isFinite(rawIngredientLink) &&
-                rawIngredientLink >= 0
-                ? Math.trunc(rawIngredientLink)
-                : undefined;
+          const rawIngredientLink =
+            substitute.ingredientId != null
+              ? Number(substitute.ingredientId)
+              : undefined;
+          const substituteIngredientId =
+            rawIngredientLink != null &&
+              Number.isFinite(rawIngredientLink) &&
+              rawIngredientLink >= 0
+              ? Math.trunc(rawIngredientLink)
+              : undefined;
 
-            return {
-              ingredientId: substituteIngredientId,
-              name: substituteName,
-              brand: substitute.isBrand ?? false,
-            };
-          })
-          .filter(
-            (
-              substitute,
-            ): substitute is {
-              ingredientId?: number;
-              name: string;
-              brand: boolean;
-            } => Boolean(substitute),
-          );
+          return [{
+            ingredientId: substituteIngredientId,
+            name: substituteName,
+            brand: substitute.isBrand ?? false,
+          }];
+        });
 
-        return {
+        return [{
           ingredientId,
           name: ingredientName,
           amount: item.amount.trim() || undefined,
@@ -1236,11 +1229,8 @@ export default function CreateCocktailScreen() {
           allowStyleSubstitution: item.allowStyleSubstitution,
           substitutes,
           order: index + 1,
-        } satisfies CreateCocktailInput["ingredients"][number];
-      })
-      .filter((value): value is CreateCocktailInput["ingredients"][number] =>
-        Boolean(value),
-      );
+        } satisfies CreateCocktailInput["ingredients"][number]];
+      });
 
     if (!sanitizedIngredients.length) {
       showDialog({
@@ -1333,7 +1323,7 @@ export default function CreateCocktailScreen() {
       isNavigatingAfterSaveRef.current = true;
       const targetId = persisted.id ?? persisted.name;
       if (!isEditMode && returnToPath) {
-        router.replace({ pathname: returnToPath, params: returnToParams });
+        router.replace({ pathname: returnToPath as never, params: returnToParams as never });
         return;
       }
 
@@ -1422,13 +1412,13 @@ export default function CreateCocktailScreen() {
 
             setHasUnsavedChanges(false);
             const state = navigation.getState();
-            const currentIndex = state.index ?? 0;
+            const currentIndex = state?.index ?? 0;
             if (currentIndex >= 2) {
               navigation.dispatch(StackActions.pop(2));
               return;
             }
             if (returnToPath) {
-              router.navigate({ pathname: returnToPath, params: returnToParams });
+              router.navigate({ pathname: returnToPath as never, params: returnToParams as never });
               return;
             }
             if (navigation.canGoBack()) {
@@ -1488,7 +1478,7 @@ export default function CreateCocktailScreen() {
 
     const leaveBack = () => {
       if (returnToPath) {
-        router.replace({ pathname: returnToPath, params: returnToParams });
+        router.replace({ pathname: returnToPath as never, params: returnToParams as never });
         return;
       }
 
@@ -1502,7 +1492,7 @@ export default function CreateCocktailScreen() {
       }
 
       if (returnToPath) {
-        router.replace({ pathname: returnToPath, params: returnToParams });
+        router.replace({ pathname: returnToPath as never, params: returnToParams as never });
         return;
       }
 
@@ -1813,7 +1803,9 @@ export default function CreateCocktailScreen() {
                   numberOfLines={1}
                 >
                   {selectedMethods.length
-                    ? selectedMethods.map((method) => t(`cocktailMethod.${method.id}.label`)).join(", ")
+                    ? selectedMethods
+                        .map((method) => t(`cocktailMethod.${method.id}.label`))
+                        .join(", ")
                     : t("cocktailForm.notSpecified")}
                 </Text>
               </View>
@@ -2458,7 +2450,7 @@ function EditableIngredientRow({
   const { t, locale } = useI18n();
   const [isFocused, setIsFocused] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const hideSuggestionsTimeout = useRef<NodeJS.Timeout | null>(null);
+  const hideSuggestionsTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const Colors = useAppColors();
 
   const normalizedName = normalizeSearchText(ingredient.name);

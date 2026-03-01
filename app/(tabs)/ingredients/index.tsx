@@ -260,7 +260,7 @@ export default function IngredientsScreen() {
   const [selectedTagKeys, setSelectedTagKeys] = useState<Set<string>>(() => new Set());
   const [headerLayout, setHeaderLayout] = useState<LayoutRectangle | null>(null);
   const [filterAnchorLayout, setFilterAnchorLayout] = useState<LayoutRectangle | null>(null);
-  const listRef = useRef<FlatList<unknown>>(null);
+  const listRef = useRef<FlatList<Ingredient>>(null);
   const lastScrollOffset = useRef(0);
   const searchStartOffset = useRef<number | null>(null);
   const previousQuery = useRef(query);
@@ -534,7 +534,7 @@ export default function IngredientsScreen() {
     [filteredIngredients],
   );
 
-  const highlightColor = Colors.highlightFaint;
+  const highlightColor = Colors.highlightFaint ?? Colors.tint;
   const isFilterActive = selectedTagKeys.size > 0;
   const emptyMessage = useMemo(() => {
     switch (activeTab) {
@@ -694,6 +694,12 @@ export default function IngredientsScreen() {
     [effectiveAvailableIngredientIds, Colors],
   );
 
+  const handleTabChange = useCallback((key: string) => {
+    if (key === 'all' || key === 'my' || key === 'shopping') {
+      setActiveTab(key);
+    }
+  }, []);
+
   const helpContent = useMemo(() => {
     switch (activeTab) {
       case 'my':
@@ -728,7 +734,7 @@ export default function IngredientsScreen() {
             onMenuPress={() => setIsMenuOpen(true)}
             tabs={tabOptions}
             activeTab={activeTab}
-            onTabChange={setActiveTab}
+            onTabChange={handleTabChange}
             anchorPrefix="ingredients-tab"
             onFilterPress={handleFilterPress}
             filterActive={isFilterActive}
@@ -767,7 +773,7 @@ export default function IngredientsScreen() {
                       const selected = selectedTagKeys.has(tag.key);
                       const isBuiltin = !isNaN(Number(tag.key)) && Number(tag.key) < 10;
                       const translatedName = isBuiltin ? t(`ingredientTag.${tag.key}`) : tag.name;
-                      const finalName = (isBuiltin && translatedName !== `ingredientTag.${tag.key}`) ? translatedName : tag.name;
+                      const finalName = (isBuiltin && translatedName !== `ingredientTag.${tag.key}`) ? translatedName : (tag.name ?? t('tags.unnamed'));
 
                       return (
                         <TagPill

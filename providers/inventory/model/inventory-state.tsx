@@ -118,8 +118,14 @@ function applyDeltaToInventoryData(
 ): InventoryData {
   return {
     ...baseData,
-    cocktails: applyDeltaToCollection(baseData.cocktails, delta.cocktails),
-    ingredients: applyDeltaToCollection(baseData.ingredients, delta.ingredients),
+    cocktails: applyDeltaToCollection(
+      baseData.cocktails as CocktailStorageRecord[],
+      delta.cocktails as { created?: CocktailStorageRecord[]; updated?: CocktailStorageRecord[]; deletedIds?: number[] } | undefined,
+    ) as unknown as InventoryData["cocktails"],
+    ingredients: applyDeltaToCollection(
+      baseData.ingredients as unknown as IngredientStorageRecord[],
+      delta.ingredients as { created?: IngredientStorageRecord[]; updated?: IngredientStorageRecord[]; deletedIds?: number[] } | undefined,
+    ) as unknown as InventoryData["ingredients"],
   };
 }
 
@@ -134,7 +140,7 @@ function backfillMissingIngredientStyleIds(
       return;
     }
 
-    baseIngredientsById.set(Math.trunc(id), ingredient as IngredientStorageRecord);
+    baseIngredientsById.set(Math.trunc(id), ingredient as unknown as IngredientStorageRecord);
   });
 
   return ingredients.map((ingredient) => {
@@ -159,7 +165,7 @@ function backfillMissingIngredientStyleIds(
 export function createInventoryStateFromData(data: InventoryData, imported: boolean): InventoryState {
   return {
     cocktails: normalizeSearchFields(data.cocktails) as Cocktail[],
-    ingredients: normalizeSearchFields(data.ingredients) as Ingredient[],
+    ingredients: normalizeSearchFields(data.ingredients) as unknown as Ingredient[],
     imported,
   } satisfies InventoryState;
 }
@@ -176,9 +182,9 @@ export function createInventoryStateFromSnapshot(
       {
         ...mergedData,
         ingredients: backfillMissingIngredientStyleIds(
-          mergedData.ingredients as IngredientStorageRecord[],
+          mergedData.ingredients as unknown as IngredientStorageRecord[],
           resolvedBaseData,
-        ),
+        ) as unknown as InventoryData["ingredients"],
       },
       Boolean(snapshot.imported),
     );

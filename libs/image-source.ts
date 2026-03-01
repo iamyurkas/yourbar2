@@ -11,7 +11,7 @@ export function resolveImageSource(uri?: string | null): ImageSource | undefined
 
   const asset = resolveAssetFromCatalog(uri);
   if (asset) {
-    return asset;
+    return asset as unknown as ImageSource;
   }
 
   if (SUPPORTED_URI_PATTERN.test(uri)) {

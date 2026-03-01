@@ -49,6 +49,8 @@ npm run web
 - `npm run prune:image-manifest` – remove unused image entries from the manifest.
 - `npm run reset-project` – reset starter assets and regenerate a clean Expo Router app tree.
 
+Before opening a pull request, run `npm run check:all` to catch lint, localization, and TypeScript issues in one pass.
+
 ## Project Structure
 
 - `app/` – Expo Router screens and navigation.

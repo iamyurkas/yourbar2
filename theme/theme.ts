@@ -4,6 +4,50 @@ import {
   type PaperTheme,
 } from "@/libs/react-native-paper";
 
+export type ThemePalette = {
+  primary: string;
+  primaryContainer: string;
+  onPrimary: string;
+  onPrimaryContainer: string;
+  background: string;
+  surface: string;
+  surfaceBright: string;
+  surfaceVariant: string;
+  outline: string;
+  outlineVariant: string;
+  onSurface: string;
+  onSurfaceMuted: string;
+  onSurfaceVariant: string;
+  onSurfaceDisabled: string;
+  onBackground: string;
+  inversePrimary: string;
+  inverseSurface: string;
+  inverseOnSurface: string;
+  error: string;
+  errorContainer: string;
+  onError: string;
+  onErrorContainer: string;
+  success: string;
+  danger: string;
+  disabled: string;
+  placeholder: string;
+  surfaceDisabled: string;
+  backdrop: string;
+  shadow: string;
+  highlightFaint: string;
+  highlightSubtle: string;
+  styledIngredient: string;
+  overlayOnPrimary: string;
+  secondary: string;
+  onSecondary: string;
+  secondaryContainer: string;
+  onSecondaryContainer: string;
+  tertiary: string;
+  onTertiary: string;
+  tertiaryContainer: string;
+  onTertiaryContainer: string;
+};
+
 export const lightPalette = {
   primary: "#4DABF7",
   primaryContainer: "#D5E6FA",
@@ -148,7 +192,7 @@ export const tagColors = {
 
 function createTheme(
   baseTheme: PaperTheme,
-  p: typeof lightPalette,
+  p: ThemePalette,
 ): PaperTheme {
   return {
     ...baseTheme,

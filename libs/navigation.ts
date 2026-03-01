@@ -1,8 +1,20 @@
 import { StackActions, type NavigationProp, type ParamListBase } from '@react-navigation/native';
 import { router } from 'expo-router';
 
-type RouteParams = Record<string, unknown> | undefined;
+type RouteParams = object | undefined;
 type ReturnToParams = Record<string, string> | undefined;
+
+type RouterObjectHref = Extract<Parameters<typeof router.push>[0], { pathname: unknown }>;
+type RouterPathname = RouterObjectHref['pathname'];
+
+type NavigationLike = Pick<NavigationProp<ParamListBase>, 'goBack' | 'dispatch'> & {
+  getState: () =>
+    | {
+        index: number;
+        routes: Array<{ name: string; params?: RouteParams }>;
+      }
+    | undefined;
+};
 
 const areParamsEqual = (left?: RouteParams, right?: RouteParams): boolean => {
   if (!left && !right) {
@@ -13,13 +25,15 @@ const areParamsEqual = (left?: RouteParams, right?: RouteParams): boolean => {
     return false;
   }
 
-  const leftKeys = Object.keys(left);
-  const rightKeys = Object.keys(right);
+  const leftRecord = left as Record<string, unknown>;
+  const rightRecord = right as Record<string, unknown>;
+  const leftKeys = Object.keys(leftRecord);
+  const rightKeys = Object.keys(rightRecord);
   if (leftKeys.length !== rightKeys.length) {
     return false;
   }
 
-  return leftKeys.every((key) => rightKeys.includes(key) && left[key] === right[key]);
+  return leftKeys.every((key) => rightKeys.includes(key) && leftRecord[key] === rightRecord[key]);
 };
 
 const areRoutesEqual = (
@@ -37,17 +51,17 @@ const areRoutesEqual = (
   return areParamsEqual(left.params, right.params);
 };
 
-export const skipDuplicateBack = (navigation: NavigationProp<ParamListBase>) => {
+export const skipDuplicateBack = (navigation: NavigationLike) => {
   const state = navigation.getState();
-  const currentIndex = state.index ?? 0;
+  const currentIndex = state?.index ?? 0;
 
   if (currentIndex <= 0) {
     navigation.goBack();
     return;
   }
 
-  const current = state.routes[currentIndex];
-  const previous = state.routes[currentIndex - 1];
+  const current = state?.routes[currentIndex];
+  const previous = state?.routes[currentIndex - 1];
   const shouldSkip = areRoutesEqual(current, previous);
 
   if (shouldSkip && currentIndex >= 2) {
@@ -59,7 +73,7 @@ export const skipDuplicateBack = (navigation: NavigationProp<ParamListBase>) => 
 };
 
 export const buildReturnToParams = (
-  returnToPath?: string,
+  returnToPath?: RouterPathname,
   returnToParams?: Record<string, string | undefined>,
 ): { returnToPath?: string; returnToParams?: string } => {
   if (!returnToPath) {
@@ -105,9 +119,9 @@ export const navigateToDetailsWithReturnTo = ({
   returnToPath,
   returnToParams,
 }: {
-  pathname: string;
+  pathname: RouterPathname;
   params: Record<string, string>;
-  returnToPath?: string;
+  returnToPath?: RouterPathname;
   returnToParams?: Record<string, string | undefined>;
 }) => {
   router.push({
@@ -116,21 +130,21 @@ export const navigateToDetailsWithReturnTo = ({
       ...params,
       ...buildReturnToParams(returnToPath, returnToParams),
     },
-  });
+  } as RouterObjectHref);
 };
 
 export const returnToSourceOrBack = (
-  navigation: NavigationProp<ParamListBase>,
+  navigation: NavigationLike,
   {
     returnToPath,
     returnToParams,
   }: {
-    returnToPath?: string;
+    returnToPath?: RouterPathname;
     returnToParams?: ReturnToParams;
   },
 ) => {
   if (returnToPath) {
-    router.navigate({ pathname: returnToPath, params: returnToParams });
+    router.navigate({ pathname: returnToPath, params: returnToParams } as RouterObjectHref);
     return;
   }
 

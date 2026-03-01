@@ -123,13 +123,16 @@ const CocktailListRowComponent = ({
     [cocktail.tags],
   );
 
-  const methodIds = useMemo(() => {
+  const methodIds = useMemo<CocktailMethodId[]>(() => {
     const legacyMethodId = (cocktail as { methodId?: CocktailMethodId | null }).methodId ?? null;
+    const isMethodId = (value: string): value is CocktailMethodId =>
+      Object.prototype.hasOwnProperty.call(METHOD_ICON_MAP, value);
+
     if (cocktail.methodIds && cocktail.methodIds.length > 0) {
-      return cocktail.methodIds;
+      return cocktail.methodIds.filter(isMethodId);
     }
 
-    return legacyMethodId ? [legacyMethodId] : [];
+    return legacyMethodId && isMethodId(legacyMethodId) ? [legacyMethodId] : [];
   }, [cocktail]);
 
   const methodIconContent = useMemo(() => {

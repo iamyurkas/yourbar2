@@ -3,6 +3,7 @@ import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { buildPhotoBaseName } from '@/libs/photo-utils';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { compareGlobalAlphabet } from '@/libs/global-sort';
+import { getCocktailMethodById } from '@/constants/cocktail-methods';
 import {
   type Cocktail,
   type CocktailIngredient,
@@ -81,7 +82,7 @@ export function normalizeSearchFields<
 
 export function normalizeTagList<TTag extends { id?: number | null; name?: string | null; color?: string | null }>(
   tags: readonly TTag[] | null | undefined,
-): Array<{ id: number; name: string; color?: string | null }> | undefined {
+): Array<{ id: number; name: string; color: string }> | undefined {
   if (!tags || tags.length === 0) {
     return undefined;
   }
@@ -90,9 +91,9 @@ export function normalizeTagList<TTag extends { id?: number | null; name?: strin
     .map((tag) => ({
       id: Number(tag.id ?? -1),
       name: tag.name?.trim() ?? '',
-      color: tag.color ?? undefined,
+      color: tag.color?.trim() ?? '',
     }))
-    .filter((tag) => Number.isFinite(tag.id) && tag.id >= 0 && tag.name)
+    .filter((tag) => Number.isFinite(tag.id) && tag.id >= 0 && tag.name && tag.color)
     .map((tag) => ({
       id: Math.trunc(tag.id),
       name: tag.name,
@@ -158,7 +159,7 @@ export function hydrateInventoryTagsFromCode(data: InventoryExportData): Invento
       ...ingredient,
       tags: hydrateTagsFromCode(ingredient.tags, BUILTIN_INGREDIENT_TAGS_BY_ID),
     })),
-  } as InventoryData;
+  };
 }
 
 export function normalizeSubstitutes(substitutes: readonly CocktailSubstitute[] | null | undefined): CocktailSubstitute[] | undefined {
@@ -196,7 +197,7 @@ export function normalizeCocktailIngredients(
       allowStyleSubstitution: ingredient.allowStyleSubstitution ? true : undefined,
       substitutes: normalizeSubstitutes(ingredient.substitutes),
     }))
-    .filter((ingredient) => ingredient.name)
+    .filter((ingredient): ingredient is (typeof ingredient) & { name: string } => Boolean(ingredient.name))
     .sort((a, b) => {
       const orderDelta = a.order - b.order;
       return orderDelta !== 0 ? orderDelta : compareGlobalAlphabet(a.name, b.name);
@@ -206,6 +207,11 @@ export function normalizeCocktailIngredients(
 export function toCocktailStorageRecord(cocktail: Cocktail | BaseCocktailRecord): CocktailStorageRecord {
   const normalizedTags = normalizeTagList(cocktail.tags);
   const normalizedIngredients = normalizeCocktailIngredients(cocktail.ingredients);
+  const normalizedMethodIds =
+    'methodIds' in cocktail
+      ? (cocktail.methodIds ?? [])
+          .flatMap((methodId) => (getCocktailMethodById(methodId) ? [methodId] : []))
+      : [];
 
   return {
     id: cocktail.id,
@@ -215,11 +221,9 @@ export function toCocktailStorageRecord(cocktail: Cocktail | BaseCocktailRecord)
     instructions: cocktail.instructions ?? undefined,
     photoUri: cocktail.photoUri ?? undefined,
     glassId: cocktail.glassId ?? undefined,
-    methodIds: 'methodIds' in cocktail ? cocktail.methodIds ?? undefined : undefined,
+    methodIds: (normalizedMethodIds.length > 0 ? normalizedMethodIds : undefined) as CocktailStorageRecord["methodIds"],
     tags: normalizedTags && normalizedTags.length > 0 ? normalizedTags : undefined,
     ingredients: normalizedIngredients && normalizedIngredients.length > 0 ? normalizedIngredients : undefined,
-    createdAt: 'createdAt' in cocktail ? cocktail.createdAt : undefined,
-    updatedAt: 'updatedAt' in cocktail ? cocktail.updatedAt : undefined,
   } satisfies CocktailStorageRecord;
 }
 

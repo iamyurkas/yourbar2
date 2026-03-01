@@ -33,11 +33,13 @@ import {
   type CocktailStorageRecord,
   type CocktailSubstitute,
   type CocktailTag,
+  type CocktailTranslationOverride,
   type CreateCocktailInput,
   type CreateIngredientInput,
   type Ingredient,
   type IngredientStorageRecord,
   type IngredientTag,
+  type IngredientTranslationOverride,
   type InventoryBaseExportFile,
   type InventoryExportData,
   type InventoryExportFile,
@@ -144,8 +146,8 @@ function sanitizeStartScreen(value?: string | null): StartScreen {
   }
 }
 
-const BUILTIN_COCKTAIL_TAGS_BY_ID = new Map(BUILTIN_COCKTAIL_TAGS.map((tag) => [tag.id, tag]));
-const BUILTIN_INGREDIENT_TAGS_BY_ID = new Map(BUILTIN_INGREDIENT_TAGS.map((tag) => [tag.id, tag]));
+const BUILTIN_COCKTAIL_TAGS_BY_ID = new Map<number, (typeof BUILTIN_COCKTAIL_TAGS)[number]>(BUILTIN_COCKTAIL_TAGS.map((tag) => [tag.id, tag]));
+const BUILTIN_INGREDIENT_TAGS_BY_ID = new Map<number, (typeof BUILTIN_INGREDIENT_TAGS)[number]>(BUILTIN_INGREDIENT_TAGS.map((tag) => [tag.id, tag]));
 
 function rehydrateBuiltInTags(state: InventoryState): InventoryState {
   const withHydratedCocktailTags = state.cocktails.map((cocktail) => ({
@@ -443,8 +445,14 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           const nextAppTheme = sanitizeAppTheme(stored.appTheme);
           const nextAmazonStoreOverride = sanitizeAmazonStoreOverride(stored.amazonStoreOverride);
           const nextAppLocale = sanitizeAppLocale(stored.appLocale);
-          const nextCustomCocktailTags = sanitizeCustomTags(stored.customCocktailTags, DEFAULT_TAG_COLOR);
-          const nextCustomIngredientTags = sanitizeCustomTags(stored.customIngredientTags, DEFAULT_TAG_COLOR);
+          const nextCustomCocktailTags = sanitizeCustomTags(
+            'customCocktailTags' in stored ? stored.customCocktailTags : undefined,
+            DEFAULT_TAG_COLOR,
+          );
+          const nextCustomIngredientTags = sanitizeCustomTags(
+            'customIngredientTags' in stored ? stored.customIngredientTags : undefined,
+            DEFAULT_TAG_COLOR,
+          );
           const nextOnboardingStep = 0;
           const nextOnboardingCompleted = stored.onboardingCompleted ?? false;
           const nextTranslationOverrides = sanitizeTranslationOverrides((stored as { translationOverrides?: unknown }).translationOverrides);
@@ -690,11 +698,11 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           return prev;
         }
 
-        const sanitizedIngredients = (input.ingredients ?? [])
-          .map((ingredient, index) => {
+        const sanitizedIngredients: CocktailIngredient[] = (input.ingredients ?? [])
+          .flatMap((ingredient, index) => {
             const trimmedIngredientName = ingredient.name?.trim();
             if (!trimmedIngredientName) {
-              return undefined;
+              return [];
             }
 
             const normalizedIngredientId =
@@ -754,7 +762,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
               });
             });
 
-            return {
+            const sanitizedIngredient: CocktailIngredient = {
               order: index + 1,
               ingredientId,
               name: trimmedIngredientName,
@@ -766,9 +774,10 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
               allowBrandSubstitution: allowBrand,
               allowStyleSubstitution: allowStyle,
               substitutes: substitutes.length > 0 ? substitutes : undefined,
-            } satisfies CocktailIngredient;
-          })
-          .filter((value): value is CocktailIngredient => Boolean(value));
+            };
+
+            return [sanitizedIngredient];
+          });
 
         if (sanitizedIngredients.length === 0) {
           return prev;
@@ -820,7 +829,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             ...ingredient,
             order: index + 1,
           })),
-        } satisfies BaseCocktailRecord;
+        } as unknown as BaseCocktailRecord;
 
         const [normalized] = normalizeSearchFields([candidateRecord]);
         if (!normalized) {
@@ -1554,11 +1563,11 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         return prev;
       }
 
-      const sanitizedIngredients = (input.ingredients ?? [])
-        .map((ingredient, index) => {
+      const sanitizedIngredients: CocktailIngredient[] = (input.ingredients ?? [])
+        .flatMap((ingredient, index) => {
           const trimmedIngredientName = ingredient.name?.trim();
           if (!trimmedIngredientName) {
-            return undefined;
+            return [];
           }
 
           const normalizedIngredientId = ingredient.ingredientId != null ? Number(ingredient.ingredientId) : undefined;
@@ -1614,7 +1623,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             });
           });
 
-          return {
+          const sanitizedIngredient: CocktailIngredient = {
             order: index + 1,
             ingredientId,
             name: trimmedIngredientName,
@@ -1626,10 +1635,10 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             allowBrandSubstitution: allowBrand,
             allowStyleSubstitution: allowStyle,
             substitutes: substitutes.length > 0 ? substitutes : undefined,
-          } satisfies CocktailIngredient;
-        })
-        .filter((value): value is CocktailIngredient => Boolean(value));
+          };
 
+          return [sanitizedIngredient];
+        });
       if (sanitizedIngredients.length === 0) {
         return prev;
       }
@@ -1675,7 +1684,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           ...ingredient,
           order: index + 1,
         })),
-      } satisfies BaseCocktailRecord;
+      } as unknown as BaseCocktailRecord;
 
       const [normalized] = normalizeSearchFields([candidateRecord]);
       if (!normalized) {
