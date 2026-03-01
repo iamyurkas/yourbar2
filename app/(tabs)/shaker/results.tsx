@@ -31,7 +31,7 @@ import { compareGlobalAlphabet, compareOptionalGlobalAlphabet } from '@/libs/glo
 import { useI18n } from '@/libs/i18n/use-i18n';
 import { useInventory, type Cocktail } from '@/providers/inventory-provider';
 
-function parseListParam(param?: string | string[]) {
+function parseListParam(param?: string | string[]): string[] {
   if (!param) {
     return [] as string[];
   }

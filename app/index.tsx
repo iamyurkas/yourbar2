@@ -6,7 +6,9 @@ import { setLastCocktailTab, setLastIngredientTab } from '@/libs/collection-tabs
 import { useI18n } from '@/libs/i18n/use-i18n';
 import { useInventory, type StartScreen } from '@/providers/inventory-provider';
 
-function getHrefForStartScreen(screen: StartScreen): string {
+type StartScreenHref = '/(tabs)/shaker' | '/(tabs)/ingredients' | '/(tabs)/cocktails';
+
+function getHrefForStartScreen(screen: StartScreen): StartScreenHref {
   switch (screen) {
     case 'shaker':
       return '/(tabs)/shaker';
