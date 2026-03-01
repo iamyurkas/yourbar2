@@ -30,13 +30,13 @@ import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
 import { useAppColors } from '@/constants/theme';
 import { isCocktailReady, summariseCocktailAvailability } from '@/libs/cocktail-availability';
 import { getLastCocktailTab, setLastCocktailTab, type CocktailTabKey } from '@/libs/collection-tabs';
+import { compareOptionalGlobalAlphabet } from '@/libs/global-sort';
+import { getPluralCategory } from '@/libs/i18n/plural';
+import { useI18n } from '@/libs/i18n/use-i18n';
 import { createIngredientLookup } from '@/libs/ingredient-availability';
 import { navigateToDetailsWithReturnTo } from '@/libs/navigation';
-import { getPluralCategory } from '@/libs/i18n/plural';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { buildTagOptions, type TagOption } from '@/libs/tag-options';
-import { compareOptionalGlobalAlphabet } from '@/libs/global-sort';
-import { useI18n } from '@/libs/i18n/use-i18n';
 import { useCocktailTabLogic, type MyTabListItem } from '@/libs/use-cocktail-tab-logic';
 import { useInventoryActions, useInventoryData, useInventorySettings, type Cocktail } from '@/providers/inventory-provider';
 import { tagColors } from '@/theme/theme';
@@ -513,11 +513,11 @@ export default function CocktailsScreen() {
               style={[
                 styles.moreIngredientsBadge,
                 {
-                  backgroundColor: Colors.surfaceVariant,
-                  borderColor: Colors.outlineVariant,
+                  backgroundColor: Colors.surface,
+                  borderColor: Colors.outline,
                 },
               ]}>
-              <Text style={[styles.moreIngredientsLabel, { color: Colors.onSurfaceVariant }]}>
+              <Text style={[styles.moreIngredientsLabel, { color: Colors.primary }]}>
                 {t("cocktails.oneMoreIngredientForMore")}
               </Text>
             </View>
@@ -821,7 +821,7 @@ export default function CocktailsScreen() {
             onScroll={handleScroll}
             scrollEventThrottle={16}
             ListEmptyComponent={
-              <Text style={[styles.emptyLabel, { color: Colors.onSurfaceVariant }]}> 
+              <Text style={[styles.emptyLabel, { color: Colors.onSurfaceVariant }]}>
                 {emptyMessage}
               </Text>
             }
@@ -843,7 +843,7 @@ export default function CocktailsScreen() {
             onScroll={handleScroll}
             scrollEventThrottle={16}
             ListEmptyComponent={
-              <Text style={[styles.emptyLabel, { color: Colors.onSurfaceVariant }]}> 
+              <Text style={[styles.emptyLabel, { color: Colors.onSurfaceVariant }]}>
                 {emptyMessage}
               </Text>
             }
@@ -888,7 +888,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: StyleSheet.hairlineWidth,
     paddingHorizontal: 12,
-    paddingVertical: 8,
+    paddingVertical: 16,
     alignItems: 'center',
   },
   moreIngredientsLabel: {
