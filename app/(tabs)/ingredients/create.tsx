@@ -133,6 +133,10 @@ export default function IngredientFormScreen() {
     const value = getParamValue(params.fromCocktailAddIngredient);
     return value === 'true';
   }, [params.fromCocktailAddIngredient]);
+  const shouldReturnToPreviousCocktailForm = useMemo(
+    () => returnToPath === '/cocktails/create' && fromCocktailAddIngredientParam,
+    [fromCocktailAddIngredientParam, returnToPath],
+  );
   const shouldConfirmOnLeave = useMemo(
     () =>
       !isEditMode &&
@@ -640,6 +644,11 @@ export default function IngredientFormScreen() {
     }
 
     if (returnToPath) {
+      if (shouldReturnToPreviousCocktailForm && navigation.canGoBack()) {
+        skipDuplicateBack(navigation);
+        return;
+      }
+
       router.replace({ pathname: returnToPath as never, params: returnToParams as never });
       return;
     }
@@ -666,6 +675,7 @@ export default function IngredientFormScreen() {
     selectedTagIds,
     setHasUnsavedChanges,
     showDialog,
+    shouldReturnToPreviousCocktailForm,
     t,
     updateIngredient,
   ]);
@@ -708,6 +718,11 @@ export default function IngredientFormScreen() {
     (action?: NavigationAction) => {
       if (isBackAction(action)) {
         if (returnToPath) {
+          if (shouldReturnToPreviousCocktailForm && navigation.canGoBack()) {
+            skipDuplicateBack(navigation);
+            return;
+          }
+
           router.replace({ pathname: returnToPath as never, params: returnToParams as never });
           return;
         }
@@ -723,13 +738,18 @@ export default function IngredientFormScreen() {
       }
 
       if (returnToPath) {
+        if (shouldReturnToPreviousCocktailForm && navigation.canGoBack()) {
+          skipDuplicateBack(navigation);
+          return;
+        }
+
         router.replace({ pathname: returnToPath as never, params: returnToParams as never });
         return;
       }
 
       router.replace('/ingredients');
     },
-    [isBackAction, navigation, returnToParams, returnToPath],
+    [isBackAction, navigation, returnToParams, returnToPath, shouldReturnToPreviousCocktailForm],
   );
 
   const handleLeaveAction = useCallback(
