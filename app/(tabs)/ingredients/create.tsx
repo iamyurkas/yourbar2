@@ -32,7 +32,7 @@ import { useAppColors } from '@/constants/theme';
 import { compareOptionalGlobalAlphabet } from '@/libs/global-sort';
 import { useI18n } from '@/libs/i18n/use-i18n';
 import { resolveImageSource } from '@/libs/image-source';
-import { buildReturnToParams, skipDuplicateBack } from '@/libs/navigation';
+import { skipDuplicateBack } from '@/libs/navigation';
 import { shouldStorePhoto, storePhoto } from '@/libs/photo-storage';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
@@ -571,11 +571,27 @@ export default function IngredientFormScreen() {
 
         setHasUnsavedChanges(false);
         isNavigatingAfterSaveRef.current = true;
+
+        if (returnToPath) {
+          if (navigation.canGoBack()) {
+            skipDuplicateBack(navigation);
+            router.navigate({ pathname: returnToPath as never, params: returnToParams as never });
+            return;
+          }
+
+          router.replace({ pathname: returnToPath as never, params: returnToParams as never });
+          return;
+        }
+
+        if (navigation.canGoBack()) {
+          skipDuplicateBack(navigation);
+          return;
+        }
+
         router.replace({
           pathname: '/ingredients/[ingredientId]',
           params: {
             ingredientId: String(numericIngredientId),
-            ...buildReturnToParams(returnToPath, returnToParams),
           },
         });
       } finally {
@@ -640,6 +656,12 @@ export default function IngredientFormScreen() {
     }
 
     if (returnToPath) {
+      if (navigation.canGoBack()) {
+        skipDuplicateBack(navigation);
+        router.navigate({ pathname: returnToPath as never, params: returnToParams as never });
+        return;
+      }
+
       router.replace({ pathname: returnToPath as never, params: returnToParams as never });
       return;
     }
@@ -708,6 +730,12 @@ export default function IngredientFormScreen() {
     (action?: NavigationAction) => {
       if (isBackAction(action)) {
         if (returnToPath) {
+          if (navigation.canGoBack()) {
+            skipDuplicateBack(navigation);
+            router.navigate({ pathname: returnToPath as never, params: returnToParams as never });
+            return;
+          }
+
           router.replace({ pathname: returnToPath as never, params: returnToParams as never });
           return;
         }
