@@ -17,6 +17,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { CollectionHeader } from '@/components/CollectionHeader';
+import { CollectionListSkeleton } from '@/components/CollectionListSkeleton';
 import { FabAdd } from '@/components/FabAdd';
 import { OnboardingAnchor } from '@/components/onboarding/OnboardingAnchor';
 import { useOnboardingAnchors } from '@/components/onboarding/OnboardingContext';
@@ -243,7 +244,7 @@ export default function IngredientsScreen() {
   const Colors = useAppColors();
   const { t, locale } = useI18n();
   const { onTabChangeRequest } = useOnboardingAnchors();
-  const { cocktails, ingredients, availableIngredientIds, shoppingIngredientIds } = useInventoryData();
+  const { cocktails, ingredients, availableIngredientIds, shoppingIngredientIds, loading } = useInventoryData();
   const { ignoreGarnish, allowAllSubstitutes } = useInventorySettings();
   const { toggleIngredientShopping, toggleIngredientAvailability } = useInventoryActions();
   const [activeTab, setActiveTab] = useState<IngredientTabKey>(() => getLastIngredientTab());
@@ -807,26 +808,30 @@ export default function IngredientsScreen() {
             </View>
           </>
         ) : null}
-        <FlatList
-          ref={listRef}
-          data={sortedIngredients}
-          keyExtractor={keyExtractor}
-          renderItem={renderItem}
-          ItemSeparatorComponent={renderSeparator}
-          contentContainerStyle={styles.listContent}
-          initialNumToRender={16}
-          maxToRenderPerBatch={16}
-          windowSize={7}
-          showsVerticalScrollIndicator
-          keyboardDismissMode="on-drag"
-          // Let the first tap both dismiss the keyboard and activate the row.
-          keyboardShouldPersistTaps="handled"
-          onScroll={handleScroll}
-          scrollEventThrottle={16}
-          ListEmptyComponent={
-            <Text style={[styles.emptyLabel, { color: Colors.onSurfaceVariant }]}>{emptyMessage}</Text>
-          }
-        />
+        {loading ? (
+          <CollectionListSkeleton />
+        ) : (
+          <FlatList
+            ref={listRef}
+            data={sortedIngredients}
+            keyExtractor={keyExtractor}
+            renderItem={renderItem}
+            ItemSeparatorComponent={renderSeparator}
+            contentContainerStyle={styles.listContent}
+            initialNumToRender={16}
+            maxToRenderPerBatch={16}
+            windowSize={7}
+            showsVerticalScrollIndicator
+            keyboardDismissMode="on-drag"
+            // Let the first tap both dismiss the keyboard and activate the row.
+            keyboardShouldPersistTaps="handled"
+            onScroll={handleScroll}
+            scrollEventThrottle={16}
+            ListEmptyComponent={
+              <Text style={[styles.emptyLabel, { color: Colors.onSurfaceVariant }]}>{emptyMessage}</Text>
+            }
+          />
+        )}
       </View>
       <FabAdd label={t('ingredients.addIngredient')} onPress={() => router.push('/ingredients/create')} />
       <SideMenuDrawer visible={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
