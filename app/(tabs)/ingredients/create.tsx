@@ -704,11 +704,23 @@ export default function IngredientFormScreen() {
     [],
   );
 
+  const returnToSource = useCallback(() => {
+    if (!returnToPath) {
+      router.replace('/ingredients');
+      return;
+    }
+
+    router.replace('/ingredients');
+    setTimeout(() => {
+      router.navigate({ pathname: returnToPath as never, params: returnToParams as never });
+    }, 0);
+  }, [returnToParams, returnToPath]);
+
   const leaveScreen = useCallback(
     (action?: NavigationAction) => {
       if (isBackAction(action)) {
         if (returnToPath) {
-          router.replace({ pathname: returnToPath as never, params: returnToParams as never });
+          returnToSource();
           return;
         }
 
@@ -723,13 +735,13 @@ export default function IngredientFormScreen() {
       }
 
       if (returnToPath) {
-        router.replace({ pathname: returnToPath as never, params: returnToParams as never });
+        returnToSource();
         return;
       }
 
       router.replace('/ingredients');
     },
-    [isBackAction, navigation, returnToParams, returnToPath],
+    [isBackAction, navigation, returnToPath, returnToSource],
   );
 
   const handleLeaveAction = useCallback(
@@ -837,7 +849,7 @@ export default function IngredientFormScreen() {
               return;
             }
             if (returnToPath) {
-              router.navigate({ pathname: returnToPath as never, params: returnToParams as never });
+              returnToSource();
               return;
             }
             if (navigation.canGoBack()) {
