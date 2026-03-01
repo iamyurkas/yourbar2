@@ -392,8 +392,7 @@ export const ukUATranslations: TranslationDictionary = {
   "ingredients.clearSelectedTagFilters": "Очистити вибрані фільтри тегів",
   "ingredients.addIngredient": "Додати інгредієнт",
 
-  "cocktails.oneMoreIngredientForMore":
-    "Ще один інгредієнт для більшої кількості коктейлів",
+  "cocktails.oneMoreIngredientForMore": "Ще інгредієнт — більше коктейлів",
   "cocktails.removeIngredientFromShopping":
     "Видалити інгредієнт зі списку покупок",
   "cocktails.addIngredientToShopping": "Додати інгредієнт до списку покупок",
