@@ -461,7 +461,7 @@ export const esESTranslations: TranslationDictionary = {
   "sideMenu.closeMenu": "Cerrar menú",
   "sideMenu.amazonStore": "Tienda de Amazon",
   "sideMenu.amazonStoreCurrent": "Actual: {{label}}",
-  "sideMenu.language": "Idioma",
+  "sideMenu.language": "Idioma de la app",
   "sideMenu.languageCurrent": "{{name}}",
   "sideMenu.reportIssueTitle": "¿Algo va mal?",
   "sideMenu.reportIssueCaption": "Reportar un error o sugerir ideas",
