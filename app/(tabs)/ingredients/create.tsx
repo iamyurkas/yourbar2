@@ -712,6 +712,12 @@ export default function IngredientFormScreen() {
           return;
         }
 
+        const navigationState = navigation.getState();
+        if ((navigationState?.index ?? 0) <= 0) {
+          router.replace('/ingredients');
+          return;
+        }
+
         skipDuplicateBack(navigation);
         return;
       }
