@@ -1,5 +1,6 @@
 import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { Stack } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 import { Appearance, useColorScheme, View } from "react-native";
 import { useEffect } from "react";
 import "react-native-reanimated";
@@ -59,6 +60,7 @@ function ThemeAppWrapper({ children }: { children: React.ReactNode }) {
   return (
     <PaperProvider theme={paperTheme}>
       <ThemeProvider value={navigationTheme}>
+        <StatusBar style={isDark ? "light" : "dark"} />
         {children}
       </ThemeProvider>
     </PaperProvider>
