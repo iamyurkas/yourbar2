@@ -18,6 +18,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { CocktailListRow } from '@/components/CocktailListRow';
+import { CollectionListSkeleton } from '@/components/CollectionListSkeleton';
 import { CollectionHeader } from '@/components/CollectionHeader';
 import { FabAdd } from '@/components/FabAdd';
 import { useOnboardingAnchors } from '@/components/onboarding/OnboardingContext';
@@ -50,7 +51,7 @@ const METHOD_ICON_SIZE = 16;
 
 export default function CocktailsScreen() {
   const { onTabChangeRequest } = useOnboardingAnchors();
-  const { cocktails, availableIngredientIds, ingredients, shoppingIngredientIds, getCocktailRating } =
+  const { cocktails, availableIngredientIds, ingredients, shoppingIngredientIds, getCocktailRating, loading } =
     useInventoryData();
   const { ignoreGarnish, allowAllSubstitutes, ratingFilterThreshold } = useInventorySettings();
   const { toggleIngredientShopping } = useInventoryActions();
@@ -804,7 +805,9 @@ export default function CocktailsScreen() {
             </View>
           </>
         ) : null}
-        {isMyTab ? (
+        {loading ? (
+          <CollectionListSkeleton />
+        ) : isMyTab ? (
           <FlatList<MyTabListItem>
             ref={listRef as React.RefObject<FlatList<MyTabListItem>>}
             data={myTabListData?.items ?? []}
