@@ -222,8 +222,8 @@ export function SubstituteModal({
     selectedSubstituteNames,
   ]);
 
-  const focusTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const secondaryFocusTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const focusTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const secondaryFocusTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const clearFocusTimers = useCallback(() => {
     if (focusTimeoutRef.current) {
