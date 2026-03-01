@@ -185,11 +185,12 @@ function makeCollapsedHeaderItem(key: string): Ingredient {
   return {
     id: `${COLLAPSED_HEADER_PREFIX}${key}`,
     name: '',
-  } as Ingredient;
+  } as unknown as Ingredient;
 }
 
 function isCollapsedHeaderItem(item: Ingredient) {
-  return typeof item.id === 'string' && item.id.startsWith(COLLAPSED_HEADER_PREFIX);
+  const itemId = (item as { id?: unknown }).id;
+  return typeof itemId === 'string' && itemId.startsWith(COLLAPSED_HEADER_PREFIX);
 }
 
 export default function ShakerScreen() {
@@ -318,7 +319,9 @@ export default function ShakerScreen() {
       if (!map.has(key)) {
         const isBuiltin = tag?.id != null && tag.id < 10;
         const translatedName = isBuiltin ? t(`ingredientTag.${tag.id}`) : tag?.name;
-        const finalName = (isBuiltin && translatedName !== `ingredientTag.${tag.id}`) ? translatedName : (tag?.name ?? t('tags.unnamed'));
+        const finalName = ((isBuiltin && translatedName !== `ingredientTag.${tag.id}`)
+          ? translatedName
+          : tag?.name) ?? t('tags.unnamed');
 
         map.set(key, {
           key,
@@ -599,7 +602,9 @@ export default function ShakerScreen() {
 
       const isBuiltin = tag?.id != null && tag.id < 10;
       const translatedName = isBuiltin ? t(`ingredientTag.${tag.id}`) : tag?.name;
-      const finalName = (isBuiltin && translatedName !== `ingredientTag.${tag.id}`) ? translatedName : (tag?.name ?? fallbackTag.name);
+      const finalName = ((isBuiltin && translatedName !== `ingredientTag.${tag.id}`)
+        ? translatedName
+        : tag?.name) ?? fallbackTag.name;
 
       groups.set(key, {
         key,

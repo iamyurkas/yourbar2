@@ -233,11 +233,11 @@ export default function ShakerResultsScreen() {
     listData.forEach((cocktail) => {
       const legacyMethodId =
         (cocktail as { methodId?: CocktailMethod['id'] | null }).methodId ?? null;
-      const methodIds = cocktail.methodIds?.length
+      const methodIds = (cocktail.methodIds?.length
         ? cocktail.methodIds
         : legacyMethodId
           ? [legacyMethodId]
-          : [];
+          : []) as CocktailMethod["id"][];
       methodIds.forEach((methodId) => {
         if (methodMap.has(methodId)) {
           usedMethods.add(methodId);
@@ -417,11 +417,11 @@ export default function ShakerResultsScreen() {
     return listData.filter((cocktail) => {
       const legacyMethodId =
         (cocktail as { methodId?: CocktailMethod['id'] | null }).methodId ?? null;
-      const methodIds = cocktail.methodIds?.length
+      const methodIds = (cocktail.methodIds?.length
         ? cocktail.methodIds
         : legacyMethodId
           ? [legacyMethodId]
-          : [];
+          : []) as CocktailMethod["id"][];
       if (methodIds.length === 0) {
         return false;
       }

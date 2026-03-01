@@ -767,7 +767,7 @@ export default function IngredientsScreen() {
                       const selected = selectedTagKeys.has(tag.key);
                       const isBuiltin = !isNaN(Number(tag.key)) && Number(tag.key) < 10;
                       const translatedName = isBuiltin ? t(`ingredientTag.${tag.key}`) : tag.name;
-                      const finalName = (isBuiltin && translatedName !== `ingredientTag.${tag.key}`) ? translatedName : tag.name;
+                      const finalName = (isBuiltin && translatedName !== `ingredientTag.${tag.key}`) ? translatedName : (tag.name ?? t('tags.unnamed'));
 
                       return (
                         <TagPill
