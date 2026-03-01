@@ -29,7 +29,7 @@ import type { SegmentTabOption } from '@/components/TopBars';
 import { getCocktailMethods, METHOD_ICON_MAP, type CocktailMethod } from '@/constants/cocktail-methods';
 import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
 import { useAppColors } from '@/constants/theme';
-import { isCocktailReady, summariseCocktailAvailability } from '@/libs/cocktail-availability';
+import { summariseCocktailAvailability } from '@/libs/cocktail-availability';
 import { getLastCocktailTab, setLastCocktailTab, type CocktailTabKey } from '@/libs/collection-tabs';
 import { compareOptionalGlobalAlphabet } from '@/libs/global-sort';
 import { getPluralCategory } from '@/libs/i18n/plural';
@@ -461,26 +461,88 @@ export default function CocktailsScreen() {
     [toggleIngredientShopping],
   );
 
-  const getAvailabilitySummary = useCallback(
-    (cocktail: Cocktail) =>
-      summariseCocktailAvailability(
-        cocktail,
-        availableIngredientIds,
-        ingredientLookup,
-        undefined,
-        {
-          ignoreGarnish,
-          allowAllSubstitutes,
-        },
-        t,
-        locale,
-      ),
-    [allowAllSubstitutes, availableIngredientIds, ignoreGarnish, ingredientLookup, t, locale],
-  );
+  const availabilitySummaryByKey = useMemo(() => {
+    const summaryMap = new Map<string, ReturnType<typeof summariseCocktailAvailability>>();
+
+    sortedFavorites.forEach((cocktail) => {
+      const cocktailKey = String(cocktail.id ?? cocktail.name);
+      summaryMap.set(
+        cocktailKey,
+        summariseCocktailAvailability(
+          cocktail,
+          availableIngredientIds,
+          ingredientLookup,
+          undefined,
+          {
+            ignoreGarnish,
+            allowAllSubstitutes,
+          },
+          t,
+          locale,
+        ),
+      );
+    });
+
+    return summaryMap;
+  }, [
+    allowAllSubstitutes,
+    availableIngredientIds,
+    ignoreGarnish,
+    ingredientLookup,
+    locale,
+    sortedFavorites,
+    t,
+  ]);
+
+  const myTabAvailabilitySummaryByKey = useMemo(() => {
+    const summaryMap = new Map<string, ReturnType<typeof summariseCocktailAvailability>>();
+
+    myTabListData?.items.forEach((item) => {
+      if (item.type !== 'cocktail') {
+        return;
+      }
+
+      const cocktailKey = String(item.cocktail.id ?? item.cocktail.name);
+      if (summaryMap.has(cocktailKey)) {
+        return;
+      }
+
+      summaryMap.set(
+        cocktailKey,
+        summariseCocktailAvailability(
+          item.cocktail,
+          availableIngredientIds,
+          ingredientLookup,
+          undefined,
+          {
+            ignoreGarnish,
+            allowAllSubstitutes,
+          },
+          t,
+          locale,
+        ),
+      );
+    });
+
+    return summaryMap;
+  }, [
+    allowAllSubstitutes,
+    availableIngredientIds,
+    ignoreGarnish,
+    ingredientLookup,
+    locale,
+    myTabListData?.items,
+    t,
+  ]);
 
   const renderItem = useCallback(
     ({ item }: { item: Cocktail }) => {
-      const availability = getAvailabilitySummary(item);
+      const cocktailKey = String(item.id ?? item.name);
+      const availability = availabilitySummaryByKey.get(cocktailKey);
+      if (!availability) {
+        return null;
+      }
+
       return (
         <CocktailListRow
           cocktail={item}
@@ -498,7 +560,7 @@ export default function CocktailsScreen() {
       );
     },
     [
-      getAvailabilitySummary,
+      availabilitySummaryByKey,
       getCocktailRating,
       handleSelectCocktail,
       ingredients,
@@ -574,7 +636,12 @@ export default function CocktailsScreen() {
         );
       }
 
-      const availability = getAvailabilitySummary(item.cocktail);
+      const cocktailKey = String(item.cocktail.id ?? item.cocktail.name);
+      const availability = myTabAvailabilitySummaryByKey.get(cocktailKey);
+      if (!availability) {
+        return null;
+      }
+
       return (
         <CocktailListRow
           cocktail={item.cocktail}
@@ -592,12 +659,12 @@ export default function CocktailsScreen() {
       );
     },
     [
-      getAvailabilitySummary,
       getCocktailRating,
       handleSelectCocktail,
       handleSelectIngredient,
       handleShoppingToggle,
       ingredients,
+      myTabAvailabilitySummaryByKey,
       shoppingIngredientIds,
       Colors,
       locale,
@@ -607,23 +674,13 @@ export default function CocktailsScreen() {
 
   const renderSeparator = useCallback(
     ({ leadingItem }: { leadingItem?: Cocktail | null }) => {
-      const isReady = leadingItem
-        ? isCocktailReady(leadingItem, availableIngredientIds, ingredientLookup, undefined, {
-          ignoreGarnish,
-          allowAllSubstitutes,
-        })
-        : false;
+      const leadingItemKey = leadingItem ? String(leadingItem.id ?? leadingItem.name) : null;
+      const isReady = leadingItemKey ? (availabilitySummaryByKey.get(leadingItemKey)?.isReady ?? false) : false;
       const backgroundColor = isReady ? Colors.outline : Colors.outlineVariant;
 
       return <View style={[styles.divider, { backgroundColor }]} />;
     },
-    [
-      availableIngredientIds,
-      allowAllSubstitutes,
-      ignoreGarnish,
-      ingredientLookup,
-      Colors,
-    ],
+    [availabilitySummaryByKey, Colors],
   );
 
   const renderMySeparator = useCallback(
