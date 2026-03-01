@@ -1968,11 +1968,11 @@ export default function CreateCocktailScreen() {
             <Pressable
               onPress={handleSubmit}
               disabled={isSaveDisabled}
-              style={[
+              style={({ pressed }) => [
                 styles.submitButton,
                 {
                   backgroundColor: Colors.tint,
-                  opacity: isSaveDisabled ? 0.6 : 1,
+                  opacity: isSaveDisabled ? 0.6 : pressed ? 0.8 : 1,
                 },
               ]}
               accessibilityRole="button"
