@@ -639,6 +639,11 @@ export default function IngredientFormScreen() {
       return;
     }
 
+    if (returnToPath === '/cocktails/create' && navigation.canGoBack()) {
+      navigation.goBack();
+      return;
+    }
+
     if (returnToPath) {
       router.replace({ pathname: returnToPath as never, params: returnToParams as never });
       return;
