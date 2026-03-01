@@ -3,7 +3,18 @@ import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { compareGlobalAlphabet } from '@/libs/global-sort';
 
-export type InventoryData = typeof bundledData;
+type RawInventoryData = typeof bundledData;
+
+type HydratedTag = {
+  id: number;
+  name: string;
+  color: string;
+};
+
+export type InventoryData = Omit<RawInventoryData, 'cocktails' | 'ingredients'> & {
+  cocktails: Array<Omit<RawInventoryData['cocktails'][number], 'tags'> & { tags?: HydratedTag[] }>;
+  ingredients: Array<Omit<RawInventoryData['ingredients'][number], 'tags'> & { tags?: HydratedTag[] }>;
+};
 
 let cachedInventoryData: InventoryData | undefined;
 
@@ -70,7 +81,7 @@ function hydrateTagList(
   return list.length > 0 ? list : undefined;
 }
 
-function hydrateInventoryTagsFromCode(data: InventoryData): InventoryData {
+function hydrateInventoryTagsFromCode(data: RawInventoryData): InventoryData {
   return {
     ...data,
     cocktails: data.cocktails.map((cocktail) => ({
@@ -84,11 +95,11 @@ function hydrateInventoryTagsFromCode(data: InventoryData): InventoryData {
   };
 }
 
-function normalizeInventoryData(data: unknown): InventoryData {
+function normalizeInventoryData(data: unknown): RawInventoryData {
   if (data && typeof data === 'object' && 'default' in data) {
-    return (data as { default?: InventoryData }).default ?? (data as InventoryData);
+    return (data as { default?: RawInventoryData }).default ?? (data as RawInventoryData);
   }
-  return data as InventoryData;
+  return data as RawInventoryData;
 }
 
 export function loadInventoryData(): InventoryData {

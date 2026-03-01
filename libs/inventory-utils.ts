@@ -158,7 +158,7 @@ export function hydrateInventoryTagsFromCode(data: InventoryExportData): Invento
       ...ingredient,
       tags: hydrateTagsFromCode(ingredient.tags, BUILTIN_INGREDIENT_TAGS_BY_ID),
     })),
-  } as InventoryData;
+  };
 }
 
 export function normalizeSubstitutes(substitutes: readonly CocktailSubstitute[] | null | undefined): CocktailSubstitute[] | undefined {
