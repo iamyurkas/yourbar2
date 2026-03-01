@@ -313,6 +313,9 @@ export const esESTranslations: TranslationDictionary = {
   "ingredientDetails.addCocktail": "Añadir cóctel",
   "ingredientDetails.editIngredient": "Editar ingrediente",
   "ingredientDetails.notFound": "Ingrediente no encontrado",
+
+  "ingredientDetails.notFoundSuggestion": "Este ingrediente aún no existe. Puedes crearlo ahora.",
+  "ingredientDetails.createMissingIngredient": "Crear este ingrediente",
   "ingredientDetails.helpMessage":
     "Esta pantalla muestra detalles del ingrediente, enlaces y cócteles relacionados.\n\nUsa el botón bajo el ingrediente para editarlo.\n\n**Cintas de cócteles**\nLa cinta izquierda muestra lo que contiene:\nazul = tiene ingredientes de marca,\namarillo = tiene ingredientes de estilo.\n\nLa cinta derecha muestra alternativas:\nazul = hay alternativa de marca,\namarillo = hay alternativa de estilo.",
   "ingredientDetails.removeBaseTitle": "Quitar ingrediente base",

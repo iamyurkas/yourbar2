@@ -319,6 +319,9 @@ export const ukUATranslations: TranslationDictionary = {
   "ingredientDetails.addCocktail": "Додати коктейль",
   "ingredientDetails.editIngredient": "Редагувати інгредієнт",
   "ingredientDetails.notFound": "Інгредієнт не знайдено",
+
+  "ingredientDetails.notFoundSuggestion": "Такого інгредієнта ще не існує. Ви можете створити його зараз.",
+  "ingredientDetails.createMissingIngredient": "Створити цей інгредієнт",
   "ingredientDetails.helpMessage":
     "Цей екран показує деталі інгредієнта, посилання та повʼязані коктейлі.\n\nВикористовуйте кнопку під інгредієнтом, щоб його редагувати.\n\n**Стрічки коктейлів**\nЛіва стрічка показує склад:\nсиня = є брендові інгредієнти,\nжовта = є стильові інгредієнти.\n\nПрава стрічка показує підстановки:\nсиня = є брендова заміна,\nжовта = є стильова замінка.",
   "ingredientDetails.removeBaseTitle": "Відвʼязати базовий інгредієнт",

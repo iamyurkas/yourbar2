@@ -95,7 +95,6 @@ export default function IngredientDetailsScreen() {
   const {
     ingredients,
     cocktails,
-    loading,
     availableIngredientIds,
     toggleIngredientAvailability,
     shoppingIngredientIds,
@@ -149,7 +148,24 @@ export default function IngredientDetailsScreen() {
   const [, startAvailabilityTransition] = useTransition();
   const [, startShoppingTransition] = useTransition();
   const isHandlingBackRef = useRef(false);
-  const shouldNavigateAway = !loading && !ingredient;
+
+  const requestedIngredientParam = useMemo(() => {
+    const value = Array.isArray(ingredientId) ? ingredientId[0] : ingredientId;
+    return typeof value === "string" ? value.trim() : "";
+  }, [ingredientId]);
+
+  const suggestedMissingIngredientName = useMemo(() => {
+    if (!requestedIngredientParam) {
+      return undefined;
+    }
+
+    const numericId = Number(requestedIngredientParam);
+    if (!Number.isNaN(numericId)) {
+      return undefined;
+    }
+
+    return requestedIngredientParam;
+  }, [requestedIngredientParam]);
 
   const isAvailable = useMemo(() => {
     if (numericIngredientId == null) {
@@ -759,18 +775,14 @@ export default function IngredientDetailsScreen() {
     returnToSourceOrBack(navigation, { returnToPath, returnToParams });
   }, [navigation, returnToParams, returnToPath]);
 
-  useEffect(() => {
-    if (!shouldNavigateAway || isHandlingBackRef.current) {
-      return;
+  const handleCreateMissingIngredient = useCallback(() => {
+    const createParams: Record<string, string> = {};
+    if (suggestedMissingIngredientName) {
+      createParams.suggestedName = suggestedMissingIngredientName;
     }
 
-    isHandlingBackRef.current = true;
-    handleReturn();
-
-    requestAnimationFrame(() => {
-      isHandlingBackRef.current = false;
-    });
-  }, [handleReturn, shouldNavigateAway]);
+    router.push({ pathname: "/ingredients/create", params: createParams });
+  }, [suggestedMissingIngredientName]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", (event) => {
@@ -794,10 +806,6 @@ export default function IngredientDetailsScreen() {
 
     return unsubscribe;
   }, [handleReturn, navigation]);
-
-  if (shouldNavigateAway) {
-    return null;
-  }
 
   return (
     <SafeAreaView
@@ -1577,14 +1585,37 @@ export default function IngredientDetailsScreen() {
           </View>
         ) : (
           <View style={styles.emptyState}>
+            <MaterialCommunityIcons
+              name="bottle-tonic-outline"
+              size={42}
+              color={Colors.onSurfaceVariant}
+            />
             <Text
               style={[
-                styles.placeholderText,
+                styles.emptyText,
                 { color: Colors.onSurfaceVariant },
               ]}
             >
               {t("ingredientDetails.notFound")}
             </Text>
+            <Text
+              style={[styles.emptyHintText, { color: Colors.onSurfaceVariant }]}
+            >
+              {t("ingredientDetails.notFoundSuggestion")}
+            </Text>
+            <Pressable
+              onPress={handleCreateMissingIngredient}
+              accessibilityRole="button"
+              accessibilityLabel={t("ingredientDetails.createMissingIngredient")}
+              style={[
+                styles.emptyStateAction,
+                { backgroundColor: Colors.tint },
+              ]}
+            >
+              <Text style={[styles.emptyStateActionLabel, { color: Colors.onTint }]}>
+                {t("ingredientDetails.createMissingIngredient")}
+              </Text>
+            </Pressable>
           </View>
         )}
       </ScrollView>
@@ -1876,5 +1907,30 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     paddingVertical: 80,
+    gap: 12,
+  },
+  emptyText: {
+    fontSize: 17,
+    fontWeight: "600",
+    textAlign: "center",
+  },
+  emptyHintText: {
+    fontSize: 14,
+    lineHeight: 21,
+    textAlign: "center",
+    maxWidth: 280,
+  },
+  emptyStateAction: {
+    marginTop: 8,
+    minWidth: 240,
+    minHeight: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 12,
+    paddingHorizontal: 20,
+  },
+  emptyStateActionLabel: {
+    fontSize: 16,
+    fontWeight: "600",
   },
 });

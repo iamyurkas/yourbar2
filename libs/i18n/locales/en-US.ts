@@ -319,6 +319,9 @@ export const enUSTranslations: TranslationDictionary = {
   "ingredientDetails.addCocktail": "Add cocktail",
   "ingredientDetails.editIngredient": "Edit ingredient",
   "ingredientDetails.notFound": "Ingredient not found",
+
+  "ingredientDetails.notFoundSuggestion": "This ingredient does not exist yet. You can create it now.",
+  "ingredientDetails.createMissingIngredient": "Create this ingredient",
   "ingredientDetails.helpMessage":
     "This screen shows ingredient details, links, and related cocktails.\n\nUse the button under the ingredient to edit it.\n\n**Cocktail ribbons**\nLeft ribbon shows what's inside:\nblue = has brand ingredients,\nyellow = has style ingredients.\n\nRight ribbon shows fallback:\nblue = brand fallback exists,\nyellow = style fallback exists.",
   "ingredientDetails.removeBaseTitle": "Remove base ingredient",
