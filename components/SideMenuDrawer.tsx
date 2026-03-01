@@ -36,6 +36,7 @@ import { AMAZON_STORES, AMAZON_STORE_KEYS, type AmazonStoreOverride } from "@/li
 import { base64ToBytes, bytesToBase64, createTarArchive, parseTarArchive } from "@/libs/archive-utils";
 import { buildPhotoBaseName } from "@/libs/photo-utils";
 import { useI18n } from "@/libs/i18n/use-i18n";
+import type { SupportedLocale } from "@/libs/i18n/types";
 import { useInventory, type AppTheme, type StartScreen } from "@/providers/inventory-provider";
 import { type ImportedPhotoEntry, type InventoryExportData, type InventoryExportFile } from "@/providers/inventory-types";
 import Constants from "expo-constants";
@@ -434,7 +435,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     setLanguageModalVisible(false);
   };
 
-  const handleSelectLanguage = (value: "en-GB" | "en-US" | "uk-UA") => {
+  const handleSelectLanguage = (value: SupportedLocale) => {
     setLocale(value);
     scheduleModalClose(languageModalCloseTimeout, setLanguageModalVisible);
   };
@@ -621,7 +622,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
           continue;
         }
 
-        const baseName = buildPhotoBaseName(entry.id || "photo", entry.name);
+        const baseName = buildPhotoBaseName(entry.id || "photo", entry.name ?? "photo");
         const nameKey = `${entry.type}/${baseName}.jpg`;
         const duplicateCount = nameCounts.get(nameKey) ?? 0;
         nameCounts.set(nameKey, duplicateCount + 1);
