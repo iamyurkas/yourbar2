@@ -889,11 +889,13 @@ const styles = StyleSheet.create({
     borderWidth: StyleSheet.hairlineWidth,
     paddingHorizontal: 12,
     paddingVertical: 8,
+    alignItems: 'center',
   },
   moreIngredientsLabel: {
     fontSize: 14,
     fontWeight: '600',
     letterSpacing: 0.1,
+    textAlign: 'center',
   },
   shoppingButton: {
     width: 20,
