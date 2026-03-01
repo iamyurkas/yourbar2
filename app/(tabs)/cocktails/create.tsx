@@ -1323,7 +1323,7 @@ export default function CreateCocktailScreen() {
       isNavigatingAfterSaveRef.current = true;
       const targetId = persisted.id ?? persisted.name;
       if (!isEditMode && returnToPath) {
-        router.replace({ pathname: returnToPath, params: returnToParams });
+        router.replace({ pathname: returnToPath as never, params: returnToParams as never });
         return;
       }
 
@@ -1418,7 +1418,7 @@ export default function CreateCocktailScreen() {
               return;
             }
             if (returnToPath) {
-              router.navigate({ pathname: returnToPath, params: returnToParams });
+              router.navigate({ pathname: returnToPath as never, params: returnToParams as never });
               return;
             }
             if (navigation.canGoBack()) {
@@ -1478,7 +1478,7 @@ export default function CreateCocktailScreen() {
 
     const leaveBack = () => {
       if (returnToPath) {
-        router.replace({ pathname: returnToPath, params: returnToParams });
+        router.replace({ pathname: returnToPath as never, params: returnToParams as never });
         return;
       }
 
@@ -1492,7 +1492,7 @@ export default function CreateCocktailScreen() {
       }
 
       if (returnToPath) {
-        router.replace({ pathname: returnToPath, params: returnToParams });
+        router.replace({ pathname: returnToPath as never, params: returnToParams as never });
         return;
       }
 
@@ -1804,7 +1804,6 @@ export default function CreateCocktailScreen() {
                 >
                   {selectedMethods.length
                     ? selectedMethods
-                        .filter((method): method is { id: CocktailMethodId } => Boolean(method?.id))
                         .map((method) => t(`cocktailMethod.${method.id}.label`))
                         .join(", ")
                     : t("cocktailForm.notSpecified")}
@@ -2451,7 +2450,7 @@ function EditableIngredientRow({
   const { t, locale } = useI18n();
   const [isFocused, setIsFocused] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const hideSuggestionsTimeout = useRef<NodeJS.Timeout | null>(null);
+  const hideSuggestionsTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const Colors = useAppColors();
 
   const normalizedName = normalizeSearchText(ingredient.name);

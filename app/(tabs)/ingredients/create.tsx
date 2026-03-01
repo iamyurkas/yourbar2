@@ -640,7 +640,7 @@ export default function IngredientFormScreen() {
     }
 
     if (returnToPath) {
-      router.replace({ pathname: returnToPath, params: returnToParams });
+      router.replace({ pathname: returnToPath as never, params: returnToParams as never });
       return;
     }
 
@@ -708,7 +708,7 @@ export default function IngredientFormScreen() {
     (action?: NavigationAction) => {
       if (isBackAction(action)) {
         if (returnToPath) {
-          router.replace({ pathname: returnToPath, params: returnToParams });
+          router.replace({ pathname: returnToPath as never, params: returnToParams as never });
           return;
         }
 
@@ -717,7 +717,7 @@ export default function IngredientFormScreen() {
       }
 
       if (returnToPath) {
-        router.replace({ pathname: returnToPath, params: returnToParams });
+        router.replace({ pathname: returnToPath as never, params: returnToParams as never });
         return;
       }
 
@@ -831,7 +831,7 @@ export default function IngredientFormScreen() {
               return;
             }
             if (returnToPath) {
-              router.navigate({ pathname: returnToPath, params: returnToParams });
+              router.navigate({ pathname: returnToPath as never, params: returnToParams as never });
               return;
             }
             if (navigation.canGoBack()) {
