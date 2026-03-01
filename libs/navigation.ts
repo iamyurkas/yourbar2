@@ -73,7 +73,7 @@ export const skipDuplicateBack = (navigation: NavigationLike) => {
 };
 
 export const buildReturnToParams = (
-  returnToPath?: RouterPathname,
+  returnToPath?: string,
   returnToParams?: Record<string, string | undefined>,
 ): { returnToPath?: string; returnToParams?: string } => {
   if (!returnToPath) {
@@ -139,12 +139,12 @@ export const returnToSourceOrBack = (
     returnToPath,
     returnToParams,
   }: {
-    returnToPath?: RouterPathname;
+    returnToPath?: string;
     returnToParams?: ReturnToParams;
   },
 ) => {
   if (returnToPath) {
-    router.navigate({ pathname: returnToPath, params: returnToParams } as RouterObjectHref);
+    router.navigate({ pathname: returnToPath as RouterPathname, params: returnToParams } as RouterObjectHref);
     return;
   }
 
