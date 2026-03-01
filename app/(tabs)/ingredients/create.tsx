@@ -111,7 +111,7 @@ export default function IngredientFormScreen() {
     }
     return undefined;
   }, [legacyReturnToParam, returnToPathParam]);
-  const returnToParams = useMemo(() => {
+  const returnToParams = useMemo<Record<string, string> | undefined>(() => {
     if (!returnToParamsParam) {
       return undefined;
     }
@@ -122,7 +122,7 @@ export default function IngredientFormScreen() {
         return undefined;
       }
 
-      const entries = Object.entries(parsed).filter(([, value]) => typeof value === 'string');
+      const entries = Object.entries(parsed).filter((entry): entry is [string, string] => typeof entry[1] === 'string');
       return entries.length ? Object.fromEntries(entries) : undefined;
     } catch (error) {
       console.warn('Failed to parse return params', error);
@@ -825,7 +825,7 @@ export default function IngredientFormScreen() {
 
             setHasUnsavedChanges(false);
             const state = navigation.getState();
-            const currentIndex = state.index ?? 0;
+            const currentIndex = state?.index ?? 0;
             if (currentIndex >= 2) {
               navigation.dispatch(StackActions.pop(2));
               return;
@@ -932,25 +932,6 @@ export default function IngredientFormScreen() {
     setImageUri(null);
   }, []);
 
-  const handleCloseBaseModal = useCallback(() => {
-    const normalized = normalizeSearchText(baseSearch);
-    if (normalized) {
-      const match = baseIngredientOptions.find((item) =>
-        item.name ? normalizeSearchText(item.name) === normalized : false,
-      );
-
-      if (match?.id != null) {
-        const targetId = Number(match.id);
-        if (Number.isFinite(targetId) && targetId >= 0) {
-          setBaseIngredientId(targetId);
-        }
-      }
-    }
-
-    setIsBaseModalVisible(false);
-    setBaseSearch('');
-  }, [baseIngredientOptions, baseSearch]);
-
   const normalizedBaseQuery = useMemo(() => normalizeSearchText(baseSearch), [baseSearch]);
 
   const baseIngredientOptions = useMemo(() => {
@@ -980,6 +961,26 @@ export default function IngredientFormScreen() {
       return item.baseIngredientId == null;
     });
   }, [baseIngredientId, ingredients, isEditMode, numericIngredientId, styleIngredientId]);
+
+  const handleCloseBaseModal = useCallback(() => {
+    const normalized = normalizeSearchText(baseSearch);
+    if (normalized) {
+      const match = baseIngredientOptions.find((item) =>
+        item.name ? normalizeSearchText(item.name) === normalized : false,
+      );
+
+      if (match?.id != null) {
+        const targetId = Number(match.id);
+        if (Number.isFinite(targetId) && targetId >= 0) {
+          setBaseIngredientId(targetId);
+        }
+      }
+    }
+
+    setIsBaseModalVisible(false);
+    setBaseSearch('');
+  }, [baseIngredientOptions, baseSearch]);
+
 
   const filteredBaseIngredients = useMemo(() => {
     if (!normalizedBaseQuery) {

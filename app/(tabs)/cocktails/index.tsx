@@ -73,7 +73,7 @@ export default function CocktailsScreen() {
   );
   const [headerLayout, setHeaderLayout] = useState<LayoutRectangle | null>(null);
   const [filterAnchorLayout, setFilterAnchorLayout] = useState<LayoutRectangle | null>(null);
-  const listRef = useRef<FlatList<unknown>>(null);
+  const listRef = useRef<FlatList<MyTabListItem | Cocktail>>(null);
   const lastScrollOffset = useRef(0);
   const searchStartOffset = useRef<number | null>(null);
   const previousQuery = useRef(query);
@@ -633,7 +633,6 @@ export default function CocktailsScreen() {
 
   const isFilterActive = selectedTagKeys.size > 0 || selectedMethodIds.size > 0;
   const isMyTab = activeTab === 'my';
-  const listData = isMyTab ? myTabListData?.items ?? [] : sortedFavorites;
   const emptyMessage = useMemo(() => {
     switch (activeTab) {
       case 'my':
@@ -690,7 +689,7 @@ export default function CocktailsScreen() {
             onMenuPress={() => setIsMenuOpen(true)}
             tabs={tabOptions}
             activeTab={activeTab}
-            onTabChange={setActiveTab}
+            onTabChange={(key) => setActiveTab(key as CocktailTabKey)}
             anchorPrefix="cocktails-tab"
             onFilterPress={handleFilterPress}
             filterActive={isFilterActive}
@@ -796,28 +795,51 @@ export default function CocktailsScreen() {
             </View>
           </>
         ) : null}
-        <FlatList
-          ref={listRef}
-          data={listData}
-          keyExtractor={isMyTab ? myTabKeyExtractor : keyExtractor}
-          renderItem={isMyTab ? renderMyItem : renderItem}
-          ItemSeparatorComponent={isMyTab ? renderMySeparator : renderSeparator}
-          contentContainerStyle={styles.listContent}
-          initialNumToRender={12}
-          maxToRenderPerBatch={12}
-          windowSize={5}
-          showsVerticalScrollIndicator
-          keyboardDismissMode="on-drag"
-          // Ensure first tap triggers row actions while dismissing the keyboard.
-          keyboardShouldPersistTaps="handled"
-          onScroll={handleScroll}
-          scrollEventThrottle={16}
-          ListEmptyComponent={
-            <Text style={[styles.emptyLabel, { color: Colors.onSurfaceVariant }]}>
-              {emptyMessage}
-            </Text>
-          }
-        />
+        {isMyTab ? (
+          <FlatList<MyTabListItem>
+            ref={listRef as React.RefObject<FlatList<MyTabListItem>>}
+            data={myTabListData?.items ?? []}
+            keyExtractor={myTabKeyExtractor}
+            renderItem={renderMyItem}
+            ItemSeparatorComponent={renderMySeparator}
+            contentContainerStyle={styles.listContent}
+            initialNumToRender={12}
+            maxToRenderPerBatch={12}
+            windowSize={5}
+            showsVerticalScrollIndicator
+            keyboardDismissMode="on-drag"
+            keyboardShouldPersistTaps="handled"
+            onScroll={handleScroll}
+            scrollEventThrottle={16}
+            ListEmptyComponent={
+              <Text style={[styles.emptyLabel, { color: Colors.onSurfaceVariant }]}> 
+                {emptyMessage}
+              </Text>
+            }
+          />
+        ) : (
+          <FlatList<Cocktail>
+            ref={listRef as React.RefObject<FlatList<Cocktail>>}
+            data={sortedFavorites}
+            keyExtractor={keyExtractor}
+            renderItem={renderItem}
+            ItemSeparatorComponent={renderSeparator}
+            contentContainerStyle={styles.listContent}
+            initialNumToRender={12}
+            maxToRenderPerBatch={12}
+            windowSize={5}
+            showsVerticalScrollIndicator
+            keyboardDismissMode="on-drag"
+            keyboardShouldPersistTaps="handled"
+            onScroll={handleScroll}
+            scrollEventThrottle={16}
+            ListEmptyComponent={
+              <Text style={[styles.emptyLabel, { color: Colors.onSurfaceVariant }]}> 
+                {emptyMessage}
+              </Text>
+            }
+          />
+        )}
       </View>
       <FabAdd
         label={t("cocktails.addCocktail")}
