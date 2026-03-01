@@ -640,6 +640,11 @@ export default function IngredientFormScreen() {
     }
 
     if (returnToPath) {
+      if (navigation.canGoBack()) {
+        skipDuplicateBack(navigation);
+        return;
+      }
+
       router.replace({ pathname: returnToPath as never, params: returnToParams as never });
       return;
     }
@@ -707,13 +712,13 @@ export default function IngredientFormScreen() {
   const leaveScreen = useCallback(
     (action?: NavigationAction) => {
       if (isBackAction(action)) {
-        if (returnToPath) {
-          router.replace({ pathname: returnToPath as never, params: returnToParams as never });
-          return;
-        }
-
         const navigationState = navigation.getState();
         if ((navigationState?.index ?? 0) <= 0) {
+          if (returnToPath) {
+            router.replace({ pathname: returnToPath as never, params: returnToParams as never });
+            return;
+          }
+
           router.replace('/ingredients');
           return;
         }
