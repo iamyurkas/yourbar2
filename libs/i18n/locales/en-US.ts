@@ -653,7 +653,7 @@ export const enUSTranslations: TranslationDictionary = {
   "cocktailTag.3": "Bitter",
   "cocktailTag.4": "Tiki",
   "cocktailTag.5": "Strong",
-  "cocktailTag.6": "Mild",
+  "cocktailTag.6": "Medium",
   "cocktailTag.7": "Soft",
   "cocktailTag.8": "Long",
   "cocktailTag.9": "Shot",

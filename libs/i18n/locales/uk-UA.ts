@@ -704,7 +704,7 @@ export const ukUATranslations: TranslationDictionary = {
   "cocktailTag.3": "Гіркий",
   "cocktailTag.4": "Тікі",
   "cocktailTag.5": "Міцний",
-  "cocktailTag.6": "Легкий",
+  "cocktailTag.6": "Помірний",
   "cocktailTag.7": "М’який",
   "cocktailTag.8": "Лонг",
   "cocktailTag.9": "Шот",
