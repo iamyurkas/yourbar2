@@ -320,7 +320,8 @@ export const ukUATranslations: TranslationDictionary = {
   "ingredientDetails.editIngredient": "Редагувати інгредієнт",
   "ingredientDetails.notFound": "Інгредієнт не знайдено",
 
-  "ingredientDetails.notFoundSuggestion": "Такого інгредієнта ще не існує. Ви можете створити його зараз.",
+  "ingredientDetails.notFoundSuggestion":
+    "Такого інгредієнта ще не існує. Ви можете створити його зараз.",
   "ingredientDetails.createMissingIngredient": "Створити цей інгредієнт",
   "ingredientDetails.helpMessage":
     "Цей екран показує деталі інгредієнта, посилання та повʼязані коктейлі.\n\nВикористовуйте кнопку під інгредієнтом, щоб його редагувати.\n\n**Стрічки коктейлів**\nЛіва стрічка показує склад:\nсиня = є брендові інгредієнти,\nжовта = є стильові інгредієнти.\n\nПрава стрічка показує підстановки:\nсиня = є брендова заміна,\nжовта = є стильова замінка.",
@@ -396,7 +397,7 @@ export const ukUATranslations: TranslationDictionary = {
   "cocktails.removeIngredientFromShopping":
     "Видалити інгредієнт зі списку покупок",
   "cocktails.addIngredientToShopping": "Додати інгредієнт до списку покупок",
-  "cocktails.buyNamed": "Купити {{name}}",
+  "cocktails.buyNamed": "Купіть {{name}}",
   "cocktails.toMakeMore.one": "Щоб зробити ще {{count}} коктейль",
   "cocktails.toMakeMore.few": "Щоб зробити ще {{count}} коктейлі",
   "cocktails.toMakeMore.many": "Щоб зробити ще {{count}} коктейлів",
