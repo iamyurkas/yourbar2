@@ -242,6 +242,8 @@ export function localizeCocktail(
     const localizedIngredientName =
       getRecipeIngredientNameTranslation(locale, cocktail.id, ingredient.ingredientId)
       ?? getRecipeIngredientNameTranslation(fallbackLocale, cocktail.id, ingredient.ingredientId)
+      ?? getCatalogFieldTranslation(locale, 'ingredient', ingredient.ingredientId, 'name')
+      ?? getCatalogFieldTranslation(fallbackLocale, 'ingredient', ingredient.ingredientId, 'name')
       ?? normalizeOptionalText(ingredient.name);
 
     return {
