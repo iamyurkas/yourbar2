@@ -4,6 +4,8 @@ import { router } from 'expo-router';
 type RouteParams = object | undefined;
 type ReturnToParams = Record<string, string> | undefined;
 
+type RouterObjectHref = Extract<Parameters<typeof router.push>[0], { pathname: unknown }>;
+type RouterPathname = RouterObjectHref['pathname'];
 
 type NavigationLike = Pick<NavigationProp<ParamListBase>, 'goBack' | 'dispatch'> & {
   getState: () =>
@@ -23,13 +25,15 @@ const areParamsEqual = (left?: RouteParams, right?: RouteParams): boolean => {
     return false;
   }
 
-  const leftKeys = Object.keys(left);
-  const rightKeys = Object.keys(right);
+  const leftRecord = left as Record<string, unknown>;
+  const rightRecord = right as Record<string, unknown>;
+  const leftKeys = Object.keys(leftRecord);
+  const rightKeys = Object.keys(rightRecord);
   if (leftKeys.length !== rightKeys.length) {
     return false;
   }
 
-  return leftKeys.every((key) => rightKeys.includes(key) && left[key] === right[key]);
+  return leftKeys.every((key) => rightKeys.includes(key) && leftRecord[key] === rightRecord[key]);
 };
 
 const areRoutesEqual = (
@@ -69,7 +73,7 @@ export const skipDuplicateBack = (navigation: NavigationLike) => {
 };
 
 export const buildReturnToParams = (
-  returnToPath?: string,
+  returnToPath?: RouterPathname,
   returnToParams?: Record<string, string | undefined>,
 ): { returnToPath?: string; returnToParams?: string } => {
   if (!returnToPath) {
@@ -115,9 +119,9 @@ export const navigateToDetailsWithReturnTo = ({
   returnToPath,
   returnToParams,
 }: {
-  pathname: string;
+  pathname: RouterPathname;
   params: Record<string, string>;
-  returnToPath?: string;
+  returnToPath?: RouterPathname;
   returnToParams?: Record<string, string | undefined>;
 }) => {
   router.push({
@@ -126,7 +130,7 @@ export const navigateToDetailsWithReturnTo = ({
       ...params,
       ...buildReturnToParams(returnToPath, returnToParams),
     },
-  });
+  } as RouterObjectHref);
 };
 
 export const returnToSourceOrBack = (
@@ -135,12 +139,12 @@ export const returnToSourceOrBack = (
     returnToPath,
     returnToParams,
   }: {
-    returnToPath?: string;
+    returnToPath?: RouterPathname;
     returnToParams?: ReturnToParams;
   },
 ) => {
   if (returnToPath) {
-    router.navigate({ pathname: returnToPath, params: returnToParams });
+    router.navigate({ pathname: returnToPath, params: returnToParams } as RouterObjectHref);
     return;
   }
 
