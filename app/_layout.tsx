@@ -1,8 +1,9 @@
 import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { Stack } from "expo-router";
+import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from "expo-status-bar";
 import { Appearance, useColorScheme, View } from "react-native";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import "react-native-reanimated";
 
 import { PaperProvider } from "@/libs/react-native-paper";
@@ -12,6 +13,8 @@ import { InventoryProvider, useInventory } from "@/providers/inventory-provider"
 import { UnsavedChangesProvider } from "@/providers/unsaved-changes-provider";
 import { getAppTheme } from "@/theme/theme";
 import * as Sentry from '@sentry/react-native';
+
+void SplashScreen.preventAutoHideAsync();
 
 Sentry.init({
   dsn: 'https://5c0a8918a74cc35cc994024d86afef00@o4510776629723136.ingest.de.sentry.io/4510777159843920',
@@ -67,21 +70,39 @@ function ThemeAppWrapper({ children }: { children: React.ReactNode }) {
   );
 }
 
+function RootLayoutContent() {
+  const { loading } = useInventory();
+
+  const onRootLayout = useCallback(() => {
+    if (!loading) {
+      void SplashScreen.hideAsync();
+    }
+  }, [loading]);
+
+  if (loading) {
+    return null;
+  }
+
+  return (
+    <View style={{ flex: 1 }} onLayout={onRootLayout}>
+      <OnboardingProvider>
+        <ThemeAppWrapper>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          </Stack>
+          <OnboardingOverlay />
+        </ThemeAppWrapper>
+      </OnboardingProvider>
+    </View>
+  );
+}
+
 export default Sentry.wrap(function RootLayout() {
   return (
-    <View style={{ flex: 1 }}>
-      <UnsavedChangesProvider>
-        <InventoryProvider>
-          <OnboardingProvider>
-            <ThemeAppWrapper>
-              <Stack>
-                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-              </Stack>
-              <OnboardingOverlay />
-            </ThemeAppWrapper>
-          </OnboardingProvider>
-        </InventoryProvider>
-      </UnsavedChangesProvider>
-    </View>
+    <UnsavedChangesProvider>
+      <InventoryProvider>
+        <RootLayoutContent />
+      </InventoryProvider>
+    </UnsavedChangesProvider>
   );
 });
