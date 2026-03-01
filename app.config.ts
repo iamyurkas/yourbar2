@@ -5,44 +5,56 @@ type ExpoIosConfig = {
   infoPlist?: Record<string, unknown>;
 } & Record<string, unknown>;
 
-export default ({ config }: { config: ExpoConfig }) => ({
-  expo: {
-    ...config,
-    ...base.expo,
+export default ({ config }: { config: ExpoConfig }) => {
+  const baseExpo = base.expo ?? {};
 
-	  ios: {
-	    ...(config.ios ?? {}),
-	    ...(base.expo.ios ?? {}),
-	    bundleIdentifier: "com.yourbarapp.free",
+  return {
+    expo: {
+      ...baseExpo,
+      ...config,
 
-	    infoPlist: {
-	      ...(((config.ios ?? {}) as ExpoIosConfig).infoPlist ?? {}),
-	      ...(((base.expo.ios ?? {}) as ExpoIosConfig).infoPlist ?? {}),
-	      ITSAppUsesNonExemptEncryption: false,
-        NSPhotoLibraryUsageDescription:
-          "Your Bar uses your photo library so you can attach custom photos to cocktails and ingredients.",
-        NSPhotoLibraryAddUsageDescription:
-          "Your Bar can save exported bar data to files you choose.",
+      name: baseExpo.name,
+      slug: baseExpo.slug,
+      scheme: baseExpo.scheme,
+
+      ios: {
+        ...(baseExpo.ios ?? {}),
+        ...(config.ios ?? {}),
+
+        bundleIdentifier: "com.yourbarapp.free",
+
+        infoPlist: {
+          ...((baseExpo.ios as ExpoIosConfig)?.infoPlist ?? {}),
+          ...((config.ios as ExpoIosConfig)?.infoPlist ?? {}),
+
+          ITSAppUsesNonExemptEncryption: false,
+
+          NSPhotoLibraryUsageDescription:
+            "Your Bar uses your photo library so you can attach custom photos to cocktails and ingredients.",
+        },
+      },
+
+      android: {
+        ...(baseExpo.android ?? {}),
+        ...(config.android ?? {}),
+
+        package: "com.yourbarapp.free",
+      },
+
+      plugins: [...(baseExpo.plugins ?? []), ...(config.plugins ?? [])],
+
+      extra: {
+        ...(baseExpo.extra ?? {}),
+        ...(config.extra ?? {}),
+
+        iosAppStoreCountryCode:
+          process.env.EXPO_PUBLIC_IOS_APP_STORE_COUNTRY_CODE ?? null,
+        iosAppStoreId: process.env.EXPO_PUBLIC_IOS_APP_STORE_ID ?? null,
+        androidPlayStoreCountryCode:
+          process.env.EXPO_PUBLIC_ANDROID_PLAY_STORE_COUNTRY_CODE ?? null,
+
+        buildTime: new Date().toISOString(),
       },
     },
-
-    android: {
-      ...(config.android ?? {}),
-      ...(base.expo.android ?? {}),
-      package: "com.yourbarapp.free",
-    },
-
-    plugins: base.expo.plugins ?? [],
-
-    extra: {
-      ...(config.extra ?? {}),
-      ...(base.expo.extra ?? {}),
-      iosAppStoreCountryCode:
-        process.env.EXPO_PUBLIC_IOS_APP_STORE_COUNTRY_CODE ?? null,
-      iosAppStoreId: process.env.EXPO_PUBLIC_IOS_APP_STORE_ID ?? null,
-      androidPlayStoreCountryCode:
-        process.env.EXPO_PUBLIC_ANDROID_PLAY_STORE_COUNTRY_CODE ?? null,
-      buildTime: new Date().toISOString(),
-    },
-  },
-});
+  };
+};
