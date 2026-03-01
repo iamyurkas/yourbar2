@@ -151,7 +151,11 @@ export function SegmentTabs({ options, value, onChange, anchorPrefix }: SegmentT
             accessibilityRole="tab"
             accessibilityState={focused ? { selected: true } : {}}
             onPress={() => onChange(option.key)}
-            style={[styles.tabButton, !anchorPrefix && { flex: 1 }]}>
+            style={({ pressed }) => [
+              styles.tabButton,
+              !anchorPrefix && { flex: 1 },
+              pressed && { backgroundColor: `${Colors.tint}1A` },
+            ]}>
             <Text
               style={[
                 styles.tabLabel,
@@ -241,6 +245,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingTop: 12,
+    paddingHorizontal: 8,
+    borderRadius: 12,
     gap: 6,
   },
   tabLabel: {
