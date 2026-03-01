@@ -186,7 +186,7 @@ export function localizeIngredient(
 
   return {
     ...ingredient,
-    name: localizedName,
+    name: localizedName ?? ingredient.name,
     description: localizedDescription,
     ...(localizedSynonyms.length ? { synonyms: localizedSynonyms } : {}),
     ...localizedSearch,
@@ -252,7 +252,7 @@ export function localizeCocktail(
 
   return {
     ...cocktail,
-    name: localizedName,
+    name: localizedName ?? cocktail.name,
     description: localizedDescription,
     instructions: localizedInstructions,
     synonyms: localizedSynonyms.length ? localizedSynonyms : cocktail.synonyms,
