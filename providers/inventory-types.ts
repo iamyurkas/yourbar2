@@ -35,11 +35,19 @@ type CocktailSubstituteRecord = NonNullable<
 
 type IngredientRecord = Omit<BaseIngredientRecord, 'tags'> & {
   tags?: IngredientTag[] | null;
+  synonyms?: string[] | null;
   styleIngredientId?: number | null;
 };
 
 export type CocktailSubstitute = CocktailSubstituteRecord & { brand?: boolean };
-export type CocktailIngredient = Omit<CocktailIngredientRecord, 'substitutes'> & {
+export type CocktailIngredient = Omit<
+  CocktailIngredientRecord,
+  'substitutes' | 'ingredientId' | 'name' | 'amount' | 'unitId'
+> & {
+  ingredientId?: number;
+  name?: string;
+  amount?: string;
+  unitId?: number;
   allowBaseSubstitution?: boolean;
   allowBrandSubstitution?: boolean;
   allowStyleSubstitution?: boolean;
@@ -147,6 +155,7 @@ export type CocktailTranslationOverride = {
 export type IngredientTranslationOverride = {
   name?: string;
   description?: string;
+  synonyms?: string[];
 };
 
 export type InventoryLocaleTranslationOverrides = {

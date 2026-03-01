@@ -1168,11 +1168,11 @@ export default function CreateCocktailScreen() {
       return;
     }
 
-    const sanitizedIngredients = ingredientsState
-      .map((item, index) => {
+    const sanitizedIngredients: CreateCocktailInput["ingredients"] = ingredientsState
+      .flatMap((item, index) => {
         const ingredientName = item.name.trim();
         if (!ingredientName) {
-          return null;
+          return [];
         }
 
         const normalizedIngredientId =
@@ -1217,7 +1217,7 @@ export default function CreateCocktailScreen() {
           }];
         });
 
-        return {
+        return [{
           ingredientId,
           name: ingredientName,
           amount: item.amount.trim() || undefined,
@@ -1229,9 +1229,8 @@ export default function CreateCocktailScreen() {
           allowStyleSubstitution: item.allowStyleSubstitution,
           substitutes,
           order: index + 1,
-        } satisfies CreateCocktailInput["ingredients"][number];
-      })
-      .filter((item): item is CreateCocktailInput["ingredients"][number] => item != null);
+        } satisfies CreateCocktailInput["ingredients"][number]];
+      });
 
     if (!sanitizedIngredients.length) {
       showDialog({

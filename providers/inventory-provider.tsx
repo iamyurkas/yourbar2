@@ -33,11 +33,13 @@ import {
   type CocktailStorageRecord,
   type CocktailSubstitute,
   type CocktailTag,
+  type CocktailTranslationOverride,
   type CreateCocktailInput,
   type CreateIngredientInput,
   type Ingredient,
   type IngredientStorageRecord,
   type IngredientTag,
+  type IngredientTranslationOverride,
   type InventoryBaseExportFile,
   type InventoryExportData,
   type InventoryExportFile,
@@ -820,7 +822,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             ...ingredient,
             order: index + 1,
           })),
-        } satisfies BaseCocktailRecord;
+        } as unknown as BaseCocktailRecord;
 
         const [normalized] = normalizeSearchFields([candidateRecord]);
         if (!normalized) {
@@ -1675,7 +1677,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           ...ingredient,
           order: index + 1,
         })),
-      } satisfies BaseCocktailRecord;
+      } as unknown as BaseCocktailRecord;
 
       const [normalized] = normalizeSearchFields([candidateRecord]);
       if (!normalized) {
