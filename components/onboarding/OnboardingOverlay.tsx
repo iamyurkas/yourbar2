@@ -29,7 +29,7 @@ type StepDef = {
 };
 
 const renderFormattedMessage = (message: string) => {
-  const segments: Array<{ text: string; bold: boolean; italic: boolean }> = [];
+  const segments: { text: string; bold: boolean; italic: boolean }[] = [];
   let buffer = '';
   let bold = false;
   let italic = false;

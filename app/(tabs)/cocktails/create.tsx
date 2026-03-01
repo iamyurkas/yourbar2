@@ -102,7 +102,7 @@ type CocktailFormSnapshot = {
   instructions: string;
   imageUri: string | null;
   selectedTagIds: number[];
-  ingredients: Array<{
+  ingredients: {
     ingredientId?: number;
     name: string;
     amount: string;
@@ -112,12 +112,12 @@ type CocktailFormSnapshot = {
     allowBaseSubstitution: boolean;
     allowBrandSubstitution: boolean;
     allowStyleSubstitution: boolean;
-    substitutes: Array<{
+    substitutes: {
       ingredientId?: number;
       name: string;
       isBrand?: boolean;
-    }>;
-  }>;
+    }[];
+  }[];
 };
 
 function getParamValue(value?: string | string[]): string | undefined {
@@ -1365,7 +1365,6 @@ export default function CreateCocktailScreen() {
     isEditMode,
     methodIds,
     name,
-    navigation,
     prefilledCocktail?.id,
     prefilledCocktail?.photoUri,
     returnToParams,
@@ -1373,8 +1372,6 @@ export default function CreateCocktailScreen() {
     selectedTagIds,
     setHasUnsavedChanges,
     showDialog,
-    shouldStorePhoto,
-    storePhoto,
     t,
   ]);
 

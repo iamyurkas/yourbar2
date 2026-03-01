@@ -374,6 +374,8 @@ export default function IngredientDetailsScreen() {
       ignoreGarnish,
       ingredientLookup,
       numericIngredientId,
+      locale,
+      t,
     ],
   );
   const canMakeMoreCocktailsCount = useMemo(

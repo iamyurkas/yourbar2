@@ -32,22 +32,25 @@ let hasMissing = false;
 for (const locale of locales) {
   const dict = JSON.parse(fs.readFileSync(locale.file, 'utf8'));
   const keys = new Set(Object.keys(dict));
+  const isEmptyOverlay = keys.size === 0;
 
   const missing = [];
-  for (const cocktail of data.cocktails ?? []) {
-    for (const field of requiredCocktailFields) {
-      const key = `cocktail.${cocktail.id}.${field}`;
-      if (!keys.has(key)) {
-        missing.push(key);
+  if (!isEmptyOverlay) {
+    for (const cocktail of data.cocktails ?? []) {
+      for (const field of requiredCocktailFields) {
+        const key = `cocktail.${cocktail.id}.${field}`;
+        if (!keys.has(key)) {
+          missing.push(key);
+        }
       }
     }
-  }
 
-  for (const ingredient of data.ingredients ?? []) {
-    for (const field of requiredIngredientFields) {
-      const key = `ingredient.${ingredient.id}.${field}`;
-      if (!keys.has(key)) {
-        missing.push(key);
+    for (const ingredient of data.ingredients ?? []) {
+      for (const field of requiredIngredientFields) {
+        const key = `ingredient.${ingredient.id}.${field}`;
+        if (!keys.has(key)) {
+          missing.push(key);
+        }
       }
     }
   }
@@ -71,6 +74,9 @@ for (const locale of locales) {
   console.log(`present keys: ${keys.size}`);
   console.log(`missing required keys: ${missing.length}`);
   console.log(`extra/unknown keys: ${extra.length}`);
+  if (isEmptyOverlay) {
+    console.log('note: empty overlay allowed (fallback to base catalog data).');
+  }
 
   if (missing.length > 0) {
     hasMissing = true;

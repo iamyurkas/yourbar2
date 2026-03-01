@@ -201,7 +201,7 @@ type ColorSliderProps = {
   label: string;
   value: number;
   onChange: (value: number) => void;
-  gradientStops: Array<{ offset: string; color: string }>;
+  gradientStops: { offset: string; color: string }[];
 };
 
 function ColorSlider({ label, value, onChange, gradientStops }: ColorSliderProps) {
