@@ -43,6 +43,8 @@ npm run web
 - `npm run lint` – run Expo linting.
 - `npm run check:catalog-overlay` – validate catalog localization overlay keys and print missing/extra reports.
 - `npm run check:catalog-overlay:strict` – same check, exits with error if required keys are missing.
+- `npm run typecheck` – run TypeScript compiler checks without emitting files.
+- `npm run check:all` – run lint, strict catalog overlay validation, and type checks.
 - `npm run update:image-manifest` – rebuild the image manifest used by the app.
 - `npm run prune:image-manifest` – remove unused image entries from the manifest.
 - `npm run reset-project` – reset starter assets and regenerate a clean Expo Router app tree.

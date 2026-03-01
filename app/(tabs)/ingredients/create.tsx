@@ -666,8 +666,6 @@ export default function IngredientFormScreen() {
     selectedTagIds,
     setHasUnsavedChanges,
     showDialog,
-    shouldStorePhoto,
-    storePhoto,
     t,
     updateIngredient,
   ]);

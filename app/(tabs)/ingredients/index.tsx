@@ -174,7 +174,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
         accessibilityLabel={shoppingLabel}
       />
     );
-  }, [handleShoppingToggle, isOnShoppingList, onShoppingToggle, Colors]);
+  }, [handleShoppingToggle, isOnShoppingList, onShoppingToggle, Colors, t]);
 
   const control = useMemo(() => {
     if (onShoppingToggle) {
@@ -471,7 +471,7 @@ export default function IngredientsScreen() {
         data: shoppingList,
       },
     };
-  }, [ingredients, availableIngredientIds, shoppingIngredientIds]);
+  }, [ingredients, availableIngredientIds, shoppingIngredientIds, t]);
 
   const activeSection = sections[activeTab] ?? sections.all;
 

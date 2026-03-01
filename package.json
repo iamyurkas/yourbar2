@@ -6,6 +6,8 @@
     "start": "expo start",
     "check:catalog-overlay": "node ./scripts/check-catalog-overlay.js",
     "check:catalog-overlay:strict": "node ./scripts/check-catalog-overlay.js --strict",
+    "typecheck": "tsc --noEmit",
+    "check:all": "npm run lint && npm run check:catalog-overlay:strict && npm run typecheck",
     "update:image-manifest": "node ./scripts/update-image-manifest.js",
     "prune:image-manifest": "node ./scripts/update-image-manifest.js --prune-unused",
     "reset-project": "node ./scripts/reset-project.js",

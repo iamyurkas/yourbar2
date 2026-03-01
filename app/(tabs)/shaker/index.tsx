@@ -639,7 +639,7 @@ export default function ShakerScreen() {
 
         return compareGlobalAlphabet(a.name, b.name);
       });
-  }, [availableTagOptions, defaultTagColor, effectiveFilteredIngredients]);
+  }, [availableTagOptions, defaultTagColor, effectiveFilteredIngredients, t]);
 
   const onboardingSampleIds = useMemo(() => {
     const preferredIds = [161, 352, 114, 339, 219, 227]; // Gin, Whiskey, Cola, Tonic, Lemon, Lime
@@ -1001,7 +1001,7 @@ export default function ShakerScreen() {
         </View>
       );
     },
-    [handleToggleGroup, Colors, selectedIngredientIds],
+    [handleToggleGroup, Colors, selectedIngredientIds, t],
   );
 
   const renderSectionHeader = useCallback(
@@ -1069,6 +1069,8 @@ export default function ShakerScreen() {
       styleBaseIngredientIds,
       brandedBaseIngredientIds,
       totalCocktailCounts,
+      locale,
+      t,
     ],
   );
 

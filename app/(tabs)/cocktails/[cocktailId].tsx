@@ -25,7 +25,6 @@ import {
   getCocktailMethodById,
   METHOD_ICON_MAP,
 } from "@/constants/cocktail-methods";
-import { COCKTAIL_UNIT_DICTIONARY } from "@/constants/cocktail-units";
 import { GLASSWARE_NAME_BY_ID, resolveGlasswareId } from "@/constants/glassware";
 import { useAppColors } from "@/constants/theme";
 import { resolveImageSource } from "@/libs/image-source";

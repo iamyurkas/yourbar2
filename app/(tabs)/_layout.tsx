@@ -16,12 +16,12 @@ import { useI18n } from '@/libs/i18n/use-i18n';
 
 type TabPressHandler = (navigation: { navigate: (...args: never[]) => void }, route: { name: string }) => void;
 
-const TAB_SCREENS: Array<{
+const TAB_SCREENS: {
   name: 'cocktails' | 'shaker' | 'ingredients';
   titleKey: string;
   icon: typeof CocktailIcon;
   onTabPress: TabPressHandler;
-}> = [
+}[] = [
     {
       name: 'cocktails',
       titleKey: 'tabs.cocktails',
