@@ -639,6 +639,14 @@ export default function IngredientFormScreen() {
       return;
     }
 
+    const navigationState = navigation.getState();
+    const canReturnToOrigin = fromCocktailAddIngredientParam && (navigationState?.index ?? 0) > 0;
+
+    if (canReturnToOrigin) {
+      skipDuplicateBack(navigation);
+      return;
+    }
+
     if (returnToPath) {
       router.replace({ pathname: returnToPath as never, params: returnToParams as never });
       return;
@@ -661,6 +669,7 @@ export default function IngredientFormScreen() {
     name,
     navigation,
     numericIngredientId,
+    fromCocktailAddIngredientParam,
     returnToParams,
     returnToPath,
     selectedTagIds,
@@ -707,12 +716,18 @@ export default function IngredientFormScreen() {
   const leaveScreen = useCallback(
     (action?: NavigationAction) => {
       if (isBackAction(action)) {
+        const navigationState = navigation.getState();
+        const canReturnToOrigin = fromCocktailAddIngredientParam && (navigationState?.index ?? 0) > 0;
+        if (canReturnToOrigin) {
+          skipDuplicateBack(navigation);
+          return;
+        }
+
         if (returnToPath) {
           router.replace({ pathname: returnToPath as never, params: returnToParams as never });
           return;
         }
 
-        const navigationState = navigation.getState();
         if ((navigationState?.index ?? 0) <= 0) {
           router.replace('/ingredients');
           return;
@@ -729,7 +744,7 @@ export default function IngredientFormScreen() {
 
       router.replace('/ingredients');
     },
-    [isBackAction, navigation, returnToParams, returnToPath],
+    [fromCocktailAddIngredientParam, isBackAction, navigation, returnToParams, returnToPath],
   );
 
   const handleLeaveAction = useCallback(
