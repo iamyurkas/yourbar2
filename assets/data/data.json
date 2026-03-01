@@ -6040,7 +6040,7 @@
           "substitutes": [
             {
               "ingredientId": 310,
-              "name": "Scotch Highland Whisky"
+              "name": "Highland Scotch whisky"
             }
           ]
         },
@@ -20216,8 +20216,8 @@
     {
       "id": 334,
       "name": "Kings County",
-      "description": "A sophisticated, spirit-forward cocktail that balances the honeyed notes of highland **Scotch whisky** with a touch of Islay smoke and herbal complexity.",
-      "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 45 ml of **Scotch Highland whisky**, 10 ml of **Islay Scotch whisky**, 10 ml of **Luxardo maraschino**, and 10 ml of **Punt e Mes**.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled Nick & Nora glass.\n5. Garnish with a **cherry**, then express the oils from a **lemon** peel over the drink and use it as a garnish as well.",
+      "description": "A sophisticated, spirit-forward cocktail that balances the honeyed notes of **Highland Scotch whisky** with a touch of Islay smoke and herbal complexity.",
+      "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 45 ml of **Highland Scotch whisky**, 10 ml of **Islay Scotch whisky**, 10 ml of **Luxardo maraschino**, and 10 ml of **Punt e Mes**.\n3. Stir gently for about 20 seconds until well chilled.\n4. Strain into a chilled Nick & Nora glass.\n5. Garnish with a **cherry**, then express the oils from a **lemon** peel over the drink and use it as a garnish as well.",
       "photoUri": "assets/cocktails/334-kings-county.jpg",
       "glassId": "nick_and_nora",
       "methodIds": ["stir"],
@@ -20233,7 +20233,7 @@
         {
           "order": 2,
           "ingredientId": 310,
-          "name": "Scotch Highland Whisky",
+          "name": "Highland Scotch whisky",
           "amount": "45",
           "unitId": 11
         },
@@ -30404,7 +30404,7 @@
     {
       "id": 502,
       "name": "Smoky Whiskey Sour",
-      "description": "A variation of the classic \"whisky sour\" created by Simon Difford for people who like the distinct smoky flavour of Scotch Islay whisky.",
+      "description": "A variation of the classic \"whisky sour\" created by Simon Difford for people who like the distinct smoky flavour of **Islay Scotch whisky**.",
       "instructions": "1. Pour 30 ml of **Scotch whisky**, 30 ml of **Islay Scotch whisky**, 30 ml of **lemon juice**, 20 ml of **maple syrup**, a dash of **Angostura bitters**, and an **egg white** into a shaker.\n2. Dry shake (without **ice**) vigorously for about 15 seconds to emulsify the **egg**.\n3. Add about 150 g of **ice**.\n4. Shake vigorously for about 15 seconds until well chilled.\n5. Strain into a chilled rocks glass filled with fresh **ice** (preferably over a large cube).\n6. Garnish with a **lemon** peel.",
       "photoUri": "assets/cocktails/502-smoky-whiskey-sour.jpg",
       "glassId": "rocks_glass",
@@ -35672,7 +35672,7 @@
             },
             {
               "ingredientId": 310,
-              "name": "Scotch Highland Whisky"
+              "name": "Highland Scotch whisky"
             }
           ]
         },
@@ -38909,22 +38909,22 @@
     {
       "id": 308,
       "name": "Sambuca",
-      "description": "Sambuca is an Italian anise-flavoured, usually colourless, liqueur. Its most common variety is often referred to as white sambuca to differentiate it from other varieties that are deep blue in colour (black sambuca) or bright red (red sambuca). Like other anise-flavoured liqueurs, the Ouzo effect is sometimes observed when combined with water.",
+      "description": "Italian anise-flavoured, usually colourless, liqueur. Its most common variety is often referred to as white sambuca to differentiate it from other varieties that are deep blue in colour (black sambuca) or bright red (red sambuca). Like other anise-flavoured liqueurs, the Ouzo effect is sometimes observed when combined with water.",
       "tags": [1],
       "photoUri": "assets/ingredients/308-sambuca.jpg"
     },
     {
       "id": 309,
       "name": "Sauvignon Blanc",
-      "description": "Sauvignon Blanc is a popular, dry white wine celebrated for its crispness, high acidity, and vibrant flavours. It is highly versatile and pairs well with a variety of foods.",
+      "description": "A popular, dry white wine celebrated for its crispness, high acidity, and vibrant flavours. It is highly versatile and pairs well with a variety of foods.",
       "tags": [2],
-      "baseIngredientId": 358,
+      "styleIngredientId": 358,
       "photoUri": "assets/ingredients/309-sauvignon-blanc.jpg"
     },
     {
       "id": 310,
-      "name": "Scotch Highland Whisky",
-      "description": "Single malt Scotch from the highlands region, typically 40–46% ABV. flavours range from honeyed malt to gentle smoke. Versatile for sipping or cocktails.",
+      "name": "Highland Scotch whisky",
+      "description": "Single malt Scotch from the Highlands region, typically 40–46% ABV. flavours range from honeyed malt to gentle smoke. Versatile for sipping or cocktails.",
       "tags": [0],
       "styleIngredientId": 311,
       "photoUri": "assets/ingredients/310-scotch-highland-whisky.jpg"
@@ -38932,7 +38932,7 @@
     {
       "id": 311,
       "name": "Scotch Whisky",
-      "description": "Whisky made in scotland and aged at least three years in oak at 40% ABV or higher. Styles span light and floral to heavily peated. Classic base for highballs and stirred drinks.",
+      "description": "Whisky made in Scotland and aged at least three years in oak at 40% ABV or higher. Styles span light and floral to heavily peated. Classic base for highballs and stirred drinks.",
       "tags": [0],
       "photoUri": "assets/ingredients/311-scotch-whisky.jpg"
     },
