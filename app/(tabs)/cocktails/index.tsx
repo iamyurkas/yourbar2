@@ -509,9 +509,18 @@ export default function CocktailsScreen() {
       if (item.type === 'separator') {
         return (
           <View style={styles.moreIngredientsWrapper}>
-            <Text style={[styles.moreIngredientsLabel, { color: Colors.onSurfaceVariant }]}>
-              {t("cocktails.oneMoreIngredientForMore")}
-            </Text>
+            <View
+              style={[
+                styles.moreIngredientsBadge,
+                {
+                  backgroundColor: Colors.surfaceVariant,
+                  borderColor: Colors.outlineVariant,
+                },
+              ]}>
+              <Text style={[styles.moreIngredientsLabel, { color: Colors.onSurfaceVariant }]}>
+                {t("cocktails.oneMoreIngredientForMore")}
+              </Text>
+            </View>
           </View>
         );
       }
@@ -872,13 +881,19 @@ const styles = StyleSheet.create({
   },
   moreIngredientsWrapper: {
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingTop: 14,
+    paddingBottom: 10,
+  },
+  moreIngredientsBadge: {
+    borderRadius: 12,
+    borderWidth: StyleSheet.hairlineWidth,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
   },
   moreIngredientsLabel: {
-    fontSize: 13,
+    fontSize: 14,
     fontWeight: '600',
-    textTransform: 'uppercase',
-    letterSpacing: 0.4,
+    letterSpacing: 0.1,
   },
   shoppingButton: {
     width: 20,
