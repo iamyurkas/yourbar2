@@ -202,6 +202,8 @@ export function useCocktailTabLogic({
         name: string;
         photoUri?: string | null;
         tagColor?: string;
+        isBranded: boolean;
+        isStyled: boolean;
         cocktails: Cocktail[];
         keys: Set<string>;
       }

@@ -146,8 +146,8 @@ function sanitizeStartScreen(value?: string | null): StartScreen {
   }
 }
 
-const BUILTIN_COCKTAIL_TAGS_BY_ID = new Map(BUILTIN_COCKTAIL_TAGS.map((tag) => [tag.id, tag]));
-const BUILTIN_INGREDIENT_TAGS_BY_ID = new Map(BUILTIN_INGREDIENT_TAGS.map((tag) => [tag.id, tag]));
+const BUILTIN_COCKTAIL_TAGS_BY_ID = new Map<number, (typeof BUILTIN_COCKTAIL_TAGS)[number]>(BUILTIN_COCKTAIL_TAGS.map((tag) => [tag.id, tag]));
+const BUILTIN_INGREDIENT_TAGS_BY_ID = new Map<number, (typeof BUILTIN_INGREDIENT_TAGS)[number]>(BUILTIN_INGREDIENT_TAGS.map((tag) => [tag.id, tag]));
 
 function rehydrateBuiltInTags(state: InventoryState): InventoryState {
   const withHydratedCocktailTags = state.cocktails.map((cocktail) => ({
