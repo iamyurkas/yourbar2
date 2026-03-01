@@ -582,7 +582,7 @@ export const ukUATranslations: TranslationDictionary = {
   "glassware.hurricane_glass": "Ураган",
   "glassware.toddy_glass": "Тодді",
   "glassware.margarita_glass": "Маргарита",
-  "glassware.nick_and_nora": "Нік енд Нора",
+  "glassware.nick_and_nora": "Нік і Нора",
   "glassware.pitcher": "Глек",
   "glassware.pub_glass": "Пивний",
   "glassware.rocks_glass": "Рокс",
