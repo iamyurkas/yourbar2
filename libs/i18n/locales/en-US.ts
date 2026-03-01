@@ -3,7 +3,7 @@ import type { TranslationDictionary } from "@/libs/i18n/types";
 export const enUSTranslations: TranslationDictionary = {
   "common.search": "Search",
   "common.openNavigation": "Open navigation",
-  "common.clearSearch": "Clear search query",
+  "common.clearSearch": "Clear search",
   "common.openScreenHelp": "Open screen help",
   "common.goBack": "Go back",
   "common.filterItems": "Filter items",
@@ -30,21 +30,21 @@ export const enUSTranslations: TranslationDictionary = {
   "common.tabShopping": "Shopping",
 
   "cocktails.emptyMy":
-    "Mark ingredients you have to see available cocktails here.",
+    "Mark the ingredients you have to see available cocktails here.",
   "cocktails.emptyFavorites":
-    "Rate cocktails and/or adjust the rating threshold in the menu.",
+    "Rate cocktails, or adjust the minimum rating in the menu.",
   "cocktails.emptyAll": "No cocktails yet",
   "cocktails.helpMyTitle": "My cocktails",
   "cocktails.helpMyText":
     "This screen shows cocktails you can make with your current ingredients.\n\nUse search to find your recipes quickly, and use filters to narrow the list by tags or method.",
   "cocktails.helpFavoritesTitle": "Favorite cocktails",
   "cocktails.helpFavoritesText":
-    "This screen shows cocktails you ranked.\n\nUse search and filters to find what you want faster.",
+    "This screen shows cocktails you rated.\n\nUse search and filters to find what you want faster.",
   "cocktails.helpAllTitle": "All cocktails",
   "cocktails.helpAllText":
     "This screen shows the full cocktail collection.\n\nUse search, switch tabs, and apply filters by method or tags.",
 
-  "ingredients.emptyMy": "Mark ingredients you have to see them here.",
+  "ingredients.emptyMy": "Mark the ingredients you have to see them here.",
   "ingredients.emptyAll": "No ingredients yet",
   "ingredients.helpMyTitle": "My ingredients",
   "ingredients.helpMyText":
@@ -263,7 +263,7 @@ export const enUSTranslations: TranslationDictionary = {
     "Shake with ice. Best for citrus, syrup, cream, or egg white to aerate and chill.",
   "cocktailMethod.stir.label": "Stir",
   "cocktailMethod.stir.description":
-    "Stir with a bar spoon in a mixing glass full of ice. Best for herbal mixers.",
+    "Stir with a bar spoon in a mixing glass full of ice. Best for clear, herbal mixers.",
   "cocktailMethod.throw.label": "Throw",
   "cocktailMethod.throw.description":
     "Pour between tins from a distance to aerate without cloudiness.",
@@ -337,7 +337,7 @@ export const enUSTranslations: TranslationDictionary = {
 
   "shaker.helpBase":
     "This screen helps you select ingredients and understand what you can mix right now.\n\nUse search to find ingredients quickly, tap ingredients to mark them to use, and open shaker results for matching cocktails.",
-  "shaker.currentSelection": "Current select",
+  "shaker.currentSelection": "Current selection",
   "shaker.clearSelectedIngredients": "Clear selected ingredients",
   "shaker.cocktailsCount": "Cocktails: {{count}}",
   "shaker.recipesCount": "(recipes: {{count}})",
@@ -359,7 +359,7 @@ export const enUSTranslations: TranslationDictionary = {
   "onboarding.step5.message":
     "Now let’s check the cocktails.\nOpen the **Cocktails** screen.",
   "onboarding.step6.message":
-    "At the top of **My cocktails** you’ll see cocktails you can make now.\n\nBelow are cocktails missing just one ingredient.",
+    "At the top of **My cocktails** you’ll see cocktails you can make now.\n\nBelow are cocktails that are missing just one ingredient.",
   "onboarding.step7.message":
     "Meet the **Shaker**.\nIt helps you find cocktails based on selected ingredients.",
   "onboarding.step8.message":
@@ -436,7 +436,7 @@ export const enUSTranslations: TranslationDictionary = {
   "sideMenu.keepScreenAwake": "Keep screen awake",
   "sideMenu.keepScreenAwakeCaption": "Prevent sleep on cocktail view",
   "sideMenu.smartShakerFiltering": "Smart shaker filtering",
-  "sideMenu.smartShakerFilteringInfo": "Smart shaker filtering info",
+  "sideMenu.smartShakerFilteringInfo": "How it works",
   "sideMenu.smartShakerFilteringInfoTitle": "Smart shaker filtering",
   "sideMenu.smartShakerFilteringInfoMessage":
     "When enabled, ingredients in groups with no current selection are hidden if they would produce zero results.\n\nIn groups where you already selected at least one ingredient, items stay visible to preserve OR logic.\n\nTurn this off to restore the default shaker behavior.",
@@ -444,8 +444,7 @@ export const enUSTranslations: TranslationDictionary = {
   "sideMenu.startingScreen": "Starting screen",
   "sideMenu.startingScreenOpen": "Open {{screen}}",
   "sideMenu.favoritesRatingFilter": "Favorites rating filter",
-  "sideMenu.favoritesRatingFilterCaption":
-    "Showing {{rating}}+ stars cocktails",
+  "sideMenu.favoritesRatingFilterCaption": "Showing {{rating}}+ star cocktails",
   "sideMenu.manageTags": "Manage tags",
   "sideMenu.manageTagsCaption": "Create or update your tags",
   "sideMenu.cocktailTags": "Cocktail tags",
@@ -481,7 +480,7 @@ export const enUSTranslations: TranslationDictionary = {
   "sideMenu.restartOnboarding": "Restart onboarding",
   "sideMenu.restartOnboardingCaption": "Show the guided tutorial again",
 
-  "app.loadingTagline": "your rules!",
+  "app.loadingTagline": "Your rules!",
   "appDialog.closeDialog": "Close dialog",
   "tagEditor.hue": "Hue",
   "tagEditor.tone": "Tone",

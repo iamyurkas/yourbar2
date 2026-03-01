@@ -3,7 +3,7 @@ import type { TranslationDictionary } from "@/libs/i18n/types";
 export const enGBTranslations: TranslationDictionary = {
   "common.search": "Search",
   "common.openNavigation": "Open navigation",
-  "common.clearSearch": "Clear search query",
+  "common.clearSearch": "Clear search",
   "common.openScreenHelp": "Open screen help",
   "common.goBack": "Go back",
   "common.filterItems": "Filter items",
@@ -32,14 +32,14 @@ export const enGBTranslations: TranslationDictionary = {
   "cocktails.emptyMy":
     "Mark ingredients you have to see available cocktails here.",
   "cocktails.emptyFavorites":
-    "Rate cocktails and/or adjust the rating threshold in the menu.",
+    "Rate cocktails or adjust the minimum rating in the menu.",
   "cocktails.emptyAll": "No cocktails yet",
   "cocktails.helpMyTitle": "My cocktails",
   "cocktails.helpMyText":
     "This screen shows cocktails you can make with your current ingredients.\n\nUse search to find your recipes quickly, and use filters to narrow the list by tags or method.",
   "cocktails.helpFavoritesTitle": "Favourite cocktails",
   "cocktails.helpFavoritesText":
-    "This screen shows cocktails you ranked.\n\nUse search and filters to find what you want faster.",
+    "This screen shows cocktails you’ve rated.\n\nUse search and filters to find what you want faster.",
   "cocktails.helpAllTitle": "All cocktails",
   "cocktails.helpAllText":
     "This screen shows the full cocktail collection.\n\nUse search, switch tabs, and apply filters by method or tags.",
@@ -123,7 +123,7 @@ export const enGBTranslations: TranslationDictionary = {
   "ingredientForm.deleteIngredient": "Delete ingredient",
   "ingredientForm.searchIngredients": "Search ingredients",
   "ingredientForm.noIngredientsFound": "No ingredients found",
-  "ingredientForm.helpTitle": "Adding ingredient",
+  "ingredientForm.helpTitle": "Add ingredient",
   "ingredientForm.helpMessage":
     "Use this screen to create a new ingredient card.\n\nAdd a name, optional photo, tags, base ingredient or style ingredient, and notes, then tap Save.\n\nA style ingredient can only link to a base ingredient that is neither branded nor styled.",
   "ingredientForm.newTag": "New tag",
@@ -190,7 +190,7 @@ export const enGBTranslations: TranslationDictionary = {
   "cocktailForm.selectEmptyUnit": "Select empty unit",
   "cocktailForm.clearMethods": "Clear methods",
   "cocktailForm.clearMethodsDescription": "Clear all selected methods.",
-  "cocktailForm.helpTitle": "Adding cocktail",
+  "cocktailForm.helpTitle": "Add cocktail",
   "cocktailForm.helpMessage":
     "Use this screen to build a new cocktail recipe.\n\nFill in name, photo, tags, ingredients, method, and instructions, then tap Save.",
   "cocktailForm.newTag": "New tag",
@@ -213,7 +213,7 @@ export const enGBTranslations: TranslationDictionary = {
     "If the specified ingredient isn't available, the cocktail will be shown as available with its base ingredient.",
   "cocktailForm.allowBrandedSubstitute": "Allow branded substitute",
   "cocktailForm.allowBrandedSubstituteMessage":
-    "If the specified ingredient isn't available, the cocktail will be shown as available with branded ingredients of the base.",
+    "If the specified ingredient isn't available, the cocktail will be shown as available with branded variants of the base ingredient.",
   "cocktailForm.allowStyleSubstitutes": "Allow style substitutes",
   "cocktailForm.allowStyleSubstitutesMessage":
     "If the specified styled ingredient isn't available, the cocktail will be shown as available with its style base ingredient or other styles of the same base.",
@@ -263,10 +263,10 @@ export const enGBTranslations: TranslationDictionary = {
     "Shake with ice. Best for citrus, syrup, cream, or egg white to aerate and chill.",
   "cocktailMethod.stir.label": "Stir",
   "cocktailMethod.stir.description":
-    "Stir with a bar spoon in a mixing glass full of ice. Best for herbal mixers.",
+    "Stir with a bar spoon in a mixing glass full of ice. Best for clear, herbal mixers.",
   "cocktailMethod.throw.label": "Throw",
   "cocktailMethod.throw.description":
-    "Pour between tins from a distance to aerate without cloudiness.",
+    "Pour between tins from a distance to aerate gently without over-diluting.",
   "cocktailMethod.build.label": "Build",
   "cocktailMethod.build.description":
     "Pour ingredients directly into the serving glass.",
@@ -336,8 +336,8 @@ export const enGBTranslations: TranslationDictionary = {
   "ingredientDetails.remove": "Remove",
 
   "shaker.helpBase":
-    "This screen helps you select ingredients and understand what you can mix right now.\n\nUse search to find ingredients quickly, tap ingredients to mark them to use, and open shaker results for matching cocktails.",
-  "shaker.currentSelection": "Current select",
+    "This screen helps you select ingredients and understand what you can mix right now.\n\nUse search to find ingredients quickly, tap ingredients to select them, and open shaker results for matching cocktails.",
+  "shaker.currentSelection": "Current selection",
   "shaker.clearSelectedIngredients": "Clear selected ingredients",
   "shaker.cocktailsCount": "Cocktails: {{count}}",
   "shaker.recipesCount": "(recipes: {{count}})",
@@ -444,8 +444,7 @@ export const enGBTranslations: TranslationDictionary = {
   "sideMenu.startingScreen": "Starting screen",
   "sideMenu.startingScreenOpen": "Open {{screen}}",
   "sideMenu.favoritesRatingFilter": "Favourites rating filter",
-  "sideMenu.favoritesRatingFilterCaption":
-    "Showing {{rating}}+ stars cocktails",
+  "sideMenu.favoritesRatingFilterCaption": "Showing {{rating}}+ star cocktails",
   "sideMenu.manageTags": "Manage tags",
   "sideMenu.manageTagsCaption": "Create or update your tags",
   "sideMenu.cocktailTags": "Cocktail tags",
@@ -474,14 +473,14 @@ export const enGBTranslations: TranslationDictionary = {
   "sideMenu.languageCurrent": "{{name}}",
   "sideMenu.reportIssueTitle": "Something wrong?",
   "sideMenu.reportIssueCaption": "Report a bug, share an idea",
-  "sideMenu.rateAppTitle": "Like Your Bar?",
+  "sideMenu.rateAppTitle": "Enjoying Your Bar?",
   "sideMenu.rateAppCaption": "Rate Your Bar!",
   "sideMenu.backupRestore": "Back up & Restore",
   "sideMenu.backupRestoreCaption": "Save your data, restore from a backup",
   "sideMenu.restartOnboarding": "Restart onboarding",
   "sideMenu.restartOnboardingCaption": "Show the guided tutorial again",
 
-  "app.loadingTagline": "your rules!",
+  "app.loadingTagline": "Your rules!",
   "appDialog.closeDialog": "Close dialogue",
   "tagEditor.hue": "Hue",
   "tagEditor.tone": "Tone",
@@ -490,7 +489,7 @@ export const enGBTranslations: TranslationDictionary = {
   "sideMenu.restore": "Restore",
   "sideMenu.restoreBundledData": "Restore bundled data",
   "sideMenu.restoreBundledDataDescription":
-    "Built-in changes will be lost, your own content is safe",
+    "Built-in changes will be lost. Your own content will remain safe.",
   "sideMenu.restoreBundledDataConfirmMessage":
     "This will restore the bundled cocktails and ingredients.\nYour custom cocktails and ingredients will stay the same.",
   "sideMenu.exportUnavailableTitle": "Export unavailable",
@@ -527,7 +526,7 @@ export const enGBTranslations: TranslationDictionary = {
   "sideMenu.backupData": "Back up data",
   "sideMenu.backingUpData": "Backing up data...",
   "sideMenu.backupDataDescription":
-    "Export cocktails, ingredients, and photos as one archive",
+    "Export cocktails, ingredients, and photos as a single archive.",
   "sideMenu.restoreData": "Restore data",
   "sideMenu.restoringData": "Restoring data...",
   "sideMenu.restoreDataDescription":
