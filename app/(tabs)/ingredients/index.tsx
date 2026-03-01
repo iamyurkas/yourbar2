@@ -67,6 +67,14 @@ type IngredientListItemProps = {
   onShoppingToggle?: (id: number) => void;
 };
 
+type IngredientRowMeta = {
+  isOnShoppingList: boolean;
+  isAvailable: boolean;
+  hasStyledVariants: boolean;
+  hasBrandedVariants: boolean;
+  subtitleText?: string;
+};
+
 const areIngredientPropsEqual = (
   prev: Readonly<IngredientListItemProps>,
   next: Readonly<IngredientListItemProps>,
@@ -630,37 +638,70 @@ export default function IngredientsScreen() {
 
   const keyExtractor = useCallback((item: Ingredient) => String(item.id ?? item.name), []);
 
-  const renderItem = useCallback(
-    ({ item }: { item: Ingredient }) => {
-      const ingredientId = Number(item.id ?? -1);
-      const isOnShoppingList = ingredientId >= 0 && shoppingIngredientIds.has(ingredientId);
-      const isAvailable = ingredientId >= 0 && effectiveAvailableIngredientIds.has(ingredientId);
+  const ingredientRowMetaByKey = useMemo(() => {
+    const rowMetaMap = new Map<string, IngredientRowMeta>();
+    const isMyTab = activeTab === 'my';
+    const countsMap = isMyTab ? ingredientCocktailStats.makeableCounts : ingredientCocktailStats.totalCounts;
 
-      const isMyTab = activeTab === 'my';
-      const countsMap = isMyTab
-        ? ingredientCocktailStats.makeableCounts
-        : ingredientCocktailStats.totalCounts;
-      const count = ingredientId >= 0 ? countsMap.get(ingredientId) ?? 0 : 0;
+    sortedIngredients.forEach((ingredient) => {
+      const ingredientId = Number(ingredient.id ?? -1);
+      const isValidId = ingredientId >= 0;
+      const isOnShoppingList = isValidId && shoppingIngredientIds.has(ingredientId);
+      const isAvailable = isValidId && effectiveAvailableIngredientIds.has(ingredientId);
+      const count = isValidId ? countsMap.get(ingredientId) ?? 0 : 0;
 
       let subtitleText: string | undefined;
       if (count > 0) {
         const pluralCategory = getPluralCategory(locale, count);
-        if (isMyTab) {
-          subtitleText = t(`ingredients.makeCount.${pluralCategory}`, { count });
-        } else {
-          subtitleText = t(`ingredients.recipeCount.${pluralCategory}`, { count });
-        }
+        subtitleText = isMyTab
+          ? t(`ingredients.makeCount.${pluralCategory}`, { count })
+          : t(`ingredients.recipeCount.${pluralCategory}`, { count });
       }
+
+      rowMetaMap.set(String(ingredient.id ?? ingredient.name), {
+        isOnShoppingList,
+        isAvailable,
+        hasStyledVariants: isValidId && styleBaseIngredientIds.has(ingredientId),
+        hasBrandedVariants: isValidId && brandedBaseIngredientIds.has(ingredientId),
+        subtitleText,
+      });
+    });
+
+    return rowMetaMap;
+  }, [
+    activeTab,
+    brandedBaseIngredientIds,
+    effectiveAvailableIngredientIds,
+    ingredientCocktailStats.makeableCounts,
+    ingredientCocktailStats.totalCounts,
+    locale,
+    shoppingIngredientIds,
+    sortedIngredients,
+    styleBaseIngredientIds,
+    t,
+  ]);
+
+  const renderItem = useCallback(
+    ({ item }: { item: Ingredient }) => {
+      const itemKey = String(item.id ?? item.name);
+      const ingredientId = Number(item.id ?? -1);
+      const isValidId = ingredientId >= 0;
+      const meta = ingredientRowMetaByKey.get(itemKey);
+
+      const isOnShoppingList = meta?.isOnShoppingList ?? (isValidId && shoppingIngredientIds.has(ingredientId));
+      const isAvailable = meta?.isAvailable ?? (isValidId && effectiveAvailableIngredientIds.has(ingredientId));
+      const hasStyledVariants = meta?.hasStyledVariants ?? (isValidId && styleBaseIngredientIds.has(ingredientId));
+      const hasBrandedVariants = meta?.hasBrandedVariants ?? (isValidId && brandedBaseIngredientIds.has(ingredientId));
 
       return (
         <IngredientListItem
           ingredient={item}
           highlightColor={highlightColor}
           isAvailable={isAvailable}
-          hasStyledVariants={ingredientId >= 0 && styleBaseIngredientIds.has(ingredientId)}
-          hasBrandedVariants={ingredientId >= 0 && brandedBaseIngredientIds.has(ingredientId)}
+          hasStyledVariants={hasStyledVariants}
+          hasBrandedVariants={hasBrandedVariants}
           onToggleAvailability={handleToggle}
-          subtitle={subtitleText}
+          subtitle={meta?.subtitleText}
           surfaceVariantColor={Colors.onSurfaceVariant ?? Colors.icon}
           isOnShoppingList={isOnShoppingList}
           showAvailabilityToggle={activeTab !== 'shopping'}
@@ -674,13 +715,11 @@ export default function IngredientsScreen() {
       handleToggle,
       handleShoppingToggle,
       highlightColor,
-      ingredientCocktailStats,
+      ingredientRowMetaByKey,
       Colors,
       shoppingIngredientIds,
       styleBaseIngredientIds,
       brandedBaseIngredientIds,
-      locale,
-      t,
     ],
   );
 
