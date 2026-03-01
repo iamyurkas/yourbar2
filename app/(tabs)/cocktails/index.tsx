@@ -273,11 +273,11 @@ export default function CocktailsScreen() {
     baseTabCocktails.forEach((cocktail) => {
       const legacyMethodId =
         (cocktail as { methodId?: CocktailMethod['id'] | null }).methodId ?? null;
-      const methodIds = cocktail.methodIds?.length
+      const methodIds = (cocktail.methodIds?.length
         ? cocktail.methodIds
         : legacyMethodId
           ? [legacyMethodId]
-          : [];
+          : []) as CocktailMethod["id"][];
       methodIds.forEach((methodId) => {
         if (methodMap.has(methodId)) {
           usedMethods.add(methodId);
@@ -330,7 +330,7 @@ export default function CocktailsScreen() {
 
     return base.filter((cocktail) => {
       const legacyMethodId = (cocktail as { methodId?: CocktailMethod['id'] | null }).methodId ?? null;
-      const methodIds = cocktail.methodIds?.length ? cocktail.methodIds : legacyMethodId ? [legacyMethodId] : [];
+      const methodIds = (cocktail.methodIds?.length ? cocktail.methodIds : legacyMethodId ? [legacyMethodId] : []) as CocktailMethod["id"][];
       if (methodIds.length === 0) {
         return false;
       }

@@ -4,12 +4,40 @@ import type { SupportedLocale } from '@/libs/i18n/types';
 
 export type BaseCocktailRecord = InventoryData['cocktails'][number];
 export type BaseIngredientRecord = InventoryData['ingredients'][number];
-type CocktailIngredientRecord = NonNullable<BaseCocktailRecord['ingredients']>[number];
-type CocktailSubstituteRecord = NonNullable<CocktailIngredientRecord['substitutes']>[number];
-type IngredientRecord = BaseIngredientRecord & {
+
+export type CocktailTag = {
+  id: number;
+  name: string;
+  color: string;
+};
+
+export type IngredientTag = {
+  id: number;
+  name: string;
+  color: string;
+};
+
+type CocktailIngredientRecord = NonNullable<BaseCocktailRecord['ingredients']>[number] & {
+  optional?: boolean | null;
+  garnish?: boolean | null;
+  photoUri?: string | null;
+  tags?: IngredientTag[] | null;
+  substitutes?: Array<{
+    ingredientId?: number | null;
+    name?: string | null;
+    brand?: boolean | null;
+  }> | null;
+};
+
+type CocktailSubstituteRecord = NonNullable<
+  NonNullable<CocktailIngredientRecord['substitutes']>[number]
+>;
+
+type IngredientRecord = Omit<BaseIngredientRecord, 'tags'> & {
+  tags?: IngredientTag[] | null;
   styleIngredientId?: number | null;
 };
-export type CocktailTag = NonNullable<BaseCocktailRecord['tags']>[number];
+
 export type CocktailSubstitute = CocktailSubstituteRecord & { brand?: boolean };
 export type CocktailIngredient = Omit<CocktailIngredientRecord, 'substitutes'> & {
   allowBaseSubstitution?: boolean;
@@ -17,20 +45,22 @@ export type CocktailIngredient = Omit<CocktailIngredientRecord, 'substitutes'> &
   allowStyleSubstitution?: boolean;
   substitutes?: CocktailSubstitute[];
 };
-type CocktailRecord = Omit<BaseCocktailRecord, 'ingredients' | 'searchName' | 'searchTokens'> & {
+
+type CocktailRecord = Omit<BaseCocktailRecord, 'ingredients' | 'searchName' | 'searchTokens' | 'tags'> & {
   ingredients?: CocktailIngredient[];
+  tags?: CocktailTag[] | null;
   searchName?: string | null;
   searchTokens?: string[] | null;
   methodId?: CocktailMethodId | null;
   methodIds?: CocktailMethodId[] | null;
 };
+
 export type PhotoBackupEntry = {
   type: 'cocktails' | 'ingredients';
   id?: number | string | null;
   name?: string | null;
   uri?: string | null;
 };
-
 
 export type ImportedPhotoEntry = {
   type: 'cocktails' | 'ingredients';
@@ -56,8 +86,6 @@ export type StartScreen =
 
 export type AppTheme = 'light' | 'dark' | 'system';
 export type AppLocale = 'en-GB' | 'en-US' | 'es-ES' | 'uk-UA';
-
-export type IngredientTag = NonNullable<IngredientRecord['tags']>[number];
 
 export type CreateCocktailSubstituteInput = {
   ingredientId?: number | string | null;

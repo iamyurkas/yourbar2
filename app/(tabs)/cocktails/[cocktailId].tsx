@@ -918,16 +918,16 @@ export default function CocktailDetailsScreen() {
 
             {cocktail.tags && cocktail.tags.length ? (
               <View style={styles.tagList}>
-                {(cocktail.tags as (CocktailTag | number)[]).map((tag, index) => {
-                  if (typeof tag === "number") {
-                    const fallbackName = t(`cocktailTag.${tag}`);
+                {(cocktail.tags as unknown[]).map((rawTag, index) => {
+                  if (typeof rawTag === "number") {
+                    const fallbackName = t(`cocktailTag.${rawTag}`);
                     const finalName =
-                      fallbackName !== `cocktailTag.${tag}`
+                      fallbackName !== `cocktailTag.${rawTag}`
                         ? fallbackName
                         : t("cocktailDetails.tag");
                     return (
                       <TagPill
-                        key={`tag-${tag}-${index}`}
+                        key={`tag-${rawTag}-${index}`}
                         label={finalName}
                         color={Colors.tint}
                         selected
@@ -936,6 +936,7 @@ export default function CocktailDetailsScreen() {
                     );
                   }
 
+                  const tag = (rawTag ?? {}) as Partial<CocktailTag>;
                   const tagKey =
                     tag.id != null
                       ? `tag-${tag.id}`
@@ -944,7 +945,10 @@ export default function CocktailDetailsScreen() {
                         : `tag-${index}`;
 
                   const tagName = tag.id != null ? t(`cocktailTag.${tag.id}`) : tag.name;
-                  const finalName = (tagName && tagName !== `cocktailTag.${tag.id}`) ? tagName : (tag.name ?? t("cocktailDetails.tag"));
+                  const finalName =
+                    tagName && tag.id != null && tagName !== `cocktailTag.${tag.id}`
+                      ? tagName
+                      : (tag.name ?? t("cocktailDetails.tag"));
 
                   return (
                     <TagPill

@@ -531,7 +531,7 @@ export default function CreateCocktailScreen() {
         }
 
         set.add(cocktailKey);
-      });
+      })
     });
 
     return map;
@@ -547,7 +547,10 @@ export default function CreateCocktailScreen() {
     [glassId],
   );
   const selectedMethods = useMemo(
-    () => methodIds.map((id) => getCocktailMethodById(id)).filter(Boolean),
+    () => methodIds.flatMap((id) => {
+      const method = getCocktailMethodById(id);
+      return method ? [method] : [];
+    }),
     [methodIds],
   );
 
@@ -1169,7 +1172,7 @@ export default function CreateCocktailScreen() {
       .map((item, index) => {
         const ingredientName = item.name.trim();
         if (!ingredientName) {
-          return undefined;
+          return null;
         }
 
         const normalizedIngredientId =
@@ -1190,39 +1193,29 @@ export default function CreateCocktailScreen() {
             ? Math.trunc(normalizedUnitId)
             : undefined;
 
-        const substitutes = item.substitutes
-          .map((substitute) => {
-            const substituteName = substitute.name.trim();
-            if (!substituteName) {
-              return undefined;
-            }
+        const substitutes: CreateCocktailInput["ingredients"][number]["substitutes"] = item.substitutes.flatMap((substitute) => {
+          const substituteName = substitute.name.trim();
+          if (!substituteName) {
+            return [];
+          }
 
-            const rawIngredientLink =
-              substitute.ingredientId != null
-                ? Number(substitute.ingredientId)
-                : undefined;
-            const substituteIngredientId =
-              rawIngredientLink != null &&
-                Number.isFinite(rawIngredientLink) &&
-                rawIngredientLink >= 0
-                ? Math.trunc(rawIngredientLink)
-                : undefined;
+          const rawIngredientLink =
+            substitute.ingredientId != null
+              ? Number(substitute.ingredientId)
+              : undefined;
+          const substituteIngredientId =
+            rawIngredientLink != null &&
+              Number.isFinite(rawIngredientLink) &&
+              rawIngredientLink >= 0
+              ? Math.trunc(rawIngredientLink)
+              : undefined;
 
-            return {
-              ingredientId: substituteIngredientId,
-              name: substituteName,
-              brand: substitute.isBrand ?? false,
-            };
-          })
-          .filter(
-            (
-              substitute,
-            ): substitute is {
-              ingredientId?: number;
-              name: string;
-              brand: boolean;
-            } => Boolean(substitute),
-          );
+          return [{
+            ingredientId: substituteIngredientId,
+            name: substituteName,
+            brand: substitute.isBrand ?? false,
+          }];
+        });
 
         return {
           ingredientId,
@@ -1238,9 +1231,7 @@ export default function CreateCocktailScreen() {
           order: index + 1,
         } satisfies CreateCocktailInput["ingredients"][number];
       })
-      .filter((value): value is CreateCocktailInput["ingredients"][number] =>
-        Boolean(value),
-      );
+      .filter((item): item is CreateCocktailInput["ingredients"][number] => item != null);
 
     if (!sanitizedIngredients.length) {
       showDialog({
@@ -1422,7 +1413,7 @@ export default function CreateCocktailScreen() {
 
             setHasUnsavedChanges(false);
             const state = navigation.getState();
-            const currentIndex = state.index ?? 0;
+            const currentIndex = state?.index ?? 0;
             if (currentIndex >= 2) {
               navigation.dispatch(StackActions.pop(2));
               return;
@@ -1813,7 +1804,10 @@ export default function CreateCocktailScreen() {
                   numberOfLines={1}
                 >
                   {selectedMethods.length
-                    ? selectedMethods.map((method) => t(`cocktailMethod.${method.id}.label`)).join(", ")
+                    ? selectedMethods
+                        .filter((method): method is { id: CocktailMethodId } => Boolean(method?.id))
+                        .map((method) => t(`cocktailMethod.${method.id}.label`))
+                        .join(", ")
                     : t("cocktailForm.notSpecified")}
                 </Text>
               </View>
