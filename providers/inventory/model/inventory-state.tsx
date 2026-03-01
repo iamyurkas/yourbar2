@@ -118,8 +118,8 @@ function applyDeltaToInventoryData(
 ): InventoryData {
   return {
     ...baseData,
-    cocktails: applyDeltaToCollection(baseData.cocktails, delta.cocktails),
-    ingredients: applyDeltaToCollection(baseData.ingredients, delta.ingredients),
+    cocktails: applyDeltaToCollection(baseData.cocktails, delta.cocktails) as InventoryData["cocktails"],
+    ingredients: applyDeltaToCollection(baseData.ingredients, delta.ingredients) as InventoryData["ingredients"],
   };
 }
 

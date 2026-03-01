@@ -1,21 +1,24 @@
 import base from "./app.base.json";
 
 type ExpoConfig = Record<string, any>;
+type ExpoIosConfig = {
+  infoPlist?: Record<string, unknown>;
+} & Record<string, unknown>;
 
 export default ({ config }: { config: ExpoConfig }) => ({
   expo: {
     ...config,
     ...base.expo,
 
-    ios: {
-      ...(config.ios ?? {}),
-      ...(base.expo.ios ?? {}),
-      bundleIdentifier: "com.yourbarapp.free",
+	  ios: {
+	    ...(config.ios ?? {}),
+	    ...(base.expo.ios ?? {}),
+	    bundleIdentifier: "com.yourbarapp.free",
 
-      infoPlist: {
-        ...((config.ios ?? {}).infoPlist ?? {}),
-        ...((base.expo.ios ?? {}).infoPlist ?? {}),
-        ITSAppUsesNonExemptEncryption: false,
+	    infoPlist: {
+	      ...(((config.ios ?? {}) as ExpoIosConfig).infoPlist ?? {}),
+	      ...(((base.expo.ios ?? {}) as ExpoIosConfig).infoPlist ?? {}),
+	      ITSAppUsesNonExemptEncryption: false,
         NSPhotoLibraryUsageDescription:
           "Your Bar uses your photo library so you can attach custom photos to cocktails and ingredients.",
         NSPhotoLibraryAddUsageDescription:

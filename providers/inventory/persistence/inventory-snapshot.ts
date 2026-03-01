@@ -206,8 +206,8 @@ export function buildInventorySnapshot(
 
   return {
     ...base,
-    customCocktailTags: options.customCocktailTags,
-    customIngredientTags: options.customIngredientTags,
+    customCocktailTags: options.customCocktailTags as unknown as Array<{ id: number; name: string; color: string }>,
+    customIngredientTags: options.customIngredientTags as unknown as Array<{ id: number; name: string; color: string }>,
     availableIngredientIds:
       options.availableIngredientIds.size > 0 ? toSortedArray(options.availableIngredientIds) : undefined,
     shoppingIngredientIds:

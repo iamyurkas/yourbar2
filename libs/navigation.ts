@@ -1,8 +1,18 @@
 import { StackActions, type NavigationProp, type ParamListBase } from '@react-navigation/native';
 import { router } from 'expo-router';
 
-type RouteParams = Record<string, unknown> | undefined;
+type RouteParams = object | undefined;
 type ReturnToParams = Record<string, string> | undefined;
+
+
+type NavigationLike = Pick<NavigationProp<ParamListBase>, 'goBack' | 'dispatch'> & {
+  getState: () =>
+    | {
+        index: number;
+        routes: Array<{ name: string; params?: RouteParams }>;
+      }
+    | undefined;
+};
 
 const areParamsEqual = (left?: RouteParams, right?: RouteParams): boolean => {
   if (!left && !right) {
@@ -37,17 +47,17 @@ const areRoutesEqual = (
   return areParamsEqual(left.params, right.params);
 };
 
-export const skipDuplicateBack = (navigation: NavigationProp<ParamListBase>) => {
+export const skipDuplicateBack = (navigation: NavigationLike) => {
   const state = navigation.getState();
-  const currentIndex = state.index ?? 0;
+  const currentIndex = state?.index ?? 0;
 
   if (currentIndex <= 0) {
     navigation.goBack();
     return;
   }
 
-  const current = state.routes[currentIndex];
-  const previous = state.routes[currentIndex - 1];
+  const current = state?.routes[currentIndex];
+  const previous = state?.routes[currentIndex - 1];
   const shouldSkip = areRoutesEqual(current, previous);
 
   if (shouldSkip && currentIndex >= 2) {
@@ -120,7 +130,7 @@ export const navigateToDetailsWithReturnTo = ({
 };
 
 export const returnToSourceOrBack = (
-  navigation: NavigationProp<ParamListBase>,
+  navigation: NavigationLike,
   {
     returnToPath,
     returnToParams,
