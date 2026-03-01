@@ -814,7 +814,8 @@ export default function IngredientDetailsScreen() {
     >
       <Stack.Screen
         options={{
-          title: t("ingredientDetails.title"),
+          title:
+            ingredient?.name || requestedIngredientParam || t("ingredientDetails.title"),
           headerTitleAlign: "center",
           headerStyle: { backgroundColor: Colors.surface },
           headerTitleStyle: {
@@ -1607,12 +1608,15 @@ export default function IngredientDetailsScreen() {
               onPress={handleCreateMissingIngredient}
               accessibilityRole="button"
               accessibilityLabel={t("ingredientDetails.createMissingIngredient")}
-              style={[
+              style={({ pressed }) => [
                 styles.emptyStateAction,
-                { backgroundColor: Colors.tint },
+                {
+                  backgroundColor: Colors.tint,
+                  opacity: pressed ? 0.8 : 1,
+                },
               ]}
             >
-              <Text style={[styles.emptyStateActionLabel, { color: Colors.onTint }]}>
+              <Text style={[styles.emptyStateActionLabel, { color: Colors.onPrimary }]}>
                 {t("ingredientDetails.createMissingIngredient")}
               </Text>
             </Pressable>
@@ -1921,9 +1925,9 @@ const styles = StyleSheet.create({
     maxWidth: 280,
   },
   emptyStateAction: {
-    marginTop: 8,
-    minWidth: 240,
-    minHeight: 50,
+    marginTop: 12,
+    minWidth: 250,
+    minHeight: 56,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 12,
