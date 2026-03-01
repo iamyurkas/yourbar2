@@ -814,8 +814,7 @@ export default function IngredientDetailsScreen() {
     >
       <Stack.Screen
         options={{
-          title:
-            ingredient?.name || requestedIngredientParam || t("ingredientDetails.title"),
+          title: t("ingredientDetails.title"),
           headerTitleAlign: "center",
           headerStyle: { backgroundColor: Colors.surface },
           headerTitleStyle: {
@@ -1585,41 +1584,48 @@ export default function IngredientDetailsScreen() {
             </View>
           </View>
         ) : (
-          <View style={styles.emptyState}>
-            <MaterialCommunityIcons
-              name="bottle-tonic-outline"
-              size={42}
-              color={Colors.onSurfaceVariant}
-            />
-            <Text
-              style={[
-                styles.emptyText,
-                { color: Colors.onSurfaceVariant },
-              ]}
-            >
-              {t("ingredientDetails.notFound")}
-            </Text>
-            <Text
-              style={[styles.emptyHintText, { color: Colors.onSurfaceVariant }]}
-            >
-              {t("ingredientDetails.notFoundSuggestion")}
-            </Text>
-            <Pressable
-              onPress={handleCreateMissingIngredient}
-              accessibilityRole="button"
-              accessibilityLabel={t("ingredientDetails.createMissingIngredient")}
-              style={({ pressed }) => [
-                styles.emptyStateAction,
-                {
-                  backgroundColor: Colors.tint,
-                  opacity: pressed ? 0.8 : 1,
-                },
-              ]}
-            >
-              <Text style={[styles.emptyStateActionLabel, { color: Colors.onPrimary }]}>
-                {t("ingredientDetails.createMissingIngredient")}
+          <View style={styles.section}>
+            {requestedIngredientParam ? (
+              <Text style={[styles.name, { color: Colors.onSurface }]}>
+                {requestedIngredientParam}
               </Text>
-            </Pressable>
+            ) : null}
+            <View style={styles.emptyState}>
+              <MaterialCommunityIcons
+                name="bottle-tonic-outline"
+                size={42}
+                color={Colors.onSurfaceVariant}
+              />
+              <Text
+                style={[
+                  styles.emptyText,
+                  { color: Colors.onSurfaceVariant },
+                ]}
+              >
+                {t("ingredientDetails.notFound")}
+              </Text>
+              <Text
+                style={[styles.emptyHintText, { color: Colors.onSurfaceVariant }]}
+              >
+                {t("ingredientDetails.notFoundSuggestion")}
+              </Text>
+              <Pressable
+                onPress={handleCreateMissingIngredient}
+                accessibilityRole="button"
+                accessibilityLabel={t("ingredientDetails.createMissingIngredient")}
+                style={({ pressed }) => [
+                  styles.emptyStateAction,
+                  {
+                    backgroundColor: Colors.tint,
+                    opacity: pressed ? 0.8 : 1,
+                  },
+                ]}
+              >
+                <Text style={[styles.emptyStateActionLabel, { color: Colors.onPrimary }]}>
+                  {t("ingredientDetails.createMissingIngredient")}
+                </Text>
+              </Pressable>
+            </View>
           </View>
         )}
       </ScrollView>
@@ -1907,7 +1913,6 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   emptyState: {
-    flex: 1,
     alignItems: "center",
     justifyContent: "center",
     paddingVertical: 80,
