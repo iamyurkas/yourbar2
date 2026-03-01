@@ -445,8 +445,14 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           const nextAppTheme = sanitizeAppTheme(stored.appTheme);
           const nextAmazonStoreOverride = sanitizeAmazonStoreOverride(stored.amazonStoreOverride);
           const nextAppLocale = sanitizeAppLocale(stored.appLocale);
-          const nextCustomCocktailTags = sanitizeCustomTags(stored.customCocktailTags, DEFAULT_TAG_COLOR);
-          const nextCustomIngredientTags = sanitizeCustomTags(stored.customIngredientTags, DEFAULT_TAG_COLOR);
+          const nextCustomCocktailTags = sanitizeCustomTags(
+            'customCocktailTags' in stored ? stored.customCocktailTags : undefined,
+            DEFAULT_TAG_COLOR,
+          );
+          const nextCustomIngredientTags = sanitizeCustomTags(
+            'customIngredientTags' in stored ? stored.customIngredientTags : undefined,
+            DEFAULT_TAG_COLOR,
+          );
           const nextOnboardingStep = 0;
           const nextOnboardingCompleted = stored.onboardingCompleted ?? false;
           const nextTranslationOverrides = sanitizeTranslationOverrides((stored as { translationOverrides?: unknown }).translationOverrides);
@@ -692,11 +698,11 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           return prev;
         }
 
-        const sanitizedIngredients = (input.ingredients ?? [])
-          .map((ingredient, index) => {
+        const sanitizedIngredients: CocktailIngredient[] = (input.ingredients ?? [])
+          .flatMap((ingredient, index) => {
             const trimmedIngredientName = ingredient.name?.trim();
             if (!trimmedIngredientName) {
-              return undefined;
+              return [];
             }
 
             const normalizedIngredientId =
@@ -756,7 +762,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
               });
             });
 
-            return {
+            const sanitizedIngredient: CocktailIngredient = {
               order: index + 1,
               ingredientId,
               name: trimmedIngredientName,
@@ -768,9 +774,10 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
               allowBrandSubstitution: allowBrand,
               allowStyleSubstitution: allowStyle,
               substitutes: substitutes.length > 0 ? substitutes : undefined,
-            } satisfies CocktailIngredient;
-          })
-          .filter((value): value is CocktailIngredient => Boolean(value));
+            };
+
+            return [sanitizedIngredient];
+          });
 
         if (sanitizedIngredients.length === 0) {
           return prev;
@@ -1556,11 +1563,11 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         return prev;
       }
 
-      const sanitizedIngredients = (input.ingredients ?? [])
-        .map((ingredient, index) => {
+      const sanitizedIngredients: CocktailIngredient[] = (input.ingredients ?? [])
+        .flatMap((ingredient, index) => {
           const trimmedIngredientName = ingredient.name?.trim();
           if (!trimmedIngredientName) {
-            return undefined;
+            return [];
           }
 
           const normalizedIngredientId = ingredient.ingredientId != null ? Number(ingredient.ingredientId) : undefined;
@@ -1616,7 +1623,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             });
           });
 
-          return {
+          const sanitizedIngredient: CocktailIngredient = {
             order: index + 1,
             ingredientId,
             name: trimmedIngredientName,
@@ -1628,10 +1635,10 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             allowBrandSubstitution: allowBrand,
             allowStyleSubstitution: allowStyle,
             substitutes: substitutes.length > 0 ? substitutes : undefined,
-          } satisfies CocktailIngredient;
-        })
-        .filter((value): value is CocktailIngredient => Boolean(value));
+          };
 
+          return [sanitizedIngredient];
+        });
       if (sanitizedIngredients.length === 0) {
         return prev;
       }
