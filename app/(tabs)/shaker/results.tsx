@@ -23,7 +23,7 @@ import { TagPill } from '@/components/TagPill';
 import { getCocktailMethods, METHOD_ICON_MAP, type CocktailMethod } from '@/constants/cocktail-methods';
 import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
 import { useAppColors } from '@/constants/theme';
-import { isCocktailReady, summariseCocktailAvailability } from '@/libs/cocktail-availability';
+import { summariseCocktailAvailability } from '@/libs/cocktail-availability';
 import { createIngredientLookup } from '@/libs/ingredient-availability';
 import { navigateToDetailsWithReturnTo } from '@/libs/navigation';
 import { normalizeSearchText } from '@/libs/search-normalization';
@@ -478,6 +478,29 @@ export default function ShakerResultsScreen() {
     );
   }, [filteredByTags, normalizedQuery]);
 
+  const availabilitySummaryByKey = useMemo(() => {
+    const summaryMap = new Map<string, ReturnType<typeof summariseCocktailAvailability>>();
+
+    filteredCocktails.forEach((cocktail) => {
+      const cocktailKey = String(cocktail.id ?? cocktail.name);
+      summaryMap.set(
+        cocktailKey,
+        summariseCocktailAvailability(cocktail, availableIngredientIds, ingredientLookup, undefined, {
+          ignoreGarnish,
+          allowAllSubstitutes,
+        }),
+      );
+    });
+
+    return summaryMap;
+  }, [
+    allowAllSubstitutes,
+    availableIngredientIds,
+    filteredCocktails,
+    ignoreGarnish,
+    ingredientLookup,
+  ]);
+
   const isFilterActive = selectedTagKeys.size > 0 || selectedMethodIds.size > 0;
   const filterMenuTop = useMemo(() => {
     if (headerLayout && filterAnchorLayout) {
@@ -520,12 +543,25 @@ export default function ShakerResultsScreen() {
   );
 
   const getAvailabilitySummary = useCallback(
-    (cocktail: Cocktail) =>
-      summariseCocktailAvailability(cocktail, availableIngredientIds, ingredientLookup, undefined, {
+    (cocktail: Cocktail) => {
+      const cocktailKey = String(cocktail.id ?? cocktail.name);
+      const cachedSummary = availabilitySummaryByKey.get(cocktailKey);
+      if (cachedSummary) {
+        return cachedSummary;
+      }
+
+      return summariseCocktailAvailability(cocktail, availableIngredientIds, ingredientLookup, undefined, {
         ignoreGarnish,
         allowAllSubstitutes,
-      }),
-    [allowAllSubstitutes, availableIngredientIds, ignoreGarnish, ingredientLookup],
+      });
+    },
+    [
+      allowAllSubstitutes,
+      availabilitySummaryByKey,
+      availableIngredientIds,
+      ignoreGarnish,
+      ingredientLookup,
+    ],
   );
 
   const renderItem = useCallback(
@@ -557,21 +593,14 @@ export default function ShakerResultsScreen() {
 
   const renderSeparator = useCallback(
     ({ leadingItem }: { leadingItem?: Cocktail | null }) => {
-      const isReady = leadingItem
-        ? isCocktailReady(leadingItem, availableIngredientIds, ingredientLookup, undefined, {
-          ignoreGarnish,
-          allowAllSubstitutes,
-        })
-        : false;
+      const cocktailKey = leadingItem ? String(leadingItem.id ?? leadingItem.name) : '';
+      const isReady = cocktailKey ? availabilitySummaryByKey.get(cocktailKey)?.isReady ?? false : false;
       const backgroundColor = isReady ? Colors.outline : Colors.outlineVariant;
 
       return <View style={[styles.divider, { backgroundColor }]} />;
     },
     [
-      allowAllSubstitutes,
-      availableIngredientIds,
-      ignoreGarnish,
-      ingredientLookup,
+      availabilitySummaryByKey,
       Colors,
     ],
   );
