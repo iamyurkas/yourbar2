@@ -18,6 +18,8 @@ type CatalogOverlayDictionary = Record<string, string>;
 type CatalogEntity = 'cocktail' | 'ingredient';
 type CatalogField = 'name' | 'description' | 'instructions' | 'synonyms';
 
+const MISSING_TRANSLATION = '__MISSING_TRANSLATION__';
+
 const CATALOG_OVERLAYS: Record<SupportedLocale, CatalogOverlayDictionary> = {
   'en-GB': enGBCatalogOverlay,
   'en-US': enUSCatalogOverlay,
@@ -26,6 +28,9 @@ const CATALOG_OVERLAYS: Record<SupportedLocale, CatalogOverlayDictionary> = {
 };
 
 const DEFAULT_LOCALE: SupportedLocale = 'en-GB';
+
+const catalogFieldTranslationCache = new Map<string, string | typeof MISSING_TRANSLATION>();
+const recipeIngredientTranslationCache = new Map<string, string | typeof MISSING_TRANSLATION>();
 
 function getCatalogOverlayValue(locale: SupportedLocale, key: string): string | undefined {
   return CATALOG_OVERLAYS[locale][key] ?? CATALOG_OVERLAYS[DEFAULT_LOCALE][key];
@@ -42,8 +47,17 @@ function getCatalogFieldTranslation(
     return undefined;
   }
 
-  const key = `${entity}.${Math.trunc(numericId)}.${field}`;
-  return getCatalogOverlayValue(locale, key)?.trim() || undefined;
+  const normalizedId = Math.trunc(numericId);
+  const cacheKey = `${locale}|${entity}|${normalizedId}|${field}`;
+  const cached = catalogFieldTranslationCache.get(cacheKey);
+  if (cached) {
+    return cached === MISSING_TRANSLATION ? undefined : cached;
+  }
+
+  const key = `${entity}.${normalizedId}.${field}`;
+  const value = getCatalogOverlayValue(locale, key)?.trim() || undefined;
+  catalogFieldTranslationCache.set(cacheKey, value ?? MISSING_TRANSLATION);
+  return value;
 }
 
 function getRecipeIngredientNameTranslation(
@@ -62,8 +76,18 @@ function getRecipeIngredientNameTranslation(
     return undefined;
   }
 
-  const key = `cocktail.${Math.trunc(normalizedCocktailId)}.ingredient.${Math.trunc(normalizedIngredientId)}.name`;
-  return getCatalogOverlayValue(locale, key)?.trim() || undefined;
+  const normalizedCocktail = Math.trunc(normalizedCocktailId);
+  const normalizedIngredient = Math.trunc(normalizedIngredientId);
+  const cacheKey = `${locale}|${normalizedCocktail}|${normalizedIngredient}`;
+  const cached = recipeIngredientTranslationCache.get(cacheKey);
+  if (cached) {
+    return cached === MISSING_TRANSLATION ? undefined : cached;
+  }
+
+  const key = `cocktail.${normalizedCocktail}.ingredient.${normalizedIngredient}.name`;
+  const value = getCatalogOverlayValue(locale, key)?.trim() || undefined;
+  recipeIngredientTranslationCache.set(cacheKey, value ?? MISSING_TRANSLATION);
+  return value;
 }
 
 function normalizeOptionalText(value?: string | null): string | undefined {
