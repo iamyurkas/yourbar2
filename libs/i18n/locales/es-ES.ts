@@ -430,7 +430,7 @@ export const esESTranslations: TranslationDictionary = {
   "sideMenu.smartShakerFilteringInfoMessage":
     "Cuando está activado, los ingredientes de grupos sin selección actual se ocultan si no producirían resultados.\n\nEn grupos donde ya has seleccionado al menos un ingrediente, los elementos permanecen visibles para mantener la lógica *o*.\n\nDesactívalo para restaurar el comportamiento predeterminado de la coctelera.",
   "sideMenu.smartShakerFilteringCaption":
-    "Ocultar ingredientes no coincidentes en la coctelera",
+    "Ocultar ingredientes no coincidentes en la Coctelera",
   "sideMenu.startingScreen": "Pantalla inicial",
   "sideMenu.startingScreenOpen": "Abrir {{screen}}",
   "sideMenu.favoritesRatingFilter": "Filtro de favoritos",
@@ -464,14 +464,14 @@ export const esESTranslations: TranslationDictionary = {
   "sideMenu.language": "Idioma",
   "sideMenu.languageCurrent": "{{name}}",
   "sideMenu.reportIssueTitle": "¿Algo va mal?",
-  "sideMenu.reportIssueCaption": "Informar de un error o sugerir una idea",
+  "sideMenu.reportIssueCaption": "Reportar un error o sugerir ideas",
   "sideMenu.rateAppTitle": "¿Te gusta Your Bar?",
   "sideMenu.rateAppCaption": "¡Califica Your Bar!",
   "sideMenu.backupRestore": "Copia de seguridad y restauración",
   "sideMenu.backupRestoreCaption":
     "Guardar y restaurar desde una copia de seguridad",
-  "sideMenu.restartOnboarding": "Reiniciar tutorial",
-  "sideMenu.restartOnboardingCaption": "Mostrar de nuevo el tutorial guiado",
+  "sideMenu.restartOnboarding": "Reiniciar el tutorial",
+  "sideMenu.restartOnboardingCaption": "Mostrar de nuevo el tutorial",
   "app.loadingTagline": "¡Tus reglas!",
   "appDialog.closeDialog": "Cerrar diálogo",
   "tagEditor.hue": "Tono",
@@ -529,9 +529,9 @@ export const esESTranslations: TranslationDictionary = {
   "language.en-US": "Inglés (EE. UU.)",
   "language.uk-UA": "Ucraniano",
   "language.es-ES": "Español (España)",
-  "languageModal.title": "Idioma",
+  "languageModal.title": "Idioma de la app",
   "languageModal.description":
-    "Elige el idioma de la aplicación. Los cambios se aplican inmediatamente.",
+    "Los cambios se aplican inmediatamente.\nLos datos incluidos se traducirán.",
   "languageModal.close": "Cerrar",
   "languageModal.selectLanguage": "Cambiar idioma a {{name}}",
   "startScreen.cocktails_all.label": "Todos los cócteles",

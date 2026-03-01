@@ -470,7 +470,7 @@ export const enUSTranslations: TranslationDictionary = {
   "sideMenu.closeMenu": "Close menu",
   "sideMenu.amazonStore": "Amazon store",
   "sideMenu.amazonStoreCurrent": "Current: {{label}}",
-  "sideMenu.language": "Language",
+  "sideMenu.language": "App Language",
   "sideMenu.languageCurrent": "{{name}}",
   "sideMenu.reportIssueTitle": "Something wrong?",
   "sideMenu.reportIssueCaption": "Report a bug, share an idea",
@@ -537,9 +537,9 @@ export const enUSTranslations: TranslationDictionary = {
   "language.en-US": "English",
   "language.uk-UA": "Ukrainian",
   "language.es-ES": "Spanish",
-  "languageModal.title": "Language",
+  "languageModal.title": "App Language",
   "languageModal.description":
-    "Choose the app language. Changes apply immediately.",
+    "Changes are applied immediately.\nBundled data will be translated.",
   "languageModal.close": "Close",
   "languageModal.selectLanguage": "Set language to {{name}}",
 

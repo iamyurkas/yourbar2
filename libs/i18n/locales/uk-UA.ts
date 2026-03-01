@@ -541,9 +541,9 @@ export const ukUATranslations: TranslationDictionary = {
   "language.en-US": "Американська англійська",
   "language.uk-UA": "Українська",
   "language.es-ES": "Іспанська",
-  "languageModal.title": "Мова",
+  "languageModal.title": "Мова застосунку",
   "languageModal.description":
-    "Оберіть мову застосунку. Зміни застосовуються одразу.",
+    "Зміни застосовуються негайно.\nВбудовані дані буде перекладено.",
   "languageModal.close": "Закрити",
   "languageModal.selectLanguage": "Встановити мову: {{name}}",
 
