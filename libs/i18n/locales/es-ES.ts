@@ -314,7 +314,8 @@ export const esESTranslations: TranslationDictionary = {
   "ingredientDetails.editIngredient": "Editar ingrediente",
   "ingredientDetails.notFound": "Ingrediente no encontrado",
 
-  "ingredientDetails.notFoundSuggestion": "Este ingrediente aún no existe. Puedes crearlo ahora.",
+  "ingredientDetails.notFoundSuggestion":
+    "Este ingrediente aún no existe. Puedes crearlo ahora.",
   "ingredientDetails.createMissingIngredient": "Crear este ingrediente",
   "ingredientDetails.helpMessage":
     "Esta pantalla muestra detalles del ingrediente, enlaces y cócteles relacionados.\n\nUsa el botón bajo el ingrediente para editarlo.\n\n**Cintas de cócteles**\nLa cinta izquierda muestra lo que contiene:\nazul = tiene ingredientes de marca,\namarillo = tiene ingredientes de estilo.\n\nLa cinta derecha muestra alternativas:\nazul = hay alternativa de marca,\namarillo = hay alternativa de estilo.",
@@ -531,7 +532,7 @@ export const esESTranslations: TranslationDictionary = {
   "language.en-GB": "Inglés",
   "language.en-US": "Inglés (EE. UU.)",
   "language.uk-UA": "Ucraniano",
-  "language.es-ES": "Español (España)",
+  "language.es-ES": "Español (beta)",
   "languageModal.title": "Idioma de la app",
   "languageModal.description":
     "Los cambios se aplican inmediatamente.\nLos datos incluidos se traducirán.",

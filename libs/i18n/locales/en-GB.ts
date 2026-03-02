@@ -320,7 +320,8 @@ export const enGBTranslations: TranslationDictionary = {
   "ingredientDetails.editIngredient": "Edit ingredient",
   "ingredientDetails.notFound": "Ingredient not found",
 
-  "ingredientDetails.notFoundSuggestion": "This ingredient does not exist yet. You can create it now.",
+  "ingredientDetails.notFoundSuggestion":
+    "This ingredient does not exist yet. You can create it now.",
   "ingredientDetails.createMissingIngredient": "Create this ingredient",
   "ingredientDetails.helpMessage":
     "This screen shows ingredient details, links, and related cocktails.\n\nUse the button under the ingredient to edit it.\n\n**Cocktail ribbons**\nLeft ribbon shows what's inside:\nblue = has brand ingredients,\nyellow = has style ingredients.\n\nRight ribbon shows fallback:\nblue = brand fallback exists,\nyellow = style fallback exists.",
@@ -538,7 +539,7 @@ export const enGBTranslations: TranslationDictionary = {
   "language.en-GB": "English",
   "language.en-US": "English (US)",
   "language.uk-UA": "Ukrainian",
-  "language.es-ES": "Spanish",
+  "language.es-ES": "Spanish (beta)",
   "languageModal.title": "App Language",
   "languageModal.description":
     "Changes are applied immediately.\nBundled data will be translated.",

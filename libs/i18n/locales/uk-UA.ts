@@ -543,7 +543,7 @@ export const ukUATranslations: TranslationDictionary = {
   "language.en-GB": "Англійська",
   "language.en-US": "Американська англійська",
   "language.uk-UA": "Українська",
-  "language.es-ES": "Іспанська",
+  "language.es-ES": "Іспанська (beta)",
   "languageModal.title": "Мова застосунку",
   "languageModal.description":
     "Зміни застосовуються негайно.\nВбудовані дані буде перекладено.",
