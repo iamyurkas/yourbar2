@@ -46,7 +46,9 @@ function ThemeAppWrapper({ children }: { children: React.ReactNode }) {
   const { colors } = paperTheme;
 
   useEffect(() => {
-    Appearance.setColorScheme(appTheme === "system" ? null : isDark ? "dark" : "light");
+    if (Appearance.setColorScheme) {
+      Appearance.setColorScheme(appTheme === "system" ? null : isDark ? "dark" : "light");
+    }
   }, [appTheme, isDark]);
 
   const navigationTheme = ({
