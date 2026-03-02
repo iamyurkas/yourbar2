@@ -327,6 +327,7 @@ export function OnboardingOverlay() {
       </Svg>
 
       <View
+        pointerEvents="box-none"
         style={[
           styles.tooltip,
           {
