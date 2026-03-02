@@ -83,9 +83,9 @@ export default function TabLayout() {
             alignItems: 'center',
           },
           tabBarBackground: () => (
-            <View style={styles.tabBarBackground}>
-              <View style={[styles.tabBarSurface, { backgroundColor: Colors.surface }]} />
-              <View style={[styles.tabBarInset, { height: insets.bottom, backgroundColor: Colors.surface }]} />
+            <View style={styles.tabBarBackground} pointerEvents="none">
+              <View style={[styles.tabBarSurface, { backgroundColor: Colors.surface }]} pointerEvents="none" />
+              <View style={[styles.tabBarInset, { height: insets.bottom, backgroundColor: Colors.surface }]} pointerEvents="none" />
             </View>
           ),
         }}>
