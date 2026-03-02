@@ -16,6 +16,7 @@ export default ({ config }: { config: ExpoConfig }) => {
       name: baseExpo.name,
       slug: baseExpo.slug,
       scheme: baseExpo.scheme,
+      version: baseExpo.version,
 
       ios: {
         ...(baseExpo.ios ?? {}),
