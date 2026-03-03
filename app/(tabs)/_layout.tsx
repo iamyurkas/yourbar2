@@ -9,7 +9,6 @@ import ShakerIcon from '@/assets/images/shaker.svg';
 import { AppDialog, type DialogOptions } from '@/components/AppDialog';
 import { TabBarButton } from '@/components/tab-bar/TabBarButton';
 import { TabBarIcon } from '@/components/tab-bar/TabBarIcon';
-import { OnboardingAnchor } from '@/components/onboarding/OnboardingAnchor';
 import { useAppColors } from '@/constants/theme';
 import { getLastCocktailTab, getLastIngredientTab } from '@/libs/collection-tabs';
 import { useI18n } from '@/libs/i18n/use-i18n';
@@ -96,9 +95,9 @@ export default function TabLayout() {
             options={{
               title: t(titleKey),
               tabBarButton: (props) => (
-                <OnboardingAnchor name={`tab-${name}`} style={styles.tabAnchor}>
+                <View style={styles.tabButtonContainer} pointerEvents="box-none" collapsable={false}>
                   <TabBarButton {...props} onOpenDialog={showDialog} />
-                </OnboardingAnchor>
+                </View>
               ),
               tabBarIcon: ({ color, focused }) => <TabBarIcon source={icon} color={color} focused={focused} />,
             }}
@@ -141,7 +140,7 @@ const styles = StyleSheet.create({
   tabBarInset: {
     height: 0,
   },
-  tabAnchor: {
+  tabButtonContainer: {
     flex: 1,
   },
 });

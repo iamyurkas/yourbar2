@@ -19,8 +19,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { CollectionHeader } from '@/components/CollectionHeader';
 import { CollectionListSkeleton } from '@/components/CollectionListSkeleton';
 import { FabAdd } from '@/components/FabAdd';
-import { OnboardingAnchor } from '@/components/onboarding/OnboardingAnchor';
-import { useOnboardingAnchors } from '@/components/onboarding/OnboardingContext';
 import { ListRow, PresenceCheck, Thumb } from '@/components/RowParts';
 import { SideMenuDrawer } from '@/components/SideMenuDrawer';
 import { TagPill } from '@/components/TagPill';
@@ -235,15 +233,6 @@ const IngredientListItem = memo(function IngredientListItemComponent({
     />
   );
 
-  const onboardingIds = [196, 161, 352, 114, 316, 339, 219, 227];
-  if (onboardingIds.includes(ingredientId)) {
-    return (
-      <OnboardingAnchor name={`ingredient-${ingredientId}`}>
-        {row}
-      </OnboardingAnchor>
-    );
-  }
-
   return row;
 }, areIngredientPropsEqual);
 
@@ -251,7 +240,6 @@ export default function IngredientsScreen() {
   const router = useRouter();
   const Colors = useAppColors();
   const { t, locale } = useI18n();
-  const { onTabChangeRequest } = useOnboardingAnchors();
   const { cocktails, ingredients, availableIngredientIds, shoppingIngredientIds, loading } = useInventoryData();
   const { ignoreGarnish, allowAllSubstitutes } = useInventorySettings();
   const { toggleIngredientShopping, toggleIngredientAvailability } = useInventoryActions();
@@ -280,14 +268,6 @@ export default function IngredientsScreen() {
   const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
 
   useScrollToTop(listRef);
-
-  useEffect(() => {
-    return onTabChangeRequest((screen, tab) => {
-      if (screen === 'ingredients') {
-        setActiveTab(tab as IngredientTabKey);
-      }
-    });
-  }, [onTabChangeRequest]);
 
   useEffect(() => {
     const wasEmpty = previousQuery.current.length === 0;
