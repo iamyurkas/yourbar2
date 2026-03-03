@@ -3,6 +3,7 @@ import { Stack } from "expo-router";
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from "expo-status-bar";
 import { Appearance, useColorScheme, View } from "react-native";
+import { SafeAreaProvider, initialWindowMetrics } from "react-native-safe-area-context";
 import { useCallback, useEffect } from "react";
 import "react-native-reanimated";
 
@@ -84,13 +85,15 @@ function RootLayoutContent() {
   }
 
   return (
-    <View style={{ flex: 1 }} onLayout={onRootLayout}>
-      <ThemeAppWrapper>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        </Stack>
-      </ThemeAppWrapper>
-    </View>
+    <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+      <View style={{ flex: 1 }} onLayout={onRootLayout}>
+        <ThemeAppWrapper>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          </Stack>
+        </ThemeAppWrapper>
+      </View>
+    </SafeAreaProvider>
   );
 }
 
