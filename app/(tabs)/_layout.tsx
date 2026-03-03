@@ -94,11 +94,7 @@ export default function TabLayout() {
             name={name}
             options={{
               title: t(titleKey),
-              tabBarButton: (props) => (
-                <View style={styles.tabButtonContainer} pointerEvents="box-none" collapsable={false}>
-                  <TabBarButton {...props} onOpenDialog={showDialog} />
-                </View>
-              ),
+              tabBarButton: (props) => <TabBarButton {...props} onOpenDialog={showDialog} />,
               tabBarIcon: ({ color, focused }) => <TabBarIcon source={icon} color={color} focused={focused} />,
             }}
             listeners={({ navigation, route }) => ({
@@ -139,8 +135,5 @@ const styles = StyleSheet.create({
   },
   tabBarInset: {
     height: 0,
-  },
-  tabButtonContainer: {
-    flex: 1,
   },
 });
