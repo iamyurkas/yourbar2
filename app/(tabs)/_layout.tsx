@@ -1,6 +1,5 @@
 import { Tabs } from 'expo-router';
 import { useCallback, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import CocktailIcon from '@/assets/images/cocktails.svg';
@@ -71,22 +70,17 @@ export default function TabLayout() {
           headerShown: false,
           tabBarActiveTintColor: Colors.primary,
           tabBarInactiveTintColor: Colors.onSurfaceVariant,
-          tabBarStyle: {
-            height: 72 + insets.bottom,
-            paddingTop: 8,
-            paddingBottom: insets.bottom,
-            backgroundColor: 'transparent',
-          },
           tabBarItemStyle: {
             justifyContent: 'center',
             alignItems: 'center',
           },
-          tabBarBackground: () => (
-            <View style={styles.tabBarBackground} pointerEvents="none">
-              <View style={[styles.tabBarSurface, { backgroundColor: Colors.surface }]} pointerEvents="none" />
-              <View style={[styles.tabBarInset, { height: insets.bottom, backgroundColor: Colors.surface }]} pointerEvents="none" />
-            </View>
-          ),
+          tabBarStyle: {
+            height: 72 + insets.bottom,
+            paddingTop: 8,
+            paddingBottom: insets.bottom,
+            backgroundColor: Colors.surface,
+            borderTopWidth: 0,
+          },
         }}>
         {TAB_SCREENS.map(({ name, titleKey, icon, onTabPress }) => (
           <Tabs.Screen
@@ -125,15 +119,3 @@ export default function TabLayout() {
   );
 }
 
-const styles = StyleSheet.create({
-  tabBarBackground: {
-    ...StyleSheet.absoluteFillObject,
-    flexDirection: 'column',
-  },
-  tabBarSurface: {
-    flex: 1,
-  },
-  tabBarInset: {
-    height: 0,
-  },
-});
