@@ -152,7 +152,6 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     detectedAmazonStore,
     effectiveAmazonStore,
     setAmazonStoreOverride,
-    restartOnboarding,
     resetInventoryFromBundle,
     exportInventoryData,
     exportInventoryPhotoEntries,
@@ -1471,27 +1470,6 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 size={20}
                 color={Colors.onSurfaceVariant}
               />
-            </Pressable>
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel={t("sideMenu.restartOnboarding")}
-              onPress={() => {
-                restartOnboarding();
-                onClose();
-              }}
-              style={[
-                styles.actionRow,
-                SURFACE_ROW_STYLE,
-              ]}>
-              <View style={[styles.actionIcon, ACTION_ICON_STYLE]}>
-                <MaterialCommunityIcons name="help-circle-outline" size={16} color={Colors.onSurfaceVariant} />
-              </View>
-              <View style={styles.settingTextContainer}>
-                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>{t("sideMenu.restartOnboarding")}</Text>
-                <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>
-                  {t("sideMenu.restartOnboardingCaption")}
-                </Text>
-              </View>
             </Pressable>
             <Pressable
               accessibilityRole="button"

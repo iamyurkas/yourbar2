@@ -7,8 +7,6 @@ import { useCallback, useEffect } from "react";
 import "react-native-reanimated";
 
 import { PaperProvider } from "@/libs/react-native-paper";
-import { OnboardingProvider } from "@/components/onboarding/OnboardingContext";
-import { OnboardingOverlay } from "@/components/onboarding/OnboardingOverlay";
 import { InventoryProvider, useInventory } from "@/providers/inventory-provider";
 import { UnsavedChangesProvider } from "@/providers/unsaved-changes-provider";
 import { getAppTheme } from "@/theme/theme";
@@ -87,14 +85,11 @@ function RootLayoutContent() {
 
   return (
     <View style={{ flex: 1 }} onLayout={onRootLayout}>
-      <OnboardingProvider>
-        <ThemeAppWrapper>
-          <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          </Stack>
-          <OnboardingOverlay />
-        </ThemeAppWrapper>
-      </OnboardingProvider>
+      <ThemeAppWrapper>
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        </Stack>
+      </ThemeAppWrapper>
     </View>
   );
 }

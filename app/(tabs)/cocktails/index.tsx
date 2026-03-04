@@ -21,7 +21,6 @@ import { CocktailListRow } from '@/components/CocktailListRow';
 import { CollectionListSkeleton } from '@/components/CollectionListSkeleton';
 import { CollectionHeader } from '@/components/CollectionHeader';
 import { FabAdd } from '@/components/FabAdd';
-import { useOnboardingAnchors } from '@/components/onboarding/OnboardingContext';
 import { ListRow, Thumb } from '@/components/RowParts';
 import { SideMenuDrawer } from '@/components/SideMenuDrawer';
 import { TagPill } from '@/components/TagPill';
@@ -51,7 +50,6 @@ const METHOD_ICON_SIZE = 16;
 type CocktailAvailabilitySummary = ReturnType<typeof summariseCocktailAvailability>;
 
 export default function CocktailsScreen() {
-  const { onTabChangeRequest } = useOnboardingAnchors();
   const { cocktails, availableIngredientIds, ingredients, shoppingIngredientIds, getCocktailRating, loading } =
     useInventoryData();
   const { ignoreGarnish, allowAllSubstitutes, ratingFilterThreshold } = useInventorySettings();
@@ -81,14 +79,6 @@ export default function CocktailsScreen() {
   const previousQuery = useRef(query);
 
   useScrollToTop(listRef);
-
-  useEffect(() => {
-    return onTabChangeRequest((screen, tab) => {
-      if (screen === 'cocktails') {
-        setActiveTab(tab as CocktailTabKey);
-      }
-    });
-  }, [onTabChangeRequest]);
 
   useEffect(() => {
     const wasEmpty = previousQuery.current.length === 0;
