@@ -476,6 +476,18 @@ export const esESTranslations: TranslationDictionary = {
     "Guardar y restaurar desde una copia de seguridad",
   "sideMenu.restartOnboarding": "Reiniciar el tutorial",
   "sideMenu.restartOnboardingCaption": "Mostrar de nuevo el tutorial",
+
+  "barManager.title": "Tus bares",
+  "barManager.subtitle": "Gestiona tus bares",
+  "barManager.createBar": "Crear bar",
+  "barManager.renameBar": "Renombrar bar",
+  "barManager.deleteBar": "Eliminar bar",
+  "barManager.barName": "Nombre del bar",
+  "barManager.deleteConfirm":
+    '¿Seguro que quieres eliminar el bar \n"{{name}}"?',
+  "barManager.cannotDeleteLast": "No puedes eliminar tu único bar.",
+  "barManager.defaultName": "Casa",
+
   "app.loadingTagline": "¡Tus reglas!",
   "appDialog.closeDialog": "Cerrar diálogo",
   "tagEditor.hue": "Tono",
