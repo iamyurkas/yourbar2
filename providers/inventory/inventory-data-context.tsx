@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react';
 
-import type { Cocktail, CocktailTag, Ingredient, IngredientTag } from '@/providers/inventory-types';
+import type { Cocktail, CocktailTag, Ingredient, IngredientTag, InventoryBar } from '@/providers/inventory-types';
 
 export type InventoryDataContextValue = {
   cocktails: Cocktail[];
@@ -12,6 +12,9 @@ export type InventoryDataContextValue = {
   customIngredientTags: IngredientTag[];
   ratingsByCocktailId: Record<string, number>;
   getCocktailRating: (cocktail: Cocktail) => number;
+  bars: InventoryBar[];
+  currentBarId: string;
+  currentBarName: string;
 };
 
 export const InventoryDataContext = createContext<InventoryDataContextValue | undefined>(undefined);

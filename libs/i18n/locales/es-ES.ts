@@ -416,6 +416,12 @@ export const esESTranslations: TranslationDictionary = {
   "tabs.shaker": "Coctelera",
   "tabs.ingredients": "Ingredientes",
   "sideMenu.settingsTitle": "Ajustes",
+
+  "sideMenu.bars": "Bares",
+  "sideMenu.currentBar": "Actual: {{name}}",
+  "sideMenu.barsDescription": "Cambia entre bares o crea uno nuevo.",
+  "sideMenu.barNamePlaceholder": "Nombre del bar",
+  "sideMenu.createBar": "Crear bar",
   "sideMenu.ignoreGarnish": "Ignorar decoración",
   "sideMenu.ignoreGarnishCaption": "Todas las decoraciones son opcionales",
   "sideMenu.allowAllSubstitutes": "Permitir sustitutos",

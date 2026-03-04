@@ -24,6 +24,8 @@ export type InventorySnapshotV1<TCocktail, TIngredient> = {
   amazonStoreOverride?: string | null;
   onboardingStep?: number;
   onboardingCompleted?: boolean;
+  bars?: Array<{ id: string; name: string; availableIngredientIds?: number[]; shoppingIngredientIds?: number[] }>;
+  currentBarId?: string;
 };
 
 export type InventoryDeltaSnapshot<TCocktail, TIngredient> = {
@@ -58,6 +60,8 @@ export type InventoryDeltaSnapshot<TCocktail, TIngredient> = {
   amazonStoreOverride?: string | null;
   onboardingStep?: number;
   onboardingCompleted?: boolean;
+  bars?: Array<{ id: string; name: string; availableIngredientIds?: number[]; shoppingIngredientIds?: number[] }>;
+  currentBarId?: string;
 };
 
 
@@ -93,6 +97,8 @@ export type InventoryDeltaSnapshotV3<TCocktail, TIngredient> = {
   amazonStoreOverride?: string | null;
   onboardingStep?: number;
   onboardingCompleted?: boolean;
+  bars?: Array<{ id: string; name: string; availableIngredientIds?: number[]; shoppingIngredientIds?: number[] }>;
+  currentBarId?: string;
   translationOverrides?: unknown;
 };
 
