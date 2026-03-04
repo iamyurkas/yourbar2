@@ -35,9 +35,9 @@ import { TagPill } from "@/components/TagPill";
 import { useAppColors } from "@/constants/theme";
 import { AMAZON_STORES, AMAZON_STORE_KEYS, type AmazonStoreOverride } from "@/libs/amazon-stores";
 import { base64ToBytes, bytesToBase64, createTarArchive, parseTarArchive } from "@/libs/archive-utils";
-import { buildPhotoBaseName } from "@/libs/photo-utils";
-import { useI18n } from "@/libs/i18n/use-i18n";
 import type { SupportedLocale } from "@/libs/i18n/types";
+import { useI18n } from "@/libs/i18n/use-i18n";
+import { buildPhotoBaseName } from "@/libs/photo-utils";
 import { useInventory, type AppTheme, type StartScreen } from "@/providers/inventory-provider";
 import { type ImportedPhotoEntry, type InventoryExportData, type InventoryExportFile } from "@/providers/inventory-types";
 import Constants from "expo-constants";
@@ -2253,7 +2253,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
             onPress={() => { }}
           >
             <View style={styles.modalHeader}>
-              <Text style={[styles.modalTitle, { color: Colors.onSurface, flex: 1 }]}> 
+              <Text style={[styles.modalTitle, { color: Colors.onSurface, flex: 1 }]}>
                 {t("languageModal.title")}
               </Text>
               <Pressable
@@ -2506,7 +2506,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   <Text
                     style={[styles.settingLabel, { color: Colors.onSurface }]}
                   >
-                    {t("sideMenu.bars")}
+                    {t("barManager.subtitle")}
                   </Text>
                   <Pressable
                     accessibilityRole="button"
@@ -2585,7 +2585,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                             <MaterialCommunityIcons
                               name="trash-can-outline"
                               size={18}
-                              color={bars.length <= 1 ? Colors.outline : Colors.error}
+                              color={bars.length <= 1 ? Colors.surface : Colors.danger}
                             />
                           </Pressable>
                         </View>
@@ -2628,9 +2628,6 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               </Text>
             </View>
             <View style={styles.tagSection}>
-              <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>
-                {t("barManager.barName")}
-              </Text>
               <TextInput
                 style={[
                   styles.barNameInput,
