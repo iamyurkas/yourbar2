@@ -883,10 +883,15 @@ export default function CocktailsScreen() {
                 style={styles.filterMenuScroll}
                 showsVerticalScrollIndicator
                 keyboardShouldPersistTaps="handled">
-                <View style={styles.filterMenuContent}>
+                <View style={styles.filterMenuBody}>
                   {activeTab === 'favorites' ? (
                     <>
-                      <View style={styles.filterMethodList}>
+                      <ScrollView
+                        horizontal
+                        style={styles.filterRatingScroll}
+                        contentContainerStyle={styles.filterRatingRow}
+                        showsHorizontalScrollIndicator={false}
+                        keyboardShouldPersistTaps="handled">
                         {availableStarRatings.length > 0 ? (
                           availableStarRatings.map((rating) => {
                             const selected = selectedStarRatings.has(rating);
@@ -908,7 +913,7 @@ export default function CocktailsScreen() {
                             {t('common.noRatingsAvailable')}
                           </Text>
                         )}
-                      </View>
+                      </ScrollView>
                       <View style={styles.filterSeparator}>
                         <View style={[styles.filterSeparatorLine, { backgroundColor: Colors.outline }]} />
                         <Text style={[styles.filterSeparatorLabel, { color: Colors.onSurfaceVariant }]}>
@@ -918,63 +923,65 @@ export default function CocktailsScreen() {
                       </View>
                     </>
                   ) : null}
-                  <View style={styles.filterMethodList}>
-                    {availableMethodOptions.length > 0 ? (
-                      availableMethodOptions.map((method) => {
-                        const selected = selectedMethodIds.has(method.id);
-                        return (
-                          <TagPill
-                            key={method.id}
-                            label={t(`cocktailMethod.${method.id}.label`)}
-                            color={Colors.tint}
-                            selected={selected}
-                            icon={renderMethodIcon(method.id, selected)}
-                            onPress={() => handleMethodFilterToggle(method.id)}
-                            accessibilityRole="checkbox"
-                            accessibilityState={{ checked: selected }}
-                            androidRippleColor={`${Colors.surfaceVariant}33`}
-                          />
-                        );
-                      })
-                    ) : (
-                      <Text style={[styles.filterMenuEmpty, { color: Colors.onSurfaceVariant }]}>
-                        {t("common.noMethodsAvailable")}
+                  <View style={styles.filterMenuContent}>
+                    <View style={styles.filterMethodList}>
+                      {availableMethodOptions.length > 0 ? (
+                        availableMethodOptions.map((method) => {
+                          const selected = selectedMethodIds.has(method.id);
+                          return (
+                            <TagPill
+                              key={method.id}
+                              label={t(`cocktailMethod.${method.id}.label`)}
+                              color={Colors.tint}
+                              selected={selected}
+                              icon={renderMethodIcon(method.id, selected)}
+                              onPress={() => handleMethodFilterToggle(method.id)}
+                              accessibilityRole="checkbox"
+                              accessibilityState={{ checked: selected }}
+                              androidRippleColor={`${Colors.surfaceVariant}33`}
+                            />
+                          );
+                        })
+                      ) : (
+                        <Text style={[styles.filterMenuEmpty, { color: Colors.onSurfaceVariant }]}>
+                          {t("common.noMethodsAvailable")}
+                        </Text>
+                      )}
+                    </View>
+                    <View style={styles.filterSeparator}>
+                      <View style={[styles.filterSeparatorLine, { backgroundColor: Colors.outline }]} />
+                      <Text style={[styles.filterSeparatorLabel, { color: Colors.onSurfaceVariant }]}>
+                        {t("common.and")}
                       </Text>
-                    )}
-                  </View>
-                  <View style={styles.filterSeparator}>
-                    <View style={[styles.filterSeparatorLine, { backgroundColor: Colors.outline }]} />
-                    <Text style={[styles.filterSeparatorLabel, { color: Colors.onSurfaceVariant }]}>
-                      {t("common.and")}
-                    </Text>
-                    <View style={[styles.filterSeparatorLine, { backgroundColor: Colors.outline }]} />
-                  </View>
-                  <View style={styles.filterTagList}>
-                    {availableTagOptions.length > 0 ? (
-                      availableTagOptions.map((tag) => {
-                        const selected = selectedTagKeys.has(tag.key);
-                        const isBuiltin = !isNaN(Number(tag.key)) && Number(tag.key) >= 1 && Number(tag.key) <= 11;
-                        const translatedName = isBuiltin ? t(`cocktailTag.${tag.key}`) : tag.name;
-                        const finalName = (isBuiltin && translatedName !== `cocktailTag.${tag.key}`) ? translatedName : tag.name;
+                      <View style={[styles.filterSeparatorLine, { backgroundColor: Colors.outline }]} />
+                    </View>
+                    <View style={styles.filterTagList}>
+                      {availableTagOptions.length > 0 ? (
+                        availableTagOptions.map((tag) => {
+                          const selected = selectedTagKeys.has(tag.key);
+                          const isBuiltin = !isNaN(Number(tag.key)) && Number(tag.key) >= 1 && Number(tag.key) <= 11;
+                          const translatedName = isBuiltin ? t(`cocktailTag.${tag.key}`) : tag.name;
+                          const finalName = (isBuiltin && translatedName !== `cocktailTag.${tag.key}`) ? translatedName : tag.name;
 
-                        return (
-                          <TagPill
-                            key={tag.key}
-                            label={finalName}
-                            color={tag.color}
-                            selected={selected}
-                            onPress={() => handleTagFilterToggle(tag.key)}
-                            accessibilityRole="checkbox"
-                            accessibilityState={{ checked: selected }}
-                            androidRippleColor={`${Colors.surfaceVariant}33`}
-                          />
-                        );
-                      })
-                    ) : (
-                      <Text style={[styles.filterMenuEmpty, { color: Colors.onSurfaceVariant }]}>
-                        {t("common.noTagsAvailable")}
-                      </Text>
-                    )}
+                          return (
+                            <TagPill
+                              key={tag.key}
+                              label={finalName}
+                              color={tag.color}
+                              selected={selected}
+                              onPress={() => handleTagFilterToggle(tag.key)}
+                              accessibilityRole="checkbox"
+                              accessibilityState={{ checked: selected }}
+                              androidRippleColor={`${Colors.surfaceVariant}33`}
+                            />
+                          );
+                        })
+                      ) : (
+                        <Text style={[styles.filterMenuEmpty, { color: Colors.onSurfaceVariant }]}>
+                          {t("common.noTagsAvailable")}
+                        </Text>
+                      )}
+                    </View>
                   </View>
                 </View>
                 {selectedTagKeys.size > 0 || selectedMethodIds.size > 0 || selectedStarRatings.size > 0 ? (
@@ -1138,6 +1145,18 @@ const styles = StyleSheet.create({
   filterMenuScroll: {
     maxHeight: 540,
     paddingBottom: 2,
+  },
+  filterMenuBody: {
+    flexDirection: 'column',
+    alignItems: 'stretch',
+  },
+  filterRatingScroll: {
+    alignSelf: 'stretch',
+  },
+  filterRatingRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
   },
   filterMenuContent: {
     flexDirection: 'row',
