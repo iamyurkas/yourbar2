@@ -4,7 +4,7 @@ import { type IngredientLookup } from '@/libs/ingredient-availability';
 import { compareGlobalAlphabet, compareOptionalGlobalAlphabet } from '@/libs/global-sort';
 
 export type MyTabListItem =
-  | { type: 'cocktail'; key: string; cocktail: Cocktail }
+  | { type: 'cocktail'; key: string; cocktail: Cocktail; parentIngredientId?: number }
   | { type: 'separator'; key: string }
   | {
       type: 'ingredient-header';
@@ -356,6 +356,7 @@ export function useCocktailTabLogic({
             type: 'cocktail',
             key: `cocktail-${cocktail.id ?? cocktail.name}-missing-${group.ingredientId}`,
             cocktail,
+            parentIngredientId: group.ingredientId,
           });
         });
       });

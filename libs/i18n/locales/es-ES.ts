@@ -394,6 +394,8 @@ export const esESTranslations: TranslationDictionary = {
   "cocktails.toMakeMore.few": "para preparar {{count}} cócteles más",
   "cocktails.toMakeMore.many": "para preparar {{count}} cócteles más",
   "cocktails.toMakeMore.other": "para preparar {{count}} cócteles más",
+  "cocktails.collapseIngredientGroup": "Contraer cócteles de {{name}}",
+  "cocktails.expandIngredientGroup": "Expandir cócteles de {{name}}",
   "cocktails.clearSelectedFilters": "Borrar filtros seleccionados",
   "cocktails.addCocktail": "Añadir cóctel",
   "shakerResults.helpTitle": "Resultados de la coctelera",

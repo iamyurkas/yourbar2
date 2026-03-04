@@ -402,6 +402,8 @@ export const ukUATranslations: TranslationDictionary = {
   "cocktails.toMakeMore.few": "Щоб зробити ще {{count}} коктейлі",
   "cocktails.toMakeMore.many": "Щоб зробити ще {{count}} коктейлів",
   "cocktails.toMakeMore.other": "Щоб зробити ще {{count}} коктейлів",
+  "cocktails.collapseIngredientGroup": "Згорнути коктейлі для {{name}}",
+  "cocktails.expandIngredientGroup": "Розгорнути коктейлі для {{name}}",
   "cocktails.clearSelectedFilters": "Очистити вибрані фільтри",
   "cocktails.addCocktail": "Додати коктейль",
 

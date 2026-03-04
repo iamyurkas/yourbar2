@@ -74,6 +74,9 @@ export default function CocktailsScreen() {
     () => new Set(),
   );
   const [selectedStarRatings, setSelectedStarRatings] = useState<Set<number>>(() => new Set());
+  const [collapsedMissingIngredientIds, setCollapsedMissingIngredientIds] = useState<Set<number>>(
+    () => new Set(),
+  );
   const [headerLayout, setHeaderLayout] = useState<LayoutRectangle | null>(null);
   const [filterAnchorLayout, setFilterAnchorLayout] = useState<LayoutRectangle | null>(null);
   const listRef = useRef<FlatList<MyTabListItem | Cocktail>>(null);
@@ -490,6 +493,20 @@ export default function CocktailsScreen() {
     defaultTagColor,
   });
 
+  const visibleMyTabItems = useMemo(() => {
+    if (!myTabListData) {
+      return [];
+    }
+
+    return myTabListData.items.filter((item) => {
+      if (item.type !== 'cocktail' || item.parentIngredientId == null) {
+        return true;
+      }
+
+      return !collapsedMissingIngredientIds.has(item.parentIngredientId);
+    });
+  }, [collapsedMissingIngredientIds, myTabListData]);
+
   const keyExtractor = useCallback((item: Cocktail) => String(item.id ?? item.name), []);
   const myTabKeyExtractor = useCallback((item: MyTabListItem) => item.key, []);
 
@@ -530,6 +547,18 @@ export default function CocktailsScreen() {
     },
     [toggleIngredientShopping],
   );
+
+  const handleToggleIngredientCollapse = useCallback((ingredientId: number) => {
+    setCollapsedMissingIngredientIds((previous) => {
+      const next = new Set(previous);
+      if (next.has(ingredientId)) {
+        next.delete(ingredientId);
+      } else {
+        next.add(ingredientId);
+      }
+      return next;
+    });
+  }, []);
 
   const availabilitySummaryByKey = useMemo(() => {
     const summaryMap = new Map<string, CocktailAvailabilitySummary>();
@@ -700,6 +729,10 @@ export default function CocktailsScreen() {
           : item.isBranded
             ? Colors.primary
             : undefined;
+        const isCollapsed = collapsedMissingIngredientIds.has(item.ingredientId);
+        const collapseAccessibilityLabel = isCollapsed
+          ? t('cocktails.expandIngredientGroup', { name: item.name })
+          : t('cocktails.collapseIngredientGroup', { name: item.name });
 
         return (
           <ListRow
@@ -715,6 +748,19 @@ export default function CocktailsScreen() {
             metaAlignment="center"
             control={
               <View style={styles.shoppingSlot}>
+                <Pressable
+                  accessibilityRole="button"
+                  accessibilityLabel={collapseAccessibilityLabel}
+                  onPress={() => handleToggleIngredientCollapse(item.ingredientId)}
+                  hitSlop={8}
+                  style={({ pressed }) => [styles.shoppingButton, pressed ? styles.shoppingButtonPressed : null]}>
+                  <MaterialCommunityIcons
+                    name={isCollapsed ? 'chevron-down' : 'chevron-up'}
+                    size={20}
+                    color={Colors.onSurfaceVariant}
+                    style={styles.shoppingIcon}
+                  />
+                </Pressable>
                 <Pressable
                   accessibilityRole="button"
                   accessibilityLabel={accessibilityLabel}
@@ -758,8 +804,10 @@ export default function CocktailsScreen() {
       handleSelectCocktail,
       handleSelectIngredient,
       handleShoppingToggle,
+      handleToggleIngredientCollapse,
       ingredients,
       myTabAvailabilitySummaryByKey,
+      collapsedMissingIngredientIds,
       shoppingIngredientIds,
       Colors,
       locale,
@@ -998,7 +1046,7 @@ export default function CocktailsScreen() {
         ) : isMyTab ? (
           <FlatList<MyTabListItem>
             ref={listRef as React.RefObject<FlatList<MyTabListItem>>}
-            data={myTabListData?.items ?? []}
+            data={visibleMyTabItems}
             keyExtractor={myTabKeyExtractor}
             renderItem={renderMyItem}
             ItemSeparatorComponent={renderMySeparator}
@@ -1105,9 +1153,11 @@ const styles = StyleSheet.create({
   },
   shoppingSlot: {
     minHeight: 24,
-    minWidth: 24,
+    minWidth: 48,
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    gap: 8,
   },
   emptyLabel: {
     textAlign: 'center',

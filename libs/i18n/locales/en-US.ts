@@ -402,6 +402,8 @@ export const enUSTranslations: TranslationDictionary = {
   "cocktails.toMakeMore.few": "To make {{count}} more cocktails",
   "cocktails.toMakeMore.many": "To make {{count}} more cocktails",
   "cocktails.toMakeMore.other": "To make {{count}} more cocktails",
+  "cocktails.collapseIngredientGroup": "Collapse {{name}} cocktails",
+  "cocktails.expandIngredientGroup": "Expand {{name}} cocktails",
   "cocktails.clearSelectedFilters": "Clear selected filters",
   "cocktails.addCocktail": "Add cocktail",
 
