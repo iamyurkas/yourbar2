@@ -431,6 +431,8 @@ export const ukUATranslations: TranslationDictionary = {
   "tabs.ingredients": "Інгредієнти",
 
   "sideMenu.settingsTitle": "Налаштування",
+  "sideMenu.bars": "Мої бари",
+  "sideMenu.manageBars": "Керування барами",
   "sideMenu.ignoreGarnish": "Ігнорувати декор",
   "sideMenu.ignoreGarnishCaption": "Весь декор є опційним",
   "sideMenu.allowAllSubstitutes": "Дозволити всі заміни",
@@ -486,6 +488,17 @@ export const ukUATranslations: TranslationDictionary = {
   "sideMenu.backupRestoreCaption": "Зберегти дані в архів чи відновити з копії",
   "sideMenu.restartOnboarding": "Повторити знайомство",
   "sideMenu.restartOnboardingCaption": "Показати навчання ще раз",
+
+  "barManager.title": "Ваші бари",
+  "barManager.subtitle": "Керувати барами",
+  "barManager.createBar": "Створити бар",
+  "barManager.renameBar": "Перейменувати бар",
+  "barManager.deleteBar": "Видалити бар",
+  "barManager.barName": "Назва бару",
+  "barManager.deleteConfirm":
+    "Ви впевнені, що хочете видалити бар \n «{{name}}»?",
+  "barManager.cannotDeleteLast": "Ви не можете видалити єдиний бар.",
+  "barManager.defaultName": "Дім",
 
   "app.loadingTagline": "твої правила!",
   "appDialog.closeDialog": "Закрити діалог",
