@@ -9,6 +9,7 @@ import {
 import type {
   AppLocale,
   AppTheme,
+  Bar,
   CocktailStorageRecord,
   CocktailTag,
   IngredientStorageRecord,
@@ -162,6 +163,8 @@ export type InventorySnapshotOptions = {
   onboardingStep: number;
   onboardingCompleted: boolean;
   translationOverrides: InventoryTranslationOverrides;
+  bars: Bar[];
+  activeBarId: string;
 };
 
 export function toSortedArray(values: Iterable<number>): number[] {
@@ -226,5 +229,7 @@ export function buildInventorySnapshot(
     onboardingStep: options.onboardingStep,
     onboardingCompleted: options.onboardingCompleted,
     translationOverrides: options.translationOverrides,
+    bars: options.bars,
+    activeBarId: options.activeBarId,
   } satisfies InventoryDeltaSnapshotV3<CocktailStorageRecord, IngredientStorageRecord>;
 }

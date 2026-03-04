@@ -431,6 +431,8 @@ export const enGBTranslations: TranslationDictionary = {
   "tabs.ingredients": "Ingredients",
 
   "sideMenu.settingsTitle": "Settings",
+  "sideMenu.bars": "Bars",
+  "sideMenu.manageBars": "Manage Bars",
   "sideMenu.ignoreGarnish": "Ignore garnish",
   "sideMenu.ignoreGarnishCaption": "All garnishes are optional",
   "sideMenu.allowAllSubstitutes": "Allow all substitutes",
@@ -483,6 +485,15 @@ export const enGBTranslations: TranslationDictionary = {
   "sideMenu.backupRestoreCaption": "Save your data, restore from a backup",
   "sideMenu.restartOnboarding": "Restart onboarding",
   "sideMenu.restartOnboardingCaption": "Show the guided tutorial again",
+
+  "barManager.title": "My Bars",
+  "barManager.createBar": "Create Bar",
+  "barManager.renameBar": "Rename Bar",
+  "barManager.deleteBar": "Delete Bar",
+  "barManager.barName": "Bar Name",
+  "barManager.deleteConfirm": "Are you sure you want to delete \"{{name}}\"?",
+  "barManager.cannotDeleteLast": "You cannot delete your only bar.",
+  "barManager.defaultName": "Default",
 
   "app.loadingTagline": "Your rules!",
   "appDialog.closeDialog": "Close dialogue",

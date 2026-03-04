@@ -21,6 +21,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -165,6 +166,12 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     createCustomIngredientTag,
     updateCustomIngredientTag,
     deleteCustomIngredientTag,
+    bars,
+    activeBarId,
+    setActiveBar,
+    createBar,
+    updateBar,
+    deleteBar,
   } = useInventory();
   const Colors = useAppColors();
   const insets = useSafeAreaInsets();
@@ -182,6 +189,12 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   const [isAmazonStoreModalVisible, setAmazonStoreModalVisible] = useState(false);
   const [isLanguageModalVisible, setLanguageModalVisible] = useState(false);
   const [isBackupRestoreModalVisible, setBackupRestoreModalVisible] = useState(false);
+  const [isBarManagerVisible, setBarManagerVisible] = useState(false);
+  const [isBarEditorVisible, setBarEditorVisible] = useState(false);
+  const [barEditorMode, setBarEditorMode] = useState<"create" | "rename">("create");
+  const [barEditorTarget, setBarEditorTarget] = useState<{ id: string, name: string } | null>(null);
+  const [barEditorValue, setBarEditorValue] = useState("");
+
   const amazonStoreModalCloseTimeout = useRef<ReturnType<typeof setTimeout> | null>(
     null,
   );
@@ -428,6 +441,69 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
   const handleLanguagePress = () => {
     setLanguageModalVisible(true);
+  };
+
+  const handleBarManagerPress = () => {
+    setBarManagerVisible(true);
+  };
+
+  const handleCloseBarManager = () => {
+    setBarManagerVisible(false);
+  };
+
+  const handleSelectBar = (id: string) => {
+    setActiveBar(id);
+    handleCloseBarManager();
+  };
+
+  const handleOpenBarEditor = (mode: "create" | "rename", bar?: { id: string, name: string }) => {
+    setBarEditorMode(mode);
+    setBarEditorTarget(bar ?? null);
+    setBarEditorValue(bar?.name ?? "");
+    setBarEditorVisible(true);
+  };
+
+  const handleCloseBarEditor = () => {
+    setBarEditorVisible(false);
+    setBarEditorTarget(null);
+    setBarEditorValue("");
+  };
+
+  const handleSaveBarEditor = () => {
+    const trimmedName = barEditorValue.trim();
+    if (!trimmedName) {
+      return;
+    }
+
+    if (barEditorMode === "create") {
+      createBar(trimmedName);
+    } else if (barEditorTarget) {
+      updateBar(barEditorTarget.id, trimmedName);
+    }
+
+    handleCloseBarEditor();
+  };
+
+  const handleDeleteBarPress = (bar: { id: string, name: string }) => {
+    if (bars.length <= 1) {
+      showDialogMessage(t("common.error"), t("barManager.cannotDeleteLast"));
+      return;
+    }
+
+    setDialogOptions({
+      title: t("barManager.deleteBar"),
+      message: t("barManager.deleteConfirm", { name: bar.name }),
+      actions: [
+        { label: t("common.cancel"), variant: "secondary" },
+        {
+          label: t("common.delete"),
+          variant: "destructive",
+          onPress: () => {
+            deleteBar(bar.id);
+          },
+        },
+      ],
+    });
   };
 
   const handleCloseLanguageModal = () => {
@@ -961,6 +1037,41 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
             showsVerticalScrollIndicator={false}
             keyboardShouldPersistTaps="handled"
           >
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={t("sideMenu.manageBars")}
+              onPress={handleBarManagerPress}
+              style={[styles.settingRow, SURFACE_ROW_STYLE]}
+            >
+              <View style={[styles.checkbox, SURFACE_ICON_STYLE]}>
+                <MaterialCommunityIcons
+                  name="home-city"
+                  size={16}
+                  color={Colors.tint}
+                />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text
+                  style={[styles.settingLabel, { color: Colors.onSurface }]}
+                >
+                  {t("sideMenu.bars")}
+                </Text>
+                <Text
+                  style={[
+                    styles.settingCaption,
+                    { color: Colors.onSurfaceVariant },
+                  ]}
+                >
+                  {bars.find(b => b.id === activeBarId)?.name ?? t("barManager.defaultName")}
+                </Text>
+              </View>
+              <MaterialCommunityIcons
+                name="chevron-right"
+                size={20}
+                color={Colors.onSurfaceVariant}
+              />
+            </Pressable>
+
             <Pressable
               accessibilityRole="checkbox"
               accessibilityState={{ checked: ignoreGarnish }}
@@ -2344,6 +2455,225 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
           </Pressable>
         </Pressable>
       </Modal>
+
+      <Modal
+        transparent
+        visible={isBarManagerVisible}
+        animationType="fade"
+        onRequestClose={handleCloseBarManager}
+      >
+        <Pressable
+          style={styles.modalOverlay}
+          onPress={handleCloseBarManager}
+          accessibilityRole="button"
+        >
+          <Pressable
+            style={[
+              styles.modalCard,
+              MODAL_CARD_STYLE,
+            ]}
+            accessibilityLabel={t("barManager.title")}
+            onPress={() => { }}
+          >
+            <View style={styles.modalHeader}>
+              <Text
+                style={[
+                  styles.modalTitle,
+                  { color: Colors.onSurface, flex: 1 },
+                ]}
+              >
+                {t("barManager.title")}
+              </Text>
+              <Pressable
+                onPress={handleCloseBarManager}
+                accessibilityRole="button"
+                accessibilityLabel={t("common.close")}
+              >
+                <MaterialCommunityIcons
+                  name="close"
+                  size={22}
+                  color={Colors.onSurfaceVariant}
+                />
+              </Pressable>
+            </View>
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={styles.tagManagerContent}
+              keyboardShouldPersistTaps="handled"
+            >
+              <View style={styles.tagSection}>
+                <View style={styles.tagSectionHeader}>
+                  <Text
+                    style={[styles.settingLabel, { color: Colors.onSurface }]}
+                  >
+                    {t("sideMenu.bars")}
+                  </Text>
+                  <Pressable
+                    accessibilityRole="button"
+                    onPress={() => handleOpenBarEditor("create")}
+                    style={[
+                      styles.tagAddButton,
+                      { borderColor: Colors.outlineVariant },
+                    ]}
+                  >
+                    <MaterialCommunityIcons
+                      name="plus"
+                      size={16}
+                      color={Colors.tint}
+                    />
+                    <Text style={[styles.tagAddLabel, { color: Colors.tint }]}>
+                      {t("common.create")}
+                    </Text>
+                  </Pressable>
+                </View>
+                <View style={styles.tagRows}>
+                  {bars.map((bar) => {
+                    const isSelected = bar.id === activeBarId;
+                    return (
+                      <View
+                        key={`bar-row-${bar.id}`}
+                        style={styles.tagRow}
+                      >
+                        <Pressable
+                          style={[
+                            styles.startScreenOption,
+                            {
+                              flex: 1,
+                              borderColor: isSelected
+                                ? Colors.tint
+                                : Colors.outlineVariant,
+                              backgroundColor: isSelected
+                                ? Colors.highlightFaint
+                                : Colors.surfaceBright,
+                              paddingTop: 12,
+                              paddingBottom: 12,
+                              paddingLeft: 12,
+                              paddingRight: 12,
+                            },
+                          ]}
+                          onPress={() => handleSelectBar(bar.id)}
+                        >
+                          <Text style={[styles.settingLabel, { color: Colors.onSurface, flex: 1 }]}>
+                            {bar.name}
+                          </Text>
+                          {isSelected && (
+                            <MaterialCommunityIcons
+                              name="check-circle"
+                              size={20}
+                              color={Colors.tint}
+                            />
+                          )}
+                        </Pressable>
+                        <View style={styles.tagActions}>
+                          <Pressable
+                            accessibilityRole="button"
+                            accessibilityLabel={t("barManager.renameBar")}
+                            onPress={() => handleOpenBarEditor("rename", bar)}
+                          >
+                            <MaterialCommunityIcons
+                              name="pencil"
+                              size={18}
+                              color={Colors.onSurfaceVariant}
+                            />
+                          </Pressable>
+                          <Pressable
+                            accessibilityRole="button"
+                            accessibilityLabel={t("barManager.deleteBar")}
+                            disabled={bars.length <= 1}
+                            onPress={() => handleDeleteBarPress(bar)}
+                          >
+                            <MaterialCommunityIcons
+                              name="trash-can-outline"
+                              size={18}
+                              color={bars.length <= 1 ? Colors.outline : Colors.error}
+                            />
+                          </Pressable>
+                        </View>
+                      </View>
+                    );
+                  })}
+                </View>
+              </View>
+            </ScrollView>
+          </Pressable>
+        </Pressable>
+      </Modal>
+
+      <Modal
+        transparent
+        visible={isBarEditorVisible}
+        animationType="fade"
+        onRequestClose={handleCloseBarEditor}
+      >
+        <Pressable
+          style={styles.modalOverlay}
+          onPress={handleCloseBarEditor}
+          accessibilityRole="button"
+        >
+          <Pressable
+            style={[
+              styles.modalCard,
+              MODAL_CARD_STYLE,
+            ]}
+            onPress={() => { }}
+          >
+            <View style={styles.modalHeader}>
+              <Text
+                style={[
+                  styles.modalTitle,
+                  { color: Colors.onSurface, flex: 1 },
+                ]}
+              >
+                {barEditorMode === "create" ? t("barManager.createBar") : t("barManager.renameBar")}
+              </Text>
+            </View>
+            <View style={styles.tagSection}>
+              <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>
+                {t("barManager.barName")}
+              </Text>
+              <TextInput
+                style={[
+                  styles.barNameInput,
+                  {
+                    color: Colors.onSurface,
+                    borderColor: Colors.outlineVariant,
+                    backgroundColor: Colors.surfaceBright,
+                  }
+                ]}
+                value={barEditorValue}
+                onChangeText={setBarEditorValue}
+                autoFocus
+                placeholder={t("barManager.barName")}
+                placeholderTextColor={Colors.onSurfaceVariant}
+              />
+            </View>
+            <View style={styles.modalFooter}>
+              <Pressable
+                onPress={handleCloseBarEditor}
+                style={[styles.modalFooterButton, { borderColor: Colors.outlineVariant }]}
+              >
+                <Text style={{ color: Colors.onSurfaceVariant }}>{t("common.cancel")}</Text>
+              </Pressable>
+              <Pressable
+                onPress={handleSaveBarEditor}
+                disabled={!barEditorValue.trim()}
+                style={[
+                  styles.modalFooterButton,
+                  {
+                    backgroundColor: Colors.tint,
+                    borderColor: Colors.tint,
+                    opacity: !barEditorValue.trim() ? 0.5 : 1,
+                  }
+                ]}
+              >
+                <Text style={{ color: Colors.background, fontWeight: "600" }}>
+                  {barEditorMode === "create" ? t("common.create") : t("common.save")}
+                </Text>
+              </Pressable>
+            </View>
+          </Pressable>
+        </Pressable>
+      </Modal>
     </Modal>
   );
 }
@@ -2598,5 +2928,27 @@ const styles = StyleSheet.create({
   },
   ratingOptionLabel: {
     fontWeight: "700",
+  },
+  barNameInput: {
+    height: 48,
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    fontSize: 16,
+  },
+  modalFooter: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    gap: 12,
+    marginTop: 8,
+  },
+  modalFooterButton: {
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 8,
+    borderWidth: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    minWidth: 80,
   },
 });

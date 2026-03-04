@@ -83,6 +83,14 @@ type NormalizedSearchFields = {
 
 export type Cocktail = CocktailRecord & NormalizedSearchFields & { userRating?: number };
 export type Ingredient = IngredientRecord & NormalizedSearchFields;
+
+export type Bar = {
+  id: string;
+  name: string;
+  availableIngredientIds: number[];
+  shoppingIngredientIds: number[];
+};
+
 export type StartScreen =
   | 'cocktails_all'
   | 'cocktails_my'
