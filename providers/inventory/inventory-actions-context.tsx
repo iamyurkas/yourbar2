@@ -53,6 +53,10 @@ export type InventoryActionsContextValue = {
   setOnboardingStep: (step: number) => void;
   completeOnboarding: () => void;
   restartOnboarding: () => void;
+  setCurrentBar: (barId: string) => void;
+  createBar: (name: string) => string | undefined;
+  renameBar: (barId: string, name: string) => boolean;
+  deleteBar: (barId: string) => boolean;
 };
 
 export const InventoryActionsContext = createContext<InventoryActionsContextValue | undefined>(undefined);

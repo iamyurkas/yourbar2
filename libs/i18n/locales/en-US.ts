@@ -431,6 +431,12 @@ export const enUSTranslations: TranslationDictionary = {
   "tabs.ingredients": "Ingredients",
 
   "sideMenu.settingsTitle": "Settings",
+
+  "sideMenu.bars": "Bars",
+  "sideMenu.currentBar": "Current: {{name}}",
+  "sideMenu.barsDescription": "Switch between bars or create a new one.",
+  "sideMenu.barNamePlaceholder": "Bar name",
+  "sideMenu.createBar": "Create bar",
   "sideMenu.ignoreGarnish": "Ignore garnish",
   "sideMenu.ignoreGarnishCaption": "All garnishes are optional",
   "sideMenu.allowAllSubstitutes": "Allow all substitutes",

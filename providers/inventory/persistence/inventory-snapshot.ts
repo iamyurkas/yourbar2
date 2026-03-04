@@ -13,6 +13,7 @@ import type {
   CocktailTag,
   IngredientStorageRecord,
   IngredientTag,
+  InventoryBar,
   InventoryTranslationOverrides,
   StartScreen,
 } from '@/providers/inventory-types';
@@ -161,6 +162,8 @@ export type InventorySnapshotOptions = {
   customIngredientTags: IngredientTag[];
   onboardingStep: number;
   onboardingCompleted: boolean;
+  bars: InventoryBar[];
+  currentBarId: string;
   translationOverrides: InventoryTranslationOverrides;
 };
 
@@ -225,6 +228,8 @@ export function buildInventorySnapshot(
     amazonStoreOverride: options.amazonStoreOverride,
     onboardingStep: options.onboardingStep,
     onboardingCompleted: options.onboardingCompleted,
+    bars: options.bars,
+    currentBarId: options.currentBarId,
     translationOverrides: options.translationOverrides,
   } satisfies InventoryDeltaSnapshotV3<CocktailStorageRecord, IngredientStorageRecord>;
 }

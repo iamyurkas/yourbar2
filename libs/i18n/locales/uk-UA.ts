@@ -431,6 +431,12 @@ export const ukUATranslations: TranslationDictionary = {
   "tabs.ingredients": "Інгредієнти",
 
   "sideMenu.settingsTitle": "Налаштування",
+
+  "sideMenu.bars": "Бари",
+  "sideMenu.currentBar": "Поточний: {{name}}",
+  "sideMenu.barsDescription": "Перемикайтеся між барами або створіть новий.",
+  "sideMenu.barNamePlaceholder": "Назва бару",
+  "sideMenu.createBar": "Створити бар",
   "sideMenu.ignoreGarnish": "Ігнорувати декор",
   "sideMenu.ignoreGarnishCaption": "Весь декор є опційним",
   "sideMenu.allowAllSubstitutes": "Дозволити всі заміни",
