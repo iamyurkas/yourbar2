@@ -1,6 +1,15 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { Animated, Dimensions, Modal, Pressable, StyleSheet, Text, View } from 'react-native';
+import {
+  Animated,
+  Dimensions,
+  Modal,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 
 import { Colors } from '@/constants/theme';
 import { useInventory } from '@/providers/inventory-provider';
@@ -15,9 +24,22 @@ type SideMenuDrawerProps = {
 
 export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   const palette = Colors;
-  const { ignoreGarnish, setIgnoreGarnish, allowAllSubstitutes, setAllowAllSubstitutes } =
-    useInventory();
+  const {
+    ignoreGarnish,
+    setIgnoreGarnish,
+    allowAllSubstitutes,
+    setAllowAllSubstitutes,
+    bars,
+    activeBarId,
+    setActiveBar,
+    createBar,
+    renameBar,
+    deleteBar,
+  } = useInventory();
   const [isMounted, setIsMounted] = useState(visible);
+  const [barsModalVisible, setBarsModalVisible] = useState(false);
+  const [draftName, setDraftName] = useState('');
+  const [editingBarId, setEditingBarId] = useState<string | null>(null);
   const translateX = useRef(new Animated.Value(-MENU_WIDTH)).current;
   const backdropOpacity = useRef(new Animated.Value(0)).current;
 
@@ -81,6 +103,34 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     setAllowAllSubstitutes(!allowAllSubstitutes);
   };
 
+  const openBarsModal = () => {
+    setBarsModalVisible(true);
+    setDraftName('');
+    setEditingBarId(null);
+  };
+
+  const closeBarsModal = () => {
+    setBarsModalVisible(false);
+    setDraftName('');
+    setEditingBarId(null);
+  };
+
+  const submitDraft = () => {
+    const trimmedName = draftName.trim();
+    if (!trimmedName) {
+      return;
+    }
+
+    if (editingBarId) {
+      renameBar(editingBarId, trimmedName);
+    } else {
+      createBar(trimmedName);
+    }
+
+    setDraftName('');
+    setEditingBarId(null);
+  };
+
   return (
     <Modal transparent visible={isMounted} statusBarTranslucent animationType="none" onRequestClose={onClose}>
       <View style={styles.container}>
@@ -93,6 +143,22 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
         <Animated.View style={[drawerStyle, { transform: [{ translateX }] }]}>
           <View style={styles.menuContent}>
             <Text style={[styles.title, { color: palette.onSurface }]}>Settings</Text>
+            <Pressable
+              accessibilityRole="button"
+              onPress={openBarsModal}
+              style={[
+                styles.settingRow,
+                {
+                  borderColor: palette.outline,
+                  backgroundColor: palette.surface,
+                },
+              ]}>
+              <MaterialCommunityIcons name="storefront-outline" size={20} color={palette.onSurface} />
+              <View style={styles.settingTextContainer}>
+                <Text style={[styles.settingLabel, { color: palette.onSurface }]}>Bars</Text>
+                <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>Current: {bars.find((bar) => bar.id === activeBarId)?.name ?? 'Home'}</Text>
+              </View>
+            </Pressable>
             <Pressable
               accessibilityRole="checkbox"
               accessibilityState={{ checked: ignoreGarnish }}
@@ -150,13 +216,74 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               </View>
               <View style={styles.settingTextContainer}>
                 <Text style={[styles.settingLabel, { color: palette.onSurface }]}>Allow all substitutes</Text>
-                <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>
-                  Use base or branded alternative regardless of a recipe
-                </Text>
+                <Text style={[styles.settingCaption, { color: palette.onSurfaceVariant }]}>Use base or branded alternative regardless of a recipe</Text>
               </View>
             </Pressable>
           </View>
         </Animated.View>
+
+        <Modal transparent visible={barsModalVisible} animationType="fade" onRequestClose={closeBarsModal}>
+          <Pressable style={[styles.modalOverlay, { backgroundColor: palette.backdrop }]} onPress={closeBarsModal}>
+            <Pressable style={[styles.modalCard, { backgroundColor: palette.surface }]} onPress={(event) => event.stopPropagation()}>
+              <Text style={[styles.modalTitle, { color: palette.onSurface }]}>Bars</Text>
+              {bars.map((bar) => {
+                const isOnlyBar = bars.length === 1;
+                return (
+                  <View key={bar.id} style={[styles.barRow, { borderColor: palette.outlineVariant }]}>
+                    <Pressable style={styles.barSelectButton} onPress={() => setActiveBar(bar.id)}>
+                      <Text style={[styles.barName, { color: palette.onSurface }]}>{bar.name}</Text>
+                      {bar.id === activeBarId ? <Text style={[styles.barActive, { color: palette.tint }]}>Active</Text> : null}
+                    </Pressable>
+                    <Pressable
+                      accessibilityRole="button"
+                      onPress={() => {
+                        setEditingBarId(bar.id);
+                        setDraftName(bar.name);
+                      }}
+                      style={styles.iconButton}>
+                      <MaterialCommunityIcons name="pencil-outline" size={18} color={palette.onSurface} />
+                    </Pressable>
+                    <Pressable
+                      accessibilityRole="button"
+                      disabled={isOnlyBar}
+                      onPress={() => deleteBar(bar.id)}
+                      style={[styles.iconButton, isOnlyBar && styles.disabledButton]}>
+                      <MaterialCommunityIcons
+                        name="trash-can-outline"
+                        size={18}
+                        color={isOnlyBar ? palette.outlineVariant : palette.error}
+                      />
+                    </Pressable>
+                  </View>
+                );
+              })}
+
+              <View style={styles.editorContainer}>
+                <TextInput
+                  value={draftName}
+                  onChangeText={setDraftName}
+                  placeholder={editingBarId ? 'Rename bar' : 'New bar name'}
+                  placeholderTextColor={palette.outlineVariant}
+                  style={[
+                    styles.editorInput,
+                    {
+                      color: palette.onSurface,
+                      borderColor: palette.outline,
+                      backgroundColor: palette.background,
+                    },
+                  ]}
+                />
+                <Pressable
+                  accessibilityRole="button"
+                  onPress={submitDraft}
+                  style={[styles.createButton, { backgroundColor: palette.tint }]}
+                  disabled={!draftName.trim()}>
+                  <Text style={[styles.createButtonLabel, { color: palette.onPrimary }]}>Create</Text>
+                </Pressable>
+              </View>
+            </Pressable>
+          </Pressable>
+        </Modal>
       </View>
     </Modal>
   );
@@ -222,5 +349,66 @@ const styles = StyleSheet.create({
   settingCaption: {
     fontSize: 12,
   },
+  modalOverlay: {
+    flex: 1,
+    justifyContent: 'center',
+    padding: 20,
+  },
+  modalCard: {
+    borderRadius: 16,
+    padding: 16,
+    gap: 12,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+  },
+  barRow: {
+    borderWidth: StyleSheet.hairlineWidth,
+    borderRadius: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  barSelectButton: {
+    flex: 1,
+    gap: 2,
+  },
+  barName: {
+    fontSize: 15,
+    fontWeight: '600',
+  },
+  barActive: {
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  iconButton: {
+    padding: 8,
+  },
+  disabledButton: {
+    opacity: 0.5,
+  },
+  editorContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginTop: 8,
+  },
+  editorInput: {
+    flex: 1,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderRadius: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    fontSize: 14,
+  },
+  createButton: {
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    borderRadius: 10,
+  },
+  createButtonLabel: {
+    fontWeight: '700',
+  },
 });
-
