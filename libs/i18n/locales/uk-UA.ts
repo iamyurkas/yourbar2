@@ -19,6 +19,7 @@ export const ukUATranslations: TranslationDictionary = {
   "common.closeTagFilters": "Закрити фільтри тегів",
   "common.noMethodsAvailable": "Немає доступних методів",
   "common.noTagsAvailable": "Немає доступних тегів",
+  "common.noRatingsAvailable": "Немає доступних оцінок",
   "common.clearFilters": "Очистити фільтри",
   "common.and": "ТА",
   "common.or": "АБО",

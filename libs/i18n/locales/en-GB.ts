@@ -19,6 +19,7 @@ export const enGBTranslations: TranslationDictionary = {
   "common.closeTagFilters": "Close tag filters",
   "common.noMethodsAvailable": "No methods available",
   "common.noTagsAvailable": "No tags available",
+  "common.noRatingsAvailable": "No ratings available",
   "common.clearFilters": "Clear filters",
   "common.and": "AND",
   "common.or": "OR",

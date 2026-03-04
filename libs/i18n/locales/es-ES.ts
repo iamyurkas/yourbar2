@@ -19,6 +19,7 @@ export const esESTranslations: TranslationDictionary = {
   "common.closeTagFilters": "Cerrar filtros de etiquetas",
   "common.noMethodsAvailable": "No hay métodos disponibles",
   "common.noTagsAvailable": "No hay etiquetas disponibles",
+  "common.noRatingsAvailable": "No hay valoraciones disponibles",
   "common.clearFilters": "Borrar filtros",
   "common.and": "Y",
   "common.or": "O",
