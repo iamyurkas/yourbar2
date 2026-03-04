@@ -319,7 +319,7 @@ export default function CocktailsScreen() {
       }
     });
 
-    return [...ratings].sort((a, b) => b - a);
+    return [...ratings].sort((a, b) => a - b);
   }, [activeTab, baseTabCocktails, getCocktailRating]);
 
   useEffect(() => {
@@ -837,6 +837,10 @@ export default function CocktailsScreen() {
     return 0;
   }, [filterAnchorLayout, headerLayout]);
 
+
+  const showRatingFilters = activeTab === 'favorites' && availableStarRatings.length > 0;
+  const showMethodFilters = availableMethodOptions.length > 0;
+
   return (
     <SafeAreaView
       style={[styles.safeArea, { backgroundColor: Colors.background }]}
@@ -884,7 +888,7 @@ export default function CocktailsScreen() {
                 showsVerticalScrollIndicator
                 keyboardShouldPersistTaps="handled">
                 <View style={styles.filterMenuBody}>
-                  {activeTab === 'favorites' ? (
+                  {showRatingFilters ? (
                     <>
                       <ScrollView
                         horizontal
@@ -892,27 +896,21 @@ export default function CocktailsScreen() {
                         contentContainerStyle={styles.filterRatingRow}
                         showsHorizontalScrollIndicator={false}
                         keyboardShouldPersistTaps="handled">
-                        {availableStarRatings.length > 0 ? (
-                          availableStarRatings.map((rating) => {
-                            const selected = selectedStarRatings.has(rating);
-                            return (
-                              <TagPill
-                                key={`rating-${rating}`}
-                                label={`${rating}★`}
-                                color={Colors.tint}
-                                selected={selected}
-                                onPress={() => handleStarRatingFilterToggle(rating)}
-                                accessibilityRole="checkbox"
-                                accessibilityState={{ checked: selected }}
-                                androidRippleColor={`${Colors.surfaceVariant}33`}
-                              />
-                            );
-                          })
-                        ) : (
-                          <Text style={[styles.filterMenuEmpty, { color: Colors.onSurfaceVariant }]}>
-                            {t('common.noRatingsAvailable')}
-                          </Text>
-                        )}
+                        {availableStarRatings.map((rating) => {
+                          const selected = selectedStarRatings.has(rating);
+                          return (
+                            <TagPill
+                              key={`rating-${rating}`}
+                              label={`${rating}★`}
+                              color={Colors.tint}
+                              selected={selected}
+                              onPress={() => handleStarRatingFilterToggle(rating)}
+                              accessibilityRole="checkbox"
+                              accessibilityState={{ checked: selected }}
+                              androidRippleColor={`${Colors.surfaceVariant}33`}
+                            />
+                          );
+                        })}
                       </ScrollView>
                       <View style={styles.filterSeparator}>
                         <View style={[styles.filterSeparatorLine, { backgroundColor: Colors.outline }]} />
@@ -924,37 +922,35 @@ export default function CocktailsScreen() {
                     </>
                   ) : null}
                   <View style={styles.filterMenuContent}>
-                    <View style={styles.filterMethodList}>
-                      {availableMethodOptions.length > 0 ? (
-                        availableMethodOptions.map((method) => {
-                          const selected = selectedMethodIds.has(method.id);
-                          return (
-                            <TagPill
-                              key={method.id}
-                              label={t(`cocktailMethod.${method.id}.label`)}
-                              color={Colors.tint}
-                              selected={selected}
-                              icon={renderMethodIcon(method.id, selected)}
-                              onPress={() => handleMethodFilterToggle(method.id)}
-                              accessibilityRole="checkbox"
-                              accessibilityState={{ checked: selected }}
-                              androidRippleColor={`${Colors.surfaceVariant}33`}
-                            />
-                          );
-                        })
-                      ) : (
-                        <Text style={[styles.filterMenuEmpty, { color: Colors.onSurfaceVariant }]}>
-                          {t("common.noMethodsAvailable")}
-                        </Text>
-                      )}
-                    </View>
-                    <View style={styles.filterSeparator}>
-                      <View style={[styles.filterSeparatorLine, { backgroundColor: Colors.outline }]} />
-                      <Text style={[styles.filterSeparatorLabel, { color: Colors.onSurfaceVariant }]}>
-                        {t("common.and")}
-                      </Text>
-                      <View style={[styles.filterSeparatorLine, { backgroundColor: Colors.outline }]} />
-                    </View>
+                    {showMethodFilters ? (
+                      <>
+                        <View style={styles.filterMethodList}>
+                          {availableMethodOptions.map((method) => {
+                            const selected = selectedMethodIds.has(method.id);
+                            return (
+                              <TagPill
+                                key={method.id}
+                                label={t(`cocktailMethod.${method.id}.label`)}
+                                color={Colors.tint}
+                                selected={selected}
+                                icon={renderMethodIcon(method.id, selected)}
+                                onPress={() => handleMethodFilterToggle(method.id)}
+                                accessibilityRole="checkbox"
+                                accessibilityState={{ checked: selected }}
+                                androidRippleColor={`${Colors.surfaceVariant}33`}
+                              />
+                            );
+                          })}
+                        </View>
+                        <View style={styles.filterSeparator}>
+                          <View style={[styles.filterSeparatorLine, { backgroundColor: Colors.outline }]} />
+                          <Text style={[styles.filterSeparatorLabel, { color: Colors.onSurfaceVariant }]}>
+                            {t("common.and")}
+                          </Text>
+                          <View style={[styles.filterSeparatorLine, { backgroundColor: Colors.outline }]} />
+                        </View>
+                      </>
+                    ) : null}
                     <View style={styles.filterTagList}>
                       {availableTagOptions.length > 0 ? (
                         availableTagOptions.map((tag) => {
