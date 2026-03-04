@@ -15,6 +15,7 @@ import type {
   StartScreen,
   AppLocale,
   AppTheme,
+  Bar,
 } from '@/providers/inventory-types';
 
 export type InventoryActionsContextValue = {
@@ -53,6 +54,10 @@ export type InventoryActionsContextValue = {
   setOnboardingStep: (step: number) => void;
   completeOnboarding: () => void;
   restartOnboarding: () => void;
+  createBar: (input: { name: string }) => Bar | undefined;
+  updateBar: (id: number, input: { name: string }) => Bar | undefined;
+  deleteBar: (id: number) => boolean;
+  setActiveBar: (id: number) => void;
 };
 
 export const InventoryActionsContext = createContext<InventoryActionsContextValue | undefined>(undefined);

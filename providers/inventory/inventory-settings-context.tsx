@@ -1,7 +1,7 @@
 import { createContext, useContext } from 'react';
 
 import type { AmazonStoreKey, AmazonStoreOverride } from '@/libs/amazon-stores';
-import type { AppLocale, AppTheme, StartScreen } from '@/providers/inventory-types';
+import type { AppLocale, AppTheme, Bar, StartScreen } from '@/providers/inventory-types';
 
 export type InventorySettingsContextValue = {
   ignoreGarnish: boolean;
@@ -18,6 +18,8 @@ export type InventorySettingsContextValue = {
   effectiveAmazonStore: AmazonStoreKey | null;
   onboardingStep: number;
   onboardingCompleted: boolean;
+  bars: Bar[];
+  activeBarId: number;
 };
 
 export const InventorySettingsContext = createContext<InventorySettingsContextValue | undefined>(undefined);

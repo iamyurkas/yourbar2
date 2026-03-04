@@ -15,6 +15,7 @@ import type {
   IngredientTag,
   InventoryTranslationOverrides,
   StartScreen,
+  Bar,
 } from '@/providers/inventory-types';
 import type { InventoryState } from '@/providers/inventory/model/inventory-state';
 
@@ -146,6 +147,8 @@ export function buildInventoryDelta(
 export type InventorySnapshotOptions = {
   availableIngredientIds: Set<number>;
   shoppingIngredientIds: Set<number>;
+  availableIngredientIdsByBar?: Record<string, number[]>;
+  shoppingIngredientIdsByBar?: Record<string, number[]>;
   ratingsByCocktailId: Record<string, number>;
   ignoreGarnish: boolean;
   allowAllSubstitutes: boolean;
@@ -161,6 +164,8 @@ export type InventorySnapshotOptions = {
   customIngredientTags: IngredientTag[];
   onboardingStep: number;
   onboardingCompleted: boolean;
+  bars: Bar[];
+  activeBarId: number;
   translationOverrides: InventoryTranslationOverrides;
 };
 
@@ -212,6 +217,8 @@ export function buildInventorySnapshot(
       options.availableIngredientIds.size > 0 ? toSortedArray(options.availableIngredientIds) : undefined,
     shoppingIngredientIds:
       options.shoppingIngredientIds.size > 0 ? toSortedArray(options.shoppingIngredientIds) : undefined,
+    availableIngredientIdsByBar: options.availableIngredientIdsByBar,
+    shoppingIngredientIdsByBar: options.shoppingIngredientIdsByBar,
     cocktailRatings: Object.keys(sanitizedRatings).length > 0 ? sanitizedRatings : undefined,
     ignoreGarnish: options.ignoreGarnish,
     allowAllSubstitutes: options.allowAllSubstitutes,
@@ -225,6 +232,8 @@ export function buildInventorySnapshot(
     amazonStoreOverride: options.amazonStoreOverride,
     onboardingStep: options.onboardingStep,
     onboardingCompleted: options.onboardingCompleted,
+    bars: options.bars,
+    activeBarId: options.activeBarId,
     translationOverrides: options.translationOverrides,
   } satisfies InventoryDeltaSnapshotV3<CocktailStorageRecord, IngredientStorageRecord>;
 }
