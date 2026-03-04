@@ -11,6 +11,8 @@ export type InventorySnapshotV1<TCocktail, TIngredient> = {
   imported?: boolean;
   availableIngredientIds?: number[];
   shoppingIngredientIds?: number[];
+  availableIngredientIdsByBar?: Record<string, number[]>;
+  shoppingIngredientIdsByBar?: Record<string, number[]>;
   cocktailRatings?: Record<string, number>;
   ignoreGarnish?: boolean;
   allowAllSubstitutes?: boolean;
@@ -24,6 +26,8 @@ export type InventorySnapshotV1<TCocktail, TIngredient> = {
   amazonStoreOverride?: string | null;
   onboardingStep?: number;
   onboardingCompleted?: boolean;
+  bars?: Array<{ id: number; name: string }>;
+  activeBarId?: number;
 };
 
 export type InventoryDeltaSnapshot<TCocktail, TIngredient> = {
@@ -45,6 +49,8 @@ export type InventoryDeltaSnapshot<TCocktail, TIngredient> = {
   customIngredientTags?: Array<{ id: number; name: string; color: string }>;
   availableIngredientIds?: number[];
   shoppingIngredientIds?: number[];
+  availableIngredientIdsByBar?: Record<string, number[]>;
+  shoppingIngredientIdsByBar?: Record<string, number[]>;
   cocktailRatings?: Record<string, number>;
   ignoreGarnish?: boolean;
   allowAllSubstitutes?: boolean;
@@ -58,6 +64,8 @@ export type InventoryDeltaSnapshot<TCocktail, TIngredient> = {
   amazonStoreOverride?: string | null;
   onboardingStep?: number;
   onboardingCompleted?: boolean;
+  bars?: Array<{ id: number; name: string }>;
+  activeBarId?: number;
 };
 
 
@@ -80,6 +88,8 @@ export type InventoryDeltaSnapshotV3<TCocktail, TIngredient> = {
   customIngredientTags?: Array<{ id: number; name: string; color: string }>;
   availableIngredientIds?: number[];
   shoppingIngredientIds?: number[];
+  availableIngredientIdsByBar?: Record<string, number[]>;
+  shoppingIngredientIdsByBar?: Record<string, number[]>;
   cocktailRatings?: Record<string, number>;
   ignoreGarnish?: boolean;
   allowAllSubstitutes?: boolean;
@@ -93,6 +103,8 @@ export type InventoryDeltaSnapshotV3<TCocktail, TIngredient> = {
   amazonStoreOverride?: string | null;
   onboardingStep?: number;
   onboardingCompleted?: boolean;
+  bars?: Array<{ id: number; name: string }>;
+  activeBarId?: number;
   translationOverrides?: unknown;
 };
 

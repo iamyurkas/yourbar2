@@ -95,6 +95,11 @@ export type StartScreen =
 export type AppTheme = 'light' | 'dark' | 'system';
 export type AppLocale = 'en-GB' | 'en-US' | 'es-ES' | 'uk-UA';
 
+export type Bar = {
+  id: number;
+  name: string;
+};
+
 export type CreateCocktailSubstituteInput = {
   ingredientId?: number | string | null;
   name?: string | null;
