@@ -17,7 +17,6 @@ import {
   UIManager,
   View,
   findNodeHandle,
-  type GestureResponderEvent,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -942,8 +941,7 @@ export default function IngredientFormScreen() {
     setIsStyleModalVisible(true);
   }, [styleIngredient?.name]);
 
-  const handleClearStyleIngredient = useCallback((event?: GestureResponderEvent) => {
-    event?.stopPropagation?.();
+  const handleClearStyleIngredient = useCallback(() => {
     setStyleIngredientId(null);
     setStyleSearch('');
   }, []);
@@ -954,8 +952,7 @@ export default function IngredientFormScreen() {
   }, [baseIngredient?.name]);
 
   const handleClearBaseIngredient = useCallback(
-    (event?: GestureResponderEvent) => {
-      event?.stopPropagation?.();
+    () => {
       setBaseIngredientId(null);
       setBaseSearch('');
     },
@@ -1691,7 +1688,7 @@ export default function IngredientFormScreen() {
           onPress={handleCloseBaseModal}
           accessibilityRole="button">
           <Pressable
-            onPress={(event) => event.stopPropagation?.()}
+            onPress={() => { }}
             style={[
               styles.modalCard,
               {
@@ -1759,7 +1756,7 @@ export default function IngredientFormScreen() {
           onPress={handleCloseStyleModal}
           accessibilityRole="button">
           <Pressable
-            onPress={(event) => event.stopPropagation?.()}
+            onPress={() => { }}
             style={[
               styles.modalCard,
               {

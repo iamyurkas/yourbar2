@@ -132,7 +132,7 @@ export function TagEditorModal({
             styles.card,
             { backgroundColor: Colors.surface, borderColor: Colors.outline, shadowColor: Colors.shadow },
           ]}
-          onPress={(event) => event.stopPropagation?.()}
+          onPress={() => { }}
           accessibilityRole="menu"
         >
           <View style={styles.header}>
