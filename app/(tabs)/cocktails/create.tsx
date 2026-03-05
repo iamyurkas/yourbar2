@@ -2051,7 +2051,7 @@ export default function CreateCocktailScreen() {
           accessibilityLabel={t("common.close")}
         >
           <Pressable
-            onPress={(event) => event.stopPropagation?.()}
+            onPress={() => { }}
             style={[
               styles.modalCard,
               {
@@ -2156,7 +2156,7 @@ export default function CreateCocktailScreen() {
           accessibilityRole="button"
         >
           <Pressable
-            onPress={(event) => event.stopPropagation?.()}
+            onPress={() => { }}
             style={[
               styles.unitModalCard,
               {
@@ -2247,7 +2247,7 @@ export default function CreateCocktailScreen() {
           accessibilityRole="button"
         >
           <Pressable
-            onPress={(event) => event.stopPropagation?.()}
+            onPress={() => { }}
             style={[
               styles.unitModalCard,
               {

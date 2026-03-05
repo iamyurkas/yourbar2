@@ -1284,8 +1284,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     accessibilityRole="button"
                     accessibilityLabel={t("sideMenu.smartShakerFilteringInfo")}
                     hitSlop={8}
-                    onPress={(event) => {
-                      event.stopPropagation();
+                    onPress={() => {
                       handleSmartShakerFilteringInfoPress();
                     }}
                     style={styles.settingInfoButton}

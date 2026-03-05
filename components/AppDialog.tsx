@@ -71,7 +71,7 @@ export function AppDialog({ visible, title, message, actions, onRequestClose }: 
         accessibilityLabel={t("appDialog.closeDialog")}>
         <Pressable
           style={[styles.card, { backgroundColor: Colors.surface }]}
-          onPress={(event) => event.stopPropagation()}>
+          onPress={() => { }}>
           <Text style={[styles.title, { color: Colors.onSurface }]}>{title}</Text>
           {normalizedMessage ? (
             <FormattedText style={[styles.message, { color: Colors.onSurfaceVariant }]}>

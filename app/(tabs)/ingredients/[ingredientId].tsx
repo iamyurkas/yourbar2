@@ -17,7 +17,6 @@ import {
   StyleSheet,
   Text,
   View,
-  type GestureResponderEvent,
   type NativeSyntheticEvent,
   type TextLayoutEventData,
 } from "react-native";
@@ -571,9 +570,7 @@ export default function IngredientDetailsScreen() {
   );
 
   const handleRemoveBase = useCallback(
-    (event?: GestureResponderEvent) => {
-      event?.stopPropagation();
-
+    () => {
       if (
         !ingredient ||
         numericIngredientId == null ||
@@ -615,9 +612,7 @@ export default function IngredientDetailsScreen() {
 
 
   const handleRemoveStyle = useCallback(
-    (event?: GestureResponderEvent) => {
-      event?.stopPropagation();
-
+    () => {
       if (
         !ingredient ||
         numericIngredientId == null ||
@@ -700,9 +695,7 @@ export default function IngredientDetailsScreen() {
   );
 
   const handleRemoveBranded = useCallback(
-    (brandedIngredient: Ingredient) => (event?: GestureResponderEvent) => {
-      event?.stopPropagation();
-
+    (brandedIngredient: Ingredient) => () => {
       const brandedId = Number(brandedIngredient.id ?? -1);
       if (Number.isNaN(brandedId)) {
         return;
@@ -731,9 +724,7 @@ export default function IngredientDetailsScreen() {
 
 
   const handleRemoveStyled = useCallback(
-    (styledIngredient: Ingredient) => (event?: GestureResponderEvent) => {
-      event?.stopPropagation();
-
+    (styledIngredient: Ingredient) => () => {
       const styledId = Number(styledIngredient.id ?? -1);
       if (Number.isNaN(styledId)) {
         return;
