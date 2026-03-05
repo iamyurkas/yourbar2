@@ -3,16 +3,18 @@ import React, { useCallback } from 'react';
 
 import { HapticTab } from '@/components/haptic-tab';
 import type { DialogOptions } from '@/components/AppDialog';
+import { OnboardingAnchor } from '@/components/onboarding/OnboardingAnchor';
 import { useUnsavedChanges } from '@/providers/unsaved-changes-provider';
 import { useI18n } from '@/libs/i18n/use-i18n';
 
 type TabBarButtonProps = BottomTabBarButtonProps & {
+  name: string;
   onOpenDialog: (options: DialogOptions) => void;
 };
 
 type TabBarPressEvent = Parameters<NonNullable<BottomTabBarButtonProps['onPress']>>[0];
 
-export function TabBarButton({ onOpenDialog, ...props }: TabBarButtonProps) {
+export function TabBarButton({ name, onOpenDialog, ...props }: TabBarButtonProps) {
   const { t } = useI18n();
   const {
     hasUnsavedChanges,
@@ -53,5 +55,9 @@ export function TabBarButton({ onOpenDialog, ...props }: TabBarButtonProps) {
     t,
   ]);
 
-  return <HapticTab {...props} onPress={handlePress} />;
+  return (
+    <OnboardingAnchor name={name} style={{ flex: 1 }}>
+      <HapticTab {...props} onPress={handlePress} hitSlop={12} />
+    </OnboardingAnchor>
+  );
 }

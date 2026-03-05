@@ -1,6 +1,5 @@
 import { Tabs } from 'expo-router';
 import { useCallback, useState } from 'react';
-import { StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import CocktailIcon from '@/assets/images/cocktails.svg';
@@ -9,7 +8,6 @@ import ShakerIcon from '@/assets/images/shaker.svg';
 import { AppDialog, type DialogOptions } from '@/components/AppDialog';
 import { TabBarButton } from '@/components/tab-bar/TabBarButton';
 import { TabBarIcon } from '@/components/tab-bar/TabBarIcon';
-import { OnboardingAnchor } from '@/components/onboarding/OnboardingAnchor';
 import { useAppColors } from '@/constants/theme';
 import { getLastCocktailTab, getLastIngredientTab } from '@/libs/collection-tabs';
 import { useI18n } from '@/libs/i18n/use-i18n';
@@ -73,10 +71,11 @@ export default function TabLayout() {
           tabBarActiveTintColor: Colors.primary,
           tabBarInactiveTintColor: Colors.onSurfaceVariant,
           tabBarStyle: {
-            height: 72 + insets.bottom,
+            minHeight: 80,
             paddingTop: 8,
             paddingBottom: insets.bottom,
             backgroundColor: Colors.surface,
+            zIndex: 100,
           },
           tabBarItemStyle: {
             justifyContent: 'center',
@@ -90,9 +89,7 @@ export default function TabLayout() {
             options={{
               title: t(titleKey),
               tabBarButton: (props) => (
-                <OnboardingAnchor name={`tab-${name}`} style={styles.tabAnchor}>
-                  <TabBarButton {...props} onOpenDialog={showDialog} />
-                </OnboardingAnchor>
+                <TabBarButton {...props} name={`tab-${name}`} onOpenDialog={showDialog} />
               ),
               tabBarIcon: ({ color, focused }) => <TabBarIcon source={icon} color={color} focused={focused} />,
             }}
@@ -124,8 +121,3 @@ export default function TabLayout() {
   );
 }
 
-const styles = StyleSheet.create({
-  tabAnchor: {
-    flex: 1,
-  },
-});

@@ -2,8 +2,8 @@ import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { Stack } from "expo-router";
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from "expo-status-bar";
-import { Appearance, useColorScheme, View } from "react-native";
-import { useCallback, useEffect } from "react";
+import { Appearance, useColorScheme } from "react-native";
+import { useEffect } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import "react-native-reanimated";
@@ -77,33 +77,33 @@ function ThemeAppWrapper({ children }: { children: React.ReactNode }) {
 function RootLayoutContent() {
   const { loading } = useInventory();
 
-  const onRootLayout = useCallback(() => {
-    if (!loading) {
-      void SplashScreen.hideAsync();
-    }
-  }, [loading]);
-
   if (loading) {
     return null;
   }
 
   return (
-    <View style={{ flex: 1 }} onLayout={onRootLayout}>
-      <OnboardingProvider>
-        <ThemeAppWrapper>
-          <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          </Stack>
-          <OnboardingOverlay />
-        </ThemeAppWrapper>
-      </OnboardingProvider>
-    </View>
+    <OnboardingProvider>
+      <ThemeAppWrapper>
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        </Stack>
+        <OnboardingOverlay />
+      </ThemeAppWrapper>
+    </OnboardingProvider>
   );
 }
 
 export default Sentry.wrap(function RootLayout() {
+  const { loading } = useInventory();
+
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
+    <GestureHandlerRootView
+      style={{ flex: 1 }}
+      onLayout={() => {
+        if (!loading) {
+          void SplashScreen.hideAsync();
+        }
+      }}>
       <SafeAreaProvider>
         <UnsavedChangesProvider>
           <InventoryProvider>
