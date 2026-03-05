@@ -1,15 +1,15 @@
 import { Tabs } from 'expo-router';
 import { useCallback, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import CocktailIcon from '@/assets/images/cocktails.svg';
 import LemonIcon from '@/assets/images/ingredients.svg';
 import ShakerIcon from '@/assets/images/shaker.svg';
 import { AppDialog, type DialogOptions } from '@/components/AppDialog';
+import { OnboardingAnchor } from '@/components/onboarding/OnboardingAnchor';
 import { TabBarButton } from '@/components/tab-bar/TabBarButton';
 import { TabBarIcon } from '@/components/tab-bar/TabBarIcon';
-import { OnboardingAnchor } from '@/components/onboarding/OnboardingAnchor';
 import { useAppColors } from '@/constants/theme';
 import { getLastCocktailTab, getLastIngredientTab } from '@/libs/collection-tabs';
 import { useI18n } from '@/libs/i18n/use-i18n';
@@ -76,18 +76,12 @@ export default function TabLayout() {
             height: 72 + insets.bottom,
             paddingTop: 8,
             paddingBottom: insets.bottom,
-            backgroundColor: 'transparent',
+            backgroundColor: Colors.surface,
           },
           tabBarItemStyle: {
             justifyContent: 'center',
             alignItems: 'center',
           },
-          tabBarBackground: () => (
-            <View style={styles.tabBarBackground} pointerEvents="none">
-              <View style={[styles.tabBarSurface, { backgroundColor: Colors.surface }]} pointerEvents="none" />
-              <View style={[styles.tabBarInset, { height: insets.bottom, backgroundColor: Colors.surface }]} pointerEvents="none" />
-            </View>
-          ),
         }}>
         {TAB_SCREENS.map(({ name, titleKey, icon, onTabPress }) => (
           <Tabs.Screen
@@ -131,16 +125,6 @@ export default function TabLayout() {
 }
 
 const styles = StyleSheet.create({
-  tabBarBackground: {
-    ...StyleSheet.absoluteFillObject,
-    flexDirection: 'column',
-  },
-  tabBarSurface: {
-    flex: 1,
-  },
-  tabBarInset: {
-    height: 0,
-  },
   tabAnchor: {
     flex: 1,
   },

@@ -2,13 +2,15 @@ import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { Stack } from "expo-router";
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from "expo-status-bar";
-import { Appearance, useColorScheme, View } from "react-native";
 import { useCallback, useEffect } from "react";
+import { Appearance, useColorScheme, View } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "react-native-reanimated";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
-import { PaperProvider } from "@/libs/react-native-paper";
 import { OnboardingProvider } from "@/components/onboarding/OnboardingContext";
 import { OnboardingOverlay } from "@/components/onboarding/OnboardingOverlay";
+import { PaperProvider } from "@/libs/react-native-paper";
 import { InventoryProvider, useInventory } from "@/providers/inventory-provider";
 import { UnsavedChangesProvider } from "@/providers/unsaved-changes-provider";
 import { getAppTheme } from "@/theme/theme";
@@ -101,10 +103,14 @@ function RootLayoutContent() {
 
 export default Sentry.wrap(function RootLayout() {
   return (
-    <UnsavedChangesProvider>
-      <InventoryProvider>
-        <RootLayoutContent />
-      </InventoryProvider>
-    </UnsavedChangesProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaProvider>
+        <UnsavedChangesProvider>
+          <InventoryProvider>
+            <RootLayoutContent />
+          </InventoryProvider>
+        </UnsavedChangesProvider>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 });
