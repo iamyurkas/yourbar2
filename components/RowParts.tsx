@@ -1,6 +1,6 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { type ImageSource } from 'expo-image';
-import React, { type ReactNode } from 'react';
+import { type ReactNode } from 'react';
 import {
   Pressable,
   StyleProp,
@@ -11,11 +11,11 @@ import {
   type TextStyle,
 } from 'react-native';
 
-import { AppImage } from './AppImage';
 import { useAppColors } from '@/constants/theme';
-import { resolveImageSource } from '@/libs/image-source';
 import { useI18n } from '@/libs/i18n/use-i18n';
+import { resolveImageSource } from '@/libs/image-source';
 import { tagColors } from '@/theme/theme';
+import { AppImage } from './AppImage';
 
 const THUMB_SIZE = 56;
 
@@ -80,7 +80,7 @@ export function PresenceCheck({ checked, onToggle, color }: PresenceCheckProps) 
       accessibilityState={{ checked }}
       onPress={onToggle}
       style={[styles.checkbox, { borderColor, backgroundColor }]}
-      hitSlop={8}>
+      hitSlop={16}>
       <MaterialCommunityIcons name="check" color={iconColor} size={12} />
     </Pressable>
   );
@@ -160,8 +160,8 @@ export function ListRow({
     metaAlignment === 'center'
       ? styles.metaContentCenter
       : metaAlignment === 'flex-start'
-      ? styles.metaContentStart
-      : styles.metaContentSpaceBetween;
+        ? styles.metaContentStart
+        : styles.metaContentSpaceBetween;
   const showBrandIndicator = brandIndicatorColor != null;
   const showRightIndicator = rightIndicatorColor != null;
   const indicatorColor = brandIndicatorColor ?? Colors.primary;

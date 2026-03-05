@@ -29,16 +29,16 @@ import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { useAppColors } from '@/constants/theme';
 import { isCocktailReady } from '@/libs/cocktail-availability';
 import { getLastIngredientTab, setLastIngredientTab, type IngredientTabKey } from '@/libs/collection-tabs';
+import { compareOptionalGlobalAlphabet } from '@/libs/global-sort';
+import { getPluralCategory } from '@/libs/i18n/plural';
+import { useI18n } from '@/libs/i18n/use-i18n';
 import {
   createIngredientLookup,
   getVisibleIngredientIdsForCocktail,
 } from '@/libs/ingredient-availability';
 import { navigateToDetailsWithReturnTo } from '@/libs/navigation';
-import { getPluralCategory } from '@/libs/i18n/plural';
 import { normalizeSearchText } from '@/libs/search-normalization';
-import { compareOptionalGlobalAlphabet } from '@/libs/global-sort';
 import { buildTagOptions, type TagOption } from '@/libs/tag-options';
-import { useI18n } from '@/libs/i18n/use-i18n';
 import {
   useInventoryActions,
   useInventoryData,
@@ -161,7 +161,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
           accessibilityRole="button"
           accessibilityLabel={shoppingLabel}
           onPress={handleShoppingToggle}
-          hitSlop={8}
+          hitSlop={16}
           style={({ pressed }) => [styles.shoppingButton, pressed ? styles.shoppingButtonPressed : null]}>
           <MaterialIcons
             name={shoppingIconName}
