@@ -6,6 +6,7 @@ export function HapticTab(props: BottomTabBarButtonProps) {
   return (
     <PlatformPressable
       {...props}
+      style={[props.style, { backgroundColor: 'transparent' }]}
       pressOpacity={0.7}
       android_ripple={{ color: 'rgba(255,255,255,0.12)', borderless: false }}
       onPressIn={(ev) => {

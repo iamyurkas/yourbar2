@@ -1,5 +1,5 @@
 import { Tabs } from 'expo-router';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -52,9 +52,17 @@ const TAB_SCREENS: {
 
 export default function TabLayout() {
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(null);
+  const [layoutWorkaround, setLayoutWorkaround] = useState(false);
   const { t } = useI18n();
   const insets = useSafeAreaInsets();
   const Colors = useAppColors();
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setLayoutWorkaround(true);
+    }, 500);
+    return () => clearTimeout(timeout);
+  }, []);
 
   const closeDialog = useCallback(() => {
     setDialogOptions(null);
@@ -73,14 +81,14 @@ export default function TabLayout() {
           tabBarActiveTintColor: Colors.primary,
           tabBarInactiveTintColor: Colors.onSurfaceVariant,
           tabBarStyle: {
-            height: 72 + insets.bottom,
-            paddingTop: 8,
-            paddingBottom: insets.bottom,
+            height: 72 + insets.bottom + (layoutWorkaround ? 0 : 0.1),
             backgroundColor: Colors.surface,
           },
           tabBarItemStyle: {
+            paddingTop: 8,
+            paddingBottom: insets.bottom,
             justifyContent: 'center',
-            alignItems: 'center',
+            alignItems: 'stretch',
           },
         }}>
         {TAB_SCREENS.map(({ name, titleKey, icon, onTabPress }) => (
@@ -90,8 +98,15 @@ export default function TabLayout() {
             options={{
               title: t(titleKey),
               tabBarButton: (props) => (
-                <OnboardingAnchor name={`tab-${name}`} style={styles.tabAnchor}>
-                  <TabBarButton {...props} onOpenDialog={showDialog} />
+                <OnboardingAnchor
+                  name={`tab-${name}`}
+                  style={[styles.tabAnchor, props.style]}
+                >
+                  <TabBarButton
+                    {...props}
+                    style={styles.tabButton}
+                    onOpenDialog={showDialog}
+                  />
                 </OnboardingAnchor>
               ),
               tabBarIcon: ({ color, focused }) => <TabBarIcon source={icon} color={color} focused={focused} />,
@@ -118,6 +133,9 @@ export default function TabLayout() {
 
 const styles = StyleSheet.create({
   tabAnchor: {
+    flex: 1,
+  },
+  tabButton: {
     flex: 1,
   },
 });
