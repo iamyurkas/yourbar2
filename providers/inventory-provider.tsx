@@ -4,7 +4,7 @@ import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { TAG_COLORS } from '@/constants/tag-colors';
 import { AMAZON_STORES, detectAmazonStoreFromStoreOrLocale, detectUsStorefrontOrLocale, getEffectiveAmazonStore, type AmazonStoreKey, type AmazonStoreOverride } from '@/libs/amazon-stores';
-import { DEFAULT_LOCALE, isSupportedLocale } from '@/libs/i18n';
+import { DEFAULT_LOCALE, isSupportedLocale, translate } from '@/libs/i18n';
 import type { SupportedLocale } from '@/libs/i18n/types';
 import { localizeCocktails, localizeIngredients } from '@/libs/i18n/catalog-overlay';
 import { loadInventoryData, reloadInventoryData } from '@/libs/inventory-data';
@@ -122,6 +122,11 @@ declare global {
   var __yourbarInventoryBars: Bar[] | undefined;
   // eslint-disable-next-line no-var
   var __yourbarInventoryActiveBarId: string | undefined;
+}
+
+
+function getDefaultBarName(locale: AppLocale): string {
+  return translate(locale, 'barManager.defaultName');
 }
 
 function createIngredientIdSet(values?: readonly number[] | null): Set<number> {
@@ -479,7 +484,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             nextActiveBarId = Date.now().toString();
             nextBars = [{
               id: nextActiveBarId,
-              name: 'Default',
+              name: getDefaultBarName(nextAppLocale),
               availableIngredientIds: toSortedArray(nextAvailableIds),
               shoppingIngredientIds: toSortedArray(nextShoppingIds),
             }];
@@ -539,7 +544,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             onboardingCompleted: false,
             bars: [{
               id: '1',
-              name: 'Default',
+              name: getDefaultBarName(DEFAULT_APP_LOCALE),
               availableIngredientIds: [],
               shoppingIngredientIds: [],
             }],
