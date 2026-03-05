@@ -99,15 +99,26 @@ export default function TabLayout() {
             listeners={({ navigation, route }) => ({
               tabPress: (event) => {
                 const state = navigation.getState();
-                const activeRoute = state.routes[state.index];
-                const isFocused = activeRoute?.key === route.key;
-
-                if (!isFocused) {
+                
+                // If state is not ready, allow default navigation behavior
+                if (!state?.routes?.length || state.index === undefined || state.index < 0) {
                   return;
                 }
+                
+                const activeRoute = state.routes[state.index];
+                
+                // If we can't determine focus state, allow default navigation
+                if (!activeRoute) {
+                  return;
+                }
+                
+                const isFocused = activeRoute.key === route.key;
 
-                event.preventDefault();
-                onTabPress(navigation, route);
+                // Only prevent default and handle specially if the tab is already focused
+                if (isFocused) {
+                  event.preventDefault();
+                  onTabPress(navigation, route);
+                }
               },
             })}
           />
