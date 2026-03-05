@@ -26,7 +26,10 @@ export function HapticTab(props: BottomTabBarButtonProps) {
       }}
       style={[props.style, isPressed && styles.pressed]}
     >
-      {isPressed && <View style={styles.debugIndicator} />}
+      <>
+        {isPressed && <View style={styles.debugIndicator} />}
+        {props.children}
+      </>
     </PlatformPressable>
   );
 }
