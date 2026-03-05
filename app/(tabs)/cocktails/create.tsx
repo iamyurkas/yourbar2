@@ -371,6 +371,36 @@ export default function CreateCocktailScreen() {
   const isNavigatingAfterSaveRef = useRef(false);
   const scrollRef = useRef<ScrollView | null>(null);
   const isHandlingBackRef = useRef(false);
+  const imagePickingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const clearImagePickingTimeout = useCallback(() => {
+    if (imagePickingTimeoutRef.current) {
+      clearTimeout(imagePickingTimeoutRef.current);
+      imagePickingTimeoutRef.current = null;
+    }
+  }, []);
+
+  const beginImagePicking = useCallback(() => {
+    clearImagePickingTimeout();
+    setIsPickingImage(true);
+    imagePickingTimeoutRef.current = setTimeout(() => {
+      setIsPickingImage(false);
+      imagePickingTimeoutRef.current = null;
+      console.warn("Image picking state reset after timeout");
+    }, 45_000);
+  }, [clearImagePickingTimeout]);
+
+  const endImagePicking = useCallback(() => {
+    clearImagePickingTimeout();
+    setIsPickingImage(false);
+  }, [clearImagePickingTimeout]);
+
+  useEffect(
+    () => () => {
+      clearImagePickingTimeout();
+    },
+    [clearImagePickingTimeout],
+  );
 
   useEffect(() => {
     isNavigatingAfterSaveRef.current = false;
@@ -799,7 +829,7 @@ export default function CreateCocktailScreen() {
     }
 
     try {
-      setIsPickingImage(true);
+      beginImagePicking();
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ["images"],
         allowsEditing: true,
@@ -821,9 +851,9 @@ export default function CreateCocktailScreen() {
         actions: [{ label: t("common.ok") }],
       });
     } finally {
-      setIsPickingImage(false);
+      endImagePicking();
     }
-  }, [ensureMediaPermission, isPickingImage, showDialog, t]);
+  }, [beginImagePicking, endImagePicking, ensureMediaPermission, isPickingImage, showDialog, t]);
 
   const ensureCameraPermission = useCallback(async () => {
     if (cameraPermissionStatus?.granted) {
@@ -858,7 +888,7 @@ export default function CreateCocktailScreen() {
     }
 
     try {
-      setIsPickingImage(true);
+      beginImagePicking();
       const result = await ImagePicker.launchCameraAsync({
         allowsEditing: true,
         quality: 1,
@@ -879,9 +909,9 @@ export default function CreateCocktailScreen() {
         actions: [{ label: t("common.ok") }],
       });
     } finally {
-      setIsPickingImage(false);
+      endImagePicking();
     }
-  }, [ensureCameraPermission, isPickingImage, showDialog, t]);
+  }, [beginImagePicking, endImagePicking, ensureCameraPermission, isPickingImage, showDialog, t]);
 
   const handleSelectImageSource = useCallback(() => {
     showDialog({
