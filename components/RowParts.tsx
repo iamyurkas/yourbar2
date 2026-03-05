@@ -18,6 +18,7 @@ import { useI18n } from '@/libs/i18n/use-i18n';
 import { tagColors } from '@/theme/theme';
 
 const THUMB_SIZE = 56;
+const TOUCH_TARGET_INSET = 14;
 
 export type ThumbProps = {
   uri?: string | null;
@@ -80,7 +81,7 @@ export function PresenceCheck({ checked, onToggle, color }: PresenceCheckProps) 
       accessibilityState={{ checked }}
       onPress={onToggle}
       style={[styles.checkbox, { borderColor, backgroundColor }]}
-      hitSlop={8}>
+      hitSlop={TOUCH_TARGET_INSET}>
       <MaterialCommunityIcons name="check" color={iconColor} size={12} />
     </Pressable>
   );
