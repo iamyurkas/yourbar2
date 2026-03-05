@@ -1,6 +1,6 @@
 import { Tabs } from 'expo-router';
 import { useCallback, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import CocktailIcon from '@/assets/images/cocktails.svg';

@@ -4,6 +4,8 @@ import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from "expo-status-bar";
 import { Appearance, useColorScheme, View } from "react-native";
 import { useCallback, useEffect } from "react";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import "react-native-reanimated";
 
 import { PaperProvider } from "@/libs/react-native-paper";
@@ -101,10 +103,14 @@ function RootLayoutContent() {
 
 export default Sentry.wrap(function RootLayout() {
   return (
-    <UnsavedChangesProvider>
-      <InventoryProvider>
-        <RootLayoutContent />
-      </InventoryProvider>
-    </UnsavedChangesProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaProvider>
+        <UnsavedChangesProvider>
+          <InventoryProvider>
+            <RootLayoutContent />
+          </InventoryProvider>
+        </UnsavedChangesProvider>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 });
