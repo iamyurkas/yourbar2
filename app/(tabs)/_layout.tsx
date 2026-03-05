@@ -1,5 +1,5 @@
 import { Tabs } from 'expo-router';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -13,6 +13,7 @@ import { TabBarIcon } from '@/components/tab-bar/TabBarIcon';
 import { useAppColors } from '@/constants/theme';
 import { getLastCocktailTab, getLastIngredientTab } from '@/libs/collection-tabs';
 import { useI18n } from '@/libs/i18n/use-i18n';
+import { useInventory } from '@/providers/inventory-provider';
 
 type TabPressHandler = (navigation: { navigate: (...args: never[]) => void }, route: { name: string }) => void;
 
@@ -52,9 +53,21 @@ const TAB_SCREENS: {
 
 export default function TabLayout() {
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(null);
+  const [tabsKey, setTabsKey] = useState(0);
+  const didForceRefreshAfterOnboarding = useRef(false);
   const { t } = useI18n();
+  const { onboardingCompleted } = useInventory();
   const insets = useSafeAreaInsets();
   const Colors = useAppColors();
+
+  useEffect(() => {
+    if (!onboardingCompleted || didForceRefreshAfterOnboarding.current) {
+      return;
+    }
+
+    didForceRefreshAfterOnboarding.current = true;
+    setTabsKey((prev) => prev + 1);
+  }, [onboardingCompleted]);
 
   const closeDialog = useCallback(() => {
     setDialogOptions(null);
@@ -67,6 +80,7 @@ export default function TabLayout() {
   return (
     <>
       <Tabs
+        key={tabsKey}
         initialRouteName="cocktails"
         screenOptions={{
           headerShown: false,
