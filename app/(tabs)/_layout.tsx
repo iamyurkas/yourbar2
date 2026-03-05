@@ -74,13 +74,13 @@ export default function TabLayout() {
           tabBarInactiveTintColor: Colors.onSurfaceVariant,
           tabBarStyle: {
             height: 72 + insets.bottom,
-            paddingTop: 8,
-            paddingBottom: insets.bottom,
             backgroundColor: Colors.surface,
           },
           tabBarItemStyle: {
             justifyContent: 'center',
-            alignItems: 'center',
+            alignItems: 'stretch',
+            paddingTop: 8,
+            paddingBottom: insets.bottom,
           },
         }}>
         {TAB_SCREENS.map(({ name, titleKey, icon, onTabPress }) => (
