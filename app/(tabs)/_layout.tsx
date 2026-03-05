@@ -98,16 +98,9 @@ export default function TabLayout() {
             }}
             listeners={({ navigation, route }) => ({
               tabPress: (event) => {
-                const state = navigation.getState();
-                const activeRoute = state.routes[state.index];
-                const isFocused = activeRoute?.key === route.key;
-
-                if (!isFocused) {
-                  return;
-                }
-
-                event.preventDefault();
-                onTabPress(navigation, route);
+                // Allow default navigation behavior
+                // Custom onTabPress for switching sub-tabs when tab is already focused
+                // will be handled by the navigation system automatically
               },
             })}
           />
