@@ -161,7 +161,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
           accessibilityRole="button"
           accessibilityLabel={shoppingLabel}
           onPress={handleShoppingToggle}
-          hitSlop={8}
+          hitSlop={14}
           style={({ pressed }) => [styles.shoppingButton, pressed ? styles.shoppingButtonPressed : null]}>
           <MaterialIcons
             name={shoppingIconName}
