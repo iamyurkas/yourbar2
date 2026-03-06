@@ -6,7 +6,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   FlatList,
   Pressable,
-  ScrollView,
   StyleSheet,
   Text,
   View,
@@ -20,11 +19,11 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { CocktailListRow } from '@/components/CocktailListRow';
 import { CollectionHeader } from '@/components/CollectionHeader';
 import { CollectionListSkeleton } from '@/components/CollectionListSkeleton';
+import { CocktailFiltersPanel } from '@/components/CocktailFiltersPanel';
 import { FabAdd } from '@/components/FabAdd';
 import { useOnboardingAnchors } from '@/components/onboarding/OnboardingContext';
 import { ListRow, Thumb } from '@/components/RowParts';
 import { SideMenuDrawer } from '@/components/SideMenuDrawer';
-import { TagPill } from '@/components/TagPill';
 import type { SegmentTabOption } from '@/components/TopBars';
 import { getCocktailMethods, METHOD_ICON_MAP, type CocktailMethod } from '@/constants/cocktail-methods';
 import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
@@ -887,7 +886,6 @@ export default function CocktailsScreen() {
 
 
   const showRatingFilters = activeTab === 'favorites' && availableStarRatings.length > 0;
-  const showMethodFilters = availableMethodOptions.length > 0;
 
   return (
     <SafeAreaView
@@ -930,114 +928,34 @@ export default function CocktailsScreen() {
                   shadowColor: Colors.shadow,
                 },
               ]}>
-              {/* Allow filter taps to work even if the search input keeps focus/keyboard open. */}
-              <ScrollView
-                style={styles.filterMenuScroll}
-                showsVerticalScrollIndicator
-                keyboardShouldPersistTaps="handled">
-                <View style={styles.filterMenuBody}>
-                  {showRatingFilters ? (
-                    <>
-                      <ScrollView
-                        horizontal
-                        style={styles.filterRatingScroll}
-                        contentContainerStyle={styles.filterRatingRow}
-                        showsHorizontalScrollIndicator={false}
-                        keyboardShouldPersistTaps="handled">
-                        {availableStarRatings.map((rating) => {
-                          const selected = selectedStarRatings.has(rating);
-                          return (
-                            <TagPill
-                              key={`rating-${rating}`}
-                              label={`${rating}★`}
-                              color={Colors.tint}
-                              selected={selected}
-                              onPress={() => handleStarRatingFilterToggle(rating)}
-                              accessibilityRole="checkbox"
-                              accessibilityState={{ checked: selected }}
-                              androidRippleColor={`${Colors.surfaceVariant}33`}
-                            />
-                          );
-                        })}
-                      </ScrollView>
-                      <View style={styles.filterSeparator}>
-                        <View style={[styles.filterSeparatorLine, { backgroundColor: Colors.outline }]} />
-                        <Text style={[styles.filterSeparatorLabel, { color: Colors.onSurfaceVariant }]}>
-                          {t('common.and')}
-                        </Text>
-                        <View style={[styles.filterSeparatorLine, { backgroundColor: Colors.outline }]} />
-                      </View>
-                    </>
-                  ) : null}
-                  <View style={styles.filterMenuContent}>
-                    {showMethodFilters ? (
-                      <>
-                        <View style={styles.filterMethodList}>
-                          {availableMethodOptions.map((method) => {
-                            const selected = selectedMethodIds.has(method.id);
-                            return (
-                              <TagPill
-                                key={method.id}
-                                label={t(`cocktailMethod.${method.id}.label`)}
-                                color={Colors.tint}
-                                selected={selected}
-                                icon={renderMethodIcon(method.id, selected)}
-                                onPress={() => handleMethodFilterToggle(method.id)}
-                                accessibilityRole="checkbox"
-                                accessibilityState={{ checked: selected }}
-                                androidRippleColor={`${Colors.surfaceVariant}33`}
-                              />
-                            );
-                          })}
-                        </View>
-                        <View style={styles.filterSeparator}>
-                          <View style={[styles.filterSeparatorLine, { backgroundColor: Colors.outline }]} />
-                          <Text style={[styles.filterSeparatorLabel, { color: Colors.onSurfaceVariant }]}>
-                            {t("common.and")}
-                          </Text>
-                          <View style={[styles.filterSeparatorLine, { backgroundColor: Colors.outline }]} />
-                        </View>
-                      </>
-                    ) : null}
-                    <View style={styles.filterTagList}>
-                      {availableTagOptions.length > 0 ? (
-                        availableTagOptions.map((tag) => {
-                          const selected = selectedTagKeys.has(tag.key);
-                          const isBuiltin = !isNaN(Number(tag.key)) && Number(tag.key) >= 1 && Number(tag.key) <= 11;
-                          const translatedName = isBuiltin ? t(`cocktailTag.${tag.key}`) : tag.name;
-                          const finalName = (isBuiltin && translatedName !== `cocktailTag.${tag.key}`) ? translatedName : tag.name;
-
-                          return (
-                            <TagPill
-                              key={tag.key}
-                              label={finalName}
-                              color={tag.color}
-                              selected={selected}
-                              onPress={() => handleTagFilterToggle(tag.key)}
-                              accessibilityRole="checkbox"
-                              accessibilityState={{ checked: selected }}
-                              androidRippleColor={`${Colors.surfaceVariant}33`}
-                            />
-                          );
-                        })
-                      ) : (
-                        <Text style={[styles.filterMenuEmpty, { color: Colors.onSurfaceVariant }]}>
-                          {t("common.noTagsAvailable")}
-                        </Text>
-                      )}
-                    </View>
-                  </View>
-                </View>
-                {selectedTagKeys.size > 0 || selectedMethodIds.size > 0 || selectedStarRatings.size > 0 ? (
-                  <Pressable
-                    accessibilityRole="button"
-                    accessibilityLabel={t("cocktails.clearSelectedFilters")}
-                    onPress={handleClearFilters}
-                    style={styles.filterMenuClearButton}>
-                    <Text style={[styles.filterMenuClearLabel, { color: Colors.tint }]}>{t("common.clearFilters")}</Text>
-                  </Pressable>
-                ) : null}
-              </ScrollView>
+              <CocktailFiltersPanel
+                availableStarRatings={availableStarRatings}
+                selectedStarRatings={selectedStarRatings}
+                onToggleStarRating={handleStarRatingFilterToggle}
+                showRatingFilters={showRatingFilters}
+                availableMethodOptions={availableMethodOptions}
+                selectedMethodIds={selectedMethodIds}
+                onToggleMethod={handleMethodFilterToggle}
+                renderMethodIcon={renderMethodIcon}
+                availableTagOptions={availableTagOptions}
+                selectedTagKeys={selectedTagKeys}
+                onToggleTag={handleTagFilterToggle}
+                onClearFilters={handleClearFilters}
+                showClearButton={selectedTagKeys.size > 0 || selectedMethodIds.size > 0 || selectedStarRatings.size > 0}
+                tintColor={Colors.tint}
+                outlineColor={Colors.outline}
+                onSurfaceVariantColor={Colors.onSurfaceVariant}
+                surfaceVariantColor={Colors.surfaceVariant}
+                andLabel={t('common.and')}
+                noTagsAvailableLabel={t('common.noTagsAvailable')}
+                clearFiltersLabel={t('common.clearFilters')}
+                getMethodLabel={(methodId) => t(`cocktailMethod.${methodId}.label`)}
+                getTagLabel={(tag) => {
+                  const isBuiltin = !isNaN(Number(tag.key)) && Number(tag.key) >= 1 && Number(tag.key) <= 11;
+                  const translatedName = isBuiltin ? t(`cocktailTag.${tag.key}`) : tag.name;
+                  return (isBuiltin && translatedName !== `cocktailTag.${tag.key}`) ? translatedName : tag.name;
+                }}
+              />
             </View>
           </>
         ) : null}
@@ -1190,36 +1108,6 @@ const styles = StyleSheet.create({
     shadowRadius: 12,
     elevation: 8,
   },
-  filterMenuScroll: {
-    maxHeight: 540,
-    paddingBottom: 2,
-  },
-  filterMenuBody: {
-    flexDirection: 'column',
-    alignItems: 'stretch',
-  },
-  filterRatingScroll: {
-    alignSelf: 'stretch',
-  },
-  filterRatingRow: {
-    flexGrow: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 12,
-  },
-  filterMenuContent: {
-    flexDirection: 'row',
-    alignItems: 'stretch',
-    justifyContent: 'space-between',
-    minWidth: '100%',
-  },
-  filterMethodList: {
-    flex: 1,
-    flexDirection: 'column',
-    gap: 8,
-    alignItems: 'flex-start',
-  },
   methodIcon: {
     width: METHOD_ICON_SIZE,
     height: METHOD_ICON_SIZE,
@@ -1232,44 +1120,5 @@ const styles = StyleSheet.create({
   },
   muddleIcon: {
     transform: [{ scaleX: 2 }],
-  },
-  filterTagList: {
-    flex: 1,
-    flexDirection: 'column',
-    gap: 8,
-    alignItems: 'flex-end',
-  },
-  filterSeparator: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 10,
-  },
-  filterSeparatorLine: {
-    width: StyleSheet.hairlineWidth,
-    flex: 1,
-  },
-  filterSeparatorLabel: {
-    fontSize: 12,
-    fontWeight: '700',
-    letterSpacing: 0.6,
-    textTransform: 'uppercase',
-    paddingVertical: 4,
-  },
-  filterMenuEmpty: {
-    fontSize: 14,
-    textAlign: 'left',
-    paddingHorizontal: 4,
-    paddingVertical: 2,
-  },
-  filterMenuClearButton: {
-    marginTop: 8,
-    alignSelf: 'flex-start',
-    paddingHorizontal: 8,
-    paddingVertical: 6,
-    borderRadius: 8,
-  },
-  filterMenuClearLabel: {
-    fontSize: 14,
-    fontWeight: '600',
   },
 });

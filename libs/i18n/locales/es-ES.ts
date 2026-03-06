@@ -308,6 +308,7 @@ export const esESTranslations: TranslationDictionary = {
   "ingredientDetails.brandedIngredients": "Ingredientes de marca",
   "ingredientDetails.viewIngredient": "Ver {{name}}",
   "ingredientDetails.removeIngredientLink": "Quitar enlace de {{name}}",
+  "ingredientDetails.filterCocktails": "Filtrar cócteles",
   "ingredientDetails.cocktails": "Cócteles",
   "ingredientDetails.showMoreCocktails": "Mostrar más cócteles",
   "ingredientDetails.noCocktailsYet": "Aún no hay cócteles",
