@@ -30,6 +30,8 @@ import { FormattedText } from "@/components/FormattedText";
 import { HeaderIconButton } from "@/components/HeaderIconButton";
 import { PresenceCheck } from "@/components/RowParts";
 import { TagPill } from "@/components/TagPill";
+import { BUILTIN_COCKTAIL_TAGS } from "@/constants/cocktail-tags";
+import { getCocktailMethods, type CocktailMethod } from "@/constants/cocktail-methods";
 import { useAppColors } from "@/constants/theme";
 import { buildAmazonIngredientUrl } from "@/libs/amazon-links";
 import { AMAZON_STORES } from "@/libs/amazon-stores";
@@ -48,8 +50,14 @@ import {
   skipDuplicateBack,
 } from "@/libs/navigation";
 import { normalizeSearchText } from "@/libs/search-normalization";
+import { buildTagOptions, type TagOption } from "@/libs/tag-options";
 import { useI18n } from "@/libs/i18n/use-i18n";
 import { useInventory, type Ingredient } from "@/providers/inventory-provider";
+
+type CocktailMethodOption = {
+  id: CocktailMethod["id"];
+  label: string;
+};
 
 function useResolvedIngredient(
   param: string | undefined,
@@ -400,17 +408,281 @@ export default function IngredientDetailsScreen() {
   );
   const [visibleCocktailCount, setVisibleCocktailCount] =
     useState(COCKTAIL_PAGE_SIZE);
+  const [selectedTagKeys, setSelectedTagKeys] = useState<Set<string>>(
+    () => new Set(),
+  );
+  const [selectedMethodIds, setSelectedMethodIds] = useState<
+    Set<CocktailMethod["id"]>
+  >(() => new Set());
+  const [selectedStarRatings, setSelectedStarRatings] = useState<Set<number>>(
+    () => new Set(),
+  );
+
+  const isFilterEnabled = cocktailEntries.length > COCKTAIL_PAGE_SIZE;
+
+  const availableTagOptions = useMemo<TagOption[]>(
+    () =>
+      buildTagOptions(
+        cocktailEntries,
+        (entry) => entry.cocktail.tags ?? [],
+        BUILTIN_COCKTAIL_TAGS,
+        Colors.tint,
+      ),
+    [Colors.tint, cocktailEntries],
+  );
+
+  const availableMethodOptions = useMemo<CocktailMethodOption[]>(() => {
+    const methodOrder = getCocktailMethods();
+    const methodMap = new Map(methodOrder.map((method) => [method.id, method]));
+    const usedMethods = new Set<CocktailMethodOption["id"]>();
+
+    cocktailEntries.forEach(({ cocktail }) => {
+      const legacyMethodId =
+        (cocktail as { methodId?: CocktailMethod["id"] | null }).methodId ??
+        null;
+      const methodIds = (cocktail.methodIds?.length
+        ? cocktail.methodIds
+        : legacyMethodId
+          ? [legacyMethodId]
+          : []) as CocktailMethod["id"][];
+
+      methodIds.forEach((methodId) => {
+        if (methodMap.has(methodId)) {
+          usedMethods.add(methodId);
+        }
+      });
+    });
+
+    return methodOrder
+      .filter((method) => usedMethods.has(method.id))
+      .map((method) => ({ id: method.id, label: method.label }));
+  }, [cocktailEntries]);
+
+  const availableStarRatings = useMemo<number[]>(() => {
+    const ratings = new Set<number>();
+    cocktailEntries.forEach(({ ratingValue }) => {
+      if (ratingValue > 0) {
+        ratings.add(ratingValue);
+      }
+    });
+
+    return [...ratings].sort((a, b) => a - b);
+  }, [cocktailEntries]);
+
+  const hasRatedCocktails = availableStarRatings.length > 0;
+
+  const handleTagFilterToggle = useCallback((key: string) => {
+    setSelectedTagKeys((previous) => {
+      const next = new Set(previous);
+      if (next.has(key)) {
+        next.delete(key);
+      } else {
+        next.add(key);
+      }
+      return next;
+    });
+  }, []);
+
+  const handleMethodFilterToggle = useCallback(
+    (methodId: CocktailMethod["id"]) => {
+      setSelectedMethodIds((previous) => {
+        const next = new Set(previous);
+        if (next.has(methodId)) {
+          next.delete(methodId);
+        } else {
+          next.add(methodId);
+        }
+        return next;
+      });
+    },
+    [],
+  );
+
+  const handleStarRatingFilterToggle = useCallback((rating: number) => {
+    setSelectedStarRatings((previous) => {
+      const next = new Set(previous);
+      if (next.has(rating)) {
+        next.delete(rating);
+      } else {
+        next.add(rating);
+      }
+      return next;
+    });
+  }, []);
+
+  const handleClearFilters = useCallback(() => {
+    setSelectedTagKeys((previous) =>
+      previous.size === 0 ? previous : new Set<string>(),
+    );
+    setSelectedMethodIds((previous) =>
+      previous.size === 0 ? previous : new Set<CocktailMethod["id"]>(),
+    );
+    setSelectedStarRatings((previous) =>
+      previous.size === 0 ? previous : new Set<number>(),
+    );
+  }, []);
+
+  useEffect(() => {
+    if (!isFilterEnabled) {
+      handleClearFilters();
+    }
+  }, [handleClearFilters, isFilterEnabled]);
+
+  useEffect(() => {
+    setSelectedTagKeys((previous) => {
+      if (previous.size === 0) {
+        return previous;
+      }
+
+      const validKeys = new Set(availableTagOptions.map((tag) => tag.key));
+      let didChange = false;
+      const next = new Set<string>();
+
+      previous.forEach((key) => {
+        if (validKeys.has(key)) {
+          next.add(key);
+        } else {
+          didChange = true;
+        }
+      });
+
+      if (!didChange && next.size === previous.size) {
+        return previous;
+      }
+
+      return next;
+    });
+  }, [availableTagOptions]);
+
+  useEffect(() => {
+    setSelectedMethodIds((previous) => {
+      if (previous.size === 0) {
+        return previous;
+      }
+
+      const validIds = new Set(availableMethodOptions.map((method) => method.id));
+      let didChange = false;
+      const next = new Set<CocktailMethod["id"]>();
+
+      previous.forEach((id) => {
+        if (validIds.has(id)) {
+          next.add(id);
+        } else {
+          didChange = true;
+        }
+      });
+
+      if (!didChange && next.size === previous.size) {
+        return previous;
+      }
+
+      return next;
+    });
+  }, [availableMethodOptions]);
+
+  useEffect(() => {
+    setSelectedStarRatings((previous) => {
+      if (previous.size === 0) {
+        return previous;
+      }
+
+      if (!hasRatedCocktails) {
+        return new Set<number>();
+      }
+
+      const validRatings = new Set(availableStarRatings);
+      let didChange = false;
+      const next = new Set<number>();
+
+      previous.forEach((rating) => {
+        if (validRatings.has(rating)) {
+          next.add(rating);
+        } else {
+          didChange = true;
+        }
+      });
+
+      if (!didChange && next.size === previous.size) {
+        return previous;
+      }
+
+      return next;
+    });
+  }, [availableStarRatings, hasRatedCocktails]);
+
+  const filteredByStars = useMemo(() => {
+    if (!isFilterEnabled || selectedStarRatings.size === 0) {
+      return cocktailEntries;
+    }
+
+    return cocktailEntries.filter((entry) =>
+      selectedStarRatings.has(entry.ratingValue),
+    );
+  }, [cocktailEntries, isFilterEnabled, selectedStarRatings]);
+
+  const filteredByMethods = useMemo(() => {
+    if (!isFilterEnabled || selectedMethodIds.size === 0) {
+      return filteredByStars;
+    }
+
+    return filteredByStars.filter(({ cocktail }) => {
+      const legacyMethodId =
+        (cocktail as { methodId?: CocktailMethod["id"] | null }).methodId ??
+        null;
+      const methodIds = (cocktail.methodIds?.length
+        ? cocktail.methodIds
+        : legacyMethodId
+          ? [legacyMethodId]
+          : []) as CocktailMethod["id"][];
+      if (methodIds.length === 0) {
+        return false;
+      }
+
+      return methodIds.some((methodId) => selectedMethodIds.has(methodId));
+    });
+  }, [filteredByStars, isFilterEnabled, selectedMethodIds]);
+
+  const filteredCocktailEntries = useMemo(() => {
+    if (!isFilterEnabled || selectedTagKeys.size === 0) {
+      return filteredByMethods;
+    }
+
+    return filteredByMethods.filter(({ cocktail }) => {
+      const tags = cocktail.tags ?? [];
+      if (tags.length === 0) {
+        return false;
+      }
+
+      return tags.some((tag) => {
+        if (!tag) {
+          return false;
+        }
+
+        const key = tag.id != null ? String(tag.id) : tag.name?.toLowerCase();
+        if (!key) {
+          return false;
+        }
+
+        return selectedTagKeys.has(key);
+      });
+    });
+  }, [filteredByMethods, isFilterEnabled, selectedTagKeys]);
+
+  const isFilterActive =
+    selectedTagKeys.size > 0 ||
+    selectedMethodIds.size > 0 ||
+    selectedStarRatings.size > 0;
 
   useEffect(() => {
     setVisibleCocktailCount(COCKTAIL_PAGE_SIZE);
-  }, [numericIngredientId]);
+  }, [filteredCocktailEntries.length, numericIngredientId]);
 
   const visibleCocktailEntries = useMemo(
-    () => cocktailEntries.slice(0, visibleCocktailCount),
-    [cocktailEntries, visibleCocktailCount],
+    () => filteredCocktailEntries.slice(0, visibleCocktailCount),
+    [filteredCocktailEntries, visibleCocktailCount],
   );
 
-  const hasMoreCocktails = visibleCocktailCount < cocktailEntries.length;
+  const hasMoreCocktails = visibleCocktailCount < filteredCocktailEntries.length;
 
   const handleToggleAvailability = useCallback(() => {
     if (numericIngredientId != null) {
@@ -762,9 +1034,9 @@ export default function IngredientDetailsScreen() {
 
   const handleShowMoreCocktails = useCallback(() => {
     setVisibleCocktailCount((previous) =>
-      Math.min(previous + COCKTAIL_PAGE_SIZE, cocktailEntries.length),
+      Math.min(previous + COCKTAIL_PAGE_SIZE, filteredCocktailEntries.length),
     );
-  }, [cocktailEntries.length]);
+  }, [filteredCocktailEntries.length]);
 
   const handleReturn = useCallback(() => {
     if (returnToPath === "/ingredients") {
@@ -1464,11 +1736,145 @@ export default function IngredientDetailsScreen() {
             ) : null}
 
             <View style={[styles.textBlock, styles.cocktailBlock]}>
-              <Text style={[styles.sectionTitle, { color: Colors.onSurface }]}>
+              <Text style={[styles.sectionTitle, { color: Colors.onSurface }]}> 
                 {t("ingredientDetails.cocktails")}
               </Text>
               {cocktailEntries.length ? (
                 <View style={styles.cocktailList}>
+                  {isFilterEnabled ? (
+                    <View
+                      style={[
+                        styles.inlineFilterPanel,
+                        {
+                          borderColor: Colors.outline,
+                          backgroundColor: Colors.surface,
+                        },
+                      ]}
+                    >
+                      {hasRatedCocktails ? (
+                        <View style={styles.inlineFilterSection}>
+                          <Text
+                            style={[
+                              styles.inlineFilterLabel,
+                              { color: Colors.onSurfaceVariant },
+                            ]}
+                          >
+                            {t("common.tabFavorites")}
+                          </Text>
+                          <View style={styles.inlineFilterPillRow}>
+                            {availableStarRatings.map((rating) => {
+                              const selected = selectedStarRatings.has(rating);
+                              return (
+                                <TagPill
+                                  key={`ingredient-rating-${rating}`}
+                                  label={`${rating}★`}
+                                  color={Colors.tint}
+                                  selected={selected}
+                                  onPress={() =>
+                                    handleStarRatingFilterToggle(rating)
+                                  }
+                                  accessibilityRole="checkbox"
+                                  accessibilityState={{ checked: selected }}
+                                />
+                              );
+                            })}
+                          </View>
+                        </View>
+                      ) : null}
+
+                      {availableMethodOptions.length > 0 ? (
+                        <View style={styles.inlineFilterSection}>
+                          <Text
+                            style={[
+                              styles.inlineFilterLabel,
+                              { color: Colors.onSurfaceVariant },
+                            ]}
+                          >
+                            {t("cocktailDetails.methods")}
+                          </Text>
+                          <View style={styles.inlineFilterPillRow}>
+                            {availableMethodOptions.map((method) => {
+                              const selected = selectedMethodIds.has(method.id);
+                              return (
+                                <TagPill
+                                  key={`ingredient-method-${method.id}`}
+                                  label={t(`cocktailMethod.${method.id}.label`)}
+                                  color={Colors.tint}
+                                  selected={selected}
+                                  onPress={() =>
+                                    handleMethodFilterToggle(method.id)
+                                  }
+                                  accessibilityRole="checkbox"
+                                  accessibilityState={{ checked: selected }}
+                                />
+                              );
+                            })}
+                          </View>
+                        </View>
+                      ) : null}
+
+                      {availableTagOptions.length > 0 ? (
+                        <View style={styles.inlineFilterSection}>
+                          <Text
+                            style={[
+                              styles.inlineFilterLabel,
+                              { color: Colors.onSurfaceVariant },
+                            ]}
+                          >
+                            {t("common.tags")}
+                          </Text>
+                          <View style={styles.inlineFilterPillRow}>
+                            {availableTagOptions.map((tag) => {
+                              const selected = selectedTagKeys.has(tag.key);
+                              const isBuiltin =
+                                !isNaN(Number(tag.key)) &&
+                                Number(tag.key) >= 1 &&
+                                Number(tag.key) <= 11;
+                              const translatedName = isBuiltin
+                                ? t(`cocktailTag.${tag.key}`)
+                                : tag.name;
+                              const finalName =
+                                isBuiltin &&
+                                translatedName !== `cocktailTag.${tag.key}`
+                                  ? translatedName
+                                  : tag.name;
+
+                              return (
+                                <TagPill
+                                  key={`ingredient-tag-${tag.key}`}
+                                  label={finalName}
+                                  color={tag.color}
+                                  selected={selected}
+                                  onPress={() => handleTagFilterToggle(tag.key)}
+                                  accessibilityRole="checkbox"
+                                  accessibilityState={{ checked: selected }}
+                                />
+                              );
+                            })}
+                          </View>
+                        </View>
+                      ) : null}
+
+                      {isFilterActive ? (
+                        <Pressable
+                          accessibilityRole="button"
+                          accessibilityLabel={t("common.clearFilters")}
+                          onPress={handleClearFilters}
+                          style={styles.inlineFilterClearButton}
+                        >
+                          <Text
+                            style={[
+                              styles.inlineFilterClearLabel,
+                              { color: Colors.tint },
+                            ]}
+                          >
+                            {t("common.clearFilters")}
+                          </Text>
+                        </Pressable>
+                      ) : null}
+                    </View>
+                  ) : null}
+
                   {visibleCocktailEntries.map(
                     ({ cocktail, isReady, missingCount, recipeNamesCount, ingredientLine, ratingValue, hasBrandFallback, hasStyleFallback, canMakeWithIngredient }, index) => {
                       const shouldHighlightRow = isReady || canMakeWithIngredient;
@@ -1772,6 +2178,36 @@ const styles = StyleSheet.create({
   },
   cocktailList: {
     marginHorizontal: -24,
+  },
+  inlineFilterPanel: {
+    marginHorizontal: 24,
+    marginBottom: 14,
+    borderWidth: 1,
+    borderRadius: 12,
+    padding: 12,
+    gap: 10,
+  },
+  inlineFilterSection: {
+    gap: 8,
+  },
+  inlineFilterLabel: {
+    fontSize: 12,
+    fontWeight: "600",
+    letterSpacing: 0.3,
+    textTransform: "uppercase",
+  },
+  inlineFilterPillRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 8,
+  },
+  inlineFilterClearButton: {
+    alignSelf: "flex-start",
+    paddingVertical: 4,
+  },
+  inlineFilterClearLabel: {
+    fontSize: 14,
+    fontWeight: "600",
   },
   cocktailDivider: {
     height: StyleSheet.hairlineWidth,
