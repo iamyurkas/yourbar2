@@ -19,7 +19,12 @@ type TabPressHandler = (
     navigate: (...args: never[]) => void;
     dispatch: (action: ReturnType<typeof StackActions.popToTop> & { target?: string }) => void;
   },
-  route: { key: string; name: string },
+  route: {
+    name: string;
+    state?: {
+      key?: string;
+    };
+  },
 ) => void;
 
 const TAB_SCREENS: {
@@ -34,7 +39,10 @@ const TAB_SCREENS: {
       icon: CocktailIcon,
       onTabPress: (navigation, route) => {
         navigation.navigate(route.name as never, { screen: 'index' } as never);
-        navigation.dispatch(Object.assign(StackActions.popToTop(), { target: route.key }));
+        const nestedStackKey = route.state?.key;
+        if (nestedStackKey) {
+          navigation.dispatch(Object.assign(StackActions.popToTop(), { target: nestedStackKey }));
+        }
       },
     },
     {
@@ -43,7 +51,10 @@ const TAB_SCREENS: {
       icon: ShakerIcon,
       onTabPress: (navigation, route) => {
         navigation.navigate(route.name as never, { screen: 'index' } as never);
-        navigation.dispatch(Object.assign(StackActions.popToTop(), { target: route.key }));
+        const nestedStackKey = route.state?.key;
+        if (nestedStackKey) {
+          navigation.dispatch(Object.assign(StackActions.popToTop(), { target: nestedStackKey }));
+        }
       },
     },
     {
@@ -52,7 +63,10 @@ const TAB_SCREENS: {
       icon: LemonIcon,
       onTabPress: (navigation, route) => {
         navigation.navigate(route.name as never, { screen: 'index' } as never);
-        navigation.dispatch(Object.assign(StackActions.popToTop(), { target: route.key }));
+        const nestedStackKey = route.state?.key;
+        if (nestedStackKey) {
+          navigation.dispatch(Object.assign(StackActions.popToTop(), { target: nestedStackKey }));
+        }
       },
     },
   ];
