@@ -118,37 +118,6 @@ export default function CocktailsScreen() {
   const ingredientLookup = useMemo(() => createIngredientLookup(ingredients), [ingredients]);
   const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
 
-  const availableTagOptions = useMemo<TagOption[]>(
-    () => buildTagOptions(cocktails, (cocktail) => cocktail.tags ?? [], BUILTIN_COCKTAIL_TAGS, defaultTagColor),
-    [cocktails, defaultTagColor],
-  );
-
-  useEffect(() => {
-    setSelectedTagKeys((previous) => {
-      if (previous.size === 0) {
-        return previous;
-      }
-
-      const validKeys = new Set(availableTagOptions.map((tag) => tag.key));
-      let didChange = false;
-      const next = new Set<string>();
-
-      previous.forEach((key) => {
-        if (validKeys.has(key)) {
-          next.add(key);
-        } else {
-          didChange = true;
-        }
-      });
-
-      if (!didChange && next.size === previous.size) {
-        return previous;
-      }
-
-      return next;
-    });
-  }, [availableTagOptions]);
-
   useEffect(() => {
     setLastCocktailTab(activeTab);
   }, [activeTab, t]);
@@ -283,6 +252,37 @@ export default function CocktailsScreen() {
 
     return cocktails;
   }, [activeTab, cocktails, ratedCocktails]);
+
+  const availableTagOptions = useMemo<TagOption[]>(
+    () => buildTagOptions(baseTabCocktails, (cocktail) => cocktail.tags ?? [], BUILTIN_COCKTAIL_TAGS, defaultTagColor),
+    [baseTabCocktails, defaultTagColor],
+  );
+
+  useEffect(() => {
+    setSelectedTagKeys((previous) => {
+      if (previous.size === 0) {
+        return previous;
+      }
+
+      const validKeys = new Set(availableTagOptions.map((tag) => tag.key));
+      let didChange = false;
+      const next = new Set<string>();
+
+      previous.forEach((key) => {
+        if (validKeys.has(key)) {
+          next.add(key);
+        } else {
+          didChange = true;
+        }
+      });
+
+      if (!didChange && next.size === previous.size) {
+        return previous;
+      }
+
+      return next;
+    });
+  }, [availableTagOptions]);
 
   const availableMethodOptions = useMemo<CocktailMethodOption[]>(() => {
     const methodOrder = getCocktailMethods();
@@ -1207,8 +1207,10 @@ const styles = StyleSheet.create({
   filterMenuContent: {
     flexDirection: 'row',
     alignItems: 'stretch',
+    justifyContent: 'space-between',
   },
   filterMethodList: {
+    flex: 1,
     flexDirection: 'column',
     gap: 8,
     alignItems: 'flex-start',
@@ -1227,6 +1229,7 @@ const styles = StyleSheet.create({
     transform: [{ scaleX: 2 }],
   },
   filterTagList: {
+    flex: 1,
     flexDirection: 'column',
     gap: 8,
     alignItems: 'flex-end',
