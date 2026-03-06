@@ -1855,7 +1855,7 @@ export default function IngredientDetailsScreen() {
             ]}
           >
             <View style={styles.filterModalHeader}>
-              <Text style={[styles.filterModalTitle, { color: Colors.onSurface }]}> 
+              <Text style={[styles.filterModalTitle, { color: Colors.onSurface }]}>
                 {t("ingredientDetails.filterCocktails")}
               </Text>
               <Pressable
@@ -2252,7 +2252,7 @@ const styles = StyleSheet.create({
     zIndex: 20,
     justifyContent: "center",
     alignItems: "center",
-    paddingHorizontal: 16,
+    paddingHorizontal: 24,
   },
   filterOverlayBackdrop: {
     ...StyleSheet.absoluteFillObject,
@@ -2260,15 +2260,17 @@ const styles = StyleSheet.create({
   },
   filterModal: {
     width: "100%",
-    maxWidth: 420,
+    maxHeight: "92%",
     borderRadius: 12,
     borderWidth: StyleSheet.hairlineWidth,
-    paddingHorizontal: 12,
-    paddingVertical: 12,
+    paddingTop: 12,
+    paddingRight: 16,
+    paddingBottom: 20,
+    paddingLeft: 16,
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.12,
     shadowRadius: 12,
-    elevation: 8,
+    elevation: 10,
   },
   filterModalHeader: {
     flexDirection: "row",
