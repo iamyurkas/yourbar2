@@ -1177,6 +1177,8 @@ const styles = StyleSheet.create({
   filterMenu: {
     position: 'absolute',
     right: 16,
+    minWidth: 280,
+    maxWidth: '92%',
     paddingHorizontal: 12,
     paddingVertical: 12,
     borderRadius: 12,
@@ -1208,6 +1210,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'stretch',
     justifyContent: 'space-between',
+    minWidth: '100%',
   },
   filterMethodList: {
     flex: 1,
