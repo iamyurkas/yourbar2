@@ -452,7 +452,7 @@ export const enUSTranslations: TranslationDictionary = {
     "When enabled, ingredients in groups with no current selection are hidden if they would produce zero results.\n\nIn groups where you already selected at least one ingredient, items stay visible to preserve OR logic.\n\nTurn this off to restore the default shaker behavior.",
   "sideMenu.smartShakerFilteringCaption": "Hide non-matching ingredients",
   "sideMenu.showTabCounters": "Tab counters",
-  "sideMenu.showTabCountersCaption": "Show item counts next to tab names",
+  "sideMenu.showTabCountersCaption": "Show item counts in tabs",
   "sideMenu.startingScreen": "Starting screen",
   "sideMenu.startingScreenOpen": "Open {{screen}}",
   "sideMenu.favoritesRatingFilter": "Favorites rating filter",
