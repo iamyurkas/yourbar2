@@ -1207,8 +1207,10 @@ const styles = StyleSheet.create({
   filterMenuContent: {
     flexDirection: 'row',
     alignItems: 'stretch',
+    justifyContent: 'space-between',
   },
   filterMethodList: {
+    flex: 1,
     flexDirection: 'column',
     gap: 8,
     alignItems: 'flex-start',
@@ -1227,6 +1229,7 @@ const styles = StyleSheet.create({
     transform: [{ scaleX: 2 }],
   },
   filterTagList: {
+    flex: 1,
     flexDirection: 'column',
     gap: 8,
     alignItems: 'flex-end',
