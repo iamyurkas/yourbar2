@@ -1,7 +1,7 @@
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { Stack, router, useLocalSearchParams } from "expo-router";
 import { Image } from "expo-image";
+import { router, Stack, useLocalSearchParams } from "expo-router";
 import React, {
   useCallback,
   useEffect,
@@ -26,11 +26,11 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { AppDialog, type DialogOptions } from "@/components/AppDialog";
 import { AppImage } from "@/components/AppImage";
+import { CocktailFiltersPanel } from "@/components/CocktailFiltersPanel";
 import { CocktailListRow } from "@/components/CocktailListRow";
 import { FormattedText } from "@/components/FormattedText";
 import { HeaderIconButton } from "@/components/HeaderIconButton";
 import { PresenceCheck } from "@/components/RowParts";
-import { CocktailFiltersPanel } from "@/components/CocktailFiltersPanel";
 import { TagPill } from "@/components/TagPill";
 import { getCocktailMethods, METHOD_ICON_MAP, type CocktailMethod } from "@/constants/cocktail-methods";
 import { BUILTIN_COCKTAIL_TAGS } from "@/constants/cocktail-tags";
@@ -38,12 +38,13 @@ import { useAppColors } from "@/constants/theme";
 import { buildAmazonIngredientUrl } from "@/libs/amazon-links";
 import { AMAZON_STORES } from "@/libs/amazon-stores";
 import { summariseCocktailAvailability } from "@/libs/cocktail-availability";
+import { getPluralCategory } from "@/libs/i18n/plural";
+import { useI18n } from "@/libs/i18n/use-i18n";
 import { resolveImageSource } from "@/libs/image-source";
 import {
   createIngredientLookup,
   getVisibleIngredientIdsForCocktail,
 } from "@/libs/ingredient-availability";
-import { getPluralCategory } from "@/libs/i18n/plural";
 import {
   buildReturnToParams,
   navigateToDetailsWithReturnTo,
@@ -53,7 +54,6 @@ import {
 } from "@/libs/navigation";
 import { normalizeSearchText } from "@/libs/search-normalization";
 import { buildTagOptions, type TagOption } from "@/libs/tag-options";
-import { useI18n } from "@/libs/i18n/use-i18n";
 import { useInventory, type Ingredient } from "@/providers/inventory-provider";
 import { tagColors } from "@/theme/theme";
 
@@ -1663,13 +1663,10 @@ export default function IngredientDetailsScreen() {
                     ]}
                   >
                     <MaterialCommunityIcons
-                      name="tune-variant"
+                      name="filter-variant"
                       size={16}
                       color={isFilterActive ? Colors.tint : Colors.onSurfaceVariant}
                     />
-                    <Text style={[styles.cocktailFilterButtonLabel, { color: Colors.onSurface }]}> 
-                      {t("ingredientDetails.filterCocktails")}
-                    </Text>
                   </Pressable>
                 ) : null}
               </View>
