@@ -394,7 +394,7 @@ export default function IngredientDetailsScreen() {
       }
     });
 
-    return Array.from(values).sort((a, b) => b - a);
+    return Array.from(values).sort((a, b) => a - b);
   }, [cocktailsWithIngredient, getCocktailRating]);
 
   const filteredCocktails = useMemo(() => {
