@@ -3,6 +3,7 @@ import { useInventory } from '@/providers/inventory-provider';
 import { usePathname, useRouter } from 'expo-router';
 import React, { useMemo } from 'react';
 import {
+  Keyboard,
   Pressable,
   StyleSheet,
   Text,
@@ -90,6 +91,14 @@ export function OnboardingOverlay() {
     if (!onboardingCompleted && onboardingStep > 0) {
       setIsDismissing(false);
     }
+  }, [onboardingCompleted, onboardingStep]);
+
+  React.useEffect(() => {
+    if (onboardingCompleted || onboardingStep <= 0) {
+      return;
+    }
+
+    Keyboard.dismiss();
   }, [onboardingCompleted, onboardingStep]);
 
   const handleLayout = () => {
