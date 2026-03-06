@@ -503,6 +503,12 @@ export default function CocktailsScreen() {
     });
   }, [collapsedMissingIngredientIds, myTabListData]);
 
+  const myReadyCocktailsCount = useMemo(() => {
+    return myTabListData.items.filter(
+      (item) => item.type === 'cocktail' && item.parentIngredientId == null,
+    ).length;
+  }, [myTabListData]);
+
   const tabOptions = useMemo<SegmentTabOption[]>(() => [
     {
       key: 'all',
@@ -512,14 +518,14 @@ export default function CocktailsScreen() {
     {
       key: 'my',
       label: t('common.tabMy'),
-      counter: showTabCounters ? `(${visibleMyTabItems.length})` : undefined,
+      counter: showTabCounters ? `(${myReadyCocktailsCount})` : undefined,
     },
     {
       key: 'favorites',
       label: t('common.tabFavorites'),
       counter: showTabCounters ? `(${cocktailsByTab.favorites.length})` : undefined,
     },
-  ], [cocktailsByTab.all.length, cocktailsByTab.favorites.length, showTabCounters, t, visibleMyTabItems.length]);
+  ], [cocktailsByTab.all.length, cocktailsByTab.favorites.length, myReadyCocktailsCount, showTabCounters, t]);
 
 
   const keyExtractor = useCallback((item: Cocktail) => String(item.id ?? item.name), []);
