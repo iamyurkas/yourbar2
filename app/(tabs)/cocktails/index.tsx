@@ -18,8 +18,8 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { CocktailListRow } from '@/components/CocktailListRow';
-import { CollectionListSkeleton } from '@/components/CollectionListSkeleton';
 import { CollectionHeader } from '@/components/CollectionHeader';
+import { CollectionListSkeleton } from '@/components/CollectionListSkeleton';
 import { FabAdd } from '@/components/FabAdd';
 import { useOnboardingAnchors } from '@/components/onboarding/OnboardingContext';
 import { ListRow, Thumb } from '@/components/RowParts';
@@ -1202,9 +1202,11 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
   },
   filterRatingRow: {
+    flexGrow: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    justifyContent: 'center',
+    gap: 12,
   },
   filterMenuContent: {
     flexDirection: 'row',
