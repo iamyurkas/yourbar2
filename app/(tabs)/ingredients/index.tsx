@@ -257,12 +257,6 @@ export default function IngredientsScreen() {
   const { toggleIngredientShopping, toggleIngredientAvailability } = useInventoryActions();
   const [activeTab, setActiveTab] = useState<IngredientTabKey>(() => getLastIngredientTab());
 
-  const tabOptions = useMemo<SegmentTabOption[]>(() => [
-    { key: 'all', label: t('common.tabAll') },
-    { key: 'my', label: t('common.tabMy') },
-    { key: 'shopping', label: t('common.tabShopping') },
-  ], [t]);
-
   const [query, setQuery] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isFilterMenuVisible, setFilterMenuVisible] = useState(false);
@@ -481,6 +475,25 @@ export default function IngredientsScreen() {
       },
     };
   }, [ingredients, availableIngredientIds, shoppingIngredientIds, t]);
+
+
+  const tabOptions = useMemo<SegmentTabOption[]>(() => [
+    {
+      key: 'all',
+      label: t('common.tabAll'),
+      counter: `(${sections.all.data.length})`,
+    },
+    {
+      key: 'my',
+      label: t('common.tabMy'),
+      counter: `(${sections.my.data.length})`,
+    },
+    {
+      key: 'shopping',
+      label: t('common.tabShopping'),
+      counter: `(${sections.shopping.data.length})`,
+    },
+  ], [sections.all.data.length, sections.my.data.length, sections.shopping.data.length, t]);
 
   const activeSection = sections[activeTab] ?? sections.all;
 

@@ -59,12 +59,6 @@ export default function CocktailsScreen() {
   const { t, locale } = useI18n();
   const [activeTab, setActiveTab] = useState<CocktailTabKey>(() => getLastCocktailTab());
 
-  const tabOptions = useMemo<SegmentTabOption[]>(() => [
-    { key: 'all', label: t('common.tabAll') },
-    { key: 'my', label: t('common.tabMy') },
-    { key: 'favorites', label: t('common.tabFavorites') },
-  ], [t]);
-
   const [query, setQuery] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isFilterMenuVisible, setFilterMenuVisible] = useState(false);
@@ -251,6 +245,14 @@ export default function CocktailsScreen() {
 
     return cocktails;
   }, [activeTab, cocktails, ratedCocktails]);
+
+  const cocktailsByTab = useMemo<Record<CocktailTabKey, Cocktail[]>>(() => ({
+    all: cocktails,
+    my: cocktails,
+    favorites: ratedCocktails,
+  }), [cocktails, ratedCocktails]);
+
+
 
   const availableTagOptions = useMemo<TagOption[]>(
     () => buildTagOptions(baseTabCocktails, (cocktail) => cocktail.tags ?? [], BUILTIN_COCKTAIL_TAGS, defaultTagColor),
@@ -505,6 +507,25 @@ export default function CocktailsScreen() {
       return !collapsedMissingIngredientIds.has(item.parentIngredientId);
     });
   }, [collapsedMissingIngredientIds, myTabListData]);
+
+  const tabOptions = useMemo<SegmentTabOption[]>(() => [
+    {
+      key: 'all',
+      label: t('common.tabAll'),
+      counter: `(${cocktailsByTab.all.length})`,
+    },
+    {
+      key: 'my',
+      label: t('common.tabMy'),
+      counter: `(${myTabListData?.items.length ?? 0})`,
+    },
+    {
+      key: 'favorites',
+      label: t('common.tabFavorites'),
+      counter: `(${cocktailsByTab.favorites.length})`,
+    },
+  ], [cocktailsByTab.all.length, cocktailsByTab.favorites.length, myTabListData?.items.length, t]);
+
 
   const keyExtractor = useCallback((item: Cocktail) => String(item.id ?? item.name), []);
   const myTabKeyExtractor = useCallback((item: MyTabListItem) => item.key, []);

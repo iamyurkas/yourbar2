@@ -33,6 +33,7 @@ type SearchTopBarProps = {
 export type SegmentTabOption = {
   key: string;
   label: string;
+  counter?: string;
 };
 
 type SegmentTabsProps = {
@@ -166,6 +167,18 @@ export function SegmentTabs({ options, value, onChange, anchorPrefix }: SegmentT
               ]}>
               {option.label}
             </Text>
+            {option.counter ? (
+              <Text
+                style={[
+                  styles.tabCounter,
+                  {
+                    color: focused ? Colors.tint : Colors.onSurfaceVariant,
+                    fontWeight: focused ? '600' : '400',
+                  },
+                ]}>
+                {option.counter}
+              </Text>
+            ) : null}
             <View
               style={[
                 styles.tabIndicator,
@@ -251,6 +264,11 @@ const styles = StyleSheet.create({
   },
   tabLabel: {
     fontSize: 14,
+    textAlign: 'center',
+  },
+  tabCounter: {
+    fontSize: 12,
+    textAlign: 'center',
   },
   tabIndicator: {
     width: '60%',
