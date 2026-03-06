@@ -18,14 +18,31 @@ type TabPressHandler = (
   navigation: {
     navigate: (...args: never[]) => void;
     dispatch: (action: ReturnType<typeof StackActions.popToTop> & { target?: string }) => void;
+    getState: () => {
+      routes: {
+        key: string;
+        state?: {
+          key?: string;
+        };
+      }[];
+    };
   },
   route: {
+    key: string;
     name: string;
     state?: {
       key?: string;
     };
   },
 ) => void;
+
+const getNestedStackKey = (
+  navigation: { getState: () => { routes: { key: string; state?: { key?: string } }[] } },
+  route: { key: string; state?: { key?: string } },
+) => {
+  const stateRoute = navigation.getState().routes.find((candidate) => candidate.key === route.key);
+  return stateRoute?.state?.key ?? route.state?.key;
+};
 
 const TAB_SCREENS: {
   name: 'cocktails' | 'shaker' | 'ingredients';
@@ -39,7 +56,7 @@ const TAB_SCREENS: {
       icon: CocktailIcon,
       onTabPress: (navigation, route) => {
         navigation.navigate(route.name as never, { screen: 'index' } as never);
-        const nestedStackKey = route.state?.key;
+        const nestedStackKey = getNestedStackKey(navigation, route);
         if (nestedStackKey) {
           navigation.dispatch(Object.assign(StackActions.popToTop(), { target: nestedStackKey }));
         }
@@ -51,7 +68,7 @@ const TAB_SCREENS: {
       icon: ShakerIcon,
       onTabPress: (navigation, route) => {
         navigation.navigate(route.name as never, { screen: 'index' } as never);
-        const nestedStackKey = route.state?.key;
+        const nestedStackKey = getNestedStackKey(navigation, route);
         if (nestedStackKey) {
           navigation.dispatch(Object.assign(StackActions.popToTop(), { target: nestedStackKey }));
         }
@@ -63,7 +80,7 @@ const TAB_SCREENS: {
       icon: LemonIcon,
       onTabPress: (navigation, route) => {
         navigation.navigate(route.name as never, { screen: 'index' } as never);
-        const nestedStackKey = route.state?.key;
+        const nestedStackKey = getNestedStackKey(navigation, route);
         if (nestedStackKey) {
           navigation.dispatch(Object.assign(StackActions.popToTop(), { target: nestedStackKey }));
         }
