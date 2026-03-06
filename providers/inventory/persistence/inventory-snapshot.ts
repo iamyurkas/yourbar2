@@ -153,6 +153,7 @@ export type InventorySnapshotOptions = {
   useImperialUnits: boolean;
   keepScreenAwake: boolean;
   shakerSmartFilteringEnabled: boolean;
+  showTabCounters: boolean;
   ratingFilterThreshold: number;
   startScreen: StartScreen;
   appTheme: AppTheme;
@@ -221,6 +222,7 @@ export function buildInventorySnapshot(
     useImperialUnits: options.useImperialUnits,
     keepScreenAwake: options.keepScreenAwake,
     shakerSmartFilteringEnabled: options.shakerSmartFilteringEnabled,
+    showTabCounters: options.showTabCounters,
     ratingFilterThreshold: options.ratingFilterThreshold,
     startScreen: options.startScreen,
     appTheme: options.appTheme,

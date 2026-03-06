@@ -439,6 +439,8 @@ export const esESTranslations: TranslationDictionary = {
     "Cuando está activado, los ingredientes de grupos sin selección actual se ocultan si no producirían resultados.\n\nEn grupos donde ya has seleccionado al menos un ingrediente, los elementos permanecen visibles para mantener la lógica *o*.\n\nDesactívalo para restaurar el comportamiento predeterminado de la coctelera.",
   "sideMenu.smartShakerFilteringCaption":
     "Ocultar ingredientes no coincidentes en la Coctelera",
+  "sideMenu.showTabCounters": "Contadores de pestañas",
+  "sideMenu.showTabCountersCaption": "Mostrar la cantidad de elementos junto al nombre de cada pestaña",
   "sideMenu.startingScreen": "Pantalla inicial",
   "sideMenu.startingScreenOpen": "Abrir {{screen}}",
   "sideMenu.favoritesRatingFilter": "Filtro de favoritos",

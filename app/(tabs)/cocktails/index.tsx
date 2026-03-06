@@ -53,7 +53,7 @@ export default function CocktailsScreen() {
   const { onTabChangeRequest } = useOnboardingAnchors();
   const { cocktails, availableIngredientIds, ingredients, shoppingIngredientIds, getCocktailRating, loading } =
     useInventoryData();
-  const { ignoreGarnish, allowAllSubstitutes, ratingFilterThreshold } = useInventorySettings();
+  const { ignoreGarnish, allowAllSubstitutes, ratingFilterThreshold, showTabCounters } = useInventorySettings();
   const { toggleIngredientShopping } = useInventoryActions();
   const Colors = useAppColors();
   const { t, locale } = useI18n();
@@ -512,19 +512,19 @@ export default function CocktailsScreen() {
     {
       key: 'all',
       label: t('common.tabAll'),
-      counter: `(${cocktailsByTab.all.length})`,
+      counter: showTabCounters ? `(${cocktailsByTab.all.length})` : undefined,
     },
     {
       key: 'my',
       label: t('common.tabMy'),
-      counter: `(${myTabListData?.items.length ?? 0})`,
+      counter: showTabCounters ? `(${visibleMyTabItems.length})` : undefined,
     },
     {
       key: 'favorites',
       label: t('common.tabFavorites'),
-      counter: `(${cocktailsByTab.favorites.length})`,
+      counter: showTabCounters ? `(${cocktailsByTab.favorites.length})` : undefined,
     },
-  ], [cocktailsByTab.all.length, cocktailsByTab.favorites.length, myTabListData?.items.length, t]);
+  ], [cocktailsByTab.all.length, cocktailsByTab.favorites.length, showTabCounters, t, visibleMyTabItems.length]);
 
 
   const keyExtractor = useCallback((item: Cocktail) => String(item.id ?? item.name), []);

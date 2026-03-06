@@ -253,7 +253,7 @@ export default function IngredientsScreen() {
   const { t, locale } = useI18n();
   const { onTabChangeRequest } = useOnboardingAnchors();
   const { cocktails, ingredients, availableIngredientIds, shoppingIngredientIds, loading } = useInventoryData();
-  const { ignoreGarnish, allowAllSubstitutes } = useInventorySettings();
+  const { ignoreGarnish, allowAllSubstitutes, showTabCounters } = useInventorySettings();
   const { toggleIngredientShopping, toggleIngredientAvailability } = useInventoryActions();
   const [activeTab, setActiveTab] = useState<IngredientTabKey>(() => getLastIngredientTab());
 
@@ -481,19 +481,19 @@ export default function IngredientsScreen() {
     {
       key: 'all',
       label: t('common.tabAll'),
-      counter: `(${sections.all.data.length})`,
+      counter: showTabCounters ? `(${sections.all.data.length})` : undefined,
     },
     {
       key: 'my',
       label: t('common.tabMy'),
-      counter: `(${sections.my.data.length})`,
+      counter: showTabCounters ? `(${sections.my.data.length})` : undefined,
     },
     {
       key: 'shopping',
       label: t('common.tabShopping'),
-      counter: `(${sections.shopping.data.length})`,
+      counter: showTabCounters ? `(${sections.shopping.data.length})` : undefined,
     },
-  ], [sections.all.data.length, sections.my.data.length, sections.shopping.data.length, t]);
+  ], [sections.all.data.length, sections.my.data.length, sections.shopping.data.length, showTabCounters, t]);
 
   const activeSection = sections[activeTab] ?? sections.all;
 

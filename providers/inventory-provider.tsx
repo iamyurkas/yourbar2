@@ -101,6 +101,8 @@ declare global {
   // eslint-disable-next-line no-var
   var __yourbarInventoryShakerSmartFilteringEnabled: boolean | undefined;
   // eslint-disable-next-line no-var
+  var __yourbarInventoryShowTabCounters: boolean | undefined;
+  // eslint-disable-next-line no-var
   var __yourbarInventoryRatingFilterThreshold: number | undefined;
   // eslint-disable-next-line no-var
   var __yourbarInventoryStartScreen: StartScreen | undefined;
@@ -342,6 +344,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   const [shakerSmartFilteringEnabled, setShakerSmartFilteringEnabled] = useState<boolean>(
     () => globalThis.__yourbarInventoryShakerSmartFilteringEnabled ?? false,
   );
+  const [showTabCounters, setShowTabCounters] = useState<boolean>(
+    () => globalThis.__yourbarInventoryShowTabCounters ?? false,
+  );
   const [ratingFilterThreshold, setRatingFilterThreshold] = useState<number>(() =>
     typeof globalThis.__yourbarInventoryRatingFilterThreshold === 'number'
       ? Math.min(5, Math.max(1, Math.round(globalThis.__yourbarInventoryRatingFilterThreshold)))
@@ -397,6 +402,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       useImperialUnits: boolean;
       keepScreenAwake: boolean;
       shakerSmartFilteringEnabled: boolean;
+      showTabCounters: boolean;
       ratingFilterThreshold: number;
       startScreen: StartScreen;
       appTheme: AppTheme;
@@ -419,6 +425,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       setUseImperialUnits(bootstrap.useImperialUnits);
       setKeepScreenAwake(bootstrap.keepScreenAwake);
       setShakerSmartFilteringEnabled(bootstrap.shakerSmartFilteringEnabled);
+      setShowTabCounters(bootstrap.showTabCounters);
       setRatingFilterThreshold(bootstrap.ratingFilterThreshold);
       setStartScreen(bootstrap.startScreen);
       setAppTheme(bootstrap.appTheme);
@@ -457,6 +464,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           const nextUseImperialUnits = (stored.useImperialUnits ?? false) || shouldDefaultToImperialUnits;
           const nextKeepScreenAwake = stored.keepScreenAwake ?? true;
           const nextShakerSmartFilteringEnabled = stored.shakerSmartFilteringEnabled ?? false;
+          const nextShowTabCounters = stored.showTabCounters ?? false;
           const nextRatingFilterThreshold = Math.min(
             5,
             Math.max(1, Math.round(stored.ratingFilterThreshold ?? 1)),
@@ -500,6 +508,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             useImperialUnits: nextUseImperialUnits,
             keepScreenAwake: nextKeepScreenAwake,
             shakerSmartFilteringEnabled: nextShakerSmartFilteringEnabled,
+            showTabCounters: nextShowTabCounters,
             ratingFilterThreshold: nextRatingFilterThreshold,
             startScreen: nextStartScreen,
             appTheme: nextAppTheme,
@@ -532,6 +541,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             useImperialUnits: shouldDefaultToImperialUnits,
             keepScreenAwake: true,
             shakerSmartFilteringEnabled: false,
+            showTabCounters: false,
             ratingFilterThreshold: 1,
             startScreen: DEFAULT_START_SCREEN,
             appTheme: DEFAULT_APP_THEME,
@@ -609,6 +619,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     globalThis.__yourbarInventoryUseImperialUnits = useImperialUnits;
     globalThis.__yourbarInventoryKeepScreenAwake = keepScreenAwake;
     globalThis.__yourbarInventoryShakerSmartFilteringEnabled = shakerSmartFilteringEnabled;
+    globalThis.__yourbarInventoryShowTabCounters = showTabCounters;
     globalThis.__yourbarInventoryRatingFilterThreshold = ratingFilterThreshold;
     globalThis.__yourbarInventoryStartScreen = startScreen;
     globalThis.__yourbarInventoryAppTheme = appTheme;
@@ -630,6 +641,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       useImperialUnits,
       keepScreenAwake,
       shakerSmartFilteringEnabled,
+      showTabCounters,
       ratingFilterThreshold,
       startScreen,
       appTheme,
@@ -665,6 +677,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     useImperialUnits,
     keepScreenAwake,
     shakerSmartFilteringEnabled,
+    showTabCounters,
     ratingFilterThreshold,
     startScreen,
     appTheme,
@@ -2001,6 +2014,10 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     setShakerSmartFilteringEnabled(Boolean(value));
   }, []);
 
+  const handleSetShowTabCounters = useCallback((value: boolean) => {
+    setShowTabCounters(Boolean(value));
+  }, []);
+
   const handleSetRatingFilterThreshold = useCallback((value: number) => {
     const normalized = Math.min(5, Math.max(1, Math.round(value)));
     setRatingFilterThreshold(normalized);
@@ -2418,6 +2435,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       useImperialUnits,
       keepScreenAwake,
       shakerSmartFilteringEnabled,
+      showTabCounters,
       ratingFilterThreshold,
       startScreen,
       appTheme,
@@ -2437,6 +2455,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       useImperialUnits,
       keepScreenAwake,
       shakerSmartFilteringEnabled,
+      showTabCounters,
       ratingFilterThreshold,
       startScreen,
       appTheme,
@@ -2481,6 +2500,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       setUseImperialUnits: handleSetUseImperialUnits,
       setKeepScreenAwake: handleSetKeepScreenAwake,
       setShakerSmartFilteringEnabled: handleSetShakerSmartFilteringEnabled,
+      setShowTabCounters: handleSetShowTabCounters,
       setRatingFilterThreshold: handleSetRatingFilterThreshold,
       setStartScreen: handleSetStartScreen,
       setAppTheme: handleSetAppTheme,
@@ -2522,6 +2542,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       handleSetUseImperialUnits,
       handleSetKeepScreenAwake,
       handleSetShakerSmartFilteringEnabled,
+      handleSetShowTabCounters,
       handleSetRatingFilterThreshold,
       handleSetStartScreen,
       handleSetAppTheme,
