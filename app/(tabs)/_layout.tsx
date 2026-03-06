@@ -1,4 +1,5 @@
 import { Tabs } from 'expo-router';
+import { StackActions } from '@react-navigation/native';
 import { useCallback, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -11,10 +12,15 @@ import { OnboardingAnchor } from '@/components/onboarding/OnboardingAnchor';
 import { TabBarButton } from '@/components/tab-bar/TabBarButton';
 import { TabBarIcon } from '@/components/tab-bar/TabBarIcon';
 import { useAppColors } from '@/constants/theme';
-import { getLastCocktailTab, getLastIngredientTab } from '@/libs/collection-tabs';
 import { useI18n } from '@/libs/i18n/use-i18n';
 
-type TabPressHandler = (navigation: { navigate: (...args: never[]) => void }, route: { name: string }) => void;
+type TabPressHandler = (
+  navigation: {
+    navigate: (...args: never[]) => void;
+    dispatch: (action: ReturnType<typeof StackActions.popToTop> & { target?: string }) => void;
+  },
+  route: { key: string; name: string },
+) => void;
 
 const TAB_SCREENS: {
   name: 'cocktails' | 'shaker' | 'ingredients';
@@ -27,8 +33,8 @@ const TAB_SCREENS: {
       titleKey: 'tabs.cocktails',
       icon: CocktailIcon,
       onTabPress: (navigation, route) => {
-        getLastCocktailTab();
         navigation.navigate(route.name as never, { screen: 'index' } as never);
+        navigation.dispatch(Object.assign(StackActions.popToTop(), { target: route.key }));
       },
     },
     {
@@ -37,6 +43,7 @@ const TAB_SCREENS: {
       icon: ShakerIcon,
       onTabPress: (navigation, route) => {
         navigation.navigate(route.name as never, { screen: 'index' } as never);
+        navigation.dispatch(Object.assign(StackActions.popToTop(), { target: route.key }));
       },
     },
     {
@@ -44,8 +51,8 @@ const TAB_SCREENS: {
       titleKey: 'tabs.ingredients',
       icon: LemonIcon,
       onTabPress: (navigation, route) => {
-        getLastIngredientTab();
         navigation.navigate(route.name as never, { screen: 'index' } as never);
+        navigation.dispatch(Object.assign(StackActions.popToTop(), { target: route.key }));
       },
     },
   ];
