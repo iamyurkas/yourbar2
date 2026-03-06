@@ -314,6 +314,7 @@ export const enUSTranslations: TranslationDictionary = {
   "ingredientDetails.brandedIngredients": "Branded ingredients",
   "ingredientDetails.viewIngredient": "View {{name}}",
   "ingredientDetails.removeIngredientLink": "Remove {{name}} link",
+  "ingredientDetails.filterCocktails": "Filter cocktails",
   "ingredientDetails.cocktails": "Cocktails",
   "ingredientDetails.showMoreCocktails": "Show more cocktails",
   "ingredientDetails.noCocktailsYet": "No cocktails yet",
