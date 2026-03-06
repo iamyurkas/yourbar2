@@ -485,7 +485,6 @@ export default function CocktailsScreen() {
   }, [activeTab, filteredCocktails, getCocktailRating, sortedCocktails]);
 
   const myTabListData = useCocktailTabLogic({
-    activeTab,
     allowAllSubstitutes,
     availableIngredientIds,
     filteredCocktails,
@@ -495,10 +494,6 @@ export default function CocktailsScreen() {
   });
 
   const visibleMyTabItems = useMemo(() => {
-    if (!myTabListData) {
-      return [];
-    }
-
     return myTabListData.items.filter((item) => {
       if (item.type !== 'cocktail' || item.parentIngredientId == null) {
         return true;
@@ -616,7 +611,7 @@ export default function CocktailsScreen() {
   const myTabAvailabilitySummaryByKey = useMemo(() => {
     const summaryMap = new Map<string, CocktailAvailabilitySummary>();
 
-    myTabListData?.items.forEach((item) => {
+    myTabListData.items.forEach((item) => {
       if (item.type !== 'cocktail') {
         return;
       }
@@ -650,7 +645,7 @@ export default function CocktailsScreen() {
     ignoreGarnish,
     ingredientLookup,
     locale,
-    myTabListData?.items,
+    myTabListData.items,
     t,
   ]);
 
@@ -852,7 +847,7 @@ export default function CocktailsScreen() {
       }
 
       const cocktailKey = String(leadingItem.cocktail.id ?? leadingItem.cocktail.name);
-      const isReady = myTabListData?.availabilityMap.get(cocktailKey) ?? false;
+      const isReady = myTabListData.availabilityMap.get(cocktailKey) ?? false;
       const backgroundColor = isReady ? Colors.outline : Colors.outlineVariant;
 
       return <View style={[styles.divider, { backgroundColor }]} />;

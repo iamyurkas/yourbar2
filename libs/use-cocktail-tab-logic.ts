@@ -37,7 +37,6 @@ const normalizeIngredientId = (value?: number | string | null): number | undefin
 };
 
 export function useCocktailTabLogic({
-  activeTab,
   allowAllSubstitutes,
   availableIngredientIds,
   filteredCocktails,
@@ -45,7 +44,6 @@ export function useCocktailTabLogic({
   ingredientLookup,
   defaultTagColor,
 }: {
-  activeTab: string;
   allowAllSubstitutes: boolean;
   availableIngredientIds: Set<number>;
   filteredCocktails: Cocktail[];
@@ -54,10 +52,6 @@ export function useCocktailTabLogic({
   defaultTagColor: string;
 }) {
   return useMemo(() => {
-    if (activeTab !== 'my') {
-      return null;
-    }
-
     const resolveNameFromId = (id?: number, fallback?: string): string => {
       if (id == null) {
         return (fallback ?? '').trim();
@@ -364,8 +358,7 @@ export function useCocktailTabLogic({
 
     return { items, availabilityMap };
   }, [
-    activeTab,
-    allowAllSubstitutes,
+      allowAllSubstitutes,
     availableIngredientIds,
     filteredCocktails,
     ignoreGarnish,
