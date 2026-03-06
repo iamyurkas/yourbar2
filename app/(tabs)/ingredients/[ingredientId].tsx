@@ -417,6 +417,9 @@ export default function IngredientDetailsScreen() {
   const [selectedMethodIds, setSelectedMethodIds] = useState<
     Set<CocktailMethod["id"]>
   >(() => new Set());
+  const [selectedStarRatings, setSelectedStarRatings] = useState<Set<number>>(
+    () => new Set(),
+  );
 
   const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
   const availableTagOptions = useMemo(
@@ -454,6 +457,18 @@ export default function IngredientDetailsScreen() {
 
     return methodOrder.filter((method) => usedMethods.has(method.id));
   }, [cocktailsWithIngredient]);
+
+  const availableStarRatings = useMemo<number[]>(() => {
+    const ratings = new Set<number>();
+    cocktailEntries.forEach((entry) => {
+      const rating = entry.ratingValue;
+      if (rating > 0) {
+        ratings.add(rating);
+      }
+    });
+
+    return [...ratings].sort((a, b) => a - b);
+  }, [cocktailEntries]);
 
   useEffect(() => {
     setSelectedTagKeys((previous) => {
@@ -507,6 +522,32 @@ export default function IngredientDetailsScreen() {
     });
   }, [availableMethodOptions]);
 
+  useEffect(() => {
+    setSelectedStarRatings((previous) => {
+      if (previous.size === 0) {
+        return previous;
+      }
+
+      const validRatings = new Set(availableStarRatings);
+      const next = new Set<number>();
+      let didChange = false;
+
+      previous.forEach((rating) => {
+        if (validRatings.has(rating)) {
+          next.add(rating);
+        } else {
+          didChange = true;
+        }
+      });
+
+      if (!didChange && next.size === previous.size) {
+        return previous;
+      }
+
+      return next;
+    });
+  }, [availableStarRatings]);
+
   const handleTagFilterToggle = useCallback((key: string) => {
     setSelectedTagKeys((previous) => {
       const next = new Set(previous);
@@ -538,6 +579,21 @@ export default function IngredientDetailsScreen() {
     setSelectedMethodIds((previous) =>
       previous.size === 0 ? previous : new Set<CocktailMethod["id"]>(),
     );
+    setSelectedStarRatings((previous) =>
+      previous.size === 0 ? previous : new Set<number>(),
+    );
+  }, []);
+
+  const handleStarRatingFilterToggle = useCallback((rating: number) => {
+    setSelectedStarRatings((previous) => {
+      const next = new Set(previous);
+      if (next.has(rating)) {
+        next.delete(rating);
+      } else {
+        next.add(rating);
+      }
+      return next;
+    });
   }, []);
 
   const handleCloseFilterMenu = useCallback(() => {
@@ -578,10 +634,17 @@ export default function IngredientDetailsScreen() {
   );
 
   const filteredCocktailEntries = useMemo(() => {
+    const byStarRatings =
+      selectedStarRatings.size === 0
+        ? cocktailEntries
+        : cocktailEntries.filter(({ ratingValue }) =>
+          selectedStarRatings.has(ratingValue),
+        );
+
     const byMethods =
       selectedMethodIds.size === 0
-        ? cocktailEntries
-        : cocktailEntries.filter(({ cocktail }) => {
+        ? byStarRatings
+        : byStarRatings.filter(({ cocktail }) => {
           const legacyMethodId =
             (cocktail as { methodId?: CocktailMethod["id"] | null }).methodId ??
             null;
@@ -620,14 +683,14 @@ export default function IngredientDetailsScreen() {
         return selectedTagKeys.has(key);
       });
     });
-  }, [cocktailEntries, selectedMethodIds, selectedTagKeys]);
+  }, [cocktailEntries, selectedMethodIds, selectedStarRatings, selectedTagKeys]);
 
   const [visibleCocktailCount, setVisibleCocktailCount] =
     useState(COCKTAIL_PAGE_SIZE);
 
   useEffect(() => {
     setVisibleCocktailCount(COCKTAIL_PAGE_SIZE);
-  }, [numericIngredientId, selectedMethodIds, selectedTagKeys]);
+  }, [numericIngredientId, selectedMethodIds, selectedStarRatings, selectedTagKeys]);
 
   const visibleCocktailEntries = useMemo(
     () => filteredCocktailEntries.slice(0, visibleCocktailCount),
@@ -636,7 +699,10 @@ export default function IngredientDetailsScreen() {
 
   const hasMoreCocktails = visibleCocktailCount < filteredCocktailEntries.length;
   const shouldShowCocktailFilters = cocktailEntries.length > COCKTAIL_PAGE_SIZE;
-  const isFilterActive = selectedTagKeys.size > 0 || selectedMethodIds.size > 0;
+  const isFilterActive =
+    selectedTagKeys.size > 0 ||
+    selectedMethodIds.size > 0 ||
+    selectedStarRatings.size > 0;
 
   const handleToggleAvailability = useCallback(() => {
     if (numericIngredientId != null) {
@@ -1933,6 +1999,55 @@ export default function IngredientDetailsScreen() {
               keyboardShouldPersistTaps="handled"
             >
               <View style={styles.filterMenuBody}>
+                {availableStarRatings.length > 0 ? (
+                  <>
+                    <ScrollView
+                      horizontal
+                      style={styles.filterRatingScroll}
+                      contentContainerStyle={styles.filterRatingRow}
+                      showsHorizontalScrollIndicator={false}
+                      keyboardShouldPersistTaps="handled"
+                    >
+                      {availableStarRatings.map((rating) => {
+                        const selected = selectedStarRatings.has(rating);
+                        return (
+                          <TagPill
+                            key={`rating-${rating}`}
+                            label={`${rating}★`}
+                            color={Colors.tint}
+                            selected={selected}
+                            onPress={() => handleStarRatingFilterToggle(rating)}
+                            accessibilityRole="checkbox"
+                            accessibilityState={{ checked: selected }}
+                            androidRippleColor={`${Colors.surfaceVariant}33`}
+                          />
+                        );
+                      })}
+                    </ScrollView>
+                    <View style={styles.filterSeparator}>
+                      <View
+                        style={[
+                          styles.filterSeparatorLine,
+                          { backgroundColor: Colors.outline },
+                        ]}
+                      />
+                      <Text
+                        style={[
+                          styles.filterSeparatorLabel,
+                          { color: Colors.onSurfaceVariant },
+                        ]}
+                      >
+                        {t("common.and")}
+                      </Text>
+                      <View
+                        style={[
+                          styles.filterSeparatorLine,
+                          { backgroundColor: Colors.outline },
+                        ]}
+                      />
+                    </View>
+                  </>
+                ) : null}
                 <View style={styles.filterMenuContent}>
                   <View style={styles.filterMethodList}>
                     {availableMethodOptions.map((method) => {
@@ -2364,6 +2479,16 @@ const styles = StyleSheet.create({
     alignItems: "stretch",
     paddingHorizontal: 12,
     paddingTop: 12,
+  },
+  filterRatingScroll: {
+    alignSelf: "stretch",
+  },
+  filterRatingRow: {
+    flexGrow: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 12,
   },
   filterMenuContent: {
     flexDirection: "row",
