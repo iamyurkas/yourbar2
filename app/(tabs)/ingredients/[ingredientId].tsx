@@ -1656,16 +1656,15 @@ export default function IngredientDetailsScreen() {
                     accessibilityLabel={t("ingredientDetails.filterCocktails")}
                     style={[
                       styles.cocktailFilterButton,
-                      {
-                        borderColor: isFilterActive ? Colors.tint : Colors.outline,
-                        backgroundColor: isFilterActive ? Colors.highlightSubtle : Colors.surfaceBright,
-                      },
+                      isFilterActive
+                        ? { backgroundColor: `${Colors.tint}1A` }
+                        : null,
                     ]}
                   >
                     <MaterialCommunityIcons
                       name="filter-variant"
-                      size={16}
-                      color={isFilterActive ? Colors.tint : Colors.onSurfaceVariant}
+                      size={24}
+                      color={isFilterActive ? Colors.tint : Colors.icon}
                     />
                   </Pressable>
                 ) : null}
@@ -2171,17 +2170,11 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   cocktailFilterButton: {
-    flexDirection: "row",
+    width: 40,
+    height: 40,
+    borderRadius: 12,
     alignItems: "center",
-    gap: 6,
-    borderWidth: 1,
-    borderRadius: 10,
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-  },
-  cocktailFilterButtonLabel: {
-    fontSize: 13,
-    fontWeight: "600",
+    justifyContent: "center",
   },
   methodIcon: {
     width: METHOD_ICON_SIZE,
