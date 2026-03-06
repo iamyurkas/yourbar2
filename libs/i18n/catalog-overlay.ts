@@ -146,7 +146,7 @@ function parseSynonymsValue(value?: string): string[] {
   return Array.from(
     new Set(
       value
-        .split(/[,;\n]/)
+        .split(/[|,;\n]/)
         .map((item) => item.trim())
         .filter(Boolean),
     ),
@@ -231,9 +231,12 @@ export function localizeCocktail(
   );
 
   const overrideSynonyms = entityOverrides?.synonyms;
+  const overlaySynonyms = parseSynonymsValue(
+    getCatalogFieldTranslation(locale, 'cocktail', cocktail.id, 'synonyms'),
+  );
   const localizedSynonyms =
     (overrideSynonyms && overrideSynonyms.length > 0 ? normalizeSynonymList(overrideSynonyms) : undefined)
-    ?? parseSynonymsValue(getCatalogFieldTranslation(locale, 'cocktail', cocktail.id, 'synonyms'))
+    ?? (overlaySynonyms.length > 0 ? overlaySynonyms : undefined)
     ?? normalizeSynonymList(cocktail.synonyms);
 
   const localizedSearch = buildLocalizedSearchFields(localizedName, localizedSynonyms);
