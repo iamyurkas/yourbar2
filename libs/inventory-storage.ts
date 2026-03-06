@@ -19,6 +19,7 @@ export type InventorySnapshotV1<TCocktail, TIngredient> = {
   useImperialUnits?: boolean;
   keepScreenAwake?: boolean;
   shakerSmartFilteringEnabled?: boolean;
+  showTabCounters?: boolean;
   ratingFilterThreshold?: number;
   startScreen?: string;
   appTheme?: string;
@@ -53,6 +54,7 @@ export type InventoryDeltaSnapshot<TCocktail, TIngredient> = {
   useImperialUnits?: boolean;
   keepScreenAwake?: boolean;
   shakerSmartFilteringEnabled?: boolean;
+  showTabCounters?: boolean;
   ratingFilterThreshold?: number;
   startScreen?: string;
   appTheme?: string;
@@ -88,6 +90,7 @@ export type InventoryDeltaSnapshotV3<TCocktail, TIngredient> = {
   useImperialUnits?: boolean;
   keepScreenAwake?: boolean;
   shakerSmartFilteringEnabled?: boolean;
+  showTabCounters?: boolean;
   ratingFilterThreshold?: number;
   startScreen?: string;
   appTheme?: string;

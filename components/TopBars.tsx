@@ -33,6 +33,7 @@ type SearchTopBarProps = {
 export type SegmentTabOption = {
   key: string;
   label: string;
+  counter?: string;
 };
 
 type SegmentTabsProps = {
@@ -156,16 +157,30 @@ export function SegmentTabs({ options, value, onChange, anchorPrefix }: SegmentT
               !anchorPrefix && { flex: 1 },
               pressed && { backgroundColor: `${Colors.tint}1A` },
             ]}>
-            <Text
-              style={[
-                styles.tabLabel,
-                {
-                  color: focused ? Colors.tint : Colors.onSurfaceVariant,
-                  fontWeight: focused ? '600' : '400',
-                },
-              ]}>
-              {option.label}
-            </Text>
+            <View style={styles.tabTextRow}>
+              <Text
+                style={[
+                  styles.tabLabel,
+                  {
+                    color: focused ? Colors.tint : Colors.onSurfaceVariant,
+                    fontWeight: focused ? '600' : '400',
+                  },
+                ]}>
+                {option.label}
+              </Text>
+              {option.counter ? (
+                <Text
+                  style={[
+                    styles.tabCounter,
+                    {
+                      color: focused ? Colors.tint : Colors.onSurfaceVariant,
+                      fontWeight: focused ? '600' : '400',
+                    },
+                  ]}>
+                  {option.counter}
+                </Text>
+              ) : null}
+            </View>
             <View
               style={[
                 styles.tabIndicator,
@@ -249,8 +264,18 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     gap: 6,
   },
+  tabTextRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    columnGap: 6,
+  },
   tabLabel: {
     fontSize: 14,
+    textAlign: 'center',
+  },
+  tabCounter: {
+    fontSize: 12,
   },
   tabIndicator: {
     width: '60%',

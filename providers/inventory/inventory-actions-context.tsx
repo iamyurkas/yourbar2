@@ -45,6 +45,7 @@ export type InventoryActionsContextValue = {
   setUseImperialUnits: (value: boolean) => void;
   setKeepScreenAwake: (value: boolean) => void;
   setShakerSmartFilteringEnabled: (value: boolean) => void;
+  setShowTabCounters: (value: boolean) => void;
   setRatingFilterThreshold: (value: number) => void;
   setStartScreen: (value: StartScreen) => void;
   setAppTheme: (value: AppTheme) => void;

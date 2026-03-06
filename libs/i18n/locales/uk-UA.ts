@@ -452,6 +452,8 @@ export const ukUATranslations: TranslationDictionary = {
   "sideMenu.smartShakerFilteringInfoMessage":
     "Якщо увімкнено, інгредієнти в групах без поточного вибору приховуються, якщо вони не дають жодного результату.\n\nУ групах, де ви вже обрали хоча б один інгредієнт, елементи залишаються видимими, щоб зберегти логіку АБО.\n\nВимкніть це, щоби повернути стандартну поведінку шейкера.",
   "sideMenu.smartShakerFilteringCaption": "Приховувати зайві інгредієнти",
+  "sideMenu.showTabCounters": "Лічильники табів",
+  "sideMenu.showTabCountersCaption": "Показувати кількість елементів праворуч від назв табів",
   "sideMenu.startingScreen": "Початковий екран",
   "sideMenu.startingScreenOpen": "Відкривати {{screen}}",
   "sideMenu.favoritesRatingFilter": "Фільтр обраних",

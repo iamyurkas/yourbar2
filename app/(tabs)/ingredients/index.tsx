@@ -253,15 +253,9 @@ export default function IngredientsScreen() {
   const { t, locale } = useI18n();
   const { onTabChangeRequest } = useOnboardingAnchors();
   const { cocktails, ingredients, availableIngredientIds, shoppingIngredientIds, loading } = useInventoryData();
-  const { ignoreGarnish, allowAllSubstitutes } = useInventorySettings();
+  const { ignoreGarnish, allowAllSubstitutes, showTabCounters } = useInventorySettings();
   const { toggleIngredientShopping, toggleIngredientAvailability } = useInventoryActions();
   const [activeTab, setActiveTab] = useState<IngredientTabKey>(() => getLastIngredientTab());
-
-  const tabOptions = useMemo<SegmentTabOption[]>(() => [
-    { key: 'all', label: t('common.tabAll') },
-    { key: 'my', label: t('common.tabMy') },
-    { key: 'shopping', label: t('common.tabShopping') },
-  ], [t]);
 
   const [query, setQuery] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -481,6 +475,25 @@ export default function IngredientsScreen() {
       },
     };
   }, [ingredients, availableIngredientIds, shoppingIngredientIds, t]);
+
+
+  const tabOptions = useMemo<SegmentTabOption[]>(() => [
+    {
+      key: 'all',
+      label: t('common.tabAll'),
+      counter: showTabCounters ? `(${sections.all.data.length})` : undefined,
+    },
+    {
+      key: 'my',
+      label: t('common.tabMy'),
+      counter: showTabCounters ? `(${sections.my.data.length})` : undefined,
+    },
+    {
+      key: 'shopping',
+      label: t('common.tabShopping'),
+      counter: showTabCounters ? `(${sections.shopping.data.length})` : undefined,
+    },
+  ], [sections.all.data.length, sections.my.data.length, sections.shopping.data.length, showTabCounters, t]);
 
   const activeSection = sections[activeTab] ?? sections.all;
 

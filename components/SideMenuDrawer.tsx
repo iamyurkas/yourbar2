@@ -142,6 +142,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     setKeepScreenAwake,
     shakerSmartFilteringEnabled,
     setShakerSmartFilteringEnabled,
+    showTabCounters,
+    setShowTabCounters,
     ratingFilterThreshold,
     setRatingFilterThreshold,
     startScreen,
@@ -370,6 +372,10 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
   const toggleShakerSmartFiltering = () => {
     setShakerSmartFilteringEnabled(!shakerSmartFilteringEnabled);
+  };
+
+  const toggleShowTabCounters = () => {
+    setShowTabCounters(!showTabCounters);
   };
 
   const handleSmartShakerFilteringInfoPress = () => {
@@ -1304,6 +1310,49 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   ]}
                 >
                   {t("sideMenu.smartShakerFilteringCaption")}
+                </Text>
+              </View>
+            </Pressable>
+            <Pressable
+              accessibilityRole="checkbox"
+              accessibilityState={{ checked: showTabCounters }}
+              onPress={toggleShowTabCounters}
+              style={[styles.settingRow, SURFACE_ROW_STYLE]}
+            >
+              <View
+                style={[
+                  styles.checkbox,
+                  {
+                    borderColor: showTabCounters
+                      ? Colors.tint
+                      : Colors.outlineVariant,
+                    backgroundColor: showTabCounters
+                      ? Colors.tint
+                      : "transparent",
+                  },
+                ]}
+              >
+                <MaterialCommunityIcons
+                  name="check"
+                  size={16}
+                  color={
+                    showTabCounters ? Colors.background : Colors.outlineVariant
+                  }
+                />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text
+                  style={[styles.settingLabel, { color: Colors.onSurface }]}
+                >
+                  {t("sideMenu.showTabCounters")}
+                </Text>
+                <Text
+                  style={[
+                    styles.settingCaption,
+                    { color: Colors.onSurfaceVariant },
+                  ]}
+                >
+                  {t("sideMenu.showTabCountersCaption")}
                 </Text>
               </View>
             </Pressable>

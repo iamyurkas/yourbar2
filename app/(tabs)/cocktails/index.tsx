@@ -53,17 +53,11 @@ export default function CocktailsScreen() {
   const { onTabChangeRequest } = useOnboardingAnchors();
   const { cocktails, availableIngredientIds, ingredients, shoppingIngredientIds, getCocktailRating, loading } =
     useInventoryData();
-  const { ignoreGarnish, allowAllSubstitutes, ratingFilterThreshold } = useInventorySettings();
+  const { ignoreGarnish, allowAllSubstitutes, ratingFilterThreshold, showTabCounters } = useInventorySettings();
   const { toggleIngredientShopping } = useInventoryActions();
   const Colors = useAppColors();
   const { t, locale } = useI18n();
   const [activeTab, setActiveTab] = useState<CocktailTabKey>(() => getLastCocktailTab());
-
-  const tabOptions = useMemo<SegmentTabOption[]>(() => [
-    { key: 'all', label: t('common.tabAll') },
-    { key: 'my', label: t('common.tabMy') },
-    { key: 'favorites', label: t('common.tabFavorites') },
-  ], [t]);
 
   const [query, setQuery] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -251,6 +245,14 @@ export default function CocktailsScreen() {
 
     return cocktails;
   }, [activeTab, cocktails, ratedCocktails]);
+
+  const cocktailsByTab = useMemo<Record<CocktailTabKey, Cocktail[]>>(() => ({
+    all: cocktails,
+    my: cocktails,
+    favorites: ratedCocktails,
+  }), [cocktails, ratedCocktails]);
+
+
 
   const availableTagOptions = useMemo<TagOption[]>(
     () => buildTagOptions(baseTabCocktails, (cocktail) => cocktail.tags ?? [], BUILTIN_COCKTAIL_TAGS, defaultTagColor),
@@ -483,7 +485,6 @@ export default function CocktailsScreen() {
   }, [activeTab, filteredCocktails, getCocktailRating, sortedCocktails]);
 
   const myTabListData = useCocktailTabLogic({
-    activeTab,
     allowAllSubstitutes,
     availableIngredientIds,
     filteredCocktails,
@@ -493,10 +494,6 @@ export default function CocktailsScreen() {
   });
 
   const visibleMyTabItems = useMemo(() => {
-    if (!myTabListData) {
-      return [];
-    }
-
     return myTabListData.items.filter((item) => {
       if (item.type !== 'cocktail' || item.parentIngredientId == null) {
         return true;
@@ -505,6 +502,31 @@ export default function CocktailsScreen() {
       return !collapsedMissingIngredientIds.has(item.parentIngredientId);
     });
   }, [collapsedMissingIngredientIds, myTabListData]);
+
+  const myReadyCocktailsCount = useMemo(() => {
+    return myTabListData.items.filter(
+      (item) => item.type === 'cocktail' && item.parentIngredientId == null,
+    ).length;
+  }, [myTabListData]);
+
+  const tabOptions = useMemo<SegmentTabOption[]>(() => [
+    {
+      key: 'all',
+      label: t('common.tabAll'),
+      counter: showTabCounters ? `(${cocktailsByTab.all.length})` : undefined,
+    },
+    {
+      key: 'my',
+      label: t('common.tabMy'),
+      counter: showTabCounters ? `(${myReadyCocktailsCount})` : undefined,
+    },
+    {
+      key: 'favorites',
+      label: t('common.tabFavorites'),
+      counter: showTabCounters ? `(${cocktailsByTab.favorites.length})` : undefined,
+    },
+  ], [cocktailsByTab.all.length, cocktailsByTab.favorites.length, myReadyCocktailsCount, showTabCounters, t]);
+
 
   const keyExtractor = useCallback((item: Cocktail) => String(item.id ?? item.name), []);
   const myTabKeyExtractor = useCallback((item: MyTabListItem) => item.key, []);
@@ -595,7 +617,7 @@ export default function CocktailsScreen() {
   const myTabAvailabilitySummaryByKey = useMemo(() => {
     const summaryMap = new Map<string, CocktailAvailabilitySummary>();
 
-    myTabListData?.items.forEach((item) => {
+    myTabListData.items.forEach((item) => {
       if (item.type !== 'cocktail') {
         return;
       }
@@ -629,7 +651,7 @@ export default function CocktailsScreen() {
     ignoreGarnish,
     ingredientLookup,
     locale,
-    myTabListData?.items,
+    myTabListData.items,
     t,
   ]);
 
@@ -831,7 +853,7 @@ export default function CocktailsScreen() {
       }
 
       const cocktailKey = String(leadingItem.cocktail.id ?? leadingItem.cocktail.name);
-      const isReady = myTabListData?.availabilityMap.get(cocktailKey) ?? false;
+      const isReady = myTabListData.availabilityMap.get(cocktailKey) ?? false;
       const backgroundColor = isReady ? Colors.outline : Colors.outlineVariant;
 
       return <View style={[styles.divider, { backgroundColor }]} />;
