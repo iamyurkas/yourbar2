@@ -314,6 +314,7 @@ export const ukUATranslations: TranslationDictionary = {
   "ingredientDetails.brandedIngredients": "Брендові інгредієнти",
   "ingredientDetails.viewIngredient": "Переглянути {{name}}",
   "ingredientDetails.removeIngredientLink": "Видалити звʼязок з {{name}}",
+  "ingredientDetails.filterCocktails": "Фільтр коктейлів",
   "ingredientDetails.cocktails": "Коктейлі",
   "ingredientDetails.showMoreCocktails": "Показати більше коктейлів",
   "ingredientDetails.noCocktailsYet": "Ще немає коктейлів",
