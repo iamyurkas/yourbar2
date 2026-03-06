@@ -50,7 +50,7 @@ export function OnboardingAnchor({ name, children, active = true, ...props }: On
       ref={viewRef}
       {...props}
       onLayout={handleLayout}
-      pointerEvents={props.pointerEvents ?? 'box-none'}
+      pointerEvents={props.pointerEvents ?? 'auto'}
       collapsable={false}
     >
       {children}
