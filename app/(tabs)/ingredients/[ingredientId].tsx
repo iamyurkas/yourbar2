@@ -1904,9 +1904,14 @@ export default function IngredientDetailsScreen() {
               },
             ]}
           >
-            <View style={styles.filterModalHeader}>
+            <View
+              style={[
+                styles.filterModalHeader,
+                { borderBottomColor: Colors.outline },
+              ]}
+            >
               <Text style={[styles.filterModalTitle, { color: Colors.onSurface }]}> 
-                {t("common.filterItems")}
+                {t("ingredientDetails.filterCocktails")}
               </Text>
               <Pressable
                 onPress={handleCloseFilterMenu}
@@ -1928,89 +1933,87 @@ export default function IngredientDetailsScreen() {
               keyboardShouldPersistTaps="handled"
             >
               <View style={styles.filterMenuBody}>
-                {availableMethodOptions.length > 0 ? (
-                  <>
-                    <View style={styles.filterMethodList}>
-                      {availableMethodOptions.map((method) => {
-                        const selected = selectedMethodIds.has(method.id);
-                        return (
-                          <TagPill
-                            key={method.id}
-                            label={t(`cocktailMethod.${method.id}.label`)}
-                            color={Colors.tint}
-                            selected={selected}
-                            icon={renderMethodIcon(method.id, selected)}
-                            onPress={() => handleMethodFilterToggle(method.id)}
-                            accessibilityRole="checkbox"
-                            accessibilityState={{ checked: selected }}
-                            androidRippleColor={`${Colors.surfaceVariant}33`}
-                          />
-                        );
-                      })}
-                    </View>
-                    <View style={styles.filterSeparator}>
-                      <View
-                        style={[
-                          styles.filterSeparatorLine,
-                          { backgroundColor: Colors.outline },
-                        ]}
-                      />
-                      <Text
-                        style={[
-                          styles.filterSeparatorLabel,
-                          { color: Colors.onSurfaceVariant },
-                        ]}
-                      >
-                        {t("common.and")}
-                      </Text>
-                      <View
-                        style={[
-                          styles.filterSeparatorLine,
-                          { backgroundColor: Colors.outline },
-                        ]}
-                      />
-                    </View>
-                  </>
-                ) : null}
-                <View style={styles.filterTagList}>
-                  {availableTagOptions.length > 0 ? (
-                    availableTagOptions.map((tag) => {
-                      const selected = selectedTagKeys.has(tag.key);
-                      const isBuiltin =
-                        !isNaN(Number(tag.key)) &&
-                        Number(tag.key) >= 1 &&
-                        Number(tag.key) <= 11;
-                      const translatedName = isBuiltin
-                        ? t(`cocktailTag.${tag.key}`)
-                        : tag.name;
-                      const finalName =
-                        isBuiltin && translatedName !== `cocktailTag.${tag.key}`
-                          ? translatedName
-                          : tag.name;
-
+                <View style={styles.filterMenuContent}>
+                  <View style={styles.filterMethodList}>
+                    {availableMethodOptions.map((method) => {
+                      const selected = selectedMethodIds.has(method.id);
                       return (
                         <TagPill
-                          key={tag.key}
-                          label={finalName}
-                          color={tag.color}
+                          key={method.id}
+                          label={t(`cocktailMethod.${method.id}.label`)}
+                          color={Colors.tint}
                           selected={selected}
-                          onPress={() => handleTagFilterToggle(tag.key)}
+                          icon={renderMethodIcon(method.id, selected)}
+                          onPress={() => handleMethodFilterToggle(method.id)}
                           accessibilityRole="checkbox"
                           accessibilityState={{ checked: selected }}
                           androidRippleColor={`${Colors.surfaceVariant}33`}
                         />
                       );
-                    })
-                  ) : (
+                    })}
+                  </View>
+                  <View style={styles.filterSeparator}>
+                    <View
+                      style={[
+                        styles.filterSeparatorLine,
+                        { backgroundColor: Colors.outline },
+                      ]}
+                    />
                     <Text
                       style={[
-                        styles.filterMenuEmpty,
+                        styles.filterSeparatorLabel,
                         { color: Colors.onSurfaceVariant },
                       ]}
                     >
-                      {t("common.noTagsAvailable")}
+                      {t("common.and")}
                     </Text>
-                  )}
+                    <View
+                      style={[
+                        styles.filterSeparatorLine,
+                        { backgroundColor: Colors.outline },
+                      ]}
+                    />
+                  </View>
+                  <View style={styles.filterTagList}>
+                    {availableTagOptions.length > 0 ? (
+                      availableTagOptions.map((tag) => {
+                        const selected = selectedTagKeys.has(tag.key);
+                        const isBuiltin =
+                          !isNaN(Number(tag.key)) &&
+                          Number(tag.key) >= 1 &&
+                          Number(tag.key) <= 11;
+                        const translatedName = isBuiltin
+                          ? t(`cocktailTag.${tag.key}`)
+                          : tag.name;
+                        const finalName =
+                          isBuiltin && translatedName !== `cocktailTag.${tag.key}`
+                            ? translatedName
+                            : tag.name;
+
+                        return (
+                          <TagPill
+                            key={tag.key}
+                            label={finalName}
+                            color={tag.color}
+                            selected={selected}
+                            onPress={() => handleTagFilterToggle(tag.key)}
+                            accessibilityRole="checkbox"
+                            accessibilityState={{ checked: selected }}
+                            androidRippleColor={`${Colors.surfaceVariant}33`}
+                          />
+                        );
+                      })
+                    ) : (
+                      <Text
+                        style={[
+                          styles.filterMenuEmpty,
+                          { color: Colors.onSurfaceVariant },
+                        ]}
+                      >
+                        {t("common.noTagsAvailable")}
+                      </Text>
+                    )}
+                  </View>
                 </View>
               </View>
               {isFilterActive ? (
@@ -2311,81 +2314,105 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   filterMenuOverlay: {
-    flex: 1,
-    backgroundColor: "rgba(0,0,0,0.35)",
-    justifyContent: "center",
-    paddingHorizontal: 16,
+    position: "absolute",
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    backgroundColor: "rgba(0,0,0,0.12)",
+    zIndex: 3,
   },
   filterModalCard: {
+    position: "absolute",
+    right: 16,
+    left: 16,
+    top: "20%",
+    maxHeight: "68%",
     borderWidth: StyleSheet.hairlineWidth,
-    borderRadius: 16,
-    maxHeight: "75%",
-    shadowOpacity: 0.22,
-    shadowRadius: 24,
-    shadowOffset: { width: 0, height: 12 },
-    elevation: 10,
+    borderRadius: 12,
+    zIndex: 4,
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.12,
+    shadowRadius: 12,
+    elevation: 8,
     overflow: "hidden",
   },
   filterModalHeader: {
-    height: 48,
-    paddingHorizontal: 16,
+    height: 44,
+    paddingHorizontal: 12,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: "rgba(127,127,127,0.3)",
   },
   filterModalTitle: {
-    fontSize: 16,
-    fontWeight: "600",
+    fontSize: 32 / 2,
+    fontWeight: "700",
   },
   filterModalCloseButton: {
-    width: 28,
-    height: 28,
+    width: 24,
+    height: 24,
     alignItems: "center",
     justifyContent: "center",
   },
   filterMenuScroll: {
-    maxHeight: 420,
+    maxHeight: 540,
+    paddingBottom: 2,
   },
   filterMenuBody: {
-    gap: 14,
-    paddingHorizontal: 16,
-    paddingTop: 14,
-    paddingBottom: 10,
+    flexDirection: "column",
+    alignItems: "stretch",
+    paddingHorizontal: 12,
+    paddingTop: 12,
+  },
+  filterMenuContent: {
+    flexDirection: "row",
+    alignItems: "stretch",
+    justifyContent: "space-between",
+    minWidth: "100%",
   },
   filterMethodList: {
-    flexDirection: "row",
-    flexWrap: "wrap",
+    flex: 1,
+    flexDirection: "column",
     gap: 8,
+    alignItems: "flex-start",
   },
   filterTagList: {
-    flexDirection: "row",
-    flexWrap: "wrap",
+    flex: 1,
+    flexDirection: "column",
     gap: 8,
+    alignItems: "flex-end",
   },
   filterSeparator: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-  },
-  filterSeparatorLine: {
-    flex: 1,
-    height: StyleSheet.hairlineWidth,
-  },
-  filterSeparatorLabel: {
-    fontSize: 11,
-    fontWeight: "600",
-    letterSpacing: 0.5,
-    textTransform: "uppercase",
-  },
-  filterMenuEmpty: {
-    fontSize: 13,
-  },
-  filterMenuClearButton: {
-    height: 48,
     alignItems: "center",
     justifyContent: "center",
+    paddingHorizontal: 10,
+  },
+  filterSeparatorLine: {
+    width: StyleSheet.hairlineWidth,
+    flex: 1,
+  },
+  filterSeparatorLabel: {
+    fontSize: 12,
+    fontWeight: "700",
+    letterSpacing: 0.6,
+    textTransform: "uppercase",
+    paddingVertical: 4,
+  },
+  filterMenuEmpty: {
+    fontSize: 14,
+    textAlign: "left",
+    paddingHorizontal: 4,
+    paddingVertical: 2,
+  },
+  filterMenuClearButton: {
+    marginTop: 8,
+    marginBottom: 8,
+    marginLeft: 12,
+    alignSelf: "flex-start",
+    paddingHorizontal: 8,
+    paddingVertical: 6,
+    borderRadius: 8,
   },
   filterMenuClearLabel: {
     fontSize: 14,
@@ -2402,8 +2429,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   muddleIcon: {
-    marginTop: 1,
-    marginRight: 1,
+    transform: [{ scaleX: 2 }],
   },
   buttonsContainer: {
     marginTop: -4,
