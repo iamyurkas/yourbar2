@@ -61,8 +61,10 @@ type CocktailTag = NonNullable<Cocktail["tags"]>[number];
 
 const METRIC_UNIT_ID = 11;
 const IMPERIAL_UNIT_ID = 12;
+const PARTS_UNIT_ID = 13;
 const GRAM_UNIT_ID = 8;
 const UNIT_CONVERSION_RATIO = 30;
+type IngredientDisplayMode = "metric" | "imperial" | "parts";
 
 const MAX_RATING = 5;
 
@@ -174,9 +176,36 @@ function convertIngredientAmount(
   return { value: amount, unitId };
 }
 
+function resolveAmountForParts(
+  ingredient: RecipeIngredient,
+): number | undefined {
+  const amount = ingredient.amount?.trim();
+  if (!amount) {
+    return undefined;
+  }
+
+  const parsedAmount = Number(amount);
+  if (Number.isNaN(parsedAmount) || parsedAmount <= 0) {
+    return undefined;
+  }
+
+  const unitId =
+    typeof ingredient.unitId === "number" ? ingredient.unitId : undefined;
+  if (unitId === IMPERIAL_UNIT_ID) {
+    return parsedAmount * UNIT_CONVERSION_RATIO;
+  }
+
+  if (unitId == null || unitId === METRIC_UNIT_ID || unitId === GRAM_UNIT_ID) {
+    return parsedAmount;
+  }
+
+  return undefined;
+}
+
 function formatIngredientQuantity(
   ingredient: RecipeIngredient,
-  useImperialUnits: boolean,
+  displayMode: IngredientDisplayMode,
+  smallestPartAmount: number | undefined,
   asNeededLabel: string,
   t: (key: string, params?: Record<string, string | number>) => string,
   locale: string,
@@ -194,18 +223,34 @@ function formatIngredientQuantity(
   let numericAmount: number | undefined;
 
   if (isNumeric) {
-    const { value, unitId: nextUnitId } = convertIngredientAmount(
-      parsedAmount,
-      unitId,
-      useImperialUnits,
-    );
-    numericAmount = value;
-    displayUnitId = nextUnitId;
+    if (displayMode === "parts") {
+      const partsAmountRaw = resolveAmountForParts(ingredient);
+      const partsAmount =
+        partsAmountRaw != null && smallestPartAmount != null
+          ? partsAmountRaw / smallestPartAmount
+          : undefined;
 
-    if (useImperialUnits && displayUnitId === IMPERIAL_UNIT_ID) {
-      displayAmount = formatOunceAmount(value);
+      if (partsAmount != null && Number.isFinite(partsAmount)) {
+        numericAmount = partsAmount;
+        displayAmount = formatAmount(partsAmount);
+        displayUnitId = PARTS_UNIT_ID;
+      } else {
+        numericAmount = parsedAmount;
+      }
     } else {
-      displayAmount = formatAmount(value);
+      const { value, unitId: nextUnitId } = convertIngredientAmount(
+        parsedAmount,
+        unitId,
+        displayMode === "imperial",
+      );
+      numericAmount = value;
+      displayUnitId = nextUnitId;
+
+      if (displayMode === "imperial" && displayUnitId === IMPERIAL_UNIT_ID) {
+        displayAmount = formatOunceAmount(value);
+      } else {
+        displayAmount = formatAmount(value);
+      }
     }
   }
 
@@ -365,12 +410,15 @@ export default function CocktailDetailsScreen() {
     return parseReturnToParams(params.returnToParams);
   }, [params.returnToParams]);
 
-  const [showImperialUnits, setShowImperialUnits] = useState(useImperialUnits);
+  const [ingredientDisplayMode, setIngredientDisplayMode] =
+    useState<IngredientDisplayMode>(useImperialUnits ? "imperial" : "metric");
   const isHandlingBackRef = useRef(false);
   const shouldNavigateAway = !loading && !cocktail;
 
   useEffect(() => {
-    setShowImperialUnits(useImperialUnits);
+    setIngredientDisplayMode((current) =>
+      current === "parts" ? current : useImperialUnits ? "imperial" : "metric",
+    );
   }, [useImperialUnits]);
 
   const handleReturn = useCallback(() => {
@@ -623,8 +671,20 @@ export default function CocktailDetailsScreen() {
   const [expandedMethodIds, setExpandedMethodIds] = useState<string[]>([]);
   const [isHelpVisible, setIsHelpVisible] = useState(false);
 
-  const handleToggleUnits = useCallback(() => {
-    setShowImperialUnits((current) => !current);
+  const smallestPartAmount = useMemo(() => {
+    const convertibleAmounts = sortedIngredients
+      .map((ingredient) => resolveAmountForParts(ingredient))
+      .filter((amount): amount is number => amount != null && amount > 0);
+
+    if (!convertibleAmounts.length) {
+      return undefined;
+    }
+
+    return Math.min(...convertibleAmounts);
+  }, [sortedIngredients]);
+
+  const handleSelectDisplayMode = useCallback((mode: IngredientDisplayMode) => {
+    setIngredientDisplayMode(mode);
   }, []);
 
   const toggleMethodDescription = useCallback((methodId: string) => {
@@ -796,30 +856,43 @@ export default function CocktailDetailsScreen() {
                 })}
               </View>
 
-              <Pressable
-                onPress={handleToggleUnits}
+              <View
                 style={[
-                  styles.toggleUnitsButton,
+                  styles.displayModeSwitcher,
                   {
                     borderColor: Colors.primary,
                     backgroundColor: Colors.surfaceBright,
                   },
                 ]}
-                accessibilityRole="button"
-                accessibilityLabel={
-                  showImperialUnits
-                    ? t("cocktailDetails.showInMetric")
-                    : t("cocktailDetails.showInImperial")
-                }
               >
-                <Text
-                  style={[styles.toggleUnitsLabel, { color: Colors.primary }]}
-                >
-                  {showImperialUnits
-                    ? t("cocktailDetails.showInMetric")
-                    : t("cocktailDetails.showInImperial")}
-                </Text>
-              </Pressable>
+                {(["imperial", "metric", "parts"] as const).map((mode) => {
+                  const isActive = ingredientDisplayMode === mode;
+                  return (
+                    <Pressable
+                      key={mode}
+                      onPress={() => handleSelectDisplayMode(mode)}
+                      style={[
+                        styles.displayModeOption,
+                        isActive
+                          ? { backgroundColor: Colors.primary }
+                          : undefined,
+                      ]}
+                      accessibilityRole="button"
+                      accessibilityState={{ selected: isActive }}
+                      accessibilityLabel={t(`cocktailDetails.displayMode.${mode}`)}
+                    >
+                      <Text
+                        style={[
+                          styles.displayModeOptionLabel,
+                          { color: isActive ? Colors.onPrimary : Colors.primary },
+                        ]}
+                      >
+                        {t(`cocktailDetails.displayMode.${mode}`)}
+                      </Text>
+                    </Pressable>
+                  );
+                })}
+              </View>
 
               {photoSource && glassSource && glassLabel ? (
                 <View style={styles.glassInfo}>
@@ -1067,7 +1140,8 @@ export default function CocktailDetailsScreen() {
                   {sortedIngredients.map((ingredient, index) => {
                     const quantity = formatIngredientQuantity(
                       ingredient,
-                      showImperialUnits,
+                      ingredientDisplayMode,
+                      smallestPartAmount,
                       t("cocktailDetails.asNeeded"),
                       t,
                       locale,
@@ -1440,14 +1514,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  toggleUnitsButton: {
-    alignSelf: "center",
-    paddingVertical: 8,
-    paddingHorizontal: 20,
-    borderRadius: 8,
+  displayModeSwitcher: {
+    borderRadius: 14,
     borderWidth: 1,
+    flexDirection: "row",
+    alignSelf: "center",
+    overflow: "hidden",
+    marginBottom: 16,
   },
-  toggleUnitsLabel: {
+  displayModeOption: {
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+  },
+  displayModeOptionLabel: {
     fontSize: 14,
     fontWeight: "600",
     textAlign: "center",
