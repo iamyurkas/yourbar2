@@ -149,6 +149,22 @@ export function hydrateTagsFromCode(
 }
 
 export function hydrateInventoryTagsFromCode(data: InventoryExportData): InventoryData {
+  const normalizeBarcodes = (values?: string[] | null): string[] | undefined => {
+    if (!values || values.length === 0) {
+      return undefined;
+    }
+
+    const unique = Array.from(
+      new Set(
+        values
+          .map((value) => value?.trim())
+          .filter((value): value is string => Boolean(value)),
+      ),
+    );
+
+    return unique.length > 0 ? unique : undefined;
+  };
+
   return {
     ...data,
     cocktails: data.cocktails.map((cocktail) => ({
@@ -158,6 +174,7 @@ export function hydrateInventoryTagsFromCode(data: InventoryExportData): Invento
     ingredients: data.ingredients.map((ingredient) => ({
       ...ingredient,
       tags: hydrateTagsFromCode(ingredient.tags, BUILTIN_INGREDIENT_TAGS_BY_ID),
+      barcodes: normalizeBarcodes(ingredient.barcodes),
     })),
   };
 }
@@ -239,6 +256,9 @@ export function toIngredientStorageRecord(ingredient: Ingredient | IngredientRec
     baseIngredientId: ingredient.baseIngredientId ?? undefined,
     styleIngredientId: ingredient.styleIngredientId ?? undefined,
     photoUri: ingredient.photoUri ?? undefined,
+    imageUrl: ingredient.imageUrl ?? undefined,
+    abv: ingredient.abv ?? undefined,
+    barcodes: ingredient.barcodes ?? undefined,
   } satisfies IngredientStorageRecord;
 }
 

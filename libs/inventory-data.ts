@@ -51,6 +51,9 @@ type RawIngredient = {
   name: string;
   description?: string;
   photoUri?: string;
+  imageUrl?: string;
+  abv?: number;
+  barcodes?: string[];
   baseIngredientId?: number;
   styleIngredientId?: number;
   tags?: RawTag[];

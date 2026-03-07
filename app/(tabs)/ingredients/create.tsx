@@ -82,6 +82,10 @@ export default function IngredientFormScreen() {
     mode?: string;
     ingredientId?: string;
     fromCocktailAddIngredient?: string;
+    prefillBarcode?: string;
+    prefillDescription?: string;
+    prefillImageUrl?: string;
+    prefillAbv?: string;
   }>();
   const modeParam = getParamValue(params.mode);
   const isEditMode = modeParam === 'edit';
@@ -90,6 +94,23 @@ export default function IngredientFormScreen() {
     const value = getParamValue(params.suggestedName);
     return typeof value === 'string' ? value : undefined;
   }, [params.suggestedName]);
+  const prefillBarcodeParam = useMemo(() => {
+    const value = getParamValue(params.prefillBarcode);
+    return typeof value === 'string' ? value : undefined;
+  }, [params.prefillBarcode]);
+  const prefillDescriptionParam = useMemo(() => {
+    const value = getParamValue(params.prefillDescription);
+    return typeof value === 'string' ? value : undefined;
+  }, [params.prefillDescription]);
+  const prefillImageUrlParam = useMemo(() => {
+    const value = getParamValue(params.prefillImageUrl);
+    return typeof value === 'string' ? value : undefined;
+  }, [params.prefillImageUrl]);
+  const prefillAbvParam = useMemo(() => {
+    const value = getParamValue(params.prefillAbv);
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : undefined;
+  }, [params.prefillAbv]);
   const returnToPathParam = useMemo(() => {
     const value = getParamValue(params.returnToPath);
     return typeof value === 'string' && value.length > 0 ? value : undefined;
@@ -206,8 +227,8 @@ export default function IngredientFormScreen() {
     }
 
     setName(suggestedNameParam ?? '');
-    setDescription('');
-    setImageUri(null);
+    setDescription(prefillDescriptionParam ?? '');
+    setImageUri(prefillImageUrlParam ?? null);
     setSelectedTagIds(defaultIngredientTagId == null ? [] : [defaultIngredientTagId]);
     setBaseIngredientId(null);
     setStyleIngredientId(null);
@@ -218,7 +239,7 @@ export default function IngredientFormScreen() {
     setInitialSnapshot(null);
     setIsSaving(false);
     setIsInitialized(true);
-  }, [defaultIngredientTagId, isEditMode, suggestedNameParam]);
+  }, [defaultIngredientTagId, isEditMode, prefillDescriptionParam, prefillImageUrlParam, suggestedNameParam]);
 
   useEffect(() => {
     if (!isEditMode || !ingredient) {
@@ -544,6 +565,9 @@ export default function IngredientFormScreen() {
           baseIngredientId,
           styleIngredientId,
           tags: selectedTags,
+      barcodes: prefillBarcodeParam ? [prefillBarcodeParam] : undefined,
+      abv: prefillAbvParam,
+      imageUrl: prefillImageUrlParam,
         };
 
         const updated = updateIngredient(numericIngredientId, {
@@ -614,6 +638,9 @@ export default function IngredientFormScreen() {
       baseIngredientId,
       styleIngredientId,
       tags: selectedTags,
+      barcodes: prefillBarcodeParam ? [prefillBarcodeParam] : undefined,
+      abv: prefillAbvParam,
+      imageUrl: prefillImageUrlParam,
     };
 
     let created = createIngredient(submission);
@@ -686,6 +713,9 @@ export default function IngredientFormScreen() {
     returnToParams,
     returnToPath,
     selectedTagIds,
+    prefillAbvParam,
+    prefillBarcodeParam,
+    prefillImageUrlParam,
     setHasUnsavedChanges,
     showDialog,
     t,
@@ -1397,6 +1427,16 @@ export default function IngredientFormScreen() {
           ]}
           placeholderTextColor={`${Colors.onSurfaceVariant}99`}
         />
+        {!isEditMode ? (
+          <Pressable
+            accessibilityRole="button"
+            onPress={() => router.push('/ingredients/scan')}
+            style={[styles.scanButton, { borderColor: Colors.tint, backgroundColor: Colors.surfaceBright }]}
+          >
+            <MaterialCommunityIcons name="barcode-scan" size={18} color={Colors.tint} />
+            <Text style={[styles.scanButtonText, { color: Colors.tint }]}>{t('barcode.scanBarcode')}</Text>
+          </Pressable>
+        ) : null}
       </View>
 
       <View style={styles.photoTileWrapper}>
@@ -1989,6 +2029,23 @@ const styles = StyleSheet.create({
   },
   submitLabel: {
     fontSize: 16,
+    fontWeight: '600',
+  },
+  scanButton: {
+    marginTop: 10,
+    borderWidth: 1,
+    borderRadius: 10,
+    minWidth: 250,
+    height: 56,
+    paddingHorizontal: 14,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    alignSelf: 'center',
+  },
+  scanButtonText: {
+    fontSize: 14,
     fontWeight: '600',
   },
   buttonsContainer: {
