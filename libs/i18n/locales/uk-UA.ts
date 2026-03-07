@@ -395,6 +395,12 @@ export const ukUATranslations: TranslationDictionary = {
   "ingredients.clearSelectedTagFilters": "Очистити вибрані фільтри тегів",
   "ingredients.addIngredient": "Додати інгредієнт",
 
+  "ingredients.sortBy": "Сортувати за",
+  "ingredients.sortOptionAlphabeticalAccessibility": "Сортувати інгредієнти за A-z",
+  "ingredients.sortOptionUnlocksMostCocktailsAccessibility": "Сортувати інгредієнти за кількістю відкритих коктейлів",
+  "ingredients.sortOptionMostUsedAccessibility": "Сортувати інгредієнти за частотою використання",
+  "ingredients.sortOptionRecentlyAddedAccessibility": "Сортувати інгредієнти за датою додавання",
+
   "cocktails.oneMoreIngredientForMore": "Ще інгредієнт — більше коктейлів",
   "cocktails.removeIngredientFromShopping":
     "Видалити інгредієнт зі списку покупок",
