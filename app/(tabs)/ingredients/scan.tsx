@@ -220,11 +220,11 @@ export default function ScanIngredientScreen() {
           <Pressable style={[styles.button, styles.buttonPrimary, { backgroundColor: colors.tint }]} onPress={() => router.replace({ pathname: '/ingredients/[ingredientId]', params: { ingredientId: String(scanState.ingredientId) } })}>
             <Text style={[styles.buttonText, { color: colors.onPrimary }]}>{t('barcode.openExisting')}</Text>
           </Pressable>
-          <Pressable style={[styles.button, styles.buttonSecondary, { backgroundColor: colors.surfaceBright }]} onPress={() => createDuplicate(scanState.barcode)}>
-            <Text style={[styles.buttonText, { color: colors.onSurface }]}>{t('barcode.createDuplicate')}</Text>
+          <Pressable style={[styles.button, styles.buttonOutline, { backgroundColor: colors.surfaceBright, borderColor: colors.tint }]} onPress={() => createDuplicate(scanState.barcode)}>
+            <Text style={[styles.buttonText, { color: colors.tint }]}>{t('barcode.createDuplicate')}</Text>
           </Pressable>
-          <Pressable style={[styles.button, styles.buttonSecondary, { backgroundColor: colors.surfaceBright }]} onPress={() => router.back()}>
-            <Text style={[styles.buttonText, { color: colors.onSurface }]}>{t('common.cancel')}</Text>
+          <Pressable style={[styles.button, styles.buttonOutline, { backgroundColor: colors.surfaceBright, borderColor: colors.tint }]} onPress={() => router.back()}>
+            <Text style={[styles.buttonText, { color: colors.tint }]}>{t('common.cancel')}</Text>
           </Pressable>
         </View>
       ) : null}
@@ -238,11 +238,11 @@ export default function ScanIngredientScreen() {
           <Pressable style={[styles.button, styles.buttonPrimary, { backgroundColor: colors.tint }]} onPress={() => attachBarcode(scanState.ingredientId, scanState.draft.barcode)}>
             <Text style={[styles.buttonText, { color: colors.onPrimary }]}>{t('barcode.addBarcodeToExisting')}</Text>
           </Pressable>
-          <Pressable style={[styles.button, styles.buttonSecondary, { backgroundColor: colors.surfaceBright }]} onPress={() => createWithDraft(scanState.draft)}>
-            <Text style={[styles.buttonText, { color: colors.onSurface }]}>{t('barcode.createNewIngredient')}</Text>
+          <Pressable style={[styles.button, styles.buttonOutline, { backgroundColor: colors.surfaceBright, borderColor: colors.tint }]} onPress={() => createWithDraft(scanState.draft)}>
+            <Text style={[styles.buttonText, { color: colors.tint }]}>{t('barcode.createNewIngredient')}</Text>
           </Pressable>
-          <Pressable style={[styles.button, styles.buttonSecondary, { backgroundColor: colors.surfaceBright }]} onPress={() => router.back()}>
-            <Text style={[styles.buttonText, { color: colors.onSurface }]}>{t('common.cancel')}</Text>
+          <Pressable style={[styles.button, styles.buttonOutline, { backgroundColor: colors.surfaceBright, borderColor: colors.tint }]} onPress={() => router.back()}>
+            <Text style={[styles.buttonText, { color: colors.tint }]}>{t('common.cancel')}</Text>
           </Pressable>
         </View>
       ) : null}
@@ -257,11 +257,11 @@ export default function ScanIngredientScreen() {
           <Pressable style={[styles.button, styles.buttonPrimary, { backgroundColor: colors.tint }]} onPress={() => createWithDraft(scanState.draft)}>
             <Text style={[styles.buttonText, { color: colors.onPrimary }]}>{t('barcode.createIngredient')}</Text>
           </Pressable>
-          <Pressable style={[styles.button, styles.buttonSecondary, { backgroundColor: colors.surfaceBright }]} onPress={() => editWithDraft(scanState.draft)}>
-            <Text style={[styles.buttonText, { color: colors.onSurface }]}>{t('barcode.editBeforeSaving')}</Text>
+          <Pressable style={[styles.button, styles.buttonOutline, { backgroundColor: colors.surfaceBright, borderColor: colors.tint }]} onPress={() => editWithDraft(scanState.draft)}>
+            <Text style={[styles.buttonText, { color: colors.tint }]}>{t('barcode.editBeforeSaving')}</Text>
           </Pressable>
-          <Pressable style={[styles.button, styles.buttonSecondary, { backgroundColor: colors.surfaceBright }]} onPress={() => router.back()}>
-            <Text style={[styles.buttonText, { color: colors.onSurface }]}>{t('common.cancel')}</Text>
+          <Pressable style={[styles.button, styles.buttonOutline, { backgroundColor: colors.surfaceBright, borderColor: colors.tint }]} onPress={() => router.back()}>
+            <Text style={[styles.buttonText, { color: colors.tint }]}>{t('common.cancel')}</Text>
           </Pressable>
         </View>
       ) : null}
@@ -273,11 +273,11 @@ export default function ScanIngredientScreen() {
           <Pressable style={[styles.button, styles.buttonPrimary, { backgroundColor: colors.tint }]} onPress={() => router.push({ pathname: '/ingredients/create', params: { prefillBarcode: scanState.barcode } })}>
             <Text style={[styles.buttonText, { color: colors.onPrimary }]}>{t('barcode.createManually')}</Text>
           </Pressable>
-          <Pressable style={[styles.button, styles.buttonSecondary, { backgroundColor: colors.surfaceBright }]} onPress={resetScanner}>
-            <Text style={[styles.buttonText, { color: colors.onSurface }]}>{t('barcode.scanAgain')}</Text>
+          <Pressable style={[styles.button, styles.buttonOutline, { backgroundColor: colors.surfaceBright, borderColor: colors.tint }]} onPress={resetScanner}>
+            <Text style={[styles.buttonText, { color: colors.tint }]}>{t('barcode.scanAgain')}</Text>
           </Pressable>
-          <Pressable style={[styles.button, styles.buttonSecondary, { backgroundColor: colors.surfaceBright }]} onPress={() => router.back()}>
-            <Text style={[styles.buttonText, { color: colors.onSurface }]}>{t('common.cancel')}</Text>
+          <Pressable style={[styles.button, styles.buttonOutline, { backgroundColor: colors.surfaceBright, borderColor: colors.tint }]} onPress={() => router.back()}>
+            <Text style={[styles.buttonText, { color: colors.tint }]}>{t('common.cancel')}</Text>
           </Pressable>
         </View>
       ) : null}
@@ -314,21 +314,20 @@ const styles = StyleSheet.create({
   message: { fontSize: 15 },
   previewImage: { width: '100%', height: 180, borderRadius: 12 },
   button: {
-    borderRadius: 12,
-    minHeight: 56,
+    minWidth: 250,
+    height: 56,
+    borderRadius: 10,
+    paddingHorizontal: 14,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 16,
   },
-  buttonPrimary: {
-    minWidth: 250,
-  },
-  buttonSecondary: {
-    minWidth: 250,
+  buttonPrimary: {},
+  buttonOutline: {
+    borderWidth: 1,
   },
   buttonText: {
     textAlign: 'center',
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '600',
   },
 });

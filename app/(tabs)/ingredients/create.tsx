@@ -1431,7 +1431,7 @@ export default function IngredientFormScreen() {
           <Pressable
             accessibilityRole="button"
             onPress={() => router.push('/ingredients/scan')}
-            style={[styles.scanButton, { borderColor: Colors.outlineVariant }]}
+            style={[styles.scanButton, { borderColor: Colors.tint, backgroundColor: Colors.surfaceBright }]}
           >
             <MaterialCommunityIcons name="barcode-scan" size={18} color={Colors.tint} />
             <Text style={[styles.scanButtonText, { color: Colors.tint }]}>{t('barcode.scanBarcode')}</Text>
@@ -2033,11 +2033,11 @@ const styles = StyleSheet.create({
   },
   scanButton: {
     marginTop: 10,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderRadius: 12,
-    minHeight: 56,
+    borderWidth: 1,
+    borderRadius: 10,
     minWidth: 250,
-    paddingHorizontal: 16,
+    height: 56,
+    paddingHorizontal: 14,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -2045,7 +2045,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   scanButtonText: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '600',
   },
   buttonsContainer: {
