@@ -1022,6 +1022,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         const description = input.description?.trim() || undefined;
         const synonyms = normalizeSynonyms(input.synonyms);
         const photoUri = input.photoUri?.trim() || undefined;
+        const imageUrl = input.imageUrl?.trim() || undefined;
+        const abv = input.abv != null && Number.isFinite(Number(input.abv)) ? Number(input.abv) : undefined;
+        const barcodes = Array.from(new Set((input.barcodes ?? []).map((value) => value?.trim()).filter((value): value is string => Boolean(value))));
 
         const tagMap = new Map<number, IngredientTag>();
         (input.tags ?? []).forEach((tag) => {
@@ -1049,6 +1052,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           baseIngredientId,
           styleIngredientId,
           photoUri,
+          imageUrl,
+          abv,
+          barcodes: barcodes.length > 0 ? barcodes : undefined,
         };
 
         const [normalized] = normalizeSearchFields([candidateRecord]);
@@ -1550,6 +1556,14 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             ? normalizeSynonyms(input.synonyms)
             : prev.ingredients[ingredientIndex]?.synonyms ?? undefined;
         const photoUri = input.photoUri?.trim() || undefined;
+        const previous = prev.ingredients[ingredientIndex];
+        const imageUrl = input.imageUrl?.trim() || previous?.imageUrl || undefined;
+        const abv = input.abv != null && Number.isFinite(Number(input.abv))
+          ? Number(input.abv)
+          : previous?.abv ?? undefined;
+        const barcodes = input.barcodes !== undefined
+          ? Array.from(new Set((input.barcodes ?? []).map((value) => value?.trim()).filter((value): value is string => Boolean(value))))
+          : previous?.barcodes ?? [];
 
         const tagMap = new Map<number, IngredientTag>();
         (input.tags ?? []).forEach((tag) => {
@@ -1568,16 +1582,19 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         });
         const tags = tagMap.size > 0 ? Array.from(tagMap.values()) : undefined;
 
-        const previous = prev.ingredients[ingredientIndex];
         const candidateRecord = {
           ...previous,
           id: previous.id,
-          name: previous.name,
-          description: previous.description,
+          name: trimmedName,
+          description,
+          synonyms,
           tags,
           baseIngredientId,
           styleIngredientId,
           photoUri,
+          imageUrl,
+          abv,
+          barcodes: barcodes.length > 0 ? barcodes : undefined,
         };
 
         const [normalized] = normalizeSearchFields([candidateRecord]);

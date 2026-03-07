@@ -37,6 +37,9 @@ export type IngredientRecord = Omit<BaseIngredientRecord, 'tags'> & {
   tags?: IngredientTag[] | null;
   synonyms?: string[] | null;
   styleIngredientId?: number | null;
+  imageUrl?: string | null;
+  abv?: number | null;
+  barcodes?: string[] | null;
 };
 
 export type CocktailSubstitute = CocktailSubstituteRecord & { brand?: boolean };
@@ -140,6 +143,9 @@ export type CreateIngredientInput = {
   description?: string | null;
   synonyms?: string[] | null;
   photoUri?: string | null;
+  imageUrl?: string | null;
+  abv?: number | null;
+  barcodes?: string[] | null;
   baseIngredientId?: number | null;
   styleIngredientId?: number | null;
   tags?: IngredientTag[] | null;

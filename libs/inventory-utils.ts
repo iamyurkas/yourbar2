@@ -239,6 +239,9 @@ export function toIngredientStorageRecord(ingredient: Ingredient | IngredientRec
     baseIngredientId: ingredient.baseIngredientId ?? undefined,
     styleIngredientId: ingredient.styleIngredientId ?? undefined,
     photoUri: ingredient.photoUri ?? undefined,
+    imageUrl: ingredient.imageUrl ?? undefined,
+    abv: ingredient.abv ?? undefined,
+    barcodes: ingredient.barcodes ?? undefined,
   } satisfies IngredientStorageRecord;
 }
 
