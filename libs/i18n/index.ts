@@ -8,9 +8,9 @@ import type { LanguageOption, SupportedLocale, TranslationDictionary } from '@/l
 export const DEFAULT_LOCALE: SupportedLocale = 'en-GB';
 
 export const LANGUAGE_OPTIONS: LanguageOption[] = [
-  { code: 'de-DE', name: 'German', nativeName: 'Deutsch', flag: '🇩🇪' },
   { code: 'en-GB', name: 'English', nativeName: 'English', flag: '🇬🇧' },
   { code: 'en-US', name: 'English (US)', nativeName: 'English (US)', flag: '🇺🇸' },
+  { code: 'de-DE', name: 'German', nativeName: 'Deutsch', flag: '🇩🇪' },
   { code: 'es-ES', name: 'Spanish', nativeName: 'Español (España)', flag: '🇪🇸' },
   { code: 'uk-UA', name: 'Ukrainian', nativeName: 'Українська', flag: '🇺🇦' },
 ];
