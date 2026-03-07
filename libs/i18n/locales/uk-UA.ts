@@ -406,6 +406,12 @@ export const ukUATranslations: TranslationDictionary = {
   "cocktails.collapseIngredientGroup": "Згорнути коктейлі для {{name}}",
   "cocktails.expandIngredientGroup": "Розгорнути коктейлі для {{name}}",
   "cocktails.clearSelectedFilters": "Очистити вибрані фільтри",
+
+  "cocktails.sortBy": "Сортувати за",
+  "cocktails.sortOptionAlphabeticalAccessibility": "Сортувати за A-z",
+  "cocktails.sortOptionRequiredCountAccessibility": "Сортувати за кількістю обов’язкових інгредієнтів",
+  "cocktails.sortOptionMissingRequiredCountAccessibility": "Сортувати за кількістю відсутніх обов’язкових інгредієнтів",
+  "cocktails.sortOptionRatingAccessibility": "Сортувати за рейтингом",
   "cocktails.addCocktail": "Додати коктейль",
 
   "shakerResults.helpTitle": "Результати шейкера",

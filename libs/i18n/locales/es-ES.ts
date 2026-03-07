@@ -398,6 +398,12 @@ export const esESTranslations: TranslationDictionary = {
   "cocktails.collapseIngredientGroup": "Contraer cócteles de {{name}}",
   "cocktails.expandIngredientGroup": "Expandir cócteles de {{name}}",
   "cocktails.clearSelectedFilters": "Borrar filtros seleccionados",
+
+  "cocktails.sortBy": "Ordenar por",
+  "cocktails.sortOptionAlphabeticalAccessibility": "Ordenar por A-z",
+  "cocktails.sortOptionRequiredCountAccessibility": "Ordenar por cantidad de ingredientes obligatorios",
+  "cocktails.sortOptionMissingRequiredCountAccessibility": "Ordenar por cantidad de ingredientes obligatorios faltantes",
+  "cocktails.sortOptionRatingAccessibility": "Ordenar por valoración",
   "cocktails.addCocktail": "Añadir cóctel",
   "shakerResults.helpTitle": "Resultados de la coctelera",
   "shakerResults.helpText":

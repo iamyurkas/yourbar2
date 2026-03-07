@@ -40,6 +40,7 @@ import { buildTagOptions, type TagOption } from '@/libs/tag-options';
 import { useCocktailTabLogic, type MyTabListItem } from '@/libs/use-cocktail-tab-logic';
 import { useInventoryActions, useInventoryData, useInventorySettings, type Cocktail } from '@/providers/inventory-provider';
 import { tagColors } from '@/theme/theme';
+import IngredientsIcon from '@/assets/images/ingredients.svg';
 
 type CocktailMethodOption = {
   id: CocktailMethod['id'];
@@ -48,6 +49,13 @@ type CocktailMethodOption = {
 
 const METHOD_ICON_SIZE = 16;
 type CocktailAvailabilitySummary = ReturnType<typeof summariseCocktailAvailability>;
+type CocktailSortOption = 'alphabetical' | 'requiredCount' | 'missingRequiredCount' | 'rating';
+
+function countRequiredIngredients(cocktail: Cocktail, ignoreGarnish: boolean): number {
+  return (cocktail.ingredients ?? []).filter(
+    (ingredient) => !ingredient?.optional && !(ignoreGarnish && ingredient?.garnish),
+  ).length;
+}
 
 export default function CocktailsScreen() {
   const { onTabChangeRequest } = useOnboardingAnchors();
@@ -67,6 +75,7 @@ export default function CocktailsScreen() {
     () => new Set(),
   );
   const [selectedStarRatings, setSelectedStarRatings] = useState<Set<number>>(() => new Set());
+  const [selectedSortOption, setSelectedSortOption] = useState<CocktailSortOption>('alphabetical');
   const [collapsedMissingIngredientIds, setCollapsedMissingIngredientIds] = useState<Set<number>>(
     () => new Set(),
   );
@@ -184,6 +193,11 @@ export default function CocktailsScreen() {
     setSelectedTagKeys((previous) => (previous.size === 0 ? previous : new Set<string>()));
     setSelectedMethodIds((previous) => (previous.size === 0 ? previous : new Set<CocktailMethod['id']>()));
     setSelectedStarRatings((previous) => (previous.size === 0 ? previous : new Set<number>()));
+    setSelectedSortOption('alphabetical');
+  }, []);
+
+  const handleSortOptionChange = useCallback((option: CocktailSortOption) => {
+    setSelectedSortOption((previous) => (previous === option ? previous : option));
   }, []);
 
   const handleStarRatingFilterToggle = useCallback((rating: number) => {
@@ -462,27 +476,67 @@ export default function CocktailsScreen() {
     );
   }, [filteredByTags, normalizedQuery]);
 
-  const sortedCocktails = useMemo(
-    () => [...filteredCocktails].sort((a, b) => compareOptionalGlobalAlphabet(a.name, b.name)),
-    [filteredCocktails],
-  );
+  const filteredAvailabilitySummaryByKey = useMemo(() => {
+    const summaryMap = new Map<string, CocktailAvailabilitySummary>();
 
-  const sortedFavorites = useMemo(() => {
-    if (activeTab !== 'favorites') {
-      return sortedCocktails;
-    }
+    filteredCocktails.forEach((cocktail) => {
+      const cocktailKey = String(cocktail.id ?? cocktail.name);
+      summaryMap.set(
+        cocktailKey,
+        summariseCocktailAvailability(cocktail, availableIngredientIds, ingredientLookup, undefined, {
+          ignoreGarnish,
+          allowAllSubstitutes,
+        }),
+      );
+    });
 
-    return [...filteredCocktails].sort((a, b) => {
-      const ratingA = getCocktailRating(a);
-      const ratingB = getCocktailRating(b);
+    return summaryMap;
+  }, [allowAllSubstitutes, availableIngredientIds, filteredCocktails, ignoreGarnish, ingredientLookup]);
 
-      if (ratingA !== ratingB) {
-        return ratingB - ratingA;
+  const compareCocktailsBySelectedSort = useCallback(
+    (left: Cocktail, right: Cocktail) => {
+      const leftName = left.name ?? '';
+      const rightName = right.name ?? '';
+
+      if (selectedSortOption === 'alphabetical') {
+        return compareOptionalGlobalAlphabet(leftName, rightName);
       }
 
-      return compareOptionalGlobalAlphabet(a.name, b.name);
-    });
-  }, [activeTab, filteredCocktails, getCocktailRating, sortedCocktails]);
+      if (selectedSortOption === 'requiredCount') {
+        const leftCount = countRequiredIngredients(left, ignoreGarnish);
+        const rightCount = countRequiredIngredients(right, ignoreGarnish);
+        if (leftCount !== rightCount) {
+          return leftCount - rightCount;
+        }
+        return compareOptionalGlobalAlphabet(leftName, rightName);
+      }
+
+      if (selectedSortOption === 'missingRequiredCount') {
+        const leftKey = String(left.id ?? left.name);
+        const rightKey = String(right.id ?? right.name);
+        const leftMissing = filteredAvailabilitySummaryByKey.get(leftKey)?.missingCount ?? 0;
+        const rightMissing = filteredAvailabilitySummaryByKey.get(rightKey)?.missingCount ?? 0;
+        if (leftMissing !== rightMissing) {
+          return leftMissing - rightMissing;
+        }
+        return compareOptionalGlobalAlphabet(leftName, rightName);
+      }
+
+      const leftRating = getCocktailRating(left);
+      const rightRating = getCocktailRating(right);
+      if (leftRating !== rightRating) {
+        return rightRating - leftRating;
+      }
+
+      return compareOptionalGlobalAlphabet(leftName, rightName);
+    },
+    [filteredAvailabilitySummaryByKey, getCocktailRating, ignoreGarnish, selectedSortOption],
+  );
+
+  const sortedCocktails = useMemo(
+    () => [...filteredCocktails].sort(compareCocktailsBySelectedSort),
+    [compareCocktailsBySelectedSort, filteredCocktails],
+  );
 
   const myTabListData = useCocktailTabLogic({
     allowAllSubstitutes,
@@ -491,6 +545,7 @@ export default function CocktailsScreen() {
     ignoreGarnish,
     ingredientLookup,
     defaultTagColor,
+    compareCocktails: compareCocktailsBySelectedSort,
   });
 
   const visibleMyTabItems = useMemo(() => {
@@ -584,7 +639,7 @@ export default function CocktailsScreen() {
   const availabilitySummaryByKey = useMemo(() => {
     const summaryMap = new Map<string, CocktailAvailabilitySummary>();
 
-    sortedFavorites.forEach((cocktail) => {
+    sortedCocktails.forEach((cocktail) => {
       const cocktailKey = String(cocktail.id ?? cocktail.name);
       summaryMap.set(
         cocktailKey,
@@ -610,7 +665,7 @@ export default function CocktailsScreen() {
     ignoreGarnish,
     ingredientLookup,
     locale,
-    sortedFavorites,
+    sortedCocktails,
     t,
   ]);
 
@@ -861,7 +916,11 @@ export default function CocktailsScreen() {
     [myTabListData, Colors],
   );
 
-  const isFilterActive = selectedTagKeys.size > 0 || selectedMethodIds.size > 0 || selectedStarRatings.size > 0;
+  const isFilterActive =
+    selectedTagKeys.size > 0 ||
+    selectedMethodIds.size > 0 ||
+    selectedStarRatings.size > 0 ||
+    selectedSortOption !== 'alphabetical';
   const isMyTab = activeTab === 'my';
   const emptyMessage = useMemo(() => {
     switch (activeTab) {
@@ -951,6 +1010,58 @@ export default function CocktailsScreen() {
                 },
               ]}>
               <CocktailFiltersPanel
+                sortSectionLabel={t('cocktails.sortBy')}
+                sortOptions={[
+                  {
+                    key: 'alphabetical',
+                    label: 'A-z',
+                    selected: selectedSortOption === 'alphabetical',
+                    onPress: () => handleSortOptionChange('alphabetical'),
+                    accessibilityLabel: t('cocktails.sortOptionAlphabeticalAccessibility'),
+                  },
+                  {
+                    key: 'requiredCount',
+                    label: '',
+                    selected: selectedSortOption === 'requiredCount',
+                    onPress: () => handleSortOptionChange('requiredCount'),
+                    accessibilityLabel: t('cocktails.sortOptionRequiredCountAccessibility'),
+                    icon: (
+                      <Image
+                        source={IngredientsIcon}
+                        style={{ width: 16, height: 16, tintColor: selectedSortOption === 'requiredCount' ? Colors.surface : Colors.tint }}
+                        contentFit="contain"
+                      />
+                    ),
+                  },
+                  {
+                    key: 'missingRequiredCount',
+                    label: '',
+                    selected: selectedSortOption === 'missingRequiredCount',
+                    onPress: () => handleSortOptionChange('missingRequiredCount'),
+                    accessibilityLabel: t('cocktails.sortOptionMissingRequiredCountAccessibility'),
+                    icon: (
+                      <MaterialCommunityIcons
+                        name="check"
+                        size={16}
+                        color={selectedSortOption === 'missingRequiredCount' ? Colors.surface : Colors.tint}
+                      />
+                    ),
+                  },
+                  {
+                    key: 'rating',
+                    label: '',
+                    selected: selectedSortOption === 'rating',
+                    onPress: () => handleSortOptionChange('rating'),
+                    accessibilityLabel: t('cocktails.sortOptionRatingAccessibility'),
+                    icon: (
+                      <MaterialCommunityIcons
+                        name="star"
+                        size={16}
+                        color={selectedSortOption === 'rating' ? Colors.surface : Colors.tint}
+                      />
+                    ),
+                  },
+                ]}
                 availableStarRatings={availableStarRatings}
                 selectedStarRatings={selectedStarRatings}
                 onToggleStarRating={handleStarRatingFilterToggle}
@@ -963,7 +1074,7 @@ export default function CocktailsScreen() {
                 selectedTagKeys={selectedTagKeys}
                 onToggleTag={handleTagFilterToggle}
                 onClearFilters={handleClearFilters}
-                showClearButton={selectedTagKeys.size > 0 || selectedMethodIds.size > 0 || selectedStarRatings.size > 0}
+                showClearButton={isFilterActive}
                 tintColor={Colors.tint}
                 outlineColor={Colors.outline}
                 onSurfaceVariantColor={Colors.onSurfaceVariant}
@@ -1008,7 +1119,7 @@ export default function CocktailsScreen() {
         ) : (
           <FlatList<Cocktail>
             ref={listRef as React.RefObject<FlatList<Cocktail>>}
-            data={sortedFavorites}
+            data={sortedCocktails}
             keyExtractor={keyExtractor}
             renderItem={renderItem}
             ItemSeparatorComponent={renderSeparator}

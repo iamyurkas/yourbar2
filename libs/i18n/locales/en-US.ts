@@ -406,6 +406,12 @@ export const enUSTranslations: TranslationDictionary = {
   "cocktails.collapseIngredientGroup": "Collapse {{name}} cocktails",
   "cocktails.expandIngredientGroup": "Expand {{name}} cocktails",
   "cocktails.clearSelectedFilters": "Clear selected filters",
+
+  "cocktails.sortBy": "Sort by",
+  "cocktails.sortOptionAlphabeticalAccessibility": "Sort by A-z",
+  "cocktails.sortOptionRequiredCountAccessibility": "Sort by required ingredients count",
+  "cocktails.sortOptionMissingRequiredCountAccessibility": "Sort by missing required ingredients count",
+  "cocktails.sortOptionRatingAccessibility": "Sort by rating",
   "cocktails.addCocktail": "Add cocktail",
 
   "shakerResults.helpTitle": "Shaker results",
