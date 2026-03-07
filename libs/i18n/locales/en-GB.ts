@@ -7,6 +7,7 @@ export const enGBTranslations: TranslationDictionary = {
   "common.openScreenHelp": "Open screen help",
   "common.goBack": "Go back",
   "common.filterItems": "Filter items",
+  "common.filterBy": "Filter by",
   "common.help": "Help",
   "common.gotIt": "Got it",
   "common.ok": "OK",

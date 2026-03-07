@@ -11,6 +11,7 @@ type CocktailFilterMethodOption = {
 
 type CocktailFiltersPanelProps = {
   sortSectionLabel?: string;
+  filterSectionLabel?: string;
   sortOptions?: {
     key: string;
     label: string;
@@ -45,6 +46,7 @@ type CocktailFiltersPanelProps = {
 
 export function CocktailFiltersPanel({
   sortSectionLabel,
+  filterSectionLabel,
   sortOptions,
   availableStarRatings,
   selectedStarRatings,
@@ -107,8 +109,10 @@ export function CocktailFiltersPanel({
             </ScrollView>
           </View>
         ) : null}
-        {showSortOptions ? (
-          <View style={[styles.sortSectionDivider, { backgroundColor: outlineColor }]} />
+        {showSortOptions && filterSectionLabel ? (
+          <Text style={[styles.filterSortLabel, styles.filterByLabel, { color: onSurfaceVariantColor }]}>
+            {filterSectionLabel}
+          </Text>
         ) : null}
         {showRatingFilters ? (
           <>
@@ -242,8 +246,7 @@ const styles = StyleSheet.create({
     minHeight: 36,
     paddingHorizontal: 10,
   },
-  sortSectionDivider: {
-    height: StyleSheet.hairlineWidth,
+  filterByLabel: {
     marginBottom: 12,
   },
   filterRatingScroll: {

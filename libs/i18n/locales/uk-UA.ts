@@ -7,6 +7,7 @@ export const ukUATranslations: TranslationDictionary = {
   "common.openScreenHelp": "Відкрити довідку екрана",
   "common.goBack": "Назад",
   "common.filterItems": "Фільтрувати",
+  "common.filterBy": "Фільтрувати за",
   "common.help": "Допомога",
   "common.gotIt": "Зрозуміло",
   "common.ok": "Гаразд",

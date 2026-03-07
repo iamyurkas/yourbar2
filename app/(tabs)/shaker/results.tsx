@@ -884,14 +884,6 @@ export default function ShakerResultsScreen() {
                             size={16}
                             color={selectedSortOption === 'random' ? Colors.surface : Colors.tint}
                           />
-                          {selectedSortOption === 'random' ? (
-                            <MaterialCommunityIcons
-                              name={isSortDescending ? 'arrow-down-thin' : 'arrow-up-thin'}
-                              size={12}
-                              color={Colors.surface}
-                              style={styles.sortDirectionIcon}
-                            />
-                          ) : null}
                         </View>
                       )}
                       style={styles.iconOnlySortPill}
@@ -899,7 +891,9 @@ export default function ShakerResultsScreen() {
                     />
                   </ScrollView>
                 </View>
-                <View style={[styles.sortSectionDivider, { backgroundColor: Colors.primary }]} />
+                <Text style={[styles.filterSectionTitle, styles.filterByLabel, { color: Colors.onSurfaceVariant }]}>
+                  {t('common.filterBy')}
+                </Text>
                 <View style={styles.filterMenuContent}>
                   <View style={styles.filterMethodList}>
                     {availableMethodOptions.length > 0 ? (
@@ -1083,8 +1077,7 @@ const styles = StyleSheet.create({
     right: -8,
     top: -8,
   },
-  sortSectionDivider: {
-    height: StyleSheet.hairlineWidth,
+  filterByLabel: {
     marginBottom: 12,
   },
   filterMethodList: {

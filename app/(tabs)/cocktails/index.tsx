@@ -335,10 +335,6 @@ export default function CocktailsScreen() {
   }, [baseTabCocktails]);
 
   const availableStarRatings = useMemo<number[]>(() => {
-    if (activeTab !== 'favorites') {
-      return [];
-    }
-
     const ratings = new Set<number>();
     baseTabCocktails.forEach((cocktail) => {
       const rating = getCocktailRating(cocktail);
@@ -348,16 +344,12 @@ export default function CocktailsScreen() {
     });
 
     return [...ratings].sort((a, b) => a - b);
-  }, [activeTab, baseTabCocktails, getCocktailRating]);
+  }, [baseTabCocktails, getCocktailRating]);
 
   useEffect(() => {
     setSelectedStarRatings((previous) => {
       if (previous.size === 0) {
         return previous;
-      }
-
-      if (activeTab !== 'favorites') {
-        return new Set<number>();
       }
 
       const validRatings = new Set(availableStarRatings);
@@ -378,7 +370,7 @@ export default function CocktailsScreen() {
 
       return next;
     });
-  }, [activeTab, availableStarRatings]);
+  }, [availableStarRatings]);
 
   useEffect(() => {
     setSelectedMethodIds((previous) => {
@@ -414,12 +406,12 @@ export default function CocktailsScreen() {
 
   const filteredByStarRatings = useMemo(() => {
     const base = baseTabCocktails;
-    if (activeTab !== 'favorites' || selectedStarRatings.size === 0) {
+    if (selectedStarRatings.size === 0) {
       return base;
     }
 
     return base.filter((cocktail) => selectedStarRatings.has(getCocktailRating(cocktail)));
-  }, [activeTab, baseTabCocktails, getCocktailRating, selectedStarRatings]);
+  }, [baseTabCocktails, getCocktailRating, selectedStarRatings]);
 
   const filteredByMethods = useMemo(() => {
     const base = filteredByStarRatings;
@@ -1016,7 +1008,7 @@ export default function CocktailsScreen() {
   }, [filterAnchorLayout, headerLayout]);
 
 
-  const showRatingFilters = activeTab === 'favorites' && availableStarRatings.length > 0;
+  const showRatingFilters = availableStarRatings.length > 0;
 
   return (
     <SafeAreaView
@@ -1061,6 +1053,7 @@ export default function CocktailsScreen() {
               ]}>
               <CocktailFiltersPanel
                 sortSectionLabel={t('cocktails.sortBy')}
+                filterSectionLabel={t('common.filterBy')}
                 sortOptions={[
                   {
                     key: 'alphabetical',
@@ -1154,14 +1147,6 @@ export default function CocktailsScreen() {
                           size={16}
                           color={selectedSortOption === 'random' ? Colors.surface : Colors.tint}
                         />
-                        {selectedSortOption === 'random' ? (
-                          <MaterialCommunityIcons
-                            name={isSortDescending ? 'arrow-down-thin' : 'arrow-up-thin'}
-                            size={12}
-                            color={Colors.surface}
-                            style={styles.sortDirectionIcon}
-                          />
-                        ) : null}
                       </View>
                     ),
                   },
