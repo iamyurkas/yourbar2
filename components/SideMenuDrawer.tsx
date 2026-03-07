@@ -908,31 +908,34 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     const androidPackageName =
       Constants.expoConfig?.android?.package ?? Constants.manifest2?.extra?.expoClient?.android?.package;
 
-    const rateUrl = Platform.select({
+    const rateUrls = Platform.select<string[]>({
       ios: iosAppStoreId
-        ? `itms-apps://itunes.apple.com/app/viewContentsUserReviews/id${iosAppStoreId}?action=write-review`
-        : null,
-      android: androidPackageName ? `market://details?id=${androidPackageName}` : null,
-      default: null,
+        ? [
+            `itms-apps://apps.apple.com/app/id${iosAppStoreId}?action=write-review`,
+            `https://apps.apple.com/app/id${iosAppStoreId}?action=write-review`,
+          ]
+        : [],
+      android: androidPackageName
+        ? [
+            `market://details?id=${androidPackageName}`,
+            `https://play.google.com/store/apps/details?id=${androidPackageName}`,
+          ]
+        : [],
+      default: [],
     });
 
-    if (!rateUrl) {
+    if (!rateUrls.length) {
       showDialogMessage(t("common.error"), t("common.tryAgainLater"));
       return;
     }
 
     try {
-      const canOpen = await Linking.canOpenURL(rateUrl);
-      if (canOpen) {
-        await Linking.openURL(rateUrl);
-        return;
-      }
-
-      if (Platform.OS === "android" && androidPackageName) {
-        await Linking.openURL(
-          `https://play.google.com/store/apps/details?id=${androidPackageName}`,
-        );
-        return;
+      for (const url of rateUrls) {
+        const canOpen = await Linking.canOpenURL(url);
+        if (canOpen) {
+          await Linking.openURL(url);
+          return;
+        }
       }
 
       showDialogMessage(t("common.error"), t("common.tryAgainLater"));
