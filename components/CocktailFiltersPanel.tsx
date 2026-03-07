@@ -10,6 +10,15 @@ type CocktailFilterMethodOption = {
 };
 
 type CocktailFiltersPanelProps = {
+  sortSectionLabel?: string;
+  sortOptions?: {
+    key: string;
+    label: string;
+    icon?: React.ReactNode;
+    selected: boolean;
+    onPress: () => void;
+    accessibilityLabel?: string;
+  }[];
   availableStarRatings: number[];
   selectedStarRatings: Set<number>;
   onToggleStarRating: (rating: number) => void;
@@ -35,6 +44,8 @@ type CocktailFiltersPanelProps = {
 };
 
 export function CocktailFiltersPanel({
+  sortSectionLabel,
+  sortOptions,
   availableStarRatings,
   selectedStarRatings,
   onToggleStarRating,
@@ -59,6 +70,7 @@ export function CocktailFiltersPanel({
   getMethodLabel,
 }: CocktailFiltersPanelProps) {
   const showMethodFilters = availableMethodOptions.length > 0;
+  const showSortOptions = Boolean(sortSectionLabel && sortOptions && sortOptions.length > 0);
 
   return (
     <ScrollView
@@ -66,6 +78,38 @@ export function CocktailFiltersPanel({
       showsVerticalScrollIndicator
       keyboardShouldPersistTaps="handled">
       <View style={styles.filterMenuBody}>
+        {showSortOptions ? (
+          <View style={styles.filterSortSection}>
+            <Text style={[styles.filterSortLabel, { color: onSurfaceVariantColor }]}>
+              {sortSectionLabel}
+            </Text>
+            <ScrollView
+              horizontal
+              style={styles.filterSortScroll}
+              contentContainerStyle={styles.filterSortRow}
+              showsHorizontalScrollIndicator={false}
+              keyboardShouldPersistTaps="handled">
+              {(sortOptions ?? []).map((option) => (
+                <TagPill
+                  key={option.key}
+                  label={option.label}
+                  color={tintColor}
+                  selected={option.selected}
+                  icon={option.icon}
+                  onPress={option.onPress}
+                  accessibilityRole="radio"
+                  accessibilityState={{ selected: option.selected }}
+                  accessibilityLabel={option.accessibilityLabel}
+                  androidRippleColor={`${surfaceVariantColor}33`}
+                  style={option.label ? undefined : styles.iconOnlyPill}
+                />
+              ))}
+            </ScrollView>
+          </View>
+        ) : null}
+        {showSortOptions ? (
+          <View style={[styles.sortSectionDivider, { backgroundColor: outlineColor }]} />
+        ) : null}
         {showRatingFilters ? (
           <>
             <ScrollView
@@ -172,6 +216,35 @@ const styles = StyleSheet.create({
   filterMenuBody: {
     flexDirection: 'column',
     alignItems: 'stretch',
+  },
+  filterSortSection: {
+    marginBottom: 12,
+    gap: 8,
+  },
+  filterSortLabel: {
+    fontSize: 12,
+    fontWeight: '700',
+    letterSpacing: 0.6,
+    textTransform: 'uppercase',
+  },
+  filterSortScroll: {
+    alignSelf: 'stretch',
+  },
+  filterSortRow: {
+    flexGrow: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 12,
+  },
+  iconOnlyPill: {
+    minWidth: 53,
+    minHeight: 36,
+    paddingHorizontal: 10,
+  },
+  sortSectionDivider: {
+    height: StyleSheet.hairlineWidth,
+    marginBottom: 12,
   },
   filterRatingScroll: {
     alignSelf: 'stretch',

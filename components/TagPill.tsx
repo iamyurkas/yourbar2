@@ -49,18 +49,22 @@ export function TagPill({
 }: TagPillProps) {
   const Colors = useAppColors();
 
+  const hasLabel = label.trim().length > 0;
+
   const content = (
     <View style={styles.contentRow}>
       {icon}
-      <Text
-        style={[
-          styles.label,
-          { color: selected ? Colors.surface : color },
-          textStyle,
-        ]}
-      >
-        {label}
-      </Text>
+      {hasLabel ? (
+        <Text
+          style={[
+            styles.label,
+            { color: selected ? Colors.surface : color },
+            textStyle,
+          ]}
+        >
+          {label}
+        </Text>
+      ) : null}
     </View>
   );
 
