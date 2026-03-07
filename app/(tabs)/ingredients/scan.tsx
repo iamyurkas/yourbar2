@@ -297,7 +297,7 @@ export default function ScanIngredientScreen() {
         onRequestClose={() => setIsHelpVisible(false)}
         title={t('barcode.helpTitle')}
         message={t('barcode.helpMessage')}
-        actions={[{ label: t('common.ok'), variant: 'primary' }]}
+        actions={[{ label: t('common.gotIt'), variant: 'secondary' }]}
       />
     </View>
   );

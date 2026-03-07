@@ -2034,16 +2034,18 @@ const styles = StyleSheet.create({
   scanButton: {
     marginTop: 10,
     borderWidth: StyleSheet.hairlineWidth,
-    borderRadius: 10,
-    paddingVertical: 10,
-    paddingHorizontal: 12,
+    borderRadius: 12,
+    minHeight: 56,
+    minWidth: 250,
+    paddingHorizontal: 16,
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     gap: 8,
-    alignSelf: 'flex-start',
+    alignSelf: 'center',
   },
   scanButtonText: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: '600',
   },
   buttonsContainer: {
