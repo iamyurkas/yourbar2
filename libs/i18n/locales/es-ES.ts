@@ -7,6 +7,7 @@ export const esESTranslations: TranslationDictionary = {
   "common.openScreenHelp": "Abrir ayuda",
   "common.goBack": "Volver",
   "common.filterItems": "Filtrar elementos",
+  "common.filterBy": "Filtrar por",
   "common.help": "Ayuda",
   "common.gotIt": "Entendido",
   "common.ok": "Aceptar",

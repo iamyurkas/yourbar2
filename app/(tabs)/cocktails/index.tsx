@@ -1053,6 +1053,7 @@ export default function CocktailsScreen() {
               ]}>
               <CocktailFiltersPanel
                 sortSectionLabel={t('cocktails.sortBy')}
+                filterSectionLabel={t('common.filterBy')}
                 sortOptions={[
                   {
                     key: 'alphabetical',
