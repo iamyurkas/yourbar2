@@ -170,7 +170,7 @@ export default function ScanIngredientScreen() {
         <View style={styles.centered}>
           <Text style={[styles.message, { color: colors.onSurface }]}>{t('barcode.cameraPermissionNeeded')}</Text>
           {permission?.canAskAgain ? (
-            <Pressable style={[styles.button, { backgroundColor: colors.tint }]} onPress={requestPermission}>
+            <Pressable style={[styles.button, styles.buttonPrimary, { backgroundColor: colors.tint }]} onPress={requestPermission}>
               <Text style={[styles.buttonText, { color: colors.onPrimary }]}>{t('common.tryAgain')}</Text>
             </Pressable>
           ) : null}
@@ -196,13 +196,13 @@ export default function ScanIngredientScreen() {
         <View style={styles.card}>
           <Text style={[styles.title, { color: colors.onSurface }]}>{t('barcode.productAlreadyExists')}</Text>
           <Text style={[styles.message, { color: colors.onSurfaceVariant }]}>{scanState.ingredientName}</Text>
-          <Pressable style={[styles.button, { backgroundColor: colors.tint }]} onPress={() => router.replace({ pathname: '/ingredients/[ingredientId]', params: { ingredientId: String(scanState.ingredientId) } })}>
+          <Pressable style={[styles.button, styles.buttonPrimary, { backgroundColor: colors.tint }]} onPress={() => router.replace({ pathname: '/ingredients/[ingredientId]', params: { ingredientId: String(scanState.ingredientId) } })}>
             <Text style={[styles.buttonText, { color: colors.onPrimary }]}>{t('barcode.openExisting')}</Text>
           </Pressable>
-          <Pressable style={[styles.button, { backgroundColor: colors.surface }]} onPress={() => createDuplicate(scanState.barcode)}>
+          <Pressable style={[styles.button, styles.buttonSecondary, { backgroundColor: colors.surfaceBright }]} onPress={() => createDuplicate(scanState.barcode)}>
             <Text style={[styles.buttonText, { color: colors.onSurface }]}>{t('barcode.createDuplicate')}</Text>
           </Pressable>
-          <Pressable style={[styles.button, { backgroundColor: colors.surface }]} onPress={() => router.back()}>
+          <Pressable style={[styles.button, styles.buttonSecondary, { backgroundColor: colors.surfaceBright }]} onPress={() => router.back()}>
             <Text style={[styles.buttonText, { color: colors.onSurface }]}>{t('common.cancel')}</Text>
           </Pressable>
         </View>
@@ -214,13 +214,13 @@ export default function ScanIngredientScreen() {
           {scanState.draft.imageUrl ? <AppImage source={{ uri: scanState.draft.imageUrl }} style={styles.previewImage} contentFit="cover" /> : null}
           <Text style={[styles.message, { color: colors.onSurface }]}>{scanState.draft.name ?? scanState.draft.barcode}</Text>
           <Text style={[styles.message, { color: colors.onSurfaceVariant }]}>{scanState.ingredientName}</Text>
-          <Pressable style={[styles.button, { backgroundColor: colors.tint }]} onPress={() => attachBarcode(scanState.ingredientId, scanState.draft.barcode)}>
+          <Pressable style={[styles.button, styles.buttonPrimary, { backgroundColor: colors.tint }]} onPress={() => attachBarcode(scanState.ingredientId, scanState.draft.barcode)}>
             <Text style={[styles.buttonText, { color: colors.onPrimary }]}>{t('barcode.addBarcodeToExisting')}</Text>
           </Pressable>
-          <Pressable style={[styles.button, { backgroundColor: colors.surface }]} onPress={() => createWithDraft(scanState.draft)}>
+          <Pressable style={[styles.button, styles.buttonSecondary, { backgroundColor: colors.surfaceBright }]} onPress={() => createWithDraft(scanState.draft)}>
             <Text style={[styles.buttonText, { color: colors.onSurface }]}>{t('barcode.createNewIngredient')}</Text>
           </Pressable>
-          <Pressable style={[styles.button, { backgroundColor: colors.surface }]} onPress={() => router.back()}>
+          <Pressable style={[styles.button, styles.buttonSecondary, { backgroundColor: colors.surfaceBright }]} onPress={() => router.back()}>
             <Text style={[styles.buttonText, { color: colors.onSurface }]}>{t('common.cancel')}</Text>
           </Pressable>
         </View>
@@ -233,13 +233,13 @@ export default function ScanIngredientScreen() {
           <Text style={[styles.message, { color: colors.onSurface }]}>{scanState.draft.name ?? scanState.draft.barcode}</Text>
           {scanState.draft.description ? <Text style={[styles.message, { color: colors.onSurfaceVariant }]}>{scanState.draft.description}</Text> : null}
           {scanState.draft.abv != null ? <Text style={[styles.message, { color: colors.onSurfaceVariant }]}>{`${scanState.draft.abv}% ABV`}</Text> : null}
-          <Pressable style={[styles.button, { backgroundColor: colors.tint }]} onPress={() => createWithDraft(scanState.draft)}>
+          <Pressable style={[styles.button, styles.buttonPrimary, { backgroundColor: colors.tint }]} onPress={() => createWithDraft(scanState.draft)}>
             <Text style={[styles.buttonText, { color: colors.onPrimary }]}>{t('barcode.createIngredient')}</Text>
           </Pressable>
-          <Pressable style={[styles.button, { backgroundColor: colors.surface }]} onPress={() => editWithDraft(scanState.draft)}>
+          <Pressable style={[styles.button, styles.buttonSecondary, { backgroundColor: colors.surfaceBright }]} onPress={() => editWithDraft(scanState.draft)}>
             <Text style={[styles.buttonText, { color: colors.onSurface }]}>{t('barcode.editBeforeSaving')}</Text>
           </Pressable>
-          <Pressable style={[styles.button, { backgroundColor: colors.surface }]} onPress={() => router.back()}>
+          <Pressable style={[styles.button, styles.buttonSecondary, { backgroundColor: colors.surfaceBright }]} onPress={() => router.back()}>
             <Text style={[styles.buttonText, { color: colors.onSurface }]}>{t('common.cancel')}</Text>
           </Pressable>
         </View>
@@ -249,13 +249,13 @@ export default function ScanIngredientScreen() {
         <View style={styles.card}>
           <Text style={[styles.title, { color: colors.onSurface }]}>{t('barcode.productNotFound')}</Text>
           <Text style={[styles.message, { color: colors.onSurfaceVariant }]}>{scanState.barcode}</Text>
-          <Pressable style={[styles.button, { backgroundColor: colors.tint }]} onPress={() => router.push({ pathname: '/ingredients/create', params: { prefillBarcode: scanState.barcode } })}>
+          <Pressable style={[styles.button, styles.buttonPrimary, { backgroundColor: colors.tint }]} onPress={() => router.push({ pathname: '/ingredients/create', params: { prefillBarcode: scanState.barcode } })}>
             <Text style={[styles.buttonText, { color: colors.onPrimary }]}>{t('barcode.createManually')}</Text>
           </Pressable>
-          <Pressable style={[styles.button, { backgroundColor: colors.surface }]} onPress={resetScanner}>
+          <Pressable style={[styles.button, styles.buttonSecondary, { backgroundColor: colors.surfaceBright }]} onPress={resetScanner}>
             <Text style={[styles.buttonText, { color: colors.onSurface }]}>{t('barcode.scanAgain')}</Text>
           </Pressable>
-          <Pressable style={[styles.button, { backgroundColor: colors.surface }]} onPress={() => router.back()}>
+          <Pressable style={[styles.button, styles.buttonSecondary, { backgroundColor: colors.surfaceBright }]} onPress={() => router.back()}>
             <Text style={[styles.buttonText, { color: colors.onSurface }]}>{t('common.cancel')}</Text>
           </Pressable>
         </View>
@@ -265,7 +265,7 @@ export default function ScanIngredientScreen() {
         <View style={styles.card}>
           <Text style={[styles.title, { color: colors.error }]}>{t('common.somethingWentWrong')}</Text>
           <Text style={[styles.message, { color: colors.onSurfaceVariant }]}>{scanState.message}</Text>
-          <Pressable style={[styles.button, { backgroundColor: colors.tint }]} onPress={resetScanner}>
+          <Pressable style={[styles.button, styles.buttonPrimary, { backgroundColor: colors.tint }]} onPress={resetScanner}>
             <Text style={[styles.buttonText, { color: colors.onPrimary }]}>{t('common.tryAgain')}</Text>
           </Pressable>
         </View>
@@ -284,6 +284,22 @@ const styles = StyleSheet.create({
   title: { fontSize: 18, fontWeight: '700' },
   message: { fontSize: 15 },
   previewImage: { width: '100%', height: 180, borderRadius: 12 },
-  button: { borderRadius: 10, paddingVertical: 11, paddingHorizontal: 14 },
-  buttonText: { textAlign: 'center', fontWeight: '600' },
+  button: {
+    borderRadius: 12,
+    minHeight: 56,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 16,
+  },
+  buttonPrimary: {
+    minWidth: 250,
+  },
+  buttonSecondary: {
+    minWidth: 250,
+  },
+  buttonText: {
+    textAlign: 'center',
+    fontSize: 16,
+    fontWeight: '600',
+  },
 });

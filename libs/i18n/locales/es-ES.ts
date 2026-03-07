@@ -700,6 +700,7 @@ export const esESTranslations: TranslationDictionary = {
   "barcode.similarProductFound": "This looks similar to an existing ingredient",
   "barcode.addBarcodeToExisting": "Add barcode to existing ingredient",
   "barcode.createNewIngredient": "Create new ingredient",
+  "barcode.createIngredient": "Create ingredient",
   "barcode.productNotFound": "Product not found",
   "barcode.createManually": "Create manually",
   "barcode.scanAgain": "Scan again",
