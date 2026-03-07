@@ -406,12 +406,26 @@ export const enUSTranslations: TranslationDictionary = {
   "cocktails.collapseIngredientGroup": "Collapse {{name}} cocktails",
   "cocktails.expandIngredientGroup": "Expand {{name}} cocktails",
   "cocktails.clearSelectedFilters": "Clear selected filters",
+
+  "cocktails.sortBy": "Sort by",
+  "cocktails.sortOptionAlphabeticalAccessibility": "Sort by A-z",
+  "cocktails.sortOptionRequiredCountAccessibility": "Sort by required ingredients count",
+  "cocktails.sortOptionMissingRequiredCountAccessibility": "Sort by missing required ingredients count",
+  "cocktails.sortOptionRatingAccessibility": "Sort by rating",
+  "cocktails.sortOptionRandomAccessibility": "Sort randomly",
   "cocktails.addCocktail": "Add cocktail",
 
   "shakerResults.helpTitle": "Shaker results",
   "shakerResults.helpText":
     "This screen shows cocktails you can make with selected ingredients.\n\nUse search and filters to narrow results, then open any cocktail to view recipe details and preparation steps.",
   "shakerResults.clearSelectedFilters": "Clear selected filters",
+
+  "shakerResults.sortBy": "Sort by",
+  "shakerResults.sortOptionAlphabetical": "Alphabetical (A–Z)",
+  "shakerResults.sortOptionRequiredCount": "Required ingredients count",
+  "shakerResults.sortOptionMissingRequiredCount": "Missing required ingredients count",
+  "shakerResults.sortOptionRating": "Rating",
+  "shakerResults.sortOptionRandom": "Random",
   "shakerResults.emptyMatchingRecipes": "No matching recipes",
 
   "rowParts.removeFromFavorites": "Remove from favorites",

@@ -43,6 +43,7 @@ export function useCocktailTabLogic({
   ignoreGarnish,
   ingredientLookup,
   defaultTagColor,
+  compareCocktails,
 }: {
   allowAllSubstitutes: boolean;
   availableIngredientIds: Set<number>;
@@ -50,6 +51,7 @@ export function useCocktailTabLogic({
   ignoreGarnish: boolean;
   ingredientLookup: IngredientLookup;
   defaultTagColor: string;
+  compareCocktails?: (left: Cocktail, right: Cocktail) => number;
 }) {
   return useMemo(() => {
     const resolveNameFromId = (id?: number, fallback?: string): string => {
@@ -312,7 +314,9 @@ export function useCocktailTabLogic({
         isBranded: group.isBranded,
         isStyled: group.isStyled,
         cocktails: group.cocktails.sort((a, b) =>
-          compareOptionalGlobalAlphabet(a.name, b.name),
+          compareCocktails
+            ? compareCocktails(a, b)
+            : compareOptionalGlobalAlphabet(a.name, b.name),
         ),
       }))
       .sort((a, b) => {
@@ -323,6 +327,11 @@ export function useCocktailTabLogic({
       });
 
     const items: MyTabListItem[] = [];
+    available.sort((a, b) =>
+      compareCocktails
+        ? compareCocktails(a, b)
+        : compareOptionalGlobalAlphabet(a.name, b.name),
+    );
     available.forEach((cocktail) => {
       items.push({
         type: 'cocktail',
@@ -364,5 +373,6 @@ export function useCocktailTabLogic({
     ignoreGarnish,
     ingredientLookup,
     defaultTagColor,
+    compareCocktails,
   ]);
 }
