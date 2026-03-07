@@ -412,6 +412,12 @@ export const ukUATranslations: TranslationDictionary = {
   "shakerResults.helpText":
     "Цей екран показує коктейлі, які можна зробити з вибраних інгредієнтів.\n\nВикористовуйте пошук і фільтри, щоб звузити результати, а потім відкрийте будь-який коктейль, щоб переглянути деталі рецепта та кроки приготування.",
   "shakerResults.clearSelectedFilters": "Очистити вибрані фільтри",
+
+  "shakerResults.sortBy": "Сортувати за",
+  "shakerResults.sortOptionAlphabetical": "За алфавітом (A–Z)",
+  "shakerResults.sortOptionRequiredCount": "Кількістю обов’язкових інгредієнтів",
+  "shakerResults.sortOptionMissingRequiredCount": "Кількістю відсутніх обов’язкових інгредієнтів",
+  "shakerResults.sortOptionRating": "Рейтингом",
   "shakerResults.emptyMatchingRecipes": "Немає відповідних рецептів",
 
   "rowParts.removeFromFavorites": "Видалити з обраного",

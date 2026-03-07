@@ -412,6 +412,12 @@ export const enUSTranslations: TranslationDictionary = {
   "shakerResults.helpText":
     "This screen shows cocktails you can make with selected ingredients.\n\nUse search and filters to narrow results, then open any cocktail to view recipe details and preparation steps.",
   "shakerResults.clearSelectedFilters": "Clear selected filters",
+
+  "shakerResults.sortBy": "Sort by",
+  "shakerResults.sortOptionAlphabetical": "Alphabetical (A–Z)",
+  "shakerResults.sortOptionRequiredCount": "Required ingredients count",
+  "shakerResults.sortOptionMissingRequiredCount": "Missing required ingredients count",
+  "shakerResults.sortOptionRating": "Rating",
   "shakerResults.emptyMatchingRecipes": "No matching recipes",
 
   "rowParts.removeFromFavorites": "Remove from favorites",

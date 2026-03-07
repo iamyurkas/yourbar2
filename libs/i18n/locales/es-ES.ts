@@ -403,6 +403,12 @@ export const esESTranslations: TranslationDictionary = {
   "shakerResults.helpText":
     "Esta pantalla muestra los cócteles que puedes preparar con los ingredientes seleccionados.\n\nUsa la búsqueda y los filtros para acotar resultados; luego abre cualquier cóctel para ver detalles de la receta y pasos de preparación.",
   "shakerResults.clearSelectedFilters": "Borrar filtros seleccionados",
+
+  "shakerResults.sortBy": "Ordenar por",
+  "shakerResults.sortOptionAlphabetical": "Alfabético (A–Z)",
+  "shakerResults.sortOptionRequiredCount": "Cantidad de ingredientes obligatorios",
+  "shakerResults.sortOptionMissingRequiredCount": "Cantidad de ingredientes obligatorios faltantes",
+  "shakerResults.sortOptionRating": "Valoración",
   "shakerResults.emptyMatchingRecipes": "No hay recetas coincidentes",
   "rowParts.removeFromFavorites": "Quitar de favoritos",
   "rowParts.addToFavorites": "Añadir a favoritos",

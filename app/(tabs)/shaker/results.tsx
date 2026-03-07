@@ -67,6 +67,14 @@ function resolveCocktailByKey(key: string, cocktails: Cocktail[]) {
 
 const METHOD_ICON_SIZE = 16;
 
+type SortOption = 'alphabetical' | 'requiredCount' | 'missingRequiredCount' | 'rating';
+
+function countRequiredIngredients(cocktail: Cocktail, ignoreGarnish: boolean): number {
+  return (cocktail.ingredients ?? []).filter(
+    (ingredient) => !ingredient?.optional && !(ignoreGarnish && ingredient?.garnish),
+  ).length;
+}
+
 export default function ShakerResultsScreen() {
   const {
     cocktails,
@@ -86,6 +94,7 @@ export default function ShakerResultsScreen() {
   const [selectedMethodIds, setSelectedMethodIds] = useState<Set<CocktailMethod['id']>>(
     () => new Set(),
   );
+  const [selectedSortOption, setSelectedSortOption] = useState<SortOption>('alphabetical');
   const [headerLayout, setHeaderLayout] = useState<LayoutRectangle | null>(null);
   const [filterAnchorLayout, setFilterAnchorLayout] = useState<LayoutRectangle | null>(null);
   const listRef = useRef<FlatList<Cocktail>>(null);
@@ -368,6 +377,11 @@ export default function ShakerResultsScreen() {
   const handleClearFilters = useCallback(() => {
     setSelectedTagKeys((previous) => (previous.size === 0 ? previous : new Set<string>()));
     setSelectedMethodIds((previous) => (previous.size === 0 ? previous : new Set<CocktailMethod['id']>()));
+    setSelectedSortOption('alphabetical');
+  }, []);
+
+  const handleSortOptionChange = useCallback((option: SortOption) => {
+    setSelectedSortOption((previous) => (previous === option ? previous : option));
   }, []);
 
   const renderMethodIcon = useCallback(
@@ -501,7 +515,57 @@ export default function ShakerResultsScreen() {
     ingredientLookup,
   ]);
 
-  const isFilterActive = selectedTagKeys.size > 0 || selectedMethodIds.size > 0;
+  const sortedCocktails = useMemo(() => {
+    const base = [...filteredCocktails];
+
+    base.sort((left, right) => {
+      const leftName = left.name ?? '';
+      const rightName = right.name ?? '';
+
+      if (selectedSortOption === 'alphabetical') {
+        return compareOptionalGlobalAlphabet(leftName, rightName);
+      }
+
+      if (selectedSortOption === 'requiredCount') {
+        const leftCount = countRequiredIngredients(left, ignoreGarnish);
+        const rightCount = countRequiredIngredients(right, ignoreGarnish);
+        if (leftCount !== rightCount) {
+          return leftCount - rightCount;
+        }
+        return compareOptionalGlobalAlphabet(leftName, rightName);
+      }
+
+      if (selectedSortOption === 'missingRequiredCount') {
+        const leftKey = String(left.id ?? left.name);
+        const rightKey = String(right.id ?? right.name);
+        const leftMissing = availabilitySummaryByKey.get(leftKey)?.missingCount ?? 0;
+        const rightMissing = availabilitySummaryByKey.get(rightKey)?.missingCount ?? 0;
+        if (leftMissing !== rightMissing) {
+          return leftMissing - rightMissing;
+        }
+        return compareOptionalGlobalAlphabet(leftName, rightName);
+      }
+
+      const leftRating = getCocktailRating(left);
+      const rightRating = getCocktailRating(right);
+      if (leftRating !== rightRating) {
+        return rightRating - leftRating;
+      }
+
+      return compareOptionalGlobalAlphabet(leftName, rightName);
+    });
+
+    return base;
+  }, [
+    availabilitySummaryByKey,
+    filteredCocktails,
+    getCocktailRating,
+    ignoreGarnish,
+    selectedSortOption,
+  ]);
+
+  const isFilterActive =
+    selectedTagKeys.size > 0 || selectedMethodIds.size > 0 || selectedSortOption !== 'alphabetical';
   const filterMenuTop = useMemo(() => {
     if (headerLayout && filterAnchorLayout) {
       return headerLayout.y + filterAnchorLayout.y + filterAnchorLayout.height + 6;
@@ -653,6 +717,49 @@ export default function ShakerResultsScreen() {
                 style={styles.filterMenuScroll}
                 showsVerticalScrollIndicator
                 keyboardShouldPersistTaps="handled">
+                <View style={styles.filterSortSection}>
+                  <Text style={[styles.filterSectionTitle, { color: Colors.onSurfaceVariant }]}>
+                    {t('shakerResults.sortBy')}
+                  </Text>
+                  <View style={styles.filterSortList}>
+                    <TagPill
+                      label={t('shakerResults.sortOptionAlphabetical')}
+                      color={Colors.tint}
+                      selected={selectedSortOption === 'alphabetical'}
+                      onPress={() => handleSortOptionChange('alphabetical')}
+                      accessibilityRole="radio"
+                      accessibilityState={{ selected: selectedSortOption === 'alphabetical' }}
+                      androidRippleColor={`${Colors.surfaceVariant}33`}
+                    />
+                    <TagPill
+                      label={t('shakerResults.sortOptionRequiredCount')}
+                      color={Colors.tint}
+                      selected={selectedSortOption === 'requiredCount'}
+                      onPress={() => handleSortOptionChange('requiredCount')}
+                      accessibilityRole="radio"
+                      accessibilityState={{ selected: selectedSortOption === 'requiredCount' }}
+                      androidRippleColor={`${Colors.surfaceVariant}33`}
+                    />
+                    <TagPill
+                      label={t('shakerResults.sortOptionMissingRequiredCount')}
+                      color={Colors.tint}
+                      selected={selectedSortOption === 'missingRequiredCount'}
+                      onPress={() => handleSortOptionChange('missingRequiredCount')}
+                      accessibilityRole="radio"
+                      accessibilityState={{ selected: selectedSortOption === 'missingRequiredCount' }}
+                      androidRippleColor={`${Colors.surfaceVariant}33`}
+                    />
+                    <TagPill
+                      label={t('shakerResults.sortOptionRating')}
+                      color={Colors.tint}
+                      selected={selectedSortOption === 'rating'}
+                      onPress={() => handleSortOptionChange('rating')}
+                      accessibilityRole="radio"
+                      accessibilityState={{ selected: selectedSortOption === 'rating' }}
+                      androidRippleColor={`${Colors.surfaceVariant}33`}
+                    />
+                  </View>
+                </View>
                 <View style={styles.filterMenuContent}>
                   <View style={styles.filterMethodList}>
                     {availableMethodOptions.length > 0 ? (
@@ -709,7 +816,7 @@ export default function ShakerResultsScreen() {
                     )}
                   </View>
                 </View>
-                {selectedTagKeys.size > 0 || selectedMethodIds.size > 0 ? (
+                {isFilterActive ? (
                   <Pressable
                     accessibilityRole="button"
                     accessibilityLabel={t("shakerResults.clearSelectedFilters")}
@@ -726,7 +833,7 @@ export default function ShakerResultsScreen() {
         ) : null}
         <FlatList
           ref={listRef}
-          data={filteredCocktails}
+          data={sortedCocktails}
           keyExtractor={(item) => String(item.id ?? item.name)}
           renderItem={renderItem}
           ItemSeparatorComponent={renderSeparator}
@@ -799,6 +906,21 @@ const styles = StyleSheet.create({
   filterMenuContent: {
     flexDirection: 'row',
     alignItems: 'stretch',
+  },
+  filterSortSection: {
+    marginBottom: 12,
+    gap: 8,
+  },
+  filterSectionTitle: {
+    fontSize: 12,
+    fontWeight: '700',
+    letterSpacing: 0.6,
+    textTransform: 'uppercase',
+  },
+  filterSortList: {
+    flexDirection: 'column',
+    gap: 8,
+    alignItems: 'flex-start',
   },
   filterMethodList: {
     flexDirection: 'column',
