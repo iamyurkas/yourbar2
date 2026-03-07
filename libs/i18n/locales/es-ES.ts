@@ -386,6 +386,12 @@ export const esESTranslations: TranslationDictionary = {
   "ingredients.clearSelectedTagFilters":
     "Borrar filtros de etiquetas seleccionados",
   "ingredients.addIngredient": "Añadir ingrediente",
+
+  "ingredients.sortBy": "Sort by",
+  "ingredients.sortOptionAlphabeticalAccessibility": "Sort ingredients by A-z",
+  "ingredients.sortOptionUnlocksMostCocktailsAccessibility": "Sort ingredients by cocktails unlocked",
+  "ingredients.sortOptionMostUsedAccessibility": "Sort ingredients by use count",
+  "ingredients.sortOptionRecentlyAddedAccessibility": "Sort ingredients by recently added",
   "cocktails.oneMoreIngredientForMore": "Un ingrediente más para más cócteles",
   "cocktails.removeIngredientFromShopping":
     "Quitar ingrediente de la lista de la compra",

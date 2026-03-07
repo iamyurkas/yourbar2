@@ -394,6 +394,12 @@ export const enUSTranslations: TranslationDictionary = {
   "ingredients.clearSelectedTagFilters": "Clear selected tag filters",
   "ingredients.addIngredient": "Add ingredient",
 
+  "ingredients.sortBy": "Sort by",
+  "ingredients.sortOptionAlphabeticalAccessibility": "Sort ingredients by A-z",
+  "ingredients.sortOptionUnlocksMostCocktailsAccessibility": "Sort ingredients by cocktails unlocked",
+  "ingredients.sortOptionMostUsedAccessibility": "Sort ingredients by use count",
+  "ingredients.sortOptionRecentlyAddedAccessibility": "Sort ingredients by recently added",
+
   "cocktails.oneMoreIngredientForMore":
     "One more ingredient for more cocktails",
   "cocktails.removeIngredientFromShopping":

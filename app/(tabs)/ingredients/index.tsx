@@ -30,6 +30,7 @@ import { useAppColors } from '@/constants/theme';
 import { isCocktailReady } from '@/libs/cocktail-availability';
 import { getLastIngredientTab, setLastIngredientTab, type IngredientTabKey } from '@/libs/collection-tabs';
 import { compareOptionalGlobalAlphabet } from '@/libs/global-sort';
+import { buildIngredientSortOptions, type IngredientSortOption } from '@/libs/ingredient-sort-options';
 import { getPluralCategory } from '@/libs/i18n/plural';
 import { useI18n } from '@/libs/i18n/use-i18n';
 import {
@@ -261,6 +262,8 @@ export default function IngredientsScreen() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isFilterMenuVisible, setFilterMenuVisible] = useState(false);
   const [selectedTagKeys, setSelectedTagKeys] = useState<Set<string>>(() => new Set());
+  const [selectedSortOption, setSelectedSortOption] = useState<IngredientSortOption>('alphabetical');
+  const [isSortDescending, setSortDescending] = useState(false);
   const [headerLayout, setHeaderLayout] = useState<LayoutRectangle | null>(null);
   const [filterAnchorLayout, setFilterAnchorLayout] = useState<LayoutRectangle | null>(null);
   const listRef = useRef<FlatList<Ingredient>>(null);
@@ -393,14 +396,22 @@ export default function IngredientsScreen() {
     });
   }, []);
 
-  const handleClearTagFilters = useCallback(() => {
-    setSelectedTagKeys((previous) => {
-      if (previous.size === 0) {
+  const handleSortOptionChange = useCallback((option: IngredientSortOption) => {
+    setSelectedSortOption((previous) => {
+      if (previous === option) {
+        setSortDescending((current) => !current);
         return previous;
       }
 
-      return new Set<string>();
+      setSortDescending(false);
+      return option;
     });
+  }, []);
+
+  const handleClearTagFilters = useCallback(() => {
+    setSelectedTagKeys((previous) => (previous.size === 0 ? previous : new Set<string>()));
+    setSelectedSortOption('alphabetical');
+    setSortDescending(false);
   }, []);
 
   const ingredientLookup = useMemo(() => createIngredientLookup(ingredients), [ingredients]);
@@ -551,13 +562,100 @@ export default function IngredientsScreen() {
     );
   }, [filteredByTags, normalizedQuery]);
 
+
+  const effectiveAvailableIngredientIds = useMemo(() => {
+    if (optimisticAvailability.size === 0) {
+      return availableIngredientIds;
+    }
+
+    const next = new Set(availableIngredientIds);
+    optimisticAvailability.forEach((value, id) => {
+      if (value) {
+        next.add(id);
+      } else {
+        next.delete(id);
+      }
+    });
+
+    return next;
+  }, [availableIngredientIds, optimisticAvailability]);
+
+  const unlocksMostCocktailsByIngredientId = useMemo(() => {
+    const unlockCounts = new Map<number, number>();
+
+    cocktails.forEach((cocktail) => {
+      const visibleIds = getVisibleIngredientIdsForCocktail(cocktail, ingredientLookup, {
+        allowAllSubstitutes,
+      });
+
+      if (visibleIds.size === 0) {
+        return;
+      }
+
+      const missingRequiredIds = new Set<number>();
+      visibleIds.forEach((ingredientId) => {
+        if (!effectiveAvailableIngredientIds.has(ingredientId)) {
+          missingRequiredIds.add(ingredientId);
+        }
+      });
+
+      if (missingRequiredIds.size !== 1) {
+        return;
+      }
+
+      const [onlyMissingIngredientId] = Array.from(missingRequiredIds);
+      unlockCounts.set(
+        onlyMissingIngredientId,
+        (unlockCounts.get(onlyMissingIngredientId) ?? 0) + 1,
+      );
+    });
+
+    return unlockCounts;
+  }, [allowAllSubstitutes, cocktails, effectiveAvailableIngredientIds, ingredientLookup]);
+
+  const compareIngredientsBySelectedSort = useCallback(
+    (left: Ingredient, right: Ingredient) => {
+      const leftName = left.name ?? '';
+      const rightName = right.name ?? '';
+      const leftId = Number(left.id ?? -1);
+      const rightId = Number(right.id ?? -1);
+
+      if (selectedSortOption === 'alphabetical') {
+        const result = compareOptionalGlobalAlphabet(leftName, rightName);
+        return isSortDescending ? -result : result;
+      }
+
+      let result = 0;
+
+      if (selectedSortOption === 'unlocksMostCocktails') {
+        const leftUnlockCount = leftId >= 0 ? unlocksMostCocktailsByIngredientId.get(leftId) ?? 0 : 0;
+        const rightUnlockCount = rightId >= 0 ? unlocksMostCocktailsByIngredientId.get(rightId) ?? 0 : 0;
+        result = rightUnlockCount - leftUnlockCount;
+      } else if (selectedSortOption === 'mostUsed') {
+        const leftUseCount = leftId >= 0 ? ingredientCocktailStats.totalCounts.get(leftId) ?? 0 : 0;
+        const rightUseCount = rightId >= 0 ? ingredientCocktailStats.totalCounts.get(rightId) ?? 0 : 0;
+        result = rightUseCount - leftUseCount;
+      } else {
+        result = rightId - leftId;
+      }
+
+      if (result === 0) {
+        result = compareOptionalGlobalAlphabet(leftName, rightName);
+      }
+
+      return isSortDescending ? -result : result;
+    },
+    [ingredientCocktailStats.totalCounts, isSortDescending, selectedSortOption, unlocksMostCocktailsByIngredientId],
+  );
+
   const sortedIngredients = useMemo(
-    () => [...filteredIngredients].sort((a, b) => compareOptionalGlobalAlphabet(a.name, b.name)),
-    [filteredIngredients],
+    () => [...filteredIngredients].sort(compareIngredientsBySelectedSort),
+    [compareIngredientsBySelectedSort, filteredIngredients],
   );
 
   const highlightColor = Colors.highlightFaint ?? Colors.tint;
-  const isFilterActive = selectedTagKeys.size > 0;
+  const isFilterActive =
+    selectedTagKeys.size > 0 || selectedSortOption !== 'alphabetical' || isSortDescending;
   const emptyMessage = useMemo(() => {
     switch (activeTab) {
       case 'my':
@@ -579,23 +677,6 @@ export default function IngredientsScreen() {
 
     return 0;
   }, [filterAnchorLayout, headerLayout]);
-
-  const effectiveAvailableIngredientIds = useMemo(() => {
-    if (optimisticAvailability.size === 0) {
-      return availableIngredientIds;
-    }
-
-    const next = new Set(availableIngredientIds);
-    optimisticAvailability.forEach((value, id) => {
-      if (value) {
-        next.add(id);
-      } else {
-        next.delete(id);
-      }
-    });
-
-    return next;
-  }, [availableIngredientIds, optimisticAvailability]);
 
   useEffect(() => {
     if (optimisticAvailability.size === 0) {
@@ -820,6 +901,55 @@ export default function IngredientsScreen() {
                 style={styles.filterMenuScroll}
                 showsVerticalScrollIndicator
                 keyboardShouldPersistTaps="handled">
+
+                <View style={styles.filterSortSection}>
+                  <Text style={[styles.filterSortLabel, { color: Colors.onSurfaceVariant }]}>
+                    {t('ingredients.sortBy')}
+                  </Text>
+                  <ScrollView
+                    horizontal
+                    style={styles.filterSortScroll}
+                    contentContainerStyle={styles.filterSortRow}
+                    showsHorizontalScrollIndicator={false}
+                    keyboardShouldPersistTaps="handled">
+                    {buildIngredientSortOptions({
+                      selectedSortOption,
+                      isSortDescending,
+                      onSortOptionChange: handleSortOptionChange,
+                      tintColor: Colors.tint,
+                      surfaceColor: Colors.surface,
+                      getAccessibilityLabel: (option) => {
+                        switch (option) {
+                          case 'alphabetical':
+                            return t('ingredients.sortOptionAlphabeticalAccessibility');
+                          case 'unlocksMostCocktails':
+                            return t('ingredients.sortOptionUnlocksMostCocktailsAccessibility');
+                          case 'mostUsed':
+                            return t('ingredients.sortOptionMostUsedAccessibility');
+                          default:
+                            return t('ingredients.sortOptionRecentlyAddedAccessibility');
+                        }
+                      },
+                    }).map((option) => (
+                      <TagPill
+                        key={option.key}
+                        label={option.label}
+                        color={Colors.tint}
+                        selected={option.selected}
+                        icon={option.icon}
+                        onPress={option.onPress}
+                        accessibilityRole="radio"
+                        accessibilityState={{ selected: option.selected }}
+                        accessibilityLabel={option.accessibilityLabel}
+                        androidRippleColor={`${Colors.surfaceVariant}33`}
+                        style={option.label ? undefined : styles.iconOnlyPill}
+                      />
+                    ))}
+                  </ScrollView>
+                </View>
+                <Text style={[styles.filterSortLabel, styles.filterByLabel, { color: Colors.onSurfaceVariant }]}>
+                  {t('common.filterBy')}
+                </Text>
                 {availableTagOptions.length > 0 ? (
                   <View style={styles.filterTagList}>
                     {availableTagOptions.map((tag) => {
@@ -847,7 +977,7 @@ export default function IngredientsScreen() {
                     {t("common.noTagsAvailable")}
                   </Text>
                 )}
-                {selectedTagKeys.size > 0 ? (
+                {isFilterActive ? (
                   <Pressable
                     accessibilityRole="button"
                     accessibilityLabel={t('ingredients.clearSelectedTagFilters')}
@@ -971,6 +1101,36 @@ const styles = StyleSheet.create({
   filterMenuScroll: {
     maxHeight: 540,
     paddingBottom: 2,
+  },
+
+  filterSortSection: {
+    marginBottom: 12,
+    gap: 8,
+  },
+  filterSortLabel: {
+    fontSize: 12,
+    fontWeight: '700',
+    letterSpacing: 0.6,
+    textTransform: 'uppercase',
+    alignSelf: 'flex-start',
+  },
+  filterSortScroll: {
+    alignSelf: 'stretch',
+  },
+  filterSortRow: {
+    flexGrow: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 12,
+  },
+  iconOnlyPill: {
+    minWidth: 53,
+    minHeight: 36,
+    paddingHorizontal: 10,
+  },
+  filterByLabel: {
+    marginBottom: 12,
   },
   filterTagList: {
     flexDirection: 'column',
