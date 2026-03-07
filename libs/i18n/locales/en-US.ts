@@ -399,9 +399,12 @@ export const enUSTranslations: TranslationDictionary = {
 
   "ingredients.sortBy": "Sort by",
   "ingredients.sortOptionAlphabeticalAccessibility": "Sort ingredients by A-z",
-  "ingredients.sortOptionUnlocksMostCocktailsAccessibility": "Sort ingredients by cocktails unlocked",
-  "ingredients.sortOptionMostUsedAccessibility": "Sort ingredients by use count",
-  "ingredients.sortOptionRecentlyAddedAccessibility": "Sort ingredients by recently added",
+  "ingredients.sortOptionUnlocksMostCocktailsAccessibility":
+    "Sort ingredients by cocktails unlocked",
+  "ingredients.sortOptionMostUsedAccessibility":
+    "Sort ingredients by use count",
+  "ingredients.sortOptionRecentlyAddedAccessibility":
+    "Sort ingredients by recently added",
 
   "cocktails.oneMoreIngredientForMore":
     "One more ingredient for more cocktails",
@@ -409,18 +412,20 @@ export const enUSTranslations: TranslationDictionary = {
     "Remove ingredient from shopping list",
   "cocktails.addIngredientToShopping": "Add ingredient to shopping list",
   "cocktails.buyNamed": "Buy {{name}}",
-  "cocktails.toMakeMore.one": "To make {{count}} more cocktail",
-  "cocktails.toMakeMore.few": "To make {{count}} more cocktails",
-  "cocktails.toMakeMore.many": "To make {{count}} more cocktails",
-  "cocktails.toMakeMore.other": "To make {{count}} more cocktails",
+  "cocktails.toMakeMore.one": "to make {{count}} more cocktail",
+  "cocktails.toMakeMore.few": "to make {{count}} more cocktails",
+  "cocktails.toMakeMore.many": "to make {{count}} more cocktails",
+  "cocktails.toMakeMore.other": "to make {{count}} more cocktails",
   "cocktails.collapseIngredientGroup": "Collapse {{name}} cocktails",
   "cocktails.expandIngredientGroup": "Expand {{name}} cocktails",
   "cocktails.clearSelectedFilters": "Clear selected filters",
 
   "cocktails.sortBy": "Sort by",
   "cocktails.sortOptionAlphabeticalAccessibility": "Sort by A-z",
-  "cocktails.sortOptionRequiredCountAccessibility": "Sort by required ingredients count",
-  "cocktails.sortOptionMissingRequiredCountAccessibility": "Sort by missing required ingredients count",
+  "cocktails.sortOptionRequiredCountAccessibility":
+    "Sort by required ingredients count",
+  "cocktails.sortOptionMissingRequiredCountAccessibility":
+    "Sort by missing required ingredients count",
   "cocktails.sortOptionRatingAccessibility": "Sort by rating",
   "cocktails.sortOptionRandomAccessibility": "Sort randomly",
   "cocktails.addCocktail": "Add cocktail",
@@ -433,7 +438,8 @@ export const enUSTranslations: TranslationDictionary = {
   "shakerResults.sortBy": "Sort by",
   "shakerResults.sortOptionAlphabetical": "Alphabetical (A–Z)",
   "shakerResults.sortOptionRequiredCount": "Required ingredients count",
-  "shakerResults.sortOptionMissingRequiredCount": "Missing required ingredients count",
+  "shakerResults.sortOptionMissingRequiredCount":
+    "Missing required ingredients count",
   "shakerResults.sortOptionRating": "Rating",
   "shakerResults.sortOptionRandom": "Random",
   "shakerResults.emptyMatchingRecipes": "No matching recipes",
@@ -746,7 +752,8 @@ export const enUSTranslations: TranslationDictionary = {
   "barcode.editBeforeSaving": "Edit before saving",
   "barcode.loadingProductInfo": "Loading product info",
   "barcode.helpTitle": "Barcode scan help",
-  "barcode.helpMessage": "Point your camera at a product barcode. We will check if it already exists, suggest similar ingredients, and let you create or attach safely.",
+  "barcode.helpMessage":
+    "Point your camera at a product barcode. We will check if it already exists, suggest similar ingredients, and let you create or attach safely.",
   "barcode.scannerUnavailable": "Barcode scanner is unavailable in this build",
   "common.back": "Back",
   "common.somethingWentWrong": "Something went wrong",
