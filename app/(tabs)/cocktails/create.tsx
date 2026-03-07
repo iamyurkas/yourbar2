@@ -1262,6 +1262,9 @@ export default function CreateCocktailScreen() {
           ingredientId != null &&
           ingredientById.get(ingredientId)?.ingredientKind === 'ice';
 
+        const process = isIceIngredient ? !item.serving : item.process;
+        const serving = isIceIngredient ? !process : item.serving;
+
         return [{
           ingredientId,
           name: ingredientName,
@@ -1269,8 +1272,8 @@ export default function CreateCocktailScreen() {
           unitId,
           optional: isIceIngredient ? false : item.optional,
           garnish: isIceIngredient ? false : item.garnish,
-          process: item.process,
-          serving: item.serving,
+          process,
+          serving,
           allowBaseSubstitution: item.allowBaseSubstitution,
           allowBrandSubstitution: item.allowBrandSubstitution,
           allowStyleSubstitution: item.allowStyleSubstitution,
@@ -2695,13 +2698,13 @@ function EditableIngredientRow({
     onChange(ingredient.key, { garnish: !ingredient.garnish });
   }, [ingredient.key, ingredient.garnish, onChange]);
 
-  const handleToggleProcess = useCallback(() => {
-    onChange(ingredient.key, { process: !ingredient.process });
-  }, [ingredient.key, ingredient.process, onChange]);
+  const handleSelectProcess = useCallback(() => {
+    onChange(ingredient.key, { process: true, serving: false });
+  }, [ingredient.key, onChange]);
 
-  const handleToggleServing = useCallback(() => {
-    onChange(ingredient.key, { serving: !ingredient.serving });
-  }, [ingredient.key, ingredient.serving, onChange]);
+  const handleSelectServing = useCallback(() => {
+    onChange(ingredient.key, { process: false, serving: true });
+  }, [ingredient.key, onChange]);
 
   const handleToggleAllowBase = useCallback(() => {
     onChange(ingredient.key, {
@@ -2747,12 +2750,39 @@ function EditableIngredientRow({
   }, [ingredient.unitId, t, usePluralUnits, locale]);
 
   useEffect(() => {
-    if (!isIceIngredient || (!ingredient.garnish && !ingredient.optional)) {
+    if (!isIceIngredient) {
       return;
     }
 
-    onChange(ingredient.key, { garnish: false, optional: false });
-  }, [ingredient.garnish, ingredient.key, ingredient.optional, isIceIngredient, onChange]);
+    const changes: Partial<EditableIngredient> = {};
+
+    if (ingredient.garnish) {
+      changes.garnish = false;
+    }
+
+    if (ingredient.optional) {
+      changes.optional = false;
+    }
+
+    if (ingredient.process && ingredient.serving) {
+      changes.serving = false;
+    } else if (!ingredient.process && !ingredient.serving) {
+      changes.process = true;
+      changes.serving = false;
+    }
+
+    if (Object.keys(changes).length > 0) {
+      onChange(ingredient.key, changes);
+    }
+  }, [
+    ingredient.garnish,
+    ingredient.key,
+    ingredient.optional,
+    ingredient.process,
+    ingredient.serving,
+    isIceIngredient,
+    onChange,
+  ]);
 
   useEffect(() => {
     return () => {
@@ -3033,10 +3063,10 @@ function EditableIngredientRow({
       <View style={styles.toggleRow}>
         {isIceIngredient ? (
           <>
-            <ToggleChip
+            <OptionChip
               label={t("cocktailForm.process")}
               active={ingredient.process}
-              onToggle={handleToggleProcess}
+              onSelect={handleSelectProcess}
               onInfo={() =>
                 onOpenDialog({
                   title: t("cocktailForm.process"),
@@ -3045,10 +3075,10 @@ function EditableIngredientRow({
                 })
               }
             />
-            <ToggleChip
+            <OptionChip
               label={t("cocktailForm.serving")}
               active={ingredient.serving}
-              onToggle={handleToggleServing}
+              onSelect={handleSelectServing}
               onInfo={() =>
                 onOpenDialog({
                   title: t("cocktailForm.serving"),
@@ -3211,6 +3241,58 @@ function ToggleChip({ label, active, onToggle, onInfo }: ToggleChipProps) {
       >
         <MaterialCommunityIcons
           name={active ? "checkbox-marked-outline" : "checkbox-blank-outline"}
+          size={18}
+          color={active ? Colors.tint : Colors.onSurfaceVariant}
+        />
+        <Text
+          style={[styles.toggleChipLabel, { color: Colors.onSurfaceVariant }]}
+          numberOfLines={1}
+        >
+          {label}
+        </Text>
+      </Pressable>
+      {onInfo ? (
+        <Pressable
+          onPress={onInfo}
+          hitSlop={8}
+          accessibilityRole="button"
+          accessibilityLabel={`About ${label}`}
+        >
+          <MaterialCommunityIcons
+            name="information-outline"
+            size={16}
+            color={Colors.onSurfaceVariant}
+          />
+        </Pressable>
+      ) : null}
+    </View>
+  );
+}
+
+type OptionChipProps = {
+  label: string;
+  active: boolean;
+  onSelect: () => void;
+  onInfo?: () => void;
+};
+
+function OptionChip({ label, active, onSelect, onInfo }: OptionChipProps) {
+  const Colors = useAppColors();
+  return (
+    <View style={styles.toggleChipContainer}>
+      <Pressable
+        onPress={onSelect}
+        style={[
+          styles.toggleChip,
+          {
+            backgroundColor: active ? `${Colors.tint}1A` : "transparent",
+          },
+        ]}
+        accessibilityRole="radio"
+        accessibilityState={{ checked: active }}
+      >
+        <MaterialCommunityIcons
+          name={active ? "check-circle" : "checkbox-blank-circle-outline"}
           size={18}
           color={active ? Colors.tint : Colors.onSurfaceVariant}
         />

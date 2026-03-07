@@ -817,8 +817,16 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             const isIceIngredient = selectedIngredient?.ingredientKind === 'ice';
             const optional = !isIceIngredient && ingredient.optional ? true : undefined;
             const garnish = !isIceIngredient && ingredient.garnish ? true : undefined;
-            const process = ingredient.process ? true : undefined;
-            const serving = ingredient.serving ? true : undefined;
+            const process = isIceIngredient
+              ? ingredient.serving ? undefined : true
+              : ingredient.process
+                ? true
+                : undefined;
+            const serving = isIceIngredient
+              ? process ? undefined : true
+              : ingredient.serving
+                ? true
+                : undefined;
             const allowBase = ingredient.allowBaseSubstitution ? true : undefined;
             const allowBrand = ingredient.allowBrandSubstitution ? true : undefined;
             const allowStyle = ingredient.allowStyleSubstitution ? true : undefined;
@@ -1705,8 +1713,16 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           const isIceIngredient = selectedIngredient?.ingredientKind === 'ice';
           const optional = !isIceIngredient && ingredient.optional ? true : undefined;
           const garnish = !isIceIngredient && ingredient.garnish ? true : undefined;
-          const process = ingredient.process ? true : undefined;
-          const serving = ingredient.serving ? true : undefined;
+          const process = isIceIngredient
+            ? ingredient.serving ? undefined : true
+            : ingredient.process
+              ? true
+              : undefined;
+          const serving = isIceIngredient
+            ? process ? undefined : true
+            : ingredient.serving
+              ? true
+              : undefined;
           const allowBase = ingredient.allowBaseSubstitution ? true : undefined;
           const allowBrand = ingredient.allowBrandSubstitution ? true : undefined;
           const allowStyle = ingredient.allowStyleSubstitution ? true : undefined;
