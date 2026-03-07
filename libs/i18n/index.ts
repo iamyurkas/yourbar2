@@ -1,3 +1,4 @@
+import { deDETranslations } from '@/libs/i18n/locales/de-DE';
 import { enGBTranslations } from '@/libs/i18n/locales/en-GB';
 import { enUSTranslations } from '@/libs/i18n/locales/en-US';
 import { esESTranslations } from '@/libs/i18n/locales/es-ES';
@@ -7,6 +8,7 @@ import type { LanguageOption, SupportedLocale, TranslationDictionary } from '@/l
 export const DEFAULT_LOCALE: SupportedLocale = 'en-GB';
 
 export const LANGUAGE_OPTIONS: LanguageOption[] = [
+  { code: 'de-DE', name: 'German', nativeName: 'Deutsch', flag: '🇩🇪' },
   { code: 'en-GB', name: 'English', nativeName: 'English', flag: '🇬🇧' },
   { code: 'en-US', name: 'English (US)', nativeName: 'English (US)', flag: '🇺🇸' },
   { code: 'es-ES', name: 'Spanish', nativeName: 'Español (España)', flag: '🇪🇸' },
@@ -14,6 +16,7 @@ export const LANGUAGE_OPTIONS: LanguageOption[] = [
 ];
 
 export const TRANSLATIONS: Record<SupportedLocale, TranslationDictionary> = {
+  'de-DE': deDETranslations,
   'en-GB': enGBTranslations,
   'en-US': enUSTranslations,
   'es-ES': esESTranslations,
@@ -21,7 +24,7 @@ export const TRANSLATIONS: Record<SupportedLocale, TranslationDictionary> = {
 };
 
 export function isSupportedLocale(value: string | null | undefined): value is SupportedLocale {
-  return value === 'en-GB' || value === 'en-US' || value === 'es-ES' || value === 'uk-UA';
+  return value === 'de-DE' || value === 'en-GB' || value === 'en-US' || value === 'es-ES' || value === 'uk-UA';
 }
 
 export function translate(
