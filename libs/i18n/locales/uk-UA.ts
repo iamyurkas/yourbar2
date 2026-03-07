@@ -210,6 +210,10 @@ export const ukUATranslations: TranslationDictionary = {
   "cocktailForm.amountPlaceholder": "напр.: 45",
   "cocktailForm.garnish": "Декор",
   "cocktailForm.optional": "Опційно",
+  "cocktailForm.process": "Процес",
+  "cocktailForm.processMessage": "Позначає лід, який використовується під час приготування (шейк, стір, бленд), а не подається в фінальному келиху.",
+  "cocktailForm.serving": "Подача",
+  "cocktailForm.servingMessage": "Позначає лід, який має бути в келиху під час подачі напою.",
   "cocktailForm.allowBaseSubstitute": "Дозволити базову заміну",
   "cocktailForm.allowBaseSubstituteMessage":
     "Якщо вказаного інгредієнта немає, коктейль буде показано як доступний із його базовим інгредієнтом.",

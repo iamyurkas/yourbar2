@@ -38095,6 +38095,7 @@
       "name": "Ice",
       "description": "Frozen water that chills and dilutes cocktails. Use large cubes for slower melt or crushed ice for Tiki drinks. Clear, fresh ice keeps flavours clean.",
       "tags": [8],
+      "ingredientKind": "ice",
       "photoUri": "assets/ingredients/196-ice.jpg"
     },
     {

@@ -88,6 +88,8 @@ type EditableIngredient = {
   unitId?: number;
   optional: boolean;
   garnish: boolean;
+  process: boolean;
+  serving: boolean;
   allowBaseSubstitution: boolean;
   allowBrandSubstitution: boolean;
   allowStyleSubstitution: boolean;
@@ -109,6 +111,8 @@ type CocktailFormSnapshot = {
     unitId?: number;
     optional: boolean;
     garnish: boolean;
+    process: boolean;
+    serving: boolean;
     allowBaseSubstitution: boolean;
     allowBrandSubstitution: boolean;
     allowStyleSubstitution: boolean;
@@ -170,6 +174,8 @@ function createEditableIngredient(
     unitId: initial?.unitId ?? defaultUnitId,
     optional: initial?.optional ?? false,
     garnish: initial?.garnish ?? false,
+    process: initial?.process ?? false,
+    serving: initial?.serving ?? false,
     allowBaseSubstitution: initial?.allowBaseSubstitution ?? false,
     allowBrandSubstitution: initial?.allowBrandSubstitution ?? false,
     allowStyleSubstitution: initial?.allowStyleSubstitution ?? false,
@@ -220,6 +226,8 @@ function mapRecipeIngredientToEditable(
     unitId: unitId ?? defaultUnitId,
     optional: Boolean(recipe.optional),
     garnish: Boolean(recipe.garnish),
+    process: Boolean((recipe as { process?: boolean }).process),
+    serving: Boolean((recipe as { serving?: boolean }).serving),
     allowBaseSubstitution: Boolean(
       (recipe as { allowBaseSubstitution?: boolean }).allowBaseSubstitution,
     ),
@@ -442,6 +450,8 @@ export default function CreateCocktailScreen() {
         unitId: item.unitId,
         optional: item.optional,
         garnish: item.garnish,
+        process: item.process,
+        serving: item.serving,
         allowBaseSubstitution: item.allowBaseSubstitution,
         allowBrandSubstitution: item.allowBrandSubstitution,
         allowStyleSubstitution: item.allowStyleSubstitution,
@@ -456,6 +466,7 @@ export default function CreateCocktailScreen() {
     description,
     glassId,
     imageUri,
+    ingredientById,
     ingredientsState,
     instructions,
     methodIds,
@@ -1247,13 +1258,19 @@ export default function CreateCocktailScreen() {
           }];
         });
 
+        const isIceIngredient =
+          ingredientId != null &&
+          ingredientById.get(ingredientId)?.ingredientKind === 'ice';
+
         return [{
           ingredientId,
           name: ingredientName,
           amount: item.amount.trim() || undefined,
           unitId,
-          optional: item.optional,
-          garnish: item.garnish,
+          optional: isIceIngredient ? false : item.optional,
+          garnish: isIceIngredient ? false : item.garnish,
+          process: item.process,
+          serving: item.serving,
           allowBaseSubstitution: item.allowBaseSubstitution,
           allowBrandSubstitution: item.allowBrandSubstitution,
           allowStyleSubstitution: item.allowStyleSubstitution,
@@ -2500,6 +2517,8 @@ function EditableIngredientRow({
     );
   }, [ingredient.ingredientId, inventoryIngredients]);
 
+  const isIceIngredient = ingredientRecord?.ingredientKind === 'ice';
+
   const baseIngredientId = useMemo(() => {
     const candidate = ingredientRecord?.baseIngredientId;
     if (candidate == null) {
@@ -2676,6 +2695,14 @@ function EditableIngredientRow({
     onChange(ingredient.key, { garnish: !ingredient.garnish });
   }, [ingredient.key, ingredient.garnish, onChange]);
 
+  const handleToggleProcess = useCallback(() => {
+    onChange(ingredient.key, { process: !ingredient.process });
+  }, [ingredient.key, ingredient.process, onChange]);
+
+  const handleToggleServing = useCallback(() => {
+    onChange(ingredient.key, { serving: !ingredient.serving });
+  }, [ingredient.key, ingredient.serving, onChange]);
+
   const handleToggleAllowBase = useCallback(() => {
     onChange(ingredient.key, {
       allowBaseSubstitution: !ingredient.allowBaseSubstitution,
@@ -2718,6 +2745,14 @@ function EditableIngredientRow({
 
     return label || "";
   }, [ingredient.unitId, t, usePluralUnits, locale]);
+
+  useEffect(() => {
+    if (!isIceIngredient || (!ingredient.garnish && !ingredient.optional)) {
+      return;
+    }
+
+    onChange(ingredient.key, { garnish: false, optional: false });
+  }, [ingredient.garnish, ingredient.key, ingredient.optional, isIceIngredient, onChange]);
 
   useEffect(() => {
     return () => {
@@ -2996,16 +3031,47 @@ function EditableIngredientRow({
       </View>
 
       <View style={styles.toggleRow}>
-        <ToggleChip
-          label={t("cocktailForm.garnish")}
-          active={ingredient.garnish}
-          onToggle={handleToggleGarnish}
-        />
-        <ToggleChip
-          label={t("cocktailForm.optional")}
-          active={ingredient.optional}
-          onToggle={handleToggleOptional}
-        />
+        {isIceIngredient ? (
+          <>
+            <ToggleChip
+              label={t("cocktailForm.process")}
+              active={ingredient.process}
+              onToggle={handleToggleProcess}
+              onInfo={() =>
+                onOpenDialog({
+                  title: t("cocktailForm.process"),
+                  message: t("cocktailForm.processMessage"),
+                  actions: [{ label: t("common.ok") }],
+                })
+              }
+            />
+            <ToggleChip
+              label={t("cocktailForm.serving")}
+              active={ingredient.serving}
+              onToggle={handleToggleServing}
+              onInfo={() =>
+                onOpenDialog({
+                  title: t("cocktailForm.serving"),
+                  message: t("cocktailForm.servingMessage"),
+                  actions: [{ label: t("common.ok") }],
+                })
+              }
+            />
+          </>
+        ) : (
+          <>
+            <ToggleChip
+              label={t("cocktailForm.garnish")}
+              active={ingredient.garnish}
+              onToggle={handleToggleGarnish}
+            />
+            <ToggleChip
+              label={t("cocktailForm.optional")}
+              active={ingredient.optional}
+              onToggle={handleToggleOptional}
+            />
+          </>
+        )}
       </View>
 
       {isBrandedIngredient ? (

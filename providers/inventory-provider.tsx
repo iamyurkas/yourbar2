@@ -810,8 +810,15 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
                 : undefined;
 
             const amount = ingredient.amount?.trim() || undefined;
-            const optional = ingredient.optional ? true : undefined;
-            const garnish = ingredient.garnish ? true : undefined;
+            const selectedIngredient =
+              ingredientId != null
+                ? prev.ingredients.find((item) => Number(item.id ?? -1) === ingredientId)
+                : undefined;
+            const isIceIngredient = selectedIngredient?.ingredientKind === 'ice';
+            const optional = !isIceIngredient && ingredient.optional ? true : undefined;
+            const garnish = !isIceIngredient && ingredient.garnish ? true : undefined;
+            const process = ingredient.process ? true : undefined;
+            const serving = ingredient.serving ? true : undefined;
             const allowBase = ingredient.allowBaseSubstitution ? true : undefined;
             const allowBrand = ingredient.allowBrandSubstitution ? true : undefined;
             const allowStyle = ingredient.allowStyleSubstitution ? true : undefined;
@@ -859,6 +866,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
               unitId,
               optional,
               garnish,
+              process,
+              serving,
               allowBaseSubstitution: allowBase,
               allowBrandSubstitution: allowBrand,
               allowStyleSubstitution: allowStyle,
@@ -1689,8 +1698,15 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
               : undefined;
 
           const amount = ingredient.amount?.trim() || undefined;
-          const optional = ingredient.optional ? true : undefined;
-          const garnish = ingredient.garnish ? true : undefined;
+          const selectedIngredient =
+            ingredientId != null
+              ? prev.ingredients.find((item) => Number(item.id ?? -1) === ingredientId)
+              : undefined;
+          const isIceIngredient = selectedIngredient?.ingredientKind === 'ice';
+          const optional = !isIceIngredient && ingredient.optional ? true : undefined;
+          const garnish = !isIceIngredient && ingredient.garnish ? true : undefined;
+          const process = ingredient.process ? true : undefined;
+          const serving = ingredient.serving ? true : undefined;
           const allowBase = ingredient.allowBaseSubstitution ? true : undefined;
           const allowBrand = ingredient.allowBrandSubstitution ? true : undefined;
           const allowStyle = ingredient.allowStyleSubstitution ? true : undefined;
@@ -1737,6 +1753,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             unitId,
             optional,
             garnish,
+            process,
+            serving,
             allowBaseSubstitution: allowBase,
             allowBrandSubstitution: allowBrand,
             allowStyleSubstitution: allowStyle,

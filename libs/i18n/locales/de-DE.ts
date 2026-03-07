@@ -211,6 +211,10 @@ export const deDETranslations: TranslationDictionary = {
   "cocktailForm.amountPlaceholder": "z. B. 45",
   "cocktailForm.garnish": "Garnitur",
   "cocktailForm.optional": "Optional",
+  "cocktailForm.process": "Zubereitung",
+  "cocktailForm.processMessage": "Kennzeichnet Eis, das bei der Zubereitung (Shaken, Rühren oder Mixen) verwendet wird und nicht im finalen Glas serviert wird.",
+  "cocktailForm.serving": "Servieren",
+  "cocktailForm.servingMessage": "Kennzeichnet Eis, das beim Servieren im Glas vorhanden sein soll.",
   "cocktailForm.allowBaseSubstitute": "Basisersatz zulassen",
   "cocktailForm.allowBaseSubstituteMessage":
     "Wenn die angegebene Zutat nicht verfügbar ist, wird der Cocktail mit seiner Basiszutat als verfügbar angezeigt.",
