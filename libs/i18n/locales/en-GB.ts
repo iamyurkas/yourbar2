@@ -210,6 +210,12 @@ export const enGBTranslations: TranslationDictionary = {
   "cocktailForm.amountPlaceholder": "e.g., 45",
   "cocktailForm.garnish": "Garnish",
   "cocktailForm.optional": "Optional",
+  "cocktailForm.iceUsageProcess": "Process",
+  "cocktailForm.iceUsageProcessMessage":
+    "Use for ice that chills during preparation (shake, stir, throw). It does not stay in the serving glass.",
+  "cocktailForm.iceUsageServing": "Serving",
+  "cocktailForm.iceUsageServingMessage":
+    "Use for ice that is served with the drink (in-glass or frozen blend ice).",
   "cocktailForm.allowBaseSubstitute": "Allow base substitute",
   "cocktailForm.allowBaseSubstituteMessage":
     "If the specified ingredient isn't available, the cocktail will be shown as available with its base ingredient.",

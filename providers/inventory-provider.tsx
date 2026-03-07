@@ -810,6 +810,10 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
                 : undefined;
 
             const amount = ingredient.amount?.trim() || undefined;
+            const iceUsage =
+              ingredient.iceUsage === 'process' || ingredient.iceUsage === 'serving'
+                ? ingredient.iceUsage
+                : undefined;
             const optional = ingredient.optional ? true : undefined;
             const garnish = ingredient.garnish ? true : undefined;
             const allowBase = ingredient.allowBaseSubstitution ? true : undefined;
@@ -857,6 +861,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
               name: trimmedIngredientName,
               amount,
               unitId,
+              iceUsage,
               optional,
               garnish,
               allowBaseSubstitution: allowBase,
@@ -1025,6 +1030,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         const imageUrl = input.imageUrl?.trim() || undefined;
         const abv = input.abv != null && Number.isFinite(Number(input.abv)) ? Number(input.abv) : undefined;
         const barcodes = Array.from(new Set((input.barcodes ?? []).map((value) => value?.trim()).filter((value): value is string => Boolean(value))));
+        const ingredientKind = input.ingredientKind?.trim() || undefined;
 
         const tagMap = new Map<number, IngredientTag>();
         (input.tags ?? []).forEach((tag) => {
@@ -1054,6 +1060,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           photoUri,
           imageUrl,
           abv,
+          ingredientKind,
           barcodes: barcodes.length > 0 ? barcodes : undefined,
         };
 
@@ -1564,6 +1571,10 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         const barcodes = input.barcodes !== undefined
           ? Array.from(new Set((input.barcodes ?? []).map((value) => value?.trim()).filter((value): value is string => Boolean(value))))
           : previous?.barcodes ?? [];
+        const ingredientKind =
+          input.ingredientKind !== undefined
+            ? input.ingredientKind?.trim() || undefined
+            : previous?.ingredientKind ?? undefined;
 
         const tagMap = new Map<number, IngredientTag>();
         (input.tags ?? []).forEach((tag) => {
@@ -1594,6 +1605,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           photoUri,
           imageUrl,
           abv,
+          ingredientKind,
           barcodes: barcodes.length > 0 ? barcodes : undefined,
         };
 
@@ -1689,6 +1701,10 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
               : undefined;
 
           const amount = ingredient.amount?.trim() || undefined;
+          const iceUsage =
+            ingredient.iceUsage === 'process' || ingredient.iceUsage === 'serving'
+              ? ingredient.iceUsage
+              : undefined;
           const optional = ingredient.optional ? true : undefined;
           const garnish = ingredient.garnish ? true : undefined;
           const allowBase = ingredient.allowBaseSubstitution ? true : undefined;
@@ -1735,6 +1751,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             name: trimmedIngredientName,
             amount,
             unitId,
+            iceUsage,
             optional,
             garnish,
             allowBaseSubstitution: allowBase,

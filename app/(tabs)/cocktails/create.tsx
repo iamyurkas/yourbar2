@@ -86,6 +86,7 @@ type EditableIngredient = {
   name: string;
   amount: string;
   unitId?: number;
+  iceUsage?: "process" | "serving";
   optional: boolean;
   garnish: boolean;
   allowBaseSubstitution: boolean;
@@ -107,6 +108,7 @@ type CocktailFormSnapshot = {
     name: string;
     amount: string;
     unitId?: number;
+    iceUsage?: "process" | "serving";
     optional: boolean;
     garnish: boolean;
     allowBaseSubstitution: boolean;
@@ -168,6 +170,7 @@ function createEditableIngredient(
     name: initial?.name ?? "",
     amount: initial?.amount ?? "",
     unitId: initial?.unitId ?? defaultUnitId,
+    iceUsage: initial?.iceUsage,
     optional: initial?.optional ?? false,
     garnish: initial?.garnish ?? false,
     allowBaseSubstitution: initial?.allowBaseSubstitution ?? false,
@@ -218,6 +221,7 @@ function mapRecipeIngredientToEditable(
     name: recipe.name ?? "",
     amount: recipe.amount ?? "",
     unitId: unitId ?? defaultUnitId,
+    iceUsage: recipe.iceUsage,
     optional: Boolean(recipe.optional),
     garnish: Boolean(recipe.garnish),
     allowBaseSubstitution: Boolean(
@@ -445,6 +449,7 @@ export default function CreateCocktailScreen() {
         allowBaseSubstitution: item.allowBaseSubstitution,
         allowBrandSubstitution: item.allowBrandSubstitution,
         allowStyleSubstitution: item.allowStyleSubstitution,
+        iceUsage: item.iceUsage,
         substitutes: item.substitutes.map((substitute) => ({
           ingredientId: substitute.ingredientId,
           name: substitute.name,
@@ -1257,6 +1262,7 @@ export default function CreateCocktailScreen() {
           allowBaseSubstitution: item.allowBaseSubstitution,
           allowBrandSubstitution: item.allowBrandSubstitution,
           allowStyleSubstitution: item.allowStyleSubstitution,
+          iceUsage: item.iceUsage,
           substitutes,
           order: index + 1,
         } satisfies CreateCocktailInput["ingredients"][number]];
@@ -2513,6 +2519,7 @@ function EditableIngredientRow({
   }, [ingredientRecord?.baseIngredientId]);
 
   const isBrandedIngredient = baseIngredientId != null;
+  const isIceIngredient = ingredientRecord?.ingredientKind === "ice";
 
   const baseIngredientRecord = useMemo(() => {
     if (baseIngredientId == null) {
@@ -2676,6 +2683,14 @@ function EditableIngredientRow({
     onChange(ingredient.key, { garnish: !ingredient.garnish });
   }, [ingredient.key, ingredient.garnish, onChange]);
 
+  const handleSelectProcessIceUsage = useCallback(() => {
+    onChange(ingredient.key, { iceUsage: "process" });
+  }, [ingredient.key, onChange]);
+
+  const handleSelectServingIceUsage = useCallback(() => {
+    onChange(ingredient.key, { iceUsage: "serving" });
+  }, [ingredient.key, onChange]);
+
   const handleToggleAllowBase = useCallback(() => {
     onChange(ingredient.key, {
       allowBaseSubstitution: !ingredient.allowBaseSubstitution,
@@ -2718,6 +2733,44 @@ function EditableIngredientRow({
 
     return label || "";
   }, [ingredient.unitId, t, usePluralUnits, locale]);
+
+  useEffect(() => {
+    if (!isIceIngredient) {
+      if (ingredient.iceUsage != null) {
+        onChange(ingredient.key, { iceUsage: undefined });
+      }
+      return;
+    }
+
+    const patch: Partial<EditableIngredient> = {};
+    let hasPatch = false;
+
+    if (ingredient.optional) {
+      patch.optional = false;
+      hasPatch = true;
+    }
+
+    if (ingredient.garnish) {
+      patch.garnish = false;
+      hasPatch = true;
+    }
+
+    if (!ingredient.iceUsage) {
+      patch.iceUsage = "process";
+      hasPatch = true;
+    }
+
+    if (hasPatch) {
+      onChange(ingredient.key, patch);
+    }
+  }, [
+    ingredient.garnish,
+    ingredient.iceUsage,
+    ingredient.key,
+    ingredient.optional,
+    isIceIngredient,
+    onChange,
+  ]);
 
   useEffect(() => {
     return () => {
@@ -2995,18 +3048,47 @@ function EditableIngredientRow({
         </View>
       </View>
 
-      <View style={styles.toggleRow}>
-        <ToggleChip
-          label={t("cocktailForm.garnish")}
-          active={ingredient.garnish}
-          onToggle={handleToggleGarnish}
-        />
-        <ToggleChip
-          label={t("cocktailForm.optional")}
-          active={ingredient.optional}
-          onToggle={handleToggleOptional}
-        />
-      </View>
+      {isIceIngredient ? (
+        <View style={styles.toggleRow}>
+          <ToggleChip
+            label={t("cocktailForm.iceUsageProcess")}
+            active={ingredient.iceUsage === "process"}
+            onToggle={handleSelectProcessIceUsage}
+            onInfo={() =>
+              onOpenDialog({
+                title: t("cocktailForm.iceUsageProcess"),
+                message: t("cocktailForm.iceUsageProcessMessage"),
+                actions: [{ label: t("common.ok") }],
+              })
+            }
+          />
+          <ToggleChip
+            label={t("cocktailForm.iceUsageServing")}
+            active={ingredient.iceUsage === "serving"}
+            onToggle={handleSelectServingIceUsage}
+            onInfo={() =>
+              onOpenDialog({
+                title: t("cocktailForm.iceUsageServing"),
+                message: t("cocktailForm.iceUsageServingMessage"),
+                actions: [{ label: t("common.ok") }],
+              })
+            }
+          />
+        </View>
+      ) : (
+        <View style={styles.toggleRow}>
+          <ToggleChip
+            label={t("cocktailForm.garnish")}
+            active={ingredient.garnish}
+            onToggle={handleToggleGarnish}
+          />
+          <ToggleChip
+            label={t("cocktailForm.optional")}
+            active={ingredient.optional}
+            onToggle={handleToggleOptional}
+          />
+        </View>
+      )}
 
       {isBrandedIngredient ? (
         <View style={styles.toggleRow}>

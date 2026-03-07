@@ -30,6 +30,7 @@ type RawCocktail = {
     name?: string;
     amount?: string;
     unitId?: number;
+    iceUsage?: 'process' | 'serving';
     optional?: boolean;
     garnish?: boolean;
     allowBaseSubstitution?: boolean;
@@ -56,6 +57,7 @@ type RawIngredient = {
   barcodes?: string[];
   baseIngredientId?: number;
   styleIngredientId?: number;
+  ingredientKind?: 'ice' | string;
   tags?: RawTag[];
   synonyms?: string[];
   searchName?: string;

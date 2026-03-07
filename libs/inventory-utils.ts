@@ -207,6 +207,10 @@ export function normalizeCocktailIngredients(
       name: ingredient.name,
       amount: ingredient.amount ?? undefined,
       unitId: ingredient.unitId != null ? Math.trunc(Number(ingredient.unitId)) : undefined,
+      iceUsage:
+        ingredient.iceUsage === 'process' || ingredient.iceUsage === 'serving'
+          ? ingredient.iceUsage
+          : undefined,
       optional: ingredient.optional ? true : undefined,
       garnish: ingredient.garnish ? true : undefined,
       allowBaseSubstitution: ingredient.allowBaseSubstitution ? true : undefined,
@@ -255,6 +259,7 @@ export function toIngredientStorageRecord(ingredient: Ingredient | IngredientRec
     tags: normalizedTags && normalizedTags.length > 0 ? normalizedTags : undefined,
     baseIngredientId: ingredient.baseIngredientId ?? undefined,
     styleIngredientId: ingredient.styleIngredientId ?? undefined,
+    ingredientKind: ingredient.ingredientKind ?? undefined,
     photoUri: ingredient.photoUri ?? undefined,
     imageUrl: ingredient.imageUrl ?? undefined,
     abv: ingredient.abv ?? undefined,

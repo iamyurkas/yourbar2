@@ -207,6 +207,12 @@ export const esESTranslations: TranslationDictionary = {
   "cocktailForm.amountPlaceholder": "p. ej., 45",
   "cocktailForm.garnish": "Decoración",
   "cocktailForm.optional": "Opcional",
+  "cocktailForm.iceUsageProcess": "Proceso",
+  "cocktailForm.iceUsageProcessMessage":
+    "Úsalo para hielo de preparación (agitar, remover, throw). No permanece en el vaso de servicio.",
+  "cocktailForm.iceUsageServing": "Servicio",
+  "cocktailForm.iceUsageServingMessage":
+    "Úsalo para hielo que se sirve con la bebida (en vaso o hielo del batido frozen).",
   "cocktailForm.allowBaseSubstitute": "Permitir sustituto base",
   "cocktailForm.allowBaseSubstituteMessage":
     "Si el ingrediente especificado no está disponible, el cóctel se mostrará como disponible con su ingrediente base.",

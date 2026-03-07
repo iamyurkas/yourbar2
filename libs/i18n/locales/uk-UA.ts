@@ -210,6 +210,12 @@ export const ukUATranslations: TranslationDictionary = {
   "cocktailForm.amountPlaceholder": "напр.: 45",
   "cocktailForm.garnish": "Декор",
   "cocktailForm.optional": "Опційно",
+  "cocktailForm.iceUsageProcess": "Технічний",
+  "cocktailForm.iceUsageProcessMessage":
+    "Для льоду, який охолоджує під час приготування (shake, stir, throw). У склянці при подачі не залишається.",
+  "cocktailForm.iceUsageServing": "У склянку",
+  "cocktailForm.iceUsageServingMessage":
+    "Для льоду, який подається разом із напоєм (лід у склянці або лід у frozen-бленді).",
   "cocktailForm.allowBaseSubstitute": "Дозволити базову заміну",
   "cocktailForm.allowBaseSubstituteMessage":
     "Якщо вказаного інгредієнта немає, коктейль буде показано як доступний із його базовим інгредієнтом.",

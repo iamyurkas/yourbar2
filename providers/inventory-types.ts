@@ -17,6 +17,9 @@ export type IngredientTag = {
   color: string;
 };
 
+export type IngredientKind = 'ice' | (string & {});
+export type IceUsage = 'process' | 'serving';
+
 type CocktailIngredientRecord = NonNullable<BaseCocktailRecord['ingredients']>[number] & {
   optional?: boolean | null;
   garnish?: boolean | null;
@@ -40,6 +43,7 @@ export type IngredientRecord = Omit<BaseIngredientRecord, 'tags'> & {
   imageUrl?: string | null;
   abv?: number | null;
   barcodes?: string[] | null;
+  ingredientKind?: IngredientKind | null;
 };
 
 export type CocktailSubstitute = CocktailSubstituteRecord & { brand?: boolean };
@@ -51,6 +55,7 @@ export type CocktailIngredient = Omit<
   name?: string;
   amount?: string;
   unitId?: number;
+  iceUsage?: IceUsage;
   allowBaseSubstitution?: boolean;
   allowBrandSubstitution?: boolean;
   allowStyleSubstitution?: boolean;
@@ -117,6 +122,7 @@ export type CreateCocktailIngredientInput = {
   name?: string | null;
   amount?: string | null;
   unitId?: number | string | null;
+  iceUsage?: IceUsage | null;
   optional?: boolean | null;
   garnish?: boolean | null;
   allowBaseSubstitution?: boolean | null;
@@ -148,6 +154,7 @@ export type CreateIngredientInput = {
   barcodes?: string[] | null;
   baseIngredientId?: number | null;
   styleIngredientId?: number | null;
+  ingredientKind?: IngredientKind | null;
   tags?: IngredientTag[] | null;
 };
 
