@@ -238,7 +238,8 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   iconOnlyPill: {
-    minWidth: 40,
+    minWidth: 53,
+    minHeight: 36,
     paddingHorizontal: 10,
   },
   sortSectionDivider: {

@@ -96,6 +96,7 @@ export default function ShakerResultsScreen() {
     () => new Set(),
   );
   const [selectedSortOption, setSelectedSortOption] = useState<SortOption>('alphabetical');
+  const [isSortDescending, setSortDescending] = useState(false);
   const [headerLayout, setHeaderLayout] = useState<LayoutRectangle | null>(null);
   const [filterAnchorLayout, setFilterAnchorLayout] = useState<LayoutRectangle | null>(null);
   const listRef = useRef<FlatList<Cocktail>>(null);
@@ -379,10 +380,19 @@ export default function ShakerResultsScreen() {
     setSelectedTagKeys((previous) => (previous.size === 0 ? previous : new Set<string>()));
     setSelectedMethodIds((previous) => (previous.size === 0 ? previous : new Set<CocktailMethod['id']>()));
     setSelectedSortOption('alphabetical');
+    setSortDescending(false);
   }, []);
 
   const handleSortOptionChange = useCallback((option: SortOption) => {
-    setSelectedSortOption((previous) => (previous === option ? previous : option));
+    setSelectedSortOption((previous) => {
+      if (previous === option) {
+        setSortDescending((current) => !current);
+        return previous;
+      }
+
+      setSortDescending(false);
+      return option;
+    });
   }, []);
 
   const renderMethodIcon = useCallback(
@@ -533,18 +543,22 @@ export default function ShakerResultsScreen() {
     base.sort((left, right) => {
       const leftName = left.name ?? '';
       const rightName = right.name ?? '';
+      let result = 0;
 
       if (selectedSortOption === 'alphabetical') {
-        return compareOptionalGlobalAlphabet(leftName, rightName);
+        result = compareOptionalGlobalAlphabet(leftName, rightName);
+        return isSortDescending ? -result : result;
       }
 
       if (selectedSortOption === 'requiredCount') {
         const leftCount = countRequiredIngredients(left, ignoreGarnish);
         const rightCount = countRequiredIngredients(right, ignoreGarnish);
         if (leftCount !== rightCount) {
-          return leftCount - rightCount;
+          result = leftCount - rightCount;
+        } else {
+          result = compareOptionalGlobalAlphabet(leftName, rightName);
         }
-        return compareOptionalGlobalAlphabet(leftName, rightName);
+        return isSortDescending ? -result : result;
       }
 
       if (selectedSortOption === 'missingRequiredCount') {
@@ -553,19 +567,22 @@ export default function ShakerResultsScreen() {
         const leftMissing = availabilitySummaryByKey.get(leftKey)?.missingCount ?? 0;
         const rightMissing = availabilitySummaryByKey.get(rightKey)?.missingCount ?? 0;
         if (leftMissing !== rightMissing) {
-          return leftMissing - rightMissing;
+          result = leftMissing - rightMissing;
+        } else {
+          result = compareOptionalGlobalAlphabet(leftName, rightName);
         }
-        return compareOptionalGlobalAlphabet(leftName, rightName);
+        return isSortDescending ? -result : result;
       }
 
       if (selectedSortOption === 'rating') {
         const leftRating = getCocktailRating(left);
         const rightRating = getCocktailRating(right);
         if (leftRating !== rightRating) {
-          return rightRating - leftRating;
+          result = rightRating - leftRating;
+        } else {
+          result = compareOptionalGlobalAlphabet(leftName, rightName);
         }
-
-        return compareOptionalGlobalAlphabet(leftName, rightName);
+        return isSortDescending ? -result : result;
       }
 
       const leftKey = String(left.id ?? left.name);
@@ -573,10 +590,12 @@ export default function ShakerResultsScreen() {
       const leftRank = randomSortRanks.get(leftKey) ?? 0;
       const rightRank = randomSortRanks.get(rightKey) ?? 0;
       if (leftRank !== rightRank) {
-        return leftRank - rightRank;
+        result = leftRank - rightRank;
+      } else {
+        result = compareOptionalGlobalAlphabet(leftName, rightName);
       }
 
-      return compareOptionalGlobalAlphabet(leftName, rightName);
+      return isSortDescending ? -result : result;
     });
 
     return base;
@@ -585,12 +604,16 @@ export default function ShakerResultsScreen() {
     filteredCocktails,
     getCocktailRating,
     ignoreGarnish,
+    isSortDescending,
     randomSortRanks,
     selectedSortOption,
   ]);
 
   const isFilterActive =
-    selectedTagKeys.size > 0 || selectedMethodIds.size > 0 || selectedSortOption !== 'alphabetical';
+    selectedTagKeys.size > 0 ||
+    selectedMethodIds.size > 0 ||
+    selectedSortOption !== 'alphabetical' ||
+    isSortDescending;
   const filterMenuTop = useMemo(() => {
     if (headerLayout && filterAnchorLayout) {
       return headerLayout.y + filterAnchorLayout.y + filterAnchorLayout.height + 6;
@@ -753,7 +776,7 @@ export default function ShakerResultsScreen() {
                     showsHorizontalScrollIndicator={false}
                     keyboardShouldPersistTaps="handled">
                     <TagPill
-                      label="A-z"
+                      label={isSortDescending && selectedSortOption === 'alphabetical' ? 'z-A' : 'A-z'}
                       color={Colors.tint}
                       selected={selectedSortOption === 'alphabetical'}
                       onPress={() => handleSortOptionChange('alphabetical')}
@@ -771,11 +794,21 @@ export default function ShakerResultsScreen() {
                       accessibilityState={{ selected: selectedSortOption === 'requiredCount' }}
                       accessibilityLabel={t('shakerResults.sortOptionRequiredCount')}
                       icon={(
-                        <Image
-                          source={IngredientsIcon}
-                          style={{ width: 16, height: 16, tintColor: selectedSortOption === 'requiredCount' ? Colors.surface : Colors.tint }}
-                          contentFit="contain"
-                        />
+                        <View style={styles.sortIconInnerWrap}>
+                          <Image
+                            source={IngredientsIcon}
+                            style={{ width: 16, height: 16, tintColor: selectedSortOption === 'requiredCount' ? Colors.surface : Colors.tint }}
+                            contentFit="contain"
+                          />
+                          {selectedSortOption === 'requiredCount' ? (
+                            <MaterialCommunityIcons
+                              name={isSortDescending ? 'arrow-down-thin' : 'arrow-up-thin'}
+                              size={12}
+                              color={Colors.surface}
+                              style={styles.sortDirectionIcon}
+                            />
+                          ) : null}
+                        </View>
                       )}
                       style={styles.iconOnlySortPill}
                       androidRippleColor={`${Colors.surfaceVariant}33`}
@@ -789,11 +822,21 @@ export default function ShakerResultsScreen() {
                       accessibilityState={{ selected: selectedSortOption === 'missingRequiredCount' }}
                       accessibilityLabel={t('shakerResults.sortOptionMissingRequiredCount')}
                       icon={(
-                        <MaterialCommunityIcons
-                          name="check"
-                          size={16}
-                          color={selectedSortOption === 'missingRequiredCount' ? Colors.surface : Colors.tint}
-                        />
+                        <View style={styles.sortIconInnerWrap}>
+                          <MaterialCommunityIcons
+                            name="check"
+                            size={16}
+                            color={selectedSortOption === 'missingRequiredCount' ? Colors.surface : Colors.tint}
+                          />
+                          {selectedSortOption === 'missingRequiredCount' ? (
+                            <MaterialCommunityIcons
+                              name={isSortDescending ? 'arrow-down-thin' : 'arrow-up-thin'}
+                              size={12}
+                              color={Colors.surface}
+                              style={styles.sortDirectionIcon}
+                            />
+                          ) : null}
+                        </View>
                       )}
                       style={styles.iconOnlySortPill}
                       androidRippleColor={`${Colors.surfaceVariant}33`}
@@ -807,11 +850,21 @@ export default function ShakerResultsScreen() {
                       accessibilityState={{ selected: selectedSortOption === 'rating' }}
                       accessibilityLabel={t('shakerResults.sortOptionRating')}
                       icon={(
-                        <MaterialCommunityIcons
-                          name="star"
-                          size={16}
-                          color={selectedSortOption === 'rating' ? Colors.surface : Colors.tint}
-                        />
+                        <View style={styles.sortIconInnerWrap}>
+                          <MaterialCommunityIcons
+                            name="star"
+                            size={16}
+                            color={selectedSortOption === 'rating' ? Colors.surface : Colors.tint}
+                          />
+                          {selectedSortOption === 'rating' ? (
+                            <MaterialCommunityIcons
+                              name={isSortDescending ? 'arrow-down-thin' : 'arrow-up-thin'}
+                              size={12}
+                              color={Colors.surface}
+                              style={styles.sortDirectionIcon}
+                            />
+                          ) : null}
+                        </View>
                       )}
                       style={styles.iconOnlySortPill}
                       androidRippleColor={`${Colors.surfaceVariant}33`}
@@ -825,11 +878,21 @@ export default function ShakerResultsScreen() {
                       accessibilityState={{ selected: selectedSortOption === 'random' }}
                       accessibilityLabel={t('shakerResults.sortOptionRandom')}
                       icon={(
-                        <MaterialCommunityIcons
-                          name="shuffle-variant"
-                          size={16}
-                          color={selectedSortOption === 'random' ? Colors.surface : Colors.tint}
-                        />
+                        <View style={styles.sortIconInnerWrap}>
+                          <MaterialCommunityIcons
+                            name="shuffle-variant"
+                            size={16}
+                            color={selectedSortOption === 'random' ? Colors.surface : Colors.tint}
+                          />
+                          {selectedSortOption === 'random' ? (
+                            <MaterialCommunityIcons
+                              name={isSortDescending ? 'arrow-down-thin' : 'arrow-up-thin'}
+                              size={12}
+                              color={Colors.surface}
+                              style={styles.sortDirectionIcon}
+                            />
+                          ) : null}
+                        </View>
                       )}
                       style={styles.iconOnlySortPill}
                       androidRippleColor={`${Colors.surfaceVariant}33`}
@@ -1005,8 +1068,20 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   iconOnlySortPill: {
-    minWidth: 40,
+    minWidth: 53,
+    minHeight: 36,
     paddingHorizontal: 10,
+  },
+  sortIconInnerWrap: {
+    width: METHOD_ICON_SIZE,
+    height: METHOD_ICON_SIZE,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  sortDirectionIcon: {
+    position: 'absolute',
+    right: -8,
+    top: -8,
   },
   sortSectionDivider: {
     height: StyleSheet.hairlineWidth,

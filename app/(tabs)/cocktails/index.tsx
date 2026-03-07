@@ -76,6 +76,7 @@ export default function CocktailsScreen() {
   );
   const [selectedStarRatings, setSelectedStarRatings] = useState<Set<number>>(() => new Set());
   const [selectedSortOption, setSelectedSortOption] = useState<CocktailSortOption>('alphabetical');
+  const [isSortDescending, setSortDescending] = useState(false);
   const [collapsedMissingIngredientIds, setCollapsedMissingIngredientIds] = useState<Set<number>>(
     () => new Set(),
   );
@@ -194,10 +195,19 @@ export default function CocktailsScreen() {
     setSelectedMethodIds((previous) => (previous.size === 0 ? previous : new Set<CocktailMethod['id']>()));
     setSelectedStarRatings((previous) => (previous.size === 0 ? previous : new Set<number>()));
     setSelectedSortOption('alphabetical');
+    setSortDescending(false);
   }, []);
 
   const handleSortOptionChange = useCallback((option: CocktailSortOption) => {
-    setSelectedSortOption((previous) => (previous === option ? previous : option));
+    setSelectedSortOption((previous) => {
+      if (previous === option) {
+        setSortDescending((current) => !current);
+        return previous;
+      }
+
+      setSortDescending(false);
+      return option;
+    });
   }, []);
 
   const handleStarRatingFilterToggle = useCallback((rating: number) => {
@@ -508,18 +518,22 @@ export default function CocktailsScreen() {
     (left: Cocktail, right: Cocktail) => {
       const leftName = left.name ?? '';
       const rightName = right.name ?? '';
+      let result = 0;
 
       if (selectedSortOption === 'alphabetical') {
-        return compareOptionalGlobalAlphabet(leftName, rightName);
+        result = compareOptionalGlobalAlphabet(leftName, rightName);
+        return isSortDescending ? -result : result;
       }
 
       if (selectedSortOption === 'requiredCount') {
         const leftCount = countRequiredIngredients(left, ignoreGarnish);
         const rightCount = countRequiredIngredients(right, ignoreGarnish);
         if (leftCount !== rightCount) {
-          return leftCount - rightCount;
+          result = leftCount - rightCount;
+        } else {
+          result = compareOptionalGlobalAlphabet(leftName, rightName);
         }
-        return compareOptionalGlobalAlphabet(leftName, rightName);
+        return isSortDescending ? -result : result;
       }
 
       if (selectedSortOption === 'missingRequiredCount') {
@@ -528,19 +542,22 @@ export default function CocktailsScreen() {
         const leftMissing = filteredAvailabilitySummaryByKey.get(leftKey)?.missingCount ?? 0;
         const rightMissing = filteredAvailabilitySummaryByKey.get(rightKey)?.missingCount ?? 0;
         if (leftMissing !== rightMissing) {
-          return leftMissing - rightMissing;
+          result = leftMissing - rightMissing;
+        } else {
+          result = compareOptionalGlobalAlphabet(leftName, rightName);
         }
-        return compareOptionalGlobalAlphabet(leftName, rightName);
+        return isSortDescending ? -result : result;
       }
 
       if (selectedSortOption === 'rating') {
         const leftRating = getCocktailRating(left);
         const rightRating = getCocktailRating(right);
         if (leftRating !== rightRating) {
-          return rightRating - leftRating;
+          result = rightRating - leftRating;
+        } else {
+          result = compareOptionalGlobalAlphabet(leftName, rightName);
         }
-
-        return compareOptionalGlobalAlphabet(leftName, rightName);
+        return isSortDescending ? -result : result;
       }
 
       const leftKey = String(left.id ?? left.name);
@@ -548,12 +565,21 @@ export default function CocktailsScreen() {
       const leftRank = randomSortRanks.get(leftKey) ?? 0;
       const rightRank = randomSortRanks.get(rightKey) ?? 0;
       if (leftRank !== rightRank) {
-        return leftRank - rightRank;
+        result = leftRank - rightRank;
+      } else {
+        result = compareOptionalGlobalAlphabet(leftName, rightName);
       }
 
-      return compareOptionalGlobalAlphabet(leftName, rightName);
+      return isSortDescending ? -result : result;
     },
-    [filteredAvailabilitySummaryByKey, getCocktailRating, ignoreGarnish, randomSortRanks, selectedSortOption],
+    [
+      filteredAvailabilitySummaryByKey,
+      getCocktailRating,
+      ignoreGarnish,
+      isSortDescending,
+      randomSortRanks,
+      selectedSortOption,
+    ],
   );
 
   const sortedCocktails = useMemo(
@@ -943,7 +969,8 @@ export default function CocktailsScreen() {
     selectedTagKeys.size > 0 ||
     selectedMethodIds.size > 0 ||
     selectedStarRatings.size > 0 ||
-    selectedSortOption !== 'alphabetical';
+    selectedSortOption !== 'alphabetical' ||
+    isSortDescending;
   const isMyTab = activeTab === 'my';
   const emptyMessage = useMemo(() => {
     switch (activeTab) {
@@ -1037,7 +1064,7 @@ export default function CocktailsScreen() {
                 sortOptions={[
                   {
                     key: 'alphabetical',
-                    label: 'A-z',
+                    label: isSortDescending && selectedSortOption === 'alphabetical' ? 'z-A' : 'A-z',
                     selected: selectedSortOption === 'alphabetical',
                     onPress: () => handleSortOptionChange('alphabetical'),
                     accessibilityLabel: t('cocktails.sortOptionAlphabeticalAccessibility'),
@@ -1049,11 +1076,21 @@ export default function CocktailsScreen() {
                     onPress: () => handleSortOptionChange('requiredCount'),
                     accessibilityLabel: t('cocktails.sortOptionRequiredCountAccessibility'),
                     icon: (
-                      <Image
-                        source={IngredientsIcon}
-                        style={{ width: 16, height: 16, tintColor: selectedSortOption === 'requiredCount' ? Colors.surface : Colors.tint }}
-                        contentFit="contain"
-                      />
+                      <View style={styles.sortIconInnerWrap}>
+                        <Image
+                          source={IngredientsIcon}
+                          style={{ width: 16, height: 16, tintColor: selectedSortOption === 'requiredCount' ? Colors.surface : Colors.tint }}
+                          contentFit="contain"
+                        />
+                        {selectedSortOption === 'requiredCount' ? (
+                          <MaterialCommunityIcons
+                            name={isSortDescending ? 'arrow-down-thin' : 'arrow-up-thin'}
+                            size={12}
+                            color={Colors.surface}
+                            style={styles.sortDirectionIcon}
+                          />
+                        ) : null}
+                      </View>
                     ),
                   },
                   {
@@ -1063,11 +1100,21 @@ export default function CocktailsScreen() {
                     onPress: () => handleSortOptionChange('missingRequiredCount'),
                     accessibilityLabel: t('cocktails.sortOptionMissingRequiredCountAccessibility'),
                     icon: (
-                      <MaterialCommunityIcons
-                        name="check"
-                        size={16}
-                        color={selectedSortOption === 'missingRequiredCount' ? Colors.surface : Colors.tint}
-                      />
+                      <View style={styles.sortIconInnerWrap}>
+                        <MaterialCommunityIcons
+                          name="check"
+                          size={16}
+                          color={selectedSortOption === 'missingRequiredCount' ? Colors.surface : Colors.tint}
+                        />
+                        {selectedSortOption === 'missingRequiredCount' ? (
+                          <MaterialCommunityIcons
+                            name={isSortDescending ? 'arrow-down-thin' : 'arrow-up-thin'}
+                            size={12}
+                            color={Colors.surface}
+                            style={styles.sortDirectionIcon}
+                          />
+                        ) : null}
+                      </View>
                     ),
                   },
                   {
@@ -1077,11 +1124,21 @@ export default function CocktailsScreen() {
                     onPress: () => handleSortOptionChange('rating'),
                     accessibilityLabel: t('cocktails.sortOptionRatingAccessibility'),
                     icon: (
-                      <MaterialCommunityIcons
-                        name="star"
-                        size={16}
-                        color={selectedSortOption === 'rating' ? Colors.surface : Colors.tint}
-                      />
+                      <View style={styles.sortIconInnerWrap}>
+                        <MaterialCommunityIcons
+                          name="star"
+                          size={16}
+                          color={selectedSortOption === 'rating' ? Colors.surface : Colors.tint}
+                        />
+                        {selectedSortOption === 'rating' ? (
+                          <MaterialCommunityIcons
+                            name={isSortDescending ? 'arrow-down-thin' : 'arrow-up-thin'}
+                            size={12}
+                            color={Colors.surface}
+                            style={styles.sortDirectionIcon}
+                          />
+                        ) : null}
+                      </View>
                     ),
                   },
                   {
@@ -1091,11 +1148,21 @@ export default function CocktailsScreen() {
                     onPress: () => handleSortOptionChange('random'),
                     accessibilityLabel: t('cocktails.sortOptionRandomAccessibility'),
                     icon: (
-                      <MaterialCommunityIcons
-                        name="shuffle-variant"
-                        size={16}
-                        color={selectedSortOption === 'random' ? Colors.surface : Colors.tint}
-                      />
+                      <View style={styles.sortIconInnerWrap}>
+                        <MaterialCommunityIcons
+                          name="shuffle-variant"
+                          size={16}
+                          color={selectedSortOption === 'random' ? Colors.surface : Colors.tint}
+                        />
+                        {selectedSortOption === 'random' ? (
+                          <MaterialCommunityIcons
+                            name={isSortDescending ? 'arrow-down-thin' : 'arrow-up-thin'}
+                            size={12}
+                            color={Colors.surface}
+                            style={styles.sortDirectionIcon}
+                          />
+                        ) : null}
+                      </View>
                     ),
                   },
                 ]}
@@ -1287,6 +1354,17 @@ const styles = StyleSheet.create({
     height: METHOD_ICON_SIZE,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  sortIconInnerWrap: {
+    width: METHOD_ICON_SIZE,
+    height: METHOD_ICON_SIZE,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  sortDirectionIcon: {
+    position: 'absolute',
+    right: -8,
+    top: -8,
   },
   muddleIcon: {
     transform: [{ scaleX: 2 }],
