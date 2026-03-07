@@ -248,6 +248,8 @@ export const ukUATranslations: TranslationDictionary = {
   "cocktailDetails.asNeeded": "За потреби",
   "cocktailDetails.garnish": "декор",
   "cocktailDetails.optional": "опційно",
+  "cocktailDetails.process": "процес",
+  "cocktailDetails.serving": "подача",
   "cocktailDetails.or": "чи {{name}}",
   "cocktailDetails.orAny": "чи будь-який {{name}}",
   "cocktailDetails.substituteFor": "Заміняє {{name}}",

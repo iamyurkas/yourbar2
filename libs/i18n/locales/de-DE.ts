@@ -249,6 +249,8 @@ export const deDETranslations: TranslationDictionary = {
   "cocktailDetails.asNeeded": "Nach Bedarf",
   "cocktailDetails.garnish": "Garnitur",
   "cocktailDetails.optional": "optional",
+  "cocktailDetails.process": "Zubereitung",
+  "cocktailDetails.serving": "Servieren",
   "cocktailDetails.or": "oder {{name}}",
   "cocktailDetails.orAny": "oder ein beliebiger {{name}}",
   "cocktailDetails.substituteFor": "Ersatz für {{name}}",

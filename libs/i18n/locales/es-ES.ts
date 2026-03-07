@@ -244,6 +244,8 @@ export const esESTranslations: TranslationDictionary = {
   "cocktailDetails.asNeeded": "Al gusto",
   "cocktailDetails.garnish": "Decoración",
   "cocktailDetails.optional": "Opcional",
+  "cocktailDetails.process": "Proceso",
+  "cocktailDetails.serving": "Servicio",
   "cocktailDetails.or": "o {{name}}",
   "cocktailDetails.orAny": "o cualquier {{name}}",
   "cocktailDetails.substituteFor": "Sustituto de {{name}}",

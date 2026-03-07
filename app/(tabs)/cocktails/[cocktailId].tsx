@@ -285,6 +285,8 @@ function getIngredientQualifier(
   ingredient: RecipeIngredient,
   garnishLabel: string,
   optionalLabel: string,
+  processLabel: string,
+  servingLabel: string,
 ): string | undefined {
   const qualifiers: string[] = [];
 
@@ -294,6 +296,14 @@ function getIngredientQualifier(
 
   if ((ingredient as { optional?: boolean | null }).optional) {
     qualifiers.push(optionalLabel);
+  }
+
+  if ((ingredient as { process?: boolean | null }).process) {
+    qualifiers.push(processLabel);
+  }
+
+  if ((ingredient as { serving?: boolean | null }).serving) {
+    qualifiers.push(servingLabel);
   }
 
   return qualifiers.join(", ") || undefined;
@@ -1150,6 +1160,8 @@ export default function CocktailDetailsScreen() {
                       ingredient,
                       t("cocktailDetails.garnish"),
                       t("cocktailDetails.optional"),
+                      t("cocktailDetails.process"),
+                      t("cocktailDetails.serving"),
                     );
                     const key = `${ingredient.ingredientId ?? ingredient.name}-${ingredient.order}`;
                     const resolution = resolvedIngredients[index];

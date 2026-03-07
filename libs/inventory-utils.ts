@@ -209,6 +209,8 @@ export function normalizeCocktailIngredients(
       unitId: ingredient.unitId != null ? Math.trunc(Number(ingredient.unitId)) : undefined,
       optional: ingredient.optional ? true : undefined,
       garnish: ingredient.garnish ? true : undefined,
+      process: ingredient.process ? true : undefined,
+      serving: ingredient.serving ? true : undefined,
       allowBaseSubstitution: ingredient.allowBaseSubstitution ? true : undefined,
       allowBrandSubstitution: ingredient.allowBrandSubstitution ? true : undefined,
       allowStyleSubstitution: ingredient.allowStyleSubstitution ? true : undefined,

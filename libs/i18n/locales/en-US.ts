@@ -248,6 +248,8 @@ export const enUSTranslations: TranslationDictionary = {
   "cocktailDetails.asNeeded": "As needed",
   "cocktailDetails.garnish": "garnish",
   "cocktailDetails.optional": "optional",
+  "cocktailDetails.process": "process",
+  "cocktailDetails.serving": "serving",
   "cocktailDetails.or": "or {{name}}",
   "cocktailDetails.orAny": "or any {{name}}",
   "cocktailDetails.substituteFor": "Substitute for {{name}}",
