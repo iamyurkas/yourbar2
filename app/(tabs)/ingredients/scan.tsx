@@ -1,6 +1,8 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+// eslint-disable-next-line import/no-unresolved
+import { CameraView, useCameraPermissions } from 'expo-camera';
 import { Stack, router } from 'expo-router';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { AppImage } from '@/components/AppImage';
@@ -12,23 +14,6 @@ import { appendBarcode, findIngredientByBarcode } from '@/services/barcode/findI
 import { findSimilarIngredientByName } from '@/services/barcode/findSimilarIngredientByName';
 import { fetchProductByBarcode } from '@/services/barcode/openFoodFacts';
 import type { ScannedProductDraft } from '@/services/barcode/types';
-
-const cameraModule = (() => {
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    return require('expo-camera') as {
-      CameraView?: React.ComponentType<any>;
-      Camera?: {
-        getCameraPermissionsAsync?: () => Promise<{ granted?: boolean; canAskAgain?: boolean }>;
-        requestCameraPermissionsAsync?: () => Promise<{ granted?: boolean; canAskAgain?: boolean }>;
-      };
-    };
-  } catch {
-    return {};
-  }
-})();
-
-const CameraView = cameraModule.CameraView;
 
 type ScanState =
   | { kind: 'ready' }
@@ -43,27 +28,7 @@ export default function ScanIngredientScreen() {
   const { t } = useI18n();
   const colors = useAppColors();
   const { ingredients, createIngredient, updateIngredient } = useInventory();
-  const [permission, setPermission] = useState<{ granted?: boolean; canAskAgain?: boolean } | null>(null);
-
-  useEffect(() => {
-    let mounted = true;
-    const run = async () => {
-      const result = await cameraModule.Camera?.getCameraPermissionsAsync?.();
-      if (mounted) {
-        setPermission(result ?? { granted: false, canAskAgain: false });
-      }
-    };
-    void run();
-    return () => {
-      mounted = false;
-    };
-  }, []);
-
-  const requestPermission = useCallback(async () => {
-    const result = await cameraModule.Camera?.requestCameraPermissionsAsync?.();
-    setPermission(result ?? { granted: false, canAskAgain: false });
-    return result;
-  }, []);
+  const [permission, requestPermission] = useCameraPermissions();
   const [scanState, setScanState] = useState<ScanState>({ kind: 'ready' });
   const [hasScanned, setHasScanned] = useState(false);
 
@@ -74,6 +39,7 @@ export default function ScanIngredientScreen() {
     }
 
     setHasScanned(true);
+
     const existingByBarcode = findIngredientByBarcode(ingredients, barcode);
     if (existingByBarcode?.id != null) {
       setScanState({
@@ -181,9 +147,7 @@ export default function ScanIngredientScreen() {
     router.replace({ pathname: '/ingredients/[ingredientId]', params: { ingredientId: String(ingredientId) } });
   }, [ingredients, updateIngredient]);
 
-  const permissionDenied = permission && !permission.granted;
-
-  const scannerUnavailable = !CameraView || !cameraModule.Camera;
+  const permissionDenied = permission?.granted === false;
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}> 
@@ -198,15 +162,11 @@ export default function ScanIngredientScreen() {
         }}
       />
 
-      {scannerUnavailable ? (
-        <Text style={[styles.message, { color: colors.error }]}>{t('barcode.scannerUnavailable')}</Text>
-      ) : null}
-
-      {!scannerUnavailable && !permission ? (
+      {!permission ? (
         <ActivityIndicator color={colors.tint} />
       ) : null}
 
-      {!scannerUnavailable && permissionDenied ? (
+      {permissionDenied ? (
         <View style={styles.centered}>
           <Text style={[styles.message, { color: colors.onSurface }]}>{t('barcode.cameraPermissionNeeded')}</Text>
           {permission?.canAskAgain ? (
@@ -217,11 +177,14 @@ export default function ScanIngredientScreen() {
         </View>
       ) : null}
 
-      {!scannerUnavailable && permission?.granted && scanState.kind === 'ready' ? (
+      {permission?.granted && scanState.kind === 'ready' ? (
         <View style={styles.scannerWrap}>
           <CameraView
             style={styles.camera}
             onBarcodeScanned={({ data }: { data?: string }) => void handleScan(data)}
+            barcodeScannerSettings={{
+              barcodeTypes: ['ean13', 'ean8', 'upc_a', 'upc_e', 'code128', 'code39'],
+            }}
           />
           <Text style={[styles.caption, { color: colors.onSurfaceVariant }]}>{t('barcode.scanBarcode')}</Text>
         </View>
