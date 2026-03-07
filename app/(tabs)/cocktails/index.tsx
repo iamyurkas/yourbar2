@@ -1092,7 +1092,7 @@ export default function CocktailsScreen() {
                     accessibilityLabel: t('cocktails.sortOptionRandomAccessibility'),
                     icon: (
                       <MaterialCommunityIcons
-                        name="dice-5-outline"
+                        name="shuffle-variant"
                         size={16}
                         color={selectedSortOption === 'random' ? Colors.surface : Colors.tint}
                       />
@@ -1113,7 +1113,7 @@ export default function CocktailsScreen() {
                 onClearFilters={handleClearFilters}
                 showClearButton={isFilterActive}
                 tintColor={Colors.tint}
-                outlineColor={Colors.outline}
+                outlineColor={Colors.primary}
                 onSurfaceVariantColor={Colors.onSurfaceVariant}
                 surfaceVariantColor={Colors.surfaceVariant}
                 andLabel={t('common.and')}

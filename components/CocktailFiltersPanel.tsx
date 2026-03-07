@@ -83,7 +83,12 @@ export function CocktailFiltersPanel({
             <Text style={[styles.filterSortLabel, { color: onSurfaceVariantColor }]}>
               {sortSectionLabel}
             </Text>
-            <View style={styles.filterSortList}>
+            <ScrollView
+              horizontal
+              style={styles.filterSortScroll}
+              contentContainerStyle={styles.filterSortRow}
+              showsHorizontalScrollIndicator={false}
+              keyboardShouldPersistTaps="handled">
               {(sortOptions ?? []).map((option) => (
                 <TagPill
                   key={option.key}
@@ -99,7 +104,7 @@ export function CocktailFiltersPanel({
                   style={option.label ? undefined : styles.iconOnlyPill}
                 />
               ))}
-            </View>
+            </ScrollView>
           </View>
         ) : null}
         {showSortOptions ? (
@@ -222,10 +227,15 @@ const styles = StyleSheet.create({
     letterSpacing: 0.6,
     textTransform: 'uppercase',
   },
-  filterSortList: {
+  filterSortScroll: {
+    alignSelf: 'stretch',
+  },
+  filterSortRow: {
+    flexGrow: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    justifyContent: 'center',
+    gap: 12,
   },
   iconOnlyPill: {
     minWidth: 40,

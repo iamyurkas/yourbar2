@@ -17,6 +17,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { CocktailListRow } from '@/components/CocktailListRow';
+import IngredientsIcon from '@/assets/images/ingredients.svg';
 import { CollectionHeader } from '@/components/CollectionHeader';
 import { SideMenuDrawer } from '@/components/SideMenuDrawer';
 import { TagPill } from '@/components/TagPill';
@@ -745,62 +746,97 @@ export default function ShakerResultsScreen() {
                   <Text style={[styles.filterSectionTitle, { color: Colors.onSurfaceVariant }]}>
                     {t('shakerResults.sortBy')}
                   </Text>
-                  <View style={styles.filterSortList}>
+                  <ScrollView
+                    horizontal
+                    style={styles.filterSortScroll}
+                    contentContainerStyle={styles.filterSortRow}
+                    showsHorizontalScrollIndicator={false}
+                    keyboardShouldPersistTaps="handled">
                     <TagPill
-                      label={t('shakerResults.sortOptionAlphabetical')}
+                      label="A-z"
                       color={Colors.tint}
                       selected={selectedSortOption === 'alphabetical'}
                       onPress={() => handleSortOptionChange('alphabetical')}
                       accessibilityRole="radio"
                       accessibilityState={{ selected: selectedSortOption === 'alphabetical' }}
+                      accessibilityLabel={t('shakerResults.sortOptionAlphabetical')}
                       androidRippleColor={`${Colors.surfaceVariant}33`}
                     />
                     <TagPill
-                      label={t('shakerResults.sortOptionRequiredCount')}
+                      label=""
                       color={Colors.tint}
                       selected={selectedSortOption === 'requiredCount'}
                       onPress={() => handleSortOptionChange('requiredCount')}
                       accessibilityRole="radio"
                       accessibilityState={{ selected: selectedSortOption === 'requiredCount' }}
+                      accessibilityLabel={t('shakerResults.sortOptionRequiredCount')}
+                      icon={(
+                        <Image
+                          source={IngredientsIcon}
+                          style={{ width: 16, height: 16, tintColor: selectedSortOption === 'requiredCount' ? Colors.surface : Colors.tint }}
+                          contentFit="contain"
+                        />
+                      )}
+                      style={styles.iconOnlySortPill}
                       androidRippleColor={`${Colors.surfaceVariant}33`}
                     />
                     <TagPill
-                      label={t('shakerResults.sortOptionMissingRequiredCount')}
+                      label=""
                       color={Colors.tint}
                       selected={selectedSortOption === 'missingRequiredCount'}
                       onPress={() => handleSortOptionChange('missingRequiredCount')}
                       accessibilityRole="radio"
                       accessibilityState={{ selected: selectedSortOption === 'missingRequiredCount' }}
+                      accessibilityLabel={t('shakerResults.sortOptionMissingRequiredCount')}
+                      icon={(
+                        <MaterialCommunityIcons
+                          name="check"
+                          size={16}
+                          color={selectedSortOption === 'missingRequiredCount' ? Colors.surface : Colors.tint}
+                        />
+                      )}
+                      style={styles.iconOnlySortPill}
                       androidRippleColor={`${Colors.surfaceVariant}33`}
                     />
                     <TagPill
-                      label={t('shakerResults.sortOptionRating')}
+                      label=""
                       color={Colors.tint}
                       selected={selectedSortOption === 'rating'}
                       onPress={() => handleSortOptionChange('rating')}
                       accessibilityRole="radio"
                       accessibilityState={{ selected: selectedSortOption === 'rating' }}
+                      accessibilityLabel={t('shakerResults.sortOptionRating')}
+                      icon={(
+                        <MaterialCommunityIcons
+                          name="star"
+                          size={16}
+                          color={selectedSortOption === 'rating' ? Colors.surface : Colors.tint}
+                        />
+                      )}
+                      style={styles.iconOnlySortPill}
                       androidRippleColor={`${Colors.surfaceVariant}33`}
                     />
                     <TagPill
-                      label={t('shakerResults.sortOptionRandom')}
+                      label=""
                       color={Colors.tint}
                       selected={selectedSortOption === 'random'}
                       onPress={() => handleSortOptionChange('random')}
                       accessibilityRole="radio"
                       accessibilityState={{ selected: selectedSortOption === 'random' }}
+                      accessibilityLabel={t('shakerResults.sortOptionRandom')}
                       icon={(
                         <MaterialCommunityIcons
-                          name="dice-5-outline"
+                          name="shuffle-variant"
                           size={16}
                           color={selectedSortOption === 'random' ? Colors.surface : Colors.tint}
                         />
                       )}
+                      style={styles.iconOnlySortPill}
                       androidRippleColor={`${Colors.surfaceVariant}33`}
                     />
-                  </View>
+                  </ScrollView>
                 </View>
-                <View style={[styles.sortSectionDivider, { backgroundColor: Colors.outline }]} />
+                <View style={[styles.sortSectionDivider, { backgroundColor: Colors.primary }]} />
                 <View style={styles.filterMenuContent}>
                   <View style={styles.filterMethodList}>
                     {availableMethodOptions.length > 0 ? (
@@ -827,11 +863,11 @@ export default function ShakerResultsScreen() {
                     )}
                   </View>
                   <View style={styles.filterSeparator}>
-                    <View style={[styles.filterSeparatorLine, { backgroundColor: Colors.outline }]} />
+                    <View style={[styles.filterSeparatorLine, { backgroundColor: Colors.primary }]} />
                     <Text style={[styles.filterSeparatorLabel, { color: Colors.onSurfaceVariant }]}>
                       {t("common.and")}
                     </Text>
-                    <View style={[styles.filterSeparatorLine, { backgroundColor: Colors.outline }]} />
+                    <View style={[styles.filterSeparatorLine, { backgroundColor: Colors.primary }]} />
                   </View>
                   <View style={styles.filterTagList}>
                     {availableTagOptions.length > 0 ? (
@@ -958,10 +994,19 @@ const styles = StyleSheet.create({
     letterSpacing: 0.6,
     textTransform: 'uppercase',
   },
-  filterSortList: {
-    flexDirection: 'column',
-    gap: 8,
-    alignItems: 'flex-start',
+  filterSortScroll: {
+    alignSelf: 'stretch',
+  },
+  filterSortRow: {
+    flexGrow: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 12,
+  },
+  iconOnlySortPill: {
+    minWidth: 40,
+    paddingHorizontal: 10,
   },
   sortSectionDivider: {
     height: StyleSheet.hairlineWidth,
