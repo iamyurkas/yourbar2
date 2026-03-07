@@ -481,8 +481,8 @@ export const enGBTranslations: TranslationDictionary = {
   "sideMenu.smartShakerFilteringInfoMessage":
     "When enabled, ingredients in groups with no current selection are hidden if they would produce zero results.\n\nIn groups where you already selected at least one ingredient, items stay visible to preserve OR logic.\n\nTurn this off to restore the default shaker behaviour.",
   "sideMenu.smartShakerFilteringCaption": "Hide non-matching ingredients",
-  "sideMenu.showTabCounters": "Tab counters",
-  "sideMenu.showTabCountersCaption": "Show item counts in tabs",
+  "sideMenu.showTabCounters": "Show counts",
+  "sideMenu.showTabCountersCaption": "Show item counts next to tabs",
   "sideMenu.startingScreen": "Starting screen",
   "sideMenu.startingScreenOpen": "Open {{screen}}",
   "sideMenu.favoritesRatingFilter": "Favourites rating filter",
@@ -588,7 +588,8 @@ export const enGBTranslations: TranslationDictionary = {
   "language.en-GB": "English",
   "language.en-US": "English (US)",
   "language.uk-UA": "Ukrainian",
-  "language.es-ES": "Spanish (beta)",
+  "language.es-ES": "Spanish",
+  "language.de-DE": "German (Beta)",
   "languageModal.title": "App Language",
   "languageModal.description":
     "Changes are applied immediately.\nBundled data will be translated.",

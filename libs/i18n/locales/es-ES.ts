@@ -472,9 +472,8 @@ export const esESTranslations: TranslationDictionary = {
     "Cuando está activado, los ingredientes de grupos sin selección actual se ocultan si no producirían resultados.\n\nEn grupos donde ya has seleccionado al menos un ingrediente, los elementos permanecen visibles para mantener la lógica *o*.\n\nDesactívalo para restaurar el comportamiento predeterminado de la coctelera.",
   "sideMenu.smartShakerFilteringCaption":
     "Ocultar ingredientes no coincidentes en la Coctelera",
-  "sideMenu.showTabCounters": "Contadores de pestañas",
-  "sideMenu.showTabCountersCaption":
-    "Mostrar la cantidad de elementos junto al nombre de cada pestaña",
+  "sideMenu.showTabCounters": "Mostrar cantidades",
+  "sideMenu.showTabCountersCaption": "Mostrar cantidades junto a las pestañas",
   "sideMenu.startingScreen": "Pantalla inicial",
   "sideMenu.startingScreenOpen": "Abrir {{screen}}",
   "sideMenu.favoritesRatingFilter": "Filtro de favoritos",
@@ -586,7 +585,8 @@ export const esESTranslations: TranslationDictionary = {
   "language.en-GB": "Inglés",
   "language.en-US": "Inglés (EE. UU.)",
   "language.uk-UA": "Ucraniano",
-  "language.es-ES": "Español (beta)",
+  "language.es-ES": "Español",
+  "language.de-DE": "Alemán (Beta)",
   "languageModal.title": "Idioma de la app",
   "languageModal.description":
     "Los cambios se aplican inmediatamente.\nLos datos incluidos se traducirán.",
@@ -733,8 +733,7 @@ export const esESTranslations: TranslationDictionary = {
   "barcode.openExisting": "Abrir existente",
   "barcode.createDuplicate": "Crear duplicado",
   "barcode.weFoundProduct": "Hemos encontrado un producto",
-  "barcode.similarProductFound":
-    "Esto se parece a un ingrediente ya existente",
+  "barcode.similarProductFound": "Esto se parece a un ingrediente ya existente",
   "barcode.addBarcodeToExisting":
     "Añadir código de barras a un ingrediente existente",
   "barcode.createNewIngredient": "Crear nuevo ingrediente",

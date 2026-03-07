@@ -1,4 +1,4 @@
-export type SupportedLocale = 'en-GB' | 'en-US' | 'es-ES' | 'uk-UA';
+export type SupportedLocale = 'de-DE' | 'en-GB' | 'en-US' | 'es-ES' | 'uk-UA';
 
 export type TranslationDictionary = Record<string, string>;
 

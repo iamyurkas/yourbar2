@@ -9,6 +9,7 @@ import type {
   InventoryTranslationOverrides,
 } from '@/providers/inventory-types';
 
+import deDECatalogOverlay from '@/libs/i18n/locales/catalog/de-DE.json';
 import enGBCatalogOverlay from '@/libs/i18n/locales/catalog/en-GB.json';
 import enUSCatalogOverlay from '@/libs/i18n/locales/catalog/en-US.json';
 import esESCatalogOverlay from '@/libs/i18n/locales/catalog/es-ES.json';
@@ -21,6 +22,7 @@ type CatalogField = 'name' | 'description' | 'instructions' | 'synonyms';
 const MISSING_TRANSLATION = '__MISSING_TRANSLATION__';
 
 const CATALOG_OVERLAYS: Record<SupportedLocale, CatalogOverlayDictionary> = {
+  'de-DE': deDECatalogOverlay,
   'en-GB': enGBCatalogOverlay,
   'en-US': enUSCatalogOverlay,
   'es-ES': esESCatalogOverlay,
