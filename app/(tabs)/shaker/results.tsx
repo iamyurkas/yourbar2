@@ -5,7 +5,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   FlatList,
   Pressable,
-  ScrollView,
   StyleSheet,
   Text,
   View,
@@ -17,10 +16,9 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { CocktailListRow } from '@/components/CocktailListRow';
-import IngredientsIcon from '@/assets/images/ingredients.svg';
+import { CocktailFiltersPanel } from '@/components/CocktailFiltersPanel';
 import { CollectionHeader } from '@/components/CollectionHeader';
 import { SideMenuDrawer } from '@/components/SideMenuDrawer';
-import { TagPill } from '@/components/TagPill';
 import { getCocktailMethods, METHOD_ICON_MAP, type CocktailMethod } from '@/constants/cocktail-methods';
 import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
 import { useAppColors } from '@/constants/theme';
@@ -28,8 +26,10 @@ import { summariseCocktailAvailability } from '@/libs/cocktail-availability';
 import { createIngredientLookup } from '@/libs/ingredient-availability';
 import { navigateToDetailsWithReturnTo } from '@/libs/navigation';
 import { normalizeSearchText } from '@/libs/search-normalization';
-import { compareGlobalAlphabet, compareOptionalGlobalAlphabet } from '@/libs/global-sort';
+import { compareOptionalGlobalAlphabet } from '@/libs/global-sort';
 import { useI18n } from '@/libs/i18n/use-i18n';
+import { buildTagOptions } from '@/libs/tag-options';
+import { buildCocktailSortOptions, type CocktailSortOption } from '@/libs/cocktail-sort-options';
 import { useInventory, type Cocktail } from '@/providers/inventory-provider';
 
 function parseListParam(param?: string | string[]): string[] {
@@ -68,8 +68,6 @@ function resolveCocktailByKey(key: string, cocktails: Cocktail[]) {
 
 const METHOD_ICON_SIZE = 16;
 
-type SortOption = 'alphabetical' | 'requiredCount' | 'missingRequiredCount' | 'rating' | 'random';
-
 function countRequiredIngredients(cocktail: Cocktail, ignoreGarnish: boolean): number {
   return (cocktail.ingredients ?? []).filter(
     (ingredient) => !ingredient?.optional && !(ignoreGarnish && ingredient?.garnish),
@@ -95,7 +93,8 @@ export default function ShakerResultsScreen() {
   const [selectedMethodIds, setSelectedMethodIds] = useState<Set<CocktailMethod['id']>>(
     () => new Set(),
   );
-  const [selectedSortOption, setSelectedSortOption] = useState<SortOption>('alphabetical');
+  const [selectedStarRatings, setSelectedStarRatings] = useState<Set<number>>(() => new Set());
+  const [selectedSortOption, setSelectedSortOption] = useState<CocktailSortOption>('alphabetical');
   const [isSortDescending, setSortDescending] = useState(false);
   const [headerLayout, setHeaderLayout] = useState<LayoutRectangle | null>(null);
   const [filterAnchorLayout, setFilterAnchorLayout] = useState<LayoutRectangle | null>(null);
@@ -180,61 +179,10 @@ export default function ShakerResultsScreen() {
   const ingredientLookup = useMemo(() => createIngredientLookup(ingredients), [ingredients]);
   const defaultTagColor = Colors.tint;
 
-  const availableTagOptions = useMemo(() => {
-    const map = new Map<string, { key: string; name: string; color: string }>();
-    const builtinTagOrder = new Map<string, number>();
-
-    BUILTIN_COCKTAIL_TAGS.forEach((tag, index) => {
-      builtinTagOrder.set(String(tag.id), index);
-      if (tag.name) {
-        builtinTagOrder.set(tag.name.trim().toLowerCase(), index);
-      }
-    });
-
-    listData.forEach((cocktail) => {
-      (cocktail.tags ?? []).forEach((tag) => {
-        if (!tag) {
-          return;
-        }
-
-        const key = tag.id != null ? String(tag.id) : tag.name?.toLowerCase();
-        if (!key) {
-          return;
-        }
-
-        if (!map.has(key)) {
-          map.set(key, {
-            key,
-            name: tag.name ?? t('tags.unnamed'),
-            color: tag.color ?? defaultTagColor,
-          });
-        }
-      });
-    });
-
-    return Array.from(map.values()).sort((a, b) => {
-      const normalizedNameA = a.name.trim().toLowerCase();
-      const normalizedNameB = b.name.trim().toLowerCase();
-      const orderA = builtinTagOrder.get(a.key) ?? builtinTagOrder.get(normalizedNameA);
-      const orderB = builtinTagOrder.get(b.key) ?? builtinTagOrder.get(normalizedNameB);
-
-      if (orderA != null || orderB != null) {
-        if (orderA == null) {
-          return 1;
-        }
-
-        if (orderB == null) {
-          return -1;
-        }
-
-        if (orderA !== orderB) {
-          return orderA - orderB;
-        }
-      }
-
-      return compareGlobalAlphabet(normalizedNameA, normalizedNameB);
-    });
-  }, [defaultTagColor, listData, t]);
+  const availableTagOptions = useMemo(
+    () => buildTagOptions(listData, (cocktail) => cocktail.tags ?? [], BUILTIN_COCKTAIL_TAGS, defaultTagColor),
+    [defaultTagColor, listData],
+  );
 
   const availableMethodOptions = useMemo(() => {
     const methodOrder = getCocktailMethods();
@@ -258,6 +206,18 @@ export default function ShakerResultsScreen() {
 
     return methodOrder.filter((method) => usedMethods.has(method.id));
   }, [listData]);
+
+  const availableStarRatings = useMemo<number[]>(() => {
+    const ratings = new Set<number>();
+    listData.forEach((cocktail) => {
+      const rating = getCocktailRating(cocktail);
+      if (rating > 0) {
+        ratings.add(rating);
+      }
+    });
+
+    return [...ratings].sort((a, b) => a - b);
+  }, [getCocktailRating, listData]);
 
   useEffect(() => {
     setSelectedTagKeys((previous) => {
@@ -284,6 +244,32 @@ export default function ShakerResultsScreen() {
       return next;
     });
   }, [availableTagOptions]);
+
+  useEffect(() => {
+    setSelectedStarRatings((previous) => {
+      if (previous.size === 0) {
+        return previous;
+      }
+
+      const validRatings = new Set(availableStarRatings);
+      let didChange = false;
+      const next = new Set<number>();
+
+      previous.forEach((rating) => {
+        if (validRatings.has(rating)) {
+          next.add(rating);
+        } else {
+          didChange = true;
+        }
+      });
+
+      if (!didChange && next.size === previous.size) {
+        return previous;
+      }
+
+      return next;
+    });
+  }, [availableStarRatings]);
 
   useEffect(() => {
     setSelectedMethodIds((previous) => {
@@ -379,11 +365,12 @@ export default function ShakerResultsScreen() {
   const handleClearFilters = useCallback(() => {
     setSelectedTagKeys((previous) => (previous.size === 0 ? previous : new Set<string>()));
     setSelectedMethodIds((previous) => (previous.size === 0 ? previous : new Set<CocktailMethod['id']>()));
+    setSelectedStarRatings((previous) => (previous.size === 0 ? previous : new Set<number>()));
     setSelectedSortOption('alphabetical');
     setSortDescending(false);
   }, []);
 
-  const handleSortOptionChange = useCallback((option: SortOption) => {
+  const handleSortOptionChange = useCallback((option: CocktailSortOption) => {
     setSelectedSortOption((previous) => {
       if (previous === option) {
         setSortDescending((current) => !current);
@@ -392,6 +379,18 @@ export default function ShakerResultsScreen() {
 
       setSortDescending(false);
       return option;
+    });
+  }, []);
+
+  const handleStarRatingFilterToggle = useCallback((rating: number) => {
+    setSelectedStarRatings((previous) => {
+      const next = new Set(previous);
+      if (next.has(rating)) {
+        next.delete(rating);
+      } else {
+        next.add(rating);
+      }
+      return next;
     });
   }, []);
 
@@ -434,12 +433,20 @@ export default function ShakerResultsScreen() {
     return { text: normalized, tokens };
   }, [query]);
 
-  const filteredByMethods = useMemo(() => {
-    if (selectedMethodIds.size === 0) {
+  const filteredByStarRatings = useMemo(() => {
+    if (selectedStarRatings.size === 0) {
       return listData;
     }
 
-    return listData.filter((cocktail) => {
+    return listData.filter((cocktail) => selectedStarRatings.has(getCocktailRating(cocktail)));
+  }, [getCocktailRating, listData, selectedStarRatings]);
+
+  const filteredByMethods = useMemo(() => {
+    if (selectedMethodIds.size === 0) {
+      return filteredByStarRatings;
+    }
+
+    return filteredByStarRatings.filter((cocktail) => {
       const legacyMethodId =
         (cocktail as { methodId?: CocktailMethod['id'] | null }).methodId ?? null;
       const methodIds = (cocktail.methodIds?.length
@@ -453,7 +460,7 @@ export default function ShakerResultsScreen() {
 
       return methodIds.some((methodId) => selectedMethodIds.has(methodId));
     });
-  }, [listData, selectedMethodIds]);
+  }, [filteredByStarRatings, selectedMethodIds]);
 
   const filteredByTags = useMemo(() => {
     const base = filteredByMethods;
@@ -612,6 +619,7 @@ export default function ShakerResultsScreen() {
   const isFilterActive =
     selectedTagKeys.size > 0 ||
     selectedMethodIds.size > 0 ||
+    selectedStarRatings.size > 0 ||
     selectedSortOption !== 'alphabetical' ||
     isSortDescending;
   const filterMenuTop = useMemo(() => {
@@ -760,208 +768,57 @@ export default function ShakerResultsScreen() {
                   shadowColor: Colors.shadow,
                 },
               ]}>
-              {/* Allow filter taps to register even when the search input is focused. */}
-              <ScrollView
-                style={styles.filterMenuScroll}
-                showsVerticalScrollIndicator
-                keyboardShouldPersistTaps="handled">
-                <View style={styles.filterSortSection}>
-                  <Text style={[styles.filterSectionTitle, { color: Colors.onSurfaceVariant }]}>
-                    {t('shakerResults.sortBy')}
-                  </Text>
-                  <ScrollView
-                    horizontal
-                    style={styles.filterSortScroll}
-                    contentContainerStyle={styles.filterSortRow}
-                    showsHorizontalScrollIndicator={false}
-                    keyboardShouldPersistTaps="handled">
-                    <TagPill
-                      label={isSortDescending && selectedSortOption === 'alphabetical' ? 'z-A' : 'A-z'}
-                      color={Colors.tint}
-                      selected={selectedSortOption === 'alphabetical'}
-                      onPress={() => handleSortOptionChange('alphabetical')}
-                      accessibilityRole="radio"
-                      accessibilityState={{ selected: selectedSortOption === 'alphabetical' }}
-                      accessibilityLabel={t('shakerResults.sortOptionAlphabetical')}
-                      androidRippleColor={`${Colors.surfaceVariant}33`}
-                    />
-                    <TagPill
-                      label=""
-                      color={Colors.tint}
-                      selected={selectedSortOption === 'requiredCount'}
-                      onPress={() => handleSortOptionChange('requiredCount')}
-                      accessibilityRole="radio"
-                      accessibilityState={{ selected: selectedSortOption === 'requiredCount' }}
-                      accessibilityLabel={t('shakerResults.sortOptionRequiredCount')}
-                      icon={(
-                        <View style={styles.sortIconInnerWrap}>
-                          <Image
-                            source={IngredientsIcon}
-                            style={{ width: 16, height: 16, tintColor: selectedSortOption === 'requiredCount' ? Colors.surface : Colors.tint }}
-                            contentFit="contain"
-                          />
-                          {selectedSortOption === 'requiredCount' ? (
-                            <MaterialCommunityIcons
-                              name={isSortDescending ? 'arrow-down-thin' : 'arrow-up-thin'}
-                              size={12}
-                              color={Colors.surface}
-                              style={styles.sortDirectionIcon}
-                            />
-                          ) : null}
-                        </View>
-                      )}
-                      style={styles.iconOnlySortPill}
-                      androidRippleColor={`${Colors.surfaceVariant}33`}
-                    />
-                    <TagPill
-                      label=""
-                      color={Colors.tint}
-                      selected={selectedSortOption === 'missingRequiredCount'}
-                      onPress={() => handleSortOptionChange('missingRequiredCount')}
-                      accessibilityRole="radio"
-                      accessibilityState={{ selected: selectedSortOption === 'missingRequiredCount' }}
-                      accessibilityLabel={t('shakerResults.sortOptionMissingRequiredCount')}
-                      icon={(
-                        <View style={styles.sortIconInnerWrap}>
-                          <MaterialCommunityIcons
-                            name="check"
-                            size={16}
-                            color={selectedSortOption === 'missingRequiredCount' ? Colors.surface : Colors.tint}
-                          />
-                          {selectedSortOption === 'missingRequiredCount' ? (
-                            <MaterialCommunityIcons
-                              name={isSortDescending ? 'arrow-down-thin' : 'arrow-up-thin'}
-                              size={12}
-                              color={Colors.surface}
-                              style={styles.sortDirectionIcon}
-                            />
-                          ) : null}
-                        </View>
-                      )}
-                      style={styles.iconOnlySortPill}
-                      androidRippleColor={`${Colors.surfaceVariant}33`}
-                    />
-                    <TagPill
-                      label=""
-                      color={Colors.tint}
-                      selected={selectedSortOption === 'rating'}
-                      onPress={() => handleSortOptionChange('rating')}
-                      accessibilityRole="radio"
-                      accessibilityState={{ selected: selectedSortOption === 'rating' }}
-                      accessibilityLabel={t('shakerResults.sortOptionRating')}
-                      icon={(
-                        <View style={styles.sortIconInnerWrap}>
-                          <MaterialCommunityIcons
-                            name="star"
-                            size={16}
-                            color={selectedSortOption === 'rating' ? Colors.surface : Colors.tint}
-                          />
-                          {selectedSortOption === 'rating' ? (
-                            <MaterialCommunityIcons
-                              name={isSortDescending ? 'arrow-down-thin' : 'arrow-up-thin'}
-                              size={12}
-                              color={Colors.surface}
-                              style={styles.sortDirectionIcon}
-                            />
-                          ) : null}
-                        </View>
-                      )}
-                      style={styles.iconOnlySortPill}
-                      androidRippleColor={`${Colors.surfaceVariant}33`}
-                    />
-                    <TagPill
-                      label=""
-                      color={Colors.tint}
-                      selected={selectedSortOption === 'random'}
-                      onPress={() => handleSortOptionChange('random')}
-                      accessibilityRole="radio"
-                      accessibilityState={{ selected: selectedSortOption === 'random' }}
-                      accessibilityLabel={t('shakerResults.sortOptionRandom')}
-                      icon={(
-                        <View style={styles.sortIconInnerWrap}>
-                          <MaterialCommunityIcons
-                            name="shuffle-variant"
-                            size={16}
-                            color={selectedSortOption === 'random' ? Colors.surface : Colors.tint}
-                          />
-                        </View>
-                      )}
-                      style={styles.iconOnlySortPill}
-                      androidRippleColor={`${Colors.surfaceVariant}33`}
-                    />
-                  </ScrollView>
-                </View>
-                <Text style={[styles.filterSectionTitle, styles.filterByLabel, { color: Colors.onSurfaceVariant }]}>
-                  {t('common.filterBy')}
-                </Text>
-                <View style={styles.filterMenuContent}>
-                  <View style={styles.filterMethodList}>
-                    {availableMethodOptions.length > 0 ? (
-                      availableMethodOptions.map((method) => {
-                        const selected = selectedMethodIds.has(method.id);
-                        return (
-                          <TagPill
-                            key={method.id}
-                            label={method.label}
-                            color={Colors.tint}
-                            selected={selected}
-                            icon={renderMethodIcon(method.id, selected)}
-                            onPress={() => handleMethodFilterToggle(method.id)}
-                            accessibilityRole="checkbox"
-                            accessibilityState={{ checked: selected }}
-                            androidRippleColor={`${Colors.surfaceVariant}33`}
-                          />
-                        );
-                      })
-                    ) : (
-                      <Text style={[styles.filterMenuEmpty, { color: Colors.onSurfaceVariant }]}>
-                        {t("common.noMethodsAvailable")}
-                      </Text>
-                    )}
-                  </View>
-                  <View style={styles.filterSeparator}>
-                    <View style={[styles.filterSeparatorLine, { backgroundColor: Colors.primary }]} />
-                    <Text style={[styles.filterSeparatorLabel, { color: Colors.onSurfaceVariant }]}>
-                      {t("common.and")}
-                    </Text>
-                    <View style={[styles.filterSeparatorLine, { backgroundColor: Colors.primary }]} />
-                  </View>
-                  <View style={styles.filterTagList}>
-                    {availableTagOptions.length > 0 ? (
-                      availableTagOptions.map((tag) => {
-                        const selected = selectedTagKeys.has(tag.key);
-                        return (
-                          <TagPill
-                            key={tag.key}
-                            label={tag.name}
-                            color={tag.color}
-                            selected={selected}
-                            onPress={() => handleTagFilterToggle(tag.key)}
-                            accessibilityRole="checkbox"
-                            accessibilityState={{ checked: selected }}
-                            androidRippleColor={`${Colors.surfaceVariant}33`}
-                          />
-                        );
-                      })
-                    ) : (
-                      <Text style={[styles.filterMenuEmpty, { color: Colors.onSurfaceVariant }]}>
-                        {t("common.noTagsAvailable")}
-                      </Text>
-                    )}
-                  </View>
-                </View>
-                {isFilterActive ? (
-                  <Pressable
-                    accessibilityRole="button"
-                    accessibilityLabel={t("shakerResults.clearSelectedFilters")}
-                    onPress={handleClearFilters}
-                    style={styles.filterMenuClearButton}>
-                    <Text style={[styles.filterMenuClearLabel, { color: Colors.tint }]}>
-                      {t("common.clearFilters")}
-                    </Text>
-                  </Pressable>
-                ) : null}
-              </ScrollView>
+              <CocktailFiltersPanel
+                sortSectionLabel={t('shakerResults.sortBy')}
+                filterSectionLabel={t('common.filterBy')}
+                sortOptions={buildCocktailSortOptions({
+                  selectedSortOption,
+                  isSortDescending,
+                  onSortOptionChange: handleSortOptionChange,
+                  tintColor: Colors.tint,
+                  surfaceColor: Colors.surface,
+                  getAccessibilityLabel: (option) => {
+                    switch (option) {
+                      case 'alphabetical':
+                        return t('shakerResults.sortOptionAlphabetical');
+                      case 'requiredCount':
+                        return t('shakerResults.sortOptionRequiredCount');
+                      case 'missingRequiredCount':
+                        return t('shakerResults.sortOptionMissingRequiredCount');
+                      case 'rating':
+                        return t('shakerResults.sortOptionRating');
+                      default:
+                        return t('shakerResults.sortOptionRandom');
+                    }
+                  },
+                })}
+                availableStarRatings={availableStarRatings}
+                selectedStarRatings={selectedStarRatings}
+                onToggleStarRating={handleStarRatingFilterToggle}
+                showRatingFilters={availableStarRatings.length > 0}
+                availableMethodOptions={availableMethodOptions}
+                selectedMethodIds={selectedMethodIds}
+                onToggleMethod={handleMethodFilterToggle}
+                renderMethodIcon={renderMethodIcon}
+                availableTagOptions={availableTagOptions}
+                selectedTagKeys={selectedTagKeys}
+                onToggleTag={handleTagFilterToggle}
+                onClearFilters={handleClearFilters}
+                showClearButton={isFilterActive}
+                tintColor={Colors.tint}
+                outlineColor={Colors.primary}
+                onSurfaceVariantColor={Colors.onSurfaceVariant}
+                surfaceVariantColor={Colors.surfaceVariant}
+                andLabel={t('common.and')}
+                noTagsAvailableLabel={t('common.noTagsAvailable')}
+                clearFiltersLabel={t('common.clearFilters')}
+                getMethodLabel={(methodId) => t(`cocktailMethod.${methodId}.label`)}
+                getTagLabel={(tag) => {
+                  const isBuiltin = !isNaN(Number(tag.key)) && Number(tag.key) >= 1 && Number(tag.key) <= 11;
+                  const translatedName = isBuiltin ? t(`cocktailTag.${tag.key}`) : tag.name;
+                  return (isBuiltin && translatedName !== `cocktailTag.${tag.key}`) ? translatedName : tag.name;
+                }}
+              />
             </View>
           </>
         ) : null}
@@ -1022,6 +879,8 @@ const styles = StyleSheet.create({
   filterMenu: {
     position: 'absolute',
     right: 16,
+    minWidth: 280,
+    maxWidth: '92%',
     paddingHorizontal: 12,
     paddingVertical: 12,
     borderRadius: 12,
@@ -1032,58 +891,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.12,
     shadowRadius: 12,
     elevation: 8,
-  },
-  filterMenuScroll: {
-    maxHeight: 540,
-    paddingBottom: 2,
-  },
-  filterMenuContent: {
-    flexDirection: 'row',
-    alignItems: 'stretch',
-  },
-  filterSortSection: {
-    marginBottom: 12,
-    gap: 8,
-  },
-  filterSectionTitle: {
-    fontSize: 12,
-    fontWeight: '700',
-    letterSpacing: 0.6,
-    textTransform: 'uppercase',
-  },
-  filterSortScroll: {
-    alignSelf: 'stretch',
-  },
-  filterSortRow: {
-    flexGrow: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 12,
-  },
-  iconOnlySortPill: {
-    minWidth: 53,
-    minHeight: 36,
-    paddingHorizontal: 10,
-  },
-  sortIconInnerWrap: {
-    width: METHOD_ICON_SIZE,
-    height: METHOD_ICON_SIZE,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  sortDirectionIcon: {
-    position: 'absolute',
-    right: -8,
-    top: -8,
-  },
-  filterByLabel: {
-    marginBottom: 12,
-  },
-  filterMethodList: {
-    flexDirection: 'column',
-    gap: 8,
-    alignItems: 'flex-start',
   },
   methodIcon: {
     width: METHOD_ICON_SIZE,
@@ -1097,44 +904,6 @@ const styles = StyleSheet.create({
   },
   muddleIcon: {
     transform: [{ scaleX: 2 }],
-  },
-  filterTagList: {
-    flexDirection: 'column',
-    gap: 8,
-    alignItems: 'flex-end',
-  },
-  filterSeparator: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 10,
-  },
-  filterSeparatorLine: {
-    width: StyleSheet.hairlineWidth,
-    flex: 1,
-  },
-  filterSeparatorLabel: {
-    fontSize: 12,
-    fontWeight: '700',
-    letterSpacing: 0.6,
-    textTransform: 'uppercase',
-    paddingVertical: 4,
-  },
-  filterMenuEmpty: {
-    fontSize: 14,
-    textAlign: 'left',
-    paddingHorizontal: 4,
-    paddingVertical: 2,
-  },
-  filterMenuClearButton: {
-    marginTop: 8,
-    alignSelf: 'flex-start',
-    paddingHorizontal: 8,
-    paddingVertical: 6,
-    borderRadius: 8,
-  },
-  filterMenuClearLabel: {
-    fontSize: 14,
-    fontWeight: '600',
   },
   emptyLabel: {
     textAlign: 'center',

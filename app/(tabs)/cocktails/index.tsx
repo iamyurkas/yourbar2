@@ -30,6 +30,7 @@ import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
 import { useAppColors } from '@/constants/theme';
 import { summariseCocktailAvailability } from '@/libs/cocktail-availability';
 import { getLastCocktailTab, setLastCocktailTab, type CocktailTabKey } from '@/libs/collection-tabs';
+import { buildCocktailSortOptions, type CocktailSortOption } from '@/libs/cocktail-sort-options';
 import { compareOptionalGlobalAlphabet } from '@/libs/global-sort';
 import { getPluralCategory } from '@/libs/i18n/plural';
 import { useI18n } from '@/libs/i18n/use-i18n';
@@ -40,7 +41,6 @@ import { buildTagOptions, type TagOption } from '@/libs/tag-options';
 import { useCocktailTabLogic, type MyTabListItem } from '@/libs/use-cocktail-tab-logic';
 import { useInventoryActions, useInventoryData, useInventorySettings, type Cocktail } from '@/providers/inventory-provider';
 import { tagColors } from '@/theme/theme';
-import IngredientsIcon from '@/assets/images/ingredients.svg';
 
 type CocktailMethodOption = {
   id: CocktailMethod['id'];
@@ -49,7 +49,6 @@ type CocktailMethodOption = {
 
 const METHOD_ICON_SIZE = 16;
 type CocktailAvailabilitySummary = ReturnType<typeof summariseCocktailAvailability>;
-type CocktailSortOption = 'alphabetical' | 'requiredCount' | 'missingRequiredCount' | 'rating' | 'random';
 
 function countRequiredIngredients(cocktail: Cocktail, ignoreGarnish: boolean): number {
   return (cocktail.ingredients ?? []).filter(
@@ -1054,103 +1053,27 @@ export default function CocktailsScreen() {
               <CocktailFiltersPanel
                 sortSectionLabel={t('cocktails.sortBy')}
                 filterSectionLabel={t('common.filterBy')}
-                sortOptions={[
-                  {
-                    key: 'alphabetical',
-                    label: isSortDescending && selectedSortOption === 'alphabetical' ? 'z-A' : 'A-z',
-                    selected: selectedSortOption === 'alphabetical',
-                    onPress: () => handleSortOptionChange('alphabetical'),
-                    accessibilityLabel: t('cocktails.sortOptionAlphabeticalAccessibility'),
+                sortOptions={buildCocktailSortOptions({
+                  selectedSortOption,
+                  isSortDescending,
+                  onSortOptionChange: handleSortOptionChange,
+                  tintColor: Colors.tint,
+                  surfaceColor: Colors.surface,
+                  getAccessibilityLabel: (option) => {
+                    switch (option) {
+                      case 'alphabetical':
+                        return t('cocktails.sortOptionAlphabeticalAccessibility');
+                      case 'requiredCount':
+                        return t('cocktails.sortOptionRequiredCountAccessibility');
+                      case 'missingRequiredCount':
+                        return t('cocktails.sortOptionMissingRequiredCountAccessibility');
+                      case 'rating':
+                        return t('cocktails.sortOptionRatingAccessibility');
+                      default:
+                        return t('cocktails.sortOptionRandomAccessibility');
+                    }
                   },
-                  {
-                    key: 'requiredCount',
-                    label: '',
-                    selected: selectedSortOption === 'requiredCount',
-                    onPress: () => handleSortOptionChange('requiredCount'),
-                    accessibilityLabel: t('cocktails.sortOptionRequiredCountAccessibility'),
-                    icon: (
-                      <View style={styles.sortIconInnerWrap}>
-                        <Image
-                          source={IngredientsIcon}
-                          style={{ width: 16, height: 16, tintColor: selectedSortOption === 'requiredCount' ? Colors.surface : Colors.tint }}
-                          contentFit="contain"
-                        />
-                        {selectedSortOption === 'requiredCount' ? (
-                          <MaterialCommunityIcons
-                            name={isSortDescending ? 'arrow-down-thin' : 'arrow-up-thin'}
-                            size={12}
-                            color={Colors.surface}
-                            style={styles.sortDirectionIcon}
-                          />
-                        ) : null}
-                      </View>
-                    ),
-                  },
-                  {
-                    key: 'missingRequiredCount',
-                    label: '',
-                    selected: selectedSortOption === 'missingRequiredCount',
-                    onPress: () => handleSortOptionChange('missingRequiredCount'),
-                    accessibilityLabel: t('cocktails.sortOptionMissingRequiredCountAccessibility'),
-                    icon: (
-                      <View style={styles.sortIconInnerWrap}>
-                        <MaterialCommunityIcons
-                          name="check"
-                          size={16}
-                          color={selectedSortOption === 'missingRequiredCount' ? Colors.surface : Colors.tint}
-                        />
-                        {selectedSortOption === 'missingRequiredCount' ? (
-                          <MaterialCommunityIcons
-                            name={isSortDescending ? 'arrow-down-thin' : 'arrow-up-thin'}
-                            size={12}
-                            color={Colors.surface}
-                            style={styles.sortDirectionIcon}
-                          />
-                        ) : null}
-                      </View>
-                    ),
-                  },
-                  {
-                    key: 'rating',
-                    label: '',
-                    selected: selectedSortOption === 'rating',
-                    onPress: () => handleSortOptionChange('rating'),
-                    accessibilityLabel: t('cocktails.sortOptionRatingAccessibility'),
-                    icon: (
-                      <View style={styles.sortIconInnerWrap}>
-                        <MaterialCommunityIcons
-                          name="star"
-                          size={16}
-                          color={selectedSortOption === 'rating' ? Colors.surface : Colors.tint}
-                        />
-                        {selectedSortOption === 'rating' ? (
-                          <MaterialCommunityIcons
-                            name={isSortDescending ? 'arrow-down-thin' : 'arrow-up-thin'}
-                            size={12}
-                            color={Colors.surface}
-                            style={styles.sortDirectionIcon}
-                          />
-                        ) : null}
-                      </View>
-                    ),
-                  },
-                  {
-                    key: 'random',
-                    label: '',
-                    selected: selectedSortOption === 'random',
-                    onPress: () => handleSortOptionChange('random'),
-                    accessibilityLabel: t('cocktails.sortOptionRandomAccessibility'),
-                    icon: (
-                      <View style={styles.sortIconInnerWrap}>
-                        <MaterialCommunityIcons
-                          name="shuffle-variant"
-                          size={16}
-                          color={selectedSortOption === 'random' ? Colors.surface : Colors.tint}
-                        />
-                      </View>
-                    ),
-                  },
-                ]}
+                })}
                 availableStarRatings={availableStarRatings}
                 selectedStarRatings={selectedStarRatings}
                 onToggleStarRating={handleStarRatingFilterToggle}
@@ -1339,17 +1262,6 @@ const styles = StyleSheet.create({
     height: METHOD_ICON_SIZE,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  sortIconInnerWrap: {
-    width: METHOD_ICON_SIZE,
-    height: METHOD_ICON_SIZE,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  sortDirectionIcon: {
-    position: 'absolute',
-    right: -8,
-    top: -8,
   },
   muddleIcon: {
     transform: [{ scaleX: 2 }],
