@@ -399,9 +399,12 @@ export const enUSTranslations: TranslationDictionary = {
 
   "ingredients.sortBy": "Sort by",
   "ingredients.sortOptionAlphabeticalAccessibility": "Sort ingredients by A-z",
-  "ingredients.sortOptionUnlocksMostCocktailsAccessibility": "Sort ingredients by cocktails unlocked",
-  "ingredients.sortOptionMostUsedAccessibility": "Sort ingredients by use count",
-  "ingredients.sortOptionRecentlyAddedAccessibility": "Sort ingredients by recently added",
+  "ingredients.sortOptionUnlocksMostCocktailsAccessibility":
+    "Sort ingredients by cocktails unlocked",
+  "ingredients.sortOptionMostUsedAccessibility":
+    "Sort ingredients by use count",
+  "ingredients.sortOptionRecentlyAddedAccessibility":
+    "Sort ingredients by recently added",
 
   "cocktails.oneMoreIngredientForMore":
     "One more ingredient for more cocktails",
@@ -419,8 +422,10 @@ export const enUSTranslations: TranslationDictionary = {
 
   "cocktails.sortBy": "Sort by",
   "cocktails.sortOptionAlphabeticalAccessibility": "Sort by A-z",
-  "cocktails.sortOptionRequiredCountAccessibility": "Sort by required ingredients count",
-  "cocktails.sortOptionMissingRequiredCountAccessibility": "Sort by missing required ingredients count",
+  "cocktails.sortOptionRequiredCountAccessibility":
+    "Sort by required ingredients count",
+  "cocktails.sortOptionMissingRequiredCountAccessibility":
+    "Sort by missing required ingredients count",
   "cocktails.sortOptionRatingAccessibility": "Sort by rating",
   "cocktails.sortOptionRandomAccessibility": "Sort randomly",
   "cocktails.addCocktail": "Add cocktail",
@@ -433,7 +438,8 @@ export const enUSTranslations: TranslationDictionary = {
   "shakerResults.sortBy": "Sort by",
   "shakerResults.sortOptionAlphabetical": "Alphabetical (A–Z)",
   "shakerResults.sortOptionRequiredCount": "Required ingredients count",
-  "shakerResults.sortOptionMissingRequiredCount": "Missing required ingredients count",
+  "shakerResults.sortOptionMissingRequiredCount":
+    "Missing required ingredients count",
   "shakerResults.sortOptionRating": "Rating",
   "shakerResults.sortOptionRandom": "Random",
   "shakerResults.emptyMatchingRecipes": "No matching recipes",
@@ -475,8 +481,8 @@ export const enUSTranslations: TranslationDictionary = {
   "sideMenu.smartShakerFilteringInfoMessage":
     "When enabled, ingredients in groups with no current selection are hidden if they would produce zero results.\n\nIn groups where you already selected at least one ingredient, items stay visible to preserve OR logic.\n\nTurn this off to restore the default shaker behavior.",
   "sideMenu.smartShakerFilteringCaption": "Hide non-matching ingredients",
-  "sideMenu.showTabCounters": "Tab counters",
-  "sideMenu.showTabCountersCaption": "Show item counts in tabs",
+  "sideMenu.showTabCounters": "Show counts",
+  "sideMenu.showTabCountersCaption": "Show item counts next to tabs",
   "sideMenu.startingScreen": "Starting screen",
   "sideMenu.startingScreenOpen": "Open {{screen}}",
   "sideMenu.favoritesRatingFilter": "Favorites rating filter",
@@ -582,7 +588,8 @@ export const enUSTranslations: TranslationDictionary = {
   "language.en-GB": "English (UK)",
   "language.en-US": "English",
   "language.uk-UA": "Ukrainian",
-  "language.es-ES": "Spanish (beta)",
+  "language.es-ES": "Spanish",
+  "language.de-DE": "German (Beta)",
   "languageModal.title": "App Language",
   "languageModal.description":
     "Changes are applied immediately.\nBundled data will be translated.",
@@ -746,7 +753,8 @@ export const enUSTranslations: TranslationDictionary = {
   "barcode.editBeforeSaving": "Edit before saving",
   "barcode.loadingProductInfo": "Loading product info",
   "barcode.helpTitle": "Barcode scan help",
-  "barcode.helpMessage": "Point your camera at a product barcode. We will check if it already exists, suggest similar ingredients, and let you create or attach safely.",
+  "barcode.helpMessage":
+    "Point your camera at a product barcode. We will check if it already exists, suggest similar ingredients, and let you create or attach safely.",
   "barcode.scannerUnavailable": "Barcode scanner is unavailable in this build",
   "common.back": "Back",
   "common.somethingWentWrong": "Something went wrong",
