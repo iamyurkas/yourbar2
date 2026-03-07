@@ -392,10 +392,14 @@ export const esESTranslations: TranslationDictionary = {
 
   "ingredients.sortBy": "Sort by",
   "ingredients.sortOptionAlphabeticalAccessibility": "Sort ingredients by A-z",
-  "ingredients.sortOptionUnlocksMostCocktailsAccessibility": "Sort ingredients by cocktails unlocked",
-  "ingredients.sortOptionMostUsedAccessibility": "Sort ingredients by use count",
-  "ingredients.sortOptionRecentlyAddedAccessibility": "Sort ingredients by recently added",
-  "cocktails.oneMoreIngredientForMore": "Un ingrediente más para más cócteles",
+  "ingredients.sortOptionUnlocksMostCocktailsAccessibility":
+    "Sort ingredients by cocktails unlocked",
+  "ingredients.sortOptionMostUsedAccessibility":
+    "Sort ingredients by use count",
+  "ingredients.sortOptionRecentlyAddedAccessibility":
+    "Sort ingredients by recently added",
+  "cocktails.oneMoreIngredientForMore":
+    "↓ Un ingrediente más para más cócteles ↓",
   "cocktails.removeIngredientFromShopping":
     "Quitar ingrediente de la lista de la compra",
   "cocktails.addIngredientToShopping":
@@ -411,8 +415,10 @@ export const esESTranslations: TranslationDictionary = {
 
   "cocktails.sortBy": "Ordenar por",
   "cocktails.sortOptionAlphabeticalAccessibility": "Ordenar por A-z",
-  "cocktails.sortOptionRequiredCountAccessibility": "Ordenar por cantidad de ingredientes obligatorios",
-  "cocktails.sortOptionMissingRequiredCountAccessibility": "Ordenar por cantidad de ingredientes obligatorios faltantes",
+  "cocktails.sortOptionRequiredCountAccessibility":
+    "Ordenar por cantidad de ingredientes obligatorios",
+  "cocktails.sortOptionMissingRequiredCountAccessibility":
+    "Ordenar por cantidad de ingredientes obligatorios faltantes",
   "cocktails.sortOptionRatingAccessibility": "Ordenar por valoración",
   "cocktails.sortOptionRandomAccessibility": "Orden aleatorio",
   "cocktails.addCocktail": "Añadir cóctel",
@@ -423,8 +429,10 @@ export const esESTranslations: TranslationDictionary = {
 
   "shakerResults.sortBy": "Ordenar por",
   "shakerResults.sortOptionAlphabetical": "Alfabético (A–Z)",
-  "shakerResults.sortOptionRequiredCount": "Cantidad de ingredientes obligatorios",
-  "shakerResults.sortOptionMissingRequiredCount": "Cantidad de ingredientes obligatorios faltantes",
+  "shakerResults.sortOptionRequiredCount":
+    "Cantidad de ingredientes obligatorios",
+  "shakerResults.sortOptionMissingRequiredCount":
+    "Cantidad de ingredientes obligatorios faltantes",
   "shakerResults.sortOptionRating": "Valoración",
   "shakerResults.sortOptionRandom": "Aleatorio",
   "shakerResults.emptyMatchingRecipes": "No hay recetas coincidentes",
@@ -464,7 +472,8 @@ export const esESTranslations: TranslationDictionary = {
   "sideMenu.smartShakerFilteringCaption":
     "Ocultar ingredientes no coincidentes en la Coctelera",
   "sideMenu.showTabCounters": "Contadores de pestañas",
-  "sideMenu.showTabCountersCaption": "Mostrar la cantidad de elementos junto al nombre de cada pestaña",
+  "sideMenu.showTabCountersCaption":
+    "Mostrar la cantidad de elementos junto al nombre de cada pestaña",
   "sideMenu.startingScreen": "Pantalla inicial",
   "sideMenu.startingScreenOpen": "Abrir {{screen}}",
   "sideMenu.favoritesRatingFilter": "Filtro de favoritos",
@@ -731,7 +740,8 @@ export const esESTranslations: TranslationDictionary = {
   "barcode.editBeforeSaving": "Edit before saving",
   "barcode.loadingProductInfo": "Loading product info",
   "barcode.helpTitle": "Barcode scan help",
-  "barcode.helpMessage": "Point your camera at a product barcode. We will check if it already exists, suggest similar ingredients, and let you create or attach safely.",
+  "barcode.helpMessage":
+    "Point your camera at a product barcode. We will check if it already exists, suggest similar ingredients, and let you create or attach safely.",
   "barcode.scannerUnavailable": "Barcode scanner is unavailable in this build",
   "common.back": "Back",
   "common.somethingWentWrong": "Something went wrong",

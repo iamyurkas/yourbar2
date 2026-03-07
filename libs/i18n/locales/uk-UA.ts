@@ -399,12 +399,16 @@ export const ukUATranslations: TranslationDictionary = {
   "ingredients.addIngredient": "Додати інгредієнт",
 
   "ingredients.sortBy": "Сортувати за",
-  "ingredients.sortOptionAlphabeticalAccessibility": "Сортувати інгредієнти за A-z",
-  "ingredients.sortOptionUnlocksMostCocktailsAccessibility": "Сортувати інгредієнти за кількістю відкритих коктейлів",
-  "ingredients.sortOptionMostUsedAccessibility": "Сортувати інгредієнти за частотою використання",
-  "ingredients.sortOptionRecentlyAddedAccessibility": "Сортувати інгредієнти за датою додавання",
+  "ingredients.sortOptionAlphabeticalAccessibility":
+    "Сортувати інгредієнти за A-z",
+  "ingredients.sortOptionUnlocksMostCocktailsAccessibility":
+    "Сортувати інгредієнти за кількістю відкритих коктейлів",
+  "ingredients.sortOptionMostUsedAccessibility":
+    "Сортувати інгредієнти за частотою використання",
+  "ingredients.sortOptionRecentlyAddedAccessibility":
+    "Сортувати інгредієнти за датою додавання",
 
-  "cocktails.oneMoreIngredientForMore": "Ще інгредієнт — більше коктейлів",
+  "cocktails.oneMoreIngredientForMore": "↓ Ще інгредієнт — більше коктейлів ↓",
   "cocktails.removeIngredientFromShopping":
     "Видалити інгредієнт зі списку покупок",
   "cocktails.addIngredientToShopping": "Додати інгредієнт до списку покупок",
@@ -419,8 +423,10 @@ export const ukUATranslations: TranslationDictionary = {
 
   "cocktails.sortBy": "Сортувати за",
   "cocktails.sortOptionAlphabeticalAccessibility": "Сортувати за A-z",
-  "cocktails.sortOptionRequiredCountAccessibility": "Сортувати за кількістю обов’язкових інгредієнтів",
-  "cocktails.sortOptionMissingRequiredCountAccessibility": "Сортувати за кількістю відсутніх обов’язкових інгредієнтів",
+  "cocktails.sortOptionRequiredCountAccessibility":
+    "Сортувати за кількістю обов’язкових інгредієнтів",
+  "cocktails.sortOptionMissingRequiredCountAccessibility":
+    "Сортувати за кількістю відсутніх обов’язкових інгредієнтів",
   "cocktails.sortOptionRatingAccessibility": "Сортувати за рейтингом",
   "cocktails.sortOptionRandomAccessibility": "Випадкове сортування",
   "cocktails.addCocktail": "Додати коктейль",
@@ -432,8 +438,10 @@ export const ukUATranslations: TranslationDictionary = {
 
   "shakerResults.sortBy": "Сортувати за",
   "shakerResults.sortOptionAlphabetical": "За алфавітом (A–Z)",
-  "shakerResults.sortOptionRequiredCount": "Кількістю обов’язкових інгредієнтів",
-  "shakerResults.sortOptionMissingRequiredCount": "Кількістю відсутніх обов’язкових інгредієнтів",
+  "shakerResults.sortOptionRequiredCount":
+    "Кількістю обов’язкових інгредієнтів",
+  "shakerResults.sortOptionMissingRequiredCount":
+    "Кількістю відсутніх обов’язкових інгредієнтів",
   "shakerResults.sortOptionRating": "Рейтингом",
   "shakerResults.sortOptionRandom": "Випадково",
   "shakerResults.emptyMatchingRecipes": "Немає відповідних рецептів",
@@ -477,7 +485,8 @@ export const ukUATranslations: TranslationDictionary = {
     "Якщо увімкнено, інгредієнти в групах без поточного вибору приховуються, якщо вони не дають жодного результату.\n\nУ групах, де ви вже обрали хоча б один інгредієнт, елементи залишаються видимими, щоб зберегти логіку АБО.\n\nВимкніть це, щоби повернути стандартну поведінку шейкера.",
   "sideMenu.smartShakerFilteringCaption": "Приховувати зайві інгредієнти",
   "sideMenu.showTabCounters": "Лічильники табів",
-  "sideMenu.showTabCountersCaption": "Показувати кількість елементів праворуч від назв табів",
+  "sideMenu.showTabCountersCaption":
+    "Показувати кількість елементів праворуч від назв табів",
   "sideMenu.startingScreen": "Початковий екран",
   "sideMenu.startingScreenOpen": "Відкривати {{screen}}",
   "sideMenu.favoritesRatingFilter": "Фільтр обраних",
@@ -802,7 +811,8 @@ export const ukUATranslations: TranslationDictionary = {
   "barcode.editBeforeSaving": "Edit before saving",
   "barcode.loadingProductInfo": "Loading product info",
   "barcode.helpTitle": "Barcode scan help",
-  "barcode.helpMessage": "Point your camera at a product barcode. We will check if it already exists, suggest similar ingredients, and let you create or attach safely.",
+  "barcode.helpMessage":
+    "Point your camera at a product barcode. We will check if it already exists, suggest similar ingredients, and let you create or attach safely.",
   "barcode.scannerUnavailable": "Barcode scanner is unavailable in this build",
   "common.back": "Back",
   "common.somethingWentWrong": "Something went wrong",

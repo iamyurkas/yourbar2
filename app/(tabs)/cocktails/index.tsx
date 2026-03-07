@@ -16,10 +16,10 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { CocktailFiltersPanel } from '@/components/CocktailFiltersPanel';
 import { CocktailListRow } from '@/components/CocktailListRow';
 import { CollectionHeader } from '@/components/CollectionHeader';
 import { CollectionListSkeleton } from '@/components/CollectionListSkeleton';
-import { CocktailFiltersPanel } from '@/components/CocktailFiltersPanel';
 import { FabAdd } from '@/components/FabAdd';
 import { useOnboardingAnchors } from '@/components/onboarding/OnboardingContext';
 import { ListRow, Thumb } from '@/components/RowParts';
@@ -29,8 +29,8 @@ import { getCocktailMethods, METHOD_ICON_MAP, type CocktailMethod } from '@/cons
 import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
 import { useAppColors } from '@/constants/theme';
 import { summariseCocktailAvailability } from '@/libs/cocktail-availability';
-import { getLastCocktailTab, setLastCocktailTab, type CocktailTabKey } from '@/libs/collection-tabs';
 import { buildCocktailSortOptions, type CocktailSortOption } from '@/libs/cocktail-sort-options';
+import { getLastCocktailTab, setLastCocktailTab, type CocktailTabKey } from '@/libs/collection-tabs';
 import { compareOptionalGlobalAlphabet } from '@/libs/global-sort';
 import { getPluralCategory } from '@/libs/i18n/plural';
 import { useI18n } from '@/libs/i18n/use-i18n';
@@ -1195,7 +1195,7 @@ const styles = StyleSheet.create({
   },
   moreIngredientsLabel: {
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: '400',
     letterSpacing: 0.1,
     textAlign: 'center',
   },
