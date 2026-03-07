@@ -3,8 +3,9 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { Stack, router } from 'expo-router';
 import { useCallback, useState } from 'react';
-import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 
+import { AppDialog } from '@/components/AppDialog';
 import { AppImage } from '@/components/AppImage';
 import { HeaderIconButton } from '@/components/HeaderIconButton';
 import { useAppColors } from '@/constants/theme';
@@ -31,6 +32,7 @@ export default function ScanIngredientScreen() {
   const [permission, requestPermission] = useCameraPermissions();
   const [scanState, setScanState] = useState<ScanState>({ kind: 'ready' });
   const [hasScanned, setHasScanned] = useState(false);
+  const [isHelpVisible, setIsHelpVisible] = useState(false);
 
   const handleScan = useCallback(async (rawBarcode?: string) => {
     const barcode = rawBarcode?.trim();
@@ -154,9 +156,28 @@ export default function ScanIngredientScreen() {
       <Stack.Screen
         options={{
           title: t('barcode.scanBarcode'),
+          headerTitleAlign: 'center',
+          headerStyle: { backgroundColor: colors.surface },
+          headerShadowVisible: false,
+          headerTitleStyle: {
+            color: colors.onSurface,
+            fontSize: Platform.OS === 'ios' ? 17 : 16,
+            fontWeight: '600',
+          },
           headerLeft: () => (
             <HeaderIconButton onPress={() => router.back()} accessibilityLabel={t('common.back')}>
-              <MaterialCommunityIcons name="arrow-left" size={22} color={colors.onSurface} />
+              <MaterialCommunityIcons
+                name={Platform.OS === 'ios' ? 'chevron-left' : 'arrow-left'}
+                size={Platform.OS === 'ios' ? 26 : 22}
+                color={colors.onSurface}
+              />
+            </HeaderIconButton>
+          ),
+          headerRight: () => (
+            <HeaderIconButton
+              onPress={() => setIsHelpVisible(true)}
+              accessibilityLabel={t('common.openScreenHelp')}>
+              <MaterialCommunityIcons name="help-circle-outline" size={22} color={colors.onSurface} />
             </HeaderIconButton>
           ),
         }}
@@ -270,6 +291,14 @@ export default function ScanIngredientScreen() {
           </Pressable>
         </View>
       ) : null}
+
+      <AppDialog
+        visible={isHelpVisible}
+        onRequestClose={() => setIsHelpVisible(false)}
+        title={t('barcode.helpTitle')}
+        message={t('barcode.helpMessage')}
+        actions={[{ label: t('common.ok'), variant: 'primary' }]}
+      />
     </View>
   );
 }

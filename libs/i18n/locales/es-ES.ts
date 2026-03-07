@@ -706,6 +706,8 @@ export const esESTranslations: TranslationDictionary = {
   "barcode.scanAgain": "Scan again",
   "barcode.editBeforeSaving": "Edit before saving",
   "barcode.loadingProductInfo": "Loading product info",
+  "barcode.helpTitle": "Barcode scan help",
+  "barcode.helpMessage": "Point your camera at a product barcode. We will check if it already exists, suggest similar ingredients, and let you create or attach safely.",
   "barcode.scannerUnavailable": "Barcode scanner is unavailable in this build",
   "common.back": "Back",
   "common.somethingWentWrong": "Something went wrong",
