@@ -404,6 +404,7 @@ export const esESTranslations: TranslationDictionary = {
   "cocktails.sortOptionRequiredCountAccessibility": "Ordenar por cantidad de ingredientes obligatorios",
   "cocktails.sortOptionMissingRequiredCountAccessibility": "Ordenar por cantidad de ingredientes obligatorios faltantes",
   "cocktails.sortOptionRatingAccessibility": "Ordenar por valoración",
+  "cocktails.sortOptionRandomAccessibility": "Orden aleatorio",
   "cocktails.addCocktail": "Añadir cóctel",
   "shakerResults.helpTitle": "Resultados de la coctelera",
   "shakerResults.helpText":
@@ -415,6 +416,7 @@ export const esESTranslations: TranslationDictionary = {
   "shakerResults.sortOptionRequiredCount": "Cantidad de ingredientes obligatorios",
   "shakerResults.sortOptionMissingRequiredCount": "Cantidad de ingredientes obligatorios faltantes",
   "shakerResults.sortOptionRating": "Valoración",
+  "shakerResults.sortOptionRandom": "Aleatorio",
   "shakerResults.emptyMatchingRecipes": "No hay recetas coincidentes",
   "rowParts.removeFromFavorites": "Quitar de favoritos",
   "rowParts.addToFavorites": "Añadir a favoritos",

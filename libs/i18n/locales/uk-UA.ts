@@ -412,6 +412,7 @@ export const ukUATranslations: TranslationDictionary = {
   "cocktails.sortOptionRequiredCountAccessibility": "Сортувати за кількістю обов’язкових інгредієнтів",
   "cocktails.sortOptionMissingRequiredCountAccessibility": "Сортувати за кількістю відсутніх обов’язкових інгредієнтів",
   "cocktails.sortOptionRatingAccessibility": "Сортувати за рейтингом",
+  "cocktails.sortOptionRandomAccessibility": "Випадкове сортування",
   "cocktails.addCocktail": "Додати коктейль",
 
   "shakerResults.helpTitle": "Результати шейкера",
@@ -424,6 +425,7 @@ export const ukUATranslations: TranslationDictionary = {
   "shakerResults.sortOptionRequiredCount": "Кількістю обов’язкових інгредієнтів",
   "shakerResults.sortOptionMissingRequiredCount": "Кількістю відсутніх обов’язкових інгредієнтів",
   "shakerResults.sortOptionRating": "Рейтингом",
+  "shakerResults.sortOptionRandom": "Випадково",
   "shakerResults.emptyMatchingRecipes": "Немає відповідних рецептів",
 
   "rowParts.removeFromFavorites": "Видалити з обраного",

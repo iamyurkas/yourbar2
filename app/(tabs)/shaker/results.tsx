@@ -67,7 +67,7 @@ function resolveCocktailByKey(key: string, cocktails: Cocktail[]) {
 
 const METHOD_ICON_SIZE = 16;
 
-type SortOption = 'alphabetical' | 'requiredCount' | 'missingRequiredCount' | 'rating';
+type SortOption = 'alphabetical' | 'requiredCount' | 'missingRequiredCount' | 'rating' | 'random';
 
 function countRequiredIngredients(cocktail: Cocktail, ignoreGarnish: boolean): number {
   return (cocktail.ingredients ?? []).filter(
@@ -515,6 +515,17 @@ export default function ShakerResultsScreen() {
     ingredientLookup,
   ]);
 
+  const randomSortRanks = useMemo(() => {
+    const rankMap = new Map<string, number>();
+
+    filteredCocktails.forEach((cocktail) => {
+      const key = String(cocktail.id ?? cocktail.name);
+      rankMap.set(key, Math.random());
+    });
+
+    return rankMap;
+  }, [filteredCocktails]);
+
   const sortedCocktails = useMemo(() => {
     const base = [...filteredCocktails];
 
@@ -546,10 +557,22 @@ export default function ShakerResultsScreen() {
         return compareOptionalGlobalAlphabet(leftName, rightName);
       }
 
-      const leftRating = getCocktailRating(left);
-      const rightRating = getCocktailRating(right);
-      if (leftRating !== rightRating) {
-        return rightRating - leftRating;
+      if (selectedSortOption === 'rating') {
+        const leftRating = getCocktailRating(left);
+        const rightRating = getCocktailRating(right);
+        if (leftRating !== rightRating) {
+          return rightRating - leftRating;
+        }
+
+        return compareOptionalGlobalAlphabet(leftName, rightName);
+      }
+
+      const leftKey = String(left.id ?? left.name);
+      const rightKey = String(right.id ?? right.name);
+      const leftRank = randomSortRanks.get(leftKey) ?? 0;
+      const rightRank = randomSortRanks.get(rightKey) ?? 0;
+      if (leftRank !== rightRank) {
+        return leftRank - rightRank;
       }
 
       return compareOptionalGlobalAlphabet(leftName, rightName);
@@ -561,6 +584,7 @@ export default function ShakerResultsScreen() {
     filteredCocktails,
     getCocktailRating,
     ignoreGarnish,
+    randomSortRanks,
     selectedSortOption,
   ]);
 
@@ -758,8 +782,25 @@ export default function ShakerResultsScreen() {
                       accessibilityState={{ selected: selectedSortOption === 'rating' }}
                       androidRippleColor={`${Colors.surfaceVariant}33`}
                     />
+                    <TagPill
+                      label={t('shakerResults.sortOptionRandom')}
+                      color={Colors.tint}
+                      selected={selectedSortOption === 'random'}
+                      onPress={() => handleSortOptionChange('random')}
+                      accessibilityRole="radio"
+                      accessibilityState={{ selected: selectedSortOption === 'random' }}
+                      icon={(
+                        <MaterialCommunityIcons
+                          name="dice-5-outline"
+                          size={16}
+                          color={selectedSortOption === 'random' ? Colors.surface : Colors.tint}
+                        />
+                      )}
+                      androidRippleColor={`${Colors.surfaceVariant}33`}
+                    />
                   </View>
                 </View>
+                <View style={[styles.sortSectionDivider, { backgroundColor: Colors.outline }]} />
                 <View style={styles.filterMenuContent}>
                   <View style={styles.filterMethodList}>
                     {availableMethodOptions.length > 0 ? (
@@ -921,6 +962,10 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     gap: 8,
     alignItems: 'flex-start',
+  },
+  sortSectionDivider: {
+    height: StyleSheet.hairlineWidth,
+    marginBottom: 12,
   },
   filterMethodList: {
     flexDirection: 'column',

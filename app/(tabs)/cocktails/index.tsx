@@ -49,7 +49,7 @@ type CocktailMethodOption = {
 
 const METHOD_ICON_SIZE = 16;
 type CocktailAvailabilitySummary = ReturnType<typeof summariseCocktailAvailability>;
-type CocktailSortOption = 'alphabetical' | 'requiredCount' | 'missingRequiredCount' | 'rating';
+type CocktailSortOption = 'alphabetical' | 'requiredCount' | 'missingRequiredCount' | 'rating' | 'random';
 
 function countRequiredIngredients(cocktail: Cocktail, ignoreGarnish: boolean): number {
   return (cocktail.ingredients ?? []).filter(
@@ -493,6 +493,17 @@ export default function CocktailsScreen() {
     return summaryMap;
   }, [allowAllSubstitutes, availableIngredientIds, filteredCocktails, ignoreGarnish, ingredientLookup]);
 
+  const randomSortRanks = useMemo(() => {
+    const rankMap = new Map<string, number>();
+
+    filteredCocktails.forEach((cocktail) => {
+      const key = String(cocktail.id ?? cocktail.name);
+      rankMap.set(key, Math.random());
+    });
+
+    return rankMap;
+  }, [filteredCocktails]);
+
   const compareCocktailsBySelectedSort = useCallback(
     (left: Cocktail, right: Cocktail) => {
       const leftName = left.name ?? '';
@@ -522,15 +533,27 @@ export default function CocktailsScreen() {
         return compareOptionalGlobalAlphabet(leftName, rightName);
       }
 
-      const leftRating = getCocktailRating(left);
-      const rightRating = getCocktailRating(right);
-      if (leftRating !== rightRating) {
-        return rightRating - leftRating;
+      if (selectedSortOption === 'rating') {
+        const leftRating = getCocktailRating(left);
+        const rightRating = getCocktailRating(right);
+        if (leftRating !== rightRating) {
+          return rightRating - leftRating;
+        }
+
+        return compareOptionalGlobalAlphabet(leftName, rightName);
+      }
+
+      const leftKey = String(left.id ?? left.name);
+      const rightKey = String(right.id ?? right.name);
+      const leftRank = randomSortRanks.get(leftKey) ?? 0;
+      const rightRank = randomSortRanks.get(rightKey) ?? 0;
+      if (leftRank !== rightRank) {
+        return leftRank - rightRank;
       }
 
       return compareOptionalGlobalAlphabet(leftName, rightName);
     },
-    [filteredAvailabilitySummaryByKey, getCocktailRating, ignoreGarnish, selectedSortOption],
+    [filteredAvailabilitySummaryByKey, getCocktailRating, ignoreGarnish, randomSortRanks, selectedSortOption],
   );
 
   const sortedCocktails = useMemo(
@@ -1058,6 +1081,20 @@ export default function CocktailsScreen() {
                         name="star"
                         size={16}
                         color={selectedSortOption === 'rating' ? Colors.surface : Colors.tint}
+                      />
+                    ),
+                  },
+                  {
+                    key: 'random',
+                    label: '',
+                    selected: selectedSortOption === 'random',
+                    onPress: () => handleSortOptionChange('random'),
+                    accessibilityLabel: t('cocktails.sortOptionRandomAccessibility'),
+                    icon: (
+                      <MaterialCommunityIcons
+                        name="dice-5-outline"
+                        size={16}
+                        color={selectedSortOption === 'random' ? Colors.surface : Colors.tint}
                       />
                     ),
                   },

@@ -102,6 +102,9 @@ export function CocktailFiltersPanel({
             </View>
           </View>
         ) : null}
+        {showSortOptions ? (
+          <View style={[styles.sortSectionDivider, { backgroundColor: outlineColor }]} />
+        ) : null}
         {showRatingFilters ? (
           <>
             <ScrollView
@@ -227,6 +230,10 @@ const styles = StyleSheet.create({
   iconOnlyPill: {
     minWidth: 40,
     paddingHorizontal: 10,
+  },
+  sortSectionDivider: {
+    height: StyleSheet.hairlineWidth,
+    marginBottom: 12,
   },
   filterRatingScroll: {
     alignSelf: 'stretch',
