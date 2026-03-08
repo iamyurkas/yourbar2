@@ -883,7 +883,7 @@
       "glassId": "shooter",
       "methodIds": ["shake"],
       "tags": [5, 9],
-      "defaultServings": 1,
+      "defaultServings": 3,
       "ingredients": [
         {
           "order": 1,
@@ -2112,7 +2112,7 @@
       "glassId": "shooter",
       "methodIds": ["shake"],
       "tags": [5, 9],
-      "defaultServings": 1,
+      "defaultServings": 3,
       "ingredients": [
         {
           "order": 1,
@@ -2607,7 +2607,7 @@
       "glassId": "shooter",
       "methodIds": ["shake"],
       "tags": [6, 9],
-      "defaultServings": 1,
+      "defaultServings": 3,
       "ingredients": [
         {
           "order": 1,
@@ -4460,7 +4460,7 @@
       "glassId": "shooter",
       "methodIds": ["shake"],
       "tags": [6, 9],
-      "defaultServings": 1,
+      "defaultServings": 3,
       "ingredients": [
         {
           "order": 1,
@@ -6733,7 +6733,7 @@
       "glassId": "shooter",
       "methodIds": ["shake"],
       "tags": [6, 9],
-      "defaultServings": 1,
+      "defaultServings": 3,
       "ingredients": [
         {
           "order": 1,
@@ -7196,7 +7196,7 @@
       "glassId": "shooter",
       "methodIds": ["shake"],
       "tags": [5, 9],
-      "defaultServings": 1,
+      "defaultServings": 3,
       "ingredients": [
         {
           "order": 1,
@@ -8874,7 +8874,7 @@
       "glassId": "hurricane_glass",
       "methodIds": ["blend"],
       "tags": [7, 8],
-      "defaultServings": 1,
+      "defaultServings": 3,
       "ingredients": [
         {
           "order": 1,
@@ -13297,7 +13297,7 @@
       "glassId": "shooter",
       "methodIds": ["shake"],
       "tags": [6, 9],
-      "defaultServings": 1,
+      "defaultServings": 3,
       "ingredients": [
         {
           "order": 1,
@@ -14795,7 +14795,7 @@
       "glassId": "shooter",
       "methodIds": ["shake"],
       "tags": [5, 9],
-      "defaultServings": 1,
+      "defaultServings": 3,
       "ingredients": [
         {
           "order": 1,
@@ -20771,7 +20771,7 @@
       "glassId": "shooter",
       "methodIds": ["shake"],
       "tags": [5, 9],
-      "defaultServings": 1,
+      "defaultServings": 3,
       "ingredients": [
         {
           "order": 1,
@@ -23898,7 +23898,7 @@
       "glassId": "shooter",
       "methodIds": ["shake"],
       "tags": [5, 9],
-      "defaultServings": 1,
+      "defaultServings": 3,
       "ingredients": [
         {
           "order": 1,
@@ -25440,7 +25440,7 @@
       "glassId": "shooter",
       "methodIds": ["shake"],
       "tags": [6, 9],
-      "defaultServings": 1,
+      "defaultServings": 3,
       "ingredients": [
         {
           "order": 1,
@@ -25825,7 +25825,7 @@
       "glassId": "shooter",
       "methodIds": ["shake"],
       "tags": [5, 9],
-      "defaultServings": 1,
+      "defaultServings": 3,
       "ingredients": [
         {
           "order": 1,
@@ -28372,7 +28372,7 @@
       "glassId": "shooter",
       "methodIds": ["shake"],
       "tags": [6, 9],
-      "defaultServings": 1,
+      "defaultServings": 3,
       "ingredients": [
         {
           "order": 1,
@@ -30728,7 +30728,7 @@
       "glassId": "shooter",
       "methodIds": ["shake", "layer"],
       "tags": [6, 9],
-      "defaultServings": 1,
+      "defaultServings": 3,
       "ingredients": [
         {
           "order": 1,
@@ -33000,7 +33000,7 @@
       "glassId": "shooter",
       "methodIds": ["shake", "layer"],
       "tags": [2, 6, 9],
-      "defaultServings": 1,
+      "defaultServings": 3,
       "ingredients": [
         {
           "order": 1,
@@ -34692,7 +34692,7 @@
       "glassId": "shooter",
       "methodIds": ["shake"],
       "tags": [6, 9],
-      "defaultServings": 1,
+      "defaultServings": 3,
       "ingredients": [
         {
           "order": 1,
@@ -35674,7 +35674,7 @@
       "glassId": "shooter",
       "methodIds": ["shake"],
       "tags": [5, 6, 9],
-      "defaultServings": 1,
+      "defaultServings": 3,
       "ingredients": [
         {
           "order": 1,
@@ -36448,7 +36448,7 @@
       "glassId": "shooter",
       "methodIds": ["shake"],
       "tags": [6, 9],
-      "defaultServings": 1,
+      "defaultServings": 3,
       "ingredients": [
         {
           "order": 1,
