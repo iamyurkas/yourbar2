@@ -13,6 +13,7 @@ import { TabBarButton } from '@/components/tab-bar/TabBarButton';
 import { TabBarIcon } from '@/components/tab-bar/TabBarIcon';
 import { useAppColors } from '@/constants/theme';
 import { useI18n } from '@/libs/i18n/use-i18n';
+import { useInventory } from '@/providers/inventory-provider';
 
 type TabPressHandler = (
   navigation: {
@@ -91,6 +92,7 @@ const TAB_SCREENS: {
 export default function TabLayout() {
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(null);
   const { t } = useI18n();
+  const { onboardingCompleted } = useInventory();
   const insets = useSafeAreaInsets();
   const Colors = useAppColors();
 
@@ -127,11 +129,19 @@ export default function TabLayout() {
             name={name}
             options={{
               title: t(titleKey),
-              tabBarButton: (props) => (
-                <OnboardingAnchor name={`tab-${name}`} style={styles.tabAnchor}>
-                  <TabBarButton {...props} onOpenDialog={showDialog} />
-                </OnboardingAnchor>
-              ),
+              tabBarButton: (props) => {
+                const button = <TabBarButton {...props} onOpenDialog={showDialog} />;
+
+                if (onboardingCompleted) {
+                  return button;
+                }
+
+                return (
+                  <OnboardingAnchor name={`tab-${name}`} style={styles.tabAnchor}>
+                    {button}
+                  </OnboardingAnchor>
+                );
+              },
               tabBarIcon: ({ color, focused }) => <TabBarIcon source={icon} color={color} focused={focused} />,
             }}
             listeners={({ navigation, route }) => ({
