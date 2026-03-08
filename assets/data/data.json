@@ -10129,8 +10129,9 @@
           "order": 1,
           "ingredientId": 196,
           "name": "Ice",
-          "amount": "150",
-          "unitId": 8
+          "amount": "120",
+          "unitId": 8,
+          "serving": true
         },
         {
           "order": 2,
@@ -23283,7 +23284,7 @@
       "instructions": "1. In a large pitcher, muddle 300 g of **berries**, an **orange** (sliced), and 45 ml of **sugar**.\n2. Add 750 ml of **red wine**, 90 ml of **brandy**, 180 ml of **orange juice**, and 300 g of **ice**.\n3. Add 180 ml of **soda water** if you want a lighter style.\n4. Stir gently for about 20 seconds until well chilled.\n5. Chill.\n6. Serve over ice and garnish with extra **berries**.",
       "photoUri": "assets/cocktails/386-mixed-berry-sangria.jpg",
       "glassId": "pitcher",
-      "methodIds": ["muddle", "stir"],
+      "methodIds": ["muddle", "build"],
       "tags": [6, 7, 8],
       "ingredients": [
         {
@@ -23333,7 +23334,8 @@
           "ingredientId": 196,
           "name": "Ice",
           "amount": "300",
-          "unitId": 8
+          "unitId": 8,
+          "process": true
         },
         {
           "order": 8,
@@ -27192,7 +27194,7 @@
       "id": 449,
       "name": "Raspberry Collins",
       "description": "A popular modern-day adaptation of the classic collins with a whopping amount of **lemon juice**, yet it is far from being overly sour.",
-      "instructions": "1. Muddle 10 **raspberries** in the base of the shaker.\n2. Add 60 ml of **gin**, 15 ml of **raspberry liqueur**, 45 ml of **lemon juice**, 15 ml of **rich simple syrup**, and 2 dashes of **orange bitters**.\n3. Add about 150 g of **ice** and shake for about 15 seconds until well chilled.\n4. Strain into a glass filled with **ice**.\n5. Top with 30 ml of **soda water**.\n6. Stir very gently to combine without losing carbonation.\n7. Garnish with a skewered **lemon** wheel and a **raspberry**.",
+      "instructions": "1. Muddle 10 **raspberries** in the base of the shaker.\n2. Add 60 ml of **gin**, 15 ml of **raspberry liqueur**, 45 ml of **lemon juice**, 15 ml of **rich simple syrup**, and 2 dashes of **orange bitters**.\n3. Add about 120 g of **ice** and shake for about 15 seconds until well chilled.\n4. Strain into a glass filled with **ice**.\n5. Top with 30 ml of **soda water**.\n6. Stir very gently to combine without losing carbonation.\n7. Garnish with a skewered **lemon** wheel and a **raspberry**.",
       "photoUri": "assets/cocktails/449-raspberry-collins.jpg",
       "glassId": "collins_glass",
       "methodIds": ["muddle", "build"],
@@ -27209,8 +27211,9 @@
           "order": 2,
           "ingredientId": 196,
           "name": "Ice",
-          "amount": "150",
-          "unitId": 8
+          "amount": "120",
+          "unitId": 8,
+          "serving": true
         },
         {
           "order": 3,
@@ -29115,7 +29118,7 @@
           "name": "Ice",
           "amount": "300",
           "unitId": 8,
-          "optional": true
+          "process": true
         },
         {
           "order": 2,
@@ -31804,8 +31807,9 @@
           "order": 1,
           "ingredientId": 196,
           "name": "Ice",
-          "amount": "150",
-          "unitId": 8
+          "amount": "120",
+          "unitId": 8,
+          "serving": true
         },
         {
           "order": 2,
@@ -34074,8 +34078,9 @@
           "order": 1,
           "ingredientId": 196,
           "name": "Ice",
-          "amount": "150",
-          "unitId": 8
+          "amount": "15",
+          "unitId": 8,
+          "process": true
         },
         {
           "order": 2,
@@ -34851,7 +34856,8 @@
           "ingredientId": 196,
           "name": "Ice",
           "amount": "300",
-          "unitId": 8
+          "unitId": 8,
+          "process": true
         },
         {
           "order": 2,
@@ -38696,7 +38702,7 @@
     {
       "id": 279,
       "name": "Pimm's No. 1",
-      "description": "Pimm's No. 1 is a gin-based fruit cup, 25% ABV. Classic in a **Pimm's Cup** or summer cup.",
+      "description": "Pimm's No. 1 is a gin-based fruit cup, 25% ABV. Classic in a **Pimm's Cup** or **Summer Cup**.",
       "tags": [1],
       "photoUri": "assets/ingredients/279-pimm-s-no-1.jpg"
     },
