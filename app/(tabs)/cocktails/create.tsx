@@ -48,9 +48,9 @@ import {
 } from "@/constants/cocktail-units";
 import { GLASSWARE } from "@/constants/glassware";
 import { useAppColors } from "@/constants/theme";
+import { compareGlobalAlphabet, compareOptionalGlobalAlphabet } from "@/libs/global-sort";
 import { getPluralCategory } from "@/libs/i18n/plural";
 import { useI18n } from "@/libs/i18n/use-i18n";
-import { compareGlobalAlphabet, compareOptionalGlobalAlphabet } from "@/libs/global-sort";
 import {
   buildReturnToParams,
   parseReturnToParams,
@@ -1879,8 +1879,8 @@ export default function CreateCocktailScreen() {
                 >
                   {selectedMethods.length
                     ? selectedMethods
-                        .map((method) => t(`cocktailMethod.${method.id}.label`))
-                        .join(", ")
+                      .map((method) => t(`cocktailMethod.${method.id}.label`))
+                      .join(", ")
                     : t("cocktailForm.notSpecified")}
                 </Text>
               </View>
@@ -1930,12 +1930,12 @@ export default function CreateCocktailScreen() {
                     key={tag.id}
                     label={finalName}
                     color={tag.color}
-                  selected={tag.selected}
-                  onPress={() => handleToggleTag(tag.id)}
-                  accessibilityRole="checkbox"
-                  accessibilityState={{ checked: tag.selected }}
-                  androidRippleColor={`${Colors.surface}33`}
-                />
+                    selected={tag.selected}
+                    onPress={() => handleToggleTag(tag.id)}
+                    accessibilityRole="checkbox"
+                    accessibilityState={{ checked: tag.selected }}
+                    androidRippleColor={`${Colors.surface}33`}
+                  />
                 );
               })}
             </View>
@@ -3591,8 +3591,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   servingsCell: {
-    width: 36,
-    height: 36,
+    width: 48,
+    height: 48,
     borderRadius: 8,
     borderWidth: StyleSheet.hairlineWidth,
     alignItems: "center",
@@ -3600,7 +3600,7 @@ const styles = StyleSheet.create({
   },
   servingsCellLabel: {
     fontSize: 16,
-    fontWeight: "700",
+    fontWeight: "400",
   },
   addIngredientButton: {
     flexDirection: "row",
