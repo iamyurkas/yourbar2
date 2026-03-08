@@ -594,9 +594,13 @@ export default function IngredientDetailsScreen() {
         ...buildReturnToParams("/ingredients/[ingredientId]", {
           ingredientId: String(targetId),
         }),
+        deleteReturnToPath: returnToPath ?? "/ingredients",
+        ...(returnToParams
+          ? { deleteReturnToParams: JSON.stringify(returnToParams) }
+          : {}),
       },
     });
-  }, [ingredient]);
+  }, [ingredient, returnToParams, returnToPath]);
 
   const handleAddCocktail = useCallback(() => {
     if (!ingredient) {

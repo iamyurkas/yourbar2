@@ -79,6 +79,8 @@ export default function IngredientFormScreen() {
     returnTo?: string;
     returnToPath?: string;
     returnToParams?: string;
+    deleteReturnToPath?: string;
+    deleteReturnToParams?: string;
     mode?: string;
     ingredientId?: string;
     fromCocktailAddIngredient?: string;
@@ -115,10 +117,18 @@ export default function IngredientFormScreen() {
     const value = getParamValue(params.returnToPath);
     return typeof value === 'string' && value.length > 0 ? value : undefined;
   }, [params.returnToPath]);
+  const deleteReturnToPathParam = useMemo(() => {
+    const value = getParamValue(params.deleteReturnToPath);
+    return typeof value === 'string' && value.length > 0 ? value : undefined;
+  }, [params.deleteReturnToPath]);
   const returnToParamsParam = useMemo(() => {
     const value = getParamValue(params.returnToParams);
     return typeof value === 'string' && value.length > 0 ? value : undefined;
   }, [params.returnToParams]);
+  const deleteReturnToParamsParam = useMemo(() => {
+    const value = getParamValue(params.deleteReturnToParams);
+    return typeof value === 'string' && value.length > 0 ? value : undefined;
+  }, [params.deleteReturnToParams]);
   const legacyReturnToParam = useMemo(() => {
     const value = getParamValue(params.returnTo);
     return value === 'cocktail-form' ? value : undefined;
@@ -154,6 +164,24 @@ export default function IngredientFormScreen() {
     const value = getParamValue(params.fromCocktailAddIngredient);
     return value === 'true';
   }, [params.fromCocktailAddIngredient]);
+  const deleteReturnToParams = useMemo<Record<string, string> | undefined>(() => {
+    if (!deleteReturnToParamsParam) {
+      return undefined;
+    }
+
+    try {
+      const parsed = JSON.parse(deleteReturnToParamsParam);
+      if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+        return undefined;
+      }
+
+      const entries = Object.entries(parsed).filter((entry): entry is [string, string] => typeof entry[1] === 'string');
+      return entries.length ? Object.fromEntries(entries) : undefined;
+    } catch (error) {
+      console.warn('Failed to parse delete return params', error);
+      return undefined;
+    }
+  }, [deleteReturnToParamsParam]);
   const shouldConfirmOnLeave = useMemo(
     () =>
       !isEditMode &&
@@ -895,10 +923,15 @@ export default function IngredientFormScreen() {
               navigation.dispatch(StackActions.pop(2));
               return;
             }
-            if (returnToPath) {
-              router.navigate({ pathname: returnToPath as never, params: returnToParams as never });
+
+            if (deleteReturnToPathParam) {
+              router.navigate({
+                pathname: deleteReturnToPathParam as never,
+                params: deleteReturnToParams as never,
+              });
               return;
             }
+
             if (navigation.canGoBack()) {
               navigation.goBack();
               return;
@@ -914,8 +947,8 @@ export default function IngredientFormScreen() {
     isEditMode,
     navigation,
     numericIngredientId,
-    returnToParams,
-    returnToPath,
+    deleteReturnToParams,
+    deleteReturnToPathParam,
     setHasUnsavedChanges,
     showDialog,
     t,
