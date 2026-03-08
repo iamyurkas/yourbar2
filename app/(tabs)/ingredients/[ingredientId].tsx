@@ -586,6 +586,18 @@ export default function IngredientDetailsScreen() {
       return;
     }
 
+    let deleteTargetPath = returnToPath ?? "/ingredients";
+    let deleteTargetParams = returnToPath ? returnToParams : undefined;
+
+    if (
+      deleteTargetPath === "/ingredients/[ingredientId]" &&
+      (deleteTargetParams?.ingredientId == null ||
+        deleteTargetParams.ingredientId === String(targetId))
+    ) {
+      deleteTargetPath = "/ingredients";
+      deleteTargetParams = undefined;
+    }
+
     router.push({
       pathname: "/ingredients/create",
       params: {
@@ -594,9 +606,9 @@ export default function IngredientDetailsScreen() {
         ...buildReturnToParams("/ingredients/[ingredientId]", {
           ingredientId: String(targetId),
         }),
-        deleteReturnToPath: returnToPath ?? "/ingredients",
-        ...(returnToParams
-          ? { deleteReturnToParams: JSON.stringify(returnToParams) }
+        deleteReturnToPath: deleteTargetPath,
+        ...(deleteTargetParams
+          ? { deleteReturnToParams: JSON.stringify(deleteTargetParams) }
           : {}),
       },
     });
