@@ -3586,22 +3586,20 @@ const styles = StyleSheet.create({
   },
   servingsGrid: {
     alignSelf: "center",
-    width: 204,
     flexDirection: "row",
-    flexWrap: "wrap",
     gap: 6,
     justifyContent: "center",
   },
   servingsCell: {
-    width: 64,
-    height: 64,
-    borderRadius: 12,
+    width: 36,
+    height: 36,
+    borderRadius: 8,
     borderWidth: StyleSheet.hairlineWidth,
     alignItems: "center",
     justifyContent: "center",
   },
   servingsCellLabel: {
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: "700",
   },
   addIngredientButton: {
