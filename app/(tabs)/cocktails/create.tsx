@@ -73,8 +73,8 @@ const MIN_AUTOCOMPLETE_LENGTH = 2;
 const MAX_SUGGESTIONS = 8;
 const INGREDIENT_REORDER_TRANSITION = LinearTransition.duration(180);
 const MIN_DEFAULT_SERVINGS = 1;
-const MAX_DEFAULT_SERVINGS = 9;
-const DEFAULT_SERVINGS_OPTIONS = [1, 2, 3, 4, 5, 6, 7, 8, 9] as const;
+const MAX_DEFAULT_SERVINGS = 6;
+const DEFAULT_SERVINGS_OPTIONS = [1, 2, 3, 4, 5, 6] as const;
 
 type EditableSubstitute = {
   key: string;

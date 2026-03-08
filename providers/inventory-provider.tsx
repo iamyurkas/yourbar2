@@ -236,7 +236,7 @@ const BUILTIN_INGREDIENT_TAG_MAX = BUILTIN_INGREDIENT_TAGS.reduce((max, tag) => 
 const USER_CREATED_ID_START = 10000;
 
 const MIN_COCKTAIL_DEFAULT_SERVINGS = 1;
-const MAX_COCKTAIL_DEFAULT_SERVINGS = 9;
+const MAX_COCKTAIL_DEFAULT_SERVINGS = 6;
 
 function sanitizeCocktailDefaultServings(value?: number | null): number {
   const normalized = Number(value ?? MIN_COCKTAIL_DEFAULT_SERVINGS);
