@@ -90,11 +90,19 @@ function resolveScaledIngredient(
     return ingredient;
   }
 
+  const hasGarnish = (ingredient as { garnish?: boolean | null }).garnish;
+  const scaledServings = hasGarnish
+    ? Math.max(1, Math.floor(servings))
+    : servings;
+  const scaledDefaultServings = hasGarnish
+    ? Math.max(1, Math.floor(defaultServings))
+    : defaultServings;
+
   const hasProcess = (ingredient as { process?: boolean | null }).process;
   const scaleFactor = hasProcess
-    ? resolveProcessBatchMultiplier(servings) /
-      resolveProcessBatchMultiplier(defaultServings)
-    : servings / defaultServings;
+    ? resolveProcessBatchMultiplier(scaledServings) /
+      resolveProcessBatchMultiplier(scaledDefaultServings)
+    : scaledServings / scaledDefaultServings;
 
   const scaledAmount = parsedAmount * scaleFactor;
 
