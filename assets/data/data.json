@@ -37921,6 +37921,279 @@
           "unitId": 11
         }
       ]
+    },
+    {
+      "id": 604,
+      "name": "Carajillo",
+      "description": "A rich, aromatic two-ingredient coffee cocktail combining **Licor 43** and freshly brewed **espresso**. Balanced sweetness and roasted bitterness make it ideal as an after-dinner serve.",
+      "instructions": "1. Add 45 ml of **Licor 43**, 45 ml of hot **espresso coffee**, and ice to a shaker.\n2. Shake hard until chilled and lightly foamy.\n3. Fine strain into a chilled glass.\n4. Garnish with 3 **coffee beans**.",
+      "glassId": "coupe",
+      "methodIds": ["shake"],
+      "tags": [6],
+      "defaultServings": 1,
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 2,
+          "ingredientId": 209,
+          "name": "Licor 43",
+          "amount": "45",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 152,
+          "name": "Espresso Coffee",
+          "amount": "45",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 109,
+          "name": "Coffee Beans",
+          "amount": "3",
+          "unitId": 1,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 605,
+      "name": "Bloomsbury Martini",
+      "description": "A spirit-forward martini variation with **gin**, **Licor 43**, dry vermouth, and a touch of creole bitters. Herbal, lightly spiced, and crisp.",
+      "instructions": "1. Add ice to a mixing glass.\n2. Pour 60 ml **gin**, 15 ml **Licor 43**, 15 ml **dry vermouth**, and 2 dashes **Peychaud's bitters**.\n3. Stir until very cold, then fine strain into the chilled glass.\n4. Express a **lemon** peel over the drink and use as garnish.",
+      "glassId": "martini",
+      "methodIds": ["stir"],
+      "tags": [5],
+      "defaultServings": 1,
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 2,
+          "ingredientId": 161,
+          "name": "Gin",
+          "amount": "60",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 209,
+          "name": "Licor 43",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 144,
+          "name": "Dry Vermouth",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 276,
+          "name": "Peychaud's Bitters",
+          "amount": "2",
+          "unitId": 6
+        },
+        {
+          "order": 6,
+          "ingredientId": 219,
+          "name": "Lemon",
+          "amount": "1",
+          "unitId": 26,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 606,
+      "name": "Hornitos Lau",
+      "description": "A bright tequila sour-style long drink with **mint**, **Licor 43**, and fresh **lime juice** served over crushed ice.",
+      "instructions": "1. Muddle 10 **mint** leaves in a shaker tin.\n2. Add 50 ml **tequila reposado**, 37.5 ml **Licor 43**, 12.5 ml **lime juice**, and ice.\n3. Shake hard, then fine strain into a collins glass filled with crushed ice.\n4. Churn briefly and top with more crushed ice.\n5. Garnish with a mint sprig.",
+      "glassId": "collins_glass",
+      "methodIds": ["muddle", "shake"],
+      "tags": [8, 6],
+      "defaultServings": 1,
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 2,
+          "ingredientId": 336,
+          "name": "Tequila Reposado",
+          "amount": "50",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 209,
+          "name": "Licor 43",
+          "amount": "37.5",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 228,
+          "name": "Lime Juice",
+          "amount": "12.5",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "serving": true
+        },
+        {
+          "order": 6,
+          "ingredientId": 241,
+          "name": "Mint",
+          "amount": "10",
+          "unitId": 10,
+          "process": true
+        },
+        {
+          "order": 7,
+          "ingredientId": 241,
+          "name": "Mint",
+          "amount": "1",
+          "unitId": 21,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 607,
+      "name": "Ambrosia",
+      "description": "A silky, dessert-like shaken cocktail where **cognac**, **Licor 43**, and **yellow chartreuse** lift rich **advocaat**.",
+      "instructions": "1. Chill a coupe glass.\n2. Add ice to a shaker.\n3. Pour 20 ml **cognac**, 25 ml **Licor 43**, 12.5 ml **yellow chartreuse**, and 50 ml **egg liqueur (advocaat)**.\n4. Shake thoroughly until chilled and smooth.\n5. Fine strain into the chilled glass.",
+      "glassId": "coupe",
+      "methodIds": ["shake"],
+      "tags": [6],
+      "defaultServings": 1,
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 2,
+          "ingredientId": 112,
+          "name": "Cognac",
+          "amount": "20",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 209,
+          "name": "Licor 43",
+          "amount": "25",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 361,
+          "name": "Yellow Chartreuse",
+          "amount": "12.5",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 148,
+          "name": "Egg Liqueur (Advocaat)",
+          "amount": "50",
+          "unitId": 11
+        }
+      ]
+    },
+    {
+      "id": 608,
+      "name": "Velours De France",
+      "description": "A velvety sour built on **cognac** and **Licor 43** with **orgeat**, **lime**, bitters, and **egg white** for texture.",
+      "instructions": "1. Add 45 ml **cognac**, 20 ml **Licor 43**, 7.5 ml **almond (orgeat) syrup**, 15 ml **lime juice**, 4 dashes **Angostura bitters**, and 7.5 ml **egg white** to a shaker.\n2. Dry shake without ice for 10 seconds.\n3. Add ice and shake again until well chilled.\n4. Fine strain into a chilled coupe glass.",
+      "glassId": "coupe",
+      "methodIds": ["shake"],
+      "tags": [6],
+      "defaultServings": 1,
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 2,
+          "ingredientId": 112,
+          "name": "Cognac",
+          "amount": "45",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 209,
+          "name": "Licor 43",
+          "amount": "20",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 11,
+          "name": "Almond (Orgeat) Syrup",
+          "amount": "7.5",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 228,
+          "name": "Lime Juice",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 19,
+          "name": "Angostura Bitters",
+          "amount": "4",
+          "unitId": 6
+        },
+        {
+          "order": 7,
+          "ingredientId": 149,
+          "name": "Egg White",
+          "amount": "7.5",
+          "unitId": 11
+        }
+      ]
     }
   ],
   "ingredients": [
@@ -39436,7 +39709,8 @@
       "id": 209,
       "name": "Licor 43",
       "description": "Popular 31% ABV Spanish liqueur from Cartagena, made from a secret, family-owned recipe of 43 natural ingredients, including Mediterranean citrus, fruit, and spices. It features a sweet, bright golden profile with strong vanilla, caramel, and citrus notes. It is highly versatile, often served on ice, in coffee, or with mixers like **ginger ale**.",
-      "tags": [1]
+      "tags": [1],
+      "photoUri": "assets/ingredients/209-licor-43.jpg"
     },
     {
       "id": 210,

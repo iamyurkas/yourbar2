@@ -123,7 +123,7 @@ export const ingredientImages: Record<string, number> = {
   'assets/ingredients/206-johnnie-walker.jpg': require('./ingredients/206-johnnie-walker.jpg'),
   'assets/ingredients/207-j-germeister.jpg': require('./ingredients/207-j-germeister.jpg'),
   'assets/ingredients/208-kahlua.jpg': require('./ingredients/208-kahlua.jpg'),
-  'assets/ingredients/209-kina-lillet.jpg': require('./ingredients/209-kina-lillet.jpg'),
+  'assets/ingredients/209-licor-43.jpg': require('./ingredients/209-licor-43.jpg'),
   'assets/ingredients/21-anis.jpg': require('./ingredients/21-anis.jpg'),
   'assets/ingredients/210-kirsch.jpg': require('./ingredients/210-kirsch.jpg'),
   'assets/ingredients/211-kiwi.jpg': require('./ingredients/211-kiwi.jpg'),
