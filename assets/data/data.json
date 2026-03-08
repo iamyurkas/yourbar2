@@ -36976,8 +36976,9 @@
           "order": 7,
           "ingredientId": 196,
           "name": "Ice",
-          "amount": "1",
-          "unitId": 8
+          "amount": "120",
+          "unitId": 8,
+          "serving": true
         },
         {
           "order": 8,
