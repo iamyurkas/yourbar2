@@ -38374,6 +38374,120 @@
           "serving": true
         }
       ]
+    },
+    {
+      "id": 612,
+      "name": "Sophisticated Dane",
+      "description": "A spirit-forward Scandinavian riff on a Negroni with **aquavit**, **Campari**, and **red vermouth**, finished with a **lemon twist**.",
+      "instructions": "1. Chill a rocks glass and add fresh **ice**.\n2. In a mixing glass with **ice**, add 45 ml **aquavit**, 22.5 ml **Campari**, and 22.5 ml **red vermouth**.\n3. Stir until well chilled.\n4. Strain into the prepared rocks glass.\n5. Express a **lemon** twist over the drink and garnish.",
+      "photoUri": "https://cdn.diffordsguide.com/cocktail/r8qL2O/square/0/512x512.webp?v=1737701620",
+      "glassId": "rocks_glass",
+      "methodIds": ["stir"],
+      "tags": [3, 6],
+      "defaultServings": 1,
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 2,
+          "ingredientId": 364,
+          "name": "Aquavit",
+          "amount": "45",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 74,
+          "name": "Campari",
+          "amount": "22.5",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 294,
+          "name": "Red Vermouth",
+          "amount": "22.5",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 219,
+          "name": "Lemon",
+          "amount": "1",
+          "unitId": 26,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 613,
+      "name": "Norwegian Wood",
+      "description": "A stirred aquavit cocktail layered with **applejack**, **red vermouth**, **yellow Chartreuse**, and aromatic bitters, garnished with a **lemon twist**.",
+      "instructions": "1. Chill a coupe glass.\n2. Fill a mixing glass with **ice** and add 30 ml **aquavit**, 30 ml **applejack**, 22.5 ml **red vermouth**, 7.5 ml **Yellow Chartreuse**, and 1 dash **Angostura bitters**.\n3. Stir until cold and diluted.\n4. Strain into the chilled coupe.\n5. Express a **lemon** twist over the surface and garnish.",
+      "photoUri": "https://cdn.diffordsguide.com/cocktail/AGYB2O/square/0/512x512.webp?v=1737701659",
+      "glassId": "coupe",
+      "methodIds": ["stir"],
+      "tags": [3, 6],
+      "defaultServings": 1,
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 2,
+          "ingredientId": 364,
+          "name": "Aquavit",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 30,
+          "name": "Applejack",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 294,
+          "name": "Red Vermouth",
+          "amount": "22.5",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 361,
+          "name": "Yellow Chartreuse",
+          "amount": "7.5",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 32,
+          "name": "Angostura Bitters",
+          "amount": "1",
+          "unitId": 6
+        },
+        {
+          "order": 7,
+          "ingredientId": 219,
+          "name": "Lemon",
+          "amount": "1",
+          "unitId": 26,
+          "garnish": true
+        }
+      ]
     }
   ],
   "ingredients": [
