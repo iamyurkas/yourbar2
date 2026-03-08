@@ -4780,7 +4780,7 @@
       "id": 76,
       "name": "Bay Breeze",
       "synonyms": ["Hawaiian Sea Breeze"],
-      "description": "A refreshing **vodka** cocktail showcasing **vodka**, **cranberry juice**, and **pineapple juice**—vibrant, fruity, and easy to savor. Garnished with a **pineapple** wedge and cherries.",
+      "description": "A refreshing **vodka** cocktail showcasing **vodka**, **cranberry juice**, and **pineapple juice**—vibrant, fruity, and easy to savour. Garnished with a **pineapple** wedge and cherries.",
       "instructions": "1. Fill a highball glass halfway with **ice**.\n2. Add 60 ml of **vodka**, 60 ml of **pineapple juice**, and 90 ml of **cranberry juice**.\n3. Stir gently to combine.\n4. Garnish with a **pineapple** wedge and 3 maraschino cherries.",
       "photoUri": "assets/cocktails/76-bay-breeze.jpg",
       "glassId": "highball_glass",
@@ -23540,7 +23540,13 @@
           "name": "Tomato Juice",
           "amount": "30",
           "unitId": 11,
-          "optional": true
+          "optional": true,
+          "substitutes": [
+            {
+              "ingredientId": 366,
+              "name": "Clamato Juice"
+            }
+          ]
         },
         {
           "order": 3,
@@ -37927,10 +37933,11 @@
       "name": "Carajillo",
       "description": "A rich, aromatic two-ingredient coffee cocktail combining **Licor 43** and freshly brewed **espresso**. Balanced sweetness and roasted bitterness make it ideal as an after-dinner serve.",
       "instructions": "1. Add 45 ml of **Licor 43**, 45 ml of hot **espresso coffee**, and ice to a shaker.\n2. Shake hard until chilled and lightly foamy.\n3. Fine strain into a chilled glass.\n4. Garnish with 3 **coffee beans**.",
-      "glassId": "coupe",
+      "photoUri": "assets/cocktails/604-carajillo.jpg",
+      "glassId": "rocks_glass",
       "methodIds": ["shake"],
-      "tags": [6],
       "defaultServings": 1,
+      "tags": [6],
       "ingredients": [
         {
           "order": 1,
@@ -37969,10 +37976,11 @@
       "name": "Bloomsbury Martini",
       "description": "A spirit-forward martini variation with **gin**, **Licor 43**, dry vermouth, and a touch of creole bitters. Herbal, lightly spiced, and crisp.",
       "instructions": "1. Fill a mixing glass with **ice**.\n2. Pour 60 ml **gin**, 15 ml **Licor 43**, 15 ml **dry vermouth**, and 2 dashes **Peychaud's bitters**.\n3. Stir until very cold, then fine strain into the chilled glass.\n4. Express a **lemon** peel over the drink and use as garnish.",
+      "photoUri": "assets/cocktails/605-bloomsbury-martini.jpg",
       "glassId": "martini",
       "methodIds": ["stir"],
-      "tags": [5],
       "defaultServings": 1,
+      "tags": [5],
       "ingredients": [
         {
           "order": 1,
@@ -38024,56 +38032,57 @@
       "id": 606,
       "name": "Hornitos Lau",
       "description": "A bright tequila sour-style long drink with **mint**, **Licor 43**, and fresh **lime juice** served over crushed ice.",
-      "instructions": "1. Muddle 10 **mint** leaves in a shaker tin.\n2. Add 50 ml **tequila reposado**, 37.5 ml **Licor 43**, 12.5 ml **lime juice**, and ice.\n3. Shake hard, then fine strain into a collins glass filled with crushed ice.\n4. Churn briefly and top with more crushed ice.\n5. Garnish with a mint sprig.",
+      "instructions": "1. Muddle 10 **mint** leaves in a shaker tin.\n2. Add 50 ml **tequila reposado**, 37.5 ml **Licor 43**, 12.5 ml **lime juice**, and **ice**.\n3. Shake hard, then fine-strain into a Collins glass filled with crushed **ice**.\n4. Churn briefly and top with more crushed **ice**.\n5. Garnish with a **mint** sprig.",
+      "photoUri": "assets/cocktails/606-hornitos-lau.jpg",
       "glassId": "collins_glass",
       "methodIds": ["muddle", "shake"],
-      "tags": [8, 6],
       "defaultServings": 1,
+      "tags": [6, 8],
       "ingredients": [
         {
           "order": 1,
-          "ingredientId": 196,
-          "name": "Ice",
-          "amount": "120",
-          "unitId": 8,
+          "ingredientId": 241,
+          "name": "Mint",
+          "amount": "10",
+          "unitId": 10,
           "process": true
         },
         {
           "order": 2,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 3,
           "ingredientId": 336,
           "name": "Tequila Reposado",
           "amount": "50",
           "unitId": 11
         },
         {
-          "order": 3,
+          "order": 4,
           "ingredientId": 209,
           "name": "Licor 43",
           "amount": "37.5",
           "unitId": 11
         },
         {
-          "order": 4,
+          "order": 5,
           "ingredientId": 228,
           "name": "Lime Juice",
           "amount": "12.5",
           "unitId": 11
         },
         {
-          "order": 5,
+          "order": 6,
           "ingredientId": 196,
           "name": "Ice",
           "amount": "150",
           "unitId": 8,
           "serving": true
-        },
-        {
-          "order": 6,
-          "ingredientId": 241,
-          "name": "Mint",
-          "amount": "10",
-          "unitId": 10,
-          "process": true
         },
         {
           "order": 7,
@@ -38090,10 +38099,11 @@
       "name": "Ambrosia",
       "description": "A silky, dessert-like shaken cocktail where **cognac**, **Licor 43**, and **yellow chartreuse** lift rich **advocaat**.",
       "instructions": "1. Fill a shaker with **ice**.\n2. Pour 20 ml **cognac**, 25 ml **Licor 43**, 12.5 ml **yellow chartreuse**, and 50 ml **egg liqueur (advocaat)**.\n3. Shake thoroughly until chilled and smooth.\n4. Fine strain into the chilled glass.",
-      "glassId": "coupe",
+      "photoUri": "assets/cocktails/607-ambrosia.jpg",
+      "glassId": "martini",
       "methodIds": ["shake"],
-      "tags": [6],
       "defaultServings": 1,
+      "tags": [6],
       "ingredients": [
         {
           "order": 1,
@@ -38137,11 +38147,12 @@
       "id": 608,
       "name": "Velours De France",
       "description": "A velvety sour built on **cognac** and **Licor 43** with **orgeat**, **lime**, bitters, and **egg white** for texture.",
-      "instructions": "1. Add 45 ml **cognac**, 20 ml **Licor 43**, 7.5 ml **almond (orgeat) syrup**, 15 ml **lime juice**, 4 dashes **Angostura bitters**, and 7.5 ml **egg white** to a shaker.\n2. Dry shake without ice for 10 seconds.\n3. Add ice and shake again until well chilled.\n4. Fine strain into a chilled coupe glass.",
+      "instructions": "1. Add 45 ml **cognac**, 20 ml **Licor 43**, 7.5 ml **almond (orgeat) syrup**, 15 ml **lime juice**, 4 dashes **Angostura bitters**, and 7.5 ml **egg white** to a shaker.\n2. Dry shake without ice for 10 seconds.\n3. Add ice and shake again until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Garnish with an **orange** twist.",
+      "photoUri": "assets/cocktails/608-velours-de-france.jpg",
       "glassId": "coupe",
       "methodIds": ["shake"],
-      "tags": [6],
       "defaultServings": 1,
+      "tags": [6],
       "ingredients": [
         {
           "order": 1,
@@ -38200,10 +38211,11 @@
       "name": "Great Northern",
       "description": "A bright, citrusy aquavit sour with **Lillet Blanc**, **triple sec**, fresh **lemon juice**, and **honey syrup**.",
       "instructions": "1. Fill a shaker with **ice**.\n2. Pour 60 ml **aquavit**, 22.5 ml **Lillet Blanc**, 15 ml **triple sec**, 22.5 ml **lemon juice**, and 15 ml **honey syrup**.\n3. Shake hard until well chilled.\n4. Fine strain into a chilled coupe glass.",
-      "glassId": "coupe",
+      "photoUri": "assets/cocktails/609-great-northern.jpg",
+      "glassId": "rocks_glass",
       "methodIds": ["shake"],
-      "tags": [6],
       "defaultServings": 1,
+      "tags": [6],
       "ingredients": [
         {
           "order": 1,
@@ -38255,10 +38267,11 @@
       "name": "Scandinavian Daiquiri",
       "description": "A Scandinavian riff on a daiquiri: **aquavit** shaken with fresh **lime juice**, **rich simple syrup**, and a touch of **daiquiri bitters**.",
       "instructions": "1. Fill a shaker with **ice**.\n2. Add 60 ml **aquavit**, 22.5 ml **lime juice**, 15 ml **rich simple syrup**, and 4 drops **daiquiri bitters**.\n3. Shake until chilled and properly diluted.\n4. Fine strain into a chilled coupe glass.",
+      "photoUri": "assets/cocktails/610-scandinavian-daiquiri.jpg",
       "glassId": "coupe",
       "methodIds": ["shake"],
-      "tags": [6],
       "defaultServings": 1,
+      "tags": [6],
       "ingredients": [
         {
           "order": 1,
@@ -38295,6 +38308,15 @@
           "name": "Daiquiri Bitters",
           "amount": "4",
           "unitId": 7
+        },
+        {
+          "order": 6,
+          "ingredientId": 20,
+          "name": "Anise",
+          "amount": "1",
+          "unitId": 1,
+          "optional": true,
+          "garnish": true
         }
       ]
     },
@@ -38302,11 +38324,12 @@
       "id": 611,
       "name": "Dead Parrot Colada",
       "description": "A tropical sour-style colada with **gin**, **aquavit**, **blue curaçao**, **maraschino**, **lemon juice**, and **coconut water**.",
-      "instructions": "1. Fill a shaker with **ice**.\n2. Pour 45 ml **gin**, 15 ml **aquavit**, 15 ml **blue curaçao**, 7.5 ml **Luxardo maraschino**, 15 ml **lemon juice**, 45 ml **coconut water**, and 15 ml **rich simple syrup**.\n3. Shake hard until cold.\n4. Strain into a chilled hurricane or highball glass over fresh ice.",
+      "instructions": "1. Fill a blender with crushed **ice**.\n2. Pour 45 ml **gin**, 15 ml **aquavit**, 15 ml **blue curaçao**, 7.5 ml **Luxardo maraschino**, 15 ml **lemon juice**, 45 ml **coconut water**, and 15 ml **rich simple syrup**.\n3. Blend until smooth.\n4. Strain into a chilled hurricane or highball glass.\n5. Do not garnish with a dead parrot.",
+      "photoUri": "assets/cocktails/611-dead-parrot-colada.jpg",
       "glassId": "hurricane_glass",
-      "methodIds": ["shake"],
-      "tags": [6],
+      "methodIds": ["blend"],
       "defaultServings": 1,
+      "tags": [6],
       "ingredients": [
         {
           "order": 1,
@@ -38314,7 +38337,7 @@
           "name": "Ice",
           "amount": "120",
           "unitId": 8,
-          "process": true
+          "serving": true
         },
         {
           "order": 2,
@@ -38364,14 +38387,6 @@
           "name": "Rich Simple Syrup",
           "amount": "15",
           "unitId": 11
-        },
-        {
-          "order": 9,
-          "ingredientId": 196,
-          "name": "Ice",
-          "amount": "150",
-          "unitId": 8,
-          "serving": true
         }
       ]
     },
@@ -38380,10 +38395,11 @@
       "name": "Sophisticated Dane",
       "description": "A spirit-forward Scandinavian riff on a Negroni with **aquavit**, **Campari**, and **red vermouth**, finished with a **lemon twist**.",
       "instructions": "1. Chill a rocks glass and add fresh **ice**.\n2. In a mixing glass with **ice**, add 45 ml **aquavit**, 22.5 ml **Campari**, and 22.5 ml **red vermouth**.\n3. Stir until well chilled.\n4. Strain into the prepared rocks glass.\n5. Express a **lemon** twist over the drink and garnish.",
+      "photoUri": "assets/cocktails/612-sophisticated-dane.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["stir"],
-      "tags": [3, 6],
       "defaultServings": 1,
+      "tags": [3, 6],
       "ingredients": [
         {
           "order": 1,
@@ -38429,10 +38445,11 @@
       "name": "Norwegian Wood",
       "description": "A stirred aquavit cocktail layered with **applejack**, **red vermouth**, **yellow Chartreuse**, and aromatic bitters, garnished with a **lemon twist**.",
       "instructions": "1. Chill a coupe glass.\n2. Fill a mixing glass with **ice** and add 30 ml **aquavit**, 30 ml **applejack**, 22.5 ml **red vermouth**, 7.5 ml **Yellow Chartreuse**, and 1 dash **Angostura bitters**.\n3. Stir until cold and diluted.\n4. Strain into the chilled coupe.\n5. Express a **lemon** twist over the surface and garnish.",
+      "photoUri": "assets/cocktails/613-norwegian-wood.jpg",
       "glassId": "coupe",
       "methodIds": ["stir"],
-      "tags": [3, 6],
       "defaultServings": 1,
+      "tags": [3, 6],
       "ingredients": [
         {
           "order": 1,
@@ -38472,7 +38489,7 @@
         },
         {
           "order": 6,
-          "ingredientId": 32,
+          "ingredientId": 19,
           "name": "Angostura Bitters",
           "amount": "1",
           "unitId": 6
@@ -38483,6 +38500,101 @@
           "name": "Lemon",
           "amount": "1",
           "unitId": 26,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 614,
+      "name": "Bloody Caesar",
+      "synonyms": ["Cesar", "Ceasar"],
+      "description": "Often just called a **Caesar**, Canada’s national cocktail. While it looks like a Bloody Mary, the key difference is Clamato juice — a blend of tomato juice and clam broth — which gives it a distinct savoury, briny \"umami\" kick.",
+      "instructions": "1. Rub a fresh lime wedge around the rim of a highball glass. Dip the rim into celery salt or a Caesar rimmer spice blend until coated.\n2. Fill the glass with ice cubes. Pour in the vodka, hot sauce, and Worcestershire sauce.\n3. Top the glass with Clamato juice. Stir well with a long spoon or \"roll\" the drink by pouring it back and forth between two glasses.\n4. Add a celery stalk and the lime wedge",
+      "photoUri": "assets/cocktails/614-bloody-caesar.jpg",
+      "glassId": "highball_glass",
+      "methodIds": ["throw", "stir"],
+      "defaultServings": 1,
+      "tags": [11],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 2,
+          "ingredientId": 345,
+          "name": "Vodka",
+          "amount": "60",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 366,
+          "name": "Clamato Juice",
+          "amount": "120",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 221,
+          "name": "Lemon Juice",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 331,
+          "name": "Tabasco",
+          "amount": "7",
+          "unitId": 7
+        },
+        {
+          "order": 6,
+          "ingredientId": 360,
+          "name": "Worcestershire Sauce",
+          "amount": "3",
+          "unitId": 6
+        },
+        {
+          "order": 7,
+          "ingredientId": 79,
+          "name": "Celery Salt",
+          "amount": "2",
+          "unitId": 15
+        },
+        {
+          "order": 8,
+          "ingredientId": 50,
+          "name": "Black Pepper",
+          "amount": "2",
+          "unitId": 15
+        },
+        {
+          "order": 9,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8,
+          "serving": true
+        },
+        {
+          "order": 10,
+          "ingredientId": 78,
+          "name": "Celery",
+          "amount": "1",
+          "unitId": 22,
+          "garnish": true
+        },
+        {
+          "order": 11,
+          "ingredientId": 227,
+          "name": "Lime",
+          "amount": "1",
+          "unitId": 27,
           "garnish": true
         }
       ]
@@ -39050,14 +39162,14 @@
     {
       "id": 78,
       "name": "Celery",
-      "description": "Celery provides a fresh, crisp, and slightly peppery flavour to cocktails. It is commonly used as a garnish for Bloody Marys and other savoury drinks. Celery juice or muddled stalks can also add a refreshing vegetal note.",
+      "description": "Celery provides a fresh, crisp, and slightly peppery flavour to cocktails. It is commonly used as a garnish for **Bloody Marys** and other savoury drinks. Celery juice or muddled stalks can also add a refreshing vegetal note.",
       "tags": [7],
       "photoUri": "assets/ingredients/78-celery.jpg"
     },
     {
       "id": 79,
       "name": "Celery Salt",
-      "description": "Seasoned salt with celery seed that adds savoury lift to Bloody Marys and micheladas.",
+      "description": "Seasoned salt with celery seed that adds savoury lift to **Bloody Marys** and **micheladas**.",
       "tags": [8],
       "photoUri": "assets/ingredients/79-celery-salt.jpg"
     },
@@ -41116,22 +41228,24 @@
     {
       "id": 364,
       "name": "Aquavit",
+      "description": "Aquavit (or akvavit) is a traditional Scandinavian spirit (min. 37.5% ABV) distilled from grain or potatoes, characterized by a dominant flavor of caraway and/or dill. Often referred to as \"water of life\", this herbal, savoury liquor is commonly served chilled as a shot with food or used in cocktails.",
       "synonyms": ["Akvavit"],
-      "description": "Aquavit (or akvavit) is a traditional Scandinavian spirit (min. 37.5% ABV) distilled from grain or potatoes, characterized by a dominant flavor of caraway and/or dill. Often referred to as \"water of life\", this herbal, savory liquor is commonly served chilled as a shot with food or used in cocktails.",
-      "tags": [0]
+      "tags": [0],
+      "photoUri": "assets/ingredients/364-aquavit.jpg"
     },
     {
       "id": 365,
       "name": "Elderflower Liquor",
       "description": "Floral, sweet, and aromatic spirit crafted from white elderflower blossoms, commonly featuring notes of pear, peach, and citrus. Popular in cocktails, it usually has a 20% ABV.",
-      "tags": [1]
+      "tags": [1],
+      "photoUri": "assets/ingredients/365-elderflower-liquor.jpg"
     },
     {
       "id": 366,
       "name": "Clamato Juice",
-      "description": "Savory beverage made from a blend of reconstituted tomato juice concentrate and dried clam broth, seasoned with spices, salt, and MSG. It is a staple ingredient in popular cocktails like the **Caesar** and the **Michelada**.",
+      "description": "Savoury beverage made from a blend of reconstituted tomato juice concentrate and dried clam broth, seasoned with spices, salt, and MSG. It is a staple ingredient in popular cocktails like the **Caesar** and the **Michelada**.",
       "tags": [7],
-      "styleIngredientId": 338
+      "photoUri": "assets/ingredients/366-clamato-juice.jpg"
     }
   ]
 }
