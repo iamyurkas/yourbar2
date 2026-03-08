@@ -40527,8 +40527,10 @@
     {
       "id": 323,
       "name": "St-Germain",
-      "description": "St-Germain is a French elderflower liqueur, 20% ABV. Use it in a **St-Germain Spritz** or **Elderflower Collins**.",
+      "synonyms": ["Elderflower"],
+      "description": "St-Germain is a French **elderflower liqueur**, 20% ABV. Use it in a **St-Germain Spritz** or **Elderflower Collins**.",
       "tags": [1],
+      "baseIngredientId": 365,
       "photoUri": "assets/ingredients/323-st-germain.jpg"
     },
     {
@@ -40818,6 +40820,19 @@
       "tags": [0],
       "baseIngredientId": 47,
       "photoUri": "assets/ingredients/363-ubrowka.jpg"
+    },
+    {
+      "id": 364,
+      "name": "Aquavit",
+      "synonyms": ["Akvavit"],
+      "description": "Aquavit (or akvavit) is a traditional Scandinavian spirit (min. 37.5% ABV) distilled from grain or potatoes, characterized by a dominant flavor of caraway and/or dill. Often referred to as \"water of life\", this herbal, savory liquor is commonly served chilled as a shot with food or used in cocktails.",
+      "tags": [0]
+    },
+    {
+      "id": 365,
+      "name": "Elderflower Liquor",
+      "description": "Floral, sweet, and aromatic spirit crafted from white elderflower blossoms, commonly featuring notes of pear, peach, and citrus. Popular in cocktails, it usually has a 20% ABV.",
+      "tags": [1]
     }
   ]
 }
