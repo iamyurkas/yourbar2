@@ -241,6 +241,7 @@ export function toCocktailStorageRecord(cocktail: Cocktail | BaseCocktailRecord)
     photoUri: cocktail.photoUri ?? undefined,
     glassId: cocktail.glassId ?? undefined,
     methodIds: (normalizedMethodIds.length > 0 ? normalizedMethodIds : undefined) as CocktailStorageRecord["methodIds"],
+    defaultServings: Number(cocktail.defaultServings ?? 1) || 1,
     tags: normalizedTags && normalizedTags.length > 0 ? normalizedTags : undefined,
     ingredients: normalizedIngredients && normalizedIngredients.length > 0 ? normalizedIngredients : undefined,
   } satisfies CocktailStorageRecord;

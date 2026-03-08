@@ -181,6 +181,8 @@ export const ukUATranslations: TranslationDictionary = {
   "cocktailForm.optionalDescription": "Необов’язковий опис",
   "cocktailForm.instructions": "Інструкція",
   "cocktailForm.instructionsPlaceholder": "1. Візьміть трохи льоду...",
+  "cocktailForm.defaultServings": "Кількість порцій за замовчуванням",
+  "cocktailForm.defaultServingsPlaceholder": "1-9",
   "cocktailForm.ingredients": "Інгредієнти",
   "cocktailForm.addIngredient": "Додати інгредієнт",
   "cocktailForm.saveCocktail": "Зберегти коктейль",

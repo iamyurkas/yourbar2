@@ -181,6 +181,8 @@ export const enUSTranslations: TranslationDictionary = {
   "cocktailForm.optionalDescription": "Optional description",
   "cocktailForm.instructions": "Instructions",
   "cocktailForm.instructionsPlaceholder": "1. Grab some ice...",
+  "cocktailForm.defaultServings": "Default servings",
+  "cocktailForm.defaultServingsPlaceholder": "1-9",
   "cocktailForm.ingredients": "Ingredients",
   "cocktailForm.addIngredient": "Add ingredient",
   "cocktailForm.saveCocktail": "Save cocktail",

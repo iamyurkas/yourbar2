@@ -72,6 +72,8 @@ const DEFAULT_IMPERIAL_UNIT_ID = 12;
 const MIN_AUTOCOMPLETE_LENGTH = 2;
 const MAX_SUGGESTIONS = 8;
 const INGREDIENT_REORDER_TRANSITION = LinearTransition.duration(180);
+const MIN_DEFAULT_SERVINGS = 1;
+const MAX_DEFAULT_SERVINGS = 9;
 
 type EditableSubstitute = {
   key: string;
@@ -98,6 +100,7 @@ type EditableIngredient = {
 
 type CocktailFormSnapshot = {
   name: string;
+  defaultServings: number;
   glassId: string | null;
   methodIds: CocktailMethodId[];
   description: string;
@@ -189,6 +192,16 @@ function shouldUsePluralUnits(amountRaw?: string) {
   }
   const numericAmount = Number(amountRaw.trim());
   return Number.isFinite(numericAmount) && numericAmount !== 1;
+}
+
+function sanitizeDefaultServings(value?: number | null): number {
+  const normalized = Number(value ?? MIN_DEFAULT_SERVINGS);
+  if (!Number.isFinite(normalized)) {
+    return MIN_DEFAULT_SERVINGS;
+  }
+
+  const integerValue = Math.trunc(normalized);
+  return Math.max(MIN_DEFAULT_SERVINGS, Math.min(MAX_DEFAULT_SERVINGS, integerValue));
 }
 
 function mapRecipeIngredientToEditable(
@@ -303,6 +316,7 @@ export default function CreateCocktailScreen() {
   );
 
   const [name, setName] = useState("");
+  const [defaultServings, setDefaultServings] = useState(MIN_DEFAULT_SERVINGS);
   const [glassId, setGlassId] = useState<string | null>("martini");
   const [isGlassModalVisible, setIsGlassModalVisible] = useState(false);
   const [methodIds, setMethodIds] = useState<CocktailMethodId[]>([]);
@@ -437,6 +451,7 @@ export default function CreateCocktailScreen() {
     const normalizedTags = [...selectedTagIds].sort((a, b) => a - b);
     return {
       name,
+      defaultServings,
       glassId,
       methodIds,
       description,
@@ -464,6 +479,7 @@ export default function CreateCocktailScreen() {
     };
   }, [
     description,
+    defaultServings,
     glassId,
     imageUri,
     ingredientById,
@@ -668,6 +684,7 @@ export default function CreateCocktailScreen() {
 
     setPrefilledCocktail(undefined);
     setName("");
+    setDefaultServings(MIN_DEFAULT_SERVINGS);
     setGlassId("martini");
     setMethodIds([]);
     setDescription("");
@@ -702,6 +719,11 @@ export default function CreateCocktailScreen() {
     if (baseCocktail) {
       setPrefilledCocktail(baseCocktail);
       setName(baseCocktail.name ?? "");
+      setDefaultServings(
+        sanitizeDefaultServings(
+          (baseCocktail as { defaultServings?: number | null }).defaultServings,
+        ),
+      );
       setGlassId(baseCocktail.glassId ?? "martini");
       const legacyMethodId =
         (baseCocktail as { methodId?: CocktailMethodId | null }).methodId ??
@@ -1310,6 +1332,7 @@ export default function CreateCocktailScreen() {
 
       const submission = {
         name: trimmedName,
+        defaultServings: sanitizeDefaultServings(defaultServings),
         glassId: glassId ?? undefined,
         methodIds,
         photoUri: initialPhotoUri,
@@ -1396,6 +1419,7 @@ export default function CreateCocktailScreen() {
     availableCocktailTags,
     createCocktail,
     updateCocktail,
+    defaultServings,
     description,
     glassId,
     imageUri,
@@ -1961,6 +1985,37 @@ export default function CreateCocktailScreen() {
               multiline
               textAlignVertical="top"
               onFocus={(event) => scrollFieldIntoView(event.nativeEvent.target)}
+            />
+          </View>
+
+          <View style={styles.section}>
+            <Text style={[styles.label, { color: Colors.onSurface }]}>
+              {t("cocktailForm.defaultServings")}
+            </Text>
+            <TextInput
+              value={String(defaultServings)}
+              onChangeText={(value) => {
+                const digitsOnly = value.replace(/[^0-9]/g, "");
+                if (!digitsOnly) {
+                  setDefaultServings(MIN_DEFAULT_SERVINGS);
+                  return;
+                }
+
+                setDefaultServings(sanitizeDefaultServings(Number(digitsOnly)));
+              }}
+              keyboardType="number-pad"
+              inputMode="numeric"
+              maxLength={1}
+              placeholder={t("cocktailForm.defaultServingsPlaceholder")}
+              style={[
+                styles.input,
+                {
+                  borderColor: Colors.outlineVariant,
+                  color: Colors.text,
+                  backgroundColor: Colors.surface,
+                },
+              ]}
+              placeholderTextColor={`${Colors.onSurfaceVariant}99`}
             />
           </View>
 
