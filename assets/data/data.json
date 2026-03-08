@@ -5340,6 +5340,7 @@
       "photoUri": "assets/cocktails/87-berry-spritz.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["muddle", "build"],
+      "tags": [7],
       "ingredients": [
         {
           "order": 1,
@@ -8358,6 +8359,7 @@
       "photoUri": "assets/cocktails/136-brown-derby.jpg",
       "glassId": "coupe",
       "methodIds": ["shake"],
+      "tags": [6],
       "ingredients": [
         {
           "order": 1,
