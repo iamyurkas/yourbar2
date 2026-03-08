@@ -245,6 +245,10 @@ export const enGBTranslations: TranslationDictionary = {
   "cocktailDetails.showMore": "Show more",
   "cocktailDetails.instructions": "Instructions",
   "cocktailDetails.ingredients": "Ingredients",
+
+  "cocktailDetails.servings": "Servings",
+  "cocktailDetails.decreaseServings": "Decrease servings",
+  "cocktailDetails.increaseServings": "Increase servings",
   "cocktailDetails.asNeeded": "As needed",
   "cocktailDetails.garnish": "garnish",
   "cocktailDetails.optional": "optional",

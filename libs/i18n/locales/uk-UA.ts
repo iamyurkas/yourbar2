@@ -245,6 +245,10 @@ export const ukUATranslations: TranslationDictionary = {
   "cocktailDetails.showMore": "Показати більше",
   "cocktailDetails.instructions": "Інструкція",
   "cocktailDetails.ingredients": "Інгредієнти",
+
+  "cocktailDetails.servings": "Порції",
+  "cocktailDetails.decreaseServings": "Зменшити кількість порцій",
+  "cocktailDetails.increaseServings": "Збільшити кількість порцій",
   "cocktailDetails.asNeeded": "За потреби",
   "cocktailDetails.garnish": "декор",
   "cocktailDetails.optional": "опційно",
