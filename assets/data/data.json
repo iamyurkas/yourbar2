@@ -37968,7 +37968,7 @@
       "id": 605,
       "name": "Bloomsbury Martini",
       "description": "A spirit-forward martini variation with **gin**, **Licor 43**, dry vermouth, and a touch of creole bitters. Herbal, lightly spiced, and crisp.",
-      "instructions": "1. Add ice to a mixing glass.\n2. Pour 60 ml **gin**, 15 ml **Licor 43**, 15 ml **dry vermouth**, and 2 dashes **Peychaud's bitters**.\n3. Stir until very cold, then fine strain into the chilled glass.\n4. Express a **lemon** peel over the drink and use as garnish.",
+      "instructions": "1. Fill a mixing glass with **ice**.\n2. Pour 60 ml **gin**, 15 ml **Licor 43**, 15 ml **dry vermouth**, and 2 dashes **Peychaud's bitters**.\n3. Stir until very cold, then fine strain into the chilled glass.\n4. Express a **lemon** peel over the drink and use as garnish.",
       "glassId": "martini",
       "methodIds": ["stir"],
       "tags": [5],
@@ -38089,7 +38089,7 @@
       "id": 607,
       "name": "Ambrosia",
       "description": "A silky, dessert-like shaken cocktail where **cognac**, **Licor 43**, and **yellow chartreuse** lift rich **advocaat**.",
-      "instructions": "1. Chill a coupe glass.\n2. Add ice to a shaker.\n3. Pour 20 ml **cognac**, 25 ml **Licor 43**, 12.5 ml **yellow chartreuse**, and 50 ml **egg liqueur (advocaat)**.\n4. Shake thoroughly until chilled and smooth.\n5. Fine strain into the chilled glass.",
+      "instructions": "1. Fill a shaker with **ice**.\n2. Pour 20 ml **cognac**, 25 ml **Licor 43**, 12.5 ml **yellow chartreuse**, and 50 ml **egg liqueur (advocaat)**.\n3. Shake thoroughly until chilled and smooth.\n4. Fine strain into the chilled glass.",
       "glassId": "coupe",
       "methodIds": ["shake"],
       "tags": [6],
@@ -38192,6 +38192,186 @@
           "name": "Egg White",
           "amount": "7.5",
           "unitId": 11
+        }
+      ]
+    },
+    {
+      "id": 609,
+      "name": "Great Northern",
+      "description": "A bright, citrusy aquavit sour with **Lillet Blanc**, **triple sec**, fresh **lemon juice**, and **honey syrup**.",
+      "instructions": "1. Fill a shaker with **ice**.\n2. Pour 60 ml **aquavit**, 22.5 ml **Lillet Blanc**, 15 ml **triple sec**, 22.5 ml **lemon juice**, and 15 ml **honey syrup**.\n3. Shake hard until well chilled.\n4. Fine strain into a chilled coupe glass.",
+      "glassId": "coupe",
+      "methodIds": ["shake"],
+      "tags": [6],
+      "defaultServings": 1,
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 2,
+          "ingredientId": 364,
+          "name": "Aquavit",
+          "amount": "60",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 226,
+          "name": "Lillet Blanc",
+          "amount": "22.5",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 340,
+          "name": "Triple Sec",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 221,
+          "name": "Lemon Juice",
+          "amount": "22.5",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 191,
+          "name": "Honey Syrup",
+          "amount": "15",
+          "unitId": 11
+        }
+      ]
+    },
+    {
+      "id": 610,
+      "name": "Scandinavian Daiquiri",
+      "description": "A Scandinavian riff on a daiquiri: **aquavit** shaken with fresh **lime juice**, **rich simple syrup**, and a touch of **daiquiri bitters**.",
+      "instructions": "1. Fill a shaker with **ice**.\n2. Add 60 ml **aquavit**, 22.5 ml **lime juice**, 15 ml **rich simple syrup**, and 4 drops **daiquiri bitters**.\n3. Shake until chilled and properly diluted.\n4. Fine strain into a chilled coupe glass.",
+      "glassId": "coupe",
+      "methodIds": ["shake"],
+      "tags": [6],
+      "defaultServings": 1,
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 2,
+          "ingredientId": 364,
+          "name": "Aquavit",
+          "amount": "60",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 228,
+          "name": "Lime Juice",
+          "amount": "22.5",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 298,
+          "name": "Rich Simple Syrup",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 135,
+          "name": "Daiquiri Bitters",
+          "amount": "4",
+          "unitId": 7
+        }
+      ]
+    },
+    {
+      "id": 611,
+      "name": "Dead Parrot Colada",
+      "description": "A tropical sour-style colada with **gin**, **aquavit**, **blue curaçao**, **maraschino**, **lemon juice**, and **coconut water**.",
+      "instructions": "1. Fill a shaker with **ice**.\n2. Pour 45 ml **gin**, 15 ml **aquavit**, 15 ml **blue curaçao**, 7.5 ml **Luxardo maraschino**, 15 ml **lemon juice**, 45 ml **coconut water**, and 15 ml **rich simple syrup**.\n3. Shake hard until cold.\n4. Strain into a chilled hurricane or highball glass over fresh ice.",
+      "glassId": "hurricane_glass",
+      "methodIds": ["shake"],
+      "tags": [6],
+      "defaultServings": 1,
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 2,
+          "ingredientId": 161,
+          "name": "Gin",
+          "amount": "45",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 364,
+          "name": "Aquavit",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 59,
+          "name": "Blue Curaçao",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 231,
+          "name": "Luxardo Maraschino",
+          "amount": "7.5",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 221,
+          "name": "Lemon Juice",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 7,
+          "ingredientId": 108,
+          "name": "Coconut Water",
+          "amount": "45",
+          "unitId": 11
+        },
+        {
+          "order": 8,
+          "ingredientId": 298,
+          "name": "Rich Simple Syrup",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 9,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "serving": true
         }
       ]
     }
