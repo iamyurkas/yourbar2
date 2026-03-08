@@ -140,6 +140,7 @@ export type CreateCocktailInput = {
   glassId?: string | null;
   methodIds?: CocktailMethodId[] | null;
   tags?: CocktailTag[] | null;
+  defaultServings?: number | null;
   ingredients: CreateCocktailIngredientInput[];
 };
 

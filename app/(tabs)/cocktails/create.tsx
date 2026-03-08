@@ -48,9 +48,9 @@ import {
 } from "@/constants/cocktail-units";
 import { GLASSWARE } from "@/constants/glassware";
 import { useAppColors } from "@/constants/theme";
+import { compareGlobalAlphabet, compareOptionalGlobalAlphabet } from "@/libs/global-sort";
 import { getPluralCategory } from "@/libs/i18n/plural";
 import { useI18n } from "@/libs/i18n/use-i18n";
-import { compareGlobalAlphabet, compareOptionalGlobalAlphabet } from "@/libs/global-sort";
 import {
   buildReturnToParams,
   parseReturnToParams,
@@ -72,6 +72,9 @@ const DEFAULT_IMPERIAL_UNIT_ID = 12;
 const MIN_AUTOCOMPLETE_LENGTH = 2;
 const MAX_SUGGESTIONS = 8;
 const INGREDIENT_REORDER_TRANSITION = LinearTransition.duration(180);
+const MIN_DEFAULT_SERVINGS = 1;
+const MAX_DEFAULT_SERVINGS = 6;
+const DEFAULT_SERVINGS_OPTIONS = [1, 2, 3, 4, 5, 6] as const;
 
 type EditableSubstitute = {
   key: string;
@@ -98,6 +101,7 @@ type EditableIngredient = {
 
 type CocktailFormSnapshot = {
   name: string;
+  defaultServings: number;
   glassId: string | null;
   methodIds: CocktailMethodId[];
   description: string;
@@ -189,6 +193,16 @@ function shouldUsePluralUnits(amountRaw?: string) {
   }
   const numericAmount = Number(amountRaw.trim());
   return Number.isFinite(numericAmount) && numericAmount !== 1;
+}
+
+function sanitizeDefaultServings(value?: number | null): number {
+  const normalized = Number(value ?? MIN_DEFAULT_SERVINGS);
+  if (!Number.isFinite(normalized)) {
+    return MIN_DEFAULT_SERVINGS;
+  }
+
+  const integerValue = Math.trunc(normalized);
+  return Math.max(MIN_DEFAULT_SERVINGS, Math.min(MAX_DEFAULT_SERVINGS, integerValue));
 }
 
 function mapRecipeIngredientToEditable(
@@ -303,6 +317,7 @@ export default function CreateCocktailScreen() {
   );
 
   const [name, setName] = useState("");
+  const [defaultServings, setDefaultServings] = useState(MIN_DEFAULT_SERVINGS);
   const [glassId, setGlassId] = useState<string | null>("martini");
   const [isGlassModalVisible, setIsGlassModalVisible] = useState(false);
   const [methodIds, setMethodIds] = useState<CocktailMethodId[]>([]);
@@ -437,6 +452,7 @@ export default function CreateCocktailScreen() {
     const normalizedTags = [...selectedTagIds].sort((a, b) => a - b);
     return {
       name,
+      defaultServings,
       glassId,
       methodIds,
       description,
@@ -464,6 +480,7 @@ export default function CreateCocktailScreen() {
     };
   }, [
     description,
+    defaultServings,
     glassId,
     imageUri,
     ingredientById,
@@ -668,6 +685,7 @@ export default function CreateCocktailScreen() {
 
     setPrefilledCocktail(undefined);
     setName("");
+    setDefaultServings(MIN_DEFAULT_SERVINGS);
     setGlassId("martini");
     setMethodIds([]);
     setDescription("");
@@ -702,6 +720,11 @@ export default function CreateCocktailScreen() {
     if (baseCocktail) {
       setPrefilledCocktail(baseCocktail);
       setName(baseCocktail.name ?? "");
+      setDefaultServings(
+        sanitizeDefaultServings(
+          (baseCocktail as { defaultServings?: number | null }).defaultServings,
+        ),
+      );
       setGlassId(baseCocktail.glassId ?? "martini");
       const legacyMethodId =
         (baseCocktail as { methodId?: CocktailMethodId | null }).methodId ??
@@ -1310,6 +1333,7 @@ export default function CreateCocktailScreen() {
 
       const submission = {
         name: trimmedName,
+        defaultServings: sanitizeDefaultServings(defaultServings),
         glassId: glassId ?? undefined,
         methodIds,
         photoUri: initialPhotoUri,
@@ -1396,6 +1420,7 @@ export default function CreateCocktailScreen() {
     availableCocktailTags,
     createCocktail,
     updateCocktail,
+    defaultServings,
     description,
     glassId,
     imageUri,
@@ -1854,8 +1879,8 @@ export default function CreateCocktailScreen() {
                 >
                   {selectedMethods.length
                     ? selectedMethods
-                        .map((method) => t(`cocktailMethod.${method.id}.label`))
-                        .join(", ")
+                      .map((method) => t(`cocktailMethod.${method.id}.label`))
+                      .join(", ")
                     : t("cocktailForm.notSpecified")}
                 </Text>
               </View>
@@ -1905,12 +1930,12 @@ export default function CreateCocktailScreen() {
                     key={tag.id}
                     label={finalName}
                     color={tag.color}
-                  selected={tag.selected}
-                  onPress={() => handleToggleTag(tag.id)}
-                  accessibilityRole="checkbox"
-                  accessibilityState={{ checked: tag.selected }}
-                  androidRippleColor={`${Colors.surface}33`}
-                />
+                    selected={tag.selected}
+                    onPress={() => handleToggleTag(tag.id)}
+                    accessibilityRole="checkbox"
+                    accessibilityState={{ checked: tag.selected }}
+                    androidRippleColor={`${Colors.surface}33`}
+                  />
                 );
               })}
             </View>
@@ -1962,6 +1987,42 @@ export default function CreateCocktailScreen() {
               textAlignVertical="top"
               onFocus={(event) => scrollFieldIntoView(event.nativeEvent.target)}
             />
+          </View>
+
+          <View style={styles.section}>
+            <Text style={[styles.label, { color: Colors.onSurface }]}>
+              {t("cocktailForm.defaultServings")}
+            </Text>
+            <View style={styles.servingsGrid}>
+              {DEFAULT_SERVINGS_OPTIONS.map((option) => {
+                const isSelected = defaultServings === option;
+                return (
+                  <Pressable
+                    key={option}
+                    onPress={() => setDefaultServings(option)}
+                    accessibilityRole="button"
+                    accessibilityLabel={t("cocktailForm.selectNamed", { name: String(option) })}
+                    accessibilityState={{ selected: isSelected }}
+                    style={[
+                      styles.servingsCell,
+                      {
+                        borderColor: isSelected ? Colors.tint : Colors.outlineVariant,
+                        backgroundColor: isSelected ? Colors.tint : Colors.surface,
+                      },
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        styles.servingsCellLabel,
+                        { color: isSelected ? Colors.onPrimary : Colors.onSurface },
+                      ]}
+                    >
+                      {option}
+                    </Text>
+                  </Pressable>
+                );
+              })}
+            </View>
           </View>
 
           <View style={styles.section}>
@@ -3522,6 +3583,24 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "600",
     marginTop: 6,
+  },
+  servingsGrid: {
+    alignSelf: "center",
+    flexDirection: "row",
+    gap: 6,
+    justifyContent: "center",
+  },
+  servingsCell: {
+    width: 48,
+    height: 48,
+    borderRadius: 8,
+    borderWidth: StyleSheet.hairlineWidth,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  servingsCellLabel: {
+    fontSize: 16,
+    fontWeight: "400",
   },
   addIngredientButton: {
     flexDirection: "row",

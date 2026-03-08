@@ -235,6 +235,19 @@ const BUILTIN_COCKTAIL_TAG_MAX = BUILTIN_COCKTAIL_TAGS.reduce((max, tag) => Math
 const BUILTIN_INGREDIENT_TAG_MAX = BUILTIN_INGREDIENT_TAGS.reduce((max, tag) => Math.max(max, tag.id), 0);
 const USER_CREATED_ID_START = 10000;
 
+const MIN_COCKTAIL_DEFAULT_SERVINGS = 1;
+const MAX_COCKTAIL_DEFAULT_SERVINGS = 6;
+
+function sanitizeCocktailDefaultServings(value?: number | null): number {
+  const normalized = Number(value ?? MIN_COCKTAIL_DEFAULT_SERVINGS);
+  if (!Number.isFinite(normalized)) {
+    return MIN_COCKTAIL_DEFAULT_SERVINGS;
+  }
+
+  const integerValue = Math.trunc(normalized);
+  return Math.max(MIN_COCKTAIL_DEFAULT_SERVINGS, Math.min(MAX_COCKTAIL_DEFAULT_SERVINGS, integerValue));
+}
+
 function sanitizeCustomTags<TTag extends { id?: number | null; name?: string | null; color?: string | null }>(
   tags: readonly TTag[] | null | undefined,
   fallbackColor: string,
@@ -907,6 +920,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         const methodIds = input.methodIds
           ? Array.from(new Set(input.methodIds)).filter(Boolean)
           : undefined;
+        const defaultServings = sanitizeCocktailDefaultServings(input.defaultServings);
 
         const tagMap = new Map<number, CocktailTag>();
         (input.tags ?? []).forEach((tag) => {
@@ -930,6 +944,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           photoUri,
           glassId,
           methodIds: methodIds && methodIds.length > 0 ? methodIds : undefined,
+          defaultServings,
           tags,
           ingredients: sanitizedIngredients.map((ingredient, index) => ({
             ...ingredient,
@@ -1795,6 +1810,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       const methodIds = input.methodIds
         ? Array.from(new Set(input.methodIds)).filter(Boolean)
         : undefined;
+      const defaultServings = sanitizeCocktailDefaultServings(input.defaultServings ?? (existing as { defaultServings?: number | null }).defaultServings);
 
       const tagMap = new Map<number, CocktailTag>();
       (input.tags ?? []).forEach((tag) => {
@@ -1819,6 +1835,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         photoUri,
         glassId,
         methodIds: methodIds && methodIds.length > 0 ? methodIds : undefined,
+        defaultServings,
         tags,
         ingredients: sanitizedIngredients.map((ingredient, index) => ({
           ...ingredient,
