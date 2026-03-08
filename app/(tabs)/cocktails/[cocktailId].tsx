@@ -63,6 +63,7 @@ const METRIC_UNIT_ID = 11;
 const IMPERIAL_UNIT_ID = 12;
 const PARTS_UNIT_ID = 13;
 const GRAM_UNIT_ID = 8;
+const CENTILITER_UNIT_ID = 3;
 const UNIT_CONVERSION_RATIO = 30;
 type IngredientDisplayMode = "metric" | "imperial" | "parts";
 
@@ -72,7 +73,47 @@ const SERVINGS_STEP = 0.5;
 
 function resolveProcessBatchMultiplier(servings: number): number {
   const normalizedServings = Math.max(1, Math.ceil(servings));
-  return Math.max(1, Math.ceil(normalizedServings / 3));
+
+  if (normalizedServings === 1) {
+    return 1;
+  }
+
+  const fullCycles = Math.floor((normalizedServings - 1) / 4);
+  const cycleOffset = (normalizedServings - 1) % 4;
+  const cycleBase = 1 + fullCycles * 3;
+
+  if (cycleOffset <= 1) {
+    return cycleBase + 0.5 * cycleOffset;
+  }
+
+  return cycleBase + 1 + (cycleOffset - 2);
+}
+
+function roundUpToMultiple(value: number, multiple: number): number {
+  if (multiple <= 0) {
+    return value;
+  }
+
+  return Math.ceil(value / multiple) * multiple;
+}
+
+function resolveProcessedAmountWithUnitRounding(
+  amount: number,
+  unitId: number | undefined,
+): number {
+  if (unitId === GRAM_UNIT_ID || unitId === METRIC_UNIT_ID) {
+    return roundUpToMultiple(amount, 30);
+  }
+
+  if (unitId === CENTILITER_UNIT_ID) {
+    return roundUpToMultiple(amount, 3);
+  }
+
+  if (unitId === IMPERIAL_UNIT_ID) {
+    return Math.ceil(amount);
+  }
+
+  return amount;
 }
 
 function resolveScaledIngredient(
@@ -105,10 +146,13 @@ function resolveScaledIngredient(
     : scaledServings / scaledDefaultServings;
 
   const scaledAmount = parsedAmount * scaleFactor;
+  const roundedScaledAmount = hasProcess
+    ? resolveProcessedAmountWithUnitRounding(scaledAmount, ingredient.unitId)
+    : scaledAmount;
 
   return {
     ...ingredient,
-    amount: formatAmount(scaledAmount),
+    amount: formatAmount(roundedScaledAmount),
   };
 }
 
