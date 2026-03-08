@@ -74,6 +74,7 @@ const MAX_SUGGESTIONS = 8;
 const INGREDIENT_REORDER_TRANSITION = LinearTransition.duration(180);
 const MIN_DEFAULT_SERVINGS = 1;
 const MAX_DEFAULT_SERVINGS = 9;
+const DEFAULT_SERVINGS_OPTIONS = [1, 2, 3, 4, 5, 6, 7, 8, 9] as const;
 
 type EditableSubstitute = {
   key: string;
@@ -1992,31 +1993,36 @@ export default function CreateCocktailScreen() {
             <Text style={[styles.label, { color: Colors.onSurface }]}>
               {t("cocktailForm.defaultServings")}
             </Text>
-            <TextInput
-              value={String(defaultServings)}
-              onChangeText={(value) => {
-                const digitsOnly = value.replace(/[^0-9]/g, "");
-                if (!digitsOnly) {
-                  setDefaultServings(MIN_DEFAULT_SERVINGS);
-                  return;
-                }
-
-                setDefaultServings(sanitizeDefaultServings(Number(digitsOnly)));
-              }}
-              keyboardType="number-pad"
-              inputMode="numeric"
-              maxLength={1}
-              placeholder={t("cocktailForm.defaultServingsPlaceholder")}
-              style={[
-                styles.input,
-                {
-                  borderColor: Colors.outlineVariant,
-                  color: Colors.text,
-                  backgroundColor: Colors.surface,
-                },
-              ]}
-              placeholderTextColor={`${Colors.onSurfaceVariant}99`}
-            />
+            <View style={styles.servingsGrid}>
+              {DEFAULT_SERVINGS_OPTIONS.map((option) => {
+                const isSelected = defaultServings === option;
+                return (
+                  <Pressable
+                    key={option}
+                    onPress={() => setDefaultServings(option)}
+                    accessibilityRole="button"
+                    accessibilityLabel={t("cocktailForm.selectNamed", { name: String(option) })}
+                    accessibilityState={{ selected: isSelected }}
+                    style={[
+                      styles.servingsCell,
+                      {
+                        borderColor: isSelected ? Colors.tint : Colors.outlineVariant,
+                        backgroundColor: isSelected ? Colors.tint : Colors.surface,
+                      },
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        styles.servingsCellLabel,
+                        { color: isSelected ? Colors.onPrimary : Colors.onSurface },
+                      ]}
+                    >
+                      {option}
+                    </Text>
+                  </Pressable>
+                );
+              })}
+            </View>
           </View>
 
           <View style={styles.section}>
@@ -3577,6 +3583,26 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "600",
     marginTop: 6,
+  },
+  servingsGrid: {
+    alignSelf: "center",
+    width: 204,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 6,
+    justifyContent: "center",
+  },
+  servingsCell: {
+    width: 64,
+    height: 64,
+    borderRadius: 12,
+    borderWidth: StyleSheet.hairlineWidth,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  servingsCellLabel: {
+    fontSize: 20,
+    fontWeight: "700",
   },
   addIngredientButton: {
     flexDirection: "row",

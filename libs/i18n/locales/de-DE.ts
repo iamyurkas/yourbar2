@@ -183,7 +183,6 @@ export const deDETranslations: TranslationDictionary = {
   "cocktailForm.instructions": "Anleitung",
   "cocktailForm.instructionsPlaceholder": "1. Eis hinzufügen...",
   "cocktailForm.defaultServings": "Standard-Portionen",
-  "cocktailForm.defaultServingsPlaceholder": "1-9",
   "cocktailForm.ingredients": "Zutaten",
   "cocktailForm.addIngredient": "Zutat hinzufügen",
   "cocktailForm.saveCocktail": "Cocktail speichern",
