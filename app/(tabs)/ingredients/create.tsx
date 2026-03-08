@@ -160,6 +160,7 @@ export default function IngredientFormScreen() {
       (fromCocktailAddIngredientParam || returnToPath === '/cocktails/create'),
     [fromCocktailAddIngredientParam, isEditMode, returnToPath],
   );
+  const shouldReturnToCocktailCreateAfterSave = returnToPath === '/cocktails/create';
 
   const navigation = useNavigation();
   const Colors = useAppColors();
@@ -682,7 +683,7 @@ export default function IngredientFormScreen() {
       return;
     }
 
-    if (returnToPath) {
+    if (shouldReturnToCocktailCreateAfterSave && returnToPath) {
       if (navigation.canGoBack()) {
         skipDuplicateBack(navigation);
         router.navigate({ pathname: returnToPath as never, params: returnToParams as never });
@@ -713,6 +714,7 @@ export default function IngredientFormScreen() {
     returnToParams,
     returnToPath,
     selectedTagIds,
+    shouldReturnToCocktailCreateAfterSave,
     prefillAbvParam,
     prefillBarcodeParam,
     prefillImageUrlParam,
