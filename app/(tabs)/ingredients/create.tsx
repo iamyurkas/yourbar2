@@ -607,11 +607,6 @@ export default function IngredientFormScreen() {
           return;
         }
 
-        if (navigation.canGoBack()) {
-          skipDuplicateBack(navigation);
-          return;
-        }
-
         router.replace({
           pathname: '/ingredients/[ingredientId]',
           params: {
@@ -678,7 +673,12 @@ export default function IngredientFormScreen() {
     isNavigatingAfterSaveRef.current = true;
     const targetId = created.id ?? created.name;
     if (!targetId) {
-      skipDuplicateBack(navigation);
+      setIsSaving(false);
+      showDialog({
+        title: t('ingredientForm.couldNotSave'),
+        message: t('common.tryAgainLater'),
+        actions: [{ label: t('common.ok') }],
+      });
       return;
     }
 
@@ -697,6 +697,7 @@ export default function IngredientFormScreen() {
       pathname: '/ingredients/[ingredientId]',
       params: { ingredientId: String(targetId) },
     });
+    setIsSaving(false);
   }, [
     availableIngredientTags,
     baseIngredientId,
