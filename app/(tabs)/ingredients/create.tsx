@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
-import { useFocusEffect, useNavigation, type NavigationAction } from '@react-navigation/native';
+import { StackActions, useFocusEffect, useNavigation, type NavigationAction } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -888,6 +888,19 @@ export default function IngredientFormScreen() {
             }
 
             setHasUnsavedChanges(false);
+            const isReturningToIngredientDetails = returnToPath === '/ingredients/[ingredientId]';
+            if (isReturningToIngredientDetails) {
+              const state = navigation.getState();
+              const currentIndex = state?.index ?? 0;
+              if (currentIndex >= 2) {
+                navigation.dispatch(StackActions.pop(2));
+                return;
+              }
+
+              router.replace('/ingredients');
+              return;
+            }
+
             if (returnToPath) {
               router.replace({ pathname: returnToPath as never, params: returnToParams as never });
               return;
