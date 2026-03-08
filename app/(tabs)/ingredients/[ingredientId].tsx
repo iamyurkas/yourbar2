@@ -591,10 +591,12 @@ export default function IngredientDetailsScreen() {
       params: {
         ingredientId: String(targetId),
         mode: "edit",
-        ...buildReturnToParams(returnToPath, returnToParams),
+        ...buildReturnToParams("/ingredients/[ingredientId]", {
+          ingredientId: String(targetId),
+        }),
       },
     });
-  }, [ingredient, returnToParams, returnToPath]);
+  }, [ingredient]);
 
   const handleAddCocktail = useCallback(() => {
     if (!ingredient) {
