@@ -209,6 +209,8 @@ export function normalizeCocktailIngredients(
       unitId: ingredient.unitId != null ? Math.trunc(Number(ingredient.unitId)) : undefined,
       optional: ingredient.optional ? true : undefined,
       garnish: ingredient.garnish ? true : undefined,
+      process: ingredient.process ? true : undefined,
+      serving: ingredient.serving ? true : undefined,
       allowBaseSubstitution: ingredient.allowBaseSubstitution ? true : undefined,
       allowBrandSubstitution: ingredient.allowBrandSubstitution ? true : undefined,
       allowStyleSubstitution: ingredient.allowStyleSubstitution ? true : undefined,
@@ -239,6 +241,7 @@ export function toCocktailStorageRecord(cocktail: Cocktail | BaseCocktailRecord)
     photoUri: cocktail.photoUri ?? undefined,
     glassId: cocktail.glassId ?? undefined,
     methodIds: (normalizedMethodIds.length > 0 ? normalizedMethodIds : undefined) as CocktailStorageRecord["methodIds"],
+    defaultServings: Number(cocktail.defaultServings ?? 1) || 1,
     tags: normalizedTags && normalizedTags.length > 0 ? normalizedTags : undefined,
     ingredients: normalizedIngredients && normalizedIngredients.length > 0 ? normalizedIngredients : undefined,
   } satisfies CocktailStorageRecord;

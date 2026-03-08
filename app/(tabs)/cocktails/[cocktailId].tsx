@@ -67,6 +67,50 @@ const UNIT_CONVERSION_RATIO = 30;
 type IngredientDisplayMode = "metric" | "imperial" | "parts";
 
 const MAX_RATING = 5;
+const MIN_SERVINGS = 0.5;
+const SERVINGS_STEP = 0.5;
+
+function resolveProcessBatchMultiplier(servings: number): number {
+  const normalizedServings = Math.max(1, Math.ceil(servings));
+  return Math.max(1, Math.ceil(normalizedServings / 3));
+}
+
+function resolveScaledIngredient(
+  ingredient: RecipeIngredient,
+  servings: number,
+  defaultServings: number,
+): RecipeIngredient {
+  const amountRaw = ingredient.amount?.trim();
+  if (!amountRaw) {
+    return ingredient;
+  }
+
+  const parsedAmount = Number(amountRaw);
+  if (Number.isNaN(parsedAmount)) {
+    return ingredient;
+  }
+
+  const hasGarnish = (ingredient as { garnish?: boolean | null }).garnish;
+  const scaledServings = hasGarnish
+    ? Math.max(1, Math.floor(servings))
+    : servings;
+  const scaledDefaultServings = hasGarnish
+    ? Math.max(1, Math.floor(defaultServings))
+    : defaultServings;
+
+  const hasProcess = (ingredient as { process?: boolean | null }).process;
+  const scaleFactor = hasProcess
+    ? resolveProcessBatchMultiplier(scaledServings) /
+      resolveProcessBatchMultiplier(scaledDefaultServings)
+    : scaledServings / scaledDefaultServings;
+
+  const scaledAmount = parsedAmount * scaleFactor;
+
+  return {
+    ...ingredient,
+    amount: formatAmount(scaledAmount),
+  };
+}
 
 function resolveCocktail(
   param: string | undefined,
@@ -285,6 +329,8 @@ function getIngredientQualifier(
   ingredient: RecipeIngredient,
   garnishLabel: string,
   optionalLabel: string,
+  processLabel: string,
+  servingLabel: string,
 ): string | undefined {
   const qualifiers: string[] = [];
 
@@ -294,6 +340,14 @@ function getIngredientQualifier(
 
   if ((ingredient as { optional?: boolean | null }).optional) {
     qualifiers.push(optionalLabel);
+  }
+
+  if ((ingredient as { process?: boolean | null }).process) {
+    qualifiers.push(processLabel);
+  }
+
+  if ((ingredient as { serving?: boolean | null }).serving) {
+    qualifiers.push(servingLabel);
   }
 
   return qualifiers.join(", ") || undefined;
@@ -492,6 +546,29 @@ export default function CocktailDetailsScreen() {
     return [...recipe].sort((a, b) => a.order - b.order);
   }, [cocktail?.ingredients]);
 
+  const normalizedDefaultServings = useMemo(() => {
+    const parsedDefault = Number(cocktail?.defaultServings ?? 1);
+    if (!Number.isFinite(parsedDefault) || parsedDefault <= 0) {
+      return 1;
+    }
+
+    return Math.round(parsedDefault / SERVINGS_STEP) * SERVINGS_STEP;
+  }, [cocktail?.defaultServings]);
+
+  const [servings, setServings] = useState<number>(normalizedDefaultServings);
+
+  useEffect(() => {
+    setServings(normalizedDefaultServings);
+  }, [normalizedDefaultServings]);
+
+  const scaledIngredients = useMemo(
+    () =>
+      sortedIngredients.map((ingredient) =>
+        resolveScaledIngredient(ingredient, servings, normalizedDefaultServings),
+      ),
+    [normalizedDefaultServings, servings, sortedIngredients],
+  );
+
   const resolvedIngredients = useMemo(
     () =>
       sortedIngredients.map((ingredient) =>
@@ -672,7 +749,7 @@ export default function CocktailDetailsScreen() {
   const [isHelpVisible, setIsHelpVisible] = useState(false);
 
   const smallestPartAmount = useMemo(() => {
-    const convertibleAmounts = sortedIngredients
+    const convertibleAmounts = scaledIngredients
       .map((ingredient) => resolveAmountForParts(ingredient))
       .filter((amount): amount is number => amount != null && amount > 0);
 
@@ -681,7 +758,17 @@ export default function CocktailDetailsScreen() {
     }
 
     return Math.min(...convertibleAmounts);
-  }, [sortedIngredients]);
+  }, [scaledIngredients]);
+
+  const canDecreaseServings = servings > MIN_SERVINGS;
+  const handleDecreaseServings = useCallback(() => {
+    setServings((current) =>
+      Math.max(MIN_SERVINGS, Math.round((current - SERVINGS_STEP) * 2) / 2),
+    );
+  }, []);
+  const handleIncreaseServings = useCallback(() => {
+    setServings((current) => Math.round((current + SERVINGS_STEP) * 2) / 2);
+  }, []);
 
   const handleSelectDisplayMode = useCallback((mode: IngredientDisplayMode) => {
     setIngredientDisplayMode(mode);
@@ -1136,10 +1223,52 @@ export default function CocktailDetailsScreen() {
                 >
                   {t("cocktailDetails.ingredients")}
                 </Text>
+                <View style={styles.servingsControl}>
+                  <Text
+                    style={[styles.servingsLabel, { color: Colors.onSurfaceVariant }]}
+                  >
+                    {t("cocktailDetails.servings")}
+                  </Text>
+                  <View
+                    style={[
+                      styles.servingsStepper,
+                      { borderColor: Colors.outline, backgroundColor: Colors.surfaceBright },
+                    ]}
+                  >
+                    <Pressable
+                      onPress={handleDecreaseServings}
+                      disabled={!canDecreaseServings}
+                      style={styles.servingsButton}
+                      accessibilityRole="button"
+                      accessibilityLabel={t("cocktailDetails.decreaseServings")}
+                    >
+                      <MaterialCommunityIcons
+                        name="minus"
+                        size={18}
+                        color={canDecreaseServings ? Colors.primary : Colors.onSurfaceDisabled}
+                      />
+                    </Pressable>
+                    <Text style={[styles.servingsValue, { color: Colors.onSurface }]}>
+                      {formatAmount(servings)}
+                    </Text>
+                    <Pressable
+                      onPress={handleIncreaseServings}
+                      style={styles.servingsButton}
+                      accessibilityRole="button"
+                      accessibilityLabel={t("cocktailDetails.increaseServings")}
+                    >
+                      <MaterialCommunityIcons
+                        name="plus"
+                        size={18}
+                        color={Colors.primary}
+                      />
+                    </Pressable>
+                  </View>
+                </View>
                 <View style={styles.ingredientsList}>
                   {sortedIngredients.map((ingredient, index) => {
                     const quantity = formatIngredientQuantity(
-                      ingredient,
+                      scaledIngredients[index] ?? ingredient,
                       ingredientDisplayMode,
                       smallestPartAmount,
                       t("cocktailDetails.asNeeded"),
@@ -1150,6 +1279,8 @@ export default function CocktailDetailsScreen() {
                       ingredient,
                       t("cocktailDetails.garnish"),
                       t("cocktailDetails.optional"),
+                      t("cocktailDetails.process"),
+                      t("cocktailDetails.serving"),
                     );
                     const key = `${ingredient.ingredientId ?? ingredient.name}-${ingredient.order}`;
                     const resolution = resolvedIngredients[index];
@@ -1617,6 +1748,37 @@ const styles = StyleSheet.create({
   },
   ingredientsList: {
     marginHorizontal: -24,
+  },
+  servingsControl: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: 12,
+  },
+  servingsLabel: {
+    fontSize: 14,
+    fontWeight: "500",
+  },
+  servingsStepper: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 1,
+    borderRadius: 999,
+    paddingHorizontal: 8,
+    gap: 4,
+  },
+  servingsButton: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  servingsValue: {
+    minWidth: 40,
+    textAlign: "center",
+    fontSize: 14,
+    fontWeight: "600",
   },
   ingredientDivider: {
     height: StyleSheet.hairlineWidth,

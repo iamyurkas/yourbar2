@@ -20,6 +20,8 @@ export type IngredientTag = {
 type CocktailIngredientRecord = NonNullable<BaseCocktailRecord['ingredients']>[number] & {
   optional?: boolean | null;
   garnish?: boolean | null;
+  process?: boolean | null;
+  serving?: boolean | null;
   photoUri?: string | null;
   tags?: IngredientTag[] | null;
   substitutes?: Array<{
@@ -34,6 +36,7 @@ type CocktailSubstituteRecord = NonNullable<
 >;
 
 export type IngredientRecord = Omit<BaseIngredientRecord, 'tags'> & {
+  ingredientKind?: 'ice' | null;
   tags?: IngredientTag[] | null;
   synonyms?: string[] | null;
   styleIngredientId?: number | null;
@@ -119,6 +122,8 @@ export type CreateCocktailIngredientInput = {
   unitId?: number | string | null;
   optional?: boolean | null;
   garnish?: boolean | null;
+  process?: boolean | null;
+  serving?: boolean | null;
   allowBaseSubstitution?: boolean | null;
   allowBrandSubstitution?: boolean | null;
   allowStyleSubstitution?: boolean | null;
@@ -135,6 +140,7 @@ export type CreateCocktailInput = {
   glassId?: string | null;
   methodIds?: CocktailMethodId[] | null;
   tags?: CocktailTag[] | null;
+  defaultServings?: number | null;
   ingredients: CreateCocktailIngredientInput[];
 };
 
