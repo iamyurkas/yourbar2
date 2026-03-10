@@ -74,6 +74,7 @@ import {
   buildInventorySnapshot,
   createInventoryBaseMaps,
   INVENTORY_SNAPSHOT_VERSION,
+  sanitizeCocktailComments,
   sanitizeCocktailRatings,
 } from '@/providers/inventory/persistence/inventory-snapshot';
 
@@ -90,6 +91,8 @@ declare global {
   var __yourbarInventoryShoppingIngredientIds: Set<number> | undefined;
   // eslint-disable-next-line no-var
   var __yourbarInventoryCocktailRatings: Record<string, number> | undefined;
+  // eslint-disable-next-line no-var
+  var __yourbarInventoryCocktailComments: Record<string, string> | undefined;
   // eslint-disable-next-line no-var
   var __yourbarInventoryIgnoreGarnish: boolean | undefined;
   // eslint-disable-next-line no-var
@@ -341,6 +344,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   const [ratingsByCocktailId, setRatingsByCocktailId] = useState<Record<string, number>>(() =>
     sanitizeCocktailRatings(globalThis.__yourbarInventoryCocktailRatings),
   );
+  const [commentsByCocktailId, setCommentsByCocktailId] = useState<Record<string, string>>(() =>
+    sanitizeCocktailComments(globalThis.__yourbarInventoryCocktailComments),
+  );
   const [ignoreGarnish, setIgnoreGarnish] = useState<boolean>(
     () => globalThis.__yourbarInventoryIgnoreGarnish ?? true,
   );
@@ -410,6 +416,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       availableIngredientIds: Set<number>;
       shoppingIngredientIds: Set<number>;
       ratingsByCocktailId: Record<string, number>;
+      commentsByCocktailId: Record<string, string>;
       ignoreGarnish: boolean;
       allowAllSubstitutes: boolean;
       useImperialUnits: boolean;
@@ -433,6 +440,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       setAvailableIngredientIds(bootstrap.availableIngredientIds);
       setShoppingIngredientIds(bootstrap.shoppingIngredientIds);
       setRatingsByCocktailId(bootstrap.ratingsByCocktailId);
+      setCommentsByCocktailId(bootstrap.commentsByCocktailId);
       setIgnoreGarnish(bootstrap.ignoreGarnish);
       setAllowAllSubstitutes(bootstrap.allowAllSubstitutes);
       setUseImperialUnits(bootstrap.useImperialUnits);
@@ -472,6 +480,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           const nextAvailableIds = createIngredientIdSet(stored.availableIngredientIds);
           const nextShoppingIds = createIngredientIdSet(stored.shoppingIngredientIds);
           const nextRatings = sanitizeCocktailRatings(stored.cocktailRatings);
+          const nextComments = sanitizeCocktailComments((stored as { cocktailComments?: Record<string, string> }).cocktailComments);
           const nextIgnoreGarnish = stored.ignoreGarnish ?? true;
           const nextAllowAllSubstitutes = stored.allowAllSubstitutes ?? true;
           const nextUseImperialUnits = (stored.useImperialUnits ?? false) || shouldDefaultToImperialUnits;
@@ -516,6 +525,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             availableIngredientIds: nextAvailableIds,
             shoppingIngredientIds: nextShoppingIds,
             ratingsByCocktailId: nextRatings,
+            commentsByCocktailId: nextComments,
             ignoreGarnish: nextIgnoreGarnish,
             allowAllSubstitutes: nextAllowAllSubstitutes,
             useImperialUnits: nextUseImperialUnits,
@@ -549,6 +559,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             availableIngredientIds: new Set(),
             shoppingIngredientIds: new Set(),
             ratingsByCocktailId: {},
+            commentsByCocktailId: {},
             ignoreGarnish: true,
             allowAllSubstitutes: true,
             useImperialUnits: shouldDefaultToImperialUnits,
@@ -627,6 +638,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     globalThis.__yourbarInventoryAvailableIngredientIds = availableIngredientIds;
     globalThis.__yourbarInventoryShoppingIngredientIds = shoppingIngredientIds;
     globalThis.__yourbarInventoryCocktailRatings = ratingsByCocktailId;
+    globalThis.__yourbarInventoryCocktailComments = commentsByCocktailId;
     globalThis.__yourbarInventoryIgnoreGarnish = ignoreGarnish;
     globalThis.__yourbarInventoryAllowAllSubstitutes = allowAllSubstitutes;
     globalThis.__yourbarInventoryUseImperialUnits = useImperialUnits;
@@ -649,6 +661,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       availableIngredientIds,
       shoppingIngredientIds,
       ratingsByCocktailId,
+      commentsByCocktailId,
       ignoreGarnish,
       allowAllSubstitutes,
       useImperialUnits,
@@ -685,6 +698,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     availableIngredientIds,
     shoppingIngredientIds,
     ratingsByCocktailId,
+    commentsByCocktailId,
     ignoreGarnish,
     allowAllSubstitutes,
     useImperialUnits,
@@ -772,6 +786,47 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       return Math.max(0, Math.min(5, Number(rating) || 0));
     },
     [ratingsByCocktailId, resolveCocktailKey],
+  );
+
+  const setCocktailComment = useCallback(
+    (cocktail: Cocktail, comment: string) => {
+      const key = resolveCocktailKey(cocktail);
+      if (!key) {
+        return;
+      }
+
+      setCommentsByCocktailId((prev) => {
+        const normalizedComment = comment.trim();
+        if (!normalizedComment) {
+          if (!(key in prev)) {
+            return prev;
+          }
+
+          const next = { ...prev };
+          delete next[key];
+          return next;
+        }
+
+        if (prev[key] === normalizedComment) {
+          return prev;
+        }
+
+        return { ...prev, [key]: normalizedComment };
+      });
+    },
+    [resolveCocktailKey],
+  );
+
+  const getCocktailComment = useCallback(
+    (cocktail: Cocktail) => {
+      const key = resolveCocktailKey(cocktail);
+      if (!key) {
+        return '';
+      }
+
+      return commentsByCocktailId[key] ?? '';
+    },
+    [commentsByCocktailId, resolveCocktailKey],
   );
 
   const setIngredientAvailability = useCallback((id: number, available: boolean) => {
@@ -1279,10 +1334,16 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       return acc;
     }, []);
 
+    const exportComments = sanitizeCocktailComments(commentsByCocktailId);
+
     const files: InventoryExportFile[] = [{
       schemaVersion: 1,
       kind: 'base',
-      data: { cocktails, ingredients },
+      data: {
+        cocktails,
+        ingredients,
+        ...(Object.keys(exportComments).length > 0 ? { cocktailComments: exportComments } : {}),
+      },
     } satisfies InventoryBaseExportFile];
 
     (Object.entries(translationOverrides) as Array<[SupportedLocale, InventoryLocaleTranslationOverrides | undefined]>).forEach(([locale, localeData]) => {
@@ -1309,7 +1370,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
 
     files.sort((a, b) => (a.kind === 'base' ? -1 : a.kind.localeCompare(b.kind)));
     return files;
-  }, [baseMaps, inventoryState, translationOverrides]);
+  }, [baseMaps, commentsByCocktailId, inventoryState, translationOverrides]);
 
   const exportInventoryPhotoEntries = useCallback((): PhotoBackupEntry[] | null => {
     if (!inventoryState) {
@@ -1373,6 +1434,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       ? createInventoryStateFromData(hydrateInventoryTagsFromCode(baseFile.data), true)
       : undefined;
 
+    const incomingComments = sanitizeCocktailComments(baseFile?.data.cocktailComments);
+
     const mergeById = <TItem extends { id?: number | null; searchNameNormalized: string }>(
       currentItems: readonly TItem[],
       incomingItems: readonly TItem[],
@@ -1412,6 +1475,13 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       merged.sort((a, b) => compareGlobalAlphabet(a.searchNameNormalized, b.searchNameNormalized));
       return merged;
     };
+
+    if (Object.keys(incomingComments).length > 0) {
+      setCommentsByCocktailId((prev) => ({
+        ...prev,
+        ...incomingComments,
+      }));
+    }
 
     if (incomingState) {
       setInventoryState((prev) => {
@@ -2481,7 +2551,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       customCocktailTags,
       customIngredientTags,
       ratingsByCocktailId,
+      commentsByCocktailId,
       getCocktailRating,
+      getCocktailComment,
     }),
     [
       localizedCocktails,
@@ -2492,7 +2564,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       customCocktailTags,
       customIngredientTags,
       ratingsByCocktailId,
+      commentsByCocktailId,
       getCocktailRating,
+      getCocktailComment,
     ],
   );
 
@@ -2563,6 +2637,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       updateCustomIngredientTag,
       deleteCustomIngredientTag,
       setCocktailRating,
+      setCocktailComment,
       setIgnoreGarnish: handleSetIgnoreGarnish,
       setAllowAllSubstitutes: handleSetAllowAllSubstitutes,
       setUseImperialUnits: handleSetUseImperialUnits,
@@ -2605,6 +2680,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       updateCustomIngredientTag,
       deleteCustomIngredientTag,
       setCocktailRating,
+      setCocktailComment,
       handleSetIgnoreGarnish,
       handleSetAllowAllSubstitutes,
       handleSetUseImperialUnits,

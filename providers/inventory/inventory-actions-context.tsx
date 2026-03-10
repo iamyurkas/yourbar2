@@ -40,6 +40,7 @@ export type InventoryActionsContextValue = {
   updateCustomIngredientTag: (id: number, input: { name: string; color?: string | null }) => IngredientTag | undefined;
   deleteCustomIngredientTag: (id: number) => boolean;
   setCocktailRating: (cocktail: Cocktail, rating: number) => void;
+  setCocktailComment: (cocktail: Cocktail, comment: string) => void;
   setIgnoreGarnish: (value: boolean) => void;
   setAllowAllSubstitutes: (value: boolean) => void;
   setUseImperialUnits: (value: boolean) => void;

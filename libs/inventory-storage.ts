@@ -14,6 +14,7 @@ export type InventorySnapshotV1<TCocktail, TIngredient> = {
   availableIngredientIds?: number[];
   shoppingIngredientIds?: number[];
   cocktailRatings?: Record<string, number>;
+  cocktailComments?: Record<string, string>;
   ignoreGarnish?: boolean;
   allowAllSubstitutes?: boolean;
   useImperialUnits?: boolean;
@@ -49,6 +50,7 @@ export type InventoryDeltaSnapshot<TCocktail, TIngredient> = {
   availableIngredientIds?: number[];
   shoppingIngredientIds?: number[];
   cocktailRatings?: Record<string, number>;
+  cocktailComments?: Record<string, string>;
   ignoreGarnish?: boolean;
   allowAllSubstitutes?: boolean;
   useImperialUnits?: boolean;
@@ -85,6 +87,7 @@ export type InventoryDeltaSnapshotV3<TCocktail, TIngredient> = {
   availableIngredientIds?: number[];
   shoppingIngredientIds?: number[];
   cocktailRatings?: Record<string, number>;
+  cocktailComments?: Record<string, string>;
   ignoreGarnish?: boolean;
   allowAllSubstitutes?: boolean;
   useImperialUnits?: boolean;

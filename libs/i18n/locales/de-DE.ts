@@ -235,6 +235,8 @@ export const deDETranslations: TranslationDictionary = {
   "cocktailDetails.noPhoto": "Kein Foto",
   "cocktailDetails.clearRating": "Bewertung löschen",
   "cocktailDetails.setRatingTo": "Bewertung auf {{value}} setzen",
+  "cocktailDetails.toggleComment": "Kommentar hinzufügen",
+  "cocktailDetails.commentPlaceholder": "Füge deinen Kommentar hinzu. Er wird beim Verlassen dieses Bildschirms automatisch gespeichert.",
   "cocktailDetails.showInMetric": "In metrischen Einheiten anzeigen",
   "cocktailDetails.showInImperial": "Imperial anzeigen",
   "cocktailDetails.displayMode.imperial": "Imperial",

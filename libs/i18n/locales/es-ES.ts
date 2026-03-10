@@ -230,6 +230,8 @@ export const esESTranslations: TranslationDictionary = {
   "cocktailDetails.noPhoto": "Sin foto",
   "cocktailDetails.clearRating": "Borrar valoración",
   "cocktailDetails.setRatingTo": "Establecer valoración en {{value}}",
+  "cocktailDetails.toggleComment": "Añadir comentario",
+  "cocktailDetails.commentPlaceholder": "Añade tu comentario. Se guardará automáticamente al salir de esta pantalla.",
   "cocktailDetails.showInMetric": "Mostrar en sistema métrico",
   "cocktailDetails.showInImperial": "Mostrar en sistema imperial",
   "cocktailDetails.displayMode.imperial": "Imperial",

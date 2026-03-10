@@ -17,6 +17,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   type TextLayoutEvent,
   View,
 } from "react-native";
@@ -484,7 +485,9 @@ export default function CocktailDetailsScreen() {
     availableIngredientIds,
     shoppingIngredientIds,
     setCocktailRating,
+    setCocktailComment,
     getCocktailRating,
+    getCocktailComment,
     ignoreGarnish,
     allowAllSubstitutes,
     useImperialUnits,
@@ -663,6 +666,17 @@ export default function CocktailDetailsScreen() {
   const [, startRatingTransition] = useTransition();
   const displayedRating = optimisticRating ?? userRating;
 
+  const userComment = useMemo(() => {
+    if (!cocktail) {
+      return "";
+    }
+
+    return getCocktailComment(cocktail);
+  }, [cocktail, getCocktailComment]);
+
+  const [isCommentFieldVisible, setIsCommentFieldVisible] = useState(false);
+  const [commentDraft, setCommentDraft] = useState("");
+
   useEffect(() => {
     setOptimisticRating((previous) => {
       if (previous == null) {
@@ -672,6 +686,30 @@ export default function CocktailDetailsScreen() {
       return previous === userRating ? null : previous;
     });
   }, [userRating]);
+
+  useEffect(() => {
+    setCommentDraft(userComment);
+    setIsCommentFieldVisible((current) => current || userComment.length > 0);
+  }, [userComment]);
+
+  const persistCommentDraft = useCallback(() => {
+    if (!cocktail) {
+      return;
+    }
+
+    const trimmedDraft = commentDraft.trim();
+    if (trimmedDraft === userComment) {
+      return;
+    }
+
+    setCocktailComment(cocktail, trimmedDraft);
+  }, [cocktail, commentDraft, setCocktailComment, userComment]);
+
+  useEffect(() => {
+    return () => {
+      persistCommentDraft();
+    };
+  }, [persistCommentDraft]);
 
   const handleRatingSelect = useCallback(
     (value: number) => {
@@ -959,6 +997,20 @@ export default function CocktailDetailsScreen() {
               </View>
 
               <View style={styles.ratingRow}>
+                <Pressable
+                  onPress={() => setIsCommentFieldVisible((current) => !current)}
+                  accessibilityRole="button"
+                  accessibilityLabel={t("cocktailDetails.toggleComment")}
+                  style={styles.ratingStar}
+                  hitSlop={8}
+                >
+                  <MaterialCommunityIcons
+                    name={isCommentFieldVisible ? "comment-edit" : "comment-plus-outline"}
+                    size={28}
+                    color={Colors.tint}
+                  />
+                </Pressable>
+
                 {Array.from({ length: MAX_RATING }).map((_, index) => {
                   const starValue = index + 1;
                   const isActive = displayedRating >= starValue;
@@ -986,6 +1038,26 @@ export default function CocktailDetailsScreen() {
                   );
                 })}
               </View>
+
+              {isCommentFieldVisible ? (
+                <TextInput
+                  value={commentDraft}
+                  onChangeText={setCommentDraft}
+                  onBlur={persistCommentDraft}
+                  placeholder={t("cocktailDetails.commentPlaceholder")}
+                  placeholderTextColor={Colors.onSurfaceVariant}
+                  multiline
+                  textAlignVertical="top"
+                  style={[
+                    styles.commentInput,
+                    {
+                      color: Colors.onSurface,
+                      borderColor: Colors.outline,
+                      backgroundColor: Colors.surfaceBright,
+                    },
+                  ]}
+                />
+              ) : null}
 
               <View
                 style={[
@@ -1688,6 +1760,17 @@ const styles = StyleSheet.create({
     height: 32,
     alignItems: "center",
     justifyContent: "center",
+  },
+  commentInput: {
+    width: "100%",
+    minHeight: 92,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderRadius: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    fontSize: 15,
+    lineHeight: 20,
+    marginTop: 10,
   },
   displayModeSwitcher: {
     borderRadius: 14,

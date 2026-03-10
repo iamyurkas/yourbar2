@@ -163,6 +163,7 @@ export type IngredientStorageRecord = Omit<IngredientRecord, 'searchName' | 'sea
 export type InventoryExportData = {
   cocktails: Array<Omit<CocktailStorageRecord, 'tags'> & { tags?: number[] | null }>;
   ingredients: Array<Omit<IngredientStorageRecord, 'tags'> & { tags?: number[] | null }>;
+  cocktailComments?: Record<string, string>;
 };
 
 export type CocktailTranslationOverride = {
