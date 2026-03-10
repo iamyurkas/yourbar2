@@ -11,6 +11,8 @@ export const esESTranslations: TranslationDictionary = {
   "common.help": "Ayuda",
   "common.gotIt": "Entendido",
   "common.ok": "Aceptar",
+  "common.yes": "Sí",
+  "common.no": "No",
   "common.tryAgainLater": "Por favor, inténtalo de nuevo más tarde.",
   "common.save": "Guardar",
   "common.delete": "Eliminar",
@@ -580,6 +582,9 @@ export const esESTranslations: TranslationDictionary = {
     "El archivo de copia de seguridad contiene datos de inventario no válidos.",
   "sideMenu.importRetryWithValidArchive":
     "Vuelve a intentarlo con un archivo de copia de seguridad válido.",
+  "sideMenu.importIngredientAvailabilityTitle": "¿Importar disponibilidad de ingredientes?",
+  "sideMenu.importIngredientAvailabilityMessage":
+    "Esta copia de seguridad incluye el estado de disponibilidad de ingredientes. ¿Quieres importarlo en tu bar actual?",
   "sideMenu.deleteTagTitle": "Eliminar etiqueta",
   "sideMenu.deleteTagMessage": '¿Eliminar "{{name}}"?',
   "sideMenu.emailUnavailableTitle": "No se puede abrir el correo",

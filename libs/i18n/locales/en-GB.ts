@@ -11,6 +11,8 @@ export const enGBTranslations: TranslationDictionary = {
   "common.help": "Help",
   "common.gotIt": "Got it",
   "common.ok": "OK",
+  "common.yes": "Yes",
+  "common.no": "No",
   "common.tryAgainLater": "Please try again later.",
   "common.save": "Save",
   "common.delete": "Delete",
@@ -581,6 +583,9 @@ export const enGBTranslations: TranslationDictionary = {
     "The backup archive contains invalid inventory data.",
   "sideMenu.importRetryWithValidArchive":
     "Please try again with a valid backup archive.",
+  "sideMenu.importIngredientAvailabilityTitle": "Import ingredient availability?",
+  "sideMenu.importIngredientAvailabilityMessage":
+    "This backup includes ingredient availability status. Import it into your current bar?",
   "sideMenu.deleteTagTitle": "Delete tag",
   "sideMenu.deleteTagMessage": 'Remove "{{name}}"?',
   "sideMenu.emailUnavailableTitle": "Unable to open email",

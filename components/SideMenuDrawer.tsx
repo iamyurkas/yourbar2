@@ -217,6 +217,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(
     null,
   );
+  const pendingIngredientAvailabilityImportResolveRef = useRef<((value: boolean) => void) | null>(null);
   const [isBackingUpData, setIsBackingUpData] = useState(false);
   const [isRestoringData, setIsRestoringData] = useState(false);
   const translateX = useRef(new Animated.Value(-MENU_WIDTH)).current;
@@ -574,6 +575,10 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   };
 
   const handleCloseDialog = () => {
+    if (pendingIngredientAvailabilityImportResolveRef.current) {
+      pendingIngredientAvailabilityImportResolveRef.current(false);
+      pendingIngredientAvailabilityImportResolveRef.current = null;
+    }
     setDialogOptions(null);
   };
 
@@ -584,6 +589,32 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       actions: [{ label: t("common.ok") }],
     });
   };
+
+  const askImportIngredientAvailability = (): Promise<boolean> => new Promise((resolve) => {
+    pendingIngredientAvailabilityImportResolveRef.current = resolve;
+    setDialogOptions({
+      title: t('sideMenu.importIngredientAvailabilityTitle'),
+      message: t('sideMenu.importIngredientAvailabilityMessage'),
+      actions: [
+        {
+          label: t('common.no'),
+          variant: 'secondary',
+          onPress: () => {
+            pendingIngredientAvailabilityImportResolveRef.current = null;
+            resolve(false);
+          },
+        },
+        {
+          label: t('common.yes'),
+          variant: 'primary',
+          onPress: () => {
+            pendingIngredientAvailabilityImportResolveRef.current = null;
+            resolve(true);
+          },
+        },
+      ],
+    });
+  });
 
 
   const parsePhotoEntryFromArchivePath = (path: string): {
@@ -636,6 +667,17 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
     const record = candidate as { kind?: unknown; schemaVersion?: unknown };
     return (record.kind === "base" || record.kind === "translations") && typeof record.schemaVersion === "number";
+  };
+
+  const hasIngredientAvailabilityInExport = (data?: InventoryExportData): boolean => {
+    const ingredientStatus = data?.ingredientStatus;
+    if (!ingredientStatus || typeof ingredientStatus !== 'object') {
+      return false;
+    }
+
+    return Object.values(ingredientStatus).some((entry) =>
+      Boolean(entry && typeof entry === 'object' && (entry as { available?: unknown }).available === true),
+    );
   };
 
   const handleBackupData = async () => {
@@ -797,7 +839,13 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
         return;
       }
 
-      importInventoryData(importFiles.length > 0 ? importFiles : (legacyBase as InventoryExportData));
+      const importPayload = importFiles.length > 0 ? importFiles : (legacyBase as InventoryExportData);
+      const baseData = importFiles.find((file) => file.kind === 'base')?.data ?? legacyBase ?? undefined;
+      const importIngredientAvailability = hasIngredientAvailabilityInExport(baseData)
+        ? await askImportIngredientAvailability()
+        : true;
+
+      importInventoryData(importPayload, { importIngredientAvailability });
 
       const directory = FileSystem.documentDirectory ?? FileSystem.cacheDirectory;
       if (!directory) {

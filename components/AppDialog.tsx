@@ -85,7 +85,7 @@ export function AppDialog({ visible, title, message, actions, onRequestClose }: 
               return (
                 <Pressable
                   key={`${action.label}-${index}`}
-                  onPress={() => {
+                  onPressIn={() => {
                     onRequestClose?.();
                     action.onPress?.();
                   }}
