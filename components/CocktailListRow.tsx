@@ -103,7 +103,7 @@ const CocktailListRowComponent = ({
     ];
 
     return (
-      <View style={styles.metaControlColumn}>
+      <View style={styles.metaControlRow}>
         {totalStars > 0 ? (
           <View style={pillStyle}>
             {Array.from({ length: totalStars }).map((_, index) => (
@@ -289,8 +289,10 @@ const CocktailListRowComponent = ({
 export const CocktailListRow = memo(CocktailListRowComponent, areCocktailRowPropsEqual);
 
 const styles = StyleSheet.create({
-  metaControlColumn: {
-    alignItems: 'flex-end',
+  metaControlRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
     gap: 2,
   },
   metaPill: {
