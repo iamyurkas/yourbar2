@@ -1491,6 +1491,16 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
 
     const incomingFeedback = parseCocktailFeedbackImport(baseFile?.data);
 
+    const mergeCocktailWithFallback = (current: Cocktail, incoming: Cocktail): Cocktail => {
+      const currentVideoInstructions = current.videoInstructions?.trim();
+      const incomingVideoInstructions = incoming.videoInstructions?.trim();
+
+      return {
+        ...incoming,
+        ...(incomingVideoInstructions ? {} : (currentVideoInstructions ? { videoInstructions: currentVideoInstructions } : {})),
+      };
+    };
+
     const mergeById = <TItem extends { id?: number | null; searchNameNormalized: string }>(
       currentItems: readonly TItem[],
       incomingItems: readonly TItem[],
@@ -1551,10 +1561,28 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           return incomingState;
         }
 
+        const currentCocktailsById = new Map<number, Cocktail>();
+        prev.cocktails.forEach((cocktail) => {
+          const id = Number(cocktail.id ?? -1);
+          if (Number.isFinite(id) && id >= 0) {
+            currentCocktailsById.set(Math.trunc(id), cocktail);
+          }
+        });
+
+        const cocktailsForMerge = incomingState.cocktails.map((item) => {
+          const id = Number(item.id ?? -1);
+          if (!Number.isFinite(id) || id < 0) {
+            return item;
+          }
+
+          const current = currentCocktailsById.get(Math.trunc(id));
+          return current ? mergeCocktailWithFallback(current, item) : item;
+        });
+
         return {
           ...prev,
           imported: true,
-          cocktails: mergeById(prev.cocktails, incomingState.cocktails),
+          cocktails: mergeById(prev.cocktails, cocktailsForMerge),
           ingredients: mergeById(prev.ingredients, incomingState.ingredients),
         } satisfies InventoryState;
       });
@@ -1566,16 +1594,29 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         translationFiles.forEach((file) => {
           const locale = file.locale;
           const prevLocale = next[locale] ?? {};
+
+          const mergedCocktails = { ...(prevLocale.cocktails ?? {}) };
+          Object.entries(file.data.cocktails ?? {}).forEach(([id, value]) => {
+            const previousValue = mergedCocktails[id] ?? {};
+            mergedCocktails[id] = {
+              ...previousValue,
+              ...value,
+            };
+          });
+
+          const mergedIngredients = { ...(prevLocale.ingredients ?? {}) };
+          Object.entries(file.data.ingredients ?? {}).forEach(([id, value]) => {
+            const previousValue = mergedIngredients[id] ?? {};
+            mergedIngredients[id] = {
+              ...previousValue,
+              ...value,
+            };
+          });
+
           next[locale] = {
             ...prevLocale,
-            cocktails: {
-              ...(prevLocale.cocktails ?? {}),
-              ...(file.data.cocktails ?? {}),
-            },
-            ingredients: {
-              ...(prevLocale.ingredients ?? {}),
-              ...(file.data.ingredients ?? {}),
-            },
+            cocktails: mergedCocktails,
+            ingredients: mergedIngredients,
           };
         });
         return next;
@@ -1962,10 +2003,10 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         ...existing,
         id: existing.id,
         name: existing.name,
-        description: existing.description,
-        instructions: existing.instructions,
-        videoInstructions: (existing as { videoInstructions?: string | undefined }).videoInstructions,
-        synonyms: existing.synonyms,
+        description,
+        instructions,
+        videoInstructions,
+        synonyms,
         photoUri,
         glassId,
         methodIds: methodIds && methodIds.length > 0 ? methodIds : undefined,
