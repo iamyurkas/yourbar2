@@ -150,12 +150,6 @@ export default function IngredientDetailsScreen() {
     return Number.isNaN(parsed) ? undefined : parsed;
   }, [ingredient?.id, ingredientId]);
 
-  const [optimisticAvailability, setOptimisticAvailability] = useState<
-    boolean | null
-  >(null);
-  const [optimisticShopping, setOptimisticShopping] = useState<boolean | null>(
-    null,
-  );
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(
     null,
   );
@@ -196,42 +190,7 @@ export default function IngredientDetailsScreen() {
     return shoppingIngredientIds.has(numericIngredientId);
   }, [numericIngredientId, shoppingIngredientIds]);
 
-  const effectiveIsAvailable = optimisticAvailability ?? isAvailable;
-  const effectiveIsOnShoppingList = optimisticShopping ?? isOnShoppingList;
-  const effectiveAvailableIngredientIds = useMemo(() => {
-    const nextIds = new Set(availableIngredientIds);
-    if (numericIngredientId == null) {
-      return nextIds;
-    }
-
-    if (effectiveIsAvailable) {
-      nextIds.add(numericIngredientId);
-    } else {
-      nextIds.delete(numericIngredientId);
-    }
-
-    return nextIds;
-  }, [availableIngredientIds, effectiveIsAvailable, numericIngredientId]);
-
-  useEffect(() => {
-    setOptimisticAvailability((previous) => {
-      if (previous == null) {
-        return previous;
-      }
-
-      return previous === isAvailable ? null : previous;
-    });
-  }, [isAvailable]);
-
-  useEffect(() => {
-    setOptimisticShopping((previous) => {
-      if (previous == null) {
-        return previous;
-      }
-
-      return previous === isOnShoppingList ? null : previous;
-    });
-  }, [isOnShoppingList]);
+  const effectiveAvailableIngredientIds = availableIngredientIds;
 
   const closeDialog = useCallback(() => {
     setDialogOptions(null);
@@ -513,17 +472,11 @@ export default function IngredientDetailsScreen() {
 
   const handleToggleAvailability = useCallback(() => {
     if (numericIngredientId != null) {
-      setOptimisticAvailability((previous) => {
-        const current = previous ?? isAvailable;
-        return !current;
-      });
-
       startAvailabilityTransition(() => {
         toggleIngredientAvailability(numericIngredientId);
       });
     }
   }, [
-    isAvailable,
     numericIngredientId,
     startAvailabilityTransition,
     toggleIngredientAvailability,
@@ -531,17 +484,11 @@ export default function IngredientDetailsScreen() {
 
   const handleToggleShopping = useCallback(() => {
     if (numericIngredientId != null) {
-      setOptimisticShopping((previous) => {
-        const current = previous ?? isOnShoppingList;
-        return !current;
-      });
-
       startShoppingTransition(() => {
         toggleIngredientShopping(numericIngredientId);
       });
     }
   }, [
-    isOnShoppingList,
     numericIngredientId,
     startShoppingTransition,
     toggleIngredientShopping,
@@ -1083,7 +1030,7 @@ export default function IngredientDetailsScreen() {
                       {t("ingredientDetails.iHaveIt")}
                     </Text>
                     <PresenceCheck
-                      checked={effectiveIsAvailable}
+                      checked={isAvailable}
                       onToggle={handleToggleAvailability}
                       color={Colors.tint}
                     />
@@ -1092,7 +1039,7 @@ export default function IngredientDetailsScreen() {
                     <Text
                       style={[styles.statusControlLabel, { color: Colors.onSurfaceVariant }]}
                     >
-                      {effectiveIsOnShoppingList
+                      {isOnShoppingList
                         ? t("ingredientDetails.removeFromShoppingList")
                         : t("ingredientDetails.addToShoppingList")}
                     </Text>
@@ -1100,7 +1047,7 @@ export default function IngredientDetailsScreen() {
                       onPress={handleToggleShopping}
                       accessibilityRole="button"
                       accessibilityLabel={
-                        effectiveIsOnShoppingList
+                        isOnShoppingList
                           ? t("ingredientDetails.removeIngredientFromShoppingList")
                           : t("ingredientDetails.addIngredientToShoppingList")
                       }
@@ -1109,7 +1056,7 @@ export default function IngredientDetailsScreen() {
                     >
                       <MaterialIcons
                         name={
-                          effectiveIsOnShoppingList
+                          isOnShoppingList
                             ? "shopping-cart"
                             : "add-shopping-cart"
                         }
@@ -1150,7 +1097,7 @@ export default function IngredientDetailsScreen() {
                           />
                         </Pressable>
                       </View>
-                      {!effectiveIsAvailable && canMakeMoreCocktailsCount > 0 ? (
+                      {!isAvailable && canMakeMoreCocktailsCount > 0 ? (
                         <Text
                           style={[
                             styles.amazonAvailabilityHint,
