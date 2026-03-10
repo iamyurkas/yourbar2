@@ -106,6 +106,7 @@ type CocktailFormSnapshot = {
   methodIds: CocktailMethodId[];
   description: string;
   instructions: string;
+  videoInstructions: string;
   imageUri: string | null;
   selectedTagIds: number[];
   ingredients: {
@@ -326,6 +327,7 @@ export default function CreateCocktailScreen() {
   const [isPickingImage, setIsPickingImage] = useState(false);
   const [description, setDescription] = useState("");
   const [instructions, setInstructions] = useState("");
+  const [videoInstructions, setVideoInstructions] = useState("");
   const [selectedTagIds, setSelectedTagIds] = useState<number[]>([]);
   const [ingredientsState, setIngredientsState] = useState<
     EditableIngredient[]
@@ -457,6 +459,7 @@ export default function CreateCocktailScreen() {
       methodIds,
       description,
       instructions,
+      videoInstructions,
       imageUri,
       selectedTagIds: normalizedTags,
       ingredients: ingredientsState.map((item) => ({
@@ -486,6 +489,7 @@ export default function CreateCocktailScreen() {
     ingredientById,
     ingredientsState,
     instructions,
+    videoInstructions,
     methodIds,
     name,
     selectedTagIds,
@@ -690,6 +694,7 @@ export default function CreateCocktailScreen() {
     setMethodIds([]);
     setDescription("");
     setInstructions("");
+    setVideoInstructions("");
     setImageUri(null);
     setSelectedTagIds([]);
     setInitialSnapshot(null);
@@ -738,6 +743,7 @@ export default function CreateCocktailScreen() {
       setMethodIds(nextMethodIds);
       setDescription(baseCocktail.description ?? "");
       setInstructions(baseCocktail.instructions ?? "");
+      setVideoInstructions((baseCocktail as { videoInstructions?: string | null }).videoInstructions ?? "");
       setImageUri(baseCocktail.photoUri ?? null);
       const mappedTags = (baseCocktail.tags ?? [])
         .map((tag) => Number(tag.id ?? -1))
@@ -1316,6 +1322,7 @@ export default function CreateCocktailScreen() {
 
     const descriptionValue = description.trim();
     const instructionsValue = instructions.trim();
+    const videoInstructionsValue = videoInstructions.trim();
     const tags = selectedTagIds
       .map((tagId) => availableCocktailTags.find((tag) => tag.id === tagId))
       .filter((tag): tag is (typeof availableCocktailTags)[number] =>
@@ -1339,6 +1346,7 @@ export default function CreateCocktailScreen() {
         photoUri: initialPhotoUri,
         description: descriptionValue || undefined,
         instructions: instructionsValue || undefined,
+        videoInstructions: videoInstructionsValue || undefined,
         tags,
         ingredients: sanitizedIngredients,
       } satisfies CreateCocktailInput;
@@ -1426,6 +1434,7 @@ export default function CreateCocktailScreen() {
     imageUri,
     ingredientsState,
     instructions,
+    videoInstructions,
     isSaving,
     isEditMode,
     methodIds,
@@ -1985,6 +1994,30 @@ export default function CreateCocktailScreen() {
               ]}
               multiline
               textAlignVertical="top"
+              onFocus={(event) => scrollFieldIntoView(event.nativeEvent.target)}
+            />
+          </View>
+
+          <View style={styles.section}>
+            <Text style={[styles.label, { color: Colors.onSurface }]}>
+              {t("cocktailForm.videoInstructions")}
+            </Text>
+            <TextInput
+              value={videoInstructions}
+              onChangeText={setVideoInstructions}
+              placeholder={t("cocktailForm.videoInstructionsPlaceholder")}
+              placeholderTextColor={`${Colors.onSurfaceVariant}99`}
+              style={[
+                styles.input,
+                {
+                  borderColor: Colors.outlineVariant,
+                  color: Colors.text,
+                  backgroundColor: Colors.surface,
+                },
+              ]}
+              autoCapitalize="none"
+              autoCorrect={false}
+              keyboardType="url"
               onFocus={(event) => scrollFieldIntoView(event.nativeEvent.target)}
             />
           </View>

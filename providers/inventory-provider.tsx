@@ -1020,6 +1020,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
 
         const description = input.description?.trim() || undefined;
         const instructions = input.instructions?.trim() || undefined;
+        const videoInstructions = input.videoInstructions?.trim() || undefined;
         const synonyms = normalizeSynonyms(input.synonyms);
         const photoUri = input.photoUri?.trim() || undefined;
         const glassId = input.glassId?.trim() || undefined;
@@ -1046,6 +1047,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           name: trimmedName,
           description,
           instructions,
+          videoInstructions,
           synonyms,
           photoUri,
           glassId,
@@ -1080,11 +1082,13 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         const nextName = input.name?.trim() || created.name || '';
         const nextDescription = input.description?.trim();
         const nextInstructions = input.instructions?.trim();
+        const nextVideoInstructions = input.videoInstructions?.trim();
         const nextSynonyms = normalizeSynonyms(input.synonyms);
         const patch: CocktailTranslationOverride = {
           name: nextName,
           ...(nextDescription ? { description: nextDescription } : {}),
           ...(nextInstructions ? { instructions: nextInstructions } : {}),
+          ...(nextVideoInstructions ? { videoInstructions: nextVideoInstructions } : {}),
           ...(((nextSynonyms ?? []).length > 0) ? { synonyms: nextSynonyms } : {}),
         };
         setTranslationOverrides((prev) => ({
@@ -1487,6 +1491,16 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
 
     const incomingFeedback = parseCocktailFeedbackImport(baseFile?.data);
 
+    const mergeCocktailWithFallback = (current: Cocktail, incoming: Cocktail): Cocktail => {
+      const currentVideoInstructions = current.videoInstructions?.trim();
+      const incomingVideoInstructions = incoming.videoInstructions?.trim();
+
+      return {
+        ...incoming,
+        ...(incomingVideoInstructions ? {} : (currentVideoInstructions ? { videoInstructions: currentVideoInstructions } : {})),
+      };
+    };
+
     const mergeById = <TItem extends { id?: number | null; searchNameNormalized: string }>(
       currentItems: readonly TItem[],
       incomingItems: readonly TItem[],
@@ -1547,10 +1561,28 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           return incomingState;
         }
 
+        const currentCocktailsById = new Map<number, Cocktail>();
+        prev.cocktails.forEach((cocktail) => {
+          const id = Number(cocktail.id ?? -1);
+          if (Number.isFinite(id) && id >= 0) {
+            currentCocktailsById.set(Math.trunc(id), cocktail);
+          }
+        });
+
+        const cocktailsForMerge = incomingState.cocktails.map((item) => {
+          const id = Number(item.id ?? -1);
+          if (!Number.isFinite(id) || id < 0) {
+            return item;
+          }
+
+          const current = currentCocktailsById.get(Math.trunc(id));
+          return current ? mergeCocktailWithFallback(current, item) : item;
+        });
+
         return {
           ...prev,
           imported: true,
-          cocktails: mergeById(prev.cocktails, incomingState.cocktails),
+          cocktails: mergeById(prev.cocktails, cocktailsForMerge),
           ingredients: mergeById(prev.ingredients, incomingState.ingredients),
         } satisfies InventoryState;
       });
@@ -1562,16 +1594,29 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         translationFiles.forEach((file) => {
           const locale = file.locale;
           const prevLocale = next[locale] ?? {};
+
+          const mergedCocktails = { ...(prevLocale.cocktails ?? {}) };
+          Object.entries(file.data.cocktails ?? {}).forEach(([id, value]) => {
+            const previousValue = mergedCocktails[id] ?? {};
+            mergedCocktails[id] = {
+              ...previousValue,
+              ...value,
+            };
+          });
+
+          const mergedIngredients = { ...(prevLocale.ingredients ?? {}) };
+          Object.entries(file.data.ingredients ?? {}).forEach(([id, value]) => {
+            const previousValue = mergedIngredients[id] ?? {};
+            mergedIngredients[id] = {
+              ...previousValue,
+              ...value,
+            };
+          });
+
           next[locale] = {
             ...prevLocale,
-            cocktails: {
-              ...(prevLocale.cocktails ?? {}),
-              ...(file.data.cocktails ?? {}),
-            },
-            ingredients: {
-              ...(prevLocale.ingredients ?? {}),
-              ...(file.data.ingredients ?? {}),
-            },
+            cocktails: mergedCocktails,
+            ingredients: mergedIngredients,
           };
         });
         return next;
@@ -1929,6 +1974,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       const existing = prev.cocktails[existingIndex];
       const description = input.description?.trim() || undefined;
       const instructions = input.instructions?.trim() || undefined;
+      const videoInstructions = input.videoInstructions?.trim() || undefined;
       const synonyms =
         input.synonyms !== undefined
           ? normalizeSynonyms(input.synonyms)
@@ -1957,9 +2003,10 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         ...existing,
         id: existing.id,
         name: existing.name,
-        description: existing.description,
-        instructions: existing.instructions,
-        synonyms: existing.synonyms,
+        description,
+        instructions,
+        videoInstructions,
+        synonyms,
         photoUri,
         glassId,
         methodIds: methodIds && methodIds.length > 0 ? methodIds : undefined,
@@ -1996,26 +2043,38 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       const nextName = input.name?.trim();
       const nextDescription = input.description?.trim();
       const nextInstructions = input.instructions?.trim();
+      const hasVideoInstructionsInInput = Object.prototype.hasOwnProperty.call(input, 'videoInstructions');
+      const nextVideoInstructions = input.videoInstructions?.trim();
       const nextSynonyms = normalizeSynonyms(input.synonyms);
       const patch: CocktailTranslationOverride = {
         ...(nextName ? { name: nextName } : {}),
         ...(nextDescription ? { description: nextDescription } : {}),
         ...(nextInstructions ? { instructions: nextInstructions } : {}),
+        ...(nextVideoInstructions ? { videoInstructions: nextVideoInstructions } : {}),
         ...(((nextSynonyms ?? []).length > 0) ? { synonyms: nextSynonyms } : {}),
       };
-      setTranslationOverrides((prev) => ({
-        ...prev,
-        [appLocale]: {
-          ...(prev[appLocale] ?? {}),
-          cocktails: {
-            ...((prev[appLocale]?.cocktails as Record<string, any> | undefined) ?? {}),
-            [key]: {
-              ...(prev[appLocale]?.cocktails?.[key] ?? {}),
-              ...patch,
+      setTranslationOverrides((prev) => {
+        const currentOverride = prev[appLocale]?.cocktails?.[key] ?? {};
+        const merged = {
+          ...currentOverride,
+          ...patch,
+        } as CocktailTranslationOverride;
+
+        if (hasVideoInstructionsInInput && !nextVideoInstructions) {
+          delete merged.videoInstructions;
+        }
+
+        return {
+          ...prev,
+          [appLocale]: {
+            ...(prev[appLocale] ?? {}),
+            cocktails: {
+              ...((prev[appLocale]?.cocktails as Record<string, any> | undefined) ?? {}),
+              [key]: merged,
             },
           },
-        },
-      }));
+        };
+      });
     }
 
     return updated;

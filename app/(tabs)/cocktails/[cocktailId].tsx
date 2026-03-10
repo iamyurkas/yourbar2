@@ -13,6 +13,7 @@ import {
 } from "react";
 import {
   AppState,
+  Linking,
   Platform,
   Pressable,
   ScrollView,
@@ -72,6 +73,47 @@ type IngredientDisplayMode = "metric" | "imperial" | "parts";
 const MAX_RATING = 5;
 const MIN_SERVINGS = 0.5;
 const SERVINGS_STEP = 0.5;
+
+type VideoService = "youtube" | "instagram" | "tiktok" | "generic";
+
+function resolveVideoService(link?: string | null): VideoService | null {
+  const value = link?.trim();
+  if (!value) {
+    return null;
+  }
+
+  try {
+    const withProtocol = /^[a-zA-Z][a-zA-Z\d+.-]*:\/\//.test(value) ? value : `https://${value}`;
+    const { hostname } = new URL(withProtocol);
+    const domain = hostname.toLowerCase().replace(/^www\./, "");
+
+    if (domain.includes("youtu.be") || domain.includes("youtube.com")) {
+      return "youtube";
+    }
+    if (domain.includes("instagram.com")) {
+      return "instagram";
+    }
+    if (domain.includes("tiktok.com")) {
+      return "tiktok";
+    }
+    return "generic";
+  } catch {
+    return "generic";
+  }
+}
+
+function resolveVideoServiceIcon(service: VideoService): "youtube" | "instagram" | "music-note" | "video-outline" {
+  switch (service) {
+    case "youtube":
+      return "youtube";
+    case "instagram":
+      return "instagram";
+    case "tiktok":
+      return "music-note";
+    default:
+      return "video-outline";
+  }
+}
 
 function resolveProcessBatchMultiplier(servings: number): number {
   const normalizedServings = Math.max(1, Math.ceil(servings));
@@ -771,6 +813,24 @@ export default function CocktailDetailsScreen() {
       .filter(Boolean);
   }, [cocktail?.instructions]);
 
+  const videoInstructionUrl = cocktail?.videoInstructions?.trim() || "";
+  const videoService = useMemo(() => resolveVideoService(videoInstructionUrl), [videoInstructionUrl]);
+
+  const handleOpenVideoInstructions = useCallback(async () => {
+    if (!videoInstructionUrl) {
+      return;
+    }
+
+    const url = /^[a-zA-Z][a-zA-Z\d+.-]*:\/\//.test(videoInstructionUrl)
+      ? videoInstructionUrl
+      : `https://${videoInstructionUrl}`;
+
+    const supported = await Linking.canOpenURL(url);
+    if (supported) {
+      await Linking.openURL(url);
+    }
+  }, [videoInstructionUrl]);
+
   const descriptionParagraphs = useMemo(() => {
     const description = cocktail?.description?.trim();
     if (!description) {
@@ -1133,18 +1193,36 @@ export default function CocktailDetailsScreen() {
 
               {photoSource && glassSource && glassLabel ? (
                 <View style={styles.glassInfo}>
-                  <View style={styles.glassImageWrapper}>
-                    <AppImage
-                      source={glassSource}
-                      style={styles.glassImage}
-                      contentFit="contain"
-                    />
+                  <View style={styles.glassInfoLeft}>
+                    <View style={styles.glassImageWrapper}>
+                      <AppImage
+                        source={glassSource}
+                        style={styles.glassImage}
+                        contentFit="contain"
+                      />
+                    </View>
+                    <Text
+                      style={[styles.glassLabel, { color: Colors.onSurface }]}
+                    >
+                      {glassLabel}
+                    </Text>
                   </View>
-                  <Text
-                    style={[styles.glassLabel, { color: Colors.onSurface }]}
-                  >
-                    {glassLabel}
-                  </Text>
+
+                  {videoService ? (
+                    <Pressable
+                      onPress={handleOpenVideoInstructions}
+                      accessibilityRole="button"
+                      accessibilityLabel={t("cocktailDetails.openVideoInstructions")}
+                      style={styles.videoInstructionButton}
+                      hitSlop={8}
+                    >
+                      <MaterialCommunityIcons
+                        name={resolveVideoServiceIcon(videoService)}
+                        size={24}
+                        color={Colors.tint}
+                      />
+                    </Pressable>
+                  ) : null}
                 </View>
               ) : null}
 
@@ -1796,6 +1874,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     gap: 8,
   },
+  videoInstructionButton: {
+    marginLeft: "auto",
+    alignItems: "center",
+    justifyContent: "center",
+  },
   ratingStar: {
     width: 32,
     height: 32,
@@ -1841,8 +1924,12 @@ const styles = StyleSheet.create({
   glassInfo: {
     flexDirection: "row",
     alignItems: "center",
+    alignSelf: "stretch",
+  },
+  glassInfoLeft: {
+    flexDirection: "row",
+    alignItems: "center",
     gap: 12,
-    alignSelf: "flex-start",
   },
   glassImageWrapper: {
     width: 48,
