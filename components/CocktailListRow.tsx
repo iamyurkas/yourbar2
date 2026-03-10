@@ -57,6 +57,47 @@ const areCocktailRowPropsEqual = (
 
 const MAX_RATING = 5;
 const METHOD_ICON_SIZE = 16;
+const COMMENT_ICON_SIZE = 8;
+
+type VideoService = 'youtube' | 'instagram' | 'tiktok' | 'generic';
+
+function resolveVideoService(link?: string | null): VideoService | null {
+  const normalized = link?.trim();
+  if (!normalized) {
+    return null;
+  }
+
+  const value = normalized.toLowerCase();
+  if (value.includes('youtube.com') || value.includes('youtu.be')) {
+    return 'youtube';
+  }
+
+  if (value.includes('instagram.com')) {
+    return 'instagram';
+  }
+
+  if (value.includes('tiktok.com') || value.includes('vm.tiktok.com')) {
+    return 'tiktok';
+  }
+
+  return 'generic';
+}
+
+function resolveVideoServiceIcon(service: VideoService): 'youtube' | 'instagram' | 'music-note' | 'video-outline' {
+  if (service === 'youtube') {
+    return 'youtube';
+  }
+
+  if (service === 'instagram') {
+    return 'instagram';
+  }
+
+  if (service === 'tiktok') {
+    return 'music-note';
+  }
+
+  return 'video-outline';
+}
 
 const CocktailListRowComponent = ({
   cocktail,
@@ -92,7 +133,7 @@ const CocktailListRowComponent = ({
   const normalizedRating = Math.max(0, Math.min(MAX_RATING, Number(ratingValue) || 0));
 
   const ratingContent = useMemo(() => {
-    if (normalizedRating <= 0 && !hasComment) {
+    if (normalizedRating <= 0) {
       return null;
     }
 
@@ -116,23 +157,12 @@ const CocktailListRowComponent = ({
             ))}
           </View>
         ) : null}
-        {hasComment ? (
-          <View style={pillStyle}>
-            <MaterialCommunityIcons
-              name="comment"
-              size={8}
-              color={Colors.onSurfaceVariant}
-            />
-          </View>
-        ) : null}
       </View>
     );
   }, [
     Colors.background,
     Colors.outline,
-    Colors.onSurfaceVariant,
     Colors.tint,
-    hasComment,
     normalizedRating,
   ]);
 
@@ -140,6 +170,32 @@ const CocktailListRowComponent = ({
     () => (cocktail.tags ?? []).map((tag) => tag?.color).filter(Boolean) as string[],
     [cocktail.tags],
   );
+
+
+  const videoService = useMemo(
+    () => resolveVideoService(cocktail.videoInstructions),
+    [cocktail.videoInstructions],
+  );
+
+  const metaTopLeadingContent = useMemo(() => {
+    if (!hasComment) {
+      return null;
+    }
+
+    return (
+      <View
+        style={[
+          styles.metaPill,
+          { backgroundColor: Colors.background, borderColor: Colors.outline },
+        ]}>
+        <MaterialCommunityIcons
+          name="comment"
+          size={COMMENT_ICON_SIZE}
+          color={Colors.onSurfaceVariant}
+        />
+      </View>
+    );
+  }, [Colors.background, Colors.onSurfaceVariant, Colors.outline, hasComment]);
 
   const methodIds = useMemo<CocktailMethodId[]>(() => {
     const legacyMethodId = (cocktail as { methodId?: CocktailMethodId | null }).methodId ?? null;
@@ -161,12 +217,19 @@ const CocktailListRowComponent = ({
     const icons = methodIds
       .map((id) => ({ id, icon: METHOD_ICON_MAP[id] }))
       .filter((item) => Boolean(item.icon));
-    if (!icons.length) {
+    if (!icons.length && !videoService) {
       return null;
     }
 
     return (
       <View style={styles.methodIconRow}>
+        {videoService ? (
+          <MaterialCommunityIcons
+            name={resolveVideoServiceIcon(videoService)}
+            size={METHOD_ICON_SIZE}
+            color={Colors.onSurfaceVariant}
+          />
+        ) : null}
         {icons.map(({ id, icon }, index) => {
           const isMuddle = id === 'muddle';
           if (icon.type === 'asset') {
@@ -195,7 +258,7 @@ const CocktailListRowComponent = ({
         })}
       </View>
     );
-  }, [methodIds, Colors.onSurfaceVariant, showMethodIcons]);
+  }, [methodIds, Colors.onSurfaceVariant, showMethodIcons, videoService]);
 
   const { hasBrandedIngredient, hasStyledIngredient } = useMemo(() => {
     const recipe = cocktail.ingredients ?? [];
@@ -274,6 +337,7 @@ const CocktailListRowComponent = ({
       highlightColor={effectiveHighlightColor}
       tagColors={tagColors}
       control={ratingContent}
+      metaTopLeading={metaTopLeadingContent}
       thumbnail={thumbnail}
       brandIndicatorColor={brandIndicatorColor}
       brandIndicatorBottomColor={brandIndicatorBottomColor}

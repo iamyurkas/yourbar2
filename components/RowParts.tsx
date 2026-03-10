@@ -119,6 +119,7 @@ type ListRowProps = {
   highlightColor?: string;
   tagColor?: string;
   tagColors?: string[];
+  metaTopLeading?: ReactNode;
   control?: ReactNode;
   metaFooter?: ReactNode;
   thumbnail?: ReactNode;
@@ -142,6 +143,7 @@ export function ListRow({
   highlightColor,
   tagColor,
   tagColors,
+  metaTopLeading,
   control,
   metaFooter,
   thumbnail,
@@ -233,6 +235,7 @@ export function ListRow({
       <View style={styles.metaColumn}>
         <View style={styles.metaContent}>
           <View style={styles.metaTop}>
+            {metaTopLeading ? <View style={styles.metaTopLeading}>{metaTopLeading}</View> : null}
             {resolvedTagColors.length ? (
               <View style={styles.tagDots}>
                 {resolvedTagColors.map((color, index) => (
@@ -309,7 +312,13 @@ const styles = StyleSheet.create({
   },
   metaTop: {
     height: 16,
+    flexDirection: 'row',
     alignItems: 'flex-end',
+    justifyContent: 'flex-end',
+    gap: 4,
+  },
+  metaTopLeading: {
+    alignItems: 'center',
     justifyContent: 'center',
   },
   tagDots: {
