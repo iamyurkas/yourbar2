@@ -1119,44 +1119,6 @@ export default function CocktailDetailsScreen() {
                 </View>
               </View>
 
-              <View
-                style={[
-                  styles.displayModeSwitcher,
-                  {
-                    borderColor: Colors.primary,
-                    backgroundColor: Colors.surfaceBright,
-                  },
-                ]}
-              >
-                {(["imperial", "metric", "parts"] as const).map((mode) => {
-                  const isActive = ingredientDisplayMode === mode;
-                  return (
-                    <Pressable
-                      key={mode}
-                      onPress={() => handleSelectDisplayMode(mode)}
-                      style={[
-                        styles.displayModeOption,
-                        isActive
-                          ? { backgroundColor: Colors.primary }
-                          : undefined,
-                      ]}
-                      accessibilityRole="button"
-                      accessibilityState={{ selected: isActive }}
-                      accessibilityLabel={t(`cocktailDetails.displayMode.${mode}`)}
-                    >
-                      <Text
-                        style={[
-                          styles.displayModeOptionLabel,
-                          { color: isActive ? Colors.onPrimary : Colors.primary },
-                        ]}
-                      >
-                        {t(`cocktailDetails.displayMode.${mode}`)}
-                      </Text>
-                    </Pressable>
-                  );
-                })}
-              </View>
-
               {photoSource && glassSource && glassLabel ? (
                 <View style={styles.glassInfo}>
                   <View style={styles.glassInfoLeft}>
@@ -1450,11 +1412,50 @@ export default function CocktailDetailsScreen() {
 
             {sortedIngredients.length ? (
               <View style={styles.textBlock}>
-                <Text
-                  style={[styles.sectionTitle, { color: Colors.onSurface }]}
-                >
-                  {t("cocktailDetails.ingredients")}
-                </Text>
+                <View style={styles.ingredientsHeaderRow}>
+                  <Text
+                    style={[styles.sectionTitle, { color: Colors.onSurface }]}
+                  >
+                    {t("cocktailDetails.ingredients")}
+                  </Text>
+                  <View
+                    style={[
+                      styles.displayModeSwitcher,
+                      {
+                        borderColor: Colors.primary,
+                        backgroundColor: Colors.surfaceBright,
+                      },
+                    ]}
+                  >
+                    {(["imperial", "metric", "parts"] as const).map((mode) => {
+                      const isActive = ingredientDisplayMode === mode;
+                      return (
+                        <Pressable
+                          key={mode}
+                          onPress={() => handleSelectDisplayMode(mode)}
+                          style={[
+                            styles.displayModeOption,
+                            isActive
+                              ? { backgroundColor: Colors.primary }
+                              : undefined,
+                          ]}
+                          accessibilityRole="button"
+                          accessibilityState={{ selected: isActive }}
+                          accessibilityLabel={t(`cocktailDetails.displayMode.${mode}`)}
+                        >
+                          <Text
+                            style={[
+                              styles.displayModeOptionLabel,
+                              { color: isActive ? Colors.onPrimary : Colors.primary },
+                            ]}
+                          >
+                            {t(`cocktailDetails.displayMode.${mode}`)}
+                          </Text>
+                        </Pressable>
+                      );
+                    })}
+                  </View>
+                </View>
                 <View style={styles.servingsControl}>
                   <Text
                     style={[styles.servingsLabel, { color: Colors.onSurfaceVariant }]}
@@ -1914,19 +1915,18 @@ const styles = StyleSheet.create({
     marginTop: 12,
   },
   displayModeSwitcher: {
-    borderRadius: 14,
+    borderRadius: 12,
     borderWidth: 1,
     flexDirection: "row",
-    alignSelf: "center",
+    alignSelf: "flex-end",
     overflow: "hidden",
-    marginBottom: 16,
   },
   displayModeOption: {
-    paddingHorizontal: 12,
-    paddingVertical: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
   },
   displayModeOptionLabel: {
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: "600",
     textAlign: "center",
   },
@@ -2004,6 +2004,12 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: "600",
+  },
+  ingredientsHeaderRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: 12,
   },
   instructionsTitle: {
     fontSize: 16,
