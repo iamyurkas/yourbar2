@@ -681,6 +681,7 @@ export default function CocktailDetailsScreen() {
 
   const [isCommentFieldVisible, setIsCommentFieldVisible] = useState(false);
   const [commentDraft, setCommentDraft] = useState("");
+  const hasComment = commentDraft.trim().length > 0 || userComment.trim().length > 0;
 
   useEffect(() => {
     setOptimisticRating((previous) => {
@@ -1065,7 +1066,7 @@ export default function CocktailDetailsScreen() {
                   hitSlop={8}
                 >
                   <MaterialCommunityIcons
-                    name={isCommentFieldVisible ? "comment-edit" : "comment-plus-outline"}
+                    name={isCommentFieldVisible ? "comment-edit" : hasComment ? "comment" : "comment-plus-outline"}
                     size={28}
                     color={Colors.tint}
                   />
