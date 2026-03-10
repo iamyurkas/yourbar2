@@ -1,7 +1,7 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import { useScrollToTop } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
-import { memo, useCallback, useEffect, useMemo, useRef, useState, useTransition } from 'react';
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   FlatList,
   Pressable,
@@ -273,7 +273,6 @@ export default function IngredientsScreen() {
   const [optimisticAvailability, setOptimisticAvailability] = useState<Map<number, boolean>>(
     () => new Map(),
   );
-  const [, startAvailabilityTransition] = useTransition();
   const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
 
   useScrollToTop(listRef);
@@ -713,12 +712,10 @@ export default function IngredientsScreen() {
           return next;
         });
 
-        startAvailabilityTransition(() => {
-          toggleIngredientAvailability(id);
-        });
+        toggleIngredientAvailability(id);
       }
     },
-    [availableIngredientIds, startAvailabilityTransition, toggleIngredientAvailability],
+    [availableIngredientIds, toggleIngredientAvailability],
   );
 
   const handleShoppingToggle = useCallback(
