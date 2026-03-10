@@ -183,11 +183,7 @@ const CocktailListRowComponent = ({
     }
 
     return (
-      <View
-        style={[
-          styles.metaPill,
-          { backgroundColor: Colors.background, borderColor: Colors.outline },
-        ]}>
+      <View style={styles.commentTopIndicator}>
         <MaterialCommunityIcons
           name="comment"
           size={COMMENT_ICON_SIZE}
@@ -195,7 +191,7 @@ const CocktailListRowComponent = ({
         />
       </View>
     );
-  }, [Colors.background, Colors.onSurfaceVariant, Colors.outline, hasComment]);
+  }, [Colors.onSurfaceVariant, hasComment]);
 
   const methodIds = useMemo<CocktailMethodId[]>(() => {
     const legacyMethodId = (cocktail as { methodId?: CocktailMethodId | null }).methodId ?? null;
@@ -368,6 +364,15 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
     paddingHorizontal: 6,
     borderWidth: StyleSheet.hairlineWidth,
+  },
+
+  commentTopIndicator: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    minWidth: 18,
+    height: 12,
+    paddingHorizontal: 4,
   },
   methodIconRow: {
     flexDirection: 'row',

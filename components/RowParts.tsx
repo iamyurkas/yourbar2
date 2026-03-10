@@ -313,7 +313,7 @@ const styles = StyleSheet.create({
   metaTop: {
     height: 16,
     flexDirection: 'row',
-    alignItems: 'flex-end',
+    alignItems: 'center',
     justifyContent: 'flex-end',
     gap: 4,
   },
@@ -326,6 +326,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-end',
     gap: 4,
+    transform: [{ translateY: -1 }],
   },
   metaMiddle: {
     flex: 1,
