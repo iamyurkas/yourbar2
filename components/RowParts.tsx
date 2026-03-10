@@ -120,6 +120,7 @@ type ListRowProps = {
   tagColor?: string;
   tagColors?: string[];
   control?: ReactNode;
+  metaTopLeading?: ReactNode;
   metaFooter?: ReactNode;
   thumbnail?: ReactNode;
   accessibilityRole?: 'button' | 'checkbox';
@@ -143,6 +144,7 @@ export function ListRow({
   tagColor,
   tagColors,
   control,
+  metaTopLeading,
   metaFooter,
   thumbnail,
   accessibilityRole,
@@ -233,11 +235,16 @@ export function ListRow({
       <View style={styles.metaColumn}>
         <View style={styles.metaContent}>
           <View style={styles.metaTop}>
-            {resolvedTagColors.length ? (
-              <View style={styles.tagDots}>
-                {resolvedTagColors.map((color, index) => (
-                  <TagDot key={`${color}-${index}`} color={color} />
-                ))}
+            {metaTopLeading || resolvedTagColors.length ? (
+              <View style={styles.metaTopRow}>
+                {metaTopLeading}
+                {resolvedTagColors.length ? (
+                  <View style={styles.tagDots}>
+                    {resolvedTagColors.map((color, index) => (
+                      <TagDot key={`${color}-${index}`} color={color} />
+                    ))}
+                  </View>
+                ) : null}
               </View>
             ) : null}
           </View>
@@ -313,6 +320,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   tagDots: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    gap: 4,
+  },
+  metaTopRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-end',

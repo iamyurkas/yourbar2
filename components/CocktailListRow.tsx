@@ -57,6 +57,48 @@ const areCocktailRowPropsEqual = (
 
 const MAX_RATING = 5;
 const METHOD_ICON_SIZE = 16;
+const TAG_DOT_SIZE = 8;
+
+type VideoService = 'youtube' | 'instagram' | 'tiktok' | 'generic';
+
+function resolveVideoService(link?: string | null): VideoService | null {
+  const value = link?.trim();
+  if (!value) {
+    return null;
+  }
+
+  try {
+    const withProtocol = /^[a-zA-Z][a-zA-Z\d+.-]*:\/\//.test(value) ? value : `https://${value}`;
+    const { hostname } = new URL(withProtocol);
+    const domain = hostname.toLowerCase().replace(/^www\./, '');
+
+    if (domain.includes('youtu.be') || domain.includes('youtube.com')) {
+      return 'youtube';
+    }
+    if (domain.includes('instagram.com')) {
+      return 'instagram';
+    }
+    if (domain.includes('tiktok.com')) {
+      return 'tiktok';
+    }
+    return 'generic';
+  } catch {
+    return 'generic';
+  }
+}
+
+function resolveVideoServiceIcon(service: VideoService): 'youtube' | 'instagram' | 'music-note' | 'video-outline' {
+  switch (service) {
+    case 'youtube':
+      return 'youtube';
+    case 'instagram':
+      return 'instagram';
+    case 'tiktok':
+      return 'music-note';
+    default:
+      return 'video-outline';
+  }
+}
 
 const CocktailListRowComponent = ({
   cocktail,
@@ -92,7 +134,7 @@ const CocktailListRowComponent = ({
   const normalizedRating = Math.max(0, Math.min(MAX_RATING, Number(ratingValue) || 0));
 
   const ratingContent = useMemo(() => {
-    if (normalizedRating <= 0 && !hasComment) {
+    if (normalizedRating <= 0) {
       return null;
     }
 
@@ -116,23 +158,12 @@ const CocktailListRowComponent = ({
             ))}
           </View>
         ) : null}
-        {hasComment ? (
-          <View style={pillStyle}>
-            <MaterialCommunityIcons
-              name="comment"
-              size={8}
-              color={Colors.onSurfaceVariant}
-            />
-          </View>
-        ) : null}
       </View>
     );
   }, [
     Colors.background,
     Colors.outline,
-    Colors.onSurfaceVariant,
     Colors.tint,
-    hasComment,
     normalizedRating,
   ]);
 
@@ -153,6 +184,25 @@ const CocktailListRowComponent = ({
     return legacyMethodId && isMethodId(legacyMethodId) ? [legacyMethodId] : [];
   }, [cocktail]);
 
+  const videoService = useMemo(
+    () => resolveVideoService(cocktail.video),
+    [cocktail.video],
+  );
+
+  const metaTopLeading = useMemo(() => {
+    if (!hasComment) {
+      return null;
+    }
+
+    return (
+      <MaterialCommunityIcons
+        name="comment"
+        size={TAG_DOT_SIZE}
+        color={Colors.onSurfaceVariant}
+      />
+    );
+  }, [Colors.onSurfaceVariant, hasComment]);
+
   const methodIconContent = useMemo(() => {
     if (!showMethodIcons) {
       return null;
@@ -161,12 +211,19 @@ const CocktailListRowComponent = ({
     const icons = methodIds
       .map((id) => ({ id, icon: METHOD_ICON_MAP[id] }))
       .filter((item) => Boolean(item.icon));
-    if (!icons.length) {
+    if (!icons.length && !videoService) {
       return null;
     }
 
     return (
       <View style={styles.methodIconRow}>
+        {videoService ? (
+          <MaterialCommunityIcons
+            name={resolveVideoServiceIcon(videoService)}
+            size={METHOD_ICON_SIZE}
+            color={Colors.onSurfaceVariant}
+          />
+        ) : null}
         {icons.map(({ id, icon }, index) => {
           const isMuddle = id === 'muddle';
           if (icon.type === 'asset') {
@@ -195,7 +252,7 @@ const CocktailListRowComponent = ({
         })}
       </View>
     );
-  }, [methodIds, Colors.onSurfaceVariant, showMethodIcons]);
+  }, [methodIds, Colors.onSurfaceVariant, showMethodIcons, videoService]);
 
   const { hasBrandedIngredient, hasStyledIngredient } = useMemo(() => {
     const recipe = cocktail.ingredients ?? [];
@@ -274,6 +331,7 @@ const CocktailListRowComponent = ({
       highlightColor={effectiveHighlightColor}
       tagColors={tagColors}
       control={ratingContent}
+      metaTopLeading={metaTopLeading}
       thumbnail={thumbnail}
       brandIndicatorColor={brandIndicatorColor}
       brandIndicatorBottomColor={brandIndicatorBottomColor}
