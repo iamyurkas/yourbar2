@@ -1089,22 +1089,6 @@ export default function CocktailDetailsScreen() {
               </View>
 
               <View style={styles.ratingRow}>
-                {videoService ? (
-                  <Pressable
-                    onPress={handleOpenVideoInstructions}
-                    accessibilityRole="button"
-                    accessibilityLabel={t("cocktailDetails.openVideoInstructions")}
-                    style={styles.videoInstructionButton}
-                    hitSlop={8}
-                  >
-                    <MaterialCommunityIcons
-                      name={resolveVideoServiceIcon(videoService)}
-                      size={26}
-                      color={Colors.tint}
-                    />
-                  </Pressable>
-                ) : null}
-
                 <View style={styles.ratingStarsRow}>
                   {Array.from({ length: MAX_RATING }).map((_, index) => {
                     const starValue = index + 1;
@@ -1209,18 +1193,36 @@ export default function CocktailDetailsScreen() {
 
               {photoSource && glassSource && glassLabel ? (
                 <View style={styles.glassInfo}>
-                  <View style={styles.glassImageWrapper}>
-                    <AppImage
-                      source={glassSource}
-                      style={styles.glassImage}
-                      contentFit="contain"
-                    />
+                  <View style={styles.glassInfoLeft}>
+                    <View style={styles.glassImageWrapper}>
+                      <AppImage
+                        source={glassSource}
+                        style={styles.glassImage}
+                        contentFit="contain"
+                      />
+                    </View>
+                    <Text
+                      style={[styles.glassLabel, { color: Colors.onSurface }]}
+                    >
+                      {glassLabel}
+                    </Text>
                   </View>
-                  <Text
-                    style={[styles.glassLabel, { color: Colors.onSurface }]}
-                  >
-                    {glassLabel}
-                  </Text>
+
+                  {videoService ? (
+                    <Pressable
+                      onPress={handleOpenVideoInstructions}
+                      accessibilityRole="button"
+                      accessibilityLabel={t("cocktailDetails.openVideoInstructions")}
+                      style={styles.videoInstructionButton}
+                      hitSlop={8}
+                    >
+                      <MaterialCommunityIcons
+                        name={resolveVideoServiceIcon(videoService)}
+                        size={24}
+                        color={Colors.tint}
+                      />
+                    </Pressable>
+                  ) : null}
                 </View>
               ) : null}
 
@@ -1862,7 +1864,6 @@ const styles = StyleSheet.create({
   },
   ratingRow: {
     alignSelf: "stretch",
-    flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     minHeight: 32,
@@ -1874,7 +1875,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   videoInstructionButton: {
-    marginRight: 8,
+    marginLeft: "auto",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -1923,8 +1924,12 @@ const styles = StyleSheet.create({
   glassInfo: {
     flexDirection: "row",
     alignItems: "center",
+    alignSelf: "stretch",
+  },
+  glassInfoLeft: {
+    flexDirection: "row",
+    alignItems: "center",
     gap: 12,
-    alignSelf: "flex-start",
   },
   glassImageWrapper: {
     width: 48,

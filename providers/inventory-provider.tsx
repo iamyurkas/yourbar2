@@ -2043,6 +2043,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       const nextName = input.name?.trim();
       const nextDescription = input.description?.trim();
       const nextInstructions = input.instructions?.trim();
+      const hasVideoInstructionsInInput = Object.prototype.hasOwnProperty.call(input, 'videoInstructions');
       const nextVideoInstructions = input.videoInstructions?.trim();
       const nextSynonyms = normalizeSynonyms(input.synonyms);
       const patch: CocktailTranslationOverride = {
@@ -2052,19 +2053,28 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         ...(nextVideoInstructions ? { videoInstructions: nextVideoInstructions } : {}),
         ...(((nextSynonyms ?? []).length > 0) ? { synonyms: nextSynonyms } : {}),
       };
-      setTranslationOverrides((prev) => ({
-        ...prev,
-        [appLocale]: {
-          ...(prev[appLocale] ?? {}),
-          cocktails: {
-            ...((prev[appLocale]?.cocktails as Record<string, any> | undefined) ?? {}),
-            [key]: {
-              ...(prev[appLocale]?.cocktails?.[key] ?? {}),
-              ...patch,
+      setTranslationOverrides((prev) => {
+        const currentOverride = prev[appLocale]?.cocktails?.[key] ?? {};
+        const merged = {
+          ...currentOverride,
+          ...patch,
+        } as CocktailTranslationOverride;
+
+        if (hasVideoInstructionsInInput && !nextVideoInstructions) {
+          delete merged.videoInstructions;
+        }
+
+        return {
+          ...prev,
+          [appLocale]: {
+            ...(prev[appLocale] ?? {}),
+            cocktails: {
+              ...((prev[appLocale]?.cocktails as Record<string, any> | undefined) ?? {}),
+              [key]: merged,
             },
           },
-        },
-      }));
+        };
+      });
     }
 
     return updated;
