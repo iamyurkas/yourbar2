@@ -58,7 +58,7 @@ function countRequiredIngredients(cocktail: Cocktail, ignoreGarnish: boolean): n
 
 export default function CocktailsScreen() {
   const { onTabChangeRequest } = useOnboardingAnchors();
-  const { cocktails, availableIngredientIds, ingredients, shoppingIngredientIds, getCocktailRating, loading } =
+  const { cocktails, availableIngredientIds, ingredients, shoppingIngredientIds, getCocktailRating, getCocktailComment, loading } =
     useInventoryData();
   const { ignoreGarnish, allowAllSubstitutes, ratingFilterThreshold, showTabCounters } = useInventorySettings();
   const { toggleIngredientShopping } = useInventoryActions();
@@ -797,6 +797,7 @@ export default function CocktailsScreen() {
           recipeNamesCount={availability.recipeNames.length}
           ingredientLine={availability.ingredientLine}
           ratingValue={getCocktailRating(item)}
+          hasComment={Boolean(getCocktailComment(item).trim())}
           hasBrandFallback={availability.hasBrandFallback}
           hasStyleFallback={availability.hasStyleFallback}
         />
@@ -804,6 +805,7 @@ export default function CocktailsScreen() {
     },
     [
       getAvailabilitySummary,
+      getCocktailComment,
       getCocktailRating,
       handleSelectCocktail,
       ingredients,
@@ -909,6 +911,7 @@ export default function CocktailsScreen() {
           recipeNamesCount={availability.recipeNames.length}
           ingredientLine={availability.ingredientLine}
           ratingValue={getCocktailRating(item.cocktail)}
+          hasComment={Boolean(getCocktailComment(item.cocktail).trim())}
           hasBrandFallback={availability.hasBrandFallback}
           hasStyleFallback={availability.hasStyleFallback}
         />
@@ -916,6 +919,7 @@ export default function CocktailsScreen() {
     },
     [
       getAvailabilitySummary,
+      getCocktailComment,
       getCocktailRating,
       handleSelectCocktail,
       handleSelectIngredient,

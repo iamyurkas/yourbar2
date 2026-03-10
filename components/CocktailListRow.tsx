@@ -23,6 +23,7 @@ type CocktailListRowProps = {
   recipeNamesCount: number;
   ingredientLine: string;
   ratingValue: number;
+  hasComment?: boolean;
   hasBrandFallback?: boolean;
   hasStyleFallback?: boolean;
 };
@@ -47,6 +48,7 @@ const areCocktailRowPropsEqual = (
     prev.recipeNamesCount === next.recipeNamesCount &&
     prev.ingredientLine === next.ingredientLine &&
     prev.ratingValue === next.ratingValue &&
+    prev.hasComment === next.hasComment &&
     prev.hasBrandFallback === next.hasBrandFallback &&
     prev.hasStyleFallback === next.hasStyleFallback &&
     onPressEqual
@@ -67,6 +69,7 @@ const CocktailListRowComponent = ({
   recipeNamesCount,
   ingredientLine,
   ratingValue,
+  hasComment = false,
   hasBrandFallback = false,
   hasStyleFallback = false,
 }: CocktailListRowProps) => {
@@ -89,7 +92,7 @@ const CocktailListRowComponent = ({
   const normalizedRating = Math.max(0, Math.min(MAX_RATING, Number(ratingValue) || 0));
 
   const ratingContent = useMemo(() => {
-    if (normalizedRating <= 0) {
+    if (normalizedRating <= 0 && !hasComment) {
       return null;
     }
 
@@ -109,12 +112,21 @@ const CocktailListRowComponent = ({
             color={Colors.tint}
           />
         ))}
+        {hasComment ? (
+          <MaterialCommunityIcons
+            name="comment"
+            size={8}
+            color={Colors.onSurfaceVariant}
+          />
+        ) : null}
       </View>
     );
   }, [
     Colors.background,
     Colors.outline,
+    Colors.onSurfaceVariant,
     Colors.tint,
+    hasComment,
     normalizedRating,
   ]);
 
