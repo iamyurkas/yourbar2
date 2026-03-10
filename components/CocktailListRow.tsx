@@ -97,27 +97,33 @@ const CocktailListRowComponent = ({
     }
 
     const totalStars = Math.max(0, Math.min(MAX_RATING, Math.round(normalizedRating)));
+    const pillStyle = [
+      styles.metaPill,
+      { backgroundColor: Colors.background, borderColor: Colors.outline },
+    ];
 
     return (
-      <View
-        style={[
-          styles.ratingPill,
-          { backgroundColor: Colors.background, borderColor: Colors.outline },
-        ]}>
-        {Array.from({ length: totalStars }).map((_, index) => (
-          <MaterialCommunityIcons
-            key={`rating-icon-${index}`}
-            name="star"
-            size={8}
-            color={Colors.tint}
-          />
-        ))}
+      <View style={styles.metaControlColumn}>
+        {totalStars > 0 ? (
+          <View style={pillStyle}>
+            {Array.from({ length: totalStars }).map((_, index) => (
+              <MaterialCommunityIcons
+                key={`rating-icon-${index}`}
+                name="star"
+                size={8}
+                color={Colors.tint}
+              />
+            ))}
+          </View>
+        ) : null}
         {hasComment ? (
-          <MaterialCommunityIcons
-            name="comment"
-            size={8}
-            color={Colors.onSurfaceVariant}
-          />
+          <View style={pillStyle}>
+            <MaterialCommunityIcons
+              name="comment"
+              size={8}
+              color={Colors.onSurfaceVariant}
+            />
+          </View>
         ) : null}
       </View>
     );
@@ -283,7 +289,11 @@ const CocktailListRowComponent = ({
 export const CocktailListRow = memo(CocktailListRowComponent, areCocktailRowPropsEqual);
 
 const styles = StyleSheet.create({
-  ratingPill: {
+  metaControlColumn: {
+    alignItems: 'flex-end',
+    gap: 2,
+  },
+  metaPill: {
     flexDirection: 'row',
     alignItems: 'center',
     alignSelf: 'flex-end',
