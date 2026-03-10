@@ -82,6 +82,57 @@ const DEFAULT_START_SCREEN: StartScreen = 'cocktails_all';
 const DEFAULT_APP_THEME: AppTheme = 'light';
 const DEFAULT_APP_LOCALE: AppLocale = DEFAULT_LOCALE;
 
+type CocktailFeedbackExport = NonNullable<InventoryExportData['cocktailFeedback']>;
+
+function buildCocktailFeedbackExport(
+  ratingsByCocktailId: Record<string, number>,
+  commentsByCocktailId: Record<string, string>,
+): CocktailFeedbackExport {
+  const sanitizedRatings = sanitizeCocktailRatings(ratingsByCocktailId);
+  const sanitizedComments = sanitizeCocktailComments(commentsByCocktailId);
+  const feedback: CocktailFeedbackExport = {};
+
+  Object.entries(sanitizedRatings).forEach(([id, rating]) => {
+    feedback[id] = { ...(feedback[id] ?? {}), rating };
+  });
+
+  Object.entries(sanitizedComments).forEach(([id, comment]) => {
+    feedback[id] = { ...(feedback[id] ?? {}), comment };
+  });
+
+  return feedback;
+}
+
+function parseCocktailFeedbackImport(data?: InventoryExportData): {
+  ratings: Record<string, number>;
+  comments: Record<string, string>;
+} {
+  const feedbackCandidate = data?.cocktailFeedback;
+  const ratingsCandidate: Record<string, number> = {};
+  const commentsCandidate: Record<string, string> = {};
+
+  if (feedbackCandidate && typeof feedbackCandidate === 'object') {
+    Object.entries(feedbackCandidate).forEach(([id, value]) => {
+      if (!value || typeof value !== 'object') {
+        return;
+      }
+
+      const entry = value as { rating?: unknown; comment?: unknown };
+      if (typeof entry.rating === 'number') {
+        ratingsCandidate[id] = entry.rating;
+      }
+      if (typeof entry.comment === 'string') {
+        commentsCandidate[id] = entry.comment;
+      }
+    });
+  }
+
+  const ratings = sanitizeCocktailRatings(ratingsCandidate);
+  const comments = sanitizeCocktailComments(commentsCandidate);
+
+  return { ratings, comments };
+}
+
 declare global {
   // eslint-disable-next-line no-var
   var __yourbarInventory: InventoryState | undefined;
@@ -1334,7 +1385,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       return acc;
     }, []);
 
-    const exportComments = sanitizeCocktailComments(commentsByCocktailId);
+    const exportFeedback = buildCocktailFeedbackExport(ratingsByCocktailId, commentsByCocktailId);
 
     const files: InventoryExportFile[] = [{
       schemaVersion: 1,
@@ -1342,7 +1393,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       data: {
         cocktails,
         ingredients,
-        ...(Object.keys(exportComments).length > 0 ? { cocktailComments: exportComments } : {}),
+        ...(Object.keys(exportFeedback).length > 0 ? { cocktailFeedback: exportFeedback } : {}),
       },
     } satisfies InventoryBaseExportFile];
 
@@ -1370,7 +1421,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
 
     files.sort((a, b) => (a.kind === 'base' ? -1 : a.kind.localeCompare(b.kind)));
     return files;
-  }, [baseMaps, commentsByCocktailId, inventoryState, translationOverrides]);
+  }, [baseMaps, commentsByCocktailId, inventoryState, ratingsByCocktailId, translationOverrides]);
 
   const exportInventoryPhotoEntries = useCallback((): PhotoBackupEntry[] | null => {
     if (!inventoryState) {
@@ -1434,7 +1485,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       ? createInventoryStateFromData(hydrateInventoryTagsFromCode(baseFile.data), true)
       : undefined;
 
-    const incomingComments = sanitizeCocktailComments(baseFile?.data.cocktailComments);
+    const incomingFeedback = parseCocktailFeedbackImport(baseFile?.data);
 
     const mergeById = <TItem extends { id?: number | null; searchNameNormalized: string }>(
       currentItems: readonly TItem[],
@@ -1476,10 +1527,17 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       return merged;
     };
 
-    if (Object.keys(incomingComments).length > 0) {
+    if (Object.keys(incomingFeedback.ratings).length > 0) {
+      setRatingsByCocktailId((prev) => ({
+        ...prev,
+        ...incomingFeedback.ratings,
+      }));
+    }
+
+    if (Object.keys(incomingFeedback.comments).length > 0) {
       setCommentsByCocktailId((prev) => ({
         ...prev,
-        ...incomingComments,
+        ...incomingFeedback.comments,
       }));
     }
 
