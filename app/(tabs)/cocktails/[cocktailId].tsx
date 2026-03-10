@@ -12,11 +12,13 @@ import {
   useTransition,
 } from "react";
 import {
+  AppState,
   Platform,
   Pressable,
   ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   type TextLayoutEvent,
   View,
 } from "react-native";
@@ -484,7 +486,9 @@ export default function CocktailDetailsScreen() {
     availableIngredientIds,
     shoppingIngredientIds,
     setCocktailRating,
+    setCocktailComment,
     getCocktailRating,
+    getCocktailComment,
     ignoreGarnish,
     allowAllSubstitutes,
     useImperialUnits,
@@ -511,6 +515,7 @@ export default function CocktailDetailsScreen() {
   const [ingredientDisplayMode, setIngredientDisplayMode] =
     useState<IngredientDisplayMode>(useImperialUnits ? "imperial" : "metric");
   const isHandlingBackRef = useRef(false);
+  const persistCommentDraftRef = useRef<() => void>(() => {});
   const shouldNavigateAway = !loading && !cocktail;
 
   useEffect(() => {
@@ -520,6 +525,8 @@ export default function CocktailDetailsScreen() {
   }, [useImperialUnits]);
 
   const handleReturn = useCallback(() => {
+    persistCommentDraftRef.current();
+
     if (returnToPath === "/cocktails") {
       skipDuplicateBack(navigation);
       return;
@@ -552,6 +559,7 @@ export default function CocktailDetailsScreen() {
       }
 
       event.preventDefault();
+      persistCommentDraftRef.current();
 
       isHandlingBackRef.current = true;
       handleReturn();
@@ -663,6 +671,18 @@ export default function CocktailDetailsScreen() {
   const [, startRatingTransition] = useTransition();
   const displayedRating = optimisticRating ?? userRating;
 
+  const userComment = useMemo(() => {
+    if (!cocktail) {
+      return "";
+    }
+
+    return getCocktailComment(cocktail);
+  }, [cocktail, getCocktailComment]);
+
+  const [isCommentFieldVisible, setIsCommentFieldVisible] = useState(false);
+  const [commentDraft, setCommentDraft] = useState("");
+  const hasComment = commentDraft.trim().length > 0 || userComment.trim().length > 0;
+
   useEffect(() => {
     setOptimisticRating((previous) => {
       if (previous == null) {
@@ -672,6 +692,56 @@ export default function CocktailDetailsScreen() {
       return previous === userRating ? null : previous;
     });
   }, [userRating]);
+
+  useEffect(() => {
+    setCommentDraft(userComment);
+    setIsCommentFieldVisible((current) => current || userComment.length > 0);
+  }, [userComment]);
+
+  const persistCommentDraft = useCallback(() => {
+    if (!cocktail) {
+      return;
+    }
+
+    const trimmedDraft = commentDraft.trim();
+    if (trimmedDraft === userComment) {
+      return;
+    }
+
+    setCocktailComment(cocktail, trimmedDraft);
+  }, [cocktail, commentDraft, setCocktailComment, userComment]);
+
+  useEffect(() => {
+    persistCommentDraftRef.current = persistCommentDraft;
+  }, [persistCommentDraft]);
+
+  useEffect(() => {
+    return () => {
+      persistCommentDraftRef.current();
+    };
+  }, []);
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener("change", (nextState) => {
+      if (nextState !== "active") {
+        persistCommentDraftRef.current();
+      }
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, []);
+
+  const handleToggleCommentField = useCallback(() => {
+    setIsCommentFieldVisible((current) => {
+      if (current) {
+        persistCommentDraftRef.current();
+      }
+
+      return !current;
+    });
+  }, []);
 
   const handleRatingSelect = useCallback(
     (value: number) => {
@@ -959,33 +1029,69 @@ export default function CocktailDetailsScreen() {
               </View>
 
               <View style={styles.ratingRow}>
-                {Array.from({ length: MAX_RATING }).map((_, index) => {
-                  const starValue = index + 1;
-                  const isActive = displayedRating >= starValue;
-                  const icon = isActive ? "star" : "star-outline";
+                <View style={styles.ratingStarsRow}>
+                  {Array.from({ length: MAX_RATING }).map((_, index) => {
+                    const starValue = index + 1;
+                    const isActive = displayedRating >= starValue;
+                    const icon = isActive ? "star" : "star-outline";
 
-                  return (
-                    <Pressable
-                      key={`rating-star-${starValue}`}
-                      onPress={() => handleRatingSelect(starValue)}
-                      accessibilityRole="button"
-                      accessibilityLabel={
-                        displayedRating === starValue
-                          ? t("cocktailDetails.clearRating")
-                          : t("cocktailDetails.setRatingTo", { value: starValue })
-                      }
-                      style={styles.ratingStar}
-                      hitSlop={8}
-                    >
-                      <MaterialCommunityIcons
-                        name={icon}
-                        size={32}
-                        color={Colors.tint}
-                      />
-                    </Pressable>
-                  );
-                })}
+                    return (
+                      <Pressable
+                        key={`rating-star-${starValue}`}
+                        onPress={() => handleRatingSelect(starValue)}
+                        accessibilityRole="button"
+                        accessibilityLabel={
+                          displayedRating === starValue
+                            ? t("cocktailDetails.clearRating")
+                            : t("cocktailDetails.setRatingTo", { value: starValue })
+                        }
+                        style={styles.ratingStar}
+                        hitSlop={8}
+                      >
+                        <MaterialCommunityIcons
+                          name={icon}
+                          size={32}
+                          color={Colors.tint}
+                        />
+                      </Pressable>
+                    );
+                  })}
+                </View>
+
+                <Pressable
+                  onPress={handleToggleCommentField}
+                  accessibilityRole="button"
+                  accessibilityLabel={t("cocktailDetails.toggleComment")}
+                  style={styles.commentToggleButton}
+                  hitSlop={8}
+                >
+                  <MaterialCommunityIcons
+                    name={isCommentFieldVisible ? "comment-edit" : hasComment ? "comment" : "comment-plus-outline"}
+                    size={28}
+                    color={Colors.tint}
+                  />
+                </Pressable>
               </View>
+
+              {isCommentFieldVisible ? (
+                <TextInput
+                  value={commentDraft}
+                  onChangeText={setCommentDraft}
+                  onBlur={persistCommentDraft}
+                  placeholder={t("cocktailDetails.commentPlaceholder")}
+                  placeholderTextColor={Colors.onSurfaceVariant}
+                  multiline
+                  textAlignVertical="top"
+                  style={[
+                    styles.commentInput,
+                    {
+                      color: Colors.text,
+                      borderColor: Colors.outlineVariant,
+                      backgroundColor: Colors.background,
+                    },
+                  ]}
+                />
+              ) : null}
 
               <View
                 style={[
@@ -1679,6 +1785,13 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   ratingRow: {
+    alignSelf: "stretch",
+    alignItems: "center",
+    justifyContent: "center",
+    minHeight: 32,
+    position: "relative",
+  },
+  ratingStarsRow: {
     flexDirection: "row",
     justifyContent: "center",
     gap: 8,
@@ -1688,6 +1801,25 @@ const styles = StyleSheet.create({
     height: 32,
     alignItems: "center",
     justifyContent: "center",
+  },
+  commentToggleButton: {
+    width: 32,
+    height: 32,
+    alignItems: "center",
+    justifyContent: "center",
+    position: "absolute",
+    right: 0,
+    top: 0,
+  },
+  commentInput: {
+    width: "100%",
+    minHeight: 120,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderRadius: 12,
+    paddingHorizontal: 16,
+    paddingVertical: Platform.select({ ios: 14, default: 12 }),
+    fontSize: 16,
+    marginTop: 12,
   },
   displayModeSwitcher: {
     borderRadius: 14,

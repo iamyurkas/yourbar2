@@ -82,6 +82,7 @@ export default function ShakerResultsScreen() {
     ignoreGarnish,
     allowAllSubstitutes,
     getCocktailRating,
+    getCocktailComment,
   } = useInventory();
   const Colors = useAppColors();
   const { t } = useI18n();
@@ -698,6 +699,7 @@ export default function ShakerResultsScreen() {
           recipeNamesCount={availability.recipeNames.length}
           ingredientLine={availability.ingredientLine}
           ratingValue={getCocktailRating(item)}
+          hasComment={Boolean(getCocktailComment(item).trim())}
           hasBrandFallback={availability.hasBrandFallback}
           hasStyleFallback={availability.hasStyleFallback}
         />
@@ -705,6 +707,7 @@ export default function ShakerResultsScreen() {
     },
     [
       getAvailabilitySummary,
+      getCocktailComment,
       getCocktailRating,
       handlePressCocktail,
       ingredients,

@@ -232,6 +232,8 @@ export const ukUATranslations: TranslationDictionary = {
   "cocktailDetails.noPhoto": "Немає фото",
   "cocktailDetails.clearRating": "Скинути рейтинг",
   "cocktailDetails.setRatingTo": "Встановити рейтинг {{value}}",
+  "cocktailDetails.toggleComment": "Додати коментар",
+  "cocktailDetails.commentPlaceholder": "Додайте коментар. Він збережеться автоматично, коли ви вийдете з цього екрана.",
   "cocktailDetails.showInMetric": "Метрична система",
   "cocktailDetails.showInImperial": "Імперська система",
   "cocktailDetails.displayMode.imperial": "Імперська",

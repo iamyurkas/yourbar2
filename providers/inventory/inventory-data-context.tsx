@@ -11,7 +11,9 @@ export type InventoryDataContextValue = {
   customCocktailTags: CocktailTag[];
   customIngredientTags: IngredientTag[];
   ratingsByCocktailId: Record<string, number>;
+  commentsByCocktailId: Record<string, string>;
   getCocktailRating: (cocktail: Cocktail) => number;
+  getCocktailComment: (cocktail: Cocktail) => string;
 };
 
 export const InventoryDataContext = createContext<InventoryDataContextValue | undefined>(undefined);

@@ -232,6 +232,8 @@ export const enUSTranslations: TranslationDictionary = {
   "cocktailDetails.noPhoto": "No photo",
   "cocktailDetails.clearRating": "Clear rating",
   "cocktailDetails.setRatingTo": "Set rating to {{value}}",
+  "cocktailDetails.toggleComment": "Add comment",
+  "cocktailDetails.commentPlaceholder": "Add your comment. It saves automatically when you leave this screen.",
   "cocktailDetails.showInMetric": "Show in metric",
   "cocktailDetails.showInImperial": "Show in imperial",
   "cocktailDetails.displayMode.imperial": "Imperial",

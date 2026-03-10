@@ -148,6 +148,7 @@ export type InventorySnapshotOptions = {
   availableIngredientIds: Set<number>;
   shoppingIngredientIds: Set<number>;
   ratingsByCocktailId: Record<string, number>;
+  commentsByCocktailId: Record<string, string>;
   ignoreGarnish: boolean;
   allowAllSubstitutes: boolean;
   useImperialUnits: boolean;
@@ -202,11 +203,37 @@ export function sanitizeCocktailRatings(
   return sanitized;
 }
 
+export function sanitizeCocktailComments(
+  comments?: Record<string, string> | null | undefined,
+): Record<string, string> {
+  if (!comments) {
+    return {};
+  }
+
+  const sanitized: Record<string, string> = {};
+
+  Object.entries(comments).forEach(([key, value]) => {
+    if (!key || typeof value !== 'string') {
+      return;
+    }
+
+    const comment = value.trim();
+    if (!comment) {
+      return;
+    }
+
+    sanitized[key] = comment;
+  });
+
+  return sanitized;
+}
+
 export function buildInventorySnapshot(
   base: InventoryDeltaBase,
   options: InventorySnapshotOptions,
 ): InventoryDeltaSnapshotV3<CocktailStorageRecord, IngredientStorageRecord> {
   const sanitizedRatings = sanitizeCocktailRatings(options.ratingsByCocktailId);
+  const sanitizedComments = sanitizeCocktailComments(options.commentsByCocktailId);
 
   return {
     ...base,
@@ -217,6 +244,7 @@ export function buildInventorySnapshot(
     shoppingIngredientIds:
       options.shoppingIngredientIds.size > 0 ? toSortedArray(options.shoppingIngredientIds) : undefined,
     cocktailRatings: Object.keys(sanitizedRatings).length > 0 ? sanitizedRatings : undefined,
+    cocktailComments: Object.keys(sanitizedComments).length > 0 ? sanitizedComments : undefined,
     ignoreGarnish: options.ignoreGarnish,
     allowAllSubstitutes: options.allowAllSubstitutes,
     useImperialUnits: options.useImperialUnits,

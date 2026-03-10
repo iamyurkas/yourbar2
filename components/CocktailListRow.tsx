@@ -23,6 +23,7 @@ type CocktailListRowProps = {
   recipeNamesCount: number;
   ingredientLine: string;
   ratingValue: number;
+  hasComment?: boolean;
   hasBrandFallback?: boolean;
   hasStyleFallback?: boolean;
 };
@@ -47,6 +48,7 @@ const areCocktailRowPropsEqual = (
     prev.recipeNamesCount === next.recipeNamesCount &&
     prev.ingredientLine === next.ingredientLine &&
     prev.ratingValue === next.ratingValue &&
+    prev.hasComment === next.hasComment &&
     prev.hasBrandFallback === next.hasBrandFallback &&
     prev.hasStyleFallback === next.hasStyleFallback &&
     onPressEqual
@@ -67,6 +69,7 @@ const CocktailListRowComponent = ({
   recipeNamesCount,
   ingredientLine,
   ratingValue,
+  hasComment = false,
   hasBrandFallback = false,
   hasStyleFallback = false,
 }: CocktailListRowProps) => {
@@ -89,32 +92,47 @@ const CocktailListRowComponent = ({
   const normalizedRating = Math.max(0, Math.min(MAX_RATING, Number(ratingValue) || 0));
 
   const ratingContent = useMemo(() => {
-    if (normalizedRating <= 0) {
+    if (normalizedRating <= 0 && !hasComment) {
       return null;
     }
 
     const totalStars = Math.max(0, Math.min(MAX_RATING, Math.round(normalizedRating)));
+    const pillStyle = [
+      styles.metaPill,
+      { backgroundColor: Colors.background, borderColor: Colors.outline },
+    ];
 
     return (
-      <View
-        style={[
-          styles.ratingPill,
-          { backgroundColor: Colors.background, borderColor: Colors.outline },
-        ]}>
-        {Array.from({ length: totalStars }).map((_, index) => (
-          <MaterialCommunityIcons
-            key={`rating-icon-${index}`}
-            name="star"
-            size={8}
-            color={Colors.tint}
-          />
-        ))}
+      <View style={styles.metaControlRow}>
+        {totalStars > 0 ? (
+          <View style={pillStyle}>
+            {Array.from({ length: totalStars }).map((_, index) => (
+              <MaterialCommunityIcons
+                key={`rating-icon-${index}`}
+                name="star"
+                size={8}
+                color={Colors.tint}
+              />
+            ))}
+          </View>
+        ) : null}
+        {hasComment ? (
+          <View style={pillStyle}>
+            <MaterialCommunityIcons
+              name="comment"
+              size={8}
+              color={Colors.onSurfaceVariant}
+            />
+          </View>
+        ) : null}
       </View>
     );
   }, [
     Colors.background,
     Colors.outline,
+    Colors.onSurfaceVariant,
     Colors.tint,
+    hasComment,
     normalizedRating,
   ]);
 
@@ -271,7 +289,13 @@ const CocktailListRowComponent = ({
 export const CocktailListRow = memo(CocktailListRowComponent, areCocktailRowPropsEqual);
 
 const styles = StyleSheet.create({
-  ratingPill: {
+  metaControlRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    gap: 2,
+  },
+  metaPill: {
     flexDirection: 'row',
     alignItems: 'center',
     alignSelf: 'flex-end',

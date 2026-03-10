@@ -117,6 +117,7 @@ export default function IngredientDetailsScreen() {
     ignoreGarnish,
     allowAllSubstitutes,
     getCocktailRating,
+    getCocktailComment,
     effectiveAmazonStore,
   } = useInventory();
 
@@ -1715,6 +1716,7 @@ export default function IngredientDetailsScreen() {
                             recipeNamesCount={recipeNamesCount}
                             ingredientLine={ingredientLine}
                             ratingValue={ratingValue}
+                            hasComment={Boolean(getCocktailComment(cocktail).trim())}
                             hasBrandFallback={hasBrandFallback}
                             hasStyleFallback={hasStyleFallback}
                           />
