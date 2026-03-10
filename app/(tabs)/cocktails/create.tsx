@@ -743,7 +743,11 @@ export default function CreateCocktailScreen() {
       setMethodIds(nextMethodIds);
       setDescription(baseCocktail.description ?? "");
       setInstructions(baseCocktail.instructions ?? "");
-      setVideoInstructions((baseCocktail as { videoInstructions?: string | null }).videoInstructions ?? "");
+      setVideoInstructions(
+        (baseCocktail as { video?: string | null; videoInstructions?: string | null }).videoInstructions
+        ?? (baseCocktail as { video?: string | null; videoInstructions?: string | null }).video
+        ?? "",
+      );
       setImageUri(baseCocktail.photoUri ?? null);
       const mappedTags = (baseCocktail.tags ?? [])
         .map((tag) => Number(tag.id ?? -1))

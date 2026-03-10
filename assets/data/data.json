@@ -182,6 +182,7 @@
       "synonyms": ["Amaretto Baileys Cognac"],
       "description": "The abbreviation stands for **amaretto**, **Baileys** and **cognac**.",
       "instructions": "1. Pour 15 ml of **amaretto** into a shooter glass.\n2. Carefully pour 15 ml of **Baileys** on top of the **amaretto**.\n3. Using a teaspoon, pour 15 ml of **cognac** on top of the **Baileys**.",
+      "video": "https://www.youtube.com/shorts/EKkt4gJpghs",
       "photoUri": "assets/cocktails/4-abc.jpg",
       "glassId": "shooter",
       "methodIds": ["layer"],

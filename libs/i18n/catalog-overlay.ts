@@ -17,7 +17,7 @@ import ukUACatalogOverlay from '@/libs/i18n/locales/catalog/uk-UA.json';
 
 type CatalogOverlayDictionary = Record<string, string>;
 type CatalogEntity = 'cocktail' | 'ingredient';
-type CatalogField = 'name' | 'description' | 'instructions' | 'videoInstructions' | 'synonyms';
+type CatalogField = 'name' | 'description' | 'instructions' | 'video' | 'videoInstructions' | 'synonyms';
 
 const MISSING_TRANSLATION = '__MISSING_TRANSLATION__';
 
@@ -38,6 +38,18 @@ function getCatalogOverlayValue(locale: SupportedLocale, key: string): string | 
   return CATALOG_OVERLAYS[locale][key] ?? CATALOG_OVERLAYS[DEFAULT_LOCALE][key];
 }
 
+function getCatalogFieldKeys(entity: CatalogEntity, id: number, field: CatalogField): string[] {
+  if (field === 'video') {
+    return [`${entity}.${id}.video`, `${entity}.${id}.videoInstructions`];
+  }
+
+  if (field === 'videoInstructions') {
+    return [`${entity}.${id}.videoInstructions`, `${entity}.${id}.video`];
+  }
+
+  return [`${entity}.${id}.${field}`];
+}
+
 function getCatalogFieldTranslation(
   locale: SupportedLocale,
   entity: CatalogEntity,
@@ -56,8 +68,10 @@ function getCatalogFieldTranslation(
     return cached === MISSING_TRANSLATION ? undefined : cached;
   }
 
-  const key = `${entity}.${normalizedId}.${field}`;
-  const value = getCatalogOverlayValue(locale, key)?.trim() || undefined;
+  const keys = getCatalogFieldKeys(entity, normalizedId, field);
+  const value = keys
+    .map((key) => getCatalogOverlayValue(locale, key)?.trim())
+    .find((entry): entry is string => Boolean(entry));
   catalogFieldTranslationCache.set(cacheKey, value ?? MISSING_TRANSLATION);
   return value;
 }
@@ -231,14 +245,14 @@ export function localizeCocktail(
     cocktail.instructions,
     entityOverrides?.instructions,
   );
-  const localizedVideoInstructions = getLocalizedText(
+  const localizedVideo = getLocalizedText(
     locale,
     fallbackLocale,
     'cocktail',
     cocktail.id,
-    'videoInstructions',
-    cocktail.videoInstructions,
-    entityOverrides?.videoInstructions,
+    'video',
+    cocktail.video ?? cocktail.videoInstructions,
+    entityOverrides?.video ?? entityOverrides?.videoInstructions,
   );
 
   const overrideSynonyms = entityOverrides?.synonyms;
@@ -271,7 +285,8 @@ export function localizeCocktail(
     name: localizedName ?? cocktail.name,
     description: localizedDescription,
     instructions: localizedInstructions,
-    videoInstructions: localizedVideoInstructions,
+    video: localizedVideo,
+    videoInstructions: localizedVideo,
     synonyms: localizedSynonyms.length ? localizedSynonyms : cocktail.synonyms,
     ingredients: localizedIngredients,
     ...localizedSearch,
