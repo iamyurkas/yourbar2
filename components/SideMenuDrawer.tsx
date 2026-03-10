@@ -39,7 +39,12 @@ import type { SupportedLocale } from "@/libs/i18n/types";
 import { useI18n } from "@/libs/i18n/use-i18n";
 import { buildPhotoBaseName } from "@/libs/photo-utils";
 import { useInventory, type AppTheme, type StartScreen } from "@/providers/inventory-provider";
-import { type ImportedPhotoEntry, type InventoryExportData, type InventoryExportFile } from "@/providers/inventory-types";
+import {
+  type ImportedPhotoEntry,
+  type InventoryExportData,
+  type InventoryExportFile,
+  type InventoryImportOptions,
+} from "@/providers/inventory-types";
 import Constants from "expo-constants";
 
 const MAX_MENU_WIDTH = 500;
@@ -219,6 +224,10 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   );
   const [isBackingUpData, setIsBackingUpData] = useState(false);
   const [isRestoringData, setIsRestoringData] = useState(false);
+  const [isIngredientStatusImportModalVisible, setIsIngredientStatusImportModalVisible] = useState(false);
+  const [shouldImportIngredientAvailability, setShouldImportIngredientAvailability] = useState(false);
+  const [shouldImportIngredientShopping, setShouldImportIngredientShopping] = useState(false);
+  const ingredientStatusImportResolverRef = useRef<((value: InventoryImportOptions | null) => void) | null>(null);
   const translateX = useRef(new Animated.Value(-MENU_WIDTH)).current;
   const backdropOpacity = useRef(new Animated.Value(0)).current;
 
@@ -638,6 +647,38 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     return (record.kind === "base" || record.kind === "translations") && typeof record.schemaVersion === "number";
   };
 
+  const hasImportableIngredientStatus = (data?: InventoryExportData | null): boolean => {
+    if (!data || typeof data !== "object") {
+      return false;
+    }
+
+    const status = data.ingredientStatus;
+    if (!status || typeof status !== "object") {
+      return false;
+    }
+
+    return Object.values(status).some((entry) =>
+      Boolean(entry && typeof entry === "object" && (entry.available === true || entry.shopping === true))
+    );
+  };
+
+  const requestIngredientStatusImportOptions = () => {
+    setShouldImportIngredientAvailability(false);
+    setShouldImportIngredientShopping(false);
+    setIsIngredientStatusImportModalVisible(true);
+
+    return new Promise<InventoryImportOptions | null>((resolve) => {
+      ingredientStatusImportResolverRef.current = resolve;
+    });
+  };
+
+  const closeIngredientStatusImportModal = (options: InventoryImportOptions | null) => {
+    setIsIngredientStatusImportModalVisible(false);
+    const resolver = ingredientStatusImportResolverRef.current;
+    ingredientStatusImportResolverRef.current = null;
+    resolver?.(options);
+  };
+
   const handleBackupData = async () => {
     if (isBackingUpData) {
       return;
@@ -797,7 +838,22 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
         return;
       }
 
-      importInventoryData(importFiles.length > 0 ? importFiles : (legacyBase as InventoryExportData));
+      const baseFromFile = importFiles.find((file) => file.kind === "base");
+      const importBaseData = baseFromFile?.kind === "base" ? baseFromFile.data : legacyBase;
+      let importOptions: InventoryImportOptions | undefined;
+
+      if (hasImportableIngredientStatus(importBaseData)) {
+        const selectedOptions = await requestIngredientStatusImportOptions();
+        if (!selectedOptions) {
+          return;
+        }
+        importOptions = selectedOptions;
+      }
+
+      importInventoryData(
+        importFiles.length > 0 ? importFiles : (legacyBase as InventoryExportData),
+        importOptions,
+      );
 
       const directory = FileSystem.documentDirectory ?? FileSystem.cacheDirectory;
       if (!directory) {
@@ -1955,6 +2011,102 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       />
       <Modal
         transparent
+        visible={isIngredientStatusImportModalVisible}
+        animationType="fade"
+        onRequestClose={() => closeIngredientStatusImportModal(null)}
+      >
+        <Pressable
+          style={styles.modalOverlay}
+          onPress={() => closeIngredientStatusImportModal(null)}
+          accessibilityRole="button"
+        >
+          <Pressable
+            style={[styles.modalCard, MODAL_CARD_STYLE]}
+            accessibilityLabel={t("sideMenu.importIngredientStatusesTitle")}
+            onPress={() => { }}
+          >
+            <Text style={[styles.modalTitle, { color: Colors.onSurface }]}>
+              {t("sideMenu.importIngredientStatusesTitle")}
+            </Text>
+            <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>
+              {t("sideMenu.importIngredientStatusesMessage")}
+            </Text>
+            <Pressable
+              accessibilityRole="checkbox"
+              accessibilityState={{ checked: shouldImportIngredientAvailability }}
+              onPress={() => setShouldImportIngredientAvailability((prev) => !prev)}
+              style={({ pressed }) => [
+                styles.startScreenOption,
+                {
+                  borderColor: shouldImportIngredientAvailability
+                    ? Colors.tint
+                    : Colors.outlineVariant,
+                  backgroundColor: shouldImportIngredientAvailability
+                    ? Colors.highlightFaint
+                    : Colors.surfaceBright,
+                },
+                pressed ? { opacity: 0.85 } : null,
+              ]}
+            >
+              <Text style={[styles.settingLabel, { color: Colors.onSurface, flex: 1 }]}>
+                {t("sideMenu.importIngredientStatusesAvailability")}
+              </Text>
+              <MaterialCommunityIcons
+                name={shouldImportIngredientAvailability ? "check-circle" : "checkbox-blank-circle-outline"}
+                size={20}
+                color={shouldImportIngredientAvailability ? Colors.tint : Colors.onSurfaceVariant}
+              />
+            </Pressable>
+            <Pressable
+              accessibilityRole="checkbox"
+              accessibilityState={{ checked: shouldImportIngredientShopping }}
+              onPress={() => setShouldImportIngredientShopping((prev) => !prev)}
+              style={({ pressed }) => [
+                styles.startScreenOption,
+                {
+                  borderColor: shouldImportIngredientShopping
+                    ? Colors.tint
+                    : Colors.outlineVariant,
+                  backgroundColor: shouldImportIngredientShopping
+                    ? Colors.highlightFaint
+                    : Colors.surfaceBright,
+                },
+                pressed ? { opacity: 0.85 } : null,
+              ]}
+            >
+              <Text style={[styles.settingLabel, { color: Colors.onSurface, flex: 1 }]}>
+                {t("sideMenu.importIngredientStatusesShopping")}
+              </Text>
+              <MaterialCommunityIcons
+                name={shouldImportIngredientShopping ? "check-circle" : "checkbox-blank-circle-outline"}
+                size={20}
+                color={shouldImportIngredientShopping ? Colors.tint : Colors.onSurfaceVariant}
+              />
+            </Pressable>
+            <View style={styles.dialogActionsRow}>
+              <Pressable
+                accessibilityRole="button"
+                onPress={() => closeIngredientStatusImportModal(null)}
+                style={[styles.dialogSecondaryButton, { borderColor: Colors.outlineVariant, backgroundColor: Colors.surfaceVariant }]}
+              >
+                <Text style={[styles.dialogButtonLabel, { color: Colors.onSurface }]}>{t("common.cancel")}</Text>
+              </Pressable>
+              <Pressable
+                accessibilityRole="button"
+                onPress={() => closeIngredientStatusImportModal({
+                  importIngredientAvailability: shouldImportIngredientAvailability,
+                  importIngredientShopping: shouldImportIngredientShopping,
+                })}
+                style={[styles.dialogPrimaryButton, { backgroundColor: Colors.tint, borderColor: Colors.tint }]}
+              >
+                <Text style={[styles.dialogButtonLabel, { color: Colors.onPrimary }]}>{t("sideMenu.importIngredientStatusesConfirm")}</Text>
+              </Pressable>
+            </View>
+          </Pressable>
+        </Pressable>
+      </Modal>
+      <Modal
+        transparent
         visible={isStartScreenModalVisible}
         animationType="fade"
         onRequestClose={handleCloseStartScreenModal}
@@ -2984,6 +3136,33 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingHorizontal: 12,
     fontSize: 16,
+  },
+  dialogActionsRow: {
+    flexDirection: "row",
+    gap: 10,
+    marginTop: 8,
+  },
+  dialogSecondaryButton: {
+    flex: 1,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderRadius: 10,
+    paddingVertical: 11,
+    paddingHorizontal: 12,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  dialogPrimaryButton: {
+    flex: 1,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderRadius: 10,
+    paddingVertical: 11,
+    paddingHorizontal: 12,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  dialogButtonLabel: {
+    fontSize: 14,
+    fontWeight: "600",
   },
   modalFooter: {
     flexDirection: "row",

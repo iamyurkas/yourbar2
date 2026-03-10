@@ -168,6 +168,11 @@ export type InventoryExportData = {
   ingredientStatus?: Record<string, { available?: boolean; shopping?: boolean }>;
 };
 
+export type InventoryImportOptions = {
+  importIngredientAvailability?: boolean;
+  importIngredientShopping?: boolean;
+};
+
 export type CocktailTranslationOverride = {
   name?: string;
   description?: string;

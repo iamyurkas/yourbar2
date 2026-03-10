@@ -2935,5 +2935,10 @@
   "cocktail.614.name": "Bloody Caesar",
   "cocktail.614.synonyms": "Cesar, Ceasar, Bloody Caesar",
   "cocktail.614.description": "Oft einfach **Caesar** genannt, der Nationalcocktail Kanadas. Obwohl er wie eine Bloody Mary aussieht, ist der Hauptunterschied der Clamato-Saft – eine Mischung aus Tomatensaft und Muschelbrühe –, der ihm eine besondere herzhafte, salzige Umami-Note verleiht.",
-  "cocktail.614.instructions": "1. Den Rand eines Highball-Glasses mit einem **Limetten**spalt befeuchten. Den Rand in **Selleriesalz** oder einer Caesar-Gewürzmischung tauchen, bis er bedeckt ist.\n2. Das Glas mit Eiswürfeln füllen. **Wodka**, **Tabasco** und **Worcestersauce** hineingießen.\n3. Das Glas mit **Clamato-Saft** auffüllen. Mit einem langen Löffel gut umrühren oder den Drink durch mehrmaliges Umgießen zwischen zwei Gläsern mischen.\n4. Mit einem **Sellerie**stange und dem **Limetten**spalt garnieren."
+  "cocktail.614.instructions": "1. Den Rand eines Highball-Glasses mit einem **Limetten**spalt befeuchten. Den Rand in **Selleriesalz** oder einer Caesar-Gewürzmischung tauchen, bis er bedeckt ist.\n2. Das Glas mit Eiswürfeln füllen. **Wodka**, **Tabasco** und **Worcestersauce** hineingießen.\n3. Das Glas mit **Clamato-Saft** auffüllen. Mit einem langen Löffel gut umrühren oder den Drink durch mehrmaliges Umgießen zwischen zwei Gläsern mischen.\n4. Mit einem **Sellerie**stange und dem **Limetten**spalt garnieren.",
+  "sideMenu.importIngredientStatusesTitle": "Zutatenstatus importieren?",
+  "sideMenu.importIngredientStatusesMessage": "Wähle aus, welche Zutatenstatus aus diesem Backup importiert werden sollen.",
+  "sideMenu.importIngredientStatusesAvailability": "Zutatenverfügbarkeit",
+  "sideMenu.importIngredientStatusesShopping": "Einkaufsliste für Zutaten",
+  "sideMenu.importIngredientStatusesConfirm": "Auswahl importieren"
 }

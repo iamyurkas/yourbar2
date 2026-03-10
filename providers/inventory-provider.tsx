@@ -45,6 +45,7 @@ import {
   type InventoryBaseExportFile,
   type InventoryExportData,
   type InventoryExportFile,
+  type InventoryImportOptions,
   type InventoryLocaleTranslationOverrides,
   type InventoryTranslationOverrides,
   type InventoryTranslationsExportFile,
@@ -1534,7 +1535,10 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     ];
   }, [baseMaps, inventoryState]);
 
-  const importInventoryData = useCallback((input: InventoryExportData | InventoryExportFile | InventoryExportFile[]) => {
+  const importInventoryData = useCallback((
+    input: InventoryExportData | InventoryExportFile | InventoryExportFile[],
+    options?: InventoryImportOptions,
+  ) => {
     const files = Array.isArray(input)
       ? input
       : (input && typeof input === 'object' && 'kind' in input
@@ -1615,11 +1619,14 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       }));
     }
 
-    if (incomingIngredientStatus.availableIngredientIds.size > 0) {
+    const shouldImportIngredientAvailability = options?.importIngredientAvailability === true;
+    const shouldImportIngredientShopping = options?.importIngredientShopping === true;
+
+    if (shouldImportIngredientAvailability && incomingIngredientStatus.availableIngredientIds.size > 0) {
       setAvailableIngredientIds((prev) => new Set([...prev, ...incomingIngredientStatus.availableIngredientIds]));
     }
 
-    if (incomingIngredientStatus.shoppingIngredientIds.size > 0) {
+    if (shouldImportIngredientShopping && incomingIngredientStatus.shoppingIngredientIds.size > 0) {
       setShoppingIngredientIds((prev) => new Set([...prev, ...incomingIngredientStatus.shoppingIngredientIds]));
     }
 
