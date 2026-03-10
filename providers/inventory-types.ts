@@ -165,6 +165,10 @@ export type InventoryExportData = {
   cocktails: Array<Omit<CocktailStorageRecord, 'tags'> & { tags?: number[] | null }>;
   ingredients: Array<Omit<IngredientStorageRecord, 'tags'> & { tags?: number[] | null }>;
   cocktailFeedback?: Record<string, { rating?: number; comment?: string }>;
+  ingredientStatuses?: {
+    availableIngredientIds?: number[];
+    shoppingIngredientIds?: number[];
+  };
 };
 
 export type CocktailTranslationOverride = {

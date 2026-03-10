@@ -580,6 +580,11 @@ export const esESTranslations: TranslationDictionary = {
     "El archivo de copia de seguridad contiene datos de inventario no válidos.",
   "sideMenu.importRetryWithValidArchive":
     "Vuelve a intentarlo con un archivo de copia de seguridad válido.",
+  "sideMenu.importIngredientAvailabilityPromptTitle": "¿Importar disponibilidad de ingredientes?",
+  "sideMenu.importIngredientAvailabilityPromptMessage":
+    "Esta copia de seguridad contiene estados de disponibilidad de ingredientes. ¿Quieres importarlos?",
+  "sideMenu.importIngredientAvailabilitySkip": "No",
+  "sideMenu.importIngredientAvailabilityImport": "Sí",
   "sideMenu.deleteTagTitle": "Eliminar etiqueta",
   "sideMenu.deleteTagMessage": '¿Eliminar "{{name}}"?',
   "sideMenu.emailUnavailableTitle": "No se puede abrir el correo",

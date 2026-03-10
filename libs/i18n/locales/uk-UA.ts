@@ -588,6 +588,11 @@ export const ukUATranslations: TranslationDictionary = {
     "Архів резервної копії містить некоректні дані інвентарю.",
   "sideMenu.importRetryWithValidArchive":
     "Спробуйте ще раз із коректним архівом резервної копії.",
+  "sideMenu.importIngredientAvailabilityPromptTitle": "Імпортувати наявність інгредієнтів?",
+  "sideMenu.importIngredientAvailabilityPromptMessage":
+    "Ця резервна копія містить статуси наявності інгредієнтів. Імпортувати їх?",
+  "sideMenu.importIngredientAvailabilitySkip": "Ні",
+  "sideMenu.importIngredientAvailabilityImport": "Так",
   "sideMenu.deleteTagTitle": "Видалити тег",
   "sideMenu.deleteTagMessage": 'Видалити "{{name}}"?',
   "sideMenu.emailUnavailableTitle": "Не вдалося відкрити пошту",

@@ -591,6 +591,11 @@ export const deDETranslations: TranslationDictionary = {
     "Das Sicherungsarchiv enthält ungültige Inventardaten.",
   "sideMenu.importRetryWithValidArchive":
     "Bitte versuchen Sie es erneut mit einem gültigen Sicherungsarchiv.",
+  "sideMenu.importIngredientAvailabilityPromptTitle": "Zutatenverfügbarkeit importieren?",
+  "sideMenu.importIngredientAvailabilityPromptMessage":
+    "Dieses Backup enthält Verfügbarkeitsstatus für Zutaten. Möchtest du sie importieren?",
+  "sideMenu.importIngredientAvailabilitySkip": "Nein",
+  "sideMenu.importIngredientAvailabilityImport": "Ja",
   "sideMenu.deleteTagTitle": "Tag löschen",
   "sideMenu.deleteTagMessage": '"{{name}}" entfernen?',
   "sideMenu.emailUnavailableTitle": "E-Mail kann nicht geöffnet werden",

@@ -585,6 +585,24 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     });
   };
 
+  const promptIngredientAvailabilityImport = () => new Promise<boolean>((resolve) => {
+    setDialogOptions({
+      title: t("sideMenu.importIngredientAvailabilityPromptTitle"),
+      message: t("sideMenu.importIngredientAvailabilityPromptMessage"),
+      actions: [
+        {
+          label: t("sideMenu.importIngredientAvailabilitySkip"),
+          variant: "secondary",
+          onPress: () => resolve(false),
+        },
+        {
+          label: t("sideMenu.importIngredientAvailabilityImport"),
+          variant: "primary",
+          onPress: () => resolve(true),
+        },
+      ],
+    });
+  });
 
   const parsePhotoEntryFromArchivePath = (path: string): {
     type: ImportedPhotoEntry['type'];
@@ -797,7 +815,17 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
         return;
       }
 
-      importInventoryData(importFiles.length > 0 ? importFiles : (legacyBase as InventoryExportData));
+      const payload = importFiles.length > 0 ? importFiles : (legacyBase as InventoryExportData);
+      const baseData = importFiles.find((file) => file.kind === 'base')?.data ?? (legacyBase ?? undefined);
+      const hasAvailabilityStatuses = Array.isArray(baseData?.ingredientStatuses?.availableIngredientIds)
+        && baseData.ingredientStatuses.availableIngredientIds.length > 0;
+
+      let shouldImportAvailability = true;
+      if (hasAvailabilityStatuses) {
+        shouldImportAvailability = await promptIngredientAvailabilityImport();
+      }
+
+      importInventoryData(payload, { importIngredientAvailability: shouldImportAvailability });
 
       const directory = FileSystem.documentDirectory ?? FileSystem.cacheDirectory;
       if (!directory) {

@@ -581,6 +581,11 @@ export const enUSTranslations: TranslationDictionary = {
     "The backup archive contains invalid inventory data.",
   "sideMenu.importRetryWithValidArchive":
     "Please try again with a valid backup archive.",
+  "sideMenu.importIngredientAvailabilityPromptTitle": "Import ingredient availability?",
+  "sideMenu.importIngredientAvailabilityPromptMessage":
+    "This backup contains ingredient availability statuses. Do you want to import them?",
+  "sideMenu.importIngredientAvailabilitySkip": "No",
+  "sideMenu.importIngredientAvailabilityImport": "Yes",
   "sideMenu.deleteTagTitle": "Delete tag",
   "sideMenu.deleteTagMessage": 'Remove "{{name}}"?',
   "sideMenu.emailUnavailableTitle": "Unable to open email",

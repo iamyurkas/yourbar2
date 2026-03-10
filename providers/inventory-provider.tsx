@@ -133,6 +133,42 @@ function parseCocktailFeedbackImport(data?: InventoryExportData): {
   return { ratings, comments };
 }
 
+function parseIngredientStatusesImport(data?: InventoryExportData): {
+  availableIngredientIds: Set<number>;
+  shoppingIngredientIds: Set<number>;
+  hasAvailableIngredientIds: boolean;
+  hasShoppingIngredientIds: boolean;
+} {
+  const statusesCandidate = data?.ingredientStatuses;
+  if (!statusesCandidate || typeof statusesCandidate !== 'object') {
+    return {
+      availableIngredientIds: new Set<number>(),
+      shoppingIngredientIds: new Set<number>(),
+      hasAvailableIngredientIds: false,
+      hasShoppingIngredientIds: false,
+    };
+  }
+
+  const statuses = statusesCandidate as {
+    availableIngredientIds?: unknown;
+    shoppingIngredientIds?: unknown;
+  };
+
+  const availableIngredientIds = createIngredientIdSet(
+    Array.isArray(statuses.availableIngredientIds) ? statuses.availableIngredientIds : undefined,
+  );
+  const shoppingIngredientIds = createIngredientIdSet(
+    Array.isArray(statuses.shoppingIngredientIds) ? statuses.shoppingIngredientIds : undefined,
+  );
+
+  return {
+    availableIngredientIds,
+    shoppingIngredientIds,
+    hasAvailableIngredientIds: Array.isArray(statuses.availableIngredientIds),
+    hasShoppingIngredientIds: Array.isArray(statuses.shoppingIngredientIds),
+  };
+}
+
 declare global {
   // eslint-disable-next-line no-var
   var __yourbarInventory: InventoryState | undefined;
@@ -1397,6 +1433,10 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       data: {
         cocktails,
         ingredients,
+        ingredientStatuses: {
+          availableIngredientIds: toSortedArray(availableIngredientIds),
+          shoppingIngredientIds: toSortedArray(shoppingIngredientIds),
+        },
         ...(Object.keys(exportFeedback).length > 0 ? { cocktailFeedback: exportFeedback } : {}),
       },
     } satisfies InventoryBaseExportFile];
@@ -1425,7 +1465,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
 
     files.sort((a, b) => (a.kind === 'base' ? -1 : a.kind.localeCompare(b.kind)));
     return files;
-  }, [baseMaps, commentsByCocktailId, inventoryState, ratingsByCocktailId, translationOverrides]);
+  }, [availableIngredientIds, baseMaps, commentsByCocktailId, inventoryState, ratingsByCocktailId, shoppingIngredientIds, translationOverrides]);
 
   const exportInventoryPhotoEntries = useCallback((): PhotoBackupEntry[] | null => {
     if (!inventoryState) {
@@ -1475,7 +1515,10 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     ];
   }, [baseMaps, inventoryState]);
 
-  const importInventoryData = useCallback((input: InventoryExportData | InventoryExportFile | InventoryExportFile[]) => {
+  const importInventoryData = useCallback((
+    input: InventoryExportData | InventoryExportFile | InventoryExportFile[],
+    options?: { importIngredientAvailability?: boolean },
+  ) => {
     const files = Array.isArray(input)
       ? input
       : (input && typeof input === 'object' && 'kind' in input
@@ -1490,6 +1533,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       : undefined;
 
     const incomingFeedback = parseCocktailFeedbackImport(baseFile?.data);
+    const incomingIngredientStatuses = parseIngredientStatusesImport(baseFile?.data);
 
     const mergeCocktailWithFallback = (current: Cocktail, incoming: Cocktail): Cocktail => {
       const currentVideo = current.video?.trim();
@@ -1586,6 +1630,14 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           ingredients: mergeById(prev.ingredients, incomingState.ingredients),
         } satisfies InventoryState;
       });
+    }
+
+    if (incomingIngredientStatuses.hasAvailableIngredientIds && options?.importIngredientAvailability !== false) {
+      setAvailableIngredientIds(incomingIngredientStatuses.availableIngredientIds);
+    }
+
+    if (incomingIngredientStatuses.hasShoppingIngredientIds) {
+      setShoppingIngredientIds(incomingIngredientStatuses.shoppingIngredientIds);
     }
 
     if (translationFiles.length > 0) {
