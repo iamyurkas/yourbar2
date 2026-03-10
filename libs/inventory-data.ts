@@ -20,7 +20,6 @@ type RawCocktail = {
   description?: string;
   instructions?: string;
   video?: string;
-  videoInstructions?: string;
   photoUri?: string;
   glassId?: string;
   methodIds?: string[];
@@ -146,8 +145,7 @@ function hydrateInventoryTagsFromCode(data: RawInventoryData): InventoryData {
     ...data,
     cocktails: data.cocktails.map((cocktail) => ({
       ...cocktail,
-      video: cocktail.video ?? cocktail.videoInstructions,
-      videoInstructions: cocktail.videoInstructions ?? cocktail.video,
+      video: cocktail.video,
       tags: hydrateTagList(cocktail.tags, BUILTIN_COCKTAIL_TAGS_BY_ID),
     })),
     ingredients: data.ingredients.map((ingredient) => ({

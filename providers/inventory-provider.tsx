@@ -1020,7 +1020,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
 
         const description = input.description?.trim() || undefined;
         const instructions = input.instructions?.trim() || undefined;
-        const videoInstructions = input.videoInstructions?.trim() || undefined;
+        const video = input.video?.trim() || undefined;
         const synonyms = normalizeSynonyms(input.synonyms);
         const photoUri = input.photoUri?.trim() || undefined;
         const glassId = input.glassId?.trim() || undefined;
@@ -1047,7 +1047,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           name: trimmedName,
           description,
           instructions,
-          videoInstructions,
+          video,
           synonyms,
           photoUri,
           glassId,
@@ -1082,13 +1082,13 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         const nextName = input.name?.trim() || created.name || '';
         const nextDescription = input.description?.trim();
         const nextInstructions = input.instructions?.trim();
-        const nextVideoInstructions = input.videoInstructions?.trim();
+        const nextVideo = input.video?.trim();
         const nextSynonyms = normalizeSynonyms(input.synonyms);
         const patch: CocktailTranslationOverride = {
           name: nextName,
           ...(nextDescription ? { description: nextDescription } : {}),
           ...(nextInstructions ? { instructions: nextInstructions } : {}),
-          ...(nextVideoInstructions ? { videoInstructions: nextVideoInstructions } : {}),
+          ...(nextVideo ? { video: nextVideo } : {}),
           ...(((nextSynonyms ?? []).length > 0) ? { synonyms: nextSynonyms } : {}),
         };
         setTranslationOverrides((prev) => ({
@@ -1492,12 +1492,12 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     const incomingFeedback = parseCocktailFeedbackImport(baseFile?.data);
 
     const mergeCocktailWithFallback = (current: Cocktail, incoming: Cocktail): Cocktail => {
-      const currentVideoInstructions = current.videoInstructions?.trim();
-      const incomingVideoInstructions = incoming.videoInstructions?.trim();
+      const currentVideo = current.video?.trim();
+      const incomingVideo = incoming.video?.trim();
 
       return {
         ...incoming,
-        ...(incomingVideoInstructions ? {} : (currentVideoInstructions ? { videoInstructions: currentVideoInstructions } : {})),
+        ...(incomingVideo ? {} : (currentVideo ? { video: currentVideo } : {})),
       };
     };
 
@@ -1974,7 +1974,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       const existing = prev.cocktails[existingIndex];
       const description = input.description?.trim() || undefined;
       const instructions = input.instructions?.trim() || undefined;
-      const videoInstructions = input.videoInstructions?.trim() || undefined;
+      const video = input.video?.trim() || undefined;
       const synonyms =
         input.synonyms !== undefined
           ? normalizeSynonyms(input.synonyms)
@@ -2005,7 +2005,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         name: existing.name,
         description,
         instructions,
-        videoInstructions,
+        video,
         synonyms,
         photoUri,
         glassId,
@@ -2043,14 +2043,14 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       const nextName = input.name?.trim();
       const nextDescription = input.description?.trim();
       const nextInstructions = input.instructions?.trim();
-      const hasVideoInstructionsInInput = Object.prototype.hasOwnProperty.call(input, 'videoInstructions');
-      const nextVideoInstructions = input.videoInstructions?.trim();
+      const hasVideoInInput = Object.prototype.hasOwnProperty.call(input, 'video');
+      const nextVideo = input.video?.trim();
       const nextSynonyms = normalizeSynonyms(input.synonyms);
       const patch: CocktailTranslationOverride = {
         ...(nextName ? { name: nextName } : {}),
         ...(nextDescription ? { description: nextDescription } : {}),
         ...(nextInstructions ? { instructions: nextInstructions } : {}),
-        ...(nextVideoInstructions ? { videoInstructions: nextVideoInstructions } : {}),
+        ...(nextVideo ? { video: nextVideo } : {}),
         ...(((nextSynonyms ?? []).length > 0) ? { synonyms: nextSynonyms } : {}),
       };
       setTranslationOverrides((prev) => {
@@ -2060,8 +2060,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           ...patch,
         } as CocktailTranslationOverride;
 
-        if (hasVideoInstructionsInInput && !nextVideoInstructions) {
-          delete merged.videoInstructions;
+        if (hasVideoInInput && !nextVideo) {
+          delete merged.video;
         }
 
         return {
