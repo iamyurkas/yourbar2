@@ -716,31 +716,31 @@ export default function CocktailDetailsScreen() {
 
   useEffect(() => {
     return () => {
-      persistCommentDraft();
+      persistCommentDraftRef.current();
     };
-  }, [persistCommentDraft]);
+  }, []);
 
   useEffect(() => {
     const subscription = AppState.addEventListener("change", (nextState) => {
       if (nextState !== "active") {
-        persistCommentDraft();
+        persistCommentDraftRef.current();
       }
     });
 
     return () => {
       subscription.remove();
     };
-  }, [persistCommentDraft]);
+  }, []);
 
   const handleToggleCommentField = useCallback(() => {
     setIsCommentFieldVisible((current) => {
       if (current) {
-        persistCommentDraft();
+        persistCommentDraftRef.current();
       }
 
       return !current;
     });
-  }, [persistCommentDraft]);
+  }, []);
 
   const handleRatingSelect = useCallback(
     (value: number) => {
