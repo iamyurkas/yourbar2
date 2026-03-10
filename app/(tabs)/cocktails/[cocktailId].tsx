@@ -1117,41 +1117,7 @@ export default function CocktailDetailsScreen() {
                     );
                   })}
                 </View>
-
-                <Pressable
-                  onPress={handleToggleCommentField}
-                  accessibilityRole="button"
-                  accessibilityLabel={t("cocktailDetails.toggleComment")}
-                  style={styles.commentToggleButton}
-                  hitSlop={8}
-                >
-                  <MaterialCommunityIcons
-                    name={isCommentFieldVisible ? "comment-edit" : hasComment ? "comment" : "comment-plus-outline"}
-                    size={28}
-                    color={Colors.tint}
-                  />
-                </Pressable>
               </View>
-
-              {isCommentFieldVisible ? (
-                <TextInput
-                  value={commentDraft}
-                  onChangeText={setCommentDraft}
-                  onBlur={persistCommentDraft}
-                  placeholder={t("cocktailDetails.commentPlaceholder")}
-                  placeholderTextColor={Colors.onSurfaceVariant}
-                  multiline
-                  textAlignVertical="top"
-                  style={[
-                    styles.commentInput,
-                    {
-                      color: Colors.text,
-                      borderColor: Colors.outlineVariant,
-                      backgroundColor: Colors.background,
-                    },
-                  ]}
-                />
-              ) : null}
 
               <View
                 style={[
@@ -1218,7 +1184,7 @@ export default function CocktailDetailsScreen() {
                     >
                       <MaterialCommunityIcons
                         name={resolveVideoServiceIcon(videoService)}
-                        size={24}
+                        size={28}
                         color={Colors.tint}
                       />
                     </Pressable>
@@ -1228,80 +1194,118 @@ export default function CocktailDetailsScreen() {
 
             </View>
 
-            {methodDetails.length ? (
-              <View style={styles.methodList}>
-                {methodDetails.map((method) => {
-                  const icon = METHOD_ICON_MAP[method.id];
-                  const isExpanded = expandedMethodIds.includes(method.id);
-                  return (
-                    <View key={method.id} style={styles.methodEntry}>
-                      <View style={styles.methodHeader}>
-                        <View style={styles.methodIconWrapper}>
-                          {icon?.type === "asset" ? (
-                            <Image
-                              source={icon.source}
-                              style={[
-                                styles.methodIcon,
-                                { tintColor: Colors.onSurfaceVariant },
-                              ]}
-                              contentFit="contain"
-                            />
-                          ) : (
+            <View style={styles.methodsAndCommentRow}>
+              {methodDetails.length ? (
+                <View style={styles.methodList}>
+                  {methodDetails.map((method) => {
+                    const icon = METHOD_ICON_MAP[method.id];
+                    const isExpanded = expandedMethodIds.includes(method.id);
+                    return (
+                      <View key={method.id} style={styles.methodEntry}>
+                        <View style={styles.methodHeader}>
+                          <View style={styles.methodIconWrapper}>
+                            {icon?.type === "asset" ? (
+                              <Image
+                                source={icon.source}
+                                style={[
+                                  styles.methodIcon,
+                                  { tintColor: Colors.onSurfaceVariant },
+                                ]}
+                                contentFit="contain"
+                              />
+                            ) : (
+                              <MaterialCommunityIcons
+                                name={
+                                  icon?.type === "icon"
+                                    ? icon.name
+                                    : "information-outline"
+                                }
+                                size={18}
+                                color={Colors.onSurfaceVariant}
+                                style={method.id === "muddle" ? styles.muddleIcon : undefined}
+                              />
+                            )}
+                          </View>
+                          <Text
+                            style={[
+                              styles.methodLabel,
+                              { color: Colors.onSurface },
+                            ]}
+                          >
+                            {t(`cocktailMethod.${method.id}.label`)}
+                          </Text>
+                          <Pressable
+                            onPress={() => toggleMethodDescription(method.id)}
+                            accessibilityRole="button"
+                            accessibilityLabel={
+                              isExpanded
+                                ? t("cocktailDetails.hideMethodDescription", {
+                                  method: t(`cocktailMethod.${method.id}.label`),
+                                })
+                                : t("cocktailDetails.showMethodDescription", {
+                                  method: t(`cocktailMethod.${method.id}.label`),
+                                })
+                            }
+                            hitSlop={8}
+                          >
                             <MaterialCommunityIcons
-                              name={
-                                icon?.type === "icon"
-                                  ? icon.name
-                                  : "information-outline"
-                              }
-                              size={18}
-                              color={Colors.onSurfaceVariant}
-                              style={method.id === "muddle" ? styles.muddleIcon : undefined}
+                              name="information-outline"
+                              size={16}
+                              color={Colors.primary}
                             />
-                          )}
+                          </Pressable>
                         </View>
-                        <Text
-                          style={[
-                            styles.methodLabel,
-                            { color: Colors.onSurface },
-                          ]}
-                        >
-                          {t(`cocktailMethod.${method.id}.label`)}
-                        </Text>
-                        <Pressable
-                          onPress={() => toggleMethodDescription(method.id)}
-                          accessibilityRole="button"
-                          accessibilityLabel={
-                            isExpanded
-                              ? t("cocktailDetails.hideMethodDescription", {
-                                method: t(`cocktailMethod.${method.id}.label`),
-                              })
-                              : t("cocktailDetails.showMethodDescription", {
-                                method: t(`cocktailMethod.${method.id}.label`),
-                              })
-                          }
-                          hitSlop={8}
-                        >
-                          <MaterialCommunityIcons
-                            name="information-outline"
-                            size={16}
-                            color={Colors.primary}
-                          />
-                        </Pressable>
+                        {isExpanded ? (
+                          <Text
+                            style={[
+                              styles.methodDescription,
+                              { color: Colors.onSurfaceVariant },
+                            ]}
+                          >
+                            {t(`cocktailMethod.${method.id}.description`)}
+                          </Text>
+                        ) : null}
                       </View>
-                      {isExpanded ? (
-                        <Text
-                          style={[
-                            styles.methodDescription,
-                            { color: Colors.onSurfaceVariant },
-                          ]}
-                        >
-                          {t(`cocktailMethod.${method.id}.description`)}
-                        </Text>
-                      ) : null}
-                    </View>
-                  );
-                })}
-              </View>
+                    );
+                  })}
+                </View>
+              ) : (
+                <View style={styles.methodListFiller} />
+              )}
+
+              <Pressable
+                onPress={handleToggleCommentField}
+                accessibilityRole="button"
+                accessibilityLabel={t("cocktailDetails.toggleComment")}
+                style={styles.commentToggleButton}
+                hitSlop={8}
+              >
+                <MaterialCommunityIcons
+                  name={isCommentFieldVisible ? "comment-edit" : hasComment ? "comment" : "comment-plus-outline"}
+                  size={28}
+                  color={Colors.tint}
+                />
+              </Pressable>
+            </View>
+
+            {isCommentFieldVisible ? (
+              <TextInput
+                value={commentDraft}
+                onChangeText={setCommentDraft}
+                onBlur={persistCommentDraft}
+                placeholder={t("cocktailDetails.commentPlaceholder")}
+                placeholderTextColor={Colors.onSurfaceVariant}
+                multiline
+                textAlignVertical="top"
+                style={[
+                  styles.commentInput,
+                  {
+                    color: Colors.text,
+                    borderColor: Colors.outlineVariant,
+                    backgroundColor: Colors.background,
+                  },
+                ]}
+              />
             ) : null}
 
             {cocktail.tags && cocktail.tags.length ? (
@@ -1875,6 +1879,8 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   videoInstructionButton: {
+    width: 32,
+    height: 32,
     marginLeft: "auto",
     alignItems: "center",
     justifyContent: "center",
@@ -1885,14 +1891,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  methodsAndCommentRow: {
+    flexDirection: "row",
+    alignSelf: "stretch",
+    alignItems: "flex-end",
+    gap: 8,
+  },
   commentToggleButton: {
     width: 32,
     height: 32,
     alignItems: "center",
     justifyContent: "center",
-    position: "absolute",
-    right: 0,
-    top: 0,
   },
   commentInput: {
     width: "100%",
@@ -1955,6 +1964,10 @@ const styles = StyleSheet.create({
   methodList: {
     gap: 12,
     alignSelf: "stretch",
+    flex: 1,
+  },
+  methodListFiller: {
+    flex: 1,
   },
   textBlock: {
     gap: 12,
