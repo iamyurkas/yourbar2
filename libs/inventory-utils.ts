@@ -238,6 +238,7 @@ export function toCocktailStorageRecord(cocktail: Cocktail | BaseCocktailRecord)
     synonyms: cocktail.synonyms ?? undefined,
     description: cocktail.description ?? undefined,
     instructions: cocktail.instructions ?? undefined,
+    videoInstructions: cocktail.videoInstructions ?? undefined,
     photoUri: cocktail.photoUri ?? undefined,
     glassId: cocktail.glassId ?? undefined,
     methodIds: (normalizedMethodIds.length > 0 ? normalizedMethodIds : undefined) as CocktailStorageRecord["methodIds"],

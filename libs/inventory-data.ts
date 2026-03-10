@@ -19,6 +19,7 @@ type RawCocktail = {
   name: string;
   description?: string;
   instructions?: string;
+  videoInstructions?: string;
   photoUri?: string;
   glassId?: string;
   methodIds?: string[];

@@ -1020,6 +1020,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
 
         const description = input.description?.trim() || undefined;
         const instructions = input.instructions?.trim() || undefined;
+        const videoInstructions = input.videoInstructions?.trim() || undefined;
         const synonyms = normalizeSynonyms(input.synonyms);
         const photoUri = input.photoUri?.trim() || undefined;
         const glassId = input.glassId?.trim() || undefined;
@@ -1046,6 +1047,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           name: trimmedName,
           description,
           instructions,
+          videoInstructions,
           synonyms,
           photoUri,
           glassId,
@@ -1080,11 +1082,13 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         const nextName = input.name?.trim() || created.name || '';
         const nextDescription = input.description?.trim();
         const nextInstructions = input.instructions?.trim();
+        const nextVideoInstructions = input.videoInstructions?.trim();
         const nextSynonyms = normalizeSynonyms(input.synonyms);
         const patch: CocktailTranslationOverride = {
           name: nextName,
           ...(nextDescription ? { description: nextDescription } : {}),
           ...(nextInstructions ? { instructions: nextInstructions } : {}),
+          ...(nextVideoInstructions ? { videoInstructions: nextVideoInstructions } : {}),
           ...(((nextSynonyms ?? []).length > 0) ? { synonyms: nextSynonyms } : {}),
         };
         setTranslationOverrides((prev) => ({
@@ -1929,6 +1933,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       const existing = prev.cocktails[existingIndex];
       const description = input.description?.trim() || undefined;
       const instructions = input.instructions?.trim() || undefined;
+      const videoInstructions = input.videoInstructions?.trim() || undefined;
       const synonyms =
         input.synonyms !== undefined
           ? normalizeSynonyms(input.synonyms)
@@ -1959,6 +1964,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         name: existing.name,
         description: existing.description,
         instructions: existing.instructions,
+        videoInstructions: (existing as { videoInstructions?: string | undefined }).videoInstructions,
         synonyms: existing.synonyms,
         photoUri,
         glassId,
@@ -1996,11 +2002,13 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       const nextName = input.name?.trim();
       const nextDescription = input.description?.trim();
       const nextInstructions = input.instructions?.trim();
+      const nextVideoInstructions = input.videoInstructions?.trim();
       const nextSynonyms = normalizeSynonyms(input.synonyms);
       const patch: CocktailTranslationOverride = {
         ...(nextName ? { name: nextName } : {}),
         ...(nextDescription ? { description: nextDescription } : {}),
         ...(nextInstructions ? { instructions: nextInstructions } : {}),
+        ...(nextVideoInstructions ? { videoInstructions: nextVideoInstructions } : {}),
         ...(((nextSynonyms ?? []).length > 0) ? { synonyms: nextSynonyms } : {}),
       };
       setTranslationOverrides((prev) => ({
