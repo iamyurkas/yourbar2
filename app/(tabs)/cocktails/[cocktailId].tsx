@@ -12,6 +12,7 @@ import {
   useTransition,
 } from "react";
 import {
+  AppState,
   Platform,
   Pressable,
   ScrollView,
@@ -706,9 +707,25 @@ export default function CocktailDetailsScreen() {
   }, [cocktail, commentDraft, setCocktailComment, userComment]);
 
   useEffect(() => {
+    const subscription = AppState.addEventListener("change", (nextState) => {
+      if (nextState !== "active") {
+        persistCommentDraft();
+      }
+    });
+
     return () => {
-      persistCommentDraft();
+      subscription.remove();
     };
+  }, [persistCommentDraft]);
+
+  const handleToggleCommentField = useCallback(() => {
+    setIsCommentFieldVisible((current) => {
+      if (current) {
+        persistCommentDraft();
+      }
+
+      return !current;
+    });
   }, [persistCommentDraft]);
 
   const handleRatingSelect = useCallback(
@@ -997,34 +1014,37 @@ export default function CocktailDetailsScreen() {
               </View>
 
               <View style={styles.ratingRow}>
-                {Array.from({ length: MAX_RATING }).map((_, index) => {
-                  const starValue = index + 1;
-                  const isActive = displayedRating >= starValue;
-                  const icon = isActive ? "star" : "star-outline";
+                <View style={styles.ratingStarsRow}>
+                  {Array.from({ length: MAX_RATING }).map((_, index) => {
+                    const starValue = index + 1;
+                    const isActive = displayedRating >= starValue;
+                    const icon = isActive ? "star" : "star-outline";
 
-                  return (
-                    <Pressable
-                      key={`rating-star-${starValue}`}
-                      onPress={() => handleRatingSelect(starValue)}
-                      accessibilityRole="button"
-                      accessibilityLabel={
-                        displayedRating === starValue
-                          ? t("cocktailDetails.clearRating")
-                          : t("cocktailDetails.setRatingTo", { value: starValue })
-                      }
-                      style={styles.ratingStar}
-                      hitSlop={8}
-                    >
-                      <MaterialCommunityIcons
-                        name={icon}
-                        size={32}
-                        color={Colors.tint}
-                      />
-                    </Pressable>
-                  );
-                })}
+                    return (
+                      <Pressable
+                        key={`rating-star-${starValue}`}
+                        onPress={() => handleRatingSelect(starValue)}
+                        accessibilityRole="button"
+                        accessibilityLabel={
+                          displayedRating === starValue
+                            ? t("cocktailDetails.clearRating")
+                            : t("cocktailDetails.setRatingTo", { value: starValue })
+                        }
+                        style={styles.ratingStar}
+                        hitSlop={8}
+                      >
+                        <MaterialCommunityIcons
+                          name={icon}
+                          size={32}
+                          color={Colors.tint}
+                        />
+                      </Pressable>
+                    );
+                  })}
+                </View>
+
                 <Pressable
-                  onPress={() => setIsCommentFieldVisible((current) => !current)}
+                  onPress={handleToggleCommentField}
                   accessibilityRole="button"
                   accessibilityLabel={t("cocktailDetails.toggleComment")}
                   style={styles.commentToggleButton}
@@ -1750,9 +1770,15 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   ratingRow: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
     alignSelf: "stretch",
+    alignItems: "center",
+    justifyContent: "center",
+    minHeight: 32,
+    position: "relative",
+  },
+  ratingStarsRow: {
+    flexDirection: "row",
+    justifyContent: "center",
     gap: 8,
   },
   ratingStar: {
@@ -1766,7 +1792,9 @@ const styles = StyleSheet.create({
     height: 32,
     alignItems: "center",
     justifyContent: "center",
-    marginLeft: 4,
+    position: "absolute",
+    right: 0,
+    top: 0,
   },
   commentInput: {
     width: "100%",
