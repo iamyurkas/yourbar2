@@ -17,7 +17,7 @@ import ukUACatalogOverlay from '@/libs/i18n/locales/catalog/uk-UA.json';
 
 type CatalogOverlayDictionary = Record<string, string>;
 type CatalogEntity = 'cocktail' | 'ingredient';
-type CatalogField = 'name' | 'description' | 'instructions' | 'videoInstructions' | 'synonyms';
+type CatalogField = 'name' | 'description' | 'instructions' | 'video' | 'synonyms';
 
 const MISSING_TRANSLATION = '__MISSING_TRANSLATION__';
 
@@ -231,14 +231,14 @@ export function localizeCocktail(
     cocktail.instructions,
     entityOverrides?.instructions,
   );
-  const localizedVideoInstructions = getLocalizedText(
+  const localizedVideo = getLocalizedText(
     locale,
     fallbackLocale,
     'cocktail',
     cocktail.id,
-    'videoInstructions',
-    cocktail.videoInstructions,
-    entityOverrides?.videoInstructions,
+    'video',
+    cocktail.video,
+    entityOverrides?.video,
   );
 
   const overrideSynonyms = entityOverrides?.synonyms;
@@ -271,7 +271,7 @@ export function localizeCocktail(
     name: localizedName ?? cocktail.name,
     description: localizedDescription,
     instructions: localizedInstructions,
-    videoInstructions: localizedVideoInstructions,
+    video: localizedVideo,
     synonyms: localizedSynonyms.length ? localizedSynonyms : cocktail.synonyms,
     ingredients: localizedIngredients,
     ...localizedSearch,

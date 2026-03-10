@@ -813,7 +813,7 @@ export default function CocktailDetailsScreen() {
       .filter(Boolean);
   }, [cocktail?.instructions]);
 
-  const videoInstructionUrl = cocktail?.videoInstructions?.trim() || "";
+  const videoInstructionUrl = cocktail?.video?.trim() || "";
   const videoService = useMemo(() => resolveVideoService(videoInstructionUrl), [videoInstructionUrl]);
 
   const handleOpenVideoInstructions = useCallback(async () => {

@@ -135,7 +135,7 @@ export type CreateCocktailInput = {
   name: string;
   description?: string | null;
   instructions?: string | null;
-  videoInstructions?: string | null;
+  video?: string | null;
   synonyms?: string[] | null;
   photoUri?: string | null;
   glassId?: string | null;
@@ -171,7 +171,7 @@ export type CocktailTranslationOverride = {
   name?: string;
   description?: string;
   instructions?: string;
-  videoInstructions?: string;
+  video?: string;
   synonyms?: string[];
 };
 

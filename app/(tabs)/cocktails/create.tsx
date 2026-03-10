@@ -106,7 +106,7 @@ type CocktailFormSnapshot = {
   methodIds: CocktailMethodId[];
   description: string;
   instructions: string;
-  videoInstructions: string;
+  video: string;
   imageUri: string | null;
   selectedTagIds: number[];
   ingredients: {
@@ -327,7 +327,7 @@ export default function CreateCocktailScreen() {
   const [isPickingImage, setIsPickingImage] = useState(false);
   const [description, setDescription] = useState("");
   const [instructions, setInstructions] = useState("");
-  const [videoInstructions, setVideoInstructions] = useState("");
+  const [video, setVideo] = useState("");
   const [selectedTagIds, setSelectedTagIds] = useState<number[]>([]);
   const [ingredientsState, setIngredientsState] = useState<
     EditableIngredient[]
@@ -459,7 +459,7 @@ export default function CreateCocktailScreen() {
       methodIds,
       description,
       instructions,
-      videoInstructions,
+      video,
       imageUri,
       selectedTagIds: normalizedTags,
       ingredients: ingredientsState.map((item) => ({
@@ -489,7 +489,7 @@ export default function CreateCocktailScreen() {
     ingredientById,
     ingredientsState,
     instructions,
-    videoInstructions,
+    video,
     methodIds,
     name,
     selectedTagIds,
@@ -694,7 +694,7 @@ export default function CreateCocktailScreen() {
     setMethodIds([]);
     setDescription("");
     setInstructions("");
-    setVideoInstructions("");
+    setVideo("");
     setImageUri(null);
     setSelectedTagIds([]);
     setInitialSnapshot(null);
@@ -743,7 +743,7 @@ export default function CreateCocktailScreen() {
       setMethodIds(nextMethodIds);
       setDescription(baseCocktail.description ?? "");
       setInstructions(baseCocktail.instructions ?? "");
-      setVideoInstructions((baseCocktail as { videoInstructions?: string | null }).videoInstructions ?? "");
+      setVideo(baseCocktail.video ?? "");
       setImageUri(baseCocktail.photoUri ?? null);
       const mappedTags = (baseCocktail.tags ?? [])
         .map((tag) => Number(tag.id ?? -1))
@@ -1322,7 +1322,7 @@ export default function CreateCocktailScreen() {
 
     const descriptionValue = description.trim();
     const instructionsValue = instructions.trim();
-    const videoInstructionsValue = videoInstructions.trim();
+    const videoValue = video.trim();
     const tags = selectedTagIds
       .map((tagId) => availableCocktailTags.find((tag) => tag.id === tagId))
       .filter((tag): tag is (typeof availableCocktailTags)[number] =>
@@ -1346,7 +1346,7 @@ export default function CreateCocktailScreen() {
         photoUri: initialPhotoUri,
         description: descriptionValue || undefined,
         instructions: instructionsValue || undefined,
-        videoInstructions: videoInstructionsValue || undefined,
+        video: videoValue || undefined,
         tags,
         ingredients: sanitizedIngredients,
       } satisfies CreateCocktailInput;
@@ -1434,7 +1434,7 @@ export default function CreateCocktailScreen() {
     imageUri,
     ingredientsState,
     instructions,
-    videoInstructions,
+    video,
     isSaving,
     isEditMode,
     methodIds,
@@ -2000,12 +2000,12 @@ export default function CreateCocktailScreen() {
 
           <View style={styles.section}>
             <Text style={[styles.label, { color: Colors.onSurface }]}>
-              {t("cocktailForm.videoInstructions")}
+              {t("cocktailForm.video")}
             </Text>
             <TextInput
-              value={videoInstructions}
-              onChangeText={setVideoInstructions}
-              placeholder={t("cocktailForm.videoInstructionsPlaceholder")}
+              value={video}
+              onChangeText={setVideo}
+              placeholder={t("cocktailForm.videoPlaceholder")}
               placeholderTextColor={`${Colors.onSurfaceVariant}99`}
               style={[
                 styles.input,
