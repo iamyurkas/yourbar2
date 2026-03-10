@@ -11,6 +11,8 @@ export const ukUATranslations: TranslationDictionary = {
   "common.help": "Допомога",
   "common.gotIt": "Зрозуміло",
   "common.ok": "Гаразд",
+  "common.yes": "Так",
+  "common.no": "Ні",
   "common.tryAgainLater": "Спробуйте ще раз пізніше.",
   "common.save": "Зберегти",
   "common.delete": "Видалити",
@@ -588,6 +590,9 @@ export const ukUATranslations: TranslationDictionary = {
     "Архів резервної копії містить некоректні дані інвентарю.",
   "sideMenu.importRetryWithValidArchive":
     "Спробуйте ще раз із коректним архівом резервної копії.",
+  "sideMenu.importIngredientAvailabilityTitle": "Імпортувати наявність інгредієнтів?",
+  "sideMenu.importIngredientAvailabilityMessage":
+    "У резервній копії є статуси наявності інгредієнтів. Імпортувати їх у Мої інгредієнти?\n\nСтатуси списку покупок буде імпортовано в будь-якому разі.",
   "sideMenu.deleteTagTitle": "Видалити тег",
   "sideMenu.deleteTagMessage": 'Видалити "{{name}}"?',
   "sideMenu.emailUnavailableTitle": "Не вдалося відкрити пошту",

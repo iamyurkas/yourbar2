@@ -85,14 +85,14 @@ export function AppDialog({ visible, title, message, actions, onRequestClose }: 
               return (
                 <Pressable
                   key={`${action.label}-${index}`}
+                  onPressIn={onRequestClose}
                   onPress={() => {
-                    onRequestClose?.();
                     action.onPress?.();
                   }}
                   accessibilityRole="button"
                   accessibilityLabel={action.accessibilityLabel ?? action.label}
                   style={[styles.actionButton, { backgroundColor, borderColor }]}
-                  hitSlop={4}>
+                  hitSlop={8}>
                   <Text style={[styles.actionLabel, { color: textColor }]}>{action.label}</Text>
                 </Pressable>
               );

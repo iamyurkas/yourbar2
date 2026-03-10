@@ -11,6 +11,8 @@ export const deDETranslations: TranslationDictionary = {
   "common.help": "Hilfe",
   "common.gotIt": "Verstanden",
   "common.ok": "OK",
+  "common.yes": "Ja",
+  "common.no": "Nein",
   "common.tryAgainLater": "Bitte versuchen Sie es später erneut.",
   "common.save": "Speichern",
   "common.delete": "Löschen",
@@ -591,6 +593,9 @@ export const deDETranslations: TranslationDictionary = {
     "Das Sicherungsarchiv enthält ungültige Inventardaten.",
   "sideMenu.importRetryWithValidArchive":
     "Bitte versuchen Sie es erneut mit einem gültigen Sicherungsarchiv.",
+  "sideMenu.importIngredientAvailabilityTitle": "Zutatenverfügbarkeit importieren?",
+  "sideMenu.importIngredientAvailabilityMessage":
+    "Das Backup enthält Verfügbarkeitsstatus von Zutaten. In „Meine Zutaten“ importieren?\n\nEinkaufslisten-Status werden in jedem Fall importiert.",
   "sideMenu.deleteTagTitle": "Tag löschen",
   "sideMenu.deleteTagMessage": '"{{name}}" entfernen?',
   "sideMenu.emailUnavailableTitle": "E-Mail kann nicht geöffnet werden",

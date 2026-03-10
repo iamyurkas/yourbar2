@@ -629,6 +629,44 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     return Array.isArray(record.cocktails) && Array.isArray(record.ingredients);
   };
 
+
+
+  const hasIngredientAvailabilityStatuses = (data?: InventoryExportData | null): boolean => {
+    const statuses = data?.ingredientStatuses;
+    if (!statuses || typeof statuses !== 'object') {
+      return false;
+    }
+
+    return Object.values(statuses).some((entry) => {
+      if (!entry || typeof entry !== 'object') {
+        return false;
+      }
+
+      const candidate = entry as { available?: unknown };
+      return candidate.available === true;
+    });
+  };
+
+  const confirmIngredientAvailabilityImport = (): Promise<boolean> => (
+    new Promise((resolve) => {
+      setDialogOptions({
+        title: t('sideMenu.importIngredientAvailabilityTitle'),
+        message: t('sideMenu.importIngredientAvailabilityMessage'),
+        actions: [
+          {
+            label: t('common.no'),
+            variant: 'secondary',
+            onPress: () => resolve(false),
+          },
+          {
+            label: t('common.yes'),
+            variant: 'primary',
+            onPress: () => resolve(true),
+          },
+        ],
+      });
+    })
+  );
   const isInventoryExportFile = (candidate: unknown): candidate is InventoryExportFile => {
     if (!candidate || typeof candidate !== "object") {
       return false;
@@ -797,7 +835,17 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
         return;
       }
 
-      importInventoryData(importFiles.length > 0 ? importFiles : (legacyBase as InventoryExportData));
+      const importedBaseData = (importFiles.find((file) => file.kind === 'base') as { data?: InventoryExportData } | undefined)?.data
+        ?? legacyBase
+        ?? null;
+      const shouldPromptIngredientAvailability = hasIngredientAvailabilityStatuses(importedBaseData);
+      const shouldImportIngredientAvailability = shouldPromptIngredientAvailability
+        ? await confirmIngredientAvailabilityImport()
+        : true;
+
+      importInventoryData(importFiles.length > 0 ? importFiles : (legacyBase as InventoryExportData), {
+        importIngredientAvailability: shouldImportIngredientAvailability,
+      });
 
       const directory = FileSystem.documentDirectory ?? FileSystem.cacheDirectory;
       if (!directory) {

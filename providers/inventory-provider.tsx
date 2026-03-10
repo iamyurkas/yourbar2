@@ -84,6 +84,74 @@ const DEFAULT_APP_LOCALE: AppLocale = DEFAULT_LOCALE;
 
 type CocktailFeedbackExport = NonNullable<InventoryExportData['cocktailFeedback']>;
 
+
+type IngredientStatusesExport = NonNullable<InventoryExportData['ingredientStatuses']>;
+
+type IngredientStatusImportResult = {
+  availableIngredientIds: Set<number>;
+  shoppingIngredientIds: Set<number>;
+  hasAnyAvailability: boolean;
+  hasAnyShopping: boolean;
+};
+
+function buildIngredientStatusesExport(
+  availableIngredientIds: Set<number>,
+  shoppingIngredientIds: Set<number>,
+): IngredientStatusesExport {
+  const statuses: IngredientStatusesExport = {};
+
+  availableIngredientIds.forEach((id) => {
+    const key = String(Math.trunc(id));
+    statuses[key] = {
+      ...(statuses[key] ?? {}),
+      available: true,
+    };
+  });
+
+  shoppingIngredientIds.forEach((id) => {
+    const key = String(Math.trunc(id));
+    statuses[key] = {
+      ...(statuses[key] ?? {}),
+      shopping: true,
+    };
+  });
+
+  return statuses;
+}
+
+function parseIngredientStatusesImport(data?: InventoryExportData): IngredientStatusImportResult {
+  const statusesCandidate = data?.ingredientStatuses;
+  const availableIngredientIds = new Set<number>();
+  const shoppingIngredientIds = new Set<number>();
+
+  if (statusesCandidate && typeof statusesCandidate === 'object') {
+    Object.entries(statusesCandidate).forEach(([id, value]) => {
+      const normalizedId = Number(id);
+      if (!Number.isFinite(normalizedId) || normalizedId < 0 || !value || typeof value !== 'object') {
+        return;
+      }
+
+      const ingredientId = Math.trunc(normalizedId);
+      const entry = value as { available?: unknown; shopping?: unknown };
+
+      if (entry.available === true) {
+        availableIngredientIds.add(ingredientId);
+      }
+
+      if (entry.shopping === true) {
+        shoppingIngredientIds.add(ingredientId);
+      }
+    });
+  }
+
+  return {
+    availableIngredientIds,
+    shoppingIngredientIds,
+    hasAnyAvailability: availableIngredientIds.size > 0,
+    hasAnyShopping: shoppingIngredientIds.size > 0,
+  };
+}
+
 function buildCocktailFeedbackExport(
   ratingsByCocktailId: Record<string, number>,
   commentsByCocktailId: Record<string, string>,
@@ -1390,6 +1458,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     }, []);
 
     const exportFeedback = buildCocktailFeedbackExport(ratingsByCocktailId, commentsByCocktailId);
+    const exportIngredientStatuses = buildIngredientStatusesExport(availableIngredientIds, shoppingIngredientIds);
 
     const files: InventoryExportFile[] = [{
       schemaVersion: 1,
@@ -1398,6 +1467,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         cocktails,
         ingredients,
         ...(Object.keys(exportFeedback).length > 0 ? { cocktailFeedback: exportFeedback } : {}),
+        ...(Object.keys(exportIngredientStatuses).length > 0 ? { ingredientStatuses: exportIngredientStatuses } : {}),
       },
     } satisfies InventoryBaseExportFile];
 
@@ -1425,7 +1495,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
 
     files.sort((a, b) => (a.kind === 'base' ? -1 : a.kind.localeCompare(b.kind)));
     return files;
-  }, [baseMaps, commentsByCocktailId, inventoryState, ratingsByCocktailId, translationOverrides]);
+  }, [availableIngredientIds, baseMaps, commentsByCocktailId, inventoryState, ratingsByCocktailId, shoppingIngredientIds, translationOverrides]);
 
   const exportInventoryPhotoEntries = useCallback((): PhotoBackupEntry[] | null => {
     if (!inventoryState) {
@@ -1475,7 +1545,10 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     ];
   }, [baseMaps, inventoryState]);
 
-  const importInventoryData = useCallback((input: InventoryExportData | InventoryExportFile | InventoryExportFile[]) => {
+  const importInventoryData = useCallback((
+    input: InventoryExportData | InventoryExportFile | InventoryExportFile[],
+    options?: { importIngredientAvailability?: boolean },
+  ) => {
     const files = Array.isArray(input)
       ? input
       : (input && typeof input === 'object' && 'kind' in input
@@ -1490,6 +1563,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       : undefined;
 
     const incomingFeedback = parseCocktailFeedbackImport(baseFile?.data);
+    const incomingIngredientStatuses = parseIngredientStatusesImport(baseFile?.data);
 
     const mergeCocktailWithFallback = (current: Cocktail, incoming: Cocktail): Cocktail => {
       const currentVideo = current.video?.trim();
@@ -1553,6 +1627,27 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         ...prev,
         ...incomingFeedback.comments,
       }));
+    }
+
+
+    if (incomingIngredientStatuses.hasAnyShopping) {
+      setShoppingIngredientIds((prev) => {
+        const next = new Set(prev);
+        incomingIngredientStatuses.shoppingIngredientIds.forEach((id) => {
+          next.add(id);
+        });
+        return next;
+      });
+    }
+
+    if (options?.importIngredientAvailability !== false && incomingIngredientStatuses.hasAnyAvailability) {
+      setAvailableIngredientIds((prev) => {
+        const next = new Set(prev);
+        incomingIngredientStatuses.availableIngredientIds.forEach((id) => {
+          next.add(id);
+        });
+        return next;
+      });
     }
 
     if (incomingState) {
