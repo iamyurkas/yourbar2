@@ -997,20 +997,6 @@ export default function CocktailDetailsScreen() {
               </View>
 
               <View style={styles.ratingRow}>
-                <Pressable
-                  onPress={() => setIsCommentFieldVisible((current) => !current)}
-                  accessibilityRole="button"
-                  accessibilityLabel={t("cocktailDetails.toggleComment")}
-                  style={styles.ratingStar}
-                  hitSlop={8}
-                >
-                  <MaterialCommunityIcons
-                    name={isCommentFieldVisible ? "comment-edit" : "comment-plus-outline"}
-                    size={28}
-                    color={Colors.tint}
-                  />
-                </Pressable>
-
                 {Array.from({ length: MAX_RATING }).map((_, index) => {
                   const starValue = index + 1;
                   const isActive = displayedRating >= starValue;
@@ -1037,6 +1023,19 @@ export default function CocktailDetailsScreen() {
                     </Pressable>
                   );
                 })}
+                <Pressable
+                  onPress={() => setIsCommentFieldVisible((current) => !current)}
+                  accessibilityRole="button"
+                  accessibilityLabel={t("cocktailDetails.toggleComment")}
+                  style={styles.commentToggleButton}
+                  hitSlop={8}
+                >
+                  <MaterialCommunityIcons
+                    name={isCommentFieldVisible ? "comment-edit" : "comment-plus-outline"}
+                    size={28}
+                    color={Colors.tint}
+                  />
+                </Pressable>
               </View>
 
               {isCommentFieldVisible ? (
@@ -1051,9 +1050,9 @@ export default function CocktailDetailsScreen() {
                   style={[
                     styles.commentInput,
                     {
-                      color: Colors.onSurface,
-                      borderColor: Colors.outline,
-                      backgroundColor: Colors.surfaceBright,
+                      color: Colors.text,
+                      borderColor: Colors.outlineVariant,
+                      backgroundColor: Colors.background,
                     },
                   ]}
                 />
@@ -1752,7 +1751,8 @@ const styles = StyleSheet.create({
   },
   ratingRow: {
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "flex-end",
+    alignSelf: "stretch",
     gap: 8,
   },
   ratingStar: {
@@ -1761,16 +1761,22 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  commentToggleButton: {
+    width: 32,
+    height: 32,
+    alignItems: "center",
+    justifyContent: "center",
+    marginLeft: 4,
+  },
   commentInput: {
     width: "100%",
-    minHeight: 92,
+    minHeight: 120,
     borderWidth: StyleSheet.hairlineWidth,
     borderRadius: 12,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    fontSize: 15,
-    lineHeight: 20,
-    marginTop: 10,
+    paddingHorizontal: 16,
+    paddingVertical: Platform.select({ ios: 14, default: 12 }),
+    fontSize: 16,
+    marginTop: 12,
   },
   displayModeSwitcher: {
     borderRadius: 14,
