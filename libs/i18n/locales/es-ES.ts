@@ -14,6 +14,8 @@ export const esESTranslations: TranslationDictionary = {
   "common.tryAgainLater": "Por favor, inténtalo de nuevo más tarde.",
   "common.save": "Guardar",
   "common.delete": "Eliminar",
+  "common.yes": "Sí",
+  "common.no": "No",
   "common.cancel": "Cancelar",
   "common.create": "Crear",
   "common.close": "Cerrar",
@@ -568,6 +570,8 @@ export const esESTranslations: TranslationDictionary = {
     "Compartir no está disponible en este dispositivo.",
   "sideMenu.exportFailedTitle": "Error al exportar",
   "sideMenu.backupFailedTitle": "Error al hacer la copia",
+  "sideMenu.importIngredientStatusTitle": "¿Importar estados de ingredientes?",
+  "sideMenu.importIngredientStatusMessage": "La copia de seguridad contiene estados de disponibilidad o de compra de ingredientes. ¿Quieres importar estos estados?",
   "sideMenu.importFailedTitle": "Error al importar",
   "sideMenu.deviceStorageUnavailable":
     "No se puede acceder al almacenamiento del dispositivo.",

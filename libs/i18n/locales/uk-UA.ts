@@ -14,6 +14,8 @@ export const ukUATranslations: TranslationDictionary = {
   "common.tryAgainLater": "Спробуйте ще раз пізніше.",
   "common.save": "Зберегти",
   "common.delete": "Видалити",
+  "common.yes": "Так",
+  "common.no": "Ні",
   "common.cancel": "Скасувати",
   "common.create": "Створити",
   "common.close": "Закрити",
@@ -577,6 +579,8 @@ export const ukUATranslations: TranslationDictionary = {
     "Поширення недоступне на цьому пристрої.",
   "sideMenu.exportFailedTitle": "Помилка експорту",
   "sideMenu.backupFailedTitle": "Помилка резервного копіювання",
+  "sideMenu.importIngredientStatusTitle": "Імпортувати статуси інгредієнтів?",
+  "sideMenu.importIngredientStatusMessage": "Резервна копія містить статуси наявності або покупок інгредієнтів. Імпортувати ці статуси?",
   "sideMenu.importFailedTitle": "Помилка імпорту",
   "sideMenu.deviceStorageUnavailable":
     "Не вдалося отримати доступ до сховища пристрою.",

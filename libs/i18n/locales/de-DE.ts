@@ -14,6 +14,8 @@ export const deDETranslations: TranslationDictionary = {
   "common.tryAgainLater": "Bitte versuchen Sie es später erneut.",
   "common.save": "Speichern",
   "common.delete": "Löschen",
+  "common.yes": "Ja",
+  "common.no": "Nein",
   "common.cancel": "Abbrechen",
   "common.create": "Erstellen",
   "common.close": "Schließen",
@@ -579,6 +581,8 @@ export const deDETranslations: TranslationDictionary = {
     "Teilen ist auf diesem Gerät nicht verfügbar.",
   "sideMenu.exportFailedTitle": "Export fehlgeschlagen",
   "sideMenu.backupFailedTitle": "Sicherung fehlgeschlagen",
+  "sideMenu.importIngredientStatusTitle": "Zutatenstatus importieren?",
+  "sideMenu.importIngredientStatusMessage": "Die Sicherung enthält Verfügbarkeits- oder Einkaufsstatus von Zutaten. Möchten Sie diese Status importieren?",
   "sideMenu.importFailedTitle": "Import fehlgeschlagen",
   "sideMenu.deviceStorageUnavailable":
     "Auf Gerätespeicher kann nicht zugegriffen werden.",

@@ -219,6 +219,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   );
   const [isBackingUpData, setIsBackingUpData] = useState(false);
   const [isRestoringData, setIsRestoringData] = useState(false);
+  const ingredientStatusImportResolverRef = useRef<((value: boolean) => void) | null>(null);
   const translateX = useRef(new Animated.Value(-MENU_WIDTH)).current;
   const backdropOpacity = useRef(new Animated.Value(0)).current;
 
@@ -574,6 +575,11 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   };
 
   const handleCloseDialog = () => {
+    if (ingredientStatusImportResolverRef.current) {
+      ingredientStatusImportResolverRef.current(false);
+      ingredientStatusImportResolverRef.current = null;
+    }
+
     setDialogOptions(null);
   };
 
@@ -585,6 +591,37 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     });
   };
 
+
+  const askImportIngredientStatus = () =>
+    new Promise<boolean>((resolve) => {
+      const resolveOnce = (value: boolean) => {
+        if (!ingredientStatusImportResolverRef.current) {
+          return;
+        }
+
+        ingredientStatusImportResolverRef.current = null;
+        resolve(value);
+      };
+
+      ingredientStatusImportResolverRef.current = resolveOnce;
+
+      setDialogOptions({
+        title: t("sideMenu.importIngredientStatusTitle"),
+        message: t("sideMenu.importIngredientStatusMessage"),
+        actions: [
+          {
+            label: t("common.no"),
+            variant: "secondary",
+            onPress: () => resolveOnce(false),
+          },
+          {
+            label: t("common.yes"),
+            variant: "primary",
+            onPress: () => resolveOnce(true),
+          },
+        ],
+      });
+    });
 
   const parsePhotoEntryFromArchivePath = (path: string): {
     type: ImportedPhotoEntry['type'];
@@ -636,6 +673,22 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
     const record = candidate as { kind?: unknown; schemaVersion?: unknown };
     return (record.kind === "base" || record.kind === "translations") && typeof record.schemaVersion === "number";
+  };
+
+  const hasIngredientStatusInImportData = (data?: InventoryExportData | null) => {
+    const status = data?.ingredientStatus;
+    if (!status || typeof status !== "object") {
+      return false;
+    }
+
+    return Object.values(status).some((entry) => {
+      if (!entry || typeof entry !== "object") {
+        return false;
+      }
+
+      const normalized = entry as { available?: unknown; shopping?: unknown };
+      return normalized.available === true || normalized.shopping === true;
+    });
   };
 
   const handleBackupData = async () => {
@@ -797,7 +850,15 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
         return;
       }
 
-      importInventoryData(importFiles.length > 0 ? importFiles : (legacyBase as InventoryExportData));
+      const baseImportData = importFiles.find((file) => file.kind === 'base')?.data ?? legacyBase;
+      const hasIngredientStatus = hasIngredientStatusInImportData(baseImportData);
+      const shouldImportIngredientStatus = hasIngredientStatus
+        ? await askImportIngredientStatus()
+        : true;
+
+      importInventoryData(importFiles.length > 0 ? importFiles : (legacyBase as InventoryExportData), {
+        importIngredientStatus: shouldImportIngredientStatus,
+      });
 
       const directory = FileSystem.documentDirectory ?? FileSystem.cacheDirectory;
       if (!directory) {
