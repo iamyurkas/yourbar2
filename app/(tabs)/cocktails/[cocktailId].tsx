@@ -515,6 +515,7 @@ export default function CocktailDetailsScreen() {
   const [ingredientDisplayMode, setIngredientDisplayMode] =
     useState<IngredientDisplayMode>(useImperialUnits ? "imperial" : "metric");
   const isHandlingBackRef = useRef(false);
+  const persistCommentDraftRef = useRef<() => void>(() => {});
   const shouldNavigateAway = !loading && !cocktail;
 
   useEffect(() => {
@@ -524,6 +525,8 @@ export default function CocktailDetailsScreen() {
   }, [useImperialUnits]);
 
   const handleReturn = useCallback(() => {
+    persistCommentDraftRef.current();
+
     if (returnToPath === "/cocktails") {
       skipDuplicateBack(navigation);
       return;
@@ -556,6 +559,7 @@ export default function CocktailDetailsScreen() {
       }
 
       event.preventDefault();
+      persistCommentDraftRef.current();
 
       isHandlingBackRef.current = true;
       handleReturn();
@@ -705,6 +709,16 @@ export default function CocktailDetailsScreen() {
 
     setCocktailComment(cocktail, trimmedDraft);
   }, [cocktail, commentDraft, setCocktailComment, userComment]);
+
+  useEffect(() => {
+    persistCommentDraftRef.current = persistCommentDraft;
+  }, [persistCommentDraft]);
+
+  useEffect(() => {
+    return () => {
+      persistCommentDraft();
+    };
+  }, [persistCommentDraft]);
 
   useEffect(() => {
     const subscription = AppState.addEventListener("change", (nextState) => {
