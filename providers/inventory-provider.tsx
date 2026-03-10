@@ -392,6 +392,12 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       ? new Set(globalThis.__yourbarInventoryShoppingIngredientIds)
       : new Set(),
   );
+  const [optimisticAvailabilityById, setOptimisticAvailabilityById] = useState<Map<number, boolean>>(
+    () => new Map(),
+  );
+  const [optimisticShoppingById, setOptimisticShoppingById] = useState<Map<number, boolean>>(
+    () => new Map(),
+  );
   const [ratingsByCocktailId, setRatingsByCocktailId] = useState<Record<string, number>>(() =>
     sanitizeCocktailRatings(globalThis.__yourbarInventoryCocktailRatings),
   );
@@ -680,6 +686,52 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   }, [activeBarId, availableIngredientIds, shoppingIngredientIds]);
 
   useEffect(() => {
+    if (optimisticAvailabilityById.size === 0) {
+      return;
+    }
+
+    setOptimisticAvailabilityById((prev) => {
+      if (prev.size === 0) {
+        return prev;
+      }
+
+      let didChange = false;
+      const next = new Map(prev);
+      prev.forEach((value, id) => {
+        if (availableIngredientIds.has(id) === value) {
+          next.delete(id);
+          didChange = true;
+        }
+      });
+
+      return didChange ? next : prev;
+    });
+  }, [availableIngredientIds, optimisticAvailabilityById]);
+
+  useEffect(() => {
+    if (optimisticShoppingById.size === 0) {
+      return;
+    }
+
+    setOptimisticShoppingById((prev) => {
+      if (prev.size === 0) {
+        return prev;
+      }
+
+      let didChange = false;
+      const next = new Map(prev);
+      prev.forEach((value, id) => {
+        if (shoppingIngredientIds.has(id) === value) {
+          next.delete(id);
+          didChange = true;
+        }
+      });
+
+      return didChange ? next : prev;
+    });
+  }, [optimisticShoppingById, shoppingIngredientIds]);
+
+  useEffect(() => {
     if (!inventoryState || !inventoryDelta) {
       return;
     }
@@ -880,7 +932,57 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     [commentsByCocktailId, resolveCocktailKey],
   );
 
+  const effectiveAvailableIngredientIds = useMemo(() => {
+    if (optimisticAvailabilityById.size === 0) {
+      return availableIngredientIds;
+    }
+
+    const next = new Set(availableIngredientIds);
+    optimisticAvailabilityById.forEach((value, id) => {
+      if (value) {
+        next.add(id);
+      } else {
+        next.delete(id);
+      }
+    });
+
+    return next;
+  }, [availableIngredientIds, optimisticAvailabilityById]);
+
+  const effectiveShoppingIngredientIds = useMemo(() => {
+    if (optimisticShoppingById.size === 0) {
+      return shoppingIngredientIds;
+    }
+
+    const next = new Set(shoppingIngredientIds);
+    optimisticShoppingById.forEach((value, id) => {
+      if (value) {
+        next.add(id);
+      } else {
+        next.delete(id);
+      }
+    });
+
+    return next;
+  }, [optimisticShoppingById, shoppingIngredientIds]);
+
+  const isIngredientAvailable = useCallback(
+    (id: number) => effectiveAvailableIngredientIds.has(id),
+    [effectiveAvailableIngredientIds],
+  );
+
+  const isIngredientOnShoppingList = useCallback(
+    (id: number) => effectiveShoppingIngredientIds.has(id),
+    [effectiveShoppingIngredientIds],
+  );
+
   const setIngredientAvailability = useCallback((id: number, available: boolean) => {
+    setOptimisticAvailabilityById((prev) => {
+      const next = new Map(prev);
+      next.set(id, available);
+      return next;
+    });
+
     setAvailableIngredientIds((prev) => {
       const next = new Set(prev);
       if (available) {
@@ -2226,6 +2328,13 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   );
 
   const toggleIngredientAvailability = useCallback((id: number) => {
+    setOptimisticAvailabilityById((prev) => {
+      const current = prev.has(id) ? prev.get(id) : availableIngredientIds.has(id);
+      const next = new Map(prev);
+      next.set(id, !current);
+      return next;
+    });
+
     setAvailableIngredientIds((prev) => {
       const next = new Set(prev);
       if (next.has(id)) {
@@ -2235,9 +2344,16 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       }
       return next;
     });
-  }, []);
+  }, [availableIngredientIds]);
 
   const toggleIngredientShopping = useCallback((id: number) => {
+    setOptimisticShoppingById((prev) => {
+      const current = prev.has(id) ? prev.get(id) : shoppingIngredientIds.has(id);
+      const next = new Map(prev);
+      next.set(id, !current);
+      return next;
+    });
+
     setShoppingIngredientIds((prev) => {
       const next = new Set(prev);
       if (next.has(id)) {
@@ -2247,7 +2363,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       }
       return next;
     });
-  }, []);
+  }, [shoppingIngredientIds]);
 
   const handleSetIgnoreGarnish = useCallback((value: boolean) => {
     setIgnoreGarnish(Boolean(value));
@@ -2663,8 +2779,10 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       cocktails: localizedCocktails,
       ingredients: localizedIngredients,
       loading,
-      availableIngredientIds,
-      shoppingIngredientIds,
+      availableIngredientIds: effectiveAvailableIngredientIds,
+      shoppingIngredientIds: effectiveShoppingIngredientIds,
+      isIngredientAvailable,
+      isIngredientOnShoppingList,
       customCocktailTags,
       customIngredientTags,
       ratingsByCocktailId,
@@ -2676,8 +2794,10 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       localizedCocktails,
       localizedIngredients,
       loading,
-      availableIngredientIds,
-      shoppingIngredientIds,
+      effectiveAvailableIngredientIds,
+      effectiveShoppingIngredientIds,
+      isIngredientAvailable,
+      isIngredientOnShoppingList,
       customCocktailTags,
       customIngredientTags,
       ratingsByCocktailId,

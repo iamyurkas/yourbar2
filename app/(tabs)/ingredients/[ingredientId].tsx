@@ -8,7 +8,6 @@ import React, {
   useMemo,
   useRef,
   useState,
-  useTransition,
 } from "react";
 import {
   Linking,
@@ -150,18 +149,10 @@ export default function IngredientDetailsScreen() {
     return Number.isNaN(parsed) ? undefined : parsed;
   }, [ingredient?.id, ingredientId]);
 
-  const [optimisticAvailability, setOptimisticAvailability] = useState<
-    boolean | null
-  >(null);
-  const [optimisticShopping, setOptimisticShopping] = useState<boolean | null>(
-    null,
-  );
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(
     null,
   );
   const [isHelpVisible, setIsHelpVisible] = useState(false);
-  const [, startAvailabilityTransition] = useTransition();
-  const [, startShoppingTransition] = useTransition();
   const isHandlingBackRef = useRef(false);
 
   const requestedIngredientParam = useMemo(() => {
@@ -196,8 +187,8 @@ export default function IngredientDetailsScreen() {
     return shoppingIngredientIds.has(numericIngredientId);
   }, [numericIngredientId, shoppingIngredientIds]);
 
-  const effectiveIsAvailable = optimisticAvailability ?? isAvailable;
-  const effectiveIsOnShoppingList = optimisticShopping ?? isOnShoppingList;
+  const effectiveIsAvailable = isAvailable;
+  const effectiveIsOnShoppingList = isOnShoppingList;
   const effectiveAvailableIngredientIds = useMemo(() => {
     const nextIds = new Set(availableIngredientIds);
     if (numericIngredientId == null) {
@@ -212,26 +203,6 @@ export default function IngredientDetailsScreen() {
 
     return nextIds;
   }, [availableIngredientIds, effectiveIsAvailable, numericIngredientId]);
-
-  useEffect(() => {
-    setOptimisticAvailability((previous) => {
-      if (previous == null) {
-        return previous;
-      }
-
-      return previous === isAvailable ? null : previous;
-    });
-  }, [isAvailable]);
-
-  useEffect(() => {
-    setOptimisticShopping((previous) => {
-      if (previous == null) {
-        return previous;
-      }
-
-      return previous === isOnShoppingList ? null : previous;
-    });
-  }, [isOnShoppingList]);
 
   const closeDialog = useCallback(() => {
     setDialogOptions(null);
@@ -513,37 +484,19 @@ export default function IngredientDetailsScreen() {
 
   const handleToggleAvailability = useCallback(() => {
     if (numericIngredientId != null) {
-      setOptimisticAvailability((previous) => {
-        const current = previous ?? isAvailable;
-        return !current;
-      });
-
-      startAvailabilityTransition(() => {
-        toggleIngredientAvailability(numericIngredientId);
-      });
+      toggleIngredientAvailability(numericIngredientId);
     }
   }, [
-    isAvailable,
     numericIngredientId,
-    startAvailabilityTransition,
     toggleIngredientAvailability,
   ]);
 
   const handleToggleShopping = useCallback(() => {
     if (numericIngredientId != null) {
-      setOptimisticShopping((previous) => {
-        const current = previous ?? isOnShoppingList;
-        return !current;
-      });
-
-      startShoppingTransition(() => {
-        toggleIngredientShopping(numericIngredientId);
-      });
+      toggleIngredientShopping(numericIngredientId);
     }
   }, [
-    isOnShoppingList,
     numericIngredientId,
-    startShoppingTransition,
     toggleIngredientShopping,
   ]);
 
