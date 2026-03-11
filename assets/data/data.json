@@ -13362,7 +13362,8 @@
       "name": "Dirty Martini",
       "synonyms": ["Olive Martini"],
       "description": "An IBA official variation of the martini drink.",
-      "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 60 ml of **vodka**, 10 ml of **dry vermouth**, and 10 ml of **olive brine**.\n3. Stir gently for about 30 seconds until well chilled.\n4. Strain into a chilled martini glass.\n5. Garnish with 3 olives.",
+      "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 75 ml of **gin**, 15 ml of **dry vermouth**, and 15 ml of **olive brine**.\n3. Stir gently for about 30 seconds until well chilled.\n4. Strain into a chilled martini glass.\n5. Garnish with 3 olives.",
+      "video": "https://www.instagram.com/p/C2ksh5fK_QR/",
       "photoUri": "assets/cocktails/210-dirty-martini.jpg",
       "glassId": "martini",
       "methodIds": ["stir"],
@@ -13379,23 +13380,23 @@
         },
         {
           "order": 2,
-          "ingredientId": 345,
-          "name": "Vodka",
-          "amount": "60",
+          "ingredientId": 161,
+          "name": "Gin",
+          "amount": "75",
           "unitId": 11
         },
         {
           "order": 3,
           "ingredientId": 144,
           "name": "Dry Vermouth",
-          "amount": "10",
+          "amount": "15",
           "unitId": 11
         },
         {
           "order": 4,
           "ingredientId": 245,
           "name": "Olive Brine",
-          "amount": "10",
+          "amount": "15",
           "unitId": 11
         },
         {
@@ -13653,7 +13654,8 @@
       "id": 214,
       "name": "Dry Martini",
       "description": "A timeless mix of **gin** and **dry vermouth** served icy cold.",
-      "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 60 ml of **gin**, 10 ml of **dry vermouth**, and a dash of **orange bitters**.\n3. Stir gently for about 30 seconds until well chilled.\n4. Strain into a chilled martini glass.\n5. Garnish with an **olive**, then express the oils from a **lemon** peel over the drink and use it as a garnish.",
+      "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 75 ml of **gin**, 15 ml of **dry vermouth**, and a dash of **orange bitters**.\n3. Stir gently for about 30 seconds until well chilled.\n4. Strain into a chilled martini glass.\n5. Garnish with an **olive**, then express the oils from a **lemon** peel over the drink and use it as a garnish.",
+      "video": "https://www.instagram.com/p/C2ktoc8KdBf/",
       "photoUri": "assets/cocktails/214-dry-martini.jpg",
       "glassId": "martini",
       "methodIds": ["stir"],
@@ -13672,14 +13674,14 @@
           "order": 2,
           "ingredientId": 161,
           "name": "Gin",
-          "amount": "60",
+          "amount": "75",
           "unitId": 11
         },
         {
           "order": 3,
           "ingredientId": 144,
           "name": "Dry Vermouth",
-          "amount": "10",
+          "amount": "15",
           "unitId": 11
         },
         {
