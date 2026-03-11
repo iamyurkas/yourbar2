@@ -1960,6 +1960,7 @@
       "synonyms": ["Mi To", "Mi-To", "Milano Torino"],
       "description": "Bitter **Campari** and sweet vermouth lengthened with fizzy soda.",
       "instructions": "1. Fill a rocks glass with **ice**.\n2. Add 30 ml of **Campari**, 30 ml of **red vermouth**, and top with **soda water**.\n3. Stir very gently to combine without losing carbonation.\n4. Garnish with an **orange** slice, then express the oils from a **lemon** peel over the drink and use it as a garnish.",
+      "video": "https://www.instagram.com/p/C2dFZHoq5ge/",
       "photoUri": "assets/cocktails/31-americano.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["build"],
@@ -6831,7 +6832,8 @@
       "id": 108,
       "name": "Blue Lagoon",
       "description": "A spirit-forward **vodka** cocktail showcasing **vodka**, **blue curaçao**, **lemonade**—deep, aromatic, and meant to be savored. Garnished with **lemon** and **cherry**.",
-      "instructions": "1. Fill a hurricane glass with **ice**.\n2. Add 60 ml of **vodka**, 30 ml of **blue curaçao**, and 120 ml of **lemonade**.\n3. Stir gently to combine.\n4. Garnish with a **lemon** slice and a **cherry**.",
+      "instructions": "1. Fill a hurricane glass with **ice**.\n2. Add 30 ml of **vodka**, 30 ml of **blue curaçao**, and 120 ml of **lemonade**.\n3. Stir gently to combine.\n4. Garnish with a **lemon** slice and a **cherry**.",
+      "video": "https://www.instagram.com/p/C2BE1dDqvFj/",
       "photoUri": "assets/cocktails/108-blue-lagoon.jpg",
       "glassId": "hurricane_glass",
       "methodIds": ["build"],
@@ -6850,7 +6852,7 @@
           "order": 2,
           "ingredientId": 345,
           "name": "Vodka",
-          "amount": "60",
+          "amount": "30",
           "unitId": 11
         },
         {
@@ -11830,7 +11832,8 @@
       "id": 186,
       "name": "Cosmopolitan",
       "description": "A citrusy **vodka** cocktail with cranberry and **orange** notes.",
-      "instructions": "1. Fill a shaker with **ice**.\n2. Add 40 ml of **vodka citron**, 15 ml of **Cointreau**, 15 ml of **lime juice**, and 30 ml of **cranberry juice**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled martini glass.\n5. Express oils from an **orange** peel over the drink and use it as a garnish.",
+      "instructions": "1. Fill a shaker with **ice**.\n2. Add 45 ml of **vodka**, 22.5 ml of **Cointreau**, 10 ml of **lime juice**, and 30 ml of **cranberry juice**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled martini glass.\n5. Express oils from an **orange** peel over the drink and use it as a garnish.",
+      "video": "https://www.instagram.com/p/C2dGP3bKJ6I/",
       "photoUri": "assets/cocktails/186-cosmopolitan.jpg",
       "glassId": "martini",
       "methodIds": ["shake"],
@@ -11847,16 +11850,22 @@
         },
         {
           "order": 2,
-          "ingredientId": 346,
-          "name": "Vodka Citron",
-          "amount": "40",
-          "unitId": 11
+          "ingredientId": 345,
+          "name": "Vodka",
+          "amount": "45",
+          "unitId": 11,
+          "substitutes": [
+            {
+              "ingredientId": 346,
+              "name": "Vodka Citron"
+            }
+          ]
         },
         {
           "order": 3,
           "ingredientId": 113,
           "name": "Cointreau",
-          "amount": "15",
+          "amount": "22.5",
           "unitId": 11,
           "allowBaseSubstitution": true,
           "substitutes": [
@@ -11874,7 +11883,7 @@
           "order": 4,
           "ingredientId": 228,
           "name": "Lime Juice",
-          "amount": "15",
+          "amount": "10",
           "unitId": 11
         },
         {
@@ -20456,7 +20465,8 @@
       "name": "John Collins",
       "synonyms": ["Gin Collins"],
       "description": "Refreshing **gin** highball with **lemon**, **sugar**, and soda.",
-      "instructions": "1. Fill a Collins glass halfway with **ice**.\n2. Add 45 ml of **gin**, 30 ml of **lemon juice**, 15 ml of **simple syrup**, and 60 ml of **soda water**.\n3. Stir very gently to combine without losing carbonation.\n4. Garnish with a **lemon** slice and a **maraschino cherry**.",
+      "instructions": "1. Fill a Collins glass halfway with **ice**.\n2. Add 60 ml of **gin**, 30 ml of **lemon juice**, 22.5 ml of **simple syrup**, and 60 ml of **soda water**.\n3. Stir very gently to combine without losing carbonation.\n4. Garnish with a **lemon** slice and a **maraschino cherry**.",
+      "video": "https://www.instagram.com/p/C2f5wyqqXW0/",
       "photoUri": "assets/cocktails/327-john-collins.jpg",
       "glassId": "collins_glass",
       "methodIds": ["build"],
@@ -20475,7 +20485,7 @@
           "order": 2,
           "ingredientId": 161,
           "name": "Gin",
-          "amount": "45",
+          "amount": "60",
           "unitId": 11
         },
         {
@@ -20489,7 +20499,7 @@
           "order": 4,
           "ingredientId": 316,
           "name": "Simple Syrup",
-          "amount": "15",
+          "amount": "22.5",
           "unitId": 11
         },
         {
@@ -20744,6 +20754,7 @@
       "name": "Jägerbomb",
       "description": "A jägerbomb is a popular \"bomb shot\" cocktail consisting of a shot of **Jägermeister** dropped into a glass containing an energy drink, typically **Red Bull**.",
       "instructions": "1. Pour roughly half a can (approx. 125 ml) of chilled **Red Bull** into a large glass, such as a pint glass or highball.\n2. Fill a standard shot glass with 45 ml of chilled **Jägermeister**.\n3. Drop the shot glass directly into the larger glass.\n4. Drink immediately, typically in one go.",
+      "video": "https://www.instagram.com/p/C2BCOhYKWH9/",
       "photoUri": "assets/cocktails/331-j-gerbomb.jpg",
       "glassId": "highball_glass",
       "methodIds": ["build"],
@@ -22044,6 +22055,7 @@
       "name": "Long Beach Iced Tea",
       "description": "A variation of the long island iced tea with **cranberry juice** instead of **cola**.",
       "instructions": "1. Fill a highball glass halfway with **ice**.\n2. Add 15 ml of **gin**, 15 ml of **white rum**, 15 ml of **tequila blanco**, 15 ml of **vodka**, 15 ml of **orange liqueur**, 30 ml of **lemon juice**, and 60 ml of **cranberry juice**.\n3. Stir gently to combine.\n4. Garnish with a **lemon** slice.",
+      "video": "https://www.instagram.com/p/C2Qg7C7KkpH/",
       "photoUri": "assets/cocktails/353-long-beach-iced-tea.jpg",
       "glassId": "highball_glass",
       "methodIds": ["build"],
@@ -22123,6 +22135,7 @@
       "synonyms": ["LIIT"],
       "description": "Five-spirit sour lengthened with **cola**.",
       "instructions": "1. Fill a highball glass halfway with **ice**.\n2. Add 15 ml of **vodka**, 15 ml of **tequila blanco**, 15 ml of **white rum**, 15 ml of **gin**, 15 ml of **Cointreau**, 25 ml of **lemon juice**, and 30 ml of **simple syrup**.\n3. Stir very gently to combine without losing carbonation.\n4. Top with a splash of **Coca-Cola**.\n5. Garnish with a **lemon** slice.",
+      "video": "https://www.instagram.com/p/C2VRu9RKgH7/",
       "photoUri": "assets/cocktails/354-long-island-iced-tea.jpg",
       "glassId": "highball_glass",
       "methodIds": ["build"],
@@ -22687,6 +22700,7 @@
       "name": "Manhattan",
       "description": "Spirit-forward mix of **bourbon**, **sweet vermouth**, and **bitters**.",
       "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 60 ml of **bourbon**, 30 ml of **red vermouth**, and 2 dashes of **Angostura bitters**.\n3. Stir gently for about 30 seconds until well chilled.\n4. Strain into a chilled martini glass.\n5. Garnish with a **maraschino cherry**.",
+      "video": "https://www.instagram.com/p/C2Ny3k6qoFX/",
       "photoUri": "assets/cocktails/362-manhattan.jpg",
       "glassId": "martini",
       "methodIds": ["stir"],
@@ -22799,6 +22813,7 @@
       "name": "Margarita",
       "description": "Classic **Tequila Sour** balanced with **triple sec** and **lime**.",
       "instructions": "1. If you prefer a salted rim, rub the edge of a margarita glass with a **lime** wedge and dip it in **salt**.\n2. Fill a shaker with **ice**.\n3. Add 50 ml of **tequila blanco**, 20 ml of **triple sec**, 15 ml of **lime juice**, and 10 ml of **agave syrup**.\n4. Shake vigorously for about 15 seconds until well chilled.\n5. Strain into the margarita glass.\n6. Garnish a wedge of **lime**.",
+      "video": "https://www.instagram.com/p/C2NwGIJqxsW/",
       "photoUri": "assets/cocktails/364-margarita.jpg",
       "glassId": "margarita_glass",
       "methodIds": ["shake"],
@@ -24156,6 +24171,7 @@
       "name": "Mojito",
       "description": "Cuban highball with rum, **lime**, **mint**, **sugar**, and sparkling soda.",
       "instructions": "1. Muddle **mint** leaves and **sugar** with **lime juice** in a highball glass.\n2. Add **white rum** and crushed **ice**.\n3. Stir very gently to combine without losing carbonation.\n4. Top with **soda water**.\n5. Stir very gently to combine without losing carbonation.\n6. Garnish with a **mint** sprig and **lime** slice.",
+      "video": "https://www.instagram.com/p/C2IaKJTKIa6/",
       "photoUri": "assets/cocktails/387-mojito.jpg",
       "glassId": "highball_glass",
       "methodIds": ["muddle", "build"],
@@ -25576,6 +25592,7 @@
       "synonyms": ["Whiskey Old Fashioned"],
       "description": "Time-honored mix of **whiskey**, **sugar**, and **bitters**.",
       "instructions": "1. Place **sugar** in a rocks glass and saturate with **bitters**.\n2. Add a splash of **water** and muddle until dissolved.\n3. Fill the glass with **ice** and add **bourbon**.\n4. Stir gently to combine.\n5. Garnish with a **maraschino cherry**, then express the oils from an **orange** peel over the drink and use it as a garnish as well.",
+      "video": "https://www.instagram.com/p/C2VQrTCqV9e/",
       "photoUri": "assets/cocktails/409-old-fashioned.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["muddle", "build"],
@@ -34563,7 +34580,7 @@
       "name": "Tom Collins",
       "synonyms": ["Gin Collins"],
       "description": "A timeless IBA classic, this refreshing highball perfectly balances the sweetness of **Old Tom gin** with crisp citrus and sparkling **water**.",
-      "instructions": "1. Fill a Collins glass halfway with **ice**.\n2. Add 45 ml of **Old Tom gin**, 30 ml of **lemon juice**, 15 ml of **simple syrup**, and 60 ml of **soda water**.\n3. Stir very gently to combine without losing carbonation.\n4. Garnish with a **maraschino cherry** and a **lemon** slice.",
+      "instructions": "1. Fill a Collins glass halfway with **ice**.\n2. Add 60 ml of **Old Tom gin**, 30 ml of **lemon juice**, 22,5 ml of **simple syrup**, and 60 ml of **soda water**.\n3. Stir very gently to combine without losing carbonation.\n4. Garnish with a **maraschino cherry** and a **lemon** slice.",
       "photoUri": "assets/cocktails/551-tom-collins.jpg",
       "glassId": "collins_glass",
       "methodIds": ["build"],
@@ -34582,7 +34599,7 @@
           "order": 2,
           "ingredientId": 243,
           "name": "Old Tom Gin",
-          "amount": "45",
+          "amount": "60",
           "unitId": 11
         },
         {
@@ -34596,7 +34613,7 @@
           "order": 4,
           "ingredientId": 316,
           "name": "Simple Syrup",
-          "amount": "15",
+          "amount": "22.5",
           "unitId": 11
         },
         {
@@ -35910,6 +35927,7 @@
       "synonyms": ["Nojito"],
       "description": "A refreshing non-alcoholic twist on the classic mojito with **mint**, **lime**, **simple syrup**, and sparkling **soda water**.",
       "instructions": "1. Add 10 **mint** leaves and 15 ml of **demerara sugar syrup** to a highball glass, then gently muddle.\n2. Add 20 ml of **lime juice** and fill the glass with **ice**.\n3. Top with 120 ml of **soda water**.\n4. Stir very gently to combine without losing carbonation.\n5. Garnish with a **mint** sprig and a **lime** wedge.",
+      "video": "https://www.instagram.com/p/C2NuyAYqtJj/",
       "photoUri": "assets/cocktails/572-virgin-mojito.jpg",
       "glassId": "highball_glass",
       "methodIds": ["muddle", "build"],
