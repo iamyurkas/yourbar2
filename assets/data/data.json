@@ -27083,8 +27083,8 @@
       "id": 433,
       "name": "Pink Lady",
       "synonyms": ["Pink Gin Fizz"],
-      "description": "A classic prohibition-era cocktail known for its beautiful rosy hue and silky texture. the combination of **gin**, **grenadine**, and **egg white** creates a sophisticated, creamy finish.",
-      "instructions": "1. Pour 45 ml of **gin**, 15 ml of **strawberry syrup**, 15 ml of **grenadine**, and an **egg white** into a shaker.\n2. Dry shake (without **ice**) vigorously for about 15 seconds to emulsify the **egg**.\n3. Add about 150 g of **ice**.\n4. Shake vigorously for about 15 seconds until well chilled.\n5. Strain into a chilled coupe glass.\n6. Garnish with a **maraschino cherry**.",
+      "description": "A classic Pink Lady with a bright, balanced profile. The combination of **gin**, **applejack**, **lemon juice**, **rich simple syrup**, **grenadine**, and **egg white** creates a silky, elegant finish.",
+      "instructions": "1. Pour 45 ml of **gin**, 15 ml of **applejack**, 22.5 ml of **lemon juice**, 12.5 ml of **rich simple syrup**, 5 ml of **grenadine**, and 1 **egg white** into a shaker.\n2. Dry shake (without **ice**) vigorously for about 15 seconds to emulsify the egg white.\n3. Add about 150 g of **ice**.\n4. Shake vigorously for about 15 seconds until well chilled.\n5. Double strain into a chilled coupe glass.",
       "photoUri": "assets/cocktails/433-pink-lady.jpg",
       "glassId": "coupe",
       "methodIds": ["shake"],
@@ -27108,34 +27108,38 @@
         },
         {
           "order": 3,
-          "ingredientId": 327,
-          "name": "Strawberry Syrup",
+          "ingredientId": 30,
+          "name": "Applejack",
           "amount": "15",
           "unitId": 11
         },
         {
           "order": 4,
-          "ingredientId": 183,
-          "name": "Grenadine",
-          "amount": "15",
+          "ingredientId": 221,
+          "name": "Lemon Juice",
+          "amount": "22.5",
           "unitId": 11
         },
         {
           "order": 5,
+          "ingredientId": 298,
+          "name": "Rich Simple Syrup",
+          "amount": "12.5",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 183,
+          "name": "Grenadine",
+          "amount": "5",
+          "unitId": 11
+        },
+        {
+          "order": 7,
           "ingredientId": 149,
           "name": "Egg White",
           "amount": "1",
           "unitId": 1
-        },
-        {
-          "order": 6,
-          "ingredientId": 236,
-          "name": "Maraschino Cherry",
-          "amount": "1",
-          "unitId": 1,
-          "garnish": true,
-          "allowBaseSubstitution": true,
-          "allowBrandSubstitution": true
         }
       ]
     },
