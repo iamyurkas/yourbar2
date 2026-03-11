@@ -569,24 +569,22 @@ export default function ShakerResultsScreen() {
         return isSortDescending ? -result : result;
       }
 
-      if (selectedSortOption === 'missingRequiredCount') {
-        const leftKey = String(left.id ?? left.name);
-        const rightKey = String(right.id ?? right.name);
-        const leftMissing = availabilitySummaryByKey.get(leftKey)?.missingCount ?? 0;
-        const rightMissing = availabilitySummaryByKey.get(rightKey)?.missingCount ?? 0;
-        if (leftMissing !== rightMissing) {
-          result = leftMissing - rightMissing;
+      if (selectedSortOption === 'rating') {
+        const leftRating = getCocktailRating(left);
+        const rightRating = getCocktailRating(right);
+        if (leftRating !== rightRating) {
+          result = rightRating - leftRating;
         } else {
           result = compareOptionalGlobalAlphabet(leftName, rightName);
         }
         return isSortDescending ? -result : result;
       }
 
-      if (selectedSortOption === 'rating') {
-        const leftRating = getCocktailRating(left);
-        const rightRating = getCocktailRating(right);
-        if (leftRating !== rightRating) {
-          result = rightRating - leftRating;
+      if (selectedSortOption === 'recentlyAdded') {
+        const leftId = Number(left.id ?? -1);
+        const rightId = Number(right.id ?? -1);
+        if (leftId !== rightId) {
+          result = rightId - leftId;
         } else {
           result = compareOptionalGlobalAlphabet(leftName, rightName);
         }
@@ -608,7 +606,6 @@ export default function ShakerResultsScreen() {
 
     return base;
   }, [
-    availabilitySummaryByKey,
     filteredCocktails,
     getCocktailRating,
     ignoreGarnish,
@@ -722,10 +719,7 @@ export default function ShakerResultsScreen() {
 
       return <View style={[styles.divider, { backgroundColor }]} />;
     },
-    [
-      availabilitySummaryByKey,
-      Colors,
-    ],
+    [Colors, availabilitySummaryByKey],
   );
 
   return (
@@ -786,10 +780,10 @@ export default function ShakerResultsScreen() {
                         return t('shakerResults.sortOptionAlphabetical');
                       case 'requiredCount':
                         return t('shakerResults.sortOptionRequiredCount');
-                      case 'missingRequiredCount':
-                        return t('shakerResults.sortOptionMissingRequiredCount');
                       case 'rating':
                         return t('shakerResults.sortOptionRating');
+                      case 'recentlyAdded':
+                        return t('shakerResults.sortOptionRecentlyAdded');
                       default:
                         return t('shakerResults.sortOptionRandom');
                     }

@@ -7,8 +7,8 @@ import IngredientsIcon from '@/assets/images/ingredients.svg';
 export type CocktailSortOption =
   | 'alphabetical'
   | 'requiredCount'
-  | 'missingRequiredCount'
   | 'rating'
+  | 'recentlyAdded'
   | 'random';
 
 type BuildCocktailSortOptionsParams = {
@@ -61,30 +61,6 @@ export function buildCocktailSortOptions({
       ),
     },
     {
-      key: 'missingRequiredCount',
-      label: '',
-      selected: selectedSortOption === 'missingRequiredCount',
-      onPress: () => onSortOptionChange('missingRequiredCount'),
-      accessibilityLabel: getAccessibilityLabel('missingRequiredCount'),
-      icon: (
-        <View style={styles.sortIconInnerWrap}>
-          <MaterialCommunityIcons
-            name="check"
-            size={16}
-            color={selectedSortOption === 'missingRequiredCount' ? surfaceColor : tintColor}
-          />
-          {selectedSortOption === 'missingRequiredCount' ? (
-            <MaterialCommunityIcons
-              name={isSortDescending ? 'arrow-down-thin' : 'arrow-up-thin'}
-              size={12}
-              color={surfaceColor}
-              style={styles.sortDirectionIcon}
-            />
-          ) : null}
-        </View>
-      ),
-    },
-    {
       key: 'rating',
       label: '',
       selected: selectedSortOption === 'rating',
@@ -98,6 +74,30 @@ export function buildCocktailSortOptions({
             color={selectedSortOption === 'rating' ? surfaceColor : tintColor}
           />
           {selectedSortOption === 'rating' ? (
+            <MaterialCommunityIcons
+              name={isSortDescending ? 'arrow-down-thin' : 'arrow-up-thin'}
+              size={12}
+              color={surfaceColor}
+              style={styles.sortDirectionIcon}
+            />
+          ) : null}
+        </View>
+      ),
+    },
+    {
+      key: 'recentlyAdded',
+      label: '',
+      selected: selectedSortOption === 'recentlyAdded',
+      onPress: () => onSortOptionChange('recentlyAdded'),
+      accessibilityLabel: getAccessibilityLabel('recentlyAdded'),
+      icon: (
+        <View style={styles.sortIconInnerWrap}>
+          <MaterialCommunityIcons
+            name="clock-outline"
+            size={16}
+            color={selectedSortOption === 'recentlyAdded' ? surfaceColor : tintColor}
+          />
+          {selectedSortOption === 'recentlyAdded' ? (
             <MaterialCommunityIcons
               name={isSortDescending ? 'arrow-down-thin' : 'arrow-up-thin'}
               size={12}
@@ -140,4 +140,3 @@ const styles = {
     top: -8,
   },
 };
-
