@@ -1,9 +1,9 @@
-import { type CocktailMethodId } from '@/constants/cocktail-methods';
-import { type InventoryData } from '@/libs/inventory-data';
-import type { SupportedLocale } from '@/libs/i18n/types';
+import { type CocktailMethodId } from "@/constants/cocktail-methods";
+import type { SupportedLocale } from "@/libs/i18n/types";
+import { type InventoryData } from "@/libs/inventory-data";
 
-export type BaseCocktailRecord = InventoryData['cocktails'][number];
-export type BaseIngredientRecord = InventoryData['ingredients'][number];
+export type BaseCocktailRecord = InventoryData["cocktails"][number];
+export type BaseIngredientRecord = InventoryData["ingredients"][number];
 
 export type CocktailTag = {
   id: number;
@@ -17,7 +17,9 @@ export type IngredientTag = {
   color: string;
 };
 
-type CocktailIngredientRecord = NonNullable<BaseCocktailRecord['ingredients']>[number] & {
+type CocktailIngredientRecord = NonNullable<
+  BaseCocktailRecord["ingredients"]
+>[number] & {
   optional?: boolean | null;
   garnish?: boolean | null;
   process?: boolean | null;
@@ -32,11 +34,11 @@ type CocktailIngredientRecord = NonNullable<BaseCocktailRecord['ingredients']>[n
 };
 
 type CocktailSubstituteRecord = NonNullable<
-  NonNullable<CocktailIngredientRecord['substitutes']>[number]
+  NonNullable<CocktailIngredientRecord["substitutes"]>[number]
 >;
 
-export type IngredientRecord = Omit<BaseIngredientRecord, 'tags'> & {
-  ingredientKind?: 'ice' | null;
+export type IngredientRecord = Omit<BaseIngredientRecord, "tags"> & {
+  ingredientKind?: "ice" | null;
   tags?: IngredientTag[] | null;
   synonyms?: string[] | null;
   styleIngredientId?: number | null;
@@ -48,7 +50,7 @@ export type IngredientRecord = Omit<BaseIngredientRecord, 'tags'> & {
 export type CocktailSubstitute = CocktailSubstituteRecord & { brand?: boolean };
 export type CocktailIngredient = Omit<
   CocktailIngredientRecord,
-  'substitutes' | 'ingredientId' | 'name' | 'amount' | 'unitId'
+  "substitutes" | "ingredientId" | "name" | "amount" | "unitId"
 > & {
   ingredientId?: number;
   name?: string;
@@ -60,7 +62,10 @@ export type CocktailIngredient = Omit<
   substitutes?: CocktailSubstitute[];
 };
 
-type CocktailRecord = Omit<BaseCocktailRecord, 'ingredients' | 'searchName' | 'searchTokens' | 'tags'> & {
+type CocktailRecord = Omit<
+  BaseCocktailRecord,
+  "ingredients" | "searchName" | "searchTokens" | "tags"
+> & {
   ingredients?: CocktailIngredient[];
   tags?: CocktailTag[] | null;
   searchName?: string | null;
@@ -70,14 +75,14 @@ type CocktailRecord = Omit<BaseCocktailRecord, 'ingredients' | 'searchName' | 's
 };
 
 export type PhotoBackupEntry = {
-  type: 'cocktails' | 'ingredients';
+  type: "cocktails" | "ingredients";
   id?: number | string | null;
   name?: string | null;
   uri?: string | null;
 };
 
 export type ImportedPhotoEntry = {
-  type: 'cocktails' | 'ingredients';
+  type: "cocktails" | "ingredients";
   id: number;
   photoUri: string;
 };
@@ -87,7 +92,8 @@ type NormalizedSearchFields = {
   searchTokensNormalized: string[];
 };
 
-export type Cocktail = CocktailRecord & NormalizedSearchFields & { userRating?: number };
+export type Cocktail = CocktailRecord &
+  NormalizedSearchFields & { userRating?: number };
 export type Ingredient = IngredientRecord & NormalizedSearchFields;
 
 export type Bar = {
@@ -98,16 +104,16 @@ export type Bar = {
 };
 
 export type StartScreen =
-  | 'cocktails_all'
-  | 'cocktails_my'
-  | 'cocktails_favorites'
-  | 'shaker'
-  | 'ingredients_all'
-  | 'ingredients_my'
-  | 'ingredients_shopping';
+  | "cocktails_all"
+  | "cocktails_my"
+  | "cocktails_favorites"
+  | "shaker"
+  | "ingredients_all"
+  | "ingredients_my"
+  | "ingredients_shopping";
 
-export type AppTheme = 'light' | 'dark' | 'system';
-export type AppLocale = 'en-GB' | 'en-US' | 'es-ES' | 'uk-UA';
+export type AppTheme = "light" | "dark" | "system";
+export type AppLocale = "de-DE" | "en-GB" | "en-US" | "es-ES" | "uk-UA";
 
 export type CreateCocktailSubstituteInput = {
   ingredientId?: number | string | null;
@@ -158,14 +164,27 @@ export type CreateIngredientInput = {
   tags?: IngredientTag[] | null;
 };
 
-export type CocktailStorageRecord = Omit<CocktailRecord, 'searchName' | 'searchTokens'>;
-export type IngredientStorageRecord = Omit<IngredientRecord, 'searchName' | 'searchTokens'>;
+export type CocktailStorageRecord = Omit<
+  CocktailRecord,
+  "searchName" | "searchTokens"
+>;
+export type IngredientStorageRecord = Omit<
+  IngredientRecord,
+  "searchName" | "searchTokens"
+>;
 
 export type InventoryExportData = {
-  cocktails: Array<Omit<CocktailStorageRecord, 'tags'> & { tags?: number[] | null }>;
-  ingredients: Array<Omit<IngredientStorageRecord, 'tags'> & { tags?: number[] | null }>;
+  cocktails: Array<
+    Omit<CocktailStorageRecord, "tags"> & { tags?: number[] | null }
+  >;
+  ingredients: Array<
+    Omit<IngredientStorageRecord, "tags"> & { tags?: number[] | null }
+  >;
   cocktailFeedback?: Record<string, { rating?: number; comment?: string }>;
-  ingredientStatus?: Record<string, { available?: boolean; shopping?: boolean }>;
+  ingredientStatus?: Record<
+    string,
+    { available?: boolean; shopping?: boolean }
+  >;
 };
 
 export type InventoryImportOptions = {
@@ -192,19 +211,23 @@ export type InventoryLocaleTranslationOverrides = {
   ingredients?: Record<string, IngredientTranslationOverride>;
 };
 
-export type InventoryTranslationOverrides = Partial<Record<SupportedLocale, InventoryLocaleTranslationOverrides>>;
+export type InventoryTranslationOverrides = Partial<
+  Record<SupportedLocale, InventoryLocaleTranslationOverrides>
+>;
 
 export type InventoryBaseExportFile = {
   schemaVersion: 1;
-  kind: 'base';
+  kind: "base";
   data: InventoryExportData;
 };
 
 export type InventoryTranslationsExportFile = {
   schemaVersion: 1;
-  kind: 'translations';
+  kind: "translations";
   locale: SupportedLocale;
   data: InventoryLocaleTranslationOverrides;
 };
 
-export type InventoryExportFile = InventoryBaseExportFile | InventoryTranslationsExportFile;
+export type InventoryExportFile =
+  | InventoryBaseExportFile
+  | InventoryTranslationsExportFile;
