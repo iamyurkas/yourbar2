@@ -2025,9 +2025,27 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
             accessibilityLabel={t("sideMenu.importIngredientStatusesTitle")}
             onPress={() => { }}
           >
-            <Text style={[styles.modalTitle, { color: Colors.onSurface }]}>
-              {t("sideMenu.importIngredientStatusesTitle")}
-            </Text>
+            <View style={styles.modalHeader}>
+              <Text
+                style={[
+                  styles.modalTitle,
+                  { color: Colors.onSurface, flex: 1 },
+                ]}
+              >
+                {t("sideMenu.importIngredientStatusesTitle")}
+              </Text>
+              <Pressable
+                onPress={() => closeIngredientStatusImportModal(null)}
+                accessibilityRole="button"
+                accessibilityLabel={t("common.close")}
+              >
+                <MaterialCommunityIcons
+                  name="close"
+                  size={22}
+                  color={Colors.onSurfaceVariant}
+                />
+              </Pressable>
+            </View>
             <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>
               {t("sideMenu.importIngredientStatusesMessage")}
             </Text>
@@ -2083,23 +2101,29 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 color={shouldImportIngredientShopping ? Colors.tint : Colors.onSurfaceVariant}
               />
             </Pressable>
-            <View style={styles.dialogActionsRow}>
+            <View style={styles.modalFooter}>
               <Pressable
-                accessibilityRole="button"
                 onPress={() => closeIngredientStatusImportModal(null)}
-                style={[styles.dialogSecondaryButton, { borderColor: Colors.outlineVariant, backgroundColor: Colors.surfaceVariant }]}
+                style={[styles.modalFooterButton, { borderColor: Colors.outlineVariant }]}
               >
-                <Text style={[styles.dialogButtonLabel, { color: Colors.onSurface }]}>{t("common.cancel")}</Text>
+                <Text style={{ color: Colors.onSurfaceVariant }}>{t("common.cancel")}</Text>
               </Pressable>
               <Pressable
-                accessibilityRole="button"
                 onPress={() => closeIngredientStatusImportModal({
                   importIngredientAvailability: shouldImportIngredientAvailability,
                   importIngredientShopping: shouldImportIngredientShopping,
                 })}
-                style={[styles.dialogPrimaryButton, { backgroundColor: Colors.tint, borderColor: Colors.tint }]}
+                style={[
+                  styles.modalFooterButton,
+                  {
+                    backgroundColor: Colors.tint,
+                    borderColor: Colors.tint,
+                  },
+                ]}
               >
-                <Text style={[styles.dialogButtonLabel, { color: Colors.onPrimary }]}>{t("sideMenu.importIngredientStatusesConfirm")}</Text>
+                <Text style={{ color: Colors.background, fontWeight: "600" }}>
+                  {t("sideMenu.importIngredientStatusesConfirm")}
+                </Text>
               </Pressable>
             </View>
           </Pressable>
@@ -3136,33 +3160,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingHorizontal: 12,
     fontSize: 16,
-  },
-  dialogActionsRow: {
-    flexDirection: "row",
-    gap: 10,
-    marginTop: 8,
-  },
-  dialogSecondaryButton: {
-    flex: 1,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderRadius: 10,
-    paddingVertical: 11,
-    paddingHorizontal: 12,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  dialogPrimaryButton: {
-    flex: 1,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderRadius: 10,
-    paddingVertical: 11,
-    paddingHorizontal: 12,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  dialogButtonLabel: {
-    fontSize: 14,
-    fontWeight: "600",
   },
   modalFooter: {
     flexDirection: "row",
