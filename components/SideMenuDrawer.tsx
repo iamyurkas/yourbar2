@@ -2025,26 +2025,28 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
             accessibilityLabel={t("sideMenu.importIngredientStatusesTitle")}
             onPress={() => { }}
           >
-            <View style={styles.modalHeader}>
+            <Pressable
+              onPress={() => closeIngredientStatusImportModal(null)}
+              accessibilityRole="button"
+              accessibilityLabel={t("common.close")}
+              style={styles.importStatusCloseButton}
+            >
+              <MaterialCommunityIcons
+                name="close"
+                size={22}
+                color={Colors.onSurfaceVariant}
+              />
+            </Pressable>
+            <View style={styles.importStatusHeader}>
               <Text
                 style={[
                   styles.modalTitle,
-                  { color: Colors.onSurface, flex: 1 },
+                  styles.importStatusTitle,
+                  { color: Colors.onSurface },
                 ]}
               >
                 {t("sideMenu.importIngredientStatusesTitle")}
               </Text>
-              <Pressable
-                onPress={() => closeIngredientStatusImportModal(null)}
-                accessibilityRole="button"
-                accessibilityLabel={t("common.close")}
-              >
-                <MaterialCommunityIcons
-                  name="close"
-                  size={22}
-                  color={Colors.onSurfaceVariant}
-                />
-              </Pressable>
             </View>
             <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>
               {t("sideMenu.importIngredientStatusesMessage")}
@@ -2101,12 +2103,20 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 color={shouldImportIngredientShopping ? Colors.tint : Colors.onSurfaceVariant}
               />
             </Pressable>
-            <View style={styles.modalFooter}>
+            <View style={styles.importStatusActions}>
               <Pressable
                 onPress={() => closeIngredientStatusImportModal(null)}
-                style={[styles.modalFooterButton, { borderColor: Colors.outlineVariant }]}
+                style={[
+                  styles.importStatusActionButton,
+                  {
+                    backgroundColor: Colors.surfaceVariant,
+                    borderColor: Colors.outlineVariant,
+                  },
+                ]}
               >
-                <Text style={{ color: Colors.onSurfaceVariant }}>{t("common.cancel")}</Text>
+                <Text style={[styles.importStatusActionLabel, { color: Colors.onSurface }]}>
+                  {t("common.cancel")}
+                </Text>
               </Pressable>
               <Pressable
                 onPress={() => closeIngredientStatusImportModal({
@@ -2114,14 +2124,14 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   importIngredientShopping: shouldImportIngredientShopping,
                 })}
                 style={[
-                  styles.modalFooterButton,
+                  styles.importStatusActionButton,
                   {
                     backgroundColor: Colors.tint,
                     borderColor: Colors.tint,
                   },
                 ]}
               >
-                <Text style={{ color: Colors.background, fontWeight: "600" }}>
+                <Text style={[styles.importStatusActionLabel, { color: Colors.onPrimary }]}>
                   {t("sideMenu.importIngredientStatusesConfirm")}
                 </Text>
               </Pressable>
@@ -3175,5 +3185,33 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     minWidth: 80,
+  },
+  importStatusCloseButton: {
+    position: "absolute",
+    top: 16,
+    right: 16,
+    zIndex: 1,
+  },
+  importStatusHeader: {
+    paddingRight: 28,
+  },
+  importStatusTitle: {
+    textAlign: "left",
+  },
+  importStatusActions: {
+    marginTop: 12,
+    gap: 12,
+  },
+  importStatusActionButton: {
+    paddingVertical: 12,
+    borderRadius: 12,
+    borderWidth: StyleSheet.hairlineWidth,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  importStatusActionLabel: {
+    textAlign: "center",
+    fontWeight: "600",
+    fontSize: 15,
   },
 });
