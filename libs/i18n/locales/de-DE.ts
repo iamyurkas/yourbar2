@@ -444,6 +444,7 @@ export const deDETranslations: TranslationDictionary = {
   "cocktails.sortOptionMissingRequiredCountAccessibility":
     "Nach Anzahl fehlender benötigter Zutaten sortieren",
   "cocktails.sortOptionRatingAccessibility": "Nach Bewertung sortieren",
+  "cocktails.sortOptionRecentlyAddedAccessibility": "Nach Hinzufügezeit sortieren",
   "cocktails.sortOptionRandomAccessibility": "Zufällig sortieren",
   "cocktails.addCocktail": "Cocktail hinzufügen",
 
@@ -458,6 +459,7 @@ export const deDETranslations: TranslationDictionary = {
   "shakerResults.sortOptionMissingRequiredCount":
     "Anzahl fehlender benötigter Zutaten",
   "shakerResults.sortOptionRating": "Bewertung",
+  "shakerResults.sortOptionRecentlyAdded": "Zuletzt hinzugefügt",
   "shakerResults.sortOptionRandom": "Zufällig",
   "shakerResults.emptyMatchingRecipes": "Keine passenden Rezepte",
 

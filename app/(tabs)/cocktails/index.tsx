@@ -477,23 +477,6 @@ export default function CocktailsScreen() {
     );
   }, [filteredByTags, normalizedQuery]);
 
-  const filteredAvailabilitySummaryByKey = useMemo(() => {
-    const summaryMap = new Map<string, CocktailAvailabilitySummary>();
-
-    filteredCocktails.forEach((cocktail) => {
-      const cocktailKey = String(cocktail.id ?? cocktail.name);
-      summaryMap.set(
-        cocktailKey,
-        summariseCocktailAvailability(cocktail, availableIngredientIds, ingredientLookup, undefined, {
-          ignoreGarnish,
-          allowAllSubstitutes,
-        }),
-      );
-    });
-
-    return summaryMap;
-  }, [allowAllSubstitutes, availableIngredientIds, filteredCocktails, ignoreGarnish, ingredientLookup]);
-
   const randomSortRanks = useMemo(() => {
     const rankMap = new Map<string, number>();
 
@@ -527,24 +510,23 @@ export default function CocktailsScreen() {
         return isSortDescending ? -result : result;
       }
 
-      if (selectedSortOption === 'missingRequiredCount') {
-        const leftKey = String(left.id ?? left.name);
-        const rightKey = String(right.id ?? right.name);
-        const leftMissing = filteredAvailabilitySummaryByKey.get(leftKey)?.missingCount ?? 0;
-        const rightMissing = filteredAvailabilitySummaryByKey.get(rightKey)?.missingCount ?? 0;
-        if (leftMissing !== rightMissing) {
-          result = leftMissing - rightMissing;
+      if (selectedSortOption === 'rating') {
+        const leftRating = getCocktailRating(left);
+        const rightRating = getCocktailRating(right);
+        if (leftRating !== rightRating) {
+          result = rightRating - leftRating;
         } else {
           result = compareOptionalGlobalAlphabet(leftName, rightName);
         }
         return isSortDescending ? -result : result;
       }
 
-      if (selectedSortOption === 'rating') {
-        const leftRating = getCocktailRating(left);
-        const rightRating = getCocktailRating(right);
-        if (leftRating !== rightRating) {
-          result = rightRating - leftRating;
+
+      if (selectedSortOption === 'recentlyAdded') {
+        const leftId = Number(left.id ?? -1);
+        const rightId = Number(right.id ?? -1);
+        if (leftId !== rightId) {
+          result = rightId - leftId;
         } else {
           result = compareOptionalGlobalAlphabet(leftName, rightName);
         }
@@ -564,7 +546,6 @@ export default function CocktailsScreen() {
       return isSortDescending ? -result : result;
     },
     [
-      filteredAvailabilitySummaryByKey,
       getCocktailRating,
       ignoreGarnish,
       isSortDescending,
@@ -1069,10 +1050,10 @@ export default function CocktailsScreen() {
                         return t('cocktails.sortOptionAlphabeticalAccessibility');
                       case 'requiredCount':
                         return t('cocktails.sortOptionRequiredCountAccessibility');
-                      case 'missingRequiredCount':
-                        return t('cocktails.sortOptionMissingRequiredCountAccessibility');
                       case 'rating':
                         return t('cocktails.sortOptionRatingAccessibility');
+                      case 'recentlyAdded':
+                        return t('cocktails.sortOptionRecentlyAddedAccessibility');
                       default:
                         return t('cocktails.sortOptionRandomAccessibility');
                     }
