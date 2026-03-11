@@ -6033,7 +6033,8 @@
       "id": 96,
       "name": "Black Velvet",
       "description": "Full-bodied stout and delicate dry sparkling wine are an unlikely combination but this classic has stood the test of time. Some may wish to add a barspoon of sugar syrup.",
-      "instructions": "1. Pour 75 ml of **Guinness** into a chilled flute glass.\n2. Slowly top with 75 ml of **prosecco**.\n3. Optionally add a bar spoon of **simple syrup** for a slightly sweeter serve.",
+      "instructions": "1. Pour 120 ml of **Guinness** into a chilled flute glass.\n2. Slowly top with 60 ml of **prosecco**.\n3. Optionally add a bar spoon of **simple syrup** for a slightly sweeter serve.",
+      "video": "https://www.instagram.com/p/C2uVJnksq8a/",
       "photoUri": "assets/cocktails/96-black-velvet.jpg",
       "glassId": "flute_glass",
       "methodIds": ["build"],
@@ -6044,14 +6045,14 @@
           "order": 1,
           "ingredientId": 184,
           "name": "Guinness",
-          "amount": "75",
+          "amount": "120",
           "unitId": 11
         },
         {
           "order": 2,
           "ingredientId": 288,
           "name": "Prosecco",
-          "amount": "75",
+          "amount": "60",
           "unitId": 11
         },
         {
@@ -11650,6 +11651,7 @@
       "synonyms": ["Corona Tequila Sunrise"],
       "description": "A vibrant and refreshing **beer** cocktail that puts a tropical twist on the classic **Tequila Sunrise**. It perfectly blends the crispness of **Corona** with **tequila blanco**, sweet **orange juice**, and a splash of **grenadine** for a beautiful layered look.",
       "instructions": "1. Fill a pub glass with **ice**.\n2. Add 330 ml of **Corona**, 45 ml of **tequila blanco**, 45 ml of **orange juice**, and 15 ml of **grenadine** to a pub glass.\n3. Stir gently to combine.\n4. Garnish with a **lime** wedge.",
+      "video": "https://www.instagram.com/p/C2nWh_rrkSd/",
       "photoUri": "assets/cocktails/183-corona-sunrise.jpg",
       "glassId": "pub_glass",
       "methodIds": ["build"],
@@ -19808,6 +19810,7 @@
       "synonyms": ["Irish Car Bomb"],
       "description": "The Irish Slammer (traditionally known by more controversial names like the \"Irish Car Bomb\") is a \"bomb shot\" cocktail consisting of **Irish whiskey**, **Irish cream**, and **Irish stout**.",
       "instructions": "1. Pour the 360 ml of **Guinness** into a pint glass and let the foam settle.\n2. Pour 15 ml of **Baileys** into a shot glass first, then layer 15 ml of **Irish whiskey** on top.\n3. Drop the shot glass into the Guinness and drink immediately. If it sits too long, the cream will curdle due to the acidity of the beer.",
+      "video": "https://www.instagram.com/p/C2nXPTYr__I/",
       "photoUri": "assets/cocktails/315-irish-slammer.jpg",
       "glassId": "pub_glass",
       "methodIds": ["build"],
@@ -27540,6 +27543,7 @@
       "name": "Porn Star Martini",
       "description": "An exotic and visually stunning modern classic, featuring vibrant **passion fruit** flavours and served with a celebratory Sidecar of **sparkling wine**.",
       "instructions": "1. Fill a shaker with **ice**.\n2. Add 50 ml of **vodka vanilla**, 20 ml of **passion fruit liqueur**, 15 ml of **passion fruit syrup**, 15 ml of **lime juice**, and 10 ml of **vanilla syrup**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled martini glass.\n5. Serve with 60 ml of **champagne** on the side.\n6. Garnish with a half of **passion fruit**.",
+      "video": "https://www.instagram.com/p/C2p2LMVIXin/",
       "photoUri": "assets/cocktails/440-porn-star-martini.jpg",
       "glassId": "martini",
       "methodIds": ["shake"],
@@ -32472,6 +32476,7 @@
       "name": "Strawberry Daiquiri",
       "description": "A bright rum sour that perfectly balances fruity **strawberry liqueur** with the crispness of **white rum** and fresh **lime**. a pinch of **salt** and **black pepper** enhances the berry profile for a complex finish.",
       "instructions": "1. Fill a shaker with **ice**.\n2. Add 60 ml of **white rum**, 30 ml of **strawberry liqueur**, 30 ml of **lime juice**, 15 ml of **rich simple syrup**, 0.5 pinches of **black pepper**, and 0.5 pinches of **salt**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled martini glass.\n5. Garnish with a **strawberry** and a slice of **lime**.",
+      "video": "https://www.instagram.com/p/C2nTnY9L1XU/",
       "photoUri": "assets/cocktails/518-strawberry-daiquiri.jpg",
       "glassId": "martini",
       "methodIds": ["shake"],
@@ -37066,7 +37071,8 @@
       "name": "White Lady",
       "synonyms": ["Gin Sour"],
       "description": "A crisp and sophisticated classic **gin** sour. the bright citrus notes of **lemon** and the **orange** sweetness of **triple sec** create a clean, refreshing profile with a beautiful silky finish.",
-      "instructions": "1. Fill a shaker with **ice**.\n2. Add 45 ml of **gin**, 30 ml of **triple sec**, and 20 ml of **lemon juice**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled martini glass.",
+      "instructions": "1. Fill a shaker with **ice**.\n2. Add 45 ml of **gin**, 30 ml of **triple sec**, 20 ml of **lemon juice** and 10 ml of **simple syrup**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled martini glass.",
+      "video": "https://www.instagram.com/p/C220UcCLrst/",
       "photoUri": "assets/cocktails/589-white-lady.jpg",
       "glassId": "martini",
       "methodIds": ["shake"],
@@ -37100,6 +37106,13 @@
           "ingredientId": 221,
           "name": "Lemon Juice",
           "amount": "20",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 316,
+          "name": "Simple Syrup",
+          "amount": "10",
           "unitId": 11
         }
       ]
