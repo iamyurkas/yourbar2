@@ -1,19 +1,20 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-// eslint-disable-next-line import/no-unresolved
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { Stack, router } from 'expo-router';
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { ActivityIndicator, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { AppDialog } from '@/components/AppDialog';
 import { AppImage } from '@/components/AppImage';
 import { HeaderIconButton } from '@/components/HeaderIconButton';
+import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { useAppColors } from '@/constants/theme';
 import { useI18n } from '@/libs/i18n/use-i18n';
 import { useInventory } from '@/providers/inventory-provider';
 import { appendBarcode, findIngredientByBarcode } from '@/services/barcode/findIngredientByBarcode';
 import { findSimilarIngredientByName } from '@/services/barcode/findSimilarIngredientByName';
-import { fetchProductByBarcode } from '@/services/barcode/openFoodFacts';
+import { lookupProductByBarcode } from '@/services/barcode/lookupProductByBarcode';
+import { pickIngredientTagsByIds, suggestIngredientTagIds } from '@/services/barcode/suggestIngredientTags';
 import type { ScannedProductDraft } from '@/services/barcode/types';
 
 type ScanState =
@@ -28,7 +29,7 @@ type ScanState =
 export default function ScanIngredientScreen() {
   const { t } = useI18n();
   const colors = useAppColors();
-  const { ingredients, createIngredient, updateIngredient } = useInventory();
+  const { ingredients, customIngredientTags, createIngredient, updateIngredient } = useInventory();
   const [permission, requestPermission] = useCameraPermissions();
   const [scanState, setScanState] = useState<ScanState>({ kind: 'ready' });
   const [hasScanned, setHasScanned] = useState(false);
@@ -54,7 +55,7 @@ export default function ScanIngredientScreen() {
     }
 
     setScanState({ kind: 'loading', barcode });
-    const lookup = await fetchProductByBarcode(barcode);
+    const lookup = await lookupProductByBarcode(barcode);
 
     if (lookup.kind === 'error') {
       setScanState({ kind: 'error', barcode, message: lookup.message });
@@ -85,8 +86,16 @@ export default function ScanIngredientScreen() {
     setScanState({ kind: 'ready' });
   }, []);
 
+  const allIngredientTags = useMemo(
+    () => [...BUILTIN_INGREDIENT_TAGS, ...customIngredientTags],
+    [customIngredientTags],
+  );
+
   const createWithDraft = useCallback((draft: ScannedProductDraft) => {
     const name = draft.name?.trim() || draft.barcode;
+    const suggestedTagIds = suggestIngredientTagIds({ categories: draft.categories, productName: name });
+    const selectedTags = pickIngredientTagsByIds(allIngredientTags, suggestedTagIds);
+
     const created = createIngredient({
       name,
       description: draft.description,
@@ -94,13 +103,13 @@ export default function ScanIngredientScreen() {
       imageUrl: draft.imageUrl,
       abv: draft.abv,
       barcodes: [draft.barcode],
-      tags: [],
+      tags: selectedTags,
     });
 
     if (created?.id != null) {
       router.replace({ pathname: '/ingredients/[ingredientId]', params: { ingredientId: String(created.id) } });
     }
-  }, [createIngredient]);
+  }, [allIngredientTags, createIngredient]);
 
   const editWithDraft = useCallback((draft: ScannedProductDraft) => {
     const params: Record<string, string> = {
@@ -118,6 +127,11 @@ export default function ScanIngredientScreen() {
     }
     if (draft.abv != null) {
       params.prefillAbv = String(draft.abv);
+    }
+
+    const suggestedTagIds = suggestIngredientTagIds({ categories: draft.categories, productName: draft.name });
+    if (suggestedTagIds.length > 0) {
+      params.prefillTagIds = suggestedTagIds.join(',');
     }
 
     router.push({ pathname: '/ingredients/create', params });

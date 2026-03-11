@@ -1,4 +1,4 @@
-import type { ScannedProductDraft } from '@/services/barcode/types';
+import type { BarcodeLookupResult } from '@/services/barcode/types';
 
 type OpenFoodFactsProductResponse = {
   status?: number;
@@ -14,13 +14,10 @@ type OpenFoodFactsProductResponse = {
       alcohol_100g?: number | string;
       alcohol_100ml?: number | string;
     };
+    categories?: string;
+    categories_tags?: string[];
   };
 };
-
-export type OpenFoodFactsLookupResult =
-  | { kind: 'found'; draft: ScannedProductDraft }
-  | { kind: 'not-found'; barcode: string }
-  | { kind: 'error'; barcode: string; message: string };
 
 function toOptionalString(value?: string | null): string | undefined {
   const trimmed = value?.trim();
@@ -40,13 +37,13 @@ function toOptionalNumber(value?: string | number | null): number | null {
   return parsed;
 }
 
-export async function fetchProductByBarcode(barcode: string): Promise<OpenFoodFactsLookupResult> {
+export async function fetchProductByBarcode(barcode: string): Promise<BarcodeLookupResult> {
   const normalizedBarcode = barcode.trim();
   if (!normalizedBarcode) {
     return { kind: 'error', barcode, message: 'Invalid barcode' };
   }
 
-  const fields = ['product_name', 'image_url', 'image_front_url', 'generic_name', 'alcohol_value', 'nutriments'];
+  const fields = ['product_name', 'image_url', 'image_front_url', 'generic_name', 'alcohol_value', 'nutriments', 'categories', 'categories_tags'];
   const url = `https://world.openfoodfacts.org/api/v2/product/${encodeURIComponent(normalizedBarcode)}?fields=${fields.join(',')}`;
 
   try {
@@ -72,6 +69,10 @@ export async function fetchProductByBarcode(barcode: string): Promise<OpenFoodFa
     const name = toOptionalString(product.product_name);
     const imageUrl = toOptionalString(product.image_front_url ?? product.image_url);
     const description = toOptionalString(product.generic_name);
+    const categories = [
+      ...(product.categories_tags ?? []).map((entry) => toOptionalString(entry?.replace(/^\w{2}:/, ''))),
+      ...((product.categories ?? '').split(',').map((entry) => toOptionalString(entry))),
+    ].filter((entry): entry is string => Boolean(entry));
     const abv =
       toOptionalNumber(product.alcohol_value)
       ?? toOptionalNumber(product.nutriments?.alcohol)
@@ -86,6 +87,7 @@ export async function fetchProductByBarcode(barcode: string): Promise<OpenFoodFa
         imageUrl,
         description,
         abv,
+        categories: categories.length > 0 ? Array.from(new Set(categories)) : undefined,
         source: 'open-food-facts',
       },
     };

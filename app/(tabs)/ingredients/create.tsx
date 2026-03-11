@@ -36,6 +36,7 @@ import { skipDuplicateBack } from '@/libs/navigation';
 import { shouldStorePhoto, storePhoto } from '@/libs/photo-storage';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
+import { suggestIngredientTagIds } from '@/services/barcode/suggestIngredientTags';
 import { useUnsavedChanges } from '@/providers/unsaved-changes-provider';
 
 type IngredientFormSnapshot = {
@@ -86,6 +87,7 @@ export default function IngredientFormScreen() {
     prefillDescription?: string;
     prefillImageUrl?: string;
     prefillAbv?: string;
+    prefillTagIds?: string;
   }>();
   const modeParam = getParamValue(params.mode);
   const isEditMode = modeParam === 'edit';
@@ -111,6 +113,17 @@ export default function IngredientFormScreen() {
     const parsed = Number(value);
     return Number.isFinite(parsed) ? parsed : undefined;
   }, [params.prefillAbv]);
+  const prefillTagIdsParam = useMemo(() => {
+    const value = getParamValue(params.prefillTagIds);
+    if (typeof value !== 'string') {
+      return [];
+    }
+
+    return Array.from(new Set(value
+      .split(',')
+      .map((entry) => Number.parseInt(entry.trim(), 10))
+      .filter((entry) => Number.isFinite(entry) && entry >= 0)));
+  }, [params.prefillTagIds]);
   const returnToPathParam = useMemo(() => {
     const value = getParamValue(params.returnToPath);
     return typeof value === 'string' && value.length > 0 ? value : undefined;
@@ -216,6 +229,7 @@ export default function IngredientFormScreen() {
   const lastModeRef = useRef<boolean | undefined>(undefined);
   const scrollRef = useRef<ScrollView | null>(null);
   const isHandlingBackRef = useRef(false);
+  const areTagsManuallyEditedRef = useRef(false);
 
   useEffect(() => {
     isNavigatingAfterSaveRef.current = false;
@@ -229,17 +243,29 @@ export default function IngredientFormScreen() {
     setName(suggestedNameParam ?? '');
     setDescription(prefillDescriptionParam ?? '');
     setImageUri(prefillImageUrlParam ?? null);
-    setSelectedTagIds(defaultIngredientTagId == null ? [] : [defaultIngredientTagId]);
+    setSelectedTagIds(prefillTagIdsParam.length > 0
+      ? prefillTagIdsParam
+      : defaultIngredientTagId == null
+        ? []
+        : [defaultIngredientTagId]);
     setBaseIngredientId(null);
     setStyleIngredientId(null);
     setBaseSearch('');
     setStyleSearch('');
     setTagModalVisible(false);
     setIsBaseModalVisible(false);
+    areTagsManuallyEditedRef.current = false;
     setInitialSnapshot(null);
     setIsSaving(false);
     setIsInitialized(true);
-  }, [defaultIngredientTagId, isEditMode, prefillDescriptionParam, prefillImageUrlParam, suggestedNameParam]);
+  }, [
+    defaultIngredientTagId,
+    isEditMode,
+    prefillDescriptionParam,
+    prefillImageUrlParam,
+    prefillTagIdsParam,
+    suggestedNameParam,
+  ]);
 
   useEffect(() => {
     if (!isEditMode || !ingredient) {
@@ -344,6 +370,7 @@ export default function IngredientFormScreen() {
   }, [imageSource, t]);
 
   const toggleTag = useCallback((tagId: number) => {
+    areTagsManuallyEditedRef.current = true;
     setSelectedTagIds((prev) => {
       if (prev.includes(tagId)) {
         return prev.filter((id) => id !== tagId);
@@ -380,12 +407,52 @@ export default function IngredientFormScreen() {
     (data: { name: string; color: string }) => {
       const created = createCustomIngredientTag(data);
       if (created?.id != null) {
+        areTagsManuallyEditedRef.current = true;
         setSelectedTagIds((prev) => (prev.includes(created.id) ? prev : [...prev, created.id]));
       }
       setTagModalVisible(false);
     },
     [createCustomIngredientTag],
   );
+
+  useEffect(() => {
+    if (isEditMode || !prefillBarcodeParam || prefillTagIdsParam.length > 0 || areTagsManuallyEditedRef.current) {
+      return;
+    }
+
+    const trimmedName = name.trim();
+    if (!trimmedName) {
+      return;
+    }
+
+    const suggestedTagIds = suggestIngredientTagIds({ productName: trimmedName });
+    if (suggestedTagIds.length === 0) {
+      return;
+    }
+
+    const hasOnlyDefaultTag =
+      defaultIngredientTagId != null
+      && selectedTagIds.length === 1
+      && selectedTagIds[0] === defaultIngredientTagId;
+
+    if (selectedTagIds.length > 0 && !hasOnlyDefaultTag) {
+      return;
+    }
+
+    const currentSerialized = [...selectedTagIds].sort((a, b) => a - b).join(',');
+    const suggestedSerialized = [...suggestedTagIds].sort((a, b) => a - b).join(',');
+
+    if (currentSerialized !== suggestedSerialized) {
+      setSelectedTagIds(suggestedTagIds);
+    }
+  }, [
+    defaultIngredientTagId,
+    isEditMode,
+    name,
+    prefillBarcodeParam,
+    prefillTagIdsParam,
+    selectedTagIds,
+  ]);
 
   const ensureMediaPermission = useCallback(async () => {
     if (permissionStatus?.granted) {
