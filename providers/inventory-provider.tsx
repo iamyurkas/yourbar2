@@ -2049,7 +2049,11 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       const existing = prev.cocktails[existingIndex];
       const description = input.description?.trim() || undefined;
       const instructions = input.instructions?.trim() || undefined;
-      const video = input.video?.trim() || undefined;
+      const hasVideoInInput = Object.prototype.hasOwnProperty.call(input, 'video');
+      const nextVideo = input.video?.trim();
+      const video = hasVideoInInput
+        ? (nextVideo || '')
+        : (existing.video ?? undefined);
       const synonyms =
         input.synonyms !== undefined
           ? normalizeSynonyms(input.synonyms)

@@ -45,6 +45,7 @@ function normalizeSearchFields<
 function applyDeltaToCollection<TRecord extends { id?: number | null }>(
   baseItems: readonly TRecord[],
   delta?: { created?: TRecord[]; updated?: TRecord[]; deletedIds?: number[] },
+  mergeUpdatedWithBase?: (updated: TRecord, base: TRecord) => TRecord,
 ): TRecord[] {
   if (!delta) {
     return [...baseItems];
@@ -88,7 +89,10 @@ function applyDeltaToCollection<TRecord extends { id?: number | null }>(
       return;
     }
 
-    const replacement = updatedMap.get(normalizedId) ?? createdMap.get(normalizedId);
+    const updated = updatedMap.get(normalizedId);
+    const replacement = updated
+      ? (mergeUpdatedWithBase ? mergeUpdatedWithBase(updated, record) : updated)
+      : createdMap.get(normalizedId);
     next.push(replacement ?? record);
     seen.add(normalizedId);
   });
@@ -112,6 +116,24 @@ function applyDeltaToCollection<TRecord extends { id?: number | null }>(
   return next;
 }
 
+function mergeCocktailUpdatedRecordWithBase(
+  updated: CocktailStorageRecord,
+  base: CocktailStorageRecord,
+): CocktailStorageRecord {
+  const hasVideoField = Object.prototype.hasOwnProperty.call(updated, 'video');
+  const updatedVideo = updated.video?.trim();
+  const baseVideo = base.video?.trim();
+
+  if (hasVideoField || updatedVideo || !baseVideo) {
+    return updated;
+  }
+
+  return {
+    ...updated,
+    video: baseVideo,
+  } satisfies CocktailStorageRecord;
+}
+
 function applyDeltaToInventoryData(
   baseData: InventoryData,
   delta: InventoryDeltaSnapshot<CocktailStorageRecord, IngredientStorageRecord>['delta'],
@@ -121,6 +143,7 @@ function applyDeltaToInventoryData(
     cocktails: applyDeltaToCollection(
       baseData.cocktails as CocktailStorageRecord[],
       delta.cocktails as { created?: CocktailStorageRecord[]; updated?: CocktailStorageRecord[]; deletedIds?: number[] } | undefined,
+      mergeCocktailUpdatedRecordWithBase,
     ) as unknown as InventoryData["cocktails"],
     ingredients: applyDeltaToCollection(
       baseData.ingredients as unknown as IngredientStorageRecord[],
