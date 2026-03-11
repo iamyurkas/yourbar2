@@ -36,8 +36,8 @@ import { skipDuplicateBack } from '@/libs/navigation';
 import { shouldStorePhoto, storePhoto } from '@/libs/photo-storage';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
-import { suggestIngredientTagIds } from '@/services/barcode/suggestIngredientTags';
 import { useUnsavedChanges } from '@/providers/unsaved-changes-provider';
+import { suggestIngredientTagIds } from '@/services/barcode/suggestIngredientTags';
 
 type IngredientFormSnapshot = {
   name: string;
@@ -632,9 +632,9 @@ export default function IngredientFormScreen() {
           baseIngredientId,
           styleIngredientId,
           tags: selectedTags,
-      barcodes: prefillBarcodeParam ? [prefillBarcodeParam] : undefined,
-      abv: prefillAbvParam,
-      imageUrl: prefillImageUrlParam,
+          barcodes: prefillBarcodeParam ? [prefillBarcodeParam] : undefined,
+          abv: prefillAbvParam,
+          imageUrl: prefillImageUrlParam,
         };
 
         const updated = updateIngredient(numericIngredientId, {
@@ -1407,7 +1407,7 @@ export default function IngredientFormScreen() {
       scrollNodeHandle,
       () => { },
       (_x, y) => {
-        const HEADER_OFFSET = 56;
+        const HEADER_OFFSET = 156;
         const targetOffset = Math.max(0, y - HEADER_OFFSET);
         scrollRef.current?.scrollTo({ y: targetOffset, animated: true });
       },
