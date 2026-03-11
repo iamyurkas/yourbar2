@@ -4976,6 +4976,7 @@
       "name": "Bee's Knees",
       "description": "A prohibition-era mix of **gin**, **lemon**, and **honey** for a bright, silky sour.",
       "instructions": "1. Fill a shaker with **ice**.\n2. Add 60 ml of **gin**, 15 ml of **honey syrup**, 25 ml of **lemon juice**, and 25 ml of **orange juice**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled martini glass.\n5. Express oils from a **lemon** peel over the drink and use it as a garnish (an **orange** peel also works).",
+      "video": "https://www.instagram.com/p/C4Y3UVfMAco/",
       "photoUri": "assets/cocktails/79-bee-s-knees.jpg",
       "glassId": "coupe",
       "methodIds": ["shake"],
@@ -22572,7 +22573,7 @@
       "name": "Mai Tai",
       "synonyms": ["Trader Vic's Mai Tai"],
       "description": "Rum-forward Tiki classic with **orange curaçao**, **lime**, and orgeat.",
-      "instructions": "1. Fill a shaker with **ice**.\n2. Add 30 ml of **white rum**, 30 ml of **dark rum**, 15 ml of **orange curaçao**, 15 ml of almond(orgeat) syrup, 30 ml of **lime juice**, and 7.5 ml of **simple syrup**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a highball glass filled with fresh **ice**.\n5. Garnish with a sprig of **mint** and a slice of **lime**.",
+      "instructions": "1. Fill a shaker with **ice**.\n2. Add 30 ml of **white rum**, 30 ml of **aged rum**, 30 ml of **orange curaçao**, 15 ml of **lime juice**, 10 ml of almond(orgeat) syrup, and 10 ml of **grenadine**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a highball glass filled with fresh **ice**.\n5. Garnish with a sprig of **mint** and a slice of **lime**.",
       "photoUri": "assets/cocktails/360-mai-tai.jpg",
       "glassId": "highball_glass",
       "methodIds": ["shake"],
@@ -22602,37 +22603,43 @@
         },
         {
           "order": 3,
-          "ingredientId": 136,
-          "name": "Dark Rum",
+          "ingredientId": 7,
+          "name": "Aged Rum",
           "amount": "30",
-          "unitId": 11
+          "unitId": 11,
+          "substitutes": [
+            {
+              "ingredientId": 136,
+              "name": "Dark Rum"
+            }
+          ]
         },
         {
           "order": 4,
           "ingredientId": 249,
           "name": "Orange Curaçao",
-          "amount": "15",
+          "amount": "30",
           "unitId": 11
         },
         {
           "order": 5,
-          "ingredientId": 11,
-          "name": "Almond (Orgeat) Syrup",
+          "ingredientId": 228,
+          "name": "Lime Juice",
           "amount": "15",
           "unitId": 11
         },
         {
           "order": 6,
-          "ingredientId": 228,
-          "name": "Lime Juice",
-          "amount": "30",
+          "ingredientId": 11,
+          "name": "Almond (Orgeat) Syrup",
+          "amount": "10",
           "unitId": 11
         },
         {
           "order": 7,
-          "ingredientId": 316,
-          "name": "Simple Syrup",
-          "amount": "7.5",
+          "ingredientId": 183,
+          "name": "Grenadine",
+          "amount": "10",
           "unitId": 11
         },
         {
@@ -25131,6 +25138,7 @@
       "synonyms": ["Red Wine Sour"],
       "description": "**Whiskey** sour finished with a float of **red wine**.",
       "instructions": "1. Add 60 ml of **bourbon**, 30 ml of **lemon juice**, 20 ml of **simple syrup**, and an **egg white** into a shaker.\n2. Dry shake (without **ice**) vigorously for about 15 seconds to emulsify the **egg**.\n3. Add about 150 g of **ice**.\n4. Shake vigorously for about 15 seconds until well chilled.\n5. Strain into a chilled rocks glass filled with fresh **ice** (preferably over a large cube).\n6. Float 15 ml of **red wine** on top.\n7. Garnish with a **maraschino cherry**, then express the oils from a **lemon** peel over the drink and use it as a garnish as well.",
+      "video": "https://www.instagram.com/p/C4YTBziMu_1/",
       "photoUri": "assets/cocktails/402-new-york-sour.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["shake", "layer"],
@@ -25520,7 +25528,7 @@
       "name": "Old Cuban",
       "synonyms": ["Old Cuban Mojito"],
       "description": "Sparkling mix of **aged rum**, **mint**, **lime**, and **champagne**.",
-      "instructions": "1. Muddle 6 **mint** leaves with 30 ml of **simple syrup** in a shaker.\n2. Add 45 ml of aged rum, 22.5 ml of **lime juice**, and 2 dashes of **Angostura bitters**.\n3. Add about 150 g of **ice**.\n4. Shake vigorously for about 15 seconds until well chilled.\n5. Strain into a chilled coupe glass.\n6. Top with 60 ml of **champagne**.\n7. Garnish with a **mint** sprig.",
+      "instructions": "1. Muddle 6 **mint** leaves with 30 ml of **simple syrup** in a shaker.\n2. Add 45 ml of **aged rum**, 22.5 ml of **lime juice**, and 2 dashes of **Angostura bitters**.\n3. Add about 150 g of **ice**.\n4. Shake vigorously for about 15 seconds until well chilled.\n5. Strain into a chilled coupe glass.\n6. Top with 60 ml of **champagne**.\n7. Garnish with a **mint** sprig.",
       "photoUri": "assets/cocktails/408-old-cuban.jpg",
       "glassId": "coupe",
       "methodIds": ["muddle", "shake"],
@@ -34541,6 +34549,7 @@
       "name": "Tom & Jerry",
       "description": "A legendary warm holiday punch that serves as a creamy, spiced embrace during the winter season.",
       "instructions": "1. Separate the **egg white** from the yolk and beat them in separate bowls until the whites are stiff and yolks are creamy.\n2. Gently fold the **egg white** into the yolk in a Toddy glass.\n3. Add 30 ml of **dark rum**, 30 ml of **cognac**, and 15 ml of **simple syrup**, to the **egg** mixture.\n4. Fill the rest of the glass with hot **milk**.\n5. Stir gently to combine.\n6. Garnish with a generous dusting of freshly grated **nutmeg**.",
+      "video": "https://www.instagram.com/p/C4WID5Br0oj/",
       "photoUri": "assets/cocktails/550-tom-jerry.jpg",
       "glassId": "toddy_glass",
       "methodIds": ["heat", "build"],
