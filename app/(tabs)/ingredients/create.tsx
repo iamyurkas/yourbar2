@@ -86,6 +86,7 @@ export default function IngredientFormScreen() {
     prefillDescription?: string;
     prefillImageUrl?: string;
     prefillAbv?: string;
+    prefillTagIds?: string;
   }>();
   const modeParam = getParamValue(params.mode);
   const isEditMode = modeParam === 'edit';
@@ -111,6 +112,17 @@ export default function IngredientFormScreen() {
     const parsed = Number(value);
     return Number.isFinite(parsed) ? parsed : undefined;
   }, [params.prefillAbv]);
+  const prefillTagIdsParam = useMemo(() => {
+    const value = getParamValue(params.prefillTagIds);
+    if (typeof value !== 'string') {
+      return [];
+    }
+
+    return Array.from(new Set(value
+      .split(',')
+      .map((entry) => Number.parseInt(entry.trim(), 10))
+      .filter((entry) => Number.isFinite(entry) && entry >= 0)));
+  }, [params.prefillTagIds]);
   const returnToPathParam = useMemo(() => {
     const value = getParamValue(params.returnToPath);
     return typeof value === 'string' && value.length > 0 ? value : undefined;
@@ -229,7 +241,11 @@ export default function IngredientFormScreen() {
     setName(suggestedNameParam ?? '');
     setDescription(prefillDescriptionParam ?? '');
     setImageUri(prefillImageUrlParam ?? null);
-    setSelectedTagIds(defaultIngredientTagId == null ? [] : [defaultIngredientTagId]);
+    setSelectedTagIds(prefillTagIdsParam.length > 0
+      ? prefillTagIdsParam
+      : defaultIngredientTagId == null
+        ? []
+        : [defaultIngredientTagId]);
     setBaseIngredientId(null);
     setStyleIngredientId(null);
     setBaseSearch('');
@@ -239,7 +255,14 @@ export default function IngredientFormScreen() {
     setInitialSnapshot(null);
     setIsSaving(false);
     setIsInitialized(true);
-  }, [defaultIngredientTagId, isEditMode, prefillDescriptionParam, prefillImageUrlParam, suggestedNameParam]);
+  }, [
+    defaultIngredientTagId,
+    isEditMode,
+    prefillDescriptionParam,
+    prefillImageUrlParam,
+    prefillTagIdsParam,
+    suggestedNameParam,
+  ]);
 
   useEffect(() => {
     if (!isEditMode || !ingredient) {

@@ -1,7 +1,8 @@
 import type { Ingredient } from '@/providers/inventory-provider';
+import { getBarcodeLookupCandidates, normalizeBarcode } from '@/services/barcode/barcodeNormalization';
 
 export function sanitizeBarcode(value?: string | null): string {
-  return value?.trim() ?? '';
+  return normalizeBarcode(value);
 }
 
 export function findIngredientByBarcode(
@@ -9,12 +10,24 @@ export function findIngredientByBarcode(
   barcode: string,
 ): Ingredient | undefined {
   const target = sanitizeBarcode(barcode);
+  const targetCandidates = new Set(getBarcodeLookupCandidates(target));
   if (!target) {
     return undefined;
   }
 
   return ingredients.find((ingredient) =>
-    (ingredient.barcodes ?? []).some((existing) => sanitizeBarcode(existing) === target),
+    (ingredient.barcodes ?? []).some((existing) => {
+      const normalizedExisting = sanitizeBarcode(existing);
+      if (!normalizedExisting) {
+        return false;
+      }
+
+      if (targetCandidates.has(normalizedExisting)) {
+        return true;
+      }
+
+      return getBarcodeLookupCandidates(normalizedExisting).some((candidate) => targetCandidates.has(candidate));
+    }),
   );
 }
 
