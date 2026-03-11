@@ -2922,10 +2922,5 @@
   "cocktail.614.name": "Bloody Caesar",
   "cocktail.614.synonyms": "Cesar, Ceasar",
   "cocktail.614.description": "Often just called a **Caesar**, Canada's national cocktail. While it looks like a Bloody Mary, the key difference is Clamato juice — a blend of tomato juice and clam broth — which gives it a distinct savory, briny umami kick.",
-  "cocktail.614.instructions": "1. Rub a fresh **lime** wedge around the rim of a highball glass. Dip the rim into **celery salt** or a Caesar rimmer spice blend until coated.\n2. Fill the glass with ice cubes. Pour in the **vodka**, **hot sauce**, and **Worcestershire sauce**.\n3. Top the glass with **Clamato juice**. Stir well with a long spoon or roll the drink by pouring it back and forth between two glasses.\n4. Add a **celery** stalk and the **lime** wedge.",
-  "sideMenu.importIngredientStatusesTitle": "Import ingredient statuses?",
-  "sideMenu.importIngredientStatusesMessage": "Choose which ingredient statuses to import from this backup.",
-  "sideMenu.importIngredientStatusesAvailability": "Ingredient availability",
-  "sideMenu.importIngredientStatusesShopping": "Ingredient shopping list",
-  "sideMenu.importIngredientStatusesConfirm": "Import selected"
+  "cocktail.614.instructions": "1. Rub a fresh **lime** wedge around the rim of a highball glass. Dip the rim into **celery salt** or a Caesar rimmer spice blend until coated.\n2. Fill the glass with ice cubes. Pour in the **vodka**, **hot sauce**, and **Worcestershire sauce**.\n3. Top the glass with **Clamato juice**. Stir well with a long spoon or roll the drink by pouring it back and forth between two glasses.\n4. Add a **celery** stalk and the **lime** wedge."
 }

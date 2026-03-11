@@ -3190,10 +3190,5 @@
   "cocktail.614.name": "Bloody Caesar",
   "cocktail.614.synonyms": "Cesar, Ceasar, Bloody Caesar",
   "cocktail.614.description": "A menudo llamado simplemente **Caesar**, es el cóctel nacional de Canadá. Aunque se parece a un Bloody Mary, la diferencia clave es el jugo Clamato, una mezcla de zumo de tomate y caldo de almeja, que le aporta un característico sabor salado y umami.",
-  "cocktail.614.instructions": "1. Frota el borde de un vaso alto con una rodaja de **lima** fresca. Moja el borde en **sal de apio** o en una mezcla de especias para Caesar hasta que esté cubierto.\n2. Llena el vaso con cubitos de hielo. Vierte el **vodka**, la **salsa picante** y la **salsa Worcestershire**.\n3. Llena el vaso con **jugo Clamato**. Remueve bien con una cuchara larga o escancia la bebida vertiéndola de un vaso a otro.\n4. Añade una rama de **apio** y la rodaja de **lima**.",
-  "sideMenu.importIngredientStatusesTitle": "¿Importar estados de ingredientes?",
-  "sideMenu.importIngredientStatusesMessage": "Elige qué estados de ingredientes importar desde esta copia de seguridad.",
-  "sideMenu.importIngredientStatusesAvailability": "Disponibilidad de ingredientes",
-  "sideMenu.importIngredientStatusesShopping": "Lista de compras de ingredientes",
-  "sideMenu.importIngredientStatusesConfirm": "Importar seleccionados"
+  "cocktail.614.instructions": "1. Frota el borde de un vaso alto con una rodaja de **lima** fresca. Moja el borde en **sal de apio** o en una mezcla de especias para Caesar hasta que esté cubierto.\n2. Llena el vaso con cubitos de hielo. Vierte el **vodka**, la **salsa picante** y la **salsa Worcestershire**.\n3. Llena el vaso con **jugo Clamato**. Remueve bien con una cuchara larga o escancia la bebida vertiéndola de un vaso a otro.\n4. Añade una rama de **apio** y la rodaja de **lima**."
 }

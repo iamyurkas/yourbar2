@@ -1,7 +1,1 @@
-{
-  "sideMenu.importIngredientStatusesTitle": "Import ingredient statuses?",
-  "sideMenu.importIngredientStatusesMessage": "Choose which ingredient statuses to import from this backup.",
-  "sideMenu.importIngredientStatusesAvailability": "Ingredient availability",
-  "sideMenu.importIngredientStatusesShopping": "Ingredient shopping list",
-  "sideMenu.importIngredientStatusesConfirm": "Import selected"
-}
+{}
