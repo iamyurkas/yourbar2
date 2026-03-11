@@ -227,6 +227,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   const [isIngredientStatusImportModalVisible, setIsIngredientStatusImportModalVisible] = useState(false);
   const [shouldImportIngredientAvailability, setShouldImportIngredientAvailability] = useState(false);
   const [shouldImportIngredientShopping, setShouldImportIngredientShopping] = useState(false);
+  const [isImportIngredientStatusesSubmitting, setIsImportIngredientStatusesSubmitting] = useState(false);
   const ingredientStatusImportResolverRef = useRef<((value: InventoryImportOptions | null) => void) | null>(null);
   const translateX = useRef(new Animated.Value(-MENU_WIDTH)).current;
   const backdropOpacity = useRef(new Animated.Value(0)).current;
@@ -665,6 +666,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   const requestIngredientStatusImportOptions = () => {
     setShouldImportIngredientAvailability(false);
     setShouldImportIngredientShopping(false);
+    setIsImportIngredientStatusesSubmitting(false);
     setIsIngredientStatusImportModalVisible(true);
 
     return new Promise<InventoryImportOptions | null>((resolve) => {
@@ -673,10 +675,23 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   };
 
   const closeIngredientStatusImportModal = (options: InventoryImportOptions | null) => {
+    setIsImportIngredientStatusesSubmitting(false);
     setIsIngredientStatusImportModalVisible(false);
     const resolver = ingredientStatusImportResolverRef.current;
     ingredientStatusImportResolverRef.current = null;
     resolver?.(options);
+  };
+
+  const handleConfirmIngredientStatusImport = () => {
+    if (isImportIngredientStatusesSubmitting) {
+      return;
+    }
+
+    setIsImportIngredientStatusesSubmitting(true);
+    closeIngredientStatusImportModal({
+      importIngredientAvailability: shouldImportIngredientAvailability,
+      importIngredientShopping: shouldImportIngredientShopping,
+    });
   };
 
   const handleBackupData = async () => {
@@ -2119,15 +2134,15 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 </Text>
               </Pressable>
               <Pressable
-                onPress={() => closeIngredientStatusImportModal({
-                  importIngredientAvailability: shouldImportIngredientAvailability,
-                  importIngredientShopping: shouldImportIngredientShopping,
-                })}
-                style={[
+                onPress={handleConfirmIngredientStatusImport}
+                disabled={isImportIngredientStatusesSubmitting}
+                accessibilityState={{ disabled: isImportIngredientStatusesSubmitting }}
+                style={({ pressed }) => [
                   styles.importStatusActionButton,
                   {
                     backgroundColor: Colors.tint,
                     borderColor: Colors.tint,
+                    opacity: isImportIngredientStatusesSubmitting ? 0.6 : pressed ? 0.8 : 1,
                   },
                 ]}
               >
