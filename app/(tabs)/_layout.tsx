@@ -1,6 +1,6 @@
 import { Tabs } from 'expo-router';
 import { StackActions } from '@react-navigation/native';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -90,9 +90,17 @@ const TAB_SCREENS: {
 
 export default function TabLayout() {
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(null);
+  const [layoutAdjustment, setLayoutAdjustment] = useState(0);
   const { t } = useI18n();
   const insets = useSafeAreaInsets();
   const Colors = useAppColors();
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLayoutAdjustment(0.1);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, []);
 
   const closeDialog = useCallback(() => {
     setDialogOptions(null);
@@ -111,14 +119,14 @@ export default function TabLayout() {
           tabBarActiveTintColor: Colors.primary,
           tabBarInactiveTintColor: Colors.onSurfaceVariant,
           tabBarStyle: {
-            height: 72 + insets.bottom,
-            paddingTop: 8,
-            paddingBottom: insets.bottom,
+            height: 72 + insets.bottom + layoutAdjustment,
             backgroundColor: Colors.surface,
           },
           tabBarItemStyle: {
             justifyContent: 'center',
-            alignItems: 'center',
+            alignItems: 'stretch',
+            paddingTop: 8,
+            paddingBottom: insets.bottom,
           },
         }}>
         {TAB_SCREENS.map(({ name, titleKey, icon, onTabPress }) => (
