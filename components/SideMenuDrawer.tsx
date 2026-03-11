@@ -967,15 +967,15 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     const rateUrls = Platform.select<string[]>({
       ios: iosAppStoreId
         ? [
-            `itms-apps://apps.apple.com/app/id${iosAppStoreId}?action=write-review`,
-            `https://apps.apple.com/app/id${iosAppStoreId}?action=write-review`,
-          ]
+          `itms-apps://apps.apple.com/app/id${iosAppStoreId}?action=write-review`,
+          `https://apps.apple.com/app/id${iosAppStoreId}?action=write-review`,
+        ]
         : [],
       android: androidPackageName
         ? [
-            `market://details?id=${androidPackageName}`,
-            `https://play.google.com/store/apps/details?id=${androidPackageName}`,
-          ]
+          `market://details?id=${androidPackageName}`,
+          `https://play.google.com/store/apps/details?id=${androidPackageName}`,
+        ]
         : [],
       default: [],
     });
@@ -3203,6 +3203,7 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   importStatusActionButton: {
+    paddingHorizontal: 20,
     paddingVertical: 12,
     borderRadius: 12,
     borderWidth: StyleSheet.hairlineWidth,

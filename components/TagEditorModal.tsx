@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Modal, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 
@@ -335,9 +335,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   saveButton: {
-    borderRadius: 10,
-    paddingVertical: 10,
+    borderRadius: 12,
+    paddingVertical: 12,
     alignItems: 'center',
+    paddingHorizontal: 20,
+    borderWidth: StyleSheet.hairlineWidth,
+    justifyContent: "center"
   },
   saveLabel: {
     fontSize: 14,
