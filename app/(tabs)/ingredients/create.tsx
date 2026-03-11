@@ -86,6 +86,7 @@ export default function IngredientFormScreen() {
     prefillDescription?: string;
     prefillImageUrl?: string;
     prefillAbv?: string;
+    prefillTagId?: string;
   }>();
   const modeParam = getParamValue(params.mode);
   const isEditMode = modeParam === 'edit';
@@ -111,6 +112,13 @@ export default function IngredientFormScreen() {
     const parsed = Number(value);
     return Number.isFinite(parsed) ? parsed : undefined;
   }, [params.prefillAbv]);
+
+  const prefillTagIdParam = useMemo(() => {
+    const value = getParamValue(params.prefillTagId);
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : undefined;
+  }, [params.prefillTagId]);
+
   const returnToPathParam = useMemo(() => {
     const value = getParamValue(params.returnToPath);
     return typeof value === 'string' && value.length > 0 ? value : undefined;
@@ -194,7 +202,9 @@ export default function IngredientFormScreen() {
   const [imageUri, setImageUri] = useState<string | null>(null);
   const [isPickingImage, setIsPickingImage] = useState(false);
   const [selectedTagIds, setSelectedTagIds] = useState<number[]>(
-    isEditMode || defaultIngredientTagId == null ? [] : [defaultIngredientTagId],
+    isEditMode
+      ? []
+      : [prefillTagIdParam ?? defaultIngredientTagId].filter((tagId): tagId is number => tagId != null),
   );
   const [isTagModalVisible, setTagModalVisible] = useState(false);
   const [baseIngredientId, setBaseIngredientId] = useState<number | null>(null);
@@ -229,7 +239,7 @@ export default function IngredientFormScreen() {
     setName(suggestedNameParam ?? '');
     setDescription(prefillDescriptionParam ?? '');
     setImageUri(prefillImageUrlParam ?? null);
-    setSelectedTagIds(defaultIngredientTagId == null ? [] : [defaultIngredientTagId]);
+    setSelectedTagIds([prefillTagIdParam ?? defaultIngredientTagId].filter((tagId): tagId is number => tagId != null));
     setBaseIngredientId(null);
     setStyleIngredientId(null);
     setBaseSearch('');
@@ -239,7 +249,7 @@ export default function IngredientFormScreen() {
     setInitialSnapshot(null);
     setIsSaving(false);
     setIsInitialized(true);
-  }, [defaultIngredientTagId, isEditMode, prefillDescriptionParam, prefillImageUrlParam, suggestedNameParam]);
+  }, [defaultIngredientTagId, isEditMode, prefillDescriptionParam, prefillImageUrlParam, prefillTagIdParam, suggestedNameParam]);
 
   useEffect(() => {
     if (!isEditMode || !ingredient) {

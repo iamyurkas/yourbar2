@@ -8,11 +8,13 @@ import { ActivityIndicator, Platform, Pressable, StyleSheet, Text, View } from '
 import { AppDialog } from '@/components/AppDialog';
 import { AppImage } from '@/components/AppImage';
 import { HeaderIconButton } from '@/components/HeaderIconButton';
+import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { useAppColors } from '@/constants/theme';
 import { useI18n } from '@/libs/i18n/use-i18n';
 import { useInventory } from '@/providers/inventory-provider';
 import { appendBarcode, findIngredientByBarcode } from '@/services/barcode/findIngredientByBarcode';
 import { findSimilarIngredientByName } from '@/services/barcode/findSimilarIngredientByName';
+import { inferIngredientTagIdFromDraft } from '@/services/barcode/inferIngredientTag';
 import { fetchProductByBarcode } from '@/services/barcode/openFoodFacts';
 import type { ScannedProductDraft } from '@/services/barcode/types';
 
@@ -87,6 +89,9 @@ export default function ScanIngredientScreen() {
 
   const createWithDraft = useCallback((draft: ScannedProductDraft) => {
     const name = draft.name?.trim() || draft.barcode;
+    const inferredTagId = inferIngredientTagIdFromDraft(draft);
+    const inferredTag = BUILTIN_INGREDIENT_TAGS.find((tag) => tag.id === inferredTagId);
+
     const created = createIngredient({
       name,
       description: draft.description,
@@ -94,7 +99,7 @@ export default function ScanIngredientScreen() {
       imageUrl: draft.imageUrl,
       abv: draft.abv,
       barcodes: [draft.barcode],
-      tags: [],
+      tags: inferredTag ? [{ ...inferredTag }] : [],
     });
 
     if (created?.id != null) {
@@ -103,8 +108,10 @@ export default function ScanIngredientScreen() {
   }, [createIngredient]);
 
   const editWithDraft = useCallback((draft: ScannedProductDraft) => {
+    const inferredTagId = inferIngredientTagIdFromDraft(draft);
     const params: Record<string, string> = {
       prefillBarcode: draft.barcode,
+      prefillTagId: String(inferredTagId),
     };
 
     if (draft.name) {
