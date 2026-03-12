@@ -266,10 +266,15 @@ const styles = StyleSheet.create({
   overlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.4)',
-    justifyContent: 'center',
-    padding: 24,
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    paddingTop: 56,
+    paddingHorizontal: 24,
+    paddingBottom: 24,
   },
   card: {
+    width: '100%',
+    maxWidth: 500,
     borderRadius: 12,
     padding: 16,
     gap: 12,

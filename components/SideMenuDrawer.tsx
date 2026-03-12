@@ -197,6 +197,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   const [isLanguageModalVisible, setLanguageModalVisible] = useState(false);
   const [isBackupRestoreModalVisible, setBackupRestoreModalVisible] = useState(false);
   const [isBarManagerVisible, setBarManagerVisible] = useState(false);
+  const barManagerTransitionTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [isBarEditorVisible, setBarEditorVisible] = useState(false);
   const [barEditorMode, setBarEditorMode] = useState<"create" | "rename">("create");
   const [barEditorTarget, setBarEditorTarget] = useState<{ id: string, name: string } | null>(null);
@@ -207,6 +208,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   );
   const languageModalCloseTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [isTagManagerVisible, setTagManagerVisible] = useState(false);
+  const tagManagerTransitionTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const tagEditorReturnTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [isTagEditorVisible, setTagEditorVisible] = useState(false);
   const [tagEditorMode, setTagEditorMode] = useState<"create" | "edit">(
     "create",
@@ -472,11 +475,22 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     handleCloseBarManager();
   };
 
+  const scheduleAfterBarManagerClose = (callback: () => void) => {
+    clearTimeoutRef(barManagerTransitionTimeout);
+    setBarManagerVisible(false);
+    barManagerTransitionTimeout.current = setTimeout(() => {
+      callback();
+      barManagerTransitionTimeout.current = null;
+    }, 250);
+  };
+
   const handleOpenBarEditor = (mode: "create" | "rename", bar?: { id: string, name: string }) => {
     setBarEditorMode(mode);
     setBarEditorTarget(bar ?? null);
     setBarEditorValue(bar?.name ?? "");
-    setBarEditorVisible(true);
+    scheduleAfterBarManagerClose(() => {
+      setBarEditorVisible(true);
+    });
   };
 
   const handleCloseBarEditor = () => {
@@ -506,19 +520,21 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       return;
     }
 
-    setDialogOptions({
-      title: t("barManager.deleteBar"),
-      message: t("barManager.deleteConfirm", { name: bar.name }),
-      actions: [
-        { label: t("common.cancel"), variant: "secondary" },
-        {
-          label: t("common.delete"),
-          variant: "destructive",
-          onPress: () => {
-            deleteBar(bar.id);
+    scheduleAfterBarManagerClose(() => {
+      setDialogOptions({
+        title: t("barManager.deleteBar"),
+        message: t("barManager.deleteConfirm", { name: bar.name }),
+        actions: [
+          { label: t("common.cancel"), variant: "secondary" },
+          {
+            label: t("common.delete"),
+            variant: "destructive",
+            onPress: () => {
+              deleteBar(bar.id);
+            },
           },
-        },
-      ],
+        ],
+      });
     });
   };
 
@@ -569,6 +585,23 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     setTagManagerVisible(false);
   };
 
+  const scheduleAfterTagManagerClose = (callback: () => void) => {
+    clearTimeoutRef(tagManagerTransitionTimeout);
+    setTagManagerVisible(false);
+    tagManagerTransitionTimeout.current = setTimeout(() => {
+      callback();
+      tagManagerTransitionTimeout.current = null;
+    }, 250);
+  };
+
+  const scheduleTagManagerReopen = () => {
+    clearTimeoutRef(tagEditorReturnTimeout);
+    tagEditorReturnTimeout.current = setTimeout(() => {
+      setTagManagerVisible(true);
+      tagEditorReturnTimeout.current = null;
+    }, 250);
+  };
+
   const handleOpenTagEditor = (
     type: "cocktail" | "ingredient",
     tag?: { id: number; name: string; color: string },
@@ -576,11 +609,17 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     setTagEditorType(type);
     setTagEditorMode(tag ? "edit" : "create");
     setTagEditorTarget(tag ?? null);
-    setTagEditorVisible(true);
+    scheduleAfterTagManagerClose(() => {
+      setTagEditorVisible(true);
+    });
   };
 
   const handleCloseTagEditor = () => {
     setTagEditorVisible(false);
+
+    if (tagEditorMode === "create") {
+      scheduleTagManagerReopen();
+    }
   };
 
   const handleCloseDialog = () => {
@@ -933,29 +972,37 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     }
 
     setTagEditorVisible(false);
+
+    if (tagEditorMode === "create") {
+      scheduleTagManagerReopen();
+    }
   };
 
   const handleDeleteTag = (
     type: "cocktail" | "ingredient",
     tag: { id: number; name: string },
   ) => {
-    setDialogOptions({
-      title: t("sideMenu.deleteTagTitle"),
-      message: t("sideMenu.deleteTagMessage", { name: tag.name }),
-      actions: [
-        { label: t("common.cancel"), variant: "secondary" },
-        {
-          label: t("common.delete"),
-          variant: "destructive",
-          onPress: () => {
-            if (type === "cocktail") {
-              deleteCustomCocktailTag(tag.id);
-            } else {
-              deleteCustomIngredientTag(tag.id);
-            }
+    scheduleAfterTagManagerClose(() => {
+      setDialogOptions({
+        title: t("sideMenu.deleteTagTitle"),
+        message: t("sideMenu.deleteTagMessage", { name: tag.name }),
+        actions: [
+          { label: t("common.cancel"), variant: "secondary" },
+          {
+            label: t("common.delete"),
+            variant: "destructive",
+            onPress: () => {
+              if (type === "cocktail") {
+                deleteCustomCocktailTag(tag.id);
+              } else {
+                deleteCustomIngredientTag(tag.id);
+              }
+
+              scheduleTagManagerReopen();
+            },
           },
-        },
-      ],
+        ],
+      });
     });
   };
 
@@ -1022,6 +1069,9 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       clearTimeoutRef(startScreenModalCloseTimeout);
       clearTimeoutRef(amazonStoreModalCloseTimeout);
       clearTimeoutRef(languageModalCloseTimeout);
+      clearTimeoutRef(barManagerTransitionTimeout);
+      clearTimeoutRef(tagManagerTransitionTimeout);
+      clearTimeoutRef(tagEditorReturnTimeout);
     };
   }, []);
 
@@ -2859,7 +2909,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
         onRequestClose={handleCloseBarEditor}
       >
         <Pressable
-          style={styles.modalOverlay}
+          style={styles.barEditorOverlay}
           onPress={handleCloseBarEditor}
           accessibilityRole="button"
         >
@@ -3055,6 +3105,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     padding: 24,
+  },
+  barEditorOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.4)",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    paddingTop: 56,
+    paddingHorizontal: 24,
+    paddingBottom: 24,
   },
   modalCard: {
     width: "100%",
