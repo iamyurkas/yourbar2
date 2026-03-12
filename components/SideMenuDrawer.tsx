@@ -197,6 +197,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   const [isLanguageModalVisible, setLanguageModalVisible] = useState(false);
   const [isBackupRestoreModalVisible, setBackupRestoreModalVisible] = useState(false);
   const [isBarManagerVisible, setBarManagerVisible] = useState(false);
+  const barManagerTransitionTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [isBarEditorVisible, setBarEditorVisible] = useState(false);
   const [barEditorMode, setBarEditorMode] = useState<"create" | "rename">("create");
   const [barEditorTarget, setBarEditorTarget] = useState<{ id: string, name: string } | null>(null);
@@ -472,16 +473,22 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     handleCloseBarManager();
   };
 
-  const handleOpenBarEditor = (mode: "create" | "rename", bar?: { id: string, name: string }) => {
-    // iOS can hang when stacking the editor modal on top of the bar manager modal.
-    // Close the manager first, then present the editor on the next tick.
+  const scheduleAfterBarManagerClose = (callback: () => void) => {
+    clearTimeoutRef(barManagerTransitionTimeout);
     setBarManagerVisible(false);
+    barManagerTransitionTimeout.current = setTimeout(() => {
+      callback();
+      barManagerTransitionTimeout.current = null;
+    }, 250);
+  };
+
+  const handleOpenBarEditor = (mode: "create" | "rename", bar?: { id: string, name: string }) => {
     setBarEditorMode(mode);
     setBarEditorTarget(bar ?? null);
     setBarEditorValue(bar?.name ?? "");
-    setTimeout(() => {
+    scheduleAfterBarManagerClose(() => {
       setBarEditorVisible(true);
-    }, 0);
+    });
   };
 
   const handleCloseBarEditor = () => {
@@ -511,19 +518,21 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       return;
     }
 
-    setDialogOptions({
-      title: t("barManager.deleteBar"),
-      message: t("barManager.deleteConfirm", { name: bar.name }),
-      actions: [
-        { label: t("common.cancel"), variant: "secondary" },
-        {
-          label: t("common.delete"),
-          variant: "destructive",
-          onPress: () => {
-            deleteBar(bar.id);
+    scheduleAfterBarManagerClose(() => {
+      setDialogOptions({
+        title: t("barManager.deleteBar"),
+        message: t("barManager.deleteConfirm", { name: bar.name }),
+        actions: [
+          { label: t("common.cancel"), variant: "secondary" },
+          {
+            label: t("common.delete"),
+            variant: "destructive",
+            onPress: () => {
+              deleteBar(bar.id);
+            },
           },
-        },
-      ],
+        ],
+      });
     });
   };
 
@@ -1027,6 +1036,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       clearTimeoutRef(startScreenModalCloseTimeout);
       clearTimeoutRef(amazonStoreModalCloseTimeout);
       clearTimeoutRef(languageModalCloseTimeout);
+      clearTimeoutRef(barManagerTransitionTimeout);
     };
   }, []);
 
@@ -2864,7 +2874,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
         onRequestClose={handleCloseBarEditor}
       >
         <Pressable
-          style={styles.modalOverlay}
+          style={styles.barEditorOverlay}
           onPress={handleCloseBarEditor}
           accessibilityRole="button"
         >
@@ -3060,6 +3070,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     padding: 24,
+  },
+  barEditorOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.4)",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    paddingTop: 56,
+    paddingHorizontal: 24,
+    paddingBottom: 24,
   },
   modalCard: {
     width: "100%",
