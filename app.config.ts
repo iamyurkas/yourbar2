@@ -50,7 +50,7 @@ export default ({ config }: { config: ExpoConfig }) => {
 
         iosAppStoreCountryCode:
           process.env.EXPO_PUBLIC_IOS_APP_STORE_COUNTRY_CODE ?? null,
-        iosAppStoreId: process.env.EXPO_PUBLIC_IOS_APP_STORE_ID ?? null,
+        iosAppStoreId: process.env.EXPO_PUBLIC_IOS_APP_STORE_ID ?? "6758964503",
         androidPlayStoreCountryCode:
           process.env.EXPO_PUBLIC_ANDROID_PLAY_STORE_COUNTRY_CODE ?? null,
 
