@@ -209,6 +209,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   const languageModalCloseTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [isTagManagerVisible, setTagManagerVisible] = useState(false);
   const tagManagerTransitionTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const tagEditorReturnTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [isTagEditorVisible, setTagEditorVisible] = useState(false);
   const [tagEditorMode, setTagEditorMode] = useState<"create" | "edit">(
     "create",
@@ -607,6 +608,14 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
   const handleCloseTagEditor = () => {
     setTagEditorVisible(false);
+
+    if (tagEditorMode === "create") {
+      clearTimeoutRef(tagEditorReturnTimeout);
+      tagEditorReturnTimeout.current = setTimeout(() => {
+        setTagManagerVisible(true);
+        tagEditorReturnTimeout.current = null;
+      }, 250);
+    }
   };
 
   const handleCloseDialog = () => {
@@ -959,29 +968,39 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     }
 
     setTagEditorVisible(false);
+
+    if (tagEditorMode === "create") {
+      clearTimeoutRef(tagEditorReturnTimeout);
+      tagEditorReturnTimeout.current = setTimeout(() => {
+        setTagManagerVisible(true);
+        tagEditorReturnTimeout.current = null;
+      }, 250);
+    }
   };
 
   const handleDeleteTag = (
     type: "cocktail" | "ingredient",
     tag: { id: number; name: string },
   ) => {
-    setDialogOptions({
-      title: t("sideMenu.deleteTagTitle"),
-      message: t("sideMenu.deleteTagMessage", { name: tag.name }),
-      actions: [
-        { label: t("common.cancel"), variant: "secondary" },
-        {
-          label: t("common.delete"),
-          variant: "destructive",
-          onPress: () => {
-            if (type === "cocktail") {
-              deleteCustomCocktailTag(tag.id);
-            } else {
-              deleteCustomIngredientTag(tag.id);
-            }
+    scheduleAfterTagManagerClose(() => {
+      setDialogOptions({
+        title: t("sideMenu.deleteTagTitle"),
+        message: t("sideMenu.deleteTagMessage", { name: tag.name }),
+        actions: [
+          { label: t("common.cancel"), variant: "secondary" },
+          {
+            label: t("common.delete"),
+            variant: "destructive",
+            onPress: () => {
+              if (type === "cocktail") {
+                deleteCustomCocktailTag(tag.id);
+              } else {
+                deleteCustomIngredientTag(tag.id);
+              }
+            },
           },
-        },
-      ],
+        ],
+      });
     });
   };
 
@@ -1050,6 +1069,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       clearTimeoutRef(languageModalCloseTimeout);
       clearTimeoutRef(barManagerTransitionTimeout);
       clearTimeoutRef(tagManagerTransitionTimeout);
+      clearTimeoutRef(tagEditorReturnTimeout);
     };
   }, []);
 
