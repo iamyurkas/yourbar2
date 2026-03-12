@@ -92,7 +92,11 @@ export default function TabLayout() {
             }}
             listeners={({ navigation, route }) => ({
               tabPress: (event) => {
-                if (!navigation.isFocused()) {
+                const navState = navigation.getState();
+                const focusedRouteKey = navState.routes[navState.index]?.key;
+                const isCurrentTabFocused = focusedRouteKey === route.key;
+
+                if (!isCurrentTabFocused) {
                   return;
                 }
 
