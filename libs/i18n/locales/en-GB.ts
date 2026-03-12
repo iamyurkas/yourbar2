@@ -535,6 +535,8 @@ export const enGBTranslations: TranslationDictionary = {
   "sideMenu.reportIssueCaption": "Report a bug, share an idea",
   "sideMenu.rateAppTitle": "Enjoying Your Bar?",
   "sideMenu.rateAppCaption": "Rate Your Bar!",
+  "sideMenu.rateAppUnavailableTitle": "Not available in this build",
+  "sideMenu.rateAppUnavailableMessage": "Rating is only available from the App Store version of Your Bar.",
   "sideMenu.backupRestore": "Back up & Restore",
   "sideMenu.backupRestoreCaption": "Save your data, restore from a backup",
   "sideMenu.restartOnboarding": "Restart onboarding",

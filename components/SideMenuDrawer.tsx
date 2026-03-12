@@ -1031,7 +1031,20 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   };
 
   const handleRateApp = async () => {
-    const iosAppStoreId = Constants.expoConfig?.extra?.iosAppStoreId;
+    const iosAppStoreIdRaw = Constants.expoConfig?.extra?.iosAppStoreId;
+    const iosAppStoreId =
+      typeof iosAppStoreIdRaw === "string" ? iosAppStoreIdRaw.trim() : null;
+    const isStandaloneIosBuild =
+      Platform.OS === "ios" && String(Constants.executionEnvironment) === "storeClient";
+
+    if (Platform.OS === "ios" && (!isStandaloneIosBuild || !iosAppStoreId)) {
+      showDialogMessage(
+        t("sideMenu.rateAppUnavailableTitle"),
+        t("sideMenu.rateAppUnavailableMessage"),
+      );
+      return;
+    }
+
     const androidPackageName =
       Constants.expoConfig?.android?.package ?? Constants.manifest2?.extra?.expoClient?.android?.package;
 
