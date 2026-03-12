@@ -473,10 +473,15 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   };
 
   const handleOpenBarEditor = (mode: "create" | "rename", bar?: { id: string, name: string }) => {
+    // iOS can hang when stacking the editor modal on top of the bar manager modal.
+    // Close the manager first, then present the editor on the next tick.
+    setBarManagerVisible(false);
     setBarEditorMode(mode);
     setBarEditorTarget(bar ?? null);
     setBarEditorValue(bar?.name ?? "");
-    setBarEditorVisible(true);
+    setTimeout(() => {
+      setBarEditorVisible(true);
+    }, 0);
   };
 
   const handleCloseBarEditor = () => {
