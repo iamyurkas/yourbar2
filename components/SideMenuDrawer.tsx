@@ -210,6 +210,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   const [isTagManagerVisible, setTagManagerVisible] = useState(false);
   const tagManagerTransitionTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const tagEditorReturnTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const backupRestoreActionTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [isTagEditorVisible, setTagEditorVisible] = useState(false);
   const [tagEditorMode, setTagEditorMode] = useState<"create" | "edit">(
     "create",
@@ -564,12 +565,20 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
   const handleBackupDataFromModal = () => {
     handleCloseBackupRestoreModal();
-    void handleBackupData();
+    clearTimeoutRef(backupRestoreActionTimeout);
+    backupRestoreActionTimeout.current = setTimeout(() => {
+      void handleBackupData();
+      backupRestoreActionTimeout.current = null;
+    }, 300);
   };
 
   const handleRestoreDataFromModal = () => {
     handleCloseBackupRestoreModal();
-    void handleRestoreData();
+    clearTimeoutRef(backupRestoreActionTimeout);
+    backupRestoreActionTimeout.current = setTimeout(() => {
+      void handleRestoreData();
+      backupRestoreActionTimeout.current = null;
+    }, 300);
   };
 
   const handleResetInventoryFromModal = () => {
@@ -1072,6 +1081,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       clearTimeoutRef(barManagerTransitionTimeout);
       clearTimeoutRef(tagManagerTransitionTimeout);
       clearTimeoutRef(tagEditorReturnTimeout);
+      clearTimeoutRef(backupRestoreActionTimeout);
     };
   }, []);
 
