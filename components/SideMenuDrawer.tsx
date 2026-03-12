@@ -208,6 +208,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   );
   const languageModalCloseTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [isTagManagerVisible, setTagManagerVisible] = useState(false);
+  const tagManagerTransitionTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [isTagEditorVisible, setTagEditorVisible] = useState(false);
   const [tagEditorMode, setTagEditorMode] = useState<"create" | "edit">(
     "create",
@@ -583,6 +584,15 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     setTagManagerVisible(false);
   };
 
+  const scheduleAfterTagManagerClose = (callback: () => void) => {
+    clearTimeoutRef(tagManagerTransitionTimeout);
+    setTagManagerVisible(false);
+    tagManagerTransitionTimeout.current = setTimeout(() => {
+      callback();
+      tagManagerTransitionTimeout.current = null;
+    }, 250);
+  };
+
   const handleOpenTagEditor = (
     type: "cocktail" | "ingredient",
     tag?: { id: number; name: string; color: string },
@@ -590,7 +600,9 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     setTagEditorType(type);
     setTagEditorMode(tag ? "edit" : "create");
     setTagEditorTarget(tag ?? null);
-    setTagEditorVisible(true);
+    scheduleAfterTagManagerClose(() => {
+      setTagEditorVisible(true);
+    });
   };
 
   const handleCloseTagEditor = () => {
@@ -1037,6 +1049,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       clearTimeoutRef(amazonStoreModalCloseTimeout);
       clearTimeoutRef(languageModalCloseTimeout);
       clearTimeoutRef(barManagerTransitionTimeout);
+      clearTimeoutRef(tagManagerTransitionTimeout);
     };
   }, []);
 
