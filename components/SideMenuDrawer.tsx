@@ -1031,7 +1031,41 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   };
 
   const handleRateApp = async () => {
-    const iosAppStoreId = Constants.expoConfig?.extra?.iosAppStoreId;
+    const normalizeIosAppStoreId = (value: unknown): string | null => {
+      if (typeof value === "number" && Number.isFinite(value)) {
+        return String(Math.trunc(value));
+      }
+
+      if (typeof value === "string") {
+        const trimmed = value.trim();
+        if (!trimmed) {
+          return null;
+        }
+
+        const idMatch = trimmed.match(/id(\d+)/i);
+        if (idMatch?.[1]) {
+          return idMatch[1];
+        }
+
+        const digitsOnly = trimmed.match(/^\d+$/);
+        return digitsOnly ? digitsOnly[0] : null;
+      }
+
+      if (value && typeof value === "object") {
+        const objectValue = value as Record<string, unknown>;
+        return (
+          normalizeIosAppStoreId(objectValue.id) ??
+          normalizeIosAppStoreId(objectValue.appId) ??
+          normalizeIosAppStoreId(objectValue.iosAppStoreId) ??
+          normalizeIosAppStoreId(objectValue.value) ??
+          normalizeIosAppStoreId(objectValue.url)
+        );
+      }
+
+      return null;
+    };
+
+    const iosAppStoreId = normalizeIosAppStoreId(Constants.expoConfig?.extra?.iosAppStoreId);
     const androidPackageName =
       Constants.expoConfig?.android?.package ?? Constants.manifest2?.extra?.expoClient?.android?.package;
 
