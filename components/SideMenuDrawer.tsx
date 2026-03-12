@@ -1038,8 +1038,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     const rateUrls = Platform.select<string[]>({
       ios: iosAppStoreId
         ? [
-          `itms-apps://apps.apple.com/app/id${iosAppStoreId}?action=write-review`,
-          `https://apps.apple.com/app/id${iosAppStoreId}?action=write-review`,
+          `itms-apps://apps.apple.com/app/id6758964503?action=write-review`,
+          `https://apps.apple.com/app/id6758964503?action=write-review`,
         ]
         : [],
       android: androidPackageName
