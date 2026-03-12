@@ -75,7 +75,7 @@ export default function TabLayout() {
             options={{
               title: t(titleKey),
               tabBarButton: (props) => (
-                <OnboardingAnchor name={`tab-${name}`} style={styles.tabAnchor}>
+                <OnboardingAnchor name={`tab-${name}`} style={styles.tabAnchor} pointerEvents="auto">
                   <TabBarButton {...props} onOpenDialog={showDialog} />
                 </OnboardingAnchor>
               ),

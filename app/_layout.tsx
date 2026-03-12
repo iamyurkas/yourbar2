@@ -6,7 +6,7 @@ import { useCallback, useEffect } from "react";
 import { Appearance, useColorScheme, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "react-native-reanimated";
-import { SafeAreaProvider } from "react-native-safe-area-context";
+import { SafeAreaProvider, initialWindowMetrics } from "react-native-safe-area-context";
 
 import { OnboardingProvider } from "@/components/onboarding/OnboardingContext";
 import { OnboardingOverlay } from "@/components/onboarding/OnboardingOverlay";
@@ -104,7 +104,7 @@ function RootLayoutContent() {
 export default Sentry.wrap(function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <SafeAreaProvider>
+      <SafeAreaProvider initialMetrics={initialWindowMetrics}>
         <UnsavedChangesProvider>
           <InventoryProvider>
             <RootLayoutContent />
