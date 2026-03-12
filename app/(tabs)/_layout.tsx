@@ -1,5 +1,4 @@
 import { Tabs } from 'expo-router';
-import { StackActions } from '@react-navigation/native';
 import { useCallback, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -14,77 +13,25 @@ import { TabBarIcon } from '@/components/tab-bar/TabBarIcon';
 import { useAppColors } from '@/constants/theme';
 import { useI18n } from '@/libs/i18n/use-i18n';
 
-type TabPressHandler = (
-  navigation: {
-    navigate: (...args: never[]) => void;
-    dispatch: (action: ReturnType<typeof StackActions.popToTop> & { target?: string }) => void;
-    getState: () => {
-      routes: {
-        key: string;
-        state?: {
-          key?: string;
-        };
-      }[];
-    };
-  },
-  route: {
-    key: string;
-    name: string;
-    state?: {
-      key?: string;
-    };
-  },
-) => void;
-
-const getNestedStackKey = (
-  navigation: { getState: () => { routes: { key: string; state?: { key?: string } }[] } },
-  route: { key: string; state?: { key?: string } },
-) => {
-  const stateRoute = navigation.getState().routes.find((candidate) => candidate.key === route.key);
-  return stateRoute?.state?.key ?? route.state?.key;
-};
-
 const TAB_SCREENS: {
   name: 'cocktails' | 'shaker' | 'ingredients';
   titleKey: string;
   icon: typeof CocktailIcon;
-  onTabPress: TabPressHandler;
 }[] = [
     {
       name: 'cocktails',
       titleKey: 'tabs.cocktails',
       icon: CocktailIcon,
-      onTabPress: (navigation, route) => {
-        navigation.navigate(route.name as never, { screen: 'index' } as never);
-        const nestedStackKey = getNestedStackKey(navigation, route);
-        if (nestedStackKey) {
-          navigation.dispatch(Object.assign(StackActions.popToTop(), { target: nestedStackKey }));
-        }
-      },
     },
     {
       name: 'shaker',
       titleKey: 'tabs.shaker',
       icon: ShakerIcon,
-      onTabPress: (navigation, route) => {
-        navigation.navigate(route.name as never, { screen: 'index' } as never);
-        const nestedStackKey = getNestedStackKey(navigation, route);
-        if (nestedStackKey) {
-          navigation.dispatch(Object.assign(StackActions.popToTop(), { target: nestedStackKey }));
-        }
-      },
     },
     {
       name: 'ingredients',
       titleKey: 'tabs.ingredients',
       icon: LemonIcon,
-      onTabPress: (navigation, route) => {
-        navigation.navigate(route.name as never, { screen: 'index' } as never);
-        const nestedStackKey = getNestedStackKey(navigation, route);
-        if (nestedStackKey) {
-          navigation.dispatch(Object.assign(StackActions.popToTop(), { target: nestedStackKey }));
-        }
-      },
     },
   ];
 
@@ -121,7 +68,7 @@ export default function TabLayout() {
             alignItems: 'center',
           },
         }}>
-        {TAB_SCREENS.map(({ name, titleKey, icon, onTabPress }) => (
+        {TAB_SCREENS.map(({ name, titleKey, icon }) => (
           <Tabs.Screen
             key={name}
             name={name}
@@ -134,12 +81,6 @@ export default function TabLayout() {
               ),
               tabBarIcon: ({ color, focused }) => <TabBarIcon source={icon} color={color} focused={focused} />,
             }}
-            listeners={({ navigation, route }) => ({
-              tabPress: (event) => {
-                event.preventDefault();
-                onTabPress(navigation, route);
-              },
-            })}
           />
         ))}
       </Tabs>
