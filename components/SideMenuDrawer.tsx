@@ -1067,20 +1067,16 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       return;
     }
 
-    try {
-      for (const url of rateUrls) {
-        const canOpen = await Linking.canOpenURL(url);
-        if (canOpen) {
-          await Linking.openURL(url);
-          return;
-        }
+    for (const url of rateUrls) {
+      try {
+        await Linking.openURL(url);
+        return;
+      } catch (error) {
+        console.error(`Failed to open app rating URL: ${url}`, error);
       }
-
-      showDialogMessage(t("common.error"), t("common.tryAgainLater"));
-    } catch (error) {
-      console.error("Failed to open app rating", error);
-      showDialogMessage(t("common.error"), t("common.tryAgainLater"));
     }
+
+    showDialogMessage(t("common.error"), t("common.tryAgainLater"));
   };
 
   useEffect(() => {
