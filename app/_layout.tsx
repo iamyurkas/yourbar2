@@ -33,7 +33,7 @@ Sentry.init({
 });
 
 export const unstable_settings = {
-  anchor: "(tabs)",
+  initialRouteName: "(tabs)",
 };
 
 function ThemeAppWrapper({ children }: { children: React.ReactNode }) {
@@ -68,7 +68,9 @@ function ThemeAppWrapper({ children }: { children: React.ReactNode }) {
     <PaperProvider theme={paperTheme}>
       <ThemeProvider value={navigationTheme}>
         <StatusBar style={isDark ? "light" : "dark"} />
-        {children}
+        <View style={{ flex: 1, backgroundColor: colors.background }}>
+          {children}
+        </View>
       </ThemeProvider>
     </PaperProvider>
   );
@@ -79,21 +81,22 @@ function RootLayoutContent() {
 
   const onRootLayout = useCallback(() => {
     if (!loading) {
-      void SplashScreen.hideAsync();
+      // Small delay to ensure the first frame of the stack is rendered
+      setTimeout(() => {
+        void SplashScreen.hideAsync();
+      }, 200);
     }
   }, [loading]);
 
-  if (loading) {
-    return null;
-  }
-
   return (
-    <View style={{ flex: 1 }} onLayout={onRootLayout}>
+    <View style={{ flex: 1, backgroundColor: loading ? '#4DABF7' : undefined }} onLayout={onRootLayout}>
       <OnboardingProvider>
         <ThemeAppWrapper>
-          <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          </Stack>
+          {!loading && (
+            <Stack>
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            </Stack>
+          )}
           <OnboardingOverlay />
         </ThemeAppWrapper>
       </OnboardingProvider>

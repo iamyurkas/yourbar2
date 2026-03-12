@@ -1,6 +1,6 @@
 import { Tabs } from 'expo-router';
 import { StackActions } from '@react-navigation/native';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -93,6 +93,15 @@ export default function TabLayout() {
   const { t } = useI18n();
   const insets = useSafeAreaInsets();
   const Colors = useAppColors();
+  const [forceUpdate, setForceUpdate] = useState(0);
+
+  useEffect(() => {
+    // Force a re-layout on iOS after initial mount to fix hit-testing issues.
+    const timer = setTimeout(() => {
+      setForceUpdate(0.1);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, []);
 
   const closeDialog = useCallback(() => {
     setDialogOptions(null);
@@ -111,14 +120,14 @@ export default function TabLayout() {
           tabBarActiveTintColor: Colors.primary,
           tabBarInactiveTintColor: Colors.onSurfaceVariant,
           tabBarStyle: {
-            height: 72 + insets.bottom,
-            paddingTop: 8,
-            paddingBottom: insets.bottom,
+            height: 72 + insets.bottom + forceUpdate,
             backgroundColor: Colors.surface,
           },
           tabBarItemStyle: {
             justifyContent: 'center',
             alignItems: 'center',
+            paddingTop: 8,
+            paddingBottom: insets.bottom,
           },
         }}>
         {TAB_SCREENS.map(({ name, titleKey, icon, onTabPress }) => (
@@ -136,8 +145,10 @@ export default function TabLayout() {
             }}
             listeners={({ navigation, route }) => ({
               tabPress: (event) => {
-                event.preventDefault();
-                onTabPress(navigation, route);
+                if (navigation.isFocused()) {
+                  event.preventDefault();
+                  onTabPress(navigation, route);
+                }
               },
             })}
           />
