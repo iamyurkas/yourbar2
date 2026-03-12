@@ -108,6 +108,8 @@ export default function TabLayout() {
         initialRouteName="cocktails"
         screenOptions={{
           headerShown: false,
+          freezeOnBlur: false,
+          lazy: false,
           tabBarActiveTintColor: Colors.primary,
           tabBarInactiveTintColor: Colors.onSurfaceVariant,
           tabBarStyle: {
