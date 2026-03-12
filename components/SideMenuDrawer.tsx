@@ -594,6 +594,14 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     }, 250);
   };
 
+  const scheduleTagManagerReopen = () => {
+    clearTimeoutRef(tagEditorReturnTimeout);
+    tagEditorReturnTimeout.current = setTimeout(() => {
+      setTagManagerVisible(true);
+      tagEditorReturnTimeout.current = null;
+    }, 250);
+  };
+
   const handleOpenTagEditor = (
     type: "cocktail" | "ingredient",
     tag?: { id: number; name: string; color: string },
@@ -610,11 +618,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     setTagEditorVisible(false);
 
     if (tagEditorMode === "create") {
-      clearTimeoutRef(tagEditorReturnTimeout);
-      tagEditorReturnTimeout.current = setTimeout(() => {
-        setTagManagerVisible(true);
-        tagEditorReturnTimeout.current = null;
-      }, 250);
+      scheduleTagManagerReopen();
     }
   };
 
@@ -970,11 +974,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     setTagEditorVisible(false);
 
     if (tagEditorMode === "create") {
-      clearTimeoutRef(tagEditorReturnTimeout);
-      tagEditorReturnTimeout.current = setTimeout(() => {
-        setTagManagerVisible(true);
-        tagEditorReturnTimeout.current = null;
-      }, 250);
+      scheduleTagManagerReopen();
     }
   };
 
@@ -997,6 +997,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               } else {
                 deleteCustomIngredientTag(tag.id);
               }
+
+              scheduleTagManagerReopen();
             },
           },
         ],
