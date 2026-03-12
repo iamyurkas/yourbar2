@@ -1031,7 +1031,18 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   };
 
   const handleRateApp = async () => {
-    const iosAppStoreId = Constants.expoConfig?.extra?.iosAppStoreId;
+    const rawIosAppStoreId = Constants.expoConfig?.extra?.iosAppStoreId;
+    const iosAppStoreId =
+      typeof rawIosAppStoreId === "string"
+        ? rawIosAppStoreId
+        : typeof rawIosAppStoreId === "number"
+          ? String(rawIosAppStoreId)
+          : rawIosAppStoreId &&
+              typeof rawIosAppStoreId === "object" &&
+              "id" in rawIosAppStoreId &&
+              (typeof rawIosAppStoreId.id === "string" || typeof rawIosAppStoreId.id === "number")
+            ? String(rawIosAppStoreId.id)
+            : null;
     const androidPackageName =
       Constants.expoConfig?.android?.package ?? Constants.manifest2?.extra?.expoClient?.android?.package;
 
