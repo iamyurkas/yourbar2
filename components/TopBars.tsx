@@ -12,7 +12,6 @@ import {
 } from 'react-native';
 
 import { AppDialog } from '@/components/AppDialog';
-import { OnboardingAnchor } from '@/components/onboarding/OnboardingAnchor';
 import { useAppColors } from '@/constants/theme';
 import { useI18n } from '@/libs/i18n/use-i18n';
 
@@ -192,17 +191,6 @@ export function SegmentTabs({ options, value, onChange, anchorPrefix }: SegmentT
           </Pressable>
         );
 
-        if (anchorPrefix) {
-          return (
-            <OnboardingAnchor
-              key={option.key}
-              name={`${anchorPrefix}-${option.key}`}
-              style={styles.tabAnchor}>
-              {content}
-            </OnboardingAnchor>
-          );
-        }
-
         return <React.Fragment key={option.key}>{content}</React.Fragment>;
       })}
     </View>
@@ -281,8 +269,5 @@ const styles = StyleSheet.create({
     width: '60%',
     height: 3,
     borderRadius: 2,
-  },
-  tabAnchor: {
-    flex: 1,
   },
 });

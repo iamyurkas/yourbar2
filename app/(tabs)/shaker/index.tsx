@@ -19,8 +19,6 @@ import {
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AppDialog } from '@/components/AppDialog';
-import { OnboardingAnchor } from '@/components/onboarding/OnboardingAnchor';
-import { useOnboardingAnchors } from '@/components/onboarding/OnboardingContext';
 import { ListRow, PresenceCheck, Thumb } from '@/components/RowParts';
 import { SideMenuDrawer } from '@/components/SideMenuDrawer';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
@@ -205,8 +203,6 @@ export default function ShakerScreen() {
     ignoreGarnish,
     allowAllSubstitutes,
     shakerSmartFilteringEnabled,
-    onboardingStep,
-    onboardingCompleted,
   } = useInventory();
   const [query, setQuery] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -222,21 +218,11 @@ export default function ShakerScreen() {
   const headerTouchState = useRef<
     Map<string, { startY: number; moved: boolean; didPress: boolean }>
   >(new Map());
-  const { registerAction } = useOnboardingAnchors();
   const insets = useSafeAreaInsets();
   const bottomInset = Math.min(insets.bottom, 8);
   const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
-  const isOnboardingActive = !onboardingCompleted && onboardingStep > 0;
 
   useScrollToTop(listRef);
-
-  useEffect(
-    () =>
-      registerAction('shaker-availability-toggle', () => {
-        setInStockOnly((previous) => (previous ? previous : true));
-      }),
-    [registerAction],
-  );
 
   useEffect(() => {
     const wasEmpty = previousQuery.current.length === 0;
@@ -645,76 +631,6 @@ export default function ShakerScreen() {
         return compareGlobalAlphabet(a.name, b.name);
       });
   }, [availableTagOptions, defaultTagColor, effectiveFilteredIngredients, t]);
-
-  const onboardingSampleIds = useMemo(() => {
-    const preferredIds = [161, 352, 114, 339, 219, 227]; // Gin, Whiskey, Cola, Tonic, Lemon, Lime
-    const existingIngredientIds = new Set(
-      ingredients
-        .map((ingredient) => Number(ingredient.id ?? -1))
-        .filter((id) => id >= 0),
-    );
-
-    const picks = preferredIds.filter((id) => existingIngredientIds.has(id));
-
-    if (picks.length > 0) {
-      return picks;
-    }
-
-    return preferredIds.filter((id) => availableIngredientIds.has(id));
-  }, [availableIngredientIds, ingredients]);
-
-  useEffect(() => {
-    setExpandedTagKeys((previous) => {
-      if (previous.size === 0) {
-        return previous;
-      }
-
-      const validKeys = new Set(ingredientGroups.map((group) => group.key));
-      let didChange = false;
-      const next = new Set<string>();
-
-      previous.forEach((key) => {
-        if (validKeys.has(key)) {
-          next.add(key);
-        } else {
-          didChange = true;
-        }
-      });
-
-      if (!didChange && next.size === previous.size) {
-        return previous;
-      }
-
-      return next;
-    });
-  }, [ingredientGroups]);
-
-  useEffect(() => {
-    if (onboardingStep !== 15) {
-      return;
-    }
-
-    setInStockOnly((previous) => (previous ? previous : true));
-    setExpandedTagKeys((previous) => {
-      const nextKeys = ingredientGroups.map((group) => group.key);
-      if (previous.size === nextKeys.length && nextKeys.every((key) => previous.has(key))) {
-        return previous;
-      }
-      return new Set(nextKeys);
-    });
-  }, [ingredientGroups, onboardingStep]);
-
-  useEffect(() => {
-    if (onboardingStep !== 11) {
-      return;
-    }
-
-    if (selectedIngredientIds.size > 0 || onboardingSampleIds.length === 0) {
-      return;
-    }
-
-    setSelectedIngredientIds(new Set(onboardingSampleIds));
-  }, [onboardingSampleIds, onboardingStep, selectedIngredientIds.size]);
 
   const handleToggleGroup = useCallback((key: string) => {
     setExpandedTagKeys((previous) => {
@@ -1139,9 +1055,7 @@ export default function ShakerScreen() {
             <MaterialCommunityIcons name="help-circle-outline" size={24} color={Colors.icon} />
           </Pressable>
           <View style={styles.iconButton}>
-            <OnboardingAnchor name="shaker-availability-toggle">
-              <PresenceCheck checked={inStockOnly} onToggle={() => setInStockOnly((previous) => !previous)} />
-            </OnboardingAnchor>
+            <PresenceCheck checked={inStockOnly} onToggle={() => setInStockOnly((previous) => !previous)} />
           </View>
         </View>
         <SectionList
@@ -1150,10 +1064,7 @@ export default function ShakerScreen() {
           keyExtractor={(item) => String(item.id ?? item.name)}
           renderItem={renderIngredient}
           renderSectionHeader={renderSectionHeader}
-          // NOTE: Fabric + sticky headers can get into a ref update loop when section content
-          // is dynamically swapped during onboarding restarts (collapsed header row <-> section
-          // header). Disable stickiness only while onboarding is active.
-          stickySectionHeadersEnabled={!isOnboardingActive}
+          stickySectionHeadersEnabled
           contentContainerStyle={[styles.listContent, { paddingBottom: 140 + bottomInset }]}
           showsVerticalScrollIndicator={false}
           keyboardDismissMode="on-drag"
@@ -1190,8 +1101,7 @@ export default function ShakerScreen() {
               {t("shaker.recipesCount", { count: matchingCocktailSummary.recipeCount })}
             </Text>
           </View>
-          <OnboardingAnchor name="shaker-show-results">
-            <Pressable
+          <Pressable
               accessibilityRole="button"
               accessibilityLabel={t('shaker.showMatchingRecipes')}
               accessibilityState={{
@@ -1226,7 +1136,6 @@ export default function ShakerScreen() {
                 {t("common.show")}
               </Text>
             </Pressable>
-          </OnboardingAnchor>
         </View>
         <SideMenuDrawer visible={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
         <AppDialog

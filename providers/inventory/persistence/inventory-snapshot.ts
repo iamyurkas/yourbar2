@@ -162,8 +162,6 @@ export type InventorySnapshotOptions = {
   amazonStoreOverride: AmazonStoreOverride | null;
   customCocktailTags: CocktailTag[];
   customIngredientTags: IngredientTag[];
-  onboardingStep: number;
-  onboardingCompleted: boolean;
   translationOverrides: InventoryTranslationOverrides;
   bars: Bar[];
   activeBarId: string;
@@ -256,8 +254,6 @@ export function buildInventorySnapshot(
     appTheme: options.appTheme,
     appLocale: options.appLocale,
     amazonStoreOverride: options.amazonStoreOverride,
-    onboardingStep: options.onboardingStep,
-    onboardingCompleted: options.onboardingCompleted,
     translationOverrides: options.translationOverrides,
     bars: options.bars,
     activeBarId: options.activeBarId,

@@ -17,8 +17,6 @@ export type InventorySettingsContextValue = {
   amazonStoreOverride: AmazonStoreOverride | null;
   detectedAmazonStore: AmazonStoreKey | null;
   effectiveAmazonStore: AmazonStoreKey | null;
-  onboardingStep: number;
-  onboardingCompleted: boolean;
   bars: Bar[];
   activeBarId: string;
 };

@@ -1,14 +1,12 @@
 import { Tabs } from 'expo-router';
 import { StackActions } from '@react-navigation/native';
 import { useCallback, useState } from 'react';
-import { StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import CocktailIcon from '@/assets/images/cocktails.svg';
 import LemonIcon from '@/assets/images/ingredients.svg';
 import ShakerIcon from '@/assets/images/shaker.svg';
 import { AppDialog, type DialogOptions } from '@/components/AppDialog';
-import { OnboardingAnchor } from '@/components/onboarding/OnboardingAnchor';
 import { TabBarButton } from '@/components/tab-bar/TabBarButton';
 import { TabBarIcon } from '@/components/tab-bar/TabBarIcon';
 import { useAppColors } from '@/constants/theme';
@@ -129,11 +127,7 @@ export default function TabLayout() {
             name={name}
             options={{
               title: t(titleKey),
-              tabBarButton: (props) => (
-                <OnboardingAnchor name={`tab-${name}`} style={styles.tabAnchor}>
-                  <TabBarButton {...props} onOpenDialog={showDialog} />
-                </OnboardingAnchor>
-              ),
+              tabBarButton: (props) => <TabBarButton {...props} onOpenDialog={showDialog} />,
               tabBarIcon: ({ color, focused }) => <TabBarIcon source={icon} color={color} focused={focused} />,
             }}
             listeners={({ navigation, route }) => ({
@@ -156,8 +150,3 @@ export default function TabLayout() {
   );
 }
 
-const styles = StyleSheet.create({
-  tabAnchor: {
-    flex: 1,
-  },
-});
