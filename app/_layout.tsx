@@ -67,7 +67,9 @@ function ThemeAppWrapper({ children }: { children: React.ReactNode }) {
     <PaperProvider theme={paperTheme}>
       <ThemeProvider value={navigationTheme}>
         <StatusBar style={isDark ? "light" : "dark"} />
-        {children}
+        <OnboardingProvider>
+          {children}
+        </OnboardingProvider>
       </ThemeProvider>
     </PaperProvider>
   );
@@ -103,9 +105,7 @@ export default Sentry.wrap(function RootLayout() {
       <SafeAreaProvider>
         <UnsavedChangesProvider>
           <InventoryProvider>
-            <OnboardingProvider>
-              <RootLayoutContent />
-            </OnboardingProvider>
+            <RootLayoutContent />
           </InventoryProvider>
         </UnsavedChangesProvider>
       </SafeAreaProvider>
