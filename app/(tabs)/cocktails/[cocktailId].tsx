@@ -13,6 +13,7 @@ import {
 } from "react";
 import {
   AppState,
+  type LayoutChangeEvent,
   Linking,
   Platform,
   Pressable,
@@ -921,6 +922,8 @@ export default function CocktailDetailsScreen() {
 
   const [expandedMethodIds, setExpandedMethodIds] = useState<string[]>([]);
   const [isHelpVisible, setIsHelpVisible] = useState(false);
+  const [nameLayout, setNameLayout] = useState<{ y: number; height: number } | null>(null);
+  const [isNameInHeader, setIsNameInHeader] = useState(false);
 
   const smallestPartAmount = useMemo(() => {
     const convertibleAmounts = scaledIngredients
@@ -999,6 +1002,27 @@ export default function CocktailDetailsScreen() {
     });
   }, [cocktail, returnToParams, returnToPath]);
 
+  const handleNameLayout = useCallback((event: LayoutChangeEvent) => {
+    const { y, height } = event.nativeEvent.layout;
+    setNameLayout({ y, height });
+  }, []);
+
+  const handleScroll = useCallback(
+    (event: { nativeEvent: { contentOffset: { y: number } } }) => {
+      if (!nameLayout) {
+        return;
+      }
+
+      const nameBottom = nameLayout.y + nameLayout.height;
+      const shouldShowNameInHeader = event.nativeEvent.contentOffset.y > nameBottom;
+
+      setIsNameInHeader((current) =>
+        current === shouldShowNameInHeader ? current : shouldShowNameInHeader,
+      );
+    },
+    [nameLayout],
+  );
+
   if (shouldNavigateAway) {
     return null;
   }
@@ -1010,7 +1034,10 @@ export default function CocktailDetailsScreen() {
     >
       <Stack.Screen
         options={{
-          title: t("cocktailDetails.title"),
+          title:
+            isNameInHeader && cocktail?.name
+              ? cocktail.name
+              : t("cocktailDetails.title"),
           headerTitleAlign: "center",
           headerStyle: { backgroundColor: Colors.surface },
           headerTitleStyle: {
@@ -1048,11 +1075,16 @@ export default function CocktailDetailsScreen() {
 
       <ScrollView
         contentContainerStyle={styles.content}
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
         showsVerticalScrollIndicator={false}
       >
         {cocktail ? (
           <View style={styles.section}>
-            <Text style={[styles.name, { color: Colors.onSurface }]}>
+            <Text
+              style={[styles.name, { color: Colors.onSurface }]}
+              onLayout={handleNameLayout}
+            >
               {cocktail.name}
             </Text>
 
