@@ -24,12 +24,17 @@ const OnboardingContext = createContext<OnboardingContextValue | undefined>(unde
 
 async function measure(ref: TargetRef): Promise<Rect | null> {
   return new Promise((resolve) => {
-    ref.current?.measureInWindow((x, y, width, height) => {
+    ref.current?.measure((x, y, width, height, pageX, pageY) => {
       if (width <= 0 || height <= 0) {
         resolve(null);
         return;
       }
-      resolve({ x, y, width, height });
+      resolve({
+        x: Number.isFinite(pageX) ? pageX : x,
+        y: Number.isFinite(pageY) ? pageY : y,
+        width,
+        height,
+      });
     });
   });
 }
