@@ -162,11 +162,12 @@ export type InventorySnapshotOptions = {
   amazonStoreOverride: AmazonStoreOverride | null;
   customCocktailTags: CocktailTag[];
   customIngredientTags: IngredientTag[];
-  onboardingStep: number;
-  onboardingCompleted: boolean;
   translationOverrides: InventoryTranslationOverrides;
   bars: Bar[];
   activeBarId: string;
+  onboardingStep: number;
+  onboardingCompleted: boolean;
+  onboardingStarterApplied: boolean;
 };
 
 export function toSortedArray(values: Iterable<number>): number[] {
@@ -256,10 +257,11 @@ export function buildInventorySnapshot(
     appTheme: options.appTheme,
     appLocale: options.appLocale,
     amazonStoreOverride: options.amazonStoreOverride,
-    onboardingStep: options.onboardingStep,
-    onboardingCompleted: options.onboardingCompleted,
     translationOverrides: options.translationOverrides,
     bars: options.bars,
     activeBarId: options.activeBarId,
+    onboardingStep: options.onboardingStep,
+    onboardingCompleted: options.onboardingCompleted,
+    onboardingStarterApplied: options.onboardingStarterApplied,
   } satisfies InventoryDeltaSnapshotV3<CocktailStorageRecord, IngredientStorageRecord>;
 }

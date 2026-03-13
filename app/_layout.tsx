@@ -8,11 +8,10 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "react-native-reanimated";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
-import { OnboardingProvider } from "@/components/onboarding/OnboardingContext";
-import { OnboardingOverlay } from "@/components/onboarding/OnboardingOverlay";
 import { PaperProvider } from "@/libs/react-native-paper";
 import { InventoryProvider, useInventory } from "@/providers/inventory-provider";
 import { UnsavedChangesProvider } from "@/providers/unsaved-changes-provider";
+import { OnboardingProvider } from '@/providers/onboarding-provider';
 import { getAppTheme } from "@/theme/theme";
 import * as Sentry from '@sentry/react-native';
 
@@ -68,7 +67,9 @@ function ThemeAppWrapper({ children }: { children: React.ReactNode }) {
     <PaperProvider theme={paperTheme}>
       <ThemeProvider value={navigationTheme}>
         <StatusBar style={isDark ? "light" : "dark"} />
-        {children}
+        <OnboardingProvider>
+          {children}
+        </OnboardingProvider>
       </ThemeProvider>
     </PaperProvider>
   );
@@ -89,14 +90,11 @@ function RootLayoutContent() {
 
   return (
     <View style={{ flex: 1 }} onLayout={onRootLayout}>
-      <OnboardingProvider>
-        <ThemeAppWrapper>
-          <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          </Stack>
-          <OnboardingOverlay />
-        </ThemeAppWrapper>
-      </OnboardingProvider>
+      <ThemeAppWrapper>
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        </Stack>
+      </ThemeAppWrapper>
     </View>
   );
 }
