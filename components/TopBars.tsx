@@ -142,7 +142,7 @@ export function SearchTopBar({
   );
 }
 
-export function SegmentTabs({ options, value, onChange, anchorPrefix }: SegmentTabsProps) {
+export function SegmentTabs({ options, value, onChange, anchorPrefix: _anchorPrefix }: SegmentTabsProps) {
   const Colors = useAppColors();
 
   return (
@@ -157,7 +157,7 @@ export function SegmentTabs({ options, value, onChange, anchorPrefix }: SegmentT
             testID={option.onboardingTargetId}
             style={({ pressed }) => [
               styles.tabButton,
-              !anchorPrefix && styles.tabButtonEqualWidth,
+              styles.tabButtonEqualWidth,
               pressed && { backgroundColor: `${Colors.tint}1A` },
             ]}>
             <View style={styles.tabTextRow}>
@@ -199,7 +199,7 @@ export function SegmentTabs({ options, value, onChange, anchorPrefix }: SegmentT
           <OnboardingTarget
             key={option.key}
             targetId={option.onboardingTargetId}
-            style={!anchorPrefix ? styles.tabButtonEqualWidth : undefined}>
+            style={styles.tabButtonEqualWidth}>
             {content}
           </OnboardingTarget>
         );
