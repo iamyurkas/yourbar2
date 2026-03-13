@@ -45,6 +45,7 @@ import {
   type Ingredient,
 } from '@/providers/inventory-provider';
 import { tagColors } from '@/theme/theme';
+import { useOnboarding } from '@/providers/onboarding-provider';
 
 type IngredientSection = {
   key: string;
@@ -263,6 +264,7 @@ export default function IngredientsScreen() {
   );
   const [, startAvailabilityTransition] = useTransition();
   const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
+  const { registerControl } = useOnboarding();
 
   useScrollToTop(listRef);
 
@@ -472,11 +474,13 @@ export default function IngredientsScreen() {
     {
       key: 'all',
       label: t('common.tabAll'),
+      onboardingTargetId: 'ingredients-tab-all',
       counter: showTabCounters ? `(${sections.all.data.length})` : undefined,
     },
     {
       key: 'my',
       label: t('common.tabMy'),
+      onboardingTargetId: 'ingredients-tab-my',
       counter: showTabCounters ? `(${sections.my.data.length})` : undefined,
     },
     {
@@ -487,6 +491,16 @@ export default function IngredientsScreen() {
   ], [sections.all.data.length, sections.my.data.length, sections.shopping.data.length, showTabCounters, t]);
 
   const activeSection = sections[activeTab] ?? sections.all;
+
+  useEffect(() => {
+    const unregisterAll = registerControl('ingredients-all', () => setActiveTab('all'));
+    const unregisterMy = registerControl('ingredients-my', () => setActiveTab('my'));
+
+    return () => {
+      unregisterAll();
+      unregisterMy();
+    };
+  }, [registerControl]);
 
   const normalizedQuery = useMemo(() => {
     const normalized = normalizeSearchText(query);

@@ -12,8 +12,10 @@ import {
 } from 'react-native';
 
 import { AppDialog } from '@/components/AppDialog';
+import { OnboardingTarget } from '@/components/onboarding/OnboardingTarget';
 import { useAppColors } from '@/constants/theme';
 import { useI18n } from '@/libs/i18n/use-i18n';
+import type { OnboardingTargetId } from '@/libs/onboarding-config';
 
 type SearchTopBarProps = {
   value: string;
@@ -33,6 +35,7 @@ export type SegmentTabOption = {
   key: string;
   label: string;
   counter?: string;
+  onboardingTargetId?: OnboardingTargetId;
 };
 
 type SegmentTabsProps = {
@@ -139,7 +142,7 @@ export function SearchTopBar({
   );
 }
 
-export function SegmentTabs({ options, value, onChange, anchorPrefix }: SegmentTabsProps) {
+export function SegmentTabs({ options, value, onChange, anchorPrefix: _anchorPrefix }: SegmentTabsProps) {
   const Colors = useAppColors();
 
   return (
@@ -151,9 +154,10 @@ export function SegmentTabs({ options, value, onChange, anchorPrefix }: SegmentT
             accessibilityRole="tab"
             accessibilityState={focused ? { selected: true } : {}}
             onPress={() => onChange(option.key)}
+            testID={option.onboardingTargetId}
             style={({ pressed }) => [
               styles.tabButton,
-              !anchorPrefix && { flex: 1 },
+              styles.tabButtonEqualWidth,
               pressed && { backgroundColor: `${Colors.tint}1A` },
             ]}>
             <View style={styles.tabTextRow}>
@@ -191,7 +195,14 @@ export function SegmentTabs({ options, value, onChange, anchorPrefix }: SegmentT
           </Pressable>
         );
 
-        return <React.Fragment key={option.key}>{content}</React.Fragment>;
+        return (
+          <OnboardingTarget
+            key={option.key}
+            targetId={option.onboardingTargetId}
+            style={styles.tabButtonEqualWidth}>
+            {content}
+          </OnboardingTarget>
+        );
       })}
     </View>
   );
@@ -251,6 +262,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     borderRadius: 12,
     gap: 6,
+  },
+  tabButtonEqualWidth: {
+    flex: 1,
   },
   tabTextRow: {
     flexDirection: 'row',

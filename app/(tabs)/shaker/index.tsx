@@ -33,6 +33,7 @@ import { compareGlobalAlphabet } from '@/libs/global-sort';
 import { getPluralCategory } from '@/libs/i18n/plural';
 import { useI18n } from '@/libs/i18n/use-i18n';
 import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
+import { useOnboarding, useOnboardingTarget } from '@/providers/onboarding-provider';
 import { tagColors } from '@/theme/theme';
 
 type IngredientTagOption = {
@@ -221,6 +222,8 @@ export default function ShakerScreen() {
   const insets = useSafeAreaInsets();
   const bottomInset = Math.min(insets.bottom, 8);
   const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
+  const { registerControl } = useOnboarding();
+  const availabilityTargetProps = useOnboardingTarget('shaker-availability-toggle');
 
   useScrollToTop(listRef);
 
@@ -244,6 +247,16 @@ export default function ShakerScreen() {
   const handleScroll = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
     lastScrollOffset.current = event.nativeEvent.contentOffset.y;
   }, []);
+
+  useEffect(() => {
+    const unregisterToggle = registerControl('shaker-in-stock', () => setInStockOnly((previous) => !previous));
+    const unregisterForceOn = registerControl('shaker-in-stock-on', () => setInStockOnly(true));
+
+    return () => {
+      unregisterToggle();
+      unregisterForceOn();
+    };
+  }, [registerControl]);
 
   const normalizedQuery = useMemo(() => {
     const normalized = normalizeSearchText(query);
@@ -1054,7 +1067,7 @@ export default function ShakerScreen() {
           >
             <MaterialCommunityIcons name="help-circle-outline" size={24} color={Colors.icon} />
           </Pressable>
-          <View style={styles.iconButton}>
+          <View style={styles.iconButton} {...availabilityTargetProps}>
             <PresenceCheck checked={inStockOnly} onToggle={() => setInStockOnly((previous) => !previous)} />
           </View>
         </View>

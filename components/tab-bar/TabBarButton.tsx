@@ -1,18 +1,22 @@
 import type { BottomTabBarButtonProps } from '@react-navigation/bottom-tabs';
 import React, { useCallback } from 'react';
+import { View } from 'react-native';
 
 import { HapticTab } from '@/components/haptic-tab';
 import type { DialogOptions } from '@/components/AppDialog';
 import { useUnsavedChanges } from '@/providers/unsaved-changes-provider';
 import { useI18n } from '@/libs/i18n/use-i18n';
+import { useOnboardingTarget } from '@/providers/onboarding-provider';
+import type { OnboardingTargetId } from '@/libs/onboarding-config';
 
 type TabBarButtonProps = BottomTabBarButtonProps & {
   onOpenDialog: (options: DialogOptions) => void;
+  onboardingTargetId?: OnboardingTargetId;
 };
 
 type TabBarPressEvent = Parameters<NonNullable<BottomTabBarButtonProps['onPress']>>[0];
 
-export function TabBarButton({ onOpenDialog, ...props }: TabBarButtonProps) {
+export function TabBarButton({ onOpenDialog, onboardingTargetId, ...props }: TabBarButtonProps) {
   const { t } = useI18n();
   const {
     hasUnsavedChanges,
@@ -53,5 +57,11 @@ export function TabBarButton({ onOpenDialog, ...props }: TabBarButtonProps) {
     t,
   ]);
 
-  return <HapticTab {...props} onPress={handlePress} />;
+  const onboardingTargetProps = useOnboardingTarget(onboardingTargetId);
+
+  return (
+    <View {...onboardingTargetProps}>
+      <HapticTab {...props} onPress={handlePress} />
+    </View>
+  );
 }

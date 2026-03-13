@@ -224,6 +224,12 @@ declare global {
   var __yourbarInventoryBars: Bar[] | undefined;
   // eslint-disable-next-line no-var
   var __yourbarInventoryActiveBarId: string | undefined;
+  // eslint-disable-next-line no-var
+  var __yourbarInventoryOnboardingStep: number | undefined;
+  // eslint-disable-next-line no-var
+  var __yourbarInventoryOnboardingCompleted: boolean | undefined;
+  // eslint-disable-next-line no-var
+  var __yourbarInventoryOnboardingStarterApplied: boolean | undefined;
 }
 
 
@@ -491,6 +497,15 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   const [activeBarId, setActiveBarId] = useState<string>(
     () => globalThis.__yourbarInventoryActiveBarId ?? '',
   );
+  const [onboardingStep, setOnboardingStep] = useState<number>(
+    () => Math.max(1, Math.min(11, Math.trunc(globalThis.__yourbarInventoryOnboardingStep ?? 1))),
+  );
+  const [onboardingCompleted, setOnboardingCompleted] = useState<boolean>(
+    () => globalThis.__yourbarInventoryOnboardingCompleted ?? false,
+  );
+  const [onboardingStarterApplied, setOnboardingStarterApplied] = useState<boolean>(
+    () => globalThis.__yourbarInventoryOnboardingStarterApplied ?? false,
+  );
   const detectedAmazonStore = useMemo(() => detectAmazonStoreFromStoreOrLocale(), []);
   const effectiveAmazonStore = useMemo(
     () => getEffectiveAmazonStore(amazonStoreOverride, detectedAmazonStore),
@@ -524,6 +539,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       customIngredientTags: IngredientTag[];
       bars: Bar[];
       activeBarId: string;
+      onboardingStep: number;
+      onboardingCompleted: boolean;
+      onboardingStarterApplied: boolean;
     }) => {
       setInventoryState(bootstrap.inventoryState);
       setAvailableIngredientIds(bootstrap.availableIngredientIds);
@@ -546,6 +564,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       setCustomIngredientTags(bootstrap.customIngredientTags);
       setBars(bootstrap.bars);
       setActiveBarId(bootstrap.activeBarId);
+      setOnboardingStep(bootstrap.onboardingStep);
+      setOnboardingCompleted(bootstrap.onboardingCompleted);
+      setOnboardingStarterApplied(bootstrap.onboardingStarterApplied);
     },
     [],
   );
@@ -591,6 +612,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             DEFAULT_TAG_COLOR,
           );
           const nextTranslationOverrides = sanitizeTranslationOverrides((stored as { translationOverrides?: unknown }).translationOverrides);
+          const nextOnboardingStep = Math.max(1, Math.min(11, Math.trunc((stored as { onboardingStep?: number }).onboardingStep ?? 1)));
+          const nextOnboardingCompleted = (stored as { onboardingCompleted?: boolean }).onboardingCompleted ?? false;
+          const nextOnboardingStarterApplied = (stored as { onboardingStarterApplied?: boolean }).onboardingStarterApplied ?? false;
 
           let nextBars: Bar[] = castedStored.bars ?? [];
           let nextActiveBarId: string = castedStored.activeBarId ?? '';
@@ -627,6 +651,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             customIngredientTags: nextCustomIngredientTags,
             bars: nextBars,
             activeBarId: nextActiveBarId,
+            onboardingStep: nextOnboardingStep,
+            onboardingCompleted: nextOnboardingCompleted,
+            onboardingStarterApplied: nextOnboardingStarterApplied,
           });
           return;
         }
@@ -664,6 +691,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
               shoppingIngredientIds: [],
             }],
             activeBarId: '1',
+            onboardingStep: 1,
+            onboardingCompleted: false,
+            onboardingStarterApplied: false,
           });
         }
       } catch (error) {
@@ -735,6 +765,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     globalThis.__yourbarInventoryCustomIngredientTags = customIngredientTags;
     globalThis.__yourbarInventoryBars = bars;
     globalThis.__yourbarInventoryActiveBarId = activeBarId;
+    globalThis.__yourbarInventoryOnboardingStep = onboardingStep;
+    globalThis.__yourbarInventoryOnboardingCompleted = onboardingCompleted;
+    globalThis.__yourbarInventoryOnboardingStarterApplied = onboardingStarterApplied;
 
     const snapshot = buildInventorySnapshot(inventoryDelta, {
       availableIngredientIds,
@@ -757,6 +790,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       customIngredientTags,
       bars,
       activeBarId,
+      onboardingStep,
+      onboardingCompleted,
+      onboardingStarterApplied,
     });
     const serialized = JSON.stringify(snapshot);
 
@@ -790,6 +826,11 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     amazonStoreOverride,
     customCocktailTags,
     customIngredientTags,
+    bars,
+    activeBarId,
+    onboardingStep,
+    onboardingCompleted,
+    onboardingStarterApplied,
   ]);
 
   const cocktails = useMemo(
@@ -2747,6 +2788,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       effectiveAmazonStore,
       bars,
       activeBarId,
+      onboardingStep,
+      onboardingCompleted,
+      onboardingStarterApplied,
     }),
     [
       ignoreGarnish,
@@ -2765,6 +2809,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       effectiveAmazonStore,
       bars,
       activeBarId,
+      onboardingStep,
+      onboardingCompleted,
+      onboardingStarterApplied,
     ],
   );
 
@@ -2804,6 +2851,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       setAppTheme: handleSetAppTheme,
       setAppLocale,
       setAmazonStoreOverride: handleSetAmazonStoreOverride,
+      setOnboardingStep,
+      setOnboardingCompleted,
+      setOnboardingStarterApplied,
       setActiveBar: handleSetActiveBar,
       createBar: handleCreateBar,
       updateBar: handleUpdateBar,
@@ -2844,6 +2894,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       handleSetAppTheme,
       setAppLocale,
       handleSetAmazonStoreOverride,
+      setOnboardingStep,
+      setOnboardingCompleted,
+      setOnboardingStarterApplied,
       handleSetActiveBar,
       handleCreateBar,
       handleUpdateBar,

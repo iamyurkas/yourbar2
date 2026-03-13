@@ -46,6 +46,7 @@ import {
   type InventoryImportOptions,
 } from "@/providers/inventory-types";
 import Constants from "expo-constants";
+import { useOnboarding } from '@/providers/onboarding-provider';
 
 const MAX_MENU_WIDTH = 500;
 const MENU_WIDTH = Math.min(
@@ -182,6 +183,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   const Colors = useAppColors();
   const insets = useSafeAreaInsets();
   const { t, locale, setLocale, languageOptions, currentLanguage } = useI18n();
+  const { startOnboarding } = useOnboarding();
   const [isMounted, setIsMounted] = useState(visible);
   const [isRatingModalVisible, setRatingModalVisible] = useState(false);
   const ratingModalCloseTimeout = useRef<ReturnType<typeof setTimeout> | null>(
@@ -1653,6 +1655,30 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 size={20}
                 color={Colors.onSurfaceVariant}
               />
+            </Pressable>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={t("sideMenu.restartOnboarding")}
+              onPress={() => {
+                onClose();
+                setTimeout(() => startOnboarding(), 200);
+              }}
+              style={[
+                styles.actionRow,
+                SURFACE_ROW_STYLE,
+              ]}
+            >
+              <View style={[styles.actionIcon, ACTION_ICON_STYLE]}>
+                <MaterialCommunityIcons
+                  name="school-outline"
+                  size={16}
+                  color={Colors.onSurfaceVariant}
+                />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>{t("sideMenu.restartOnboarding")}</Text>
+                <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>{t("sideMenu.restartOnboardingCaption")}</Text>
+              </View>
             </Pressable>
             <Pressable
               accessibilityRole="button"
