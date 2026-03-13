@@ -12,10 +12,10 @@ import {
 } from 'react-native';
 
 import { AppDialog } from '@/components/AppDialog';
-import { OnboardingTarget } from '@/components/onboarding/OnboardingTarget';
 import { useAppColors } from '@/constants/theme';
 import { useI18n } from '@/libs/i18n/use-i18n';
 import type { OnboardingTargetId } from '@/libs/onboarding-config';
+import { useOnboardingTarget } from '@/providers/onboarding-provider';
 
 type SearchTopBarProps = {
   value: string;
@@ -142,68 +142,67 @@ export function SearchTopBar({
   );
 }
 
+function SegmentTabButton({ option, value, onChange }: { option: SegmentTabOption; value: string; onChange: (key: string) => void }) {
+  const Colors = useAppColors();
+  const focused = option.key === value;
+  const onboardingTargetProps = useOnboardingTarget(option.onboardingTargetId);
+
+  return (
+    <Pressable
+      {...onboardingTargetProps}
+      accessibilityRole="tab"
+      accessibilityState={focused ? { selected: true } : {}}
+      onPress={() => onChange(option.key)}
+      testID={option.onboardingTargetId}
+      style={({ pressed }) => [
+        styles.tabButton,
+        styles.tabButtonEqualWidth,
+        pressed && { backgroundColor: `${Colors.tint}1A` },
+      ]}>
+      <View style={styles.tabTextRow}>
+        <Text
+          style={[
+            styles.tabLabel,
+            {
+              color: focused ? Colors.tint : Colors.onSurfaceVariant,
+              fontWeight: focused ? '600' : '400',
+            },
+          ]}>
+          {option.label}
+        </Text>
+        {option.counter ? (
+          <Text
+            style={[
+              styles.tabCounter,
+              {
+                color: focused ? Colors.tint : Colors.onSurfaceVariant,
+                fontWeight: focused ? '600' : '400',
+              },
+            ]}>
+            {option.counter}
+          </Text>
+        ) : null}
+      </View>
+      <View
+        style={[
+          styles.tabIndicator,
+          {
+            backgroundColor: focused ? Colors.tint : 'transparent',
+          },
+        ]}
+      />
+    </Pressable>
+  );
+}
+
 export function SegmentTabs({ options, value, onChange, anchorPrefix: _anchorPrefix }: SegmentTabsProps) {
   const Colors = useAppColors();
 
   return (
     <View style={[styles.tabs, { backgroundColor: Colors.surface }]}> 
-      {options.map((option) => {
-        const focused = option.key === value;
-        const content = (
-          <Pressable
-            accessibilityRole="tab"
-            accessibilityState={focused ? { selected: true } : {}}
-            onPress={() => onChange(option.key)}
-            testID={option.onboardingTargetId}
-            style={({ pressed }) => [
-              styles.tabButton,
-              styles.tabButtonEqualWidth,
-              pressed && { backgroundColor: `${Colors.tint}1A` },
-            ]}>
-            <View style={styles.tabTextRow}>
-              <Text
-                style={[
-                  styles.tabLabel,
-                  {
-                    color: focused ? Colors.tint : Colors.onSurfaceVariant,
-                    fontWeight: focused ? '600' : '400',
-                  },
-                ]}>
-                {option.label}
-              </Text>
-              {option.counter ? (
-                <Text
-                  style={[
-                    styles.tabCounter,
-                    {
-                      color: focused ? Colors.tint : Colors.onSurfaceVariant,
-                      fontWeight: focused ? '600' : '400',
-                    },
-                  ]}>
-                  {option.counter}
-                </Text>
-              ) : null}
-            </View>
-            <View
-              style={[
-                styles.tabIndicator,
-                {
-                  backgroundColor: focused ? Colors.tint : 'transparent',
-                },
-              ]}
-            />
-          </Pressable>
-        );
-
-        return (
-          <OnboardingTarget
-            key={option.key}
-            targetId={option.onboardingTargetId}
-            style={styles.tabButtonEqualWidth}>
-            {content}
-          </OnboardingTarget>
-        );
-      })}
+      {options.map((option) => (
+        <SegmentTabButton key={option.key} option={option} value={value} onChange={onChange} />
+      ))}
     </View>
   );
 }
