@@ -33,6 +33,7 @@ import { compareGlobalAlphabet } from '@/libs/global-sort';
 import { getPluralCategory } from '@/libs/i18n/plural';
 import { useI18n } from '@/libs/i18n/use-i18n';
 import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
+import { OnboardingTarget, useOnboarding } from '@/providers/onboarding-provider';
 import { tagColors } from '@/theme/theme';
 
 type IngredientTagOption = {
@@ -207,6 +208,7 @@ export default function ShakerScreen() {
   const [query, setQuery] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [inStockOnly, setInStockOnly] = useState(false);
+  const { shakerInStockOnly, consumeShakerInStockOnlyRequest } = useOnboarding();
   const [isHelpVisible, setIsHelpVisible] = useState(false);
   const [expandedTagKeys, setExpandedTagKeys] = useState<Set<string>>(() => new Set());
   const [selectedIngredientIds, setSelectedIngredientIds] = useState<Set<number>>(() => new Set());
@@ -245,6 +247,15 @@ export default function ShakerScreen() {
     lastScrollOffset.current = event.nativeEvent.contentOffset.y;
   }, []);
 
+
+  useEffect(() => {
+    if (!shakerInStockOnly) {
+      return;
+    }
+
+    setInStockOnly(true);
+    consumeShakerInStockOnlyRequest();
+  }, [consumeShakerInStockOnlyRequest, shakerInStockOnly]);
   const normalizedQuery = useMemo(() => {
     const normalized = normalizeSearchText(query);
     const tokens = normalized ? normalized.split(/\s+/).filter(Boolean) : [];
@@ -1054,9 +1065,11 @@ export default function ShakerScreen() {
           >
             <MaterialCommunityIcons name="help-circle-outline" size={24} color={Colors.icon} />
           </Pressable>
-          <View style={styles.iconButton}>
-            <PresenceCheck checked={inStockOnly} onToggle={() => setInStockOnly((previous) => !previous)} />
-          </View>
+          <OnboardingTarget id="shaker-availability-toggle">
+            <View style={styles.iconButton}>
+              <PresenceCheck checked={inStockOnly} onToggle={() => setInStockOnly((previous) => !previous)} />
+            </View>
+          </OnboardingTarget>
         </View>
         <SectionList
           ref={listRef}

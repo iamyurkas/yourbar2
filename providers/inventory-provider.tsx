@@ -82,6 +82,7 @@ import {
 const DEFAULT_START_SCREEN: StartScreen = 'cocktails_all';
 const DEFAULT_APP_THEME: AppTheme = 'light';
 const DEFAULT_APP_LOCALE: AppLocale = DEFAULT_LOCALE;
+const DEFAULT_ONBOARDING_STEP = 1;
 
 type CocktailFeedbackExport = NonNullable<InventoryExportData['cocktailFeedback']>;
 type IngredientStatusExport = NonNullable<InventoryExportData['ingredientStatus']>;
@@ -480,6 +481,15 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   const [appLocale, setAppLocale] = useState<AppLocale>(
     () => sanitizeAppLocale(globalThis.__yourbarInventoryAppLocale),
   );
+  const [onboardingStep, setOnboardingStep] = useState<number>(
+    () => (globalThis as any).__yourbarInventoryOnboardingStep ?? DEFAULT_ONBOARDING_STEP,
+  );
+  const [onboardingCompleted, setOnboardingCompleted] = useState<boolean>(
+    () => (globalThis as any).__yourbarInventoryOnboardingCompleted ?? false,
+  );
+  const [onboardingStarterApplied, setOnboardingStarterApplied] = useState<boolean>(
+    () => (globalThis as any).__yourbarInventoryOnboardingStarterApplied ?? false,
+  );
   const [translationOverrides, setTranslationOverrides] = useState<InventoryTranslationOverrides>({});
   const [customCocktailTags, setCustomCocktailTags] = useState<CocktailTag[]>(() =>
     sanitizeCustomTags(globalThis.__yourbarInventoryCustomCocktailTags, DEFAULT_TAG_COLOR),
@@ -518,6 +528,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       startScreen: StartScreen;
       appTheme: AppTheme;
       appLocale: AppLocale;
+      onboardingStep: number;
+      onboardingCompleted: boolean;
+      onboardingStarterApplied: boolean;
       translationOverrides: InventoryTranslationOverrides;
       amazonStoreOverride: AmazonStoreOverride | null;
       customCocktailTags: CocktailTag[];
@@ -540,6 +553,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       setStartScreen(bootstrap.startScreen);
       setAppTheme(bootstrap.appTheme);
       setAppLocale(bootstrap.appLocale);
+      setOnboardingStep(bootstrap.onboardingStep);
+      setOnboardingCompleted(bootstrap.onboardingCompleted);
+      setOnboardingStarterApplied(bootstrap.onboardingStarterApplied);
       setTranslationOverrides(bootstrap.translationOverrides);
       setAmazonStoreOverride(bootstrap.amazonStoreOverride);
       setCustomCocktailTags(bootstrap.customCocktailTags);
@@ -582,6 +598,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           const nextAppTheme = sanitizeAppTheme(stored.appTheme);
           const nextAmazonStoreOverride = sanitizeAmazonStoreOverride(stored.amazonStoreOverride);
           const nextAppLocale = sanitizeAppLocale(stored.appLocale);
+          const nextOnboardingStep = Math.max(1, Math.min(11, Math.round(stored.onboardingStep ?? DEFAULT_ONBOARDING_STEP)));
+          const nextOnboardingCompleted = stored.onboardingCompleted ?? false;
+          const nextOnboardingStarterApplied = stored.onboardingStarterApplied ?? false;
           const nextCustomCocktailTags = sanitizeCustomTags(
             'customCocktailTags' in stored ? stored.customCocktailTags : undefined,
             DEFAULT_TAG_COLOR,
@@ -621,6 +640,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             startScreen: nextStartScreen,
             appTheme: nextAppTheme,
             appLocale: nextAppLocale,
+            onboardingStep: nextOnboardingStep,
+            onboardingCompleted: nextOnboardingCompleted,
+            onboardingStarterApplied: nextOnboardingStarterApplied,
             translationOverrides: nextTranslationOverrides,
             amazonStoreOverride: nextAmazonStoreOverride,
             customCocktailTags: nextCustomCocktailTags,
@@ -653,6 +675,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             startScreen: DEFAULT_START_SCREEN,
             appTheme: DEFAULT_APP_THEME,
             appLocale: DEFAULT_APP_LOCALE,
+            onboardingStep: DEFAULT_ONBOARDING_STEP,
+            onboardingCompleted: false,
+            onboardingStarterApplied: false,
             translationOverrides: {},
             amazonStoreOverride: null,
             customCocktailTags: [],
@@ -730,6 +755,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     globalThis.__yourbarInventoryStartScreen = startScreen;
     globalThis.__yourbarInventoryAppTheme = appTheme;
     globalThis.__yourbarInventoryAppLocale = appLocale;
+    (globalThis as any).__yourbarInventoryOnboardingStep = onboardingStep;
+    (globalThis as any).__yourbarInventoryOnboardingCompleted = onboardingCompleted;
+    (globalThis as any).__yourbarInventoryOnboardingStarterApplied = onboardingStarterApplied;
     globalThis.__yourbarInventoryAmazonStoreOverride = amazonStoreOverride;
     globalThis.__yourbarInventoryCustomCocktailTags = customCocktailTags;
     globalThis.__yourbarInventoryCustomIngredientTags = customIngredientTags;
@@ -751,6 +779,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       startScreen,
       appTheme,
       appLocale,
+      onboardingStep,
+      onboardingCompleted,
+      onboardingStarterApplied,
       translationOverrides,
       amazonStoreOverride,
       customCocktailTags,
@@ -786,6 +817,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     startScreen,
     appTheme,
     appLocale,
+    onboardingStep,
+    onboardingCompleted,
+    onboardingStarterApplied,
     translationOverrides,
     amazonStoreOverride,
     customCocktailTags,
@@ -2741,6 +2775,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       startScreen,
       appTheme,
       appLocale,
+      onboardingStep,
+      onboardingCompleted,
+      onboardingStarterApplied,
       translationOverrides,
       amazonStoreOverride,
       detectedAmazonStore,
@@ -2759,6 +2796,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       startScreen,
       appTheme,
       appLocale,
+      onboardingStep,
+      onboardingCompleted,
+      onboardingStarterApplied,
       translationOverrides,
       amazonStoreOverride,
       detectedAmazonStore,
@@ -2803,6 +2843,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       setStartScreen: handleSetStartScreen,
       setAppTheme: handleSetAppTheme,
       setAppLocale,
+      setOnboardingStep,
+      setOnboardingCompleted,
+      setOnboardingStarterApplied,
       setAmazonStoreOverride: handleSetAmazonStoreOverride,
       setActiveBar: handleSetActiveBar,
       createBar: handleCreateBar,
@@ -2843,6 +2886,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       handleSetStartScreen,
       handleSetAppTheme,
       setAppLocale,
+      setOnboardingStep,
+      setOnboardingCompleted,
+      setOnboardingStarterApplied,
       handleSetAmazonStoreOverride,
       handleSetActiveBar,
       handleCreateBar,

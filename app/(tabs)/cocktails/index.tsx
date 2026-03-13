@@ -39,6 +39,7 @@ import { normalizeSearchText } from '@/libs/search-normalization';
 import { buildTagOptions, type TagOption } from '@/libs/tag-options';
 import { useCocktailTabLogic, type MyTabListItem } from '@/libs/use-cocktail-tab-logic';
 import { useInventoryActions, useInventoryData, useInventorySettings, type Cocktail } from '@/providers/inventory-provider';
+import { useOnboarding } from '@/providers/onboarding-provider';
 import { tagColors } from '@/theme/theme';
 
 type CocktailMethodOption = {
@@ -63,6 +64,16 @@ export default function CocktailsScreen() {
   const Colors = useAppColors();
   const { t, locale } = useI18n();
   const [activeTab, setActiveTab] = useState<CocktailTabKey>(() => getLastCocktailTab());
+  const { requestedCocktailsTab } = useOnboarding();
+
+
+  useEffect(() => {
+    if (!requestedCocktailsTab || requestedCocktailsTab === activeTab) {
+      return;
+    }
+
+    setActiveTab(requestedCocktailsTab);
+  }, [activeTab, requestedCocktailsTab]);
 
   const [query, setQuery] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);

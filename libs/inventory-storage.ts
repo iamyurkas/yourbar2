@@ -28,6 +28,7 @@ export type InventorySnapshotV1<TCocktail, TIngredient> = {
   amazonStoreOverride?: string | null;
   onboardingStep?: number;
   onboardingCompleted?: boolean;
+  onboardingStarterApplied?: boolean;
 };
 
 export type InventoryDeltaSnapshot<TCocktail, TIngredient> = {
@@ -64,6 +65,7 @@ export type InventoryDeltaSnapshot<TCocktail, TIngredient> = {
   amazonStoreOverride?: string | null;
   onboardingStep?: number;
   onboardingCompleted?: boolean;
+  onboardingStarterApplied?: boolean;
 };
 
 
@@ -101,6 +103,7 @@ export type InventoryDeltaSnapshotV3<TCocktail, TIngredient> = {
   amazonStoreOverride?: string | null;
   onboardingStep?: number;
   onboardingCompleted?: boolean;
+  onboardingStarterApplied?: boolean;
   translationOverrides?: unknown;
   bars?: Bar[];
   activeBarId?: string;

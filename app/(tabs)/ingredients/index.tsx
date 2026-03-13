@@ -44,6 +44,7 @@ import {
   useInventorySettings,
   type Ingredient,
 } from '@/providers/inventory-provider';
+import { useOnboarding } from '@/providers/onboarding-provider';
 import { tagColors } from '@/theme/theme';
 
 type IngredientSection = {
@@ -245,6 +246,16 @@ export default function IngredientsScreen() {
   const { ignoreGarnish, allowAllSubstitutes, showTabCounters } = useInventorySettings();
   const { toggleIngredientShopping, toggleIngredientAvailability } = useInventoryActions();
   const [activeTab, setActiveTab] = useState<IngredientTabKey>(() => getLastIngredientTab());
+  const { requestedIngredientsTab } = useOnboarding();
+
+
+  useEffect(() => {
+    if (!requestedIngredientsTab || requestedIngredientsTab === activeTab) {
+      return;
+    }
+
+    setActiveTab(requestedIngredientsTab);
+  }, [activeTab, requestedIngredientsTab]);
 
   const [query, setQuery] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);

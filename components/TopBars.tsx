@@ -14,6 +14,7 @@ import {
 import { AppDialog } from '@/components/AppDialog';
 import { useAppColors } from '@/constants/theme';
 import { useI18n } from '@/libs/i18n/use-i18n';
+import { OnboardingTarget } from '@/providers/onboarding-provider';
 
 type SearchTopBarProps = {
   value: string;
@@ -146,8 +147,10 @@ export function SegmentTabs({ options, value, onChange, anchorPrefix }: SegmentT
     <View style={[styles.tabs, { backgroundColor: Colors.surface }]}> 
       {options.map((option) => {
         const focused = option.key === value;
+        const targetId = anchorPrefix ? `${anchorPrefix}-${option.key}` : undefined;
         const content = (
           <Pressable
+            testID={targetId}
             accessibilityRole="tab"
             accessibilityState={focused ? { selected: true } : {}}
             onPress={() => onChange(option.key)}
@@ -190,6 +193,10 @@ export function SegmentTabs({ options, value, onChange, anchorPrefix }: SegmentT
             />
           </Pressable>
         );
+
+        if (targetId === 'ingredients-tab-all' || targetId === 'ingredients-tab-my' || targetId === 'cocktails-tab-my') {
+          return <OnboardingTarget key={option.key} id={targetId}>{content}</OnboardingTarget>;
+        }
 
         return <React.Fragment key={option.key}>{content}</React.Fragment>;
       })}

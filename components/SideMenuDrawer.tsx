@@ -39,6 +39,7 @@ import type { SupportedLocale } from "@/libs/i18n/types";
 import { useI18n } from "@/libs/i18n/use-i18n";
 import { buildPhotoBaseName } from "@/libs/photo-utils";
 import { useInventory, type AppTheme, type StartScreen } from "@/providers/inventory-provider";
+import { useOnboarding } from "@/providers/onboarding-provider";
 import {
   type ImportedPhotoEntry,
   type InventoryExportData,
@@ -179,6 +180,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     updateBar,
     deleteBar,
   } = useInventory();
+  const { restartOnboarding } = useOnboarding();
   const Colors = useAppColors();
   const insets = useSafeAreaInsets();
   const { t, locale, setLocale, languageOptions, currentLanguage } = useI18n();
@@ -1443,6 +1445,35 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   ]}
                 >
                   {t("sideMenu.smartShakerFilteringCaption")}
+                </Text>
+              </View>
+            </Pressable>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={t("sideMenu.restartOnboarding")}
+              onPress={restartOnboarding}
+              style={[styles.settingRow, SURFACE_ROW_STYLE]}
+            >
+              <View style={[styles.checkbox, SURFACE_ICON_STYLE]}>
+                <MaterialCommunityIcons
+                  name="map-marker-path"
+                  size={16}
+                  color={Colors.tint}
+                />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text
+                  style={[styles.settingLabel, { color: Colors.onSurface }]}
+                >
+                  {t("sideMenu.restartOnboarding")}
+                </Text>
+                <Text
+                  style={[
+                    styles.settingCaption,
+                    { color: Colors.onSurfaceVariant },
+                  ]}
+                >
+                  {t("sideMenu.restartOnboardingCaption")}
                 </Text>
               </View>
             </Pressable>
