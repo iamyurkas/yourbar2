@@ -262,12 +262,12 @@ export function OnboardingProvider({ children }: { children: React.ReactNode }) 
           >
             <RichMessage text={t(step.messageId)} />
             <View style={styles.footer}>
-              <View style={styles.buttons}>
+              <View style={styles.buttonsRow}>
                 <Pressable onPress={handleNext} style={[styles.primaryButton, { backgroundColor: Colors.primary }]}>
                   <Text style={[styles.primaryButtonText, { color: Colors.onPrimary }]}>{t(step.ctaLabelKey)}</Text>
                 </Pressable>
                 {shouldShowSkip ? (
-                  <Pressable onPress={finishOnboarding} hitSlop={8}>
+                  <Pressable onPress={finishOnboarding} hitSlop={8} style={styles.skipAction}>
                     <Text style={[styles.skipText, { color: Colors.onSurfaceVariant }]}>{t('onboarding.skip')}</Text>
                   </Pressable>
                 ) : null}
@@ -337,11 +337,16 @@ const styles = StyleSheet.create({
     fontSize: 12,
     textAlign: 'center',
   },
-  buttons: {
-    flexDirection: 'row',
-    alignItems: 'center',
+  buttonsRow: {
+    width: '100%',
+    minHeight: 44,
     justifyContent: 'center',
-    gap: 20,
+    alignItems: 'center',
+    position: 'relative',
+  },
+  skipAction: {
+    position: 'absolute',
+    right: 0,
   },
   skipText: {
     fontSize: 16,
