@@ -675,8 +675,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             amazonStoreOverride: null,
             customCocktailTags: [],
             customIngredientTags: [],
-            onboardingStep: 0,
-            onboardingCompleted: true,
+            onboardingStep: 1,
+            onboardingCompleted: false,
             bars: [{
               id: '1',
               name: getDefaultBarName(DEFAULT_APP_LOCALE),
@@ -2375,8 +2375,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   }, []);
 
   const restartOnboarding = useCallback(() => {
-    setOnboardingCompleted(true);
-    setOnboardingStep(0);
+    setOnboardingCompleted(false);
+    setOnboardingStep(1);
+    setStartScreen('ingredients_all');
   }, []);
 
   const handleSetActiveBar = useCallback(
