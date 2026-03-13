@@ -74,6 +74,7 @@ export function OnboardingProvider({ children }: { children: React.ReactNode }) 
 
   const targetsRef = useRef<Map<OnboardingTargetId, TargetRef>>(new Map());
   const controlsRef = useRef<Map<ControlId, ControlHandler>>(new Map());
+  const overlayRef = useRef<View>(null);
   const [isActive, setIsActive] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [targetRect, setTargetRect] = useState<Rect | null>(null);
@@ -160,8 +161,18 @@ export function OnboardingProvider({ children }: { children: React.ReactNode }) 
         }
         const targetRef = targetsRef.current.get(step.targetId!);
         if (targetRef) {
-          const rect = await measure(targetRef);
-          if (rect) {
+          const [targetRectInWindow, overlayRectInWindow] = await Promise.all([
+            measure(targetRef),
+            measure(overlayRef),
+          ]);
+
+          if (targetRectInWindow && overlayRectInWindow) {
+            const rect = {
+              x: targetRectInWindow.x - overlayRectInWindow.x,
+              y: targetRectInWindow.y - overlayRectInWindow.y,
+              width: targetRectInWindow.width,
+              height: targetRectInWindow.height,
+            };
             if (!cancelled) {
               setTargetRect(rect);
             }
@@ -224,7 +235,7 @@ export function OnboardingProvider({ children }: { children: React.ReactNode }) 
     <OnboardingContext.Provider value={contextValue}>
       {children}
       {isActive && step ? (
-        <View style={StyleSheet.absoluteFill} pointerEvents="box-none">
+        <View ref={overlayRef} style={StyleSheet.absoluteFill} pointerEvents="box-none" collapsable={false}>
           {targetRect ? (
             <>
               <View style={[styles.dim, { backgroundColor: 'rgba(0,0,0,0.65)', left: 0, right: 0, top: 0, height: targetRect.y }]} />
