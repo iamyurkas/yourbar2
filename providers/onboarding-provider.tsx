@@ -211,6 +211,7 @@ export function OnboardingProvider({ children }: { children: React.ReactNode }) 
   }, [currentIndex, finishOnboarding, router, step]);
 
   const shouldShowSkip = step && step.stepId < ONBOARDING_STEPS.length;
+  const dimColor = Colors.backdrop;
 
   const tooltipTop = useMemo(() => {
     if (!targetRect) {
@@ -238,27 +239,40 @@ export function OnboardingProvider({ children }: { children: React.ReactNode }) 
         <View ref={overlayRef} style={StyleSheet.absoluteFill} pointerEvents="box-none" collapsable={false}>
           {targetRect ? (
             <>
-              <View style={[styles.dim, { backgroundColor: 'rgba(0,0,0,0.65)', left: 0, right: 0, top: 0, height: targetRect.y }]} />
-              <View style={[styles.dim, { backgroundColor: 'rgba(0,0,0,0.65)', left: 0, width: targetRect.x, top: targetRect.y, height: targetRect.height }]} />
-              <View style={[styles.dim, { backgroundColor: 'rgba(0,0,0,0.65)', left: targetRect.x + targetRect.width, right: 0, top: targetRect.y, height: targetRect.height }]} />
-              <View style={[styles.dim, { backgroundColor: 'rgba(0,0,0,0.65)', left: 0, right: 0, top: targetRect.y + targetRect.height, bottom: 0 }]} />
-              <View pointerEvents="none" style={[styles.spotlight, { borderColor: Colors.primary, top: targetRect.y - 4, left: targetRect.x - 4, width: targetRect.width + 8, height: targetRect.height + 8 }]} />
+              <View style={[styles.dim, { backgroundColor: dimColor, left: 0, right: 0, top: 0, height: targetRect.y }]} />
+              <View style={[styles.dim, { backgroundColor: dimColor, left: 0, width: targetRect.x, top: targetRect.y, height: targetRect.height }]} />
+              <View style={[styles.dim, { backgroundColor: dimColor, left: targetRect.x + targetRect.width, right: 0, top: targetRect.y, height: targetRect.height }]} />
+              <View style={[styles.dim, { backgroundColor: dimColor, left: 0, right: 0, top: targetRect.y + targetRect.height, bottom: 0 }]} />
+              <View
+                pointerEvents="none"
+                style={[
+                  styles.spotlight,
+                  {
+                    borderColor: Colors.tertiary,
+                    backgroundColor: Colors.overlayOnPrimary,
+                    top: targetRect.y - 4,
+                    left: targetRect.x - 4,
+                    width: targetRect.width + 8,
+                    height: targetRect.height + 8,
+                  },
+                ]}
+              />
             </>
           ) : (
-            <View style={[styles.dim, { backgroundColor: 'rgba(0,0,0,0.65)', left: 0, top: 0, right: 0, bottom: 0 }]} />
+            <View style={[styles.dim, { backgroundColor: dimColor, left: 0, top: 0, right: 0, bottom: 0 }]} />
           )}
-          <View style={[styles.tooltip, { top: tooltipTop, left: 16, width: width - 32, backgroundColor: Colors.surface, borderColor: Colors.outline }]}> 
+          <View style={[styles.tooltip, { top: tooltipTop, left: 16, width: width - 32, backgroundColor: Colors.surfaceBright, borderColor: Colors.outlineVariant, shadowColor: Colors.shadow }]}> 
             <RichMessage text={t(step.messageId)} />
             <View style={styles.footer}>
               <Text style={[styles.counter, { color: Colors.onSurfaceVariant }]}>{t('onboarding.stepCounter', { current: step.stepId, total: ONBOARDING_STEPS.length })}</Text>
               <View style={styles.buttons}>
                 {shouldShowSkip ? (
-                  <Pressable onPress={finishOnboarding} style={styles.ghostButton}>
-                    <Text style={{ color: Colors.onSurfaceVariant }}>{t('onboarding.skip')}</Text>
+                  <Pressable onPress={finishOnboarding} style={[styles.ghostButton, { backgroundColor: Colors.surfaceVariant, borderColor: Colors.outlineVariant }]}>
+                    <Text style={{ color: Colors.onSurface }}>{t('onboarding.skip')}</Text>
                   </Pressable>
                 ) : null}
-                <Pressable onPress={handleNext} style={[styles.primaryButton, { backgroundColor: Colors.primary }]}> 
-                  <Text style={{ color: Colors.onPrimary, fontWeight: '700' }}>{t(step.ctaLabelKey)}</Text>
+                <Pressable onPress={handleNext} style={[styles.primaryButton, { backgroundColor: Colors.primaryContainer, borderColor: Colors.primary }]}> 
+                  <Text style={{ color: Colors.onPrimaryContainer, fontWeight: '700' }}>{t(step.ctaLabelKey)}</Text>
                 </Pressable>
               </View>
             </View>
@@ -316,6 +330,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 16,
     gap: 10,
+    shadowOpacity: 0.2,
+    shadowRadius: 16,
+    shadowOffset: { width: 0, height: 10 },
+    elevation: 8,
   },
   footer: {
     flexDirection: 'row',
@@ -324,8 +342,8 @@ const styles = StyleSheet.create({
   },
   counter: { fontSize: 12 },
   buttons: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  ghostButton: { paddingVertical: 8, paddingHorizontal: 10 },
-  primaryButton: { paddingVertical: 10, paddingHorizontal: 14, borderRadius: 10 },
+  ghostButton: { paddingVertical: 8, paddingHorizontal: 10, borderRadius: 10, borderWidth: 1 },
+  primaryButton: { paddingVertical: 10, paddingHorizontal: 14, borderRadius: 10, borderWidth: 1 },
   messageWrap: { gap: 2 },
   messageText: { fontSize: 15, lineHeight: 21 },
   bold: { fontWeight: '700' },
