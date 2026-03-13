@@ -81,6 +81,7 @@ export function OnboardingProvider({ children }: { children: React.ReactNode }) 
   const [layoutRevision, setLayoutRevision] = useState(0);
 
   const step = ONBOARDING_STEPS[currentIndex];
+  const overlayColor = Colors.backdrop;
 
   const registerTarget = useCallback((targetId: OnboardingTargetId, ref: TargetRef) => {
     targetsRef.current.set(targetId, ref);
@@ -238,14 +239,14 @@ export function OnboardingProvider({ children }: { children: React.ReactNode }) 
         <View ref={overlayRef} style={StyleSheet.absoluteFill} pointerEvents="box-none" collapsable={false}>
           {targetRect ? (
             <>
-              <View style={[styles.dim, { backgroundColor: 'rgba(0,0,0,0.65)', left: 0, right: 0, top: 0, height: targetRect.y }]} />
-              <View style={[styles.dim, { backgroundColor: 'rgba(0,0,0,0.65)', left: 0, width: targetRect.x, top: targetRect.y, height: targetRect.height }]} />
-              <View style={[styles.dim, { backgroundColor: 'rgba(0,0,0,0.65)', left: targetRect.x + targetRect.width, right: 0, top: targetRect.y, height: targetRect.height }]} />
-              <View style={[styles.dim, { backgroundColor: 'rgba(0,0,0,0.65)', left: 0, right: 0, top: targetRect.y + targetRect.height, bottom: 0 }]} />
+              <View style={[styles.dim, { backgroundColor: overlayColor, left: 0, right: 0, top: 0, height: targetRect.y }]} />
+              <View style={[styles.dim, { backgroundColor: overlayColor, left: 0, width: targetRect.x, top: targetRect.y, height: targetRect.height }]} />
+              <View style={[styles.dim, { backgroundColor: overlayColor, left: targetRect.x + targetRect.width, right: 0, top: targetRect.y, height: targetRect.height }]} />
+              <View style={[styles.dim, { backgroundColor: overlayColor, left: 0, right: 0, top: targetRect.y + targetRect.height, bottom: 0 }]} />
               <View pointerEvents="none" style={[styles.spotlight, { borderColor: Colors.primary, top: targetRect.y - 4, left: targetRect.x - 4, width: targetRect.width + 8, height: targetRect.height + 8 }]} />
             </>
           ) : (
-            <View style={[styles.dim, { backgroundColor: 'rgba(0,0,0,0.65)', left: 0, top: 0, right: 0, bottom: 0 }]} />
+            <View style={[styles.dim, { backgroundColor: overlayColor, left: 0, top: 0, right: 0, bottom: 0 }]} />
           )}
           <View style={[styles.tooltip, { top: tooltipTop, left: 16, width: width - 32, backgroundColor: Colors.surface, borderColor: Colors.outline }]}> 
             <RichMessage text={t(step.messageId)} />
