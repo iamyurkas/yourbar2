@@ -1,7 +1,7 @@
 import type { BottomTabBarButtonProps } from '@react-navigation/bottom-tabs';
 import React, { useCallback } from 'react';
 
-import { HapticTab } from '@/components/haptic-tab';
+import { PlatformPressable } from '@react-navigation/elements';
 import type { DialogOptions } from '@/components/AppDialog';
 import { useUnsavedChanges } from '@/providers/unsaved-changes-provider';
 import { useI18n } from '@/libs/i18n/use-i18n';
@@ -53,5 +53,5 @@ export function TabBarButton({ onOpenDialog, ...props }: TabBarButtonProps) {
     t,
   ]);
 
-  return <HapticTab {...props} onPress={handlePress} />;
+  return <PlatformPressable {...props} onPress={handlePress} pressOpacity={0.7} android_ripple={{ color: 'rgba(255,255,255,0.12)', borderless: false }} />;
 }
