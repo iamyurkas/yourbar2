@@ -1449,38 +1449,6 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               </View>
             </Pressable>
             <Pressable
-              accessibilityRole="button"
-              accessibilityLabel={t("sideMenu.restartOnboarding")}
-              onPress={() => {
-                onClose();
-                setTimeout(() => startOnboarding(), 200);
-              }}
-              style={[styles.settingRow, SURFACE_ROW_STYLE]}
-            >
-              <View style={[styles.checkbox, SURFACE_ICON_STYLE]}>
-                <MaterialCommunityIcons
-                  name="school-outline"
-                  size={16}
-                  color={Colors.tint}
-                />
-              </View>
-              <View style={styles.settingTextContainer}>
-                <Text
-                  style={[styles.settingLabel, { color: Colors.onSurface }]}
-                >
-                  {t("sideMenu.restartOnboarding")}
-                </Text>
-                <Text
-                  style={[
-                    styles.settingCaption,
-                    { color: Colors.onSurfaceVariant },
-                  ]}
-                >
-                  {t("sideMenu.restartOnboardingCaption")}
-                </Text>
-              </View>
-            </Pressable>
-            <Pressable
               accessibilityRole="checkbox"
               accessibilityState={{ checked: showTabCounters }}
               onPress={toggleShowTabCounters}
@@ -1687,6 +1655,30 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 size={20}
                 color={Colors.onSurfaceVariant}
               />
+            </Pressable>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={t("sideMenu.restartOnboarding")}
+              onPress={() => {
+                onClose();
+                setTimeout(() => startOnboarding(), 200);
+              }}
+              style={[
+                styles.actionRow,
+                SURFACE_ROW_STYLE,
+              ]}
+            >
+              <View style={[styles.actionIcon, ACTION_ICON_STYLE]}>
+                <MaterialCommunityIcons
+                  name="school-outline"
+                  size={16}
+                  color={Colors.onSurfaceVariant}
+                />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>{t("sideMenu.restartOnboarding")}</Text>
+                <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>{t("sideMenu.restartOnboardingCaption")}</Text>
+              </View>
             </Pressable>
             <Pressable
               accessibilityRole="button"
