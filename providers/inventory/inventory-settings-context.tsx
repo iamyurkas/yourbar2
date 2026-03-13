@@ -19,6 +19,9 @@ export type InventorySettingsContextValue = {
   effectiveAmazonStore: AmazonStoreKey | null;
   bars: Bar[];
   activeBarId: string;
+  onboardingStep: number;
+  onboardingCompleted: boolean;
+  onboardingStarterApplied: boolean;
 };
 
 export const InventorySettingsContext = createContext<InventorySettingsContextValue | undefined>(undefined);

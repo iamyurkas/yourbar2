@@ -47,44 +47,48 @@ const TAB_SCREENS: {
   titleKey: string;
   icon: typeof CocktailIcon;
   onTabPress: TabPressHandler;
+  onboardingTargetId: 'tab-cocktails' | 'tab-shaker' | 'tab-ingredients';
 }[] = [
-    {
-      name: 'cocktails',
-      titleKey: 'tabs.cocktails',
-      icon: CocktailIcon,
-      onTabPress: (navigation, route) => {
-        navigation.navigate(route.name as never, { screen: 'index' } as never);
-        const nestedStackKey = getNestedStackKey(navigation, route);
-        if (nestedStackKey) {
-          navigation.dispatch(Object.assign(StackActions.popToTop(), { target: nestedStackKey }));
-        }
-      },
+  {
+    name: 'cocktails',
+    titleKey: 'tabs.cocktails',
+    icon: CocktailIcon,
+    onboardingTargetId: 'tab-cocktails',
+    onTabPress: (navigation, route) => {
+      navigation.navigate(route.name as never, { screen: 'index' } as never);
+      const nestedStackKey = getNestedStackKey(navigation, route);
+      if (nestedStackKey) {
+        navigation.dispatch(Object.assign(StackActions.popToTop(), { target: nestedStackKey }));
+      }
     },
-    {
-      name: 'shaker',
-      titleKey: 'tabs.shaker',
-      icon: ShakerIcon,
-      onTabPress: (navigation, route) => {
-        navigation.navigate(route.name as never, { screen: 'index' } as never);
-        const nestedStackKey = getNestedStackKey(navigation, route);
-        if (nestedStackKey) {
-          navigation.dispatch(Object.assign(StackActions.popToTop(), { target: nestedStackKey }));
-        }
-      },
+  },
+  {
+    name: 'shaker',
+    titleKey: 'tabs.shaker',
+    icon: ShakerIcon,
+    onboardingTargetId: 'tab-shaker',
+    onTabPress: (navigation, route) => {
+      navigation.navigate(route.name as never, { screen: 'index' } as never);
+      const nestedStackKey = getNestedStackKey(navigation, route);
+      if (nestedStackKey) {
+        navigation.dispatch(Object.assign(StackActions.popToTop(), { target: nestedStackKey }));
+      }
     },
-    {
-      name: 'ingredients',
-      titleKey: 'tabs.ingredients',
-      icon: LemonIcon,
-      onTabPress: (navigation, route) => {
-        navigation.navigate(route.name as never, { screen: 'index' } as never);
-        const nestedStackKey = getNestedStackKey(navigation, route);
-        if (nestedStackKey) {
-          navigation.dispatch(Object.assign(StackActions.popToTop(), { target: nestedStackKey }));
-        }
-      },
+  },
+  {
+    name: 'ingredients',
+    titleKey: 'tabs.ingredients',
+    icon: LemonIcon,
+    onboardingTargetId: 'tab-ingredients',
+    onTabPress: (navigation, route) => {
+      navigation.navigate(route.name as never, { screen: 'index' } as never);
+      const nestedStackKey = getNestedStackKey(navigation, route);
+      if (nestedStackKey) {
+        navigation.dispatch(Object.assign(StackActions.popToTop(), { target: nestedStackKey }));
+      }
     },
-  ];
+  },
+];
 
 export default function TabLayout() {
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(null);
@@ -121,13 +125,13 @@ export default function TabLayout() {
             alignItems: 'center',
           },
         }}>
-        {TAB_SCREENS.map(({ name, titleKey, icon, onTabPress }) => (
+        {TAB_SCREENS.map(({ name, titleKey, icon, onTabPress, onboardingTargetId }) => (
           <Tabs.Screen
             key={name}
             name={name}
             options={{
               title: t(titleKey),
-              tabBarButton: (props) => <TabBarButton {...props} onOpenDialog={showDialog} />,
+              tabBarButton: (props) => <TabBarButton {...props} onboardingTargetId={onboardingTargetId} onOpenDialog={showDialog} />,
               tabBarIcon: ({ color, focused }) => <TabBarIcon source={icon} color={color} focused={focused} />,
             }}
             listeners={({ navigation, route }) => ({

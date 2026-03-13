@@ -40,6 +40,7 @@ import { buildTagOptions, type TagOption } from '@/libs/tag-options';
 import { useCocktailTabLogic, type MyTabListItem } from '@/libs/use-cocktail-tab-logic';
 import { useInventoryActions, useInventoryData, useInventorySettings, type Cocktail } from '@/providers/inventory-provider';
 import { tagColors } from '@/theme/theme';
+import { useOnboarding } from '@/providers/onboarding-provider';
 
 type CocktailMethodOption = {
   id: CocktailMethod['id'];
@@ -63,6 +64,7 @@ export default function CocktailsScreen() {
   const Colors = useAppColors();
   const { t, locale } = useI18n();
   const [activeTab, setActiveTab] = useState<CocktailTabKey>(() => getLastCocktailTab());
+  const { registerControl } = useOnboarding();
 
   const [query, setQuery] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -584,6 +586,7 @@ export default function CocktailsScreen() {
     {
       key: 'my',
       label: t('common.tabMy'),
+      onboardingTargetId: 'cocktails-tab-my',
       counter: showTabCounters ? `(${myReadyCocktailsCount})` : undefined,
     },
     {
@@ -593,6 +596,12 @@ export default function CocktailsScreen() {
     },
   ], [cocktailsByTab.all.length, cocktailsByTab.favorites.length, myReadyCocktailsCount, showTabCounters, t]);
 
+
+
+  useEffect(() => {
+    const unregister = registerControl('cocktails-my', () => setActiveTab('my'));
+    return () => unregister();
+  }, [registerControl]);
 
   const keyExtractor = useCallback((item: Cocktail) => String(item.id ?? item.name), []);
   const myTabKeyExtractor = useCallback((item: MyTabListItem) => item.key, []);

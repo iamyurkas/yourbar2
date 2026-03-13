@@ -165,6 +165,9 @@ export type InventorySnapshotOptions = {
   translationOverrides: InventoryTranslationOverrides;
   bars: Bar[];
   activeBarId: string;
+  onboardingStep: number;
+  onboardingCompleted: boolean;
+  onboardingStarterApplied: boolean;
 };
 
 export function toSortedArray(values: Iterable<number>): number[] {
@@ -257,5 +260,8 @@ export function buildInventorySnapshot(
     translationOverrides: options.translationOverrides,
     bars: options.bars,
     activeBarId: options.activeBarId,
+    onboardingStep: options.onboardingStep,
+    onboardingCompleted: options.onboardingCompleted,
+    onboardingStarterApplied: options.onboardingStarterApplied,
   } satisfies InventoryDeltaSnapshotV3<CocktailStorageRecord, IngredientStorageRecord>;
 }

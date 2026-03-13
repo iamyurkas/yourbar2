@@ -11,6 +11,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { PaperProvider } from "@/libs/react-native-paper";
 import { InventoryProvider, useInventory } from "@/providers/inventory-provider";
 import { UnsavedChangesProvider } from "@/providers/unsaved-changes-provider";
+import { OnboardingProvider } from '@/providers/onboarding-provider';
 import { getAppTheme } from "@/theme/theme";
 import * as Sentry from '@sentry/react-native';
 
@@ -102,7 +103,9 @@ export default Sentry.wrap(function RootLayout() {
       <SafeAreaProvider>
         <UnsavedChangesProvider>
           <InventoryProvider>
-            <RootLayoutContent />
+            <OnboardingProvider>
+              <RootLayoutContent />
+            </OnboardingProvider>
           </InventoryProvider>
         </UnsavedChangesProvider>
       </SafeAreaProvider>
