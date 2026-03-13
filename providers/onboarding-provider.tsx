@@ -262,17 +262,17 @@ export function OnboardingProvider({ children }: { children: React.ReactNode }) 
           >
             <RichMessage text={t(step.messageId)} />
             <View style={styles.footer}>
-              <Text style={[styles.counter, { color: Colors.onSurfaceVariant }]}>{t('onboarding.stepCounter', { current: step.stepId, total: ONBOARDING_STEPS.length })}</Text>
               <View style={styles.buttons}>
+                <Pressable onPress={handleNext} style={[styles.primaryButton, { backgroundColor: Colors.primary }]}>
+                  <Text style={[styles.primaryButtonText, { color: Colors.onPrimary }]}>{t(step.ctaLabelKey)}</Text>
+                </Pressable>
                 {shouldShowSkip ? (
                   <Pressable onPress={finishOnboarding} hitSlop={8}>
                     <Text style={[styles.skipText, { color: Colors.onSurfaceVariant }]}>{t('onboarding.skip')}</Text>
                   </Pressable>
                 ) : null}
-                <Pressable onPress={handleNext} style={[styles.primaryButton, { backgroundColor: Colors.primary }]}>
-                  <Text style={[styles.primaryButtonText, { color: Colors.onPrimary }]}>{t(step.ctaLabelKey)}</Text>
-                </Pressable>
               </View>
+              <Text style={[styles.counter, { color: Colors.onSurfaceVariant }]}>{t('onboarding.stepCounter', { current: step.stepId, total: ONBOARDING_STEPS.length })}</Text>
             </View>
           </View>
         </View>
@@ -330,12 +330,19 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   footer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-end',
+    alignItems: 'center',
+    gap: 10,
   },
-  counter: { fontSize: 12 },
-  buttons: { flexDirection: 'row', alignItems: 'center', gap: 12 },
+  counter: {
+    fontSize: 12,
+    textAlign: 'center',
+  },
+  buttons: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 20,
+  },
   skipText: {
     fontSize: 16,
     fontWeight: '600',
@@ -349,8 +356,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   primaryButtonText: { fontSize: 16, fontWeight: '700' },
-  messageWrap: { gap: 2 },
-  messageText: { fontSize: 15, lineHeight: 21 },
+  messageWrap: { gap: 2, alignItems: 'center' },
+  messageText: { fontSize: 15, lineHeight: 21, textAlign: 'center' },
   bold: { fontWeight: '700' },
   italic: { fontStyle: 'italic' },
 });
