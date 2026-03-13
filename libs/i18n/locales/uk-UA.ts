@@ -214,9 +214,11 @@ export const ukUATranslations: TranslationDictionary = {
   "cocktailForm.garnish": "Декор",
   "cocktailForm.optional": "Опційно",
   "cocktailForm.process": "Процес",
-  "cocktailForm.processMessage": "Позначає лід для технік приготування: шейк, стір, кидання (throwing).",
+  "cocktailForm.processMessage":
+    "Позначає лід для технік приготування: шейк, стір, кидання (throwing).",
   "cocktailForm.serving": "Подача",
-  "cocktailForm.servingMessage": "Позначає лід для подачі, включно з блендингом, адже цей лід потрапляє у склянку.",
+  "cocktailForm.servingMessage":
+    "Позначає лід для подачі, включно з блендингом, адже цей лід потрапляє у склянку.",
   "cocktailForm.allowBaseSubstitute": "Дозволити базову заміну",
   "cocktailForm.allowBaseSubstituteMessage":
     "Якщо вказаного інгредієнта немає, коктейль буде показано як доступний із його базовим інгредієнтом.",
@@ -236,7 +238,8 @@ export const ukUATranslations: TranslationDictionary = {
   "cocktailDetails.setRatingTo": "Встановити рейтинг {{value}}",
   "cocktailDetails.toggleComment": "Додати коментар",
   "cocktailDetails.openVideoInstructions": "Відкрити відеоінструкцію",
-  "cocktailDetails.commentPlaceholder": "Додайте коментар. Він збережеться автоматично, коли ви вийдете з цього екрана.",
+  "cocktailDetails.commentPlaceholder":
+    "Додайте коментар. Він збережеться автоматично, коли ви вийдете з цього екрана.",
   "cocktailDetails.showInMetric": "Метрична система",
   "cocktailDetails.showInImperial": "Імперська система",
   "cocktailDetails.displayMode.imperial": "Імперська",
@@ -373,7 +376,7 @@ export const ukUATranslations: TranslationDictionary = {
   "onboarding.start": "Почати",
   "onboarding.next": "Далі",
   "onboarding.finish": "Завершити",
-  "onboarding.skip": "Пропустити",
+  "onboarding.skip": "Досить",
   "onboarding.stepCounter": "{{current}} з {{total}}",
   "onboarding.step1.message":
     "**Вітаємо!**\nДавайте налаштуємо ваш бар, додавши кілька інгредієнтів.",
@@ -444,7 +447,8 @@ export const ukUATranslations: TranslationDictionary = {
   "cocktails.sortOptionMissingRequiredCountAccessibility":
     "Сортувати за кількістю відсутніх обов’язкових інгредієнтів",
   "cocktails.sortOptionRatingAccessibility": "Сортувати за рейтингом",
-  "cocktails.sortOptionRecentlyAddedAccessibility": "Сортувати за часом додавання",
+  "cocktails.sortOptionRecentlyAddedAccessibility":
+    "Сортувати за часом додавання",
   "cocktails.sortOptionRandomAccessibility": "Випадкове сортування",
   "cocktails.addCocktail": "Додати коктейль",
 
@@ -592,7 +596,8 @@ export const ukUATranslations: TranslationDictionary = {
     "Спробуйте ще раз із коректним архівом резервної копії.",
 
   "sideMenu.importIngredientStatusesTitle": "Імпортувати статуси інгредієнтів?",
-  "sideMenu.importIngredientStatusesMessage": "Оберіть, які статуси інгредієнтів імпортувати з цієї резервної копії.",
+  "sideMenu.importIngredientStatusesMessage":
+    "Оберіть, які статуси інгредієнтів імпортувати з цієї резервної копії.",
   "sideMenu.importIngredientStatusesAvailability": "Наявність інгредієнтів",
   "sideMenu.importIngredientStatusesShopping": "Список покупок інгредієнтів",
   "sideMenu.importIngredientStatusesConfirm": "Імпортувати вибране",
