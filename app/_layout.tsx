@@ -9,7 +9,6 @@ import "react-native-reanimated";
 import { SafeAreaProvider, initialWindowMetrics } from "react-native-safe-area-context";
 
 import { OnboardingProvider } from "@/components/onboarding/OnboardingContext";
-import { OnboardingOverlay } from "@/components/onboarding/OnboardingOverlay";
 import { PaperProvider } from "@/libs/react-native-paper";
 import { InventoryProvider, useInventory } from "@/providers/inventory-provider";
 import { UnsavedChangesProvider } from "@/providers/unsaved-changes-provider";
@@ -94,7 +93,6 @@ function RootLayoutContent() {
           <Stack>
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           </Stack>
-          <OnboardingOverlay />
         </ThemeAppWrapper>
       </OnboardingProvider>
     </View>
