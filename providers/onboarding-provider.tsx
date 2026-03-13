@@ -247,7 +247,20 @@ export function OnboardingProvider({ children }: { children: React.ReactNode }) 
               <View style={[styles.dim, { backgroundColor: 'rgba(0,0,0,0.65)', left: 0, width: targetRect.x, top: targetRect.y, height: targetRect.height }]} />
               <View style={[styles.dim, { backgroundColor: 'rgba(0,0,0,0.65)', left: targetRect.x + targetRect.width, right: 0, top: targetRect.y, height: targetRect.height }]} />
               <View style={[styles.dim, { backgroundColor: 'rgba(0,0,0,0.65)', left: 0, right: 0, top: targetRect.y + targetRect.height, bottom: 0 }]} />
-              <View pointerEvents="none" style={[styles.spotlight, { borderColor: Colors.primary, top: targetRect.y - 4, left: targetRect.x - 4, width: targetRect.width + 8, height: targetRect.height + 8 }]} />
+              <View
+                pointerEvents="none"
+                style={[
+                  styles.spotlight,
+                  {
+                    borderColor: Colors.primary,
+                    borderRadius: step.targetId === 'tab-shaker' ? 0 : styles.spotlight.borderRadius,
+                    top: targetRect.y - 4,
+                    left: targetRect.x - 4,
+                    width: targetRect.width + 8,
+                    height: targetRect.height + 8,
+                  },
+                ]}
+              />
             </>
           ) : (
             <View style={[styles.dim, { backgroundColor: 'rgba(0,0,0,0.65)', left: 0, top: 0, right: 0, bottom: 0 }]} />
