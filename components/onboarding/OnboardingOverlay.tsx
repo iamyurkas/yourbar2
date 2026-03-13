@@ -305,17 +305,17 @@ export function OnboardingOverlay() {
       pointerEvents={currentStep?.buttonLabelKey ? 'box-none' : 'none'}
       collapsable={false}
     >
-      <View style={StyleSheet.absoluteFill} pointerEvents="none">
-        <Svg
-          height="100%"
-          width="100%"
-          style={StyleSheet.absoluteFill}
-          pointerEvents="none"
-        >
-          <Defs>
-            <Mask id="mask">
-              <Rect height="100%" width="100%" fill="white" />
-              {adjustedAnchor && (
+      {adjustedAnchor ? (
+        <View style={StyleSheet.absoluteFill} pointerEvents="none">
+          <Svg
+            height="100%"
+            width="100%"
+            style={StyleSheet.absoluteFill}
+            pointerEvents="none"
+          >
+            <Defs>
+              <Mask id="mask">
+                <Rect height="100%" width="100%" fill="white" />
                 <Rect
                   x={adjustedAnchor.x - highlightPaddingX}
                   y={adjustedAnchor.y - highlightPaddingY}
@@ -324,18 +324,18 @@ export function OnboardingOverlay() {
                   rx={highlightRadius}
                   fill="black"
                 />
-              )}
-            </Mask>
-          </Defs>
-          <Rect
-            height="100%"
-            width="100%"
-            fill="rgba(0,0,0,0.7)"
-            mask="url(#mask)"
-            pointerEvents="none"
-          />
-        </Svg>
-      </View>
+              </Mask>
+            </Defs>
+            <Rect
+              height="100%"
+              width="100%"
+              fill="rgba(0,0,0,0.7)"
+              mask="url(#mask)"
+              pointerEvents="none"
+            />
+          </Svg>
+        </View>
+      ) : null}
 
       <View
         pointerEvents="box-none"
