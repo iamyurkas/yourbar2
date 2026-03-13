@@ -211,6 +211,7 @@ export function OnboardingProvider({ children }: { children: React.ReactNode }) 
   }, [currentIndex, finishOnboarding, router, step]);
 
   const shouldShowSkip = step && step.stepId < ONBOARDING_STEPS.length;
+  const tooltipWidth = Math.min(width - 32, 500);
 
   const tooltipTop = useMemo(() => {
     if (!targetRect) {
@@ -247,18 +248,29 @@ export function OnboardingProvider({ children }: { children: React.ReactNode }) 
           ) : (
             <View style={[styles.dim, { backgroundColor: 'rgba(0,0,0,0.65)', left: 0, top: 0, right: 0, bottom: 0 }]} />
           )}
-          <View style={[styles.tooltip, { top: tooltipTop, left: 16, width: width - 32, backgroundColor: Colors.surface, borderColor: Colors.outline }]}> 
+          <View
+            style={[
+              styles.tooltip,
+              {
+                top: tooltipTop,
+                left: (width - tooltipWidth) / 2,
+                width: tooltipWidth,
+                backgroundColor: Colors.surface,
+                borderColor: Colors.outlineVariant,
+              },
+            ]}
+          >
             <RichMessage text={t(step.messageId)} />
             <View style={styles.footer}>
               <Text style={[styles.counter, { color: Colors.onSurfaceVariant }]}>{t('onboarding.stepCounter', { current: step.stepId, total: ONBOARDING_STEPS.length })}</Text>
               <View style={styles.buttons}>
                 {shouldShowSkip ? (
-                  <Pressable onPress={finishOnboarding} style={styles.ghostButton}>
-                    <Text style={{ color: Colors.onSurfaceVariant }}>{t('onboarding.skip')}</Text>
+                  <Pressable onPress={finishOnboarding} hitSlop={8}>
+                    <Text style={[styles.skipText, { color: Colors.onSurfaceVariant }]}>{t('onboarding.skip')}</Text>
                   </Pressable>
                 ) : null}
-                <Pressable onPress={handleNext} style={[styles.primaryButton, { backgroundColor: Colors.primary }]}> 
-                  <Text style={{ color: Colors.onPrimary, fontWeight: '700' }}>{t(step.ctaLabelKey)}</Text>
+                <Pressable onPress={handleNext} style={[styles.primaryButton, { backgroundColor: Colors.primary }]}>
+                  <Text style={[styles.primaryButtonText, { color: Colors.onPrimary }]}>{t(step.ctaLabelKey)}</Text>
                 </Pressable>
               </View>
             </View>
@@ -320,12 +332,23 @@ const styles = StyleSheet.create({
   footer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-end',
   },
   counter: { fontSize: 12 },
-  buttons: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  ghostButton: { paddingVertical: 8, paddingHorizontal: 10 },
-  primaryButton: { paddingVertical: 10, paddingHorizontal: 14, borderRadius: 10 },
+  buttons: { flexDirection: 'row', alignItems: 'center', gap: 12 },
+  skipText: {
+    fontSize: 16,
+    fontWeight: '600',
+    textDecorationLine: 'underline',
+  },
+  primaryButton: {
+    minWidth: 102,
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    borderRadius: 14,
+    alignItems: 'center',
+  },
+  primaryButtonText: { fontSize: 16, fontWeight: '700' },
   messageWrap: { gap: 2 },
   messageText: { fontSize: 15, lineHeight: 21 },
   bold: { fontWeight: '700' },
