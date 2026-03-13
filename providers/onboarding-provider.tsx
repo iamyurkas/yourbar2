@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { Keyboard, Pressable, StyleSheet, Text, useWindowDimensions, View, type LayoutChangeEvent } from 'react-native';
+import { Keyboard, Pressable, StyleSheet, Text, useWindowDimensions, View, type LayoutChangeEvent, type LayoutRectangle } from 'react-native';
 
 import { useAppColors } from '@/constants/theme';
 import { ONBOARDING_STARTER_INGREDIENT_IDS, ONBOARDING_STEPS, type OnboardingTargetId } from '@/libs/onboarding-config';
@@ -79,6 +79,7 @@ export function OnboardingProvider({ children }: { children: React.ReactNode }) 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [targetRect, setTargetRect] = useState<Rect | null>(null);
   const [layoutRevision, setLayoutRevision] = useState(0);
+  const [tooltipHeight, setTooltipHeight] = useState(0);
 
   const step = ONBOARDING_STEPS[currentIndex];
 
@@ -215,6 +216,9 @@ export function OnboardingProvider({ children }: { children: React.ReactNode }) 
 
   const tooltipTop = useMemo(() => {
     if (!targetRect) {
+      if (step?.stepId === 1 && tooltipHeight > 0) {
+        return Math.max(16, (height - tooltipHeight) / 2);
+      }
       return height * 0.55;
     }
     const nearBottom = targetRect.y + targetRect.height > height * 0.65;
@@ -222,7 +226,7 @@ export function OnboardingProvider({ children }: { children: React.ReactNode }) 
       return Math.max(16, targetRect.y - 220);
     }
     return Math.min(height - 220, targetRect.y + targetRect.height + 12);
-  }, [height, targetRect]);
+  }, [height, step?.stepId, targetRect, tooltipHeight]);
 
   const contextValue = useMemo(() => ({
     registerTarget,
@@ -249,6 +253,12 @@ export function OnboardingProvider({ children }: { children: React.ReactNode }) 
             <View style={[styles.dim, { backgroundColor: 'rgba(0,0,0,0.65)', left: 0, top: 0, right: 0, bottom: 0 }]} />
           )}
           <View
+            onLayout={(event) => {
+              const layout: LayoutRectangle = event.nativeEvent.layout;
+              if (layout.height !== tooltipHeight) {
+                setTooltipHeight(layout.height);
+              }
+            }}
             style={[
               styles.tooltip,
               {
