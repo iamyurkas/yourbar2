@@ -1,7 +1,7 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import { useScrollToTop } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
-import { memo, useCallback, useEffect, useMemo, useRef, useState, useTransition } from 'react';
+import { memo, useCallback, useDeferredValue, useEffect, useMemo, useRef, useState, useTransition } from 'react';
 import {
   FlatList,
   Pressable,
@@ -69,7 +69,6 @@ type IngredientListItemProps = {
 
 type IngredientRowMeta = {
   isOnShoppingList: boolean;
-  isAvailable: boolean;
   hasStyledVariants: boolean;
   hasBrandedVariants: boolean;
   subtitleText?: string;
@@ -412,6 +411,8 @@ export default function IngredientsScreen() {
     );
   }, [ingredientLookup.brandsByBaseId]);
 
+  const deferredAvailableIngredientIds = useDeferredValue(availableIngredientIds);
+
   const ingredientCocktailStats = useMemo(() => {
     const totalCounts = new Map<number, number>();
     const makeableCounts = new Map<number, number>();
@@ -424,7 +425,7 @@ export default function IngredientsScreen() {
         return;
       }
 
-      const isMakeable = isCocktailReady(cocktail, availableIngredientIds, ingredientLookup, ingredients, {
+      const isMakeable = isCocktailReady(cocktail, deferredAvailableIngredientIds, ingredientLookup, ingredients, {
         ignoreGarnish,
         allowAllSubstitutes,
       });
@@ -440,7 +441,7 @@ export default function IngredientsScreen() {
     return { totalCounts, makeableCounts };
   }, [
     allowAllSubstitutes,
-    availableIngredientIds,
+    deferredAvailableIngredientIds,
     cocktails,
     ignoreGarnish,
     ingredientLookup,
@@ -574,6 +575,23 @@ export default function IngredientsScreen() {
     return next;
   }, [availableIngredientIds, optimisticAvailability]);
 
+  const deferredEffectiveAvailableIngredientIds = useDeferredValue(effectiveAvailableIngredientIds);
+
+  const getEffectiveAvailability = useCallback(
+    (id: number) => {
+      if (id < 0) {
+        return false;
+      }
+
+      if (optimisticAvailability.has(id)) {
+        return optimisticAvailability.get(id) ?? availableIngredientIds.has(id);
+      }
+
+      return availableIngredientIds.has(id);
+    },
+    [availableIngredientIds, optimisticAvailability],
+  );
+
   const unlocksMostCocktailsByIngredientId = useMemo(() => {
     const unlockCounts = new Map<number, number>();
 
@@ -588,7 +606,7 @@ export default function IngredientsScreen() {
 
       const missingRequiredIds = new Set<number>();
       visibleIds.forEach((ingredientId) => {
-        if (!effectiveAvailableIngredientIds.has(ingredientId)) {
+        if (!deferredEffectiveAvailableIngredientIds.has(ingredientId)) {
           missingRequiredIds.add(ingredientId);
         }
       });
@@ -605,7 +623,7 @@ export default function IngredientsScreen() {
     });
 
     return unlockCounts;
-  }, [allowAllSubstitutes, cocktails, effectiveAvailableIngredientIds, ingredientLookup]);
+  }, [allowAllSubstitutes, cocktails, deferredEffectiveAvailableIngredientIds, ingredientLookup]);
 
   const compareIngredientsBySelectedSort = useCallback(
     (left: Ingredient, right: Ingredient) => {
@@ -735,7 +753,6 @@ export default function IngredientsScreen() {
       const ingredientId = Number(ingredient.id ?? -1);
       const isValidId = ingredientId >= 0;
       const isOnShoppingList = isValidId && shoppingIngredientIds.has(ingredientId);
-      const isAvailable = isValidId && effectiveAvailableIngredientIds.has(ingredientId);
       const count = isValidId ? countsMap.get(ingredientId) ?? 0 : 0;
 
       let subtitleText: string | undefined;
@@ -748,7 +765,6 @@ export default function IngredientsScreen() {
 
       rowMetaMap.set(String(ingredient.id ?? ingredient.name), {
         isOnShoppingList,
-        isAvailable,
         hasStyledVariants: isValidId && styleBaseIngredientIds.has(ingredientId),
         hasBrandedVariants: isValidId && brandedBaseIngredientIds.has(ingredientId),
         subtitleText,
@@ -759,7 +775,6 @@ export default function IngredientsScreen() {
   }, [
     activeTab,
     brandedBaseIngredientIds,
-    effectiveAvailableIngredientIds,
     ingredientCocktailStats.makeableCounts,
     ingredientCocktailStats.totalCounts,
     locale,
@@ -777,7 +792,7 @@ export default function IngredientsScreen() {
       const meta = ingredientRowMetaByKey.get(itemKey);
 
       const isOnShoppingList = meta?.isOnShoppingList ?? (isValidId && shoppingIngredientIds.has(ingredientId));
-      const isAvailable = meta?.isAvailable ?? (isValidId && effectiveAvailableIngredientIds.has(ingredientId));
+      const isAvailable = isValidId && getEffectiveAvailability(ingredientId);
       const hasStyledVariants = meta?.hasStyledVariants ?? (isValidId && styleBaseIngredientIds.has(ingredientId));
       const hasBrandedVariants = meta?.hasBrandedVariants ?? (isValidId && brandedBaseIngredientIds.has(ingredientId));
 
@@ -799,7 +814,7 @@ export default function IngredientsScreen() {
     },
     [
       activeTab,
-      effectiveAvailableIngredientIds,
+      getEffectiveAvailability,
       handleToggle,
       handleShoppingToggle,
       highlightColor,
@@ -814,12 +829,12 @@ export default function IngredientsScreen() {
   const renderSeparator = useCallback(
     ({ leadingItem }: { leadingItem?: Ingredient | null }) => {
       const ingredientId = Number(leadingItem?.id ?? -1);
-      const isAvailable = ingredientId >= 0 && effectiveAvailableIngredientIds.has(ingredientId);
+      const isAvailable = getEffectiveAvailability(ingredientId);
       const backgroundColor = isAvailable ? Colors.outline : Colors.outlineVariant;
 
       return <View style={[styles.divider, { backgroundColor }]} />;
     },
-    [effectiveAvailableIngredientIds, Colors],
+    [Colors, getEffectiveAvailability],
   );
 
   const handleTabChange = useCallback((key: string) => {
