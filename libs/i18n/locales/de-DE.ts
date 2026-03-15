@@ -239,7 +239,8 @@ export const deDETranslations: TranslationDictionary = {
   "cocktailDetails.setRatingTo": "Bewertung auf {{value}} setzen",
   "cocktailDetails.toggleComment": "Kommentar hinzufügen",
   "cocktailDetails.openVideoInstructions": "Videoanleitung öffnen",
-  "cocktailDetails.commentPlaceholder": "Füge deinen Kommentar hinzu. Er wird beim Verlassen dieses Bildschirms automatisch gespeichert.",
+  "cocktailDetails.commentPlaceholder":
+    "Füge deinen Kommentar hinzu. Er wird beim Verlassen dieses Bildschirms automatisch gespeichert.",
   "cocktailDetails.showInMetric": "In metrischen Einheiten anzeigen",
   "cocktailDetails.showInImperial": "Imperial anzeigen",
   "cocktailDetails.displayMode.imperial": "Imperial",
@@ -291,7 +292,7 @@ export const deDETranslations: TranslationDictionary = {
   "cocktailMethod.throw.label": "Umgießen",
   "cocktailMethod.throw.description":
     "Zwischen zwei Gefäßen hin- und hergießen, um sanft zu belüften, ohne zu stark zu verwässern.",
-  "cocktailMethod.build.label": "Im Glas zubereiten",
+  "cocktailMethod.build.label": "Im Glas",
   "cocktailMethod.build.description":
     "Zutaten direkt in das Servierglas geben.",
   "cocktailMethod.layer.label": "Schichten",
@@ -444,7 +445,8 @@ export const deDETranslations: TranslationDictionary = {
   "cocktails.sortOptionMissingRequiredCountAccessibility":
     "Nach Anzahl fehlender benötigter Zutaten sortieren",
   "cocktails.sortOptionRatingAccessibility": "Nach Bewertung sortieren",
-  "cocktails.sortOptionRecentlyAddedAccessibility": "Nach Hinzufügezeit sortieren",
+  "cocktails.sortOptionRecentlyAddedAccessibility":
+    "Nach Hinzufügezeit sortieren",
   "cocktails.sortOptionRandomAccessibility": "Zufällig sortieren",
   "cocktails.addCocktail": "Cocktail hinzufügen",
 
@@ -595,7 +597,8 @@ export const deDETranslations: TranslationDictionary = {
     "Bitte versuchen Sie es erneut mit einem gültigen Sicherungsarchiv.",
 
   "sideMenu.importIngredientStatusesTitle": "Zutatenstatus importieren?",
-  "sideMenu.importIngredientStatusesMessage": "Wähle aus, welche Zutatenstatus aus diesem Backup importiert werden sollen.",
+  "sideMenu.importIngredientStatusesMessage":
+    "Wähle aus, welche Zutatenstatus aus diesem Backup importiert werden sollen.",
   "sideMenu.importIngredientStatusesAvailability": "Zutatenverfügbarkeit",
   "sideMenu.importIngredientStatusesShopping": "Einkaufsliste für Zutaten",
   "sideMenu.importIngredientStatusesConfirm": "Auswahl importieren",
@@ -729,15 +732,15 @@ export const deDETranslations: TranslationDictionary = {
   "unit.27.singular": "Spalte",
   "unit.27.plural": "Spalten",
 
-  "ingredientTag.0": "Basisspirituose",
-  "ingredientTag.1": "Likör",
-  "ingredientTag.2": "Wein/Wermut",
-  "ingredientTag.3": "Bier/Cider",
+  "ingredientTag.0": "Basisspirituosen",
+  "ingredientTag.1": "Liköre",
+  "ingredientTag.2": "Wein & Wermut",
+  "ingredientTag.3": "Bier & Cider",
   "ingredientTag.4": "Bitter",
   "ingredientTag.5": "Sirup",
-  "ingredientTag.6": "Mixer (Softdrink/Saft)",
-  "ingredientTag.7": "Obst/Gemüse & Saft",
-  "ingredientTag.8": "Kühlschrank & Vorratskammer",
+  "ingredientTag.6": "Mixer",
+  "ingredientTag.7": "Obst, Gemüse & Saft",
+  "ingredientTag.8": "Kühlschrank & Vorrat",
   "ingredientTag.9": "Sonstiges",
 
   "cocktailTag.1": "IBA offiziell",
