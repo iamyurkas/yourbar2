@@ -234,7 +234,8 @@ export const esESTranslations: TranslationDictionary = {
   "cocktailDetails.setRatingTo": "Establecer valoración en {{value}}",
   "cocktailDetails.toggleComment": "Añadir comentario",
   "cocktailDetails.openVideoInstructions": "Abrir instrucciones en video",
-  "cocktailDetails.commentPlaceholder": "Añade tu comentario. Se guardará automáticamente al salir de esta pantalla.",
+  "cocktailDetails.commentPlaceholder":
+    "Añade tu comentario. Se guardará automáticamente al salir de esta pantalla.",
   "cocktailDetails.showInMetric": "Mostrar en sistema métrico",
   "cocktailDetails.showInImperial": "Mostrar en sistema imperial",
   "cocktailDetails.displayMode.imperial": "Imperial",
@@ -279,9 +280,9 @@ export const esESTranslations: TranslationDictionary = {
   "cocktailMethod.shake.label": "Agitar",
   "cocktailMethod.shake.description":
     "Agita con hielo. Ideal para cítricos, siropes, crema o clara de huevo para airear y enfriar.",
-  "cocktailMethod.stir.label": "Remover",
+  "cocktailMethod.stir.label": "Mezclar",
   "cocktailMethod.stir.description":
-    "Remueve con cuchara de bar en un vaso mezclador lleno de hielo. Ideal para mezclas herbales.",
+    "Mezclar con cuchara de bar en un vaso mezclador lleno de hielo. Ideal para mezclas herbales.",
   "cocktailMethod.throw.label": "Trasvasar",
   "cocktailMethod.throw.description":
     "Vierte entre cocteleras desde cierta altura para airear sin enturbiar.",
@@ -439,7 +440,8 @@ export const esESTranslations: TranslationDictionary = {
   "cocktails.sortOptionMissingRequiredCountAccessibility":
     "Ordenar por cantidad de ingredientes obligatorios faltantes",
   "cocktails.sortOptionRatingAccessibility": "Ordenar por valoración",
-  "cocktails.sortOptionRecentlyAddedAccessibility": "Ordenar por fecha de adición",
+  "cocktails.sortOptionRecentlyAddedAccessibility":
+    "Ordenar por fecha de adición",
   "cocktails.sortOptionRandomAccessibility": "Orden aleatorio",
   "cocktails.addCocktail": "Añadir cóctel",
   "shakerResults.helpTitle": "Resultados de la coctelera",
@@ -583,10 +585,14 @@ export const esESTranslations: TranslationDictionary = {
   "sideMenu.importRetryWithValidArchive":
     "Vuelve a intentarlo con un archivo de copia de seguridad válido.",
 
-  "sideMenu.importIngredientStatusesTitle": "¿Importar estados de ingredientes?",
-  "sideMenu.importIngredientStatusesMessage": "Elige qué estados de ingredientes importar desde esta copia de seguridad.",
-  "sideMenu.importIngredientStatusesAvailability": "Disponibilidad de ingredientes",
-  "sideMenu.importIngredientStatusesShopping": "Lista de compras de ingredientes",
+  "sideMenu.importIngredientStatusesTitle":
+    "¿Importar estados de ingredientes?",
+  "sideMenu.importIngredientStatusesMessage":
+    "Elige qué estados de ingredientes importar desde esta copia de seguridad.",
+  "sideMenu.importIngredientStatusesAvailability":
+    "Disponibilidad de ingredientes",
+  "sideMenu.importIngredientStatusesShopping":
+    "Lista de compras de ingredientes",
   "sideMenu.importIngredientStatusesConfirm": "Importar seleccionados",
   "sideMenu.deleteTagTitle": "Eliminar etiqueta",
   "sideMenu.deleteTagMessage": '¿Eliminar "{{name}}"?',
