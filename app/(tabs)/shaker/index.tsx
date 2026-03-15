@@ -1229,7 +1229,6 @@ const styles = StyleSheet.create({
   groupTitle: {
     fontSize: 14,
     fontWeight: '600',
-    textTransform: 'capitalize',
   },
   groupList: {
     overflow: 'hidden',
