@@ -183,7 +183,14 @@ export function localizeIngredient(
     entityOverrides?.description,
   );
 
-  const localizedSynonyms = normalizeSynonymList(ingredient.synonyms);
+  const overrideSynonyms = entityOverrides?.synonyms;
+  const overlaySynonyms = parseSynonymsValue(
+    getCatalogFieldTranslation(locale, 'ingredient', ingredient.id, 'synonyms'),
+  );
+  const localizedSynonyms =
+    (overrideSynonyms && overrideSynonyms.length > 0 ? normalizeSynonymList(overrideSynonyms) : undefined)
+    ?? (overlaySynonyms.length > 0 ? overlaySynonyms : undefined)
+    ?? normalizeSynonymList(ingredient.synonyms);
   const localizedSearch = buildLocalizedSearchFields(localizedName, localizedSynonyms);
 
   return {
