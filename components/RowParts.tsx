@@ -63,10 +63,12 @@ export function TagDot({ color = tagColors.default }: TagDotProps) {
 type PresenceCheckProps = {
   checked: boolean;
   onToggle?: () => void;
+  onPressIn?: () => void;
+  onPressOut?: () => void;
   color?: string;
 };
 
-export function PresenceCheck({ checked, onToggle, color }: PresenceCheckProps) {
+export function PresenceCheck({ checked, onToggle, onPressIn, onPressOut, color }: PresenceCheckProps) {
   const Colors = useAppColors();
   const tintColor = color ?? Colors.tint;
   const idleColor = tintColor;
@@ -79,6 +81,8 @@ export function PresenceCheck({ checked, onToggle, color }: PresenceCheckProps) 
       accessibilityRole="checkbox"
       accessibilityState={{ checked }}
       onPress={onToggle}
+      onPressIn={onPressIn}
+      onPressOut={onPressOut}
       style={[styles.checkbox, { borderColor, backgroundColor }]}
       hitSlop={16}>
       <MaterialCommunityIcons name="check" color={iconColor} size={12} />

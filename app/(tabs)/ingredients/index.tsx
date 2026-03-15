@@ -109,11 +109,31 @@ const IngredientListItem = memo(function IngredientListItemComponent({
     .map((tag) => tag?.color ?? tagColors.yellow)
     .filter(Boolean);
 
+  const [isCheckboxPressActive, setIsCheckboxPressActive] = useState(false);
+  const [optimisticAvailability, setOptimisticAvailability] = useState<boolean | null>(null);
+
+  const effectiveAvailability = optimisticAvailability ?? isAvailable;
+
+  useEffect(() => {
+    if (optimisticAvailability === isAvailable) {
+      setOptimisticAvailability(null);
+    }
+  }, [isAvailable, optimisticAvailability]);
+
   const handleToggleAvailability = useCallback(() => {
     if (ingredientId >= 0) {
+      setOptimisticAvailability((previous) => !(previous ?? isAvailable));
       onToggleAvailability(ingredientId);
     }
-  }, [ingredientId, onToggleAvailability]);
+  }, [ingredientId, isAvailable, onToggleAvailability]);
+
+  const handleCheckboxPressIn = useCallback(() => {
+    setIsCheckboxPressActive(true);
+  }, []);
+
+  const handleCheckboxPressOut = useCallback(() => {
+    setIsCheckboxPressActive(false);
+  }, []);
 
   const handleShoppingToggle = useCallback(() => {
     if (ingredientId >= 0 && onShoppingToggle) {
@@ -192,13 +212,26 @@ const IngredientListItem = memo(function IngredientListItemComponent({
     return (
       <View style={styles.presenceSlot}>
         {showAvailabilityToggle ? (
-          <PresenceCheck checked={isAvailable} onToggle={handleToggleAvailability} />
+          <PresenceCheck
+            checked={effectiveAvailability}
+            onToggle={handleToggleAvailability}
+            onPressIn={handleCheckboxPressIn}
+            onPressOut={handleCheckboxPressOut}
+          />
         ) : (
           <View style={styles.presencePlaceholder} />
         )}
       </View>
     );
-  }, [handleToggleAvailability, isAvailable, onShoppingToggle, showAvailabilityToggle, shoppingControl]);
+  }, [
+    effectiveAvailability,
+    handleCheckboxPressIn,
+    handleCheckboxPressOut,
+    handleToggleAvailability,
+    onShoppingToggle,
+    showAvailabilityToggle,
+    shoppingControl,
+  ]);
 
   const handlePress = useCallback(() => {
     const routeParam = ingredient.id ?? ingredient.name;
@@ -219,7 +252,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
       subtitle={subtitle}
       subtitleStyle={subtitleStyle}
       onPress={handlePress}
-      selected={isAvailable}
+      selected={effectiveAvailability || isCheckboxPressActive}
       highlightColor={highlightColor}
       tagColors={ingredientTagColors}
       accessibilityRole="button"
