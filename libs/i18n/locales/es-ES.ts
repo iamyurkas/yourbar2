@@ -658,7 +658,7 @@ export const esESTranslations: TranslationDictionary = {
   "glassware.nick_and_nora": "Nick & Nora",
   "glassware.pitcher": "Jarra",
   "glassware.pub_glass": "Vaso de pinta",
-  "glassware.rocks_glass": "Vaso old fashioned",
+  "glassware.rocks_glass": "Vaso Old Fashioned",
   "glassware.shooter": "Chupito",
   "glassware.snifter": "Copa balón",
   "glassware.tiki_glass": "Vaso tiki",
