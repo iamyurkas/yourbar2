@@ -27,6 +27,7 @@ import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { useAppColors } from '@/constants/theme';
 import { isCocktailReady } from '@/libs/cocktail-availability';
 import { getLastIngredientTab, setLastIngredientTab, type IngredientTabKey } from '@/libs/collection-tabs';
+import { getLastIngredientListState, setLastIngredientListState } from '@/libs/ingredient-list-state';
 import { compareOptionalGlobalAlphabet } from '@/libs/global-sort';
 import { buildIngredientSortOptions, type IngredientSortOption } from '@/libs/ingredient-sort-options';
 import { getPluralCategory } from '@/libs/i18n/plural';
@@ -255,14 +256,15 @@ export default function IngredientsScreen() {
   const { cocktails, ingredients, availableIngredientIds, shoppingIngredientIds, loading } = useInventoryData();
   const { ignoreGarnish, allowAllSubstitutes, showTabCounters } = useInventorySettings();
   const { toggleIngredientShopping, toggleIngredientAvailability } = useInventoryActions();
-  const [activeTab, setActiveTab] = useState<IngredientTabKey>(() => getLastIngredientTab());
+  const initialListState = useMemo(() => getLastIngredientListState(), []);
+  const [activeTab, setActiveTab] = useState<IngredientTabKey>(() => initialListState.tab ?? getLastIngredientTab());
 
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState(initialListState.query);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isFilterMenuVisible, setFilterMenuVisible] = useState(false);
-  const [selectedTagKeys, setSelectedTagKeys] = useState<Set<string>>(() => new Set());
-  const [selectedSortOption, setSelectedSortOption] = useState<IngredientSortOption>('alphabetical');
-  const [isSortDescending, setSortDescending] = useState(false);
+  const [selectedTagKeys, setSelectedTagKeys] = useState<Set<string>>(() => new Set(initialListState.tagKeys));
+  const [selectedSortOption, setSelectedSortOption] = useState<IngredientSortOption>(initialListState.sort);
+  const [isSortDescending, setSortDescending] = useState(initialListState.isSortDescending);
   const [headerLayout, setHeaderLayout] = useState<LayoutRectangle | null>(null);
   const [filterAnchorLayout, setFilterAnchorLayout] = useState<LayoutRectangle | null>(null);
   const listRef = useRef<FlatList<Ingredient>>(null);
@@ -288,27 +290,35 @@ export default function IngredientsScreen() {
   }, []);
 
   useEffect(() => {
-    const parsedQuery = getParamValue(params.query);
-    setQuery((previous) => (previous === parsedQuery ? previous : parsedQuery));
+    const rawQuery = getParamValue(params.query);
+    const rawTab = getParamValue(params.tab);
+    const rawTags = getParamValue(params.tags);
+    const rawSort = getParamValue(params.sort);
+    const rawDesc = getParamValue(params.desc);
+    const hasListParams = [rawQuery, rawTab, rawTags, rawSort, rawDesc].some((value) => value.length > 0);
 
-    const parsedTab = getParamValue(params.tab);
-    const nextTab: IngredientTabKey = parsedTab === 'my' || parsedTab === 'shopping' ? parsedTab : 'all';
+    if (!hasListParams) {
+      return;
+    }
+
+    setQuery((previous) => (previous === rawQuery ? previous : rawQuery));
+
+    const nextTab: IngredientTabKey = rawTab === 'my' || rawTab === 'shopping' ? rawTab : 'all';
     setActiveTab((previous) => (previous === nextTab ? previous : nextTab));
 
-    const parsedTagKeys = getParamValue(params.tags)
+    const parsedTagKeys = rawTags
       .split(',')
       .map((item) => item.trim())
       .filter(Boolean);
     setSelectedTagKeys(() => new Set(parsedTagKeys));
 
-    const parsedSort = getParamValue(params.sort);
     const nextSortOption: IngredientSortOption =
-      parsedSort === 'unlocksMostCocktails' || parsedSort === 'mostUsed' || parsedSort === 'recentlyAdded'
-        ? parsedSort
+      rawSort === 'unlocksMostCocktails' || rawSort === 'mostUsed' || rawSort === 'recentlyAdded'
+        ? rawSort
         : 'alphabetical';
     setSelectedSortOption((previous) => (previous === nextSortOption ? previous : nextSortOption));
 
-    const nextSortDescending = getParamValue(params.desc) === '1';
+    const nextSortDescending = rawDesc === '1';
     setSortDescending((previous) => (previous === nextSortDescending ? previous : nextSortDescending));
   }, [getParamValue, params.desc, params.query, params.sort, params.tab, params.tags]);
 
@@ -347,6 +357,17 @@ export default function IngredientsScreen() {
   useEffect(() => {
     setLastIngredientTab(activeTab);
   }, [activeTab, t]);
+
+
+  useEffect(() => {
+    setLastIngredientListState({
+      query,
+      tab: activeTab,
+      tagKeys: [...selectedTagKeys],
+      sort: selectedSortOption,
+      isSortDescending,
+    });
+  }, [activeTab, isSortDescending, query, selectedSortOption, selectedTagKeys]);
 
   const availableTagOptions = useMemo<TagOption[]>(
     () =>
