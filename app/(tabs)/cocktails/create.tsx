@@ -310,6 +310,27 @@ export default function CreateCocktailScreen() {
     openInstanceIdParam,
     sourceParam,
   ]);
+  const ingredientCreateReturnParams = useMemo(() => {
+    const payload = {
+      mode: modeParam,
+      source: "ingredient",
+      ingredientId: ingredientParam,
+      ingredientName: ingredientNameParam,
+      cocktailId: cocktailParam,
+      cocktailName: cocktailNameParam,
+      openInstanceId: openInstanceIdParam,
+    };
+    const json = JSON.stringify(payload);
+    return json === "{}" ? formReturnParams : json;
+  }, [
+    cocktailNameParam,
+    cocktailParam,
+    formReturnParams,
+    ingredientNameParam,
+    ingredientParam,
+    modeParam,
+    openInstanceIdParam,
+  ]);
   const returnToPath = useMemo(() => {
     const value = getParamValue(params.returnToPath);
     return typeof value === "string" && value.length > 0 ? value : undefined;
@@ -1167,7 +1188,7 @@ export default function CreateCocktailScreen() {
             mode: "create",
             fromCocktailAddIngredient: "true",
             returnToPath: "/cocktails/create",
-            returnToParams: formReturnParams,
+            returnToParams: ingredientCreateReturnParams,
           },
         });
         return;
@@ -1179,11 +1200,11 @@ export default function CreateCocktailScreen() {
           suggestedName: trimmed,
           fromCocktailAddIngredient: "true",
           returnToPath: "/cocktails/create",
-          returnToParams: formReturnParams,
+          returnToParams: ingredientCreateReturnParams,
         },
       });
     },
-    [formReturnParams],
+    [ingredientCreateReturnParams],
   );
 
   const handleSelectSubstituteCandidate = useCallback(
