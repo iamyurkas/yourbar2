@@ -2946,5 +2946,20 @@
   "cocktail.621.instructions": "1. Fill a wine glass with **ice**.\n2. Add 90 ml of chilled **fino sherry**.\n3. Top with 90 ml of chilled **lemon-lime soda**.\n4. Stir briefly and garnish with a **mint** sprig.",
   "cocktail.622.name": "Marama Rum Punch",
   "cocktail.622.description": "A tropical rum punch with **white rum**, **passion fruit syrup**, **orange juice**, and **pineapple juice** balanced by **lime juice**.",
-  "cocktail.622.instructions": "1. Fill a shaker with **ice**.\n2. Add 45 ml of **white rum**, 30 ml of **pineapple juice**, 30 ml of **orange juice**, 22.5 ml of **lime juice**, and 15 ml of **passion fruit syrup**.\n3. Shake hard until chilled.\n4. Strain into a highball glass over fresh **ice**.\n5. Garnish with a **mint** sprig."
+  "cocktail.622.instructions": "1. Fill a shaker with **ice**.\n2. Add 45 ml of **white rum**, 30 ml of **pineapple juice**, 30 ml of **orange juice**, 22.5 ml of **lime juice**, and 15 ml of **passion fruit syrup**.\n3. Shake hard until chilled.\n4. Strain into a highball glass over fresh **ice**.\n5. Garnish with a **mint** sprig.",
+  "cocktail.623.name": "Winter",
+  "cocktail.623.description": "A warming whiskey sour variation with **bourbon**, **lemon juice**, **honey syrup**, and **allspice dram**, finished with **Angostura bitters**.",
+  "cocktail.623.instructions": "1. Add 60 ml of **bourbon**, 22.5 ml of **lemon juice**, 15 ml of **honey syrup**, 7.5 ml of **allspice dram**, and 2 dashes of **Angostura bitters** to a shaker with **ice**.\n2. Shake hard until well chilled.\n3. Fine strain into a chilled coupe glass.\n4. Garnish with an **orange** twist.",
+  "cocktail.624.name": "Sailor's Swizzle",
+  "cocktail.624.description": "A rich Caribbean-style swizzle with **dark rum**, **falernum**, **lime juice**, and **Angostura bitters**.",
+  "cocktail.624.instructions": "1. Fill a highball glass with crushed **ice**.\n2. Add 60 ml of **dark rum**, 22.5 ml of **lime juice**, 15 ml of **falernum**, 7.5 ml of **demerara sugar syrup**, and 2 dashes of **Angostura bitters**.\n3. Churn or swizzle until the glass is frosty.\n4. Top with extra crushed **ice** and garnish with a **mint** sprig.",
+  "cocktail.625.name": "Lion's Tail",
+  "cocktail.625.description": "A classic bourbon sour combining **bourbon**, **lime juice**, **allspice dram**, and bittersweet spice from **Angostura bitters**.",
+  "cocktail.625.instructions": "1. Add 60 ml of **bourbon**, 22.5 ml of **lime juice**, 7.5 ml of **allspice dram**, 7.5 ml of **simple syrup**, and 1 dash of **Angostura bitters** to a shaker with **ice**.\n2. Shake hard until chilled.\n3. Fine strain into a chilled coupe glass.\n4. Garnish with an **orange** twist.",
+  "cocktail.626.name": "Poison Dart",
+  "cocktail.626.description": "A vibrant tropical sour with **tequila blanco**, **mezcal**, **pineapple juice**, **lime juice**, and **falernum**.",
+  "cocktail.626.instructions": "1. Add 45 ml of **tequila blanco**, 15 ml of **mezcal**, 22.5 ml of **pineapple juice**, 22.5 ml of **lime juice**, 15 ml of **falernum**, and 7.5 ml of **honey syrup** to a shaker with **ice**.\n2. Shake hard until the shaker is cold.\n3. Strain into a coupe glass.\n4. Garnish with a **lime** wedge.",
+  "cocktail.627.name": "Nui Nui",
+  "cocktail.627.description": "A classic Don the Beachcomber-style tiki drink with **aged rum**, **dark rum**, citrus, and warm baking spices.",
+  "cocktail.627.instructions": "1. Add 30 ml of **aged rum**, 30 ml of **dark rum**, 22.5 ml of **lime juice**, 22.5 ml of **orange juice**, 15 ml of **cinnamon syrup**, 7.5 ml of **vanilla syrup**, and 7.5 ml of **allspice dram** to a shaker with **ice**.\n2. Shake hard until chilled.\n3. Strain into a rocks glass over fresh **ice**.\n4. Garnish with an **orange** slice."
 }

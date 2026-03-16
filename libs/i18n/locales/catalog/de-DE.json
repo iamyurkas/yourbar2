@@ -2963,8 +2963,7 @@
   "cocktail.618.instructions": "1. Eine Coupette kühlen, mit **Absinth** ausspülen und den Überschuss verwerfen.\n2. **Weißen Rum**, **Limettensaft**, **Falernum**, **Orangenmarmelade** und **Angostura Bitters** in einen Shaker mit Eis geben.\n3. Kräftig shaken und fein in das vorbereitete Glas abseihen.",
   "cocktail.619.name": "Crosstree",
   "cocktail.619.description": "Ein heller, funky Sour: **Overproof Rum**, **Bianco Wermut**, **Ananassaft** und **Limette**, akzentuiert mit Vanille und **Absinth**.",
-  "cocktail.619.instructions": "1. **Overproof Rum**, **Bianco Wermut**, **Ananassaft**, **Limettensaft**, **Vanillesirup** und **Absinth** in einen Shaker mit Eis geben.\n2. Kräftig shaken, bis gut gekühlt.\n3. Fein in eine gekühlte Coupette abseihen."
-,
+  "cocktail.619.instructions": "1. **Overproof Rum**, **Bianco Wermut**, **Ananassaft**, **Limettensaft**, **Vanillesirup** und **Absinth** in einen Shaker mit Eis geben.\n2. Kräftig shaken, bis gut gekühlt.\n3. Fein in eine gekühlte Coupette abseihen.",
   "cocktail.620.name": "Mint Limeade",
   "cocktail.620.synonyms": "Mint Limeade",
   "cocktail.620.description": "Ein alkoholfreier, kühlender Lime-Cooler mit frischer **Minze**, **Limettensaft** und **Sodawasser**.",
@@ -2976,5 +2975,20 @@
   "cocktail.622.name": "Marama Rum Punch",
   "cocktail.622.synonyms": "Marama Rum Punch",
   "cocktail.622.description": "Ein tropischer Rum Punch mit **weißem Rum**, **Passionsfruchtsirup**, **Orangensaft** und **Ananassaft**, ausbalanciert mit **Limettensaft**.",
-  "cocktail.622.instructions": "1. Einen Shaker mit **Eis** füllen.\n2. 45 ml **weißen Rum**, 30 ml **Ananassaft**, 30 ml **Orangensaft**, 22.5 ml **Limettensaft** und 15 ml **Passionsfruchtsirup** zugeben.\n3. Kräftig shaken, bis alles gut gekühlt ist.\n4. In ein Highball-Glas mit frischem **Eis** abseihen.\n5. Mit einem **Minze**zweig garnieren."
+  "cocktail.622.instructions": "1. Einen Shaker mit **Eis** füllen.\n2. 45 ml **weißen Rum**, 30 ml **Ananassaft**, 30 ml **Orangensaft**, 22.5 ml **Limettensaft** und 15 ml **Passionsfruchtsirup** zugeben.\n3. Kräftig shaken, bis alles gut gekühlt ist.\n4. In ein Highball-Glas mit frischem **Eis** abseihen.\n5. Mit einem **Minze**zweig garnieren.",
+  "cocktail.623.name": "Winter",
+  "cocktail.623.description": "Eine wärmende Whiskey-Sour-Variante mit **Bourbon**, **Zitronensaft**, **Honigsirup** und **Piment Dram**, abgerundet mit **Angostura Bitters**.",
+  "cocktail.623.instructions": "1. 60 ml **Bourbon**, 22.5 ml **Zitronensaft**, 15 ml **Honigsirup**, 7.5 ml **Piment Dram** und 2 Dashes **Angostura Bitters** mit **Eis** in einen Shaker geben.\n2. Kräftig shaken, bis alles gut gekühlt ist.\n3. Fein in eine gekühlte Coupette abseihen.\n4. Mit einer **Orangen**zeste garnieren.",
+  "cocktail.624.name": "Sailor's Swizzle",
+  "cocktail.624.description": "Ein kräftiger Swizzle im Karibik-Stil mit **dunklem Rum**, **Falernum**, **Limettensaft** und **Angostura Bitters**.",
+  "cocktail.624.instructions": "1. Ein Highball-Glas mit Crushed **Eis** füllen.\n2. 60 ml **dunklen Rum**, 22.5 ml **Limettensaft**, 15 ml **Falernum**, 7.5 ml **Demerara-Zuckersirup** und 2 Dashes **Angostura Bitters** zugeben.\n3. Swizzlen oder umrühren, bis das Glas beschlägt.\n4. Mit weiterem Crushed **Eis** auffüllen und mit einem **Minze**zweig garnieren.",
+  "cocktail.625.name": "Lion's Tail",
+  "cocktail.625.description": "Ein klassischer Bourbon Sour mit **Bourbon**, **Limettensaft**, **Piment Dram** und würziger Bitternote von **Angostura Bitters**.",
+  "cocktail.625.instructions": "1. 60 ml **Bourbon**, 22.5 ml **Limettensaft**, 7.5 ml **Piment Dram**, 7.5 ml **Zuckersirup** und 1 Dash **Angostura Bitters** mit **Eis** in einen Shaker geben.\n2. Kräftig shaken, bis alles gut gekühlt ist.\n3. Fein in eine gekühlte Coupette abseihen.\n4. Mit einer **Orangen**zeste garnieren.",
+  "cocktail.626.name": "Poison Dart",
+  "cocktail.626.description": "Ein lebhafter tropischer Sour mit **Tequila Blanco**, **Mezcal**, **Ananassaft**, **Limettensaft** und **Falernum**.",
+  "cocktail.626.instructions": "1. 45 ml **Tequila Blanco**, 15 ml **Mezcal**, 22.5 ml **Ananassaft**, 22.5 ml **Limettensaft**, 15 ml **Falernum** und 7.5 ml **Honigsirup** mit **Eis** in einen Shaker geben.\n2. Kräftig shaken, bis der Shaker kalt ist.\n3. In eine Coupette abseihen.\n4. Mit einer **Limetten**spalte garnieren.",
+  "cocktail.627.name": "Nui Nui",
+  "cocktail.627.description": "Ein klassischer Tiki-Drink im Stil von Don the Beachcomber mit **gereiftem Rum**, **dunklem Rum**, Zitrusnoten und warmen Backgewürzen.",
+  "cocktail.627.instructions": "1. 30 ml **gereiften Rum**, 30 ml **dunklen Rum**, 22.5 ml **Limettensaft**, 22.5 ml **Orangensaft**, 15 ml **Zimtsirup**, 7.5 ml **Vanillesirup** und 7.5 ml **Piment Dram** mit **Eis** in einen Shaker geben.\n2. Kräftig shaken, bis alles gut gekühlt ist.\n3. In ein Rocks-Glas auf frisches **Eis** abseihen.\n4. Mit einer **Orangen**scheibe garnieren."
 }

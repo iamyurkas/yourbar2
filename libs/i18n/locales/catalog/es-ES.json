@@ -3205,8 +3205,7 @@
   "cocktail.618.instructions": "1. Enfría una copa coupe, enjuágala con **absenta** y desecha el exceso.\n2. Añade a una coctelera con hielo **ron blanco**, **zumo de lima**, **falernum**, **mermelada de naranja** y **bíteres de Angostura**.\n3. Agita con fuerza y cuela fino en la copa preparada.",
   "cocktail.619.name": "Crosstree",
   "cocktail.619.description": "Un sour agitado brillante y funky con **ron overproof**, **vermút bianco**, **zumo de piña** y **lima**, con acentos de vainilla y **absenta**.",
-  "cocktail.619.instructions": "1. Añade a una coctelera con hielo **ron overproof**, **vermút bianco**, **zumo de piña**, **zumo de lima**, **sirope de vainilla** y **absenta**.\n2. Agita con fuerza hasta enfriar bien.\n3. Cuela fino en una copa coupe fría."
-,
+  "cocktail.619.instructions": "1. Añade a una coctelera con hielo **ron overproof**, **vermút bianco**, **zumo de piña**, **zumo de lima**, **sirope de vainilla** y **absenta**.\n2. Agita con fuerza hasta enfriar bien.\n3. Cuela fino en una copa coupe fría.",
   "cocktail.620.name": "Mint Limeade",
   "cocktail.620.synonyms": "Mint Limeade",
   "cocktail.620.description": "Un refresco de lima sin alcohol, muy fresco, con **menta**, **zumo de lima** y **soda**.",
@@ -3218,5 +3217,20 @@
   "cocktail.622.name": "Marama Rum Punch",
   "cocktail.622.synonyms": "Marama Rum Punch",
   "cocktail.622.description": "Un ponche tropical con **ron blanco**, **jarabe de fruta de la pasión**, **zumo de naranja** y **zumo de piña**, equilibrado con **zumo de lima**.",
-  "cocktail.622.instructions": "1. Llena una coctelera con **hielo**.\n2. Añade 45 ml de **ron blanco**, 30 ml de **zumo de piña**, 30 ml de **zumo de naranja**, 22.5 ml de **zumo de lima** y 15 ml de **jarabe de fruta de la pasión**.\n3. Agita con fuerza hasta enfriar.\n4. Cuela en un vaso highball con **hielo** fresco.\n5. Decora con una ramita de **menta**."
+  "cocktail.622.instructions": "1. Llena una coctelera con **hielo**.\n2. Añade 45 ml de **ron blanco**, 30 ml de **zumo de piña**, 30 ml de **zumo de naranja**, 22.5 ml de **zumo de lima** y 15 ml de **jarabe de fruta de la pasión**.\n3. Agita con fuerza hasta enfriar.\n4. Cuela en un vaso highball con **hielo** fresco.\n5. Decora con una ramita de **menta**.",
+  "cocktail.623.name": "Winter",
+  "cocktail.623.description": "Una variación reconfortante del whiskey sour con **bourbon**, **zumo de limón**, **jarabe de miel** y **allspice dram**, rematada con **bíteres de Angostura**.",
+  "cocktail.623.instructions": "1. Añade 60 ml de **bourbon**, 22.5 ml de **zumo de limón**, 15 ml de **jarabe de miel**, 7.5 ml de **allspice dram** y 2 golpes de **bíteres de Angostura** a una coctelera con **hielo**.\n2. Agita con fuerza hasta enfriar bien.\n3. Cuela fino en una copa coupe fría.\n4. Decora con un twist de **naranja**.",
+  "cocktail.624.name": "Sailor's Swizzle",
+  "cocktail.624.description": "Un swizzle intenso de estilo caribeño con **ron oscuro**, **falernum**, **zumo de lima** y **bíteres de Angostura**.",
+  "cocktail.624.instructions": "1. Llena un vaso highball con **hielo** picado.\n2. Añade 60 ml de **ron oscuro**, 22.5 ml de **zumo de lima**, 15 ml de **falernum**, 7.5 ml de **jarabe de azúcar de demerara** y 2 golpes de **bíteres de Angostura**.\n3. Remueve con técnica swizzle hasta que el vaso esté escarchado.\n4. Completa con más **hielo** picado y decora con una ramita de **menta**.",
+  "cocktail.625.name": "Lion's Tail",
+  "cocktail.625.description": "Un sour clásico de bourbon con **bourbon**, **zumo de lima**, **allspice dram** y toque especiado de **bíteres de Angostura**.",
+  "cocktail.625.instructions": "1. Añade 60 ml de **bourbon**, 22.5 ml de **zumo de lima**, 7.5 ml de **allspice dram**, 7.5 ml de **jarabe simple** y 1 golpe de **bíteres de Angostura** a una coctelera con **hielo**.\n2. Agita con fuerza hasta enfriar.\n3. Cuela fino en una copa coupe fría.\n4. Decora con un twist de **naranja**.",
+  "cocktail.626.name": "Poison Dart",
+  "cocktail.626.description": "Un sour tropical vibrante con **tequila blanco**, **mezcal**, **zumo de piña**, **zumo de lima** y **falernum**.",
+  "cocktail.626.instructions": "1. Añade 45 ml de **tequila blanco**, 15 ml de **mezcal**, 22.5 ml de **zumo de piña**, 22.5 ml de **zumo de lima**, 15 ml de **falernum** y 7.5 ml de **jarabe de miel** a una coctelera con **hielo**.\n2. Agita con fuerza hasta que la coctelera esté bien fría.\n3. Cuela en una copa coupe.\n4. Decora con un gajo de **lima**.",
+  "cocktail.627.name": "Nui Nui",
+  "cocktail.627.description": "Un clásico tiki al estilo Don the Beachcomber con **ron añejo**, **ron oscuro**, cítricos y especias cálidas de repostería.",
+  "cocktail.627.instructions": "1. Añade 30 ml de **ron añejo**, 30 ml de **ron oscuro**, 22.5 ml de **zumo de lima**, 22.5 ml de **zumo de naranja**, 15 ml de **jarabe de canela**, 7.5 ml de **jarabe de vainilla** y 7.5 ml de **allspice dram** a una coctelera con **hielo**.\n2. Agita con fuerza hasta enfriar.\n3. Cuela en un vaso bajo con **hielo** fresco.\n4. Decora con una rodaja de **naranja**."
 }
