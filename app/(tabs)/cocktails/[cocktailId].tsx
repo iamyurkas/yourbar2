@@ -570,7 +570,7 @@ export default function CocktailDetailsScreen() {
   const handleReturn = useCallback(() => {
     persistCommentDraftRef.current();
 
-    if (returnToPath === "/cocktails") {
+    if (returnToPath === "/cocktails" && !returnToParams) {
       skipDuplicateBack(navigation);
       return;
     }
