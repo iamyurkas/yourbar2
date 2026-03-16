@@ -24,9 +24,11 @@ export function TabBarButton({ onOpenDialog, onboardingTargetId, ...props }: Tab
     saveHandler,
     setHasUnsavedChanges,
     setRequireLeaveConfirmation,
+    markSkipNextLeaveConfirmation,
   } = useUnsavedChanges();
   const handlePress = useCallback((event: TabBarPressEvent) => {
     const proceed = () => {
+      markSkipNextLeaveConfirmation();
       setHasUnsavedChanges(false);
       setRequireLeaveConfirmation(false);
       props.onPress?.(event);
@@ -52,6 +54,7 @@ export function TabBarButton({ onOpenDialog, onboardingTargetId, ...props }: Tab
     props,
     requireLeaveConfirmation,
     saveHandler,
+    markSkipNextLeaveConfirmation,
     setHasUnsavedChanges,
     setRequireLeaveConfirmation,
     t,

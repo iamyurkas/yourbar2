@@ -188,7 +188,12 @@ export default function IngredientFormScreen() {
     customIngredientTags,
     createCustomIngredientTag,
   } = useInventory();
-  const { setHasUnsavedChanges, setRequireLeaveConfirmation, setSaveHandler } = useUnsavedChanges();
+  const {
+    setHasUnsavedChanges,
+    setRequireLeaveConfirmation,
+    setSaveHandler,
+    consumeSkipNextLeaveConfirmation,
+  } = useUnsavedChanges();
   const isNavigatingAfterSaveRef = useRef(false);
 
   const ingredient = useResolvedIngredient(ingredientParam, ingredients);
@@ -889,6 +894,10 @@ export default function IngredientFormScreen() {
         return;
       }
 
+      if (consumeSkipNextLeaveConfirmation()) {
+        return;
+      }
+
       const backAction = isBackAction(event.data.action);
       if (hasUnsavedChanges || shouldConfirmOnLeave || backAction) {
         event.preventDefault();
@@ -897,7 +906,14 @@ export default function IngredientFormScreen() {
     });
 
     return unsubscribe;
-  }, [handleLeaveAction, hasUnsavedChanges, isBackAction, navigation, shouldConfirmOnLeave]);
+  }, [
+    consumeSkipNextLeaveConfirmation,
+    handleLeaveAction,
+    hasUnsavedChanges,
+    isBackAction,
+    navigation,
+    shouldConfirmOnLeave,
+  ]);
 
   useFocusEffect(
     useCallback(() => {
