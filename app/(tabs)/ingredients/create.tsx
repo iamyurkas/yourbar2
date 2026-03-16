@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
-import { useFocusEffect, useNavigation, type NavigationAction } from '@react-navigation/native';
+import { useFocusEffect, useIsFocused, useNavigation, type NavigationAction } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -75,6 +75,7 @@ function useResolvedIngredient(param: string | undefined, ingredients: Ingredien
 }
 
 export default function IngredientFormScreen() {
+  const isFocused = useIsFocused();
   const params = useLocalSearchParams<{
     suggestedName?: string;
     returnTo?: string;
@@ -334,15 +335,31 @@ export default function IngredientFormScreen() {
   }, [buildSnapshot, initialSnapshot]);
 
   useEffect(() => {
-    setHasUnsavedChanges(hasUnsavedChanges || shouldConfirmOnLeave);
-  }, [hasUnsavedChanges, setHasUnsavedChanges, shouldConfirmOnLeave]);
+    setHasUnsavedChanges(isFocused && (hasUnsavedChanges || shouldConfirmOnLeave));
+  }, [hasUnsavedChanges, isFocused, setHasUnsavedChanges, shouldConfirmOnLeave]);
 
   useEffect(() => {
-    setRequireLeaveConfirmation(shouldConfirmOnLeave);
+    setRequireLeaveConfirmation(isFocused && shouldConfirmOnLeave);
     return () => {
       setRequireLeaveConfirmation(false);
     };
-  }, [setRequireLeaveConfirmation, shouldConfirmOnLeave]);
+  }, [isFocused, setRequireLeaveConfirmation, shouldConfirmOnLeave]);
+
+  useFocusEffect(
+    useCallback(() => {
+      setHasUnsavedChanges(hasUnsavedChanges || shouldConfirmOnLeave);
+      setRequireLeaveConfirmation(shouldConfirmOnLeave);
+      return () => {
+        setHasUnsavedChanges(false);
+        setRequireLeaveConfirmation(false);
+      };
+    }, [
+      hasUnsavedChanges,
+      setHasUnsavedChanges,
+      setRequireLeaveConfirmation,
+      shouldConfirmOnLeave,
+    ]),
+  );
 
   useEffect(() => () => {
     setHasUnsavedChanges(false);
