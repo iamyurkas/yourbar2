@@ -2922,5 +2922,14 @@
   "cocktail.614.name": "Bloody Caesar",
   "cocktail.614.synonyms": "Cesar, Ceasar",
   "cocktail.614.description": "Often just called a **Caesar**, Canada's national cocktail. While it looks like a Bloody Mary, the key difference is Clamato juice — a blend of tomato juice and clam broth — which gives it a distinct savory, briny umami kick.",
-  "cocktail.614.instructions": "1. Rub a fresh **lime** wedge around the rim of a highball glass. Dip the rim into **celery salt** or a Caesar rimmer spice blend until coated.\n2. Fill the glass with ice cubes. Pour in the **vodka**, **hot sauce**, and **Worcestershire sauce**.\n3. Top the glass with **Clamato juice**. Stir well with a long spoon or roll the drink by pouring it back and forth between two glasses.\n4. Add a **celery** stalk and the **lime** wedge."
+  "cocktail.614.instructions": "1. Rub a fresh **lime** wedge around the rim of a highball glass. Dip the rim into **celery salt** or a Caesar rimmer spice blend until coated.\n2. Fill the glass with ice cubes. Pour in the **vodka**, **hot sauce**, and **Worcestershire sauce**.\n3. Top the glass with **Clamato juice**. Stir well with a long spoon or roll the drink by pouring it back and forth between two glasses.\n4. Add a **celery** stalk and the **lime** wedge.",
+  "cocktail.615.name": "Jäger Negroni",
+  "cocktail.615.description": "A lightly spicy **Negroni** perfectly suited as an after-dinner digestif. **Jägermeister** adds an interesting blend of herbal flavours which combine with the **gin**'s herbals to create a burst of tastes.",
+  "cocktail.615.instructions": "1. Fill a mixing glass with **ice**.\n2. Add 22.5 ml **gin**, 22.5 ml **red vermouth**, 22.5 ml **Jägermeister**, and 7.5 ml **Campari**.\n3. Briefly stir until well chilled.\n4. Strain into a chilled rocks glass filled with fresh **ice**.\n5. Express oils from an **orange** peel over the drink and use it as a garnish.",
+  "cocktail.616.name": "Jäger Old-Fashioned",
+  "cocktail.616.description": "Rewarding, chocolatey, and boozy with complex herbal and fruity notes. The spice of **Jägermeister** perfectly complements the **chocolate bitters** and **bourbon**.",
+  "cocktail.616.instructions": "1. Fill a mixing glass with **ice**.\n2. Add 40 ml **Jägermeister**, 20 ml **bourbon**, 5 ml **maple syrup**, and 3 dashes **chocolate bitters**.\n3. Stir until well chilled.\n4. Strain into a chilled rocks glass filled with fresh **ice**.\n5. Express oils from an **orange** peel over the cocktail and use it as a garnish, along with a **maraschino cherry**.",
+  "cocktail.617.name": "Élysée Treaty",
+  "cocktail.617.description": "Cognac-laced, zesty, and bittersweet. A sophisticated after-dinner cocktail where **cognac** is enhanced by herbal **Jägermeister** and **orange bitters**.",
+  "cocktail.617.instructions": "1. Fill a shaker with **ice**.\n2. Add 40 ml **cognac**, 20 ml **Jägermeister**, 10 ml **rich simple syrup**, and 3 dashes **orange bitters**.\n3. Shake all ingredients vigorously until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Express oils from an **orange** peel over the drink and use it as a garnish."
 }
