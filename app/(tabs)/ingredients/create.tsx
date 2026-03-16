@@ -342,6 +342,15 @@ export default function IngredientFormScreen() {
     setHasUnsavedChanges(hasUnsavedChanges || shouldConfirmOnLeave);
   }, [hasUnsavedChanges, isFocused, setHasUnsavedChanges, shouldConfirmOnLeave]);
 
+  useFocusEffect(
+    useCallback(() => {
+      setHasUnsavedChanges(hasUnsavedChanges || shouldConfirmOnLeave);
+      return () => {
+        setHasUnsavedChanges(false);
+      };
+    }, [hasUnsavedChanges, setHasUnsavedChanges, shouldConfirmOnLeave]),
+  );
+
   useEffect(() => {
     if (!isFocused) {
       return;
