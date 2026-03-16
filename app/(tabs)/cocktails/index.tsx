@@ -1,7 +1,7 @@
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { useScrollToTop } from '@react-navigation/native';
 import { Image } from 'expo-image';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   FlatList,
@@ -34,7 +34,7 @@ import { compareOptionalGlobalAlphabet } from '@/libs/global-sort';
 import { getPluralCategory } from '@/libs/i18n/plural';
 import { useI18n } from '@/libs/i18n/use-i18n';
 import { createIngredientLookup } from '@/libs/ingredient-availability';
-import { navigateToDetailsWithReturnTo } from '@/libs/navigation';
+import { buildReturnToParams, navigateToDetailsWithReturnTo } from '@/libs/navigation';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { buildTagOptions, type TagOption } from '@/libs/tag-options';
 import { useCocktailTabLogic, type MyTabListItem } from '@/libs/use-cocktail-tab-logic';
@@ -109,8 +109,84 @@ export default function CocktailsScreen() {
     lastScrollOffset.current = event.nativeEvent.contentOffset.y;
   }, []);
   const router = useRouter();
+  const params = useLocalSearchParams<{
+    query?: string | string[];
+    tab?: string | string[];
+    tags?: string | string[];
+    methods?: string | string[];
+    ratings?: string | string[];
+    sort?: string | string[];
+    desc?: string | string[];
+  }>();
   const ingredientLookup = useMemo(() => createIngredientLookup(ingredients), [ingredients]);
   const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
+
+  const getParamValue = useCallback((value?: string | string[]) => {
+    if (Array.isArray(value)) {
+      return value[0] ?? '';
+    }
+
+    return value ?? '';
+  }, []);
+
+  useEffect(() => {
+    const parsedQuery = getParamValue(params.query);
+    setQuery((previous) => (previous === parsedQuery ? previous : parsedQuery));
+
+    const parsedTab = getParamValue(params.tab);
+    const nextTab: CocktailTabKey = parsedTab === 'my' || parsedTab === 'favorites' ? parsedTab : 'all';
+    setActiveTab((previous) => (previous === nextTab ? previous : nextTab));
+
+    const parsedTagKeys = getParamValue(params.tags)
+      .split(',')
+      .map((item) => item.trim())
+      .filter(Boolean);
+    setSelectedTagKeys(() => new Set(parsedTagKeys));
+
+    const parsedMethodIds = getParamValue(params.methods)
+      .split(',')
+      .map((item) => item.trim())
+      .filter((item): item is CocktailMethod['id'] => Boolean(getCocktailMethods().find((method) => method.id === item)));
+    setSelectedMethodIds(() => new Set(parsedMethodIds));
+
+    const parsedRatings = getParamValue(params.ratings)
+      .split(',')
+      .map((item) => Number(item.trim()))
+      .filter((value) => Number.isFinite(value) && value >= 1 && value <= 5);
+    setSelectedStarRatings(() => new Set(parsedRatings));
+
+    const parsedSort = getParamValue(params.sort);
+    const nextSortOption: CocktailSortOption =
+      parsedSort === 'requiredCount' || parsedSort === 'rating' || parsedSort === 'recentlyAdded' || parsedSort === 'random'
+        ? parsedSort
+        : 'alphabetical';
+    setSelectedSortOption((previous) => (previous === nextSortOption ? previous : nextSortOption));
+
+    const nextSortDescending = getParamValue(params.desc) === '1';
+    setSortDescending((previous) => (previous === nextSortDescending ? previous : nextSortDescending));
+  }, [
+    getParamValue,
+    params.desc,
+    params.methods,
+    params.query,
+    params.ratings,
+    params.sort,
+    params.tab,
+    params.tags,
+  ]);
+
+  const listReturnToParams = useMemo<Record<string, string | undefined>>(
+    () => ({
+      query: query.length > 0 ? query : undefined,
+      tab: activeTab,
+      tags: selectedTagKeys.size > 0 ? [...selectedTagKeys].sort().join(',') : undefined,
+      methods: selectedMethodIds.size > 0 ? [...selectedMethodIds].sort().join(',') : undefined,
+      ratings: selectedStarRatings.size > 0 ? [...selectedStarRatings].sort((a, b) => a - b).join(',') : undefined,
+      sort: selectedSortOption,
+      desc: isSortDescending ? '1' : undefined,
+    }),
+    [activeTab, isSortDescending, query, selectedMethodIds, selectedSortOption, selectedStarRatings, selectedTagKeys],
+  );
 
   useEffect(() => {
     setLastCocktailTab(activeTab);
@@ -617,9 +693,10 @@ export default function CocktailsScreen() {
         pathname: '/cocktails/[cocktailId]',
         params: { cocktailId: String(candidateId) },
         returnToPath: '/cocktails',
+        returnToParams: listReturnToParams,
       });
     },
-    [],
+    [listReturnToParams],
   );
 
   const handleSelectIngredient = useCallback(
@@ -629,10 +706,11 @@ export default function CocktailsScreen() {
           pathname: '/ingredients/[ingredientId]',
           params: { ingredientId: String(ingredientId) },
           returnToPath: '/cocktails',
+          returnToParams: listReturnToParams,
         });
       }
     },
-    [],
+    [listReturnToParams],
   );
 
   const handleShoppingToggle = useCallback(
@@ -1139,7 +1217,13 @@ export default function CocktailsScreen() {
       <FabAdd
         label={t("cocktails.addCocktail")}
         onPress={() =>
-          router.push({ pathname: '/cocktails/create', params: { source: 'cocktails' } })
+          router.push({
+            pathname: '/cocktails/create',
+            params: {
+              source: 'cocktails',
+              ...buildReturnToParams('/cocktails', listReturnToParams),
+            },
+          })
         }
       />
       <SideMenuDrawer visible={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
