@@ -1549,13 +1549,14 @@ export default function CreateCocktailScreen() {
             variant: "destructive",
             onPress: () => {
               setHasUnsavedChanges(false);
+              setRequireLeaveConfirmation(false);
               onLeave();
             },
           },
         ],
       });
     },
-    [handleSubmit, setHasUnsavedChanges, showDialog, t],
+    [handleSubmit, setHasUnsavedChanges, setRequireLeaveConfirmation, showDialog, t],
   );
 
   useEffect(() => {

@@ -811,13 +811,14 @@ export default function IngredientFormScreen() {
             variant: 'destructive',
             onPress: () => {
               setHasUnsavedChanges(false);
+              setRequireLeaveConfirmation(false);
               onLeave();
             },
           },
         ],
       });
     },
-    [handleSubmit, setHasUnsavedChanges, showDialog, t],
+    [handleSubmit, setHasUnsavedChanges, setRequireLeaveConfirmation, showDialog, t],
   );
 
   useEffect(() => {
