@@ -1,6 +1,6 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import { useScrollToTop } from '@react-navigation/native';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { memo, useCallback, useDeferredValue, useEffect, useMemo, useRef, useState, useTransition } from 'react';
 import {
   FlatList,
@@ -35,7 +35,7 @@ import {
   createIngredientLookup,
   getVisibleIngredientIdsForCocktail,
 } from '@/libs/ingredient-availability';
-import { navigateToDetailsWithReturnTo } from '@/libs/navigation';
+import { buildReturnToParams, navigateToDetailsWithReturnTo } from '@/libs/navigation';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { buildTagOptions, type TagOption } from '@/libs/tag-options';
 import {
@@ -65,6 +65,7 @@ type IngredientListItemProps = {
   isOnShoppingList: boolean;
   showAvailabilityToggle?: boolean;
   onShoppingToggle?: (id: number) => void;
+  returnToParams?: Record<string, string | undefined>;
 };
 
 type IngredientRowMeta = {
@@ -88,7 +89,8 @@ const areIngredientPropsEqual = (
   prev.surfaceVariantColor === next.surfaceVariantColor &&
   prev.isOnShoppingList === next.isOnShoppingList &&
   prev.showAvailabilityToggle === next.showAvailabilityToggle &&
-  prev.onShoppingToggle === next.onShoppingToggle;
+  prev.onShoppingToggle === next.onShoppingToggle &&
+  prev.returnToParams === next.returnToParams;
 
 const IngredientListItem = memo(function IngredientListItemComponent({
   ingredient,
@@ -102,6 +104,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
   isOnShoppingList,
   showAvailabilityToggle = true,
   onShoppingToggle,
+  returnToParams,
 }: IngredientListItemProps) {
   const Colors = useAppColors();
   const ingredientId = Number(ingredient.id ?? -1);
@@ -210,8 +213,9 @@ const IngredientListItem = memo(function IngredientListItemComponent({
       pathname: '/ingredients/[ingredientId]',
       params: { ingredientId: String(routeParam) },
       returnToPath: '/ingredients',
+      returnToParams,
     });
-  }, [ingredient.id, ingredient.name]);
+  }, [ingredient.id, ingredient.name, returnToParams]);
 
   const row = (
     <ListRow
@@ -239,6 +243,13 @@ const IngredientListItem = memo(function IngredientListItemComponent({
 
 export default function IngredientsScreen() {
   const router = useRouter();
+  const params = useLocalSearchParams<{
+    query?: string | string[];
+    tab?: string | string[];
+    tags?: string | string[];
+    sort?: string | string[];
+    desc?: string | string[];
+  }>();
   const Colors = useAppColors();
   const { t, locale } = useI18n();
   const { cocktails, ingredients, availableIngredientIds, shoppingIngredientIds, loading } = useInventoryData();
@@ -266,6 +277,51 @@ export default function IngredientsScreen() {
   const { registerControl } = useOnboarding();
 
   useScrollToTop(listRef);
+
+
+  const getParamValue = useCallback((value?: string | string[]) => {
+    if (Array.isArray(value)) {
+      return value[0] ?? '';
+    }
+
+    return value ?? '';
+  }, []);
+
+  useEffect(() => {
+    const parsedQuery = getParamValue(params.query);
+    setQuery((previous) => (previous === parsedQuery ? previous : parsedQuery));
+
+    const parsedTab = getParamValue(params.tab);
+    const nextTab: IngredientTabKey = parsedTab === 'my' || parsedTab === 'shopping' ? parsedTab : 'all';
+    setActiveTab((previous) => (previous === nextTab ? previous : nextTab));
+
+    const parsedTagKeys = getParamValue(params.tags)
+      .split(',')
+      .map((item) => item.trim())
+      .filter(Boolean);
+    setSelectedTagKeys(() => new Set(parsedTagKeys));
+
+    const parsedSort = getParamValue(params.sort);
+    const nextSortOption: IngredientSortOption =
+      parsedSort === 'unlocksMostCocktails' || parsedSort === 'mostUsed' || parsedSort === 'recentlyAdded'
+        ? parsedSort
+        : 'alphabetical';
+    setSelectedSortOption((previous) => (previous === nextSortOption ? previous : nextSortOption));
+
+    const nextSortDescending = getParamValue(params.desc) === '1';
+    setSortDescending((previous) => (previous === nextSortDescending ? previous : nextSortDescending));
+  }, [getParamValue, params.desc, params.query, params.sort, params.tab, params.tags]);
+
+  const listReturnToParams = useMemo<Record<string, string | undefined>>(
+    () => ({
+      query: query.length > 0 ? query : undefined,
+      tab: activeTab,
+      tags: selectedTagKeys.size > 0 ? [...selectedTagKeys].sort().join(',') : undefined,
+      sort: selectedSortOption,
+      desc: isSortDescending ? '1' : undefined,
+    }),
+    [activeTab, isSortDescending, query, selectedSortOption, selectedTagKeys],
+  );
 
   useEffect(() => {
     const wasEmpty = previousQuery.current.length === 0;
@@ -809,6 +865,7 @@ export default function IngredientsScreen() {
           isOnShoppingList={isOnShoppingList}
           showAvailabilityToggle={activeTab !== 'shopping'}
           onShoppingToggle={activeTab === 'shopping' ? handleShoppingToggle : undefined}
+          returnToParams={listReturnToParams}
         />
       );
     },
@@ -823,6 +880,7 @@ export default function IngredientsScreen() {
       shoppingIngredientIds,
       styleBaseIngredientIds,
       brandedBaseIngredientIds,
+      listReturnToParams,
     ],
   );
 
@@ -1024,7 +1082,10 @@ export default function IngredientsScreen() {
           />
         )}
       </View>
-      <FabAdd label={t('ingredients.addIngredient')} onPress={() => router.push('/ingredients/create')} />
+      <FabAdd
+        label={t('ingredients.addIngredient')}
+        onPress={() => router.push({ pathname: '/ingredients/create', params: buildReturnToParams('/ingredients', listReturnToParams) })}
+      />
       <SideMenuDrawer visible={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
     </SafeAreaView>
   );
