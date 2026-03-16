@@ -7,6 +7,8 @@ type UnsavedChangesContextValue = {
   setSaveHandler: (handler: (() => void) | null) => void;
   requireLeaveConfirmation: boolean;
   setRequireLeaveConfirmation: (value: boolean) => void;
+  markSkipNextLeaveConfirmation: () => void;
+  consumeSkipNextLeaveConfirmation: () => boolean;
 };
 
 const UnsavedChangesContext = createContext<UnsavedChangesContextValue | null>(null);
@@ -19,9 +21,23 @@ export function UnsavedChangesProvider({ children }: UnsavedChangesProviderProps
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [saveHandler, setSaveHandler] = useState<(() => void) | null>(null);
   const [requireLeaveConfirmation, setRequireLeaveConfirmation] = useState(false);
+  const skipNextLeaveConfirmationRef = React.useRef(false);
 
   const updateHasUnsavedChanges = useCallback((value: boolean) => {
     setHasUnsavedChanges(value);
+  }, []);
+
+  const markSkipNextLeaveConfirmation = useCallback(() => {
+    skipNextLeaveConfirmationRef.current = true;
+  }, []);
+
+  const consumeSkipNextLeaveConfirmation = useCallback(() => {
+    if (!skipNextLeaveConfirmationRef.current) {
+      return false;
+    }
+
+    skipNextLeaveConfirmationRef.current = false;
+    return true;
   }, []);
 
   const value = useMemo(
@@ -32,12 +48,16 @@ export function UnsavedChangesProvider({ children }: UnsavedChangesProviderProps
       setSaveHandler,
       requireLeaveConfirmation,
       setRequireLeaveConfirmation,
+      markSkipNextLeaveConfirmation,
+      consumeSkipNextLeaveConfirmation,
     }),
     [
       hasUnsavedChanges,
       requireLeaveConfirmation,
       saveHandler,
       updateHasUnsavedChanges,
+      markSkipNextLeaveConfirmation,
+      consumeSkipNextLeaveConfirmation,
     ],
   );
 

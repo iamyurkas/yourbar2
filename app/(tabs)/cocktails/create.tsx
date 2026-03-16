@@ -274,7 +274,12 @@ export default function CreateCocktailScreen() {
     useImperialUnits,
   } = useInventory();
   const params = useLocalSearchParams();
-  const { setHasUnsavedChanges, setRequireLeaveConfirmation, setSaveHandler } = useUnsavedChanges();
+  const {
+    setHasUnsavedChanges,
+    setRequireLeaveConfirmation,
+    setSaveHandler,
+    consumeSkipNextLeaveConfirmation,
+  } = useUnsavedChanges();
 
   const modeParam = getParamValue(params.mode);
   const isEditMode = modeParam === "edit";
@@ -1587,7 +1592,9 @@ export default function CreateCocktailScreen() {
       if (isNavigatingAfterSaveRef.current || isHandlingBackRef.current) {
         return;
       }
-
+      if (consumeSkipNextLeaveConfirmation()) {
+        return;
+      }
       if (hasUnsavedChanges || shouldConfirmOnLeave) {
         event.preventDefault();
         confirmLeave(() => {
@@ -1618,6 +1625,7 @@ export default function CreateCocktailScreen() {
     returnToPath,
     returnToParams,
     shouldConfirmOnLeave,
+    consumeSkipNextLeaveConfirmation,
   ]);
 
   const handleGoBack = useCallback(() => {

@@ -1,13 +1,13 @@
 import type { BottomTabBarButtonProps } from '@react-navigation/bottom-tabs';
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { View } from 'react-native';
 
-import { HapticTab } from '@/components/haptic-tab';
 import type { DialogOptions } from '@/components/AppDialog';
-import { useUnsavedChanges } from '@/providers/unsaved-changes-provider';
+import { HapticTab } from '@/components/haptic-tab';
 import { useI18n } from '@/libs/i18n/use-i18n';
-import { useOnboardingTarget } from '@/providers/onboarding-provider';
 import type { OnboardingTargetId } from '@/libs/onboarding-config';
+import { useOnboardingTarget } from '@/providers/onboarding-provider';
+import { useUnsavedChanges } from '@/providers/unsaved-changes-provider';
 
 type TabBarButtonProps = BottomTabBarButtonProps & {
   onOpenDialog: (options: DialogOptions) => void;
@@ -24,9 +24,11 @@ export function TabBarButton({ onOpenDialog, onboardingTargetId, ...props }: Tab
     saveHandler,
     setHasUnsavedChanges,
     setRequireLeaveConfirmation,
+    markSkipNextLeaveConfirmation,
   } = useUnsavedChanges();
   const handlePress = useCallback((event: TabBarPressEvent) => {
     const proceed = () => {
+      markSkipNextLeaveConfirmation();
       setHasUnsavedChanges(false);
       setRequireLeaveConfirmation(false);
       props.onPress?.(event);
@@ -52,6 +54,7 @@ export function TabBarButton({ onOpenDialog, onboardingTargetId, ...props }: Tab
     props,
     requireLeaveConfirmation,
     saveHandler,
+    markSkipNextLeaveConfirmation,
     setHasUnsavedChanges,
     setRequireLeaveConfirmation,
     t,
