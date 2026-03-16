@@ -3190,5 +3190,14 @@
   "cocktail.614.name": "Bloody Caesar",
   "cocktail.614.synonyms": "Cesar, Ceasar, Bloody Caesar",
   "cocktail.614.description": "A menudo llamado simplemente **Caesar**, es el cóctel nacional de Canadá. Aunque se parece a un Bloody Mary, la diferencia clave es el jugo Clamato, una mezcla de zumo de tomate y caldo de almeja, que le aporta un característico sabor salado y umami.",
-  "cocktail.614.instructions": "1. Frota el borde de un vaso alto con una rodaja de **lima** fresca. Moja el borde en **sal de apio** o en una mezcla de especias para Caesar hasta que esté cubierto.\n2. Llena el vaso con cubitos de hielo. Vierte el **vodka**, la **salsa picante** y la **salsa Worcestershire**.\n3. Llena el vaso con **jugo Clamato**. Remueve bien con una cuchara larga o escancia la bebida vertiéndola de un vaso a otro.\n4. Añade una rama de **apio** y la rodaja de **lima**."
+  "cocktail.614.instructions": "1. Frota el borde de un vaso alto con una rodaja de **lima** fresca. Moja el borde en **sal de apio** o en una mezcla de especias para Caesar hasta que esté cubierto.\n2. Llena el vaso con cubitos de hielo. Vierte el **vodka**, la **salsa picante** y la **salsa Worcestershire**.\n3. Llena el vaso con **jugo Clamato**. Remueve bien con una cuchara larga o escancia la bebida vertiéndola de un vaso a otro.\n4. Añade una rama de **apio** y la rodaja de **lima**.",
+  "cocktail.615.name": "Jager Negroni",
+  "cocktail.615.description": "A bitter-sweet herbal Negroni riff combining **Jägermeister**, **gin**, and **Campari**.",
+  "cocktail.615.instructions": "1. Fill a mixing glass with **ice**.\n2. Add 30 ml **Jägermeister**, 30 ml **gin**, and 30 ml **Campari**.\n3. Stir until well chilled and slightly diluted.\n4. Strain over fresh **ice** in a rocks glass.\n5. Express an **orange** zest over the drink and garnish.",
+  "cocktail.616.name": "Jager Old Fashioned",
+  "cocktail.616.description": "An herbal spin on the Old Fashioned built with **Jägermeister**, **bourbon**, sugar, and bitters.",
+  "cocktail.616.instructions": "1. Add **sugar**, **Angostura bitters**, and a splash of **water** to a rocks glass.\n2. Muddle until the sugar dissolves.\n3. Add fresh **ice**, then pour in 30 ml **bourbon** and 30 ml **Jägermeister**.\n4. Stir briefly to chill and combine.\n5. Garnish with an **orange** twist.",
+  "cocktail.617.name": "Elysee Treaty",
+  "cocktail.617.description": "A cognac sour variation with **green Chartreuse**, **lemon juice**, **simple syrup**, and aromatic bitters.",
+  "cocktail.617.instructions": "1. Fill a shaker with **ice**.\n2. Add 45 ml **cognac**, 15 ml **green Chartreuse**, 22.5 ml **lemon juice**, 15 ml **simple syrup**, and 1 dash **Angostura bitters**.\n3. Shake hard until well chilled.\n4. Fine strain into a chilled coupe.\n5. Garnish with a **lemon** twist."
 }

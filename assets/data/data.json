@@ -38666,6 +38666,188 @@
           "garnish": true
         }
       ]
+    },
+    {
+      "id": 615,
+      "name": "Jager Negroni",
+      "description": "A bitter-sweet herbal Negroni riff combining **Jägermeister**, **gin**, and **Campari**.",
+      "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 30 ml **Jägermeister**, 30 ml **gin**, and 30 ml **Campari**.\n3. Stir until well chilled and slightly diluted.\n4. Strain over fresh **ice** in a rocks glass.\n5. Express an **orange** zest over the drink and garnish.",
+      "glassId": "rocks_glass",
+      "methodIds": ["stir"],
+      "defaultServings": 1,
+      "tags": [1, 2],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 2,
+          "ingredientId": 207,
+          "name": "Jägermeister",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 161,
+          "name": "Gin",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 74,
+          "name": "Campari",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8,
+          "serving": true
+        },
+        {
+          "order": 6,
+          "ingredientId": 247,
+          "name": "Orange",
+          "amount": "1",
+          "unitId": 26,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 616,
+      "name": "Jager Old Fashioned",
+      "description": "An herbal spin on the Old Fashioned built with **Jägermeister**, **bourbon**, sugar, and bitters.",
+      "instructions": "1. Add **sugar**, **Angostura bitters**, and a splash of **water** to a rocks glass.\n2. Muddle until the sugar dissolves.\n3. Add fresh **ice**, then pour in 30 ml **bourbon** and 30 ml **Jägermeister**.\n4. Stir briefly to chill and combine.\n5. Garnish with an **orange** twist.",
+      "glassId": "rocks_glass",
+      "methodIds": ["muddle", "build"],
+      "defaultServings": 1,
+      "tags": [1, 5],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 329,
+          "name": "Sugar",
+          "amount": "1",
+          "unitId": 13
+        },
+        {
+          "order": 2,
+          "ingredientId": 19,
+          "name": "Angostura Bitters",
+          "amount": "2",
+          "unitId": 6
+        },
+        {
+          "order": 3,
+          "ingredientId": 349,
+          "name": "Water",
+          "amount": "1",
+          "unitId": 6
+        },
+        {
+          "order": 4,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
+        },
+        {
+          "order": 5,
+          "ingredientId": 65,
+          "name": "Bourbon",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 207,
+          "name": "Jägermeister",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 7,
+          "ingredientId": 247,
+          "name": "Orange",
+          "amount": "1",
+          "unitId": 26,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 617,
+      "name": "Elysee Treaty",
+      "description": "A cognac sour variation with **green Chartreuse**, **lemon juice**, **simple syrup**, and aromatic bitters.",
+      "instructions": "1. Fill a shaker with **ice**.\n2. Add 45 ml **cognac**, 15 ml **green Chartreuse**, 22.5 ml **lemon juice**, 15 ml **simple syrup**, and 1 dash **Angostura bitters**.\n3. Shake hard until well chilled.\n4. Fine strain into a chilled coupe.\n5. Garnish with a **lemon** twist.",
+      "glassId": "coupe",
+      "methodIds": ["shake"],
+      "defaultServings": 1,
+      "tags": [5],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 2,
+          "ingredientId": 112,
+          "name": "Cognac",
+          "amount": "45",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 182,
+          "name": "Green Chartreuse",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 221,
+          "name": "Lemon Juice",
+          "amount": "22.5",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 316,
+          "name": "Simple Syrup",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 19,
+          "name": "Angostura Bitters",
+          "amount": "1",
+          "unitId": 6
+        },
+        {
+          "order": 7,
+          "ingredientId": 219,
+          "name": "Lemon",
+          "amount": "1",
+          "unitId": 26,
+          "garnish": true
+        }
+      ]
     }
   ],
   "ingredients": [
