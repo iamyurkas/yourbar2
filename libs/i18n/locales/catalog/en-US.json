@@ -2937,5 +2937,14 @@
   "cocktail.618.instructions": "1. Chill a coupe glass, rinse with **absinthe**, and discard excess.\n2. Add **white rum**, **lime juice**, **falernum**, **orange marmalade**, and **Angostura bitters** to a shaker with ice.\n3. Shake hard and fine strain into the prepared glass.",
   "cocktail.619.name": "Crosstree",
   "cocktail.619.description": "A bright, funky shaken sour with **overproof rum**, **bianco vermouth**, **pineapple juice**, and **lime**, accented by vanilla and **absinthe**.",
-  "cocktail.619.instructions": "1. Add **overproof rum**, **bianco vermouth**, **pineapple juice**, **lime juice**, **vanilla syrup**, and **absinthe** to a shaker with ice.\n2. Shake hard until well chilled.\n3. Fine strain into a chilled coupe glass."
+  "cocktail.619.instructions": "1. Add **overproof rum**, **bianco vermouth**, **pineapple juice**, **lime juice**, **vanilla syrup**, and **absinthe** to a shaker with ice.\n2. Shake hard until well chilled.\n3. Fine strain into a chilled coupe glass.",
+  "cocktail.620.name": "Mint Limeade",
+  "cocktail.620.description": "A cooling non-alcoholic lime cooler with fresh **mint**, **lime juice**, and **soda water**.",
+  "cocktail.620.instructions": "1. Gently muddle **mint** with **lime juice** and 15 ml of **simple syrup** in a shaker tin.\n2. Add **ice** and shake briefly.\n3. Strain into an ice-filled highball glass.\n4. Top with 90 ml of **soda water** and stir gently.\n5. Garnish with a **mint** sprig and **lime** wedge.",
+  "cocktail.621.name": "Rebujito",
+  "cocktail.621.description": "A light Andalusian sherry highball combining chilled **fino sherry** with lemon-lime soda and aromatic **mint**.",
+  "cocktail.621.instructions": "1. Fill a wine glass with **ice**.\n2. Add 90 ml of chilled **fino sherry**.\n3. Top with 90 ml of chilled **lemon-lime soda**.\n4. Stir briefly and garnish with a **mint** sprig.",
+  "cocktail.622.name": "Marama Rum Punch",
+  "cocktail.622.description": "A tropical rum punch with **white rum**, **passion fruit syrup**, **orange juice**, and **pineapple juice** balanced by **lime juice**.",
+  "cocktail.622.instructions": "1. Fill a shaker with **ice**.\n2. Add 45 ml of **white rum**, 30 ml of **pineapple juice**, 30 ml of **orange juice**, 22.5 ml of **lime juice**, and 15 ml of **passion fruit syrup**.\n3. Shake hard until chilled.\n4. Strain into a highball glass over fresh **ice**.\n5. Garnish with a **mint** sprig."
 }
