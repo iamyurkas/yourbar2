@@ -2948,5 +2948,20 @@
   "cocktail.614.name": "Bloody Caesar",
   "cocktail.614.synonyms": "Cesar, Ceasar, Bloody Caesar",
   "cocktail.614.description": "Oft einfach **Caesar** genannt, der Nationalcocktail Kanadas. Obwohl er wie eine Bloody Mary aussieht, ist der Hauptunterschied der Clamato-Saft – eine Mischung aus Tomatensaft und Muschelbrühe –, der ihm eine besondere herzhafte, salzige Umami-Note verleiht.",
-  "cocktail.614.instructions": "1. Den Rand eines Highball-Glasses mit einem **Limetten**spalt befeuchten. Den Rand in **Selleriesalz** oder einer Caesar-Gewürzmischung tauchen, bis er bedeckt ist.\n2. Das Glas mit Eiswürfeln füllen. **Wodka**, **Tabasco** und **Worcestersauce** hineingießen.\n3. Das Glas mit **Clamato-Saft** auffüllen. Mit einem langen Löffel gut umrühren oder den Drink durch mehrmaliges Umgießen zwischen zwei Gläsern mischen.\n4. Mit einem **Sellerie**stange und dem **Limetten**spalt garnieren."
+  "cocktail.614.instructions": "1. Den Rand eines Highball-Glasses mit einem **Limetten**spalt befeuchten. Den Rand in **Selleriesalz** oder einer Caesar-Gewürzmischung tauchen, bis er bedeckt ist.\n2. Das Glas mit Eiswürfeln füllen. **Wodka**, **Tabasco** und **Worcestersauce** hineingießen.\n3. Das Glas mit **Clamato-Saft** auffüllen. Mit einem langen Löffel gut umrühren oder den Drink durch mehrmaliges Umgießen zwischen zwei Gläsern mischen.\n4. Mit einem **Sellerie**stange und dem **Limetten**spalt garnieren.",
+  "cocktail.615.name": "Maid in Cuba",
+  "cocktail.615.description": "Ein frischer Daiquiri-Style-Cocktail mit **weißem Rum**, **Minze** und **Gurke**, abgerundet mit einem Splash **Sodawasser** und einem Absinth-Rinse.",
+  "cocktail.615.instructions": "1. Eine Coupette vorkühlen, mit **Absinth** ausspülen und den Überschuss verwerfen.\n2. In einem Shaker **Gurke** muddlen und **Minz**blätter nur leicht andrücken.\n3. **Weißen Rum**, **Limettensaft**, **Zuckersirup rich** und Eis zugeben.\n4. Kräftig shaken und fein in das vorbereitete Glas abseihen.\n5. Mit einem Splash **Sodawasser** toppen.",
+  "cocktail.616.name": "McKinley's Delight",
+  "cocktail.616.description": "Ein klassischer gerührter Whiskey-Cocktail mit **Rye Whiskey**, **rotem Wermut**, Kirschlikör und einem Hauch **Absinth**.",
+  "cocktail.616.instructions": "1. Ein Rührglas mit Eis füllen.\n2. **Rye Whiskey**, **roten Wermut**, **Kirschlikör** und einen Dash **Absinth** zugeben.\n3. Rühren, bis der Drink gut gekühlt und verdünnt ist.\n4. Fein in eine gekühlte Coupette abseihen.",
+  "cocktail.617.name": "Redwood Heights",
+  "cocktail.617.description": "Ein bitterer, spirituoser Gin-Aperitif mit **Absinth**-Rinse, **rotem Wermut**, **Cynar** und **Orange Bitters**.",
+  "cocktail.617.instructions": "1. Eine Coupette kühlen, mit **Absinth** ausspülen und den Überschuss verwerfen.\n2. In einem Rührglas mit Eis **Gin**, **roten Wermut**, **Cynar** und **Orange Bitters** geben.\n3. Gut rühren und in das vorbereitete Glas abseihen.",
+  "cocktail.618.name": "Hemingway Breakfast",
+  "cocktail.618.description": "Ein tropisch-würziger Hemingway-Twist mit **weißem Rum**, **Limettensaft**, **Falernum**, Orangenmarmelade, Bitters und einem **Absinth**-Rinse.",
+  "cocktail.618.instructions": "1. Eine Coupette kühlen, mit **Absinth** ausspülen und den Überschuss verwerfen.\n2. **Weißen Rum**, **Limettensaft**, **Falernum**, **Orangenmarmelade** und **Angostura Bitters** in einen Shaker mit Eis geben.\n3. Kräftig shaken und fein in das vorbereitete Glas abseihen.",
+  "cocktail.619.name": "Crosstree",
+  "cocktail.619.description": "Ein heller, funky Sour: **Overproof Rum**, **Bianco Wermut**, **Ananassaft** und **Limette**, akzentuiert mit Vanille und **Absinth**.",
+  "cocktail.619.instructions": "1. **Overproof Rum**, **Bianco Wermut**, **Ananassaft**, **Limettensaft**, **Vanillesirup** und **Absinth** in einen Shaker mit Eis geben.\n2. Kräftig shaken, bis gut gekühlt.\n3. Fein in eine gekühlte Coupette abseihen."
 }
