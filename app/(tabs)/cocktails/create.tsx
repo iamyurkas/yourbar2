@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
-import { StackActions, useFocusEffect, useNavigation, type NavigationAction } from "@react-navigation/native";
+import { StackActions, useFocusEffect, useIsFocused, useNavigation, type NavigationAction } from "@react-navigation/native";
 import { Image } from "expo-image";
 import * as ImagePicker from "expo-image-picker";
 import { Stack, router, useLocalSearchParams } from "expo-router";
@@ -258,6 +258,7 @@ function mapRecipeIngredientToEditable(
 
 export default function CreateCocktailScreen() {
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
   const Colors = useAppColors();
   const insets = useSafeAreaInsets();
   const { t, locale } = useI18n();
@@ -512,15 +513,23 @@ export default function CreateCocktailScreen() {
   }, [buildSnapshot, initialSnapshot]);
 
   useEffect(() => {
+    if (!isFocused) {
+      return;
+    }
+
     setHasUnsavedChanges(hasUnsavedChanges || shouldConfirmOnLeave);
-  }, [hasUnsavedChanges, setHasUnsavedChanges, shouldConfirmOnLeave]);
+  }, [hasUnsavedChanges, isFocused, setHasUnsavedChanges, shouldConfirmOnLeave]);
 
   useEffect(() => {
+    if (!isFocused) {
+      return;
+    }
+
     setRequireLeaveConfirmation(shouldConfirmOnLeave);
     return () => {
       setRequireLeaveConfirmation(false);
     };
-  }, [setRequireLeaveConfirmation, shouldConfirmOnLeave]);
+  }, [isFocused, setRequireLeaveConfirmation, shouldConfirmOnLeave]);
 
   useFocusEffect(
     useCallback(() => {
