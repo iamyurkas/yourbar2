@@ -170,7 +170,8 @@ export default function IngredientFormScreen() {
   const shouldConfirmOnLeave = useMemo(
     () =>
       !isEditMode &&
-      (fromCocktailAddIngredientParam || returnToPath === '/cocktails/create'),
+      !fromCocktailAddIngredientParam &&
+      returnToPath === '/cocktails/create',
     [fromCocktailAddIngredientParam, isEditMode, returnToPath],
   );
 
