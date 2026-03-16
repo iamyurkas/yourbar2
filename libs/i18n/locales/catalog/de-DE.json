@@ -2948,5 +2948,14 @@
   "cocktail.614.name": "Bloody Caesar",
   "cocktail.614.synonyms": "Cesar, Ceasar, Bloody Caesar",
   "cocktail.614.description": "Oft einfach **Caesar** genannt, der Nationalcocktail Kanadas. Obwohl er wie eine Bloody Mary aussieht, ist der Hauptunterschied der Clamato-Saft – eine Mischung aus Tomatensaft und Muschelbrühe –, der ihm eine besondere herzhafte, salzige Umami-Note verleiht.",
-  "cocktail.614.instructions": "1. Den Rand eines Highball-Glasses mit einem **Limetten**spalt befeuchten. Den Rand in **Selleriesalz** oder einer Caesar-Gewürzmischung tauchen, bis er bedeckt ist.\n2. Das Glas mit Eiswürfeln füllen. **Wodka**, **Tabasco** und **Worcestersauce** hineingießen.\n3. Das Glas mit **Clamato-Saft** auffüllen. Mit einem langen Löffel gut umrühren oder den Drink durch mehrmaliges Umgießen zwischen zwei Gläsern mischen.\n4. Mit einem **Sellerie**stange und dem **Limetten**spalt garnieren."
+  "cocktail.614.instructions": "1. Den Rand eines Highball-Glasses mit einem **Limetten**spalt befeuchten. Den Rand in **Selleriesalz** oder einer Caesar-Gewürzmischung tauchen, bis er bedeckt ist.\n2. Das Glas mit Eiswürfeln füllen. **Wodka**, **Tabasco** und **Worcestersauce** hineingießen.\n3. Das Glas mit **Clamato-Saft** auffüllen. Mit einem langen Löffel gut umrühren oder den Drink durch mehrmaliges Umgießen zwischen zwei Gläsern mischen.\n4. Mit einem **Sellerie**stange und dem **Limetten**spalt garnieren.",
+  "cocktail.615.name": "Mint Limeade",
+  "cocktail.615.description": "Ein erfrischender alkoholfreier Longdrink mit **Minze**, **Limettensaft** und **Zuckersirup**, aufgefüllt mit kaltem **Sodawasser** über zerstoßenem **Eis**.",
+  "cocktail.615.instructions": "1. In einem Highball-Glas 8 **Minzblätter** mit 20 ml **Zuckersirup** und 25 ml **Limettensaft** leicht andrücken.\n2. Das Glas mit Crushed **Eis** füllen.\n3. Mit 100 ml kaltem **Sodawasser** auffüllen und kurz umrühren.\n4. Mit einem **Minzzweig** und einer **Limettenspalte** garnieren.",
+  "cocktail.616.name": "Rebujito",
+  "cocktail.616.description": "Ein leichter andalusischer Aperitif aus trockenem **Fino-Sherry** und gekühlter **Limonade**, serviert auf **Eis** mit frischer **Minze** und **Limette**.",
+  "cocktail.616.instructions": "1. Ein Highball-Glas mit **Eiswürfeln** füllen.\n2. 60 ml gekühlten **Fino-Sherry** zugeben.\n3. Mit 120 ml gekühlter **Limonade** auffüllen und vorsichtig umrühren.\n4. Mit einem **Minzzweig** und einer **Limettenspalte** garnieren.",
+  "cocktail.617.name": "Marama Rum Punch",
+  "cocktail.617.description": "Ein fruchtiger Rum-Punch mit **gereiftem Rum**, **weißem Rum**, tropischen Säften sowie etwas **Grenadine** und **Angostura Bitters**, geschüttelt und auf **Eis** serviert.",
+  "cocktail.617.instructions": "1. Einen Shaker mit **Eis** füllen.\n2. 30 ml **gereiften Rum**, 30 ml **weißen Rum**, 45 ml **Orangensaft**, 45 ml **Ananassaft**, 15 ml **Limettensaft**, 10 ml **Grenadine** und 2 Dashes **Angostura Bitters** zugeben.\n3. Kräftig schütteln, bis alles gut gekühlt ist.\n4. In ein Hurricane-Glas auf frisches **Eis** abseihen.\n5. Mit einer **Orangenscheibe** und einem **Minzzweig** garnieren."
 }

@@ -2922,5 +2922,14 @@
   "cocktail.614.name": "Bloody Caesar",
   "cocktail.614.synonyms": "Cesar, Ceasar",
   "cocktail.614.description": "Often just called a **Caesar**, Canada's national cocktail. While it looks like a Bloody Mary, the key difference is Clamato juice — a blend of tomato juice and clam broth — which gives it a distinct savory, briny umami kick.",
-  "cocktail.614.instructions": "1. Rub a fresh **lime** wedge around the rim of a highball glass. Dip the rim into **celery salt** or a Caesar rimmer spice blend until coated.\n2. Fill the glass with ice cubes. Pour in the **vodka**, **hot sauce**, and **Worcestershire sauce**.\n3. Top the glass with **Clamato juice**. Stir well with a long spoon or roll the drink by pouring it back and forth between two glasses.\n4. Add a **celery** stalk and the **lime** wedge."
+  "cocktail.614.instructions": "1. Rub a fresh **lime** wedge around the rim of a highball glass. Dip the rim into **celery salt** or a Caesar rimmer spice blend until coated.\n2. Fill the glass with ice cubes. Pour in the **vodka**, **hot sauce**, and **Worcestershire sauce**.\n3. Top the glass with **Clamato juice**. Stir well with a long spoon or roll the drink by pouring it back and forth between two glasses.\n4. Add a **celery** stalk and the **lime** wedge.",
+  "cocktail.615.name": "Mint Limeade",
+  "cocktail.615.description": "A refreshing non-alcoholic cooler with **mint**, **lime juice**, and **sugar syrup**, lengthened with chilled **soda water** over crushed **ice**.",
+  "cocktail.615.instructions": "1. In a highball glass, gently muddle 8 **mint leaves** with 20 ml **simple syrup** and 25 ml **lime juice**.\n2. Fill the glass with crushed **ice**.\n3. Top with 100 ml chilled **soda water** and stir briefly.\n4. Garnish with a **mint sprig** and a **lime wedge**.",
+  "cocktail.616.name": "Rebujito",
+  "cocktail.616.description": "A light Andalusian refresher combining dry **fino sherry** with chilled **lemonade**, served over **ice** and lifted by fresh **mint** and **lime**.",
+  "cocktail.616.instructions": "1. Fill a highball glass with cubed **ice**.\n2. Add 60 ml chilled **fino sherry**.\n3. Top with 120 ml chilled **lemonade** and stir gently.\n4. Garnish with a **mint sprig** and a **lime wedge**.",
+  "cocktail.617.name": "Marama Rum Punch",
+  "cocktail.617.description": "A fruity rum punch with **aged rum**, **white rum**, tropical juices, and a touch of **grenadine** and **Angostura bitters**, shaken and served over **ice**.",
+  "cocktail.617.instructions": "1. Fill a shaker with **ice**.\n2. Add 30 ml **aged rum**, 30 ml **white rum**, 45 ml **orange juice**, 45 ml **pineapple juice**, 15 ml **lime juice**, 10 ml **grenadine**, and 2 dashes **Angostura bitters**.\n3. Shake hard until well chilled.\n4. Strain into a hurricane glass filled with fresh **ice**.\n5. Garnish with an **orange slice** and a **mint sprig**."
 }

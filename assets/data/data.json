@@ -38666,6 +38666,217 @@
           "garnish": true
         }
       ]
+    },
+    {
+      "id": 615,
+      "name": "Mint Limeade",
+      "description": "A refreshing non-alcoholic cooler with **mint**, **lime juice**, and **sugar syrup**, lengthened with chilled **soda water** over crushed **ice**.",
+      "instructions": "1. In a highball glass, gently muddle 8 **mint leaves** with 20 ml **simple syrup** and 25 ml **lime juice**.\n2. Fill the glass with crushed **ice**.\n3. Top with 100 ml chilled **soda water** and stir briefly.\n4. Garnish with a **mint sprig** and a **lime wedge**.",
+      "photoUri": "",
+      "glassId": "highball_glass",
+      "methodIds": ["muddle", "build"],
+      "defaultServings": 1,
+      "tags": [7, 8, 10],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 241,
+          "name": "Mint",
+          "amount": "8",
+          "unitId": 10,
+          "process": true
+        },
+        {
+          "order": 2,
+          "ingredientId": 316,
+          "name": "Simple Syrup",
+          "amount": "20",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 228,
+          "name": "Lime Juice",
+          "amount": "25",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8,
+          "serving": true
+        },
+        {
+          "order": 5,
+          "ingredientId": 318,
+          "name": "Soda Water",
+          "amount": "100",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 241,
+          "name": "Mint",
+          "amount": "1",
+          "unitId": 21,
+          "garnish": true
+        },
+        {
+          "order": 7,
+          "ingredientId": 227,
+          "name": "Lime",
+          "amount": "1",
+          "unitId": 27,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 616,
+      "name": "Rebujito",
+      "description": "A light Andalusian refresher combining dry **fino sherry** with chilled **lemonade**, served over **ice** and lifted by fresh **mint** and **lime**.",
+      "instructions": "1. Fill a highball glass with cubed **ice**.\n2. Add 60 ml chilled **fino sherry**.\n3. Top with 120 ml chilled **lemonade** and stir gently.\n4. Garnish with a **mint sprig** and a **lime wedge**.",
+      "photoUri": "",
+      "glassId": "highball_glass",
+      "methodIds": ["build"],
+      "defaultServings": 1,
+      "tags": [6, 8],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8,
+          "serving": true
+        },
+        {
+          "order": 2,
+          "ingredientId": 157,
+          "name": "Fino Sherry",
+          "amount": "60",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 224,
+          "name": "Lemonade",
+          "amount": "120",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 241,
+          "name": "Mint",
+          "amount": "1",
+          "unitId": 21,
+          "garnish": true
+        },
+        {
+          "order": 5,
+          "ingredientId": 227,
+          "name": "Lime",
+          "amount": "1",
+          "unitId": 27,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 617,
+      "name": "Marama Rum Punch",
+      "description": "A fruity rum punch with **aged rum**, **white rum**, tropical juices, and a touch of **grenadine** and **Angostura bitters**, shaken and served over **ice**.",
+      "instructions": "1. Fill a shaker with **ice**.\n2. Add 30 ml **aged rum**, 30 ml **white rum**, 45 ml **orange juice**, 45 ml **pineapple juice**, 15 ml **lime juice**, 10 ml **grenadine**, and 2 dashes **Angostura bitters**.\n3. Shake hard until well chilled.\n4. Strain into a hurricane glass filled with fresh **ice**.\n5. Garnish with an **orange slice** and a **mint sprig**.",
+      "photoUri": "",
+      "glassId": "hurricane_glass",
+      "methodIds": ["shake"],
+      "defaultServings": 1,
+      "tags": [4, 6, 8],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 2,
+          "ingredientId": 7,
+          "name": "Aged Rum",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 357,
+          "name": "White Rum",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 251,
+          "name": "Orange Juice",
+          "amount": "45",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 281,
+          "name": "Pineapple Juice",
+          "amount": "45",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 228,
+          "name": "Lime Juice",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 7,
+          "ingredientId": 183,
+          "name": "Grenadine",
+          "amount": "10",
+          "unitId": 11
+        },
+        {
+          "order": 8,
+          "ingredientId": 19,
+          "name": "Angostura Bitters",
+          "amount": "2",
+          "unitId": 6
+        },
+        {
+          "order": 9,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8,
+          "serving": true
+        },
+        {
+          "order": 10,
+          "ingredientId": 247,
+          "name": "Orange",
+          "amount": "1",
+          "unitId": 19,
+          "garnish": true
+        },
+        {
+          "order": 11,
+          "ingredientId": 241,
+          "name": "Mint",
+          "amount": "1",
+          "unitId": 21,
+          "garnish": true
+        }
+      ]
     }
   ],
   "ingredients": [

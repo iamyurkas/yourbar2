@@ -3190,5 +3190,14 @@
   "cocktail.614.name": "Bloody Caesar",
   "cocktail.614.synonyms": "Cesar, Ceasar, Bloody Caesar",
   "cocktail.614.description": "A menudo llamado simplemente **Caesar**, es el cóctel nacional de Canadá. Aunque se parece a un Bloody Mary, la diferencia clave es el jugo Clamato, una mezcla de zumo de tomate y caldo de almeja, que le aporta un característico sabor salado y umami.",
-  "cocktail.614.instructions": "1. Frota el borde de un vaso alto con una rodaja de **lima** fresca. Moja el borde en **sal de apio** o en una mezcla de especias para Caesar hasta que esté cubierto.\n2. Llena el vaso con cubitos de hielo. Vierte el **vodka**, la **salsa picante** y la **salsa Worcestershire**.\n3. Llena el vaso con **jugo Clamato**. Remueve bien con una cuchara larga o escancia la bebida vertiéndola de un vaso a otro.\n4. Añade una rama de **apio** y la rodaja de **lima**."
+  "cocktail.614.instructions": "1. Frota el borde de un vaso alto con una rodaja de **lima** fresca. Moja el borde en **sal de apio** o en una mezcla de especias para Caesar hasta que esté cubierto.\n2. Llena el vaso con cubitos de hielo. Vierte el **vodka**, la **salsa picante** y la **salsa Worcestershire**.\n3. Llena el vaso con **jugo Clamato**. Remueve bien con una cuchara larga o escancia la bebida vertiéndola de un vaso a otro.\n4. Añade una rama de **apio** y la rodaja de **lima**.",
+  "cocktail.615.name": "Mint Limeade",
+  "cocktail.615.description": "Un refresco sin alcohol con **menta**, **zumo de lima** y **jarabe de azúcar**, alargado con **soda** fría sobre **hielo** picado.",
+  "cocktail.615.instructions": "1. En un vaso highball, machaca suavemente 8 hojas de **menta** con 20 ml de **jarabe simple** y 25 ml de **zumo de lima**.\n2. Llena el vaso con **hielo** picado.\n3. Añade 100 ml de **soda** fría y remueve brevemente.\n4. Decora con una ramita de **menta** y una cuña de **lima**.",
+  "cocktail.616.name": "Rebujito",
+  "cocktail.616.description": "Un refresco andaluz ligero que combina **fino** seco con **limonada** fría, servido con **hielo** y realzado con **menta** y **lima** frescas.",
+  "cocktail.616.instructions": "1. Llena un vaso highball con cubos de **hielo**.\n2. Añade 60 ml de **fino** bien frío.\n3. Completa con 120 ml de **limonada** fría y remueve suavemente.\n4. Decora con una ramita de **menta** y una cuña de **lima**.",
+  "cocktail.617.name": "Marama Rum Punch",
+  "cocktail.617.description": "Un ponche afrutado de ron con **ron añejo**, **ron blanco**, zumos tropicales y un toque de **granadina** y **Angostura bitters**, agitado y servido sobre **hielo**.",
+  "cocktail.617.instructions": "1. Llena una coctelera con **hielo**.\n2. Añade 30 ml de **ron añejo**, 30 ml de **ron blanco**, 45 ml de **zumo de naranja**, 45 ml de **zumo de piña**, 15 ml de **zumo de lima**, 10 ml de **granadina** y 2 golpes de **Angostura bitters**.\n3. Agita con fuerza hasta enfriar bien.\n4. Cuela en una copa hurricane con **hielo** fresco.\n5. Decora con una rodaja de **naranja** y una ramita de **menta**."
 }
