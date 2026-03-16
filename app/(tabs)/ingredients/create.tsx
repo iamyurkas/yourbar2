@@ -832,6 +832,11 @@ export default function IngredientFormScreen() {
   const leaveScreen = useCallback(
     (action?: NavigationAction) => {
       if (isBackAction(action)) {
+        if (fromCocktailAddIngredientParam && returnToPath === '/cocktails/create') {
+          skipDuplicateBack(navigation);
+          return;
+        }
+
         if (returnToPath) {
           if (navigation.canGoBack()) {
             skipDuplicateBack(navigation);
@@ -860,7 +865,13 @@ export default function IngredientFormScreen() {
 
       router.replace('/ingredients');
     },
-    [isBackAction, navigation, returnToParams, returnToPath],
+    [
+      fromCocktailAddIngredientParam,
+      isBackAction,
+      navigation,
+      returnToParams,
+      returnToPath,
+    ],
   );
 
   const handleLeaveAction = useCallback(
