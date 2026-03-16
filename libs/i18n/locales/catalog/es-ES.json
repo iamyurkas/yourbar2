@@ -3206,4 +3206,17 @@
   "cocktail.619.name": "Crosstree",
   "cocktail.619.description": "Un sour agitado brillante y funky con **ron overproof**, **vermút bianco**, **zumo de piña** y **lima**, con acentos de vainilla y **absenta**.",
   "cocktail.619.instructions": "1. Añade a una coctelera con hielo **ron overproof**, **vermút bianco**, **zumo de piña**, **zumo de lima**, **sirope de vainilla** y **absenta**.\n2. Agita con fuerza hasta enfriar bien.\n3. Cuela fino en una copa coupe fría."
+,
+  "cocktail.620.name": "Mint Limeade",
+  "cocktail.620.synonyms": "Mint Limeade",
+  "cocktail.620.description": "Un refresco de lima sin alcohol, muy fresco, con **menta**, **zumo de lima** y **soda**.",
+  "cocktail.620.instructions": "1. Machaca suavemente 10 hojas de **menta** con 30 ml de **zumo de lima** y 15 ml de **jarabe simple** en una coctelera.\n2. Añade **hielo** y agita brevemente.\n3. Cuela en un vaso highball lleno de hielo.\n4. Completa con 90 ml de **soda** y remueve con suavidad.\n5. Decora con una ramita de **menta** y un gajo de **lima**.",
+  "cocktail.621.name": "Rebujito",
+  "cocktail.621.synonyms": "Rebujito Cocktail",
+  "cocktail.621.description": "Un highball andaluz ligero que combina **fino** bien frío con refresco de lima-limón y **menta** aromática.",
+  "cocktail.621.instructions": "1. Llena una copa de vino con **hielo**.\n2. Añade 90 ml de **fino** bien frío.\n3. Completa con 90 ml de **refresco de lima-limón** bien frío.\n4. Remueve brevemente y decora con una ramita de **menta**.",
+  "cocktail.622.name": "Marama Rum Punch",
+  "cocktail.622.synonyms": "Marama Rum Punch",
+  "cocktail.622.description": "Un ponche tropical con **ron blanco**, **jarabe de fruta de la pasión**, **zumo de naranja** y **zumo de piña**, equilibrado con **zumo de lima**.",
+  "cocktail.622.instructions": "1. Llena una coctelera con **hielo**.\n2. Añade 45 ml de **ron blanco**, 30 ml de **zumo de piña**, 30 ml de **zumo de naranja**, 22.5 ml de **zumo de lima** y 15 ml de **jarabe de fruta de la pasión**.\n3. Agita con fuerza hasta enfriar.\n4. Cuela en un vaso highball con **hielo** fresco.\n5. Decora con una ramita de **menta**."
 }

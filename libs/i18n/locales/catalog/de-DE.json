@@ -2964,4 +2964,17 @@
   "cocktail.619.name": "Crosstree",
   "cocktail.619.description": "Ein heller, funky Sour: **Overproof Rum**, **Bianco Wermut**, **Ananassaft** und **Limette**, akzentuiert mit Vanille und **Absinth**.",
   "cocktail.619.instructions": "1. **Overproof Rum**, **Bianco Wermut**, **Ananassaft**, **Limettensaft**, **Vanillesirup** und **Absinth** in einen Shaker mit Eis geben.\n2. Kräftig shaken, bis gut gekühlt.\n3. Fein in eine gekühlte Coupette abseihen."
+,
+  "cocktail.620.name": "Mint Limeade",
+  "cocktail.620.synonyms": "Mint Limeade",
+  "cocktail.620.description": "Ein alkoholfreier, kühlender Lime-Cooler mit frischer **Minze**, **Limettensaft** und **Sodawasser**.",
+  "cocktail.620.instructions": "1. 10 **Minz**blätter mit 30 ml **Limettensaft** und 15 ml **Zuckersirup** im Shaker sanft muddlen.\n2. **Eis** zugeben und kurz shaken.\n3. In ein mit Eis gefülltes Highball-Glas abseihen.\n4. Mit 90 ml **Sodawasser** auffüllen und vorsichtig umrühren.\n5. Mit einem **Minze**zweig und einem **Limetten**spalt garnieren.",
+  "cocktail.621.name": "Rebujito",
+  "cocktail.621.synonyms": "Rebujito Cocktail",
+  "cocktail.621.description": "Ein leichter andalusischer Sherry-Highball mit gut gekühltem **Fino Sherry**, Zitronen-Limetten-Limonade und aromatischer **Minze**.",
+  "cocktail.621.instructions": "1. Ein Weinglas mit **Eis** füllen.\n2. 90 ml gut gekühlten **Fino Sherry** zugeben.\n3. Mit 90 ml gut gekühlter **Zitronen-Limetten-Limonade** auffüllen.\n4. Kurz umrühren und mit einem **Minze**zweig garnieren.",
+  "cocktail.622.name": "Marama Rum Punch",
+  "cocktail.622.synonyms": "Marama Rum Punch",
+  "cocktail.622.description": "Ein tropischer Rum Punch mit **weißem Rum**, **Passionsfruchtsirup**, **Orangensaft** und **Ananassaft**, ausbalanciert mit **Limettensaft**.",
+  "cocktail.622.instructions": "1. Einen Shaker mit **Eis** füllen.\n2. 45 ml **weißen Rum**, 30 ml **Ananassaft**, 30 ml **Orangensaft**, 22.5 ml **Limettensaft** und 15 ml **Passionsfruchtsirup** zugeben.\n3. Kräftig shaken, bis alles gut gekühlt ist.\n4. In ein Highball-Glas mit frischem **Eis** abseihen.\n5. Mit einem **Minze**zweig garnieren."
 }
