@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
-import { useFocusEffect, useNavigation, type NavigationAction } from '@react-navigation/native';
+import { useFocusEffect, useIsFocused, useNavigation, type NavigationAction } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -175,6 +175,7 @@ export default function IngredientFormScreen() {
   );
 
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
   const Colors = useAppColors();
   const insets = useSafeAreaInsets();
   const { t } = useI18n();
@@ -334,15 +335,15 @@ export default function IngredientFormScreen() {
   }, [buildSnapshot, initialSnapshot]);
 
   useEffect(() => {
-    setHasUnsavedChanges(hasUnsavedChanges || shouldConfirmOnLeave);
-  }, [hasUnsavedChanges, setHasUnsavedChanges, shouldConfirmOnLeave]);
+    setHasUnsavedChanges(isFocused && (hasUnsavedChanges || shouldConfirmOnLeave));
+  }, [hasUnsavedChanges, isFocused, setHasUnsavedChanges, shouldConfirmOnLeave]);
 
   useEffect(() => {
-    setRequireLeaveConfirmation(shouldConfirmOnLeave);
+    setRequireLeaveConfirmation(isFocused && shouldConfirmOnLeave);
     return () => {
       setRequireLeaveConfirmation(false);
     };
-  }, [setRequireLeaveConfirmation, shouldConfirmOnLeave]);
+  }, [isFocused, setRequireLeaveConfirmation, shouldConfirmOnLeave]);
 
   useEffect(() => () => {
     setHasUnsavedChanges(false);
