@@ -34132,7 +34132,7 @@
     },
     {
       "id": 544,
-      "name": "Three Dots and a Dash",
+      "name": "Three Dots and a Dash",
       "description": "A classic Tiki masterpiece created by Don the Beachcomber during WWII. Its name represents the morse code for 'Victory' (V), featuring a complex blend of rums and exotic spices.",
       "instructions": "1. Fill a shaker with **ice**.\n2. Add 45 ml of **Rhum Martinique Agricole**, 15 ml of **aged rum**, 7.5 ml of **falernum**, 7.5 ml of **allspice dram**, 15 ml of **lemon juice**, 15 ml of **orange juice**, 15 ml of **honey syrup**, 2 dashes of **Angostura bitters**, and a slice of **pineapple**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled Tiki glass.\n5. Garnish with 3 maraschino cherries.",
       "photoUri": "assets/cocktails/544-three-dots-and-a-dash.jpg",
@@ -37856,9 +37856,9 @@
     {
       "id": 602,
       "name": "Zombie",
-      "synonyms": ["Three Dots and a Dash"],
+      "synonyms": ["Three Dots and a Dash"],
       "description": "A legendary and potent Tiki classic that blends multiple rums, fresh **lime**, and tropical spice for a complex, sun-soaked experience.",
-      "instructions": "1. Add **Jamaican dark rum**, 45 ml **gold Puerto Rican rum**, **demerara rum**, fresh **lime juice**, **falernum**, **don's mix**, **grenadine**, **Angostura bitters**, and **Pernod** into a blender.\n2. Add 180 g of crushed **ice**.\n3. Blend at high speed for no more than 5 seconds.\n4. Pour the contents into a tall glass or Tiki glass and add additional crushed **ice** to fill if necessary.\n5. Garnish with a **mint** sprig.",
+      "instructions": "1. Add **Jamaican dark rum**, **gold Puerto Rican rum**, **demerara rum**, fresh **lime juice**, **falernum**, **Don's mix**, **grenadine**, **Angostura bitters**, and **Pernod** into a blender.\n2. Add 180 g of crushed **ice**.\n3. Blend at high speed for no more than 5 seconds.\n4. Pour the contents into a tall glass or Tiki glass and add additional crushed **ice** to fill if necessary.\n5. Garnish with a **mint** sprig.",
       "photoUri": "assets/cocktails/602-zombie.jpg",
       "glassId": "tiki_glass",
       "methodIds": ["blend"],
