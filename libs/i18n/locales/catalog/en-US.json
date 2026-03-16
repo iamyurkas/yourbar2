@@ -2922,5 +2922,20 @@
   "cocktail.614.name": "Bloody Caesar",
   "cocktail.614.synonyms": "Cesar, Ceasar",
   "cocktail.614.description": "Often just called a **Caesar**, Canada's national cocktail. While it looks like a Bloody Mary, the key difference is Clamato juice — a blend of tomato juice and clam broth — which gives it a distinct savory, briny umami kick.",
-  "cocktail.614.instructions": "1. Rub a fresh **lime** wedge around the rim of a highball glass. Dip the rim into **celery salt** or a Caesar rimmer spice blend until coated.\n2. Fill the glass with ice cubes. Pour in the **vodka**, **hot sauce**, and **Worcestershire sauce**.\n3. Top the glass with **Clamato juice**. Stir well with a long spoon or roll the drink by pouring it back and forth between two glasses.\n4. Add a **celery** stalk and the **lime** wedge."
+  "cocktail.614.instructions": "1. Rub a fresh **lime** wedge around the rim of a highball glass. Dip the rim into **celery salt** or a Caesar rimmer spice blend until coated.\n2. Fill the glass with ice cubes. Pour in the **vodka**, **hot sauce**, and **Worcestershire sauce**.\n3. Top the glass with **Clamato juice**. Stir well with a long spoon or roll the drink by pouring it back and forth between two glasses.\n4. Add a **celery** stalk and the **lime** wedge.",
+  "cocktail.615.name": "Maid in Cuba",
+  "cocktail.615.description": "A fresh Daiquiri-style cocktail with **white rum**, **mint**, and **cucumber**, finished with a light splash of **soda water** and an absinthe rinse.",
+  "cocktail.615.instructions": "1. Chill a coupe glass, rinse it with **absinthe**, and discard the excess.\n2. In a shaker, muddle **cucumber** and gently bruise **mint** leaves.\n3. Add **white rum**, **lime juice**, **rich simple syrup**, and ice.\n4. Shake hard and fine strain into the prepared glass.\n5. Top with a splash of **soda water**.",
+  "cocktail.616.name": "McKinley's Delight",
+  "cocktail.616.description": "A classic stirred whiskey cocktail combining **rye whiskey**, **red vermouth**, cherry liqueur, and a touch of **absinthe**.",
+  "cocktail.616.instructions": "1. Fill a mixing glass with ice.\n2. Add **rye whiskey**, **red vermouth**, **cherry liqueur**, and a dash of **absinthe**.\n3. Stir until chilled and diluted.\n4. Fine strain into a chilled coupe glass.",
+  "cocktail.617.name": "Redwood Heights",
+  "cocktail.617.description": "A bitter, spirit-forward gin aperitif with an **absinthe** rinse, **red vermouth**, **Cynar**, and **orange bitters**.",
+  "cocktail.617.instructions": "1. Chill a coupe glass, rinse with **absinthe**, and discard excess.\n2. In a mixing glass with ice, add **gin**, **red vermouth**, **Cynar**, and **orange bitters**.\n3. Stir well, then strain into the prepared glass.",
+  "cocktail.618.name": "Hemingway Breakfast",
+  "cocktail.618.description": "A tropical and spiced Hemingway riff: **white rum**, **lime juice**, **falernum**, orange marmalade, bitters, and an **absinthe** rinse.",
+  "cocktail.618.instructions": "1. Chill a coupe glass, rinse with **absinthe**, and discard excess.\n2. Add **white rum**, **lime juice**, **falernum**, **orange marmalade**, and **Angostura bitters** to a shaker with ice.\n3. Shake hard and fine strain into the prepared glass.",
+  "cocktail.619.name": "Crosstree",
+  "cocktail.619.description": "A bright, funky shaken sour with **overproof rum**, **bianco vermouth**, **pineapple juice**, and **lime**, accented by vanilla and **absinthe**.",
+  "cocktail.619.instructions": "1. Add **overproof rum**, **bianco vermouth**, **pineapple juice**, **lime juice**, **vanilla syrup**, and **absinthe** to a shaker with ice.\n2. Shake hard until well chilled.\n3. Fine strain into a chilled coupe glass."
 }
