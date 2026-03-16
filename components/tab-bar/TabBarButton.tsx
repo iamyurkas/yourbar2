@@ -1,4 +1,5 @@
 import type { BottomTabBarButtonProps } from '@react-navigation/bottom-tabs';
+import { useSegments } from 'expo-router';
 import React, { useCallback } from 'react';
 import { View } from 'react-native';
 
@@ -8,6 +9,7 @@ import { useUnsavedChanges } from '@/providers/unsaved-changes-provider';
 import { useI18n } from '@/libs/i18n/use-i18n';
 import { useOnboardingTarget } from '@/providers/onboarding-provider';
 import type { OnboardingTargetId } from '@/libs/onboarding-config';
+import type { AppTabName } from '@/providers/unsaved-changes-provider';
 
 type TabBarButtonProps = BottomTabBarButtonProps & {
   onOpenDialog: (options: DialogOptions) => void;
@@ -17,22 +19,25 @@ type TabBarButtonProps = BottomTabBarButtonProps & {
 type TabBarPressEvent = Parameters<NonNullable<BottomTabBarButtonProps['onPress']>>[0];
 
 export function TabBarButton({ onOpenDialog, onboardingTargetId, ...props }: TabBarButtonProps) {
+  const segments = useSegments();
   const { t } = useI18n();
   const {
-    hasUnsavedChanges,
-    requireLeaveConfirmation,
     saveHandler,
-    setHasUnsavedChanges,
-    setRequireLeaveConfirmation,
+    shouldBlockTabSwitch,
+    resetUnsavedChanges,
   } = useUnsavedChanges();
+
+  const activeTab = segments.find((segment): segment is AppTabName => (
+    segment === 'cocktails' || segment === 'ingredients' || segment === 'shaker'
+  )) ?? null;
+
   const handlePress = useCallback((event: TabBarPressEvent) => {
     const proceed = () => {
-      setHasUnsavedChanges(false);
-      setRequireLeaveConfirmation(false);
+      resetUnsavedChanges();
       props.onPress?.(event);
     };
 
-    if (hasUnsavedChanges || requireLeaveConfirmation) {
+    if (shouldBlockTabSwitch(activeTab)) {
       onOpenDialog({
         title: t("tabBar.leaveWithoutSavingTitle"),
         message: t("tabBar.leaveWithoutSavingMessage"),
@@ -47,13 +52,12 @@ export function TabBarButton({ onOpenDialog, onboardingTargetId, ...props }: Tab
 
     proceed();
   }, [
-    hasUnsavedChanges,
+    activeTab,
     onOpenDialog,
     props,
-    requireLeaveConfirmation,
+    resetUnsavedChanges,
     saveHandler,
-    setHasUnsavedChanges,
-    setRequireLeaveConfirmation,
+    shouldBlockTabSwitch,
     t,
   ]);
 

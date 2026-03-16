@@ -75,6 +75,7 @@ const INGREDIENT_REORDER_TRANSITION = LinearTransition.duration(180);
 const MIN_DEFAULT_SERVINGS = 1;
 const MAX_DEFAULT_SERVINGS = 6;
 const DEFAULT_SERVINGS_OPTIONS = [1, 2, 3, 4, 5, 6] as const;
+const COCKTAILS_UNSAVED_OWNER = { tab: "cocktails" as const };
 
 type EditableSubstitute = {
   key: string;
@@ -512,28 +513,28 @@ export default function CreateCocktailScreen() {
   }, [buildSnapshot, initialSnapshot]);
 
   useEffect(() => {
-    setHasUnsavedChanges(hasUnsavedChanges || shouldConfirmOnLeave);
+    setHasUnsavedChanges(hasUnsavedChanges || shouldConfirmOnLeave, COCKTAILS_UNSAVED_OWNER);
   }, [hasUnsavedChanges, setHasUnsavedChanges, shouldConfirmOnLeave]);
 
   useEffect(() => {
-    setRequireLeaveConfirmation(shouldConfirmOnLeave);
+    setRequireLeaveConfirmation(shouldConfirmOnLeave, COCKTAILS_UNSAVED_OWNER);
     return () => {
-      setRequireLeaveConfirmation(false);
+      setRequireLeaveConfirmation(false, COCKTAILS_UNSAVED_OWNER);
     };
   }, [setRequireLeaveConfirmation, shouldConfirmOnLeave]);
 
   useFocusEffect(
     useCallback(() => {
-      setHasUnsavedChanges(hasUnsavedChanges || shouldConfirmOnLeave);
+      setHasUnsavedChanges(hasUnsavedChanges || shouldConfirmOnLeave, COCKTAILS_UNSAVED_OWNER);
       return () => {
-        setHasUnsavedChanges(false);
+        setHasUnsavedChanges(false, COCKTAILS_UNSAVED_OWNER);
       };
     }, [hasUnsavedChanges, setHasUnsavedChanges, shouldConfirmOnLeave]),
   );
 
   useEffect(() => () => {
-    setHasUnsavedChanges(false);
-    setRequireLeaveConfirmation(false);
+    setHasUnsavedChanges(false, COCKTAILS_UNSAVED_OWNER);
+    setRequireLeaveConfirmation(false, COCKTAILS_UNSAVED_OWNER);
   }, [setHasUnsavedChanges, setRequireLeaveConfirmation]);
 
   const getBaseGroupId = useCallback(
@@ -1401,7 +1402,7 @@ export default function CreateCocktailScreen() {
         }
       }
 
-      setHasUnsavedChanges(false);
+      setHasUnsavedChanges(false, COCKTAILS_UNSAVED_OWNER);
       isNavigatingAfterSaveRef.current = true;
       const targetId = persisted.id ?? persisted.name;
       if (!isEditMode && returnToPath) {
@@ -1494,7 +1495,7 @@ export default function CreateCocktailScreen() {
               return;
             }
 
-            setHasUnsavedChanges(false);
+            setHasUnsavedChanges(false, COCKTAILS_UNSAVED_OWNER);
             const state = navigation.getState();
             const currentIndex = state?.index ?? 0;
             if (currentIndex >= 2) {
@@ -1539,7 +1540,7 @@ export default function CreateCocktailScreen() {
             label: t("cocktailForm.leave"),
             variant: "destructive",
             onPress: () => {
-              setHasUnsavedChanges(false);
+              setHasUnsavedChanges(false, COCKTAILS_UNSAVED_OWNER);
               onLeave();
             },
           },

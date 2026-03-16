@@ -39,6 +39,8 @@ import { useInventory, type Ingredient } from '@/providers/inventory-provider';
 import { useUnsavedChanges } from '@/providers/unsaved-changes-provider';
 import { suggestIngredientTagIds } from '@/services/barcode/suggestIngredientTags';
 
+const INGREDIENTS_UNSAVED_OWNER = { tab: 'ingredients' as const };
+
 type IngredientFormSnapshot = {
   name: string;
   description: string;
@@ -334,19 +336,19 @@ export default function IngredientFormScreen() {
   }, [buildSnapshot, initialSnapshot]);
 
   useEffect(() => {
-    setHasUnsavedChanges(hasUnsavedChanges || shouldConfirmOnLeave);
+    setHasUnsavedChanges(hasUnsavedChanges || shouldConfirmOnLeave, INGREDIENTS_UNSAVED_OWNER);
   }, [hasUnsavedChanges, setHasUnsavedChanges, shouldConfirmOnLeave]);
 
   useEffect(() => {
-    setRequireLeaveConfirmation(shouldConfirmOnLeave);
+    setRequireLeaveConfirmation(shouldConfirmOnLeave, INGREDIENTS_UNSAVED_OWNER);
     return () => {
-      setRequireLeaveConfirmation(false);
+      setRequireLeaveConfirmation(false, INGREDIENTS_UNSAVED_OWNER);
     };
   }, [setRequireLeaveConfirmation, shouldConfirmOnLeave]);
 
   useEffect(() => () => {
-    setHasUnsavedChanges(false);
-    setRequireLeaveConfirmation(false);
+    setHasUnsavedChanges(false, INGREDIENTS_UNSAVED_OWNER);
+    setRequireLeaveConfirmation(false, INGREDIENTS_UNSAVED_OWNER);
   }, [setHasUnsavedChanges, setRequireLeaveConfirmation]);
 
   const imageSource = useMemo(() => {
@@ -660,7 +662,7 @@ export default function IngredientFormScreen() {
           return;
         }
 
-        setHasUnsavedChanges(false);
+        setHasUnsavedChanges(false, INGREDIENTS_UNSAVED_OWNER);
         isNavigatingAfterSaveRef.current = true;
 
         if (returnToPath) {
@@ -741,7 +743,7 @@ export default function IngredientFormScreen() {
       }
     }
 
-    setHasUnsavedChanges(false);
+    setHasUnsavedChanges(false, INGREDIENTS_UNSAVED_OWNER);
     isNavigatingAfterSaveRef.current = true;
     const targetId = created.id ?? created.name;
     if (!targetId) {
@@ -801,7 +803,7 @@ export default function IngredientFormScreen() {
             label: t('ingredientForm.leave'),
             variant: 'destructive',
             onPress: () => {
-              setHasUnsavedChanges(false);
+              setHasUnsavedChanges(false, INGREDIENTS_UNSAVED_OWNER);
               onLeave();
             },
           },
@@ -954,7 +956,7 @@ export default function IngredientFormScreen() {
               return;
             }
 
-            setHasUnsavedChanges(false);
+            setHasUnsavedChanges(false, INGREDIENTS_UNSAVED_OWNER);
             const isReturningToIngredientDetails = returnToPath === '/ingredients/[ingredientId]';
             if (isReturningToIngredientDetails) {
               router.replace({ pathname: '/ingredients', params: returnToParams as never });
