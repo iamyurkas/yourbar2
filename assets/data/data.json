@@ -4598,7 +4598,15 @@
           "ingredientId": 307,
           "name": "Salt",
           "amount": "1",
-          "unitId": 15
+          "unitId": 15,
+          "substitutes": [
+            {
+              "name": "Saline solution (4:1)",
+              "amount": "2",
+              "unitId": 7,
+              "ingredientId": 368
+            }
+          ]
         },
         {
           "order": 10,
@@ -6371,7 +6379,15 @@
           "amount": "5",
           "unitId": 8,
           "garnish": true,
-          "optional": true
+          "optional": true,
+          "substitutes": [
+            {
+              "name": "Saline solution (4:1)",
+              "amount": "10",
+              "unitId": 7,
+              "ingredientId": 368
+            }
+          ]
         }
       ]
     },
@@ -6620,7 +6636,15 @@
           "ingredientId": 307,
           "name": "Salt",
           "amount": "2",
-          "unitId": 15
+          "unitId": 15,
+          "substitutes": [
+            {
+              "name": "Saline solution (4:1)",
+              "amount": "4",
+              "unitId": 7,
+              "ingredientId": 368
+            }
+          ]
         },
         {
           "order": 11,
@@ -8988,7 +9012,15 @@
           "ingredientId": 307,
           "name": "Salt",
           "amount": "1",
-          "unitId": 6
+          "unitId": 6,
+          "substitutes": [
+            {
+              "name": "Saline solution (4:1)",
+              "amount": "2",
+              "unitId": 7,
+              "ingredientId": 368
+            }
+          ]
         },
         {
           "order": 8,
@@ -16382,7 +16414,15 @@
           "ingredientId": 307,
           "name": "Salt",
           "amount": "0.5",
-          "unitId": 15
+          "unitId": 15,
+          "substitutes": [
+            {
+              "name": "Saline solution (4:1)",
+              "amount": "1",
+              "unitId": 7,
+              "ingredientId": 368
+            }
+          ]
         },
         {
           "order": 8,
@@ -18066,7 +18106,15 @@
           "name": "Salt",
           "amount": "1",
           "unitId": 15,
-          "garnish": true
+          "garnish": true,
+          "substitutes": [
+            {
+              "name": "Saline solution (4:1)",
+              "amount": "2",
+              "unitId": 7,
+              "ingredientId": 368
+            }
+          ]
         },
         {
           "order": 7,
@@ -22026,7 +22074,15 @@
           "amount": "5",
           "unitId": 8,
           "optional": true,
-          "garnish": true
+          "garnish": true,
+          "substitutes": [
+            {
+              "name": "Saline solution (4:1)",
+              "amount": "10",
+              "unitId": 7,
+              "ingredientId": 368
+            }
+          ]
         },
         {
           "order": 8,
@@ -23255,7 +23311,15 @@
           "name": "Salt",
           "amount": "1",
           "unitId": 6,
-          "optional": true
+          "optional": true,
+          "substitutes": [
+            {
+              "name": "Saline solution (4:1)",
+              "amount": "2",
+              "unitId": 7,
+              "ingredientId": 368
+            }
+          ]
         }
       ]
     },
@@ -23821,7 +23885,15 @@
           "name": "Salt",
           "amount": "1",
           "unitId": 15,
-          "garnish": true
+          "garnish": true,
+          "substitutes": [
+            {
+              "name": "Saline solution (4:1)",
+              "amount": "2",
+              "unitId": 7,
+              "ingredientId": 368
+            }
+          ]
         },
         {
           "order": 7,
@@ -24595,7 +24667,15 @@
           "name": "Salt",
           "amount": "1",
           "unitId": 15,
-          "garnish": true
+          "garnish": true,
+          "substitutes": [
+            {
+              "name": "Saline solution (4:1)",
+              "amount": "2",
+              "unitId": 7,
+              "ingredientId": 368
+            }
+          ]
         },
         {
           "order": 9,
@@ -27275,7 +27355,15 @@
           "name": "Salt",
           "amount": "1",
           "unitId": 15,
-          "garnish": true
+          "garnish": true,
+          "substitutes": [
+            {
+              "name": "Saline solution (4:1)",
+              "amount": "2",
+              "unitId": 7,
+              "ingredientId": 368
+            }
+          ]
         },
         {
           "order": 7,
@@ -29951,7 +30039,15 @@
           "ingredientId": 307,
           "name": "Salt",
           "amount": "1",
-          "unitId": 15
+          "unitId": 15,
+          "substitutes": [
+            {
+              "name": "Saline solution (4:1)",
+              "amount": "2",
+              "unitId": 7,
+              "ingredientId": 368
+            }
+          ]
         },
         {
           "order": 7,
@@ -31178,7 +31274,15 @@
           "name": "Salt",
           "amount": "5",
           "unitId": 8,
-          "garnish": true
+          "garnish": true,
+          "substitutes": [
+            {
+              "name": "Saline solution (4:1)",
+              "amount": "10",
+              "unitId": 7,
+              "ingredientId": 368
+            }
+          ]
         },
         {
           "order": 5,
@@ -31470,7 +31574,15 @@
           "ingredientId": 307,
           "name": "Salt",
           "amount": "1",
-          "unitId": 24
+          "unitId": 24,
+          "substitutes": [
+            {
+              "name": "Saline solution (4:1)",
+              "amount": "2",
+              "unitId": 7,
+              "ingredientId": 368
+            }
+          ]
         },
         {
           "order": 8,
@@ -32366,7 +32478,15 @@
           "ingredientId": 307,
           "name": "Salt",
           "amount": "1",
-          "unitId": 15
+          "unitId": 15,
+          "substitutes": [
+            {
+              "name": "Saline solution (4:1)",
+              "amount": "2",
+              "unitId": 7,
+              "ingredientId": 368
+            }
+          ]
         }
       ]
     },
@@ -33930,7 +34050,15 @@
           "ingredientId": 307,
           "name": "Salt",
           "amount": "0.5",
-          "unitId": 15
+          "unitId": 15,
+          "substitutes": [
+            {
+              "name": "Saline solution (4:1)",
+              "amount": "1",
+              "unitId": 7,
+              "ingredientId": 368
+            }
+          ]
         },
         {
           "order": 8,
@@ -36906,7 +37034,15 @@
           "ingredientId": 307,
           "name": "Salt",
           "amount": "1",
-          "unitId": 15
+          "unitId": 15,
+          "substitutes": [
+            {
+              "name": "Saline solution (4:1)",
+              "amount": "2",
+              "unitId": 7,
+              "ingredientId": 368
+            }
+          ]
         },
         {
           "order": 11,
@@ -37411,7 +37547,15 @@
           "ingredientId": 307,
           "name": "Salt",
           "amount": "1",
-          "unitId": 15
+          "unitId": 15,
+          "substitutes": [
+            {
+              "name": "Saline solution (4:1)",
+              "amount": "2",
+              "unitId": 7,
+              "ingredientId": 368
+            }
+          ]
         },
         {
           "order": 7,
