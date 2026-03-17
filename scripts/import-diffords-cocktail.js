@@ -159,6 +159,10 @@ function parseIngredientLine(line) {
       .trim(),
   );
 
+  if (unitId === 1 && /\bleaves?\b/i.test(name)) {
+    unitId = 10;
+  }
+
   if (!name) return null;
 
   const lowered = normalizeText(working);
