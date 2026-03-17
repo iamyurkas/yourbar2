@@ -38862,6 +38862,218 @@
           "garnish": true
         }
       ]
+    },
+    {
+      "id": 618,
+      "name": "Maid in Cuba",
+      "description": "A refreshing and sophisticated twist on the Daiquiri, combining white rum with cool cucumber and fresh mint, finished with a subtle herbal absinthe rinse and a splash of soda. Zesty, crisp, and exceptionally balanced.",
+      "instructions": "1. Select and pre-chill a coupe glass.\n2. Rinse the chilled glass with **absinthe** (swirl around to coat the inside and discard the excess).\n3. In a shaker, muddle 2 slices of **cucumber** and gently bruise 7 fresh **mint leaves**.\n4. Add 60 ml of **white rum**, 22.5 ml of **lime juice**, 15 ml of **rich simple syrup**, and about 150 g of **ice**.\n5. Shake vigorously until well chilled.\n6. Fine strain into the absinthe-rinsed glass.\n7. Top with 10 ml of **soda water**.\n8. Garnish with a **cucumber** slice floated on the surface.",
+      "glassId": "coupe",
+      "methodIds": [
+        "muddle",
+        "shake"
+      ],
+      "tags": [
+        6,
+        8
+      ],
+      "defaultServings": 1,
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 2,
+          "ingredientId": 2,
+          "name": "Absinthe",
+          "amount": "1",
+          "unitId": 20,
+          "process": true
+        },
+        {
+          "order": 3,
+          "ingredientId": 133,
+          "name": "Cucumber",
+          "amount": "2",
+          "unitId": 19
+        },
+        {
+          "order": 4,
+          "ingredientId": 241,
+          "name": "Mint",
+          "amount": "7",
+          "unitId": 10
+        },
+        {
+          "order": 5,
+          "ingredientId": 357,
+          "name": "White Rum",
+          "amount": "60",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 228,
+          "name": "Lime Juice",
+          "amount": "22.5",
+          "unitId": 11
+        },
+        {
+          "order": 7,
+          "ingredientId": 298,
+          "name": "Rich Simple Syrup",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 8,
+          "ingredientId": 318,
+          "name": "Soda Water",
+          "amount": "10",
+          "unitId": 11
+        },
+        {
+          "order": 9,
+          "ingredientId": 133,
+          "name": "Cucumber",
+          "amount": "1",
+          "unitId": 19,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 619,
+      "name": "McKinley's Delight",
+      "description": "A bold and aromatic classic from the late 19th century, this cocktail is a spirit-forward Manhattan riff. Spicy rye whiskey is balanced by sweet vermouth and rich cherry liqueur, with a dash of absinthe adding an intriguing layer of herbal complexity.",
+      "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 50 ml of **rye whiskey**, 25 ml of **red vermouth**, 5 ml of **cherry heering**, and 1 dash of **absinthe**.\n3. Stir gently for about 30 seconds until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Express the oils from a **lemon** peel over the drink and use it as a garnish.",
+      "glassId": "coupe",
+      "methodIds": [
+        "stir"
+      ],
+      "tags": [
+        5
+      ],
+      "defaultServings": 1,
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 2,
+          "ingredientId": 305,
+          "name": "Rye Whiskey",
+          "amount": "50",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 294,
+          "name": "Red Vermouth",
+          "amount": "25",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 86,
+          "name": "Cherry Heering",
+          "amount": "5",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 2,
+          "name": "Absinthe",
+          "amount": "1",
+          "unitId": 6
+        },
+        {
+          "order": 6,
+          "ingredientId": 219,
+          "name": "Lemon",
+          "amount": "1",
+          "unitId": 14,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 620,
+      "name": "Redwood Heights",
+      "description": "An elegant and complex gin-based cocktail that offers a refreshing herbal alternative to a Manhattan. The botanical notes of gin are layered with sweet vermouth and the bitter, earthy depth of Cynar, finished with an absinthe-rinsed glass for a lingering aromatic finish.",
+      "instructions": "1. Select and pre-chill a coupe glass.\n2. Rinse the chilled glass with **absinthe** (swirl around and discard the excess).\n3. Fill a mixing glass with **ice**.\n4. Add 60 ml of **gin**, 30 ml of **red vermouth**, 15 ml of **Cynar**, and 1 dash of **orange bitters**.\n5. Stir gently for about 30 seconds until well chilled.\n6. Strain into the absinthe-rinsed glass.\n7. Express the oils from an **orange** peel over the drink and use it as a garnish.",
+      "glassId": "coupe",
+      "methodIds": [
+        "stir"
+      ],
+      "tags": [
+        5
+      ],
+      "defaultServings": 1,
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 2,
+          "ingredientId": 2,
+          "name": "Absinthe",
+          "amount": "1",
+          "unitId": 20,
+          "process": true
+        },
+        {
+          "order": 3,
+          "ingredientId": 161,
+          "name": "Gin",
+          "amount": "60",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 294,
+          "name": "Red Vermouth",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 134,
+          "name": "Cynar",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 248,
+          "name": "Orange Bitters",
+          "amount": "1",
+          "unitId": 6
+        },
+        {
+          "order": 7,
+          "ingredientId": 247,
+          "name": "Orange",
+          "amount": "1",
+          "unitId": 14,
+          "garnish": true
+        }
+      ]
     }
   ],
   "ingredients": [
