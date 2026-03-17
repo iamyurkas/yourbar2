@@ -300,8 +300,10 @@ function buildIngredientNameVariants(name) {
     [/^lime\s+slices?\s+wheels?$/i, 'lime'],
     [/^lime\s+wheels?$/i, 'lime'],
     [/^sugar syrup$/i, 'simple syrup'],
+    [/^orgeat syrup$/i, 'almond orgeat syrup'],
     [/^kummel liqueur$/i, 'kümmel liqueur'],
     [/^maraschino liqueur$/i, 'luxardo maraschino'],
+    [/^white overproof rum$/i, 'overproof rum'],
   ];
 
   patterns.forEach(([regex, replacement]) => {
