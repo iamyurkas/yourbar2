@@ -219,6 +219,8 @@ function extractJsonLd(html) {
 
 function stripHtmlTags(value) {
   return String(value || '')
+    .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, ' ')
+    .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, ' ')
     .replace(/<br\s*\/?>/gi, ' ')
     .replace(/<[^>]+>/g, ' ')
     .replace(/&nbsp;/gi, ' ')
@@ -229,16 +231,42 @@ function stripHtmlTags(value) {
     .trim();
 }
 
-function extractReviewText(html) {
-  const reviewSectionMatch = html.match(
-    /<h2[^>]*>\s*Review\s*<\/h2>[\s\S]*?(?:<h2|<section[^>]*class=["'][^"']*recipe-[^"']*["'])/i,
-  );
+function isLikelyHumanText(value) {
+  const text = String(value || '').trim();
+  if (!text) return false;
+  if (/[{}]/.test(text)) return false;
+  if (/\b(background|font-family|border|padding|margin|display|@media)\b/i.test(text)) return false;
 
-  const scopedHtml = reviewSectionMatch ? reviewSectionMatch[0] : html;
-  const paragraphMatches = [...scopedHtml.matchAll(/<p[^>]*>([\s\S]*?)<\/p>/gi)];
-  for (const paragraphMatch of paragraphMatches) {
-    const text = stripHtmlTags(paragraphMatch[1]);
-    if (text) {
+  const words = text.match(/[a-zA-Z][a-zA-Z'-]*/g) || [];
+  if (words.length < 5) return false;
+
+  const punctuationNoise = (text.match(/[;:]/g) || []).length;
+  if (punctuationNoise > Math.max(6, Math.floor(text.length / 20))) return false;
+
+  return true;
+}
+
+function extractReviewText(html) {
+  const sanitizedHtml = String(html || '')
+    .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, ' ')
+    .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, ' ');
+
+  const reviewBlockMatch = sanitizedHtml.match(
+    /<h2[^>]*>\s*Review\s*<\/h2>([\s\S]*?)(?=<h2[^>]*>|$)/i,
+  );
+  const scopedHtml = reviewBlockMatch?.[1] || '';
+  if (!scopedHtml) {
+    return '';
+  }
+
+  const candidates = [
+    ...scopedHtml.matchAll(/<p[^>]*>([\s\S]*?)<\/p>/gi),
+    ...scopedHtml.matchAll(/<li[^>]*>([\s\S]*?)<\/li>/gi),
+  ];
+
+  for (const candidate of candidates) {
+    const text = stripHtmlTags(candidate[1]);
+    if (isLikelyHumanText(text)) {
       return text;
     }
   }
