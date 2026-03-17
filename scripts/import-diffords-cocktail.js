@@ -611,10 +611,12 @@ function ingredientDisplayName(name) {
   return String(name || '').toLowerCase();
 }
 
-function formatIngredientWithAmount(row) {
+function formatIngredientWithAmount(row, options = {}) {
   if (!row) return '';
+  const { lowercaseName = true } = options;
   const qty = formatQuantity(row.amount, row.unitId);
-  return `${qty} of **${ingredientDisplayName(row.name)}**`;
+  const displayName = lowercaseName ? ingredientDisplayName(row.name) : String(row.name || '');
+  return `${qty} of **${displayName}**`;
 }
 
 function findIngredientsMentionedInText(text, ingredientRows) {
@@ -662,7 +664,9 @@ function expandPourIngredientsStep(text, ingredientRows, alreadyMentionedIds) {
     return text;
   }
 
-  const list = candidates.map((row) => formatIngredientWithAmount(row)).join(' and ');
+  const list = candidates
+    .map((row) => formatIngredientWithAmount(row, { lowercaseName: !!row.process }))
+    .join(' and ');
   return text.replace(/\bpour\b/i, `Pour ${list}`);
 }
 
