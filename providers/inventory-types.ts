@@ -30,6 +30,8 @@ type CocktailIngredientRecord = NonNullable<
     ingredientId?: number | null;
     name?: string | null;
     brand?: boolean | null;
+    amount?: string | null;
+    unit?: string | null;
   }> | null;
 };
 
@@ -119,6 +121,8 @@ export type CreateCocktailSubstituteInput = {
   ingredientId?: number | string | null;
   name?: string | null;
   brand?: boolean | null;
+  amount?: string | null;
+  unit?: string | null;
 };
 
 export type CreateCocktailIngredientInput = {

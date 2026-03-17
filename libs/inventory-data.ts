@@ -43,6 +43,8 @@ type RawCocktail = {
       ingredientId?: number;
       name?: string;
       brand?: boolean;
+      amount?: string;
+      unit?: string;
     }>;
   }>;
   synonyms?: string[];

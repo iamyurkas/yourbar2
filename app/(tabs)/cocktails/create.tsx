@@ -81,6 +81,8 @@ type EditableSubstitute = {
   ingredientId?: number;
   name: string;
   isBrand?: boolean;
+  amount: string;
+  unit: string;
 };
 
 type EditableIngredient = {
@@ -125,6 +127,8 @@ type CocktailFormSnapshot = {
       ingredientId?: number;
       name: string;
       isBrand?: boolean;
+      amount: string;
+      unit: string;
     }[];
   }[];
 };
@@ -146,6 +150,8 @@ function createEditableSubstitute(
     ingredientId?: number | null;
     name?: string | null;
     brand?: boolean | null;
+    amount?: string | null;
+    unit?: string | null;
   },
 ): EditableSubstitute | undefined {
   const name = source.name?.trim();
@@ -164,6 +170,8 @@ function createEditableSubstitute(
     ingredientId: substituteIngredientId,
     name,
     isBrand: source.brand ?? false,
+    amount: source.amount?.trim() ?? "",
+    unit: source.unit?.trim() ?? "",
   } satisfies EditableSubstitute;
 }
 
@@ -225,6 +233,8 @@ function mapRecipeIngredientToEditable(
           typeof item.ingredientId === "number" ? item.ingredientId : undefined,
         name: item.name,
         brand: (item as { brand?: boolean }).brand ?? false,
+        amount: (item as { amount?: string }).amount,
+        unit: (item as { unit?: string }).unit,
       }),
     )
     .filter((item): item is EditableSubstitute => Boolean(item));
@@ -504,6 +514,8 @@ export default function CreateCocktailScreen() {
           ingredientId: substitute.ingredientId,
           name: substitute.name,
           isBrand: substitute.isBrand,
+          amount: substitute.amount,
+          unit: substitute.unit,
         })),
       })),
     };
@@ -512,7 +524,6 @@ export default function CreateCocktailScreen() {
     defaultServings,
     glassId,
     imageUri,
-    ingredientById,
     ingredientsState,
     instructions,
     video,
@@ -1095,6 +1106,23 @@ export default function CreateCocktailScreen() {
     [handleUpdateSubstitutes],
   );
 
+  const handleChangeSubstitute = useCallback(
+    (
+      ingredientKey: string,
+      substituteKey: string,
+      changes: Partial<Pick<EditableSubstitute, "amount" | "unit">>,
+    ) => {
+      handleUpdateSubstitutes(ingredientKey, (items) =>
+        items.map((substitute) =>
+          substitute.key === substituteKey
+            ? { ...substitute, ...changes }
+            : substitute,
+        ),
+      );
+    },
+    [handleUpdateSubstitutes],
+  );
+
   const handleOpenUnitPicker = useCallback((key: string) => {
     setUnitPickerTarget(key);
   }, []);
@@ -1230,6 +1258,8 @@ export default function CreateCocktailScreen() {
         name: trimmedName,
         ingredientId: numericId,
         isBrand: false,
+        amount: "",
+        unit: "",
       };
 
       handleUpdateSubstitutes(substituteTarget, (items) => {
@@ -1310,6 +1340,8 @@ export default function CreateCocktailScreen() {
             ingredientId: substituteIngredientId,
             name: substituteName,
             brand: substitute.isBrand ?? false,
+            amount: substitute.amount.trim() || undefined,
+            unit: substitute.unit.trim() || undefined,
           }];
         });
 
@@ -1458,6 +1490,7 @@ export default function CreateCocktailScreen() {
     description,
     glassId,
     imageUri,
+    ingredientById,
     ingredientsState,
     instructions,
     video,
@@ -2107,9 +2140,10 @@ export default function CreateCocktailScreen() {
                   onRequestUnitPicker={handleOpenUnitPicker}
                   onRequestAddSubstitute={handleOpenSubstituteModal}
                   onRemoveSubstitute={handleRemoveSubstitute}
+                  onChangeSubstitute={handleChangeSubstitute}
                   onRequestCreateIngredient={handleRequestCreateIngredient}
                   onInputFocus={scrollFieldIntoView}
-                  onOpenDialog={showDialog}
+                onOpenDialog={showDialog}
                   index={index}
                   totalCount={ingredientsState.length}
                 />
@@ -2594,6 +2628,11 @@ type EditableIngredientRowProps = {
   onRequestUnitPicker: (key: string) => void;
   onRequestAddSubstitute: (key: string) => void;
   onRemoveSubstitute: (ingredientKey: string, substituteKey: string) => void;
+  onChangeSubstitute: (
+    ingredientKey: string,
+    substituteKey: string,
+    changes: Partial<Pick<EditableSubstitute, "amount" | "unit">>,
+  ) => void;
   onRequestCreateIngredient: (name: string) => void;
   onInputFocus: (target?: number | null) => void;
   onOpenDialog: (options: DialogOptions) => void;
@@ -2614,6 +2653,7 @@ function EditableIngredientRow({
   onRequestUnitPicker,
   onRequestAddSubstitute,
   onRemoveSubstitute,
+  onChangeSubstitute,
   onRequestCreateIngredient,
   onInputFocus,
   onOpenDialog,
@@ -3308,29 +3348,62 @@ function EditableIngredientRow({
                   },
                 ]}
               >
-                <Text
-                  style={[styles.substituteLabel, { color: Colors.onSurface }]}
-                  numberOfLines={1}
-                >
-                  {substitute.name}
-                  {substitute.isBrand ? ` • ${t("cocktailForm.brand")}` : ""}
-                </Text>
-                <Pressable
-                  onPress={() =>
-                    onRemoveSubstitute(ingredient.key, substitute.key)
-                  }
-                  hitSlop={8}
-                  accessibilityRole="button"
-                  accessibilityLabel={t("cocktailForm.removeNamed", {
-                    name: substitute.name,
-                  })}
-                >
-                  <MaterialCommunityIcons
-                    name="close"
-                    size={16}
-                    color={Colors.onSurfaceVariant}
+                <View style={styles.substituteHeaderRow}>
+                  <Text
+                    style={[styles.substituteLabel, { color: Colors.onSurface }]}
+                    numberOfLines={1}
+                  >
+                    {substitute.name}
+                    {substitute.isBrand ? ` • ${t("cocktailForm.brand")}` : ""}
+                  </Text>
+                  <Pressable
+                    onPress={() =>
+                      onRemoveSubstitute(ingredient.key, substitute.key)
+                    }
+                    hitSlop={8}
+                    accessibilityRole="button"
+                    accessibilityLabel={t("cocktailForm.removeNamed", {
+                      name: substitute.name,
+                    })}
+                  >
+                    <MaterialCommunityIcons
+                      name="close"
+                      size={16}
+                      color={Colors.onSurfaceVariant}
+                    />
+                  </Pressable>
+                </View>
+                <View style={styles.substituteMetaRow}>
+                  <TextInput
+                    value={substitute.amount}
+                    onChangeText={(value) =>
+                      onChangeSubstitute(ingredient.key, substitute.key, {
+                        amount: value,
+                      })
+                    }
+                    placeholder={t("cocktailForm.amount")}
+                    keyboardType="decimal-pad"
+                    style={[
+                      styles.substituteMetaInput,
+                      { color: Colors.onSurface, borderColor: Colors.outlineVariant },
+                    ]}
+                    placeholderTextColor={Colors.onSurfaceVariant}
                   />
-                </Pressable>
+                  <TextInput
+                    value={substitute.unit}
+                    onChangeText={(value) =>
+                      onChangeSubstitute(ingredient.key, substitute.key, {
+                        unit: value,
+                      })
+                    }
+                    placeholder={t("cocktailForm.unit")}
+                    style={[
+                      styles.substituteMetaInput,
+                      { color: Colors.onSurface, borderColor: Colors.outlineVariant },
+                    ]}
+                    placeholderTextColor={Colors.onSurfaceVariant}
+                  />
+                </View>
               </View>
             ))}
           </View>
@@ -3847,19 +3920,35 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   substitutePill: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
     borderWidth: StyleSheet.hairlineWidth,
     borderRadius: 12,
     paddingHorizontal: 12,
     paddingVertical: 10,
-    gap: 12,
+    gap: 8,
   },
   substituteLabel: {
     fontSize: 14,
     fontWeight: "400",
     flex: 1,
+  },
+  substituteHeaderRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: 12,
+  },
+  substituteMetaRow: {
+    flexDirection: "row",
+    gap: 8,
+  },
+  substituteMetaInput: {
+    flex: 1,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    fontSize: 14,
+    minHeight: 40,
   },
   substituteHint: {
     fontSize: 14,

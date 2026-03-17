@@ -1042,11 +1042,15 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
               seenKeys.add(key);
 
               const brand = candidate.brand ? true : undefined;
+              const substituteAmount = candidate.amount?.trim() || undefined;
+              const substituteUnit = candidate.unit?.trim() || undefined;
 
               substitutes.push({
                 ingredientId: substituteIngredientId,
                 name: substituteName,
                 brand,
+                amount: substituteAmount,
+                unit: substituteUnit,
               });
             });
 
@@ -2031,11 +2035,15 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             seenKeys.add(key);
 
             const brand = candidate.brand ? true : undefined;
+            const substituteAmount = candidate.amount?.trim() || undefined;
+            const substituteUnit = candidate.unit?.trim() || undefined;
 
             substitutes.push({
               ingredientId: substituteIngredientId,
               name: substituteName,
               brand,
+              amount: substituteAmount,
+              unit: substituteUnit,
             });
           });
 

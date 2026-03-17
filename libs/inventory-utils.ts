@@ -189,6 +189,8 @@ export function normalizeSubstitutes(substitutes: readonly CocktailSubstitute[] 
       ingredientId: substitute.ingredientId != null ? Math.trunc(Number(substitute.ingredientId)) : undefined,
       name: substitute.name,
       brand: substitute.brand,
+      amount: substitute.amount ?? undefined,
+      unit: substitute.unit ?? undefined,
     }))
     .filter((substitute) => substitute.name && Number.isFinite(Number(substitute.ingredientId ?? -1)));
 }
