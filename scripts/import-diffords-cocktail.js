@@ -285,6 +285,26 @@ function extractReviewText(html) {
   return '';
 }
 
+function extractGlassText(html) {
+  const sanitizedHtml = String(html || '')
+    .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, ' ')
+    .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, ' ');
+
+  const patterns = [
+    /<dt[^>]*>\s*Glass\s*<\/dt>\s*<dd[^>]*>([\s\S]*?)<\/dd>/i,
+    /\bGlass\s*:\s*([^\n<]+)/i,
+  ];
+
+  for (const pattern of patterns) {
+    const match = sanitizedHtml.match(pattern);
+    if (!match) continue;
+    const text = stripHtmlTags(match[1]);
+    if (text) return text;
+  }
+
+  return '';
+}
+
 function getTextInstructions(recipe) {
   const source = recipe?.recipeInstructions;
   if (!source) return [];
@@ -309,7 +329,16 @@ function findMethodIds(textLines) {
   return methodIds.length > 0 ? [...new Set(methodIds)] : [DEFAULT_METHOD_ID];
 }
 
-function findGlassId(recipe) {
+function findGlassId(recipe, explicitGlassText) {
+  const explicitHaystack = normalizeText(explicitGlassText || '');
+  if (explicitHaystack) {
+    for (const [token, id] of Object.entries(GLASS_HINTS)) {
+      if (explicitHaystack.includes(normalizeText(token))) {
+        return id;
+      }
+    }
+  }
+
   const haystack = normalizeText(`${recipe?.recipeCategory || ''} ${recipe?.description || ''} ${recipe?.name || ''}`);
   for (const [token, id] of Object.entries(GLASS_HINTS)) {
     if (haystack.includes(normalizeText(token))) {
@@ -351,6 +380,7 @@ async function fetchRecipe(url) {
   return {
     recipe,
     review: extractReviewText(html),
+    glassText: extractGlassText(html),
   };
 }
 
@@ -442,7 +472,7 @@ function main() {
 
   Promise.resolve()
     .then(async () => {
-      const { recipe, review } = await fetchRecipe(url);
+      const { recipe, review, glassText } = await fetchRecipe(url);
       const recipeName = toTitleCase(recipe.name || 'Unnamed Cocktail');
       const recipeIngredients = Array.isArray(recipe.recipeIngredient) ? recipe.recipeIngredient : [];
       const parsedIngredients = recipeIngredients.map(parseIngredientLine).filter(Boolean);
@@ -512,7 +542,7 @@ function main() {
           (typeof recipe.description === 'string' && recipe.description.trim()) ||
           `Auto-imported from ${url}`,
         instructions: buildCocktailInstructions(recipeName, ingredientRows, sourceInstructions),
-        glassId: findGlassId(recipe),
+        glassId: findGlassId(recipe, glassText),
         methodIds: findMethodIds(sourceInstructions),
         tags: DEFAULT_COCKTAIL_TAGS,
         defaultServings: 1,
