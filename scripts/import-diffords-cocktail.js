@@ -51,6 +51,21 @@ const UNIT_ID_BY_TOKEN = {
   'cubes': 4,
 };
 
+const GARNISH_TRAILING_UNIT_ID_BY_TOKEN = {
+  leaf: 10,
+  leaves: 10,
+  slice: 19,
+  slices: 19,
+  wedge: 27,
+  wedges: 27,
+  peel: 14,
+  peels: 14,
+  twist: 26,
+  twists: 26,
+  sprig: 21,
+  sprigs: 21,
+};
+
 const METHOD_HINTS = [
   ['build', 'build'],
   ['stir', 'stir'],
@@ -170,6 +185,76 @@ function parseIngredientLine(line) {
   const process = /\bice\b|\bto rinse\b|\brinse\b|\bto rim\b|\brim\b|\btop up\b|\btop with\b/.test(lowered);
 
   return { amount, unitId, name, garnish, process };
+}
+
+function parseGarnishPart(part) {
+  let text = String(part || '')
+    .replace(/^\s*(with|and)\s+/i, '')
+    .replace(/^\s*(a|an|the)\s+/i, '')
+    .replace(/^\s*fresh\s+/i, '')
+    .replace(/[.;:!?]+$/g, '')
+    .trim();
+
+  if (!text) return null;
+
+  let amount = '1';
+  let unitId = 1;
+
+  const amountMatch = text.match(/^(\d+(?:\.\d+)?(?:\s+\d+\/\d+)?|\d+\/\d+)\s+(.+)$/);
+  if (amountMatch) {
+    const parsedAmount = parseFraction(amountMatch[1]);
+    if (parsedAmount != null) {
+      amount = Number.isInteger(parsedAmount)
+        ? String(parsedAmount)
+        : String(Number(parsedAmount.toFixed(2)));
+      text = amountMatch[2].trim();
+    }
+  }
+
+  const tokens = text.split(/\s+/);
+  const lastToken = tokens[tokens.length - 1]?.toLowerCase();
+  const trailingUnitId = GARNISH_TRAILING_UNIT_ID_BY_TOKEN[lastToken];
+  if (trailingUnitId) {
+    unitId = trailingUnitId;
+    text = tokens.slice(0, -1).join(' ').trim();
+  }
+
+  const name = toTitleCase(text);
+  if (!name) return null;
+
+  return {
+    amount,
+    unitId,
+    name,
+    garnish: true,
+  };
+}
+
+function extractGarnishCandidatesFromInstructions(sourceInstructions) {
+  const candidates = [];
+
+  for (const line of sourceInstructions || []) {
+    const normalizedLine = String(line || '').replace(/\s+/g, ' ').trim();
+    if (!normalizedLine) continue;
+
+    const garnishMatch = normalizedLine.match(/\bgarnish\s+with\s+(.+)/i);
+    if (!garnishMatch) continue;
+
+    const tail = garnishMatch[1].replace(/[.;:!?]+$/g, '');
+    const parts = tail
+      .split(/,|\band\b/gi)
+      .map((part) => part.trim())
+      .filter(Boolean);
+
+    parts.forEach((part) => {
+      const parsed = parseGarnishPart(part);
+      if (parsed) {
+        candidates.push(parsed);
+      }
+    });
+  }
+
+  return candidates;
 }
 
 function buildIngredientNameVariants(name) {
@@ -573,6 +658,45 @@ function main() {
           unitId: parsed.unitId,
           ...(parsed.garnish ? { garnish: true } : {}),
           ...(parsed.process ? { process: true } : {}),
+        });
+      }
+
+      const garnishCandidates = extractGarnishCandidatesFromInstructions(sourceInstructions);
+      for (const garnishCandidate of garnishCandidates) {
+        const nameVariants = buildIngredientNameVariants(garnishCandidate.name);
+        const existing = nameVariants
+          .map((variant) => ingredientByNormalized.get(variant))
+          .find(Boolean);
+
+        let ingredient = existing;
+        if (!ingredient) {
+          ingredient = {
+            id: nextIngredientId++,
+            name: garnishCandidate.name,
+            description: `Auto-imported ingredient from Difford's recipe: ${garnishCandidate.name}.`,
+            tags: [guessIngredientTagId(garnishCandidate.name)],
+          };
+          data.ingredients.push(ingredient);
+          buildIngredientNameVariants(ingredient.name).forEach((variant) => {
+            ingredientByNormalized.set(variant, ingredient);
+          });
+          console.log(`+ Added garnish ingredient: ${ingredient.name} (#${ingredient.id})`);
+        }
+
+        const alreadyExists = ingredientRows.some(
+          (row) => row.garnish && row.ingredientId === ingredient.id,
+        );
+        if (alreadyExists) {
+          continue;
+        }
+
+        ingredientRows.push({
+          order: ingredientRows.length + 1,
+          ingredientId: ingredient.id,
+          name: ingredient.name,
+          amount: garnishCandidate.amount,
+          unitId: garnishCandidate.unitId,
+          garnish: true,
         });
       }
 
