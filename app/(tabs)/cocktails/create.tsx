@@ -82,7 +82,7 @@ type EditableSubstitute = {
   name: string;
   isBrand?: boolean;
   amount: string;
-  unit: string;
+  unitId?: number;
 };
 
 type SubstituteUnitPickerTarget = {
@@ -133,7 +133,7 @@ type CocktailFormSnapshot = {
       name: string;
       isBrand?: boolean;
       amount: string;
-      unit: string;
+      unitId?: number;
     }[];
   }[];
 };
@@ -157,6 +157,7 @@ function createEditableSubstitute(
     brand?: boolean | null;
     amount?: string | null;
     unit?: string | null;
+    unitId?: number | string | null;
   },
 ): EditableSubstitute | undefined {
   const name = source.name?.trim();
@@ -170,13 +171,19 @@ function createEditableSubstitute(
       ? Math.trunc(ingredientValue)
       : undefined;
 
+  const unitIdValue = source.unitId != null ? Number(source.unitId) : undefined;
+  const substituteUnitId =
+    unitIdValue != null && Number.isFinite(unitIdValue) && unitIdValue >= 0
+      ? Math.trunc(unitIdValue)
+      : undefined;
+
   return {
     key: createUniqueKey(`sub-${parentKey}`),
     ingredientId: substituteIngredientId,
     name,
     isBrand: source.brand ?? false,
     amount: source.amount?.trim() ?? "",
-    unit: source.unit?.trim() ?? "",
+    unitId: substituteUnitId,
   } satisfies EditableSubstitute;
 }
 
@@ -239,7 +246,9 @@ function mapRecipeIngredientToEditable(
         name: item.name,
         brand: (item as { brand?: boolean }).brand ?? false,
         amount: (item as { amount?: string }).amount,
-        unit: (item as { unit?: string }).unit,
+        unitId:
+          (item as { unitId?: number | string | null }).unitId ??
+          (item as { unit?: string }).unit,
       }),
     )
     .filter((item): item is EditableSubstitute => Boolean(item));
@@ -522,7 +531,7 @@ export default function CreateCocktailScreen() {
           name: substitute.name,
           isBrand: substitute.isBrand,
           amount: substitute.amount,
-          unit: substitute.unit,
+          unitId: substitute.unitId,
         })),
       })),
     };
@@ -1117,7 +1126,7 @@ export default function CreateCocktailScreen() {
     (
       ingredientKey: string,
       substituteKey: string,
-      changes: Partial<Pick<EditableSubstitute, "amount" | "unit">>,
+      changes: Partial<Pick<EditableSubstitute, "amount" | "unitId">>,
     ) => {
       handleUpdateSubstitutes(ingredientKey, (items) =>
         items.map((substitute) =>
@@ -1277,19 +1286,7 @@ export default function CreateCocktailScreen() {
       : namedUnitOptions;
   }, [locale, t, usePluralUnitsInSubstitutePicker]);
 
-  const selectedSubstituteUnitOptionId = useMemo(() => {
-    const selected = targetSubstituteForUnitPicker?.unit?.trim();
-    if (!selected) {
-      return undefined;
-    }
-
-    const selectedNormalized = normalizeSearchText(selected);
-    const matched = sortedSubstituteUnitOptions.find(
-      (option) => normalizeSearchText(option.displayLabel.trim()) === selectedNormalized,
-    );
-
-    return matched?.id;
-  }, [sortedSubstituteUnitOptions, targetSubstituteForUnitPicker?.unit]);
+  const selectedSubstituteUnitOptionId = targetSubstituteForUnitPicker?.unitId;
 
   const handleSelectSubstituteUnit = useCallback(
     (unitId?: number) => {
@@ -1305,7 +1302,7 @@ export default function CreateCocktailScreen() {
         substituteUnitPickerTarget.ingredientKey,
         substituteUnitPickerTarget.substituteKey,
         {
-          unit: selectedOption?.displayLabel?.trim() ?? "",
+          unitId: selectedOption?.id,
         },
       );
 
@@ -1375,7 +1372,7 @@ export default function CreateCocktailScreen() {
         ingredientId: numericId,
         isBrand: false,
         amount: "",
-        unit: "",
+        unitId: undefined,
       };
 
       handleUpdateSubstitutes(substituteTarget, (items) => {
@@ -1457,7 +1454,7 @@ export default function CreateCocktailScreen() {
             name: substituteName,
             brand: substitute.isBrand ?? false,
             amount: substitute.amount.trim() || undefined,
-            unit: substitute.unit.trim() || undefined,
+            unitId: substitute.unitId,
           }];
         });
 
@@ -2838,7 +2835,7 @@ type EditableIngredientRowProps = {
   onChangeSubstitute: (
     ingredientKey: string,
     substituteKey: string,
-    changes: Partial<Pick<EditableSubstitute, "amount" | "unit">>,
+    changes: Partial<Pick<EditableSubstitute, "amount" | "unitId">>,
   ) => void;
   onRequestCreateIngredient: (name: string) => void;
   onInputFocus: (target?: number | null) => void;
@@ -3119,6 +3116,35 @@ function EditableIngredientRow({
 
     return label || "";
   }, [ingredient.unitId, t, usePluralUnits, locale]);
+
+  const getSubstituteUnitLabel = useCallback(
+    (substitute: EditableSubstitute) => {
+      if (substitute.unitId == null) {
+        return "";
+      }
+
+      const usePluralSubstituteUnits = shouldUsePluralUnits(substitute.amount);
+      const category = usePluralSubstituteUnits
+        ? getPluralCategory(locale, 2)
+        : "one";
+      const form = usePluralSubstituteUnits ? "plural" : "singular";
+
+      let label = t(`unit.${substitute.unitId}.${category}`);
+      if (label === `unit.${substitute.unitId}.${category}`) {
+        label = t(`unit.${substitute.unitId}.${form}`);
+      }
+
+      if (label === `unit.${substitute.unitId}.${form}`) {
+        const entry = COCKTAIL_UNIT_DICTIONARY[substitute.unitId];
+        label = usePluralSubstituteUnits
+          ? (entry?.plural ?? entry?.singular ?? "")
+          : (entry?.singular ?? "");
+      }
+
+      return label || "";
+    },
+    [locale, t],
+  );
 
   useEffect(() => {
     if (!isIceIngredient) {
@@ -3541,8 +3567,10 @@ function EditableIngredientRow({
         </Pressable>
         {ingredient.substitutes.length ? (
           <View style={styles.substitutesList}>
-            {ingredient.substitutes.map((substitute) => (
-              <View
+            {ingredient.substitutes.map((substitute) => {
+              const substituteUnitLabel = getSubstituteUnitLabel(substitute);
+
+              return <View
                 key={substitute.key}
                 style={[
                   styles.substitutePill,
@@ -3616,13 +3644,13 @@ function EditableIngredientRow({
                       style={[
                         styles.substituteUnitLabel,
                         {
-                          color: substitute.unit.trim()
+                          color: substituteUnitLabel.trim()
                             ? Colors.onSurface
                             : Colors.onSurfaceVariant,
                         },
                       ]}
                     >
-                      {substitute.unit.trim() || t("cocktailForm.unit")}
+                      {substituteUnitLabel.trim() || t("cocktailForm.unit")}
                     </Text>
                     <MaterialIcons
                       name="expand-more"
@@ -3631,8 +3659,8 @@ function EditableIngredientRow({
                     />
                   </Pressable>
                 </View>
-              </View>
-            ))}
+              </View>;
+            })}
           </View>
         ) : null}
       </View>
