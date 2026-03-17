@@ -599,19 +599,109 @@ function emphasizeIngredients(text, ingredientRows) {
   return result;
 }
 
-function buildCocktailInstructions(cocktailName, ingredientRows, sourceInstructions) {
-  const measured = ingredientRows
-    .filter((row) => !row.garnish)
-    .map((row) => `${formatQuantity(row.amount, row.unitId)} of **${row.name}**`);
+function ingredientDisplayName(name) {
+  return String(name || '').toLowerCase();
+}
 
-  const lines = [];
-  if (measured.length > 0) {
-    lines.push(`1. Add ${measured.join(', ')}.`);
+function formatIngredientWithAmount(row) {
+  if (!row) return '';
+  const qty = formatQuantity(row.amount, row.unitId);
+  return `${qty} of **${ingredientDisplayName(row.name)}**`;
+}
+
+function findIngredientsMentionedInText(text, ingredientRows) {
+  const normalizedText = normalizeText(text);
+  const mentioned = new Set();
+  (ingredientRows || []).forEach((row) => {
+    const variants = buildIngredientNameVariants(row.name);
+    if (variants.some((variant) => normalizedText.includes(variant))) {
+      mentioned.add(row.ingredientId);
+    }
+  });
+  return mentioned;
+}
+
+function expandAddNextIngredientsStep(text, ingredientRows, alreadyMentionedIds) {
+  if (!/\badd\s+next\s+\w+\s+ingredients\b/i.test(text)) {
+    return text;
   }
 
+  const candidates = (ingredientRows || []).filter(
+    (row) => !row.garnish && !row.process && !alreadyMentionedIds.has(row.ingredientId),
+  );
+  if (candidates.length === 0) {
+    return text.replace(/\badd\s+next\s+\w+\s+ingredients\b/i, 'Add ingredients');
+  }
+
+  const list = candidates.map((row) => formatIngredientWithAmount(row)).join(', ');
+  return text.replace(/\badd\s+next\s+\w+\s+ingredients\b/i, `Add ${list}`);
+}
+
+function injectMuddleAmounts(text, ingredientRows) {
+  if (!/\bmuddle\b/i.test(text)) {
+    return text;
+  }
+
+  let updated = text;
+  (ingredientRows || [])
+    .filter((row) => !row.garnish)
+    .forEach((row) => {
+      const variants = buildIngredientNameVariants(row.name);
+      if (!variants.some((variant) => normalizeText(updated).includes(variant))) {
+        return;
+      }
+      const ingredientWord = ingredientDisplayName(row.name);
+      if (/\b\d/.test(updated) && new RegExp(`\\b${escapeRegExp(ingredientWord)}\\b`, 'i').test(updated)) {
+        return;
+      }
+
+      const qty = formatQuantity(row.amount, row.unitId);
+      updated = updated.replace(
+        new RegExp(`\\b${escapeRegExp(ingredientWord)}\\b`, 'i'),
+        `${qty} of ${ingredientWord}`,
+      );
+    });
+
+  updated = updated.replace(/^Lightly muddle/i, 'In a shaker lightly muddle');
+
+  return updated;
+}
+
+function injectTopProcessIngredient(text, ingredientRows) {
+  if (!/\btop\s+with\b/i.test(text)) {
+    return text;
+  }
+
+  const topIngredient = (ingredientRows || []).find((row) => row.process && /soda|lemonade/i.test(row.name));
+  if (!topIngredient) {
+    return text;
+  }
+
+  let updated = text;
+  updated = updated.replace(/\btop\s+with\s+lemonade\b/i, `Top with ${ingredientDisplayName(topIngredient.name)}`);
+  if (/\btop\s+with\b/i.test(updated) && !new RegExp(escapeRegExp(ingredientDisplayName(topIngredient.name)), 'i').test(updated)) {
+    updated = updated.replace(/\btop\s+with\b/i, `Top with ${ingredientDisplayName(topIngredient.name)},`);
+  }
+  return updated;
+}
+
+function buildCocktailInstructions(cocktailName, ingredientRows, sourceInstructions) {
+  const lines = [];
+  const alreadyMentionedIds = new Set();
+
   sourceInstructions.forEach((step) => {
-    const cleaned = normalizeInstructionStep(step);
+    let cleaned = normalizeInstructionStep(step);
     if (cleaned) {
+      const mentionedBefore = findIngredientsMentionedInText(cleaned, ingredientRows);
+      mentionedBefore.forEach((id) => alreadyMentionedIds.add(id));
+
+      cleaned = injectMuddleAmounts(cleaned, ingredientRows);
+      cleaned = expandAddNextIngredientsStep(cleaned, ingredientRows, alreadyMentionedIds);
+      cleaned = injectTopProcessIngredient(cleaned, ingredientRows);
+
+      const mentionedAfter = findIngredientsMentionedInText(cleaned, ingredientRows);
+      mentionedAfter.forEach((id) => alreadyMentionedIds.add(id));
+
       lines.push(`${lines.length + 1}. ${emphasizeIngredients(cleaned, ingredientRows)}`);
     }
   });
