@@ -101,6 +101,10 @@ type EditableIngredient = {
   substitutes: EditableSubstitute[];
 };
 
+type UnitPickerTarget =
+  | { type: "ingredient"; ingredientKey: string }
+  | { type: "substitute"; ingredientKey: string; substituteKey: string };
+
 type CocktailFormSnapshot = {
   name: string;
   defaultServings: number;
@@ -375,7 +379,7 @@ export default function CreateCocktailScreen() {
   const [prefilledCocktail, setPrefilledCocktail] = useState<
     Cocktail | undefined
   >(undefined);
-  const [unitPickerTarget, setUnitPickerTarget] = useState<string | null>(null);
+  const [unitPickerTarget, setUnitPickerTarget] = useState<UnitPickerTarget | null>(null);
   const [substituteTarget, setSubstituteTarget] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [permissionStatus, requestPermission] =
@@ -1124,22 +1128,54 @@ export default function CreateCocktailScreen() {
   );
 
   const handleOpenUnitPicker = useCallback((key: string) => {
-    setUnitPickerTarget(key);
+    setUnitPickerTarget({ type: "ingredient", ingredientKey: key });
   }, []);
 
-  const handleSelectUnit = useCallback(
-    (unitId?: number) => {
-      if (unitPickerTarget) {
-        handleChangeIngredient(unitPickerTarget, { unitId });
-      }
-      setUnitPickerTarget(null);
+  const handleOpenSubstituteUnitPicker = useCallback(
+    (ingredientKey: string, substituteKey: string) => {
+      setUnitPickerTarget({ type: "substitute", ingredientKey, substituteKey });
     },
-    [handleChangeIngredient, unitPickerTarget],
+    [],
   );
 
   const handleCloseUnitPicker = useCallback(() => {
     setUnitPickerTarget(null);
   }, []);
+
+  const handleSelectUnit = useCallback(
+    (optionId: number, optionLabel: string) => {
+      if (!unitPickerTarget) {
+        return;
+      }
+
+      if (unitPickerTarget.type === "ingredient") {
+        handleChangeIngredient(unitPickerTarget.ingredientKey, { unitId: optionId });
+      } else {
+        handleChangeSubstitute(
+          unitPickerTarget.ingredientKey,
+          unitPickerTarget.substituteKey,
+          { unit: optionLabel.trim() },
+        );
+      }
+
+      setUnitPickerTarget(null);
+    },
+    [handleChangeIngredient, handleChangeSubstitute, unitPickerTarget],
+  );
+
+  const handleClearUnitSelection = useCallback(() => {
+    if (!unitPickerTarget) {
+      return;
+    }
+
+    if (unitPickerTarget.type === "ingredient") {
+      handleChangeIngredient(unitPickerTarget.ingredientKey, { unitId: undefined });
+    } else {
+      handleChangeSubstitute(unitPickerTarget.ingredientKey, unitPickerTarget.substituteKey, { unit: "" });
+    }
+
+    setUnitPickerTarget(null);
+  }, [handleChangeIngredient, handleChangeSubstitute, unitPickerTarget]);
 
   const handleToggleMethod = useCallback((targetId: CocktailMethodId) => {
     setMethodIds((prev) => {
@@ -1155,14 +1191,31 @@ export default function CreateCocktailScreen() {
     setIsMethodModalVisible(false);
   }, []);
 
-  const targetUnitPickerIngredient = useMemo(
-    () => ingredientsState.find((item) => item.key === unitPickerTarget),
-    [ingredientsState, unitPickerTarget],
-  );
+  const targetUnitPickerIngredient = useMemo(() => {
+    if (!unitPickerTarget) {
+      return undefined;
+    }
+
+    return ingredientsState.find((item) => item.key === unitPickerTarget.ingredientKey);
+  }, [ingredientsState, unitPickerTarget]);
+
+  const targetUnitPickerSubstitute = useMemo(() => {
+    if (unitPickerTarget?.type !== "substitute") {
+      return undefined;
+    }
+
+    return targetUnitPickerIngredient?.substitutes.find(
+      (item) => item.key === unitPickerTarget.substituteKey,
+    );
+  }, [targetUnitPickerIngredient, unitPickerTarget]);
 
   const usePluralUnitsInPicker = useMemo(
-    () => shouldUsePluralUnits(targetUnitPickerIngredient?.amount),
-    [targetUnitPickerIngredient?.amount],
+    () => shouldUsePluralUnits(
+      unitPickerTarget?.type === "substitute"
+        ? targetUnitPickerSubstitute?.amount
+        : targetUnitPickerIngredient?.amount,
+    ),
+    [targetUnitPickerIngredient?.amount, targetUnitPickerSubstitute?.amount, unitPickerTarget?.type],
   );
 
   const sortedUnitOptions = useMemo(() => {
@@ -2138,6 +2191,7 @@ export default function CreateCocktailScreen() {
                   onRemove={handleRemoveIngredient}
                   onMove={handleMoveIngredient}
                   onRequestUnitPicker={handleOpenUnitPicker}
+                  onRequestSubstituteUnitPicker={handleOpenSubstituteUnitPicker}
                   onRequestAddSubstitute={handleOpenSubstituteModal}
                   onRemoveSubstitute={handleRemoveSubstitute}
                   onChangeSubstitute={handleChangeSubstitute}
@@ -2380,17 +2434,30 @@ export default function CreateCocktailScreen() {
               >
                 {t("cocktailForm.selectUnit")}
               </Text>
-              <Pressable
-                onPress={handleCloseUnitPicker}
-                accessibilityRole="button"
-                accessibilityLabel={t("common.close")}
-              >
-                <MaterialCommunityIcons
-                  name="close"
-                  size={22}
-                  color={Colors.onSurfaceVariant}
-                />
-              </Pressable>
+              <View style={styles.unitModalHeaderActions}>
+                <Pressable
+                  onPress={handleClearUnitSelection}
+                  accessibilityRole="button"
+                  accessibilityLabel={t("common.clear")}
+                >
+                  <Text
+                    style={[styles.unitModalClearLabel, { color: Colors.tint }]}
+                  >
+                    {t("common.clear")}
+                  </Text>
+                </Pressable>
+                <Pressable
+                  onPress={handleCloseUnitPicker}
+                  accessibilityRole="button"
+                  accessibilityLabel={t("common.close")}
+                >
+                  <MaterialCommunityIcons
+                    name="close"
+                    size={22}
+                    color={Colors.onSurfaceVariant}
+                  />
+                </Pressable>
+              </View>
             </View>
             <ScrollView
               style={styles.unitModalScroll}
@@ -2399,12 +2466,14 @@ export default function CreateCocktailScreen() {
               keyboardShouldPersistTaps="handled"
             >
               {sortedUnitOptions.map((option) => {
-                const isSelected =
-                  option.id === targetUnitPickerIngredient?.unitId;
+                const trimmedOptionLabel = option.displayLabel.trim();
+                const isSelected = unitPickerTarget?.type === "substitute"
+                  ? trimmedOptionLabel === (targetUnitPickerSubstitute?.unit.trim() ?? "")
+                  : option.id === targetUnitPickerIngredient?.unitId;
                 return (
                   <Pressable
                     key={option.id}
-                    onPress={() => handleSelectUnit(option.id)}
+                    onPress={() => handleSelectUnit(option.id, option.displayLabel)}
                     style={[
                       styles.unitOption,
                       {
@@ -2626,6 +2695,7 @@ type EditableIngredientRowProps = {
   onRemove: (key: string) => void;
   onMove: (key: string, direction: "up" | "down") => void;
   onRequestUnitPicker: (key: string) => void;
+  onRequestSubstituteUnitPicker: (ingredientKey: string, substituteKey: string) => void;
   onRequestAddSubstitute: (key: string) => void;
   onRemoveSubstitute: (ingredientKey: string, substituteKey: string) => void;
   onChangeSubstitute: (
@@ -2651,6 +2721,7 @@ function EditableIngredientRow({
   onRemove,
   onMove,
   onRequestUnitPicker,
+  onRequestSubstituteUnitPicker,
   onRequestAddSubstitute,
   onRemoveSubstitute,
   onChangeSubstitute,
@@ -3389,20 +3460,34 @@ function EditableIngredientRow({
                     ]}
                     placeholderTextColor={Colors.onSurfaceVariant}
                   />
-                  <TextInput
-                    value={substitute.unit}
-                    onChangeText={(value) =>
-                      onChangeSubstitute(ingredient.key, substitute.key, {
-                        unit: value,
-                      })
-                    }
-                    placeholder={t("cocktailForm.unit")}
+                  <Pressable
+                    onPress={() => onRequestSubstituteUnitPicker(ingredient.key, substitute.key)}
                     style={[
                       styles.substituteMetaInput,
-                      { color: Colors.onSurface, borderColor: Colors.outlineVariant },
+                      styles.substituteUnitSelector,
+                      {
+                        borderColor: Colors.outlineVariant,
+                        backgroundColor: Colors.background,
+                      },
                     ]}
-                    placeholderTextColor={Colors.onSurfaceVariant}
-                  />
+                    accessibilityRole="button"
+                    accessibilityLabel={t("cocktailForm.selectUnit")}
+                  >
+                    <Text
+                      style={[
+                        styles.substituteUnitLabel,
+                        { color: substitute.unit.trim() ? Colors.onSurface : Colors.onSurfaceVariant },
+                      ]}
+                      numberOfLines={1}
+                    >
+                      {substitute.unit.trim() || t("cocktailForm.unit")}
+                    </Text>
+                    <MaterialIcons
+                      name="expand-more"
+                      size={16}
+                      color={Colors.onSurfaceVariant}
+                    />
+                  </Pressable>
                 </View>
               </View>
             ))}
@@ -3950,6 +4035,17 @@ const styles = StyleSheet.create({
     fontSize: 14,
     minHeight: 40,
   },
+  substituteUnitSelector: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  substituteUnitLabel: {
+    flex: 1,
+    fontSize: 14,
+    fontWeight: "400",
+    marginRight: 8,
+  },
   substituteHint: {
     fontSize: 14,
   },
@@ -4059,6 +4155,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     gap: 12,
+  },
+  unitModalHeaderActions: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+  },
+  unitModalClearLabel: {
+    fontSize: 14,
+    fontWeight: "600",
   },
   modalListContent: {
     gap: 8,
