@@ -2868,6 +2868,9 @@ function EditableIngredientRow({
   const { t, locale } = useI18n();
   const [isFocused, setIsFocused] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [expandedSubstituteKeys, setExpandedSubstituteKeys] = useState<Set<string>>(
+    () => new Set(),
+  );
   const hideSuggestionsTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const Colors = useAppColors();
 
@@ -3145,6 +3148,18 @@ function EditableIngredientRow({
     },
     [locale, t],
   );
+
+  const toggleSubstituteExpanded = useCallback((substituteKey: string) => {
+    setExpandedSubstituteKeys((previous) => {
+      const next = new Set(previous);
+      if (next.has(substituteKey)) {
+        next.delete(substituteKey);
+      } else {
+        next.add(substituteKey);
+      }
+      return next;
+    });
+  }, []);
 
   useEffect(() => {
     if (!isIceIngredient) {
@@ -3569,6 +3584,7 @@ function EditableIngredientRow({
           <View style={styles.substitutesList}>
             {ingredient.substitutes.map((substitute) => {
               const substituteUnitLabel = getSubstituteUnitLabel(substitute);
+              const isSubstituteExpanded = expandedSubstituteKeys.has(substitute.key);
 
               return <View
                 key={substitute.key}
@@ -3592,6 +3608,18 @@ function EditableIngredientRow({
                     {substitute.name}
                     {substitute.isBrand ? ` • ${t("cocktailForm.brand")}` : ""}
                   </Text>
+                  <View style={styles.substituteActionsRow}>
+                    <Pressable
+                      onPress={() => toggleSubstituteExpanded(substitute.key)}
+                      hitSlop={8}
+                      accessibilityRole="button"
+                    >
+                      <MaterialCommunityIcons
+                        name={isSubstituteExpanded ? "chevron-up" : "chevron-down"}
+                        size={18}
+                        color={Colors.onSurfaceVariant}
+                      />
+                    </Pressable>
                   <Pressable
                     onPress={() =>
                       onRemoveSubstitute(ingredient.key, substitute.key)
@@ -3608,56 +3636,59 @@ function EditableIngredientRow({
                       color={Colors.onSurfaceVariant}
                     />
                   </Pressable>
+                  </View>
                 </View>
-                <View style={styles.substituteMetaRow}>
-                  <TextInput
-                    value={substitute.amount}
-                    onChangeText={(value) =>
-                      onChangeSubstitute(ingredient.key, substitute.key, {
-                        amount: value,
-                      })
-                    }
-                    placeholder={t("cocktailForm.amount")}
-                    keyboardType="decimal-pad"
-                    style={[
-                      styles.substituteMetaInput,
-                      { color: Colors.onSurface, borderColor: Colors.outlineVariant },
-                    ]}
-                    placeholderTextColor={Colors.onSurfaceVariant}
-                  />
-                  <Pressable
-                    onPress={() =>
-                      onRequestSubstituteUnitPicker(ingredient.key, substitute.key)
-                    }
-                    style={[
-                      styles.substituteMetaInput,
-                      styles.substituteUnitSelector,
-                      {
-                        borderColor: Colors.outlineVariant,
-                      },
-                    ]}
-                    accessibilityRole="button"
-                    accessibilityLabel={t("cocktailForm.selectUnit")}
-                  >
-                    <Text
+                {isSubstituteExpanded ? (
+                  <View style={styles.substituteMetaRow}>
+                    <TextInput
+                      value={substitute.amount}
+                      onChangeText={(value) =>
+                        onChangeSubstitute(ingredient.key, substitute.key, {
+                          amount: value,
+                        })
+                      }
+                      placeholder={t("cocktailForm.amount")}
+                      keyboardType="decimal-pad"
                       style={[
-                        styles.substituteUnitLabel,
+                        styles.substituteMetaInput,
+                        { color: Colors.onSurface, borderColor: Colors.outlineVariant },
+                      ]}
+                      placeholderTextColor={Colors.onSurfaceVariant}
+                    />
+                    <Pressable
+                      onPress={() =>
+                        onRequestSubstituteUnitPicker(ingredient.key, substitute.key)
+                      }
+                      style={[
+                        styles.substituteMetaInput,
+                        styles.substituteUnitSelector,
                         {
-                          color: substituteUnitLabel.trim()
-                            ? Colors.onSurface
-                            : Colors.onSurfaceVariant,
+                          borderColor: Colors.outlineVariant,
                         },
                       ]}
+                      accessibilityRole="button"
+                      accessibilityLabel={t("cocktailForm.selectUnit")}
                     >
-                      {substituteUnitLabel.trim() || t("cocktailForm.unit")}
-                    </Text>
-                    <MaterialIcons
-                      name="expand-more"
-                      size={18}
-                      color={Colors.onSurfaceVariant}
-                    />
-                  </Pressable>
-                </View>
+                      <Text
+                        style={[
+                          styles.substituteUnitLabel,
+                          {
+                            color: substituteUnitLabel.trim()
+                              ? Colors.onSurface
+                              : Colors.onSurfaceVariant,
+                          },
+                        ]}
+                      >
+                        {substituteUnitLabel.trim() || t("cocktailForm.unit")}
+                      </Text>
+                      <MaterialIcons
+                        name="expand-more"
+                        size={18}
+                        color={Colors.onSurfaceVariant}
+                      />
+                    </Pressable>
+                  </View>
+                ) : null}
               </View>;
             })}
           </View>
@@ -4190,6 +4221,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     gap: 12,
+  },
+  substituteActionsRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
   },
   substituteMetaRow: {
     flexDirection: "row",
