@@ -76,9 +76,11 @@ const GLASS_HINTS = {
 
 function normalizeText(value) {
   return String(value || '')
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '')
     .toLowerCase()
     .replace(/['’]/g, '')
-    .replace(/[^a-z0-9]+/g, ' ')
+    .replace(/[^\p{L}\p{N}]+/gu, ' ')
     .trim();
 }
 
@@ -189,6 +191,8 @@ function buildIngredientNameVariants(name) {
     [/^aromatic bitters$/i, 'bitters'],
     [/^(dark|black) rum$/i, 'dark rum'],
     [/^(dark\/?black|black\/?dark) rum$/i, 'dark rum'],
+    [/^basil leaves?$/i, 'basil'],
+    [/^kummel liqueur$/i, 'kümmel liqueur'],
   ];
 
   patterns.forEach(([regex, replacement]) => {
@@ -548,7 +552,6 @@ function main() {
         tags: DEFAULT_COCKTAIL_TAGS,
         defaultServings: 1,
         ingredients: ingredientRows,
-        video: url,
       };
 
       data.cocktails.push(cocktail);
