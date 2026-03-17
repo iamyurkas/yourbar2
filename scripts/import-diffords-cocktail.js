@@ -56,12 +56,10 @@ const METHOD_HINTS = [
   ['stir', 'stir'],
   ['muddle', 'muddle'],
   ['blend', 'blend'],
-  ['swizzle', 'swizzle'],
+  ['throw', 'throw'],
   ['layer', 'layer'],
-  ['dry shake', 'dry_shake'],
   ['shake', 'shake'],
-  ['strain', 'strain'],
-  ['top', 'top'],
+  ['heat', 'heat'],
 ];
 
 const GLASS_HINTS = {
@@ -188,6 +186,9 @@ function buildIngredientNameVariants(name) {
     [/^gold tequila$/i, 'tequila gold'],
     [/^silver tequila$/i, 'tequila blanco'],
     [/^agave nectar$/i, 'agave syrup'],
+    [/^aromatic bitters$/i, 'bitters'],
+    [/^(dark|black) rum$/i, 'dark rum'],
+    [/^(dark\/?black|black\/?dark) rum$/i, 'dark rum'],
   ];
 
   patterns.forEach(([regex, replacement]) => {
