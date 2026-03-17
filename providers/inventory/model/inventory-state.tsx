@@ -214,12 +214,27 @@ export function createInventoryStateFromSnapshot(
   }
 
   const mergedLegacyIngredients = backfillMissingIngredientStyleIds(
-    snapshot.ingredients,
+    applyDeltaToCollection(
+      resolvedBaseData.ingredients as unknown as IngredientStorageRecord[],
+      {
+        created: snapshot.ingredients,
+        updated: snapshot.ingredients,
+      },
+    ),
     resolvedBaseData,
   );
 
+  const mergedLegacyCocktails = applyDeltaToCollection(
+    resolvedBaseData.cocktails as CocktailStorageRecord[],
+    {
+      created: snapshot.cocktails,
+      updated: snapshot.cocktails,
+    },
+    mergeCocktailUpdatedRecordWithBase,
+  );
+
   return {
-    cocktails: normalizeSearchFields(snapshot.cocktails) as Cocktail[],
+    cocktails: normalizeSearchFields(mergedLegacyCocktails) as Cocktail[],
     ingredients: normalizeSearchFields(mergedLegacyIngredients) as Ingredient[],
     imported: Boolean(snapshot.imported),
   } satisfies InventoryState;
