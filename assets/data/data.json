@@ -38869,14 +38869,8 @@
       "description": "A refreshing and sophisticated twist on the Daiquiri, combining white rum with cool cucumber and fresh mint, finished with a subtle herbal absinthe rinse and a splash of soda. Zesty, crisp, and exceptionally balanced.",
       "instructions": "1. Select and pre-chill a coupe glass.\n2. Rinse the chilled glass with **absinthe** (swirl around to coat the inside and discard the excess).\n3. In a shaker, muddle 2 slices of **cucumber** and gently bruise 7 fresh **mint leaves**.\n4. Add 60 ml of **white rum**, 22.5 ml of **lime juice**, 15 ml of **rich simple syrup**, and about 150 g of **ice**.\n5. Shake vigorously until well chilled.\n6. Fine strain into the absinthe-rinsed glass.\n7. Top with 10 ml of **soda water**.\n8. Garnish with a **cucumber** slice floated on the surface.",
       "glassId": "coupe",
-      "methodIds": [
-        "muddle",
-        "shake"
-      ],
-      "tags": [
-        6,
-        8
-      ],
+      "methodIds": ["muddle", "shake"],
+      "tags": [6, 8],
       "defaultServings": 1,
       "ingredients": [
         {
@@ -38953,12 +38947,8 @@
       "description": "A bold and aromatic classic from the late 19th century, this cocktail is a spirit-forward Manhattan riff. Spicy rye whiskey is balanced by sweet vermouth and rich cherry liqueur, with a dash of absinthe adding an intriguing layer of herbal complexity.",
       "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 50 ml of **rye whiskey**, 25 ml of **red vermouth**, 5 ml of **cherry heering**, and 1 dash of **absinthe**.\n3. Stir gently for about 30 seconds until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Express the oils from a **lemon** peel over the drink and use it as a garnish.",
       "glassId": "coupe",
-      "methodIds": [
-        "stir"
-      ],
-      "tags": [
-        5
-      ],
+      "methodIds": ["stir"],
+      "tags": [5],
       "defaultServings": 1,
       "ingredients": [
         {
@@ -39013,12 +39003,8 @@
       "description": "An elegant and complex gin-based cocktail that offers a refreshing herbal alternative to a Manhattan. The botanical notes of gin are layered with sweet vermouth and the bitter, earthy depth of Cynar, finished with an absinthe-rinsed glass for a lingering aromatic finish.",
       "instructions": "1. Select and pre-chill a coupe glass.\n2. Rinse the chilled glass with **absinthe** (swirl around and discard the excess).\n3. Fill a mixing glass with **ice**.\n4. Add 60 ml of **gin**, 30 ml of **red vermouth**, 15 ml of **Cynar**, and 1 dash of **orange bitters**.\n5. Stir gently for about 30 seconds until well chilled.\n6. Strain into the absinthe-rinsed glass.\n7. Express the oils from an **orange** peel over the drink and use it as a garnish.",
       "glassId": "coupe",
-      "methodIds": [
-        "stir"
-      ],
-      "tags": [
-        5
-      ],
+      "methodIds": ["stir"],
+      "tags": [5],
       "defaultServings": 1,
       "ingredients": [
         {
@@ -39072,6 +39058,178 @@
           "amount": "1",
           "unitId": 14,
           "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 621,
+      "name": "Maria Theresa Margarita",
+      "description": "Originally sweetened with sugar syrup, this is better smoothed with honey.",
+      "instructions": "1. Fill a shaker with **ice**.\n2. Add 60 ml of **patrón reposado tequila**, 30 ml of **cranberry juice (sweetened)**, 15 ml of **lime juice (freshly squeezed)**, 10 ml of **agave syrup (agave nectar)**.\n3. FINE STRAIN into chilled glass.\n4. Garnish with lime wedge.",
+      "glassId": "coupe",
+      "methodIds": ["shake"],
+      "tags": [6],
+      "defaultServings": 1,
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 2,
+          "ingredientId": 334,
+          "name": "Patrón Reposado tequila",
+          "amount": "60",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 119,
+          "name": "Cranberry juice (sweetened)",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 228,
+          "name": "Lime juice (freshly squeezed)",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 6,
+          "name": "Agave syrup (agave nectar)",
+          "amount": "10",
+          "unitId": 11
+        }
+      ]
+    },
+    {
+      "id": 622,
+      "name": "Mezcal Dante",
+      "description": "Some of the biggest flavours on the back bar are corralled, tamed and made to play together nicely to produce an assertive but very quaffable cocktail.",
+      "instructions": "1. Fill a shaker with **ice**.\n2. Add 3 fresh of **basil leaves**, 30 ml of **del maguey vida clásico mezcal**, 15 ml of **patrón silver blanco tequila**, 10 ml of **green chartreuse (or alternative herbal liqueur)**, 7.5 ml of **kummel liqueur**, 10 ml of **agave syrup (agave nectar)**, 20 ml of **lime juice (freshly squeezed)**.\n3. FINE STRAIN into chilled glass.\n4. Garnish with a basil leaf boat floated on surface.",
+      "glassId": "coupe",
+      "methodIds": ["shake", "layer"],
+      "tags": [6],
+      "defaultServings": 1,
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 2,
+          "ingredientId": 39,
+          "name": "Basil leaves",
+          "amount": "3",
+          "unitId": 1
+        },
+        {
+          "order": 3,
+          "ingredientId": 238,
+          "name": "Del Maguey Vida Clásico Mezcal",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 334,
+          "name": "Patrón Silver blanco tequila",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 182,
+          "name": "Green Chartreuse (or alternative herbal liqueur)",
+          "amount": "10",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 367,
+          "name": "Kummel liqueur",
+          "amount": "7.5",
+          "unitId": 11
+        },
+        {
+          "order": 7,
+          "ingredientId": 6,
+          "name": "Agave syrup (agave nectar)",
+          "amount": "10",
+          "unitId": 11
+        },
+        {
+          "order": 8,
+          "ingredientId": 228,
+          "name": "Lime juice (freshly squeezed)",
+          "amount": "20",
+          "unitId": 11
+        }
+      ]
+    },
+    {
+      "id": 623,
+      "name": "The Malagueña",
+      "description": "Bittersweet dark pungent rum is lightly sweetened, aromatised and bittered by amaro and bitters duo. A sharpener of an aperitivo.",
+      "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 15 ml of **dark/black/blackstrap rum**, 30 ml of **amaro montenegro**, 7.5 ml of **agave syrup (agave nectar)**, 3 dash of **angostura aromatic bitters**, 1 dash of **orange bitters by angostura**.\n3. FINE STRAIN into chilled glass.\n4. EXPRESS orange zest twist over the cocktail and use as garnish.",
+      "glassId": "coupe",
+      "methodIds": ["stir"],
+      "tags": [6],
+      "defaultServings": 1,
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 2,
+          "ingredientId": 57,
+          "name": "Dark/black/blackstrap rum",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 15,
+          "name": "Amaro Montenegro",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 6,
+          "name": "Agave syrup (agave nectar)",
+          "amount": "7.5",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 49,
+          "name": "Angostura Aromatic Bitters",
+          "amount": "3",
+          "unitId": 6
+        },
+        {
+          "order": 6,
+          "ingredientId": 49,
+          "name": "Orange Bitters by Angostura",
+          "amount": "1",
+          "unitId": 6
         }
       ]
     }
@@ -41722,6 +41880,12 @@
       "description": "Savoury beverage made from a blend of reconstituted tomato juice concentrate and dried clam broth, seasoned with spices, salt, and MSG. It is a staple ingredient in popular cocktails like the **Caesar** and the **Michelada**.",
       "tags": [7],
       "photoUri": "assets/ingredients/366-clamato-juice.jpg"
+    },
+    {
+      "id": 367,
+      "name": "Kummel liqueur",
+      "description": "A kummel liqueur used in cocktails.",
+      "tags": [9]
     }
   ]
 }

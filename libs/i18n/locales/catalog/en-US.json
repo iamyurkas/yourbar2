@@ -2943,5 +2943,16 @@
   "cocktail.620.name": "Redwood Heights",
   "cocktail.620.description": "An elegant and complex gin-based cocktail that offers a refreshing herbal alternative to a Manhattan. The botanical notes of gin are layered with sweet vermouth and the bitter, earthy depth of Cynar, finished with an absinthe-rinsed glass for a lingering aromatic finish.",
   "cocktail.620.instructions": "1. Select and pre-chill a coupe glass.\n2. Rinse the chilled glass with **absinthe** (swirl around and discard the excess).\n3. Fill a mixing glass with **ice**.\n4. Add 60 ml of **gin**, 30 ml of **red vermouth**, 15 ml of **Cynar**, and 1 dash of **orange bitters**.\n5. Stir gently for about 30 seconds until well chilled.\n6. Strain into the absinthe-rinsed glass.\n7. Express the oils from an **orange** peel over the drink and use it as a garnish.",
-  "cocktail.620.synonyms": "Redwood Heights"
+  "cocktail.620.synonyms": "Redwood Heights",
+  "cocktail.621.name": "Maria Theresa Margarita",
+  "cocktail.621.description": "Originally sweetened with sugar syrup, this is better smoothed with honey.",
+  "cocktail.621.instructions": "1. Fill a shaker with **ice**.\n2. Add 60 ml of **patrón reposado tequila**, 30 ml of **cranberry juice (sweetened)**, 15 ml of **lime juice (freshly squeezed)**, 10 ml of **agave syrup (agave nectar)**.\n3. FINE STRAIN into chilled glass.\n4. Garnish with lime wedge.",
+  "cocktail.622.name": "Mezcal Dante",
+  "cocktail.622.description": "Some of the biggest flavours on the back bar are corralled, tamed and made to play together nicely to produce an assertive but very quaffable cocktail.",
+  "cocktail.622.instructions": "1. Fill a shaker with **ice**.\n2. Add 3 fresh of **basil leaves**, 30 ml of **del maguey vida clásico mezcal**, 15 ml of **patrón silver blanco tequila**, 10 ml of **green chartreuse (or alternative herbal liqueur)**, 7.5 ml of **kummel liqueur**, 10 ml of **agave syrup (agave nectar)**, 20 ml of **lime juice (freshly squeezed)**.\n3. FINE STRAIN into chilled glass.\n4. Garnish with a basil leaf boat floated on surface.",
+  "ingredient.367.name": "Kummel liqueur",
+  "ingredient.367.description": "A kummel liqueur used in cocktails.",
+  "cocktail.623.name": "The Malagueña",
+  "cocktail.623.description": "Bittersweet dark pungent rum is lightly sweetened, aromatised and bittered by amaro and bitters duo. A sharpener of an aperitivo.",
+  "cocktail.623.instructions": "1. Fill a mixing glass with **ice**.\n2. Add 15 ml of **dark/black/blackstrap rum**, 30 ml of **amaro montenegro**, 7.5 ml of **agave syrup (agave nectar)**, 3 dash of **angostura aromatic bitters**, 1 dash of **orange bitters by angostura**.\n3. FINE STRAIN into chilled glass.\n4. EXPRESS orange zest twist over the cocktail and use as garnish."
 }
