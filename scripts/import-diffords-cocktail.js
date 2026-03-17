@@ -193,6 +193,7 @@ function buildIngredientNameVariants(name) {
     [/^(dark\/?black|black\/?dark) rum$/i, 'dark rum'],
     [/^basil leaves?$/i, 'basil'],
     [/^kummel liqueur$/i, 'kümmel liqueur'],
+    [/^maraschino liqueur$/i, 'luxardo maraschino'],
   ];
 
   patterns.forEach(([regex, replacement]) => {
