@@ -299,6 +299,7 @@ export const ingredientImages: Record<string, number> = {
   'assets/ingredients/365-elderflower-liquor.jpg': require('./ingredients/365-elderflower-liquor.jpg'),
   'assets/ingredients/366-clamato-juice.jpg': require('./ingredients/366-clamato-juice.jpg'),
   'assets/ingredients/367-ginger-liqueur.jpg': require('./ingredients/367-ginger-liqueur.jpg'),
+  'assets/ingredients/368-saline-solution-4-1.jpg': require('./ingredients/368-saline-solution-4-1.jpg'),
   'assets/ingredients/37-banana-liqueur.jpg': require('./ingredients/37-banana-liqueur.jpg'),
   'assets/ingredients/38-banana-liqueur-green.jpg': require('./ingredients/38-banana-liqueur-green.jpg'),
   'assets/ingredients/39-basil.jpg': require('./ingredients/39-basil.jpg'),

@@ -43327,6 +43327,13 @@
       "description": "Sweet, aromatic spirit made by macerating ginger root in alcohol, often enhanced with citrus oil, sugar, and sometimes botanicals. Typically has an ABV 25-30%%.",
       "tags": [1, 9],
       "photoUri": "assets/ingredients/367-ginger-liqueur.jpg"
+    },
+    {
+      "id": 368,
+      "name": "Saline solution (4:1)",
+      "description": "A 4:1 saline solution for cocktails is a 20% concentration mixture used to enhance flavors, typically made by dissolving 1 part salt into 4 parts water (by weight, e.g., 20g salt to 80g water or 1 oz salt to 4 oz water).",
+      "tags": [1, 9],
+      "photoUri": "assets/ingredients/368-saline-solution-4-1.jpg"
     }
   ]
 }
