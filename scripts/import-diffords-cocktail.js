@@ -441,13 +441,38 @@ function getTextInstructions(recipe) {
 }
 
 function findMethodIds(textLines) {
-  const joined = normalizeText(textLines.join(' '));
+  const rawJoined = String((textLines || []).join(' '));
+  const joined = normalizeText(rawJoined);
+
+  const stirUpperIndex = rawJoined.search(/\bSTIR\b/);
+  const stirAnyIndex = joined.indexOf('stir');
+
   const methodIds = METHOD_HINTS
-    .map(([hint, id]) => ({ id, index: joined.indexOf(normalizeText(hint)) }))
-    .filter((entry) => entry.index >= 0)
+    .map(([hint, id]) => {
+      if (id === 'stir') {
+        if (stirUpperIndex >= 0) {
+          return { id, index: stirUpperIndex };
+        }
+        return null;
+      }
+
+      const index = joined.indexOf(normalizeText(hint));
+      return index >= 0 ? { id, index } : null;
+    })
+    .filter(Boolean)
     .sort((a, b) => a.index - b.index)
     .map((entry) => entry.id);
-  return methodIds.length > 0 ? [...new Set(methodIds)] : [DEFAULT_METHOD_ID];
+
+  const uniqueMethodIds = [...new Set(methodIds)];
+  if (uniqueMethodIds.length > 0) {
+    return uniqueMethodIds;
+  }
+
+  if (stirAnyIndex >= 0) {
+    return ['stir'];
+  }
+
+  return [DEFAULT_METHOD_ID];
 }
 
 function findGlassId(recipe, explicitGlassText) {
