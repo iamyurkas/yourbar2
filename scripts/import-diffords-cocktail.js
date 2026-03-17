@@ -645,6 +645,27 @@ function expandAddNextIngredientsStep(text, ingredientRows, alreadyMentionedIds)
   return text.replace(/\badd\s+next\s+\w+\s+ingredients\b/i, `Add ${list}`);
 }
 
+function expandPourIngredientsStep(text, ingredientRows, alreadyMentionedIds) {
+  if (!/\bpour\b/i.test(text)) {
+    return text;
+  }
+
+  const hasExplicitAmounts = /\b\d+(?:\.\d+)?\s*(ml|cl|oz|dash|dashes|part|parts|teaspoon|tablespoon|cup|cups)\b/i.test(text);
+  if (hasExplicitAmounts) {
+    return text;
+  }
+
+  const candidates = (ingredientRows || []).filter(
+    (row) => !row.garnish && !alreadyMentionedIds.has(row.ingredientId),
+  );
+  if (candidates.length === 0) {
+    return text;
+  }
+
+  const list = candidates.map((row) => formatIngredientWithAmount(row)).join(' and ');
+  return text.replace(/\bpour\b/i, `Pour ${list}`);
+}
+
 function injectMuddleAmounts(text, ingredientRows) {
   if (!/\bmuddle\b/i.test(text)) {
     return text;
@@ -708,6 +729,7 @@ function buildCocktailInstructions(cocktailName, ingredientRows, sourceInstructi
 
       cleaned = injectMuddleAmounts(cleaned, ingredientRows);
       cleaned = expandAddNextIngredientsStep(cleaned, ingredientRows, alreadyMentionedIds);
+      cleaned = expandPourIngredientsStep(cleaned, ingredientRows, alreadyMentionedIds);
       cleaned = injectTopProcessIngredient(cleaned, ingredientRows);
 
       const mentionedAfter = findIngredientsMentionedInText(cleaned, ingredientRows);
