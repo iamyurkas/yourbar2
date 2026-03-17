@@ -283,6 +283,42 @@ async function fetchRecipe(url) {
   return recipe;
 }
 
+function shouldSkipInstructionStep(step) {
+  const normalized = normalizeText(step);
+  return (
+    /\b(select|choose|pick)\b/.test(normalized) &&
+    /\b(pre chill|prechill|chill)\b/.test(normalized) &&
+    /\bglass\b/.test(normalized)
+  );
+}
+
+function toSentenceCase(text) {
+  const lowered = String(text || '').toLowerCase();
+  return lowered.replace(/^[a-z]/, (char) => char.toUpperCase());
+}
+
+function normalizeInstructionStep(step) {
+  let text = String(step || '')
+    .replace(/^\s*\d+[.)]\s*/, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  if (!text || shouldSkipInstructionStep(text)) {
+    return '';
+  }
+
+  text = toSentenceCase(text)
+    .replace(/\binto chilled glass\b/i, 'into a chilled glass')
+    .replace(/\binto chilled coupe\b/i, 'into a chilled coupe')
+    .replace(/^Garnish with (?!a\b|an\b|the\b)([a-z])/i, 'Garnish with a $1');
+
+  if (!/[.!?]$/.test(text)) {
+    text += '.';
+  }
+
+  return text;
+}
+
 function buildCocktailInstructions(cocktailName, ingredientRows, sourceInstructions) {
   const measured = ingredientRows
     .filter((row) => !row.garnish)
@@ -293,8 +329,8 @@ function buildCocktailInstructions(cocktailName, ingredientRows, sourceInstructi
     lines.push(`1. Add ${measured.join(', ')}.`);
   }
 
-  sourceInstructions.forEach((step, index) => {
-    const cleaned = step.replace(/\s+/g, ' ').trim();
+  sourceInstructions.forEach((step) => {
+    const cleaned = normalizeInstructionStep(step);
     if (cleaned) {
       lines.push(`${lines.length + 1}. ${cleaned}`);
     }
