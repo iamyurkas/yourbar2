@@ -217,6 +217,34 @@ function extractJsonLd(html) {
   return null;
 }
 
+function stripHtmlTags(value) {
+  return String(value || '')
+    .replace(/<br\s*\/?>/gi, ' ')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/&amp;/gi, '&')
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;/gi, "'")
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function extractReviewText(html) {
+  const reviewSectionMatch = html.match(
+    /<h2[^>]*>\s*Review\s*<\/h2>[\s\S]*?(?:<h2|<section[^>]*class=["'][^"']*recipe-[^"']*["'])/i,
+  );
+
+  const scopedHtml = reviewSectionMatch ? reviewSectionMatch[0] : html;
+  const paragraphMatches = [...scopedHtml.matchAll(/<p[^>]*>([\s\S]*?)<\/p>/gi)];
+  for (const paragraphMatch of paragraphMatches) {
+    const text = stripHtmlTags(paragraphMatch[1]);
+    if (text) {
+      return text;
+    }
+  }
+  return '';
+}
+
 function getTextInstructions(recipe) {
   const source = recipe?.recipeInstructions;
   if (!source) return [];
@@ -280,15 +308,19 @@ async function fetchRecipe(url) {
   if (!recipe) {
     throw new Error('Unable to locate Recipe JSON-LD in the page');
   }
-  return recipe;
+  return {
+    recipe,
+    review: extractReviewText(html),
+  };
 }
 
 function shouldSkipInstructionStep(step) {
   const normalized = normalizeText(step);
   return (
-    /\b(select|choose|pick)\b/.test(normalized) &&
-    /\b(pre chill|prechill|chill)\b/.test(normalized) &&
-    /\bglass\b/.test(normalized)
+    (/\b(select|choose|pick)\b/.test(normalized) &&
+      /\b(pre chill|prechill|chill)\b/.test(normalized) &&
+      /\bglass\b/.test(normalized)) ||
+    (/\bprepare\b/.test(normalized) && /\bgarnish\b/.test(normalized))
   );
 }
 
@@ -370,7 +402,7 @@ function main() {
 
   Promise.resolve()
     .then(async () => {
-      const recipe = await fetchRecipe(url);
+      const { recipe, review } = await fetchRecipe(url);
       const recipeName = toTitleCase(recipe.name || 'Unnamed Cocktail');
       const recipeIngredients = Array.isArray(recipe.recipeIngredient) ? recipe.recipeIngredient : [];
       const parsedIngredients = recipeIngredients.map(parseIngredientLine).filter(Boolean);
@@ -436,6 +468,7 @@ function main() {
         id: nextCocktailId,
         name: recipeName,
         description:
+          (typeof review === 'string' && review.trim()) ||
           (typeof recipe.description === 'string' && recipe.description.trim()) ||
           `Auto-imported from ${url}`,
         instructions: buildCocktailInstructions(recipeName, ingredientRows, sourceInstructions),
