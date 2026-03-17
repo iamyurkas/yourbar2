@@ -11,7 +11,6 @@ import React, {
   useTransition,
 } from "react";
 import {
-  type LayoutChangeEvent,
   Linking,
   Platform,
   Pressable,
@@ -20,6 +19,7 @@ import {
   Text,
   View,
   type GestureResponderEvent,
+  type LayoutChangeEvent,
   type NativeSyntheticEvent,
   type TextLayoutEventData,
 } from "react-native";
@@ -91,7 +91,7 @@ type CocktailMethodOption = {
 };
 
 const METHOD_ICON_SIZE = 16;
-const COCKTAIL_FILTER_MIN_COUNT = 20;
+const COCKTAIL_FILTER_MIN_COUNT = 3;
 function buildFallbackText(value?: string) {
   const trimmed = value?.trim();
   return trimmed ? trimmed.slice(0, 2).toUpperCase() : undefined;
