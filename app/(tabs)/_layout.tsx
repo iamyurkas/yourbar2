@@ -1,6 +1,7 @@
 import { Tabs } from 'expo-router';
 import { StackActions } from '@react-navigation/native';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { AppState } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import CocktailIcon from '@/assets/images/cocktails.svg';
@@ -14,9 +15,9 @@ import { useI18n } from '@/libs/i18n/use-i18n';
 
 type TabPressHandler = (
   navigation: {
-    navigate: (...args: never[]) => void;
     dispatch: (action: ReturnType<typeof StackActions.popToTop> & { target?: string }) => void;
     getState: () => {
+      index: number;
       routes: {
         key: string;
         state?: {
@@ -27,7 +28,6 @@ type TabPressHandler = (
   },
   route: {
     key: string;
-    name: string;
     state?: {
       key?: string;
     };
@@ -42,6 +42,11 @@ const getNestedStackKey = (
   return stateRoute?.state?.key ?? route.state?.key;
 };
 
+const isFocusedTabRoute = (
+  navigation: { getState: () => { index: number; routes: { key: string }[] } },
+  route: { key: string },
+) => navigation.getState().routes[navigation.getState().index]?.key === route.key;
+
 const TAB_SCREENS: {
   name: 'cocktails' | 'shaker' | 'ingredients';
   titleKey: string;
@@ -55,7 +60,6 @@ const TAB_SCREENS: {
     icon: CocktailIcon,
     onboardingTargetId: 'tab-cocktails',
     onTabPress: (navigation, route) => {
-      navigation.navigate(route.name as never, { screen: 'index' } as never);
       const nestedStackKey = getNestedStackKey(navigation, route);
       if (nestedStackKey) {
         navigation.dispatch(Object.assign(StackActions.popToTop(), { target: nestedStackKey }));
@@ -68,7 +72,6 @@ const TAB_SCREENS: {
     icon: ShakerIcon,
     onboardingTargetId: 'tab-shaker',
     onTabPress: (navigation, route) => {
-      navigation.navigate(route.name as never, { screen: 'index' } as never);
       const nestedStackKey = getNestedStackKey(navigation, route);
       if (nestedStackKey) {
         navigation.dispatch(Object.assign(StackActions.popToTop(), { target: nestedStackKey }));
@@ -81,7 +84,6 @@ const TAB_SCREENS: {
     icon: LemonIcon,
     onboardingTargetId: 'tab-ingredients',
     onTabPress: (navigation, route) => {
-      navigation.navigate(route.name as never, { screen: 'index' } as never);
       const nestedStackKey = getNestedStackKey(navigation, route);
       if (nestedStackKey) {
         navigation.dispatch(Object.assign(StackActions.popToTop(), { target: nestedStackKey }));
@@ -92,9 +94,20 @@ const TAB_SCREENS: {
 
 export default function TabLayout() {
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(null);
+  const appStateRef = useRef(AppState.currentState);
   const { t } = useI18n();
   const insets = useSafeAreaInsets();
   const Colors = useAppColors();
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', (nextState) => {
+      appStateRef.current = nextState;
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, []);
 
   const closeDialog = useCallback(() => {
     setDialogOptions(null);
@@ -136,6 +149,10 @@ export default function TabLayout() {
             }}
             listeners={({ navigation, route }) => ({
               tabPress: (event) => {
+                if (appStateRef.current !== 'active' || !isFocusedTabRoute(navigation, route)) {
+                  return;
+                }
+
                 event.preventDefault();
                 onTabPress(navigation, route);
               },
@@ -153,4 +170,3 @@ export default function TabLayout() {
     </>
   );
 }
-
