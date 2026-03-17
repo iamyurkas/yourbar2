@@ -150,6 +150,9 @@ function parseIngredientLine(line) {
     name
       .replace(/^of\s+/i, '')
       .replace(/^fresh\s+/i, '')
+      .replace(/^top\s+up\s+with\s+/i, '')
+      .replace(/^top\s+with\s+/i, '')
+      .replace(/^with\s+/i, '')
       .replace(/\s*\([^)]*\)\s*/g, ' ')
       .replace(/\b(for garnish|to garnish|garnish)\b/gi, '')
       .replace(/\s+/g, ' ')
@@ -160,7 +163,7 @@ function parseIngredientLine(line) {
 
   const lowered = normalizeText(working);
   const garnish = /\bgarnish\b|\bto garnish\b|\bfor garnish\b/.test(lowered);
-  const process = /\bice\b|\bto rinse\b|\brinse\b|\bto rim\b|\brim\b/.test(lowered);
+  const process = /\bice\b|\bto rinse\b|\brinse\b|\bto rim\b|\brim\b|\btop up\b|\btop with\b/.test(lowered);
 
   return { amount, unitId, name, garnish, process };
 }
@@ -192,6 +195,8 @@ function buildIngredientNameVariants(name) {
     [/^(dark|black) rum$/i, 'dark rum'],
     [/^(dark\/?black|black\/?dark) rum$/i, 'dark rum'],
     [/^basil leaves?$/i, 'basil'],
+    [/^mint leaves?$/i, 'mint'],
+    [/^sugar syrup$/i, 'simple syrup'],
     [/^kummel liqueur$/i, 'kümmel liqueur'],
     [/^maraschino liqueur$/i, 'luxardo maraschino'],
   ];
