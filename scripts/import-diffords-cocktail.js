@@ -251,10 +251,22 @@ function extractReviewText(html) {
     .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, ' ')
     .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, ' ');
 
-  const reviewBlockMatch = sanitizedHtml.match(
-    /<h2[^>]*>\s*Review\s*<\/h2>([\s\S]*?)(?=<h2[^>]*>|$)/i,
-  );
-  const scopedHtml = reviewBlockMatch?.[1] || '';
+  const headingRegex = /<h([1-4])[^>]*>([\s\S]*?)<\/h\1>/gi;
+  const headings = [...sanitizedHtml.matchAll(headingRegex)].map((match) => ({
+    full: match[0],
+    start: match.index,
+    end: (match.index || 0) + match[0].length,
+    text: stripHtmlTags(match[2]),
+  }));
+
+  const reviewHeading = headings.find((heading) => /^review\s*:?\s*$/i.test(heading.text));
+  if (!reviewHeading) {
+    return '';
+  }
+
+  const nextHeading = headings.find((heading) => heading.start > reviewHeading.start);
+  const sectionEnd = nextHeading ? nextHeading.start : sanitizedHtml.length;
+  const scopedHtml = sanitizedHtml.slice(reviewHeading.end, sectionEnd);
   if (!scopedHtml) {
     return '';
   }
