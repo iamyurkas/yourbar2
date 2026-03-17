@@ -436,6 +436,11 @@ function emphasizeIngredients(text, ingredientRows) {
   const names = [...new Set((ingredientRows || []).map((row) => row?.name).filter(Boolean))]
     .sort((a, b) => b.length - a.length);
 
+  if (!names.some((name) => normalizeText(name) === 'ice')) {
+    names.push('Ice');
+    names.push('Crushed ice');
+  }
+
   for (const name of names) {
     const escaped = escapeRegExp(name);
     const pattern = new RegExp(`(^|[^\\p{L}\\p{N}])(${escaped})(?=[^\\p{L}\\p{N}]|$)`, 'giu');
