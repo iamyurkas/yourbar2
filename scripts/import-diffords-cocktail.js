@@ -114,32 +114,44 @@ function parseIngredientLine(line) {
 
   working = working.replace(/^\d+\)\s*/, '').replace(/^[-•]\s*/, '');
 
-  const match = working.match(/^(?<amount>\d+(?:\.\d+)?(?:\s+\d+\/\d+)?|\d+\/\d+)?\s*(?<unit>[a-zA-Z][a-zA-Z\s.&-]{0,20})?\s+(?<name>.+)$/);
-
   let amount = '1';
   let unitId = 1;
   let name = working;
 
-  if (match && match.groups) {
-    const parsedAmount = parseFraction((match.groups.amount || '').trim());
-    const rawUnit = (match.groups.unit || '').trim().toLowerCase().replace(/\.$/, '');
-    const restName = (match.groups.name || '').trim();
-
+  const amountMatch = working.match(/^(\d+(?:\.\d+)?(?:\s+\d+\/\d+)?|\d+\/\d+)\s+(.+)$/);
+  if (amountMatch) {
+    const parsedAmount = parseFraction(amountMatch[1]);
     if (parsedAmount != null) {
-      amount = Number.isInteger(parsedAmount) ? String(parsedAmount) : String(Number(parsedAmount.toFixed(2)));
-      name = restName;
+      amount = Number.isInteger(parsedAmount)
+        ? String(parsedAmount)
+        : String(Number(parsedAmount.toFixed(2)));
+      let rest = amountMatch[2].trim();
 
-      const unitIdMatch = UNIT_ID_BY_TOKEN[rawUnit] || UNIT_ID_BY_TOKEN[rawUnit.replace(/\s+/g, '')];
-      if (unitIdMatch) {
-        unitId = unitIdMatch;
+      const restTokens = rest.split(/\s+/);
+      const oneWordUnit = restTokens[0]?.toLowerCase().replace(/\.$/, '');
+      const twoWordUnit = restTokens.slice(0, 2).join(' ').toLowerCase().replace(/\.$/, '');
+
+      const twoWordUnitId = UNIT_ID_BY_TOKEN[twoWordUnit] || UNIT_ID_BY_TOKEN[twoWordUnit.replace(/\s+/g, '')];
+      const oneWordUnitId = UNIT_ID_BY_TOKEN[oneWordUnit] || UNIT_ID_BY_TOKEN[(oneWordUnit || '').replace(/\s+/g, '')];
+
+      if (twoWordUnitId) {
+        unitId = twoWordUnitId;
+        rest = restTokens.slice(2).join(' ');
+      } else if (oneWordUnitId) {
+        unitId = oneWordUnitId;
+        rest = restTokens.slice(1).join(' ');
       }
+
+      name = rest || working;
     }
   }
 
   name = toTitleCase(
     name
       .replace(/^of\s+/i, '')
+      .replace(/^fresh\s+/i, '')
       .replace(/\s*\([^)]*\)\s*/g, ' ')
+      .replace(/\b(for garnish|to garnish|garnish)\b/gi, '')
       .replace(/\s+/g, ' ')
       .trim(),
   );
@@ -151,6 +163,40 @@ function parseIngredientLine(line) {
   const process = /\bice\b|\bto rinse\b|\brinse\b|\bto rim\b|\brim\b/.test(lowered);
 
   return { amount, unitId, name, garnish, process };
+}
+
+function buildIngredientNameVariants(name) {
+  const raw = String(name || '').trim();
+  if (!raw) return [];
+
+  const title = toTitleCase(raw);
+  const normalized = normalizeText(title);
+  const variants = new Set([normalized]);
+
+  const words = title.split(/\s+/).filter(Boolean);
+  if (words.length === 2) {
+    variants.add(normalizeText(`${words[1]} ${words[0]}`));
+  }
+  if (words.length === 3) {
+    variants.add(normalizeText(`${words[2]} ${words[0]} ${words[1]}`));
+  }
+
+  const patterns = [
+    [/^reposado tequila$/i, 'tequila reposado'],
+    [/^blanco tequila$/i, 'tequila blanco'],
+    [/^anejo tequila$/i, 'tequila añejo'],
+    [/^gold tequila$/i, 'tequila gold'],
+    [/^silver tequila$/i, 'tequila blanco'],
+    [/^agave nectar$/i, 'agave syrup'],
+  ];
+
+  patterns.forEach(([regex, replacement]) => {
+    if (regex.test(title)) {
+      variants.add(normalizeText(replacement));
+    }
+  });
+
+  return [...variants];
 }
 
 function extractJsonLd(html) {
@@ -299,15 +345,21 @@ function main() {
       }
 
       const data = JSON.parse(fs.readFileSync(DATA_PATH, 'utf8'));
-      const ingredientByNormalized = new Map(
-        (data.ingredients || []).map((ingredient) => [normalizeText(ingredient.name), ingredient]),
-      );
+      const ingredientByNormalized = new Map();
+      (data.ingredients || []).forEach((ingredient) => {
+        buildIngredientNameVariants(ingredient.name).forEach((variant) => {
+          ingredientByNormalized.set(variant, ingredient);
+        });
+      });
 
       let nextIngredientId = Math.max(...data.ingredients.map((item) => item.id)) + 1;
       const ingredientRows = [];
 
       for (const parsed of parsedIngredients) {
-        const existing = ingredientByNormalized.get(normalizeText(parsed.name));
+        const nameVariants = buildIngredientNameVariants(parsed.name);
+        const existing = nameVariants
+          .map((variant) => ingredientByNormalized.get(variant))
+          .find(Boolean);
         let ingredient = existing;
         if (!ingredient) {
           ingredient = {
@@ -317,7 +369,9 @@ function main() {
             tags: [guessIngredientTagId(parsed.name)],
           };
           data.ingredients.push(ingredient);
-          ingredientByNormalized.set(normalizeText(ingredient.name), ingredient);
+          buildIngredientNameVariants(ingredient.name).forEach((variant) => {
+            ingredientByNormalized.set(variant, ingredient);
+          });
           console.log(`+ Added ingredient: ${ingredient.name} (#${ingredient.id})`);
         }
 
