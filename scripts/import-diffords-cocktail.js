@@ -426,6 +426,33 @@ function normalizeInstructionStep(step) {
   return text;
 }
 
+function escapeRegExp(value) {
+  return String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function emphasizeIngredients(text, ingredientRows) {
+  let result = String(text || '');
+  const names = [...new Set((ingredientRows || []).map((row) => row?.name).filter(Boolean))]
+    .sort((a, b) => b.length - a.length);
+
+  for (const name of names) {
+    const escaped = escapeRegExp(name);
+    const pattern = new RegExp(`(^|[^\\p{L}\\p{N}])(${escaped})(?=[^\\p{L}\\p{N}]|$)`, 'giu');
+    result = result.replace(pattern, (full, prefix, match, offset, source) => {
+      const start = offset + String(prefix).length;
+      const end = start + String(match).length;
+      const before = source.slice(Math.max(0, start - 2), start);
+      const after = source.slice(end, end + 2);
+      if (before === '**' && after === '**') {
+        return full;
+      }
+      return `${prefix}**${match}**`;
+    });
+  }
+
+  return result;
+}
+
 function buildCocktailInstructions(cocktailName, ingredientRows, sourceInstructions) {
   const measured = ingredientRows
     .filter((row) => !row.garnish)
@@ -439,7 +466,7 @@ function buildCocktailInstructions(cocktailName, ingredientRows, sourceInstructi
   sourceInstructions.forEach((step) => {
     const cleaned = normalizeInstructionStep(step);
     if (cleaned) {
-      lines.push(`${lines.length + 1}. ${cleaned}`);
+      lines.push(`${lines.length + 1}. ${emphasizeIngredients(cleaned, ingredientRows)}`);
     }
   });
 
