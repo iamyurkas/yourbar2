@@ -656,9 +656,12 @@ function injectMuddleAmounts(text, ingredientRows) {
       }
 
       const qty = formatQuantity(row.amount, row.unitId);
+      const muddlePhrase = row.unitId === 10
+        ? `${row.amount} ${ingredientWord} ${Number(row.amount) === 1 ? 'leaf' : 'leaves'}`
+        : `${qty} of ${ingredientWord}`;
       updated = updated.replace(
         new RegExp(`\\b${escapeRegExp(ingredientWord)}\\b`, 'i'),
-        `${qty} of ${ingredientWord}`,
+        muddlePhrase,
       );
     });
 
