@@ -233,13 +233,14 @@ function extractJsonLd(html) {
 }
 
 function stripHtmlTags(value) {
-  return String(value || '')
-    .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, ' ')
-    .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, ' ')
+  const withoutNonContentBlocks = String(value || '')
+    .replace(/<style\b[^>]*>[\s\S]*?<\s*\/\s*style\s*>/gi, ' ')
+    .replace(/<script\b[^>]*>[\s\S]*?<\s*\/\s*script\s*>/gi, ' ');
+
+  return withoutNonContentBlocks
     .replace(/<br\s*\/?>/gi, ' ')
     .replace(/<[^>]+>/g, ' ')
     .replace(/&nbsp;/gi, ' ')
-    .replace(/&amp;/gi, '&')
     .replace(/&quot;/gi, '"')
     .replace(/&#39;/gi, "'")
     .replace(/\s+/g, ' ')
@@ -263,8 +264,8 @@ function isLikelyHumanText(value) {
 
 function extractReviewText(html) {
   const sanitizedHtml = String(html || '')
-    .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, ' ')
-    .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, ' ');
+    .replace(/<style\b[^>]*>[\s\S]*?<\s*\/\s*style\s*>/gi, ' ')
+    .replace(/<script\b[^>]*>[\s\S]*?<\s*\/\s*script\s*>/gi, ' ');
 
   const headingRegex = /<h([1-4])[^>]*>([\s\S]*?)<\/h\1>/gi;
   const headings = [...sanitizedHtml.matchAll(headingRegex)].map((match) => ({
@@ -302,8 +303,8 @@ function extractReviewText(html) {
 
 function extractGlassText(html) {
   const sanitizedHtml = String(html || '')
-    .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, ' ')
-    .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, ' ');
+    .replace(/<style\b[^>]*>[\s\S]*?<\s*\/\s*style\s*>/gi, ' ')
+    .replace(/<script\b[^>]*>[\s\S]*?<\s*\/\s*script\s*>/gi, ' ');
 
   const patterns = [
     /<dt[^>]*>\s*Glass\s*<\/dt>\s*<dd[^>]*>([\s\S]*?)<\/dd>/i,
