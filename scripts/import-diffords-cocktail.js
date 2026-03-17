@@ -336,7 +336,11 @@ function getTextInstructions(recipe) {
 
 function findMethodIds(textLines) {
   const joined = normalizeText(textLines.join(' '));
-  const methodIds = METHOD_HINTS.filter(([hint]) => joined.includes(hint)).map(([, id]) => id);
+  const methodIds = METHOD_HINTS
+    .map(([hint, id]) => ({ id, index: joined.indexOf(normalizeText(hint)) }))
+    .filter((entry) => entry.index >= 0)
+    .sort((a, b) => a.index - b.index)
+    .map((entry) => entry.id);
   return methodIds.length > 0 ? [...new Set(methodIds)] : [DEFAULT_METHOD_ID];
 }
 
