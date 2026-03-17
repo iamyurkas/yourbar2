@@ -1532,14 +1532,47 @@ export default function CocktailDetailsScreen() {
                 </View>
                 <View style={styles.ingredientsList}>
                   {sortedIngredients.map((ingredient, index) => {
-                    const quantity = formatIngredientQuantity(
-                      scaledIngredients[index] ?? ingredient,
+                    const resolution = resolvedIngredients[index];
+                    const ingredientId = parseIngredientId(ingredient);
+                    const resolvedId = resolution.resolvedId ?? ingredientId;
+                    const resolvedDeclaredSubstitute =
+                      resolution.substituteFor && resolvedId != null
+                        ? (ingredient.substitutes ?? []).find(
+                          (substitute) =>
+                            typeof substitute.ingredientId === "number" &&
+                            substitute.ingredientId === resolvedId,
+                        )
+                        : undefined;
+                    const quantityIngredient =
+                      resolvedDeclaredSubstitute?.amount?.trim()
+                        ? resolveScaledIngredient(
+                          {
+                            ...ingredient,
+                            amount: resolvedDeclaredSubstitute.amount,
+                            unitId:
+                              typeof resolvedDeclaredSubstitute.unitId === "number"
+                                ? resolvedDeclaredSubstitute.unitId
+                                : undefined,
+                          },
+                          servings,
+                          normalizedDefaultServings,
+                        )
+                        : (scaledIngredients[index] ?? ingredient);
+                    const quantityBase = formatIngredientQuantity(
+                      quantityIngredient,
                       ingredientDisplayMode,
                       smallestPartAmount,
                       t("cocktailDetails.asNeeded"),
                       t,
                       locale,
                     );
+                    const substituteUnit =
+                      typeof resolvedDeclaredSubstitute?.unitId === "number"
+                        ? ""
+                        : (resolvedDeclaredSubstitute?.unit?.trim() ?? "");
+                    const quantity = substituteUnit
+                      ? `${quantityBase} ${substituteUnit}`
+                      : quantityBase;
                     const qualifier = getIngredientQualifier(
                       ingredient,
                       t("cocktailDetails.garnish"),
@@ -1548,9 +1581,6 @@ export default function CocktailDetailsScreen() {
                       t("cocktailDetails.serving"),
                     );
                     const key = `${ingredient.ingredientId ?? ingredient.name}-${ingredient.order}`;
-                    const resolution = resolvedIngredients[index];
-                    const ingredientId = parseIngredientId(ingredient);
-                    const resolvedId = resolution.resolvedId ?? ingredientId;
                     const resolvedIngredient =
                       resolvedId != null && resolvedId >= 0
                         ? ingredientLookup.ingredientById.get(resolvedId)

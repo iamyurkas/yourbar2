@@ -1042,11 +1042,22 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
               seenKeys.add(key);
 
               const brand = candidate.brand ? true : undefined;
+              const substituteAmount = candidate.amount?.trim() || undefined;
+              const normalizedSubstituteUnitId =
+                candidate.unitId != null ? Number(candidate.unitId) : undefined;
+              const substituteUnitId =
+                normalizedSubstituteUnitId != null &&
+                  Number.isFinite(normalizedSubstituteUnitId) &&
+                  normalizedSubstituteUnitId >= 0
+                  ? Math.trunc(normalizedSubstituteUnitId)
+                  : undefined;
 
               substitutes.push({
                 ingredientId: substituteIngredientId,
                 name: substituteName,
                 brand,
+                amount: substituteAmount,
+                unitId: substituteUnitId,
               });
             });
 
@@ -2031,11 +2042,22 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             seenKeys.add(key);
 
             const brand = candidate.brand ? true : undefined;
+            const substituteAmount = candidate.amount?.trim() || undefined;
+            const normalizedSubstituteUnitId =
+              candidate.unitId != null ? Number(candidate.unitId) : undefined;
+            const substituteUnitId =
+              normalizedSubstituteUnitId != null &&
+                Number.isFinite(normalizedSubstituteUnitId) &&
+                normalizedSubstituteUnitId >= 0
+                ? Math.trunc(normalizedSubstituteUnitId)
+                : undefined;
 
             substitutes.push({
               ingredientId: substituteIngredientId,
               name: substituteName,
               brand,
+              amount: substituteAmount,
+              unitId: substituteUnitId,
             });
           });
 
