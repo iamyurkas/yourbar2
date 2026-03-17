@@ -38869,14 +38869,8 @@
       "description": "A refreshing and sophisticated twist on the Daiquiri, combining white rum with cool cucumber and fresh mint, finished with a subtle herbal absinthe rinse and a splash of soda. Zesty, crisp, and exceptionally balanced.",
       "instructions": "1. Select and pre-chill a coupe glass.\n2. Rinse the chilled glass with **absinthe** (swirl around to coat the inside and discard the excess).\n3. In a shaker, muddle 2 slices of **cucumber** and gently bruise 7 fresh **mint leaves**.\n4. Add 60 ml of **white rum**, 22.5 ml of **lime juice**, 15 ml of **rich simple syrup**, and about 150 g of **ice**.\n5. Shake vigorously until well chilled.\n6. Fine strain into the absinthe-rinsed glass.\n7. Top with 10 ml of **soda water**.\n8. Garnish with a **cucumber** slice floated on the surface.",
       "glassId": "coupe",
-      "methodIds": [
-        "muddle",
-        "shake"
-      ],
-      "tags": [
-        6,
-        8
-      ],
+      "methodIds": ["muddle", "shake"],
+      "tags": [6, 8],
       "defaultServings": 1,
       "ingredients": [
         {
@@ -38953,12 +38947,8 @@
       "description": "A bold and aromatic classic from the late 19th century, this cocktail is a spirit-forward Manhattan riff. Spicy rye whiskey is balanced by sweet vermouth and rich cherry liqueur, with a dash of absinthe adding an intriguing layer of herbal complexity.",
       "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 50 ml of **rye whiskey**, 25 ml of **red vermouth**, 5 ml of **cherry heering**, and 1 dash of **absinthe**.\n3. Stir gently for about 30 seconds until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Express the oils from a **lemon** peel over the drink and use it as a garnish.",
       "glassId": "coupe",
-      "methodIds": [
-        "stir"
-      ],
-      "tags": [
-        5
-      ],
+      "methodIds": ["stir"],
+      "tags": [5],
       "defaultServings": 1,
       "ingredients": [
         {
@@ -39013,12 +39003,8 @@
       "description": "An elegant and complex gin-based cocktail that offers a refreshing herbal alternative to a Manhattan. The botanical notes of gin are layered with sweet vermouth and the bitter, earthy depth of Cynar, finished with an absinthe-rinsed glass for a lingering aromatic finish.",
       "instructions": "1. Select and pre-chill a coupe glass.\n2. Rinse the chilled glass with **absinthe** (swirl around and discard the excess).\n3. Fill a mixing glass with **ice**.\n4. Add 60 ml of **gin**, 30 ml of **red vermouth**, 15 ml of **Cynar**, and 1 dash of **orange bitters**.\n5. Stir gently for about 30 seconds until well chilled.\n6. Strain into the absinthe-rinsed glass.\n7. Express the oils from an **orange** peel over the drink and use it as a garnish.",
       "glassId": "coupe",
-      "methodIds": [
-        "stir"
-      ],
-      "tags": [
-        5
-      ],
+      "methodIds": ["stir"],
+      "tags": [5],
       "defaultServings": 1,
       "ingredients": [
         {
@@ -41722,6 +41708,13 @@
       "description": "Savoury beverage made from a blend of reconstituted tomato juice concentrate and dried clam broth, seasoned with spices, salt, and MSG. It is a staple ingredient in popular cocktails like the **Caesar** and the **Michelada**.",
       "tags": [7],
       "photoUri": "assets/ingredients/366-clamato-juice.jpg"
+    },
+    {
+      "id": 367,
+      "name": "Ginger Liqueur",
+      "description": "Sweet, aromatic spirit made by macerating ginger root in alcohol, often enhanced with citrus oil, sugar, and sometimes botanicals. Typically has an ABV 25-30%%.",
+      "tags": [1, 9],
+      "photoUri": "assets/ingredients/367-ginger-liqueur.jpg"
     }
   ]
 }

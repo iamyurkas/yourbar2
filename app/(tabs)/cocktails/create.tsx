@@ -2257,7 +2257,7 @@ export default function CreateCocktailScreen() {
                   onChangeSubstitute={handleChangeSubstitute}
                   onRequestCreateIngredient={handleRequestCreateIngredient}
                   onInputFocus={scrollFieldIntoView}
-                onOpenDialog={showDialog}
+                  onOpenDialog={showDialog}
                   index={index}
                   totalCount={ingredientsState.length}
                 />
@@ -3634,7 +3634,6 @@ function EditableIngredientRow({
                       styles.substituteUnitSelector,
                       {
                         borderColor: Colors.outlineVariant,
-                        backgroundColor: Colors.highlightFaint,
                       },
                     ]}
                     accessibilityRole="button"
