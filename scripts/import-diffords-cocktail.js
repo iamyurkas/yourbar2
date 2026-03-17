@@ -177,6 +177,9 @@ function parseIngredientLine(line) {
   if (unitId === 1 && /\bleaves?\b/i.test(name)) {
     unitId = 10;
   }
+  if (unitId === 1 && /\bslices?\b|\bwheels?\b/i.test(name)) {
+    unitId = 19;
+  }
 
   if (!name) return null;
 
@@ -217,6 +220,15 @@ function parseGarnishPart(part) {
   if (trailingUnitId) {
     unitId = trailingUnitId;
     text = tokens.slice(0, -1).join(' ').trim();
+  }
+
+  if (unitId === 1 && /\bslices?\s+wheels?\b/i.test(text)) {
+    unitId = 19;
+    text = text.replace(/\bslices?\s+wheels?\b/gi, '').replace(/\s+/g, ' ').trim();
+  }
+  if (unitId === 1 && /\bwheels?\b/i.test(text)) {
+    unitId = 19;
+    text = text.replace(/\bwheels?\b/gi, '').replace(/\s+/g, ' ').trim();
   }
 
   const name = toTitleCase(text);
@@ -285,6 +297,8 @@ function buildIngredientNameVariants(name) {
     [/^(dark\/?black|black\/?dark) rum$/i, 'dark rum'],
     [/^basil leaves?$/i, 'basil'],
     [/^mint leaves?$/i, 'mint'],
+    [/^lime\s+slices?\s+wheels?$/i, 'lime'],
+    [/^lime\s+wheels?$/i, 'lime'],
     [/^sugar syrup$/i, 'simple syrup'],
     [/^kummel liqueur$/i, 'kümmel liqueur'],
     [/^maraschino liqueur$/i, 'luxardo maraschino'],
