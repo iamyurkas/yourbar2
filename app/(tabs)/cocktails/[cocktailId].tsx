@@ -1549,7 +1549,10 @@ export default function CocktailDetailsScreen() {
                           {
                             ...ingredient,
                             amount: resolvedDeclaredSubstitute.amount,
-                            unitId: undefined,
+                            unitId:
+                              typeof resolvedDeclaredSubstitute.unitId === "number"
+                                ? resolvedDeclaredSubstitute.unitId
+                                : undefined,
                           },
                           servings,
                           normalizedDefaultServings,
@@ -1564,7 +1567,9 @@ export default function CocktailDetailsScreen() {
                       locale,
                     );
                     const substituteUnit =
-                      resolvedDeclaredSubstitute?.unit?.trim() ?? "";
+                      typeof resolvedDeclaredSubstitute?.unitId === "number"
+                        ? ""
+                        : (resolvedDeclaredSubstitute?.unit?.trim() ?? "");
                     const quantity = substituteUnit
                       ? `${quantityBase} ${substituteUnit}`
                       : quantityBase;

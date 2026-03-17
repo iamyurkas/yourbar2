@@ -1043,14 +1043,21 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
 
               const brand = candidate.brand ? true : undefined;
               const substituteAmount = candidate.amount?.trim() || undefined;
-              const substituteUnit = candidate.unit?.trim() || undefined;
+              const normalizedSubstituteUnitId =
+                candidate.unitId != null ? Number(candidate.unitId) : undefined;
+              const substituteUnitId =
+                normalizedSubstituteUnitId != null &&
+                  Number.isFinite(normalizedSubstituteUnitId) &&
+                  normalizedSubstituteUnitId >= 0
+                  ? Math.trunc(normalizedSubstituteUnitId)
+                  : undefined;
 
               substitutes.push({
                 ingredientId: substituteIngredientId,
                 name: substituteName,
                 brand,
                 amount: substituteAmount,
-                unit: substituteUnit,
+                unitId: substituteUnitId,
               });
             });
 
@@ -2036,14 +2043,21 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
 
             const brand = candidate.brand ? true : undefined;
             const substituteAmount = candidate.amount?.trim() || undefined;
-            const substituteUnit = candidate.unit?.trim() || undefined;
+            const normalizedSubstituteUnitId =
+              candidate.unitId != null ? Number(candidate.unitId) : undefined;
+            const substituteUnitId =
+              normalizedSubstituteUnitId != null &&
+                Number.isFinite(normalizedSubstituteUnitId) &&
+                normalizedSubstituteUnitId >= 0
+                ? Math.trunc(normalizedSubstituteUnitId)
+                : undefined;
 
             substitutes.push({
               ingredientId: substituteIngredientId,
               name: substituteName,
               brand,
               amount: substituteAmount,
-              unit: substituteUnit,
+              unitId: substituteUnitId,
             });
           });
 

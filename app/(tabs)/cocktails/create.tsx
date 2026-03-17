@@ -82,7 +82,12 @@ type EditableSubstitute = {
   name: string;
   isBrand?: boolean;
   amount: string;
-  unit: string;
+  unitId?: number;
+};
+
+type SubstituteUnitPickerTarget = {
+  ingredientKey: string;
+  substituteKey: string;
 };
 
 type EditableIngredient = {
@@ -128,7 +133,7 @@ type CocktailFormSnapshot = {
       name: string;
       isBrand?: boolean;
       amount: string;
-      unit: string;
+      unitId?: number;
     }[];
   }[];
 };
@@ -152,6 +157,7 @@ function createEditableSubstitute(
     brand?: boolean | null;
     amount?: string | null;
     unit?: string | null;
+    unitId?: number | string | null;
   },
 ): EditableSubstitute | undefined {
   const name = source.name?.trim();
@@ -165,13 +171,19 @@ function createEditableSubstitute(
       ? Math.trunc(ingredientValue)
       : undefined;
 
+  const unitIdValue = source.unitId != null ? Number(source.unitId) : undefined;
+  const substituteUnitId =
+    unitIdValue != null && Number.isFinite(unitIdValue) && unitIdValue >= 0
+      ? Math.trunc(unitIdValue)
+      : undefined;
+
   return {
     key: createUniqueKey(`sub-${parentKey}`),
     ingredientId: substituteIngredientId,
     name,
     isBrand: source.brand ?? false,
     amount: source.amount?.trim() ?? "",
-    unit: source.unit?.trim() ?? "",
+    unitId: substituteUnitId,
   } satisfies EditableSubstitute;
 }
 
@@ -234,7 +246,9 @@ function mapRecipeIngredientToEditable(
         name: item.name,
         brand: (item as { brand?: boolean }).brand ?? false,
         amount: (item as { amount?: string }).amount,
-        unit: (item as { unit?: string }).unit,
+        unitId:
+          (item as { unitId?: number | string | null }).unitId ??
+          (item as { unit?: string }).unit,
       }),
     )
     .filter((item): item is EditableSubstitute => Boolean(item));
@@ -376,6 +390,8 @@ export default function CreateCocktailScreen() {
     Cocktail | undefined
   >(undefined);
   const [unitPickerTarget, setUnitPickerTarget] = useState<string | null>(null);
+  const [substituteUnitPickerTarget, setSubstituteUnitPickerTarget] =
+    useState<SubstituteUnitPickerTarget | null>(null);
   const [substituteTarget, setSubstituteTarget] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [permissionStatus, requestPermission] =
@@ -515,7 +531,7 @@ export default function CreateCocktailScreen() {
           name: substitute.name,
           isBrand: substitute.isBrand,
           amount: substitute.amount,
-          unit: substitute.unit,
+          unitId: substitute.unitId,
         })),
       })),
     };
@@ -1110,7 +1126,7 @@ export default function CreateCocktailScreen() {
     (
       ingredientKey: string,
       substituteKey: string,
-      changes: Partial<Pick<EditableSubstitute, "amount" | "unit">>,
+      changes: Partial<Pick<EditableSubstitute, "amount" | "unitId">>,
     ) => {
       handleUpdateSubstitutes(ingredientKey, (items) =>
         items.map((substitute) =>
@@ -1139,6 +1155,17 @@ export default function CreateCocktailScreen() {
 
   const handleCloseUnitPicker = useCallback(() => {
     setUnitPickerTarget(null);
+  }, []);
+
+  const handleOpenSubstituteUnitPicker = useCallback(
+    (ingredientKey: string, substituteKey: string) => {
+      setSubstituteUnitPickerTarget({ ingredientKey, substituteKey });
+    },
+    [],
+  );
+
+  const handleCloseSubstituteUnitPicker = useCallback(() => {
+    setSubstituteUnitPickerTarget(null);
   }, []);
 
   const handleToggleMethod = useCallback((targetId: CocktailMethodId) => {
@@ -1197,6 +1224,92 @@ export default function CreateCocktailScreen() {
 
     return emptyUnitOption ? [emptyUnitOption, ...namedUnitOptions] : namedUnitOptions;
   }, [locale, t, usePluralUnitsInPicker]);
+
+  const targetSubstituteForUnitPicker = useMemo(() => {
+    if (!substituteUnitPickerTarget) {
+      return undefined;
+    }
+
+    const ingredient = ingredientsState.find(
+      (item) => item.key === substituteUnitPickerTarget.ingredientKey,
+    );
+    return ingredient?.substitutes.find(
+      (substitute) => substitute.key === substituteUnitPickerTarget.substituteKey,
+    );
+  }, [ingredientsState, substituteUnitPickerTarget]);
+
+  const usePluralUnitsInSubstitutePicker = useMemo(
+    () => shouldUsePluralUnits(targetSubstituteForUnitPicker?.amount),
+    [targetSubstituteForUnitPicker?.amount],
+  );
+
+  const sortedSubstituteUnitOptions = useMemo(() => {
+    const category = usePluralUnitsInSubstitutePicker
+      ? getPluralCategory(locale, 2)
+      : "one";
+    const form = usePluralUnitsInSubstitutePicker ? "plural" : "singular";
+
+    const mappedOptions = COCKTAIL_UNIT_OPTIONS.map((option) => {
+      let displayLabel = t(`unit.${option.id}.${category}`);
+      if (displayLabel === `unit.${option.id}.${category}`) {
+        displayLabel = t(`unit.${option.id}.${form}`);
+      }
+
+      if (displayLabel === `unit.${option.id}.${form}`) {
+        displayLabel = option.label || " ";
+      }
+
+      return {
+        ...option,
+        displayLabel,
+      };
+    });
+
+    const emptyUnitOption = mappedOptions.find(
+      (option) => !option.displayLabel.trim(),
+    );
+    const namedUnitOptions = mappedOptions
+      .filter((option) => option !== emptyUnitOption)
+      .sort((a, b) => {
+        const labelDiff = compareGlobalAlphabet(
+          a.displayLabel.trim(),
+          b.displayLabel.trim(),
+        );
+        if (labelDiff !== 0) {
+          return labelDiff;
+        }
+        return a.id - b.id;
+      });
+
+    return emptyUnitOption
+      ? [emptyUnitOption, ...namedUnitOptions]
+      : namedUnitOptions;
+  }, [locale, t, usePluralUnitsInSubstitutePicker]);
+
+  const selectedSubstituteUnitOptionId = targetSubstituteForUnitPicker?.unitId;
+
+  const handleSelectSubstituteUnit = useCallback(
+    (unitId?: number) => {
+      if (!substituteUnitPickerTarget) {
+        return;
+      }
+
+      const selectedOption = sortedSubstituteUnitOptions.find(
+        (option) => option.id === unitId,
+      );
+
+      handleChangeSubstitute(
+        substituteUnitPickerTarget.ingredientKey,
+        substituteUnitPickerTarget.substituteKey,
+        {
+          unitId: selectedOption?.id,
+        },
+      );
+
+      setSubstituteUnitPickerTarget(null);
+    },
+    [handleChangeSubstitute, sortedSubstituteUnitOptions, substituteUnitPickerTarget],
+  );
 
   const handleOpenSubstituteModal = useCallback((key: string) => {
     setSubstituteTarget(key);
@@ -1259,7 +1372,7 @@ export default function CreateCocktailScreen() {
         ingredientId: numericId,
         isBrand: false,
         amount: "",
-        unit: "",
+        unitId: undefined,
       };
 
       handleUpdateSubstitutes(substituteTarget, (items) => {
@@ -1341,7 +1454,7 @@ export default function CreateCocktailScreen() {
             name: substituteName,
             brand: substitute.isBrand ?? false,
             amount: substitute.amount.trim() || undefined,
-            unit: substitute.unit.trim() || undefined,
+            unitId: substitute.unitId,
           }];
         });
 
@@ -2138,12 +2251,13 @@ export default function CreateCocktailScreen() {
                   onRemove={handleRemoveIngredient}
                   onMove={handleMoveIngredient}
                   onRequestUnitPicker={handleOpenUnitPicker}
+                  onRequestSubstituteUnitPicker={handleOpenSubstituteUnitPicker}
                   onRequestAddSubstitute={handleOpenSubstituteModal}
                   onRemoveSubstitute={handleRemoveSubstitute}
                   onChangeSubstitute={handleChangeSubstitute}
                   onRequestCreateIngredient={handleRequestCreateIngredient}
                   onInputFocus={scrollFieldIntoView}
-                onOpenDialog={showDialog}
+                  onOpenDialog={showDialog}
                   index={index}
                   totalCount={ingredientsState.length}
                 />
@@ -2437,6 +2551,92 @@ export default function CreateCocktailScreen() {
       </Modal>
 
       <Modal
+        visible={substituteUnitPickerTarget != null}
+        transparent
+        animationType="fade"
+        onRequestClose={handleCloseSubstituteUnitPicker}
+      >
+        <Pressable
+          style={[
+            styles.unitModalOverlay,
+            {
+              paddingTop: Math.max(insets.top, 16),
+              paddingBottom: Math.max(insets.bottom, 16),
+            },
+          ]}
+          onPress={handleCloseSubstituteUnitPicker}
+          accessibilityRole="button"
+        >
+          <Pressable
+            onPress={(event) => event.stopPropagation?.()}
+            style={[
+              styles.unitModalCard,
+              {
+                backgroundColor: Colors.surface,
+                borderColor: Colors.outline,
+                shadowColor: Colors.shadow,
+              },
+            ]}
+            accessibilityRole="menu"
+          >
+            <View style={styles.unitModalHeader}>
+              <Text style={[styles.unitModalTitle, { color: Colors.onSurface }]}>
+                {t("cocktailForm.selectUnit")}
+              </Text>
+              <Pressable
+                onPress={handleCloseSubstituteUnitPicker}
+                accessibilityRole="button"
+                accessibilityLabel={t("common.close")}
+              >
+                <MaterialCommunityIcons
+                  name="close"
+                  size={22}
+                  color={Colors.onSurfaceVariant}
+                />
+              </Pressable>
+            </View>
+            <ScrollView
+              style={styles.unitModalScroll}
+              contentContainerStyle={styles.unitModalList}
+              showsVerticalScrollIndicator={false}
+              keyboardShouldPersistTaps="handled"
+            >
+              {sortedSubstituteUnitOptions.map((option) => {
+                const isSelected = option.id === selectedSubstituteUnitOptionId;
+                return (
+                  <Pressable
+                    key={`substitute-${option.id}`}
+                    onPress={() => handleSelectSubstituteUnit(option.id)}
+                    style={[
+                      styles.unitOption,
+                      {
+                        borderColor: isSelected ? Colors.tint : Colors.outlineVariant,
+                        backgroundColor: isSelected
+                          ? Colors.highlightFaint
+                          : Colors.surfaceBright,
+                      },
+                    ]}
+                    accessibilityRole="button"
+                    accessibilityLabel={
+                      option.displayLabel.trim()
+                        ? t("cocktailForm.selectNamed", {
+                          name: option.displayLabel.trim(),
+                        })
+                        : t("cocktailForm.selectEmptyUnit")
+                    }
+                  >
+                    <Text style={[styles.unitLabel, { color: Colors.onSurface }]}>
+                      {option.displayLabel}
+                    </Text>
+                  </Pressable>
+                );
+              })}
+            </ScrollView>
+          </Pressable>
+        </Pressable>
+      </Modal>
+
+      <Modal
         visible={isMethodModalVisible}
         transparent
         animationType="fade"
@@ -2626,12 +2826,16 @@ type EditableIngredientRowProps = {
   onRemove: (key: string) => void;
   onMove: (key: string, direction: "up" | "down") => void;
   onRequestUnitPicker: (key: string) => void;
+  onRequestSubstituteUnitPicker: (
+    ingredientKey: string,
+    substituteKey: string,
+  ) => void;
   onRequestAddSubstitute: (key: string) => void;
   onRemoveSubstitute: (ingredientKey: string, substituteKey: string) => void;
   onChangeSubstitute: (
     ingredientKey: string,
     substituteKey: string,
-    changes: Partial<Pick<EditableSubstitute, "amount" | "unit">>,
+    changes: Partial<Pick<EditableSubstitute, "amount" | "unitId">>,
   ) => void;
   onRequestCreateIngredient: (name: string) => void;
   onInputFocus: (target?: number | null) => void;
@@ -2651,6 +2855,7 @@ function EditableIngredientRow({
   onRemove,
   onMove,
   onRequestUnitPicker,
+  onRequestSubstituteUnitPicker,
   onRequestAddSubstitute,
   onRemoveSubstitute,
   onChangeSubstitute,
@@ -2911,6 +3116,35 @@ function EditableIngredientRow({
 
     return label || "";
   }, [ingredient.unitId, t, usePluralUnits, locale]);
+
+  const getSubstituteUnitLabel = useCallback(
+    (substitute: EditableSubstitute) => {
+      if (substitute.unitId == null) {
+        return "";
+      }
+
+      const usePluralSubstituteUnits = shouldUsePluralUnits(substitute.amount);
+      const category = usePluralSubstituteUnits
+        ? getPluralCategory(locale, 2)
+        : "one";
+      const form = usePluralSubstituteUnits ? "plural" : "singular";
+
+      let label = t(`unit.${substitute.unitId}.${category}`);
+      if (label === `unit.${substitute.unitId}.${category}`) {
+        label = t(`unit.${substitute.unitId}.${form}`);
+      }
+
+      if (label === `unit.${substitute.unitId}.${form}`) {
+        const entry = COCKTAIL_UNIT_DICTIONARY[substitute.unitId];
+        label = usePluralSubstituteUnits
+          ? (entry?.plural ?? entry?.singular ?? "")
+          : (entry?.singular ?? "");
+      }
+
+      return label || "";
+    },
+    [locale, t],
+  );
 
   useEffect(() => {
     if (!isIceIngredient) {
@@ -3333,8 +3567,10 @@ function EditableIngredientRow({
         </Pressable>
         {ingredient.substitutes.length ? (
           <View style={styles.substitutesList}>
-            {ingredient.substitutes.map((substitute) => (
-              <View
+            {ingredient.substitutes.map((substitute) => {
+              const substituteUnitLabel = getSubstituteUnitLabel(substitute);
+
+              return <View
                 key={substitute.key}
                 style={[
                   styles.substitutePill,
@@ -3389,23 +3625,41 @@ function EditableIngredientRow({
                     ]}
                     placeholderTextColor={Colors.onSurfaceVariant}
                   />
-                  <TextInput
-                    value={substitute.unit}
-                    onChangeText={(value) =>
-                      onChangeSubstitute(ingredient.key, substitute.key, {
-                        unit: value,
-                      })
+                  <Pressable
+                    onPress={() =>
+                      onRequestSubstituteUnitPicker(ingredient.key, substitute.key)
                     }
-                    placeholder={t("cocktailForm.unit")}
                     style={[
                       styles.substituteMetaInput,
-                      { color: Colors.onSurface, borderColor: Colors.outlineVariant },
+                      styles.substituteUnitSelector,
+                      {
+                        borderColor: Colors.outlineVariant,
+                      },
                     ]}
-                    placeholderTextColor={Colors.onSurfaceVariant}
-                  />
+                    accessibilityRole="button"
+                    accessibilityLabel={t("cocktailForm.selectUnit")}
+                  >
+                    <Text
+                      style={[
+                        styles.substituteUnitLabel,
+                        {
+                          color: substituteUnitLabel.trim()
+                            ? Colors.onSurface
+                            : Colors.onSurfaceVariant,
+                        },
+                      ]}
+                    >
+                      {substituteUnitLabel.trim() || t("cocktailForm.unit")}
+                    </Text>
+                    <MaterialIcons
+                      name="expand-more"
+                      size={18}
+                      color={Colors.onSurfaceVariant}
+                    />
+                  </Pressable>
                 </View>
-              </View>
-            ))}
+              </View>;
+            })}
           </View>
         ) : null}
       </View>
@@ -3949,6 +4203,16 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     fontSize: 14,
     minHeight: 40,
+  },
+  substituteUnitSelector: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  substituteUnitLabel: {
+    fontSize: 14,
+    fontWeight: "400",
+    flex: 1,
   },
   substituteHint: {
     fontSize: 14,
