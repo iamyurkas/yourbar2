@@ -589,6 +589,14 @@ function emphasizeIngredients(text, ingredientRows) {
       const end = start + String(match).length;
       const before = source.slice(Math.max(0, start - 2), start);
       const after = source.slice(end, end + 2);
+      const afterWord = source.slice(end, end + 7).toLowerCase();
+      const isInsideBoldSpan = ((source.slice(0, start).match(/\*\*/g) || []).length % 2) === 1;
+      if (isInsideBoldSpan) {
+        return full;
+      }
+      if (normalizeText(match) === 'ice' && afterWord.startsWith('-filled')) {
+        return full;
+      }
       if (before === '**' && after === '**') {
         return full;
       }
