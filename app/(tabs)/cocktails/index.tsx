@@ -21,7 +21,7 @@ import { CocktailListRow } from '@/components/CocktailListRow';
 import { CollectionHeader } from '@/components/CollectionHeader';
 import { CollectionListSkeleton } from '@/components/CollectionListSkeleton';
 import { FabAdd } from '@/components/FabAdd';
-import { ListRow, PresenceCheck, Thumb } from '@/components/RowParts';
+import { ListRow, Thumb } from '@/components/RowParts';
 import { SideMenuDrawer } from '@/components/SideMenuDrawer';
 import type { SegmentTabOption } from '@/components/TopBars';
 import { getCocktailMethods, METHOD_ICON_MAP, type CocktailMethod } from '@/constants/cocktail-methods';
@@ -942,105 +942,9 @@ export default function CocktailsScreen() {
     router.push({ pathname: '/ingredients', params: { tab: 'shopping' } });
   }, [effectivePartySelectedCocktailKeys, router, shoppingIngredientIds, sortedCocktails, toggleIngredientShopping]);
 
-  const renderPartyItem = useCallback(
-    ({ item }: { item: Cocktail }) => {
-      const availability = getAvailabilitySummary(item);
-      const cocktailKey = String(item.id ?? item.name);
-      const isChecked = isPartySelected(cocktailKey);
-      const tagColors = (item.tags ?? []).map((tag) => tag?.color).filter(Boolean) as string[];
-      const ratingValue = Math.max(0, Math.min(5, Math.round(getCocktailRating(item))));
-      const legacyMethodId = (item as { methodId?: CocktailMethod['id'] | null }).methodId ?? null;
-      const methodIds = (item.methodIds?.length ? item.methodIds : legacyMethodId ? [legacyMethodId] : []) as CocktailMethod['id'][];
-
-      return (
-        <ListRow
-          title={item.name}
-          subtitle={availability.ingredientLine || '\u00A0'}
-          selected={availability.isReady}
-          highlightColor={Colors.highlightFaint}
-          tagColors={tagColors}
-          thumbnail={<Thumb label={item.name} uri={item.photoUri} />}
-          onPress={() => handleSelectCocktail(item)}
-          control={
-            <View style={styles.partyMetaControlRow}>
-              {ratingValue > 0 ? (
-                <View
-                  style={[
-                    styles.partyRatingPill,
-                    {
-                      backgroundColor: Colors.background,
-                      borderColor: Colors.outline,
-                    },
-                  ]}>
-                  {Array.from({ length: ratingValue }).map((_, index) => (
-                    <MaterialCommunityIcons
-                      key={`party-rating-icon-${cocktailKey}-${index}`}
-                      name="star"
-                      size={8}
-                      color={Colors.tint}
-                    />
-                  ))}
-                </View>
-              ) : (
-                <View style={styles.partyRatingPlaceholder} />
-              )}
-              <PresenceCheck checked={isChecked} onToggle={() => handlePartySelectionToggle(item)} />
-            </View>
-          }
-          metaFooter={
-            <View style={styles.partyMethodIconRow}>
-              {methodIds.map((methodId, index) => {
-                const icon = METHOD_ICON_MAP[methodId];
-                if (!icon) {
-                  return null;
-                }
-
-                if (icon.type === 'asset') {
-                  return (
-                    <Image
-                      key={`party-method-asset-${cocktailKey}-${index}`}
-                      source={icon.source}
-                      style={[styles.methodIcon, { tintColor: Colors.onSurfaceVariant }]}
-                      contentFit="contain"
-                    />
-                  );
-                }
-
-                const isMuddle = methodId === 'muddle';
-                return (
-                  <View key={`party-method-icon-${cocktailKey}-${index}`} style={styles.methodIconWrapper}>
-                    <MaterialCommunityIcons
-                      name={icon.name}
-                      size={METHOD_ICON_SIZE}
-                      color={Colors.onSurfaceVariant}
-                      style={isMuddle ? styles.muddleIcon : undefined}
-                    />
-                  </View>
-                );
-              })}
-            </View>
-          }
-          accessibilityRole="button"
-          metaAlignment="center"
-        />
-      );
-    },
-    [
-      Colors.background,
-      Colors.highlightFaint,
-      Colors.onSurfaceVariant,
-      Colors.outline,
-      Colors.tint,
-      getAvailabilitySummary,
-      getCocktailRating,
-      handlePartySelectionToggle,
-      handleSelectCocktail,
-      isPartySelected,
-    ],
-  );
-
   const renderItem = useCallback(
     ({ item }: { item: Cocktail }) => {
+      const isPartyView = activeTab === 'party';
       const availability = getAvailabilitySummary(item);
 
       const isPartyCocktail = isPartySelected(String(item.id ?? item.name));
@@ -1060,13 +964,17 @@ export default function CocktailsScreen() {
           hasBrandFallback={availability.hasBrandFallback}
           hasStyleFallback={availability.hasStyleFallback}
           isPartySelected={isPartyCocktail}
+          showPartySelectionControl={isPartyView}
+          onPartySelectionToggle={isPartyView ? () => handlePartySelectionToggle(item) : undefined}
         />
       );
     },
     [
+      activeTab,
       getAvailabilitySummary,
       getCocktailComment,
       getCocktailRating,
+      handlePartySelectionToggle,
       handleSelectCocktail,
       ingredients,
       isPartySelected,
@@ -1404,7 +1312,7 @@ export default function CocktailsScreen() {
             ref={listRef as React.RefObject<FlatList<Cocktail>>}
             data={sortedCocktails}
             keyExtractor={keyExtractor}
-            renderItem={isPartyTab ? renderPartyItem : renderItem}
+            renderItem={renderItem}
             ItemSeparatorComponent={renderSeparator}
             contentContainerStyle={styles.listContent}
             initialNumToRender={12}
@@ -1565,32 +1473,6 @@ const styles = StyleSheet.create({
   },
   muddleIcon: {
     transform: [{ scaleX: 2 }],
-  },
-  partyMetaControlRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    gap: 8,
-  },
-  partyRatingPill: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 2,
-    borderRadius: 12,
-    paddingVertical: 2,
-    paddingHorizontal: 6,
-    borderWidth: StyleSheet.hairlineWidth,
-  },
-  partyRatingPlaceholder: {
-    width: 8,
-    height: 8,
-  },
-  partyMethodIconRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    gap: 2,
-    minHeight: METHOD_ICON_SIZE,
   },
   partyFabContainer: {
     position: 'absolute',
