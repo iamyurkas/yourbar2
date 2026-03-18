@@ -43,7 +43,7 @@ export const enGBTranslations: TranslationDictionary = {
     "This screen shows the full cocktail collection.\n\nUse search, switch tabs, and apply filters by method or tags.",
   "cocktails.helpPartyTitle": "Party cocktails",
   "cocktails.helpPartyText":
-    "Select cocktails, then tap the basket button to add all their ingredients to the shopping list.",
+    "Select cocktails, then tap the cart button to add all their ingredients to the shopping list.",
 
   "ingredients.emptyMy": "Mark ingredients you have to see them here.",
   "ingredients.emptyAll": "No ingredients yet",

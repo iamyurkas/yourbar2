@@ -43,7 +43,7 @@ export const esESTranslations: TranslationDictionary = {
     "Esta pantalla muestra la colección completa de cócteles.\n\nUsa la búsqueda, cambia de pestaña y aplica filtros por método o etiquetas.",
   "cocktails.helpPartyTitle": "Cócteles para fiesta",
   "cocktails.helpPartyText":
-    "Selecciona cócteles y toca el botón de cesta para añadir todos sus ingredientes a la lista de compras.",
+    "Selecciona cócteles y toca el botón del carrito para añadir todos sus ingredientes a la lista de compras.",
   "ingredients.emptyMy": "Marca los ingredientes que tienes para verlos aquí.",
   "ingredients.emptyAll": "Aún no hay ingredientes",
   "ingredients.helpMyTitle": "Mis ingredientes",
