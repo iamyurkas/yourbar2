@@ -2061,6 +2061,7 @@ const styles = StyleSheet.create({
     height: 24,
     alignItems: "center",
     justifyContent: "center",
+    marginRight: -1,
   },
   amazonInfoIcon: {
     lineHeight: 24,
@@ -2075,6 +2076,7 @@ const styles = StyleSheet.create({
     height: 24,
     alignItems: "center",
     justifyContent: "center",
+    marginRight: -3,
   },
   cocktailList: {
     marginHorizontal: -24,

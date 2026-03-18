@@ -39,8 +39,8 @@ import { normalizeSearchText } from '@/libs/search-normalization';
 import { buildTagOptions, type TagOption } from '@/libs/tag-options';
 import { useCocktailTabLogic, type MyTabListItem } from '@/libs/use-cocktail-tab-logic';
 import { useInventoryActions, useInventoryData, useInventorySettings, type Cocktail } from '@/providers/inventory-provider';
-import { tagColors } from '@/theme/theme';
 import { useOnboarding } from '@/providers/onboarding-provider';
+import { tagColors } from '@/theme/theme';
 
 type CocktailMethodOption = {
   id: CocktailMethod['id'];
@@ -1423,7 +1423,7 @@ export default function CocktailsScreen() {
         )}
       </View>
       {isPartyTab ? (
-        <View style={[styles.partyFabContainer, { shadowColor: Colors.shadow }]}> 
+        <View style={[styles.partyFabContainer, { shadowColor: Colors.shadow }]}>
           <Pressable
             accessibilityRole="button"
             accessibilityLabel={t('cocktails.addPartyIngredientsToShopping')}
@@ -1432,7 +1432,7 @@ export default function CocktailsScreen() {
             style={({ pressed }) => [
               styles.partyFab,
               {
-                backgroundColor: partySelectionCount === 0 ? Colors.disabled : Colors.primary,
+                backgroundColor: partySelectionCount === 0 ? Colors.surface : Colors.primary,
                 opacity: partySelectionCount === 0 ? 1 : pressed ? 0.85 : 1,
               },
             ]}>

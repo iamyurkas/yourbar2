@@ -13,7 +13,6 @@ import {
 } from "react";
 import {
   AppState,
-  type LayoutChangeEvent,
   Linking,
   Platform,
   Pressable,
@@ -21,8 +20,9 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  type TextLayoutEvent,
   View,
+  type LayoutChangeEvent,
+  type TextLayoutEvent,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -40,6 +40,8 @@ import {
 } from "@/constants/cocktail-methods";
 import { GLASSWARE_NAME_BY_ID, resolveGlasswareId } from "@/constants/glassware";
 import { useAppColors } from "@/constants/theme";
+import { getPluralCategory } from "@/libs/i18n/plural";
+import { useI18n } from "@/libs/i18n/use-i18n";
 import { resolveImageSource } from "@/libs/image-source";
 import {
   createIngredientLookup,
@@ -47,8 +49,6 @@ import {
   type IngredientLookup,
   type IngredientResolution,
 } from "@/libs/ingredient-availability";
-import { getPluralCategory } from "@/libs/i18n/plural";
-import { useI18n } from "@/libs/i18n/use-i18n";
 import {
   buildReturnToParams,
   navigateToDetailsWithReturnTo,
@@ -187,7 +187,7 @@ function resolveScaledIngredient(
   const hasProcess = (ingredient as { process?: boolean | null }).process;
   const scaleFactor = hasProcess
     ? resolveProcessBatchMultiplier(scaledServings) /
-      resolveProcessBatchMultiplier(scaledDefaultServings)
+    resolveProcessBatchMultiplier(scaledDefaultServings)
     : scaledServings / scaledDefaultServings;
 
   const scaledAmount = parsedAmount * scaleFactor;
@@ -632,7 +632,7 @@ export default function CocktailDetailsScreen() {
   const [ingredientDisplayMode, setIngredientDisplayMode] =
     useState<IngredientDisplayMode>(useImperialUnits ? "imperial" : "metric");
   const isHandlingBackRef = useRef(false);
-  const persistCommentDraftRef = useRef<() => void>(() => {});
+  const persistCommentDraftRef = useRef<() => void>(() => { });
   const shouldNavigateAway = !loading && !cocktail;
 
   useEffect(() => {
@@ -1235,17 +1235,17 @@ export default function CocktailDetailsScreen() {
                   <Text style={[styles.partyControlLabel, { color: Colors.onSurfaceVariant }]}>{t('cocktailDetails.buyAllIngredients')}</Text>
                   <View style={styles.partyControlActionSlot}>
                     <Pressable
-                    onPress={handleAddCocktailIngredientsToShopping}
-                    accessibilityRole="button"
-                    accessibilityLabel={t('cocktailDetails.addCocktailIngredientsToShopping')}
-                    style={styles.partyShoppingButton}
-                    hitSlop={8}>
-                    <MaterialIcons
-                      name={areAllCocktailIngredientsOnShoppingList ? 'shopping-cart' : 'add-shopping-cart'}
-                      size={24}
-                      color={Colors.tint}
-                    />
-                  </Pressable>
+                      onPress={handleAddCocktailIngredientsToShopping}
+                      accessibilityRole="button"
+                      accessibilityLabel={t('cocktailDetails.addCocktailIngredientsToShopping')}
+                      style={styles.partyShoppingButton}
+                      hitSlop={8}>
+                      <MaterialIcons
+                        name={areAllCocktailIngredientsOnShoppingList ? 'shopping-cart' : 'add-shopping-cart'}
+                        size={24}
+                        color={Colors.tint}
+                      />
+                    </Pressable>
                   </View>
                 </View>
               </View>
@@ -1931,8 +1931,8 @@ export default function CocktailDetailsScreen() {
                     />
                     <Text style={[styles.itemActionLabel, { color: Colors.primary }]}>{t("cocktailDetails.editCocktail")}</Text>
                   </Pressable>
-                  </View>
                 </View>
+              </View>
             ) : null}
           </View>
         ) : (
@@ -2059,12 +2059,14 @@ const styles = StyleSheet.create({
   partyControlActionSlot: {
     width: 24,
     alignItems: 'flex-end',
+    marginRight: 3,
   },
   partyShoppingButton: {
     width: 24,
     height: 24,
     alignItems: 'center',
     justifyContent: 'center',
+    marginRight: -2,
   },
   videoInstructionButton: {
     width: 32,
