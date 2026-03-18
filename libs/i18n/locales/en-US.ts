@@ -263,6 +263,7 @@ export const enUSTranslations: TranslationDictionary = {
   "cocktailDetails.orAny": "or any {{name}}",
   "cocktailDetails.substituteFor": "Substitute for {{name}}",
   "cocktailDetails.onShoppingList": "On shopping list",
+  "cocktailDetails.addCocktailIngredientsToShopping": "Add cocktail ingredients to shopping list",
   "cocktailDetails.copyCocktail": "Copy cocktail",
   "cocktailDetails.editCocktail": "Edit cocktail",
   "cocktailDetails.notFound": "Cocktail not found",

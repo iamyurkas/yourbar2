@@ -57,10 +57,10 @@ function countRequiredIngredients(cocktail: Cocktail, ignoreGarnish: boolean): n
 }
 
 export default function CocktailsScreen() {
-  const { cocktails, availableIngredientIds, ingredients, shoppingIngredientIds, getCocktailRating, getCocktailComment, loading } =
+  const { cocktails, availableIngredientIds, ingredients, shoppingIngredientIds, partySelectedCocktailKeys, getCocktailRating, getCocktailComment, loading } =
     useInventoryData();
   const { ignoreGarnish, allowAllSubstitutes, showTabCounters } = useInventorySettings();
-  const { toggleIngredientShopping } = useInventoryActions();
+  const { toggleIngredientShopping, togglePartyCocktailSelection } = useInventoryActions();
   const Colors = useAppColors();
   const { t, locale } = useI18n();
   const [activeTab, setActiveTab] = useState<CocktailTabKey>(() => getLastCocktailTab());
@@ -79,7 +79,6 @@ export default function CocktailsScreen() {
   const [collapsedMissingIngredientIds, setCollapsedMissingIngredientIds] = useState<Set<number>>(
     () => new Set(),
   );
-  const [partySelectedCocktailKeys, setPartySelectedCocktailKeys] = useState<Set<string>>(() => new Set());
   const [headerLayout, setHeaderLayout] = useState<LayoutRectangle | null>(null);
   const [filterAnchorLayout, setFilterAnchorLayout] = useState<LayoutRectangle | null>(null);
   const listRef = useRef<FlatList<MyTabListItem | Cocktail>>(null);
@@ -836,17 +835,8 @@ export default function CocktailsScreen() {
       return;
     }
 
-    setPartySelectedCocktailKeys((previous) => {
-      const next = new Set(previous);
-      if (next.has(cocktailKey)) {
-        next.delete(cocktailKey);
-      } else {
-        next.add(cocktailKey);
-      }
-
-      return next;
-    });
-  }, []);
+    togglePartyCocktailSelection(cocktailKey);
+  }, [togglePartyCocktailSelection]);
 
   const handleAddPartyIngredientsToShopping = useCallback(() => {
     if (partySelectedCocktailKeys.size === 0) {
@@ -877,7 +867,6 @@ export default function CocktailsScreen() {
       }
     });
 
-    setPartySelectedCocktailKeys(() => new Set());
     router.push({ pathname: '/ingredients', params: { tab: 'shopping' } });
   }, [partySelectedCocktailKeys, router, shoppingIngredientIds, sortedCocktails, toggleIngredientShopping]);
 

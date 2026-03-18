@@ -31,7 +31,7 @@ import { AppDialog } from "@/components/AppDialog";
 import { AppImage } from "@/components/AppImage";
 import { FormattedText } from "@/components/FormattedText";
 import { HeaderIconButton } from "@/components/HeaderIconButton";
-import { ListRow, Thumb } from "@/components/RowParts";
+import { ListRow, PresenceCheck, Thumb } from "@/components/RowParts";
 import { TagPill } from "@/components/TagPill";
 import {
   getCocktailMethodById,
@@ -528,6 +528,9 @@ export default function CocktailDetailsScreen() {
     loading,
     availableIngredientIds,
     shoppingIngredientIds,
+    partySelectedCocktailKeys,
+    togglePartyCocktailSelection,
+    toggleIngredientShopping,
     setCocktailRating,
     setCocktailComment,
     getCocktailRating,
@@ -543,6 +546,62 @@ export default function CocktailDetailsScreen() {
     () => resolveCocktail(resolvedParam, cocktails),
     [cocktails, resolvedParam],
   );
+
+  const cocktailSelectionKey = useMemo(() => {
+    if (!cocktail) {
+      return '';
+    }
+
+    return String(cocktail.id ?? cocktail.name ?? '');
+  }, [cocktail]);
+
+  const isPartySelected = useMemo(() => {
+    if (!cocktailSelectionKey) {
+      return false;
+    }
+
+    return partySelectedCocktailKeys.has(cocktailSelectionKey);
+  }, [cocktailSelectionKey, partySelectedCocktailKeys]);
+
+  const cocktailIngredientIds = useMemo(() => {
+    if (!cocktail) {
+      return [] as number[];
+    }
+
+    const ids = new Set<number>();
+    (cocktail.ingredients ?? []).forEach((ingredient) => {
+      const parsedId = Number(ingredient.ingredientId);
+      if (Number.isFinite(parsedId) && parsedId >= 0) {
+        ids.add(Math.trunc(parsedId));
+      }
+    });
+
+    return [...ids];
+  }, [cocktail]);
+
+  const areAllCocktailIngredientsOnShoppingList = useMemo(() => {
+    if (cocktailIngredientIds.length === 0) {
+      return false;
+    }
+
+    return cocktailIngredientIds.every((id) => shoppingIngredientIds.has(id));
+  }, [cocktailIngredientIds, shoppingIngredientIds]);
+
+  const handlePartySelectionToggle = useCallback(() => {
+    if (!cocktailSelectionKey) {
+      return;
+    }
+
+    togglePartyCocktailSelection(cocktailSelectionKey);
+  }, [cocktailSelectionKey, togglePartyCocktailSelection]);
+
+  const handleAddCocktailIngredientsToShopping = useCallback(() => {
+    cocktailIngredientIds.forEach((ingredientId) => {
+      if (!shoppingIngredientIds.has(ingredientId)) {
+        toggleIngredientShopping(ingredientId);
+      }
+    });
+  }, [cocktailIngredientIds, shoppingIngredientIds, toggleIngredientShopping]);
 
   const returnToPath = useMemo(() => {
     const value = Array.isArray(params.returnToPath)
@@ -1148,6 +1207,21 @@ export default function CocktailDetailsScreen() {
                       </Pressable>
                     );
                   })}
+                </View>
+                <View style={styles.partyControlsColumn}>
+                  <PresenceCheck checked={isPartySelected} onToggle={handlePartySelectionToggle} />
+                  <Pressable
+                    onPress={handleAddCocktailIngredientsToShopping}
+                    accessibilityRole="button"
+                    accessibilityLabel={t('cocktailDetails.addCocktailIngredientsToShopping')}
+                    style={styles.partyShoppingButton}
+                    hitSlop={8}>
+                    <MaterialIcons
+                      name={areAllCocktailIngredientsOnShoppingList ? 'shopping-cart' : 'add-shopping-cart'}
+                      size={22}
+                      color={Colors.tint}
+                    />
+                  </Pressable>
                 </View>
               </View>
 
@@ -1940,6 +2014,19 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     gap: 8,
+  },
+  partyControlsColumn: {
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    alignItems: 'flex-end',
+    gap: 8,
+  },
+  partyShoppingButton: {
+    width: 28,
+    height: 28,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   videoInstructionButton: {
     width: 32,
