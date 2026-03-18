@@ -191,6 +191,8 @@ declare global {
   // eslint-disable-next-line no-var
   var __yourbarInventoryShoppingIngredientIds: Set<number> | undefined;
   // eslint-disable-next-line no-var
+  var __yourbarInventoryPartyCocktailKeys: Set<string> | undefined;
+  // eslint-disable-next-line no-var
   var __yourbarInventoryCocktailRatings: Record<string, number> | undefined;
   // eslint-disable-next-line no-var
   var __yourbarInventoryCocktailComments: Record<string, string> | undefined;
@@ -254,7 +256,6 @@ function sanitizeStartScreen(value?: string | null): StartScreen {
   switch (value) {
     case 'cocktails_all':
     case 'cocktails_my':
-    case 'cocktails_favorites':
     case 'shaker':
     case 'ingredients_all':
     case 'ingredients_my':
@@ -444,6 +445,11 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       ? new Set(globalThis.__yourbarInventoryShoppingIngredientIds)
       : new Set(),
   );
+  const [partyCocktailKeys, setPartyCocktailKeys] = useState<Set<string>>(() =>
+    globalThis.__yourbarInventoryPartyCocktailKeys
+      ? new Set(globalThis.__yourbarInventoryPartyCocktailKeys)
+      : new Set(),
+  );
   const [ratingsByCocktailId, setRatingsByCocktailId] = useState<Record<string, number>>(() =>
     sanitizeCocktailRatings(globalThis.__yourbarInventoryCocktailRatings),
   );
@@ -521,6 +527,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       inventoryState: InventoryState;
       availableIngredientIds: Set<number>;
       shoppingIngredientIds: Set<number>;
+      partyCocktailKeys: Set<string>;
       ratingsByCocktailId: Record<string, number>;
       commentsByCocktailId: Record<string, string>;
       ignoreGarnish: boolean;
@@ -546,6 +553,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       setInventoryState(bootstrap.inventoryState);
       setAvailableIngredientIds(bootstrap.availableIngredientIds);
       setShoppingIngredientIds(bootstrap.shoppingIngredientIds);
+      setPartyCocktailKeys(bootstrap.partyCocktailKeys);
       setRatingsByCocktailId(bootstrap.ratingsByCocktailId);
       setCommentsByCocktailId(bootstrap.commentsByCocktailId);
       setIgnoreGarnish(bootstrap.ignoreGarnish);
@@ -587,6 +595,12 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           const nextInventoryState = rehydrateBuiltInTags(createInventoryStateFromSnapshot(stored, baseInventoryData));
           const nextAvailableIds = createIngredientIdSet(stored.availableIngredientIds);
           const nextShoppingIds = createIngredientIdSet(stored.shoppingIngredientIds);
+          const nextPartyCocktailKeys = new Set(
+            Array.isArray((stored as { partyCocktailKeys?: unknown }).partyCocktailKeys)
+              ? ((stored as { partyCocktailKeys?: unknown }).partyCocktailKeys as unknown[])
+                .filter((value): value is string => typeof value === 'string' && value.trim().length > 0)
+              : [],
+          );
           const nextRatings = sanitizeCocktailRatings(stored.cocktailRatings);
           const nextComments = sanitizeCocktailComments((stored as { cocktailComments?: Record<string, string> }).cocktailComments);
           const nextIgnoreGarnish = stored.ignoreGarnish ?? true;
@@ -626,6 +640,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
               name: getDefaultBarName(nextAppLocale),
               availableIngredientIds: toSortedArray(nextAvailableIds),
               shoppingIngredientIds: toSortedArray(nextShoppingIds),
+              partyCocktailKeys: Array.from(nextPartyCocktailKeys).sort(),
             }];
           }
 
@@ -633,6 +648,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             inventoryState: nextInventoryState,
             availableIngredientIds: nextAvailableIds,
             shoppingIngredientIds: nextShoppingIds,
+            partyCocktailKeys: nextPartyCocktailKeys,
             ratingsByCocktailId: nextRatings,
             commentsByCocktailId: nextComments,
             ignoreGarnish: nextIgnoreGarnish,
@@ -668,6 +684,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             inventoryState: createInventoryStateFromData(data, true),
             availableIngredientIds: new Set(),
             shoppingIngredientIds: new Set(),
+            partyCocktailKeys: new Set(),
             ratingsByCocktailId: {},
             commentsByCocktailId: {},
             ignoreGarnish: true,
@@ -689,6 +706,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
               name: getDefaultBarName(DEFAULT_APP_LOCALE),
               availableIngredientIds: [],
               shoppingIngredientIds: [],
+              partyCocktailKeys: [],
             }],
             activeBarId: '1',
             onboardingStep: 1,
@@ -722,10 +740,12 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
 
       const nextAvailable = toSortedArray(availableIngredientIds);
       const nextShopping = toSortedArray(shoppingIngredientIds);
+      const nextParty = Array.from(partyCocktailKeys).sort();
 
       const hasChanges =
         JSON.stringify(activeBar.availableIngredientIds) !== JSON.stringify(nextAvailable) ||
-        JSON.stringify(activeBar.shoppingIngredientIds) !== JSON.stringify(nextShopping);
+        JSON.stringify(activeBar.shoppingIngredientIds) !== JSON.stringify(nextShopping) ||
+        JSON.stringify(activeBar.partyCocktailKeys ?? []) !== JSON.stringify(nextParty);
 
       if (!hasChanges) {
         return prevBars;
@@ -733,11 +753,16 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
 
       return prevBars.map((bar) =>
         bar.id === activeBarId
-          ? { ...bar, availableIngredientIds: nextAvailable, shoppingIngredientIds: nextShopping }
+          ? {
+            ...bar,
+            availableIngredientIds: nextAvailable,
+            shoppingIngredientIds: nextShopping,
+            partyCocktailKeys: nextParty,
+          }
           : bar,
       );
     });
-  }, [activeBarId, availableIngredientIds, shoppingIngredientIds]);
+  }, [activeBarId, availableIngredientIds, shoppingIngredientIds, partyCocktailKeys]);
 
   useEffect(() => {
     if (!inventoryState || !inventoryDelta) {
@@ -748,6 +773,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     globalThis.__yourbarInventory = inventoryState;
     globalThis.__yourbarInventoryAvailableIngredientIds = availableIngredientIds;
     globalThis.__yourbarInventoryShoppingIngredientIds = shoppingIngredientIds;
+    globalThis.__yourbarInventoryPartyCocktailKeys = partyCocktailKeys;
     globalThis.__yourbarInventoryCocktailRatings = ratingsByCocktailId;
     globalThis.__yourbarInventoryCocktailComments = commentsByCocktailId;
     globalThis.__yourbarInventoryIgnoreGarnish = ignoreGarnish;
@@ -772,6 +798,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     const snapshot = buildInventorySnapshot(inventoryDelta, {
       availableIngredientIds,
       shoppingIngredientIds,
+      partyCocktailKeys,
       ratingsByCocktailId,
       commentsByCocktailId,
       ignoreGarnish,
@@ -810,6 +837,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     inventoryDelta,
     availableIngredientIds,
     shoppingIngredientIds,
+    partyCocktailKeys,
     ratingsByCocktailId,
     commentsByCocktailId,
     ignoreGarnish,
@@ -2365,6 +2393,45 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     });
   }, []);
 
+  const addIngredientsToShopping = useCallback((ids: number[]) => {
+    setShoppingIngredientIds((prev) => {
+      const next = new Set(prev);
+      let didChange = false;
+
+      ids.forEach((id) => {
+        const normalized = Number(id);
+        if (!Number.isFinite(normalized) || normalized < 0) {
+          return;
+        }
+
+        const parsedId = Math.trunc(normalized);
+        if (!next.has(parsedId)) {
+          next.add(parsedId);
+          didChange = true;
+        }
+      });
+
+      return didChange ? next : prev;
+    });
+  }, []);
+
+  const toggleCocktailParty = useCallback((cocktail: Cocktail) => {
+    const key = resolveCocktailKey(cocktail);
+    if (!key) {
+      return;
+    }
+
+    setPartyCocktailKeys((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) {
+        next.delete(key);
+      } else {
+        next.add(key);
+      }
+      return next;
+    });
+  }, [resolveCocktailKey]);
+
   const handleSetIgnoreGarnish = useCallback((value: boolean) => {
     setIgnoreGarnish(Boolean(value));
   }, []);
@@ -2413,6 +2480,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         if (bar) {
           setAvailableIngredientIds(createIngredientIdSet(bar.availableIngredientIds));
           setShoppingIngredientIds(createIngredientIdSet(bar.shoppingIngredientIds));
+          setPartyCocktailKeys(new Set(bar.partyCocktailKeys ?? []));
           setActiveBarId(id);
         }
         return prevBars;
@@ -2432,6 +2500,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       name: trimmedName,
       availableIngredientIds: [],
       shoppingIngredientIds: [],
+      partyCocktailKeys: [],
     };
 
     setBars((prev) => [...prev, newBar]);
@@ -2460,6 +2529,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         const firstRemaining = nextBars[0];
         setAvailableIngredientIds(createIngredientIdSet(firstRemaining.availableIngredientIds));
         setShoppingIngredientIds(createIngredientIdSet(firstRemaining.shoppingIngredientIds));
+        setPartyCocktailKeys(new Set(firstRemaining.partyCocktailKeys ?? []));
         setActiveBarId(firstRemaining.id);
       }
       return nextBars;
@@ -2770,6 +2840,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       loading,
       availableIngredientIds,
       shoppingIngredientIds,
+      partyCocktailKeys,
       customCocktailTags,
       customIngredientTags,
       ratingsByCocktailId,
@@ -2783,6 +2854,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       loading,
       availableIngredientIds,
       shoppingIngredientIds,
+      partyCocktailKeys,
       customCocktailTags,
       customIngredientTags,
       ratingsByCocktailId,
@@ -2842,6 +2914,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       setIngredientAvailability,
       toggleIngredientAvailability,
       toggleIngredientShopping,
+      addIngredientsToShopping,
+      toggleCocktailParty,
       clearBaseIngredient,
       createCocktail,
       createIngredient,
@@ -2885,6 +2959,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       setIngredientAvailability,
       toggleIngredientAvailability,
       toggleIngredientShopping,
+      addIngredientsToShopping,
+      toggleCocktailParty,
       clearBaseIngredient,
       createCocktail,
       createIngredient,

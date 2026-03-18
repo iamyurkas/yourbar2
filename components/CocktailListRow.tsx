@@ -10,7 +10,7 @@ import type { Cocktail, Ingredient } from '@/providers/inventory-provider';
 import { createIngredientLookup } from '@/libs/ingredient-availability';
 import { useI18n } from '@/libs/i18n/use-i18n';
 
-import { ListRow, Thumb } from './RowParts';
+import { ListRow, PresenceCheck, Thumb } from './RowParts';
 
 type CocktailListRowProps = {
   cocktail: Cocktail;
@@ -26,6 +26,10 @@ type CocktailListRowProps = {
   hasComment?: boolean;
   hasBrandFallback?: boolean;
   hasStyleFallback?: boolean;
+  showPartyIndicator?: boolean;
+  showPartyCheckbox?: boolean;
+  isPartyChecked?: boolean;
+  onPartyToggle?: () => void;
 };
 
 const areCocktailRowPropsEqual = (
@@ -51,6 +55,10 @@ const areCocktailRowPropsEqual = (
     prev.hasComment === next.hasComment &&
     prev.hasBrandFallback === next.hasBrandFallback &&
     prev.hasStyleFallback === next.hasStyleFallback &&
+    prev.showPartyIndicator === next.showPartyIndicator &&
+    prev.showPartyCheckbox === next.showPartyCheckbox &&
+    prev.isPartyChecked === next.isPartyChecked &&
+    prev.onPartyToggle === next.onPartyToggle &&
     onPressEqual
   );
 };
@@ -114,6 +122,10 @@ const CocktailListRowComponent = ({
   hasComment = false,
   hasBrandFallback = false,
   hasStyleFallback = false,
+  showPartyIndicator = false,
+  showPartyCheckbox = false,
+  isPartyChecked = false,
+  onPartyToggle,
 }: CocktailListRowProps) => {
   const Colors = useAppColors();
   const { t } = useI18n();
@@ -158,13 +170,32 @@ const CocktailListRowComponent = ({
             ))}
           </View>
         ) : null}
+        {showPartyIndicator ? (
+          <MaterialCommunityIcons
+            name="party-popper"
+            size={12}
+            color={Colors.styledIngredient}
+          />
+        ) : null}
+        {showPartyCheckbox ? (
+          <PresenceCheck
+            checked={isPartyChecked}
+            onToggle={onPartyToggle}
+            color={Colors.tint}
+          />
+        ) : null}
       </View>
     );
   }, [
     Colors.background,
     Colors.outline,
+    Colors.styledIngredient,
     Colors.tint,
+    isPartyChecked,
     normalizedRating,
+    onPartyToggle,
+    showPartyCheckbox,
+    showPartyIndicator,
   ]);
 
   const tagColors = useMemo(

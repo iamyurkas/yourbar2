@@ -28,20 +28,20 @@ export const enUSTranslations: TranslationDictionary = {
   "common.show": "Show",
   "common.tabAll": "All",
   "common.tabMy": "My",
-  "common.tabFavorites": "Favorites",
+  "common.tabParty": "Party",
   "common.tabShopping": "Shopping",
 
   "cocktails.emptyMy":
     "Mark the ingredients you have to see available cocktails here.",
-  "cocktails.emptyFavorites":
-    "Rate cocktails, or adjust the minimum rating in the menu.",
+  "cocktails.emptyParty":
+    "Select cocktails for your party and then add ingredients to shopping.",
   "cocktails.emptyAll": "No cocktails yet",
   "cocktails.helpMyTitle": "My cocktails",
   "cocktails.helpMyText":
     "This screen shows cocktails you can make with your current ingredients.\n\nUse search to find your recipes quickly, and use filters to narrow the list by tags or method.",
-  "cocktails.helpFavoritesTitle": "Favorite cocktails",
-  "cocktails.helpFavoritesText":
-    "This screen shows cocktails you rated.\n\nUse search and filters to find what you want faster.",
+  "cocktails.helpPartyTitle": "Party cocktails",
+  "cocktails.helpPartyText":
+    "This screen mirrors All cocktails and lets you mark cocktails for your party.\n\nTap the cart button to add ingredients from selected cocktails to shopping.",
   "cocktails.helpAllTitle": "All cocktails",
   "cocktails.helpAllText":
     "This screen shows the full cocktail collection.\n\nUse search, switch tabs, and apply filters by method or tags.",
@@ -438,14 +438,17 @@ export const enUSTranslations: TranslationDictionary = {
 
   "cocktails.sortBy": "Sort by",
   "cocktails.sortOptionAlphabeticalAccessibility": "Sort by A-z",
-  "cocktails.sortOptionRequiredCountAccessibility":
-    "Sort by required ingredients count",
+  "cocktails.sortOptionPartyAccessibility":
+    "Sort by party selection",
   "cocktails.sortOptionMissingRequiredCountAccessibility":
     "Sort by missing required ingredients count",
   "cocktails.sortOptionRatingAccessibility": "Sort by rating",
   "cocktails.sortOptionRecentlyAddedAccessibility": "Sort by recently added",
   "cocktails.sortOptionRandomAccessibility": "Sort randomly",
   "cocktails.addCocktail": "Add cocktail",
+  "cocktails.addPartyIngredientsToShopping": "Add selected party ingredients to shopping",
+  "cocktailDetails.toggleParty": "Toggle party selection",
+  "cocktailDetails.buyIngredients": "Buy ingredients",
 
   "shakerResults.helpTitle": "Shaker results",
   "shakerResults.helpText":
@@ -455,6 +458,7 @@ export const enUSTranslations: TranslationDictionary = {
   "shakerResults.sortBy": "Sort by",
   "shakerResults.sortOptionAlphabetical": "Alphabetical (A–Z)",
   "shakerResults.sortOptionRequiredCount": "Required ingredients count",
+  "shakerResults.sortOptionParty": "Party selection",
   "shakerResults.sortOptionMissingRequiredCount":
     "Missing required ingredients count",
   "shakerResults.sortOptionRating": "Rating",
@@ -503,8 +507,6 @@ export const enUSTranslations: TranslationDictionary = {
   "sideMenu.showTabCountersCaption": "Show item counts next to tabs",
   "sideMenu.startingScreen": "Starting screen",
   "sideMenu.startingScreenOpen": "Open {{screen}}",
-  "sideMenu.favoritesRatingFilter": "Favorites rating filter",
-  "sideMenu.favoritesRatingFilterCaption": "Showing {{rating}}+ star cocktails",
   "sideMenu.manageTags": "Manage tags",
   "sideMenu.manageTagsCaption": "Create or update your tags",
   "sideMenu.cocktailTags": "Cocktail tags",
@@ -594,9 +596,6 @@ export const enUSTranslations: TranslationDictionary = {
   "sideMenu.emailUnavailableTitle": "Unable to open email",
   "sideMenu.emailUnavailableMessage":
     "Please send your report to your.bar.app@gmail.com manually.",
-  "sideMenu.favoritesRatingModalDescription":
-    "Choose the minimum rating to show on Favorites",
-  "sideMenu.favoritesRatingOption": "Show {{value}} stars and up",
   "sideMenu.useAutomaticAmazonStoreDetection":
     "Use automatic Amazon store detection",
   "sideMenu.disableAmazonLink": "Disable Amazon link",
@@ -624,8 +623,6 @@ export const enUSTranslations: TranslationDictionary = {
   "startScreen.cocktails_all.description": "Browse every recipe",
   "startScreen.cocktails_my.label": "My cocktails",
   "startScreen.cocktails_my.description": "See your creations first",
-  "startScreen.cocktails_favorites.label": "Favorite cocktails",
-  "startScreen.cocktails_favorites.description": "Jump into saved cocktails",
   "startScreen.shaker.label": "Shaker",
   "startScreen.shaker.description": "Mix based on your inventory",
   "startScreen.ingredients_all.label": "All ingredients",

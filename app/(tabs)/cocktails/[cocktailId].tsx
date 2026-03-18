@@ -528,8 +528,11 @@ export default function CocktailDetailsScreen() {
     loading,
     availableIngredientIds,
     shoppingIngredientIds,
+    partyCocktailKeys,
     setCocktailRating,
     setCocktailComment,
+    addIngredientsToShopping,
+    toggleCocktailParty,
     getCocktailRating,
     getCocktailComment,
     ignoreGarnish,
@@ -711,7 +714,11 @@ export default function CocktailDetailsScreen() {
   }, [cocktail, getCocktailRating]);
 
   const [optimisticRating, setOptimisticRating] = useState<number | null>(null);
+  const [optimisticPartySelected, setOptimisticPartySelected] = useState<boolean | null>(null);
+  const [optimisticAllIngredientsOnShopping, setOptimisticAllIngredientsOnShopping] = useState<boolean | null>(null);
   const [, startRatingTransition] = useTransition();
+  const [, startPartyTransition] = useTransition();
+  const [, startShoppingTransition] = useTransition();
   const displayedRating = optimisticRating ?? userRating;
 
   const userComment = useMemo(() => {
@@ -735,6 +742,64 @@ export default function CocktailDetailsScreen() {
       return previous === userRating ? null : previous;
     });
   }, [userRating]);
+
+  const cocktailKey = useMemo(
+    () => String(cocktail?.id ?? cocktail?.name ?? ''),
+    [cocktail?.id, cocktail?.name],
+  );
+  const isPartySelected = cocktailKey.length > 0 && partyCocktailKeys.has(cocktailKey);
+  const effectivePartySelected = optimisticPartySelected ?? isPartySelected;
+
+  const cocktailIngredientIds = useMemo(() => {
+    const ids = new Set<number>();
+
+    (cocktail?.ingredients ?? []).forEach((recipeIngredient) => {
+      const ingredientId = Number(recipeIngredient.ingredientId ?? -1);
+      if (Number.isFinite(ingredientId) && ingredientId >= 0) {
+        ids.add(Math.trunc(ingredientId));
+      }
+
+      (recipeIngredient.substitutes ?? []).forEach((substitute) => {
+        const substituteId = Number(substitute.ingredientId ?? -1);
+        if (Number.isFinite(substituteId) && substituteId >= 0) {
+          ids.add(Math.trunc(substituteId));
+        }
+      });
+    });
+
+    return Array.from(ids);
+  }, [cocktail?.ingredients]);
+
+  const areAllCocktailIngredientsOnShopping = useMemo(() => {
+    if (cocktailIngredientIds.length === 0) {
+      return false;
+    }
+
+    return cocktailIngredientIds.every((ingredientId) => shoppingIngredientIds.has(ingredientId));
+  }, [cocktailIngredientIds, shoppingIngredientIds]);
+
+  const effectiveAllIngredientsOnShopping =
+    optimisticAllIngredientsOnShopping ?? areAllCocktailIngredientsOnShopping;
+
+  useEffect(() => {
+    setOptimisticPartySelected((previous) => {
+      if (previous == null) {
+        return previous;
+      }
+
+      return previous === isPartySelected ? null : previous;
+    });
+  }, [isPartySelected]);
+
+  useEffect(() => {
+    setOptimisticAllIngredientsOnShopping((previous) => {
+      if (previous == null) {
+        return previous;
+      }
+
+      return previous === areAllCocktailIngredientsOnShopping ? null : previous;
+    });
+  }, [areAllCocktailIngredientsOnShopping]);
 
   useEffect(() => {
     setCommentDraft(userComment);
@@ -801,6 +866,32 @@ export default function CocktailDetailsScreen() {
     },
     [cocktail, displayedRating, setCocktailRating, startRatingTransition],
   );
+
+  const handlePartyToggle = useCallback(() => {
+    if (!cocktail) {
+      return;
+    }
+
+    setOptimisticPartySelected((previous) => {
+      const current = previous ?? isPartySelected;
+      return !current;
+    });
+
+    startPartyTransition(() => {
+      toggleCocktailParty(cocktail);
+    });
+  }, [cocktail, isPartySelected, startPartyTransition, toggleCocktailParty]);
+
+  const handleAddCocktailIngredientsToShopping = useCallback(() => {
+    if (cocktailIngredientIds.length === 0) {
+      return;
+    }
+
+    setOptimisticAllIngredientsOnShopping(true);
+    startShoppingTransition(() => {
+      addIngredientsToShopping(cocktailIngredientIds);
+    });
+  }, [addIngredientsToShopping, cocktailIngredientIds, startShoppingTransition]);
 
   const instructionsParagraphs = useMemo(() => {
     const instructions = cocktail?.instructions?.trim();
@@ -1148,6 +1239,43 @@ export default function CocktailDetailsScreen() {
                       </Pressable>
                     );
                   })}
+                </View>
+                <View style={styles.partyShoppingBlock}>
+                  <View style={styles.partyRow}>
+                    <Text style={[styles.partyRowLabel, { color: Colors.onSurfaceVariant }]}>
+                      {t('common.tabParty')}
+                    </Text>
+                    <Pressable
+                      accessibilityRole="checkbox"
+                      accessibilityState={{ checked: effectivePartySelected }}
+                      accessibilityLabel={t('cocktailDetails.toggleParty')}
+                      onPress={handlePartyToggle}
+                      style={styles.partyCheckboxPressable}
+                      hitSlop={8}>
+                      <MaterialCommunityIcons
+                        name={effectivePartySelected ? 'checkbox-marked' : 'checkbox-blank-outline'}
+                        size={24}
+                        color={effectivePartySelected ? Colors.tint : Colors.onSurfaceVariant}
+                      />
+                    </Pressable>
+                  </View>
+                  <View style={styles.partyRow}>
+                    <Text style={[styles.partyRowLabel, { color: Colors.onSurfaceVariant }]}>
+                      {t('cocktailDetails.buyIngredients')}
+                    </Text>
+                    <Pressable
+                      accessibilityRole="button"
+                      accessibilityLabel={t('cocktailDetails.buyIngredients')}
+                      onPress={handleAddCocktailIngredientsToShopping}
+                      style={styles.partyCheckboxPressable}
+                      hitSlop={8}>
+                      <MaterialIcons
+                        name={effectiveAllIngredientsOnShopping ? 'shopping-cart' : 'add-shopping-cart'}
+                        size={24}
+                        color={effectiveAllIngredientsOnShopping ? Colors.tint : Colors.onSurfaceVariant}
+                      />
+                    </Pressable>
+                  </View>
                 </View>
               </View>
 
@@ -1940,6 +2068,26 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     gap: 8,
+  },
+  partyShoppingBlock: {
+    width: "100%",
+    marginTop: 8,
+    gap: 6,
+  },
+  partyRow: {
+    width: "100%",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  partyRowLabel: {
+    fontSize: 14,
+    fontWeight: "500",
+  },
+  partyCheckboxPressable: {
+    minWidth: 24,
+    alignItems: "flex-end",
+    justifyContent: "center",
   },
   videoInstructionButton: {
     width: 32,

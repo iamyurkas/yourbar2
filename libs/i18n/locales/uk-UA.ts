@@ -28,19 +28,19 @@ export const ukUATranslations: TranslationDictionary = {
   "common.show": "Показати",
   "common.tabAll": "Усі",
   "common.tabMy": "Мої",
-  "common.tabFavorites": "Обрані",
+  "common.tabParty": "Вечірка",
   "common.tabShopping": "Покупки",
 
   "cocktails.emptyMy":
     "Позначте наявні інгредієнти, щоби бачити доступні коктейлі.",
-  "cocktails.emptyFavorites":
+  "cocktails.emptyParty":
     "Оцініть коктейлі чи змініть поріг рейтингу в меню.",
   "cocktails.emptyAll": "Ще немає коктейлів",
   "cocktails.helpMyTitle": "Мої коктейлі",
   "cocktails.helpMyText":
     "Цей екран показує коктейлі, які можна приготувати з ваших поточних інгредієнтів.\n\nВикористовуйте пошук і фільтри за тегами чи методом.",
-  "cocktails.helpFavoritesTitle": "Обрані коктейлі",
-  "cocktails.helpFavoritesText":
+  "cocktails.helpPartyTitle": "Обрані коктейлі",
+  "cocktails.helpPartyText":
     "Цей екран показує коктейлі, які ви оцінили.\n\nВикористовуйте пошук і фільтри, щоб швидше знайти потрібне.",
   "cocktails.helpAllTitle": "Усі коктейлі",
   "cocktails.helpAllText":
@@ -442,8 +442,8 @@ export const ukUATranslations: TranslationDictionary = {
 
   "cocktails.sortBy": "Сортувати за",
   "cocktails.sortOptionAlphabeticalAccessibility": "Сортувати за A-z",
-  "cocktails.sortOptionRequiredCountAccessibility":
-    "Сортувати за кількістю обов’язкових інгредієнтів",
+  "cocktails.sortOptionPartyAccessibility":
+    "Сортувати за відміткою для вечірки",
   "cocktails.sortOptionMissingRequiredCountAccessibility":
     "Сортувати за кількістю відсутніх обов’язкових інгредієнтів",
   "cocktails.sortOptionRatingAccessibility": "Сортувати за рейтингом",
@@ -451,6 +451,9 @@ export const ukUATranslations: TranslationDictionary = {
     "Сортувати за часом додавання",
   "cocktails.sortOptionRandomAccessibility": "Випадкове сортування",
   "cocktails.addCocktail": "Додати коктейль",
+  "cocktails.addPartyIngredientsToShopping": "Додати вибрані інгредієнти вечірки у шопінг",
+  "cocktailDetails.toggleParty": "Перемкнути вибір для вечірки",
+  "cocktailDetails.buyIngredients": "Buy ingredients",
 
   "shakerResults.helpTitle": "Результати шейкера",
   "shakerResults.helpText":
@@ -461,6 +464,7 @@ export const ukUATranslations: TranslationDictionary = {
   "shakerResults.sortOptionAlphabetical": "За алфавітом (A–Z)",
   "shakerResults.sortOptionRequiredCount":
     "Кількістю обов’язкових інгредієнтів",
+  "shakerResults.sortOptionParty": "Вибір для вечірки",
   "shakerResults.sortOptionMissingRequiredCount":
     "Кількістю відсутніх обов’язкових інгредієнтів",
   "shakerResults.sortOptionRating": "Рейтингом",
@@ -511,9 +515,6 @@ export const ukUATranslations: TranslationDictionary = {
     "Показувати кількість елементів біля вкладок",
   "sideMenu.startingScreen": "Початковий екран",
   "sideMenu.startingScreenOpen": "Відкривати {{screen}}",
-  "sideMenu.favoritesRatingFilter": "Фільтр обраних",
-  "sideMenu.favoritesRatingFilterCaption":
-    "Показано коктейлі з {{rating}}+ зірками",
   "sideMenu.manageTags": "Керування тегами",
   "sideMenu.manageTagsCaption": "Створюйте, редагуйте та видаляйте теги",
   "sideMenu.cocktailTags": "Теги коктейлів",
@@ -606,9 +607,6 @@ export const ukUATranslations: TranslationDictionary = {
   "sideMenu.emailUnavailableTitle": "Не вдалося відкрити пошту",
   "sideMenu.emailUnavailableMessage":
     "Надішліть звіт вручну на your.bar.app@gmail.com.",
-  "sideMenu.favoritesRatingModalDescription":
-    "Оберіть мінімальний рейтинг для вкладки обраного",
-  "sideMenu.favoritesRatingOption": "Показувати від {{value}} зірок",
   "sideMenu.useAutomaticAmazonStoreDetection":
     "Використовувати автоматичне визначення магазину Amazon",
   "sideMenu.disableAmazonLink": "Вимкнути посилання Amazon",
@@ -636,8 +634,6 @@ export const ukUATranslations: TranslationDictionary = {
   "startScreen.cocktails_all.description": "Переглянути всі рецепти",
   "startScreen.cocktails_my.label": "Мої коктейлі",
   "startScreen.cocktails_my.description": "Спочатку ваші доступні",
-  "startScreen.cocktails_favorites.label": "Улюблені коктейлі",
-  "startScreen.cocktails_favorites.description": "Швидкий доступ до збережених",
   "startScreen.shaker.label": "Шейкер",
   "startScreen.shaker.description": "Змішування",
   "startScreen.ingredients_all.label": "Усі інгредієнти",

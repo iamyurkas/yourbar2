@@ -119,6 +119,7 @@ export default function IngredientDetailsScreen() {
     allowAllSubstitutes,
     getCocktailRating,
     getCocktailComment,
+    partyCocktailKeys,
     effectiveAmazonStore,
   } = useInventory();
 
@@ -1747,6 +1748,7 @@ export default function IngredientDetailsScreen() {
                             recipeNamesCount={recipeNamesCount}
                             ingredientLine={ingredientLine}
                             ratingValue={ratingValue}
+                            showPartyIndicator={partyCocktailKeys.has(String(cocktail.id ?? cocktail.name ?? ''))}
                             hasComment={Boolean(getCocktailComment(cocktail).trim())}
                             hasBrandFallback={hasBrandFallback}
                             hasStyleFallback={hasStyleFallback}

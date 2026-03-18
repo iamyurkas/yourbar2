@@ -8,6 +8,7 @@ export type InventoryDataContextValue = {
   loading: boolean;
   availableIngredientIds: Set<number>;
   shoppingIngredientIds: Set<number>;
+  partyCocktailKeys: Set<string>;
   customCocktailTags: CocktailTag[];
   customIngredientTags: IngredientTag[];
   ratingsByCocktailId: Record<string, number>;

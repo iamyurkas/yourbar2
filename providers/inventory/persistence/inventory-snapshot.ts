@@ -147,6 +147,7 @@ export function buildInventoryDelta(
 export type InventorySnapshotOptions = {
   availableIngredientIds: Set<number>;
   shoppingIngredientIds: Set<number>;
+  partyCocktailKeys: Set<string>;
   ratingsByCocktailId: Record<string, number>;
   commentsByCocktailId: Record<string, string>;
   ignoreGarnish: boolean;
@@ -244,6 +245,8 @@ export function buildInventorySnapshot(
       options.availableIngredientIds.size > 0 ? toSortedArray(options.availableIngredientIds) : undefined,
     shoppingIngredientIds:
       options.shoppingIngredientIds.size > 0 ? toSortedArray(options.shoppingIngredientIds) : undefined,
+    partyCocktailKeys:
+      options.partyCocktailKeys.size > 0 ? Array.from(options.partyCocktailKeys).sort() : undefined,
     cocktailRatings: Object.keys(sanitizedRatings).length > 0 ? sanitizedRatings : undefined,
     cocktailComments: Object.keys(sanitizedComments).length > 0 ? sanitizedComments : undefined,
     ignoreGarnish: options.ignoreGarnish,
