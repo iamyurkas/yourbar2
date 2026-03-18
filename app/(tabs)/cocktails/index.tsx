@@ -2,7 +2,7 @@ import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { useScrollToTop } from '@react-navigation/native';
 import { Image } from 'expo-image';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState, useTransition } from 'react';
 import {
   FlatList,
   Pressable,
@@ -75,7 +75,10 @@ export default function CocktailsScreen() {
   );
   const [headerLayout, setHeaderLayout] = useState<LayoutRectangle | null>(null);
   const [filterAnchorLayout, setFilterAnchorLayout] = useState<LayoutRectangle | null>(null);
-  const deferredPartySelectedCocktailKeys = useDeferredValue(partySelectedCocktailKeys);
+  const [optimisticPartySelection, setOptimisticPartySelection] = useState<Map<string, boolean>>(
+    () => new Map(),
+  );
+  const [, startPartySelectionTransition] = useTransition();
   const listRef = useRef<FlatList<MyTabListItem | Cocktail>>(null);
   const lastScrollOffset = useRef(0);
   const searchStartOffset = useRef<number | null>(null);
@@ -538,9 +541,43 @@ export default function CocktailsScreen() {
     return rankMap;
   }, [filteredCocktails]);
 
+  const effectivePartySelectedCocktailKeys = useMemo(() => {
+    if (optimisticPartySelection.size === 0) {
+      return partySelectedCocktailKeys;
+    }
+
+    const next = new Set(partySelectedCocktailKeys);
+    optimisticPartySelection.forEach((value, key) => {
+      if (value) {
+        next.add(key);
+      } else {
+        next.delete(key);
+      }
+    });
+
+    return next;
+  }, [optimisticPartySelection, partySelectedCocktailKeys]);
+
+  const deferredEffectivePartySelectedCocktailKeys = useDeferredValue(effectivePartySelectedCocktailKeys);
+
+  const isPartySelected = useCallback(
+    (key: string) => {
+      if (!key) {
+        return false;
+      }
+
+      if (optimisticPartySelection.has(key)) {
+        return optimisticPartySelection.get(key) ?? partySelectedCocktailKeys.has(key);
+      }
+
+      return partySelectedCocktailKeys.has(key);
+    },
+    [optimisticPartySelection, partySelectedCocktailKeys],
+  );
+
   const partySelectionKeysForSort = useMemo(
-    () => (selectedSortOption === 'partySelected' ? deferredPartySelectedCocktailKeys : null),
-    [deferredPartySelectedCocktailKeys, selectedSortOption],
+    () => (selectedSortOption === 'partySelected' ? deferredEffectivePartySelectedCocktailKeys : null),
+    [deferredEffectivePartySelectedCocktailKeys, selectedSortOption],
   );
 
   const compareCocktailsBySelectedSort = useCallback(
@@ -827,7 +864,7 @@ export default function CocktailsScreen() {
     ],
   );
 
-  const partySelectionCount = partySelectedCocktailKeys.size;
+  const partySelectionCount = effectivePartySelectedCocktailKeys.size;
 
   const handlePartySelectionToggle = useCallback((cocktail: Cocktail) => {
     const cocktailKey = String(cocktail.id ?? cocktail.name);
@@ -835,11 +872,45 @@ export default function CocktailsScreen() {
       return;
     }
 
-    togglePartyCocktailSelection(cocktailKey);
-  }, [togglePartyCocktailSelection]);
+    setOptimisticPartySelection((previous) => {
+      const next = new Map(previous);
+      const current = next.has(cocktailKey)
+        ? next.get(cocktailKey) ?? partySelectedCocktailKeys.has(cocktailKey)
+        : partySelectedCocktailKeys.has(cocktailKey);
+      next.set(cocktailKey, !current);
+      return next;
+    });
+
+    startPartySelectionTransition(() => {
+      togglePartyCocktailSelection(cocktailKey);
+    });
+  }, [partySelectedCocktailKeys, startPartySelectionTransition, togglePartyCocktailSelection]);
+
+  useEffect(() => {
+    if (optimisticPartySelection.size === 0) {
+      return;
+    }
+
+    setOptimisticPartySelection((previous) => {
+      if (previous.size === 0) {
+        return previous;
+      }
+
+      let didChange = false;
+      const next = new Map(previous);
+      previous.forEach((value, key) => {
+        if (partySelectedCocktailKeys.has(key) === value) {
+          next.delete(key);
+          didChange = true;
+        }
+      });
+
+      return didChange ? next : previous;
+    });
+  }, [optimisticPartySelection, partySelectedCocktailKeys]);
 
   const handleAddPartyIngredientsToShopping = useCallback(() => {
-    if (partySelectedCocktailKeys.size === 0) {
+    if (effectivePartySelectedCocktailKeys.size === 0) {
       return;
     }
 
@@ -847,7 +918,7 @@ export default function CocktailsScreen() {
 
     sortedCocktails.forEach((cocktail) => {
       const cocktailKey = String(cocktail.id ?? cocktail.name);
-      if (!partySelectedCocktailKeys.has(cocktailKey)) {
+      if (!effectivePartySelectedCocktailKeys.has(cocktailKey)) {
         return;
       }
 
@@ -868,13 +939,13 @@ export default function CocktailsScreen() {
     });
 
     router.push({ pathname: '/ingredients', params: { tab: 'shopping' } });
-  }, [partySelectedCocktailKeys, router, shoppingIngredientIds, sortedCocktails, toggleIngredientShopping]);
+  }, [effectivePartySelectedCocktailKeys, router, shoppingIngredientIds, sortedCocktails, toggleIngredientShopping]);
 
   const renderPartyItem = useCallback(
     ({ item }: { item: Cocktail }) => {
       const availability = getAvailabilitySummary(item);
       const cocktailKey = String(item.id ?? item.name);
-      const isChecked = partySelectedCocktailKeys.has(cocktailKey);
+      const isChecked = isPartySelected(cocktailKey);
       const tagColors = (item.tags ?? []).map((tag) => tag?.color).filter(Boolean) as string[];
       const ratingValue = Math.max(0, Math.min(5, Math.round(getCocktailRating(item))));
       const legacyMethodId = (item as { methodId?: CocktailMethod['id'] | null }).methodId ?? null;
@@ -963,7 +1034,7 @@ export default function CocktailsScreen() {
       getCocktailRating,
       handlePartySelectionToggle,
       handleSelectCocktail,
-      partySelectedCocktailKeys,
+      isPartySelected,
     ],
   );
 
@@ -971,7 +1042,7 @@ export default function CocktailsScreen() {
     ({ item }: { item: Cocktail }) => {
       const availability = getAvailabilitySummary(item);
 
-      const isPartySelected = partySelectedCocktailKeys.has(String(item.id ?? item.name));
+      const isPartyCocktail = isPartySelected(String(item.id ?? item.name));
 
       return (
         <CocktailListRow
@@ -987,7 +1058,7 @@ export default function CocktailsScreen() {
           hasComment={Boolean(getCocktailComment(item).trim())}
           hasBrandFallback={availability.hasBrandFallback}
           hasStyleFallback={availability.hasStyleFallback}
-          isPartySelected={isPartySelected}
+          isPartySelected={isPartyCocktail}
         />
       );
     },
@@ -997,7 +1068,7 @@ export default function CocktailsScreen() {
       getCocktailRating,
       handleSelectCocktail,
       ingredients,
-      partySelectedCocktailKeys,
+      isPartySelected,
     ],
   );
 
@@ -1088,7 +1159,7 @@ export default function CocktailsScreen() {
       }
 
       const availability = getAvailabilitySummary(item.cocktail, myTabAvailabilitySummaryByKey);
-      const isPartySelected = partySelectedCocktailKeys.has(String(item.cocktail.id ?? item.cocktail.name));
+      const isPartyCocktail = isPartySelected(String(item.cocktail.id ?? item.cocktail.name));
 
       return (
         <CocktailListRow
@@ -1104,7 +1175,7 @@ export default function CocktailsScreen() {
           hasComment={Boolean(getCocktailComment(item.cocktail).trim())}
           hasBrandFallback={availability.hasBrandFallback}
           hasStyleFallback={availability.hasStyleFallback}
-          isPartySelected={isPartySelected}
+          isPartySelected={isPartyCocktail}
         />
       );
     },
@@ -1123,7 +1194,7 @@ export default function CocktailsScreen() {
       Colors,
       locale,
       t,
-      partySelectedCocktailKeys,
+      isPartySelected,
     ],
   );
 
