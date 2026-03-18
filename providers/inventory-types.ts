@@ -109,7 +109,6 @@ export type Bar = {
 export type StartScreen =
   | "cocktails_all"
   | "cocktails_my"
-  | "cocktails_favorites"
   | "shaker"
   | "ingredients_all"
   | "ingredients_my"

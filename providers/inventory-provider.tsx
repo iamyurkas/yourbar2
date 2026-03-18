@@ -254,7 +254,6 @@ function sanitizeStartScreen(value?: string | null): StartScreen {
   switch (value) {
     case 'cocktails_all':
     case 'cocktails_my':
-    case 'cocktails_favorites':
     case 'shaker':
     case 'ingredients_all':
     case 'ingredients_my':
@@ -469,7 +468,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   const [showTabCounters, setShowTabCounters] = useState<boolean>(
     () => globalThis.__yourbarInventoryShowTabCounters ?? false,
   );
-  const [ratingFilterThreshold, setRatingFilterThreshold] = useState<number>(() =>
+  const [partySelectedCocktailKeys, setPartySelectedCocktailKeys] = useState<Set<string>>(() => new Set());
+const [ratingFilterThreshold, setRatingFilterThreshold] = useState<number>(() =>
     typeof globalThis.__yourbarInventoryRatingFilterThreshold === 'number'
       ? Math.min(5, Math.max(1, Math.round(globalThis.__yourbarInventoryRatingFilterThreshold)))
       : 1,
@@ -2365,6 +2365,24 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     });
   }, []);
 
+  const togglePartyCocktailSelection = useCallback((key: string) => {
+    const normalizedKey = key.trim();
+    if (!normalizedKey) {
+      return;
+    }
+
+    setPartySelectedCocktailKeys((previous) => {
+      const next = new Set(previous);
+      if (next.has(normalizedKey)) {
+        next.delete(normalizedKey);
+      } else {
+        next.add(normalizedKey);
+      }
+
+      return next;
+    });
+  }, []);
+
   const handleSetIgnoreGarnish = useCallback((value: boolean) => {
     setIgnoreGarnish(Boolean(value));
   }, []);
@@ -2774,6 +2792,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       customIngredientTags,
       ratingsByCocktailId,
       commentsByCocktailId,
+      partySelectedCocktailKeys,
       getCocktailRating,
       getCocktailComment,
     }),
@@ -2787,6 +2806,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       customIngredientTags,
       ratingsByCocktailId,
       commentsByCocktailId,
+      partySelectedCocktailKeys,
       getCocktailRating,
       getCocktailComment,
     ],
@@ -2842,6 +2862,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       setIngredientAvailability,
       toggleIngredientAvailability,
       toggleIngredientShopping,
+      togglePartyCocktailSelection,
       clearBaseIngredient,
       createCocktail,
       createIngredient,
@@ -2885,6 +2906,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       setIngredientAvailability,
       toggleIngredientAvailability,
       toggleIngredientShopping,
+      togglePartyCocktailSelection,
       clearBaseIngredient,
       createCocktail,
       createIngredient,

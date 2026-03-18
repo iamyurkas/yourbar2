@@ -821,6 +821,7 @@ export default function IngredientsScreen() {
 
   const keyExtractor = useCallback((item: Ingredient) => String(item.id ?? item.name), []);
 
+
   const ingredientRowMetaByKey = useMemo(() => {
     const rowMetaMap = new Map<string, IngredientRowMeta>();
     const isMyTab = activeTab === 'my';

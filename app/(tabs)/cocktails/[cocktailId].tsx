@@ -13,7 +13,6 @@ import {
 } from "react";
 import {
   AppState,
-  type LayoutChangeEvent,
   Linking,
   Platform,
   Pressable,
@@ -21,8 +20,9 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  type TextLayoutEvent,
   View,
+  type LayoutChangeEvent,
+  type TextLayoutEvent,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -31,7 +31,7 @@ import { AppDialog } from "@/components/AppDialog";
 import { AppImage } from "@/components/AppImage";
 import { FormattedText } from "@/components/FormattedText";
 import { HeaderIconButton } from "@/components/HeaderIconButton";
-import { ListRow, Thumb } from "@/components/RowParts";
+import { ListRow, PresenceCheck, Thumb } from "@/components/RowParts";
 import { TagPill } from "@/components/TagPill";
 import {
   getCocktailMethodById,
@@ -40,6 +40,8 @@ import {
 } from "@/constants/cocktail-methods";
 import { GLASSWARE_NAME_BY_ID, resolveGlasswareId } from "@/constants/glassware";
 import { useAppColors } from "@/constants/theme";
+import { getPluralCategory } from "@/libs/i18n/plural";
+import { useI18n } from "@/libs/i18n/use-i18n";
 import { resolveImageSource } from "@/libs/image-source";
 import {
   createIngredientLookup,
@@ -47,8 +49,6 @@ import {
   type IngredientLookup,
   type IngredientResolution,
 } from "@/libs/ingredient-availability";
-import { getPluralCategory } from "@/libs/i18n/plural";
-import { useI18n } from "@/libs/i18n/use-i18n";
 import {
   buildReturnToParams,
   navigateToDetailsWithReturnTo,
@@ -187,7 +187,7 @@ function resolveScaledIngredient(
   const hasProcess = (ingredient as { process?: boolean | null }).process;
   const scaleFactor = hasProcess
     ? resolveProcessBatchMultiplier(scaledServings) /
-      resolveProcessBatchMultiplier(scaledDefaultServings)
+    resolveProcessBatchMultiplier(scaledDefaultServings)
     : scaledServings / scaledDefaultServings;
 
   const scaledAmount = parsedAmount * scaleFactor;
@@ -528,6 +528,9 @@ export default function CocktailDetailsScreen() {
     loading,
     availableIngredientIds,
     shoppingIngredientIds,
+    partySelectedCocktailKeys,
+    togglePartyCocktailSelection,
+    toggleIngredientShopping,
     setCocktailRating,
     setCocktailComment,
     getCocktailRating,
@@ -544,6 +547,77 @@ export default function CocktailDetailsScreen() {
     [cocktails, resolvedParam],
   );
 
+  const cocktailSelectionKey = useMemo(() => {
+    if (!cocktail) {
+      return '';
+    }
+
+    return String(cocktail.id ?? cocktail.name ?? '');
+  }, [cocktail]);
+
+  const isPartySelected = useMemo(() => {
+    if (!cocktailSelectionKey) {
+      return false;
+    }
+
+    return partySelectedCocktailKeys.has(cocktailSelectionKey);
+  }, [cocktailSelectionKey, partySelectedCocktailKeys]);
+
+  const cocktailIngredientIds = useMemo(() => {
+    if (!cocktail) {
+      return [] as number[];
+    }
+
+    const ids = new Set<number>();
+    (cocktail.ingredients ?? []).forEach((ingredient) => {
+      const parsedId = Number(ingredient.ingredientId);
+      if (Number.isFinite(parsedId) && parsedId >= 0) {
+        ids.add(Math.trunc(parsedId));
+      }
+    });
+
+    return [...ids];
+  }, [cocktail]);
+
+
+  const areAllCocktailIngredientsOnShoppingList = useMemo(() => {
+    if (cocktailIngredientIds.length === 0) {
+      return false;
+    }
+
+    return cocktailIngredientIds.every((id) => shoppingIngredientIds.has(id));
+  }, [cocktailIngredientIds, shoppingIngredientIds]);
+
+  const handlePartySelectionToggle = useCallback(() => {
+    if (!cocktailSelectionKey) {
+      return;
+    }
+
+    togglePartyCocktailSelection(cocktailSelectionKey);
+  }, [cocktailSelectionKey, togglePartyCocktailSelection]);
+
+  const handleAddCocktailIngredientsToShopping = useCallback(() => {
+    if (areAllCocktailIngredientsOnShoppingList) {
+      cocktailIngredientIds.forEach((ingredientId) => {
+        if (shoppingIngredientIds.has(ingredientId)) {
+          toggleIngredientShopping(ingredientId);
+        }
+      });
+      return;
+    }
+
+    cocktailIngredientIds.forEach((ingredientId) => {
+      if (!shoppingIngredientIds.has(ingredientId)) {
+        toggleIngredientShopping(ingredientId);
+      }
+    });
+  }, [
+    areAllCocktailIngredientsOnShoppingList,
+    cocktailIngredientIds,
+    shoppingIngredientIds,
+    toggleIngredientShopping,
+  ]);
+
   const returnToPath = useMemo(() => {
     const value = Array.isArray(params.returnToPath)
       ? params.returnToPath[0]
@@ -558,7 +632,7 @@ export default function CocktailDetailsScreen() {
   const [ingredientDisplayMode, setIngredientDisplayMode] =
     useState<IngredientDisplayMode>(useImperialUnits ? "imperial" : "metric");
   const isHandlingBackRef = useRef(false);
-  const persistCommentDraftRef = useRef<() => void>(() => {});
+  const persistCommentDraftRef = useRef<() => void>(() => { });
   const shouldNavigateAway = !loading && !cocktail;
 
   useEffect(() => {
@@ -1148,6 +1222,31 @@ export default function CocktailDetailsScreen() {
                       </Pressable>
                     );
                   })}
+                </View>
+              </View>
+              <View style={styles.partyControlsWrapper}>
+                <View style={styles.partyControlRow}>
+                  <Text style={[styles.partyControlLabel, { color: Colors.onSurfaceVariant }]}>{t('common.tabParty')}</Text>
+                  <View style={styles.partyControlActionSlot}>
+                    <PresenceCheck checked={isPartySelected} onToggle={handlePartySelectionToggle} />
+                  </View>
+                </View>
+                <View style={styles.partyControlRow}>
+                  <Text style={[styles.partyControlLabel, { color: Colors.onSurfaceVariant }]}>{t('cocktailDetails.buyAllIngredients')}</Text>
+                  <View style={styles.partyControlActionSlot}>
+                    <Pressable
+                      onPress={handleAddCocktailIngredientsToShopping}
+                      accessibilityRole="button"
+                      accessibilityLabel={t('cocktailDetails.addCocktailIngredientsToShopping')}
+                      style={styles.partyShoppingButton}
+                      hitSlop={8}>
+                      <MaterialIcons
+                        name={areAllCocktailIngredientsOnShoppingList ? 'shopping-cart' : 'add-shopping-cart'}
+                        size={24}
+                        color={Colors.tint}
+                      />
+                    </Pressable>
+                  </View>
                 </View>
               </View>
 
@@ -1940,6 +2039,34 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     gap: 8,
+  },
+  partyControlsWrapper: {
+    alignSelf: 'stretch',
+    alignItems: 'flex-end',
+    gap: 10,
+  },
+  partyControlRow: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    gap: 12,
+  },
+  partyControlLabel: {
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  partyControlActionSlot: {
+    width: 24,
+    alignItems: 'flex-end',
+    marginRight: 3,
+  },
+  partyShoppingButton: {
+    width: 24,
+    height: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: -2,
   },
   videoInstructionButton: {
     width: 32,

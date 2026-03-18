@@ -22,6 +22,7 @@ export type InventoryActionsContextValue = {
   setIngredientAvailability: (id: number, available: boolean) => void;
   toggleIngredientAvailability: (id: number) => void;
   toggleIngredientShopping: (id: number) => void;
+  togglePartyCocktailSelection: (key: string) => void;
   clearBaseIngredient: (id: number) => void;
   createCocktail: (input: CreateCocktailInput) => Cocktail | undefined;
   createIngredient: (input: CreateIngredientInput) => Ingredient | undefined;

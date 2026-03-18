@@ -12,6 +12,7 @@ export type InventoryDataContextValue = {
   customIngredientTags: IngredientTag[];
   ratingsByCocktailId: Record<string, number>;
   commentsByCocktailId: Record<string, string>;
+  partySelectedCocktailKeys: Set<string>;
   getCocktailRating: (cocktail: Cocktail) => number;
   getCocktailComment: (cocktail: Cocktail) => string;
 };

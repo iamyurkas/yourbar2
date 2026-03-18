@@ -119,6 +119,7 @@ export default function IngredientDetailsScreen() {
     allowAllSubstitutes,
     getCocktailRating,
     getCocktailComment,
+    partySelectedCocktailKeys,
     effectiveAmazonStore,
   } = useInventory();
 
@@ -1750,6 +1751,7 @@ export default function IngredientDetailsScreen() {
                             hasComment={Boolean(getCocktailComment(cocktail).trim())}
                             hasBrandFallback={hasBrandFallback}
                             hasStyleFallback={hasStyleFallback}
+                            isPartySelected={partySelectedCocktailKeys.has(String(cocktail.id ?? cocktail.name))}
                           />
                         </React.Fragment>
                       );
@@ -2059,6 +2061,7 @@ const styles = StyleSheet.create({
     height: 24,
     alignItems: "center",
     justifyContent: "center",
+    marginRight: -1,
   },
   amazonInfoIcon: {
     lineHeight: 24,
@@ -2073,6 +2076,7 @@ const styles = StyleSheet.create({
     height: 24,
     alignItems: "center",
     justifyContent: "center",
+    marginRight: -3,
   },
   cocktailList: {
     marginHorizontal: -24,
