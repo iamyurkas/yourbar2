@@ -28,21 +28,15 @@ export const esESTranslations: TranslationDictionary = {
   "common.show": "Mostrar",
   "common.tabAll": "Todos",
   "common.tabMy": "Mis",
-  "common.tabFavorites": "Favoritos",
   "common.tabShopping": "Compras",
   "common.tabParty": "Fiesta",
   "cocktails.emptyMy":
     "Marca los ingredientes que tienes para ver aquí los cócteles disponibles.",
-  "cocktails.emptyFavorites":
-    "Valora cócteles y/o ajusta el umbral de valoración en el menú.",
   "cocktails.emptyAll": "Aún no hay cócteles",
   "cocktails.emptyParty": "Selecciona cócteles para crear una lista de compras para la fiesta.",
   "cocktails.helpMyTitle": "Mis cócteles",
   "cocktails.helpMyText":
     "Esta pantalla muestra los cócteles que puedes preparar con tus ingredientes actuales.\n\nUsa la búsqueda para encontrar tus recetas rápidamente y utiliza filtros para acotar la lista por etiquetas o método.",
-  "cocktails.helpFavoritesTitle": "Cócteles favoritos",
-  "cocktails.helpFavoritesText":
-    "Esta pantalla muestra los cócteles que has valorado.\n\nUsa la búsqueda y los filtros para encontrar lo que quieres más rápido.",
   "cocktails.helpAllTitle": "Todos los cócteles",
   "cocktails.helpAllText":
     "Esta pantalla muestra la colección completa de cócteles.\n\nUsa la búsqueda, cambia de pestaña y aplica filtros por método o etiquetas.",
@@ -504,8 +498,6 @@ export const esESTranslations: TranslationDictionary = {
   "sideMenu.showTabCountersCaption": "Mostrar cantidades junto a las pestañas",
   "sideMenu.startingScreen": "Pantalla inicial",
   "sideMenu.startingScreenOpen": "Abrir {{screen}}",
-  "sideMenu.favoritesRatingFilter": "Filtro de favoritos",
-  "sideMenu.favoritesRatingFilterCaption": "Cócteles con {{rating}}★ o más",
   "sideMenu.manageTags": "Gestionar etiquetas",
   "sideMenu.manageTagsCaption": "Crea o actualiza tus etiquetas",
   "sideMenu.cocktailTags": "Etiquetas de cóctel",
@@ -605,9 +597,6 @@ export const esESTranslations: TranslationDictionary = {
   "sideMenu.emailUnavailableTitle": "No se puede abrir el correo",
   "sideMenu.emailUnavailableMessage":
     "Envía tu informe manualmente a your.bar.app@gmail.com.",
-  "sideMenu.favoritesRatingModalDescription":
-    "Elige la valoración mínima que mostrar en Favoritos",
-  "sideMenu.favoritesRatingOption": "Mostrar {{value}} estrellas o más",
   "sideMenu.useAutomaticAmazonStoreDetection":
     "Usar detección automática de tienda de Amazon",
   "sideMenu.disableAmazonLink": "Desactivar enlace de Amazon",
@@ -634,9 +623,6 @@ export const esESTranslations: TranslationDictionary = {
   "startScreen.cocktails_all.description": "Explora todas las recetas",
   "startScreen.cocktails_my.label": "Mis cócteles",
   "startScreen.cocktails_my.description": "Ve primero tus creaciones",
-  "startScreen.cocktails_favorites.label": "Cócteles favoritos",
-  "startScreen.cocktails_favorites.description":
-    "Accede a tus cócteles guardados",
   "startScreen.shaker.label": "Coctelera",
   "startScreen.shaker.description": "Mezcla según tu inventario",
   "startScreen.ingredients_all.label": "Todos los ingredientes",

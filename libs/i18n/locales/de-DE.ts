@@ -28,22 +28,16 @@ export const deDETranslations: TranslationDictionary = {
   "common.show": "Anzeigen",
   "common.tabAll": "Alle",
   "common.tabMy": "Meine",
-  "common.tabFavorites": "Favoriten",
   "common.tabShopping": "Einkaufsliste",
   "common.tabParty": "Party",
 
   "cocktails.emptyMy":
     "Markieren Sie Zutaten, die Sie besitzen, um hier verfügbare Cocktails zu sehen.",
-  "cocktails.emptyFavorites":
-    "Bewerten Sie Cocktails oder ändern Sie die Mindestbewertung im Menü.",
   "cocktails.emptyAll": "Noch keine Cocktails",
   "cocktails.emptyParty": "Wähle Cocktails aus, um eine Party-Einkaufsliste zu erstellen.",
   "cocktails.helpMyTitle": "Meine Cocktails",
   "cocktails.helpMyText":
     "Dieser Bildschirm zeigt Cocktails, die Sie mit Ihren aktuellen Zutaten zubereiten können.\n\nNutzen Sie die Suche, um Ihre Rezepte schnell zu finden, und verwenden Sie Filter, um die Liste nach Tags oder Methode einzugrenzen.",
-  "cocktails.helpFavoritesTitle": "Lieblingscocktails",
-  "cocktails.helpFavoritesText":
-    "Dieser Bildschirm zeigt Cocktails, die Sie bewertet haben.\n\nNutzen Sie Suche und Filter, um schneller zu finden, was Sie suchen.",
   "cocktails.helpAllTitle": "Alle Cocktails",
   "cocktails.helpAllText":
     "Dieser Bildschirm zeigt die vollständige Cocktailsammlung.\n\nNutzen Sie die Suche, wechseln Sie zwischen den Tabs und filtern Sie nach Methode oder Tags.",
@@ -514,9 +508,6 @@ export const deDETranslations: TranslationDictionary = {
   "sideMenu.showTabCountersCaption": "Anzahl neben Tabs anzeigen",
   "sideMenu.startingScreen": "Startbildschirm",
   "sideMenu.startingScreenOpen": "{{screen}} öffnen",
-  "sideMenu.favoritesRatingFilter": "Mindestbewertung",
-  "sideMenu.favoritesRatingFilterCaption":
-    "Cocktails mit {{rating}}+ Sternen anzeigen",
   "sideMenu.manageTags": "Tags verwalten",
   "sideMenu.manageTagsCaption": "Erstellen oder aktualisieren Sie Ihre Tags",
   "sideMenu.cocktailTags": "Cocktail-Tags",
@@ -613,9 +604,6 @@ export const deDETranslations: TranslationDictionary = {
   "sideMenu.emailUnavailableTitle": "E-Mail kann nicht geöffnet werden",
   "sideMenu.emailUnavailableMessage":
     "Bitte senden Sie Ihren Bericht manuell an your.bar.app@gmail.com.",
-  "sideMenu.favoritesRatingModalDescription":
-    "Wählen Sie die Mindestbewertung für die Anzeige in Favoriten",
-  "sideMenu.favoritesRatingOption": "{{value}} Sterne und mehr anzeigen",
   "sideMenu.useAutomaticAmazonStoreDetection":
     "Automatische Amazon-Store-Erkennung verwenden",
   "sideMenu.disableAmazonLink": "Amazon-Link deaktivieren",
@@ -644,9 +632,6 @@ export const deDETranslations: TranslationDictionary = {
   "startScreen.cocktails_my.label": "Meine Cocktails",
   "startScreen.cocktails_my.description":
     "Verfügbare Cocktails zuerst anzeigen",
-  "startScreen.cocktails_favorites.label": "Lieblingscocktails",
-  "startScreen.cocktails_favorites.description":
-    "Zu gespeicherten Cocktails springen",
   "startScreen.shaker.label": "Shaker",
   "startScreen.shaker.description": "Cocktails nach Zutaten finden",
   "startScreen.ingredients_all.label": "Alle Zutaten",

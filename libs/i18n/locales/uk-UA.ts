@@ -28,22 +28,16 @@ export const ukUATranslations: TranslationDictionary = {
   "common.show": "Показати",
   "common.tabAll": "Усі",
   "common.tabMy": "Мої",
-  "common.tabFavorites": "Обрані",
   "common.tabShopping": "Покупки",
   "common.tabParty": "Party",
 
   "cocktails.emptyMy":
     "Позначте наявні інгредієнти, щоби бачити доступні коктейлі.",
-  "cocktails.emptyFavorites":
-    "Оцініть коктейлі чи змініть поріг рейтингу в меню.",
   "cocktails.emptyAll": "Ще немає коктейлів",
   "cocktails.emptyParty": "Оберіть коктейлі, щоб зібрати список покупок для вечірки.",
   "cocktails.helpMyTitle": "Мої коктейлі",
   "cocktails.helpMyText":
     "Цей екран показує коктейлі, які можна приготувати з ваших поточних інгредієнтів.\n\nВикористовуйте пошук і фільтри за тегами чи методом.",
-  "cocktails.helpFavoritesTitle": "Обрані коктейлі",
-  "cocktails.helpFavoritesText":
-    "Цей екран показує коктейлі, які ви оцінили.\n\nВикористовуйте пошук і фільтри, щоб швидше знайти потрібне.",
   "cocktails.helpAllTitle": "Усі коктейлі",
   "cocktails.helpAllText":
     "Цей екран показує всю колекцію коктейлів.\n\nВикористовуйте пошук, перемикайте вкладки та застосовуйте фільтри.",
@@ -517,9 +511,6 @@ export const ukUATranslations: TranslationDictionary = {
     "Показувати кількість елементів біля вкладок",
   "sideMenu.startingScreen": "Початковий екран",
   "sideMenu.startingScreenOpen": "Відкривати {{screen}}",
-  "sideMenu.favoritesRatingFilter": "Фільтр обраних",
-  "sideMenu.favoritesRatingFilterCaption":
-    "Показано коктейлі з {{rating}}+ зірками",
   "sideMenu.manageTags": "Керування тегами",
   "sideMenu.manageTagsCaption": "Створюйте, редагуйте та видаляйте теги",
   "sideMenu.cocktailTags": "Теги коктейлів",
@@ -612,9 +603,6 @@ export const ukUATranslations: TranslationDictionary = {
   "sideMenu.emailUnavailableTitle": "Не вдалося відкрити пошту",
   "sideMenu.emailUnavailableMessage":
     "Надішліть звіт вручну на your.bar.app@gmail.com.",
-  "sideMenu.favoritesRatingModalDescription":
-    "Оберіть мінімальний рейтинг для вкладки обраного",
-  "sideMenu.favoritesRatingOption": "Показувати від {{value}} зірок",
   "sideMenu.useAutomaticAmazonStoreDetection":
     "Використовувати автоматичне визначення магазину Amazon",
   "sideMenu.disableAmazonLink": "Вимкнути посилання Amazon",
@@ -642,8 +630,6 @@ export const ukUATranslations: TranslationDictionary = {
   "startScreen.cocktails_all.description": "Переглянути всі рецепти",
   "startScreen.cocktails_my.label": "Мої коктейлі",
   "startScreen.cocktails_my.description": "Спочатку ваші доступні",
-  "startScreen.cocktails_favorites.label": "Улюблені коктейлі",
-  "startScreen.cocktails_favorites.description": "Швидкий доступ до збережених",
   "startScreen.shaker.label": "Шейкер",
   "startScreen.shaker.description": "Змішування",
   "startScreen.ingredients_all.label": "Усі інгредієнти",

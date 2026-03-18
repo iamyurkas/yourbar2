@@ -59,7 +59,7 @@ function countRequiredIngredients(cocktail: Cocktail, ignoreGarnish: boolean): n
 export default function CocktailsScreen() {
   const { cocktails, availableIngredientIds, ingredients, shoppingIngredientIds, getCocktailRating, getCocktailComment, loading } =
     useInventoryData();
-  const { ignoreGarnish, allowAllSubstitutes, ratingFilterThreshold, showTabCounters } = useInventorySettings();
+  const { ignoreGarnish, allowAllSubstitutes, showTabCounters } = useInventorySettings();
   const { toggleIngredientShopping } = useInventoryActions();
   const Colors = useAppColors();
   const { t, locale } = useI18n();
@@ -135,7 +135,7 @@ export default function CocktailsScreen() {
     setQuery((previous) => (previous === parsedQuery ? previous : parsedQuery));
 
     const parsedTab = getParamValue(params.tab);
-    const nextTab: CocktailTabKey = parsedTab === 'my' || parsedTab === 'favorites' || parsedTab === 'party' ? parsedTab : 'all';
+    const nextTab: CocktailTabKey = parsedTab === 'my' || parsedTab === 'party' ? parsedTab : 'all';
     setActiveTab((previous) => (previous === nextTab ? previous : nextTab));
 
     const parsedTagKeys = getParamValue(params.tags)
@@ -323,27 +323,13 @@ export default function CocktailsScreen() {
     [Colors],
   );
 
-  const ratedCocktails = useMemo(() => {
-    return cocktails.filter((cocktail) => {
-      const ratingValue = getCocktailRating(cocktail);
-      return ratingValue >= ratingFilterThreshold;
-    });
-  }, [cocktails, getCocktailRating, ratingFilterThreshold]);
-
-  const baseTabCocktails = useMemo(() => {
-    if (activeTab === 'favorites') {
-      return ratedCocktails;
-    }
-
-    return cocktails;
-  }, [activeTab, cocktails, ratedCocktails]);
+  const baseTabCocktails = cocktails;
 
   const cocktailsByTab = useMemo<Record<CocktailTabKey, Cocktail[]>>(() => ({
     all: cocktails,
     my: cocktails,
-    favorites: ratedCocktails,
     party: cocktails,
-  }), [cocktails, ratedCocktails]);
+  }), [cocktails]);
 
 
 
@@ -668,16 +654,11 @@ export default function CocktailsScreen() {
       counter: showTabCounters ? `(${myReadyCocktailsCount})` : undefined,
     },
     {
-      key: 'favorites',
-      label: t('common.tabFavorites'),
-      counter: showTabCounters ? `(${cocktailsByTab.favorites.length})` : undefined,
-    },
-    {
       key: 'party',
       label: t('common.tabParty'),
       counter: showTabCounters ? `(${cocktailsByTab.party.length})` : undefined,
     },
-  ], [cocktailsByTab.all.length, cocktailsByTab.favorites.length, cocktailsByTab.party.length, myReadyCocktailsCount, showTabCounters, t]);
+  ], [cocktailsByTab.all.length, cocktailsByTab.party.length, myReadyCocktailsCount, showTabCounters, t]);
 
 
 
@@ -1115,8 +1096,6 @@ export default function CocktailsScreen() {
     switch (activeTab) {
       case 'my':
         return t('cocktails.emptyMy');
-      case 'favorites':
-        return t('cocktails.emptyFavorites');
       case 'party':
         return t('cocktails.emptyParty');
       default:
@@ -1129,11 +1108,6 @@ export default function CocktailsScreen() {
         return {
           title: t('cocktails.helpMyTitle'),
           text: t('cocktails.helpMyText'),
-        };
-      case 'favorites':
-        return {
-          title: t('cocktails.helpFavoritesTitle'),
-          text: t('cocktails.helpFavoritesText'),
         };
       case 'party':
         return {

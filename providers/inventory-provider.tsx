@@ -254,7 +254,6 @@ function sanitizeStartScreen(value?: string | null): StartScreen {
   switch (value) {
     case 'cocktails_all':
     case 'cocktails_my':
-    case 'cocktails_favorites':
     case 'shaker':
     case 'ingredients_all':
     case 'ingredients_my':
