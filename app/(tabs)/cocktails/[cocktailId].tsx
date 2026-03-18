@@ -1242,7 +1242,7 @@ export default function CocktailDetailsScreen() {
                     hitSlop={8}>
                     <MaterialIcons
                       name={areAllCocktailIngredientsOnShoppingList ? 'shopping-cart' : 'add-shopping-cart'}
-                      size={22}
+                      size={24}
                       color={Colors.tint}
                     />
                   </Pressable>
@@ -2043,26 +2043,26 @@ const styles = StyleSheet.create({
   partyControlsWrapper: {
     alignSelf: 'stretch',
     alignItems: 'flex-end',
-    gap: 16,
+    gap: 10,
   },
   partyControlRow: {
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-end',
-    gap: 10,
+    gap: 12,
   },
   partyControlLabel: {
-    fontSize: 13,
+    fontSize: 14,
     fontWeight: '500',
   },
   partyControlActionSlot: {
-    width: 28,
+    width: 24,
     alignItems: 'flex-end',
   },
   partyShoppingButton: {
-    width: 28,
-    height: 28,
+    width: 24,
+    height: 24,
     alignItems: 'center',
     justifyContent: 'center',
   },
