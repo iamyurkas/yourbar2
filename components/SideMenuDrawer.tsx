@@ -618,9 +618,12 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       const rawMessage = error instanceof Error ? error.message : "";
       const isConfigError = rawMessage === "missing_client_id" || rawMessage === "invalid_client_id";
       const isInvalidRequest = rawMessage.includes("auth_failed:invalid_request");
+      const isAndroidClientTypeError = rawMessage === "android_client_not_supported_for_custom_uri";
 
       const message = isConfigError
         ? t("sideMenu.googleDriveMissingClientId")
+        : isAndroidClientTypeError
+          ? t("sideMenu.googleDriveAndroidClientTypeHint")
         : isInvalidRequest
           ? t("sideMenu.googleDriveInvalidRequestHint")
           : t("sideMenu.googleDriveLoginFailed");

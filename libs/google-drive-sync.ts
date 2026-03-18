@@ -115,11 +115,11 @@ function getGoogleClientId(): string | null {
         : [];
 
   const candidates = [
-    ...platformCandidates,
     expoExtra?.googleDriveClientId,
     manifest2Extra?.googleDriveClientId,
     manifestExtra?.googleDriveClientId,
     process.env.EXPO_PUBLIC_GOOGLE_DRIVE_CLIENT_ID,
+    ...platformCandidates,
   ].map(resolveClientIdCandidate);
 
   for (const value of candidates) {
@@ -186,6 +186,10 @@ async function getGoogleUserEmail(accessToken: string): Promise<string | undefin
 export async function signInToGoogleDrive(): Promise<GoogleDriveSession> {
   if (!isGoogleDriveAuthSupported()) {
     throw new Error('expo_go_not_supported');
+  }
+
+  if (isAndroidSpecificClientConfiguredWithoutGenericClient()) {
+    throw new Error('android_client_not_supported_for_custom_uri');
   }
 
   const clientId = getGoogleClientId();
@@ -263,6 +267,28 @@ export async function signInToGoogleDrive(): Promise<GoogleDriveSession> {
 
   await persistSession(session);
   return session;
+}
+
+function isAndroidSpecificClientConfiguredWithoutGenericClient(): boolean {
+  if (Platform.OS !== 'android') {
+    return false;
+  }
+
+  const expoExtra = Constants.expoConfig?.extra as Record<string, unknown> | undefined;
+  const manifest2Extra = Constants.manifest2?.extra?.expoClient?.extra as Record<string, unknown> | undefined;
+  const manifestExtra = (Constants as { manifest?: { extra?: Record<string, unknown> } }).manifest?.extra;
+
+  const generic = resolveClientIdCandidate(expoExtra?.googleDriveClientId)
+    ?? resolveClientIdCandidate(manifest2Extra?.googleDriveClientId)
+    ?? resolveClientIdCandidate(manifestExtra?.googleDriveClientId)
+    ?? resolveClientIdCandidate(process.env.EXPO_PUBLIC_GOOGLE_DRIVE_CLIENT_ID);
+
+  const androidSpecific = resolveClientIdCandidate(expoExtra?.googleDriveAndroidClientId)
+    ?? resolveClientIdCandidate(manifest2Extra?.googleDriveAndroidClientId)
+    ?? resolveClientIdCandidate(manifestExtra?.googleDriveAndroidClientId)
+    ?? resolveClientIdCandidate(process.env.EXPO_PUBLIC_GOOGLE_DRIVE_ANDROID_CLIENT_ID);
+
+  return !generic && Boolean(androidSpecific);
 }
 
 function getGoogleRedirectUri(clientId: string): string {

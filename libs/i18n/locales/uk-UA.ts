@@ -564,6 +564,7 @@ export const ukUATranslations: TranslationDictionary = {
   "sideMenu.googleDriveNotConfigured": "У цій збірці не налаштовано Google Drive OAuth.",
   "sideMenu.googleDriveExpoGoNotSupported": "Вхід у Google Drive не підтримується в Expo Go. Використайте development або release збірку.",
   "sideMenu.googleDriveMissingClientId": "У конфігурації застосунку відсутній Google OAuth client ID.",
+  "sideMenu.googleDriveAndroidClientTypeHint": "Android OAuth client ID не підтримується цим browser-flow. Вкажіть EXPO_PUBLIC_GOOGLE_DRIVE_CLIENT_ID як Web OAuth client ID.",
   "sideMenu.googleDriveInvalidRequestHint": "Google відхилив OAuth-запит. Перевірте, що тип OAuth-клієнта і redirect URI відповідають цій збірці.",
   "sideMenu.googleDriveLoginFailed": "Не вдалося виконати вхід. Спробуйте ще раз.",
   "sideMenu.googleDriveSyncSuccessTitle": "Синхронізацію завершено",
