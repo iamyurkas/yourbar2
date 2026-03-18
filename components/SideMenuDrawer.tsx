@@ -38,6 +38,14 @@ import { base64ToBytes, bytesToBase64, createTarArchive, parseTarArchive } from 
 import type { SupportedLocale } from "@/libs/i18n/types";
 import { useI18n } from "@/libs/i18n/use-i18n";
 import { buildPhotoBaseName } from "@/libs/photo-utils";
+import {
+  clearGoogleDriveSession,
+  downloadBackupFromGoogleDrive,
+  loadGoogleDriveSession,
+  signInToGoogleDrive,
+  type GoogleDriveSession,
+  uploadBackupToGoogleDrive,
+} from "@/libs/google-drive-sync";
 import { useInventory, type AppTheme, type StartScreen } from "@/providers/inventory-provider";
 import {
   type ImportedPhotoEntry,
@@ -221,6 +229,9 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   const [shouldImportIngredientAvailability, setShouldImportIngredientAvailability] = useState(false);
   const [shouldImportIngredientShopping, setShouldImportIngredientShopping] = useState(false);
   const [isImportIngredientStatusesSubmitting, setIsImportIngredientStatusesSubmitting] = useState(false);
+  const [googleDriveSession, setGoogleDriveSession] = useState<GoogleDriveSession | null>(null);
+  const [isGoogleDriveAuthLoading, setGoogleDriveAuthLoading] = useState(false);
+  const [isGoogleDriveSyncing, setGoogleDriveSyncing] = useState(false);
   const ingredientStatusImportResolverRef = useRef<((value: InventoryImportOptions | null) => void) | null>(null);
   const translateX = useRef(new Animated.Value(-MENU_WIDTH)).current;
   const backdropOpacity = useRef(new Animated.Value(0)).current;
@@ -253,6 +264,19 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       ref.current = null;
     }
   };
+
+  useEffect(() => {
+    let isActive = true;
+    void loadGoogleDriveSession().then((session) => {
+      if (isActive) {
+        setGoogleDriveSession(session);
+      }
+    });
+
+    return () => {
+      isActive = false;
+    };
+  }, []);
 
   const scheduleModalClose = (
     ref: { current: ReturnType<typeof setTimeout> | null },
@@ -562,6 +586,71 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     handleResetInventory();
   };
 
+  const handleGoogleDriveLogin = async () => {
+    if (isGoogleDriveAuthLoading) {
+      return;
+    }
+
+    setGoogleDriveAuthLoading(true);
+    try {
+      const session = await signInToGoogleDrive();
+      setGoogleDriveSession(session);
+      showDialogMessage(
+        t("sideMenu.googleDriveConnectedTitle"),
+        t("sideMenu.googleDriveConnectedMessage", { email: session.email ?? t("sideMenu.googleDriveUnknownAccount") }),
+      );
+    } catch (error) {
+      console.error("Google Drive login failed", error);
+      const message = error instanceof Error && error.message === "missing_client_id"
+        ? t("sideMenu.googleDriveMissingClientId")
+        : t("sideMenu.googleDriveLoginFailed");
+      showDialogMessage(t("sideMenu.googleDriveErrorTitle"), message);
+    } finally {
+      setGoogleDriveAuthLoading(false);
+    }
+  };
+
+  const handleGoogleDriveLogout = async () => {
+    if (isGoogleDriveAuthLoading) {
+      return;
+    }
+
+    setGoogleDriveAuthLoading(true);
+    try {
+      await clearGoogleDriveSession();
+      setGoogleDriveSession(null);
+    } finally {
+      setGoogleDriveAuthLoading(false);
+    }
+  };
+
+  const handleGoogleDriveSync = async () => {
+    if (!googleDriveSession || isGoogleDriveSyncing) {
+      return;
+    }
+
+    setGoogleDriveSyncing(true);
+    try {
+      const remoteBackup = await downloadBackupFromGoogleDrive(googleDriveSession);
+      if (remoteBackup) {
+        await restoreFromArchiveBase64(remoteBackup);
+      }
+
+      const archiveBase64 = await buildBackupArchiveBase64();
+      if (!archiveBase64) {
+        return;
+      }
+
+      await uploadBackupToGoogleDrive(googleDriveSession, archiveBase64);
+      showDialogMessage(t("sideMenu.googleDriveSyncSuccessTitle"), t("sideMenu.googleDriveSyncSuccessMessage"));
+    } catch (error) {
+      console.error("Google Drive sync failed", error);
+      showDialogMessage(t("sideMenu.googleDriveErrorTitle"), t("sideMenu.googleDriveSyncFailed"));
+    } finally {
+      setGoogleDriveSyncing(false);
+    }
+  };
+
   const handleOpenTagManager = () => {
     setTagManagerVisible(true);
   };
@@ -718,18 +807,14 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     });
   };
 
-  const handleBackupData = async () => {
-    if (isBackingUpData) {
-      return;
-    }
-
+  const buildBackupArchiveBase64 = async (): Promise<string | null> => {
     const data = exportInventoryData();
     if (!data) {
       showDialogMessage(
         t("sideMenu.exportUnavailableTitle"),
         t("sideMenu.exportUnavailableMessage"),
       );
-      return;
+      return null;
     }
 
     const photoEntries = exportInventoryPhotoEntries();
@@ -738,6 +823,141 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
         t("sideMenu.backupUnavailableTitle"),
         t("sideMenu.backupUnavailableMessage"),
       );
+      return null;
+    }
+
+    const files: { path: string; contents: Uint8Array }[] = [];
+    const encoder = new TextEncoder();
+    data.forEach((file) => {
+      const path = file.kind === 'base' ? 'base.json' : `translations.${file.locale}.json`;
+      files.push({
+        path,
+        contents: encoder.encode(JSON.stringify(file, null, 2)),
+      });
+    });
+
+    const entries = photoEntries.filter((entry) => entry.uri);
+    const nameCounts = new Map<string, number>();
+
+    for (const entry of entries) {
+      const uri = entry.uri;
+      if (!uri) {
+        continue;
+      }
+
+      const info = await FileSystem.getInfoAsync(uri);
+      if (!info.exists || info.isDirectory) {
+        continue;
+      }
+
+      const baseName = buildPhotoBaseName(entry.id || "photo", entry.name ?? "photo");
+      const nameKey = `${entry.type}/${baseName}.jpg`;
+      const duplicateCount = nameCounts.get(nameKey) ?? 0;
+      nameCounts.set(nameKey, duplicateCount + 1);
+      const fileName =
+        duplicateCount > 0
+          ? `${baseName}-${duplicateCount + 1}.jpg`
+          : `${baseName}.jpg`;
+      const contentsBase64 = await FileSystem.readAsStringAsync(uri, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
+      const contents = base64ToBytes(contentsBase64);
+      files.push({ path: `${entry.type}/${fileName}`, contents });
+    }
+
+    return createTarArchive(files);
+  };
+
+  const restoreFromArchiveBase64 = async (archiveBase64: string): Promise<boolean> => {
+    const archiveBytes = base64ToBytes(archiveBase64);
+    const archivedFiles = parseTarArchive(archiveBytes);
+
+    if (archivedFiles.length === 0) {
+      showDialogMessage(t("sideMenu.importFailedTitle"), t("sideMenu.importArchiveEmpty"));
+      return false;
+    }
+
+    const decoder = new TextDecoder();
+    const importFiles: InventoryExportFile[] = [];
+    let hasLegacyBase = false;
+    let legacyBase: InventoryExportData | null = null;
+    for (const archived of archivedFiles) {
+      if (!archived.path.toLowerCase().endsWith('.json')) {
+        continue;
+      }
+
+      const parsed = JSON.parse(decoder.decode(archived.contents)) as unknown;
+      if (isInventoryExportFile(parsed)) {
+        importFiles.push(parsed);
+      } else if (isValidInventoryData(parsed) && !hasLegacyBase) {
+        hasLegacyBase = true;
+        legacyBase = parsed;
+      }
+    }
+
+    if (importFiles.length === 0 && !legacyBase) {
+      showDialogMessage(t("sideMenu.importFailedTitle"), t("sideMenu.importMissingInventory"));
+      return false;
+    }
+
+    const baseFromFile = importFiles.find((file) => file.kind === "base");
+    const importBaseData = baseFromFile?.kind === "base" ? baseFromFile.data : legacyBase;
+    let importOptions: InventoryImportOptions | undefined;
+
+    if (hasImportableIngredientStatus(importBaseData)) {
+      const selectedOptions = await requestIngredientStatusImportOptions();
+      if (!selectedOptions) {
+        return false;
+      }
+      importOptions = selectedOptions;
+    }
+
+    importInventoryData(
+      importFiles.length > 0 ? importFiles : (legacyBase as InventoryExportData),
+      importOptions,
+    );
+
+    const directory = FileSystem.documentDirectory ?? FileSystem.cacheDirectory;
+    if (!directory) {
+      showDialogMessage(t("sideMenu.importFailedTitle"), t("sideMenu.deviceStorageUnavailable"));
+      return false;
+    }
+
+    const importedPhotoEntries: ImportedPhotoEntry[] = [];
+    const timestamp = Date.now();
+    const photosDir = `${directory.replace(/\/?$/, "/")}imported-photos/`;
+    await FileSystem.makeDirectoryAsync(photosDir, { intermediates: true });
+
+    for (const file of archivedFiles) {
+      if (file.path.toLowerCase().endsWith('.json')) {
+        continue;
+      }
+
+      const parsedPath = parsePhotoEntryFromArchivePath(file.path);
+      if (!parsedPath || file.contents.length === 0) {
+        continue;
+      }
+
+      const outputFileName = `${parsedPath.type}-${parsedPath.id}-${timestamp}.${parsedPath.extension}`;
+      const destinationUri = `${photosDir}${outputFileName}`;
+      await FileSystem.writeAsStringAsync(destinationUri, bytesToBase64(file.contents), {
+        encoding: FileSystem.EncodingType.Base64,
+      });
+
+      importedPhotoEntries.push({
+        type: parsedPath.type,
+        id: parsedPath.id,
+        photoUri: destinationUri,
+      });
+    }
+
+    importInventoryPhotos(importedPhotoEntries);
+    onClose();
+    return true;
+  };
+
+  const handleBackupData = async () => {
+    if (isBackingUpData) {
       return;
     }
 
@@ -760,49 +980,14 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
         return;
       }
 
-      const files: { path: string; contents: Uint8Array }[] = [];
-      const encoder = new TextEncoder();
-      data.forEach((file) => {
-        const path = file.kind === 'base' ? 'base.json' : `translations.${file.locale}.json`;
-        files.push({
-          path,
-          contents: encoder.encode(JSON.stringify(file, null, 2)),
-        });
-      });
-
-      const entries = photoEntries.filter((entry) => entry.uri);
-      const nameCounts = new Map<string, number>();
-
-      for (const entry of entries) {
-        const uri = entry.uri;
-        if (!uri) {
-          continue;
-        }
-
-        const info = await FileSystem.getInfoAsync(uri);
-        if (!info.exists || info.isDirectory) {
-          continue;
-        }
-
-        const baseName = buildPhotoBaseName(entry.id || "photo", entry.name ?? "photo");
-        const nameKey = `${entry.type}/${baseName}.jpg`;
-        const duplicateCount = nameCounts.get(nameKey) ?? 0;
-        nameCounts.set(nameKey, duplicateCount + 1);
-        const fileName =
-          duplicateCount > 0
-            ? `${baseName}-${duplicateCount + 1}.jpg`
-            : `${baseName}.jpg`;
-        const contentsBase64 = await FileSystem.readAsStringAsync(uri, {
-          encoding: FileSystem.EncodingType.Base64,
-        });
-        const contents = base64ToBytes(contentsBase64);
-        files.push({ path: `${entry.type}/${fileName}`, contents });
+      const archiveBase64 = await buildBackupArchiveBase64();
+      if (!archiveBase64) {
+        return;
       }
 
       const timestamp = new Date().toISOString().slice(0, 10);
       const filename = `yourbar-backup-${timestamp}.tar`;
       const fileUri = `${directory.replace(/\/?$/, "/")}${filename}`;
-      const archiveBase64 = createTarArchive(files);
       await FileSystem.writeAsStringAsync(fileUri, archiveBase64, {
         encoding: FileSystem.EncodingType.Base64,
       });
@@ -846,90 +1031,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       const archiveBase64 = await FileSystem.readAsStringAsync(asset.uri, {
         encoding: FileSystem.EncodingType.Base64,
       });
-      const archiveBytes = base64ToBytes(archiveBase64);
-      const archivedFiles = parseTarArchive(archiveBytes);
-
-      if (archivedFiles.length === 0) {
-        showDialogMessage(t("sideMenu.importFailedTitle"), t("sideMenu.importArchiveEmpty"));
-        return;
-      }
-
-      const decoder = new TextDecoder();
-      const importFiles: InventoryExportFile[] = [];
-      let hasLegacyBase = false;
-      let legacyBase: InventoryExportData | null = null;
-      for (const archived of archivedFiles) {
-        if (!archived.path.toLowerCase().endsWith('.json')) {
-          continue;
-        }
-
-        const parsed = JSON.parse(decoder.decode(archived.contents)) as unknown;
-        if (isInventoryExportFile(parsed)) {
-          importFiles.push(parsed);
-        } else if (isValidInventoryData(parsed) && !hasLegacyBase) {
-          hasLegacyBase = true;
-          legacyBase = parsed;
-        }
-      }
-
-      if (importFiles.length === 0 && !legacyBase) {
-        showDialogMessage(t("sideMenu.importFailedTitle"), t("sideMenu.importMissingInventory"));
-        return;
-      }
-
-      const baseFromFile = importFiles.find((file) => file.kind === "base");
-      const importBaseData = baseFromFile?.kind === "base" ? baseFromFile.data : legacyBase;
-      let importOptions: InventoryImportOptions | undefined;
-
-      if (hasImportableIngredientStatus(importBaseData)) {
-        const selectedOptions = await requestIngredientStatusImportOptions();
-        if (!selectedOptions) {
-          return;
-        }
-        importOptions = selectedOptions;
-      }
-
-      importInventoryData(
-        importFiles.length > 0 ? importFiles : (legacyBase as InventoryExportData),
-        importOptions,
-      );
-
-      const directory = FileSystem.documentDirectory ?? FileSystem.cacheDirectory;
-      if (!directory) {
-        showDialogMessage(t("sideMenu.importFailedTitle"), t("sideMenu.deviceStorageUnavailable"));
-        return;
-      }
-
-      const importedPhotoEntries: ImportedPhotoEntry[] = [];
-      const timestamp = Date.now();
-      const photosDir = `${directory.replace(/\/?$/, "/")}imported-photos/`;
-      await FileSystem.makeDirectoryAsync(photosDir, { intermediates: true });
-
-      for (const file of archivedFiles) {
-        if (file.path.toLowerCase().endsWith('.json')) {
-          continue;
-        }
-
-        const parsedPath = parsePhotoEntryFromArchivePath(file.path);
-        if (!parsedPath || file.contents.length === 0) {
-          continue;
-        }
-
-        const outputFileName = `${parsedPath.type}-${parsedPath.id}-${timestamp}.${parsedPath.extension}`;
-        const destinationUri = `${photosDir}${outputFileName}`;
-        await FileSystem.writeAsStringAsync(destinationUri, bytesToBase64(file.contents), {
-          encoding: FileSystem.EncodingType.Base64,
-        });
-
-        importedPhotoEntries.push({
-          type: parsedPath.type,
-          id: parsedPath.id,
-          photoUri: destinationUri,
-        });
-      }
-
-      importInventoryPhotos(importedPhotoEntries);
-      onClose();
+      await restoreFromArchiveBase64(archiveBase64);
     } catch (error) {
       console.error("Failed to restore backup archive", error);
       showDialogMessage(
@@ -1152,6 +1254,65 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
             showsVerticalScrollIndicator={false}
             keyboardShouldPersistTaps="handled"
           >
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={t("sideMenu.googleDriveSync")}
+              onPress={googleDriveSession ? handleGoogleDriveSync : handleGoogleDriveLogin}
+              style={[styles.settingRow, SURFACE_ROW_STYLE]}
+            >
+              <View style={[styles.checkbox, SURFACE_ICON_STYLE]}>
+                <MaterialCommunityIcons
+                  name="google-drive"
+                  size={16}
+                  color={Colors.tint}
+                />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text
+                  style={[styles.settingLabel, { color: Colors.onSurface }]}
+                >
+                  {googleDriveSession ? t("sideMenu.googleDriveSyncNow") : t("sideMenu.googleDriveLogin")}
+                </Text>
+                <Text
+                  style={[
+                    styles.settingCaption,
+                    { color: Colors.onSurfaceVariant },
+                  ]}
+                >
+                  {googleDriveSession
+                    ? t("sideMenu.googleDriveConnectedAs", { email: googleDriveSession.email ?? t("sideMenu.googleDriveUnknownAccount") })
+                    : t("sideMenu.googleDriveCaption")}
+                </Text>
+              </View>
+              <MaterialCommunityIcons
+                name={isGoogleDriveSyncing || isGoogleDriveAuthLoading ? "loading" : "chevron-right"}
+                size={20}
+                color={Colors.onSurfaceVariant}
+              />
+            </Pressable>
+            {googleDriveSession ? (
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={t("sideMenu.googleDriveLogout")}
+                onPress={handleGoogleDriveLogout}
+                style={[
+                  styles.actionRow,
+                  SURFACE_ROW_STYLE,
+                ]}
+              >
+                <View style={[styles.actionIcon, ACTION_ICON_STYLE]}>
+                  <MaterialCommunityIcons
+                    name="logout"
+                    size={16}
+                    color={Colors.onSurfaceVariant}
+                  />
+                </View>
+                <View style={styles.settingTextContainer}>
+                  <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>{t("sideMenu.googleDriveLogout")}</Text>
+                  <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>{t("sideMenu.googleDriveLogoutCaption")}</Text>
+                </View>
+              </Pressable>
+            ) : null}
             <Pressable
               accessibilityRole="button"
               accessibilityLabel={t("sideMenu.manageBars")}

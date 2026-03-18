@@ -53,6 +53,8 @@ export default ({ config }: { config: ExpoConfig }) => {
         iosAppStoreId: process.env.EXPO_PUBLIC_IOS_APP_STORE_ID ?? "6758964503",
         androidPlayStoreCountryCode:
           process.env.EXPO_PUBLIC_ANDROID_PLAY_STORE_COUNTRY_CODE ?? null,
+        googleDriveClientId:
+          process.env.EXPO_PUBLIC_GOOGLE_DRIVE_CLIENT_ID ?? null,
 
         buildTime: new Date().toISOString(),
       },
