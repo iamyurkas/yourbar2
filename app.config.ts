@@ -18,10 +18,25 @@ export default ({ config }: { config: ExpoConfig }) => {
     .map((candidate) =>
       `com.googleusercontent.apps.${candidate.replace(/\\.apps\\.googleusercontent\\.com$/, "")}`,
     );
-  const baseScheme = baseExpo.scheme ?? config.scheme ?? "yourbar";
-  const schemeValues = Array.from(
-    new Set([...(Array.isArray(baseScheme) ? baseScheme : [baseScheme]), ...googleSchemes]),
-  ).filter(Boolean);
+  const configuredScheme = baseExpo.scheme ?? config.scheme ?? "yourbar";
+  const primaryScheme = Array.isArray(configuredScheme) ? configuredScheme[0] : configuredScheme;
+  const uniqueGoogleSchemes = Array.from(new Set(googleSchemes));
+  const existingIosUrlTypes = [
+    ...((((baseExpo.ios as ExpoIosConfig)?.infoPlist?.CFBundleURLTypes as Array<Record<string, unknown>> | undefined) ?? [])),
+    ...((((config.ios as ExpoIosConfig)?.infoPlist?.CFBundleURLTypes as Array<Record<string, unknown>> | undefined) ?? [])),
+  ];
+  const googleIosUrlTypes = uniqueGoogleSchemes.map((scheme) => ({
+    CFBundleURLSchemes: [scheme],
+  }));
+  const existingAndroidIntentFilters = [
+    ...(((baseExpo.android as { intentFilters?: Array<Record<string, unknown>> } | undefined)?.intentFilters ?? [])),
+    ...(((config.android as { intentFilters?: Array<Record<string, unknown>> } | undefined)?.intentFilters ?? [])),
+  ];
+  const googleAndroidIntentFilters = uniqueGoogleSchemes.map((scheme) => ({
+    action: "VIEW",
+    category: ["BROWSABLE", "DEFAULT"],
+    data: [{ scheme }],
+  }));
 
   return {
     expo: {
@@ -30,7 +45,7 @@ export default ({ config }: { config: ExpoConfig }) => {
 
       name: baseExpo.name,
       slug: baseExpo.slug,
-      scheme: schemeValues,
+      scheme: primaryScheme,
       version: baseExpo.version,
 
       ios: {
@@ -42,6 +57,7 @@ export default ({ config }: { config: ExpoConfig }) => {
         infoPlist: {
           ...((baseExpo.ios as ExpoIosConfig)?.infoPlist ?? {}),
           ...((config.ios as ExpoIosConfig)?.infoPlist ?? {}),
+          CFBundleURLTypes: [...existingIosUrlTypes, ...googleIosUrlTypes],
 
           ITSAppUsesNonExemptEncryption: false,
 
@@ -53,6 +69,7 @@ export default ({ config }: { config: ExpoConfig }) => {
       android: {
         ...(baseExpo.android ?? {}),
         ...(config.android ?? {}),
+        intentFilters: [...existingAndroidIntentFilters, ...googleAndroidIntentFilters],
 
         package: "com.yourbarapp.free",
       },
