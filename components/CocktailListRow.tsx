@@ -1,14 +1,14 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
-import React, { memo, useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { resolveGlasswareUriFromId } from '@/assets/image-manifest';
 import { METHOD_ICON_MAP, type CocktailMethodId } from '@/constants/cocktail-methods';
 import { useAppColors } from '@/constants/theme';
-import type { Cocktail, Ingredient } from '@/providers/inventory-provider';
-import { createIngredientLookup } from '@/libs/ingredient-availability';
 import { useI18n } from '@/libs/i18n/use-i18n';
+import { createIngredientLookup } from '@/libs/ingredient-availability';
+import type { Cocktail, Ingredient } from '@/providers/inventory-provider';
 
 import { ListRow, PresenceCheck, Thumb } from './RowParts';
 
@@ -389,7 +389,7 @@ const styles = StyleSheet.create({
   metaPill: {
     flexDirection: 'row',
     alignItems: 'center',
-    alignSelf: 'flex-end',
+    alignSelf: 'center',
     gap: 2,
     borderRadius: 12,
     paddingVertical: 2,
