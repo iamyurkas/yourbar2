@@ -71,6 +71,10 @@ import {
   type InventoryState,
 } from '@/providers/inventory/model/inventory-state';
 import {
+  readInventoryRuntimeCache,
+  writeInventoryRuntimeCache,
+} from '@/providers/inventory/model/inventory-runtime-cache';
+import {
   buildInventoryDelta,
   buildInventorySnapshot,
   createInventoryBaseMaps,
@@ -105,57 +109,6 @@ const DEFAULT_START_SCREEN: StartScreen = 'cocktails_all';
 const DEFAULT_APP_THEME: AppTheme = 'light';
 const DEFAULT_APP_LOCALE: AppLocale = DEFAULT_LOCALE;
 
-declare global {
-  // eslint-disable-next-line no-var
-  var __yourbarInventory: InventoryState | undefined;
-  // eslint-disable-next-line no-var
-  var __yourbarInventoryAvailableIngredientIds: Set<number> | undefined;
-  // eslint-disable-next-line no-var
-  var __yourbarInventoryShoppingIngredientIds: Set<number> | undefined;
-  // eslint-disable-next-line no-var
-  var __yourbarInventoryCocktailRatings: Record<string, number> | undefined;
-  // eslint-disable-next-line no-var
-  var __yourbarInventoryCocktailComments: Record<string, string> | undefined;
-  // eslint-disable-next-line no-var
-  var __yourbarInventoryPartySelectedCocktailKeys: Set<string> | undefined;
-  // eslint-disable-next-line no-var
-  var __yourbarInventoryIgnoreGarnish: boolean | undefined;
-  // eslint-disable-next-line no-var
-  var __yourbarInventoryAllowAllSubstitutes: boolean | undefined;
-  // eslint-disable-next-line no-var
-  var __yourbarInventoryUseImperialUnits: boolean | undefined;
-  // eslint-disable-next-line no-var
-  var __yourbarInventoryKeepScreenAwake: boolean | undefined;
-  // eslint-disable-next-line no-var
-  var __yourbarInventoryShakerSmartFilteringEnabled: boolean | undefined;
-  // eslint-disable-next-line no-var
-  var __yourbarInventoryShowTabCounters: boolean | undefined;
-  // eslint-disable-next-line no-var
-  var __yourbarInventoryRatingFilterThreshold: number | undefined;
-  // eslint-disable-next-line no-var
-  var __yourbarInventoryStartScreen: StartScreen | undefined;
-  // eslint-disable-next-line no-var
-  var __yourbarInventoryAppTheme: AppTheme | undefined;
-  // eslint-disable-next-line no-var
-  var __yourbarInventoryAppLocale: AppLocale | undefined;
-  // eslint-disable-next-line no-var
-  var __yourbarInventoryAmazonStoreOverride: AmazonStoreOverride | null | undefined;
-  // eslint-disable-next-line no-var
-  var __yourbarInventoryCustomCocktailTags: CocktailTag[] | undefined;
-  // eslint-disable-next-line no-var
-  var __yourbarInventoryCustomIngredientTags: IngredientTag[] | undefined;
-  // eslint-disable-next-line no-var
-  var __yourbarInventoryBars: Bar[] | undefined;
-  // eslint-disable-next-line no-var
-  var __yourbarInventoryActiveBarId: string | undefined;
-  // eslint-disable-next-line no-var
-  var __yourbarInventoryOnboardingStep: number | undefined;
-  // eslint-disable-next-line no-var
-  var __yourbarInventoryOnboardingCompleted: boolean | undefined;
-  // eslint-disable-next-line no-var
-  var __yourbarInventoryOnboardingStarterApplied: boolean | undefined;
-}
-
 
 function getDefaultBarName(locale: AppLocale): string {
   return translate(locale, 'barManager.defaultName');
@@ -176,86 +129,87 @@ type InventoryProviderProps = {
 export function InventoryProvider({ children }: InventoryProviderProps) {
   const baseMaps = useMemo(() => createInventoryBaseMaps(loadInventoryData()), []);
   const baseInventoryData = baseMaps.baseData;
+  const runtimeCache = useMemo(() => readInventoryRuntimeCache(), []);
   const [inventoryState, setInventoryState] = useState<InventoryState | undefined>(
-    () => globalThis.__yourbarInventory,
+    () => runtimeCache.inventoryState,
   );
-  const [loading, setLoading] = useState<boolean>(() => !globalThis.__yourbarInventory);
+  const [loading, setLoading] = useState<boolean>(() => !runtimeCache.inventoryState);
   const [availableIngredientIds, setAvailableIngredientIds] = useState<Set<number>>(() =>
-    globalThis.__yourbarInventoryAvailableIngredientIds
-      ? new Set(globalThis.__yourbarInventoryAvailableIngredientIds)
+    runtimeCache.availableIngredientIds
+      ? new Set(runtimeCache.availableIngredientIds)
       : new Set(),
   );
   const [shoppingIngredientIds, setShoppingIngredientIds] = useState<Set<number>>(() =>
-    globalThis.__yourbarInventoryShoppingIngredientIds
-      ? new Set(globalThis.__yourbarInventoryShoppingIngredientIds)
+    runtimeCache.shoppingIngredientIds
+      ? new Set(runtimeCache.shoppingIngredientIds)
       : new Set(),
   );
   const [ratingsByCocktailId, setRatingsByCocktailId] = useState<Record<string, number>>(() =>
-    sanitizeCocktailRatings(globalThis.__yourbarInventoryCocktailRatings),
+    sanitizeCocktailRatings(runtimeCache.cocktailRatings),
   );
   const [commentsByCocktailId, setCommentsByCocktailId] = useState<Record<string, string>>(() =>
-    sanitizeCocktailComments(globalThis.__yourbarInventoryCocktailComments),
+    sanitizeCocktailComments(runtimeCache.cocktailComments),
   );
   const [ignoreGarnish, setIgnoreGarnish] = useState<boolean>(
-    () => globalThis.__yourbarInventoryIgnoreGarnish ?? true,
+    () => runtimeCache.ignoreGarnish ?? true,
   );
   const [allowAllSubstitutes, setAllowAllSubstitutes] = useState<boolean>(
-    () => globalThis.__yourbarInventoryAllowAllSubstitutes ?? true,
+    () => runtimeCache.allowAllSubstitutes ?? true,
   );
   const shouldDefaultToImperialUnits = useMemo(() => detectUsStorefrontOrLocale(), []);
   const [useImperialUnits, setUseImperialUnits] = useState<boolean>(
-    () => (globalThis.__yourbarInventoryUseImperialUnits ?? false) || shouldDefaultToImperialUnits,
+    () => (runtimeCache.useImperialUnits ?? false) || shouldDefaultToImperialUnits,
   );
   const [keepScreenAwake, setKeepScreenAwake] = useState<boolean>(
-    () => globalThis.__yourbarInventoryKeepScreenAwake ?? true,
+    () => runtimeCache.keepScreenAwake ?? true,
   );
   const [shakerSmartFilteringEnabled, setShakerSmartFilteringEnabled] = useState<boolean>(
-    () => globalThis.__yourbarInventoryShakerSmartFilteringEnabled ?? false,
+    () => runtimeCache.shakerSmartFilteringEnabled ?? false,
   );
   const [showTabCounters, setShowTabCounters] = useState<boolean>(
-    () => globalThis.__yourbarInventoryShowTabCounters ?? false,
+    () => runtimeCache.showTabCounters ?? false,
   );
   const [partySelectedCocktailKeys, setPartySelectedCocktailKeys] = useState<Set<string>>(() =>
-    globalThis.__yourbarInventoryPartySelectedCocktailKeys
-      ? new Set(globalThis.__yourbarInventoryPartySelectedCocktailKeys)
+    runtimeCache.partySelectedCocktailKeys
+      ? new Set(runtimeCache.partySelectedCocktailKeys)
       : new Set(),
   );
-const [ratingFilterThreshold, setRatingFilterThreshold] = useState<number>(() =>
-    typeof globalThis.__yourbarInventoryRatingFilterThreshold === 'number'
-      ? Math.min(5, Math.max(1, Math.round(globalThis.__yourbarInventoryRatingFilterThreshold)))
+  const [ratingFilterThreshold, setRatingFilterThreshold] = useState<number>(() =>
+    typeof runtimeCache.ratingFilterThreshold === 'number'
+      ? Math.min(5, Math.max(1, Math.round(runtimeCache.ratingFilterThreshold)))
       : 1,
   );
   const [startScreen, setStartScreen] = useState<StartScreen>(
-    () => globalThis.__yourbarInventoryStartScreen ?? DEFAULT_START_SCREEN,
+    () => runtimeCache.startScreen ?? DEFAULT_START_SCREEN,
   );
   const [appTheme, setAppTheme] = useState<AppTheme>(
-    () => globalThis.__yourbarInventoryAppTheme ?? DEFAULT_APP_THEME,
+    () => runtimeCache.appTheme ?? DEFAULT_APP_THEME,
   );
   const [amazonStoreOverride, setAmazonStoreOverride] = useState<AmazonStoreOverride | null>(
-    () => sanitizeAmazonStoreOverride(globalThis.__yourbarInventoryAmazonStoreOverride, AMAZON_STORES) as AmazonStoreOverride | null,
+    () => sanitizeAmazonStoreOverride(runtimeCache.amazonStoreOverride, AMAZON_STORES) as AmazonStoreOverride | null,
   );
   const [appLocale, setAppLocale] = useState<AppLocale>(
-    () => sanitizeAppLocale(globalThis.__yourbarInventoryAppLocale, isSupportedLocale, DEFAULT_APP_LOCALE) as AppLocale,
+    () => sanitizeAppLocale(runtimeCache.appLocale, isSupportedLocale, DEFAULT_APP_LOCALE) as AppLocale,
   );
   const [translationOverrides, setTranslationOverrides] = useState<InventoryTranslationOverrides>({});
   const [customCocktailTags, setCustomCocktailTags] = useState<CocktailTag[]>(() =>
-    sanitizeCustomTags(globalThis.__yourbarInventoryCustomCocktailTags, DEFAULT_TAG_COLOR, compareGlobalAlphabet),
+    sanitizeCustomTags(runtimeCache.customCocktailTags, DEFAULT_TAG_COLOR, compareGlobalAlphabet),
   );
   const [customIngredientTags, setCustomIngredientTags] = useState<IngredientTag[]>(() =>
-    sanitizeCustomTags(globalThis.__yourbarInventoryCustomIngredientTags, DEFAULT_TAG_COLOR, compareGlobalAlphabet),
+    sanitizeCustomTags(runtimeCache.customIngredientTags, DEFAULT_TAG_COLOR, compareGlobalAlphabet),
   );
-  const [bars, setBars] = useState<Bar[]>(() => globalThis.__yourbarInventoryBars ?? []);
+  const [bars, setBars] = useState<Bar[]>(() => runtimeCache.bars ?? []);
   const [activeBarId, setActiveBarId] = useState<string>(
-    () => globalThis.__yourbarInventoryActiveBarId ?? '',
+    () => runtimeCache.activeBarId ?? '',
   );
   const [onboardingStep, setOnboardingStep] = useState<number>(
-    () => Math.max(1, Math.min(11, Math.trunc(globalThis.__yourbarInventoryOnboardingStep ?? 1))),
+    () => Math.max(1, Math.min(11, Math.trunc(runtimeCache.onboardingStep ?? 1))),
   );
   const [onboardingCompleted, setOnboardingCompleted] = useState<boolean>(
-    () => globalThis.__yourbarInventoryOnboardingCompleted ?? false,
+    () => runtimeCache.onboardingCompleted ?? false,
   );
   const [onboardingStarterApplied, setOnboardingStarterApplied] = useState<boolean>(
-    () => globalThis.__yourbarInventoryOnboardingStarterApplied ?? false,
+    () => runtimeCache.onboardingStarterApplied ?? false,
   );
   const detectedAmazonStore = useMemo(() => detectAmazonStoreFromStoreOrLocale(), []);
   const effectiveAmazonStore = useMemo(
@@ -512,30 +466,32 @@ const [ratingFilterThreshold, setRatingFilterThreshold] = useState<number>(() =>
     }
 
     setLoading(false);
-    globalThis.__yourbarInventory = inventoryState;
-    globalThis.__yourbarInventoryAvailableIngredientIds = availableIngredientIds;
-    globalThis.__yourbarInventoryShoppingIngredientIds = shoppingIngredientIds;
-    globalThis.__yourbarInventoryCocktailRatings = ratingsByCocktailId;
-    globalThis.__yourbarInventoryCocktailComments = commentsByCocktailId;
-    globalThis.__yourbarInventoryPartySelectedCocktailKeys = partySelectedCocktailKeys;
-    globalThis.__yourbarInventoryIgnoreGarnish = ignoreGarnish;
-    globalThis.__yourbarInventoryAllowAllSubstitutes = allowAllSubstitutes;
-    globalThis.__yourbarInventoryUseImperialUnits = useImperialUnits;
-    globalThis.__yourbarInventoryKeepScreenAwake = keepScreenAwake;
-    globalThis.__yourbarInventoryShakerSmartFilteringEnabled = shakerSmartFilteringEnabled;
-    globalThis.__yourbarInventoryShowTabCounters = showTabCounters;
-    globalThis.__yourbarInventoryRatingFilterThreshold = ratingFilterThreshold;
-    globalThis.__yourbarInventoryStartScreen = startScreen;
-    globalThis.__yourbarInventoryAppTheme = appTheme;
-    globalThis.__yourbarInventoryAppLocale = appLocale;
-    globalThis.__yourbarInventoryAmazonStoreOverride = amazonStoreOverride;
-    globalThis.__yourbarInventoryCustomCocktailTags = customCocktailTags;
-    globalThis.__yourbarInventoryCustomIngredientTags = customIngredientTags;
-    globalThis.__yourbarInventoryBars = bars;
-    globalThis.__yourbarInventoryActiveBarId = activeBarId;
-    globalThis.__yourbarInventoryOnboardingStep = onboardingStep;
-    globalThis.__yourbarInventoryOnboardingCompleted = onboardingCompleted;
-    globalThis.__yourbarInventoryOnboardingStarterApplied = onboardingStarterApplied;
+    writeInventoryRuntimeCache({
+      inventoryState,
+      availableIngredientIds,
+      shoppingIngredientIds,
+      cocktailRatings: ratingsByCocktailId,
+      cocktailComments: commentsByCocktailId,
+      partySelectedCocktailKeys,
+      ignoreGarnish,
+      allowAllSubstitutes,
+      useImperialUnits,
+      keepScreenAwake,
+      shakerSmartFilteringEnabled,
+      showTabCounters,
+      ratingFilterThreshold,
+      startScreen,
+      appTheme,
+      appLocale,
+      amazonStoreOverride,
+      customCocktailTags,
+      customIngredientTags,
+      bars,
+      activeBarId,
+      onboardingStep,
+      onboardingCompleted,
+      onboardingStarterApplied,
+    });
 
     const snapshot = buildInventorySnapshot(inventoryDelta, {
       availableIngredientIds,

@@ -285,7 +285,7 @@ const CocktailListRowComponent = ({
         })}
       </View>
     );
-  }, [methodIds, Colors.onSurfaceVariant, showMethodIcons, videoService]);
+  }, [methodIds, Colors.onSurfaceVariant, Colors.tertiary, showMethodIcons, videoService]);
 
   const { hasBrandedIngredient, hasStyledIngredient } = useMemo(() => {
     const recipe = cocktail.ingredients ?? [];

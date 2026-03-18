@@ -1016,7 +1016,6 @@ export default function IngredientFormScreen() {
     deleteIngredient,
     ingredient?.name,
     isEditMode,
-    navigation,
     numericIngredientId,
     returnToParams,
     returnToPath,
