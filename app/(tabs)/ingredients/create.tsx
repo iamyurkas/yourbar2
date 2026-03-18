@@ -31,6 +31,7 @@ import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { useAppColors } from '@/constants/theme';
 import { compareOptionalGlobalAlphabet } from '@/libs/global-sort';
 import { useI18n } from '@/libs/i18n/use-i18n';
+import { getIngredientSaveNavigationPlan } from '@/libs/ingredient-save-navigation';
 import { resolveImageSource } from '@/libs/image-source';
 import { skipDuplicateBack } from '@/libs/navigation';
 import { shouldStorePhoto, storePhoto } from '@/libs/photo-storage';
@@ -668,28 +669,39 @@ export default function IngredientFormScreen() {
         setHasUnsavedChanges(false);
         isNavigatingAfterSaveRef.current = true;
 
-        if (returnToPath) {
-          if (navigation.canGoBack()) {
-            skipDuplicateBack(navigation);
-            router.navigate({ pathname: returnToPath as never, params: returnToParams as never });
-            return;
-          }
+        const plan = getIngredientSaveNavigationPlan({
+          returnToPath,
+          canGoBack: navigation.canGoBack(),
+          fallbackIngredientId: String(numericIngredientId),
+        });
 
+        if (plan.kind === 'back_then_navigate_return') {
+          skipDuplicateBack(navigation);
+          router.navigate({ pathname: returnToPath as never, params: returnToParams as never });
+          return;
+        }
+
+        if (plan.kind === 'replace_return') {
           router.replace({ pathname: returnToPath as never, params: returnToParams as never });
           return;
         }
 
-        if (navigation.canGoBack()) {
+        if (plan.kind === 'back') {
           skipDuplicateBack(navigation);
           return;
         }
 
-        router.replace({
-          pathname: '/ingredients/[ingredientId]',
-          params: {
-            ingredientId: String(numericIngredientId),
-          },
-        });
+        if (plan.kind === 'replace_ingredient_details') {
+          router.replace({
+            pathname: '/ingredients/[ingredientId]',
+            params: {
+              ingredientId: plan.ingredientId,
+            },
+          });
+          return;
+        }
+
+        router.replace('/ingredients');
       } finally {
         setIsSaving(false);
       }
@@ -754,21 +766,37 @@ export default function IngredientFormScreen() {
       return;
     }
 
-    if (returnToPath) {
-      if (navigation.canGoBack()) {
-        skipDuplicateBack(navigation);
-        router.navigate({ pathname: returnToPath as never, params: returnToParams as never });
-        return;
-      }
+    const plan = getIngredientSaveNavigationPlan({
+      returnToPath,
+      canGoBack: navigation.canGoBack(),
+      fallbackIngredientId: String(targetId),
+    });
 
+    if (plan.kind === 'back_then_navigate_return') {
+      skipDuplicateBack(navigation);
+      router.navigate({ pathname: returnToPath as never, params: returnToParams as never });
+      return;
+    }
+
+    if (plan.kind === 'replace_return') {
       router.replace({ pathname: returnToPath as never, params: returnToParams as never });
       return;
     }
 
-    router.replace({
-      pathname: '/ingredients/[ingredientId]',
-      params: { ingredientId: String(targetId) },
-    });
+    if (plan.kind === 'back') {
+      skipDuplicateBack(navigation);
+      return;
+    }
+
+    if (plan.kind === 'replace_ingredient_details') {
+      router.replace({
+        pathname: '/ingredients/[ingredientId]',
+        params: { ingredientId: plan.ingredientId },
+      });
+      return;
+    }
+
+    router.replace('/ingredients');
   }, [
     availableIngredientTags,
     baseIngredientId,

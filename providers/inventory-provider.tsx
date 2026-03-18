@@ -78,110 +78,32 @@ import {
   sanitizeCocktailComments,
   sanitizeCocktailRatings,
 } from '@/providers/inventory/persistence/inventory-snapshot';
+import {
+  buildCocktailFeedbackExport,
+  buildIngredientStatusExport,
+  parseCocktailFeedbackImport,
+  parseIngredientStatusImport,
+  type CocktailFeedbackExport,
+} from '@/providers/inventory/model/inventory-provider-mappers';
+import {
+  createIngredientIdSet,
+  sanitizeAmazonStoreOverride,
+  sanitizeAppLocale,
+  sanitizeAppTheme,
+  sanitizeCocktailDefaultServings,
+  sanitizeStartScreen,
+} from '@/providers/inventory/model/inventory-provider-sanitizers';
+import {
+  getNextCustomTagId,
+  sanitizePartySelectedCocktailKeys,
+  sanitizeCustomTags,
+  sanitizeTranslationOverrides,
+} from '@/providers/inventory/model/inventory-provider-utils';
+import { rehydrateBuiltInTags } from '@/providers/inventory/model/inventory-provider-rehydration';
 
 const DEFAULT_START_SCREEN: StartScreen = 'cocktails_all';
 const DEFAULT_APP_THEME: AppTheme = 'light';
 const DEFAULT_APP_LOCALE: AppLocale = DEFAULT_LOCALE;
-
-type CocktailFeedbackExport = NonNullable<InventoryExportData['cocktailFeedback']>;
-type IngredientStatusExport = NonNullable<InventoryExportData['ingredientStatus']>;
-
-function buildCocktailFeedbackExport(
-  ratingsByCocktailId: Record<string, number>,
-  commentsByCocktailId: Record<string, string>,
-): CocktailFeedbackExport {
-  const sanitizedRatings = sanitizeCocktailRatings(ratingsByCocktailId);
-  const sanitizedComments = sanitizeCocktailComments(commentsByCocktailId);
-  const feedback: CocktailFeedbackExport = {};
-
-  Object.entries(sanitizedRatings).forEach(([id, rating]) => {
-    feedback[id] = { ...(feedback[id] ?? {}), rating };
-  });
-
-  Object.entries(sanitizedComments).forEach(([id, comment]) => {
-    feedback[id] = { ...(feedback[id] ?? {}), comment };
-  });
-
-  return feedback;
-}
-
-function parseCocktailFeedbackImport(data?: InventoryExportData): {
-  ratings: Record<string, number>;
-  comments: Record<string, string>;
-} {
-  const feedbackCandidate = data?.cocktailFeedback;
-  const ratingsCandidate: Record<string, number> = {};
-  const commentsCandidate: Record<string, string> = {};
-
-  if (feedbackCandidate && typeof feedbackCandidate === 'object') {
-    Object.entries(feedbackCandidate).forEach(([id, value]) => {
-      if (!value || typeof value !== 'object') {
-        return;
-      }
-
-      const entry = value as { rating?: unknown; comment?: unknown };
-      if (typeof entry.rating === 'number') {
-        ratingsCandidate[id] = entry.rating;
-      }
-      if (typeof entry.comment === 'string') {
-        commentsCandidate[id] = entry.comment;
-      }
-    });
-  }
-
-  const ratings = sanitizeCocktailRatings(ratingsCandidate);
-  const comments = sanitizeCocktailComments(commentsCandidate);
-
-  return { ratings, comments };
-}
-
-function buildIngredientStatusExport(
-  availableIngredientIds: Set<number>,
-  shoppingIngredientIds: Set<number>,
-): IngredientStatusExport {
-  const status: IngredientStatusExport = {};
-
-  toSortedArray(availableIngredientIds).forEach((id) => {
-    status[String(id)] = { ...(status[String(id)] ?? {}), available: true };
-  });
-
-  toSortedArray(shoppingIngredientIds).forEach((id) => {
-    status[String(id)] = { ...(status[String(id)] ?? {}), shopping: true };
-  });
-
-  return status;
-}
-
-function parseIngredientStatusImport(data?: InventoryExportData): {
-  availableIngredientIds: Set<number>;
-  shoppingIngredientIds: Set<number>;
-} {
-  const statusCandidate = data?.ingredientStatus;
-  const availableIngredientIds = new Set<number>();
-  const shoppingIngredientIds = new Set<number>();
-
-  if (!statusCandidate || typeof statusCandidate !== 'object') {
-    return { availableIngredientIds, shoppingIngredientIds };
-  }
-
-  Object.entries(statusCandidate).forEach(([id, value]) => {
-    const numericId = Number(id);
-    if (!Number.isFinite(numericId) || numericId < 0 || !value || typeof value !== 'object') {
-      return;
-    }
-
-    const normalizedId = Math.trunc(numericId);
-    const entry = value as { available?: unknown; shopping?: unknown };
-    if (entry.available === true) {
-      availableIngredientIds.add(normalizedId);
-    }
-    if (entry.shopping === true) {
-      shoppingIngredientIds.add(normalizedId);
-    }
-  });
-
-  return { availableIngredientIds, shoppingIngredientIds };
-}
 
 declare global {
   // eslint-disable-next-line no-var
@@ -194,6 +116,8 @@ declare global {
   var __yourbarInventoryCocktailRatings: Record<string, number> | undefined;
   // eslint-disable-next-line no-var
   var __yourbarInventoryCocktailComments: Record<string, string> | undefined;
+  // eslint-disable-next-line no-var
+  var __yourbarInventoryPartySelectedCocktailKeys: Set<string> | undefined;
   // eslint-disable-next-line no-var
   var __yourbarInventoryIgnoreGarnish: boolean | undefined;
   // eslint-disable-next-line no-var
@@ -237,104 +161,6 @@ function getDefaultBarName(locale: AppLocale): string {
   return translate(locale, 'barManager.defaultName');
 }
 
-function createIngredientIdSet(values?: readonly number[] | null): Set<number> {
-  if (!values || values.length === 0) {
-    return new Set<number>();
-  }
-
-  const sanitized = values
-    .map((value) => Number(value))
-    .filter((value) => Number.isFinite(value))
-    .map((value) => Math.trunc(value));
-
-  return new Set(sanitized);
-}
-
-function sanitizeStartScreen(value?: string | null): StartScreen {
-  switch (value) {
-    case 'cocktails_all':
-    case 'cocktails_my':
-    case 'shaker':
-    case 'ingredients_all':
-    case 'ingredients_my':
-    case 'ingredients_shopping':
-      return value;
-    default:
-      return DEFAULT_START_SCREEN;
-  }
-}
-
-const BUILTIN_COCKTAIL_TAGS_BY_ID = new Map<number, (typeof BUILTIN_COCKTAIL_TAGS)[number]>(BUILTIN_COCKTAIL_TAGS.map((tag) => [tag.id, tag]));
-const BUILTIN_INGREDIENT_TAGS_BY_ID = new Map<number, (typeof BUILTIN_INGREDIENT_TAGS)[number]>(BUILTIN_INGREDIENT_TAGS.map((tag) => [tag.id, tag]));
-
-function rehydrateBuiltInTags(state: InventoryState): InventoryState {
-  const withHydratedCocktailTags = state.cocktails.map((cocktail) => ({
-    ...cocktail,
-    tags: cocktail.tags?.map((tag) => {
-      const builtinTag = BUILTIN_COCKTAIL_TAGS_BY_ID.get(Number(tag.id ?? -1));
-      return builtinTag
-        ? {
-            ...tag,
-            id: builtinTag.id,
-            name: builtinTag.name,
-            color: builtinTag.color,
-          }
-        : tag;
-    }),
-  }));
-
-  const withHydratedIngredientTags = state.ingredients.map((ingredient) => ({
-    ...ingredient,
-    tags: ingredient.tags?.map((tag) => {
-      const builtinTag = BUILTIN_INGREDIENT_TAGS_BY_ID.get(Number(tag.id ?? -1));
-      return builtinTag
-        ? {
-            ...tag,
-            id: builtinTag.id,
-            name: builtinTag.name,
-            color: builtinTag.color,
-          }
-        : tag;
-    }),
-  }));
-
-  return {
-    ...state,
-    cocktails: withHydratedCocktailTags,
-    ingredients: withHydratedIngredientTags,
-  };
-}
-
-function sanitizeAppTheme(value?: string | null): AppTheme {
-  switch (value) {
-    case 'light':
-    case 'dark':
-    case 'system':
-      return value;
-    default:
-      return DEFAULT_APP_THEME;
-  }
-}
-
-
-
-function sanitizeAppLocale(value?: string | null): AppLocale {
-  return isSupportedLocale(value) ? value : DEFAULT_APP_LOCALE;
-}
-
-function sanitizeAmazonStoreOverride(value?: string | null): AmazonStoreOverride | null {
-  if (!value) {
-    return null;
-  }
-
-  const normalized = value.toUpperCase();
-  if (normalized === 'DISABLED') {
-    return 'DISABLED';
-  }
-
-  return normalized in AMAZON_STORES ? (normalized as AmazonStoreKey) : null;
-}
-
 const DEFAULT_TAG_COLOR = TAG_COLORS[0];
 const BUILTIN_COCKTAIL_TAG_MAX = BUILTIN_COCKTAIL_TAGS.reduce((max, tag) => Math.max(max, tag.id), 0);
 const BUILTIN_INGREDIENT_TAG_MAX = BUILTIN_INGREDIENT_TAGS.reduce((max, tag) => Math.max(max, tag.id), 0);
@@ -342,85 +168,6 @@ const USER_CREATED_ID_START = 10000;
 
 const MIN_COCKTAIL_DEFAULT_SERVINGS = 1;
 const MAX_COCKTAIL_DEFAULT_SERVINGS = 6;
-
-function sanitizeCocktailDefaultServings(value?: number | null): number {
-  const normalized = Number(value ?? MIN_COCKTAIL_DEFAULT_SERVINGS);
-  if (!Number.isFinite(normalized)) {
-    return MIN_COCKTAIL_DEFAULT_SERVINGS;
-  }
-
-  const integerValue = Math.trunc(normalized);
-  return Math.max(MIN_COCKTAIL_DEFAULT_SERVINGS, Math.min(MAX_COCKTAIL_DEFAULT_SERVINGS, integerValue));
-}
-
-function sanitizeCustomTags<TTag extends { id?: number | null; name?: string | null; color?: string | null }>(
-  tags: readonly TTag[] | null | undefined,
-  fallbackColor: string,
-): Array<{ id: number; name: string; color: string }> {
-  if (!tags || tags.length === 0) {
-    return [];
-  }
-
-  const map = new Map<number, { id: number; name: string; color: string }>();
-
-  tags.forEach((tag) => {
-    const rawId = Number(tag.id ?? -1);
-    if (!Number.isFinite(rawId) || rawId < 0) {
-      return;
-    }
-
-    const name = tag.name?.trim();
-    if (!name) {
-      return;
-    }
-
-    const color = typeof tag.color === 'string' && tag.color.trim() ? tag.color : fallbackColor;
-    map.set(rawId, { id: Math.trunc(rawId), name, color });
-  });
-
-  return Array.from(map.values()).sort((a, b) => compareGlobalAlphabet(a.name, b.name));
-}
-
-
-function sanitizeTranslationOverrides(value: unknown): InventoryTranslationOverrides {
-  if (!value || typeof value !== 'object') {
-    return {};
-  }
-
-  const result: InventoryTranslationOverrides = {};
-  (Object.entries(value as Record<string, unknown>)).forEach(([locale, localeValue]) => {
-    if (!isSupportedLocale(locale) || !localeValue || typeof localeValue !== 'object') {
-      return;
-    }
-
-    const localeRecord = localeValue as Record<string, unknown>;
-    const cocktails = localeRecord.cocktails;
-    const ingredients = localeRecord.ingredients;
-    const nextLocale: InventoryLocaleTranslationOverrides = {};
-    if (cocktails && typeof cocktails === 'object') {
-      nextLocale.cocktails = cocktails as Record<string, any>;
-    }
-    if (ingredients && typeof ingredients === 'object') {
-      nextLocale.ingredients = ingredients as Record<string, any>;
-    }
-
-    result[locale] = nextLocale;
-  });
-
-  return result;
-}
-
-function getNextCustomTagId(tags: readonly { id?: number | null }[], minimum: number): number {
-  const maxId = tags.reduce((max, tag) => {
-    const id = Number(tag.id ?? -1);
-    if (!Number.isFinite(id) || id < 0) {
-      return max;
-    }
-    return Math.max(max, Math.trunc(id));
-  }, minimum);
-
-  return maxId + 1;
-}
 
 type InventoryProviderProps = {
   children: React.ReactNode;
@@ -468,7 +215,11 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   const [showTabCounters, setShowTabCounters] = useState<boolean>(
     () => globalThis.__yourbarInventoryShowTabCounters ?? false,
   );
-  const [partySelectedCocktailKeys, setPartySelectedCocktailKeys] = useState<Set<string>>(() => new Set());
+  const [partySelectedCocktailKeys, setPartySelectedCocktailKeys] = useState<Set<string>>(() =>
+    globalThis.__yourbarInventoryPartySelectedCocktailKeys
+      ? new Set(globalThis.__yourbarInventoryPartySelectedCocktailKeys)
+      : new Set(),
+  );
 const [ratingFilterThreshold, setRatingFilterThreshold] = useState<number>(() =>
     typeof globalThis.__yourbarInventoryRatingFilterThreshold === 'number'
       ? Math.min(5, Math.max(1, Math.round(globalThis.__yourbarInventoryRatingFilterThreshold)))
@@ -481,17 +232,17 @@ const [ratingFilterThreshold, setRatingFilterThreshold] = useState<number>(() =>
     () => globalThis.__yourbarInventoryAppTheme ?? DEFAULT_APP_THEME,
   );
   const [amazonStoreOverride, setAmazonStoreOverride] = useState<AmazonStoreOverride | null>(
-    () => sanitizeAmazonStoreOverride(globalThis.__yourbarInventoryAmazonStoreOverride),
+    () => sanitizeAmazonStoreOverride(globalThis.__yourbarInventoryAmazonStoreOverride, AMAZON_STORES) as AmazonStoreOverride | null,
   );
   const [appLocale, setAppLocale] = useState<AppLocale>(
-    () => sanitizeAppLocale(globalThis.__yourbarInventoryAppLocale),
+    () => sanitizeAppLocale(globalThis.__yourbarInventoryAppLocale, isSupportedLocale, DEFAULT_APP_LOCALE) as AppLocale,
   );
   const [translationOverrides, setTranslationOverrides] = useState<InventoryTranslationOverrides>({});
   const [customCocktailTags, setCustomCocktailTags] = useState<CocktailTag[]>(() =>
-    sanitizeCustomTags(globalThis.__yourbarInventoryCustomCocktailTags, DEFAULT_TAG_COLOR),
+    sanitizeCustomTags(globalThis.__yourbarInventoryCustomCocktailTags, DEFAULT_TAG_COLOR, compareGlobalAlphabet),
   );
   const [customIngredientTags, setCustomIngredientTags] = useState<IngredientTag[]>(() =>
-    sanitizeCustomTags(globalThis.__yourbarInventoryCustomIngredientTags, DEFAULT_TAG_COLOR),
+    sanitizeCustomTags(globalThis.__yourbarInventoryCustomIngredientTags, DEFAULT_TAG_COLOR, compareGlobalAlphabet),
   );
   const [bars, setBars] = useState<Bar[]>(() => globalThis.__yourbarInventoryBars ?? []);
   const [activeBarId, setActiveBarId] = useState<string>(
@@ -523,6 +274,7 @@ const [ratingFilterThreshold, setRatingFilterThreshold] = useState<number>(() =>
       shoppingIngredientIds: Set<number>;
       ratingsByCocktailId: Record<string, number>;
       commentsByCocktailId: Record<string, string>;
+      partySelectedCocktailKeys: Set<string>;
       ignoreGarnish: boolean;
       allowAllSubstitutes: boolean;
       useImperialUnits: boolean;
@@ -548,6 +300,7 @@ const [ratingFilterThreshold, setRatingFilterThreshold] = useState<number>(() =>
       setShoppingIngredientIds(bootstrap.shoppingIngredientIds);
       setRatingsByCocktailId(bootstrap.ratingsByCocktailId);
       setCommentsByCocktailId(bootstrap.commentsByCocktailId);
+      setPartySelectedCocktailKeys(bootstrap.partySelectedCocktailKeys);
       setIgnoreGarnish(bootstrap.ignoreGarnish);
       setAllowAllSubstitutes(bootstrap.allowAllSubstitutes);
       setUseImperialUnits(bootstrap.useImperialUnits);
@@ -584,11 +337,18 @@ const [ratingFilterThreshold, setRatingFilterThreshold] = useState<number>(() =>
         const stored = await loadInventorySnapshot<CocktailStorageRecord, IngredientStorageRecord>();
         if (stored && (stored.version === INVENTORY_SNAPSHOT_VERSION || (stored as any).version === 2 || (stored as any).version === 1) && !cancelled) {
           const castedStored = stored as any;
-          const nextInventoryState = rehydrateBuiltInTags(createInventoryStateFromSnapshot(stored, baseInventoryData));
+          const nextInventoryState = rehydrateBuiltInTags(
+            createInventoryStateFromSnapshot(stored, baseInventoryData),
+            BUILTIN_COCKTAIL_TAGS,
+            BUILTIN_INGREDIENT_TAGS,
+          );
           const nextAvailableIds = createIngredientIdSet(stored.availableIngredientIds);
           const nextShoppingIds = createIngredientIdSet(stored.shoppingIngredientIds);
           const nextRatings = sanitizeCocktailRatings(stored.cocktailRatings);
           const nextComments = sanitizeCocktailComments((stored as { cocktailComments?: Record<string, string> }).cocktailComments);
+          const nextPartySelectedCocktailKeys = sanitizePartySelectedCocktailKeys(
+            (stored as { partySelectedCocktailKeys?: string[] }).partySelectedCocktailKeys,
+          );
           const nextIgnoreGarnish = stored.ignoreGarnish ?? true;
           const nextAllowAllSubstitutes = stored.allowAllSubstitutes ?? true;
           const nextUseImperialUnits = (stored.useImperialUnits ?? false) || shouldDefaultToImperialUnits;
@@ -599,19 +359,24 @@ const [ratingFilterThreshold, setRatingFilterThreshold] = useState<number>(() =>
             5,
             Math.max(1, Math.round(stored.ratingFilterThreshold ?? 1)),
           );
-          const nextStartScreen = sanitizeStartScreen(stored.startScreen);
-          const nextAppTheme = sanitizeAppTheme(stored.appTheme);
-          const nextAmazonStoreOverride = sanitizeAmazonStoreOverride(stored.amazonStoreOverride);
-          const nextAppLocale = sanitizeAppLocale(stored.appLocale);
+          const nextStartScreen = sanitizeStartScreen(stored.startScreen, DEFAULT_START_SCREEN) as StartScreen;
+          const nextAppTheme = sanitizeAppTheme(stored.appTheme, DEFAULT_APP_THEME) as AppTheme;
+          const nextAmazonStoreOverride = sanitizeAmazonStoreOverride(stored.amazonStoreOverride, AMAZON_STORES) as AmazonStoreOverride | null;
+          const nextAppLocale = sanitizeAppLocale(stored.appLocale, isSupportedLocale, DEFAULT_APP_LOCALE) as AppLocale;
           const nextCustomCocktailTags = sanitizeCustomTags(
             'customCocktailTags' in stored ? stored.customCocktailTags : undefined,
             DEFAULT_TAG_COLOR,
+            compareGlobalAlphabet,
           );
           const nextCustomIngredientTags = sanitizeCustomTags(
             'customIngredientTags' in stored ? stored.customIngredientTags : undefined,
             DEFAULT_TAG_COLOR,
+            compareGlobalAlphabet,
           );
-          const nextTranslationOverrides = sanitizeTranslationOverrides((stored as { translationOverrides?: unknown }).translationOverrides);
+          const nextTranslationOverrides = sanitizeTranslationOverrides<InventoryTranslationOverrides>(
+            (stored as { translationOverrides?: unknown }).translationOverrides,
+            isSupportedLocale,
+          );
           const nextOnboardingStep = Math.max(1, Math.min(11, Math.trunc((stored as { onboardingStep?: number }).onboardingStep ?? 1)));
           const nextOnboardingCompleted = (stored as { onboardingCompleted?: boolean }).onboardingCompleted ?? false;
           const nextOnboardingStarterApplied = (stored as { onboardingStarterApplied?: boolean }).onboardingStarterApplied ?? false;
@@ -635,6 +400,7 @@ const [ratingFilterThreshold, setRatingFilterThreshold] = useState<number>(() =>
             shoppingIngredientIds: nextShoppingIds,
             ratingsByCocktailId: nextRatings,
             commentsByCocktailId: nextComments,
+            partySelectedCocktailKeys: nextPartySelectedCocktailKeys,
             ignoreGarnish: nextIgnoreGarnish,
             allowAllSubstitutes: nextAllowAllSubstitutes,
             useImperialUnits: nextUseImperialUnits,
@@ -670,6 +436,7 @@ const [ratingFilterThreshold, setRatingFilterThreshold] = useState<number>(() =>
             shoppingIngredientIds: new Set(),
             ratingsByCocktailId: {},
             commentsByCocktailId: {},
+            partySelectedCocktailKeys: new Set<string>(),
             ignoreGarnish: true,
             allowAllSubstitutes: true,
             useImperialUnits: shouldDefaultToImperialUnits,
@@ -750,6 +517,7 @@ const [ratingFilterThreshold, setRatingFilterThreshold] = useState<number>(() =>
     globalThis.__yourbarInventoryShoppingIngredientIds = shoppingIngredientIds;
     globalThis.__yourbarInventoryCocktailRatings = ratingsByCocktailId;
     globalThis.__yourbarInventoryCocktailComments = commentsByCocktailId;
+    globalThis.__yourbarInventoryPartySelectedCocktailKeys = partySelectedCocktailKeys;
     globalThis.__yourbarInventoryIgnoreGarnish = ignoreGarnish;
     globalThis.__yourbarInventoryAllowAllSubstitutes = allowAllSubstitutes;
     globalThis.__yourbarInventoryUseImperialUnits = useImperialUnits;
@@ -774,6 +542,7 @@ const [ratingFilterThreshold, setRatingFilterThreshold] = useState<number>(() =>
       shoppingIngredientIds,
       ratingsByCocktailId,
       commentsByCocktailId,
+      partySelectedCocktailKeys,
       ignoreGarnish,
       allowAllSubstitutes,
       useImperialUnits,
@@ -812,6 +581,7 @@ const [ratingFilterThreshold, setRatingFilterThreshold] = useState<number>(() =>
     shoppingIngredientIds,
     ratingsByCocktailId,
     commentsByCocktailId,
+    partySelectedCocktailKeys,
     ignoreGarnish,
     allowAllSubstitutes,
     useImperialUnits,
@@ -1103,7 +873,11 @@ const [ratingFilterThreshold, setRatingFilterThreshold] = useState<number>(() =>
         const methodIds = input.methodIds
           ? Array.from(new Set(input.methodIds)).filter(Boolean)
           : undefined;
-        const defaultServings = sanitizeCocktailDefaultServings(input.defaultServings);
+        const defaultServings = sanitizeCocktailDefaultServings(
+          input.defaultServings,
+          MIN_COCKTAIL_DEFAULT_SERVINGS,
+          MAX_COCKTAIL_DEFAULT_SERVINGS,
+        );
 
         const tagMap = new Map<number, CocktailTag>();
         (input.tags ?? []).forEach((tag) => {
@@ -1465,8 +1239,19 @@ const [ratingFilterThreshold, setRatingFilterThreshold] = useState<number>(() =>
       return acc;
     }, []);
 
-    const exportFeedback = buildCocktailFeedbackExport(ratingsByCocktailId, commentsByCocktailId);
-    const exportIngredientStatus = buildIngredientStatusExport(availableIngredientIds, shoppingIngredientIds);
+    const exportFeedback = buildCocktailFeedbackExport(
+      ratingsByCocktailId,
+      commentsByCocktailId,
+      {
+        ratings: sanitizeCocktailRatings,
+        comments: sanitizeCocktailComments,
+      },
+    );
+    const exportIngredientStatus = buildIngredientStatusExport(
+      availableIngredientIds,
+      shoppingIngredientIds,
+      toSortedArray,
+    );
 
     const files: InventoryExportFile[] = [{
       schemaVersion: 1,
@@ -1578,7 +1363,10 @@ const [ratingFilterThreshold, setRatingFilterThreshold] = useState<number>(() =>
       ? createInventoryStateFromData(hydrateInventoryTagsFromCode(baseFile.data), true)
       : undefined;
 
-    const incomingFeedback = parseCocktailFeedbackImport(baseFile?.data);
+    const incomingFeedback = parseCocktailFeedbackImport(baseFile?.data, {
+      ratings: sanitizeCocktailRatings,
+      comments: sanitizeCocktailComments,
+    });
     const incomingIngredientStatus = parseIngredientStatusImport(baseFile?.data);
 
     const mergeCocktailWithFallback = (current: Cocktail, incoming: Cocktail): Cocktail => {
@@ -2100,7 +1888,11 @@ const [ratingFilterThreshold, setRatingFilterThreshold] = useState<number>(() =>
       const methodIds = input.methodIds
         ? Array.from(new Set(input.methodIds)).filter(Boolean)
         : undefined;
-      const defaultServings = sanitizeCocktailDefaultServings(input.defaultServings ?? (existing as { defaultServings?: number | null }).defaultServings);
+      const defaultServings = sanitizeCocktailDefaultServings(
+        input.defaultServings ?? (existing as { defaultServings?: number | null }).defaultServings,
+        MIN_COCKTAIL_DEFAULT_SERVINGS,
+        MAX_COCKTAIL_DEFAULT_SERVINGS,
+      );
 
       const tagMap = new Map<number, CocktailTag>();
       (input.tags ?? []).forEach((tag) => {
@@ -2413,15 +2205,15 @@ const [ratingFilterThreshold, setRatingFilterThreshold] = useState<number>(() =>
   }, []);
 
   const handleSetStartScreen = useCallback((value: StartScreen) => {
-    setStartScreen(sanitizeStartScreen(value));
+    setStartScreen(sanitizeStartScreen(value, DEFAULT_START_SCREEN) as StartScreen);
   }, []);
 
   const handleSetAppTheme = useCallback((value: AppTheme) => {
-    setAppTheme(sanitizeAppTheme(value));
+    setAppTheme(sanitizeAppTheme(value, DEFAULT_APP_THEME) as AppTheme);
   }, []);
 
   const handleSetAmazonStoreOverride = useCallback((value: AmazonStoreOverride | null) => {
-    setAmazonStoreOverride(value == null ? null : sanitizeAmazonStoreOverride(value));
+    setAmazonStoreOverride(value == null ? null : sanitizeAmazonStoreOverride(value, AMAZON_STORES) as AmazonStoreOverride | null);
   }, []);
 
   const handleSetActiveBar = useCallback(
