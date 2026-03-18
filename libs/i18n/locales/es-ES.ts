@@ -436,6 +436,8 @@ export const esESTranslations: TranslationDictionary = {
 
   "cocktails.sortBy": "Ordenar por",
   "cocktails.sortOptionAlphabeticalAccessibility": "Ordenar por A-z",
+  "cocktails.sortOptionPartySelectedAccessibility":
+    "Ordenar por selección de fiesta",
   "cocktails.sortOptionRequiredCountAccessibility":
     "Ordenar por cantidad de ingredientes obligatorios",
   "cocktails.sortOptionMissingRequiredCountAccessibility":

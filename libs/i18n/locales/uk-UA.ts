@@ -443,6 +443,8 @@ export const ukUATranslations: TranslationDictionary = {
 
   "cocktails.sortBy": "Сортувати за",
   "cocktails.sortOptionAlphabeticalAccessibility": "Сортувати за A-z",
+  "cocktails.sortOptionPartySelectedAccessibility":
+    "Сортувати за відібраністю для вечірки",
   "cocktails.sortOptionRequiredCountAccessibility":
     "Сортувати за кількістю обов’язкових інгредієнтів",
   "cocktails.sortOptionMissingRequiredCountAccessibility":

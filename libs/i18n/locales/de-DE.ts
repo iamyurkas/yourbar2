@@ -441,6 +441,8 @@ export const deDETranslations: TranslationDictionary = {
   "cocktails.sortBy": "Sortieren nach",
   "cocktails.sortOptionAlphabeticalAccessibility":
     "Alphabetisch sortieren (A-Z)",
+  "cocktails.sortOptionPartySelectedAccessibility":
+    "Nach Partyauswahl sortieren",
   "cocktails.sortOptionRequiredCountAccessibility":
     "Nach Anzahl benötigter Zutaten sortieren",
   "cocktails.sortOptionMissingRequiredCountAccessibility":
