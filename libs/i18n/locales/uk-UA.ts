@@ -562,6 +562,7 @@ export const ukUATranslations: TranslationDictionary = {
   "sideMenu.googleDriveConnectedMessage": "Вхід виконано як {{email}}.",
   "sideMenu.googleDriveErrorTitle": "Помилка Google Drive",
   "sideMenu.googleDriveNotConfigured": "У цій збірці не налаштовано Google Drive OAuth.",
+  "sideMenu.googleDriveExpoGoNotSupported": "Вхід у Google Drive не підтримується в Expo Go. Використайте development або release збірку.",
   "sideMenu.googleDriveMissingClientId": "У конфігурації застосунку відсутній Google OAuth client ID.",
   "sideMenu.googleDriveLoginFailed": "Не вдалося виконати вхід. Спробуйте ще раз.",
   "sideMenu.googleDriveSyncSuccessTitle": "Синхронізацію завершено",

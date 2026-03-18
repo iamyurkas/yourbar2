@@ -41,6 +41,7 @@ import { buildPhotoBaseName } from "@/libs/photo-utils";
 import {
   clearGoogleDriveSession,
   downloadBackupFromGoogleDrive,
+  isGoogleDriveAuthSupported,
   isGoogleDriveConfigured,
   loadGoogleDriveSession,
   signInToGoogleDrive,
@@ -257,6 +258,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     backgroundColor: Colors.surfaceVariant,
   }), [Colors]);
   const googleDriveConfigured = isGoogleDriveConfigured();
+  const googleDriveAuthSupported = isGoogleDriveAuthSupported();
 
   const clearTimeoutRef = (ref: {
     current: ReturnType<typeof setTimeout> | null;
@@ -589,6 +591,11 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   };
 
   const handleGoogleDriveLogin = async () => {
+    if (!googleDriveAuthSupported) {
+      showDialogMessage(t("sideMenu.googleDriveErrorTitle"), t("sideMenu.googleDriveExpoGoNotSupported"));
+      return;
+    }
+
     if (!googleDriveConfigured) {
       showDialogMessage(t("sideMenu.googleDriveErrorTitle"), t("sideMenu.googleDriveNotConfigured"));
       return;
@@ -1263,7 +1270,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
             <Pressable
               accessibilityRole="button"
               accessibilityLabel={t("sideMenu.googleDriveSync")}
-              onPress={!googleDriveConfigured ? undefined : (googleDriveSession ? handleGoogleDriveSync : handleGoogleDriveLogin)}
+              onPress={!googleDriveConfigured || !googleDriveAuthSupported ? undefined : (googleDriveSession ? handleGoogleDriveSync : handleGoogleDriveLogin)}
               style={[styles.settingRow, SURFACE_ROW_STYLE]}
             >
               <View style={[styles.checkbox, SURFACE_ICON_STYLE]}>
@@ -1277,9 +1284,11 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 <Text
                   style={[styles.settingLabel, { color: Colors.onSurface }]}
                 >
-                  {!googleDriveConfigured
+                  {!googleDriveAuthSupported
                     ? t("sideMenu.googleDriveUnavailable")
-                    : (googleDriveSession ? t("sideMenu.googleDriveSyncNow") : t("sideMenu.googleDriveLogin"))}
+                    : (!googleDriveConfigured
+                    ? t("sideMenu.googleDriveUnavailable")
+                    : (googleDriveSession ? t("sideMenu.googleDriveSyncNow") : t("sideMenu.googleDriveLogin")))}
                 </Text>
                 <Text
                   style={[
@@ -1287,15 +1296,17 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     { color: Colors.onSurfaceVariant },
                   ]}
                 >
-                  {!googleDriveConfigured
+                  {!googleDriveAuthSupported
+                    ? t("sideMenu.googleDriveExpoGoNotSupported")
+                    : (!googleDriveConfigured
                     ? t("sideMenu.googleDriveNotConfigured")
                     : (googleDriveSession
                     ? t("sideMenu.googleDriveConnectedAs", { email: googleDriveSession.email ?? t("sideMenu.googleDriveUnknownAccount") })
-                    : t("sideMenu.googleDriveCaption"))}
+                    : t("sideMenu.googleDriveCaption")))}
                 </Text>
               </View>
               <MaterialCommunityIcons
-                name={!googleDriveConfigured ? "alert-circle-outline" : (isGoogleDriveSyncing || isGoogleDriveAuthLoading ? "loading" : "chevron-right")}
+                name={!googleDriveConfigured || !googleDriveAuthSupported ? "alert-circle-outline" : (isGoogleDriveSyncing || isGoogleDriveAuthLoading ? "loading" : "chevron-right")}
                 size={20}
                 color={Colors.onSurfaceVariant}
               />

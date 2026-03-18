@@ -553,6 +553,7 @@ export const esESTranslations: TranslationDictionary = {
   "sideMenu.googleDriveConnectedMessage": "Sesión iniciada como {{email}}.",
   "sideMenu.googleDriveErrorTitle": "Error de Google Drive",
   "sideMenu.googleDriveNotConfigured": "Esta compilación no incluye configuración OAuth de Google Drive.",
+  "sideMenu.googleDriveExpoGoNotSupported": "El inicio de sesión de Google Drive no es compatible con Expo Go. Usa una build de desarrollo o de lanzamiento.",
   "sideMenu.googleDriveMissingClientId": "Falta el ID de cliente OAuth de Google en la configuración.",
   "sideMenu.googleDriveLoginFailed": "No se pudo iniciar sesión. Inténtalo de nuevo.",
   "sideMenu.googleDriveSyncSuccessTitle": "Sincronización completada",

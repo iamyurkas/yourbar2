@@ -1,6 +1,5 @@
 import Constants from 'expo-constants';
 import * as FileSystem from 'expo-file-system/legacy';
-import * as Linking from 'expo-linking';
 import { Platform } from 'react-native';
 import * as WebBrowser from 'expo-web-browser';
 
@@ -127,6 +126,10 @@ export function isGoogleDriveConfigured(): boolean {
   return Boolean(getGoogleClientId());
 }
 
+export function isGoogleDriveAuthSupported(): boolean {
+  return Constants.appOwnership !== 'expo';
+}
+
 async function getGoogleUserEmail(accessToken: string): Promise<string | undefined> {
   try {
     const response = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
@@ -144,14 +147,22 @@ async function getGoogleUserEmail(accessToken: string): Promise<string | undefin
 }
 
 export async function signInToGoogleDrive(): Promise<GoogleDriveSession> {
+  if (!isGoogleDriveAuthSupported()) {
+    throw new Error('expo_go_not_supported');
+  }
+
   const clientId = getGoogleClientId();
   if (!clientId) {
     throw new Error('missing_client_id');
   }
 
   const resolvedScheme = Constants.expoConfig?.scheme;
-  const scheme = Array.isArray(resolvedScheme) ? resolvedScheme[0] : (resolvedScheme ?? 'yourbar');
-  const redirectUri = Linking.createURL('oauthredirect', { scheme });
+  const scheme = Array.isArray(resolvedScheme) ? resolvedScheme[0] : resolvedScheme;
+  if (!scheme || typeof scheme !== 'string') {
+    throw new Error('missing_app_scheme');
+  }
+
+  const redirectUri = `${scheme}://oauthredirect`;
   const codeVerifier = createCodeVerifier();
   const codeChallenge = codeVerifier;
 

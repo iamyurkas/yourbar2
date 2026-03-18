@@ -568,6 +568,7 @@ export const deDETranslations: TranslationDictionary = {
   "sideMenu.googleDriveConnectedMessage": "Angemeldet als {{email}}.",
   "sideMenu.googleDriveErrorTitle": "Google-Drive-Fehler",
   "sideMenu.googleDriveNotConfigured": "Dieser Build enthält keine Google-Drive-OAuth-Konfiguration.",
+  "sideMenu.googleDriveExpoGoNotSupported": "Die Google-Drive-Anmeldung wird in Expo Go nicht unterstützt. Verwenden Sie einen Development- oder Release-Build.",
   "sideMenu.googleDriveMissingClientId": "Google OAuth-Client-ID fehlt in der App-Konfiguration.",
   "sideMenu.googleDriveLoginFailed": "Anmeldung fehlgeschlagen. Bitte erneut versuchen.",
   "sideMenu.googleDriveSyncSuccessTitle": "Synchronisierung abgeschlossen",
