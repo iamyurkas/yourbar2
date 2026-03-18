@@ -85,6 +85,14 @@ import {
   parseIngredientStatusImport,
   type CocktailFeedbackExport,
 } from '@/providers/inventory/model/inventory-provider-mappers';
+import {
+  createIngredientIdSet,
+  sanitizeAmazonStoreOverride,
+  sanitizeAppLocale,
+  sanitizeAppTheme,
+  sanitizeCocktailDefaultServings,
+  sanitizeStartScreen,
+} from '@/providers/inventory/model/inventory-provider-sanitizers';
 
 const DEFAULT_START_SCREEN: StartScreen = 'cocktails_all';
 const DEFAULT_APP_THEME: AppTheme = 'light';
@@ -144,33 +152,6 @@ function getDefaultBarName(locale: AppLocale): string {
   return translate(locale, 'barManager.defaultName');
 }
 
-function createIngredientIdSet(values?: readonly number[] | null): Set<number> {
-  if (!values || values.length === 0) {
-    return new Set<number>();
-  }
-
-  const sanitized = values
-    .map((value) => Number(value))
-    .filter((value) => Number.isFinite(value))
-    .map((value) => Math.trunc(value));
-
-  return new Set(sanitized);
-}
-
-function sanitizeStartScreen(value?: string | null): StartScreen {
-  switch (value) {
-    case 'cocktails_all':
-    case 'cocktails_my':
-    case 'shaker':
-    case 'ingredients_all':
-    case 'ingredients_my':
-    case 'ingredients_shopping':
-      return value;
-    default:
-      return DEFAULT_START_SCREEN;
-  }
-}
-
 const BUILTIN_COCKTAIL_TAGS_BY_ID = new Map<number, (typeof BUILTIN_COCKTAIL_TAGS)[number]>(BUILTIN_COCKTAIL_TAGS.map((tag) => [tag.id, tag]));
 const BUILTIN_INGREDIENT_TAGS_BY_ID = new Map<number, (typeof BUILTIN_INGREDIENT_TAGS)[number]>(BUILTIN_INGREDIENT_TAGS.map((tag) => [tag.id, tag]));
 
@@ -212,36 +193,6 @@ function rehydrateBuiltInTags(state: InventoryState): InventoryState {
   };
 }
 
-function sanitizeAppTheme(value?: string | null): AppTheme {
-  switch (value) {
-    case 'light':
-    case 'dark':
-    case 'system':
-      return value;
-    default:
-      return DEFAULT_APP_THEME;
-  }
-}
-
-
-
-function sanitizeAppLocale(value?: string | null): AppLocale {
-  return isSupportedLocale(value) ? value : DEFAULT_APP_LOCALE;
-}
-
-function sanitizeAmazonStoreOverride(value?: string | null): AmazonStoreOverride | null {
-  if (!value) {
-    return null;
-  }
-
-  const normalized = value.toUpperCase();
-  if (normalized === 'DISABLED') {
-    return 'DISABLED';
-  }
-
-  return normalized in AMAZON_STORES ? (normalized as AmazonStoreKey) : null;
-}
-
 const DEFAULT_TAG_COLOR = TAG_COLORS[0];
 const BUILTIN_COCKTAIL_TAG_MAX = BUILTIN_COCKTAIL_TAGS.reduce((max, tag) => Math.max(max, tag.id), 0);
 const BUILTIN_INGREDIENT_TAG_MAX = BUILTIN_INGREDIENT_TAGS.reduce((max, tag) => Math.max(max, tag.id), 0);
@@ -249,16 +200,6 @@ const USER_CREATED_ID_START = 10000;
 
 const MIN_COCKTAIL_DEFAULT_SERVINGS = 1;
 const MAX_COCKTAIL_DEFAULT_SERVINGS = 6;
-
-function sanitizeCocktailDefaultServings(value?: number | null): number {
-  const normalized = Number(value ?? MIN_COCKTAIL_DEFAULT_SERVINGS);
-  if (!Number.isFinite(normalized)) {
-    return MIN_COCKTAIL_DEFAULT_SERVINGS;
-  }
-
-  const integerValue = Math.trunc(normalized);
-  return Math.max(MIN_COCKTAIL_DEFAULT_SERVINGS, Math.min(MAX_COCKTAIL_DEFAULT_SERVINGS, integerValue));
-}
 
 function sanitizeCustomTags<TTag extends { id?: number | null; name?: string | null; color?: string | null }>(
   tags: readonly TTag[] | null | undefined,
@@ -388,10 +329,10 @@ const [ratingFilterThreshold, setRatingFilterThreshold] = useState<number>(() =>
     () => globalThis.__yourbarInventoryAppTheme ?? DEFAULT_APP_THEME,
   );
   const [amazonStoreOverride, setAmazonStoreOverride] = useState<AmazonStoreOverride | null>(
-    () => sanitizeAmazonStoreOverride(globalThis.__yourbarInventoryAmazonStoreOverride),
+    () => sanitizeAmazonStoreOverride(globalThis.__yourbarInventoryAmazonStoreOverride, AMAZON_STORES) as AmazonStoreOverride | null,
   );
   const [appLocale, setAppLocale] = useState<AppLocale>(
-    () => sanitizeAppLocale(globalThis.__yourbarInventoryAppLocale),
+    () => sanitizeAppLocale(globalThis.__yourbarInventoryAppLocale, isSupportedLocale, DEFAULT_APP_LOCALE) as AppLocale,
   );
   const [translationOverrides, setTranslationOverrides] = useState<InventoryTranslationOverrides>({});
   const [customCocktailTags, setCustomCocktailTags] = useState<CocktailTag[]>(() =>
@@ -506,10 +447,10 @@ const [ratingFilterThreshold, setRatingFilterThreshold] = useState<number>(() =>
             5,
             Math.max(1, Math.round(stored.ratingFilterThreshold ?? 1)),
           );
-          const nextStartScreen = sanitizeStartScreen(stored.startScreen);
-          const nextAppTheme = sanitizeAppTheme(stored.appTheme);
-          const nextAmazonStoreOverride = sanitizeAmazonStoreOverride(stored.amazonStoreOverride);
-          const nextAppLocale = sanitizeAppLocale(stored.appLocale);
+          const nextStartScreen = sanitizeStartScreen(stored.startScreen, DEFAULT_START_SCREEN) as StartScreen;
+          const nextAppTheme = sanitizeAppTheme(stored.appTheme, DEFAULT_APP_THEME) as AppTheme;
+          const nextAmazonStoreOverride = sanitizeAmazonStoreOverride(stored.amazonStoreOverride, AMAZON_STORES) as AmazonStoreOverride | null;
+          const nextAppLocale = sanitizeAppLocale(stored.appLocale, isSupportedLocale, DEFAULT_APP_LOCALE) as AppLocale;
           const nextCustomCocktailTags = sanitizeCustomTags(
             'customCocktailTags' in stored ? stored.customCocktailTags : undefined,
             DEFAULT_TAG_COLOR,
@@ -1010,7 +951,11 @@ const [ratingFilterThreshold, setRatingFilterThreshold] = useState<number>(() =>
         const methodIds = input.methodIds
           ? Array.from(new Set(input.methodIds)).filter(Boolean)
           : undefined;
-        const defaultServings = sanitizeCocktailDefaultServings(input.defaultServings);
+        const defaultServings = sanitizeCocktailDefaultServings(
+          input.defaultServings,
+          MIN_COCKTAIL_DEFAULT_SERVINGS,
+          MAX_COCKTAIL_DEFAULT_SERVINGS,
+        );
 
         const tagMap = new Map<number, CocktailTag>();
         (input.tags ?? []).forEach((tag) => {
@@ -2021,7 +1966,11 @@ const [ratingFilterThreshold, setRatingFilterThreshold] = useState<number>(() =>
       const methodIds = input.methodIds
         ? Array.from(new Set(input.methodIds)).filter(Boolean)
         : undefined;
-      const defaultServings = sanitizeCocktailDefaultServings(input.defaultServings ?? (existing as { defaultServings?: number | null }).defaultServings);
+      const defaultServings = sanitizeCocktailDefaultServings(
+        input.defaultServings ?? (existing as { defaultServings?: number | null }).defaultServings,
+        MIN_COCKTAIL_DEFAULT_SERVINGS,
+        MAX_COCKTAIL_DEFAULT_SERVINGS,
+      );
 
       const tagMap = new Map<number, CocktailTag>();
       (input.tags ?? []).forEach((tag) => {
@@ -2334,15 +2283,15 @@ const [ratingFilterThreshold, setRatingFilterThreshold] = useState<number>(() =>
   }, []);
 
   const handleSetStartScreen = useCallback((value: StartScreen) => {
-    setStartScreen(sanitizeStartScreen(value));
+    setStartScreen(sanitizeStartScreen(value, DEFAULT_START_SCREEN) as StartScreen);
   }, []);
 
   const handleSetAppTheme = useCallback((value: AppTheme) => {
-    setAppTheme(sanitizeAppTheme(value));
+    setAppTheme(sanitizeAppTheme(value, DEFAULT_APP_THEME) as AppTheme);
   }, []);
 
   const handleSetAmazonStoreOverride = useCallback((value: AmazonStoreOverride | null) => {
-    setAmazonStoreOverride(value == null ? null : sanitizeAmazonStoreOverride(value));
+    setAmazonStoreOverride(value == null ? null : sanitizeAmazonStoreOverride(value, AMAZON_STORES) as AmazonStoreOverride | null);
   }, []);
 
   const handleSetActiveBar = useCallback(
