@@ -69,3 +69,15 @@ export function getNextCustomTagId(tags: readonly { id?: number | null }[], mini
 
   return maxId + 1;
 }
+
+export function sanitizePartySelectedCocktailKeys(values?: readonly string[] | null): Set<string> {
+  if (!values || values.length === 0) {
+    return new Set<string>();
+  }
+
+  const normalized = values
+    .map((value) => (typeof value === 'string' ? value.trim() : ''))
+    .filter(Boolean);
+
+  return new Set(normalized);
+}

@@ -31,6 +31,7 @@ const {
   sanitizeCustomTags,
   sanitizeTranslationOverrides,
   getNextCustomTagId,
+  sanitizePartySelectedCocktailKeys,
 } = loadTsModule(path.resolve(__dirname, '../providers/inventory/model/inventory-provider-utils.ts'));
 
 test('sanitizeCustomTags filters invalid entries, deduplicates by id and sorts by name', () => {
@@ -90,4 +91,9 @@ test('getNextCustomTagId returns next id after max valid id', () => {
   );
 
   assert.equal(next, 10003);
+});
+
+test('sanitizePartySelectedCocktailKeys trims values and removes empty/duplicates', () => {
+  const result = sanitizePartySelectedCocktailKeys(['  abc  ', '', 'abc', 'def', '   ']);
+  assert.deepEqual(Array.from(result.values()), ['abc', 'def']);
 });

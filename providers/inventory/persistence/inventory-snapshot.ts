@@ -149,6 +149,7 @@ export type InventorySnapshotOptions = {
   shoppingIngredientIds: Set<number>;
   ratingsByCocktailId: Record<string, number>;
   commentsByCocktailId: Record<string, string>;
+  partySelectedCocktailKeys: Set<string>;
   ignoreGarnish: boolean;
   allowAllSubstitutes: boolean;
   useImperialUnits: boolean;
@@ -246,6 +247,12 @@ export function buildInventorySnapshot(
       options.shoppingIngredientIds.size > 0 ? toSortedArray(options.shoppingIngredientIds) : undefined,
     cocktailRatings: Object.keys(sanitizedRatings).length > 0 ? sanitizedRatings : undefined,
     cocktailComments: Object.keys(sanitizedComments).length > 0 ? sanitizedComments : undefined,
+    partySelectedCocktailKeys:
+      options.partySelectedCocktailKeys.size > 0
+        ? Array.from(options.partySelectedCocktailKeys)
+          .map((value) => value.trim())
+          .filter(Boolean)
+        : undefined,
     ignoreGarnish: options.ignoreGarnish,
     allowAllSubstitutes: options.allowAllSubstitutes,
     useImperialUnits: options.useImperialUnits,

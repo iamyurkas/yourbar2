@@ -95,6 +95,7 @@ import {
 } from '@/providers/inventory/model/inventory-provider-sanitizers';
 import {
   getNextCustomTagId,
+  sanitizePartySelectedCocktailKeys,
   sanitizeCustomTags,
   sanitizeTranslationOverrides,
 } from '@/providers/inventory/model/inventory-provider-utils';
@@ -115,6 +116,8 @@ declare global {
   var __yourbarInventoryCocktailRatings: Record<string, number> | undefined;
   // eslint-disable-next-line no-var
   var __yourbarInventoryCocktailComments: Record<string, string> | undefined;
+  // eslint-disable-next-line no-var
+  var __yourbarInventoryPartySelectedCocktailKeys: Set<string> | undefined;
   // eslint-disable-next-line no-var
   var __yourbarInventoryIgnoreGarnish: boolean | undefined;
   // eslint-disable-next-line no-var
@@ -212,7 +215,11 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   const [showTabCounters, setShowTabCounters] = useState<boolean>(
     () => globalThis.__yourbarInventoryShowTabCounters ?? false,
   );
-  const [partySelectedCocktailKeys, setPartySelectedCocktailKeys] = useState<Set<string>>(() => new Set());
+  const [partySelectedCocktailKeys, setPartySelectedCocktailKeys] = useState<Set<string>>(() =>
+    globalThis.__yourbarInventoryPartySelectedCocktailKeys
+      ? new Set(globalThis.__yourbarInventoryPartySelectedCocktailKeys)
+      : new Set(),
+  );
 const [ratingFilterThreshold, setRatingFilterThreshold] = useState<number>(() =>
     typeof globalThis.__yourbarInventoryRatingFilterThreshold === 'number'
       ? Math.min(5, Math.max(1, Math.round(globalThis.__yourbarInventoryRatingFilterThreshold)))
@@ -267,6 +274,7 @@ const [ratingFilterThreshold, setRatingFilterThreshold] = useState<number>(() =>
       shoppingIngredientIds: Set<number>;
       ratingsByCocktailId: Record<string, number>;
       commentsByCocktailId: Record<string, string>;
+      partySelectedCocktailKeys: Set<string>;
       ignoreGarnish: boolean;
       allowAllSubstitutes: boolean;
       useImperialUnits: boolean;
@@ -292,6 +300,7 @@ const [ratingFilterThreshold, setRatingFilterThreshold] = useState<number>(() =>
       setShoppingIngredientIds(bootstrap.shoppingIngredientIds);
       setRatingsByCocktailId(bootstrap.ratingsByCocktailId);
       setCommentsByCocktailId(bootstrap.commentsByCocktailId);
+      setPartySelectedCocktailKeys(bootstrap.partySelectedCocktailKeys);
       setIgnoreGarnish(bootstrap.ignoreGarnish);
       setAllowAllSubstitutes(bootstrap.allowAllSubstitutes);
       setUseImperialUnits(bootstrap.useImperialUnits);
@@ -337,6 +346,9 @@ const [ratingFilterThreshold, setRatingFilterThreshold] = useState<number>(() =>
           const nextShoppingIds = createIngredientIdSet(stored.shoppingIngredientIds);
           const nextRatings = sanitizeCocktailRatings(stored.cocktailRatings);
           const nextComments = sanitizeCocktailComments((stored as { cocktailComments?: Record<string, string> }).cocktailComments);
+          const nextPartySelectedCocktailKeys = sanitizePartySelectedCocktailKeys(
+            (stored as { partySelectedCocktailKeys?: string[] }).partySelectedCocktailKeys,
+          );
           const nextIgnoreGarnish = stored.ignoreGarnish ?? true;
           const nextAllowAllSubstitutes = stored.allowAllSubstitutes ?? true;
           const nextUseImperialUnits = (stored.useImperialUnits ?? false) || shouldDefaultToImperialUnits;
@@ -388,6 +400,7 @@ const [ratingFilterThreshold, setRatingFilterThreshold] = useState<number>(() =>
             shoppingIngredientIds: nextShoppingIds,
             ratingsByCocktailId: nextRatings,
             commentsByCocktailId: nextComments,
+            partySelectedCocktailKeys: nextPartySelectedCocktailKeys,
             ignoreGarnish: nextIgnoreGarnish,
             allowAllSubstitutes: nextAllowAllSubstitutes,
             useImperialUnits: nextUseImperialUnits,
@@ -423,6 +436,7 @@ const [ratingFilterThreshold, setRatingFilterThreshold] = useState<number>(() =>
             shoppingIngredientIds: new Set(),
             ratingsByCocktailId: {},
             commentsByCocktailId: {},
+            partySelectedCocktailKeys: new Set<string>(),
             ignoreGarnish: true,
             allowAllSubstitutes: true,
             useImperialUnits: shouldDefaultToImperialUnits,
@@ -503,6 +517,7 @@ const [ratingFilterThreshold, setRatingFilterThreshold] = useState<number>(() =>
     globalThis.__yourbarInventoryShoppingIngredientIds = shoppingIngredientIds;
     globalThis.__yourbarInventoryCocktailRatings = ratingsByCocktailId;
     globalThis.__yourbarInventoryCocktailComments = commentsByCocktailId;
+    globalThis.__yourbarInventoryPartySelectedCocktailKeys = partySelectedCocktailKeys;
     globalThis.__yourbarInventoryIgnoreGarnish = ignoreGarnish;
     globalThis.__yourbarInventoryAllowAllSubstitutes = allowAllSubstitutes;
     globalThis.__yourbarInventoryUseImperialUnits = useImperialUnits;
@@ -527,6 +542,7 @@ const [ratingFilterThreshold, setRatingFilterThreshold] = useState<number>(() =>
       shoppingIngredientIds,
       ratingsByCocktailId,
       commentsByCocktailId,
+      partySelectedCocktailKeys,
       ignoreGarnish,
       allowAllSubstitutes,
       useImperialUnits,
@@ -565,6 +581,7 @@ const [ratingFilterThreshold, setRatingFilterThreshold] = useState<number>(() =>
     shoppingIngredientIds,
     ratingsByCocktailId,
     commentsByCocktailId,
+    partySelectedCocktailKeys,
     ignoreGarnish,
     allowAllSubstitutes,
     useImperialUnits,
