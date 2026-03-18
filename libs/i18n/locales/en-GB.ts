@@ -556,6 +556,7 @@ export const enGBTranslations: TranslationDictionary = {
   "sideMenu.googleDriveNotConfigured": "This build does not include Google Drive OAuth configuration.",
   "sideMenu.googleDriveExpoGoNotSupported": "Google Drive sign-in is not supported in Expo Go. Use a development build or release build.",
   "sideMenu.googleDriveMissingClientId": "Missing Google OAuth client ID in app config.",
+  "sideMenu.googleDriveInvalidRequestHint": "Google rejected the OAuth request. Check that your Google OAuth client type and redirect URI match this build.",
   "sideMenu.googleDriveLoginFailed": "Unable to sign in. Please try again.",
   "sideMenu.googleDriveSyncSuccessTitle": "Sync complete",
   "sideMenu.googleDriveSyncSuccessMessage": "Your inventory and settings are synced to Google Drive.",

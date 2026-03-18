@@ -20,6 +20,15 @@ type DriveFile = {
   modifiedTime?: string;
 };
 
+export type GoogleDriveAuthDebugInfo = {
+  platform: string;
+  appOwnership: string;
+  clientIdConfigured: boolean;
+  clientIdPreview?: string;
+  redirectUri?: string;
+  configuredSchemes: string[];
+};
+
 function getStoragePath(): string | null {
   const directory = FileSystem.documentDirectory ?? FileSystem.cacheDirectory;
   if (!directory) {
@@ -130,6 +139,34 @@ export function isGoogleDriveAuthSupported(): boolean {
   return Constants.appOwnership !== 'expo';
 }
 
+export function getGoogleDriveAuthDebugInfo(): GoogleDriveAuthDebugInfo {
+  const clientId = getGoogleClientId();
+  const configuredSchemes = normalizeSchemes(Constants.expoConfig?.scheme);
+  let redirectUri: string | undefined;
+
+  if (clientId) {
+    try {
+      redirectUri = getGoogleRedirectUri(clientId);
+    } catch {
+      redirectUri = undefined;
+    }
+  }
+
+  const clientIdPreview =
+    clientId && clientId.length > 12
+      ? `${clientId.slice(0, 6)}…${clientId.slice(-20)}`
+      : clientId ?? undefined;
+
+  return {
+    platform: Platform.OS,
+    appOwnership: Constants.appOwnership ?? 'unknown',
+    clientIdConfigured: Boolean(clientId),
+    clientIdPreview,
+    redirectUri,
+    configuredSchemes,
+  };
+}
+
 async function getGoogleUserEmail(accessToken: string): Promise<string | undefined> {
   try {
     const response = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
@@ -179,8 +216,9 @@ export async function signInToGoogleDrive(): Promise<GoogleDriveSession> {
   const url = new URL(result.url);
   const code = url.searchParams.get('code');
   const authError = url.searchParams.get('error');
+  const authErrorDescription = url.searchParams.get('error_description');
   if (!code || authError) {
-    throw new Error(`auth_failed:${authError ?? 'missing_code'}`);
+    throw new Error(`auth_failed:${authError ?? 'missing_code'}:${authErrorDescription ?? ''}`);
   }
 
   const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
@@ -250,6 +288,18 @@ function createCodeVerifier(length = 64): string {
   }
 
   return result;
+}
+
+function normalizeSchemes(candidate: unknown): string[] {
+  if (typeof candidate === 'string' && candidate.trim()) {
+    return [candidate.trim()];
+  }
+
+  if (Array.isArray(candidate)) {
+    return candidate.filter((item): item is string => typeof item === 'string' && item.trim().length > 0);
+  }
+
+  return [];
 }
 
 async function fetchDriveFiles(session: GoogleDriveSession): Promise<DriveFile[]> {

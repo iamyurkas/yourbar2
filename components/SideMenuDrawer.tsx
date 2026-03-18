@@ -41,6 +41,7 @@ import { buildPhotoBaseName } from "@/libs/photo-utils";
 import {
   clearGoogleDriveSession,
   downloadBackupFromGoogleDrive,
+  getGoogleDriveAuthDebugInfo,
   isGoogleDriveAuthSupported,
   isGoogleDriveConfigured,
   loadGoogleDriveSession,
@@ -614,9 +615,29 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
         t("sideMenu.googleDriveConnectedMessage", { email: session.email ?? t("sideMenu.googleDriveUnknownAccount") }),
       );
     } catch (error) {
-      const message = error instanceof Error && (error.message === "missing_client_id" || error.message === "invalid_client_id")
+      const rawMessage = error instanceof Error ? error.message : "";
+      const isConfigError = rawMessage === "missing_client_id" || rawMessage === "invalid_client_id";
+      const isInvalidRequest = rawMessage.includes("auth_failed:invalid_request");
+
+      const message = isConfigError
         ? t("sideMenu.googleDriveMissingClientId")
-        : t("sideMenu.googleDriveLoginFailed");
+        : isInvalidRequest
+          ? t("sideMenu.googleDriveInvalidRequestHint")
+          : t("sideMenu.googleDriveLoginFailed");
+
+      if (isInvalidRequest) {
+        const diagnostics = getGoogleDriveAuthDebugInfo();
+        const diagnosticDetails = [
+          `platform: ${diagnostics.platform}`,
+          `appOwnership: ${diagnostics.appOwnership}`,
+          `clientId: ${diagnostics.clientIdPreview ?? "n/a"}`,
+          `redirectUri: ${diagnostics.redirectUri ?? "n/a"}`,
+          `schemes: ${diagnostics.configuredSchemes.join(", ") || "n/a"}`,
+        ].join("\n");
+        showDialogMessage(t("sideMenu.googleDriveErrorTitle"), `${message}\n\n${diagnosticDetails}`);
+        return;
+      }
+
       showDialogMessage(t("sideMenu.googleDriveErrorTitle"), message);
     } finally {
       setGoogleDriveAuthLoading(false);

@@ -555,6 +555,7 @@ export const esESTranslations: TranslationDictionary = {
   "sideMenu.googleDriveNotConfigured": "Esta compilación no incluye configuración OAuth de Google Drive.",
   "sideMenu.googleDriveExpoGoNotSupported": "El inicio de sesión de Google Drive no es compatible con Expo Go. Usa una build de desarrollo o de lanzamiento.",
   "sideMenu.googleDriveMissingClientId": "Falta el ID de cliente OAuth de Google en la configuración.",
+  "sideMenu.googleDriveInvalidRequestHint": "Google rechazó la solicitud OAuth. Comprueba que el tipo de cliente OAuth y el redirect URI coincidan con esta build.",
   "sideMenu.googleDriveLoginFailed": "No se pudo iniciar sesión. Inténtalo de nuevo.",
   "sideMenu.googleDriveSyncSuccessTitle": "Sincronización completada",
   "sideMenu.googleDriveSyncSuccessMessage": "Tu inventario y ajustes se han sincronizado con Google Drive.",

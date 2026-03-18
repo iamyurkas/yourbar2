@@ -570,6 +570,7 @@ export const deDETranslations: TranslationDictionary = {
   "sideMenu.googleDriveNotConfigured": "Dieser Build enthält keine Google-Drive-OAuth-Konfiguration.",
   "sideMenu.googleDriveExpoGoNotSupported": "Die Google-Drive-Anmeldung wird in Expo Go nicht unterstützt. Verwenden Sie einen Development- oder Release-Build.",
   "sideMenu.googleDriveMissingClientId": "Google OAuth-Client-ID fehlt in der App-Konfiguration.",
+  "sideMenu.googleDriveInvalidRequestHint": "Google hat die OAuth-Anfrage abgelehnt. Prüfen Sie, ob OAuth-Client-Typ und Redirect-URI zu diesem Build passen.",
   "sideMenu.googleDriveLoginFailed": "Anmeldung fehlgeschlagen. Bitte erneut versuchen.",
   "sideMenu.googleDriveSyncSuccessTitle": "Synchronisierung abgeschlossen",
   "sideMenu.googleDriveSyncSuccessMessage": "Ihr Inventar und Ihre Einstellungen wurden mit Google Drive synchronisiert.",
