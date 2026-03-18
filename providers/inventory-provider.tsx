@@ -98,6 +98,7 @@ import {
   sanitizeCustomTags,
   sanitizeTranslationOverrides,
 } from '@/providers/inventory/model/inventory-provider-utils';
+import { rehydrateBuiltInTags } from '@/providers/inventory/model/inventory-provider-rehydration';
 
 const DEFAULT_START_SCREEN: StartScreen = 'cocktails_all';
 const DEFAULT_APP_THEME: AppTheme = 'light';
@@ -155,47 +156,6 @@ declare global {
 
 function getDefaultBarName(locale: AppLocale): string {
   return translate(locale, 'barManager.defaultName');
-}
-
-const BUILTIN_COCKTAIL_TAGS_BY_ID = new Map<number, (typeof BUILTIN_COCKTAIL_TAGS)[number]>(BUILTIN_COCKTAIL_TAGS.map((tag) => [tag.id, tag]));
-const BUILTIN_INGREDIENT_TAGS_BY_ID = new Map<number, (typeof BUILTIN_INGREDIENT_TAGS)[number]>(BUILTIN_INGREDIENT_TAGS.map((tag) => [tag.id, tag]));
-
-function rehydrateBuiltInTags(state: InventoryState): InventoryState {
-  const withHydratedCocktailTags = state.cocktails.map((cocktail) => ({
-    ...cocktail,
-    tags: cocktail.tags?.map((tag) => {
-      const builtinTag = BUILTIN_COCKTAIL_TAGS_BY_ID.get(Number(tag.id ?? -1));
-      return builtinTag
-        ? {
-            ...tag,
-            id: builtinTag.id,
-            name: builtinTag.name,
-            color: builtinTag.color,
-          }
-        : tag;
-    }),
-  }));
-
-  const withHydratedIngredientTags = state.ingredients.map((ingredient) => ({
-    ...ingredient,
-    tags: ingredient.tags?.map((tag) => {
-      const builtinTag = BUILTIN_INGREDIENT_TAGS_BY_ID.get(Number(tag.id ?? -1));
-      return builtinTag
-        ? {
-            ...tag,
-            id: builtinTag.id,
-            name: builtinTag.name,
-            color: builtinTag.color,
-          }
-        : tag;
-    }),
-  }));
-
-  return {
-    ...state,
-    cocktails: withHydratedCocktailTags,
-    ingredients: withHydratedIngredientTags,
-  };
 }
 
 const DEFAULT_TAG_COLOR = TAG_COLORS[0];
@@ -368,7 +328,11 @@ const [ratingFilterThreshold, setRatingFilterThreshold] = useState<number>(() =>
         const stored = await loadInventorySnapshot<CocktailStorageRecord, IngredientStorageRecord>();
         if (stored && (stored.version === INVENTORY_SNAPSHOT_VERSION || (stored as any).version === 2 || (stored as any).version === 1) && !cancelled) {
           const castedStored = stored as any;
-          const nextInventoryState = rehydrateBuiltInTags(createInventoryStateFromSnapshot(stored, baseInventoryData));
+          const nextInventoryState = rehydrateBuiltInTags(
+            createInventoryStateFromSnapshot(stored, baseInventoryData),
+            BUILTIN_COCKTAIL_TAGS,
+            BUILTIN_INGREDIENT_TAGS,
+          );
           const nextAvailableIds = createIngredientIdSet(stored.availableIngredientIds);
           const nextShoppingIds = createIngredientIdSet(stored.shoppingIngredientIds);
           const nextRatings = sanitizeCocktailRatings(stored.cocktailRatings);
