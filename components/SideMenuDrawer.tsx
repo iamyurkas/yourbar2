@@ -41,6 +41,7 @@ import { buildPhotoBaseName } from "@/libs/photo-utils";
 import {
   clearGoogleDriveSession,
   downloadBackupFromGoogleDrive,
+  isGoogleDriveConfigured,
   loadGoogleDriveSession,
   signInToGoogleDrive,
   type GoogleDriveSession,
@@ -255,6 +256,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     borderColor: Colors.tint,
     backgroundColor: Colors.surfaceVariant,
   }), [Colors]);
+  const googleDriveConfigured = isGoogleDriveConfigured();
 
   const clearTimeoutRef = (ref: {
     current: ReturnType<typeof setTimeout> | null;
@@ -587,6 +589,11 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   };
 
   const handleGoogleDriveLogin = async () => {
+    if (!googleDriveConfigured) {
+      showDialogMessage(t("sideMenu.googleDriveErrorTitle"), t("sideMenu.googleDriveNotConfigured"));
+      return;
+    }
+
     if (isGoogleDriveAuthLoading) {
       return;
     }
@@ -600,7 +607,6 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
         t("sideMenu.googleDriveConnectedMessage", { email: session.email ?? t("sideMenu.googleDriveUnknownAccount") }),
       );
     } catch (error) {
-      console.error("Google Drive login failed", error);
       const message = error instanceof Error && error.message === "missing_client_id"
         ? t("sideMenu.googleDriveMissingClientId")
         : t("sideMenu.googleDriveLoginFailed");
@@ -1257,7 +1263,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
             <Pressable
               accessibilityRole="button"
               accessibilityLabel={t("sideMenu.googleDriveSync")}
-              onPress={googleDriveSession ? handleGoogleDriveSync : handleGoogleDriveLogin}
+              onPress={!googleDriveConfigured ? undefined : (googleDriveSession ? handleGoogleDriveSync : handleGoogleDriveLogin)}
               style={[styles.settingRow, SURFACE_ROW_STYLE]}
             >
               <View style={[styles.checkbox, SURFACE_ICON_STYLE]}>
@@ -1271,7 +1277,9 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 <Text
                   style={[styles.settingLabel, { color: Colors.onSurface }]}
                 >
-                  {googleDriveSession ? t("sideMenu.googleDriveSyncNow") : t("sideMenu.googleDriveLogin")}
+                  {!googleDriveConfigured
+                    ? t("sideMenu.googleDriveUnavailable")
+                    : (googleDriveSession ? t("sideMenu.googleDriveSyncNow") : t("sideMenu.googleDriveLogin"))}
                 </Text>
                 <Text
                   style={[
@@ -1279,13 +1287,15 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                     { color: Colors.onSurfaceVariant },
                   ]}
                 >
-                  {googleDriveSession
+                  {!googleDriveConfigured
+                    ? t("sideMenu.googleDriveNotConfigured")
+                    : (googleDriveSession
                     ? t("sideMenu.googleDriveConnectedAs", { email: googleDriveSession.email ?? t("sideMenu.googleDriveUnknownAccount") })
-                    : t("sideMenu.googleDriveCaption")}
+                    : t("sideMenu.googleDriveCaption"))}
                 </Text>
               </View>
               <MaterialCommunityIcons
-                name={isGoogleDriveSyncing || isGoogleDriveAuthLoading ? "loading" : "chevron-right"}
+                name={!googleDriveConfigured ? "alert-circle-outline" : (isGoogleDriveSyncing || isGoogleDriveAuthLoading ? "loading" : "chevron-right")}
                 size={20}
                 color={Colors.onSurfaceVariant}
               />

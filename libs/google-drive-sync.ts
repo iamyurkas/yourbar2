@@ -82,8 +82,26 @@ export async function clearGoogleDriveSession(): Promise<void> {
 
 function getGoogleClientId(): string | null {
   const expoExtra = Constants.expoConfig?.extra as Record<string, unknown> | undefined;
-  const value = expoExtra?.googleDriveClientId;
-  return typeof value === 'string' && value.trim().length > 0 ? value.trim() : null;
+  const manifest2Extra = Constants.manifest2?.extra?.expoClient?.extra as Record<string, unknown> | undefined;
+  const manifestExtra = (Constants as { manifest?: { extra?: Record<string, unknown> } }).manifest?.extra;
+  const candidates = [
+    expoExtra?.googleDriveClientId,
+    manifest2Extra?.googleDriveClientId,
+    manifestExtra?.googleDriveClientId,
+    process.env.EXPO_PUBLIC_GOOGLE_DRIVE_CLIENT_ID,
+  ];
+
+  for (const value of candidates) {
+    if (typeof value === 'string' && value.trim().length > 0) {
+      return value.trim();
+    }
+  }
+
+  return null;
+}
+
+export function isGoogleDriveConfigured(): boolean {
+  return Boolean(getGoogleClientId());
 }
 
 async function getGoogleUserEmail(accessToken: string): Promise<string | undefined> {
