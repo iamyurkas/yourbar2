@@ -101,3 +101,15 @@ test('parseIngredientStatusImport ignores invalid ids and values', () => {
   assert.equal(parsed.shoppingIngredientIds.has(0), false);
   assert.equal(parsed.availableIngredientIds.has(5), true);
 });
+
+test('parseCocktailFeedbackImport returns empty maps for non-object payload', () => {
+  const parsed = parseCocktailFeedbackImport({ cocktailFeedback: 'bad payload' }, sanitize);
+
+  assert.equal(Object.keys(parsed.ratings).length, 0);
+  assert.equal(Object.keys(parsed.comments).length, 0);
+});
+
+test('buildIngredientStatusExport returns empty object for empty sets', () => {
+  const status = buildIngredientStatusExport(new Set(), new Set(), (set) => [...set]);
+  assert.equal(Object.keys(status).length, 0);
+});

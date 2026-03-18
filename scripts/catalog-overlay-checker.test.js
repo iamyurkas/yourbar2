@@ -1,7 +1,10 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const os = require('node:os');
+const path = require('node:path');
 
-const { buildLocaleReport } = require('./catalog-overlay-checker');
+const { buildLocaleReport, loadCatalogLocales } = require('./catalog-overlay-checker');
 
 const SAMPLE_DATA = {
   cocktails: [{ id: 10 }],
@@ -58,4 +61,30 @@ test('buildLocaleReport keeps optional recipe ingredient name keys and flags unk
 
   assert.equal(report.missing.length, 0);
   assert.deepEqual(report.extra, ['ingredient.20.foo']);
+});
+
+test('loadCatalogLocales respects onlyLocale filter', () => {
+  const tmpRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'catalog-overlay-'));
+  fs.mkdirSync(path.join(tmpRoot, 'assets', 'data'), { recursive: true });
+  fs.mkdirSync(path.join(tmpRoot, 'libs', 'i18n', 'locales', 'catalog'), { recursive: true });
+
+  fs.writeFileSync(
+    path.join(tmpRoot, 'assets', 'data', 'data.json'),
+    JSON.stringify(SAMPLE_DATA),
+    'utf8',
+  );
+  fs.writeFileSync(
+    path.join(tmpRoot, 'libs', 'i18n', 'locales', 'catalog', 'en-US.json'),
+    JSON.stringify({ 'cocktail.10.name': 'A' }),
+    'utf8',
+  );
+  fs.writeFileSync(
+    path.join(tmpRoot, 'libs', 'i18n', 'locales', 'catalog', 'uk-UA.json'),
+    JSON.stringify({ 'cocktail.10.name': 'Б' }),
+    'utf8',
+  );
+
+  const loaded = loadCatalogLocales({ root: tmpRoot, onlyLocale: 'uk-UA' });
+  assert.equal(loaded.locales.length, 1);
+  assert.equal(loaded.locales[0].code, 'uk-UA');
 });

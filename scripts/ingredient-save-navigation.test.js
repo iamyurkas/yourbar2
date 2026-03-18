@@ -68,3 +68,12 @@ test('falls back to ingredients list when no return path, cannot go back and no 
 
   assert.equal(plan.kind, 'replace_ingredients_list');
 });
+
+test('uses simple back navigation when no return path and stack can go back', () => {
+  const plan = getIngredientSaveNavigationPlan({
+    canGoBack: true,
+    fallbackIngredientId: '42',
+  });
+
+  assert.equal(plan.kind, 'back');
+});

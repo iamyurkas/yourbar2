@@ -46,6 +46,11 @@ test('createIngredientIdSet normalizes numbers and drops invalid values', () => 
   assert.equal(ids.size, 3);
 });
 
+test('createIngredientIdSet handles empty and undefined input', () => {
+  assert.equal(createIngredientIdSet([]).size, 0);
+  assert.equal(createIngredientIdSet(undefined).size, 0);
+});
+
 test('sanitizeStartScreen keeps known values and falls back otherwise', () => {
   assert.equal(sanitizeStartScreen('cocktails_all', 'fallback'), 'cocktails_all');
   assert.equal(sanitizeStartScreen('unknown', 'fallback'), 'fallback');
@@ -70,6 +75,7 @@ test('sanitizeAmazonStoreOverride supports DISABLED and allowed stores', () => {
   assert.equal(sanitizeAmazonStoreOverride('disabled', stores), 'DISABLED');
   assert.equal(sanitizeAmazonStoreOverride('us', stores), 'US');
   assert.equal(sanitizeAmazonStoreOverride('pl', stores), null);
+  assert.equal(sanitizeAmazonStoreOverride(undefined, stores), null);
 });
 
 test('sanitizeCocktailDefaultServings clamps and truncates values', () => {
