@@ -54,14 +54,3 @@ export const COCKTAIL_UNIT_OPTIONS = NORMALIZED_MEASURE_UNITS.map((unit) => ({
   id: unit.id,
   label: unit.singular,
 })) satisfies { id: number; label: string }[];
-
-export function getCocktailUnitLabel(
-  unitId?: number | null,
-): string | undefined {
-  if (unitId == null) {
-    return undefined;
-  }
-  const entry = COCKTAIL_UNIT_DICTIONARY[unitId];
-  const label = entry?.singular.trim();
-  return label || undefined;
-}

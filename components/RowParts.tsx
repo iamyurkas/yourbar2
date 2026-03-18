@@ -12,7 +12,6 @@ import {
 } from 'react-native';
 
 import { useAppColors } from '@/constants/theme';
-import { useI18n } from '@/libs/i18n/use-i18n';
 import { resolveImageSource } from '@/libs/image-source';
 import { tagColors } from '@/theme/theme';
 import { AppImage } from './AppImage';
@@ -82,29 +81,6 @@ export function PresenceCheck({ checked, onToggle, color }: PresenceCheckProps) 
       style={[styles.checkbox, { borderColor, backgroundColor }]}
       hitSlop={16}>
       <MaterialCommunityIcons name="check" color={iconColor} size={12} />
-    </Pressable>
-  );
-}
-
-type FavoriteStarProps = {
-  active: boolean;
-  onToggle?: () => void;
-};
-
-export function FavoriteStar({ active, onToggle }: FavoriteStarProps) {
-  const Colors = useAppColors();
-  const { t } = useI18n();
-  const icon = active ? 'star' : 'star-outline';
-  const color = active ? Colors.secondary : Colors.onSurfaceVariant;
-
-  return (
-    <Pressable
-      accessibilityRole="button"
-      accessibilityLabel={active ? t("rowParts.removeFromFavorites") : t("rowParts.addToFavorites")}
-      onPress={onToggle}
-      style={styles.starButton}
-      hitSlop={8}>
-      <MaterialCommunityIcons name={icon} size={24} color={color} />
     </Pressable>
   );
 }
@@ -377,9 +353,6 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  starButton: {
-    padding: 2,
   },
   thumb: {
     width: THUMB_SIZE,

@@ -200,20 +200,3 @@ export async function persistInventorySnapshot<TCocktail, TIngredient>(
     throw error;
   }
 }
-
-export async function clearInventorySnapshot(): Promise<void> {
-  const storagePath = resolveStoragePath();
-
-  if (!storagePath) {
-    return;
-  }
-
-  try {
-    const info = await FileSystem.getInfoAsync(storagePath);
-    if (info.exists) {
-      await FileSystem.deleteAsync(storagePath, { idempotent: true });
-    }
-  } catch (error) {
-    console.warn('Unable to clear inventory snapshot', error);
-  }
-}

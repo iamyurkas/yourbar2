@@ -472,8 +472,6 @@ export const deDETranslations: TranslationDictionary = {
   "shakerResults.sortOptionRandom": "Zufällig",
   "shakerResults.emptyMatchingRecipes": "Keine passenden Rezepte",
 
-  "rowParts.removeFromFavorites": "Aus Favoriten entfernen",
-  "rowParts.addToFavorites": "Zu Favoriten hinzufügen",
   "cocktailListRow.allIngredientsReady": "Alle Zutaten bereit",
 
   "tabBar.leaveWithoutSavingTitle": "Ohne Speichern verlassen?",

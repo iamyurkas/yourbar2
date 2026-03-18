@@ -158,9 +158,6 @@ export const darkPalette = {
   onTertiaryContainer: "#DFF3FF",
 } as const;
 
-/** @deprecated Use lightPalette or darkPalette instead */
-export const palette = lightPalette;
-
 export const tagPalette = [
   "#ec5a5a",
   "#F06292",
