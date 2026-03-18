@@ -48,7 +48,49 @@ type CocktailMethodOption = {
 };
 
 const METHOD_ICON_SIZE = 16;
+const PARTY_META_ICON_SIZE = 8;
 type CocktailAvailabilitySummary = ReturnType<typeof summariseCocktailAvailability>;
+
+type VideoService = 'youtube' | 'instagram' | 'tiktok' | 'generic';
+
+function resolveVideoService(link?: string | null): VideoService | null {
+  const value = link?.trim();
+  if (!value) {
+    return null;
+  }
+
+  try {
+    const withProtocol = /^[a-zA-Z][a-zA-Z\d+.-]*:\/\//.test(value) ? value : `https://${value}`;
+    const { hostname } = new URL(withProtocol);
+    const domain = hostname.toLowerCase().replace(/^www\./, '');
+
+    if (domain.includes('youtu.be') || domain.includes('youtube.com')) {
+      return 'youtube';
+    }
+    if (domain.includes('instagram.com')) {
+      return 'instagram';
+    }
+    if (domain.includes('tiktok.com')) {
+      return 'tiktok';
+    }
+    return 'generic';
+  } catch {
+    return 'generic';
+  }
+}
+
+function resolveVideoServiceIcon(service: VideoService): 'youtube' | 'instagram' | 'music-note' | 'video-outline' {
+  switch (service) {
+    case 'youtube':
+      return 'youtube';
+    case 'instagram':
+      return 'instagram';
+    case 'tiktok':
+      return 'music-note';
+    default:
+      return 'video-outline';
+  }
+}
 
 export default function CocktailsScreen() {
   const { cocktails, availableIngredientIds, ingredients, shoppingIngredientIds, partySelectedCocktailKeys, getCocktailRating, getCocktailComment, loading } =
@@ -951,6 +993,8 @@ export default function CocktailsScreen() {
       const ratingValue = Math.max(0, Math.min(5, Math.round(getCocktailRating(item))));
       const legacyMethodId = (item as { methodId?: CocktailMethod['id'] | null }).methodId ?? null;
       const methodIds = (item.methodIds?.length ? item.methodIds : legacyMethodId ? [legacyMethodId] : []) as CocktailMethod['id'][];
+      const hasComment = Boolean(getCocktailComment(item).trim());
+      const videoService = resolveVideoService(item.video);
 
       return (
         <ListRow
@@ -961,6 +1005,15 @@ export default function CocktailsScreen() {
           tagColors={tagColors}
           thumbnail={<Thumb label={item.name} uri={item.photoUri} />}
           onPress={() => handleSelectCocktail(item)}
+          metaTopLeading={
+            hasComment ? (
+              <MaterialCommunityIcons
+                name="comment"
+                size={PARTY_META_ICON_SIZE}
+                color={Colors.onSurfaceVariant}
+              />
+            ) : null
+          }
           control={
             <View style={styles.partyMetaControlRow}>
               {ratingValue > 0 ? (
@@ -989,6 +1042,13 @@ export default function CocktailsScreen() {
           }
           metaFooter={
             <View style={styles.partyMethodIconRow}>
+              {videoService ? (
+                <MaterialCommunityIcons
+                  name={resolveVideoServiceIcon(videoService)}
+                  size={METHOD_ICON_SIZE}
+                  color={Colors.onSurfaceVariant}
+                />
+              ) : null}
               {methodIds.map((methodId, index) => {
                 const icon = METHOD_ICON_MAP[methodId];
                 if (!icon) {
@@ -1032,6 +1092,7 @@ export default function CocktailsScreen() {
       Colors.outline,
       Colors.tint,
       getAvailabilitySummary,
+      getCocktailComment,
       getCocktailRating,
       handlePartySelectionToggle,
       handleSelectCocktail,
