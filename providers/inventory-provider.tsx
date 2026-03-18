@@ -78,110 +78,17 @@ import {
   sanitizeCocktailComments,
   sanitizeCocktailRatings,
 } from '@/providers/inventory/persistence/inventory-snapshot';
+import {
+  buildCocktailFeedbackExport,
+  buildIngredientStatusExport,
+  parseCocktailFeedbackImport,
+  parseIngredientStatusImport,
+  type CocktailFeedbackExport,
+} from '@/providers/inventory/model/inventory-provider-mappers';
 
 const DEFAULT_START_SCREEN: StartScreen = 'cocktails_all';
 const DEFAULT_APP_THEME: AppTheme = 'light';
 const DEFAULT_APP_LOCALE: AppLocale = DEFAULT_LOCALE;
-
-type CocktailFeedbackExport = NonNullable<InventoryExportData['cocktailFeedback']>;
-type IngredientStatusExport = NonNullable<InventoryExportData['ingredientStatus']>;
-
-function buildCocktailFeedbackExport(
-  ratingsByCocktailId: Record<string, number>,
-  commentsByCocktailId: Record<string, string>,
-): CocktailFeedbackExport {
-  const sanitizedRatings = sanitizeCocktailRatings(ratingsByCocktailId);
-  const sanitizedComments = sanitizeCocktailComments(commentsByCocktailId);
-  const feedback: CocktailFeedbackExport = {};
-
-  Object.entries(sanitizedRatings).forEach(([id, rating]) => {
-    feedback[id] = { ...(feedback[id] ?? {}), rating };
-  });
-
-  Object.entries(sanitizedComments).forEach(([id, comment]) => {
-    feedback[id] = { ...(feedback[id] ?? {}), comment };
-  });
-
-  return feedback;
-}
-
-function parseCocktailFeedbackImport(data?: InventoryExportData): {
-  ratings: Record<string, number>;
-  comments: Record<string, string>;
-} {
-  const feedbackCandidate = data?.cocktailFeedback;
-  const ratingsCandidate: Record<string, number> = {};
-  const commentsCandidate: Record<string, string> = {};
-
-  if (feedbackCandidate && typeof feedbackCandidate === 'object') {
-    Object.entries(feedbackCandidate).forEach(([id, value]) => {
-      if (!value || typeof value !== 'object') {
-        return;
-      }
-
-      const entry = value as { rating?: unknown; comment?: unknown };
-      if (typeof entry.rating === 'number') {
-        ratingsCandidate[id] = entry.rating;
-      }
-      if (typeof entry.comment === 'string') {
-        commentsCandidate[id] = entry.comment;
-      }
-    });
-  }
-
-  const ratings = sanitizeCocktailRatings(ratingsCandidate);
-  const comments = sanitizeCocktailComments(commentsCandidate);
-
-  return { ratings, comments };
-}
-
-function buildIngredientStatusExport(
-  availableIngredientIds: Set<number>,
-  shoppingIngredientIds: Set<number>,
-): IngredientStatusExport {
-  const status: IngredientStatusExport = {};
-
-  toSortedArray(availableIngredientIds).forEach((id) => {
-    status[String(id)] = { ...(status[String(id)] ?? {}), available: true };
-  });
-
-  toSortedArray(shoppingIngredientIds).forEach((id) => {
-    status[String(id)] = { ...(status[String(id)] ?? {}), shopping: true };
-  });
-
-  return status;
-}
-
-function parseIngredientStatusImport(data?: InventoryExportData): {
-  availableIngredientIds: Set<number>;
-  shoppingIngredientIds: Set<number>;
-} {
-  const statusCandidate = data?.ingredientStatus;
-  const availableIngredientIds = new Set<number>();
-  const shoppingIngredientIds = new Set<number>();
-
-  if (!statusCandidate || typeof statusCandidate !== 'object') {
-    return { availableIngredientIds, shoppingIngredientIds };
-  }
-
-  Object.entries(statusCandidate).forEach(([id, value]) => {
-    const numericId = Number(id);
-    if (!Number.isFinite(numericId) || numericId < 0 || !value || typeof value !== 'object') {
-      return;
-    }
-
-    const normalizedId = Math.trunc(numericId);
-    const entry = value as { available?: unknown; shopping?: unknown };
-    if (entry.available === true) {
-      availableIngredientIds.add(normalizedId);
-    }
-    if (entry.shopping === true) {
-      shoppingIngredientIds.add(normalizedId);
-    }
-  });
-
-  return { availableIngredientIds, shoppingIngredientIds };
-}
 
 declare global {
   // eslint-disable-next-line no-var
@@ -1465,8 +1372,19 @@ const [ratingFilterThreshold, setRatingFilterThreshold] = useState<number>(() =>
       return acc;
     }, []);
 
-    const exportFeedback = buildCocktailFeedbackExport(ratingsByCocktailId, commentsByCocktailId);
-    const exportIngredientStatus = buildIngredientStatusExport(availableIngredientIds, shoppingIngredientIds);
+    const exportFeedback = buildCocktailFeedbackExport(
+      ratingsByCocktailId,
+      commentsByCocktailId,
+      {
+        ratings: sanitizeCocktailRatings,
+        comments: sanitizeCocktailComments,
+      },
+    );
+    const exportIngredientStatus = buildIngredientStatusExport(
+      availableIngredientIds,
+      shoppingIngredientIds,
+      toSortedArray,
+    );
 
     const files: InventoryExportFile[] = [{
       schemaVersion: 1,
@@ -1578,7 +1496,10 @@ const [ratingFilterThreshold, setRatingFilterThreshold] = useState<number>(() =>
       ? createInventoryStateFromData(hydrateInventoryTagsFromCode(baseFile.data), true)
       : undefined;
 
-    const incomingFeedback = parseCocktailFeedbackImport(baseFile?.data);
+    const incomingFeedback = parseCocktailFeedbackImport(baseFile?.data, {
+      ratings: sanitizeCocktailRatings,
+      comments: sanitizeCocktailComments,
+    });
     const incomingIngredientStatus = parseIngredientStatusImport(baseFile?.data);
 
     const mergeCocktailWithFallback = (current: Cocktail, incoming: Cocktail): Cocktail => {
