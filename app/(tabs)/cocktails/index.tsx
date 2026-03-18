@@ -559,6 +559,7 @@ export default function CocktailsScreen() {
   }, [optimisticPartySelection, partySelectedCocktailKeys]);
 
   const deferredEffectivePartySelectedCocktailKeys = useDeferredValue(effectivePartySelectedCocktailKeys);
+  const partySelectedCount = effectivePartySelectedCocktailKeys.size;
 
   const isPartySelected = useCallback(
     (key: string) => {
@@ -692,9 +693,9 @@ export default function CocktailsScreen() {
     {
       key: 'party',
       label: t('common.tabParty'),
-      counter: showTabCounters ? `(${cocktailsByTab.party.length})` : undefined,
+      counter: showTabCounters ? `(${partySelectedCount})` : undefined,
     },
-  ], [cocktailsByTab.all.length, cocktailsByTab.party.length, myReadyCocktailsCount, showTabCounters, t]);
+  ], [cocktailsByTab.all.length, myReadyCocktailsCount, partySelectedCount, showTabCounters, t]);
 
 
 
