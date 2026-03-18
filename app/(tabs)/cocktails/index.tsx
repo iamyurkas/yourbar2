@@ -887,6 +887,9 @@ export default function CocktailsScreen() {
       const cocktailKey = String(item.id ?? item.name);
       const isChecked = partySelectedCocktailKeys.has(cocktailKey);
       const tagColors = (item.tags ?? []).map((tag) => tag?.color).filter(Boolean) as string[];
+      const ratingValue = Math.max(0, Math.min(5, Math.round(getCocktailRating(item))));
+      const legacyMethodId = (item as { methodId?: CocktailMethod['id'] | null }).methodId ?? null;
+      const methodIds = (item.methodIds?.length ? item.methodIds : legacyMethodId ? [legacyMethodId] : []) as CocktailMethod['id'][];
 
       return (
         <ListRow
@@ -897,13 +900,82 @@ export default function CocktailsScreen() {
           tagColors={tagColors}
           thumbnail={<Thumb label={item.name} uri={item.photoUri} />}
           onPress={() => handleSelectCocktail(item)}
-          control={<PresenceCheck checked={isChecked} onToggle={() => handlePartySelectionToggle(item)} />}
+          control={
+            <View style={styles.partyMetaControlRow}>
+              {ratingValue > 0 ? (
+                <View
+                  style={[
+                    styles.partyRatingPill,
+                    {
+                      backgroundColor: Colors.background,
+                      borderColor: Colors.outline,
+                    },
+                  ]}>
+                  {Array.from({ length: ratingValue }).map((_, index) => (
+                    <MaterialCommunityIcons
+                      key={`party-rating-icon-${cocktailKey}-${index}`}
+                      name="star"
+                      size={8}
+                      color={Colors.tint}
+                    />
+                  ))}
+                </View>
+              ) : (
+                <View style={styles.partyRatingPlaceholder} />
+              )}
+              <PresenceCheck checked={isChecked} onToggle={() => handlePartySelectionToggle(item)} />
+            </View>
+          }
+          metaFooter={
+            <View style={styles.partyMethodIconRow}>
+              {methodIds.map((methodId, index) => {
+                const icon = METHOD_ICON_MAP[methodId];
+                if (!icon) {
+                  return null;
+                }
+
+                if (icon.type === 'asset') {
+                  return (
+                    <Image
+                      key={`party-method-asset-${cocktailKey}-${index}`}
+                      source={icon.source}
+                      style={[styles.methodIcon, { tintColor: Colors.onSurfaceVariant }]}
+                      contentFit="contain"
+                    />
+                  );
+                }
+
+                const isMuddle = methodId === 'muddle';
+                return (
+                  <View key={`party-method-icon-${cocktailKey}-${index}`} style={styles.methodIconWrapper}>
+                    <MaterialCommunityIcons
+                      name={icon.name}
+                      size={METHOD_ICON_SIZE}
+                      color={Colors.onSurfaceVariant}
+                      style={isMuddle ? styles.muddleIcon : undefined}
+                    />
+                  </View>
+                );
+              })}
+            </View>
+          }
           accessibilityRole="button"
           metaAlignment="center"
         />
       );
     },
-    [Colors.highlightFaint, getAvailabilitySummary, handlePartySelectionToggle, handleSelectCocktail, partySelectedCocktailKeys],
+    [
+      Colors.background,
+      Colors.highlightFaint,
+      Colors.onSurfaceVariant,
+      Colors.outline,
+      Colors.tint,
+      getAvailabilitySummary,
+      getCocktailRating,
+      handlePartySelectionToggle,
+      handleSelectCocktail,
+      partySelectedCocktailKeys,
+    ],
   );
 
   const renderItem = useCallback(
@@ -1295,7 +1367,7 @@ export default function CocktailsScreen() {
                 opacity: partySelectionCount === 0 ? 0.45 : pressed ? 0.85 : 1,
               },
             ]}>
-            <MaterialCommunityIcons name="basket" size={24} color={Colors.onPrimary} />
+            <MaterialIcons name="add-shopping-cart" size={24} color={Colors.onPrimary} />
           </Pressable>
         </View>
       ) : (
@@ -1419,6 +1491,32 @@ const styles = StyleSheet.create({
   },
   muddleIcon: {
     transform: [{ scaleX: 2 }],
+  },
+  partyMetaControlRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    gap: 8,
+  },
+  partyRatingPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 2,
+    borderRadius: 12,
+    paddingVertical: 2,
+    paddingHorizontal: 6,
+    borderWidth: StyleSheet.hairlineWidth,
+  },
+  partyRatingPlaceholder: {
+    width: 8,
+    height: 8,
+  },
+  partyMethodIconRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    gap: 2,
+    minHeight: METHOD_ICON_SIZE,
   },
   partyFabContainer: {
     position: 'absolute',
