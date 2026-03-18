@@ -597,12 +597,26 @@ export default function CocktailDetailsScreen() {
   }, [cocktailSelectionKey, togglePartyCocktailSelection]);
 
   const handleAddCocktailIngredientsToShopping = useCallback(() => {
+    if (areAllCocktailIngredientsOnShoppingList) {
+      cocktailIngredientIds.forEach((ingredientId) => {
+        if (shoppingIngredientIds.has(ingredientId)) {
+          toggleIngredientShopping(ingredientId);
+        }
+      });
+      return;
+    }
+
     cocktailIngredientIds.forEach((ingredientId) => {
       if (!shoppingIngredientIds.has(ingredientId)) {
         toggleIngredientShopping(ingredientId);
       }
     });
-  }, [cocktailIngredientIds, shoppingIngredientIds, toggleIngredientShopping]);
+  }, [
+    areAllCocktailIngredientsOnShoppingList,
+    cocktailIngredientIds,
+    shoppingIngredientIds,
+    toggleIngredientShopping,
+  ]);
 
   const returnToPath = useMemo(() => {
     const value = Array.isArray(params.returnToPath)
