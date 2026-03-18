@@ -13,6 +13,7 @@ import {
 } from "react";
 import {
   AppState,
+  findNodeHandle,
   Linking,
   Platform,
   Pressable,
@@ -20,6 +21,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  UIManager,
   View,
   type LayoutChangeEvent,
   type TextLayoutEvent,
@@ -631,6 +633,7 @@ export default function CocktailDetailsScreen() {
 
   const [ingredientDisplayMode, setIngredientDisplayMode] =
     useState<IngredientDisplayMode>(useImperialUnits ? "imperial" : "metric");
+  const scrollRef = useRef<ScrollView | null>(null);
   const isHandlingBackRef = useRef(false);
   const persistCommentDraftRef = useRef<() => void>(() => { });
   const shouldNavigateAway = !loading && !cocktail;
@@ -1097,6 +1100,30 @@ export default function CocktailDetailsScreen() {
     [nameLayout],
   );
 
+  const scrollFieldIntoView = useCallback((target?: number | null) => {
+    if (target == null) {
+      return;
+    }
+
+    const scrollNodeHandle = scrollRef.current?.getInnerViewNode
+      ? findNodeHandle(scrollRef.current.getInnerViewNode())
+      : findNodeHandle(scrollRef.current);
+    if (!scrollNodeHandle) {
+      return;
+    }
+
+    UIManager.measureLayout(
+      target,
+      scrollNodeHandle,
+      () => { },
+      (_x, y) => {
+        const HEADER_OFFSET = 156;
+        const targetOffset = Math.max(0, y - HEADER_OFFSET);
+        scrollRef.current?.scrollTo({ y: targetOffset, animated: true });
+      },
+    );
+  }, []);
+
   if (shouldNavigateAway) {
     return null;
   }
@@ -1148,6 +1175,7 @@ export default function CocktailDetailsScreen() {
       />
 
       <ScrollView
+        ref={scrollRef}
         contentContainerStyle={styles.content}
         onScroll={handleScroll}
         scrollEventThrottle={16}
@@ -1386,6 +1414,7 @@ export default function CocktailDetailsScreen() {
                 value={commentDraft}
                 onChangeText={setCommentDraft}
                 onBlur={persistCommentDraft}
+                onFocus={(event) => scrollFieldIntoView(event.nativeEvent.target)}
                 placeholder={t("cocktailDetails.commentPlaceholder")}
                 placeholderTextColor={Colors.onSurfaceVariant}
                 multiline
