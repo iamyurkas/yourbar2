@@ -7,6 +7,21 @@ type ExpoIosConfig = {
 
 export default ({ config }: { config: ExpoConfig }) => {
   const baseExpo = base.expo ?? {};
+  const googleClientIds = [
+    process.env.EXPO_PUBLIC_GOOGLE_DRIVE_CLIENT_ID ?? null,
+    process.env.EXPO_PUBLIC_GOOGLE_DRIVE_ANDROID_CLIENT_ID ?? null,
+    process.env.EXPO_PUBLIC_GOOGLE_DRIVE_IOS_CLIENT_ID ?? null,
+  ];
+  const googleSchemes = googleClientIds
+    .flatMap((candidate) => (typeof candidate === "string" ? [candidate.trim()] : []))
+    .filter((candidate) => candidate.endsWith(".apps.googleusercontent.com"))
+    .map((candidate) =>
+      `com.googleusercontent.apps.${candidate.replace(/\\.apps\\.googleusercontent\\.com$/, "")}`,
+    );
+  const baseScheme = baseExpo.scheme ?? config.scheme ?? "yourbar";
+  const schemeValues = Array.from(
+    new Set([...(Array.isArray(baseScheme) ? baseScheme : [baseScheme]), ...googleSchemes]),
+  ).filter(Boolean);
 
   return {
     expo: {
@@ -15,7 +30,7 @@ export default ({ config }: { config: ExpoConfig }) => {
 
       name: baseExpo.name,
       slug: baseExpo.slug,
-      scheme: baseExpo.scheme,
+      scheme: schemeValues,
       version: baseExpo.version,
 
       ios: {

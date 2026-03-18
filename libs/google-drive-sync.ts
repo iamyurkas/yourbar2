@@ -156,13 +156,7 @@ export async function signInToGoogleDrive(): Promise<GoogleDriveSession> {
     throw new Error('missing_client_id');
   }
 
-  const resolvedScheme = Constants.expoConfig?.scheme;
-  const scheme = Array.isArray(resolvedScheme) ? resolvedScheme[0] : resolvedScheme;
-  if (!scheme || typeof scheme !== 'string') {
-    throw new Error('missing_app_scheme');
-  }
-
-  const redirectUri = `${scheme}://oauthredirect`;
+  const redirectUri = getGoogleRedirectUri(clientId);
   const codeVerifier = createCodeVerifier();
   const codeChallenge = codeVerifier;
 
@@ -231,6 +225,21 @@ export async function signInToGoogleDrive(): Promise<GoogleDriveSession> {
 
   await persistSession(session);
   return session;
+}
+
+function getGoogleRedirectUri(clientId: string): string {
+  const suffix = '.apps.googleusercontent.com';
+  if (!clientId.endsWith(suffix)) {
+    throw new Error('invalid_client_id');
+  }
+
+  const idPrefix = clientId.slice(0, -suffix.length);
+  if (!idPrefix) {
+    throw new Error('invalid_client_id');
+  }
+
+  const scheme = `com.googleusercontent.apps.${idPrefix}`;
+  return `${scheme}:/oauthredirect`;
 }
 
 function createCodeVerifier(length = 64): string {

@@ -614,7 +614,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
         t("sideMenu.googleDriveConnectedMessage", { email: session.email ?? t("sideMenu.googleDriveUnknownAccount") }),
       );
     } catch (error) {
-      const message = error instanceof Error && error.message === "missing_client_id"
+      const message = error instanceof Error && (error.message === "missing_client_id" || error.message === "invalid_client_id")
         ? t("sideMenu.googleDriveMissingClientId")
         : t("sideMenu.googleDriveLoginFailed");
       showDialogMessage(t("sideMenu.googleDriveErrorTitle"), message);
