@@ -2,7 +2,7 @@ import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { useScrollToTop } from '@react-navigation/native';
 import { Image } from 'expo-image';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
 import {
   FlatList,
   Pressable,
@@ -75,6 +75,7 @@ export default function CocktailsScreen() {
   );
   const [headerLayout, setHeaderLayout] = useState<LayoutRectangle | null>(null);
   const [filterAnchorLayout, setFilterAnchorLayout] = useState<LayoutRectangle | null>(null);
+  const deferredPartySelectedCocktailKeys = useDeferredValue(partySelectedCocktailKeys);
   const listRef = useRef<FlatList<MyTabListItem | Cocktail>>(null);
   const lastScrollOffset = useRef(0);
   const searchStartOffset = useRef<number | null>(null);
@@ -537,6 +538,11 @@ export default function CocktailsScreen() {
     return rankMap;
   }, [filteredCocktails]);
 
+  const partySelectionKeysForSort = useMemo(
+    () => (selectedSortOption === 'partySelected' ? deferredPartySelectedCocktailKeys : null),
+    [deferredPartySelectedCocktailKeys, selectedSortOption],
+  );
+
   const compareCocktailsBySelectedSort = useCallback(
     (left: Cocktail, right: Cocktail) => {
       const leftName = left.name ?? '';
@@ -549,8 +555,8 @@ export default function CocktailsScreen() {
       }
 
       if (selectedSortOption === 'partySelected') {
-        const leftPartyScore = partySelectedCocktailKeys.has(String(left.id ?? left.name)) ? 1 : 0;
-        const rightPartyScore = partySelectedCocktailKeys.has(String(right.id ?? right.name)) ? 1 : 0;
+        const leftPartyScore = partySelectionKeysForSort?.has(String(left.id ?? left.name)) ? 1 : 0;
+        const rightPartyScore = partySelectionKeysForSort?.has(String(right.id ?? right.name)) ? 1 : 0;
         if (leftPartyScore !== rightPartyScore) {
           result = rightPartyScore - leftPartyScore;
         } else {
@@ -597,7 +603,7 @@ export default function CocktailsScreen() {
     [
       getCocktailRating,
       isSortDescending,
-      partySelectedCocktailKeys,
+      partySelectionKeysForSort,
       randomSortRanks,
       selectedSortOption,
     ],
