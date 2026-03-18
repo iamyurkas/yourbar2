@@ -116,6 +116,33 @@ function applyDeltaToCollection<TRecord extends { id?: number | null }>(
   return next;
 }
 
+function mergeLegacyCollectionWithBase<TRecord extends { id?: number | null }>(
+  baseItems: readonly TRecord[],
+  legacyItems: readonly TRecord[],
+): TRecord[] {
+  const merged = new Map<number, TRecord>();
+
+  baseItems.forEach((record) => {
+    const id = Number(record.id ?? -1);
+    if (!Number.isFinite(id) || id < 0) {
+      return;
+    }
+
+    merged.set(Math.trunc(id), record);
+  });
+
+  legacyItems.forEach((record) => {
+    const id = Number(record.id ?? -1);
+    if (!Number.isFinite(id) || id < 0) {
+      return;
+    }
+
+    merged.set(Math.trunc(id), record);
+  });
+
+  return Array.from(merged.values());
+}
+
 function mergeCocktailUpdatedRecordWithBase(
   updated: CocktailStorageRecord,
   base: CocktailStorageRecord,
@@ -214,12 +241,20 @@ export function createInventoryStateFromSnapshot(
   }
 
   const mergedLegacyIngredients = backfillMissingIngredientStyleIds(
-    snapshot.ingredients,
+    mergeLegacyCollectionWithBase(
+      resolvedBaseData.ingredients as unknown as IngredientStorageRecord[],
+      snapshot.ingredients,
+    ),
     resolvedBaseData,
   );
 
+  const mergedLegacyCocktails = mergeLegacyCollectionWithBase(
+    resolvedBaseData.cocktails as CocktailStorageRecord[],
+    snapshot.cocktails,
+  );
+
   return {
-    cocktails: normalizeSearchFields(snapshot.cocktails) as Cocktail[],
+    cocktails: normalizeSearchFields(mergedLegacyCocktails) as Cocktail[],
     ingredients: normalizeSearchFields(mergedLegacyIngredients) as Ingredient[],
     imported: Boolean(snapshot.imported),
   } satisfies InventoryState;
