@@ -146,22 +146,28 @@ test('returnToSourceOrBack pops duplicate previous route when no returnToPath is
 
 test('parseReturnToParams gracefully rejects invalid payloads and keeps string params only', () => {
   const { exports } = loadNavigationModule();
+  const originalWarn = console.warn;
+  console.warn = () => {};
 
-  assert.equal(exports.parseReturnToParams(undefined), undefined);
-  assert.equal(exports.parseReturnToParams('{invalid'), undefined);
-  assert.equal(exports.parseReturnToParams(JSON.stringify([])), undefined);
+  try {
+    assert.equal(exports.parseReturnToParams(undefined), undefined);
+    assert.equal(exports.parseReturnToParams('{invalid'), undefined);
+    assert.equal(exports.parseReturnToParams(JSON.stringify([])), undefined);
 
-  const parsed = exports.parseReturnToParams(
-    JSON.stringify({
+    const parsed = exports.parseReturnToParams(
+      JSON.stringify({
+        cocktailId: '12',
+        mode: 'edit',
+        servings: 2,
+        nested: { value: 'nope' },
+      }),
+    );
+
+    assert.deepEqual(toPlainValue(parsed), {
       cocktailId: '12',
       mode: 'edit',
-      servings: 2,
-      nested: { value: 'nope' },
-    }),
-  );
-
-  assert.deepEqual(toPlainValue(parsed), {
-    cocktailId: '12',
-    mode: 'edit',
-  });
+    });
+  } finally {
+    console.warn = originalWarn;
+  }
 });
