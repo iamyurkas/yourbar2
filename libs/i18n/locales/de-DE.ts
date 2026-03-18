@@ -44,7 +44,7 @@ export const deDETranslations: TranslationDictionary = {
     "Dieser Bildschirm zeigt die vollständige Cocktailsammlung.\n\nNutzen Sie die Suche, wechseln Sie zwischen den Tabs und filtern Sie nach Methode oder Tags.",
   "cocktails.helpPartyTitle": "Party-Cocktails",
   "cocktails.helpPartyText":
-    "Wählen Sie Cocktails aus und tippen Sie dann auf die Korb-Schaltfläche, um alle Zutaten zur Einkaufsliste hinzuzufügen.",
+    "Wählen Sie Cocktails aus und tippen Sie dann auf die Warenkorb-Schaltfläche, um alle Zutaten zur Einkaufsliste hinzuzufügen.",
 
   "ingredients.emptyMy":
     "Markieren Sie Zutaten, die Sie besitzen, um sie hier zu sehen.",
