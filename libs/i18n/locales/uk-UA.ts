@@ -267,6 +267,7 @@ export const ukUATranslations: TranslationDictionary = {
   "cocktailDetails.substituteFor": "Заміняє {{name}}",
   "cocktailDetails.onShoppingList": "У списку покупок",
   "cocktailDetails.addCocktailIngredientsToShopping": "Додати інгредієнти коктейлю до списку покупок",
+  "cocktailDetails.buyAllIngredients": "Купити всі інгредієнти",
   "cocktailDetails.copyCocktail": "Копіювати коктейль",
   "cocktailDetails.editCocktail": "Редагувати коктейль",
   "cocktailDetails.notFound": "Коктейль не знайдено",

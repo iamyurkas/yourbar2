@@ -1208,8 +1208,14 @@ export default function CocktailDetailsScreen() {
                     );
                   })}
                 </View>
-                <View style={styles.partyControlsColumn}>
+              </View>
+              <View style={styles.partyControlsWrapper}>
+                <View style={styles.partyControlRow}>
+                  <Text style={[styles.partyControlLabel, { color: Colors.onSurfaceVariant }]}>{t('common.tabParty')}</Text>
                   <PresenceCheck checked={isPartySelected} onToggle={handlePartySelectionToggle} />
+                </View>
+                <View style={styles.partyControlRow}>
+                  <Text style={[styles.partyControlLabel, { color: Colors.onSurfaceVariant }]}>{t('cocktailDetails.buyAllIngredients')}</Text>
                   <Pressable
                     onPress={handleAddCocktailIngredientsToShopping}
                     accessibilityRole="button"
@@ -2015,12 +2021,21 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     gap: 8,
   },
-  partyControlsColumn: {
-    position: 'absolute',
-    right: 0,
-    top: 0,
+  partyControlsWrapper: {
+    alignSelf: 'stretch',
     alignItems: 'flex-end',
     gap: 8,
+    marginTop: 8,
+  },
+  partyControlRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    gap: 10,
+  },
+  partyControlLabel: {
+    fontSize: 13,
+    fontWeight: '500',
   },
   partyShoppingButton: {
     width: 28,

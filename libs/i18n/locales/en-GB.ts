@@ -264,6 +264,7 @@ export const enGBTranslations: TranslationDictionary = {
   "cocktailDetails.substituteFor": "Substitute for {{name}}",
   "cocktailDetails.onShoppingList": "On shopping list",
   "cocktailDetails.addCocktailIngredientsToShopping": "Add cocktail ingredients to shopping list",
+  "cocktailDetails.buyAllIngredients": "Buy all ingredients",
   "cocktailDetails.copyCocktail": "Copy cocktail",
   "cocktailDetails.editCocktail": "Edit cocktail",
   "cocktailDetails.notFound": "Cocktail not found",

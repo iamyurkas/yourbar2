@@ -268,6 +268,7 @@ export const deDETranslations: TranslationDictionary = {
   "cocktailDetails.substituteFor": "Ersatz für {{name}}",
   "cocktailDetails.onShoppingList": "Auf der Einkaufsliste",
   "cocktailDetails.addCocktailIngredientsToShopping": "Cocktail-Zutaten zur Einkaufsliste hinzufügen",
+  "cocktailDetails.buyAllIngredients": "Alle Zutaten kaufen",
   "cocktailDetails.copyCocktail": "Cocktail kopieren",
   "cocktailDetails.editCocktail": "Cocktail bearbeiten",
   "cocktailDetails.notFound": "Cocktail nicht gefunden",
